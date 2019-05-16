@@ -28,10 +28,12 @@ tests/cases/compiler/arrayAssignmentTest5.ts(23,17): error TS2322: Type 'IToken[
                 var tokens:IStateToken[]= lineTokens.tokens;
                     ~~~~~~
 !!! error TS2322: Type '{|IToken|0|}[]' is not assignable to type '{|IStateToken|1|}[]'.
-!!! error TS2322:   Property 'state' is missing in type 'IToken' but required in type 'IStateToken'.
+!!! error TS2322:   Property 'state' is missing in type '{|IToken|2|}' but required in type '{|IStateToken|3|}'.
 !!! related TS2728 tests/cases/compiler/arrayAssignmentTest5.ts:8:9: 'state' is declared here.
 !!! annotated symbol 0 tests/cases/compiler/arrayAssignmentTest5.ts:4:15
 !!! annotated symbol 1 tests/cases/compiler/arrayAssignmentTest5.ts:7:15
+!!! annotated symbol 2 tests/cases/compiler/arrayAssignmentTest5.ts:4:15
+!!! annotated symbol 3 tests/cases/compiler/arrayAssignmentTest5.ts:7:15
                 if (tokens.length === 0) {
                     return this.onEnter(line, tokens, offset);        // <== this should produce an error since onEnter can not be called with (string, IStateToken[], offset)
                 }

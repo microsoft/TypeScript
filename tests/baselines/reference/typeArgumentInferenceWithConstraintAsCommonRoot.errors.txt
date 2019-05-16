@@ -12,7 +12,9 @@ tests/cases/compiler/typeArgumentInferenceWithConstraintAsCommonRoot.ts(7,6): er
     f(g, e); // valid because both Giraffe and Elephant satisfy the constraint. T is Animal
          ~
 !!! error TS2345: Argument of type '{|Elephant|0|}' is not assignable to parameter of type '{|Giraffe|1|}'.
-!!! error TS2345:   Property 'y' is missing in type 'Elephant' but required in type 'Giraffe'.
+!!! error TS2345:   Property 'y' is missing in type '{|Elephant|2|}' but required in type '{|Giraffe|3|}'.
 !!! related TS2728 tests/cases/compiler/typeArgumentInferenceWithConstraintAsCommonRoot.ts:2:36: 'y' is declared here.
 !!! annotated symbol 0 tests/cases/compiler/typeArgumentInferenceWithConstraintAsCommonRoot.ts:3:11
 !!! annotated symbol 1 tests/cases/compiler/typeArgumentInferenceWithConstraintAsCommonRoot.ts:2:11
+!!! annotated symbol 2 tests/cases/compiler/typeArgumentInferenceWithConstraintAsCommonRoot.ts:3:11
+!!! annotated symbol 3 tests/cases/compiler/typeArgumentInferenceWithConstraintAsCommonRoot.ts:2:11

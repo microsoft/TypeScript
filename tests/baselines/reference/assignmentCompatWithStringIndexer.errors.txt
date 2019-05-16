@@ -47,10 +47,12 @@ tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignme
     ~
 !!! error TS2322: Type '{|A|0|}' is not assignable to type '{ [x: string]: {|Derived|1|}; }'.
 !!! error TS2322:   Index signatures are incompatible.
-!!! error TS2322:     Property 'bar' is missing in type 'Base' but required in type 'Derived'.
+!!! error TS2322:     Property 'bar' is missing in type '{|Base|2|}' but required in type '{|Derived|3|}'.
 !!! related TS2728 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithStringIndexer.ts:4:34: 'bar' is declared here.
 !!! annotated symbol 0 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithStringIndexer.ts:7:7
 !!! annotated symbol 1 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithStringIndexer.ts:4:11
+!!! annotated symbol 2 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithStringIndexer.ts:3:11
+!!! annotated symbol 3 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithStringIndexer.ts:4:11
     
     var b2: { [x: string]: Derived2; }
     a = b2; // ok

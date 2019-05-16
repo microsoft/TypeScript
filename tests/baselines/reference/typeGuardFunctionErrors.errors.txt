@@ -132,8 +132,10 @@ tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts(166,54
     function hasNonMatchingParameterType1(x: A): x is B {
                                                       ~
 !!! error TS2677: A type predicate's type must be assignable to its parameter's type.
-!!! error TS2677:   Property 'propA' is missing in type 'B' but required in type 'A'.
+!!! error TS2677:   Property 'propA' is missing in type '{|B|0|}' but required in type '{|A|1|}'.
 !!! related TS2728 tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts:2:5: 'propA' is declared here.
+!!! annotated symbol 0 tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts:5:7
+!!! annotated symbol 1 tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts:1:7
         return true;
     }
     
@@ -190,10 +192,12 @@ tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts(166,54
                                                  ~~~
 !!! error TS2345: Argument of type '(p1: any) => p1 is {|C|0|}' is not assignable to parameter of type '(p1: any) => p1 is {|B|1|}'.
 !!! error TS2345:   Type predicate 'p1 is C' is not assignable to 'p1 is B'.
-!!! error TS2345:     Property 'propB' is missing in type 'C' but required in type 'B'.
+!!! error TS2345:     Property 'propB' is missing in type '{|C|2|}' but required in type '{|B|3|}'.
 !!! related TS2728 tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts:6:5: 'propB' is declared here.
 !!! annotated symbol 0 tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts:9:7
 !!! annotated symbol 1 tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts:5:7
+!!! annotated symbol 2 tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts:9:7
+!!! annotated symbol 3 tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts:5:7
     
     // Boolean not assignable to type guard
     var assign1: (p1, p2) => p1 is A;

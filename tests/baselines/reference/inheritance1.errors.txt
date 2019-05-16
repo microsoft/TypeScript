@@ -31,20 +31,24 @@ tests/cases/compiler/inheritance1.ts(61,1): error TS2741: Property 'select' is m
     class ImageBase extends Control implements SelectableControl{
           ~~~~~~~~~
 !!! error TS2420: Class '{|ImageBase|0|}' incorrectly implements interface '{|SelectableControl|1|}'.
-!!! error TS2420:   Property 'select' is missing in type 'ImageBase' but required in type 'SelectableControl'.
+!!! error TS2420:   Property 'select' is missing in type '{|ImageBase|2|}' but required in type '{|SelectableControl|3|}'.
 !!! related TS2728 tests/cases/compiler/inheritance1.ts:5:5: 'select' is declared here.
 !!! annotated symbol 0 tests/cases/compiler/inheritance1.ts:14:7
 !!! annotated symbol 1 tests/cases/compiler/inheritance1.ts:4:11
+!!! annotated symbol 2 tests/cases/compiler/inheritance1.ts:14:7
+!!! annotated symbol 3 tests/cases/compiler/inheritance1.ts:4:11
     }
     class Image1 extends Control {
     }
     class Locations implements SelectableControl {
           ~~~~~~~~~
 !!! error TS2420: Class '{|Locations|0|}' incorrectly implements interface '{|SelectableControl|1|}'.
-!!! error TS2420:   Property 'state' is missing in type 'Locations' but required in type 'SelectableControl'.
+!!! error TS2420:   Property 'state' is missing in type '{|Locations|2|}' but required in type '{|SelectableControl|3|}'.
 !!! related TS2728 tests/cases/compiler/inheritance1.ts:2:13: 'state' is declared here.
 !!! annotated symbol 0 tests/cases/compiler/inheritance1.ts:18:7
 !!! annotated symbol 1 tests/cases/compiler/inheritance1.ts:4:11
+!!! annotated symbol 2 tests/cases/compiler/inheritance1.ts:18:7
+!!! annotated symbol 3 tests/cases/compiler/inheritance1.ts:4:11
         select() { }
     }
     class Locations1 {
@@ -59,8 +63,10 @@ tests/cases/compiler/inheritance1.ts(61,1): error TS2741: Property 'select' is m
     b = sc;
     b = c;
     ~
-!!! error TS2741: Property 'select' is missing in type 'Control' but required in type 'Button'.
+!!! error TS2741: Property 'select' is missing in type '{|Control|0|}' but required in type '{|Button|1|}'.
 !!! related TS2728 tests/cases/compiler/inheritance1.ts:9:5: 'select' is declared here.
+!!! annotated symbol 0 tests/cases/compiler/inheritance1.ts:1:7
+!!! annotated symbol 1 tests/cases/compiler/inheritance1.ts:8:7
     
     var t: TextBox;
     sc = t;
@@ -68,14 +74,18 @@ tests/cases/compiler/inheritance1.ts(61,1): error TS2741: Property 'select' is m
     t = sc;
     t = c;
     ~
-!!! error TS2741: Property 'select' is missing in type 'Control' but required in type 'TextBox'.
+!!! error TS2741: Property 'select' is missing in type '{|Control|0|}' but required in type '{|TextBox|1|}'.
 !!! related TS2728 tests/cases/compiler/inheritance1.ts:12:5: 'select' is declared here.
+!!! annotated symbol 0 tests/cases/compiler/inheritance1.ts:1:7
+!!! annotated symbol 1 tests/cases/compiler/inheritance1.ts:11:7
     
     var i: ImageBase;
     sc = i;
     ~~
-!!! error TS2741: Property 'select' is missing in type 'ImageBase' but required in type 'SelectableControl'.
+!!! error TS2741: Property 'select' is missing in type '{|ImageBase|0|}' but required in type '{|SelectableControl|1|}'.
 !!! related TS2728 tests/cases/compiler/inheritance1.ts:5:5: 'select' is declared here.
+!!! annotated symbol 0 tests/cases/compiler/inheritance1.ts:14:7
+!!! annotated symbol 1 tests/cases/compiler/inheritance1.ts:4:11
     c = i;
     i = sc;
     i = c;
@@ -83,8 +93,10 @@ tests/cases/compiler/inheritance1.ts(61,1): error TS2741: Property 'select' is m
     var i1: Image1;
     sc = i1;
     ~~
-!!! error TS2741: Property 'select' is missing in type 'Image1' but required in type 'SelectableControl'.
+!!! error TS2741: Property 'select' is missing in type '{|Image1|0|}' but required in type '{|SelectableControl|1|}'.
 !!! related TS2728 tests/cases/compiler/inheritance1.ts:5:5: 'select' is declared here.
+!!! annotated symbol 0 tests/cases/compiler/inheritance1.ts:16:7
+!!! annotated symbol 1 tests/cases/compiler/inheritance1.ts:4:11
     c = i1;
     i1 = sc;
     i1 = c;
@@ -92,29 +104,41 @@ tests/cases/compiler/inheritance1.ts(61,1): error TS2741: Property 'select' is m
     var l: Locations;
     sc = l;
     ~~
-!!! error TS2741: Property 'state' is missing in type 'Locations' but required in type 'SelectableControl'.
+!!! error TS2741: Property 'state' is missing in type '{|Locations|0|}' but required in type '{|SelectableControl|1|}'.
 !!! related TS2728 tests/cases/compiler/inheritance1.ts:2:13: 'state' is declared here.
+!!! annotated symbol 0 tests/cases/compiler/inheritance1.ts:18:7
+!!! annotated symbol 1 tests/cases/compiler/inheritance1.ts:4:11
     c = l;
     ~
-!!! error TS2741: Property 'state' is missing in type 'Locations' but required in type 'Control'.
+!!! error TS2741: Property 'state' is missing in type '{|Locations|0|}' but required in type '{|Control|1|}'.
 !!! related TS2728 tests/cases/compiler/inheritance1.ts:2:13: 'state' is declared here.
+!!! annotated symbol 0 tests/cases/compiler/inheritance1.ts:18:7
+!!! annotated symbol 1 tests/cases/compiler/inheritance1.ts:1:7
     l = sc;
     l = c;
     ~
-!!! error TS2741: Property 'select' is missing in type 'Control' but required in type 'Locations'.
+!!! error TS2741: Property 'select' is missing in type '{|Control|0|}' but required in type '{|Locations|1|}'.
 !!! related TS2728 tests/cases/compiler/inheritance1.ts:19:5: 'select' is declared here.
+!!! annotated symbol 0 tests/cases/compiler/inheritance1.ts:1:7
+!!! annotated symbol 1 tests/cases/compiler/inheritance1.ts:18:7
     
     var l1: Locations1;
     sc = l1;
     ~~
-!!! error TS2741: Property 'state' is missing in type 'Locations1' but required in type 'SelectableControl'.
+!!! error TS2741: Property 'state' is missing in type '{|Locations1|0|}' but required in type '{|SelectableControl|1|}'.
 !!! related TS2728 tests/cases/compiler/inheritance1.ts:2:13: 'state' is declared here.
+!!! annotated symbol 0 tests/cases/compiler/inheritance1.ts:21:7
+!!! annotated symbol 1 tests/cases/compiler/inheritance1.ts:4:11
     c = l1;
     ~
-!!! error TS2741: Property 'state' is missing in type 'Locations1' but required in type 'Control'.
+!!! error TS2741: Property 'state' is missing in type '{|Locations1|0|}' but required in type '{|Control|1|}'.
 !!! related TS2728 tests/cases/compiler/inheritance1.ts:2:13: 'state' is declared here.
+!!! annotated symbol 0 tests/cases/compiler/inheritance1.ts:21:7
+!!! annotated symbol 1 tests/cases/compiler/inheritance1.ts:1:7
     l1 = sc;
     l1 = c;
     ~~
-!!! error TS2741: Property 'select' is missing in type 'Control' but required in type 'Locations1'.
+!!! error TS2741: Property 'select' is missing in type '{|Control|0|}' but required in type '{|Locations1|1|}'.
 !!! related TS2728 tests/cases/compiler/inheritance1.ts:22:5: 'select' is declared here.
+!!! annotated symbol 0 tests/cases/compiler/inheritance1.ts:1:7
+!!! annotated symbol 1 tests/cases/compiler/inheritance1.ts:21:7

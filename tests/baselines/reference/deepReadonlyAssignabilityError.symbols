@@ -1,0 +1,48 @@
+=== tests/cases/compiler/deepReadonlyAssignabilityError.ts ===
+type DeepReadonly<T> = {
+>DeepReadonly : Symbol(DeepReadonly, Decl(deepReadonlyAssignabilityError.ts, 0, 0))
+>T : Symbol(T, Decl(deepReadonlyAssignabilityError.ts, 0, 18))
+
+    readonly [K in keyof T]: DeepReadonly<T[K]>;
+>K : Symbol(K, Decl(deepReadonlyAssignabilityError.ts, 1, 14))
+>T : Symbol(T, Decl(deepReadonlyAssignabilityError.ts, 0, 18))
+>DeepReadonly : Symbol(DeepReadonly, Decl(deepReadonlyAssignabilityError.ts, 0, 0))
+>T : Symbol(T, Decl(deepReadonlyAssignabilityError.ts, 0, 18))
+>K : Symbol(K, Decl(deepReadonlyAssignabilityError.ts, 1, 14))
+}
+
+declare function f2<T>(x: DeepReadonly<T>): (x: T) => void;
+>f2 : Symbol(f2, Decl(deepReadonlyAssignabilityError.ts, 2, 1))
+>T : Symbol(T, Decl(deepReadonlyAssignabilityError.ts, 4, 20))
+>x : Symbol(x, Decl(deepReadonlyAssignabilityError.ts, 4, 23))
+>DeepReadonly : Symbol(DeepReadonly, Decl(deepReadonlyAssignabilityError.ts, 0, 0))
+>T : Symbol(T, Decl(deepReadonlyAssignabilityError.ts, 4, 20))
+>x : Symbol(x, Decl(deepReadonlyAssignabilityError.ts, 4, 45))
+>T : Symbol(T, Decl(deepReadonlyAssignabilityError.ts, 4, 20))
+
+/**
+ * This produces a function whose argument type is a deeply recursive reverse mapped type
+ */
+const result = f2({ x: { y: { z: { a: { b: { c: 12 } } } } } });
+>result : Symbol(result, Decl(deepReadonlyAssignabilityError.ts, 9, 5))
+>f2 : Symbol(f2, Decl(deepReadonlyAssignabilityError.ts, 2, 1))
+>x : Symbol(x, Decl(deepReadonlyAssignabilityError.ts, 9, 19))
+>y : Symbol(y, Decl(deepReadonlyAssignabilityError.ts, 9, 24))
+>z : Symbol(z, Decl(deepReadonlyAssignabilityError.ts, 9, 29))
+>a : Symbol(a, Decl(deepReadonlyAssignabilityError.ts, 9, 34))
+>b : Symbol(b, Decl(deepReadonlyAssignabilityError.ts, 9, 39))
+>c : Symbol(c, Decl(deepReadonlyAssignabilityError.ts, 9, 44))
+
+result({
+>result : Symbol(result, Decl(deepReadonlyAssignabilityError.ts, 9, 5))
+
+    x: {
+>x : Symbol(x, Decl(deepReadonlyAssignabilityError.ts, 11, 8))
+
+        y: {
+>y : Symbol(y, Decl(deepReadonlyAssignabilityError.ts, 12, 8))
+            
+        }
+    }
+});
+

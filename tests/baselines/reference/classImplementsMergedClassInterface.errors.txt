@@ -27,22 +27,26 @@ tests/cases/conformance/classes/classDeclarations/classImplementsMergedClassInte
     class C3 implements C1 { // error -- missing y
           ~~
 !!! error TS2720: Class '{|C3|0|}' incorrectly implements class '{|C1|1|}'. Did you mean to extend '{|C1|2|}' and inherit its members as a subclass?
-!!! error TS2720:   Property 'y' is missing in type 'C3' but required in type 'C1'.
+!!! error TS2720:   Property 'y' is missing in type '{|C3|3|}' but required in type '{|C1|4|}'.
 !!! related TS2728 tests/cases/conformance/classes/classDeclarations/classImplementsMergedClassInterface.ts:6:5: 'y' is declared here.
 !!! annotated symbol 0 tests/cases/conformance/classes/classDeclarations/classImplementsMergedClassInterface.ts:12:7
 !!! annotated symbol 1 tests/cases/conformance/classes/classDeclarations/classImplementsMergedClassInterface.ts:1:15
 !!! annotated symbol 2 tests/cases/conformance/classes/classDeclarations/classImplementsMergedClassInterface.ts:1:15
+!!! annotated symbol 3 tests/cases/conformance/classes/classDeclarations/classImplementsMergedClassInterface.ts:12:7
+!!! annotated symbol 4 tests/cases/conformance/classes/classDeclarations/classImplementsMergedClassInterface.ts:1:15
         x : number;
     }
     
     class C4 implements C1 { // error -- missing x
           ~~
 !!! error TS2720: Class '{|C4|0|}' incorrectly implements class '{|C1|1|}'. Did you mean to extend '{|C1|2|}' and inherit its members as a subclass?
-!!! error TS2720:   Property 'x' is missing in type 'C4' but required in type 'C1'.
+!!! error TS2720:   Property 'x' is missing in type '{|C4|3|}' but required in type '{|C1|4|}'.
 !!! related TS2728 tests/cases/conformance/classes/classDeclarations/classImplementsMergedClassInterface.ts:2:5: 'x' is declared here.
 !!! annotated symbol 0 tests/cases/conformance/classes/classDeclarations/classImplementsMergedClassInterface.ts:16:7
 !!! annotated symbol 1 tests/cases/conformance/classes/classDeclarations/classImplementsMergedClassInterface.ts:1:15
 !!! annotated symbol 2 tests/cases/conformance/classes/classDeclarations/classImplementsMergedClassInterface.ts:1:15
+!!! annotated symbol 3 tests/cases/conformance/classes/classDeclarations/classImplementsMergedClassInterface.ts:16:7
+!!! annotated symbol 4 tests/cases/conformance/classes/classDeclarations/classImplementsMergedClassInterface.ts:1:15
         y : number;
     }
     

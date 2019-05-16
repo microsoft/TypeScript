@@ -78,7 +78,7 @@ tests/cases/conformance/expressions/objectLiterals/objectLiteralNormalization.ts
     a2 = { a: 1 };  // Error
     ~~
 !!! error TS2322: Type '{ {|a|0|}: number; }' is not assignable to type '{ {|a|1|}: number; {|b|2|}: number; } | { {|a|3|}: string; {|b|4|}?: undefined; } | { {|a|5|}?: undefined; {|b|6|}?: undefined; }'.
-!!! error TS2322:   Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: number; }'.
+!!! error TS2322:   Property 'b' is missing in type '{ {|a|7|}: number; }' but required in type '{ {|a|8|}: number; {|b|9|}: number; }'.
 !!! related TS2728 tests/cases/conformance/expressions/objectLiterals/objectLiteralNormalization.ts:11:19: 'b' is declared here.
 !!! annotated symbol 0 tests/cases/conformance/expressions/objectLiterals/objectLiteralNormalization.ts:18:8
 !!! annotated symbol 1 tests/cases/conformance/expressions/objectLiterals/objectLiteralNormalization.ts:11:13
@@ -87,6 +87,9 @@ tests/cases/conformance/expressions/objectLiterals/objectLiteralNormalization.ts
 !!! annotated symbol 4 tests/cases/conformance/expressions/objectLiterals/objectLiteralNormalization.ts:2:47
 !!! annotated symbol 5 tests/cases/conformance/expressions/objectLiterals/objectLiteralNormalization.ts:11:29
 !!! annotated symbol 6 tests/cases/conformance/expressions/objectLiterals/objectLiteralNormalization.ts:2:47
+!!! annotated symbol 7 tests/cases/conformance/expressions/objectLiterals/objectLiteralNormalization.ts:18:8
+!!! annotated symbol 8 tests/cases/conformance/expressions/objectLiterals/objectLiteralNormalization.ts:11:13
+!!! annotated symbol 9 tests/cases/conformance/expressions/objectLiterals/objectLiteralNormalization.ts:11:19
     
     // Object literals containing spreads are not normalized
     declare let b1: { a: string, b: string } | { b: string, c: string };

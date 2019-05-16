@@ -45,6 +45,11 @@ tests/cases/conformance/jsx/inline/index.tsx(5,1): error TS2741: Property '__pre
     let elem = prerendered;
     elem = <h></h>; // Expect assignability error here
     ~~~~
-!!! error TS2741: Property '__predomBrand' is missing in type 'JSX.Element' but required in type 'import("tests/cases/conformance/jsx/inline/renderer2").predom.JSX.Element'.
+!!! error TS2741: Property '__predomBrand' is missing in type '{|JSX|0|}.{|Element|1|}' but required in type 'import("tests/cases/conformance/jsx/inline/renderer2").{|predom|2|}.{|JSX|3|}.{|Element|4|}'.
 !!! related TS2728 tests/cases/conformance/jsx/inline/renderer2.d.ts:7:13: '__predomBrand' is declared here.
+!!! annotated symbol 0 tests/cases/conformance/jsx/inline/renderer.d.ts:2:15
+!!! annotated symbol 1 tests/cases/conformance/jsx/inline/renderer.d.ts:6:19
+!!! annotated symbol 2 tests/cases/conformance/jsx/inline/renderer2.d.ts:15:17
+!!! annotated symbol 3 tests/cases/conformance/jsx/inline/renderer2.d.ts:2:15
+!!! annotated symbol 4 tests/cases/conformance/jsx/inline/renderer2.d.ts:6:19
     

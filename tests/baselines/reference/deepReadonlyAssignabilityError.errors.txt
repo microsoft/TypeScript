@@ -1,0 +1,30 @@
+tests/cases/compiler/deepReadonlyAssignabilityError.ts(14,9): error TS2741: Property 'z' is missing in type '{}' but required in type '{ z: { a: any; }; }'.
+
+
+==== tests/cases/compiler/deepReadonlyAssignabilityError.ts (1 errors) ====
+    type DeepReadonly<T> = {
+        readonly [K in keyof T]: DeepReadonly<T[K]>;
+    }
+    
+    declare function f2<T>(x: DeepReadonly<T>): (x: T) => void;
+    
+    /**
+     * This produces a function whose argument type is a deeply recursive reverse mapped type
+     */
+    const result = f2({ x: { y: { z: { a: { b: { c: 12 } } } } } });
+    
+    result({
+        x: {
+            y: {
+            ~
+!!! error TS2741: Property 'z' is missing in type '{}' but required in type '{ {|z|0|}: { {|a|1|}: {|any|2|}; }; }'.
+!!! related TS2728 tests/cases/compiler/deepReadonlyAssignabilityError.ts:10:31: 'z' is declared here.
+!!! related TS6500 tests/cases/compiler/deepReadonlyAssignabilityError.ts:10:26: The expected type comes from property 'y' which is declared here on type '{ y: { z: any; }; }'
+!!! annotated symbol 0 tests/cases/compiler/deepReadonlyAssignabilityError.ts:10:31
+!!! annotated symbol 1 tests/cases/compiler/deepReadonlyAssignabilityError.ts:10:36
+!!! annotated reveal 2: { b: any; }
+                
+            }
+        }
+    });
+    

@@ -1,0 +1,50 @@
+=== tests/cases/compiler/deepReadonlyAssignabilityError.ts ===
+type DeepReadonly<T> = {
+>DeepReadonly : DeepReadonly<T>
+
+    readonly [K in keyof T]: DeepReadonly<T[K]>;
+}
+
+declare function f2<T>(x: DeepReadonly<T>): (x: T) => void;
+>f2 : <T>(x: DeepReadonly<T>) => (x: T) => void
+>x : DeepReadonly<T>
+>x : T
+
+/**
+ * This produces a function whose argument type is a deeply recursive reverse mapped type
+ */
+const result = f2({ x: { y: { z: { a: { b: { c: 12 } } } } } });
+>result : (x: { x: { y: any; }; }) => void
+>f2({ x: { y: { z: { a: { b: { c: 12 } } } } } }) : (x: { x: { y: any; }; }) => void
+>f2 : <T>(x: DeepReadonly<T>) => (x: T) => void
+>{ x: { y: { z: { a: { b: { c: 12 } } } } } } : { x: { y: { z: { a: { b: { c: number; }; }; }; }; }; }
+>x : { y: { z: { a: { b: { c: number; }; }; }; }; }
+>{ y: { z: { a: { b: { c: 12 } } } } } : { y: { z: { a: { b: { c: number; }; }; }; }; }
+>y : { z: { a: { b: { c: number; }; }; }; }
+>{ z: { a: { b: { c: 12 } } } } : { z: { a: { b: { c: number; }; }; }; }
+>z : { a: { b: { c: number; }; }; }
+>{ a: { b: { c: 12 } } } : { a: { b: { c: number; }; }; }
+>a : { b: { c: number; }; }
+>{ b: { c: 12 } } : { b: { c: number; }; }
+>b : { c: number; }
+>{ c: 12 } : { c: number; }
+>c : number
+>12 : 12
+
+result({
+>result({    x: {        y: {                    }    }}) : void
+>result : (x: { x: { y: any; }; }) => void
+>{    x: {        y: {                    }    }} : { x: { y: {}; }; }
+
+    x: {
+>x : { y: {}; }
+>{        y: {                    }    } : { y: {}; }
+
+        y: {
+>y : {}
+>{                    } : {}
+            
+        }
+    }
+});
+

@@ -18,11 +18,14 @@ tests/cases/conformance/types/typeRelationships/instanceOf/narrowingGenericTypeF
             acceptA(x);
                     ~
 !!! error TS2345: Argument of type '{|B|0|}<{|T|1|}>' is not assignable to parameter of type '{|A|2|}<unknown>'.
-!!! error TS2345:   Property 'a' is missing in type 'B<T>' but required in type 'A<unknown>'.
+!!! error TS2345:   Property 'a' is missing in type '{|B|3|}<{|T|4|}>' but required in type '{|A|5|}<unknown>'.
 !!! related TS2728 tests/cases/conformance/types/typeRelationships/instanceOf/narrowingGenericTypeFromInstanceof01.ts:2:17: 'a' is declared here.
 !!! annotated symbol 0 tests/cases/conformance/types/typeRelationships/instanceOf/narrowingGenericTypeFromInstanceof01.ts:5:7
 !!! annotated symbol 1 tests/cases/conformance/types/typeRelationships/instanceOf/narrowingGenericTypeFromInstanceof01.ts:11:15
 !!! annotated symbol 2 tests/cases/conformance/types/typeRelationships/instanceOf/narrowingGenericTypeFromInstanceof01.ts:1:7
+!!! annotated symbol 3 tests/cases/conformance/types/typeRelationships/instanceOf/narrowingGenericTypeFromInstanceof01.ts:5:7
+!!! annotated symbol 4 tests/cases/conformance/types/typeRelationships/instanceOf/narrowingGenericTypeFromInstanceof01.ts:11:15
+!!! annotated symbol 5 tests/cases/conformance/types/typeRelationships/instanceOf/narrowingGenericTypeFromInstanceof01.ts:1:7
         }
     
         if (x instanceof A) {

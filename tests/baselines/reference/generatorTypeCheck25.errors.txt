@@ -25,7 +25,7 @@ tests/cases/conformance/es6/yieldExpressions/generatorTypeCheck25.ts(4,5): error
 !!! error TS2322:             Type '(value?: any) => {|IteratorResult|20|}<{|Bar|21|} | {|Baz|22|}>' is not assignable to type '(value?: any) => {|IteratorResult|23|}<{|Foo|24|}>'.
 !!! error TS2322:               Type '{|IteratorResult|25|}<{|Bar|26|} | {|Baz|27|}>' is not assignable to type '{|IteratorResult|28|}<{|Foo|29|}>'.
 !!! error TS2322:                 Type '{|Bar|30|} | {|Baz|31|}' is not assignable to type '{|Foo|32|}'.
-!!! error TS2322:                   Property 'x' is missing in type 'Baz' but required in type 'Foo'.
+!!! error TS2322:                   Property 'x' is missing in type '{|Baz|33|}' but required in type '{|Foo|34|}'.
 !!! related TS2728 tests/cases/conformance/es6/yieldExpressions/generatorTypeCheck25.ts:1:13: 'x' is declared here.
 !!! annotated symbol 0 /.ts/lib.es2015.iterable.d.ts:46:11
 !!! annotated symbol 1 tests/cases/conformance/es6/yieldExpressions/generatorTypeCheck25.ts:2:7
@@ -60,6 +60,8 @@ tests/cases/conformance/es6/yieldExpressions/generatorTypeCheck25.ts(4,5): error
 !!! annotated symbol 30 tests/cases/conformance/es6/yieldExpressions/generatorTypeCheck25.ts:2:7
 !!! annotated symbol 31 tests/cases/conformance/es6/yieldExpressions/generatorTypeCheck25.ts:3:7
 !!! annotated symbol 32 tests/cases/conformance/es6/yieldExpressions/generatorTypeCheck25.ts:1:7
+!!! annotated symbol 33 tests/cases/conformance/es6/yieldExpressions/generatorTypeCheck25.ts:3:7
+!!! annotated symbol 34 tests/cases/conformance/es6/yieldExpressions/generatorTypeCheck25.ts:1:7
         yield;
         yield new Bar;
         yield new Baz;

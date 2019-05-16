@@ -22,12 +22,14 @@ tests/cases/compiler/promisesWithConstraints.ts(20,1): error TS2322: Type 'CProm
     b = a; // ok
     ~
 !!! error TS2322: Type '{|Promise|0|}<{|Foo|1|}>' is not assignable to type '{|Promise|2|}<{|Bar|3|}>'.
-!!! error TS2322:   Property 'y' is missing in type 'Foo' but required in type 'Bar'.
+!!! error TS2322:   Property 'y' is missing in type '{|Foo|4|}' but required in type '{|Bar|5|}'.
 !!! related TS2728 tests/cases/compiler/promisesWithConstraints.ts:10:20: 'y' is declared here.
 !!! annotated symbol 0 /.ts/lib.es5.d.ts:1399:11
 !!! annotated symbol 1 tests/cases/compiler/promisesWithConstraints.ts:9:11
 !!! annotated symbol 2 /.ts/lib.es5.d.ts:1399:11
 !!! annotated symbol 3 tests/cases/compiler/promisesWithConstraints.ts:10:11
+!!! annotated symbol 4 tests/cases/compiler/promisesWithConstraints.ts:9:11
+!!! annotated symbol 5 tests/cases/compiler/promisesWithConstraints.ts:10:11
     
     var a2: CPromise<Foo>;
     var b2: CPromise<Bar>;

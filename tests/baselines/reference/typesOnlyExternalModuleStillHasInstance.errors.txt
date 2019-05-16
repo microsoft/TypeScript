@@ -8,8 +8,10 @@ tests/cases/conformance/externalModules/foo_1.ts(5,5): error TS2741: Property 'M
     var x: typeof foo0 = {};
     var y: {M2: Object} = foo0;
         ~
-!!! error TS2741: Property 'M2' is missing in type 'typeof import("tests/cases/conformance/externalModules/foo_0")' but required in type '{ M2: Object; }'.
+!!! error TS2741: Property 'M2' is missing in type 'typeof import("tests/cases/conformance/externalModules/foo_0")' but required in type '{ {|M2|0|}: {|Object|1|}; }'.
 !!! related TS2728 tests/cases/conformance/externalModules/foo_1.ts:5:9: 'M2' is declared here.
+!!! annotated symbol 0 tests/cases/conformance/externalModules/foo_1.ts:5:9
+!!! annotated symbol 1 /.ts/lib.es5.d.ts:120:11
     
 ==== tests/cases/conformance/externalModules/foo_0.ts (0 errors) ====
     export interface Person {

@@ -20,11 +20,14 @@ tests/cases/conformance/jsdoc/test.ts(1,34): error TS2344: Type '{ a: number; }'
     /** @type {Everything<{ a: number  }, undefined, { c: 1, d: 1 }, number, string>} */
                           ~~~~~~~~~~~~~~
 !!! error TS2344: Type '{ {|a|0|}: number; }' does not satisfy the constraint '{ {|a|1|}: number; {|b|2|}: string; }'.
-!!! error TS2344:   Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: string; }'.
+!!! error TS2344:   Property 'b' is missing in type '{ {|a|3|}: number; }' but required in type '{ {|a|4|}: number; {|b|5|}: string; }'.
 !!! related TS2728 tests/cases/conformance/jsdoc/a.js:2:28: 'b' is declared here.
 !!! annotated symbol 0 tests/cases/conformance/jsdoc/a.js:12:25
 !!! annotated symbol 1 tests/cases/conformance/jsdoc/a.js:2:17
 !!! annotated symbol 2 tests/cases/conformance/jsdoc/a.js:2:28
+!!! annotated symbol 3 tests/cases/conformance/jsdoc/a.js:12:25
+!!! annotated symbol 4 tests/cases/conformance/jsdoc/a.js:2:17
+!!! annotated symbol 5 tests/cases/conformance/jsdoc/a.js:2:28
     var wrong;
     
     /** @type {Everything<{ a: number  }>} */
@@ -36,9 +39,12 @@ tests/cases/conformance/jsdoc/test.ts(1,34): error TS2344: Type '{ a: number; }'
     declare var actually: Everything<{ a: number  }, undefined, { c: 1, d: 1 }, number, string>;
                                      ~~~~~~~~~~~~~~
 !!! error TS2344: Type '{ {|a|0|}: number; }' does not satisfy the constraint '{ {|a|1|}: number; {|b|2|}: string; }'.
-!!! error TS2344:   Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: string; }'.
+!!! error TS2344:   Property 'b' is missing in type '{ {|a|3|}: number; }' but required in type '{ {|a|4|}: number; {|b|5|}: string; }'.
 !!! related TS2728 tests/cases/conformance/jsdoc/a.js:2:28: 'b' is declared here.
 !!! annotated symbol 0 tests/cases/conformance/jsdoc/test.ts:1:36
 !!! annotated symbol 1 tests/cases/conformance/jsdoc/a.js:2:17
 !!! annotated symbol 2 tests/cases/conformance/jsdoc/a.js:2:28
+!!! annotated symbol 3 tests/cases/conformance/jsdoc/test.ts:1:36
+!!! annotated symbol 4 tests/cases/conformance/jsdoc/a.js:2:17
+!!! annotated symbol 5 tests/cases/conformance/jsdoc/a.js:2:28
     

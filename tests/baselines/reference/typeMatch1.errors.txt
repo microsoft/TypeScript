@@ -30,9 +30,11 @@ tests/cases/compiler/typeMatch1.ts(20,1): error TS2367: This condition will alwa
 !!! annotated symbol 1 tests/cases/compiler/typeMatch1.ts:12:7
     x6=C;
        ~
-!!! error TS2741: Property 'x' is missing in type 'typeof C' but required in type 'C'.
+!!! error TS2741: Property 'x' is missing in type 'typeof {|C|0|}' but required in type '{|C|1|}'.
 !!! related TS2728 tests/cases/compiler/typeMatch1.ts:12:19: 'x' is declared here.
 !!! related TS6213 tests/cases/compiler/typeMatch1.ts:19:4: Did you mean to use 'new' with this expression?
+!!! annotated symbol 0 tests/cases/compiler/typeMatch1.ts:12:7
+!!! annotated symbol 1 tests/cases/compiler/typeMatch1.ts:12:7
     C==D;
     ~~~~
 !!! error TS2367: This condition will always return 'false' since the types 'typeof C' and 'typeof D' have no overlap.

@@ -42,16 +42,30 @@ tests/cases/compiler/assignmentCompatBug2.ts(33,1): error TS2741: Property 'm' i
     
     b3 = {
     ~~
-!!! error TS2741: Property 'm' is missing in type '{ f: (n: number) => number; g: (s: string) => number; }' but required in type '{ f(n: number): number; g(s: string): number; m: number; n?: number; k?(a: any): any; }'.
+!!! error TS2741: Property 'm' is missing in type '{ {|f|0|}: (n: number) => number; {|g|1|}: (s: string) => number; }' but required in type '{ {|f|2|}(n: number): number; {|g|3|}(s: string): number; {|m|4|}: number; {|n|5|}?: number; {|k|6|}?(a: any): any; }'.
 !!! related TS2728 tests/cases/compiler/assignmentCompatBug2.ts:7:55: 'm' is declared here.
+!!! annotated symbol 0 tests/cases/compiler/assignmentCompatBug2.ts:16:5
+!!! annotated symbol 1 tests/cases/compiler/assignmentCompatBug2.ts:17:5
+!!! annotated symbol 2 tests/cases/compiler/assignmentCompatBug2.ts:7:11
+!!! annotated symbol 3 tests/cases/compiler/assignmentCompatBug2.ts:7:33
+!!! annotated symbol 4 tests/cases/compiler/assignmentCompatBug2.ts:7:55
+!!! annotated symbol 5 tests/cases/compiler/assignmentCompatBug2.ts:7:66
+!!! annotated symbol 6 tests/cases/compiler/assignmentCompatBug2.ts:7:78
         f: (n) => { return 0; },
         g: (s) => { return 0; },
     }; // error
     
     b3 = {
     ~~
-!!! error TS2741: Property 'g' is missing in type '{ f: (n: number) => number; m: number; }' but required in type '{ f(n: number): number; g(s: string): number; m: number; n?: number; k?(a: any): any; }'.
+!!! error TS2741: Property 'g' is missing in type '{ {|f|0|}: (n: number) => number; {|m|1|}: number; }' but required in type '{ {|f|2|}(n: number): number; {|g|3|}(s: string): number; {|m|4|}: number; {|n|5|}?: number; {|k|6|}?(a: any): any; }'.
 !!! related TS2728 tests/cases/compiler/assignmentCompatBug2.ts:7:33: 'g' is declared here.
+!!! annotated symbol 0 tests/cases/compiler/assignmentCompatBug2.ts:21:5
+!!! annotated symbol 1 tests/cases/compiler/assignmentCompatBug2.ts:22:5
+!!! annotated symbol 2 tests/cases/compiler/assignmentCompatBug2.ts:7:11
+!!! annotated symbol 3 tests/cases/compiler/assignmentCompatBug2.ts:7:33
+!!! annotated symbol 4 tests/cases/compiler/assignmentCompatBug2.ts:7:55
+!!! annotated symbol 5 tests/cases/compiler/assignmentCompatBug2.ts:7:66
+!!! annotated symbol 6 tests/cases/compiler/assignmentCompatBug2.ts:7:78
         f: (n) => { return 0; },
         m: 0,
     }; // error
@@ -66,8 +80,17 @@ tests/cases/compiler/assignmentCompatBug2.ts(33,1): error TS2741: Property 'm' i
     
     b3 = {
     ~~
-!!! error TS2741: Property 'm' is missing in type '{ f: (n: number) => number; g: (s: string) => number; n: number; k: (a: any) => any; }' but required in type '{ f(n: number): number; g(s: string): number; m: number; n?: number; k?(a: any): any; }'.
+!!! error TS2741: Property 'm' is missing in type '{ {|f|0|}: (n: number) => number; {|g|1|}: (s: string) => number; {|n|2|}: number; {|k|3|}: (a: any) => any; }' but required in type '{ {|f|4|}(n: number): number; {|g|5|}(s: string): number; {|m|6|}: number; {|n|7|}?: number; {|k|8|}?(a: any): any; }'.
 !!! related TS2728 tests/cases/compiler/assignmentCompatBug2.ts:7:55: 'm' is declared here.
+!!! annotated symbol 0 tests/cases/compiler/assignmentCompatBug2.ts:34:5
+!!! annotated symbol 1 tests/cases/compiler/assignmentCompatBug2.ts:35:5
+!!! annotated symbol 2 tests/cases/compiler/assignmentCompatBug2.ts:36:5
+!!! annotated symbol 3 tests/cases/compiler/assignmentCompatBug2.ts:37:5
+!!! annotated symbol 4 tests/cases/compiler/assignmentCompatBug2.ts:7:11
+!!! annotated symbol 5 tests/cases/compiler/assignmentCompatBug2.ts:7:33
+!!! annotated symbol 6 tests/cases/compiler/assignmentCompatBug2.ts:7:55
+!!! annotated symbol 7 tests/cases/compiler/assignmentCompatBug2.ts:7:66
+!!! annotated symbol 8 tests/cases/compiler/assignmentCompatBug2.ts:7:78
         f: (n) => { return 0; },
         g: (s) => { return 0; },
         n: 0,

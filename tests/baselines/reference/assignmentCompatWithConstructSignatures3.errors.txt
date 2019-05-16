@@ -310,7 +310,7 @@ tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignme
 !!! error TS2322: Type 'new (x: { {|foo|0|}: string; }, y: { {|foo|1|}: string; {|bar|2|}: string; }) => {|Base|3|}' is not assignable to type 'new <{|T|4|} extends {|Base|5|}>(x: {|T|6|}, y: {|T|7|}) => {|T|8|}'.
 !!! error TS2322:   Types of parameters 'y' and 'y' are incompatible.
 !!! error TS2322:     Type '{|T|9|}' is not assignable to type '{ {|foo|10|}: string; {|bar|11|}: string; }'.
-!!! error TS2322:       Property 'bar' is missing in type 'Base' but required in type '{ foo: string; bar: string; }'.
+!!! error TS2322:       Property 'bar' is missing in type '{|Base|12|}' but required in type '{ {|foo|13|}: string; {|bar|14|}: string; }'.
 !!! related TS2728 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithConstructSignatures3.ts:18:53: 'bar' is declared here.
 !!! annotated symbol 0 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithConstructSignatures3.ts:18:20
 !!! annotated symbol 1 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithConstructSignatures3.ts:18:40
@@ -324,6 +324,9 @@ tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignme
 !!! annotated symbol 9 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithConstructSignatures3.ts:75:15
 !!! annotated symbol 10 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithConstructSignatures3.ts:18:40
 !!! annotated symbol 11 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithConstructSignatures3.ts:18:53
+!!! annotated symbol 12 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithConstructSignatures3.ts:3:7
+!!! annotated symbol 13 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithConstructSignatures3.ts:18:40
+!!! annotated symbol 14 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithConstructSignatures3.ts:18:53
     var b12: new <T extends Array<Base>>(x: Array<Base>, y: T) => Array<Derived>; 
     a12 = b12; // ok
     b12 = a12; // ok

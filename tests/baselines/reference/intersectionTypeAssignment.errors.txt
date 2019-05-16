@@ -16,31 +16,41 @@ tests/cases/conformance/types/intersection/intersectionTypeAssignment.ts(14,1): 
     a = y;
     x = a;  // Error
     ~
-!!! error TS2741: Property 'b' is missing in type '{ a: string; }' but required in type '{ a: string; b: string; }'.
+!!! error TS2741: Property 'b' is missing in type '{ {|a|0|}: string; }' but required in type '{ {|a|1|}: string; {|b|2|}: string; }'.
 !!! related TS2728 tests/cases/conformance/types/intersection/intersectionTypeAssignment.ts:3:21: 'b' is declared here.
+!!! annotated symbol 0 tests/cases/conformance/types/intersection/intersectionTypeAssignment.ts:1:10
+!!! annotated symbol 1 tests/cases/conformance/types/intersection/intersectionTypeAssignment.ts:3:10
+!!! annotated symbol 2 tests/cases/conformance/types/intersection/intersectionTypeAssignment.ts:3:21
     y = a;  // Error
     ~
 !!! error TS2322: Type '{ {|a|0|}: string; }' is not assignable to type '{ {|a|1|}: string; } & { {|b|2|}: string; }'.
-!!! error TS2322:   Property 'b' is missing in type '{ a: string; }' but required in type '{ b: string; }'.
+!!! error TS2322:   Property 'b' is missing in type '{ {|a|3|}: string; }' but required in type '{ {|b|4|}: string; }'.
 !!! related TS2728 tests/cases/conformance/types/intersection/intersectionTypeAssignment.ts:4:26: 'b' is declared here.
 !!! annotated symbol 0 tests/cases/conformance/types/intersection/intersectionTypeAssignment.ts:1:10
 !!! annotated symbol 1 tests/cases/conformance/types/intersection/intersectionTypeAssignment.ts:4:10
 !!! annotated symbol 2 tests/cases/conformance/types/intersection/intersectionTypeAssignment.ts:4:26
+!!! annotated symbol 3 tests/cases/conformance/types/intersection/intersectionTypeAssignment.ts:1:10
+!!! annotated symbol 4 tests/cases/conformance/types/intersection/intersectionTypeAssignment.ts:4:26
     
     b = x;
     b = y;
     x = b;  // Error
     ~
-!!! error TS2741: Property 'a' is missing in type '{ b: string; }' but required in type '{ a: string; b: string; }'.
+!!! error TS2741: Property 'a' is missing in type '{ {|b|0|}: string; }' but required in type '{ {|a|1|}: string; {|b|2|}: string; }'.
 !!! related TS2728 tests/cases/conformance/types/intersection/intersectionTypeAssignment.ts:3:10: 'a' is declared here.
+!!! annotated symbol 0 tests/cases/conformance/types/intersection/intersectionTypeAssignment.ts:2:10
+!!! annotated symbol 1 tests/cases/conformance/types/intersection/intersectionTypeAssignment.ts:3:10
+!!! annotated symbol 2 tests/cases/conformance/types/intersection/intersectionTypeAssignment.ts:3:21
     y = b;  // Error
     ~
 !!! error TS2322: Type '{ {|b|0|}: string; }' is not assignable to type '{ {|a|1|}: string; } & { {|b|2|}: string; }'.
-!!! error TS2322:   Property 'a' is missing in type '{ b: string; }' but required in type '{ a: string; }'.
+!!! error TS2322:   Property 'a' is missing in type '{ {|b|3|}: string; }' but required in type '{ {|a|4|}: string; }'.
 !!! related TS2728 tests/cases/conformance/types/intersection/intersectionTypeAssignment.ts:4:10: 'a' is declared here.
 !!! annotated symbol 0 tests/cases/conformance/types/intersection/intersectionTypeAssignment.ts:2:10
 !!! annotated symbol 1 tests/cases/conformance/types/intersection/intersectionTypeAssignment.ts:4:10
 !!! annotated symbol 2 tests/cases/conformance/types/intersection/intersectionTypeAssignment.ts:4:26
+!!! annotated symbol 3 tests/cases/conformance/types/intersection/intersectionTypeAssignment.ts:2:10
+!!! annotated symbol 4 tests/cases/conformance/types/intersection/intersectionTypeAssignment.ts:4:10
     
     x = y;
     y = x;

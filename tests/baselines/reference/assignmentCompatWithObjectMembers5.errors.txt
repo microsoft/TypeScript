@@ -17,9 +17,13 @@ tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignme
     
     c = i; // error
     ~
-!!! error TS2741: Property 'foo' is missing in type 'I' but required in type 'C'.
+!!! error TS2741: Property 'foo' is missing in type '{|I|0|}' but required in type '{|C|1|}'.
 !!! related TS2728 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithObjectMembers5.ts:2:5: 'foo' is declared here.
+!!! annotated symbol 0 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithObjectMembers5.ts:7:11
+!!! annotated symbol 1 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithObjectMembers5.ts:1:7
     i = c; // error
     ~
-!!! error TS2741: Property 'fooo' is missing in type 'C' but required in type 'I'.
+!!! error TS2741: Property 'fooo' is missing in type '{|C|0|}' but required in type '{|I|1|}'.
 !!! related TS2728 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithObjectMembers5.ts:8:5: 'fooo' is declared here.
+!!! annotated symbol 0 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithObjectMembers5.ts:1:7
+!!! annotated symbol 1 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithObjectMembers5.ts:7:11

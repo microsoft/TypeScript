@@ -59,10 +59,12 @@ tests/cases/conformance/expressions/typeAssertions/typeAssertions.ts(48,50): err
     someBase = <SomeBase>someOther; // Error
                ~~~~~~~~~~~~~~~~~~~
 !!! error TS2352: Conversion of type '{|SomeOther|0|}' to type '{|SomeBase|1|}' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
-!!! error TS2352:   Property 'p' is missing in type 'SomeOther' but required in type 'SomeBase'.
+!!! error TS2352:   Property 'p' is missing in type '{|SomeOther|2|}' but required in type '{|SomeBase|3|}'.
 !!! related TS2728 tests/cases/conformance/expressions/typeAssertions/typeAssertions.ts:15:13: 'p' is declared here.
 !!! annotated symbol 0 tests/cases/conformance/expressions/typeAssertions/typeAssertions.ts:20:7
 !!! annotated symbol 1 tests/cases/conformance/expressions/typeAssertions/typeAssertions.ts:14:7
+!!! annotated symbol 2 tests/cases/conformance/expressions/typeAssertions/typeAssertions.ts:20:7
+!!! annotated symbol 3 tests/cases/conformance/expressions/typeAssertions/typeAssertions.ts:14:7
     
     someDerived = <SomeDerived>someDerived;
     someDerived = <SomeDerived>someBase;
@@ -76,17 +78,21 @@ tests/cases/conformance/expressions/typeAssertions/typeAssertions.ts(48,50): err
     someOther = <SomeOther>someDerived; // Error
                 ~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS2352: Conversion of type '{|SomeDerived|0|}' to type '{|SomeOther|1|}' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
-!!! error TS2352:   Property 'q' is missing in type 'SomeDerived' but required in type 'SomeOther'.
+!!! error TS2352:   Property 'q' is missing in type '{|SomeDerived|2|}' but required in type '{|SomeOther|3|}'.
 !!! related TS2728 tests/cases/conformance/expressions/typeAssertions/typeAssertions.ts:21:13: 'q' is declared here.
 !!! annotated symbol 0 tests/cases/conformance/expressions/typeAssertions/typeAssertions.ts:17:7
 !!! annotated symbol 1 tests/cases/conformance/expressions/typeAssertions/typeAssertions.ts:20:7
+!!! annotated symbol 2 tests/cases/conformance/expressions/typeAssertions/typeAssertions.ts:17:7
+!!! annotated symbol 3 tests/cases/conformance/expressions/typeAssertions/typeAssertions.ts:20:7
     someOther = <SomeOther>someBase; // Error
                 ~~~~~~~~~~~~~~~~~~~
 !!! error TS2352: Conversion of type '{|SomeBase|0|}' to type '{|SomeOther|1|}' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
-!!! error TS2352:   Property 'q' is missing in type 'SomeBase' but required in type 'SomeOther'.
+!!! error TS2352:   Property 'q' is missing in type '{|SomeBase|2|}' but required in type '{|SomeOther|3|}'.
 !!! related TS2728 tests/cases/conformance/expressions/typeAssertions/typeAssertions.ts:21:13: 'q' is declared here.
 !!! annotated symbol 0 tests/cases/conformance/expressions/typeAssertions/typeAssertions.ts:14:7
 !!! annotated symbol 1 tests/cases/conformance/expressions/typeAssertions/typeAssertions.ts:20:7
+!!! annotated symbol 2 tests/cases/conformance/expressions/typeAssertions/typeAssertions.ts:14:7
+!!! annotated symbol 3 tests/cases/conformance/expressions/typeAssertions/typeAssertions.ts:20:7
     someOther = <SomeOther>someOther;
     
     // Type assertion cannot be a type-predicate type

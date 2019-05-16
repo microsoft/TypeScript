@@ -36,13 +36,15 @@ tests/cases/compiler/unionTypeWithRecursiveSubtypeReduction2.ts(20,1): error TS2
 !!! error TS2322: Type '{|Property|0|}' is not assignable to type '{|Class|1|}'.
 !!! error TS2322:   Types of property 'parent' are incompatible.
 !!! error TS2322:     Type '{|Module|2|} | {|Class|3|}' is not assignable to type '{|Namespace|4|}'.
-!!! error TS2322:       Property 'members' is missing in type 'Class' but required in type 'Namespace'.
+!!! error TS2322:       Property 'members' is missing in type '{|Class|5|}' but required in type '{|Namespace|6|}'.
 !!! related TS2728 tests/cases/compiler/unionTypeWithRecursiveSubtypeReduction2.ts:6:12: 'members' is declared here.
 !!! annotated symbol 0 tests/cases/compiler/unionTypeWithRecursiveSubtypeReduction2.ts:13:7
 !!! annotated symbol 1 tests/cases/compiler/unionTypeWithRecursiveSubtypeReduction2.ts:9:7
 !!! annotated symbol 2 tests/cases/compiler/unionTypeWithRecursiveSubtypeReduction2.ts:1:7
 !!! annotated symbol 3 tests/cases/compiler/unionTypeWithRecursiveSubtypeReduction2.ts:9:7
 !!! annotated symbol 4 tests/cases/compiler/unionTypeWithRecursiveSubtypeReduction2.ts:5:7
+!!! annotated symbol 5 tests/cases/compiler/unionTypeWithRecursiveSubtypeReduction2.ts:9:7
+!!! annotated symbol 6 tests/cases/compiler/unionTypeWithRecursiveSubtypeReduction2.ts:5:7
     p = c;
     ~
 !!! error TS2322: Type '{|Class|0|}' is not assignable to type '{|Property|1|}'.

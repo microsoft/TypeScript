@@ -43,12 +43,14 @@ tests/cases/compiler/interfaceAssignmentCompat.ts(44,9): error TS2322: Type 'IEy
                      ~~~~~~~~~~~
 !!! error TS2345: Argument of type '(a: {|IFrenchEye|0|}, b: {|IFrenchEye|1|}) => number' is not assignable to parameter of type '(a: {|IEye|2|}, b: {|IEye|3|}) => number'.
 !!! error TS2345:   Types of parameters 'a' and 'a' are incompatible.
-!!! error TS2345:     Property 'coleur' is missing in type 'IEye' but required in type 'IFrenchEye'.
+!!! error TS2345:     Property 'coleur' is missing in type '{|IEye|4|}' but required in type '{|IFrenchEye|5|}'.
 !!! related TS2728 tests/cases/compiler/interfaceAssignmentCompat.ts:13:9: 'coleur' is declared here.
 !!! annotated symbol 0 tests/cases/compiler/interfaceAssignmentCompat.ts:12:22
 !!! annotated symbol 1 tests/cases/compiler/interfaceAssignmentCompat.ts:12:22
 !!! annotated symbol 2 tests/cases/compiler/interfaceAssignmentCompat.ts:8:22
 !!! annotated symbol 3 tests/cases/compiler/interfaceAssignmentCompat.ts:8:22
+!!! annotated symbol 4 tests/cases/compiler/interfaceAssignmentCompat.ts:8:22
+!!! annotated symbol 5 tests/cases/compiler/interfaceAssignmentCompat.ts:12:22
             // type of z inferred from specialized array type
             var z=x.sort(CompareEyes); // ok
     

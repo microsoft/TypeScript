@@ -17,7 +17,10 @@ tests/cases/conformance/es6/Symbols/symbolProperty10.ts(10,5): error TS2322: Typ
         ~
 !!! error TS2322: Type '{|I|0|}' is not assignable to type '{|C|1|}'.
 !!! error TS2322:   Types of property '[Symbol.iterator]' are incompatible.
-!!! error TS2322:     Property 'y' is missing in type '{ x: any; }' but required in type '{ x: any; y: any; }'.
+!!! error TS2322:     Property 'y' is missing in type '{ {|x|2|}: any; }' but required in type '{ {|x|3|}: any; {|y|4|}: any; }'.
 !!! related TS2728 tests/cases/conformance/es6/Symbols/symbolProperty10.ts:2:29: 'y' is declared here.
 !!! annotated symbol 0 tests/cases/conformance/es6/Symbols/symbolProperty10.ts:4:11
 !!! annotated symbol 1 tests/cases/conformance/es6/Symbols/symbolProperty10.ts:1:7
+!!! annotated symbol 2 tests/cases/conformance/es6/Symbols/symbolProperty10.ts:5:27
+!!! annotated symbol 3 tests/cases/conformance/es6/Symbols/symbolProperty10.ts:2:26
+!!! annotated symbol 4 tests/cases/conformance/es6/Symbols/symbolProperty10.ts:2:29

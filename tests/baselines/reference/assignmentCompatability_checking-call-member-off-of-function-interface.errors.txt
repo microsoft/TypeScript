@@ -25,16 +25,18 @@ tests/cases/compiler/assignmentCompatability_checking-call-member-off-of-functio
 !!! annotated symbol 0 tests/cases/compiler/assignmentCompatability_checking-call-member-off-of-function-interface.ts:3:11
     x = [''];
     ~
-!!! error TS2741: Property 'call' is missing in type 'string[]' but required in type 'Callable'.
+!!! error TS2741: Property 'call' is missing in type 'string[]' but required in type '{|Callable|0|}'.
 !!! related TS2728 tests/cases/compiler/assignmentCompatability_checking-call-member-off-of-function-interface.ts:4:5: 'call' is declared here.
+!!! annotated symbol 0 tests/cases/compiler/assignmentCompatability_checking-call-member-off-of-function-interface.ts:3:11
     x = 4;
     ~
 !!! error TS2322: Type '4' is not assignable to type '{|Callable|0|}'.
 !!! annotated symbol 0 tests/cases/compiler/assignmentCompatability_checking-call-member-off-of-function-interface.ts:3:11
     x = {};
     ~
-!!! error TS2741: Property 'call' is missing in type '{}' but required in type 'Callable'.
+!!! error TS2741: Property 'call' is missing in type '{}' but required in type '{|Callable|0|}'.
 !!! related TS2728 tests/cases/compiler/assignmentCompatability_checking-call-member-off-of-function-interface.ts:4:5: 'call' is declared here.
+!!! annotated symbol 0 tests/cases/compiler/assignmentCompatability_checking-call-member-off-of-function-interface.ts:3:11
     
     // Should work
     function f() { };
@@ -58,9 +60,10 @@ tests/cases/compiler/assignmentCompatability_checking-call-member-off-of-functio
     fn({});
        ~~
 !!! error TS2345: Argument of type '{}' is not assignable to parameter of type '{|Callable|0|}'.
-!!! error TS2345:   Property 'call' is missing in type '{}' but required in type 'Callable'.
+!!! error TS2345:   Property 'call' is missing in type '{}' but required in type '{|Callable|1|}'.
 !!! related TS2728 tests/cases/compiler/assignmentCompatability_checking-call-member-off-of-function-interface.ts:4:5: 'call' is declared here.
 !!! annotated symbol 0 tests/cases/compiler/assignmentCompatability_checking-call-member-off-of-function-interface.ts:3:11
+!!! annotated symbol 1 tests/cases/compiler/assignmentCompatability_checking-call-member-off-of-function-interface.ts:3:11
     
     
     // Should work

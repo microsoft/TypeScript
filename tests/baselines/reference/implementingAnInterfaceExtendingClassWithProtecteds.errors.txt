@@ -32,10 +32,12 @@ tests/cases/conformance/interfaces/interfacesExtendingClasses/implementingAnInte
     class Bar2 implements I { // error
           ~~~~
 !!! error TS2420: Class '{|Bar2|0|}' incorrectly implements interface '{|I|1|}'.
-!!! error TS2420:   Property 'x' is missing in type 'Bar2' but required in type 'I'.
+!!! error TS2420:   Property 'x' is missing in type '{|Bar2|2|}' but required in type '{|I|3|}'.
 !!! related TS2728 tests/cases/conformance/interfaces/interfacesExtendingClasses/implementingAnInterfaceExtendingClassWithProtecteds.ts:2:15: 'x' is declared here.
 !!! annotated symbol 0 tests/cases/conformance/interfaces/interfacesExtendingClasses/implementingAnInterfaceExtendingClassWithProtecteds.ts:12:7
 !!! annotated symbol 1 tests/cases/conformance/interfaces/interfacesExtendingClasses/implementingAnInterfaceExtendingClassWithProtecteds.ts:5:11
+!!! annotated symbol 2 tests/cases/conformance/interfaces/interfacesExtendingClasses/implementingAnInterfaceExtendingClassWithProtecteds.ts:12:7
+!!! annotated symbol 3 tests/cases/conformance/interfaces/interfacesExtendingClasses/implementingAnInterfaceExtendingClassWithProtecteds.ts:5:11
         y: number;
     }
     
@@ -62,10 +64,12 @@ tests/cases/conformance/interfaces/interfacesExtendingClasses/implementingAnInte
     class Bar5 extends Foo implements I { // error
           ~~~~
 !!! error TS2420: Class '{|Bar5|0|}' incorrectly implements interface '{|I|1|}'.
-!!! error TS2420:   Property 'y' is missing in type 'Bar5' but required in type 'I'.
+!!! error TS2420:   Property 'y' is missing in type '{|Bar5|2|}' but required in type '{|I|3|}'.
 !!! related TS2728 tests/cases/conformance/interfaces/interfacesExtendingClasses/implementingAnInterfaceExtendingClassWithProtecteds.ts:6:5: 'y' is declared here.
 !!! annotated symbol 0 tests/cases/conformance/interfaces/interfacesExtendingClasses/implementingAnInterfaceExtendingClassWithProtecteds.ts:26:7
 !!! annotated symbol 1 tests/cases/conformance/interfaces/interfacesExtendingClasses/implementingAnInterfaceExtendingClassWithProtecteds.ts:5:11
+!!! annotated symbol 2 tests/cases/conformance/interfaces/interfacesExtendingClasses/implementingAnInterfaceExtendingClassWithProtecteds.ts:26:7
+!!! annotated symbol 3 tests/cases/conformance/interfaces/interfacesExtendingClasses/implementingAnInterfaceExtendingClassWithProtecteds.ts:5:11
     }
     
     class Bar6 extends Foo implements I { // error

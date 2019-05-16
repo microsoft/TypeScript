@@ -46,10 +46,12 @@ tests/cases/compiler/interfaceDeclaration4.ts(39,18): error TS1005: ';' expected
     class C2 implements I4 {
           ~~
 !!! error TS2420: Class '{|C2|0|}' incorrectly implements interface '{|I4|1|}'.
-!!! error TS2420:   Property 'item' is missing in type 'C2' but required in type 'I4'.
+!!! error TS2420:   Property 'item' is missing in type '{|C2|2|}' but required in type '{|I4|3|}'.
 !!! related TS2728 tests/cases/compiler/interfaceDeclaration4.ts:4:27: 'item' is declared here.
 !!! annotated symbol 0 tests/cases/compiler/interfaceDeclaration4.ts:27:7
 !!! annotated symbol 1 tests/cases/compiler/interfaceDeclaration4.ts:22:11
+!!! annotated symbol 2 tests/cases/compiler/interfaceDeclaration4.ts:27:7
+!!! annotated symbol 3 tests/cases/compiler/interfaceDeclaration4.ts:22:11
         public token: string;
     }
     
@@ -61,10 +63,12 @@ tests/cases/compiler/interfaceDeclaration4.ts(39,18): error TS1005: ';' expected
     class C3 implements Foo.I1 { }
           ~~
 !!! error TS2420: Class '{|C3|0|}' incorrectly implements interface '{|I1|1|}'.
-!!! error TS2420:   Property 'item' is missing in type 'C3' but required in type 'I1'.
+!!! error TS2420:   Property 'item' is missing in type '{|C3|2|}' but required in type '{|I1|3|}'.
 !!! related TS2728 tests/cases/compiler/interfaceDeclaration4.ts:4:27: 'item' is declared here.
 !!! annotated symbol 0 tests/cases/compiler/interfaceDeclaration4.ts:36:7
 !!! annotated symbol 1 tests/cases/compiler/interfaceDeclaration4.ts:4:22
+!!! annotated symbol 2 tests/cases/compiler/interfaceDeclaration4.ts:36:7
+!!! annotated symbol 3 tests/cases/compiler/interfaceDeclaration4.ts:4:22
     
     // Negative case 
     interface Foo.I1 { }

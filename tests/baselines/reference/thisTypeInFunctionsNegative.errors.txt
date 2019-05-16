@@ -223,12 +223,16 @@ tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts(178,22): e
     wrongPropertyName.f(13);
     ~~~~~~~~~~~~~~~~~
 !!! error TS2684: The 'this' context of type '{ {|wrongName|0|}: number; {|f|1|}: (this: { {|y|2|}: number; }, x: number) => number; }' is not assignable to method's 'this' of type '{ {|y|3|}: number; }'.
-!!! error TS2684:   Property 'y' is missing in type '{ wrongName: number; f: (this: { y: number; }, x: number) => number; }' but required in type '{ y: number; }'.
+!!! error TS2684:   Property 'y' is missing in type '{ {|wrongName|4|}: number; {|f|5|}: (this: { {|y|6|}: number; }, x: number) => number; }' but required in type '{ {|y|7|}: number; }'.
 !!! related TS2728 tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts:63:56: 'y' is declared here.
 !!! annotated symbol 0 tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts:63:25
 !!! annotated symbol 1 tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts:63:44
 !!! annotated symbol 2 tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts:63:56
 !!! annotated symbol 3 tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts:63:56
+!!! annotated symbol 4 tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts:63:25
+!!! annotated symbol 5 tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts:63:44
+!!! annotated symbol 6 tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts:63:56
+!!! annotated symbol 7 tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts:63:56
     
     let c = new C();
     c.explicitC(); // not enough arguments
@@ -311,10 +315,12 @@ tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts(178,22): e
     ~~~~~~~~~~~~~~~~~~
 !!! error TS2322: Type '(this: { {|x|0|}: number; }, m: number) => number' is not assignable to type '(this: { {|n|1|}: number; }, m: number) => number'.
 !!! error TS2322:   The 'this' types of each signature are incompatible.
-!!! error TS2322:     Property 'x' is missing in type '{ n: number; }' but required in type '{ x: number; }'.
+!!! error TS2322:     Property 'x' is missing in type '{ {|n|2|}: number; }' but required in type '{ {|x|3|}: number; }'.
 !!! related TS2728 tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts:104:33: 'x' is declared here.
 !!! annotated symbol 0 tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts:104:33
 !!! annotated symbol 1 tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts:12:29
+!!! annotated symbol 2 tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts:12:29
+!!! annotated symbol 3 tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts:104:33
     
     c.explicitC = d.explicitD;
     ~~~~~~~~~~~
@@ -411,10 +417,12 @@ tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts(178,22): e
     ~~~~~~~~~~~~~~
 !!! error TS2322: Type '(this: {|Base2|0|}) => number' is not assignable to type '(this: {|Base1|1|}) => number'.
 !!! error TS2322:   The 'this' types of each signature are incompatible.
-!!! error TS2322:     Property 'y' is missing in type 'Base1' but required in type 'Base2'.
+!!! error TS2322:     Property 'y' is missing in type '{|Base1|2|}' but required in type '{|Base2|3|}'.
 !!! related TS2728 tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts:131:5: 'y' is declared here.
 !!! annotated symbol 0 tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts:130:7
 !!! annotated symbol 1 tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts:121:7
+!!! annotated symbol 2 tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts:121:7
+!!! annotated symbol 3 tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts:130:7
     b1.explicit = b2.polymorphic // error, 'y' not in Base1: { x }
     ~~~~~~~~~~~
 !!! error TS2322: Type '(this: {|Base2|0|}) => number' is not assignable to type '(this: {|Base1|1|}) => number'.

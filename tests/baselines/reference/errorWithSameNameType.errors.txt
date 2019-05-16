@@ -27,6 +27,8 @@ tests/cases/compiler/c.ts(11,1): error TS2741: Property 'foo1' is missing in typ
     
     a = b
     ~
-!!! error TS2741: Property 'foo1' is missing in type 'import("tests/cases/compiler/b").F' but required in type 'import("tests/cases/compiler/a").F'.
+!!! error TS2741: Property 'foo1' is missing in type 'import("tests/cases/compiler/b").{|F|0|}' but required in type 'import("tests/cases/compiler/a").{|F|1|}'.
 !!! related TS2728 tests/cases/compiler/a.ts:2:5: 'foo1' is declared here.
+!!! annotated symbol 0 tests/cases/compiler/b.ts:1:18
+!!! annotated symbol 1 tests/cases/compiler/a.ts:1:18
     

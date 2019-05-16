@@ -13,8 +13,10 @@
     /** @type {{ b: number }} */
     const json1 = require("./json.json"); // No error (bad)
           ~~~~~
-!!! error TS2741: Property 'b' is missing in type '{ "a": number; }' but required in type '{ b: number; }'.
+!!! error TS2741: Property 'b' is missing in type '{ {|"a"|0|}: number; }' but required in type '{ {|b|1|}: number; }'.
 !!! related TS2728 /user.js:4:14: 'b' is declared here.
+!!! annotated symbol 0 /json.json:1:3
+!!! annotated symbol 1 /user.js:4:14
     json1.b; // No error (OK since that's the type annotation)
     
     const js0 = require("./js.js");
@@ -25,8 +27,10 @@
     /** @type {{ b: number }} */
     const js1 = require("./js.js"); // Error (good)
           ~~~
-!!! error TS2741: Property 'b' is missing in type '{ a: number; }' but required in type '{ b: number; }'.
+!!! error TS2741: Property 'b' is missing in type '{ {|a|0|}: number; }' but required in type '{ {|b|1|}: number; }'.
 !!! related TS2728 /user.js:11:14: 'b' is declared here.
+!!! annotated symbol 0 /js.js:1:20
+!!! annotated symbol 1 /user.js:11:14
     js1.b;
 ==== /json.json (0 errors) ====
     { "a": 0 }

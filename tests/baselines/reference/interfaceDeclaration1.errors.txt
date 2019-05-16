@@ -61,10 +61,12 @@ tests/cases/compiler/interfaceDeclaration1.ts(52,11): error TS2320: Interface 'i
     class C1 implements I3 {
           ~~
 !!! error TS2420: Class '{|C1|0|}' incorrectly implements interface '{|I3|1|}'.
-!!! error TS2420:   Property 'prototype' is missing in type 'C1' but required in type 'I3'.
+!!! error TS2420:   Property 'prototype' is missing in type '{|C1|2|}' but required in type '{|I3|3|}'.
 !!! related TS2728 tests/cases/compiler/interfaceDeclaration1.ts:12:5: 'prototype' is declared here.
 !!! annotated symbol 0 tests/cases/compiler/interfaceDeclaration1.ts:35:7
 !!! annotated symbol 1 tests/cases/compiler/interfaceDeclaration1.ts:11:11
+!!! annotated symbol 2 tests/cases/compiler/interfaceDeclaration1.ts:35:7
+!!! annotated symbol 3 tests/cases/compiler/interfaceDeclaration1.ts:11:11
         constructor() {
             var prototype: number = 3;
         }

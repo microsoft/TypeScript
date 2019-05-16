@@ -29,7 +29,7 @@ tests/cases/conformance/es6/for-ofStatements/for-of31.ts(14,15): error TS2322: T
 !!! error TS2322:       Type '{|StringIterator|4|}' is not assignable to type '{|Iterator|5|}<string>'.
 !!! error TS2322:         Types of property 'next' are incompatible.
 !!! error TS2322:           Type '() => { {|value|6|}: string; }' is not assignable to type '(value?: any) => {|IteratorResult|7|}<string>'.
-!!! error TS2322:             Property 'done' is missing in type '{ value: string; }' but required in type 'IteratorResult<string>'.
+!!! error TS2322:             Property 'done' is missing in type '{ {|value|8|}: string; }' but required in type '{|IteratorResult|9|}<string>'.
 !!! related TS2728 /.ts/lib.es2015.iterable.d.ts:32:5: 'done' is declared here.
 !!! annotated symbol 0 tests/cases/conformance/es6/for-ofStatements/for-of31.ts:1:7
 !!! annotated symbol 1 /.ts/lib.es2015.iterable.d.ts:42:11
@@ -39,3 +39,5 @@ tests/cases/conformance/es6/for-ofStatements/for-of31.ts(14,15): error TS2322: T
 !!! annotated symbol 5 /.ts/lib.es2015.iterable.d.ts:36:11
 !!! annotated symbol 6 tests/cases/conformance/es6/for-ofStatements/for-of31.ts:5:13
 !!! annotated symbol 7 /.ts/lib.es2015.iterable.d.ts:31:11
+!!! annotated symbol 8 tests/cases/conformance/es6/for-ofStatements/for-of31.ts:5:13
+!!! annotated symbol 9 /.ts/lib.es2015.iterable.d.ts:31:11

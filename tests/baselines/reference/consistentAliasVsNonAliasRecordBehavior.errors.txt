@@ -24,13 +24,17 @@ tests/cases/compiler/consistentAliasVsNonAliasRecordBehavior.ts(38,5): error TS2
     function mixed1(x: Record2<'a', string>, y: Record<string, string>) {
         x = y; // error
         ~
-!!! error TS2741: Property 'a' is missing in type 'Record<string, string>' but required in type 'Record2<"a", string>'.
+!!! error TS2741: Property 'a' is missing in type '{|Record|0|}<string, string>' but required in type '{|Record2|1|}<"a", string>'.
+!!! annotated symbol 0 /.ts/lib.es5.d.ts:1452:6
+!!! annotated symbol 1 tests/cases/compiler/consistentAliasVsNonAliasRecordBehavior.ts:5:6
     }
     
     function mixed2(x: Record<'a', string>, y: Record2<string, string>) {
         x = y; // error
         ~
-!!! error TS2741: Property 'a' is missing in type 'Record2<string, string>' but required in type 'Record<"a", string>'.
+!!! error TS2741: Property 'a' is missing in type '{|Record2|0|}<string, string>' but required in type '{|Record|1|}<"a", string>'.
+!!! annotated symbol 0 tests/cases/compiler/consistentAliasVsNonAliasRecordBehavior.ts:5:6
+!!! annotated symbol 1 /.ts/lib.es5.d.ts:1452:6
     }
     
     function defaultRecord2<T>(x: Record<'a', T>, y: Record<string, T>) {
@@ -44,12 +48,20 @@ tests/cases/compiler/consistentAliasVsNonAliasRecordBehavior.ts(38,5): error TS2
     function mixed3<T>(x: Record2<'a', T>, y: Record<string, T>) {
         x = y; // error
         ~
-!!! error TS2741: Property 'a' is missing in type 'Record<string, T>' but required in type 'Record2<"a", T>'.
+!!! error TS2741: Property 'a' is missing in type '{|Record|0|}<string, {|T|1|}>' but required in type '{|Record2|2|}<"a", {|T|3|}>'.
+!!! annotated symbol 0 /.ts/lib.es5.d.ts:1452:6
+!!! annotated symbol 1 tests/cases/compiler/consistentAliasVsNonAliasRecordBehavior.ts:33:17
+!!! annotated symbol 2 tests/cases/compiler/consistentAliasVsNonAliasRecordBehavior.ts:5:6
+!!! annotated symbol 3 tests/cases/compiler/consistentAliasVsNonAliasRecordBehavior.ts:33:17
     }
     
     function mixed4<T>(x: Record<'a', T>, y: Record2<string, T>) {
         x = y; // error
         ~
-!!! error TS2741: Property 'a' is missing in type 'Record2<string, T>' but required in type 'Record<"a", T>'.
+!!! error TS2741: Property 'a' is missing in type '{|Record2|0|}<string, {|T|1|}>' but required in type '{|Record|2|}<"a", {|T|3|}>'.
+!!! annotated symbol 0 tests/cases/compiler/consistentAliasVsNonAliasRecordBehavior.ts:5:6
+!!! annotated symbol 1 tests/cases/compiler/consistentAliasVsNonAliasRecordBehavior.ts:37:17
+!!! annotated symbol 2 /.ts/lib.es5.d.ts:1452:6
+!!! annotated symbol 3 tests/cases/compiler/consistentAliasVsNonAliasRecordBehavior.ts:37:17
     }
     

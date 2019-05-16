@@ -84,10 +84,14 @@ tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignme
         t = s;
         ~
 !!! error TS2322: Type '{|S|0|}' is not assignable to type '{|T|1|}'.
-!!! error TS2322:   Property 'c' is missing in type 'S' but required in type '{ a: 2; b: 4 | 3; c: string; }'.
+!!! error TS2322:   Property 'c' is missing in type '{|S|2|}' but required in type '{ {|a|3|}: 2; {|b|4|}: 4 | 3; {|c|5|}: string; }'.
 !!! related TS2728 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithDiscriminatedUnion.ts:52:36: 'c' is declared here.
 !!! annotated symbol 0 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithDiscriminatedUnion.ts:49:10
 !!! annotated symbol 1 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithDiscriminatedUnion.ts:50:10
+!!! annotated symbol 2 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithDiscriminatedUnion.ts:49:10
+!!! annotated symbol 3 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithDiscriminatedUnion.ts:52:16
+!!! annotated symbol 4 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithDiscriminatedUnion.ts:52:26
+!!! annotated symbol 5 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithDiscriminatedUnion.ts:52:36
     }
     
     // Maximum discriminant combinations

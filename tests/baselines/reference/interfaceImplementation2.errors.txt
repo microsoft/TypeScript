@@ -13,10 +13,12 @@ tests/cases/compiler/interfaceImplementation2.ts(8,7): error TS2420: Class 'C3' 
     class C3 implements I1 {
           ~~
 !!! error TS2420: Class '{|C3|0|}' incorrectly implements interface '{|I1|1|}'.
-!!! error TS2420:   Property 'iFn' is missing in type 'C3' but required in type 'I1'.
+!!! error TS2420:   Property 'iFn' is missing in type '{|C3|2|}' but required in type '{|I1|3|}'.
 !!! related TS2728 tests/cases/compiler/interfaceImplementation2.ts:5:5: 'iFn' is declared here.
 !!! annotated symbol 0 tests/cases/compiler/interfaceImplementation2.ts:8:7
 !!! annotated symbol 1 tests/cases/compiler/interfaceImplementation2.ts:1:11
+!!! annotated symbol 2 tests/cases/compiler/interfaceImplementation2.ts:8:7
+!!! annotated symbol 3 tests/cases/compiler/interfaceImplementation2.ts:1:11
         public iObj:{ };
         public iNum:number;
         public iAny:any;

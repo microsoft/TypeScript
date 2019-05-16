@@ -12,6 +12,8 @@ tests/cases/compiler/crashInsourcePropertyIsRelatableToTargetProperty.ts(9,5): e
     }
     var a: D = foo("hi", []);
         ~
-!!! error TS2741: Property 'x' is missing in type '(x: "hi", items: string[]) => typeof foo' but required in type 'D'.
+!!! error TS2741: Property 'x' is missing in type '(x: "hi", items: string[]) => typeof {|foo|0|}' but required in type '{|D|1|}'.
 !!! related TS2728 tests/cases/compiler/crashInsourcePropertyIsRelatableToTargetProperty.ts:2:13: 'x' is declared here.
+!!! annotated symbol 0 tests/cases/compiler/crashInsourcePropertyIsRelatableToTargetProperty.ts:5:10
+!!! annotated symbol 1 tests/cases/compiler/crashInsourcePropertyIsRelatableToTargetProperty.ts:4:7
     

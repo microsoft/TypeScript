@@ -16,10 +16,14 @@ tests/cases/compiler/clodulesDerivedClasses.ts(9,7): error TS2417: Class static 
           ~~~~
 !!! error TS2417: Class static side 'typeof {|Path|0|}' incorrectly extends base class static side 'typeof {|Shape|1|}'.
 !!! error TS2417:   Types of property 'Utils' are incompatible.
-!!! error TS2417:     Property 'convert' is missing in type 'typeof Path.Utils' but required in type 'typeof Shape.Utils'.
+!!! error TS2417:     Property 'convert' is missing in type 'typeof {|Path|2|}.{|Utils|3|}' but required in type 'typeof {|Shape|4|}.{|Utils|5|}'.
 !!! related TS2728 tests/cases/compiler/clodulesDerivedClasses.ts:6:21: 'convert' is declared here.
 !!! annotated symbol 0 tests/cases/compiler/clodulesDerivedClasses.ts:9:7
 !!! annotated symbol 1 tests/cases/compiler/clodulesDerivedClasses.ts:1:7
+!!! annotated symbol 2 tests/cases/compiler/clodulesDerivedClasses.ts:9:7
+!!! annotated symbol 3 tests/cases/compiler/clodulesDerivedClasses.ts:14:13
+!!! annotated symbol 4 tests/cases/compiler/clodulesDerivedClasses.ts:1:7
+!!! annotated symbol 5 tests/cases/compiler/clodulesDerivedClasses.ts:5:14
         name: string;
     
     }

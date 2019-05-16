@@ -5,5 +5,6 @@ tests/cases/conformance/es6/destructuring/nonIterableRestElement3.ts(2,5): error
     var c = { bogus: 0 };
     [...c] = ["", 0];
         ~
-!!! error TS2741: Property 'bogus' is missing in type '(string | number)[]' but required in type '{ bogus: number; }'.
+!!! error TS2741: Property 'bogus' is missing in type '(string | number)[]' but required in type '{ {|bogus|0|}: number; }'.
 !!! related TS2728 tests/cases/conformance/es6/destructuring/nonIterableRestElement3.ts:1:11: 'bogus' is declared here.
+!!! annotated symbol 0 tests/cases/conformance/es6/destructuring/nonIterableRestElement3.ts:1:11

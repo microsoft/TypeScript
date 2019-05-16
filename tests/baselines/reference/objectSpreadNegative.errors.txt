@@ -48,13 +48,19 @@ tests/cases/conformance/types/spread/objectSpreadNegative.ts(58,11): error TS233
     let spread = { ...{ b: true }, ...{s: "foo" } };
     spread = { s: "foo" };  // error, missing 'b'
     ~~~~~~
-!!! error TS2741: Property 'b' is missing in type '{ s: string; }' but required in type '{ s: string; b: boolean; }'.
+!!! error TS2741: Property 'b' is missing in type '{ {|s|0|}: string; }' but required in type '{ {|s|1|}: string; {|b|2|}: boolean; }'.
 !!! related TS2728 tests/cases/conformance/types/spread/objectSpreadNegative.ts:22:21: 'b' is declared here.
+!!! annotated symbol 0 tests/cases/conformance/types/spread/objectSpreadNegative.ts:23:12
+!!! annotated symbol 1 tests/cases/conformance/types/spread/objectSpreadNegative.ts:22:36
+!!! annotated symbol 2 tests/cases/conformance/types/spread/objectSpreadNegative.ts:22:21
     let b = { b: false };
     spread = b; // error, missing 's'
     ~~~~~~
-!!! error TS2741: Property 's' is missing in type '{ b: boolean; }' but required in type '{ s: string; b: boolean; }'.
+!!! error TS2741: Property 's' is missing in type '{ {|b|0|}: boolean; }' but required in type '{ {|s|1|}: string; {|b|2|}: boolean; }'.
 !!! related TS2728 tests/cases/conformance/types/spread/objectSpreadNegative.ts:22:36: 's' is declared here.
+!!! annotated symbol 0 tests/cases/conformance/types/spread/objectSpreadNegative.ts:24:11
+!!! annotated symbol 1 tests/cases/conformance/types/spread/objectSpreadNegative.ts:22:36
+!!! annotated symbol 2 tests/cases/conformance/types/spread/objectSpreadNegative.ts:22:21
     
     // literal repeats are not allowed, but spread repeats are fine
     let duplicated = { b: 'bad', ...o, b: 'bad', ...o2, b: 'bad' }

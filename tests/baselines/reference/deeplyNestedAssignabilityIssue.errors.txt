@@ -50,16 +50,18 @@
                 more: {
                     thing: {}
                     ~~~~~
-!!! error TS2741: Property 'a' is missing in type '{}' but required in type 'A'.
+!!! error TS2741: Property 'a' is missing in type '{}' but required in type '{|A|0|}'.
 !!! related TS2728 tests/cases/compiler/deeplyNestedAssignabilityIssue.ts:2:5: 'a' is declared here.
 !!! related TS6500 tests/cases/compiler/deeplyNestedAssignabilityIssue.ts:9:17: The expected type comes from property 'thing' which is declared here on type '{ thing: A; }'
+!!! annotated symbol 0 tests/cases/compiler/deeplyNestedAssignabilityIssue.ts:1:11
                 },
                 yetstill: {
                     another: {}
                     ~~~~~~~
-!!! error TS2741: Property 'a' is missing in type '{}' but required in type 'A'.
+!!! error TS2741: Property 'a' is missing in type '{}' but required in type '{|A|0|}'.
 !!! related TS2728 tests/cases/compiler/deeplyNestedAssignabilityIssue.ts:2:5: 'a' is declared here.
 !!! related TS6500 tests/cases/compiler/deeplyNestedAssignabilityIssue.ts:12:17: The expected type comes from property 'another' which is declared here on type '{ another: A; }'
+!!! annotated symbol 0 tests/cases/compiler/deeplyNestedAssignabilityIssue.ts:1:11
                 }
             }
         }

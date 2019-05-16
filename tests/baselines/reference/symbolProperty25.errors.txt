@@ -10,10 +10,12 @@ tests/cases/conformance/es6/Symbols/symbolProperty25.ts(5,7): error TS2420: Clas
     class C implements I {
           ~
 !!! error TS2420: Class '{|C|0|}' incorrectly implements interface '{|I|1|}'.
-!!! error TS2420:   Property '[Symbol.toPrimitive]' is missing in type 'C' but required in type 'I'.
+!!! error TS2420:   Property '[Symbol.toPrimitive]' is missing in type '{|C|2|}' but required in type '{|I|3|}'.
 !!! related TS2728 tests/cases/conformance/es6/Symbols/symbolProperty25.ts:2:5: '[Symbol.toPrimitive]' is declared here.
 !!! annotated symbol 0 tests/cases/conformance/es6/Symbols/symbolProperty25.ts:5:7
 !!! annotated symbol 1 tests/cases/conformance/es6/Symbols/symbolProperty25.ts:1:11
+!!! annotated symbol 2 tests/cases/conformance/es6/Symbols/symbolProperty25.ts:5:7
+!!! annotated symbol 3 tests/cases/conformance/es6/Symbols/symbolProperty25.ts:1:11
         [Symbol.toStringTag]() {
             return "";
         }

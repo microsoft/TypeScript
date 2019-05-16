@@ -36,7 +36,7 @@ tests/cases/compiler/errorsWithInvokablesInUnions01.ts(16,12): error TS2322: Typ
                ~~~~
 !!! error TS2322: Type 'typeof {|ctor|0|}' is not assignable to type '{|ConstructableA|1|} | {|IDirectiveLinkFn|2|}<number> | {|IDirectivePrePost|3|}<number>'.
 !!! error TS2322:   Type 'typeof {|ctor|4|}' is not assignable to type '{|ConstructableA|5|}'.
-!!! error TS2322:     Property 'somePropA' is missing in type 'ctor' but required in type '{ somePropA: any; }'.
+!!! error TS2322:     Property 'somePropA' is missing in type '{|ctor|6|}' but required in type '{ {|somePropA|7|}: any; }'.
 !!! related TS2728 tests/cases/compiler/errorsWithInvokablesInUnions01.ts:2:12: 'somePropA' is declared here.
 !!! annotated symbol 0 tests/cases/compiler/errorsWithInvokablesInUnions01.ts:16:90
 !!! annotated symbol 1 tests/cases/compiler/errorsWithInvokablesInUnions01.ts:1:11
@@ -44,6 +44,8 @@ tests/cases/compiler/errorsWithInvokablesInUnions01.ts(16,12): error TS2322: Typ
 !!! annotated symbol 3 tests/cases/compiler/errorsWithInvokablesInUnions01.ts:9:11
 !!! annotated symbol 4 tests/cases/compiler/errorsWithInvokablesInUnions01.ts:16:90
 !!! annotated symbol 5 tests/cases/compiler/errorsWithInvokablesInUnions01.ts:1:11
+!!! annotated symbol 6 tests/cases/compiler/errorsWithInvokablesInUnions01.ts:16:90
+!!! annotated symbol 7 tests/cases/compiler/errorsWithInvokablesInUnions01.ts:2:12
         someUnaccountedProp: any;
     }
     

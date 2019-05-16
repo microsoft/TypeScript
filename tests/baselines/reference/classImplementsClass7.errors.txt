@@ -10,9 +10,11 @@ tests/cases/compiler/classImplementsClass7.ts(5,7): error TS2720: Class 'B' inco
     class B implements A {}
           ~
 !!! error TS2720: Class '{|B|0|}' incorrectly implements class '{|A|1|}'. Did you mean to extend '{|A|2|}' and inherit its members as a subclass?
-!!! error TS2720:   Property 'x' is missing in type 'B' but required in type 'A'.
+!!! error TS2720:   Property 'x' is missing in type '{|B|3|}' but required in type '{|A|4|}'.
 !!! related TS2728 tests/cases/compiler/classImplementsClass7.ts:2:13: 'x' is declared here.
 !!! annotated symbol 0 tests/cases/compiler/classImplementsClass7.ts:5:7
 !!! annotated symbol 1 tests/cases/compiler/classImplementsClass7.ts:1:7
 !!! annotated symbol 2 tests/cases/compiler/classImplementsClass7.ts:1:7
+!!! annotated symbol 3 tests/cases/compiler/classImplementsClass7.ts:5:7
+!!! annotated symbol 4 tests/cases/compiler/classImplementsClass7.ts:1:7
     

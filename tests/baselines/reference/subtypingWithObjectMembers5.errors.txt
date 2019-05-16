@@ -28,10 +28,12 @@ tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingW
         class B implements A {
               ~
 !!! error TS2420: Class '{|B|0|}' incorrectly implements interface '{|A|1|}'.
-!!! error TS2420:   Property 'foo' is missing in type 'B' but required in type 'A'.
+!!! error TS2420:   Property 'foo' is missing in type '{|B|2|}' but required in type '{|A|3|}'.
 !!! related TS2728 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithObjectMembers5.ts:13:9: 'foo' is declared here.
 !!! annotated symbol 0 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithObjectMembers5.ts:16:11
 !!! annotated symbol 1 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithObjectMembers5.ts:12:15
+!!! annotated symbol 2 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithObjectMembers5.ts:16:11
+!!! annotated symbol 3 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithObjectMembers5.ts:12:15
             fooo: Derived; // error
         }
     
@@ -42,10 +44,12 @@ tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingW
         class B2 implements A2 {
               ~~
 !!! error TS2420: Class '{|B2|0|}' incorrectly implements interface '{|A2|1|}'.
-!!! error TS2420:   Property '1' is missing in type 'B2' but required in type 'A2'.
+!!! error TS2420:   Property '1' is missing in type '{|B2|2|}' but required in type '{|A2|3|}'.
 !!! related TS2728 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithObjectMembers5.ts:21:9: '1' is declared here.
 !!! annotated symbol 0 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithObjectMembers5.ts:24:11
 !!! annotated symbol 1 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithObjectMembers5.ts:20:15
+!!! annotated symbol 2 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithObjectMembers5.ts:24:11
+!!! annotated symbol 3 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithObjectMembers5.ts:20:15
             2: Derived; // error
         }
     
@@ -56,10 +60,12 @@ tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingW
         class B3 implements A3 {
               ~~
 !!! error TS2420: Class '{|B3|0|}' incorrectly implements interface '{|A3|1|}'.
-!!! error TS2420:   Property ''1'' is missing in type 'B3' but required in type 'A3'.
+!!! error TS2420:   Property ''1'' is missing in type '{|B3|2|}' but required in type '{|A3|3|}'.
 !!! related TS2728 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithObjectMembers5.ts:29:9: ''1'' is declared here.
 !!! annotated symbol 0 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithObjectMembers5.ts:32:11
 !!! annotated symbol 1 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithObjectMembers5.ts:28:15
+!!! annotated symbol 2 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithObjectMembers5.ts:32:11
+!!! annotated symbol 3 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithObjectMembers5.ts:28:15
             '1.0': Derived; // error
         }
     }

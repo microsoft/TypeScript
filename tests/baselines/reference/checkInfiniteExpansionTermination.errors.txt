@@ -27,7 +27,7 @@ tests/cases/compiler/checkInfiniteExpansionTermination.ts(16,1): error TS2322: T
 !!! error TS2322:   Types of property 'n' are incompatible.
 !!! error TS2322:     Type '{|IObservable|4|}<{|Bar|5|}[]>' is not assignable to type '{|IObservable|6|}<{|Foo|7|}[]>'.
 !!! error TS2322:       Type '{|Bar|8|}[]' is not assignable to type '{|Foo|9|}[]'.
-!!! error TS2322:         Property 'x' is missing in type 'Bar' but required in type 'Foo'.
+!!! error TS2322:         Property 'x' is missing in type '{|Bar|10|}' but required in type '{|Foo|11|}'.
 !!! related TS2728 tests/cases/compiler/checkInfiniteExpansionTermination.ts:11:17: 'x' is declared here.
 !!! annotated symbol 0 tests/cases/compiler/checkInfiniteExpansionTermination.ts:9:11
 !!! annotated symbol 1 tests/cases/compiler/checkInfiniteExpansionTermination.ts:12:11
@@ -39,4 +39,6 @@ tests/cases/compiler/checkInfiniteExpansionTermination.ts(16,1): error TS2322: T
 !!! annotated symbol 7 tests/cases/compiler/checkInfiniteExpansionTermination.ts:11:11
 !!! annotated symbol 8 tests/cases/compiler/checkInfiniteExpansionTermination.ts:12:11
 !!! annotated symbol 9 tests/cases/compiler/checkInfiniteExpansionTermination.ts:11:11
+!!! annotated symbol 10 tests/cases/compiler/checkInfiniteExpansionTermination.ts:12:11
+!!! annotated symbol 11 tests/cases/compiler/checkInfiniteExpansionTermination.ts:11:11
     

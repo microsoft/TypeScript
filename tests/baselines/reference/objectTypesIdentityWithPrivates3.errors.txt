@@ -30,8 +30,11 @@ tests/cases/conformance/types/typeRelationships/typeAndMemberIdentity/objectType
     <C4>c3; // Should fail (private x originates in the same declaration, but different types)
     ~~~~~~
 !!! error TS2352: Conversion of type '{|C3|0|}<{|T2|1|}>' to type '{|C4|2|}' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
-!!! error TS2352:   Property 'y' is missing in type 'C3<T2>' but required in type 'C4'.
+!!! error TS2352:   Property 'y' is missing in type '{|C3|3|}<{|T2|4|}>' but required in type '{|C4|5|}'.
 !!! related TS2728 tests/cases/conformance/types/typeRelationships/typeAndMemberIdentity/objectTypesIdentityWithPrivates3.ts:21:5: 'y' is declared here.
 !!! annotated symbol 0 tests/cases/conformance/types/typeRelationships/typeAndMemberIdentity/objectTypesIdentityWithPrivates3.ts:16:7
 !!! annotated symbol 1 tests/cases/conformance/types/typeRelationships/typeAndMemberIdentity/objectTypesIdentityWithPrivates3.ts:2:11
 !!! annotated symbol 2 tests/cases/conformance/types/typeRelationships/typeAndMemberIdentity/objectTypesIdentityWithPrivates3.ts:20:7
+!!! annotated symbol 3 tests/cases/conformance/types/typeRelationships/typeAndMemberIdentity/objectTypesIdentityWithPrivates3.ts:16:7
+!!! annotated symbol 4 tests/cases/conformance/types/typeRelationships/typeAndMemberIdentity/objectTypesIdentityWithPrivates3.ts:2:11
+!!! annotated symbol 5 tests/cases/conformance/types/typeRelationships/typeAndMemberIdentity/objectTypesIdentityWithPrivates3.ts:20:7

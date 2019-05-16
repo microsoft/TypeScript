@@ -165,12 +165,16 @@ tests/cases/conformance/types/mapped/mappedTypeErrors.ts(152,17): error TS2339: 
         let x1 = objAndReadonly({ x: 0, y: 0 }, { x: 1 });  // Error
                                                 ~~~~~~~~
 !!! error TS2345: Argument of type '{ {|x|0|}: number; }' is not assignable to parameter of type '{|Readonly|1|}<{ {|x|2|}: number; {|y|3|}: number; }>'.
-!!! error TS2345:   Property 'y' is missing in type '{ x: number; }' but required in type 'Readonly<{ x: number; y: number; }>'.
+!!! error TS2345:   Property 'y' is missing in type '{ {|x|4|}: number; }' but required in type '{|Readonly|5|}<{ {|x|6|}: number; {|y|7|}: number; }>'.
 !!! related TS2728 tests/cases/conformance/types/mapped/mappedTypeErrors.ts:75:37: 'y' is declared here.
 !!! annotated symbol 0 tests/cases/conformance/types/mapped/mappedTypeErrors.ts:75:47
 !!! annotated symbol 1 /.ts/lib.es5.d.ts:1438:6
 !!! annotated symbol 2 tests/cases/conformance/types/mapped/mappedTypeErrors.ts:75:31
 !!! annotated symbol 3 tests/cases/conformance/types/mapped/mappedTypeErrors.ts:75:37
+!!! annotated symbol 4 tests/cases/conformance/types/mapped/mappedTypeErrors.ts:75:47
+!!! annotated symbol 5 /.ts/lib.es5.d.ts:1438:6
+!!! annotated symbol 6 tests/cases/conformance/types/mapped/mappedTypeErrors.ts:75:31
+!!! annotated symbol 7 tests/cases/conformance/types/mapped/mappedTypeErrors.ts:75:37
         let x2 = objAndReadonly({ x: 0, y: 0 }, { x: 1, y: 1 });
         let x3 = objAndReadonly({ x: 0, y: 0 }, { x: 1, y: 1, z: 1 });  // Error
                                                               ~~~~

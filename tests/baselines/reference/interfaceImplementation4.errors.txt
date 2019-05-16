@@ -13,10 +13,12 @@ tests/cases/compiler/interfaceImplementation4.ts(8,7): error TS2420: Class 'C5' 
     class C5 implements I1 {
           ~~
 !!! error TS2420: Class '{|C5|0|}' incorrectly implements interface '{|I1|1|}'.
-!!! error TS2420:   Property 'iObj' is missing in type 'C5' but required in type 'I1'.
+!!! error TS2420:   Property 'iObj' is missing in type '{|C5|2|}' but required in type '{|I1|3|}'.
 !!! related TS2728 tests/cases/compiler/interfaceImplementation4.ts:2:5: 'iObj' is declared here.
 !!! annotated symbol 0 tests/cases/compiler/interfaceImplementation4.ts:8:7
 !!! annotated symbol 1 tests/cases/compiler/interfaceImplementation4.ts:1:11
+!!! annotated symbol 2 tests/cases/compiler/interfaceImplementation4.ts:8:7
+!!! annotated symbol 3 tests/cases/compiler/interfaceImplementation4.ts:1:11
         public iNum:number;
         public iAny:any;
         public iFn() { }

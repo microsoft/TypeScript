@@ -35,11 +35,14 @@ tests/cases/conformance/jsx/file.tsx(21,10): error TS2741: Property 'x' is missi
 !!! related TS6500 tests/cases/conformance/jsx/file.tsx:11:23: The expected type comes from property 'x' which is declared here on type 'IntrinsicAttributes & { x: boolean; }'
     let c = <SFC2AndEmptyComp />;
              ~~~~~~~~~~~~~~~~
-!!! error TS2741: Property 'x' is missing in type '{}' but required in type '{ x: boolean; }'.
+!!! error TS2741: Property 'x' is missing in type '{}' but required in type '{ {|x|0|}: boolean; }'.
 !!! related TS2728 tests/cases/conformance/jsx/file.tsx:11:23: 'x' is declared here.
+!!! annotated symbol 0 tests/cases/conformance/jsx/file.tsx:11:23
     let d = <SFC2AndEmptyComp data-prop />;
              ~~~~~~~~~~~~~~~~
-!!! error TS2741: Property 'x' is missing in type '{ data-prop: true; }' but required in type '{ x: boolean; }'.
+!!! error TS2741: Property 'x' is missing in type '{ {|data-prop|0|}: true; }' but required in type '{ {|x|1|}: boolean; }'.
 !!! related TS2728 tests/cases/conformance/jsx/file.tsx:11:23: 'x' is declared here.
+!!! annotated symbol 0 tests/cases/conformance/jsx/file.tsx:21:27
+!!! annotated symbol 1 tests/cases/conformance/jsx/file.tsx:11:23
     
     

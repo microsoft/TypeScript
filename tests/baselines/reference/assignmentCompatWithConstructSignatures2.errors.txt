@@ -49,20 +49,24 @@ tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignme
     // errors
     t = () => 1;
     ~
-!!! error TS2741: Property 'f' is missing in type '() => number' but required in type 'T'.
+!!! error TS2741: Property 'f' is missing in type '() => number' but required in type '{|T|0|}'.
 !!! related TS2728 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithConstructSignatures2.ts:4:5: 'f' is declared here.
+!!! annotated symbol 0 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithConstructSignatures2.ts:3:11
     t = function (x: number) { return ''; }
     ~
-!!! error TS2741: Property 'f' is missing in type '(x: number) => string' but required in type 'T'.
+!!! error TS2741: Property 'f' is missing in type '(x: number) => string' but required in type '{|T|0|}'.
 !!! related TS2728 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithConstructSignatures2.ts:4:5: 'f' is declared here.
+!!! annotated symbol 0 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithConstructSignatures2.ts:3:11
     a = () => 1;
     ~
-!!! error TS2741: Property 'f' is missing in type '() => number' but required in type '{ f: new (x: number) => void; }'.
+!!! error TS2741: Property 'f' is missing in type '() => number' but required in type '{ {|f|0|}: new (x: number) => void; }'.
 !!! related TS2728 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithConstructSignatures2.ts:7:10: 'f' is declared here.
+!!! annotated symbol 0 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithConstructSignatures2.ts:7:10
     a = function (x: number) { return ''; }
     ~
-!!! error TS2741: Property 'f' is missing in type '(x: number) => string' but required in type '{ f: new (x: number) => void; }'.
+!!! error TS2741: Property 'f' is missing in type '(x: number) => string' but required in type '{ {|f|0|}: new (x: number) => void; }'.
 !!! related TS2728 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithConstructSignatures2.ts:7:10: 'f' is declared here.
+!!! annotated symbol 0 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithConstructSignatures2.ts:7:10
     
     interface S2 {
         f(x: string): void;
@@ -88,12 +92,14 @@ tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignme
 !!! annotated symbol 1 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithConstructSignatures2.ts:3:11
     t = (x: string) => 1;
     ~
-!!! error TS2741: Property 'f' is missing in type '(x: string) => number' but required in type 'T'.
+!!! error TS2741: Property 'f' is missing in type '(x: string) => number' but required in type '{|T|0|}'.
 !!! related TS2728 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithConstructSignatures2.ts:4:5: 'f' is declared here.
+!!! annotated symbol 0 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithConstructSignatures2.ts:3:11
     t = function (x: string) { return ''; }
     ~
-!!! error TS2741: Property 'f' is missing in type '(x: string) => string' but required in type 'T'.
+!!! error TS2741: Property 'f' is missing in type '(x: string) => string' but required in type '{|T|0|}'.
 !!! related TS2728 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithConstructSignatures2.ts:4:5: 'f' is declared here.
+!!! annotated symbol 0 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithConstructSignatures2.ts:3:11
     a = s2;
     ~
 !!! error TS2322: Type '{|S2|0|}' is not assignable to type '{ {|f|1|}: new (x: number) => void; }'.
@@ -112,10 +118,12 @@ tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignme
 !!! annotated symbol 1 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithConstructSignatures2.ts:7:10
     a = (x: string) => 1;
     ~
-!!! error TS2741: Property 'f' is missing in type '(x: string) => number' but required in type '{ f: new (x: number) => void; }'.
+!!! error TS2741: Property 'f' is missing in type '(x: string) => number' but required in type '{ {|f|0|}: new (x: number) => void; }'.
 !!! related TS2728 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithConstructSignatures2.ts:7:10: 'f' is declared here.
+!!! annotated symbol 0 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithConstructSignatures2.ts:7:10
     a = function (x: string) { return ''; }
     ~
-!!! error TS2741: Property 'f' is missing in type '(x: string) => string' but required in type '{ f: new (x: number) => void; }'.
+!!! error TS2741: Property 'f' is missing in type '(x: string) => string' but required in type '{ {|f|0|}: new (x: number) => void; }'.
 !!! related TS2728 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithConstructSignatures2.ts:7:10: 'f' is declared here.
+!!! annotated symbol 0 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithConstructSignatures2.ts:7:10
     

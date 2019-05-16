@@ -15,7 +15,7 @@ tests/cases/compiler/contextualSignatureInstatiationContravariance.ts(8,1): erro
     ~~
 !!! error TS2322: Type '<{|T|0|} extends {|Animal|1|}>(x: {|T|2|}, y: {|T|3|}) => void' is not assignable to type '(g: {|Giraffe|4|}, e: {|Elephant|5|}) => void'.
 !!! error TS2322:   Types of parameters 'y' and 'e' are incompatible.
-!!! error TS2322:     Property 'y' is missing in type 'Elephant' but required in type 'Giraffe'.
+!!! error TS2322:     Property 'y' is missing in type '{|Elephant|6|}' but required in type '{|Giraffe|7|}'.
 !!! related TS2728 tests/cases/compiler/contextualSignatureInstatiationContravariance.ts:2:36: 'y' is declared here.
 !!! annotated symbol 0 tests/cases/compiler/contextualSignatureInstatiationContravariance.ts:5:10
 !!! annotated symbol 1 tests/cases/compiler/contextualSignatureInstatiationContravariance.ts:1:11
@@ -23,6 +23,8 @@ tests/cases/compiler/contextualSignatureInstatiationContravariance.ts(8,1): erro
 !!! annotated symbol 3 tests/cases/compiler/contextualSignatureInstatiationContravariance.ts:5:10
 !!! annotated symbol 4 tests/cases/compiler/contextualSignatureInstatiationContravariance.ts:2:11
 !!! annotated symbol 5 tests/cases/compiler/contextualSignatureInstatiationContravariance.ts:3:11
+!!! annotated symbol 6 tests/cases/compiler/contextualSignatureInstatiationContravariance.ts:3:11
+!!! annotated symbol 7 tests/cases/compiler/contextualSignatureInstatiationContravariance.ts:2:11
     
     var h2: (g1: Giraffe, g2: Giraffe) => void;
     h2 = f2; // valid because Giraffe satisfies the constraint. It is safe in the traditional contravariant fashion.

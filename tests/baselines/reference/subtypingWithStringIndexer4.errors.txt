@@ -49,10 +49,12 @@ tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingW
 !!! annotated symbol 3 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithStringIndexer4.ts:3:11
                           ~~~~
 !!! error TS2344: Type '{|Base|0|}' does not satisfy the constraint '{|Derived|1|}'.
-!!! error TS2344:   Property 'bar' is missing in type 'Base' but required in type 'Derived'.
+!!! error TS2344:   Property 'bar' is missing in type '{|Base|2|}' but required in type '{|Derived|3|}'.
 !!! related TS2728 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithStringIndexer4.ts:4:34: 'bar' is declared here.
 !!! annotated symbol 0 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithStringIndexer4.ts:3:11
 !!! annotated symbol 1 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithStringIndexer4.ts:4:11
+!!! annotated symbol 2 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithStringIndexer4.ts:3:11
+!!! annotated symbol 3 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithStringIndexer4.ts:4:11
             [x: string]: string; // error
         }
     

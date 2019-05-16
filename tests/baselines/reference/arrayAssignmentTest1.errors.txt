@@ -76,8 +76,9 @@ tests/cases/compiler/arrayAssignmentTest1.ts(85,1): error TS2740: Type 'I1' is m
     
     var i1_error: I1 = []; // should be an error - is
         ~~~~~~~~
-!!! error TS2741: Property 'IM1' is missing in type 'undefined[]' but required in type 'I1'.
+!!! error TS2741: Property 'IM1' is missing in type 'undefined[]' but required in type '{|I1|0|}'.
 !!! related TS2728 tests/cases/compiler/arrayAssignmentTest1.ts:2:2: 'IM1' is declared here.
+!!! annotated symbol 0 tests/cases/compiler/arrayAssignmentTest1.ts:1:11
     var c1_error: C1 = []; // should be an error - is
         ~~~~~~~~
 !!! error TS2739: Type 'undefined[]' is missing the following properties from type 'C1': IM1, C1M1
@@ -86,8 +87,9 @@ tests/cases/compiler/arrayAssignmentTest1.ts(85,1): error TS2740: Type 'I1' is m
 !!! error TS2739: Type 'undefined[]' is missing the following properties from type 'C2': C2M1, IM1, C1M1
     var c3_error: C3 = []; // should be an error - is
         ~~~~~~~~
-!!! error TS2741: Property 'CM3M1' is missing in type 'undefined[]' but required in type 'C3'.
+!!! error TS2741: Property 'CM3M1' is missing in type 'undefined[]' but required in type '{|C3|0|}'.
 !!! related TS2728 tests/cases/compiler/arrayAssignmentTest1.ts:14:5: 'CM3M1' is declared here.
+!!! annotated symbol 0 tests/cases/compiler/arrayAssignmentTest1.ts:13:7
     
     
     arr_any = arr_i1; // should be ok - is
@@ -101,20 +103,24 @@ tests/cases/compiler/arrayAssignmentTest1.ts(85,1): error TS2740: Type 'I1' is m
     arr_i1 = arr_c3; // should be an error - is
     ~~~~~~
 !!! error TS2322: Type '{|C3|0|}[]' is not assignable to type '{|I1|1|}[]'.
-!!! error TS2322:   Property 'IM1' is missing in type 'C3' but required in type 'I1'.
+!!! error TS2322:   Property 'IM1' is missing in type '{|C3|2|}' but required in type '{|I1|3|}'.
 !!! related TS2728 tests/cases/compiler/arrayAssignmentTest1.ts:2:2: 'IM1' is declared here.
 !!! annotated symbol 0 tests/cases/compiler/arrayAssignmentTest1.ts:13:7
 !!! annotated symbol 1 tests/cases/compiler/arrayAssignmentTest1.ts:1:11
+!!! annotated symbol 2 tests/cases/compiler/arrayAssignmentTest1.ts:13:7
+!!! annotated symbol 3 tests/cases/compiler/arrayAssignmentTest1.ts:1:11
     
     arr_c1 = arr_c1; // should be ok - subtype relationship - is
     arr_c1 = arr_c2; // should be ok - subtype relationship - is
     arr_c1 = arr_i1; // should be an error - is
     ~~~~~~
 !!! error TS2322: Type '{|I1|0|}[]' is not assignable to type '{|C1|1|}[]'.
-!!! error TS2322:   Property 'C1M1' is missing in type 'I1' but required in type 'C1'.
+!!! error TS2322:   Property 'C1M1' is missing in type '{|I1|2|}' but required in type '{|C1|3|}'.
 !!! related TS2728 tests/cases/compiler/arrayAssignmentTest1.ts:7:2: 'C1M1' is declared here.
 !!! annotated symbol 0 tests/cases/compiler/arrayAssignmentTest1.ts:1:11
 !!! annotated symbol 1 tests/cases/compiler/arrayAssignmentTest1.ts:5:7
+!!! annotated symbol 2 tests/cases/compiler/arrayAssignmentTest1.ts:1:11
+!!! annotated symbol 3 tests/cases/compiler/arrayAssignmentTest1.ts:5:7
     arr_c1 = arr_c3; // should be an error - is
     ~~~~~~
 !!! error TS2322: Type '{|C3|0|}[]' is not assignable to type '{|C1|1|}[]'.
@@ -126,10 +132,12 @@ tests/cases/compiler/arrayAssignmentTest1.ts(85,1): error TS2740: Type 'I1' is m
     arr_c2 = arr_c1; // should be an error - subtype relationship - is
     ~~~~~~
 !!! error TS2322: Type '{|C1|0|}[]' is not assignable to type '{|C2|1|}[]'.
-!!! error TS2322:   Property 'C2M1' is missing in type 'C1' but required in type 'C2'.
+!!! error TS2322:   Property 'C2M1' is missing in type '{|C1|2|}' but required in type '{|C2|3|}'.
 !!! related TS2728 tests/cases/compiler/arrayAssignmentTest1.ts:10:5: 'C2M1' is declared here.
 !!! annotated symbol 0 tests/cases/compiler/arrayAssignmentTest1.ts:5:7
 !!! annotated symbol 1 tests/cases/compiler/arrayAssignmentTest1.ts:9:7
+!!! annotated symbol 2 tests/cases/compiler/arrayAssignmentTest1.ts:5:7
+!!! annotated symbol 3 tests/cases/compiler/arrayAssignmentTest1.ts:9:7
     arr_c2 = arr_i1; // should be an error - subtype relationship - is
     ~~~~~~
 !!! error TS2322: Type '{|I1|0|}[]' is not assignable to type '{|C2|1|}[]'.
@@ -149,24 +157,30 @@ tests/cases/compiler/arrayAssignmentTest1.ts(85,1): error TS2740: Type 'I1' is m
     arr_c3 = arr_c2_2; // should be an error - is
     ~~~~~~
 !!! error TS2322: Type '{|C2|0|}[]' is not assignable to type '{|C3|1|}[]'.
-!!! error TS2322:   Property 'CM3M1' is missing in type 'C2' but required in type 'C3'.
+!!! error TS2322:   Property 'CM3M1' is missing in type '{|C2|2|}' but required in type '{|C3|3|}'.
 !!! related TS2728 tests/cases/compiler/arrayAssignmentTest1.ts:14:5: 'CM3M1' is declared here.
 !!! annotated symbol 0 tests/cases/compiler/arrayAssignmentTest1.ts:9:7
 !!! annotated symbol 1 tests/cases/compiler/arrayAssignmentTest1.ts:13:7
+!!! annotated symbol 2 tests/cases/compiler/arrayAssignmentTest1.ts:9:7
+!!! annotated symbol 3 tests/cases/compiler/arrayAssignmentTest1.ts:13:7
     arr_c3 = arr_c1_2; // should be an error - is
     ~~~~~~
 !!! error TS2322: Type '{|C1|0|}[]' is not assignable to type '{|C3|1|}[]'.
-!!! error TS2322:   Property 'CM3M1' is missing in type 'C1' but required in type 'C3'.
+!!! error TS2322:   Property 'CM3M1' is missing in type '{|C1|2|}' but required in type '{|C3|3|}'.
 !!! related TS2728 tests/cases/compiler/arrayAssignmentTest1.ts:14:5: 'CM3M1' is declared here.
 !!! annotated symbol 0 tests/cases/compiler/arrayAssignmentTest1.ts:5:7
 !!! annotated symbol 1 tests/cases/compiler/arrayAssignmentTest1.ts:13:7
+!!! annotated symbol 2 tests/cases/compiler/arrayAssignmentTest1.ts:5:7
+!!! annotated symbol 3 tests/cases/compiler/arrayAssignmentTest1.ts:13:7
     arr_c3 = arr_i1_2; // should be an error - is
     ~~~~~~
 !!! error TS2322: Type '{|I1|0|}[]' is not assignable to type '{|C3|1|}[]'.
-!!! error TS2322:   Property 'CM3M1' is missing in type 'I1' but required in type 'C3'.
+!!! error TS2322:   Property 'CM3M1' is missing in type '{|I1|2|}' but required in type '{|C3|3|}'.
 !!! related TS2728 tests/cases/compiler/arrayAssignmentTest1.ts:14:5: 'CM3M1' is declared here.
 !!! annotated symbol 0 tests/cases/compiler/arrayAssignmentTest1.ts:1:11
 !!! annotated symbol 1 tests/cases/compiler/arrayAssignmentTest1.ts:13:7
+!!! annotated symbol 2 tests/cases/compiler/arrayAssignmentTest1.ts:1:11
+!!! annotated symbol 3 tests/cases/compiler/arrayAssignmentTest1.ts:13:7
     
     arr_any = f1; // should be an error - is
     ~~~~~~~

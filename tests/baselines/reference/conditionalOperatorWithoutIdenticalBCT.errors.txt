@@ -31,19 +31,23 @@ tests/cases/conformance/expressions/conditonalOperator/conditionalOperatorWithou
     var result2: A = true ? a : b;
         ~~~~~~~
 !!! error TS2322: Type '{|A|0|} | {|B|1|}' is not assignable to type '{|A|2|}'.
-!!! error TS2322:   Property 'propertyA' is missing in type 'B' but required in type 'A'.
+!!! error TS2322:   Property 'propertyA' is missing in type '{|B|3|}' but required in type '{|A|4|}'.
 !!! related TS2728 tests/cases/conformance/expressions/conditonalOperator/conditionalOperatorWithoutIdenticalBCT.ts:3:21: 'propertyA' is declared here.
 !!! annotated symbol 0 tests/cases/conformance/expressions/conditonalOperator/conditionalOperatorWithoutIdenticalBCT.ts:3:7
 !!! annotated symbol 1 tests/cases/conformance/expressions/conditonalOperator/conditionalOperatorWithoutIdenticalBCT.ts:4:7
 !!! annotated symbol 2 tests/cases/conformance/expressions/conditonalOperator/conditionalOperatorWithoutIdenticalBCT.ts:3:7
+!!! annotated symbol 3 tests/cases/conformance/expressions/conditonalOperator/conditionalOperatorWithoutIdenticalBCT.ts:4:7
+!!! annotated symbol 4 tests/cases/conformance/expressions/conditonalOperator/conditionalOperatorWithoutIdenticalBCT.ts:3:7
     var result3: B = true ? a : b;
         ~~~~~~~
 !!! error TS2322: Type '{|A|0|} | {|B|1|}' is not assignable to type '{|B|2|}'.
-!!! error TS2322:   Property 'propertyB' is missing in type 'A' but required in type 'B'.
+!!! error TS2322:   Property 'propertyB' is missing in type '{|A|3|}' but required in type '{|B|4|}'.
 !!! related TS2728 tests/cases/conformance/expressions/conditonalOperator/conditionalOperatorWithoutIdenticalBCT.ts:4:21: 'propertyB' is declared here.
 !!! annotated symbol 0 tests/cases/conformance/expressions/conditonalOperator/conditionalOperatorWithoutIdenticalBCT.ts:3:7
 !!! annotated symbol 1 tests/cases/conformance/expressions/conditonalOperator/conditionalOperatorWithoutIdenticalBCT.ts:4:7
 !!! annotated symbol 2 tests/cases/conformance/expressions/conditonalOperator/conditionalOperatorWithoutIdenticalBCT.ts:4:7
+!!! annotated symbol 3 tests/cases/conformance/expressions/conditonalOperator/conditionalOperatorWithoutIdenticalBCT.ts:3:7
+!!! annotated symbol 4 tests/cases/conformance/expressions/conditonalOperator/conditionalOperatorWithoutIdenticalBCT.ts:4:7
     var result31: A | B = true ? a : b;
     
     var result4: (t: X) => number = true ? (m) => m.propertyX1 : (n) => n.propertyX2;

@@ -219,14 +219,18 @@ tests/cases/conformance/types/asyncGenerators/types.asyncGenerators.es2018.2.ts(
     }
     async function * explicitReturnType10(): IterableIterator<number> {
                                              ~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2741: Property '[Symbol.iterator]' is missing in type 'AsyncIterableIterator<any>' but required in type 'IterableIterator<number>'.
+!!! error TS2741: Property '[Symbol.iterator]' is missing in type '{|AsyncIterableIterator|0|}<any>' but required in type '{|IterableIterator|1|}<number>'.
 !!! related TS2728 /.ts/lib.es2015.iterable.d.ts:47:5: '[Symbol.iterator]' is declared here.
+!!! annotated symbol 0 /.ts/lib.es2018.asynciterable.d.ts:42:11
+!!! annotated symbol 1 /.ts/lib.es2015.iterable.d.ts:46:11
         yield 1;
     }
     async function * explicitReturnType11(): Iterable<number> {
                                              ~~~~~~~~~~~~~~~~
-!!! error TS2741: Property '[Symbol.iterator]' is missing in type 'AsyncIterableIterator<any>' but required in type 'Iterable<number>'.
+!!! error TS2741: Property '[Symbol.iterator]' is missing in type '{|AsyncIterableIterator|0|}<any>' but required in type '{|Iterable|1|}<number>'.
 !!! related TS2728 /.ts/lib.es2015.iterable.d.ts:43:5: '[Symbol.iterator]' is declared here.
+!!! annotated symbol 0 /.ts/lib.es2018.asynciterable.d.ts:42:11
+!!! annotated symbol 1 /.ts/lib.es2015.iterable.d.ts:42:11
         yield 1;
     }
     async function * explicitReturnType12(): Iterator<number> {

@@ -15,12 +15,16 @@ tests/cases/compiler/bluebirdStaticThis.ts(60,73): error TS2694: Namespace '"tes
     export declare class Promise<R> implements Promise.Thenable<R> {
                          ~~~~~~~
 !!! error TS2420: Class '{|Promise|0|}<{|R|1|}>' incorrectly implements interface '{|Thenable|2|}<{|R|3|}>'.
-!!! error TS2420:   Property 'then' is missing in type 'Promise<R>' but required in type 'Thenable<R>'.
+!!! error TS2420:   Property 'then' is missing in type '{|Promise|4|}<{|R|5|}>' but required in type '{|Thenable|6|}<{|R|7|}>'.
 !!! related TS2728 tests/cases/compiler/bluebirdStaticThis.ts:113:3: 'then' is declared here.
 !!! annotated symbol 0 tests/cases/compiler/bluebirdStaticThis.ts:5:22
 !!! annotated symbol 1 tests/cases/compiler/bluebirdStaticThis.ts:5:30
 !!! annotated symbol 2 tests/cases/compiler/bluebirdStaticThis.ts:112:19
 !!! annotated symbol 3 tests/cases/compiler/bluebirdStaticThis.ts:5:30
+!!! annotated symbol 4 tests/cases/compiler/bluebirdStaticThis.ts:5:22
+!!! annotated symbol 5 tests/cases/compiler/bluebirdStaticThis.ts:5:30
+!!! annotated symbol 6 tests/cases/compiler/bluebirdStaticThis.ts:112:19
+!!! annotated symbol 7 tests/cases/compiler/bluebirdStaticThis.ts:5:30
     	constructor(callback: (resolve: (thenableOrResult: R | Promise.Thenable<R>) => void, reject: (error: any) => void) => void);
         static try<R>(dit: typeof Promise, fn: () => Promise.Thenable<R>, args?: any[], ctx?: any): Promise<R>;
         static try<R>(dit: typeof Promise, fn: () => R, args?: any[], ctx?: any): Promise<R>;

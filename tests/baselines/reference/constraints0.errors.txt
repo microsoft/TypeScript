@@ -19,9 +19,11 @@ tests/cases/compiler/constraints0.ts(14,11): error TS2344: Type 'B' does not sat
     var v2: C<B>; // should not work
               ~
 !!! error TS2344: Type '{|B|0|}' does not satisfy the constraint '{|A|1|}'.
-!!! error TS2344:   Property 'a' is missing in type 'B' but required in type 'A'.
+!!! error TS2344:   Property 'a' is missing in type '{|B|2|}' but required in type '{|A|3|}'.
 !!! related TS2728 tests/cases/compiler/constraints0.ts:2:2: 'a' is declared here.
 !!! annotated symbol 0 tests/cases/compiler/constraints0.ts:5:11
 !!! annotated symbol 1 tests/cases/compiler/constraints0.ts:1:11
+!!! annotated symbol 2 tests/cases/compiler/constraints0.ts:5:11
+!!! annotated symbol 3 tests/cases/compiler/constraints0.ts:1:11
     
     var y = v1.x.a; // 'a' should be of type 'number'

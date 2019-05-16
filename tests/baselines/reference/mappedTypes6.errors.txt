@@ -217,8 +217,10 @@ tests/cases/conformance/types/mapped/mappedTypes6.ts(120,4): error TS2540: Canno
     
     x1 = { a: 1 };  // Error
     ~~
-!!! error TS2741: Property 'b' is missing in type '{ a: number; }' but required in type 'Foo'.
+!!! error TS2741: Property 'b' is missing in type '{ {|a|0|}: number; }' but required in type '{|Foo|1|}'.
 !!! related TS2728 tests/cases/conformance/types/mapped/mappedTypes6.ts:80:5: 'b' is declared here.
+!!! annotated symbol 0 tests/cases/conformance/types/mapped/mappedTypes6.ts:92:8
+!!! annotated symbol 1 tests/cases/conformance/types/mapped/mappedTypes6.ts:78:6
     x1 = { a: 1, b: 1 };
     x1 = { a: 1, b: 1, c: 1 };
     x1 = { a: 1, b: 1, c: 1, d: 1 };
@@ -238,8 +240,13 @@ tests/cases/conformance/types/mapped/mappedTypes6.ts(120,4): error TS2540: Canno
 !!! error TS2739: Type '{ a: number; b: number; }' is missing the following properties from type 'Required<Foo>': c, d
     x2 = { a: 1, b: 1, c: 1 };  // Error
     ~~
-!!! error TS2741: Property 'd' is missing in type '{ a: number; b: number; c: number; }' but required in type 'Required<Foo>'.
+!!! error TS2741: Property 'd' is missing in type '{ {|a|0|}: number; {|b|1|}: number; {|c|2|}: number; }' but required in type '{|Required|3|}<{|Foo|4|}>'.
 !!! related TS2728 tests/cases/conformance/types/mapped/mappedTypes6.ts:82:5: 'd' is declared here.
+!!! annotated symbol 0 tests/cases/conformance/types/mapped/mappedTypes6.ts:106:8
+!!! annotated symbol 1 tests/cases/conformance/types/mapped/mappedTypes6.ts:106:14
+!!! annotated symbol 2 tests/cases/conformance/types/mapped/mappedTypes6.ts:106:20
+!!! annotated symbol 3 /.ts/lib.es5.d.ts:1431:6
+!!! annotated symbol 4 tests/cases/conformance/types/mapped/mappedTypes6.ts:78:6
     x2 = { a: 1, b: 1, c: 1, d: 1 };
     
     type Bar = {

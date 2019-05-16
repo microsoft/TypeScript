@@ -37,8 +37,11 @@ tests/cases/conformance/jsx/file.tsx(36,29): error TS2322: Type 'string' is not 
 !!! annotated symbol 3 tests/cases/conformance/jsx/file.tsx:3:43
     const c1 = <OneThing yy={10}/>;  // missing property;
                 ~~~~~~~~
-!!! error TS2741: Property 'yy1' is missing in type '{ yy: number; }' but required in type '{ yy: number; yy1: string; }'.
+!!! error TS2741: Property 'yy1' is missing in type '{ {|yy|0|}: number; }' but required in type '{ {|yy|1|}: number; {|yy1|2|}: string; }'.
 !!! related TS2728 tests/cases/conformance/jsx/file.tsx:3:43: 'yy1' is declared here.
+!!! annotated symbol 0 tests/cases/conformance/jsx/file.tsx:13:22
+!!! annotated symbol 1 tests/cases/conformance/jsx/file.tsx:3:31
+!!! annotated symbol 2 tests/cases/conformance/jsx/file.tsx:3:43
     const c2 = <OneThing {...obj} yy1 />; // type incompatible;
                                   ~~~
 !!! error TS2322: Type 'true' is not assignable to type 'string'.
@@ -72,8 +75,11 @@ tests/cases/conformance/jsx/file.tsx(36,29): error TS2322: Type 'string' is not 
     // Error
     const d1 = <TestingOneThing extra-data />
                 ~~~~~~~~~~~~~~~
-!!! error TS2741: Property 'yy' is missing in type '{ extra-data: true; }' but required in type '{ yy: string; direction?: number; }'.
+!!! error TS2741: Property 'yy' is missing in type '{ {|extra-data|0|}: true; }' but required in type '{ {|yy|1|}: string; {|direction|2|}?: number; }'.
 !!! related TS2728 tests/cases/conformance/jsx/file.tsx:22:38: 'yy' is declared here.
+!!! annotated symbol 0 tests/cases/conformance/jsx/file.tsx:25:29
+!!! annotated symbol 1 tests/cases/conformance/jsx/file.tsx:22:38
+!!! annotated symbol 2 tests/cases/conformance/jsx/file.tsx:22:50
     const d2 = <TestingOneThing yy="hello" direction="left" />
                                            ~~~~~~~~~
 !!! error TS2322: Type 'string' is not assignable to type 'number'.

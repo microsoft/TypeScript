@@ -79,18 +79,22 @@ tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignme
         ~
 !!! error TS2322: Type '{|T|0|}' is not assignable to type '{|S|1|}'.
 !!! error TS2322:   Types of property 'foo' are incompatible.
-!!! error TS2322:     Property 'bar' is missing in type 'Derived2' but required in type 'Derived'.
+!!! error TS2322:     Property 'bar' is missing in type '{|Derived2|2|}' but required in type '{|Derived|3|}'.
 !!! related TS2728 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithObjectMembers4.ts:5:34: 'bar' is declared here.
 !!! annotated symbol 0 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithObjectMembers4.ts:9:11
 !!! annotated symbol 1 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithObjectMembers4.ts:8:11
+!!! annotated symbol 2 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithObjectMembers4.ts:6:11
+!!! annotated symbol 3 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithObjectMembers4.ts:5:11
         t = s; // error
         ~
 !!! error TS2322: Type '{|S|0|}' is not assignable to type '{|T|1|}'.
 !!! error TS2322:   Types of property 'foo' are incompatible.
-!!! error TS2322:     Property 'baz' is missing in type 'Derived' but required in type 'Derived2'.
+!!! error TS2322:     Property 'baz' is missing in type '{|Derived|2|}' but required in type '{|Derived2|3|}'.
 !!! related TS2728 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithObjectMembers4.ts:6:35: 'baz' is declared here.
 !!! annotated symbol 0 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithObjectMembers4.ts:8:11
 !!! annotated symbol 1 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithObjectMembers4.ts:9:11
+!!! annotated symbol 2 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithObjectMembers4.ts:5:11
+!!! annotated symbol 3 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithObjectMembers4.ts:6:11
         s = s2; // ok
         s = a2; // ok
     
@@ -240,10 +244,12 @@ tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignme
         ~
 !!! error TS2322: Type '{|S|0|}' is not assignable to type '{|T|1|}'.
 !!! error TS2322:   Types of property 'foo' are incompatible.
-!!! error TS2322:     Property 'baz' is missing in type 'Base' but required in type 'Derived2'.
+!!! error TS2322:     Property 'baz' is missing in type '{|Base|2|}' but required in type '{|Derived2|3|}'.
 !!! related TS2728 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithObjectMembers4.ts:51:35: 'baz' is declared here.
 !!! annotated symbol 0 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithObjectMembers4.ts:53:11
 !!! annotated symbol 1 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithObjectMembers4.ts:54:11
+!!! annotated symbol 2 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithObjectMembers4.ts:49:11
+!!! annotated symbol 3 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithObjectMembers4.ts:51:11
         s = s2; // ok
         s = a2; // ok
     

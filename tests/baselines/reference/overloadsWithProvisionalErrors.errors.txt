@@ -19,8 +19,11 @@ tests/cases/compiler/overloadsWithProvisionalErrors.ts(8,17): error TS2304: Cann
 !!! error TS2304: Cannot find name 'blah'.
     func(s => ({ a: blah })); // Two errors here, one for blah not being defined, and one for the overload since it would not be applicable anyway
               ~~~~~~~~~~~~~
-!!! error TS2741: Property 'b' is missing in type '{ a: any; }' but required in type '{ a: number; b: number; }'.
+!!! error TS2741: Property 'b' is missing in type '{ {|a|0|}: any; }' but required in type '{ {|a|1|}: number; {|b|2|}: number; }'.
 !!! related TS2728 tests/cases/compiler/overloadsWithProvisionalErrors.ts:3:42: 'b' is declared here.
 !!! related TS6502 tests/cases/compiler/overloadsWithProvisionalErrors.ts:3:14: The expected type comes from the return type of this signature.
+!!! annotated symbol 0 tests/cases/compiler/overloadsWithProvisionalErrors.ts:8:14
+!!! annotated symbol 1 tests/cases/compiler/overloadsWithProvisionalErrors.ts:3:31
+!!! annotated symbol 2 tests/cases/compiler/overloadsWithProvisionalErrors.ts:3:42
                     ~~~~
 !!! error TS2304: Cannot find name 'blah'.

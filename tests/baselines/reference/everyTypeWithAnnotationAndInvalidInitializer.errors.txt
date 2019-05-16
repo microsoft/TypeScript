@@ -76,12 +76,16 @@ tests/cases/conformance/statements/VariableStatements/everyTypeWithAnnotationAnd
     
     var anInterface: I = new D();
         ~~~~~~~~~~~
-!!! error TS2741: Property 'id' is missing in type 'D<unknown>' but required in type 'I'.
+!!! error TS2741: Property 'id' is missing in type '{|D|0|}<unknown>' but required in type '{|I|1|}'.
 !!! related TS2728 tests/cases/conformance/statements/VariableStatements/everyTypeWithAnnotationAndInvalidInitializer.ts:2:5: 'id' is declared here.
+!!! annotated symbol 0 tests/cases/conformance/statements/VariableStatements/everyTypeWithAnnotationAndInvalidInitializer.ts:9:7
+!!! annotated symbol 1 tests/cases/conformance/statements/VariableStatements/everyTypeWithAnnotationAndInvalidInitializer.ts:1:11
     var aClass: C = new D();
         ~~~~~~
-!!! error TS2741: Property 'id' is missing in type 'D<unknown>' but required in type 'C'.
+!!! error TS2741: Property 'id' is missing in type '{|D|0|}<unknown>' but required in type '{|C|1|}'.
 !!! related TS2728 tests/cases/conformance/statements/VariableStatements/everyTypeWithAnnotationAndInvalidInitializer.ts:6:5: 'id' is declared here.
+!!! annotated symbol 0 tests/cases/conformance/statements/VariableStatements/everyTypeWithAnnotationAndInvalidInitializer.ts:9:7
+!!! annotated symbol 1 tests/cases/conformance/statements/VariableStatements/everyTypeWithAnnotationAndInvalidInitializer.ts:5:7
     var aGenericClass: D<string> = new C();
         ~~~~~~~~~~~~~
 !!! error TS2739: Type 'C' is missing the following properties from type 'D<string>': source, recurse, wrapped
@@ -117,7 +121,7 @@ tests/cases/conformance/statements/VariableStatements/everyTypeWithAnnotationAnd
 !!! error TS2322: Type 'typeof {|N|0|}' is not assignable to type 'typeof {|M|1|}'.
 !!! error TS2322:   Types of property 'A' are incompatible.
 !!! error TS2322:     Type 'typeof {|N|2|}.{|A|3|}' is not assignable to type 'typeof {|M|4|}.{|A|5|}'.
-!!! error TS2322:       Property 'name' is missing in type 'N.A' but required in type 'M.A'.
+!!! error TS2322:       Property 'name' is missing in type '{|N|6|}.{|A|7|}' but required in type '{|M|8|}.{|A|9|}'.
 !!! related TS2728 tests/cases/conformance/statements/VariableStatements/everyTypeWithAnnotationAndInvalidInitializer.ts:20:9: 'name' is declared here.
 !!! annotated symbol 0 tests/cases/conformance/statements/VariableStatements/everyTypeWithAnnotationAndInvalidInitializer.ts:26:8
 !!! annotated symbol 1 tests/cases/conformance/statements/VariableStatements/everyTypeWithAnnotationAndInvalidInitializer.ts:18:8
@@ -125,6 +129,10 @@ tests/cases/conformance/statements/VariableStatements/everyTypeWithAnnotationAnd
 !!! annotated symbol 3 tests/cases/conformance/statements/VariableStatements/everyTypeWithAnnotationAndInvalidInitializer.ts:27:18
 !!! annotated symbol 4 tests/cases/conformance/statements/VariableStatements/everyTypeWithAnnotationAndInvalidInitializer.ts:18:8
 !!! annotated symbol 5 tests/cases/conformance/statements/VariableStatements/everyTypeWithAnnotationAndInvalidInitializer.ts:19:18
+!!! annotated symbol 6 tests/cases/conformance/statements/VariableStatements/everyTypeWithAnnotationAndInvalidInitializer.ts:26:8
+!!! annotated symbol 7 tests/cases/conformance/statements/VariableStatements/everyTypeWithAnnotationAndInvalidInitializer.ts:27:18
+!!! annotated symbol 8 tests/cases/conformance/statements/VariableStatements/everyTypeWithAnnotationAndInvalidInitializer.ts:18:8
+!!! annotated symbol 9 tests/cases/conformance/statements/VariableStatements/everyTypeWithAnnotationAndInvalidInitializer.ts:19:18
     var aClassInModule: M.A = new N.A();
         ~~~~~~~~~~~~~~
 !!! error TS2322: Type '{|N|0|}.{|A|1|}' is not assignable to type '{|M|2|}.{|A|3|}'.

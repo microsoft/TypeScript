@@ -75,8 +75,14 @@ tests/cases/conformance/jsx/inline/index.tsx(24,48): error TS2322: Type 'import(
     let elem = prerendered;
     elem = <h></h>; // Expect assignability error here
     ~~~~
-!!! error TS2741: Property '__predomBrand' is missing in type 'import("tests/cases/conformance/jsx/inline/renderer").dom.JSX.Element' but required in type 'import("tests/cases/conformance/jsx/inline/renderer2").predom.JSX.Element'.
+!!! error TS2741: Property '__predomBrand' is missing in type 'import("tests/cases/conformance/jsx/inline/renderer").{|dom|0|}.{|JSX|1|}.{|Element|2|}' but required in type 'import("tests/cases/conformance/jsx/inline/renderer2").{|predom|3|}.{|JSX|4|}.{|Element|5|}'.
 !!! related TS2728 tests/cases/conformance/jsx/inline/renderer2.d.ts:7:13: '__predomBrand' is declared here.
+!!! annotated symbol 0 tests/cases/conformance/jsx/inline/renderer.d.ts:19:17
+!!! annotated symbol 1 tests/cases/conformance/jsx/inline/renderer.d.ts:2:15
+!!! annotated symbol 2 tests/cases/conformance/jsx/inline/renderer.d.ts:6:19
+!!! annotated symbol 3 tests/cases/conformance/jsx/inline/renderer2.d.ts:19:17
+!!! annotated symbol 4 tests/cases/conformance/jsx/inline/renderer2.d.ts:2:15
+!!! annotated symbol 5 tests/cases/conformance/jsx/inline/renderer2.d.ts:6:19
     
     const DOMSFC = (props: {x: number, y: number, children?: dom.JSX.Element[]}) => <p>{props.x} + {props.y} = {props.x + props.y}{props.children}</p>;
     
@@ -103,9 +109,11 @@ tests/cases/conformance/jsx/inline/index.tsx(24,48): error TS2322: Type 'import(
 !!! annotated symbol 5 tests/cases/conformance/jsx/inline/renderer2.d.ts:6:19
                                            ~~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS2605: JSX element type '{|MyClass|0|}' is not a constructor function for JSX elements.
-!!! error TS2605:   Property '__domBrand' is missing in type 'MyClass' but required in type 'ElementClass'.
+!!! error TS2605:   Property '__domBrand' is missing in type '{|MyClass|1|}' but required in type '{|ElementClass|2|}'.
 !!! related TS2728 tests/cases/conformance/jsx/inline/renderer.d.ts:7:13: '__domBrand' is declared here.
 !!! annotated symbol 0 tests/cases/conformance/jsx/inline/component.tsx:6:14
+!!! annotated symbol 1 tests/cases/conformance/jsx/inline/component.tsx:6:14
+!!! annotated symbol 2 tests/cases/conformance/jsx/inline/renderer.d.ts:12:19
                                                                   ~~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS2322: Type 'import("tests/cases/conformance/jsx/inline/renderer").{|dom|0|}.{|JSX|1|}.{|Element|2|}' is not assignable to type 'import("tests/cases/conformance/jsx/inline/renderer2").{|predom|3|}.{|JSX|4|}.{|Element|5|}'.
 !!! annotated symbol 0 tests/cases/conformance/jsx/inline/renderer.d.ts:19:17
@@ -121,8 +129,14 @@ tests/cases/conformance/jsx/inline/index.tsx(24,48): error TS2322: Type 'import(
     // Should fail, nondom isn't allowed as children of dom
     const _brokenTree2 = <DOMSFC x={1} y={2}>{tree}{tree}</DOMSFC>
                                              ~~~~~~
-!!! error TS2741: Property '__domBrand' is missing in type 'import("tests/cases/conformance/jsx/inline/renderer2").predom.JSX.Element' but required in type 'import("tests/cases/conformance/jsx/inline/renderer").dom.JSX.Element'.
+!!! error TS2741: Property '__domBrand' is missing in type 'import("tests/cases/conformance/jsx/inline/renderer2").{|predom|0|}.{|JSX|1|}.{|Element|2|}' but required in type 'import("tests/cases/conformance/jsx/inline/renderer").{|dom|3|}.{|JSX|4|}.{|Element|5|}'.
 !!! related TS2728 tests/cases/conformance/jsx/inline/renderer.d.ts:7:13: '__domBrand' is declared here.
+!!! annotated symbol 0 tests/cases/conformance/jsx/inline/renderer2.d.ts:19:17
+!!! annotated symbol 1 tests/cases/conformance/jsx/inline/renderer2.d.ts:2:15
+!!! annotated symbol 2 tests/cases/conformance/jsx/inline/renderer2.d.ts:6:19
+!!! annotated symbol 3 tests/cases/conformance/jsx/inline/renderer.d.ts:19:17
+!!! annotated symbol 4 tests/cases/conformance/jsx/inline/renderer.d.ts:2:15
+!!! annotated symbol 5 tests/cases/conformance/jsx/inline/renderer.d.ts:6:19
                                                    ~~~~~~
 !!! error TS2322: Type 'import("tests/cases/conformance/jsx/inline/renderer2").{|predom|0|}.{|JSX|1|}.{|Element|2|}' is not assignable to type 'import("tests/cases/conformance/jsx/inline/renderer").{|dom|3|}.{|JSX|4|}.{|Element|5|}'.
 !!! annotated symbol 0 tests/cases/conformance/jsx/inline/renderer2.d.ts:19:17

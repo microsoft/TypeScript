@@ -9,12 +9,14 @@ tests/cases/compiler/typeofExternalModules_core.ts(7,1): error TS2741: Property 
     var y1: typeof ext = ext;
     y1 = exp;
     ~~
-!!! error TS2741: Property 'C' is missing in type 'typeof D' but required in type 'typeof import("tests/cases/compiler/typeofExternalModules_external")'.
+!!! error TS2741: Property 'C' is missing in type 'typeof {|D|0|}' but required in type 'typeof import("tests/cases/compiler/typeofExternalModules_external")'.
 !!! related TS2728 /.src/tests/cases/compiler/typeofExternalModules_external.ts:1:14: 'C' is declared here.
+!!! annotated symbol 0 /.src/tests/cases/compiler/typeofExternalModules_exportAssign.ts:1:7
     var y2: typeof exp = exp;
     y2 = ext;
     ~~
-!!! error TS2741: Property 'prototype' is missing in type 'typeof import("tests/cases/compiler/typeofExternalModules_external")' but required in type 'typeof D'.
+!!! error TS2741: Property 'prototype' is missing in type 'typeof import("tests/cases/compiler/typeofExternalModules_external")' but required in type 'typeof {|D|0|}'.
+!!! annotated symbol 0 /.src/tests/cases/compiler/typeofExternalModules_exportAssign.ts:1:7
 ==== tests/cases/compiler/typeofExternalModules_external.ts (0 errors) ====
     export class C { }
     

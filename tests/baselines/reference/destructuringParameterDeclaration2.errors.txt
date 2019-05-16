@@ -90,9 +90,10 @@ tests/cases/conformance/es6/destructuring/destructuringParameterDeclaration2.ts(
     c1({});            // Error, implied type is {z:number}?
        ~~
 !!! error TS2345: Argument of type '{}' is not assignable to parameter of type '{ {|z|0|}: number; }'.
-!!! error TS2345:   Property 'z' is missing in type '{}' but required in type '{ z: number; }'.
+!!! error TS2345:   Property 'z' is missing in type '{}' but required in type '{ {|z|1|}: number; }'.
 !!! related TS2728 tests/cases/conformance/es6/destructuring/destructuringParameterDeclaration2.ts:27:21: 'z' is declared here.
 !!! annotated symbol 0 tests/cases/conformance/es6/destructuring/destructuringParameterDeclaration2.ts:27:21
+!!! annotated symbol 1 tests/cases/conformance/es6/destructuring/destructuringParameterDeclaration2.ts:27:21
     c1({ z: true });   // Error, implied type is {z:number}?
          ~
 !!! error TS2322: Type 'true' is not assignable to type 'number'.
@@ -137,13 +138,19 @@ tests/cases/conformance/es6/destructuring/destructuringParameterDeclaration2.ts(
 !!! error TS2416: Property 'd4' in type 'C4' is not assignable to the same property in base type 'F2'.
 !!! error TS2416:   Type '({ x, y, c }: { {|x|0|}: any; {|y|1|}: any; {|c|2|}: any; }) => void' is not assignable to type '({ x, y, z }?: { {|x|3|}: any; {|y|4|}: any; {|z|5|}: any; }) => any'.
 !!! error TS2416:     Types of parameters '__0' and '__0' are incompatible.
-!!! error TS2416:       Property 'c' is missing in type '{ x: any; y: any; z: any; }' but required in type '{ x: any; y: any; c: any; }'.
+!!! error TS2416:       Property 'c' is missing in type '{ {|x|6|}: any; {|y|7|}: any; {|z|8|}: any; }' but required in type '{ {|x|9|}: any; {|y|10|}: any; {|c|11|}: any; }'.
 !!! annotated dropped!: 0
 !!! annotated dropped!: 1
 !!! annotated dropped!: 2
 !!! annotated dropped!: 3
 !!! annotated dropped!: 4
 !!! annotated dropped!: 5
+!!! annotated dropped!: 6
+!!! annotated dropped!: 7
+!!! annotated dropped!: 8
+!!! annotated dropped!: 9
+!!! annotated dropped!: 10
+!!! annotated dropped!: 11
         e0([a, b, q]) { }
     }
     

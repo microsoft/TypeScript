@@ -22,7 +22,9 @@ tests/cases/conformance/es6/destructuring/iterableArrayPattern17.ts(17,5): error
     fun(new FooIterator);
         ~~~~~~~~~~~~~~~
 !!! error TS2345: Argument of type '{|FooIterator|0|}' is not assignable to parameter of type '{|Bar|1|}'.
-!!! error TS2345:   Property 'x' is missing in type 'FooIterator' but required in type 'Bar'.
+!!! error TS2345:   Property 'x' is missing in type '{|FooIterator|2|}' but required in type '{|Bar|3|}'.
 !!! related TS2728 tests/cases/conformance/es6/destructuring/iterableArrayPattern17.ts:1:13: 'x' is declared here.
 !!! annotated symbol 0 tests/cases/conformance/es6/destructuring/iterableArrayPattern17.ts:3:7
 !!! annotated symbol 1 tests/cases/conformance/es6/destructuring/iterableArrayPattern17.ts:1:7
+!!! annotated symbol 2 tests/cases/conformance/es6/destructuring/iterableArrayPattern17.ts:3:7
+!!! annotated symbol 3 tests/cases/conformance/es6/destructuring/iterableArrayPattern17.ts:1:7

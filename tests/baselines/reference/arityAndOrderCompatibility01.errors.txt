@@ -55,7 +55,8 @@ tests/cases/conformance/types/tuple/arityAndOrderCompatibility01.ts(32,5): error
 !!! error TS2741: Property '2' is missing in type '[string, number]' but required in type '[number, number, number]'.
     var j2: [number, number, number] = y;
         ~~
-!!! error TS2741: Property '2' is missing in type 'StrNum' but required in type '[number, number, number]'.
+!!! error TS2741: Property '2' is missing in type '{|StrNum|0|}' but required in type '[number, number, number]'.
+!!! annotated symbol 0 tests/cases/conformance/types/tuple/arityAndOrderCompatibility01.ts:1:11
     var j3: [number, number, number] = z;
         ~~
 !!! error TS2740: Type '{ 0: string; 1: number; length: 2; }' is missing the following properties from type '[number, number, number]': 2, pop, push, concat, and 16 more.
@@ -64,7 +65,8 @@ tests/cases/conformance/types/tuple/arityAndOrderCompatibility01.ts(32,5): error
 !!! error TS2741: Property '2' is missing in type '[string, number]' but required in type '[string, number, number]'.
     var k2: [string, number, number] = y;
         ~~
-!!! error TS2741: Property '2' is missing in type 'StrNum' but required in type '[string, number, number]'.
+!!! error TS2741: Property '2' is missing in type '{|StrNum|0|}' but required in type '[string, number, number]'.
+!!! annotated symbol 0 tests/cases/conformance/types/tuple/arityAndOrderCompatibility01.ts:1:11
     var k3: [string, number, number] = z;
         ~~
 !!! error TS2740: Type '{ 0: string; 1: number; length: 2; }' is missing the following properties from type '[string, number, number]': 2, pop, push, concat, and 16 more.

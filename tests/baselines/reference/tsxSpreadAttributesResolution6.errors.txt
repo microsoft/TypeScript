@@ -18,7 +18,7 @@ tests/cases/conformance/jsx/file.tsx(13,10): error TS2322: Type '{ editable: tru
     let x = <TextComponent editable={true} />
              ~~~~~~~~~~~~~
 !!! error TS2322: Type '{ {|editable|0|}: true; }' is not assignable to type '({|IntrinsicAttributes|1|} & {|IntrinsicClassAttributes|2|}<{|TextComponent|3|}> & { {|editable|4|}: false; } & { {|children|5|}?: {|ReactNode|6|}; }) | ({|IntrinsicAttributes|7|} & {|IntrinsicClassAttributes|8|}<{|TextComponent|9|}> & { {|editable|10|}: true; {|onEdit|11|}: (newText: string) => void; } & { {|children|12|}?: {|ReactNode|13|}; })'.
-!!! error TS2322:   Property 'onEdit' is missing in type '{ editable: true; }' but required in type '{ editable: true; onEdit: (newText: string) => void; }'.
+!!! error TS2322:   Property 'onEdit' is missing in type '{ {|editable|14|}: true; }' but required in type '{ {|editable|15|}: true; {|onEdit|16|}: (newText: string) => void; }'.
 !!! related TS2728 tests/cases/conformance/jsx/file.tsx:4:36: 'onEdit' is declared here.
 !!! annotated symbol 0 tests/cases/conformance/jsx/file.tsx:13:24
 !!! annotated symbol 1 /.lib/react.d.ts:2367:15
@@ -34,6 +34,9 @@ tests/cases/conformance/jsx/file.tsx(13,10): error TS2322: Type '{ editable: tru
 !!! annotated symbol 11 tests/cases/conformance/jsx/file.tsx:4:36
 !!! annotated symbol 12 /.lib/react.d.ts:175:22
 !!! annotated symbol 13 /.lib/react.d.ts:93:10
+!!! annotated symbol 14 tests/cases/conformance/jsx/file.tsx:13:24
+!!! annotated symbol 15 tests/cases/conformance/jsx/file.tsx:4:20
+!!! annotated symbol 16 tests/cases/conformance/jsx/file.tsx:4:36
     
     const textProps: TextProps = {
         editable: false

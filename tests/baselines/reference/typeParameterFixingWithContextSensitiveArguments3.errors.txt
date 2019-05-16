@@ -10,6 +10,8 @@ tests/cases/compiler/typeParameterFixingWithContextSensitiveArguments3.ts(7,35):
     
     var d = f(a, b, u2 => u2.b, t2 => t2);
                                       ~~
-!!! error TS2741: Property 'b' is missing in type 'A' but required in type 'B'.
+!!! error TS2741: Property 'b' is missing in type '{|A|0|}' but required in type '{|B|1|}'.
 !!! related TS2728 tests/cases/compiler/typeParameterFixingWithContextSensitiveArguments3.ts:3:25: 'b' is declared here.
 !!! related TS6502 tests/cases/compiler/typeParameterFixingWithContextSensitiveArguments3.ts:1:56: The expected type comes from the return type of this signature.
+!!! annotated symbol 0 tests/cases/compiler/typeParameterFixingWithContextSensitiveArguments3.ts:2:11
+!!! annotated symbol 1 tests/cases/compiler/typeParameterFixingWithContextSensitiveArguments3.ts:3:11

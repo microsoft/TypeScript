@@ -109,10 +109,12 @@ tests/cases/compiler/recursiveClassReferenceTest.ts(95,21): error TS2345: Argume
     			return new State(self);
     			                 ~~~~
 !!! error TS2345: Argument of type '{|Window|0|}' is not assignable to parameter of type '{|IMode|1|}'.
-!!! error TS2345:   Property 'getInitialState' is missing in type 'Window' but required in type 'IMode'.
+!!! error TS2345:   Property 'getInitialState' is missing in type '{|Window|2|}' but required in type '{|IMode|3|}'.
 !!! related TS2728 tests/cases/compiler/recursiveClassReferenceTest.ts:66:19: 'getInitialState' is declared here.
 !!! annotated symbol 0 tests/cases/compiler/recursiveClassReferenceTest.ts:71:11
 !!! annotated symbol 1 tests/cases/compiler/recursiveClassReferenceTest.ts:66:11
+!!! annotated symbol 2 tests/cases/compiler/recursiveClassReferenceTest.ts:71:11
+!!! annotated symbol 3 tests/cases/compiler/recursiveClassReferenceTest.ts:66:11
     		}
     
     

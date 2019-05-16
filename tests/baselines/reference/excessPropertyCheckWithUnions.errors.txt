@@ -52,10 +52,13 @@ tests/cases/compiler/excessPropertyCheckWithUnions.ts(66,9): error TS2326: Types
     wrong = { tag: "D" }
     ~~~~~
 !!! error TS2322: Type '{ {|tag|0|}: "D"; }' is not assignable to type '{|ADT|1|}'.
-!!! error TS2322:   Property 'd20' is missing in type '{ tag: "D"; }' but required in type '{ tag: "D"; d20: 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12 | 13 | 14 | 15 | 16 | 17 | 18 | 19 | 20; }'.
+!!! error TS2322:   Property 'd20' is missing in type '{ {|tag|2|}: "D"; }' but required in type '{ {|tag|3|}: "D"; {|d20|4|}: 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12 | 13 | 14 | 15 | 16 | 17 | 18 | 19 | 20; }'.
 !!! related TS2728 tests/cases/compiler/excessPropertyCheckWithUnions.ts:6:5: 'd20' is declared here.
 !!! annotated symbol 0 tests/cases/compiler/excessPropertyCheckWithUnions.ts:12:11
 !!! annotated symbol 1 tests/cases/compiler/excessPropertyCheckWithUnions.ts:1:6
+!!! annotated symbol 2 tests/cases/compiler/excessPropertyCheckWithUnions.ts:12:11
+!!! annotated symbol 3 tests/cases/compiler/excessPropertyCheckWithUnions.ts:5:5
+!!! annotated symbol 4 tests/cases/compiler/excessPropertyCheckWithUnions.ts:6:5
     
     type Ambiguous = {
         tag: "A",

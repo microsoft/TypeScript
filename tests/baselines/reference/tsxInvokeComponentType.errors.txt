@@ -9,8 +9,9 @@ tests/cases/compiler/tsxInvokeComponentType.tsx(6,14): error TS2741: Property 's
     
     const bad = <Elem />;
                  ~~~~
-!!! error TS2741: Property 'someKey' is missing in type '{}' but required in type '{ someKey: string; }'.
+!!! error TS2741: Property 'someKey' is missing in type '{}' but required in type '{ {|someKey|0|}: string; }'.
 !!! related TS2728 tests/cases/compiler/tsxInvokeComponentType.tsx:4:37: 'someKey' is declared here.
+!!! annotated symbol 0 tests/cases/compiler/tsxInvokeComponentType.tsx:4:37
     
     const good = <Elem someKey="ok" />;
     

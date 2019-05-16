@@ -40,12 +40,14 @@ tests/cases/conformance/types/typeRelationships/assignmentCompatibility/covarian
         b = a;  // Error
         ~
 !!! error TS2322: Type '{|P|0|}<{|A|1|}>' is not assignable to type '{|P|2|}<{|B|3|}>'.
-!!! error TS2322:   Property 'b' is missing in type 'A' but required in type 'B'.
+!!! error TS2322:   Property 'b' is missing in type '{|A|4|}' but required in type '{|B|5|}'.
 !!! related TS2728 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/covariantCallbacks.ts:8:25: 'b' is declared here.
 !!! annotated symbol 0 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/covariantCallbacks.ts:3:11
 !!! annotated symbol 1 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/covariantCallbacks.ts:7:11
 !!! annotated symbol 2 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/covariantCallbacks.ts:3:11
 !!! annotated symbol 3 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/covariantCallbacks.ts:8:11
+!!! annotated symbol 4 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/covariantCallbacks.ts:7:11
+!!! annotated symbol 5 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/covariantCallbacks.ts:8:11
     }
     
     function f2(a: Promise<A>, b: Promise<B>) {

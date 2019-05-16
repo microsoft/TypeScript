@@ -193,9 +193,9 @@ tests/cases/conformance/types/conditional/conditionalTypes2.ts(75,12): error TS2
         fooBat(x);  // Error
                ~
 !!! error TS2345: Argument of type '{|Extract|0|}<{|Extract|1|}<{|T|2|}, {|Foo|3|}>, {|Bar|4|}>' is not assignable to parameter of type '{ {|foo|5|}: string; {|bat|6|}: string; }'.
-!!! error TS2345:   Property 'bat' is missing in type 'Bar & Foo' but required in type '{ foo: string; bat: string; }'.
-!!! error TS2345:     Type '{|Extract|7|}<{|T|8|}, {|Bar|9|}>' is not assignable to type '{ {|foo|10|}: string; {|bat|11|}: string; }'.
-!!! error TS2345:       Property 'bat' is missing in type 'Bar & Foo' but required in type '{ foo: string; bat: string; }'.
+!!! error TS2345:   Property 'bat' is missing in type '{|Bar|7|} & {|Foo|8|}' but required in type '{ {|foo|9|}: string; {|bat|10|}: string; }'.
+!!! error TS2345:     Type '{|Extract|11|}<{|T|12|}, {|Bar|13|}>' is not assignable to type '{ {|foo|14|}: string; {|bat|15|}: string; }'.
+!!! error TS2345:       Property 'bat' is missing in type '{|Bar|16|} & {|Foo|17|}' but required in type '{ {|foo|18|}: string; {|bat|19|}: string; }'.
 !!! related TS2728 tests/cases/conformance/types/conditional/conditionalTypes2.ts:62:43: 'bat' is declared here.
 !!! related TS2728 tests/cases/conformance/types/conditional/conditionalTypes2.ts:62:43: 'bat' is declared here.
 !!! annotated symbol 0 /.ts/lib.es5.d.ts:1464:6
@@ -205,15 +205,23 @@ tests/cases/conformance/types/conditional/conditionalTypes2.ts(75,12): error TS2
 !!! annotated symbol 4 tests/cases/conformance/types/conditional/conditionalTypes2.ts:59:6
 !!! annotated symbol 5 tests/cases/conformance/types/conditional/conditionalTypes2.ts:62:30
 !!! annotated symbol 6 tests/cases/conformance/types/conditional/conditionalTypes2.ts:62:43
-!!! annotated symbol 7 /.ts/lib.es5.d.ts:1464:6
-!!! annotated symbol 8 tests/cases/conformance/types/conditional/conditionalTypes2.ts:72:14
-!!! annotated symbol 9 tests/cases/conformance/types/conditional/conditionalTypes2.ts:59:6
-!!! annotated symbol 10 tests/cases/conformance/types/conditional/conditionalTypes2.ts:62:30
-!!! annotated symbol 11 tests/cases/conformance/types/conditional/conditionalTypes2.ts:62:43
+!!! annotated symbol 7 tests/cases/conformance/types/conditional/conditionalTypes2.ts:59:6
+!!! annotated symbol 8 tests/cases/conformance/types/conditional/conditionalTypes2.ts:58:6
+!!! annotated symbol 9 tests/cases/conformance/types/conditional/conditionalTypes2.ts:62:30
+!!! annotated symbol 10 tests/cases/conformance/types/conditional/conditionalTypes2.ts:62:43
+!!! annotated symbol 11 /.ts/lib.es5.d.ts:1464:6
+!!! annotated symbol 12 tests/cases/conformance/types/conditional/conditionalTypes2.ts:72:14
+!!! annotated symbol 13 tests/cases/conformance/types/conditional/conditionalTypes2.ts:59:6
+!!! annotated symbol 14 tests/cases/conformance/types/conditional/conditionalTypes2.ts:62:30
+!!! annotated symbol 15 tests/cases/conformance/types/conditional/conditionalTypes2.ts:62:43
+!!! annotated symbol 16 tests/cases/conformance/types/conditional/conditionalTypes2.ts:59:6
+!!! annotated symbol 17 tests/cases/conformance/types/conditional/conditionalTypes2.ts:58:6
+!!! annotated symbol 18 tests/cases/conformance/types/conditional/conditionalTypes2.ts:62:30
+!!! annotated symbol 19 tests/cases/conformance/types/conditional/conditionalTypes2.ts:62:43
         fooBat(y);  // Error
                ~
 !!! error TS2345: Argument of type '{|Extract|0|}<{|T|1|}, {|Foo|2|} & {|Bar|3|}>' is not assignable to parameter of type '{ {|foo|4|}: string; {|bat|5|}: string; }'.
-!!! error TS2345:   Property 'bat' is missing in type 'Foo & Bar' but required in type '{ foo: string; bat: string; }'.
+!!! error TS2345:   Property 'bat' is missing in type '{|Foo|6|} & {|Bar|7|}' but required in type '{ {|foo|8|}: string; {|bat|9|}: string; }'.
 !!! related TS2728 tests/cases/conformance/types/conditional/conditionalTypes2.ts:62:43: 'bat' is declared here.
 !!! annotated symbol 0 /.ts/lib.es5.d.ts:1464:6
 !!! annotated symbol 1 tests/cases/conformance/types/conditional/conditionalTypes2.ts:72:14
@@ -221,11 +229,15 @@ tests/cases/conformance/types/conditional/conditionalTypes2.ts(75,12): error TS2
 !!! annotated symbol 3 tests/cases/conformance/types/conditional/conditionalTypes2.ts:59:6
 !!! annotated symbol 4 tests/cases/conformance/types/conditional/conditionalTypes2.ts:62:30
 !!! annotated symbol 5 tests/cases/conformance/types/conditional/conditionalTypes2.ts:62:43
+!!! annotated symbol 6 tests/cases/conformance/types/conditional/conditionalTypes2.ts:58:6
+!!! annotated symbol 7 tests/cases/conformance/types/conditional/conditionalTypes2.ts:59:6
+!!! annotated symbol 8 tests/cases/conformance/types/conditional/conditionalTypes2.ts:62:30
+!!! annotated symbol 9 tests/cases/conformance/types/conditional/conditionalTypes2.ts:62:43
         fooBat(z);  // Error
                ~
 !!! error TS2345: Argument of type '{|Extract2|0|}<{|T|1|}, {|Foo|2|}, {|Bar|3|}>' is not assignable to parameter of type '{ {|foo|4|}: string; {|bat|5|}: string; }'.
 !!! error TS2345:   Type '{|T|6|} extends {|Bar|7|} ? {|T|8|} : never' is not assignable to type '{ {|foo|9|}: string; {|bat|10|}: string; }'.
-!!! error TS2345:     Property 'bat' is missing in type 'Bar & Foo' but required in type '{ foo: string; bat: string; }'.
+!!! error TS2345:     Property 'bat' is missing in type '{|Bar|11|} & {|Foo|12|}' but required in type '{ {|foo|13|}: string; {|bat|14|}: string; }'.
 !!! related TS2728 tests/cases/conformance/types/conditional/conditionalTypes2.ts:62:43: 'bat' is declared here.
 !!! annotated symbol 0 tests/cases/conformance/types/conditional/conditionalTypes2.ts:64:6
 !!! annotated symbol 1 tests/cases/conformance/types/conditional/conditionalTypes2.ts:72:14
@@ -238,6 +250,10 @@ tests/cases/conformance/types/conditional/conditionalTypes2.ts(75,12): error TS2
 !!! annotated symbol 8 tests/cases/conformance/types/conditional/conditionalTypes2.ts:72:14
 !!! annotated symbol 9 tests/cases/conformance/types/conditional/conditionalTypes2.ts:62:30
 !!! annotated symbol 10 tests/cases/conformance/types/conditional/conditionalTypes2.ts:62:43
+!!! annotated symbol 11 tests/cases/conformance/types/conditional/conditionalTypes2.ts:59:6
+!!! annotated symbol 12 tests/cases/conformance/types/conditional/conditionalTypes2.ts:58:6
+!!! annotated symbol 13 tests/cases/conformance/types/conditional/conditionalTypes2.ts:62:30
+!!! annotated symbol 14 tests/cases/conformance/types/conditional/conditionalTypes2.ts:62:43
     }
     
     // Repros from #22860

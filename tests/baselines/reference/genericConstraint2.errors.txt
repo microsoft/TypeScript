@@ -18,10 +18,12 @@ tests/cases/compiler/genericConstraint2.ts(21,17): error TS2344: Type 'Comparabl
     class ComparableString implements Comparable<string>{
           ~~~~~~~~~~~~~~~~
 !!! error TS2420: Class '{|ComparableString|0|}' incorrectly implements interface '{|Comparable|1|}<string>'.
-!!! error TS2420:   Property 'comparer' is missing in type 'ComparableString' but required in type 'Comparable<string>'.
+!!! error TS2420:   Property 'comparer' is missing in type '{|ComparableString|2|}' but required in type '{|Comparable|3|}<string>'.
 !!! related TS2728 tests/cases/compiler/genericConstraint2.ts:2:5: 'comparer' is declared here.
 !!! annotated symbol 0 tests/cases/compiler/genericConstraint2.ts:11:7
 !!! annotated symbol 1 tests/cases/compiler/genericConstraint2.ts:1:11
+!!! annotated symbol 2 tests/cases/compiler/genericConstraint2.ts:11:7
+!!! annotated symbol 3 tests/cases/compiler/genericConstraint2.ts:1:11
         constructor(public currentValue: string) { }
     
         localeCompare(other) {
@@ -34,8 +36,11 @@ tests/cases/compiler/genericConstraint2.ts(21,17): error TS2344: Type 'Comparabl
     var c = compare<ComparableString>(a, b);
                     ~~~~~~~~~~~~~~~~
 !!! error TS2344: Type '{|ComparableString|0|}' does not satisfy the constraint '{|Comparable|1|}<{|ComparableString|2|}>'.
-!!! error TS2344:   Property 'comparer' is missing in type 'ComparableString' but required in type 'Comparable<ComparableString>'.
+!!! error TS2344:   Property 'comparer' is missing in type '{|ComparableString|3|}' but required in type '{|Comparable|4|}<{|ComparableString|5|}>'.
 !!! related TS2728 tests/cases/compiler/genericConstraint2.ts:2:5: 'comparer' is declared here.
 !!! annotated symbol 0 tests/cases/compiler/genericConstraint2.ts:11:7
 !!! annotated symbol 1 tests/cases/compiler/genericConstraint2.ts:1:11
 !!! annotated symbol 2 tests/cases/compiler/genericConstraint2.ts:11:7
+!!! annotated symbol 3 tests/cases/compiler/genericConstraint2.ts:11:7
+!!! annotated symbol 4 tests/cases/compiler/genericConstraint2.ts:1:11
+!!! annotated symbol 5 tests/cases/compiler/genericConstraint2.ts:11:7

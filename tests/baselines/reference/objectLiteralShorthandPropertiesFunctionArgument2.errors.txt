@@ -12,10 +12,14 @@ tests/cases/conformance/es6/shorthandPropertyAssignment/objectLiteralShorthandPr
     foo(person);  // error
         ~~~~~~
 !!! error TS2345: Argument of type '{ {|name|0|}: string; {|id|1|}: number; }' is not assignable to parameter of type '{ {|a|2|}: string; {|id|3|}: number; }'.
-!!! error TS2345:   Property 'a' is missing in type '{ name: string; id: number; }' but required in type '{ a: string; id: number; }'.
+!!! error TS2345:   Property 'a' is missing in type '{ {|name|4|}: string; {|id|5|}: number; }' but required in type '{ {|a|6|}: string; {|id|7|}: number; }'.
 !!! related TS2728 tests/cases/conformance/es6/shorthandPropertyAssignment/objectLiteralShorthandPropertiesFunctionArgument2.ts:6:19: 'a' is declared here.
 !!! annotated symbol 0 tests/cases/conformance/es6/shorthandPropertyAssignment/objectLiteralShorthandPropertiesFunctionArgument2.ts:4:16
 !!! annotated symbol 1 tests/cases/conformance/es6/shorthandPropertyAssignment/objectLiteralShorthandPropertiesFunctionArgument2.ts:4:22
 !!! annotated symbol 2 tests/cases/conformance/es6/shorthandPropertyAssignment/objectLiteralShorthandPropertiesFunctionArgument2.ts:6:19
 !!! annotated symbol 3 tests/cases/conformance/es6/shorthandPropertyAssignment/objectLiteralShorthandPropertiesFunctionArgument2.ts:6:30
+!!! annotated symbol 4 tests/cases/conformance/es6/shorthandPropertyAssignment/objectLiteralShorthandPropertiesFunctionArgument2.ts:4:16
+!!! annotated symbol 5 tests/cases/conformance/es6/shorthandPropertyAssignment/objectLiteralShorthandPropertiesFunctionArgument2.ts:4:22
+!!! annotated symbol 6 tests/cases/conformance/es6/shorthandPropertyAssignment/objectLiteralShorthandPropertiesFunctionArgument2.ts:6:19
+!!! annotated symbol 7 tests/cases/conformance/es6/shorthandPropertyAssignment/objectLiteralShorthandPropertiesFunctionArgument2.ts:6:30
     

@@ -30,10 +30,12 @@ tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingW
           ~
 !!! error TS2415: Class '{|B|0|}' incorrectly extends base class '{|A|1|}'.
 !!! error TS2415:   Index signatures are incompatible.
-!!! error TS2415:     Property 'bar' is missing in type 'Base' but required in type 'Derived'.
+!!! error TS2415:     Property 'bar' is missing in type '{|Base|2|}' but required in type '{|Derived|3|}'.
 !!! related TS2728 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithNumericIndexer3.ts:4:34: 'bar' is declared here.
 !!! annotated symbol 0 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithNumericIndexer3.ts:11:7
 !!! annotated symbol 1 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithNumericIndexer3.ts:7:7
+!!! annotated symbol 2 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithNumericIndexer3.ts:3:11
+!!! annotated symbol 3 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithNumericIndexer3.ts:4:11
         [x: number]: Base; // error
     }
     

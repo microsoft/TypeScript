@@ -26,14 +26,18 @@ tests/cases/compiler/interfaceExtendsClassWithPrivate1.ts(27,1): error TS2739: T
     c = i;
     i = c; // error
     ~
-!!! error TS2741: Property 'other' is missing in type 'C' but required in type 'I'.
+!!! error TS2741: Property 'other' is missing in type '{|C|0|}' but required in type '{|I|1|}'.
 !!! related TS2728 tests/cases/compiler/interfaceExtendsClassWithPrivate1.ts:7:5: 'other' is declared here.
+!!! annotated symbol 0 tests/cases/compiler/interfaceExtendsClassWithPrivate1.ts:1:7
+!!! annotated symbol 1 tests/cases/compiler/interfaceExtendsClassWithPrivate1.ts:6:11
     
     i = d;
     d = i; // error
     ~
-!!! error TS2741: Property 'bar' is missing in type 'I' but required in type 'D'.
+!!! error TS2741: Property 'bar' is missing in type '{|I|0|}' but required in type '{|D|1|}'.
 !!! related TS2728 tests/cases/compiler/interfaceExtendsClassWithPrivate1.ts:13:5: 'bar' is declared here.
+!!! annotated symbol 0 tests/cases/compiler/interfaceExtendsClassWithPrivate1.ts:6:11
+!!! annotated symbol 1 tests/cases/compiler/interfaceExtendsClassWithPrivate1.ts:10:7
     
     c = d;
     d = c; // error

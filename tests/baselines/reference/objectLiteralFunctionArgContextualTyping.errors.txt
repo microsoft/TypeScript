@@ -34,17 +34,21 @@ tests/cases/compiler/objectLiteralFunctionArgContextualTyping.ts(13,36): error T
     f2({ toString: (s) => s }) // error, missing property value from ArgsString
        ~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS2345: Argument of type '{ {|toString|0|}: (s: string) => string; }' is not assignable to parameter of type '{|I|1|}'.
-!!! error TS2345:   Property 'value' is missing in type '{ toString: (s: string) => string; }' but required in type 'I'.
+!!! error TS2345:   Property 'value' is missing in type '{ {|toString|2|}: (s: string) => string; }' but required in type '{|I|3|}'.
 !!! related TS2728 tests/cases/compiler/objectLiteralFunctionArgContextualTyping.ts:2:5: 'value' is declared here.
 !!! annotated symbol 0 tests/cases/compiler/objectLiteralFunctionArgContextualTyping.ts:11:6
 !!! annotated symbol 1 tests/cases/compiler/objectLiteralFunctionArgContextualTyping.ts:1:11
+!!! annotated symbol 2 tests/cases/compiler/objectLiteralFunctionArgContextualTyping.ts:11:6
+!!! annotated symbol 3 tests/cases/compiler/objectLiteralFunctionArgContextualTyping.ts:1:11
     f2({ toString: (s: string) => s }) // error, missing property value from ArgsString
        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS2345: Argument of type '{ {|toString|0|}: (s: string) => string; }' is not assignable to parameter of type '{|I|1|}'.
-!!! error TS2345:   Property 'value' is missing in type '{ toString: (s: string) => string; }' but required in type 'I'.
+!!! error TS2345:   Property 'value' is missing in type '{ {|toString|2|}: (s: string) => string; }' but required in type '{|I|3|}'.
 !!! related TS2728 tests/cases/compiler/objectLiteralFunctionArgContextualTyping.ts:2:5: 'value' is declared here.
 !!! annotated symbol 0 tests/cases/compiler/objectLiteralFunctionArgContextualTyping.ts:12:6
 !!! annotated symbol 1 tests/cases/compiler/objectLiteralFunctionArgContextualTyping.ts:1:11
+!!! annotated symbol 2 tests/cases/compiler/objectLiteralFunctionArgContextualTyping.ts:12:6
+!!! annotated symbol 3 tests/cases/compiler/objectLiteralFunctionArgContextualTyping.ts:1:11
     f2({ value: '', toString: (s) => s.uhhh }) // error
                                        ~~~~
 !!! error TS2339: Property 'uhhh' does not exist on type 'string'.

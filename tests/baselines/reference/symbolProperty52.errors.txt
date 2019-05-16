@@ -12,8 +12,9 @@ tests/cases/conformance/es6/Symbols/symbolProperty52.ts(7,12): error TS2339: Pro
     
     obj = {};
     ~~~
-!!! error TS2741: Property '[Symbol.nonsense]' is missing in type '{}' but required in type '{ [Symbol.nonsense]: number; }'.
+!!! error TS2741: Property '[Symbol.nonsense]' is missing in type '{}' but required in type '{ {|[Symbol.nonsense]|0|}: number; }'.
 !!! related TS2728 tests/cases/conformance/es6/Symbols/symbolProperty52.ts:2:5: '[Symbol.nonsense]' is declared here.
+!!! annotated symbol 0 tests/cases/conformance/es6/Symbols/symbolProperty52.ts:2:5
     
     obj[Symbol.nonsense];
                ~~~~~~~~

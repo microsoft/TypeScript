@@ -14,10 +14,12 @@ tests/cases/compiler/genericTypeConstraints.ts(9,31): error TS2344: Type 'FooExt
     class BarExtended extends Bar<FooExtended> {
                                   ~~~~~~~~~~~
 !!! error TS2344: Type '{|FooExtended|0|}' does not satisfy the constraint '{|Foo|1|}'.
-!!! error TS2344:   Property 'fooMethod' is missing in type 'FooExtended' but required in type 'Foo'.
+!!! error TS2344:   Property 'fooMethod' is missing in type '{|FooExtended|2|}' but required in type '{|Foo|3|}'.
 !!! related TS2728 tests/cases/compiler/genericTypeConstraints.ts:2:5: 'fooMethod' is declared here.
 !!! annotated symbol 0 tests/cases/compiler/genericTypeConstraints.ts:5:7
 !!! annotated symbol 1 tests/cases/compiler/genericTypeConstraints.ts:1:7
+!!! annotated symbol 2 tests/cases/compiler/genericTypeConstraints.ts:5:7
+!!! annotated symbol 3 tests/cases/compiler/genericTypeConstraints.ts:1:7
         constructor() {
             super();
         }

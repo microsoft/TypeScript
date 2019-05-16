@@ -458,12 +458,14 @@ tests/cases/compiler/strictFunctionTypesErrors.ts(155,5): error TS2322: Type '(c
     animalComparer2 = dogComparer2;  // Error
     ~~~~~~~~~~~~~~~
 !!! error TS2322: Type '{|Comparer2|0|}<{|Dog|1|}>' is not assignable to type '{|Comparer2|2|}<{|Animal|3|}>'.
-!!! error TS2322:   Property 'dog' is missing in type 'Animal' but required in type 'Dog'.
+!!! error TS2322:   Property 'dog' is missing in type '{|Animal|4|}' but required in type '{|Dog|5|}'.
 !!! related TS2728 tests/cases/compiler/strictFunctionTypesErrors.ts:91:32: 'dog' is declared here.
 !!! annotated symbol 0 tests/cases/compiler/strictFunctionTypesErrors.ts:104:11
 !!! annotated symbol 1 tests/cases/compiler/strictFunctionTypesErrors.ts:91:11
 !!! annotated symbol 2 tests/cases/compiler/strictFunctionTypesErrors.ts:104:11
 !!! annotated symbol 3 tests/cases/compiler/strictFunctionTypesErrors.ts:90:11
+!!! annotated symbol 4 tests/cases/compiler/strictFunctionTypesErrors.ts:90:11
+!!! annotated symbol 5 tests/cases/compiler/strictFunctionTypesErrors.ts:91:11
     dogComparer2 = animalComparer2;  // Ok
     
     // Crate<T> is invariant in --strictFunctionTypes mode

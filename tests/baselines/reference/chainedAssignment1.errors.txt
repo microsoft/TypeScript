@@ -26,8 +26,10 @@ tests/cases/compiler/chainedAssignment1.ts(22,1): error TS2322: Type 'Z' is not 
     var c3 = new Z();
     c1 = c2 = c3; // a bug made this not report the same error as below
     ~~
-!!! error TS2741: Property 'a' is missing in type 'Z' but required in type 'X'.
+!!! error TS2741: Property 'a' is missing in type '{|Z|0|}' but required in type '{|X|1|}'.
 !!! related TS2728 tests/cases/compiler/chainedAssignment1.ts:3:5: 'a' is declared here.
+!!! annotated symbol 0 tests/cases/compiler/chainedAssignment1.ts:13:7
+!!! annotated symbol 1 tests/cases/compiler/chainedAssignment1.ts:1:7
          ~~
 !!! error TS2739: Type 'Z' is missing the following properties from type 'Y': a, b
     c2 = c3; // Error TS111: Cannot convert Z to Y

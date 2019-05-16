@@ -168,7 +168,10 @@ tests/cases/conformance/es6/destructuring/declarationsAndAssignments.ts(138,9): 
     f14([2, ["abc", { x: 0 }]]);
     f14([2, ["abc", { y: false }]]);  // Error, no x
                     ~~~~~~~~~~~~
-!!! error TS2741: Property 'x' is missing in type '{ y: boolean; }' but required in type '{ x: any; y?: boolean; }'.
+!!! error TS2741: Property 'x' is missing in type '{ {|y|0|}: boolean; }' but required in type '{ {|x|1|}: any; {|y|2|}?: boolean; }'.
+!!! annotated symbol 0 tests/cases/conformance/es6/destructuring/declarationsAndAssignments.ts:106:19
+!!! annotated dropped!: 1
+!!! annotated dropped!: 2
     
     module M {
         export var [a, b] = [1, 2];

@@ -42,8 +42,9 @@ tests/cases/conformance/types/tuple/contextualTypeWithTuple.ts(25,1): error TS23
     // error
     objNumTuple = [ {}, 5];
                     ~~
-!!! error TS2741: Property 'a' is missing in type '{}' but required in type '{ a: string; }'.
+!!! error TS2741: Property 'a' is missing in type '{}' but required in type '{ {|a|0|}: string; }'.
 !!! related TS2728 tests/cases/conformance/types/tuple/contextualTypeWithTuple.ts:5:21: 'a' is declared here.
+!!! annotated symbol 0 tests/cases/conformance/types/tuple/contextualTypeWithTuple.ts:5:21
     numStrBoolTuple = numStrTuple;
     ~~~~~~~~~~~~~~~
 !!! error TS2741: Property '2' is missing in type '[number, string]' but required in type '[number, string, boolean]'.
@@ -64,7 +65,10 @@ tests/cases/conformance/types/tuple/contextualTypeWithTuple.ts(25,1): error TS23
 !!! annotated symbol 2 tests/cases/conformance/types/tuple/contextualTypeWithTuple.ts:7:7
     unionTuple2 = unionTuple;
     ~~~~~~~~~~~
-!!! error TS2741: Property '2' is missing in type '[C, string | number]' but required in type '[C, string | number, D]'.
+!!! error TS2741: Property '2' is missing in type '[{|C|0|}, string | number]' but required in type '[{|C|1|}, string | number, {|D|2|}]'.
+!!! annotated symbol 0 tests/cases/conformance/types/tuple/contextualTypeWithTuple.ts:7:7
+!!! annotated symbol 1 tests/cases/conformance/types/tuple/contextualTypeWithTuple.ts:7:7
+!!! annotated symbol 2 tests/cases/conformance/types/tuple/contextualTypeWithTuple.ts:8:7
     numStrTuple = unionTuple3;
     ~~~~~~~~~~~
 !!! error TS2322: Type '[number, string | number]' is not assignable to type '[number, string]'.

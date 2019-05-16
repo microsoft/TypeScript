@@ -45,12 +45,17 @@ tests/cases/conformance/types/tuple/castingTuple.ts(33,1): error TS2304: Cannot 
     var classCDATuple = <[C, D, A]>classCDTuple;
                         ~~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS2352: Conversion of type '[{|C|0|}, {|D|1|}]' to type '[{|C|2|}, {|D|3|}, {|A|4|}]' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
-!!! error TS2352:   Property '2' is missing in type '[C, D]' but required in type '[C, D, A]'.
+!!! error TS2352:   Property '2' is missing in type '[{|C|5|}, {|D|6|}]' but required in type '[{|C|7|}, {|D|8|}, {|A|9|}]'.
 !!! annotated symbol 0 tests/cases/conformance/types/tuple/castingTuple.ts:3:7
 !!! annotated symbol 1 tests/cases/conformance/types/tuple/castingTuple.ts:4:7
 !!! annotated symbol 2 tests/cases/conformance/types/tuple/castingTuple.ts:3:7
 !!! annotated symbol 3 tests/cases/conformance/types/tuple/castingTuple.ts:4:7
 !!! annotated symbol 4 tests/cases/conformance/types/tuple/castingTuple.ts:2:7
+!!! annotated symbol 5 tests/cases/conformance/types/tuple/castingTuple.ts:3:7
+!!! annotated symbol 6 tests/cases/conformance/types/tuple/castingTuple.ts:4:7
+!!! annotated symbol 7 tests/cases/conformance/types/tuple/castingTuple.ts:3:7
+!!! annotated symbol 8 tests/cases/conformance/types/tuple/castingTuple.ts:4:7
+!!! annotated symbol 9 tests/cases/conformance/types/tuple/castingTuple.ts:2:7
     var eleFromCDA1 = classCDATuple[2]; // A
     var eleFromCDA2 = classCDATuple[5]; // C | D | A
                                     ~
@@ -71,12 +76,14 @@ tests/cases/conformance/types/tuple/castingTuple.ts(33,1): error TS2304: Cannot 
     var t9 = <[A, I]>classCDTuple;
              ~~~~~~~~~~~~~~~~~~~~
 !!! error TS2352: Conversion of type '[{|C|0|}, {|D|1|}]' to type '[{|A|2|}, {|I|3|}]' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
-!!! error TS2352:   Property 'a' is missing in type 'C' but required in type 'A'.
+!!! error TS2352:   Property 'a' is missing in type '{|C|4|}' but required in type '{|A|5|}'.
 !!! related TS2728 tests/cases/conformance/types/tuple/castingTuple.ts:2:11: 'a' is declared here.
 !!! annotated symbol 0 tests/cases/conformance/types/tuple/castingTuple.ts:3:7
 !!! annotated symbol 1 tests/cases/conformance/types/tuple/castingTuple.ts:4:7
 !!! annotated symbol 2 tests/cases/conformance/types/tuple/castingTuple.ts:2:7
 !!! annotated symbol 3 tests/cases/conformance/types/tuple/castingTuple.ts:1:11
+!!! annotated symbol 4 tests/cases/conformance/types/tuple/castingTuple.ts:3:7
+!!! annotated symbol 5 tests/cases/conformance/types/tuple/castingTuple.ts:2:7
     var array1 = <number[]>numStrTuple;
         ~~~~~~
 !!! error TS2403: Subsequent variable declarations must have the same type.  Variable 'array1' must be of type '{}[]', but here has type 'number[]'.

@@ -112,44 +112,68 @@ tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignme
     
         c = d; // error
         ~
-!!! error TS2741: Property 'opt' is missing in type 'D' but required in type 'C'.
+!!! error TS2741: Property 'opt' is missing in type '{|D|0|}' but required in type '{|C|1|}'.
 !!! related TS2728 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithObjectMembersOptionality2.ts:53:9: 'opt' is declared here.
+!!! annotated symbol 0 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithObjectMembersOptionality2.ts:61:15
+!!! annotated symbol 1 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithObjectMembersOptionality2.ts:52:15
         c = e; // error
         ~
-!!! error TS2741: Property 'opt' is missing in type 'E' but required in type 'C'.
+!!! error TS2741: Property 'opt' is missing in type '{|E|0|}' but required in type '{|C|1|}'.
 !!! related TS2728 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithObjectMembersOptionality2.ts:53:9: 'opt' is declared here.
+!!! annotated symbol 0 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithObjectMembersOptionality2.ts:64:15
+!!! annotated symbol 1 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithObjectMembersOptionality2.ts:52:15
         c = f; // error
         ~
-!!! error TS2741: Property 'opt' is missing in type 'F' but required in type 'C'.
+!!! error TS2741: Property 'opt' is missing in type '{|F|0|}' but required in type '{|C|1|}'.
 !!! related TS2728 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithObjectMembersOptionality2.ts:53:9: 'opt' is declared here.
+!!! annotated symbol 0 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithObjectMembersOptionality2.ts:67:15
+!!! annotated symbol 1 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithObjectMembersOptionality2.ts:52:15
         c = a; // ok
     
         a = d; // error
         ~
-!!! error TS2741: Property 'opt' is missing in type 'D' but required in type '{ opt: Base; }'.
+!!! error TS2741: Property 'opt' is missing in type '{|D|0|}' but required in type '{ {|opt|1|}: {|Base|2|}; }'.
 !!! related TS2728 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithObjectMembersOptionality2.ts:57:14: 'opt' is declared here.
+!!! annotated symbol 0 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithObjectMembersOptionality2.ts:61:15
+!!! annotated symbol 1 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithObjectMembersOptionality2.ts:57:14
+!!! annotated symbol 2 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithObjectMembersOptionality2.ts:4:7
         a = e; // error
         ~
-!!! error TS2741: Property 'opt' is missing in type 'E' but required in type '{ opt: Base; }'.
+!!! error TS2741: Property 'opt' is missing in type '{|E|0|}' but required in type '{ {|opt|1|}: {|Base|2|}; }'.
 !!! related TS2728 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithObjectMembersOptionality2.ts:57:14: 'opt' is declared here.
+!!! annotated symbol 0 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithObjectMembersOptionality2.ts:64:15
+!!! annotated symbol 1 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithObjectMembersOptionality2.ts:57:14
+!!! annotated symbol 2 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithObjectMembersOptionality2.ts:4:7
         a = f; // error
         ~
-!!! error TS2741: Property 'opt' is missing in type 'F' but required in type '{ opt: Base; }'.
+!!! error TS2741: Property 'opt' is missing in type '{|F|0|}' but required in type '{ {|opt|1|}: {|Base|2|}; }'.
 !!! related TS2728 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithObjectMembersOptionality2.ts:57:14: 'opt' is declared here.
+!!! annotated symbol 0 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithObjectMembersOptionality2.ts:67:15
+!!! annotated symbol 1 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithObjectMembersOptionality2.ts:57:14
+!!! annotated symbol 2 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithObjectMembersOptionality2.ts:4:7
         a = c; // ok
     
         b = d; // error
         ~
-!!! error TS2741: Property 'opt' is missing in type 'D' but required in type '{ opt: Base; }'.
+!!! error TS2741: Property 'opt' is missing in type '{|D|0|}' but required in type '{ {|opt|1|}: {|Base|2|}; }'.
 !!! related TS2728 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithObjectMembersOptionality2.ts:58:15: 'opt' is declared here.
+!!! annotated symbol 0 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithObjectMembersOptionality2.ts:61:15
+!!! annotated symbol 1 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithObjectMembersOptionality2.ts:58:15
+!!! annotated symbol 2 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithObjectMembersOptionality2.ts:4:7
         b = e; // error
         ~
-!!! error TS2741: Property 'opt' is missing in type 'E' but required in type '{ opt: Base; }'.
+!!! error TS2741: Property 'opt' is missing in type '{|E|0|}' but required in type '{ {|opt|1|}: {|Base|2|}; }'.
 !!! related TS2728 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithObjectMembersOptionality2.ts:58:15: 'opt' is declared here.
+!!! annotated symbol 0 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithObjectMembersOptionality2.ts:64:15
+!!! annotated symbol 1 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithObjectMembersOptionality2.ts:58:15
+!!! annotated symbol 2 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithObjectMembersOptionality2.ts:4:7
         b = f; // error
         ~
-!!! error TS2741: Property 'opt' is missing in type 'F' but required in type '{ opt: Base; }'.
+!!! error TS2741: Property 'opt' is missing in type '{|F|0|}' but required in type '{ {|opt|1|}: {|Base|2|}; }'.
 !!! related TS2728 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithObjectMembersOptionality2.ts:58:15: 'opt' is declared here.
+!!! annotated symbol 0 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithObjectMembersOptionality2.ts:67:15
+!!! annotated symbol 1 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithObjectMembersOptionality2.ts:58:15
+!!! annotated symbol 2 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithObjectMembersOptionality2.ts:4:7
         b = a; // ok
         b = c; // ok
     }

@@ -63,24 +63,30 @@ tests/cases/compiler/arrayAssignmentTest2.ts(58,1): error TS2740: Type 'I1' is m
     arr_c3 = arr_c2_2; // should be an error - is
     ~~~~~~
 !!! error TS2322: Type '{|C2|0|}[]' is not assignable to type '{|C3|1|}[]'.
-!!! error TS2322:   Property 'CM3M1' is missing in type 'C2' but required in type 'C3'.
+!!! error TS2322:   Property 'CM3M1' is missing in type '{|C2|2|}' but required in type '{|C3|3|}'.
 !!! related TS2728 tests/cases/compiler/arrayAssignmentTest2.ts:14:2: 'CM3M1' is declared here.
 !!! annotated symbol 0 tests/cases/compiler/arrayAssignmentTest2.ts:9:7
 !!! annotated symbol 1 tests/cases/compiler/arrayAssignmentTest2.ts:13:7
+!!! annotated symbol 2 tests/cases/compiler/arrayAssignmentTest2.ts:9:7
+!!! annotated symbol 3 tests/cases/compiler/arrayAssignmentTest2.ts:13:7
     arr_c3 = arr_c1_2; // should be an error - is
     ~~~~~~
 !!! error TS2322: Type '{|C1|0|}[]' is not assignable to type '{|C3|1|}[]'.
-!!! error TS2322:   Property 'CM3M1' is missing in type 'C1' but required in type 'C3'.
+!!! error TS2322:   Property 'CM3M1' is missing in type '{|C1|2|}' but required in type '{|C3|3|}'.
 !!! related TS2728 tests/cases/compiler/arrayAssignmentTest2.ts:14:2: 'CM3M1' is declared here.
 !!! annotated symbol 0 tests/cases/compiler/arrayAssignmentTest2.ts:5:7
 !!! annotated symbol 1 tests/cases/compiler/arrayAssignmentTest2.ts:13:7
+!!! annotated symbol 2 tests/cases/compiler/arrayAssignmentTest2.ts:5:7
+!!! annotated symbol 3 tests/cases/compiler/arrayAssignmentTest2.ts:13:7
     arr_c3 = arr_i1_2; // should be an error - is
     ~~~~~~
 !!! error TS2322: Type '{|I1|0|}[]' is not assignable to type '{|C3|1|}[]'.
-!!! error TS2322:   Property 'CM3M1' is missing in type 'I1' but required in type 'C3'.
+!!! error TS2322:   Property 'CM3M1' is missing in type '{|I1|2|}' but required in type '{|C3|3|}'.
 !!! related TS2728 tests/cases/compiler/arrayAssignmentTest2.ts:14:2: 'CM3M1' is declared here.
 !!! annotated symbol 0 tests/cases/compiler/arrayAssignmentTest2.ts:1:11
 !!! annotated symbol 1 tests/cases/compiler/arrayAssignmentTest2.ts:13:7
+!!! annotated symbol 2 tests/cases/compiler/arrayAssignmentTest2.ts:1:11
+!!! annotated symbol 3 tests/cases/compiler/arrayAssignmentTest2.ts:13:7
     
     arr_any = f1; // should be an error - is
     ~~~~~~~

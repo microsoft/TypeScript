@@ -17,10 +17,12 @@ tests/cases/compiler/generics1.ts(14,9): error TS2314: Generic type 'G<T, U>' re
     var v3: G<A, A>;               // Error, A not valid argument for U
                  ~
 !!! error TS2344: Type '{|A|0|}' does not satisfy the constraint '{|B|1|}'.
-!!! error TS2344:   Property 'b' is missing in type 'A' but required in type 'B'.
+!!! error TS2344:   Property 'b' is missing in type '{|A|2|}' but required in type '{|B|3|}'.
 !!! related TS2728 tests/cases/compiler/generics1.ts:2:25: 'b' is declared here.
 !!! annotated symbol 0 tests/cases/compiler/generics1.ts:1:11
 !!! annotated symbol 1 tests/cases/compiler/generics1.ts:2:11
+!!! annotated symbol 2 tests/cases/compiler/generics1.ts:1:11
+!!! annotated symbol 3 tests/cases/compiler/generics1.ts:2:11
     var v4: G<G<A, B>, C>;         // Ok
     var v5: G<any, any>;           // Error, any does not satisfy constraint B
     var v6: G<any>;                // Error, wrong number of arguments

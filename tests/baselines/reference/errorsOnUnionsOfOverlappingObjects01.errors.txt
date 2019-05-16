@@ -94,18 +94,23 @@ tests/cases/compiler/errorsOnUnionsOfOverlappingObjects01.ts(47,10): error TS234
     addToZoo({ dog: "Barky McBarkface" });
              ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS2345: Argument of type '{ {|dog|0|}: string; }' is not assignable to parameter of type '{|ExoticAnimal|1|}'.
-!!! error TS2345:   Property 'cat' is missing in type '{ dog: string; }' but required in type 'CatDog'.
+!!! error TS2345:   Property 'cat' is missing in type '{ {|dog|2|}: string; }' but required in type '{|CatDog|3|}'.
 !!! related TS2728 tests/cases/compiler/errorsOnUnionsOfOverlappingObjects01.ts:31:20: 'cat' is declared here.
 !!! annotated symbol 0 tests/cases/compiler/errorsOnUnionsOfOverlappingObjects01.ts:42:12
 !!! annotated symbol 1 tests/cases/compiler/errorsOnUnionsOfOverlappingObjects01.ts:35:6
+!!! annotated symbol 2 tests/cases/compiler/errorsOnUnionsOfOverlappingObjects01.ts:42:12
+!!! annotated symbol 3 tests/cases/compiler/errorsOnUnionsOfOverlappingObjects01.ts:31:11
     addToZoo({ man: "Manny", bear: "Coffee" });
              ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS2345: Argument of type '{ {|man|0|}: string; {|bear|1|}: string; }' is not assignable to parameter of type '{|ExoticAnimal|2|}'.
-!!! error TS2345:   Property 'pig' is missing in type '{ man: string; bear: string; }' but required in type 'ManBearPig'.
+!!! error TS2345:   Property 'pig' is missing in type '{ {|man|3|}: string; {|bear|4|}: string; }' but required in type '{|ManBearPig|5|}'.
 !!! related TS2728 tests/cases/compiler/errorsOnUnionsOfOverlappingObjects01.ts:32:45: 'pig' is declared here.
 !!! annotated symbol 0 tests/cases/compiler/errorsOnUnionsOfOverlappingObjects01.ts:43:12
 !!! annotated symbol 1 tests/cases/compiler/errorsOnUnionsOfOverlappingObjects01.ts:43:26
 !!! annotated symbol 2 tests/cases/compiler/errorsOnUnionsOfOverlappingObjects01.ts:35:6
+!!! annotated symbol 3 tests/cases/compiler/errorsOnUnionsOfOverlappingObjects01.ts:43:12
+!!! annotated symbol 4 tests/cases/compiler/errorsOnUnionsOfOverlappingObjects01.ts:43:26
+!!! annotated symbol 5 tests/cases/compiler/errorsOnUnionsOfOverlappingObjects01.ts:32:11
     
     const manBeer = { man: "Manny", beer: "Coffee" };
     addToZoo({ man: "Manny", beer: "Coffee" });

@@ -22,8 +22,11 @@ tests/cases/conformance/jsx/file.tsx(49,6): error TS2746: This JSX tag's 'childr
     // Error: missing children
     let k = <Comp a={10} b="hi" />;
              ~~~~
-!!! error TS2741: Property 'children' is missing in type '{ a: number; b: string; }' but required in type 'Prop'.
+!!! error TS2741: Property 'children' is missing in type '{ {|a|0|}: number; {|b|1|}: string; }' but required in type '{|Prop|2|}'.
 !!! related TS2728 tests/cases/conformance/jsx/file.tsx:6:5: 'children' is declared here.
+!!! annotated symbol 0 tests/cases/conformance/jsx/file.tsx:14:15
+!!! annotated symbol 1 tests/cases/conformance/jsx/file.tsx:14:22
+!!! annotated symbol 2 tests/cases/conformance/jsx/file.tsx:3:11
     
     let k0 =
         <Comp a={10} b="hi" children="Random" >

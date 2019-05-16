@@ -23,10 +23,12 @@ tests/cases/compiler/arrayOfSubtypeIsAssignableToReadonlyArray.ts(18,1): error T
     rrb = ara; // error: 'A' is not assignable to 'B'
     ~~~
 !!! error TS2322: Type '{|A|0|}[]' is not assignable to type 'readonly {|B|1|}[]'.
-!!! error TS2322:   Property 'b' is missing in type 'A' but required in type 'B'.
+!!! error TS2322:   Property 'b' is missing in type '{|A|2|}' but required in type '{|B|3|}'.
 !!! related TS2728 tests/cases/compiler/arrayOfSubtypeIsAssignableToReadonlyArray.ts:2:21: 'b' is declared here.
 !!! annotated symbol 0 tests/cases/compiler/arrayOfSubtypeIsAssignableToReadonlyArray.ts:1:7
 !!! annotated symbol 1 tests/cases/compiler/arrayOfSubtypeIsAssignableToReadonlyArray.ts:2:7
+!!! annotated symbol 2 tests/cases/compiler/arrayOfSubtypeIsAssignableToReadonlyArray.ts:1:7
+!!! annotated symbol 3 tests/cases/compiler/arrayOfSubtypeIsAssignableToReadonlyArray.ts:2:7
     
     rra = cra;
     rra = crb; // OK, C<B> is assignable to ReadonlyArray<A>

@@ -28,10 +28,12 @@ tests/cases/conformance/interfaces/interfacesExtendingClasses/implementingAnInte
     class Bar2 implements I { // error
           ~~~~
 !!! error TS2420: Class '{|Bar2|0|}' incorrectly implements interface '{|I|1|}'.
-!!! error TS2420:   Property 'x' is missing in type 'Bar2' but required in type 'I'.
+!!! error TS2420:   Property 'x' is missing in type '{|Bar2|2|}' but required in type '{|I|3|}'.
 !!! related TS2728 tests/cases/conformance/interfaces/interfacesExtendingClasses/implementingAnInterfaceExtendingClassWithPrivates.ts:2:13: 'x' is declared here.
 !!! annotated symbol 0 tests/cases/conformance/interfaces/interfacesExtendingClasses/implementingAnInterfaceExtendingClassWithPrivates.ts:12:7
 !!! annotated symbol 1 tests/cases/conformance/interfaces/interfacesExtendingClasses/implementingAnInterfaceExtendingClassWithPrivates.ts:5:11
+!!! annotated symbol 2 tests/cases/conformance/interfaces/interfacesExtendingClasses/implementingAnInterfaceExtendingClassWithPrivates.ts:12:7
+!!! annotated symbol 3 tests/cases/conformance/interfaces/interfacesExtendingClasses/implementingAnInterfaceExtendingClassWithPrivates.ts:5:11
         y: number;
     }
     
