@@ -1382,7 +1382,16 @@ namespace ts {
         }
 
         function parseIdentifier(diagnosticMessage?: DiagnosticMessage): Identifier {
-            return createIdentifier(isIdentifier(), diagnosticMessage);
+            const isId = isIdentifier()
+            if (isId) {
+                return createIdentifier(true, diagnosticMessage);
+            }
+            else if(tokenIsIdentifierOrKeyword(token())) {
+                const identifier = createIdentifier(true, diagnosticMessage);
+                identifier.definitelyIdentifier = true;
+                return identifier;
+            }
+            return createIdentifier(false, diagnosticMessage);
         }
 
         function parseIdentifierName(diagnosticMessage?: DiagnosticMessage): Identifier {
