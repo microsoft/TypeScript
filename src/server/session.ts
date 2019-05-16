@@ -1318,11 +1318,11 @@ namespace ts.server {
             this.projectService.openClientFileWithNormalizedPath(fileName, fileContent, scriptKind, /*hasMixedContent*/ false, projectRootPath);
         }
 
-        private getPosition(args: protocol.FileLocationRequestArgs, scriptInfo: ScriptInfo): number {
+        private getPosition(args: protocol.Location & { position?: number }, scriptInfo: ScriptInfo): number {
             return args.position !== undefined ? args.position : scriptInfo.lineOffsetToPosition(args.line, args.offset);
         }
 
-        private getPositionInFile(args: protocol.FileLocationRequestArgs, file: NormalizedPath): number {
+        private getPositionInFile(args: protocol.Location & { position?: number }, file: NormalizedPath): number {
             const scriptInfo = this.projectService.getScriptInfoForNormalizedPath(file)!;
             return this.getPosition(args, scriptInfo);
         }
@@ -2059,6 +2059,28 @@ namespace ts.server {
             this.projectService.configurePlugin(args);
         }
 
+        private getSmartSelectionRange(args: protocol.SelectionRangeRequestArgs, simplifiedResult: boolean) {
+            const { locations } = args;
+            const { file, languageService } = this.getFileAndLanguageServiceForSyntacticOperation(args);
+            const scriptInfo = Debug.assertDefined(this.projectService.getScriptInfo(file));
+
+            return map(locations, location => {
+                const pos = this.getPosition(location, scriptInfo);
+                const selectionRange = languageService.getSmartSelectionRange(file, pos);
+                return simplifiedResult ? this.mapSelectionRange(selectionRange, scriptInfo) : selectionRange;
+            });
+        }
+
+        private mapSelectionRange(selectionRange: SelectionRange, scriptInfo: ScriptInfo): protocol.SelectionRange {
+            const result: protocol.SelectionRange = {
+                textSpan: this.toLocationTextSpan(selectionRange.textSpan, scriptInfo),
+            };
+            if (selectionRange.parent) {
+                result.parent = this.mapSelectionRange(selectionRange.parent, scriptInfo);
+            }
+            return result;
+        }
+
         getCanonicalFileName(fileName: string) {
             const name = this.host.useCaseSensitiveFileNames ? fileName : fileName.toLowerCase();
             return normalizePath(name);
@@ -2414,7 +2436,13 @@ namespace ts.server {
                 this.configurePlugin(request.arguments);
                 this.doOutput(/*info*/ undefined, CommandNames.ConfigurePlugin, request.seq, /*success*/ true);
                 return this.notRequired();
-            }
+            },
+            [CommandNames.SelectionRange]: (request: protocol.SelectionRangeRequest) => {
+                return this.requiredResponse(this.getSmartSelectionRange(request.arguments, /*simplifiedResult*/ true));
+            },
+            [CommandNames.SelectionRangeFull]: (request: protocol.SelectionRangeRequest) => {
+                return this.requiredResponse(this.getSmartSelectionRange(request.arguments, /*simplifiedResult*/ false));
+            },
         });
 
         public addProtocolHandler(command: string, handler: (request: protocol.Request) => HandlerResponse) {
