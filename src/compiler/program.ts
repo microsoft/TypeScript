@@ -507,7 +507,7 @@ namespace ts {
         if (!spans || isArray(spans)) {
             return spans;
         }
-        let results: SymbolSpan[] | undefined;
+        let results: AnnotationSpan[] | undefined;
         let diagnosticChain: DiagnosticMessageChain | undefined = spans;
         let offset = 0;
 

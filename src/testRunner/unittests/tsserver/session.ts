@@ -264,6 +264,7 @@ namespace ts.server {
                 CommandNames.OrganizeImportsFull,
                 CommandNames.GetEditsForFileRename,
                 CommandNames.GetEditsForFileRenameFull,
+                CommandNames.ExpandReveal
             ];
 
             it("should not throw when commands are executed with invalid arguments", () => {

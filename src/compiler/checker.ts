@@ -30,6 +30,8 @@ namespace ts {
             (preserveConstEnums && moduleState === ModuleInstanceState.ConstEnumOnly);
     }
 
+    let nextCheckerId = 0;
+
     export function createTypeChecker(host: TypeCheckerHost, produceDiagnostics: boolean): TypeChecker {
         const getPackagesSet: () => Map<true> = memoize(() => {
             const set = createMap<true>();
@@ -71,6 +73,7 @@ namespace ts {
 
         const emptySymbols = createSymbolTable();
         const identityMapper: (type: Type) => Type = identity;
+        const checkerId = ++nextCheckerId;
 
         const compilerOptions = host.getCompilerOptions();
         const languageVersion = getEmitScriptTarget(compilerOptions);
@@ -380,33 +383,75 @@ namespace ts {
 
             getLocalTypeParametersOfClassOrInterfaceOrTypeAlias,
             getDiagnosticRenderingContext: flags => {
-                let spans: AnnotationSpan[] | undefined;
-                let offset = 0;
-                const captureSymbolSpan = (original: string, symbol: Symbol): string => {
-                    (spans || (spans = [])).push({ kind: "symbol", symbol, start: offset + typeWriter.getTextPos(), length: original.length });
-                    return original;
-                };
-                const typeWriter = createTextWriter("", captureSymbolSpan);
                 const typeFormatFlags = getTypeFormatFlagsFromRenderFlags(flags);
+                const textWriter = getSpanAwareTextWriter();
                 return {
                     typeToString: (type, symbolOffset) => {
-                        offset = symbolOffset;
-                        typeWriter.clear();
-                        return typeToString(type, /*enclosingDeclaration*/ undefined, typeFormatFlags, typeWriter);
+                        textWriter.setSpanOffsetPos(symbolOffset);
+                        textWriter.clear();
+                        return typeToString(type, /*enclosingDeclaration*/ undefined, typeFormatFlags, textWriter);
                     },
                     symbolToString: (symbol, symbolOffset) => {
-                        offset = symbolOffset;
-                        typeWriter.clear();
-                        return symbolToString(symbol, /*enclosingDeclaration*/ undefined, /*meaning*/ undefined, /*flags*/ undefined, typeWriter);
+                        textWriter.setSpanOffsetPos(symbolOffset);
+                        textWriter.clear();
+                        return symbolToString(symbol, /*enclosingDeclaration*/ undefined, /*meaning*/ undefined, /*flags*/ undefined, textWriter);
                     },
                     getPendingAnnotationSpans: () => {
-                        const result = spans;
-                        spans = undefined;
-                        return result;
+                        return textWriter.getPendingAnnotationSpans();
                     }
                 };
             },
+            id: checkerId,
+            getExpandedReveal: revealId => {
+                const reveal = revealSpans[revealId];
+                if (!reveal) {
+                    return undefined;
+                }
+                return reveal();
+            }
         };
+
+        type SpanAwareTextWriter = EmitTextWriter & { getPendingAnnotationSpans(): AnnotationSpan[] | undefined; setSpanOffsetPos(offset: number): void }
+
+        function getSpanAwareTextWriter() {
+            let spans: AnnotationSpan[] | undefined;
+            let offset = 0;
+            const captureSymbolSpan = (original: string, symbol: Symbol): string => {
+                (spans || (spans = [])).push({ kind: "symbol", symbol, start: offset + typeWriter.getTextPos(), length: original.length });
+                return original;
+            };
+            const captureExpansionSpan = (start: number, length: number, printCallback: (writer: EmitTextWriter) => string) => {
+                (spans || (spans = [])).push(registerExpansionCallback(start + offset, length, printCallback));
+            }
+            const typeWriter = createTextWriter("", captureSymbolSpan, captureExpansionSpan) as SpanAwareTextWriter;
+            typeWriter.getPendingAnnotationSpans = () => {
+                const result = spans;
+                spans = undefined;
+                return result;
+            }
+            typeWriter.setSpanOffsetPos = newOffset => void (offset = newOffset);
+            return typeWriter;
+        }
+
+        let revealId = 0;
+        const revealSpans: (() => RevealedResult)[] = [];
+        function registerExpansionCallback(start: number, length: number, printCallback: (writer: EmitTextWriter) => string): RevealSpan {
+            const span: RevealSpan = {
+                kind: "reveal",
+                start,
+                length,
+                id: revealId++,
+                checker: checkerId,
+                callback: () => {
+                    const writer = getSpanAwareTextWriter();
+                    const text = printCallback(writer);
+                    return { text, annotations: writer.getPendingAnnotationSpans() };
+                }
+            };
+            revealSpans[span.id] = span.callback;
+
+            return span;
+        }
 
         function getTypeFormatFlagsFromRenderFlags(flags: DiagnosticRendererFlags) {
             // Setting a flag disables the default `TypeFormatFlags.AllowUniqueESSymbolType | TypeFormatFlags.UseAliasDefinedOutsideCurrentScope` flags
@@ -3420,13 +3465,38 @@ namespace ts {
             }
         }
 
+        function getExpansionSpanAwarePrinter(writer: EmitTextWriter, sourceFile: SourceFile | undefined) {
+            const options = { removeComments: true };
+            const handlers: PrintHandlers | undefined = writer.writeExpansionSpan ? {
+                onEmitNode: (hint, node, emit) => {
+                    if (!node) {
+                        return emit(hint, node);
+                    }
+                    const expansionCb = getExpansionCallback(node);
+                    if (!expansionCb) {
+                        return emit(hint, node);
+                    }
+                    const start = writer.getTextPos();
+                    const result = emit(hint, node);
+                    const length = writer.getTextPos() - start;
+                    const printCb = (writer: EmitTextWriter) => {
+                        const printer = getExpansionSpanAwarePrinter(writer, sourceFile);
+                        printer.writeNode(EmitHint.Unspecified, expansionCb(), sourceFile, writer);
+                        return writer.getText();
+                    }
+                    writer.writeExpansionSpan!(start, length, printCb);
+                    return result;
+                }
+            } : undefined;
+            return createPrinter(options, handlers);
+        }
+
         function typeToString(type: Type, enclosingDeclaration?: Node, flags: TypeFormatFlags = TypeFormatFlags.AllowUniqueESSymbolType | TypeFormatFlags.UseAliasDefinedOutsideCurrentScope, writer: EmitTextWriter = createTextWriter("")): string {
             const noTruncation = compilerOptions.noErrorTruncation || flags & TypeFormatFlags.NoTruncation;
             const typeNode = nodeBuilder.typeToTypeNode(type, enclosingDeclaration, toNodeBuilderFlags(flags) | NodeBuilderFlags.IgnoreErrors | (noTruncation ? NodeBuilderFlags.NoTruncation : 0), writer);
             if (typeNode === undefined) return Debug.fail("should always get typenode");
-            const options = { removeComments: true };
-            const printer = createPrinter(options);
             const sourceFile = enclosingDeclaration && getSourceFileOfNode(enclosingDeclaration);
+            const printer = getExpansionSpanAwarePrinter(writer, sourceFile);
             printer.writeNode(EmitHint.Unspecified, typeNode, /*sourceFile*/ sourceFile, writer);
             const result = writer.getText();
 
@@ -4036,7 +4106,10 @@ namespace ts {
                     context.flags |= propertyIsReverseMapped ? NodeBuilderFlags.InReverseMappedType : 0;
                     let propertyTypeNode: TypeNode;
                     if (propertyIsReverseMapped && !!(savedFlags & NodeBuilderFlags.InReverseMappedType)) {
-                        propertyTypeNode = createElidedInformationPlaceholder(context);
+                        const contextCopy = cloneContextForExpansion(context);
+                        propertyTypeNode = setExpansionCallback(createElidedInformationPlaceholder(context), () =>
+                            typeToTypeNodeHelper(getTypeOfSymbol(propertySymbol), contextCopy)
+                        );
                     }
                     else {
                         propertyTypeNode = propertyType ? typeToTypeNodeHelper(propertyType, context) : createKeywordTypeNode(SyntaxKind.AnyKeyword);
@@ -4059,6 +4132,22 @@ namespace ts {
                     }
                     typeElements.push(propertySignature);
                 }
+            }
+
+            /**
+             * Clones the enclosing declaration and flags of the context
+             */
+            function cloneContextForExpansion(context: NodeBuilderContext): NodeBuilderContext {
+                return {
+                    enclosingDeclaration: context.enclosingDeclaration,
+                    flags: context.flags,
+                    approximateLength: 0,
+                    encounteredError: false,
+                    visitedTypes: undefined,
+                    tracker: context.tracker,
+                    symbolDepth: undefined,
+                    inferTypeParameters: context.inferTypeParameters
+                };
             }
 
             function mapToTypeNodes(types: ReadonlyArray<Type> | undefined, context: NodeBuilderContext, isBareList?: boolean): TypeNode[] | undefined {
@@ -12386,8 +12475,12 @@ namespace ts {
                 }
             }
 
+            function getDiagnosticRendererFlagsForPair(source: Type, target: Type) {
+                return typeToString(source) === typeToString(target) ? DiagnosticRendererFlags.UseFullyQualifiedTypes : DiagnosticRendererFlags.None;
+            }
+
             function reportRelationError(message: DiagnosticMessage | undefined, source: Type, target: Type) {
-                const flags = typeToString(source) === typeToString(target) ? DiagnosticRendererFlags.UseFullyQualifiedTypes : DiagnosticRendererFlags.None;
+                const flags = getDiagnosticRendererFlagsForPair(source, target);
                 if (target.flags & TypeFlags.TypeParameter && target.immediateBaseConstraint !== undefined && isTypeAssignableTo(source, target.immediateBaseConstraint)) {
                     reportErrorWithFlags(
                         flags,
@@ -13550,7 +13643,13 @@ namespace ts {
                         }
                         if (props.length === 1) {
                             const propName = symbolToString(unmatchedProperty);
-                            reportError(Diagnostics.Property_0_is_missing_in_type_1_but_required_in_type_2, propName, ...getTypeNamesForErrorDisplay(source, target));
+                            reportErrorWithFlags(
+                                getDiagnosticRendererFlagsForPair(source, target),
+                                Diagnostics.Property_0_is_missing_in_type_1_but_required_in_type_2,
+                                propName,
+                                source,
+                                target
+                            );
                             if (length(unmatchedProperty.declarations)) {
                                 associateRelatedInfo(createDiagnosticForNode(unmatchedProperty.declarations[0], Diagnostics._0_is_declared_here, propName));
                             }

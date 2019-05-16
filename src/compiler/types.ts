@@ -3321,6 +3321,10 @@ namespace ts {
         /* @internal */ getLocalTypeParametersOfClassOrInterfaceOrTypeAlias(symbol: Symbol): ReadonlyArray<TypeParameter> | undefined;
 
         /* @internal */ getDiagnosticRenderingContext(flags: DiagnosticRendererFlags): DiagnosticRenderContext;
+
+        id: number;
+
+        getExpandedReveal(id: number): RevealedResult | undefined;
     }
 
 
@@ -3330,13 +3334,29 @@ namespace ts {
         UseFullyQualifiedTypes  = 1 << 0,
     }
 
-    export type AnnotationSpan = SymbolSpan;
+    export type AnnotationSpan = SymbolSpan | RevealSpan;
 
-    export interface SymbolSpan {
-        kind: "symbol";
-        symbol: Symbol;
+    export interface AnnotationSpanBase {
+        kind: AnnotationSpan["kind"];
         start: number;
         length: number;
+    }
+
+    export interface SymbolSpan extends AnnotationSpanBase {
+        kind: "symbol";
+        symbol: Symbol;
+    }
+
+    export interface RevealedResult {
+        text: string;
+        annotations?: AnnotationSpan[];
+    }
+
+    export interface RevealSpan extends AnnotationSpanBase {
+        kind: "reveal";
+        id: number;
+        checker: number;
+        callback: () => RevealedResult;
     }
 
     /** @internal */
@@ -5289,6 +5309,7 @@ namespace ts {
         externalHelpersModuleName?: Identifier;  // The local name for an imported helpers module
         helpers?: EmitHelper[];                  // Emit helpers for the node
         startsOnNewLine?: boolean;               // If the node should begin on a new line
+        expansion?: () => Node;                  // A callback that returns a node tree representing an expansion of this node tree
     }
 
     export const enum EmitFlags {
@@ -5833,6 +5854,7 @@ namespace ts {
         getIndent(): number;
         isAtStartOfLine(): boolean;
         getTextPosWithWriteLine?(): number;
+        writeExpansionSpan?(start: number, length: number, printCallback: (writer: EmitTextWriter) => string): void; 
     }
 
     export interface GetEffectiveTypeRootsHost {

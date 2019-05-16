@@ -2008,13 +2008,28 @@ declare namespace ts {
          * and the operation is cancelled, then it should be discarded, otherwise it is safe to keep.
          */
         runWithCancellationToken<T>(token: CancellationToken, cb: (checker: TypeChecker) => T): T;
+        id: number;
+        getExpandedReveal(id: number): RevealedResult | undefined;
     }
-    type AnnotationSpan = SymbolSpan;
-    interface SymbolSpan {
-        kind: "symbol";
-        symbol: Symbol;
+    type AnnotationSpan = SymbolSpan | RevealSpan;
+    interface AnnotationSpanBase {
+        kind: AnnotationSpan["kind"];
         start: number;
         length: number;
+    }
+    interface SymbolSpan extends AnnotationSpanBase {
+        kind: "symbol";
+        symbol: Symbol;
+    }
+    interface RevealedResult {
+        text: string;
+        annotations?: AnnotationSpan[];
+    }
+    interface RevealSpan extends AnnotationSpanBase {
+        kind: "reveal";
+        id: number;
+        checker: number;
+        callback: () => RevealedResult;
     }
     enum NodeBuilderFlags {
         None = 0,

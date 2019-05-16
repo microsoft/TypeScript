@@ -3195,7 +3195,7 @@ namespace ts {
         return indentStrings[1].length;
     }
 
-    export function createTextWriter(newLine: string, writeSymbol?: ((t: string, s: Symbol) => string)): EmitTextWriter {
+    export function createTextWriter(newLine: string, writeSymbol?: ((t: string, s: Symbol) => string), writeExpansionSpan?: EmitTextWriter["writeExpansionSpan"]): EmitTextWriter {
         let output: string;
         let indent: number;
         let lineStart: boolean;
@@ -3289,7 +3289,8 @@ namespace ts {
             writeSymbol: (s, _) => write(writeSymbol ? writeSymbol(s, _) : s),
             writeTrailingSemicolon: write,
             writeComment: write,
-            getTextPosWithWriteLine
+            getTextPosWithWriteLine,
+            writeExpansionSpan
         };
     }
 
@@ -7199,7 +7200,7 @@ namespace ts {
     export function createRenderedCompilerDiagnostic(checker: TypeChecker, flags: DiagnosticRendererFlags, message: DiagnosticMessage, ...args: (string | number | Type | Symbol | undefined)[]): Diagnostic;
     export function createRenderedCompilerDiagnostic(checker: TypeChecker, flags: DiagnosticRendererFlags, message: DiagnosticMessage): Diagnostic {
         let text = getLocaleSpecificMessage(message);
-        let spans: SymbolSpan[] | undefined;
+        let spans: AnnotationSpan[] | undefined;
 
         if (arguments.length > 3) {
             const ctx = checker.getDiagnosticRenderingContext(flags);
@@ -7252,7 +7253,7 @@ namespace ts {
     export function chainRenderedDiagnosticMessages(checker: TypeChecker, flags: DiagnosticRendererFlags, details: DiagnosticMessageChain | undefined, message: DiagnosticMessage, ...args: (string | number | Type | Symbol | undefined)[]): DiagnosticMessageChain;
     export function chainRenderedDiagnosticMessages(checker: TypeChecker, flags: DiagnosticRendererFlags, details: DiagnosticMessageChain | undefined, message: DiagnosticMessage): DiagnosticMessageChain {
         let text = getLocaleSpecificMessage(message);
-        let spans: SymbolSpan[] | undefined;
+        let spans: AnnotationSpan[] | undefined;
 
         if (arguments.length > 4) {
             const ctx = checker.getDiagnosticRenderingContext(flags);

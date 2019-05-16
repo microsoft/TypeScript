@@ -2008,13 +2008,28 @@ declare namespace ts {
          * and the operation is cancelled, then it should be discarded, otherwise it is safe to keep.
          */
         runWithCancellationToken<T>(token: CancellationToken, cb: (checker: TypeChecker) => T): T;
+        id: number;
+        getExpandedReveal(id: number): RevealedResult | undefined;
     }
-    type AnnotationSpan = SymbolSpan;
-    interface SymbolSpan {
-        kind: "symbol";
-        symbol: Symbol;
+    type AnnotationSpan = SymbolSpan | RevealSpan;
+    interface AnnotationSpanBase {
+        kind: AnnotationSpan["kind"];
         start: number;
         length: number;
+    }
+    interface SymbolSpan extends AnnotationSpanBase {
+        kind: "symbol";
+        symbol: Symbol;
+    }
+    interface RevealedResult {
+        text: string;
+        annotations?: AnnotationSpan[];
+    }
+    interface RevealSpan extends AnnotationSpanBase {
+        kind: "reveal";
+        id: number;
+        checker: number;
+        callback: () => RevealedResult;
     }
     enum NodeBuilderFlags {
         None = 0,
@@ -5809,7 +5824,8 @@ declare namespace ts.server.protocol {
         GetEditsForRefactor = "getEditsForRefactor",
         OrganizeImports = "organizeImports",
         GetEditsForFileRename = "getEditsForFileRename",
-        ConfigurePlugin = "configurePlugin"
+        ConfigurePlugin = "configurePlugin",
+        ExpandReveal = "expandReveal"
     }
     /**
      * A TypeScript Server message
@@ -6096,13 +6112,21 @@ declare namespace ts.server.protocol {
          */
         annotations?: DiagnosticAnnotationSpan[];
     }
-    type DiagnosticAnnotationSpan = DiagnosticSymbolSpan;
-    interface DiagnosticSymbolSpan {
-        kind: "symbol";
+    type DiagnosticAnnotationSpan = DiagnosticSymbolSpan | DiagnosticRevealSpan;
+    interface DiagnosticSpanBase {
+        kind: DiagnosticAnnotationSpan["kind"];
         start: number;
         length: number;
+    }
+    interface DiagnosticSymbolSpan extends DiagnosticSpanBase {
+        kind: "symbol";
         file: string;
         location: Location;
+    }
+    interface DiagnosticRevealSpan extends DiagnosticSpanBase {
+        kind: "reveal";
+        id: number;
+        checker: number;
     }
     /**
      * Response message for "projectInfo" request
@@ -6783,6 +6807,21 @@ declare namespace ts.server.protocol {
         arguments: ConfigurePluginRequestArguments;
     }
     interface ConfigurePluginResponse extends Response {
+    }
+    interface ExpandRevealRequestArguments {
+        id: number;
+        checker: number;
+    }
+    interface ExpandRevealRequest extends Request {
+        command: CommandTypes.ExpandReveal;
+        arguments: ExpandRevealRequestArguments;
+    }
+    interface ExpandRevealResponseBody {
+        text: string;
+        annotations?: DiagnosticAnnotationSpan[];
+    }
+    interface ExpandRevealResponse extends Response {
+        body: ExpandRevealResponseBody;
     }
     /**
      *  Information found in an "open" request.
@@ -9064,6 +9103,7 @@ declare namespace ts.server {
         private getBraceMatching;
         private getDiagnosticsForProject;
         private configurePlugin;
+        private expandReveal;
         getCanonicalFileName(fileName: string): string;
         exit(): void;
         private notRequired;

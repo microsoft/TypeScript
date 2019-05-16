@@ -832,17 +832,18 @@ namespace ts.server {
         }
 
         /* @internal */
-        private forEachProject(cb: (project: Project) => void) {
-            this.externalProjects.forEach(cb);
-            this.configuredProjects.forEach(cb);
-            this.inferredProjects.forEach(cb);
+        private forEachProject<T>(cb: (project: Project) => T | undefined) {
+            return forEach(this.externalProjects, cb) || forEach(arrayFrom(this.configuredProjects.values()), cb) || forEach(this.inferredProjects, cb);
         }
 
         /* @internal */
-        forEachEnabledProject(cb: (project: Project) => void) {
-            this.forEachProject(project => {
+        forEachEnabledProject<T>(cb: (project: Project) => T | undefined) {
+            return this.forEachProject(project => {
                 if (!project.isOrphan() && project.languageServiceEnabled) {
-                    cb(project);
+                    const result = cb(project);
+                    if (result) {
+                        return result;
+                    }
                 }
             });
         }

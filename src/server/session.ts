@@ -2072,6 +2072,28 @@ namespace ts.server {
             this.projectService.configurePlugin(args);
         }
 
+        private expandReveal(args: protocol.ExpandRevealRequestArguments): protocol.ExpandRevealResponseBody {
+            const checker = this.projectService.forEachEnabledProject(p => {
+                const program = p.getLanguageService().getProgram();
+                if (!program) return;
+                // IDs always comes from the diagnostics producing version of the checker
+                const c = program.getDiagnosticsProducingTypeChecker();
+                if (c.id === args.checker) {
+                    return c;
+                }
+            });
+            if (!checker) {
+                // TODO: Issue an error response of some kind?
+                return { text: "..." };
+            }
+            const result = checker.getExpandedReveal(args.id);
+            if (!result) {
+                // TODO: Issue an error response of some kind?
+                return { text: "..." };
+            }
+            return { text: result.text, annotations: mapDefined(result.annotations, convertAnnotationSpanToDiagnosticAnnotationSpan) }
+        }
+
         getCanonicalFileName(fileName: string) {
             const name = this.host.useCaseSensitiveFileNames ? fileName : fileName.toLowerCase();
             return normalizePath(name);
@@ -2427,6 +2449,9 @@ namespace ts.server {
                 this.configurePlugin(request.arguments);
                 this.doOutput(/*info*/ undefined, CommandNames.ConfigurePlugin, request.seq, /*success*/ true);
                 return this.notRequired();
+            },
+            [CommandNames.ExpandReveal]: (request: protocol.ExpandRevealRequest) => {
+                return this.requiredResponse(this.expandReveal(request.arguments));
             }
         });
 
@@ -2564,10 +2589,21 @@ namespace ts.server {
         switch (span.kind) {
             case "symbol":
                 return convertSymbolSpanIntoDiagnosticSymbolSpan(span);
+            case "reveal":
+                return convertRevealSpanIntoDiagnosticRevealSpan(span);
             default:
-                // TODO: Convert to `Debug.assertNever` once `span` is actually a union
-                return Debug.fail("Unconverted annotation kind");
+                return Debug.assertNever(span, "Unconverted annotation kind");
         }
+    }
+
+    function convertRevealSpanIntoDiagnosticRevealSpan(span: RevealSpan): protocol.DiagnosticRevealSpan {
+        return {
+            kind: span.kind,
+            start: span.start,
+            length: span.length,
+            id: span.id,
+            checker: span.checker
+        }; // We don't use a spread here because if we did, we'd have to have a `callback` field of type `undefined`, which'd leak some implementation details to consumers
     }
 
     function convertSymbolSpanIntoDiagnosticSymbolSpan(span: SymbolSpan): protocol.DiagnosticSymbolSpan | undefined {

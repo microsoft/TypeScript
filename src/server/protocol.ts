@@ -130,7 +130,8 @@ namespace ts.server.protocol {
         GetEditsForFileRename = "getEditsForFileRename",
         /* @internal */
         GetEditsForFileRenameFull = "getEditsForFileRename-full",
-        ConfigurePlugin = "configurePlugin"
+        ConfigurePlugin = "configurePlugin",
+        ExpandReveal = "expandReveal"
 
         // NOTE: If updating this, be sure to also update `allCommandNames` in `harness/unittests/session.ts`.
     }
@@ -484,14 +485,24 @@ namespace ts.server.protocol {
         annotations?: DiagnosticAnnotationSpan[];
     }
 
-    export type DiagnosticAnnotationSpan = DiagnosticSymbolSpan;
+    export type DiagnosticAnnotationSpan = DiagnosticSymbolSpan | DiagnosticRevealSpan;
 
-    export interface DiagnosticSymbolSpan {
-        kind: "symbol";
+    export interface DiagnosticSpanBase {
+        kind: DiagnosticAnnotationSpan["kind"];
         start: number;
         length: number;
+    }
+
+    export interface DiagnosticSymbolSpan extends DiagnosticSpanBase {
+        kind: "symbol";
         file: string;
         location: Location;
+    }
+
+    export interface DiagnosticRevealSpan extends DiagnosticSpanBase {
+        kind: "reveal";
+        id: number;
+        checker: number;
     }
 
     /**
@@ -1407,6 +1418,25 @@ namespace ts.server.protocol {
     }
 
     export interface ConfigurePluginResponse extends Response {
+    }
+
+    export interface ExpandRevealRequestArguments {
+        id: number;
+        checker: number;
+    }
+
+    export interface ExpandRevealRequest extends Request {
+        command: CommandTypes.ExpandReveal;
+        arguments: ExpandRevealRequestArguments;
+    }
+
+    export interface ExpandRevealResponseBody {
+        text: string;
+        annotations?: DiagnosticAnnotationSpan[];
+    }
+
+    export interface ExpandRevealResponse extends Response {
+        body: ExpandRevealResponseBody;
     }
 
     /**

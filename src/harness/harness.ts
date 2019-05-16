@@ -1145,11 +1145,14 @@ namespace Harness {
                 }
                 switch (annotation.kind) {
                     case "symbol":
-                        const p = protocolSpan;
+                        const p = protocolSpan as ts.server.protocol.DiagnosticSymbolSpan;
                         const file = ts.getSourceFileOfNode(annotation.symbol.declarations[0]);
                         return `symbol ${index} ${ts.formatLocation(file, ts.getPositionOfLineAndCharacter(file, p.location.line - 1, p.location.offset - 1), formatDiagnsoticHost, ts.identity)}`;
+                    case "reveal":
+                        // expand reveals once, but never recursively reveal, since some expansions can be infinite
+                        return `reveal ${index}: ${annotation.callback().text}`;
                     default:
-                        return ts.Debug.fail("Unhandled annotation kind in harness baseliner"); // TODO: use Debug.assertNever when AnnotationSpan is a union
+                        return ts.Debug.assertNever(annotation, "Unhandled annotation kind in harness baseliner"); // TODO: use Debug.assertNever when AnnotationSpan is a union
                 }
             }
         }

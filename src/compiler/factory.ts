@@ -3208,6 +3208,21 @@ namespace ts {
     }
 
     /**
+     * Sets a callback to use to expand an ellision node (eg, ...) with a more complete node tree
+     */
+    /*@internal*/
+    export function setExpansionCallback<T extends Node>(node: T, expansionCb: EmitNode["expansion"]) {
+        getOrCreateEmitNode(node).expansion = expansionCb;
+        return node;
+    }
+
+    /*@internal*/
+    export function getExpansionCallback(node: Node) {
+        const emitNode = node.emitNode;
+        return emitNode && emitNode.expansion;
+    }
+
+    /**
      * Gets a custom text range to use when emitting comments.
      */
     export function getCommentRange(node: Node) {
