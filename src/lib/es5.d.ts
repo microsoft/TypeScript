@@ -513,7 +513,7 @@ interface Boolean {
 
 interface BooleanConstructor {
     new(value?: any): Boolean;
-    (value?: any): boolean;
+    <T>(value?: T): value is Exclude<T, false | null | undefined | '' | 0>;
     readonly prototype: Boolean;
 }
 
@@ -1273,13 +1273,13 @@ interface Array<T> {
       * @param callbackfn A function that accepts up to three arguments. The every method calls the callbackfn function for each element in array1 until the callbackfn returns false, or until the end of the array.
       * @param thisArg An object to which the this keyword can refer in the callbackfn function. If thisArg is omitted, undefined is used as the this value.
       */
-    every(callbackfn: (value: T, index: number, array: T[]) => boolean, thisArg?: any): boolean;
+    every(callbackfn: (value: T, index: number, array: T[]) => unknown, thisArg?: any): boolean;
     /**
       * Determines whether the specified callback function returns true for any element of an array.
       * @param callbackfn A function that accepts up to three arguments. The some method calls the callbackfn function for each element in array1 until the callbackfn returns true, or until the end of the array.
       * @param thisArg An object to which the this keyword can refer in the callbackfn function. If thisArg is omitted, undefined is used as the this value.
       */
-    some(callbackfn: (value: T, index: number, array: T[]) => boolean, thisArg?: any): boolean;
+    some(callbackfn: (value: T, index: number, array: T[]) => unknown, thisArg?: any): boolean;
     /**
       * Performs the specified action for each element in an array.
       * @param callbackfn  A function that accepts up to three arguments. forEach calls the callbackfn function one time for each element in the array.
@@ -1303,7 +1303,7 @@ interface Array<T> {
       * @param callbackfn A function that accepts up to three arguments. The filter method calls the callbackfn function one time for each element in the array.
       * @param thisArg An object to which the this keyword can refer in the callbackfn function. If thisArg is omitted, undefined is used as the this value.
       */
-    filter(callbackfn: (value: T, index: number, array: T[]) => any, thisArg?: any): T[];
+    filter(callbackfn: (value: T, index: number, array: T[]) => unknown, thisArg?: any): T[];
     /**
       * Calls the specified callback function for all the elements in an array. The return value of the callback function is the accumulated result, and is provided as an argument in the next call to the callback function.
       * @param callbackfn A function that accepts up to four arguments. The reduce method calls the callbackfn function one time for each element in the array.
@@ -1446,9 +1446,7 @@ type Extract<T, U> = T extends U ? T : never;
 /**
  * Construct a type with the properties of T except for those in type K.
  */
-type Omit<T, K extends keyof any> = {
-    [P in Exclude<keyof T, K>]: T[P]
-};
+type Omit<T, K extends keyof any> = Pick<T, Exclude<keyof T, K>>;
 
 /**
  * Exclude null and undefined from T

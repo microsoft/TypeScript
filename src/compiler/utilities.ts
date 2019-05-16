@@ -3960,6 +3960,16 @@ namespace ts {
         return isPropertyAccessExpression(node) && isEntityNameExpression(node.expression);
     }
 
+    export function tryGetPropertyAccessOrIdentifierToString(expr: Expression): string | undefined {
+        if (isPropertyAccessExpression(expr)) {
+            return tryGetPropertyAccessOrIdentifierToString(expr.expression) + "." + expr.name;
+        }
+        if (isIdentifier(expr)) {
+            return unescapeLeadingUnderscores(expr.escapedText);
+        }
+        return undefined;
+    }
+
     export function isPrototypeAccess(node: Node): node is PropertyAccessExpression {
         return isPropertyAccessExpression(node) && node.name.escapedText === "prototype";
     }

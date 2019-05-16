@@ -1602,7 +1602,7 @@ declare namespace ts {
     }
     interface JSDocTypeTag extends JSDocTag {
         kind: SyntaxKind.JSDocTypeTag;
-        typeExpression?: JSDocTypeExpression;
+        typeExpression: JSDocTypeExpression;
     }
     interface JSDocTypedefTag extends JSDocTag, NamedDeclaration {
         parent: JSDoc;
@@ -1878,13 +1878,18 @@ declare namespace ts {
         sourceFile: SourceFile;
         references?: ReadonlyArray<ResolvedProjectReference | undefined>;
     }
+    type CustomTransformerFactory = (context: TransformationContext) => CustomTransformer;
+    interface CustomTransformer {
+        transformSourceFile(node: SourceFile): SourceFile;
+        transformBundle(node: Bundle): Bundle;
+    }
     interface CustomTransformers {
         /** Custom transformers to evaluate before built-in .js transformations. */
-        before?: TransformerFactory<SourceFile>[];
+        before?: (TransformerFactory<SourceFile> | CustomTransformerFactory)[];
         /** Custom transformers to evaluate after built-in .js transformations. */
-        after?: TransformerFactory<SourceFile>[];
+        after?: (TransformerFactory<SourceFile> | CustomTransformerFactory)[];
         /** Custom transformers to evaluate after built-in .d.ts transformations. */
-        afterDeclarations?: TransformerFactory<Bundle | SourceFile>[];
+        afterDeclarations?: (TransformerFactory<Bundle | SourceFile> | CustomTransformerFactory)[];
     }
     interface SourceMapSpan {
         /** Line number in the .js file. */
@@ -2384,8 +2389,8 @@ declare namespace ts {
         root: ConditionalRoot;
         checkType: Type;
         extendsType: Type;
-        trueType: Type;
-        falseType: Type;
+        resolvedTrueType: Type;
+        resolvedFalseType: Type;
     }
     interface SubstitutionType extends InstantiableType {
         typeVariable: TypeVariable;
@@ -2412,12 +2417,13 @@ declare namespace ts {
     enum InferencePriority {
         NakedTypeVariable = 1,
         HomomorphicMappedType = 2,
-        MappedTypeConstraint = 4,
-        ReturnType = 8,
-        LiteralKeyof = 16,
-        NoConstraints = 32,
-        AlwaysStrict = 64,
-        PriorityImpliesCombination = 28
+        PartialHomomorphicMappedType = 4,
+        MappedTypeConstraint = 8,
+        ReturnType = 16,
+        LiteralKeyof = 32,
+        NoConstraints = 64,
+        AlwaysStrict = 128,
+        PriorityImpliesCombination = 56
     }
     /** @deprecated Use FileExtensionInfo instead. */
     type JsFileExtensionInfo = FileExtensionInfo;
@@ -2760,6 +2766,7 @@ declare namespace ts {
         resolveTypeReferenceDirectives?(typeReferenceDirectiveNames: string[], containingFile: string, redirectedReference?: ResolvedProjectReference): (ResolvedTypeReferenceDirective | undefined)[];
         getEnvironmentVariable?(name: string): string | undefined;
         createHash?(data: string): string;
+        getParsedCommandLine?(fileName: string): ParsedCommandLine | undefined;
     }
     interface SourceMapRange extends TextRange {
         source?: SourceMapSource;
@@ -3631,7 +3638,7 @@ declare namespace ts {
     /**
      * Reads the config file, reports errors if any and exits if the config file cannot be found
      */
-    function getParsedCommandLineOfConfigFile(configFileName: string, optionsToExtend: CompilerOptions, host: ParseConfigFileHost): ParsedCommandLine | undefined;
+    function getParsedCommandLineOfConfigFile(configFileName: string, optionsToExtend: CompilerOptions, host: ParseConfigFileHost, extendedConfigCache?: Map<ExtendedConfigCacheEntry>): ParsedCommandLine | undefined;
     /**
      * Read tsconfig.json file
      * @param fileName The path to the config file
@@ -3665,7 +3672,7 @@ declare namespace ts {
      * @param basePath A root directory to resolve relative path entries in the config
      *    file to. e.g. outDir
      */
-    function parseJsonConfigFileContent(json: any, host: ParseConfigHost, basePath: string, existingOptions?: CompilerOptions, configFileName?: string, resolutionStack?: Path[], extraFileExtensions?: ReadonlyArray<FileExtensionInfo>): ParsedCommandLine;
+    function parseJsonConfigFileContent(json: any, host: ParseConfigHost, basePath: string, existingOptions?: CompilerOptions, configFileName?: string, resolutionStack?: Path[], extraFileExtensions?: ReadonlyArray<FileExtensionInfo>, extendedConfigCache?: Map<ExtendedConfigCacheEntry>): ParsedCommandLine;
     /**
      * Parse the contents of a config file (tsconfig.json).
      * @param jsonNode The contents of the config file to parse
@@ -3673,7 +3680,20 @@ declare namespace ts {
      * @param basePath A root directory to resolve relative path entries in the config
      *    file to. e.g. outDir
      */
-    function parseJsonSourceFileConfigFileContent(sourceFile: TsConfigSourceFile, host: ParseConfigHost, basePath: string, existingOptions?: CompilerOptions, configFileName?: string, resolutionStack?: Path[], extraFileExtensions?: ReadonlyArray<FileExtensionInfo>): ParsedCommandLine;
+    function parseJsonSourceFileConfigFileContent(sourceFile: TsConfigSourceFile, host: ParseConfigHost, basePath: string, existingOptions?: CompilerOptions, configFileName?: string, resolutionStack?: Path[], extraFileExtensions?: ReadonlyArray<FileExtensionInfo>, extendedConfigCache?: Map<ExtendedConfigCacheEntry>): ParsedCommandLine;
+    interface ParsedTsconfig {
+        raw: any;
+        options?: CompilerOptions;
+        typeAcquisition?: TypeAcquisition;
+        /**
+         * Note that the case of the config path has not yet been normalized, as no files have been imported into the project yet
+         */
+        extendedConfigPath?: string;
+    }
+    interface ExtendedConfigCacheEntry {
+        extendedResult: TsConfigSourceFile;
+        extendedConfig: ParsedTsconfig | undefined;
+    }
     function convertCompilerOptionsFromJson(jsonOptions: any, basePath: string, configFileName?: string): {
         options: CompilerOptions;
         errors: Diagnostic[];
@@ -3841,7 +3861,7 @@ declare namespace ts {
     function updateArrayLiteral(node: ArrayLiteralExpression, elements: ReadonlyArray<Expression>): ArrayLiteralExpression;
     function createObjectLiteral(properties?: ReadonlyArray<ObjectLiteralElementLike>, multiLine?: boolean): ObjectLiteralExpression;
     function updateObjectLiteral(node: ObjectLiteralExpression, properties: ReadonlyArray<ObjectLiteralElementLike>): ObjectLiteralExpression;
-    function createPropertyAccess(expression: Expression, name: string | Identifier | undefined): PropertyAccessExpression;
+    function createPropertyAccess(expression: Expression, name: string | Identifier): PropertyAccessExpression;
     function updatePropertyAccess(node: PropertyAccessExpression, expression: Expression, name: Identifier): PropertyAccessExpression;
     function createElementAccess(expression: Expression, index: number | Expression): ElementAccessExpression;
     function updateElementAccess(node: ElementAccessExpression, expression: Expression, argumentExpression: Expression): ElementAccessExpression;
@@ -4056,7 +4076,7 @@ declare namespace ts {
     function createInputFiles(javascriptText: string, declarationText: string): InputFiles;
     function createInputFiles(readFileText: (path: string) => string | undefined, javascriptPath: string, javascriptMapPath: string | undefined, declarationPath: string, declarationMapPath: string | undefined, buildInfoPath: string | undefined): InputFiles;
     function createInputFiles(javascriptText: string, declarationText: string, javascriptMapPath: string | undefined, javascriptMapText: string | undefined, declarationMapPath: string | undefined, declarationMapText: string | undefined): InputFiles;
-    function updateBundle(node: Bundle, sourceFiles: ReadonlyArray<SourceFile>, prepends?: ReadonlyArray<UnparsedSource>): Bundle;
+    function updateBundle(node: Bundle, sourceFiles: ReadonlyArray<SourceFile>, prepends?: ReadonlyArray<UnparsedSource | InputFiles>): Bundle;
     function createImmediatelyInvokedFunctionExpression(statements: ReadonlyArray<Statement>): CallExpression;
     function createImmediatelyInvokedFunctionExpression(statements: ReadonlyArray<Statement>, param: ParameterDeclaration, paramValue: Expression): CallExpression;
     function createImmediatelyInvokedArrowFunction(statements: ReadonlyArray<Statement>): CallExpression;
@@ -4788,6 +4808,7 @@ declare namespace ts {
         getSignatureHelpItems(fileName: string, position: number, options: SignatureHelpItemsOptions | undefined): SignatureHelpItems | undefined;
         getRenameInfo(fileName: string, position: number, options?: RenameInfoOptions): RenameInfo;
         findRenameLocations(fileName: string, position: number, findInStrings: boolean, findInComments: boolean, providePrefixAndSuffixTextForRename?: boolean): ReadonlyArray<RenameLocation> | undefined;
+        getSmartSelectionRange(fileName: string, position: number): SelectionRange;
         getDefinitionAtPosition(fileName: string, position: number): ReadonlyArray<DefinitionInfo> | undefined;
         getDefinitionAndBoundSpan(fileName: string, position: number): DefinitionInfoAndBoundSpan | undefined;
         getTypeDefinitionAtPosition(fileName: string, position: number): ReadonlyArray<DefinitionInfo> | undefined;
@@ -5231,6 +5252,10 @@ declare namespace ts {
         documentation: SymbolDisplayPart[];
         displayParts: SymbolDisplayPart[];
         isOptional: boolean;
+    }
+    interface SelectionRange {
+        textSpan: TextSpan;
+        parent?: SelectionRange;
     }
     /**
      * Represents a single signature to show in signature help.

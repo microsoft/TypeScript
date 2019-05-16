@@ -127,3 +127,14 @@ function fn<T extends {elements: Array<string>} | {elements: Array<number>}>(par
 function fn2<T extends Array<string>>(param: T, cb: (element: T[number]) => void) {
     cb(param[0]);
 }
+
+// Repro from #31149
+
+function fn3<T extends ReadonlyArray<string>>(param: T, cb: (element: T[number]) => void) {
+    cb(param[0]);
+}
+
+function fn4<K extends number>() {
+    let x: Array<string>[K] = 'abc';
+    let y: ReadonlyArray<string>[K] = 'abc';
+}
