@@ -83,32 +83,29 @@ const o8 = {
 };
 === tests/cases/conformance/parser/ecmascript2018/asyncGenerators/nestedFunctionDeclarationNamedYieldIsError.ts ===
 const o9 = {
->o9 : { f(): AsyncIterableIterator<() => void>; }
->{    async * f() {        function yield() {        }    }} : { f(): AsyncIterableIterator<() => void>; }
+>o9 : { f(): AsyncIterableIterator<any>; }
+>{    async * f() {        function yield() {        }    }} : { f(): AsyncIterableIterator<any>; }
 
     async * f() {
->f : () => AsyncIterableIterator<() => void>
+>f : () => AsyncIterableIterator<any>
 
         function yield() {
-> : () => any
->yield() {        } : any
->() {        } : () => void
+>yield : () => void
         }
     }
 };
 === tests/cases/conformance/parser/ecmascript2018/asyncGenerators/nestedFunctionExpressionNamedYieldIsError.ts ===
 const o10 = {
->o10 : { f(): AsyncIterableIterator<() => void>; }
->{    async * f() {        const x = function yield() {        };    }} : { f(): AsyncIterableIterator<() => void>; }
+>o10 : { f(): AsyncIterableIterator<any>; }
+>{    async * f() {        const x = function yield() {        };    }} : { f(): AsyncIterableIterator<any>; }
 
     async * f() {
->f : () => AsyncIterableIterator<() => void>
+>f : () => AsyncIterableIterator<any>
 
         const x = function yield() {
->x : () => any
->function : () => any
->yield() {        } : any
->() {        } : () => void
+>x : () => void
+>function yield() {        } : () => void
+>yield : () => void
 
         };
     }
@@ -122,10 +119,7 @@ const o11 = {
 >f : () => AsyncIterableIterator<any>
 
         function await() {
-> : () => any
->await() : any
->() : any
-> : any
+>await : () => void
         }
     }
 };
@@ -138,11 +132,9 @@ const o12 = {
 >f : () => AsyncIterableIterator<any>
 
         const x = function await() {
->x : () => any
->function : () => any
->await() : any
->() : any
-> : any
+>x : () => void
+>function await() {        } : () => void
+>await : () => void
 
         };
     }

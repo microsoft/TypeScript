@@ -17301,6 +17301,12 @@ namespace ts {
             }
         }
 
+        function checkDefinitelyIdentifier(node?: Identifier, message?: DiagnosticMessage) {
+            if (node && node.definitelyIdentifier && node.originalKeywordKind) {
+                error(node, message || Diagnostics.Identifier_expected);
+            }
+        }
+
         function checkIdentifier(node: Identifier): Type {
             const symbol = getResolvedSymbol(node);
             if (symbol === unknownSymbol) {
@@ -22979,7 +22985,7 @@ namespace ts {
 
         function checkFunctionExpressionOrObjectLiteralMethodDeferred(node: ArrowFunction | FunctionExpression | MethodDeclaration) {
             Debug.assert(node.kind !== SyntaxKind.MethodDeclaration || isObjectLiteralMethod(node));
-
+            node.name && isIdentifier(node.name) && checkDefinitelyIdentifier(node.name)
             const functionFlags = getFunctionFlags(node);
             const returnOrPromisedType = getReturnOrPromisedType(node, functionFlags);
 
@@ -24422,6 +24428,7 @@ namespace ts {
                 grammarErrorOnFirstToken(node.expression, Diagnostics.Type_expected);
             }
 
+            checkDefinitelyIdentifier(node.name)
             checkSourceElement(node.constraint);
             checkSourceElement(node.default);
             const typeParameter = getDeclaredTypeOfTypeParameter(getSymbolOfNode(node));
@@ -26135,6 +26142,7 @@ namespace ts {
         function checkFunctionOrMethodDeclaration(node: FunctionDeclaration | MethodDeclaration | MethodSignature): void {
             checkDecorators(node);
             checkSignatureDeclaration(node);
+            node.name && isIdentifier(node.name) && checkDefinitelyIdentifier(node.name);
             const functionFlags = getFunctionFlags(node);
 
             // Do not use hasDynamicName here, because that returns false for well known symbols.
@@ -27405,6 +27413,7 @@ namespace ts {
 
         function checkBreakOrContinueStatement(node: BreakOrContinueStatement) {
             // Grammar checking
+            checkDefinitelyIdentifier(node.label)
             if (!checkGrammarStatementInAmbientContext(node)) checkGrammarBreakOrContinueStatement(node);
 
             // TODO: Check that target label is valid
@@ -28206,7 +28215,7 @@ namespace ts {
             checkTypeParameters(node.typeParameters);
             if (produceDiagnostics) {
                 checkTypeNameIsReserved(node.name, Diagnostics.Interface_name_cannot_be_0);
-
+                checkDefinitelyIdentifier(node.name);
                 checkExportsOnMergedDeclarations(node);
                 const symbol = getSymbolOfNode(node);
                 checkTypeParameterListsIdentical(symbol);
@@ -28244,7 +28253,7 @@ namespace ts {
         function checkTypeAliasDeclaration(node: TypeAliasDeclaration) {
             // Grammar checking
             checkGrammarDecoratorsAndModifiers(node);
-
+            checkDefinitelyIdentifier(node.name);
             checkTypeNameIsReserved(node.name, Diagnostics.Type_alias_name_cannot_be_0);
             checkTypeParameters(node.typeParameters);
             checkSourceElement(node.type);
@@ -28423,6 +28432,7 @@ namespace ts {
             // Grammar checking
             checkGrammarDecoratorsAndModifiers(node);
 
+            checkDefinitelyIdentifier(node.name);
             checkTypeNameIsReserved(node.name, Diagnostics.Enum_name_cannot_be_0);
             checkCollisionWithRequireExportsInGeneratedCode(node, node.name);
             checkCollisionWithGlobalPromiseInGeneratedCode(node, node.name);

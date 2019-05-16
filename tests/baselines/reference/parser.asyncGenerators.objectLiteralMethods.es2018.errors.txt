@@ -9,15 +9,9 @@ tests/cases/conformance/parser/ecmascript2018/asyncGenerators/awaitParameterIsEr
 tests/cases/conformance/parser/ecmascript2018/asyncGenerators/awaitParameterIsError.ts(2,22): error TS1136: Property assignment expected.
 tests/cases/conformance/parser/ecmascript2018/asyncGenerators/awaitParameterIsError.ts(4,1): error TS1128: Declaration or statement expected.
 tests/cases/conformance/parser/ecmascript2018/asyncGenerators/nestedFunctionDeclarationNamedAwaitIsError.ts(3,18): error TS1003: Identifier expected.
-tests/cases/conformance/parser/ecmascript2018/asyncGenerators/nestedFunctionDeclarationNamedAwaitIsError.ts(3,24): error TS1109: Expression expected.
-tests/cases/conformance/parser/ecmascript2018/asyncGenerators/nestedFunctionDeclarationNamedAwaitIsError.ts(3,26): error TS1005: ';' expected.
 tests/cases/conformance/parser/ecmascript2018/asyncGenerators/nestedFunctionDeclarationNamedYieldIsError.ts(3,18): error TS1003: Identifier expected.
-tests/cases/conformance/parser/ecmascript2018/asyncGenerators/nestedFunctionDeclarationNamedYieldIsError.ts(3,26): error TS1005: '=>' expected.
-tests/cases/conformance/parser/ecmascript2018/asyncGenerators/nestedFunctionExpressionNamedAwaitIsError.ts(3,28): error TS1005: '(' expected.
-tests/cases/conformance/parser/ecmascript2018/asyncGenerators/nestedFunctionExpressionNamedAwaitIsError.ts(3,34): error TS1109: Expression expected.
-tests/cases/conformance/parser/ecmascript2018/asyncGenerators/nestedFunctionExpressionNamedAwaitIsError.ts(3,36): error TS1005: ';' expected.
-tests/cases/conformance/parser/ecmascript2018/asyncGenerators/nestedFunctionExpressionNamedYieldIsError.ts(3,28): error TS1005: '(' expected.
-tests/cases/conformance/parser/ecmascript2018/asyncGenerators/nestedFunctionExpressionNamedYieldIsError.ts(3,36): error TS1005: '=>' expected.
+tests/cases/conformance/parser/ecmascript2018/asyncGenerators/nestedFunctionExpressionNamedAwaitIsError.ts(3,28): error TS1003: Identifier expected.
+tests/cases/conformance/parser/ecmascript2018/asyncGenerators/nestedFunctionExpressionNamedYieldIsError.ts(3,28): error TS1003: Identifier expected.
 tests/cases/conformance/parser/ecmascript2018/asyncGenerators/yieldInParameterInitializerIsError.ts(2,19): error TS2523: 'yield' expressions cannot be used in a parameter initializer.
 tests/cases/conformance/parser/ecmascript2018/asyncGenerators/yieldParameterIsError.ts(2,15): error TS1138: Parameter declaration expected.
 tests/cases/conformance/parser/ecmascript2018/asyncGenerators/yieldParameterIsError.ts(2,15): error TS2693: 'yield' only refers to a type, but is being used as a value here.
@@ -93,51 +87,39 @@ tests/cases/conformance/parser/ecmascript2018/asyncGenerators/yieldStarMissingVa
             }
         }
     };
-==== tests/cases/conformance/parser/ecmascript2018/asyncGenerators/nestedFunctionDeclarationNamedYieldIsError.ts (2 errors) ====
+==== tests/cases/conformance/parser/ecmascript2018/asyncGenerators/nestedFunctionDeclarationNamedYieldIsError.ts (1 errors) ====
     const o9 = {
         async * f() {
             function yield() {
                      ~~~~~
 !!! error TS1003: Identifier expected.
-                             ~
-!!! error TS1005: '=>' expected.
             }
         }
     };
-==== tests/cases/conformance/parser/ecmascript2018/asyncGenerators/nestedFunctionExpressionNamedYieldIsError.ts (2 errors) ====
+==== tests/cases/conformance/parser/ecmascript2018/asyncGenerators/nestedFunctionExpressionNamedYieldIsError.ts (1 errors) ====
     const o10 = {
         async * f() {
             const x = function yield() {
                                ~~~~~
-!!! error TS1005: '(' expected.
-                                       ~
-!!! error TS1005: '=>' expected.
+!!! error TS1003: Identifier expected.
             };
         }
     };
-==== tests/cases/conformance/parser/ecmascript2018/asyncGenerators/nestedFunctionDeclarationNamedAwaitIsError.ts (3 errors) ====
+==== tests/cases/conformance/parser/ecmascript2018/asyncGenerators/nestedFunctionDeclarationNamedAwaitIsError.ts (1 errors) ====
     const o11 = {
         async * f() {
             function await() {
                      ~~~~~
 !!! error TS1003: Identifier expected.
-                           ~
-!!! error TS1109: Expression expected.
-                             ~
-!!! error TS1005: ';' expected.
             }
         }
     };
-==== tests/cases/conformance/parser/ecmascript2018/asyncGenerators/nestedFunctionExpressionNamedAwaitIsError.ts (3 errors) ====
+==== tests/cases/conformance/parser/ecmascript2018/asyncGenerators/nestedFunctionExpressionNamedAwaitIsError.ts (1 errors) ====
     const o12 = {
         async * f() {
             const x = function await() {
                                ~~~~~
-!!! error TS1005: '(' expected.
-                                     ~
-!!! error TS1109: Expression expected.
-                                       ~
-!!! error TS1005: ';' expected.
+!!! error TS1003: Identifier expected.
             };
         }
     };

@@ -78,12 +78,10 @@ class C9 {
 >C9 : C9
 
     async * f() {
->f : () => AsyncIterableIterator<() => void>
+>f : () => AsyncIterableIterator<any>
 
         function yield() {
-> : () => any
->yield() {        } : any
->() {        } : () => void
+>yield : () => void
         }
     }
 }
@@ -92,13 +90,12 @@ class C10 {
 >C10 : C10
 
     async * f() {
->f : () => AsyncIterableIterator<() => void>
+>f : () => AsyncIterableIterator<any>
 
         const x = function yield() {
->x : () => any
->function : () => any
->yield() {        } : any
->() {        } : () => void
+>x : () => void
+>function yield() {        } : () => void
+>yield : () => void
 
         };
     }
@@ -111,10 +108,7 @@ class C11 {
 >f : () => AsyncIterableIterator<any>
 
         function await() {
-> : () => any
->await() : any
->() : any
-> : any
+>await : () => void
         }
     }
 }
@@ -126,11 +120,9 @@ class C12 {
 >f : () => AsyncIterableIterator<any>
 
         const x = function await() {
->x : () => any
->function : () => any
->await() : any
->() : any
-> : any
+>x : () => void
+>function await() {        } : () => void
+>await : () => void
 
         };
     }

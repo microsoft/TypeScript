@@ -8,7 +8,7 @@ import while = require("dfdf");
 >"dfdf" : "dfdf"
 
 import * as  while from "foo"
-> : () => any
+> : number
 > : any
 >from : any
 >"foo" : "foo"
@@ -19,8 +19,7 @@ var typeof = 10;
 >10 : 10
 
 function throw() {}
-> : () => any
->() {} : () => void
+>throw : () => void
 
 module void {}
 >module : any
@@ -60,9 +59,7 @@ var [debugger, if] = [1, 2];
 >2 : 2
 
 enum void {}
-> : (Missing)
->void {} : undefined
->{} : {}
+>void : void
 
 
 

@@ -43,7 +43,7 @@ async function * f9() {
 >f9 : Symbol(f9, Decl(nestedFunctionDeclarationNamedYieldIsError.ts, 0, 0))
 
     function yield() {
-> : Symbol((Missing), Decl(nestedFunctionDeclarationNamedYieldIsError.ts, 0, 23))
+>yield : Symbol(yield, Decl(nestedFunctionDeclarationNamedYieldIsError.ts, 0, 23))
     }
 }
 === tests/cases/conformance/parser/ecmascript2018/asyncGenerators/nestedFunctionExpressionNamedYieldIsError.ts ===
@@ -52,6 +52,7 @@ async function * f10() {
 
     const x = function yield() {
 >x : Symbol(x, Decl(nestedFunctionExpressionNamedYieldIsError.ts, 1, 9))
+>yield : Symbol(yield, Decl(nestedFunctionExpressionNamedYieldIsError.ts, 1, 13))
 
     };
 }
@@ -60,7 +61,7 @@ async function * f11() {
 >f11 : Symbol(f11, Decl(nestedFunctionDeclarationNamedAwaitIsError.ts, 0, 0))
 
     function await() {
-> : Symbol((Missing), Decl(nestedFunctionDeclarationNamedAwaitIsError.ts, 0, 24))
+>await : Symbol(await, Decl(nestedFunctionDeclarationNamedAwaitIsError.ts, 0, 24))
     }
 }
 === tests/cases/conformance/parser/ecmascript2018/asyncGenerators/nestedFunctionExpressionNamedAwaitIsError.ts ===
@@ -69,6 +70,7 @@ async function * f12() {
 
     const x = function yield() {
 >x : Symbol(x, Decl(nestedFunctionExpressionNamedAwaitIsError.ts, 1, 9))
+>yield : Symbol(yield, Decl(nestedFunctionExpressionNamedAwaitIsError.ts, 1, 13))
 
     };
 }

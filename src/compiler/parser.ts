@@ -1382,6 +1382,10 @@ namespace ts {
         }
 
         function parseIdentifier(diagnosticMessage?: DiagnosticMessage): Identifier {
+            return createIdentifier(isIdentifier(), diagnosticMessage);
+        }
+
+        function parseDefinitelyIdentifier(diagnosticMessage?: DiagnosticMessage): Identifier {
             const isId = isIdentifier()
             if (isId) {
                 return createIdentifier(true, diagnosticMessage);
@@ -2458,7 +2462,7 @@ namespace ts {
 
         function parseTypeParameter(): TypeParameterDeclaration {
             const node = <TypeParameterDeclaration>createNode(SyntaxKind.TypeParameter);
-            node.name = parseIdentifier();
+            node.name = parseDefinitelyIdentifier();
             if (parseOptional(SyntaxKind.ExtendsKeyword)) {
                 // It's not uncommon for people to write improper constraints to a generic.  If the
                 // user writes a constraint that is an expression and not an actual type, then parse
@@ -2824,7 +2828,7 @@ namespace ts {
 
         function parseMappedTypeParameter() {
             const node = <TypeParameterDeclaration>createNode(SyntaxKind.TypeParameter);
-            node.name = parseIdentifier();
+            node.name = parseDefinitelyIdentifier();
             parseExpected(SyntaxKind.InKeyword);
             node.constraint = parseType();
             return finishNode(node);
@@ -3114,7 +3118,7 @@ namespace ts {
             const node = <InferTypeNode>createNode(SyntaxKind.InferType);
             parseExpected(SyntaxKind.InferKeyword);
             const typeParameter = <TypeParameterDeclaration>createNode(SyntaxKind.TypeParameter);
-            typeParameter.name = parseIdentifier();
+            typeParameter.name = parseDefinitelyIdentifier();
             node.typeParameter = finishNode(typeParameter);
             return finishNode(node);
         }
@@ -4856,10 +4860,10 @@ namespace ts {
             const isGenerator = node.asteriskToken ? SignatureFlags.Yield : SignatureFlags.None;
             const isAsync = hasModifier(node, ModifierFlags.Async) ? SignatureFlags.Await : SignatureFlags.None;
             node.name =
-                isGenerator && isAsync ? doInYieldAndAwaitContext(parseOptionalIdentifier) :
-                    isGenerator ? doInYieldContext(parseOptionalIdentifier) :
-                        isAsync ? doInAwaitContext(parseOptionalIdentifier) :
-                            parseOptionalIdentifier();
+                isGenerator && isAsync ? doInYieldAndAwaitContext(parseOptionalDefinitelyIdentifier) :
+                    isGenerator ? doInYieldContext(parseOptionalDefinitelyIdentifier) :
+                        isAsync ? doInAwaitContext(parseOptionalDefinitelyIdentifier) :
+                        parseOptionalDefinitelyIdentifier();
 
             fillSignature(SyntaxKind.ColonToken, isGenerator | isAsync, node);
             node.body = parseFunctionBlock(isGenerator | isAsync);
@@ -4871,8 +4875,12 @@ namespace ts {
             return finishNode(node);
         }
 
-        function parseOptionalIdentifier(): Identifier | undefined {
-            return isIdentifier() ? parseIdentifier() : undefined;
+        // function parseOptionalIdentifier(): Identifier | undefined {
+        //     return isIdentifier() ? parseIdentifier() : undefined;
+        // }
+
+        function parseOptionalDefinitelyIdentifier(): Identifier | undefined {
+            return (isIdentifier() || tokenIsIdentifierOrKeyword(token())) ? parseDefinitelyIdentifier() : undefined;
         }
 
         function parseNewExpressionOrNewDotTarget(): NewExpression | MetaProperty {
@@ -5051,7 +5059,7 @@ namespace ts {
 
             parseExpected(kind === SyntaxKind.BreakStatement ? SyntaxKind.BreakKeyword : SyntaxKind.ContinueKeyword);
             if (!canParseSemicolon()) {
-                node.label = parseIdentifier();
+                node.label = parseDefinitelyIdentifier();
             }
 
             parseSemicolon();
@@ -5651,7 +5659,7 @@ namespace ts {
             node.kind = SyntaxKind.FunctionDeclaration;
             parseExpected(SyntaxKind.FunctionKeyword);
             node.asteriskToken = parseOptionalToken(SyntaxKind.AsteriskToken);
-            node.name = hasModifier(node, ModifierFlags.Default) ? parseOptionalIdentifier() : parseIdentifier();
+            node.name = hasModifier(node, ModifierFlags.Default) ? parseOptionalDefinitelyIdentifier() : parseDefinitelyIdentifier();
             const isGenerator = node.asteriskToken ? SignatureFlags.Yield : SignatureFlags.None;
             const isAsync = hasModifier(node, ModifierFlags.Async) ? SignatureFlags.Await : SignatureFlags.None;
             fillSignature(SyntaxKind.ColonToken, isGenerator | isAsync, node);
@@ -5987,7 +5995,7 @@ namespace ts {
         function parseInterfaceDeclaration(node: InterfaceDeclaration): InterfaceDeclaration {
             node.kind = SyntaxKind.InterfaceDeclaration;
             parseExpected(SyntaxKind.InterfaceKeyword);
-            node.name = parseIdentifier();
+            node.name = parseDefinitelyIdentifier();
             node.typeParameters = parseTypeParameters();
             node.heritageClauses = parseHeritageClauses();
             node.members = parseObjectTypeMembers();
@@ -5997,7 +6005,7 @@ namespace ts {
         function parseTypeAliasDeclaration(node: TypeAliasDeclaration): TypeAliasDeclaration {
             node.kind = SyntaxKind.TypeAliasDeclaration;
             parseExpected(SyntaxKind.TypeKeyword);
-            node.name = parseIdentifier();
+            node.name = parseDefinitelyIdentifier();
             node.typeParameters = parseTypeParameters();
             parseExpected(SyntaxKind.EqualsToken);
             node.type = parseType();
@@ -6019,7 +6027,7 @@ namespace ts {
         function parseEnumDeclaration(node: EnumDeclaration): EnumDeclaration {
             node.kind = SyntaxKind.EnumDeclaration;
             parseExpected(SyntaxKind.EnumKeyword);
-            node.name = parseIdentifier();
+            node.name = parseDefinitelyIdentifier();
             if (parseExpected(SyntaxKind.OpenBraceToken)) {
                 node.members = parseDelimitedList(ParsingContext.EnumMembers, parseEnumMember);
                 parseExpected(SyntaxKind.CloseBraceToken);

@@ -24,8 +24,7 @@ while (from)
 var ;
 typeof ;
 10;
-function () { }
-throw function () { };
+function throw() { }
 module;
 void {};
 var _a = { "while": 1, "return": 2 },  = _a["while"],  = _a["return"];
@@ -35,6 +34,6 @@ debugger;
 if ()
     ;
 [1, 2];
-(function () {
-})( || ( = {}));
-void {};
+var void;
+(function (void) {
+})(void || (void = {}));

@@ -3,7 +3,6 @@ enum void {
 }
 
 //// [parserEnumDeclaration4.js]
-var ;
-(function () {
-})( || ( = {}));
-void {};
+var void;
+(function (void) {
+})(void || (void = {}));
