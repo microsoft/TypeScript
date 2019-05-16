@@ -4449,7 +4449,7 @@ declare namespace ts {
     function createAbstractBuilder(rootNames: ReadonlyArray<string> | undefined, options: CompilerOptions | undefined, host?: CompilerHost, oldProgram?: BuilderProgram, configFileParsingDiagnostics?: ReadonlyArray<Diagnostic>, projectReferences?: ReadonlyArray<ProjectReference>): BuilderProgram;
 }
 declare namespace ts {
-    function readBuilderProgram(compilerOptions: CompilerOptions, readFile: (path: string) => string | undefined): (EmitAndSemanticDiagnosticsBuilderProgram & SemanticDiagnosticsBuilderProgram) | undefined;
+    function readBuilderProgram(compilerOptions: CompilerOptions, readFile: (path: string) => string | undefined): EmitAndSemanticDiagnosticsBuilderProgram | undefined;
     function createIncrementalCompilerHost(options: CompilerOptions, system?: System): CompilerHost;
     interface IncrementalProgramOptions<T extends BuilderProgram> {
         rootNames: ReadonlyArray<string>;
@@ -4578,10 +4578,6 @@ declare namespace ts {
         dry?: boolean;
         force?: boolean;
         verbose?: boolean;
-        preserveWatchOutput?: boolean;
-        listEmittedFiles?: boolean;
-        listFiles?: boolean;
-        pretty?: boolean;
         incremental?: boolean;
         traceResolution?: boolean;
         [option: string]: CompilerOptionsValue | undefined;

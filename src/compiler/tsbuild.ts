@@ -163,10 +163,10 @@ namespace ts {
         /*@internal*/ watch?: boolean;
         /*@internal*/ help?: boolean;
 
-        preserveWatchOutput?: boolean;
-        listEmittedFiles?: boolean;
-        listFiles?: boolean;
-        pretty?: boolean;
+        /*@internal*/ preserveWatchOutput?: boolean;
+        /*@internal*/ listEmittedFiles?: boolean;
+        /*@internal*/ listFiles?: boolean;
+        /*@internal*/ pretty?: boolean;
         incremental?: boolean;
 
         traceResolution?: boolean;

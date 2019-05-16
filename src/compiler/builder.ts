@@ -993,7 +993,7 @@ namespace ts {
         return map;
     }
 
-    export function createBuildProgramUsingProgramBuildInfo(program: ProgramBuildInfo): EmitAndSemanticDiagnosticsBuilderProgram & SemanticDiagnosticsBuilderProgram {
+    export function createBuildProgramUsingProgramBuildInfo(program: ProgramBuildInfo): EmitAndSemanticDiagnosticsBuilderProgram {
         const fileInfos = createMapFromTemplate(program.fileInfos);
         const state: ReusableBuilderProgramState = {
             fileInfos,
