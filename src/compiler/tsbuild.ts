@@ -569,15 +569,16 @@ namespace ts {
 
     function getBuildOrderFor(state: SolutionBuilderState, project: string | undefined, onlyReferences: boolean | undefined) {
         const resolvedProject = project && resolveProjectName(state, project);
+        const buildOrderFromState = getBuildOrder(state);
         if (resolvedProject) {
             const projectPath = toResolvedConfigFilePath(state, resolvedProject);
             const projectIndex = findIndex(
-                getBuildOrder(state),
+                buildOrderFromState,
                 configFileName => toResolvedConfigFilePath(state, configFileName) === projectPath
             );
             if (projectIndex === -1) return undefined;
         }
-        const buildOrder = resolvedProject ? createBuildOrder(state, [resolvedProject]) : getBuildOrder(state);
+        const buildOrder = resolvedProject ? createBuildOrder(state, [resolvedProject]) : buildOrderFromState;
         Debug.assert(!onlyReferences || resolvedProject !== undefined);
         Debug.assert(!onlyReferences || buildOrder[buildOrder.length - 1] === resolvedProject);
         return onlyReferences ? buildOrder.slice(0, buildOrder.length - 1) : buildOrder;
@@ -1714,8 +1715,8 @@ namespace ts {
         }
 
         disableCache(state);
-        reportErrorSummary(state);
-        startWatching(state);
+        reportErrorSummary(state, buildOrder);
+        startWatching(state, buildOrder);
 
         return errorProjects ?
             successfulProjects ?
@@ -1798,7 +1799,8 @@ namespace ts {
             state.projectErrorsReported.clear();
             reportWatchStatus(state, Diagnostics.File_change_detected_Starting_incremental_compilation);
         }
-        const invalidatedProject = getNextInvalidatedProject(state, getBuildOrder(state), /*reportQueue*/ false);
+        const buildOrder = getBuildOrder(state);
+        const invalidatedProject = getNextInvalidatedProject(state, buildOrder, /*reportQueue*/ false);
         if (invalidatedProject) {
             invalidatedProject.done();
             if (state.projectPendingBuild.size) {
@@ -1810,7 +1812,7 @@ namespace ts {
             }
         }
         disableCache(state);
-        reportErrorSummary(state);
+        reportErrorSummary(state, buildOrder);
     }
 
     function watchConfigFile(state: SolutionBuilderState, resolved: ResolvedConfigFileName, resolvedPath: ResolvedConfigFilePath) {
@@ -1908,10 +1910,10 @@ namespace ts {
         );
     }
 
-    function startWatching(state: SolutionBuilderState) {
+    function startWatching(state: SolutionBuilderState, buildOrder: readonly ResolvedConfigFileName[]) {
         if (!state.watchAllProjectsPending) return;
         state.watchAllProjectsPending = false;
-        for (const resolved of getBuildOrder(state)) {
+        for (const resolved of buildOrder) {
             const resolvedPath = toResolvedConfigFilePath(state, resolved);
             // Watch this file
             watchConfigFile(state, resolved, resolvedPath);
@@ -1985,12 +1987,12 @@ namespace ts {
         reportAndStoreErrors(state, proj, [state.configFileCache.get(proj) as Diagnostic]);
     }
 
-    function reportErrorSummary(state: SolutionBuilderState) {
+    function reportErrorSummary(state: SolutionBuilderState, buildOrder: readonly ResolvedConfigFileName[]) {
         if (!state.needsSummary || (!state.watch && !state.host.reportErrorSummary)) return;
         state.needsSummary = false;
         const { diagnostics } = state;
         // Report errors from the other projects
-        getBuildOrder(state).forEach(project => {
+        buildOrder.forEach(project => {
             const projectPath = toResolvedConfigFilePath(state, project);
             if (!state.projectErrorsReported.has(projectPath)) {
                 reportErrors(state, diagnostics.get(projectPath) || emptyArray);

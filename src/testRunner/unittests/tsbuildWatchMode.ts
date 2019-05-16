@@ -143,6 +143,28 @@ namespace ts.tscWatch {
             createSolutionInWatchMode(allFiles);
         });
 
+        it("verify building references watches only those projects", () => {
+            const system = createTsBuildWatchSystem(allFiles, { currentDirectory: projectsLocation });
+            const host = createSolutionBuilderWithWatchHost(system);
+            const solutionBuilder = ts.createSolutionBuilderWithWatch(host, [`${project}/${SubProject.tests}`], { watch: true });
+            solutionBuilder.buildReferences(`${project}/${SubProject.tests}`);
+
+            checkWatchedFiles(system, testProjectExpectedWatchedFiles.slice(0, testProjectExpectedWatchedFiles.length - tests.length));
+            checkWatchedDirectories(system, emptyArray, /*recursive*/ false);
+            checkWatchedDirectories(system, testProjectExpectedWatchedDirectoriesRecursive, /*recursive*/ true);
+
+            checkOutputErrorsInitial(system, emptyArray);
+            const testOutput = getOutputStamps(system, SubProject.tests, "index");
+            const outputFileStamps = getOutputFileStamps(system);
+            for (const stamp of outputFileStamps.slice(0, outputFileStamps.length - testOutput.length)) {
+                assert.isDefined(stamp[1], `${stamp[0]} expected to be present`);
+            }
+            for (const stamp of testOutput) {
+                assert.isUndefined(stamp[1], `${stamp[0]} expected to be missing`);
+            }
+            return system;
+        });
+
         describe("validates the changes and watched files", () => {
             const newFileWithoutExtension = "newFile";
             const newFile: File = {
