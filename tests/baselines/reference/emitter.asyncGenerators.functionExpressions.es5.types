@@ -24,12 +24,12 @@ const f3 = async function * () {
 }
 === tests/cases/conformance/emitter/es5/asyncGenerators/F4.ts ===
 const f4 = async function * () {
->f4 : () => AsyncGenerator<number, void, unknown>
->async function * () {    const x = yield* [1];} : () => AsyncGenerator<number, void, unknown>
+>f4 : () => AsyncGenerator<number, void, undefined>
+>async function * () {    const x = yield* [1];} : () => AsyncGenerator<number, void, undefined>
 
     const x = yield* [1];
->x : number | void
->yield* [1] : number | void
+>x : any
+>yield* [1] : any
 >[1] : number[]
 >1 : 1
 }

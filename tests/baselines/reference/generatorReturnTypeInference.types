@@ -1,6 +1,6 @@
 === tests/cases/conformance/generators/generatorReturnTypeInference.ts ===
 declare const iterableIterator: IterableIterator<number>;
->iterableIterator : IterableIterator<number, number | void, unknown>
+>iterableIterator : IterableIterator<number>
 
 declare const generator: Generator<number, string, boolean>;
 >generator : Generator<number, string, boolean>
@@ -25,19 +25,19 @@ function* g002() { // Generator<number, void, unknown>
 }
 
 function* g003() { // Generator<never, void, unknown>
->g003 : () => Generator<never, void, unknown>
+>g003 : () => Generator<never, void, undefined>
 
     yield* [];
->yield* [] : void
+>yield* [] : any
 >[] : never[]
 }
 
 function* g004() { // Generator<number, void, unknown>
->g004 : () => Generator<number, void, unknown>
+>g004 : () => Generator<number, void, undefined>
 
     yield* iterableIterator;
->yield* iterableIterator : number | void
->iterableIterator : IterableIterator<number, number | void, unknown>
+>yield* iterableIterator : any
+>iterableIterator : IterableIterator<number>
 }
 
 function* g005() { // Generator<number, void, boolean>

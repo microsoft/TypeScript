@@ -163,7 +163,7 @@ class C15 {
 >C15 : C15
 
     async * f() {
->f : () => AsyncGenerator<any, void, unknown>
+>f : () => AsyncGenerator<any, void, any>
 
         yield *;
 >yield * : any
@@ -175,10 +175,10 @@ class C16 {
 >C16 : C16
 
     async * f() {
->f : () => AsyncGenerator<any, void, unknown>
+>f : () => AsyncGenerator<any, void, undefined>
 
         yield * [];
->yield * [] : void
+>yield * [] : any
 >[] : undefined[]
     }
 }

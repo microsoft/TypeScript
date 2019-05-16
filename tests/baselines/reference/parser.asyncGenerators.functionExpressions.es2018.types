@@ -132,8 +132,8 @@ const f14 = async function * () {
 };
 === tests/cases/conformance/parser/ecmascript2018/asyncGenerators/yieldStarMissingValueIsError.ts ===
 const f15 = async function * () {
->f15 : () => AsyncGenerator<any, void, unknown>
->async function * () {    yield *;} : () => AsyncGenerator<any, void, unknown>
+>f15 : () => AsyncGenerator<any, void, any>
+>async function * () {    yield *;} : () => AsyncGenerator<any, void, any>
 
     yield *;
 >yield * : any
@@ -142,11 +142,11 @@ const f15 = async function * () {
 };
 === tests/cases/conformance/parser/ecmascript2018/asyncGenerators/yieldStarWithValueIsOk.ts ===
 const f16 = async function * () {
->f16 : () => AsyncGenerator<any, void, unknown>
->async function * () {    yield * [];} : () => AsyncGenerator<any, void, unknown>
+>f16 : () => AsyncGenerator<any, void, undefined>
+>async function * () {    yield * [];} : () => AsyncGenerator<any, void, undefined>
 
     yield * [];
->yield * [] : void
+>yield * [] : any
 >[] : undefined[]
 
 };

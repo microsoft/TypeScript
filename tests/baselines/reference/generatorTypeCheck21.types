@@ -9,10 +9,10 @@ class Bar extends Foo { y: string }
 >y : string
 
 function* g(): IterableIterator<Foo> {
->g : () => IterableIterator<Foo, void | Foo, unknown>
+>g : () => IterableIterator<Foo>
 
     yield;
->yield : unknown
+>yield : undefined
 
     yield * new Bar;
 >yield * new Bar : any

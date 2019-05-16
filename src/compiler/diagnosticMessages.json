@@ -1760,7 +1760,7 @@
         "category": "Error",
         "code": 2489
     },
-    "The type returned by the 'next()' method of an iterator must have a 'value' property.": {
+    "The type returned by the '{0}()' method of an iterator must have a 'value' property.": {
         "category": "Error",
         "code": 2490
     },
@@ -1988,7 +1988,7 @@
         "category": "Error",
         "code": 2546
     },
-    "The type returned by the 'next()' method of an async iterator must be a promise for a type with a 'value' property.": {
+    "The type returned by the '{0}()' method of an async iterator must be a promise for a type with a 'value' property.": {
         "category": "Error",
         "code": 2547
     },
@@ -2616,6 +2616,30 @@
     "'super' may not use type arguments.": {
         "category": "Error",
         "code": 2754
+    },
+    "Cannot iterate value because the 'next' method of its iterator expects type '{1}', but for-of will always send '{0}'.": {
+        "category": "Error",
+        "code": 2755
+    },
+    "Cannot iterate value because the 'next' method of its iterator expects type '{1}', but array spread will always send '{0}'.": {
+        "category": "Error",
+        "code": 2756
+    },
+    "Cannot iterate value because the 'next' method of its iterator expects type '{1}', but array destructuring will always send '{0}'.": {
+        "category": "Error",
+        "code": 2757
+    },
+    "Cannot delegate iteration to value because the 'next' method of its iterator expects type '{1}', but the containing generator will always send '{0}'.": {
+        "category": "Error",
+        "code": 2758
+    },
+    "The '{0}' property of an iterator must be a method.": {
+        "category": "Error",
+        "code": 2759
+    },
+    "The '{0}' property of an async iterator must be a method.": {
+        "category": "Error",
+        "code": 2760
     },
 
     "Import declaration '{0}' is using private name '{1}'.": {

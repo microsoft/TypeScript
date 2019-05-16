@@ -18,20 +18,21 @@ interface IteratorReturnResult<TReturn> {
     value: TReturn;
 }
 
-type IteratorResult<T, TReturn = T | void> = IteratorYieldResult<T> | IteratorReturnResult<TReturn>;
+type IteratorResult<T, TReturn = any> = IteratorYieldResult<T> | IteratorReturnResult<TReturn>;
 
-interface Iterator<T, TReturn = T | void, TNext = unknown> {
-    next(value?: TNext): IteratorResult<T, TReturn>;
+interface Iterator<T, TReturn = any, TNext = undefined> {
+    // NOTE: 'next' is defined using a tuple to ensure we report the correct assignability errors in all places.
+    next(...args: [] | [TNext]): IteratorResult<T, TReturn>;
     return?(value?: TReturn): IteratorResult<T, TReturn>;
-    throw?(e?: unknown): IteratorResult<T, TReturn>;
+    throw?(e?: any): IteratorResult<T, TReturn>;
 }
 
 interface Iterable<T> {
     [Symbol.iterator](): Iterator<T>;
 }
 
-interface IterableIterator<T, TReturn = T | void, TNext = unknown> extends Iterator<T, TReturn, TNext> {
-    [Symbol.iterator](): IterableIterator<T, TReturn, TNext>;
+interface IterableIterator<T> extends Iterator<T> {
+    [Symbol.iterator](): IterableIterator<T>;
 }
 
 interface Array<T> {

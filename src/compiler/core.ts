@@ -1078,6 +1078,7 @@ namespace ts {
      * @param value The value to append to the array. If `value` is `undefined`, nothing is
      * appended.
      */
+    export function append<TArray extends any[] | undefined, TValue extends NonNullable<TArray>[number] | undefined>(to: TArray, value: TValue): [undefined, undefined] extends [TArray, TValue] ? TArray : NonNullable<TArray>[number][];
     export function append<T>(to: T[], value: T | undefined): T[];
     export function append<T>(to: T[] | undefined, value: T): T[];
     export function append<T>(to: T[] | undefined, value: T | undefined): T[] | undefined;

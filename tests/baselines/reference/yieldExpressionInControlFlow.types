@@ -19,7 +19,7 @@ function* f() {
 === tests/cases/conformance/es6/yieldExpressions/alsoFails.ts ===
 // fails in Typescript too
 function* g() {
->g : () => Generator<any, void, unknown>
+>g : () => Generator<any, void, any>
 
     var o = []
 >o : any[]

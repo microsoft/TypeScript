@@ -13,13 +13,13 @@ class Baz { z: number }
 >z : number
 
 function* g3() {
->g3 : () => Generator<Foo | Baz, void, unknown>
+>g3 : () => Generator<Foo | Baz, void, undefined>
 
     yield;
 >yield : any
 
     yield * [new Foo];
->yield * [new Foo] : void | Foo
+>yield * [new Foo] : any
 >[new Foo] : Foo[]
 >new Foo : Foo
 >Foo : typeof Foo
@@ -35,13 +35,13 @@ function* g3() {
 >Baz : typeof Baz
 
     yield *[new Bar];
->yield *[new Bar] : void | Bar
+>yield *[new Bar] : any
 >[new Bar] : Bar[]
 >new Bar : Bar
 >Bar : typeof Bar
 
     yield *[new Baz];
->yield *[new Baz] : void | Baz
+>yield *[new Baz] : any
 >[new Baz] : Baz[]
 >new Baz : Baz
 >Baz : typeof Baz

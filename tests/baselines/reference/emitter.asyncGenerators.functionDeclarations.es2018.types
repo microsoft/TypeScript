@@ -21,11 +21,11 @@ async function * f3() {
 }
 === tests/cases/conformance/emitter/es2018/asyncGenerators/F4.ts ===
 async function * f4() {
->f4 : () => AsyncGenerator<number, void, unknown>
+>f4 : () => AsyncGenerator<number, void, undefined>
 
     const x = yield* [1];
->x : number | void
->yield* [1] : number | void
+>x : any
+>yield* [1] : any
 >[1] : number[]
 >1 : 1
 }

@@ -36,15 +36,15 @@ const o3 = {
 }
 === tests/cases/conformance/emitter/es2015/asyncGenerators/O4.ts ===
 const o4 = {
->o4 : { f(): AsyncGenerator<number, void, unknown>; }
->{    async * f() {        const x = yield* [1];    }} : { f(): AsyncGenerator<number, void, unknown>; }
+>o4 : { f(): AsyncGenerator<number, void, undefined>; }
+>{    async * f() {        const x = yield* [1];    }} : { f(): AsyncGenerator<number, void, undefined>; }
 
     async * f() {
->f : () => AsyncGenerator<number, void, unknown>
+>f : () => AsyncGenerator<number, void, undefined>
 
         const x = yield* [1];
->x : number | void
->yield* [1] : number | void
+>x : any
+>yield* [1] : any
 >[1] : number[]
 >1 : 1
     }

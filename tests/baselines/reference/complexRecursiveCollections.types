@@ -1121,7 +1121,7 @@ declare module Immutable {
 >Seq : any
 
       [Symbol.iterator](): IterableIterator<[keyof T, T[keyof T]]>;
->[Symbol.iterator] : () => IterableIterator<[keyof T, T[keyof T]], void | [keyof T, T[keyof T]], unknown>
+>[Symbol.iterator] : () => IterableIterator<[keyof T, T[keyof T]]>
 >Symbol.iterator : symbol
 >Symbol : SymbolConstructor
 >iterator : symbol
@@ -1584,7 +1584,7 @@ declare module Immutable {
 >context : any
 
       [Symbol.iterator](): IterableIterator<[K, V]>;
->[Symbol.iterator] : () => IterableIterator<[K, V], void | [K, V], unknown>
+>[Symbol.iterator] : () => IterableIterator<[K, V]>
 >Symbol.iterator : symbol
 >Symbol : SymbolConstructor
 >iterator : symbol
@@ -1733,7 +1733,7 @@ declare module Immutable {
 >context : any
 
       [Symbol.iterator](): IterableIterator<T>;
->[Symbol.iterator] : () => IterableIterator<T, void | T, unknown>
+>[Symbol.iterator] : () => IterableIterator<T>
 >Symbol.iterator : symbol
 >Symbol : SymbolConstructor
 >iterator : symbol
@@ -1797,7 +1797,7 @@ declare module Immutable {
 >context : any
 
       [Symbol.iterator](): IterableIterator<T>;
->[Symbol.iterator] : () => IterableIterator<T, void | T, unknown>
+>[Symbol.iterator] : () => IterableIterator<T>
 >Symbol.iterator : symbol
 >Symbol : SymbolConstructor
 >iterator : symbol
@@ -1924,13 +1924,13 @@ declare module Immutable {
 
     // Iterators
     keys(): IterableIterator<K>;
->keys : () => IterableIterator<K, void | K, unknown>
+>keys : () => IterableIterator<K>
 
     values(): IterableIterator<V>;
->values : () => IterableIterator<V, void | V, unknown>
+>values : () => IterableIterator<V>
 
     entries(): IterableIterator<[K, V]>;
->entries : () => IterableIterator<[K, V], void | [K, V], unknown>
+>entries : () => IterableIterator<[K, V]>
 
     // Collections (Seq)
     keySeq(): Seq.Indexed<K>;

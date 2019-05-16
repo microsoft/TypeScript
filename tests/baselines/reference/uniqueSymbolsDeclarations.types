@@ -122,9 +122,9 @@ function* genFuncYieldVarCall() { yield varCall; }
 
 // generator function yield with return type query
 function* genFuncYieldConstCallWithTypeQuery(): IterableIterator<typeof constCall> { yield constCall; }
->genFuncYieldConstCallWithTypeQuery : () => IterableIterator<unique symbol, void | unique symbol, unknown>
+>genFuncYieldConstCallWithTypeQuery : () => IterableIterator<unique symbol>
 >constCall : unique symbol
->yield constCall : unknown
+>yield constCall : undefined
 >constCall : unique symbol
 
 // async function return inference
@@ -796,11 +796,11 @@ interface Context {
 >s : unique symbol
 
     method3(): AsyncIterableIterator<typeof s>;
->method3 : () => AsyncIterableIterator<unique symbol, void | unique symbol, unknown>
+>method3 : () => AsyncIterableIterator<unique symbol>
 >s : unique symbol
 
     method4(): IterableIterator<typeof s>;
->method4 : () => IterableIterator<unique symbol, void | unique symbol, unknown>
+>method4 : () => IterableIterator<unique symbol>
 >s : unique symbol
 
     method5(p?: typeof s): typeof s;

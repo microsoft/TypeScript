@@ -4236,14 +4236,16 @@ namespace ts {
 
     /* @internal */
     export interface IterationTypes {
-        yieldType?: Type;
-        returnType?: Type;
-        nextType?: Type;
+        readonly yieldType: Type;
+        readonly returnType: Type;
+        readonly nextType: Type;
     }
 
     // Just a place to cache element types of iterables and iterators
     /* @internal */
     export interface IterableOrIteratorType extends ObjectType, UnionType {
+        iterationTypesOfGeneratorReturnType?: IterationTypes;
+        iterationTypesOfAsyncGeneratorReturnType?: IterationTypes;
         iterationTypesOfIterable?: IterationTypes;
         iterationTypesOfIterator?: IterationTypes;
         iterationTypesOfAsyncIterable?: IterationTypes;

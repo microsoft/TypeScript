@@ -52,10 +52,10 @@ const result2: A[] = Array.from(inputA.values());
 >Array.from : { <T>(arrayLike: ArrayLike<T>): T[]; <T, U>(arrayLike: ArrayLike<T>, mapfn: (v: T, k: number) => U, thisArg?: any): U[]; <T>(iterable: Iterable<T> | ArrayLike<T>): T[]; <T, U>(iterable: Iterable<T> | ArrayLike<T>, mapfn: (v: T, k: number) => U, thisArg?: any): U[]; }
 >Array : ArrayConstructor
 >from : { <T>(arrayLike: ArrayLike<T>): T[]; <T, U>(arrayLike: ArrayLike<T>, mapfn: (v: T, k: number) => U, thisArg?: any): U[]; <T>(iterable: Iterable<T> | ArrayLike<T>): T[]; <T, U>(iterable: Iterable<T> | ArrayLike<T>, mapfn: (v: T, k: number) => U, thisArg?: any): U[]; }
->inputA.values() : IterableIterator<A, void | A, unknown>
->inputA.values : () => IterableIterator<A, void | A, unknown>
+>inputA.values() : IterableIterator<A>
+>inputA.values : () => IterableIterator<A>
 >inputA : A[]
->values : () => IterableIterator<A, void | A, unknown>
+>values : () => IterableIterator<A>
 
 const result3: B[] = Array.from(inputA.values()); // expect error
 >result3 : B[]
@@ -63,10 +63,10 @@ const result3: B[] = Array.from(inputA.values()); // expect error
 >Array.from : { <T>(arrayLike: ArrayLike<T>): T[]; <T, U>(arrayLike: ArrayLike<T>, mapfn: (v: T, k: number) => U, thisArg?: any): U[]; <T>(iterable: Iterable<T> | ArrayLike<T>): T[]; <T, U>(iterable: Iterable<T> | ArrayLike<T>, mapfn: (v: T, k: number) => U, thisArg?: any): U[]; }
 >Array : ArrayConstructor
 >from : { <T>(arrayLike: ArrayLike<T>): T[]; <T, U>(arrayLike: ArrayLike<T>, mapfn: (v: T, k: number) => U, thisArg?: any): U[]; <T>(iterable: Iterable<T> | ArrayLike<T>): T[]; <T, U>(iterable: Iterable<T> | ArrayLike<T>, mapfn: (v: T, k: number) => U, thisArg?: any): U[]; }
->inputA.values() : IterableIterator<A, void | A, unknown>
->inputA.values : () => IterableIterator<A, void | A, unknown>
+>inputA.values() : IterableIterator<A>
+>inputA.values : () => IterableIterator<A>
 >inputA : A[]
->values : () => IterableIterator<A, void | A, unknown>
+>values : () => IterableIterator<A>
 
 const result4: A[] = Array.from(inputB, ({ b }): A => ({ a: b }));
 >result4 : A[]
