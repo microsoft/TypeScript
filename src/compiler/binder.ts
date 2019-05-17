@@ -2992,7 +2992,7 @@ namespace ts {
                     identifiers.set(node.escapedText as string, true);
                 }
                 const symbol = lookupSymbolForNameWorker(sourceFile, node.escapedText);
-                if(!!symbol && !!symbol.valueDeclaration && isVariableDeclaration(symbol.valueDeclaration) && !!symbol.valueDeclaration.initializer) {
+                if (!!symbol && !!symbol.valueDeclaration && isVariableDeclaration(symbol.valueDeclaration) && !!symbol.valueDeclaration.initializer) {
                     const init = symbol.valueDeclaration.initializer;
                     q.push(init);
                     if (isAssignmentExpression(init, /*excludeCompoundAssignment*/ true)) {
