@@ -4302,6 +4302,11 @@ namespace ts {
             function lookupTypeParameterNodes(chain: Symbol[], index: number, context: NodeBuilderContext) {
                 Debug.assert(chain && 0 <= index && index < chain.length);
                 const symbol = chain[index];
+                const symbolId = "" + getSymbolId(symbol);
+                if (context.typeParameterSymbolList && context.typeParameterSymbolList.get(symbolId)) {
+                    return undefined;
+                }
+                (context.typeParameterSymbolList || (context.typeParameterSymbolList = createMap())).set(symbolId, true);
                 let typeParameterNodes: ReadonlyArray<TypeNode> | ReadonlyArray<TypeParameterDeclaration> | undefined;
                 if (context.flags & NodeBuilderFlags.WriteTypeParametersInQualifiedName && index < (chain.length - 1)) {
                     const parentSymbol = symbol;
@@ -4628,6 +4633,7 @@ namespace ts {
             inferTypeParameters: TypeParameter[] | undefined;
             approximateLength: number;
             truncating?: boolean;
+            typeParameterSymbolList?: Map<true>;
         }
 
         function isDefaultBindingContext(location: Node) {
