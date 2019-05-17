@@ -2977,7 +2977,6 @@ namespace ts {
     export function isExportsOrModuleExportsOrAlias(sourceFile: SourceFile, node: Expression): boolean {
         let i = 0;
         const q = [node];
-        const identifiers = createMap<true>();
         while (q.length && i < 100) {
             i++;
             node = q.shift()!;
@@ -2985,12 +2984,6 @@ namespace ts {
                 return true;
             }
             else if (isIdentifier(node)) {
-                if (identifiers.has(node.escapedText as string)) {
-                    return false;
-                }
-                else {
-                    identifiers.set(node.escapedText as string, true);
-                }
                 const symbol = lookupSymbolForNameWorker(sourceFile, node.escapedText);
                 if (!!symbol && !!symbol.valueDeclaration && isVariableDeclaration(symbol.valueDeclaration) && !!symbol.valueDeclaration.initializer) {
                     const init = symbol.valueDeclaration.initializer;
