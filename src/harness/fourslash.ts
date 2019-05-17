@@ -1503,7 +1503,7 @@ Actual: ${stringify(fullActual)}`);
         }
 
         public baselineSmartSelection() {
-            const n = ts.sys.newLine;
+            const n = "\n";
             const baselineFile = this.getBaselineFileName();
             const markers = this.getMarkers();
             const fileContent = this.activeFile.content;
