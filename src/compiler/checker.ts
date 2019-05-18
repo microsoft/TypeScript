@@ -10406,14 +10406,34 @@ namespace ts {
             const checkTypeInstantiable = maybeTypeOfKind(checkType, TypeFlags.Instantiable | TypeFlags.GenericMappedType);
             let combinedMapper: TypeMapper | undefined;
             if (root.inferTypeParameters) {
-                const context = createInferenceContext(root.inferTypeParameters, /*signature*/ undefined, InferenceFlags.None);
+                const freshParams = map(root.inferTypeParameters, cloneTypeParameter);
+                const freshMapper = createTypeMapper(root.inferTypeParameters, freshParams);
+                const context = createInferenceContext(freshParams, /*signature*/ undefined, InferenceFlags.None);
+                // We have three mappers that need applying:
+                //    * The original `mapper` used to create this conditional
+                //    * The mapper that maps the old root type parameter to the clone (`freshMapper`)
+                //    * The mapper that maps the clone to its inference result (`context.mapper`)
+                // When we're looking at making an inference for a clone, when we get its constraint, it's autmagically be
+                // instantiated with the context, so it doesn't need that one - however the constraint may refer to another _root_, _uncloned_
+                // `infer` type parameter.
+                // Eg, if we have `Foo<T, U extends T>` and `Foo<number, infer B>` - `B` is constrained to `T`, which, in turn, has been instantiated
+                // as `number`
+                // Conversely, if we have `Foo<infer A, infer B>`, `B` is still constrained to `T` and `T` is instantiated as `A`
+                // So we need to:
+                //    * Clone the type parameters so their constraints can be instantiated in the context of `mapper`
+                //    * Set the clones to both map the context and the original params
+                //    * instantiate the extends type with the clones
+                //    * incorporate all of the component mappers into the combined mapper for the members
+                for (const p of freshParams) {
+                    p.mapper = combineTypeMappers(mapper, freshMapper);
+                }
                 if (!checkTypeInstantiable) {
                     // We don't want inferences from constraints as they may cause us to eagerly resolve the
                     // conditional type instead of deferring resolution. Also, we always want strict function
                     // types rules (i.e. proper contravariance) for inferences.
-                    inferTypes(context.inferences, checkType, extendsType, InferencePriority.NoConstraints | InferencePriority.AlwaysStrict);
+                    inferTypes(context.inferences, checkType, instantiateType(extendsType, freshMapper), InferencePriority.NoConstraints | InferencePriority.AlwaysStrict);
                 }
-                combinedMapper = combineTypeMappers(mapper, context.mapper);
+                combinedMapper = combineTypeMappers(combineTypeMappers(freshMapper, context.mapper), mapper);
             }
             // Instantiate the extends type including inferences for 'infer T' type parameters
             const inferredExtendsType = combinedMapper ? instantiateType(root.extendsType, combinedMapper) : extendsType;

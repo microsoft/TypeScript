@@ -1,0 +1,32 @@
+=== tests/cases/compiler/conditionalDoesntLeakUninstantiatedTypeParameter.ts ===
+interface Synthetic<A, B extends A> {}
+>Synthetic : Symbol(Synthetic, Decl(conditionalDoesntLeakUninstantiatedTypeParameter.ts, 0, 0))
+>A : Symbol(A, Decl(conditionalDoesntLeakUninstantiatedTypeParameter.ts, 0, 20))
+>B : Symbol(B, Decl(conditionalDoesntLeakUninstantiatedTypeParameter.ts, 0, 22))
+>A : Symbol(A, Decl(conditionalDoesntLeakUninstantiatedTypeParameter.ts, 0, 20))
+
+type SyntheticDestination<T, U> = U extends Synthetic<T, infer V> ? V : never;
+>SyntheticDestination : Symbol(SyntheticDestination, Decl(conditionalDoesntLeakUninstantiatedTypeParameter.ts, 0, 38))
+>T : Symbol(T, Decl(conditionalDoesntLeakUninstantiatedTypeParameter.ts, 1, 26))
+>U : Symbol(U, Decl(conditionalDoesntLeakUninstantiatedTypeParameter.ts, 1, 28))
+>U : Symbol(U, Decl(conditionalDoesntLeakUninstantiatedTypeParameter.ts, 1, 28))
+>Synthetic : Symbol(Synthetic, Decl(conditionalDoesntLeakUninstantiatedTypeParameter.ts, 0, 0))
+>T : Symbol(T, Decl(conditionalDoesntLeakUninstantiatedTypeParameter.ts, 1, 26))
+>V : Symbol(V, Decl(conditionalDoesntLeakUninstantiatedTypeParameter.ts, 1, 62))
+>V : Symbol(V, Decl(conditionalDoesntLeakUninstantiatedTypeParameter.ts, 1, 62))
+
+type TestSynthetic = // Resolved to T, should be `number` or an inference failure (`unknown`)
+>TestSynthetic : Symbol(TestSynthetic, Decl(conditionalDoesntLeakUninstantiatedTypeParameter.ts, 1, 78))
+
+    SyntheticDestination<number, Synthetic<number, number>>;
+>SyntheticDestination : Symbol(SyntheticDestination, Decl(conditionalDoesntLeakUninstantiatedTypeParameter.ts, 0, 38))
+>Synthetic : Symbol(Synthetic, Decl(conditionalDoesntLeakUninstantiatedTypeParameter.ts, 0, 0))
+
+const y: TestSynthetic = 3; // Type '3' is not assignable to type 'T'. (shouldn't error)
+>y : Symbol(y, Decl(conditionalDoesntLeakUninstantiatedTypeParameter.ts, 5, 5))
+>TestSynthetic : Symbol(TestSynthetic, Decl(conditionalDoesntLeakUninstantiatedTypeParameter.ts, 1, 78))
+
+const z: TestSynthetic = '3'; // Type '"3""' is not assignable to type 'T'. (should not mention T)
+>z : Symbol(z, Decl(conditionalDoesntLeakUninstantiatedTypeParameter.ts, 6, 5))
+>TestSynthetic : Symbol(TestSynthetic, Decl(conditionalDoesntLeakUninstantiatedTypeParameter.ts, 1, 78))
+
