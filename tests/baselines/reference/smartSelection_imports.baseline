@@ -1,0 +1,29 @@
+import { /**/x as y, z } from './z';
+import { b } from './';
+
+console.log(1);
+
+
+         x                      
+
+
+         x as y                 
+
+
+         x as y, z              
+
+
+       { x as y, z }            
+
+
+import { x as y, z } from './z';
+
+
+import { x as y, z } from './z';
+import { b } from './';
+
+
+import { x as y, z } from './z';
+import { b } from './';
+
+console.log(1);
