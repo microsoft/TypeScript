@@ -1,5 +1,5 @@
 namespace ts {
-    describe("unittests:: services:: Organize imports", () => {
+    describe("unittests:: services:: organizeImports", () => {
         describe("Sort imports", () => {
             it("Sort - non-relative vs non-relative", () => {
                 assertSortsBefore(
@@ -347,8 +347,10 @@ import { } from "lib";
             {
                 path: "/test.d.ts",
                 content: `
+import foo from 'foo';
 import { Caseless } from 'caseless';
 
+declare module 'foo' {}
 declare module 'caseless' {
     interface Caseless {
         test(name: KeyType): boolean;

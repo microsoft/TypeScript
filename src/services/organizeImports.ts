@@ -89,7 +89,7 @@ namespace ts.OrganizeImports {
         const usedImports: ImportDeclaration[] = [];
 
         for (const importDecl of oldImports) {
-            const {importClause} = importDecl;
+            const { importClause, moduleSpecifier } = importDecl;
 
             if (!importClause) {
                 // Imports without import clauses are assumed to be included for their side effects and are not removed.
@@ -125,6 +125,14 @@ namespace ts.OrganizeImports {
             if (name || namedBindings) {
                 usedImports.push(updateImportDeclarationAndClause(importDecl, name, namedBindings));
             }
+            // If a module is imported to be augmented, keep the import declaration, but without an import clause
+            else if (hasModuleDeclarationMatchingSpecifier(sourceFile, moduleSpecifier)) {
+                usedImports.push(createImportDeclaration(
+                    importDecl.decorators,
+                    importDecl.modifiers,
+                    /*importClause*/ undefined,
+                    moduleSpecifier));
+            }
         }
 
         return usedImports;
@@ -133,6 +141,14 @@ namespace ts.OrganizeImports {
             // The JSX factory symbol is always used if JSX elements are present - even if they are not allowed.
             return jsxElementsPresent && (identifier.text === jsxNamespace) || FindAllReferences.Core.isSymbolReferencedInFile(identifier, typeChecker, sourceFile);
         }
+    }
+
+    function hasModuleDeclarationMatchingSpecifier(sourceFile: SourceFile, moduleSpecifier: Expression) {
+        const moduleSpecifierText = isStringLiteral(moduleSpecifier) && moduleSpecifier.text;
+        return isString(moduleSpecifierText) && some(sourceFile.statements, statement =>
+            isModuleDeclaration(statement)
+            && isStringLiteral(statement.name)
+            && statement.name.text === moduleSpecifierText);
     }
 
     function getExternalModuleName(specifier: Expression) {
