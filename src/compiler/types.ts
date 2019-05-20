@@ -3751,6 +3751,8 @@ namespace ts {
         extendedContainers?: Symbol[];      // Containers (other than the parent) which this symbol is aliased in
         extendedContainersByFile?: Map<Symbol[]>;      // Containers (other than the parent) which this symbol is aliased in
         variances?: VarianceFlags[];             // Alias symbol type argument variance cache
+        deferralConstituents?: Type[];      // Calculated list of constituents for a deferred type
+        deferralParent?: Type;              // Source union/intersection of a deferred type
     }
 
     /* @internal */
@@ -3777,6 +3779,7 @@ namespace ts {
         ReverseMapped     = 1 << 13,        // Property of reverse-inferred homomorphic mapped type
         OptionalParameter = 1 << 14,        // Optional parameter
         RestParameter     = 1 << 15,        // Rest parameter
+        DeferredType      = 1 << 16,        // Calculation of the type of this symbol is deferred due to processing costs, should be fetched with `getTypeOfSymbolWithDeferredType`
         Synthetic = SyntheticProperty | SyntheticMethod,
         Discriminant = HasNonUniformType | HasLiteralType,
         Partial = ReadPartial | WritePartial
