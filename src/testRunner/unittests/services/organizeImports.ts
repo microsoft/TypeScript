@@ -343,6 +343,19 @@ import { } from "lib";
                 },
                 libFile);
 
+            testOrganizeImports("Unused_false_positive_module_augmentation",
+            {
+                path: "/test.d.ts",
+                content: `
+import { Caseless } from 'caseless';
+
+declare module 'caseless' {
+    interface Caseless {
+        test(name: KeyType): boolean;
+    }
+}`
+            });
+
             testOrganizeImports("Unused_false_positive_shorthand_assignment",
             {
                     path: "/test.ts",
