@@ -3,16 +3,12 @@
 //@Filename: jsxExpressionFollowedByIdentifier.tsx
 ////declare var React: any;
 ////declare var x: string;
-////const a = <div>{<div />/*1*/x/*2*/}</div>
+////const a = <div>{<div />[|x|]}</div>
 
-goTo.marker('1');
+const range = test.ranges()[0];
 verify.getSyntacticDiagnostics([{
   code: 1005,
   message: "'}' expected.",
-  range: {
-    fileName: test.marker('1').fileName,
-    pos: test.marker('1').position,
-    end: test.marker('2').position,
-  }
+  range,
 }]);
-verify.quickInfoIs('var x: string');
+verify.quickInfoAt(range, 'var x: string');
