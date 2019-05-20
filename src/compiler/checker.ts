@@ -20537,7 +20537,7 @@ namespace ts {
             }
             const flowType = getFlowTypeOfReference(node, indexedAccessType, assumeUninitialized ? getOptionalType(indexedAccessType) : indexedAccessType);
             if (assumeUninitialized && !(getFalsyFlags(indexedAccessType) & TypeFlags.Undefined) && getFalsyFlags(flowType) & TypeFlags.Undefined) {
-                error(indexExpression, Diagnostics.Property_0_is_used_before_being_assigned, symbolToString(prop!)); // TODO: GH#18217
+                error(indexExpression, Diagnostics.Property_0_is_used_before_being_assigned, symbolToString(prop));
                 // Return the declared type to reduce follow-on errors
                 return indexedAccessType;
             }
