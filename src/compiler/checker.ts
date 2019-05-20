@@ -20503,7 +20503,45 @@ namespace ts {
                 AccessFlags.Writing | (isGenericObjectType(objectType) && !isThisTypeParameter(objectType) ? AccessFlags.NoIndexSignatures : 0) :
                 AccessFlags.None;
             const indexedAccessType = getIndexedAccessTypeOrUndefined(objectType, effectiveIndexType, node, accessFlags) || errorType;
-            return checkIndexedAccessIndexType(indexedAccessType, node);
+            const prop = indexedAccessType.symbol;
+
+            // Only compute control flow type if this is a property access expression that isn't an
+            // assignment target, and the referenced property was declared as a variable, property,
+            // accessor, or optional method.
+            // TODO: This probably doesn't handle element access expressions
+            const assignmentKind = getAssignmentTargetKind(node);
+            if (node.kind !== SyntaxKind.ElementAccessExpression ||
+                assignmentKind === AssignmentKind.Definite ||
+                prop && !(prop.flags & (SymbolFlags.Variable | SymbolFlags.Property | SymbolFlags.Accessor)) && !(prop.flags & SymbolFlags.Method && indexedAccessType.flags & TypeFlags.Union)) {
+                return checkIndexedAccessIndexType(indexedAccessType, node);
+            }
+            // If strict null checks and strict property initialization checks are enabled, if we have
+            // a this.xxx property access, if the property is an instance property without an initializer,
+            // and if we are in a constructor of the same class as the property declaration, assume that
+            // the property is uninitialized at the top of the control flow.
+            let assumeUninitialized = false;
+            if (strictNullChecks && strictPropertyInitialization && node.expression.kind === SyntaxKind.ThisKeyword) {
+                const declaration = prop && prop.valueDeclaration;
+                if (declaration && isInstancePropertyWithoutInitializer(declaration)) {
+                    const flowContainer = getControlFlowContainer(node);
+                    if (flowContainer.kind === SyntaxKind.Constructor && flowContainer.parent === declaration.parent) {
+                        assumeUninitialized = true;
+                    }
+                }
+            }
+            else if (strictNullChecks && prop && prop.valueDeclaration &&
+                isPropertyAccessExpression(prop.valueDeclaration) &&
+                getAssignmentDeclarationPropertyAccessKind(prop.valueDeclaration) &&
+                getControlFlowContainer(node) === getControlFlowContainer(prop.valueDeclaration)) {
+                assumeUninitialized = true;
+            }
+            const flowType = getFlowTypeOfReference(node, indexedAccessType, assumeUninitialized ? getOptionalType(indexedAccessType) : indexedAccessType);
+            if (assumeUninitialized && !(getFalsyFlags(indexedAccessType) & TypeFlags.Undefined) && getFalsyFlags(flowType) & TypeFlags.Undefined) {
+                error(indexExpression, Diagnostics.Property_0_is_used_before_being_assigned, symbolToString(prop!)); // TODO: GH#18217
+                // Return the declared type to reduce follow-on errors
+                return indexedAccessType;
+            }
+            return checkIndexedAccessIndexType(assignmentKind ? getBaseTypeOfLiteralType(flowType) : flowType, node);
         }
 
         function checkThatExpressionIsProperSymbolReference(expression: Expression, expressionType: Type, reportError: boolean): boolean {
