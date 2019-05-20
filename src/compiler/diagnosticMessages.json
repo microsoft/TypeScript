@@ -655,7 +655,7 @@
         "category": "Error",
         "code": 1207
     },
-    "Cannot compile namespaces when the '--isolatedModules' flag is provided.": {
+    "All files must be modules when the '--isolatedModules' flag is provided.": {
         "category": "Error",
         "code": 1208
     },
