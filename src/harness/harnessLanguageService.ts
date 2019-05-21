@@ -472,6 +472,9 @@ namespace Harness.LanguageService {
         getRenameInfo(fileName: string, position: number, options?: ts.RenameInfoOptions): ts.RenameInfo {
             return unwrapJSONCallResult(this.shim.getRenameInfo(fileName, position, options));
         }
+        getSmartSelectionRange(fileName: string, position: number): ts.SelectionRange {
+            return unwrapJSONCallResult(this.shim.getSmartSelectionRange(fileName, position));
+        }
         findRenameLocations(fileName: string, position: number, findInStrings: boolean, findInComments: boolean, providePrefixAndSuffixTextForRename?: boolean): ts.RenameLocation[] {
             return unwrapJSONCallResult(this.shim.findRenameLocations(fileName, position, findInStrings, findInComments, providePrefixAndSuffixTextForRename));
         }

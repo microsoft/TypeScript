@@ -2080,6 +2080,10 @@ namespace ts {
             };
         }
 
+        function getSmartSelectionRange(fileName: string, position: number): SelectionRange {
+            return SmartSelectionRange.getSmartSelectionRange(position, syntaxTreeCache.getCurrentSourceFile(fileName));
+        }
+
         function getApplicableRefactors(fileName: string, positionOrRange: number | TextRange, preferences: UserPreferences = emptyOptions): ApplicableRefactorInfo[] {
             synchronizeHostData();
             const file = getValidSourceFile(fileName);
@@ -2127,6 +2131,7 @@ namespace ts {
             getBreakpointStatementAtPosition,
             getNavigateToItems,
             getRenameInfo,
+            getSmartSelectionRange,
             findRenameLocations,
             getNavigationBarItems,
             getNavigationTree,

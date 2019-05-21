@@ -1417,12 +1417,7 @@ Actual: ${stringify(fullActual)}`);
         }
 
         public baselineCurrentFileBreakpointLocations() {
-            let baselineFile = this.testData.globalOptions[MetadataOptionNames.baselineFile];
-            if (!baselineFile) {
-                baselineFile = this.activeFile.fileName.replace(this.basePath + "/breakpointValidation", "bpSpan");
-                baselineFile = baselineFile.replace(ts.Extension.Ts, ".baseline");
-
-            }
+            const baselineFile = this.getBaselineFileName().replace("breakpointValidation", "bpSpan");
             Harness.Baseline.runBaseline(baselineFile, this.baselineCurrentFileLocations(pos => this.getBreakpointStatementLocation(pos)!));
         }
 
@@ -1497,8 +1492,7 @@ Actual: ${stringify(fullActual)}`);
         }
 
         public baselineQuickInfo() {
-            const baselineFile = this.testData.globalOptions[MetadataOptionNames.baselineFile] ||
-                ts.getBaseFileName(this.activeFile.fileName).replace(ts.Extension.Ts, ".baseline");
+            const baselineFile = this.getBaselineFileName();
             Harness.Baseline.runBaseline(
                 baselineFile,
                 stringify(
@@ -1506,6 +1500,39 @@ Actual: ${stringify(fullActual)}`);
                         marker,
                         quickInfo: this.languageService.getQuickInfoAtPosition(marker.fileName, marker.position)
                     }))));
+        }
+
+        public baselineSmartSelection() {
+            const n = "\n";
+            const baselineFile = this.getBaselineFileName();
+            const markers = this.getMarkers();
+            const fileContent = this.activeFile.content;
+            const text = markers.map(marker => {
+                const baselineContent = [fileContent.slice(0, marker.position) + "/**/" + fileContent.slice(marker.position) + n];
+                let selectionRange: ts.SelectionRange | undefined = this.languageService.getSmartSelectionRange(this.activeFile.fileName, marker.position);
+                while (selectionRange) {
+                    const { textSpan } = selectionRange;
+                    let masked = Array.from(fileContent).map((char, index) => {
+                        const charCode = char.charCodeAt(0);
+                        if (index >= textSpan.start && index < ts.textSpanEnd(textSpan)) {
+                            return char === " " ? "•" : ts.isLineBreak(charCode) ? `↲${n}` : char;
+                        }
+                        return ts.isLineBreak(charCode) ? char : " ";
+                    }).join("");
+                    masked = masked.replace(/^\s*$\r?\n?/gm, ""); // Remove blank lines
+                    const isRealCharacter = (char: string) => char !== "•" && char !== "↲" && !ts.isWhiteSpaceLike(char.charCodeAt(0));
+                    const leadingWidth = Array.from(masked).findIndex(isRealCharacter);
+                    const trailingWidth = ts.findLastIndex(Array.from(masked), isRealCharacter);
+                    masked = masked.slice(0, leadingWidth)
+                        + masked.slice(leadingWidth, trailingWidth).replace(/•/g, " ").replace(/↲/g, "")
+                        + masked.slice(trailingWidth);
+                    baselineContent.push(masked);
+                    selectionRange = selectionRange.parent;
+                }
+                return baselineContent.join(fileContent.includes("\n") ? n + n : n);
+            }).join(n.repeat(2) + "=".repeat(80) + n.repeat(2));
+
+            Harness.Baseline.runBaseline(baselineFile, text);
         }
 
         public printBreakpointLocation(pos: number) {
@@ -1560,6 +1587,11 @@ Actual: ${stringify(fullActual)}`);
         public printCurrentSignatureHelp() {
             const help = this.getSignatureHelp(ts.emptyOptions)!;
             Harness.IO.log(stringify(help.items[help.selectedItemIndex]));
+        }
+
+        private getBaselineFileName() {
+            return this.testData.globalOptions[MetadataOptionNames.baselineFile] ||
+                ts.getBaseFileName(this.activeFile.fileName).replace(ts.Extension.Ts, ".baseline");
         }
 
         private getSignatureHelp({ triggerReason }: FourSlashInterface.VerifySignatureHelpOptions): ts.SignatureHelpItems | undefined {
@@ -3958,6 +3990,10 @@ namespace FourSlashInterface {
 
         public baselineQuickInfo() {
             this.state.baselineQuickInfo();
+        }
+
+        public baselineSmartSelection() {
+            this.state.baselineSmartSelection();
         }
 
         public nameOrDottedNameSpanTextIs(text: string) {

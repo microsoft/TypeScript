@@ -503,3 +503,17 @@ function fn4<K extends number>() {
 >K : Symbol(K, Decl(keyofAndIndexedAccess2.ts, 133, 13))
 }
 
+// Repro from #31439
+
+export class c {
+>c : Symbol(c, Decl(keyofAndIndexedAccess2.ts, 136, 1))
+
+  [x: string]: string;
+>x : Symbol(x, Decl(keyofAndIndexedAccess2.ts, 141, 3))
+
+  constructor() {
+    this["a"] = "b";
+>this : Symbol(c, Decl(keyofAndIndexedAccess2.ts, 136, 1))
+  }
+}
+

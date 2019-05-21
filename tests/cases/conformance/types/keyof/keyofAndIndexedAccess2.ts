@@ -138,3 +138,12 @@ function fn4<K extends number>() {
     let x: Array<string>[K] = 'abc';
     let y: ReadonlyArray<string>[K] = 'abc';
 }
+
+// Repro from #31439
+
+export class c {
+  [x: string]: string;
+  constructor() {
+    this["a"] = "b";
+  }
+}

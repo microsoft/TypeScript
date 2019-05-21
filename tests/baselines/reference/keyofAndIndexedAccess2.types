@@ -499,3 +499,21 @@ function fn4<K extends number>() {
 >'abc' : "abc"
 }
 
+// Repro from #31439
+
+export class c {
+>c : c
+
+  [x: string]: string;
+>x : string
+
+  constructor() {
+    this["a"] = "b";
+>this["a"] = "b" : "b"
+>this["a"] : string
+>this : this
+>"a" : "a"
+>"b" : "b"
+  }
+}
+

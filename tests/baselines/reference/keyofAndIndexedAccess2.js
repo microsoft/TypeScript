@@ -137,6 +137,15 @@ function fn4<K extends number>() {
     let y: ReadonlyArray<string>[K] = 'abc';
 }
 
+// Repro from #31439
+
+export class c {
+  [x: string]: string;
+  constructor() {
+    this["a"] = "b";
+  }
+}
+
 
 //// [keyofAndIndexedAccess2.js]
 function f1(obj, k0, k1, k2) {
@@ -225,4 +234,10 @@ function fn3(param, cb) {
 function fn4() {
     let x = 'abc';
     let y = 'abc';
+}
+// Repro from #31439
+export class c {
+    constructor() {
+        this["a"] = "b";
+    }
 }
