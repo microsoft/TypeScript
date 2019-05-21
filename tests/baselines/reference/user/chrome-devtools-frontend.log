@@ -4484,9 +4484,7 @@ node_modules/chrome-devtools-frontend/front_end/coverage/CoverageModel.js(175,64
 node_modules/chrome-devtools-frontend/front_end/coverage/CoverageModel.js(190,48): error TS2694: Namespace 'Coverage' has no exported member 'RangeUseCount'.
 node_modules/chrome-devtools-frontend/front_end/coverage/CoverageModel.js(191,11): error TS2403: Subsequent variable declarations must have the same type.  Variable 'entry' must be of type '[CSSStyleSheetHeader, any[]]', but here has type 'CoverageInfo'.
 node_modules/chrome-devtools-frontend/front_end/coverage/CoverageModel.js(197,5): error TS2322: Type '[CSSStyleSheetHeader, any[]][]' is not assignable to type 'CoverageInfo[]'.
-  Types of property 'pop' are incompatible.
-    Type '() => [CSSStyleSheetHeader, any[]]' is not assignable to type '() => CoverageInfo'.
-      Type '[CSSStyleSheetHeader, any[]]' is not assignable to type 'CoverageInfo'.
+  Type '[CSSStyleSheetHeader, any[]]' is not assignable to type 'CoverageInfo'.
 node_modules/chrome-devtools-frontend/front_end/coverage/CoverageModel.js(201,31): error TS2694: Namespace 'Coverage' has no exported member 'RangeUseCount'.
 node_modules/chrome-devtools-frontend/front_end/coverage/CoverageModel.js(202,32): error TS2694: Namespace 'Coverage' has no exported member 'CoverageSegment'.
 node_modules/chrome-devtools-frontend/front_end/coverage/CoverageModel.js(210,23): error TS2339: Property 'peekLast' does not exist on type 'any[]'.

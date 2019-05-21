@@ -14,10 +14,26 @@
 goTo.marker("0");
 const preferences: FourSlashInterface.UserPreferences = { includeCompletionsForModuleExports: true };
 verify.completions(
-    { marker: "0", exact: ["globalThis", "undefined", ...completion.statementKeywordsWithTypes], preferences },
+    {
+        marker: "0",
+        exact: [
+            completion.globalThisEntry,
+            completion.undefinedVarEntry,
+            ...completion.statementKeywordsWithTypes
+        ],
+        preferences
+    },
     {
         marker: "1",
-        includes: { name: "fooBar", source: "/src/foo-bar", sourceDisplay: "./foo-bar", text: "(property) default: 0", kind: "property", hasAction: true },
+        includes: {
+            name: "fooBar",
+            source: "/src/foo-bar",
+            sourceDisplay: "./foo-bar",
+            text: "(property) default: 0",
+            kind: "property",
+            hasAction: true,
+            sortText: completion.SortText.AutoImportSuggestions
+        },
         preferences,
     },
 );

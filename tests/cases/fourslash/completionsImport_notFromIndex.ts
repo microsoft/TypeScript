@@ -26,6 +26,7 @@ for (const [marker, sourceDisplay] of [["0", "./src"], ["1", "./a"], ["2", "../a
             kind: "const",
             kindModifiers: "export",
             hasAction: true,
+            sortText: completion.SortText.AutoImportSuggestions
         },
         preferences: { includeCompletionsForModuleExports: true },
     });

@@ -528,6 +528,7 @@ declare namespace FourSlashInterface {
         readonly isRecommended?: boolean;
         readonly kind?: string;
         readonly kindModifiers?: string;
+        readonly sortText?: completion.SortText;
 
         // details
         readonly text?: string;
@@ -650,6 +651,15 @@ declare var cancellation: FourSlashInterface.cancellation;
 declare var classification: typeof FourSlashInterface.classification;
 declare namespace completion {
     type Entry = FourSlashInterface.ExpectedCompletionEntryObject;
+    export const enum SortText {
+        LocationPriority = "0",
+        SuggestedClassMembers = "1",
+        GlobalsOrKeywords = "2",
+        AutoImportSuggestions = "3",
+        JavascriptIdentifiers = "4"
+    }
+    export const globalThisEntry: Entry;
+    export const undefinedVarEntry: Entry;
     export const globals: ReadonlyArray<Entry>;
     export const globalsInJs: ReadonlyArray<Entry>;
     export const globalKeywords: ReadonlyArray<Entry>;
