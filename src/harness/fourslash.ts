@@ -582,6 +582,20 @@ namespace FourSlash {
             });
         }
 
+        public verifyErrorExistsAtRange(range: Range, code: number) {
+            const span = ts.createTextSpanFromRange(range);
+            const hasMatchingError = ts.some(
+                this.getDiagnostics(range.fileName),
+                ({ code, start, length }) =>
+                    code === code &&
+                    ts.isNumber(start) && ts.isNumber(length) &&
+                    ts.textSpansEqual(span, { start, length }));
+
+            if (!hasMatchingError) {
+                this.raiseError(`No error with code ${code} found at provided range.`);
+            }
+        }
+
         public verifyNumberOfErrorsInCurrentFile(expected: number) {
             const errors = this.getDiagnostics(this.activeFile.fileName);
             const actual = errors.length;
@@ -3966,6 +3980,10 @@ namespace FourSlashInterface {
 
         public noErrors() {
             this.state.verifyNoErrors();
+        }
+
+        public errorExistsAtRange(range: FourSlash.Range, code: number) {
+            this.state.verifyErrorExistsAtRange(range, code);
         }
 
         public numberOfErrorsInCurrentFile(expected: number) {
