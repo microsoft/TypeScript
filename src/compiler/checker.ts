@@ -5695,7 +5695,7 @@ namespace ts {
                 type = getTypeOfEnumMember(symbol);
             }
             else {
-                return Debug.fail("Unhandled declaration kind! " + Debug.showSyntaxKind(declaration) + " for " + Debug.showSymbol(symbol));
+                return Debug.fail("Unhandled declaration kind! " + Debug.formatSyntaxKind(declaration.kind) + " for " + Debug.formatSymbol(symbol));
             }
 
             if (!popTypeResolution()) {
@@ -25536,7 +25536,7 @@ namespace ts {
                     case SyntaxKind.ImportSpecifier: // https://github.com/Microsoft/TypeScript/pull/7591
                         return DeclarationSpaces.ExportValue;
                     default:
-                        return Debug.fail(Debug.showSyntaxKind(d));
+                        return Debug.failBadSyntaxKind(d);
                 }
             }
         }
