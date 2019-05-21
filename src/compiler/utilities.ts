@@ -2640,6 +2640,10 @@ namespace ts {
         return isKeyword(token) && !isContextualKeyword(token);
     }
 
+    export function isFutureReservedWord(token: SyntaxKind): boolean {
+        return isKeyword(token) && SyntaxKind.FirstFutureReservedWord <= token && token <= SyntaxKind.LastFutureReservedWord;
+    }
+
     export function isStringANonContextualKeyword(name: string) {
         const token = stringToToken(name);
         return token !== undefined && isNonContextualKeyword(token);

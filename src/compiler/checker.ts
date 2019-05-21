@@ -17301,12 +17301,6 @@ namespace ts {
             }
         }
 
-        function checkDefinitelyIdentifier(node?: Identifier, message?: DiagnosticMessage) {
-            if (node && node.definitelyIdentifier && node.originalKeywordKind) {
-                error(node, message || Diagnostics.Identifier_expected);
-            }
-        }
-
         function checkIdentifier(node: Identifier): Type {
             const symbol = getResolvedSymbol(node);
             if (symbol === unknownSymbol) {
@@ -26710,6 +26704,30 @@ namespace ts {
             return type === autoType ? anyType : type === autoArrayType ? anyArrayType : type;
         }
 
+        function checkDefinitelyIdentifier(node?: Identifier, message?: DiagnosticMessage) {
+            if (node && node.definitelyIdentifier && node.originalKeywordKind) {
+                error(node, message || Diagnostics.Identifier_expected);
+            }
+        }
+
+        function checkGrammarNameKeywordUsedInDeclarationName(name: Identifier | BindingPattern): boolean {
+            if (isIdentifier(name)) {
+                if (name.originalKeywordKind && (isNonContextualKeyword(name.originalKeywordKind) && !isFutureReservedWord(name.originalKeywordKind))) {
+                    error(name, Diagnostics.Keyword_0_cannot_be_used_as_a_declaration_name, formatSyntaxKind(name.originalKeywordKind));
+                    return true
+                }
+            }
+            else {
+                const elements = name.elements;
+                for (const element of elements) {
+                    if (!isOmittedExpression(element)) {
+                        checkGrammarNameKeywordUsedInDeclarationName(element.name);
+                    }
+                }
+            }
+            return false;
+        }
+
         // Check variable, parameter, or property declaration
         function checkVariableLikeDeclaration(node: ParameterDeclaration | PropertyDeclaration | PropertySignature | VariableDeclaration | BindingElement) {
             checkDecorators(node);
@@ -26732,7 +26750,7 @@ namespace ts {
                 }
             }
 
-            if (node.kind === SyntaxKind.BindingElement) {
+            if (isBindingElement(node)) {
                 if (node.parent.kind === SyntaxKind.ObjectBindingPattern && languageVersion < ScriptTarget.ESNext) {
                     checkExternalEmitHelpers(node, ExternalEmitHelpers.Rest);
                 }
@@ -26799,6 +26817,13 @@ namespace ts {
                 }
                 return;
             }
+            // for VariableDeclaration or BindingElement
+            if (isVariableDeclaration(node) || isBindingElement(node) || (isParameter(node) && !parameterIsThisKeyword(node))) {
+                if (isIdentifier(node.name) || isBindingPattern(node.name)) {
+                    checkGrammarNameKeywordUsedInDeclarationName(node.name);
+                }
+            }
+
             const symbol = getSymbolOfNode(node);
             const type = convertAutoToAny(getTypeOfSymbol(symbol));
             if (node === symbol.valueDeclaration) {
