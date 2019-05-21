@@ -1,0 +1,49 @@
+=== tests/cases/compiler/booleanFilterAnyArray.ts ===
+interface Bullean { }
+interface BulleanConstructor {
+    new(v1?: any): Bullean;
+>v1 : any
+
+    <T>(v2?: T): v2 is T;
+>v2 : T
+}
+
+interface Ari<T> {
+    filter<S extends T>(cb1: (value: T) => value is S): Ari<S>;
+>filter : { <S extends T>(cb1: (value: T) => value is S): Ari<S>; (cb2: (value: T) => unknown): Ari<T>; }
+>cb1 : (value: T) => value is S
+>value : T
+
+    filter(cb2: (value: T) => unknown): Ari<T>;
+>filter : { <S extends T>(cb1: (value: T) => value is S): Ari<S>; (cb2: (value: T) => unknown): Ari<T>; }
+>cb2 : (value: T) => unknown
+>value : T
+}
+declare var Bullean: BulleanConstructor;
+>Bullean : BulleanConstructor
+
+declare let anys: Ari<any>;
+>anys : Ari<any>
+
+var xs: Ari<any>;
+>xs : Ari<any>
+
+var xs = anys.filter(Bullean)
+>xs : Ari<any>
+>anys.filter(Bullean) : Ari<unknown>
+>anys.filter : { <S extends any>(cb1: (value: any) => value is S): Ari<S>; (cb2: (value: any) => unknown): Ari<any>; }
+>anys : Ari<any>
+>filter : { <S extends any>(cb1: (value: any) => value is S): Ari<S>; (cb2: (value: any) => unknown): Ari<any>; }
+>Bullean : BulleanConstructor
+
+declare let realanys: any[];
+>realanys : any[]
+
+var ys = realanys.filter(Boolean)
+>ys : unknown[]
+>realanys.filter(Boolean) : unknown[]
+>realanys.filter : { <S extends any>(callbackfn: (value: any, index: number, array: any[]) => value is S, thisArg?: any): S[]; (callbackfn: (value: any, index: number, array: any[]) => unknown, thisArg?: any): any[]; }
+>realanys : any[]
+>filter : { <S extends any>(callbackfn: (value: any, index: number, array: any[]) => value is S, thisArg?: any): S[]; (callbackfn: (value: any, index: number, array: any[]) => unknown, thisArg?: any): any[]; }
+>Boolean : BooleanConstructor
+

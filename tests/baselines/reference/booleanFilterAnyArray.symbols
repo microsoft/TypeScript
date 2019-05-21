@@ -1,0 +1,72 @@
+=== tests/cases/compiler/booleanFilterAnyArray.ts ===
+interface Bullean { }
+>Bullean : Symbol(Bullean, Decl(booleanFilterAnyArray.ts, 0, 0), Decl(booleanFilterAnyArray.ts, 10, 11))
+
+interface BulleanConstructor {
+>BulleanConstructor : Symbol(BulleanConstructor, Decl(booleanFilterAnyArray.ts, 0, 21))
+
+    new(v1?: any): Bullean;
+>v1 : Symbol(v1, Decl(booleanFilterAnyArray.ts, 2, 8))
+>Bullean : Symbol(Bullean, Decl(booleanFilterAnyArray.ts, 0, 0), Decl(booleanFilterAnyArray.ts, 10, 11))
+
+    <T>(v2?: T): v2 is T;
+>T : Symbol(T, Decl(booleanFilterAnyArray.ts, 3, 5))
+>v2 : Symbol(v2, Decl(booleanFilterAnyArray.ts, 3, 8))
+>T : Symbol(T, Decl(booleanFilterAnyArray.ts, 3, 5))
+>v2 : Symbol(v2, Decl(booleanFilterAnyArray.ts, 3, 8))
+>T : Symbol(T, Decl(booleanFilterAnyArray.ts, 3, 5))
+}
+
+interface Ari<T> {
+>Ari : Symbol(Ari, Decl(booleanFilterAnyArray.ts, 4, 1))
+>T : Symbol(T, Decl(booleanFilterAnyArray.ts, 6, 14))
+
+    filter<S extends T>(cb1: (value: T) => value is S): Ari<S>;
+>filter : Symbol(Ari.filter, Decl(booleanFilterAnyArray.ts, 6, 18), Decl(booleanFilterAnyArray.ts, 7, 63))
+>S : Symbol(S, Decl(booleanFilterAnyArray.ts, 7, 11))
+>T : Symbol(T, Decl(booleanFilterAnyArray.ts, 6, 14))
+>cb1 : Symbol(cb1, Decl(booleanFilterAnyArray.ts, 7, 24))
+>value : Symbol(value, Decl(booleanFilterAnyArray.ts, 7, 30))
+>T : Symbol(T, Decl(booleanFilterAnyArray.ts, 6, 14))
+>value : Symbol(value, Decl(booleanFilterAnyArray.ts, 7, 30))
+>S : Symbol(S, Decl(booleanFilterAnyArray.ts, 7, 11))
+>Ari : Symbol(Ari, Decl(booleanFilterAnyArray.ts, 4, 1))
+>S : Symbol(S, Decl(booleanFilterAnyArray.ts, 7, 11))
+
+    filter(cb2: (value: T) => unknown): Ari<T>;
+>filter : Symbol(Ari.filter, Decl(booleanFilterAnyArray.ts, 6, 18), Decl(booleanFilterAnyArray.ts, 7, 63))
+>cb2 : Symbol(cb2, Decl(booleanFilterAnyArray.ts, 8, 11))
+>value : Symbol(value, Decl(booleanFilterAnyArray.ts, 8, 17))
+>T : Symbol(T, Decl(booleanFilterAnyArray.ts, 6, 14))
+>Ari : Symbol(Ari, Decl(booleanFilterAnyArray.ts, 4, 1))
+>T : Symbol(T, Decl(booleanFilterAnyArray.ts, 6, 14))
+}
+declare var Bullean: BulleanConstructor;
+>Bullean : Symbol(Bullean, Decl(booleanFilterAnyArray.ts, 0, 0), Decl(booleanFilterAnyArray.ts, 10, 11))
+>BulleanConstructor : Symbol(BulleanConstructor, Decl(booleanFilterAnyArray.ts, 0, 21))
+
+declare let anys: Ari<any>;
+>anys : Symbol(anys, Decl(booleanFilterAnyArray.ts, 11, 11))
+>Ari : Symbol(Ari, Decl(booleanFilterAnyArray.ts, 4, 1))
+
+var xs: Ari<any>;
+>xs : Symbol(xs, Decl(booleanFilterAnyArray.ts, 12, 3), Decl(booleanFilterAnyArray.ts, 13, 3))
+>Ari : Symbol(Ari, Decl(booleanFilterAnyArray.ts, 4, 1))
+
+var xs = anys.filter(Bullean)
+>xs : Symbol(xs, Decl(booleanFilterAnyArray.ts, 12, 3), Decl(booleanFilterAnyArray.ts, 13, 3))
+>anys.filter : Symbol(Ari.filter, Decl(booleanFilterAnyArray.ts, 6, 18), Decl(booleanFilterAnyArray.ts, 7, 63))
+>anys : Symbol(anys, Decl(booleanFilterAnyArray.ts, 11, 11))
+>filter : Symbol(Ari.filter, Decl(booleanFilterAnyArray.ts, 6, 18), Decl(booleanFilterAnyArray.ts, 7, 63))
+>Bullean : Symbol(Bullean, Decl(booleanFilterAnyArray.ts, 0, 0), Decl(booleanFilterAnyArray.ts, 10, 11))
+
+declare let realanys: any[];
+>realanys : Symbol(realanys, Decl(booleanFilterAnyArray.ts, 15, 11))
+
+var ys = realanys.filter(Boolean)
+>ys : Symbol(ys, Decl(booleanFilterAnyArray.ts, 16, 3))
+>realanys.filter : Symbol(Array.filter, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>realanys : Symbol(realanys, Decl(booleanFilterAnyArray.ts, 15, 11))
+>filter : Symbol(Array.filter, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Boolean : Symbol(Boolean, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
