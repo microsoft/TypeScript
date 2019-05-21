@@ -172,11 +172,10 @@ namespace ts {
             const token = scanner.scan();
             const textPos = scanner.getTextPos();
             if (textPos <= end) {
-                const node = createNode(token, pos, textPos, parent);
-                nodes.push(node);
-                if (isIdentifier(node)) {
-                    node.escapedText = escapeLeadingUnderscores(scanner.getTokenValue());
+                if (token === SyntaxKind.Identifier) {
+                    Debug.fail(`Did not expect ${Debug.showSyntaxKind(parent)} to have an Identifier in its trivia`);
                 }
+                nodes.push(createNode(token, pos, textPos, parent));
             }
             pos = textPos;
             if (token === SyntaxKind.EndOfFileToken) {
