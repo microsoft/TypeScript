@@ -223,11 +223,6 @@ src/main/core-options.js(251,9): error TS2322: Type '[{ since: string; value: fa
         Object literal may only specify known properties, and 'since' does not exist in type '{ value: (string | number | boolean)[]; }'.
 src/main/core-options.js(254,5): error TS2322: Type 'string' is not assignable to type 'boolean | null'.
 src/main/core-options.js(259,3): error TS2740: Type '{ since: string; category: string; type: "boolean"; default: false; description: string; }' is missing the following properties from type 'OptionInfo': array, deprecated, redirect, oppositeDescription, and 3 more.
-src/main/core.js(304,34): error TS2538: Type 'false' cannot be used as an index type.
-src/main/core.js(304,47): error TS2538: Type 'false' cannot be used as an index type.
-src/main/core.js(309,28): error TS2538: Type 'false' cannot be used as an index type.
-src/main/core.js(309,72): error TS2538: Type 'false' cannot be used as an index type.
-src/main/core.js(317,14): error TS2538: Type 'false' cannot be used as an index type.
 src/main/options-normalizer.js(35,35): error TS2339: Property 'yellow' does not exist on type 'typeof import("../../../node_modules/chalk/types/index")'.
 src/main/options-normalizer.js(36,35): error TS2339: Property 'blue' does not exist on type 'typeof import("../../../node_modules/chalk/types/index")'.
 src/main/options-normalizer.js(54,5): error TS2525: Initializer provides no value for this binding element and the binding element has no default value.
