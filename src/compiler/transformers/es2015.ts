@@ -145,7 +145,7 @@ namespace ts {
         loopOutParameters: LoopOutParameter[];
     }
 
-    type LoopConverter = (node: IterationStatement, outermostLabeledStatement: LabeledStatement | undefined, convertedLoopBodyStatements: Statement[] | undefined) => Statement;
+    type LoopConverter = (node: IterationStatement, outermostLabeledStatement: LabeledStatement | undefined, convertedLoopBodyStatements: Statement[] | undefined, ancestorFacts: HierarchyFacts) => Statement;
 
     // Facts we track as we traverse the tree
     const enum HierarchyFacts {
@@ -163,11 +163,12 @@ namespace ts {
         ExportedVariableStatement = 1 << 5,     // Enclosed in an exported variable statement in the current scope
         TopLevel = 1 << 6,                      // Enclosing block-scoped container is a top-level container
         Block = 1 << 7,                         // Enclosing block-scoped container is a Block
-        IterationStatement = 1 << 8,            // Enclosed in an IterationStatement
+        IterationStatement = 1 << 8,            // Immediately enclosed in an IterationStatement
         IterationStatementBlock = 1 << 9,       // Enclosing Block is enclosed in an IterationStatement
-        ForStatement = 1 << 10,                 // Enclosing block-scoped container is a ForStatement
-        ForInOrForOfStatement = 1 << 11,        // Enclosing block-scoped container is a ForInStatement or ForOfStatement
-        ConstructorWithCapturedSuper = 1 << 12, // Enclosed in a constructor that captures 'this' for use with 'super'
+        IterationContainer = 1 << 10,           // Enclosed in an outer IterationStatement
+        ForStatement = 1 << 11,                 // Enclosing block-scoped container is a ForStatement
+        ForInOrForOfStatement = 1 << 12,        // Enclosing block-scoped container is a ForInStatement or ForOfStatement
+        ConstructorWithCapturedSuper = 1 << 13, // Enclosed in a constructor that captures 'this' for use with 'super'
         // NOTE: do not add more ancestor flags without also updating AncestorFactsMask below.
         // NOTE: when adding a new ancestor flag, be sure to update the subtree flags below.
 
@@ -184,11 +185,11 @@ namespace ts {
 
         // A source file is a top-level block scope.
         SourceFileIncludes = TopLevel,
-        SourceFileExcludes = BlockScopeExcludes & ~TopLevel,
+        SourceFileExcludes = BlockScopeExcludes & ~TopLevel | IterationContainer,
 
         // Functions, methods, and accessors are both new lexical scopes and new block scopes.
         FunctionIncludes = Function | TopLevel,
-        FunctionExcludes = BlockScopeExcludes & ~TopLevel | ArrowFunction | AsyncFunctionBody | CapturesThis | NonStaticClassElement | ConstructorWithCapturedSuper,
+        FunctionExcludes = BlockScopeExcludes & ~TopLevel | ArrowFunction | AsyncFunctionBody | CapturesThis | NonStaticClassElement | ConstructorWithCapturedSuper | IterationContainer,
 
         AsyncFunctionBodyIncludes = FunctionIncludes | AsyncFunctionBody,
         AsyncFunctionBodyExcludes = FunctionExcludes & ~NonStaticClassElement,
@@ -205,16 +206,16 @@ namespace ts {
         // 'do' and 'while' statements are not block scopes. We track that the subtree is contained
         // within an IterationStatement to indicate whether the embedded statement is an
         // IterationStatementBlock.
-        DoOrWhileStatementIncludes = IterationStatement,
+        DoOrWhileStatementIncludes = IterationStatement | IterationContainer,
         DoOrWhileStatementExcludes = None,
 
         // 'for' statements are new block scopes and have special handling for 'let' declarations.
-        ForStatementIncludes = IterationStatement | ForStatement,
+        ForStatementIncludes = IterationStatement | ForStatement | IterationContainer,
         ForStatementExcludes = BlockScopeExcludes & ~ForStatement,
 
         // 'for-in' and 'for-of' statements are new block scopes and have special handling for
         // 'let' declarations.
-        ForInOrForOfStatementIncludes = IterationStatement | ForInOrForOfStatement,
+        ForInOrForOfStatementIncludes = IterationStatement | ForInOrForOfStatement | IterationContainer,
         ForInOrForOfStatementExcludes = BlockScopeExcludes & ~ForInOrForOfStatement,
 
         // Blocks (other than function bodies) are new block scopes.
@@ -228,8 +229,8 @@ namespace ts {
         // Subtree facts
         //
 
-        NewTarget = 1 << 13,                            // Contains a 'new.target' meta-property
-        CapturedLexicalThis = 1 << 14,                  // Contains a lexical `this` reference captured by an arrow function.
+        NewTarget = 1 << 14,                            // Contains a 'new.target' meta-property
+        CapturedLexicalThis = 1 << 15,                  // Contains a lexical `this` reference captured by an arrow function.
 
         //
         // Subtree masks
@@ -2227,7 +2228,7 @@ namespace ts {
 
         function visitIterationStatementWithFacts(excludeFacts: HierarchyFacts, includeFacts: HierarchyFacts, node: IterationStatement, outermostLabeledStatement: LabeledStatement | undefined, convert?: LoopConverter) {
             const ancestorFacts = enterSubtree(excludeFacts, includeFacts);
-            const updated = convertIterationStatementBodyIfNecessary(node, outermostLabeledStatement, convert);
+            const updated = convertIterationStatementBodyIfNecessary(node, outermostLabeledStatement, ancestorFacts, convert);
             exitSubtree(ancestorFacts, HierarchyFacts.None, HierarchyFacts.None);
             return updated;
         }
@@ -2434,7 +2435,7 @@ namespace ts {
             return restoreEnclosingLabel(forStatement, outermostLabeledStatement, convertedLoopState && resetLabel);
         }
 
-        function convertForOfStatementForIterable(node: ForOfStatement, outermostLabeledStatement: LabeledStatement, convertedLoopBodyStatements: Statement[]): Statement {
+        function convertForOfStatementForIterable(node: ForOfStatement, outermostLabeledStatement: LabeledStatement, convertedLoopBodyStatements: Statement[], ancestorFacts: HierarchyFacts): Statement {
             const expression = visitNode(node.expression, visitor, isExpression);
             const iterator = isIdentifier(expression) ? getGeneratedNameForNode(expression) : createTempVariable(/*recordTempVariable*/ undefined);
             const result = isIdentifier(expression) ? getGeneratedNameForNode(iterator) : createTempVariable(/*recordTempVariable*/ undefined);
@@ -2447,13 +2448,18 @@ namespace ts {
             hoistVariableDeclaration(errorRecord);
             hoistVariableDeclaration(returnMethod);
 
+            // if we are enclosed in an outer loop ensure we reset 'errorRecord' per each iteration
+            const initializer = ancestorFacts & HierarchyFacts.IterationContainer
+                ? inlineExpressions([createAssignment(errorRecord, createVoidZero()), values])
+                : values;
+
             const forStatement = setEmitFlags(
                 setTextRange(
                     createFor(
                         /*initializer*/ setEmitFlags(
                             setTextRange(
                                 createVariableDeclarationList([
-                                    setTextRange(createVariableDeclaration(iterator, /*type*/ undefined, values), node.expression),
+                                    setTextRange(createVariableDeclaration(iterator, /*type*/ undefined, initializer), node.expression),
                                     createVariableDeclaration(result, /*type*/ undefined, next)
                                 ]),
                                 node.expression
@@ -2665,7 +2671,7 @@ namespace ts {
             }
         }
 
-        function convertIterationStatementBodyIfNecessary(node: IterationStatement, outermostLabeledStatement: LabeledStatement | undefined, convert?: LoopConverter): VisitResult<Statement> {
+        function convertIterationStatementBodyIfNecessary(node: IterationStatement, outermostLabeledStatement: LabeledStatement | undefined, ancestorFacts: HierarchyFacts, convert?: LoopConverter): VisitResult<Statement> {
             if (!shouldConvertIterationStatement(node)) {
                 let saveAllowedNonLabeledJumps: Jump | undefined;
                 if (convertedLoopState) {
@@ -2676,7 +2682,7 @@ namespace ts {
                 }
 
                 const result = convert
-                    ? convert(node, outermostLabeledStatement, /*convertedLoopBodyStatements*/ undefined)
+                    ? convert(node, outermostLabeledStatement, /*convertedLoopBodyStatements*/ undefined, ancestorFacts)
                     : restoreEnclosingLabel(visitEachChild(node, visitor, context), outermostLabeledStatement, convertedLoopState && resetLabel);
 
                 if (convertedLoopState) {
@@ -2708,7 +2714,7 @@ namespace ts {
             let loop: Statement;
             if (bodyFunction) {
                 if (convert) {
-                    loop = convert(node, outermostLabeledStatement, bodyFunction.part);
+                    loop = convert(node, outermostLabeledStatement, bodyFunction.part, ancestorFacts);
                 }
                 else {
                     const clone = convertIterationStatementCore(node, initializerFunction, createBlock(bodyFunction.part, /*multiLine*/ true));
