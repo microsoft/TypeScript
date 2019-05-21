@@ -91,7 +91,7 @@ namespace ts.OutliningElementsCollector {
                 const region = regions.pop();
                 if (region) {
                     region.textSpan.length = lineEnd - region.textSpan.start;
-                    region.textSpan.length = lineEnd - region.textSpan.start;
+                    region.hintSpan.length = lineEnd - region.textSpan.start;
                     out.push(region);
                 }
             }
