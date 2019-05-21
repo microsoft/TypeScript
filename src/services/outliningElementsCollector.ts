@@ -73,32 +73,29 @@ namespace ts.OutliningElementsCollector {
         const lineStarts = sourceFile.getLineStarts();
         for (let i = 0; i < lineStarts.length; i++) {
             const currentLineStart = lineStarts[i];
-            const lineEnd = i + 1 === lineStarts.length ? sourceFile.getEnd() : lineStarts[i + 1] - 1;
+            const newlinePosition = i + 1 === lineStarts.length ? sourceFile.getEnd() : lineStarts[i + 1] - 1;
+            // If the character before \n is \r, decrement line end by 1.
+            const lineEnd = sourceFile.text.charCodeAt(newlinePosition - 1) === CharacterCodes.carriageReturn ? newlinePosition - 1 : newlinePosition;
             const lineText = sourceFile.text.substring(currentLineStart, lineEnd);
-            const result = isRegionDelimiter(lineText);
+            const regionDelimiterRegExp = /^\s*\/\/\s*#(end)?region(?:\s+(.*))?(?:\r)?$/;
+            const result = regionDelimiterRegExp.exec(lineText);
             if (!result || isInComment(sourceFile, currentLineStart)) {
                 continue;
             }
 
             if (!result[1]) {
-                const span = createTextSpanFromBounds(sourceFile.text.indexOf("//", currentLineStart), result[3] ? lineEnd - 1 : lineEnd);
+                const span = createTextSpanFromBounds(sourceFile.text.indexOf("//", currentLineStart), lineEnd);
                 regions.push(createOutliningSpan(span, OutliningSpanKind.Region, span, /*autoCollapse*/ false, result[2] || "#region"));
             }
             else {
                 const region = regions.pop();
                 if (region) {
-                    region.textSpan.length = result[3] ? (lineEnd - 1) - region.textSpan.start : lineEnd - region.textSpan.start;
-                    region.hintSpan.length = result[3] ? (lineEnd - 1) - region.textSpan.start : lineEnd - region.textSpan.start;
+                    region.textSpan.length = lineEnd - region.textSpan.start;
+                    region.textSpan.length = lineEnd - region.textSpan.start;
                     out.push(region);
                 }
             }
         }
-    }
-
-    // [^\S\r\n]+ match any whitespace that is not \r \n. Note that we probably should not see \n here.
-    const regionDelimiterRegExp = /^\s*\/\/\s*#(end)?region(?:[^\S\r\n]+(.*))?(\r)?$/;
-    function isRegionDelimiter(lineText: string) {
-        return regionDelimiterRegExp.exec(lineText);
     }
 
     function addOutliningForLeadingCommentsForNode(n: Node, sourceFile: SourceFile, cancellationToken: CancellationToken, out: Push<OutliningSpan>): void {
@@ -114,7 +111,9 @@ namespace ts.OutliningElementsCollector {
                 case SyntaxKind.SingleLineCommentTrivia:
                     // never fold region delimiters into single-line comment regions
                     const commentText = sourceText.slice(pos, end);
-                    if (isRegionDelimiter(commentText)) {
+                    const regionDelimiterRegExp = /^\s*\/\/\s*#(end)?region(?:\s+(.*))?(?:\r)?$/;
+                    const result = regionDelimiterRegExp.exec(commentText);
+                    if (result) {
                         combineAndAddMultipleSingleLineComments();
                         singleLineCommentCount = 0;
                         break;
