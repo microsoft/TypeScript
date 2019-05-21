@@ -44,5 +44,6 @@ tests/cases/conformance/expressions/unaryOperators/negateOperator/negateOperator
     var NUMBER =-;
         ~~~~~~
 !!! error TS2403: Subsequent variable declarations must have the same type.  Variable 'NUMBER' must be of type 'any', but here has type 'number'.
+!!! related TS6203 tests/cases/conformance/expressions/unaryOperators/negateOperator/negateOperatorInvalidOperations.ts:4:19: 'NUMBER' was also declared here.
                  ~
 !!! error TS1109: Expression expected.

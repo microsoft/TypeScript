@@ -14,6 +14,7 @@ tests/cases/compiler/classWithDuplicateIdentifier.ts(11,5): error TS2717: Subseq
 !!! error TS2300: Duplicate identifier 'a'.
         ~
 !!! error TS2717: Subsequent property declarations must have the same type.  Property 'a' must be of type '() => number', but here has type 'number'.
+!!! related TS6203 tests/cases/compiler/classWithDuplicateIdentifier.ts:2:5: 'a' was also declared here.
     }
     class K {
         b: number; // error: duplicate identifier
@@ -30,5 +31,6 @@ tests/cases/compiler/classWithDuplicateIdentifier.ts(11,5): error TS2717: Subseq
 !!! error TS2300: Duplicate identifier 'c'.
         ~
 !!! error TS2717: Subsequent property declarations must have the same type.  Property 'c' must be of type 'number', but here has type 'string'.
+!!! related TS6203 tests/cases/compiler/classWithDuplicateIdentifier.ts:10:5: 'c' was also declared here.
     }
     

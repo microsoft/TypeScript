@@ -25,12 +25,15 @@ tests/cases/conformance/parser/ecmascript5/Generics/parserCastVersusArrowFunctio
     var v = <T>(a) => 1;
         ~
 !!! error TS2403: Subsequent variable declarations must have the same type.  Variable 'v' must be of type '<T>() => number', but here has type '<T>(a: any) => number'.
+!!! related TS6203 tests/cases/conformance/parser/ecmascript5/Generics/parserCastVersusArrowFunction1.ts:1:5: 'v' was also declared here.
     var v = <T>(a, b) => 1;
         ~
 !!! error TS2403: Subsequent variable declarations must have the same type.  Variable 'v' must be of type '<T>() => number', but here has type '<T>(a: any, b: any) => number'.
+!!! related TS6203 tests/cases/conformance/parser/ecmascript5/Generics/parserCastVersusArrowFunction1.ts:1:5: 'v' was also declared here.
     var v = <T>(a = 1, b = 2) => 1;
         ~
 !!! error TS2403: Subsequent variable declarations must have the same type.  Variable 'v' must be of type '<T>() => number', but here has type '<T>(a?: number, b?: number) => number'.
+!!! related TS6203 tests/cases/conformance/parser/ecmascript5/Generics/parserCastVersusArrowFunction1.ts:1:5: 'v' was also declared here.
     
     var v = <T>(a);
              ~

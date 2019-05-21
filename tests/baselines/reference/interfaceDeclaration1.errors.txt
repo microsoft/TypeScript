@@ -30,6 +30,7 @@ tests/cases/compiler/interfaceDeclaration1.ts(52,11): error TS2320: Interface 'i
 !!! error TS2300: Duplicate identifier 'item'.
         ~~~~
 !!! error TS2717: Subsequent property declarations must have the same type.  Property 'item' must be of type 'any', but here has type 'number'.
+!!! related TS6203 tests/cases/compiler/interfaceDeclaration1.ts:7:5: 'item' was also declared here.
     }
     
     interface I3 {
