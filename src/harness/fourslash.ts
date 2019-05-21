@@ -582,12 +582,13 @@ namespace FourSlash {
             });
         }
 
-        public verifyErrorExistsAtRange(range: Range, code: number) {
+        public verifyErrorExistsAtRange(range: Range, code: number, expectedMessage?: string) {
             const span = ts.createTextSpanFromRange(range);
             const hasMatchingError = ts.some(
                 this.getDiagnostics(range.fileName),
-                ({ code, start, length }) =>
+                ({ code, messageText, start, length }) =>
                     code === code &&
+                    (!expectedMessage || expectedMessage === messageText) &&
                     ts.isNumber(start) && ts.isNumber(length) &&
                     ts.textSpansEqual(span, { start, length }));
 
@@ -3982,8 +3983,8 @@ namespace FourSlashInterface {
             this.state.verifyNoErrors();
         }
 
-        public errorExistsAtRange(range: FourSlash.Range, code: number) {
-            this.state.verifyErrorExistsAtRange(range, code);
+        public errorExistsAtRange(range: FourSlash.Range, code: number, message?: string) {
+            this.state.verifyErrorExistsAtRange(range, code, message);
         }
 
         public numberOfErrorsInCurrentFile(expected: number) {

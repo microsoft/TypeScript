@@ -238,7 +238,7 @@ declare namespace FourSlashInterface {
         signatureHelp(...options: VerifySignatureHelpOptions[], ): void;
         // Checks that there are no compile errors.
         noErrors(): void;
-        errorExistsAtRange(range: Range, code: number): void;
+        errorExistsAtRange(range: Range, code: number, message?: string): void;
         numberOfErrorsInCurrentFile(expected: number): void;
         baselineCurrentFileBreakpointLocations(): void;
         baselineCurrentFileNameOrDottedNameSpans(): void;

@@ -4439,8 +4439,9 @@ namespace ts {
                 parseExpected(SyntaxKind.CloseBraceToken);
             }
             else {
-                parseExpected(SyntaxKind.CloseBraceToken, /*message*/ undefined, /*shouldAdvance*/ false);
-                scanJsxText();
+                if (parseExpected(SyntaxKind.CloseBraceToken, /*message*/ undefined, /*shouldAdvance*/ false)) {
+                    scanJsxText();
+                }
             }
 
             return finishNode(node);
