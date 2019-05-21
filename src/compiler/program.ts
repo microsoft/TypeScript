@@ -2232,7 +2232,10 @@ namespace ts {
                     if (isRedirect) {
                         inputName = getProjectReferenceRedirect(fileName) || fileName;
                     }
-                    if (getNormalizedAbsolutePath(checkedName, currentDirectory) !== getNormalizedAbsolutePath(inputName, currentDirectory)) {
+                    // Check if it differs only in drive letters its ok to ignore that error:
+                    const checkedAbsolutePath = getNormalizedAbsolutePathWithoutRoot(checkedName, currentDirectory);
+                    const inputAbsolutePath = getNormalizedAbsolutePathWithoutRoot(inputName, currentDirectory);
+                    if (checkedAbsolutePath !== inputAbsolutePath) {
                         reportFileNamesDifferOnlyInCasingError(inputName, checkedName, refFile, refPos, refEnd);
                     }
                 }
