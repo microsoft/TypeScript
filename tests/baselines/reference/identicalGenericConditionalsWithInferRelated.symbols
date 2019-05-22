@@ -1,0 +1,36 @@
+=== tests/cases/compiler/identicalGenericConditionalsWithInferRelated.ts ===
+function f<X>(arg: X) {
+>f : Symbol(f, Decl(identicalGenericConditionalsWithInferRelated.ts, 0, 0))
+>X : Symbol(X, Decl(identicalGenericConditionalsWithInferRelated.ts, 0, 11))
+>arg : Symbol(arg, Decl(identicalGenericConditionalsWithInferRelated.ts, 0, 14))
+>X : Symbol(X, Decl(identicalGenericConditionalsWithInferRelated.ts, 0, 11))
+
+    type Cond1 = X extends [infer A] ? A : never;
+>Cond1 : Symbol(Cond1, Decl(identicalGenericConditionalsWithInferRelated.ts, 0, 23))
+>X : Symbol(X, Decl(identicalGenericConditionalsWithInferRelated.ts, 0, 11))
+>A : Symbol(A, Decl(identicalGenericConditionalsWithInferRelated.ts, 1, 33))
+>A : Symbol(A, Decl(identicalGenericConditionalsWithInferRelated.ts, 1, 33))
+
+    type Cond2 = X extends [infer A] ? A : never;
+>Cond2 : Symbol(Cond2, Decl(identicalGenericConditionalsWithInferRelated.ts, 1, 49))
+>X : Symbol(X, Decl(identicalGenericConditionalsWithInferRelated.ts, 0, 11))
+>A : Symbol(A, Decl(identicalGenericConditionalsWithInferRelated.ts, 2, 33))
+>A : Symbol(A, Decl(identicalGenericConditionalsWithInferRelated.ts, 2, 33))
+
+    let x: Cond1 = null as any;
+>x : Symbol(x, Decl(identicalGenericConditionalsWithInferRelated.ts, 4, 7))
+>Cond1 : Symbol(Cond1, Decl(identicalGenericConditionalsWithInferRelated.ts, 0, 23))
+
+    let y: Cond2 = null as any;
+>y : Symbol(y, Decl(identicalGenericConditionalsWithInferRelated.ts, 5, 7))
+>Cond2 : Symbol(Cond2, Decl(identicalGenericConditionalsWithInferRelated.ts, 1, 49))
+
+    x = y; // is err, should be ok
+>x : Symbol(x, Decl(identicalGenericConditionalsWithInferRelated.ts, 4, 7))
+>y : Symbol(y, Decl(identicalGenericConditionalsWithInferRelated.ts, 5, 7))
+
+    y = x; // is err, should be ok
+>y : Symbol(y, Decl(identicalGenericConditionalsWithInferRelated.ts, 5, 7))
+>x : Symbol(x, Decl(identicalGenericConditionalsWithInferRelated.ts, 4, 7))
+}
+
