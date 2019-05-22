@@ -125,13 +125,22 @@ namespace ts.OrganizeImports {
             if (name || namedBindings) {
                 usedImports.push(updateImportDeclarationAndClause(importDecl, name, namedBindings));
             }
-            // If a module is imported to be augmented, keep the import declaration, but without an import clause
+            // If a module is imported to be augmented, it’s used
             else if (hasModuleDeclarationMatchingSpecifier(sourceFile, moduleSpecifier)) {
-                usedImports.push(createImportDeclaration(
-                    importDecl.decorators,
-                    importDecl.modifiers,
-                    /*importClause*/ undefined,
-                    moduleSpecifier));
+                // If we’re in a declaration file, it’s safe to remove the import clause from it
+                if (sourceFile.isDeclarationFile) {
+                    usedImports.push(createImportDeclaration(
+                        importDecl.decorators,
+                        importDecl.modifiers,
+                        /*importClause*/ undefined,
+                        moduleSpecifier));
+                }
+                // If we’re not in a declaration file, we can’t remove the import clause even though
+                // the imported symbols are unused, because removing them makes it look like the import
+                // declaration has side effects, which will cause it to be preserved in the JS emit.
+                else {
+                    usedImports.push(importDecl);
+                }
             }
         }
 
@@ -145,10 +154,9 @@ namespace ts.OrganizeImports {
 
     function hasModuleDeclarationMatchingSpecifier(sourceFile: SourceFile, moduleSpecifier: Expression) {
         const moduleSpecifierText = isStringLiteral(moduleSpecifier) && moduleSpecifier.text;
-        return isString(moduleSpecifierText) && some(sourceFile.statements, statement =>
-            isModuleDeclaration(statement)
-            && isStringLiteral(statement.name)
-            && statement.name.text === moduleSpecifierText);
+        return isString(moduleSpecifierText) && some(sourceFile.moduleAugmentations, moduleName =>
+            isStringLiteral(moduleName)
+            && moduleName.text === moduleSpecifierText);
     }
 
     function getExternalModuleName(specifier: Expression) {

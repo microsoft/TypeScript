@@ -358,6 +358,21 @@ declare module 'caseless' {
 }`
             });
 
+            testOrganizeImports("Unused_preserve_imports_for_module_augmentation_in_non_declaration_file",
+            {
+                path: "/test.ts",
+                content: `
+import foo from 'foo';
+import { Caseless } from 'caseless';
+
+declare module 'foo' {}
+declare module 'caseless' {
+    interface Caseless {
+        test(name: KeyType): boolean;
+    }
+}`
+            });
+
             testOrganizeImports("Unused_false_positive_shorthand_assignment",
             {
                     path: "/test.ts",
