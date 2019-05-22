@@ -147,3 +147,13 @@ export class c {
     this["a"] = "b";
   }
 }
+
+// Repro from #31385
+
+type Foo<T> = { [key: string]: { [K in keyof T]: K }[keyof T] };
+
+type Bar<T> = { [key: string]: { [K in keyof T]: [K] }[keyof T] };
+
+type Baz<T, Q extends Foo<T>> = { [K in keyof Q]: T[Q[K]] };
+
+type Qux<T, Q extends Bar<T>> = { [K in keyof Q]: T[Q[K]["0"]] };
