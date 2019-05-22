@@ -30,8 +30,10 @@ function f1(ma: string[], ra: readonly string[], mt: [string, string], rt: reado
 }
 
 declare var v: readonly[number, number, ...number[]];
-v[0] = 1; // Error
-v[1] = 1; // Error
-v[2] = 1; // Error
-v[0 + 1] = 1; // Error
-v[0 + 2] = 1; // Error
+v[0] = 1;        // Error
+v[1] = 1;        // Error
+v[2] = 1;        // Error
+delete v[2];     // Error
+v[0 + 1] = 1;    // Error
+v[0 + 2] = 1;    // Error
+delete v[0 + 1]; // Error
