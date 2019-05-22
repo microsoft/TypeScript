@@ -7657,15 +7657,20 @@ namespace ts {
             return hasNonCircularBaseConstraint(type) ? getConstraintFromIndexedAccess(type) : undefined;
         }
 
+        function getSimplifiedTypeOrConstraint(type: Type) {
+            const simplified = getSimplifiedType(type, /*writing*/ false);
+            return simplified !== type ? simplified : getConstraintOfType(type);
+        }
+
         function getConstraintFromIndexedAccess(type: IndexedAccessType) {
-            const indexConstraint = getConstraintOfType(type.indexType);
+            const indexConstraint = getSimplifiedTypeOrConstraint(type.indexType);
             if (indexConstraint && indexConstraint !== type.indexType) {
                 const indexedAccess = getIndexedAccessTypeOrUndefined(type.objectType, indexConstraint);
                 if (indexedAccess) {
                     return indexedAccess;
                 }
             }
-            const objectConstraint = getConstraintOfType(type.objectType);
+            const objectConstraint = getSimplifiedTypeOrConstraint(type.objectType);
             if (objectConstraint && objectConstraint !== type.objectType) {
                 return getIndexedAccessTypeOrUndefined(objectConstraint, type.indexType);
             }
