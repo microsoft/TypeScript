@@ -307,7 +307,12 @@ namespace ts {
             const { fileName, packageId } = resolved;
             const resolvedFileName = options.preserveSymlinks ? fileName : realPath(fileName, host, traceEnabled);
             if (traceEnabled) {
-                trace(host, Diagnostics.Type_reference_directive_0_was_successfully_resolved_to_1_primary_Colon_2, typeReferenceDirectiveName, resolvedFileName, primary);
+                if (packageId) {
+                    trace(host, Diagnostics.Type_reference_directive_0_was_successfully_resolved_to_1_with_Package_ID_2_primary_Colon_3, typeReferenceDirectiveName, resolvedFileName, packageIdToString(packageId), primary);
+                }
+                else {
+                    trace(host, Diagnostics.Type_reference_directive_0_was_successfully_resolved_to_1_primary_Colon_2, typeReferenceDirectiveName, resolvedFileName, primary);
+                }
             }
             resolvedTypeReferenceDirective = { primary, resolvedFileName, packageId, isExternalLibraryImport: pathContainsNodeModules(fileName) };
         }
@@ -663,7 +668,12 @@ namespace ts {
 
         if (traceEnabled) {
             if (result.resolvedModule) {
-                trace(host, Diagnostics.Module_name_0_was_successfully_resolved_to_1, moduleName, result.resolvedModule.resolvedFileName);
+                if (result.resolvedModule.packageId) {
+                    trace(host, Diagnostics.Module_name_0_was_successfully_resolved_to_1_with_Package_ID_2, moduleName, result.resolvedModule.resolvedFileName, packageIdToString(result.resolvedModule.packageId));
+                }
+                else {
+                    trace(host, Diagnostics.Module_name_0_was_successfully_resolved_to_1, moduleName, result.resolvedModule.resolvedFileName);
+                }
             }
             else {
                 trace(host, Diagnostics.Module_name_0_was_not_resolved, moduleName);
@@ -1165,12 +1175,7 @@ namespace ts {
                 ? { name: packageJsonContent.name, subModuleName, version: packageJsonContent.version }
                 : undefined;
             if (traceEnabled) {
-                if (packageId) {
-                    trace(host, Diagnostics.Found_package_json_at_0_Package_ID_is_1, packageJsonPath, packageIdToString(packageId));
-                }
-                else {
-                    trace(host, Diagnostics.Found_package_json_at_0, packageJsonPath);
-                }
+                trace(host, Diagnostics.Found_package_json_at_0, packageJsonPath);
             }
 
             return { packageJsonContent, packageId, versionPaths };

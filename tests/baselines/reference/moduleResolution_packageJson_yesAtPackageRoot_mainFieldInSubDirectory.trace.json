@@ -6,7 +6,7 @@
     "'package.json' does not have a 'types' field.",
     "'package.json' has 'main' field 'src/index.js' that references '/node_modules/foo/src/index.js'.",
     "'package.json' does not have a 'typesVersions' field.",
-    "Found 'package.json' at '/node_modules/foo/package.json'. Package ID is 'foo/src/index.d.ts@1.2.3'.",
+    "Found 'package.json' at '/node_modules/foo/package.json'.",
     "File '/node_modules/foo.ts' does not exist.",
     "File '/node_modules/foo.tsx' does not exist.",
     "File '/node_modules/foo.d.ts' does not exist.",
@@ -23,5 +23,5 @@
     "File '/node_modules/foo/src/index.tsx' does not exist.",
     "File '/node_modules/foo/src/index.d.ts' exist - use it as a name resolution result.",
     "Resolving real path for '/node_modules/foo/src/index.d.ts', result '/node_modules/foo/src/index.d.ts'.",
-    "======== Module name 'foo' was successfully resolved to '/node_modules/foo/src/index.d.ts'. ========"
+    "======== Module name 'foo' was successfully resolved to '/node_modules/foo/src/index.d.ts' with Package ID 'foo/src/index.d.ts@1.2.3'. ========"
 ]
