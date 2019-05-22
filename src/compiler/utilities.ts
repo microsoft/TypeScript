@@ -2073,7 +2073,7 @@ namespace ts {
     }
 
     export function importFromModuleSpecifier(node: StringLiteralLike): AnyValidImportOrReExport {
-        return tryGetImportFromModuleSpecifier(node) || Debug.fail(Debug.showSyntaxKind(node.parent));
+        return tryGetImportFromModuleSpecifier(node) || Debug.failBadSyntaxKind(node.parent);
     }
 
     export function tryGetImportFromModuleSpecifier(node: StringLiteralLike): AnyValidImportOrReExport | undefined {
@@ -4184,78 +4184,6 @@ namespace ts {
                 return lineFeed;
         }
         return getNewLine ? getNewLine() : sys ? sys.newLine : carriageReturnLineFeed;
-    }
-
-    /**
-     * Formats an enum value as a string for debugging and debug assertions.
-     */
-    function formatEnum(value = 0, enumObject: any, isFlags?: boolean) {
-        const members = getEnumMembers(enumObject);
-        if (value === 0) {
-            return members.length > 0 && members[0][0] === 0 ? members[0][1] : "0";
-        }
-        if (isFlags) {
-            let result = "";
-            let remainingFlags = value;
-            for (let i = members.length - 1; i >= 0 && remainingFlags !== 0; i--) {
-                const [enumValue, enumName] = members[i];
-                if (enumValue !== 0 && (remainingFlags & enumValue) === enumValue) {
-                    remainingFlags &= ~enumValue;
-                    result = `${enumName}${result ? ", " : ""}${result}`;
-                }
-            }
-            if (remainingFlags === 0) {
-                return result;
-            }
-        }
-        else {
-            for (const [enumValue, enumName] of members) {
-                if (enumValue === value) {
-                    return enumName;
-                }
-            }
-        }
-        return value.toString();
-    }
-
-    function getEnumMembers(enumObject: any) {
-        const result: [number, string][] = [];
-        for (const name in enumObject) {
-            const value = enumObject[name];
-            if (typeof value === "number") {
-                result.push([value, name]);
-            }
-        }
-
-        return stableSort<[number, string]>(result, (x, y) => compareValues(x[0], y[0]));
-    }
-
-    export function formatSyntaxKind(kind: SyntaxKind | undefined): string {
-        return formatEnum(kind, (<any>ts).SyntaxKind, /*isFlags*/ false);
-    }
-
-    export function formatModifierFlags(flags: ModifierFlags | undefined): string {
-        return formatEnum(flags, (<any>ts).ModifierFlags, /*isFlags*/ true);
-    }
-
-    export function formatTransformFlags(flags: TransformFlags | undefined): string {
-        return formatEnum(flags, (<any>ts).TransformFlags, /*isFlags*/ true);
-    }
-
-    export function formatEmitFlags(flags: EmitFlags | undefined): string {
-        return formatEnum(flags, (<any>ts).EmitFlags, /*isFlags*/ true);
-    }
-
-    export function formatSymbolFlags(flags: SymbolFlags | undefined): string {
-        return formatEnum(flags, (<any>ts).SymbolFlags, /*isFlags*/ true);
-    }
-
-    export function formatTypeFlags(flags: TypeFlags | undefined): string {
-        return formatEnum(flags, (<any>ts).TypeFlags, /*isFlags*/ true);
-    }
-
-    export function formatObjectFlags(flags: ObjectFlags | undefined): string {
-        return formatEnum(flags, (<any>ts).ObjectFlags, /*isFlags*/ true);
     }
 
     /**
@@ -8426,29 +8354,6 @@ namespace ts {
     export function changeAnyExtension(path: string, ext: string, extensions?: string | ReadonlyArray<string>, ignoreCase?: boolean) {
         const pathext = extensions !== undefined && ignoreCase !== undefined ? getAnyExtensionFromPath(path, extensions, ignoreCase) : getAnyExtensionFromPath(path);
         return pathext ? path.slice(0, path.length - pathext.length) + (startsWith(ext, ".") ? ext : "." + ext) : path;
-    }
-
-    export namespace Debug {
-        export function showSymbol(symbol: Symbol): string {
-            const symbolFlags = (ts as any).SymbolFlags;
-            return `{ flags: ${symbolFlags ? showFlags(symbol.flags, symbolFlags) : symbol.flags}; declarations: ${map(symbol.declarations, showSyntaxKind)} }`;
-        }
-
-        function showFlags(flags: number, flagsEnum: { [flag: number]: string }): string {
-            const out: string[] = [];
-            for (let pow = 0; pow <= 30; pow++) {
-                const n = 1 << pow;
-                if (flags & n) {
-                    out.push(flagsEnum[n]);
-                }
-            }
-            return out.join("|");
-        }
-
-        export function showSyntaxKind(node: Node): string {
-            const syntaxKind = (ts as any).SyntaxKind;
-            return syntaxKind ? syntaxKind[node.kind] : node.kind.toString();
-        }
     }
 
     export function tryParsePattern(pattern: string): Pattern | undefined {
