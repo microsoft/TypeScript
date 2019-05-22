@@ -7289,6 +7289,10 @@ interface HTMLMediaElement extends HTMLElement {
      * Gets or sets a flag that indicates whether the client provides a set of controls for the media (in case the developer does not include controls for the player).
      */
     controls: boolean;
+    /**
+     * A DOMTokenList that helps the user agent select what controls to show on the media element whenever the user agent shows its own set of controls. The DOMTokenList takes one or more of three possible values: nodownload, nofullscreen, and noremoteplayback.
+     */
+    readonly controlsList: DOMTokenList;
     crossOrigin: string | null;
     /**
      * Gets the address or URL of the current media resource that is selected by IHTMLMediaElement.
