@@ -7646,6 +7646,14 @@ namespace ts {
         return root + pathComponents.slice(1).join(directorySeparator);
     }
 
+    export function getNormalizedAbsolutePathWithoutRoot(fileName: string, currentDirectory: string | undefined) {
+        return getPathWithoutRoot(getNormalizedPathComponents(fileName, currentDirectory));
+    }
+
+    function getPathWithoutRoot(pathComponents: ReadonlyArray<string>) {
+        if (pathComponents.length === 0) return "";
+        return pathComponents.slice(1).join(directorySeparator);
+    }
 }
 
 /* @internal */
