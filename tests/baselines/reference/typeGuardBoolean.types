@@ -20,15 +20,15 @@ function test(strOrNull: string | null, strOrUndefined: string | undefined) {
 >strOrNull : string | null
 
       nil = strOrNull;
->nil = strOrNull : null
+>nil = strOrNull : string | null
 >nil : null
->strOrNull : null
+>strOrNull : string | null
   }
   else {
       str = strOrNull;
->str = strOrNull : string
+>str = strOrNull : string | null
 >str : string
->strOrNull : string
+>strOrNull : string | null
   }
   if (Boolean(strOrUndefined)) {
 >Boolean(strOrUndefined) : boolean
@@ -36,9 +36,9 @@ function test(strOrNull: string | null, strOrUndefined: string | undefined) {
 >strOrUndefined : string | undefined
 
       str = strOrUndefined;
->str = strOrUndefined : string
+>str = strOrUndefined : string | undefined
 >str : string
->strOrUndefined : string
+>strOrUndefined : string | undefined
   }
 }
 

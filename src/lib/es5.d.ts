@@ -513,7 +513,7 @@ interface Boolean {
 
 interface BooleanConstructor {
     new(value?: any): Boolean;
-    <T extends any>(value?: T): value is Exclude<T, false | null | undefined | '' | 0>;
+    <T>(value?: T): boolean;
     readonly prototype: Boolean;
 }
 
@@ -1133,12 +1133,6 @@ interface ReadonlyArray<T> {
       * @param thisArg An object to which the this keyword can refer in the callbackfn function. If thisArg is omitted, undefined is used as the this value.
       */
     map<U>(callbackfn: (value: T, index: number, array: ReadonlyArray<T>) => U, thisArg?: any): U[];
-    /**
-     * Returns the elements of an array that meet the condition specified in a callback function.
-     * @param callbackfn A function that accepts up to three arguments. The filter method calls the callbackfn function one time for each element in the array.
-     * @param thisArg An object to which the this keyword can refer in the callbackfn function. If thisArg is omitted, undefined is used as the this value.
-     */
-    filter(this: ReadonlyArray<never>, callbackfn: (value: any, index: number, array: ReadonlyArray<any>) => unknown, thisArg?: any): any[];
     /**
      * Returns the elements of an array that meet the condition specified in a callback function.
      * @param callbackfn A function that accepts up to three arguments. The filter method calls the callbackfn function one time for each element in the array.
