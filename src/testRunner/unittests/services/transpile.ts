@@ -17,7 +17,10 @@ namespace ts {
 
                 transpileOptions = testSettings.options || {};
                 if (!transpileOptions.compilerOptions) {
-                    transpileOptions.compilerOptions = {};
+                    transpileOptions.compilerOptions = { };
+                }
+                if (transpileOptions.compilerOptions.target === undefined) {
+                    transpileOptions.compilerOptions.target = ScriptTarget.ES3;
                 }
 
                 if (transpileOptions.compilerOptions.newLine === undefined) {
