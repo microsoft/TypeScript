@@ -232,9 +232,9 @@ declare namespace FourSlashInterface {
         rangesWithSameTextAreRenameLocations(): void;
         rangesAreRenameLocations(options?: Range[] | { findInStrings?: boolean, findInComments?: boolean, ranges?: Range[] });
         findReferencesDefinitionDisplayPartsAtCaretAre(expected: ts.SymbolDisplayPart[]): void;
-        noSignatureHelp(...markers: string[]): void;
-        noSignatureHelpForTriggerReason(triggerReason: SignatureHelpTriggerReason, ...markers: string[]): void
-        signatureHelpPresentForTriggerReason(triggerReason: SignatureHelpTriggerReason, ...markers: string[]): void
+        noSignatureHelp(...markers: (string | Marker)[]): void;
+        noSignatureHelpForTriggerReason(triggerReason: SignatureHelpTriggerReason, ...markers: (string | Marker)[]): void
+        signatureHelpPresentForTriggerReason(triggerReason: SignatureHelpTriggerReason, ...markers: (string | Marker)[]): void
         signatureHelp(...options: VerifySignatureHelpOptions[], ): void;
         // Checks that there are no compile errors.
         noErrors(): void;
@@ -538,7 +538,7 @@ declare namespace FourSlashInterface {
     }
 
     interface VerifySignatureHelpOptions {
-        marker?: ArrayOrSingle<string>;
+        marker?: ArrayOrSingle<string | Marker>;
         /** @default 1 */
         overloadsCount?: number;
         docComment?: string;
