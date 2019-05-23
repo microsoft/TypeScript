@@ -10397,6 +10397,11 @@ namespace ts {
             return type;
         }
 
+        function maybeCloneTypeParameter(p: TypeParameter) {
+            const constraint = getConstraintOfTypeParameter(p);
+            return constraint && maybeTypeOfKind(constraint, TypeFlags.Instantiable | TypeFlags.GenericMappedType) ? cloneTypeParameter(p) : p;
+        }
+
         function getConditionalType(root: ConditionalRoot, mapper: TypeMapper | undefined): Type {
             const checkType = instantiateType(root.checkType, mapper);
             const extendsType = instantiateType(root.extendsType, mapper);
@@ -10423,11 +10428,14 @@ namespace ts {
                 //    * The original `mapper` used to create this conditional
                 //    * The mapper that maps the old root type parameter to the clone (`freshMapper`)
                 //    * The mapper that maps the clone to its inference result (`context.mapper`)
-                const freshParams = map(root.inferTypeParameters, cloneTypeParameter);
+                const freshParams = map(root.inferTypeParameters, maybeCloneTypeParameter);
                 const freshMapper = createTypeMapper(root.inferTypeParameters, freshParams);
                 const context = createInferenceContext(freshParams, /*signature*/ undefined, InferenceFlags.None);
+                const freshCombinedMapper = combineTypeMappers(mapper, freshMapper);
                 for (const p of freshParams) {
-                    p.mapper = combineTypeMappers(mapper, freshMapper);
+                    if (root.inferTypeParameters.indexOf(p) === -1) {
+                        p.mapper = freshCombinedMapper;
+                    }
                 }
                 if (!checkTypeInstantiable) {
                     // We don't want inferences from constraints as they may cause us to eagerly resolve the
