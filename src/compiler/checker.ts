@@ -5231,7 +5231,7 @@ namespace ts {
                     }
                 }
                 // Use contextual parameter type if one is available
-                const type = declaration.symbol.escapedName === InternalSymbolName.This ? getContextualThisParameterType(func) : getContextuallyTypedParameterType(declaration);
+                const type = declaration.symbol.escapedName === InternalSymbolName.This ? getContextualThisParameterType(func) : getContextuallyTypedParameterType(declaration, /*forCache*/ true);
                 if (type) {
                     return addOptionality(type, isOptional);
                 }
@@ -11515,6 +11515,7 @@ namespace ts {
                 case SyntaxKind.FunctionExpression:
                 case SyntaxKind.ArrowFunction:
                 case SyntaxKind.MethodDeclaration:
+                case SyntaxKind.FunctionDeclaration: // Function declarations can have context when annotated with a jsdoc @type
                     return isContextSensitiveFunctionLikeDeclaration(<FunctionExpression | ArrowFunction | MethodDeclaration>node);
                 case SyntaxKind.ObjectLiteralExpression:
                     return some((<ObjectLiteralExpression>node).properties, isContextSensitive);
@@ -11548,6 +11549,9 @@ namespace ts {
         }
 
         function isContextSensitiveFunctionLikeDeclaration(node: FunctionLikeDeclaration): boolean {
+            if (isFunctionDeclaration(node) && (!isInJSFile(node) || !getTypeForDeclarationFromJSDocComment(node))) {
+                return false;
+            }
             // Functions with type parameters are not context sensitive.
             if (node.typeParameters) {
                 return false;
@@ -18241,7 +18245,7 @@ namespace ts {
         }
 
         // Return contextual type of parameter or undefined if no contextual type is available
-        function getContextuallyTypedParameterType(parameter: ParameterDeclaration): Type | undefined {
+        function getContextuallyTypedParameterType(parameter: ParameterDeclaration, forCache?: boolean): Type | undefined {
             const func = parameter.parent;
             if (!isContextSensitiveFunctionOrObjectLiteralMethod(func)) {
                 return undefined;
@@ -18262,8 +18266,21 @@ namespace ts {
                 links.resolvedSignature = cached;
                 return type;
             }
-            const contextualSignature = getContextualSignature(func);
+            let contextualSignature = getContextualSignature(func);
             if (contextualSignature) {
+                if (forCache) {
+                    // Calling the below guarantees the types are primed and assigned in the same way
+                    // as when the parameter is reached via `checkFunctionExpressionOrObjectLiteralMethod`.
+                    // This should prevent any uninstantiated inference variables in the contextual signature
+                    // from leaking, and should lock in cached parameter types via `assignContextualParameterTypes`
+                    // which we will then immediately use the results of below.
+                    contextuallyCheckFunctionExpressionOrObjectLiteralMethod(func);
+                    const type = getTypeOfSymbol(getMergedSymbol(func.symbol));
+                    if (isTypeAny(type)) {
+                        return type;
+                    }
+                    contextualSignature = getSignaturesOfType(type, SignatureKind.Call)[0];
+                }
                 const index = func.parameters.indexOf(parameter) - (getThisParameter(func) ? 1 : 0);
                 return parameter.dotDotDotToken && lastOrUndefined(func.parameters) === parameter ?
                     getRestTypeAtPosition(contextualSignature, index) :
@@ -23053,12 +23070,18 @@ namespace ts {
                 checkGrammarForGenerator(node);
             }
 
-            const links = getNodeLinks(node);
             const type = getTypeOfSymbol(getMergedSymbol(node.symbol));
             if (isTypeAny(type)) {
                 return type;
             }
 
+            contextuallyCheckFunctionExpressionOrObjectLiteralMethod(node, checkMode);
+
+            return type;
+        }
+
+        function contextuallyCheckFunctionExpressionOrObjectLiteralMethod(node: FunctionExpression | ArrowFunction | MethodDeclaration, checkMode?: CheckMode) {
+            const links = getNodeLinks(node);
             // Check if function expression is contextually typed and assign parameter types if so.
             if (!(links.flags & NodeCheckFlags.ContextChecked)) {
                 const contextualSignature = getContextualSignature(node);
@@ -23068,6 +23091,10 @@ namespace ts {
                 if (!(links.flags & NodeCheckFlags.ContextChecked)) {
                     links.flags |= NodeCheckFlags.ContextChecked;
                     if (contextualSignature) {
+                        const type = getTypeOfSymbol(getMergedSymbol(node.symbol));
+                        if (isTypeAny(type)) {
+                            return;
+                        }
                         const signature = getSignaturesOfType(type, SignatureKind.Call)[0];
                         if (isContextSensitive(node)) {
                             const inferenceContext = getInferenceContext(node);
@@ -23088,8 +23115,6 @@ namespace ts {
                     checkSignatureDeclaration(node);
                 }
             }
-
-            return type;
         }
 
         function getReturnOrPromisedType(node: FunctionLikeDeclaration | MethodSignature, functionFlags: FunctionFlags) {
