@@ -30,3 +30,36 @@ function f<X>(arg: X) {
 >x : X extends [infer A] ? A : never
 }
 
+// repro from https://github.com/microsoft/TypeScript/issues/26627
+export type Constructor<T> = new (...args: any[]) => T
+>Constructor : Constructor<T>
+>args : any[]
+
+export type MappedResult<T> =
+>MappedResult : MappedResult<T>
+
+    T extends Boolean ? boolean :
+    T extends Number ? number :
+    T extends String ? string :
+    T
+
+
+interface X {
+    decode<C extends Constructor<any>>(ctor: C): MappedResult<C extends Constructor<infer T> ? T : never>
+>decode : <C extends Constructor<any>>(ctor: C) => MappedResult<C extends Constructor<infer T> ? T : never>
+>ctor : C
+}
+
+class Y implements X {
+>Y : Y
+
+    decode<C extends Constructor<any>>(ctor: C): MappedResult<C extends Constructor<infer T> ? T : never> {
+>decode : <C extends Constructor<any>>(ctor: C) => MappedResult<C extends Constructor<infer T> ? T : never>
+>ctor : C
+
+        throw new Error()
+>new Error() : Error
+>Error : ErrorConstructor
+    }
+}
+

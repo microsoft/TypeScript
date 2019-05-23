@@ -7,3 +7,22 @@ function f<X>(arg: X) {
     x = y; // is err, should be ok
     y = x; // is err, should be ok
 }
+
+// repro from https://github.com/microsoft/TypeScript/issues/26627
+export type Constructor<T> = new (...args: any[]) => T
+export type MappedResult<T> =
+    T extends Boolean ? boolean :
+    T extends Number ? number :
+    T extends String ? string :
+    T
+
+
+interface X {
+    decode<C extends Constructor<any>>(ctor: C): MappedResult<C extends Constructor<infer T> ? T : never>
+}
+
+class Y implements X {
+    decode<C extends Constructor<any>>(ctor: C): MappedResult<C extends Constructor<infer T> ? T : never> {
+        throw new Error()
+    }
+}
