@@ -2,7 +2,7 @@
 {
   "compilerOptions": {
     "allowJs": true,
-    "noEmit": true,
+    "outDir": "foo",
     "isolatedModules": true,
   }
 }
