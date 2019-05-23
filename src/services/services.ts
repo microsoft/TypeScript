@@ -1544,13 +1544,22 @@ namespace ts {
 
         /// References and Occurrences
         function getOccurrencesAtPosition(fileName: string, position: number): ReadonlyArray<ReferenceEntry> | undefined {
-            return flatMap(getDocumentHighlights(fileName, position, [fileName]), entry => entry.highlightSpans.map<ReferenceEntry>(highlightSpan => ({
-                fileName: entry.fileName,
-                textSpan: highlightSpan.textSpan,
-                isWriteAccess: highlightSpan.kind === HighlightSpanKind.writtenReference,
-                isDefinition: false,
-                isInString: highlightSpan.isInString,
-            })));
+            return flatMap(
+                getDocumentHighlights(fileName, position, [fileName]),
+                entry => entry.highlightSpans.map(highlightSpan => {
+                    const result: ReferenceEntry = {
+                        fileName: entry.fileName,
+                        textSpan: highlightSpan.textSpan,
+                        isWriteAccess: highlightSpan.kind === HighlightSpanKind.writtenReference,
+                        isDefinition: false,
+                        isInString: highlightSpan.isInString,
+                    };
+                    if (highlightSpan.declarationSpan) {
+                        result.declarationSpan = highlightSpan.declarationSpan;
+                    }
+                    return result;
+                })
+            );
         }
 
         function getDocumentHighlights(fileName: string, position: number, filesToSearch: ReadonlyArray<string>): DocumentHighlights[] | undefined {

@@ -613,6 +613,13 @@ namespace ts {
          */
         originalTextSpan?: TextSpan;
         originalFileName?: string;
+
+        /**
+         * If DocumentSpan.textSpan is the span for name of the declaration,
+         * then this is the span for relevant declaration
+         */
+        declarationSpan?: TextSpan;
+        originalDeclarationSpan?: TextSpan;
     }
 
     export interface RenameLocation extends DocumentSpan {
@@ -647,6 +654,7 @@ namespace ts {
         fileName?: string;
         isInString?: true;
         textSpan: TextSpan;
+        declarationSpan?: TextSpan;
         kind: HighlightSpanKind;
     }
 

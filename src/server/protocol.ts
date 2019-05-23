@@ -872,8 +872,16 @@ namespace ts.server.protocol {
         file: string;
     }
 
+    export interface DeclarationTextSpan extends TextSpan {
+        declarationStart?: Location;
+        declarationEnd?: Location;
+    }
+
+    export interface DeclarationFileSpan extends FileSpan, DeclarationTextSpan {
+    }
+
     export interface DefinitionInfoAndBoundSpan {
-        definitions: ReadonlyArray<FileSpan>;
+        definitions: ReadonlyArray<DeclarationFileSpan>;
         textSpan: TextSpan;
     }
 
@@ -881,7 +889,7 @@ namespace ts.server.protocol {
      * Definition response message.  Gives text range for definition.
      */
     export interface DefinitionResponse extends Response {
-        body?: FileSpan[];
+        body?: DeclarationFileSpan[];
     }
 
     export interface DefinitionInfoAndBoundSpanReponse extends Response {
@@ -892,14 +900,14 @@ namespace ts.server.protocol {
      * Definition response message.  Gives text range for definition.
      */
     export interface TypeDefinitionResponse extends Response {
-        body?: FileSpan[];
+        body?: DeclarationFileSpan[];
     }
 
     /**
      * Implementation response message.  Gives text range for implementations.
      */
     export interface ImplementationResponse extends Response {
-        body?: FileSpan[];
+        body?: DeclarationFileSpan[];
     }
 
     /**
@@ -942,7 +950,7 @@ namespace ts.server.protocol {
     }
 
     /** @deprecated */
-    export interface OccurrencesResponseItem extends FileSpan {
+    export interface OccurrencesResponseItem extends DeclarationFileSpan {
         /**
          * True if the occurrence is a write location, false otherwise.
          */
@@ -972,7 +980,7 @@ namespace ts.server.protocol {
     /**
      * Span augmented with extra information that denotes the kind of the highlighting to be used for span.
      */
-    export interface HighlightSpan extends TextSpan {
+    export interface HighlightSpan extends DeclarationTextSpan {
         kind: HighlightSpanKind;
     }
 
@@ -1007,7 +1015,7 @@ namespace ts.server.protocol {
         command: CommandTypes.References;
     }
 
-    export interface ReferencesResponseItem extends FileSpan {
+    export interface ReferencesResponseItem extends DeclarationFileSpan {
         /** Text of line containing the reference.  Including this
          *  with the response avoids latency of editor loading files
          * to show text of reference line (the server already has
@@ -1150,7 +1158,7 @@ namespace ts.server.protocol {
         locs: RenameTextSpan[];
     }
 
-    export interface RenameTextSpan extends TextSpan {
+    export interface RenameTextSpan extends DeclarationTextSpan {
         readonly prefixText?: string;
         readonly suffixText?: string;
     }

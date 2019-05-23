@@ -279,7 +279,11 @@ namespace ts.GoToDefinition {
             kind: symbolKind,
             name: symbolName,
             containerKind: undefined!, // TODO: GH#18217
-            containerName
+            containerName,
+            declarationSpan: createTextSpanFromNode(
+                FindAllReferences.getDeclarationForDeclarationSpan(declaration)!,
+                sourceFile
+            )
         };
     }
 

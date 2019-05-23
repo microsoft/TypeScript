@@ -5070,6 +5070,12 @@ declare namespace ts {
          */
         originalTextSpan?: TextSpan;
         originalFileName?: string;
+        /**
+         * If DocumentSpan.textSpan is the span for name of the declaration,
+         * then this is the span for relevant declaration
+         */
+        declarationSpan?: TextSpan;
+        originalDeclarationSpan?: TextSpan;
     }
     interface RenameLocation extends DocumentSpan {
         readonly prefixText?: string;
@@ -5098,6 +5104,7 @@ declare namespace ts {
         fileName?: string;
         isInString?: true;
         textSpan: TextSpan;
+        declarationSpan?: TextSpan;
         kind: HighlightSpanKind;
     }
     interface NavigateToItem {

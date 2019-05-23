@@ -505,13 +505,66 @@ namespace ts.projectSystem {
         return { start: toLocation(span.start), end: toLocation(textSpanEnd(span)) };
     }
 
-    export function protocolRenameSpanFromSubstring(
-        str: string,
-        substring: string,
-        options?: SpanFromSubstringOptions,
-        prefixSuffixText?: { readonly prefixText?: string, readonly suffixText?: string },
-    ): protocol.RenameTextSpan {
-        return { ...protocolTextSpanFromSubstring(str, substring, options), ...prefixSuffixText };
+    export interface DocumentSpanFromSubstring {
+        file: File;
+        text: string;
+        options?: SpanFromSubstringOptions;
+    }
+    export function protocolFileSpanFromSubstring({ file, text, options }: DocumentSpanFromSubstring): protocol.FileSpan {
+        return { file: file.path, ...protocolTextSpanFromSubstring(file.content, text, options) };
+    }
+
+    interface DeclarationFileSpanFromSubString {
+        file: File;
+        text: string;
+        options?: SpanFromSubstringOptions;
+        declarationText?: string;
+        declarationOptions?: SpanFromSubstringOptions;
+    }
+    export function protocolDeclarationFileSpanFromSubstring({ declarationText, declarationOptions, ...rest }: DeclarationFileSpanFromSubString): protocol.DeclarationFileSpan {
+        const result = protocolFileSpanFromSubstring(rest);
+        if (!declarationText) return result;
+        const declarationSpan = protocolFileSpanFromSubstring({ file: rest.file, text: declarationText, options: declarationOptions });
+        return {
+            ...result,
+            declarationStart: declarationSpan.start,
+            declarationEnd: declarationSpan.end
+        };
+    }
+
+    export interface ProtocolDeclarationTextSpanFromString {
+        fileText: string;
+        text: string;
+        options?: SpanFromSubstringOptions;
+        declarationText?: string;
+        declarationOptions?: SpanFromSubstringOptions;
+    }
+    export function protocolDeclarationTextSpanFromSubstring({ fileText, text, options, declarationText, declarationOptions }: ProtocolDeclarationTextSpanFromString): protocol.DeclarationTextSpan {
+        const span = textSpanFromSubstring(fileText, text, options);
+        const toLocation = protocolToLocation(fileText);
+        const result: protocol.DeclarationTextSpan = {
+            start: toLocation(span.start),
+            end: toLocation(textSpanEnd(span))
+        };
+        if (declarationText) {
+            const span = textSpanFromSubstring(fileText, declarationText, declarationOptions);
+            result.declarationStart = toLocation(span.start);
+            result.declarationEnd = toLocation(textSpanEnd(span));
+        }
+        return result;
+    }
+
+    export interface ProtocolRenameSpanFromSubstring extends ProtocolDeclarationTextSpanFromString {
+        prefixSuffixText?: {
+            readonly prefixText?: string;
+            readonly suffixText?: string;
+        };
+    }
+    export function protocolRenameSpanFromSubstring({ prefixSuffixText, ...rest }: ProtocolRenameSpanFromSubstring): protocol.RenameTextSpan {
+        return {
+            ...protocolDeclarationTextSpanFromSubstring(rest),
+            ...prefixSuffixText
+        };
     }
 
     export function textSpanFromSubstring(str: string, substring: string, options?: SpanFromSubstringOptions): TextSpan {
