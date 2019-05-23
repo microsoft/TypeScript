@@ -15751,7 +15751,7 @@ namespace ts {
 
         function getAccessedPropertyName(access: AccessExpression): __String | undefined {
             return access.kind === SyntaxKind.PropertyAccessExpression ? access.name.escapedText :
-                isStringLiteral(access.argumentExpression) || isNumericLiteral(access.argumentExpression) ? escapeLeadingUnderscores(access.argumentExpression.text) :
+            isStringLiteral(access.argumentExpression) || isNumericLiteral(access.argumentExpression) ? escapeLeadingUnderscores(access.argumentExpression.text) :
                 undefined;
         }
 
@@ -20491,21 +20491,6 @@ namespace ts {
             const objectType = checkNonNullExpression(node.expression);
 
             const indexExpression = node.argumentExpression;
-            if (!indexExpression) {
-                const sourceFile = getSourceFileOfNode(node);
-                if (node.parent.kind === SyntaxKind.NewExpression && (<NewExpression>node.parent).expression === node) {
-                    const start = skipTrivia(sourceFile.text, node.expression.end);
-                    const end = node.end;
-                    grammarErrorAtPos(sourceFile, start, end - start, Diagnostics.new_T_cannot_be_used_to_create_an_array_Use_new_Array_T_instead);
-                }
-                else {
-                    const start = node.end - "]".length;
-                    const end = node.end;
-                    grammarErrorAtPos(sourceFile, start, end - start, Diagnostics.Expression_expected);
-                }
-                return errorType;
-            }
-
             const indexType = checkExpression(indexExpression);
 
             if (objectType === errorType || objectType === silentNeverType) {
@@ -28419,9 +28404,7 @@ namespace ts {
                                     name = ex.name.escapedText;
                                 }
                                 else {
-                                    const argument = ex.argumentExpression;
-                                    Debug.assert(isLiteralExpression(argument));
-                                    name = escapeLeadingUnderscores((argument as LiteralExpression).text);
+                                    name = escapeLeadingUnderscores(cast(ex.argumentExpression, isLiteralExpression).text);
                                 }
                                 return evaluateEnumMember(expr, type.symbol, name);
                             }
