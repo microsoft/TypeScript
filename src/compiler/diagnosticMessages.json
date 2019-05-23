@@ -3811,10 +3811,6 @@
         "category": "Error",
         "code": 6189
     },
-    "Found 'package.json' at '{0}'. Package ID is '{1}'.": {
-        "category": "Message",
-        "code": 6190
-    },
     "Whether to keep outdated console output in watch mode instead of clearing the screen.": {
         "category": "Message",
         "code": 6191
@@ -3922,6 +3918,14 @@
     "Found {0} errors.": {
         "category": "Message",
         "code": 6217
+    },
+    "======== Module name '{0}' was successfully resolved to '{1}' with Package ID '{2}'. ========": {
+        "category": "Message",
+        "code": 6218
+    },
+    "======== Type reference directive '{0}' was successfully resolved to '{1}' with Package ID '{2}', primary: {3}. ========": {
+        "category": "Message",
+        "code": 6219
     },
 
     "Projects to reference": {
@@ -4975,7 +4979,7 @@
         "code": 95079
     },
 
-    "No value exists in scope for the shorthand property '{0}'. Either declare one or provide an initializer." :{
+    "No value exists in scope for the shorthand property '{0}'. Either declare one or provide an initializer.": {
         "category": "Error",
         "code": 18004
     },
