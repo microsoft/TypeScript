@@ -424,6 +424,10 @@ namespace ts.server {
             return renameInfo;
         }
 
+        getSmartSelectionRange() {
+            return notImplemented();
+        }
+
         findRenameLocations(fileName: string, position: number, findInStrings: boolean, findInComments: boolean): RenameLocation[] {
             if (!this.lastRenameEntry ||
                 this.lastRenameEntry.inputs.fileName !== fileName ||
