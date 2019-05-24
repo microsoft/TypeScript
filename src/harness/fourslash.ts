@@ -1208,7 +1208,7 @@ Actual: ${stringify(fullActual)}`);
             }
         }
 
-        public verifySignatureHelpPresence(expectPresent: boolean, triggerReason: ts.SignatureHelpTriggerReason | undefined, markers: ReadonlyArray<string>) {
+        public verifySignatureHelpPresence(expectPresent: boolean, triggerReason: ts.SignatureHelpTriggerReason | undefined, markers: ReadonlyArray<string | Marker>) {
             if (markers.length) {
                 for (const marker of markers) {
                     this.goToMarker(marker);
@@ -3768,15 +3768,15 @@ namespace FourSlashInterface {
             assert(ranges.length !== 0, "Array of ranges is expected to be non-empty");
         }
 
-        public noSignatureHelp(...markers: string[]): void {
+        public noSignatureHelp(...markers: (string | FourSlash.Marker)[]): void {
             this.state.verifySignatureHelpPresence(/*expectPresent*/ false, /*triggerReason*/ undefined, markers);
         }
 
-        public noSignatureHelpForTriggerReason(reason: ts.SignatureHelpTriggerReason, ...markers: string[]): void {
+        public noSignatureHelpForTriggerReason(reason: ts.SignatureHelpTriggerReason, ...markers: (string | FourSlash.Marker)[]): void {
             this.state.verifySignatureHelpPresence(/*expectPresent*/ false, reason, markers);
         }
 
-        public signatureHelpPresentForTriggerReason(reason: ts.SignatureHelpTriggerReason, ...markers: string[]): void {
+        public signatureHelpPresentForTriggerReason(reason: ts.SignatureHelpTriggerReason, ...markers: (string | FourSlash.Marker)[]): void {
             this.state.verifySignatureHelpPresence(/*expectPresent*/ true, reason, markers);
         }
 
@@ -5124,7 +5124,7 @@ namespace FourSlashInterface {
     }
 
     export interface VerifySignatureHelpOptions {
-        readonly marker?: ArrayOrSingle<string>;
+        readonly marker?: ArrayOrSingle<string | FourSlash.Marker>;
         /** @default 1 */
         readonly overloadsCount?: number;
         /** @default undefined */

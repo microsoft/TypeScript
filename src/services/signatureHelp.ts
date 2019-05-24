@@ -133,11 +133,21 @@ namespace ts.SignatureHelp {
     }
 
     function containsPrecedingToken(startingToken: Node, sourceFile: SourceFile, container: Node) {
-        const precedingToken = Debug.assertDefined(
-            findPrecedingToken(startingToken.getFullStart(), sourceFile, startingToken.parent, /*excludeJsdoc*/ true)
-        );
-
-        return rangeContainsRange(container, precedingToken);
+        const pos = startingToken.getFullStart();
+        // There’s a possibility that `startingToken.parent` contains only `startingToken` and
+        // missing nodes, none of which are valid to be returned by `findPrecedingToken`. In that
+        // case, the preceding token we want is actually higher up the tree—almost definitely the
+        // next parent, but theoretically the situation with missing nodes might be happening on
+        // multiple nested levels.
+        let currentParent: Node | undefined = startingToken.parent;
+        while (currentParent) {
+            const precedingToken = findPrecedingToken(pos, sourceFile, currentParent, /*excludeJsdoc*/ true);
+            if (precedingToken) {
+                return rangeContainsRange(container, precedingToken);
+            }
+            currentParent = currentParent.parent;
+        }
+        return Debug.fail("Could not find preceding token");
     }
 
     export interface ArgumentInfoForCompletions {
