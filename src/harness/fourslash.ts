@@ -955,14 +955,18 @@ namespace FourSlash {
             const fullExpected = ts.map<FourSlashInterface.ReferenceGroup, ReferenceGroupJson>(parts, ({ definition, ranges }) => ({
                 definition: typeof definition === "string" ? definition : { ...definition, range: ts.createTextSpanFromRange(definition.range) },
                 references: ranges.map<ts.ReferenceEntry>(r => {
-                    const { isWriteAccess = false, isDefinition = false, isInString } = (r.marker && r.marker.data || {}) as { isWriteAccess?: boolean, isDefinition?: boolean, isInString?: true };
-                    return {
+                    const { isWriteAccess = false, isDefinition = false, isInString, declarationRange } = (r.marker && r.marker.data || {}) as { isWriteAccess?: boolean, isDefinition?: boolean, isInString?: true, declarationRange?: number };
+                    const result: ts.ReferenceEntry = {
                         fileName: r.fileName,
                         textSpan: ts.createTextSpanFromRange(r),
                         isWriteAccess,
                         isDefinition,
                         ...(isInString ? { isInString: true } : undefined),
                     };
+                    if (declarationRange !== undefined) {
+                        result.declarationSpan = ts.createTextSpanFromRange(this.getRanges()[declarationRange]);
+                    }
+                    return result;
                 }),
             }));
 
@@ -1011,7 +1015,7 @@ Actual: ${stringify(fullActual)}`);
                 };
 
                 if ((actual === undefined) !== (expected === undefined)) {
-                    fail(`Expected ${expected}, got ${actual}`);
+                    fail(`Expected ${stringify(expected)}, got ${stringify(actual)}`);
                 }
 
                 for (const key in actual) {
@@ -1021,7 +1025,7 @@ Actual: ${stringify(fullActual)}`);
                             recur(ak, ek, path ? path + "." + key : key);
                         }
                         else if (ak !== ek) {
-                            fail(`Expected '${key}' to be '${ek}', got '${ak}'`);
+                            fail(`Expected '${key}' to be '${stringify(ek)}', got '${stringify(ak)}'`);
                         }
                     }
                 }
