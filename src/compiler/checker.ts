@@ -3610,7 +3610,7 @@ namespace ts {
                     // _Within_ an alias symbol declaration, references to the alias type should be the alias name
                     // If this is done, we need to mark the type as needing to preserve the alias when we get back up to it.
                     context.visitedTypes.set("" + getTypeId(type), true);
-                    return createTypeReferenceNode(getNameForInlineTypeAliasCreation(type), /*typeArguments*/ undefined);
+                    return createTypeReferenceNode(getNameForInlineTypeAliasCreation(type, context), /*typeArguments*/ undefined);
                 }
                 if (!inTypeAlias && type.aliasSymbol && (context.flags & NodeBuilderFlags.UseAliasDefinedOutsideCurrentScope || isTypeSymbolAccessible(type.aliasSymbol, context.enclosingDeclaration))) {
                     const typeArgumentNodes = mapToTypeNodes(type.aliasTypeArguments, context);
@@ -3732,11 +3732,12 @@ namespace ts {
                                 return createElidedInformationPlaceholder(context);
                             }
                             context.symbolDepth.set(id, depth + 1);
+                            Debug.assert(!context.visitedTypes.has(typeId));
                             context.visitedTypes.set(typeId, false);
                             let result = createTypeNodeFromObjectType(type);
                             if (context.visitedTypes.get(typeId) === true) {
                                 // Circular reference is required - emit an inline type alias
-                                result = createInlineTypeAliasDeclaration(getNameForInlineTypeAliasCreation(type), result);
+                                result = createInlineTypeAliasDeclaration(getNameForInlineTypeAliasCreation(type, context), result);
                             }
                             context.visitedTypes.delete(typeId);
                             context.symbolDepth.set(id, depth);
@@ -3762,13 +3763,33 @@ namespace ts {
                     }
                 }
 
-                function getNameForInlineTypeAliasCreation(type: Type): Identifier {
+                function nameShadowsNameInScope(escapedName: __String, context: NodeBuilderContext) {
+                    return !!resolveName(context.enclosingDeclaration, escapedName, SymbolFlags.Type, /*nameNotFoundArg*/ undefined, escapedName, /*isUse*/ false);
+                }
+
+                function getSyntheticTypeNameForType(type: Type, context: NodeBuilderContext, seed: string): string {
+                    const typeId = "" + getTypeId(type);
+                    if (context.syntheticTypeNames && context.syntheticTypeNames.get(typeId)) {
+                        return context.syntheticTypeNames.get(typeId)!;
+                    }
+                    let i = 0;
+                    let text = seed;
+                    while ((context.usedSyntheticTypeNames && context.usedSyntheticTypeNames.get(text)) || nameShadowsNameInScope(escapeLeadingUnderscores(text), context)) {
+                        i++;
+                        text = `${seed}_${i}`;
+                    }
+                    (context.usedSyntheticTypeNames || (context.usedSyntheticTypeNames = createMap())).set(text, true);
+                    (context.syntheticTypeNames || (context.syntheticTypeNames = createMap())).set(typeId, text);
+                    return text;
+                }
+
+                function getNameForInlineTypeAliasCreation(type: Type, context: NodeBuilderContext): Identifier {
                     // If it was originally made using an inline type alias, reuse that name, otherwise
                     // get a generated name for the (usually anonymous) type node which contains the
                     // circular reference
                     return type.aliasSymbol && some(type.aliasSymbol.declarations, isInlineTypeAlias)
                         ? createIdentifier(unescapeLeadingUnderscores(type.aliasSymbol.escapedName))
-                        : getGeneratedNameForNode(type.symbol.declarations[0]);
+                        : createIdentifier(getSyntheticTypeNameForType(type, context, "Anon"));
                 }
 
                 function createTypeNodeFromObjectType(type: ObjectType): TypeNode {
@@ -4661,6 +4682,8 @@ namespace ts {
             approximateLength: number;
             truncating?: boolean;
             typeParameterSymbolList?: Map<true>;
+            usedSyntheticTypeNames?: Map<true>;
+            syntheticTypeNames?: Map<string>;
         }
 
         function isDefaultBindingContext(location: Node) {
