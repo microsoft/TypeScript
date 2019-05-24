@@ -14681,7 +14681,7 @@ namespace ts {
             if (getObjectFlags(type) & ObjectFlags.RequiresWidening) {
                 if (context === undefined && type.widened) {
                     return type.widened;
-                } 
+                }
                 let result: Type | undefined;
                 if (type.flags & TypeFlags.Nullable) {
                     result = anyType;
