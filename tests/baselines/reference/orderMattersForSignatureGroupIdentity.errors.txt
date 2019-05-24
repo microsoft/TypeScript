@@ -33,6 +33,7 @@ tests/cases/compiler/orderMattersForSignatureGroupIdentity.ts(24,5): error TS234
     var w: C;
         ~
 !!! error TS2403: Subsequent variable declarations must have the same type.  Variable 'w' must be of type 'A', but here has type 'C'.
+!!! related TS6203 tests/cases/compiler/orderMattersForSignatureGroupIdentity.ts:21:5: 'w' was also declared here.
     
     w({ s: "", n: 0 }).toLowerCase();
         ~~~~~

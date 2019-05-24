@@ -201,6 +201,7 @@ tests/cases/compiler/duplicateLocalVariable1.ts(186,37): error TS2356: An arithm
                 for (var i = 0; i < 14; i++) {
                          ~
 !!! error TS2403: Subsequent variable declarations must have the same type.  Variable 'i' must be of type 'string', but here has type 'number'.
+!!! related TS6203 tests/cases/compiler/duplicateLocalVariable1.ts:181:22: 'i' was also declared here.
                                 ~~~~~~
 !!! error TS2365: Operator '<' cannot be applied to types 'string' and 'number'.
                                         ~

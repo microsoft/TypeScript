@@ -2546,6 +2546,8 @@ namespace ts {
         Shared         = 1 << 10, // Referenced as antecedent more than once
         PreFinally     = 1 << 11, // Injected edge that links pre-finally label and pre-try flow
         AfterFinally   = 1 << 12, // Injected edge that links post-finally flow with the rest of the graph
+        /** @internal */
+        Cached         = 1 << 13, // Indicates that at least one cross-call cache entry exists for this node, even if not a loop participant
         Label = BranchLabel | LoopLabel,
         Condition = TrueCondition | FalseCondition
     }
@@ -2614,7 +2616,7 @@ namespace ts {
 
     // Incomplete types occur during control flow analysis of loops. An IncompleteType
     // is distinguished from a regular type by a flags value of zero. Incomplete type
-    // objects are internal to the getFlowTypeOfRefecence function and never escape it.
+    // objects are internal to the getFlowTypeOfReference function and never escape it.
     export interface IncompleteType {
         flags: TypeFlags;  // No flags set
         type: Type;        // The type marked incomplete
@@ -3011,13 +3013,26 @@ namespace ts {
         Completely  = 1 << 1,
     }
 
+    export type CustomTransformerFactory = (context: TransformationContext) => CustomTransformer;
+
+    export interface CustomTransformer {
+        transformSourceFile(node: SourceFile): SourceFile;
+        transformBundle(node: Bundle): Bundle;
+    }
+
     export interface CustomTransformers {
         /** Custom transformers to evaluate before built-in .js transformations. */
-        before?: TransformerFactory<SourceFile>[];
+        before?: (TransformerFactory<SourceFile> | CustomTransformerFactory)[];
         /** Custom transformers to evaluate after built-in .js transformations. */
-        after?: TransformerFactory<SourceFile>[];
+        after?: (TransformerFactory<SourceFile> | CustomTransformerFactory)[];
         /** Custom transformers to evaluate after built-in .d.ts transformations. */
-        afterDeclarations?: TransformerFactory<Bundle | SourceFile>[];
+        afterDeclarations?: (TransformerFactory<Bundle | SourceFile> | CustomTransformerFactory)[];
+    }
+
+    /*@internal*/
+    export interface EmitTransformers {
+        scriptTransformers: readonly TransformerFactory<SourceFile | Bundle>[];
+        declarationTransformers: readonly TransformerFactory<SourceFile | Bundle>[];
     }
 
     export interface SourceMapSpan {
@@ -3139,6 +3154,7 @@ namespace ts {
          */
         getExportSymbolOfSymbol(symbol: Symbol): Symbol;
         getPropertySymbolOfDestructuringAssignment(location: Identifier): Symbol | undefined;
+        getTypeOfAssignmentPattern(pattern: AssignmentPattern): Type;
         getTypeAtLocation(node: Node): Type;
         getTypeFromTypeNode(node: TypeNode): Type;
 
@@ -3735,7 +3751,7 @@ namespace ts {
         specifierCache?: Map<string>;     // For symbols corresponding to external modules, a cache of incoming path -> module specifier name mappings
         extendedContainers?: Symbol[];      // Containers (other than the parent) which this symbol is aliased in
         extendedContainersByFile?: Map<Symbol[]>;      // Containers (other than the parent) which this symbol is aliased in
-        variances?: Variance[];             // Alias symbol type argument variance cache
+        variances?: VarianceFlags[];             // Alias symbol type argument variance cache
     }
 
     /* @internal */
@@ -3951,6 +3967,8 @@ namespace ts {
         StructuredOrInstantiable = StructuredType | Instantiable,
         /* @internal */
         ObjectFlagsType = Nullable | Never | Object | Union | Intersection,
+        /* @internal */
+        Simplifiable = IndexedAccess | Conditional,
         // 'Narrowable' types are types where narrowing actually narrows.
         // This *should* be every type other than null, undefined, void, and never
         Narrowable = Any | Unknown | StructuredOrInstantiable | StringLike | NumberLike | BigIntLike | BooleanLike | ESSymbol | UniqueESSymbol | NonPrimitive,
@@ -4131,12 +4149,16 @@ namespace ts {
     }
 
     /* @internal */
-    export const enum Variance {
-        Invariant     = 0,  // Neither covariant nor contravariant
-        Covariant     = 1,  // Covariant
-        Contravariant = 2,  // Contravariant
-        Bivariant     = 3,  // Both covariant and contravariant
-        Independent   = 4,  // Unwitnessed type parameter
+    export const enum VarianceFlags {
+        Invariant     =      0,  // Neither covariant nor contravariant
+        Covariant     = 1 << 0,  // Covariant
+        Contravariant = 1 << 1,  // Contravariant
+        Bivariant     = Covariant | Contravariant,  // Both covariant and contravariant
+        Independent   = 1 << 2,  // Unwitnessed type parameter
+        VarianceMask  = Invariant | Covariant | Contravariant | Independent, // Mask containing all measured variances without the unmeasurable flag
+        Unmeasurable  = 1 << 3,  // Variance result is unusable - relationship relies on structural comparisons which are not reflected in generic relationships
+        Unreliable    = 1 << 4,  // Variance result is unreliable - relationship relies on structural comparisons which are not reflected in generic relationships
+        AllowsStructuralFallback = Unmeasurable | Unreliable,
     }
 
     // Generic class and interface types
@@ -4144,7 +4166,7 @@ namespace ts {
         /* @internal */
         instantiations: Map<TypeReference>;  // Generic instantiation cache
         /* @internal */
-        variances?: Variance[];  // Variance of each type parameter
+        variances?: VarianceFlags[];  // Variance of each type parameter
     }
 
     export interface TupleType extends GenericType {
@@ -4319,8 +4341,8 @@ namespace ts {
         root: ConditionalRoot;
         checkType: Type;
         extendsType: Type;
-        trueType: Type;
-        falseType: Type;
+        resolvedTrueType: Type;
+        resolvedFalseType: Type;
         /* @internal */
         resolvedInferredTrueType?: Type; // The `trueType` instantiated with the `combinedMapper`, if present
         /* @internal */
@@ -4405,15 +4427,16 @@ namespace ts {
     export type TypeMapper = (t: TypeParameter) => Type;
 
     export const enum InferencePriority {
-        NakedTypeVariable           = 1 << 0,  // Naked type variable in union or intersection type
-        HomomorphicMappedType       = 1 << 1,  // Reverse inference for homomorphic mapped type
-        MappedTypeConstraint        = 1 << 2,  // Reverse inference for mapped type
-        ReturnType                  = 1 << 3,  // Inference made from return type of generic function
-        LiteralKeyof                = 1 << 4,  // Inference made from a string literal to a keyof T
-        NoConstraints               = 1 << 5,  // Don't infer from constraints of instantiable types
-        AlwaysStrict                = 1 << 6,  // Always use strict rules for contravariant inferences
+        NakedTypeVariable            = 1 << 0,  // Naked type variable in union or intersection type
+        HomomorphicMappedType        = 1 << 1,  // Reverse inference for homomorphic mapped type
+        PartialHomomorphicMappedType = 1 << 2,  // Partial reverse inference for homomorphic mapped type
+        MappedTypeConstraint         = 1 << 3,  // Reverse inference for mapped type
+        ReturnType                   = 1 << 4,  // Inference made from return type of generic function
+        LiteralKeyof                 = 1 << 5,  // Inference made from a string literal to a keyof T
+        NoConstraints                = 1 << 6,  // Don't infer from constraints of instantiable types
+        AlwaysStrict                 = 1 << 7,  // Always use strict rules for contravariant inferences
 
-        PriorityImpliesCombination  = ReturnType | MappedTypeConstraint | LiteralKeyof,  // These priorities imply that the resulting type should be a combination of all candidates
+        PriorityImpliesCombination = ReturnType | MappedTypeConstraint | LiteralKeyof,  // These priorities imply that the resulting type should be a combination of all candidates
     }
 
     /* @internal */
@@ -5133,7 +5156,7 @@ namespace ts {
         createHash?(data: string): string;
         getParsedCommandLine?(fileName: string): ParsedCommandLine | undefined;
 
-        // TODO: later handle this in better way in builder host instead once the api for tsbuild finalizes and doesnt use compilerHost as base
+        // TODO: later handle this in better way in builder host instead once the api for tsbuild finalizes and doesn't use compilerHost as base
         /*@internal*/createDirectory?(directory: string): void;
     }
 

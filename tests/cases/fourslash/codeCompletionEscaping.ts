@@ -7,7 +7,7 @@
 verify.completions({
     marker: "",
     includes: [
-        { name: "__foo", kind: "warning" },
-        { name: "___foo", kind: "warning" },
+        { name: "__foo", kind: "warning", sortText: completion.SortText.JavascriptIdentifiers },
+        { name: "___foo", kind: "warning", sortText: completion.SortText.JavascriptIdentifiers },
     ],
 });

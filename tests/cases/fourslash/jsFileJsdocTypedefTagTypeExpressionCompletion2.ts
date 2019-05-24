@@ -28,10 +28,10 @@ function getCompletions(nonWarnings: ReadonlyArray<string>): ReadonlyArray<FourS
         { name: "property1", kind: "property" },
         { name: "method3", kind: "method" },
         { name: "method4", kind: "method" },
-        { name: "foo", kind: "warning" },
+        { name: "foo", kind: "warning", sortText: completion.SortText.JavascriptIdentifiers },
     ];
     for (const name of nonWarnings) ts.Debug.assert(withKinds.some(entry => entry.name === name));
-    return withKinds.map(entry => nonWarnings.includes(entry.name) ? entry : ({ name: entry.name, kind: "warning" }));
+    return withKinds.map(entry => nonWarnings.includes(entry.name) ? entry : ({ name: entry.name, kind: "warning", sortText: completion.SortText.JavascriptIdentifiers }));
 }
 
 verify.completions(
