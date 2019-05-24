@@ -4010,6 +4010,8 @@ namespace ts {
         restrictiveInstantiation?: Type; // Instantiation with type parameters mapped to unconstrained form
         /* @internal */
         immediateBaseConstraint?: Type;  // Immediate base constraint cache
+        /* @internal */
+        widened?: Type; // Cached widened form of the type
     }
 
     /* @internal */
