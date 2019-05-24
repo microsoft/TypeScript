@@ -1,5 +1,6 @@
 tests/cases/conformance/salsa/bug26885.js(2,5): error TS2683: 'this' implicitly has type 'any' because it does not have a type annotation.
-tests/cases/conformance/salsa/bug26885.js(11,16): error TS7017: Element implicitly has an 'any' type because type '{}' has no index signature.
+tests/cases/conformance/salsa/bug26885.js(11,16): error TS7053: Element implicitly has an 'any' type because expression of type 'string' can't be used to index type '{}'.
+  No index signature with a parameter of type 'string' was found on type '{}'.
 
 
 ==== tests/cases/conformance/salsa/bug26885.js (2 errors) ====
@@ -17,7 +18,8 @@ tests/cases/conformance/salsa/bug26885.js(11,16): error TS7017: Element implicit
         get(key) {
             return this._map[key + ''];
                    ~~~~~~~~~~~~~~~~~~~
-!!! error TS7017: Element implicitly has an 'any' type because type '{}' has no index signature.
+!!! error TS7053: Element implicitly has an 'any' type because expression of type 'string' can't be used to index type '{}'.
+!!! error TS7053:   No index signature with a parameter of type 'string' was found on type '{}'.
         }
     }
     

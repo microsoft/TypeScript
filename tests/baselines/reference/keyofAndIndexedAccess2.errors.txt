@@ -15,7 +15,8 @@ tests/cases/conformance/types/keyof/keyofAndIndexedAccess2.ts(26,7): error TS233
 tests/cases/conformance/types/keyof/keyofAndIndexedAccess2.ts(27,5): error TS2322: Type '1' is not assignable to type 'T[keyof T]'.
 tests/cases/conformance/types/keyof/keyofAndIndexedAccess2.ts(31,5): error TS2322: Type '{ [key: string]: number; }' is not assignable to type '{ [P in K]: number; }'.
 tests/cases/conformance/types/keyof/keyofAndIndexedAccess2.ts(38,5): error TS2322: Type '{ [x: string]: number; }' is not assignable to type '{ [P in K]: number; }'.
-tests/cases/conformance/types/keyof/keyofAndIndexedAccess2.ts(50,3): error TS7017: Element implicitly has an 'any' type because type 'Item' has no index signature.
+tests/cases/conformance/types/keyof/keyofAndIndexedAccess2.ts(50,3): error TS7053: Element implicitly has an 'any' type because expression of type 'string' can't be used to index type 'Item'.
+  No index signature with a parameter of type 'string' was found on type 'Item'.
 tests/cases/conformance/types/keyof/keyofAndIndexedAccess2.ts(51,3): error TS2322: Type '123' is not assignable to type 'string & number'.
   Type '123' is not assignable to type 'string'.
 tests/cases/conformance/types/keyof/keyofAndIndexedAccess2.ts(52,3): error TS2322: Type '123' is not assignable to type 'T[keyof T]'.
@@ -112,7 +113,8 @@ tests/cases/conformance/types/keyof/keyofAndIndexedAccess2.ts(108,5): error TS23
     function f10<T extends Item, K extends keyof T>(obj: T, k1: string, k2: keyof Item, k3: keyof T, k4: K) {
       obj[k1] = 123;  // Error
       ~~~~~~~
-!!! error TS7017: Element implicitly has an 'any' type because type 'Item' has no index signature.
+!!! error TS7053: Element implicitly has an 'any' type because expression of type 'string' can't be used to index type 'Item'.
+!!! error TS7053:   No index signature with a parameter of type 'string' was found on type 'Item'.
       obj[k2] = 123;  // Error
       ~~~~~~~
 !!! error TS2322: Type '123' is not assignable to type 'string & number'.
@@ -228,4 +230,14 @@ tests/cases/conformance/types/keyof/keyofAndIndexedAccess2.ts(108,5): error TS23
         this["a"] = "b";
       }
     }
+    
+    // Repro from #31385
+    
+    type Foo<T> = { [key: string]: { [K in keyof T]: K }[keyof T] };
+    
+    type Bar<T> = { [key: string]: { [K in keyof T]: [K] }[keyof T] };
+    
+    type Baz<T, Q extends Foo<T>> = { [K in keyof Q]: T[Q[K]] };
+    
+    type Qux<T, Q extends Bar<T>> = { [K in keyof Q]: T[Q[K]["0"]] };
     
