@@ -55,15 +55,15 @@ var a = fnReturn1();
 >fnReturn1 : () => any
 
 function fnReturn2() {
->fnReturn2 : type default_1 = () => default_1
+>fnReturn2 : type Anon = () => Anon
 
     return fnReturn2;
->fnReturn2 : type default_1 = () => default_1
+>fnReturn2 : type Anon = () => Anon
 }
 var fnr2: () => any = fnReturn2();
 >fnr2 : () => any
->fnReturn2() : type default_1 = () => default_1
->fnReturn2 : type default_1 = () => default_1
+>fnReturn2() : type Anon = () => Anon
+>fnReturn2 : type Anon = () => Anon
 
 // Comma
 var co1 = (co1, 3);
@@ -223,21 +223,21 @@ var fnCallResult: any;
 
 // Call argument
 function fnArg1(x: typeof fnArg1, y: number) {
->fnArg1 : type default_1 = (x: default_1, y: number) => void
->x : type default_1 = (x: default_1, y: number) => void
->fnArg1 : type default_1 = (x: default_1, y: number) => void
+>fnArg1 : type Anon = (x: Anon, y: number) => void
+>x : type Anon = (x: Anon, y: number) => void
+>fnArg1 : type Anon = (x: Anon, y: number) => void
 >y : number
 
     var x: (n: typeof fnArg1, m: number) => void;
->x : type default_1 = (x: default_1, y: number) => void
->n : type default_1 = (x: default_1, y: number) => void
->fnArg1 : type default_1 = (x: default_1, y: number) => void
+>x : type Anon = (x: Anon, y: number) => void
+>n : type Anon = (x: Anon, y: number) => void
+>fnArg1 : type Anon = (x: Anon, y: number) => void
 >m : number
 
     fnArg1(fnArg1, 0);
 >fnArg1(fnArg1, 0) : void
->fnArg1 : type default_1 = (x: default_1, y: number) => void
->fnArg1 : type default_1 = (x: default_1, y: number) => void
+>fnArg1 : type Anon = (x: Anon, y: number) => void
+>fnArg1 : type Anon = (x: Anon, y: number) => void
 >0 : 0
 }
 

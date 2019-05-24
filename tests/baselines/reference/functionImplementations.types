@@ -8,11 +8,11 @@ var v: void = function () { } ();
 // FunctionExpression f with no return type annotation and directly references f in its body returns any
 var a: any = function f() {
 >a : any
->function f() {    return f;} : type _a = () => _a
->f : type _a = () => _a
+>function f() {    return f;} : type Anon = () => Anon
+>f : type Anon = () => Anon
 
     return f;
->f : type _a = () => _a
+>f : type Anon = () => Anon
 
 };
 var a: any = function f() {
@@ -29,15 +29,15 @@ var a: any = function f() {
 // FunctionExpression f with no return type annotation and indirectly references f in its body returns any
 var a: any = function f() {
 >a : any
->function f() {    var x = f;    return x;} : type _a = () => _a
->f : type _a = () => _a
+>function f() {    var x = f;    return x;} : type Anon = () => Anon
+>f : type Anon = () => Anon
 
     var x = f;
->x : type _a = () => _a
->f : type _a = () => _a
+>x : type Anon = () => Anon
+>f : type Anon = () => Anon
 
     return x;
->x : type _a = () => _a
+>x : type Anon = () => Anon
 
 };
 

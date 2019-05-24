@@ -24,43 +24,43 @@ export function f() {
 }
 
 export declare const xx: type T = ({ x: {y: T} } & {y: string})["x"];
->xx : type _a = { y: _a; }
->x : type _a = { y: _a; }
->y : type _a = { y: _a; }
+>xx : type Anon = { y: Anon; }
+>x : type Anon = { y: Anon; }
+>y : type Anon = { y: Anon; }
 >y : string
 
 export const yy = (null as any as type T = ({ x: {y: T} } & {y: string})["x"]);
->yy : type _a = { y: _a; }
->(null as any as type T = ({ x: {y: T} } & {y: string})["x"]) : type _a = { y: _a; }
->null as any as type T = ({ x: {y: T} } & {y: string})["x"] : type _a = { y: _a; }
+>yy : type Anon = { y: Anon; }
+>(null as any as type T = ({ x: {y: T} } & {y: string})["x"]) : type Anon = { y: Anon; }
+>null as any as type T = ({ x: {y: T} } & {y: string})["x"] : type Anon = { y: Anon; }
 >null as any : any
 >null : null
->x : type _a = { y: _a; }
->y : type _a = { y: _a; }
+>x : type Anon = { y: Anon; }
+>y : type Anon = { y: Anon; }
 >y : string
 
 export function ff() {
->ff : () => type _a = { y: _a; }
+>ff : () => type Anon = { y: Anon; }
 
     return (null as any as type T = ({ x: {y: T} } & {y: string})["x"]).y.y.y.y.y.y;
->(null as any as type T = ({ x: {y: T} } & {y: string})["x"]).y.y.y.y.y.y : type _a = { y: _a; }
->(null as any as type T = ({ x: {y: T} } & {y: string})["x"]).y.y.y.y.y : type _a = { y: _a; }
->(null as any as type T = ({ x: {y: T} } & {y: string})["x"]).y.y.y.y : type _a = { y: _a; }
->(null as any as type T = ({ x: {y: T} } & {y: string})["x"]).y.y.y : type _a = { y: _a; }
->(null as any as type T = ({ x: {y: T} } & {y: string})["x"]).y.y : type _a = { y: _a; }
->(null as any as type T = ({ x: {y: T} } & {y: string})["x"]).y : type _a = { y: _a; }
->(null as any as type T = ({ x: {y: T} } & {y: string})["x"]) : type _a = { y: _a; }
->null as any as type T = ({ x: {y: T} } & {y: string})["x"] : type _a = { y: _a; }
+>(null as any as type T = ({ x: {y: T} } & {y: string})["x"]).y.y.y.y.y.y : type Anon = { y: Anon; }
+>(null as any as type T = ({ x: {y: T} } & {y: string})["x"]).y.y.y.y.y : type Anon = { y: Anon; }
+>(null as any as type T = ({ x: {y: T} } & {y: string})["x"]).y.y.y.y : type Anon = { y: Anon; }
+>(null as any as type T = ({ x: {y: T} } & {y: string})["x"]).y.y.y : type Anon = { y: Anon; }
+>(null as any as type T = ({ x: {y: T} } & {y: string})["x"]).y.y : type Anon = { y: Anon; }
+>(null as any as type T = ({ x: {y: T} } & {y: string})["x"]).y : type Anon = { y: Anon; }
+>(null as any as type T = ({ x: {y: T} } & {y: string})["x"]) : type Anon = { y: Anon; }
+>null as any as type T = ({ x: {y: T} } & {y: string})["x"] : type Anon = { y: Anon; }
 >null as any : any
 >null : null
->x : type _a = { y: _a; }
->y : type _a = { y: _a; }
+>x : type Anon = { y: Anon; }
+>y : type Anon = { y: Anon; }
 >y : string
->y : type _a = { y: _a; }
->y : type _a = { y: _a; }
->y : type _a = { y: _a; }
->y : type _a = { y: _a; }
->y : type _a = { y: _a; }
->y : type _a = { y: _a; }
+>y : type Anon = { y: Anon; }
+>y : type Anon = { y: Anon; }
+>y : type Anon = { y: Anon; }
+>y : type Anon = { y: Anon; }
+>y : type Anon = { y: Anon; }
+>y : type Anon = { y: Anon; }
 }
 

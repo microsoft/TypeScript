@@ -6,33 +6,33 @@ module M {
 >i : I
 
    function f(p: I) { return f };
->f : type default_1 = (p: I) => default_1
+>f : type Anon = (p: I) => Anon
 >p : I
->f : type default_1 = (p: I) => default_1
+>f : type Anon = (p: I) => Anon
 
    var i: I;
 >i : I
 
    f(i);
->f(i) : type default_1 = (p: I) => default_1
->f : type default_1 = (p: I) => default_1
+>f(i) : type Anon = (p: I) => Anon
+>f : type Anon = (p: I) => Anon
 >i : I
 
    f(f(i));
->f(f(i)) : type default_1 = (p: I) => default_1
->f : type default_1 = (p: I) => default_1
->f(i) : type default_1 = (p: I) => default_1
->f : type default_1 = (p: I) => default_1
+>f(f(i)) : type Anon = (p: I) => Anon
+>f : type Anon = (p: I) => Anon
+>f(i) : type Anon = (p: I) => Anon
+>f : type Anon = (p: I) => Anon
 >i : I
 
    f((f(f(i))));
->f((f(f(i)))) : type default_1 = (p: I) => default_1
->f : type default_1 = (p: I) => default_1
->(f(f(i))) : type default_1 = (p: I) => default_1
->f(f(i)) : type default_1 = (p: I) => default_1
->f : type default_1 = (p: I) => default_1
->f(i) : type default_1 = (p: I) => default_1
->f : type default_1 = (p: I) => default_1
+>f((f(f(i)))) : type Anon = (p: I) => Anon
+>f : type Anon = (p: I) => Anon
+>(f(f(i))) : type Anon = (p: I) => Anon
+>f(f(i)) : type Anon = (p: I) => Anon
+>f : type Anon = (p: I) => Anon
+>f(i) : type Anon = (p: I) => Anon
+>f : type Anon = (p: I) => Anon
 >i : I
 
 }

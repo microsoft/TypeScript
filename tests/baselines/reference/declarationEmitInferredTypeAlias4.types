@@ -1,14 +1,14 @@
 === tests/cases/compiler/declarationEmitInferredTypeAlias4.ts ===
 function f<A>() {
->f : <A>() => A[] | type _a = { x: A[] | _a; }
+>f : <A>() => A[] | type Anon = { x: A[] | Anon; }
 
     type Foo<T> = T | { x: Foo<T> };
->Foo : T | type _a = { x: T | _a; }
->x : T | type _a = { x: T | _a; }
+>Foo : T | type Anon = { x: T | Anon; }
+>x : T | type Anon = { x: T | Anon; }
 
     var x: Foo<A[]>;
->x : A[] | type _a = { x: A[] | _a; }
+>x : A[] | type Anon = { x: A[] | Anon; }
 
     return x;
->x : A[] | type _a = { x: A[] | _a; }
+>x : A[] | type Anon = { x: A[] | Anon; }
 }

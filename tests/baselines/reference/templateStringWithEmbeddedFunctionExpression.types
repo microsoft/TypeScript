@@ -2,7 +2,7 @@
 var x = `abc${ function y() { return y; } }def`;
 >x : string
 >`abc${ function y() { return y; } }def` : string
->function y() { return y; } : type _a = () => _a
->y : type _a = () => _a
->y : type _a = () => _a
+>function y() { return y; } : type Anon = () => Anon
+>y : type Anon = () => Anon
+>y : type Anon = () => Anon
 

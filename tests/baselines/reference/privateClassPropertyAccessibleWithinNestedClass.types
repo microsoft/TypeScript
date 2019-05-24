@@ -25,10 +25,10 @@ class C {
 >x : string
 
     private foo() { return this.foo; }
->foo : type foo_1 = () => foo_1
->this.foo : type foo_1 = () => foo_1
+>foo : type Anon = () => Anon
+>this.foo : type Anon = () => Anon
 >this : this
->foo : type foo_1 = () => foo_1
+>foo : type Anon = () => Anon
 
     private static x: string;
 >x : string
@@ -51,17 +51,17 @@ class C {
 >x : string
 
     private static foo() { return this.foo; }
->foo : type foo_1 = () => foo_1
->this.foo : type foo_1 = () => foo_1
+>foo : type Anon = () => Anon
+>this.foo : type Anon = () => Anon
 >this : typeof C
->foo : type foo_1 = () => foo_1
+>foo : type Anon = () => Anon
 
     private static bar() { this.foo(); }
 >bar : () => void
->this.foo() : type foo_1 = () => foo_1
->this.foo : type foo_1 = () => foo_1
+>this.foo() : type Anon = () => Anon
+>this.foo : type Anon = () => Anon
 >this : typeof C
->foo : type foo_1 = () => foo_1
+>foo : type Anon = () => Anon
 
     private bar() {
 >bar : () => void
@@ -76,10 +76,10 @@ class C {
 >x : C
 
                 var x1 = x.foo;
->x1 : type foo_1 = () => foo_1
->x.foo : type foo_1 = () => foo_1
+>x1 : type Anon = () => Anon
+>x.foo : type Anon = () => Anon
 >x : C
->foo : type foo_1 = () => foo_1
+>foo : type Anon = () => Anon
 
                 var x2 = x.bar;
 >x2 : () => void
@@ -118,10 +118,10 @@ class C {
 >bar : () => void
 
                 var sx4 = C.foo;
->sx4 : type foo_1 = () => foo_1
->C.foo : type foo_1 = () => foo_1
+>sx4 : type Anon = () => Anon
+>C.foo : type Anon = () => Anon
 >C : typeof C
->foo : type foo_1 = () => foo_1
+>foo : type Anon = () => Anon
 
                 let y = new C();
 >y : C
@@ -129,10 +129,10 @@ class C {
 >C : typeof C
 
                 var y1 = y.foo;
->y1 : type foo_1 = () => foo_1
->y.foo : type foo_1 = () => foo_1
+>y1 : type Anon = () => Anon
+>y.foo : type Anon = () => Anon
 >y : C
->foo : type foo_1 = () => foo_1
+>foo : type Anon = () => Anon
 
                 var y2 = y.bar;
 >y2 : () => void

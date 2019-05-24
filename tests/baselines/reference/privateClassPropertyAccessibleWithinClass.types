@@ -25,10 +25,10 @@ class C {
 >x : string
 
     private foo() { return this.foo; }
->foo : type foo_1 = () => foo_1
->this.foo : type foo_1 = () => foo_1
+>foo : type Anon = () => Anon
+>this.foo : type Anon = () => Anon
 >this : this
->foo : type foo_1 = () => foo_1
+>foo : type Anon = () => Anon
 
     private static x: string;
 >x : string
@@ -51,17 +51,17 @@ class C {
 >x : string
 
     private static foo() { return this.foo; }
->foo : type foo_1 = () => foo_1
->this.foo : type foo_1 = () => foo_1
+>foo : type Anon = () => Anon
+>this.foo : type Anon = () => Anon
 >this : typeof C
->foo : type foo_1 = () => foo_1
+>foo : type Anon = () => Anon
 
     private static bar() { this.foo(); }
 >bar : () => void
->this.foo() : type foo_1 = () => foo_1
->this.foo : type foo_1 = () => foo_1
+>this.foo() : type Anon = () => Anon
+>this.foo : type Anon = () => Anon
 >this : typeof C
->foo : type foo_1 = () => foo_1
+>foo : type Anon = () => Anon
 }
 
 // added level of function nesting

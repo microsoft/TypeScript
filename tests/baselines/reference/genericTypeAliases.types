@@ -175,46 +175,46 @@ p.tag = "test";
 >"test" : "test"
 
 function f<A>() {
->f : <A>() => A[] | type _a = { x: A[] | _a; }
+>f : <A>() => A[] | type Anon = { x: A[] | Anon; }
 
     type Foo<T> = T | { x: Foo<T> };
->Foo : T | type _a = { x: T | _a; }
->x : T | type _a = { x: T | _a; }
+>Foo : T | type Anon = { x: T | Anon; }
+>x : T | type Anon = { x: T | Anon; }
 
     var x: Foo<A[]>;
->x : A[] | type _a = { x: A[] | _a; }
+>x : A[] | type Anon = { x: A[] | Anon; }
 
     return x;
->x : A[] | type _a = { x: A[] | _a; }
+>x : A[] | type Anon = { x: A[] | Anon; }
 }
 
 function g<B>() {
->g : <B>() => B[] | type _a = { x: B[] | _a; }
+>g : <B>() => B[] | type Anon = { x: B[] | Anon; }
 
     type Bar<U> = U | { x: Bar<U> };
->Bar : U | type _a = { x: U | _a; }
->x : U | type _a = { x: U | _a; }
+>Bar : U | type Anon = { x: U | Anon; }
+>x : U | type Anon = { x: U | Anon; }
 
     var x: Bar<B[]>;
->x : B[] | type _a = { x: B[] | _a; }
+>x : B[] | type Anon = { x: B[] | Anon; }
 
     return x;
->x : B[] | type _a = { x: B[] | _a; }
+>x : B[] | type Anon = { x: B[] | Anon; }
 }
 
 // Deeply instantiated generics
 var a = f<string>();
->a : string[] | type _a = { x: string[] | _a; }
->f<string>() : string[] | type _a = { x: string[] | _a; }
->f : <A>() => A[] | type _a = { x: A[] | _a; }
+>a : string[] | type Anon = { x: string[] | Anon; }
+>f<string>() : string[] | type Anon = { x: string[] | Anon; }
+>f : <A>() => A[] | type Anon = { x: A[] | Anon; }
 
 var b = g<string>();
->b : string[] | type _a = { x: string[] | _a; }
->g<string>() : string[] | type _a = { x: string[] | _a; }
->g : <B>() => B[] | type _a = { x: B[] | _a; }
+>b : string[] | type Anon = { x: string[] | Anon; }
+>g<string>() : string[] | type Anon = { x: string[] | Anon; }
+>g : <B>() => B[] | type Anon = { x: B[] | Anon; }
 
 a = b;
->a = b : string[] | type _a = { x: string[] | _a; }
->a : string[] | type _a = { x: string[] | _a; }
->b : string[] | type _a = { x: string[] | _a; }
+>a = b : string[] | type Anon = { x: string[] | Anon; }
+>a : string[] | type Anon = { x: string[] | Anon; }
+>b : string[] | type Anon = { x: string[] | Anon; }
 

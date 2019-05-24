@@ -68,6 +68,6 @@ declare function b1(): typeof b1;
 declare function foo(): typeof foo;
 declare var foo1: typeof foo;
 declare var foo2: typeof foo;
-declare var foo3: type _a = () => _a;
-declare var x: type _b = () => _b;
+declare var foo3: type Anon = () => Anon;
+declare var x: type Anon = () => Anon;
 declare function foo5(x: number): (x: number) => number;

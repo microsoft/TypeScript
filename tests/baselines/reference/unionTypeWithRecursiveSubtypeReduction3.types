@@ -1,17 +1,17 @@
 === tests/cases/compiler/unionTypeWithRecursiveSubtypeReduction3.ts ===
 var a27: { prop: number } | { prop: T27 };
->a27 : { prop: number; } | type _a = { prop: { prop: number; } | _a; }
+>a27 : { prop: number; } | type Anon = { prop: { prop: number; } | Anon; }
 >prop : number
->prop : { prop: number; } | type _a = { prop: { prop: number; } | _a; }
+>prop : { prop: number; } | type Anon = { prop: { prop: number; } | Anon; }
 
 type T27 = typeof a27;
->T27 : { prop: number; } | type _a = { prop: { prop: number; } | _a; }
->a27 : { prop: number; } | type _a = { prop: { prop: number; } | _a; }
+>T27 : { prop: number; } | type Anon = { prop: { prop: number; } | Anon; }
+>a27 : { prop: number; } | type Anon = { prop: { prop: number; } | Anon; }
 
 var b: T27;
->b : { prop: number; } | type _a = { prop: { prop: number; } | _a; }
+>b : { prop: number; } | type Anon = { prop: { prop: number; } | Anon; }
 
 var s: string = b;
 >s : string
->b : { prop: number; } | type _a = { prop: { prop: number; } | _a; }
+>b : { prop: number; } | type Anon = { prop: { prop: number; } | Anon; }
 

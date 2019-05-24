@@ -1,25 +1,25 @@
 === tests/cases/compiler/returnInfiniteIntersection.ts ===
 function recursive() {
->recursive : () => type _a = <T>(subkey: T) => _a & { p: any; } & { p: any; }
+>recursive : () => type Anon = <T>(subkey: T) => Anon & { p: any; } & { p: any; }
 
     let x = <T>(subkey: T) => recursive();
->x : type _a = <T>(subkey: T) => _a & { p: any; }
-><T>(subkey: T) => recursive() : type _a = <T>(subkey: T) => _a & { p: any; }
+>x : type Anon = <T>(subkey: T) => Anon & { p: any; }
+><T>(subkey: T) => recursive() : type Anon = <T>(subkey: T) => Anon & { p: any; }
 >subkey : T
->recursive() : type _a = <T>(subkey: T) => _a & { p: any; } & { p: any; }
->recursive : () => type _a = <T>(subkey: T) => _a & { p: any; } & { p: any; }
+>recursive() : type Anon = <T>(subkey: T) => Anon & { p: any; } & { p: any; }
+>recursive : () => type Anon = <T>(subkey: T) => Anon & { p: any; } & { p: any; }
 
     return x as typeof x & { p };
->x as typeof x & { p } : type _a = <T>(subkey: T) => _a & { p: any; } & { p: any; }
->x : type _a = <T>(subkey: T) => _a & { p: any; }
->x : type _a = <T>(subkey: T) => _a & { p: any; }
+>x as typeof x & { p } : type Anon = <T>(subkey: T) => Anon & { p: any; } & { p: any; }
+>x : type Anon = <T>(subkey: T) => Anon & { p: any; }
+>x : type Anon = <T>(subkey: T) => Anon & { p: any; }
 >p : any
 }
 
 let result = recursive()(1)
->result : type _a = <T>(subkey: T) => _a & { p: any; } & { p: any; }
->recursive()(1) : type _a = <T>(subkey: T) => _a & { p: any; } & { p: any; }
->recursive() : type _a = <T>(subkey: T) => _a & { p: any; } & { p: any; }
->recursive : () => type _a = <T>(subkey: T) => _a & { p: any; } & { p: any; }
+>result : type Anon = <T>(subkey: T) => Anon & { p: any; } & { p: any; }
+>recursive()(1) : type Anon = <T>(subkey: T) => Anon & { p: any; } & { p: any; }
+>recursive() : type Anon = <T>(subkey: T) => Anon & { p: any; } & { p: any; }
+>recursive : () => type Anon = <T>(subkey: T) => Anon & { p: any; } & { p: any; }
 >1 : 1
 

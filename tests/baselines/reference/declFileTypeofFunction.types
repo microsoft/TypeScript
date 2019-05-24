@@ -1,71 +1,71 @@
 === tests/cases/compiler/declFileTypeofFunction.ts ===
 function f(n: typeof f): string;
->f : type default_1 = { (n: default_1): string; (n: type default_2 = { (n: default_2): number; (n: default_1): number; }): string; }
->n : type default_1 = { (n: default_1): string; (n: type default_2 = { (n: default_2): number; (n: default_1): number; }): string; }
->f : type default_1 = { (n: default_1): string; (n: type default_2 = { (n: default_2): number; (n: default_1): number; }): string; }
+>f : type Anon = { (n: Anon): string; (n: type Anon_1 = { (n: Anon_1): number; (n: Anon): number; }): string; }
+>n : type Anon = { (n: Anon): string; (n: type Anon_1 = { (n: Anon_1): number; (n: Anon): number; }): string; }
+>f : type Anon = { (n: Anon): string; (n: type Anon_1 = { (n: Anon_1): number; (n: Anon): number; }): string; }
 
 function f(n: typeof g): string;
->f : type default_1 = { (n: default_1): string; (n: type default_2 = { (n: default_2): number; (n: default_1): number; }): string; }
->n : type default_1 = { (n: default_1): number; (n: type default_2 = { (n: default_2): string; (n: default_1): string; }): number; }
->g : type default_1 = { (n: default_1): number; (n: type default_2 = { (n: default_2): string; (n: default_1): string; }): number; }
+>f : type Anon = { (n: Anon): string; (n: type Anon_1 = { (n: Anon_1): number; (n: Anon): number; }): string; }
+>n : type Anon = { (n: Anon): number; (n: type Anon_1 = { (n: Anon_1): string; (n: Anon): string; }): number; }
+>g : type Anon = { (n: Anon): number; (n: type Anon_1 = { (n: Anon_1): string; (n: Anon): string; }): number; }
 
 function f() { return undefined; }
->f : type default_1 = { (n: default_1): string; (n: type default_2 = { (n: default_2): number; (n: default_1): number; }): string; }
+>f : type Anon = { (n: Anon): string; (n: type Anon_1 = { (n: Anon_1): number; (n: Anon): number; }): string; }
 >undefined : undefined
 
 function g(n: typeof g): number;
->g : type default_1 = { (n: default_1): number; (n: type default_2 = { (n: default_2): string; (n: default_1): string; }): number; }
->n : type default_1 = { (n: default_1): number; (n: type default_2 = { (n: default_2): string; (n: default_1): string; }): number; }
->g : type default_1 = { (n: default_1): number; (n: type default_2 = { (n: default_2): string; (n: default_1): string; }): number; }
+>g : type Anon = { (n: Anon): number; (n: type Anon_1 = { (n: Anon_1): string; (n: Anon): string; }): number; }
+>n : type Anon = { (n: Anon): number; (n: type Anon_1 = { (n: Anon_1): string; (n: Anon): string; }): number; }
+>g : type Anon = { (n: Anon): number; (n: type Anon_1 = { (n: Anon_1): string; (n: Anon): string; }): number; }
 
 function g(n: typeof f): number;
->g : type default_1 = { (n: default_1): number; (n: type default_2 = { (n: default_2): string; (n: default_1): string; }): number; }
->n : type default_1 = { (n: default_1): string; (n: type default_2 = { (n: default_2): number; (n: default_1): number; }): string; }
->f : type default_1 = { (n: default_1): string; (n: type default_2 = { (n: default_2): number; (n: default_1): number; }): string; }
+>g : type Anon = { (n: Anon): number; (n: type Anon_1 = { (n: Anon_1): string; (n: Anon): string; }): number; }
+>n : type Anon = { (n: Anon): string; (n: type Anon_1 = { (n: Anon_1): number; (n: Anon): number; }): string; }
+>f : type Anon = { (n: Anon): string; (n: type Anon_1 = { (n: Anon_1): number; (n: Anon): number; }): string; }
 
 function g() { return undefined; }
->g : type default_1 = { (n: default_1): number; (n: type default_2 = { (n: default_2): string; (n: default_1): string; }): number; }
+>g : type Anon = { (n: Anon): number; (n: type Anon_1 = { (n: Anon_1): string; (n: Anon): string; }): number; }
 >undefined : undefined
 
 var b: () => typeof b;
->b : type _a = () => _a
->b : type _a = () => _a
+>b : type Anon = () => Anon
+>b : type Anon = () => Anon
 
 function b1() {
->b1 : type default_1 = () => default_1
+>b1 : type Anon = () => Anon
 
     return b1;
->b1 : type default_1 = () => default_1
+>b1 : type Anon = () => Anon
 }
 
 function foo(): typeof foo {
->foo : type default_1 = () => default_1
->foo : type default_1 = () => default_1
+>foo : type Anon = () => Anon
+>foo : type Anon = () => Anon
 
     return null;
 >null : null
 }
 var foo1: typeof foo;
->foo1 : type default_1 = () => default_1
->foo : type default_1 = () => default_1
+>foo1 : type Anon = () => Anon
+>foo : type Anon = () => Anon
 
 var foo2 = foo;
->foo2 : type default_1 = () => default_1
->foo : type default_1 = () => default_1
+>foo2 : type Anon = () => Anon
+>foo : type Anon = () => Anon
 
 var foo3 = function () {
->foo3 : type _a = () => _a
->function () {    return foo3;} : type _a = () => _a
+>foo3 : type Anon = () => Anon
+>function () {    return foo3;} : type Anon = () => Anon
 
     return foo3;
->foo3 : type _a = () => _a
+>foo3 : type Anon = () => Anon
 }
 var x = () => {
->x : type _a = () => _a
->() => {    return x;} : type _a = () => _a
+>x : type Anon = () => Anon
+>() => {    return x;} : type Anon = () => Anon
 
     return x;
->x : type _a = () => _a
+>x : type Anon = () => Anon
 }
 
 function foo5(x: number) {

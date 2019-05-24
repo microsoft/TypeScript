@@ -1,53 +1,53 @@
 === tests/cases/compiler/cyclicTypeInstantiation.ts ===
 function foo<T>() {
->foo : <T>() => type _a = { a: T; b: _a; }
+>foo : <T>() => type Anon = { a: T; b: Anon; }
 
     var x: {
->x : type _a = { a: T; b: _a; }
+>x : type Anon = { a: T; b: Anon; }
 
         a: T;
 >a : T
 
         b: typeof x;
->b : type _a = { a: T; b: _a; }
->x : type _a = { a: T; b: _a; }
+>b : type Anon = { a: T; b: Anon; }
+>x : type Anon = { a: T; b: Anon; }
 
     };
     return x;
->x : type _a = { a: T; b: _a; }
+>x : type Anon = { a: T; b: Anon; }
 }
 
 function bar<T>() {
->bar : <T>() => type _a = { a: T; b: _a; }
+>bar : <T>() => type Anon = { a: T; b: Anon; }
 
     var x: {
->x : type _a = { a: T; b: _a; }
+>x : type Anon = { a: T; b: Anon; }
 
         a: T;
 >a : T
 
         b: typeof x;
->b : type _a = { a: T; b: _a; }
->x : type _a = { a: T; b: _a; }
+>b : type Anon = { a: T; b: Anon; }
+>x : type Anon = { a: T; b: Anon; }
 
     };
     return x;
->x : type _a = { a: T; b: _a; }
+>x : type Anon = { a: T; b: Anon; }
 }
 
 var a = foo<string>();
->a : type _a = { a: string; b: _a; }
->foo<string>() : type _a = { a: string; b: _a; }
->foo : <T>() => type _a = { a: T; b: _a; }
+>a : type Anon = { a: string; b: Anon; }
+>foo<string>() : type Anon = { a: string; b: Anon; }
+>foo : <T>() => type Anon = { a: T; b: Anon; }
 
 var b = bar<string>();
->b : type _a = { a: string; b: _a; }
->bar<string>() : type _a = { a: string; b: _a; }
->bar : <T>() => type _a = { a: T; b: _a; }
+>b : type Anon = { a: string; b: Anon; }
+>bar<string>() : type Anon = { a: string; b: Anon; }
+>bar : <T>() => type Anon = { a: T; b: Anon; }
 
 // Relating types of a and b produces instantiations of the cyclic anonymous types in foo and bar
 a = b;
->a = b : type _a = { a: string; b: _a; }
->a : type _a = { a: string; b: _a; }
->b : type _a = { a: string; b: _a; }
+>a = b : type Anon = { a: string; b: Anon; }
+>a : type Anon = { a: string; b: Anon; }
+>b : type Anon = { a: string; b: Anon; }
 

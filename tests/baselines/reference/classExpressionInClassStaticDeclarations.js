@@ -33,8 +33,8 @@ var C = /** @class */ (function () {
 
 //// [classExpressionInClassStaticDeclarations.d.ts]
 declare class C {
-    static D: type class_1 = {
+    static D: type Anon = {
         new (): {};
-        D: class_1;
+        D: Anon;
     };
 }

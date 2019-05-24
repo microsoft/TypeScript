@@ -3,14 +3,14 @@ declare module "bar" {
 >"bar" : typeof import("bar")
 
     var before: typeof func;
->before : type default_1 = () => default_1
->func : type default_1 = () => default_1
+>before : type Anon = () => Anon
+>func : type Anon = () => Anon
 
     export default function func(): typeof func;
->func : type default_1 = () => default_1
->func : type default_1 = () => default_1
+>func : type Anon = () => Anon
+>func : type Anon = () => Anon
 
     var after: typeof func;
->after : type default_1 = () => default_1
->func : type default_1 = () => default_1
+>after : type Anon = () => Anon
+>func : type Anon = () => Anon
 }

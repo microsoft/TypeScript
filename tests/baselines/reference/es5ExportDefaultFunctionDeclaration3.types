@@ -1,21 +1,21 @@
 === tests/cases/compiler/es5ExportDefaultFunctionDeclaration3.ts ===
 var before: typeof func = func();
->before : type default_1 = () => default_1
->func : type default_1 = () => default_1
->func() : type default_1 = () => default_1
->func : type default_1 = () => default_1
+>before : type Anon = () => Anon
+>func : type Anon = () => Anon
+>func() : type Anon = () => Anon
+>func : type Anon = () => Anon
 
 export default function func(): typeof func {
->func : type default_1 = () => default_1
->func : type default_1 = () => default_1
+>func : type Anon = () => Anon
+>func : type Anon = () => Anon
 
     return func;
->func : type default_1 = () => default_1
+>func : type Anon = () => Anon
 }
 
 var after: typeof func = func();
->after : type default_1 = () => default_1
->func : type default_1 = () => default_1
->func() : type default_1 = () => default_1
->func : type default_1 = () => default_1
+>after : type Anon = () => Anon
+>func : type Anon = () => Anon
+>func() : type Anon = () => Anon
+>func : type Anon = () => Anon
 

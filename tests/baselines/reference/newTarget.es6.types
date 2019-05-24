@@ -15,15 +15,15 @@ class A {
 >target : any
     }
     static c = function () { return new.target; }
->c : type _a = () => _a
->function () { return new.target; } : type _a = () => _a
->new.target : type _a = () => _a
+>c : type Anon = () => Anon
+>function () { return new.target; } : type Anon = () => Anon
+>new.target : type Anon = () => Anon
 >target : any
 
     d = function () { return new.target; }
->d : type _a = () => _a
->function () { return new.target; } : type _a = () => _a
->new.target : type _a = () => _a
+>d : type Anon = () => Anon
+>function () { return new.target; } : type Anon = () => Anon
+>new.target : type Anon = () => Anon
 >target : any
 }
 
@@ -81,13 +81,13 @@ const f2 = function () {
 }
 
 const O = {
->O : { k: type _a = () => _a; }
->{    k: function () { return new.target; }} : { k: type _a = () => _a; }
+>O : { k: type Anon = () => Anon; }
+>{    k: function () { return new.target; }} : { k: type Anon = () => Anon; }
 
     k: function () { return new.target; }
->k : type _a = () => _a
->function () { return new.target; } : type _a = () => _a
->new.target : type _a = () => _a
+>k : type Anon = () => Anon
+>function () { return new.target; } : type Anon = () => Anon
+>new.target : type Anon = () => Anon
 >target : any
 
 };

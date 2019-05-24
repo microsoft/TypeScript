@@ -52,18 +52,18 @@ let [x2 = x2] = []
 >[] : [any?]
 
 let z0 = () => z0;
->z0 : type _a = () => _a
->() => z0 : type _a = () => _a
->z0 : type _a = () => _a
+>z0 : type Anon = () => Anon
+>() => z0 : type Anon = () => Anon
+>z0 : type Anon = () => Anon
 
 let z1 = function () { return z1; }
->z1 : type _a = () => _a
->function () { return z1; } : type _a = () => _a
->z1 : type _a = () => _a
+>z1 : type Anon = () => Anon
+>function () { return z1; } : type Anon = () => Anon
+>z1 : type Anon = () => Anon
 
 let z2 = { f() { return z2;}}
->z2 : type _a = { f(): _a; }
->{ f() { return z2;}} : { f(): type _a = { f(): _a; }; }
->f : () => type _a = { f(): _a; }
->z2 : type _a = { f(): _a; }
+>z2 : type Anon = { f(): Anon; }
+>{ f() { return z2;}} : { f(): type Anon = { f(): Anon; }; }
+>f : () => type Anon = { f(): Anon; }
+>z2 : type Anon = { f(): Anon; }
 

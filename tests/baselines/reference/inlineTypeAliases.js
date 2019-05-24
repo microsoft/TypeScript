@@ -48,9 +48,9 @@ export declare const xx: type T = ({
 } & {
     y: string;
 })["x"];
-export declare const yy: type _a = {
-    y: _a;
+export declare const yy: type Anon = {
+    y: Anon;
 };
-export declare function ff(): type _b = {
-    y: _b;
+export declare function ff(): type Anon = {
+    y: Anon;
 };

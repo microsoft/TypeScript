@@ -1,21 +1,21 @@
 === tests/cases/conformance/salsa/axios.js ===
 var axios = {}
->axios : { default: type _a = { default: _a; }; }
+>axios : { default: type Anon = { default: Anon; }; }
 >{} : {}
 
 module.exports = axios // both assignments should be ok
->module.exports = axios : { default: type _a = { default: _a; }; }
->module.exports : { default: type _a = { default: _a; }; }
->module : { "tests/cases/conformance/salsa/axios": { default: type _a = { default: _a; }; }; }
->exports : { default: type _a = { default: _a; }; }
->axios : { default: type _a = { default: _a; }; }
+>module.exports = axios : { default: type Anon = { default: Anon; }; }
+>module.exports : { default: type Anon = { default: Anon; }; }
+>module : { "tests/cases/conformance/salsa/axios": { default: type Anon = { default: Anon; }; }; }
+>exports : { default: type Anon = { default: Anon; }; }
+>axios : { default: type Anon = { default: Anon; }; }
 
 module.exports.default = axios
->module.exports.default = axios : { default: type _a = { default: _a; }; }
->module.exports.default : type _a = { default: _a; }
->module.exports : { default: type _a = { default: _a; }; }
->module : { "tests/cases/conformance/salsa/axios": { default: type _a = { default: _a; }; }; }
->exports : { default: type _a = { default: _a; }; }
->default : type _a = { default: _a; }
->axios : { default: type _a = { default: _a; }; }
+>module.exports.default = axios : { default: type Anon = { default: Anon; }; }
+>module.exports.default : type Anon = { default: Anon; }
+>module.exports : { default: type Anon = { default: Anon; }; }
+>module : { "tests/cases/conformance/salsa/axios": { default: type Anon = { default: Anon; }; }; }
+>exports : { default: type Anon = { default: Anon; }; }
+>default : type Anon = { default: Anon; }
+>axios : { default: type Anon = { default: Anon; }; }
 

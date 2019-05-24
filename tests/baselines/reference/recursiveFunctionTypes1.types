@@ -3,9 +3,9 @@ class C {
 >C : C
 
      static g(t: typeof C.g){ }
->g : type g_1 = (t: g_1) => void
->t : type g_1 = (t: g_1) => void
->C.g : type g_1 = (t: g_1) => void
+>g : type Anon = (t: Anon) => void
+>t : type Anon = (t: Anon) => void
+>C.g : type Anon = (t: Anon) => void
 >C : typeof C
->g : type g_1 = (t: g_1) => void
+>g : type Anon = (t: Anon) => void
 }

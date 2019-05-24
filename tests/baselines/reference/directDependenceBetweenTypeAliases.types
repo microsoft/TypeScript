@@ -72,17 +72,17 @@ type T10 = { x: T10 } | { new(v: T10): string }
 >v : T10
 
 type T11 = T12[]
->T11 : [type _a = { x: [_a, string][]; }, string][]
+>T11 : [type Anon = { x: [Anon, string][]; }, string][]
 
 type T12 = [T13, string]
->T12 : [type _a = { x: [_a, string][]; }, string]
+>T12 : [type Anon = { x: [Anon, string][]; }, string]
 
 type T13 = typeof zz
->T13 : type _a = { x: [_a, string][]; }
->zz : type _a = { x: [_a, string][]; }
+>T13 : type Anon = { x: [Anon, string][]; }
+>zz : type Anon = { x: [Anon, string][]; }
 
 var zz: { x: T11 }
->zz : type _a = { x: [_a, string][]; }
->x : [type _a = { x: [_a, string][]; }, string][]
+>zz : type Anon = { x: [Anon, string][]; }
+>x : [type Anon = { x: [Anon, string][]; }, string][]
 
 

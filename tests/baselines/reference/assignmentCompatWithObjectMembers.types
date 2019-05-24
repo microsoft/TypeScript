@@ -177,14 +177,14 @@ module ObjectTypes {
 >t2 : T2
 
     var a: { foo: typeof a; }
->a : type _a = { foo: _a; }
->foo : type _a = { foo: _a; }
->a : type _a = { foo: _a; }
+>a : type Anon = { foo: Anon; }
+>foo : type Anon = { foo: Anon; }
+>a : type Anon = { foo: Anon; }
 
     var b: { foo: typeof b; }
->b : type _a = { foo: _a; }
->foo : type _a = { foo: _a; }
->b : type _a = { foo: _a; }
+>b : type Anon = { foo: Anon; }
+>foo : type Anon = { foo: Anon; }
+>b : type Anon = { foo: Anon; }
 
     var a2 = { foo: a2 };
 >a2 : any
@@ -234,9 +234,9 @@ module ObjectTypes {
 >t : T
 
     s2 = b;
->s2 = b : type _a = { foo: _a; }
+>s2 = b : type Anon = { foo: Anon; }
 >s2 : S2
->b : type _a = { foo: _a; }
+>b : type Anon = { foo: Anon; }
 
     s2 = a2;
 >s2 = a2 : any
@@ -244,28 +244,28 @@ module ObjectTypes {
 >a2 : any
 
     a = b;
->a = b : type _a = { foo: _a; }
->a : type _a = { foo: _a; }
->b : type _a = { foo: _a; }
+>a = b : type Anon = { foo: Anon; }
+>a : type Anon = { foo: Anon; }
+>b : type Anon = { foo: Anon; }
 
     b = a;
->b = a : type _a = { foo: _a; }
->b : type _a = { foo: _a; }
->a : type _a = { foo: _a; }
+>b = a : type Anon = { foo: Anon; }
+>b : type Anon = { foo: Anon; }
+>a : type Anon = { foo: Anon; }
 
     a = s;
 >a = s : S
->a : type _a = { foo: _a; }
+>a : type Anon = { foo: Anon; }
 >s : S
 
     a = s2;
 >a = s2 : S2
->a : type _a = { foo: _a; }
+>a : type Anon = { foo: Anon; }
 >s2 : S2
 
     a = a2;
 >a = a2 : any
->a : type _a = { foo: _a; }
+>a : type Anon = { foo: Anon; }
 >a2 : any
 
     a2 = b2;
@@ -279,9 +279,9 @@ module ObjectTypes {
 >a2 : any
 
     a2 = b;
->a2 = b : type _a = { foo: _a; }
+>a2 = b : type Anon = { foo: Anon; }
 >a2 : any
->b : type _a = { foo: _a; }
+>b : type Anon = { foo: Anon; }
 
     a2 = t2;
 >a2 = t2 : T2
