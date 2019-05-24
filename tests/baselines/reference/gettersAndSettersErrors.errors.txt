@@ -24,6 +24,7 @@ tests/cases/compiler/gettersAndSettersErrors.ts(12,16): error TS2379: Getter and
 !!! error TS2300: Duplicate identifier 'Foo'.
                ~~~
 !!! error TS2717: Subsequent property declarations must have the same type.  Property 'Foo' must be of type 'string', but here has type 'number'.
+!!! related TS6203 tests/cases/compiler/gettersAndSettersErrors.ts:2:16: 'Foo' was also declared here.
         public get Goo(v:string):string {return null;} // error - getters must not have a parameter
                    ~~~
 !!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.

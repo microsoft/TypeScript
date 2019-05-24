@@ -17,5 +17,5 @@
 
 verify.completions(
     { marker: ["1", "3"], includes: ["charAt", "toExponential"] },
-    { marker: "2", includes: "age" },
+    { marker: "2", includes: { name: "age", sortText: completion.SortText.JavascriptIdentifiers } },
 );

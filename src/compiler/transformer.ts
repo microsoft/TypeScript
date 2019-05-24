@@ -24,13 +24,24 @@ namespace ts {
         EmitNotifications = 1 << 1,
     }
 
-    export function getTransformers(compilerOptions: CompilerOptions, customTransformers?: CustomTransformers) {
+    export const noTransformers: EmitTransformers = { scriptTransformers: emptyArray, declarationTransformers: emptyArray };
+
+    export function getTransformers(compilerOptions: CompilerOptions, customTransformers?: CustomTransformers, emitOnlyDtsFiles?: boolean): EmitTransformers {
+        return {
+            scriptTransformers: getScriptTransformers(compilerOptions, customTransformers, emitOnlyDtsFiles),
+            declarationTransformers: getDeclarationTransformers(customTransformers),
+        };
+    }
+
+    function getScriptTransformers(compilerOptions: CompilerOptions, customTransformers?: CustomTransformers, emitOnlyDtsFiles?: boolean) {
+        if (emitOnlyDtsFiles) return emptyArray;
+
         const jsx = compilerOptions.jsx;
         const languageVersion = getEmitScriptTarget(compilerOptions);
         const moduleKind = getEmitModuleKind(compilerOptions);
         const transformers: TransformerFactory<SourceFile | Bundle>[] = [];
 
-        addRange(transformers, customTransformers && customTransformers.before);
+        addRange(transformers, customTransformers && map(customTransformers.before, wrapScriptTransformerFactory));
 
         transformers.push(transformTypeScript);
 
@@ -71,9 +82,42 @@ namespace ts {
             transformers.push(transformES5);
         }
 
-        addRange(transformers, customTransformers && customTransformers.after);
-
+        addRange(transformers, customTransformers && map(customTransformers.after, wrapScriptTransformerFactory));
         return transformers;
+    }
+
+    function getDeclarationTransformers(customTransformers?: CustomTransformers) {
+        const transformers: TransformerFactory<SourceFile | Bundle>[] = [];
+        transformers.push(transformDeclarations);
+        addRange(transformers, customTransformers && map(customTransformers.afterDeclarations, wrapDeclarationTransformerFactory));
+        return transformers;
+    }
+
+    /**
+     * Wrap a custom script or declaration transformer object in a `Transformer` callback with fallback support for transforming bundles.
+     */
+    function wrapCustomTransformer(transformer: CustomTransformer): Transformer<Bundle | SourceFile> {
+        return node => isBundle(node) ? transformer.transformBundle(node) : transformer.transformSourceFile(node);
+    }
+
+    /**
+     * Wrap a transformer factory that may return a custom script or declaration transformer object.
+     */
+    function wrapCustomTransformerFactory<T extends SourceFile | Bundle>(transformer: TransformerFactory<T> | CustomTransformerFactory, handleDefault: (node: Transformer<T>) => Transformer<Bundle | SourceFile>): TransformerFactory<Bundle | SourceFile> {
+        return context => {
+            const customTransformer = transformer(context);
+            return typeof customTransformer === "function"
+                ? handleDefault(customTransformer)
+                : wrapCustomTransformer(customTransformer);
+        };
+    }
+
+    function wrapScriptTransformerFactory(transformer: TransformerFactory<SourceFile> | CustomTransformerFactory): TransformerFactory<Bundle | SourceFile> {
+        return wrapCustomTransformerFactory(transformer, chainBundle);
+    }
+
+    function wrapDeclarationTransformerFactory(transformer: TransformerFactory<Bundle | SourceFile> | CustomTransformerFactory): TransformerFactory<Bundle | SourceFile> {
+        return wrapCustomTransformerFactory(transformer, identity);
     }
 
     export function noEmitSubstitution(_hint: EmitHint, node: Node) {

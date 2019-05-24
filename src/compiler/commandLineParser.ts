@@ -2361,7 +2361,7 @@ namespace ts {
             if (!host.fileExists(extendedConfigPath) && !endsWith(extendedConfigPath, Extension.Json)) {
                 extendedConfigPath = `${extendedConfigPath}.json`;
                 if (!host.fileExists(extendedConfigPath)) {
-                    errors.push(createDiagnostic(Diagnostics.File_0_does_not_exist, extendedConfig));
+                    errors.push(createDiagnostic(Diagnostics.File_0_not_found, extendedConfig));
                     return undefined;
                 }
             }
@@ -2372,7 +2372,7 @@ namespace ts {
         if (resolved.resolvedModule) {
             return resolved.resolvedModule.resolvedFileName;
         }
-        errors.push(createDiagnostic(Diagnostics.File_0_does_not_exist, extendedConfig));
+        errors.push(createDiagnostic(Diagnostics.File_0_not_found, extendedConfig));
         return undefined;
     }
 
