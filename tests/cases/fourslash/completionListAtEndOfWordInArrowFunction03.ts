@@ -7,6 +7,6 @@ verify.completions({
     includes: [
         "defaultIsAnInvalidParameterName",
         // This should probably stop working in the future.
-        { name: "default", text: "default", kind: "keyword" },
+        { name: "default", text: "default", kind: "keyword", sortText: completion.SortText.GlobalsOrKeywords },
     ],
 });

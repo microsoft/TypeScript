@@ -13,10 +13,23 @@
 verify.completions({
     marker: "",
     exact: [
-        { name: "Test2", text: "(alias) function Test2(): void\nimport Test2", kind: "alias" },
-        "globalThis",
-        "undefined",
-        { name: "Test1", source: "/a", sourceDisplay: "./a", text: "function Test1(): void", kind: "function", kindModifiers: "export", hasAction: true },
+        {
+            name: "Test2",
+            text: "(alias) function Test2(): void\nimport Test2",
+            kind: "alias"
+        },
+        completion.globalThisEntry,
+        completion.undefinedVarEntry,
+        {
+            name: "Test1",
+            source: "/a",
+            sourceDisplay: "./a",
+            text: "function Test1(): void",
+            kind: "function",
+            kindModifiers: "export",
+            hasAction: true,
+            sortText: completion.SortText.AutoImportSuggestions
+        },
         ...completion.statementKeywordsWithTypes,
     ],
     preferences: { includeCompletionsForModuleExports: true },

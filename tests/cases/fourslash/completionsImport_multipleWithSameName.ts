@@ -20,9 +20,15 @@ goTo.marker("");
 verify.completions({
     marker: "",
     exact: [
-        "globalThis",
-        { name: "foo", text: "var foo: number", kind: "var", kindModifiers: "declare" },
-        "undefined",
+        completion.globalThisEntry,
+        {
+            name: "foo",
+            text: "var foo: number",
+            kind: "var",
+            kindModifiers: "declare",
+            sortText: completion.SortText.GlobalsOrKeywords
+        },
+        completion.undefinedVarEntry,
         {
             name: "foo",
             source: "/a",
@@ -31,6 +37,7 @@ verify.completions({
             kind: "const",
             kindModifiers: "export",
             hasAction: true,
+            sortText: completion.SortText.AutoImportSuggestions
         },
         {
             name: "foo",
@@ -40,6 +47,7 @@ verify.completions({
             kind: "const",
             kindModifiers: "export",
             hasAction: true,
+            sortText: completion.SortText.AutoImportSuggestions
         },
         ...completion.statementKeywordsWithTypes,
     ],
