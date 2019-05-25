@@ -843,6 +843,12 @@
               </Str>
               <Disp Icon="Str" />
             </Item>
+            <Item ItemId=";All_files_must_be_modules_when_the_isolatedModules_flag_is_provided_1208" ItemType="0" PsrId="306" Leaf="true">
+              <Str Cat="Text">
+                <Val><![CDATA[All files must be modules when the '--isolatedModules' flag is provided.]]></Val>
+              </Str>
+              <Disp Icon="Str" />
+            </Item>
             <Item ItemId=";All_imports_in_import_declaration_are_unused_6192" ItemType="0" PsrId="306" Leaf="true">
               <Str Cat="Text">
                 <Val><![CDATA[All imports in import declaration are unused.]]></Val>
@@ -1416,12 +1422,6 @@
             <Item ItemId=";Cannot_compile_modules_using_option_0_unless_the_module_flag_is_amd_or_system_6131" ItemType="0" PsrId="306" Leaf="true">
               <Str Cat="Text">
                 <Val><![CDATA[Cannot compile modules using option '{0}' unless the '--module' flag is 'amd' or 'system'.]]></Val>
-              </Str>
-              <Disp Icon="Str" />
-            </Item>
-            <Item ItemId=";Cannot_compile_namespaces_when_the_isolatedModules_flag_is_provided_1208" ItemType="0" PsrId="306" Leaf="true">
-              <Str Cat="Text">
-                <Val><![CDATA[Cannot compile namespaces when the '--isolatedModules' flag is provided.]]></Val>
               </Str>
               <Disp Icon="Str" />
             </Item>
@@ -2445,6 +2445,12 @@
               </Str>
               <Disp Icon="Str" />
             </Item>
+            <Item ItemId=";Element_implicitly_has_an_any_type_because_expression_of_type_0_can_t_be_used_to_index_type_1_7053" ItemType="0" PsrId="306" Leaf="true">
+              <Str Cat="Text">
+                <Val><![CDATA[Element implicitly has an 'any' type because expression of type '{0}' can't be used to index type '{1}'.]]></Val>
+              </Str>
+              <Disp Icon="Str" />
+            </Item>
             <Item ItemId=";Element_implicitly_has_an_any_type_because_index_expression_is_not_of_type_number_7015" ItemType="0" PsrId="306" Leaf="true">
               <Str Cat="Text">
                 <Val><![CDATA[Element implicitly has an 'any' type because index expression is not of type 'number'.]]></Val>
@@ -3000,12 +3006,6 @@
             <Item ItemId=";Found_package_json_at_0_6099" ItemType="0" PsrId="306" Leaf="true">
               <Str Cat="Text">
                 <Val><![CDATA[Found 'package.json' at '{0}'.]]></Val>
-              </Str>
-              <Disp Icon="Str" />
-            </Item>
-            <Item ItemId=";Found_package_json_at_0_Package_ID_is_1_6190" ItemType="0" PsrId="306" Leaf="true">
-              <Str Cat="Text">
-                <Val><![CDATA[Found 'package.json' at '{0}'. Package ID is '{1}'.]]></Val>
               </Str>
               <Disp Icon="Str" />
             </Item>
@@ -3933,6 +3933,12 @@
               </Str>
               <Disp Icon="Str" />
             </Item>
+            <Item ItemId=";Module_name_0_was_successfully_resolved_to_1_with_Package_ID_2_6218" ItemType="0" PsrId="306" Leaf="true">
+              <Str Cat="Text">
+                <Val><![CDATA[======== Module name '{0}' was successfully resolved to '{1}' with Package ID '{2}'. ========]]></Val>
+              </Str>
+              <Disp Icon="Str" />
+            </Item>
             <Item ItemId=";Module_resolution_kind_is_not_specified_using_0_6088" ItemType="0" PsrId="306" Leaf="true">
               <Str Cat="Text">
                 <Val><![CDATA[Module resolution kind is not specified, using '{0}'.]]></Val>
@@ -3984,6 +3990,12 @@
             <Item ItemId=";No_base_constructor_has_the_specified_number_of_type_arguments_2508" ItemType="0" PsrId="306" Leaf="true">
               <Str Cat="Text">
                 <Val><![CDATA[No base constructor has the specified number of type arguments.]]></Val>
+              </Str>
+              <Disp Icon="Str" />
+            </Item>
+            <Item ItemId=";No_index_signature_with_a_parameter_of_type_0_was_found_on_type_1_7054" ItemType="0" PsrId="306" Leaf="true">
+              <Str Cat="Text">
+                <Val><![CDATA[No index signature with a parameter of type '{0}' was found on type '{1}'.]]></Val>
               </Str>
               <Disp Icon="Str" />
             </Item>
@@ -6459,6 +6471,12 @@
               </Str>
               <Disp Icon="Str" />
             </Item>
+            <Item ItemId=";Type_reference_directive_0_was_successfully_resolved_to_1_with_Package_ID_2_primary_Colon_3_6219" ItemType="0" PsrId="306" Leaf="true">
+              <Str Cat="Text">
+                <Val><![CDATA[======== Type reference directive '{0}' was successfully resolved to '{1}' with Package ID '{2}', primary: {3}. ========]]></Val>
+              </Str>
+              <Disp Icon="Str" />
+            </Item>
             <Item ItemId=";Types_have_separate_declarations_of_a_private_property_0_2442" ItemType="0" PsrId="306" Leaf="true">
               <Str Cat="Text">
                 <Val><![CDATA[Types have separate declarations of a private property '{0}'.]]></Val>
@@ -7224,6 +7242,12 @@
             <Item ItemId=";package_json_does_not_have_a_typesVersions_entry_that_matches_version_0_6207" ItemType="0" PsrId="306" Leaf="true">
               <Str Cat="Text">
                 <Val><![CDATA['package.json' does not have a 'typesVersions' entry that matches version '{0}'.]]></Val>
+              </Str>
+              <Disp Icon="Str" />
+            </Item>
+            <Item ItemId=";package_json_had_a_falsy_0_field_6220" ItemType="0" PsrId="306" Leaf="true">
+              <Str Cat="Text">
+                <Val><![CDATA['package.json' had a falsy '{0}' field.]]></Val>
               </Str>
               <Disp Icon="Str" />
             </Item>
