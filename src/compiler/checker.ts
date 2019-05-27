@@ -21354,8 +21354,12 @@ namespace ts {
             return produceDiagnostics || !args ? resolveErrorCall(node) : getCandidateForOverloadFailure(node, candidates, args, !!candidatesOutArray);
 
             function getCallErrorNode(node: CallLikeExpression): Node {
-                if (isCallExpression(node) && isPropertyAccessExpression(node.expression)) {
-                    return node.expression.name;
+                if (isCallExpression(node)) {
+                    if (isPropertyAccessExpression(node.expression)) {
+                        return node.expression.name;
+                    } else {
+                        return node.expression;
+                    }
                 }
                 return node;
             }

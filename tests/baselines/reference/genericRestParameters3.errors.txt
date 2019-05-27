@@ -87,7 +87,7 @@ tests/cases/conformance/types/rest/genericRestParameters3.ts(53,5): error TS2345
     declare function foo<T extends any[]>(cb: (...args: T) => void): void;
     
     foo<CoolArray<any>>();     // Error
-    ~~~~~~~~~~~~~~~~~~~~~
+    ~~~
 !!! error TS2554: Expected 1 arguments, but got 0.
 !!! related TS6210 tests/cases/conformance/types/rest/genericRestParameters3.ts:27:39: An argument for 'cb' was not provided.
     foo<CoolArray<any>>(100);  // Error
