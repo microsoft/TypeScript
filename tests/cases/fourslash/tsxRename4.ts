@@ -9,7 +9,7 @@
 ////        div: {};
 ////    }
 ////}
-////class [|MyClass|] {}
+////[|class [|{| "declarationRange": 0 |}MyClass|] {}|]
 ////
 ////<[|MyClass|]></[|MyClass|]>;
 ////<[|MyClass|]/>;
@@ -18,6 +18,6 @@
 
 verify.noErrors();
 
-const [r0, r1, r2, r3, d0, d1] = test.ranges();
-verify.rangesAreRenameLocations([r0, r1, r2, r3]);
-verify.rangesAreRenameLocations([d0, d1]);
+const rangesByText = test.rangesByText();
+verify.rangesAreRenameLocations(rangesByText.get("MyClass"));
+verify.rangesAreRenameLocations(rangesByText.get("div"));

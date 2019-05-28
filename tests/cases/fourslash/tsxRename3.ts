@@ -9,11 +9,12 @@
 //// }
 //// class MyClass {
 ////   props: {
-////     [|name|]?: string;
+////     [|[|{| "declarationRange": 0 |}name|]?: string;|]
 ////     size?: number;
 //// }
 ////
 ////
-//// var x = <MyClass [|name|]='hello'/>;
+//// var x = <MyClass [|[|{| "declarationRange": 2 |}name|]='hello'|]/>;
 
-verify.rangesAreRenameLocations();
+const rangesByText = test.rangesByText();
+verify.rangesAreRenameLocations(rangesByText.get("name"));

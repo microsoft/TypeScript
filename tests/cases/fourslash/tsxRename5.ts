@@ -13,7 +13,8 @@
 ////     size?: number;
 //// }
 ////
-//// var [|nn|]: string;
+//// [|var [|{| "declarationRange": 0 |}nn|]: string;|]
 //// var x = <MyClass name={[|nn|]}></MyClass>;
 
-verify.rangesAreRenameLocations();
+const rangesByText = test.rangesByText();
+verify.rangesAreRenameLocations(rangesByText.get("nn"));

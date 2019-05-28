@@ -4,13 +4,13 @@
 //// declare module JSX {
 ////     interface Element { }
 ////     interface IntrinsicElements {
-////         [|div|]: {
+////         [|[|{| "declarationRange": 0 |}div|]: {
 ////             name?: string;
 ////             isOpen?: boolean;
-////         };
+////         };|]
 ////         span: { n: string; };
 ////     }
 //// }
 //// var x = <[|div|] />;
-
-verify.rangesAreRenameLocations();
+const rangesByText = test.rangesByText();
+verify.rangesAreRenameLocations(rangesByText.get("div"));

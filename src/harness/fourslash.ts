@@ -1191,9 +1191,14 @@ Actual: ${stringify(fullActual)}`);
 
                 const sort = (locations: ReadonlyArray<ts.RenameLocation> | undefined) =>
                     locations && ts.sort(locations, (r1, r2) => ts.compareStringsCaseSensitive(r1.fileName, r2.fileName) || r1.textSpan.start - r2.textSpan.start);
-                assert.deepEqual(sort(references), sort(ranges.map((rangeOrOptions): ts.RenameLocation => {
+                assert.deepEqual(sort(references), sort(ranges.map(rangeOrOptions => {
                     const { range, ...prefixSuffixText } = "range" in rangeOrOptions ? rangeOrOptions : { range: rangeOrOptions };
-                    return { fileName: range.fileName, textSpan: ts.createTextSpanFromRange(range), ...prefixSuffixText };
+                    const result: ts.RenameLocation = { fileName: range.fileName, textSpan: ts.createTextSpanFromRange(range), ...prefixSuffixText };
+                    const { declarationRange } = (range.marker && range.marker.data || {}) as { declarationRange?: number; };
+                    if (declarationRange !== undefined) {
+                        result.declarationSpan = ts.createTextSpanFromRange(this.getRanges()[declarationRange]);
+                    }
+                    return result;
                 })));
             }
         }

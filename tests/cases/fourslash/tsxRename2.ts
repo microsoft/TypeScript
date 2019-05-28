@@ -5,12 +5,13 @@
 ////     interface Element { }
 ////     interface IntrinsicElements {
 ////         div: {
-////             [|name|]?: string;
+////             [|[|{| "declarationRange": 0 |}name|]?: string;|]
 ////             isOpen?: boolean;
 ////         };
 ////         span: { n: string; };
 ////     }
 //// }
-//// var x = <div [|name|]="hello" />;
+//// var x = <div [|[|{| "declarationRange": 2 |}name|]="hello"|] />;
 
-verify.rangesAreRenameLocations();
+const rangesByText = test.rangesByText();
+verify.rangesAreRenameLocations(rangesByText.get("name"));

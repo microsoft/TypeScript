@@ -15,11 +15,13 @@
 ////     propString: string
 ////     optional?: boolean
 //// }
-//// declare function [|Opt|](attributes: OptionPropBag): JSX.Element;
+//// [|declare function [|{| "declarationRange": 0 |}Opt|](attributes: OptionPropBag): JSX.Element;|]
 //// let opt = <[|Opt|] />;
 //// let opt1 = <[|Opt|] propx={100} propString />;
 //// let opt2 = <[|Opt|] propx={100} optional/>;
 //// let opt3 = <[|Opt|] wrong />;
 //// let opt4 = <[|Opt|] propx={100} propString="hi" />;
 
-verify.rangesAreRenameLocations();
+//verify.rangesAreRenameLocations();
+const rangesByText = test.rangesByText();
+verify.rangesAreRenameLocations(rangesByText.get("Opt"));

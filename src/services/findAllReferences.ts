@@ -27,6 +27,8 @@ namespace ts.FindAllReferences {
         readonly textSpan: TextSpan;
     }
     export function nodeEntry(node: Node, kind: NodeEntryKind = EntryKind.Node): NodeEntry {
+        // TODO(shkamat)::
+        //  JSXOpeningElement or JSXElement for tagName ?
         const declaration = getDeclarationForDeclarationSpan(
             isDeclaration(node) ?
                 node :
@@ -60,8 +62,13 @@ namespace ts.FindAllReferences {
             case SyntaxKind.ImportClause:
                 return node.parent;
 
+            case SyntaxKind.JsxAttribute:
+                return (node as JsxAttribute).initializer === undefined ?
+                    undefined :
+                    node;
+
             // Not really interesting definition
-            // Should we show whole object literal instead?
+            // TODO(shkamat):: Should we show whole object literal instead?
             case SyntaxKind.ShorthandPropertyAssignment:
                 return undefined;
 
