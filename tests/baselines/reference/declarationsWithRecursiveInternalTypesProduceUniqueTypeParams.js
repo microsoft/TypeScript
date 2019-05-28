@@ -18,11 +18,43 @@ export const updateIfChanged = <T>(t: T) => {
     return reduce<T>(t, (t: T) => t);
 };
 
+// example from https://github.com/microsoft/TypeScript/issues/31605
+
+export const testRecFun = <T extends Object>(parent: T) => {
+    return {
+        result: parent,
+        deeper: <U extends Object>(child: U) =>
+            testRecFun<T & U>({ ...parent, ...child })
+    };
+}
+
+
+let p1 = testRecFun({ one: '1' })
+void p1.result.one;
+let p2 = p1.deeper({ two: '2' })
+void p2.result.one;
+void p2.result.two;
+let p3 = p2.deeper({ three: '3' })
+void p3.result.one;
+void p3.result.two;
+void p3.result.three;
+
 
 //// [declarationsWithRecursiveInternalTypesProduceUniqueTypeParams.js]
 "use strict";
 // Note that both of the following have an `any` in their return type from where we bottom out the type printout
 // for havign too many instances of the same symbol nesting.
+var __assign = (this && this.__assign) || function () {
+    __assign = Object.assign || function(t) {
+        for (var s, i = 1, n = arguments.length; i < n; i++) {
+            s = arguments[i];
+            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
+                t[p] = s[p];
+        }
+        return t;
+    };
+    return __assign.apply(this, arguments);
+};
 exports.__esModule = true;
 exports.updateIfChanged = function (t) {
     var reduce = function (u, update) {
@@ -36,6 +68,24 @@ exports.updateIfChanged = function (t) {
     };
     return reduce(t, function (t) { return t; });
 };
+// example from https://github.com/microsoft/TypeScript/issues/31605
+exports.testRecFun = function (parent) {
+    return {
+        result: parent,
+        deeper: function (child) {
+            return exports.testRecFun(__assign({}, parent, child));
+        }
+    };
+};
+var p1 = exports.testRecFun({ one: '1' });
+void p1.result.one;
+var p2 = p1.deeper({ two: '2' });
+void p2.result.one;
+void p2.result.two;
+var p3 = p2.deeper({ three: '3' });
+void p3.result.one;
+void p3.result.two;
+void p3.result.three;
 
 
 //// [declarationsWithRecursiveInternalTypesProduceUniqueTypeParams.d.ts]
@@ -77,4 +127,38 @@ export declare const updateIfChanged: <T>(t: T) => (<K extends keyof T>(key: K) 
 }) & {
     map: (updater: (u: T) => T) => T;
     set: (newU: T) => T;
+};
+export declare const testRecFun: <T extends Object>(parent: T) => {
+    result: T;
+    deeper: <U extends Object>(child: U) => {
+        result: T & U;
+        deeper: <U_1 extends Object>(child: U_1) => {
+            result: T & U & U_1;
+            deeper: <U_2 extends Object>(child: U_2) => {
+                result: T & U & U_1 & U_2;
+                deeper: <U_3 extends Object>(child: U_3) => {
+                    result: T & U & U_1 & U_2 & U_3;
+                    deeper: <U_4 extends Object>(child: U_4) => {
+                        result: T & U & U_1 & U_2 & U_3 & U_4;
+                        deeper: <U_5 extends Object>(child: U_5) => {
+                            result: T & U & U_1 & U_2 & U_3 & U_4 & U_5;
+                            deeper: <U_6 extends Object>(child: U_6) => {
+                                result: T & U & U_1 & U_2 & U_3 & U_4 & U_5 & U_6;
+                                deeper: <U_7 extends Object>(child: U_7) => {
+                                    result: T & U & U_1 & U_2 & U_3 & U_4 & U_5 & U_6 & U_7;
+                                    deeper: <U_8 extends Object>(child: U_8) => {
+                                        result: T & U & U_1 & U_2 & U_3 & U_4 & U_5 & U_6 & U_7 & U_8;
+                                        deeper: <U_9 extends Object>(child: U_9) => {
+                                            result: T & U & U_1 & U_2 & U_3 & U_4 & U_5 & U_6 & U_7 & U_8 & U_9;
+                                            deeper: <U_10 extends Object>(child: U_10) => any;
+                                        };
+                                    };
+                                };
+                            };
+                        };
+                    };
+                };
+            };
+        };
+    };
 };
