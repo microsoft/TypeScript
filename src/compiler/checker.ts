@@ -21357,7 +21357,8 @@ namespace ts {
                 if (isCallExpression(node)) {
                     if (isPropertyAccessExpression(node.expression)) {
                         return node.expression.name;
-                    } else {
+                    }
+                    else {
                         return node.expression;
                     }
                 }
