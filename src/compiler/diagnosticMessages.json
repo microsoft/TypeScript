@@ -2963,6 +2963,10 @@
         "category": "Error",
         "code": 4104
     },
+    "Cannot directly use 'keyof' operator on primitive '{0}'. Are you missing a 'typeof' ?": {
+        "category": "Error",
+        "code": 4106
+    },
 
     "The current host does not support the '{0}' option.": {
         "category": "Error",

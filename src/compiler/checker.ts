@@ -10048,7 +10048,11 @@ namespace ts {
             if (!links.resolvedType) {
                 switch (node.operator) {
                     case SyntaxKind.KeyOfKeyword:
-                        links.resolvedType = getIndexType(getTypeFromTypeNode(node.type));
+                        const operandType = getTypeFromTypeNode(node.type);
+                        if (operandType.flags & TypeFlags.Primitive) {
+                            error(node, Diagnostics.Cannot_directly_use_keyof_operator_on_primitive_0_Are_you_missing_a_typeof, typeToString(operandType));
+                        }
+                        links.resolvedType = getIndexType(operandType);
                         break;
                     case SyntaxKind.UniqueKeyword:
                         links.resolvedType = node.type.kind === SyntaxKind.SymbolKeyword
