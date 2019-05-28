@@ -698,13 +698,6 @@ node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighth
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(10092,16): error TS2304: Cannot find name 'd41d8cd98f00b204e9800998ecf8427e_LibraryDetectorTests'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(10513,19): error TS2488: Type 'NodeListOf<Element>' must have a '[Symbol.iterator]()' method that returns an iterator.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(10811,19): error TS2304: Cannot find name 'getElementsInDocument'.
-node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(11441,1): error TS2322: Type 'unknown' is not assignable to type 'number'.
-node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(11444,1): error TS2322: Type 'unknown' is not assignable to type 'number'.
-node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(11447,15): error TS2339: Property 'textLength' does not exist on type 'unknown'.
-node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(11447,28): error TS2339: Property 'textLength' does not exist on type 'unknown'.
-node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(11450,43): error TS2339: Property 'node' does not exist on type 'unknown'.
-node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(11453,6): error TS2339: Property 'cssRule' does not exist on type 'unknown'.
-node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(11460,6): error TS2339: Property 'cssRule' does not exist on type 'unknown'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(12197,34): error TS2554: Expected 0 arguments, but got 2.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(12327,36): error TS2554: Expected 0 arguments, but got 1.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(13607,7): error TS2339: Property 'protocolMethod' does not exist on type 'Error'.
@@ -3389,7 +3382,7 @@ node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(2765,22): error
 node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(2785,91): error TS2339: Property 'xRel' does not exist on type 'Pos'.
 node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(2855,32): error TS2339: Property 'left' does not exist on type 'never'.
 node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(2855,49): error TS2339: Property 'right' does not exist on type 'never'.
-node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(2856,10): error TS2365: Operator '+' cannot be applied to types 'null' and '0 | 1'.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(2856,10): error TS2365: Operator '+' cannot be applied to types 'null' and '1 | 0'.
 node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(2858,32): error TS2339: Property 'left' does not exist on type 'never'.
 node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(2858,49): error TS2339: Property 'right' does not exist on type 'never'.
 node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(3034,25): error TS2339: Property 'xRel' does not exist on type 'Pos'.
