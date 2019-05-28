@@ -36,7 +36,7 @@ namespace ts.projectSystem {
                 kindModifiers: ScriptElementKindModifier.exportedModifier,
                 name: "foo",
                 replacementSpan: undefined,
-                sortText: "0",
+                sortText: Completions.SortText.AutoImportSuggestions,
                 source: "/a",
             };
             assert.deepEqual<protocol.CompletionInfo | undefined>(response, {

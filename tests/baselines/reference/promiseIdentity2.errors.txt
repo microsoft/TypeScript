@@ -15,3 +15,4 @@ tests/cases/compiler/promiseIdentity2.ts(11,5): error TS2403: Subsequent variabl
     var x: Promise<any, string>;
         ~
 !!! error TS2403: Subsequent variable declarations must have the same type.  Variable 'x' must be of type 'IPromise<string, number>', but here has type 'Promise<any, string>'.
+!!! related TS6203 tests/cases/compiler/promiseIdentity2.ts:10:5: 'x' was also declared here.

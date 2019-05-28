@@ -655,7 +655,7 @@
         "category": "Error",
         "code": 1207
     },
-    "Cannot compile namespaces when the '--isolatedModules' flag is provided.": {
+    "All files must be modules when the '--isolatedModules' flag is provided.": {
         "category": "Error",
         "code": 1208
     },
@@ -3811,10 +3811,6 @@
         "category": "Error",
         "code": 6189
     },
-    "Found 'package.json' at '{0}'. Package ID is '{1}'.": {
-        "category": "Message",
-        "code": 6190
-    },
     "Whether to keep outdated console output in watch mode instead of clearing the screen.": {
         "category": "Message",
         "code": 6191
@@ -3922,6 +3918,18 @@
     "Found {0} errors.": {
         "category": "Message",
         "code": 6217
+    },
+    "======== Module name '{0}' was successfully resolved to '{1}' with Package ID '{2}'. ========": {
+        "category": "Message",
+        "code": 6218
+    },
+    "======== Type reference directive '{0}' was successfully resolved to '{1}' with Package ID '{2}', primary: {3}. ========": {
+        "category": "Message",
+        "code": 6219
+    },
+    "'package.json' had a falsy '{0}' field.": {
+        "category": "Message",
+        "code": 6220
     },
 
     "Projects to reference": {
@@ -4283,6 +4291,14 @@
     "Element implicitly has an 'any' type because type '{0}' has no index signature. Did you mean to call '{1}' ?": {
         "category": "Error",
         "code": 7052
+    },
+    "Element implicitly has an 'any' type because expression of type '{0}' can't be used to index type '{1}'.": {
+        "category": "Error",
+        "code": 7053
+    },    
+    "No index signature with a parameter of type '{0}' was found on type '{1}'.": {
+        "category": "Error",
+        "code": 7054
     },
     "You cannot rename this element.": {
         "category": "Error",
@@ -4975,7 +4991,7 @@
         "code": 95079
     },
 
-    "No value exists in scope for the shorthand property '{0}'. Either declare one or provide an initializer." :{
+    "No value exists in scope for the shorthand property '{0}'. Either declare one or provide an initializer.": {
         "category": "Error",
         "code": 18004
     },
