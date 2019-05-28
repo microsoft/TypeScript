@@ -1,0 +1,52 @@
+=== tests/cases/compiler/mappedTypeAliasSubstitutability.ts ===
+// repro from https://github.com/microsoft/TypeScript/issues/31616
+
+const v = { test: { smth: 5 } };
+>v : Symbol(v, Decl(mappedTypeAliasSubstitutability.ts, 2, 5))
+>test : Symbol(test, Decl(mappedTypeAliasSubstitutability.ts, 2, 11))
+>smth : Symbol(smth, Decl(mappedTypeAliasSubstitutability.ts, 2, 19))
+
+type Field<A extends string, R> = { [K in A]: R };
+>Field : Symbol(Field, Decl(mappedTypeAliasSubstitutability.ts, 2, 32))
+>A : Symbol(A, Decl(mappedTypeAliasSubstitutability.ts, 3, 11))
+>R : Symbol(R, Decl(mappedTypeAliasSubstitutability.ts, 3, 28))
+>K : Symbol(K, Decl(mappedTypeAliasSubstitutability.ts, 3, 37))
+>A : Symbol(A, Decl(mappedTypeAliasSubstitutability.ts, 3, 11))
+>R : Symbol(R, Decl(mappedTypeAliasSubstitutability.ts, 3, 28))
+
+const f = <A extends string, B extends string, R>(x: { [K in A]: Field<B, R> } ): R => ({} as any);
+>f : Symbol(f, Decl(mappedTypeAliasSubstitutability.ts, 4, 5))
+>A : Symbol(A, Decl(mappedTypeAliasSubstitutability.ts, 4, 11))
+>B : Symbol(B, Decl(mappedTypeAliasSubstitutability.ts, 4, 28))
+>R : Symbol(R, Decl(mappedTypeAliasSubstitutability.ts, 4, 46))
+>x : Symbol(x, Decl(mappedTypeAliasSubstitutability.ts, 4, 50))
+>K : Symbol(K, Decl(mappedTypeAliasSubstitutability.ts, 4, 56))
+>A : Symbol(A, Decl(mappedTypeAliasSubstitutability.ts, 4, 11))
+>Field : Symbol(Field, Decl(mappedTypeAliasSubstitutability.ts, 2, 32))
+>B : Symbol(B, Decl(mappedTypeAliasSubstitutability.ts, 4, 28))
+>R : Symbol(R, Decl(mappedTypeAliasSubstitutability.ts, 4, 46))
+>R : Symbol(R, Decl(mappedTypeAliasSubstitutability.ts, 4, 46))
+
+const g = <A extends string, B extends string, R>(x: Field<A, Field<B, R>>): R => ({} as any);
+>g : Symbol(g, Decl(mappedTypeAliasSubstitutability.ts, 5, 5))
+>A : Symbol(A, Decl(mappedTypeAliasSubstitutability.ts, 5, 11))
+>B : Symbol(B, Decl(mappedTypeAliasSubstitutability.ts, 5, 28))
+>R : Symbol(R, Decl(mappedTypeAliasSubstitutability.ts, 5, 46))
+>x : Symbol(x, Decl(mappedTypeAliasSubstitutability.ts, 5, 50))
+>Field : Symbol(Field, Decl(mappedTypeAliasSubstitutability.ts, 2, 32))
+>A : Symbol(A, Decl(mappedTypeAliasSubstitutability.ts, 5, 11))
+>Field : Symbol(Field, Decl(mappedTypeAliasSubstitutability.ts, 2, 32))
+>B : Symbol(B, Decl(mappedTypeAliasSubstitutability.ts, 5, 28))
+>R : Symbol(R, Decl(mappedTypeAliasSubstitutability.ts, 5, 46))
+>R : Symbol(R, Decl(mappedTypeAliasSubstitutability.ts, 5, 46))
+
+const r1 = f(v); // number
+>r1 : Symbol(r1, Decl(mappedTypeAliasSubstitutability.ts, 6, 5))
+>f : Symbol(f, Decl(mappedTypeAliasSubstitutability.ts, 4, 5))
+>v : Symbol(v, Decl(mappedTypeAliasSubstitutability.ts, 2, 5))
+
+const r2 = g(v); // unknown
+>r2 : Symbol(r2, Decl(mappedTypeAliasSubstitutability.ts, 7, 5))
+>g : Symbol(g, Decl(mappedTypeAliasSubstitutability.ts, 5, 5))
+>v : Symbol(v, Decl(mappedTypeAliasSubstitutability.ts, 2, 5))
+

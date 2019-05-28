@@ -7,6 +7,8 @@ namespace ts {
     let nextMergeId = 1;
     let nextFlowId = 1;
 
+    const maxSymbolRecusionDepth = 10;
+
     export function getNodeId(node: Node): number {
         if (!node.id) {
             node.id = nextNodeId;
@@ -3722,7 +3724,7 @@ namespace ts {
                             }
 
                             const depth = context.symbolDepth.get(id) || 0;
-                            if (depth > 10) {
+                            if (depth > maxSymbolRecusionDepth) {
                                 return createElidedInformationPlaceholder(context);
                             }
                             context.symbolDepth.set(id, depth + 1);
@@ -15139,7 +15141,7 @@ namespace ts {
         }
 
         function inferTypes(inferences: InferenceInfo[], originalSource: Type, originalTarget: Type, priority: InferencePriority = 0, contravariant = false) {
-            let symbolStack: Symbol[];
+            let symbolDepth: Map<number>;
             let visited: Map<boolean>;
             let bivariant = false;
             let propagationType: Type;
@@ -15150,6 +15152,12 @@ namespace ts {
                 if (!couldContainTypeVariables(target)) {
                     return;
                 }
+
+                const key = source.id + "," + target.id;
+                if (visited && visited.get(key)) {
+                    return;
+                }
+                (visited || (visited = createMap<boolean>())).set(key, true);
                 if (source === wildcardType) {
                     // We are inferring from an 'any' type. We want to infer this type for every type parameter
                     // referenced in the target type, so we record it as the propagation type and infer from the
@@ -15256,7 +15264,7 @@ namespace ts {
                         // Infer to the simplified version of an indexed access, if possible, to (hopefully) expose more bare type parameters to the inference engine
                         const simplified = getSimplifiedType(target, /*writing*/ false);
                         if (simplified !== target) {
-                            inferFromTypesOnce(source, simplified);
+                            inferFromTypes(source, simplified);
                         }
                         else if (target.flags & TypeFlags.IndexedAccess) {
                             const indexType = getSimplifiedType((target as IndexedAccessType).indexType, /*writing*/ false);
@@ -15265,7 +15273,7 @@ namespace ts {
                             if (indexType.flags & TypeFlags.Instantiable) {
                                 const simplified = distributeIndexOverObjectType(getSimplifiedType((target as IndexedAccessType).objectType, /*writing*/ false), indexType, /*writing*/ false);
                                 if (simplified && simplified !== target) {
-                                    inferFromTypesOnce(source, simplified);
+                                    inferFromTypes(source, simplified);
                                 }
                             }
                         }
@@ -15369,11 +15377,6 @@ namespace ts {
                         source = apparentSource;
                     }
                     if (source.flags & (TypeFlags.Object | TypeFlags.Intersection)) {
-                        const key = source.id + "," + target.id;
-                        if (visited && visited.get(key)) {
-                            return;
-                        }
-                        (visited || (visited = createMap<boolean>())).set(key, true);
                         // If we are already processing another target type with the same associated symbol (such as
                         // an instantiation of the same generic type), we do not explore this target as it would yield
                         // no further inferences. We exclude the static side of classes from this check since it shares
@@ -15382,24 +15385,18 @@ namespace ts {
                             !(getObjectFlags(target) & ObjectFlags.Anonymous && target.symbol && target.symbol.flags & SymbolFlags.Class);
                         const symbol = isNonConstructorObject ? target.symbol : undefined;
                         if (symbol) {
-                            if (contains(symbolStack, symbol)) {
+                            const id = "" + getSymbolId(symbol);
+                            const depth = symbolDepth && symbolDepth.get(id) || 0;
+                            if (depth > maxSymbolRecusionDepth) {
                                 return;
                             }
-                            (symbolStack || (symbolStack = [])).push(symbol);
+                            (symbolDepth || (symbolDepth = createMap())).set(id, depth + 1);
                             inferFromObjectTypes(source, target);
-                            symbolStack.pop();
+                            symbolDepth.set(id, depth);
                         }
                         else {
                             inferFromObjectTypes(source, target);
                         }
-                    }
-                }
-
-                function inferFromTypesOnce(source: Type, target: Type) {
-                    const key = source.id + "," + target.id;
-                    if (!visited || !visited.get(key)) {
-                        (visited || (visited = createMap<boolean>())).set(key, true);
-                        inferFromTypes(source, target);
                     }
                 }
             }
