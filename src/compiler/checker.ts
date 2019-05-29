@@ -5921,7 +5921,20 @@ namespace ts {
             return anyType;
         }
 
+        function getTypeOfSymbolWithDeferredType(symbol: Symbol) {
+            const links = getSymbolLinks(symbol);
+            if (!links.type) {
+                Debug.assertDefined(links.deferralParent);
+                Debug.assertDefined(links.deferralConstituents);
+                links.type = links.deferralParent!.flags & TypeFlags.Union ? getUnionType(links.deferralConstituents!) : getIntersectionType(links.deferralConstituents!);
+            }
+            return links.type;
+        }
+
         function getTypeOfSymbol(symbol: Symbol): Type {
+            if (getCheckFlags(symbol) & CheckFlags.DeferredType) {
+                return getTypeOfSymbolWithDeferredType(symbol);
+            }
             if (getCheckFlags(symbol) & CheckFlags.Instantiated) {
                 return getTypeOfInstantiatedSymbol(symbol);
             }
@@ -8061,7 +8074,15 @@ namespace ts {
 
             result.declarations = declarations!;
             result.nameType = nameType;
-            result.type = isUnion ? getUnionType(propTypes) : getIntersectionType(propTypes);
+            if (propTypes.length > 2) {
+                // When `propTypes` has the potential to explode in size when normalized, defer normalization until absolutely needed
+                result.checkFlags |= CheckFlags.DeferredType;
+                result.deferralParent = containingType;
+                result.deferralConstituents = propTypes;
+            }
+            else {
+                result.type = isUnion ? getUnionType(propTypes) : getIntersectionType(propTypes);
+            }
             return result;
         }
 
@@ -12313,8 +12334,8 @@ namespace ts {
             return false;
         }
 
-        function isIgnoredJsxProperty(source: Type, sourceProp: Symbol, targetMemberType: Type | undefined) {
-            return getObjectFlags(source) & ObjectFlags.JsxAttributes && !(isUnhyphenatedJsxName(sourceProp.escapedName) || targetMemberType);
+        function isIgnoredJsxProperty(source: Type, sourceProp: Symbol) {
+            return getObjectFlags(source) & ObjectFlags.JsxAttributes && !isUnhyphenatedJsxName(sourceProp.escapedName);
         }
 
         /**
@@ -13495,6 +13516,49 @@ namespace ts {
                 return result || properties;
             }
 
+            function isPropertySymbolTypeRelated(sourceProp: Symbol, targetProp: Symbol, getTypeOfSourceProperty: (sym: Symbol) => Type, reportErrors: boolean): Ternary {
+                const targetIsOptional = strictNullChecks && !!(getCheckFlags(targetProp) & CheckFlags.Partial);
+                const source = getTypeOfSourceProperty(sourceProp);
+                if (getCheckFlags(targetProp) & CheckFlags.DeferredType && !getSymbolLinks(targetProp).type) {
+                    // Rather than resolving (and normalizing) the type, relate constituent-by-constituent without performing normalization or seconadary passes
+                    const links = getSymbolLinks(targetProp);
+                    Debug.assertDefined(links.deferralParent);
+                    Debug.assertDefined(links.deferralConstituents);
+                    const unionParent = !!(links.deferralParent!.flags & TypeFlags.Union);
+                    let result = unionParent ? Ternary.False : Ternary.True;
+                    const targetTypes = links.deferralConstituents!;
+                    for (const targetType of targetTypes) {
+                        const related = isRelatedTo(source, targetType, /*reportErrors*/ false, /*headMessage*/ undefined, /*isIntersectionConstituent*/ !unionParent);
+                        if (!unionParent) {
+                            if (!related) {
+                                // Can't assign to a target individually - have to fallback to assigning to the _whole_ intersection (which forces normalization)
+                                return isRelatedTo(source, addOptionality(getTypeOfSymbol(targetProp), targetIsOptional), reportErrors);
+                            }
+                            result &= related;
+                        }
+                        else {
+                            if (related) {
+                                return related;
+                            }
+                        }
+                    }
+                    if (unionParent && !result && targetIsOptional) {
+                        result = isRelatedTo(source, undefinedType);
+                    }
+                    if (unionParent && !result && reportErrors) {
+                        // The easiest way to get the right errors here is to un-defer (which may be costly)
+                        // If it turns out this is too costly too often, we can replicate the error handling logic within
+                        // typeRelatedToSomeType without the discriminatable type branch (as that requires a manifest union
+                        // type on which to hand discriminable properties, which we are expressly trying to avoid here)
+                        return isRelatedTo(source, addOptionality(getTypeOfSymbol(targetProp), targetIsOptional), reportErrors);
+                    }
+                    return result;
+                }
+                else {
+                    return isRelatedTo(source, addOptionality(getTypeOfSymbol(targetProp), targetIsOptional), reportErrors);
+                }
+            }
+
             function propertyRelatedTo(source: Type, target: Type, sourceProp: Symbol, targetProp: Symbol, getTypeOfSourceProperty: (sym: Symbol) => Type, reportErrors: boolean): Ternary {
                 const sourcePropFlags = getDeclarationModifierFlagsFromSymbol(sourceProp);
                 const targetPropFlags = getDeclarationModifierFlagsFromSymbol(targetProp);
@@ -13537,7 +13601,7 @@ namespace ts {
                     return Ternary.False;
                 }
                 // If the target comes from a partial union prop, allow `undefined` in the target type
-                const related = isRelatedTo(getTypeOfSourceProperty(sourceProp), addOptionality(getTypeOfSymbol(targetProp), !!(getCheckFlags(targetProp) & CheckFlags.Partial)), reportErrors);
+                const related = isPropertySymbolTypeRelated(sourceProp, targetProp, getTypeOfSourceProperty, reportErrors);
                 if (!related) {
                     if (reportErrors) {
                         reportError(Diagnostics.Types_of_property_0_are_incompatible, symbolToString(targetProp));
@@ -13649,9 +13713,6 @@ namespace ts {
                     if (!(targetProp.flags & SymbolFlags.Prototype)) {
                         const sourceProp = getPropertyOfType(source, targetProp.escapedName);
                         if (sourceProp && sourceProp !== targetProp) {
-                            if (isIgnoredJsxProperty(source, sourceProp, getTypeOfSymbol(targetProp))) {
-                                continue;
-                            }
                             const related = propertyRelatedTo(source, target, sourceProp, targetProp, getTypeOfSymbol, reportErrors);
                             if (!related) {
                                 return Ternary.False;
@@ -13797,7 +13858,7 @@ namespace ts {
             function eachPropertyRelatedTo(source: Type, target: Type, kind: IndexKind, reportErrors: boolean): Ternary {
                 let result = Ternary.True;
                 for (const prop of getPropertiesOfObjectType(source)) {
-                    if (isIgnoredJsxProperty(source, prop, /*targetMemberType*/ undefined)) {
+                    if (isIgnoredJsxProperty(source, prop)) {
                         continue;
                     }
                     // Skip over symbol-named members
@@ -14679,26 +14740,34 @@ namespace ts {
 
         function getWidenedTypeWithContext(type: Type, context: WideningContext | undefined): Type {
             if (getObjectFlags(type) & ObjectFlags.RequiresWidening) {
+                if (context === undefined && type.widened) {
+                    return type.widened;
+                }
+                let result: Type | undefined;
                 if (type.flags & TypeFlags.Nullable) {
-                    return anyType;
+                    result = anyType;
                 }
-                if (isObjectLiteralType(type)) {
-                    return getWidenedTypeOfObjectLiteral(type, context);
+                else if (isObjectLiteralType(type)) {
+                    result = getWidenedTypeOfObjectLiteral(type, context);
                 }
-                if (type.flags & TypeFlags.Union) {
+                else if (type.flags & TypeFlags.Union) {
                     const unionContext = context || createWideningContext(/*parent*/ undefined, /*propertyName*/ undefined, (<UnionType>type).types);
                     const widenedTypes = sameMap((<UnionType>type).types, t => t.flags & TypeFlags.Nullable ? t : getWidenedTypeWithContext(t, unionContext));
                     // Widening an empty object literal transitions from a highly restrictive type to
                     // a highly inclusive one. For that reason we perform subtype reduction here if the
                     // union includes empty object types (e.g. reducing {} | string to just {}).
-                    return getUnionType(widenedTypes, some(widenedTypes, isEmptyObjectType) ? UnionReduction.Subtype : UnionReduction.Literal);
+                    result = getUnionType(widenedTypes, some(widenedTypes, isEmptyObjectType) ? UnionReduction.Subtype : UnionReduction.Literal);
                 }
-                if (type.flags & TypeFlags.Intersection) {
-                    return getIntersectionType(sameMap((<IntersectionType>type).types, getWidenedType));
+                else if (type.flags & TypeFlags.Intersection) {
+                    result = getIntersectionType(sameMap((<IntersectionType>type).types, getWidenedType));
                 }
-                if (isArrayType(type) || isTupleType(type)) {
-                    return createTypeReference((<TypeReference>type).target, sameMap((<TypeReference>type).typeArguments, getWidenedType));
+                else if (isArrayType(type) || isTupleType(type)) {
+                    result = createTypeReference((<TypeReference>type).target, sameMap((<TypeReference>type).typeArguments, getWidenedType));
                 }
+                if (result && context === undefined) {
+                    type.widened = result;
+                }
+                return result || type;
             }
             return type;
         }
