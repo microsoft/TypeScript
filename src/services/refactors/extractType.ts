@@ -2,6 +2,7 @@
 namespace ts.refactor {
     const refactorName = "Extract type";
     const extractToTypeAlias = "Extract to type alias";
+    const extractToInterface = "Extract to interface";
     const extractToTypeDef = "Extract to typedef";
     registerRefactor(refactorName, {
         getAvailableActions(context): ReadonlyArray<ApplicableRefactorInfo> {
@@ -11,23 +12,32 @@ namespace ts.refactor {
             return [{
                 name: refactorName,
                 description: getLocaleSpecificMessage(Diagnostics.Extract_type),
-                actions: [info.isJS ? {
+                actions: info.isJS ? [{
                     name: extractToTypeDef, description: getLocaleSpecificMessage(Diagnostics.Extract_to_typedef)
-                } : {
-                        name: extractToTypeAlias, description: getLocaleSpecificMessage(Diagnostics.Extract_to_type_alias)
-                    }]
+                }] : append([{
+                    name: extractToTypeAlias, description: getLocaleSpecificMessage(Diagnostics.Extract_to_type_alias)
+                }], info.typeElements && {
+                    name: extractToInterface, description: getLocaleSpecificMessage(Diagnostics.Extract_to_interface)
+                })
             }];
         },
         getEditsForAction(context, actionName): RefactorEditInfo {
-            Debug.assert(actionName === extractToTypeAlias || actionName === extractToTypeDef);
+            Debug.assert(actionName === extractToTypeAlias || actionName === extractToTypeDef || actionName === extractToInterface);
             const { file } = context;
             const info = Debug.assertDefined(getRangeToExtract(context));
-            Debug.assert(actionName === extractToTypeAlias && !info.isJS || actionName === extractToTypeDef && info.isJS);
 
+            Debug.assert(
+                info.isJS ? actionName === extractToTypeDef : (
+                    (actionName === extractToInterface && !!info.typeElements) || actionName === extractToTypeAlias
+                )
+            );
             const name = getUniqueName("NewType", file);
             const edits = textChanges.ChangeTracker.with(context, changes => info.isJS ?
-                doTypedefChange(changes, file, name, info.firstStatement, info.selection, info.typeParameters) :
-                doTypeAliasChange(changes, file, name, info.firstStatement, info.selection, info.typeParameters));
+                doTypedefChange(changes, file, name, info) :
+                info.typeElements ?
+                    doInterfaceChange(changes, file, name, info) :
+                    doTypeAliasChange(changes, file, name, info)
+            );
 
             const renameFilename = file.fileName;
             const renameLocation = getRenameLocation(edits, renameFilename, name, /*preferLastLocation*/ false);
@@ -35,7 +45,15 @@ namespace ts.refactor {
         }
     });
 
-    interface Info { isJS: boolean; selection: TypeNode; firstStatement: Statement; typeParameters: ReadonlyArray<TypeParameterDeclaration>; }
+    interface TypeAliasInfo {
+        isJS: boolean; selection: TypeNode; firstStatement: Statement; typeParameters: ReadonlyArray<TypeParameterDeclaration>; typeElements: undefined;
+    }
+
+    interface InterfaceInfo {
+        isJS: boolean; selection: TypeNode; firstStatement: Statement; typeParameters: ReadonlyArray<TypeParameterDeclaration>; typeElements: ReadonlyArray<TypeElement>;
+    }
+
+    type Info = TypeAliasInfo | InterfaceInfo;
 
     function getRangeToExtract(context: RefactorContext): Info | undefined {
         const { file, startPosition } = context;
@@ -51,7 +69,29 @@ namespace ts.refactor {
         const typeParameters = collectTypeParameters(checker, selection, firstStatement, file);
         if (!typeParameters) return undefined;
 
-        return { isJS, selection, firstStatement, typeParameters };
+        const types = flattenTypeLiteralNodeReference(checker, selection);
+        const typeElements = types && flatMap(types, type => type.members);
+        return { isJS, selection, firstStatement, typeParameters, typeElements } as Info;
+    }
+
+    function flattenTypeLiteralNodeReference(checker: TypeChecker, node: TypeNode | undefined): ReadonlyArray<TypeLiteralNode> | undefined {
+        if (!node) return undefined;
+        if (isIntersectionTypeNode(node)) {
+            const result: TypeLiteralNode[] = [];
+            for (const type of node.types) {
+                const flattenedTypes = flattenTypeLiteralNodeReference(checker, type);
+                if (!flattenedTypes) return undefined;
+                addRange(result, flattenedTypes);
+            }
+            return result;
+        }
+        else if (isParenthesizedTypeNode(node)) {
+            return flattenTypeLiteralNodeReference(checker, node.type);
+        }
+        else if (isTypeLiteralNode(node)) {
+            return [node];
+        }
+        return undefined;
     }
 
     function isStatementAndHasJSDoc(n: Node): n is (Statement & HasJSDoc) {
@@ -107,7 +147,9 @@ namespace ts.refactor {
         }
     }
 
-    function doTypeAliasChange(changes: textChanges.ChangeTracker, file: SourceFile, name: string, firstStatement: Statement, selection: TypeNode, typeParameters: ReadonlyArray<TypeParameterDeclaration>) {
+    function doTypeAliasChange(changes: textChanges.ChangeTracker, file: SourceFile, name: string, info: TypeAliasInfo) {
+        const { firstStatement, selection, typeParameters } = info;
+
         const newTypeNode = createTypeAliasDeclaration(
             /* decorators */ undefined,
             /* modifiers */ undefined,
@@ -119,7 +161,24 @@ namespace ts.refactor {
         changes.replaceNode(file, selection, createTypeReferenceNode(name, typeParameters.map(id => createTypeReferenceNode(id.name, /* typeArguments */ undefined))));
     }
 
-    function doTypedefChange(changes: textChanges.ChangeTracker, file: SourceFile, name: string, firstStatement: Statement, selection: TypeNode, typeParameters: ReadonlyArray<TypeParameterDeclaration>) {
+    function doInterfaceChange(changes: textChanges.ChangeTracker, file: SourceFile, name: string, info: InterfaceInfo) {
+        const { firstStatement, selection, typeParameters, typeElements } = info;
+
+        const newTypeNode = createInterfaceDeclaration(
+            /* decorators */ undefined,
+            /* modifiers */ undefined,
+            name,
+            typeParameters,
+            /* heritageClauses */ undefined,
+            typeElements
+        );
+        changes.insertNodeBefore(file, firstStatement, newTypeNode, /* blankLineBetween */ true);
+        changes.replaceNode(file, selection, createTypeReferenceNode(name, typeParameters.map(id => createTypeReferenceNode(id.name, /* typeArguments */ undefined))));
+    }
+
+    function doTypedefChange(changes: textChanges.ChangeTracker, file: SourceFile, name: string, info: Info) {
+        const { firstStatement, selection, typeParameters } = info;
+
         const node = <JSDocTypedefTag>createNode(SyntaxKind.JSDocTypedefTag);
         node.tagName = createIdentifier("typedef"); // TODO: jsdoc factory https://github.com/Microsoft/TypeScript/pull/29539
         node.fullName = createIdentifier(name);
