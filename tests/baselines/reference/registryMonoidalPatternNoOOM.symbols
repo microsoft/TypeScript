@@ -1,0 +1,471 @@
+=== tests/cases/compiler/registryMonoidalPatternNoOOM.ts ===
+interface Plugins<TConfig> {}
+>Plugins : Symbol(Plugins, Decl(registryMonoidalPatternNoOOM.ts, 0, 0), Decl(registryMonoidalPatternNoOOM.ts, 14, 43), Decl(registryMonoidalPatternNoOOM.ts, 46, 43), Decl(registryMonoidalPatternNoOOM.ts, 76, 45))
+>TConfig : Symbol(TConfig, Decl(registryMonoidalPatternNoOOM.ts, 0, 18), Decl(registryMonoidalPatternNoOOM.ts, 15, 18), Decl(registryMonoidalPatternNoOOM.ts, 47, 18), Decl(registryMonoidalPatternNoOOM.ts, 77, 18))
+
+type PluginNames = keyof Plugins<any>;
+>PluginNames : Symbol(PluginNames, Decl(registryMonoidalPatternNoOOM.ts, 0, 29))
+>Plugins : Symbol(Plugins, Decl(registryMonoidalPatternNoOOM.ts, 0, 0), Decl(registryMonoidalPatternNoOOM.ts, 14, 43), Decl(registryMonoidalPatternNoOOM.ts, 46, 43), Decl(registryMonoidalPatternNoOOM.ts, 76, 45))
+
+interface MiddlewarePlugin<TKind extends PluginNames, TPreviousConfig> {
+>MiddlewarePlugin : Symbol(MiddlewarePlugin, Decl(registryMonoidalPatternNoOOM.ts, 2, 38))
+>TKind : Symbol(TKind, Decl(registryMonoidalPatternNoOOM.ts, 4, 27))
+>PluginNames : Symbol(PluginNames, Decl(registryMonoidalPatternNoOOM.ts, 0, 29))
+>TPreviousConfig : Symbol(TPreviousConfig, Decl(registryMonoidalPatternNoOOM.ts, 4, 53))
+
+    readonly _group: TKind;
+>_group : Symbol(MiddlewarePlugin._group, Decl(registryMonoidalPatternNoOOM.ts, 4, 72))
+>TKind : Symbol(TKind, Decl(registryMonoidalPatternNoOOM.ts, 4, 27))
+
+    configure<TConfig>(cb: (conf: TPreviousConfig) => TConfig): Plugins<TConfig>[TKind];
+>configure : Symbol(MiddlewarePlugin.configure, Decl(registryMonoidalPatternNoOOM.ts, 5, 27))
+>TConfig : Symbol(TConfig, Decl(registryMonoidalPatternNoOOM.ts, 6, 14))
+>cb : Symbol(cb, Decl(registryMonoidalPatternNoOOM.ts, 6, 23))
+>conf : Symbol(conf, Decl(registryMonoidalPatternNoOOM.ts, 6, 28))
+>TPreviousConfig : Symbol(TPreviousConfig, Decl(registryMonoidalPatternNoOOM.ts, 4, 53))
+>TConfig : Symbol(TConfig, Decl(registryMonoidalPatternNoOOM.ts, 6, 14))
+>Plugins : Symbol(Plugins, Decl(registryMonoidalPatternNoOOM.ts, 0, 0), Decl(registryMonoidalPatternNoOOM.ts, 14, 43), Decl(registryMonoidalPatternNoOOM.ts, 46, 43), Decl(registryMonoidalPatternNoOOM.ts, 76, 45))
+>TConfig : Symbol(TConfig, Decl(registryMonoidalPatternNoOOM.ts, 6, 14))
+>TKind : Symbol(TKind, Decl(registryMonoidalPatternNoOOM.ts, 4, 27))
+
+    // combine<TConfig>(cb: Plugins<(conf: TPreviousConfig) => TConfig>[TKind]): Plugins<TConfig>[TKind];
+    // The above "works", but the below _should_ result in less to check and is simpler (and is needed to trigger the OOM bug)
+    combine<TConfig>(cb: MiddlewarePlugin<TKind, (conf: TPreviousConfig) => TConfig>): Plugins<TConfig>[TKind];
+>combine : Symbol(MiddlewarePlugin.combine, Decl(registryMonoidalPatternNoOOM.ts, 6, 88))
+>TConfig : Symbol(TConfig, Decl(registryMonoidalPatternNoOOM.ts, 9, 12))
+>cb : Symbol(cb, Decl(registryMonoidalPatternNoOOM.ts, 9, 21))
+>MiddlewarePlugin : Symbol(MiddlewarePlugin, Decl(registryMonoidalPatternNoOOM.ts, 2, 38))
+>TKind : Symbol(TKind, Decl(registryMonoidalPatternNoOOM.ts, 4, 27))
+>conf : Symbol(conf, Decl(registryMonoidalPatternNoOOM.ts, 9, 50))
+>TPreviousConfig : Symbol(TPreviousConfig, Decl(registryMonoidalPatternNoOOM.ts, 4, 53))
+>TConfig : Symbol(TConfig, Decl(registryMonoidalPatternNoOOM.ts, 9, 12))
+>Plugins : Symbol(Plugins, Decl(registryMonoidalPatternNoOOM.ts, 0, 0), Decl(registryMonoidalPatternNoOOM.ts, 14, 43), Decl(registryMonoidalPatternNoOOM.ts, 46, 43), Decl(registryMonoidalPatternNoOOM.ts, 76, 45))
+>TConfig : Symbol(TConfig, Decl(registryMonoidalPatternNoOOM.ts, 9, 12))
+>TKind : Symbol(TKind, Decl(registryMonoidalPatternNoOOM.ts, 4, 27))
+}
+
+const GroupOneName = "GroupOne";
+>GroupOneName : Symbol(GroupOneName, Decl(registryMonoidalPatternNoOOM.ts, 12, 5), Decl(registryMonoidalPatternNoOOM.ts, 12, 32))
+
+type GroupOneName = typeof GroupOneName;
+>GroupOneName : Symbol(GroupOneName, Decl(registryMonoidalPatternNoOOM.ts, 12, 5), Decl(registryMonoidalPatternNoOOM.ts, 12, 32))
+>GroupOneName : Symbol(GroupOneName, Decl(registryMonoidalPatternNoOOM.ts, 12, 5), Decl(registryMonoidalPatternNoOOM.ts, 12, 32))
+
+type GroupOne<T> = PluginA<T> | PluginB<T>;
+>GroupOne : Symbol(GroupOne, Decl(registryMonoidalPatternNoOOM.ts, 13, 40))
+>T : Symbol(T, Decl(registryMonoidalPatternNoOOM.ts, 14, 14))
+>PluginA : Symbol(PluginA, Decl(registryMonoidalPatternNoOOM.ts, 17, 1))
+>T : Symbol(T, Decl(registryMonoidalPatternNoOOM.ts, 14, 14))
+>PluginB : Symbol(PluginB, Decl(registryMonoidalPatternNoOOM.ts, 28, 1))
+>T : Symbol(T, Decl(registryMonoidalPatternNoOOM.ts, 14, 14))
+
+interface Plugins<TConfig> {
+>Plugins : Symbol(Plugins, Decl(registryMonoidalPatternNoOOM.ts, 0, 0), Decl(registryMonoidalPatternNoOOM.ts, 14, 43), Decl(registryMonoidalPatternNoOOM.ts, 46, 43), Decl(registryMonoidalPatternNoOOM.ts, 76, 45))
+>TConfig : Symbol(TConfig, Decl(registryMonoidalPatternNoOOM.ts, 0, 18), Decl(registryMonoidalPatternNoOOM.ts, 15, 18), Decl(registryMonoidalPatternNoOOM.ts, 47, 18), Decl(registryMonoidalPatternNoOOM.ts, 77, 18))
+
+    [GroupOneName]: GroupOne<TConfig>;
+>[GroupOneName] : Symbol(Plugins[GroupOneName], Decl(registryMonoidalPatternNoOOM.ts, 15, 28))
+>GroupOneName : Symbol(GroupOneName, Decl(registryMonoidalPatternNoOOM.ts, 12, 5), Decl(registryMonoidalPatternNoOOM.ts, 12, 32))
+>GroupOne : Symbol(GroupOne, Decl(registryMonoidalPatternNoOOM.ts, 13, 40))
+>TConfig : Symbol(TConfig, Decl(registryMonoidalPatternNoOOM.ts, 0, 18), Decl(registryMonoidalPatternNoOOM.ts, 15, 18), Decl(registryMonoidalPatternNoOOM.ts, 47, 18), Decl(registryMonoidalPatternNoOOM.ts, 77, 18))
+}
+class PluginA<TConf> implements MiddlewarePlugin<GroupOneName, TConf> {
+>PluginA : Symbol(PluginA, Decl(registryMonoidalPatternNoOOM.ts, 17, 1))
+>TConf : Symbol(TConf, Decl(registryMonoidalPatternNoOOM.ts, 18, 14))
+>MiddlewarePlugin : Symbol(MiddlewarePlugin, Decl(registryMonoidalPatternNoOOM.ts, 2, 38))
+>GroupOneName : Symbol(GroupOneName, Decl(registryMonoidalPatternNoOOM.ts, 12, 5), Decl(registryMonoidalPatternNoOOM.ts, 12, 32))
+>TConf : Symbol(TConf, Decl(registryMonoidalPatternNoOOM.ts, 18, 14))
+
+    readonly _kind = "PluginA";
+>_kind : Symbol(PluginA._kind, Decl(registryMonoidalPatternNoOOM.ts, 18, 71))
+
+    readonly _group = GroupOneName;
+>_group : Symbol(PluginA._group, Decl(registryMonoidalPatternNoOOM.ts, 19, 31))
+>GroupOneName : Symbol(GroupOneName, Decl(registryMonoidalPatternNoOOM.ts, 12, 5), Decl(registryMonoidalPatternNoOOM.ts, 12, 32))
+
+    constructor(public value: TConf) {}
+>value : Symbol(PluginA.value, Decl(registryMonoidalPatternNoOOM.ts, 21, 16))
+>TConf : Symbol(TConf, Decl(registryMonoidalPatternNoOOM.ts, 18, 14))
+
+    configure<T>(cb: (conf: TConf) => T): GroupOne<T> {
+>configure : Symbol(PluginA.configure, Decl(registryMonoidalPatternNoOOM.ts, 21, 39))
+>T : Symbol(T, Decl(registryMonoidalPatternNoOOM.ts, 22, 14))
+>cb : Symbol(cb, Decl(registryMonoidalPatternNoOOM.ts, 22, 17))
+>conf : Symbol(conf, Decl(registryMonoidalPatternNoOOM.ts, 22, 22))
+>TConf : Symbol(TConf, Decl(registryMonoidalPatternNoOOM.ts, 18, 14))
+>T : Symbol(T, Decl(registryMonoidalPatternNoOOM.ts, 22, 14))
+>GroupOne : Symbol(GroupOne, Decl(registryMonoidalPatternNoOOM.ts, 13, 40))
+>T : Symbol(T, Decl(registryMonoidalPatternNoOOM.ts, 22, 14))
+
+        return new PluginA(cb(this.value));
+>PluginA : Symbol(PluginA, Decl(registryMonoidalPatternNoOOM.ts, 17, 1))
+>cb : Symbol(cb, Decl(registryMonoidalPatternNoOOM.ts, 22, 17))
+>this.value : Symbol(PluginA.value, Decl(registryMonoidalPatternNoOOM.ts, 21, 16))
+>this : Symbol(PluginA, Decl(registryMonoidalPatternNoOOM.ts, 17, 1))
+>value : Symbol(PluginA.value, Decl(registryMonoidalPatternNoOOM.ts, 21, 16))
+    }
+    combine<T>(plug: GroupOne<(conf: TConf) => T>): GroupOne<T> {
+>combine : Symbol(PluginA.combine, Decl(registryMonoidalPatternNoOOM.ts, 24, 5))
+>T : Symbol(T, Decl(registryMonoidalPatternNoOOM.ts, 25, 12))
+>plug : Symbol(plug, Decl(registryMonoidalPatternNoOOM.ts, 25, 15))
+>GroupOne : Symbol(GroupOne, Decl(registryMonoidalPatternNoOOM.ts, 13, 40))
+>conf : Symbol(conf, Decl(registryMonoidalPatternNoOOM.ts, 25, 31))
+>TConf : Symbol(TConf, Decl(registryMonoidalPatternNoOOM.ts, 18, 14))
+>T : Symbol(T, Decl(registryMonoidalPatternNoOOM.ts, 25, 12))
+>GroupOne : Symbol(GroupOne, Decl(registryMonoidalPatternNoOOM.ts, 13, 40))
+>T : Symbol(T, Decl(registryMonoidalPatternNoOOM.ts, 25, 12))
+
+        return plug.configure(f => f(this.value));
+>plug.configure : Symbol(configure, Decl(registryMonoidalPatternNoOOM.ts, 21, 39), Decl(registryMonoidalPatternNoOOM.ts, 33, 39))
+>plug : Symbol(plug, Decl(registryMonoidalPatternNoOOM.ts, 25, 15))
+>configure : Symbol(configure, Decl(registryMonoidalPatternNoOOM.ts, 21, 39), Decl(registryMonoidalPatternNoOOM.ts, 33, 39))
+>f : Symbol(f, Decl(registryMonoidalPatternNoOOM.ts, 26, 30))
+>f : Symbol(f, Decl(registryMonoidalPatternNoOOM.ts, 26, 30))
+>this.value : Symbol(PluginA.value, Decl(registryMonoidalPatternNoOOM.ts, 21, 16))
+>this : Symbol(PluginA, Decl(registryMonoidalPatternNoOOM.ts, 17, 1))
+>value : Symbol(PluginA.value, Decl(registryMonoidalPatternNoOOM.ts, 21, 16))
+    }
+}
+
+class PluginB<TConf> implements MiddlewarePlugin<GroupOneName, TConf> {
+>PluginB : Symbol(PluginB, Decl(registryMonoidalPatternNoOOM.ts, 28, 1))
+>TConf : Symbol(TConf, Decl(registryMonoidalPatternNoOOM.ts, 30, 14))
+>MiddlewarePlugin : Symbol(MiddlewarePlugin, Decl(registryMonoidalPatternNoOOM.ts, 2, 38))
+>GroupOneName : Symbol(GroupOneName, Decl(registryMonoidalPatternNoOOM.ts, 12, 5), Decl(registryMonoidalPatternNoOOM.ts, 12, 32))
+>TConf : Symbol(TConf, Decl(registryMonoidalPatternNoOOM.ts, 30, 14))
+
+    readonly _kind = "PluginB";
+>_kind : Symbol(PluginB._kind, Decl(registryMonoidalPatternNoOOM.ts, 30, 71))
+
+    readonly _group = GroupOneName;
+>_group : Symbol(PluginB._group, Decl(registryMonoidalPatternNoOOM.ts, 31, 31))
+>GroupOneName : Symbol(GroupOneName, Decl(registryMonoidalPatternNoOOM.ts, 12, 5), Decl(registryMonoidalPatternNoOOM.ts, 12, 32))
+
+    constructor(public value: TConf) {}
+>value : Symbol(PluginB.value, Decl(registryMonoidalPatternNoOOM.ts, 33, 16))
+>TConf : Symbol(TConf, Decl(registryMonoidalPatternNoOOM.ts, 30, 14))
+
+    configure<T>(cb: (conf: TConf) => T): GroupOne<T> {
+>configure : Symbol(PluginB.configure, Decl(registryMonoidalPatternNoOOM.ts, 33, 39))
+>T : Symbol(T, Decl(registryMonoidalPatternNoOOM.ts, 34, 14))
+>cb : Symbol(cb, Decl(registryMonoidalPatternNoOOM.ts, 34, 17))
+>conf : Symbol(conf, Decl(registryMonoidalPatternNoOOM.ts, 34, 22))
+>TConf : Symbol(TConf, Decl(registryMonoidalPatternNoOOM.ts, 30, 14))
+>T : Symbol(T, Decl(registryMonoidalPatternNoOOM.ts, 34, 14))
+>GroupOne : Symbol(GroupOne, Decl(registryMonoidalPatternNoOOM.ts, 13, 40))
+>T : Symbol(T, Decl(registryMonoidalPatternNoOOM.ts, 34, 14))
+
+        return new PluginB(cb(this.value));
+>PluginB : Symbol(PluginB, Decl(registryMonoidalPatternNoOOM.ts, 28, 1))
+>cb : Symbol(cb, Decl(registryMonoidalPatternNoOOM.ts, 34, 17))
+>this.value : Symbol(PluginB.value, Decl(registryMonoidalPatternNoOOM.ts, 33, 16))
+>this : Symbol(PluginB, Decl(registryMonoidalPatternNoOOM.ts, 28, 1))
+>value : Symbol(PluginB.value, Decl(registryMonoidalPatternNoOOM.ts, 33, 16))
+    }
+    combine<T>(plug: GroupOne<(conf: TConf) => T>): GroupOne<T> {
+>combine : Symbol(PluginB.combine, Decl(registryMonoidalPatternNoOOM.ts, 36, 5))
+>T : Symbol(T, Decl(registryMonoidalPatternNoOOM.ts, 37, 12))
+>plug : Symbol(plug, Decl(registryMonoidalPatternNoOOM.ts, 37, 15))
+>GroupOne : Symbol(GroupOne, Decl(registryMonoidalPatternNoOOM.ts, 13, 40))
+>conf : Symbol(conf, Decl(registryMonoidalPatternNoOOM.ts, 37, 31))
+>TConf : Symbol(TConf, Decl(registryMonoidalPatternNoOOM.ts, 30, 14))
+>T : Symbol(T, Decl(registryMonoidalPatternNoOOM.ts, 37, 12))
+>GroupOne : Symbol(GroupOne, Decl(registryMonoidalPatternNoOOM.ts, 13, 40))
+>T : Symbol(T, Decl(registryMonoidalPatternNoOOM.ts, 37, 12))
+
+        return plug.configure(f => f(this.value));
+>plug.configure : Symbol(configure, Decl(registryMonoidalPatternNoOOM.ts, 21, 39), Decl(registryMonoidalPatternNoOOM.ts, 33, 39))
+>plug : Symbol(plug, Decl(registryMonoidalPatternNoOOM.ts, 37, 15))
+>configure : Symbol(configure, Decl(registryMonoidalPatternNoOOM.ts, 21, 39), Decl(registryMonoidalPatternNoOOM.ts, 33, 39))
+>f : Symbol(f, Decl(registryMonoidalPatternNoOOM.ts, 38, 30))
+>f : Symbol(f, Decl(registryMonoidalPatternNoOOM.ts, 38, 30))
+>this.value : Symbol(PluginB.value, Decl(registryMonoidalPatternNoOOM.ts, 33, 16))
+>this : Symbol(PluginB, Decl(registryMonoidalPatternNoOOM.ts, 28, 1))
+>value : Symbol(PluginB.value, Decl(registryMonoidalPatternNoOOM.ts, 33, 16))
+    }
+}
+
+// One plugin group isn't quite enough to run OOM - we need a few more
+
+const GroupTwoName = "GroupTwo";
+>GroupTwoName : Symbol(GroupTwoName, Decl(registryMonoidalPatternNoOOM.ts, 44, 5), Decl(registryMonoidalPatternNoOOM.ts, 44, 32))
+
+type GroupTwoName = typeof GroupTwoName;
+>GroupTwoName : Symbol(GroupTwoName, Decl(registryMonoidalPatternNoOOM.ts, 44, 5), Decl(registryMonoidalPatternNoOOM.ts, 44, 32))
+>GroupTwoName : Symbol(GroupTwoName, Decl(registryMonoidalPatternNoOOM.ts, 44, 5), Decl(registryMonoidalPatternNoOOM.ts, 44, 32))
+
+type GroupTwo<T> = PluginC<T> | PluginD<T>;
+>GroupTwo : Symbol(GroupTwo, Decl(registryMonoidalPatternNoOOM.ts, 45, 40))
+>T : Symbol(T, Decl(registryMonoidalPatternNoOOM.ts, 46, 14))
+>PluginC : Symbol(PluginC, Decl(registryMonoidalPatternNoOOM.ts, 49, 1))
+>T : Symbol(T, Decl(registryMonoidalPatternNoOOM.ts, 46, 14))
+>PluginD : Symbol(PluginD, Decl(registryMonoidalPatternNoOOM.ts, 60, 1))
+>T : Symbol(T, Decl(registryMonoidalPatternNoOOM.ts, 46, 14))
+
+interface Plugins<TConfig> {
+>Plugins : Symbol(Plugins, Decl(registryMonoidalPatternNoOOM.ts, 0, 0), Decl(registryMonoidalPatternNoOOM.ts, 14, 43), Decl(registryMonoidalPatternNoOOM.ts, 46, 43), Decl(registryMonoidalPatternNoOOM.ts, 76, 45))
+>TConfig : Symbol(TConfig, Decl(registryMonoidalPatternNoOOM.ts, 0, 18), Decl(registryMonoidalPatternNoOOM.ts, 15, 18), Decl(registryMonoidalPatternNoOOM.ts, 47, 18), Decl(registryMonoidalPatternNoOOM.ts, 77, 18))
+
+    [GroupTwoName]: GroupTwo<TConfig>;
+>[GroupTwoName] : Symbol(Plugins[GroupTwoName], Decl(registryMonoidalPatternNoOOM.ts, 47, 28))
+>GroupTwoName : Symbol(GroupTwoName, Decl(registryMonoidalPatternNoOOM.ts, 44, 5), Decl(registryMonoidalPatternNoOOM.ts, 44, 32))
+>GroupTwo : Symbol(GroupTwo, Decl(registryMonoidalPatternNoOOM.ts, 45, 40))
+>TConfig : Symbol(TConfig, Decl(registryMonoidalPatternNoOOM.ts, 0, 18), Decl(registryMonoidalPatternNoOOM.ts, 15, 18), Decl(registryMonoidalPatternNoOOM.ts, 47, 18), Decl(registryMonoidalPatternNoOOM.ts, 77, 18))
+}
+class PluginC<TConf> implements MiddlewarePlugin<GroupTwoName, TConf> {
+>PluginC : Symbol(PluginC, Decl(registryMonoidalPatternNoOOM.ts, 49, 1))
+>TConf : Symbol(TConf, Decl(registryMonoidalPatternNoOOM.ts, 50, 14))
+>MiddlewarePlugin : Symbol(MiddlewarePlugin, Decl(registryMonoidalPatternNoOOM.ts, 2, 38))
+>GroupTwoName : Symbol(GroupTwoName, Decl(registryMonoidalPatternNoOOM.ts, 44, 5), Decl(registryMonoidalPatternNoOOM.ts, 44, 32))
+>TConf : Symbol(TConf, Decl(registryMonoidalPatternNoOOM.ts, 50, 14))
+
+    readonly _kind = "PluginC";
+>_kind : Symbol(PluginC._kind, Decl(registryMonoidalPatternNoOOM.ts, 50, 71))
+
+    readonly _group = GroupTwoName;
+>_group : Symbol(PluginC._group, Decl(registryMonoidalPatternNoOOM.ts, 51, 31))
+>GroupTwoName : Symbol(GroupTwoName, Decl(registryMonoidalPatternNoOOM.ts, 44, 5), Decl(registryMonoidalPatternNoOOM.ts, 44, 32))
+
+    constructor(public value: TConf) {}
+>value : Symbol(PluginC.value, Decl(registryMonoidalPatternNoOOM.ts, 53, 16))
+>TConf : Symbol(TConf, Decl(registryMonoidalPatternNoOOM.ts, 50, 14))
+
+    configure<T>(cb: (conf: TConf) => T): GroupTwo<T> {
+>configure : Symbol(PluginC.configure, Decl(registryMonoidalPatternNoOOM.ts, 53, 39))
+>T : Symbol(T, Decl(registryMonoidalPatternNoOOM.ts, 54, 14))
+>cb : Symbol(cb, Decl(registryMonoidalPatternNoOOM.ts, 54, 17))
+>conf : Symbol(conf, Decl(registryMonoidalPatternNoOOM.ts, 54, 22))
+>TConf : Symbol(TConf, Decl(registryMonoidalPatternNoOOM.ts, 50, 14))
+>T : Symbol(T, Decl(registryMonoidalPatternNoOOM.ts, 54, 14))
+>GroupTwo : Symbol(GroupTwo, Decl(registryMonoidalPatternNoOOM.ts, 45, 40))
+>T : Symbol(T, Decl(registryMonoidalPatternNoOOM.ts, 54, 14))
+
+        return new PluginC(cb(this.value));
+>PluginC : Symbol(PluginC, Decl(registryMonoidalPatternNoOOM.ts, 49, 1))
+>cb : Symbol(cb, Decl(registryMonoidalPatternNoOOM.ts, 54, 17))
+>this.value : Symbol(PluginC.value, Decl(registryMonoidalPatternNoOOM.ts, 53, 16))
+>this : Symbol(PluginC, Decl(registryMonoidalPatternNoOOM.ts, 49, 1))
+>value : Symbol(PluginC.value, Decl(registryMonoidalPatternNoOOM.ts, 53, 16))
+    }
+    combine<T>(plug: GroupTwo<(conf: TConf) => T>): GroupTwo<T> {
+>combine : Symbol(PluginC.combine, Decl(registryMonoidalPatternNoOOM.ts, 56, 5))
+>T : Symbol(T, Decl(registryMonoidalPatternNoOOM.ts, 57, 12))
+>plug : Symbol(plug, Decl(registryMonoidalPatternNoOOM.ts, 57, 15))
+>GroupTwo : Symbol(GroupTwo, Decl(registryMonoidalPatternNoOOM.ts, 45, 40))
+>conf : Symbol(conf, Decl(registryMonoidalPatternNoOOM.ts, 57, 31))
+>TConf : Symbol(TConf, Decl(registryMonoidalPatternNoOOM.ts, 50, 14))
+>T : Symbol(T, Decl(registryMonoidalPatternNoOOM.ts, 57, 12))
+>GroupTwo : Symbol(GroupTwo, Decl(registryMonoidalPatternNoOOM.ts, 45, 40))
+>T : Symbol(T, Decl(registryMonoidalPatternNoOOM.ts, 57, 12))
+
+        return plug.configure(f => f(this.value));
+>plug.configure : Symbol(configure, Decl(registryMonoidalPatternNoOOM.ts, 53, 39), Decl(registryMonoidalPatternNoOOM.ts, 65, 39))
+>plug : Symbol(plug, Decl(registryMonoidalPatternNoOOM.ts, 57, 15))
+>configure : Symbol(configure, Decl(registryMonoidalPatternNoOOM.ts, 53, 39), Decl(registryMonoidalPatternNoOOM.ts, 65, 39))
+>f : Symbol(f, Decl(registryMonoidalPatternNoOOM.ts, 58, 30))
+>f : Symbol(f, Decl(registryMonoidalPatternNoOOM.ts, 58, 30))
+>this.value : Symbol(PluginC.value, Decl(registryMonoidalPatternNoOOM.ts, 53, 16))
+>this : Symbol(PluginC, Decl(registryMonoidalPatternNoOOM.ts, 49, 1))
+>value : Symbol(PluginC.value, Decl(registryMonoidalPatternNoOOM.ts, 53, 16))
+    }
+}
+
+class PluginD<TConf> implements MiddlewarePlugin<GroupTwoName, TConf> {
+>PluginD : Symbol(PluginD, Decl(registryMonoidalPatternNoOOM.ts, 60, 1))
+>TConf : Symbol(TConf, Decl(registryMonoidalPatternNoOOM.ts, 62, 14))
+>MiddlewarePlugin : Symbol(MiddlewarePlugin, Decl(registryMonoidalPatternNoOOM.ts, 2, 38))
+>GroupTwoName : Symbol(GroupTwoName, Decl(registryMonoidalPatternNoOOM.ts, 44, 5), Decl(registryMonoidalPatternNoOOM.ts, 44, 32))
+>TConf : Symbol(TConf, Decl(registryMonoidalPatternNoOOM.ts, 62, 14))
+
+    readonly _kind = "PluginD";
+>_kind : Symbol(PluginD._kind, Decl(registryMonoidalPatternNoOOM.ts, 62, 71))
+
+    readonly _group = GroupTwoName;
+>_group : Symbol(PluginD._group, Decl(registryMonoidalPatternNoOOM.ts, 63, 31))
+>GroupTwoName : Symbol(GroupTwoName, Decl(registryMonoidalPatternNoOOM.ts, 44, 5), Decl(registryMonoidalPatternNoOOM.ts, 44, 32))
+
+    constructor(public value: TConf) {}
+>value : Symbol(PluginD.value, Decl(registryMonoidalPatternNoOOM.ts, 65, 16))
+>TConf : Symbol(TConf, Decl(registryMonoidalPatternNoOOM.ts, 62, 14))
+
+    configure<T>(cb: (conf: TConf) => T): GroupTwo<T> {
+>configure : Symbol(PluginD.configure, Decl(registryMonoidalPatternNoOOM.ts, 65, 39))
+>T : Symbol(T, Decl(registryMonoidalPatternNoOOM.ts, 66, 14))
+>cb : Symbol(cb, Decl(registryMonoidalPatternNoOOM.ts, 66, 17))
+>conf : Symbol(conf, Decl(registryMonoidalPatternNoOOM.ts, 66, 22))
+>TConf : Symbol(TConf, Decl(registryMonoidalPatternNoOOM.ts, 62, 14))
+>T : Symbol(T, Decl(registryMonoidalPatternNoOOM.ts, 66, 14))
+>GroupTwo : Symbol(GroupTwo, Decl(registryMonoidalPatternNoOOM.ts, 45, 40))
+>T : Symbol(T, Decl(registryMonoidalPatternNoOOM.ts, 66, 14))
+
+        return new PluginD(cb(this.value));
+>PluginD : Symbol(PluginD, Decl(registryMonoidalPatternNoOOM.ts, 60, 1))
+>cb : Symbol(cb, Decl(registryMonoidalPatternNoOOM.ts, 66, 17))
+>this.value : Symbol(PluginD.value, Decl(registryMonoidalPatternNoOOM.ts, 65, 16))
+>this : Symbol(PluginD, Decl(registryMonoidalPatternNoOOM.ts, 60, 1))
+>value : Symbol(PluginD.value, Decl(registryMonoidalPatternNoOOM.ts, 65, 16))
+    }
+    combine<T>(plug: GroupTwo<(conf: TConf) => T>): GroupTwo<T> {
+>combine : Symbol(PluginD.combine, Decl(registryMonoidalPatternNoOOM.ts, 68, 5))
+>T : Symbol(T, Decl(registryMonoidalPatternNoOOM.ts, 69, 12))
+>plug : Symbol(plug, Decl(registryMonoidalPatternNoOOM.ts, 69, 15))
+>GroupTwo : Symbol(GroupTwo, Decl(registryMonoidalPatternNoOOM.ts, 45, 40))
+>conf : Symbol(conf, Decl(registryMonoidalPatternNoOOM.ts, 69, 31))
+>TConf : Symbol(TConf, Decl(registryMonoidalPatternNoOOM.ts, 62, 14))
+>T : Symbol(T, Decl(registryMonoidalPatternNoOOM.ts, 69, 12))
+>GroupTwo : Symbol(GroupTwo, Decl(registryMonoidalPatternNoOOM.ts, 45, 40))
+>T : Symbol(T, Decl(registryMonoidalPatternNoOOM.ts, 69, 12))
+
+        return plug.configure(f => f(this.value));
+>plug.configure : Symbol(configure, Decl(registryMonoidalPatternNoOOM.ts, 53, 39), Decl(registryMonoidalPatternNoOOM.ts, 65, 39))
+>plug : Symbol(plug, Decl(registryMonoidalPatternNoOOM.ts, 69, 15))
+>configure : Symbol(configure, Decl(registryMonoidalPatternNoOOM.ts, 53, 39), Decl(registryMonoidalPatternNoOOM.ts, 65, 39))
+>f : Symbol(f, Decl(registryMonoidalPatternNoOOM.ts, 70, 30))
+>f : Symbol(f, Decl(registryMonoidalPatternNoOOM.ts, 70, 30))
+>this.value : Symbol(PluginD.value, Decl(registryMonoidalPatternNoOOM.ts, 65, 16))
+>this : Symbol(PluginD, Decl(registryMonoidalPatternNoOOM.ts, 60, 1))
+>value : Symbol(PluginD.value, Decl(registryMonoidalPatternNoOOM.ts, 65, 16))
+    }
+}
+
+const GroupThreeName = "GroupThree";
+>GroupThreeName : Symbol(GroupThreeName, Decl(registryMonoidalPatternNoOOM.ts, 74, 5), Decl(registryMonoidalPatternNoOOM.ts, 74, 36))
+
+type GroupThreeName = typeof GroupThreeName;
+>GroupThreeName : Symbol(GroupThreeName, Decl(registryMonoidalPatternNoOOM.ts, 74, 5), Decl(registryMonoidalPatternNoOOM.ts, 74, 36))
+>GroupThreeName : Symbol(GroupThreeName, Decl(registryMonoidalPatternNoOOM.ts, 74, 5), Decl(registryMonoidalPatternNoOOM.ts, 74, 36))
+
+type GroupThree<T> = PluginE<T> | PluginF<T>;
+>GroupThree : Symbol(GroupThree, Decl(registryMonoidalPatternNoOOM.ts, 75, 44))
+>T : Symbol(T, Decl(registryMonoidalPatternNoOOM.ts, 76, 16))
+>PluginE : Symbol(PluginE, Decl(registryMonoidalPatternNoOOM.ts, 79, 1))
+>T : Symbol(T, Decl(registryMonoidalPatternNoOOM.ts, 76, 16))
+>PluginF : Symbol(PluginF, Decl(registryMonoidalPatternNoOOM.ts, 90, 1))
+>T : Symbol(T, Decl(registryMonoidalPatternNoOOM.ts, 76, 16))
+
+interface Plugins<TConfig> {
+>Plugins : Symbol(Plugins, Decl(registryMonoidalPatternNoOOM.ts, 0, 0), Decl(registryMonoidalPatternNoOOM.ts, 14, 43), Decl(registryMonoidalPatternNoOOM.ts, 46, 43), Decl(registryMonoidalPatternNoOOM.ts, 76, 45))
+>TConfig : Symbol(TConfig, Decl(registryMonoidalPatternNoOOM.ts, 0, 18), Decl(registryMonoidalPatternNoOOM.ts, 15, 18), Decl(registryMonoidalPatternNoOOM.ts, 47, 18), Decl(registryMonoidalPatternNoOOM.ts, 77, 18))
+
+    [GroupThreeName]: GroupThree<TConfig>;
+>[GroupThreeName] : Symbol(Plugins[GroupThreeName], Decl(registryMonoidalPatternNoOOM.ts, 77, 28))
+>GroupThreeName : Symbol(GroupThreeName, Decl(registryMonoidalPatternNoOOM.ts, 74, 5), Decl(registryMonoidalPatternNoOOM.ts, 74, 36))
+>GroupThree : Symbol(GroupThree, Decl(registryMonoidalPatternNoOOM.ts, 75, 44))
+>TConfig : Symbol(TConfig, Decl(registryMonoidalPatternNoOOM.ts, 0, 18), Decl(registryMonoidalPatternNoOOM.ts, 15, 18), Decl(registryMonoidalPatternNoOOM.ts, 47, 18), Decl(registryMonoidalPatternNoOOM.ts, 77, 18))
+}
+class PluginE<TConf> implements MiddlewarePlugin<GroupThreeName, TConf> {
+>PluginE : Symbol(PluginE, Decl(registryMonoidalPatternNoOOM.ts, 79, 1))
+>TConf : Symbol(TConf, Decl(registryMonoidalPatternNoOOM.ts, 80, 14))
+>MiddlewarePlugin : Symbol(MiddlewarePlugin, Decl(registryMonoidalPatternNoOOM.ts, 2, 38))
+>GroupThreeName : Symbol(GroupThreeName, Decl(registryMonoidalPatternNoOOM.ts, 74, 5), Decl(registryMonoidalPatternNoOOM.ts, 74, 36))
+>TConf : Symbol(TConf, Decl(registryMonoidalPatternNoOOM.ts, 80, 14))
+
+    readonly _kind = "PluginC";
+>_kind : Symbol(PluginE._kind, Decl(registryMonoidalPatternNoOOM.ts, 80, 73))
+
+    readonly _group = GroupThreeName;
+>_group : Symbol(PluginE._group, Decl(registryMonoidalPatternNoOOM.ts, 81, 31))
+>GroupThreeName : Symbol(GroupThreeName, Decl(registryMonoidalPatternNoOOM.ts, 74, 5), Decl(registryMonoidalPatternNoOOM.ts, 74, 36))
+
+    constructor(public value: TConf) {}
+>value : Symbol(PluginE.value, Decl(registryMonoidalPatternNoOOM.ts, 83, 16))
+>TConf : Symbol(TConf, Decl(registryMonoidalPatternNoOOM.ts, 80, 14))
+
+    configure<T>(cb: (conf: TConf) => T): GroupThree<T> {
+>configure : Symbol(PluginE.configure, Decl(registryMonoidalPatternNoOOM.ts, 83, 39))
+>T : Symbol(T, Decl(registryMonoidalPatternNoOOM.ts, 84, 14))
+>cb : Symbol(cb, Decl(registryMonoidalPatternNoOOM.ts, 84, 17))
+>conf : Symbol(conf, Decl(registryMonoidalPatternNoOOM.ts, 84, 22))
+>TConf : Symbol(TConf, Decl(registryMonoidalPatternNoOOM.ts, 80, 14))
+>T : Symbol(T, Decl(registryMonoidalPatternNoOOM.ts, 84, 14))
+>GroupThree : Symbol(GroupThree, Decl(registryMonoidalPatternNoOOM.ts, 75, 44))
+>T : Symbol(T, Decl(registryMonoidalPatternNoOOM.ts, 84, 14))
+
+        return new PluginE(cb(this.value));
+>PluginE : Symbol(PluginE, Decl(registryMonoidalPatternNoOOM.ts, 79, 1))
+>cb : Symbol(cb, Decl(registryMonoidalPatternNoOOM.ts, 84, 17))
+>this.value : Symbol(PluginE.value, Decl(registryMonoidalPatternNoOOM.ts, 83, 16))
+>this : Symbol(PluginE, Decl(registryMonoidalPatternNoOOM.ts, 79, 1))
+>value : Symbol(PluginE.value, Decl(registryMonoidalPatternNoOOM.ts, 83, 16))
+    }
+    combine<T>(plug: GroupThree<(conf: TConf) => T>): GroupThree<T> {
+>combine : Symbol(PluginE.combine, Decl(registryMonoidalPatternNoOOM.ts, 86, 5))
+>T : Symbol(T, Decl(registryMonoidalPatternNoOOM.ts, 87, 12))
+>plug : Symbol(plug, Decl(registryMonoidalPatternNoOOM.ts, 87, 15))
+>GroupThree : Symbol(GroupThree, Decl(registryMonoidalPatternNoOOM.ts, 75, 44))
+>conf : Symbol(conf, Decl(registryMonoidalPatternNoOOM.ts, 87, 33))
+>TConf : Symbol(TConf, Decl(registryMonoidalPatternNoOOM.ts, 80, 14))
+>T : Symbol(T, Decl(registryMonoidalPatternNoOOM.ts, 87, 12))
+>GroupThree : Symbol(GroupThree, Decl(registryMonoidalPatternNoOOM.ts, 75, 44))
+>T : Symbol(T, Decl(registryMonoidalPatternNoOOM.ts, 87, 12))
+
+        return plug.configure(f => f(this.value));
+>plug.configure : Symbol(configure, Decl(registryMonoidalPatternNoOOM.ts, 83, 39), Decl(registryMonoidalPatternNoOOM.ts, 95, 39))
+>plug : Symbol(plug, Decl(registryMonoidalPatternNoOOM.ts, 87, 15))
+>configure : Symbol(configure, Decl(registryMonoidalPatternNoOOM.ts, 83, 39), Decl(registryMonoidalPatternNoOOM.ts, 95, 39))
+>f : Symbol(f, Decl(registryMonoidalPatternNoOOM.ts, 88, 30))
+>f : Symbol(f, Decl(registryMonoidalPatternNoOOM.ts, 88, 30))
+>this.value : Symbol(PluginE.value, Decl(registryMonoidalPatternNoOOM.ts, 83, 16))
+>this : Symbol(PluginE, Decl(registryMonoidalPatternNoOOM.ts, 79, 1))
+>value : Symbol(PluginE.value, Decl(registryMonoidalPatternNoOOM.ts, 83, 16))
+    }
+}
+
+class PluginF<TConf> implements MiddlewarePlugin<GroupThreeName, TConf> {
+>PluginF : Symbol(PluginF, Decl(registryMonoidalPatternNoOOM.ts, 90, 1))
+>TConf : Symbol(TConf, Decl(registryMonoidalPatternNoOOM.ts, 92, 14))
+>MiddlewarePlugin : Symbol(MiddlewarePlugin, Decl(registryMonoidalPatternNoOOM.ts, 2, 38))
+>GroupThreeName : Symbol(GroupThreeName, Decl(registryMonoidalPatternNoOOM.ts, 74, 5), Decl(registryMonoidalPatternNoOOM.ts, 74, 36))
+>TConf : Symbol(TConf, Decl(registryMonoidalPatternNoOOM.ts, 92, 14))
+
+    readonly _kind = "PluginD";
+>_kind : Symbol(PluginF._kind, Decl(registryMonoidalPatternNoOOM.ts, 92, 73))
+
+    readonly _group = GroupThreeName;
+>_group : Symbol(PluginF._group, Decl(registryMonoidalPatternNoOOM.ts, 93, 31))
+>GroupThreeName : Symbol(GroupThreeName, Decl(registryMonoidalPatternNoOOM.ts, 74, 5), Decl(registryMonoidalPatternNoOOM.ts, 74, 36))
+
+    constructor(public value: TConf) {}
+>value : Symbol(PluginF.value, Decl(registryMonoidalPatternNoOOM.ts, 95, 16))
+>TConf : Symbol(TConf, Decl(registryMonoidalPatternNoOOM.ts, 92, 14))
+
+    configure<T>(cb: (conf: TConf) => T): GroupThree<T> {
+>configure : Symbol(PluginF.configure, Decl(registryMonoidalPatternNoOOM.ts, 95, 39))
+>T : Symbol(T, Decl(registryMonoidalPatternNoOOM.ts, 96, 14))
+>cb : Symbol(cb, Decl(registryMonoidalPatternNoOOM.ts, 96, 17))
+>conf : Symbol(conf, Decl(registryMonoidalPatternNoOOM.ts, 96, 22))
+>TConf : Symbol(TConf, Decl(registryMonoidalPatternNoOOM.ts, 92, 14))
+>T : Symbol(T, Decl(registryMonoidalPatternNoOOM.ts, 96, 14))
+>GroupThree : Symbol(GroupThree, Decl(registryMonoidalPatternNoOOM.ts, 75, 44))
+>T : Symbol(T, Decl(registryMonoidalPatternNoOOM.ts, 96, 14))
+
+        return new PluginF(cb(this.value));
+>PluginF : Symbol(PluginF, Decl(registryMonoidalPatternNoOOM.ts, 90, 1))
+>cb : Symbol(cb, Decl(registryMonoidalPatternNoOOM.ts, 96, 17))
+>this.value : Symbol(PluginF.value, Decl(registryMonoidalPatternNoOOM.ts, 95, 16))
+>this : Symbol(PluginF, Decl(registryMonoidalPatternNoOOM.ts, 90, 1))
+>value : Symbol(PluginF.value, Decl(registryMonoidalPatternNoOOM.ts, 95, 16))
+    }
+    combine<T>(plug: GroupThree<(conf: TConf) => T>): GroupThree<T> {
+>combine : Symbol(PluginF.combine, Decl(registryMonoidalPatternNoOOM.ts, 98, 5))
+>T : Symbol(T, Decl(registryMonoidalPatternNoOOM.ts, 99, 12))
+>plug : Symbol(plug, Decl(registryMonoidalPatternNoOOM.ts, 99, 15))
+>GroupThree : Symbol(GroupThree, Decl(registryMonoidalPatternNoOOM.ts, 75, 44))
+>conf : Symbol(conf, Decl(registryMonoidalPatternNoOOM.ts, 99, 33))
+>TConf : Symbol(TConf, Decl(registryMonoidalPatternNoOOM.ts, 92, 14))
+>T : Symbol(T, Decl(registryMonoidalPatternNoOOM.ts, 99, 12))
+>GroupThree : Symbol(GroupThree, Decl(registryMonoidalPatternNoOOM.ts, 75, 44))
+>T : Symbol(T, Decl(registryMonoidalPatternNoOOM.ts, 99, 12))
+
+        return plug.configure(f => f(this.value));
+>plug.configure : Symbol(configure, Decl(registryMonoidalPatternNoOOM.ts, 83, 39), Decl(registryMonoidalPatternNoOOM.ts, 95, 39))
+>plug : Symbol(plug, Decl(registryMonoidalPatternNoOOM.ts, 99, 15))
+>configure : Symbol(configure, Decl(registryMonoidalPatternNoOOM.ts, 83, 39), Decl(registryMonoidalPatternNoOOM.ts, 95, 39))
+>f : Symbol(f, Decl(registryMonoidalPatternNoOOM.ts, 100, 30))
+>f : Symbol(f, Decl(registryMonoidalPatternNoOOM.ts, 100, 30))
+>this.value : Symbol(PluginF.value, Decl(registryMonoidalPatternNoOOM.ts, 95, 16))
+>this : Symbol(PluginF, Decl(registryMonoidalPatternNoOOM.ts, 90, 1))
+>value : Symbol(PluginF.value, Decl(registryMonoidalPatternNoOOM.ts, 95, 16))
+    }
+}
+

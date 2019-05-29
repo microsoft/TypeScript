@@ -7,8 +7,6 @@ namespace ts {
     let nextMergeId = 1;
     let nextFlowId = 1;
 
-    const maxSymbolRecusionDepth = 10;
-
     export function getNodeId(node: Node): number {
         if (!node.id) {
             node.id = nextNodeId;
@@ -3724,7 +3722,7 @@ namespace ts {
                             }
 
                             const depth = context.symbolDepth.get(id) || 0;
-                            if (depth > maxSymbolRecusionDepth) {
+                            if (depth > 10) {
                                 return createElidedInformationPlaceholder(context);
                             }
                             context.symbolDepth.set(id, depth + 1);
@@ -13050,6 +13048,13 @@ namespace ts {
                 return result;
             }
 
+            function getInstanceOfAliasOrReferenceWithMarker(input: Type, typeArguments: readonly Type[]) {
+                const s = input.aliasSymbol ? getTypeAliasInstantiation(input.aliasSymbol, typeArguments) : createTypeReference((<TypeReference>input).target, typeArguments);
+                if (s.aliasSymbol) s.aliasTypeArgumentsContainsMarker = true;
+                else (<TypeReference>s).objectFlags |= ObjectFlags.MarkerType;
+                return s;
+            }
+
             function structuredTypeRelatedTo(source: Type, target: Type, reportErrors: boolean, isIntersectionConstituent: boolean): Ternary {
                 const flags = source.flags & target.flags;
                 if (relation === identityRelation && !(flags & TypeFlags.Object)) {
@@ -13098,6 +13103,40 @@ namespace ts {
                     const varianceResult = relateVariances(source.aliasTypeArguments, target.aliasTypeArguments, variances);
                     if (varianceResult !== undefined) {
                         return varianceResult;
+                    }
+                }
+
+                // If a more _general_ version of the source and target are being compared, consider them related with assumptions
+                // eg, if { x: Q } and { x: Q, y: A } are being compared and we're about to look at { x: Q' } and { x: Q', y: A } where Q'
+                // is some specialization or subtype of Q
+                // This is difficult to detect generally, so we scan for prior comparisons of the same instantiated type, and match up matching
+                // type arguments into sets to create a canonicalization based on those matches
+                if (relation !== identityRelation && ((source.aliasSymbol && !source.aliasTypeArgumentsContainsMarker && source.aliasTypeArguments) || (getObjectFlags(source) & ObjectFlags.Reference && (<TypeReference>source).typeArguments && !(getObjectFlags(source) & ObjectFlags.MarkerType))) &&
+                ((target.aliasSymbol && !target.aliasTypeArgumentsContainsMarker && target.aliasTypeArguments) || (getObjectFlags(target) & ObjectFlags.Reference && (<TypeReference>target).typeArguments && !(getObjectFlags(target) & ObjectFlags.MarkerType)))) {
+                    const originalKey = getRelationKey(source, target, relation);
+                    const sourceTypeArguments = source.aliasTypeArguments || (<TypeReference>source).typeArguments!;
+                    const targetTypeArguments = target.aliasTypeArguments || (<TypeReference>target).typeArguments!;
+                    for (let i = 0; i < sourceTypeArguments.length; i++) {
+                        for (let j = 0; j < targetTypeArguments.length; j++) {
+                            if (!(sourceTypeArguments[i].flags & TypeFlags.TypeParameter) && isTypeIdenticalTo(sourceTypeArguments[i], targetTypeArguments[j])) {
+                                const sourceClone = sourceTypeArguments.slice();
+                                sourceClone[i] = markerOtherType;
+                                const s = getInstanceOfAliasOrReferenceWithMarker(source, sourceClone);
+                                const targetClone = targetTypeArguments.slice();
+                                targetClone[j] = markerOtherType;
+                                const t = getInstanceOfAliasOrReferenceWithMarker(target, targetClone);
+                                // If the marker-instantiated form looks "the same" as the type we already have (eg,
+                                // because we replace unconstrained generics with unconstrained generics), skip the check
+                                // since we'll otherwise deliver a spurious `Maybe` result from the key _just_ set upon
+                                // entry into `recursiveTypeRelatedTo`
+                                if (getRelationKey(s, t, relation) !== originalKey) {
+                                    const result = isRelatedTo(s, t, /*reportErrors*/ false);
+                                    if (result) {
+                                        return result;
+                                    }
+                                }
+                            }
+                        }
                     }
                 }
 
@@ -15387,7 +15426,7 @@ namespace ts {
                         if (symbol) {
                             const id = "" + getSymbolId(symbol);
                             const depth = symbolDepth && symbolDepth.get(id) || 0;
-                            if (depth > maxSymbolRecusionDepth) {
+                            if (depth > 5) {
                                 return;
                             }
                             (symbolDepth || (symbolDepth = createMap())).set(id, depth + 1);

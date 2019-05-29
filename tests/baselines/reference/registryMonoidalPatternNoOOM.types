@@ -1,0 +1,361 @@
+=== tests/cases/compiler/registryMonoidalPatternNoOOM.ts ===
+interface Plugins<TConfig> {}
+
+type PluginNames = keyof Plugins<any>;
+>PluginNames : "GroupOne" | "GroupTwo" | "GroupThree"
+
+interface MiddlewarePlugin<TKind extends PluginNames, TPreviousConfig> {
+    readonly _group: TKind;
+>_group : TKind
+
+    configure<TConfig>(cb: (conf: TPreviousConfig) => TConfig): Plugins<TConfig>[TKind];
+>configure : <TConfig>(cb: (conf: TPreviousConfig) => TConfig) => Plugins<TConfig>[TKind]
+>cb : (conf: TPreviousConfig) => TConfig
+>conf : TPreviousConfig
+
+    // combine<TConfig>(cb: Plugins<(conf: TPreviousConfig) => TConfig>[TKind]): Plugins<TConfig>[TKind];
+    // The above "works", but the below _should_ result in less to check and is simpler (and is needed to trigger the OOM bug)
+    combine<TConfig>(cb: MiddlewarePlugin<TKind, (conf: TPreviousConfig) => TConfig>): Plugins<TConfig>[TKind];
+>combine : <TConfig>(cb: MiddlewarePlugin<TKind, (conf: TPreviousConfig) => TConfig>) => Plugins<TConfig>[TKind]
+>cb : MiddlewarePlugin<TKind, (conf: TPreviousConfig) => TConfig>
+>conf : TPreviousConfig
+}
+
+const GroupOneName = "GroupOne";
+>GroupOneName : "GroupOne"
+>"GroupOne" : "GroupOne"
+
+type GroupOneName = typeof GroupOneName;
+>GroupOneName : "GroupOne"
+>GroupOneName : "GroupOne"
+
+type GroupOne<T> = PluginA<T> | PluginB<T>;
+>GroupOne : GroupOne<T>
+
+interface Plugins<TConfig> {
+    [GroupOneName]: GroupOne<TConfig>;
+>[GroupOneName] : GroupOne<TConfig>
+>GroupOneName : "GroupOne"
+}
+class PluginA<TConf> implements MiddlewarePlugin<GroupOneName, TConf> {
+>PluginA : PluginA<TConf>
+
+    readonly _kind = "PluginA";
+>_kind : "PluginA"
+>"PluginA" : "PluginA"
+
+    readonly _group = GroupOneName;
+>_group : "GroupOne"
+>GroupOneName : "GroupOne"
+
+    constructor(public value: TConf) {}
+>value : TConf
+
+    configure<T>(cb: (conf: TConf) => T): GroupOne<T> {
+>configure : <T>(cb: (conf: TConf) => T) => GroupOne<T>
+>cb : (conf: TConf) => T
+>conf : TConf
+
+        return new PluginA(cb(this.value));
+>new PluginA(cb(this.value)) : PluginA<T>
+>PluginA : typeof PluginA
+>cb(this.value) : T
+>cb : (conf: TConf) => T
+>this.value : TConf
+>this : this
+>value : TConf
+    }
+    combine<T>(plug: GroupOne<(conf: TConf) => T>): GroupOne<T> {
+>combine : <T>(plug: GroupOne<(conf: TConf) => T>) => GroupOne<T>
+>plug : GroupOne<(conf: TConf) => T>
+>conf : TConf
+
+        return plug.configure(f => f(this.value));
+>plug.configure(f => f(this.value)) : GroupOne<T>
+>plug.configure : (<T>(cb: (conf: (conf: TConf) => T) => T) => GroupOne<T>) | (<T>(cb: (conf: (conf: TConf) => T) => T) => GroupOne<T>)
+>plug : GroupOne<(conf: TConf) => T>
+>configure : (<T>(cb: (conf: (conf: TConf) => T) => T) => GroupOne<T>) | (<T>(cb: (conf: (conf: TConf) => T) => T) => GroupOne<T>)
+>f => f(this.value) : (f: (conf: TConf) => T) => T
+>f : (conf: TConf) => T
+>f(this.value) : T
+>f : (conf: TConf) => T
+>this.value : TConf
+>this : this
+>value : TConf
+    }
+}
+
+class PluginB<TConf> implements MiddlewarePlugin<GroupOneName, TConf> {
+>PluginB : PluginB<TConf>
+
+    readonly _kind = "PluginB";
+>_kind : "PluginB"
+>"PluginB" : "PluginB"
+
+    readonly _group = GroupOneName;
+>_group : "GroupOne"
+>GroupOneName : "GroupOne"
+
+    constructor(public value: TConf) {}
+>value : TConf
+
+    configure<T>(cb: (conf: TConf) => T): GroupOne<T> {
+>configure : <T>(cb: (conf: TConf) => T) => GroupOne<T>
+>cb : (conf: TConf) => T
+>conf : TConf
+
+        return new PluginB(cb(this.value));
+>new PluginB(cb(this.value)) : PluginB<T>
+>PluginB : typeof PluginB
+>cb(this.value) : T
+>cb : (conf: TConf) => T
+>this.value : TConf
+>this : this
+>value : TConf
+    }
+    combine<T>(plug: GroupOne<(conf: TConf) => T>): GroupOne<T> {
+>combine : <T>(plug: GroupOne<(conf: TConf) => T>) => GroupOne<T>
+>plug : GroupOne<(conf: TConf) => T>
+>conf : TConf
+
+        return plug.configure(f => f(this.value));
+>plug.configure(f => f(this.value)) : GroupOne<T>
+>plug.configure : (<T>(cb: (conf: (conf: TConf) => T) => T) => GroupOne<T>) | (<T>(cb: (conf: (conf: TConf) => T) => T) => GroupOne<T>)
+>plug : GroupOne<(conf: TConf) => T>
+>configure : (<T>(cb: (conf: (conf: TConf) => T) => T) => GroupOne<T>) | (<T>(cb: (conf: (conf: TConf) => T) => T) => GroupOne<T>)
+>f => f(this.value) : (f: (conf: TConf) => T) => T
+>f : (conf: TConf) => T
+>f(this.value) : T
+>f : (conf: TConf) => T
+>this.value : TConf
+>this : this
+>value : TConf
+    }
+}
+
+// One plugin group isn't quite enough to run OOM - we need a few more
+
+const GroupTwoName = "GroupTwo";
+>GroupTwoName : "GroupTwo"
+>"GroupTwo" : "GroupTwo"
+
+type GroupTwoName = typeof GroupTwoName;
+>GroupTwoName : "GroupTwo"
+>GroupTwoName : "GroupTwo"
+
+type GroupTwo<T> = PluginC<T> | PluginD<T>;
+>GroupTwo : GroupTwo<T>
+
+interface Plugins<TConfig> {
+    [GroupTwoName]: GroupTwo<TConfig>;
+>[GroupTwoName] : GroupTwo<TConfig>
+>GroupTwoName : "GroupTwo"
+}
+class PluginC<TConf> implements MiddlewarePlugin<GroupTwoName, TConf> {
+>PluginC : PluginC<TConf>
+
+    readonly _kind = "PluginC";
+>_kind : "PluginC"
+>"PluginC" : "PluginC"
+
+    readonly _group = GroupTwoName;
+>_group : "GroupTwo"
+>GroupTwoName : "GroupTwo"
+
+    constructor(public value: TConf) {}
+>value : TConf
+
+    configure<T>(cb: (conf: TConf) => T): GroupTwo<T> {
+>configure : <T>(cb: (conf: TConf) => T) => GroupTwo<T>
+>cb : (conf: TConf) => T
+>conf : TConf
+
+        return new PluginC(cb(this.value));
+>new PluginC(cb(this.value)) : PluginC<T>
+>PluginC : typeof PluginC
+>cb(this.value) : T
+>cb : (conf: TConf) => T
+>this.value : TConf
+>this : this
+>value : TConf
+    }
+    combine<T>(plug: GroupTwo<(conf: TConf) => T>): GroupTwo<T> {
+>combine : <T>(plug: GroupTwo<(conf: TConf) => T>) => GroupTwo<T>
+>plug : GroupTwo<(conf: TConf) => T>
+>conf : TConf
+
+        return plug.configure(f => f(this.value));
+>plug.configure(f => f(this.value)) : GroupTwo<T>
+>plug.configure : (<T>(cb: (conf: (conf: TConf) => T) => T) => GroupTwo<T>) | (<T>(cb: (conf: (conf: TConf) => T) => T) => GroupTwo<T>)
+>plug : GroupTwo<(conf: TConf) => T>
+>configure : (<T>(cb: (conf: (conf: TConf) => T) => T) => GroupTwo<T>) | (<T>(cb: (conf: (conf: TConf) => T) => T) => GroupTwo<T>)
+>f => f(this.value) : (f: (conf: TConf) => T) => T
+>f : (conf: TConf) => T
+>f(this.value) : T
+>f : (conf: TConf) => T
+>this.value : TConf
+>this : this
+>value : TConf
+    }
+}
+
+class PluginD<TConf> implements MiddlewarePlugin<GroupTwoName, TConf> {
+>PluginD : PluginD<TConf>
+
+    readonly _kind = "PluginD";
+>_kind : "PluginD"
+>"PluginD" : "PluginD"
+
+    readonly _group = GroupTwoName;
+>_group : "GroupTwo"
+>GroupTwoName : "GroupTwo"
+
+    constructor(public value: TConf) {}
+>value : TConf
+
+    configure<T>(cb: (conf: TConf) => T): GroupTwo<T> {
+>configure : <T>(cb: (conf: TConf) => T) => GroupTwo<T>
+>cb : (conf: TConf) => T
+>conf : TConf
+
+        return new PluginD(cb(this.value));
+>new PluginD(cb(this.value)) : PluginD<T>
+>PluginD : typeof PluginD
+>cb(this.value) : T
+>cb : (conf: TConf) => T
+>this.value : TConf
+>this : this
+>value : TConf
+    }
+    combine<T>(plug: GroupTwo<(conf: TConf) => T>): GroupTwo<T> {
+>combine : <T>(plug: GroupTwo<(conf: TConf) => T>) => GroupTwo<T>
+>plug : GroupTwo<(conf: TConf) => T>
+>conf : TConf
+
+        return plug.configure(f => f(this.value));
+>plug.configure(f => f(this.value)) : GroupTwo<T>
+>plug.configure : (<T>(cb: (conf: (conf: TConf) => T) => T) => GroupTwo<T>) | (<T>(cb: (conf: (conf: TConf) => T) => T) => GroupTwo<T>)
+>plug : GroupTwo<(conf: TConf) => T>
+>configure : (<T>(cb: (conf: (conf: TConf) => T) => T) => GroupTwo<T>) | (<T>(cb: (conf: (conf: TConf) => T) => T) => GroupTwo<T>)
+>f => f(this.value) : (f: (conf: TConf) => T) => T
+>f : (conf: TConf) => T
+>f(this.value) : T
+>f : (conf: TConf) => T
+>this.value : TConf
+>this : this
+>value : TConf
+    }
+}
+
+const GroupThreeName = "GroupThree";
+>GroupThreeName : "GroupThree"
+>"GroupThree" : "GroupThree"
+
+type GroupThreeName = typeof GroupThreeName;
+>GroupThreeName : "GroupThree"
+>GroupThreeName : "GroupThree"
+
+type GroupThree<T> = PluginE<T> | PluginF<T>;
+>GroupThree : GroupThree<T>
+
+interface Plugins<TConfig> {
+    [GroupThreeName]: GroupThree<TConfig>;
+>[GroupThreeName] : GroupThree<TConfig>
+>GroupThreeName : "GroupThree"
+}
+class PluginE<TConf> implements MiddlewarePlugin<GroupThreeName, TConf> {
+>PluginE : PluginE<TConf>
+
+    readonly _kind = "PluginC";
+>_kind : "PluginC"
+>"PluginC" : "PluginC"
+
+    readonly _group = GroupThreeName;
+>_group : "GroupThree"
+>GroupThreeName : "GroupThree"
+
+    constructor(public value: TConf) {}
+>value : TConf
+
+    configure<T>(cb: (conf: TConf) => T): GroupThree<T> {
+>configure : <T>(cb: (conf: TConf) => T) => GroupThree<T>
+>cb : (conf: TConf) => T
+>conf : TConf
+
+        return new PluginE(cb(this.value));
+>new PluginE(cb(this.value)) : PluginE<T>
+>PluginE : typeof PluginE
+>cb(this.value) : T
+>cb : (conf: TConf) => T
+>this.value : TConf
+>this : this
+>value : TConf
+    }
+    combine<T>(plug: GroupThree<(conf: TConf) => T>): GroupThree<T> {
+>combine : <T>(plug: GroupThree<(conf: TConf) => T>) => GroupThree<T>
+>plug : GroupThree<(conf: TConf) => T>
+>conf : TConf
+
+        return plug.configure(f => f(this.value));
+>plug.configure(f => f(this.value)) : GroupThree<T>
+>plug.configure : (<T>(cb: (conf: (conf: TConf) => T) => T) => GroupThree<T>) | (<T>(cb: (conf: (conf: TConf) => T) => T) => GroupThree<T>)
+>plug : GroupThree<(conf: TConf) => T>
+>configure : (<T>(cb: (conf: (conf: TConf) => T) => T) => GroupThree<T>) | (<T>(cb: (conf: (conf: TConf) => T) => T) => GroupThree<T>)
+>f => f(this.value) : (f: (conf: TConf) => T) => T
+>f : (conf: TConf) => T
+>f(this.value) : T
+>f : (conf: TConf) => T
+>this.value : TConf
+>this : this
+>value : TConf
+    }
+}
+
+class PluginF<TConf> implements MiddlewarePlugin<GroupThreeName, TConf> {
+>PluginF : PluginF<TConf>
+
+    readonly _kind = "PluginD";
+>_kind : "PluginD"
+>"PluginD" : "PluginD"
+
+    readonly _group = GroupThreeName;
+>_group : "GroupThree"
+>GroupThreeName : "GroupThree"
+
+    constructor(public value: TConf) {}
+>value : TConf
+
+    configure<T>(cb: (conf: TConf) => T): GroupThree<T> {
+>configure : <T>(cb: (conf: TConf) => T) => GroupThree<T>
+>cb : (conf: TConf) => T
+>conf : TConf
+
+        return new PluginF(cb(this.value));
+>new PluginF(cb(this.value)) : PluginF<T>
+>PluginF : typeof PluginF
+>cb(this.value) : T
+>cb : (conf: TConf) => T
+>this.value : TConf
+>this : this
+>value : TConf
+    }
+    combine<T>(plug: GroupThree<(conf: TConf) => T>): GroupThree<T> {
+>combine : <T>(plug: GroupThree<(conf: TConf) => T>) => GroupThree<T>
+>plug : GroupThree<(conf: TConf) => T>
+>conf : TConf
+
+        return plug.configure(f => f(this.value));
+>plug.configure(f => f(this.value)) : GroupThree<T>
+>plug.configure : (<T>(cb: (conf: (conf: TConf) => T) => T) => GroupThree<T>) | (<T>(cb: (conf: (conf: TConf) => T) => T) => GroupThree<T>)
+>plug : GroupThree<(conf: TConf) => T>
+>configure : (<T>(cb: (conf: (conf: TConf) => T) => T) => GroupThree<T>) | (<T>(cb: (conf: (conf: TConf) => T) => T) => GroupThree<T>)
+>f => f(this.value) : (f: (conf: TConf) => T) => T
+>f : (conf: TConf) => T
+>f(this.value) : T
+>f : (conf: TConf) => T
+>this.value : TConf
+>this : this
+>value : TConf
+    }
+}
+
