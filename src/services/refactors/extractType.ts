@@ -22,22 +22,25 @@ namespace ts.refactor {
             }];
         },
         getEditsForAction(context, actionName): RefactorEditInfo {
-            Debug.assert(actionName === extractToTypeAlias || actionName === extractToTypeDef || actionName === extractToInterface);
             const { file } = context;
             const info = Debug.assertDefined(getRangeToExtract(context));
 
-            Debug.assert(
-                info.isJS ? actionName === extractToTypeDef : (
-                    (actionName === extractToInterface && !!info.typeElements) || actionName === extractToTypeAlias
-                )
-            );
             const name = getUniqueName("NewType", file);
-            const edits = textChanges.ChangeTracker.with(context, changes => info.isJS ?
-                doTypedefChange(changes, file, name, info) :
-                info.typeElements ?
-                    doInterfaceChange(changes, file, name, info) :
-                    doTypeAliasChange(changes, file, name, info)
-            );
+            const edits = textChanges.ChangeTracker.with(context, changes => {
+                switch (actionName) {
+                    case extractToTypeAlias:
+                        Debug.assert(!info.isJS);
+                        return doTypeAliasChange(changes, file, name, info);
+                    case extractToTypeDef:
+                        Debug.assert(info.isJS);
+                        return doTypedefChange(changes, file, name, info);
+                    case extractToInterface:
+                        Debug.assert(!info.isJS && !!info.typeElements);
+                        return doInterfaceChange(changes, file, name, info as InterfaceInfo);
+                    default:
+                        Debug.fail("Unexpected action");
+                }
+            });
 
             const renameFilename = file.fileName;
             const renameLocation = getRenameLocation(edits, renameFilename, name, /*preferLastLocation*/ false);
@@ -46,7 +49,7 @@ namespace ts.refactor {
     });
 
     interface TypeAliasInfo {
-        isJS: boolean; selection: TypeNode; firstStatement: Statement; typeParameters: ReadonlyArray<TypeParameterDeclaration>; typeElements: undefined;
+        isJS: boolean; selection: TypeNode; firstStatement: Statement; typeParameters: ReadonlyArray<TypeParameterDeclaration>; typeElements?: ReadonlyArray<TypeElement>;
     }
 
     interface InterfaceInfo {
@@ -71,7 +74,7 @@ namespace ts.refactor {
 
         const types = flattenTypeLiteralNodeReference(checker, selection);
         const typeElements = types && flatMap(types, type => type.members);
-        return { isJS, selection, firstStatement, typeParameters, typeElements } as Info;
+        return { isJS, selection, firstStatement, typeParameters, typeElements };
     }
 
     function flattenTypeLiteralNodeReference(checker: TypeChecker, node: TypeNode | undefined): ReadonlyArray<TypeLiteralNode> | undefined {
