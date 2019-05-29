@@ -20267,14 +20267,14 @@ namespace ts {
                 }
             }
             else if (strictNullChecks && prop && prop.valueDeclaration &&
-                     isPropertyAccessExpression(prop.valueDeclaration) &&
-                     getAssignmentDeclarationPropertyAccessKind(prop.valueDeclaration) &&
-                     getControlFlowContainer(node) === getControlFlowContainer(prop.valueDeclaration)) {
+                isPropertyAccessExpression(prop.valueDeclaration) &&
+                getAssignmentDeclarationPropertyAccessKind(prop.valueDeclaration) &&
+                getControlFlowContainer(node) === getControlFlowContainer(prop.valueDeclaration)) {
                 assumeUninitialized = true;
             }
             const flowType = getFlowTypeOfReference(node, propType, assumeUninitialized ? getOptionalType(propType) : propType);
             if (assumeUninitialized && !(getFalsyFlags(propType) & TypeFlags.Undefined) && getFalsyFlags(flowType) & TypeFlags.Undefined) {
-                error(errorNode, Diagnostics.Property_0_is_used_before_being_assigned, symbolToString(prop!));
+                error(errorNode, Diagnostics.Property_0_is_used_before_being_assigned, symbolToString(prop!)); // TODO: GH#18217
                 // Return the declared type to reduce follow-on errors
                 return propType;
             }
