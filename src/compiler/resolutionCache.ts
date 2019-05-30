@@ -54,6 +54,7 @@ namespace ts {
         writeLog(s: string): void;
         maxNumberOfFilesToIterateForInvalidation?: number;
         getCurrentProgram(): Program | undefined;
+        fileIsOpen(filePath: Path): boolean;
     }
 
     interface DirectoryWatchesOfFailedLookup {
@@ -712,6 +713,10 @@ namespace ts {
                 else {
                     if (!isPathWithDefaultFailedLookupExtension(fileOrDirectoryPath) && !customFailedLookupPaths.has(fileOrDirectoryPath)) {
                         return false;
+                    }
+                    // prevent saving an open file from over-eagerly triggering invalidation
+                    if (resolutionHost.fileIsOpen(fileOrDirectoryPath)) {
+                        return;
                     }
                     // Ignore emits from the program
                     if (isEmittedFileOfProgram(resolutionHost.getCurrentProgram(), fileOrDirectoryPath)) {

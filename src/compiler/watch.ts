@@ -691,6 +691,7 @@ namespace ts {
             hasChangedAutomaticTypeDirectiveNames = true;
             scheduleProgramUpdate();
         };
+        compilerHost.fileIsOpen = () => false;
         compilerHost.maxNumberOfFilesToIterateForInvalidation = host.maxNumberOfFilesToIterateForInvalidation;
         compilerHost.getCurrentProgram = getCurrentProgram;
         compilerHost.writeLog = writeLog;
