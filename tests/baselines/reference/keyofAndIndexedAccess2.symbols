@@ -517,3 +517,47 @@ export class c {
   }
 }
 
+// Repro from #31385
+
+type Foo<T> = { [key: string]: { [K in keyof T]: K }[keyof T] };
+>Foo : Symbol(Foo, Decl(keyofAndIndexedAccess2.ts, 145, 1))
+>T : Symbol(T, Decl(keyofAndIndexedAccess2.ts, 149, 9))
+>key : Symbol(key, Decl(keyofAndIndexedAccess2.ts, 149, 17))
+>K : Symbol(K, Decl(keyofAndIndexedAccess2.ts, 149, 34))
+>T : Symbol(T, Decl(keyofAndIndexedAccess2.ts, 149, 9))
+>K : Symbol(K, Decl(keyofAndIndexedAccess2.ts, 149, 34))
+>T : Symbol(T, Decl(keyofAndIndexedAccess2.ts, 149, 9))
+
+type Bar<T> = { [key: string]: { [K in keyof T]: [K] }[keyof T] };
+>Bar : Symbol(Bar, Decl(keyofAndIndexedAccess2.ts, 149, 64))
+>T : Symbol(T, Decl(keyofAndIndexedAccess2.ts, 151, 9))
+>key : Symbol(key, Decl(keyofAndIndexedAccess2.ts, 151, 17))
+>K : Symbol(K, Decl(keyofAndIndexedAccess2.ts, 151, 34))
+>T : Symbol(T, Decl(keyofAndIndexedAccess2.ts, 151, 9))
+>K : Symbol(K, Decl(keyofAndIndexedAccess2.ts, 151, 34))
+>T : Symbol(T, Decl(keyofAndIndexedAccess2.ts, 151, 9))
+
+type Baz<T, Q extends Foo<T>> = { [K in keyof Q]: T[Q[K]] };
+>Baz : Symbol(Baz, Decl(keyofAndIndexedAccess2.ts, 151, 66))
+>T : Symbol(T, Decl(keyofAndIndexedAccess2.ts, 153, 9))
+>Q : Symbol(Q, Decl(keyofAndIndexedAccess2.ts, 153, 11))
+>Foo : Symbol(Foo, Decl(keyofAndIndexedAccess2.ts, 145, 1))
+>T : Symbol(T, Decl(keyofAndIndexedAccess2.ts, 153, 9))
+>K : Symbol(K, Decl(keyofAndIndexedAccess2.ts, 153, 35))
+>Q : Symbol(Q, Decl(keyofAndIndexedAccess2.ts, 153, 11))
+>T : Symbol(T, Decl(keyofAndIndexedAccess2.ts, 153, 9))
+>Q : Symbol(Q, Decl(keyofAndIndexedAccess2.ts, 153, 11))
+>K : Symbol(K, Decl(keyofAndIndexedAccess2.ts, 153, 35))
+
+type Qux<T, Q extends Bar<T>> = { [K in keyof Q]: T[Q[K]["0"]] };
+>Qux : Symbol(Qux, Decl(keyofAndIndexedAccess2.ts, 153, 60))
+>T : Symbol(T, Decl(keyofAndIndexedAccess2.ts, 155, 9))
+>Q : Symbol(Q, Decl(keyofAndIndexedAccess2.ts, 155, 11))
+>Bar : Symbol(Bar, Decl(keyofAndIndexedAccess2.ts, 149, 64))
+>T : Symbol(T, Decl(keyofAndIndexedAccess2.ts, 155, 9))
+>K : Symbol(K, Decl(keyofAndIndexedAccess2.ts, 155, 35))
+>Q : Symbol(Q, Decl(keyofAndIndexedAccess2.ts, 155, 11))
+>T : Symbol(T, Decl(keyofAndIndexedAccess2.ts, 155, 9))
+>Q : Symbol(Q, Decl(keyofAndIndexedAccess2.ts, 155, 11))
+>K : Symbol(K, Decl(keyofAndIndexedAccess2.ts, 155, 35))
+

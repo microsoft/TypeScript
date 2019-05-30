@@ -517,3 +517,19 @@ export class c {
   }
 }
 
+// Repro from #31385
+
+type Foo<T> = { [key: string]: { [K in keyof T]: K }[keyof T] };
+>Foo : Foo<T>
+>key : string
+
+type Bar<T> = { [key: string]: { [K in keyof T]: [K] }[keyof T] };
+>Bar : Bar<T>
+>key : string
+
+type Baz<T, Q extends Foo<T>> = { [K in keyof Q]: T[Q[K]] };
+>Baz : Baz<T, Q>
+
+type Qux<T, Q extends Bar<T>> = { [K in keyof Q]: T[Q[K]["0"]] };
+>Qux : Qux<T, Q>
+

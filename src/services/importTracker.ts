@@ -133,7 +133,7 @@ namespace ts.FindAllReferences {
                             break;
 
                         default:
-                            Debug.assertNever(direct, `Unexpected import kind: ${Debug.showSyntaxKind(direct)}`);
+                            Debug.failBadSyntaxKind(direct, "Unexpected import kind.");
                     }
                 }
             }
@@ -515,7 +515,7 @@ namespace ts.FindAllReferences {
                 const sym = useLhsSymbol ? checker.getSymbolAtLocation(cast(node.left, isPropertyAccessExpression).name) : symbol;
                 // Better detection for GH#20803
                 if (sym && !(checker.getMergedSymbol(sym.parent!).flags & SymbolFlags.Module)) {
-                    Debug.fail(`Special property assignment kind does not have a module as its parent. Assignment is ${Debug.showSymbol(sym)}, parent is ${Debug.showSymbol(sym.parent!)}`);
+                    Debug.fail(`Special property assignment kind does not have a module as its parent. Assignment is ${Debug.formatSymbol(sym)}, parent is ${Debug.formatSymbol(sym.parent!)}`);
                 }
                 return sym && exportInfo(sym, kind);
             }

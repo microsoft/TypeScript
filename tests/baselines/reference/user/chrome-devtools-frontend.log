@@ -698,13 +698,6 @@ node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighth
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(10092,16): error TS2304: Cannot find name 'd41d8cd98f00b204e9800998ecf8427e_LibraryDetectorTests'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(10513,19): error TS2488: Type 'NodeListOf<Element>' must have a '[Symbol.iterator]()' method that returns an iterator.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(10811,19): error TS2304: Cannot find name 'getElementsInDocument'.
-node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(11441,1): error TS2322: Type 'unknown' is not assignable to type 'number'.
-node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(11444,1): error TS2322: Type 'unknown' is not assignable to type 'number'.
-node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(11447,15): error TS2339: Property 'textLength' does not exist on type 'unknown'.
-node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(11447,28): error TS2339: Property 'textLength' does not exist on type 'unknown'.
-node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(11450,43): error TS2339: Property 'node' does not exist on type 'unknown'.
-node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(11453,6): error TS2339: Property 'cssRule' does not exist on type 'unknown'.
-node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(11460,6): error TS2339: Property 'cssRule' does not exist on type 'unknown'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(12197,34): error TS2554: Expected 0 arguments, but got 2.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(12327,36): error TS2554: Expected 0 arguments, but got 1.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(13607,7): error TS2339: Property 'protocolMethod' does not exist on type 'Error'.
@@ -3129,9 +3122,6 @@ node_modules/chrome-devtools-frontend/front_end/bindings/BreakpointManager.js(53
 node_modules/chrome-devtools-frontend/front_end/bindings/BreakpointManager.js(655,51): error TS2339: Property 'valuesArray' does not exist on type 'Map<DebuggerModel, ModelBreakpoint>'.
 node_modules/chrome-devtools-frontend/front_end/bindings/BreakpointManager.js(667,51): error TS2339: Property 'valuesArray' does not exist on type 'Map<DebuggerModel, ModelBreakpoint>'.
 node_modules/chrome-devtools-frontend/front_end/bindings/BreakpointManager.js(674,79): error TS2345: Argument of type 'this' is not assignable to parameter of type '{ modelAdded(model: T): void; modelRemoved(model: T): void; }'.
-  Type 'Breakpoint' is not assignable to type '{ modelAdded(model: T): void; modelRemoved(model: T): void; }'.
-    Types of property 'modelAdded' are incompatible.
-      Type '(debuggerModel: DebuggerModel) => void' is not assignable to type '(model: T) => void'.
 node_modules/chrome-devtools-frontend/front_end/bindings/BreakpointManager.js(713,51): error TS2339: Property 'valuesArray' does not exist on type 'Map<DebuggerModel, ModelBreakpoint>'.
 node_modules/chrome-devtools-frontend/front_end/bindings/BreakpointManager.js(787,14): error TS7014: Function type, which lacks return-type annotation, implicitly has an 'any' return type.
 node_modules/chrome-devtools-frontend/front_end/bindings/BreakpointManager.js(862,14): error TS7014: Function type, which lacks return-type annotation, implicitly has an 'any' return type.
@@ -3389,7 +3379,7 @@ node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(2765,22): error
 node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(2785,91): error TS2339: Property 'xRel' does not exist on type 'Pos'.
 node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(2855,32): error TS2339: Property 'left' does not exist on type 'never'.
 node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(2855,49): error TS2339: Property 'right' does not exist on type 'never'.
-node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(2856,10): error TS2365: Operator '+' cannot be applied to types 'null' and '0 | 1'.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(2856,10): error TS2365: Operator '+' cannot be applied to types 'null' and '1 | 0'.
 node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(2858,32): error TS2339: Property 'left' does not exist on type 'never'.
 node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(2858,49): error TS2339: Property 'right' does not exist on type 'never'.
 node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(3034,25): error TS2339: Property 'xRel' does not exist on type 'Pos'.
@@ -6628,8 +6618,6 @@ node_modules/chrome-devtools-frontend/front_end/heap_snapshot_worker/HeapSnapsho
       Type 'HeapSnapshotNode' is not assignable to type '{ itemIndex(): number; serialize(): any; }'.
         Property '_snapshot' does not exist on type '{ itemIndex(): number; serialize(): any; }'.
 node_modules/chrome-devtools-frontend/front_end/heap_snapshot_worker/HeapSnapshot.js(2341,15): error TS2345: Argument of type 'HeapSnapshotNodeIndexProvider' is not assignable to parameter of type '{ itemForIndex(newIndex: number): { itemIndex(): number; serialize(): any; }; }'.
-  Types of property 'itemForIndex' are incompatible.
-    Type '(index: number) => HeapSnapshotNode' is not assignable to type '(newIndex: number) => { itemIndex(): number; serialize(): any; }'.
 node_modules/chrome-devtools-frontend/front_end/heap_snapshot_worker/HeapSnapshot.js(2353,12): error TS2339: Property 'nodeIndex' does not exist on type 'void'.
 node_modules/chrome-devtools-frontend/front_end/heap_snapshot_worker/HeapSnapshot.js(2354,16): error TS2339: Property 'id' does not exist on type 'void'.
 node_modules/chrome-devtools-frontend/front_end/heap_snapshot_worker/HeapSnapshot.js(2397,13): error TS2339: Property 'nodeIndex' does not exist on type 'void'.
@@ -7714,9 +7702,6 @@ node_modules/chrome-devtools-frontend/front_end/network_log/NetworkLog.js(44,57)
           Type 'T' is not assignable to type 'NetworkManager'.
 node_modules/chrome-devtools-frontend/front_end/network_log/NetworkLog.js(99,59): error TS2345: Argument of type 'this' is not assignable to parameter of type '{ modelAdded(model: T): void; modelRemoved(model: T): void; }'.
 node_modules/chrome-devtools-frontend/front_end/network_log/NetworkLog.js(101,61): error TS2345: Argument of type 'this' is not assignable to parameter of type '{ modelAdded(model: T): void; modelRemoved(model: T): void; }'.
-  Type 'NetworkLog' is not assignable to type '{ modelAdded(model: T): void; modelRemoved(model: T): void; }'.
-    Types of property 'modelAdded' are incompatible.
-      Type '(networkManager: NetworkManager) => void' is not assignable to type '(model: T) => void'.
 node_modules/chrome-devtools-frontend/front_end/network_log/NetworkLog.js(123,24): error TS2694: Namespace 'Protocol' has no exported member 'Network'.
 node_modules/chrome-devtools-frontend/front_end/network_log/NetworkLog.js(154,49): error TS2694: Namespace 'NetworkLog.NetworkLog' has no exported member '_InitiatorInfo'.
 node_modules/chrome-devtools-frontend/front_end/network_log/NetworkLog.js(165,38): error TS2694: Namespace 'NetworkLog.NetworkLog' has no exported member '_InitiatorInfo'.
@@ -10842,7 +10827,7 @@ node_modules/chrome-devtools-frontend/front_end/settings/SettingsScreen.js(45,10
 node_modules/chrome-devtools-frontend/front_end/settings/SettingsScreen.js(46,24): error TS2555: Expected at least 2 arguments, but got 1.
 node_modules/chrome-devtools-frontend/front_end/settings/SettingsScreen.js(54,43): error TS2555: Expected at least 2 arguments, but got 1.
 node_modules/chrome-devtools-frontend/front_end/settings/SettingsScreen.js(69,55): error TS2339: Property 'runtime' does not exist on type 'Window'.
-node_modules/chrome-devtools-frontend/front_end/settings/SettingsScreen.js(85,5): error TS2739: Type '{ tabbedPane(): TabbedPane; enableMoreTabsButton(): void; }' is missing the following properties from type '{ appendApplicableItems(locationName: string): void; appendView(view: { viewId(): string; title(): string; isCloseable(): boolean; isTransient(): boolean; toolbarItems(): Promise<ToolbarItem[]>; widget(): Promise<...>; disposeView(): void; }, insertBefore?: { ...; }): void; showView(view: { ...; }, insertBefore?: { ...': appendApplicableItems, appendView, showView, removeView, widget
+node_modules/chrome-devtools-frontend/front_end/settings/SettingsScreen.js(85,5): error TS2322: Type '{ tabbedPane(): TabbedPane; enableMoreTabsButton(): void; }' is not assignable to type '{ appendApplicableItems(locationName: string): void; appendView(view: { viewId(): string; title(): string; isCloseable(): boolean; isTransient(): boolean; toolbarItems(): Promise<ToolbarItem[]>; widget(): Promise<...>; disposeView(): void; }, insertBefore?: { ...; }): void; showView(view: { ...; }, insertBefore?: { ...'.
 node_modules/chrome-devtools-frontend/front_end/settings/SettingsScreen.js(100,15): error TS2339: Property 'keyCode' does not exist on type 'Event'.
 node_modules/chrome-devtools-frontend/front_end/settings/SettingsScreen.js(119,31): error TS2339: Property 'createChild' does not exist on type 'Element'.
 node_modules/chrome-devtools-frontend/front_end/settings/SettingsScreen.js(121,42): error TS2339: Property 'createChild' does not exist on type 'Element'.
@@ -11369,7 +11354,7 @@ node_modules/chrome-devtools-frontend/front_end/sources/SourcesPanel.js(133,55):
 node_modules/chrome-devtools-frontend/front_end/sources/SourcesPanel.js(208,22): error TS2694: Namespace 'Common' has no exported member 'Event'.
 node_modules/chrome-devtools-frontend/front_end/sources/SourcesPanel.js(227,52): error TS2339: Property '_instance' does not exist on type 'typeof WrapperView'.
 node_modules/chrome-devtools-frontend/front_end/sources/SourcesPanel.js(242,40): error TS2339: Property '_instance' does not exist on type 'typeof WrapperView'.
-node_modules/chrome-devtools-frontend/front_end/sources/SourcesPanel.js(257,7): error TS2739: Type '{ tabbedPane(): TabbedPane; enableMoreTabsButton(): void; }' is missing the following properties from type '{ appendApplicableItems(locationName: string): void; appendView(view: { viewId(): string; title(): string; isCloseable(): boolean; isTransient(): boolean; toolbarItems(): Promise<ToolbarItem[]>; widget(): Promise<...>; disposeView(): void; }, insertBefore?: { ...; }): void; showView(view: { ...; }, insertBefore?: { ...': appendApplicableItems, appendView, showView, removeView, widget
+node_modules/chrome-devtools-frontend/front_end/sources/SourcesPanel.js(257,7): error TS2322: Type '{ tabbedPane(): TabbedPane; enableMoreTabsButton(): void; }' is not assignable to type '{ appendApplicableItems(locationName: string): void; appendView(view: { viewId(): string; title(): string; isCloseable(): boolean; isTransient(): boolean; toolbarItems(): Promise<ToolbarItem[]>; widget(): Promise<...>; disposeView(): void; }, insertBefore?: { ...; }): void; showView(view: { ...; }, insertBefore?: { ...'.
 node_modules/chrome-devtools-frontend/front_end/sources/SourcesPanel.js(277,20): error TS2339: Property 'window' does not exist on type 'Element'.
 node_modules/chrome-devtools-frontend/front_end/sources/SourcesPanel.js(289,22): error TS2694: Namespace 'Common' has no exported member 'Event'.
 node_modules/chrome-devtools-frontend/front_end/sources/SourcesPanel.js(330,22): error TS2694: Namespace 'Common' has no exported member 'Event'.
@@ -12891,8 +12876,8 @@ node_modules/chrome-devtools-frontend/front_end/ui/InspectorView.js(53,50): erro
 node_modules/chrome-devtools-frontend/front_end/ui/InspectorView.js(69,40): error TS2555: Expected at least 2 arguments, but got 1.
 node_modules/chrome-devtools-frontend/front_end/ui/InspectorView.js(80,24): error TS2694: Namespace 'Common' has no exported member 'Event'.
 node_modules/chrome-devtools-frontend/front_end/ui/InspectorView.js(92,51): error TS2339: Property 'runtime' does not exist on type 'Window'.
-node_modules/chrome-devtools-frontend/front_end/ui/InspectorView.js(116,7): error TS2739: Type '{ tabbedPane(): TabbedPane; enableMoreTabsButton(): void; }' is missing the following properties from type '{ appendApplicableItems(locationName: string): void; appendView(view: { viewId(): string; title(): string; isCloseable(): boolean; isTransient(): boolean; toolbarItems(): Promise<ToolbarItem[]>; widget(): Promise<...>; disposeView(): void; }, insertBefore?: { ...; }): void; showView(view: { ...; }, insertBefore?: { ...': appendApplicableItems, appendView, showView, removeView, widget
-node_modules/chrome-devtools-frontend/front_end/ui/InspectorView.js(118,7): error TS2739: Type '{ tabbedPane(): TabbedPane; enableMoreTabsButton(): void; }' is missing the following properties from type '{ appendApplicableItems(locationName: string): void; appendView(view: { viewId(): string; title(): string; isCloseable(): boolean; isTransient(): boolean; toolbarItems(): Promise<ToolbarItem[]>; widget(): Promise<...>; disposeView(): void; }, insertBefore?: { ...; }): void; showView(view: { ...; }, insertBefore?: { ...': appendApplicableItems, appendView, showView, removeView, widget
+node_modules/chrome-devtools-frontend/front_end/ui/InspectorView.js(116,7): error TS2322: Type '{ tabbedPane(): TabbedPane; enableMoreTabsButton(): void; }' is not assignable to type '{ appendApplicableItems(locationName: string): void; appendView(view: { viewId(): string; title(): string; isCloseable(): boolean; isTransient(): boolean; toolbarItems(): Promise<ToolbarItem[]>; widget(): Promise<...>; disposeView(): void; }, insertBefore?: { ...; }): void; showView(view: { ...; }, insertBefore?: { ...'.
+node_modules/chrome-devtools-frontend/front_end/ui/InspectorView.js(118,7): error TS2322: Type '{ tabbedPane(): TabbedPane; enableMoreTabsButton(): void; }' is not assignable to type '{ appendApplicableItems(locationName: string): void; appendView(view: { viewId(): string; title(): string; isCloseable(): boolean; isTransient(): boolean; toolbarItems(): Promise<ToolbarItem[]>; widget(): Promise<...>; disposeView(): void; }, insertBefore?: { ...; }): void; showView(view: { ...; }, insertBefore?: { ...'.
 node_modules/chrome-devtools-frontend/front_end/ui/InspectorView.js(247,73): error TS2339: Property 'altKey' does not exist on type 'Event'.
 node_modules/chrome-devtools-frontend/front_end/ui/InspectorView.js(247,89): error TS2339: Property 'shiftKey' does not exist on type 'Event'.
 node_modules/chrome-devtools-frontend/front_end/ui/InspectorView.js(254,17): error TS2339: Property 'keyCode' does not exist on type 'Event'.
