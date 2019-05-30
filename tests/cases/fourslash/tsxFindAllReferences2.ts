@@ -15,6 +15,6 @@
 
 const rangesByText = test.rangesByText();
 verify.singleReferenceGroup(
-    "(property) name ?: string",
+    "(property) name?: string",
     rangesByText.get("name")
 );

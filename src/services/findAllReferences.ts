@@ -27,16 +27,31 @@ namespace ts.FindAllReferences {
         readonly textSpan: TextSpan;
     }
     export function nodeEntry(node: Node, kind: NodeEntryKind = EntryKind.Node): NodeEntry {
+        return {
+            kind,
+            node: (node as NamedDeclaration).name || node,
+            declaration: getDeclarationForDeclarationSpanForNode(node)
+        };
+    }
+
+    function getDeclarationForDeclarationSpanForNode(node: Node): Node | undefined {
+        if (isDeclaration(node)) {
+            return getDeclarationForDeclarationSpan(node);
+        }
+
         // TODO(shkamat)::
         //  JSXOpeningElement or JSXElement for tagName ?
-        const declaration = getDeclarationForDeclarationSpan(
-            isDeclaration(node) ?
-                node :
-                node.parent && isDeclaration(node.parent) && node.parent.name === node ?
-                    node.parent :
-                    undefined
-        );
-        return { kind, node: (node as NamedDeclaration).name || node, declaration };
+        if (!node.parent || !isDeclaration(node.parent)) {
+            return undefined;
+        }
+
+        if (node.parent.name === node || // node is name of declaration, use parent
+            // Property name of the import export specifier use import/export specifier
+            isImportOrExportSpecifier(node.parent) && node.parent.propertyName === node) {
+            return getDeclarationForDeclarationSpan(node.parent);
+        }
+
+        return undefined;
     }
 
     export function getDeclarationForDeclarationSpan(node: NamedDeclaration | undefined): Node | undefined {
