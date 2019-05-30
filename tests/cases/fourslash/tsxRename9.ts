@@ -15,19 +15,19 @@
 ////     className?: string;
 //// }
 //// interface ButtonProps extends ClickableProps {
-////     [|[|{| "declarationRange": 0 |}onClick|](event?: React.MouseEvent<HTMLButtonElement>): void;|]
+////     [|[|{| "declarationRangeIndex": 0 |}onClick|](event?: React.MouseEvent<HTMLButtonElement>): void;|]
 //// }
 //// interface LinkProps extends ClickableProps {
-////     [|[|{| "declarationRange": 2 |}goTo|]: string;|]
+////     [|[|{| "declarationRangeIndex": 2 |}goTo|]: string;|]
 //// }
-//// [|declare function [|{| "declarationRange": 4 |}MainButton|](buttonProps: ButtonProps): JSX.Element;|]
-//// [|declare function [|{| "declarationRange": 6 |}MainButton|](linkProps: LinkProps): JSX.Element;|]
-//// [|declare function [|{| "declarationRange": 8 |}MainButton|](props: ButtonProps | LinkProps): JSX.Element;|]
+//// [|declare function [|{| "declarationRangeIndex": 4 |}MainButton|](buttonProps: ButtonProps): JSX.Element;|]
+//// [|declare function [|{| "declarationRangeIndex": 6 |}MainButton|](linkProps: LinkProps): JSX.Element;|]
+//// [|declare function [|{| "declarationRangeIndex": 8 |}MainButton|](props: ButtonProps | LinkProps): JSX.Element;|]
 //// let opt = <[|MainButton|] />;
 //// let opt = <[|MainButton|] children="chidlren" />;
-//// let opt = <[|MainButton|] [|[|{| "declarationRange": 13 |}onClick|]={()=>{}}|] />;
-//// let opt = <[|MainButton|] [|[|{| "declarationRange": 16 |}onClick|]={()=>{}}|] [|ignore-prop|] />;
-//// let opt = <[|MainButton|] [|[|{| "declarationRange": 20 |}goTo|]="goTo"|] />;
+//// let opt = <[|MainButton|] [|[|{| "declarationRangeIndex": 13 |}onClick|]={()=>{}}|] />;
+//// let opt = <[|MainButton|] [|[|{| "declarationRangeIndex": 16 |}onClick|]={()=>{}}|] [|ignore-prop|] />;
+//// let opt = <[|MainButton|] [|[|{| "declarationRangeIndex": 20 |}goTo|]="goTo"|] />;
 //// let opt = <[|MainButton|] [|wrong|] />;
 
 const [

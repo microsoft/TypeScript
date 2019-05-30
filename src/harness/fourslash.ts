@@ -955,7 +955,7 @@ namespace FourSlash {
             const fullExpected = ts.map<FourSlashInterface.ReferenceGroup, ReferenceGroupJson>(parts, ({ definition, ranges }) => ({
                 definition: typeof definition === "string" ? definition : { ...definition, range: ts.createTextSpanFromRange(definition.range) },
                 references: ranges.map<ts.ReferenceEntry>(r => {
-                    const { isWriteAccess = false, isDefinition = false, isInString, declarationRange } = (r.marker && r.marker.data || {}) as { isWriteAccess?: boolean, isDefinition?: boolean, isInString?: true, declarationRange?: number };
+                    const { isWriteAccess = false, isDefinition = false, isInString, declarationRangeIndex } = (r.marker && r.marker.data || {}) as { isWriteAccess?: boolean, isDefinition?: boolean, isInString?: true, declarationRangeIndex?: number };
                     const result: ts.ReferenceEntry = {
                         fileName: r.fileName,
                         textSpan: ts.createTextSpanFromRange(r),
@@ -963,8 +963,8 @@ namespace FourSlash {
                         isDefinition,
                         ...(isInString ? { isInString: true } : undefined),
                     };
-                    if (declarationRange !== undefined) {
-                        result.declarationSpan = ts.createTextSpanFromRange(this.getRanges()[declarationRange]);
+                    if (declarationRangeIndex !== undefined) {
+                        result.declarationSpan = ts.createTextSpanFromRange(this.getRanges()[declarationRangeIndex]);
                     }
                     return result;
                 }),
@@ -1194,9 +1194,9 @@ Actual: ${stringify(fullActual)}`);
                 assert.deepEqual(sort(references), sort(ranges.map(rangeOrOptions => {
                     const { range, ...prefixSuffixText } = "range" in rangeOrOptions ? rangeOrOptions : { range: rangeOrOptions };
                     const result: ts.RenameLocation = { fileName: range.fileName, textSpan: ts.createTextSpanFromRange(range), ...prefixSuffixText };
-                    const { declarationRange } = (range.marker && range.marker.data || {}) as { declarationRange?: number; };
-                    if (declarationRange !== undefined) {
-                        result.declarationSpan = ts.createTextSpanFromRange(this.getRanges()[declarationRange]);
+                    const { declarationRangeIndex } = (range.marker && range.marker.data || {}) as { declarationRangeIndex?: number; };
+                    if (declarationRangeIndex !== undefined) {
+                        result.declarationSpan = ts.createTextSpanFromRange(this.getRanges()[declarationRangeIndex]);
                     }
                     return result;
                 })));

@@ -9,7 +9,7 @@
 ////        div: {};
 ////    }
 ////}
-////[|class [|{| "declarationRange": 0 |}MyClass|] {}|]
+////[|class [|{| "declarationRangeIndex": 0 |}MyClass|] {}|]
 ////
 ////<[|MyClass|]></[|MyClass|]>;
 ////<[|MyClass|]/>;

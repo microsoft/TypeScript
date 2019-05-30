@@ -4,7 +4,7 @@
 //// declare module JSX {
 ////     interface Element { }
 ////     interface IntrinsicElements {
-////         [|[|{| "declarationRange": 0 |}div|]: {
+////         [|[|{| "declarationRangeIndex": 0 |}div|]: {
 ////             name?: string;
 ////             isOpen?: boolean;
 ////         };|]

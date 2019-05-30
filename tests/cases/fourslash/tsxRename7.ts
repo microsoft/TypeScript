@@ -11,14 +11,14 @@
 ////     interface ElementAttributesProperty { props; }
 //// }
 //// interface OptionPropBag {
-////     [|[|{| "declarationRange": 0 |}propx|]: number|]
+////     [|[|{| "declarationRangeIndex": 0 |}propx|]: number|]
 ////     propString: string
 ////     optional?: boolean
 //// }
 //// declare function Opt(attributes: OptionPropBag): JSX.Element;
 //// let opt = <Opt />;
-//// let opt1 = <Opt [|[|{| "declarationRange": 2 |}propx|]={100}|] propString />;
-//// let opt2 = <Opt [|[|{| "declarationRange": 4 |}propx|]={100}|] optional/>;
+//// let opt1 = <Opt [|[|{| "declarationRangeIndex": 2 |}propx|]={100}|] propString />;
+//// let opt2 = <Opt [|[|{| "declarationRangeIndex": 4 |}propx|]={100}|] optional/>;
 //// let opt3 = <Opt wrong />;
 
 const rangesByText = test.rangesByText();

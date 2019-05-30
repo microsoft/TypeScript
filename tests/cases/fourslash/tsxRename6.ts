@@ -15,7 +15,7 @@
 ////     propString: string
 ////     optional?: boolean
 //// }
-//// [|declare function [|{| "declarationRange": 0 |}Opt|](attributes: OptionPropBag): JSX.Element;|]
+//// [|declare function [|{| "declarationRangeIndex": 0 |}Opt|](attributes: OptionPropBag): JSX.Element;|]
 //// let opt = <[|Opt|] />;
 //// let opt1 = <[|Opt|] propx={100} propString />;
 //// let opt2 = <[|Opt|] propx={100} optional/>;
