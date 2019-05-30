@@ -7,13 +7,17 @@
 ////     }
 ////     interface ElementAttributesProperty { props }
 //// }
-//// class [|{| "isWriteAccess": true, "isDefinition": true |}MyClass|] {
+//// [|class [|{| "isWriteAccess": true, "isDefinition": true, "declarationRangeIndex": 0 |}MyClass|] {
 ////   props: {
 ////     name?: string;
 ////     size?: number;
-//// }
+//// }|]
 ////
 ////
 //// var x = <[|MyClass|] name='hello'></[|MyClass|]>;
 
-verify.singleReferenceGroup("class MyClass");
+const rangesByText = test.rangesByText();
+verify.singleReferenceGroup(
+    "class MyClass",
+    rangesByText.get("MyClass")
+);

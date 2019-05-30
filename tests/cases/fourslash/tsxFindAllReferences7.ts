@@ -11,14 +11,18 @@
 ////     interface ElementAttributesProperty { props; }
 //// }
 //// interface OptionPropBag {
-////     [|{| "isDefinition": true |}propx|]: number
+////     [|[|{| "isDefinition": true, "declarationRangeIndex": 0 |}propx|]: number|]
 ////     propString: string
 ////     optional?: boolean
 //// }
 //// declare function Opt(attributes: OptionPropBag): JSX.Element;
 //// let opt = <Opt />;
-//// let opt1 = <Opt [|{| "isWriteAccess": true, "isDefinition": true |}propx|]={100} propString />;
-//// let opt2 = <Opt [|{| "isWriteAccess": true, "isDefinition": true |}propx|]={100} optional/>;
+//// let opt1 = <Opt [|[|{| "isWriteAccess": true, "isDefinition": true, "declarationRangeIndex": 2 |}propx|]={100}|] propString />;
+//// let opt2 = <Opt [|[|{| "isWriteAccess": true, "isDefinition": true, "declarationRangeIndex": 4 |}propx|]={100}|] optional/>;
 //// let opt3 = <Opt wrong />;
 
-verify.singleReferenceGroup("(property) OptionPropBag.propx: number");
+const rangesByText = test.rangesByText();
+verify.singleReferenceGroup(
+    "(property) OptionPropBag.propx: number",
+    rangesByText.get("propx")
+);

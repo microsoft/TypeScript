@@ -20,9 +20,9 @@
 //// interface LinkProps extends ClickableProps {
 ////     goTo: string;
 //// }
-//// declare function [|{| "isWriteAccess": true, "isDefinition": true |}MainButton|](buttonProps: ButtonProps): JSX.Element;
-//// declare function [|{| "isWriteAccess": true, "isDefinition": true |}MainButton|](linkProps: LinkProps): JSX.Element;
-//// declare function [|{| "isWriteAccess": true, "isDefinition": true |}MainButton|](props: ButtonProps | LinkProps): JSX.Element;
+//// [|declare function [|{| "isWriteAccess": true, "isDefinition": true, "declarationRangeIndex": 0 |}MainButton|](buttonProps: ButtonProps): JSX.Element;|]
+//// [|declare function [|{| "isWriteAccess": true, "isDefinition": true, "declarationRangeIndex": 2 |}MainButton|](linkProps: LinkProps): JSX.Element;|]
+//// [|declare function [|{| "isWriteAccess": true, "isDefinition": true, "declarationRangeIndex": 4 |}MainButton|](props: ButtonProps | LinkProps): JSX.Element;|]
 //// let opt = <[|MainButton|] />;
 //// let opt = <[|MainButton|] children="chidlren" />;
 //// let opt = <[|MainButton|] onClick={()=>{}} />;
@@ -30,4 +30,8 @@
 //// let opt = <[|MainButton|] goTo="goTo" />;
 //// let opt = <[|MainButton|] wrong />;
 
-verify.singleReferenceGroup("function MainButton(buttonProps: ButtonProps): JSX.Element (+2 overloads)");
+const rangesByText = test.rangesByText();
+verify.singleReferenceGroup(
+    "function MainButton(buttonProps: ButtonProps): JSX.Element (+2 overloads)",
+    rangesByText.get("MainButton")
+);

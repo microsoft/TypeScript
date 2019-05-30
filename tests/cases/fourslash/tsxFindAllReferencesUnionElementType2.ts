@@ -17,7 +17,8 @@
 ////     private method() { }
 //// }
 
-//// var [|{| "isWriteAccess": true, "isDefinition": true |}RCComp|] = RC1 || RC2;
+//// [|var [|{| "isWriteAccess": true, "isDefinition": true, "declarationRangeIndex": 0 |}RCComp|] = RC1 || RC2;|]
 //// <[|RCComp|] />
 
-verify.singleReferenceGroup("var RCComp: typeof RC1");
+const [, r1, r2 ] = test.ranges();
+verify.singleReferenceGroup("var RCComp: typeof RC1", [r1, r2]);
