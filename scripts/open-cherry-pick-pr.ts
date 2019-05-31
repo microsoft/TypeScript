@@ -29,7 +29,7 @@ async function main() {
         ["git", ["fetch", "origin", "master"]]
     ]);
     let logText = runSequence([
-        ["git", ["log", `origin/master..${currentSha.trim()}`, `--pretty="%h %s%n%b"`]]
+        ["git", ["log", `origin/master..${currentSha.trim()}`, `--pretty="%h %s%n%b"`, "--reverse"]]
     ]);
     logText = `Cherry-pick PR #${process.env.SOURCE_ISSUE} into ${process.env.TARGET_BRANCH}
 
