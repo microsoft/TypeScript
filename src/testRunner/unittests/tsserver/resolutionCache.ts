@@ -1000,7 +1000,7 @@ export const x = 10;`
                 verifyWatchesWithConfigFile(host, files, file1, expectedNonRelativeDirectories);
 
                 // invoke callback to simulate saving
-                host.invokeWatchedDirectoriesRecursiveCallback(projectLocation + "/src", "file1.ts");
+                host.modifyFile(file1.path, file1.content, { invokeFileDeleteCreateAsPartInsteadOfChange: true });
                 host.checkTimeoutQueueLengthAndRun(0);
             });
         });

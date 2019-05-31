@@ -1343,7 +1343,7 @@ var x = 10;`
 
         it("no project structure update on directory watch invoke on open file save", () => {
             const projectRootPath = "/users/username/projects/project";
-            const fileA: File = {
+            const file1: File = {
                 path: `${projectRootPath}/a.ts`,
                 content: "export const a = 10;"
             };
@@ -1351,13 +1351,13 @@ var x = 10;`
                 path: `${projectRootPath}/tsconfig.json`,
                 content: "{}"
             };
-            const files = [fileA, config];
+            const files = [file1, config];
             const host = createServerHost(files);
             const service = createProjectService(host);
-            service.openClientFile(fileA.path);
+            service.openClientFile(file1.path);
             checkNumberOfProjects(service, { configuredProjects: 1 });
 
-            host.invokeWatchedDirectoriesRecursiveCallback(projectRootPath, "a.ts");
+            host.modifyFile(file1.path, file1.content, { invokeFileDeleteCreateAsPartInsteadOfChange: true });
             host.checkTimeoutQueueLength(0);
         });
 

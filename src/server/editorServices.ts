@@ -1002,10 +1002,10 @@ namespace ts.server {
                 directory,
                 fileOrDirectory => {
                     const fileOrDirectoryPath = this.toPath(fileOrDirectory);
-                    const fileSystemResult = project.getCachedDirectoryStructureHost().addOrDeleteFileOrDirectory(fileOrDirectory, fileOrDirectoryPath);
+                    project.getCachedDirectoryStructureHost().addOrDeleteFileOrDirectory(fileOrDirectory, fileOrDirectoryPath);
 
                     // don't trigger callback on open, existing files
-                    if (project.fileIsOpen(fileOrDirectoryPath) && fileSystemResult && fileSystemResult.fileExists) {
+                    if (project.fileIsOpen(fileOrDirectoryPath)) {
                         return;
                     }
 
