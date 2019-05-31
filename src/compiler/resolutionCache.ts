@@ -716,7 +716,7 @@ namespace ts {
                     }
                     // prevent saving an open file from over-eagerly triggering invalidation
                     if (resolutionHost.fileIsOpen(fileOrDirectoryPath)) {
-                        return;
+                        return false;
                     }
                     // Ignore emits from the program
                     if (isEmittedFileOfProgram(resolutionHost.getCurrentProgram(), fileOrDirectoryPath)) {
