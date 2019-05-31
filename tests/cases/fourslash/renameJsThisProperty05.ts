@@ -7,8 +7,9 @@
 ////    this.x = y;
 ////  }
 ////}
-////C.prototype.[|z|] = 1;
+////[|C.prototype.[|{| "declarationRangeIndex": 0 |}z|] = 1;|]
 ////var t = new C(12);
-////t.[|z|] = 11;
+////[|t.[|{| "declarationRangeIndex": 2 |}z|] = 11;|]
 
-verify.rangesAreRenameLocations();
+const [r0Def, r0, r1Def, r1] = test.ranges();
+verify.rangesAreRenameLocations([r0, r1]);

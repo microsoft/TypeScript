@@ -4,7 +4,8 @@
 // @Filename: a.js
 ////var C = class  {
 ////}
-////C.[|staticProperty|] = "string";
+////[|C.[|{| "declarationRangeIndex": 0 |}staticProperty|] = "string";|]
 ////console.log(C.[|staticProperty|]);
 
-verify.rangesAreRenameLocations();
+const [rDef, ...ranges] = test.ranges();
+verify.rangesAreRenameLocations(ranges);

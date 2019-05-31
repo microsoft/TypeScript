@@ -4,7 +4,8 @@
 // @Filename: a.js
 ////function bar() {
 ////}
-////bar.[|foo|] = "foo";
+////[|bar.[|{| "declarationRangeIndex": 0 |}foo|] = "foo";|]
 ////console.log(bar.[|foo|]);
 
-verify.rangesAreRenameLocations();
+const [rDef, ...ranges] = test.ranges();
+verify.rangesAreRenameLocations(ranges);

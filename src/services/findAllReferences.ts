@@ -41,11 +41,27 @@ namespace ts.FindAllReferences {
 
         // TODO(shkamat)::
         // JSXOpeningElement or JSXElement for tagName ?
-        if (!node.parent || (!isDeclaration(node.parent) && !isExportAssignment(node.parent))) {
+        if (!node.parent) return undefined;
+
+        if (!isDeclaration(node.parent) && !isExportAssignment(node.parent)) {
+            // Special property assignment in javascript
+            if (isInJSFile(node)) {
+                const binaryExpression = isBinaryExpression(node.parent) ?
+                    node.parent :
+                    isPropertyAccessExpression(node.parent) &&
+                        isBinaryExpression(node.parent.parent) &&
+                        node.parent.parent.left === node.parent ?
+                        node.parent.parent :
+                        undefined;
+                return binaryExpression && getAssignmentDeclarationKind(binaryExpression) !== AssignmentDeclarationKind.None ?
+                    getDeclarationForDeclarationSpan(binaryExpression) :
+                    undefined;
+            }
             return undefined;
         }
 
-        if (node.parent.name === node || // node is name of declaration, use parent
+        if (isConstructorDeclaration(node.parent) ||
+            node.parent.name === node || // node is name of declaration, use parent
             // Property name of the import export specifier or binding pattern, use parent
             ((isImportOrExportSpecifier(node.parent) || isBindingElement(node.parent))
                 && node.parent.propertyName === node) ||
@@ -56,7 +72,7 @@ namespace ts.FindAllReferences {
         return undefined;
     }
 
-    export function getDeclarationForDeclarationSpan(node: NamedDeclaration | undefined): Node | undefined {
+    export function getDeclarationForDeclarationSpan(node: NamedDeclaration | BinaryExpression | undefined): Node | undefined {
         if (!node) return undefined;
         switch (node.kind) {
             case SyntaxKind.VariableDeclaration:
@@ -83,6 +99,11 @@ namespace ts.FindAllReferences {
                 return (node as JsxAttribute).initializer === undefined ?
                     undefined :
                     node;
+
+            case SyntaxKind.BinaryExpression:
+                return isExpressionStatement(node.parent) ?
+                    node.parent :
+                    undefined;
 
             // Not really interesting definition
             // TODO(shkamat):: Should we show whole object literal instead?

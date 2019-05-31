@@ -4,8 +4,9 @@
 // @Filename: a.js
 ////function bar() {
 ////}
-////bar.prototype.[|x|] = 10;
+////[|bar.prototype.[|{| "declarationRangeIndex": 0 |}x|] = 10;|]
 ////var t = new bar();
-////t.[|x|] = 11;
+////[|t.[|{| "declarationRangeIndex": 2 |}x|] = 11;|]
 
-verify.rangesAreRenameLocations();
+const [r0Def, r0, r1Def, r1] = test.ranges();
+verify.rangesAreRenameLocations([r0, r1]);

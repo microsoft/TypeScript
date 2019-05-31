@@ -4,7 +4,8 @@
 // @Filename: a.js
 ////class Minimatch {
 ////}
-////Minimatch.[|staticProperty|] = "string";
+////[|Minimatch.[|{| "declarationRangeIndex": 0 |}staticProperty|] = "string";|]
 ////console.log(Minimatch.[|staticProperty|]);
 
-verify.rangesAreRenameLocations();
+const [rDef, ...ranges] = test.ranges();
+verify.rangesAreRenameLocations(ranges);
