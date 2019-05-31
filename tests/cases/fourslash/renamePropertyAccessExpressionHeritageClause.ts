@@ -2,9 +2,10 @@
 
 //// class B {}
 //// function foo() {
-////     return {[|B|]: B};
+////     return {[|[|{| "declarationRangeIndex": 0 |}B|]: B|]};
 //// }
 //// class C extends (foo()).[|B|] {}
 //// class C1 extends foo().[|B|] {}
 
-verify.rangesAreRenameLocations();
+const ranges = test.rangesByText();
+verify.rangesAreRenameLocations(ranges.get("B"));

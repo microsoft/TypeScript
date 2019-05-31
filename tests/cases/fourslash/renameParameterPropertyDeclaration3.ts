@@ -1,10 +1,11 @@
 ﻿/// <reference path='fourslash.ts'/>
 
 //// class Foo {
-////     constructor(protected [|protectedParam|]: number) {
+////     constructor([|protected [|{| "declarationRangeIndex": 0 |}protectedParam|]: number|]) {
 ////         let protectedParam = [|protectedParam|];
 ////         this.[|protectedParam|] += 10;
 ////     }
 //// }
 
-verify.rangesAreRenameLocations();
+const [rDef, ...rest] = test.ranges();
+verify.rangesAreRenameLocations(rest);
