@@ -40,15 +40,15 @@ namespace ts.FindAllReferences {
         }
 
         // TODO(shkamat)::
-        //  JSXOpeningElement or JSXElement for tagName ?
+        // JSXOpeningElement or JSXElement for tagName ?
         if (!node.parent || (!isDeclaration(node.parent) && !isExportAssignment(node.parent))) {
             return undefined;
         }
 
         if (node.parent.name === node || // node is name of declaration, use parent
-            // Property name of the import export specifier use import/export specifier
-            isImportOrExportSpecifier(node.parent) && node.parent.propertyName === node ||
-            // Is assignment of export assignment
+            // Property name of the import export specifier or binding pattern, use parent
+            ((isImportOrExportSpecifier(node.parent) || isBindingElement(node.parent))
+                && node.parent.propertyName === node) ||
             isExportAssignment(node.parent) && node.parent.expression === node) {
             return getDeclarationForDeclarationSpan(node.parent);
         }

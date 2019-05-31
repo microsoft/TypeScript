@@ -1,11 +1,12 @@
 /// <reference path='fourslash.ts'/>
 
 ////interface I {
-////    [|property1|]: number;
+////    [|[|{| "declarationRangeIndex": 0 |}property1|]: number;|]
 ////    property2: string;
 ////}
 ////
 ////var foo: I;
-////var { [|property1|]: prop1 } = foo;
+////[|var { [|{| "declarationRangeIndex": 2 |}property1|]: prop1 } = foo;|]
 
-verify.rangesAreRenameLocations();
+
+verify.rangesAreRenameLocations(test.rangesByText().get("property1"));
