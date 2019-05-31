@@ -12981,6 +12981,18 @@ namespace ts {
                 return result;
             }
 
+            function propagateSidebandVarianceFlags(typeArguments: readonly Type[], variances: VarianceFlags[]) {
+                for (let i = 0; i < variances.length; i++) {
+                    const v = variances[i];
+                    if (v & VarianceFlags.Unmeasurable) {
+                        instantiateType(typeArguments[i], reportUnmeasurableMarkers);
+                    }
+                    if (v & VarianceFlags.Unreliable) {
+                        instantiateType(typeArguments[i], reportUnreliableMarkers);
+                    }
+                }
+            }
+
             // Determine if possibly recursive types are related. First, check if the result is already available in the global cache.
             // Second, check if we have already started a comparison of the given two types in which case we assume the result to be true.
             // Third, check if both types are part of deeply nested chains of generic type instantiations and if so assume the types are
@@ -12998,6 +13010,16 @@ namespace ts {
                         // as a failure, and should be updated as a reported failure by the bottom of this function.
                     }
                     else {
+                        if (outofbandVarianceMarkerHandler) {
+                            // We're in the middle of variance checking - integrate any unmeasurable/unreliable flags from this cached component
+                            if (source.flags & (TypeFlags.Object | TypeFlags.Conditional) && source.aliasSymbol &&
+                            source.aliasTypeArguments && source.aliasSymbol === target.aliasSymbol) {
+                                propagateSidebandVarianceFlags(source.aliasTypeArguments, getAliasVariances(source.aliasSymbol));
+                            }
+                            if (getObjectFlags(source) & ObjectFlags.Reference && getObjectFlags(target) & ObjectFlags.Reference && (<TypeReference>source).target === (<TypeReference>target).target && length((<TypeReference>source).typeArguments)) {
+                                propagateSidebandVarianceFlags((<TypeReference>source).typeArguments!, getVariances((<TypeReference>source).target));
+                            }
+                        }
                         return related === RelationComparisonResult.Succeeded ? Ternary.True : Ternary.False;
                     }
                 }
@@ -14070,12 +14092,6 @@ namespace ts {
                         if (unreliable) {
                             variance |= VarianceFlags.Unreliable;
                         }
-                        const covariantID = getRelationKey(typeWithSub, typeWithSuper, assignableRelation);
-                        const contravariantID = getRelationKey(typeWithSuper, typeWithSub, assignableRelation);
-                        // We delete the results of these checks, as we want them to actually be run, see the `Unmeasurable` variance we cache,
-                        // And then fall back to a structural result.
-                        assignableRelation.delete(covariantID);
-                        assignableRelation.delete(contravariantID);
                     }
                     variances.push(variance);
                 }
