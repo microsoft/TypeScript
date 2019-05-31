@@ -3,7 +3,7 @@
 /// <reference types="node" />
 
 import Octokit = require("@octokit/rest");
-import {runSequence} from "./run-sequence";
+const {runSequence} = require("./run-sequence");
 import fs = require("fs");
 import path = require("path");
 
@@ -13,6 +13,12 @@ const branchName = `pick/${process.env.SOURCE_ISSUE}/${process.env.TARGET_BRANCH
 const remoteUrl = `https://${process.argv[2]}@github.com/${userName}/TypeScript.git`;
 
 async function main() {
+    if (!process.env.TARGET_BRANCH) {
+        throw new Error("Target branch not specified");
+    }
+    if (!process.env.SOURCE_ISSUE) {
+        throw new Error("Source issue not specified");
+    }
     const currentSha = runSequence([
         ["git", ["rev-parse", "HEAD"]]
     ]);
@@ -80,15 +86,17 @@ ${logText}`
 main().catch(async e => {
     console.error(e);
     process.exitCode = 1;
-    const gh = new Octokit();
-    gh.authenticate({
-        type: "token",
-        token: process.argv[2]
-    });
-    await gh.issues.createComment({
-        number: +process.env.SOURCE_ISSUE,
-        owner: "Microsoft",
-        repo: "TypeScript",
-        body: `Hey @${process.env.REQUESTING_USER}, I couldn't open a PR with the cherry-pick. ([You can check the log here](https://typescript.visualstudio.com/TypeScript/_build/index?buildId=${process.env.BUILD_BUILDID}&_a=summary)). You may need to squash and pick this PR into ${process.env.TARGET_BRANCH} manually.`
-    });
+    if (process.env.SOURCE_ISSUE) {
+        const gh = new Octokit();
+        gh.authenticate({
+            type: "token",
+            token: process.argv[2]
+        });
+        await gh.issues.createComment({
+            number: +process.env.SOURCE_ISSUE,
+            owner: "Microsoft",
+            repo: "TypeScript",
+            body: `Hey @${process.env.REQUESTING_USER}, I couldn't open a PR with the cherry-pick. ([You can check the log here](https://typescript.visualstudio.com/TypeScript/_build/index?buildId=${process.env.BUILD_BUILDID}&_a=summary)). You may need to squash and pick this PR into ${process.env.TARGET_BRANCH} manually.`
+        });
+    }
 });
