@@ -18435,11 +18435,13 @@ namespace ts {
                     }
                     return contextSensitive === true ? getTypeOfExpression(left) : contextSensitive;
                 case SyntaxKind.BarBarToken:
-                    // When an || expression has a contextual type, the operands are contextually typed by that type. When an ||
-                    // expression has no contextual type, the right operand is contextually typed by the type of the left operand,
-                    // except for the special case of Javascript declarations of the form `namespace.prop = namespace.prop || {}`
+                    // When an || expression has a contextual type, the operands are contextually typed by that type, except
+                    // when that type originates in a binding pattern, the right operand is contextually typed by the type of
+                    // the left operand. When an || expression has no contextual type, the right operand is contextually typed
+                    // by the type of the left operand, except for the special case of Javascript declarations of the form
+                    // `namespace.prop = namespace.prop || {}`.
                     const type = getContextualType(binaryExpression, contextFlags);
-                    return !type && node === right && !isDefaultedExpandoInitializer(binaryExpression) ?
+                    return node === right && (type && type.pattern || !type && !isDefaultedExpandoInitializer(binaryExpression)) ?
                         getTypeOfExpression(left) : type;
                 case SyntaxKind.AmpersandAmpersandToken:
                 case SyntaxKind.CommaToken:
