@@ -4,9 +4,10 @@
 ////     propD: number;
 //// }
 //// interface D extends C {
-////     [|propC|]: number;
+////     [|[|{| "declarationRangeIndex": 0 |}propC|]: number;|]
 //// }
 //// var d: D;
 //// d.[|propC|];
 
-verify.rangesAreRenameLocations();
+const [rDef, ...ranges] = test.ranges();
+verify.rangesAreRenameLocations(ranges);

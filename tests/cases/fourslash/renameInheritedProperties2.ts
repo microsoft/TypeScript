@@ -1,10 +1,11 @@
 ﻿/// <reference path='fourslash.ts'/>
 
 //// class class1 extends class1 {
-////    [|doStuff|]() { }
+////    [|[|{| "declarationRangeIndex": 0 |}doStuff|]() { }|]
 //// }
 ////
 //// var v: class1;
 //// v.[|doStuff|]();
 
-verify.rangesAreRenameLocations();
+const [rDef, ...ranges] = test.ranges();
+verify.rangesAreRenameLocations(ranges);

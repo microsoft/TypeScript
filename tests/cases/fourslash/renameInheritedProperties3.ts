@@ -1,10 +1,11 @@
 ﻿/// <reference path='fourslash.ts'/>
 
 //// interface interface1 extends interface1 {
-////    [|propName|]: string;
+////    [|[|{| "declarationRangeIndex": 0 |}propName|]: string;|]
 //// }
 ////
 //// var v: interface1;
 //// v.[|propName|];
 
-verify.rangesAreRenameLocations();
+const [rDef, ...ranges] = test.ranges();
+verify.rangesAreRenameLocations(ranges);

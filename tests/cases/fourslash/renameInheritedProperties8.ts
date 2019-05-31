@@ -1,14 +1,14 @@
 ﻿/// <reference path='fourslash.ts'/>
 
 //// class C implements D {
-////     [|prop1|]: string;
+////     [|[|{| "declarationRangeIndex": 0 |}prop1|]: string;|]
 //// }
 ////
 //// interface D extends C {
-////     [|prop1|]: string;
+////     [|[|{| "declarationRangeIndex": 2 |}prop1|]: string;|]
 //// }
 ////
 //// var c: C;
 //// c.[|prop1|];
 
-verify.rangesAreRenameLocations();
+verify.rangesAreRenameLocations(test.rangesByText().get("prop1"));

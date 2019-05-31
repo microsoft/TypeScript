@@ -1,7 +1,7 @@
 ﻿/// <reference path='fourslash.ts'/>
 
 //// class C extends D {
-////     [|prop1|]: string;
+////     [|[|{| "declarationRangeIndex": 0 |}prop1|]: string;|]
 //// }
 ////
 //// class D extends C {
@@ -11,4 +11,5 @@
 //// var c: C;
 //// c.[|prop1|];
 
-verify.rangesAreRenameLocations();
+const [rDef, ...ranges] = test.ranges();
+verify.rangesAreRenameLocations(ranges);
