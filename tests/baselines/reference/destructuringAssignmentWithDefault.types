@@ -16,3 +16,50 @@ let x = 0;
 >1 : 1
 >a : { x?: number | undefined; }
 
+// Repro from #26235
+
+function f1(options?: { color?: string, width?: number }) {
+>f1 : (options?: { color?: string | undefined; width?: number | undefined; } | undefined) => void
+>options : { color?: string | undefined; width?: number | undefined; } | undefined
+>color : string | undefined
+>width : number | undefined
+
+    let { color, width } = options || {};
+>color : string | undefined
+>width : number | undefined
+>options || {} : { color?: string | undefined; width?: number | undefined; }
+>options : { color?: string | undefined; width?: number | undefined; } | undefined
+>{} : {}
+
+    ({ color, width } = options || {});
+>({ color, width } = options || {}) : { color?: string | undefined; width?: number | undefined; }
+>{ color, width } = options || {} : { color?: string | undefined; width?: number | undefined; }
+>{ color, width } : { color: string | undefined; width: number | undefined; }
+>color : string | undefined
+>width : number | undefined
+>options || {} : { color?: string | undefined; width?: number | undefined; }
+>options : { color?: string | undefined; width?: number | undefined; } | undefined
+>{} : {}
+}
+
+function f2(options?: [string?, number?]) {
+>f2 : (options?: [(string | undefined)?, (number | undefined)?] | undefined) => void
+>options : [(string | undefined)?, (number | undefined)?] | undefined
+
+    let [str, num] = options || [];
+>str : string | undefined
+>num : number | undefined
+>options || [] : [(string | undefined)?, (number | undefined)?]
+>options : [(string | undefined)?, (number | undefined)?] | undefined
+>[] : []
+
+    [str, num] = options || [];
+>[str, num] = options || [] : [(string | undefined)?, (number | undefined)?]
+>[str, num] : [string | undefined, number | undefined]
+>str : string | undefined
+>num : number | undefined
+>options || [] : [(string | undefined)?, (number | undefined)?]
+>options : [(string | undefined)?, (number | undefined)?] | undefined
+>[] : []
+}
+

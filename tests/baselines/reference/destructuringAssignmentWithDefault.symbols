@@ -10,3 +10,37 @@ let x = 0;
 >x : Symbol(x, Decl(destructuringAssignmentWithDefault.ts, 2, 2))
 >a : Symbol(a, Decl(destructuringAssignmentWithDefault.ts, 0, 5))
 
+// Repro from #26235
+
+function f1(options?: { color?: string, width?: number }) {
+>f1 : Symbol(f1, Decl(destructuringAssignmentWithDefault.ts, 2, 14))
+>options : Symbol(options, Decl(destructuringAssignmentWithDefault.ts, 6, 12))
+>color : Symbol(color, Decl(destructuringAssignmentWithDefault.ts, 6, 23))
+>width : Symbol(width, Decl(destructuringAssignmentWithDefault.ts, 6, 39))
+
+    let { color, width } = options || {};
+>color : Symbol(color, Decl(destructuringAssignmentWithDefault.ts, 7, 9))
+>width : Symbol(width, Decl(destructuringAssignmentWithDefault.ts, 7, 16))
+>options : Symbol(options, Decl(destructuringAssignmentWithDefault.ts, 6, 12))
+
+    ({ color, width } = options || {});
+>color : Symbol(color, Decl(destructuringAssignmentWithDefault.ts, 8, 6))
+>width : Symbol(width, Decl(destructuringAssignmentWithDefault.ts, 8, 13))
+>options : Symbol(options, Decl(destructuringAssignmentWithDefault.ts, 6, 12))
+}
+
+function f2(options?: [string?, number?]) {
+>f2 : Symbol(f2, Decl(destructuringAssignmentWithDefault.ts, 9, 1))
+>options : Symbol(options, Decl(destructuringAssignmentWithDefault.ts, 11, 12))
+
+    let [str, num] = options || [];
+>str : Symbol(str, Decl(destructuringAssignmentWithDefault.ts, 12, 9))
+>num : Symbol(num, Decl(destructuringAssignmentWithDefault.ts, 12, 13))
+>options : Symbol(options, Decl(destructuringAssignmentWithDefault.ts, 11, 12))
+
+    [str, num] = options || [];
+>str : Symbol(str, Decl(destructuringAssignmentWithDefault.ts, 12, 9))
+>num : Symbol(num, Decl(destructuringAssignmentWithDefault.ts, 12, 13))
+>options : Symbol(options, Decl(destructuringAssignmentWithDefault.ts, 11, 12))
+}
+
