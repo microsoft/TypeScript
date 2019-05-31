@@ -12981,6 +12981,17 @@ namespace ts {
                 return result;
             }
 
+            function propegateSidebandVarianceFlags(variances: VarianceFlags[]) {
+                if (outofbandVarianceMarkerHandler) {
+                    if (some(variances, v => !!(v & VarianceFlags.Unmeasurable))) {
+                        outofbandVarianceMarkerHandler(/*onlyUnreliable*/ false);
+                    }
+                    if (some(variances, v => !!(v & VarianceFlags.Unreliable))) {
+                        outofbandVarianceMarkerHandler(/*onlyUnreliable*/ true);
+                    }
+                }
+            }
+
             // Determine if possibly recursive types are related. First, check if the result is already available in the global cache.
             // Second, check if we have already started a comparison of the given two types in which case we assume the result to be true.
             // Third, check if both types are part of deeply nested chains of generic type instantiations and if so assume the types are
@@ -12998,6 +13009,16 @@ namespace ts {
                         // as a failure, and should be updated as a reported failure by the bottom of this function.
                     }
                     else {
+                        if (outofbandVarianceMarkerHandler) {
+                            // We're in the middle of variance checking - integrate any unmeasurable/unreliable flags from this cached component
+                            if (source.flags & (TypeFlags.Object | TypeFlags.Conditional) && source.aliasSymbol &&
+                            source.aliasTypeArguments && source.aliasSymbol === target.aliasSymbol) {
+                                propegateSidebandVarianceFlags(getAliasVariances(source.aliasSymbol));
+                            }
+                            if (getObjectFlags(source) & ObjectFlags.Reference && getObjectFlags(target) & ObjectFlags.Reference && (<TypeReference>source).target === (<TypeReference>target).target) {
+                                propegateSidebandVarianceFlags(getVariances((<TypeReference>source).target));
+                            }
+                        }
                         return related === RelationComparisonResult.Succeeded ? Ternary.True : Ternary.False;
                     }
                 }
