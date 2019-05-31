@@ -5,7 +5,7 @@
 ////    set: function (x) {
 ////        this._x = x;
 ////    },
-////    copy: function ([|x|]) {
+////    copy: function ([|{| "declarationRangeIndex": 0 |}x|]) {
 ////        this._x = [|x|].prop;
 ////    }
 ////};

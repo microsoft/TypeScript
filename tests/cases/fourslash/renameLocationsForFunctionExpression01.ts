@@ -1,7 +1,8 @@
 /// <reference path='fourslash.ts'/>
 
-////var x = function [|f|](g: any, h: any) {
+////var x = [|function [|{| "declarationRangeIndex": 0 |}f|](g: any, h: any) {
 ////    [|f|]([|f|], g);
-////}
+////}|]
 
-verify.rangesAreRenameLocations();
+const [rDef, ...rest] = test.ranges();
+verify.rangesAreRenameLocations(rest);
