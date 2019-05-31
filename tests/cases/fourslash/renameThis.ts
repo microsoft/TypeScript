@@ -1,12 +1,12 @@
 /// <reference path='fourslash.ts'/>
 
-////function f([|this|]) {
+////function f([|{| "declarationRangeIndex": 0 |}this|]) {
 ////    return [|this|];
 ////}
 ////this/**/;
-////const _ = { [|this|]: 0 }.[|this|];
+////const _ = { [|[|{| "declarationRangeIndex": 2 |}this|]: 0|] }.[|this|];
 
-const [r0, r1, r2, r3] = test.ranges()
+const [r0, r1, r2Def, r2, r3] = test.ranges()
 verify.rangesAreRenameLocations([r0, r1]);
 
 // Trying to rename a non-parameter 'this' should fail

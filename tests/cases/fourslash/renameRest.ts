@@ -1,11 +1,13 @@
 /// <reference path='fourslash.ts'/>
 ////interface Gen {
 ////    x: number;
-////    [|parent|]: Gen;
+////    [|[|{| "declarationRangeIndex": 0 |}parent|]: Gen;|]
 ////    millenial: string;
 ////}
 ////let t: Gen;
 ////var { x, ...rest } = t;
 ////rest.[|parent|];
 
-verify.rangesAreRenameLocations();
+
+const rangesByText = test.rangesByText();
+verify.rangesAreRenameLocations(rangesByText.get("parent"));

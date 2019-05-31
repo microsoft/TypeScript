@@ -4,10 +4,11 @@
 //// export function doThing(): string;
 //// export function doTheOtherThing(): void;
 
-//// export as namespace [|myLib|];
+//// [|export as namespace [|{| "declarationRangeIndex": 0 |}myLib|];|]
 
 // @Filename: 1.ts
 //// /// <reference path="0.d.ts" />
 //// [|myLib|].doThing();
 
-verify.rangesAreRenameLocations();
+const rangesByText = test.rangesByText();
+verify.rangesAreRenameLocations(rangesByText.get("myLib"));
