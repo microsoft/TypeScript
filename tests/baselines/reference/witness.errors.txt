@@ -56,6 +56,7 @@ tests/cases/conformance/types/witness/witness.ts(128,19): error TS2729: Property
     var co1: number;
         ~~~
 !!! error TS2403: Subsequent variable declarations must have the same type.  Variable 'co1' must be of type 'any', but here has type 'number'.
+!!! related TS6203 tests/cases/conformance/types/witness/witness.ts:28:5: 'co1' was also declared here.
     var co2 = (3, 4, co2);
                ~
 !!! error TS2695: Left side of comma operator is unused and has no side effects.
@@ -72,22 +73,26 @@ tests/cases/conformance/types/witness/witness.ts(128,19): error TS2729: Property
     var co3: number;
         ~~~
 !!! error TS2403: Subsequent variable declarations must have the same type.  Variable 'co3' must be of type 'any', but here has type 'number'.
+!!! related TS6203 tests/cases/conformance/types/witness/witness.ts:32:5: 'co3' was also declared here.
     
     // Assignment
     var as1 = (as1 = 2);
     var as1: number;
         ~~~
 !!! error TS2403: Subsequent variable declarations must have the same type.  Variable 'as1' must be of type 'any', but here has type 'number'.
+!!! related TS6203 tests/cases/conformance/types/witness/witness.ts:36:5: 'as1' was also declared here.
     var as2 = (as2 = as2 = 2);
     var as2: number;
         ~~~
 !!! error TS2403: Subsequent variable declarations must have the same type.  Variable 'as2' must be of type 'any', but here has type 'number'.
+!!! related TS6203 tests/cases/conformance/types/witness/witness.ts:38:5: 'as2' was also declared here.
     
     // Conditional
     var cnd1 = cnd1 ? 0 : 1;
     var cnd1: number;
         ~~~~
 !!! error TS2403: Subsequent variable declarations must have the same type.  Variable 'cnd1' must be of type 'any', but here has type 'number'.
+!!! related TS6203 tests/cases/conformance/types/witness/witness.ts:42:5: 'cnd1' was also declared here.
     var cnd2 = cnd1 ? cnd1 ? '' : "" : '';
     var cnd2: string;
     
@@ -104,6 +109,7 @@ tests/cases/conformance/types/witness/witness.ts(128,19): error TS2729: Property
     var and1: string;
         ~~~~
 !!! error TS2403: Subsequent variable declarations must have the same type.  Variable 'and1' must be of type 'any', but here has type 'string'.
+!!! related TS6203 tests/cases/conformance/types/witness/witness.ts:56:5: 'and1' was also declared here.
     var and2 = '' && and2;
     var and2: any;
     var and3 = and3 && and3;
@@ -159,6 +165,7 @@ tests/cases/conformance/types/witness/witness.ts(128,19): error TS2729: Property
     var propAcc1: { m: any; }
         ~~~~~~~~
 !!! error TS2403: Subsequent variable declarations must have the same type.  Variable 'propAcc1' must be of type 'any', but here has type '{ m: any; }'.
+!!! related TS6203 tests/cases/conformance/types/witness/witness.ts:107:5: 'propAcc1' was also declared here.
     
     // Property access of module member
     module M2 {

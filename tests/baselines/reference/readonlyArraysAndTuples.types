@@ -97,3 +97,59 @@ function f1(ma: string[], ra: readonly string[], mt: [string, string], rt: reado
 >mt : [string, string]
 }
 
+declare var v: readonly[number, number, ...number[]];
+>v : readonly [number, number, ...number[]]
+
+v[0] = 1;        // Error
+>v[0] = 1 : 1
+>v[0] : any
+>v : readonly [number, number, ...number[]]
+>0 : 0
+>1 : 1
+
+v[1] = 1;        // Error
+>v[1] = 1 : 1
+>v[1] : any
+>v : readonly [number, number, ...number[]]
+>1 : 1
+>1 : 1
+
+v[2] = 1;        // Error
+>v[2] = 1 : 1
+>v[2] : number
+>v : readonly [number, number, ...number[]]
+>2 : 2
+>1 : 1
+
+delete v[2];     // Error
+>delete v[2] : boolean
+>v[2] : number
+>v : readonly [number, number, ...number[]]
+>2 : 2
+
+v[0 + 1] = 1;    // Error
+>v[0 + 1] = 1 : 1
+>v[0 + 1] : number
+>v : readonly [number, number, ...number[]]
+>0 + 1 : number
+>0 : 0
+>1 : 1
+>1 : 1
+
+v[0 + 2] = 1;    // Error
+>v[0 + 2] = 1 : 1
+>v[0 + 2] : number
+>v : readonly [number, number, ...number[]]
+>0 + 2 : number
+>0 : 0
+>2 : 2
+>1 : 1
+
+delete v[0 + 1]; // Error
+>delete v[0 + 1] : boolean
+>v[0 + 1] : number
+>v : readonly [number, number, ...number[]]
+>0 + 1 : number
+>0 : 0
+>1 : 1
+

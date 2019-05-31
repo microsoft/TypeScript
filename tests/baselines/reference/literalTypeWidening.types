@@ -443,14 +443,14 @@ function test<T extends { a: string, b: string }>(obj: T): T {
 
     let { a, ...rest } = obj;
 >a : string
->rest : Omit<T, "a">
+>rest : Pick<T, Exclude<keyof T, "a">>
 >obj : T
 
     return { a: 'hello', ...rest } as T;
 >{ a: 'hello', ...rest } as T : T
->{ a: 'hello', ...rest } : { a: string; } & Omit<T, "a">
+>{ a: 'hello', ...rest } : { a: string; } & Pick<T, Exclude<keyof T, "a">>
 >a : string
 >'hello' : "hello"
->rest : Omit<T, "a">
+>rest : Pick<T, Exclude<keyof T, "a">>
 }
 

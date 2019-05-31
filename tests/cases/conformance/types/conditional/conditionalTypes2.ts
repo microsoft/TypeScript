@@ -190,3 +190,9 @@ type ProductComplementComplement = {
 };
 type PCCA = ProductComplementComplement['a'];
 type PCCB = ProductComplementComplement['b'];
+
+// Repro from #31326
+
+type Hmm<T, U extends T> = U extends T ? { [K in keyof U]: number } : never;
+type What = Hmm<{}, { a: string }>
+const w: What = { a: 4 };

@@ -129,6 +129,7 @@ tests/cases/conformance/expressions/functionCalls/overloadResolutionConstructors
     var n = new fn5((n) => n.toFixed());
         ~
 !!! error TS2403: Subsequent variable declarations must have the same type.  Variable 'n' must be of type 'number', but here has type 'string'.
+!!! related TS6203 tests/cases/conformance/expressions/functionCalls/overloadResolutionConstructors.ts:58:5: 'n' was also declared here.
                              ~~~~~~~
 !!! error TS2339: Property 'toFixed' does not exist on type 'string'.
     var s = new fn5((n) => n.substr(0));
