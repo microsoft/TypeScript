@@ -38,7 +38,7 @@ ${logText.trim()}`
     const logpath = path.join(__dirname, "../", "logmessage.txt");
     runSequence([
         ["git", ["checkout", "-b", "temp-branch"]],
-        ["git", ["reset", "master", "--soft"]]
+        ["git", ["reset", "origin/master", "--soft"]]
     ]);
     fs.writeFileSync(logpath, logText);
     runSequence([
