@@ -1341,6 +1341,26 @@ var x = 10;`
             }
         });
 
+        it("no project structure update on directory watch invoke on open file save", () => {
+            const projectRootPath = "/users/username/projects/project";
+            const fileA: File = {
+                path: `${projectRootPath}/a.ts`,
+                content: "export const a = 10;"
+            };
+            const config: File = {
+                path: `${projectRootPath}/tsconfig.json`,
+                content: "{}"
+            };
+            const files = [fileA, config];
+            const host = createServerHost(files);
+            const service = createProjectService(host);
+            service.openClientFile(fileA.path);
+            checkNumberOfProjects(service, { configuredProjects: 1 });
+
+            host.invokeWatchedDirectoriesRecursiveCallback(projectRootPath, "a.ts");
+            host.checkTimeoutQueueLength(0);
+        });
+
         it("handles delayed directory watch invoke on file creation", () => {
             const projectRootPath = "/users/username/projects/project";
             const fileB: File = {

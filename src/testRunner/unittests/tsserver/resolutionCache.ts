@@ -977,7 +977,7 @@ export const x = 10;`
         });
 
         describe("avoid unnecessary invalidation", () => {
-            it("failed lookup invalidation", () => {
+            it("unnecessary lookup invalidation on save", () => {
                 const expectedNonRelativeDirectories = [`${projectLocation}/node_modules`, `${projectLocation}/src`];
                 const module1Name = "module1";
                 const module2Name = "module2";
@@ -999,6 +999,7 @@ export const x = 10;`
                 verifyTrace(resolutionTrace, expectedTrace);
                 verifyWatchesWithConfigFile(host, files, file1, expectedNonRelativeDirectories);
 
+                // invoke callback to simulate saving
                 host.invokeWatchedDirectoriesRecursiveCallback(projectLocation + "/src", "file1.ts");
                 host.checkTimeoutQueueLengthAndRun(0);
             });
