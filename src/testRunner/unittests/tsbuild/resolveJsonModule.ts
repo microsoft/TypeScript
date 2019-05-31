@@ -31,8 +31,9 @@ namespace ts {
 
         it("with resolveJsonModule and include only", () => {
             verifyProjectWithResolveJsonModule("/src/tsconfig_withInclude.json", [
-                Diagnostics.File_0_is_not_in_project_file_list_Projects_must_list_all_files_or_use_an_include_pattern,
-                "/src/src/hello.json"
+                Diagnostics.File_0_is_not_in_project_1_file_list_Projects_must_list_all_files_or_use_an_include_pattern,
+                "/src/src/hello.json",
+                "/src/tsconfig_withInclude.json"
             ]);
         });
 
