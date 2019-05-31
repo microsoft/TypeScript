@@ -222,11 +222,12 @@ tests/cases/conformance/types/keyof/keyofAndIndexedAccess2.ts(108,5): error TS23
         let y: ReadonlyArray<string>[K] = 'abc';
     }
     
-    // Repro from #31439
+    // Repro from #31439 and #31691
     
     export class c {
       [x: string]: string;
       constructor() {
+        this.a = "b";
         this["a"] = "b";
       }
     }

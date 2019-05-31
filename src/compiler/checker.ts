@@ -20192,7 +20192,7 @@ namespace ts {
                 markAliasReferenced(parentSymbol, node);
             }
             if (!prop) {
-                const indexInfo = assignmentKind === AssignmentKind.None || !isGenericObjectType(leftType) ? getIndexInfoOfType(apparentType, IndexKind.String) : undefined;
+                const indexInfo = assignmentKind === AssignmentKind.None || !isGenericObjectType(leftType) || isThisTypeParameter(leftType) ? getIndexInfoOfType(apparentType, IndexKind.String) : undefined;
                 if (!(indexInfo && indexInfo.type)) {
                     if (isJSLiteralType(leftType)) {
                         return anyType;
