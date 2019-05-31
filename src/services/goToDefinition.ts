@@ -273,6 +273,7 @@ namespace ts.GoToDefinition {
     function createDefinitionInfoFromName(declaration: Declaration, symbolKind: ScriptElementKind, symbolName: string, containerName: string): DefinitionInfo {
         const name = getNameOfDeclaration(declaration) || declaration;
         const sourceFile = name.getSourceFile();
+        const declarationNode = FindAllReferences.getDeclarationForDeclarationSpan(declaration)!;
         return {
             fileName: sourceFile.fileName,
             textSpan: createTextSpanFromNode(name, sourceFile),
@@ -280,10 +281,9 @@ namespace ts.GoToDefinition {
             name: symbolName,
             containerKind: undefined!, // TODO: GH#18217
             containerName,
-            declarationSpan: createTextSpanFromNode(
-                FindAllReferences.getDeclarationForDeclarationSpan(declaration)!,
-                sourceFile
-            )
+            declarationSpan: FindAllReferences.isDeclarationNodeWithStartAndEnd(declarationNode) ?
+                createTextSpanFromNode(declarationNode.start, sourceFile, declarationNode.end) :
+                createTextSpanFromNode(declarationNode, sourceFile),
         };
     }
 

@@ -16,10 +16,15 @@ namespace ts.FindAllReferences {
     export const enum EntryKind { Span, Node, StringLiteral, SearchedLocalFoundProperty, SearchedPropertyFoundLocal }
     export type NodeEntryKind = EntryKind.Node | EntryKind.StringLiteral | EntryKind.SearchedLocalFoundProperty | EntryKind.SearchedPropertyFoundLocal;
     export type Entry = NodeEntry | SpanEntry;
+    export interface DeclarationNodeWithStartAndEnd {
+        start: Node;
+        end: Node;
+    }
+    export type DeclarationNode = Node | DeclarationNodeWithStartAndEnd;
     export interface NodeEntry {
         readonly kind: NodeEntryKind;
         readonly node: Node;
-        readonly declaration?: Node;
+        readonly declaration?: DeclarationNode;
     }
     export interface SpanEntry {
         readonly kind: EntryKind.Span;
@@ -34,7 +39,11 @@ namespace ts.FindAllReferences {
         };
     }
 
-    function getDeclarationForDeclarationSpanForNode(node: Node): Node | undefined {
+    export function isDeclarationNodeWithStartAndEnd(node: DeclarationNode): node is DeclarationNodeWithStartAndEnd {
+        return node && (node as Node).kind === undefined;
+    }
+
+    function getDeclarationForDeclarationSpanForNode(node: Node): DeclarationNode | undefined {
         if (isDeclaration(node)) {
             return getDeclarationForDeclarationSpan(node);
         }
@@ -72,7 +81,7 @@ namespace ts.FindAllReferences {
         return undefined;
     }
 
-    export function getDeclarationForDeclarationSpan(node: NamedDeclaration | BinaryExpression | undefined): Node | undefined {
+    export function getDeclarationForDeclarationSpan(node: NamedDeclaration | BinaryExpression | undefined): DeclarationNode | undefined {
         if (!node) return undefined;
         switch (node.kind) {
             case SyntaxKind.VariableDeclaration:
@@ -80,6 +89,8 @@ namespace ts.FindAllReferences {
                     node :
                     isVariableStatement(node.parent.parent) ?
                         node.parent.parent :
+                        isForInOrOfStatement(node.parent.parent) ?
+                            { start: node.parent.parent.initializer, end: node.parent.parent.expression } :
                         node.parent;
 
             case SyntaxKind.BindingElement:
@@ -257,7 +268,9 @@ namespace ts.FindAllReferences {
             displayParts
         };
         if (declaration) {
-            result.declarationSpan = getTextSpan(declaration, sourceFile);
+            result.declarationSpan = isDeclarationNodeWithStartAndEnd(declaration) ?
+                getTextSpan(declaration.start, sourceFile, declaration.end) :
+                getTextSpan(declaration, sourceFile);
         }
         return result;
     }
@@ -298,7 +311,9 @@ namespace ts.FindAllReferences {
             const sourceFile = entry.node.getSourceFile();
             const result: DocumentSpan = { textSpan: getTextSpan(entry.node, sourceFile), fileName: sourceFile.fileName };
             if (entry.declaration) {
-                result.declarationSpan = getTextSpan(entry.declaration, sourceFile);
+                result.declarationSpan = isDeclarationNodeWithStartAndEnd(entry.declaration) ?
+                    getTextSpan(entry.declaration.start, sourceFile, entry.declaration.end) :
+                    getTextSpan(entry.declaration, sourceFile);
             }
             return result;
         }
@@ -392,10 +407,11 @@ namespace ts.FindAllReferences {
         return { fileName: documentSpan.fileName, span };
     }
 
-    function getTextSpan(node: Node, sourceFile: SourceFile): TextSpan {
+    function getTextSpan(node: Node, sourceFile: SourceFile, endNode?: Node): TextSpan {
         let start = node.getStart(sourceFile);
-        let end = node.getEnd();
+        let end = (endNode || node).getEnd();
         if (node.kind === SyntaxKind.StringLiteral) {
+            Debug.assert(endNode === undefined);
             start += 1;
             end -= 1;
         }
