@@ -12981,16 +12981,14 @@ namespace ts {
                 return result;
             }
 
-            function propegateSidebandVarianceFlags(typeArguments: readonly Type[], variances: VarianceFlags[]) {
-                if (outofbandVarianceMarkerHandler) {
-                    for (let i = 0; i < variances.length; i++) {
-                        const v = variances[i];
-                        if (v & VarianceFlags.Unmeasurable) {
-                            instantiateType(typeArguments[i], reportUnmeasurableMarkers);
-                        }
-                        if (v & VarianceFlags.Unreliable) {
-                            instantiateType(typeArguments[i], reportUnreliableMarkers);
-                        }
+            function propagateSidebandVarianceFlags(typeArguments: readonly Type[], variances: VarianceFlags[]) {
+                for (let i = 0; i < variances.length; i++) {
+                    const v = variances[i];
+                    if (v & VarianceFlags.Unmeasurable) {
+                        instantiateType(typeArguments[i], reportUnmeasurableMarkers);
+                    }
+                    if (v & VarianceFlags.Unreliable) {
+                        instantiateType(typeArguments[i], reportUnreliableMarkers);
                     }
                 }
             }
@@ -13016,10 +13014,10 @@ namespace ts {
                             // We're in the middle of variance checking - integrate any unmeasurable/unreliable flags from this cached component
                             if (source.flags & (TypeFlags.Object | TypeFlags.Conditional) && source.aliasSymbol &&
                             source.aliasTypeArguments && source.aliasSymbol === target.aliasSymbol) {
-                                propegateSidebandVarianceFlags(source.aliasTypeArguments, getAliasVariances(source.aliasSymbol));
+                                propagateSidebandVarianceFlags(source.aliasTypeArguments, getAliasVariances(source.aliasSymbol));
                             }
                             if (getObjectFlags(source) & ObjectFlags.Reference && getObjectFlags(target) & ObjectFlags.Reference && (<TypeReference>source).target === (<TypeReference>target).target && length((<TypeReference>source).typeArguments)) {
-                                propegateSidebandVarianceFlags((<TypeReference>source).typeArguments!, getVariances((<TypeReference>source).target));
+                                propagateSidebandVarianceFlags((<TypeReference>source).typeArguments!, getVariances((<TypeReference>source).target));
                             }
                         }
                         return related === RelationComparisonResult.Succeeded ? Ternary.True : Ternary.False;
