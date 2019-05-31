@@ -14094,12 +14094,6 @@ namespace ts {
                         if (unreliable) {
                             variance |= VarianceFlags.Unreliable;
                         }
-                        const covariantID = getRelationKey(typeWithSub, typeWithSuper, assignableRelation);
-                        const contravariantID = getRelationKey(typeWithSuper, typeWithSub, assignableRelation);
-                        // We delete the results of these checks, as we want them to actually be run, see the `Unmeasurable` variance we cache,
-                        // And then fall back to a structural result.
-                        assignableRelation.delete(covariantID);
-                        assignableRelation.delete(contravariantID);
                     }
                     variances.push(variance);
                 }
