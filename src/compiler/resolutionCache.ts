@@ -54,6 +54,7 @@ namespace ts {
         writeLog(s: string): void;
         maxNumberOfFilesToIterateForInvalidation?: number;
         getCurrentProgram(): Program | undefined;
+        fileIsOpen(filePath: Path): boolean;
     }
 
     interface DirectoryWatchesOfFailedLookup {
@@ -697,6 +698,11 @@ namespace ts {
             else {
                 // If something to do with folder/file starting with "." in node_modules folder, skip it
                 if (isPathIgnored(fileOrDirectoryPath)) return false;
+
+                // prevent saving an open file from over-eagerly triggering invalidation
+                if (resolutionHost.fileIsOpen(fileOrDirectoryPath)) {
+                    return false;
+                }
 
                 // Some file or directory in the watching directory is created
                 // Return early if it does not have any of the watching extension or not the custom failed lookup path
