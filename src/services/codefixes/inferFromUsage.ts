@@ -76,6 +76,8 @@ namespace ts.codefix {
             case Diagnostics.Rest_parameter_0_implicitly_has_an_any_type.code:
             case Diagnostics.Rest_parameter_0_implicitly_has_an_any_type_but_a_better_type_may_be_inferred_from_usage.code:
                 return Diagnostics.Infer_parameter_types_from_usage;
+            case Diagnostics.this_implicitly_has_type_any_because_it_does_not_have_a_type_annotation.code:
+                return Diagnostics.Infer_this_type_of_0_from_usage;
             default:
                 return Diagnostics.Infer_type_of_0_from_usage;
         }
@@ -235,12 +237,7 @@ namespace ts.codefix {
             return;
         }
 
-        if (isInJSFile(containingFunction)) {
-            annotateJSDocThis(changes, sourceFile, containingFunction, typeNode, program, host);
-        }
-        else {
-            changes.tryInsertThisTypeAnnotation(sourceFile, containingFunction, typeNode);
-        }
+        changes.tryInsertThisTypeAnnotation(sourceFile, containingFunction, typeNode);
     }
 
     function annotateSetAccessor(changes: textChanges.ChangeTracker, sourceFile: SourceFile, setAccessorDeclaration: SetAccessorDeclaration, program: Program, host: LanguageServiceHost, cancellationToken: CancellationToken): void {
@@ -293,12 +290,6 @@ namespace ts.codefix {
             return typeNode && createJSDocParamTag(name, !!inference.isOptional, createJSDocTypeExpression(typeNode), "");
         });
         addJSDocTags(changes, sourceFile, signature, paramTags);
-    }
-
-    function annotateJSDocThis(changes: textChanges.ChangeTracker, sourceFile: SourceFile, containingFunction: FunctionLike, typeNode: TypeNode, _program: Program, _host: LanguageServiceHost) {
-        addJSDocTags(changes, sourceFile, containingFunction, [
-            createJSDocParamTag(createIdentifier("this"), /* isBracketed */ false, createJSDocTypeExpression(typeNode)),
-        ]);
     }
 
     function addJSDocTags(changes: textChanges.ChangeTracker, sourceFile: SourceFile, parent: HasJSDoc, newTags: ReadonlyArray<JSDocTag>): void {

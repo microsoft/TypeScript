@@ -5244,6 +5244,9 @@ namespace ts {
                 return node.parent.left.name;
             }
         }
+        else if (isVariableDeclaration(node.parent) && isIdentifier(node.parent.name)) {
+            return node.parent.name;
+        }
     }
 
     /**

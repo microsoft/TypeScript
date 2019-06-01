@@ -4951,6 +4951,10 @@
         "category": "Message",
         "code": 95076
     },
+    "Infer 'this' type of '{0}' from usage": {
+        "category": "Message",
+        "code": 95077
+    },
     "No value exists in scope for the shorthand property '{0}'. Either declare one or provide an initializer." :{
         "category": "Error",
         "code": 18004
