@@ -1504,12 +1504,27 @@ namespace ts {
          */
         function createExportExpression(name: Identifier, value: Expression, location?: TextRange) {
             return setTextRange(
-                createAssignment(
+                createCall(
                     createPropertyAccess(
-                        createIdentifier("exports"),
-                        getSynthesizedClone(name)
+                        createIdentifier("Object"),
+                        "defineProperty"
                     ),
-                    value
+                    /*typeArguments*/ undefined,
+                    [
+                        createIdentifier("exports"),
+                        createLiteral(name),
+                        createObjectLiteral([
+                            createPropertyAssignment("enumerable", createLiteral(/*value*/ true)),
+                            createPropertyAssignment("get", createArrowFunction(
+                                /*modifiers*/ undefined,
+                                /*typeParameters*/ undefined,
+                                /*parameters*/ [],
+                                /*type*/ undefined,
+                                /*equalsGreaterThanToken*/ undefined,
+                                value
+                            ))
+                        ])
+                    ]
                 ),
                 location
             );
