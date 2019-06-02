@@ -237,7 +237,18 @@ namespace ts.codefix {
             return;
         }
 
-        changes.tryInsertThisTypeAnnotation(sourceFile, containingFunction, typeNode);
+        if (isInJSFile(containingFunction)) {
+            annotateJSDocThis(changes, sourceFile, containingFunction, typeNode);
+        }
+        else {
+            changes.tryInsertThisTypeAnnotation(sourceFile, containingFunction, typeNode);
+        }
+    }
+
+    function annotateJSDocThis(changes: textChanges.ChangeTracker, sourceFile: SourceFile, containingFunction: FunctionLike, typeNode: TypeNode) {
+        addJSDocTags(changes, sourceFile, containingFunction, [
+            createJSDocThisTag(createJSDocTypeExpression(typeNode)),
+        ]);
     }
 
     function annotateSetAccessor(changes: textChanges.ChangeTracker, sourceFile: SourceFile, setAccessorDeclaration: SetAccessorDeclaration, program: Program, host: LanguageServiceHost, cancellationToken: CancellationToken): void {
@@ -412,7 +423,7 @@ namespace ts.codefix {
             constructContexts?: CallContext[];
             numberIndexContext?: UsageContext;
             stringIndexContext?: UsageContext;
-            thisType?: Type;
+            candidateThisTypes?: Type[];
         }
 
         export function inferTypesFromReferences(references: ReadonlyArray<Identifier>, checker: TypeChecker, cancellationToken: CancellationToken): Type[] {
@@ -476,7 +487,6 @@ namespace ts.codefix {
             }
 
             const checker = program.getTypeChecker();
-            const candidateTypes: Type[] = [];
             const usageContext: UsageContext = {};
 
             for (const reference of references) {
@@ -484,11 +494,7 @@ namespace ts.codefix {
                 inferTypeFromContext(reference, checker, usageContext);
             }
 
-            if (usageContext.thisType) {
-                candidateTypes.push(usageContext.thisType);
-            }
-
-            return unifyFromContext(candidateTypes, checker);
+            return unifyFromContext(usageContext.candidateThisTypes || emptyArray, checker);
         }
 
         function inferTypeFromContext(node: Expression, checker: TypeChecker, usageContext: UsageContext): void {
@@ -528,6 +534,9 @@ namespace ts.codefix {
                 case SyntaxKind.PropertyAssignment:
                 case SyntaxKind.ShorthandPropertyAssignment:
                     inferTypeFromPropertyAssignment(<PropertyAssignment | ShorthandPropertyAssignment>node.parent, checker, usageContext);
+                    break;
+                case SyntaxKind.PropertyDeclaration:
+                    inferTypeFromPropertyDeclaration(<PropertyDeclaration>node.parent, checker, usageContext);
                     break;
                 case SyntaxKind.VariableDeclaration: {
                     const { name, initializer } = node.parent as VariableDeclaration;
@@ -729,7 +738,11 @@ namespace ts.codefix {
                 objectLiteral.parent :
                 objectLiteral;
 
-            usageContext.thisType = checker.getTypeAtLocation(nodeWithRealType);
+            addCandidateThisType(usageContext, checker.getTypeAtLocation(nodeWithRealType));
+        }
+
+        function inferTypeFromPropertyDeclaration(declaration: PropertyDeclaration, checker: TypeChecker, usageContext: UsageContext) {
+            addCandidateThisType(usageContext, checker.getTypeAtLocation(declaration.parent));
         }
 
         interface Priority {
@@ -923,6 +936,12 @@ namespace ts.codefix {
         function addCandidateType(context: UsageContext, type: Type | undefined) {
             if (type && !(type.flags & TypeFlags.Any) && !(type.flags & TypeFlags.Never)) {
                 (context.candidateTypes || (context.candidateTypes = [])).push(type);
+            }
+        }
+
+        function addCandidateThisType(context: UsageContext, type: Type | undefined) {
+            if (type && !(type.flags & TypeFlags.Any) && !(type.flags & TypeFlags.Never)) {
+                (context.candidateThisTypes || (context.candidateThisTypes = [])).push(type);
             }
         }
 
