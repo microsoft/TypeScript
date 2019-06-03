@@ -1,12 +1,12 @@
 /// <reference path='fourslash.ts'/>
 
 ////class Base<T> {
-////    [|{| "isDefinition": true |}a|]: this;
-////    [|{| "isWriteAccess": true, "isDefinition": true |}method|]<U>(a?:T, b?:U): this { }
+////    [|[|{| "isDefinition": true, "declarationRangeIndex": 0 |}a|]: this;|]
+////    [|[|{| "isWriteAccess": true, "isDefinition": true, "declarationRangeIndex": 2 |}method|]<U>(a?:T, b?:U): this { }|]
 ////}
 ////class MyClass extends Base<number> {
-////    [|{| "isDefinition": true |}a|];
-////    [|{| "isWriteAccess": true, "isDefinition": true |}method|]() { }
+////    [|[|{| "isDefinition": true, "declarationRangeIndex": 4 |}a|];|]
+////    [|[|{| "isWriteAccess": true, "isDefinition": true, "declarationRangeIndex": 6 |}method|]() { }|]
 ////}
 ////
 ////var c: MyClass;

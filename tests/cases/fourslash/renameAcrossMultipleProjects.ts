@@ -1,7 +1,7 @@
 /// <reference path="fourslash.ts" />
 
 //@Filename: a.ts
-////var [|x|]: number;
+////[|var [|{| "declarationRangeIndex": 0 |}x|]: number;|]
 
 //@Filename: b.ts
 /////// <reference path="a.ts" />
@@ -11,4 +11,5 @@
 /////// <reference path="a.ts" />
 ////[|x|]++;
 
-verify.rangesAreRenameLocations();
+const [rDef, ...ranges] = test.ranges();
+verify.rangesAreRenameLocations(ranges);

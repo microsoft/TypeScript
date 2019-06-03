@@ -5,7 +5,8 @@
 ////export = SomeModule;
 
 // @Filename: b.ts
-////import [|M|] = require("./a");
+////[|import [|{| "declarationRangeIndex": 0 |}M|] = require("./a");|]
 ////import C = [|M|].SomeClass;
 
-verify.rangesAreRenameLocations();
+const [rDef, ...ranges] = test.ranges();
+verify.rangesAreRenameLocations(ranges);

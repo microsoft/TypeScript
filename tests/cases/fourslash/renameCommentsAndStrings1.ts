@@ -2,9 +2,10 @@
 
 ///////<reference path="./Bar.ts" />
 
-////function [|Bar|]() {
+////[|function [|{| "declarationRangeIndex": 0 |}Bar|]() {
 ////    // This is a reference to Bar in a comment.
 ////    "this is a reference to Bar in a string"
-////}
+////}|]
 
-verify.rangesAreRenameLocations();
+const [rDef, ...ranges] = test.ranges();
+verify.rangesAreRenameLocations(ranges);

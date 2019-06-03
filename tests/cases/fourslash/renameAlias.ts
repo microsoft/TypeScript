@@ -1,7 +1,8 @@
 /// <reference path='fourslash.ts'/>
 
 ////module SomeModule { export class SomeClass { } }
-////import [|M|] = SomeModule;
+////[|import [|{| "declarationRangeIndex": 0 |}M|] = SomeModule;|]
 ////import C = [|M|].SomeClass;
 
-verify.rangesAreRenameLocations();
+const [rDef, ...ranges] = test.ranges();
+verify.rangesAreRenameLocations(ranges);

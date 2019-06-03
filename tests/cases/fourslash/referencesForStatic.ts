@@ -6,7 +6,7 @@
 ////var n = 43;
 ////
 ////class foo {
-////    static [|{| "isWriteAccess": true, "isDefinition": true |}n|] = '';
+////    [|static [|{| "isWriteAccess": true, "isDefinition": true, "declarationRangeIndex": 0 |}n|] = '';|]
 ////
 ////    public bar() {
 ////        foo.[|{| "isWriteAccess": true |}n|] = "'";
@@ -30,4 +30,5 @@
 // @Filename: referencesOnStatic_2.ts
 ////var q = foo.[|n|];
 
-verify.singleReferenceGroup("(property) foo.n: string");
+const [rDef, ...ranges] = test.ranges();
+verify.singleReferenceGroup("(property) foo.n: string", ranges);

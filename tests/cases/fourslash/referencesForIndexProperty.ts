@@ -3,8 +3,8 @@
 // References a class property using string index access
 
 ////class Foo {
-////    [|{| "isDefinition": true |}property|]: number;
-////    [|{| "isWriteAccess": true, "isDefinition": true |}method|](): void { }
+////    [|[|{| "isDefinition": true, "declarationRangeIndex": 0 |}property|]: number;|]
+////    [|[|{| "isWriteAccess": true, "isDefinition": true, "declarationRangeIndex": 2 |}method|](): void { }|]
 ////}
 ////
 ////var f: Foo;
