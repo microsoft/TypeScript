@@ -1,58 +1,58 @@
 /// <reference path='fourslash.ts' />
 
 ////interface I {
-////    [|prop1|]: () => void;
+////    [|[|{| "declarationRangeIndex": 0 |}prop1|]: () => void;|]
 ////    prop2(): void;
 ////}
 ////
 ////var o1: I = {
-////    [|prop1|]() { },
+////    [|[|{| "declarationRangeIndex": 2 |}prop1|]() { }|],
 ////    prop2() { }
 ////};
 ////
 ////var o2: I = {
-////    [|prop1|]: () => { },
+////    [|[|{| "declarationRangeIndex": 4 |}prop1|]: () => { }|],
 ////    prop2: () => { }
 ////};
 ////
 ////var o3: I = {
-////    get [|prop1|]() { return () => { }; },
+////    [|get [|{| "declarationRangeIndex": 6 |}prop1|]() { return () => { }; }|],
 ////    get prop2() { return () => { }; }
 ////};
 ////
 ////var o4: I = {
-////    set [|prop1|](v) { },
+////    [|set [|{| "declarationRangeIndex": 8 |}prop1|](v) { }|],
 ////    set prop2(v) { }
 ////};
 ////
 ////var o5: I = {
-////    "[|prop1|]"() { },
+////    [|"[|{| "declarationRangeIndex": 10 |}prop1|]"() { }|],
 ////    "prop2"() { }
 ////};
 ////
 ////var o6: I = {
-////    "[|prop1|]": function () { },
+////    [|"[|{| "declarationRangeIndex": 12 |}prop1|]": function () { }|],
 ////    "prop2": function () { }
 ////};
 ////
 ////var o7: I = {
-////    ["[|prop1|]"]: function () { },
+////    [|["[|{| "declarationRangeIndex": 14 |}prop1|]"]: function () { }|],
 ////    ["prop2"]: function () { }
 ////};
 ////
 ////var o8: I = {
-////    ["[|prop1|]"]() { },
+////    [|["[|{| "declarationRangeIndex": 16 |}prop1|]"]() { }|],
 ////    ["prop2"]() { }
 ////};
 ////
 ////var o9: I = {
-////    get ["[|prop1|]"]() { return () => { }; },
+////    [|get ["[|{| "declarationRangeIndex": 18 |}prop1|]"]() { return () => { }; }|],
 ////    get ["prop2"]() { return () => { }; }
 ////};
 ////
 ////var o10: I = {
-////    set ["[|prop1|]"](v) { },
+////    [|set ["[|{| "declarationRangeIndex": 20 |}prop1|]"](v) { }|],
 ////    set ["prop2"](v) { }
 ////};
 
-verify.rangesAreRenameLocations();
+verify.rangesAreRenameLocations(test.rangesByText().get("prop1"));

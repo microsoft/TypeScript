@@ -62,11 +62,16 @@ namespace ts.FindAllReferences {
                         node.parent.parent.left === node.parent ?
                         node.parent.parent :
                         undefined;
-                return binaryExpression && getAssignmentDeclarationKind(binaryExpression) !== AssignmentDeclarationKind.None ?
-                    getDeclarationForDeclarationSpan(binaryExpression) :
-                    undefined;
+                if (binaryExpression && getAssignmentDeclarationKind(binaryExpression) !== AssignmentDeclarationKind.None) {
+                    return getDeclarationForDeclarationSpan(binaryExpression);
+                }
             }
-            return undefined;
+
+            // Handle computed property name
+            const propertyName = findAncestor(node, isComputedPropertyName);
+            return propertyName ?
+                getDeclarationForDeclarationSpan(propertyName.parent) :
+                undefined;
         }
 
         if (isConstructorDeclaration(node.parent) ||
