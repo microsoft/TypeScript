@@ -1,10 +1,10 @@
 /// <reference path='fourslash.ts' />
 
 ////interface I {
-////    [|x|]: number;
+////    [|[|{| "declarationRangeIndex": 0 |}x|]: number;|]
 ////}
 ////var a: I;
 ////var x;
-////({ [|x|]: x } = a);
+////([|{ [|{| "declarationRangeIndex": 2 |}x|]: x } = a|]);
 
-verify.rangesAreRenameLocations();
+verify.rangesAreRenameLocations(test.rangesByText().get("x"));

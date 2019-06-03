@@ -81,7 +81,7 @@ namespace ts.FindAllReferences {
         return undefined;
     }
 
-    export function getDeclarationForDeclarationSpan(node: NamedDeclaration | BinaryExpression | undefined): DeclarationNode | undefined {
+    export function getDeclarationForDeclarationSpan(node: NamedDeclaration | BinaryExpression | ForInOrOfStatement | undefined): DeclarationNode | undefined {
         if (!node) return undefined;
         switch (node.kind) {
             case SyntaxKind.VariableDeclaration:
@@ -90,8 +90,8 @@ namespace ts.FindAllReferences {
                     isVariableStatement(node.parent.parent) ?
                         node.parent.parent :
                         isForInOrOfStatement(node.parent.parent) ?
-                            { start: node.parent.parent.initializer, end: node.parent.parent.expression } :
-                        node.parent;
+                            getDeclarationForDeclarationSpan(node.parent.parent) :
+                            node.parent;
 
             case SyntaxKind.BindingElement:
                 return getDeclarationForDeclarationSpan(node.parent.parent as NamedDeclaration);
@@ -114,12 +114,27 @@ namespace ts.FindAllReferences {
             case SyntaxKind.BinaryExpression:
                 return isExpressionStatement(node.parent) ?
                     node.parent :
-                    undefined;
+                    node;
 
-            // Not really interesting definition
+            case SyntaxKind.ForOfStatement:
+            case SyntaxKind.ForInStatement:
+                return {
+                    start: (node as ForInOrOfStatement).initializer,
+                    end: (node as ForInOrOfStatement).expression
+                };
+
+            case SyntaxKind.PropertyAssignment:
             // TODO(shkamat):: Should we show whole object literal instead?
             case SyntaxKind.ShorthandPropertyAssignment:
-                return undefined;
+                return isArrayLiteralOrObjectLiteralDestructuringPattern(node.parent) ?
+                    getDeclarationForDeclarationSpan(
+                        findAncestor(node.parent, node =>
+                            isBinaryExpression(node) || isForInOrOfStatement(node)
+                        ) as BinaryExpression | ForInOrOfStatement
+                    ) :
+                    node.kind === SyntaxKind.PropertyAssignment ?
+                        node :
+                        undefined;
 
             default:
                 return node;
