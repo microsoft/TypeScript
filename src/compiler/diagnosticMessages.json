@@ -655,7 +655,7 @@
         "category": "Error",
         "code": 1207
     },
-    "Cannot compile namespaces when the '--isolatedModules' flag is provided.": {
+    "All files must be modules when the '--isolatedModules' flag is provided.": {
         "category": "Error",
         "code": 1208
     },
@@ -3835,10 +3835,6 @@
         "category": "Error",
         "code": 6189
     },
-    "Found 'package.json' at '{0}'. Package ID is '{1}'.": {
-        "category": "Message",
-        "code": 6190
-    },
     "Whether to keep outdated console output in watch mode instead of clearing the screen.": {
         "category": "Message",
         "code": 6191
@@ -3947,9 +3943,21 @@
         "category": "Message",
         "code": 6217
     },
-    "Enable strict checking of generator types.": {
+    "======== Module name '{0}' was successfully resolved to '{1}' with Package ID '{2}'. ========": {
         "category": "Message",
         "code": 6218
+    },
+    "======== Type reference directive '{0}' was successfully resolved to '{1}' with Package ID '{2}', primary: {3}. ========": {
+        "category": "Message",
+        "code": 6219
+    },
+    "'package.json' had a falsy '{0}' field.": {
+        "category": "Message",
+        "code": 6220
+    },
+    "Enable strict checking of generator types.": {
+        "category": "Message",
+        "code": 6221
     },
 
     "Projects to reference": {
@@ -4312,9 +4320,17 @@
         "category": "Error",
         "code": 7052
     },
-    "Generator implicitly has type '{0}' because it does not yield or return any values. Consider supplying a return type.": {
+    "Element implicitly has an 'any' type because expression of type '{0}' can't be used to index type '{1}'.": {
         "category": "Error",
         "code": 7053
+    },    
+    "No index signature with a parameter of type '{0}' was found on type '{1}'.": {
+        "category": "Error",
+        "code": 7054
+    },
+    "Generator implicitly has type '{0}' because it does not yield or return any values. Consider supplying a return type.": {
+        "category": "Error",
+        "code": 7055
     },
 
     "You cannot rename this element.": {
@@ -5008,7 +5024,7 @@
         "code": 95079
     },
 
-    "No value exists in scope for the shorthand property '{0}'. Either declare one or provide an initializer." :{
+    "No value exists in scope for the shorthand property '{0}'. Either declare one or provide an initializer.": {
         "category": "Error",
         "code": 18004
     },

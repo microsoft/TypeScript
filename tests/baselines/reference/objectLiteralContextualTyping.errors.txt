@@ -33,4 +33,5 @@ tests/cases/conformance/expressions/contextualTyping/objectLiteralContextualTypi
     var b: {};
         ~
 !!! error TS2403: Subsequent variable declarations must have the same type.  Variable 'b' must be of type 'unknown', but here has type '{}'.
+!!! related TS6203 tests/cases/conformance/expressions/contextualTyping/objectLiteralContextualTyping.ts:28:5: 'b' was also declared here.
     

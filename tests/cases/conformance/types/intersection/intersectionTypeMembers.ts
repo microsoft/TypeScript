@@ -42,3 +42,25 @@ const de: D & E = {
         other: { g: 101 }
     }
 }
+
+// Additional test case with >2 doubly nested members so fix for #31441 is tested w/ excess props
+interface F {
+    nested: { doublyNested: { g: string; } }
+}
+
+interface G {
+    nested: { doublyNested: { h: string; } }
+}
+
+const defg: D & E & F & G = {
+    nested: {
+        doublyNested: {
+            d: 'yes',
+            f: 'no',
+            g: 'ok',
+            h: 'affirmative'
+        },
+        different: { e: 12 },
+        other: { g: 101 }
+    }
+}

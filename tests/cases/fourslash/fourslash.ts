@@ -232,9 +232,9 @@ declare namespace FourSlashInterface {
         rangesWithSameTextAreRenameLocations(): void;
         rangesAreRenameLocations(options?: Range[] | { findInStrings?: boolean, findInComments?: boolean, ranges?: Range[] });
         findReferencesDefinitionDisplayPartsAtCaretAre(expected: ts.SymbolDisplayPart[]): void;
-        noSignatureHelp(...markers: string[]): void;
-        noSignatureHelpForTriggerReason(triggerReason: SignatureHelpTriggerReason, ...markers: string[]): void
-        signatureHelpPresentForTriggerReason(triggerReason: SignatureHelpTriggerReason, ...markers: string[]): void
+        noSignatureHelp(...markers: (string | Marker)[]): void;
+        noSignatureHelpForTriggerReason(triggerReason: SignatureHelpTriggerReason, ...markers: (string | Marker)[]): void
+        signatureHelpPresentForTriggerReason(triggerReason: SignatureHelpTriggerReason, ...markers: (string | Marker)[]): void
         signatureHelp(...options: VerifySignatureHelpOptions[], ): void;
         // Checks that there are no compile errors.
         noErrors(): void;
@@ -528,6 +528,7 @@ declare namespace FourSlashInterface {
         readonly isRecommended?: boolean;
         readonly kind?: string;
         readonly kindModifiers?: string;
+        readonly sortText?: completion.SortText;
 
         // details
         readonly text?: string;
@@ -537,7 +538,7 @@ declare namespace FourSlashInterface {
     }
 
     interface VerifySignatureHelpOptions {
-        marker?: ArrayOrSingle<string>;
+        marker?: ArrayOrSingle<string | Marker>;
         /** @default 1 */
         overloadsCount?: number;
         docComment?: string;
@@ -650,6 +651,15 @@ declare var cancellation: FourSlashInterface.cancellation;
 declare var classification: typeof FourSlashInterface.classification;
 declare namespace completion {
     type Entry = FourSlashInterface.ExpectedCompletionEntryObject;
+    export const enum SortText {
+        LocationPriority = "0",
+        SuggestedClassMembers = "1",
+        GlobalsOrKeywords = "2",
+        AutoImportSuggestions = "3",
+        JavascriptIdentifiers = "4"
+    }
+    export const globalThisEntry: Entry;
+    export const undefinedVarEntry: Entry;
     export const globals: ReadonlyArray<Entry>;
     export const globalsInJs: ReadonlyArray<Entry>;
     export const globalKeywords: ReadonlyArray<Entry>;

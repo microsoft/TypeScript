@@ -1,10 +1,7 @@
 Exit Code: 1
 Standard output:
-../../../../../built/local/lib.dom.d.ts(17676,19): error TS2451: Cannot redeclare block-scoped variable 'WebAssembly'.
+../../../../../built/local/lib.dom.d.ts(17677,19): error TS2451: Cannot redeclare block-scoped variable 'WebAssembly'.
 declarations.d.ts(258,15): error TS2451: Cannot redeclare block-scoped variable 'WebAssembly'.
-lib/ContextModuleFactory.js(253,50): error TS2339: Property 'concat' does not exist on type 'unknown'.
-lib/web/JsonpChunkTemplatePlugin.js(13,6): error TS2339: Property 'id' does not exist on type 'unknown'.
-lib/web/JsonpMainTemplatePlugin.js(501,11): error TS2339: Property 'id' does not exist on type 'unknown'.
 
 
 

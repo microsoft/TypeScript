@@ -18,4 +18,4 @@
 for (var i = 1; i <= 10; i++) {
 	verify.completions({ marker: String(i), exact: undefined });
 }
-verify.completions({ marker: "end", includes: "null" });
+verify.completions({ marker: "end", includes: { name: "null", sortText: completion.SortText.GlobalsOrKeywords } });

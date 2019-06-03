@@ -1,7 +1,7 @@
 namespace ts {
     // WARNING: The script `configureNightly.ts` uses a regexp to parse out these values.
     // If changing the text in this section, be sure to test `configureNightly` too.
-    export const versionMajorMinor = "3.5";
+    export const versionMajorMinor = "3.6";
     /** The version of the TypeScript compiler release */
     export const version = `${versionMajorMinor}.0-dev`;
 }
@@ -44,7 +44,7 @@ namespace ts {
 
     /** ES6 Iterator type. */
     export interface Iterator<T> {
-        next(): { value: T, done?: false } | { done: true };
+        next(): { value: T, done?: false } | { value: never, done: true };
     }
 
     /** Array that is only intended to be pushed to, never read. */
@@ -375,7 +375,7 @@ namespace ts {
                     return { value: undefined as never, done: true };
                 }
                 i++;
-                return { value: [arrayA[i - 1], arrayB[i - 1]], done: false };
+                return { value: [arrayA[i - 1], arrayB[i - 1]] as [T, U], done: false };
             }
         };
     }
@@ -567,7 +567,7 @@ namespace ts {
         return {
             next() {
                 const iterRes = iter.next();
-                return iterRes.done ? iterRes : { value: mapFn(iterRes.value), done: false };
+                return iterRes.done ? iterRes as { done: true, value: never } : { value: mapFn(iterRes.value), done: false };
             }
         };
     }
@@ -678,7 +678,7 @@ namespace ts {
                     }
                     const iterRes = iter.next();
                     if (iterRes.done) {
-                        return iterRes;
+                        return iterRes as { done: true, value: never };
                     }
                     currentIter = getIterator(iterRes.value);
                 }
@@ -753,7 +753,7 @@ namespace ts {
                 while (true) {
                     const res = iter.next();
                     if (res.done) {
-                        return res;
+                        return res as { done: true, value: never };
                     }
                     const value = mapFn(res.value);
                     if (value !== undefined) {
@@ -1686,89 +1686,6 @@ namespace ts {
      */
     export type AnyFunction = (...args: never[]) => void;
     export type AnyConstructor = new (...args: unknown[]) => unknown;
-
-    export namespace Debug {
-        export let currentAssertionLevel = AssertionLevel.None;
-        export let isDebugging = false;
-
-        export function shouldAssert(level: AssertionLevel): boolean {
-            return currentAssertionLevel >= level;
-        }
-
-        export function assert(expression: boolean, message?: string, verboseDebugInfo?: string | (() => string), stackCrawlMark?: AnyFunction): void {
-            if (!expression) {
-                if (verboseDebugInfo) {
-                    message += "\r\nVerbose Debug Information: " + (typeof verboseDebugInfo === "string" ? verboseDebugInfo : verboseDebugInfo());
-                }
-                fail(message ? "False expression: " + message : "False expression.", stackCrawlMark || assert);
-            }
-        }
-
-        export function assertEqual<T>(a: T, b: T, msg?: string, msg2?: string): void {
-            if (a !== b) {
-                const message = msg ? msg2 ? `${msg} ${msg2}` : msg : "";
-                fail(`Expected ${a} === ${b}. ${message}`);
-            }
-        }
-
-        export function assertLessThan(a: number, b: number, msg?: string): void {
-            if (a >= b) {
-                fail(`Expected ${a} < ${b}. ${msg || ""}`);
-            }
-        }
-
-        export function assertLessThanOrEqual(a: number, b: number): void {
-            if (a > b) {
-                fail(`Expected ${a} <= ${b}`);
-            }
-        }
-
-        export function assertGreaterThanOrEqual(a: number, b: number): void {
-            if (a < b) {
-                fail(`Expected ${a} >= ${b}`);
-            }
-        }
-
-        export function fail(message?: string, stackCrawlMark?: AnyFunction): never {
-            debugger;
-            const e = new Error(message ? `Debug Failure. ${message}` : "Debug Failure.");
-            if ((<any>Error).captureStackTrace) {
-                (<any>Error).captureStackTrace(e, stackCrawlMark || fail);
-            }
-            throw e;
-        }
-
-        export function assertDefined<T>(value: T | null | undefined, message?: string): T {
-            if (value === undefined || value === null) return fail(message);
-            return value;
-        }
-
-        export function assertEachDefined<T, A extends ReadonlyArray<T>>(value: A, message?: string): A {
-            for (const v of value) {
-                assertDefined(v, message);
-            }
-            return value;
-        }
-
-        export function assertNever(member: never, message = "Illegal value:", stackCrawlMark?: AnyFunction): never {
-            const detail = typeof member === "object" && "kind" in member && "pos" in member ? "SyntaxKind: " + showSyntaxKind(member as Node) : JSON.stringify(member);
-            return fail(`${message} ${detail}`, stackCrawlMark || assertNever);
-        }
-
-        export function getFunctionName(func: AnyFunction) {
-            if (typeof func !== "function") {
-                return "";
-            }
-            else if (func.hasOwnProperty("name")) {
-                return (<any>func).name;
-            }
-            else {
-                const text = Function.prototype.toString.call(func);
-                const match = /^function\s+([\w\$]+)\s*\(/.exec(text);
-                return match ? match[1] : "";
-            }
-        }
-    }
 
     export function equateValues<T>(a: T, b: T) {
         return a === b;
