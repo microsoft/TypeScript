@@ -14,8 +14,9 @@
 ////   }
 //// }
 ////
-//// var [|/*dst*/nn|]: {name?: string; size?: number};
+//// [|var [|/*dst*/{| "declarationRangeIndex": 0 |}nn|]: {name?: string; size?: number};|]
 //// var x = <MyClass {...[|n/*src*/n|]}></MyClass>;
 
 verify.goToDefinition("src", "dst");
-verify.rangesAreRenameLocations();
+const [rDef, ...ranges] = test.ranges();
+verify.rangesAreRenameLocations(ranges);

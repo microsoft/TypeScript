@@ -228,7 +228,7 @@ declare namespace FourSlashInterface {
          */
         referenceGroups(starts: ArrayOrSingle<string> | ArrayOrSingle<Range>, parts: ReadonlyArray<ReferenceGroup>): void;
         singleReferenceGroup(definition: ReferencesDefinition, ranges?: Range[]): void;
-        rangesAreOccurrences(isWriteAccess?: boolean): void;
+        rangesAreOccurrences(isWriteAccess?: boolean, ranges?: Range[]): void;
         rangesWithSameTextAreRenameLocations(): void;
         rangesAreRenameLocations(options?: Range[] | { findInStrings?: boolean, findInComments?: boolean, ranges?: Range[] });
         findReferencesDefinitionDisplayPartsAtCaretAre(expected: ts.SymbolDisplayPart[]): void;

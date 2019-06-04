@@ -2709,8 +2709,8 @@ Actual: ${stringify(fullActual)}`);
             return this.languageService.getDocumentHighlights(this.activeFile.fileName, this.currentCaretPosition, filesToSearch);
         }
 
-        public verifyRangesAreOccurrences(isWriteAccess?: boolean) {
-            const ranges = this.getRanges();
+        public verifyRangesAreOccurrences(isWriteAccess?: boolean, ranges?: Range[]) {
+            ranges = ranges || this.getRanges();
             for (const r of ranges) {
                 this.goToRangeStart(r);
                 this.verifyOccurrencesAtPositionListCount(ranges.length);
@@ -4084,8 +4084,8 @@ namespace FourSlashInterface {
             this.state.verifyOccurrencesAtPositionListCount(expectedCount);
         }
 
-        public rangesAreOccurrences(isWriteAccess?: boolean) {
-            this.state.verifyRangesAreOccurrences(isWriteAccess);
+        public rangesAreOccurrences(isWriteAccess?: boolean, ranges?: FourSlash.Range[]) {
+            this.state.verifyRangesAreOccurrences(isWriteAccess, ranges);
         }
 
         public rangesWithSameTextAreRenameLocations() {
