@@ -6,22 +6,21 @@
 ////namespace JSX {
 ////    export interface Element { }
 ////    export interface IntrinsicElements {
-////        [|{| "isDefinition": true |}div|]: any;
+////        [|[|{| "isDefinition": true, "declarationRangeIndex": 0 |}div|]: any;|]
 ////    }
 ////}
 ////
-////const [|{| "isWriteAccess": true, "isDefinition": true |}Comp|] = () =>
+////[|const [|{| "isWriteAccess": true, "isDefinition": true, "declarationRangeIndex": 2 |}Comp|] = () =>
 ////    <[|div|]>
 ////        Some content
 ////        <[|div|]>More content</[|div|]>
-////    </[|div|]>;
+////    </[|div|]>;|]
 ////
 ////const x = <[|Comp|]>
 ////    Content
 ////</[|Comp|]>;
 
-const ranges = test.ranges();
-const [d0, c0, d1, d2, d3, d4, c1, c2] = test.ranges();
+const [d0Def, d0, c0Def, c0, d1, d2, d3, d4, c1, c2] = test.ranges();
 
 const allD = [d0, d1, d2, d3, d4];
 const allC = [c0, c1, c2];

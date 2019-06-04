@@ -1,7 +1,7 @@
 /// <reference path='fourslash.ts' />
 
-////(function [|{| "isWriteAccess": true, "isDefinition": true |}___foo|]() {
+////([|function [|{| "isWriteAccess": true, "isDefinition": true, "declarationRangeIndex": 0 |}___foo|]() {
 ////    [|___foo|]();
-////})
+////}|])
 
-verify.singleReferenceGroup("(local function) ___foo(): void");
+verify.singleReferenceGroup("(local function) ___foo(): void", test.rangesByText().get("___foo"));

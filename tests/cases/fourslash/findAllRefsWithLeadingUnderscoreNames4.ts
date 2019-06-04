@@ -1,10 +1,10 @@
 /// <reference path='fourslash.ts'/>
 
 ////class Foo {
-////    public [|{| "isWriteAccess": true, "isDefinition": true |}____bar|]() { return 0; }
+////    [|public [|{| "isWriteAccess": true, "isDefinition": true, "declarationRangeIndex": 0 |}____bar|]() { return 0; }|]
 ////}
 ////
 ////var x: Foo;
 ////x.[|____bar|];
 
-verify.singleReferenceGroup("(method) Foo.____bar(): number");
+verify.singleReferenceGroup("(method) Foo.____bar(): number", test.rangesByText().get("____bar"));
