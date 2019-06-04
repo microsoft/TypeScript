@@ -3956,7 +3956,7 @@
         "category": "Error",
         "code": 6306
     },
-    "File '{0}' is not in project '{1}' file list. Projects must list all files or use an 'include' pattern.": {
+    "File '{0}' is not listed within the file list of project '{1}'. Projects must list all files or use an 'include' pattern.": {
         "category": "Error",
         "code": 6307
     },
