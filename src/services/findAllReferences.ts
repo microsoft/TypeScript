@@ -111,11 +111,6 @@ namespace ts.FindAllReferences {
             case SyntaxKind.ImportClause:
                 return node.parent;
 
-            case SyntaxKind.JsxAttribute:
-                return (node as JsxAttribute).initializer === undefined ?
-                    undefined :
-                    node;
-
             case SyntaxKind.BinaryExpression:
                 return isExpressionStatement(node.parent) ?
                     node.parent :
@@ -129,7 +124,6 @@ namespace ts.FindAllReferences {
                 };
 
             case SyntaxKind.PropertyAssignment:
-            // TODO(shkamat):: Should we show whole object literal instead?
             case SyntaxKind.ShorthandPropertyAssignment:
                 return isArrayLiteralOrObjectLiteralDestructuringPattern(node.parent) ?
                     getDeclarationForDeclarationSpan(
@@ -137,12 +131,21 @@ namespace ts.FindAllReferences {
                             isBinaryExpression(node) || isForInOrOfStatement(node)
                         ) as BinaryExpression | ForInOrOfStatement
                     ) :
-                    node.kind === SyntaxKind.PropertyAssignment ?
-                        node :
-                        undefined;
+                    node;
 
             default:
                 return node;
+        }
+    }
+
+    export function setDeclarationSpan(span: DocumentSpan, sourceFile: SourceFile, declaration?: DeclarationNode) {
+        if (declaration) {
+            const declarationSpan = isDeclarationNodeWithStartAndEnd(declaration) ?
+                getTextSpan(declaration.start, sourceFile, declaration.end) :
+                getTextSpan(declaration, sourceFile);
+            if (declarationSpan.start !== span.textSpan.start || declarationSpan.length !== span.textSpan.length) {
+                span.declarationSpan = declarationSpan;
+            }
         }
     }
 
@@ -287,11 +290,7 @@ namespace ts.FindAllReferences {
             textSpan: getTextSpan(isComputedPropertyName(node) ? node.expression : node, sourceFile),
             displayParts
         };
-        if (declaration) {
-            result.declarationSpan = isDeclarationNodeWithStartAndEnd(declaration) ?
-                getTextSpan(declaration.start, sourceFile, declaration.end) :
-                getTextSpan(declaration, sourceFile);
-        }
+        setDeclarationSpan(result, sourceFile, declaration);
         return result;
     }
 
@@ -330,11 +329,7 @@ namespace ts.FindAllReferences {
         else {
             const sourceFile = entry.node.getSourceFile();
             const result: DocumentSpan = { textSpan: getTextSpan(entry.node, sourceFile), fileName: sourceFile.fileName };
-            if (entry.declaration) {
-                result.declarationSpan = isDeclarationNodeWithStartAndEnd(entry.declaration) ?
-                    getTextSpan(entry.declaration.start, sourceFile, entry.declaration.end) :
-                    getTextSpan(entry.declaration, sourceFile);
-            }
+            setDeclarationSpan(result, sourceFile, entry.declaration);
             return result;
         }
     }

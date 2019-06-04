@@ -117,7 +117,7 @@
 ////array.forEach(
 ////
 ////
-////function([|{| "isWriteAccess": true, "isDefinition": true, "declarationRangeIndex": 43 |}str|]) {
+////function([|{| "isWriteAccess": true, "isDefinition": true |}str|]) {
 ////
 ////
 ////

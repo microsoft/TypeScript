@@ -1,6 +1,6 @@
 /// <reference path='fourslash.ts' />
 
-////function f([|{[|{| "declarationRangeIndex": 0 |}a|]}: {[|{| "declarationRangeIndex": 2 |}a|]}|]) {
+////function f([|{[|{| "declarationRangeIndex": 0 |}a|]}: {[|a|]}|]) {
 ////    f({[|a|]});
 ////}
 

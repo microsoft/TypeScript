@@ -281,12 +281,11 @@ namespace ts.GoToDefinition {
             containerKind: undefined!, // TODO: GH#18217
             containerName,
         };
-        const declarationNode = FindAllReferences.getDeclarationForDeclarationSpan(declaration);
-        if (declarationNode) {
-            result.declarationSpan = FindAllReferences.isDeclarationNodeWithStartAndEnd(declarationNode) ?
-                createTextSpanFromNode(declarationNode.start, sourceFile, declarationNode.end) :
-                createTextSpanFromNode(declarationNode, sourceFile);
-        }
+        FindAllReferences.setDeclarationSpan(
+            result,
+            sourceFile,
+            FindAllReferences.getDeclarationForDeclarationSpan(declaration)
+        );
         return result;
     }
 
