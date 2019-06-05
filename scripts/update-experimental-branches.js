@@ -28,7 +28,6 @@ async function main() {
 
     // Forcibly cleanup workspace
     runSequence([
-        ["git", ["clean", "-fdx"]],
         ["git", ["checkout", "."]],
         ["git", ["fetch", "-fu", "origin", "master:master"]],
         ["git", ["checkout", "master"]],
