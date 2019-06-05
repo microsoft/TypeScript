@@ -9,4 +9,4 @@
 ////[|var { [|{| "declarationRangeIndex": 2 |}property1|]: prop1 } = foo;|]
 
 
-verify.rangesAreRenameLocations(test.rangesByText().get("property1"));
+verify.rangesWithSameTextAreRenameLocations("property1");

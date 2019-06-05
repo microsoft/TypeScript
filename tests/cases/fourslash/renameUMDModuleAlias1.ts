@@ -10,5 +10,4 @@
 //// /// <reference path="0.d.ts" />
 //// [|myLib|].doThing();
 
-const rangesByText = test.rangesByText();
-verify.rangesAreRenameLocations(rangesByText.get("myLib"));
+verify.rangesWithSameTextAreRenameLocations("myLib");

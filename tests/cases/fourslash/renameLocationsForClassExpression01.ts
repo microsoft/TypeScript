@@ -20,5 +20,4 @@
 ////}
 ////var z = class Foo {}
 
-const [rDef, ...rest] = test.ranges();
-verify.rangesAreRenameLocations(rest);
+verify.rangesWithSameTextAreRenameLocations("Foo");

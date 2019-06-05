@@ -8,5 +8,4 @@
 ////[|import [|{| "declarationRangeIndex": 0 |}M|] = require("./a");|]
 ////import C = [|M|].SomeClass;
 
-const [rDef, ...ranges] = test.ranges();
-verify.rangesAreRenameLocations(ranges);
+verify.rangesWithSameTextAreRenameLocations("M");

@@ -7,5 +7,4 @@
 ////     }
 //// }
 
-const [rDef, ...rest] = test.ranges();
-verify.rangesAreRenameLocations(rest);
+verify.rangesWithSameTextAreRenameLocations("privateParam");

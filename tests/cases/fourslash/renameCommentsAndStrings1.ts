@@ -7,5 +7,4 @@
 ////    "this is a reference to Bar in a string"
 ////}|]
 
-const [rDef, ...ranges] = test.ranges();
-verify.rangesAreRenameLocations(ranges);
+verify.rangesWithSameTextAreRenameLocations("Bar");

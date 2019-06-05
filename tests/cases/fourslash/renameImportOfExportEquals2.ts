@@ -33,7 +33,4 @@ verify.referenceGroups(oRanges, [os, ps, qs]);
 verify.referenceGroups(pRanges, [ps, qs]);
 verify.referenceGroups(qRanges, [qs]);
 
-verify.rangesAreRenameLocations(nRanges);
-verify.rangesAreRenameLocations(oRanges);
-verify.rangesAreRenameLocations(pRanges);
-verify.rangesAreRenameLocations(qRanges);
+verify.rangesWithSameTextAreRenameLocations("N", "O", "P", "Q");

@@ -7,5 +7,4 @@
 ////[|bar.[|{| "declarationRangeIndex": 0 |}foo|] = "foo";|]
 ////console.log(bar.[|foo|]);
 
-const [rDef, ...ranges] = test.ranges();
-verify.rangesAreRenameLocations(ranges);
+verify.rangesWithSameTextAreRenameLocations("foo");

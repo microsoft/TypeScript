@@ -7,5 +7,4 @@
 //// var v: interface1;
 //// v.[|propName|];
 
-const [rDef, ...ranges] = test.ranges();
-verify.rangesAreRenameLocations(ranges);
+verify.rangesWithSameTextAreRenameLocations("propName");

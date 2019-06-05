@@ -17,7 +17,4 @@
 ////<[|div|]> </[|div|]>
 
 verify.noErrors();
-
-const rangesByText = test.rangesByText();
-verify.rangesAreRenameLocations(rangesByText.get("MyClass"));
-verify.rangesAreRenameLocations(rangesByText.get("div"));
+verify.rangesWithSameTextAreRenameLocations("MyClass", "div");

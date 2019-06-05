@@ -7,5 +7,4 @@
 //// var v: class1;
 //// v.[|doStuff|]();
 
-const [rDef, ...ranges] = test.ranges();
-verify.rangesAreRenameLocations(ranges);
+verify.rangesWithSameTextAreRenameLocations("doStuff");

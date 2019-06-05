@@ -2720,8 +2720,13 @@ Actual: ${stringify(fullActual)}`);
             }
         }
 
-        public verifyRangesWithSameTextAreRenameLocations() {
-            this.rangesByText().forEach(ranges => this.verifyRangesAreRenameLocations(ranges));
+        public verifyRangesWithSameTextAreRenameLocations(...texts: string[]) {
+            if (texts.length) {
+                texts.forEach(text => this.verifyRangesAreRenameLocations(this.rangesByText().get(text)!));
+            }
+            else {
+                this.rangesByText().forEach(ranges => this.verifyRangesAreRenameLocations(ranges));
+            }
         }
 
         public verifyRangesWithSameTextAreDocumentHighlights() {
@@ -4088,8 +4093,8 @@ namespace FourSlashInterface {
             this.state.verifyRangesAreOccurrences(isWriteAccess, ranges);
         }
 
-        public rangesWithSameTextAreRenameLocations() {
-            this.state.verifyRangesWithSameTextAreRenameLocations();
+        public rangesWithSameTextAreRenameLocations(...texts: string[]) {
+            this.state.verifyRangesWithSameTextAreRenameLocations(...texts);
         }
 
         public rangesAreRenameLocations(options?: FourSlash.Range[] | { findInStrings?: boolean, findInComments?: boolean, ranges?: FourSlash.Range[] }) {

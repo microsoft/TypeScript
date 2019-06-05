@@ -9,6 +9,5 @@
 //// var d: D;
 //// d.[|propD|];
 
-const [rDef, ...ranges] = test.ranges();
-verify.rangesAreRenameLocations(ranges);
+verify.rangesWithSameTextAreRenameLocations("propD");
 

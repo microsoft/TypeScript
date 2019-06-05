@@ -10,5 +10,4 @@
 ////    let foo = () => [|f|]([|f|], g);
 ////}|]
 
-const [rDef, ...rest] = test.ranges();
-verify.rangesAreRenameLocations(rest);
+verify.rangesWithSameTextAreRenameLocations("f");

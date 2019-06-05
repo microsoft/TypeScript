@@ -7,5 +7,4 @@
 //// class C extends (foo()).[|B|] {}
 //// class C1 extends foo().[|B|] {}
 
-const ranges = test.rangesByText();
-verify.rangesAreRenameLocations(ranges.get("B"));
+verify.rangesWithSameTextAreRenameLocations("B");

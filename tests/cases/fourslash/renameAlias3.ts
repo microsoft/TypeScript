@@ -4,5 +4,4 @@
 ////import M = SomeModule;
 ////import C = M.[|SomeClass|];
 
-const [rDef, ...ranges] = test.ranges();
-verify.rangesAreRenameLocations(ranges);
+verify.rangesWithSameTextAreRenameLocations("SomeClass");

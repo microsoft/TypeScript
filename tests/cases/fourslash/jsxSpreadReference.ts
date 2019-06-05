@@ -18,5 +18,4 @@
 //// var x = <MyClass {...[|n/*src*/n|]}></MyClass>;
 
 verify.goToDefinition("src", "dst");
-const [rDef, ...ranges] = test.ranges();
-verify.rangesAreRenameLocations(ranges);
+verify.rangesWithSameTextAreRenameLocations("nn");

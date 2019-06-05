@@ -22,6 +22,4 @@
 //// let opt3 = <[|Opt|] wrong />;
 //// let opt4 = <[|Opt|] propx={100} propString="hi" />;
 
-//verify.rangesAreRenameLocations();
-const rangesByText = test.rangesByText();
-verify.rangesAreRenameLocations(rangesByText.get("Opt"));
+verify.rangesWithSameTextAreRenameLocations("Opt");

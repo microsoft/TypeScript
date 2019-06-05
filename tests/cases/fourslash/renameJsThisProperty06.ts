@@ -11,5 +11,4 @@
 ////var t = new C(12);
 ////[|t.[|{| "declarationRangeIndex": 2 |}z|] = 11;|]
 
-const [r0Def, r0, r1Def, r1] = test.ranges();
-verify.rangesAreRenameLocations([r0, r1]);
+verify.rangesWithSameTextAreRenameLocations("z");

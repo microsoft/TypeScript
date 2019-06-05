@@ -16,5 +16,4 @@
 //// [|var [|{| "declarationRangeIndex": 0 |}nn|]: string;|]
 //// var x = <MyClass name={[|nn|]}></MyClass>;
 
-const rangesByText = test.rangesByText();
-verify.rangesAreRenameLocations(rangesByText.get("nn"));
+verify.rangesWithSameTextAreRenameLocations("nn");

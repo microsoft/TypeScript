@@ -11,5 +11,4 @@
 /////// <reference path="a.ts" />
 ////[|x|]++;
 
-const [rDef, ...ranges] = test.ranges();
-verify.rangesAreRenameLocations(ranges);
+verify.rangesWithSameTextAreRenameLocations("x");

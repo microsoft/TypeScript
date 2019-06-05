@@ -55,4 +55,4 @@
 ////    [|set ["[|{| "declarationRangeIndex": 20 |}prop2|]"](v) { }|]
 ////};
 
-verify.rangesAreRenameLocations(test.rangesByText().get("prop2"));
+verify.rangesWithSameTextAreRenameLocations("prop2");

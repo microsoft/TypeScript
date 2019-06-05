@@ -12,5 +12,4 @@
 ////o['[|prop|]'];
 ////o.[|prop|];
 
-const rangesByText = test.rangesByText();
-verify.rangesAreRenameLocations(rangesByText.get("prop"));
+verify.rangesWithSameTextAreRenameLocations("prop");

@@ -13,5 +13,4 @@
 //// }
 //// var x = <div [|[|{| "declarationRangeIndex": 2 |}name|]="hello"|] />;
 
-const rangesByText = test.rangesByText();
-verify.rangesAreRenameLocations(rangesByText.get("name"));
+verify.rangesWithSameTextAreRenameLocations("name");

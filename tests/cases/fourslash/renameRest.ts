@@ -8,6 +8,4 @@
 ////var { x, ...rest } = t;
 ////rest.[|parent|];
 
-
-const rangesByText = test.rangesByText();
-verify.rangesAreRenameLocations(rangesByText.get("parent"));
+verify.rangesWithSameTextAreRenameLocations("parent");

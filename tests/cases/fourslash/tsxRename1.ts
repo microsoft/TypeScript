@@ -12,5 +12,4 @@
 ////     }
 //// }
 //// var x = <[|div|] />;
-const rangesByText = test.rangesByText();
-verify.rangesAreRenameLocations(rangesByText.get("div"));
+verify.rangesWithSameTextAreRenameLocations("div");

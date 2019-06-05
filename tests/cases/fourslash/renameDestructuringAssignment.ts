@@ -7,4 +7,4 @@
 ////var x;
 ////([|{ [|{| "declarationRangeIndex": 2 |}x|]: x } = a|]);
 
-verify.rangesAreRenameLocations(test.rangesByText().get("x"));
+verify.rangesWithSameTextAreRenameLocations("x");

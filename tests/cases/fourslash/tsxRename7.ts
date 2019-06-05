@@ -21,5 +21,4 @@
 //// let opt2 = <Opt [|[|{| "declarationRangeIndex": 4 |}propx|]={100}|] optional/>;
 //// let opt3 = <Opt wrong />;
 
-const rangesByText = test.rangesByText();
-verify.rangesAreRenameLocations(rangesByText.get("propx"));
+verify.rangesWithSameTextAreRenameLocations("propx");

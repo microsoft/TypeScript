@@ -55,4 +55,4 @@
 ////    set ["prop2"](v) { }
 ////};
 
-verify.rangesAreRenameLocations(test.rangesByText().get("prop1"));
+verify.rangesWithSameTextAreRenameLocations("prop1");

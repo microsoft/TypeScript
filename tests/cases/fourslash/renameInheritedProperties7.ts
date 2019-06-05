@@ -11,5 +11,4 @@
 //// var c: C;
 //// c.[|prop1|];
 
-const [rDef, ...ranges] = test.ranges();
-verify.rangesAreRenameLocations(ranges);
+verify.rangesWithSameTextAreRenameLocations("prop1");
