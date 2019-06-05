@@ -42,6 +42,7 @@ namespace FourSlash {
          * is a range with `text in range` "selected".
          */
         ranges: Range[];
+        rangesByText?: ts.MultiMap<Range>;
     }
 
     export interface Marker {
@@ -1002,7 +1003,7 @@ namespace FourSlash {
         }
 
         public verifySingleReferenceGroup(definition: FourSlashInterface.ReferenceGroupDefinition, ranges?: Range[] | string) {
-            ranges =  ts.isString(ranges) ? this.rangesByText().get(ranges)! : ranges || this.getRanges();
+            ranges = ts.isString(ranges) ? this.rangesByText().get(ranges)! : ranges || this.getRanges();
             this.verifyReferenceGroups(ranges, [{ definition, ranges }]);
         }
 
@@ -1853,6 +1854,7 @@ Actual: ${stringify(fullActual)}`);
                     range.end = updatePosition(range.end, editStart, editEnd, newText);
                 }
             }
+            this.testData.rangesByText = undefined;
         }
 
         private removeWhitespace(text: string): string {
@@ -2035,7 +2037,9 @@ Actual: ${stringify(fullActual)}`);
         }
 
         public rangesByText(): ts.Map<Range[]> {
+            if (this.testData.rangesByText) return this.testData.rangesByText;
             const result = ts.createMultiMap<Range>();
+            this.testData.rangesByText = result;
             for (const range of this.getRanges()) {
                 const text = this.rangeText(range);
                 result.add(text, range);
