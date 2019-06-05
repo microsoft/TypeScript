@@ -975,5 +975,34 @@ export const x = 10;`
                 host.checkTimeoutQueueLength(0);
             });
         });
+
+        describe("avoid unnecessary invalidation", () => {
+            it("unnecessary lookup invalidation on save", () => {
+                const expectedNonRelativeDirectories = [`${projectLocation}/node_modules`, `${projectLocation}/src`];
+                const module1Name = "module1";
+                const module2Name = "module2";
+                const fileContent = `import { module1 } from "${module1Name}";import { module2 } from "${module2Name}";`;
+                const file1: File = {
+                    path: `${projectLocation}/src/file1.ts`,
+                    content: fileContent
+                };
+                const { module1, module2 } = getModules(`${projectLocation}/src/node_modules/module1/index.ts`, `${projectLocation}/node_modules/module2/index.ts`);
+                const files = [module1, module2, file1, configFile, libFile];
+                const host = createServerHost(files);
+                const resolutionTrace = createHostModuleResolutionTrace(host);
+                const service = createProjectService(host);
+                service.openClientFile(file1.path);
+                const project = service.configuredProjects.get(configFile.path)!;
+                (project as ResolutionCacheHost).maxNumberOfFilesToIterateForInvalidation = 1;
+                const expectedTrace = getExpectedNonRelativeModuleResolutionTrace(host, file1, module1, module1Name);
+                getExpectedNonRelativeModuleResolutionTrace(host, file1, module2, module2Name, expectedTrace);
+                verifyTrace(resolutionTrace, expectedTrace);
+                verifyWatchesWithConfigFile(host, files, file1, expectedNonRelativeDirectories);
+
+                // invoke callback to simulate saving
+                host.modifyFile(file1.path, file1.content, { invokeFileDeleteCreateAsPartInsteadOfChange: true });
+                host.checkTimeoutQueueLengthAndRun(0);
+            });
+        });
     });
 }
