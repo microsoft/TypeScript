@@ -71,7 +71,6 @@ async function main() {
     // Return to `master` and make a new `experimental` branch
     runSequence([
         ["git", ["checkout", "master"]],
-        ["git", ["branch", "-D", "experimental"]],
         ["git", ["checkout", "-b", "experimental"]],
     ]);
 
