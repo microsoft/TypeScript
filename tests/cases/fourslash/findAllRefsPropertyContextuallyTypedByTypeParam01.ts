@@ -1,12 +1,12 @@
 /// <reference path="./fourslash.ts" />
 
 ////interface IFoo {
-////    [|{| "isDefinition": true |}a|]: string;
+////    [|[|{| "isDefinition": true, "declarationRangeIndex": 0 |}a|]: string;|]
 ////}
 ////class C<T extends IFoo> {
 ////    method() {
 ////        var x: T = {
-////            [|{| "isWriteAccess": true, "isDefinition": true |}a|]: ""
+////            [|[|{| "isWriteAccess": true, "isDefinition": true, "declarationRangeIndex": 2 |}a|]: ""|]
 ////        };
 ////        x.[|a|];
 ////    }
@@ -14,7 +14,7 @@
 ////
 ////
 ////var x: IFoo = {
-////    [|{| "isWriteAccess": true, "isDefinition": true |}a|]: "ss"
+////    [|[|{| "isWriteAccess": true, "isDefinition": true, "declarationRangeIndex": 5 |}a|]: "ss"|]
 ////};
 
-verify.singleReferenceGroup("(property) IFoo.a: string");
+verify.singleReferenceGroup("(property) IFoo.a: string", test.rangesByText().get("a"));
