@@ -30,8 +30,7 @@
 //// let opt = <[|MainButton|] goTo="goTo" />;
 //// let opt = <[|MainButton|] wrong />;
 
-const rangesByText = test.rangesByText();
 verify.singleReferenceGroup(
     "function MainButton(buttonProps: ButtonProps): JSX.Element (+2 overloads)",
-    rangesByText.get("MainButton")
+    "MainButton"
 );

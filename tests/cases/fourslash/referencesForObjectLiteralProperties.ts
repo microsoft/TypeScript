@@ -8,5 +8,4 @@
 ////var y = x;
 ////y.[|add|];
 
-const [rDef, ...ranges] = test.ranges();
-verify.singleReferenceGroup("(property) add: number", ranges);
+verify.singleReferenceGroup("(property) add: number", "add");

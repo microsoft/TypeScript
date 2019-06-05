@@ -8,5 +8,4 @@
 ////var y: Foo2;
 ////y[[|42|]];
 
-
-verify.singleReferenceGroup('(property) Foo2["42"]: number', test.rangesByText().get("42"));
+verify.singleReferenceGroup('(property) Foo2["42"]: number', "42");

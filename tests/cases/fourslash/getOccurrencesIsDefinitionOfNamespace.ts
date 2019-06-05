@@ -4,4 +4,4 @@
 ////}|]
 ////let x = [|Numbers|].n + 1;
 
-verify.singleReferenceGroup("namespace Numbers", test.rangesByText().get("Numbers"));
+verify.singleReferenceGroup("namespace Numbers", "Numbers");

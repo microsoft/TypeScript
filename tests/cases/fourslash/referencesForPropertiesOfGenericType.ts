@@ -10,5 +10,4 @@
 ////var y: IFoo<number>;
 ////y.[|doSomething|](12);
 
-const [rDef, ...ranges] = test.ranges();
-verify.singleReferenceGroup("(method) IFoo<T>.doSomething(v: T): T", ranges);
+verify.singleReferenceGroup("(method) IFoo<T>.doSomething(v: T): T", "doSomething");

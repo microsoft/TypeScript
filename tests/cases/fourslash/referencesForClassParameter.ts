@@ -19,4 +19,4 @@
 ////var n = new foo(undefined);
 ////n.[|{| "isWriteAccess": true |}p|] = null;
 
-verify.singleReferenceGroup("(property) foo.p: any", test.rangesByText().get("p"));
+verify.singleReferenceGroup("(property) foo.p: any", "p");

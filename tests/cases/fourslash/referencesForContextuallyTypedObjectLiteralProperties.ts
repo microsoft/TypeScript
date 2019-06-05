@@ -25,4 +25,4 @@
 ////// Untped -- should not be included
 ////var u = { xy: 0 };
 
-verify.singleReferenceGroup("(property) IFoo.xy: number", test.rangesByText().get("xy"));
+verify.singleReferenceGroup("(property) IFoo.xy: number", "xy");

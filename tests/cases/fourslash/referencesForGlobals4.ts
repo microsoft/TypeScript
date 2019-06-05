@@ -10,4 +10,4 @@
 // @Filename: referencesForGlobals_2.ts
 ////var m = [|globalModule|];
 
-verify.singleReferenceGroup("namespace globalModule", test.rangesByText().get("globalModule"));
+verify.singleReferenceGroup("namespace globalModule", "globalModule");

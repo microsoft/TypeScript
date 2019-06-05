@@ -8,4 +8,4 @@
 // @Filename: referencesForGlobals_2.ts
 ////import f = require("[|foo|]");
 
-verify.singleReferenceGroup('module "foo"', test.rangesByText().get("foo"));
+verify.singleReferenceGroup('module "foo"', "foo");

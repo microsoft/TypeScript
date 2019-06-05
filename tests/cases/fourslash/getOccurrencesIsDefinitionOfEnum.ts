@@ -5,4 +5,4 @@
 ////}|]
 ////let first = [|E|].First;
 
-verify.singleReferenceGroup("enum E", test.rangesByText().get("E"));
+verify.singleReferenceGroup("enum E", "E");

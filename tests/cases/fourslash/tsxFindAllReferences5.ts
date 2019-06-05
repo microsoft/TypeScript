@@ -22,8 +22,7 @@
 //// let opt3 = <[|Opt|] wrong />;
 //// let opt4 = <[|Opt|] propx={100} propString="hi" />;
 
-const rangesByText = test.rangesByText();
 verify.singleReferenceGroup(
     "function Opt(attributes: OptionPropBag): JSX.Element",
-    rangesByText.get("Opt")
+    "Opt"
 );

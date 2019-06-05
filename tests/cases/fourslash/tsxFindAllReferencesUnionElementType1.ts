@@ -21,9 +21,8 @@
 //// [|var [|{| "isWriteAccess": true, "isDefinition": true, "declarationRangeIndex": 0 |}SFCComp|] = SFC1 || SFC2;|]
 //// <[|SFCComp|] x={ "hi" } />
 
-const [, r1, r2] = test.ranges();
 verify.singleReferenceGroup(`var SFCComp: ((prop: {
     x: number;
 }) => JSX.Element) | ((prop: {
     x: boolean;
-}) => JSX.Element)`, [r1, r2]);
+}) => JSX.Element)`, "SFCComp");

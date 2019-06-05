@@ -13,4 +13,4 @@
 ////x.[|___bar|];
 ////x.____bar;
 
-verify.singleReferenceGroup("(property) Foo.___bar: any", test.rangesByText().get("___bar"));
+verify.singleReferenceGroup("(property) Foo.___bar: any", "___bar");

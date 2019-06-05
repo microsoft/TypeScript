@@ -12,4 +12,4 @@
 ////let x;
 ////x.[|p|];
 
-verify.singleReferenceGroup("(property) p: number", test.rangesByText().get("p"));
+verify.singleReferenceGroup("(property) p: number", "p");

@@ -20,5 +20,4 @@
 // @Filename: referenceToClass_2.ts
 ////var k: [|foo|];
 
-const [rDef, ...ranges] = test.ranges();
-verify.singleReferenceGroup("class foo", ranges);
+verify.singleReferenceGroup("class foo", "foo");

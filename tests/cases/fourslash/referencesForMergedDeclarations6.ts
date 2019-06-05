@@ -10,4 +10,4 @@
 ////// module
 ////import a1 = [|Foo|];
 
-verify.singleReferenceGroup("namespace Foo", test.rangesByText().get("Foo"));
+verify.singleReferenceGroup("namespace Foo", "Foo");

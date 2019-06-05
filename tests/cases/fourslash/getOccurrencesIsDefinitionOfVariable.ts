@@ -17,4 +17,4 @@
 ////[|{| "isWriteAccess": true |}x|] += 1;
 ////[|{| "isWriteAccess": true |}x|] <<= 1;
 
-verify.singleReferenceGroup("var x: number", test.rangesByText().get("x"));
+verify.singleReferenceGroup("var x: number", "x");

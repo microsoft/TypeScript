@@ -31,5 +31,4 @@
 //// let opt = <MainButton [|{| "isWriteAccess": true, "isDefinition": true |}goTo|] />;
 //// let opt = <MainButton wrong />;
 
-const rangesByText = test.rangesByText();
-verify.singleReferenceGroup("(property) LinkProps.goTo: string", rangesByText.get("goTo"));
+verify.singleReferenceGroup("(property) LinkProps.goTo: string", "goTo");

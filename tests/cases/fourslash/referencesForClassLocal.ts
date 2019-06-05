@@ -20,4 +20,4 @@
 ////    }
 ////}
 
-verify.singleReferenceGroup("(property) foo.n: number", test.rangesByText().get("n"));
+verify.singleReferenceGroup("(property) foo.n: number", "n");

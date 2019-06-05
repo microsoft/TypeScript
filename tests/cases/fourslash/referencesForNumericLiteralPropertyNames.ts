@@ -9,4 +9,4 @@
 ////x = { [|"[|{| "isWriteAccess": true, "isDefinition": true, "declarationRangeIndex": 3 |}12|]": 0|] };
 ////x = { [|[|{| "isWriteAccess": true, "isDefinition": true, "declarationRangeIndex": 5 |}12|]: 0|] };
 
-verify.singleReferenceGroup("(property) Foo[12]: any", test.rangesByText().get("12"));
+verify.singleReferenceGroup("(property) Foo[12]: any", "12");

@@ -18,4 +18,4 @@
 ////}
 
 verify.noErrors();
-verify.singleReferenceGroup("type T = number", test.rangesByText().get("T"));
+verify.singleReferenceGroup("type T = number", "T");

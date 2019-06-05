@@ -4,4 +4,4 @@
 ////    [|__foo|]();
 ////}|]
 
-verify.singleReferenceGroup("function __foo(): void", test.rangesByText().get("__foo"));
+verify.singleReferenceGroup("function __foo(): void", "__foo");

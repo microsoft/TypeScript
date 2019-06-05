@@ -4,4 +4,4 @@
 ////    [|__foo|]();
 ////}|])
 
-verify.singleReferenceGroup("(local function) __foo(): void", test.rangesByText().get("__foo"));
+verify.singleReferenceGroup("(local function) __foo(): void", "__foo");

@@ -7,6 +7,5 @@
 ////            break labelc;
 ////}
 
-const ranges = test.rangesByText();
-verify.singleReferenceGroup("labela", ranges.get("labela"));
-verify.singleReferenceGroup("labelb", ranges.get("labelb"));
+verify.singleReferenceGroup("labela", "labela");
+verify.singleReferenceGroup("labelb", "labelb");

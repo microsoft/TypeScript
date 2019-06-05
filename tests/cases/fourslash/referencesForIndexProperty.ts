@@ -11,6 +11,5 @@
 ////f["[|property|]"];
 ////f["[|method|]"];
 
-const ranges = test.rangesByText();
-verify.singleReferenceGroup("(property) Foo.property: number", ranges.get("property"));
-verify.singleReferenceGroup("(method) Foo.method(): void", ranges.get("method"));
+verify.singleReferenceGroup("(property) Foo.property: number", "property");
+verify.singleReferenceGroup("(method) Foo.method(): void", "method");

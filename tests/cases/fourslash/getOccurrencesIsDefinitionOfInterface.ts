@@ -4,4 +4,4 @@
 ////}|]
 ////let i: [|I|] = { p: 12 };
 
-verify.singleReferenceGroup("interface I", test.rangesByText().get("I"));
+verify.singleReferenceGroup("interface I", "I");

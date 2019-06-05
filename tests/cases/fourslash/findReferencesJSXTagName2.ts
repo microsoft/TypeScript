@@ -6,4 +6,4 @@
 
 verify.singleReferenceGroup(`const obj: {
     Component: () => any;
-}`, test.rangesByText().get("obj"));
+}`, "obj");

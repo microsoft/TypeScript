@@ -23,4 +23,4 @@
 ////second.[|start|]();
 ////second.stop();
 
-verify.singleReferenceGroup("(method) Test.start(): this", test.rangesByText().get("start"));
+verify.singleReferenceGroup("(method) Test.start(): this", "start");

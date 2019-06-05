@@ -15,4 +15,4 @@ verify.singleReferenceGroup([
     "(alias) function alias(): void",
     "(alias) namespace alias",
     "import alias = ATest"
-].join("\n"), test.rangesByText().get("alias"));
+].join("\n"), "alias");

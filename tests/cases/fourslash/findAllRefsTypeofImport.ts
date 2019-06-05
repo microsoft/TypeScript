@@ -5,4 +5,4 @@
 ////declare const a: typeof import("./a");
 ////a.[|x|];
 
-verify.singleReferenceGroup("const x: 0", test.rangesByText().get("x"));
+verify.singleReferenceGroup("const x: 0", "x");

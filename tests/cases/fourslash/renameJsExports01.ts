@@ -8,6 +8,5 @@
 ////var mod = require('./a');
 ////var t = mod./**/[|area|](10);
 
-const [rDef, ...ranges] = test.ranges();
-verify.singleReferenceGroup("(property) area: (r: any) => number", ranges);
-verify.rangesAreRenameLocations(ranges);
+verify.singleReferenceGroup("(property) area: (r: any) => number", "area");
+verify.rangesWithSameTextAreRenameLocations("area");

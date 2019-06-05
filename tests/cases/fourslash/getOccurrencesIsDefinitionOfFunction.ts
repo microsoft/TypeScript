@@ -3,4 +3,4 @@
 ////}|]
 ////[|func|](x)
 
-verify.singleReferenceGroup("function func(x: number): void", test.rangesByText().get("func"));
+verify.singleReferenceGroup("function func(x: number): void", "func");

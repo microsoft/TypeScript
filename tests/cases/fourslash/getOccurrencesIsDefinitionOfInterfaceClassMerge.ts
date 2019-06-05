@@ -13,4 +13,4 @@
 ////let i: [|Numbers|] = new [|Numbers|]();
 ////let x = i.f(i.p + i.m);
 
-verify.singleReferenceGroup("class Numbers\ninterface Numbers", test.rangesByText().get("Numbers"));
+verify.singleReferenceGroup("class Numbers\ninterface Numbers", "Numbers");

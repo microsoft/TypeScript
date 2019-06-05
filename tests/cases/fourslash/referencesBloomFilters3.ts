@@ -9,4 +9,4 @@
 // @Filename: expression.ts
 ////(Test[[|42|]]);
 
-verify.singleReferenceGroup('(enum member) Test["42"] = 1', test.rangesByText().get("42"));
+verify.singleReferenceGroup('(enum member) Test["42"] = 1', "42");

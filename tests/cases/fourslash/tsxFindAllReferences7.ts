@@ -21,8 +21,4 @@
 //// let opt2 = <Opt [|[|{| "isWriteAccess": true, "isDefinition": true, "declarationRangeIndex": 4 |}propx|]={100}|] optional/>;
 //// let opt3 = <Opt wrong />;
 
-const rangesByText = test.rangesByText();
-verify.singleReferenceGroup(
-    "(property) OptionPropBag.propx: number",
-    rangesByText.get("propx")
-);
+verify.singleReferenceGroup("(property) OptionPropBag.propx: number", "propx");

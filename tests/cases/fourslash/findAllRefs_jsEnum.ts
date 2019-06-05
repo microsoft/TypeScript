@@ -13,4 +13,4 @@ verify.singleReferenceGroup(
 `enum E
 const E: {
     A: string;
-}`, test.rangesByText().get("E"));
+}`, "E");

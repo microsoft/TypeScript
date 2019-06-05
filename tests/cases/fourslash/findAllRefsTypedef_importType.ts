@@ -11,4 +11,4 @@
 /////** @type {import('./a').[|Foo|]} */
 ////const x = 0;
 
-verify.singleReferenceGroup("type Foo = number", test.rangesByText().get("Foo"));
+verify.singleReferenceGroup("type Foo = number", "Foo");

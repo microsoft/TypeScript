@@ -9,6 +9,5 @@
 //// v.[|propName|];
 //// v.[|doStuff|]();
 
-const ranges = test.rangesByText();
-verify.singleReferenceGroup("(method) interface1.doStuff(): void", ranges.get("doStuff"));
-verify.singleReferenceGroup("(property) interface1.propName: string", ranges.get("propName"));
+verify.singleReferenceGroup("(method) interface1.doStuff(): void", "doStuff");
+verify.singleReferenceGroup("(property) interface1.propName: string", "propName");

@@ -13,4 +13,4 @@
 ////    method() {}
 ////}
 
-verify.singleReferenceGroup("function decorator(target: any): any", test.rangesByText().get("decorator"));
+verify.singleReferenceGroup("function decorator(target: any): any", "decorator");

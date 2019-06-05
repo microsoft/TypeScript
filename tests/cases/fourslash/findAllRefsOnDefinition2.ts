@@ -14,4 +14,4 @@
 ////var start: Second.Test.[|start|];
 ////var stop: Second.Test.stop;
 
-verify.singleReferenceGroup("interface Test.start", test.rangesByText().get("start"));
+verify.singleReferenceGroup("interface Test.start", "start");

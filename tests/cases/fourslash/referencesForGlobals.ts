@@ -25,4 +25,4 @@
 // @Filename: referencesForGlobals_2.ts
 ////var m = [|global|];
 
-verify.singleReferenceGroup("var global: number", test.rangesByText().get("global"));
+verify.singleReferenceGroup("var global: number", "global");

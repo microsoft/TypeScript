@@ -17,4 +17,4 @@
 ////    [|[|{| "isWriteAccess": true, "isDefinition": true, "declarationRangeIndex": 5 |}a|]: "ss"|]
 ////};
 
-verify.singleReferenceGroup("(property) IFoo.a: string", test.rangesByText().get("a"));
+verify.singleReferenceGroup("(property) IFoo.a: string", "a");

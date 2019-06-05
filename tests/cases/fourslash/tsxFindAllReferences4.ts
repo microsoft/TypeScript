@@ -16,8 +16,4 @@
 ////
 //// var x = <[|MyClass|] name='hello'></[|MyClass|]>;
 
-const rangesByText = test.rangesByText();
-verify.singleReferenceGroup(
-    "class MyClass",
-    rangesByText.get("MyClass")
-);
+verify.singleReferenceGroup("class MyClass", "MyClass");

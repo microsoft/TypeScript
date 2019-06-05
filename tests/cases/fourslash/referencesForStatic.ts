@@ -30,5 +30,4 @@
 // @Filename: referencesOnStatic_2.ts
 ////var q = foo.[|n|];
 
-const [rDef, ...ranges] = test.ranges();
-verify.singleReferenceGroup("(property) foo.n: string", ranges);
+verify.singleReferenceGroup("(property) foo.n: string", "n");

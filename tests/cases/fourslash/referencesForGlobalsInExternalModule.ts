@@ -18,11 +18,7 @@
 ////
 ////export = x;
 
-const ranges = test.rangesByText();
-verify.singleReferenceGroup("var topLevelVar: number", ranges.get("topLevelVar"));
-
-const topLevelClass = ranges.get("topLevelClass");
-verify.singleReferenceGroup("class topLevelClass", topLevelClass);
-
-verify.singleReferenceGroup("interface topLevelInterface", ranges.get("topLevelInterface"));
-verify.singleReferenceGroup("namespace topLevelModule", ranges.get("topLevelModule"));
+verify.singleReferenceGroup("var topLevelVar: number", "topLevelVar");
+verify.singleReferenceGroup("class topLevelClass", "topLevelClass");
+verify.singleReferenceGroup("interface topLevelInterface", "topLevelInterface");
+verify.singleReferenceGroup("namespace topLevelModule", "topLevelModule");

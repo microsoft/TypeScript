@@ -10,4 +10,4 @@
 ////// external use
 ////M.[|variable|]
 
-verify.singleReferenceGroup("var M.variable: number", test.rangesByText().get("variable"));
+verify.singleReferenceGroup("var M.variable: number", "variable");

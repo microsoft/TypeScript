@@ -13,11 +13,8 @@
 //// }
 //// var x = <[|div|] />;
 
-const rangesByText = test.rangesByText();
 verify.singleReferenceGroup(
     `(property) JSX.IntrinsicElements.div: {
     name?: string;
     isOpen?: boolean;
-}`,
-    rangesByText.get("div")
-);
+}`, "div");

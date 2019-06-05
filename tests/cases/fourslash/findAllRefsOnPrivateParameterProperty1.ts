@@ -9,4 +9,4 @@
 ////    }
 ////}
 
-verify.singleReferenceGroup("(property) ABCD.z: number", test.rangesByText().get("z"));
+verify.singleReferenceGroup("(property) ABCD.z: number", "z");

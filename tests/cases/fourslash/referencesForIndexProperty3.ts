@@ -12,4 +12,4 @@
 ////var x = {};
 ////x["[|toMyString|]"]();
 
-verify.singleReferenceGroup("(method) Object.toMyString(): any", test.rangesByText().get("toMyString"));
+verify.singleReferenceGroup("(method) Object.toMyString(): any", "toMyString");

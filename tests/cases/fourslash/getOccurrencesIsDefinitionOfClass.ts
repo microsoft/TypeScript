@@ -7,4 +7,4 @@
 ////}|]
 ////let c = new [|C|]();
 
-verify.singleReferenceGroup("class C", test.rangesByText().get("C"));
+verify.singleReferenceGroup("class C", "C");

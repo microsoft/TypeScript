@@ -13,8 +13,4 @@
 //// }
 //// var x = <div [|[|{| "isWriteAccess": true, "isDefinition": true, "declarationRangeIndex": 2 |}name|]="hello"|] />;
 
-const rangesByText = test.rangesByText();
-verify.singleReferenceGroup(
-    "(property) name?: string",
-    rangesByText.get("name")
-);
+verify.singleReferenceGroup("(property) name?: string", "name");

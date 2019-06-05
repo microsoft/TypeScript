@@ -3,4 +3,4 @@
 ////let y = o.[|foo|];
 ////let z = o['[|foo|]'];
 
-verify.singleReferenceGroup('(property) ["foo"]: number', test.rangesByText().get("foo"));
+verify.singleReferenceGroup('(property) ["foo"]: number', "foo");

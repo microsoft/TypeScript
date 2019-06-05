@@ -3,4 +3,4 @@
 ////  return [|x|] + 1
 ////}
 
-verify.singleReferenceGroup("(parameter) x: number", test.rangesByText().get("x"));
+verify.singleReferenceGroup("(parameter) x: number", "x");

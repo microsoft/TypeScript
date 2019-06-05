@@ -10,4 +10,4 @@
 ////// module
 ////import a3 = Foo.[|Bar|].Baz;
 
-verify.singleReferenceGroup("namespace Foo.Bar", test.rangesByText().get("Bar"));
+verify.singleReferenceGroup("namespace Foo.Bar", "Bar");

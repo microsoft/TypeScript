@@ -11,4 +11,4 @@ verify.noReferences();
 goTo.marker("2");
 verify.noReferences();
 
-verify.singleReferenceGroup("var bar: () => void", test.rangesByText().get("bar"));
+verify.singleReferenceGroup("var bar: () => void", "bar");

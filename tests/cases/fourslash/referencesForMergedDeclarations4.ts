@@ -22,4 +22,4 @@
 ////[|testClass|].s;
 ////new [|testClass|]();
 
-verify.singleReferenceGroup("class testClass\nnamespace testClass", test.rangesByText().get("testClass"));
+verify.singleReferenceGroup("class testClass\nnamespace testClass", "testClass");

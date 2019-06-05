@@ -12,9 +12,9 @@
 ////    x.[|foo|]
 ////}
 
-verify.singleReferenceGroup("(property) A.foo: string", test.rangesByText().get("foo"));
+verify.singleReferenceGroup("(property) A.foo: string", "foo");
 
 goTo.marker("");
 edit.insert("\n");
 
-verify.singleReferenceGroup("(property) A.foo: string", test.rangesByText().get("foo"));
+verify.singleReferenceGroup("(property) A.foo: string", "foo");

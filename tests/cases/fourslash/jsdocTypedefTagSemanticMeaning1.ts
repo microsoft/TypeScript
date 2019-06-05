@@ -9,4 +9,4 @@
 /////** @type {[|T|]} */
 ////const n = [|T|];
 
-verify.singleReferenceGroup("type T = number\nconst T: 1", test.rangesByText().get("T"));
+verify.singleReferenceGroup("type T = number\nconst T: 1", "T");

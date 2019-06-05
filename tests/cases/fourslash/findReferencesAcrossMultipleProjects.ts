@@ -11,4 +11,4 @@
 /////// <reference path="a.ts" />
 ////[|{| "isWriteAccess": true |}x|]++;
 
-verify.singleReferenceGroup("var x: number", test.rangesByText().get("x"));
+verify.singleReferenceGroup("var x: number", "x");

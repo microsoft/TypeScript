@@ -8,4 +8,4 @@
 ////    x = [|n|];
 ////}
 
-verify.singleReferenceGroup("(parameter) n: number", test.rangesByText().get("n"));
+verify.singleReferenceGroup("(parameter) n: number", "n");

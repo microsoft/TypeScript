@@ -7,4 +7,4 @@
 ////var x: Foo;
 ////x.[|__bar|];
 
-verify.singleReferenceGroup("(method) Foo.__bar(): number", test.rangesByText().get("__bar"));
+verify.singleReferenceGroup("(method) Foo.__bar(): number", "__bar");

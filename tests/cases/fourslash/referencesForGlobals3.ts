@@ -10,4 +10,4 @@
 // @Filename: referencesForGlobals_2.ts
 ////var i: [|globalInterface|];
 
-verify.singleReferenceGroup("interface globalInterface", test.rangesByText().get("globalInterface"));
+verify.singleReferenceGroup("interface globalInterface", "globalInterface");

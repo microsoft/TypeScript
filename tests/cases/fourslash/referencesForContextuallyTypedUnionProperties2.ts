@@ -34,4 +34,4 @@
 ////var u1 = { a: 0, b: 0, common: "" };
 ////var u2 = { b: 0, common: 0 };
 
-verify.singleReferenceGroup("(property) B.b: number", test.rangesByText().get("b"));
+verify.singleReferenceGroup("(property) B.b: number", "b");

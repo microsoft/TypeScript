@@ -30,8 +30,4 @@
 //// let opt = <MainButton goTo="goTo" />;
 //// let opt = <MainButton wrong />;
 
-const rangesByText = test.rangesByText();
-verify.singleReferenceGroup(
-    "(method) ButtonProps.onClick(event?: any): void",
-    rangesByText.get("onClick")
-);
+verify.singleReferenceGroup("(method) ButtonProps.onClick(event?: any): void", "onClick");

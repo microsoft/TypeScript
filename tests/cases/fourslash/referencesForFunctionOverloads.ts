@@ -7,4 +7,4 @@
 ////    [|foo|]('', 43);
 ////}|]
 
-verify.singleReferenceGroup("function foo(x: string): any", test.rangesByText().get("foo"));
+verify.singleReferenceGroup("function foo(x: string): any", "foo");

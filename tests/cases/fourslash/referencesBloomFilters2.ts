@@ -14,4 +14,4 @@
 // @Filename: redeclaration.ts
 ////container = { [|"[|{| "isWriteAccess": true, "isDefinition": true, "declarationRangeIndex": 4 |}42|]" : 18|] };
 
-verify.singleReferenceGroup("(property) 42: number", test.rangesByText().get("42"));
+verify.singleReferenceGroup("(property) 42: number", "42");

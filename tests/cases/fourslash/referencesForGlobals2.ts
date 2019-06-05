@@ -10,4 +10,4 @@
 // @Filename: referencesForGlobals_2.ts
 ////var c = [|globalClass|]();
 
-verify.singleReferenceGroup("class globalClass", test.rangesByText().get("globalClass"));
+verify.singleReferenceGroup("class globalClass", "globalClass");

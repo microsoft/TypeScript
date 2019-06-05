@@ -1001,8 +1001,8 @@ namespace FourSlash {
             assert.deepEqual<ReadonlyArray<ts.ReferenceEntry> | undefined>(refs, expected);
         }
 
-        public verifySingleReferenceGroup(definition: FourSlashInterface.ReferenceGroupDefinition, ranges?: Range[]) {
-            ranges = ranges || this.getRanges();
+        public verifySingleReferenceGroup(definition: FourSlashInterface.ReferenceGroupDefinition, ranges?: Range[] | string) {
+            ranges =  ts.isString(ranges) ? this.rangesByText().get(ranges)! : ranges || this.getRanges();
             this.verifyReferenceGroups(ranges, [{ definition, ranges }]);
         }
 
@@ -3971,7 +3971,7 @@ namespace FourSlashInterface {
             this.state.verifyGetReferencesForServerTest(expected);
         }
 
-        public singleReferenceGroup(definition: ReferenceGroupDefinition, ranges?: FourSlash.Range[]) {
+        public singleReferenceGroup(definition: ReferenceGroupDefinition, ranges?: FourSlash.Range[] | string) {
             this.state.verifySingleReferenceGroup(definition, ranges);
         }
 
