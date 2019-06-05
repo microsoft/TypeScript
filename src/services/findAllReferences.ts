@@ -79,7 +79,12 @@ namespace ts.FindAllReferences {
             // Property name of the import export specifier or binding pattern, use parent
             ((isImportOrExportSpecifier(node.parent) || isBindingElement(node.parent))
                 && node.parent.propertyName === node) ||
-            isExportAssignment(node.parent) && node.parent.expression === node) {
+            isExportAssignment(node.parent) && (
+                node.parent.expression === node ||
+                (!node.parent.isExportEquals && node.kind === SyntaxKind.DefaultKeyword)
+            ) ||
+            // Is default export
+            (node.kind === SyntaxKind.DefaultKeyword && hasModifier(node.parent, ModifierFlags.ExportDefault))) {
             return getDeclarationForDeclarationSpan(node.parent);
         }
 
