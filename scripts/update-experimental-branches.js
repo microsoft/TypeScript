@@ -30,9 +30,9 @@ async function main() {
     runSequence([
         ["git", ["clean", "-fdx"]],
         ["git", ["checkout", "."]],
+        ["git", ["fetch", "-fu", "origin", "master:master"]],
         ["git", ["checkout", "master"]],
         ["git", ["remote", "add", "fork", remoteUrl]], // Add the remote fork
-        ["git", ["fetch", "origin", "master:master"]],
     ]);
 
     const gh = new Octokit();
