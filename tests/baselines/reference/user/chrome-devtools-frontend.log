@@ -3012,7 +3012,15 @@ node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighth
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(65285,7): error TS2339: Property 'description' does not exist on type 'Error'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(65310,1): error TS2323: Cannot redeclare exported variable '__esModule'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(65379,1): error TS2323: Cannot redeclare exported variable '__esModule'.
+node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(65443,1): error TS2322: Type '{ line: number; column: number; }' is not assignable to type '{}'.
+  Property 'line' does not exist on type '{}'.
+node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(65464,1): error TS2322: Type '{ line: number; column: number; }' is not assignable to type '{}'.
+  Property 'line' does not exist on type '{}'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(65468,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'entry' must be of type '{ multiLine: boolean; slice: any[]; range: number[]; loc: { start: { line: number; column: number; }; end: {}; }; }', but here has type '{ multiLine: boolean; slice: any[]; range: any[]; loc: { start: { line: number; column: number; }; end: {}; }; }'.
+node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(65507,1): error TS2322: Type '{ line: number; column: number; }' is not assignable to type '{}'.
+  Property 'line' does not exist on type '{}'.
+node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(65529,1): error TS2322: Type '{ line: number; column: number; }' is not assignable to type '{}'.
+  Property 'line' does not exist on type '{}'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(65533,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'entry' must be of type '{ multiLine: boolean; slice: number[]; range: any[]; loc: { start: { line: number; column: number; }; end: {}; }; }', but here has type '{ multiLine: boolean; slice: any[]; range: any[]; loc: { start: { line: number; column: number; }; end: {}; }; }'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(65576,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'comment' must be of type '{ multiLine: boolean; slice: any[]; range: number[]; loc: { start: { line: number; column: number; }; end: {}; }; }[]', but here has type '{ multiLine: boolean; slice: number[]; range: any[]; loc: { start: { line: number; column: number; }; end: {}; }; }[]'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(66529,1): error TS2323: Cannot redeclare exported variable '__esModule'.
