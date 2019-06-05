@@ -88,8 +88,6 @@ namespace ts {
         return result;
     }
 
-    export type ReportEmitErrorSummary = (errorCount: number) => void;
-
     export function getErrorCountForSummary(diagnostics: ReadonlyArray<Diagnostic>) {
         return countWhere(diagnostics, diagnostic => diagnostic.category === DiagnosticCategory.Error);
     }
@@ -113,12 +111,12 @@ namespace ts {
         getCurrentDirectory(): string;
         getCompilerOptions(): CompilerOptions;
         getSourceFiles(): ReadonlyArray<SourceFile>;
-        getSyntacticDiagnostics(): ReadonlyArray<Diagnostic>;
-        getOptionsDiagnostics(): ReadonlyArray<Diagnostic>;
-        getGlobalDiagnostics(): ReadonlyArray<Diagnostic>;
-        getSemanticDiagnostics(): ReadonlyArray<Diagnostic>;
+        getSyntacticDiagnostics(sourceFile?: SourceFile, cancellationToken?: CancellationToken): ReadonlyArray<Diagnostic>;
+        getOptionsDiagnostics(cancellationToken?: CancellationToken): ReadonlyArray<Diagnostic>;
+        getGlobalDiagnostics(cancellationToken?: CancellationToken): ReadonlyArray<Diagnostic>;
+        getSemanticDiagnostics(sourceFile?: SourceFile, cancellationToken?: CancellationToken): ReadonlyArray<Diagnostic>;
         getConfigFileParsingDiagnostics(): ReadonlyArray<Diagnostic>;
-        emit(targetSourceFile?: SourceFile, writeFile?: WriteFileCallback): EmitResult;
+        emit(targetSourceFile?: SourceFile, writeFile?: WriteFileCallback, cancellationToken?: CancellationToken, emitOnlyDtsFiles?: boolean, customTransformers?: CustomTransformers): EmitResult;
     }
 
     export function listFiles(program: ProgramToEmitFilesAndReportErrors, writeFileName: (s: string) => void) {
@@ -132,25 +130,35 @@ namespace ts {
     /**
      * Helper that emit files, report diagnostics and lists emitted and/or source files depending on compiler options
      */
-    export function emitFilesAndReportErrors(program: ProgramToEmitFilesAndReportErrors, reportDiagnostic: DiagnosticReporter, writeFileName?: (s: string) => void, reportSummary?: ReportEmitErrorSummary, writeFile?: WriteFileCallback) {
+    export function emitFilesAndReportErrors(
+        program: ProgramToEmitFilesAndReportErrors,
+        reportDiagnostic: DiagnosticReporter,
+        writeFileName?: (s: string) => void,
+        reportSummary?: ReportEmitErrorSummary,
+        writeFile?: WriteFileCallback,
+        cancellationToken?: CancellationToken,
+        emitOnlyDtsFiles?: boolean,
+        customTransformers?: CustomTransformers
+    ) {
         // First get and report any syntactic errors.
         const diagnostics = program.getConfigFileParsingDiagnostics().slice();
         const configFileParsingDiagnosticsLength = diagnostics.length;
-        addRange(diagnostics, program.getSyntacticDiagnostics());
+        addRange(diagnostics, program.getSyntacticDiagnostics(/*sourceFile*/ undefined, cancellationToken));
 
         // If we didn't have any syntactic errors, then also try getting the global and
         // semantic errors.
         if (diagnostics.length === configFileParsingDiagnosticsLength) {
-            addRange(diagnostics, program.getOptionsDiagnostics());
-            addRange(diagnostics, program.getGlobalDiagnostics());
+            addRange(diagnostics, program.getOptionsDiagnostics(cancellationToken));
+            addRange(diagnostics, program.getGlobalDiagnostics(cancellationToken));
 
             if (diagnostics.length === configFileParsingDiagnosticsLength) {
-                addRange(diagnostics, program.getSemanticDiagnostics());
+                addRange(diagnostics, program.getSemanticDiagnostics(/*sourceFile*/ undefined, cancellationToken));
             }
         }
 
         // Emit and report any errors we ran into.
-        const { emittedFiles, emitSkipped, diagnostics: emitDiagnostics } = program.emit(/*targetSourceFile*/ undefined, writeFile);
+        const emitResult = program.emit(/*targetSourceFile*/ undefined, writeFile, cancellationToken, emitOnlyDtsFiles, customTransformers);
+        const { emittedFiles, diagnostics: emitDiagnostics } = emitResult;
         addRange(diagnostics, emitDiagnostics);
 
         sortAndDeduplicateDiagnostics(diagnostics).forEach(reportDiagnostic);
@@ -167,7 +175,34 @@ namespace ts {
             reportSummary(getErrorCountForSummary(diagnostics));
         }
 
-        if (emitSkipped && diagnostics.length > 0) {
+        return {
+            emitResult,
+            diagnostics,
+        };
+    }
+
+    export function emitFilesAndReportErrorsAndGetExitStatus(
+        program: ProgramToEmitFilesAndReportErrors,
+        reportDiagnostic: DiagnosticReporter,
+        writeFileName?: (s: string) => void,
+        reportSummary?: ReportEmitErrorSummary,
+        writeFile?: WriteFileCallback,
+        cancellationToken?: CancellationToken,
+        emitOnlyDtsFiles?: boolean,
+        customTransformers?: CustomTransformers
+    ) {
+        const { emitResult, diagnostics } = emitFilesAndReportErrors(
+            program,
+            reportDiagnostic,
+            writeFileName,
+            reportSummary,
+            writeFile,
+            cancellationToken,
+            emitOnlyDtsFiles,
+            customTransformers
+        );
+
+        if (emitResult.emitSkipped && diagnostics.length > 0) {
             // If the emitter didn't emit anything, then pass that value along.
             return ExitStatus.DiagnosticsPresent_OutputsSkipped;
         }
@@ -375,6 +410,33 @@ namespace ts {
         return host;
     }
 
+    export interface IncrementalCompilationOptions {
+        rootNames: ReadonlyArray<string>;
+        options: CompilerOptions;
+        configFileParsingDiagnostics?: ReadonlyArray<Diagnostic>;
+        projectReferences?: ReadonlyArray<ProjectReference>;
+        host?: CompilerHost;
+        reportDiagnostic?: DiagnosticReporter;
+        reportErrorSummary?: ReportEmitErrorSummary;
+        afterProgramEmitAndDiagnostics?(program: EmitAndSemanticDiagnosticsBuilderProgram): void;
+        system?: System;
+    }
+    export function performIncrementalCompilation(input: IncrementalCompilationOptions) {
+        const system = input.system || sys;
+        const host = input.host || (input.host = createIncrementalCompilerHost(input.options, system));
+        const builderProgram = createIncrementalProgram(input);
+        const exitStatus = emitFilesAndReportErrorsAndGetExitStatus(
+            builderProgram,
+            input.reportDiagnostic || createDiagnosticReporter(system),
+            s => host.trace && host.trace(s),
+            input.reportErrorSummary || input.options.pretty ? errorCount => system.write(getErrorSummaryText(errorCount, system.newLine)) : undefined
+        );
+        if (input.afterProgramEmitAndDiagnostics) input.afterProgramEmitAndDiagnostics(builderProgram);
+        return exitStatus;
+    }
+}
+
+namespace ts {
     export function readBuilderProgram(compilerOptions: CompilerOptions, readFile: (path: string) => string | undefined) {
         if (compilerOptions.out || compilerOptions.outFile) return undefined;
         const buildInfoPath = getOutputPathForBuildInfo(compilerOptions);
@@ -395,7 +457,7 @@ namespace ts {
         return host;
     }
 
-    interface IncrementalProgramOptions<T extends BuilderProgram> {
+    export interface IncrementalProgramOptions<T extends BuilderProgram> {
         rootNames: ReadonlyArray<string>;
         options: CompilerOptions;
         configFileParsingDiagnostics?: ReadonlyArray<Diagnostic>;
@@ -403,7 +465,8 @@ namespace ts {
         host?: CompilerHost;
         createProgram?: CreateProgram<T>;
     }
-    function createIncrementalProgram<T extends BuilderProgram = EmitAndSemanticDiagnosticsBuilderProgram>({
+
+    export function createIncrementalProgram<T extends BuilderProgram = EmitAndSemanticDiagnosticsBuilderProgram>({
         rootNames, options, configFileParsingDiagnostics, projectReferences, host, createProgram
     }: IncrementalProgramOptions<T>): T {
         host = host || createIncrementalCompilerHost(options);
@@ -412,33 +475,6 @@ namespace ts {
         return createProgram(rootNames, options, host, oldProgram, configFileParsingDiagnostics, projectReferences);
     }
 
-    export interface IncrementalCompilationOptions {
-        rootNames: ReadonlyArray<string>;
-        options: CompilerOptions;
-        configFileParsingDiagnostics?: ReadonlyArray<Diagnostic>;
-        projectReferences?: ReadonlyArray<ProjectReference>;
-        host?: CompilerHost;
-        reportDiagnostic?: DiagnosticReporter;
-        reportErrorSummary?: ReportEmitErrorSummary;
-        afterProgramEmitAndDiagnostics?(program: EmitAndSemanticDiagnosticsBuilderProgram): void;
-        system?: System;
-    }
-    export function performIncrementalCompilation(input: IncrementalCompilationOptions) {
-        const system = input.system || sys;
-        const host = input.host || (input.host = createIncrementalCompilerHost(input.options, system));
-        const builderProgram = createIncrementalProgram(input);
-        const exitStatus = emitFilesAndReportErrors(
-            builderProgram,
-            input.reportDiagnostic || createDiagnosticReporter(system),
-            s => host.trace && host.trace(s),
-            input.reportErrorSummary || input.options.pretty ? errorCount => system.write(getErrorSummaryText(errorCount, system.newLine)) : undefined
-        );
-        if (input.afterProgramEmitAndDiagnostics) input.afterProgramEmitAndDiagnostics(builderProgram);
-        return exitStatus;
-    }
-}
-
-namespace ts {
     export type WatchStatusReporter = (diagnostic: Diagnostic, newLine: string, options: CompilerOptions) => void;
     /** Create the program with rootNames and options, if they are undefined, oldProgram and new configFile diagnostics create new program */
     export type CreateProgram<T extends BuilderProgram> = (rootNames: ReadonlyArray<string> | undefined, options: CompilerOptions | undefined, host?: CompilerHost, oldProgram?: T, configFileParsingDiagnostics?: ReadonlyArray<Diagnostic>, projectReferences?: ReadonlyArray<ProjectReference> | undefined) => T;

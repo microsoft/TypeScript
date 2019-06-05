@@ -19,13 +19,11 @@ namespace ts {
         function verifyProjectWithResolveJsonModuleWithFs(fs: vfs.FileSystem, configFile: string, allExpectedOutputs: ReadonlyArray<string>, ...expectedDiagnosticMessages: fakes.ExpectedDiagnostic[]) {
             const host = new fakes.SolutionBuilderHost(fs);
             const builder = createSolutionBuilder(host, [configFile], { dry: false, force: false, verbose: false });
-            builder.buildAllProjects();
+            builder.build();
             host.assertDiagnosticMessages(...expectedDiagnosticMessages);
             if (!expectedDiagnosticMessages.length) {
                 // Check for outputs. Not an exhaustive list
-                for (const output of allExpectedOutputs) {
-                    assert(fs.existsSync(output), `Expect file ${output} to exist`);
-                }
+                verifyOutputsPresent(fs, allExpectedOutputs);
             }
         }
 
@@ -64,20 +62,18 @@ export default hello.hello`);
             const configFile = "src/tsconfig_withFiles.json";
             replaceText(fs, configFile, `"composite": true,`, `"composite": true, "sourceMap": true,`);
             const host = new fakes.SolutionBuilderHost(fs);
-            const builder = createSolutionBuilder(host, [configFile], { verbose: true });
-            builder.buildAllProjects();
+            let builder = createSolutionBuilder(host, [configFile], { verbose: true });
+            builder.build();
             host.assertDiagnosticMessages(
                 getExpectedDiagnosticForProjectsInBuild(configFile),
                 [Diagnostics.Project_0_is_out_of_date_because_output_file_1_does_not_exist, configFile, "src/dist/src/index.js"],
                 [Diagnostics.Building_project_0, `/${configFile}`]
             );
-            for (const output of [...allExpectedOutputs, "/src/dist/src/index.js.map"]) {
-                assert(fs.existsSync(output), `Expect file ${output} to exist`);
-            }
+            verifyOutputsPresent(fs, [...allExpectedOutputs, "/src/dist/src/index.js.map"]);
             host.clearDiagnostics();
-            builder.resetBuildContext();
+            builder = createSolutionBuilder(host, [configFile], { verbose: true });
             tick();
-            builder.buildAllProjects();
+            builder.build();
             host.assertDiagnosticMessages(
                 getExpectedDiagnosticForProjectsInBuild(configFile),
                 [Diagnostics.Project_0_is_up_to_date_because_newest_input_1_is_older_than_oldest_output_2, configFile, "src/src/index.ts", "src/dist/src/index.js"]
@@ -89,20 +85,18 @@ export default hello.hello`);
             const configFile = "src/tsconfig_withFiles.json";
             replaceText(fs, configFile, `"outDir": "dist",`, "");
             const host = new fakes.SolutionBuilderHost(fs);
-            const builder = createSolutionBuilder(host, [configFile], { verbose: true });
-            builder.buildAllProjects();
+            let builder = createSolutionBuilder(host, [configFile], { verbose: true });
+            builder.build();
             host.assertDiagnosticMessages(
                 getExpectedDiagnosticForProjectsInBuild(configFile),
                 [Diagnostics.Project_0_is_out_of_date_because_output_file_1_does_not_exist, configFile, "src/src/index.js"],
                 [Diagnostics.Building_project_0, `/${configFile}`]
             );
-            for (const output of ["/src/src/index.js", "/src/src/index.d.ts"]) {
-                assert(fs.existsSync(output), `Expect file ${output} to exist`);
-            }
+            verifyOutputsPresent(fs, ["/src/src/index.js", "/src/src/index.d.ts"]);
             host.clearDiagnostics();
-            builder.resetBuildContext();
+            builder = createSolutionBuilder(host, [configFile], { verbose: true });
             tick();
-            builder.buildAllProjects();
+            builder.build();
             host.assertDiagnosticMessages(
                 getExpectedDiagnosticForProjectsInBuild(configFile),
                 [Diagnostics.Project_0_is_up_to_date_because_newest_input_1_is_older_than_oldest_output_2, configFile, "src/src/index.ts", "src/src/index.js"]
@@ -128,8 +122,8 @@ export default hello.hello`);
             const stringsConfigFile = "src/strings/tsconfig.json";
             const mainConfigFile = "src/main/tsconfig.json";
             const host = new fakes.SolutionBuilderHost(fs);
-            const builder = createSolutionBuilder(host, [configFile], { verbose: true });
-            builder.buildAllProjects();
+            let builder = createSolutionBuilder(host, [configFile], { verbose: true });
+            builder.build();
             host.assertDiagnosticMessages(
                 getExpectedDiagnosticForProjectsInBuild(stringsConfigFile, mainConfigFile, configFile),
                 [Diagnostics.Project_0_is_out_of_date_because_output_file_1_does_not_exist, stringsConfigFile, "src/strings/tsconfig.tsbuildinfo"],
@@ -137,11 +131,11 @@ export default hello.hello`);
                 [Diagnostics.Project_0_is_out_of_date_because_output_file_1_does_not_exist, mainConfigFile, "src/main/index.js"],
                 [Diagnostics.Building_project_0, `/${mainConfigFile}`],
             );
-            assert(fs.existsSync(expectedOutput), `Expect file ${expectedOutput} to exist`);
+            verifyOutputsPresent(fs, [expectedOutput]);
             host.clearDiagnostics();
-            builder.resetBuildContext();
+            builder = createSolutionBuilder(host, [configFile], { verbose: true });
             tick();
-            builder.buildAllProjects();
+            builder.build();
             host.assertDiagnosticMessages(
                 getExpectedDiagnosticForProjectsInBuild(stringsConfigFile, mainConfigFile, configFile),
                 [Diagnostics.Project_0_is_up_to_date_because_newest_input_1_is_older_than_oldest_output_2, stringsConfigFile, "src/strings/foo.json", "src/strings/tsconfig.tsbuildinfo"],

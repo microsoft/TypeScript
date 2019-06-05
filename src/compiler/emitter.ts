@@ -284,7 +284,6 @@ namespace ts {
             // Write build information if applicable
             if (!buildInfoPath || targetSourceFile || emitSkipped) return;
             const program = host.getProgramBuildInfo();
-            if (!bundle && !program) return;
             if (host.isEmitBlocked(buildInfoPath) || compilerOptions.noEmit) {
                 emitSkipped = true;
                 return;
@@ -638,7 +637,12 @@ namespace ts {
     }
 
     /*@internal*/
-    export function emitUsingBuildInfo(config: ParsedCommandLine, host: EmitUsingBuildInfoHost, getCommandLine: (ref: ProjectReference) => ParsedCommandLine | undefined): EmitUsingBuildInfoResult {
+    export function emitUsingBuildInfo(
+        config: ParsedCommandLine,
+        host: EmitUsingBuildInfoHost,
+        getCommandLine: (ref: ProjectReference) => ParsedCommandLine | undefined,
+        customTransformers?: CustomTransformers
+    ): EmitUsingBuildInfoResult {
         const { buildInfoPath, jsFilePath, sourceMapFilePath, declarationFilePath, declarationMapPath } = getOutputPathsForBundle(config.options, /*forceDtsPaths*/ false);
         const buildInfoText = host.readFile(Debug.assertDefined(buildInfoPath));
         if (!buildInfoText) return buildInfoPath!;
@@ -723,7 +727,12 @@ namespace ts {
             useCaseSensitiveFileNames: () => host.useCaseSensitiveFileNames(),
             getProgramBuildInfo: returnUndefined
         };
-        emitFiles(notImplementedResolver, emitHost, /*targetSourceFile*/ undefined, getTransformers(config.options), /*emitOnlyDtsFiles*/ false);
+        emitFiles(
+            notImplementedResolver,
+            emitHost,
+            /*targetSourceFile*/ undefined,
+            getTransformers(config.options, customTransformers)
+        );
         return outputFiles;
     }
 

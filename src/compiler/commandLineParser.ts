@@ -1022,8 +1022,7 @@ namespace ts {
         }
     }
 
-    /* @internal */
-    export interface OptionsBase {
+    interface OptionsBase {
         [option: string]: CompilerOptionsValue | undefined;
     }
 

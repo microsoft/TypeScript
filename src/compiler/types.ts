@@ -3068,6 +3068,9 @@ namespace ts {
 
         // Diagnostics were produced and outputs were generated in spite of them.
         DiagnosticsPresent_OutputsGenerated = 2,
+
+        // When build skipped because passed in project is invalid
+        InvalidProject_OutputsSkipped = 3,
     }
 
     export interface EmitResult {
