@@ -64,6 +64,7 @@ namespace ts {
         | SyntaxKind.InterfaceKeyword
         | SyntaxKind.IsKeyword
         | SyntaxKind.KeyOfKeyword
+        | SyntaxKind.NotKeyword
         | SyntaxKind.LetKeyword
         | SyntaxKind.ModuleKeyword
         | SyntaxKind.NamespaceKeyword
@@ -259,6 +260,7 @@ namespace ts {
         InferKeyword,
         IsKeyword,
         KeyOfKeyword,
+        NotKeyword,
         ModuleKeyword,
         NamespaceKeyword,
         NeverKeyword,
@@ -1242,7 +1244,7 @@ namespace ts {
 
     export interface TypeOperatorNode extends TypeNode {
         kind: SyntaxKind.TypeOperator;
-        operator: SyntaxKind.KeyOfKeyword | SyntaxKind.UniqueKeyword | SyntaxKind.ReadonlyKeyword;
+        operator: SyntaxKind.KeyOfKeyword | SyntaxKind.UniqueKeyword | SyntaxKind.ReadonlyKeyword | SyntaxKind.NotKeyword;
         type: TypeNode;
     }
 
@@ -3938,6 +3940,7 @@ namespace ts {
         Conditional     = 1 << 24,  // T extends U ? X : Y
         Substitution    = 1 << 25,  // Type parameter substitution
         NonPrimitive    = 1 << 26,  // intrinsic object type
+        Negated         = 1 << 27,  // negated type
 
         /* @internal */
         AnyOrUnknown = Any | Unknown,
@@ -3967,7 +3970,7 @@ namespace ts {
         UnionOrIntersection = Union | Intersection,
         StructuredType = Object | Union | Intersection,
         TypeVariable = TypeParameter | IndexedAccess,
-        InstantiableNonPrimitive = TypeVariable | Conditional | Substitution,
+        InstantiableNonPrimitive = TypeVariable | Conditional | Substitution | Negated,
         InstantiablePrimitive = Index,
         Instantiable = InstantiableNonPrimitive | InstantiablePrimitive,
         StructuredOrInstantiable = StructuredType | Instantiable,
@@ -3983,16 +3986,16 @@ namespace ts {
         NotPrimitiveUnion = Any | Unknown | Enum | Void | Never | StructuredOrInstantiable,
         // The following flags are aggregated during union and intersection type construction
         /* @internal */
-        IncludesMask = Any | Unknown | Primitive | Never | Object | Union | NonPrimitive,
+        IncludesMask = Any | Unknown | Primitive | Never | Object | Union | NonPrimitive | Negated | TypeVariable,
         // The following flags are used for different purposes during union and intersection type construction
         /* @internal */
-        IncludesStructuredOrInstantiable = TypeParameter,
+        IncludesStructuredOrInstantiable = Conditional,
         /* @internal */
         IncludesNonWideningType = Intersection,
         /* @internal */
         IncludesWildcard = Index,
         /* @internal */
-        IncludesEmptyObject = IndexedAccess,
+        IncludesEmptyObject = Substitution,
         // The following flag is used for different purposes by maybeTypeOfKind
         /* @internal */
         GenericMappedType = Never,
@@ -4070,6 +4073,11 @@ namespace ts {
 
     // Enum types (TypeFlags.Enum)
     export interface EnumType extends Type {
+    }
+
+    // Negated types (TypeFlags.Negated)
+    export interface NegatedType extends Type {
+        type: Type;
     }
 
     export const enum ObjectFlags {
@@ -4357,11 +4365,15 @@ namespace ts {
         /* @internal */
         resolvedInferredTrueType?: Type; // The `trueType` instantiated with the `combinedMapper`, if present
         /* @internal */
+        resolvedInferredFalseType?: Type; // Likewise, the `falseType` with the `falseCombinedMapper`
+        /* @internal */
         resolvedDefaultConstraint?: Type;
         /* @internal */
         mapper?: TypeMapper;
         /* @internal */
         combinedMapper?: TypeMapper;
+        /* @internal */
+        falseCombinedMapper?: TypeMapper;
     }
 
     // Type parameter substitution (TypeFlags.Substitution)

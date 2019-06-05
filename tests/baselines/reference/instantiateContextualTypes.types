@@ -260,7 +260,7 @@ class InferFunctionTypes extends Component<{children: (foo: number) => string}> 
 >foo : number
 
 createElement(InferFunctionTypes, (foo) => "" + foo);
->createElement(InferFunctionTypes, (foo) => "" + foo) : any
+>createElement(InferFunctionTypes, (foo) => "" + foo) : error
 >createElement : <P extends {}>(type: ComponentClass<P>, ...children: P extends { children?: infer C | undefined; } ? C extends any[] ? C : C[] : unknown) => any
 >InferFunctionTypes : typeof InferFunctionTypes
 >(foo) => "" + foo : (foo: number) => string
@@ -270,7 +270,7 @@ createElement(InferFunctionTypes, (foo) => "" + foo);
 >foo : number
 
 createElement2(InferFunctionTypes, [(foo) => "" + foo]);
->createElement2(InferFunctionTypes, [(foo) => "" + foo]) : any
+>createElement2(InferFunctionTypes, [(foo) => "" + foo]) : error
 >createElement2 : <P extends {}>(type: ComponentClass<P>, child: P extends { children?: infer C | undefined; } ? C extends any[] ? C : C[] : unknown) => any
 >InferFunctionTypes : typeof InferFunctionTypes
 >[(foo) => "" + foo] : ((foo: number) => string)[]

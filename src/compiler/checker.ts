@@ -395,6 +395,7 @@ namespace ts {
 
         const tupleTypes = createMap<GenericType>();
         const unionTypes = createMap<UnionType>();
+        const negatedTypes = createMap<NegatedType>();
         const intersectionTypes = createMap<Type>();
         const literalTypes = createMap<LiteralType>();
         const indexedAccessTypes = createMap<IndexedAccessType>();
@@ -3579,6 +3580,10 @@ namespace ts {
                     context.approximateLength += 4;
                     return createThis();
                 }
+                if (type.flags & TypeFlags.Negated) {
+                    context.approximateLength += 4;
+                    return createTypeOperatorNode(SyntaxKind.NotKeyword, typeToTypeNodeHelper((type as NegatedType).type, context));
+                }
 
                 const objectFlags = getObjectFlags(type);
 
@@ -5855,7 +5860,8 @@ namespace ts {
                     return type;
                 }
             }
-            const type = createObjectType(ObjectFlags.Anonymous, symbol);
+            const isClosed = isFunctionExpression(declaration) || isArrowFunction(declaration);
+            const type = createObjectType(ObjectFlags.Anonymous | (isClosed ? ObjectFlags.ObjectLiteral : 0), symbol);
             if (symbol.flags & SymbolFlags.Class) {
                 const baseTypeVariable = getBaseTypeVariableOfClass(symbol);
                 return baseTypeVariable ? getIntersectionType([type, baseTypeVariable]) : type;
@@ -7704,7 +7710,7 @@ namespace ts {
                 // just `any`. This result is _usually_ unwanted - so instead here we elide an `any` branch from the constraint type,
                 // in effect treating `any` like `never` rather than `unknown` in this location.
                 const trueConstraint = getInferredTrueTypeFromConditionalType(type);
-                const falseConstraint = getFalseTypeFromConditionalType(type);
+                const falseConstraint = getInferredFalseTypeFromConditionalType(type);
                 type.resolvedDefaultConstraint = isTypeAny(trueConstraint) ? falseConstraint : isTypeAny(falseConstraint) ? trueConstraint : getUnionType([trueConstraint, falseConstraint]);
             }
             return type.resolvedDefaultConstraint;
@@ -7748,7 +7754,7 @@ namespace ts {
             let constraints: Type[] | undefined;
             let hasDisjointDomainType = false;
             for (const t of type.types) {
-                if (t.flags & TypeFlags.Instantiable) {
+                if (t.flags & TypeFlags.Instantiable && !(t.flags & TypeFlags.Negated)) {
                     // We keep following constraints as long as we have an instantiable type that is known
                     // not to be circular or infinite (hence we stop on index access types).
                     let constraint = getConstraintOfType(t);
@@ -7759,7 +7765,7 @@ namespace ts {
                         constraints = append(constraints, constraint);
                     }
                 }
-                else if (t.flags & TypeFlags.DisjointDomains) {
+                else if (t.flags & TypeFlags.DisjointDomains || t.flags & TypeFlags.Negated) {
                     hasDisjointDomainType = true;
                 }
             }
@@ -7770,7 +7776,7 @@ namespace ts {
                     // We add any types belong to one of the disjoint domains because they might cause the final
                     // intersection operation to reduce the union constraints.
                     for (const t of type.types) {
-                        if (t.flags & TypeFlags.DisjointDomains) {
+                        if (t.flags & TypeFlags.DisjointDomains || t.flags & TypeFlags.Negated) {
                             constraints = append(constraints, t);
                         }
                     }
@@ -9118,10 +9124,10 @@ namespace ts {
             let constraints: Type[] | undefined;
             while (node && !isStatement(node) && node.kind !== SyntaxKind.JSDocComment) {
                 const parent = node.parent;
-                if (parent.kind === SyntaxKind.ConditionalType && node === (<ConditionalTypeNode>parent).trueType) {
+                if (parent.kind === SyntaxKind.ConditionalType && (node === (<ConditionalTypeNode>parent).trueType || node === (<ConditionalTypeNode>parent).falseType)) {
                     const constraint = getImpliedConstraint(typeVariable, (<ConditionalTypeNode>parent).checkType, (<ConditionalTypeNode>parent).extendsType);
                     if (constraint) {
-                        constraints = append(constraints, constraint);
+                        constraints = append(constraints, node === (<ConditionalTypeNode>parent).trueType ? constraint : getNegatedType(constraint));
                     }
                 }
                 node = parent;
@@ -9857,6 +9863,59 @@ namespace ts {
             return true;
         }
 
+        function checkForUnsatisfiedNegatedType(typeSet: Type[]) {
+            const nonNegatedSet = filter(typeSet, t => !(t.flags & TypeFlags.Negated));
+            if (!length(nonNegatedSet)) {
+                return false;
+            }
+            const negatedBounds = getUnionType(map(filter(typeSet, t => !!(t.flags & TypeFlags.Negated)), t => (t as NegatedType).type));
+            for (const nonNegatedType of nonNegatedSet) {
+                if (isTypeSubtypeOf(nonNegatedType, negatedBounds)) {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        function removeNegatedSubtypes(types: Type[]) {
+            if (types.length === 0) {
+                return;
+            }
+            let i = types.length;
+            const nonNegatedBounds = filter(types, t => !(t.flags & TypeFlags.Negated));
+            if (!length(nonNegatedBounds)) {
+                return;
+            }
+            const nonNegativePart = getIntersectionType(nonNegatedBounds);
+            while (i > 0) {
+                i--;
+                if (types[i].flags & TypeFlags.Negated) {
+                    if (isTypeSubtypeOf(nonNegativePart, types[i])) {
+                        orderedRemoveItemAt(types, i);
+                    }
+                }
+            }
+        }
+
+        function checkForUnsatisfiedTypeVariableConstraint(typeSet: Type[]) {
+            const nonVariablePart = filter(typeSet, t => !(t.flags & TypeFlags.TypeVariable));
+            if (!length(nonVariablePart)) {
+                return false;
+            }
+            const variables = filter(typeSet, t => !!(t.flags & TypeFlags.TypeVariable));
+            for (const toCheck of nonVariablePart) {
+                for (const variable of variables) {
+                    const constraint = getConstraintOfType(variable);
+                    if (constraint && (constraint.flags & TypeFlags.Primitive || constraint.flags && TypeFlags.Union && (constraint as UnionType).objectFlags & ObjectFlags.PrimitiveUnion)) {
+                        if (isIntersectionEmpty(toCheck, constraint)) {
+                            return true;
+                        }
+                    }
+                }
+            }
+            return false;
+        }
+
         function createIntersectionType(types: Type[], aliasSymbol?: Symbol, aliasTypeArguments?: ReadonlyArray<Type>) {
             const result = <IntersectionType>createType(TypeFlags.Intersection);
             result.objectFlags = getPropagatingFlagsOfTypes(types, /*excludeKinds*/ TypeFlags.Nullable);
@@ -9922,34 +9981,47 @@ namespace ts {
             const id = getTypeListId(typeSet);
             let result = intersectionTypes.get(id);
             if (!result) {
-                if (includes & TypeFlags.Union) {
-                    if (intersectUnionsOfPrimitiveTypes(typeSet)) {
-                        // When the intersection creates a reduced set (which might mean that *all* union types have
-                        // disappeared), we restart the operation to get a new set of combined flags. Once we have
-                        // reduced we'll never reduce again, so this occurs at most once.
-                        result = getIntersectionType(typeSet, aliasSymbol, aliasTypeArguments);
-                    }
-                    else {
-                        // We are attempting to construct a type of the form X & (A | B) & Y. Transform this into a type of
-                        // the form X & A & Y | X & B & Y and recursively reduce until no union type constituents remain.
-                        // If the estimated size of the resulting union type exceeds 100000 constituents, report an error.
-                        const size = reduceLeft(typeSet, (n, t) => n * (t.flags & TypeFlags.Union ? (<UnionType>t).types.length : 1), 1);
-                        if (size >= 100000) {
-                            error(currentNode, Diagnostics.Expression_produces_a_union_type_that_is_too_complex_to_represent);
-                            return errorType;
-                        }
-                        const unionIndex = findIndex(typeSet, t => (t.flags & TypeFlags.Union) !== 0);
-                        const unionType = <UnionType>typeSet[unionIndex];
-                        result = getUnionType(map(unionType.types, t => getIntersectionType(replaceElement(typeSet, unionIndex, t))),
-                            UnionReduction.Literal, aliasSymbol, aliasTypeArguments);
-                    }
-                }
-                else {
-                    result = createIntersectionType(typeSet, aliasSymbol, aliasTypeArguments);
-                }
+                result = getIntersectionTypeWorker(includes, typeSet, aliasSymbol, aliasTypeArguments);
                 intersectionTypes.set(id, result);
             }
             return result;
+        }
+
+        function getIntersectionTypeWorker(includes: TypeFlags, typeSet: Type[], aliasSymbol?: Symbol, aliasTypeArguments?: ReadonlyArray<Type>) {
+            if (includes & TypeFlags.Union) {
+                if (intersectUnionsOfPrimitiveTypes(typeSet)) {
+                    // When the intersection creates a reduced set (which might mean that *all* union types have
+                    // disappeared), we restart the operation to get a new set of combined flags. Once we have
+                    // reduced we'll never reduce again, so this occurs at most once.
+                    return getIntersectionType(typeSet, aliasSymbol, aliasTypeArguments);
+                }
+                else {
+                    // We are attempting to construct a type of the form X & (A | B) & Y. Transform this into a type of
+                    // the form X & A & Y | X & B & Y and recursively reduce until no union type constituents remain.
+                    // If the estimated size of the resulting union type exceeds 100000 constituents, report an error.
+                    const size = reduceLeft(typeSet, (n, t) => n * (t.flags & TypeFlags.Union ? (<UnionType>t).types.length : 1), 1);
+                    if (size >= 100000) {
+                        error(currentNode, Diagnostics.Expression_produces_a_union_type_that_is_too_complex_to_represent);
+                        return errorType;
+                    }
+                    const unionIndex = findIndex(typeSet, t => (t.flags & TypeFlags.Union) !== 0);
+                    const unionType = <UnionType>typeSet[unionIndex];
+                    return getUnionType(map(unionType.types, t => getIntersectionType(replaceElement(typeSet, unionIndex, t))),
+                        UnionReduction.Literal, aliasSymbol, aliasTypeArguments);
+                }
+            }
+            if (includes & TypeFlags.TypeVariable) {
+                if (checkForUnsatisfiedTypeVariableConstraint(typeSet)) {
+                    return neverType;
+                }
+            }
+            if (includes & TypeFlags.Negated) {
+                if (checkForUnsatisfiedNegatedType(typeSet)) {
+                    return neverType;
+                }
+                removeNegatedSubtypes(typeSet);
+            }
+            return createIntersectionType(typeSet, aliasSymbol, aliasTypeArguments);
         }
 
         function getTypeFromIntersectionTypeNode(node: IntersectionTypeNode): Type {
@@ -10015,9 +10087,35 @@ namespace ts {
             return numberIndexInfo !== enumNumberIndexInfo ? numberIndexInfo : undefined;
         }
 
+        function getIndexTypeForNegatedType(type: NegatedType, stringsOnly: boolean, noIndexSignatures: boolean | undefined) {
+            // `keyof not A` is difficult to reason about - `not A` could have any number of keys on its component types
+            // However there are certain cases, like `keyof not { x: unknown }` where you can safely conclude that the keyof
+            // result should be `not "x" & (string | number | symbol)`, because the type negated effectively forbids the key
+            // eg, `not {[x: string]: any}` should produce `not string & (string | number | symbol)` or simply `number | symbol`
+            // but take `keyof not {x: any, y: string}` - we can't conclude anything about the keys of the negation here - `{x: 12}`
+            // is in the negation because it's missing a `y` key, so the `keyof` cannot include `x`
+            // likewise considering `keyof not {x: any, y: any}`, we can't still conclude that `not "x"` is a key because `{x: 12}`
+            // is _still_ in `not {x: any, y: any}`.
+            // This indicates that we only time we can produce a negated result from a `keyof` is when we are taking a `keyof` a
+            // type with a _single_ field of type `any` or `unknown`
+            // We can't really do any better, since `keyof` is effectively capturing a lower bound, while most of our type logic reasons
+            // over upper bounds
+            // When we have more than a single known-any property, a `keyof not Whatever` must therefore be `never`, as, much like `keyof {}`,
+            // we have no knowledge of the structure of the types in the domain.
+            const rawUnnegated = getIndexType(type.type, stringsOnly, noIndexSignatures);
+            if (rawUnnegated.flags & TypeFlags.Index) {
+                return getIndexTypeForGenericType(<InstantiableType | UnionOrIntersectionType>type, stringsOnly);
+            }
+            if (!(rawUnnegated.flags & TypeFlags.Union) && (getIndexedAccessType(type.type, rawUnnegated).flags & TypeFlags.AnyOrUnknown)) {
+                return intersectTypes(getNegatedType(rawUnnegated), keyofConstraintType);
+            }
+            return neverType;
+        }
+
         function getIndexType(type: Type, stringsOnly = keyofStringsOnly, noIndexSignatures?: boolean): Type {
             return type.flags & TypeFlags.Union ? getIntersectionType(map((<IntersectionType>type).types, t => getIndexType(t, stringsOnly, noIndexSignatures))) :
                 type.flags & TypeFlags.Intersection ? getUnionType(map((<IntersectionType>type).types, t => getIndexType(t, stringsOnly, noIndexSignatures))) :
+                type.flags & TypeFlags.Negated ? getIndexTypeForNegatedType(type as NegatedType, stringsOnly, noIndexSignatures) :
                 maybeTypeOfKind(type, TypeFlags.InstantiableNonPrimitive) ? getIndexTypeForGenericType(<InstantiableType | UnionOrIntersectionType>type, stringsOnly) :
                 getObjectFlags(type) & ObjectFlags.Mapped ? filterType(getConstraintTypeFromMappedType(<MappedType>type), t => !(noIndexSignatures && t.flags & (TypeFlags.Any | TypeFlags.String))) :
                 type === wildcardType ? wildcardType :
@@ -10048,6 +10146,9 @@ namespace ts {
                 switch (node.operator) {
                     case SyntaxKind.KeyOfKeyword:
                         links.resolvedType = getIndexType(getTypeFromTypeNode(node.type));
+                        break;
+                    case SyntaxKind.NotKeyword:
+                        links.resolvedType = getNegatedType(getTypeFromTypeNode(node.type));
                         break;
                     case SyntaxKind.UniqueKeyword:
                         links.resolvedType = node.type.kind === SyntaxKind.SymbolKeyword
@@ -10090,6 +10191,9 @@ namespace ts {
             }
             if (type.flags & TypeFlags.Intersection) {
                 return some((type as IntersectionType).types, isJSLiteralType);
+            }
+            if (type.flags & TypeFlags.Negated) {
+                return false;
             }
             if (type.flags & TypeFlags.Instantiable) {
                 return isJSLiteralType(getResolvedBaseConstraint(type));
@@ -10264,11 +10368,11 @@ namespace ts {
         }
 
         function isGenericObjectType(type: Type): boolean {
-            return maybeTypeOfKind(type, TypeFlags.InstantiableNonPrimitive | TypeFlags.GenericMappedType);
+            return maybeTypeOfKindUnwrapNegations(type, TypeFlags.InstantiableNonPrimitive | TypeFlags.GenericMappedType);
         }
 
         function isGenericIndexType(type: Type): boolean {
-            return maybeTypeOfKind(type, TypeFlags.InstantiableNonPrimitive | TypeFlags.Index);
+            return maybeTypeOfKindUnwrapNegations(type, TypeFlags.InstantiableNonPrimitive | TypeFlags.Index);
         }
 
         function isThisTypeParameter(type: Type): boolean {
@@ -10320,7 +10424,7 @@ namespace ts {
                 return type[cache] = distributedOverIndex;
             }
             // Only do the inner distributions if the index can no longer be instantiated to cause index distribution again
-            if (!(indexType.flags & TypeFlags.Instantiable)) {
+            if (!(indexType.flags & (TypeFlags.Instantiable & ~TypeFlags.Negated))) {
                 // (T | U)[K] -> T[K] | U[K] (reading)
                 // (T | U)[K] -> T[K] & U[K] (writing)
                 // (T & U)[K] -> T[K] & U[K]
@@ -10485,10 +10589,12 @@ namespace ts {
             if (checkType === wildcardType || extendsType === wildcardType) {
                 return wildcardType;
             }
-            const checkTypeInstantiable = maybeTypeOfKind(checkType, TypeFlags.Instantiable | TypeFlags.GenericMappedType);
+            const checkTypeInstantiable = maybeTypeOfKindUnwrapNegations(checkType, TypeFlags.Instantiable | TypeFlags.GenericMappedType);
             let combinedMapper: TypeMapper | undefined;
+            let falseCombinedMapper: TypeMapper | undefined;
             if (root.inferTypeParameters) {
                 const context = createInferenceContext(root.inferTypeParameters, /*signature*/ undefined, InferenceFlags.None);
+                falseCombinedMapper = combineTypeMappers(mapper, cloneInferenceContext(context).mapper);
                 if (!checkTypeInstantiable) {
                     // We don't want inferences from constraints as they may cause us to eagerly resolve the
                     // conditional type instead of deferring resolution. Also, we always want strict function
@@ -10500,20 +10606,20 @@ namespace ts {
             // Instantiate the extends type including inferences for 'infer T' type parameters
             const inferredExtendsType = combinedMapper ? instantiateType(root.extendsType, combinedMapper) : extendsType;
             // We attempt to resolve the conditional type only when the check and extends types are non-generic
-            if (!checkTypeInstantiable && !maybeTypeOfKind(inferredExtendsType, TypeFlags.Instantiable | TypeFlags.GenericMappedType)) {
+            if (!checkTypeInstantiable && !maybeTypeOfKindUnwrapNegations(inferredExtendsType, TypeFlags.Instantiable | TypeFlags.GenericMappedType)) {
                 if (inferredExtendsType.flags & TypeFlags.AnyOrUnknown) {
                     return instantiateType(root.trueType, combinedMapper || mapper);
                 }
                 // Return union of trueType and falseType for 'any' since it matches anything
                 if (checkType.flags & TypeFlags.Any) {
-                    return getUnionType([instantiateType(root.trueType, combinedMapper || mapper), instantiateType(root.falseType, mapper)]);
+                    return getUnionType([instantiateType(root.trueType, combinedMapper || mapper), instantiateType(root.falseType, falseCombinedMapper || mapper)]);
                 }
                 // Return falseType for a definitely false extends check. We check an instantiations of the two
                 // types with type parameters mapped to the wildcard type, the most permissive instantiations
                 // possible (the wildcard type is assignable to and from all types). If those are not related,
                 // then no instantiations will be and we can just return the false branch type.
                 if (!isTypeAssignableTo(getPermissiveInstantiation(checkType), getPermissiveInstantiation(inferredExtendsType))) {
-                    return instantiateType(root.falseType, mapper);
+                    return instantiateType(root.falseType, falseCombinedMapper || mapper);
                 }
                 // Return trueType for a definitely true extends check. We check instantiations of the two
                 // types with type parameters mapped to their restrictive form, i.e. a form of the type parameter
@@ -10532,6 +10638,7 @@ namespace ts {
             result.extendsType = extendsType;
             result.mapper = mapper;
             result.combinedMapper = combinedMapper;
+            result.falseCombinedMapper = falseCombinedMapper;
             result.aliasSymbol = root.aliasSymbol;
             result.aliasTypeArguments = instantiateTypes(root.aliasTypeArguments, mapper!); // TODO: GH#18217
             return result;
@@ -10547,6 +10654,10 @@ namespace ts {
 
         function getInferredTrueTypeFromConditionalType(type: ConditionalType) {
             return type.resolvedInferredTrueType || (type.resolvedInferredTrueType = type.combinedMapper ? instantiateType(type.root.trueType, type.combinedMapper) : getTrueTypeFromConditionalType(type));
+        }
+
+        function getInferredFalseTypeFromConditionalType(type: ConditionalType) {
+            return type.resolvedInferredFalseType || (type.resolvedInferredFalseType = type.falseCombinedMapper ? instantiateType(type.root.falseType, type.falseCombinedMapper) : getFalseTypeFromConditionalType(type));
         }
 
         function getInferTypeParameters(node: ConditionalTypeNode): TypeParameter[] | undefined {
@@ -10597,6 +10708,36 @@ namespace ts {
                 links.resolvedType = getDeclaredTypeOfTypeParameter(getSymbolOfNode(node.typeParameter));
             }
             return links.resolvedType;
+        }
+
+        function getNegatedType(type: Type): Type {
+            if (type.flags & TypeFlags.Negated) {
+                return (type as NegatedType).type;
+            }
+            if (type.flags & TypeFlags.Union) {
+                return getIntersectionType(map((type as UnionType).types, getNegatedType));
+            }
+            if (type.flags & TypeFlags.Intersection) {
+                return getUnionType(map((type as IntersectionType).types, getNegatedType));
+            }
+            if (type.flags & TypeFlags.Any) {
+                return type;
+            }
+            if (type.flags & TypeFlags.Unknown) {
+                return neverType;
+            }
+            if (type.flags & TypeFlags.Never) {
+                return unknownType;
+            }
+            const inputId = getTypeId(type);
+            const existing = negatedTypes.get("" + inputId);
+            if (existing) {
+                return existing;
+            }
+            const newNegated = createType(TypeFlags.Negated) as NegatedType;
+            newNegated.type = type;
+            negatedTypes.set("" + inputId, newNegated);
+            return newNegated;
         }
 
         function getIdentifierChain(node: EntityName): Identifier[] {
@@ -11170,7 +11311,7 @@ namespace ts {
 
         function instantiateSymbol(symbol: Symbol, mapper: TypeMapper): Symbol {
             const links = getSymbolLinks(symbol);
-            if (links.type && !maybeTypeOfKind(links.type, TypeFlags.Object | TypeFlags.Instantiable)) {
+            if (links.type && !maybeTypeOfKindUnwrapNegations(links.type, TypeFlags.Object | TypeFlags.Instantiable)) {
                 // If the type of the symbol is already resolved, and if that type could not possibly
                 // be affected by instantiation, simply return the symbol itself.
                 return symbol;
@@ -11469,6 +11610,9 @@ namespace ts {
             if (flags & TypeFlags.Conditional) {
                 return getConditionalTypeInstantiation(<ConditionalType>type, combineTypeMappers((<ConditionalType>type).mapper, mapper));
             }
+            if (flags & TypeFlags.Negated) {
+                return getNegatedType(instantiateType((type as NegatedType).type, mapper));
+            }
             if (flags & TypeFlags.Substitution) {
                 const maybeVariable = instantiateType((<SubstitutionType>type).typeVariable, mapper);
                 if (maybeVariable.flags & TypeFlags.TypeVariable) {
@@ -11479,7 +11623,7 @@ namespace ts {
                     if (sub.flags & TypeFlags.AnyOrUnknown || isTypeAssignableTo(getRestrictiveInstantiation(maybeVariable), getRestrictiveInstantiation(sub))) {
                         return maybeVariable;
                     }
-                    return sub;
+                    return filterType(sub, t => !(t.flags & TypeFlags.Negated)); // TODO: Filtering out negated types on nonconcrete instances is a loss of precision
                 }
             }
             return type;
@@ -12289,11 +12433,11 @@ namespace ts {
             if (s & TypeFlags.StringLike && t & TypeFlags.String) return true;
             if (s & TypeFlags.StringLiteral && s & TypeFlags.EnumLiteral &&
                 t & TypeFlags.StringLiteral && !(t & TypeFlags.EnumLiteral) &&
-                (<StringLiteralType>source).value === (<StringLiteralType>target).value) return true;
+                (<LiteralType>source).value === (<LiteralType>target).value) return true;
             if (s & TypeFlags.NumberLike && t & TypeFlags.Number) return true;
             if (s & TypeFlags.NumberLiteral && s & TypeFlags.EnumLiteral &&
                 t & TypeFlags.NumberLiteral && !(t & TypeFlags.EnumLiteral) &&
-                (<NumberLiteralType>source).value === (<NumberLiteralType>target).value) return true;
+                (<LiteralType>source).value === (<LiteralType>target).value) return true;
             if (s & TypeFlags.BigIntLike && t & TypeFlags.BigInt) return true;
             if (s & TypeFlags.BooleanLike && t & TypeFlags.Boolean) return true;
             if (s & TypeFlags.ESSymbolLike && t & TypeFlags.ESSymbol) return true;
@@ -12557,7 +12701,6 @@ namespace ts {
                 if (relation === comparableRelation && !(target.flags & TypeFlags.Never) && isSimpleTypeRelatedTo(target, source, relation) ||
                     isSimpleTypeRelatedTo(source, target, relation, reportErrors ? reportError : undefined)) return Ternary.True;
 
-                const isComparingJsxAttributes = !!(getObjectFlags(source) & ObjectFlags.JsxAttributes);
                 const isPerformingExcessPropertyChecks = (isObjectLiteralType(source) && getObjectFlags(source) & ObjectFlags.FreshLiteral);
                 if (isPerformingExcessPropertyChecks) {
                     const discriminantType = target.flags & TypeFlags.Union ? findMatchingDiscriminantType(source, target as UnionType) : undefined;
@@ -12573,7 +12716,7 @@ namespace ts {
                     source.flags & (TypeFlags.Primitive | TypeFlags.Object | TypeFlags.Intersection) && source !== globalObjectType &&
                     target.flags & (TypeFlags.Object | TypeFlags.Intersection) && isWeakType(target) &&
                     (getPropertiesOfType(source).length > 0 || typeHasCallOrConstructSignatures(source)) &&
-                    !hasCommonProperties(source, target, isComparingJsxAttributes)) {
+                    !hasCommonProperties(source, target, !!(getObjectFlags(source) & ObjectFlags.JsxAttributes))) {
                     if (reportErrors) {
                         const calls = getSignaturesOfType(source, SignatureKind.Call);
                         const constructs = getSignaturesOfType(source, SignatureKind.Construct);
@@ -12636,6 +12779,22 @@ namespace ts {
                         //    - For a primitive type or type parameter (such as 'number = A & B') there is no point in
                         //          breaking the intersection apart.
                         result = someTypeRelatedToType(<IntersectionType>source, target, /*reportErrors*/ false);
+                        if (relation === comparableRelation) {
+                            // In the comparable relation, we may have, eg, `string & not "a"` being related to `"a"`
+                            // `string` and `"a"` are usually comparable - it's only the additional domain limiting
+                            // provided by the negated intersection that narrows further
+                            // So we collect the negated domain bits and see if the target is comparable with those.
+                            // If there's any negated domain bit for which it's not comparable, then the intersection
+                            // as a whole shouldn't be comparable.
+                            const negations = filter((<IntersectionType>source).types, t => !!(t.flags & TypeFlags.Negated));
+                            if (length(negations)) {
+                                for (const negation of negations) {
+                                    if (!(result &= isRelatedTo(target, negation))) {
+                                        break;
+                                    }
+                                }
+                            }
+                        }
                     }
                     if (!result && (source.flags & TypeFlags.StructuredOrInstantiable || target.flags & TypeFlags.StructuredOrInstantiable)) {
                         if (result = recursiveTypeRelatedTo(source, target, reportErrors, isIntersectionConstituent)) {
@@ -12677,7 +12836,7 @@ namespace ts {
                     else if (source.symbol && source.flags & TypeFlags.Object && globalObjectType === source) {
                         reportError(Diagnostics.The_Object_type_is_assignable_to_very_few_other_types_Did_you_mean_to_use_the_any_type_instead);
                     }
-                    else if (isComparingJsxAttributes && target.flags & TypeFlags.Intersection) {
+                    else if (!!(getObjectFlags(source) & ObjectFlags.JsxAttributes) && target.flags & TypeFlags.Intersection) {
                         const targetTypes = (target as IntersectionType).types;
                         const intrinsicAttributes = getJsxType(JsxNames.IntrinsicAttributes, errorNode);
                         const intrinsicClassAttributes = getJsxType(JsxNames.IntrinsicClassAttributes, errorNode);
@@ -13118,6 +13277,9 @@ namespace ts {
                     if (flags & TypeFlags.Substitution) {
                         return isRelatedTo((<SubstitutionType>source).substitute, (<SubstitutionType>target).substitute, /*reportErrors*/ false);
                     }
+                    if (flags & TypeFlags.Negated) {
+                        return isRelatedTo((source as NegatedType).type, (target as NegatedType).type);
+                    }
                     return Ternary.False;
                 }
 
@@ -13290,6 +13452,29 @@ namespace ts {
                             }
                         }
                     }
+                }
+                else if (target.flags & TypeFlags.Negated) {
+                    if (source.flags & TypeFlags.Negated) {
+                        // ~S is a subset of ~T iff T is a subset of S
+                        return isRelatedTo((target as NegatedType).type, (source as NegatedType).type);
+                    }
+                    if (isObjectLiteralType(source)) {
+                        const result = isRelatedTo(source, (target as NegatedType).type);
+                        return result === Ternary.Maybe ? Ternary.Maybe : result ? Ternary.False : Ternary.True;
+                    }
+                    // Relationship check is S contained in T
+                    // A type S is a subset of ~T if S has no overlap with T (there exist no values within S which are in T) by definition
+                    //  however, checking this directly is pretty hard. So instead we rephrase it -
+                    // S contained in ~T is true if S and T share no overlap - that overlap is their _intersection_. This means
+                    // That S contained in ~T is true if (S & T) is `never` (or effectively `never`, since intersections are not eagerly simplified)
+                    // Object literals get to skip this check, since they are effectively closed, having both an upper and lower bound of themselves
+                    if (isIntersectionEmpty(source, (target as NegatedType).type)) {
+                        return Ternary.True;
+                    }
+                    return Ternary.False;
+                }
+                else if (source.flags & TypeFlags.Negated) {
+                    return Ternary.False;
                 }
                 else {
                     // An empty object type is related to any mapped type that includes a '?' modifier.
@@ -15034,7 +15219,8 @@ namespace ts {
         // results for union and intersection types for performance reasons.
         function couldContainTypeVariables(type: Type): boolean {
             const objectFlags = getObjectFlags(type);
-            return !!(type.flags & TypeFlags.Instantiable ||
+            return !!(type.flags & (TypeFlags.Instantiable & ~TypeFlags.Negated) ||
+                type.flags & TypeFlags.Negated && couldContainTypeVariables((type as NegatedType).type) ||
                 objectFlags & ObjectFlags.Reference && forEach((<TypeReference>type).typeArguments, couldContainTypeVariables) ||
                 objectFlags & ObjectFlags.Anonymous && type.symbol && type.symbol.flags & (SymbolFlags.Function | SymbolFlags.Method | SymbolFlags.Class | SymbolFlags.TypeLiteral | SymbolFlags.ObjectLiteral) && type.symbol.declarations ||
                 objectFlags & ObjectFlags.Mapped ||
@@ -15300,7 +15486,7 @@ namespace ts {
                             const indexType = getSimplifiedType((target as IndexedAccessType).indexType, /*writing*/ false);
                             // Generally simplifications of instantiable indexes are avoided to keep relationship checking correct, however if our target is an access, we can consider
                             // that key of that access to be "instantiated", since we're looking to find the infernce goal in any way we can.
-                            if (indexType.flags & TypeFlags.Instantiable) {
+                            if (indexType.flags & (TypeFlags.Instantiable & ~TypeFlags.Negated)) {
                                 const simplified = distributeIndexOverObjectType(getSimplifiedType((target as IndexedAccessType).objectType, /*writing*/ false), indexType, /*writing*/ false);
                                 if (simplified && simplified !== target) {
                                     inferFromTypesOnce(source, simplified);
@@ -15336,6 +15522,11 @@ namespace ts {
                     inferFromTypes((<ConditionalType>source).extendsType, (<ConditionalType>target).extendsType);
                     inferFromTypes(getTrueTypeFromConditionalType(<ConditionalType>source), getTrueTypeFromConditionalType(<ConditionalType>target));
                     inferFromTypes(getFalseTypeFromConditionalType(<ConditionalType>source), getFalseTypeFromConditionalType(<ConditionalType>target));
+                }
+                else if (source.flags & TypeFlags.Negated && target.flags & TypeFlags.Negated) {
+                    contravariant = !contravariant;
+                    inferFromTypes((source as NegatedType).type, (target as NegatedType).type);
+                    contravariant = !contravariant;
                 }
                 else if (target.flags & TypeFlags.Conditional && !contravariant) {
                     inferFromTypes(source, getTrueTypeFromConditionalType(<ConditionalType>target));
@@ -15377,7 +15568,7 @@ namespace ts {
                     }
                 }
                 else {
-                    if (!(priority & InferencePriority.NoConstraints && source.flags & (TypeFlags.Intersection | TypeFlags.Instantiable))) {
+                    if (!(priority & InferencePriority.NoConstraints && source.flags & (TypeFlags.Intersection | (TypeFlags.Instantiable & ~TypeFlags.Negated)))) {
                         const apparentSource = getApparentType(source);
                         // getApparentType can return _any_ type, since an indexed access or conditional may simplify to any other type.
                         // If that occurs and it doesn't simplify to an object or intersection, we'll need to restart `inferFromTypes`
@@ -16099,6 +16290,9 @@ namespace ts {
             }
             if (flags & TypeFlags.NonPrimitive) {
                 return strictNullChecks ? TypeFacts.ObjectStrictFacts : TypeFacts.ObjectFacts;
+            }
+            if (flags & TypeFlags.Negated) {
+                return TypeFacts.All; // Specific combinations of negations may remove type facts, but generally they do not imply any narrowing of applicable facts
             }
             if (flags & TypeFlags.Instantiable) {
                 return getTypeFacts(getBaseConstraintOfType(type) || unknownType);
@@ -18769,7 +18963,7 @@ namespace ts {
         // If the given contextual type contains instantiable types and if a mapper representing
         // return type inferences is available, instantiate those types using that mapper.
         function instantiateContextualType(contextualType: Type | undefined, node: Expression, contextFlags?: ContextFlags): Type | undefined {
-            if (contextualType && maybeTypeOfKind(contextualType, TypeFlags.Instantiable)) {
+            if (contextualType && maybeTypeOfKindUnwrapNegations(contextualType, TypeFlags.Instantiable)) {
                 const inferenceContext = getInferenceContext(node);
                 // If no inferences have been made, nothing is gained from instantiating as type parameters
                 // would just be replaced with their defaults similar to the apparent type.
@@ -23502,6 +23696,24 @@ namespace ts {
             return false;
         }
 
+        function maybeTypeOfKindUnwrapNegations(type: Type, kind: TypeFlags): boolean {
+            if (type.flags & TypeFlags.Negated) {
+                type = (type as NegatedType).type;
+            }
+            if (type.flags & kind & ~TypeFlags.GenericMappedType || kind & TypeFlags.GenericMappedType && isGenericMappedType(type)) {
+                return true;
+            }
+            if (type.flags & TypeFlags.UnionOrIntersection) {
+                const types = (<UnionOrIntersectionType>type).types;
+                for (const t of types) {
+                    if (maybeTypeOfKindUnwrapNegations(t, kind)) {
+                        return true;
+                    }
+                }
+            }
+            return false;
+        }
+
         function isTypeAssignableToKind(source: Type, kind: TypeFlags, strict?: boolean): boolean {
             if (source.flags & kind) {
                 return true;
@@ -24267,6 +24479,9 @@ namespace ts {
                 if (contextualType.flags & TypeFlags.UnionOrIntersection) {
                     const types = (<UnionType>contextualType).types;
                     return some(types, t => isLiteralOfContextualType(candidateType, t));
+                }
+                if (contextualType.flags & TypeFlags.Negated) {
+                    contextualType = (contextualType as NegatedType).type;
                 }
                 if (contextualType.flags & TypeFlags.InstantiableNonPrimitive) {
                     // If the contextual type is a type variable constrained to a primitive type, consider

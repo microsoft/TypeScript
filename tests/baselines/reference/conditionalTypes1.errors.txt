@@ -36,7 +36,7 @@ tests/cases/conformance/types/conditional/conditionalTypes1.ts(117,5): error TS2
 tests/cases/conformance/types/conditional/conditionalTypes1.ts(134,10): error TS2540: Cannot assign to 'id' because it is a read-only property.
 tests/cases/conformance/types/conditional/conditionalTypes1.ts(135,5): error TS2542: Index signature in type 'DeepReadonlyArray<Part>' only permits reading.
 tests/cases/conformance/types/conditional/conditionalTypes1.ts(136,22): error TS2540: Cannot assign to 'id' because it is a read-only property.
-tests/cases/conformance/types/conditional/conditionalTypes1.ts(137,10): error TS2339: Property 'updatePart' does not exist on type 'DeepReadonlyObject<Part>'.
+tests/cases/conformance/types/conditional/conditionalTypes1.ts(137,10): error TS2339: Property 'updatePart' does not exist on type 'DeepReadonlyObject<object & not any[] & Part>'.
 tests/cases/conformance/types/conditional/conditionalTypes1.ts(159,5): error TS2322: Type 'ZeroOf<T>' is not assignable to type 'T'.
   'ZeroOf<T>' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint 'string | number'.
     Type '0 | (T extends string ? "" : false)' is not assignable to type 'T'.
@@ -52,9 +52,15 @@ tests/cases/conformance/types/conditional/conditionalTypes1.ts(160,5): error TS2
 tests/cases/conformance/types/conditional/conditionalTypes1.ts(263,9): error TS2403: Subsequent variable declarations must have the same type.  Variable 'z' must be of type 'T1', but here has type 'Foo<T & U>'.
 tests/cases/conformance/types/conditional/conditionalTypes1.ts(288,43): error TS2322: Type 'T95<U>' is not assignable to type 'T94<U>'.
   Type 'boolean' is not assignable to type 'true'.
+tests/cases/conformance/types/conditional/conditionalTypes1.ts(352,12): error TS2322: Type 'number' is not assignable to type '(not any[] & number) | undefined'.
+tests/cases/conformance/types/conditional/conditionalTypes1.ts(352,18): error TS2322: Type '{ 0: { a: number; c: string; }; }' is not assignable to type '{ [index: number]: RecursivePartial<{ a: number; c: string; }>; }'.
+  Property '0' is incompatible with index signature.
+    Type '{ a: number; c: string; }' is not assignable to type 'RecursivePartial<{ a: number; c: string; }>'.
+      Types of property 'a' are incompatible.
+        Type 'number' is not assignable to type '(not any[] & number) | undefined'.
 
 
-==== tests/cases/conformance/types/conditional/conditionalTypes1.ts (22 errors) ====
+==== tests/cases/conformance/types/conditional/conditionalTypes1.ts (24 errors) ====
     type T00 = Exclude<"a" | "b" | "c" | "d", "a" | "c" | "f">;  // "b" | "d"
     type T01 = Extract<"a" | "b" | "c" | "d", "a" | "c" | "f">;  // "a" | "c"
     
@@ -248,7 +254,7 @@ tests/cases/conformance/types/conditional/conditionalTypes1.ts(288,43): error TS
 !!! error TS2540: Cannot assign to 'id' because it is a read-only property.
         part.updatePart("hello");  // Error
              ~~~~~~~~~~
-!!! error TS2339: Property 'updatePart' does not exist on type 'DeepReadonlyObject<Part>'.
+!!! error TS2339: Property 'updatePart' does not exist on type 'DeepReadonlyObject<object & not any[] & Part>'.
     }
     
     type ZeroOf<T extends number | string | boolean> = T extends number ? 0 : T extends string ? "" : false;
@@ -484,6 +490,16 @@ tests/cases/conformance/types/conditional/conditionalTypes1.ts(288,43): error TS
     
     var a = {o: 1, b: 2, c: [{a: 1, c: '213'}]}
     assign(a, {o: 2, c: {0: {a: 2, c: '213123'}}})
+               ~
+!!! error TS2322: Type 'number' is not assignable to type '(not any[] & number) | undefined'.
+!!! related TS6500 tests/cases/conformance/types/conditional/conditionalTypes1.ts:351:10: The expected type comes from property 'o' which is declared here on type 'RecursivePartial<{ o: number; b: number; c: { a: number; c: string; }[]; }>'
+                     ~
+!!! error TS2322: Type '{ 0: { a: number; c: string; }; }' is not assignable to type '{ [index: number]: RecursivePartial<{ a: number; c: string; }>; }'.
+!!! error TS2322:   Property '0' is incompatible with index signature.
+!!! error TS2322:     Type '{ a: number; c: string; }' is not assignable to type 'RecursivePartial<{ a: number; c: string; }>'.
+!!! error TS2322:       Types of property 'a' are incompatible.
+!!! error TS2322:         Type 'number' is not assignable to type '(not any[] & number) | undefined'.
+!!! related TS6500 tests/cases/conformance/types/conditional/conditionalTypes1.ts:351:22: The expected type comes from property 'c' which is declared here on type 'RecursivePartial<{ o: number; b: number; c: { a: number; c: string; }[]; }>'
     
     // Repros from #23843
     

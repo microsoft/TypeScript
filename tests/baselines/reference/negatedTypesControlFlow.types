@@ -1,0 +1,72 @@
+=== tests/cases/conformance/types/negated/negatedTypesControlFlow.ts ===
+interface A { type: "a", data: number }
+>type : "a"
+>data : number
+
+interface B { type: "b", data: string }
+>type : "b"
+>data : string
+
+interface Unknown { type: string & not ("a"|"b"), data: object }
+>type : string & not "a" & not "b"
+>data : object
+
+type ABU = A | B | Unknown;
+>ABU : ABU
+
+declare function needsNumber(x: number): void;
+>needsNumber : (x: number) => void
+>x : number
+
+declare function needsString(x: string): void;
+>needsString : (x: string) => void
+>x : string
+
+declare function needsObject(x: object): void;
+>needsObject : (x: object) => void
+>x : object
+
+declare var x: ABU;
+>x : ABU
+
+if (x.type === "a") {
+>x.type === "a" : boolean
+>x.type : "a" | "b" | (string & not "a" & not "b")
+>x : ABU
+>type : "a" | "b" | (string & not "a" & not "b")
+>"a" : "a"
+
+    let y = x.data;
+>y : number
+>x.data : number
+>x : A
+>data : number
+
+    needsNumber(y);
+>needsNumber(y) : void
+>needsNumber : (x: number) => void
+>y : number
+}
+else if (x.type === "b") {
+>x.type === "b" : boolean
+>x.type : "b" | (string & not "a" & not "b")
+>x : B | Unknown
+>type : "b" | (string & not "a" & not "b")
+>"b" : "b"
+
+    needsString(x.data);
+>needsString(x.data) : void
+>needsString : (x: string) => void
+>x.data : string
+>x : B
+>data : string
+}
+else {
+    needsObject(x.data);
+>needsObject(x.data) : void
+>needsObject : (x: object) => void
+>x.data : object
+>x : Unknown
+>data : object
+}
+

@@ -10,7 +10,7 @@ type Unpacked<T> =
     T;
 
 type T00 = Unpacked<string>;  // string
->T00 : string
+>T00 : not Promise<unknown> & not ((...args: any[]) => unknown) & not unknown[] & string
 
 type T01 = Unpacked<string[]>;  // string
 >T01 : string
@@ -347,25 +347,25 @@ declare class MyClass {
 }
 
 type JsonifiedExample = Jsonified<Example>;
->JsonifiedExample : JsonifiedObject<Example>
+>JsonifiedExample : JsonifiedObject<object & not { toJSON(): unknown; } & not Function & Example>
 
 declare let ex: JsonifiedExample;
->ex : JsonifiedObject<Example>
+>ex : JsonifiedObject<object & not { toJSON(): unknown; } & not Function & Example>
 
 const z1: "correct" = ex.customClass;
 >z1 : "correct"
 >ex.customClass : "correct"
->ex : JsonifiedObject<Example>
+>ex : JsonifiedObject<object & not { toJSON(): unknown; } & not Function & Example>
 >customClass : "correct"
 
 const z2: string = ex.obj.nested.attr;
 >z2 : string
 >ex.obj.nested.attr : string
->ex.obj.nested : JsonifiedObject<{ attr: Date; }>
->ex.obj : JsonifiedObject<{ prop: "property"; clz: MyClass; nested: { attr: Date; }; }>
->ex : JsonifiedObject<Example>
->obj : JsonifiedObject<{ prop: "property"; clz: MyClass; nested: { attr: Date; }; }>
->nested : JsonifiedObject<{ attr: Date; }>
+>ex.obj.nested : JsonifiedObject<object & not { toJSON(): unknown; } & not Function & { attr: Date; }>
+>ex.obj : JsonifiedObject<object & not { toJSON(): unknown; } & not Function & { prop: "property"; clz: MyClass; nested: { attr: Date; }; }>
+>ex : JsonifiedObject<object & not { toJSON(): unknown; } & not Function & Example>
+>obj : JsonifiedObject<object & not { toJSON(): unknown; } & not Function & { prop: "property"; clz: MyClass; nested: { attr: Date; }; }>
+>nested : JsonifiedObject<object & not { toJSON(): unknown; } & not Function & { attr: Date; }>
 >attr : string
 
 // Repros from #21631

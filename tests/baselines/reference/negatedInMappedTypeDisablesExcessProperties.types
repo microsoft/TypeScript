@@ -1,0 +1,56 @@
+=== tests/cases/conformance/types/negated/negatedInMappedTypeDisablesExcessProperties.ts ===
+// https://github.com/Microsoft/TypeScript/issues/4196
+// needs https://github.com/Microsoft/TypeScript/pull/26797 to work, as even though the mapped type can be
+// written, the key type `string & ~("foo" | "bar")` can't be represented as properties or string/number index
+// signatures
+
+type Config = {
+>Config : Config
+
+    foo: number;
+>foo : number
+
+    bar: number;
+>bar : number
+
+} & {
+    [k in (string & not ("foo" | "bar"))]: string;
+};
+
+const conf: Config = {
+>conf : Config
+>{    foo: 12,    bar: 12,    other: "string"} : { foo: number; bar: number; other: string; }
+
+    foo: 12,
+>foo : number
+>12 : 12
+
+    bar: 12,
+>bar : number
+>12 : 12
+
+    other: "string"
+>other : string
+>"string" : "string"
+
+}; // OK
+
+const conf2: Config = {
+>conf2 : Config
+>{    foo: 12,    bar: 12,    other: 0,} : { foo: number; bar: number; other: number; }
+
+    foo: 12,
+>foo : number
+>12 : 12
+
+    bar: 12,
+>bar : number
+>12 : 12
+
+    other: 0,
+>other : number
+>0 : 0
+
+}; // Should error
+
+

@@ -1220,6 +1220,7 @@ namespace ts {
         SyntaxKind.BooleanKeyword,
         SyntaxKind.FalseKeyword,
         SyntaxKind.KeyOfKeyword,
+        SyntaxKind.NotKeyword,
         SyntaxKind.NeverKeyword,
         SyntaxKind.NullKeyword,
         SyntaxKind.NumberKeyword,

@@ -1,0 +1,61 @@
+tests/cases/conformance/types/negated/negatedRepresentativeExamples.ts(7,8): error TS2345: Argument of type 'Promise<string>' is not assignable to parameter of type 'not object | not Promise<any>'.
+  Type 'Promise<string>' is not assignable to type 'not Promise<any>'.
+tests/cases/conformance/types/negated/negatedRepresentativeExamples.ts(14,16): error TS2345: Argument of type '() => void' is not assignable to parameter of type '(value: number) => not void'.
+  Type 'void' is not assignable to type 'not void'.
+tests/cases/conformance/types/negated/negatedRepresentativeExamples.ts(23,9): error TS2345: Argument of type 'number | null' is not assignable to parameter of type 'not null'.
+  Type 'null' is not assignable to type 'not null'.
+tests/cases/conformance/types/negated/negatedRepresentativeExamples.ts(23,12): error TS7006: Parameter 'n' implicitly has an 'any' type.
+tests/cases/conformance/types/negated/negatedRepresentativeExamples.ts(32,7): error TS2345: Argument of type '(number | undefined)[]' is not assignable to parameter of type '(not undefined)[]'.
+  Type 'number | undefined' is not assignable to type 'not undefined'.
+    Type 'undefined' is not assignable to type 'not undefined'.
+
+
+==== tests/cases/conformance/types/negated/negatedRepresentativeExamples.ts (5 errors) ====
+    // https://github.com/Microsoft/TypeScript/issues/7993
+    
+    declare function ignore<T extends not (object & Promise<any>)>(value: T): void;
+    declare function readFileAsync(): Promise<string>;
+    declare function readFileSync(): string;
+    ignore(readFileSync());     // OK
+    ignore(readFileAsync());    // Should error
+           ~~~~~~~~~~~~~~~
+!!! error TS2345: Argument of type 'Promise<string>' is not assignable to parameter of type 'not object | not Promise<any>'.
+!!! error TS2345:   Type 'Promise<string>' is not assignable to type 'not Promise<any>'.
+    
+    declare function map<T, U extends not void>(values: T[], map: (value: T) => U) : U[]; // validate map callback doesn't return void
+    
+    function foo() {}
+    
+    map([1, 2, 3], n => n + 1); // OK
+    map([1, 2, 3], foo);        // Should error
+                   ~~~
+!!! error TS2345: Argument of type '() => void' is not assignable to parameter of type '(value: number) => not void'.
+!!! error TS2345:   Type 'void' is not assignable to type 'not void'.
+    
+    function asValid<T extends not null>(value: T, isValid: (value: T) => boolean) : T | null {
+        return isValid(value) ? value : null;
+    }
+    
+    declare const x: number;
+    declare const y: number | null;
+    asValid(x, n => n >= 0);    // OK
+    asValid(y, n => n >= 0);    // Should error
+            ~
+!!! error TS2345: Argument of type 'number | null' is not assignable to parameter of type 'not null'.
+!!! error TS2345:   Type 'null' is not assignable to type 'not null'.
+               ~
+!!! error TS7006: Parameter 'n' implicitly has an 'any' type.
+    
+    function tryAt<T extends not undefined>(values: T[], index: number): T | undefined {
+        return values[index];
+    }
+    
+    declare const a: number[];
+    declare const b: (number | undefined)[];
+    tryAt(a, 0);    // OK
+    tryAt(b, 0);    // Should error
+          ~
+!!! error TS2345: Argument of type '(number | undefined)[]' is not assignable to parameter of type '(not undefined)[]'.
+!!! error TS2345:   Type 'number | undefined' is not assignable to type 'not undefined'.
+!!! error TS2345:     Type 'undefined' is not assignable to type 'not undefined'.
+    

@@ -98,6 +98,7 @@ namespace ts {
         interface: SyntaxKind.InterfaceKeyword,
         is: SyntaxKind.IsKeyword,
         keyof: SyntaxKind.KeyOfKeyword,
+        not: SyntaxKind.NotKeyword,
         let: SyntaxKind.LetKeyword,
         module: SyntaxKind.ModuleKeyword,
         namespace: SyntaxKind.NamespaceKeyword,

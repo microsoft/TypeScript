@@ -4560,7 +4560,7 @@ namespace FourSlashInterface {
         export const keywords: ReadonlyArray<ExpectedCompletionEntryObject> = keywordsWithUndefined.filter(k => k.name !== "undefined");
 
         export const typeKeywords: ReadonlyArray<ExpectedCompletionEntryObject> =
-            ["false", "null", "true", "void", "any", "boolean", "keyof", "never", "number", "object", "string", "symbol", "undefined", "unique", "unknown", "bigint"].map(keywordEntry);
+            ["false", "null", "true", "void", "any", "boolean", "keyof", "not", "never", "number", "object", "string", "symbol", "undefined", "unique", "unknown", "bigint"].map(keywordEntry);
 
         const globalTypeDecls: ReadonlyArray<ExpectedCompletionEntryObject> = [
             interfaceEntry("Symbol"),
@@ -4823,6 +4823,7 @@ namespace FourSlashInterface {
             "infer",
             "is",
             "keyof",
+            "not",
             "module",
             "namespace",
             "never",
@@ -5037,6 +5038,7 @@ namespace FourSlashInterface {
             "infer",
             "is",
             "keyof",
+            "not",
             "module",
             "namespace",
             "never",

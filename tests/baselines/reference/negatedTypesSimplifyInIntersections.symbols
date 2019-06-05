@@ -1,0 +1,7 @@
+=== tests/cases/conformance/types/negated/negatedTypesSimplifyInIntersections.ts ===
+type A = boolean & not true;   // false
+>A : Symbol(A, Decl(negatedTypesSimplifyInIntersections.ts, 0, 0))
+
+type B = "w" & not string;     // never
+>B : Symbol(B, Decl(negatedTypesSimplifyInIntersections.ts, 0, 28))
+

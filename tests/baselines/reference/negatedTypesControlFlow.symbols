@@ -1,0 +1,72 @@
+=== tests/cases/conformance/types/negated/negatedTypesControlFlow.ts ===
+interface A { type: "a", data: number }
+>A : Symbol(A, Decl(negatedTypesControlFlow.ts, 0, 0))
+>type : Symbol(A.type, Decl(negatedTypesControlFlow.ts, 0, 13))
+>data : Symbol(A.data, Decl(negatedTypesControlFlow.ts, 0, 24))
+
+interface B { type: "b", data: string }
+>B : Symbol(B, Decl(negatedTypesControlFlow.ts, 0, 39))
+>type : Symbol(B.type, Decl(negatedTypesControlFlow.ts, 1, 13))
+>data : Symbol(B.data, Decl(negatedTypesControlFlow.ts, 1, 24))
+
+interface Unknown { type: string & not ("a"|"b"), data: object }
+>Unknown : Symbol(Unknown, Decl(negatedTypesControlFlow.ts, 1, 39))
+>type : Symbol(Unknown.type, Decl(negatedTypesControlFlow.ts, 2, 19))
+>data : Symbol(Unknown.data, Decl(negatedTypesControlFlow.ts, 2, 49))
+
+type ABU = A | B | Unknown;
+>ABU : Symbol(ABU, Decl(negatedTypesControlFlow.ts, 2, 64))
+>A : Symbol(A, Decl(negatedTypesControlFlow.ts, 0, 0))
+>B : Symbol(B, Decl(negatedTypesControlFlow.ts, 0, 39))
+>Unknown : Symbol(Unknown, Decl(negatedTypesControlFlow.ts, 1, 39))
+
+declare function needsNumber(x: number): void;
+>needsNumber : Symbol(needsNumber, Decl(negatedTypesControlFlow.ts, 3, 27))
+>x : Symbol(x, Decl(negatedTypesControlFlow.ts, 4, 29))
+
+declare function needsString(x: string): void;
+>needsString : Symbol(needsString, Decl(negatedTypesControlFlow.ts, 4, 46))
+>x : Symbol(x, Decl(negatedTypesControlFlow.ts, 5, 29))
+
+declare function needsObject(x: object): void;
+>needsObject : Symbol(needsObject, Decl(negatedTypesControlFlow.ts, 5, 46))
+>x : Symbol(x, Decl(negatedTypesControlFlow.ts, 6, 29))
+
+declare var x: ABU;
+>x : Symbol(x, Decl(negatedTypesControlFlow.ts, 7, 11))
+>ABU : Symbol(ABU, Decl(negatedTypesControlFlow.ts, 2, 64))
+
+if (x.type === "a") {
+>x.type : Symbol(type, Decl(negatedTypesControlFlow.ts, 0, 13), Decl(negatedTypesControlFlow.ts, 1, 13), Decl(negatedTypesControlFlow.ts, 2, 19))
+>x : Symbol(x, Decl(negatedTypesControlFlow.ts, 7, 11))
+>type : Symbol(type, Decl(negatedTypesControlFlow.ts, 0, 13), Decl(negatedTypesControlFlow.ts, 1, 13), Decl(negatedTypesControlFlow.ts, 2, 19))
+
+    let y = x.data;
+>y : Symbol(y, Decl(negatedTypesControlFlow.ts, 10, 7))
+>x.data : Symbol(A.data, Decl(negatedTypesControlFlow.ts, 0, 24))
+>x : Symbol(x, Decl(negatedTypesControlFlow.ts, 7, 11))
+>data : Symbol(A.data, Decl(negatedTypesControlFlow.ts, 0, 24))
+
+    needsNumber(y);
+>needsNumber : Symbol(needsNumber, Decl(negatedTypesControlFlow.ts, 3, 27))
+>y : Symbol(y, Decl(negatedTypesControlFlow.ts, 10, 7))
+}
+else if (x.type === "b") {
+>x.type : Symbol(type, Decl(negatedTypesControlFlow.ts, 1, 13), Decl(negatedTypesControlFlow.ts, 2, 19))
+>x : Symbol(x, Decl(negatedTypesControlFlow.ts, 7, 11))
+>type : Symbol(type, Decl(negatedTypesControlFlow.ts, 1, 13), Decl(negatedTypesControlFlow.ts, 2, 19))
+
+    needsString(x.data);
+>needsString : Symbol(needsString, Decl(negatedTypesControlFlow.ts, 4, 46))
+>x.data : Symbol(B.data, Decl(negatedTypesControlFlow.ts, 1, 24))
+>x : Symbol(x, Decl(negatedTypesControlFlow.ts, 7, 11))
+>data : Symbol(B.data, Decl(negatedTypesControlFlow.ts, 1, 24))
+}
+else {
+    needsObject(x.data);
+>needsObject : Symbol(needsObject, Decl(negatedTypesControlFlow.ts, 5, 46))
+>x.data : Symbol(Unknown.data, Decl(negatedTypesControlFlow.ts, 2, 49))
+>x : Symbol(x, Decl(negatedTypesControlFlow.ts, 7, 11))
+>data : Symbol(Unknown.data, Decl(negatedTypesControlFlow.ts, 2, 49))
+}
+

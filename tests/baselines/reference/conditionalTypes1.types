@@ -6,7 +6,7 @@ type T01 = Extract<"a" | "b" | "c" | "d", "a" | "c" | "f">;  // "a" | "c"
 >T01 : "a" | "c"
 
 type T02 = Exclude<string | number | (() => void), Function>;  // string | number
->T02 : string | number
+>T02 : (not Function & string) | (not Function & number)
 
 type T03 = Extract<string | number | (() => void), Function>;  // () => void
 >T03 : () => void
@@ -109,7 +109,7 @@ type Options = { k: "a", a: number } | { k: "b", b: string } | { k: "c", c: bool
 >c : boolean
 
 type T10 = Exclude<Options, { k: "a" | "b" }>;  // { k: "c", c: boolean }
->T10 : { k: "c"; c: boolean; }
+>T10 : not { k: "a" | "b"; } & { k: "c"; c: boolean; }
 >k : "a" | "b"
 
 type T11 = Extract<Options, { k: "a" | "b" }>;  // { k: "a", a: number } | { k: "b", b: string }
@@ -117,7 +117,7 @@ type T11 = Extract<Options, { k: "a" | "b" }>;  // { k: "a", a: number } | { k: 
 >k : "a" | "b"
 
 type T12 = Exclude<Options, { k: "a" } | { k: "b" }>;  // { k: "c", c: boolean }
->T12 : { k: "c"; c: boolean; }
+>T12 : not { k: "a"; } & not { k: "b"; } & { k: "c"; c: boolean; }
 >k : "a"
 >k : "b"
 
@@ -127,7 +127,7 @@ type T13 = Extract<Options, { k: "a" } | { k: "b" }>;  // { k: "a", a: number } 
 >k : "b"
 
 type T14 = Exclude<Options, { q: "a" }>;  // Options
->T14 : Options
+>T14 : (not { q: "a"; } & { k: "a"; a: number; }) | (not { q: "a"; } & { k: "b"; b: string; }) | (not { q: "a"; } & { k: "c"; c: boolean; })
 >q : "a"
 
 type T15 = Extract<Options, { q: "a" }>;  // never
@@ -334,68 +334,68 @@ type DeepReadonlyObject<T> = {
 };
 
 function f10(part: DeepReadonly<Part>) {
->f10 : (part: DeepReadonlyObject<Part>) => void
->part : DeepReadonlyObject<Part>
+>f10 : (part: DeepReadonlyObject<object & not any[] & Part>) => void
+>part : DeepReadonlyObject<object & not any[] & Part>
 
     let name: string = part.name;
 >name : string
->part.name : string
->part : DeepReadonlyObject<Part>
->name : string
+>part.name : not any[] & string
+>part : DeepReadonlyObject<object & not any[] & Part>
+>name : not any[] & string
 
     let id: number = part.subparts[0].id;
 >id : number
->part.subparts[0].id : number
->part.subparts[0] : DeepReadonlyObject<Part>
+>part.subparts[0].id : not any[] & number
+>part.subparts[0] : DeepReadonlyObject<object & not any[] & Part>
 >part.subparts : DeepReadonlyArray<Part>
->part : DeepReadonlyObject<Part>
+>part : DeepReadonlyObject<object & not any[] & Part>
 >subparts : DeepReadonlyArray<Part>
 >0 : 0
->id : number
+>id : not any[] & number
 
     part.id = part.id;  // Error
->part.id = part.id : number
+>part.id = part.id : not any[] & number
 >part.id : any
->part : DeepReadonlyObject<Part>
+>part : DeepReadonlyObject<object & not any[] & Part>
 >id : any
->part.id : number
->part : DeepReadonlyObject<Part>
->id : number
+>part.id : not any[] & number
+>part : DeepReadonlyObject<object & not any[] & Part>
+>id : not any[] & number
 
     part.subparts[0] = part.subparts[0];  // Error
->part.subparts[0] = part.subparts[0] : DeepReadonlyObject<Part>
->part.subparts[0] : DeepReadonlyObject<Part>
+>part.subparts[0] = part.subparts[0] : DeepReadonlyObject<object & not any[] & Part>
+>part.subparts[0] : DeepReadonlyObject<object & not any[] & Part>
 >part.subparts : DeepReadonlyArray<Part>
->part : DeepReadonlyObject<Part>
+>part : DeepReadonlyObject<object & not any[] & Part>
 >subparts : DeepReadonlyArray<Part>
 >0 : 0
->part.subparts[0] : DeepReadonlyObject<Part>
+>part.subparts[0] : DeepReadonlyObject<object & not any[] & Part>
 >part.subparts : DeepReadonlyArray<Part>
->part : DeepReadonlyObject<Part>
+>part : DeepReadonlyObject<object & not any[] & Part>
 >subparts : DeepReadonlyArray<Part>
 >0 : 0
 
     part.subparts[0].id = part.subparts[0].id;  // Error
->part.subparts[0].id = part.subparts[0].id : number
+>part.subparts[0].id = part.subparts[0].id : not any[] & number
 >part.subparts[0].id : any
->part.subparts[0] : DeepReadonlyObject<Part>
+>part.subparts[0] : DeepReadonlyObject<object & not any[] & Part>
 >part.subparts : DeepReadonlyArray<Part>
->part : DeepReadonlyObject<Part>
+>part : DeepReadonlyObject<object & not any[] & Part>
 >subparts : DeepReadonlyArray<Part>
 >0 : 0
 >id : any
->part.subparts[0].id : number
->part.subparts[0] : DeepReadonlyObject<Part>
+>part.subparts[0].id : not any[] & number
+>part.subparts[0] : DeepReadonlyObject<object & not any[] & Part>
 >part.subparts : DeepReadonlyArray<Part>
->part : DeepReadonlyObject<Part>
+>part : DeepReadonlyObject<object & not any[] & Part>
 >subparts : DeepReadonlyArray<Part>
 >0 : 0
->id : number
+>id : not any[] & number
 
     part.updatePart("hello");  // Error
 >part.updatePart("hello") : any
 >part.updatePart : any
->part : DeepReadonlyObject<Part>
+>part : DeepReadonlyObject<object & not any[] & Part>
 >updatePart : any
 >"hello" : "hello"
 }
@@ -1039,7 +1039,7 @@ var a = {o: 1, b: 2, c: [{a: 1, c: '213'}]}
 >'213' : "213"
 
 assign(a, {o: 2, c: {0: {a: 2, c: '213123'}}})
->assign(a, {o: 2, c: {0: {a: 2, c: '213123'}}}) : void
+>assign(a, {o: 2, c: {0: {a: 2, c: '213123'}}}) : any
 >assign : <T>(o: T, a: RecursivePartial<T>) => void
 >a : { o: number; b: number; c: { a: number; c: string; }[]; }
 >{o: 2, c: {0: {a: 2, c: '213123'}}} : { o: number; c: { 0: { a: number; c: string; }; }; }

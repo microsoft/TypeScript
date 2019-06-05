@@ -1,0 +1,309 @@
+tests/cases/conformance/types/negated/negatedTypes.ts(20,5): error TS2322: Type 'string' is not assignable to type 'not string'.
+tests/cases/conformance/types/negated/negatedTypes.ts(21,5): error TS2322: Type '"ok"' is not assignable to type 'not string'.
+tests/cases/conformance/types/negated/negatedTypes.ts(22,5): error TS2322: Type 'Literal' is not assignable to type 'not string'.
+tests/cases/conformance/types/negated/negatedTypes.ts(26,5): error TS2322: Type 'unknown' is not assignable to type 'not string'.
+tests/cases/conformance/types/negated/negatedTypes.ts(29,5): error TS2322: Type 'not string' is not assignable to type 'string'.
+tests/cases/conformance/types/negated/negatedTypes.ts(30,5): error TS2322: Type 'not string' is not assignable to type '"ok"'.
+tests/cases/conformance/types/negated/negatedTypes.ts(31,5): error TS2322: Type 'not string' is not assignable to type 'Literal'.
+tests/cases/conformance/types/negated/negatedTypes.ts(32,5): error TS2322: Type 'not string' is not assignable to type 'number'.
+tests/cases/conformance/types/negated/negatedTypes.ts(33,5): error TS2322: Type 'not string' is not assignable to type '0'.
+tests/cases/conformance/types/negated/negatedTypes.ts(34,5): error TS2322: Type 'not string' is not assignable to type 'NumLiteral'.
+tests/cases/conformance/types/negated/negatedTypes.ts(36,5): error TS2322: Type 'not string' is not assignable to type 'never'.
+tests/cases/conformance/types/negated/negatedTypes.ts(49,5): error TS2741: Property 'x' is missing in type '{ y: any; }' but required in type '{ x: any; }'.
+tests/cases/conformance/types/negated/negatedTypes.ts(51,5): error TS2322: Type 'not { x: any; }' is not assignable to type '{ x: any; }'.
+tests/cases/conformance/types/negated/negatedTypes.ts(52,5): error TS2322: Type 'not { y: any; }' is not assignable to type '{ x: any; }'.
+tests/cases/conformance/types/negated/negatedTypes.ts(53,5): error TS2322: Type 'not { x: any; y: any; }' is not assignable to type '{ x: any; }'.
+tests/cases/conformance/types/negated/negatedTypes.ts(54,5): error TS2741: Property 'x' is missing in type 'not { x: any; } & not { y: any; }' but required in type '{ x: any; }'.
+tests/cases/conformance/types/negated/negatedTypes.ts(55,5): error TS2322: Type 'not { x: any; } | not { y: any; }' is not assignable to type '{ x: any; }'.
+  Type 'not { x: any; }' is not assignable to type '{ x: any; }'.
+tests/cases/conformance/types/negated/negatedTypes.ts(57,5): error TS2741: Property 'y' is missing in type '{ x: any; }' but required in type '{ y: any; }'.
+tests/cases/conformance/types/negated/negatedTypes.ts(59,5): error TS2322: Type 'not { x: any; }' is not assignable to type '{ y: any; }'.
+tests/cases/conformance/types/negated/negatedTypes.ts(60,5): error TS2322: Type 'not { y: any; }' is not assignable to type '{ y: any; }'.
+tests/cases/conformance/types/negated/negatedTypes.ts(61,5): error TS2322: Type 'not { x: any; y: any; }' is not assignable to type '{ y: any; }'.
+tests/cases/conformance/types/negated/negatedTypes.ts(62,5): error TS2741: Property 'y' is missing in type 'not { x: any; } & not { y: any; }' but required in type '{ y: any; }'.
+tests/cases/conformance/types/negated/negatedTypes.ts(63,5): error TS2322: Type 'not { x: any; } | not { y: any; }' is not assignable to type '{ y: any; }'.
+  Type 'not { x: any; }' is not assignable to type '{ y: any; }'.
+tests/cases/conformance/types/negated/negatedTypes.ts(65,5): error TS2741: Property 'y' is missing in type '{ x: any; }' but required in type '{ x: any; y: any; }'.
+tests/cases/conformance/types/negated/negatedTypes.ts(66,5): error TS2741: Property 'x' is missing in type '{ y: any; }' but required in type '{ x: any; y: any; }'.
+tests/cases/conformance/types/negated/negatedTypes.ts(67,5): error TS2322: Type 'not { x: any; }' is not assignable to type '{ x: any; y: any; }'.
+tests/cases/conformance/types/negated/negatedTypes.ts(68,5): error TS2322: Type 'not { y: any; }' is not assignable to type '{ x: any; y: any; }'.
+tests/cases/conformance/types/negated/negatedTypes.ts(69,5): error TS2322: Type 'not { x: any; y: any; }' is not assignable to type '{ x: any; y: any; }'.
+tests/cases/conformance/types/negated/negatedTypes.ts(70,5): error TS2739: Type 'not { x: any; } & not { y: any; }' is missing the following properties from type '{ x: any; y: any; }': x, y
+tests/cases/conformance/types/negated/negatedTypes.ts(71,5): error TS2322: Type 'not { x: any; } | not { y: any; }' is not assignable to type '{ x: any; y: any; }'.
+  Type 'not { x: any; }' is not assignable to type '{ x: any; y: any; }'.
+tests/cases/conformance/types/negated/negatedTypes.ts(73,5): error TS2322: Type '{ x: any; }' is not assignable to type 'not { x: any; }'.
+tests/cases/conformance/types/negated/negatedTypes.ts(74,5): error TS2322: Type '{ y: any; }' is not assignable to type 'not { x: any; }'.
+tests/cases/conformance/types/negated/negatedTypes.ts(75,5): error TS2322: Type 'not { y: any; }' is not assignable to type 'not { x: any; }'.
+tests/cases/conformance/types/negated/negatedTypes.ts(76,5): error TS2322: Type 'not { x: any; y: any; }' is not assignable to type 'not { x: any; }'.
+tests/cases/conformance/types/negated/negatedTypes.ts(78,5): error TS2322: Type 'not { x: any; } | not { y: any; }' is not assignable to type 'not { x: any; }'.
+  Type 'not { y: any; }' is not assignable to type 'not { x: any; }'.
+tests/cases/conformance/types/negated/negatedTypes.ts(80,5): error TS2322: Type '{ x: any; }' is not assignable to type 'not { y: any; }'.
+tests/cases/conformance/types/negated/negatedTypes.ts(81,5): error TS2322: Type '{ y: any; }' is not assignable to type 'not { y: any; }'.
+tests/cases/conformance/types/negated/negatedTypes.ts(82,5): error TS2322: Type 'not { x: any; }' is not assignable to type 'not { y: any; }'.
+tests/cases/conformance/types/negated/negatedTypes.ts(83,5): error TS2322: Type 'not { x: any; y: any; }' is not assignable to type 'not { y: any; }'.
+tests/cases/conformance/types/negated/negatedTypes.ts(85,5): error TS2322: Type 'not { x: any; } | not { y: any; }' is not assignable to type 'not { y: any; }'.
+  Type 'not { x: any; }' is not assignable to type 'not { y: any; }'.
+tests/cases/conformance/types/negated/negatedTypes.ts(87,5): error TS2322: Type '{ x: any; }' is not assignable to type 'not { x: any; y: any; }'.
+tests/cases/conformance/types/negated/negatedTypes.ts(88,5): error TS2322: Type '{ y: any; }' is not assignable to type 'not { x: any; y: any; }'.
+tests/cases/conformance/types/negated/negatedTypes.ts(89,5): error TS2322: Type '{ x: any; y: any; }' is not assignable to type 'not { x: any; y: any; }'.
+tests/cases/conformance/types/negated/negatedTypes.ts(95,5): error TS2322: Type '{ x: any; }' is not assignable to type 'not { x: any; } & not { y: any; }'.
+  Type '{ x: any; }' is not assignable to type 'not { x: any; }'.
+tests/cases/conformance/types/negated/negatedTypes.ts(96,5): error TS2322: Type '{ y: any; }' is not assignable to type 'not { x: any; } & not { y: any; }'.
+  Type '{ y: any; }' is not assignable to type 'not { x: any; }'.
+tests/cases/conformance/types/negated/negatedTypes.ts(97,5): error TS2322: Type '{ x: any; y: any; }' is not assignable to type 'not { x: any; } & not { y: any; }'.
+  Type '{ x: any; y: any; }' is not assignable to type 'not { x: any; }'.
+tests/cases/conformance/types/negated/negatedTypes.ts(98,5): error TS2322: Type 'not { x: any; }' is not assignable to type 'not { x: any; } & not { y: any; }'.
+  Type 'not { x: any; }' is not assignable to type 'not { y: any; }'.
+tests/cases/conformance/types/negated/negatedTypes.ts(99,5): error TS2322: Type 'not { y: any; }' is not assignable to type 'not { x: any; } & not { y: any; }'.
+  Type 'not { y: any; }' is not assignable to type 'not { x: any; }'.
+tests/cases/conformance/types/negated/negatedTypes.ts(100,5): error TS2322: Type 'not { x: any; y: any; }' is not assignable to type 'not { x: any; } & not { y: any; }'.
+  Type 'not { x: any; y: any; }' is not assignable to type 'not { x: any; }'.
+tests/cases/conformance/types/negated/negatedTypes.ts(101,5): error TS2322: Type 'not { x: any; } | not { y: any; }' is not assignable to type 'not { x: any; } & not { y: any; }'.
+  Type 'not { x: any; }' is not assignable to type 'not { x: any; } & not { y: any; }'.
+    Type 'not { x: any; }' is not assignable to type 'not { y: any; }'.
+tests/cases/conformance/types/negated/negatedTypes.ts(103,5): error TS2322: Type '{ x: any; }' is not assignable to type 'not { x: any; } | not { y: any; }'.
+  Type '{ x: any; }' is not assignable to type 'not { y: any; }'.
+tests/cases/conformance/types/negated/negatedTypes.ts(104,5): error TS2322: Type '{ y: any; }' is not assignable to type 'not { x: any; } | not { y: any; }'.
+  Type '{ y: any; }' is not assignable to type 'not { y: any; }'.
+tests/cases/conformance/types/negated/negatedTypes.ts(105,5): error TS2322: Type '{ x: any; y: any; }' is not assignable to type 'not { x: any; } | not { y: any; }'.
+  Type '{ x: any; y: any; }' is not assignable to type 'not { y: any; }'.
+
+
+==== tests/cases/conformance/types/negated/negatedTypes.ts (53 errors) ====
+    enum Literal {
+        ok = "ok"
+    }
+    
+    enum NumLiteral {
+        Val
+    }
+    
+    function f1(
+        notString: not string,
+        str: string,
+        strlit: "ok",
+        strenum: Literal,
+        num: number,
+        numlit: 0,
+        numenum: NumLiteral,
+        unknownVal: unknown,
+        neverVal: never
+    ) {
+        notString = str;        // not ok
+        ~~~~~~~~~
+!!! error TS2322: Type 'string' is not assignable to type 'not string'.
+        notString = strlit;     // not ok
+        ~~~~~~~~~
+!!! error TS2322: Type '"ok"' is not assignable to type 'not string'.
+        notString = strenum;    // not ok
+        ~~~~~~~~~
+!!! error TS2322: Type 'Literal' is not assignable to type 'not string'.
+        notString = num;        // ok
+        notString = numlit;     // ok
+        notString = numenum;    // ok
+        notString = unknownVal; // not ok (unknown is all values, includes string)
+        ~~~~~~~~~
+!!! error TS2322: Type 'unknown' is not assignable to type 'not string'.
+        notString = neverVal;   // ok (never is empty set of types, doesn't include string)
+    
+        str = notString;        // not ok
+        ~~~
+!!! error TS2322: Type 'not string' is not assignable to type 'string'.
+        strlit = notString;     // not ok
+        ~~~~~~
+!!! error TS2322: Type 'not string' is not assignable to type '"ok"'.
+        strenum = notString;    // not ok
+        ~~~~~~~
+!!! error TS2322: Type 'not string' is not assignable to type 'Literal'.
+        num = notString;        // not ok
+        ~~~
+!!! error TS2322: Type 'not string' is not assignable to type 'number'.
+        numlit = notString;     // not ok
+        ~~~~~~
+!!! error TS2322: Type 'not string' is not assignable to type '0'.
+        numenum = notString;    // not ok
+        ~~~~~~~
+!!! error TS2322: Type 'not string' is not assignable to type 'NumLiteral'.
+        unknownVal = notString; // ok
+        neverVal = notString;   // not ok
+        ~~~~~~~~
+!!! error TS2322: Type 'not string' is not assignable to type 'never'.
+    }
+    
+    function f2(
+        x: { x },
+        y: { y },
+        xy: {x, y},
+        nx: not typeof x,
+        ny: not typeof y,
+        nxy: not typeof xy,
+        neither: not (typeof x | typeof y),
+        notBoth: not (typeof x & typeof y)
+    ) {
+        x = y;          // not ok
+        ~
+!!! error TS2741: Property 'x' is missing in type '{ y: any; }' but required in type '{ x: any; }'.
+!!! related TS2728 tests/cases/conformance/types/negated/negatedTypes.ts:40:10: 'x' is declared here.
+        x = xy;         // ok
+        x = nx;         // not ok
+        ~
+!!! error TS2322: Type 'not { x: any; }' is not assignable to type '{ x: any; }'.
+        x = ny;         // not ok
+        ~
+!!! error TS2322: Type 'not { y: any; }' is not assignable to type '{ x: any; }'.
+        x = nxy;        // not ok
+        ~
+!!! error TS2322: Type 'not { x: any; y: any; }' is not assignable to type '{ x: any; }'.
+        x = neither;    // not ok
+        ~
+!!! error TS2741: Property 'x' is missing in type 'not { x: any; } & not { y: any; }' but required in type '{ x: any; }'.
+!!! related TS2728 tests/cases/conformance/types/negated/negatedTypes.ts:40:10: 'x' is declared here.
+        x = notBoth;    // not ok
+        ~
+!!! error TS2322: Type 'not { x: any; } | not { y: any; }' is not assignable to type '{ x: any; }'.
+!!! error TS2322:   Type 'not { x: any; }' is not assignable to type '{ x: any; }'.
+    
+        y = x;          // not ok
+        ~
+!!! error TS2741: Property 'y' is missing in type '{ x: any; }' but required in type '{ y: any; }'.
+!!! related TS2728 tests/cases/conformance/types/negated/negatedTypes.ts:41:10: 'y' is declared here.
+        y = xy;         // ok
+        y = nx;         // not ok
+        ~
+!!! error TS2322: Type 'not { x: any; }' is not assignable to type '{ y: any; }'.
+        y = ny;         // not ok
+        ~
+!!! error TS2322: Type 'not { y: any; }' is not assignable to type '{ y: any; }'.
+        y = nxy;        // not ok
+        ~
+!!! error TS2322: Type 'not { x: any; y: any; }' is not assignable to type '{ y: any; }'.
+        y = neither;    // not ok
+        ~
+!!! error TS2741: Property 'y' is missing in type 'not { x: any; } & not { y: any; }' but required in type '{ y: any; }'.
+!!! related TS2728 tests/cases/conformance/types/negated/negatedTypes.ts:41:10: 'y' is declared here.
+        y = notBoth;    // not ok
+        ~
+!!! error TS2322: Type 'not { x: any; } | not { y: any; }' is not assignable to type '{ y: any; }'.
+!!! error TS2322:   Type 'not { x: any; }' is not assignable to type '{ y: any; }'.
+    
+        xy = x;         // not ok
+        ~~
+!!! error TS2741: Property 'y' is missing in type '{ x: any; }' but required in type '{ x: any; y: any; }'.
+!!! related TS2728 tests/cases/conformance/types/negated/negatedTypes.ts:42:13: 'y' is declared here.
+        xy = y;         // not ok
+        ~~
+!!! error TS2741: Property 'x' is missing in type '{ y: any; }' but required in type '{ x: any; y: any; }'.
+!!! related TS2728 tests/cases/conformance/types/negated/negatedTypes.ts:42:10: 'x' is declared here.
+        xy = nx;        // not ok
+        ~~
+!!! error TS2322: Type 'not { x: any; }' is not assignable to type '{ x: any; y: any; }'.
+        xy = ny;        // not ok
+        ~~
+!!! error TS2322: Type 'not { y: any; }' is not assignable to type '{ x: any; y: any; }'.
+        xy = nxy;       // not ok
+        ~~
+!!! error TS2322: Type 'not { x: any; y: any; }' is not assignable to type '{ x: any; y: any; }'.
+        xy = neither;   // not ok
+        ~~
+!!! error TS2739: Type 'not { x: any; } & not { y: any; }' is missing the following properties from type '{ x: any; y: any; }': x, y
+        xy = notBoth;   // not ok
+        ~~
+!!! error TS2322: Type 'not { x: any; } | not { y: any; }' is not assignable to type '{ x: any; y: any; }'.
+!!! error TS2322:   Type 'not { x: any; }' is not assignable to type '{ x: any; y: any; }'.
+    
+        nx = x;         // not ok
+        ~~
+!!! error TS2322: Type '{ x: any; }' is not assignable to type 'not { x: any; }'.
+        nx = y;         // not ok
+        ~~
+!!! error TS2322: Type '{ y: any; }' is not assignable to type 'not { x: any; }'.
+        nx = ny;        // not ok
+        ~~
+!!! error TS2322: Type 'not { y: any; }' is not assignable to type 'not { x: any; }'.
+        nx = nxy;       // not ok
+        ~~
+!!! error TS2322: Type 'not { x: any; y: any; }' is not assignable to type 'not { x: any; }'.
+        nx = neither;   // ok
+        nx = notBoth;   // not ok
+        ~~
+!!! error TS2322: Type 'not { x: any; } | not { y: any; }' is not assignable to type 'not { x: any; }'.
+!!! error TS2322:   Type 'not { y: any; }' is not assignable to type 'not { x: any; }'.
+    
+        ny = x;         // not ok
+        ~~
+!!! error TS2322: Type '{ x: any; }' is not assignable to type 'not { y: any; }'.
+        ny = y;         // not ok
+        ~~
+!!! error TS2322: Type '{ y: any; }' is not assignable to type 'not { y: any; }'.
+        ny = nx;        // not ok
+        ~~
+!!! error TS2322: Type 'not { x: any; }' is not assignable to type 'not { y: any; }'.
+        ny = nxy;       // not ok
+        ~~
+!!! error TS2322: Type 'not { x: any; y: any; }' is not assignable to type 'not { y: any; }'.
+        ny = neither;   // ok
+        ny = notBoth;   // not ok
+        ~~
+!!! error TS2322: Type 'not { x: any; } | not { y: any; }' is not assignable to type 'not { y: any; }'.
+!!! error TS2322:   Type 'not { x: any; }' is not assignable to type 'not { y: any; }'.
+    
+        nxy = x;        // not ok
+        ~~~
+!!! error TS2322: Type '{ x: any; }' is not assignable to type 'not { x: any; y: any; }'.
+        nxy = y;        // not ok
+        ~~~
+!!! error TS2322: Type '{ y: any; }' is not assignable to type 'not { x: any; y: any; }'.
+        nxy = xy;       // not ok
+        ~~~
+!!! error TS2322: Type '{ x: any; y: any; }' is not assignable to type 'not { x: any; y: any; }'.
+        nxy = nx;       // ok
+        nxy = ny;       // ok
+        nxy = neither;  // ok
+        nxy = notBoth;  // ok
+    
+        neither = x;    // not ok
+        ~~~~~~~
+!!! error TS2322: Type '{ x: any; }' is not assignable to type 'not { x: any; } & not { y: any; }'.
+!!! error TS2322:   Type '{ x: any; }' is not assignable to type 'not { x: any; }'.
+        neither = y;    // not ok
+        ~~~~~~~
+!!! error TS2322: Type '{ y: any; }' is not assignable to type 'not { x: any; } & not { y: any; }'.
+!!! error TS2322:   Type '{ y: any; }' is not assignable to type 'not { x: any; }'.
+        neither = xy;   // not ok
+        ~~~~~~~
+!!! error TS2322: Type '{ x: any; y: any; }' is not assignable to type 'not { x: any; } & not { y: any; }'.
+!!! error TS2322:   Type '{ x: any; y: any; }' is not assignable to type 'not { x: any; }'.
+        neither = nx;   // not ok
+        ~~~~~~~
+!!! error TS2322: Type 'not { x: any; }' is not assignable to type 'not { x: any; } & not { y: any; }'.
+!!! error TS2322:   Type 'not { x: any; }' is not assignable to type 'not { y: any; }'.
+        neither = ny;   // not ok
+        ~~~~~~~
+!!! error TS2322: Type 'not { y: any; }' is not assignable to type 'not { x: any; } & not { y: any; }'.
+!!! error TS2322:   Type 'not { y: any; }' is not assignable to type 'not { x: any; }'.
+        neither = nxy;  // not ok
+        ~~~~~~~
+!!! error TS2322: Type 'not { x: any; y: any; }' is not assignable to type 'not { x: any; } & not { y: any; }'.
+!!! error TS2322:   Type 'not { x: any; y: any; }' is not assignable to type 'not { x: any; }'.
+        neither = notBoth; // not ok
+        ~~~~~~~
+!!! error TS2322: Type 'not { x: any; } | not { y: any; }' is not assignable to type 'not { x: any; } & not { y: any; }'.
+!!! error TS2322:   Type 'not { x: any; }' is not assignable to type 'not { x: any; } & not { y: any; }'.
+!!! error TS2322:     Type 'not { x: any; }' is not assignable to type 'not { y: any; }'.
+    
+        notBoth = x;    // not ok
+        ~~~~~~~
+!!! error TS2322: Type '{ x: any; }' is not assignable to type 'not { x: any; } | not { y: any; }'.
+!!! error TS2322:   Type '{ x: any; }' is not assignable to type 'not { y: any; }'.
+        notBoth = y;    // not ok
+        ~~~~~~~
+!!! error TS2322: Type '{ y: any; }' is not assignable to type 'not { x: any; } | not { y: any; }'.
+!!! error TS2322:   Type '{ y: any; }' is not assignable to type 'not { y: any; }'.
+        notBoth = xy;   // not ok
+        ~~~~~~~
+!!! error TS2322: Type '{ x: any; y: any; }' is not assignable to type 'not { x: any; } | not { y: any; }'.
+!!! error TS2322:   Type '{ x: any; y: any; }' is not assignable to type 'not { y: any; }'.
+        notBoth = nx;   // ok
+        notBoth = ny;   // ok
+        notBoth = neither; // ok
+    }

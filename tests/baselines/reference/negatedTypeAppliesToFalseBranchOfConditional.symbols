@@ -1,0 +1,17 @@
+=== tests/cases/conformance/types/negated/negatedTypeAppliesToFalseBranchOfConditional.ts ===
+// https://github.com/Microsoft/TypeScript/issues/26240
+
+type OnlyNumber<T extends number> = T;
+>OnlyNumber : Symbol(OnlyNumber, Decl(negatedTypeAppliesToFalseBranchOfConditional.ts, 0, 0))
+>T : Symbol(T, Decl(negatedTypeAppliesToFalseBranchOfConditional.ts, 2, 16))
+>T : Symbol(T, Decl(negatedTypeAppliesToFalseBranchOfConditional.ts, 2, 16))
+
+type ToNumber<T extends number | string> =
+>ToNumber : Symbol(ToNumber, Decl(negatedTypeAppliesToFalseBranchOfConditional.ts, 2, 38))
+>T : Symbol(T, Decl(negatedTypeAppliesToFalseBranchOfConditional.ts, 3, 14))
+
+    T extends string ? undefined : OnlyNumber<T>;
+>T : Symbol(T, Decl(negatedTypeAppliesToFalseBranchOfConditional.ts, 3, 14))
+>OnlyNumber : Symbol(OnlyNumber, Decl(negatedTypeAppliesToFalseBranchOfConditional.ts, 0, 0))
+>T : Symbol(T, Decl(negatedTypeAppliesToFalseBranchOfConditional.ts, 3, 14))
+

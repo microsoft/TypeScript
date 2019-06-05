@@ -750,7 +750,7 @@ events.emit('jump', 20, 'up');
 >'up' : "up"
 
 events.emit('stop', 'Bye!');
->events.emit('stop', 'Bye!') : void
+>events.emit('stop', 'Bye!') : any
 >events.emit : <K extends "move" | "jump" | "stop" | "done" = "move" | "jump" | "stop" | "done">(e: K, ...payload: Record1[K] extends any[] ? Record1[K] : [Record1[K]]) => void
 >events : EventType<Record1>
 >emit : <K extends "move" | "jump" | "stop" | "done" = "move" | "jump" | "stop" | "done">(e: K, ...payload: Record1[K] extends any[] ? Record1[K] : [Record1[K]]) => void

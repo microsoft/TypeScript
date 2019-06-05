@@ -1,0 +1,364 @@
+=== tests/cases/conformance/types/negated/negatedTypes.ts ===
+enum Literal {
+>Literal : Symbol(Literal, Decl(negatedTypes.ts, 0, 0))
+
+    ok = "ok"
+>ok : Symbol(Literal.ok, Decl(negatedTypes.ts, 0, 14))
+}
+
+enum NumLiteral {
+>NumLiteral : Symbol(NumLiteral, Decl(negatedTypes.ts, 2, 1))
+
+    Val
+>Val : Symbol(NumLiteral.Val, Decl(negatedTypes.ts, 4, 17))
+}
+
+function f1(
+>f1 : Symbol(f1, Decl(negatedTypes.ts, 6, 1))
+
+    notString: not string,
+>notString : Symbol(notString, Decl(negatedTypes.ts, 8, 12))
+
+    str: string,
+>str : Symbol(str, Decl(negatedTypes.ts, 9, 26))
+
+    strlit: "ok",
+>strlit : Symbol(strlit, Decl(negatedTypes.ts, 10, 16))
+
+    strenum: Literal,
+>strenum : Symbol(strenum, Decl(negatedTypes.ts, 11, 17))
+>Literal : Symbol(Literal, Decl(negatedTypes.ts, 0, 0))
+
+    num: number,
+>num : Symbol(num, Decl(negatedTypes.ts, 12, 21))
+
+    numlit: 0,
+>numlit : Symbol(numlit, Decl(negatedTypes.ts, 13, 16))
+
+    numenum: NumLiteral,
+>numenum : Symbol(numenum, Decl(negatedTypes.ts, 14, 14))
+>NumLiteral : Symbol(NumLiteral, Decl(negatedTypes.ts, 2, 1))
+
+    unknownVal: unknown,
+>unknownVal : Symbol(unknownVal, Decl(negatedTypes.ts, 15, 24))
+
+    neverVal: never
+>neverVal : Symbol(neverVal, Decl(negatedTypes.ts, 16, 24))
+
+) {
+    notString = str;        // not ok
+>notString : Symbol(notString, Decl(negatedTypes.ts, 8, 12))
+>str : Symbol(str, Decl(negatedTypes.ts, 9, 26))
+
+    notString = strlit;     // not ok
+>notString : Symbol(notString, Decl(negatedTypes.ts, 8, 12))
+>strlit : Symbol(strlit, Decl(negatedTypes.ts, 10, 16))
+
+    notString = strenum;    // not ok
+>notString : Symbol(notString, Decl(negatedTypes.ts, 8, 12))
+>strenum : Symbol(strenum, Decl(negatedTypes.ts, 11, 17))
+
+    notString = num;        // ok
+>notString : Symbol(notString, Decl(negatedTypes.ts, 8, 12))
+>num : Symbol(num, Decl(negatedTypes.ts, 12, 21))
+
+    notString = numlit;     // ok
+>notString : Symbol(notString, Decl(negatedTypes.ts, 8, 12))
+>numlit : Symbol(numlit, Decl(negatedTypes.ts, 13, 16))
+
+    notString = numenum;    // ok
+>notString : Symbol(notString, Decl(negatedTypes.ts, 8, 12))
+>numenum : Symbol(numenum, Decl(negatedTypes.ts, 14, 14))
+
+    notString = unknownVal; // not ok (unknown is all values, includes string)
+>notString : Symbol(notString, Decl(negatedTypes.ts, 8, 12))
+>unknownVal : Symbol(unknownVal, Decl(negatedTypes.ts, 15, 24))
+
+    notString = neverVal;   // ok (never is empty set of types, doesn't include string)
+>notString : Symbol(notString, Decl(negatedTypes.ts, 8, 12))
+>neverVal : Symbol(neverVal, Decl(negatedTypes.ts, 16, 24))
+
+    str = notString;        // not ok
+>str : Symbol(str, Decl(negatedTypes.ts, 9, 26))
+>notString : Symbol(notString, Decl(negatedTypes.ts, 8, 12))
+
+    strlit = notString;     // not ok
+>strlit : Symbol(strlit, Decl(negatedTypes.ts, 10, 16))
+>notString : Symbol(notString, Decl(negatedTypes.ts, 8, 12))
+
+    strenum = notString;    // not ok
+>strenum : Symbol(strenum, Decl(negatedTypes.ts, 11, 17))
+>notString : Symbol(notString, Decl(negatedTypes.ts, 8, 12))
+
+    num = notString;        // not ok
+>num : Symbol(num, Decl(negatedTypes.ts, 12, 21))
+>notString : Symbol(notString, Decl(negatedTypes.ts, 8, 12))
+
+    numlit = notString;     // not ok
+>numlit : Symbol(numlit, Decl(negatedTypes.ts, 13, 16))
+>notString : Symbol(notString, Decl(negatedTypes.ts, 8, 12))
+
+    numenum = notString;    // not ok
+>numenum : Symbol(numenum, Decl(negatedTypes.ts, 14, 14))
+>notString : Symbol(notString, Decl(negatedTypes.ts, 8, 12))
+
+    unknownVal = notString; // ok
+>unknownVal : Symbol(unknownVal, Decl(negatedTypes.ts, 15, 24))
+>notString : Symbol(notString, Decl(negatedTypes.ts, 8, 12))
+
+    neverVal = notString;   // not ok
+>neverVal : Symbol(neverVal, Decl(negatedTypes.ts, 16, 24))
+>notString : Symbol(notString, Decl(negatedTypes.ts, 8, 12))
+}
+
+function f2(
+>f2 : Symbol(f2, Decl(negatedTypes.ts, 36, 1))
+
+    x: { x },
+>x : Symbol(x, Decl(negatedTypes.ts, 38, 12))
+>x : Symbol(x, Decl(negatedTypes.ts, 39, 8))
+
+    y: { y },
+>y : Symbol(y, Decl(negatedTypes.ts, 39, 13))
+>y : Symbol(y, Decl(negatedTypes.ts, 40, 8))
+
+    xy: {x, y},
+>xy : Symbol(xy, Decl(negatedTypes.ts, 40, 13))
+>x : Symbol(x, Decl(negatedTypes.ts, 41, 9))
+>y : Symbol(y, Decl(negatedTypes.ts, 41, 11))
+
+    nx: not typeof x,
+>nx : Symbol(nx, Decl(negatedTypes.ts, 41, 15))
+>x : Symbol(x, Decl(negatedTypes.ts, 38, 12))
+
+    ny: not typeof y,
+>ny : Symbol(ny, Decl(negatedTypes.ts, 42, 21))
+>y : Symbol(y, Decl(negatedTypes.ts, 39, 13))
+
+    nxy: not typeof xy,
+>nxy : Symbol(nxy, Decl(negatedTypes.ts, 43, 21))
+>xy : Symbol(xy, Decl(negatedTypes.ts, 40, 13))
+
+    neither: not (typeof x | typeof y),
+>neither : Symbol(neither, Decl(negatedTypes.ts, 44, 23))
+>x : Symbol(x, Decl(negatedTypes.ts, 38, 12))
+>y : Symbol(y, Decl(negatedTypes.ts, 39, 13))
+
+    notBoth: not (typeof x & typeof y)
+>notBoth : Symbol(notBoth, Decl(negatedTypes.ts, 45, 39))
+>x : Symbol(x, Decl(negatedTypes.ts, 38, 12))
+>y : Symbol(y, Decl(negatedTypes.ts, 39, 13))
+
+) {
+    x = y;          // not ok
+>x : Symbol(x, Decl(negatedTypes.ts, 38, 12))
+>y : Symbol(y, Decl(negatedTypes.ts, 39, 13))
+
+    x = xy;         // ok
+>x : Symbol(x, Decl(negatedTypes.ts, 38, 12))
+>xy : Symbol(xy, Decl(negatedTypes.ts, 40, 13))
+
+    x = nx;         // not ok
+>x : Symbol(x, Decl(negatedTypes.ts, 38, 12))
+>nx : Symbol(nx, Decl(negatedTypes.ts, 41, 15))
+
+    x = ny;         // not ok
+>x : Symbol(x, Decl(negatedTypes.ts, 38, 12))
+>ny : Symbol(ny, Decl(negatedTypes.ts, 42, 21))
+
+    x = nxy;        // not ok
+>x : Symbol(x, Decl(negatedTypes.ts, 38, 12))
+>nxy : Symbol(nxy, Decl(negatedTypes.ts, 43, 21))
+
+    x = neither;    // not ok
+>x : Symbol(x, Decl(negatedTypes.ts, 38, 12))
+>neither : Symbol(neither, Decl(negatedTypes.ts, 44, 23))
+
+    x = notBoth;    // not ok
+>x : Symbol(x, Decl(negatedTypes.ts, 38, 12))
+>notBoth : Symbol(notBoth, Decl(negatedTypes.ts, 45, 39))
+
+    y = x;          // not ok
+>y : Symbol(y, Decl(negatedTypes.ts, 39, 13))
+>x : Symbol(x, Decl(negatedTypes.ts, 38, 12))
+
+    y = xy;         // ok
+>y : Symbol(y, Decl(negatedTypes.ts, 39, 13))
+>xy : Symbol(xy, Decl(negatedTypes.ts, 40, 13))
+
+    y = nx;         // not ok
+>y : Symbol(y, Decl(negatedTypes.ts, 39, 13))
+>nx : Symbol(nx, Decl(negatedTypes.ts, 41, 15))
+
+    y = ny;         // not ok
+>y : Symbol(y, Decl(negatedTypes.ts, 39, 13))
+>ny : Symbol(ny, Decl(negatedTypes.ts, 42, 21))
+
+    y = nxy;        // not ok
+>y : Symbol(y, Decl(negatedTypes.ts, 39, 13))
+>nxy : Symbol(nxy, Decl(negatedTypes.ts, 43, 21))
+
+    y = neither;    // not ok
+>y : Symbol(y, Decl(negatedTypes.ts, 39, 13))
+>neither : Symbol(neither, Decl(negatedTypes.ts, 44, 23))
+
+    y = notBoth;    // not ok
+>y : Symbol(y, Decl(negatedTypes.ts, 39, 13))
+>notBoth : Symbol(notBoth, Decl(negatedTypes.ts, 45, 39))
+
+    xy = x;         // not ok
+>xy : Symbol(xy, Decl(negatedTypes.ts, 40, 13))
+>x : Symbol(x, Decl(negatedTypes.ts, 38, 12))
+
+    xy = y;         // not ok
+>xy : Symbol(xy, Decl(negatedTypes.ts, 40, 13))
+>y : Symbol(y, Decl(negatedTypes.ts, 39, 13))
+
+    xy = nx;        // not ok
+>xy : Symbol(xy, Decl(negatedTypes.ts, 40, 13))
+>nx : Symbol(nx, Decl(negatedTypes.ts, 41, 15))
+
+    xy = ny;        // not ok
+>xy : Symbol(xy, Decl(negatedTypes.ts, 40, 13))
+>ny : Symbol(ny, Decl(negatedTypes.ts, 42, 21))
+
+    xy = nxy;       // not ok
+>xy : Symbol(xy, Decl(negatedTypes.ts, 40, 13))
+>nxy : Symbol(nxy, Decl(negatedTypes.ts, 43, 21))
+
+    xy = neither;   // not ok
+>xy : Symbol(xy, Decl(negatedTypes.ts, 40, 13))
+>neither : Symbol(neither, Decl(negatedTypes.ts, 44, 23))
+
+    xy = notBoth;   // not ok
+>xy : Symbol(xy, Decl(negatedTypes.ts, 40, 13))
+>notBoth : Symbol(notBoth, Decl(negatedTypes.ts, 45, 39))
+
+    nx = x;         // not ok
+>nx : Symbol(nx, Decl(negatedTypes.ts, 41, 15))
+>x : Symbol(x, Decl(negatedTypes.ts, 38, 12))
+
+    nx = y;         // not ok
+>nx : Symbol(nx, Decl(negatedTypes.ts, 41, 15))
+>y : Symbol(y, Decl(negatedTypes.ts, 39, 13))
+
+    nx = ny;        // not ok
+>nx : Symbol(nx, Decl(negatedTypes.ts, 41, 15))
+>ny : Symbol(ny, Decl(negatedTypes.ts, 42, 21))
+
+    nx = nxy;       // not ok
+>nx : Symbol(nx, Decl(negatedTypes.ts, 41, 15))
+>nxy : Symbol(nxy, Decl(negatedTypes.ts, 43, 21))
+
+    nx = neither;   // ok
+>nx : Symbol(nx, Decl(negatedTypes.ts, 41, 15))
+>neither : Symbol(neither, Decl(negatedTypes.ts, 44, 23))
+
+    nx = notBoth;   // not ok
+>nx : Symbol(nx, Decl(negatedTypes.ts, 41, 15))
+>notBoth : Symbol(notBoth, Decl(negatedTypes.ts, 45, 39))
+
+    ny = x;         // not ok
+>ny : Symbol(ny, Decl(negatedTypes.ts, 42, 21))
+>x : Symbol(x, Decl(negatedTypes.ts, 38, 12))
+
+    ny = y;         // not ok
+>ny : Symbol(ny, Decl(negatedTypes.ts, 42, 21))
+>y : Symbol(y, Decl(negatedTypes.ts, 39, 13))
+
+    ny = nx;        // not ok
+>ny : Symbol(ny, Decl(negatedTypes.ts, 42, 21))
+>nx : Symbol(nx, Decl(negatedTypes.ts, 41, 15))
+
+    ny = nxy;       // not ok
+>ny : Symbol(ny, Decl(negatedTypes.ts, 42, 21))
+>nxy : Symbol(nxy, Decl(negatedTypes.ts, 43, 21))
+
+    ny = neither;   // ok
+>ny : Symbol(ny, Decl(negatedTypes.ts, 42, 21))
+>neither : Symbol(neither, Decl(negatedTypes.ts, 44, 23))
+
+    ny = notBoth;   // not ok
+>ny : Symbol(ny, Decl(negatedTypes.ts, 42, 21))
+>notBoth : Symbol(notBoth, Decl(negatedTypes.ts, 45, 39))
+
+    nxy = x;        // not ok
+>nxy : Symbol(nxy, Decl(negatedTypes.ts, 43, 21))
+>x : Symbol(x, Decl(negatedTypes.ts, 38, 12))
+
+    nxy = y;        // not ok
+>nxy : Symbol(nxy, Decl(negatedTypes.ts, 43, 21))
+>y : Symbol(y, Decl(negatedTypes.ts, 39, 13))
+
+    nxy = xy;       // not ok
+>nxy : Symbol(nxy, Decl(negatedTypes.ts, 43, 21))
+>xy : Symbol(xy, Decl(negatedTypes.ts, 40, 13))
+
+    nxy = nx;       // ok
+>nxy : Symbol(nxy, Decl(negatedTypes.ts, 43, 21))
+>nx : Symbol(nx, Decl(negatedTypes.ts, 41, 15))
+
+    nxy = ny;       // ok
+>nxy : Symbol(nxy, Decl(negatedTypes.ts, 43, 21))
+>ny : Symbol(ny, Decl(negatedTypes.ts, 42, 21))
+
+    nxy = neither;  // ok
+>nxy : Symbol(nxy, Decl(negatedTypes.ts, 43, 21))
+>neither : Symbol(neither, Decl(negatedTypes.ts, 44, 23))
+
+    nxy = notBoth;  // ok
+>nxy : Symbol(nxy, Decl(negatedTypes.ts, 43, 21))
+>notBoth : Symbol(notBoth, Decl(negatedTypes.ts, 45, 39))
+
+    neither = x;    // not ok
+>neither : Symbol(neither, Decl(negatedTypes.ts, 44, 23))
+>x : Symbol(x, Decl(negatedTypes.ts, 38, 12))
+
+    neither = y;    // not ok
+>neither : Symbol(neither, Decl(negatedTypes.ts, 44, 23))
+>y : Symbol(y, Decl(negatedTypes.ts, 39, 13))
+
+    neither = xy;   // not ok
+>neither : Symbol(neither, Decl(negatedTypes.ts, 44, 23))
+>xy : Symbol(xy, Decl(negatedTypes.ts, 40, 13))
+
+    neither = nx;   // not ok
+>neither : Symbol(neither, Decl(negatedTypes.ts, 44, 23))
+>nx : Symbol(nx, Decl(negatedTypes.ts, 41, 15))
+
+    neither = ny;   // not ok
+>neither : Symbol(neither, Decl(negatedTypes.ts, 44, 23))
+>ny : Symbol(ny, Decl(negatedTypes.ts, 42, 21))
+
+    neither = nxy;  // not ok
+>neither : Symbol(neither, Decl(negatedTypes.ts, 44, 23))
+>nxy : Symbol(nxy, Decl(negatedTypes.ts, 43, 21))
+
+    neither = notBoth; // not ok
+>neither : Symbol(neither, Decl(negatedTypes.ts, 44, 23))
+>notBoth : Symbol(notBoth, Decl(negatedTypes.ts, 45, 39))
+
+    notBoth = x;    // not ok
+>notBoth : Symbol(notBoth, Decl(negatedTypes.ts, 45, 39))
+>x : Symbol(x, Decl(negatedTypes.ts, 38, 12))
+
+    notBoth = y;    // not ok
+>notBoth : Symbol(notBoth, Decl(negatedTypes.ts, 45, 39))
+>y : Symbol(y, Decl(negatedTypes.ts, 39, 13))
+
+    notBoth = xy;   // not ok
+>notBoth : Symbol(notBoth, Decl(negatedTypes.ts, 45, 39))
+>xy : Symbol(xy, Decl(negatedTypes.ts, 40, 13))
+
+    notBoth = nx;   // ok
+>notBoth : Symbol(notBoth, Decl(negatedTypes.ts, 45, 39))
+>nx : Symbol(nx, Decl(negatedTypes.ts, 41, 15))
+
+    notBoth = ny;   // ok
+>notBoth : Symbol(notBoth, Decl(negatedTypes.ts, 45, 39))
+>ny : Symbol(ny, Decl(negatedTypes.ts, 42, 21))
+
+    notBoth = neither; // ok
+>notBoth : Symbol(notBoth, Decl(negatedTypes.ts, 45, 39))
+>neither : Symbol(neither, Decl(negatedTypes.ts, 44, 23))
+}

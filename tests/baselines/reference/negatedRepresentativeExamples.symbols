@@ -1,0 +1,110 @@
+=== tests/cases/conformance/types/negated/negatedRepresentativeExamples.ts ===
+// https://github.com/Microsoft/TypeScript/issues/7993
+
+declare function ignore<T extends not (object & Promise<any>)>(value: T): void;
+>ignore : Symbol(ignore, Decl(negatedRepresentativeExamples.ts, 0, 0))
+>T : Symbol(T, Decl(negatedRepresentativeExamples.ts, 2, 24))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --))
+>value : Symbol(value, Decl(negatedRepresentativeExamples.ts, 2, 63))
+>T : Symbol(T, Decl(negatedRepresentativeExamples.ts, 2, 24))
+
+declare function readFileAsync(): Promise<string>;
+>readFileAsync : Symbol(readFileAsync, Decl(negatedRepresentativeExamples.ts, 2, 79))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --))
+
+declare function readFileSync(): string;
+>readFileSync : Symbol(readFileSync, Decl(negatedRepresentativeExamples.ts, 3, 50))
+
+ignore(readFileSync());     // OK
+>ignore : Symbol(ignore, Decl(negatedRepresentativeExamples.ts, 0, 0))
+>readFileSync : Symbol(readFileSync, Decl(negatedRepresentativeExamples.ts, 3, 50))
+
+ignore(readFileAsync());    // Should error
+>ignore : Symbol(ignore, Decl(negatedRepresentativeExamples.ts, 0, 0))
+>readFileAsync : Symbol(readFileAsync, Decl(negatedRepresentativeExamples.ts, 2, 79))
+
+declare function map<T, U extends not void>(values: T[], map: (value: T) => U) : U[]; // validate map callback doesn't return void
+>map : Symbol(map, Decl(negatedRepresentativeExamples.ts, 6, 24))
+>T : Symbol(T, Decl(negatedRepresentativeExamples.ts, 8, 21))
+>U : Symbol(U, Decl(negatedRepresentativeExamples.ts, 8, 23))
+>values : Symbol(values, Decl(negatedRepresentativeExamples.ts, 8, 44))
+>T : Symbol(T, Decl(negatedRepresentativeExamples.ts, 8, 21))
+>map : Symbol(map, Decl(negatedRepresentativeExamples.ts, 8, 56))
+>value : Symbol(value, Decl(negatedRepresentativeExamples.ts, 8, 63))
+>T : Symbol(T, Decl(negatedRepresentativeExamples.ts, 8, 21))
+>U : Symbol(U, Decl(negatedRepresentativeExamples.ts, 8, 23))
+>U : Symbol(U, Decl(negatedRepresentativeExamples.ts, 8, 23))
+
+function foo() {}
+>foo : Symbol(foo, Decl(negatedRepresentativeExamples.ts, 8, 85))
+
+map([1, 2, 3], n => n + 1); // OK
+>map : Symbol(map, Decl(negatedRepresentativeExamples.ts, 6, 24))
+>n : Symbol(n, Decl(negatedRepresentativeExamples.ts, 12, 14))
+>n : Symbol(n, Decl(negatedRepresentativeExamples.ts, 12, 14))
+
+map([1, 2, 3], foo);        // Should error
+>map : Symbol(map, Decl(negatedRepresentativeExamples.ts, 6, 24))
+>foo : Symbol(foo, Decl(negatedRepresentativeExamples.ts, 8, 85))
+
+function asValid<T extends not null>(value: T, isValid: (value: T) => boolean) : T | null {
+>asValid : Symbol(asValid, Decl(negatedRepresentativeExamples.ts, 13, 20))
+>T : Symbol(T, Decl(negatedRepresentativeExamples.ts, 15, 17))
+>value : Symbol(value, Decl(negatedRepresentativeExamples.ts, 15, 37))
+>T : Symbol(T, Decl(negatedRepresentativeExamples.ts, 15, 17))
+>isValid : Symbol(isValid, Decl(negatedRepresentativeExamples.ts, 15, 46))
+>value : Symbol(value, Decl(negatedRepresentativeExamples.ts, 15, 57))
+>T : Symbol(T, Decl(negatedRepresentativeExamples.ts, 15, 17))
+>T : Symbol(T, Decl(negatedRepresentativeExamples.ts, 15, 17))
+
+    return isValid(value) ? value : null;
+>isValid : Symbol(isValid, Decl(negatedRepresentativeExamples.ts, 15, 46))
+>value : Symbol(value, Decl(negatedRepresentativeExamples.ts, 15, 37))
+>value : Symbol(value, Decl(negatedRepresentativeExamples.ts, 15, 37))
+}
+
+declare const x: number;
+>x : Symbol(x, Decl(negatedRepresentativeExamples.ts, 19, 13))
+
+declare const y: number | null;
+>y : Symbol(y, Decl(negatedRepresentativeExamples.ts, 20, 13))
+
+asValid(x, n => n >= 0);    // OK
+>asValid : Symbol(asValid, Decl(negatedRepresentativeExamples.ts, 13, 20))
+>x : Symbol(x, Decl(negatedRepresentativeExamples.ts, 19, 13))
+>n : Symbol(n, Decl(negatedRepresentativeExamples.ts, 21, 10))
+>n : Symbol(n, Decl(negatedRepresentativeExamples.ts, 21, 10))
+
+asValid(y, n => n >= 0);    // Should error
+>asValid : Symbol(asValid, Decl(negatedRepresentativeExamples.ts, 13, 20))
+>y : Symbol(y, Decl(negatedRepresentativeExamples.ts, 20, 13))
+>n : Symbol(n, Decl(negatedRepresentativeExamples.ts, 22, 10))
+>n : Symbol(n, Decl(negatedRepresentativeExamples.ts, 22, 10))
+
+function tryAt<T extends not undefined>(values: T[], index: number): T | undefined {
+>tryAt : Symbol(tryAt, Decl(negatedRepresentativeExamples.ts, 22, 24))
+>T : Symbol(T, Decl(negatedRepresentativeExamples.ts, 24, 15))
+>values : Symbol(values, Decl(negatedRepresentativeExamples.ts, 24, 40))
+>T : Symbol(T, Decl(negatedRepresentativeExamples.ts, 24, 15))
+>index : Symbol(index, Decl(negatedRepresentativeExamples.ts, 24, 52))
+>T : Symbol(T, Decl(negatedRepresentativeExamples.ts, 24, 15))
+
+    return values[index];
+>values : Symbol(values, Decl(negatedRepresentativeExamples.ts, 24, 40))
+>index : Symbol(index, Decl(negatedRepresentativeExamples.ts, 24, 52))
+}
+
+declare const a: number[];
+>a : Symbol(a, Decl(negatedRepresentativeExamples.ts, 28, 13))
+
+declare const b: (number | undefined)[];
+>b : Symbol(b, Decl(negatedRepresentativeExamples.ts, 29, 13))
+
+tryAt(a, 0);    // OK
+>tryAt : Symbol(tryAt, Decl(negatedRepresentativeExamples.ts, 22, 24))
+>a : Symbol(a, Decl(negatedRepresentativeExamples.ts, 28, 13))
+
+tryAt(b, 0);    // Should error
+>tryAt : Symbol(tryAt, Decl(negatedRepresentativeExamples.ts, 22, 24))
+>b : Symbol(b, Decl(negatedRepresentativeExamples.ts, 29, 13))
+

@@ -412,10 +412,10 @@ type ProductComplement = {
 
 };
 type PCA = ProductComplement['a'];
->PCA : Product<"b", 1>
+>PCA : not { f1: "a"; } & Product<"b", 1>
 
 type PCB = ProductComplement['b'];
->PCB : Product<"a", 0>
+>PCB : not { f1: "b"; } & Product<"a", 0>
 
 // {a: Product<'a', 0>; b: Product<'b', 1>}
 type ProductComplementComplement = {
@@ -426,10 +426,10 @@ type ProductComplementComplement = {
 
 };
 type PCCA = ProductComplementComplement['a'];
->PCCA : Product<"a", 0>
+>PCCA : Product<"a", 0> | ({ f1: "a"; } & Product<"b", 1>)
 
 type PCCB = ProductComplementComplement['b'];
->PCCB : Product<"b", 1>
+>PCCB : Product<"b", 1> | ({ f1: "b"; } & Product<"a", 0>)
 
 // Repro from #31326
 

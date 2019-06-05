@@ -1,0 +1,42 @@
+=== tests/cases/conformance/types/negated/negatedFreshTreatedAsClosedSet.ts ===
+// from https://github.com/Microsoft/TypeScript/issues/4183
+type Distinct<A, B> = (A | B) & not (A & B);
+>Distinct : Distinct<A, B>
+
+declare var o1: {x};
+>o1 : { x: any; }
+>x : any
+
+declare var o2: {y};
+>o2 : { y: any; }
+>y : any
+
+declare function f1(x: Distinct<typeof o1, typeof o2>): void;
+>f1 : (x: Distinct<{ x: any; }, { y: any; }>) => void
+>x : Distinct<{ x: any; }, { y: any; }>
+>o1 : { x: any; }
+>o2 : { y: any; }
+
+f1({x: 0});         // OK
+>f1({x: 0}) : void
+>f1 : (x: Distinct<{ x: any; }, { y: any; }>) => void
+>{x: 0} : { x: number; }
+>x : number
+>0 : 0
+
+f1({y: 0});         // OK
+>f1({y: 0}) : void
+>f1 : (x: Distinct<{ x: any; }, { y: any; }>) => void
+>{y: 0} : { y: number; }
+>y : number
+>0 : 0
+
+f1({x: 0, y: 0});   // Should error
+>f1({x: 0, y: 0}) : void
+>f1 : (x: Distinct<{ x: any; }, { y: any; }>) => void
+>{x: 0, y: 0} : { x: number; y: number; }
+>x : number
+>0 : 0
+>y : number
+>0 : 0
+
