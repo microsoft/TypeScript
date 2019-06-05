@@ -6,6 +6,7 @@
 ////const b = require("[|./b|]");
 
 // @Filename: /b.js
-////[|module|].exports = 0;
+////[|[|{| "declarationRangeIndex": 1 |}module|].exports = 0;|]
 
-verify.singleReferenceGroup('module "/b"')
+const [r0, rDef, r1] = test.ranges();
+verify.singleReferenceGroup('module "/b"', [r0, r1]);
