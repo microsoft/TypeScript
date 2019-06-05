@@ -34,23 +34,21 @@ async function main() {
         ["git", ["remote", "add", "fork", remoteUrl]], // Add the remote fork
     ]);
 
-    const gh = new Octokit();
-    gh.authenticate({
-        type: "token",
-        token: process.argv[2]
+    const gh = new Octokit({
+        auth: process.argv[2]
     });
     for (const numRaw of prnums) {
         const num = +numRaw;
         if (num) {
             // PR number rather than branch name - lookup info
-            const inputPR = await gh.pulls.get({ owner: "Microsoft", repo: "TypeScript", number: num });
+            const inputPR = await gh.pulls.get({ owner: "Microsoft", repo: "TypeScript", pull_number: num });
             // GH calculates the rebaseable-ness of a PR into its target, so we can just use that here
             if (!inputPR.data.rebaseable) {
                 if (+triggeredPR === num) {
                     await gh.issues.createComment({
                         owner: "Microsoft",
                         repo: "TypeScript",
-                        number: num,
+                        issue_number: num,
                         body: `This PR is configured as an experiment, and currently has merge conflicts with master - please rebase onto master and fix the conflicts.`
                     });
                     throw new Error(`Merge conflict detected in PR ${num} with master`);
