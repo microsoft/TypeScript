@@ -26687,7 +26687,18 @@ namespace ts {
         type PotentiallyUnusedIdentifier =
             | SourceFile | ModuleDeclaration | ClassLikeDeclaration | InterfaceDeclaration
             | Block | CaseBlock | ForStatement | ForInStatement | ForOfStatement
-            | Exclude<SignatureDeclaration, IndexSignatureDeclaration | JSDocFunctionType> | TypeAliasDeclaration
+            | CallSignatureDeclaration
+            | ConstructSignatureDeclaration
+            | MethodSignature
+            | FunctionTypeNode
+            | ConstructorTypeNode
+            | FunctionDeclaration
+            | MethodDeclaration
+            | ConstructorDeclaration
+            | AccessorDeclaration
+            | FunctionExpression
+            | ArrowFunction
+            | TypeAliasDeclaration
             | InferTypeNode;
 
         function checkUnusedIdentifiers(potentiallyUnusedIdentifiers: ReadonlyArray<PotentiallyUnusedIdentifier>, addDiagnostic: AddUnusedDiagnostic) {
