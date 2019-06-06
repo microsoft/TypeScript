@@ -20630,7 +20630,7 @@ namespace ts {
 
         function checkIndexedAccess(node: ElementAccessExpression): Type {
             const exprType = checkNonNullExpression(node.expression);
-            const objectType = getAssignmentTargetKind(node) !== AssignmentKind.None || isMethodAccessForCall(node.parent) ? getWidenedType(exprType) : exprType;
+            const objectType = getAssignmentTargetKind(node) !== AssignmentKind.None || isMethodAccessForCall(node) ? getWidenedType(exprType) : exprType;
 
             const indexExpression = node.argumentExpression;
             if (!indexExpression) {
