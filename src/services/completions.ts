@@ -49,7 +49,9 @@ namespace ts.Completions {
         const compilerOptions = program.getCompilerOptions();
 
         const contextToken = findPrecedingToken(position, sourceFile);
-        if (triggerCharacter && !isValidTrigger(sourceFile, triggerCharacter, contextToken, position)) return undefined;
+        if (triggerCharacter && !isInString(sourceFile, position, contextToken) && !isValidTrigger(sourceFile, triggerCharacter, contextToken, position)) {
+            return undefined;
+        }
 
         const stringCompletions = StringCompletions.getStringLiteralCompletions(sourceFile, position, contextToken, typeChecker, compilerOptions, host, log, preferences);
         if (stringCompletions) {

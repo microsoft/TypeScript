@@ -9,7 +9,7 @@ function padNum(number: number) {
 }
 
 const userName = process.env.GH_USERNAME;
-const reviewers = process.env.requesting_user ? [process.env.requesting_user] : ["weswigham", "sandersn", "RyanCavanaugh"];
+const reviewers = process.env.REQUESTING_USER ? [process.env.REQUESTING_USER] : ["weswigham", "sandersn", "RyanCavanaugh"];
 const now = new Date();
 const branchName = `user-update-${process.env.TARGET_FORK}-${now.getFullYear()}${padNum(now.getMonth())}${padNum(now.getDay())}${process.env.TARGET_BRANCH ? "-" + process.env.TARGET_BRANCH : ""}`;
 const remoteUrl = `https://${process.argv[2]}@github.com/${userName}/TypeScript.git`;
@@ -36,14 +36,14 @@ gh.pulls.create({
     head: `${userName}:${branchName}`,
     base: process.env.TARGET_BRANCH || "master",
     body:
-`${process.env.source_issue ? `This test run was triggerd by a request on https://github.com/Microsoft/TypeScript/pull/${process.env.source_issue} `+"\n" : ""}Please review the diff and merge if no changes are unexpected.
+`${process.env.SOURCE_ISSUE ? `This test run was triggerd by a request on https://github.com/Microsoft/TypeScript/pull/${process.env.SOURCE_ISSUE} `+"\n" : ""}Please review the diff and merge if no changes are unexpected.
 You can view the build log [here](https://typescript.visualstudio.com/TypeScript/_build/index?buildId=${process.env.BUILD_BUILDID}&_a=summary).
 
 cc ${reviewers.map(r => "@" + r).join(" ")}`,
 }).then(async r => {
     const num = r.data.number;
     console.log(`Pull request ${num} created.`);
-    if (!process.env.source_issue) {
+    if (!process.env.SOURCE_ISSUE) {
         await gh.pulls.createReviewRequest({
             owner: process.env.TARGET_FORK,
             repo: "TypeScript",
@@ -53,7 +53,7 @@ cc ${reviewers.map(r => "@" + r).join(" ")}`,
     }
     else {
         await gh.issues.createComment({
-            number: +process.env.source_issue,
+            number: +process.env.SOURCE_ISSUE,
             owner: "Microsoft",
             repo: "TypeScript",
             body: `The user suite test run you requested has finished and _failed_. I've opened a [PR with the baseline diff from master](${r.data.html_url}).`

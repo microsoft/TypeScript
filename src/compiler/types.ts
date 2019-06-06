@@ -3068,6 +3068,9 @@ namespace ts {
 
         // Diagnostics were produced and outputs were generated in spite of them.
         DiagnosticsPresent_OutputsGenerated = 2,
+
+        // When build skipped because passed in project is invalid
+        InvalidProject_OutputsSkipped = 3,
     }
 
     export interface EmitResult {
@@ -3154,6 +3157,7 @@ namespace ts {
          */
         getExportSymbolOfSymbol(symbol: Symbol): Symbol;
         getPropertySymbolOfDestructuringAssignment(location: Identifier): Symbol | undefined;
+        getTypeOfAssignmentPattern(pattern: AssignmentPattern): Type;
         getTypeAtLocation(node: Node): Type;
         getTypeFromTypeNode(node: TypeNode): Type;
 
@@ -3751,6 +3755,8 @@ namespace ts {
         extendedContainers?: Symbol[];      // Containers (other than the parent) which this symbol is aliased in
         extendedContainersByFile?: Map<Symbol[]>;      // Containers (other than the parent) which this symbol is aliased in
         variances?: VarianceFlags[];             // Alias symbol type argument variance cache
+        deferralConstituents?: Type[];      // Calculated list of constituents for a deferred type
+        deferralParent?: Type;              // Source union/intersection of a deferred type
     }
 
     /* @internal */
@@ -3777,6 +3783,7 @@ namespace ts {
         ReverseMapped     = 1 << 13,        // Property of reverse-inferred homomorphic mapped type
         OptionalParameter = 1 << 14,        // Optional parameter
         RestParameter     = 1 << 15,        // Rest parameter
+        DeferredType      = 1 << 16,        // Calculation of the type of this symbol is deferred due to processing costs, should be fetched with `getTypeOfSymbolWithDeferredType`
         Synthetic = SyntheticProperty | SyntheticMethod,
         Discriminant = HasNonUniformType | HasLiteralType,
         Partial = ReadPartial | WritePartial
@@ -4009,6 +4016,8 @@ namespace ts {
         restrictiveInstantiation?: Type; // Instantiation with type parameters mapped to unconstrained form
         /* @internal */
         immediateBaseConstraint?: Type;  // Immediate base constraint cache
+        /* @internal */
+        widened?: Type; // Cached widened form of the type
     }
 
     /* @internal */
@@ -5188,6 +5197,7 @@ namespace ts {
         ContainsYield = 1 << 17,
         ContainsHoistedDeclarationOrCompletion = 1 << 18,
         ContainsDynamicImport = 1 << 19,
+        ContainsClassFields = 1 << 20,
 
         // Please leave this as 1 << 29.
         // It is the maximum bit we can set before we outgrow the size of a v8 small integer (SMI) on an x86 system.

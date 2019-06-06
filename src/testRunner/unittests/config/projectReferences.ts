@@ -325,7 +325,7 @@ namespace ts {
             };
             testProjectReferences(spec, "/alpha/tsconfig.json", (program, host) => {
                 program.emit();
-                assert.deepEqual(host.outputs.map(e => e.file).sort(), ["/alpha/bin/src/a.d.ts", "/alpha/bin/src/a.js"]);
+                assert.deepEqual(host.outputs.map(e => e.file).sort(), ["/alpha/bin/src/a.d.ts", "/alpha/bin/src/a.js", "/alpha/bin/tsconfig.tsbuildinfo"]);
             });
         });
     });
