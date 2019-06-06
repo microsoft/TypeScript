@@ -395,8 +395,12 @@ namespace ts.server {
             const locations: RenameLocation[] = [];
             for (const entry of body.locs) {
                 const fileName = entry.file;
-                for (const { start, end, ...prefixSuffixText } of entry.locs) {
-                    locations.push({ textSpan: this.decodeSpan({ start, end }, fileName), fileName, ...prefixSuffixText });
+                for (const { start, end, declarationStart, declarationEnd, ...prefixSuffixText } of entry.locs) {
+                    const renameLocation: RenameLocation = { textSpan: this.decodeSpan({ start, end }, fileName), fileName, ...prefixSuffixText };
+                    if (declarationStart !== undefined) {
+                        renameLocation.declarationSpan = this.decodeSpan({ start: declarationStart, end: declarationEnd! }, fileName);
+                    }
+                    locations.push(renameLocation);
                 }
             }
 
