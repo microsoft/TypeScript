@@ -11,7 +11,7 @@
 ////         span: { n: string; };
 ////     }
 //// }
-//// var x = <[|div|] />;
+//// var x = [|<[|{| "declarationRangeIndex": 2 |}div|] />|];
 
 verify.singleReferenceGroup(
     `(property) JSX.IntrinsicElements.div: {

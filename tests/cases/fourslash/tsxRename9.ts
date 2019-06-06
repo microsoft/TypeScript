@@ -23,12 +23,12 @@
 //// [|declare function [|{| "declarationRangeIndex": 4 |}MainButton|](buttonProps: ButtonProps): JSX.Element;|]
 //// [|declare function [|{| "declarationRangeIndex": 6 |}MainButton|](linkProps: LinkProps): JSX.Element;|]
 //// [|declare function [|{| "declarationRangeIndex": 8 |}MainButton|](props: ButtonProps | LinkProps): JSX.Element;|]
-//// let opt = <[|MainButton|] />;
-//// let opt = <[|MainButton|] children="chidlren" />;
-//// let opt = <[|MainButton|] [|[|{| "declarationRangeIndex": 13 |}onClick|]={()=>{}}|] />;
-//// let opt = <[|MainButton|] [|[|{| "declarationRangeIndex": 16 |}onClick|]={()=>{}}|] [|ignore-prop|] />;
-//// let opt = <[|MainButton|] [|[|{| "declarationRangeIndex": 20 |}goTo|]="goTo"|] />;
-//// let opt = <[|MainButton|] [|wrong|] />;
+//// let opt = [|<[|{| "declarationRangeIndex": 10 |}MainButton|] />|];
+//// let opt = [|<[|{| "declarationRangeIndex": 12 |}MainButton|] children="chidlren" />|];
+//// let opt = [|<[|{| "declarationRangeIndex": 14 |}MainButton|] [|[|{| "declarationRangeIndex": 16 |}onClick|]={()=>{}}|] />|];
+//// let opt = [|<[|{| "declarationRangeIndex": 18 |}MainButton|] [|[|{| "declarationRangeIndex": 20 |}onClick|]={()=>{}}|] [|ignore-prop|] />|];
+//// let opt = [|<[|{| "declarationRangeIndex": 23 |}MainButton|] [|[|{| "declarationRangeIndex": 25 |}goTo|]="goTo"|] />|];
+//// let opt = [|<[|{| "declarationRangeIndex": 27 |}MainButton|] [|wrong|] />|];
 
 verify.rangesWithSameTextAreRenameLocations(
     "onClick",

@@ -1577,8 +1577,14 @@ namespace ts {
             const node = getTouchingPropertyName(sourceFile, position);
             if (isIdentifier(node) && (isJsxOpeningElement(node.parent) || isJsxClosingElement(node.parent)) && isIntrinsicJsxName(node.escapedText)) {
                 const { openingElement, closingElement } = node.parent.parent;
-                return [openingElement, closingElement].map((node): RenameLocation =>
-                    ({ fileName: sourceFile.fileName, textSpan: createTextSpanFromNode(node.tagName, sourceFile) }));
+                return [openingElement, closingElement].map(node => {
+                    const result: RenameLocation = {
+                        fileName: sourceFile.fileName,
+                        textSpan: createTextSpanFromNode(node.tagName, sourceFile)
+                    };
+                    FindAllReferences.setDeclarationSpan(result, sourceFile, node.parent);
+                    return result;
+                });
             }
             else {
                 return getReferencesWorker(node, position, { findInStrings, findInComments, providePrefixAndSuffixTextForRename, isForRename: true },

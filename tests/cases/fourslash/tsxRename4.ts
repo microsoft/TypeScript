@@ -11,10 +11,10 @@
 ////}
 ////[|class [|{| "declarationRangeIndex": 0 |}MyClass|] {}|]
 ////
-////<[|MyClass|]></[|MyClass|]>;
-////<[|MyClass|]/>;
+////[|<[|{| "declarationRangeIndex": 2 |}MyClass|]></[|{| "declarationRangeIndex": 2 |}MyClass|]>|];
+////[|<[|{| "declarationRangeIndex": 5 |}MyClass|]/>|];
 ////
-////<[|div|]> </[|div|]>
+////[|<[|{| "declarationRangeIndex": 7 |}div|]> </[|{| "declarationRangeIndex": 7 |}div|]>|]
 
 verify.noErrors();
 verify.rangesWithSameTextAreRenameLocations("MyClass", "div");

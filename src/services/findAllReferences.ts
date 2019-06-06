@@ -48,11 +48,17 @@ namespace ts.FindAllReferences {
             return getDeclarationForDeclarationSpan(node);
         }
 
-        // TODO(shkamat)::
-        // JSXOpeningElement or JSXElement for tagName ?
         if (!node.parent) return undefined;
 
         if (!isDeclaration(node.parent) && !isExportAssignment(node.parent)) {
+            // Jsx Tags
+            if (isJsxOpeningElement(node.parent) || isJsxClosingElement(node.parent)) {
+                return node.parent.parent;
+            }
+            else if (isJsxSelfClosingElement(node.parent)) {
+                return node.parent;
+            }
+
             // Special property assignment in javascript
             if (isInJSFile(node)) {
                 const binaryExpression = isBinaryExpression(node.parent) ?

@@ -11,16 +11,16 @@
 ////}
 ////
 ////[|const [|{| "isWriteAccess": true, "isDefinition": true, "declarationRangeIndex": 2 |}Comp|] = () =>
-////    <[|div|]>
+////    [|<[|{| "declarationRangeIndex": 4 |}div|]>
 ////        Some content
-////        <[|div|]>More content</[|div|]>
-////    </[|div|]>;|]
+////        [|<[|{| "declarationRangeIndex": 6 |}div|]>More content</[|{| "declarationRangeIndex": 6 |}div|]>|]
+////    </[|{| "declarationRangeIndex": 4 |}div|]>|];|]
 ////
-////const x = <[|Comp|]>
+////const x = [|<[|{| "declarationRangeIndex": 10 |}Comp|]>
 ////    Content
-////</[|Comp|]>;
+////</[|{| "declarationRangeIndex": 10 |}Comp|]>|];
 
-const [d0Def, d0, c0Def, c0, d1, d2, d3, d4, c1, c2] = test.ranges();
+const [d0Def, d0, c0Def, c0, d1Def, d1, d2Def, d2, d3, d4, c1Def, c1, c2] = test.ranges();
 
 const allD = [d0, d1, d2, d3, d4];
 const allC = [c0, c1, c2];

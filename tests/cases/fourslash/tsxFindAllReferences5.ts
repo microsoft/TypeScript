@@ -16,11 +16,11 @@
 ////     optional?: boolean
 //// }
 //// [|declare function [|{| "isWriteAccess": true, "isDefinition": true, "declarationRangeIndex": 0 |}Opt|](attributes: OptionPropBag): JSX.Element;|]
-//// let opt = <[|Opt|] />;
-//// let opt1 = <[|Opt|] propx={100} propString />;
-//// let opt2 = <[|Opt|] propx={100} optional/>;
-//// let opt3 = <[|Opt|] wrong />;
-//// let opt4 = <[|Opt|] propx={100} propString="hi" />;
+//// let opt = [|<[|{| "declarationRangeIndex": 2 |}Opt|] />|];
+//// let opt1 = [|<[|{| "declarationRangeIndex": 4 |}Opt|] propx={100} propString />|];
+//// let opt2 = [|<[|{| "declarationRangeIndex": 6 |}Opt|] propx={100} optional/>|];
+//// let opt3 = [|<[|{| "declarationRangeIndex": 8 |}Opt|] wrong />|];
+//// let opt4 = [|<[|{| "declarationRangeIndex": 10 |}Opt|] propx={100} propString="hi" />|];
 
 verify.singleReferenceGroup(
     "function Opt(attributes: OptionPropBag): JSX.Element",

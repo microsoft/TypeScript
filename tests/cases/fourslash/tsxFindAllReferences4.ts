@@ -14,6 +14,6 @@
 //// }|]
 ////
 ////
-//// var x = <[|MyClass|] name='hello'></[|MyClass|]>;
+//// var x = [|<[|{| "declarationRangeIndex" : 2 |}MyClass|] name='hello'></[|{| "declarationRangeIndex" : 2 |}MyClass|]>|];
 
 verify.singleReferenceGroup("class MyClass", "MyClass");

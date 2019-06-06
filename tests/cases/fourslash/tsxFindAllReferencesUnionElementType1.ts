@@ -19,7 +19,7 @@
 //// }
 
 //// [|var [|{| "isWriteAccess": true, "isDefinition": true, "declarationRangeIndex": 0 |}SFCComp|] = SFC1 || SFC2;|]
-//// <[|SFCComp|] x={ "hi" } />
+//// [|<[|{| "declarationRangeIndex": 2 |}SFCComp|] x={ "hi" } />|]
 
 verify.singleReferenceGroup(`var SFCComp: ((prop: {
     x: number;
