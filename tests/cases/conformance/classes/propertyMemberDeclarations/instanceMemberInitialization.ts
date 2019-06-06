@@ -8,7 +8,7 @@ var c2 = new C();
 var r = c.x === c2.x;
 
 // #31792
-export class MyMap<K, V> {
-	constructor(private readonly Map_: typeof Map = Map) {}
+class MyMap<K, V> {
+	constructor(private readonly Map_: { new<K, V>(): any }) {}
 	private readonly store = new this.Map_<K, V>();
 }

@@ -916,7 +916,7 @@ namespace ts {
                 );
 
                 const parameters = transformConstructorParameters(constructor);
-                const body = transformConstructorBody(node.members, constructor, parametersWithPropertyAssignments);
+                const body = transformConstructorBody(existingMembers, constructor, parametersWithPropertyAssignments);
                 members.push(startOnNewLine(
                     setOriginalNode(
                         setTextRange(
