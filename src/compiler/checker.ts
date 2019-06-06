@@ -6444,7 +6444,8 @@ namespace ts {
                 for (const declaration of symbol.declarations) {
                     if (declaration.kind === SyntaxKind.EnumDeclaration) {
                         for (const member of (<EnumDeclaration>declaration).members) {
-                            const memberType = getFreshTypeOfLiteralType(getLiteralType(getEnumMemberValue(member)!, enumCount, getSymbolOfNode(member))); // TODO: GH#18217
+                            const value = getEnumMemberValue(member);
+                            const memberType = getFreshTypeOfLiteralType(getLiteralType(value !== undefined ? value : 0, enumCount, getSymbolOfNode(member)));
                             getSymbolLinks(getSymbolOfNode(member)).declaredType = memberType;
                             memberTypeList.push(getRegularTypeOfLiteralType(memberType));
                         }
@@ -7453,8 +7454,9 @@ namespace ts {
                 else if (t.flags & (TypeFlags.Any | TypeFlags.String)) {
                     stringIndexInfo = createIndexInfo(propType, !!(templateModifiers & MappedTypeModifiers.IncludeReadonly));
                 }
-                else if (t.flags & TypeFlags.Number) {
-                    numberIndexInfo = createIndexInfo(propType, !!(templateModifiers & MappedTypeModifiers.IncludeReadonly));
+                else if (t.flags & (TypeFlags.Number | TypeFlags.Enum)) {
+                    numberIndexInfo = createIndexInfo(numberIndexInfo ? getUnionType([numberIndexInfo.type, propType]) : propType,
+                        !!(templateModifiers & MappedTypeModifiers.IncludeReadonly));
                 }
             }
         }
@@ -28465,9 +28467,9 @@ namespace ts {
             if (member.initializer) {
                 return computeConstantValue(member);
             }
-            // In ambient enum declarations that specify no const modifier, enum member declarations that omit
-            // a value are considered computed members (as opposed to having auto-incremented values).
-            if (member.parent.flags & NodeFlags.Ambient && !isEnumConst(member.parent)) {
+            // In ambient non-const numeric enum declarations, enum members without initializers are
+            // considered computed members (as opposed to having auto-incremented values).
+            if (member.parent.flags & NodeFlags.Ambient && !isEnumConst(member.parent) && getEnumKind(getSymbolOfNode(member.parent)) === EnumKind.Numeric) {
                 return undefined;
             }
             // If the member declaration specifies no value, the member is considered a constant enum member.
