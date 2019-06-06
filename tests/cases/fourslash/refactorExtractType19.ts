@@ -1,6 +1,6 @@
 /// <reference path='fourslash.ts' />
 
-//// type A<B, C, D = B> = /*a*/Partial<C | string | D>/*b*/ & D | C
+//// type A<B, C, D = B> = /*a*/Partial<C | string | D>/*b*/ & D | C;
 
 goTo.select("a", "b");
 edit.applyRefactor({
@@ -9,6 +9,6 @@ edit.applyRefactor({
     actionDescription: "Extract to type alias",
     newContent: `type /*RENAME*/NewType<C, D> = Partial<C | string | D>;
 
-type A<B, C, D = B> = NewType<C, D> & D | C`,
+type A<B, C, D = B> = NewType<C, D> & D | C;`,
 });
 
