@@ -11,5 +11,5 @@ edit.applyRefactor({
     refactorName: "Extract Symbol",
     actionName: "constant_scope_0",
     actionDescription: "Extract to constant in enclosing scope",
-    newContent: "const /*RENAME*/newLocal = <div></div>",
+    newContent: "const /*RENAME*/newLocal = <div></div>;",
 });
