@@ -5,7 +5,7 @@
 ////[|[|{| "declarationRangeIndex": 2 |}export|] = [|{| "declarationRangeIndex": 2 |}T|];|]
 
 // @Filename: /b.ts
-////[|import [|{| "isWriteAccess": true, "isDefinition": true, "declarationRangeIndex": 5 |}T|] = require("[|./a|]");|]
+////[|import [|{| "isWriteAccess": true, "isDefinition": true, "declarationRangeIndex": 5 |}T|] = require("[|{| "declarationRangeIndex": 5 |}./a|]");|]
 
 const [r0Def, r0, r12Def, r1, r2, r3Def, r3, r4] = test.ranges();
 const mod = { definition: 'module "/a"', ranges: [r4, r1] };

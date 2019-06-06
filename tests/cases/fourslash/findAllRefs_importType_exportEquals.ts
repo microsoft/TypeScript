@@ -8,12 +8,12 @@
 ////[|[|{| "declarationRangeIndex": 4 |}export|] = [|{| "declarationRangeIndex": 4 |}T|];|]
 
 // @Filename: /b.ts
-////const x: import("[|./[|a|]|]") = 0;
-////const y: import("[|./[|a|]|]").U = "";
+////[|const x: import("[|{| "declarationRangeIndex": 7 |}./[|a|]|]") = 0;|]
+////[|const y: import("[|{| "declarationRangeIndex": 10 |}./[|a|]|]").U = "";|]
 
 verify.noErrors();
 
-const [r0Def, r0, r1Def, r1, r2Def, rExport, r2, r3, r3b, r4, r4b] = test.ranges();
+const [r0Def, r0, r1Def, r1, r2Def, rExport, r2, r3Def, r3, r3b, r4Def, r4, r4b] = test.ranges();
 verify.referenceGroups(r0, [{ definition: "type T = number\nnamespace T", ranges: [r0, r2, r3] }]);
 verify.referenceGroups(r1, [{ definition: "namespace T", ranges: [r1, r2] }]);
 const t: FourSlashInterface.ReferenceGroup = { definition: "type T = number\nnamespace T", ranges: [r0, r1, r2, r3] };

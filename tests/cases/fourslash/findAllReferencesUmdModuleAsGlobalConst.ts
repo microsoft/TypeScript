@@ -12,9 +12,9 @@
 ////[|export as namespace [|{| "isWriteAccess": true, "isDefinition": true, "declarationRangeIndex": 0 |}THREE|];|]
 
 // @Filename: /typings/global.d.ts
-////import * as _THREE from '[|three|]';
+////[|import * as _THREE from '[|{| "declarationRangeIndex": 2 |}three|]';|]
 ////declare global {
-////    [|const [|{| "isWriteAccess": true, "isDefinition": true, "declarationRangeIndex": 3 |}THREE|]: typeof _THREE;|]
+////    [|const [|{| "isWriteAccess": true, "isDefinition": true, "declarationRangeIndex": 4 |}THREE|]: typeof _THREE;|]
 ////}
 
 // @Filename: /src/index.ts
@@ -38,7 +38,7 @@
 ////    "files": ["/src/index.ts", "typings/global.d.ts"]
 ////}
 
-const [r0Def, r0, r1, r2Def, ...rest] = test.ranges();
+const [r0Def, r0, r1Def, r1, r2Def, ...rest] = test.ranges();
 // GH#29533
 // TODO:: this should be var THREE: typeof import instead of module name as var but thats existing issue and repros with quickInfo too.
 verify.singleReferenceGroup(`module "/node_modules/@types/three/index"

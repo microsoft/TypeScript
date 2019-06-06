@@ -6,6 +6,6 @@
 ////}|]
 
 // @Filename: referencesForGlobals_2.ts
-////import f = require("[|foo|]");
+////[|import f = require("[|{| "declarationRangeIndex": 2 |}foo|]");|]
 
 verify.singleReferenceGroup('module "foo"', "foo");

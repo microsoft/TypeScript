@@ -4,7 +4,7 @@
 ////{}
 
 // @Filename: a.ts
-////[|import /*foo*/[|{| "isWriteAccess": true, "isDefinition": true, "declarationRangeIndex": 0 |}foo|] from /*fooModule*/"[|{| "isInString": true |}foo|]";|]
+////[|import /*foo*/[|{| "isWriteAccess": true, "isDefinition": true, "declarationRangeIndex": 0 |}foo|] from /*fooModule*/"[|{| "isInString": true, "declarationRangeIndex": 0 |}foo|]";|]
 ////[|foo|]();
 
 goTo.file("a.ts");

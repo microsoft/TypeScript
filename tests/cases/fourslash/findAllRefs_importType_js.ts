@@ -8,16 +8,16 @@
 ////[|module.exports.[|{| "isWriteAccess": true, "isDefinition": true, "declarationRangeIndex": 4 |}D|] = [|class [|{| "isWriteAccess": true, "isDefinition": true, "declarationRangeIndex": 6 |}D|] {}|];|]
 
 // @Filename: /b.js
-/////** @type {import("[|./a|]")} */
+/////** [|@type {import("[|{| "declarationRangeIndex": 8 |}./a|]")}|] */
 ////const x = 0;
-/////** @type {import("[|./a|]").[|D|]} */
+/////** [|@type {import("[|{| "declarationRangeIndex": 10 |}./a|]").[|D|]}|] */
 ////const y = 0;
 
 verify.noErrors();
 
 // TODO: GH#24025
 
-const [rModuleDef, rModule, r0Def, r0, r1Def, r1, r2Def, r2, r3, r4, r5] = test.ranges();
+const [rModuleDef, rModule, r0Def, r0, r1Def, r1, r2Def, r2, r3Def, r3, r4Def, r4, r5] = test.ranges();
 verify.referenceGroups(rModule, [{ definition: 'module "/a"', ranges: [r3, r4, rModule] }]);
 verify.referenceGroups(r0, [
     { definition: "(local class) C", ranges: [r0] },

@@ -19,7 +19,8 @@ namespace ts.projectSystem {
                     locs: [
                         protocolRenameSpanFromSubstring({
                             fileText: bTs.content,
-                            text: "./a"
+                            text: "./a",
+                            declarationText: bTs.content
                         })
                     ]
                 }],
@@ -43,7 +44,8 @@ namespace ts.projectSystem {
                     locs: [
                         protocolRenameSpanFromSubstring({
                             fileText: bTs.content,
-                            text: "./a"
+                            text: "./a",
+                            declarationText: bTs.content
                         })
                     ]
                 }],
@@ -68,7 +70,8 @@ namespace ts.projectSystem {
                     locs: [
                         protocolRenameSpanFromSubstring({
                             fileText: bTs.content,
-                            text: "./a"
+                            text: "./a",
+                            declarationText: bTs.content
                         })
                     ]
                 }],

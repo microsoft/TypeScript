@@ -51,16 +51,6 @@ namespace ts.FindAllReferences {
         if (!node.parent) return undefined;
 
         if (!isDeclaration(node.parent) && !isExportAssignment(node.parent)) {
-            // Jsx Tags
-            if (isJsxOpeningElement(node.parent) || isJsxClosingElement(node.parent)) {
-                return node.parent.parent;
-            }
-            else if (isJsxSelfClosingElement(node.parent) ||
-                isLabeledStatement(node.parent) ||
-                isBreakOrContinueStatement(node.parent)) {
-                return node.parent;
-            }
-
             // Special property assignment in javascript
             if (isInJSFile(node)) {
                 const binaryExpression = isBinaryExpression(node.parent) ?
@@ -72,6 +62,29 @@ namespace ts.FindAllReferences {
                         undefined;
                 if (binaryExpression && getAssignmentDeclarationKind(binaryExpression) !== AssignmentDeclarationKind.None) {
                     return getDeclarationForDeclarationSpan(binaryExpression);
+                }
+            }
+
+            // Jsx Tags
+            if (isJsxOpeningElement(node.parent) || isJsxClosingElement(node.parent)) {
+                return node.parent.parent;
+            }
+            else if (isJsxSelfClosingElement(node.parent) ||
+                isLabeledStatement(node.parent) ||
+                isBreakOrContinueStatement(node.parent)) {
+                return node.parent;
+            }
+            else if (isStringLiteralLike(node)) {
+                const validImport = tryGetImportFromModuleSpecifier(node);
+                if (validImport) {
+                    const declOrStatement = findAncestor(validImport, node =>
+                        isDeclaration(node) ||
+                        isStatement(node) ||
+                        isJSDocTag(node)
+                    )! as NamedDeclaration | Statement | JSDocTag;
+                    return isDeclaration(declOrStatement) ?
+                        getDeclarationForDeclarationSpan(declOrStatement) :
+                        declOrStatement;
                 }
             }
 

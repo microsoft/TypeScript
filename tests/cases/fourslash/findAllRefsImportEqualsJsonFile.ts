@@ -5,11 +5,11 @@
 // @resolveJsonModule: true
 
 // @Filename: /a.ts
-////[|import [|{| "isWriteAccess": true, "isDefinition": true, "declarationRangeIndex": 0 |}j|] = require("[|./j.json|]");|]
+////[|import [|{| "isWriteAccess": true, "isDefinition": true, "declarationRangeIndex": 0 |}j|] = require("[|{| "declarationRangeIndex": 0 |}./j.json|]");|]
 ////[|j|];
 
 // @Filename: /b.js
-////[|const [|{| "isWriteAccess": true, "isDefinition": true, "declarationRangeIndex": 4 |}j|] = require("[|./j.json|]");|]
+////[|const [|{| "isWriteAccess": true, "isDefinition": true, "declarationRangeIndex": 4 |}j|] = require("[|{| "declarationRangeIndex": 4 |}./j.json|]");|]
 ////[|j|];
 
 // @Filename: /j.json
