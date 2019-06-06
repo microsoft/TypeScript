@@ -74,15 +74,12 @@ namespace ts.FindAllReferences {
                 undefined;
         }
 
-        if (isConstructorDeclaration(node.parent) ||
-            node.parent.name === node || // node is name of declaration, use parent
+        if (node.parent.name === node || // node is name of declaration, use parent
+            isConstructorDeclaration(node.parent) ||
+            isExportAssignment(node.parent) ||
             // Property name of the import export specifier or binding pattern, use parent
             ((isImportOrExportSpecifier(node.parent) || isBindingElement(node.parent))
                 && node.parent.propertyName === node) ||
-            isExportAssignment(node.parent) && (
-                node.parent.expression === node ||
-                (!node.parent.isExportEquals && node.kind === SyntaxKind.DefaultKeyword)
-            ) ||
             // Is default export
             (node.kind === SyntaxKind.DefaultKeyword && hasModifier(node.parent, ModifierFlags.ExportDefault))) {
             return getDeclarationForDeclarationSpan(node.parent);

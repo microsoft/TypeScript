@@ -5,7 +5,7 @@
 ////[|namespace [|{| "isWriteAccess": true, "isDefinition": true, "declarationRangeIndex": 2 |}T|] {
 ////    export type U = string;
 ////}|]
-////[|[|export|] = [|{| "declarationRangeIndex": 4 |}T|];|]
+////[|[|{| "declarationRangeIndex": 4 |}export|] = [|{| "declarationRangeIndex": 4 |}T|];|]
 
 // @Filename: /b.ts
 ////const x: import("[|./[|a|]|]") = 0;
