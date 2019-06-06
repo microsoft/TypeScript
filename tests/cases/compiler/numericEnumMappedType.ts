@@ -1,4 +1,5 @@
 // @strict: true
+// @declaration: true
 
 // Repro from #31771
 
