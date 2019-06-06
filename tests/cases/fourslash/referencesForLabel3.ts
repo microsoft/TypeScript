@@ -2,8 +2,8 @@
 
 // References to unused label
 
-////[|label|]: while (true) {
+////[|[|{| "declarationRangeIndex": 0 |}label|]: while (true) {
 ////    var label = "label";
-////}
+////}|]
 
-verify.singleReferenceGroup("label");
+verify.singleReferenceGroup("label", "label");

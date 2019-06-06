@@ -55,7 +55,9 @@ namespace ts.FindAllReferences {
             if (isJsxOpeningElement(node.parent) || isJsxClosingElement(node.parent)) {
                 return node.parent.parent;
             }
-            else if (isJsxSelfClosingElement(node.parent)) {
+            else if (isJsxSelfClosingElement(node.parent) ||
+                isLabeledStatement(node.parent) ||
+                isBreakOrContinueStatement(node.parent)) {
                 return node.parent;
             }
 
