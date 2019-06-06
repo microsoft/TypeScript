@@ -66,3 +66,45 @@ var N2;
 })(N2 || (N2 = {}));
 var e = E.ONE;
 var x = e;
+
+
+//// [numericEnumMappedType.d.ts]
+declare enum E1 {
+    ONE = 0,
+    TWO = 1,
+    THREE = 2
+}
+declare enum E2 {
+    ONE,
+    TWO,
+    THREE
+}
+declare type Bins1 = {
+    [k in E1]?: string;
+};
+declare type Bins2 = {
+    [k in E2]?: string;
+};
+declare const b1: Bins1;
+declare const b2: Bins2;
+declare const e1: E1;
+declare const e2: E2;
+declare function val(): number;
+declare enum N1 {
+    A,
+    B
+}
+declare enum N2 {
+    C,
+    D
+}
+declare type T1 = {
+    [K in N1 | N2]: K;
+};
+declare enum E {
+    ONE = 0,
+    TWO = 1,
+    THREE = "x"
+}
+declare const e: E;
+declare const x: E.ONE;
