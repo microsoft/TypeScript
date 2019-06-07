@@ -370,6 +370,14 @@ namespace ts {
             description: Diagnostics.Do_not_emit_comments_to_output,
         },
         {
+            name: "preserveDeclarationComments",
+            type: "boolean",
+            affectsEmit: true,
+            showInSimplifiedHelpView: true,
+            category: Diagnostics.Basic_Options,
+            description: Diagnostics.Preserve_emit_comments_to_output_in_declaration,
+        },
+        {
             name: "noEmit",
             type: "boolean",
             affectsEmit: true,

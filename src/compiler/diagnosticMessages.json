@@ -4109,6 +4109,10 @@
         "category": "Message",
         "code": 6502
     },
+    "Preserve emit comments to output in declaration.": {
+        "category": "Message",
+        "code": 6503
+    },
 
     "Variable '{0}' implicitly has an '{1}' type.": {
         "category": "Error",
@@ -4295,7 +4299,7 @@
     "Element implicitly has an 'any' type because expression of type '{0}' can't be used to index type '{1}'.": {
         "category": "Error",
         "code": 7053
-    },    
+    },
     "No index signature with a parameter of type '{0}' was found on type '{1}'.": {
         "category": "Error",
         "code": 7054

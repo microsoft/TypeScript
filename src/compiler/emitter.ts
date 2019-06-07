@@ -356,7 +356,7 @@ namespace ts {
             }
 
             const printerOptions: PrinterOptions = {
-                removeComments: compilerOptions.removeComments,
+                removeComments: compilerOptions.removeComments && !compilerOptions.preserveDeclarationComments,
                 newLine: compilerOptions.newLine,
                 noEmitHelpers: true,
                 module: compilerOptions.module,
