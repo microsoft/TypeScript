@@ -160,6 +160,13 @@ src/language-js/printer-estree.js(1892,20): error TS2345: Argument of type '{ ty
 src/language-js/printer-estree.js(1894,18): error TS2345: Argument of type '"while ("' is not assignable to parameter of type '{ type: string; id: any; contents: any; break: boolean; expandedStates: any; }'.
 src/language-js/printer-estree.js(1903,9): error TS2345: Argument of type '")"' is not assignable to parameter of type '{ type: string; id: any; contents: any; break: boolean; expandedStates: any; }'.
 src/language-js/printer-estree.js(2426,28): error TS2345: Argument of type 'any' is not assignable to parameter of type 'never'.
+src/language-js/printer-estree.js(2446,13): error TS2345: Argument of type '{ hasLineBreak: boolean; cells: never[]; }[]' is not assignable to parameter of type '{ cells: any; } | ConcatArray<{ cells: any; }>'.
+  Type '{ hasLineBreak: boolean; cells: never[]; }[]' is not assignable to type 'ConcatArray<{ cells: any; }>'.
+    Types of property 'slice' are incompatible.
+      Type '(start?: number | undefined, end?: number | undefined) => { hasLineBreak: boolean; cells: never[]; }[]' is not assignable to type '(start?: number | undefined, end?: number | undefined) => { cells: any; }[]'.
+        Type '{ hasLineBreak: boolean; cells: never[]; }[]' is not assignable to type '{ cells: any; }[]'.
+          Type '{ hasLineBreak: boolean; cells: never[]; }' is not assignable to type '{ cells: any; }'.
+            Property 'hasLineBreak' does not exist on type '{ cells: any; }'.
 src/language-js/printer-estree.js(3513,11): error TS2345: Argument of type 'never[] | { type: string; parts: any; }' is not assignable to parameter of type 'ConcatArray<never>'.
   Type '{ type: string; parts: any; }' is not assignable to type 'ConcatArray<never>'.
 src/language-js/printer-estree.js(4031,23): error TS2532: Object is possibly 'undefined'.
