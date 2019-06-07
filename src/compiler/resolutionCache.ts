@@ -51,6 +51,7 @@ namespace ts {
         getCachedDirectoryStructureHost(): CachedDirectoryStructureHost | undefined;
         projectName?: string;
         getGlobalCache?(): string | undefined;
+        globalCacheResolutionModuleName?(externalModuleName: string): string;
         writeLog(s: string): void;
         maxNumberOfFilesToIterateForInvalidation?: number;
         getCurrentProgram(): Program | undefined;
@@ -235,7 +236,12 @@ namespace ts {
             if (globalCache !== undefined && !isExternalModuleNameRelative(moduleName) && !(primaryResult.resolvedModule && extensionIsTS(primaryResult.resolvedModule.extension))) {
                 // create different collection of failed lookup locations for second pass
                 // if it will fail and we've already found something during the first pass - we don't want to pollute its results
-                const { resolvedModule, failedLookupLocations } = loadModuleFromGlobalCache(moduleName, resolutionHost.projectName, compilerOptions, host, globalCache);
+                const { resolvedModule, failedLookupLocations } = loadModuleFromGlobalCache(
+                    Debug.assertDefined(resolutionHost.globalCacheResolutionModuleName)(moduleName),
+                    resolutionHost.projectName,
+                    compilerOptions,
+                    host,
+                    globalCache);
                 if (resolvedModule) {
                     return { resolvedModule, failedLookupLocations: addRange(primaryResult.failedLookupLocations as string[], failedLookupLocations) };
                 }

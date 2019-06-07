@@ -1831,9 +1831,11 @@ declare module "stream" {
             checkProjectActualFiles(proj, [file.path, libFile.path, nodeTyping.path]);
 
             // Here, since typings doesnt contain node typings and resolution fails and
-            // node typings go out of project
+            // node typings go out of project,
+            // but because we handle core node modules when resolving from typings cache
+            // node typings are included in the project
             host.checkTimeoutQueueLengthAndRun(2);
-            checkProjectActualFiles(proj, [file.path, libFile.path]);
+            checkProjectActualFiles(proj, [file.path, libFile.path, nodeTyping.path]);
         });
     });
 
