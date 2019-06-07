@@ -16,8 +16,8 @@ var Foo = /** @class */ (function () {
     }
     return Foo;
 }());
-exports.Foo = Foo;
 _a = key;
+exports.Foo = Foo;
 
 
 //// [variableDeclarationDeclarationEmitUniqueSymbolPartialStatement.d.ts]
