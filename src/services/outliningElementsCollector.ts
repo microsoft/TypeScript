@@ -198,6 +198,8 @@ namespace ts.OutliningElementsCollector {
                 return spanForObjectOrArrayLiteral(n, SyntaxKind.OpenBracketToken);
             case SyntaxKind.JsxElement:
                 return spanForJSXElement(<JsxElement>n);
+            case SyntaxKind.JsxFragment:
+                return spanForJSXFragment(<JsxFragment>n);
             case SyntaxKind.JsxSelfClosingElement:
             case SyntaxKind.JsxOpeningElement:
                 return spanForJSXAttributes((<JsxOpeningLikeElement>n).attributes);
@@ -207,6 +209,12 @@ namespace ts.OutliningElementsCollector {
             const textSpan = createTextSpanFromBounds(node.openingElement.getStart(sourceFile), node.closingElement.getEnd());
             const tagName = node.openingElement.tagName.getText(sourceFile);
             const bannerText = "<" + tagName + ">...</" + tagName + ">";
+            return createOutliningSpan(textSpan, OutliningSpanKind.Code, textSpan, /*autoCollapse*/ false, bannerText);
+        }
+
+        function spanForJSXFragment(node: JsxFragment): OutliningSpan | undefined {
+            const textSpan = createTextSpanFromBounds(node.openingFragment.getStart(sourceFile), node.closingFragment.getEnd());
+            const bannerText = "<>...</>";
             return createOutliningSpan(textSpan, OutliningSpanKind.Code, textSpan, /*autoCollapse*/ false, bannerText);
         }
 
