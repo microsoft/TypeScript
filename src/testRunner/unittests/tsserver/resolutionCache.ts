@@ -818,10 +818,8 @@ namespace ts.projectSystem {
                 verifyTrace(resolutionTrace, expectedTrace);
 
                 const currentDirectory = getDirectoryPath(file1.path);
-                const watchedFiles = mapDefined(files, f => f === file1 || f.path.indexOf("/node_modules/") !== -1 ? undefined : f.path);
-                forEachAncestorDirectory(currentDirectory, d => {
-                    watchedFiles.push(combinePaths(d, "tsconfig.json"), combinePaths(d, "jsconfig.json"));
-                });
+                const watchedFiles = mapDefined(files, f => f === file1 || f.path.indexOf("/node_modules/") !== -1 ? undefined : f.path)
+                    .concat(getConfigFilesToWatch(`${projectLocation}/product/src`));
                 const watchedRecursiveDirectories = getTypeRootsFromLocation(currentDirectory).concat([
                     `${currentDirectory}/node_modules`, `${currentDirectory}/feature`, `${projectLocation}/product/${nodeModules}`,
                     `${projectLocation}/${nodeModules}`, `${projectLocation}/product/test/${nodeModules}`,

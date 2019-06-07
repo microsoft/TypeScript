@@ -477,6 +477,13 @@ namespace ts.projectSystem {
         return getRootsToWatchWithAncestorDirectory(currentDirectory, nodeModulesAtTypes);
     }
 
+    export function getConfigFilesToWatch(folder: string) {
+        return [
+            ...getRootsToWatchWithAncestorDirectory(folder, "tsconfig.json"),
+            ...getRootsToWatchWithAncestorDirectory(folder, "jsconfig.json")
+        ];
+    }
+
     export function checkOpenFiles(projectService: server.ProjectService, expectedFiles: File[]) {
         checkArray("Open files", arrayFrom(projectService.openFiles.keys(), path => projectService.getScriptInfoForPath(path as Path)!.fileName), expectedFiles.map(file => file.path));
     }

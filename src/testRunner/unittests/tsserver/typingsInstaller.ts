@@ -986,14 +986,15 @@ namespace ts.projectSystem {
         });
 
         it("should redo resolution that resolved to '.js' file after typings are installed", () => {
+            const projects = `/user/username/projects`;
             const file: TestFSWithWatch.File = {
-                path: "/a/b/app.js",
+                path: `${projects}/a/b/app.js`,
                 content: `
                 import * as commander from "commander";`
             };
-            const cachePath = "/a/cache";
+            const cachePath = `${projects}/a/cache`;
             const commanderJS: TestFSWithWatch.File = {
-                path: "/node_modules/commander/index.js",
+                path: `${projects}/node_modules/commander/index.js`,
                 content: "module.exports = 0",
             };
 
@@ -1013,10 +1014,17 @@ namespace ts.projectSystem {
             const service = createProjectService(host, { typingsInstaller: installer });
             service.openClientFile(file.path);
 
-            checkWatchedFiles(host, [...flatMap(["/a/b", "/a", ""], x => [x + "/tsconfig.json", x + "/jsconfig.json"]), "/a/lib/lib.d.ts"]);
+            checkWatchedFiles(host, [...getConfigFilesToWatch(getDirectoryPath(file.path)), "/a/lib/lib.d.ts"]);
             checkWatchedDirectories(host, [], /*recursive*/ false);
             // Does not include cachePath because that is handled by typingsInstaller
-            checkWatchedDirectories(host, ["/node_modules", "/a/b/node_modules", "/a/b/node_modules/@types", "/a/b/bower_components"], /*recursive*/ true);
+            checkWatchedDirectories(host, [
+                `${projects}/node_modules`,
+                `${projects}/a/node_modules`,
+                `${projects}/a/b/node_modules`,
+                `${projects}/a/node_modules/@types`,
+                `${projects}/a/b/node_modules/@types`,
+                `${projects}/a/b/bower_components`
+            ], /*recursive*/ true);
 
             service.checkNumberOfProjects({ inferredProjects: 1 });
             checkProjectActualFiles(service.inferredProjects[0], [file.path, commanderJS.path]);
