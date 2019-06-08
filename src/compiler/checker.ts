@@ -9956,6 +9956,9 @@ namespace ts {
                 }
                 else {
                     result = createIntersectionType(typeSet, aliasSymbol, aliasTypeArguments);
+                    if (isEmptyIntersectionType(<IntersectionType>result)) {
+                        result = neverType;
+                    }
                 }
                 intersectionTypes.set(id, result);
             }
