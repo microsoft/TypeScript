@@ -1,4 +1,4 @@
-//// [intersectionReduction.ts]
+//// [intersectionReductionStrict.ts]
 declare const sym1: unique symbol;
 declare const sym2: unique symbol;
 
@@ -57,7 +57,8 @@ t1 = t2;
 t2 = t1;
 
 
-//// [intersectionReduction.js]
+//// [intersectionReductionStrict.js]
+"use strict";
 // Repro from #31663
 var x1 = { a: 'foo', b: 42 };
 var x2 = { a: 'foo', b: true };
