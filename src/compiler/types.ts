@@ -3983,7 +3983,7 @@ namespace ts {
         NotPrimitiveUnion = Any | Unknown | Enum | Void | Never | StructuredOrInstantiable,
         // The following flags are aggregated during union and intersection type construction
         /* @internal */
-        IncludesMask = Any | Unknown | Primitive | Never | Object | Union,
+        IncludesMask = Any | Unknown | Primitive | Never | Object | Union | NonPrimitive,
         // The following flags are used for different purposes during union and intersection type construction
         /* @internal */
         IncludesStructuredOrInstantiable = TypeParameter,
