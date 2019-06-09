@@ -51,3 +51,80 @@ class Comp<T extends Foo, S> extends Component<S & State<T>>
     }
 }
 
+// Repro from #31833
+
+type Foo1 = {
+>Foo1 : Symbol(Foo1, Decl(indexedAccessRelation.ts, 17, 1))
+
+  type: 'foo1';
+>type : Symbol(type, Decl(indexedAccessRelation.ts, 21, 13))
+
+  extra: number;
+>extra : Symbol(extra, Decl(indexedAccessRelation.ts, 22, 15))
+
+};
+
+type Foo2 = {
+>Foo2 : Symbol(Foo2, Decl(indexedAccessRelation.ts, 24, 2))
+
+  type: 'foo2';
+>type : Symbol(type, Decl(indexedAccessRelation.ts, 26, 13))
+
+  extra: string;
+>extra : Symbol(extra, Decl(indexedAccessRelation.ts, 27, 15))
+
+};
+
+type Both = Foo1 | Foo2;
+>Both : Symbol(Both, Decl(indexedAccessRelation.ts, 29, 2))
+>Foo1 : Symbol(Foo1, Decl(indexedAccessRelation.ts, 17, 1))
+>Foo2 : Symbol(Foo2, Decl(indexedAccessRelation.ts, 24, 2))
+
+type FooTypes = Both['type'];
+>FooTypes : Symbol(FooTypes, Decl(indexedAccessRelation.ts, 31, 24))
+>Both : Symbol(Both, Decl(indexedAccessRelation.ts, 29, 2))
+
+export type FooFromType<T extends FooTypes, O extends Both = Both> = O extends { type: T } ? O : never;
+>FooFromType : Symbol(FooFromType, Decl(indexedAccessRelation.ts, 33, 29))
+>T : Symbol(T, Decl(indexedAccessRelation.ts, 35, 24))
+>FooTypes : Symbol(FooTypes, Decl(indexedAccessRelation.ts, 31, 24))
+>O : Symbol(O, Decl(indexedAccessRelation.ts, 35, 43))
+>Both : Symbol(Both, Decl(indexedAccessRelation.ts, 29, 2))
+>Both : Symbol(Both, Decl(indexedAccessRelation.ts, 29, 2))
+>O : Symbol(O, Decl(indexedAccessRelation.ts, 35, 43))
+>type : Symbol(type, Decl(indexedAccessRelation.ts, 35, 80))
+>T : Symbol(T, Decl(indexedAccessRelation.ts, 35, 24))
+>O : Symbol(O, Decl(indexedAccessRelation.ts, 35, 43))
+
+type FooExtraFromType<T extends FooTypes> = FooFromType<T>['extra'];
+>FooExtraFromType : Symbol(FooExtraFromType, Decl(indexedAccessRelation.ts, 35, 103))
+>T : Symbol(T, Decl(indexedAccessRelation.ts, 37, 22))
+>FooTypes : Symbol(FooTypes, Decl(indexedAccessRelation.ts, 31, 24))
+>FooFromType : Symbol(FooFromType, Decl(indexedAccessRelation.ts, 33, 29))
+>T : Symbol(T, Decl(indexedAccessRelation.ts, 37, 22))
+
+function fnWithFooExtra<T extends FooTypes>(type: T, extra: FooExtraFromType<T>) { }
+>fnWithFooExtra : Symbol(fnWithFooExtra, Decl(indexedAccessRelation.ts, 37, 68))
+>T : Symbol(T, Decl(indexedAccessRelation.ts, 39, 24))
+>FooTypes : Symbol(FooTypes, Decl(indexedAccessRelation.ts, 31, 24))
+>type : Symbol(type, Decl(indexedAccessRelation.ts, 39, 44))
+>T : Symbol(T, Decl(indexedAccessRelation.ts, 39, 24))
+>extra : Symbol(extra, Decl(indexedAccessRelation.ts, 39, 52))
+>FooExtraFromType : Symbol(FooExtraFromType, Decl(indexedAccessRelation.ts, 35, 103))
+>T : Symbol(T, Decl(indexedAccessRelation.ts, 39, 24))
+
+type FnType = <T extends FooTypes>(type: T, extra: FooExtraFromType<T>) => void;
+>FnType : Symbol(FnType, Decl(indexedAccessRelation.ts, 39, 84))
+>T : Symbol(T, Decl(indexedAccessRelation.ts, 41, 15))
+>FooTypes : Symbol(FooTypes, Decl(indexedAccessRelation.ts, 31, 24))
+>type : Symbol(type, Decl(indexedAccessRelation.ts, 41, 35))
+>T : Symbol(T, Decl(indexedAccessRelation.ts, 41, 15))
+>extra : Symbol(extra, Decl(indexedAccessRelation.ts, 41, 43))
+>FooExtraFromType : Symbol(FooExtraFromType, Decl(indexedAccessRelation.ts, 35, 103))
+>T : Symbol(T, Decl(indexedAccessRelation.ts, 41, 15))
+
+const fn: FnType = fnWithFooExtra;
+>fn : Symbol(fn, Decl(indexedAccessRelation.ts, 43, 5))
+>FnType : Symbol(FnType, Decl(indexedAccessRelation.ts, 39, 84))
+>fnWithFooExtra : Symbol(fnWithFooExtra, Decl(indexedAccessRelation.ts, 37, 68))
+

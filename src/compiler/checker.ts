@@ -12519,7 +12519,7 @@ namespace ts {
                     source = getSimplifiedType(source, /*writing*/ false);
                 }
                 if (target.flags & TypeFlags.Simplifiable) {
-                    target = getSimplifiedType(target, /*writing*/ true);
+                    target = getSimplifiedType(target, (source.flags & TypeFlags.IndexedAccess) !== 0 && (target.flags & TypeFlags.IndexedAccess) !== 0);
                 }
 
                 // Try to see if we're relating something like `Foo` -> `Bar | null | undefined`.

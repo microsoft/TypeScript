@@ -36,3 +36,54 @@ class Comp<T extends Foo, S> extends Component<S & State<T>>
     }
 }
 
+// Repro from #31833
+
+type Foo1 = {
+>Foo1 : Foo1
+
+  type: 'foo1';
+>type : "foo1"
+
+  extra: number;
+>extra : number
+
+};
+
+type Foo2 = {
+>Foo2 : Foo2
+
+  type: 'foo2';
+>type : "foo2"
+
+  extra: string;
+>extra : string
+
+};
+
+type Both = Foo1 | Foo2;
+>Both : Both
+
+type FooTypes = Both['type'];
+>FooTypes : "foo1" | "foo2"
+
+export type FooFromType<T extends FooTypes, O extends Both = Both> = O extends { type: T } ? O : never;
+>FooFromType : FooFromType<T, O>
+>type : T
+
+type FooExtraFromType<T extends FooTypes> = FooFromType<T>['extra'];
+>FooExtraFromType : (FooFromType<T, Foo1> | FooFromType<T, Foo2>)["extra"]
+
+function fnWithFooExtra<T extends FooTypes>(type: T, extra: FooExtraFromType<T>) { }
+>fnWithFooExtra : <T extends "foo1" | "foo2">(type: T, extra: (FooFromType<T, Foo1> | FooFromType<T, Foo2>)["extra"]) => void
+>type : T
+>extra : (FooFromType<T, Foo1> | FooFromType<T, Foo2>)["extra"]
+
+type FnType = <T extends FooTypes>(type: T, extra: FooExtraFromType<T>) => void;
+>FnType : FnType
+>type : T
+>extra : (FooFromType<T, Foo1> | FooFromType<T, Foo2>)["extra"]
+
+const fn: FnType = fnWithFooExtra;
+>fn : FnType
+>fnWithFooExtra : <T extends "foo1" | "foo2">(type: T, extra: (FooFromType<T, Foo1> | FooFromType<T, Foo2>)["extra"]) => void
+
