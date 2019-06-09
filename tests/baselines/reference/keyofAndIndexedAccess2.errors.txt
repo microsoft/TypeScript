@@ -17,8 +17,7 @@ tests/cases/conformance/types/keyof/keyofAndIndexedAccess2.ts(31,5): error TS232
 tests/cases/conformance/types/keyof/keyofAndIndexedAccess2.ts(38,5): error TS2322: Type '{ [x: string]: number; }' is not assignable to type '{ [P in K]: number; }'.
 tests/cases/conformance/types/keyof/keyofAndIndexedAccess2.ts(50,3): error TS7053: Element implicitly has an 'any' type because expression of type 'string' can't be used to index type 'Item'.
   No index signature with a parameter of type 'string' was found on type 'Item'.
-tests/cases/conformance/types/keyof/keyofAndIndexedAccess2.ts(51,3): error TS2322: Type '123' is not assignable to type 'string & number'.
-  Type '123' is not assignable to type 'string'.
+tests/cases/conformance/types/keyof/keyofAndIndexedAccess2.ts(51,3): error TS2322: Type '123' is not assignable to type 'never'.
 tests/cases/conformance/types/keyof/keyofAndIndexedAccess2.ts(52,3): error TS2322: Type '123' is not assignable to type 'T[keyof T]'.
 tests/cases/conformance/types/keyof/keyofAndIndexedAccess2.ts(53,3): error TS2322: Type '123' is not assignable to type 'T[K]'.
 tests/cases/conformance/types/keyof/keyofAndIndexedAccess2.ts(65,7): error TS2339: Property 'foo' does not exist on type 'T'.
@@ -26,8 +25,7 @@ tests/cases/conformance/types/keyof/keyofAndIndexedAccess2.ts(66,3): error TS253
 tests/cases/conformance/types/keyof/keyofAndIndexedAccess2.ts(67,3): error TS2322: Type '123' is not assignable to type 'T[keyof T]'.
 tests/cases/conformance/types/keyof/keyofAndIndexedAccess2.ts(68,3): error TS2322: Type '123' is not assignable to type 'T[K]'.
 tests/cases/conformance/types/keyof/keyofAndIndexedAccess2.ts(108,5): error TS2322: Type '123' is not assignable to type 'Type[K]'.
-  Type '123' is not assignable to type '123 & "some string"'.
-    Type '123' is not assignable to type '"some string"'.
+  Type '123' is not assignable to type 'never'.
 
 
 ==== tests/cases/conformance/types/keyof/keyofAndIndexedAccess2.ts (23 errors) ====
@@ -117,8 +115,7 @@ tests/cases/conformance/types/keyof/keyofAndIndexedAccess2.ts(108,5): error TS23
 !!! error TS7053:   No index signature with a parameter of type 'string' was found on type 'Item'.
       obj[k2] = 123;  // Error
       ~~~~~~~
-!!! error TS2322: Type '123' is not assignable to type 'string & number'.
-!!! error TS2322:   Type '123' is not assignable to type 'string'.
+!!! error TS2322: Type '123' is not assignable to type 'never'.
       obj[k3] = 123;  // Error
       ~~~~~~~
 !!! error TS2322: Type '123' is not assignable to type 'T[keyof T]'.
@@ -190,8 +187,7 @@ tests/cases/conformance/types/keyof/keyofAndIndexedAccess2.ts(108,5): error TS23
         return 123;  // Error
         ~~~~~~~~~~~
 !!! error TS2322: Type '123' is not assignable to type 'Type[K]'.
-!!! error TS2322:   Type '123' is not assignable to type '123 & "some string"'.
-!!! error TS2322:     Type '123' is not assignable to type '"some string"'.
+!!! error TS2322:   Type '123' is not assignable to type 'never'.
     }
     
     // Repro from #30920
