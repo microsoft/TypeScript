@@ -7569,7 +7569,7 @@ namespace ts {
     export function getDirectoryPath(path: Path): Path;
     /**
      * Returns the path except for its basename. Semantics align with NodeJS's `path.dirname`
-     * except that we support URL's as well.
+     * except that we support URLs as well.
      *
      * ```ts
      * getDirectoryPath("/path/to/file.ext") === "/path/to"
