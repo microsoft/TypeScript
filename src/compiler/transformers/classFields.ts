@@ -82,7 +82,7 @@ namespace ts {
                 case SyntaxKind.SetAccessor:
                 case SyntaxKind.MethodDeclaration:
                     // Visit the name of the member (if it's a computed property name).
-                    return visitEachChild(node, classElementVisitor, context);
+                    return visitEachChild(node, visitor, context);
 
                 case SyntaxKind.PropertyDeclaration:
                     return visitPropertyDeclaration(node as PropertyDeclaration);
@@ -90,8 +90,11 @@ namespace ts {
                 case SyntaxKind.ComputedPropertyName:
                     return visitComputedPropertyName(node as ComputedPropertyName);
 
-                default:
+                case SyntaxKind.SemicolonClassElement:
                     return node;
+
+                default:
+                    return Debug.failBadSyntaxKind(node);
             }
         }
 
@@ -139,7 +142,7 @@ namespace ts {
                 return visitEachChild(node, visitor, context);
             }
             const savedPendingExpressions = pendingExpressions;
-            pendingExpressions = undefined;
+            pendingExpressions = undefined!;
 
             const extendsClauseElement = getEffectiveBaseTypeNode(node);
             const isDerivedClass = !!(extendsClauseElement && skipOuterExpressions(extendsClauseElement.expression).kind !== SyntaxKind.NullKeyword);
@@ -147,18 +150,18 @@ namespace ts {
             const statements: Statement[] = [
                 updateClassDeclaration(
                     node,
-                    node.decorators,
+                    /*decorators*/ undefined,
                     node.modifiers,
                     node.name,
-                    node.typeParameters,
-                    node.heritageClauses,
+                    /*typeParameters*/ undefined,
+                    visitNodes(node.heritageClauses, visitor, isHeritageClause),
                     transformClassMembers(node, isDerivedClass)
                 )
             ];
 
             // Write any pending expressions from elided or moved computed property names
             if (some(pendingExpressions)) {
-                statements.push(createExpressionStatement(inlineExpressions(pendingExpressions!)));
+                statements.push(createExpressionStatement(inlineExpressions(pendingExpressions)));
             }
             pendingExpressions = savedPendingExpressions;
 
@@ -199,7 +202,7 @@ namespace ts {
                 node,
                 node.modifiers,
                 node.name,
-                node.typeParameters,
+                /*typeParameters*/ undefined,
                 visitNodes(node.heritageClauses, visitor, isHeritageClause),
                 transformClassMembers(node, isDerivedClass)
             );
@@ -329,6 +332,21 @@ namespace ts {
             //      this.x = 1;
             //  }
             //
+            if (constructor && constructor.body) {
+                let parameterPropertyDeclarationCount = 0;
+                for (let i = indexOfFirstStatement; i < constructor.body.statements.length; i++) {
+                    if (isParameterPropertyDeclaration(getOriginalNode(constructor.body.statements[i]))) {
+                        parameterPropertyDeclarationCount++;
+                    }
+                    else {
+                        break;
+                    }
+                }
+                if (parameterPropertyDeclarationCount > 0) {
+                    addRange(statements, visitNodes(constructor.body.statements, visitor, isStatement, indexOfFirstStatement, parameterPropertyDeclarationCount));
+                    indexOfFirstStatement += parameterPropertyDeclarationCount;
+                }
+            }
             addInitializedPropertyStatements(statements, properties, createThis());
 
             // Add existing statements, skipping the initial super call.
