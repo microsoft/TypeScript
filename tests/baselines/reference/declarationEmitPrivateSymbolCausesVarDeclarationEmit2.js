@@ -34,8 +34,8 @@ var C = /** @class */ (function () {
     }
     return C;
 }());
-_a = a_1.x;
 exports.C = C;
+_a = a_1.x;
 //// [c.js]
 "use strict";
 var __extends = (this && this.__extends) || (function () {
@@ -64,8 +64,8 @@ var D = /** @class */ (function (_super) {
     }
     return D;
 }(b_1.C));
-_a = a_1.x;
 exports.D = D;
+_a = a_1.x;
 
 
 //// [a.d.ts]

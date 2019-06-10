@@ -241,6 +241,47 @@ namespace ts {
     }
 
     /**
+     * A simple inlinable expression is an expression which can be copied into multiple locations
+     * without risk of repeating any sideeffects and whose value could not possibly change between
+     * any such locations
+     */
+    export function isSimpleInlineableExpression(expression: Expression) {
+        return !isIdentifier(expression) && isSimpleCopiableExpression(expression) ||
+            isWellKnownSymbolSyntactically(expression);
+    }
+
+    /**
+     * Adds super call and preceding prologue directives into the list of statements.
+     *
+     * @param ctor The constructor node.
+     * @param result The list of statements.
+     * @param visitor The visitor to apply to each node added to the result array.
+     * @returns index of the statement that follows super call
+     */
+    export function addPrologueDirectivesAndInitialSuperCall(ctor: ConstructorDeclaration, result: Statement[], visitor: Visitor): number {
+        if (ctor.body) {
+            const statements = ctor.body.statements;
+            // add prologue directives to the list (if any)
+            const index = addPrologue(result, statements, /*ensureUseStrict*/ false, visitor);
+            if (index === statements.length) {
+                // list contains nothing but prologue directives (or empty) - exit
+                return index;
+            }
+
+            const statement = statements[index];
+            if (statement.kind === SyntaxKind.ExpressionStatement && isSuperCall((<ExpressionStatement>statement).expression)) {
+                result.push(visitNode(statement, visitor, isStatement));
+                return index + 1;
+            }
+
+            return index;
+        }
+
+        return 0;
+    }
+
+
+    /**
      * @param input Template string input strings
      * @param args Names which need to be made file-level unique
      */
@@ -254,5 +295,44 @@ namespace ts {
             result += input[input.length - 1];
             return result;
         };
+    }
+
+    /**
+     * Gets all property declarations with initializers on either the static or instance side of a class.
+     *
+     * @param node The class node.
+     * @param isStatic A value indicating whether to get properties from the static or instance side of the class.
+     */
+    export function getInitializedProperties(node: ClassExpression | ClassDeclaration, isStatic: boolean): ReadonlyArray<PropertyDeclaration> {
+        return filter(node.members, isStatic ? isStaticInitializedProperty : isInstanceInitializedProperty);
+    }
+
+    /**
+     * Gets a value indicating whether a class element is a static property declaration with an initializer.
+     *
+     * @param member The class element node.
+     */
+    export function isStaticInitializedProperty(member: ClassElement): member is PropertyDeclaration & { initializer: Expression; } {
+        return isInitializedProperty(member) && hasStaticModifier(member);
+    }
+
+    /**
+     * Gets a value indicating whether a class element is an instance property declaration with an initializer.
+     *
+     * @param member The class element node.
+     */
+    export function isInstanceInitializedProperty(member: ClassElement): member is PropertyDeclaration & { initializer: Expression; } {
+        return isInitializedProperty(member) && !hasStaticModifier(member);
+    }
+
+    /**
+     * Gets a value indicating whether a class element is either a static or an instance property declaration with an initializer.
+     *
+     * @param member The class element node.
+     * @param isStatic A value indicating whether the member should be a static or instance member.
+     */
+    export function isInitializedProperty(member: ClassElement): member is PropertyDeclaration & { initializer: Expression; } {
+        return member.kind === SyntaxKind.PropertyDeclaration
+            && (<PropertyDeclaration>member).initializer !== undefined;
     }
 }
