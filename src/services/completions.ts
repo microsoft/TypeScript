@@ -1036,6 +1036,9 @@ namespace ts.Completions {
                     symbolToOriginInfoMap[getSymbolId(firstAccessibleSymbol)] =
                         !moduleSymbol || !isExternalModuleSymbol(moduleSymbol) ? { kind: SymbolOriginInfoKind.SymbolMemberNoExport } : { kind: SymbolOriginInfoKind.SymbolMemberExport, moduleSymbol, isDefaultExport: false };
                 }
+                else if (preferences.includeCompletionsWithInsertText) {
+                    symbols.push(symbol);
+                }
             }
             else {
                 symbols.push(symbol);
