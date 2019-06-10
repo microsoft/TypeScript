@@ -1567,7 +1567,7 @@ namespace ts {
                         break;
 
                     default:
-                        Debug.failBadSyntaxKind(node);
+                        Debug.failBadSyntaxKind(member, currentSourceFile && currentSourceFile.fileName);
                         break;
                 }
             }

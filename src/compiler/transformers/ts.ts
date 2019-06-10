@@ -312,10 +312,7 @@ namespace ts {
         function classElementVisitorWorker(node: Node): VisitResult<Node> {
             switch (node.kind) {
                 case SyntaxKind.Constructor:
-                    // TypeScript constructors are transformed in `visitClassDeclaration`.
-                    // We elide them here as `visitorWorker` checks transform flags, which could
-                    // erronously include an ES6 constructor without TypeScript syntax.
-                    return undefined;
+                    return visitConstructor(node as ConstructorDeclaration);
 
                 case SyntaxKind.PropertyDeclaration:
                     // Property declarations are not TypeScript syntax, but they must be visited
@@ -609,6 +606,7 @@ namespace ts {
             if (!isClassLikeDeclarationWithTypeScriptSyntax(node) && !(currentNamespace && hasModifier(node, ModifierFlags.Export))) {
                 return visitEachChild(node, visitor, context);
             }
+
             const staticProperties = getInitializedProperties(node, /*isStatic*/ true);
             const facts = getClassFacts(node, staticProperties);
 
@@ -735,6 +733,7 @@ namespace ts {
                 emitFlags |= EmitFlags.NoTrailingSourceMap;
             }
 
+            aggregateTransformFlags(classDeclaration);
             setTextRange(classDeclaration, node);
             setOriginalNode(classDeclaration, node);
             setEmitFlags(classDeclaration, emitFlags);
@@ -842,6 +841,7 @@ namespace ts {
             const heritageClauses = visitNodes(node.heritageClauses, visitor, isHeritageClause);
             const members = transformClassMembers(node);
             const classExpression = createClassExpression(/*modifiers*/ undefined, name, /*typeParameters*/ undefined, heritageClauses, members);
+            aggregateTransformFlags(classExpression);
             setOriginalNode(classExpression, node);
             setTextRange(classExpression, location);
 
@@ -868,16 +868,15 @@ namespace ts {
                 return visitEachChild(node, visitor, context);
             }
 
-            const members = transformClassMembers(node);
-
             const classExpression = createClassExpression(
                 /*modifiers*/ undefined,
                 node.name,
                 /*typeParameters*/ undefined,
-                node.heritageClauses,
-                members
+                visitNodes(node.heritageClauses, visitor, isHeritageClause),
+                transformClassMembers(node)
             );
 
+            aggregateTransformFlags(classExpression);
             setOriginalNode(classExpression, node);
             setTextRange(classExpression, node);
 
@@ -891,207 +890,28 @@ namespace ts {
          */
         function transformClassMembers(node: ClassDeclaration | ClassExpression) {
             const members: ClassElement[] = [];
-            const existingMembers = visitNodes(node.members, classElementVisitor, isClassElement);
             const constructor = getFirstConstructorWithBody(node);
-            const parametersWithPropertyAssignments =
-                constructor && hasTypeScriptClassSyntax(constructor)
-                ? filter(constructor.parameters, isParameterPropertyDeclaration)
-                : undefined;
-            if (some(parametersWithPropertyAssignments) && constructor) {
-                currentClassHasParameterProperties = true;
+            const parametersWithPropertyAssignments = constructor &&
+                filter(constructor.parameters, isParameterPropertyDeclaration);
 
-                // Create property declarations for constructor parameter properties.
-                addRange(
-                    members,
-                    parametersWithPropertyAssignments.map(param =>
-                        createProperty(
+            if (parametersWithPropertyAssignments) {
+                for (const parameter of parametersWithPropertyAssignments) {
+                    if (isIdentifier(parameter.name)) {
+                        members.push(aggregateTransformFlags(createProperty(
                             /*decorators*/ undefined,
                             /*modifiers*/ undefined,
-                            param.name,
+                            parameter.name,
                             /*questionOrExclamationToken*/ undefined,
                             /*type*/ undefined,
-                            /*initializer*/ undefined
-                        )
-                    )
-                );
-
-                const parameters = transformConstructorParameters(constructor);
-                const body = transformConstructorBody(node.members, constructor, parametersWithPropertyAssignments);
-                members.push(startOnNewLine(
-                    setOriginalNode(
-                        setTextRange(
-                            createConstructor(
-                            /*decorators*/ undefined,
-                            /*modifiers*/ undefined,
-                                parameters,
-                                body
-                            ),
-                            constructor
-                        ),
-                        constructor
-                    )
-                ));
-                addRange(
-                    members,
-                    visitNodes(
-                        existingMembers,
-                        member => {
-                            if (isPropertyDeclaration(member) && !hasStaticModifier(member) && !!member.initializer) {
-                                const updated = updateProperty(
-                                    member,
-                                    member.decorators,
-                                    member.modifiers,
-                                    member.name,
-                                    member.questionToken,
-                                    member.type,
-                                    /*initializer*/ undefined
-                                );
-                                setCommentRange(updated, node);
-                                setSourceMapRange(updated, node);
-                                return updated;
-                            }
-                            return member;
-                        },
-                        isClassElement
-                    )
-                );
-            }
-            else {
-                if (constructor) {
-                    members.push(visitEachChild(constructor, visitor, context));
+                            /*initializer*/ undefined)));
+                    }
                 }
-                addRange(members, existingMembers);
             }
+
+            addRange(members, visitNodes(node.members, classElementVisitor, isClassElement));
             return setTextRange(createNodeArray(members), /*location*/ node.members);
         }
 
-        /**
-         * Transforms (or creates) the parameters for the constructor of a class with
-         * parameter property assignments or instance property initializers.
-         *
-         * @param constructor The constructor declaration.
-         */
-        function transformConstructorParameters(constructor: ConstructorDeclaration) {
-            // The ES2015 spec specifies in 14.5.14. Runtime Semantics: ClassDefinitionEvaluation:
-            // If constructor is empty, then
-            //     If ClassHeritag_eopt is present and protoParent is not null, then
-            //          Let constructor be the result of parsing the source text
-            //              constructor(...args) { super (...args);}
-            //          using the syntactic grammar with the goal symbol MethodDefinition[~Yield].
-            //      Else,
-            //           Let constructor be the result of parsing the source text
-            //               constructor( ){ }
-            //           using the syntactic grammar with the goal symbol MethodDefinition[~Yield].
-            //
-            // While we could emit the '...args' rest parameter, certain later tools in the pipeline might
-            // downlevel the '...args' portion less efficiently by naively copying the contents of 'arguments' to an array.
-            // Instead, we'll avoid using a rest parameter and spread into the super call as
-            // 'super(...arguments)' instead of 'super(...args)', as you can see in "transformConstructorBody".
-            return visitParameterList(constructor && constructor.parameters, visitor, context)
-                || <ParameterDeclaration[]>[];
-        }
-
-        /**
-         * Transforms (or creates) a constructor body for a class with parameter property assignments.
-         *
-         * @param node The current class.
-         * @param constructor The current class constructor.
-         */
-        function transformConstructorBody(members: NodeArray<ClassElement>, constructor: ConstructorDeclaration, propertyAssignments: ReadonlyArray<ParameterPropertyDeclaration>) {
-            let statements: Statement[] = [];
-            let indexOfFirstStatement = 0;
-
-            resumeLexicalEnvironment();
-
-            indexOfFirstStatement = addPrologueDirectivesAndInitialSuperCall(constructor, statements, visitor);
-
-            // Add parameters with property assignments. Transforms this:
-            //
-            //  constructor (public x, public y) {
-            //  }
-            //
-            // Into this:
-            //
-            //  constructor (x, y) {
-            //      this.x = x;
-            //      this.y = y;
-            //  }
-            //
-            addRange(statements, map(propertyAssignments, transformParameterWithPropertyAssignment));
-
-            // Get property initializers.
-            const classBodyProperties = members.filter(member => isPropertyDeclaration(member) && !hasStaticModifier(member) && !!member.initializer) as PropertyDeclaration[];
-            addRange(statements, classBodyProperties.map(
-                prop => {
-                    const name = prop.name;
-                    const lhs = (!isComputedPropertyName(name) || isSimpleInlineableExpression(name.expression)) ?
-                        createMemberAccessForPropertyName(createThis(), name, prop) :
-                        createElementAccess(createThis(), getGeneratedNameForNode(name));
-                    const initializerNode = createExpressionStatement(
-                        createAssignment(lhs, prop.initializer!)
-                    );
-                    setOriginalNode(initializerNode, prop);
-                    setTextRange(initializerNode, prop);
-                    setCommentRange(initializerNode, prop);
-                    setSourceMapRange(initializerNode, prop);
-                    return initializerNode;
-                }
-            ));
-
-            // Add the existing statements, skipping the initial super call.
-            addRange(statements, visitNodes(constructor.body!.statements, visitor, isStatement, indexOfFirstStatement));
-
-            // End the lexical environment.
-            statements = mergeLexicalEnvironment(statements, endLexicalEnvironment());
-            return setTextRange(
-                createBlock(
-                    setTextRange(
-                        createNodeArray(statements),
-                        /*location*/ constructor ? constructor.body!.statements : members
-                    ),
-                    /*multiLine*/ true
-                ),
-                /*location*/ constructor ? constructor.body : undefined
-            );
-        }
-
-        /**
-         * Transforms a parameter into a property assignment statement.
-         *
-         * @param node The parameter declaration.
-         */
-        function transformParameterWithPropertyAssignment(node: ParameterPropertyDeclaration) {
-            const name = node.name;
-            if (!isIdentifier(name)) {
-                return undefined;
-            }
-            const propertyName = getMutableClone(name);
-            setEmitFlags(propertyName, EmitFlags.NoComments | EmitFlags.NoSourceMap);
-
-            const localName = getMutableClone(name);
-            setEmitFlags(localName, EmitFlags.NoComments);
-
-            return startOnNewLine(
-                setEmitFlags(
-                    setTextRange(
-                        createExpressionStatement(
-                            createAssignment(
-                                setTextRange(
-                                    createPropertyAccess(
-                                        createThis(),
-                                        propertyName
-                                    ),
-                                    node.name
-                                ),
-                                localName
-                            )
-                        ),
-                        moveRangePos(node, -1)
-                    ),
-                    EmitFlags.NoComments
-                )
-            );
-        }
 
         /**
          * Gets either the static or instance members of a class that are decorated, or have
@@ -2045,7 +1865,7 @@ namespace ts {
          *
          * @param node The declaration node.
          */
-        function shouldEmitFunctionLikeDeclaration(node: FunctionLikeDeclaration) {
+        function shouldEmitFunctionLikeDeclaration<T extends FunctionLikeDeclaration>(node: T): node is T & { body: NonNullable<T["body"]> } {
             return !nodeIsMissing(node.body);
         }
 
@@ -2075,10 +1895,90 @@ namespace ts {
 
             return updateConstructor(
                 node,
-                visitNodes(node.decorators, visitor, isDecorator),
-                visitNodes(node.modifiers, visitor, isModifier),
+                /*decorators*/ undefined,
+                /*modifiers*/ undefined,
                 visitParameterList(node.parameters, visitor, context),
-                visitFunctionBody(node.body, visitor, context)
+                transformConstructorBody(node.body, node)
+            );
+        }
+
+        function transformConstructorBody(body: Block, constructor: ConstructorDeclaration) {
+            const parametersWithPropertyAssignments = constructor &&
+                filter(constructor.parameters, isParameterPropertyDeclaration);
+            if (!some(parametersWithPropertyAssignments)) {
+                return visitFunctionBody(body, visitor, context);
+            }
+
+            let statements: Statement[] = [];
+            let indexOfFirstStatement = 0;
+
+            resumeLexicalEnvironment();
+
+            indexOfFirstStatement = addPrologueDirectivesAndInitialSuperCall(constructor, statements, visitor);
+
+            // Add parameters with property assignments. Transforms this:
+            //
+            //  constructor (public x, public y) {
+            //  }
+            //
+            // Into this:
+            //
+            //  constructor (x, y) {
+            //      this.x = x;
+            //      this.y = y;
+            //  }
+            //
+            addRange(statements, map(parametersWithPropertyAssignments, transformParameterWithPropertyAssignment));
+
+            // Add the existing statements, skipping the initial super call.
+            addRange(statements, visitNodes(body.statements, visitor, isStatement, indexOfFirstStatement));
+
+            // End the lexical environment.
+            statements = mergeLexicalEnvironment(statements, endLexicalEnvironment());
+            const block = createBlock(setTextRange(createNodeArray(statements), body.statements), /*multiLine*/ true);
+            setTextRange(block, /*location*/ body);
+            setOriginalNode(block, body);
+            return block;
+        }
+
+        /**
+         * Transforms a parameter into a property assignment statement.
+         *
+         * @param node The parameter declaration.
+         */
+        function transformParameterWithPropertyAssignment(node: ParameterPropertyDeclaration) {
+            const name = node.name;
+            if (!isIdentifier(name)) {
+                return undefined;
+            }
+
+            const propertyName = getMutableClone(name);
+            setEmitFlags(propertyName, EmitFlags.NoComments | EmitFlags.NoSourceMap);
+
+            const localName = getMutableClone(name);
+            setEmitFlags(localName, EmitFlags.NoComments);
+
+            return startOnNewLine(
+                removeAllComments(
+                    setTextRange(
+                        setOriginalNode(
+                            createExpressionStatement(
+                                createAssignment(
+                                    setTextRange(
+                                        createPropertyAccess(
+                                            createThis(),
+                                            propertyName
+                                        ),
+                                        node.name
+                                    ),
+                                    localName
+                                )
+                            ),
+                            node
+                        ),
+                        moveRangePos(node, -1)
+                    )
+                )
             );
         }
 
@@ -2217,6 +2117,7 @@ namespace ts {
             if (parameterIsThisKeyword(node)) {
                 return undefined;
             }
+
             const updated = updateParameter(
                 node,
                 /*decorators*/ undefined,
