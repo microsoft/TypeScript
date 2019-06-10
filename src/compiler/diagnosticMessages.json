@@ -3956,7 +3956,7 @@
         "category": "Error",
         "code": 6306
     },
-    "File '{0}' is not in project file list. Projects must list all files or use an 'include' pattern.": {
+    "File '{0}' is not listed within the file list of project '{1}'. Projects must list all files or use an 'include' pattern.": {
         "category": "Error",
         "code": 6307
     },
@@ -4295,7 +4295,7 @@
     "Element implicitly has an 'any' type because expression of type '{0}' can't be used to index type '{1}'.": {
         "category": "Error",
         "code": 7053
-    },    
+    },
     "No index signature with a parameter of type '{0}' was found on type '{1}'.": {
         "category": "Error",
         "code": 7054
