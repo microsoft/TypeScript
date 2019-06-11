@@ -14630,7 +14630,7 @@ namespace ts {
         }
 
         function createSymbolWithType(source: Symbol, type: Type | undefined) {
-            const symbol = createSymbol(source.flags, source.escapedName);
+            const symbol = createSymbol(source.flags, source.escapedName, getCheckFlags(source) & CheckFlags.Readonly);
             symbol.declarations = source.declarations;
             symbol.parent = source.parent;
             symbol.type = type;
