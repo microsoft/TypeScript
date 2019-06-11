@@ -14,7 +14,7 @@
 
 //@Filename: /node_modules/@types/react/package.json
 ////{
-////  "name": "react"
+////  "name": "@types/react"
 ////}
 
 //@Filename: /node_modules/@types/fake-react/index.d.ts
@@ -22,7 +22,7 @@
 
 //@Filename: /node_modules/@types/fake-react/package.json
 ////{
-////  "name": "fake-react"
+////  "name": "@types/fake-react"
 ////}
 
 //@Filename: /src/index.ts

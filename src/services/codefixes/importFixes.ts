@@ -612,37 +612,33 @@ namespace ts.codefix {
         const packageJsons = findPackageJsons(getDirectoryPath(from.fileName), host);
         const dependencyIterator = readPackageJsonDependencies();
         forEachExternalModule(checker, allSourceFiles, (module, sourceFile) => {
-            if (sourceFile === undefined || sourceFile !== from && isImportablePath(from.fileName, sourceFile.fileName) && packageJsonAllowsImporting(sourceFile.fileName)) {
+            if (sourceFile === undefined) {
+                const maybeSourceFile = module.valueDeclaration.getSourceFile();
+                if (!maybeSourceFile || packageJsonAllowsImporting(maybeSourceFile.fileName)) {
+                    cb(module);
+                }
+            }
+            else if (sourceFile && sourceFile !== from && isImportablePath(from.fileName, sourceFile.fileName) && packageJsonAllowsImporting(sourceFile.fileName)) {
                 cb(module);
             }
         });
 
         let seenDeps: Map<true> | undefined;
-        function packageJsonAllowsImporting(fileName: string): Ternary {
-            const pathComponents = getPathComponents(getDirectoryPath(fileName));
-            const nodeModulesIndex = pathComponents.lastIndexOf("node_modules");
-            if (nodeModulesIndex === -1) {
-                return Ternary.Maybe;
-            }
-            const moduleSpecifier = pathComponents[nodeModulesIndex + 1] === "@types"
-                ? pathComponents[nodeModulesIndex + 2]
-                : pathComponents[nodeModulesIndex + 1];
-            if (!moduleSpecifier) {
-                return Ternary.Maybe;
-            }
-
-            if (seenDeps && seenDeps.has(moduleSpecifier)) {
-                return Ternary.True;
+        function packageJsonAllowsImporting(fileName: string): boolean {
+            const moduleSpecifier = getModuleSpecifierFromFileName(fileName);
+            if (!moduleSpecifier || !packageJsons.length || seenDeps && seenDeps.has(moduleSpecifier)) {
+                return true;
             }
 
             let packageName: string;
             while (packageName = dependencyIterator.next().value) {
-                (seenDeps || (seenDeps = createMap())).set(packageName, true);
-                if (packageName === moduleSpecifier) {
-                    return Ternary.True;
+                const nameWithoutTypes = getPackageNameFromTypesPackageName(packageName);
+                (seenDeps || (seenDeps = createMap())).set(nameWithoutTypes, true);
+                if (nameWithoutTypes === moduleSpecifier) {
+                    return true;
                 }
             }
-            return Ternary.False;
+            return false;
         }
 
         type PackageJson = Record<string, Record<string, string> | undefined>;
@@ -660,6 +656,24 @@ namespace ts.codefix {
                     }
                 }
             }
+        }
+
+        function getModuleSpecifierFromFileName(fileName: string): string | undefined {
+            const pathComponents = getPathComponents(getDirectoryPath(fileName));
+            const nodeModulesIndex = pathComponents.lastIndexOf("node_modules");
+            if (nodeModulesIndex === -1) {
+                return undefined;
+            }
+            const firstComponent = pathComponents[nodeModulesIndex + 1];
+            const moduleSpecifier = firstComponent &&
+                firstComponent === "@types" ? pathComponents[nodeModulesIndex + 2] :
+                startsWith(firstComponent, "@") ? `${firstComponent}/${pathComponents[nodeModulesIndex + 2]}` :
+                firstComponent;
+
+            if (!moduleSpecifier) {
+                return undefined;
+            }
+            return moduleSpecifier;
         }
     }
 
