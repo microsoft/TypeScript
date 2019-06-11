@@ -1,3 +1,5 @@
+/// <reference path="../stringCompletions.ts" />
+
 /* @internal */
 namespace ts.codefix {
     export const importFixId = "fixMissingImport";
@@ -384,7 +386,7 @@ namespace ts.codefix {
         // "default" is a keyword and not a legal identifier for the import, so we don't expect it here
         Debug.assert(symbolName !== InternalSymbolName.Default);
 
-        const fixes = arrayFrom(flatMapIterator(getExportInfos(symbolName, getMeaningFromLocation(symbolToken), cancellationToken, sourceFile, checker, program).entries(), ([_, exportInfos]) =>
+        const fixes = arrayFrom(flatMapIterator(getExportInfos(symbolName, getMeaningFromLocation(symbolToken), cancellationToken, sourceFile, checker, program, host).entries(), ([_, exportInfos]) =>
             getFixForImport(exportInfos, symbolName, symbolToken.getStart(sourceFile), program, sourceFile, host, preferences)));
         return { fixes, symbolName };
     }
@@ -397,6 +399,7 @@ namespace ts.codefix {
         sourceFile: SourceFile,
         checker: TypeChecker,
         program: Program,
+        host: LanguageServiceHost
     ): ReadonlyMap<ReadonlyArray<SymbolExportInfo>> {
         // For each original symbol, keep all re-exports of that symbol together so we can call `getCodeActionsForImport` on the whole group at once.
         // Maps symbol id to info for modules providing that symbol (original export + re-exports).
@@ -404,7 +407,7 @@ namespace ts.codefix {
         function addSymbol(moduleSymbol: Symbol, exportedSymbol: Symbol, importKind: ImportKind): void {
             originalSymbolToExportInfos.add(getUniqueSymbolId(exportedSymbol, checker).toString(), { moduleSymbol, importKind, exportedSymbolIsTypeOnly: isTypeOnlySymbol(exportedSymbol, checker) });
         }
-        forEachExternalModuleToImportFrom(checker, sourceFile, program.getSourceFiles(), moduleSymbol => {
+        forEachExternalModuleToImportFrom(checker, host, sourceFile, program.getSourceFiles(), moduleSymbol => {
             cancellationToken.throwIfCancellationRequested();
 
             const defaultInfo = getDefaultLikeExportInfo(sourceFile, moduleSymbol, checker, program.getCompilerOptions());
@@ -605,12 +608,59 @@ namespace ts.codefix {
         return some(declarations, decl => !!(getMeaningFromDeclaration(decl) & meaning));
     }
 
-    export function forEachExternalModuleToImportFrom(checker: TypeChecker, from: SourceFile, allSourceFiles: ReadonlyArray<SourceFile>, cb: (module: Symbol) => void) {
+    export function forEachExternalModuleToImportFrom(checker: TypeChecker, host: LanguageServiceHost, from: SourceFile, allSourceFiles: ReadonlyArray<SourceFile>, cb: (module: Symbol) => void) {
+        const packageJsons = findPackageJsons(getDirectoryPath(from.fileName), host);
+        const dependencyIterator = readPackageJsonDependencies();
         forEachExternalModule(checker, allSourceFiles, (module, sourceFile) => {
-            if (sourceFile === undefined || sourceFile !== from && isImportablePath(from.fileName, sourceFile.fileName)) {
+            if (sourceFile === undefined || sourceFile !== from && isImportablePath(from.fileName, sourceFile.fileName) && packageJsonAllowsImporting(sourceFile.fileName)) {
                 cb(module);
             }
         });
+
+        let seenDeps: Map<true> | undefined;
+        function packageJsonAllowsImporting(fileName: string): Ternary {
+            const pathComponents = getPathComponents(getDirectoryPath(fileName));
+            const nodeModulesIndex = pathComponents.lastIndexOf("node_modules");
+            if (nodeModulesIndex === -1) {
+                return Ternary.Maybe;
+            }
+            const moduleSpecifier = pathComponents[nodeModulesIndex + 1] === "@types"
+                ? pathComponents[nodeModulesIndex + 2]
+                : pathComponents[nodeModulesIndex + 1];
+            if (!moduleSpecifier) {
+                return Ternary.Maybe;
+            }
+
+            if (seenDeps && seenDeps.has(moduleSpecifier)) {
+                return Ternary.True;
+            }
+
+            let packageName: string;
+            while (packageName = dependencyIterator.next().value) {
+                (seenDeps || (seenDeps = createMap())).set(packageName, true);
+                if (packageName === moduleSpecifier) {
+                    return Ternary.True;
+                }
+            }
+            return Ternary.False;
+        }
+
+        type PackageJson = Record<string, Record<string, string> | undefined>;
+        function *readPackageJsonDependencies() {
+            const dependencyKeys = ["dependencies", "devDependencies", "optionalDependencies"] as const;
+            for (const fileName of packageJsons) {
+                const content = readJson(fileName, { readFile: host.readFile ? host.readFile.bind(host) : sys.readFile }) as PackageJson;
+                for (const key of dependencyKeys) {
+                    const dependencyHash = content[key];
+                    if (!dependencyHash) {
+                        continue;
+                    }
+                    for (const packageName in dependencyHash) {
+                        yield packageName;
+                    }
+                }
+            }
+        }
     }
 
     function forEachExternalModule(checker: TypeChecker, allSourceFiles: ReadonlyArray<SourceFile>, cb: (module: Symbol, sourceFile: SourceFile | undefined) => void) {

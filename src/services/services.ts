@@ -1457,7 +1457,7 @@ namespace ts {
 
         function getCompletionEntrySymbol(fileName: string, position: number, name: string, source?: string): Symbol | undefined {
             synchronizeHostData();
-            return Completions.getCompletionEntrySymbol(program, log, getValidSourceFile(fileName), position, { name, source });
+            return Completions.getCompletionEntrySymbol(program, log, getValidSourceFile(fileName), position, { name, source }, host);
         }
 
         function getQuickInfoAtPosition(fileName: string, position: number): QuickInfo | undefined {
