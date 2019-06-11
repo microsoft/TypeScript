@@ -9522,44 +9522,13 @@ namespace ts {
             return false;
         }
 
-        // Return true if the given intersection type contains
-        // more than one unit type or,
-        // an object type and a nullable type (null or undefined), or
-        // a string-like type and a type known to be non-string-like, or
-        // a number-like type and a type known to be non-number-like, or
-        // a symbol-like type and a type known to be non-symbol-like, or
-        // a void-like type and a type known to be non-void-like, or
-        // a non-primitive type and a type known to be primitive.
-        function isEmptyIntersectionType(type: IntersectionType) {
-            let combined: TypeFlags = 0;
-            for (const t of type.types) {
-                if (t.flags & TypeFlags.Unit && combined & TypeFlags.Unit) {
-                    return true;
-                }
-                combined |= t.flags;
-                if (combined & TypeFlags.Nullable && combined & (TypeFlags.Object | TypeFlags.NonPrimitive) ||
-                    combined & TypeFlags.NonPrimitive && combined & (TypeFlags.DisjointDomains & ~TypeFlags.NonPrimitive) ||
-                    combined & TypeFlags.StringLike && combined & (TypeFlags.DisjointDomains & ~TypeFlags.StringLike) ||
-                    combined & TypeFlags.NumberLike && combined & (TypeFlags.DisjointDomains & ~TypeFlags.NumberLike) ||
-                    combined & TypeFlags.BigIntLike && combined & (TypeFlags.DisjointDomains & ~TypeFlags.BigIntLike) ||
-                    combined & TypeFlags.ESSymbolLike && combined & (TypeFlags.DisjointDomains & ~TypeFlags.ESSymbolLike) ||
-                    combined & TypeFlags.VoidLike && combined & (TypeFlags.DisjointDomains & ~TypeFlags.VoidLike)) {
-                    return true;
-                }
-            }
-            return false;
-        }
-
         function addTypeToUnion(typeSet: Type[], includes: TypeFlags, type: Type) {
             const flags = type.flags;
             if (flags & TypeFlags.Union) {
                 return addTypesToUnion(typeSet, includes, (<UnionType>type).types);
             }
-            // We ignore 'never' types in unions. Likewise, we ignore intersections of unit types as they are
-            // another form of 'never' (in that they have an empty value domain). We could in theory turn
-            // intersections of unit types into 'never' upon construction, but deferring the reduction makes it
-            // easier to reason about their origin.
-            if (!(flags & TypeFlags.Never || flags & TypeFlags.Intersection && isEmptyIntersectionType(<IntersectionType>type))) {
+            // We ignore 'never' types in unions
+            if (!(flags & TypeFlags.Never)) {
                 includes |= flags & TypeFlags.IncludesMask;
                 if (flags & TypeFlags.StructuredOrInstantiable) includes |= TypeFlags.IncludesStructuredOrInstantiable;
                 if (type === wildcardType) includes |= TypeFlags.IncludesWildcard;
@@ -9783,13 +9752,18 @@ namespace ts {
                 }
             }
             else {
-                includes |= flags & TypeFlags.IncludesMask;
                 if (flags & TypeFlags.AnyOrUnknown) {
                     if (type === wildcardType) includes |= TypeFlags.IncludesWildcard;
                 }
                 else if ((strictNullChecks || !(flags & TypeFlags.Nullable)) && !contains(typeSet, type)) {
+                    if (type.flags & TypeFlags.Unit && includes & TypeFlags.Unit) {
+                        // We have seen two distinct unit types which means we should reduce to an
+                        // empty intersection. Adding TypeFlags.NonPrimitive causes that to happen.
+                        includes |= TypeFlags.NonPrimitive;
+                    }
                     typeSet.push(type);
                 }
+                includes |= flags & TypeFlags.IncludesMask;
             }
             return includes;
         }
@@ -9905,7 +9879,23 @@ namespace ts {
         function getIntersectionType(types: ReadonlyArray<Type>, aliasSymbol?: Symbol, aliasTypeArguments?: ReadonlyArray<Type>): Type {
             const typeSet: Type[] = [];
             const includes = addTypesToIntersection(typeSet, 0, types);
-            if (includes & TypeFlags.Never) {
+            // An intersection type is considered empty if it contains
+            // the type never, or
+            // more than one unit type or,
+            // an object type and a nullable type (null or undefined), or
+            // a string-like type and a type known to be non-string-like, or
+            // a number-like type and a type known to be non-number-like, or
+            // a symbol-like type and a type known to be non-symbol-like, or
+            // a void-like type and a type known to be non-void-like, or
+            // a non-primitive type and a type known to be primitive.
+            if (includes & TypeFlags.Never ||
+                strictNullChecks && includes & TypeFlags.Nullable && includes & (TypeFlags.Object | TypeFlags.NonPrimitive | TypeFlags.IncludesEmptyObject) ||
+                includes & TypeFlags.NonPrimitive && includes & (TypeFlags.DisjointDomains & ~TypeFlags.NonPrimitive) ||
+                includes & TypeFlags.StringLike && includes & (TypeFlags.DisjointDomains & ~TypeFlags.StringLike) ||
+                includes & TypeFlags.NumberLike && includes & (TypeFlags.DisjointDomains & ~TypeFlags.NumberLike) ||
+                includes & TypeFlags.BigIntLike && includes & (TypeFlags.DisjointDomains & ~TypeFlags.BigIntLike) ||
+                includes & TypeFlags.ESSymbolLike && includes & (TypeFlags.DisjointDomains & ~TypeFlags.ESSymbolLike) ||
+                includes & TypeFlags.VoidLike && includes & (TypeFlags.DisjointDomains & ~TypeFlags.VoidLike)) {
                 return neverType;
             }
             if (includes & TypeFlags.Any) {

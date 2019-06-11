@@ -1,4 +1,4 @@
-// @strict: false
+// @strict: true
 
 declare const sym1: unique symbol;
 declare const sym2: unique symbol;

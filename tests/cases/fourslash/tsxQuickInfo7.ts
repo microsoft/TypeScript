@@ -24,6 +24,6 @@ verify.quickInfos({
     3: "function OverloadComponent<boolean, string>(attr: {\n    b: string;\n    a: boolean;\n}): any (+2 overloads)",
     4: "function OverloadComponent(): any (+2 overloads)", // Subtype pass chooses this overload, since `a` is missing from the top overload, and `ignore-prop` is missing from the second (while T & {ignore-prop: true} is a proper subtype of `{}`)
     5: "function OverloadComponent(): any (+2 overloads)",
-    6: "function OverloadComponent<boolean, string & number>(attr: {\n    b: string & number;\n    a: boolean;\n}): any (+2 overloads)",
-    7: "function OverloadComponent<boolean, number & string>(attr: {\n    b: number & string;\n    a: boolean;\n}): any (+2 overloads)",
+    6: "function OverloadComponent<boolean, never>(attr: {\n    b: never;\n    a: boolean;\n}): any (+2 overloads)",
+    7: "function OverloadComponent<boolean, never>(attr: {\n    b: never;\n    a: boolean;\n}): any (+2 overloads)",
 });

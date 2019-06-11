@@ -58,11 +58,11 @@ var b2: { name: string } & string[];
 >name : string
 
 var c2: string & { name: string } & number;
->c2 : string & { name: string; } & number
+>c2 : never
 >name : string
 
 var d2: string & { name: string } & number & { name: string };
->d2 : string & { name: string; } & number & { name: string; }
+>d2 : never
 >name : string
 >name : string
 
@@ -76,13 +76,13 @@ f2(b2); // string[]
 >f2 : <T>(x: T & { name: string; }) => T
 >b2 : { name: string; } & string[]
 
-f2(c2); // string & number
->f2(c2) : string & number
+f2(c2); // never
+>f2(c2) : never
 >f2 : <T>(x: T & { name: string; }) => T
->c2 : string & { name: string; } & number
+>c2 : never
 
-f2(d2); // string & number
->f2(d2) : string & number
+f2(d2); // never
+>f2(d2) : never
 >f2 : <T>(x: T & { name: string; }) => T
->d2 : string & { name: string; } & number & { name: string; }
+>d2 : never
 

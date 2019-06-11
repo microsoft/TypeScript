@@ -249,7 +249,7 @@ function f10<T extends Item, K extends keyof T>(obj: T, k1: string, k2: keyof It
 
   obj[k2] = 123;  // Error
 >obj[k2] = 123 : 123
->obj[k2] : string & number
+>obj[k2] : never
 >obj : T
 >k2 : "a" | "b"
 >123 : 123

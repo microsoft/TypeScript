@@ -211,8 +211,8 @@ type T52 = X3<{ a: (x: string) => void, b: (x: string) => void }>;  // string
 >b : (x: string) => void
 >x : string
 
-type T53 = X3<{ a: (x: number) => void, b: (x: string) => void }>;  // string & number
->T53 : number & string
+type T53 = X3<{ a: (x: number) => void, b: (x: string) => void }>;  // never
+>T53 : never
 >a : (x: number) => void
 >x : number
 >b : (x: string) => void
