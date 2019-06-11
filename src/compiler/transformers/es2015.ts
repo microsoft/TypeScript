@@ -3819,8 +3819,11 @@ namespace ts {
             // [source]
             //      [a, ...b, c]
             //
+            // [output (downlevelIteration)]
+            //      __spread([a], b, [c])
+            //
             // [output]
-            //      [a].concat(b, [c])
+            //      __spreadArrays([a], b, [c])
 
             // Map spans of spread expressions into their expressions and spans of other
             // expressions into an array literal.
@@ -3834,10 +3837,7 @@ namespace ts {
             if (compilerOptions.downlevelIteration) {
                 if (segments.length === 1) {
                     const firstSegment = segments[0];
-                    if (isCallExpression(firstSegment)
-                        && isIdentifier(firstSegment.expression)
-                        && (getEmitFlags(firstSegment.expression) & EmitFlags.HelperName)
-                        && firstSegment.expression.escapedText === "___spread") {
+                    if (isCallToHelper(firstSegment, "___spread" as __String)) {
                         return segments[0];
                     }
                 }
@@ -3846,15 +3846,31 @@ namespace ts {
             }
             else {
                 if (segments.length === 1) {
-                    const firstElement = elements[0];
-                    return needsUniqueCopy && isSpreadElement(firstElement) && firstElement.expression.kind !== SyntaxKind.ArrayLiteralExpression
-                        ? createArraySlice(segments[0])
-                        : segments[0];
+                    const firstSegment = segments[0];
+                    if (!needsUniqueCopy
+                        || isPackedArrayLiteral(firstSegment)
+                        || isCallToHelper(firstSegment, "___spreadArrays" as __String)) {
+                        return segments[0];
+                    }
                 }
 
-                // Rewrite using the pattern <segment0>.concat(<segment1>, <segment2>, ...)
-                return createArrayConcat(segments.shift()!, segments);
+                return createSpreadArraysHelper(context, segments);
             }
+        }
+
+        function isPackedElement(node: Expression) {
+            return !isOmittedExpression(node);
+        }
+
+        function isPackedArrayLiteral(node: Expression) {
+            return isArrayLiteralExpression(node) && every(node.elements, isPackedElement);
+        }
+
+        function isCallToHelper(firstSegment: Expression, helperName: __String) {
+            return isCallExpression(firstSegment)
+                && isIdentifier(firstSegment.expression)
+                && (getEmitFlags(firstSegment.expression) & EmitFlags.HelperName)
+                && firstSegment.expression.escapedText === helperName;
         }
 
         function partitionSpread(node: Expression) {
