@@ -12873,7 +12873,7 @@ namespace ts {
             }
 
             function filterPrimitivesIfContainsNonPrimitive(type: UnionType) {
-                if (some(type.types, t => !!(t.flags & TypeFlags.NonPrimitive))) {
+                if (maybeTypeOfKind(type, TypeFlags.NonPrimitive)) {
                     const result = filterType(type, t => !(t.flags & TypeFlags.Primitive));
                     if (!(result.flags & TypeFlags.Never)) {
                         return result;
