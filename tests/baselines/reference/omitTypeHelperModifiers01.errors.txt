@@ -1,0 +1,27 @@
+tests/cases/compiler/omitTypeHelperModifiers01.ts(16,7): error TS2540: Cannot assign to 'c' because it is a read-only property.
+
+
+==== tests/cases/compiler/omitTypeHelperModifiers01.ts (1 errors) ====
+    type A = {
+        a: number;
+        b?: string;
+        readonly c: boolean;
+        d: unknown;
+    };
+    
+    type B = Omit<A, 'a'>;
+    
+    function f(x: B) {
+        const b = x.b;
+        x.b = "hello";
+        x.b = undefined;
+    
+        const c = x.c;
+        x.c = true;
+          ~
+!!! error TS2540: Cannot assign to 'c' because it is a read-only property.
+    
+        const d = x.d;
+        x.d = d;
+    }
+    

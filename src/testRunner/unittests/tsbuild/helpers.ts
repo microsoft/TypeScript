@@ -62,7 +62,7 @@ namespace ts {
         }
     }
 
-    const libContent = `${TestFSWithWatch.libFile.content}
+    export const libContent = `${TestFSWithWatch.libFile.content}
 interface ReadonlyArray<T> {}
 declare const console: { log(msg: any): void; };`;
 
@@ -80,6 +80,18 @@ declare const console: { log(msg: any): void; };`;
         fs.writeFileSync("/lib/lib.d.ts", libContent);
         fs.makeReadonly();
         return fs;
+    }
+
+    export function verifyOutputsPresent(fs: vfs.FileSystem, outputs: readonly string[]) {
+        for (const output of outputs) {
+            assert(fs.existsSync(output), `Expect file ${output} to exist`);
+        }
+    }
+
+    export function verifyOutputsAbsent(fs: vfs.FileSystem, outputs: readonly string[]) {
+        for (const output of outputs) {
+            assert.isFalse(fs.existsSync(output), `Expect file ${output} to not exist`);
+        }
     }
 
     function generateSourceMapBaselineFiles(fs: vfs.FileSystem, mapFileNames: ReadonlyArray<string>) {
@@ -172,7 +184,7 @@ declare const console: { log(msg: any): void; };`;
             }
             return originalReadFile.call(host, path);
         };
-        builder.buildAllProjects();
+        builder.build();
         generateSourceMapBaselineFiles(fs, expectedMapFileNames);
         generateBuildInfoSectionBaselineFiles(fs, expectedBuildInfoFilesForSectionBaselines || emptyArray);
         fs.makeReadonly();

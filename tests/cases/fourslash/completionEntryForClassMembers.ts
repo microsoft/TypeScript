@@ -130,9 +130,9 @@ verify.completions(
         marker: "InsideMethod",
         exact: [
             "arguments",
-            "globalThis",
+            completion.globalThisEntry,
             "B", "C", "D", "D1", "D2", "D3", "D4", "D5", "D6", "E", "F", "F2", "G", "G2", "H", "I", "J", "K", "L", "L2", "M", "N", "O",
-            "undefined",
+            completion.undefinedVarEntry,
             ...completion.insideMethodKeywords,
         ],
     },
@@ -146,7 +146,9 @@ verify.completions(
             "classThatStartedWritingIdentifierAfterPrivateModifier",
             "classThatStartedWritingIdentifierAfterPrivateStaticModifier",
         ],
-        exact: ["private", "protected", "public", "static", "abstract", "async", "constructor", "get", "readonly", "set"],
+        exact: ["private", "protected", "public", "static", "abstract", "async", "constructor", "get", "readonly", "set"].map(
+            name => ({ name, sortText: completion.SortText.GlobalsOrKeywords })
+            ),
         isNewIdentifierLocation: true,
     },
     {

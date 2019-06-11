@@ -1328,6 +1328,8 @@ namespace ts {
             return node;
         }
 
+        function createMissingNode<T extends Node>(kind: T["kind"], reportAtCurrentPosition: false, diagnosticMessage?: DiagnosticMessage, arg0?: any): T;
+        function createMissingNode<T extends Node>(kind: T["kind"], reportAtCurrentPosition: boolean, diagnosticMessage: DiagnosticMessage, arg0?: any): T;
         function createMissingNode<T extends Node>(kind: T["kind"], reportAtCurrentPosition: boolean, diagnosticMessage: DiagnosticMessage, arg0?: any): T {
             if (reportAtCurrentPosition) {
                 parseErrorAtPosition(scanner.getStartPos(), 0, diagnosticMessage, arg0);
@@ -3122,15 +3124,16 @@ namespace ts {
         }
 
         function parseUnionOrIntersectionType(kind: SyntaxKind.UnionType | SyntaxKind.IntersectionType, parseConstituentType: () => TypeNode, operator: SyntaxKind.BarToken | SyntaxKind.AmpersandToken): TypeNode {
-            parseOptional(operator);
+            const start = scanner.getStartPos();
+            const hasLeadingOperator = parseOptional(operator);
             let type = parseConstituentType();
-            if (token() === operator) {
+            if (token() === operator || hasLeadingOperator) {
                 const types = [type];
                 while (parseOptional(operator)) {
                     types.push(parseConstituentType());
                 }
-                const node = <UnionOrIntersectionTypeNode>createNode(kind, type.pos);
-                node.types = createNodeArray(types, type.pos);
+                const node = <UnionOrIntersectionTypeNode>createNode(kind, start);
+                node.types = createNodeArray(types, start);
                 type = finishNode(node);
             }
             return type;
@@ -4290,7 +4293,7 @@ namespace ts {
                     badNode.end = invalidElement.end;
                     badNode.left = result;
                     badNode.right = invalidElement;
-                    badNode.operatorToken = createMissingNode(SyntaxKind.CommaToken, /*reportAtCurrentPosition*/ false, /*diagnosticMessage*/ undefined!); // TODO: GH#18217
+                    badNode.operatorToken = createMissingNode(SyntaxKind.CommaToken, /*reportAtCurrentPosition*/ false);
                     badNode.operatorToken.pos = badNode.operatorToken.end = badNode.right.pos;
                     return <JsxElement><Node>badNode;
                 }
@@ -6855,7 +6858,7 @@ namespace ts {
                 }
 
                 function parseReturnTag(start: number, tagName: Identifier): JSDocReturnTag {
-                    if (forEach(tags, t => t.kind === SyntaxKind.JSDocReturnTag)) {
+                    if (some(tags, isJSDocReturnTag)) {
                         parseErrorAt(tagName.pos, scanner.getTokenPos(), Diagnostics._0_tag_already_specified, tagName.escapedText);
                     }
 
@@ -6866,7 +6869,7 @@ namespace ts {
                 }
 
                 function parseTypeTag(start: number, tagName: Identifier): JSDocTypeTag {
-                    if (forEach(tags, t => t.kind === SyntaxKind.JSDocTypeTag)) {
+                    if (some(tags, isJSDocTypeTag)) {
                         parseErrorAt(tagName.pos, scanner.getTokenPos(), Diagnostics._0_tag_already_specified, tagName.escapedText);
                     }
 
@@ -7782,24 +7785,9 @@ namespace ts {
 
     /*@internal*/
     export function processCommentPragmas(context: PragmaContext, sourceText: string): void {
-        const triviaScanner = createScanner(context.languageVersion, /*skipTrivia*/ false, LanguageVariant.Standard, sourceText);
         const pragmas: PragmaPseudoMapEntry[] = [];
 
-        // Keep scanning all the leading trivia in the file until we get to something that
-        // isn't trivia.  Any single line comment will be analyzed to see if it is a
-        // reference comment.
-        while (true) {
-            const kind = triviaScanner.scan();
-            if (!isTrivia(kind)) {
-                break;
-            }
-
-            const range = {
-                kind: <SyntaxKind.SingleLineCommentTrivia | SyntaxKind.MultiLineCommentTrivia>triviaScanner.getToken(),
-                pos: triviaScanner.getTokenPos(),
-                end: triviaScanner.getTextPos(),
-            };
-
+        for (const range of getLeadingCommentRanges(sourceText, 0) || emptyArray) {
             const comment = sourceText.substring(range.pos, range.end);
             extractPragmas(pragmas, range, comment);
         }

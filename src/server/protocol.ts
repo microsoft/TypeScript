@@ -130,7 +130,10 @@ namespace ts.server.protocol {
         GetEditsForFileRename = "getEditsForFileRename",
         /* @internal */
         GetEditsForFileRenameFull = "getEditsForFileRename-full",
-        ConfigurePlugin = "configurePlugin"
+        ConfigurePlugin = "configurePlugin",
+        SelectionRange = "selectionRange",
+        /* @internal */
+        SelectionRangeFull = "selectionRange-full",
 
         // NOTE: If updating this, be sure to also update `allCommandNames` in `harness/unittests/session.ts`.
     }
@@ -1393,6 +1396,24 @@ namespace ts.server.protocol {
     }
 
     export interface ConfigurePluginResponse extends Response {
+    }
+
+    export interface SelectionRangeRequest extends FileRequest {
+        command: CommandTypes.SelectionRange;
+        arguments: SelectionRangeRequestArgs;
+    }
+
+    export interface SelectionRangeRequestArgs extends FileRequestArgs {
+        locations: Location[];
+    }
+
+    export interface SelectionRangeResponse extends Response {
+        body?: SelectionRange[];
+    }
+
+    export interface SelectionRange {
+        textSpan: TextSpan;
+        parent?: SelectionRange;
     }
 
     /**

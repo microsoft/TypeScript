@@ -796,6 +796,7 @@ namespace ts {
             (result as SemanticDiagnosticsBuilderProgram).getSemanticDiagnosticsOfNextAffectedFile = getSemanticDiagnosticsOfNextAffectedFile;
         }
         else if (kind === BuilderProgramKind.EmitAndSemanticDiagnosticsBuilderProgram) {
+            (result as EmitAndSemanticDiagnosticsBuilderProgram).getSemanticDiagnosticsOfNextAffectedFile = getSemanticDiagnosticsOfNextAffectedFile;
             (result as EmitAndSemanticDiagnosticsBuilderProgram).emitNextAffectedFile = emitNextAffectedFile;
         }
         else {
@@ -913,6 +914,11 @@ namespace ts {
                     );
                 }
 
+                // Add file to affected file pending emit to handle for later emit time
+                if (kind === BuilderProgramKind.EmitAndSemanticDiagnosticsBuilderProgram) {
+                    addToAffectedFilesPendingEmit(state, [(affected as SourceFile).path]);
+                }
+
                 // Get diagnostics for the affected file if its not ignored
                 if (ignoreSourceFile && ignoreSourceFile(affected as SourceFile)) {
                     // Get next affected file
@@ -951,18 +957,8 @@ namespace ts {
 
             // When semantic builder asks for diagnostics of the whole program,
             // ensure that all the affected files are handled
-            let affected: SourceFile | Program | undefined;
-            let affectedFilesPendingEmit: Path[] | undefined;
-            while (affected = getNextAffectedFile(state, cancellationToken, computeHash)) {
-                if (affected !== state.program && kind === BuilderProgramKind.EmitAndSemanticDiagnosticsBuilderProgram) {
-                    (affectedFilesPendingEmit || (affectedFilesPendingEmit = [])).push((affected as SourceFile).path);
-                }
-                doneWithAffectedFile(state, affected);
-            }
-
-            // In case of emit builder, cache the files to be emitted
-            if (affectedFilesPendingEmit) {
-                addToAffectedFilesPendingEmit(state, affectedFilesPendingEmit);
+            // tslint:disable-next-line no-empty
+            while (getSemanticDiagnosticsOfNextAffectedFile(cancellationToken)) {
             }
 
             let diagnostics: Diagnostic[] | undefined;
@@ -997,7 +993,7 @@ namespace ts {
         return map;
     }
 
-    export function createBuildProgramUsingProgramBuildInfo(program: ProgramBuildInfo): EmitAndSemanticDiagnosticsBuilderProgram & SemanticDiagnosticsBuilderProgram {
+    export function createBuildProgramUsingProgramBuildInfo(program: ProgramBuildInfo): EmitAndSemanticDiagnosticsBuilderProgram {
         const fileInfos = createMapFromTemplate(program.fileInfos);
         const state: ReusableBuilderProgramState = {
             fileInfos,
@@ -1181,7 +1177,7 @@ namespace ts {
      * The builder that can handle the changes in program and iterate through changed file to emit the files
      * The semantic diagnostics are cached per file and managed by clearing for the changed/affected files
      */
-    export interface EmitAndSemanticDiagnosticsBuilderProgram extends BuilderProgram {
+    export interface EmitAndSemanticDiagnosticsBuilderProgram extends SemanticDiagnosticsBuilderProgram {
         /**
          * Emits the next affected file's emit result (EmitResult and sourceFiles emitted) or returns undefined if iteration is complete
          * The first of writeFile if provided, writeFile of BuilderProgramHost if provided, writeFile of compiler host

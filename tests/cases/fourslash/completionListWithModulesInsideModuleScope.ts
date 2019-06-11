@@ -328,7 +328,7 @@ verifyGeneral('class', {
 // from interface in mod1
 verify.completions({
     marker: "interface",
-    exact: "readonly",
+    exact: { name: "readonly", sortText: completion.SortText.GlobalsOrKeywords },
     isNewIdentifierLocation: true,
 });
 
@@ -376,7 +376,14 @@ verifyGeneral('exportedClass', {
 });
 
 // from exported interface in mod1
-verify.completions({ marker: "exportedInterface", exact: ["readonly"], isNewIdentifierLocation: true });
+verify.completions({
+    marker: "exportedInterface",
+    exact: [{
+        name: "readonly",
+        sortText: completion.SortText.GlobalsOrKeywords
+    }],
+    isNewIdentifierLocation: true
+});
 
 // from exported namespace in mod1
 verifyExportedNamespace('exportedNamespace');
