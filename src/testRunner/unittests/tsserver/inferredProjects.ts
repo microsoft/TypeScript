@@ -1,8 +1,9 @@
 namespace ts.projectSystem {
     describe("unittests:: tsserver:: Inferred projects", () => {
         it("create inferred project", () => {
+            const projectRoot = "/user/username/projects/project";
             const appFile: File = {
-                path: "/a/b/c/app.ts",
+                path: `${projectRoot}/app.ts`,
                 content: `
                 import {f} from "./module"
                 console.log(f)
@@ -10,7 +11,7 @@ namespace ts.projectSystem {
             };
 
             const moduleFile: File = {
-                path: "/a/b/c/module.d.ts",
+                path: `${projectRoot}/module.d.ts`,
                 content: `export let x: number`
             };
             const host = createServerHost([appFile, moduleFile, libFile]);
@@ -24,20 +25,19 @@ namespace ts.projectSystem {
             const project = projectService.inferredProjects[0];
 
             checkArray("inferred project", project.getFileNames(), [appFile.path, libFile.path, moduleFile.path]);
-            const configFileLocations = ["/a/b/c/", "/a/b/", "/a/", "/"];
-            const configFiles = flatMap(configFileLocations, location => [location + "tsconfig.json", location + "jsconfig.json"]);
-            checkWatchedFiles(host, configFiles.concat(libFile.path, moduleFile.path));
-            checkWatchedDirectories(host, ["/a/b/c"], /*recursive*/ false);
-            checkWatchedDirectories(host, [combinePaths(getDirectoryPath(appFile.path), nodeModulesAtTypes)], /*recursive*/ true);
+            checkWatchedFiles(host, getConfigFilesToWatch(projectRoot).concat(libFile.path, moduleFile.path));
+            checkWatchedDirectories(host, [projectRoot], /*recursive*/ false);
+            checkWatchedDirectories(host, [combinePaths(projectRoot, nodeModulesAtTypes)], /*recursive*/ true);
         });
 
         it("should use only one inferred project if 'useOneInferredProject' is set", () => {
+            const projectRoot = "/user/username/projects/project";
             const file1 = {
-                path: "/a/b/main.ts",
+                path: `${projectRoot}/a/b/main.ts`,
                 content: "let x =1;"
             };
             const configFile: File = {
-                path: "/a/b/tsconfig.json",
+                path: `${projectRoot}/a/b/tsconfig.json`,
                 content: `{
                     "compilerOptions": {
                         "target": "es6"
@@ -46,12 +46,12 @@ namespace ts.projectSystem {
                 }`
             };
             const file2 = {
-                path: "/a/c/main.ts",
+                path: `${projectRoot}/a/c/main.ts`,
                 content: "let x =1;"
             };
 
             const file3 = {
-                path: "/a/d/main.ts",
+                path: `${projectRoot}/a/d/main.ts`,
                 content: "let x =1;"
             };
 

@@ -76,6 +76,41 @@ namespace ts {
         return some(ignoredPaths, searchPath => stringContains(path, searchPath));
     }
 
+    /**
+     * Filter out paths like
+     * "/", "/user", "/user/username", "/user/username/folderAtRoot",
+     * "c:/", "c:/users", "c:/users/username", "c:/users/username/folderAtRoot", "c:/folderAtRoot"
+     * @param dirPath
+     */
+    export function canWatchDirectory(dirPath: Path) {
+        const rootLength = getRootLength(dirPath);
+        if (dirPath.length === rootLength) {
+            // Ignore "/", "c:/"
+            return false;
+        }
+
+        const nextDirectorySeparator = dirPath.indexOf(directorySeparator, rootLength);
+        if (nextDirectorySeparator === -1) {
+            // ignore "/user", "c:/users" or "c:/folderAtRoot"
+            return false;
+        }
+
+        if (dirPath.charCodeAt(0) !== CharacterCodes.slash &&
+            dirPath.substr(rootLength, nextDirectorySeparator).search(/users/i) === -1) {
+            // Paths like c:/folderAtRoot/subFolder are allowed
+            return true;
+        }
+
+        for (let searchIndex = nextDirectorySeparator + 1, searchLevels = 2; searchLevels > 0; searchLevels--) {
+            searchIndex = dirPath.indexOf(directorySeparator, searchIndex) + 1;
+            if (searchIndex === 0) {
+                // Folder isnt at expected minimun levels
+                return false;
+            }
+        }
+        return true;
+    }
+
     export const maxNumberOfFilesToIterateForInvalidation = 256;
 
     type GetResolutionWithResolvedFileName<T extends ResolutionWithFailedLookupLocations = ResolutionWithFailedLookupLocations, R extends ResolutionWithResolvedFileName = ResolutionWithResolvedFileName> =
@@ -371,41 +406,6 @@ namespace ts {
 
         function isNodeModulesAtTypesDirectory(dirPath: Path) {
             return endsWith(dirPath, "/node_modules/@types");
-        }
-
-        /**
-         * Filter out paths like
-         * "/", "/user", "/user/username", "/user/username/folderAtRoot",
-         * "c:/", "c:/users", "c:/users/username", "c:/users/username/folderAtRoot", "c:/folderAtRoot"
-         * @param dirPath
-         */
-        function canWatchDirectory(dirPath: Path) {
-            const rootLength = getRootLength(dirPath);
-            if (dirPath.length === rootLength) {
-                // Ignore "/", "c:/"
-                return false;
-            }
-
-            const nextDirectorySeparator = dirPath.indexOf(directorySeparator, rootLength);
-            if (nextDirectorySeparator === -1) {
-                // ignore "/user", "c:/users" or "c:/folderAtRoot"
-                return false;
-            }
-
-            if (dirPath.charCodeAt(0) !== CharacterCodes.slash &&
-                dirPath.substr(rootLength, nextDirectorySeparator).search(/users/i) === -1) {
-                // Paths like c:/folderAtRoot/subFolder are allowed
-                return true;
-            }
-
-            for (let searchIndex = nextDirectorySeparator + 1, searchLevels = 2; searchLevels > 0; searchLevels--) {
-                searchIndex = dirPath.indexOf(directorySeparator, searchIndex) + 1;
-                if (searchIndex === 0) {
-                    // Folder isnt at expected minimun levels
-                    return false;
-                }
-            }
-            return true;
         }
 
         function getDirectoryToWatchFailedLookupLocation(failedLookupLocation: string, failedLookupLocationPath: Path): DirectoryOfFailedLookupWatch | undefined {
