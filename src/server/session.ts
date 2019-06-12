@@ -1066,14 +1066,11 @@ namespace ts.server {
         }
 
         private toDeclarationFileSpan(fileName: string, textSpan: TextSpan, declarationSpan: TextSpan | undefined, project: Project): protocol.DeclarationFileSpan {
-            const result = this.toFileSpan(fileName, textSpan, project) as protocol.DeclarationFileSpan;
-            if (declarationSpan) {
-                const declaration = this.toFileSpan(fileName, declarationSpan, project);
-                result.declarationStart = declaration.start;
-                result.declarationEnd = declaration.end;
-            }
-            return result;
-
+            const fileSpan = this.toFileSpan(fileName, textSpan, project);
+            const declaration = declarationSpan && this.toFileSpan(fileName, declarationSpan, project);
+            return declaration ?
+                { ...fileSpan, declarationStart: declaration.start, declarationEnd: declaration.end } :
+                fileSpan;
         }
 
         private getTypeDefinition(args: protocol.FileLocationRequestArgs): ReadonlyArray<protocol.DeclarationFileSpan> {
@@ -1099,36 +1096,27 @@ namespace ts.server {
             const { file, project } = this.getFileAndProject(args);
             const position = this.getPositionInFile(args, file);
             const implementations = this.mapImplementationLocations(project.getLanguageService().getImplementationAtPosition(file, position) || emptyArray, project);
-            if (simplifiedResult) {
-                return implementations.map(({ fileName, textSpan, declarationSpan }) => this.toDeclarationFileSpan(fileName, textSpan, declarationSpan, project));
-            }
-
-            return implementations.map(Session.mapToOriginalLocation);
+            return simplifiedResult ?
+                implementations.map(({ fileName, textSpan, declarationSpan }) => this.toDeclarationFileSpan(fileName, textSpan, declarationSpan, project)) :
+                implementations.map(Session.mapToOriginalLocation);
         }
 
         private getOccurrences(args: protocol.FileLocationRequestArgs): ReadonlyArray<protocol.OccurrencesResponseItem> {
             const { file, project } = this.getFileAndProject(args);
-
             const position = this.getPositionInFile(args, file);
-
             const occurrences = project.getLanguageService().getOccurrencesAtPosition(file, position);
-
-            if (!occurrences) {
-                return emptyArray;
-            }
-
-            return occurrences.map(occurrence => {
-                const { fileName, isWriteAccess, textSpan, isInString, declarationSpan } = occurrence;
-                const scriptInfo = project.getScriptInfo(fileName)!;
-                const result = toProtocolDeclarationTextSpan(textSpan, declarationSpan, scriptInfo) as protocol.OccurrencesResponseItem;
-                result.file = fileName;
-                result.isWriteAccess = isWriteAccess;
-                // no need to serialize the property if it is not true
-                if (isInString) {
-                    result.isInString = isInString;
-                }
-                return result;
-            });
+            return occurrences ?
+                occurrences.map<protocol.OccurrencesResponseItem>(occurrence => {
+                    const { fileName, isWriteAccess, textSpan, isInString, declarationSpan } = occurrence;
+                    const scriptInfo = project.getScriptInfo(fileName)!;
+                    return {
+                        ...toProtocolDeclarationTextSpan(textSpan, declarationSpan, scriptInfo),
+                        file: fileName,
+                        isWriteAccess,
+                        ...(isInString ? { isInString } : undefined)
+                    };
+                }) :
+                emptyArray;
         }
 
         private getSyntacticDiagnosticsSync(args: protocol.SyntacticDiagnosticsSyncRequestArgs): ReadonlyArray<protocol.Diagnostic> | ReadonlyArray<protocol.DiagnosticWithLinePosition> {
@@ -1178,11 +1166,10 @@ namespace ts.server {
                 const scriptInfo = project.getScriptInfo(fileName)!;
                 return {
                     file: fileName,
-                    highlightSpans: highlightSpans.map(({ textSpan, kind, declarationSpan }) => {
-                        const result = toProtocolDeclarationTextSpan(textSpan, declarationSpan, scriptInfo) as protocol.HighlightSpan;
-                        result.kind = kind;
-                        return result;
-                    })
+                    highlightSpans: highlightSpans.map(({ textSpan, kind, declarationSpan }) => ({
+                        ...toProtocolDeclarationTextSpan(textSpan, declarationSpan, scriptInfo),
+                        kind
+                    }))
                 };
             });
         }
@@ -1328,8 +1315,7 @@ namespace ts.server {
                         isDefinition
                     };
                 }));
-            const result: protocol.ReferencesResponseBody = { refs, symbolName, symbolStartOffset, symbolDisplayString };
-            return result;
+            return { refs, symbolName, symbolStartOffset, symbolDisplayString };
         }
         /**
          * @param fileName is the name of the file to be opened
@@ -2580,11 +2566,11 @@ namespace ts.server {
     }
 
     function toProtocolDeclarationTextSpan(span: TextSpan, declarationSpan: TextSpan | undefined, scriptInfo: ScriptInfo): protocol.DeclarationTextSpan {
-        const result = toProcolTextSpan(span, scriptInfo) as protocol.DeclarationTextSpan;
-        if (!declarationSpan) return result;
-        result.declarationStart = scriptInfo.positionToLineOffset(declarationSpan.start);
-        result.declarationEnd = scriptInfo.positionToLineOffset(textSpanEnd(declarationSpan));
-        return result;
+        const textSpan = toProcolTextSpan(span, scriptInfo);
+        const declarationTextSpan = declarationSpan && toProcolTextSpan(declarationSpan, scriptInfo);
+        return declarationTextSpan ?
+            { ...textSpan, declarationStart: declarationTextSpan.start, declarationEnd: declarationTextSpan.end } :
+            textSpan;
     }
 
     function convertTextChangeToCodeEdit(change: TextChange, scriptInfo: ScriptInfoOrConfig): protocol.CodeEdit {

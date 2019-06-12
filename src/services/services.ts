@@ -1546,19 +1546,14 @@ namespace ts {
         function getOccurrencesAtPosition(fileName: string, position: number): ReadonlyArray<ReferenceEntry> | undefined {
             return flatMap(
                 getDocumentHighlights(fileName, position, [fileName]),
-                entry => entry.highlightSpans.map(highlightSpan => {
-                    const result: ReferenceEntry = {
-                        fileName: entry.fileName,
-                        textSpan: highlightSpan.textSpan,
-                        isWriteAccess: highlightSpan.kind === HighlightSpanKind.writtenReference,
-                        isDefinition: false,
-                        isInString: highlightSpan.isInString,
-                    };
-                    if (highlightSpan.declarationSpan) {
-                        result.declarationSpan = highlightSpan.declarationSpan;
-                    }
-                    return result;
-                })
+                entry => entry.highlightSpans.map<ReferenceEntry>(highlightSpan => ({
+                    fileName: entry.fileName,
+                    textSpan: highlightSpan.textSpan,
+                    isWriteAccess: highlightSpan.kind === HighlightSpanKind.writtenReference,
+                    isDefinition: false,
+                    ...highlightSpan.isInString && { isInString: true },
+                    ...highlightSpan.declarationSpan && { declarationSpan: highlightSpan.declarationSpan }
+                }))
             );
         }
 
@@ -1577,13 +1572,13 @@ namespace ts {
             const node = getTouchingPropertyName(sourceFile, position);
             if (isIdentifier(node) && (isJsxOpeningElement(node.parent) || isJsxClosingElement(node.parent)) && isIntrinsicJsxName(node.escapedText)) {
                 const { openingElement, closingElement } = node.parent.parent;
-                return [openingElement, closingElement].map(node => {
-                    const result: RenameLocation = {
+                return [openingElement, closingElement].map((node): RenameLocation => {
+                    const textSpan = createTextSpanFromNode(node.tagName, sourceFile);
+                    return {
                         fileName: sourceFile.fileName,
-                        textSpan: createTextSpanFromNode(node.tagName, sourceFile)
+                        textSpan,
+                        ...FindAllReferences.toDeclarationSpan(textSpan, sourceFile, node.parent)
                     };
-                    FindAllReferences.setDeclarationSpan(result, sourceFile, node.parent);
-                    return result;
                 });
             }
             else {

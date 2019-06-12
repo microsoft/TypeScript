@@ -7,12 +7,12 @@ namespace ts.projectSystem {
         declarationOptions?: SpanFromSubstringOptions;
     }
     function documentSpanFromSubstring({ file, text, declarationText, options, declarationOptions }: DocumentSpanFromSubstring): DocumentSpan {
-        const result: DocumentSpan = { fileName: file.path, textSpan: textSpanFromSubstring(file.content, text, options) };
-        if (declarationText) {
-            const declarationSpan = documentSpanFromSubstring({ file, text: declarationText, options: declarationOptions });
-            result.declarationSpan = declarationSpan.textSpan;
-        }
-        return result;
+        const declarationSpan = declarationText !== undefined ? documentSpanFromSubstring({ file, text: declarationText, options: declarationOptions }) : undefined;
+        return {
+            fileName: file.path,
+            textSpan: textSpanFromSubstring(file.content, text, options),
+            ...declarationSpan && { declarationSpan: declarationSpan.textSpan }
+        };
     }
 
     function renameLocation(input: DocumentSpanFromSubstring): RenameLocation {

@@ -273,20 +273,20 @@ namespace ts.GoToDefinition {
     function createDefinitionInfoFromName(declaration: Declaration, symbolKind: ScriptElementKind, symbolName: string, containerName: string): DefinitionInfo {
         const name = getNameOfDeclaration(declaration) || declaration;
         const sourceFile = name.getSourceFile();
-        const result: DefinitionInfo = {
+        const textSpan = createTextSpanFromNode(name, sourceFile);
+        return {
             fileName: sourceFile.fileName,
-            textSpan: createTextSpanFromNode(name, sourceFile),
+            textSpan,
             kind: symbolKind,
             name: symbolName,
             containerKind: undefined!, // TODO: GH#18217
             containerName,
+            ...FindAllReferences.toDeclarationSpan(
+                textSpan,
+                sourceFile,
+                FindAllReferences.getDeclarationForDeclarationSpan(declaration)
+            )
         };
-        FindAllReferences.setDeclarationSpan(
-            result,
-            sourceFile,
-            FindAllReferences.getDeclarationForDeclarationSpan(declaration)
-        );
-        return result;
     }
 
     function createDefinitionFromSignatureDeclaration(typeChecker: TypeChecker, decl: SignatureDeclaration): DefinitionInfo {

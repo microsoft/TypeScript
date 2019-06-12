@@ -523,13 +523,16 @@ namespace ts.projectSystem {
     }
     export function protocolDeclarationFileSpanFromSubstring({ declarationText, declarationOptions, ...rest }: DeclarationFileSpanFromSubString): protocol.DeclarationFileSpan {
         const result = protocolFileSpanFromSubstring(rest);
-        if (!declarationText) return result;
-        const declarationSpan = protocolFileSpanFromSubstring({ file: rest.file, text: declarationText, options: declarationOptions });
-        return {
-            ...result,
-            declarationStart: declarationSpan.start,
-            declarationEnd: declarationSpan.end
-        };
+        const declarationSpan = declarationText !== undefined ?
+            protocolFileSpanFromSubstring({ file: rest.file, text: declarationText, options: declarationOptions }) :
+            undefined;
+        return declarationSpan ?
+            {
+                ...result,
+                declarationStart: declarationSpan.start,
+                declarationEnd: declarationSpan.end
+            } :
+            result;
     }
 
     export interface ProtocolDeclarationTextSpanFromString {
@@ -542,16 +545,15 @@ namespace ts.projectSystem {
     export function protocolDeclarationTextSpanFromSubstring({ fileText, text, options, declarationText, declarationOptions }: ProtocolDeclarationTextSpanFromString): protocol.DeclarationTextSpan {
         const span = textSpanFromSubstring(fileText, text, options);
         const toLocation = protocolToLocation(fileText);
-        const result: protocol.DeclarationTextSpan = {
+        const declarationSpan = declarationText !== undefined ? textSpanFromSubstring(fileText, declarationText, declarationOptions) : undefined;
+        return {
             start: toLocation(span.start),
-            end: toLocation(textSpanEnd(span))
+            end: toLocation(textSpanEnd(span)),
+            ...declarationSpan && {
+                declarationStart: toLocation(declarationSpan.start),
+                declarationEnd: toLocation(textSpanEnd(declarationSpan))
+            }
         };
-        if (declarationText) {
-            const span = textSpanFromSubstring(fileText, declarationText, declarationOptions);
-            result.declarationStart = toLocation(span.start);
-            result.declarationEnd = toLocation(textSpanEnd(span));
-        }
-        return result;
     }
 
     export interface ProtocolRenameSpanFromSubstring extends ProtocolDeclarationTextSpanFromString {

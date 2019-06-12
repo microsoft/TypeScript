@@ -161,15 +161,14 @@ namespace ts.FindAllReferences {
         }
     }
 
-    export function setDeclarationSpan(span: DocumentSpan, sourceFile: SourceFile, declaration?: DeclarationNode) {
-        if (declaration) {
-            const declarationSpan = isDeclarationNodeWithStartAndEnd(declaration) ?
-                getTextSpan(declaration.start, sourceFile, declaration.end) :
-                getTextSpan(declaration, sourceFile);
-            if (declarationSpan.start !== span.textSpan.start || declarationSpan.length !== span.textSpan.length) {
-                span.declarationSpan = declarationSpan;
-            }
-        }
+    export function toDeclarationSpan(textSpan: TextSpan, sourceFile: SourceFile, declaration?: DeclarationNode): { declarationSpan: TextSpan } | undefined {
+        if (!declaration) return undefined;
+        const declarationSpan = isDeclarationNodeWithStartAndEnd(declaration) ?
+            getTextSpan(declaration.start, sourceFile, declaration.end) :
+            getTextSpan(declaration, sourceFile);
+        return declarationSpan.start !== textSpan.start || declarationSpan.length !== textSpan.length ?
+            { declarationSpan } :
+            undefined;
     }
 
     export interface Options {
@@ -304,17 +303,17 @@ namespace ts.FindAllReferences {
 
         const { node, name, kind, displayParts, declaration } = info;
         const sourceFile = node.getSourceFile();
-        const result: ReferencedSymbolDefinitionInfo = {
+        const textSpan = getTextSpan(isComputedPropertyName(node) ? node.expression : node, sourceFile);
+        return {
             containerKind: ScriptElementKind.unknown,
             containerName: "",
             fileName: sourceFile.fileName,
             kind,
             name,
-            textSpan: getTextSpan(isComputedPropertyName(node) ? node.expression : node, sourceFile),
-            displayParts
+            textSpan,
+            displayParts,
+            ...toDeclarationSpan(textSpan, sourceFile, declaration)
         };
-        setDeclarationSpan(result, sourceFile, declaration);
-        return result;
     }
 
     function getDefinitionKindAndDisplayParts(symbol: Symbol, checker: TypeChecker, node: Node): { displayParts: SymbolDisplayPart[], kind: ScriptElementKind } {
@@ -351,9 +350,12 @@ namespace ts.FindAllReferences {
         }
         else {
             const sourceFile = entry.node.getSourceFile();
-            const result: DocumentSpan = { textSpan: getTextSpan(entry.node, sourceFile), fileName: sourceFile.fileName };
-            setDeclarationSpan(result, sourceFile, entry.declaration);
-            return result;
+            const textSpan = getTextSpan(entry.node, sourceFile);
+            return {
+                textSpan,
+                fileName: sourceFile.fileName,
+                ...toDeclarationSpan(textSpan, sourceFile, entry.declaration)
+            };
         }
     }
 
@@ -438,10 +440,8 @@ namespace ts.FindAllReferences {
             textSpan: documentSpan.textSpan,
             kind: writeAccess ? HighlightSpanKind.writtenReference : HighlightSpanKind.reference,
             isInString: entry.kind === EntryKind.StringLiteral ? true : undefined,
+            ...documentSpan.declarationSpan && { declarationSpan: documentSpan.declarationSpan }
         };
-        if (documentSpan.declarationSpan) {
-            span.declarationSpan = documentSpan.declarationSpan;
-        }
         return { fileName: documentSpan.fileName, span };
     }
 

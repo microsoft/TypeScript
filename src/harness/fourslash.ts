@@ -957,17 +957,16 @@ namespace FourSlash {
                 definition: typeof definition === "string" ? definition : { ...definition, range: ts.createTextSpanFromRange(definition.range) },
                 references: ranges.map<ts.ReferenceEntry>(r => {
                     const { isWriteAccess = false, isDefinition = false, isInString, declarationRangeIndex } = (r.marker && r.marker.data || {}) as { isWriteAccess?: boolean, isDefinition?: boolean, isInString?: true, declarationRangeIndex?: number };
-                    const result: ts.ReferenceEntry = {
+                    return {
                         fileName: r.fileName,
                         textSpan: ts.createTextSpanFromRange(r),
                         isWriteAccess,
                         isDefinition,
+                        ...(declarationRangeIndex !== undefined ?
+                            { declarationSpan: ts.createTextSpanFromRange(this.getRanges()[declarationRangeIndex]) } :
+                            undefined),
                         ...(isInString ? { isInString: true } : undefined),
                     };
-                    if (declarationRangeIndex !== undefined) {
-                        result.declarationSpan = ts.createTextSpanFromRange(this.getRanges()[declarationRangeIndex]);
-                    }
-                    return result;
                 }),
             }));
 
@@ -1192,14 +1191,17 @@ Actual: ${stringify(fullActual)}`);
 
                 const sort = (locations: ReadonlyArray<ts.RenameLocation> | undefined) =>
                     locations && ts.sort(locations, (r1, r2) => ts.compareStringsCaseSensitive(r1.fileName, r2.fileName) || r1.textSpan.start - r2.textSpan.start);
-                assert.deepEqual(sort(references), sort(ranges.map(rangeOrOptions => {
+                assert.deepEqual(sort(references), sort(ranges.map((rangeOrOptions): ts.RenameLocation => {
                     const { range, ...prefixSuffixText } = "range" in rangeOrOptions ? rangeOrOptions : { range: rangeOrOptions };
-                    const result: ts.RenameLocation = { fileName: range.fileName, textSpan: ts.createTextSpanFromRange(range), ...prefixSuffixText };
                     const { declarationRangeIndex } = (range.marker && range.marker.data || {}) as { declarationRangeIndex?: number; };
-                    if (declarationRangeIndex !== undefined) {
-                        result.declarationSpan = ts.createTextSpanFromRange(this.getRanges()[declarationRangeIndex]);
-                    }
-                    return result;
+                    return {
+                        fileName: range.fileName,
+                        textSpan: ts.createTextSpanFromRange(range),
+                        ...(declarationRangeIndex !== undefined ?
+                            { declarationSpan: ts.createTextSpanFromRange(this.getRanges()[declarationRangeIndex]) } :
+                            undefined),
+                        ...prefixSuffixText
+                    };
                 })));
             }
         }
