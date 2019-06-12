@@ -1,0 +1,49 @@
+=== tests/cases/compiler/conditionalPrependNoHang.ts ===
+export type Prepend<Elm, T extends unknown[]> =
+>Prepend : Symbol(Prepend, Decl(conditionalPrependNoHang.ts, 0, 0))
+>Elm : Symbol(Elm, Decl(conditionalPrependNoHang.ts, 0, 20))
+>T : Symbol(T, Decl(conditionalPrependNoHang.ts, 0, 24))
+
+  T extends unknown ?
+>T : Symbol(T, Decl(conditionalPrependNoHang.ts, 0, 24))
+
+  ((arg: Elm, ...rest: T) => void) extends ((...args: infer T2) => void) ? T2 :
+>arg : Symbol(arg, Decl(conditionalPrependNoHang.ts, 2, 4))
+>Elm : Symbol(Elm, Decl(conditionalPrependNoHang.ts, 0, 20))
+>rest : Symbol(rest, Decl(conditionalPrependNoHang.ts, 2, 13))
+>T : Symbol(T, Decl(conditionalPrependNoHang.ts, 0, 24))
+>args : Symbol(args, Decl(conditionalPrependNoHang.ts, 2, 45))
+>T2 : Symbol(T2, Decl(conditionalPrependNoHang.ts, 2, 59))
+>T2 : Symbol(T2, Decl(conditionalPrependNoHang.ts, 2, 59))
+
+  never :
+  never;
+export type ExactExtract<T, U> = T extends U ? U extends T ? T : never : never;
+>ExactExtract : Symbol(ExactExtract, Decl(conditionalPrependNoHang.ts, 4, 8))
+>T : Symbol(T, Decl(conditionalPrependNoHang.ts, 5, 25))
+>U : Symbol(U, Decl(conditionalPrependNoHang.ts, 5, 27))
+>T : Symbol(T, Decl(conditionalPrependNoHang.ts, 5, 25))
+>U : Symbol(U, Decl(conditionalPrependNoHang.ts, 5, 27))
+>U : Symbol(U, Decl(conditionalPrependNoHang.ts, 5, 27))
+>T : Symbol(T, Decl(conditionalPrependNoHang.ts, 5, 25))
+>T : Symbol(T, Decl(conditionalPrependNoHang.ts, 5, 25))
+
+type Conv<T, U = T> =
+>Conv : Symbol(Conv, Decl(conditionalPrependNoHang.ts, 5, 79))
+>T : Symbol(T, Decl(conditionalPrependNoHang.ts, 7, 10))
+>U : Symbol(U, Decl(conditionalPrependNoHang.ts, 7, 12))
+>T : Symbol(T, Decl(conditionalPrependNoHang.ts, 7, 10))
+
+  { 0: [T]; 1: Prepend<T, Conv<ExactExtract<U, T>>>;}[U extends T ? 0 : 1];
+>0 : Symbol(0, Decl(conditionalPrependNoHang.ts, 8, 3))
+>T : Symbol(T, Decl(conditionalPrependNoHang.ts, 7, 10))
+>1 : Symbol(1, Decl(conditionalPrependNoHang.ts, 8, 11))
+>Prepend : Symbol(Prepend, Decl(conditionalPrependNoHang.ts, 0, 0))
+>T : Symbol(T, Decl(conditionalPrependNoHang.ts, 7, 10))
+>Conv : Symbol(Conv, Decl(conditionalPrependNoHang.ts, 5, 79))
+>ExactExtract : Symbol(ExactExtract, Decl(conditionalPrependNoHang.ts, 4, 8))
+>U : Symbol(U, Decl(conditionalPrependNoHang.ts, 7, 12))
+>T : Symbol(T, Decl(conditionalPrependNoHang.ts, 7, 10))
+>U : Symbol(U, Decl(conditionalPrependNoHang.ts, 7, 12))
+>T : Symbol(T, Decl(conditionalPrependNoHang.ts, 7, 10))
+

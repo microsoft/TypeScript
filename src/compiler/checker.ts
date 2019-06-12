@@ -67,6 +67,7 @@ namespace ts {
         let enumCount = 0;
         let instantiationDepth = 0;
         let constraintDepth = 0;
+        const perInstanceDepth = createMap<number>();
         let currentNode: Node | undefined;
 
         const emptySymbols = createSymbolTable();
@@ -7815,7 +7816,7 @@ namespace ts {
                     if (!pushTypeResolution(t, TypeSystemPropertyName.ImmediateBaseConstraint)) {
                         return circularConstraintType;
                     }
-                    if (constraintDepth >= 50) {
+                    if (checkMaximumConstraintDepthExceeded(t)) {
                         // We have reached 50 recursive invocations of getImmediateBaseConstraint and there is a
                         // very high likelihood we're dealing with an infinite generic type that perpetually generates
                         // new type identities as we descend into it. We stop the recursion here and mark this type
@@ -7824,9 +7825,9 @@ namespace ts {
                         nonTerminating = true;
                         return t.immediateBaseConstraint = noConstraintType;
                     }
-                    constraintDepth++;
+                    incrementConstraintDepth(t);
                     let result = computeBaseConstraint(getSimplifiedType(t, /*writing*/ false));
-                    constraintDepth--;
+                    decrementConstraintDepth(t);
                     if (!popTypeResolution()) {
                         if (t.flags & TypeFlags.TypeParameter) {
                             const errorNode = getConstraintDeclaration(<TypeParameter>t);
@@ -7845,6 +7846,28 @@ namespace ts {
                     t.immediateBaseConstraint = result || noConstraintType;
                 }
                 return t.immediateBaseConstraint;
+            }
+
+            function checkMaximumConstraintDepthExceeded(t: Type) {
+                return constraintDepth >= 50 || (t.flags & TypeFlags.Conditional && (perInstanceDepth.get("" + getTypeId(getNodeLinks((t as ConditionalType).root.node).resolvedType!)) || 0) >= 10);
+            }
+
+            function incrementConstraintDepth(t: Type) {
+                constraintDepth++;
+                if (t.flags & TypeFlags.Conditional) {
+                    const base = getNodeLinks((t as ConditionalType).root.node).resolvedType!;
+                    const id = "" + getTypeId(base);
+                    perInstanceDepth.set(id, (perInstanceDepth.get(id) || 0) + 1);
+                }
+            }
+
+            function decrementConstraintDepth(t: Type) {
+                constraintDepth--;
+                if (t.flags & TypeFlags.Conditional) {
+                    const base = getNodeLinks((t as ConditionalType).root.node).resolvedType!;
+                    const id = "" + getTypeId(base);
+                    perInstanceDepth.set(id, perInstanceDepth.get(id)! - 1);
+                }
             }
 
             function getBaseConstraint(t: Type): Type | undefined {
@@ -7883,9 +7906,9 @@ namespace ts {
                 }
                 if (t.flags & TypeFlags.Conditional) {
                     const constraint = getConstraintFromConditionalType(<ConditionalType>t);
-                    constraintDepth++; // Penalize repeating conditional types (this captures the recursion within getConstraintFromConditionalType and carries it forward)
+                    incrementConstraintDepth(t); // Penalize repeating conditional types (this captures the recursion within getConstraintFromConditionalType and carries it forward)
                     const result = constraint && getBaseConstraint(constraint);
-                    constraintDepth--;
+                    decrementConstraintDepth(t);
                     return result;
                 }
                 if (t.flags & TypeFlags.Substitution) {
