@@ -611,23 +611,38 @@ namespace ts.codefix {
     export function forEachExternalModuleToImportFrom(checker: TypeChecker, host: LanguageServiceHost, from: SourceFile, allSourceFiles: ReadonlyArray<SourceFile>, cb: (module: Symbol) => void) {
         const packageJsons = findPackageJsons(getDirectoryPath(from.fileName), host);
         const dependencyIterator = readPackageJsonDependencies();
+        const isJS = isSourceFileJS(from);
         forEachExternalModule(checker, allSourceFiles, (module, sourceFile) => {
-            if (sourceFile === undefined) {
-                const maybeSourceFile = module.valueDeclaration.getSourceFile();
-                if (!maybeSourceFile || packageJsonAllowsImporting(maybeSourceFile.fileName)) {
+            if (sourceFile === undefined && packageJsonAllowsImporting(stripQuotes(module.getName()))) {
+                cb(module);
+            }
+            else if (sourceFile && sourceFile !== from && isImportablePath(from.fileName, sourceFile.fileName)) {
+                const moduleSpecifier = getModuleSpecifierFromFileName(sourceFile.fileName);
+                if (!moduleSpecifier || packageJsonAllowsImporting(moduleSpecifier)) {
                     cb(module);
                 }
-            }
-            else if (sourceFile && sourceFile !== from && isImportablePath(from.fileName, sourceFile.fileName) && packageJsonAllowsImporting(sourceFile.fileName)) {
-                cb(module);
             }
         });
 
         let seenDeps: Map<true> | undefined;
-        function packageJsonAllowsImporting(fileName: string): boolean {
-            const moduleSpecifier = getModuleSpecifierFromFileName(fileName);
-            if (!moduleSpecifier || !packageJsons.length || seenDeps && seenDeps.has(moduleSpecifier)) {
+        let hasNodeTypingsViaTypeAcquisition: boolean | undefined;
+        function packageJsonAllowsImporting(moduleSpecifier: string): boolean {
+            if (!packageJsons.length || seenDeps && seenDeps.has(moduleSpecifier)) {
                 return true;
+            }
+
+            // If we’re in JavaScript, it can be difficult to tell whether the user wants to import
+            // from Node core modules or not. We can start by seeing if type acquisition has already
+            // downloaded @types/node, because if it has, that indicates that the user has already
+            // been using some Node core modules directly, as opposed to simply having @types/node
+            // accidentally as a dependency of a dependency.
+            if (isJS && JsTyping.nodeCoreModules.has(moduleSpecifier)) {
+                if (hasNodeTypingsViaTypeAcquisition === undefined) {
+                    hasNodeTypingsViaTypeAcquisition = host.hasTypeAcquisitionAcquiredNodeTypings && host.hasTypeAcquisitionAcquiredNodeTypings();
+                }
+                if (hasNodeTypingsViaTypeAcquisition) {
+                    return true;
+                }
             }
 
             let packageName: string;

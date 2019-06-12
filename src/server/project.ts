@@ -527,6 +527,17 @@ namespace ts.server {
             return this.projectService.getSourceFileLike(fileName, this);
         }
 
+        /*@internal*/
+        getUnresolvedImports(): SortedReadonlyArray<string> | undefined {
+            return this.typingsCache.getUnresolvedImports(this);
+        }
+
+        /*@internal*/
+        hasTypeAcquisitionAcquiredNodeTypings?(): boolean {
+            const globalCache = this.getGlobalCache();
+            return !!globalCache && some(this.typingFiles, fileName => startsWithDirectory(fileName, combinePaths(globalCache, "node_modules", "@types", "node"), this.getCanonicalFileName));
+        }
+
         private shouldEmitFile(scriptInfo: ScriptInfo) {
             return scriptInfo && !scriptInfo.isDynamicOrHasMixedContent();
         }
