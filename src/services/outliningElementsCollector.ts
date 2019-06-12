@@ -237,7 +237,7 @@ namespace ts.OutliningElementsCollector {
             ? findChildOfKind(node, SyntaxKind.OpenParenToken, sourceFile)
             : findChildOfKind(body, SyntaxKind.OpenBraceToken, sourceFile);
         const closeToken = findChildOfKind(body, SyntaxKind.CloseBraceToken, sourceFile);
-        return openToken && closeToken && spanBetweenTokens(openToken, closeToken, node.parent, sourceFile, /*autoCollapse*/ node.parent.kind !== SyntaxKind.ArrowFunction);
+        return openToken && closeToken && spanBetweenTokens(openToken, closeToken, node, sourceFile, /*autoCollapse*/ node.kind !== SyntaxKind.ArrowFunction);
     }
 
     function spanBetweenTokens(openToken: Node, closeToken: Node, hintSpanNode: Node, sourceFile: SourceFile, autoCollapse = false, useFullStart = true): OutliningSpan {
