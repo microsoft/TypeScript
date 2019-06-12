@@ -458,6 +458,11 @@ namespace ts.server {
         }
 
         /*@internal*/
+        fileIsOpen(filePath: Path) {
+            return this.projectService.openFiles.has(filePath);
+        }
+
+        /*@internal*/
         writeLog(s: string) {
             this.projectService.logger.info(s);
         }
