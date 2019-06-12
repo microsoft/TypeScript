@@ -286,13 +286,25 @@ namespace ts.codefix {
         preferences: UserPreferences,
     ): ReadonlyArray<FixAddNewImport | FixUseImportType> {
         const isJs = isSourceFileJS(sourceFile);
+        const { allowsImporting } = createLazyPackageJsonDependencyReader(sourceFile.fileName, host);
         const choicesForEachExportingModule = flatMap(moduleSymbols, ({ moduleSymbol, importKind, exportedSymbolIsTypeOnly }) =>
             moduleSpecifiers.getModuleSpecifiers(moduleSymbol, program.getCompilerOptions(), sourceFile, host, program.getSourceFiles(), preferences, program.redirectTargetsMap)
             .map((moduleSpecifier): FixAddNewImport | FixUseImportType =>
                 // `position` should only be undefined at a missing jsx namespace, in which case we shouldn't be looking for pure types.
                 exportedSymbolIsTypeOnly && isJs ? { kind: ImportFixKind.ImportType, moduleSpecifier, position: Debug.assertDefined(position) } : { kind: ImportFixKind.AddNew, moduleSpecifier, importKind }));
-        // Sort to keep the shortest paths first
-        return sort(choicesForEachExportingModule, (a, b) => a.moduleSpecifier.length - b.moduleSpecifier.length);
+
+        // Sort by presence in package.json, then shortest paths first
+        return sort(choicesForEachExportingModule, (a, b) => {
+            const allowsImportingA = allowsImporting(a.moduleSpecifier, isJs);
+            const allowsImportingB = allowsImporting(b.moduleSpecifier, isJs);
+            if (allowsImportingA && !allowsImportingB) {
+                return -1;
+            }
+            if (allowsImportingB && !allowsImportingA) {
+                return 1;
+            }
+            return a.moduleSpecifier.length - b.moduleSpecifier.length;
+        });
     }
 
     function getFixesForAddImport(
@@ -609,69 +621,19 @@ namespace ts.codefix {
     }
 
     export function forEachExternalModuleToImportFrom(checker: TypeChecker, host: LanguageServiceHost, from: SourceFile, allSourceFiles: ReadonlyArray<SourceFile>, cb: (module: Symbol) => void) {
-        const packageJsons = findPackageJsons(getDirectoryPath(from.fileName), host);
-        const dependencyIterator = readPackageJsonDependencies();
+        const { allowsImporting } = createLazyPackageJsonDependencyReader(from.fileName, host);
         const isJS = isSourceFileJS(from);
         forEachExternalModule(checker, allSourceFiles, (module, sourceFile) => {
-            if (sourceFile === undefined && packageJsonAllowsImporting(stripQuotes(module.getName()))) {
+            if (sourceFile === undefined && allowsImporting(stripQuotes(module.getName()), isJS)) {
                 cb(module);
             }
             else if (sourceFile && sourceFile !== from && isImportablePath(from.fileName, sourceFile.fileName)) {
                 const moduleSpecifier = getModuleSpecifierFromFileName(sourceFile.fileName);
-                if (!moduleSpecifier || packageJsonAllowsImporting(moduleSpecifier)) {
+                if (!moduleSpecifier || allowsImporting(moduleSpecifier, isJS)) {
                     cb(module);
                 }
             }
         });
-
-        let seenDeps: Map<true> | undefined;
-        let hasNodeTypingsViaTypeAcquisition: boolean | undefined;
-        function packageJsonAllowsImporting(moduleSpecifier: string): boolean {
-            if (!packageJsons.length || seenDeps && seenDeps.has(moduleSpecifier)) {
-                return true;
-            }
-
-            // If we’re in JavaScript, it can be difficult to tell whether the user wants to import
-            // from Node core modules or not. We can start by seeing if type acquisition has already
-            // downloaded @types/node, because if it has, that indicates that the user has already
-            // been using some Node core modules directly, as opposed to simply having @types/node
-            // accidentally as a dependency of a dependency.
-            if (isJS && JsTyping.nodeCoreModules.has(moduleSpecifier)) {
-                if (hasNodeTypingsViaTypeAcquisition === undefined) {
-                    hasNodeTypingsViaTypeAcquisition = host.hasTypeAcquisitionAcquiredNodeTypings && host.hasTypeAcquisitionAcquiredNodeTypings();
-                }
-                if (hasNodeTypingsViaTypeAcquisition) {
-                    return true;
-                }
-            }
-
-            let packageName: string;
-            while (packageName = dependencyIterator.next().value) {
-                const nameWithoutTypes = getPackageNameFromTypesPackageName(packageName);
-                (seenDeps || (seenDeps = createMap())).set(nameWithoutTypes, true);
-                if (nameWithoutTypes === moduleSpecifier) {
-                    return true;
-                }
-            }
-            return false;
-        }
-
-        type PackageJson = Record<string, Record<string, string> | undefined>;
-        function *readPackageJsonDependencies() {
-            const dependencyKeys = ["dependencies", "devDependencies", "optionalDependencies"] as const;
-            for (const fileName of packageJsons) {
-                const content = readJson(fileName, { readFile: host.readFile ? host.readFile.bind(host) : sys.readFile }) as PackageJson;
-                for (const key of dependencyKeys) {
-                    const dependencyHash = content[key];
-                    if (!dependencyHash) {
-                        continue;
-                    }
-                    for (const packageName in dependencyHash) {
-                        yield packageName;
-                    }
-                }
-            }
-        }
 
         function getModuleSpecifierFromFileName(fileName: string): string | undefined {
             const pathComponents = getPathComponents(getDirectoryPath(fileName));
@@ -742,5 +704,71 @@ namespace ts.codefix {
         }
         // Need `|| "_"` to ensure result isn't empty.
         return !isStringANonContextualKeyword(res) ? res || "_" : `_${res}`;
+    }
+
+    function createLazyPackageJsonDependencyReader(fromPath: string, host: LanguageServiceHost) {
+        const packageJsonPaths = findPackageJsons(getDirectoryPath(fromPath), host);
+        const dependencyIterator = readPackageJsonDependencies();
+        let seenDeps: Map<true> | undefined;
+        function *readPackageJsonDependencies() {
+            type PackageJson = Record<typeof dependencyKeys[number], Record<string, string> | undefined>;
+            const dependencyKeys = ["dependencies", "devDependencies", "optionalDependencies"] as const;
+            for (const fileName of packageJsonPaths) {
+                const content = readJson(fileName, { readFile: host.readFile ? host.readFile.bind(host) : sys.readFile }) as PackageJson;
+                for (const key of dependencyKeys) {
+                    const dependencyHash = content[key];
+                    if (!dependencyHash) {
+                        continue;
+                    }
+                    for (const packageName in dependencyHash) {
+                        yield packageName;
+                    }
+                }
+            }
+        }
+
+        function containsDependency(dependency: string) {
+            if ((seenDeps || (seenDeps = createMap())).has(dependency)) {
+                return true;
+            }
+            let packageName: string;
+            while (packageName = dependencyIterator.next().value) {
+                seenDeps.set(packageName, true);
+                if (packageName === dependency) {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        let hasNodeTypingsViaTypeAcquisition: boolean | undefined;
+        function allowsImporting(moduleSpecifier: string, fromJSFile: boolean): boolean {
+            if (!packageJsonPaths.length) {
+                return true;
+            }
+
+            // If we’re in JavaScript, it can be difficult to tell whether the user wants to import
+            // from Node core modules or not. We can start by seeing if type acquisition has already
+            // downloaded @types/node, because if it has, that indicates that the user has already
+            // been using some Node core modules directly, as opposed to simply having @types/node
+            // accidentally as a dependency of a dependency.
+            if (fromJSFile && JsTyping.nodeCoreModules.has(moduleSpecifier)) {
+                if (hasNodeTypingsViaTypeAcquisition === undefined) {
+                    hasNodeTypingsViaTypeAcquisition = host.hasTypeAcquisitionAcquiredNodeTypings && host.hasTypeAcquisitionAcquiredNodeTypings();
+                }
+                if (hasNodeTypingsViaTypeAcquisition) {
+                    return true;
+                }
+            }
+
+            return containsDependency(moduleSpecifier)
+                || containsDependency(getTypesPackageName(moduleSpecifier));
+        }
+
+        return {
+            packageJsonPaths,
+            containsDependency,
+            allowsImporting
+        };
     }
 }
