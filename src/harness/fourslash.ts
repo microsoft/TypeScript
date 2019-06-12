@@ -2238,6 +2238,20 @@ Actual: ${stringify(fullActual)}`);
             });
         }
 
+        public verifyOutliningHintSpans(spans: Range[]) {
+            const actual = this.languageService.getOutliningSpans(this.activeFile.fileName);
+
+            if (actual.length !== spans.length) {
+                this.raiseError(`verifyOutliningHintSpans failed - expected total spans to be ${spans.length}, but was ${actual.length}`);
+            }
+
+            ts.zipWith(spans, actual, (expectedSpan, actualSpan, i) => {
+                if (expectedSpan.pos !== actualSpan.hintSpan.start || expectedSpan.end !== ts.textSpanEnd(actualSpan.hintSpan)) {
+                    return this.raiseError(`verifyOutliningSpans failed - span ${(i + 1)} expected: (${expectedSpan.pos},${expectedSpan.end}),  actual: (${actualSpan.hintSpan.start},${ts.textSpanEnd(actualSpan.hintSpan)})`);
+                }
+            });
+        }
+
         public verifyTodoComments(descriptors: string[], spans: Range[]) {
             const actual = this.languageService.getTodoComments(this.activeFile.fileName,
                 descriptors.map(d => { return { text: d, priority: 0 }; }));
@@ -4003,6 +4017,10 @@ namespace FourSlashInterface {
 
         public outliningSpansInCurrentFile(spans: FourSlash.Range[], kind?: "comment" | "region" | "code" | "imports") {
             this.state.verifyOutliningSpans(spans, kind);
+        }
+
+        public outliningHintSpansInCurrentFile(spans: FourSlash.Range[]) {
+            this.state.verifyOutliningHintSpans(spans);
         }
 
         public todoCommentsInCurrentFile(descriptors: string[]) {
