@@ -1781,6 +1781,70 @@ namespace ts.projectSystem {
                     import * as c from "foo/a/c";
             `, ["foo"], [fooAA, fooAB, fooAC]);
         });
+
+        it("should handle node core modules", () => {
+            const file: TestFSWithWatch.File = {
+                path: "/a/b/app.js",
+                content: `// @ts-check
+
+const net = require("net");
+const stream = require("stream");`
+            };
+            const nodeTyping: TestFSWithWatch.File = {
+                path: `${globalTypingsCacheLocation}/node_modules/node/index.d.ts`,
+                content: `
+declare module "net" {
+    export type n = number;
+}
+declare module "stream" {
+    export type s = string;
+}`,
+            };
+
+            const host = createServerHost([file, libFile]);
+            const installer = new (class extends Installer {
+                constructor() {
+                    super(host, { globalTypingsCacheLocation, typesRegistry: createTypesRegistry("node") });
+                }
+                installWorker(_requestId: number, _args: string[], _cwd: string, cb: TI.RequestCompletedAction) {
+                    executeCommand(this, host, ["node"], [nodeTyping], cb);
+                }
+            })();
+            const projectService = createProjectService(host, { typingsInstaller: installer });
+            projectService.openClientFile(file.path);
+            projectService.checkNumberOfProjects({ inferredProjects: 1 });
+
+            const proj = projectService.inferredProjects[0];
+            checkProjectActualFiles(proj, [file.path, libFile.path]);
+            installer.installAll(/*expectedCount*/ 1);
+            host.checkTimeoutQueueLengthAndRun(2);
+            checkProjectActualFiles(proj, [file.path, libFile.path, nodeTyping.path]);
+            projectService.applyChangesInOpenFiles(
+                /*openFiles*/ undefined,
+                arrayIterator([{
+                    fileName: file.path,
+                    changes: arrayIterator([{
+                        span: {
+                            start: file.content.indexOf(`"stream"`) + 2,
+                            length: 0
+                        },
+                        newText: " "
+                    }])
+                }]),
+                /*closedFiles*/ undefined
+            );
+            // Below timeout Updates the typings to empty array because of "s tream" as unsresolved import
+            // and schedules the update graph because of this.
+            host.checkTimeoutQueueLengthAndRun(2);
+            checkProjectActualFiles(proj, [file.path, libFile.path, nodeTyping.path]);
+
+            // Here, since typings doesnt contain node typings and resolution fails and
+            // node typings go out of project,
+            // but because we handle core node modules when resolving from typings cache
+            // node typings are included in the project
+            host.checkTimeoutQueueLengthAndRun(2);
+            checkProjectActualFiles(proj, [file.path, libFile.path, nodeTyping.path]);
+        });
     });
 
     describe("unittests:: tsserver:: typingsInstaller:: tsserver:: with inferred Project", () => {

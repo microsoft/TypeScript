@@ -458,6 +458,9 @@ namespace ts.server {
         }
 
         /*@internal*/
+        globalCacheResolutionModuleName = JsTyping.nonRelativeModuleNameForTypingCache;
+
+        /*@internal*/
         fileIsOpen(filePath: Path) {
             return this.projectService.openFiles.has(filePath);
         }
