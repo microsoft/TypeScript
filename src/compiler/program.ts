@@ -1453,9 +1453,8 @@ namespace ts {
                 notImplementedResolver,
                 getEmitHost(writeFileCallback),
                 /*targetSourceFile*/ undefined,
+                /*transformers*/ noTransformers,
                 /*emitOnlyDtsFiles*/ false,
-                /*transformers*/ undefined,
-                /*declaraitonTransformers*/ undefined,
                 /*onlyBuildInfo*/ true
             );
 
@@ -1574,14 +1573,12 @@ namespace ts {
 
             performance.mark("beforeEmit");
 
-            const transformers = emitOnlyDtsFiles ? [] : getTransformers(options, customTransformers);
             const emitResult = emitFiles(
                 emitResolver,
                 getEmitHost(writeFileCallback),
                 sourceFile,
+                getTransformers(options, customTransformers, emitOnlyDtsFiles),
                 emitOnlyDtsFiles,
-                transformers,
-                customTransformers && customTransformers.afterDeclarations
             );
 
             performance.mark("afterEmit");
@@ -2235,7 +2232,10 @@ namespace ts {
                     if (isRedirect) {
                         inputName = getProjectReferenceRedirect(fileName) || fileName;
                     }
-                    if (getNormalizedAbsolutePath(checkedName, currentDirectory) !== getNormalizedAbsolutePath(inputName, currentDirectory)) {
+                    // Check if it differs only in drive letters its ok to ignore that error:
+                    const checkedAbsolutePath = getNormalizedAbsolutePathWithoutRoot(checkedName, currentDirectory);
+                    const inputAbsolutePath = getNormalizedAbsolutePathWithoutRoot(inputName, currentDirectory);
+                    if (checkedAbsolutePath !== inputAbsolutePath) {
                         reportFileNamesDifferOnlyInCasingError(inputName, checkedName, refFile, refPos, refEnd);
                     }
                 }
@@ -2688,6 +2688,7 @@ namespace ts {
                     return undefined;
                 }
                 sourceFile = Debug.assertDefined(commandLine.options.configFile);
+                Debug.assert(!sourceFile.path || sourceFile.path === sourceFilePath);
                 addFileToFilesByName(sourceFile, sourceFilePath, /*redirectedPath*/ undefined);
             }
             else {
@@ -2699,11 +2700,12 @@ namespace ts {
                     projectReferenceRedirects.set(sourceFilePath, false);
                     return undefined;
                 }
-                sourceFile.path = sourceFilePath;
-                sourceFile.resolvedPath = sourceFilePath;
-                sourceFile.originalFileName = refPath;
                 commandLine = parseJsonSourceFileConfigFileContent(sourceFile, configParsingHost, basePath, /*existingOptions*/ undefined, refPath);
             }
+            sourceFile.path = sourceFilePath;
+            sourceFile.resolvedPath = sourceFilePath;
+            sourceFile.originalFileName = refPath;
+
             const resolvedRef: ResolvedProjectReference = { commandLine, sourceFile };
             projectReferenceRedirects.set(sourceFilePath, resolvedRef);
             if (commandLine.projectReferences) {
@@ -2771,7 +2773,7 @@ namespace ts {
                     // Ignore file that is not emitted
                     if (!sourceFileMayBeEmitted(file, options, isSourceFileFromExternalLibrary, getResolvedProjectReferenceToRedirect)) continue;
                     if (rootPaths.indexOf(file.path) === -1) {
-                        programDiagnostics.add(createCompilerDiagnostic(Diagnostics.File_0_is_not_in_project_file_list_Projects_must_list_all_files_or_use_an_include_pattern, file.fileName));
+                        programDiagnostics.add(createCompilerDiagnostic(Diagnostics.File_0_is_not_listed_within_the_file_list_of_project_1_Projects_must_list_all_files_or_use_an_include_pattern, file.fileName, options.configFilePath || ""));
                     }
                 }
             }
@@ -2856,10 +2858,10 @@ namespace ts {
                     createDiagnosticForOptionName(Diagnostics.Option_isolatedModules_can_only_be_used_when_either_option_module_is_provided_or_option_target_is_ES2015_or_higher, "isolatedModules", "target");
                 }
 
-                const firstNonExternalModuleSourceFile = find(files, f => !isExternalModule(f) && !f.isDeclarationFile && f.scriptKind !== ScriptKind.JSON);
+                const firstNonExternalModuleSourceFile = find(files, f => !isExternalModule(f) && !isSourceFileJS(f) && !f.isDeclarationFile && f.scriptKind !== ScriptKind.JSON);
                 if (firstNonExternalModuleSourceFile) {
                     const span = getErrorSpanForNode(firstNonExternalModuleSourceFile, firstNonExternalModuleSourceFile);
-                    programDiagnostics.add(createFileDiagnostic(firstNonExternalModuleSourceFile, span.start, span.length, Diagnostics.Cannot_compile_namespaces_when_the_isolatedModules_flag_is_provided));
+                    programDiagnostics.add(createFileDiagnostic(firstNonExternalModuleSourceFile, span.start, span.length, Diagnostics.All_files_must_be_modules_when_the_isolatedModules_flag_is_provided));
                 }
             }
             else if (firstNonAmbientExternalModuleSourceFile && languageVersion < ScriptTarget.ES2015 && options.module === ModuleKind.None) {

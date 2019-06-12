@@ -22,34 +22,32 @@ namespace ts {
         });
 
         it("orders the graph correctly - specify two roots", () => {
-            checkGraphOrdering(["A", "G"], ["A", "B", "C", "D", "E", "G"]);
+            checkGraphOrdering(["A", "G"], ["D", "E", "C", "B", "A", "G"]);
         });
 
         it("orders the graph correctly - multiple parts of the same graph in various orders", () => {
-            checkGraphOrdering(["A"], ["A", "B", "C", "D", "E"]);
-            checkGraphOrdering(["A", "C", "D"], ["A", "B", "C", "D", "E"]);
-            checkGraphOrdering(["D", "C", "A"], ["A", "B", "C", "D", "E"]);
+            checkGraphOrdering(["A"], ["D", "E", "C", "B", "A"]);
+            checkGraphOrdering(["A", "C", "D"], ["D", "E", "C", "B", "A"]);
+            checkGraphOrdering(["D", "C", "A"], ["D", "E", "C", "B", "A"]);
         });
 
         it("orders the graph correctly - other orderings", () => {
-            checkGraphOrdering(["F"], ["F", "E"]);
+            checkGraphOrdering(["F"], ["E", "F"]);
             checkGraphOrdering(["E"], ["E"]);
-            checkGraphOrdering(["F", "C", "A"], ["A", "B", "C", "D", "E", "F"]);
+            checkGraphOrdering(["F", "C", "A"], ["E", "F", "D", "C", "B", "A"]);
         });
 
         function checkGraphOrdering(rootNames: string[], expectedBuildSet: string[]) {
-            const builder = createSolutionBuilder(host!, rootNames, { dry: true, force: false, verbose: false });
+            const builder = createSolutionBuilder(host!, rootNames.map(getProjectFileName), { dry: true, force: false, verbose: false });
+            const buildQueue = builder.getBuildOrder();
 
-            const projFileNames = rootNames.map(getProjectFileName);
-            const graph = builder.getBuildGraph(projFileNames);
-
-            assert.sameMembers(graph.buildQueue, expectedBuildSet.map(getProjectFileName));
+            assert.deepEqual(buildQueue, expectedBuildSet.map(getProjectFileName));
 
             for (const dep of deps) {
                 const child = getProjectFileName(dep[0]);
-                if (graph.buildQueue.indexOf(child) < 0) continue;
+                if (buildQueue.indexOf(child) < 0) continue;
                 const parent = getProjectFileName(dep[1]);
-                assert.isAbove(graph.buildQueue.indexOf(child), graph.buildQueue.indexOf(parent), `Expecting child ${child} to be built after parent ${parent}`);
+                assert.isAbove(buildQueue.indexOf(child), buildQueue.indexOf(parent), `Expecting child ${child} to be built after parent ${parent}`);
             }
         }
 

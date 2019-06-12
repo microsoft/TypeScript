@@ -17,12 +17,22 @@ const preferences: FourSlashInterface.UserPreferences = { includeCompletionsForM
 verify.completions(
     {
         marker: "0",
-        includes: { name: "a", source: "/a", hasAction: true, },
+        includes: {
+            name: "a",
+            source: "/a",
+            hasAction: true,
+            sortText: completion.SortText.AutoImportSuggestions
+        },
         preferences,
     },
     {
         marker: "1",
-        includes: { name: "b", source: "/a", hasAction: true },
+        includes: {
+            name: "b",
+            source: "/a",
+            hasAction: true,
+            sortText: completion.SortText.AutoImportSuggestions
+        },
         preferences,
     }
 );

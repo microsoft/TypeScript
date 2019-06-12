@@ -4231,7 +4231,8 @@ interface WorkerEventMap extends AbstractWorkerEventMap {
 /** An interface of the Web Workers API represents a background task that can be easily created and can send messages back to its creator. Creating a worker is as simple as calling the Worker() constructor and specifying a script to be run in the worker thread. */
 interface Worker extends EventTarget, AbstractWorker {
     onmessage: ((this: Worker, ev: MessageEvent) => any) | null;
-    postMessage(message: any, transfer?: Transferable[]): void;
+    postMessage(message: any, transfer: Transferable[]): void;
+    postMessage(message: any, options?: PostMessageOptions): void;
     terminate(): void;
     addEventListener<K extends keyof WorkerEventMap>(type: K, listener: (this: Worker, ev: WorkerEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;

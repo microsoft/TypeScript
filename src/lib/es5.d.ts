@@ -513,7 +513,7 @@ interface Boolean {
 
 interface BooleanConstructor {
     new(value?: any): Boolean;
-    <T>(value?: T): value is Exclude<T, false | null | undefined | '' | 0>;
+    <T>(value?: T): boolean;
     readonly prototype: Boolean;
 }
 
@@ -1446,9 +1446,7 @@ type Extract<T, U> = T extends U ? T : never;
 /**
  * Construct a type with the properties of T except for those in type K.
  */
-type Omit<T, K extends keyof any> = {
-    [P in Exclude<keyof T, K>]: T[P]
-};
+type Omit<T, K extends keyof any> = Pick<T, Exclude<keyof T, K>>;
 
 /**
  * Exclude null and undefined from T

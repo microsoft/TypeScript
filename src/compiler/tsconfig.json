@@ -8,6 +8,7 @@
 
     "files": [
         "core.ts",
+        "debug.ts",
         "performance.ts",
         "semver.ts",
 

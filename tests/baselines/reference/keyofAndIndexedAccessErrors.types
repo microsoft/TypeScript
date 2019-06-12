@@ -74,8 +74,8 @@ type T19 = Shape[{ x: string }];  // Error
 type T20 = Shape[string | number];  // Error
 >T20 : any
 
-type T21 = Shape[string & number];  // Error
->T21 : any
+type T21 = Shape[string & number];
+>T21 : never
 
 type T22 = Shape[string | boolean];  // Error
 >T22 : any

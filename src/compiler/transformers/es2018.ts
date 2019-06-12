@@ -77,6 +77,8 @@ namespace ts {
                     return visitObjectLiteralExpression(node as ObjectLiteralExpression);
                 case SyntaxKind.BinaryExpression:
                     return visitBinaryExpression(node as BinaryExpression, noDestructuringValue);
+                case SyntaxKind.CatchClause:
+                    return visitCatchClause(node as CatchClause);
                 case SyntaxKind.VariableDeclaration:
                     return visitVariableDeclaration(node as VariableDeclaration);
                 case SyntaxKind.ForOfStatement:
@@ -268,6 +270,28 @@ namespace ts {
                     visitNode(node.left, visitorNoDestructuringValue, isExpression),
                     visitNode(node.right, noDestructuringValue ? visitorNoDestructuringValue : visitor, isExpression)
                 );
+            }
+            return visitEachChild(node, visitor, context);
+        }
+
+        function visitCatchClause(node: CatchClause) {
+            if (node.variableDeclaration &&
+                isBindingPattern(node.variableDeclaration.name) &&
+                node.variableDeclaration.name.transformFlags & TransformFlags.ContainsObjectRestOrSpread) {
+                const name = getGeneratedNameForNode(node.variableDeclaration.name);
+                const updatedDecl = updateVariableDeclaration(node.variableDeclaration, node.variableDeclaration.name, /*type*/ undefined, name);
+                const visitedBindings = flattenDestructuringBinding(updatedDecl, visitor, context, FlattenLevel.ObjectRest);
+                let block = visitNode(node.block, visitor, isBlock);
+                if (some(visitedBindings)) {
+                    block = updateBlock(block, [
+                        createVariableStatement(/*modifiers*/ undefined, visitedBindings),
+                        ...block.statements,
+                    ]);
+                }
+                return updateCatchClause(
+                    node,
+                    updateVariableDeclaration(node.variableDeclaration, name, /*type*/ undefined, /*initializer*/ undefined),
+                    block);
             }
             return visitEachChild(node, visitor, context);
         }

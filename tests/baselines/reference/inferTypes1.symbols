@@ -297,7 +297,7 @@ type T52 = X3<{ a: (x: string) => void, b: (x: string) => void }>;  // string
 >b : Symbol(b, Decl(inferTypes1.ts, 69, 39))
 >x : Symbol(x, Decl(inferTypes1.ts, 69, 44))
 
-type T53 = X3<{ a: (x: number) => void, b: (x: string) => void }>;  // string & number
+type T53 = X3<{ a: (x: number) => void, b: (x: string) => void }>;  // never
 >T53 : Symbol(T53, Decl(inferTypes1.ts, 69, 66))
 >X3 : Symbol(X3, Decl(inferTypes1.ts, 63, 52))
 >a : Symbol(a, Decl(inferTypes1.ts, 70, 15))

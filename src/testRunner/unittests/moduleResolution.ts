@@ -530,7 +530,7 @@ export = C;
         });
     });
 
-    describe("unittests:: moduleResolution:: Files with different casing", () => {
+    describe("unittests:: moduleResolution:: Files with different casing with forceConsistentCasingInFileNames", () => {
         let library: SourceFile;
         function test(files: Map<string>, options: CompilerOptions, currentDirectory: string, useCaseSensitiveFileNames: boolean, rootFiles: string[], diagnosticCodes: number[]): void {
             const getCanonicalFileName = createGetCanonicalFileName(useCaseSensitiveFileNames);
@@ -648,6 +648,22 @@ import b = require("./moduleB");
                 `
             });
             test(files, { module: ModuleKind.CommonJS, forceConsistentCasingInFileNames: true }, "/a/B/c", /*useCaseSensitiveFileNames*/ false, ["moduleD.ts"], []);
+        });
+
+        it("should succeed when the two files in program differ only in drive letter in their names", () => {
+            const files = createMapFromTemplate({
+                "d:/someFolder/moduleA.ts": `import a = require("D:/someFolder/moduleC")`,
+                "d:/someFolder/moduleB.ts": `import a = require("./moduleC")`,
+                "D:/someFolder/moduleC.ts": "export const x = 10",
+            });
+            test(
+                files,
+                { module: ModuleKind.CommonJS, forceConsistentCasingInFileNames: true },
+                "d:/someFolder",
+                /*useCaseSensitiveFileNames*/ false,
+                ["d:/someFolder/moduleA.ts", "d:/someFolder/moduleB.ts"],
+                []
+            );
         });
     });
 

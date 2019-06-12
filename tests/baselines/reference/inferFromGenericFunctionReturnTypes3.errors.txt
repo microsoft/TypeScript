@@ -201,3 +201,22 @@ tests/cases/compiler/inferFromGenericFunctionReturnTypes3.ts(180,26): error TS23
 !!! error TS2322:         Type 'State.B' is not assignable to type 'State.A'.
 !!! related TS6502 tests/cases/compiler/inferFromGenericFunctionReturnTypes3.ts:179:28: The expected type comes from the return type of this signature.
     
+    // Repros from #31443
+    
+    enum Enum { A, B }
+    
+    class ClassWithConvert<T> {
+      constructor(val: T) { }
+      convert(converter: { to: (v: T) => T; }) { }
+    }
+    
+    function fn<T>(arg: ClassWithConvert<T>, f: () => ClassWithConvert<T>) { }
+    fn(new ClassWithConvert(Enum.A), () => new ClassWithConvert(Enum.A));
+    
+    type Func<T> = (x: T) => T;
+    
+    declare function makeFoo<T>(x: T): Func<T>;
+    declare function baz<U>(x: Func<U>, y: Func<U>): void;
+    
+    baz(makeFoo(Enum.A), makeFoo(Enum.A));
+    
