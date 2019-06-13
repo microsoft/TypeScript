@@ -1272,7 +1272,7 @@ namespace ts.Completions {
 
         function getSymbolsFromOtherSourceFileExports(symbols: Symbol[], tokenText: string, target: ScriptTarget, host: LanguageServiceHost): void {
             const tokenTextLowerCase = tokenText.toLowerCase();
-
+            const potentialDuplicateSymbols = createMap<{ alias: Symbol, moduleSymbol: Symbol, insertAt: number }>();
             const seenResolvedModules = createMap<true>();
 
             codefix.forEachExternalModuleToImportFrom(typeChecker, host, sourceFile, program.getSourceFiles(), moduleSymbol => {
@@ -1296,33 +1296,55 @@ namespace ts.Completions {
                     symbolToOriginInfoMap[getSymbolId(resolvedModuleSymbol)] = { kind: SymbolOriginInfoKind.Export, moduleSymbol, isDefaultExport: false };
                 }
 
-                for (let symbol of typeChecker.getExportsOfModule(moduleSymbol)) {
+                for (const symbol of typeChecker.getExportsOfModule(moduleSymbol)) {
                     // Don't add a completion for a re-export, only for the original.
                     // The actual import fix might end up coming from a re-export -- we don't compute that until getting completion details.
                     // This is just to avoid adding duplicate completion entries.
                     //
                     // If `symbol.parent !== ...`, this is an `export * from "foo"` re-export. Those don't create new symbols.
-                    if (typeChecker.getMergedSymbol(symbol.parent!) !== resolvedModuleSymbol
-                        || some(symbol.declarations, d =>
-                            // If `!!d.name.originalKeywordKind`, this is `export { _break as break };` -- skip this and prefer the keyword completion.
-                            // If `!!d.parent.parent.moduleSpecifier`, this is `export { foo } from "foo"` re-export, which creates a new symbol (thus isn't caught by the first check).
-                            isExportSpecifier(d) && (d.propertyName ? isIdentifierANonContextualKeyword(d.name) : !!d.parent.parent.moduleSpecifier))) {
+                    if (typeChecker.getMergedSymbol(symbol.parent!) !== resolvedModuleSymbol) {
                         continue;
                     }
-
-                    const isDefaultExport = symbol.escapedName === InternalSymbolName.Default;
-                    if (isDefaultExport) {
-                        symbol = getLocalSymbolForExportDefault(symbol) || symbol;
+                    // If `!!d.name.originalKeywordKind`, this is `export { _break as break };` -- skip this and prefer the keyword completion.
+                    if (some(symbol.declarations, d => isExportSpecifier(d) && !!d.propertyName && isIdentifierANonContextualKeyword(d.name))) {
+                        continue;
+                    }
+                    // If `!!d.parent.parent.moduleSpecifier`, this is `export { foo } from "foo"` re-export, which creates a new symbol (thus isn't caught by the first check).
+                    if (some(symbol.declarations, d => isExportSpecifier(d) && !d.propertyName && !!d.parent.parent.moduleSpecifier)) {
+                        // If we haven’t yet seen the original symbol, note the alias so we can add it at the end if the original doesn’t show up eventually
+                        const exportSymbol = findAlias(typeChecker, symbol, alias => some(alias.declarations, d => !!d.localSymbol));
+                        const localSymbol = exportSymbol && find(exportSymbol.declarations, d => !!d.localSymbol)!.localSymbol;
+                        if (localSymbol && !symbolToOriginInfoMap[getSymbolId(localSymbol)]) {
+                            potentialDuplicateSymbols.set(getSymbolId(localSymbol).toString(), { alias: symbol, moduleSymbol, insertAt: symbols.length });
+                        }
+                        continue;
+                    }
+                    else {
+                        // This is not a re-export, so see if we have any aliases pending and remove them
+                        potentialDuplicateSymbols.delete(getSymbolId(symbol).toString());
                     }
 
-                    const origin: SymbolOriginInfoExport = { kind: SymbolOriginInfoKind.Export, moduleSymbol, isDefaultExport };
-                    if (detailsEntryId || stringContainsCharactersInOrder(getSymbolName(symbol, origin, target).toLowerCase(), tokenTextLowerCase)) {
-                        symbols.push(symbol);
-                        symbolToSortTextMap[getSymbolId(symbol)] = SortText.AutoImportSuggestions;
-                        symbolToOriginInfoMap[getSymbolId(symbol)] = origin;
-                    }
+                    pushSymbol(symbol, moduleSymbol);
                 }
             });
+
+            // By this point, any potential duplicates that were actually duplicates have been
+            // removed, so the rest need to be added.
+            potentialDuplicateSymbols.forEach(({ alias, moduleSymbol, insertAt }) => pushSymbol(alias, moduleSymbol, insertAt));
+
+            function pushSymbol(symbol: Symbol, moduleSymbol: Symbol, insertAt = symbols.length) {
+                const isDefaultExport = symbol.escapedName === InternalSymbolName.Default;
+                if (isDefaultExport) {
+                    symbol = getLocalSymbolForExportDefault(symbol) || symbol;
+                }
+                const origin: SymbolOriginInfoExport = { kind: SymbolOriginInfoKind.Export, moduleSymbol, isDefaultExport };
+                if (detailsEntryId || stringContainsCharactersInOrder(getSymbolName(symbol, origin, target).toLowerCase(), tokenTextLowerCase)) {
+                    symbols.splice(insertAt, 0, symbol);
+                    symbolToSortTextMap[getSymbolId(symbol)] = SortText.AutoImportSuggestions;
+                    symbolToOriginInfoMap[getSymbolId(symbol)] = origin;
+                }
+                return symbol;
+            }
         }
 
         /**
@@ -2249,5 +2271,14 @@ namespace ts.Completions {
 
     function binaryExpressionMayBeOpenTag({ left }: BinaryExpression): boolean {
         return nodeIsMissing(left);
+    }
+
+    function findAlias(typeChecker: TypeChecker, symbol: Symbol, predicate: (symbol: Symbol) => boolean): Symbol | undefined {
+        let currentAlias: Symbol | undefined = symbol;
+        while (currentAlias.flags & SymbolFlags.Alias && (currentAlias = typeChecker.getImmediateAliasedSymbol(currentAlias))) {
+            if (predicate(currentAlias)) {
+                return currentAlias;
+            }
+        }
     }
 }
