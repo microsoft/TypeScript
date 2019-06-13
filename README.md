@@ -82,7 +82,7 @@ gulp runtests         # Run tests using the built compiler and test infrastructu
                       # You can override the host or specify a test for this command.
                       # Use --host=<hostName> or --tests=<testPath>.
 gulp baseline-accept  # This replaces the baseline test results with the results obtained from gulp runtests.
-gulp lint             # Runs tslint on the TypeScript source.
+gulp lint             # Runs eslint on the TypeScript source.
 gulp help             # List the above commands.
 ```
 

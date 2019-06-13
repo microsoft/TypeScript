@@ -318,34 +318,23 @@ task("clean-tests").description = "Cleans the outputs for the test infrastructur
 
 const watchTests = () => watchProject("src/testRunner", cmdLineOptions);
 
-const buildRules = () => buildProject("scripts/tslint");
-task("build-rules", buildRules);
-task("build-rules").description = "Compiles tslint rules to js";
-
-const cleanRules = () => cleanProject("scripts/tslint");
-cleanTasks.push(cleanRules);
-task("clean-rules", cleanRules);
-task("clean-rules").description = "Cleans the outputs for the lint rules";
-
 const lintFoldStart = async () => { if (fold.isTravis()) console.log(fold.start("lint")); };
 const lintFoldEnd = async () => { if (fold.isTravis()) console.log(fold.end("lint")); };
-const lint = series([
-    lintFoldStart,
-    ...["scripts/tslint/tsconfig.json", "src/tsconfig-base.json"].map(project => {
-        const lintOne = () => {
-            const args = ["node_modules/tslint/bin/tslint", "--project", project, "--formatters-dir", "./built/local/tslint/formatters", "--format", "autolinkableStylish"];
-            if (cmdLineOptions.fix) args.push("--fix");
-            log(`Linting: node ${args.join(" ")}`);
-            return exec(process.execPath, args);
-        };
-        lintOne.dispayName = `lint(${project})`;
-        return lintOne;
-    }),
-    lintFoldEnd
-]);
+const eslint = async () => {
+    const args = [
+        "node_modules/eslint/bin/eslint", "-f", "autolinkable-stylish", "-c", ".eslintrc", "--ext", ".ts", "."
+    ];
+
+    if (cmdLineOptions.fix) {
+        args.push("--fix");
+    }
+    log(`Linting: ${args.join(" ")}`);
+    return exec(process.execPath, args);
+}
+const lint = series([lintFoldStart, eslint, lintFoldEnd]);
 lint.displayName = "lint";
-task("lint", series(buildRules, lint));
-task("lint").description = "Runs tslint on the compiler sources.";
+task("lint", lint);
+task("lint").description = "Runs eslint on the compiler sources.";
 task("lint").flags = {
     "   --f[iles]=<regex>": "pattern to match files to lint",
 };
@@ -393,7 +382,7 @@ const generateCodeCoverage = () => exec("istanbul", ["cover", "node_modules/moch
 task("generate-code-coverage", series(preBuild, buildTests, generateCodeCoverage));
 task("generate-code-coverage").description = "Generates code coverage data via istanbul";
 
-const preTest = parallel(buildRules, buildTests, buildServices, buildLssl);
+const preTest = parallel(buildTests, buildServices, buildLssl);
 preTest.displayName = "preTest";
 
 const postTest = (done) => cmdLineOptions.lint ? lint(done) : done();
