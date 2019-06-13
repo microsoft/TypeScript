@@ -9,12 +9,12 @@
 
 // @Filename: /node_modules/@types/three/index.d.ts
 ////export * from "./three-core";
-////[|export as namespace [|{| "isWriteAccess": true, "isDefinition": true, "declarationRangeIndex": 0 |}THREE|];|]
+////[|export as namespace [|{| "isWriteAccess": true, "isDefinition": true, "contextRangeIndex": 0 |}THREE|];|]
 
 // @Filename: /typings/global.d.ts
-////[|import * as _THREE from '[|{| "declarationRangeIndex": 2 |}three|]';|]
+////[|import * as _THREE from '[|{| "contextRangeIndex": 2 |}three|]';|]
 ////declare global {
-////    [|const [|{| "isWriteAccess": true, "isDefinition": true, "declarationRangeIndex": 4 |}THREE|]: typeof _THREE;|]
+////    [|const [|{| "isWriteAccess": true, "isDefinition": true, "contextRangeIndex": 4 |}THREE|]: typeof _THREE;|]
 ////}
 
 // @Filename: /src/index.ts

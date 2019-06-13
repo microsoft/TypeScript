@@ -1,6 +1,6 @@
 /// <reference path='fourslash.ts' />
 
-////([|function [|{| "isWriteAccess": true, "isDefinition": true, "declarationRangeIndex": 0 |}___foo|]() {
+////([|function [|{| "isWriteAccess": true, "isDefinition": true, "contextRangeIndex": 0 |}___foo|]() {
 ////    [|___foo|]();
 ////}|])
 

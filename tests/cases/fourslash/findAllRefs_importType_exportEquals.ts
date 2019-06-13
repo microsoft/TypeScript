@@ -1,15 +1,15 @@
 /// <reference path='fourslash.ts' />
 
 // @Filename: /a.ts
-////[|type [|{| "isWriteAccess": true, "isDefinition": true, "declarationRangeIndex": 0 |}T|] = number;|]
-////[|namespace [|{| "isWriteAccess": true, "isDefinition": true, "declarationRangeIndex": 2 |}T|] {
+////[|type [|{| "isWriteAccess": true, "isDefinition": true, "contextRangeIndex": 0 |}T|] = number;|]
+////[|namespace [|{| "isWriteAccess": true, "isDefinition": true, "contextRangeIndex": 2 |}T|] {
 ////    export type U = string;
 ////}|]
-////[|[|{| "declarationRangeIndex": 4 |}export|] = [|{| "declarationRangeIndex": 4 |}T|];|]
+////[|[|{| "contextRangeIndex": 4 |}export|] = [|{| "contextRangeIndex": 4 |}T|];|]
 
 // @Filename: /b.ts
-////[|const x: import("[|{| "declarationRangeIndex": 7 |}./[|a|]|]") = 0;|]
-////[|const y: import("[|{| "declarationRangeIndex": 10 |}./[|a|]|]").U = "";|]
+////[|const x: import("[|{| "contextRangeIndex": 7 |}./[|a|]|]") = 0;|]
+////[|const y: import("[|{| "contextRangeIndex": 10 |}./[|a|]|]").U = "";|]
 
 verify.noErrors();
 

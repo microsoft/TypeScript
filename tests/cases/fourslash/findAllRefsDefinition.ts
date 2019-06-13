@@ -1,6 +1,6 @@
 /// <reference path='fourslash.ts' />
 
-////[|const [|{| "isWriteAccess": true, "isDefinition": true, "declarationRangeIndex": 0 |}x|] = 0;|]
+////[|const [|{| "isWriteAccess": true, "isDefinition": true, "contextRangeIndex": 0 |}x|] = 0;|]
 ////[|x|];
 
 const ranges = test.rangesByText().get("x");

@@ -3,7 +3,7 @@
 ////interface Foo { }
 ////module Foo {
 ////    export interface Bar { }
-////    [|export module [|{| "isWriteAccess": true, "isDefinition": true, "declarationRangeIndex": 0 |}Bar|] { export interface Baz { } }|]
+////    [|export module [|{| "isWriteAccess": true, "isDefinition": true, "contextRangeIndex": 0 |}Bar|] { export interface Baz { } }|]
 ////    export function Bar() { }
 ////}
 ////

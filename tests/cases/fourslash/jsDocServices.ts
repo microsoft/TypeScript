@@ -7,7 +7,7 @@
 /////**
 //// * @param /*use*/[|foo|] I pity the foo
 //// */
-////function f([|[|/*def*/{| "isWriteAccess": true, "isDefinition": true, "declarationRangeIndex": 1 |}foo|]: I|]) {
+////function f([|[|/*def*/{| "isWriteAccess": true, "isDefinition": true, "contextRangeIndex": 1 |}foo|]: I|]) {
 ////    return [|foo|];
 ////}
 

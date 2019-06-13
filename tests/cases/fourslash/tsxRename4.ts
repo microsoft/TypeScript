@@ -9,12 +9,12 @@
 ////        div: {};
 ////    }
 ////}
-////[|class [|{| "declarationRangeIndex": 0 |}MyClass|] {}|]
+////[|class [|{| "contextRangeIndex": 0 |}MyClass|] {}|]
 ////
-////[|<[|{| "declarationRangeIndex": 2 |}MyClass|]></[|{| "declarationRangeIndex": 2 |}MyClass|]>|];
-////[|<[|{| "declarationRangeIndex": 5 |}MyClass|]/>|];
+////[|<[|{| "contextRangeIndex": 2 |}MyClass|]></[|{| "contextRangeIndex": 2 |}MyClass|]>|];
+////[|<[|{| "contextRangeIndex": 5 |}MyClass|]/>|];
 ////
-////[|<[|{| "declarationRangeIndex": 7 |}div|]> </[|{| "declarationRangeIndex": 7 |}div|]>|]
+////[|<[|{| "contextRangeIndex": 7 |}div|]> </[|{| "contextRangeIndex": 7 |}div|]>|]
 
 verify.noErrors();
 verify.rangesWithSameTextAreRenameLocations("MyClass", "div");

@@ -3,12 +3,12 @@
 // @noLib: true
 
 // @Filename: /a.ts
-////[|var [|{| "isDefinition": true, "declarationRangeIndex": 0 |}x|];|]
-////[|export { [|{| "isWriteAccess": true, "isDefinition": true, "declarationRangeIndex": 2 |}x|] };|]
-////[|export { [|{| "declarationRangeIndex": 4 |}x|] as [|{| "isWriteAccess": true, "isDefinition": true, "declarationRangeIndex": 4 |}y|] };|]
+////[|var [|{| "isDefinition": true, "contextRangeIndex": 0 |}x|];|]
+////[|export { [|{| "isWriteAccess": true, "isDefinition": true, "contextRangeIndex": 2 |}x|] };|]
+////[|export { [|{| "contextRangeIndex": 4 |}x|] as [|{| "isWriteAccess": true, "isDefinition": true, "contextRangeIndex": 4 |}y|] };|]
 
 // @Filename: /b.ts
-////[|import { [|{| "isWriteAccess": true, "isDefinition": true, "declarationRangeIndex": 7 |}x|], [|{| "isWriteAccess": true, "isDefinition": true, "declarationRangeIndex": 7 |}y|] } from "./a";|]
+////[|import { [|{| "isWriteAccess": true, "isDefinition": true, "contextRangeIndex": 7 |}x|], [|{| "isWriteAccess": true, "isDefinition": true, "contextRangeIndex": 7 |}y|] } from "./a";|]
 ////[|x|]; [|y|];
 
 verify.noErrors();

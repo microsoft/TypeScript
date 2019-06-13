@@ -5,7 +5,7 @@
 // @Filename: /a.js
 /////**
 //// * @typedef I {Object}
-//// * [|@prop [|{| "isDefinition": true, "declarationRangeIndex": 0 |}p|] {number}
+//// * [|@prop [|{| "isDefinition": true, "contextRangeIndex": 0 |}p|] {number}
 //// |]*/
 ////
 /////** @type {I} */

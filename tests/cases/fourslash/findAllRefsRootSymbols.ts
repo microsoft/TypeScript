@@ -1,8 +1,8 @@
 /// <reference path="fourslash.ts" />
 
-////interface I { [|[|{| "isDefinition": true, "declarationRangeIndex": 0 |}x|]: {};|] }
-////interface J { [|[|{| "isDefinition": true, "declarationRangeIndex": 2 |}x|]: {};|] }
-////declare const o: (I | J) & { [|[|{| "isWriteAccess": true, "isDefinition": true, "declarationRangeIndex": 4 |}x|]: string|] };
+////interface I { [|[|{| "isDefinition": true, "contextRangeIndex": 0 |}x|]: {};|] }
+////interface J { [|[|{| "isDefinition": true, "contextRangeIndex": 2 |}x|]: {};|] }
+////declare const o: (I | J) & { [|[|{| "isWriteAccess": true, "isDefinition": true, "contextRangeIndex": 4 |}x|]: string|] };
 ////o.[|x|];
 
 const [r0Def, r0, r1Def, r1, r2Def, r2, r3] = test.ranges();

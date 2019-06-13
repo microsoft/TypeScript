@@ -362,7 +362,7 @@ namespace ts.server {
                             ...outputReferencedSymbol.definition,
                             textSpan: createTextSpan(mappedDefinitionFile.pos, outputReferencedSymbol.definition.textSpan.length),
                             fileName: mappedDefinitionFile.fileName,
-                            declarationSpan: getMappedDeclarationSpan(outputReferencedSymbol.definition, project)
+                            contextSpan: getMappedContextSpan(outputReferencedSymbol.definition, project)
                         };
 
                     let symbolToAddTo = find(outputs, o => documentSpansEqual(o.definition, definition));
@@ -501,22 +501,22 @@ namespace ts.server {
             },
             originalFileName: documentSpan.fileName,
             originalTextSpan: documentSpan.textSpan,
-            declarationSpan: getMappedDeclarationSpan(documentSpan, project),
-            originalDeclarationSpan: documentSpan.declarationSpan
+            contextSpan: getMappedContextSpan(documentSpan, project),
+            originalContextSpan: documentSpan.contextSpan
         };
     }
 
-    function getMappedDeclarationSpan(documentSpan: DocumentSpan, project: Project): TextSpan | undefined {
-        const declarationSpanStart = documentSpan.declarationSpan && getMappedLocation(
-            { fileName: documentSpan.fileName, pos: documentSpan.declarationSpan.start },
+    function getMappedContextSpan(documentSpan: DocumentSpan, project: Project): TextSpan | undefined {
+        const contextSpanStart = documentSpan.contextSpan && getMappedLocation(
+            { fileName: documentSpan.fileName, pos: documentSpan.contextSpan.start },
             project
         );
-        const declarationSpanEnd = documentSpan.declarationSpan && getMappedLocation(
-            { fileName: documentSpan.fileName, pos: documentSpan.declarationSpan.start + documentSpan.declarationSpan.length },
+        const contextSpanEnd = documentSpan.contextSpan && getMappedLocation(
+            { fileName: documentSpan.fileName, pos: documentSpan.contextSpan.start + documentSpan.contextSpan.length },
             project
         );
-        return declarationSpanStart && declarationSpanEnd ?
-            { start: declarationSpanStart.pos, length: declarationSpanEnd.pos - declarationSpanStart.pos } :
+        return contextSpanStart && contextSpanEnd ?
+            { start: contextSpanStart.pos, length: contextSpanEnd.pos - contextSpanStart.pos } :
             undefined;
     }
 
@@ -971,7 +971,7 @@ namespace ts.server {
                 : diagnostics.map(d => formatDiag(file, project, d));
         }
 
-        private getDefinition(args: protocol.FileLocationRequestArgs, simplifiedResult: boolean): ReadonlyArray<protocol.DeclarationFileSpan> | ReadonlyArray<DefinitionInfo> {
+        private getDefinition(args: protocol.FileLocationRequestArgs, simplifiedResult: boolean): ReadonlyArray<protocol.FileSpanWithContext> | ReadonlyArray<DefinitionInfo> {
             const { file, project } = this.getFileAndProject(args);
             const position = this.getPositionInFile(args, file);
             const definitions = this.mapDefinitionInfoLocations(project.getLanguageService().getDefinitionAtPosition(file, position) || emptyArray, project);
@@ -1026,8 +1026,8 @@ namespace ts.server {
             return project.getLanguageService().getEmitOutput(file);
         }
 
-        private mapDefinitionInfo(definitions: ReadonlyArray<DefinitionInfo>, project: Project): ReadonlyArray<protocol.DeclarationFileSpan> {
-            return definitions.map(def => this.toDeclarationFileSpan(def.fileName, def.textSpan, def.declarationSpan, project));
+        private mapDefinitionInfo(definitions: ReadonlyArray<DefinitionInfo>, project: Project): ReadonlyArray<protocol.FileSpanWithContext> {
+            return definitions.map(def => this.toFileSpanWithContext(def.fileName, def.textSpan, def.contextSpan, project));
         }
 
         /*
@@ -1046,8 +1046,8 @@ namespace ts.server {
                     textSpan: def.originalTextSpan,
                     targetFileName: def.fileName,
                     targetTextSpan: def.textSpan,
-                    declarationSpan: def.originalDeclarationSpan,
-                    targetDeclarationSpan: def.declarationSpan
+                    contextSpan: def.originalContextSpan,
+                    targetContextSpan: def.contextSpan
                 };
             }
             return def;
@@ -1065,15 +1065,15 @@ namespace ts.server {
             };
         }
 
-        private toDeclarationFileSpan(fileName: string, textSpan: TextSpan, declarationSpan: TextSpan | undefined, project: Project): protocol.DeclarationFileSpan {
+        private toFileSpanWithContext(fileName: string, textSpan: TextSpan, contextSpan: TextSpan | undefined, project: Project): protocol.FileSpanWithContext {
             const fileSpan = this.toFileSpan(fileName, textSpan, project);
-            const declaration = declarationSpan && this.toFileSpan(fileName, declarationSpan, project);
-            return declaration ?
-                { ...fileSpan, declarationStart: declaration.start, declarationEnd: declaration.end } :
+            const context = contextSpan && this.toFileSpan(fileName, contextSpan, project);
+            return context ?
+                { ...fileSpan, contextStart: context.start, contextEnd: context.end } :
                 fileSpan;
         }
 
-        private getTypeDefinition(args: protocol.FileLocationRequestArgs): ReadonlyArray<protocol.DeclarationFileSpan> {
+        private getTypeDefinition(args: protocol.FileLocationRequestArgs): ReadonlyArray<protocol.FileSpanWithContext> {
             const { file, project } = this.getFileAndProject(args);
             const position = this.getPositionInFile(args, file);
 
@@ -1092,12 +1092,12 @@ namespace ts.server {
             });
         }
 
-        private getImplementation(args: protocol.FileLocationRequestArgs, simplifiedResult: boolean): ReadonlyArray<protocol.DeclarationFileSpan> | ReadonlyArray<ImplementationLocation> {
+        private getImplementation(args: protocol.FileLocationRequestArgs, simplifiedResult: boolean): ReadonlyArray<protocol.FileSpanWithContext> | ReadonlyArray<ImplementationLocation> {
             const { file, project } = this.getFileAndProject(args);
             const position = this.getPositionInFile(args, file);
             const implementations = this.mapImplementationLocations(project.getLanguageService().getImplementationAtPosition(file, position) || emptyArray, project);
             return simplifiedResult ?
-                implementations.map(({ fileName, textSpan, declarationSpan }) => this.toDeclarationFileSpan(fileName, textSpan, declarationSpan, project)) :
+                implementations.map(({ fileName, textSpan, contextSpan }) => this.toFileSpanWithContext(fileName, textSpan, contextSpan, project)) :
                 implementations.map(Session.mapToOriginalLocation);
         }
 
@@ -1107,10 +1107,10 @@ namespace ts.server {
             const occurrences = project.getLanguageService().getOccurrencesAtPosition(file, position);
             return occurrences ?
                 occurrences.map<protocol.OccurrencesResponseItem>(occurrence => {
-                    const { fileName, isWriteAccess, textSpan, isInString, declarationSpan } = occurrence;
+                    const { fileName, isWriteAccess, textSpan, isInString, contextSpan } = occurrence;
                     const scriptInfo = project.getScriptInfo(fileName)!;
                     return {
-                        ...toProtocolDeclarationTextSpan(textSpan, declarationSpan, scriptInfo),
+                        ...toProtocolTextSpanWithContext(textSpan, contextSpan, scriptInfo),
                         file: fileName,
                         isWriteAccess,
                         ...(isInString ? { isInString } : undefined)
@@ -1166,8 +1166,8 @@ namespace ts.server {
                 const scriptInfo = project.getScriptInfo(fileName)!;
                 return {
                     file: fileName,
-                    highlightSpans: highlightSpans.map(({ textSpan, kind, declarationSpan }) => ({
-                        ...toProtocolDeclarationTextSpan(textSpan, declarationSpan, scriptInfo),
+                    highlightSpans: highlightSpans.map(({ textSpan, kind, contextSpan }) => ({
+                        ...toProtocolTextSpanWithContext(textSpan, contextSpan, scriptInfo),
                         kind
                     }))
                 };
@@ -1273,11 +1273,11 @@ namespace ts.server {
 
         private toSpanGroups(locations: ReadonlyArray<RenameLocation>): ReadonlyArray<protocol.SpanGroup> {
             const map = createMap<protocol.SpanGroup>();
-            for (const { fileName, textSpan, declarationSpan, originalDeclarationSpan: _2, originalTextSpan: _, originalFileName: _1, ...prefixSuffixText } of locations) {
+            for (const { fileName, textSpan, contextSpan, originalContextSpan: _2, originalTextSpan: _, originalFileName: _1, ...prefixSuffixText } of locations) {
                 let group = map.get(fileName);
                 if (!group) map.set(fileName, group = { file: fileName, locs: [] });
                 const scriptInfo = Debug.assertDefined(this.projectService.getScriptInfo(fileName));
-                group.locs.push({ ...toProtocolDeclarationTextSpan(textSpan, declarationSpan, scriptInfo), ...prefixSuffixText });
+                group.locs.push({ ...toProtocolTextSpanWithContext(textSpan, contextSpan, scriptInfo), ...prefixSuffixText });
             }
             return arrayFrom(map.values());
         }
@@ -1302,9 +1302,9 @@ namespace ts.server {
             const symbolStartOffset = nameSpan ? scriptInfo.positionToLineOffset(nameSpan.start).offset : 0;
             const symbolName = nameSpan ? scriptInfo.getSnapshot().getText(nameSpan.start, textSpanEnd(nameSpan)) : "";
             const refs: ReadonlyArray<protocol.ReferencesResponseItem> = flatMap(references, referencedSymbol =>
-                referencedSymbol.references.map(({ fileName, textSpan, declarationSpan, isWriteAccess, isDefinition }): protocol.ReferencesResponseItem => {
+                referencedSymbol.references.map(({ fileName, textSpan, contextSpan, isWriteAccess, isDefinition }): protocol.ReferencesResponseItem => {
                     const scriptInfo = Debug.assertDefined(this.projectService.getScriptInfo(fileName));
-                    const span = toProtocolDeclarationTextSpan(textSpan, declarationSpan, scriptInfo);
+                    const span = toProtocolTextSpanWithContext(textSpan, contextSpan, scriptInfo);
                     const lineSpan = scriptInfo.lineToTextSpan(span.start.line - 1);
                     const lineText = scriptInfo.getSnapshot().getText(lineSpan.start, textSpanEnd(lineSpan)).replace(/\r|\n/g, "");
                     return {
@@ -2565,11 +2565,11 @@ namespace ts.server {
         };
     }
 
-    function toProtocolDeclarationTextSpan(span: TextSpan, declarationSpan: TextSpan | undefined, scriptInfo: ScriptInfo): protocol.DeclarationTextSpan {
+    function toProtocolTextSpanWithContext(span: TextSpan, contextSpan: TextSpan | undefined, scriptInfo: ScriptInfo): protocol.TextSpanWithContext {
         const textSpan = toProcolTextSpan(span, scriptInfo);
-        const declarationTextSpan = declarationSpan && toProcolTextSpan(declarationSpan, scriptInfo);
-        return declarationTextSpan ?
-            { ...textSpan, declarationStart: declarationTextSpan.start, declarationEnd: declarationTextSpan.end } :
+        const contextTextSpan = contextSpan && toProcolTextSpan(contextSpan, scriptInfo);
+        return contextTextSpan ?
+            { ...textSpan, contextStart: contextTextSpan.start, contextEnd: contextTextSpan.end } :
             textSpan;
     }
 

@@ -7,7 +7,7 @@
 ////
 ////var y = new DefaultExportedClass;
 ////
-////[|namespace [|{| "isWriteAccess": true, "isDefinition": true, "declarationRangeIndex": 0 |}DefaultExportedClass|] {
+////[|namespace [|{| "isWriteAccess": true, "isDefinition": true, "contextRangeIndex": 0 |}DefaultExportedClass|] {
 ////}|]
 
 verify.noErrors();

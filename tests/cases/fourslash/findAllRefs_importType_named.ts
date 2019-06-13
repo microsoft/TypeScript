@@ -1,8 +1,8 @@
 /// <reference path='fourslash.ts' />
 
 // @Filename: /a.ts
-////[|export type [|{| "isWriteAccess": true, "isDefinition": true, "declarationRangeIndex": 0 |}T|] = number;|]
-////[|export type [|{| "isWriteAccess": true, "isDefinition": true, "declarationRangeIndex": 2 |}U|] = string;|]
+////[|export type [|{| "isWriteAccess": true, "isDefinition": true, "contextRangeIndex": 0 |}T|] = number;|]
+////[|export type [|{| "isWriteAccess": true, "isDefinition": true, "contextRangeIndex": 2 |}U|] = string;|]
 
 // @Filename: /b.ts
 ////const x: import("./a").[|T|] = 0;

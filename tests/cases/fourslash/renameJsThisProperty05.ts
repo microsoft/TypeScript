@@ -7,8 +7,8 @@
 ////    this.x = y;
 ////  }
 ////}
-////[|C.prototype.[|{| "declarationRangeIndex": 0 |}z|] = 1;|]
+////[|C.prototype.[|{| "contextRangeIndex": 0 |}z|] = 1;|]
 ////var t = new C(12);
-////[|t.[|{| "declarationRangeIndex": 2 |}z|] = 11;|]
+////[|t.[|{| "contextRangeIndex": 2 |}z|] = 11;|]
 
 verify.rangesWithSameTextAreRenameLocations("z");

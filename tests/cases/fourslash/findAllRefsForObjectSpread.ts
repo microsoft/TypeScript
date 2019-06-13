@@ -1,7 +1,7 @@
 /// <reference path='fourslash.ts'/>
 
-////interface A1 { [|readonly [|{| "isDefinition": true, "declarationRangeIndex": 0 |}a|]: string|] };
-////interface A2 { [|[|{| "isDefinition": true, "declarationRangeIndex": 2 |}a|]?: number|] };
+////interface A1 { [|readonly [|{| "isDefinition": true, "contextRangeIndex": 0 |}a|]: string|] };
+////interface A2 { [|[|{| "isDefinition": true, "contextRangeIndex": 2 |}a|]?: number|] };
 ////let a1: A1;
 ////let a2: A2;
 ////let a12 = { ...a1, ...a2 };

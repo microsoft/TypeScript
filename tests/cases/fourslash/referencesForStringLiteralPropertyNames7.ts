@@ -4,9 +4,9 @@
 // @allowJs: true
 // @checkJs: true
 
-////var x = { [|"[|{| "isWriteAccess": true, "isDefinition": true, "declarationRangeIndex": 0 |}someProperty|]": 0|] }
+////var x = { [|"[|{| "isWriteAccess": true, "isDefinition": true, "contextRangeIndex": 0 |}someProperty|]": 0|] }
 ////x["[|someProperty|]"] = 3;
-////[|x.[|{| "isWriteAccess": true, "isDefinition": true, "declarationRangeIndex": 3 |}someProperty|] = 5;|]
+////[|x.[|{| "isWriteAccess": true, "isDefinition": true, "contextRangeIndex": 3 |}someProperty|] = 5;|]
 
 const [r0Def, r0, r1, r2Def, r2] = test.ranges();
 const ranges = [r0, r1, r2];

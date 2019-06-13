@@ -281,10 +281,10 @@ namespace ts.GoToDefinition {
             name: symbolName,
             containerKind: undefined!, // TODO: GH#18217
             containerName,
-            ...FindAllReferences.toDeclarationSpan(
+            ...FindAllReferences.toContextSpan(
                 textSpan,
                 sourceFile,
-                FindAllReferences.getDeclarationForDeclarationSpan(declaration)
+                FindAllReferences.getContextNode(declaration)
             )
         };
     }

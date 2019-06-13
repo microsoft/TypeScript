@@ -3,10 +3,10 @@
 // @allowJs: true
 
 // @Filename: /a.js
-////[|exports.[|{| "isWriteAccess": true, "isDefinition": true, "declarationRangeIndex": 0 |}A|] = class {};|]
+////[|exports.[|{| "isWriteAccess": true, "isDefinition": true, "contextRangeIndex": 0 |}A|] = class {};|]
 
 // @Filename: /b.js
-////[|import { [|{| "isWriteAccess": true, "isDefinition": true, "declarationRangeIndex": 2 |}A|] } from "./a";|]
+////[|import { [|{| "isWriteAccess": true, "isDefinition": true, "contextRangeIndex": 2 |}A|] } from "./a";|]
 ////[|A|];
 
 const [r0Def, r0, r1Def, r1, r2] = test.ranges();

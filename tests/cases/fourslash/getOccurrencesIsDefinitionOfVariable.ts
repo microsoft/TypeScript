@@ -1,5 +1,5 @@
 /// <reference path='fourslash.ts' />
-////[|var [|{| "isWriteAccess": true, "isDefinition": true, "declarationRangeIndex": 0 |}x|] = 0;|]
+////[|var [|{| "isWriteAccess": true, "isDefinition": true, "contextRangeIndex": 0 |}x|] = 0;|]
 ////var assignmentRightHandSide = [|x|];
 ////var assignmentRightHandSide2 = 1 + [|x|];
 ////

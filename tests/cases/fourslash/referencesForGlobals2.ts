@@ -3,7 +3,7 @@
 // Global class reference.
 
 // @Filename: referencesForGlobals_1.ts
-////[|class [|{| "isWriteAccess": true, "isDefinition": true, "declarationRangeIndex": 0 |}globalClass|] {
+////[|class [|{| "isWriteAccess": true, "isDefinition": true, "contextRangeIndex": 0 |}globalClass|] {
 ////    public f() { }
 ////}|]
 

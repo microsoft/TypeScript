@@ -1,15 +1,15 @@
 /// <reference path='fourslash.ts'/>
 
 // @Filename: a.ts
-////[|class [|{| "isWriteAccess": true, "isDefinition": true, "declarationRangeIndex": 0 |}A|] {
+////[|class [|{| "isWriteAccess": true, "isDefinition": true, "contextRangeIndex": 0 |}A|] {
 ////}|]
-////[|export = [|{| "declarationRangeIndex": 2 |}A|];|]
+////[|export = [|{| "contextRangeIndex": 2 |}A|];|]
 
 // @Filename: b.ts
-////[|export import [|{| "isWriteAccess": true, "isDefinition": true, "declarationRangeIndex": 4 |}b|] = require('./a');|]
+////[|export import [|{| "isWriteAccess": true, "isDefinition": true, "contextRangeIndex": 4 |}b|] = require('./a');|]
 
 // @Filename: c.ts
-////[|import [|{| "isWriteAccess": true, "isDefinition": true, "declarationRangeIndex": 6 |}b|] = require('./b');|]
+////[|import [|{| "isWriteAccess": true, "isDefinition": true, "contextRangeIndex": 6 |}b|] = require('./b');|]
 ////var a = new [|b|]./**/[|b|]();
 
 goTo.marker();

@@ -1,7 +1,7 @@
 /// <reference path="fourslash.ts" />
 
 // @Filename: a.ts
-////[|function [|{| "isWriteAccess": true, "isDefinition": true, "declarationRangeIndex": 0 |}decorator|](target) {
+////[|function [|{| "isWriteAccess": true, "isDefinition": true, "contextRangeIndex": 0 |}decorator|](target) {
 ////    return target;
 ////}|]
 ////[|decorator|]();

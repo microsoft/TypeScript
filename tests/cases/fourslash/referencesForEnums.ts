@@ -1,9 +1,9 @@
 /// <reference path='fourslash.ts'/>
 
 ////enum E {
-////    [|[|{| "isWriteAccess": true, "isDefinition": true, "declarationRangeIndex": 0 |}value1|] = 1|],
-////    [|"[|{| "isWriteAccess": true, "isDefinition": true, "declarationRangeIndex": 2 |}value2|]" = [|value1|]|],
-////    [|[|{| "isWriteAccess": true, "isDefinition": true, "declarationRangeIndex": 5 |}111|] = 11|]
+////    [|[|{| "isWriteAccess": true, "isDefinition": true, "contextRangeIndex": 0 |}value1|] = 1|],
+////    [|"[|{| "isWriteAccess": true, "isDefinition": true, "contextRangeIndex": 2 |}value2|]" = [|value1|]|],
+////    [|[|{| "isWriteAccess": true, "isDefinition": true, "contextRangeIndex": 5 |}111|] = 11|]
 ////}
 ////
 ////E.[|value1|];

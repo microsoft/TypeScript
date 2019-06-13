@@ -1,11 +1,11 @@
 /// <reference path='fourslash.ts'/>
 
 ////type T =
-////    | { [|[|{| "isDefinition": true, "declarationRangeIndex": 0 |}type|]: "a",|] [|[|{| "isDefinition": true, "declarationRangeIndex": 2 |}prop|]: number|] }
-////    | { [|[|{| "isDefinition": true, "declarationRangeIndex": 4 |}type|]: "b",|] [|[|{| "isDefinition": true, "declarationRangeIndex": 6 |}prop|]: string|] };
+////    | { [|[|{| "isDefinition": true, "contextRangeIndex": 0 |}type|]: "a",|] [|[|{| "isDefinition": true, "contextRangeIndex": 2 |}prop|]: number|] }
+////    | { [|[|{| "isDefinition": true, "contextRangeIndex": 4 |}type|]: "b",|] [|[|{| "isDefinition": true, "contextRangeIndex": 6 |}prop|]: string|] };
 ////const tt: T = {
-////    [|[|{| "isWriteAccess": true, "isDefinition": true, "declarationRangeIndex": 8 |}type|]: "a"|],
-////    [|[|{| "isWriteAccess": true, "isDefinition": true, "declarationRangeIndex": 10 |}prop|]: 0|],
+////    [|[|{| "isWriteAccess": true, "isDefinition": true, "contextRangeIndex": 8 |}type|]: "a"|],
+////    [|[|{| "isWriteAccess": true, "isDefinition": true, "contextRangeIndex": 10 |}prop|]: 0|],
 ////};
 ////declare const t: T;
 ////if (t.[|type|] === "a") {

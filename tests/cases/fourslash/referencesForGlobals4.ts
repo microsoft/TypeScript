@@ -3,7 +3,7 @@
 // Global module reference.
 
 // @Filename: referencesForGlobals_1.ts
-////[|module [|{| "isWriteAccess": true, "isDefinition": true, "declarationRangeIndex": 0 |}globalModule|] {
+////[|module [|{| "isWriteAccess": true, "isDefinition": true, "contextRangeIndex": 0 |}globalModule|] {
 ////     export f() { };
 ////}|]
 

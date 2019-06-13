@@ -2,8 +2,8 @@
 
 // References to labels with close names
 
-////[|[|{| "declarationRangeIndex": 0 |}labela|]: while (true) {
-////[|[|{| "declarationRangeIndex": 2 |}labelb|]:     while (false) { [|break [|{| "declarationRangeIndex": 4 |}labelb|];|] }|]
+////[|[|{| "contextRangeIndex": 0 |}labela|]: while (true) {
+////[|[|{| "contextRangeIndex": 2 |}labelb|]:     while (false) { [|break [|{| "contextRangeIndex": 4 |}labelb|];|] }|]
 ////            break labelc;
 ////}|]
 

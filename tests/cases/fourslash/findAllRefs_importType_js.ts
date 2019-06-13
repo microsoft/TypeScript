@@ -4,13 +4,13 @@
 // @checkJs: true
 
 // @Filename: /a.js
-////[|[|{| "declarationRangeIndex": 0 |}module|].exports = [|class [|{| "isWriteAccess": true, "isDefinition": true, "declarationRangeIndex": 2 |}C|] {}|];|]
-////[|module.exports.[|{| "isWriteAccess": true, "isDefinition": true, "declarationRangeIndex": 4 |}D|] = [|class [|{| "isWriteAccess": true, "isDefinition": true, "declarationRangeIndex": 6 |}D|] {}|];|]
+////[|[|{| "contextRangeIndex": 0 |}module|].exports = [|class [|{| "isWriteAccess": true, "isDefinition": true, "contextRangeIndex": 2 |}C|] {}|];|]
+////[|module.exports.[|{| "isWriteAccess": true, "isDefinition": true, "contextRangeIndex": 4 |}D|] = [|class [|{| "isWriteAccess": true, "isDefinition": true, "contextRangeIndex": 6 |}D|] {}|];|]
 
 // @Filename: /b.js
-/////** [|@type {import("[|{| "declarationRangeIndex": 8 |}./a|]")}|] */
+/////** [|@type {import("[|{| "contextRangeIndex": 8 |}./a|]")}|] */
 ////const x = 0;
-/////** [|@type {import("[|{| "declarationRangeIndex": 10 |}./a|]").[|D|]}|] */
+/////** [|@type {import("[|{| "contextRangeIndex": 10 |}./a|]").[|D|]}|] */
 ////const y = 0;
 
 verify.noErrors();

@@ -1,8 +1,8 @@
 /// <reference path='fourslash.ts' />
 
 ////interface I {
-////    [|[|{| "isDefinition": true, "declarationRangeIndex": 0 |}0|]: number;|]
-////    [|[|{| "isDefinition": true, "declarationRangeIndex": 2 |}s|]: string;|]
+////    [|[|{| "isDefinition": true, "contextRangeIndex": 0 |}0|]: number;|]
+////    [|[|{| "isDefinition": true, "contextRangeIndex": 2 |}s|]: string;|]
 ////}
 ////interface J {
 ////    a: I[[|0|]],

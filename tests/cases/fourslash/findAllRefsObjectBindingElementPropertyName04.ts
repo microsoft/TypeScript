@@ -1,12 +1,12 @@
 /// <reference path='fourslash.ts'/>
 
 ////interface I {
-////    [|[|{| "isDefinition": true, "declarationRangeIndex": 0 |}property1|]: number;|]
+////    [|[|{| "isDefinition": true, "contextRangeIndex": 0 |}property1|]: number;|]
 ////    property2: string;
 ////}
 ////
-////function f([|{ [|{| "declarationRangeIndex": 2 |}property1|]: p1 }: I|],
-////           [|{ [|{| "isWriteAccess": true, "isDefinition": true, "declarationRangeIndex": 4 |}property1|] }: I|],
+////function f([|{ [|{| "contextRangeIndex": 2 |}property1|]: p1 }: I|],
+////           [|{ [|{| "isWriteAccess": true, "isDefinition": true, "contextRangeIndex": 4 |}property1|] }: I|],
 ////           { property1: p2 }) {
 ////
 ////    return [|property1|] + 1;

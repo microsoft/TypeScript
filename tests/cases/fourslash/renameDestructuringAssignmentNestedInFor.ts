@@ -3,15 +3,15 @@
 ////interface MultiRobot {
 ////    name: string;
 ////    skills: {
-////        [|[|{| "declarationRangeIndex": 0 |}primary|]: string;|]
+////        [|[|{| "contextRangeIndex": 0 |}primary|]: string;|]
 ////        secondary: string;
 ////    };
 ////}
-////let multiRobot: MultiRobot, [|[|{| "declarationRangeIndex": 2 |}primary|]: string|], secondary: string, primaryA: string, secondaryA: string, i: number;
-////for ([|{ skills: { [|{| "declarationRangeIndex": 4 |}primary|]: primaryA, secondary: secondaryA } } = multiRobot|], i = 0; i < 1; i++) {
+////let multiRobot: MultiRobot, [|[|{| "contextRangeIndex": 2 |}primary|]: string|], secondary: string, primaryA: string, secondaryA: string, i: number;
+////for ([|{ skills: { [|{| "contextRangeIndex": 4 |}primary|]: primaryA, secondary: secondaryA } } = multiRobot|], i = 0; i < 1; i++) {
 ////    primaryA;
 ////}
-////for ([|{ skills: { [|{| "declarationRangeIndex": 6 |}primary|], secondary } } = multiRobot|], i = 0; i < 1; i++) {
+////for ([|{ skills: { [|{| "contextRangeIndex": 6 |}primary|], secondary } } = multiRobot|], i = 0; i < 1; i++) {
 ////    [|primary|];
 ////}
 

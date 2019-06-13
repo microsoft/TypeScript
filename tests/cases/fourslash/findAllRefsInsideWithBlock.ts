@@ -1,6 +1,6 @@
 /// <reference path='fourslash.ts'/>
 
-////[|var [|{| "isWriteAccess": true, "isDefinition": true, "declarationRangeIndex": 0 |}x|] = 0;|]
+////[|var [|{| "isWriteAccess": true, "isDefinition": true, "contextRangeIndex": 0 |}x|] = 0;|]
 ////
 ////with ({}) {
 ////    var y = x;  // Reference of x here should not be picked

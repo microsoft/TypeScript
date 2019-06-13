@@ -2,7 +2,7 @@
 
 //// class B {}
 //// function foo() {
-////     return {[|[|{| "isWriteAccess": true, "isDefinition": true, "declarationRangeIndex": 0 |}B|]: B|]};
+////     return {[|[|{| "isWriteAccess": true, "isDefinition": true, "contextRangeIndex": 0 |}B|]: B|]};
 //// }
 //// class C extends (foo()).[|B|] {}
 //// class C1 extends foo().[|B|] {}

@@ -3,7 +3,7 @@
 //@Filename: findAllRefsOnDefinition2-import.ts
 ////export module Test{
 ////
-////    [|export interface [|{| "isWriteAccess": true, "isDefinition": true, "declarationRangeIndex": 0 |}start|] { }|]
+////    [|export interface [|{| "isWriteAccess": true, "isDefinition": true, "contextRangeIndex": 0 |}start|] { }|]
 ////
 ////    export interface stop { }
 ////}

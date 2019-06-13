@@ -1,17 +1,17 @@
 /// <reference path='fourslash.ts' />
 
-////[|declare namespace [|{| "isWriteAccess": true, "isDefinition": true, "declarationRangeIndex": 0 |}N|] {
-////    [|export var [|{| "isWriteAccess": true, "isDefinition": true, "declarationRangeIndex": 2 |}x|]: number;|]
+////[|declare namespace [|{| "isWriteAccess": true, "isDefinition": true, "contextRangeIndex": 0 |}N|] {
+////    [|export var [|{| "isWriteAccess": true, "isDefinition": true, "contextRangeIndex": 2 |}x|]: number;|]
 ////}|]
 ////declare module "mod" {
-////    [|export = [|{| "declarationRangeIndex": 4 |}N|];|]
+////    [|export = [|{| "contextRangeIndex": 4 |}N|];|]
 ////}
 ////declare module "a" {
-////    [|import * as [|{| "isWriteAccess": true, "isDefinition": true, "declarationRangeIndex": 6 |}N|] from "mod";|]
-////    [|export { [|{| "isWriteAccess": true, "isDefinition": true, "declarationRangeIndex": 8 |}N|] };|] // Renaming N here would rename
+////    [|import * as [|{| "isWriteAccess": true, "isDefinition": true, "contextRangeIndex": 6 |}N|] from "mod";|]
+////    [|export { [|{| "isWriteAccess": true, "isDefinition": true, "contextRangeIndex": 8 |}N|] };|] // Renaming N here would rename
 ////}
 ////declare module "b" {
-////    [|import { [|{| "isWriteAccess": true, "isDefinition": true, "declarationRangeIndex": 10 |}N|] } from "a";|]
+////    [|import { [|{| "isWriteAccess": true, "isDefinition": true, "contextRangeIndex": 10 |}N|] } from "a";|]
 ////    export const y: typeof [|N|].[|x|];
 ////}
 

@@ -1,7 +1,7 @@
 /// <reference path='fourslash.ts'/>
 
-////interface A1 { [|[|{| "declarationRangeIndex": 0 |}a|]: number|] };
-////interface A2 { [|[|{| "declarationRangeIndex": 2 |}a|]?: number|] };
+////interface A1 { [|[|{| "contextRangeIndex": 0 |}a|]: number|] };
+////interface A2 { [|[|{| "contextRangeIndex": 2 |}a|]?: number|] };
 ////let a1: A1;
 ////let a2: A2;
 ////let a12 = { ...a1, ...a2 };

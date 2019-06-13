@@ -1,7 +1,7 @@
 /// <reference path='fourslash.ts'/>
 
 ////module M {
-////    [|export var [|{| "isWriteAccess": true, "isDefinition": true, "declarationRangeIndex": 0 |}variable|] = 0;|]
+////    [|export var [|{| "isWriteAccess": true, "isDefinition": true, "contextRangeIndex": 0 |}variable|] = 0;|]
 ////
 ////    // local use
 ////    var x = [|variable|];

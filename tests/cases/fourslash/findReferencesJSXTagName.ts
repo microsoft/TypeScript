@@ -1,14 +1,14 @@
 /// <reference path='fourslash.ts'/>
 
 // @Filename: index.tsx
-////[|import { [|{| "isWriteAccess": true, "isDefinition": true, "declarationRangeIndex": 0 |}SubmissionComp|] } from "./RedditSubmission"|]
+////[|import { [|{| "isWriteAccess": true, "isDefinition": true, "contextRangeIndex": 0 |}SubmissionComp|] } from "./RedditSubmission"|]
 ////function displaySubreddit(subreddit: string) {
 ////    let components = submissions
-////        .map((value, index) => [|<[|{| "declarationRangeIndex": 2 |}SubmissionComp|] key={ index } elementPosition= { index } {...value.data} />|]);
+////        .map((value, index) => [|<[|{| "contextRangeIndex": 2 |}SubmissionComp|] key={ index } elementPosition= { index } {...value.data} />|]);
 ////}
 
 // @Filename: RedditSubmission.ts
-////export const [|[|{| "isWriteAccess": true, "isDefinition": true, "declarationRangeIndex": 4 |}SubmissionComp|] = (submission: SubmissionProps) =>
+////export const [|[|{| "isWriteAccess": true, "isDefinition": true, "contextRangeIndex": 4 |}SubmissionComp|] = (submission: SubmissionProps) =>
 ////    <div style|]={{ fontFamily: "sans-serif" }}></div>;
 
 const [r0Def, r0, r1Def, r1, r2Def, r2] = test.ranges();

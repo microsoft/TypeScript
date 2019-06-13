@@ -1,13 +1,13 @@
 /// <reference path='fourslash.ts' />
 
 // @Filename: f.ts
-////[|export { [|{| "declarationRangeIndex": 0 |}foo|] as [|{| "isWriteAccess": true, "isDefinition": true, "declarationRangeIndex": 0 |}default|] };|]
-////[|function /*start*/[|{| "isWriteAccess": true, "isDefinition": true, "declarationRangeIndex": 3 |}foo|](a: number, b: number) {
+////[|export { [|{| "contextRangeIndex": 0 |}foo|] as [|{| "isWriteAccess": true, "isDefinition": true, "contextRangeIndex": 0 |}default|] };|]
+////[|function /*start*/[|{| "isWriteAccess": true, "isDefinition": true, "contextRangeIndex": 3 |}foo|](a: number, b: number) {
 ////    return a + b;
 ////}|]
 
 // @Filename: b.ts
-////[|import [|{| "isWriteAccess": true, "isDefinition": true, "declarationRangeIndex": 5 |}bar|] from "./f";|]
+////[|import [|{| "isWriteAccess": true, "isDefinition": true, "contextRangeIndex": 5 |}bar|] from "./f";|]
 ////[|bar|](1, 2);
 
 verify.noErrors();

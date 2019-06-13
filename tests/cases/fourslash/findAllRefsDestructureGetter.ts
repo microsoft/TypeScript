@@ -1,11 +1,11 @@
 /// <reference path="fourslash.ts" />
 
 ////class Test {
-////    [|get [|{| "isDefinition": true, "isWriteAccess": true, "declarationRangeIndex": 0 |}x|]() { return 0; }|]
+////    [|get [|{| "isDefinition": true, "isWriteAccess": true, "contextRangeIndex": 0 |}x|]() { return 0; }|]
 ////
-////    [|set [|{| "isDefinition": true, "isWriteAccess": true, "declarationRangeIndex": 2 |}y|](a: number) {}|]
+////    [|set [|{| "isDefinition": true, "isWriteAccess": true, "contextRangeIndex": 2 |}y|](a: number) {}|]
 ////}
-////[|const { [|{| "isDefinition": true, "isWriteAccess": true, "declarationRangeIndex": 4 |}x|], [|{| "isDefinition": true, "isWriteAccess": true, "declarationRangeIndex": 4 |}y|] } = new Test();|]
+////[|const { [|{| "isDefinition": true, "isWriteAccess": true, "contextRangeIndex": 4 |}x|], [|{| "isDefinition": true, "isWriteAccess": true, "contextRangeIndex": 4 |}y|] } = new Test();|]
 ////[|x|]; [|y|];
 
 const [x0Def, x0, y0Def, y0, xy1Def, x1, y1, x2, y2] = test.ranges();

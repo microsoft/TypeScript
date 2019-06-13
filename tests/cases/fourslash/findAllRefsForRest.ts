@@ -1,7 +1,7 @@
 /// <reference path='fourslash.ts'/>
 ////interface Gen {
 ////    x: number
-////    [|[|{| "isDefinition": true, "declarationRangeIndex": 0 |}parent|]: Gen;|]
+////    [|[|{| "isDefinition": true, "contextRangeIndex": 0 |}parent|]: Gen;|]
 ////    millenial: string;
 ////}
 ////let t: Gen;

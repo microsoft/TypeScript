@@ -4,11 +4,11 @@
 
 // @Filename: /a.ts
 ////class C {
-////    [|get [|{| "isWriteAccess": true, "isDefinition": true, "declarationRangeIndex": 0 |}g|](): number { return 0; }|]
+////    [|get [|{| "isWriteAccess": true, "isDefinition": true, "contextRangeIndex": 0 |}g|](): number { return 0; }|]
 ////
-////    [|set [|{| "isWriteAccess": true, "isDefinition": true, "declarationRangeIndex": 2 |}s|](value: number) {}|]
+////    [|set [|{| "isWriteAccess": true, "isDefinition": true, "contextRangeIndex": 2 |}s|](value: number) {}|]
 ////}
-////[|const { [|{| "isWriteAccess": true, "isDefinition": true, "declarationRangeIndex": 4 |}g|], [|{| "isWriteAccess": true, "isDefinition": true, "declarationRangeIndex": 4 |}s|] } = new C();|]
+////[|const { [|{| "isWriteAccess": true, "isDefinition": true, "contextRangeIndex": 4 |}g|], [|{| "isWriteAccess": true, "isDefinition": true, "contextRangeIndex": 4 |}s|] } = new C();|]
 
 const [g0Def, g0, s0Def, s0, gs1Def, g1, s1] = test.ranges();
 verify.quickInfoAt(g0, "(property) C.g: number");

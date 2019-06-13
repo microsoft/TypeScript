@@ -1,17 +1,17 @@
 /// <reference path='fourslash.ts' />
 
-////[|declare namespace [|{| "isWriteAccess": true, "isDefinition": true, "declarationRangeIndex": 0 |}N|] {
+////[|declare namespace [|{| "isWriteAccess": true, "isDefinition": true, "contextRangeIndex": 0 |}N|] {
 ////    export var x: number;
 ////}|]
 ////declare module "mod" {
-////    [|export = [|{| "declarationRangeIndex": 2 |}N|];|]
+////    [|export = [|{| "contextRangeIndex": 2 |}N|];|]
 ////}
 ////declare module "a" {
-////    [|import * as [|{| "isWriteAccess": true, "isDefinition": true, "declarationRangeIndex": 4 |}O|] from "mod";|]
-////    [|export { [|{| "declarationRangeIndex": 6 |}O|] as [|{| "isWriteAccess": true, "isDefinition": true, "declarationRangeIndex": 6 |}P|] };|] // Renaming N here would rename
+////    [|import * as [|{| "isWriteAccess": true, "isDefinition": true, "contextRangeIndex": 4 |}O|] from "mod";|]
+////    [|export { [|{| "contextRangeIndex": 6 |}O|] as [|{| "isWriteAccess": true, "isDefinition": true, "contextRangeIndex": 6 |}P|] };|] // Renaming N here would rename
 ////}
 ////declare module "b" {
-////    [|import { [|{| "declarationRangeIndex": 9 |}P|] as [|{| "isWriteAccess": true, "isDefinition": true, "declarationRangeIndex": 9 |}Q|] } from "a";|]
+////    [|import { [|{| "contextRangeIndex": 9 |}P|] as [|{| "isWriteAccess": true, "isDefinition": true, "contextRangeIndex": 9 |}Q|] } from "a";|]
 ////    export const y: typeof [|Q|].x;
 ////}
 

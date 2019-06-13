@@ -1,8 +1,8 @@
 ﻿/// <reference path='fourslash.ts'/>
 
 //// class class1 extends class1 {
-////    [|[|{| "isWriteAccess": true, "isDefinition": true, "declarationRangeIndex": 0 |}doStuff|]() { }|]
-////    [|[|{| "isDefinition": true, "declarationRangeIndex": 2 |}propName|]: string;|]
+////    [|[|{| "isWriteAccess": true, "isDefinition": true, "contextRangeIndex": 0 |}doStuff|]() { }|]
+////    [|[|{| "isDefinition": true, "contextRangeIndex": 2 |}propName|]: string;|]
 //// }
 ////
 //// var v: class1;

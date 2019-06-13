@@ -1,7 +1,7 @@
 ﻿/// <reference path='fourslash.ts'/>
 
 //// class Foo {
-////     constructor([|protected [|{| "isWriteAccess": true, "isDefinition": true, "declarationRangeIndex": 0 |}protectedParam|]: number|]) {
+////     constructor([|protected [|{| "isWriteAccess": true, "isDefinition": true, "contextRangeIndex": 0 |}protectedParam|]: number|]) {
 ////         let localProtected = [|protectedParam|];
 ////         this.[|{| "isWriteAccess": true |}protectedParam|] += 10;
 ////     }

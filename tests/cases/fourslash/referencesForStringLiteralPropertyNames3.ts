@@ -1,8 +1,8 @@
 /// <reference path='fourslash.ts'/>
 
 ////class Foo2 {
-////    [|get "[|{| "isWriteAccess": true, "isDefinition": true, "declarationRangeIndex": 0 |}42|]"() { return 0; }|]
-////    [|set [|{| "isWriteAccess": true, "isDefinition": true, "declarationRangeIndex": 2 |}42|](n) { }|]
+////    [|get "[|{| "isWriteAccess": true, "isDefinition": true, "contextRangeIndex": 0 |}42|]"() { return 0; }|]
+////    [|set [|{| "isWriteAccess": true, "isDefinition": true, "contextRangeIndex": 2 |}42|](n) { }|]
 ////}
 ////
 ////var y: Foo2;

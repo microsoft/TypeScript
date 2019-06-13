@@ -11,14 +11,14 @@
 ////     interface ElementAttributesProperty { props; }
 //// }
 //// interface OptionPropBag {
-////     [|[|{| "declarationRangeIndex": 0 |}propx|]: number|]
+////     [|[|{| "contextRangeIndex": 0 |}propx|]: number|]
 ////     propString: string
 ////     optional?: boolean
 //// }
 //// declare function Opt(attributes: OptionPropBag): JSX.Element;
 //// let opt = <Opt />;
-//// let opt1 = <Opt [|[|{| "declarationRangeIndex": 2 |}propx|]={100}|] propString />;
-//// let opt2 = <Opt [|[|{| "declarationRangeIndex": 4 |}propx|]={100}|] optional/>;
+//// let opt1 = <Opt [|[|{| "contextRangeIndex": 2 |}propx|]={100}|] propString />;
+//// let opt2 = <Opt [|[|{| "contextRangeIndex": 4 |}propx|]={100}|] optional/>;
 //// let opt3 = <Opt wrong />;
 
 verify.rangesWithSameTextAreRenameLocations("propx");

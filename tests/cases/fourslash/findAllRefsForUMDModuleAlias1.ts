@@ -4,7 +4,7 @@
 //// export function doThing(): string;
 //// export function doTheOtherThing(): void;
 
-//// [|export as namespace [|{| "isWriteAccess": true, "isDefinition": true, "declarationRangeIndex": 0 |}myLib|];|]
+//// [|export as namespace [|{| "isWriteAccess": true, "isDefinition": true, "contextRangeIndex": 0 |}myLib|];|]
 
 // @Filename: 1.ts
 //// /// <reference path="0.d.ts" />

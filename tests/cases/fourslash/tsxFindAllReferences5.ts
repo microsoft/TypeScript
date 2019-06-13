@@ -15,12 +15,12 @@
 ////     propString: string
 ////     optional?: boolean
 //// }
-//// [|declare function [|{| "isWriteAccess": true, "isDefinition": true, "declarationRangeIndex": 0 |}Opt|](attributes: OptionPropBag): JSX.Element;|]
-//// let opt = [|<[|{| "declarationRangeIndex": 2 |}Opt|] />|];
-//// let opt1 = [|<[|{| "declarationRangeIndex": 4 |}Opt|] propx={100} propString />|];
-//// let opt2 = [|<[|{| "declarationRangeIndex": 6 |}Opt|] propx={100} optional/>|];
-//// let opt3 = [|<[|{| "declarationRangeIndex": 8 |}Opt|] wrong />|];
-//// let opt4 = [|<[|{| "declarationRangeIndex": 10 |}Opt|] propx={100} propString="hi" />|];
+//// [|declare function [|{| "isWriteAccess": true, "isDefinition": true, "contextRangeIndex": 0 |}Opt|](attributes: OptionPropBag): JSX.Element;|]
+//// let opt = [|<[|{| "contextRangeIndex": 2 |}Opt|] />|];
+//// let opt1 = [|<[|{| "contextRangeIndex": 4 |}Opt|] propx={100} propString />|];
+//// let opt2 = [|<[|{| "contextRangeIndex": 6 |}Opt|] propx={100} optional/>|];
+//// let opt3 = [|<[|{| "contextRangeIndex": 8 |}Opt|] wrong />|];
+//// let opt4 = [|<[|{| "contextRangeIndex": 10 |}Opt|] propx={100} propString="hi" />|];
 
 verify.singleReferenceGroup(
     "function Opt(attributes: OptionPropBag): JSX.Element",

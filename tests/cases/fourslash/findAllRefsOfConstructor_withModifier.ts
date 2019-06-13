@@ -1,7 +1,7 @@
 /// <reference path="fourslash.ts" />
 
 ////class X {
-////    [|public [|{| "declarationRangeIndex": 0 |}constructor|]() {}|]
+////    [|public [|{| "contextRangeIndex": 0 |}constructor|]() {}|]
 ////}
 ////var x = new [|X|]();
 

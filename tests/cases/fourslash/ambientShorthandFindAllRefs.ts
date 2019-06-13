@@ -4,10 +4,10 @@
 ////declare module "jquery";
 
 // @Filename: user.ts
-////[|import {[|{| "isWriteAccess": true, "isDefinition": true, "declarationRangeIndex": 0 |}x|]} from "jquery";|]
+////[|import {[|{| "isWriteAccess": true, "isDefinition": true, "contextRangeIndex": 0 |}x|]} from "jquery";|]
 
 // @Filename: user2.ts
-////[|import {[|{| "isWriteAccess": true, "isDefinition": true, "declarationRangeIndex": 2 |}x|]} from "jquery";|]
+////[|import {[|{| "isWriteAccess": true, "isDefinition": true, "contextRangeIndex": 2 |}x|]} from "jquery";|]
 
 const [r0Def, r0, r1Def, r1] = test.ranges();
 // TODO: Want these to be in the same group, but that would require creating a symbol for `x`.

@@ -1,6 +1,6 @@
 /// <reference path='fourslash.ts'/>
 
-////[|export default class [|{| "declarationRangeIndex": 0 |}DefaultExportedClass|] {
+////[|export default class [|{| "contextRangeIndex": 0 |}DefaultExportedClass|] {
 ////}|]
 /////*
 //// *  Commenting [|{| "inComment": true |}DefaultExportedClass|]

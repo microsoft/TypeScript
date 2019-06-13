@@ -1,11 +1,11 @@
 /// <reference path='fourslash.ts' />
-////[|interface [|{| "isWriteAccess": true, "isDefinition": true, "declarationRangeIndex": 0 |}Numbers|] {
+////[|interface [|{| "isWriteAccess": true, "isDefinition": true, "contextRangeIndex": 0 |}Numbers|] {
 ////    p: number;
 ////}|]
-////[|interface [|{| "isWriteAccess": true, "isDefinition": true, "declarationRangeIndex": 2 |}Numbers|] {
+////[|interface [|{| "isWriteAccess": true, "isDefinition": true, "contextRangeIndex": 2 |}Numbers|] {
 ////    m: number;
 ////}|]
-////[|class [|{| "isWriteAccess": true, "isDefinition": true, "declarationRangeIndex": 4 |}Numbers|] {
+////[|class [|{| "isWriteAccess": true, "isDefinition": true, "contextRangeIndex": 4 |}Numbers|] {
 ////    f(n: number) {
 ////        return this.p + this.m + n;
 ////    }

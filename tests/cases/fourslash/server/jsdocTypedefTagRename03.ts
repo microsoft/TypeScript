@@ -4,7 +4,7 @@
 // @Filename: jsDocTypedef_form3.js
 ////
 //// /**
-////  * [|@typedef /*1*/[|{| "declarationRangeIndex": 0 |}Person|]
+////  * [|@typedef /*1*/[|{| "contextRangeIndex": 0 |}Person|]
 ////  * @type {Object}
 ////  * @property {number} age
 ////  * @property {string} name

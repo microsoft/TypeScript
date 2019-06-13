@@ -3,7 +3,7 @@
 // References to a property of the apparent type using string indexer
 
 ////interface Object {
-////    [|[|{| "isDefinition": true, "declarationRangeIndex": 0 |}toMyString|]();|]
+////    [|[|{| "isDefinition": true, "contextRangeIndex": 0 |}toMyString|]();|]
 ////}
 ////
 ////var y: Object;

@@ -2,7 +2,7 @@
 
 // @Filename: /defA.ts
 ////declare module "a" {
-////    [|export type [|{| "isWriteAccess": true, "isDefinition": true, "declarationRangeIndex": 0 |}T|] = number;|]
+////    [|export type [|{| "isWriteAccess": true, "isDefinition": true, "contextRangeIndex": 0 |}T|] = number;|]
 ////}
 
 // @Filename: /defB.ts

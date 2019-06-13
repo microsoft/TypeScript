@@ -1,7 +1,7 @@
 /// <reference path="../fourslash.ts"/>
 
 // @Filename: referencesForGlobals_1.ts
-////[|var [|{| "declarationRangeIndex": 0 |}globalName|] = 0;|]
+////[|var [|{| "contextRangeIndex": 0 |}globalName|] = 0;|]
 
 // @Filename: referencesForGlobals_2.ts
 ////var y = [|globalName|];

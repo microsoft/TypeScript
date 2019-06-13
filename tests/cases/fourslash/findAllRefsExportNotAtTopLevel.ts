@@ -1,7 +1,7 @@
 /// <reference path="fourslash.ts" />
 
 ////{
-////    [|export const [|{| "isWriteAccess": true, "isDefinition": true, "declarationRangeIndex": 0 |}x|] = 0;|]
+////    [|export const [|{| "isWriteAccess": true, "isDefinition": true, "contextRangeIndex": 0 |}x|] = 0;|]
 ////    [|x|];
 ////}
 

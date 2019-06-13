@@ -20,7 +20,7 @@ namespace ts.projectSystem {
                         protocolRenameSpanFromSubstring({
                             fileText: bTs.content,
                             text: "./a",
-                            declarationText: bTs.content
+                            contextText: bTs.content
                         })
                     ]
                 }],
@@ -45,7 +45,7 @@ namespace ts.projectSystem {
                         protocolRenameSpanFromSubstring({
                             fileText: bTs.content,
                             text: "./a",
-                            declarationText: bTs.content
+                            contextText: bTs.content
                         })
                     ]
                 }],
@@ -71,7 +71,7 @@ namespace ts.projectSystem {
                         protocolRenameSpanFromSubstring({
                             fileText: bTs.content,
                             text: "./a",
-                            declarationText: bTs.content
+                            contextText: bTs.content
                         })
                     ]
                 }],
@@ -103,7 +103,7 @@ namespace ts.projectSystem {
                             protocolRenameSpanFromSubstring({
                                 fileText: aTs.content,
                                 text: "x",
-                                declarationText: "const x = 0;"
+                                contextText: "const x = 0;"
                             }),
                             protocolRenameSpanFromSubstring({
                                 fileText: aTs.content,
@@ -135,7 +135,7 @@ namespace ts.projectSystem {
                             protocolRenameSpanFromSubstring({
                                 fileText: aTs.content,
                                 text: "x",
-                                declarationText: "const x = 0;"
+                                contextText: "const x = 0;"
                             }),
                             protocolRenameSpanFromSubstring({
                                 fileText: aTs.content,
@@ -169,7 +169,7 @@ namespace ts.projectSystem {
                             protocolRenameSpanFromSubstring({
                                 fileText: aTs.content,
                                 text: "x",
-                                declarationText: "const x = 0;"
+                                contextText: "const x = 0;"
                             }),
                             protocolRenameSpanFromSubstring({
                                 fileText: aTs.content,
@@ -210,13 +210,13 @@ namespace ts.projectSystem {
                             protocolRenameSpanFromSubstring({
                                 fileText: aTs.content,
                                 text: "x",
-                                declarationText: "const x = 1;"
+                                contextText: "const x = 1;"
                             }),
                             protocolRenameSpanFromSubstring({
                                 fileText: aTs.content,
                                 text: "x",
                                 options: { index: 2 },
-                                declarationText: "export { x };",
+                                contextText: "export { x };",
                                 prefixSuffixText: { suffixText: " as x" }
                             }),
                         ],
@@ -243,7 +243,7 @@ namespace ts.projectSystem {
                             protocolRenameSpanFromSubstring({
                                 fileText: bTs.content,
                                 text: "x",
-                                declarationText: `import { x } from "./a";`
+                                contextText: `import { x } from "./a";`
                             }),
                             protocolRenameSpanFromSubstring({
                                 fileText: bTs.content,
@@ -258,13 +258,13 @@ namespace ts.projectSystem {
                             protocolRenameSpanFromSubstring({
                                 fileText: aTs.content,
                                 text: "x",
-                                declarationText: "const x = 1;"
+                                contextText: "const x = 1;"
                             }),
                             protocolRenameSpanFromSubstring({
                                 fileText: aTs.content,
                                 text: "x",
                                 options: { index: 2 },
-                                declarationText: "export { x };",
+                                contextText: "export { x };",
                             }),
                         ],
                     },

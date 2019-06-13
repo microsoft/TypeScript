@@ -2,16 +2,16 @@
 
 // Global variable reference.
 
-////[|var [|{| "isWriteAccess": true, "isDefinition": true, "declarationRangeIndex": 0 |}topLevelVar|] = 2;|]
+////[|var [|{| "isWriteAccess": true, "isDefinition": true, "contextRangeIndex": 0 |}topLevelVar|] = 2;|]
 ////var topLevelVar2 = [|topLevelVar|];
 ////
-////[|class [|{| "isWriteAccess": true, "isDefinition": true, "declarationRangeIndex": 3 |}topLevelClass|] { }|]
+////[|class [|{| "isWriteAccess": true, "isDefinition": true, "contextRangeIndex": 3 |}topLevelClass|] { }|]
 ////var c = new [|topLevelClass|]();
 ////
-////[|interface [|{| "isWriteAccess": true, "isDefinition": true, "declarationRangeIndex": 6 |}topLevelInterface|] { }|]
+////[|interface [|{| "isWriteAccess": true, "isDefinition": true, "contextRangeIndex": 6 |}topLevelInterface|] { }|]
 ////var i: [|topLevelInterface|];
 ////
-////[|module [|{| "isWriteAccess": true, "isDefinition": true, "declarationRangeIndex": 9 |}topLevelModule|] {
+////[|module [|{| "isWriteAccess": true, "isDefinition": true, "contextRangeIndex": 9 |}topLevelModule|] {
 ////    export var x;
 ////}|]
 ////var x = [|topLevelModule|].x;

@@ -4,7 +4,7 @@
 // @Filename: jsDocCallback.js
 ////
 //// /**
-////  * [|@callback [|{| "declarationRangeIndex": 0 |}FooCallback|]
+////  * [|@callback [|{| "contextRangeIndex": 0 |}FooCallback|]
 ////  * @param {string} eventName - Rename should work
 ////  |]*/
 ////

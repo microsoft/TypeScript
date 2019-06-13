@@ -3,15 +3,15 @@
 // @Filename: localGetReferences_1.ts
 ////// Comment Refence Test: g/*1*/lobalVar
 ////// References to a variable declared in global.
-////[|var [|{| "isWriteAccess": true, "isDefinition": true, "declarationRangeIndex": 0 |}globalVar|]: number = 2;|]
+////[|var [|{| "isWriteAccess": true, "isDefinition": true, "contextRangeIndex": 0 |}globalVar|]: number = 2;|]
 ////
 ////class fooCls {
 ////    // References to static variable declared in a class.
-////    [|static [|{| "isWriteAccess": true, "isDefinition": true, "declarationRangeIndex": 2 |}clsSVar|] = 1;|]
+////    [|static [|{| "isWriteAccess": true, "isDefinition": true, "contextRangeIndex": 2 |}clsSVar|] = 1;|]
 ////    // References to a variable declared in a class.
-////    [|[|{| "isWriteAccess": true, "isDefinition": true, "declarationRangeIndex": 4 |}clsVar|] = 1;|]
+////    [|[|{| "isWriteAccess": true, "isDefinition": true, "contextRangeIndex": 4 |}clsVar|] = 1;|]
 ////
-////    constructor ([|public [|{| "isWriteAccess": true, "isDefinition": true, "declarationRangeIndex": 6 |}clsParam|]: number|]) {
+////    constructor ([|public [|{| "isWriteAccess": true, "isDefinition": true, "contextRangeIndex": 6 |}clsParam|]: number|]) {
 ////        //Increments
 ////        [|{| "isWriteAccess": true |}globalVar|]++;
 ////        this.[|{| "isWriteAccess": true |}clsVar|]++;
@@ -23,9 +23,9 @@
 ////}
 ////
 ////// References to a function parameter.
-////[|function [|{| "isWriteAccess": true, "isDefinition": true, "declarationRangeIndex": 12 |}foo|]([|[|{| "isWriteAccess": true, "isDefinition": true, "declarationRangeIndex": 14 |}x|]: number|]) {
+////[|function [|{| "isWriteAccess": true, "isDefinition": true, "contextRangeIndex": 12 |}foo|]([|[|{| "isWriteAccess": true, "isDefinition": true, "contextRangeIndex": 14 |}x|]: number|]) {
 ////    // References to a variable declared in a function.
-////    [|var [|{| "isWriteAccess": true, "isDefinition": true, "declarationRangeIndex": 16 |}fnVar|] = 1;|]
+////    [|var [|{| "isWriteAccess": true, "isDefinition": true, "contextRangeIndex": 16 |}fnVar|] = 1;|]
 ////
 ////    //Increments
 ////    fooCls.[|{| "isWriteAccess": true |}clsSVar|]++;
@@ -85,7 +85,7 @@
 /////*3*/err = err++;
 /////*4*/
 //////Shadowed fn Parameter
-////function shdw([|[|{| "isWriteAccess": true, "isDefinition": true, "shadow": true, "declarationRangeIndex": 39 |}globalVar|]: number|]) {
+////function shdw([|[|{| "isWriteAccess": true, "isDefinition": true, "shadow": true, "contextRangeIndex": 39 |}globalVar|]: number|]) {
 ////    //Increments
 ////    [|{| "isWriteAccess": true, "shadow": true |}globalVar|]++;
 ////    return [|{| "shadow": true |}globalVar|];

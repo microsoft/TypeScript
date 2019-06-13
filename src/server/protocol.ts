@@ -872,16 +872,16 @@ namespace ts.server.protocol {
         file: string;
     }
 
-    export interface DeclarationTextSpan extends TextSpan {
-        declarationStart?: Location;
-        declarationEnd?: Location;
+    export interface TextSpanWithContext extends TextSpan {
+        contextStart?: Location;
+        contextEnd?: Location;
     }
 
-    export interface DeclarationFileSpan extends FileSpan, DeclarationTextSpan {
+    export interface FileSpanWithContext extends FileSpan, TextSpanWithContext {
     }
 
     export interface DefinitionInfoAndBoundSpan {
-        definitions: ReadonlyArray<DeclarationFileSpan>;
+        definitions: ReadonlyArray<FileSpanWithContext>;
         textSpan: TextSpan;
     }
 
@@ -889,7 +889,7 @@ namespace ts.server.protocol {
      * Definition response message.  Gives text range for definition.
      */
     export interface DefinitionResponse extends Response {
-        body?: DeclarationFileSpan[];
+        body?: FileSpanWithContext[];
     }
 
     export interface DefinitionInfoAndBoundSpanReponse extends Response {
@@ -900,14 +900,14 @@ namespace ts.server.protocol {
      * Definition response message.  Gives text range for definition.
      */
     export interface TypeDefinitionResponse extends Response {
-        body?: DeclarationFileSpan[];
+        body?: FileSpanWithContext[];
     }
 
     /**
      * Implementation response message.  Gives text range for implementations.
      */
     export interface ImplementationResponse extends Response {
-        body?: DeclarationFileSpan[];
+        body?: FileSpanWithContext[];
     }
 
     /**
@@ -950,7 +950,7 @@ namespace ts.server.protocol {
     }
 
     /** @deprecated */
-    export interface OccurrencesResponseItem extends DeclarationFileSpan {
+    export interface OccurrencesResponseItem extends FileSpanWithContext {
         /**
          * True if the occurrence is a write location, false otherwise.
          */
@@ -980,7 +980,7 @@ namespace ts.server.protocol {
     /**
      * Span augmented with extra information that denotes the kind of the highlighting to be used for span.
      */
-    export interface HighlightSpan extends DeclarationTextSpan {
+    export interface HighlightSpan extends TextSpanWithContext {
         kind: HighlightSpanKind;
     }
 
@@ -1015,7 +1015,7 @@ namespace ts.server.protocol {
         command: CommandTypes.References;
     }
 
-    export interface ReferencesResponseItem extends DeclarationFileSpan {
+    export interface ReferencesResponseItem extends FileSpanWithContext {
         /** Text of line containing the reference.  Including this
          *  with the response avoids latency of editor loading files
          * to show text of reference line (the server already has
@@ -1158,7 +1158,7 @@ namespace ts.server.protocol {
         locs: RenameTextSpan[];
     }
 
-    export interface RenameTextSpan extends DeclarationTextSpan {
+    export interface RenameTextSpan extends TextSpanWithContext {
         readonly prefixText?: string;
         readonly suffixText?: string;
     }

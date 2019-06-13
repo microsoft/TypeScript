@@ -1,8 +1,8 @@
 /// <reference path='fourslash.ts' />
 
 // @Filename: f.ts
-////[|export { [|{| "declarationRangeIndex": 0 |}foo|] as [|{| "isWriteAccess": true, "isDefinition": true, "declarationRangeIndex": 0 |}foo|] }|]
-////[|function /*start*/[|{| "isWriteAccess": true, "isDefinition": true, "declarationRangeIndex": 3 |}foo|](a: number, b: number) { }|]
+////[|export { [|{| "contextRangeIndex": 0 |}foo|] as [|{| "isWriteAccess": true, "isDefinition": true, "contextRangeIndex": 0 |}foo|] }|]
+////[|function /*start*/[|{| "isWriteAccess": true, "isDefinition": true, "contextRangeIndex": 3 |}foo|](a: number, b: number) { }|]
 
 // @Filename: b.ts
 ////import x = require("./f");

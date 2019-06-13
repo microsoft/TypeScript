@@ -2,13 +2,13 @@
 // @noLib: true
 
 ////declare module "a" {
-////    [|export class [|{| "isWriteAccess": true, "isDefinition": true, "declarationRangeIndex": 0 |}C|] {}|]
+////    [|export class [|{| "isWriteAccess": true, "isDefinition": true, "contextRangeIndex": 0 |}C|] {}|]
 ////}
 ////declare module "b" {
-////    [|export { [|{| "isWriteAccess": true, "isDefinition": true, "declarationRangeIndex": 2 |}C|] } from "a";|]
+////    [|export { [|{| "isWriteAccess": true, "isDefinition": true, "contextRangeIndex": 2 |}C|] } from "a";|]
 ////}
 ////declare module "c" {
-////    [|import { [|{| "isWriteAccess": true, "isDefinition": true, "declarationRangeIndex": 4 |}C|] } from "b";|]
+////    [|import { [|{| "isWriteAccess": true, "isDefinition": true, "contextRangeIndex": 4 |}C|] } from "b";|]
 ////    export function f(c: [|C|]): void;
 ////}
 

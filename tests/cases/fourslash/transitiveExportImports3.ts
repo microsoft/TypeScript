@@ -1,12 +1,12 @@
 /// <reference path='fourslash.ts'/>
 
 // @Filename: a.ts
-////[|export function [|{| "isWriteAccess": true, "isDefinition": true, "declarationRangeIndex": 0 |}f|]() {}|]
+////[|export function [|{| "isWriteAccess": true, "isDefinition": true, "contextRangeIndex": 0 |}f|]() {}|]
 
 // @Filename: b.ts
-////[|export { [|{| "declarationRangeIndex": 2 |}f|] as [|{| "isWriteAccess": true, "isDefinition": true, "declarationRangeIndex": 2 |}g|] } from "./a";|]
-////[|import { [|{| "isWriteAccess": true, "isDefinition": true, "declarationRangeIndex": 5 |}f|] } from "./a";|]
-////[|import { [|{| "isWriteAccess": true, "isDefinition": true, "declarationRangeIndex": 7 |}g|] } from "./b";|]
+////[|export { [|{| "contextRangeIndex": 2 |}f|] as [|{| "isWriteAccess": true, "isDefinition": true, "contextRangeIndex": 2 |}g|] } from "./a";|]
+////[|import { [|{| "isWriteAccess": true, "isDefinition": true, "contextRangeIndex": 5 |}f|] } from "./a";|]
+////[|import { [|{| "isWriteAccess": true, "isDefinition": true, "contextRangeIndex": 7 |}g|] } from "./b";|]
 
 verify.noErrors();
 

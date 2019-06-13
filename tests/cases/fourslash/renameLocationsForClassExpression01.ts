@@ -3,7 +3,7 @@
 ////class Foo {
 ////}
 ////
-////var x = [|class [|{| "declarationRangeIndex": 0 |}Foo|] {
+////var x = [|class [|{| "contextRangeIndex": 0 |}Foo|] {
 ////    doIt() {
 ////        return [|Foo|];
 ////    }

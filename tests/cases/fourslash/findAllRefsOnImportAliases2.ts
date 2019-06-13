@@ -1,14 +1,14 @@
 /// <reference path="fourslash.ts" />
 
 //@Filename: a.ts
-////[|export class [|{| "isWriteAccess": true, "isDefinition": true, "declarationRangeIndex": 0 |}Class|] {}|]
+////[|export class [|{| "isWriteAccess": true, "isDefinition": true, "contextRangeIndex": 0 |}Class|] {}|]
 
 //@Filename: b.ts
-////[|import { [|{| "declarationRangeIndex": 2 |}Class|] as [|{| "isWriteAccess": true, "isDefinition": true, "declarationRangeIndex": 2 |}C2|] } from "./a";|]
+////[|import { [|{| "contextRangeIndex": 2 |}Class|] as [|{| "isWriteAccess": true, "isDefinition": true, "contextRangeIndex": 2 |}C2|] } from "./a";|]
 ////var c = new [|C2|]();
 
 //@Filename: c.ts
-////[|export { [|{| "declarationRangeIndex": 6 |}Class|] as [|{| "isWriteAccess": true, "isDefinition": true, "declarationRangeIndex": 6 |}C3|] } from "./a";|]
+////[|export { [|{| "contextRangeIndex": 6 |}Class|] as [|{| "isWriteAccess": true, "isDefinition": true, "contextRangeIndex": 6 |}C3|] } from "./a";|]
 
 const ranges = test.rangesByText();
 const classRanges = ranges.get("Class");

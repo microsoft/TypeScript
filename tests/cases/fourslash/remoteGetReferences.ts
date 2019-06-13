@@ -119,12 +119,12 @@
 ////});
 
 // @Filename: remoteGetReferences_2.ts
-////[|var [|{| "isWriteAccess": true, "isDefinition": true, "declarationRangeIndex": 10 |}remoteglobalVar|]: number = 2;|]
+////[|var [|{| "isWriteAccess": true, "isDefinition": true, "contextRangeIndex": 10 |}remoteglobalVar|]: number = 2;|]
 ////
-////[|class [|{| "isWriteAccess": true, "isDefinition": true, "declarationRangeIndex": 12 |}remotefooCls|] {
+////[|class [|{| "isWriteAccess": true, "isDefinition": true, "contextRangeIndex": 12 |}remotefooCls|] {
 ////	//Declare
-////	[|[|{| "isWriteAccess": true, "isDefinition": true, "declarationRangeIndex": 14 |}remoteclsVar|] = 1;|]
-////	[|static [|{| "isWriteAccess": true, "isDefinition": true, "declarationRangeIndex": 16 |}remoteclsSVar|] = 1;|]
+////	[|[|{| "isWriteAccess": true, "isDefinition": true, "contextRangeIndex": 14 |}remoteclsVar|] = 1;|]
+////	[|static [|{| "isWriteAccess": true, "isDefinition": true, "contextRangeIndex": 16 |}remoteclsSVar|] = 1;|]
 ////
 ////	constructor(public remoteclsParam: number) {
 ////		//Increments

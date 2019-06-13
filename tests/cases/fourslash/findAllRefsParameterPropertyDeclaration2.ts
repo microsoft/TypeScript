@@ -1,7 +1,7 @@
 ﻿/// <reference path='fourslash.ts'/>
 
 //// class Foo {
-////     constructor([|public [|{| "isWriteAccess": true, "isDefinition": true, "declarationRangeIndex": 0 |}publicParam|]: number|]) {
+////     constructor([|public [|{| "isWriteAccess": true, "isDefinition": true, "contextRangeIndex": 0 |}publicParam|]: number|]) {
 ////         let localPublic = [|publicParam|];
 ////         this.[|{| "isWriteAccess": true |}publicParam|] += 10;
 ////     }

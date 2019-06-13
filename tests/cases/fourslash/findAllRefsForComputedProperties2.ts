@@ -1,15 +1,15 @@
 /// <reference path='fourslash.ts'/>
 
 ////interface I {
-////    [|[[|{| "isDefinition": true, "declarationRangeIndex": 0 |}42|]](): void;|]
+////    [|[[|{| "isDefinition": true, "contextRangeIndex": 0 |}42|]](): void;|]
 ////}
 ////
 ////class C implements I {
-////    [|[[|{| "isDefinition": true, "declarationRangeIndex": 2 |}42|]]: any;|]
+////    [|[[|{| "isDefinition": true, "contextRangeIndex": 2 |}42|]]: any;|]
 ////}
 ////
 ////var x: I = {
-////    [|["[|{| "isWriteAccess": true, "isDefinition": true, "declarationRangeIndex": 4 |}42|]"]: function () { }|]
+////    [|["[|{| "isWriteAccess": true, "isDefinition": true, "contextRangeIndex": 4 |}42|]"]: function () { }|]
 ////}
 
 const [r0Def, r0, r1Def, r1, r2Def, r2] = test.ranges();

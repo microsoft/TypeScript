@@ -1,8 +1,8 @@
 /// <reference path='fourslash.ts' />
 // @Filename: m.ts
-////[|export var [|{| "isWriteAccess": true, "isDefinition": true, "declarationRangeIndex": 0 |}x|] = 12;|]
+////[|export var [|{| "isWriteAccess": true, "isDefinition": true, "contextRangeIndex": 0 |}x|] = 12;|]
 // @Filename: main.ts
-////[|import { [|{| "isWriteAccess": true, "isDefinition": true, "declarationRangeIndex": 2 |}x|] } from "./m";|]
+////[|import { [|{| "isWriteAccess": true, "isDefinition": true, "contextRangeIndex": 2 |}x|] } from "./m";|]
 ////const y = [|x|];
 
 const ranges = test.ranges();

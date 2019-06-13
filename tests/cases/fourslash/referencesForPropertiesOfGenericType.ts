@@ -1,7 +1,7 @@
 /// <reference path='fourslash.ts'/>
 
 ////interface IFoo<T> {
-////    [|[|{| "isDefinition": true, "declarationRangeIndex": 0 |}doSomething|](v: T): T;|]
+////    [|[|{| "isDefinition": true, "contextRangeIndex": 0 |}doSomething|](v: T): T;|]
 ////}
 ////
 ////var x: IFoo<string>;

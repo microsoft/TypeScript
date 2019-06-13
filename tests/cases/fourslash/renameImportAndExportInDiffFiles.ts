@@ -1,11 +1,11 @@
 /// <reference path='fourslash.ts' />
 
 // @Filename: a.ts
-////[|export var [|{| "isDefinition": true, "declarationRangeIndex": 0 |}a|];|]
+////[|export var [|{| "isDefinition": true, "contextRangeIndex": 0 |}a|];|]
 
 // @Filename: b.ts
-////[|import { [|{| "isWriteAccess": true, "isDefinition": true, "declarationRangeIndex": 2 |}a|] } from './a';|]
-////[|export { [|{| "isWriteAccess": true, "isDefinition": true, "declarationRangeIndex": 4 |}a|] };|]
+////[|import { [|{| "isWriteAccess": true, "isDefinition": true, "contextRangeIndex": 2 |}a|] } from './a';|]
+////[|export { [|{| "isWriteAccess": true, "isDefinition": true, "contextRangeIndex": 4 |}a|] };|]
 
 const [r0Def, r0, r1Def, r1, r2Def, r2] = test.ranges();
 const vars = { definition: "var a: any", ranges: [r0] };

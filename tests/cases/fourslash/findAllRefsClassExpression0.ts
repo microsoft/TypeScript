@@ -1,12 +1,12 @@
 /// <reference path='fourslash.ts' />
 
 // @Filename: /a.ts
-////export = [|class [|{| "isWriteAccess": true, "isDefinition": true, "declarationRangeIndex": 0 |}A|] {
+////export = [|class [|{| "isWriteAccess": true, "isDefinition": true, "contextRangeIndex": 0 |}A|] {
 ////    m() { [|A|]; }
 ////}|];
 
 // @Filename: /b.ts
-////[|import [|{| "isWriteAccess": true, "isDefinition": true, "declarationRangeIndex": 3 |}A|] = require("./a");|]
+////[|import [|{| "isWriteAccess": true, "isDefinition": true, "contextRangeIndex": 3 |}A|] = require("./a");|]
 ////[|A|];
 
 const [r0Def, r0, r1, r2Def, r2, r3] = test.ranges();

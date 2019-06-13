@@ -21,7 +21,7 @@
 ////    }
 ////}
 ////// These are *not* real uses of the 'this' keyword, they are identifiers.
-////const x = { [|[|{| "isWriteAccess": true, "isDefinition": true, "declarationRangeIndex": 9 |}this|]: 0|] }
+////const x = { [|[|{| "isWriteAccess": true, "isDefinition": true, "contextRangeIndex": 9 |}this|]: 0|] }
 ////x.[|this|];
 
 const [glob, f0, f1, g0, g1, x, y, constructor, method, propDefDef, propDef, propUse] = test.ranges();

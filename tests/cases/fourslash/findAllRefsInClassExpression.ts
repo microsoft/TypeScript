@@ -1,8 +1,8 @@
 /// <reference path='fourslash.ts'/>
 
-////interface I { [|[|{| "isDefinition": true, "declarationRangeIndex": 0 |}boom|](): void;|] }
+////interface I { [|[|{| "isDefinition": true, "contextRangeIndex": 0 |}boom|](): void;|] }
 ////new class C implements I {
-////   [|[|{| "isWriteAccess": true, "isDefinition": true, "declarationRangeIndex": 2 |}boom|](){}|]
+////   [|[|{| "isWriteAccess": true, "isDefinition": true, "contextRangeIndex": 2 |}boom|](){}|]
 ////}
 
 const [r0Def, r0, r1Def, r1] = test.ranges();

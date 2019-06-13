@@ -1,6 +1,6 @@
 /// <reference path='fourslash.ts'/>
 
-////[|export default function /*1*/[|{| "declarationRangeIndex": 0 |}DefaultExportedFunction|]() {
+////[|export default function /*1*/[|{| "contextRangeIndex": 0 |}DefaultExportedFunction|]() {
 ////    return /*2*/[|DefaultExportedFunction|]
 ////}|]
 /////**

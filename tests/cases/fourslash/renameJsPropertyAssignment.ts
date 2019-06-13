@@ -4,7 +4,7 @@
 // @Filename: a.js
 ////function bar() {
 ////}
-////[|bar.[|{| "declarationRangeIndex": 0 |}foo|] = "foo";|]
+////[|bar.[|{| "contextRangeIndex": 0 |}foo|] = "foo";|]
 ////console.log(bar.[|foo|]);
 
 verify.rangesWithSameTextAreRenameLocations("foo");

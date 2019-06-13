@@ -5,7 +5,7 @@
 ////var n = 14;
 ////
 ////class foo {
-////    [|private [|{| "isWriteAccess": true, "isDefinition": true, "declarationRangeIndex": 0 |}n|] = 0;|]
+////    [|private [|{| "isWriteAccess": true, "isDefinition": true, "contextRangeIndex": 0 |}n|] = 0;|]
 ////
 ////    public bar() {
 ////        this.[|{| "isWriteAccess": true |}n|] = 9;

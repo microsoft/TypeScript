@@ -16,15 +16,15 @@ namespace ts.FindAllReferences {
     export const enum EntryKind { Span, Node, StringLiteral, SearchedLocalFoundProperty, SearchedPropertyFoundLocal }
     export type NodeEntryKind = EntryKind.Node | EntryKind.StringLiteral | EntryKind.SearchedLocalFoundProperty | EntryKind.SearchedPropertyFoundLocal;
     export type Entry = NodeEntry | SpanEntry;
-    export interface DeclarationNodeWithStartAndEnd {
+    export interface ContextWithStartAndEndNode {
         start: Node;
         end: Node;
     }
-    export type DeclarationNode = Node | DeclarationNodeWithStartAndEnd;
+    export type ContextNode = Node | ContextWithStartAndEndNode;
     export interface NodeEntry {
         readonly kind: NodeEntryKind;
         readonly node: Node;
-        readonly declaration?: DeclarationNode;
+        readonly context?: ContextNode;
     }
     export interface SpanEntry {
         readonly kind: EntryKind.Span;
@@ -35,17 +35,17 @@ namespace ts.FindAllReferences {
         return {
             kind,
             node: (node as NamedDeclaration).name || node,
-            declaration: getDeclarationForDeclarationSpanForNode(node)
+            context: getContextNodeForNodeEntry(node)
         };
     }
 
-    export function isDeclarationNodeWithStartAndEnd(node: DeclarationNode): node is DeclarationNodeWithStartAndEnd {
+    export function isContextWithStartAndEndNode(node: ContextNode): node is ContextWithStartAndEndNode {
         return node && (node as Node).kind === undefined;
     }
 
-    function getDeclarationForDeclarationSpanForNode(node: Node): DeclarationNode | undefined {
+    function getContextNodeForNodeEntry(node: Node): ContextNode | undefined {
         if (isDeclaration(node)) {
-            return getDeclarationForDeclarationSpan(node);
+            return getContextNode(node);
         }
 
         if (!node.parent) return undefined;
@@ -61,7 +61,7 @@ namespace ts.FindAllReferences {
                         node.parent.parent :
                         undefined;
                 if (binaryExpression && getAssignmentDeclarationKind(binaryExpression) !== AssignmentDeclarationKind.None) {
-                    return getDeclarationForDeclarationSpan(binaryExpression);
+                    return getContextNode(binaryExpression);
                 }
             }
 
@@ -83,7 +83,7 @@ namespace ts.FindAllReferences {
                         isJSDocTag(node)
                     )! as NamedDeclaration | Statement | JSDocTag;
                     return isDeclaration(declOrStatement) ?
-                        getDeclarationForDeclarationSpan(declOrStatement) :
+                        getContextNode(declOrStatement) :
                         declOrStatement;
                 }
             }
@@ -91,7 +91,7 @@ namespace ts.FindAllReferences {
             // Handle computed property name
             const propertyName = findAncestor(node, isComputedPropertyName);
             return propertyName ?
-                getDeclarationForDeclarationSpan(propertyName.parent) :
+                getContextNode(propertyName.parent) :
                 undefined;
         }
 
@@ -103,13 +103,13 @@ namespace ts.FindAllReferences {
                 && node.parent.propertyName === node) ||
             // Is default export
             (node.kind === SyntaxKind.DefaultKeyword && hasModifier(node.parent, ModifierFlags.ExportDefault))) {
-            return getDeclarationForDeclarationSpan(node.parent);
+            return getContextNode(node.parent);
         }
 
         return undefined;
     }
 
-    export function getDeclarationForDeclarationSpan(node: NamedDeclaration | BinaryExpression | ForInOrOfStatement | undefined): DeclarationNode | undefined {
+    export function getContextNode(node: NamedDeclaration | BinaryExpression | ForInOrOfStatement | undefined): ContextNode | undefined {
         if (!node) return undefined;
         switch (node.kind) {
             case SyntaxKind.VariableDeclaration:
@@ -118,11 +118,11 @@ namespace ts.FindAllReferences {
                     isVariableStatement(node.parent.parent) ?
                         node.parent.parent :
                         isForInOrOfStatement(node.parent.parent) ?
-                            getDeclarationForDeclarationSpan(node.parent.parent) :
+                            getContextNode(node.parent.parent) :
                             node.parent;
 
             case SyntaxKind.BindingElement:
-                return getDeclarationForDeclarationSpan(node.parent.parent as NamedDeclaration);
+                return getContextNode(node.parent.parent as NamedDeclaration);
 
             case SyntaxKind.ImportSpecifier:
                 return node.parent.parent.parent;
@@ -149,7 +149,7 @@ namespace ts.FindAllReferences {
             case SyntaxKind.PropertyAssignment:
             case SyntaxKind.ShorthandPropertyAssignment:
                 return isArrayLiteralOrObjectLiteralDestructuringPattern(node.parent) ?
-                    getDeclarationForDeclarationSpan(
+                    getContextNode(
                         findAncestor(node.parent, node =>
                             isBinaryExpression(node) || isForInOrOfStatement(node)
                         ) as BinaryExpression | ForInOrOfStatement
@@ -161,13 +161,13 @@ namespace ts.FindAllReferences {
         }
     }
 
-    export function toDeclarationSpan(textSpan: TextSpan, sourceFile: SourceFile, declaration?: DeclarationNode): { declarationSpan: TextSpan } | undefined {
-        if (!declaration) return undefined;
-        const declarationSpan = isDeclarationNodeWithStartAndEnd(declaration) ?
-            getTextSpan(declaration.start, sourceFile, declaration.end) :
-            getTextSpan(declaration, sourceFile);
-        return declarationSpan.start !== textSpan.start || declarationSpan.length !== textSpan.length ?
-            { declarationSpan } :
+    export function toContextSpan(textSpan: TextSpan, sourceFile: SourceFile, context?: ContextNode): { contextSpan: TextSpan } | undefined {
+        if (!context) return undefined;
+        const contextSpan = isContextWithStartAndEndNode(context) ?
+            getTextSpan(context.start, sourceFile, context.end) :
+            getTextSpan(context, sourceFile);
+        return contextSpan.start !== textSpan.start || contextSpan.length !== textSpan.length ?
+            { contextSpan } :
             undefined;
     }
 
@@ -273,7 +273,7 @@ namespace ts.FindAllReferences {
                         name,
                         kind,
                         displayParts,
-                        declaration: getDeclarationForDeclarationSpan(declaration)
+                        context: getContextNode(declaration)
                     };
                 }
                 case DefinitionKind.Label: {
@@ -301,7 +301,7 @@ namespace ts.FindAllReferences {
             }
         })();
 
-        const { node, name, kind, displayParts, declaration } = info;
+        const { node, name, kind, displayParts, context } = info;
         const sourceFile = node.getSourceFile();
         const textSpan = getTextSpan(isComputedPropertyName(node) ? node.expression : node, sourceFile);
         return {
@@ -312,7 +312,7 @@ namespace ts.FindAllReferences {
             name,
             textSpan,
             displayParts,
-            ...toDeclarationSpan(textSpan, sourceFile, declaration)
+            ...toContextSpan(textSpan, sourceFile, context)
         };
     }
 
@@ -354,7 +354,7 @@ namespace ts.FindAllReferences {
             return {
                 textSpan,
                 fileName: sourceFile.fileName,
-                ...toDeclarationSpan(textSpan, sourceFile, entry.declaration)
+                ...toContextSpan(textSpan, sourceFile, entry.context)
             };
         }
     }
@@ -440,7 +440,7 @@ namespace ts.FindAllReferences {
             textSpan: documentSpan.textSpan,
             kind: writeAccess ? HighlightSpanKind.writtenReference : HighlightSpanKind.reference,
             isInString: entry.kind === EntryKind.StringLiteral ? true : undefined,
-            ...documentSpan.declarationSpan && { declarationSpan: documentSpan.declarationSpan }
+            ...documentSpan.contextSpan && { contextSpan: documentSpan.contextSpan }
         };
         return { fileName: documentSpan.fileName, span };
     }

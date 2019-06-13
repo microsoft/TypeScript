@@ -1,16 +1,16 @@
 /// <reference path='fourslash.ts' />
 
 ////interface I {
-////    [|[|{| "declarationRangeIndex": 0 |}property1|]: number;|]
+////    [|[|{| "contextRangeIndex": 0 |}property1|]: number;|]
 ////    property2: string;
 ////}
 ////var elems: I[];
 ////
-////var [|[|{| "declarationRangeIndex": 2 |}property1|]: number|], p2: number;
-////for ([|{ [|{| "declarationRangeIndex": 4 |}property1|] } of elems|]) {
+////var [|[|{| "contextRangeIndex": 2 |}property1|]: number|], p2: number;
+////for ([|{ [|{| "contextRangeIndex": 4 |}property1|] } of elems|]) {
 ////    [|property1|]++;
 ////}
-////for ([|{ [|{| "declarationRangeIndex": 7 |}property1|]: p2 } of elems|]) {
+////for ([|{ [|{| "contextRangeIndex": 7 |}property1|]: p2 } of elems|]) {
 ////}
 
 verify.noErrors();

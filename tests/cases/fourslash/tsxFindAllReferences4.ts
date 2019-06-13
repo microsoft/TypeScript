@@ -7,13 +7,13 @@
 ////     }
 ////     interface ElementAttributesProperty { props }
 //// }
-//// [|class [|{| "isWriteAccess": true, "isDefinition": true, "declarationRangeIndex": 0 |}MyClass|] {
+//// [|class [|{| "isWriteAccess": true, "isDefinition": true, "contextRangeIndex": 0 |}MyClass|] {
 ////   props: {
 ////     name?: string;
 ////     size?: number;
 //// }|]
 ////
 ////
-//// var x = [|<[|{| "declarationRangeIndex" : 2 |}MyClass|] name='hello'></[|{| "declarationRangeIndex" : 2 |}MyClass|]>|];
+//// var x = [|<[|{| "contextRangeIndex" : 2 |}MyClass|] name='hello'></[|{| "contextRangeIndex" : 2 |}MyClass|]>|];
 
 verify.singleReferenceGroup("class MyClass", "MyClass");

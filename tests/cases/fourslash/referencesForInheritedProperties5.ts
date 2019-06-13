@@ -1,12 +1,12 @@
 ﻿/// <reference path='fourslash.ts'/>
 
 //// interface interface1 extends interface1 {
-////    [|[|{| "isDefinition": true, "declarationRangeIndex": 0 |}doStuff|](): void;|]
-////    [|[|{| "isDefinition": true, "declarationRangeIndex": 2 |}propName|]: string;|]
+////    [|[|{| "isDefinition": true, "contextRangeIndex": 0 |}doStuff|](): void;|]
+////    [|[|{| "isDefinition": true, "contextRangeIndex": 2 |}propName|]: string;|]
 //// }
 //// interface interface2 extends interface1 {
-////    [|[|{| "isDefinition": true, "declarationRangeIndex": 4 |}doStuff|](): void;|]
-////    [|[|{| "isDefinition": true, "declarationRangeIndex": 6 |}propName|]: string;|]
+////    [|[|{| "isDefinition": true, "contextRangeIndex": 4 |}doStuff|](): void;|]
+////    [|[|{| "isDefinition": true, "contextRangeIndex": 6 |}propName|]: string;|]
 //// }
 ////
 //// var v: interface1;

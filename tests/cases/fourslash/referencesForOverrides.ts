@@ -3,59 +3,59 @@
 ////module FindRef3 {
 ////	module SimpleClassTest {
 ////		export class Foo {
-////			[|public [|{| "isWriteAccess": true, "isDefinition": true, "declarationRangeIndex": 0 |}foo|](): void {
+////			[|public [|{| "isWriteAccess": true, "isDefinition": true, "contextRangeIndex": 0 |}foo|](): void {
 ////			}|]
 ////		}
 ////		export class Bar extends Foo {
-////			[|public [|{| "isWriteAccess": true, "isDefinition": true, "declarationRangeIndex": 2 |}foo|](): void {
+////			[|public [|{| "isWriteAccess": true, "isDefinition": true, "contextRangeIndex": 2 |}foo|](): void {
 ////			}|]
 ////		}
 ////	}
 ////
 ////	module SimpleInterfaceTest {
 ////		export interface IFoo {
-////			[|[|{| "isDefinition": true, "declarationRangeIndex": 4 |}ifoo|](): void;|]
+////			[|[|{| "isDefinition": true, "contextRangeIndex": 4 |}ifoo|](): void;|]
 ////		}
 ////		export interface IBar extends IFoo {
-////			[|[|{| "isDefinition": true, "declarationRangeIndex": 6 |}ifoo|](): void;|]
+////			[|[|{| "isDefinition": true, "contextRangeIndex": 6 |}ifoo|](): void;|]
 ////		}
 ////	}
 ////
 ////	module SimpleClassInterfaceTest {
 ////		export interface IFoo {
-////			[|[|{| "isDefinition": true, "declarationRangeIndex": 8 |}icfoo|](): void;|]
+////			[|[|{| "isDefinition": true, "contextRangeIndex": 8 |}icfoo|](): void;|]
 ////		}
 ////		export class Bar implements IFoo {
-////			[|public [|{| "isWriteAccess": true, "isDefinition": true, "declarationRangeIndex": 10 |}icfoo|](): void {
+////			[|public [|{| "isWriteAccess": true, "isDefinition": true, "contextRangeIndex": 10 |}icfoo|](): void {
 ////			}|]
 ////		}
 ////	}
 ////
 ////	module Test {
 ////		export interface IBase {
-////			[|[|{| "isDefinition": true, "declarationRangeIndex": 12 |}field|]: string;|]
-////			[|[|{| "isDefinition": true, "declarationRangeIndex": 14 |}method|](): void;|]
+////			[|[|{| "isDefinition": true, "contextRangeIndex": 12 |}field|]: string;|]
+////			[|[|{| "isDefinition": true, "contextRangeIndex": 14 |}method|](): void;|]
 ////		}
 ////
 ////		export interface IBlah extends IBase {
-////			[|[|{| "isDefinition": true, "declarationRangeIndex": 16 |}field|]: string;|]
+////			[|[|{| "isDefinition": true, "contextRangeIndex": 16 |}field|]: string;|]
 ////		}
 ////
 ////		export interface IBlah2 extends IBlah {
-////			[|[|{| "isDefinition": true, "declarationRangeIndex": 18 |}field|]: string;|]
+////			[|[|{| "isDefinition": true, "contextRangeIndex": 18 |}field|]: string;|]
 ////		}
 ////
 ////		export interface IDerived extends IBlah2 {
-////			[|[|{| "isDefinition": true, "declarationRangeIndex": 20 |}method|](): void;|]
+////			[|[|{| "isDefinition": true, "contextRangeIndex": 20 |}method|](): void;|]
 ////		}
 ////
 ////		export class Bar implements IDerived {
-////			[|public [|{| "isDefinition": true, "declarationRangeIndex": 22 |}field|]: string;|]
-////			[|public [|{| "isWriteAccess": true, "isDefinition": true, "declarationRangeIndex": 24 |}method|](): void { }|]
+////			[|public [|{| "isDefinition": true, "contextRangeIndex": 22 |}field|]: string;|]
+////			[|public [|{| "isWriteAccess": true, "isDefinition": true, "contextRangeIndex": 24 |}method|](): void { }|]
 ////		}
 ////
 ////		export class BarBlah extends Bar {
-////			[|public [|{| "isDefinition": true, "declarationRangeIndex": 26 |}field|]: string;|]
+////			[|public [|{| "isDefinition": true, "contextRangeIndex": 26 |}field|]: string;|]
 ////		}
 ////	}
 ////

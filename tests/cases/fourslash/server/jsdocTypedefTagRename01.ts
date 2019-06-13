@@ -4,7 +4,7 @@
 // @Filename: jsDocTypedef_form1.js
 ////
 //// /** @typedef {(string | number)} */
-//// [|var [|{| "declarationRangeIndex": 0 |}NumberLike|];|]
+//// [|var [|{| "contextRangeIndex": 0 |}NumberLike|];|]
 ////
 //// [|NumberLike|] = 10;
 ////

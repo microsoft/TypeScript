@@ -4,7 +4,7 @@
 ////     propC: number;
 //// }
 //// interface D extends C {
-////     [|[|{| "declarationRangeIndex": 0 |}propD|]: string;|]
+////     [|[|{| "contextRangeIndex": 0 |}propD|]: string;|]
 //// }
 //// var d: D;
 //// d.[|propD|];

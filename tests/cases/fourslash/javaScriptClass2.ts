@@ -6,8 +6,8 @@
 // @Filename: Foo.js
 //// class Foo {
 ////    constructor() {
-////        [|this.[|{| "declarationRangeIndex": 0 |}union|] = 'foo';|]
-////        [|this.[|{| "declarationRangeIndex": 2 |}union|] = 100;|]
+////        [|this.[|{| "contextRangeIndex": 0 |}union|] = 'foo';|]
+////        [|this.[|{| "contextRangeIndex": 2 |}union|] = 100;|]
 ////    }
 ////    method() { return this.[|union|]; }
 //// }

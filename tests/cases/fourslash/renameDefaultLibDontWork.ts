@@ -4,7 +4,7 @@
 // "test" is a comment on the default library.
 
 // @Filename: file1.ts
-//// [|var [|{| "declarationRangeIndex": 0 |}test|] = "foo";|]
+//// [|var [|{| "contextRangeIndex": 0 |}test|] = "foo";|]
 //// console.log([|test|]);
 
 const [r0Def, ...ranges] = test.ranges();

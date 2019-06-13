@@ -1,10 +1,10 @@
 /// <reference path="fourslash.ts" />
 
 // @Filename: a.ts
-////[|export default function /*def*/[|{| "isWriteAccess": true, "isDefinition": true, "declarationRangeIndex": 0 |}f|]() {}|]
+////[|export default function /*def*/[|{| "isWriteAccess": true, "isDefinition": true, "contextRangeIndex": 0 |}f|]() {}|]
 
 // @Filename: b.ts
-////[|import [|{| "isWriteAccess": true, "isDefinition": true, "declarationRangeIndex": 2 |}g|] from "./a";|]
+////[|import [|{| "isWriteAccess": true, "isDefinition": true, "contextRangeIndex": 2 |}g|] from "./a";|]
 ////[|/*ref*/g|]();
 
 // @Filename: c.ts

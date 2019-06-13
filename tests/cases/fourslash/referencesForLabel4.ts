@@ -2,9 +2,9 @@
 
 // References to a label outside function bounderies
 
-////[|[|{| "declarationRangeIndex": 0 |}label|]: function foo(label) {
+////[|[|{| "contextRangeIndex": 0 |}label|]: function foo(label) {
 ////    while (true) {
-////        [|break [|{| "declarationRangeIndex": 2 |}label|];|]
+////        [|break [|{| "contextRangeIndex": 2 |}label|];|]
 ////    }
 ////}|]
 

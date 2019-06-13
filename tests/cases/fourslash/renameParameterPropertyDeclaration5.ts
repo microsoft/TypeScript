@@ -1,7 +1,7 @@
 /// <reference path='fourslash.ts'/>
 
 //// class Foo {
-////     constructor([|protected [ [|{| "declarationRangeIndex": 0 |}protectedParam|] ]|]) {
+////     constructor([|protected [ [|{| "contextRangeIndex": 0 |}protectedParam|] ]|]) {
 ////         let myProtectedParam = [|protectedParam|];
 ////     }
 //// }

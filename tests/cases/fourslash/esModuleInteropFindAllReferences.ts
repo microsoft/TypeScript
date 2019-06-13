@@ -4,7 +4,7 @@
 
 // @Filename: /abc.d.ts
 ////declare module "a" {
-////    [|export const [|{| "isWriteAccess": true, "isDefinition": true, "declarationRangeIndex": 0 |}x|]: number;|]
+////    [|export const [|{| "isWriteAccess": true, "isDefinition": true, "contextRangeIndex": 0 |}x|]: number;|]
 ////}
 
 // @Filename: /b.ts

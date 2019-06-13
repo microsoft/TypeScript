@@ -1,9 +1,9 @@
 /// <reference path='fourslash.ts'/>
 
-//// [|var [|{| "isWriteAccess": true, "isDefinition": true, "declarationRangeIndex": 0 |}name|] = "Foo";|]
+//// [|var [|{| "isWriteAccess": true, "isDefinition": true, "contextRangeIndex": 0 |}name|] = "Foo";|]
 ////
 //// var obj = { [|{| "isWriteAccess": true, "isDefinition": true |}name|] };
-//// var obj1 = { [|[|{| "isWriteAccess": true, "isDefinition": true, "declarationRangeIndex": 3 |}name|]:[|name|]|] };
+//// var obj1 = { [|[|{| "isWriteAccess": true, "isDefinition": true, "contextRangeIndex": 3 |}name|]:[|name|]|] };
 //// obj.[|name|];
 
 const [r0Def, r0, r1, r2Def, r2, r3, r4] = test.ranges();

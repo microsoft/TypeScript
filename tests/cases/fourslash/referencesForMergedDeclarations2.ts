@@ -6,7 +6,7 @@
 ////
 ////function ATest() { }
 ////
-////[|import [|{| "isWriteAccess": true, "isDefinition": true, "declarationRangeIndex": 0 |}alias|] = ATest;|] // definition
+////[|import [|{| "isWriteAccess": true, "isDefinition": true, "contextRangeIndex": 0 |}alias|] = ATest;|] // definition
 ////
 ////var a: [|alias|].Bar; // namespace
 ////[|alias|].call(this); // value

@@ -5,7 +5,7 @@
 ////export = SomeModule;
 
 // @Filename: b.ts
-////[|import [|{| "declarationRangeIndex": 0 |}M|] = require("./a");|]
+////[|import [|{| "contextRangeIndex": 0 |}M|] = require("./a");|]
 ////import C = [|M|].SomeClass;
 
 verify.rangesWithSameTextAreRenameLocations("M");

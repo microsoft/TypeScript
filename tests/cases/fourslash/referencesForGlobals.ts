@@ -3,7 +3,7 @@
 // Global variable reference.
 
 // @Filename: referencesForGlobals_1.ts
-////[|var [|{| "isWriteAccess": true, "isDefinition": true, "declarationRangeIndex": 0 |}global|] = 2;|]
+////[|var [|{| "isWriteAccess": true, "isDefinition": true, "contextRangeIndex": 0 |}global|] = 2;|]
 ////
 ////class foo {
 ////    constructor (public global) { }

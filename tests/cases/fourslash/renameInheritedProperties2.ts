@@ -1,7 +1,7 @@
 ﻿/// <reference path='fourslash.ts'/>
 
 //// class class1 extends class1 {
-////    [|[|{| "declarationRangeIndex": 0 |}doStuff|]() { }|]
+////    [|[|{| "contextRangeIndex": 0 |}doStuff|]() { }|]
 //// }
 ////
 //// var v: class1;

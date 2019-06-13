@@ -1,7 +1,7 @@
 /// <reference path='fourslash.ts' />
 
 // @Filename: /node_modules/foo/index.d.ts
-////[|export type [|{| "isWriteAccess": true, "isDefinition": true, "declarationRangeIndex": 0 |}T|] = number;|]
+////[|export type [|{| "isWriteAccess": true, "isDefinition": true, "contextRangeIndex": 0 |}T|] = number;|]
 
 // @Filename: /a.ts
 ////import * as foo from "foo";

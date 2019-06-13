@@ -2,7 +2,7 @@
 
 // References to unused label
 
-////[|[|{| "declarationRangeIndex": 0 |}label|]: while (true) {
+////[|[|{| "contextRangeIndex": 0 |}label|]: while (true) {
 ////    var label = "label";
 ////}|]
 

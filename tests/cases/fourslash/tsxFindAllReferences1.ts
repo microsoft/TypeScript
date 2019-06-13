@@ -4,14 +4,14 @@
 //// declare module JSX {
 ////     interface Element { }
 ////     interface IntrinsicElements {
-////         [|[|{| "isWriteAccess": true, "isDefinition": true, "declarationRangeIndex": 0 |}div|]: {
+////         [|[|{| "isWriteAccess": true, "isDefinition": true, "contextRangeIndex": 0 |}div|]: {
 ////             name?: string;
 ////             isOpen?: boolean;
 ////         };|]
 ////         span: { n: string; };
 ////     }
 //// }
-//// var x = [|<[|{| "declarationRangeIndex": 2 |}div|] />|];
+//// var x = [|<[|{| "contextRangeIndex": 2 |}div|] />|];
 
 verify.singleReferenceGroup(
     `(property) JSX.IntrinsicElements.div: {

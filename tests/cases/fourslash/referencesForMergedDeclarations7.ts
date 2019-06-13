@@ -2,9 +2,9 @@
 
 ////interface Foo { }
 ////module Foo {
-////    [|export interface [|{| "isWriteAccess": true, "isDefinition": true, "declarationRangeIndex": 0 |}Bar|] { }|]
-////    [|export module [|{| "isWriteAccess": true, "isDefinition": true, "declarationRangeIndex": 2 |}Bar|] { export interface Baz { } }|]
-////    [|export function [|{| "isWriteAccess": true, "isDefinition": true, "declarationRangeIndex": 4 |}Bar|]() { }|]
+////    [|export interface [|{| "isWriteAccess": true, "isDefinition": true, "contextRangeIndex": 0 |}Bar|] { }|]
+////    [|export module [|{| "isWriteAccess": true, "isDefinition": true, "contextRangeIndex": 2 |}Bar|] { export interface Baz { } }|]
+////    [|export function [|{| "isWriteAccess": true, "isDefinition": true, "contextRangeIndex": 4 |}Bar|]() { }|]
 ////}
 ////
 ////// module, value and type

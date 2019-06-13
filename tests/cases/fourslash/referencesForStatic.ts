@@ -6,7 +6,7 @@
 ////var n = 43;
 ////
 ////class foo {
-////    [|static [|{| "isWriteAccess": true, "isDefinition": true, "declarationRangeIndex": 0 |}n|] = '';|]
+////    [|static [|{| "isWriteAccess": true, "isDefinition": true, "contextRangeIndex": 0 |}n|] = '';|]
 ////
 ////    public bar() {
 ////        foo.[|{| "isWriteAccess": true |}n|] = "'";

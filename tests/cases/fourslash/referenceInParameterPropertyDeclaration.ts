@@ -2,9 +2,9 @@
 
 // @Filename: file1.ts
 //// class Foo {
-////     constructor([|private [|{| "isWriteAccess": true, "isDefinition": true, "type": "number", "declarationRangeIndex": 0 |}privateParam|]: number|],
-////         [|public [|{| "isWriteAccess": true, "isDefinition": true, "type": "string", "declarationRangeIndex": 2 |}publicParam|]: string|],
-////         [|protected [|{| "isWriteAccess": true, "isDefinition": true, "type": "boolean", "declarationRangeIndex": 4 |}protectedParam|]: boolean|]) {
+////     constructor([|private [|{| "isWriteAccess": true, "isDefinition": true, "type": "number", "contextRangeIndex": 0 |}privateParam|]: number|],
+////         [|public [|{| "isWriteAccess": true, "isDefinition": true, "type": "string", "contextRangeIndex": 2 |}publicParam|]: string|],
+////         [|protected [|{| "isWriteAccess": true, "isDefinition": true, "type": "boolean", "contextRangeIndex": 4 |}protectedParam|]: boolean|]) {
 ////
 ////         let localPrivate = [|privateParam|];
 ////         this.[|{| "isWriteAccess": true |}privateParam|] += 10;

@@ -5,7 +5,7 @@
 
 /////**
 //// * Doc comment
-//// * [|@typedef /*def*/[|{| "isWriteAccess": true, "isDefinition": true, "declarationRangeIndex": 0 |}Product|]
+//// * [|@typedef /*def*/[|{| "isWriteAccess": true, "isDefinition": true, "contextRangeIndex": 0 |}Product|]
 //// * @property {string} title
 //// |]*/
 

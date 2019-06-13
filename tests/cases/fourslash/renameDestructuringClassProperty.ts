@@ -1,17 +1,17 @@
 /// <reference path='fourslash.ts' />
 
 ////class A {
-////    [|[|{| "declarationRangeIndex": 0 |}foo|]: string;|]
+////    [|[|{| "contextRangeIndex": 0 |}foo|]: string;|]
 ////}
 ////class B {
 ////    syntax1(a: A): void {
-////        [|let { [|{| "declarationRangeIndex": 2 |}foo|] } = a;|]
+////        [|let { [|{| "contextRangeIndex": 2 |}foo|] } = a;|]
 ////    }
 ////    syntax2(a: A): void {
-////        [|let { [|{| "declarationRangeIndex": 4 |}foo|]: foo } = a;|]
+////        [|let { [|{| "contextRangeIndex": 4 |}foo|]: foo } = a;|]
 ////    }
 ////    syntax11(a: A): void {
-////        [|let { [|{| "declarationRangeIndex": 6 |}foo|] } = a;|]
+////        [|let { [|{| "contextRangeIndex": 6 |}foo|] } = a;|]
 ////        [|foo|] = "newString";
 ////    }
 ////}

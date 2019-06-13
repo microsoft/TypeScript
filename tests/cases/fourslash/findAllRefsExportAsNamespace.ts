@@ -3,11 +3,11 @@
 // `export as namespace` results in global search.
 
 // @Filename: /node_modules/a/index.d.ts
-////[|export function [|{| "isWriteAccess": true, "isDefinition": true, "declarationRangeIndex": 0 |}f|](): void;|]
+////[|export function [|{| "isWriteAccess": true, "isDefinition": true, "contextRangeIndex": 0 |}f|](): void;|]
 ////export as namespace A;
 
 // @Filename: /b.ts
-////[|import { [|{| "isWriteAccess": true, "isDefinition": true, "declarationRangeIndex": 2 |}f|] } from "a";|]
+////[|import { [|{| "isWriteAccess": true, "isDefinition": true, "contextRangeIndex": 2 |}f|] } from "a";|]
 
 // @Filename: /c.ts
 ////A.[|f|]();

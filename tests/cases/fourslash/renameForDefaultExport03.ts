@@ -1,10 +1,10 @@
 /// <reference path='fourslash.ts'/>
 
-////[|function /*1*/[|{| "declarationRangeIndex": 0 |}f|]() {
+////[|function /*1*/[|{| "contextRangeIndex": 0 |}f|]() {
 ////    return 100;
 ////}|]
 ////
-////[|export default /*2*/[|{| "declarationRangeIndex": 2 |}f|];|]
+////[|export default /*2*/[|{| "contextRangeIndex": 2 |}f|];|]
 ////
 ////var x: typeof /*3*/[|f|];
 ////
@@ -13,7 +13,7 @@
 /////**
 //// *  Commenting [|{| "inComment": true |}f|]
 //// */
-////[|namespace /*5*/[|{| "declarationRangeIndex": 7 |}f|] {
+////[|namespace /*5*/[|{| "contextRangeIndex": 7 |}f|] {
 ////    var local = 100;
 ////}|]
 

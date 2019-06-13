@@ -2,13 +2,13 @@
 
 
 ////class A {
-////    [|[|{| "declarationRangeIndex": 0 |}constructor|](s: string) {}|]
+////    [|[|{| "contextRangeIndex": 0 |}constructor|](s: string) {}|]
 ////}
 ////class B extends A {
-////    [|[|{| "declarationRangeIndex": 2 |}constructor|]() { [|super|](""); }|]
+////    [|[|{| "contextRangeIndex": 2 |}constructor|]() { [|super|](""); }|]
 ////}
 ////class C extends B {
-////    [|[|{| "declarationRangeIndex": 5 |}constructor|]() {
+////    [|[|{| "contextRangeIndex": 5 |}constructor|]() {
 ////        [|super|]();
 ////    }|]
 ////}

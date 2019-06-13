@@ -1,6 +1,6 @@
 /// <reference path='fourslash.ts'/>
 
-////[|export default function [|{| "isWriteAccess": true, "isDefinition": true, "declarationRangeIndex": 0 |}DefaultExportedFunction|]() {
+////[|export default function [|{| "isWriteAccess": true, "isDefinition": true, "contextRangeIndex": 0 |}DefaultExportedFunction|]() {
 ////    return [|DefaultExportedFunction|];
 ////}|]
 ////
@@ -8,7 +8,7 @@
 ////
 ////var y = [|DefaultExportedFunction|]();
 ////
-////[|namespace [|{| "isWriteAccess": true, "isDefinition": true, "declarationRangeIndex": 5 |}DefaultExportedFunction|] {
+////[|namespace [|{| "isWriteAccess": true, "isDefinition": true, "contextRangeIndex": 5 |}DefaultExportedFunction|] {
 ////}|]
 
 

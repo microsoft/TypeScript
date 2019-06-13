@@ -3,14 +3,14 @@
 // @allowSyntheticDefaultImports: true
 
 // @Filename: /export.ts
-////[|const [|{| "isWriteAccess": true, "isDefinition": true, "declarationRangeIndex": 0 |}foo|] = 1;|]
-////[|export = [|{| "declarationRangeIndex": 2 |}foo|];|]
+////[|const [|{| "isWriteAccess": true, "isDefinition": true, "contextRangeIndex": 0 |}foo|] = 1;|]
+////[|export = [|{| "contextRangeIndex": 2 |}foo|];|]
 
 // @Filename: /re-export.ts
-////[|export { [|{| "isWriteAccess": true, "isDefinition": true, "declarationRangeIndex": 4 |}default|] } from "./export";|]
+////[|export { [|{| "isWriteAccess": true, "isDefinition": true, "contextRangeIndex": 4 |}default|] } from "./export";|]
 
 // @Filename: /re-export-dep.ts
-////[|import [|{| "isWriteAccess": true, "isDefinition": true, "declarationRangeIndex": 6 |}fooDefault|] from "./re-export";|]
+////[|import [|{| "isWriteAccess": true, "isDefinition": true, "contextRangeIndex": 6 |}fooDefault|] from "./re-export";|]
 
 verify.noErrors();
 

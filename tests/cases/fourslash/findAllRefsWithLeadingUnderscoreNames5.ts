@@ -3,7 +3,7 @@
 ////class Foo {
 ////    public _bar;
 ////    public __bar;
-////    [|public [|{| "isDefinition": true, "declarationRangeIndex": 0 |}___bar|];|]
+////    [|public [|{| "isDefinition": true, "contextRangeIndex": 0 |}___bar|];|]
 ////    public ____bar;
 ////}
 ////

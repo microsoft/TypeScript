@@ -2,7 +2,7 @@
 
 // @Filename: a.ts
 ////interface A {
-////    [|[|{| "isDefinition": true, "declarationRangeIndex": 0 |}foo|]: string;|]
+////    [|[|{| "isDefinition": true, "contextRangeIndex": 0 |}foo|]: string;|]
 ////}
 
 // @Filename: b.ts

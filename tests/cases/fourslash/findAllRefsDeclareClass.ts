@@ -1,6 +1,6 @@
 /// <reference path="fourslash.ts" />
 
-////[|declare class [|{| "isWriteAccess": true, "isDefinition": true, "declarationRangeIndex": 0 |}C|] {
+////[|declare class [|{| "isWriteAccess": true, "isDefinition": true, "contextRangeIndex": 0 |}C|] {
 ////    static m(): void;
 ////}|]
 

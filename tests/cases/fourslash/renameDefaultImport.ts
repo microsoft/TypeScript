@@ -1,13 +1,13 @@
 /// <reference path='fourslash.ts' />
 
 // @Filename: B.ts
-////[|export default class /*1*/[|{| "isWriteAccess": true, "isDefinition": true, "declarationRangeIndex": 0 |}B|] {
+////[|export default class /*1*/[|{| "isWriteAccess": true, "isDefinition": true, "contextRangeIndex": 0 |}B|] {
 ////    test() {
 ////    }
 ////}|]
 
 // @Filename: A.ts
-////[|import [|{| "isWriteAccess": true, "isDefinition": true, "declarationRangeIndex": 2 |}B|] from "./B";|]
+////[|import [|{| "isWriteAccess": true, "isDefinition": true, "contextRangeIndex": 2 |}B|] from "./B";|]
 ////let b = new [|B|]();
 ////b.test();
 

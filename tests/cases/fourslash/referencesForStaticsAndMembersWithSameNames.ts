@@ -3,12 +3,12 @@
 ////module FindRef4 {
 ////	module MixedStaticsClassTest {
 ////		export class Foo {
-////			[|[|{| "isDefinition": true, "declarationRangeIndex": 0 |}bar|]: Foo;|]
-////			[|static [|{| "isDefinition": true, "declarationRangeIndex": 2 |}bar|]: Foo;|]
+////			[|[|{| "isDefinition": true, "contextRangeIndex": 0 |}bar|]: Foo;|]
+////			[|static [|{| "isDefinition": true, "contextRangeIndex": 2 |}bar|]: Foo;|]
 ////
-////			[|public [|{| "isWriteAccess": true, "isDefinition": true, "declarationRangeIndex": 4 |}foo|](): void {
+////			[|public [|{| "isWriteAccess": true, "isDefinition": true, "contextRangeIndex": 4 |}foo|](): void {
 ////			}|]
-////			[|public static [|{| "isWriteAccess": true, "isDefinition": true, "declarationRangeIndex": 6 |}foo|](): void {
+////			[|public static [|{| "isWriteAccess": true, "isDefinition": true, "contextRangeIndex": 6 |}foo|](): void {
 ////			}|]
 ////		}
 ////	}

@@ -3,7 +3,7 @@
 ////function f() {
 ////
 ////}
-////var x = [|function [|{| "declarationRangeIndex": 0 |}f|](g: any, h: any) {
+////var x = [|function [|{| "contextRangeIndex": 0 |}f|](g: any, h: any) {
 ////
 ////    let helper = function f(): any { f(); }
 ////

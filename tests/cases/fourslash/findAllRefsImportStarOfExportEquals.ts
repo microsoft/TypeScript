@@ -2,21 +2,21 @@
 
 // @allowSyntheticDefaultimports: true
 // @Filename: /node_modules/a/index.d.ts
-////[|declare function [|{| "isWriteAccess": true, "isDefinition": true, "declarationRangeIndex": 0 |}a|](): void;|]
-////[|declare namespace [|{| "isWriteAccess": true, "isDefinition": true, "declarationRangeIndex": 2 |}a|] {
+////[|declare function [|{| "isWriteAccess": true, "isDefinition": true, "contextRangeIndex": 0 |}a|](): void;|]
+////[|declare namespace [|{| "isWriteAccess": true, "isDefinition": true, "contextRangeIndex": 2 |}a|] {
 ////    export const x: number;
 ////}|]
-////[|export = [|{| "declarationRangeIndex": 4 |}a|];|]
+////[|export = [|{| "contextRangeIndex": 4 |}a|];|]
 
 // Import with different name and we find local refs
 // @Filename: /b.ts
-////[|import [|{| "isWriteAccess": true, "isDefinition": true, "declarationRangeIndex": 6 |}b|] from "a";|]
+////[|import [|{| "isWriteAccess": true, "isDefinition": true, "contextRangeIndex": 6 |}b|] from "a";|]
 ////[|b|]();
 ////[|b|].x;
 
 // Import with same name and we find all refs
 // @Filename: /c.ts
-////[|import [|{| "isWriteAccess": true, "isDefinition": true, "declarationRangeIndex": 10 |}a|] from "a";|]
+////[|import [|{| "isWriteAccess": true, "isDefinition": true, "contextRangeIndex": 10 |}a|] from "a";|]
 ////[|a|]();
 ////[|a|].x;
 

@@ -78,10 +78,10 @@ namespace ts.projectSystem {
                     arguments: { file: myConstFile, ...myConstStart }
                 }).response as protocol.RenameResponseBody;
 
-                const locationOfMyConstInLib = protocolDeclarationFileSpanFromSubstring({
+                const locationOfMyConstInLib = protocolFileSpanWithContextFromSubstring({
                     file: containerLib[1],
                     text: "myConst",
-                    declarationText: "export const myConst = 30;"
+                    contextText: "export const myConst = 30;"
                 });
                 const { file: _, ...renameTextOfMyConstInLib } = locationOfMyConstInLib;
                 assert.deepEqual(response.locs, [
@@ -191,8 +191,8 @@ fn5();
                             file: dtsPath,
                             start: { line: fn, offset: definition.start.offset + declareSpaceLength },
                             end: { line: fn, offset: definition.end.offset + declareSpaceLength },
-                            declarationStart: { line: fn, offset: 1 },
-                            declarationEnd: { line: fn, offset: 37 }
+                            contextStart: { line: fn, offset: 1 },
+                            contextEnd: { line: fn, offset: 37 }
                         }],
                         textSpan
                     },
@@ -204,20 +204,20 @@ fn5();
                 };
             }
 
-            function declarationSpan(fn: number): protocol.DeclarationTextSpan {
+            function declarationSpan(fn: number): protocol.TextSpanWithContext {
                 return {
                     start: { line: fn, offset: 17 },
                     end: { line: fn, offset: 20 },
-                    declarationStart: { line: fn, offset: 1 },
-                    declarationEnd: { line: fn, offset: 26 }
+                    contextStart: { line: fn, offset: 1 },
+                    contextEnd: { line: fn, offset: 26 }
                 };
             }
-            function importSpan(fn: number): protocol.DeclarationTextSpan {
+            function importSpan(fn: number): protocol.TextSpanWithContext {
                 return {
                     start: { line: fn + 1, offset: 5 },
                     end: { line: fn + 1, offset: 8 },
-                    declarationStart: { line: 1, offset: 1 },
-                    declarationEnd: { line: 7, offset: 27 }
+                    contextStart: { line: 1, offset: 1 },
+                    contextEnd: { line: 7, offset: 27 }
                 };
             }
             function usageSpan(fn: number): protocol.TextSpan {
@@ -226,7 +226,7 @@ fn5();
 
             function renameFromDependencyTs(fn: number): SessionAction<protocol.RenameRequest, protocol.RenameResponseBody> {
                 const defSpan = declarationSpan(fn);
-                const { declarationStart: _, declarationEnd: _1, ...triggerSpan } = defSpan;
+                const { contextStart: _, contextEnd: _1, ...triggerSpan } = defSpan;
                 return {
                     reqName: "rename",
                     request: {

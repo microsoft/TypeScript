@@ -7,7 +7,7 @@
 ////    export var x;
 ////}
 ////
-////[|import [|{| "isWriteAccess": true, "isDefinition": true, "declarationRangeIndex": 0 |}globalAlias|] = globalModule;|]
+////[|import [|{| "isWriteAccess": true, "isDefinition": true, "contextRangeIndex": 0 |}globalAlias|] = globalModule;|]
 
 // @Filename: referencesForGlobals_2.ts
 ////var m = [|globalAlias|];

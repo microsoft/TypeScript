@@ -1,18 +1,18 @@
 /// <reference path="fourslash.ts" />
 
 // @Filename: /a.ts
-////[|export const [|{| "isWriteAccess": true, "isDefinition": true, "declarationRangeIndex": 0 |}x|] = 0;|]
+////[|export const [|{| "isWriteAccess": true, "isDefinition": true, "contextRangeIndex": 0 |}x|] = 0;|]
 
 // @Filename: /b.ts
-////[|export const [|{| "isWriteAccess": true, "isDefinition": true, "declarationRangeIndex": 2 |}x|] = 0;|]
+////[|export const [|{| "isWriteAccess": true, "isDefinition": true, "contextRangeIndex": 2 |}x|] = 0;|]
 
 //@Filename: /c.ts
-////[|export { [|{| "isWriteAccess": true, "isDefinition": true, "declarationRangeIndex": 4 |}x|] } from "./b";|]
-////[|import { [|{| "isWriteAccess": true, "isDefinition": true, "declarationRangeIndex": 6 |}x|] } from "./a";|]
+////[|export { [|{| "isWriteAccess": true, "isDefinition": true, "contextRangeIndex": 4 |}x|] } from "./b";|]
+////[|import { [|{| "isWriteAccess": true, "isDefinition": true, "contextRangeIndex": 6 |}x|] } from "./a";|]
 ////[|x|];
 
 // @Filename: /d.ts
-////[|import { [|{| "isWriteAccess": true, "isDefinition": true, "declarationRangeIndex": 9 |}x|] } from "./c";|]
+////[|import { [|{| "isWriteAccess": true, "isDefinition": true, "contextRangeIndex": 9 |}x|] } from "./c";|]
 
 verify.noErrors();
 const [aDef, a, bDef, b, cFromBDef, cFromB, cFromADef, cFromA, cUse, dDef, d] = test.ranges();

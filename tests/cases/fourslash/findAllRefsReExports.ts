@@ -1,22 +1,22 @@
 /// <reference path="fourslash.ts" />
 
 // @Filename: /a.ts
-////[|export function [|{| "isWriteAccess": true, "isDefinition": true, "declarationRangeIndex": 0 |}foo|](): void {}|]
+////[|export function [|{| "isWriteAccess": true, "isDefinition": true, "contextRangeIndex": 0 |}foo|](): void {}|]
 
 // @Filename: /b.ts
-////[|export { [|{| "declarationRangeIndex": 2 |}foo|] as [|{| "isWriteAccess": true, "isDefinition": true, "declarationRangeIndex": 2 |}bar|] } from "./a";|]
+////[|export { [|{| "contextRangeIndex": 2 |}foo|] as [|{| "isWriteAccess": true, "isDefinition": true, "contextRangeIndex": 2 |}bar|] } from "./a";|]
 
 // @Filename: /c.ts
-////[|export { [|{| "declarationRangeIndex": 5 |}foo|] as [|{| "isWriteAccess": true, "isDefinition": true, "declarationRangeIndex": 5 |}default|] } from "./a";|]
+////[|export { [|{| "contextRangeIndex": 5 |}foo|] as [|{| "isWriteAccess": true, "isDefinition": true, "contextRangeIndex": 5 |}default|] } from "./a";|]
 
 // @Filename: /d.ts
-////[|export { [|{| "isWriteAccess": true, "isDefinition": true, "declarationRangeIndex": 8 |}default|] } from "./c";|]
+////[|export { [|{| "isWriteAccess": true, "isDefinition": true, "contextRangeIndex": 8 |}default|] } from "./c";|]
 
 // @Filename: /e.ts
-////[|import { [|{| "isWriteAccess": true, "isDefinition": true, "declarationRangeIndex": 10 |}bar|] } from "./b";|]
-////[|import [|{| "isWriteAccess": true, "isDefinition": true, "declarationRangeIndex": 12 |}baz|] from "./c";|]
-////[|import { [|{| "declarationRangeIndex": 14 |}default|] as [|{| "isWriteAccess": true, "isDefinition": true, "declarationRangeIndex": 14 |}bang|] } from "./c";|]
-////[|import [|{| "isWriteAccess": true, "isDefinition": true, "declarationRangeIndex": 17 |}boom|] from "./d";|]
+////[|import { [|{| "isWriteAccess": true, "isDefinition": true, "contextRangeIndex": 10 |}bar|] } from "./b";|]
+////[|import [|{| "isWriteAccess": true, "isDefinition": true, "contextRangeIndex": 12 |}baz|] from "./c";|]
+////[|import { [|{| "contextRangeIndex": 14 |}default|] as [|{| "isWriteAccess": true, "isDefinition": true, "contextRangeIndex": 14 |}bang|] } from "./c";|]
+////[|import [|{| "isWriteAccess": true, "isDefinition": true, "contextRangeIndex": 17 |}boom|] from "./d";|]
 ////[|bar|](); [|baz|](); [|bang|](); [|boom|]();
 
 verify.noErrors();

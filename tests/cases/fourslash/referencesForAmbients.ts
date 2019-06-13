@@ -1,16 +1,16 @@
 /// <reference path='fourslash.ts'/>
 
-////[|declare module "[|{| "isWriteAccess": true, "isDefinition": true, "declarationRangeIndex": 0 |}foo|]" {
-////    [|var [|{| "isWriteAccess": true, "isDefinition": true, "declarationRangeIndex": 2 |}f|]: number;|]
+////[|declare module "[|{| "isWriteAccess": true, "isDefinition": true, "contextRangeIndex": 0 |}foo|]" {
+////    [|var [|{| "isWriteAccess": true, "isDefinition": true, "contextRangeIndex": 2 |}f|]: number;|]
 ////}|]
 ////
-////[|declare module "[|{| "isWriteAccess": true, "isDefinition": true, "declarationRangeIndex": 4 |}bar|]" {
-////    [|export import [|{| "isWriteAccess": true, "isDefinition": true, "declarationRangeIndex": 6 |}foo|] = require("[|{| "declarationRangeIndex": 6 |}foo|]");|]
+////[|declare module "[|{| "isWriteAccess": true, "isDefinition": true, "contextRangeIndex": 4 |}bar|]" {
+////    [|export import [|{| "isWriteAccess": true, "isDefinition": true, "contextRangeIndex": 6 |}foo|] = require("[|{| "contextRangeIndex": 6 |}foo|]");|]
 ////    var f2: typeof [|foo|].[|f|];
 ////}|]
 ////
 ////declare module "baz" {
-////    [|import bar = require("[|{| "declarationRangeIndex": 11 |}bar|]");|]
+////    [|import bar = require("[|{| "contextRangeIndex": 11 |}bar|]");|]
 ////    var f2: typeof bar.[|foo|];
 ////}
 

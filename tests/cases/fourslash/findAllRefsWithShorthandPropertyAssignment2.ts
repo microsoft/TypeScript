@@ -1,8 +1,8 @@
 /// <reference path='fourslash.ts'/>
 
-//// [|var [|{| "isWriteAccess": true, "isDefinition": true, "declarationRangeIndex": 0 |}dx|] = "Foo";|]
+//// [|var [|{| "isWriteAccess": true, "isDefinition": true, "contextRangeIndex": 0 |}dx|] = "Foo";|]
 ////
-//// module M { [|export var [|{| "isDefinition": true, "declarationRangeIndex": 2 |}dx|];|] }
+//// module M { [|export var [|{| "isDefinition": true, "contextRangeIndex": 2 |}dx|];|] }
 //// module M {
 ////    var z = 100;
 ////    export var y = { [|{| "isWriteAccess": true, "isDefinition": true |}dx|], z };

@@ -1,19 +1,19 @@
 /// <reference path='fourslash.ts'/>
 
 ////interface I {
-////    [|[|{| "isDefinition": true, "declarationRangeIndex": 0 |}property1|]: number;|]
+////    [|[|{| "isDefinition": true, "contextRangeIndex": 0 |}property1|]: number;|]
 ////    property2: string;
 ////}
 ////
 ////var elems: I[];
-////for ([|let { [|{| "declarationRangeIndex": 2 |}property1|]: p } of elems|]) {
+////for ([|let { [|{| "contextRangeIndex": 2 |}property1|]: p } of elems|]) {
 ////}
-////for ([|let { [|{| "isWriteAccess": true, "isDefinition": true, "declarationRangeIndex": 4 |}property1|] } of elems|]) {
+////for ([|let { [|{| "isWriteAccess": true, "isDefinition": true, "contextRangeIndex": 4 |}property1|] } of elems|]) {
 ////}
-////for ([|var { [|{| "declarationRangeIndex": 6 |}property1|]: p1 } of elems|]) {
+////for ([|var { [|{| "contextRangeIndex": 6 |}property1|]: p1 } of elems|]) {
 ////}
 ////var p2;
-////for ([|{ [|{| "isWriteAccess": true, "isDefinition": true, "declarationRangeIndex": 8 |}property1|] : p2 } of elems|]) {
+////for ([|{ [|{| "isWriteAccess": true, "isDefinition": true, "contextRangeIndex": 8 |}property1|] : p2 } of elems|]) {
 ////}
 
 const [r0Def, r0, r1Def, r1, r2Def, r2, r3Def, r3, r4Def, r4] = test.ranges();

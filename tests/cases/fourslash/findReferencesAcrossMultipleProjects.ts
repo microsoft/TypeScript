@@ -1,7 +1,7 @@
 /// <reference path="fourslash.ts" />
 
 //@Filename: a.ts
-////[|var [|{| "isDefinition": true, "declarationRangeIndex": 0 |}x|]: number;|]
+////[|var [|{| "isDefinition": true, "contextRangeIndex": 0 |}x|]: number;|]
 
 //@Filename: b.ts
 /////// <reference path="a.ts" />

@@ -956,14 +956,14 @@ namespace FourSlash {
             const fullExpected = ts.map<FourSlashInterface.ReferenceGroup, ReferenceGroupJson>(parts, ({ definition, ranges }) => ({
                 definition: typeof definition === "string" ? definition : { ...definition, range: ts.createTextSpanFromRange(definition.range) },
                 references: ranges.map<ts.ReferenceEntry>(r => {
-                    const { isWriteAccess = false, isDefinition = false, isInString, declarationRangeIndex } = (r.marker && r.marker.data || {}) as { isWriteAccess?: boolean, isDefinition?: boolean, isInString?: true, declarationRangeIndex?: number };
+                    const { isWriteAccess = false, isDefinition = false, isInString, contextRangeIndex } = (r.marker && r.marker.data || {}) as { isWriteAccess?: boolean, isDefinition?: boolean, isInString?: true, contextRangeIndex?: number };
                     return {
                         fileName: r.fileName,
                         textSpan: ts.createTextSpanFromRange(r),
                         isWriteAccess,
                         isDefinition,
-                        ...(declarationRangeIndex !== undefined ?
-                            { declarationSpan: ts.createTextSpanFromRange(this.getRanges()[declarationRangeIndex]) } :
+                        ...(contextRangeIndex !== undefined ?
+                            { contextSpan: ts.createTextSpanFromRange(this.getRanges()[contextRangeIndex]) } :
                             undefined),
                         ...(isInString ? { isInString: true } : undefined),
                     };
@@ -1193,12 +1193,12 @@ Actual: ${stringify(fullActual)}`);
                     locations && ts.sort(locations, (r1, r2) => ts.compareStringsCaseSensitive(r1.fileName, r2.fileName) || r1.textSpan.start - r2.textSpan.start);
                 assert.deepEqual(sort(references), sort(ranges.map((rangeOrOptions): ts.RenameLocation => {
                     const { range, ...prefixSuffixText } = "range" in rangeOrOptions ? rangeOrOptions : { range: rangeOrOptions };
-                    const { declarationRangeIndex } = (range.marker && range.marker.data || {}) as { declarationRangeIndex?: number; };
+                    const { contextRangeIndex } = (range.marker && range.marker.data || {}) as { contextRangeIndex?: number; };
                     return {
                         fileName: range.fileName,
                         textSpan: ts.createTextSpanFromRange(range),
-                        ...(declarationRangeIndex !== undefined ?
-                            { declarationSpan: ts.createTextSpanFromRange(this.getRanges()[declarationRangeIndex]) } :
+                        ...(contextRangeIndex !== undefined ?
+                            { contextSpan: ts.createTextSpanFromRange(this.getRanges()[contextRangeIndex]) } :
                             undefined),
                         ...prefixSuffixText
                     };

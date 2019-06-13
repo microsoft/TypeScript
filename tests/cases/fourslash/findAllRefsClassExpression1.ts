@@ -3,10 +3,10 @@
 // @allowJs: true
 
 // @Filename: /a.js
-////module.exports = [|class [|{| "isWriteAccess": true, "isDefinition": true, "declarationRangeIndex": 0 |}A|] {}|];
+////module.exports = [|class [|{| "isWriteAccess": true, "isDefinition": true, "contextRangeIndex": 0 |}A|] {}|];
 
 // @Filename: /b.js
-////[|import [|{| "isWriteAccess": true, "isDefinition": true, "declarationRangeIndex": 2 |}A|] = require("./a");|]
+////[|import [|{| "isWriteAccess": true, "isDefinition": true, "contextRangeIndex": 2 |}A|] = require("./a");|]
 ////[|A|];
 
 const [r0Def, r0, r1Def, r1, r2] = test.ranges();

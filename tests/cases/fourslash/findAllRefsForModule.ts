@@ -6,10 +6,10 @@
 ////export const x = 0;
 
 // @Filename: /b.ts
-////[|import { x } from "[|{| "declarationRangeIndex": 0 |}./a|]";|]
+////[|import { x } from "[|{| "contextRangeIndex": 0 |}./a|]";|]
 
 // @Filename: /c/sub.js
-////[|const a = require("[|{| "declarationRangeIndex": 2 |}../a|]");|]
+////[|const a = require("[|{| "contextRangeIndex": 2 |}../a|]");|]
 
 // @Filename: /d.ts
 //// /// <reference path="[|./a.ts|]" />

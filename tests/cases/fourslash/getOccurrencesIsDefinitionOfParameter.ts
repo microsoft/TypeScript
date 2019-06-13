@@ -1,5 +1,5 @@
 /// <reference path='fourslash.ts' />
-////function f([|[|{| "isWriteAccess": true, "isDefinition": true, "declarationRangeIndex": 0 |}x|]: number|]) {
+////function f([|[|{| "isWriteAccess": true, "isDefinition": true, "contextRangeIndex": 0 |}x|]: number|]) {
 ////  return [|x|] + 1
 ////}
 

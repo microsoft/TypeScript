@@ -514,49 +514,49 @@ namespace ts.projectSystem {
         return { file: file.path, ...protocolTextSpanFromSubstring(file.content, text, options) };
     }
 
-    interface DeclarationFileSpanFromSubString {
+    interface FileSpanWithContextFromSubString {
         file: File;
         text: string;
         options?: SpanFromSubstringOptions;
-        declarationText?: string;
-        declarationOptions?: SpanFromSubstringOptions;
+        contextText?: string;
+        contextOptions?: SpanFromSubstringOptions;
     }
-    export function protocolDeclarationFileSpanFromSubstring({ declarationText, declarationOptions, ...rest }: DeclarationFileSpanFromSubString): protocol.DeclarationFileSpan {
+    export function protocolFileSpanWithContextFromSubstring({ contextText, contextOptions, ...rest }: FileSpanWithContextFromSubString): protocol.FileSpanWithContext {
         const result = protocolFileSpanFromSubstring(rest);
-        const declarationSpan = declarationText !== undefined ?
-            protocolFileSpanFromSubstring({ file: rest.file, text: declarationText, options: declarationOptions }) :
+        const contextSpan = contextText !== undefined ?
+            protocolFileSpanFromSubstring({ file: rest.file, text: contextText, options: contextOptions }) :
             undefined;
-        return declarationSpan ?
+        return contextSpan ?
             {
                 ...result,
-                declarationStart: declarationSpan.start,
-                declarationEnd: declarationSpan.end
+                contextStart: contextSpan.start,
+                contextEnd: contextSpan.end
             } :
             result;
     }
 
-    export interface ProtocolDeclarationTextSpanFromString {
+    export interface ProtocolTextSpanWithContextFromString {
         fileText: string;
         text: string;
         options?: SpanFromSubstringOptions;
-        declarationText?: string;
-        declarationOptions?: SpanFromSubstringOptions;
+        contextText?: string;
+        contextOptions?: SpanFromSubstringOptions;
     }
-    export function protocolDeclarationTextSpanFromSubstring({ fileText, text, options, declarationText, declarationOptions }: ProtocolDeclarationTextSpanFromString): protocol.DeclarationTextSpan {
+    export function protocolTextSpanWithContextFromSubstring({ fileText, text, options, contextText, contextOptions }: ProtocolTextSpanWithContextFromString): protocol.TextSpanWithContext {
         const span = textSpanFromSubstring(fileText, text, options);
         const toLocation = protocolToLocation(fileText);
-        const declarationSpan = declarationText !== undefined ? textSpanFromSubstring(fileText, declarationText, declarationOptions) : undefined;
+        const contextSpan = contextText !== undefined ? textSpanFromSubstring(fileText, contextText, contextOptions) : undefined;
         return {
             start: toLocation(span.start),
             end: toLocation(textSpanEnd(span)),
-            ...declarationSpan && {
-                declarationStart: toLocation(declarationSpan.start),
-                declarationEnd: toLocation(textSpanEnd(declarationSpan))
+            ...contextSpan && {
+                contextStart: toLocation(contextSpan.start),
+                contextEnd: toLocation(textSpanEnd(contextSpan))
             }
         };
     }
 
-    export interface ProtocolRenameSpanFromSubstring extends ProtocolDeclarationTextSpanFromString {
+    export interface ProtocolRenameSpanFromSubstring extends ProtocolTextSpanWithContextFromString {
         prefixSuffixText?: {
             readonly prefixText?: string;
             readonly suffixText?: string;
@@ -564,7 +564,7 @@ namespace ts.projectSystem {
     }
     export function protocolRenameSpanFromSubstring({ prefixSuffixText, ...rest }: ProtocolRenameSpanFromSubstring): protocol.RenameTextSpan {
         return {
-            ...protocolDeclarationTextSpanFromSubstring(rest),
+            ...protocolTextSpanWithContextFromSubstring(rest),
             ...prefixSuffixText
         };
     }

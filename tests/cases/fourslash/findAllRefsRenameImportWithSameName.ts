@@ -1,10 +1,10 @@
 /// <reference path="fourslash.ts" />
 
 // @Filename: /a.ts
-////[|export const [|{| "isWriteAccess": true, "isDefinition": true, "declarationRangeIndex": 0 |}x|] = 0;|]
+////[|export const [|{| "isWriteAccess": true, "isDefinition": true, "contextRangeIndex": 0 |}x|] = 0;|]
 
 //@Filename: /b.ts
-////[|import { [|{| "declarationRangeIndex": 2 |}x|] as [|{| "isWriteAccess": true, "isDefinition": true, "declarationRangeIndex": 2 |}x|] } from "./a";|]
+////[|import { [|{| "contextRangeIndex": 2 |}x|] as [|{| "isWriteAccess": true, "isDefinition": true, "contextRangeIndex": 2 |}x|] } from "./a";|]
 ////[|x|];
 
 verify.noErrors();

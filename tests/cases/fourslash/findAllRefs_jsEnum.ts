@@ -4,7 +4,7 @@
 
 // @Filename: /a.js
 /////** @enum {string} */
-////[|const [|{| "isWriteAccess": true, "isDefinition": true, "declarationRangeIndex": 0 |}E|] = { A: "" };|]
+////[|const [|{| "isWriteAccess": true, "isDefinition": true, "contextRangeIndex": 0 |}E|] = { A: "" };|]
 ////[|E|]["A"];
 /////** @type {[|E|]} */
 ////const e = [|E|].A;

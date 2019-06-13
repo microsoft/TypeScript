@@ -15,20 +15,20 @@
 ////     className?: string;
 //// }
 //// interface ButtonProps extends ClickableProps {
-////     [|[|{| "declarationRangeIndex": 0 |}onClick|](event?: React.MouseEvent<HTMLButtonElement>): void;|]
+////     [|[|{| "contextRangeIndex": 0 |}onClick|](event?: React.MouseEvent<HTMLButtonElement>): void;|]
 //// }
 //// interface LinkProps extends ClickableProps {
-////     [|[|{| "declarationRangeIndex": 2 |}goTo|]: string;|]
+////     [|[|{| "contextRangeIndex": 2 |}goTo|]: string;|]
 //// }
-//// [|declare function [|{| "declarationRangeIndex": 4 |}MainButton|](buttonProps: ButtonProps): JSX.Element;|]
-//// [|declare function [|{| "declarationRangeIndex": 6 |}MainButton|](linkProps: LinkProps): JSX.Element;|]
-//// [|declare function [|{| "declarationRangeIndex": 8 |}MainButton|](props: ButtonProps | LinkProps): JSX.Element;|]
-//// let opt = [|<[|{| "declarationRangeIndex": 10 |}MainButton|] />|];
-//// let opt = [|<[|{| "declarationRangeIndex": 12 |}MainButton|] children="chidlren" />|];
-//// let opt = [|<[|{| "declarationRangeIndex": 14 |}MainButton|] [|[|{| "declarationRangeIndex": 16 |}onClick|]={()=>{}}|] />|];
-//// let opt = [|<[|{| "declarationRangeIndex": 18 |}MainButton|] [|[|{| "declarationRangeIndex": 20 |}onClick|]={()=>{}}|] [|ignore-prop|] />|];
-//// let opt = [|<[|{| "declarationRangeIndex": 23 |}MainButton|] [|[|{| "declarationRangeIndex": 25 |}goTo|]="goTo"|] />|];
-//// let opt = [|<[|{| "declarationRangeIndex": 27 |}MainButton|] [|wrong|] />|];
+//// [|declare function [|{| "contextRangeIndex": 4 |}MainButton|](buttonProps: ButtonProps): JSX.Element;|]
+//// [|declare function [|{| "contextRangeIndex": 6 |}MainButton|](linkProps: LinkProps): JSX.Element;|]
+//// [|declare function [|{| "contextRangeIndex": 8 |}MainButton|](props: ButtonProps | LinkProps): JSX.Element;|]
+//// let opt = [|<[|{| "contextRangeIndex": 10 |}MainButton|] />|];
+//// let opt = [|<[|{| "contextRangeIndex": 12 |}MainButton|] children="chidlren" />|];
+//// let opt = [|<[|{| "contextRangeIndex": 14 |}MainButton|] [|[|{| "contextRangeIndex": 16 |}onClick|]={()=>{}}|] />|];
+//// let opt = [|<[|{| "contextRangeIndex": 18 |}MainButton|] [|[|{| "contextRangeIndex": 20 |}onClick|]={()=>{}}|] [|ignore-prop|] />|];
+//// let opt = [|<[|{| "contextRangeIndex": 23 |}MainButton|] [|[|{| "contextRangeIndex": 25 |}goTo|]="goTo"|] />|];
+//// let opt = [|<[|{| "contextRangeIndex": 27 |}MainButton|] [|wrong|] />|];
 
 verify.rangesWithSameTextAreRenameLocations(
     "onClick",

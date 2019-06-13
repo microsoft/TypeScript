@@ -1,10 +1,10 @@
 ﻿/// <reference path='fourslash.ts'/>
 
 ////class class1 extends class1 {
-////    [|[|{| "isWriteAccess": true, "isDefinition": true, "declarationRangeIndex": 0 |}doStuff|]() { }|]
+////    [|[|{| "isWriteAccess": true, "isDefinition": true, "contextRangeIndex": 0 |}doStuff|]() { }|]
 ////}
 ////class class2 extends class1 {
-////    [|[|{| "isWriteAccess": true, "isDefinition": true, "declarationRangeIndex": 2 |}doStuff|]() { }|]
+////    [|[|{| "isWriteAccess": true, "isDefinition": true, "contextRangeIndex": 2 |}doStuff|]() { }|]
 ////}
 ////
 ////var v: class2;

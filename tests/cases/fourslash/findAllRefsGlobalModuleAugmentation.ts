@@ -3,7 +3,7 @@
 // @Filename: /a.ts
 ////export {};
 ////declare global {
-////    [|function [|{| "isWriteAccess": true, "isDefinition": true, "declarationRangeIndex": 0 |}f|](): void;|]
+////    [|function [|{| "isWriteAccess": true, "isDefinition": true, "contextRangeIndex": 0 |}f|](): void;|]
 ////}
 
 // @Filename: /b.ts

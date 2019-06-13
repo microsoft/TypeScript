@@ -2,12 +2,12 @@
 
 // class and uninstantiated module
 
-////[|class [|{| "isWriteAccess": true, "isDefinition": true, "declarationRangeIndex": 0 |}testClass|] {
+////[|class [|{| "isWriteAccess": true, "isDefinition": true, "contextRangeIndex": 0 |}testClass|] {
 ////    static staticMethod() { }
 ////    method() { }
 ////}|]
 ////
-////[|module [|{| "isWriteAccess": true, "isDefinition": true, "declarationRangeIndex": 2 |}testClass|] {
+////[|module [|{| "isWriteAccess": true, "isDefinition": true, "contextRangeIndex": 2 |}testClass|] {
 ////    export interface Bar {
 ////
 ////    }

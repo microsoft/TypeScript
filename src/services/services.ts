@@ -1552,7 +1552,7 @@ namespace ts {
                     isWriteAccess: highlightSpan.kind === HighlightSpanKind.writtenReference,
                     isDefinition: false,
                     ...highlightSpan.isInString && { isInString: true },
-                    ...highlightSpan.declarationSpan && { declarationSpan: highlightSpan.declarationSpan }
+                    ...highlightSpan.contextSpan && { contextSpan: highlightSpan.contextSpan }
                 }))
             );
         }
@@ -1577,7 +1577,7 @@ namespace ts {
                     return {
                         fileName: sourceFile.fileName,
                         textSpan,
-                        ...FindAllReferences.toDeclarationSpan(textSpan, sourceFile, node.parent)
+                        ...FindAllReferences.toContextSpan(textSpan, sourceFile, node.parent)
                     };
                 });
             }

@@ -1,13 +1,13 @@
 /// <reference path='fourslash.ts'/>
 
-////[|interface [|{| "isWriteAccess": true, "isDefinition": true, "declarationRangeIndex": 0 |}Foo|] {
+////[|interface [|{| "isWriteAccess": true, "isDefinition": true, "contextRangeIndex": 0 |}Foo|] {
 ////}|]
 ////
-////[|module [|{| "isWriteAccess": true, "isDefinition": true, "declarationRangeIndex": 2 |}Foo|] {
+////[|module [|{| "isWriteAccess": true, "isDefinition": true, "contextRangeIndex": 2 |}Foo|] {
 ////    export interface Bar { }
 ////}|]
 ////
-////[|function [|{| "isWriteAccess": true, "isDefinition": true, "declarationRangeIndex": 4 |}Foo|](): void {
+////[|function [|{| "isWriteAccess": true, "isDefinition": true, "contextRangeIndex": 4 |}Foo|](): void {
 ////}|]
 ////
 ////var f1: [|Foo|].Bar;

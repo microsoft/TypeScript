@@ -1,16 +1,16 @@
 /// <reference path='fourslash.ts'/>
 
 // @Filename: a.ts
-////[|namespace [|{| "isWriteAccess": true, "isDefinition": true, "declarationRangeIndex": 0 |}A|] {
+////[|namespace [|{| "isWriteAccess": true, "isDefinition": true, "contextRangeIndex": 0 |}A|] {
 ////    export const x = 0;
 ////}|]
 
 // @Filename: b.ts
-////[|export import [|{| "isWriteAccess": true, "isDefinition": true, "declarationRangeIndex": 2 |}B|] = [|A|];|]
+////[|export import [|{| "isWriteAccess": true, "isDefinition": true, "contextRangeIndex": 2 |}B|] = [|A|];|]
 ////[|B|].x;
 
 // @Filename: c.ts
-////[|import { [|{| "isWriteAccess": true, "isDefinition": true, "declarationRangeIndex": 6 |}B|] } from "./b";|]
+////[|import { [|{| "isWriteAccess": true, "isDefinition": true, "contextRangeIndex": 6 |}B|] } from "./b";|]
 
 verify.noErrors();
 

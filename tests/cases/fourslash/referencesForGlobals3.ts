@@ -3,7 +3,7 @@
 // Global interface reference.
 
 // @Filename: referencesForGlobals_1.ts
-////[|interface [|{| "isWriteAccess": true, "isDefinition": true, "declarationRangeIndex": 0 |}globalInterface|] {
+////[|interface [|{| "isWriteAccess": true, "isDefinition": true, "contextRangeIndex": 0 |}globalInterface|] {
 ////     f();
 ////}|]
 

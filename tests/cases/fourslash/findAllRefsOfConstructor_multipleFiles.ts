@@ -3,21 +3,21 @@
 // @Filename: f.ts
 
 ////class A {
-////    [|[|{| "declarationRangeIndex": 0 |}constructor|](s: string) {}|]
+////    [|[|{| "contextRangeIndex": 0 |}constructor|](s: string) {}|]
 ////}
 ////class B extends A { }
-////[|export { [|{| "isWriteAccess": true, "isDefinition": true, "declarationRangeIndex": 2 |}A|], [|{| "isWriteAccess": true, "isDefinition": true, "declarationRangeIndex": 2 |}B|] };|]
+////[|export { [|{| "isWriteAccess": true, "isDefinition": true, "contextRangeIndex": 2 |}A|], [|{| "isWriteAccess": true, "isDefinition": true, "contextRangeIndex": 2 |}B|] };|]
 
 // @Filename: a.ts
 
-////[|import { [|{| "declarationRangeIndex": 5 |}A|] as A1 } from "./f";|]
+////[|import { [|{| "contextRangeIndex": 5 |}A|] as A1 } from "./f";|]
 ////const a1 = new [|A1|]("a1");
 ////export default class extends A1 { }
-////[|export { [|{| "declarationRangeIndex": 8 |}B|] as [|{| "isWriteAccess": true, "isDefinition": true, "declarationRangeIndex": 8 |}B1|] } from "./f";|]
+////[|export { [|{| "contextRangeIndex": 8 |}B|] as [|{| "isWriteAccess": true, "isDefinition": true, "contextRangeIndex": 8 |}B1|] } from "./f";|]
 
 // @Filename: b.ts
 
-////[|import [|{| "declarationRangeIndex": 11 |}B|], { B1 } from "./a";|]
+////[|import [|{| "contextRangeIndex": 11 |}B|], { B1 } from "./a";|]
 ////const d = new [|B|]("b");
 ////const d1 = new [|B1|]("b1");
 

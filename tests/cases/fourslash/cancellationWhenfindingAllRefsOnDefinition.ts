@@ -7,7 +7,7 @@
 ////
 ////    }
 ////
-////    [|public /**/[|{| "isWriteAccess": true, "isDefinition": true, "declarationRangeIndex": 0 |}start|](){
+////    [|public /**/[|{| "isWriteAccess": true, "isDefinition": true, "contextRangeIndex": 0 |}start|](){
 ////        return this;
 ////    }|]
 ////

@@ -7,7 +7,7 @@
 ////class p { }
 ////
 ////class foo {
-////    constructor ([|public [|{| "isWriteAccess": true, "isDefinition": true, "declarationRangeIndex": 0 |}p|]: any|]) {
+////    constructor ([|public [|{| "isWriteAccess": true, "isDefinition": true, "contextRangeIndex": 0 |}p|]: any|]) {
 ////    }
 ////
 ////    public f(p) {

@@ -2,17 +2,17 @@
 
 // @Filename: /file1.ts
 ////declare function log(s: string | number): void;
-////[|const [|{| "isWriteAccess": true, "isDefinition": true, "declarationRangeIndex": 0 |}q|] = 1;|]
-////[|export { [|{| "isWriteAccess": true, "isDefinition": true, "declarationRangeIndex": 2 |}q|] };|]
+////[|const [|{| "isWriteAccess": true, "isDefinition": true, "contextRangeIndex": 0 |}q|] = 1;|]
+////[|export { [|{| "isWriteAccess": true, "isDefinition": true, "contextRangeIndex": 2 |}q|] };|]
 ////const x = {
-////    [|[|{| "isWriteAccess": true, "isDefinition": true, "declarationRangeIndex": 4 |}z|]: 'value'|]
+////    [|[|{| "isWriteAccess": true, "isDefinition": true, "contextRangeIndex": 4 |}z|]: 'value'|]
 ////}
-////[|const { [|{| "isWriteAccess": true, "isDefinition": true, "declarationRangeIndex": 6 |}z|] } = x;|]
+////[|const { [|{| "isWriteAccess": true, "isDefinition": true, "contextRangeIndex": 6 |}z|] } = x;|]
 ////log([|z|]);
 
 // @Filename: /file2.ts
 ////declare function log(s: string | number): void;
-////[|import { [|{| "isWriteAccess": true, "isDefinition": true, "declarationRangeIndex": 9 |}q|] } from "./file1";|]
+////[|import { [|{| "isWriteAccess": true, "isDefinition": true, "contextRangeIndex": 9 |}q|] } from "./file1";|]
 ////log([|q|] + 1);
 
 verify.noErrors();

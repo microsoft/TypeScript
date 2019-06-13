@@ -1,5 +1,5 @@
 /// <reference path='fourslash.ts' />
-////[|enum [|{| "isWriteAccess": true, "isDefinition": true, "declarationRangeIndex": 0 |}E|] {
+////[|enum [|{| "isWriteAccess": true, "isDefinition": true, "contextRangeIndex": 0 |}E|] {
 ////    First,
 ////    Second
 ////}|]

@@ -6,7 +6,7 @@
 
 // @Filename: /a.d.ts
 ////export as namespace abc;
-////[|export const [|{| "isWriteAccess": true, "isDefinition": true, "declarationRangeIndex": 0 |}x|]: number;|]
+////[|export const [|{| "isWriteAccess": true, "isDefinition": true, "contextRangeIndex": 0 |}x|]: number;|]
 
 // @Filename: /b.ts
 ////import a from "./a";

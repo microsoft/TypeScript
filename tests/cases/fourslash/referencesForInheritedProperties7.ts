@@ -1,16 +1,16 @@
 ﻿/// <reference path='fourslash.ts'/>
 
 //// class class1 extends class1 {
-////    [|[|{| "isWriteAccess": true, "isDefinition": true, "declarationRangeIndex": 0 |}doStuff|]() { }|]
-////    [|[|{| "isDefinition": true, "declarationRangeIndex": 2 |}propName|]: string;|]
+////    [|[|{| "isWriteAccess": true, "isDefinition": true, "contextRangeIndex": 0 |}doStuff|]() { }|]
+////    [|[|{| "isDefinition": true, "contextRangeIndex": 2 |}propName|]: string;|]
 //// }
 //// interface interface1 extends interface1 {
-////    [|[|{| "isDefinition": true, "declarationRangeIndex": 4 |}doStuff|](): void;|]
-////    [|[|{| "isDefinition": true, "declarationRangeIndex": 6 |}propName|]: string;|]
+////    [|[|{| "isDefinition": true, "contextRangeIndex": 4 |}doStuff|](): void;|]
+////    [|[|{| "isDefinition": true, "contextRangeIndex": 6 |}propName|]: string;|]
 //// }
 //// class class2 extends class1 implements interface1 {
-////    [|[|{| "isWriteAccess": true, "isDefinition": true, "declarationRangeIndex": 8 |}doStuff|]() { }|]
-////    [|[|{| "isDefinition": true, "declarationRangeIndex": 10 |}propName|]: string;|]
+////    [|[|{| "isWriteAccess": true, "isDefinition": true, "contextRangeIndex": 8 |}doStuff|]() { }|]
+////    [|[|{| "isDefinition": true, "contextRangeIndex": 10 |}propName|]: string;|]
 //// }
 ////
 //// var v: class2;

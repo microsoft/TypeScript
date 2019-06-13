@@ -5,7 +5,7 @@
 // @esModuleInterop: true
 
 // @Filename: /foo.ts
-////[|import [|{| "isWriteAccess": true, "isDefinition": true, "declarationRangeIndex": 0 |}settings|] from "./settings.json";|]
+////[|import [|{| "isWriteAccess": true, "isDefinition": true, "contextRangeIndex": 0 |}settings|] from "./settings.json";|]
 ////[|settings|];
 
 // @Filename: /settings.json

@@ -1,10 +1,10 @@
 /// <reference path='fourslash.ts'/>
 
-////[|interface [|{| "isWriteAccess": true, "isDefinition": true, "declarationRangeIndex": 0 |}Foo|] { }|]
-////[|module [|{| "isWriteAccess": true, "isDefinition": true, "declarationRangeIndex": 2 |}Foo|] { export interface Bar { } }|]
-////[|function [|{| "isWriteAccess": true, "isDefinition": true, "declarationRangeIndex": 4 |}Foo|]() { }|]
+////[|interface [|{| "isWriteAccess": true, "isDefinition": true, "contextRangeIndex": 0 |}Foo|] { }|]
+////[|module [|{| "isWriteAccess": true, "isDefinition": true, "contextRangeIndex": 2 |}Foo|] { export interface Bar { } }|]
+////[|function [|{| "isWriteAccess": true, "isDefinition": true, "contextRangeIndex": 4 |}Foo|]() { }|]
 ////
-////[|export = [|{| "declarationRangeIndex": 6 |}Foo|];|]
+////[|export = [|{| "contextRangeIndex": 6 |}Foo|];|]
 
 const ranges = test.ranges();
 const [r0Def, r0, r1Def, r1, r2Def, r2, r3Def, r3] = ranges;

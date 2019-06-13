@@ -1,12 +1,12 @@
 /// <reference path='fourslash.ts'/>
 
 ////class C {
-////	constructor([|public [|{| "isWriteAccess": true, "isDefinition": true, "declarationRangeIndex": 0 |}x|]: string|]) {
+////	constructor([|public [|{| "isWriteAccess": true, "isDefinition": true, "contextRangeIndex": 0 |}x|]: string|]) {
 ////		[|x|];
 ////	}
 ////}
 ////class D extends C {
-////	constructor([|public [|{| "isWriteAccess": true, "isDefinition": true, "declarationRangeIndex": 3 |}x|]: string|]) {
+////	constructor([|public [|{| "isWriteAccess": true, "isDefinition": true, "contextRangeIndex": 3 |}x|]: string|]) {
 ////		super([|x|]);
 ////	}
 ////}

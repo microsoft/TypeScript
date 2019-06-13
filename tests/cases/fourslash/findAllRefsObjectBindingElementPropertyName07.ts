@@ -2,6 +2,6 @@
 
 ////let p, b;
 ////
-////p, [|[{ [|{| "isDefinition": true, "declarationRangeIndex": 0 |}a|]: p, b }] = [{ [|[|{| "isWriteAccess": true, "isDefinition": true, "declarationRangeIndex": 2 |}a|]: 10|], b: true }]|];
+////p, [|[{ [|{| "isDefinition": true, "contextRangeIndex": 0 |}a|]: p, b }] = [{ [|[|{| "isWriteAccess": true, "isDefinition": true, "contextRangeIndex": 2 |}a|]: 10|], b: true }]|];
 
 verify.singleReferenceGroup("(property) a: any", "a");

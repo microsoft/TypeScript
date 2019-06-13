@@ -1,5 +1,5 @@
 /// <reference path='fourslash.ts' />
-////[|const { [|{| "isWriteAccess": true, "isDefinition": true, "declarationRangeIndex": 0 |}x|], y } = { [|[|{| "isWriteAccess": true, "isDefinition": true, "declarationRangeIndex": 2 |}x|]: 1|], y: 2 };|]
+////[|const { [|{| "isWriteAccess": true, "isDefinition": true, "contextRangeIndex": 0 |}x|], y } = { [|[|{| "isWriteAccess": true, "isDefinition": true, "contextRangeIndex": 2 |}x|]: 1|], y: 2 };|]
 ////const z = [|x|];
 
 const [r0Def, r0, r1Def, r1, r2] = test.ranges();

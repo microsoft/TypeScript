@@ -1,15 +1,15 @@
 /// <reference path='fourslash.ts'/>
 
 ////interface interface1 {
-////    [|[|{| "isDefinition": true, "declarationRangeIndex": 0 |}doStuff|](): void;|]
+////    [|[|{| "isDefinition": true, "contextRangeIndex": 0 |}doStuff|](): void;|]
 ////}
 ////
 ////interface interface2  extends interface1{
-////    [|[|{| "isDefinition": true, "declarationRangeIndex": 2 |}doStuff|](): void;|]
+////    [|[|{| "isDefinition": true, "contextRangeIndex": 2 |}doStuff|](): void;|]
 ////}
 ////
 ////class class1 implements interface2 {
-////    [|[|{| "isWriteAccess": true, "isDefinition": true, "declarationRangeIndex": 4 |}doStuff|]() {
+////    [|[|{| "isWriteAccess": true, "isDefinition": true, "contextRangeIndex": 4 |}doStuff|]() {
 ////
 ////    }|]
 ////}
