@@ -1,5 +1,3 @@
-/// <reference path="../stringCompletions.ts" />
-
 /* @internal */
 namespace ts.codefix {
     export const importFixId = "fixMissingImport";
