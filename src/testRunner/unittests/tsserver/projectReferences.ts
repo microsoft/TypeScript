@@ -169,6 +169,8 @@ fn5();
                 expectedResponse: Response;
                 expectedResponseNoMap?: Response;
                 expectedResponseNoDts?: Response;
+                requestDependencyChange?: Partial<Req>;
+                expectedResponseDependencyChange: Response;
             }
             function gotoDefintinionFromMainTs(fn: number): SessionAction<protocol.DefinitionAndBoundSpanRequest, protocol.DefinitionInfoAndBoundSpan> {
                 const textSpan = usageSpan(fn);
@@ -200,6 +202,11 @@ fn5();
                         // To import declaration
                         definitions: [{ file: mainTs.path, ...importSpan(fn) }],
                         textSpan
+                    },
+                    expectedResponseDependencyChange: {
+                        // Definition on fn + 1 line
+                        definitions: [{ file: dependencyTs.path, ...declarationSpan(fn + 1) }],
+                        textSpan
                     }
                 };
             }
@@ -227,6 +234,8 @@ fn5();
             function renameFromDependencyTs(fn: number): SessionAction<protocol.RenameRequest, protocol.RenameResponseBody> {
                 const defSpan = declarationSpan(fn);
                 const { contextStart: _, contextEnd: _1, ...triggerSpan } = defSpan;
+                const defSpanPlusOne = declarationSpan(fn + 1);
+                const { contextStart: _2, contextEnd: _3, ...triggerSpanPlusOne } = defSpanPlusOne;
                 return {
                     reqName: "rename",
                     request: {
@@ -246,12 +255,30 @@ fn5();
                         locs: [
                             { file: dependencyTs.path, locs: [defSpan] }
                         ]
+                    },
+                    requestDependencyChange: {
+                        command: protocol.CommandTypes.Rename,
+                        arguments: { file: dependencyTs.path, ...triggerSpanPlusOne.start }
+                    },
+                    expectedResponseDependencyChange: {
+                        info: {
+                            canRename: true,
+                            fileToRename: undefined,
+                            displayName: `fn${fn}`,
+                            fullDisplayName: `"${dependecyLocation}/FnS".fn${fn}`,
+                            kind: ScriptElementKind.functionElement,
+                            kindModifiers: "export",
+                            triggerSpan: triggerSpanPlusOne
+                        },
+                        locs: [
+                            { file: dependencyTs.path, locs: [defSpanPlusOne] }
+                        ]
                     }
                 };
             }
 
             function renameFromDependencyTsWithBothProjectsOpen(fn: number): SessionAction<protocol.RenameRequest, protocol.RenameResponseBody> {
-                const { reqName, request, expectedResponse } = renameFromDependencyTs(fn);
+                const { reqName, request, expectedResponse, expectedResponseDependencyChange, requestDependencyChange } = renameFromDependencyTs(fn);
                 const { info, locs } = expectedResponse;
                 return {
                     reqName,
@@ -271,7 +298,21 @@ fn5();
                     },
                     // Only dependency result
                     expectedResponseNoMap: expectedResponse,
-                    expectedResponseNoDts: expectedResponse
+                    expectedResponseNoDts: expectedResponse,
+                    requestDependencyChange,
+                    expectedResponseDependencyChange: {
+                        info: expectedResponseDependencyChange.info,
+                        locs: [
+                            expectedResponseDependencyChange.locs[0],
+                            {
+                                file: mainTs.path,
+                                locs: [
+                                    importSpan(fn),
+                                    usageSpan(fn)
+                                ]
+                            }
+                        ]
+                    }
                 };
             }
 
@@ -633,6 +674,36 @@ fn5();
                     verifyMainScenarioAndScriptInfoCollectionWithNoDts,
                     /*noDts*/ true
                 );
+
+                it("when defining project source changes", () => {
+                    const { host, session } = openTsFile();
+
+                    // First action
+                    firstAction(session);
+
+                    // Make change, without rebuild of solution
+                    if (contains(openInfos, dependencyTs.path)) {
+                        session.executeCommandSeq<protocol.ChangeRequest>({
+                            command: protocol.CommandTypes.Change,
+                            arguments: {
+                                file: dependencyTs.path, line: 1, offset: 1, endLine: 1, endOffset: 1, insertString: `function fooBar() { }
+`}
+                        });
+                    }
+                    else {
+                        host.writeFile(dependencyTs.path, `function fooBar() { }
+${dependencyTs.content}`);
+                    }
+                    host.runQueuedTimeoutCallbacks();
+
+                    for (const actionGetter of actionGetters) {
+                        for (let fn = 1; fn <= 5; fn++) {
+                            const { reqName, request, requestDependencyChange, expectedResponseDependencyChange } = actionGetter(fn);
+                            const { response } = session.executeCommandSeq(requestDependencyChange || request);
+                            assert.deepEqual(response, expectedResponseDependencyChange, `Failed on ${reqName}`);
+                        }
+                    }
+                });
             }
 
             const usageVerifier: DocumentPositionMapperVerifier = {
