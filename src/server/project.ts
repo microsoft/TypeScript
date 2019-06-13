@@ -527,11 +527,6 @@ namespace ts.server {
             return this.projectService.getSourceFileLike(fileName, this);
         }
 
-        /*@internal*/
-        getUnresolvedImports(): SortedReadonlyArray<string> | undefined {
-            return this.typingsCache.getUnresolvedImports(this);
-        }
-
         private shouldEmitFile(scriptInfo: ScriptInfo) {
             return scriptInfo && !scriptInfo.isDynamicOrHasMixedContent();
         }
