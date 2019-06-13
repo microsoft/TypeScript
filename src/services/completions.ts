@@ -1272,8 +1272,21 @@ namespace ts.Completions {
 
         function getSymbolsFromOtherSourceFileExports(symbols: Symbol[], tokenText: string, target: ScriptTarget, host: LanguageServiceHost): void {
             const tokenTextLowerCase = tokenText.toLowerCase();
-            const potentialDuplicateSymbols = createMap<{ alias: Symbol, moduleSymbol: Symbol, insertAt: number }>();
             const seenResolvedModules = createMap<true>();
+            /**
+             * Contains re-exported symbols that should only be pushed onto `symbols` if the symbol they’re aliases for
+             * don’t appear in `symbols`, which can happen if a re-exporting module is found in the project package.json
+             * but the original exporting module is not. These symbols are corralled here by the symbol id of the exported
+             * symbol that they’re re-exporting, and deleted from the map if that original exported symbol comes through.
+             * Any remaining in the map after all symbols have been seen can be assumed to be not duplicates.
+             */
+            const potentialDuplicateSymbols = createMap<{ alias: Symbol, moduleSymbol: Symbol, insertAt: number }>();
+            /**
+             * Contains re-exported symbols that we’ve already skipped due to knowing their aliased symbol is already covered.
+             * By keeping track of this, we can short circuit when tracing re-exported re-exports instead of having to go all
+             * the way back to the source to find out if a symbol is a duplicate.
+             */
+            const coveredReExportedSymbols = createMap<true>();
 
             codefix.forEachExternalModuleToImportFrom(typeChecker, host, sourceFile, program.getSourceFiles(), moduleSymbol => {
                 // Perf -- ignore other modules if this is a request for details
@@ -1312,9 +1325,16 @@ namespace ts.Completions {
                     // If `!!d.parent.parent.moduleSpecifier`, this is `export { foo } from "foo"` re-export, which creates a new symbol (thus isn't caught by the first check).
                     if (some(symbol.declarations, d => isExportSpecifier(d) && !d.propertyName && !!d.parent.parent.moduleSpecifier)) {
                         // If we haven’t yet seen the original symbol, note the alias so we can add it at the end if the original doesn’t show up eventually
-                        const nearestExportLocalSymbol = forEachAlias(typeChecker, symbol, alias => forEach(alias.declarations, d => d.localSymbol));
-                        if (nearestExportLocalSymbol && !symbolToOriginInfoMap[getSymbolId(nearestExportLocalSymbol)]) {
-                            potentialDuplicateSymbols.set(getSymbolId(nearestExportLocalSymbol).toString(), { alias: symbol, moduleSymbol, insertAt: symbols.length });
+                        const nearestExportSymbol = forEachAlias(typeChecker, symbol, alias => some(alias.declarations, d => isExportSpecifier(d) || !!d.localSymbol) && alias);
+                        if (nearestExportSymbol) {
+                            if (!symbolToOriginInfoMap[getSymbolId(nearestExportSymbol)] && !coveredReExportedSymbols.has(getSymbolId(nearestExportSymbol).toString())) {
+                                potentialDuplicateSymbols.set(getSymbolId(nearestExportSymbol).toString(), { alias: symbol, moduleSymbol, insertAt: symbols.length });
+                            }
+                            else {
+                                // Perf - we know this symbol is an alias to one that’s already covered in `symbols`, so store it here
+                                // in case another symbol re-exports this one; that way we can short-circuit as soon as we see this symbol id.
+                                addToSeen(coveredReExportedSymbols, getSymbolId(symbol));
+                            }
                         }
                         continue;
                     }
