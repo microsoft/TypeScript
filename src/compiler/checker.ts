@@ -12600,8 +12600,8 @@ namespace ts {
                         result = typeRelatedToSomeType(getRegularTypeOfObjectLiteral(source), <UnionType>target, reportErrors && !(source.flags & TypeFlags.Primitive) && !(target.flags & TypeFlags.Primitive));
                         if (result && isPerformingExcessPropertyChecks) {
                             // Validate against excess props using the original `source`
-                            const discriminantType = target.flags & TypeFlags.Union ? findMatchingDiscriminantType(source, target as UnionType) : undefined;
-                            if (!propertiesRelatedTo(source, discriminantType || target, reportErrors, /*excludedProperties*/ undefined)) {
+                            const discriminantType = findMatchingDiscriminantType(source, target as UnionType) || filterPrimitivesIfContainsNonPrimitive(target as UnionType);
+                            if (!propertiesRelatedTo(source, discriminantType, reportErrors, /*excludedProperties*/ undefined)) {
                                 return Ternary.False;
                             }
                         }
@@ -12870,6 +12870,16 @@ namespace ts {
                     }
                 }
                 return bestMatch;
+            }
+
+            function filterPrimitivesIfContainsNonPrimitive(type: UnionType) {
+                if (maybeTypeOfKind(type, TypeFlags.NonPrimitive)) {
+                    const result = filterType(type, t => !(t.flags & TypeFlags.Primitive));
+                    if (!(result.flags & TypeFlags.Never)) {
+                        return result;
+                    }
+                }
+                return type;
             }
 
             // Keep this up-to-date with the same logic within `getApparentTypeOfContextualType`, since they should behave similarly
