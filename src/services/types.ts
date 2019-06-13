@@ -236,8 +236,6 @@ namespace ts {
         getDocumentPositionMapper?(generatedFileName: string, sourceFileName?: string): DocumentPositionMapper | undefined;
         /* @internal */
         getSourceFileLike?(fileName: string): SourceFileLike | undefined;
-        /* @internal */
-        hasTypeAcquisitionAcquiredNodeTypings?(): boolean;
     }
 
     /* @internal */

@@ -286,7 +286,7 @@ namespace ts.codefix {
         preferences: UserPreferences,
     ): ReadonlyArray<FixAddNewImport | FixUseImportType> {
         const isJs = isSourceFileJS(sourceFile);
-        const { allowsImporting } = createLazyPackageJsonDependencyReader(sourceFile.fileName, host);
+        const { allowsImporting } = createLazyPackageJsonDependencyReader(sourceFile, host);
         const choicesForEachExportingModule = flatMap(moduleSymbols, ({ moduleSymbol, importKind, exportedSymbolIsTypeOnly }) =>
             moduleSpecifiers.getModuleSpecifiers(moduleSymbol, program.getCompilerOptions(), sourceFile, host, program.getSourceFiles(), preferences, program.redirectTargetsMap)
             .map((moduleSpecifier): FixAddNewImport | FixUseImportType =>
@@ -295,8 +295,8 @@ namespace ts.codefix {
 
         // Sort by presence in package.json, then shortest paths first
         return sort(choicesForEachExportingModule, (a, b) => {
-            const allowsImportingA = allowsImporting(a.moduleSpecifier, isJs);
-            const allowsImportingB = allowsImporting(b.moduleSpecifier, isJs);
+            const allowsImportingA = allowsImporting(a.moduleSpecifier);
+            const allowsImportingB = allowsImporting(b.moduleSpecifier);
             if (allowsImportingA && !allowsImportingB) {
                 return -1;
             }
@@ -621,15 +621,14 @@ namespace ts.codefix {
     }
 
     export function forEachExternalModuleToImportFrom(checker: TypeChecker, host: LanguageServiceHost, from: SourceFile, allSourceFiles: ReadonlyArray<SourceFile>, cb: (module: Symbol) => void) {
-        const { allowsImporting } = createLazyPackageJsonDependencyReader(from.fileName, host);
-        const isJS = isSourceFileJS(from);
+        const { allowsImporting } = createLazyPackageJsonDependencyReader(from, host);
         forEachExternalModule(checker, allSourceFiles, (module, sourceFile) => {
-            if (sourceFile === undefined && allowsImporting(stripQuotes(module.getName()), isJS)) {
+            if (sourceFile === undefined && allowsImporting(stripQuotes(module.getName()))) {
                 cb(module);
             }
             else if (sourceFile && sourceFile !== from && isImportablePath(from.fileName, sourceFile.fileName)) {
                 const moduleSpecifier = getModuleSpecifierFromFileName(sourceFile.fileName);
-                if (!moduleSpecifier || allowsImporting(moduleSpecifier, isJS)) {
+                if (!moduleSpecifier || allowsImporting(moduleSpecifier)) {
                     cb(module);
                 }
             }
@@ -706,8 +705,8 @@ namespace ts.codefix {
         return !isStringANonContextualKeyword(res) ? res || "_" : `_${res}`;
     }
 
-    function createLazyPackageJsonDependencyReader(fromPath: string, host: LanguageServiceHost) {
-        const packageJsonPaths = findPackageJsons(getDirectoryPath(fromPath), host);
+    function createLazyPackageJsonDependencyReader(fromFile: SourceFile, host: LanguageServiceHost) {
+        const packageJsonPaths = findPackageJsons(getDirectoryPath(fromFile.fileName), host);
         const dependencyIterator = readPackageJsonDependencies();
         let seenDeps: Map<true> | undefined;
         function *readPackageJsonDependencies() {
@@ -741,8 +740,8 @@ namespace ts.codefix {
             return false;
         }
 
-        let hasNodeTypingsViaTypeAcquisition: boolean | undefined;
-        function allowsImporting(moduleSpecifier: string, fromJSFile: boolean): boolean {
+        let usesNodeCoreModules: boolean | undefined;
+        function allowsImporting(moduleSpecifier: string): boolean {
             if (!packageJsonPaths.length) {
                 return true;
             }
@@ -752,11 +751,11 @@ namespace ts.codefix {
             // downloaded @types/node, because if it has, that indicates that the user has already
             // been using some Node core modules directly, as opposed to simply having @types/node
             // accidentally as a dependency of a dependency.
-            if (fromJSFile && JsTyping.nodeCoreModules.has(moduleSpecifier)) {
-                if (hasNodeTypingsViaTypeAcquisition === undefined) {
-                    hasNodeTypingsViaTypeAcquisition = host.hasTypeAcquisitionAcquiredNodeTypings && host.hasTypeAcquisitionAcquiredNodeTypings();
+            if (isSourceFileJS(fromFile) && JsTyping.nodeCoreModules.has(moduleSpecifier)) {
+                if (usesNodeCoreModules === undefined) {
+                    usesNodeCoreModules = consumesNodeCoreModules(fromFile);
                 }
-                if (hasNodeTypingsViaTypeAcquisition) {
+                if (usesNodeCoreModules) {
                     return true;
                 }
             }
@@ -770,5 +769,9 @@ namespace ts.codefix {
             containsDependency,
             allowsImporting
         };
+    }
+
+    function consumesNodeCoreModules(sourceFile: SourceFile): boolean {
+        return some(sourceFile.imports, ({ text }) => JsTyping.nodeCoreModules.has(text));
     }
 }
