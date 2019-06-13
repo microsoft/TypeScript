@@ -138,12 +138,5 @@ namespace ts.server {
             this.perProjectCache.delete(project.getProjectName());
             this.installer.onProjectClosed(project);
         }
-
-        getUnresolvedImports(project: Project): SortedReadonlyArray<string> | undefined {
-            const entry = this.perProjectCache.get(project.getProjectName());
-            if (entry) {
-                return entry.unresolvedImports;
-            }
-        }
     }
 }
