@@ -1312,10 +1312,9 @@ namespace ts.Completions {
                     // If `!!d.parent.parent.moduleSpecifier`, this is `export { foo } from "foo"` re-export, which creates a new symbol (thus isn't caught by the first check).
                     if (some(symbol.declarations, d => isExportSpecifier(d) && !d.propertyName && !!d.parent.parent.moduleSpecifier)) {
                         // If we haven’t yet seen the original symbol, note the alias so we can add it at the end if the original doesn’t show up eventually
-                        const exportSymbol = findAlias(typeChecker, symbol, alias => some(alias.declarations, d => !!d.localSymbol));
-                        const localSymbol = exportSymbol && find(exportSymbol.declarations, d => !!d.localSymbol)!.localSymbol;
-                        if (localSymbol && !symbolToOriginInfoMap[getSymbolId(localSymbol)]) {
-                            potentialDuplicateSymbols.set(getSymbolId(localSymbol).toString(), { alias: symbol, moduleSymbol, insertAt: symbols.length });
+                        const nearestExportLocalSymbol = forEachAlias(typeChecker, symbol, alias => forEach(alias.declarations, d => d.localSymbol));
+                        if (nearestExportLocalSymbol && !symbolToOriginInfoMap[getSymbolId(nearestExportLocalSymbol)]) {
+                            potentialDuplicateSymbols.set(getSymbolId(nearestExportLocalSymbol).toString(), { alias: symbol, moduleSymbol, insertAt: symbols.length });
                         }
                         continue;
                     }
@@ -2273,11 +2272,12 @@ namespace ts.Completions {
         return nodeIsMissing(left);
     }
 
-    function findAlias(typeChecker: TypeChecker, symbol: Symbol, predicate: (symbol: Symbol) => boolean): Symbol | undefined {
+    function forEachAlias<T>(typeChecker: TypeChecker, symbol: Symbol, predicateMapper: (symbol: Symbol) => T | undefined): T | undefined {
         let currentAlias: Symbol | undefined = symbol;
         while (currentAlias.flags & SymbolFlags.Alias && (currentAlias = typeChecker.getImmediateAliasedSymbol(currentAlias))) {
-            if (predicate(currentAlias)) {
-                return currentAlias;
+            const mappedValue = predicateMapper(currentAlias);
+            if (mappedValue) {
+                return mappedValue;
             }
         }
     }
