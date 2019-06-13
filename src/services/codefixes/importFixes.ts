@@ -745,10 +745,9 @@ namespace ts.codefix {
             }
 
             // If we’re in JavaScript, it can be difficult to tell whether the user wants to import
-            // from Node core modules or not. We can start by seeing if type acquisition has already
-            // downloaded @types/node, because if it has, that indicates that the user has already
-            // been using some Node core modules directly, as opposed to simply having @types/node
-            // accidentally as a dependency of a dependency.
+            // from Node core modules or not. We can start by seeing if the user is actually using
+            // any node core modules, as opposed to simply having @types/node accidentally as a
+            // dependency of a dependency.
             if (isSourceFileJS(fromFile) && JsTyping.nodeCoreModules.has(moduleSpecifier)) {
                 if (usesNodeCoreModules === undefined) {
                     usesNodeCoreModules = consumesNodeCoreModules(fromFile);
