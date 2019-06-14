@@ -104,7 +104,7 @@
         "no-sparse-arrays": "error",
         "no-template-curly-in-string": "off",
         "no-throw-literal": "error",
-        "no-trailing-spaces": "off",
+        "no-trailing-spaces": "error",
         "no-undef-init": "error",
         "no-unsafe-finally": "error",
         "no-unused-expressions": "off",
