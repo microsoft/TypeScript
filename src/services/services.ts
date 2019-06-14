@@ -35,7 +35,7 @@ namespace ts {
         }
 
         private assertHasRealPosition(message?: string) {
-            // tslint:disable-next-line:debug-assert
+            // eslint-disable-next-line microsoft-typescript/debug-assert
             Debug.assert(!positionIsSynthesized(this.pos) && !positionIsSynthesized(this.end), message || "Node must have a real position for this operation");
         }
 

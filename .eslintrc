@@ -57,7 +57,7 @@
         "microsoft-typescript/no-double-space": "off",
         "microsoft-typescript/boolean-trivia": "off",
         "microsoft-typescript/no-in-operator": "off",
-        "microsoft-typescript/debug-assert": "off",
+        "microsoft-typescript/debug-assert": "error",
         "microsoft-typescript/no-keywords": "off",
 
         "arrow-body-style": "off",
