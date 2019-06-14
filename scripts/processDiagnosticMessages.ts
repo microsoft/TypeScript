@@ -20,7 +20,7 @@ function main(): void {
     function writeFile(fileName: string, contents: string) {
         fs.writeFile(path.join(path.dirname(inputFilePath), fileName), contents, { encoding: "utf-8" }, err => {
             if (err) throw err;
-        })
+        });
     }
 
     const inputFilePath = process.argv[2].replace(/\\/g, "/");

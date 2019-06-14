@@ -71,7 +71,7 @@ function getKnownAuthorMaps() {
 }
 
 function deduplicate<T>(array: T[]): T[] {
-    let result: T[] = []
+    let result: T[] = [];
     if (array) {
         for (const item of array) {
             if (result.indexOf(item) < 0) {

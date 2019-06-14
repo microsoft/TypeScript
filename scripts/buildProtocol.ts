@@ -28,11 +28,11 @@ class DeclarationsWalker {
             : "";
         if (walker.removedTypes) {
             text += "\ndeclare namespace ts {\n";
-            text += "    // these types are empty stubs for types from services and should not be used directly\n"
+            text += "    // these types are empty stubs for types from services and should not be used directly\n";
             for (const type of walker.removedTypes) {
                 text += `    export type ${type.symbol!.name} = never;\n`;
             }
-            text += "}"
+            text += "}";
         }
         return text;
     }
@@ -142,7 +142,7 @@ function writeProtocolFile(outputFile: string, protocolTs: string, typeScriptSer
                 getCanonicalFileName: function (f) { return f; },
                 getCurrentDirectory: function() { return '.'; },
                 getNewLine: function() { return "\r\n"; }
-            }
+            };
             const diags = emitResult.diagnostics.map(d => ts.formatDiagnostic(d, diagHost)).join("\r\n");
             throw new Error(`Declaration file for protocol.ts is not generated:\r\n${diags}`);
         }
@@ -161,7 +161,7 @@ function writeProtocolFile(outputFile: string, protocolTs: string, typeScriptSer
                 return ts.createSourceFile(fileName, protocolDts, options.target);
             }
             return originalGetSourceFile.apply(host, [fileName]);
-        }
+        };
         const rootFiles = includeTypeScriptServices ? [protocolFileName, typeScriptServicesDts] : [protocolFileName];
         return ts.createProgram(rootFiles, options, host);
     }

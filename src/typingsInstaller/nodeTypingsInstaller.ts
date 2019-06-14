@@ -15,7 +15,7 @@ namespace ts.server.typingsInstaller {
 
         isEnabled = () => {
             return typeof this.logFile === "string";
-        }
+        };
         writeLine = (text: string) => {
             if (typeof this.logFile !== "string") return;
 
@@ -25,7 +25,7 @@ namespace ts.server.typingsInstaller {
             catch (e) {
                 this.logFile = undefined;
             }
-        }
+        };
     }
 
     /** Used if `--npmLocation` is not passed. */

@@ -34,7 +34,7 @@ async function main() {
     logText = `Cherry-pick PR #${process.env.SOURCE_ISSUE} into ${process.env.TARGET_BRANCH}
 
 Component commits:
-${logText.trim()}`
+${logText.trim()}`;
     const logpath = path.join(__dirname, "../", "logmessage.txt");
     runSequence([
         ["git", ["checkout", "-b", "temp-branch"]],
@@ -51,7 +51,7 @@ ${logText.trim()}`
     runSequence([
         ["git", ["checkout", process.env.TARGET_BRANCH]], // checkout the target branch
         ["git", ["checkout", "-b", branchName]], // create a new branch
-        ["git", ["cherry-pick", squashSha.trim()]], // 
+        ["git", ["cherry-pick", squashSha.trim()]], //
         ["git", ["remote", "add", "fork", remoteUrl]], // Add the remote fork
         ["git", ["push", "--set-upstream", "fork", branchName, "-f"]] // push the branch
     ]);
