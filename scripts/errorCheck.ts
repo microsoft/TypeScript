@@ -13,7 +13,7 @@ fs.readFile('src/compiler/diagnosticMessages.json', 'utf-8', (err, data) => {
     console.log('Loaded ' + keys.length + ' errors');
 
     for (let k of keys) {
-        messages[k]['seen'] = false;
+        messages[k].seen = false;
     }
 
     let errRegex = /\(\d+,\d+\): error TS([^:]+):/g;
@@ -30,7 +30,7 @@ fs.readFile('src/compiler/diagnosticMessages.json', 'utf-8', (err, data) => {
                 while (g = errRegex.exec(baseline)) {
                     var errCode = +g[1];
                     let msg = keys.filter(k => messages[k].code === errCode)[0];
-                    messages[msg]['seen'] = true;
+                    messages[msg].seen = true;
                 }
 
                 done();
@@ -41,7 +41,7 @@ fs.readFile('src/compiler/diagnosticMessages.json', 'utf-8', (err, data) => {
             console.log('== List of errors not present in baselines ==');
             let count = 0;
             for (let k of keys) {
-                if (messages[k]['seen'] !== true) {
+                if (messages[k].seen !== true) {
                     console.log(k);
                     count++;
                 }

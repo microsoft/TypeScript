@@ -67,7 +67,7 @@
         "complexity": "off",
         "constructor-super": "error",
         "curly": ["error", "multi-line"],
-        "dot-notation": "off",
+        "dot-notation": "error",
         "eol-last": "off",
         "eqeqeq": "error",
         "guard-for-in": "off",

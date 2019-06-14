@@ -169,7 +169,7 @@ var args = process.argv.slice(2);
 if (args.length < 1) {
     console.log('Usage: node authors.js [command]');
     console.log('List of commands: ');
-    Object.keys(Commands).forEach(k => console.log(`     ${k}: ${(Commands as any)[k]['description']}`));
+    Object.keys(Commands).forEach(k => console.log(`     ${k}: ${(Commands as any)[k].description}`));
 } else {
     var cmd: Function = (Commands as any)[args[0]];
     if (cmd === undefined) {
