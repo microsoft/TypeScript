@@ -193,26 +193,26 @@ namespace Harness.Parallel.Host {
         }
 
         function skipCostlyTests(tasks: Task[]) {
-            if (statSync('.test-cost.json')) {
-                const costs = JSON.parse(readFileSync('.test-cost.json', 'utf8')) as {
+            if (statSync(".test-cost.json")) {
+                const costs = JSON.parse(readFileSync(".test-cost.json", "utf8")) as {
                     totalTime: number,
                     totalEdits: number,
-                    data: Array<{ name: string, time: number, edits: number, costs: number }>
-                }
+                    data: { name: string, time: number, edits: number, costs: number }[]
+                };
                 let skippedEdits = 0;
-                let skippedTests = new Set<string>();
                 let skippedTime = 0;
+                const skippedTests = new Set<string>();
                 let i = 0;
                 for (; i < costs.data.length && (skippedEdits / costs.totalEdits) < (skipPercent / 100); i++) {
                     skippedEdits += costs.data[i].edits;
                     skippedTime += costs.data[i].time;
                     skippedTests.add(costs.data[i].name);
                 }
-                console.log(`Skipped ${i} expensive tests; estimated time savings of ${(skippedTime / costs.totalTime * 100).toFixed(2)}% with ${skipPercent.toFixed(2)}% chance of missing a test.`)
+                console.log(`Skipped ${i} expensive tests; estimated time savings of ${(skippedTime / costs.totalTime * 100).toFixed(2)}% with ${skipPercent.toFixed(2)}% chance of missing a test.`);
                 return tasks.filter(t => !skippedTests.has(t.file));
             }
             else {
-                console.log('No cost analysis discovered.');
+                console.log("No cost analysis discovered.");
                 return tasks;
             }
         }
