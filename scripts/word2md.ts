@@ -177,7 +177,7 @@ interface FindReplaceOptions {
 
 function convertDocumentToMarkdown(doc: Word.Document): string {
 
-    var result: string = "";
+    var result = "";
     var lastStyle: string;
     var lastInTable: boolean;
     var tableColumnCount: number;

@@ -59,7 +59,7 @@ fs.readFile('src/compiler/diagnosticInformationMap.generated.ts', 'utf-8', (err,
         errorNames.push(errMatch[1]);
     }
 
-    let allSrc: string = '';
+    let allSrc = '';
     glob('./src/**/*.ts', {}, (err, files) => {
         console.log('Reading ' + files.length + ' source files');
         for (let file of files) {

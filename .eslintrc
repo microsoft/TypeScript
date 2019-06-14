@@ -30,7 +30,7 @@
         "@typescript-eslint/no-angle-bracket-type-assertion": "off",
         "@typescript-eslint/no-empty-interface": "off",
         "@typescript-eslint/no-explicit-any": "off",
-        "@typescript-eslint/no-inferrable-types": "off",
+        "@typescript-eslint/no-inferrable-types": "error",
         "@typescript-eslint/no-misused-new": "error",
         "@typescript-eslint/no-namespace": "off",
         "@typescript-eslint/no-object-literal-type-assertion": "off",
