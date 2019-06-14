@@ -2,15 +2,17 @@ import fs = require('fs');
 import path = require('path');
 import child_process = require("child_process");
 
-type Author = {
+interface Author {
     displayNames: string[];
     preferredName?: string;
     emails: string[];
 };
 
-type AuthorMap = { [s: string]: Author };
+interface AuthorMap {
+    [s: string]: Author
+};
 
-type Command = {
+interface Command {
     (...arg: string[]): void;
     description?: string;
 };

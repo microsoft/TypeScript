@@ -43,7 +43,7 @@
         "@typescript-eslint/no-var-requires": "off",
         "@typescript-eslint/prefer-for-of": "error",
         "@typescript-eslint/prefer-function-type": "off",
-        "@typescript-eslint/prefer-interface": "off",
+        "@typescript-eslint/prefer-interface": "error",
         "@typescript-eslint/prefer-namespace-keyword": "off",
         "semi": "off",
         "@typescript-eslint/semi": "error",
