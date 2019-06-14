@@ -4977,7 +4977,8 @@ namespace ts {
                 return false;
             }
             try {
-                // tslint:disable-next-line no-unnecessary-qualifier (making clear this is a global mutation!)
+                // making clear this is a global mutation!
+                // eslint-disable-next-line @typescript-eslint/no-unnecessary-qualifier
                 ts.localizedDiagnosticMessages = JSON.parse(fileContents!);
             }
             catch {
