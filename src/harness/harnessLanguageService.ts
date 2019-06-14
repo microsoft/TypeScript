@@ -769,19 +769,22 @@ namespace Harness.LanguageService {
         }
 
         setTimeout(callback: (...args: any[]) => void, ms: number, ...args: any[]): any {
-            // tslint:disable-next-line:ban
+            // eslint-disable-next-line no-restricted-globals
             return setTimeout(callback, ms, args);
         }
 
         clearTimeout(timeoutId: any): void {
+            // eslint-disable-next-line no-restricted-globals
             clearTimeout(timeoutId);
         }
 
         setImmediate(callback: (...args: any[]) => void, _ms: number, ...args: any[]): any {
+            // eslint-disable-next-line no-restricted-globals
             return setImmediate(callback, args);
         }
 
         clearImmediate(timeoutId: any): void {
+            // eslint-disable-next-line no-restricted-globals
             clearImmediate(timeoutId);
         }
 

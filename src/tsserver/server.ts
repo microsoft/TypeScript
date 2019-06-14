@@ -482,6 +482,7 @@ namespace ts.server {
                     // so we defer until the next tick.
                     //
                     // Construction should finish before the next tick fires, so we do not need to do this recursively.
+                    // eslint-disable-next-line no-restricted-globals
                     setImmediate(() => this.event(body, eventName));
                 }
             };
@@ -698,7 +699,7 @@ namespace ts.server {
         // stat due to inconsistencies of fs.watch
         // and efficiency of stat on modern filesystems
         function startWatchTimer() {
-            // tslint:disable-next-line:ban
+            // eslint-disable-next-line no-restricted-globals
             setInterval(() => {
                 let count = 0;
                 let nextToCheck = nextFileToCheck;
@@ -881,10 +882,13 @@ namespace ts.server {
         };
     };
 
+    /* eslint-disable no-restricted-globals */
     sys.setTimeout = setTimeout;
     sys.clearTimeout = clearTimeout;
     sys.setImmediate = setImmediate;
     sys.clearImmediate = clearImmediate;
+    /* eslint-enable no-restricted-globals */
+
     if (typeof global !== "undefined" && global.gc) {
         sys.gc = () => global.gc();
     }
