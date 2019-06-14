@@ -396,7 +396,7 @@ namespace ts.codefix {
         // "default" is a keyword and not a legal identifier for the import, so we don't expect it here
         Debug.assert(symbolName !== InternalSymbolName.Default);
 
-        const fixes = arrayFrom(flatMapIterator(getExportInfos(symbolName, getMeaningFromLocation(symbolToken), cancellationToken, sourceFile, checker, program, host).entries(), ([_, exportInfos]) =>
+        const fixes = arrayFrom(flatMapIterator(getExportInfos(symbolName, getMeaningFromLocation(symbolToken), cancellationToken, sourceFile, checker, program, preferences, host).entries(), ([_, exportInfos]) =>
             getFixForImport(exportInfos, symbolName, symbolToken.getStart(sourceFile), program, sourceFile, host, preferences)));
         return { fixes, symbolName };
     }
@@ -409,6 +409,7 @@ namespace ts.codefix {
         sourceFile: SourceFile,
         checker: TypeChecker,
         program: Program,
+        preferences: UserPreferences,
         host: LanguageServiceHost
     ): ReadonlyMap<ReadonlyArray<SymbolExportInfo>> {
         // For each original symbol, keep all re-exports of that symbol together so we can call `getCodeActionsForImport` on the whole group at once.
@@ -417,7 +418,7 @@ namespace ts.codefix {
         function addSymbol(moduleSymbol: Symbol, exportedSymbol: Symbol, importKind: ImportKind): void {
             originalSymbolToExportInfos.add(getUniqueSymbolId(exportedSymbol, checker).toString(), { moduleSymbol, importKind, exportedSymbolIsTypeOnly: isTypeOnlySymbol(exportedSymbol, checker) });
         }
-        forEachExternalModuleToImportFrom(checker, host, sourceFile, program.getSourceFiles(), moduleSymbol => {
+        forEachExternalModuleToImportFrom(checker, host, preferences, program.redirectTargetsMap, sourceFile, program.getSourceFiles(), moduleSymbol => {
             cancellationToken.throwIfCancellationRequested();
 
             const defaultInfo = getDefaultLikeExportInfo(sourceFile, moduleSymbol, checker, program.getCompilerOptions());
@@ -618,36 +619,38 @@ namespace ts.codefix {
         return some(declarations, decl => !!(getMeaningFromDeclaration(decl) & meaning));
     }
 
-    export function forEachExternalModuleToImportFrom(checker: TypeChecker, host: LanguageServiceHost, from: SourceFile, allSourceFiles: ReadonlyArray<SourceFile>, cb: (module: Symbol) => void) {
+    export function forEachExternalModuleToImportFrom(checker: TypeChecker, host: LanguageServiceHost, preferences: UserPreferences, redirectTargetsMap: RedirectTargetsMap, from: SourceFile, allSourceFiles: ReadonlyArray<SourceFile>, cb: (module: Symbol) => void) {
         const { allowsImporting } = createLazyPackageJsonDependencyReader(from, host);
+        const compilerOptions = host.getCompilationSettings();
+        const getCanonicalFileName = hostGetCanonicalFileName(host);
         forEachExternalModule(checker, allSourceFiles, (module, sourceFile) => {
             if (sourceFile === undefined && allowsImporting(stripQuotes(module.getName()))) {
                 cb(module);
             }
             else if (sourceFile && sourceFile !== from && isImportablePath(from.fileName, sourceFile.fileName)) {
-                const moduleSpecifier = getModuleSpecifierFromFileName(sourceFile.fileName);
+                const moduleSpecifier = getNodeModulesSpecifierFromFileName(sourceFile.fileName);
                 if (!moduleSpecifier || allowsImporting(moduleSpecifier)) {
                     cb(module);
                 }
             }
         });
 
-        function getModuleSpecifierFromFileName(fileName: string): string | undefined {
-            const pathComponents = getPathComponents(getDirectoryPath(fileName));
-            const nodeModulesIndex = pathComponents.lastIndexOf("node_modules");
-            if (nodeModulesIndex === -1) {
-                return undefined;
-            }
-            const firstComponent = pathComponents[nodeModulesIndex + 1];
-            const moduleSpecifier = firstComponent &&
-                firstComponent === "@types" ? pathComponents[nodeModulesIndex + 2] :
-                startsWith(firstComponent, "@") ? `${firstComponent}/${pathComponents[nodeModulesIndex + 2]}` :
-                firstComponent;
+        function getNodeModulesSpecifierFromFileName(importedFileName: string): string | undefined {
+            const specifier = moduleSpecifiers.getModuleSpecifier(
+                compilerOptions,
+                from,
+                toPath(from.fileName, /*basePath*/ undefined, getCanonicalFileName),
+                importedFileName,
+                host,
+                allSourceFiles,
+                preferences,
+                redirectTargetsMap);
 
-            if (!moduleSpecifier) {
-                return undefined;
+            // Relative paths here are not node_modules, so we don’t care about them;
+            // returning anyting will trigger a lookup in package.json.
+            if (!pathIsRelative(specifier)) {
+                return getPackageNameFromTypesPackageName(specifier);
             }
-            return moduleSpecifier;
         }
     }
 

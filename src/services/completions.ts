@@ -1288,7 +1288,7 @@ namespace ts.Completions {
              */
             const coveredReExportedSymbols = createMap<true>();
 
-            codefix.forEachExternalModuleToImportFrom(typeChecker, host, sourceFile, program.getSourceFiles(), moduleSymbol => {
+            codefix.forEachExternalModuleToImportFrom(typeChecker, host, preferences, program.redirectTargetsMap, sourceFile, program.getSourceFiles(), moduleSymbol => {
                 // Perf -- ignore other modules if this is a request for details
                 if (detailsEntryId && detailsEntryId.source && stripQuotes(moduleSymbol.name) !== detailsEntryId.source) {
                     return;
