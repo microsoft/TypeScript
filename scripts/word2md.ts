@@ -205,7 +205,18 @@ function convertDocumentToMarkdown(doc: Word.Document): string {
         var replace = find.replacement;
         replace.clearFormatting();
         setProperties(replace, replaceOptions);
-        find.execute(findText, false, false, false, false, false, true, 0, true, replaceText, 2);
+        find.execute(findText,
+            /* matchCase */ false,
+            /* matchWholeWord */ false,
+            /* matchWildcards */ false,
+            /* matchSoundsLike */ false,
+            /* matchAllWordForms */ false,
+            /* forward */ true,
+            0,
+            /* format */ true,
+            replaceText,
+            2
+        );
     }
 
     function fixHyperlinks() {
@@ -405,7 +416,7 @@ function main(args: string[]) {
     var app: Word.Application = sys.createObject("Word.Application");
     var doc = app.documents.open(args[0]);
     sys.writeFile(args[1], convertDocumentToMarkdown(doc));
-    doc.close(false);
+    doc.close(/* saveChanges */ false);
     app.quit();
 }
 

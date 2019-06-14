@@ -73,7 +73,7 @@ namespace ts {
             if (content !== null) {
                 if (!sourcesContent) sourcesContent = [];
                 while (sourcesContent.length < sourceIndex) {
-                    // tslint:disable-next-line:no-null-keyword boolean-trivia
+                    // eslint-disable-next-line microsoft-typescript/boolean-trivia
                     sourcesContent.push(null);
                 }
                 sourcesContent[sourceIndex] = content;
