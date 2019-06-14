@@ -141,7 +141,7 @@ var sys = (function () {
         args[i] = WScript.Arguments.Item(i);
     }
     return {
-        args: args,
+        args,
         createObject: (typeName: string) => new ActiveXObject(typeName),
         write(s: string): void {
             WScript.StdOut.Write(s);

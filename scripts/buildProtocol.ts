@@ -139,9 +139,9 @@ function writeProtocolFile(outputFile: string, protocolTs: string, typeScriptSer
 
         if (protocolDts === undefined) {
             const diagHost: ts.FormatDiagnosticsHost = {
-                getCanonicalFileName: function (f) { return f; },
-                getCurrentDirectory: function() { return '.'; },
-                getNewLine: function() { return "\r\n"; }
+                getCanonicalFileName(f) { return f; },
+                getCurrentDirectory() { return '.'; },
+                getNewLine() { return "\r\n"; }
             };
             const diags = emitResult.diagnostics.map(d => ts.formatDiagnostic(d, diagHost)).join("\r\n");
             throw new Error(`Declaration file for protocol.ts is not generated:\r\n${diags}`);

@@ -110,7 +110,7 @@
         "no-unused-expressions": "off",
         "no-unused-labels": "error",
         "no-var": "off",
-        "object-shorthand": "off",
+        "object-shorthand": "error",
         "one-var": "off",
         "prefer-const": "off",
         "prefer-object-spread": "error",
