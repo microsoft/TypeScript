@@ -103,7 +103,7 @@
         "no-shadow": "off",
         "no-sparse-arrays": "error",
         "no-template-curly-in-string": "off",
-        "no-throw-literal": "off",
+        "no-throw-literal": "error",
         "no-trailing-spaces": "off",
         "no-undef-init": "error",
         "no-unsafe-finally": "error",

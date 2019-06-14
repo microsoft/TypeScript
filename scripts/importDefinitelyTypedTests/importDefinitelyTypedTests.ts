@@ -18,7 +18,7 @@ function main() {
     const [, progName, tscRoot, definitelyTypedRoot] = process.argv;
     if (process.argv.length !== 4) {
         if (process.argv.length < 2) {
-            throw "Expected at least 2 argv elements.";
+            throw new Error("Expected at least 2 argv elements.");
         }
         console.log("Usage:");
         console.log(`    node ${path.relative(__dirname, progName)} [TypeScript Repo Root] [DefinitelyTyped Repo Root]`);
