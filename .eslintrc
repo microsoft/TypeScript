@@ -20,7 +20,7 @@
         "@typescript-eslint/ban-types": "off",
         "camelcase": "off",
         "@typescript-eslint/camelcase": "off",
-        "@typescript-eslint/class-name-casing": "off",
+        "@typescript-eslint/class-name-casing": "error",
         "@typescript-eslint/explicit-member-accessibility": "off",
         "@typescript-eslint/import/order": "off",
         "indent": "off",
