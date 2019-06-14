@@ -911,14 +911,11 @@ namespace ts.server {
         cancellationToken = nullCancellationToken;
     }
 
-    let eventPort: number | undefined;
-    {
-        const str = findArgument("--eventPort");
-        const v = str === undefined ? undefined : parseInt(str);
-        if (v !== undefined && !isNaN(v)) {
-            eventPort = v;
-        }
+    function parseEventPort(eventPortStr: string | undefined) {
+        const eventPort = eventPortStr === undefined ? undefined : parseInt(eventPortStr);
+        return eventPort !== undefined && !isNaN(eventPort) ? eventPort : undefined;
     }
+    const eventPort: number | undefined = parseEventPort(findArgument("--eventPort"));
 
     const localeStr = findArgument("--locale");
     if (localeStr) {

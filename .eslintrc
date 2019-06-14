@@ -62,7 +62,7 @@
 
         "arrow-body-style": "off",
         "arrow-parens": "off",
-        "brace-style": "off",
+        "brace-style": ["error", "stroustrup", { "allowSingleLine": true }],
         "comma-dangle": "off",
         "complexity": "off",
         "constructor-super": "error",

@@ -170,11 +170,13 @@ if (args.length < 1) {
     console.log('Usage: node authors.js [command]');
     console.log('List of commands: ');
     Object.keys(Commands).forEach(k => console.log(`     ${k}: ${(Commands as any)[k].description}`));
-} else {
+}
+else {
     var cmd: Function = (Commands as any)[args[0]];
     if (cmd === undefined) {
         console.log('Unknown command ' + args[1]);
-    } else {
+    }
+    else {
         cmd.apply(undefined, args.slice(1));
     }
 }

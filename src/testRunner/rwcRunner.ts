@@ -11,7 +11,8 @@ namespace RWC {
 
         try {
             fn(oldIO);
-        } finally {
+        }
+        finally {
             wrappedIO.endReplay();
             Harness.IO = oldIO;
         }
