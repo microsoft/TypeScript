@@ -628,14 +628,14 @@ namespace ts.codefix {
                 cb(module);
             }
             else if (sourceFile && sourceFile !== from && isImportablePath(from.fileName, sourceFile.fileName)) {
-                const moduleSpecifier = getNodeModulesSpecifierFromFileName(sourceFile.fileName);
+                const moduleSpecifier = getNodeModulesPackageNameFromFileName(sourceFile.fileName);
                 if (!moduleSpecifier || allowsImporting(moduleSpecifier)) {
                     cb(module);
                 }
             }
         });
 
-        function getNodeModulesSpecifierFromFileName(importedFileName: string): string | undefined {
+        function getNodeModulesPackageNameFromFileName(importedFileName: string): string | undefined {
             const specifier = moduleSpecifiers.getModuleSpecifier(
                 compilerOptions,
                 from,
@@ -646,10 +646,15 @@ namespace ts.codefix {
                 preferences,
                 redirectTargetsMap);
 
-            // Relative paths here are not node_modules, so we don’t care about them;
+            // Paths here are not node_modules, so we don’t care about them;
             // returning anyting will trigger a lookup in package.json.
-            if (!pathIsRelative(specifier)) {
-                return getPackageNameFromTypesPackageName(specifier);
+            if (!pathIsRelative(specifier) && !isRootedDiskPath(specifier)) {
+                const components = getPathComponents(getPackageNameFromTypesPackageName(specifier)).slice(1);
+                // Scoped packages
+                if (startsWith(components[0], "@")) {
+                    return `${components[0]}/${components[1]}`;
+                }
+                return components[0];
             }
         }
     }
