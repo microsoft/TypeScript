@@ -669,7 +669,7 @@ namespace ts.server {
                             msg += `\n\nFile text of ${fileRequest.file}:${indent(text)}\n`;
                         }
                     }
-                    catch { } // tslint:disable-line no-empty
+                    catch { } // eslint-disable-line no-empty
                 }
 
                 if (err.message && err.message.indexOf(`Could not find sourceFile:`) !== -1) {

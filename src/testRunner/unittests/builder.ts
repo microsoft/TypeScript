@@ -78,7 +78,7 @@ namespace ts {
             const program = getProgram();
             builderProgram = createEmitAndSemanticDiagnosticsBuilderProgram(program, host, builderProgram);
             const outputFileNames: string[] = [];
-            // tslint:disable-next-line no-empty
+            // eslint-disable-next-line no-empty
             while (builderProgram.emitNextAffectedFile(fileName => outputFileNames.push(fileName))) {
             }
             assert.deepEqual(outputFileNames, fileNames);

@@ -82,7 +82,7 @@
         "no-debugger": "off",
         "no-duplicate-case": "error",
         "no-duplicate-imports": "error",
-        "no-empty": "off",
+        "no-empty": "error",
         "no-eval": "off",
         "no-extra-bind": "error",
         "no-fallthrough": "off",

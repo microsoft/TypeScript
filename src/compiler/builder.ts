@@ -957,7 +957,7 @@ namespace ts {
 
             // When semantic builder asks for diagnostics of the whole program,
             // ensure that all the affected files are handled
-            // tslint:disable-next-line no-empty
+            // eslint-disable-next-line no-empty
             while (getSemanticDiagnosticsOfNextAffectedFile(cancellationToken)) {
             }
 
