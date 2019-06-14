@@ -16,8 +16,6 @@ namespace Harness.Parallel.Host {
         const { fork } = require("child_process") as typeof import("child_process");
         const { statSync, readFileSync } = require("fs") as typeof import("fs");
 
-        const editSkipRate = 0.05
-
         // NOTE: paths for module and types for FailedTestReporter _do not_ line up due to our use of --outFile for run.js
         // tslint:disable-next-line:variable-name
         const FailedTestReporter = require(path.resolve(__dirname, "../../scripts/failed-tests")) as typeof import("../../../scripts/failed-tests");
@@ -194,7 +192,7 @@ namespace Harness.Parallel.Host {
             return `tsrunner-${runner}://${test}`;
         }
 
-        function skipCostlyTests(tasks: Task[], editSkipRate: number) {
+        function skipCostlyTests(tasks: Task[]) {
             if (statSync('.test-cost.json')) {
                 const costs = JSON.parse(readFileSync('.test-cost.json', 'utf8')) as {
                     totalTime: number,
@@ -205,12 +203,12 @@ namespace Harness.Parallel.Host {
                 let skippedTests = new Set<string>();
                 let skippedTime = 0;
                 let i = 0;
-                for (; i < costs.data.length && (skippedEdits / costs.totalEdits) < editSkipRate; i++) {
+                for (; i < costs.data.length && (skippedEdits / costs.totalEdits) < (skipPercent / 100); i++) {
                     skippedEdits += costs.data[i].edits;
                     skippedTime += costs.data[i].time;
                     skippedTests.add(costs.data[i].name);
                 }
-                console.log(`Skipped ${i} expensive tests; estimated time savings of ${(skippedTime / costs.totalTime * 100).toFixed(2)}% with ${(editSkipRate * 100).toFixed(2)}% chance of missing a test.`)
+                console.log(`Skipped ${i} expensive tests; estimated time savings of ${(skippedTime / costs.totalTime * 100).toFixed(2)}% with ${skipPercent.toFixed(2)}% chance of missing a test.`)
                 return tasks.filter(t => !skippedTests.has(t.file));
             }
             else {
@@ -219,7 +217,7 @@ namespace Harness.Parallel.Host {
             }
         }
 
-        function startDelayed(perfData: { [testHash: string]: number } | undefined, totalCost: number, editSkipRate: number) {
+        function startDelayed(perfData: { [testHash: string]: number } | undefined, totalCost: number) {
             console.log(`Discovered ${tasks.length} unittest suites` + (newTasks.length ? ` and ${newTasks.length} new suites.` : "."));
             console.log("Discovering runner-based tests...");
             const discoverStart = +(new Date());
@@ -258,7 +256,7 @@ namespace Harness.Parallel.Host {
             }
             tasks.sort((a, b) => a.size - b.size);
             tasks = tasks.concat(newTasks);
-            tasks = skipCostlyTests(tasks, editSkipRate);
+            tasks = skipCostlyTests(tasks);
             const batchCount = workerCount;
             const packfraction = 0.9;
             const chunkSize = 1000; // ~1KB or 1s for sending batches near the end of a test
@@ -653,6 +651,6 @@ namespace Harness.Parallel.Host {
         }
 
         // tslint:disable-next-line:ban
-        setTimeout(() => startDelayed(perfData, totalCost, editSkipRate), 0); // Do real startup on next tick, so all unit tests have been collected
+        setTimeout(() => startDelayed(perfData, totalCost), 0); // Do real startup on next tick, so all unit tests have been collected
     }
 }
