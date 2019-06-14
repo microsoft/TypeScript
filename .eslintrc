@@ -47,7 +47,7 @@
         "@typescript-eslint/prefer-namespace-keyword": "off",
         "semi": "off",
         "@typescript-eslint/semi": "error",
-        "@typescript-eslint/type-annotation-spacing": "off",
+        "@typescript-eslint/type-annotation-spacing": "error",
         "@typescript-eslint/unified-signatures": "off",
 
         "microsoft-typescript/object-literal-surrounding-space": "off",
