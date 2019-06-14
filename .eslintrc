@@ -119,7 +119,7 @@
         "radix": "off",
         "sort-keys": "off",
         "space-before-function-paren": "off",
-        "space-in-parens": "off",
+        "space-in-parens": "error",
         "unicode-bom": ["error", "never"],
         "use-isnan": "error",
         "valid-typeof": "off"

@@ -46,7 +46,7 @@ function copyFileSync(source: string, destination: string) {
     fs.writeFileSync(destination, text);
 }
 
-function importDefinitelyTypedTest(tscPath: string, rwcTestPath: string, testCaseName: string, testFiles: string[], responseFile: string ) {
+function importDefinitelyTypedTest(tscPath: string, rwcTestPath: string, testCaseName: string, testFiles: string[], responseFile: string) {
     let cmd = "node " + tscPath + " --module commonjs " + testFiles.join(" ");
     if (responseFile) {
         cmd += " @" + responseFile;
