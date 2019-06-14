@@ -3193,7 +3193,7 @@ ${code}
             const debug = new FourSlashInterface.Debug(state);
             const format = new FourSlashInterface.Format(state);
             const cancellation = new FourSlashInterface.Cancellation(state);
-            // tslint:disable-next-line:no-eval
+            // eslint-disable-next-line no-eval
             const f = eval(wrappedCode);
             f(test, goTo, plugins, verify, edit, debug, format, cancellation, FourSlashInterface.Classification, FourSlashInterface.Completion, verifyOperationIsCancelled);
         }

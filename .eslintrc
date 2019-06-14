@@ -83,7 +83,7 @@
         "no-duplicate-case": "error",
         "no-duplicate-imports": "error",
         "no-empty": "error",
-        "no-eval": "off",
+        "no-eval": "error",
         "no-extra-bind": "error",
         "no-fallthrough": "off",
         "no-invalid-this": "off",
