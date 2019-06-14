@@ -50,7 +50,7 @@
         "@typescript-eslint/type-annotation-spacing": "error",
         "@typescript-eslint/unified-signatures": "off",
 
-        "microsoft-typescript/object-literal-surrounding-space": "off",
+        "microsoft-typescript/object-literal-surrounding-space": "error",
         "microsoft-typescript/no-type-assertion-whitespace": "error",
         "microsoft-typescript/type-operator-spacing": "off",
         "microsoft-typescript/only-arrow-functions": "off",

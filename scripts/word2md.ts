@@ -388,8 +388,8 @@ function convertDocumentToMarkdown(doc: Word.Document): string {
     findReplace("&lt;", { style: "Terminal" }, "<", {});
     findReplace("", { font: { subscript: true } }, "<sub>^&</sub>", { font: { subscript: false } });
     findReplace("", { style: "Code Fragment" }, "`^&`", { style: -66 /* default font */ });
-    findReplace("", { style: "Production" }, "*^&*", { style: -66 /* default font */});
-    findReplace("", { style: "Terminal" }, "`^&`", { style: -66 /* default font */});
+    findReplace("", { style: "Production" }, "*^&*", { style: -66 /* default font */ });
+    findReplace("", { style: "Terminal" }, "`^&`", { style: -66 /* default font */ });
     findReplace("", { font: { bold: true, italic: true } }, "***^&***", { font: { bold: false, italic: false } });
     findReplace("", { font: { italic: true } }, "*^&*", { font: { italic: false } });
 
