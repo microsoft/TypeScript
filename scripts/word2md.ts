@@ -7,8 +7,7 @@
 // as a command line argument and the resulting Markdown is written to standard output. The
 // tool recognizes the specific Word styles used in the TypeScript Language Specification.
 
-module Word {
-
+namespace Word {
     export interface Collection<T> {
         count: number;
         item(index: number): T;

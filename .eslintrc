@@ -44,7 +44,7 @@
         "@typescript-eslint/prefer-for-of": "error",
         "@typescript-eslint/prefer-function-type": "off",
         "@typescript-eslint/prefer-interface": "error",
-        "@typescript-eslint/prefer-namespace-keyword": "off",
+        "@typescript-eslint/prefer-namespace-keyword": "error",
         "semi": "off",
         "@typescript-eslint/semi": "error",
         "@typescript-eslint/type-annotation-spacing": "error",
