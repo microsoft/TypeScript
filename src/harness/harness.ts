@@ -28,7 +28,7 @@ var assert: typeof _chai.assert = _chai.assert;
     };
 }
 
-var global: NodeJS.Global = Function("return this").call(undefined); // tslint:disable-line:function-constructor
+var global: NodeJS.Global = Function("return this").call(undefined); // eslint-disable-line no-new-func
 
 declare var window: {};
 declare var XMLHttpRequest: new() => XMLHttpRequest;

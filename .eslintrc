@@ -88,7 +88,7 @@
         "no-fallthrough": "off",
         "no-invalid-this": "off",
         "no-multiple-empty-lines": "off",
-        "no-new-func": "off",
+        "no-new-func": "error",
         "no-new-wrappers": "error",
         "no-redeclare": "off",
         "no-return-await": "error",
