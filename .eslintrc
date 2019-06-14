@@ -71,7 +71,7 @@
         "eol-last": "off",
         "eqeqeq": "error",
         "guard-for-in": "off",
-        "linebreak-style": "off",
+        "linebreak-style": ["error", "windows"],
         "max-classes-per-file": "off",
         "max-len": "off",
         "new-parens": "error",
