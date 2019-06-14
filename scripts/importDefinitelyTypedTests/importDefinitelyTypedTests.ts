@@ -95,7 +95,7 @@ function importDefinitelyTypedTest(tscPath: string, rwcTestPath: string, testCas
             //console.log("\r\n");
 
         })
-        .on('error', (error: any) => {
+        .on("error", (error: any) => {
             console.log("==> error " + JSON.stringify(error));
             console.log("\r\n");
         });

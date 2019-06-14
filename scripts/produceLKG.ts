@@ -1,10 +1,10 @@
 /// <reference types="node" />
 
-import childProcess = require('child_process');
-import fs = require('fs-extra');
-import path = require('path');
-import removeInternal = require('remove-internal');
-import glob = require('glob');
+import childProcess = require("child_process");
+import fs = require("fs-extra");
+import path = require("path");
+import removeInternal = require("remove-internal");
+import glob = require("glob");
 
 const root = path.join(__dirname, "..");
 const source = path.join(root, "built/local");
@@ -30,7 +30,6 @@ async function copyLocalizedDiagnostics() {
     for (const d of dir) {
         const fileName = path.join(source, d);
         if (fs.statSync(fileName).isDirectory()) {
-            if (d === 'tslint') continue;
             await fs.copy(fileName, path.join(dest, d));
         }
     }

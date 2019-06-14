@@ -115,7 +115,7 @@
         "prefer-const": "off",
         "prefer-object-spread": "error",
         "quote-props": ["error", "consistent-as-needed"],
-        "quotes": "off",
+        "quotes": ["error", "double", { "avoidEscape": true, "allowTemplateLiterals": true }],
         "radix": "off",
         "sort-keys": "off",
         "space-before-function-paren": "off",

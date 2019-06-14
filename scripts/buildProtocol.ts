@@ -140,7 +140,7 @@ function writeProtocolFile(outputFile: string, protocolTs: string, typeScriptSer
         if (protocolDts === undefined) {
             const diagHost: ts.FormatDiagnosticsHost = {
                 getCanonicalFileName(f) { return f; },
-                getCurrentDirectory() { return '.'; },
+                getCurrentDirectory() { return "."; },
                 getNewLine() { return "\r\n"; }
             };
             const diags = emitResult.diagnostics.map(d => ts.formatDiagnostic(d, diagHost)).join("\r\n");
