@@ -35,7 +35,7 @@
         "@typescript-eslint/no-namespace": "off",
         "@typescript-eslint/no-object-literal-type-assertion": "off",
         "@typescript-eslint/no-parameter-properties": "off",
-        "@typescript-eslint/no-this-alias": "off",
+        "@typescript-eslint/no-this-alias": "error",
         "@typescript-eslint/no-triple-slash-reference": "off",
         "@typescript-eslint/no-unnecessary-qualifier": "off",
         "@typescript-eslint/no-unnecessary-type-assertion": "off",

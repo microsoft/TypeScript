@@ -26,7 +26,7 @@ abstract class ExternalCompileRunnerBase extends RunnerBase {
         // Read in and evaluate the test list
         const testList = this.tests && this.tests.length ? this.tests : this.enumerateTestFiles();
 
-        // tslint:disable-next-line:no-this-assignment
+        // eslint-disable-next-line @typescript-eslint/no-this-alias
         const cls = this;
         describe(`${this.kind()} code samples`, function(this: Mocha.ISuiteCallbackContext) {
             this.timeout(600_000); // 10 minutes
@@ -36,7 +36,7 @@ abstract class ExternalCompileRunnerBase extends RunnerBase {
         });
     }
     private runTest(directoryName: string) {
-        // tslint:disable-next-line:no-this-assignment
+        // eslint-disable-next-line @typescript-eslint/no-this-alias
         const cls = this;
         const timeout = 600_000; // 10 minutes
         describe(directoryName, function(this: Mocha.ISuiteCallbackContext) {
