@@ -204,7 +204,13 @@ namespace ts.codefix {
         if (!isIdentifier(parameterDeclaration.name)) {
             return;
         }
-        const parameterInferences = inferTypeForParametersFromUsage(containingFunction, sourceFile, program, cancellationToken) ||
+
+        const references = inferFunctionReferencesFromUsage(containingFunction, sourceFile, program, cancellationToken);
+        if (!references) {
+            return;
+        }
+
+        const parameterInferences = InferFromReference.inferTypeForParametersFromReferences(references, containingFunction, program, cancellationToken) ||
             containingFunction.parameters.map<ParameterInference>(p => ({
                 declaration: p,
                 type: isIdentifier(p.name) ? inferTypeForVariableFromUsage(p.name, program, cancellationToken) : program.getTypeChecker().getAnyType()
@@ -227,7 +233,12 @@ namespace ts.codefix {
     }
 
     function annotateThis(changes: textChanges.ChangeTracker, sourceFile: SourceFile, containingFunction: textChanges.ThisTypeAnnotatable, program: Program, host: LanguageServiceHost, cancellationToken: CancellationToken) {
-        const thisInference = inferTypeForThisFromUsage(containingFunction, program, cancellationToken);
+        const references = inferFunctionReferencesFromUsage(containingFunction, sourceFile, program, cancellationToken);
+        if (!references) {
+            return;
+        }
+
+        const thisInference = InferFromReference.inferTypeForThisFromReferences(references, program, cancellationToken);
         if (!thisInference) {
             return;
         }
@@ -355,7 +366,7 @@ namespace ts.codefix {
         return InferFromReference.unifyFromContext(types, checker);
     }
 
-    function inferTypeForParametersFromUsage(containingFunction: FunctionLike, sourceFile: SourceFile, program: Program, cancellationToken: CancellationToken): ParameterInference[] | undefined {
+    function inferFunctionReferencesFromUsage(containingFunction: FunctionLike, sourceFile: SourceFile, program: Program, cancellationToken: CancellationToken): ReadonlyArray<Identifier> | undefined {
         let searchToken;
         switch (containingFunction.kind) {
             case SyntaxKind.Constructor:
@@ -373,30 +384,16 @@ namespace ts.codefix {
                 searchToken = containingFunction.name;
                 break;
         }
-        if (searchToken) {
-            return InferFromReference.inferTypeForParametersFromReferences(getReferences(searchToken, program, cancellationToken), containingFunction, program, cancellationToken);
-        }
-    }
 
-    function inferTypeForThisFromUsage(containingFunction: SignatureDeclaration, program: Program, cancellationToken: CancellationToken) {
-        let searchToken;
-
-        switch (containingFunction.kind) {
-            case SyntaxKind.FunctionExpression:
-                const parent = containingFunction.parent;
-                searchToken = isVariableDeclaration(parent) && isIdentifier(parent.name) ?
-                    parent.name :
-                    containingFunction.name;
-                break;
-            case SyntaxKind.FunctionDeclaration:
-            case SyntaxKind.MethodDeclaration:
-                searchToken = containingFunction.name;
-                break;
+        if (!searchToken) {
+            return undefined;
         }
 
-        if (searchToken) {
-            return InferFromReference.inferTypeForThisFromReferences(getReferences(searchToken, program, cancellationToken), program, cancellationToken);
-        }
+        return getReferences(searchToken, program, cancellationToken);
+
+        // return inferThis
+        //     ? InferFromReference.inferTypeForThisFromReferences(references, program, cancellationToken)
+        //     : InferFromReference.inferTypeForParametersFromReferences(references, containingFunction, program, cancellationToken);
     }
 
     interface ParameterInference {
