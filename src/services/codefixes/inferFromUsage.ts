@@ -206,10 +206,6 @@ namespace ts.codefix {
         }
 
         const references = inferFunctionReferencesFromUsage(containingFunction, sourceFile, program, cancellationToken);
-        if (!references) {
-            return;
-        }
-
         const parameterInferences = InferFromReference.inferTypeForParametersFromReferences(references, containingFunction, program, cancellationToken) ||
             containingFunction.parameters.map<ParameterInference>(p => ({
                 declaration: p,
@@ -432,15 +428,12 @@ namespace ts.codefix {
             return inferFromContext(usageContext, checker);
         }
 
-        export function inferTypeForParametersFromReferences(references: ReadonlyArray<Identifier>, declaration: FunctionLike, program: Program, cancellationToken: CancellationToken): ParameterInference[] | undefined {
-            const checker = program.getTypeChecker();
-            if (references.length === 0) {
-                return undefined;
-            }
-            if (!declaration.parameters) {
+        export function inferTypeForParametersFromReferences(references: ReadonlyArray<Identifier> | undefined, declaration: FunctionLike, program: Program, cancellationToken: CancellationToken): ParameterInference[] | undefined {
+            if (references === undefined || references.length === 0 || !declaration.parameters) {
                 return undefined;
             }
 
+            const checker = program.getTypeChecker();
             const usageContext: UsageContext = {};
             for (const reference of references) {
                 cancellationToken.throwIfCancellationRequested();
