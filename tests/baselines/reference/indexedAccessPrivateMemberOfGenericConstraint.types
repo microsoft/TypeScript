@@ -1,0 +1,11 @@
+=== tests/cases/compiler/indexedAccessPrivateMemberOfGenericConstraint.ts ===
+class A {
+>A : A
+
+  private a: number;
+>a : number
+}
+
+type B<T extends A> = T["a"];
+>B : T["a"]
+
