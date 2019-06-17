@@ -6,6 +6,20 @@ class A {
 >a : number
 }
 
-type B<T extends A> = T["a"];
->B : T["a"]
+class B {
+>B : B
+
+  private a: string;
+>a : string
+}
+
+type X<T extends A> = T["a"];
+>X : T["a"]
+
+type Y<T extends A | B> = T["a"];
+>Y : T["a"]
+
+type Z<T extends A & B> = T["a"];
+>Z : T["a"]
+
 

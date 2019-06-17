@@ -2,4 +2,11 @@ class A {
   private a: number;
 }
 
-type B<T extends A> = T["a"];
+class B {
+  private a: string;
+}
+
+type X<T extends A> = T["a"];
+type Y<T extends A | B> = T["a"];
+type Z<T extends A & B> = T["a"];
+
