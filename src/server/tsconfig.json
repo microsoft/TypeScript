@@ -1,7 +1,7 @@
 {
     "extends": "../tsconfig-base",
     "compilerOptions": {
-        "removeComments": true,
+        "removeComments": false,
         "outFile": "../../built/local/server.js",
         "preserveConstEnums": true,
         "types": [

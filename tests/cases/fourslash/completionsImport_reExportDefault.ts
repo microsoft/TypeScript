@@ -15,10 +15,28 @@
 verify.completions({
     marker: "",
     exact: [
+        completion.globalThisEntry,
         ...completion.globalsVars,
-        "undefined",
-        { name: "foo", source: "/a/b/impl", sourceDisplay: "./a", text: "function foo(): void", kind: "function", hasAction: true },
-        { name: "foo", source: "/a/index", sourceDisplay: "./a", text: "(alias) function foo(): void\nexport foo", kind: "alias", hasAction: true },
+        completion.undefinedVarEntry,
+        {
+            name: "foo",
+            source: "/a/b/impl",
+            sourceDisplay: "./a",
+            text: "function foo(): void",
+            kind: "function",
+            kindModifiers: "export",
+            hasAction: true,
+            sortText: completion.SortText.AutoImportSuggestions
+        },
+        {
+            name: "foo",
+            source: "/a/index",
+            sourceDisplay: "./a",
+            text: "(alias) function foo(): void\nexport foo",
+            kind: "alias",
+            hasAction: true,
+            sortText: completion.SortText.AutoImportSuggestions
+        },
         ...completion.globalKeywords,
     ],
     preferences: { includeCompletionsForModuleExports: true },

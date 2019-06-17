@@ -1,5 +1,4 @@
-tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithObjectTypeArgsAndConstraints3.ts(18,32): error TS2322: Type 'Derived2' is not assignable to type 'Derived'.
-  Property 'y' is missing in type 'Derived2'.
+tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithObjectTypeArgsAndConstraints3.ts(18,32): error TS2741: Property 'y' is missing in type 'Derived2' but required in type 'Derived'.
 
 
 ==== tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithObjectTypeArgsAndConstraints3.ts (1 errors) ====
@@ -22,8 +21,8 @@ tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithObj
     
     var r1 = f({ x: new Derived(), y: new Derived2() }); // error because neither is supertype of the other
                                    ~
-!!! error TS2322: Type 'Derived2' is not assignable to type 'Derived'.
-!!! error TS2322:   Property 'y' is missing in type 'Derived2'.
+!!! error TS2741: Property 'y' is missing in type 'Derived2' but required in type 'Derived'.
+!!! related TS2728 tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithObjectTypeArgsAndConstraints3.ts:7:5: 'y' is declared here.
 !!! related TS6500 tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithObjectTypeArgsAndConstraints3.ts:13:39: The expected type comes from property 'y' which is declared here on type '{ x: Derived; y: Derived; }'
     
     function f2<T extends Base, U extends { x: T; y: T }>(a: U) {

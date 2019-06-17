@@ -26,5 +26,5 @@ tests/cases/compiler/promiseTypeInference.ts(10,39): error TS2322: Type 'IPromis
 !!! error TS2322:         Types of parameters 'success' and 'onfulfilled' are incompatible.
 !!! error TS2322:           Type 'TResult1 | PromiseLike<TResult1>' is not assignable to type 'IPromise<TResult1 | TResult2>'.
 !!! error TS2322:             Type 'TResult1' is not assignable to type 'IPromise<TResult1 | TResult2>'.
-!!! related TS6502 /.ts/lib.es5.d.ts:1396:57: The expected type comes from the return type of this signature.
+!!! related TS6502 /.ts/lib.es5.d.ts:1406:57: The expected type comes from the return type of this signature.
     

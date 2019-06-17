@@ -1,0 +1,13 @@
+=== tests/cases/conformance/constEnums/constEnum4.ts ===
+if (1)
+    const enum A { }
+>A : Symbol(A, Decl(constEnum4.ts, 0, 6))
+
+else if (2)
+    const enum B { }
+>B : Symbol(B, Decl(constEnum4.ts, 2, 11))
+
+else
+    const enum C { }
+>C : Symbol(C, Decl(constEnum4.ts, 4, 4))
+

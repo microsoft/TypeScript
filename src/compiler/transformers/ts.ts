@@ -101,7 +101,7 @@ namespace ts {
         function transformBundle(node: Bundle) {
             return createBundle(node.sourceFiles.map(transformSourceFile), mapDefined(node.prepends, prepend => {
                 if (prepend.kind === SyntaxKind.InputFiles) {
-                    return createUnparsedSourceFile(prepend.javascriptText, prepend.javascriptMapPath, prepend.javascriptMapText);
+                    return createUnparsedSourceFile(prepend, "js");
                 }
                 return prepend;
             }));
@@ -208,15 +208,9 @@ namespace ts {
          * @param node The node to visit.
          */
         function visitorWorker(node: Node): VisitResult<Node> {
-            if (node.transformFlags & TransformFlags.TypeScript) {
-                // This node is explicitly marked as TypeScript, so we should transform the node.
+            if (node.transformFlags & TransformFlags.ContainsTypeScript) {
                 return visitTypeScript(node);
             }
-            else if (node.transformFlags & TransformFlags.ContainsTypeScript) {
-                // This node contains TypeScript, so we should visit its children.
-                return visitEachChild(node, visitor, context);
-            }
-
             return node;
         }
 
@@ -296,15 +290,9 @@ namespace ts {
                  (<ImportEqualsDeclaration>node).moduleReference.kind === SyntaxKind.ExternalModuleReference)) {
                 // do not emit ES6 imports and exports since they are illegal inside a namespace
                 return undefined;
-           }
-           else if (node.transformFlags & TransformFlags.TypeScript || hasModifier(node, ModifierFlags.Export)) {
-                // This node is explicitly marked as TypeScript, or is exported at the namespace
-                // level, so we should transform the node.
-                return visitTypeScript(node);
             }
-            else if (node.transformFlags & TransformFlags.ContainsTypeScript) {
-                // This node contains TypeScript, so we should visit its children.
-                return visitEachChild(node, visitor, context);
+            else if (node.transformFlags & TransformFlags.ContainsTypeScript || hasModifier(node, ModifierFlags.Export)) {
+                return visitTypeScript(node);
             }
 
             return node;
@@ -365,7 +353,7 @@ namespace ts {
          * @param node The node to visit.
          */
         function visitTypeScript(node: Node): VisitResult<Node> {
-            if (hasModifier(node, ModifierFlags.Ambient) && isStatement(node)) {
+            if (isStatement(node) && hasModifier(node, ModifierFlags.Ambient)) {
                 // TypeScript ambient declarations are elided, but some comments may be preserved.
                 // See the implementation of `getLeadingComments` in comments.ts for more details.
                 return createNotEmittedStatement(node);
@@ -443,7 +431,7 @@ namespace ts {
                     return createNotEmittedStatement(node);
 
                 case SyntaxKind.ClassDeclaration:
-                    // This is a class declaration with TypeScript syntax extensions.
+                    // This may be a class declaration with TypeScript syntax extensions.
                     //
                     // TypeScript class syntax extensions include:
                     // - decorators
@@ -455,7 +443,7 @@ namespace ts {
                     return visitClassDeclaration(<ClassDeclaration>node);
 
                 case SyntaxKind.ClassExpression:
-                    // This is a class expression with TypeScript syntax extensions.
+                    // This may be a class expression with TypeScript syntax extensions.
                     //
                     // TypeScript class syntax extensions include:
                     // - decorators
@@ -467,7 +455,7 @@ namespace ts {
                     return visitClassExpression(<ClassExpression>node);
 
                 case SyntaxKind.HeritageClause:
-                    // This is a heritage clause with TypeScript syntax extensions.
+                    // This may be a heritage clause with TypeScript syntax extensions.
                     //
                     // TypeScript heritage clause extensions include:
                     // - `implements` clause
@@ -503,7 +491,7 @@ namespace ts {
                     return visitArrowFunction(<ArrowFunction>node);
 
                 case SyntaxKind.Parameter:
-                    // This is a parameter declaration with TypeScript syntax extensions.
+                    // This may be a parameter declaration with TypeScript syntax extensions.
                     //
                     // TypeScript parameter declaration syntax extensions include:
                     // - decorators
@@ -556,7 +544,8 @@ namespace ts {
                     return visitImportEqualsDeclaration(<ImportEqualsDeclaration>node);
 
                 default:
-                    return Debug.failBadSyntaxKind(node);
+                    // node contains some other TypeScript syntax
+                    return visitEachChild(node, visitor, context);
             }
         }
 
@@ -607,18 +596,22 @@ namespace ts {
             return facts;
         }
 
-        /**
-         * Transforms a class declaration with TypeScript syntax into compatible ES6.
-         *
-         * This function will only be called when one of the following conditions are met:
-         * - The class has decorators.
-         * - The class has property declarations with initializers.
-         * - The class contains a constructor that contains parameters with accessibility modifiers.
-         * - The class is an export in a TypeScript namespace.
-         *
-         * @param node The node to transform.
-         */
+        function hasTypeScriptClassSyntax(node: Node) {
+            return !!(node.transformFlags & TransformFlags.ContainsTypeScriptClassSyntax);
+        }
+
+        function isClassLikeDeclarationWithTypeScriptSyntax(node: ClassLikeDeclaration) {
+            return some(node.decorators)
+                || some(node.typeParameters)
+                || some(node.heritageClauses, hasTypeScriptClassSyntax)
+                || some(node.members, hasTypeScriptClassSyntax);
+        }
+
         function visitClassDeclaration(node: ClassDeclaration): VisitResult<Statement> {
+            if (!isClassLikeDeclarationWithTypeScriptSyntax(node) && !(currentNamespace && hasModifier(node, ModifierFlags.Export))) {
+                return visitEachChild(node, visitor, context);
+            }
+
             const savedPendingExpressions = pendingExpressions;
             pendingExpressions = undefined;
 
@@ -682,7 +675,7 @@ namespace ts {
                 setEmitFlags(statement, EmitFlags.NoComments | EmitFlags.NoTokenSourceMaps);
                 statements.push(statement);
 
-                addStatementsAfterPrologue(statements, context.endLexicalEnvironment());
+                insertStatementsAfterStandardPrologue(statements, context.endLexicalEnvironment());
 
                 const iife = createImmediatelyInvokedArrowFunction(statements);
                 setEmitFlags(iife, EmitFlags.TypeScriptClassWrapper);
@@ -890,16 +883,11 @@ namespace ts {
             return statement;
         }
 
-        /**
-         * Transforms a class expression with TypeScript syntax into compatible ES6.
-         *
-         * This function will only be called when one of the following conditions are met:
-         * - The class has property declarations with initializers.
-         * - The class contains a constructor that contains parameters with accessibility modifiers.
-         *
-         * @param node The node to transform.
-         */
         function visitClassExpression(node: ClassExpression): Expression {
+            if (!isClassLikeDeclarationWithTypeScriptSyntax(node)) {
+                return visitEachChild(node, visitor, context);
+            }
+
             const savedPendingExpressions = pendingExpressions;
             pendingExpressions = undefined;
 
@@ -1350,11 +1338,14 @@ namespace ts {
             let decorators: (ReadonlyArray<Decorator> | undefined)[] | undefined;
             if (node) {
                 const parameters = node.parameters;
-                for (let i = 0; i < parameters.length; i++) {
-                    const parameter = parameters[i];
+                const firstParameterIsThis = parameters.length > 0 && parameterIsThisKeyword(parameters[0]);
+                const firstParameterOffset = firstParameterIsThis ? 1 : 0;
+                const numParameters = firstParameterIsThis ? parameters.length - 1 : parameters.length;
+                for (let i = 0; i < numParameters; i++) {
+                    const parameter = parameters[i + firstParameterOffset];
                     if (decorators || parameter.decorators) {
                         if (!decorators) {
-                            decorators = new Array(parameters.length);
+                            decorators = new Array(numParameters);
                         }
 
                         decorators[i] = parameter.decorators;
@@ -1898,8 +1889,12 @@ namespace ts {
                         case SyntaxKind.StringLiteral:
                             return createIdentifier("String");
 
+                        case SyntaxKind.PrefixUnaryExpression:
                         case SyntaxKind.NumericLiteral:
                             return createIdentifier("Number");
+
+                        case SyntaxKind.BigIntLiteral:
+                            return getGlobalBigIntNameWithFallback();
 
                         case SyntaxKind.TrueKeyword:
                         case SyntaxKind.FalseKeyword:
@@ -1912,6 +1907,9 @@ namespace ts {
                 case SyntaxKind.NumberKeyword:
                     return createIdentifier("Number");
 
+                case SyntaxKind.BigIntKeyword:
+                    return getGlobalBigIntNameWithFallback();
+
                 case SyntaxKind.SymbolKeyword:
                     return languageVersion < ScriptTarget.ES2015
                         ? getGlobalSymbolNameWithFallback()
@@ -1922,10 +1920,18 @@ namespace ts {
 
                 case SyntaxKind.IntersectionType:
                 case SyntaxKind.UnionType:
-                    return serializeUnionOrIntersectionType(<UnionOrIntersectionTypeNode>node);
+                    return serializeTypeList((<UnionOrIntersectionTypeNode>node).types);
+
+                case SyntaxKind.ConditionalType:
+                    return serializeTypeList([(<ConditionalTypeNode>node).trueType, (<ConditionalTypeNode>node).falseType]);
+
+                case SyntaxKind.TypeOperator:
+                    if ((<TypeOperatorNode>node).operator === SyntaxKind.ReadonlyKeyword) {
+                        return serializeTypeNode((<TypeOperatorNode>node).type);
+                    }
+                    break;
 
                 case SyntaxKind.TypeQuery:
-                case SyntaxKind.TypeOperator:
                 case SyntaxKind.IndexedAccessType:
                 case SyntaxKind.MappedType:
                 case SyntaxKind.TypeLiteral:
@@ -1935,6 +1941,7 @@ namespace ts {
                 case SyntaxKind.ImportType:
                     break;
 
+
                 default:
                     return Debug.failBadSyntaxKind(node);
             }
@@ -1942,11 +1949,11 @@ namespace ts {
             return createIdentifier("Object");
         }
 
-        function serializeUnionOrIntersectionType(node: UnionOrIntersectionTypeNode): SerializedTypeNode {
+        function serializeTypeList(types: ReadonlyArray<TypeNode>): SerializedTypeNode {
             // Note when updating logic here also update getEntityNameForDecoratorMetadata
             // so that aliases can be marked as referenced
             let serializedUnion: SerializedTypeNode | undefined;
-            for (let typeNode of node.types) {
+            for (let typeNode of types) {
                 while (typeNode.kind === SyntaxKind.ParenthesizedType) {
                     typeNode = (typeNode as ParenthesizedTypeNode).type; // Skip parens if need be
                 }
@@ -1992,6 +1999,11 @@ namespace ts {
             const kind = resolver.getTypeReferenceSerializationKind(node.typeName, currentNameScope || currentLexicalScope);
             switch (kind) {
                 case TypeReferenceSerializationKind.Unknown:
+                    // From conditional type type reference that cannot be resolved is Similar to any or unknown
+                    if (findAncestor(node, n => n.parent && isConditionalTypeNode(n.parent) && (n.parent.trueType === n || n.parent.falseType === n))) {
+                        return createIdentifier("Object");
+                    }
+
                     const serialized = serializeEntityNameAsExpressionFallback(node.typeName);
                     const temp = createTempVariable(hoistVariableDeclaration);
                     return createConditional(
@@ -2005,6 +2017,9 @@ namespace ts {
 
                 case TypeReferenceSerializationKind.VoidNullableOrNeverType:
                     return createVoidZero();
+
+                case TypeReferenceSerializationKind.BigIntLikeType:
+                    return getGlobalBigIntNameWithFallback();
 
                 case TypeReferenceSerializationKind.BooleanType:
                     return createIdentifier("Boolean");
@@ -2116,6 +2131,20 @@ namespace ts {
         }
 
         /**
+         * Gets an expression that points to the global "BigInt" constructor at runtime if it is
+         * available.
+         */
+        function getGlobalBigIntNameWithFallback(): SerializedTypeNode {
+            return languageVersion < ScriptTarget.ESNext
+                ? createConditional(
+                    createTypeCheck(createIdentifier("BigInt"), "function"),
+                    createIdentifier("BigInt"),
+                    createIdentifier("Object")
+                )
+                : createIdentifier("BigInt");
+        }
+
+        /**
          * A simple inlinable expression is an expression which can be copied into multiple locations
          * without risk of repeating any sideeffects and whose value could not possibly change between
          * any such locations
@@ -2199,18 +2228,11 @@ namespace ts {
          * @param node The HeritageClause to transform.
          */
         function visitHeritageClause(node: HeritageClause): HeritageClause | undefined {
-            if (node.token === SyntaxKind.ExtendsKeyword) {
-                const types = visitNodes(node.types, visitor, isExpressionWithTypeArguments, 0, 1);
-                return setTextRange(
-                    createHeritageClause(
-                        SyntaxKind.ExtendsKeyword,
-                        types
-                    ),
-                    node
-                );
+            if (node.token === SyntaxKind.ImplementsKeyword) {
+                // implements clauses are elided
+                return undefined;
             }
-
-            return undefined;
+            return visitEachChild(node, visitor, context);
         }
 
         /**
@@ -2261,16 +2283,6 @@ namespace ts {
             );
         }
 
-        /**
-         * Visits a method declaration of a class.
-         *
-         * This function will be called when one of the following conditions are met:
-         * - The node is an overload
-         * - The node is marked as abstract, public, private, protected, or readonly
-         * - The node has a computed property name
-         *
-         * @param node The method node.
-         */
         function visitMethodDeclaration(node: MethodDeclaration) {
             if (!shouldEmitFunctionLikeDeclaration(node)) {
                 return undefined;
@@ -2306,15 +2318,6 @@ namespace ts {
             return !(nodeIsMissing(node.body) && hasModifier(node, ModifierFlags.Abstract));
         }
 
-        /**
-         * Visits a get accessor declaration of a class.
-         *
-         * This function will be called when one of the following conditions are met:
-         * - The node is marked as abstract, public, private, or protected
-         * - The node has a computed property name
-         *
-         * @param node The get accessor node.
-         */
         function visitGetAccessor(node: GetAccessorDeclaration) {
             if (!shouldEmitAccessorDeclaration(node)) {
                 return undefined;
@@ -2337,15 +2340,6 @@ namespace ts {
             return updated;
         }
 
-        /**
-         * Visits a set accessor declaration of a class.
-         *
-         * This function will be called when one of the following conditions are met:
-         * - The node is marked as abstract, public, private, or protected
-         * - The node has a computed property name
-         *
-         * @param node The set accessor node.
-         */
         function visitSetAccessor(node: SetAccessorDeclaration) {
             if (!shouldEmitAccessorDeclaration(node)) {
                 return undefined;
@@ -2367,16 +2361,6 @@ namespace ts {
             return updated;
         }
 
-        /**
-         * Visits a function declaration.
-         *
-         * This function will be called when one of the following conditions are met:
-         * - The node is an overload
-         * - The node is exported from a TypeScript namespace
-         * - The node has decorators
-         *
-         * @param node The function node.
-         */
         function visitFunctionDeclaration(node: FunctionDeclaration): VisitResult<Statement> {
             if (!shouldEmitFunctionLikeDeclaration(node)) {
                 return createNotEmittedStatement(node);
@@ -2400,14 +2384,6 @@ namespace ts {
             return updated;
         }
 
-        /**
-         * Visits a function expression node.
-         *
-         * This function will be called when one of the following conditions are met:
-         * - The node has type annotations
-         *
-         * @param node The function expression node.
-         */
         function visitFunctionExpression(node: FunctionExpression): Expression {
             if (!shouldEmitFunctionLikeDeclaration(node)) {
                 return createOmittedExpression();
@@ -2425,11 +2401,6 @@ namespace ts {
             return updated;
         }
 
-        /**
-         * @remarks
-         * This function will be called when one of the following conditions are met:
-         * - The node has type annotations
-         */
         function visitArrowFunction(node: ArrowFunction) {
             const updated = updateArrowFunction(
                 node,
@@ -2443,22 +2414,12 @@ namespace ts {
             return updated;
         }
 
-        /**
-         * Visits a parameter declaration node.
-         *
-         * This function will be called when one of the following conditions are met:
-         * - The node has an accessibility modifier.
-         * - The node has a questionToken.
-         * - The node's kind is ThisKeyword.
-         *
-         * @param node The parameter declaration node.
-         */
         function visitParameter(node: ParameterDeclaration) {
             if (parameterIsThisKeyword(node)) {
                 return undefined;
             }
-
-            const parameter = createParameter(
+            const updated = updateParameter(
+                node,
                 /*decorators*/ undefined,
                 /*modifiers*/ undefined,
                 node.dotDotDotToken,
@@ -2467,24 +2428,17 @@ namespace ts {
                 /*type*/ undefined,
                 visitNode(node.initializer, visitor, isExpression)
             );
-
-            // While we emit the source map for the node after skipping decorators and modifiers,
-            // we need to emit the comments for the original range.
-            setOriginalNode(parameter, node);
-            setTextRange(parameter, moveRangePastModifiers(node));
-            setCommentRange(parameter, node);
-            setSourceMapRange(parameter, moveRangePastModifiers(node));
-            setEmitFlags(parameter.name, EmitFlags.NoTrailingSourceMap);
-
-            return parameter;
+            if (updated !== node) {
+                // While we emit the source map for the node after skipping decorators and modifiers,
+                // we need to emit the comments for the original range.
+                setCommentRange(updated, node);
+                setTextRange(updated, moveRangePastModifiers(node));
+                setSourceMapRange(updated, moveRangePastModifiers(node));
+                setEmitFlags(updated.name, EmitFlags.NoTrailingSourceMap);
+            }
+            return updated;
         }
 
-        /**
-         * Visits a variable statement in a namespace.
-         *
-         * This function will be called when one of the following conditions are met:
-         * - The node is exported from a TypeScript namespace.
-         */
         function visitVariableStatement(node: VariableStatement): Statement | undefined {
             if (isExportOfNamespace(node)) {
                 const variables = getInitializedVariables(node.declarationList);
@@ -2538,12 +2492,6 @@ namespace ts {
                 visitNode(node.initializer, visitor, isExpression));
         }
 
-        /**
-         * Visits a parenthesized expression that contains either a type assertion or an `as`
-         * expression.
-         *
-         * @param node The parenthesized expression node.
-         */
         function visitParenthesizedExpression(node: ParenthesizedExpression): Expression {
             const innerExpression = skipOuterExpressions(node.expression, ~OuterExpressionKinds.Assertions);
             if (isAssertionExpression(innerExpression)) {
@@ -2629,7 +2577,7 @@ namespace ts {
          */
         function visitEnumDeclaration(node: EnumDeclaration): VisitResult<Statement> {
             if (!shouldEmitEnumDeclaration(node)) {
-                return undefined;
+                return createNotEmittedStatement(node);
             }
 
             const statements: Statement[] = [];
@@ -2727,7 +2675,7 @@ namespace ts {
             const statements: Statement[] = [];
             startLexicalEnvironment();
             const members = map(node.members, transformEnumMember);
-            addStatementsAfterPrologue(statements, endLexicalEnvironment());
+            insertStatementsAfterStandardPrologue(statements, endLexicalEnvironment());
             addRange(statements, members);
 
             currentNamespaceContainerName = savedCurrentNamespaceLocalName;
@@ -3048,7 +2996,7 @@ namespace ts {
                 statementsLocation = moveRangePos(moduleBlock.statements, -1);
             }
 
-            addStatementsAfterPrologue(statements, endLexicalEnvironment());
+            insertStatementsAfterStandardPrologue(statements, endLexicalEnvironment());
             currentNamespaceContainerName = savedCurrentNamespaceContainerName;
             currentNamespace = savedCurrentNamespace;
             currentScopeFirstDeclarationsOfName = savedCurrentScopeFirstDeclarationsOfName;
@@ -3642,7 +3590,7 @@ namespace ts {
         );
     }
 
-    const decorateHelper: EmitHelper = {
+    export const decorateHelper: UnscopedEmitHelper = {
         name: "typescript:decorate",
         scoped: false,
         priority: 2,
@@ -3667,7 +3615,7 @@ namespace ts {
         );
     }
 
-    const metadataHelper: EmitHelper = {
+    export const metadataHelper: UnscopedEmitHelper = {
         name: "typescript:metadata",
         scoped: false,
         priority: 3,
@@ -3692,7 +3640,7 @@ namespace ts {
         );
     }
 
-    const paramHelper: EmitHelper = {
+    export const paramHelper: UnscopedEmitHelper = {
         name: "typescript:param",
         scoped: false,
         priority: 4,

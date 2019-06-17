@@ -84,3 +84,11 @@ type UnexpectedError<T extends PropertyKey> = T
 type NoErrorHere<T extends PropertyKey> = T
 >NoErrorHere : T
 
+// Repro from #30331
+
+type a<T> = T extends Array<infer U> ? U : never;
+>a : a<T>
+
+type b<T> = { [K in a<T> & keyof T ]: 42 };
+>b : b<T>
+

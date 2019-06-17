@@ -3,9 +3,7 @@ tests/cases/conformance/jsx/file.tsx(19,10): error TS2322: Type '{ naaame: strin
 tests/cases/conformance/jsx/file.tsx(27,15): error TS2322: Type 'number' is not assignable to type 'string'.
 tests/cases/conformance/jsx/file.tsx(29,10): error TS2322: Type '{ naaaaaaame: string; }' is not assignable to type 'IntrinsicAttributes & { name?: string; }'.
   Property 'naaaaaaame' does not exist on type 'IntrinsicAttributes & { name?: string; }'.
-tests/cases/conformance/jsx/file.tsx(34,10): error TS2322: Type '{ extra-prop-name: string; }' is not assignable to type 'IntrinsicAttributes & { "prop-name": string; }'.
-  Type '{ extra-prop-name: string; }' is not assignable to type '{ "prop-name": string; }'.
-    Property '"prop-name"' is missing in type '{ extra-prop-name: string; }'.
+tests/cases/conformance/jsx/file.tsx(34,10): error TS2741: Property '"prop-name"' is missing in type '{ extra-prop-name: string; }' but required in type '{ "prop-name": string; }'.
 tests/cases/conformance/jsx/file.tsx(37,10): error TS2322: Type '{ prop1: true; }' is not assignable to type 'IntrinsicAttributes'.
   Property 'prop1' does not exist on type 'IntrinsicAttributes'.
 tests/cases/conformance/jsx/file.tsx(38,11): error TS2322: Type '{ ref: (x: any) => any; }' is not assignable to type 'IntrinsicAttributes'.
@@ -58,9 +56,8 @@ tests/cases/conformance/jsx/file.tsx(45,11): error TS2559: Type '{ prop1: boolea
     // Error
     let h = <MeetAndGreet extra-prop-name="World" />;
              ~~~~~~~~~~~~
-!!! error TS2322: Type '{ extra-prop-name: string; }' is not assignable to type 'IntrinsicAttributes & { "prop-name": string; }'.
-!!! error TS2322:   Type '{ extra-prop-name: string; }' is not assignable to type '{ "prop-name": string; }'.
-!!! error TS2322:     Property '"prop-name"' is missing in type '{ extra-prop-name: string; }'.
+!!! error TS2741: Property '"prop-name"' is missing in type '{ extra-prop-name: string; }' but required in type '{ "prop-name": string; }'.
+!!! related TS2728 tests/cases/conformance/jsx/file.tsx:11:27: '"prop-name"' is declared here.
     
     // Error
     let i = <EmptyPropSFC prop1 />

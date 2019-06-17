@@ -22,7 +22,7 @@ c.default;
 >default : Symbol(a.default, Decl(t1.ts, 0, 0))
 
 import { default as d } from "./t1";
->default : Symbol(d, Decl(t3.ts, 6, 8))
+>default : Symbol(a.default, Decl(t1.ts, 0, 0))
 >d : Symbol(d, Decl(t3.ts, 6, 8))
 
 d;
@@ -42,7 +42,7 @@ e2.default;
 
 import f1, { default as f2 } from "./t1";
 >f1 : Symbol(f1, Decl(t3.ts, 11, 6))
->default : Symbol(f2, Decl(t3.ts, 11, 12))
+>default : Symbol(a.default, Decl(t1.ts, 0, 0))
 >f2 : Symbol(f2, Decl(t3.ts, 11, 12))
 
 f1;

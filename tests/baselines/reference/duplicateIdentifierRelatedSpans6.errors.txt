@@ -92,3 +92,5 @@
 !!! related TS6203 tests/cases/compiler/file2.ts:7:9: 'duplicate3' was also declared here.
         }
     }
+Found 6 errors.
+

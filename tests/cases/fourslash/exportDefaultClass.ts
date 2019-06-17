@@ -5,4 +5,4 @@
 ////}
 //// /*2*/
 
-verify.completions({ marker: test.markers(), includes: { name: "C", text: "class C", kind: "class" } });
+verify.completions({ marker: test.markers(), includes: { name: "C", text: "class C", kind: "class", kindModifiers: "export" } });

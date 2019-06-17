@@ -33,3 +33,19 @@ export function bar2<T>(obj: T) {
 >obj : T
 }
 
+// Repros from #31099
+
+type Weird = any extends infer U ? U : never;
+>Weird : any
+
+type AlsoWeird = unknown extends infer U ? U : never;
+>AlsoWeird : unknown
+
+const a: Weird = null;
+>a : any
+>null : null
+
+const b: string = a;
+>b : string
+>a : any
+

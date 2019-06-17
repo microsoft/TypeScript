@@ -92,6 +92,7 @@ namespace ts.server.protocol {
         SynchronizeProjectList = "synchronizeProjectList",
         /* @internal */
         ApplyChangedToOpenFiles = "applyChangedToOpenFiles",
+        UpdateOpen = "updateOpen",
         /* @internal */
         EncodedSemanticClassificationsFull = "encodedSemanticClassifications-full",
         /* @internal */
@@ -129,7 +130,10 @@ namespace ts.server.protocol {
         GetEditsForFileRename = "getEditsForFileRename",
         /* @internal */
         GetEditsForFileRenameFull = "getEditsForFileRename-full",
-        ConfigurePlugin = "configurePlugin"
+        ConfigurePlugin = "configurePlugin",
+        SelectionRange = "selectionRange",
+        /* @internal */
+        SelectionRangeFull = "selectionRange-full",
 
         // NOTE: If updating this, be sure to also update `allCommandNames` in `harness/unittests/session.ts`.
     }
@@ -221,6 +225,11 @@ namespace ts.server.protocol {
          * Contains message body if success === true.
          */
         body?: any;
+
+        /**
+         * Contains extra information that plugin can include to be passed on
+         */
+        metadata?: unknown;
     }
 
     /**
@@ -1386,6 +1395,27 @@ namespace ts.server.protocol {
         arguments: ConfigurePluginRequestArguments;
     }
 
+    export interface ConfigurePluginResponse extends Response {
+    }
+
+    export interface SelectionRangeRequest extends FileRequest {
+        command: CommandTypes.SelectionRange;
+        arguments: SelectionRangeRequestArgs;
+    }
+
+    export interface SelectionRangeRequestArgs extends FileRequestArgs {
+        locations: Location[];
+    }
+
+    export interface SelectionRangeResponse extends Response {
+        body?: SelectionRange[];
+    }
+
+    export interface SelectionRange {
+        textSpan: TextSpan;
+        parent?: SelectionRange;
+    }
+
     /**
      *  Information found in an "open" request.
      */
@@ -1532,6 +1562,32 @@ namespace ts.server.protocol {
          * List of open files files that were changes
          */
         changedFiles?: ChangedOpenFile[];
+        /**
+         * List of files that were closed
+         */
+        closedFiles?: string[];
+    }
+
+    /**
+     * Request to synchronize list of open files with the client
+     */
+    export interface UpdateOpenRequest extends Request {
+        command: CommandTypes.UpdateOpen;
+        arguments: UpdateOpenRequestArgs;
+    }
+
+    /**
+     * Arguments to UpdateOpenRequest
+     */
+    export interface UpdateOpenRequestArgs {
+        /**
+         * List of newly open files
+         */
+        openFiles?: OpenRequestArgs[];
+        /**
+         * List of open files files that were changes
+         */
+        changedFiles?: FileCodeEdits[];
         /**
          * List of files that were closed
          */
@@ -2401,6 +2457,7 @@ namespace ts.server.protocol {
      */
     export interface DiagnosticEvent extends Event {
         body?: DiagnosticEventBody;
+        event: DiagnosticEventKind;
     }
 
     export interface ConfigFileDiagnosticEventBody {
@@ -2519,6 +2576,10 @@ namespace ts.server.protocol {
          */
         maxFileSize: number;
     }
+
+    /*@internal*/
+    export type AnyEvent = RequestCompletedEvent | DiagnosticEvent | ConfigFileDiagnosticEvent | ProjectLanguageServiceStateEvent | TelemetryEvent |
+        ProjectsUpdatedInBackgroundEvent | ProjectLoadingStartEvent | ProjectLoadingFinishEvent | SurveyReadyEvent | LargeFileReferencedEvent;
 
     /**
      * Arguments for reload request.
@@ -2881,7 +2942,7 @@ namespace ts.server.protocol {
 
     export interface UserPreferences {
         readonly disableSuggestions?: boolean;
-        readonly quotePreference?: "double" | "single";
+        readonly quotePreference?: "auto" | "double" | "single";
         /**
          * If enabled, TypeScript will search through all external modules' exports and add them to the completions list.
          * This affects lone identifier completions but not completions on the right hand side of `obj.`.
@@ -2895,6 +2956,8 @@ namespace ts.server.protocol {
         readonly importModuleSpecifierPreference?: "relative" | "non-relative";
         readonly allowTextChangesInNewFiles?: boolean;
         readonly lazyConfiguredProjectsFromExternalProject?: boolean;
+        readonly providePrefixAndSuffixTextForRename?: boolean;
+        readonly allowRenameOfImportPath?: boolean;
     }
 
     export interface CompilerOptions {
@@ -3004,6 +3067,9 @@ namespace ts.server.protocol {
         ES2015 = "ES2015",
         ES2016 = "ES2016",
         ES2017 = "ES2017",
+        ES2018 = "ES2018",
+        ES2019 = "ES2019",
+        ES2020 = "ES2020",
         ESNext = "ESNext"
     }
 }

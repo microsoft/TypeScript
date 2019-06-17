@@ -1,0 +1,156 @@
+=== tests/cases/conformance/types/intersection/intersectionReductionStrict.ts ===
+declare const sym1: unique symbol;
+>sym1 : Symbol(sym1, Decl(intersectionReductionStrict.ts, 0, 13))
+
+declare const sym2: unique symbol;
+>sym2 : Symbol(sym2, Decl(intersectionReductionStrict.ts, 1, 13))
+
+type T1 = string & 'a';  // 'a'
+>T1 : Symbol(T1, Decl(intersectionReductionStrict.ts, 1, 34))
+
+type T2 = 'a' & string & 'b';  // never
+>T2 : Symbol(T2, Decl(intersectionReductionStrict.ts, 3, 23))
+
+type T3 = number & 10;  // 10
+>T3 : Symbol(T3, Decl(intersectionReductionStrict.ts, 4, 29))
+
+type T4 = 10 & number & 20;  // never
+>T4 : Symbol(T4, Decl(intersectionReductionStrict.ts, 5, 22))
+
+type T5 = symbol & typeof sym1;  // typeof sym1
+>T5 : Symbol(T5, Decl(intersectionReductionStrict.ts, 6, 27))
+>sym1 : Symbol(sym1, Decl(intersectionReductionStrict.ts, 0, 13))
+
+type T6 = typeof sym1 & symbol & typeof sym2;  // never
+>T6 : Symbol(T6, Decl(intersectionReductionStrict.ts, 7, 31))
+>sym1 : Symbol(sym1, Decl(intersectionReductionStrict.ts, 0, 13))
+>sym2 : Symbol(sym2, Decl(intersectionReductionStrict.ts, 1, 13))
+
+type T7 = string & 'a' & number & 10 & symbol & typeof sym1;  // never
+>T7 : Symbol(T7, Decl(intersectionReductionStrict.ts, 8, 45))
+>sym1 : Symbol(sym1, Decl(intersectionReductionStrict.ts, 0, 13))
+
+type T10 = string & ('a' | 'b');  // 'a' | 'b'
+>T10 : Symbol(T10, Decl(intersectionReductionStrict.ts, 9, 60))
+
+type T11 = (string | number) & ('a' | 10);  // 'a' | 10
+>T11 : Symbol(T11, Decl(intersectionReductionStrict.ts, 11, 32))
+
+type N1 = 'a' & 'b';
+>N1 : Symbol(N1, Decl(intersectionReductionStrict.ts, 12, 42))
+
+type N2 = { a: string } & null;
+>N2 : Symbol(N2, Decl(intersectionReductionStrict.ts, 14, 20))
+>a : Symbol(a, Decl(intersectionReductionStrict.ts, 15, 11))
+
+type N3 = { a: string } & undefined;
+>N3 : Symbol(N3, Decl(intersectionReductionStrict.ts, 15, 31))
+>a : Symbol(a, Decl(intersectionReductionStrict.ts, 16, 11))
+
+type N4 = string & number;
+>N4 : Symbol(N4, Decl(intersectionReductionStrict.ts, 16, 36))
+
+type N5 = number & object;
+>N5 : Symbol(N5, Decl(intersectionReductionStrict.ts, 17, 26))
+
+type N6 = symbol & string;
+>N6 : Symbol(N6, Decl(intersectionReductionStrict.ts, 18, 26))
+
+type N7 = void & string;
+>N7 : Symbol(N7, Decl(intersectionReductionStrict.ts, 19, 26))
+
+type X = { x: string };
+>X : Symbol(X, Decl(intersectionReductionStrict.ts, 20, 24))
+>x : Symbol(x, Decl(intersectionReductionStrict.ts, 22, 10))
+
+type X1 = X | 'a' & 'b';
+>X1 : Symbol(X1, Decl(intersectionReductionStrict.ts, 22, 23))
+>X : Symbol(X, Decl(intersectionReductionStrict.ts, 20, 24))
+
+type X2 = X | { a: string } & null;
+>X2 : Symbol(X2, Decl(intersectionReductionStrict.ts, 24, 24))
+>X : Symbol(X, Decl(intersectionReductionStrict.ts, 20, 24))
+>a : Symbol(a, Decl(intersectionReductionStrict.ts, 25, 15))
+
+type X3 = X | { a: string } & undefined;
+>X3 : Symbol(X3, Decl(intersectionReductionStrict.ts, 25, 35))
+>X : Symbol(X, Decl(intersectionReductionStrict.ts, 20, 24))
+>a : Symbol(a, Decl(intersectionReductionStrict.ts, 26, 15))
+
+type X4 = X | string & number;
+>X4 : Symbol(X4, Decl(intersectionReductionStrict.ts, 26, 40))
+>X : Symbol(X, Decl(intersectionReductionStrict.ts, 20, 24))
+
+type X5 = X | number & object;
+>X5 : Symbol(X5, Decl(intersectionReductionStrict.ts, 27, 30))
+>X : Symbol(X, Decl(intersectionReductionStrict.ts, 20, 24))
+
+type X6 = X | symbol & string;
+>X6 : Symbol(X6, Decl(intersectionReductionStrict.ts, 28, 30))
+>X : Symbol(X, Decl(intersectionReductionStrict.ts, 20, 24))
+
+type X7 = X | void & string;
+>X7 : Symbol(X7, Decl(intersectionReductionStrict.ts, 29, 30))
+>X : Symbol(X, Decl(intersectionReductionStrict.ts, 20, 24))
+
+// Repro from #31663
+
+const x1 = { a: 'foo', b: 42 };
+>x1 : Symbol(x1, Decl(intersectionReductionStrict.ts, 34, 5))
+>a : Symbol(a, Decl(intersectionReductionStrict.ts, 34, 12))
+>b : Symbol(b, Decl(intersectionReductionStrict.ts, 34, 22))
+
+const x2 = { a: 'foo', b: true };
+>x2 : Symbol(x2, Decl(intersectionReductionStrict.ts, 35, 5))
+>a : Symbol(a, Decl(intersectionReductionStrict.ts, 35, 12))
+>b : Symbol(b, Decl(intersectionReductionStrict.ts, 35, 22))
+
+declare let k: 'a' | 'b';
+>k : Symbol(k, Decl(intersectionReductionStrict.ts, 37, 11))
+
+x1[k] = 'bar' as any;  // Error
+>x1 : Symbol(x1, Decl(intersectionReductionStrict.ts, 34, 5))
+>k : Symbol(k, Decl(intersectionReductionStrict.ts, 37, 11))
+
+x2[k] = 'bar' as any;  // Error
+>x2 : Symbol(x2, Decl(intersectionReductionStrict.ts, 35, 5))
+>k : Symbol(k, Decl(intersectionReductionStrict.ts, 37, 11))
+
+const enum Tag1 {}
+>Tag1 : Symbol(Tag1, Decl(intersectionReductionStrict.ts, 40, 21))
+
+const enum Tag2 {}
+>Tag2 : Symbol(Tag2, Decl(intersectionReductionStrict.ts, 42, 18))
+
+declare let s1: string & Tag1;
+>s1 : Symbol(s1, Decl(intersectionReductionStrict.ts, 45, 11))
+>Tag1 : Symbol(Tag1, Decl(intersectionReductionStrict.ts, 40, 21))
+
+declare let s2: string & Tag2;
+>s2 : Symbol(s2, Decl(intersectionReductionStrict.ts, 46, 11))
+>Tag2 : Symbol(Tag2, Decl(intersectionReductionStrict.ts, 42, 18))
+
+declare let t1: string & Tag1 | undefined;
+>t1 : Symbol(t1, Decl(intersectionReductionStrict.ts, 48, 11))
+>Tag1 : Symbol(Tag1, Decl(intersectionReductionStrict.ts, 40, 21))
+
+declare let t2: string & Tag2 | undefined;
+>t2 : Symbol(t2, Decl(intersectionReductionStrict.ts, 49, 11))
+>Tag2 : Symbol(Tag2, Decl(intersectionReductionStrict.ts, 42, 18))
+
+s1 = s2;
+>s1 : Symbol(s1, Decl(intersectionReductionStrict.ts, 45, 11))
+>s2 : Symbol(s2, Decl(intersectionReductionStrict.ts, 46, 11))
+
+s2 = s1;
+>s2 : Symbol(s2, Decl(intersectionReductionStrict.ts, 46, 11))
+>s1 : Symbol(s1, Decl(intersectionReductionStrict.ts, 45, 11))
+
+t1 = t2;
+>t1 : Symbol(t1, Decl(intersectionReductionStrict.ts, 48, 11))
+>t2 : Symbol(t2, Decl(intersectionReductionStrict.ts, 49, 11))
+
+t2 = t1;
+>t2 : Symbol(t2, Decl(intersectionReductionStrict.ts, 49, 11))
+>t1 : Symbol(t1, Decl(intersectionReductionStrict.ts, 48, 11))
+

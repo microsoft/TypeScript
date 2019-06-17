@@ -19,13 +19,13 @@ module Query {
     }
 
     function fromOrderBy() {
->fromOrderBy : () => Iterator<{}>
+>fromOrderBy : () => Iterator<unknown>
 
         return fromDoWhile(test => {
->fromDoWhile(test => {            return true;        }) : Iterator<{}>
+>fromDoWhile(test => {            return true;        }) : Iterator<unknown>
 >fromDoWhile : <T>(doWhile: (test: Iterator<T>) => boolean) => Iterator<T>
->test => {            return true;        } : (test: Iterator<{}>) => true
->test : Iterator<{}>
+>test => {            return true;        } : (test: Iterator<unknown>) => true
+>test : Iterator<unknown>
 
             return true;
 >true : true

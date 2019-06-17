@@ -1,6 +1,6 @@
 namespace ts {
     import theory = utils.theory;
-    describe("semver", () => {
+    describe("unittests:: semver", () => {
         describe("Version", () => {
             function assertVersion(version: Version, [major, minor, patch, prerelease, build]: [number, number, number, string[]?, string[]?]) {
                 assert.strictEqual(version.major, major);

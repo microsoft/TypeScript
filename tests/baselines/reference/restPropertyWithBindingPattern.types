@@ -1,0 +1,31 @@
+=== tests/cases/conformance/es6/destructuring/restPropertyWithBindingPattern.ts ===
+({...{}} = {});
+>({...{}} = {}) : {}
+>{...{}} = {} : {}
+>{...{}} : {}
+>{} : {}
+>{} : {}
+
+({...({})} = {});
+>({...({})} = {}) : {}
+>{...({})} = {} : {}
+>{...({})} : {}
+>({}) : {}
+>{} : {}
+>{} : {}
+
+({...[]} = {});
+>({...[]} = {}) : {}
+>{...[]} = {} : {}
+>{...[]} : { [n: number]: undefined; length: number; toString(): string; toLocaleString(): string; pop(): undefined; push(...items: undefined[]): number; concat(...items: ConcatArray<undefined>[]): undefined[]; concat(...items: ConcatArray<undefined>[]): undefined[]; join(separator?: string): string; reverse(): undefined[]; shift(): undefined; slice(start?: number, end?: number): undefined[]; sort(compareFn?: (a: undefined, b: undefined) => number): undefined[]; splice(start: number, deleteCount?: number): undefined[]; splice(start: number, deleteCount: number, ...items: undefined[]): undefined[]; unshift(...items: undefined[]): number; indexOf(searchElement: undefined, fromIndex?: number): number; lastIndexOf(searchElement: undefined, fromIndex?: number): number; every(callbackfn: (value: undefined, index: number, array: undefined[]) => unknown, thisArg?: any): boolean; some(callbackfn: (value: undefined, index: number, array: undefined[]) => unknown, thisArg?: any): boolean; forEach(callbackfn: (value: undefined, index: number, array: undefined[]) => void, thisArg?: any): void; map<U>(callbackfn: (value: undefined, index: number, array: undefined[]) => U, thisArg?: any): U[]; filter<S extends undefined>(callbackfn: (value: undefined, index: number, array: undefined[]) => value is S, thisArg?: any): S[]; filter(callbackfn: (value: undefined, index: number, array: undefined[]) => unknown, thisArg?: any): undefined[]; reduce(callbackfn: (previousValue: undefined, currentValue: undefined, currentIndex: number, array: undefined[]) => undefined): undefined; reduce(callbackfn: (previousValue: undefined, currentValue: undefined, currentIndex: number, array: undefined[]) => undefined, initialValue: undefined): undefined; reduce<U>(callbackfn: (previousValue: U, currentValue: undefined, currentIndex: number, array: undefined[]) => U, initialValue: U): U; reduceRight(callbackfn: (previousValue: undefined, currentValue: undefined, currentIndex: number, array: undefined[]) => undefined): undefined; reduceRight(callbackfn: (previousValue: undefined, currentValue: undefined, currentIndex: number, array: undefined[]) => undefined, initialValue: undefined): undefined; reduceRight<U>(callbackfn: (previousValue: U, currentValue: undefined, currentIndex: number, array: undefined[]) => U, initialValue: U): U; }
+>[] : undefined[]
+>{} : {}
+
+({...([])} = {});
+>({...([])} = {}) : {}
+>{...([])} = {} : {}
+>{...([])} : { [n: number]: undefined; length: number; toString(): string; toLocaleString(): string; pop(): undefined; push(...items: undefined[]): number; concat(...items: ConcatArray<undefined>[]): undefined[]; concat(...items: ConcatArray<undefined>[]): undefined[]; join(separator?: string): string; reverse(): undefined[]; shift(): undefined; slice(start?: number, end?: number): undefined[]; sort(compareFn?: (a: undefined, b: undefined) => number): undefined[]; splice(start: number, deleteCount?: number): undefined[]; splice(start: number, deleteCount: number, ...items: undefined[]): undefined[]; unshift(...items: undefined[]): number; indexOf(searchElement: undefined, fromIndex?: number): number; lastIndexOf(searchElement: undefined, fromIndex?: number): number; every(callbackfn: (value: undefined, index: number, array: undefined[]) => unknown, thisArg?: any): boolean; some(callbackfn: (value: undefined, index: number, array: undefined[]) => unknown, thisArg?: any): boolean; forEach(callbackfn: (value: undefined, index: number, array: undefined[]) => void, thisArg?: any): void; map<U>(callbackfn: (value: undefined, index: number, array: undefined[]) => U, thisArg?: any): U[]; filter<S extends undefined>(callbackfn: (value: undefined, index: number, array: undefined[]) => value is S, thisArg?: any): S[]; filter(callbackfn: (value: undefined, index: number, array: undefined[]) => unknown, thisArg?: any): undefined[]; reduce(callbackfn: (previousValue: undefined, currentValue: undefined, currentIndex: number, array: undefined[]) => undefined): undefined; reduce(callbackfn: (previousValue: undefined, currentValue: undefined, currentIndex: number, array: undefined[]) => undefined, initialValue: undefined): undefined; reduce<U>(callbackfn: (previousValue: U, currentValue: undefined, currentIndex: number, array: undefined[]) => U, initialValue: U): U; reduceRight(callbackfn: (previousValue: undefined, currentValue: undefined, currentIndex: number, array: undefined[]) => undefined): undefined; reduceRight(callbackfn: (previousValue: undefined, currentValue: undefined, currentIndex: number, array: undefined[]) => undefined, initialValue: undefined): undefined; reduceRight<U>(callbackfn: (previousValue: U, currentValue: undefined, currentIndex: number, array: undefined[]) => U, initialValue: U): U; }
+>([]) : undefined[]
+>[] : undefined[]
+>{} : {}
+

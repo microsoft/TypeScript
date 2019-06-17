@@ -164,13 +164,14 @@ namespace ts {
          * Returns a JSON-encoded value of the type:
          * { canRename: boolean, localizedErrorMessage: string, displayName: string, fullDisplayName: string, kind: string, kindModifiers: string, triggerSpan: { start; length } }
          */
-        getRenameInfo(fileName: string, position: number): string;
+        getRenameInfo(fileName: string, position: number, options?: RenameInfoOptions): string;
+        getSmartSelectionRange(fileName: string, position: number): string;
 
         /**
          * Returns a JSON-encoded value of the type:
          * { fileName: string, textSpan: { start: number, length: number } }[]
          */
-        findRenameLocations(fileName: string, position: number, findInStrings: boolean, findInComments: boolean): string;
+        findRenameLocations(fileName: string, position: number, findInStrings: boolean, findInComments: boolean, providePrefixAndSuffixTextForRename?: boolean): string;
 
         /**
          * Returns a JSON-encoded value of the type:
@@ -331,9 +332,9 @@ namespace ts {
         private loggingEnabled = false;
         private tracingEnabled = false;
 
-        public resolveModuleNames: (moduleName: string[], containingFile: string) => (ResolvedModuleFull | undefined)[];
-        public resolveTypeReferenceDirectives: (typeDirectiveNames: string[], containingFile: string) => (ResolvedTypeReferenceDirective | undefined)[];
-        public directoryExists: (directoryName: string) => boolean;
+        public resolveModuleNames: ((moduleName: string[], containingFile: string) => (ResolvedModuleFull | undefined)[]) | undefined;
+        public resolveTypeReferenceDirectives: ((typeDirectiveNames: string[], containingFile: string) => (ResolvedTypeReferenceDirective | undefined)[]) | undefined;
+        public directoryExists: ((directoryName: string) => boolean) | undefined;
 
         constructor(private shimHost: LanguageServiceShimHost) {
             // if shimHost is a COM object then property check will become method call with no arguments.
@@ -490,12 +491,18 @@ namespace ts {
         public useCaseSensitiveFileNames: boolean;
 
         constructor(private shimHost: CoreServicesShimHost) {
-        this.useCaseSensitiveFileNames = this.shimHost.useCaseSensitiveFileNames ? this.shimHost.useCaseSensitiveFileNames() : false;
+            this.useCaseSensitiveFileNames = this.shimHost.useCaseSensitiveFileNames ? this.shimHost.useCaseSensitiveFileNames() : false;
             if ("directoryExists" in this.shimHost) {
                 this.directoryExists = directoryName => this.shimHost.directoryExists(directoryName);
             }
+            else {
+                this.directoryExists = undefined!; // TODO: GH#18217
+            }
             if ("realpath" in this.shimHost) {
                 this.realpath = path => this.shimHost.realpath!(path); // TODO: GH#18217
+            }
+            else {
+                this.realpath = undefined!; // TODO: GH#18217
             }
         }
 
@@ -825,17 +832,24 @@ namespace ts {
             );
         }
 
-        public getRenameInfo(fileName: string, position: number): string {
+        public getRenameInfo(fileName: string, position: number, options?: RenameInfoOptions): string {
             return this.forwardJSONCall(
                 `getRenameInfo('${fileName}', ${position})`,
-                () => this.languageService.getRenameInfo(fileName, position)
+                () => this.languageService.getRenameInfo(fileName, position, options)
             );
         }
 
-        public findRenameLocations(fileName: string, position: number, findInStrings: boolean, findInComments: boolean): string {
+        public getSmartSelectionRange(fileName: string, position: number): string {
             return this.forwardJSONCall(
-                `findRenameLocations('${fileName}', ${position}, ${findInStrings}, ${findInComments})`,
-                () => this.languageService.findRenameLocations(fileName, position, findInStrings, findInComments)
+                `getSmartSelectionRange('${fileName}', ${position})`,
+                () => this.languageService.getSmartSelectionRange(fileName, position)
+            );
+        }
+
+        public findRenameLocations(fileName: string, position: number, findInStrings: boolean, findInComments: boolean, providePrefixAndSuffixTextForRename?: boolean): string {
+            return this.forwardJSONCall(
+                `findRenameLocations('${fileName}', ${position}, ${findInStrings}, ${findInComments}, ${providePrefixAndSuffixTextForRename})`,
+                () => this.languageService.findRenameLocations(fileName, position, findInStrings, findInComments, providePrefixAndSuffixTextForRename)
             );
         }
 
@@ -1182,7 +1196,7 @@ namespace ts {
 
     export class TypeScriptServicesFactory implements ShimFactory {
         private _shims: Shim[] = [];
-        private documentRegistry: DocumentRegistry;
+        private documentRegistry: DocumentRegistry | undefined;
 
         /*
          * Returns script API version.

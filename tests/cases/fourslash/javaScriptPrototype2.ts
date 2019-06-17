@@ -26,9 +26,9 @@ edit.backspace();
 // Verify the type of the instance property
 goTo.marker('2');
 edit.insert('.');
-verify.completions({ includes: { name: "toFixed", kind: "method" } });
+verify.completions({ includes: { name: "toFixed", kind: "method", kindModifiers: "declare" } });
 
 goTo.marker('3');
 edit.insert('.');
 // Make sure symbols don't leak out into the constructor
-verify.completions({ includes: ["qua", "foo", "bar"].map(name => ({ name, kind: "warning" })) });
+verify.completions({ includes: ["qua", "foo", "bar"].map(name => ({ name, kind: "warning", sortText: completion.SortText.JavascriptIdentifiers })) });

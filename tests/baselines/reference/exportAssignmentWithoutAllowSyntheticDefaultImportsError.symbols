@@ -1,0 +1,11 @@
+=== /bar.ts ===
+export = bar;
+>bar : Symbol(bar, Decl(bar.ts, 0, 13))
+
+function bar() {}
+>bar : Symbol(bar, Decl(bar.ts, 0, 13))
+
+=== /foo.ts ===
+import bar from './bar';
+>bar : Symbol(bar, Decl(foo.ts, 0, 6))
+

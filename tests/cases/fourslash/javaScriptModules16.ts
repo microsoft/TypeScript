@@ -18,8 +18,8 @@ edit.insert('.');
 verify.completions({
     exact: [
         ...["n", "s", "b"].map(name => ({ name, kind: "property" })),
-        ...["x", "require"].map(name => ({ name, kind: "warning" })),
+        ...["x", "require"].map(name => ({ name, kind: "warning", sortText: completion.SortText.JavascriptIdentifiers })),
     ],
 });
 edit.insert('n.');
-verify.completions({ includes: { name: "toFixed", kind: "method" } });
+verify.completions({ includes: { name: "toFixed", kind: "method", kindModifiers: "declare" } });

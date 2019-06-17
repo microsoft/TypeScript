@@ -1,6 +1,5 @@
 tests/cases/compiler/arrayFrom.ts(20,7): error TS2322: Type 'A[]' is not assignable to type 'B[]'.
-  Type 'A' is not assignable to type 'B'.
-    Property 'b' is missing in type 'A'.
+  Property 'b' is missing in type 'A' but required in type 'B'.
 tests/cases/compiler/arrayFrom.ts(23,7): error TS2322: Type 'A[]' is not assignable to type 'B[]'.
 
 
@@ -27,8 +26,8 @@ tests/cases/compiler/arrayFrom.ts(23,7): error TS2322: Type 'A[]' is not assigna
     const result3: B[] = Array.from(inputA.values()); // expect error
           ~~~~~~~
 !!! error TS2322: Type 'A[]' is not assignable to type 'B[]'.
-!!! error TS2322:   Type 'A' is not assignable to type 'B'.
-!!! error TS2322:     Property 'b' is missing in type 'A'.
+!!! error TS2322:   Property 'b' is missing in type 'A' but required in type 'B'.
+!!! related TS2728 tests/cases/compiler/arrayFrom.ts:9:3: 'b' is declared here.
     const result4: A[] = Array.from(inputB, ({ b }): A => ({ a: b }));
     const result5: A[] = Array.from(inputALike);
     const result6: B[] = Array.from(inputALike); // expect error

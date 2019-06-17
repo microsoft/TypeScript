@@ -9,4 +9,8 @@
 // @Filename: /project/index.ts
 ////import { } from ".//**/";
 
-verify.completions({ marker: "", exact: "test.json", isNewIdentifierLocation: true });
+verify.completions({
+    marker: "",
+    exact: { name: "test.json", kind: "script", kindModifiers: ".json" },
+    isNewIdentifierLocation: true,
+});

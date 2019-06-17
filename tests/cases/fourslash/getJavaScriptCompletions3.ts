@@ -6,4 +6,4 @@
 ////var v;
 ////v./**/
 
-verify.completions({ marker: "", includes: { name: "concat", kind: "method" } });
+verify.completions({ marker: "", includes: { name: "concat", kind: "method", kindModifiers: "declare" } });

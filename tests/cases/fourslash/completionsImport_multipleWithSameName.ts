@@ -20,10 +20,35 @@ goTo.marker("");
 verify.completions({
     marker: "",
     exact: [
-        { name: "foo", text: "var foo: number", kind: "var" },
-        "undefined",
-        { name: "foo", source: "/a", sourceDisplay: "./a", text: "const foo: 0", kind: "const", hasAction: true },
-        { name: "foo", source: "/b", sourceDisplay: "./b", text: "const foo: 1", kind: "const", hasAction: true },
+        completion.globalThisEntry,
+        {
+            name: "foo",
+            text: "var foo: number",
+            kind: "var",
+            kindModifiers: "declare",
+            sortText: completion.SortText.GlobalsOrKeywords
+        },
+        completion.undefinedVarEntry,
+        {
+            name: "foo",
+            source: "/a",
+            sourceDisplay: "./a",
+            text: "const foo: 0",
+            kind: "const",
+            kindModifiers: "export",
+            hasAction: true,
+            sortText: completion.SortText.AutoImportSuggestions
+        },
+        {
+            name: "foo",
+            source: "/b",
+            sourceDisplay: "./b",
+            text: "const foo: 1",
+            kind: "const",
+            kindModifiers: "export",
+            hasAction: true,
+            sortText: completion.SortText.AutoImportSuggestions
+        },
         ...completion.statementKeywordsWithTypes,
     ],
     preferences: { includeCompletionsForModuleExports: true },

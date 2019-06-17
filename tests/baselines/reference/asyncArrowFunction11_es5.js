@@ -53,7 +53,8 @@ var A = /** @class */ (function () {
                 args[_i] = arguments[_i];
             }
             return __awaiter(_this, void 0, void 0, function () {
-                var _a, obj;
+                var obj;
+                var _a;
                 var _this = this;
                 return __generator(this, function (_b) {
                     switch (_b.label) {

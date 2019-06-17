@@ -14,11 +14,11 @@ use(x.toExponential());
 
 === c:/root/folder2/file2.ts ===
 import {x as a} from "./file3"  // found with baseurl
->x : Symbol(a, Decl(file2.ts, 0, 8))
+>x : Symbol(a, Decl(file3.ts, 0, 10))
 >a : Symbol(a, Decl(file2.ts, 0, 8))
 
 import {y as b} from "file4"    // found with fallback
->y : Symbol(b, Decl(file2.ts, 1, 8))
+>y : Symbol(b, Decl(index.d.ts, 0, 10))
 >b : Symbol(b, Decl(file2.ts, 1, 8))
 
 export var x = a + b;

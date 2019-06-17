@@ -1,15 +1,151 @@
 === tests/cases/compiler/noImplicitAnyStringIndexerOnObject.ts ===
-var x = {}["hello"];
->x : any
+var a = {}["hello"];
+>a : any
 >{}["hello"] : any
 >{} : {}
 >"hello" : "hello"
 
-var y: string = { '': 'foo' }[''];
->y : string
+var b: string = { '': 'foo' }[''];
+>b : string
 >{ '': 'foo' }[''] : string
 >{ '': 'foo' } : { '': string; }
 >'' : string
 >'foo' : "foo"
 >'' : ""
+
+var c = {
+>c : { get: (key: string) => string; }
+>{  get: (key: string) => 'foobar'} : { get: (key: string) => string; }
+
+  get: (key: string) => 'foobar'
+>get : (key: string) => string
+>(key: string) => 'foobar' : (key: string) => string
+>key : string
+>'foobar' : "foobar"
+
+};
+c['hello'];
+>c['hello'] : any
+>c : { get: (key: string) => string; }
+>'hello' : "hello"
+
+const foo = c['hello'];
+>foo : any
+>c['hello'] : any
+>c : { get: (key: string) => string; }
+>'hello' : "hello"
+
+var d = {
+>d : { set: (key: string) => string; }
+>{  set: (key: string) => 'foobar'} : { set: (key: string) => string; }
+
+  set: (key: string) => 'foobar'
+>set : (key: string) => string
+>(key: string) => 'foobar' : (key: string) => string
+>key : string
+>'foobar' : "foobar"
+
+};
+const bar = d['hello'];
+>bar : any
+>d['hello'] : any
+>d : { set: (key: string) => string; }
+>'hello' : "hello"
+
+var e = {
+>e : { set: (key: string) => string; get: (key: string) => string; }
+>{  set: (key: string) => 'foobar',  get: (key: string) => 'foobar'} : { set: (key: string) => string; get: (key: string) => string; }
+
+  set: (key: string) => 'foobar',
+>set : (key: string) => string
+>(key: string) => 'foobar' : (key: string) => string
+>key : string
+>'foobar' : "foobar"
+
+  get: (key: string) => 'foobar'
+>get : (key: string) => string
+>(key: string) => 'foobar' : (key: string) => string
+>key : string
+>'foobar' : "foobar"
+
+};
+e['hello'] = 'modified';
+>e['hello'] = 'modified' : "modified"
+>e['hello'] : any
+>e : { set: (key: string) => string; get: (key: string) => string; }
+>'hello' : "hello"
+>'modified' : "modified"
+
+e['hello'] += 1;
+>e['hello'] += 1 : any
+>e['hello'] : any
+>e : { set: (key: string) => string; get: (key: string) => string; }
+>'hello' : "hello"
+>1 : 1
+
+e['hello'] ++;
+>e['hello'] ++ : number
+>e['hello'] : any
+>e : { set: (key: string) => string; get: (key: string) => string; }
+>'hello' : "hello"
+
+const o = { a: 0 };
+>o : { a: number; }
+>{ a: 0 } : { a: number; }
+>a : number
+>0 : 0
+
+declare const k: "a" | "b" | "c";
+>k : "a" | "b" | "c"
+
+o[k];
+>o[k] : any
+>o : { a: number; }
+>k : "a" | "b" | "c"
+
+
+declare const k2: "c";
+>k2 : "c"
+
+o[k2];
+>o[k2] : any
+>o : { a: number; }
+>k2 : "c"
+
+declare const sym : unique symbol;
+>sym : unique symbol
+
+o[sym];
+>o[sym] : any
+>o : { a: number; }
+>sym : unique symbol
+
+enum NumEnum { a, b }
+>NumEnum : NumEnum
+>a : NumEnum.a
+>b : NumEnum.b
+
+let numEnumKey: NumEnum;
+>numEnumKey : NumEnum
+
+o[numEnumKey];
+>o[numEnumKey] : any
+>o : { a: number; }
+>numEnumKey : NumEnum
+
+
+enum StrEnum { a = "a", b = "b" }
+>StrEnum : StrEnum
+>a : StrEnum.a
+>"a" : "a"
+>b : StrEnum.b
+>"b" : "b"
+
+let strEnumKey: StrEnum;
+>strEnumKey : StrEnum
+
+o[strEnumKey];
+>o[strEnumKey] : any
+>o : { a: number; }
+>strEnumKey : StrEnum
 

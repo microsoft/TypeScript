@@ -1,0 +1,34 @@
+=== tests/cases/conformance/ambient/types.ts ===
+declare module "*.foo" {
+>"*.foo" : Symbol("*.foo", Decl(types.ts, 0, 0))
+
+  let everywhere: string;
+>everywhere : Symbol(everywhere, Decl(types.ts, 1, 5))
+}
+
+
+=== tests/cases/conformance/ambient/testA.ts ===
+import { everywhere, onlyInA, alsoOnlyInA } from "a.foo";
+>everywhere : Symbol(everywhere, Decl(testA.ts, 0, 8))
+>onlyInA : Symbol(onlyInA, Decl(testA.ts, 0, 20))
+>alsoOnlyInA : Symbol(alsoOnlyInA, Decl(testA.ts, 0, 29))
+
+declare module "a.foo" {
+>"a.foo" : Symbol("a.foo", Decl(testA.ts, 0, 57), Decl(types.ts, 0, 0), Decl(testB.ts, 0, 57))
+
+  let onlyInA: number;
+>onlyInA : Symbol(onlyInA, Decl(testA.ts, 2, 5))
+}
+
+=== tests/cases/conformance/ambient/testB.ts ===
+import { everywhere, onlyInA, alsoOnlyInA } from "b.foo"; // Error
+>everywhere : Symbol(everywhere, Decl(testB.ts, 0, 8))
+>onlyInA : Symbol(onlyInA, Decl(testB.ts, 0, 20))
+>alsoOnlyInA : Symbol(alsoOnlyInA, Decl(testB.ts, 0, 29))
+
+declare module "a.foo" {
+>"a.foo" : Symbol("a.foo", Decl(testA.ts, 0, 57), Decl(types.ts, 0, 0), Decl(testB.ts, 0, 57))
+
+  let alsoOnlyInA: number;
+>alsoOnlyInA : Symbol(alsoOnlyInA, Decl(testB.ts, 2, 5))
+}

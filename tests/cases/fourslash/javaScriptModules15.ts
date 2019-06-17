@@ -22,4 +22,4 @@ goTo.marker();
 edit.insert('.');
 verify.completions({ includes: ["s", "b", "n"].map(name => ({ name, kind: "property" })) });
 edit.insert('n.');
-verify.completions({ includes: { name: "toFixed", kind: "method" } });
+verify.completions({ includes: { name: "toFixed", kind: "method", kindModifiers: "declare" } });

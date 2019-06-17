@@ -1,6 +1,5 @@
 tests/cases/conformance/es6/Symbols/symbolProperty52.ts(2,13): error TS2339: Property 'nonsense' does not exist on type 'SymbolConstructor'.
-tests/cases/conformance/es6/Symbols/symbolProperty52.ts(5,1): error TS2322: Type '{}' is not assignable to type '{ [Symbol.nonsense]: number; }'.
-  Property '[Symbol.nonsense]' is missing in type '{}'.
+tests/cases/conformance/es6/Symbols/symbolProperty52.ts(5,1): error TS2741: Property '[Symbol.nonsense]' is missing in type '{}' but required in type '{ [Symbol.nonsense]: number; }'.
 tests/cases/conformance/es6/Symbols/symbolProperty52.ts(7,12): error TS2339: Property 'nonsense' does not exist on type 'SymbolConstructor'.
 
 
@@ -13,8 +12,8 @@ tests/cases/conformance/es6/Symbols/symbolProperty52.ts(7,12): error TS2339: Pro
     
     obj = {};
     ~~~
-!!! error TS2322: Type '{}' is not assignable to type '{ [Symbol.nonsense]: number; }'.
-!!! error TS2322:   Property '[Symbol.nonsense]' is missing in type '{}'.
+!!! error TS2741: Property '[Symbol.nonsense]' is missing in type '{}' but required in type '{ [Symbol.nonsense]: number; }'.
+!!! related TS2728 tests/cases/conformance/es6/Symbols/symbolProperty52.ts:2:5: '[Symbol.nonsense]' is declared here.
     
     obj[Symbol.nonsense];
                ~~~~~~~~

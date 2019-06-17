@@ -1,4 +1,4 @@
-tests/cases/compiler/emitCapturingThisInTupleDestructuring2.ts(8,39): error TS2493: Tuple type '[number, number]' with length '2' cannot be assigned to tuple with length '3'.
+tests/cases/compiler/emitCapturingThisInTupleDestructuring2.ts(8,39): error TS2493: Tuple type '[number, number]' of length '2' has no element at index '2'.
 
 
 ==== tests/cases/compiler/emitCapturingThisInTupleDestructuring2.ts (1 errors) ====
@@ -11,6 +11,6 @@ tests/cases/compiler/emitCapturingThisInTupleDestructuring2.ts(8,39): error TS24
         method() {
             () => [this.test, this.test1, this.test2] = array1; // even though there is a compiler error, we should still emit lexical capture for "this" 
                                           ~~~~~~~~~~
-!!! error TS2493: Tuple type '[number, number]' with length '2' cannot be assigned to tuple with length '3'.
+!!! error TS2493: Tuple type '[number, number]' of length '2' has no element at index '2'.
         }
     }

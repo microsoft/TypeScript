@@ -13,7 +13,7 @@ namespace ts {
     }
 
     let reportDiagnostic = createDiagnosticReporter(sys);
-    function updateReportDiagnostic(options?: CompilerOptions) {
+    function updateReportDiagnostic(options: CompilerOptions | BuildOptions) {
         if (shouldBePretty(options)) {
             reportDiagnostic = createDiagnosticReporter(sys, /*pretty*/ true);
         }
@@ -23,7 +23,7 @@ namespace ts {
         return !!sys.writeOutputIsTTY && sys.writeOutputIsTTY();
     }
 
-    function shouldBePretty(options?: CompilerOptions) {
+    function shouldBePretty(options: CompilerOptions | BuildOptions) {
         if (!options || typeof options.pretty === "undefined") {
             return defaultIsPretty();
         }
@@ -132,20 +132,41 @@ namespace ts {
         const commandLineOptions = commandLine.options;
         if (configFileName) {
             const configParseResult = parseConfigFileWithSystem(configFileName, commandLineOptions, sys, reportDiagnostic)!; // TODO: GH#18217
+            if (commandLineOptions.showConfig) {
+                if (configParseResult.errors.length !== 0) {
+                    updateReportDiagnostic(configParseResult.options);
+                    configParseResult.errors.forEach(reportDiagnostic);
+                    return sys.exit(ExitStatus.DiagnosticsPresent_OutputsSkipped);
+                }
+                // tslint:disable-next-line:no-null-keyword
+                sys.write(JSON.stringify(convertToTSConfig(configParseResult, configFileName, sys), null, 4) + sys.newLine);
+                return sys.exit(ExitStatus.Success);
+            }
             updateReportDiagnostic(configParseResult.options);
             if (isWatchSet(configParseResult.options)) {
                 reportWatchModeWithoutSysSupport();
                 createWatchOfConfigFile(configParseResult, commandLineOptions);
+            }
+            else if (isIncrementalCompilation(configParseResult.options)) {
+                performIncrementalCompilation(configParseResult);
             }
             else {
                 performCompilation(configParseResult.fileNames, configParseResult.projectReferences, configParseResult.options, getConfigFileParsingDiagnostics(configParseResult));
             }
         }
         else {
+            if (commandLineOptions.showConfig) {
+                // tslint:disable-next-line:no-null-keyword
+                sys.write(JSON.stringify(convertToTSConfig(commandLine, combinePaths(sys.getCurrentDirectory(), "tsconfig.json"), sys), null, 4) + sys.newLine);
+                return sys.exit(ExitStatus.Success);
+            }
             updateReportDiagnostic(commandLineOptions);
             if (isWatchSet(commandLineOptions)) {
                 reportWatchModeWithoutSysSupport();
                 createWatchOfFilesAndCompilerOptions(commandLine.fileNames, commandLineOptions);
+            }
+            else if (isIncrementalCompilation(commandLineOptions)) {
+                performIncrementalCompilation(commandLine);
             }
             else {
                 performCompilation(commandLine.fileNames, /*references*/ undefined, commandLineOptions);
@@ -162,6 +183,9 @@ namespace ts {
 
     function performBuild(args: string[]) {
         const { buildOptions, projects, errors } = parseBuildCommand(args);
+        // Update to pretty if host supports it
+        updateReportDiagnostic(buildOptions);
+
         if (errors.length > 0) {
             errors.forEach(reportDiagnostic);
             return sys.exit(ExitStatus.DiagnosticsPresent_OutputsSkipped);
@@ -173,8 +197,6 @@ namespace ts {
             return sys.exit(ExitStatus.Success);
         }
 
-        // Update to pretty if host supports it
-        updateReportDiagnostic();
         if (projects.length === 0) {
             printVersion();
             printHelp(buildOpts, "--build ");
@@ -185,26 +207,35 @@ namespace ts {
             reportDiagnostic(createCompilerDiagnostic(Diagnostics.The_current_host_does_not_support_the_0_option, "--build"));
             return sys.exit(ExitStatus.DiagnosticsPresent_OutputsSkipped);
         }
+
         if (buildOptions.watch) {
             reportWatchModeWithoutSysSupport();
+            const buildHost = createSolutionBuilderWithWatchHost(sys, /*createProgram*/ undefined, reportDiagnostic, createBuilderStatusReporter(sys, shouldBePretty(buildOptions)), createWatchStatusReporter(buildOptions));
+            updateCreateProgram(buildHost);
+            buildHost.afterProgramEmitAndDiagnostics = program => reportStatistics(program.getProgram());
+            const builder = createSolutionBuilderWithWatch(buildHost, projects, buildOptions);
+            builder.build();
+            return;
         }
 
-        // TODO: change this to host if watch => watchHost otherwiue without wathc
-        const builder = createSolutionBuilder(createSolutionBuilderWithWatchHost(sys, reportDiagnostic, createBuilderStatusReporter(sys, shouldBePretty()), createWatchStatusReporter()), projects, buildOptions);
-        if (buildOptions.clean) {
-            return sys.exit(builder.cleanAllProjects());
-        }
+        const buildHost = createSolutionBuilderHost(sys, /*createProgram*/ undefined, reportDiagnostic, createBuilderStatusReporter(sys, shouldBePretty(buildOptions)), createReportErrorSummary(buildOptions));
+        updateCreateProgram(buildHost);
+        buildHost.afterProgramEmitAndDiagnostics = program => reportStatistics(program.getProgram());
+        const builder = createSolutionBuilder(buildHost, projects, buildOptions);
+        return sys.exit(buildOptions.clean ? builder.clean() : builder.build());
+    }
 
-        if (buildOptions.watch) {
-            builder.buildAllProjects();
-            return builder.startWatching();
-        }
-
-        return sys.exit(builder.buildAllProjects());
+    function createReportErrorSummary(options: CompilerOptions | BuildOptions): ReportEmitErrorSummary | undefined {
+        return shouldBePretty(options) ?
+            errorCount => sys.write(getErrorSummaryText(errorCount, sys.newLine)) :
+            undefined;
     }
 
     function performCompilation(rootNames: string[], projectReferences: ReadonlyArray<ProjectReference> | undefined, options: CompilerOptions, configFileParsingDiagnostics?: ReadonlyArray<Diagnostic>) {
         const host = createCompilerHost(options);
+        const currentDirectory = host.getCurrentDirectory();
+        const getCanonicalFileName = createGetCanonicalFileName(host.useCaseSensitiveFileNames());
+        changeCompilerHostLikeToUseCache(host, fileName => toPath(fileName, currentDirectory, getCanonicalFileName));
         enableStatistics(options);
 
         const programOptions: CreateProgramOptions = {
@@ -215,20 +246,43 @@ namespace ts {
             configFileParsingDiagnostics
         };
         const program = createProgram(programOptions);
-        const exitStatus = emitFilesAndReportErrors(program, reportDiagnostic, s => sys.write(s + sys.newLine));
+        const exitStatus = emitFilesAndReportErrorsAndGetExitStatus(
+            program,
+            reportDiagnostic,
+            s => sys.write(s + sys.newLine),
+            createReportErrorSummary(options)
+        );
         reportStatistics(program);
         return sys.exit(exitStatus);
     }
 
-    function updateWatchCompilationHost(watchCompilerHost: WatchCompilerHost<EmitAndSemanticDiagnosticsBuilderProgram>) {
-        const compileUsingBuilder = watchCompilerHost.createProgram;
-        watchCompilerHost.createProgram = (rootNames, options, host, oldProgram, configFileParsingDiagnostics, projectReferences) => {
+    function performIncrementalCompilation(config: ParsedCommandLine) {
+        const { options, fileNames, projectReferences } = config;
+        enableStatistics(options);
+        return sys.exit(ts.performIncrementalCompilation({
+            rootNames: fileNames,
+            options,
+            configFileParsingDiagnostics: getConfigFileParsingDiagnostics(config),
+            projectReferences,
+            reportDiagnostic,
+            reportErrorSummary: createReportErrorSummary(options),
+            afterProgramEmitAndDiagnostics: builderProgram => reportStatistics(builderProgram.getProgram())
+        }));
+    }
+
+    function updateCreateProgram<T extends BuilderProgram>(host: { createProgram: CreateProgram<T>; }) {
+        const compileUsingBuilder = host.createProgram;
+        host.createProgram = (rootNames, options, host, oldProgram, configFileParsingDiagnostics, projectReferences) => {
             Debug.assert(rootNames !== undefined || (options === undefined && !!oldProgram));
             if (options !== undefined) {
                 enableStatistics(options);
             }
             return compileUsingBuilder(rootNames, options, host, oldProgram, configFileParsingDiagnostics, projectReferences);
         };
+    }
+
+    function updateWatchCompilationHost(watchCompilerHost: WatchCompilerHost<EmitAndSemanticDiagnosticsBuilderProgram>) {
+        updateCreateProgram(watchCompilerHost);
         const emitFilesUsingBuilder = watchCompilerHost.afterProgramCreate!; // TODO: GH#18217
         watchCompilerHost.afterProgramCreate = builderProgram => {
             emitFilesUsingBuilder(builderProgram);
@@ -236,7 +290,7 @@ namespace ts {
         };
     }
 
-    function createWatchStatusReporter(options?: CompilerOptions) {
+    function createWatchStatusReporter(options: CompilerOptions | BuildOptions) {
         return ts.createWatchStatusReporter(sys, shouldBePretty(options));
     }
 
@@ -281,6 +335,10 @@ namespace ts {
             const checkTime = performance.getDuration("Check");
             const emitTime = performance.getDuration("Emit");
             if (compilerOptions.extendedDiagnostics) {
+                const caches = program.getRelationCacheSizes();
+                reportCountStatistic("Assignability cache size", caches.assignable);
+                reportCountStatistic("Identity cache size", caches.identity);
+                reportCountStatistic("Subtype cache size", caches.subtype);
                 performance.forEachMeasure((name, duration) => reportTimeStatistic(`${name} time`, duration));
             }
             else {

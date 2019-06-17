@@ -1,0 +1,54 @@
+=== tests/cases/compiler/module.d.ts ===
+declare module "module" {
+>"module" : typeof import("module")
+
+    export interface Modifier<T> { }
+
+    export function fn<T>(x: T): Modifier<T>;
+>fn : <T>(x: T) => Modifier<T>
+>x : T
+}
+=== tests/cases/compiler/index.ts ===
+import { fn } from "module";
+>fn : <T>(x: T) => import("module").Modifier<T>
+
+export const fail1 = fn(<T>(x: T): T => x);
+>fail1 : import("module").Modifier<(<T>(x: T) => T)>
+>fn(<T>(x: T): T => x) : import("module").Modifier<(<T>(x: T) => T)>
+>fn : <T>(x: T) => import("module").Modifier<T>
+><T>(x: T): T => x : <T>(x: T) => T
+>x : T
+>x : T
+
+export const fail2 = fn(function<T>(x: T): T {
+>fail2 : import("module").Modifier<(<T>(x: T) => T)>
+>fn(function<T>(x: T): T {  return x;}) : import("module").Modifier<(<T>(x: T) => T)>
+>fn : <T>(x: T) => import("module").Modifier<T>
+>function<T>(x: T): T {  return x;} : <T>(x: T) => T
+>x : T
+
+  return x;
+>x : T
+
+});
+
+export const works1 = fn((x: number) => x);
+>works1 : import("module").Modifier<(x: number) => number>
+>fn((x: number) => x) : import("module").Modifier<(x: number) => number>
+>fn : <T>(x: T) => import("module").Modifier<T>
+>(x: number) => x : (x: number) => number
+>x : number
+>x : number
+
+type MakeItWork = <T>(x: T) => T;
+>MakeItWork : MakeItWork
+>x : T
+
+export const works2 = fn<MakeItWork>(x => x);
+>works2 : import("module").Modifier<MakeItWork>
+>fn<MakeItWork>(x => x) : import("module").Modifier<MakeItWork>
+>fn : <T>(x: T) => import("module").Modifier<T>
+>x => x : <T>(x: T) => T
+>x : T
+>x : T
+

@@ -27,6 +27,7 @@ const abs = (ctr: boolean): FourSlashInterface.ExpectedCompletionEntry => ({
     name: "Abs",
     text: ctr ? "constructor Abs(): Abs" : "class Abs",
     kind: "class",
+    kindModifiers: "abstract",
 });
 
 verify.completions(

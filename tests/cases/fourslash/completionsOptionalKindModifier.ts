@@ -8,7 +8,7 @@
 verify.completions({
     marker: "a",
     exact: [
-        { name: "a", kindModifiers: "optional" },
-        { name: "method", kindModifiers: "optional" },
+        { name: "a", kind: "property", kindModifiers: "optional" },
+        { name: "method", kind: "method", kindModifiers: "optional" },
     ],
 });

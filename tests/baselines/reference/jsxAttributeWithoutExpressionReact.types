@@ -21,7 +21,7 @@ declare var React: any;
 >dataSource : any
 >this.state.ds : any
 >this.state : any
->this : any
+>this : typeof globalThis
 >state : any
 >ds : any
 >renderRow : any

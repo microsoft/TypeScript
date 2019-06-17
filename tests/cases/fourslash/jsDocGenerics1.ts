@@ -23,4 +23,4 @@
 //// var x;
 //// x[0].a./*3*/
 
-verify.completions({ marker: test.markers(), includes: { name: "toFixed", kind: "method" } });
+verify.completions({ marker: test.markers(), includes: { name: "toFixed", kind: "method", kindModifiers: "declare" } });

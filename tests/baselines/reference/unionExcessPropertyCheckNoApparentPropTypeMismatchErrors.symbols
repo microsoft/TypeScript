@@ -1,0 +1,41 @@
+=== tests/cases/compiler/unionExcessPropertyCheckNoApparentPropTypeMismatchErrors.ts ===
+interface IStringDictionary<V> {
+>IStringDictionary : Symbol(IStringDictionary, Decl(unionExcessPropertyCheckNoApparentPropTypeMismatchErrors.ts, 0, 0))
+>V : Symbol(V, Decl(unionExcessPropertyCheckNoApparentPropTypeMismatchErrors.ts, 0, 28))
+
+	[name: string]: V;
+>name : Symbol(name, Decl(unionExcessPropertyCheckNoApparentPropTypeMismatchErrors.ts, 1, 2))
+>V : Symbol(V, Decl(unionExcessPropertyCheckNoApparentPropTypeMismatchErrors.ts, 0, 28))
+}
+interface INumberDictionary<V> {
+>INumberDictionary : Symbol(INumberDictionary, Decl(unionExcessPropertyCheckNoApparentPropTypeMismatchErrors.ts, 2, 1))
+>V : Symbol(V, Decl(unionExcessPropertyCheckNoApparentPropTypeMismatchErrors.ts, 3, 28))
+
+	[idx: number]: V;
+>idx : Symbol(idx, Decl(unionExcessPropertyCheckNoApparentPropTypeMismatchErrors.ts, 4, 2))
+>V : Symbol(V, Decl(unionExcessPropertyCheckNoApparentPropTypeMismatchErrors.ts, 3, 28))
+}
+
+declare function forEach<T>(from: IStringDictionary<T> | INumberDictionary<T>, callback: (entry: { key: any; value: T; }, remove: () => void) => any);
+>forEach : Symbol(forEach, Decl(unionExcessPropertyCheckNoApparentPropTypeMismatchErrors.ts, 5, 1))
+>T : Symbol(T, Decl(unionExcessPropertyCheckNoApparentPropTypeMismatchErrors.ts, 7, 25))
+>from : Symbol(from, Decl(unionExcessPropertyCheckNoApparentPropTypeMismatchErrors.ts, 7, 28))
+>IStringDictionary : Symbol(IStringDictionary, Decl(unionExcessPropertyCheckNoApparentPropTypeMismatchErrors.ts, 0, 0))
+>T : Symbol(T, Decl(unionExcessPropertyCheckNoApparentPropTypeMismatchErrors.ts, 7, 25))
+>INumberDictionary : Symbol(INumberDictionary, Decl(unionExcessPropertyCheckNoApparentPropTypeMismatchErrors.ts, 2, 1))
+>T : Symbol(T, Decl(unionExcessPropertyCheckNoApparentPropTypeMismatchErrors.ts, 7, 25))
+>callback : Symbol(callback, Decl(unionExcessPropertyCheckNoApparentPropTypeMismatchErrors.ts, 7, 78))
+>entry : Symbol(entry, Decl(unionExcessPropertyCheckNoApparentPropTypeMismatchErrors.ts, 7, 90))
+>key : Symbol(key, Decl(unionExcessPropertyCheckNoApparentPropTypeMismatchErrors.ts, 7, 98))
+>value : Symbol(value, Decl(unionExcessPropertyCheckNoApparentPropTypeMismatchErrors.ts, 7, 108))
+>T : Symbol(T, Decl(unionExcessPropertyCheckNoApparentPropTypeMismatchErrors.ts, 7, 25))
+>remove : Symbol(remove, Decl(unionExcessPropertyCheckNoApparentPropTypeMismatchErrors.ts, 7, 121))
+
+let count = 0;
+>count : Symbol(count, Decl(unionExcessPropertyCheckNoApparentPropTypeMismatchErrors.ts, 9, 3))
+
+forEach({ toString: 123 }, () => count++);
+>forEach : Symbol(forEach, Decl(unionExcessPropertyCheckNoApparentPropTypeMismatchErrors.ts, 5, 1))
+>toString : Symbol(toString, Decl(unionExcessPropertyCheckNoApparentPropTypeMismatchErrors.ts, 10, 9))
+>count : Symbol(count, Decl(unionExcessPropertyCheckNoApparentPropTypeMismatchErrors.ts, 9, 3))
+

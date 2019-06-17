@@ -257,7 +257,7 @@ namespace ts {
             // We emit hoisted variables early to align roughly with our previous emit output.
             // Two key differences in this approach are:
             // - Temporary variables will appear at the top rather than at the bottom of the file
-            addStatementsAfterPrologue(statements, endLexicalEnvironment());
+            insertStatementsAfterStandardPrologue(statements, endLexicalEnvironment());
 
             const exportStarFunction = addExportStarIfNeeded(statements)!; // TODO: GH#18217
             const moduleObject = createObjectLiteral([
@@ -1463,9 +1463,8 @@ namespace ts {
          * @param node The node to visit.
          */
         function destructuringAndImportCallVisitor(node: Node): VisitResult<Node> {
-            if (node.transformFlags & TransformFlags.DestructuringAssignment
-                && node.kind === SyntaxKind.BinaryExpression) {
-                return visitDestructuringAssignment(<DestructuringAssignment>node);
+            if (isDestructuringAssignment(node)) {
+                return visitDestructuringAssignment(node);
             }
             else if (isImportCall(node)) {
                 return visitImportCallExpression(node);
