@@ -32053,9 +32053,6 @@ namespace ts {
                         return grammarErrorAtPos(node, node.end - 1, ";".length, Diagnostics._0_expected, "{");
                     }
                 }
-                else if (isClassLike(node.parent) && isStringLiteral(node.name) && node.name.text === "constructor" && (!compilerOptions.target || compilerOptions.target < ScriptTarget.ES5)) {
-                    return grammarErrorOnNode(node.name, Diagnostics.Quoted_constructors_have_previously_been_interpreted_as_methods_which_is_incorrect_In_TypeScript_3_6_they_will_be_correctly_parsed_as_constructors_In_the_meantime_consider_using_constructor_to_write_a_constructor_or_constructor_to_write_a_method);
-                }
                 if (checkGrammarForGenerator(node)) {
                     return true;
                 }

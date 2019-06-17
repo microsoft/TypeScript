@@ -5650,9 +5650,24 @@ namespace ts {
             return finishNode(node);
         }
 
+        function tryParseStringConstructorDeclaration(node: ConstructorDeclaration): ConstructorDeclaration | undefined {
+            return tryParse(() => {
+                const stringLiteral = parseLiteralNode();
+                if (isStringLiteral(stringLiteral) && stringLiteral.text === "constructor") {
+                    node.kind = SyntaxKind.Constructor;
+                    node.name = stringLiteral;
+                    return parseConstructorDeclarationEnd(node);
+                }
+            });
+        }
+
         function parseConstructorDeclaration(node: ConstructorDeclaration): ConstructorDeclaration {
             node.kind = SyntaxKind.Constructor;
             parseExpected(SyntaxKind.ConstructorKeyword);
+            return parseConstructorDeclarationEnd(node);
+        }
+
+        function parseConstructorDeclarationEnd(node: ConstructorDeclaration): ConstructorDeclaration {
             fillSignature(SyntaxKind.ColonToken, SignatureFlags.None, node);
             node.body = parseFunctionBlockOrSemicolon(SignatureFlags.None, Diagnostics.or_expected);
             return finishNode(node);
@@ -5859,6 +5874,13 @@ namespace ts {
 
             if (parseContextualModifier(SyntaxKind.SetKeyword)) {
                 return parseAccessorDeclaration(<AccessorDeclaration>node, SyntaxKind.SetAccessor);
+            }
+
+            if (token() === SyntaxKind.StringLiteral) {
+                const stringConstructor = tryParseStringConstructorDeclaration(<ConstructorDeclaration>node);
+                if (stringConstructor) {
+                    return stringConstructor;
+                }
             }
 
             if (token() === SyntaxKind.ConstructorKeyword) {
