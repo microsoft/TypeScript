@@ -2,32 +2,63 @@
 class C {
 >C : C
 
-    "constructor"() {} // Error in 3.5
->"constructor" : () => void
+    "constructor"() {
+>"constructor" : error
+
+        console.log(this);
+>console.log(this) : void
+>console.log : (message?: any, ...optionalParams: any[]) => void
+>console : Console
+>log : (message?: any, ...optionalParams: any[]) => void
+>this : this
+    }
 }
 
 class D {
 >D : D
 
-    'constructor'() {} // Error in 3.5
->'constructor' : () => void
+    'constructor'() {
+>'constructor' : error
+
+        console.log(this);
+>console.log(this) : void
+>console.log : (message?: any, ...optionalParams: any[]) => void
+>console : Console
+>log : (message?: any, ...optionalParams: any[]) => void
+>this : this
+    }
 }
 
 class E {
 >E : E
 
-    ['constructor']() {}
+    ['constructor']() {
 >['constructor'] : () => void
 >'constructor' : "constructor"
+
+        console.log(this);
+>console.log(this) : void
+>console.log : (message?: any, ...optionalParams: any[]) => void
+>console : Console
+>log : (message?: any, ...optionalParams: any[]) => void
+>this : this
+    }
 }
 
 new class {
->new class {    "constructor"() {} // Error in 3.5} : (Anonymous class)
->class {    "constructor"() {} // Error in 3.5} : typeof (Anonymous class)
+>new class {    "constructor"() {        console.log(this);    }} : (Anonymous class)
+>class {    "constructor"() {        console.log(this);    }} : typeof (Anonymous class)
 
-    "constructor"() {} // Error in 3.5
->"constructor" : () => void
+    "constructor"() {
+>"constructor" : error
 
+        console.log(this);
+>console.log(this) : void
+>console.log : (message?: any, ...optionalParams: any[]) => void
+>console : Console
+>log : (message?: any, ...optionalParams: any[]) => void
+>this : this
+    }
 };
 
 var o = { "constructor"() {} };
