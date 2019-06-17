@@ -386,10 +386,6 @@ namespace ts.codefix {
         }
 
         return getReferences(searchToken, program, cancellationToken);
-
-        // return inferThis
-        //     ? InferFromReference.inferTypeForThisFromReferences(references, program, cancellationToken)
-        //     : InferFromReference.inferTypeForParametersFromReferences(references, containingFunction, program, cancellationToken);
     }
 
     interface ParameterInference {
