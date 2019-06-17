@@ -5653,7 +5653,10 @@ namespace ts {
         function tryParseStringConstructorDeclaration(node: ConstructorDeclaration): ConstructorDeclaration | undefined {
             return tryParse(() => {
                 const stringLiteral = parseLiteralNode();
-                if (isStringLiteral(stringLiteral) && stringLiteral.text === "constructor") {
+                if (isStringLiteral(stringLiteral)
+                    && stringLiteral.text === "constructor"
+                    && token() === SyntaxKind.OpenParenToken
+                ) {
                     node.kind = SyntaxKind.Constructor;
                     node.name = stringLiteral;
                     return parseConstructorDeclarationEnd(node);
