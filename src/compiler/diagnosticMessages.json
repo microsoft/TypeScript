@@ -2963,6 +2963,10 @@
         "category": "Error",
         "code": 4104
     },
+    "Private or protected member '{0}' cannot be accessed on a type parameter.": {
+        "category": "Error",
+        "code": 4105
+    },
 
     "The current host does not support the '{0}' option.": {
         "category": "Error",
