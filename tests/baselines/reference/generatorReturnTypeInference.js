@@ -91,6 +91,20 @@ function* g306() { // Generator<number, boolean, "hi">
     return true;
 }
 
+function* g307<T>() { // Generator<number, T, T>
+    const a: T = yield 0;
+    return a;
+}
+
+function* g308<T>(x: T) { // Generator<T, T, T>
+    const a: T = yield x;
+    return a;
+}
+
+function* g309<T, U, V>(x: T, y: U) { // Generator<T, U, V>
+    const a: V = yield x;
+    return y;
+}
 
 //// [generatorReturnTypeInference.js]
 // 'yield' iteration type inference
@@ -164,4 +178,16 @@ function* g305() {
 function* g306() {
     const a = yield 1;
     return true;
+}
+function* g307() {
+    const a = yield 0;
+    return a;
+}
+function* g308(x) {
+    const a = yield x;
+    return a;
+}
+function* g309(x, y) {
+    const a = yield x;
+    return y;
 }

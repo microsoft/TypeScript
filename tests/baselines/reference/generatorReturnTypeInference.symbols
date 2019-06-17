@@ -156,3 +156,48 @@ function* g306() { // Generator<number, boolean, "hi">
     return true;
 }
 
+function* g307<T>() { // Generator<number, T, T>
+>g307 : Symbol(g307, Decl(generatorReturnTypeInference.ts, 90, 1))
+>T : Symbol(T, Decl(generatorReturnTypeInference.ts, 92, 15))
+
+    const a: T = yield 0;
+>a : Symbol(a, Decl(generatorReturnTypeInference.ts, 93, 9))
+>T : Symbol(T, Decl(generatorReturnTypeInference.ts, 92, 15))
+
+    return a;
+>a : Symbol(a, Decl(generatorReturnTypeInference.ts, 93, 9))
+}
+
+function* g308<T>(x: T) { // Generator<T, T, T>
+>g308 : Symbol(g308, Decl(generatorReturnTypeInference.ts, 95, 1))
+>T : Symbol(T, Decl(generatorReturnTypeInference.ts, 97, 15))
+>x : Symbol(x, Decl(generatorReturnTypeInference.ts, 97, 18))
+>T : Symbol(T, Decl(generatorReturnTypeInference.ts, 97, 15))
+
+    const a: T = yield x;
+>a : Symbol(a, Decl(generatorReturnTypeInference.ts, 98, 9))
+>T : Symbol(T, Decl(generatorReturnTypeInference.ts, 97, 15))
+>x : Symbol(x, Decl(generatorReturnTypeInference.ts, 97, 18))
+
+    return a;
+>a : Symbol(a, Decl(generatorReturnTypeInference.ts, 98, 9))
+}
+
+function* g309<T, U, V>(x: T, y: U) { // Generator<T, U, V>
+>g309 : Symbol(g309, Decl(generatorReturnTypeInference.ts, 100, 1))
+>T : Symbol(T, Decl(generatorReturnTypeInference.ts, 102, 15))
+>U : Symbol(U, Decl(generatorReturnTypeInference.ts, 102, 17))
+>V : Symbol(V, Decl(generatorReturnTypeInference.ts, 102, 20))
+>x : Symbol(x, Decl(generatorReturnTypeInference.ts, 102, 24))
+>T : Symbol(T, Decl(generatorReturnTypeInference.ts, 102, 15))
+>y : Symbol(y, Decl(generatorReturnTypeInference.ts, 102, 29))
+>U : Symbol(U, Decl(generatorReturnTypeInference.ts, 102, 17))
+
+    const a: V = yield x;
+>a : Symbol(a, Decl(generatorReturnTypeInference.ts, 103, 9))
+>V : Symbol(V, Decl(generatorReturnTypeInference.ts, 102, 20))
+>x : Symbol(x, Decl(generatorReturnTypeInference.ts, 102, 24))
+
+    return y;
+>y : Symbol(y, Decl(generatorReturnTypeInference.ts, 102, 29))
+}

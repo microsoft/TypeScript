@@ -94,3 +94,18 @@ function* g306() { // Generator<number, boolean, "hi">
     const a: "hi" = yield 1;
     return true;
 }
+
+function* g307<T>() { // Generator<number, T, T>
+    const a: T = yield 0;
+    return a;
+}
+
+function* g308<T>(x: T) { // Generator<T, T, T>
+    const a: T = yield x;
+    return a;
+}
+
+function* g309<T, U, V>(x: T, y: U) { // Generator<T, U, V>
+    const a: V = yield x;
+    return y;
+}

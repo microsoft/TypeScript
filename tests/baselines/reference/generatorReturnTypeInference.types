@@ -201,3 +201,41 @@ function* g306() { // Generator<number, boolean, "hi">
 >true : true
 }
 
+function* g307<T>() { // Generator<number, T, T>
+>g307 : <T>() => Generator<number, T, T>
+
+    const a: T = yield 0;
+>a : T
+>yield 0 : any
+>0 : 0
+
+    return a;
+>a : T
+}
+
+function* g308<T>(x: T) { // Generator<T, T, T>
+>g308 : <T>(x: T) => Generator<T, T, T>
+>x : T
+
+    const a: T = yield x;
+>a : T
+>yield x : any
+>x : T
+
+    return a;
+>a : T
+}
+
+function* g309<T, U, V>(x: T, y: U) { // Generator<T, U, V>
+>g309 : <T, U, V>(x: T, y: U) => Generator<T, U, V>
+>x : T
+>y : U
+
+    const a: V = yield x;
+>a : V
+>yield x : any
+>x : T
+
+    return y;
+>y : U
+}
