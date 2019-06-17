@@ -31,7 +31,7 @@ async function runConsoleTests(runJs, defaultReporter, runInParallel, watchMode,
     const inspect = cmdLineOptions.inspect;
     const runners = cmdLineOptions.runners;
     const light = cmdLineOptions.light;
-    const skipPercent = cmdLineOptions.skipPercent;
+    const skipPercent = process.env.CI === "true" ? 0 : cmdLineOptions.skipPercent;
     const stackTraceLimit = cmdLineOptions.stackTraceLimit;
     const testConfigFile = "test.config";
     const failed = cmdLineOptions.failed;
@@ -63,7 +63,7 @@ async function runConsoleTests(runJs, defaultReporter, runInParallel, watchMode,
         testTimeout = 400000;
     }
 
-    if (tests || runners || light || testTimeout || taskConfigsFolder || keepFailed || skipPercent) {
+    if (tests || runners || light || testTimeout || taskConfigsFolder || keepFailed || skipPercent !== undefined) {
         writeTestConfigFile(tests, runners, light, skipPercent, taskConfigsFolder, workerCount, stackTraceLimit, testTimeout, keepFailed);
     }
 
