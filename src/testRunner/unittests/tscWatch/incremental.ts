@@ -129,6 +129,14 @@ namespace ts.tscWatch {
             signature: Harness.mockHash(libFile.content)
         };
 
+        const getCanonicalFileName = createGetCanonicalFileName(/*useCaseSensitiveFileNames*/ false);
+        function relativeToBuildInfo(buildInfoPath: string, path: string) {
+            return getRelativePathFromFile(buildInfoPath, path, getCanonicalFileName);
+        }
+
+        const buildInfoPath = `${project}/tsconfig.tsbuildinfo`;
+        const [libFilePath, file1Path, file2Path] = [libFile.path, `${project}/file1.ts`, `${project}/file2.ts`].map(path => relativeToBuildInfo(buildInfoPath, path));
+
         describe("non module compilation", () => {
             function getFileInfo(content: string): BuilderState.FileInfo {
                 return { version: Harness.mockHash(content), signature: Harness.mockHash(`declare ${content}\n`) };
@@ -150,7 +158,6 @@ namespace ts.tscWatch {
                 path: `${project}/file2.js`,
                 content: "var y = 20;\n"
             };
-
             describe("own file emit without errors", () => {
                 const modifiedFile2Content = file2.content.replace("y", "z").replace("20", "10");
                 verifyIncrementalWatchEmit({
@@ -163,14 +170,14 @@ namespace ts.tscWatch {
                             content: getBuildInfoText({
                                 program: {
                                     fileInfos: {
-                                        [libFile.path]: libFileInfo,
-                                        [file1.path]: getFileInfo(file1.content),
-                                        [file2.path]: getFileInfo(file2.content)
+                                        [libFilePath]: libFileInfo,
+                                        [file1Path]: getFileInfo(file1.content),
+                                        [file2Path]: getFileInfo(file2.content)
                                     },
                                     options: { incremental: true, configFilePath: configFile.path },
                                     referencedMap: {},
                                     exportedModulesMap: {},
-                                    semanticDiagnosticsPerFile: [libFile.path, file1.path, file2.path]
+                                    semanticDiagnosticsPerFile: [libFilePath, file1Path, file2Path]
                                 },
                                 version
                             })
@@ -186,14 +193,14 @@ namespace ts.tscWatch {
                             content: getBuildInfoText({
                                 program: {
                                     fileInfos: {
-                                        [libFile.path]: libFileInfo,
-                                        [file1.path]: getFileInfo(file1.content),
-                                        [file2.path]: getFileInfo(modifiedFile2Content)
+                                        [libFilePath]: libFileInfo,
+                                        [file1Path]: getFileInfo(file1.content),
+                                        [file2Path]: getFileInfo(modifiedFile2Content)
                                     },
                                     options: { incremental: true, configFilePath: configFile.path },
                                     referencedMap: {},
                                     exportedModulesMap: {},
-                                    semanticDiagnosticsPerFile: [libFile.path, file1.path, file2.path]
+                                    semanticDiagnosticsPerFile: [libFilePath, file1Path, file2Path]
                                 },
                                 version
                             })
@@ -213,16 +220,16 @@ namespace ts.tscWatch {
                     signature: Harness.mockHash("declare const y: string;\n")
                 };
                 const file2ReuasableError: ProgramBuildInfoDiagnostic = [
-                    file2.path, [
+                    file2Path, [
                         {
-                            file: file2.path,
+                            file: file2Path,
                             start: 6,
                             length: 1,
                             code: Diagnostics.Type_0_is_not_assignable_to_type_1.code,
                             category: Diagnostics.Type_0_is_not_assignable_to_type_1.category,
                             messageText: "Type '20' is not assignable to type 'string'."
                         }
-                    ] as ReusableDiagnostic[]
+                    ]
                 ];
                 const file2Errors = [
                     "file2.ts(1,7): error TS2322: Type '20' is not assignable to type 'string'.\n"
@@ -238,16 +245,16 @@ namespace ts.tscWatch {
                             content: getBuildInfoText({
                                 program: {
                                     fileInfos: {
-                                        [libFile.path]: libFileInfo,
-                                        [file1.path]: getFileInfo(file1.content),
-                                        [file2.path]: file2FileInfo
+                                        [libFilePath]: libFileInfo,
+                                        [file1Path]: getFileInfo(file1.content),
+                                        [file2Path]: file2FileInfo
                                     },
                                     options: { incremental: true, configFilePath: configFile.path },
                                     referencedMap: {},
                                     exportedModulesMap: {},
                                     semanticDiagnosticsPerFile: [
-                                        libFile.path,
-                                        file1.path,
+                                        libFilePath,
+                                        file1Path,
                                         file2ReuasableError
                                     ]
                                 },
@@ -265,16 +272,16 @@ namespace ts.tscWatch {
                             content: getBuildInfoText({
                                 program: {
                                     fileInfos: {
-                                        [libFile.path]: libFileInfo,
-                                        [file1.path]: getFileInfo(modifiedFile1Content),
-                                        [file2.path]: file2FileInfo
+                                        [libFilePath]: libFileInfo,
+                                        [file1Path]: getFileInfo(modifiedFile1Content),
+                                        [file2Path]: file2FileInfo
                                     },
                                     options: { incremental: true, configFilePath: configFile.path },
                                     referencedMap: {},
                                     exportedModulesMap: {},
                                     semanticDiagnosticsPerFile: [
-                                        libFile.path,
-                                        file1.path,
+                                        libFilePath,
+                                        file1Path,
                                         file2ReuasableError
                                     ]
                                 },
@@ -369,14 +376,14 @@ namespace ts.tscWatch {
                             content: getBuildInfoText({
                                 program: {
                                     fileInfos: {
-                                        [libFile.path]: libFileInfo,
-                                        [file1.path]: getFileInfo(file1.content),
-                                        [file2.path]: getFileInfo(file2.content)
+                                        [libFilePath]: libFileInfo,
+                                        [file1Path]: getFileInfo(file1.content),
+                                        [file2Path]: getFileInfo(file2.content)
                                     },
                                     options: { incremental: true, module: ModuleKind.AMD, configFilePath: configFile.path },
                                     referencedMap: {},
                                     exportedModulesMap: {},
-                                    semanticDiagnosticsPerFile: [libFile.path, file1.path, file2.path]
+                                    semanticDiagnosticsPerFile: [libFilePath, file1Path, file2Path]
                                 },
                                 version
                             })
@@ -391,14 +398,14 @@ namespace ts.tscWatch {
                             content: getBuildInfoText({
                                 program: {
                                     fileInfos: {
-                                        [libFile.path]: libFileInfo,
-                                        [file1.path]: getFileInfo(file1.content),
-                                        [file2.path]: getFileInfo(modifiedFile2Content)
+                                        [libFilePath]: libFileInfo,
+                                        [file1Path]: getFileInfo(file1.content),
+                                        [file2Path]: getFileInfo(modifiedFile2Content)
                                     },
                                     options: { incremental: true, module: ModuleKind.AMD, configFilePath: configFile.path },
                                     referencedMap: {},
                                     exportedModulesMap: {},
-                                    semanticDiagnosticsPerFile: [libFile.path, file1.path, file2.path]
+                                    semanticDiagnosticsPerFile: [libFilePath, file1Path, file2Path]
                                 },
                                 version
                             })
@@ -418,16 +425,16 @@ namespace ts.tscWatch {
                     signature: Harness.mockHash("export declare const y: string;\n")
                 };
                 const file2ReuasableError: ProgramBuildInfoDiagnostic = [
-                    file2.path, [
+                    file2Path, [
                         {
-                            file: file2.path,
+                            file: file2Path,
                             start: 13,
                             length: 1,
                             code: Diagnostics.Type_0_is_not_assignable_to_type_1.code,
                             category: Diagnostics.Type_0_is_not_assignable_to_type_1.category,
                             messageText: "Type '20' is not assignable to type 'string'."
                         }
-                    ] as ReusableDiagnostic[]
+                    ]
                 ];
                 const file2Errors = [
                     "file2.ts(1,14): error TS2322: Type '20' is not assignable to type 'string'.\n"
@@ -443,16 +450,16 @@ namespace ts.tscWatch {
                             content: getBuildInfoText({
                                 program: {
                                     fileInfos: {
-                                        [libFile.path]: libFileInfo,
-                                        [file1.path]: getFileInfo(file1.content),
-                                        [file2.path]: file2FileInfo
+                                        [libFilePath]: libFileInfo,
+                                        [file1Path]: getFileInfo(file1.content),
+                                        [file2Path]: file2FileInfo
                                     },
                                     options: { incremental: true, module: ModuleKind.AMD, configFilePath: configFile.path },
                                     referencedMap: {},
                                     exportedModulesMap: {},
                                     semanticDiagnosticsPerFile: [
-                                        libFile.path,
-                                        file1.path,
+                                        libFilePath,
+                                        file1Path,
                                         file2ReuasableError
                                     ]
                                 },
@@ -469,17 +476,17 @@ namespace ts.tscWatch {
                             content: getBuildInfoText({
                                 program: {
                                     fileInfos: {
-                                        [libFile.path]: libFileInfo,
-                                        [file1.path]: getFileInfo(modifiedFile1Content),
-                                        [file2.path]: file2FileInfo
+                                        [libFilePath]: libFileInfo,
+                                        [file1Path]: getFileInfo(modifiedFile1Content),
+                                        [file2Path]: file2FileInfo
                                     },
                                     options: { incremental: true, module: ModuleKind.AMD, configFilePath: configFile.path },
                                     referencedMap: {},
                                     exportedModulesMap: {},
                                     semanticDiagnosticsPerFile: [
-                                        libFile.path,
+                                        libFilePath,
                                         file2ReuasableError,
-                                        file1.path
+                                        file1Path
                                     ]
                                 },
                                 version

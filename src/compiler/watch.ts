@@ -437,7 +437,7 @@ namespace ts {
 }
 
 namespace ts {
-    export function readBuilderProgram(compilerOptions: CompilerOptions, readFile: (path: string) => string | undefined) {
+    export function readBuilderProgram(compilerOptions: CompilerOptions, readFile: (path: string) => string | undefined, useCaseSensitiveFileNames: boolean) {
         if (compilerOptions.out || compilerOptions.outFile) return undefined;
         const buildInfoPath = getOutputPathForBuildInfo(compilerOptions);
         if (!buildInfoPath) return undefined;
@@ -446,7 +446,7 @@ namespace ts {
         const buildInfo = getBuildInfo(content);
         if (buildInfo.version !== version) return undefined;
         if (!buildInfo.program) return undefined;
-        return createBuildProgramUsingProgramBuildInfo(buildInfo.program);
+        return createBuildProgramUsingProgramBuildInfo(buildInfo.program, buildInfoPath, useCaseSensitiveFileNames);
     }
 
     export function createIncrementalCompilerHost(options: CompilerOptions, system = sys): CompilerHost {
@@ -471,7 +471,7 @@ namespace ts {
     }: IncrementalProgramOptions<T>): T {
         host = host || createIncrementalCompilerHost(options);
         createProgram = createProgram || createEmitAndSemanticDiagnosticsBuilderProgram as any as CreateProgram<T>;
-        const oldProgram = readBuilderProgram(options, path => host!.readFile(path)) as any as T;
+        const oldProgram = readBuilderProgram(options, path => host!.readFile(path), host.useCaseSensitiveFileNames()) as any as T;
         return createProgram(rootNames, options, host, oldProgram, configFileParsingDiagnostics, projectReferences);
     }
 
@@ -747,7 +747,7 @@ namespace ts {
             ((typeDirectiveNames, containingFile, redirectedReference) => resolutionCache.resolveTypeReferenceDirectives(typeDirectiveNames, containingFile, redirectedReference));
         const userProvidedResolution = !!host.resolveModuleNames || !!host.resolveTypeReferenceDirectives;
 
-        builderProgram = readBuilderProgram(compilerOptions, path => compilerHost.readFile(path)) as any as T;
+        builderProgram = readBuilderProgram(compilerOptions, path => compilerHost.readFile(path), compilerHost.useCaseSensitiveFileNames()) as any as T;
         synchronizeProgram();
 
         // Update the wild card directory watch

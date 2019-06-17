@@ -68,27 +68,27 @@ exports.bar = bar_1.default;
 {
   "program": {
     "fileInfos": {
-      "/lib/lib.d.ts": {
+      "../../lib/lib.d.ts": {
         "version": "-15964756381",
         "signature": "-15964756381"
       },
-      "/src/bar.ts": {
+      "../bar.ts": {
         "version": "5936740878",
         "signature": "11191036521"
       },
-      "/src/bundling.ts": {
+      "../bundling.ts": {
         "version": "-21659820217",
         "signature": "-40032907372"
       },
-      "/src/global.d.ts": {
+      "../global.d.ts": {
         "version": "-9780226215",
         "signature": "-9780226215"
       },
-      "/src/lazyindex.ts": {
+      "../lazyindex.ts": {
         "version": "-6956449754",
         "signature": "-6224542381"
       },
-      "/src/index.ts": {
+      "../index.ts": {
         "version": "-11602502901",
         "signature": "18468008756"
       }
@@ -101,30 +101,30 @@ exports.bar = bar_1.default;
       "configFilePath": "/src/tsconfig.json"
     },
     "referencedMap": {
-      "/src/index.ts": [
-        "/src/bundling.ts",
-        "/src/lazyindex.ts"
+      "../index.ts": [
+        "../bundling.ts",
+        "../lazyindex.ts"
       ],
-      "/src/lazyindex.ts": [
-        "/src/bar.ts"
+      "../lazyindex.ts": [
+        "../bar.ts"
       ]
     },
     "exportedModulesMap": {
-      "/src/index.ts": [
-        "/src/bundling.ts",
-        "/src/lazyindex.ts"
+      "../index.ts": [
+        "../bundling.ts",
+        "../lazyindex.ts"
       ],
-      "/src/lazyindex.ts": [
-        "/src/bar.ts"
+      "../lazyindex.ts": [
+        "../bar.ts"
       ]
     },
     "semanticDiagnosticsPerFile": [
-      "/lib/lib.d.ts",
-      "/src/bar.ts",
-      "/src/bundling.ts",
-      "/src/global.d.ts",
-      "/src/index.ts",
-      "/src/lazyindex.ts"
+      "../../lib/lib.d.ts",
+      "../bar.ts",
+      "../bundling.ts",
+      "../global.d.ts",
+      "../index.ts",
+      "../lazyindex.ts"
     ]
   },
   "version": "FakeTSVersion"
