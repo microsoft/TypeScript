@@ -3119,6 +3119,18 @@ namespace ts {
         return node.emitNode;
     }
 
+    /**
+     * Sets `EmitFlags.NoComments` on a node and removes any leading and trailing synthetic comments.
+     * @internal
+     */
+    export function removeAllComments<T extends Node>(node: T): T {
+        const emitNode = getOrCreateEmitNode(node);
+        emitNode.flags |= EmitFlags.NoComments;
+        emitNode.leadingComments = undefined;
+        emitNode.trailingComments = undefined;
+        return node;
+    }
+
     export function setTextRange<T extends TextRange>(range: T, location: TextRange | undefined): T {
         if (location) {
             range.pos = location.pos;
