@@ -2303,6 +2303,7 @@ declare namespace ts {
         MarkerType = 8192,
         JSLiteral = 16384,
         FreshLiteral = 32768,
+        ArrayLiteral = 65536,
         ClassOrInterface = 3,
     }
     interface ObjectType extends Type {
