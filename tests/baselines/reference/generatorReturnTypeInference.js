@@ -52,7 +52,7 @@ function* g201() { // Generator<number, void, string>
     let a: string = yield 1;
 }
 
-function* g202() { // Generator<1 | 2, void, string & number>
+function* g202() { // Generator<1 | 2, void, never>
     let a: string = yield 1;
     let b: number = yield 2;
 }

@@ -90,7 +90,7 @@ function* g201() { // Generator<number, void, string>
 >a : Symbol(a, Decl(generatorReturnTypeInference.ts, 50, 7))
 }
 
-function* g202() { // Generator<1 | 2, void, string & number>
+function* g202() { // Generator<1 | 2, void, never>
 >g202 : Symbol(g202, Decl(generatorReturnTypeInference.ts, 51, 1))
 
     let a: string = yield 1;

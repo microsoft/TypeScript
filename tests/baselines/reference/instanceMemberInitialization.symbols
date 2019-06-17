@@ -28,3 +28,25 @@ var r = c.x === c2.x;
 >c2 : Symbol(c2, Decl(instanceMemberInitialization.ts, 6, 3))
 >x : Symbol(C.x, Decl(instanceMemberInitialization.ts, 0, 9))
 
+// #31792
+
+
+
+class MyMap<K, V> {
+>MyMap : Symbol(MyMap, Decl(instanceMemberInitialization.ts, 7, 21))
+>K : Symbol(K, Decl(instanceMemberInitialization.ts, 13, 12))
+>V : Symbol(V, Decl(instanceMemberInitialization.ts, 13, 14))
+
+    constructor(private readonly Map_: { new<K, V>(): any }) {}
+>Map_ : Symbol(MyMap.Map_, Decl(instanceMemberInitialization.ts, 14, 16))
+>K : Symbol(K, Decl(instanceMemberInitialization.ts, 14, 45))
+>V : Symbol(V, Decl(instanceMemberInitialization.ts, 14, 47))
+
+    private readonly store = new this.Map_<K, V>();
+>store : Symbol(MyMap.store, Decl(instanceMemberInitialization.ts, 14, 63))
+>this.Map_ : Symbol(MyMap.Map_, Decl(instanceMemberInitialization.ts, 14, 16))
+>this : Symbol(MyMap, Decl(instanceMemberInitialization.ts, 7, 21))
+>Map_ : Symbol(MyMap.Map_, Decl(instanceMemberInitialization.ts, 14, 16))
+>K : Symbol(K, Decl(instanceMemberInitialization.ts, 13, 12))
+>V : Symbol(V, Decl(instanceMemberInitialization.ts, 13, 14))
+}
