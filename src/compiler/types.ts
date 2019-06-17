@@ -4089,19 +4089,20 @@ namespace ts {
         MarkerType       = 1 << 13, // Marker type used for variance probing
         JSLiteral        = 1 << 14, // Object type declared in JS - disables errors on read/write of nonexisting members
         FreshLiteral     = 1 << 15, // Fresh object literal
+        ArrayLiteral     = 1 << 16, // Originates in an array literal
         /* @internal */
-        PrimitiveUnion   = 1 << 16, // Union of only primitive types
+        PrimitiveUnion   = 1 << 17, // Union of only primitive types
         /* @internal */
-        ContainsWideningType = 1 << 17, // Type is or contains undefined or null widening type
+        ContainsWideningType = 1 << 18, // Type is or contains undefined or null widening type
         /* @internal */
-        ContainsObjectLiteral = 1 << 18, // Type is or contains object literal type
+        ContainsObjectOrArrayLiteral = 1 << 19, // Type is or contains object literal type
         /* @internal */
-        NonInferrableType = 1 << 19, // Type is or contains anyFunctionType or silentNeverType
+        NonInferrableType = 1 << 20, // Type is or contains anyFunctionType or silentNeverType
         ClassOrInterface = Class | Interface,
         /* @internal */
-        RequiresWidening = ContainsWideningType | ContainsObjectLiteral,
+        RequiresWidening = ContainsWideningType | ContainsObjectOrArrayLiteral,
         /* @internal */
-        PropagatingFlags = ContainsWideningType | ContainsObjectLiteral | NonInferrableType
+        PropagatingFlags = ContainsWideningType | ContainsObjectOrArrayLiteral | NonInferrableType
     }
 
     /* @internal */
@@ -4154,6 +4155,8 @@ namespace ts {
     export interface TypeReference extends ObjectType {
         target: GenericType;    // Type reference target
         typeArguments?: ReadonlyArray<Type>;  // Type reference type arguments (undefined if none)
+        /* @internal */
+        literalType?: TypeReference;  // Clone of type with ObjectFlags.ArrayLiteral set
     }
 
     /* @internal */
