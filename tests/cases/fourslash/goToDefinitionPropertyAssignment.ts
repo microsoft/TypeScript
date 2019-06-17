@@ -8,9 +8,4 @@
 //// Component.[|/*PropertyClick*/displayName|]
 
 verify.goToDefinition("FunctionClick", "FunctionResult")
-
 verify.goToDefinition("PropertyClick", "PropertyResult")
-
-// export const Component = () => { return "OK"}
-// Component.displayName = 'Component'
-

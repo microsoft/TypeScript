@@ -26,7 +26,7 @@ namespace ts.GoToDefinition {
         if (!symbol) {
             return getDefinitionInfoForIndexSignatures(node, typeChecker);
         }
-        
+
         const calledDeclaration = tryGetSignatureDeclaration(typeChecker, node);
         // Don't go to the component constructor definition for a JSX element, just go to the component definition.
         if (calledDeclaration && !(isJsxOpeningLikeElement(node.parent) && isConstructorLike(calledDeclaration))) {
@@ -235,8 +235,7 @@ namespace ts.GoToDefinition {
     function getDefinitionFromSymbol(typeChecker: TypeChecker, symbol: Symbol, node: Node): DefinitionInfo[] | undefined {
         // There are cases when you extend a function by adding properties to it afterwards,
         // we want to strip those extra properties
-        const filteredDeclarations = symbol.declarations.filter(d =>  !ts.isAssignmentDeclaration(d) || d === symbol.valueDeclaration)
-
+        const filteredDeclarations = filter(symbol.declarations, d =>  !isAssignmentDeclaration(d) || d === symbol.valueDeclaration) || undefined;
         return getConstructSignatureDefinition() || getCallSignatureDefinition() || map(filteredDeclarations, declaration => createDefinitionInfo(declaration, typeChecker, symbol, node));
 
         function getConstructSignatureDefinition(): DefinitionInfo[] | undefined {
