@@ -3,19 +3,18 @@
 // `export as namespace` results in global search.
 
 // @Filename: /node_modules/a/index.d.ts
-////export function [|{| "isWriteAccess": true, "isDefinition": true |}f|](): void;
+////[|export function [|{| "isWriteAccess": true, "isDefinition": true, "contextRangeIndex": 0 |}f|](): void;|]
 ////export as namespace A;
 
 // @Filename: /b.ts
-////import { [|{| "isWriteAccess": true, "isDefinition": true |}f|] } from "a";
+////[|import { [|{| "isWriteAccess": true, "isDefinition": true, "contextRangeIndex": 2 |}f|] } from "a";|]
 
 // @Filename: /c.ts
 ////A.[|f|]();
 
 verify.noErrors();
 
-const ranges = test.ranges();
-const [r0, r1, r2] = ranges;
+const [r0Def, r0, r1Def, r1, r2] = test.ranges();
 
 const globals = { definition: "function f(): void", ranges: [r0, r2] };
 const imports = { definition: "(alias) function f(): void\nimport f", ranges: [r1] };

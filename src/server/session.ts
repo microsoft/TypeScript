@@ -354,13 +354,17 @@ namespace ts.server {
             defaultProject,
             initialLocation,
             ({ project, location }, getMappedLocation) => {
-            for (const outputReferencedSymbol of project.getLanguageService().findReferences(location.fileName, location.pos) || emptyArray) {
+                for (const outputReferencedSymbol of project.getLanguageService().findReferences(location.fileName, location.pos) || emptyArray) {
                     const mappedDefinitionFile = getMappedLocation(project, documentSpanLocation(outputReferencedSymbol.definition));
-                    const definition: ReferencedSymbolDefinitionInfo = mappedDefinitionFile === undefined ? outputReferencedSymbol.definition : {
-                        ...outputReferencedSymbol.definition,
-                        textSpan: createTextSpan(mappedDefinitionFile.pos, outputReferencedSymbol.definition.textSpan.length),
-                        fileName: mappedDefinitionFile.fileName,
-                    };
+                    const definition: ReferencedSymbolDefinitionInfo = mappedDefinitionFile === undefined ?
+                        outputReferencedSymbol.definition :
+                        {
+                            ...outputReferencedSymbol.definition,
+                            textSpan: createTextSpan(mappedDefinitionFile.pos, outputReferencedSymbol.definition.textSpan.length),
+                            fileName: mappedDefinitionFile.fileName,
+                            contextSpan: getMappedContextSpan(outputReferencedSymbol.definition, project)
+                        };
+
                     let symbolToAddTo = find(outputs, o => documentSpansEqual(o.definition, definition));
                     if (!symbolToAddTo) {
                         symbolToAddTo = { definition, references: [] };
@@ -481,9 +485,39 @@ namespace ts.server {
         return { fileName, pos: textSpan.start };
     }
 
-    function getMappedLocation(location: DocumentPosition, projectService: ProjectService, project: Project): DocumentPosition | undefined {
+    function getMappedLocation(location: DocumentPosition, project: Project): DocumentPosition | undefined {
         const mapsTo = project.getSourceMapper().tryGetSourcePosition(location);
-        return mapsTo && projectService.fileExists(toNormalizedPath(mapsTo.fileName)) ? mapsTo : undefined;
+        return mapsTo && project.projectService.fileExists(toNormalizedPath(mapsTo.fileName)) ? mapsTo : undefined;
+    }
+
+    function getMappedDocumentSpan(documentSpan: DocumentSpan, project: Project): DocumentSpan | undefined {
+        const newPosition = getMappedLocation(documentSpanLocation(documentSpan), project);
+        if (!newPosition) return undefined;
+        return {
+            fileName: newPosition.fileName,
+            textSpan: {
+                start: newPosition.pos,
+                length: documentSpan.textSpan.length
+            },
+            originalFileName: documentSpan.fileName,
+            originalTextSpan: documentSpan.textSpan,
+            contextSpan: getMappedContextSpan(documentSpan, project),
+            originalContextSpan: documentSpan.contextSpan
+        };
+    }
+
+    function getMappedContextSpan(documentSpan: DocumentSpan, project: Project): TextSpan | undefined {
+        const contextSpanStart = documentSpan.contextSpan && getMappedLocation(
+            { fileName: documentSpan.fileName, pos: documentSpan.contextSpan.start },
+            project
+        );
+        const contextSpanEnd = documentSpan.contextSpan && getMappedLocation(
+            { fileName: documentSpan.fileName, pos: documentSpan.contextSpan.start + documentSpan.contextSpan.length },
+            project
+        );
+        return contextSpanStart && contextSpanEnd ?
+            { start: contextSpanStart.pos, length: contextSpanEnd.pos - contextSpanStart.pos } :
+            undefined;
     }
 
     export interface SessionOptions {
@@ -937,7 +971,7 @@ namespace ts.server {
                 : diagnostics.map(d => formatDiag(file, project, d));
         }
 
-        private getDefinition(args: protocol.FileLocationRequestArgs, simplifiedResult: boolean): ReadonlyArray<protocol.FileSpan> | ReadonlyArray<DefinitionInfo> {
+        private getDefinition(args: protocol.FileLocationRequestArgs, simplifiedResult: boolean): ReadonlyArray<protocol.FileSpanWithContext> | ReadonlyArray<DefinitionInfo> {
             const { file, project } = this.getFileAndProject(args);
             const position = this.getPositionInFile(args, file);
             const definitions = this.mapDefinitionInfoLocations(project.getLanguageService().getDefinitionAtPosition(file, position) || emptyArray, project);
@@ -946,19 +980,13 @@ namespace ts.server {
 
         private mapDefinitionInfoLocations(definitions: ReadonlyArray<DefinitionInfo>, project: Project): ReadonlyArray<DefinitionInfo> {
             return definitions.map((info): DefinitionInfo => {
-                const newLoc = getMappedLocation(documentSpanLocation(info), this.projectService, project);
-                return !newLoc ? info : {
+                const newDocumentSpan = getMappedDocumentSpan(info, project);
+                return !newDocumentSpan ? info : {
+                    ...newDocumentSpan,
                     containerKind: info.containerKind,
                     containerName: info.containerName,
-                    fileName: newLoc.fileName,
                     kind: info.kind,
                     name: info.name,
-                    textSpan: {
-                        start: newLoc.pos,
-                        length: info.textSpan.length
-                    },
-                    originalFileName: info.fileName,
-                    originalTextSpan: info.textSpan,
                 };
             });
         }
@@ -983,7 +1011,7 @@ namespace ts.server {
             if (simplifiedResult) {
                 return {
                     definitions: this.mapDefinitionInfo(definitions, project),
-                    textSpan: this.toLocationTextSpan(textSpan, scriptInfo)
+                    textSpan: toProcolTextSpan(textSpan, scriptInfo)
                 };
             }
 
@@ -998,8 +1026,8 @@ namespace ts.server {
             return project.getLanguageService().getEmitOutput(file);
         }
 
-        private mapDefinitionInfo(definitions: ReadonlyArray<DefinitionInfo>, project: Project): ReadonlyArray<protocol.FileSpan> {
-            return definitions.map(def => this.toFileSpan(def.fileName, def.textSpan, project));
+        private mapDefinitionInfo(definitions: ReadonlyArray<DefinitionInfo>, project: Project): ReadonlyArray<protocol.FileSpanWithContext> {
+            return definitions.map(def => this.toFileSpanWithContext(def.fileName, def.textSpan, def.contextSpan, project));
         }
 
         /*
@@ -1017,7 +1045,9 @@ namespace ts.server {
                     fileName: def.originalFileName,
                     textSpan: def.originalTextSpan,
                     targetFileName: def.fileName,
-                    targetTextSpan: def.textSpan
+                    targetTextSpan: def.textSpan,
+                    contextSpan: def.originalContextSpan,
+                    targetContextSpan: def.contextSpan
                 };
             }
             return def;
@@ -1035,7 +1065,15 @@ namespace ts.server {
             };
         }
 
-        private getTypeDefinition(args: protocol.FileLocationRequestArgs): ReadonlyArray<protocol.FileSpan> {
+        private toFileSpanWithContext(fileName: string, textSpan: TextSpan, contextSpan: TextSpan | undefined, project: Project): protocol.FileSpanWithContext {
+            const fileSpan = this.toFileSpan(fileName, textSpan, project);
+            const context = contextSpan && this.toFileSpan(fileName, contextSpan, project);
+            return context ?
+                { ...fileSpan, contextStart: context.start, contextEnd: context.end } :
+                fileSpan;
+        }
+
+        private getTypeDefinition(args: protocol.FileLocationRequestArgs): ReadonlyArray<protocol.FileSpanWithContext> {
             const { file, project } = this.getFileAndProject(args);
             const position = this.getPositionInFile(args, file);
 
@@ -1045,58 +1083,40 @@ namespace ts.server {
 
         private mapImplementationLocations(implementations: ReadonlyArray<ImplementationLocation>, project: Project): ReadonlyArray<ImplementationLocation> {
             return implementations.map((info): ImplementationLocation => {
-                const newLoc = getMappedLocation(documentSpanLocation(info), this.projectService, project);
-                return !newLoc ? info : {
-                    fileName: newLoc.fileName,
+                const newDocumentSpan = getMappedDocumentSpan(info, project);
+                return !newDocumentSpan ? info : {
+                    ...newDocumentSpan,
                     kind: info.kind,
                     displayParts: info.displayParts,
-                    textSpan: {
-                        start: newLoc.pos,
-                        length: info.textSpan.length
-                    },
-                    originalFileName: info.fileName,
-                    originalTextSpan: info.textSpan,
                 };
             });
         }
 
-        private getImplementation(args: protocol.FileLocationRequestArgs, simplifiedResult: boolean): ReadonlyArray<protocol.FileSpan> | ReadonlyArray<ImplementationLocation> {
+        private getImplementation(args: protocol.FileLocationRequestArgs, simplifiedResult: boolean): ReadonlyArray<protocol.FileSpanWithContext> | ReadonlyArray<ImplementationLocation> {
             const { file, project } = this.getFileAndProject(args);
             const position = this.getPositionInFile(args, file);
             const implementations = this.mapImplementationLocations(project.getLanguageService().getImplementationAtPosition(file, position) || emptyArray, project);
-            if (simplifiedResult) {
-                return implementations.map(({ fileName, textSpan }) => this.toFileSpan(fileName, textSpan, project));
-            }
-
-            return implementations.map(Session.mapToOriginalLocation);
+            return simplifiedResult ?
+                implementations.map(({ fileName, textSpan, contextSpan }) => this.toFileSpanWithContext(fileName, textSpan, contextSpan, project)) :
+                implementations.map(Session.mapToOriginalLocation);
         }
 
         private getOccurrences(args: protocol.FileLocationRequestArgs): ReadonlyArray<protocol.OccurrencesResponseItem> {
             const { file, project } = this.getFileAndProject(args);
-
             const position = this.getPositionInFile(args, file);
-
             const occurrences = project.getLanguageService().getOccurrencesAtPosition(file, position);
-
-            if (!occurrences) {
-                return emptyArray;
-            }
-
-            return occurrences.map(occurrence => {
-                const { fileName, isWriteAccess, textSpan, isInString } = occurrence;
-                const scriptInfo = project.getScriptInfo(fileName)!;
-                const result: protocol.OccurrencesResponseItem = {
-                    start: scriptInfo.positionToLineOffset(textSpan.start),
-                    end: scriptInfo.positionToLineOffset(textSpanEnd(textSpan)),
-                    file: fileName,
-                    isWriteAccess,
-                };
-                // no need to serialize the property if it is not true
-                if (isInString) {
-                    result.isInString = isInString;
-                }
-                return result;
-            });
+            return occurrences ?
+                occurrences.map<protocol.OccurrencesResponseItem>(occurrence => {
+                    const { fileName, isWriteAccess, textSpan, isInString, contextSpan } = occurrence;
+                    const scriptInfo = project.getScriptInfo(fileName)!;
+                    return {
+                        ...toProtocolTextSpanWithContext(textSpan, contextSpan, scriptInfo),
+                        file: fileName,
+                        isWriteAccess,
+                        ...(isInString ? { isInString } : undefined)
+                    };
+                }) :
+                emptyArray;
         }
 
         private getSyntacticDiagnosticsSync(args: protocol.SyntacticDiagnosticsSyncRequestArgs): ReadonlyArray<protocol.Diagnostic> | ReadonlyArray<protocol.DiagnosticWithLinePosition> {
@@ -1139,33 +1159,19 @@ namespace ts.server {
             const position = this.getPositionInFile(args, file);
             const documentHighlights = project.getLanguageService().getDocumentHighlights(file, position, args.filesToSearch);
 
-            if (!documentHighlights) {
-                return emptyArray;
-            }
+            if (!documentHighlights) return emptyArray;
+            if (!simplifiedResult) return documentHighlights;
 
-            if (simplifiedResult) {
-                return documentHighlights.map(convertToDocumentHighlightsItem);
-            }
-            else {
-                return documentHighlights;
-            }
-
-            function convertToDocumentHighlightsItem(documentHighlights: DocumentHighlights): protocol.DocumentHighlightsItem {
-                const { fileName, highlightSpans } = documentHighlights;
-
+            return documentHighlights.map<protocol.DocumentHighlightsItem>(({ fileName, highlightSpans }) => {
                 const scriptInfo = project.getScriptInfo(fileName)!;
                 return {
                     file: fileName,
-                    highlightSpans: highlightSpans.map(convertHighlightSpan)
+                    highlightSpans: highlightSpans.map(({ textSpan, kind, contextSpan }) => ({
+                        ...toProtocolTextSpanWithContext(textSpan, contextSpan, scriptInfo),
+                        kind
+                    }))
                 };
-
-                function convertHighlightSpan(highlightSpan: HighlightSpan): protocol.HighlightSpan {
-                    const { textSpan, kind } = highlightSpan;
-                    const start = scriptInfo.positionToLineOffset(textSpan.start);
-                    const end = scriptInfo.positionToLineOffset(textSpanEnd(textSpan));
-                    return { start, end, kind };
-                }
-            }
+            });
         }
 
         private setCompilerOptionsForInferredProjects(args: protocol.SetCompilerOptionsForInferredProjectsArgs): void {
@@ -1258,7 +1264,7 @@ namespace ts.server {
             if (info.canRename) {
                 const { canRename, fileToRename, displayName, fullDisplayName, kind, kindModifiers, triggerSpan } = info;
                 return identity<protocol.RenameInfoSuccess>(
-                    { canRename, fileToRename, displayName, fullDisplayName, kind, kindModifiers, triggerSpan: this.toLocationTextSpan(triggerSpan, scriptInfo) });
+                    { canRename, fileToRename, displayName, fullDisplayName, kind, kindModifiers, triggerSpan: toProcolTextSpan(triggerSpan, scriptInfo) });
             }
             else {
                 return info;
@@ -1267,11 +1273,11 @@ namespace ts.server {
 
         private toSpanGroups(locations: ReadonlyArray<RenameLocation>): ReadonlyArray<protocol.SpanGroup> {
             const map = createMap<protocol.SpanGroup>();
-            for (const { fileName, textSpan, originalTextSpan: _, originalFileName: _1, ...prefixSuffixText } of locations) {
+            for (const { fileName, textSpan, contextSpan, originalContextSpan: _2, originalTextSpan: _, originalFileName: _1, ...prefixSuffixText } of locations) {
                 let group = map.get(fileName);
                 if (!group) map.set(fileName, group = { file: fileName, locs: [] });
                 const scriptInfo = Debug.assertDefined(this.projectService.getScriptInfo(fileName));
-                group.locs.push({ ...this.toLocationTextSpan(textSpan, scriptInfo), ...prefixSuffixText });
+                group.locs.push({ ...toProtocolTextSpanWithContext(textSpan, contextSpan, scriptInfo), ...prefixSuffixText });
             }
             return arrayFrom(map.values());
         }
@@ -1286,30 +1292,31 @@ namespace ts.server {
                 { fileName: args.file, pos: position },
             );
 
-            if (simplifiedResult) {
-                const defaultProject = this.getDefaultProject(args);
-                const scriptInfo = defaultProject.getScriptInfoForNormalizedPath(file)!;
-                const nameInfo = defaultProject.getLanguageService().getQuickInfoAtPosition(file, position);
-                const symbolDisplayString = nameInfo ? displayPartsToString(nameInfo.displayParts) : "";
-                const nameSpan = nameInfo && nameInfo.textSpan;
-                const symbolStartOffset = nameSpan ? scriptInfo.positionToLineOffset(nameSpan.start).offset : 0;
-                const symbolName = nameSpan ? scriptInfo.getSnapshot().getText(nameSpan.start, textSpanEnd(nameSpan)) : "";
-                const refs: ReadonlyArray<protocol.ReferencesResponseItem> = flatMap(references, referencedSymbol =>
-                    referencedSymbol.references.map(({ fileName, textSpan, isWriteAccess, isDefinition }): protocol.ReferencesResponseItem => {
-                        const scriptInfo = Debug.assertDefined(this.projectService.getScriptInfo(fileName));
-                        const start = scriptInfo.positionToLineOffset(textSpan.start);
-                        const lineSpan = scriptInfo.lineToTextSpan(start.line - 1);
-                        const lineText = scriptInfo.getSnapshot().getText(lineSpan.start, textSpanEnd(lineSpan)).replace(/\r|\n/g, "");
-                        return { ...toFileSpan(fileName, textSpan, scriptInfo), lineText, isWriteAccess, isDefinition };
-                    }));
-                const result: protocol.ReferencesResponseBody = { refs, symbolName, symbolStartOffset, symbolDisplayString };
-                return result;
-            }
-            else {
-                return references;
-            }
-        }
+            if (!simplifiedResult) return references;
 
+            const defaultProject = this.getDefaultProject(args);
+            const scriptInfo = defaultProject.getScriptInfoForNormalizedPath(file)!;
+            const nameInfo = defaultProject.getLanguageService().getQuickInfoAtPosition(file, position);
+            const symbolDisplayString = nameInfo ? displayPartsToString(nameInfo.displayParts) : "";
+            const nameSpan = nameInfo && nameInfo.textSpan;
+            const symbolStartOffset = nameSpan ? scriptInfo.positionToLineOffset(nameSpan.start).offset : 0;
+            const symbolName = nameSpan ? scriptInfo.getSnapshot().getText(nameSpan.start, textSpanEnd(nameSpan)) : "";
+            const refs: ReadonlyArray<protocol.ReferencesResponseItem> = flatMap(references, referencedSymbol =>
+                referencedSymbol.references.map(({ fileName, textSpan, contextSpan, isWriteAccess, isDefinition }): protocol.ReferencesResponseItem => {
+                    const scriptInfo = Debug.assertDefined(this.projectService.getScriptInfo(fileName));
+                    const span = toProtocolTextSpanWithContext(textSpan, contextSpan, scriptInfo);
+                    const lineSpan = scriptInfo.lineToTextSpan(span.start.line - 1);
+                    const lineText = scriptInfo.getSnapshot().getText(lineSpan.start, textSpanEnd(lineSpan)).replace(/\r|\n/g, "");
+                    return {
+                        file: fileName,
+                        ...span,
+                        lineText,
+                        isWriteAccess,
+                        isDefinition
+                    };
+                }));
+            return { refs, symbolName, symbolStartOffset, symbolDisplayString };
+        }
         /**
          * @param fileName is the name of the file to be opened
          * @param fileContent is a version of the file content that is known to be more up to date than the one on disk
@@ -1357,8 +1364,8 @@ namespace ts.server {
             if (simplifiedResult) {
                 const scriptInfo = this.projectService.getScriptInfoForNormalizedPath(file)!;
                 return spans.map(s => ({
-                    textSpan: this.toLocationTextSpan(s.textSpan, scriptInfo),
-                    hintSpan: this.toLocationTextSpan(s.hintSpan, scriptInfo),
+                    textSpan: toProcolTextSpan(s.textSpan, scriptInfo),
+                    hintSpan: toProcolTextSpan(s.hintSpan, scriptInfo),
                     bannerText: s.bannerText,
                     autoCollapse: s.autoCollapse,
                     kind: s.kind
@@ -1547,7 +1554,7 @@ namespace ts.server {
             const entries = mapDefined<CompletionEntry, protocol.CompletionEntry>(completions.entries, entry => {
                 if (completions.isMemberCompletion || startsWith(entry.name.toLowerCase(), prefix.toLowerCase())) {
                     const { name, kind, kindModifiers, sortText, insertText, replacementSpan, hasAction, source, isRecommended } = entry;
-                    const convertedSpan = replacementSpan ? this.toLocationTextSpan(replacementSpan, scriptInfo) : undefined;
+                    const convertedSpan = replacementSpan ? toProcolTextSpan(replacementSpan, scriptInfo) : undefined;
                     // Use `hasAction || undefined` to avoid serializing `false`.
                     return { name, kind, kindModifiers, sortText, insertText, replacementSpan: convertedSpan, hasAction: hasAction || undefined, source, isRecommended };
                 }
@@ -1710,7 +1717,7 @@ namespace ts.server {
                 text: item.text,
                 kind: item.kind,
                 kindModifiers: item.kindModifiers,
-                spans: item.spans.map(span => this.toLocationTextSpan(span, scriptInfo)),
+                spans: item.spans.map(span => toProcolTextSpan(span, scriptInfo)),
                 childItems: this.mapLocationNavigationBarItems(item.childItems, scriptInfo),
                 indent: item.indent
             }));
@@ -1731,16 +1738,9 @@ namespace ts.server {
                 text: tree.text,
                 kind: tree.kind,
                 kindModifiers: tree.kindModifiers,
-                spans: tree.spans.map(span => this.toLocationTextSpan(span, scriptInfo)),
-                nameSpan: tree.nameSpan && this.toLocationTextSpan(tree.nameSpan, scriptInfo),
+                spans: tree.spans.map(span => toProcolTextSpan(span, scriptInfo)),
+                nameSpan: tree.nameSpan && toProcolTextSpan(tree.nameSpan, scriptInfo),
                 childItems: map(tree.childItems, item => this.toLocationNavigationTree(item, scriptInfo))
-            };
-        }
-
-        private toLocationTextSpan(span: TextSpan, scriptInfo: ScriptInfo): protocol.TextSpan {
-            return {
-                start: scriptInfo.positionToLineOffset(span.start),
-                end: scriptInfo.positionToLineOffset(textSpanEnd(span))
             };
         }
 
@@ -2001,7 +2001,7 @@ namespace ts.server {
             return !spans
                 ? undefined
                 : simplifiedResult
-                    ? spans.map(span => this.toLocationTextSpan(span, scriptInfo))
+                    ? spans.map(span => toProcolTextSpan(span, scriptInfo))
                     : spans;
         }
 
@@ -2073,7 +2073,7 @@ namespace ts.server {
 
         private mapSelectionRange(selectionRange: SelectionRange, scriptInfo: ScriptInfo): protocol.SelectionRange {
             const result: protocol.SelectionRange = {
-                textSpan: this.toLocationTextSpan(selectionRange.textSpan, scriptInfo),
+                textSpan: toProcolTextSpan(selectionRange.textSpan, scriptInfo),
             };
             if (selectionRange.parent) {
                 result.parent = this.mapSelectionRange(selectionRange.parent, scriptInfo);
@@ -2558,8 +2558,19 @@ namespace ts.server {
         readonly project: Project;
     }
 
-    function toFileSpan(fileName: string, textSpan: TextSpan, scriptInfo: ScriptInfo): protocol.FileSpan {
-        return { file: fileName, start: scriptInfo.positionToLineOffset(textSpan.start), end: scriptInfo.positionToLineOffset(textSpanEnd(textSpan)) };
+    function toProcolTextSpan(textSpan: TextSpan, scriptInfo: ScriptInfo): protocol.TextSpan {
+        return {
+            start: scriptInfo.positionToLineOffset(textSpan.start),
+            end: scriptInfo.positionToLineOffset(textSpanEnd(textSpan))
+        };
+    }
+
+    function toProtocolTextSpanWithContext(span: TextSpan, contextSpan: TextSpan | undefined, scriptInfo: ScriptInfo): protocol.TextSpanWithContext {
+        const textSpan = toProcolTextSpan(span, scriptInfo);
+        const contextTextSpan = contextSpan && toProcolTextSpan(contextSpan, scriptInfo);
+        return contextTextSpan ?
+            { ...textSpan, contextStart: contextTextSpan.start, contextEnd: contextTextSpan.end } :
+            textSpan;
     }
 
     function convertTextChangeToCodeEdit(change: TextChange, scriptInfo: ScriptInfoOrConfig): protocol.CodeEdit {

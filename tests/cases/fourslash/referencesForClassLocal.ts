@@ -5,7 +5,7 @@
 ////var n = 14;
 ////
 ////class foo {
-////    private [|{| "isWriteAccess": true, "isDefinition": true |}n|] = 0;
+////    [|private [|{| "isWriteAccess": true, "isDefinition": true, "contextRangeIndex": 0 |}n|] = 0;|]
 ////
 ////    public bar() {
 ////        this.[|{| "isWriteAccess": true |}n|] = 9;
@@ -20,4 +20,4 @@
 ////    }
 ////}
 
-verify.singleReferenceGroup("(property) foo.n: number");
+verify.singleReferenceGroup("(property) foo.n: number", "n");

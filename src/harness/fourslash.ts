@@ -42,6 +42,7 @@ namespace FourSlash {
          * is a range with `text in range` "selected".
          */
         ranges: Range[];
+        rangesByText?: ts.MultiMap<Range>;
     }
 
     export interface Marker {
@@ -955,12 +956,15 @@ namespace FourSlash {
             const fullExpected = ts.map<FourSlashInterface.ReferenceGroup, ReferenceGroupJson>(parts, ({ definition, ranges }) => ({
                 definition: typeof definition === "string" ? definition : { ...definition, range: ts.createTextSpanFromRange(definition.range) },
                 references: ranges.map<ts.ReferenceEntry>(r => {
-                    const { isWriteAccess = false, isDefinition = false, isInString } = (r.marker && r.marker.data || {}) as { isWriteAccess?: boolean, isDefinition?: boolean, isInString?: true };
+                    const { isWriteAccess = false, isDefinition = false, isInString, contextRangeIndex } = (r.marker && r.marker.data || {}) as { isWriteAccess?: boolean, isDefinition?: boolean, isInString?: true, contextRangeIndex?: number };
                     return {
                         fileName: r.fileName,
                         textSpan: ts.createTextSpanFromRange(r),
                         isWriteAccess,
                         isDefinition,
+                        ...(contextRangeIndex !== undefined ?
+                            { contextSpan: ts.createTextSpanFromRange(this.getRanges()[contextRangeIndex]) } :
+                            undefined),
                         ...(isInString ? { isInString: true } : undefined),
                     };
                 }),
@@ -997,8 +1001,8 @@ namespace FourSlash {
             assert.deepEqual<ReadonlyArray<ts.ReferenceEntry> | undefined>(refs, expected);
         }
 
-        public verifySingleReferenceGroup(definition: FourSlashInterface.ReferenceGroupDefinition, ranges?: Range[]) {
-            ranges = ranges || this.getRanges();
+        public verifySingleReferenceGroup(definition: FourSlashInterface.ReferenceGroupDefinition, ranges?: Range[] | string) {
+            ranges = ts.isString(ranges) ? this.rangesByText().get(ranges)! : ranges || this.getRanges();
             this.verifyReferenceGroups(ranges, [{ definition, ranges }]);
         }
 
@@ -1011,7 +1015,7 @@ Actual: ${stringify(fullActual)}`);
                 };
 
                 if ((actual === undefined) !== (expected === undefined)) {
-                    fail(`Expected ${expected}, got ${actual}`);
+                    fail(`Expected ${stringify(expected)}, got ${stringify(actual)}`);
                 }
 
                 for (const key in actual) {
@@ -1021,7 +1025,7 @@ Actual: ${stringify(fullActual)}`);
                             recur(ak, ek, path ? path + "." + key : key);
                         }
                         else if (ak !== ek) {
-                            fail(`Expected '${key}' to be '${ek}', got '${ak}'`);
+                            fail(`Expected '${key}' to be '${stringify(ek)}', got '${stringify(ak)}'`);
                         }
                     }
                 }
@@ -1189,7 +1193,15 @@ Actual: ${stringify(fullActual)}`);
                     locations && ts.sort(locations, (r1, r2) => ts.compareStringsCaseSensitive(r1.fileName, r2.fileName) || r1.textSpan.start - r2.textSpan.start);
                 assert.deepEqual(sort(references), sort(ranges.map((rangeOrOptions): ts.RenameLocation => {
                     const { range, ...prefixSuffixText } = "range" in rangeOrOptions ? rangeOrOptions : { range: rangeOrOptions };
-                    return { fileName: range.fileName, textSpan: ts.createTextSpanFromRange(range), ...prefixSuffixText };
+                    const { contextRangeIndex } = (range.marker && range.marker.data || {}) as { contextRangeIndex?: number; };
+                    return {
+                        fileName: range.fileName,
+                        textSpan: ts.createTextSpanFromRange(range),
+                        ...(contextRangeIndex !== undefined ?
+                            { contextSpan: ts.createTextSpanFromRange(this.getRanges()[contextRangeIndex]) } :
+                            undefined),
+                        ...prefixSuffixText
+                    };
                 })));
             }
         }
@@ -1844,6 +1856,7 @@ Actual: ${stringify(fullActual)}`);
                     range.end = updatePosition(range.end, editStart, editEnd, newText);
                 }
             }
+            this.testData.rangesByText = undefined;
         }
 
         private removeWhitespace(text: string): string {
@@ -2026,7 +2039,9 @@ Actual: ${stringify(fullActual)}`);
         }
 
         public rangesByText(): ts.Map<Range[]> {
+            if (this.testData.rangesByText) return this.testData.rangesByText;
             const result = ts.createMultiMap<Range>();
+            this.testData.rangesByText = result;
             for (const range of this.getRanges()) {
                 const text = this.rangeText(range);
                 result.add(text, range);
@@ -2714,8 +2729,8 @@ Actual: ${stringify(fullActual)}`);
             return this.languageService.getDocumentHighlights(this.activeFile.fileName, this.currentCaretPosition, filesToSearch);
         }
 
-        public verifyRangesAreOccurrences(isWriteAccess?: boolean) {
-            const ranges = this.getRanges();
+        public verifyRangesAreOccurrences(isWriteAccess?: boolean, ranges?: Range[]) {
+            ranges = ranges || this.getRanges();
             for (const r of ranges) {
                 this.goToRangeStart(r);
                 this.verifyOccurrencesAtPositionListCount(ranges.length);
@@ -2725,8 +2740,13 @@ Actual: ${stringify(fullActual)}`);
             }
         }
 
-        public verifyRangesWithSameTextAreRenameLocations() {
-            this.rangesByText().forEach(ranges => this.verifyRangesAreRenameLocations(ranges));
+        public verifyRangesWithSameTextAreRenameLocations(...texts: string[]) {
+            if (texts.length) {
+                texts.forEach(text => this.verifyRangesAreRenameLocations(this.rangesByText().get(text)!));
+            }
+            else {
+                this.rangesByText().forEach(ranges => this.verifyRangesAreRenameLocations(ranges));
+            }
         }
 
         public verifyRangesWithSameTextAreDocumentHighlights() {
@@ -3971,7 +3991,7 @@ namespace FourSlashInterface {
             this.state.verifyGetReferencesForServerTest(expected);
         }
 
-        public singleReferenceGroup(definition: ReferenceGroupDefinition, ranges?: FourSlash.Range[]) {
+        public singleReferenceGroup(definition: ReferenceGroupDefinition, ranges?: FourSlash.Range[] | string) {
             this.state.verifySingleReferenceGroup(definition, ranges);
         }
 
@@ -4093,12 +4113,12 @@ namespace FourSlashInterface {
             this.state.verifyOccurrencesAtPositionListCount(expectedCount);
         }
 
-        public rangesAreOccurrences(isWriteAccess?: boolean) {
-            this.state.verifyRangesAreOccurrences(isWriteAccess);
+        public rangesAreOccurrences(isWriteAccess?: boolean, ranges?: FourSlash.Range[]) {
+            this.state.verifyRangesAreOccurrences(isWriteAccess, ranges);
         }
 
-        public rangesWithSameTextAreRenameLocations() {
-            this.state.verifyRangesWithSameTextAreRenameLocations();
+        public rangesWithSameTextAreRenameLocations(...texts: string[]) {
+            this.state.verifyRangesWithSameTextAreRenameLocations(...texts);
         }
 
         public rangesAreRenameLocations(options?: FourSlash.Range[] | { findInStrings?: boolean, findInComments?: boolean, ranges?: FourSlash.Range[] }) {
