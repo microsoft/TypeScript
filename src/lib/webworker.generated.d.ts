@@ -4494,34 +4494,34 @@ declare namespace WebAssembly {
         value: any;
         valueOf(): any;
     }
-    
+
     var Global: {
         prototype: Global;
         new(descriptor: GlobalDescriptor, value?: any): Global;
     };
-    
+
     interface Instance {
         readonly exports: any;
     }
-    
+
     var Instance: {
         prototype: Instance;
         new(module: Module, importObject?: any): Instance;
     };
-    
+
     interface Memory {
         readonly buffer: ArrayBuffer;
         grow(delta: number): number;
     }
-    
+
     var Memory: {
         prototype: Memory;
         new(descriptor: MemoryDescriptor): Memory;
     };
-    
+
     interface Module {
     }
-    
+
     var Module: {
         prototype: Module;
         new(bytes: BufferSource): Module;
@@ -4529,51 +4529,51 @@ declare namespace WebAssembly {
         exports(module: Module): ModuleExportDescriptor[];
         imports(module: Module): ModuleImportDescriptor[];
     };
-    
+
     interface Table {
         readonly length: number;
         get(index: number): Function | null;
         grow(delta: number): number;
         set(index: number, value: Function | null): void;
     }
-    
+
     var Table: {
         prototype: Table;
         new(descriptor: TableDescriptor): Table;
     };
-    
+
     interface GlobalDescriptor {
         mutable?: boolean;
         value: string;
     }
-    
+
     interface MemoryDescriptor {
         initial: number;
         maximum?: number;
     }
-    
+
     interface ModuleExportDescriptor {
         kind: ImportExportKind;
         name: string;
     }
-    
+
     interface ModuleImportDescriptor {
         kind: ImportExportKind;
         module: string;
         name: string;
     }
-    
+
     interface TableDescriptor {
         element: TableKind;
         initial: number;
         maximum?: number;
     }
-    
+
     interface WebAssemblyInstantiatedSource {
         instance: Instance;
         module: Module;
     }
-    
+
     type ImportExportKind = "function" | "table" | "memory" | "global";
     type TableKind = "anyfunc";
     function compile(bytes: BufferSource): Promise<Module>;
@@ -4746,7 +4746,7 @@ type RequestRedirect = "follow" | "error" | "manual";
 type ResponseType = "basic" | "cors" | "default" | "error" | "opaque" | "opaqueredirect";
 type ServiceWorkerState = "installing" | "installed" | "activating" | "activated" | "redundant";
 type ServiceWorkerUpdateViaCache = "imports" | "all" | "none";
-type VisibilityState = "hidden" | "visible" | "prerender";
+type VisibilityState = "hidden" | "visible";
 type WebGLPowerPreference = "default" | "low-power" | "high-performance";
 type WorkerType = "classic" | "module";
 type XMLHttpRequestResponseType = "" | "arraybuffer" | "blob" | "document" | "json" | "text";
