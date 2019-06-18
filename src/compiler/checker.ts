@@ -21108,8 +21108,11 @@ namespace ts {
             signature: Signature,
             relation: Map<RelationComparisonResult>,
             checkMode: CheckMode,
-            reportErrors: boolean) {
+            reportErrors: boolean,
+            containingMessageChain: (() => DiagnosticMessageChain | undefined) | undefined
+        ) {
             if (isJsxOpeningLikeElement(node)) {
+                // TODO: Maybe containingMessageChain too?
                 return checkApplicableSignatureForJsxOpeningLikeElement(node, signature, relation, checkMode, reportErrors);
             }
             const thisType = getThisTypeOfSignature(signature);
@@ -21137,7 +21140,7 @@ namespace ts {
                     // we obtain the regular type of any object literal arguments because we may not have inferred complete
                     // parameter types yet and therefore excess property checks may yield false positives (see #17041).
                     const checkArgType = checkMode & CheckMode.SkipContextSensitive ? getRegularTypeOfObjectLiteral(argType) : argType;
-                    if (!checkTypeRelatedToAndOptionallyElaborate(checkArgType, paramType, relation, reportErrors ? arg : undefined, arg, headMessage)) {
+                    if (!checkTypeRelatedToAndOptionallyElaborate(checkArgType, paramType, relation, reportErrors ? arg : undefined, arg, headMessage, containingMessageChain)) {
                         return false;
                     }
                 }
@@ -21475,11 +21478,14 @@ namespace ts {
             // skip the checkApplicableSignature check.
             if (reportErrors) {
                 if (candidatesForArgumentError) {
-                    createDiagnosticForNodeFromMessageChain // is what I really want to call
-                    chainDiagnosticMessages(chain, Diagnostics.Failed_to_find_a_suitable_overload_for_this_call);
-                    diagnostics.add(createDiagnosticForNode(node, Diagnostics.Failed_to_find_a_suitable_overload_for_this_call));
+                    // const related: DiagnosticRelatedInformation[] = [];
                     for (const c of candidatesForArgumentError) {
-                        checkApplicableSignature(node, args, c, assignableRelation, CheckMode.Normal, /*reportErrors*/ true);
+                        const chain = chainDiagnosticMessages(chainDiagnosticMessages(undefined, Diagnostics.Overload_0_gave_the_following_error, signatureToString(c)), Diagnostics.Failed_to_find_a_suitable_overload_for_this_call);
+                        checkApplicableSignature(node, args, c, assignableRelation, CheckMode.Normal, /*reportErrors*/ true, () => chain);
+                        // related.push(argNode)
+                        // This is not right; I want them to be siblings
+                        // probably this is a new feature :(
+                        // chain = chainDiagnosticMessages(chain, msg);
                     }
                 }
                 else if (candidateForArgumentArityError) {
@@ -21514,7 +21520,7 @@ namespace ts {
                     if (typeArguments || !hasCorrectArity(node, args, candidate, signatureHelpTrailingComma)) {
                         return undefined;
                     }
-                    if (!checkApplicableSignature(node, args, candidate, relation, CheckMode.Normal, /*reportErrors*/ false)) {
+                    if (!checkApplicableSignature(node, args, candidate, relation, CheckMode.Normal, /*reportErrors*/ false, /*containingMessageChain*/ undefined)) {
                         candidatesForArgumentError = [candidate];
                         return undefined;
                     }
@@ -21555,7 +21561,7 @@ namespace ts {
                     else {
                         checkCandidate = candidate;
                     }
-                    if (!checkApplicableSignature(node, args, checkCandidate, relation, argCheckMode, /*reportErrors*/ false)) {
+                    if (!checkApplicableSignature(node, args, checkCandidate, relation, argCheckMode, /*reportErrors*/ false, /*containingMessageChain*/ undefined)) {
                         // Give preference to error candidates that have no rest parameters (as they are more specific)
                         if (getMinArgumentCount(checkCandidate) <= args.length && args.length <= getParameterCount(checkCandidate)) {
                             (candidatesForArgumentError || (candidatesForArgumentError = [])).push(checkCandidate);
@@ -21577,7 +21583,7 @@ namespace ts {
                                 continue;
                             }
                         }
-                        if (!checkApplicableSignature(node, args, checkCandidate, relation, argCheckMode, /*reportErrors*/ false)) {
+                        if (!checkApplicableSignature(node, args, checkCandidate, relation, argCheckMode, /*reportErrors*/ false, /*containingMessageChain*/ undefined)) {
                             // Give preference to error candidates that have no rest parameters (as they are more specific)
                             if (getMinArgumentCount(checkCandidate) <= args.length && args.length <= getParameterCount(checkCandidate)) {
                                 (candidatesForArgumentError || (candidatesForArgumentError = [])).push(checkCandidate);

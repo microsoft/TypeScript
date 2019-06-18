@@ -2625,6 +2625,10 @@
         "category": "Error",
         "code": 2755
     },
+    "Overload '{0}' gave the following error.": {
+        "category": "Error",
+        "code": 2756
+    },
 
     "Import declaration '{0}' is using private name '{1}'.": {
         "category": "Error",
