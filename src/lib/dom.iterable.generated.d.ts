@@ -2,11 +2,20 @@
 /// DOM Iterable APIs
 /////////////////////////////
 
+interface AudioParam {
+    setValueCurveAtTime(values: Iterable<number>, startTime: number, duration: number): AudioParam;
+}
+
 interface AudioParamMap extends ReadonlyMap<string, AudioParam> {
 }
 
 interface AudioTrackList {
     [Symbol.iterator](): IterableIterator<AudioTrack>;
+}
+
+interface BaseAudioContext {
+    createIIRFilter(feedforward: Iterable<number>, feedback: Iterable<number>): IIRFilterNode;
+    createPeriodicWave(real: Iterable<number>, imag: Iterable<number>, constraints?: PeriodicWaveConstraints): PeriodicWave;
 }
 
 interface CSSRuleList {
@@ -15,6 +24,14 @@ interface CSSRuleList {
 
 interface CSSStyleDeclaration {
     [Symbol.iterator](): IterableIterator<string>;
+}
+
+interface Cache {
+    addAll(requests: Iterable<RequestInfo>): Promise<void>;
+}
+
+interface CanvasPathDrawingStyles {
+    setLineDash(segments: Iterable<number>): void;
 }
 
 interface ClientRectList {
@@ -96,6 +113,15 @@ interface Headers {
     values(): IterableIterator<string>;
 }
 
+interface IDBObjectStore {
+    /**
+     * Creates a new index in store with the given name, keyPath and options and returns a new IDBIndex. If the keyPath and options define constraints that cannot be satisfied with the data already in store the upgrade transaction will abort with a "ConstraintError" DOMException.
+     * 
+     * Throws an "InvalidStateError" DOMException if not called within an upgrade transaction.
+     */
+    createIndex(name: string, keyPath: string | Iterable<string>, options?: IDBIndexParameters): IDBIndex;
+}
+
 interface MediaKeyStatusMap {
     [Symbol.iterator](): IterableIterator<[BufferSource, MediaKeyStatus]>;
     entries(): IterableIterator<[BufferSource, MediaKeyStatus]>;
@@ -113,6 +139,10 @@ interface MimeTypeArray {
 
 interface NamedNodeMap {
     [Symbol.iterator](): IterableIterator<Attr>;
+}
+
+interface Navigator {
+    requestMediaKeySystemAccess(keySystem: string, supportedConfigurations: Iterable<MediaKeySystemConfiguration>): Promise<MediaKeySystemAccess>;
 }
 
 interface NodeList {
@@ -153,6 +183,10 @@ interface Plugin {
 
 interface PluginArray {
     [Symbol.iterator](): IterableIterator<Plugin>;
+}
+
+interface RTCRtpTransceiver {
+    setCodecPreferences(codecs: Iterable<RTCRtpCodecCapability>): void;
 }
 
 interface RTCStatsReport extends ReadonlyMap<string, any> {
@@ -222,6 +256,36 @@ interface URLSearchParams {
     values(): IterableIterator<string>;
 }
 
+interface VRDisplay {
+    requestPresent(layers: Iterable<VRLayer>): Promise<void>;
+}
+
 interface VideoTrackList {
     [Symbol.iterator](): IterableIterator<VideoTrack>;
+}
+
+interface WEBGL_draw_buffers {
+    drawBuffersWEBGL(buffers: Iterable<GLenum>): void;
+}
+
+interface WebAuthentication {
+    makeCredential(accountInformation: Account, cryptoParameters: Iterable<ScopedCredentialParameters>, attestationChallenge: Int8Array | Int16Array | Int32Array | Uint8Array | Uint16Array | Uint32Array | Uint8ClampedArray | Float32Array | Float64Array | DataView | ArrayBuffer | null, options?: ScopedCredentialOptions): Promise<ScopedCredentialInfo>;
+}
+
+interface WebGLRenderingContextBase {
+    uniform1fv(location: WebGLUniformLocation | null, v: Iterable<GLfloat>): void;
+    uniform2fv(location: WebGLUniformLocation | null, v: Iterable<GLfloat>): void;
+    uniform3fv(location: WebGLUniformLocation | null, v: Iterable<GLfloat>): void;
+    uniform4fv(location: WebGLUniformLocation | null, v: Iterable<GLfloat>): void;
+    uniform1iv(location: WebGLUniformLocation | null, v: Iterable<GLint>): void;
+    uniform2iv(location: WebGLUniformLocation | null, v: Iterable<GLint>): void;
+    uniform3iv(location: WebGLUniformLocation | null, v: Iterable<GLint>): void;
+    uniform4iv(location: WebGLUniformLocation | null, v: Iterable<GLint>): void;
+    uniformMatrix2fv(location: WebGLUniformLocation | null, transpose: GLboolean, value: Iterable<GLfloat>): void;
+    uniformMatrix3fv(location: WebGLUniformLocation | null, transpose: GLboolean, value: Iterable<GLfloat>): void;
+    uniformMatrix4fv(location: WebGLUniformLocation | null, transpose: GLboolean, value: Iterable<GLfloat>): void;
+    vertexAttrib1fv(index: GLuint, values: Iterable<GLfloat>): void;
+    vertexAttrib2fv(index: GLuint, values: Iterable<GLfloat>): void;
+    vertexAttrib3fv(index: GLuint, values: Iterable<GLfloat>): void;
+    vertexAttrib4fv(index: GLuint, values: Iterable<GLfloat>): void;
 }
