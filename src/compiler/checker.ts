@@ -12341,7 +12341,26 @@ namespace ts {
             return getObjectFlags(source) & ObjectFlags.JsxAttributes && !isUnhyphenatedJsxName(sourceProp.escapedName);
         }
 
-        /**
+        function checkTypeRelatedTo(
+            source: Type,
+            target: Type,
+            relation: Map<RelationComparisonResult>,
+            errorNode: Node | undefined,
+            headMessage?: DiagnosticMessage,
+            containingMessageChain?: () => DiagnosticMessageChain | undefined,
+            errorOutputContainer?: { error?: Diagnostic },
+        ): boolean;
+        function checkTypeRelatedTo(
+            source: Type,
+            target: Type,
+            relation: Map<RelationComparisonResult>,
+            errorNode: Node | undefined,
+            headMessage?: DiagnosticMessage,
+            containingMessageChain?: () => DiagnosticMessageChain | undefined,
+            errorOutputContainer?: { error?: Diagnostic },
+            breakdown?: boolean
+        ): [Node, DiagnosticMessageChain];
+       /**
          * Checks if 'source' is related to 'target' (e.g.: is a assignable to).
          * @param source The left-hand-side of the relation.
          * @param target The right-hand-side of the relation.
@@ -12358,9 +12377,9 @@ namespace ts {
             errorNode: Node | undefined,
             headMessage?: DiagnosticMessage,
             containingMessageChain?: () => DiagnosticMessageChain | undefined,
-            errorOutputContainer?: { error?: Diagnostic }
-        ): boolean {
-
+            errorOutputContainer?: { error?: Diagnostic },
+            breakdown?: boolean
+        ): boolean | [Node, DiagnosticMessageChain] {
             let errorInfo: DiagnosticMessageChain | undefined;
             let relatedInfo: [DiagnosticRelatedInformation, ...DiagnosticRelatedInformation[]] | undefined;
             let maybeKeys: string[];
@@ -12399,7 +12418,9 @@ namespace ts {
                         }
                     }
                 }
-
+                if (breakdown) {
+                    return [errorNode!, errorInfo];
+                }
                 const diag = createDiagnosticForNodeFromMessageChain(errorNode!, errorInfo, relatedInformation);
                 if (relatedInfo) {
                     addRelatedInfo(diag, ...relatedInfo);
@@ -12409,6 +12430,7 @@ namespace ts {
                 }
                 diagnostics.add(diag); // TODO: GH#18217
             }
+            Debug.assert(!breakdown);
             return result !== Ternary.False;
 
             function reportError(message: DiagnosticMessage, arg0?: string | number, arg1?: string | number, arg2?: string | number, arg3?: string | number): void {
@@ -21102,6 +21124,9 @@ namespace ts {
             return checkTypeRelatedToAndOptionallyElaborate(attributesType, paramType, relation, reportErrors ? node.tagName : undefined, node.attributes);
         }
 
+        // TODO: This function is only used in overload resolution; it should instead return a [errorNode, messageChain] pair if there is a failure and undefined if not
+        // The first-round callers can used undefined=pass and the second-round callers can build their own errors from the pair.
+        // TODO: Still need to thread BREAKDOWN through checkTypeRealtedToAndOptionallyElaborate and all other checkType calls
         function checkApplicableSignature(
             node: CallLikeExpression,
             args: ReadonlyArray<Expression>,
@@ -21109,7 +21134,7 @@ namespace ts {
             relation: Map<RelationComparisonResult>,
             checkMode: CheckMode,
             reportErrors: boolean,
-            containingMessageChain: (() => DiagnosticMessageChain | undefined) | undefined
+            containingMessageChain: (() => DiagnosticMessageChain | undefined) | undefined,
         ) {
             if (isJsxOpeningLikeElement(node)) {
                 // TODO: Maybe containingMessageChain too?
@@ -21478,14 +21503,21 @@ namespace ts {
             // skip the checkApplicableSignature check.
             if (reportErrors) {
                 if (candidatesForArgumentError) {
-                    // const related: DiagnosticRelatedInformation[] = [];
-                    for (const c of candidatesForArgumentError) {
-                        const chain = chainDiagnosticMessages(chainDiagnosticMessages(undefined, Diagnostics.Overload_0_gave_the_following_error, signatureToString(c)), Diagnostics.Failed_to_find_a_suitable_overload_for_this_call);
+                    if (candidatesForArgumentError.length > 3) {
+                        const c = candidatesForArgumentError[candidatesForArgumentError.length - 1];
+                        const chain = chainDiagnosticMessages(undefined, Diagnostics.Failed_to_find_a_suitable_overload_for_this_call);
                         checkApplicableSignature(node, args, c, assignableRelation, CheckMode.Normal, /*reportErrors*/ true, () => chain);
-                        // related.push(argNode)
-                        // This is not right; I want them to be siblings
-                        // probably this is a new feature :(
-                        // chain = chainDiagnosticMessages(chain, msg);
+                    }
+                    else {
+                        // const related: DiagnosticRelatedInformation[] = [];
+                        for (const c of candidatesForArgumentError) {
+                            const chain = chainDiagnosticMessages(chainDiagnosticMessages(undefined, Diagnostics.Overload_0_gave_the_following_error, signatureToString(c)), Diagnostics.Failed_to_find_a_suitable_overload_for_this_call);
+                            const [errorNode, msg] = checkApplicableSignature(node, args, c, assignableRelation, CheckMode.Normal, /*reportErrors*/ true, () => chain);
+                            // related.push(argNode)
+                            // This is not right; I want them to be siblings
+                            // probably this is a new feature :(
+                            // chain = chainDiagnosticMessages(chain, msg);
+                        }
                     }
                 }
                 else if (candidateForArgumentArityError) {
