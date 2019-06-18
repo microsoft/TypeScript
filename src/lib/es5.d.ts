@@ -1427,6 +1427,13 @@ type Pick<T, K extends keyof T> = {
 };
 
 /**
+ * Construct a type with only public properties of type T
+ */
+type PublicOf<T> = {
+    [P in keyof T]: T[P]
+};
+
+/**
  * Construct a type with a set of properties K of type T
  */
 type Record<K extends keyof any, T> = {

@@ -1,0 +1,25 @@
+=== tests/cases/compiler/implementPublicOfClass.ts ===
+class Base {
+>Base : Base
+
+    private foo(): any { }
+>foo : () => any
+
+    public bar(): any { }
+>bar : () => any
+}
+
+class BaseExtendedFail implements Base {
+>BaseExtendedFail : BaseExtendedFail
+
+    public bar() { }
+>bar : () => void
+}
+
+class BaseExtended implements PublicOf<Base> {
+>BaseExtended : BaseExtended
+
+    public bar() { }
+>bar : () => void
+}
+

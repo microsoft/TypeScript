@@ -1,0 +1,23 @@
+tests/cases/compiler/implementPublicOfClass.ts(7,7): error TS2720: Class 'BaseExtendedFail' incorrectly implements class 'Base'. Did you mean to extend 'Base' and inherit its members as a subclass?
+  Property 'foo' is missing in type 'BaseExtendedFail' but required in type 'Base'.
+
+
+==== tests/cases/compiler/implementPublicOfClass.ts (1 errors) ====
+    class Base {
+        private foo(): any { }
+    
+        public bar(): any { }
+    }
+    
+    class BaseExtendedFail implements Base {
+          ~~~~~~~~~~~~~~~~
+!!! error TS2720: Class 'BaseExtendedFail' incorrectly implements class 'Base'. Did you mean to extend 'Base' and inherit its members as a subclass?
+!!! error TS2720:   Property 'foo' is missing in type 'BaseExtendedFail' but required in type 'Base'.
+!!! related TS2728 tests/cases/compiler/implementPublicOfClass.ts:2:13: 'foo' is declared here.
+        public bar() { }
+    }
+    
+    class BaseExtended implements PublicOf<Base> {
+        public bar() { }
+    }
+    
