@@ -3,8 +3,6 @@ class C {
 >C : Symbol(C, Decl(quotedConstructors.ts, 0, 0))
 
     "constructor"() {
->"constructor" : Symbol(C["constructor"], Decl(quotedConstructors.ts, 0, 9))
-
         console.log(this);
 >console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
 >console : Symbol(console, Decl(lib.dom.d.ts, --, --))
@@ -17,8 +15,6 @@ class D {
 >D : Symbol(D, Decl(quotedConstructors.ts, 4, 1))
 
     'constructor'() {
->'constructor' : Symbol(D['constructor'], Decl(quotedConstructors.ts, 6, 9))
-
         console.log(this);
 >console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
 >console : Symbol(console, Decl(lib.dom.d.ts, --, --))
@@ -44,8 +40,6 @@ class E {
 
 new class {
     "constructor"() {
->"constructor" : Symbol((Anonymous class)["constructor"], Decl(quotedConstructors.ts, 18, 11))
-
         console.log(this);
 >console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
 >console : Symbol(console, Decl(lib.dom.d.ts, --, --))

@@ -5650,30 +5650,26 @@ namespace ts {
             return finishNode(node);
         }
 
-        function tryParseStringConstructorDeclaration(node: ConstructorDeclaration): ConstructorDeclaration | undefined {
+        function parseConstructorName() {
+            if (token() === SyntaxKind.ConstructorKeyword) {
+                return parseExpected(SyntaxKind.ConstructorKeyword);
+            }
+            if (token() === SyntaxKind.StringLiteral
+                && stripQuotes(scanner.getTokenText()) === "constructor"
+                && lookAhead(nextToken) === SyntaxKind.OpenParenToken) {
+                return parseLiteralNode();
+            }
+        }
+
+        function tryParseConstructorDeclaration(node: ConstructorDeclaration): ConstructorDeclaration | undefined {
             return tryParse(() => {
-                const stringLiteral = parseLiteralNode();
-                if (isStringLiteral(stringLiteral)
-                    && stringLiteral.text === "constructor"
-                    && token() === SyntaxKind.OpenParenToken
-                ) {
+                if (parseConstructorName()) {
                     node.kind = SyntaxKind.Constructor;
-                    node.name = stringLiteral;
-                    return parseConstructorDeclarationEnd(node);
+                    fillSignature(SyntaxKind.ColonToken, SignatureFlags.None, node);
+                    node.body = parseFunctionBlockOrSemicolon(SignatureFlags.None, Diagnostics.or_expected);
+                    return finishNode(node);
                 }
             });
-        }
-
-        function parseConstructorDeclaration(node: ConstructorDeclaration): ConstructorDeclaration {
-            node.kind = SyntaxKind.Constructor;
-            parseExpected(SyntaxKind.ConstructorKeyword);
-            return parseConstructorDeclarationEnd(node);
-        }
-
-        function parseConstructorDeclarationEnd(node: ConstructorDeclaration): ConstructorDeclaration {
-            fillSignature(SyntaxKind.ColonToken, SignatureFlags.None, node);
-            node.body = parseFunctionBlockOrSemicolon(SignatureFlags.None, Diagnostics.or_expected);
-            return finishNode(node);
         }
 
         function parseMethodDeclaration(node: MethodDeclaration, asteriskToken: AsteriskToken, diagnosticMessage?: DiagnosticMessage): MethodDeclaration {
@@ -5879,15 +5875,11 @@ namespace ts {
                 return parseAccessorDeclaration(<AccessorDeclaration>node, SyntaxKind.SetAccessor);
             }
 
-            if (token() === SyntaxKind.StringLiteral) {
-                const stringConstructor = tryParseStringConstructorDeclaration(<ConstructorDeclaration>node);
-                if (stringConstructor) {
-                    return stringConstructor;
+            if (token() === SyntaxKind.ConstructorKeyword || token() === SyntaxKind.StringLiteral) {
+                const constructorDeclaration = tryParseConstructorDeclaration(<ConstructorDeclaration>node);
+                if (constructorDeclaration) {
+                    return constructorDeclaration;
                 }
-            }
-
-            if (token() === SyntaxKind.ConstructorKeyword) {
-                return parseConstructorDeclaration(<ConstructorDeclaration>node);
             }
 
             if (isIndexSignature()) {

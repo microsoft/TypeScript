@@ -3148,6 +3148,23 @@ namespace ts {
         return s.replace(escapedCharsRegExp, getReplacement);
     }
 
+    /**
+     * Strip off existed single quotes or double quotes from a given string
+     *
+     * @return non-quoted string
+     */
+    export function stripQuotes(name: string) {
+        const length = name.length;
+        if (length >= 2 && name.charCodeAt(0) === name.charCodeAt(length - 1) && startsWithQuote(name)) {
+            return name.substring(1, length - 1);
+        }
+        return name;
+    }
+
+    export function startsWithQuote(name: string): boolean {
+        return isSingleOrDoubleQuote(name.charCodeAt(0));
+    }
+
     function getReplacement(c: string, offset: number, input: string) {
         if (c.charCodeAt(0) === CharacterCodes.nullCharacter) {
             const lookAhead = input.charCodeAt(offset + c.length);

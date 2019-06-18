@@ -3,8 +3,6 @@ class C {
 >C : C
 
     "constructor"() {
->"constructor" : error
-
         console.log(this);
 >console.log(this) : void
 >console.log : (message?: any, ...optionalParams: any[]) => void
@@ -18,8 +16,6 @@ class D {
 >D : D
 
     'constructor'() {
->'constructor' : error
-
         console.log(this);
 >console.log(this) : void
 >console.log : (message?: any, ...optionalParams: any[]) => void
@@ -50,8 +46,6 @@ new class {
 >class {    "constructor"() {        console.log(this);    }} : typeof (Anonymous class)
 
     "constructor"() {
->"constructor" : error
-
         console.log(this);
 >console.log(this) : void
 >console.log : (message?: any, ...optionalParams: any[]) => void
