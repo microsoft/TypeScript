@@ -3265,7 +3265,7 @@ namespace ts {
 
         function hasVisibleDeclarations(symbol: Symbol, shouldComputeAliasToMakeVisible: boolean): SymbolVisibilityResult | undefined {
             let aliasesToMakeVisible: LateVisibilityPaintedStatement[] | undefined;
-            if (!every(symbol.declarations, getIsDeclarationVisible)) {
+            if (!every(filter(symbol.declarations, d => d.kind !== SyntaxKind.Identifier), getIsDeclarationVisible)) {
                 return undefined;
             }
             return { accessibility: SymbolAccessibility.Accessible, aliasesToMakeVisible };
