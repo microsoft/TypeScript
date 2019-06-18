@@ -1054,7 +1054,7 @@ namespace ts {
                         });
                         const namespaceDecl = createModuleDeclaration(/*decorators*/ undefined, ensureModifiers(input, isPrivate), input.name!, createModuleBlock(declarations), NodeFlags.Namespace);
 
-                        if (!hasModifier(clean, ModifierFlags.ExportDefault)) {
+                        if (!hasModifier(clean, ModifierFlags.Default)) {
                             return [clean, namespaceDecl];
                         }
 

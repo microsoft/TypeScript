@@ -47,3 +47,31 @@ Example.Bar = Bar
 >Bar : typeof Bar
 >Bar : typeof Bar
 
+=== tests/cases/compiler/index4.ts ===
+function A() {  }
+>A : () => void
+
+function B() { }
+>B : () => void
+
+export function C() {
+>C : typeof C
+
+  return null;
+>null : null
+}
+
+C.A = A;
+>C.A = A : () => void
+>C.A : () => void
+>C : typeof C
+>A : () => void
+>A : () => void
+
+C.B = B;
+>C.B = B : () => void
+>C.B : () => void
+>C : typeof C
+>B : () => void
+>B : () => void
+

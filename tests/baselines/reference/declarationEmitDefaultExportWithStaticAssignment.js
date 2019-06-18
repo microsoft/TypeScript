@@ -20,6 +20,18 @@ export default function Example() {}
 
 Example.Bar = Bar
 
+//// [index4.ts]
+function A() {  }
+
+function B() { }
+
+export function C() {
+  return null;
+}
+
+C.A = A;
+C.B = B;
+
 //// [foo.js]
 "use strict";
 exports.__esModule = true;
@@ -56,6 +68,17 @@ exports.Bar = Bar;
 function Example() { }
 exports["default"] = Example;
 Example.Bar = Bar;
+//// [index4.js]
+"use strict";
+exports.__esModule = true;
+function A() { }
+function B() { }
+function C() {
+    return null;
+}
+exports.C = C;
+C.A = A;
+C.B = B;
 
 
 //// [foo.d.ts]
@@ -83,3 +106,9 @@ declare namespace Example {
     var Bar: typeof import("./index3").Bar;
 }
 export default Example;
+//// [index4.d.ts]
+export declare function C(): any;
+export declare namespace C {
+    var A: () => void;
+    var B: () => void;
+}

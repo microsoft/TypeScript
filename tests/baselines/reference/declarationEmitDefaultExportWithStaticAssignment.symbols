@@ -44,3 +44,28 @@ Example.Bar = Bar
 >Bar : Symbol(Example.Bar, Decl(index3.ts, 1, 36))
 >Bar : Symbol(Bar, Decl(index3.ts, 0, 0))
 
+=== tests/cases/compiler/index4.ts ===
+function A() {  }
+>A : Symbol(A, Decl(index4.ts, 0, 0))
+
+function B() { }
+>B : Symbol(B, Decl(index4.ts, 0, 17))
+
+export function C() {
+>C : Symbol(C, Decl(index4.ts, 2, 16), Decl(index4.ts, 6, 1))
+
+  return null;
+}
+
+C.A = A;
+>C.A : Symbol(C.A, Decl(index4.ts, 6, 1))
+>C : Symbol(C, Decl(index4.ts, 2, 16), Decl(index4.ts, 6, 1))
+>A : Symbol(C.A, Decl(index4.ts, 6, 1))
+>A : Symbol(A, Decl(index4.ts, 0, 0))
+
+C.B = B;
+>C.B : Symbol(C.B, Decl(index4.ts, 8, 8))
+>C : Symbol(C, Decl(index4.ts, 2, 16), Decl(index4.ts, 6, 1))
+>B : Symbol(C.B, Decl(index4.ts, 8, 8))
+>B : Symbol(B, Decl(index4.ts, 0, 17))
+

@@ -18,3 +18,15 @@ export class Bar {}
 export default function Example() {}
 
 Example.Bar = Bar
+
+// @filename: index4.ts
+function A() {  }
+
+function B() { }
+
+export function C() {
+  return null;
+}
+
+C.A = A;
+C.B = B;
