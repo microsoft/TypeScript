@@ -2621,6 +2621,10 @@
         "category": "Error",
         "code": 2754
     },
+    "Failed to find a suitable overload for this call.": {
+        "category": "Error",
+        "code": 2755
+    },
 
     "Import declaration '{0}' is using private name '{1}'.": {
         "category": "Error",

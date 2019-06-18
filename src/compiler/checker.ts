@@ -21439,7 +21439,7 @@ namespace ts {
             //     function foo(): void;
             //     foo<number>(0);
             //
-            let candidateForArgumentError: Signature | undefined;
+            let candidatesForArgumentError: Signature[] | undefined;
             let candidateForArgumentArityError: Signature | undefined;
             let candidateForTypeArgumentError: Signature | undefined;
             let result: Signature | undefined;
@@ -21474,8 +21474,13 @@ namespace ts {
             // If candidate is undefined, it means that no candidates had a suitable arity. In that case,
             // skip the checkApplicableSignature check.
             if (reportErrors) {
-                if (candidateForArgumentError) {
-                    checkApplicableSignature(node, args, candidateForArgumentError, assignableRelation, CheckMode.Normal, /*reportErrors*/ true);
+                if (candidatesForArgumentError) {
+                    createDiagnosticForNodeFromMessageChain // is what I really want to call
+                    chainDiagnosticMessages(chain, Diagnostics.Failed_to_find_a_suitable_overload_for_this_call);
+                    diagnostics.add(createDiagnosticForNode(node, Diagnostics.Failed_to_find_a_suitable_overload_for_this_call));
+                    for (const c of candidatesForArgumentError) {
+                        checkApplicableSignature(node, args, c, assignableRelation, CheckMode.Normal, /*reportErrors*/ true);
+                    }
                 }
                 else if (candidateForArgumentArityError) {
                     diagnostics.add(getArgumentArityError(node, [candidateForArgumentArityError], args));
@@ -21500,7 +21505,7 @@ namespace ts {
             return produceDiagnostics || !args ? resolveErrorCall(node) : getCandidateForOverloadFailure(node, candidates, args, !!candidatesOutArray);
 
             function chooseOverload(candidates: Signature[], relation: Map<RelationComparisonResult>, signatureHelpTrailingComma = false) {
-                candidateForArgumentError = undefined;
+                candidatesForArgumentError = undefined;
                 candidateForArgumentArityError = undefined;
                 candidateForTypeArgumentError = undefined;
 
@@ -21510,7 +21515,7 @@ namespace ts {
                         return undefined;
                     }
                     if (!checkApplicableSignature(node, args, candidate, relation, CheckMode.Normal, /*reportErrors*/ false)) {
-                        candidateForArgumentError = candidate;
+                        candidatesForArgumentError = [candidate];
                         return undefined;
                     }
                     return candidate;
@@ -21552,8 +21557,8 @@ namespace ts {
                     }
                     if (!checkApplicableSignature(node, args, checkCandidate, relation, argCheckMode, /*reportErrors*/ false)) {
                         // Give preference to error candidates that have no rest parameters (as they are more specific)
-                        if (!candidateForArgumentError || getEffectiveRestType(candidateForArgumentError) || !getEffectiveRestType(checkCandidate)) {
-                            candidateForArgumentError = checkCandidate;
+                        if (getMinArgumentCount(checkCandidate) <= args.length && args.length <= getParameterCount(checkCandidate)) {
+                            (candidatesForArgumentError || (candidatesForArgumentError = [])).push(checkCandidate);
                         }
                         continue;
                     }
@@ -21574,8 +21579,8 @@ namespace ts {
                         }
                         if (!checkApplicableSignature(node, args, checkCandidate, relation, argCheckMode, /*reportErrors*/ false)) {
                             // Give preference to error candidates that have no rest parameters (as they are more specific)
-                            if (!candidateForArgumentError || getEffectiveRestType(candidateForArgumentError) || !getEffectiveRestType(checkCandidate)) {
-                                candidateForArgumentError = checkCandidate;
+                            if (getMinArgumentCount(checkCandidate) <= args.length && args.length <= getParameterCount(checkCandidate)) {
+                                (candidatesForArgumentError || (candidatesForArgumentError = [])).push(checkCandidate);
                             }
                             continue;
                         }
