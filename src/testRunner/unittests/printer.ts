@@ -54,7 +54,7 @@ namespace ts {
             printsCorrectly("removeComments", { removeComments: true }, printer => printer.printFile(sourceFile));
 
             // github #14948
-            // tslint:disable-next-line no-invalid-template-strings
+            // eslint-disable-next-line no-template-curly-in-string
             printsCorrectly("templateLiteral", {}, printer => printer.printFile(createSourceFile("source.ts", "let greeting = `Hi ${name}, how are you?`;", ScriptTarget.ES2017)));
 
             // github #18071

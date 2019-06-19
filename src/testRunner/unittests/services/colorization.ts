@@ -1,4 +1,5 @@
-// tslint:disable no-invalid-template-strings (lots of tests use quoted code)
+// lots of tests use quoted code
+/* eslint-disable no-template-curly-in-string */
 
 interface ClassificationEntry {
     value: any;

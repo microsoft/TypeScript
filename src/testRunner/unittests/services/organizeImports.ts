@@ -406,7 +406,7 @@ D();
                 },
                 libFile);
 
-            // tslint:disable no-invalid-template-strings
+            /* eslint-disable no-template-curly-in-string */
             testOrganizeImports("MoveToTop_Invalid",
                 {
                     path: "/test.ts",
@@ -423,7 +423,7 @@ D();
 `,
                 },
                 libFile);
-            // tslint:enable no-invalid-template-strings
+            /* eslint-enable no-template-curly-in-string */
 
             testOrganizeImports("CoalesceMultipleModules",
                 {
@@ -668,7 +668,7 @@ export * from "lib";
                     },
                     libFile);
 
-                // tslint:disable no-invalid-template-strings
+                /* eslint-disable no-template-curly-in-string */
                 testOrganizeExports("MoveToTop_Invalid",
                     {
                         path: "/test.ts",
@@ -684,7 +684,7 @@ export { D } from "lib";
 `,
                     },
                     libFile);
-                // tslint:enable no-invalid-template-strings
+                /* eslint-enable no-template-curly-in-string */
 
                 testOrganizeExports("MoveToTop_WithImportsFirst",
                     {
