@@ -19,11 +19,14 @@ export declare function __awaiter(thisArg: any, _arguments: any, P: Function, ge
 
 //// [a.js]
 import * as tslib_1 from "tslib";
-let A = class A {
-};
-A = tslib_1.__decorate([
-    dec
-], A);
+let A = (() => {
+    let A = class A {
+    };
+    A = tslib_1.__decorate([
+        dec
+    ], A);
+    return A;
+})();
 export { A };
 const o = { a: 1 };
 const y = Object.assign({}, o);
