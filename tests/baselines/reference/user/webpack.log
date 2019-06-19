@@ -1,6 +1,6 @@
 Exit Code: 1
 Standard output:
-../../../../../built/local/lib.dom.d.ts(17677,19): error TS2451: Cannot redeclare block-scoped variable 'WebAssembly'.
+../../../../../built/local/lib.dom.d.ts(17892,19): error TS2451: Cannot redeclare block-scoped variable 'WebAssembly'.
 declarations.d.ts(258,15): error TS2451: Cannot redeclare block-scoped variable 'WebAssembly'.
 
 
