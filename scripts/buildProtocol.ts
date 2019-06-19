@@ -42,7 +42,7 @@ class DeclarationsWalker {
             return;
         }
         this.visitedTypes.push(type);
-        let s = type.aliasSymbol || type.getSymbol();
+        const s = type.aliasSymbol || type.getSymbol();
         if (!s) {
             return;
         }
@@ -64,7 +64,7 @@ class DeclarationsWalker {
                     }
                     else {
                         // splice declaration in final d.ts file
-                        let text = decl.getFullText();
+                        const text = decl.getFullText();
                         this.text += `${text}\n`;
                         // recursively pull all dependencies into result dts file
 

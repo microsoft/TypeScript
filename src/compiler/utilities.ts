@@ -4724,7 +4724,7 @@ namespace ts {
         return { span, newLength };
     }
 
-    export let unchangedTextChangeRange = createTextChangeRange(createTextSpan(0, 0), 0);
+    export let unchangedTextChangeRange = createTextChangeRange(createTextSpan(0, 0), 0); // eslint-disable-line prefer-const
 
     /**
      * Called to merge all the changes that occurred across several versions of a script snapshot
@@ -7025,6 +7025,7 @@ namespace ts {
         this.skipTrivia = skipTrivia || (pos => pos);
     }
 
+    // eslint-disable-next-line prefer-const
     export let objectAllocator: ObjectAllocator = {
         getNodeConstructor: () => <any>Node,
         getTokenConstructor: () => <any>Node,

@@ -1,5 +1,5 @@
-let runners: RunnerBase[] = [];
-let iterations = 1;
+const runners: RunnerBase[] = [];
+const iterations = 1;
 
 function runTests(runners: RunnerBase[]) {
     for (let i = iterations; i > 0; i--) {
@@ -50,7 +50,7 @@ const mytestconfigFileName = "mytest.config";
 const testconfigFileName = "test.config";
 
 const customConfig = tryGetConfig(Harness.IO.args());
-let testConfigContent =
+const testConfigContent =
     customConfig && Harness.IO.fileExists(customConfig)
         ? Harness.IO.readFile(customConfig)!
         : Harness.IO.fileExists(mytestconfigFileName)

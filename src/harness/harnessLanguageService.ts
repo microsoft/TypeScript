@@ -594,15 +594,13 @@ namespace Harness.LanguageService {
         getLanguageService(): ts.LanguageService { return new LanguageServiceShimProxy(this.factory.createLanguageServiceShim(this.host)); }
         getClassifier(): ts.Classifier { return new ClassifierShimProxy(this.factory.createClassifierShim(this.host)); }
         getPreProcessedFileInfo(fileName: string, fileContents: string): ts.PreProcessedFileInfo {
-            let shimResult: {
+            const coreServicesShim = this.factory.createCoreServicesShim(this.host);
+            const shimResult: {
                 referencedFiles: ts.ShimsFileReference[];
                 typeReferenceDirectives: ts.ShimsFileReference[];
                 importedFiles: ts.ShimsFileReference[];
                 isLibFile: boolean;
-            };
-
-            const coreServicesShim = this.factory.createCoreServicesShim(this.host);
-            shimResult = unwrapJSONCallResult(coreServicesShim.getPreProcessedFileInfo(fileName, ts.ScriptSnapshot.fromString(fileContents)));
+            } = unwrapJSONCallResult(coreServicesShim.getPreProcessedFileInfo(fileName, ts.ScriptSnapshot.fromString(fileContents)));
 
             const convertResult: ts.PreProcessedFileInfo = {
                 referencedFiles: [],

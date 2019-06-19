@@ -623,8 +623,10 @@ namespace Harness {
     ) => void;
 
     // Settings
+    /* eslint-disable prefer-const */
     export let userSpecifiedRoot = "";
     export let lightMode = false;
+    /* eslint-enable prefer-const */
 
     /** Functionality for compiling TypeScript code */
     export namespace Compiler {

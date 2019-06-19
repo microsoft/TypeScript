@@ -709,7 +709,6 @@ namespace ts {
         const { rootNames, options, configFileParsingDiagnostics, projectReferences } = createProgramOptions;
         let { oldProgram } = createProgramOptions;
 
-        let program: Program;
         let processingDefaultLibFiles: SourceFile[] | undefined;
         let processingOtherFiles: SourceFile[] | undefined;
         let files: SourceFile[];
@@ -905,7 +904,7 @@ namespace ts {
         // unconditionally set oldProgram to undefined to prevent it from being captured in closure
         oldProgram = undefined;
 
-        program = {
+        const program: Program = {
             getRootFileNames: () => rootNames,
             getSourceFile,
             getSourceFileByPath,

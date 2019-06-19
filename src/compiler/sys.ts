@@ -635,6 +635,7 @@ namespace ts {
     };
 
     // TODO: GH#18217 this is used as if it's certainly defined in many places.
+    // eslint-disable-next-line prefer-const
     export let sys: System = (() => {
         // NodeJS detects "\uFEFF" at the start of the string and *replaces* it with the actual
         // byte order mark from the specified encoding. Using any other byte order mark does

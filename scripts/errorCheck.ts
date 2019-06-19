@@ -1,35 +1,35 @@
 declare var require: any;
-let fs = require("fs");
-let async = require("async");
-let glob = require("glob");
+const fs = require("fs");
+const async = require("async");
+const glob = require("glob");
 
 fs.readFile("src/compiler/diagnosticMessages.json", "utf-8", (err, data) => {
     if (err) {
         throw err;
     }
 
-    let messages = JSON.parse(data);
-    let keys = Object.keys(messages);
+    const messages = JSON.parse(data);
+    const keys = Object.keys(messages);
     console.log("Loaded " + keys.length + " errors");
 
-    for (let k of keys) {
+    for (const k of keys) {
         messages[k].seen = false;
     }
 
-    let errRegex = /\(\d+,\d+\): error TS([^:]+):/g;
+    const errRegex = /\(\d+,\d+\): error TS([^:]+):/g;
+    const baseDir = "tests/baselines/reference/";
 
-    let baseDir = "tests/baselines/reference/";
     fs.readdir(baseDir, (err, files) => {
         files = files.filter(f => f.indexOf(".errors.txt") > 0);
-        let tasks: Array<(callback: () => void) => void> = [];
+        const tasks: Array<(callback: () => void) => void> = [];
         files.forEach(f => tasks.push(done => {
             fs.readFile(baseDir + f, "utf-8", (err, baseline) => {
                 if (err) throw err;
 
                 let g: string[];
                 while (g = errRegex.exec(baseline)) {
-                    var errCode = +g[1];
-                    let msg = keys.filter(k => messages[k].code === errCode)[0];
+                    const errCode = +g[1];
+                    const msg = keys.filter(k => messages[k].code === errCode)[0];
                     messages[msg].seen = true;
                 }
 
@@ -40,7 +40,7 @@ fs.readFile("src/compiler/diagnosticMessages.json", "utf-8", (err, data) => {
         async.parallelLimit(tasks, 25, done => {
             console.log("== List of errors not present in baselines ==");
             let count = 0;
-            for (let k of keys) {
+            for (const k of keys) {
                 if (messages[k].seen !== true) {
                     console.log(k);
                     count++;
@@ -52,8 +52,8 @@ fs.readFile("src/compiler/diagnosticMessages.json", "utf-8", (err, data) => {
 });
 
 fs.readFile("src/compiler/diagnosticInformationMap.generated.ts", "utf-8", (err, data) => {
-    let errorRegexp = /\s(\w+): \{ code/g;
-    let errorNames: string[] = [];
+    const errorRegexp = /\s(\w+): \{ code/g;
+    const errorNames: string[] = [];
     let errMatch: string[];
     while (errMatch = errorRegexp.exec(data)) {
         errorNames.push(errMatch[1]);
@@ -62,12 +62,12 @@ fs.readFile("src/compiler/diagnosticInformationMap.generated.ts", "utf-8", (err,
     let allSrc = "";
     glob("./src/**/*.ts", {}, (err, files) => {
         console.log("Reading " + files.length + " source files");
-        for (let file of files) {
+        for (const file of files) {
             if (file.indexOf("diagnosticInformationMap.generated.ts") > 0) {
                 continue;
             }
 
-            let src = fs.readFileSync(file, "utf-8");
+            const src = fs.readFileSync(file, "utf-8");
             allSrc = allSrc + src;
         }
 
@@ -75,7 +75,7 @@ fs.readFile("src/compiler/diagnosticInformationMap.generated.ts", "utf-8", (err,
 
         let count = 0;
         console.log("== List of errors not used in source ==");
-        for (let errName of errorNames) {
+        for (const errName of errorNames) {
             if (allSrc.indexOf(errName) < 0) {
                 console.log(errName);
                 count++;

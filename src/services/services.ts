@@ -1012,7 +1012,7 @@ namespace ts {
         return sourceFile;
     }
 
-    export let disableIncrementalParsing = false;
+    export let disableIncrementalParsing = false; // eslint-disable-line prefer-const
 
     export function updateLanguageServiceSourceFile(sourceFile: SourceFile, scriptSnapshot: IScriptSnapshot, version: string, textChangeRange: TextChangeRange | undefined, aggressiveChecks?: boolean): SourceFile {
         // If we were given a text change range, and our version or open-ness changed, then

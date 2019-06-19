@@ -1,8 +1,10 @@
 /* @internal */
 namespace ts {
     export namespace Debug {
+        /* eslint-disable prefer-const */
         export let currentAssertionLevel = AssertionLevel.None;
         export let isDebugging = false;
+        /* eslint-enable prefer-const */
 
         export function shouldAssert(level: AssertionLevel): boolean {
             return currentAssertionLevel >= level;

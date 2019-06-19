@@ -7,15 +7,11 @@ namespace ts {
 
         function transpilesCorrectly(name: string, input: string, testSettings: TranspileTestSettings) {
             describe(name, () => {
-                let justName: string;
-                let transpileOptions: TranspileOptions;
-                let canUseOldTranspile: boolean;
-                let toBeCompiled: Harness.Compiler.TestFile[];
                 let transpileResult: TranspileOutput;
                 let oldTranspileResult: string;
                 let oldTranspileDiagnostics: Diagnostic[];
 
-                transpileOptions = testSettings.options || {};
+                const transpileOptions: TranspileOptions = testSettings.options || {};
                 if (!transpileOptions.compilerOptions) {
                     transpileOptions.compilerOptions = {};
                 }
@@ -33,13 +29,12 @@ namespace ts {
 
                 transpileOptions.reportDiagnostics = true;
 
-                justName = "transpile/" + name.replace(/[^a-z0-9\-. ]/ig, "") + (transpileOptions.compilerOptions.jsx ? Extension.Tsx : Extension.Ts);
-                toBeCompiled = [{
+                const justName = "transpile/" + name.replace(/[^a-z0-9\-. ]/ig, "") + (transpileOptions.compilerOptions.jsx ? Extension.Tsx : Extension.Ts);
+                const toBeCompiled: Harness.Compiler.TestFile[] = [{
                     unitName: transpileOptions.fileName,
                     content: input
                 }];
-
-                canUseOldTranspile = !transpileOptions.renamedDependencies;
+                const canUseOldTranspile = !transpileOptions.renamedDependencies;
 
                 before(() => {
                     transpileResult = transpileModule(input, transpileOptions);

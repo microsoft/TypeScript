@@ -1975,12 +1975,11 @@ namespace ts {
         }
 
         function cacheExpression(node: Expression): Identifier {
-            let temp: Identifier;
             if (isGeneratedIdentifier(node) || getEmitFlags(node) & EmitFlags.HelperName) {
                 return <Identifier>node;
             }
 
-            temp = createTempVariable(hoistVariableDeclaration);
+            const temp = createTempVariable(hoistVariableDeclaration);
             emitAssignment(temp, node, /*location*/ node);
             return temp;
         }

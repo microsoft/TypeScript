@@ -14,7 +14,7 @@
 //
 
 /* @internal */
-let debugObjectHost: { CollectGarbage(): void } = (function (this: any) { return this; })();
+let debugObjectHost: { CollectGarbage(): void } = (function (this: any) { return this; })(); // eslint-disable-line prefer-const
 
 // We need to use 'null' to interface with the managed side.
 /* tslint:disable:no-null-keyword */

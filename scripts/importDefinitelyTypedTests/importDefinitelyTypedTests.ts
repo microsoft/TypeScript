@@ -42,7 +42,7 @@ function filePathEndsWith(path: string, endingString: string): boolean {
 }
 
 function copyFileSync(source: string, destination: string) {
-    let text = fs.readFileSync(source);
+    const text = fs.readFileSync(source);
     fs.writeFileSync(destination, text);
 }
 
@@ -52,8 +52,8 @@ function importDefinitelyTypedTest(tscPath: string, rwcTestPath: string, testCas
         cmd += " @" + responseFile;
     }
 
-    let testDirectoryName = testCaseName + "_" + Math.floor((Math.random() * 10000) + 1);
-    let testDirectoryPath = path.join(process.env.temp, testDirectoryName);
+    const testDirectoryName = testCaseName + "_" + Math.floor((Math.random() * 10000) + 1);
+    const testDirectoryPath = path.join(process.env.temp, testDirectoryName);
     if (fs.existsSync(testDirectoryPath)) {
         throw new Error("Could not create test directory");
     }
@@ -77,8 +77,8 @@ function importDefinitelyTypedTest(tscPath: string, rwcTestPath: string, testCas
             }
 
             // copy generated file to output location
-            let outputFilePath = path.join(testDirectoryPath, "iocapture0.json");
-            let testCasePath = path.join(rwcTestPath, "DefinitelyTyped_" + testCaseName + ".json");
+            const outputFilePath = path.join(testDirectoryPath, "iocapture0.json");
+            const testCasePath = path.join(rwcTestPath, "DefinitelyTyped_" + testCaseName + ".json");
             copyFileSync(outputFilePath, testCasePath);
 
             //console.log("output generated at: " + outputFilePath);
@@ -121,8 +121,8 @@ function importDefinitelyTypedTests(tscPath: string, rwcTestPath: string, defini
                         throw err;
                     }
 
-                    let tsFiles: string[] = [];
-                    let testFiles: string[] = [];
+                    const tsFiles: string[] = [];
+                    const testFiles: string[] = [];
                     let paramFile: string;
 
                     for (const filePath of files.map(f => path.join(directoryPath, f))) {
