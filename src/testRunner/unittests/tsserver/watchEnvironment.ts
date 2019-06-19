@@ -201,7 +201,7 @@ namespace ts.projectSystem {
             host.ensureFileOrFolder(ignoredEntity);
             host.checkTimeoutQueueLength(0);
             verifyProject();
-        })
+        });
 
         function verifyProject() {
             checkWatchedDirectories(host, emptyArray, /*recursive*/ true);
