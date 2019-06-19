@@ -434,7 +434,7 @@ namespace ts.FindAllReferences {
     /**
      * Given a local reference, we might notice that it's an import/export and recursively search for references of that.
      * If at an import, look locally for the symbol it imports.
-     * If an an export, look for all imports of it.
+     * If at an export, look for all imports of it.
      * This doesn't handle export specifiers; that is done in `getReferencesAtExportSpecifier`.
      * @param comingFromExport If we are doing a search for all exports, don't bother looking backwards for the imported symbol, since that's the reason we're here.
      */
