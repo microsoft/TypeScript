@@ -1,16 +1,16 @@
 Exit Code: 1
 Standard output:
-../../../../built/local/lib.dom.d.ts(2495,11): error TS2300: Duplicate identifier 'CSSRule'.
-../../../../built/local/lib.dom.d.ts(2514,13): error TS2300: Duplicate identifier 'CSSRule'.
-../../../../built/local/lib.dom.d.ts(3399,11): error TS2300: Duplicate identifier 'Comment'.
-../../../../built/local/lib.dom.d.ts(3402,13): error TS2300: Duplicate identifier 'Comment'.
-../../../../built/local/lib.dom.d.ts(5093,11): error TS2300: Duplicate identifier 'Event'.
-../../../../built/local/lib.dom.d.ts(5153,13): error TS2300: Duplicate identifier 'Event'.
-../../../../built/local/lib.dom.d.ts(11609,11): error TS2300: Duplicate identifier 'Position'.
-../../../../built/local/lib.dom.d.ts(12365,11): error TS2300: Duplicate identifier 'Request'.
-../../../../built/local/lib.dom.d.ts(12445,13): error TS2300: Duplicate identifier 'Request'.
-../../../../built/local/lib.dom.d.ts(17123,11): error TS2300: Duplicate identifier 'Window'.
-../../../../built/local/lib.dom.d.ts(17259,13): error TS2300: Duplicate identifier 'Window'.
+../../../../built/local/lib.dom.d.ts(2589,11): error TS2300: Duplicate identifier 'CSSRule'.
+../../../../built/local/lib.dom.d.ts(2608,13): error TS2300: Duplicate identifier 'CSSRule'.
+../../../../built/local/lib.dom.d.ts(3513,11): error TS2300: Duplicate identifier 'Comment'.
+../../../../built/local/lib.dom.d.ts(3516,13): error TS2300: Duplicate identifier 'Comment'.
+../../../../built/local/lib.dom.d.ts(5233,11): error TS2300: Duplicate identifier 'Event'.
+../../../../built/local/lib.dom.d.ts(5301,13): error TS2300: Duplicate identifier 'Event'.
+../../../../built/local/lib.dom.d.ts(11807,11): error TS2300: Duplicate identifier 'Position'.
+../../../../built/local/lib.dom.d.ts(12561,11): error TS2300: Duplicate identifier 'Request'.
+../../../../built/local/lib.dom.d.ts(12625,13): error TS2300: Duplicate identifier 'Request'.
+../../../../built/local/lib.dom.d.ts(17341,11): error TS2300: Duplicate identifier 'Window'.
+../../../../built/local/lib.dom.d.ts(17475,13): error TS2300: Duplicate identifier 'Window'.
 ../../../../built/local/lib.es5.d.ts(1416,11): error TS2300: Duplicate identifier 'ArrayLike'.
 ../../../../built/local/lib.es5.d.ts(1452,6): error TS2300: Duplicate identifier 'Record'.
 ../../../../node_modules/@types/node/index.d.ts(150,13): error TS2403: Subsequent variable declarations must have the same type.  Variable 'module' must be of type '{}', but here has type 'NodeModule'.
@@ -955,7 +955,7 @@ node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighth
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(39899,1): error TS2304: Cannot find name 'WebInspector'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(39909,1): error TS2304: Cannot find name 'WebInspector'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(39957,1): error TS2304: Cannot find name 'WebInspector'.
-node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(39957,68): error TS2339: Property 'message' does not exist on type 'ProgressEvent'.
+node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(39957,68): error TS2339: Property 'message' does not exist on type 'FileReaderProgressEvent'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(39963,1): error TS2304: Cannot find name 'WebInspector'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(39980,16): error TS2304: Cannot find name 'WebInspector'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(39986,1): error TS2304: Cannot find name 'WebInspector'.
@@ -5159,7 +5159,7 @@ node_modules/chrome-devtools-frontend/front_end/dom_extension/DOMExtension.js(74
 node_modules/chrome-devtools-frontend/front_end/dom_extension/DOMExtension.js(745,48): error TS2339: Property 'pageX' does not exist on type 'Event'.
 node_modules/chrome-devtools-frontend/front_end/dom_extension/DOMExtension.js(745,60): error TS2339: Property 'pageY' does not exist on type 'Event'.
 node_modules/chrome-devtools-frontend/front_end/dom_extension/DOMExtension.js(753,20): error TS2339: Property 'deepElementFromPoint' does not exist on type 'Document'.
-node_modules/chrome-devtools-frontend/front_end/dom_extension/DOMExtension.js(761,5): error TS2740: Type 'ShadowRoot' is missing the following properties from type 'Document': URL, alinkColor, all, anchors, and 176 more.
+node_modules/chrome-devtools-frontend/front_end/dom_extension/DOMExtension.js(761,5): error TS2740: Type 'ShadowRoot' is missing the following properties from type 'Document': URL, alinkColor, all, anchors, and 174 more.
 node_modules/chrome-devtools-frontend/front_end/dom_extension/DOMExtension.js(766,28): error TS2339: Property 'deepElementFromPoint' does not exist on type 'DocumentFragment'.
 node_modules/chrome-devtools-frontend/front_end/dom_extension/DOMExtension.js(766,70): error TS2339: Property 'deepElementFromPoint' does not exist on type 'Document'.
 node_modules/chrome-devtools-frontend/front_end/dom_extension/DOMExtension.js(771,20): error TS2339: Property 'deepActiveElement' does not exist on type 'Document'.
@@ -11119,7 +11119,7 @@ node_modules/chrome-devtools-frontend/front_end/sources/JavaScriptBreakpointsSid
 node_modules/chrome-devtools-frontend/front_end/sources/JavaScriptBreakpointsSidebarPane.js(206,28): error TS2555: Expected at least 2 arguments, but got 1.
 node_modules/chrome-devtools-frontend/front_end/sources/JavaScriptCompilerPlugin.js(51,5): error TS2322: Type 'Timer' is not assignable to type 'number'.
 node_modules/chrome-devtools-frontend/front_end/sources/JavaScriptSourceFrame.js(60,50): error TS2345: Argument of type 'Event' is not assignable to parameter of type 'MouseEvent | KeyboardEvent'.
-  Type 'Event' is missing the following properties from type 'KeyboardEvent': altKey, char, charCode, code, and 19 more.
+  Type 'Event' is missing the following properties from type 'KeyboardEvent': altKey, char, charCode, code, and 16 more.
 node_modules/chrome-devtools-frontend/front_end/sources/JavaScriptSourceFrame.js(107,33): error TS2339: Property 'asParsedURL' does not exist on type 'string'.
 node_modules/chrome-devtools-frontend/front_end/sources/JavaScriptSourceFrame.js(128,59): error TS2555: Expected at least 2 arguments, but got 1.
 node_modules/chrome-devtools-frontend/front_end/sources/JavaScriptSourceFrame.js(132,9): error TS2555: Expected at least 2 arguments, but got 1.
