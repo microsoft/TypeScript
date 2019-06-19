@@ -11671,12 +11671,14 @@ namespace ts {
             return checkTypeRelatedToAndOptionallyElaborate(source, target, assignableRelation, errorNode, expr, headMessage, containingMessageChain);
         }
 
-        function checkTypeRelatedToAndOptionallyElaborate(source: Type, target: Type, relation: Map<RelationComparisonResult>, errorNode: Node | undefined, expr: Expression | undefined, headMessage?: DiagnosticMessage, containingMessageChain?: () => DiagnosticMessageChain | undefined): boolean {
-            if (isTypeRelatedTo(source, target, relation)) return true;
+        function checkTypeRelatedToAndOptionallyElaborate(source: Type, target: Type, relation: Map<RelationComparisonResult>, errorNode: Node | undefined, expr: Expression | undefined, headMessage?: DiagnosticMessage, containingMessageChain?: () => DiagnosticMessageChain | undefined): boolean;
+        function checkTypeRelatedToAndOptionallyElaborate(source: Type, target: Type, relation: Map<RelationComparisonResult>, errorNode: Node | undefined, expr: Expression | undefined, headMessage?: DiagnosticMessage, containingMessageChain?: () => DiagnosticMessageChain | undefined, breakdown?: boolean): [Node, DiagnosticMessageChain];
+        function checkTypeRelatedToAndOptionallyElaborate(source: Type, target: Type, relation: Map<RelationComparisonResult>, errorNode: Node | undefined, expr: Expression | undefined, headMessage?: DiagnosticMessage, containingMessageChain?: () => DiagnosticMessageChain | undefined, breakdown?: boolean): boolean | [Node, DiagnosticMessageChain] {
+            if (isTypeRelatedTo(source, target, relation)) return breakdown ? false : true;
             if (!errorNode || !elaborateError(expr, source, target, relation, headMessage)) {
-                return checkTypeRelatedTo(source, target, relation, errorNode, headMessage, containingMessageChain);
+                return checkTypeRelatedTo(source, target, relation, errorNode, headMessage, containingMessageChain, undefined, breakdown);
             }
-            return false;
+            return breakdown ? [undefined!,undefined!] as [Node, DiagnosticMessageChain] : false;
         }
 
         function isOrHasGenericConditional(type: Type): boolean {
@@ -12430,7 +12432,10 @@ namespace ts {
                 }
                 diagnostics.add(diag); // TODO: GH#18217
             }
-            Debug.assert(!breakdown);
+            if (breakdown) {
+                Debug.assert(result === Ternary.False ? !errorNode : true, "missed opportunity to interact with error.");
+                return result === Ternary.False ? [undefined!, undefined!] as [Node, DiagnosticMessageChain] : false;
+            }
             return result !== Ternary.False;
 
             function reportError(message: DiagnosticMessage, arg0?: string | number, arg1?: string | number, arg2?: string | number, arg3?: string | number): void {
@@ -21121,13 +21126,13 @@ namespace ts {
             // can be specified by users through attributes property.
             const paramType = getEffectiveFirstArgumentForJsxSignature(signature, node);
             const attributesType = checkExpressionWithContextualType(node.attributes, paramType, /*inferenceContext*/ undefined, checkMode);
-            return checkTypeRelatedToAndOptionallyElaborate(attributesType, paramType, relation, reportErrors ? node.tagName : undefined, node.attributes);
+            return checkTypeRelatedToAndOptionallyElaborate(attributesType, paramType, relation, reportErrors ? node.tagName : undefined, node.attributes, undefined, undefined, /*breakdown*/ true);
         }
 
         // TODO: This function is only used in overload resolution; it should instead return a [errorNode, messageChain] pair if there is a failure and undefined if not
         // The first-round callers can used undefined=pass and the second-round callers can build their own errors from the pair.
         // TODO: Still need to thread BREAKDOWN through checkTypeRealtedToAndOptionallyElaborate and all other checkType calls
-        function checkApplicableSignature(
+        function getSignatureApplicabilityError(
             node: CallLikeExpression,
             args: ReadonlyArray<Expression>,
             signature: Signature,
@@ -21149,8 +21154,9 @@ namespace ts {
                 const thisArgumentType = thisArgumentNode ? checkExpression(thisArgumentNode) : voidType;
                 const errorNode = reportErrors ? (thisArgumentNode || node) : undefined;
                 const headMessage = Diagnostics.The_this_context_of_type_0_is_not_assignable_to_method_s_this_of_type_1;
-                if (!checkTypeRelatedTo(thisArgumentType, thisType, relation, errorNode, headMessage)) {
-                    return false;
+                const r = checkTypeRelatedTo(thisArgumentType, thisType, relation, errorNode, headMessage, undefined, undefined, /*breakdown*/ true);
+                if (r) {
+                    return r;
                 }
             }
             const headMessage = Diagnostics.Argument_of_type_0_is_not_assignable_to_parameter_of_type_1;
@@ -21165,17 +21171,18 @@ namespace ts {
                     // we obtain the regular type of any object literal arguments because we may not have inferred complete
                     // parameter types yet and therefore excess property checks may yield false positives (see #17041).
                     const checkArgType = checkMode & CheckMode.SkipContextSensitive ? getRegularTypeOfObjectLiteral(argType) : argType;
-                    if (!checkTypeRelatedToAndOptionallyElaborate(checkArgType, paramType, relation, reportErrors ? arg : undefined, arg, headMessage, containingMessageChain)) {
-                        return false;
+                    const r = checkTypeRelatedToAndOptionallyElaborate(checkArgType, paramType, relation, reportErrors ? arg : undefined, arg, headMessage, containingMessageChain, /*breakdown*/ true);
+                    if (r) {
+                        return r;
                     }
                 }
             }
             if (restType) {
                 const spreadType = getSpreadArgumentType(args, argCount, args.length, restType, /*context*/ undefined);
                 const errorNode = reportErrors ? argCount < args.length ? args[argCount] : node : undefined;
-                return checkTypeRelatedTo(spreadType, restType, relation, errorNode, headMessage);
+                return checkTypeRelatedTo(spreadType, restType, relation, errorNode, headMessage, undefined, undefined, /*breakdown*/ true);
             }
-            return true;
+            return undefined;
         }
 
         /**
@@ -21506,13 +21513,15 @@ namespace ts {
                     if (candidatesForArgumentError.length > 3) {
                         const c = candidatesForArgumentError[candidatesForArgumentError.length - 1];
                         const chain = chainDiagnosticMessages(undefined, Diagnostics.Failed_to_find_a_suitable_overload_for_this_call);
-                        checkApplicableSignature(node, args, c, assignableRelation, CheckMode.Normal, /*reportErrors*/ true, () => chain);
+                        getSignatureApplicabilityError(node, args, c, assignableRelation, CheckMode.Normal, /*reportErrors*/ true, () => chain);
                     }
                     else {
                         // const related: DiagnosticRelatedInformation[] = [];
                         for (const c of candidatesForArgumentError) {
                             const chain = chainDiagnosticMessages(chainDiagnosticMessages(undefined, Diagnostics.Overload_0_gave_the_following_error, signatureToString(c)), Diagnostics.Failed_to_find_a_suitable_overload_for_this_call);
-                            const [errorNode, msg] = checkApplicableSignature(node, args, c, assignableRelation, CheckMode.Normal, /*reportErrors*/ true, () => chain);
+                            const r = getSignatureApplicabilityError(node, args, c, assignableRelation, CheckMode.Normal, /*reportErrors*/ true, () => chain);
+                            if (!r || !r[0]) continue; // TODO:assert!
+                            diagnostics.add(createDiagnosticForNodeFromMessageChain(r[0], r[1], /*relatedInformation*/ undefined));
                             // related.push(argNode)
                             // This is not right; I want them to be siblings
                             // probably this is a new feature :(
@@ -21552,7 +21561,7 @@ namespace ts {
                     if (typeArguments || !hasCorrectArity(node, args, candidate, signatureHelpTrailingComma)) {
                         return undefined;
                     }
-                    if (!checkApplicableSignature(node, args, candidate, relation, CheckMode.Normal, /*reportErrors*/ false, /*containingMessageChain*/ undefined)) {
+                    if (getSignatureApplicabilityError(node, args, candidate, relation, CheckMode.Normal, /*reportErrors*/ false, /*containingMessageChain*/ undefined)) {
                         candidatesForArgumentError = [candidate];
                         return undefined;
                     }
@@ -21593,7 +21602,7 @@ namespace ts {
                     else {
                         checkCandidate = candidate;
                     }
-                    if (!checkApplicableSignature(node, args, checkCandidate, relation, argCheckMode, /*reportErrors*/ false, /*containingMessageChain*/ undefined)) {
+                    if (getSignatureApplicabilityError(node, args, checkCandidate, relation, argCheckMode, /*reportErrors*/ false, /*containingMessageChain*/ undefined)) {
                         // Give preference to error candidates that have no rest parameters (as they are more specific)
                         if (getMinArgumentCount(checkCandidate) <= args.length && args.length <= getParameterCount(checkCandidate)) {
                             (candidatesForArgumentError || (candidatesForArgumentError = [])).push(checkCandidate);
@@ -21615,7 +21624,7 @@ namespace ts {
                                 continue;
                             }
                         }
-                        if (!checkApplicableSignature(node, args, checkCandidate, relation, argCheckMode, /*reportErrors*/ false, /*containingMessageChain*/ undefined)) {
+                        if (getSignatureApplicabilityError(node, args, checkCandidate, relation, argCheckMode, /*reportErrors*/ false, /*containingMessageChain*/ undefined)) {
                             // Give preference to error candidates that have no rest parameters (as they are more specific)
                             if (getMinArgumentCount(checkCandidate) <= args.length && args.length <= getParameterCount(checkCandidate)) {
                                 (candidatesForArgumentError || (candidatesForArgumentError = [])).push(checkCandidate);
