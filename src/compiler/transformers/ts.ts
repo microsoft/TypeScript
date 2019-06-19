@@ -23,11 +23,10 @@ namespace ts {
         IsNamedExternalExport = 1 << 4,
         IsDefaultExternalExport = 1 << 5,
         IsDerivedClass = 1 << 6,
-        UseImmediatelyInvokedFunctionExpression = 1 << 7,
 
         HasAnyDecorators = HasConstructorDecorators | HasMemberDecorators,
         NeedsName = HasStaticInitializedProperties | HasMemberDecorators,
-        MayNeedImmediatelyInvokedFunctionExpression = HasAnyDecorators | HasStaticInitializedProperties,
+        UseImmediatelyInvokedFunctionExpression = HasAnyDecorators | HasStaticInitializedProperties,
         IsExported = IsExportOfNamespace | IsDefaultExternalExport | IsNamedExternalExport,
     }
 
@@ -587,7 +586,6 @@ namespace ts {
             if (isExportOfNamespace(node)) facts |= ClassFacts.IsExportOfNamespace;
             else if (isDefaultExternalModuleExport(node)) facts |= ClassFacts.IsDefaultExternalExport;
             else if (isNamedExternalModuleExport(node)) facts |= ClassFacts.IsNamedExternalExport;
-            if (languageVersion <= ScriptTarget.ES5 && (facts & ClassFacts.MayNeedImmediatelyInvokedFunctionExpression)) facts |= ClassFacts.UseImmediatelyInvokedFunctionExpression;
             return facts;
         }
 
@@ -666,7 +664,7 @@ namespace ts {
                             /*type*/ undefined,
                             iife
                         )
-                    ])
+                    ], languageVersion > ScriptTarget.ES5 ? NodeFlags.Let : undefined)
                 );
 
                 setOriginalNode(varStatement, node);
