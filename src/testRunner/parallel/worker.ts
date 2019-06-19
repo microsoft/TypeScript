@@ -125,7 +125,10 @@ namespace Harness.Parallel.Worker {
             }
 
             function addTest(title: string | Mocha.Func | Mocha.AsyncFunc, fn: Mocha.Func | Mocha.AsyncFunc | undefined): Mocha.Test {
-                if (typeof title === "function") fn = title, title = fn.name;
+                if (typeof title === "function") {
+                    fn = title;
+                    title = fn.name;
+                }
                 const test = new Test(title, suites[0].pending ? undefined : fn);
                 suites[0].addTest(test);
                 return test;

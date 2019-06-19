@@ -2942,7 +2942,7 @@ namespace ts {
             node.declarationMapPath = declarationMapPath;
             node.declarationMapText = declarationMapTextOrBuildInfoPath;
             node.javascriptPath = javascriptPath;
-            node.declarationPath = declarationPath,
+            node.declarationPath = declarationPath;
             node.buildInfoPath = buildInfoPath;
             node.buildInfo = buildInfo;
             node.oldFileOfCurrentEmit = oldFileOfCurrentEmit;

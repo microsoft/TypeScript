@@ -44,7 +44,7 @@ describe("unittests:: services:: PreProcessFile:", () => {
                     ambientExternalModules: undefined,
                     isLibFile: false
                 });
-        }),
+        });
 
         it("Do not return reference path because of invalid triple-slash syntax", () => {
             test("///<reference path\"refFile1.ts\" />" + "\n" + "///<reference path =\"refFile2.ts\">" + "\n" + "///<referencepath=\"refFile3.ts\" />" + "\n" + "///<reference pat= \"refFile4d.ts\" />",
@@ -58,7 +58,7 @@ describe("unittests:: services:: PreProcessFile:", () => {
                     ambientExternalModules: undefined,
                     isLibFile: false
                 });
-        }),
+        });
 
         it("Do not return reference path of non-imports", () => {
             test("Quill.import('delta');",
@@ -72,7 +72,7 @@ describe("unittests:: services:: PreProcessFile:", () => {
                     ambientExternalModules: undefined,
                     isLibFile: false
                 });
-        }),
+        });
 
         it("Do not return reference path of nested non-imports", () => {
             test("a.b.import('c');",
@@ -86,7 +86,7 @@ describe("unittests:: services:: PreProcessFile:", () => {
                     ambientExternalModules: undefined,
                     isLibFile: false
                 });
-        }),
+        });
 
         it("Correctly return imported files", () => {
             test("import i1 = require(\"r1.ts\"); import i2 =require(\"r2.ts\"); import i3= require(\"r3.ts\"); import i4=require(\"r4.ts\"); import i5 = require  (\"r5.ts\");",
@@ -101,7 +101,7 @@ describe("unittests:: services:: PreProcessFile:", () => {
                     ambientExternalModules: undefined,
                     isLibFile: false
                 });
-        }),
+        });
 
         it("Do not return imported files if readImportFiles argument is false", () => {
             test("import i1 = require(\"r1.ts\"); import i2 =require(\"r2.ts\"); import i3= require(\"r3.ts\"); import i4=require(\"r4.ts\"); import i5 = require  (\"r5.ts\");",
@@ -115,7 +115,7 @@ describe("unittests:: services:: PreProcessFile:", () => {
                     ambientExternalModules: undefined,
                     isLibFile: false
                 });
-        }),
+        });
 
         it("Do not return import path because of invalid import syntax", () => {
             test("import i1 require(\"r1.ts\"); import = require(\"r2.ts\") import i3= require(\"r3.ts\"); import i5",
@@ -129,7 +129,7 @@ describe("unittests:: services:: PreProcessFile:", () => {
                     ambientExternalModules: undefined,
                     isLibFile: false
                 });
-        }),
+        });
 
         it("Correctly return referenced files and import files", () => {
             test("///<reference path=\"refFile1.ts\" />" + "\n" + "///<reference path =\"refFile2.ts\"/>" + "\n" + "import i1 = require(\"r1.ts\"); import i2 =require(\"r2.ts\");",
@@ -143,7 +143,7 @@ describe("unittests:: services:: PreProcessFile:", () => {
                     ambientExternalModules: undefined,
                     isLibFile: false
                 });
-        }),
+        });
 
         it("Correctly return referenced files and import files even with some invalid syntax", () => {
             test("///<reference path=\"refFile1.ts\" />" + "\n" + "///<reference path \"refFile2.ts\"/>" + "\n" + "import i1 = require(\"r1.ts\"); import = require(\"r2.ts\"); import i2 = require(\"r3.ts\");",

@@ -40,7 +40,7 @@ export function Component(x: Config): any;`
                 },
             });
             const definitions = languageService.getDefinitionAtPosition("foo.ts", 160); // 160 is the latter `vueTemplateHtml` position
-            expect(definitions).to.exist; // tslint:disable-line no-unused-expression
+            expect(definitions).to.exist; // eslint-disable-line no-unused-expressions
         });
     });
 }

@@ -337,7 +337,7 @@ namespace ts.server {
 
                 session.send = Session.prototype.send;
                 assert(session.send);
-                expect(session.send(msg)).to.not.exist; // tslint:disable-line no-unused-expression
+                expect(session.send(msg)).to.not.exist; // eslint-disable-line no-unused-expressions
                 expect(lastWrittenToHost).to.equal(resultMsg);
             });
         });

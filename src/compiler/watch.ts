@@ -331,7 +331,9 @@ namespace ts {
     export function createProgramHost<T extends BuilderProgram = EmitAndSemanticDiagnosticsBuilderProgram>(system: System, createProgram: CreateProgram<T> | undefined): ProgramHost<T> {
         const getDefaultLibLocation = memoize(() => getDirectoryPath(normalizePath(system.getExecutingFilePath())));
         let host: DirectoryStructureHost = system;
-        host; // tslint:disable-line no-unused-expression (TODO: `host` is unused!)
+        // TODO: `host` is unused!
+        // eslint-disable-next-line no-unused-expressions
+        host;
         return {
             useCaseSensitiveFileNames: () => system.useCaseSensitiveFileNames,
             getNewLine: () => system.newLine,

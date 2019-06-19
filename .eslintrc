@@ -107,7 +107,7 @@
         "no-trailing-spaces": "error",
         "no-undef-init": "error",
         "no-unsafe-finally": "error",
-        "no-unused-expressions": "off",
+        "no-unused-expressions": "error",
         "no-unused-labels": "error",
         "no-var": "off",
         "object-shorthand": "error",
