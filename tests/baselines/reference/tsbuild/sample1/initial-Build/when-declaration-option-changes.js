@@ -46,7 +46,7 @@ exports.multiply = multiply;
     "options": {
       "incremental": true,
       "skipDefaultLibCheck": true,
-      "configFilePath": "/src/core/tsconfig.json"
+      "configFilePath": "./tsconfig.json"
     },
     "referencedMap": {},
     "exportedModulesMap": {},

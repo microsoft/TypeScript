@@ -71,7 +71,7 @@ export function multiply(a, b) { return a * b; }
       "listFiles": true,
       "listEmittedFiles": true,
       "target": 8,
-      "configFilePath": "/src/core/tsconfig.json"
+      "configFilePath": "./tsconfig.json"
     },
     "referencedMap": {},
     "exportedModulesMap": {},

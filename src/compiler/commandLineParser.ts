@@ -969,7 +969,8 @@ namespace ts {
         return typeAcquisition;
     }
 
-    function getOptionNameMap(): OptionNameMap {
+    /* @internal */
+    export function getOptionNameMap(): OptionNameMap {
         return optionNameMapCache || (optionNameMapCache = createOptionNameMap(optionDeclarations));
     }
 

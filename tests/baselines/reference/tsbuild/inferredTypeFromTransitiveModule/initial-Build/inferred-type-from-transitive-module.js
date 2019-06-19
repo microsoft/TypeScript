@@ -96,9 +96,9 @@ exports.bar = bar_1.default;
     "options": {
       "target": 1,
       "declaration": true,
-      "outDir": "/src/obj",
+      "outDir": "./",
       "incremental": true,
-      "configFilePath": "/src/tsconfig.json"
+      "configFilePath": "../tsconfig.json"
     },
     "referencedMap": {
       "../index.ts": [

@@ -41,7 +41,7 @@ export declare function multiply(a: number, b: number): number;
       "incremental": true,
       "declaration": true,
       "skipDefaultLibCheck": true,
-      "configFilePath": "/src/core/tsconfig.json"
+      "configFilePath": "./tsconfig.json"
     },
     "referencedMap": {},
     "exportedModulesMap": {},

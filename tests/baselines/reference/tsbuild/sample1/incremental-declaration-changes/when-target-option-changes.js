@@ -54,7 +54,7 @@ exports.multiply = multiply;
       "listFiles": true,
       "listEmittedFiles": true,
       "target": 1,
-      "configFilePath": "/src/core/tsconfig.json"
+      "configFilePath": "./tsconfig.json"
     },
     "referencedMap": {},
     "exportedModulesMap": {},

@@ -39,9 +39,9 @@ type A = HKT<number>[typeof sym];
       }
     },
     "options": {
-      "rootDir": "/src/src",
+      "rootDir": "./src",
       "incremental": true,
-      "configFilePath": "/src/tsconfig.json"
+      "configFilePath": "./tsconfig.json"
     },
     "referencedMap": {
       "./src/main.ts": [

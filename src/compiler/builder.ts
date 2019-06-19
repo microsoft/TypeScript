@@ -619,7 +619,10 @@ namespace ts {
             fileInfos[relativeToBuildInfo(key)] = signature === undefined ? value : { version: value.version, signature };
         });
 
-        const result: ProgramBuildInfo = { fileInfos, options: state.compilerOptions };
+        const result: ProgramBuildInfo = {
+            fileInfos,
+            options: convertToReusableCompilerOptions(state.compilerOptions, relativeToBuildInfo)
+        };
         if (state.referencedMap) {
             const referencedMap: MapLike<string[]> = {};
             state.referencedMap.forEach((value, key) => {
@@ -661,6 +664,40 @@ namespace ts {
         function relativeToBuildInfo(path: string) {
             return ensurePathIsNonModuleName(getRelativePathFromDirectory(buildInfoDirectory, path, getCanonicalFileName));
         }
+    }
+
+    function convertToReusableCompilerOptions(options: CompilerOptions, relativeToBuildInfo: (path: string) => string) {
+        const result: CompilerOptions = {};
+        const optionsNameMap = getOptionNameMap().optionNameMap;
+
+        for (const name in options) {
+            if (hasProperty(options, name)) {
+                result[name] = convertToReusableCompilerOptionValue(
+                    optionsNameMap.get(name.toLowerCase()),
+                    options[name] as CompilerOptionsValue,
+                    relativeToBuildInfo
+                );
+            }
+        }
+        if (result.configFilePath) {
+            result.configFilePath = relativeToBuildInfo(result.configFilePath);
+        }
+        return result;
+    }
+
+    function convertToReusableCompilerOptionValue(option: CommandLineOption | undefined, value: CompilerOptionsValue, relativeToBuildInfo: (path: string) => string) {
+        if (option) {
+            if (option.type === "list") {
+                const values = value as ReadonlyArray<string | number>;
+                if (option.element.isFilePath && values.length) {
+                    return values.map(relativeToBuildInfo);
+                }
+            }
+            else if (option.isFilePath) {
+                return relativeToBuildInfo(value as string);
+            }
+        }
+        return value;
     }
 
     function convertToReusableDiagnostics(diagnostics: ReadonlyArray<Diagnostic>, relativeToBuildInfo: (path: string) => string): ReadonlyArray<ReusableDiagnostic> {
@@ -991,7 +1028,7 @@ namespace ts {
 
         const state: ReusableBuilderProgramState = {
             fileInfos,
-            compilerOptions: program.options,
+            compilerOptions: convertFromReusableCompilerOptions(program.options, toAbsolutePath),
             referencedMap: getMapOfReferencedSet(program.referencedMap, toPath),
             exportedModulesMap: getMapOfReferencedSet(program.exportedModulesMap, toPath),
             semanticDiagnosticsPerFile: program.semanticDiagnosticsPerFile && arrayToMap(program.semanticDiagnosticsPerFile, value => isString(value) ? value : value[0], value => isString(value) ? emptyArray : value[1]),
@@ -1023,6 +1060,44 @@ namespace ts {
         function toPath(path: string) {
             return ts.toPath(path, buildInfoDirectory, getCanonicalFileName);
         }
+
+        function toAbsolutePath(path: string) {
+            return getNormalizedAbsolutePath(path, buildInfoDirectory);
+        }
+    }
+
+    function convertFromReusableCompilerOptions(options: CompilerOptions, toAbsolutePath: (path: string) => string) {
+        const result: CompilerOptions = {};
+        const optionsNameMap = getOptionNameMap().optionNameMap;
+
+        for (const name in options) {
+            if (hasProperty(options, name)) {
+                result[name] = convertFromReusableCompilerOptionValue(
+                    optionsNameMap.get(name.toLowerCase()),
+                    options[name] as CompilerOptionsValue,
+                    toAbsolutePath
+                );
+            }
+        }
+        if (result.configFilePath) {
+            result.configFilePath = toAbsolutePath(result.configFilePath);
+        }
+        return result;
+    }
+
+    function convertFromReusableCompilerOptionValue(option: CommandLineOption | undefined, value: CompilerOptionsValue, toAbsolutePath: (path: string) => string) {
+        if (option) {
+            if (option.type === "list") {
+                const values = value as ReadonlyArray<string | number>;
+                if (option.element.isFilePath && values.length) {
+                    return values.map(toAbsolutePath);
+                }
+            }
+            else if (option.isFilePath) {
+                return toAbsolutePath(value as string);
+            }
+        }
+        return value;
     }
 
     export function createRedirectedBuilderProgram(state: { program: Program | undefined; compilerOptions: CompilerOptions; }, configFileParsingDiagnostics: ReadonlyArray<Diagnostic>): BuilderProgram {

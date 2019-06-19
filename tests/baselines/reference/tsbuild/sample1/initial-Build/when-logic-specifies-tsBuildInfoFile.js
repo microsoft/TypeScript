@@ -206,7 +206,7 @@ exports.multiply = multiply;
       "declaration": true,
       "declarationMap": true,
       "skipDefaultLibCheck": true,
-      "configFilePath": "/src/core/tsconfig.json"
+      "configFilePath": "./tsconfig.json"
     },
     "referencedMap": {},
     "exportedModulesMap": {},
@@ -388,12 +388,12 @@ sourceFile:index.ts
     },
     "options": {
       "composite": true,
-      "tsBuildInfoFile": "/src/logic/ownFile.tsbuildinfo",
+      "tsBuildInfoFile": "./ownFile.tsbuildinfo",
       "declaration": true,
       "sourceMap": true,
       "forceConsistentCasingInFileNames": true,
       "skipDefaultLibCheck": true,
-      "configFilePath": "/src/logic/tsconfig.json"
+      "configFilePath": "./tsconfig.json"
     },
     "referencedMap": {
       "./index.ts": [
@@ -478,7 +478,7 @@ exports.m = mod;
       "declaration": true,
       "forceConsistentCasingInFileNames": true,
       "skipDefaultLibCheck": true,
-      "configFilePath": "/src/tests/tsconfig.json"
+      "configFilePath": "./tsconfig.json"
     },
     "referencedMap": {
       "../logic/index.ts": [

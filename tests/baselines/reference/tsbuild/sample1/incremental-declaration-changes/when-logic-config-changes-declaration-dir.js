@@ -44,11 +44,11 @@ export declare const m: typeof mod;
     "options": {
       "composite": true,
       "declaration": true,
-      "declarationDir": "/src/logic/decls",
+      "declarationDir": "./decls",
       "sourceMap": true,
       "forceConsistentCasingInFileNames": true,
       "skipDefaultLibCheck": true,
-      "configFilePath": "/src/logic/tsconfig.json"
+      "configFilePath": "./tsconfig.json"
     },
     "referencedMap": {
       "./index.ts": [
@@ -101,7 +101,7 @@ export declare const m: typeof mod;
       "declaration": true,
       "forceConsistentCasingInFileNames": true,
       "skipDefaultLibCheck": true,
-      "configFilePath": "/src/tests/tsconfig.json"
+      "configFilePath": "./tsconfig.json"
     },
     "referencedMap": {
       "../logic/index.ts": [

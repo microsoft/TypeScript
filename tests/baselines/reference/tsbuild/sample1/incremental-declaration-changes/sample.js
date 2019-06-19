@@ -193,7 +193,7 @@ export class someClass { }
       "declaration": true,
       "declarationMap": true,
       "skipDefaultLibCheck": true,
-      "configFilePath": "/src/core/tsconfig.json"
+      "configFilePath": "./tsconfig.json"
     },
     "referencedMap": {},
     "exportedModulesMap": {},
@@ -234,7 +234,7 @@ export class someClass { }
       "sourceMap": true,
       "forceConsistentCasingInFileNames": true,
       "skipDefaultLibCheck": true,
-      "configFilePath": "/src/logic/tsconfig.json"
+      "configFilePath": "./tsconfig.json"
     },
     "referencedMap": {
       "./index.ts": [
@@ -287,7 +287,7 @@ export class someClass { }
       "declaration": true,
       "forceConsistentCasingInFileNames": true,
       "skipDefaultLibCheck": true,
-      "configFilePath": "/src/tests/tsconfig.json"
+      "configFilePath": "./tsconfig.json"
     },
     "referencedMap": {
       "../logic/index.ts": [

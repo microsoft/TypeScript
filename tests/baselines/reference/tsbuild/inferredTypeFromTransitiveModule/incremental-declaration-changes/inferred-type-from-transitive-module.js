@@ -58,9 +58,9 @@ export declare const lazyBar: LazyAction<() => void, typeof import("./lazyIndex"
     "options": {
       "target": 1,
       "declaration": true,
-      "outDir": "/src/obj",
+      "outDir": "./",
       "incremental": true,
-      "configFilePath": "/src/tsconfig.json"
+      "configFilePath": "../tsconfig.json"
     },
     "referencedMap": {
       "../index.ts": [

@@ -174,7 +174,10 @@ namespace ts.tscWatch {
                                         [file1Path]: getFileInfo(file1.content),
                                         [file2Path]: getFileInfo(file2.content)
                                     },
-                                    options: { incremental: true, configFilePath: configFile.path },
+                                    options: {
+                                        incremental: true,
+                                        configFilePath: "./tsconfig.json"
+                                    },
                                     referencedMap: {},
                                     exportedModulesMap: {},
                                     semanticDiagnosticsPerFile: [libFilePath, file1Path, file2Path]
@@ -197,7 +200,10 @@ namespace ts.tscWatch {
                                         [file1Path]: getFileInfo(file1.content),
                                         [file2Path]: getFileInfo(modifiedFile2Content)
                                     },
-                                    options: { incremental: true, configFilePath: configFile.path },
+                                    options: {
+                                        incremental: true,
+                                        configFilePath: "./tsconfig.json"
+                                    },
                                     referencedMap: {},
                                     exportedModulesMap: {},
                                     semanticDiagnosticsPerFile: [libFilePath, file1Path, file2Path]
@@ -249,7 +255,10 @@ namespace ts.tscWatch {
                                         [file1Path]: getFileInfo(file1.content),
                                         [file2Path]: file2FileInfo
                                     },
-                                    options: { incremental: true, configFilePath: configFile.path },
+                                    options: {
+                                        incremental: true,
+                                        configFilePath: "./tsconfig.json"
+                                    },
                                     referencedMap: {},
                                     exportedModulesMap: {},
                                     semanticDiagnosticsPerFile: [
@@ -276,7 +285,10 @@ namespace ts.tscWatch {
                                         [file1Path]: getFileInfo(modifiedFile1Content),
                                         [file2Path]: file2FileInfo
                                     },
-                                    options: { incremental: true, configFilePath: configFile.path },
+                                    options: {
+                                        incremental: true,
+                                        configFilePath: "./tsconfig.json"
+                                    },
                                     referencedMap: {},
                                     exportedModulesMap: {},
                                     semanticDiagnosticsPerFile: [
@@ -380,7 +392,11 @@ namespace ts.tscWatch {
                                         [file1Path]: getFileInfo(file1.content),
                                         [file2Path]: getFileInfo(file2.content)
                                     },
-                                    options: { incremental: true, module: ModuleKind.AMD, configFilePath: configFile.path },
+                                    options: {
+                                        incremental: true,
+                                        module: ModuleKind.AMD,
+                                        configFilePath: "./tsconfig.json"
+                                    },
                                     referencedMap: {},
                                     exportedModulesMap: {},
                                     semanticDiagnosticsPerFile: [libFilePath, file1Path, file2Path]
@@ -402,7 +418,11 @@ namespace ts.tscWatch {
                                         [file1Path]: getFileInfo(file1.content),
                                         [file2Path]: getFileInfo(modifiedFile2Content)
                                     },
-                                    options: { incremental: true, module: ModuleKind.AMD, configFilePath: configFile.path },
+                                    options: {
+                                        incremental: true,
+                                        module: ModuleKind.AMD,
+                                        configFilePath: "./tsconfig.json"
+                                    },
                                     referencedMap: {},
                                     exportedModulesMap: {},
                                     semanticDiagnosticsPerFile: [libFilePath, file1Path, file2Path]
@@ -454,7 +474,11 @@ namespace ts.tscWatch {
                                         [file1Path]: getFileInfo(file1.content),
                                         [file2Path]: file2FileInfo
                                     },
-                                    options: { incremental: true, module: ModuleKind.AMD, configFilePath: configFile.path },
+                                    options: {
+                                        incremental: true,
+                                        module: ModuleKind.AMD,
+                                        configFilePath: "./tsconfig.json"
+                                    },
                                     referencedMap: {},
                                     exportedModulesMap: {},
                                     semanticDiagnosticsPerFile: [
@@ -480,7 +504,11 @@ namespace ts.tscWatch {
                                         [file1Path]: getFileInfo(modifiedFile1Content),
                                         [file2Path]: file2FileInfo
                                     },
-                                    options: { incremental: true, module: ModuleKind.AMD, configFilePath: configFile.path },
+                                    options: {
+                                        incremental: true,
+                                        module: ModuleKind.AMD,
+                                        configFilePath: "./tsconfig.json"
+                                    },
                                     referencedMap: {},
                                     exportedModulesMap: {},
                                     semanticDiagnosticsPerFile: [
