@@ -15,7 +15,7 @@
         "@typescript-eslint", "microsoft-typescript"
     ],
     "rules": {
-        "@typescript-eslint/adjacent-overload-signatures": "off",
+        "@typescript-eslint/adjacent-overload-signatures": "error",
         "@typescript-eslint/array-type": "off",
         "@typescript-eslint/ban-types": "off",
         "camelcase": "off",
