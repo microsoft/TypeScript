@@ -19,7 +19,7 @@
         "@typescript-eslint/array-type": "off",
         "@typescript-eslint/ban-types": "off",
         "camelcase": "off",
-        "@typescript-eslint/camelcase": "off",
+        "@typescript-eslint/camelcase": ["error", { "properties": "never", "allow": ["^[A-Za-z][a-zA-Za-z]+_[A-Za-z]+$"] }],
         "@typescript-eslint/class-name-casing": "error",
         "@typescript-eslint/explicit-member-accessibility": "off",
         "@typescript-eslint/import/order": "off",

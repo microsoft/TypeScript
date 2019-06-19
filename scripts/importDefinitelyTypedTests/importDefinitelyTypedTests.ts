@@ -1,6 +1,6 @@
 import * as fs from "fs";
 import * as path from "path";
-import * as child_process from "child_process";
+import * as childProcess from "child_process";
 
 
 interface Map<T> {
@@ -59,7 +59,7 @@ function importDefinitelyTypedTest(tscPath: string, rwcTestPath: string, testCas
     }
     fs.mkdirSync(testDirectoryPath);
 
-    child_process.exec(cmd, {
+    childProcess.exec(cmd, {
         maxBuffer: 1 * 1024 * 1024,
         cwd: testDirectoryPath
     }, (error, stdout, stderr) => {

@@ -1,6 +1,6 @@
 import fs = require("fs");
 import path = require("path");
-import child_process = require("child_process");
+import childProcess = require("child_process");
 
 interface Author {
     displayNames: string[];
@@ -116,7 +116,7 @@ namespace Commands {
         console.log(cmd);
         const outputRegExp = /\d+\s+([^<]+)<([^>]+)>/;
         const authors: { name: string, email: string, knownAuthor?: Author }[] = [];
-        const {output: [error, stdout, stderr]} = child_process.spawnSync(`git`, ["shortlog", "-se", ...specs], { cwd: path.resolve(__dirname, "../") });
+        const {output: [error, stdout, stderr]} = childProcess.spawnSync(`git`, ["shortlog", "-se", ...specs], { cwd: path.resolve(__dirname, "../") });
         if (error) {
             console.log(stderr.toString());
         }
