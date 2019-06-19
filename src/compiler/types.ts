@@ -5726,6 +5726,7 @@ namespace ts {
         /*@internal*/ writeBundleFileInfo?: boolean;
         /*@internal*/ recordInternalSection?: boolean;
         /*@internal*/ stripInternal?: boolean;
+        /*@internal*/ relativeToBuildInfo?: (path: string) => string;
     }
 
     /* @internal */

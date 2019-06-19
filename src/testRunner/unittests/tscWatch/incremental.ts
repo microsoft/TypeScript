@@ -322,8 +322,8 @@ namespace ts.tscWatch {
                             path: `${project}/out.tsbuildinfo`,
                             content: getBuildInfoText({
                                 bundle: {
-                                    commonSourceDirectory: `${project}/`,
-                                    sourceFiles: [file1.path, file2.path],
+                                    commonSourceDirectory: relativeToBuildInfo(`${project}/out.tsbuildinfo`, `${project}/`),
+                                    sourceFiles: [file1Path, file2Path],
                                     js: {
                                         sections: [
                                             { pos: 0, end: outFile.content.length, kind: BundleFileSectionKind.Text }
@@ -550,8 +550,8 @@ namespace ts.tscWatch {
                             path: `${project}/out.tsbuildinfo`,
                             content: getBuildInfoText({
                                 bundle: {
-                                    commonSourceDirectory: `${project}/`,
-                                    sourceFiles: [file1.path, file2.path],
+                                    commonSourceDirectory: relativeToBuildInfo(`${project}/out.tsbuildinfo`, `${project}/`),
+                                    sourceFiles: [file1Path, file2Path],
                                     js: {
                                         sections: [
                                             { pos: 0, end: outFile.content.length, kind: BundleFileSectionKind.Text }
