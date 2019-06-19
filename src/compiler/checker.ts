@@ -7597,8 +7597,8 @@ namespace ts {
                         }
                     }
                     // The properties of a union type are those that are present in all constituent types, so
-                    // we only need to check the properties of the first type
-                    if (type.flags & TypeFlags.Union) {
+                    // we only need to check the properties of the first type wihtout index signature
+                    if (type.flags & TypeFlags.Union && !getIndexInfoOfType(current, IndexKind.String) && !getIndexInfoOfType(current, IndexKind.Number)) {
                         break;
                     }
                 }
