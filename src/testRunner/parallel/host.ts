@@ -193,8 +193,8 @@ namespace Harness.Parallel.Host {
         }
 
         function skipCostlyTests(tasks: Task[]) {
-            if (statSync(".test-cost.json")) {
-                const costs = JSON.parse(readFileSync(".test-cost.json", "utf8")) as {
+            if (statSync("tests/.test-cost.json")) {
+                const costs = JSON.parse(readFileSync("tests/.test-cost.json", "utf8")) as {
                     totalTime: number,
                     totalEdits: number,
                     data: { name: string, time: number, edits: number, costs: number }[]
@@ -208,7 +208,7 @@ namespace Harness.Parallel.Host {
                     skippedTime += costs.data[i].time;
                     skippedTests.add(costs.data[i].name);
                 }
-                console.log(`Skipped ${i} expensive tests; estimated time savings of ${(skippedTime / costs.totalTime * 100).toFixed(2)}% with ${skipPercent.toFixed(2)}% chance of missing a test.`);
+                console.log(`Skipped ${i} expensive tests; estimated time savings of ${(skippedTime / costs.totalTime * 100).toFixed(2)}% with --skipPercent=${skipPercent.toFixed(2)} chance of missing a test.`);
                 return tasks.filter(t => !skippedTests.has(t.file));
             }
             else {

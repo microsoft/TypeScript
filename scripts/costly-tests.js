@@ -25,7 +25,6 @@ async function main() {
         const percentTime = perf[k] / totalTime
         const percentHits = (1 + (edits[otherk] || 0)) / totalEdits
         const cost = 5 + Math.log(percentTime / percentHits)
-        // TODO: Write counts instead of numbers to make JSON file smaller
         data.push({ name: otherk, time: perf[k], edits: 1 + (edits[otherk] || 0), cost})
         if (edits[otherk])
             i++
@@ -36,7 +35,7 @@ async function main() {
         data: data.sort((x,y) => y.cost - x.cost).map(x => ({ ...x, cost: x.cost.toFixed(2) }))
     }
 
-    fs.writeFileSync('.test-cost.json', JSON.stringify(output), 'utf8')
+    fs.writeFileSync('tests/.test-cost.json', JSON.stringify(output), 'utf8')
 }
 
 main().catch(e => {
