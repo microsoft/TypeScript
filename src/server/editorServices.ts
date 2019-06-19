@@ -1784,7 +1784,7 @@ namespace ts.server {
             }
             project.enablePluginsWithOptions(compilerOptions, this.currentPluginConfigOverrides);
             const filesToAdd = parsedCommandLine.fileNames.concat(project.getExternalFiles());
-            this.updateRootAndOptionsOfNonInferredProject(project, filesToAdd, fileNamePropertyReader, compilerOptions, parsedCommandLine.typeAcquisition!, parsedCommandLine.compileOnSave!); // TODO: GH#18217
+            this.updateRootAndOptionsOfNonInferredProject(project, filesToAdd, fileNamePropertyReader, compilerOptions, parsedCommandLine.typeAcquisition!, parsedCommandLine.compileOnSave); // TODO: GH#18217
         }
 
         private updateNonInferredProjectFiles<T>(project: ExternalProject | ConfiguredProject, files: T[], propertyReader: FilePropertyReader<T>) {

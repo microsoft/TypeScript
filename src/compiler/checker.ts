@@ -4093,7 +4093,7 @@ namespace ts {
                 let typeParameters: TypeParameterDeclaration[] | undefined;
                 let typeArguments: TypeNode[] | undefined;
                 if (context.flags & NodeBuilderFlags.WriteTypeArgumentsOfSignature && signature.target && signature.mapper && signature.target.typeParameters) {
-                    typeArguments = signature.target.typeParameters.map(parameter => typeToTypeNodeHelper(instantiateType(parameter, signature.mapper!), context));
+                    typeArguments = signature.target.typeParameters.map(parameter => typeToTypeNodeHelper(instantiateType(parameter, signature.mapper), context));
                 }
                 else {
                     typeParameters = signature.typeParameters && signature.typeParameters.map(parameter => typeParameterToDeclaration(parameter, context));
@@ -5893,7 +5893,7 @@ namespace ts {
                 if (!pushTypeResolution(symbol, TypeSystemPropertyName.Type)) {
                     return links.type = errorType;
                 }
-                let type = instantiateType(getTypeOfSymbol(links.target!), links.mapper!);
+                let type = instantiateType(getTypeOfSymbol(links.target!), links.mapper);
                 if (!popTypeResolution()) {
                     type = reportCircularityError(symbol);
                 }
@@ -7006,7 +7006,7 @@ namespace ts {
                 const minTypeArgumentCount = getMinTypeArgumentCount(baseSig.typeParameters);
                 const typeParamCount = length(baseSig.typeParameters);
                 if (isJavaScript || typeArgCount >= minTypeArgumentCount && typeArgCount <= typeParamCount) {
-                    const sig = typeParamCount ? createSignatureInstantiation(baseSig, fillMissingTypeArguments(typeArguments, baseSig.typeParameters, minTypeArgumentCount, isJavaScript)!) : cloneSignature(baseSig);
+                    const sig = typeParamCount ? createSignatureInstantiation(baseSig, fillMissingTypeArguments(typeArguments, baseSig.typeParameters, minTypeArgumentCount, isJavaScript)) : cloneSignature(baseSig);
                     sig.typeParameters = classType.localTypeParameters;
                     sig.resolvedReturnType = classType;
                     result.push(sig);
@@ -7903,7 +7903,7 @@ namespace ts {
             if (!typeParameter.default) {
                 if (typeParameter.target) {
                     const targetDefault = getResolvedTypeParameterDefault(typeParameter.target);
-                    typeParameter.default = targetDefault ? instantiateType(targetDefault, typeParameter.mapper!) : noConstraintType;
+                    typeParameter.default = targetDefault ? instantiateType(targetDefault, typeParameter.mapper) : noConstraintType;
                 }
                 else {
                     // To block recursion, set the initial value to the resolvingDefaultType.
@@ -8563,7 +8563,7 @@ namespace ts {
                 if (!pushTypeResolution(signature, TypeSystemPropertyName.ResolvedReturnType)) {
                     return errorType;
                 }
-                let type = signature.target ? instantiateType(getReturnTypeOfSignature(signature.target), signature.mapper!) :
+                let type = signature.target ? instantiateType(getReturnTypeOfSignature(signature.target), signature.mapper) :
                     signature.unionSignatures ? getUnionType(map(signature.unionSignatures, getReturnTypeOfSignature), UnionReduction.Subtype) :
                     getReturnTypeFromAnnotation(signature.declaration!) ||
                     isJSConstructor(signature.declaration) && getJSClassType(getSymbolOfNode(signature.declaration!)) ||
@@ -8815,7 +8815,7 @@ namespace ts {
             if (!typeParameter.constraint) {
                 if (typeParameter.target) {
                     const targetConstraint = getConstraintOfTypeParameter(typeParameter.target);
-                    typeParameter.constraint = targetConstraint ? instantiateType(targetConstraint, typeParameter.mapper!) : noConstraintType;
+                    typeParameter.constraint = targetConstraint ? instantiateType(targetConstraint, typeParameter.mapper) : noConstraintType;
                 }
                 else {
                     const constraintDeclaration = getConstraintDeclaration(typeParameter);
@@ -11175,7 +11175,7 @@ namespace ts {
                 // type mappers. This ensures that original type identities are properly preserved and that aliases
                 // always reference a non-aliases.
                 symbol = links.target!;
-                mapper = combineTypeMappers(links.mapper!, mapper);
+                mapper = combineTypeMappers(links.mapper, mapper);
             }
             // Keep the flags from the symbol we're instantiating.  Mark that is instantiated, and
             // also transient so that we can just store data on it directly.
@@ -11232,7 +11232,7 @@ namespace ts {
                 // We are instantiating an anonymous type that has one or more type parameters in scope. Apply the
                 // mapper to the type parameters to produce the effective list of type arguments, and compute the
                 // instantiation cache key from the type IDs of the type arguments.
-                const combinedMapper = type.objectFlags & ObjectFlags.Instantiated ? combineTypeMappers(type.mapper!, mapper) : mapper;
+                const combinedMapper = type.objectFlags & ObjectFlags.Instantiated ? combineTypeMappers(type.mapper, mapper) : mapper;
                 const typeArguments: Type[] = map(typeParameters, combinedMapper);
                 const id = getTypeListId(typeArguments);
                 let result = links.instantiations!.get(id);
@@ -18951,7 +18951,7 @@ namespace ts {
                     return createTypeReference((declaredManagedType as GenericType), args);
                 }
                 else if (length(declaredManagedType.aliasTypeArguments) >= 2) {
-                    const args = fillMissingTypeArguments([ctorType, attributesType], declaredManagedType.aliasTypeArguments!, 2, isInJSFile(context));
+                    const args = fillMissingTypeArguments([ctorType, attributesType], declaredManagedType.aliasTypeArguments, 2, isInJSFile(context));
                     return getTypeAliasInstantiation(declaredManagedType.aliasSymbol!, args);
                 }
             }
@@ -25194,7 +25194,7 @@ namespace ts {
                     }
                     result = result && checkTypeAssignableTo(
                         typeArguments[i],
-                        instantiateType(constraint, mapper!),
+                        instantiateType(constraint, mapper),
                         node.typeArguments![i],
                         Diagnostics.Type_0_does_not_satisfy_the_constraint_1);
                 }
@@ -25486,7 +25486,7 @@ namespace ts {
                             return;
                         }
                         else if (nodeIsPresent((<FunctionLikeDeclaration>subsequentNode).body)) {
-                            error(errorNode, Diagnostics.Function_implementation_name_must_be_0, declarationNameToString(node.name!));
+                            error(errorNode, Diagnostics.Function_implementation_name_must_be_0, declarationNameToString(node.name));
                             return;
                         }
                     }

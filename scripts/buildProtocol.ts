@@ -30,7 +30,7 @@ class DeclarationsWalker {
             text += "\ndeclare namespace ts {\n";
             text += "    // these types are empty stubs for types from services and should not be used directly\n";
             for (const type of walker.removedTypes) {
-                text += `    export type ${type.symbol!.name} = never;\n`;
+                text += `    export type ${type.symbol.name} = never;\n`;
             }
             text += "}";
         }

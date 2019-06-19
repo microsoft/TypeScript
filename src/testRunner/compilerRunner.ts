@@ -145,7 +145,7 @@ class CompilerTest {
             assert.equal(testCaseContent.tsConfig.fileNames.length, 0, `list of files in tsconfig is not currently supported`);
 
             tsConfigOptions = ts.cloneCompilerOptions(testCaseContent.tsConfig.options);
-            this.tsConfigFiles.push(this.createHarnessTestFile(testCaseContent.tsConfigFileUnitData!, rootDir, ts.combinePaths(rootDir, tsConfigOptions.configFilePath!)));
+            this.tsConfigFiles.push(this.createHarnessTestFile(testCaseContent.tsConfigFileUnitData!, rootDir, ts.combinePaths(rootDir, tsConfigOptions.configFilePath)));
         }
         else {
             const baseUrl = this.harnessSettings.baseUrl;

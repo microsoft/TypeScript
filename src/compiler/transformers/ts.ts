@@ -1271,7 +1271,7 @@ namespace ts {
             const propertyName = isComputedPropertyName(property.name) && !isSimpleInlineableExpression(property.name.expression)
                 ? updateComputedPropertyName(property.name, getGeneratedNameForNode(property.name))
                 : property.name;
-            const initializer = visitNode(property.initializer!, visitor, isExpression);
+            const initializer = visitNode(property.initializer, visitor, isExpression);
             const memberAccess = createMemberAccessForPropertyName(receiver, propertyName, /*location*/ propertyName);
 
             return createAssignment(memberAccess, initializer);
@@ -2477,7 +2477,7 @@ namespace ts {
                 return setTextRange(
                     createAssignment(
                         getNamespaceMemberNameWithSourceMapsAndWithoutComments(name),
-                        visitNode(node.initializer!, visitor, isExpression)
+                        visitNode(node.initializer, visitor, isExpression)
                     ),
                     /*location*/ node
                 );

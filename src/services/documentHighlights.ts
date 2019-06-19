@@ -244,7 +244,7 @@ namespace ts.DocumentHighlights {
     function getLoopBreakContinueOccurrences(loopNode: IterationStatement): Node[] {
         const keywords: Node[] = [];
 
-        if (pushKeywordIf(keywords, loopNode.getFirstToken()!, SyntaxKind.ForKeyword, SyntaxKind.WhileKeyword, SyntaxKind.DoKeyword)) {
+        if (pushKeywordIf(keywords, loopNode.getFirstToken(), SyntaxKind.ForKeyword, SyntaxKind.WhileKeyword, SyntaxKind.DoKeyword)) {
             // If we succeeded and got a do-while loop, then start looking for a 'while' keyword.
             if (loopNode.kind === SyntaxKind.DoStatement) {
                 const loopTokens = loopNode.getChildren();
@@ -259,7 +259,7 @@ namespace ts.DocumentHighlights {
 
         forEach(aggregateAllBreakAndContinueStatements(loopNode.statement), statement => {
             if (ownsBreakOrContinueStatement(loopNode, statement)) {
-                pushKeywordIf(keywords, statement.getFirstToken()!, SyntaxKind.BreakKeyword, SyntaxKind.ContinueKeyword);
+                pushKeywordIf(keywords, statement.getFirstToken(), SyntaxKind.BreakKeyword, SyntaxKind.ContinueKeyword);
             }
         });
 
@@ -289,15 +289,15 @@ namespace ts.DocumentHighlights {
     function getSwitchCaseDefaultOccurrences(switchStatement: SwitchStatement): Node[] {
         const keywords: Node[] = [];
 
-        pushKeywordIf(keywords, switchStatement.getFirstToken()!, SyntaxKind.SwitchKeyword);
+        pushKeywordIf(keywords, switchStatement.getFirstToken(), SyntaxKind.SwitchKeyword);
 
         // Go through each clause in the switch statement, collecting the 'case'/'default' keywords.
         forEach(switchStatement.caseBlock.clauses, clause => {
-            pushKeywordIf(keywords, clause.getFirstToken()!, SyntaxKind.CaseKeyword, SyntaxKind.DefaultKeyword);
+            pushKeywordIf(keywords, clause.getFirstToken(), SyntaxKind.CaseKeyword, SyntaxKind.DefaultKeyword);
 
             forEach(aggregateAllBreakAndContinueStatements(clause), statement => {
                 if (ownsBreakOrContinueStatement(switchStatement, statement)) {
-                    pushKeywordIf(keywords, statement.getFirstToken()!, SyntaxKind.BreakKeyword);
+                    pushKeywordIf(keywords, statement.getFirstToken(), SyntaxKind.BreakKeyword);
                 }
             });
         });
@@ -308,10 +308,10 @@ namespace ts.DocumentHighlights {
     function getTryCatchFinallyOccurrences(tryStatement: TryStatement, sourceFile: SourceFile): Node[] {
         const keywords: Node[] = [];
 
-        pushKeywordIf(keywords, tryStatement.getFirstToken()!, SyntaxKind.TryKeyword);
+        pushKeywordIf(keywords, tryStatement.getFirstToken(), SyntaxKind.TryKeyword);
 
         if (tryStatement.catchClause) {
-            pushKeywordIf(keywords, tryStatement.catchClause.getFirstToken()!, SyntaxKind.CatchKeyword);
+            pushKeywordIf(keywords, tryStatement.catchClause.getFirstToken(), SyntaxKind.CatchKeyword);
         }
 
         if (tryStatement.finallyBlock) {

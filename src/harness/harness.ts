@@ -833,7 +833,7 @@ namespace Harness {
                 setCompilerOptionsFromHarnessSetting(harnessSettings, options);
             }
             if (options.rootDirs) {
-                options.rootDirs = ts.map(options.rootDirs, d => ts.getNormalizedAbsolutePath(d, currentDirectory!));
+                options.rootDirs = ts.map(options.rootDirs, d => ts.getNormalizedAbsolutePath(d, currentDirectory));
             }
 
             const useCaseSensitiveFileNames = options.useCaseSensitiveFileNames !== undefined ? options.useCaseSensitiveFileNames : true;

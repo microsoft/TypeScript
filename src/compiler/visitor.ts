@@ -334,7 +334,7 @@ namespace ts {
                     nodesVisitor((<IndexSignatureDeclaration>node).decorators, visitor, isDecorator),
                     nodesVisitor((<IndexSignatureDeclaration>node).modifiers, visitor, isModifier),
                     nodesVisitor((<IndexSignatureDeclaration>node).parameters, visitor, isParameterDeclaration),
-                    visitNode((<IndexSignatureDeclaration>node).type!, visitor, isTypeNode));
+                    visitNode((<IndexSignatureDeclaration>node).type, visitor, isTypeNode));
 
             // Types
 
@@ -564,7 +564,7 @@ namespace ts {
             case SyntaxKind.YieldExpression:
                 return updateYield(<YieldExpression>node,
                     visitNode((<YieldExpression>node).asteriskToken, tokenVisitor, isToken),
-                    visitNode((<YieldExpression>node).expression!, visitor, isExpression));
+                    visitNode((<YieldExpression>node).expression, visitor, isExpression));
 
             case SyntaxKind.SpreadElement:
                 return updateSpread(<SpreadElement>node,
@@ -683,7 +683,7 @@ namespace ts {
 
             case SyntaxKind.ThrowStatement:
                 return updateThrow(<ThrowStatement>node,
-                    visitNode((<ThrowStatement>node).expression!, visitor, isExpression));
+                    visitNode((<ThrowStatement>node).expression, visitor, isExpression));
 
             case SyntaxKind.TryStatement:
                 return updateTry(<TryStatement>node,
@@ -857,7 +857,7 @@ namespace ts {
             case SyntaxKind.JsxAttribute:
                 return updateJsxAttribute(<JsxAttribute>node,
                     visitNode((<JsxAttribute>node).name, visitor, isIdentifier),
-                    visitNode((<JsxAttribute>node).initializer!, visitor, isStringLiteralOrJsxExpression));
+                    visitNode((<JsxAttribute>node).initializer, visitor, isStringLiteralOrJsxExpression));
 
             case SyntaxKind.JsxAttributes:
                 return updateJsxAttributes(<JsxAttributes>node,

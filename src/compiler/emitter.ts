@@ -2661,7 +2661,7 @@ namespace ts {
             writeKeyword("function");
             emit(node.asteriskToken);
             writeSpace();
-            emitIdentifierName(node.name!); // TODO: GH#18217
+            emitIdentifierName(node.name); // TODO: GH#18217
             emitSignatureAndBody(node, emitSignatureHead);
         }
 
@@ -3490,7 +3490,7 @@ namespace ts {
                     if (shouldEmitPrologueDirective) {
                         if (needsToSetSourceFile) {
                             needsToSetSourceFile = false;
-                            setSourceFile(sourceFile!);
+                            setSourceFile(sourceFile);
                         }
                         writeLine();
                         const pos = writer.getTextPos();

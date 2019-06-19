@@ -1193,7 +1193,7 @@ namespace ts.refactor.extractSymbol {
                     if (!returnValueProperty) {
                         returnValueProperty = "__return";
                     }
-                    assignments.unshift(createPropertyAssignment(returnValueProperty, visitNode((<ReturnStatement>node).expression!, visitor)));
+                    assignments.unshift(createPropertyAssignment(returnValueProperty, visitNode((<ReturnStatement>node).expression, visitor)));
                 }
                 if (assignments.length === 1) {
                     return createReturn(assignments[0].name as Expression);

@@ -936,7 +936,7 @@ namespace ts {
             //      x = %sent%;
 
             const resumeLabel = defineLabel();
-            const expression = visitNode(node.expression!, visitor, isExpression);
+            const expression = visitNode(node.expression, visitor, isExpression);
             if (node.asteriskToken) {
                 const iterator = (getEmitFlags(node.expression!) & EmitFlags.Iterator) === 0
                     ? createValuesHelper(context, expression, /*location*/ node)
@@ -1262,7 +1262,7 @@ namespace ts {
             while (variablesWritten < numVariables) {
                 for (let i = variablesWritten; i < numVariables; i++) {
                     const variable = variables[i];
-                    if (containsYield(variable.initializer!) && pendingExpressions.length > 0) {
+                    if (containsYield(variable.initializer) && pendingExpressions.length > 0) {
                         break;
                     }
 
@@ -1283,7 +1283,7 @@ namespace ts {
             return setSourceMapRange(
                 createAssignment(
                     setSourceMapRange(<Identifier>getSynthesizedClone(node.name), node.name),
-                    visitNode(node.initializer!, visitor, isExpression)
+                    visitNode(node.initializer, visitor, isExpression)
                 ),
                 node
             );
@@ -1868,7 +1868,7 @@ namespace ts {
 
         function transformAndEmitThrowStatement(node: ThrowStatement): void {
             emitThrow(
-                visitNode(node.expression!, visitor, isExpression),
+                visitNode(node.expression, visitor, isExpression),
                 /*location*/ node
             );
         }

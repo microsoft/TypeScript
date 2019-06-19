@@ -38,7 +38,7 @@
         "@typescript-eslint/no-this-alias": "error",
         "@typescript-eslint/no-triple-slash-reference": "off",
         "@typescript-eslint/no-unnecessary-qualifier": "error",
-        "@typescript-eslint/no-unnecessary-type-assertion": "off",
+        "@typescript-eslint/no-unnecessary-type-assertion": "error",
         "@typescript-eslint/no-use-before-define": "off",
         "@typescript-eslint/no-var-requires": "off",
         "@typescript-eslint/prefer-for-of": "error",
