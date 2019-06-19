@@ -1544,13 +1544,17 @@ namespace ts {
 
         /// References and Occurrences
         function getOccurrencesAtPosition(fileName: string, position: number): ReadonlyArray<ReferenceEntry> | undefined {
-            return flatMap(getDocumentHighlights(fileName, position, [fileName]), entry => entry.highlightSpans.map<ReferenceEntry>(highlightSpan => ({
-                fileName: entry.fileName,
-                textSpan: highlightSpan.textSpan,
-                isWriteAccess: highlightSpan.kind === HighlightSpanKind.writtenReference,
-                isDefinition: false,
-                isInString: highlightSpan.isInString,
-            })));
+            return flatMap(
+                getDocumentHighlights(fileName, position, [fileName]),
+                entry => entry.highlightSpans.map<ReferenceEntry>(highlightSpan => ({
+                    fileName: entry.fileName,
+                    textSpan: highlightSpan.textSpan,
+                    isWriteAccess: highlightSpan.kind === HighlightSpanKind.writtenReference,
+                    isDefinition: false,
+                    ...highlightSpan.isInString && { isInString: true },
+                    ...highlightSpan.contextSpan && { contextSpan: highlightSpan.contextSpan }
+                }))
+            );
         }
 
         function getDocumentHighlights(fileName: string, position: number, filesToSearch: ReadonlyArray<string>): DocumentHighlights[] | undefined {
@@ -1568,8 +1572,14 @@ namespace ts {
             const node = getTouchingPropertyName(sourceFile, position);
             if (isIdentifier(node) && (isJsxOpeningElement(node.parent) || isJsxClosingElement(node.parent)) && isIntrinsicJsxName(node.escapedText)) {
                 const { openingElement, closingElement } = node.parent.parent;
-                return [openingElement, closingElement].map((node): RenameLocation =>
-                    ({ fileName: sourceFile.fileName, textSpan: createTextSpanFromNode(node.tagName, sourceFile) }));
+                return [openingElement, closingElement].map((node): RenameLocation => {
+                    const textSpan = createTextSpanFromNode(node.tagName, sourceFile);
+                    return {
+                        fileName: sourceFile.fileName,
+                        textSpan,
+                        ...FindAllReferences.toContextSpan(textSpan, sourceFile, node.parent)
+                    };
+                });
             }
             else {
                 return getReferencesWorker(node, position, { findInStrings, findInComments, providePrefixAndSuffixTextForRename, isForRename: true },

@@ -1,16 +1,16 @@
 /// <reference path='fourslash.ts' />
 
 // @Filename: /export.ts
-////const [|{| "isWriteAccess": true, "isDefinition": true |}foo|] = 1;
-////export default [|foo|];
+////[|const [|{| "isWriteAccess": true, "isDefinition": true, "contextRangeIndex": 0 |}foo|] = 1;|]
+////[|export default [|{| "contextRangeIndex": 2 |}foo|];|]
 
 // @Filename: /re-export.ts
-////export { [|{| "isWriteAccess": true, "isDefinition": true |}default|] } from "./export";
+////[|export { [|{| "isWriteAccess": true, "isDefinition": true, "contextRangeIndex": 4 |}default|] } from "./export";|]
 
 // @Filename: /re-export-dep.ts
-////import [|{| "isWriteAccess": true, "isDefinition": true |}fooDefault|] from "./re-export";
+////[|import [|{| "isWriteAccess": true, "isDefinition": true, "contextRangeIndex": 6 |}fooDefault|] from "./re-export";|]
 
-const [r0, r1, r2, r3] = test.ranges();
+const [r0Def, r0, r1Def, r1, r2Def, r2, r3Def, r3] = test.ranges();
 verify.referenceGroups([r0, r1], [
     { definition: "const foo: 1", ranges: [r0, r1] },
     { definition: "(alias) const foo: 1\nexport default", ranges: [r2], },

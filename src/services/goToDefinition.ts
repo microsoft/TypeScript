@@ -273,13 +273,19 @@ namespace ts.GoToDefinition {
     function createDefinitionInfoFromName(declaration: Declaration, symbolKind: ScriptElementKind, symbolName: string, containerName: string): DefinitionInfo {
         const name = getNameOfDeclaration(declaration) || declaration;
         const sourceFile = name.getSourceFile();
+        const textSpan = createTextSpanFromNode(name, sourceFile);
         return {
             fileName: sourceFile.fileName,
-            textSpan: createTextSpanFromNode(name, sourceFile),
+            textSpan,
             kind: symbolKind,
             name: symbolName,
             containerKind: undefined!, // TODO: GH#18217
-            containerName
+            containerName,
+            ...FindAllReferences.toContextSpan(
+                textSpan,
+                sourceFile,
+                FindAllReferences.getContextNode(declaration)
+            )
         };
     }
 
