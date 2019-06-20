@@ -172,6 +172,7 @@ namespace ts {
         traceResolution?: boolean;
         /* @internal */ diagnostics?: boolean;
         /* @internal */ extendedDiagnostics?: boolean;
+        /* @internal */ locale?: string;
 
         [option: string]: CompilerOptionsValue | undefined;
     }
