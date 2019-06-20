@@ -15,7 +15,7 @@ To add a new test:
 Debugging
 ---------
 
-You can open a test's container with an interactive shell to debug with `docker run tstest/folder -it --entrypoint "/bin/sh"`.
+You can open a test's container with an interactive shell to debug with `docker run -it --entrypoint "/bin/sh" tstest/folder`.
 If you want to remote debug a typescript process within a container, you'll need to forward the port you instruct the
 compiler or language server to listen on by passing `--expose PORT` where `PORT` is the port number you'd like forwarded to the
 host.
