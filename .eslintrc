@@ -48,7 +48,7 @@
         "semi": "off",
         "@typescript-eslint/semi": "error",
         "@typescript-eslint/type-annotation-spacing": "error",
-        "@typescript-eslint/unified-signatures": "off",
+        "@typescript-eslint/unified-signatures": "error",
 
         "microsoft-typescript/object-literal-surrounding-space": "error",
         "microsoft-typescript/no-type-assertion-whitespace": "error",
@@ -129,6 +129,7 @@
         "rules": {
             "@typescript-eslint/interface-name-prefix": "off",
             "@typescript-eslint/prefer-function-type": "off",
+            "@typescript-eslint/unified-signatures": "off",
 
             "no-var": "off"
         }

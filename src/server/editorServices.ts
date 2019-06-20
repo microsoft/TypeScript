@@ -659,7 +659,6 @@ namespace ts.server {
 
         updateTypingsForProject(response: SetTypings | InvalidateCachedTypings | PackageInstalledResponse): void;
         /** @internal */
-        // tslint:disable-next-line:unified-signatures
         updateTypingsForProject(response: SetTypings | InvalidateCachedTypings | PackageInstalledResponse | BeginInstallTypes | EndInstallTypes): void;
         updateTypingsForProject(response: SetTypings | InvalidateCachedTypings | PackageInstalledResponse | BeginInstallTypes | EndInstallTypes): void {
             const project = this.findProject(response.projectName);

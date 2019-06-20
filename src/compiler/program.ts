@@ -316,7 +316,6 @@ namespace ts {
         };
     }
 
-    // tslint:disable unified-signatures
     export function getPreEmitDiagnostics(program: Program, sourceFile?: SourceFile, cancellationToken?: CancellationToken): ReadonlyArray<Diagnostic>;
     /*@internal*/ export function getPreEmitDiagnostics(program: BuilderProgram, sourceFile?: SourceFile, cancellationToken?: CancellationToken): ReadonlyArray<Diagnostic>;
     export function getPreEmitDiagnostics(program: Program | BuilderProgram, sourceFile?: SourceFile, cancellationToken?: CancellationToken): ReadonlyArray<Diagnostic> {
@@ -334,7 +333,6 @@ namespace ts {
 
         return sortAndDeduplicateDiagnostics(diagnostics);
     }
-    // tslint:enable unified-signatures
 
     export interface FormatDiagnosticsHost {
         getCurrentDirectory(): string;

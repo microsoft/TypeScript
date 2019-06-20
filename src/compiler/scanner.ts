@@ -340,7 +340,6 @@ namespace ts {
 
     export function getPositionOfLineAndCharacter(sourceFile: SourceFileLike, line: number, character: number): number;
     /* @internal */
-    // tslint:disable-next-line:unified-signatures
     export function getPositionOfLineAndCharacter(sourceFile: SourceFileLike, line: number, character: number, allowEdits?: true): number;
     export function getPositionOfLineAndCharacter(sourceFile: SourceFileLike, line: number, character: number, allowEdits?: true): number {
         return sourceFile.getPositionOfLineAndCharacter ?

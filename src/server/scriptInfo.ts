@@ -595,7 +595,7 @@ namespace ts.server {
          */
         lineOffsetToPosition(line: number, offset: number): number;
         /*@internal*/
-        // tslint:disable-next-line:unified-signatures
+        // eslint-disable-next-line @typescript-eslint/unified-signatures
         lineOffsetToPosition(line: number, offset: number, allowEdits?: true): number;
         lineOffsetToPosition(line: number, offset: number, allowEdits?: true): number {
             return this.textStorage.lineOffsetToPosition(line, offset, allowEdits);

@@ -65,7 +65,7 @@ namespace ts {
 
     // Literals
 
-    /* @internal */ export function createLiteral(value: string | StringLiteral | NoSubstitutionTemplateLiteral | NumericLiteral | Identifier, isSingleQuote: boolean): StringLiteral; // tslint:disable-line unified-signatures
+    /* @internal */ export function createLiteral(value: string | StringLiteral | NoSubstitutionTemplateLiteral | NumericLiteral | Identifier, isSingleQuote: boolean): StringLiteral;
     /** If a node is passed, creates a string literal whose source text is read from a source node during emit. */
     export function createLiteral(value: string | StringLiteral | NoSubstitutionTemplateLiteral | NumericLiteral | Identifier): StringLiteral;
     export function createLiteral(value: number | PseudoBigInt): NumericLiteral;
@@ -125,7 +125,7 @@ namespace ts {
 
     export function createIdentifier(text: string): Identifier;
     /* @internal */
-    export function createIdentifier(text: string, typeArguments: ReadonlyArray<TypeNode | TypeParameterDeclaration> | undefined): Identifier; // tslint:disable-line unified-signatures
+    export function createIdentifier(text: string, typeArguments: ReadonlyArray<TypeNode | TypeParameterDeclaration> | undefined): Identifier;
     export function createIdentifier(text: string, typeArguments?: ReadonlyArray<TypeNode | TypeParameterDeclaration>): Identifier {
         const node = <Identifier>createSynthesizedNode(SyntaxKind.Identifier);
         node.escapedText = escapeLeadingUnderscores(text);
@@ -140,7 +140,7 @@ namespace ts {
 
     export function updateIdentifier(node: Identifier): Identifier;
     /* @internal */
-    export function updateIdentifier(node: Identifier, typeArguments: NodeArray<TypeNode | TypeParameterDeclaration> | undefined): Identifier; // tslint:disable-line unified-signatures
+    export function updateIdentifier(node: Identifier, typeArguments: NodeArray<TypeNode | TypeParameterDeclaration> | undefined): Identifier;
     export function updateIdentifier(node: Identifier, typeArguments?: NodeArray<TypeNode | TypeParameterDeclaration> | undefined): Identifier {
         return node.typeArguments !== typeArguments
             ? updateNode(createIdentifier(idText(node), typeArguments), node)
@@ -151,7 +151,7 @@ namespace ts {
 
     /** Create a unique temporary variable. */
     export function createTempVariable(recordTempVariable: ((node: Identifier) => void) | undefined): Identifier;
-    /* @internal */ export function createTempVariable(recordTempVariable: ((node: Identifier) => void) | undefined, reservedInNestedScopes: boolean): GeneratedIdentifier; // tslint:disable-line unified-signatures
+    /* @internal */ export function createTempVariable(recordTempVariable: ((node: Identifier) => void) | undefined, reservedInNestedScopes: boolean): GeneratedIdentifier;
     export function createTempVariable(recordTempVariable: ((node: Identifier) => void) | undefined, reservedInNestedScopes?: boolean): GeneratedIdentifier {
         const name = createIdentifier("") as GeneratedIdentifier;
         name.autoGenerateFlags = GeneratedIdentifierFlags.Auto;
@@ -204,7 +204,7 @@ namespace ts {
 
     /** Create a unique name generated for a node. */
     export function getGeneratedNameForNode(node: Node | undefined): Identifier;
-    /* @internal */ export function getGeneratedNameForNode(node: Node | undefined, flags: GeneratedIdentifierFlags): Identifier; // tslint:disable-line unified-signatures
+    /* @internal */ export function getGeneratedNameForNode(node: Node | undefined, flags: GeneratedIdentifierFlags): Identifier;
     export function getGeneratedNameForNode(node: Node | undefined, flags?: GeneratedIdentifierFlags): Identifier {
         const name = createIdentifier(node && isIdentifier(node) ? idText(node) : "");
         name.autoGenerateFlags = GeneratedIdentifierFlags.Node | flags!;
