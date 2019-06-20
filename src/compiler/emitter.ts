@@ -251,10 +251,10 @@ namespace ts {
         function emitSourceFileOrBundle({ jsFilePath, sourceMapFilePath, declarationFilePath, declarationMapPath, buildInfoPath }: EmitFileNames, sourceFileOrBundle: SourceFile | Bundle | undefined) {
             let buildInfoDirectory: string | undefined;
             if (buildInfoPath && sourceFileOrBundle && isBundle(sourceFileOrBundle)) {
-                buildInfoDirectory = getDirectoryPath(buildInfoPath);
+                buildInfoDirectory = getDirectoryPath(getNormalizedAbsolutePath(buildInfoPath, host.getCurrentDirectory()));
                 bundleBuildInfo = {
                     commonSourceDirectory: relativeToBuildInfo(host.getCommonSourceDirectory()),
-                    sourceFiles: sourceFileOrBundle.sourceFiles.map(file => relativeToBuildInfo(file.fileName))
+                    sourceFiles: sourceFileOrBundle.sourceFiles.map(file => relativeToBuildInfo(getNormalizedAbsolutePath(file.fileName, host.getCurrentDirectory())))
                 };
             }
             emitJsFileOrBundle(sourceFileOrBundle, jsFilePath, sourceMapFilePath, relativeToBuildInfo);
@@ -629,10 +629,14 @@ namespace ts {
         getNewLine(): string;
     }
 
-    function createSourceFilesFromBundleBuildInfo(bundle: BundleBuildInfo, buildInfoDirectory: string): ReadonlyArray<SourceFile> {
+    function createSourceFilesFromBundleBuildInfo(bundle: BundleBuildInfo, buildInfoDirectory: string, host: EmitUsingBuildInfoHost): ReadonlyArray<SourceFile> {
         const sourceFiles = bundle.sourceFiles.map(fileName => {
             const sourceFile = createNode(SyntaxKind.SourceFile, 0, 0) as SourceFile;
-            sourceFile.fileName = getNormalizedAbsolutePath(fileName, buildInfoDirectory);
+            sourceFile.fileName = getRelativePathFromDirectory(
+                host.getCurrentDirectory(),
+                getNormalizedAbsolutePath(fileName, buildInfoDirectory),
+                !host.useCaseSensitiveFileNames()
+            );
             sourceFile.text = "";
             sourceFile.statements = createNodeArray();
             return sourceFile;
@@ -676,7 +680,7 @@ namespace ts {
 
         const buildInfo = getBuildInfo(buildInfoText);
         if (!buildInfo.bundle || !buildInfo.bundle.js || (declarationText && !buildInfo.bundle.dts)) return buildInfoPath!;
-        const buildInfoDirectory = getDirectoryPath(buildInfoPath!);
+        const buildInfoDirectory = getDirectoryPath(getNormalizedAbsolutePath(buildInfoPath!, host.getCurrentDirectory()));
         const ownPrependInput = createInputFiles(
             jsFileText,
             declarationText!,
@@ -692,7 +696,7 @@ namespace ts {
         );
         const outputFiles: OutputFile[] = [];
         const prependNodes = createPrependNodes(config.projectReferences, getCommandLine, f => host.readFile(f));
-        const sourceFilesForJsEmit = createSourceFilesFromBundleBuildInfo(buildInfo.bundle, buildInfoDirectory);
+        const sourceFilesForJsEmit = createSourceFilesFromBundleBuildInfo(buildInfo.bundle, buildInfoDirectory, host);
         const emitHost: EmitHost = {
             getPrependNodes: memoize(() => [...prependNodes, ownPrependInput]),
             getCanonicalFileName: host.getCanonicalFileName,

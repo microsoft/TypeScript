@@ -243,7 +243,7 @@ namespace ts {
 
     function convertToDiagnostics(diagnostics: ReadonlyArray<ReusableDiagnostic>, newProgram: Program, getCanonicalFileName: GetCanonicalFileName): ReadonlyArray<Diagnostic> {
         if (!diagnostics.length) return emptyArray;
-        const buildInfoDirectory = getDirectoryPath(getOutputPathForBuildInfo(newProgram.getCompilerOptions())!);
+        const buildInfoDirectory = getDirectoryPath(getNormalizedAbsolutePath(getOutputPathForBuildInfo(newProgram.getCompilerOptions())!, newProgram.getCurrentDirectory()));
         return diagnostics.map(diagnostic => {
             const result: Diagnostic = convertToDiagnosticRelatedInformation(diagnostic, newProgram, toPath);
             result.reportsUnnecessary = diagnostic.reportsUnnecessary;
@@ -612,7 +612,7 @@ namespace ts {
      */
     function getProgramBuildInfo(state: Readonly<ReusableBuilderProgramState>, getCanonicalFileName: GetCanonicalFileName): ProgramBuildInfo | undefined {
         if (state.compilerOptions.outFile || state.compilerOptions.out) return undefined;
-        const buildInfoDirectory = getDirectoryPath(getOutputPathForBuildInfo(state.compilerOptions)!);
+        const buildInfoDirectory = getDirectoryPath(getNormalizedAbsolutePath(getOutputPathForBuildInfo(state.compilerOptions)!, Debug.assertDefined(state.program).getCurrentDirectory()));
         const fileInfos: MapLike<BuilderState.FileInfo> = {};
         state.fileInfos.forEach((value, key) => {
             const signature = state.currentAffectedFilesSignatures && state.currentAffectedFilesSignatures.get(key);
@@ -1015,9 +1015,9 @@ namespace ts {
         return map;
     }
 
-    export function createBuildProgramUsingProgramBuildInfo(program: ProgramBuildInfo, buildInfoPath: string, useCaseSensitiveFileNames: boolean): EmitAndSemanticDiagnosticsBuilderProgram {
-        const buildInfoDirectory = getDirectoryPath(buildInfoPath);
-        const getCanonicalFileName = createGetCanonicalFileName(useCaseSensitiveFileNames);
+    export function createBuildProgramUsingProgramBuildInfo(program: ProgramBuildInfo, buildInfoPath: string, host: ReadBuildProgramHost): EmitAndSemanticDiagnosticsBuilderProgram {
+        const buildInfoDirectory = getDirectoryPath(getNormalizedAbsolutePath(buildInfoPath, host.getCurrentDirectory()));
+        const getCanonicalFileName = createGetCanonicalFileName(host.useCaseSensitiveFileNames());
 
         const fileInfos = createMap<BuilderState.FileInfo>();
         for (const key in program.fileInfos) {
