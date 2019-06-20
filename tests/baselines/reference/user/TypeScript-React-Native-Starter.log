@@ -3,7 +3,7 @@ Standard output:
 node_modules/@types/react-native/index.d.ts(3425,42): error TS2583: Cannot find name 'Map'. Do you need to change your target library? Try changing the `lib` compiler option to es2015 or later.
 node_modules/@types/react-native/index.d.ts(3438,42): error TS2583: Cannot find name 'Map'. Do you need to change your target library? Try changing the `lib` compiler option to es2015 or later.
 node_modules/@types/react-native/index.d.ts(8745,18): error TS2717: Subsequent property declarations must have the same type.  Property 'geolocation' must be of type 'Geolocation', but here has type 'GeolocationStatic'.
-node_modules/@types/react/index.d.ts(377,23): error TS2583: Cannot find name 'Set'. Do you need to change your target library? Try changing the `lib` compiler option to es2015 or later.
+node_modules/@types/react/index.d.ts(378,23): error TS2583: Cannot find name 'Set'. Do you need to change your target library? Try changing the `lib` compiler option to es2015 or later.
 
 
 
