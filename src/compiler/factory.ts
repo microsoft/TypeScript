@@ -1544,8 +1544,8 @@ namespace ts {
     export function createIf(expression: Expression, thenStatement: Statement, elseStatement?: Statement) {
         const node = <IfStatement>createSynthesizedNode(SyntaxKind.IfStatement);
         node.expression = expression;
-        node.thenStatement = thenStatement;
-        node.elseStatement = elseStatement;
+        node.thenStatement = isNotEmittedOrPartiallyEmittedNode(thenStatement) ? setTextRange(setOriginalNode(createEmptyStatement(), thenStatement), thenStatement) : thenStatement;
+        node.elseStatement = elseStatement && isNotEmittedOrPartiallyEmittedNode(elseStatement) ? setTextRange(setOriginalNode(createEmptyStatement(), elseStatement), elseStatement) : elseStatement;
         return node;
     }
 
