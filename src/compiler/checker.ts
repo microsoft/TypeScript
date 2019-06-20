@@ -11672,8 +11672,8 @@ namespace ts {
         }
 
         function checkTypeRelatedToAndOptionallyElaborate(source: Type, target: Type, relation: Map<RelationComparisonResult>, errorNode: Node | undefined, expr: Expression | undefined, headMessage?: DiagnosticMessage, containingMessageChain?: () => DiagnosticMessageChain | undefined): boolean;
-        function checkTypeRelatedToAndOptionallyElaborate(source: Type, target: Type, relation: Map<RelationComparisonResult>, errorNode: Node | undefined, expr: Expression | undefined, headMessage?: DiagnosticMessage, containingMessageChain?: () => DiagnosticMessageChain | undefined, breakdown?: boolean): [Node, DiagnosticMessageChain] | false;
-        function checkTypeRelatedToAndOptionallyElaborate(source: Type, target: Type, relation: Map<RelationComparisonResult>, errorNode: Node | undefined, expr: Expression | undefined, headMessage?: DiagnosticMessage, containingMessageChain?: () => DiagnosticMessageChain | undefined, breakdown?: boolean): boolean | [Node, DiagnosticMessageChain] {
+        function checkTypeRelatedToAndOptionallyElaborate(source: Type, target: Type, relation: Map<RelationComparisonResult>, errorNode: Node | undefined, expr: Expression | undefined, headMessage?: DiagnosticMessage, containingMessageChain?: () => DiagnosticMessageChain | undefined, breakdown?: boolean): [Node, DiagnosticMessageChain, DiagnosticRelatedInformation[]?] | false;
+        function checkTypeRelatedToAndOptionallyElaborate(source: Type, target: Type, relation: Map<RelationComparisonResult>, errorNode: Node | undefined, expr: Expression | undefined, headMessage?: DiagnosticMessage, containingMessageChain?: () => DiagnosticMessageChain | undefined, breakdown?: boolean): boolean | [Node, DiagnosticMessageChain, DiagnosticRelatedInformation[]?] {
             if (isTypeRelatedTo(source, target, relation)) return breakdown ? false : true;
             if (!errorNode || !elaborateError(expr, source, target, relation, headMessage)) {
                 return checkTypeRelatedTo(source, target, relation, errorNode, headMessage, containingMessageChain, undefined, breakdown);
@@ -12361,7 +12361,7 @@ namespace ts {
             containingMessageChain?: () => DiagnosticMessageChain | undefined,
             errorOutputContainer?: { error?: Diagnostic },
             breakdown?: boolean
-        ): false | [Node, DiagnosticMessageChain];
+        ): false | [Node, DiagnosticMessageChain, DiagnosticRelatedInformation[]?];
        /**
          * Checks if 'source' is related to 'target' (e.g.: is a assignable to).
          * @param source The left-hand-side of the relation.
@@ -12381,7 +12381,7 @@ namespace ts {
             containingMessageChain?: () => DiagnosticMessageChain | undefined,
             errorOutputContainer?: { error?: Diagnostic },
             breakdown?: boolean
-        ): boolean | [Node, DiagnosticMessageChain] {
+        ): boolean | [Node, DiagnosticMessageChain, DiagnosticRelatedInformation[]?] {
             let errorInfo: DiagnosticMessageChain | undefined;
             let relatedInfo: [DiagnosticRelatedInformation, ...DiagnosticRelatedInformation[]] | undefined;
             let maybeKeys: string[];
@@ -12421,7 +12421,7 @@ namespace ts {
                     }
                 }
                 if (breakdown) {
-                    return [errorNode!, errorInfo];
+                    return [errorNode!, errorInfo, relatedInfo ? [...(relatedInformation || []), ...relatedInfo]: relatedInformation];
                 }
                 const diag = createDiagnosticForNodeFromMessageChain(errorNode!, errorInfo, relatedInformation);
                 if (relatedInfo) {
@@ -21129,9 +21129,6 @@ namespace ts {
             return checkTypeRelatedToAndOptionallyElaborate(attributesType, paramType, relation, reportErrors ? node.tagName : undefined, node.attributes, undefined, undefined, /*breakdown*/ true);
         }
 
-        // TODO: This function is only used in overload resolution; it should instead return a [errorNode, messageChain] pair if there is a failure and undefined if not
-        // The first-round callers can used undefined=pass and the second-round callers can build their own errors from the pair.
-        // TODO: Still need to thread BREAKDOWN through checkTypeRealtedToAndOptionallyElaborate and all other checkType calls
         function getSignatureApplicabilityError(
             node: CallLikeExpression,
             args: ReadonlyArray<Expression>,
@@ -21518,9 +21515,9 @@ namespace ts {
                             chain = chainDiagnosticMessages(chain, Diagnostics.Failed_to_find_a_suitable_overload_for_this_call_from_0_overloads, candidatesForArgumentError.length);
                         }
                         const r = getSignatureApplicabilityError(node, args, last, assignableRelation, CheckMode.Normal, /*reportErrors*/ true, () => chain);
-                        Debug.assert(!!r && !!r[0]);
+                        Debug.assert(!!r && !!r[0], "No error for last signature");
                         if (r) {
-                            diagnostics.add(createDiagnosticForNodeFromMessageChain(r[0], r[1], undefined));
+                            diagnostics.add(createDiagnosticForNodeFromMessageChain(...r));
                         }
                     }
                     else {
@@ -21528,9 +21525,9 @@ namespace ts {
                         for (const c of candidatesForArgumentError) {
                             const chain = chainDiagnosticMessages(undefined, Diagnostics.Overload_0_gave_the_following_error, signatureToString(c));
                             const r = getSignatureApplicabilityError(node, args, c, assignableRelation, CheckMode.Normal, /*reportErrors*/ true, () => chain);
-                            Debug.assert(!!r && !!r[0]);
+                            Debug.assert(!!r && !!r[0], "No error for signature (1)");
                             if (r) {
-                                related.push(createDiagnosticForNodeFromMessageChain(r[0], r[1]));
+                                related.push(createDiagnosticForNodeFromMessageChain(...r));
                             }
                         }
                         diagnostics.add(createDiagnosticForNodeFromMessageChain(node, chainDiagnosticMessages(undefined, Diagnostics.Failed_to_find_a_suitable_overload_for_this_call_from_0_overloads, candidatesForArgumentError.length), related));
