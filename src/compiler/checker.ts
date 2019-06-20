@@ -11672,7 +11672,7 @@ namespace ts {
         }
 
         function checkTypeRelatedToAndOptionallyElaborate(source: Type, target: Type, relation: Map<RelationComparisonResult>, errorNode: Node | undefined, expr: Expression | undefined, headMessage?: DiagnosticMessage, containingMessageChain?: () => DiagnosticMessageChain | undefined): boolean;
-        function checkTypeRelatedToAndOptionallyElaborate(source: Type, target: Type, relation: Map<RelationComparisonResult>, errorNode: Node | undefined, expr: Expression | undefined, headMessage?: DiagnosticMessage, containingMessageChain?: () => DiagnosticMessageChain | undefined, breakdown?: boolean): [Node, DiagnosticMessageChain];
+        function checkTypeRelatedToAndOptionallyElaborate(source: Type, target: Type, relation: Map<RelationComparisonResult>, errorNode: Node | undefined, expr: Expression | undefined, headMessage?: DiagnosticMessage, containingMessageChain?: () => DiagnosticMessageChain | undefined, breakdown?: boolean): [Node, DiagnosticMessageChain] | false;
         function checkTypeRelatedToAndOptionallyElaborate(source: Type, target: Type, relation: Map<RelationComparisonResult>, errorNode: Node | undefined, expr: Expression | undefined, headMessage?: DiagnosticMessage, containingMessageChain?: () => DiagnosticMessageChain | undefined, breakdown?: boolean): boolean | [Node, DiagnosticMessageChain] {
             if (isTypeRelatedTo(source, target, relation)) return breakdown ? false : true;
             if (!errorNode || !elaborateError(expr, source, target, relation, headMessage)) {
@@ -12361,7 +12361,7 @@ namespace ts {
             containingMessageChain?: () => DiagnosticMessageChain | undefined,
             errorOutputContainer?: { error?: Diagnostic },
             breakdown?: boolean
-        ): [Node, DiagnosticMessageChain];
+        ): false | [Node, DiagnosticMessageChain];
        /**
          * Checks if 'source' is related to 'target' (e.g.: is a assignable to).
          * @param source The left-hand-side of the relation.
@@ -21512,21 +21512,20 @@ namespace ts {
                 if (candidatesForArgumentError) {
                     if (candidatesForArgumentError.length > 3) {
                         const c = candidatesForArgumentError[candidatesForArgumentError.length - 1];
-                        const chain = chainDiagnosticMessages(undefined, Diagnostics.Failed_to_find_a_suitable_overload_for_this_call);
+                        const chain = chainDiagnosticMessages(undefined, Diagnostics.Failed_to_find_a_suitable_overload_for_this_call_from_the_0_closest_overloads, candidatesForArgumentError.length);
+
                         getSignatureApplicabilityError(node, args, c, assignableRelation, CheckMode.Normal, /*reportErrors*/ true, () => chain);
                     }
                     else {
-                        // const related: DiagnosticRelatedInformation[] = [];
-                        for (const c of candidatesForArgumentError) {
-                            const chain = chainDiagnosticMessages(chainDiagnosticMessages(undefined, Diagnostics.Overload_0_gave_the_following_error, signatureToString(c)), Diagnostics.Failed_to_find_a_suitable_overload_for_this_call);
+                        const related: DiagnosticRelatedInformation[] = [];
+                        const close = candidatesForArgumentError.filter(c => getMinArgumentCount(c) <= args.length && args.length <= getParameterCount(c));
+                        for (const c of close) {
+                            const chain = chainDiagnosticMessages(undefined, Diagnostics.Overload_0_gave_the_following_error, signatureToString(c));
                             const r = getSignatureApplicabilityError(node, args, c, assignableRelation, CheckMode.Normal, /*reportErrors*/ true, () => chain);
                             if (!r || !r[0]) continue; // TODO:assert!
-                            diagnostics.add(createDiagnosticForNodeFromMessageChain(r[0], r[1], /*relatedInformation*/ undefined));
-                            // related.push(argNode)
-                            // This is not right; I want them to be siblings
-                            // probably this is a new feature :(
-                            // chain = chainDiagnosticMessages(chain, msg);
+                            related.push(createDiagnosticForNodeFromMessageChain(r[0], r[1]));
                         }
+                        diagnostics.add(createDiagnosticForNodeFromMessageChain(node, chainDiagnosticMessages(undefined, Diagnostics.Failed_to_find_a_suitable_overload_for_this_call_from_the_0_closest_overloads, close.length), related));
                     }
                 }
                 else if (candidateForArgumentArityError) {
@@ -21604,9 +21603,7 @@ namespace ts {
                     }
                     if (getSignatureApplicabilityError(node, args, checkCandidate, relation, argCheckMode, /*reportErrors*/ false, /*containingMessageChain*/ undefined)) {
                         // Give preference to error candidates that have no rest parameters (as they are more specific)
-                        if (getMinArgumentCount(checkCandidate) <= args.length && args.length <= getParameterCount(checkCandidate)) {
-                            (candidatesForArgumentError || (candidatesForArgumentError = [])).push(checkCandidate);
-                        }
+                        (candidatesForArgumentError || (candidatesForArgumentError = [])).push(checkCandidate);
                         continue;
                     }
                     if (argCheckMode) {
@@ -21626,9 +21623,7 @@ namespace ts {
                         }
                         if (getSignatureApplicabilityError(node, args, checkCandidate, relation, argCheckMode, /*reportErrors*/ false, /*containingMessageChain*/ undefined)) {
                             // Give preference to error candidates that have no rest parameters (as they are more specific)
-                            if (getMinArgumentCount(checkCandidate) <= args.length && args.length <= getParameterCount(checkCandidate)) {
-                                (candidatesForArgumentError || (candidatesForArgumentError = [])).push(checkCandidate);
-                            }
+                            (candidatesForArgumentError || (candidatesForArgumentError = [])).push(checkCandidate);
                             continue;
                         }
                     }

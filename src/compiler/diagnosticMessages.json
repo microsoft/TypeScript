@@ -2621,7 +2621,7 @@
         "category": "Error",
         "code": 2754
     },
-    "Failed to find a suitable overload for this call.": {
+    "Failed to find a suitable overload for this call from the {0} closest overloads.": {
         "category": "Error",
         "code": 2755
     },
