@@ -3,7 +3,7 @@ Integrations
 
 This repository contains `Dockerfile`s that describe how to build open source projects (usually those with complex build tasks) with a specific version of typescript. These are used for extended validations of a given typescript build.
 
-Contibuting
+Contributing
 -----------
 
 To add a new test:
