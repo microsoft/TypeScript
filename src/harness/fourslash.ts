@@ -746,7 +746,7 @@ namespace FourSlash {
         private verifyCompletionsWorker(options: FourSlashInterface.VerifyCompletionsOptions): void {
             const actualCompletions = this.getCompletionListAtCaret({ ...options.preferences, triggerCharacter: options.triggerCharacter })!;
             if (!actualCompletions) {
-                if ("exact" in options && options.exact === undefined) return;
+                if (ts.hasProperty(options, "exact") && options.exact === undefined) return;
                 this.raiseError(`No completions at position '${this.currentCaretPosition}'.`);
             }
 
@@ -754,7 +754,7 @@ namespace FourSlash {
                 this.raiseError(`Expected 'isNewIdentifierLocation' to be ${options.isNewIdentifierLocation || false}, got ${actualCompletions.isNewIdentifierLocation}`);
             }
 
-            if ("isGlobalCompletion" in options && actualCompletions.isGlobalCompletion !== options.isGlobalCompletion) {
+            if (ts.hasProperty(options, "isGlobalCompletion") && actualCompletions.isGlobalCompletion !== options.isGlobalCompletion) {
                 this.raiseError(`Expected 'isGlobalCompletion to be ${options.isGlobalCompletion}, got ${actualCompletions.isGlobalCompletion}`);
             }
 
@@ -772,8 +772,8 @@ namespace FourSlash {
                 }
             }
 
-            if ("exact" in options) {
-                ts.Debug.assert(!("includes" in options) && !("excludes" in options));
+            if (ts.hasProperty(options, "exact")) {
+                ts.Debug.assert(!ts.hasProperty(options, "includes") && !ts.hasProperty(options, "excludes"));
                 if (options.exact === undefined) throw this.raiseError("Expected no completions");
                 this.verifyCompletionsAreExactly(actualCompletions.entries, toArray(options.exact), options.marker);
             }
@@ -1192,7 +1192,7 @@ Actual: ${stringify(fullActual)}`);
                 const sort = (locations: ReadonlyArray<ts.RenameLocation> | undefined) =>
                     locations && ts.sort(locations, (r1, r2) => ts.compareStringsCaseSensitive(r1.fileName, r2.fileName) || r1.textSpan.start - r2.textSpan.start);
                 assert.deepEqual(sort(references), sort(ranges.map((rangeOrOptions): ts.RenameLocation => {
-                    const { range, ...prefixSuffixText } = "range" in rangeOrOptions ? rangeOrOptions : { range: rangeOrOptions };
+                    const { range, ...prefixSuffixText } = "range" in rangeOrOptions ? rangeOrOptions : { range: rangeOrOptions }; // eslint-disable-line microsoft-typescript/no-in-operator
                     const { contextRangeIndex } = (range.marker && range.marker.data || {}) as { contextRangeIndex?: number; };
                     return {
                         fileName: range.fileName,
@@ -3129,7 +3129,7 @@ Actual: ${stringify(fullActual)}`);
             return this.getApplicableRefactorsWorker(this.getSelection(), this.activeFile.fileName);
         }
         private getApplicableRefactors(rangeOrMarker: Range | Marker, preferences = ts.emptyOptions): ReadonlyArray<ts.ApplicableRefactorInfo> {
-            return this.getApplicableRefactorsWorker("position" in rangeOrMarker ? rangeOrMarker.position : rangeOrMarker, rangeOrMarker.fileName, preferences);
+            return this.getApplicableRefactorsWorker("position" in rangeOrMarker ? rangeOrMarker.position : rangeOrMarker, rangeOrMarker.fileName, preferences); // eslint-disable-line microsoft-typescript/no-in-operator
         }
         private getApplicableRefactorsWorker(positionOrRange: number | ts.TextRange, fileName: string, preferences = ts.emptyOptions): ReadonlyArray<ts.ApplicableRefactorInfo> {
             return this.languageService.getApplicableRefactors(fileName, positionOrRange, preferences) || ts.emptyArray;

@@ -59,7 +59,7 @@
         }],
         "microsoft-typescript/no-double-space": "error",
         "microsoft-typescript/boolean-trivia": "error",
-        "microsoft-typescript/no-in-operator": "off",
+        "microsoft-typescript/no-in-operator": "error",
         "microsoft-typescript/debug-assert": "error",
         "microsoft-typescript/no-keywords": "error",
 

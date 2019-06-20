@@ -66,7 +66,7 @@ namespace ts {
         }
 
         export function assertNever(member: never, message = "Illegal value:", stackCrawlMark?: AnyFunction): never {
-            const detail = typeof member === "object" && "kind" in member && "pos" in member && formatSyntaxKind ? "SyntaxKind: " + formatSyntaxKind((member as Node).kind) : JSON.stringify(member);
+            const detail = typeof member === "object" && hasProperty(member, "kind") && hasProperty(member, "pos") && formatSyntaxKind ? "SyntaxKind: " + formatSyntaxKind((member as Node).kind) : JSON.stringify(member);
             return fail(`${message} ${detail}`, stackCrawlMark || assertNever);
         }
 

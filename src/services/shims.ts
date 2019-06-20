@@ -18,7 +18,7 @@ let debugObjectHost: { CollectGarbage(): void } = (function (this: any) { return
 
 // We need to use 'null' to interface with the managed side.
 /* tslint:disable:no-null-keyword */
-/* tslint:disable:no-in-operator */
+/* eslint-disable microsoft-typescript/no-in-operator */
 
 /* @internal */
 namespace ts {
@@ -1271,7 +1271,7 @@ namespace ts {
     }
 }
 
-/* tslint:enable:no-in-operator */
+/* eslint-enable microsoft-typescript/no-in-operator */
 /* tslint:enable:no-null */
 
 
