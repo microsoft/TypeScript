@@ -25,7 +25,7 @@
         "@typescript-eslint/import/order": "off",
         "indent": "off",
         "@typescript-eslint/indent": "off",
-        "@typescript-eslint/interface-name-prefix": "off",
+        "@typescript-eslint/interface-name-prefix": "error",
         "@typescript-eslint/member-ordering": "off",
         "@typescript-eslint/no-angle-bracket-type-assertion": "off",
         "@typescript-eslint/no-empty-interface": "off",
@@ -123,5 +123,11 @@
         "unicode-bom": ["error", "never"],
         "use-isnan": "error",
         "valid-typeof": "off"
-    }
+    },
+    "overrides": [{
+        "files": ["src/lib/*.d.ts"],
+        "rules": {
+            "@typescript-eslint/interface-name-prefix": "off"
+        }
+    }]
 }

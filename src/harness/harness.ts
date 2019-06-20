@@ -439,7 +439,7 @@ namespace Utils {
 }
 
 namespace Harness {
-    // tslint:disable-next-line:interface-name
+    // eslint-disable-next-line @typescript-eslint/interface-name-prefix
     export interface IO {
         newLine(): string;
         getCurrentDirectory(): string;

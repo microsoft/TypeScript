@@ -102,7 +102,7 @@ namespace ts {
      * snapshot is observably immutable. i.e. the same calls with the same parameters will return
      * the same values.
      */
-    // tslint:disable-next-line interface-name
+    // eslint-disable-next-line @typescript-eslint/interface-name-prefix
     export interface IScriptSnapshot {
         /** Gets a portion of the script snapshot specified by [start, end). */
         getText(start: number, end: number): string;
