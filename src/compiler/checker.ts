@@ -21510,22 +21510,30 @@ namespace ts {
             // skip the checkApplicableSignature check.
             if (reportErrors) {
                 if (candidatesForArgumentError) {
-                    if (candidatesForArgumentError.length > 3) {
-                        const c = candidatesForArgumentError[candidatesForArgumentError.length - 1];
-                        const chain = chainDiagnosticMessages(undefined, Diagnostics.Failed_to_find_a_suitable_overload_for_this_call_from_the_0_closest_overloads, candidatesForArgumentError.length);
-
-                        getSignatureApplicabilityError(node, args, c, assignableRelation, CheckMode.Normal, /*reportErrors*/ true, () => chain);
+                    if (candidatesForArgumentError.length === 1 || candidatesForArgumentError.length > 3) {
+                        const last = candidatesForArgumentError[candidatesForArgumentError.length - 1];
+                        let chain: DiagnosticMessageChain | undefined = undefined;
+                        if (candidatesForArgumentError.length > 3) {
+                            chain = chainDiagnosticMessages(chain, Diagnostics.The_last_overload_gave_the_following_error);
+                            chain = chainDiagnosticMessages(chain, Diagnostics.Failed_to_find_a_suitable_overload_for_this_call_from_0_overloads, candidatesForArgumentError.length);
+                        }
+                        const r = getSignatureApplicabilityError(node, args, last, assignableRelation, CheckMode.Normal, /*reportErrors*/ true, () => chain);
+                        Debug.assert(!!r && !!r[0]);
+                        if (r) {
+                            diagnostics.add(createDiagnosticForNodeFromMessageChain(r[0], r[1], undefined));
+                        }
                     }
                     else {
                         const related: DiagnosticRelatedInformation[] = [];
-                        const close = candidatesForArgumentError.filter(c => getMinArgumentCount(c) <= args.length && args.length <= getParameterCount(c));
-                        for (const c of close) {
+                        for (const c of candidatesForArgumentError) {
                             const chain = chainDiagnosticMessages(undefined, Diagnostics.Overload_0_gave_the_following_error, signatureToString(c));
                             const r = getSignatureApplicabilityError(node, args, c, assignableRelation, CheckMode.Normal, /*reportErrors*/ true, () => chain);
-                            if (!r || !r[0]) continue; // TODO:assert!
-                            related.push(createDiagnosticForNodeFromMessageChain(r[0], r[1]));
+                            Debug.assert(!!r && !!r[0]);
+                            if (r) {
+                                related.push(createDiagnosticForNodeFromMessageChain(r[0], r[1]));
+                            }
                         }
-                        diagnostics.add(createDiagnosticForNodeFromMessageChain(node, chainDiagnosticMessages(undefined, Diagnostics.Failed_to_find_a_suitable_overload_for_this_call_from_the_0_closest_overloads, close.length), related));
+                        diagnostics.add(createDiagnosticForNodeFromMessageChain(node, chainDiagnosticMessages(undefined, Diagnostics.Failed_to_find_a_suitable_overload_for_this_call_from_0_overloads, candidatesForArgumentError.length), related));
                     }
                 }
                 else if (candidateForArgumentArityError) {
