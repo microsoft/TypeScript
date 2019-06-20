@@ -42,7 +42,7 @@
         "@typescript-eslint/no-use-before-define": "off",
         "@typescript-eslint/no-var-requires": "off",
         "@typescript-eslint/prefer-for-of": "error",
-        "@typescript-eslint/prefer-function-type": "off",
+        "@typescript-eslint/prefer-function-type": "error",
         "@typescript-eslint/prefer-interface": "error",
         "@typescript-eslint/prefer-namespace-keyword": "error",
         "semi": "off",
@@ -128,6 +128,8 @@
         "files": ["src/lib/*.d.ts"],
         "rules": {
             "@typescript-eslint/interface-name-prefix": "off",
+            "@typescript-eslint/prefer-function-type": "off",
+
             "no-var": "off"
         }
     }]
