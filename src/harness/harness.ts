@@ -1311,6 +1311,13 @@ namespace Harness {
                 if (jsCode.length && jsCode.charCodeAt(jsCode.length - 1) !== ts.CharacterCodes.lineFeed) {
                     jsCode += "\r\n";
                 }
+                if (!result.diagnostics.length && !ts.endsWith(file.file, ts.Extension.Json)) {
+                    const fileParseResult = ts.createSourceFile(file.file, file.text, options.target || ts.ScriptTarget.ES3, /*parentNodes*/ false, ts.endsWith(file.file, "x") ? ts.ScriptKind.JSX : ts.ScriptKind.JS);
+                    if (ts.length(fileParseResult.parseDiagnostics)) {
+                        jsCode += getErrorBaseline([file.asTestFile()], fileParseResult.parseDiagnostics);
+                        return;
+                    }
+                }
                 jsCode += fileOutput(file, harnessSettings);
             });
 
