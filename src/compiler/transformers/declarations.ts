@@ -348,7 +348,7 @@ namespace ts {
         function collectReferences(sourceFile: SourceFile | UnparsedSource, ret: Map<SourceFile>) {
             if (noResolve || (!isUnparsedSource(sourceFile) && isSourceFileJS(sourceFile))) return ret;
             forEach(sourceFile.referencedFiles, f => {
-                const elem = tryResolveScriptReference(host, sourceFile, f);
+                const elem = host.getSourceFileFromReference(sourceFile, f);
                 if (elem) {
                     ret.set("" + getOriginalNodeId(elem), elem);
                 }
