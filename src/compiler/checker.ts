@@ -16989,8 +16989,8 @@ namespace ts {
             const witnesses: (string | undefined)[] = [];
             for (const clause of switchStatement.caseBlock.clauses) {
                 if (clause.kind === SyntaxKind.CaseClause) {
-                    if (clause.expression.kind === SyntaxKind.StringLiteral) {
-                        witnesses.push((clause.expression as StringLiteral).text);
+                    if (isStringLiteralLike(clause.expression)) {
+                        witnesses.push(clause.expression.text);
                         continue;
                     }
                     return emptyArray;
