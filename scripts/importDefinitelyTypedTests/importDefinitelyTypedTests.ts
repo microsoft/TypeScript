@@ -116,7 +116,7 @@ function importDefinitelyTypedTests(tscPath: string, rwcTestPath: string, defini
             .filter(i => fs.statSync(path.join(definitelyTypedRoot, i)).isDirectory())
             .forEach(d => {
                 const directoryPath = path.join(definitelyTypedRoot, d);
-                fs.readdir(directoryPath, function (err, files) {
+                fs.readdir(directoryPath, (err, files) => {
                     if (err) {
                         throw err;
                     }

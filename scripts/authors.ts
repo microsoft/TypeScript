@@ -100,18 +100,18 @@ function sortAuthors(a: string, b: string) {
 }
 
 namespace Commands {
-    export const writeAuthors: Command = function () {
+    export const writeAuthors: Command = () => {
         const output = deduplicate(getKnownAuthors().map(getAuthorName).filter(a => !!a)).sort(sortAuthors).join("\r\n* ");
         fs.writeFileSync(authorsPath, "TypeScript is authored by:\r\n* " + output);
     };
     writeAuthors.description = "Write known authors to AUTHORS.md file.";
 
-    export const listKnownAuthors: Command = function () {
+    export const listKnownAuthors: Command = () => {
         deduplicate(getKnownAuthors().map(getAuthorName)).filter(a => !!a).sort(sortAuthors).forEach(log);
     };
     listKnownAuthors.description = "List known authors as listed in .mailmap file.";
 
-    export const listAuthors: Command = function (...specs: string[]) {
+    export const listAuthors: Command = (...specs: string[]) => {
         const cmd = "git shortlog -se " + specs.join(" ");
         console.log(cmd);
         const outputRegExp = /\d+\s+([^<]+)<([^>]+)>/;
@@ -137,7 +137,7 @@ namespace Commands {
 
             const maps = getKnownAuthorMaps();
 
-            const lookupAuthor = function ({name, email}: { name: string, email: string }) {
+            const lookupAuthor = ({name, email}: { name: string, email: string }) => {
                 return maps.authorsByEmail[email.toLocaleLowerCase()] || maps.authorsByName[name];
             };
 

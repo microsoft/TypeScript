@@ -53,7 +53,10 @@
         "microsoft-typescript/object-literal-surrounding-space": "error",
         "microsoft-typescript/no-type-assertion-whitespace": "error",
         "microsoft-typescript/type-operator-spacing": "error",
-        "microsoft-typescript/only-arrow-functions": "off",
+        "microsoft-typescript/only-arrow-functions": ["error", {
+            "allowNamedFunctions": true ,
+            "allowDeclarations": true
+        }],
         "microsoft-typescript/no-double-space": "error",
         "microsoft-typescript/boolean-trivia": "error",
         "microsoft-typescript/no-in-operator": "off",

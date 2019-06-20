@@ -130,7 +130,7 @@ namespace Word {
     }
 }
 
-const sys = (function () {
+const sys = (() => {
     const fileStream = new ActiveXObject("ADODB.Stream");
     fileStream.Type = 2 /* text */;
     const binaryStream = new ActiveXObject("ADODB.Stream");
