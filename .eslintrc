@@ -58,7 +58,7 @@
         "microsoft-typescript/boolean-trivia": "error",
         "microsoft-typescript/no-in-operator": "off",
         "microsoft-typescript/debug-assert": "error",
-        "microsoft-typescript/no-keywords": "off",
+        "microsoft-typescript/no-keywords": "error",
 
         "arrow-body-style": "off",
         "arrow-parens": "off",
@@ -130,6 +130,8 @@
             "@typescript-eslint/interface-name-prefix": "off",
             "@typescript-eslint/prefer-function-type": "off",
             "@typescript-eslint/unified-signatures": "off",
+
+            "microsoft-typescript/no-keywords": "off",
 
             "no-var": "off"
         }
