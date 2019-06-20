@@ -582,6 +582,12 @@ namespace ts.FindAllReferences {
             return p.name !== node ? undefined :
                 p.parent.kind === SyntaxKind.CatchClause ? undefined : p.parent.parent.kind === SyntaxKind.VariableStatement ? p.parent.parent : undefined;
         }
+        else if (parent.parent && parent.parent.parent && parent.parent.parent.kind === SyntaxKind.VariableDeclaration) {
+          const p = parent.parent.parent as VariableDeclaration;
+          const binded = parent as BindingElement;
+          return binded.name !== node ? undefined :
+              p.parent.kind === SyntaxKind.CatchClause ? undefined : p.parent.parent.kind === SyntaxKind.VariableStatement ? p.parent.parent : undefined;
+        }
         else {
             return parent;
         }
