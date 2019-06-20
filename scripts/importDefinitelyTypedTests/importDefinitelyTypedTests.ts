@@ -7,7 +7,7 @@ interface Map<T> {
     [key: string]: T;
 }
 
-declare var process: {
+declare let process: {
     argv: string[];
     env: Map<string>;
     exit(exitCode?: number): void;

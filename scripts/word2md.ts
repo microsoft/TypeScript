@@ -130,13 +130,13 @@ namespace Word {
     }
 }
 
-var sys = (function () {
-    var fileStream = new ActiveXObject("ADODB.Stream");
-    fileStream.Type = 2 /*text*/;
-    var binaryStream = new ActiveXObject("ADODB.Stream");
-    binaryStream.Type = 1 /*binary*/;
-    var args: string[] = [];
-    for (var i = 0; i < WScript.Arguments.length; i++) {
+const sys = (function () {
+    const fileStream = new ActiveXObject("ADODB.Stream");
+    fileStream.Type = 2 /* text */;
+    const binaryStream = new ActiveXObject("ADODB.Stream");
+    binaryStream.Type = 1 /* binary */;
+    const args: string[] = [];
+    for (let i = 0; i < WScript.Arguments.length; i++) {
         args[i] = WScript.Arguments.Item(i);
     }
     return {
@@ -176,17 +176,17 @@ interface FindReplaceOptions {
 
 function convertDocumentToMarkdown(doc: Word.Document): string {
 
-    var result = "";
-    var lastStyle: string;
-    var lastInTable: boolean;
-    var tableColumnCount: number;
-    var tableCellIndex: number;
-    var columnAlignment: number[] = [];
+    const columnAlignment: number[] = [];
+    let tableColumnCount: number;
+    let tableCellIndex: number;
+    let lastInTable: boolean;
+    let lastStyle: string;
+    let result = "";
 
     function setProperties(target: any, properties: any) {
-        for (var name in properties) {
+        for (const name in properties) {
             if (properties.hasOwnProperty(name)) {
-                var value = properties[name];
+                const value = properties[name];
                 if (typeof value === "object") {
                     setProperties(target[name], value);
                 }
@@ -198,10 +198,10 @@ function convertDocumentToMarkdown(doc: Word.Document): string {
     }
 
     function findReplace(findText: string, findOptions: FindReplaceOptions, replaceText: string, replaceOptions: FindReplaceOptions) {
-        var find = doc.range().find;
+        const find = doc.range().find;
         find.clearFormatting();
         setProperties(find, findOptions);
-        var replace = find.replacement;
+        const replace = find.replacement;
         replace.clearFormatting();
         setProperties(replace, replaceOptions);
         find.execute(findText,
@@ -219,12 +219,12 @@ function convertDocumentToMarkdown(doc: Word.Document): string {
     }
 
     function fixHyperlinks() {
-        var count = doc.hyperlinks.count;
-        for (var i = 0; i < count; i++) {
-            var hyperlink = doc.hyperlinks.item(i + 1);
-            var address = hyperlink.address;
+        const count = doc.hyperlinks.count;
+        for (let i = 0; i < count; i++) {
+            const hyperlink = doc.hyperlinks.item(i + 1);
+            const address = hyperlink.address;
             if (address && address.length > 0) {
-                var textToDisplay = hyperlink.textToDisplay;
+                const textToDisplay = hyperlink.textToDisplay;
                 hyperlink.textToDisplay = "[" + textToDisplay + "](" + address + ")";
             }
         }
@@ -235,7 +235,7 @@ function convertDocumentToMarkdown(doc: Word.Document): string {
     }
 
     function writeTableHeader() {
-        for (var i = 0; i < tableColumnCount - 1; i++) {
+        for (let i = 0; i < tableColumnCount - 1; i++) {
             switch (columnAlignment[i]) {
                 case 1:
                     write("|:---:");
@@ -251,7 +251,7 @@ function convertDocumentToMarkdown(doc: Word.Document): string {
     }
 
     function trimEndFormattingMarks(text: string) {
-        var i = text.length;
+        let i = text.length;
         while (i > 0 && text.charCodeAt(i - 1) < 0x20) i--;
         return text.substr(0, i);
     }
@@ -271,12 +271,13 @@ function convertDocumentToMarkdown(doc: Word.Document): string {
 
     function writeParagraph(p: Word.Paragraph) {
 
-        var range = p.range;
-        var text = range.text;
-        var style = p.style.nameLocal;
-        var inTable = range.tables.count > 0;
-        var level = 1;
-        var sectionBreak = text.indexOf("\x0C") >= 0;
+        const range = p.range;
+        const inTable = range.tables.count > 0;
+        const sectionBreak = range.text.indexOf("\x0C") >= 0;
+
+        let level = 1;
+        let style = p.style.nameLocal;
+        let text = range.text;
 
         text = trimEndFormattingMarks(text);
         if (text === "/") {
@@ -285,7 +286,7 @@ function convertDocumentToMarkdown(doc: Word.Document): string {
             // hidden text and, if so, emit that instead. The hidden text is assumed to
             // contain an appropriate markdown image link.
             range.textRetrievalMode.includeHiddenText = true;
-            var fullText = range.text;
+            const fullText = range.text;
             range.textRetrievalMode.includeHiddenText = false;
             if (text !== fullText) {
                 text = "&emsp;&emsp;" + fullText.substr(1);
@@ -307,7 +308,7 @@ function convertDocumentToMarkdown(doc: Word.Document): string {
 
             case "Heading":
             case "Appendix":
-                var section = range.listFormat.listString;
+                const section = range.listFormat.listString;
                 write("####".substr(0, level) + ' <a name="' + section + '"/>' + section + " " + text + "\n\n");
                 break;
 
@@ -358,7 +359,7 @@ function convertDocumentToMarkdown(doc: Word.Document): string {
                 break;
 
             case "TOC":
-                var strings = text.split("\t");
+                const strings = text.split("\t");
                 write("        ".substr(0, level * 2 - 2) + "* [" + strings[0] + " " + strings[1] + "](#" + strings[0] + ")\n");
                 break;
         }
@@ -371,11 +372,11 @@ function convertDocumentToMarkdown(doc: Word.Document): string {
     }
 
     function writeDocument() {
-        var title = doc.builtInDocumentProperties.item(1) + "";
+        const title = doc.builtInDocumentProperties.item(1) + "";
         if (title.length) {
             write("# " + title + "\n\n");
         }
-        for (var p = doc.paragraphs.first; p; p = p.next()) {
+        for (let p = doc.paragraphs.first; p; p = p.next()) {
             writeParagraph(p);
         }
         writeBlockEnd();
@@ -412,8 +413,8 @@ function main(args: string[]) {
         sys.write("Syntax: word2md <inputfile> <outputfile>\n");
         return;
     }
-    var app: Word.Application = sys.createObject("Word.Application");
-    var doc = app.documents.open(args[0]);
+    const app: Word.Application = sys.createObject("Word.Application");
+    const doc = app.documents.open(args[0]);
     sys.writeFile(args[1], convertDocumentToMarkdown(doc));
     doc.close(/* saveChanges */ false);
     app.quit();

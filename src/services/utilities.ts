@@ -6,7 +6,7 @@ interface PromiseConstructor {
     all<T>(values: (T | PromiseLike<T>)[]): Promise<T[]>;
 }
 /* @internal */
-declare var Promise: PromiseConstructor;
+declare let Promise: PromiseConstructor;
 
 // These utilities are common to multiple language service features.
 /* @internal */

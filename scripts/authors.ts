@@ -167,14 +167,14 @@ namespace Commands {
     listAuthors.description = "List known and unknown authors for a given spec, e.g. 'node authors.js listAuthors origin/release-2.6..origin/release-2.7'";
 }
 
-var args = process.argv.slice(2);
+const args = process.argv.slice(2);
 if (args.length < 1) {
     console.log("Usage: node authors.js [command]");
     console.log("List of commands: ");
     Object.keys(Commands).forEach(k => console.log(`     ${k}: ${(Commands as any)[k].description}`));
 }
 else {
-    var cmd: Function = (Commands as any)[args[0]];
+    const cmd: Function = (Commands as any)[args[0]];
     if (cmd === undefined) {
         console.log("Unknown command " + args[1]);
     }

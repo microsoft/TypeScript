@@ -1,4 +1,3 @@
-declare var require: any;
 const fs = require("fs");
 const async = require("async");
 const glob = require("glob");

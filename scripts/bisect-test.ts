@@ -6,17 +6,17 @@ import cp = require("child_process");
 import fs = require("fs");
 
 // Slice off 'node bisect-test.js' from the command line args
-var args = process.argv.slice(2);
+const args = process.argv.slice(2);
 
 function tsc(tscArgs: string, onExit: (exitCode: number) => void) {
-    var tsc = cp.exec("node built/local/tsc.js " + tscArgs,() => void 0);
+    const tsc = cp.exec("node built/local/tsc.js " + tscArgs,() => void 0);
     tsc.on("close", tscExitCode => {
         onExit(tscExitCode);
     });
 }
 
 // TODO: Rewrite bisect script to handle the post-jake/gulp swap period
-var jake = cp.exec("jake clean local", () => void 0);
+const jake = cp.exec("jake clean local", () => void 0);
 jake.on("close", jakeExitCode => {
     if (jakeExitCode === 0) {
         // See what we're being asked to do
@@ -35,7 +35,7 @@ jake.on("close", jakeExitCode => {
         else if (args[1] === "emits" || args[1] === "!emits") {
             tsc(args[0], tscExitCode => {
                 fs.readFile(args[2], "utf-8", (err, data) => {
-                    var doesContains = data.indexOf(args[3]) >= 0;
+                    const doesContains = data.indexOf(args[3]) >= 0;
                     if (doesContains === (args[1] === "emits")) {
                         console.log("Good");
                         process.exit(0); // Good

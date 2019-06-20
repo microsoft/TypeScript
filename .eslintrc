@@ -109,7 +109,7 @@
         "no-unsafe-finally": "error",
         "no-unused-expressions": "error",
         "no-unused-labels": "error",
-        "no-var": "off",
+        "no-var": "error",
         "object-shorthand": "error",
         "one-var": "off",
         "prefer-const": "error",
@@ -127,7 +127,8 @@
     "overrides": [{
         "files": ["src/lib/*.d.ts"],
         "rules": {
-            "@typescript-eslint/interface-name-prefix": "off"
+            "@typescript-eslint/interface-name-prefix": "off",
+            "no-var": "off"
         }
     }]
 }

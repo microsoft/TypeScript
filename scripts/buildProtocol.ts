@@ -20,8 +20,8 @@ class DeclarationsWalker {
     }
 
     static getExtraDeclarations(typeChecker: ts.TypeChecker, protocolFile: ts.SourceFile): string {
+        const walker = new DeclarationsWalker(typeChecker, protocolFile);
         let text = "declare namespace ts.server.protocol {\n";
-        var walker = new DeclarationsWalker(typeChecker, protocolFile);
         walker.visitTypeNodes(protocolFile);
         text = walker.text
             ? `declare namespace ts.server.protocol {\n${walker.text}}`

@@ -1,9 +1,9 @@
 // Block scoped definitions work poorly for global variables, temporarily enable var
-/* tslint:disable:no-var-keyword */
+/* eslint-disable no-var */
 
 // this will work in the browser via browserify
-var _chai: typeof chai = require("chai");
-var assert: typeof _chai.assert = _chai.assert;
+const _chai: typeof chai = require("chai");
+const assert: typeof _chai.assert = _chai.assert;
 {
     // chai's builtin `assert.isFalse` is featureful but slow - we don't use those features,
     // so we'll just overwrite it as an alterative to migrating a bunch of code off of chai
@@ -32,6 +32,7 @@ var global: NodeJS.Global = Function("return this").call(undefined); // eslint-d
 
 declare var window: {};
 declare var XMLHttpRequest: new() => XMLHttpRequest;
+
 interface XMLHttpRequest {
     readonly readyState: number;
     readonly responseText: string;
@@ -44,7 +45,7 @@ interface XMLHttpRequest {
     getResponseHeader(header: string): string | null;
     overrideMimeType(mime: string): void;
 }
-/* tslint:enable:no-var-keyword prefer-const */
+/* eslint-enable no-var */
 
 namespace Utils {
     export function encodeString(s: string): string {

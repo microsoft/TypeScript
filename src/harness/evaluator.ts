@@ -1,5 +1,5 @@
 namespace evaluator {
-    declare var Symbol: SymbolConstructor;
+    declare let Symbol: SymbolConstructor;
 
     const sourceFile = vpath.combine(vfs.srcFolder, "source.ts");
 
