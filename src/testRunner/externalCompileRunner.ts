@@ -148,12 +148,24 @@ class DockerfileRunner extends ExternalCompileRunnerBase {
         // tslint:disable-next-line:no-null-keyword
         return result.status === 0 && !result.stdout.length && !result.stderr.length ? null : `Exit Code: ${result.status}
 Standard output:
-${stripAbsoluteImportPaths(sanitizeTimestamps(result.stdout.toString().replace(/\r\n/g, "\n").replace(/\x1b\[[0-9;]*[a-zA-Z]/g, "")))}
+${sanitizeDockerfileOutput(result.stdout.toString())}
 
 
 Standard error:
-${stripAbsoluteImportPaths(sanitizeTimestamps(result.stderr.toString().replace(/\r\n/g, "\n").replace(/\x1b\[[0-9;]*[a-zA-Z]/g, "")))}`;
+${sanitizeDockerfileOutput(result.stderr.toString())}`;
     }
+}
+
+function sanitizeDockerfileOutput(result: string): string {
+    return stripAbsoluteImportPaths(sanitizeTimestamps(stripANSIEscapes(normalizeNewlines(result))));
+}
+
+function normalizeNewlines(result: string): string {
+    return result.replace(/\r\n/g, "\n");
+}
+
+function stripANSIEscapes(result: string): string {
+    return result.replace(/\x1b\[[0-9;]*[a-zA-Z]/g, "");
 }
 
 function sanitizeTimestamps(result: string): string {
