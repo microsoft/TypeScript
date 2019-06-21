@@ -85,8 +85,8 @@ namespace ts.projectSystem {
                 });
                 const { file: _, ...renameTextOfMyConstInLib } = locationOfMyConstInLib;
                 assert.deepEqual(response.locs, [
-                    { file: myConstFile, locs: [{ start: myConstStart, end: myConstEnd }] },
-                    { file: locationOfMyConstInLib.file, locs: [renameTextOfMyConstInLib] }
+                    { file: locationOfMyConstInLib.file, locs: [renameTextOfMyConstInLib] },
+                    { file: myConstFile, locs: [{ start: myConstStart, end: myConstEnd }] }
                 ]);
             });
         });
