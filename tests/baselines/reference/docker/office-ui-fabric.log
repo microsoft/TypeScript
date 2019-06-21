@@ -10,15 +10,15 @@ Starting "rush rebuild"
 Executing a maximum of 1 simultaneous processes...
 
 [@uifabric/prettier-rules] started
-1 of 41: [@uifabric/prettier-rules] completed successfully in ? seconds
+XX of XX: [@uifabric/prettier-rules] completed successfully in ? seconds
 [@uifabric/tslint-rules] started
-2 of 41: [@uifabric/tslint-rules] completed successfully in ? seconds
+XX of XX: [@uifabric/tslint-rules] completed successfully in ? seconds
 [@uifabric/codepen-loader] started
 ts-jest[versions] (WARN) Version X.X.X-insiders.xxxxxxxx of typescript installed has not been tested with ts-jest. If you're experiencing issues, consider using a supported version (>=2.7.0 <4.0.0). Please do not report issues in ts-jest if you are using unsupported versions.
 [@uifabric/build] started
-4 of 41: [@uifabric/build] completed successfully in ? seconds
+XX of XX: [@uifabric/build] completed successfully in ? seconds
 [@uifabric/migration] started
-5 of 41: [@uifabric/migration] completed successfully in ? seconds
+XX of XX: [@uifabric/migration] completed successfully in ? seconds
 [@uifabric/set-version] started
 ts-jest[versions] (WARN) Version X.X.X-insiders.xxxxxxxx of typescript installed has not been tested with ts-jest. If you're experiencing issues, consider using a supported version (>=2.7.0 <4.0.0). Please do not report issues in ts-jest if you are using unsupported versions.
 [@uifabric/merge-styles] started
@@ -26,13 +26,13 @@ ts-jest[versions] (WARN) Version X.X.X-insiders.xxxxxxxx of typescript installed
 [@uifabric/jest-serializer-merge-styles] started
 ts-jest[versions] (WARN) Version X.X.X-insiders.xxxxxxxx of typescript installed has not been tested with ts-jest. If you're experiencing issues, consider using a supported version (>=2.7.0 <4.0.0). Please do not report issues in ts-jest if you are using unsupported versions.
 [@uifabric/test-utilities] started
-9 of 41: [@uifabric/test-utilities] completed successfully in ? seconds
+XX of XX: [@uifabric/test-utilities] completed successfully in ? seconds
 [@uifabric/utilities] started
 ts-jest[versions] (WARN) Version X.X.X-insiders.xxxxxxxx of typescript installed has not been tested with ts-jest. If you're experiencing issues, consider using a supported version (>=2.7.0 <4.0.0). Please do not report issues in ts-jest if you are using unsupported versions.
 [@uifabric/styling] started
 ts-jest[versions] (WARN) Version X.X.X-insiders.xxxxxxxx of typescript installed has not been tested with ts-jest. If you're experiencing issues, consider using a supported version (>=2.7.0 <4.0.0). Please do not report issues in ts-jest if you are using unsupported versions.
 [@uifabric/file-type-icons] started
-12 of 41: [@uifabric/file-type-icons] completed successfully in ? seconds
+XX of XX: [@uifabric/file-type-icons] completed successfully in ? seconds
 [@uifabric/foundation] started
 ts-jest[versions] (WARN) Version X.X.X-insiders.xxxxxxxx of typescript installed has not been tested with ts-jest. If you're experiencing issues, consider using a supported version (>=2.7.0 <4.0.0). Please do not report issues in ts-jest if you are using unsupported versions.
   ● createFactory › passes componentProps without userProps
@@ -270,9 +270,9 @@ ts-jest[versions] (WARN) Version X.X.X-insiders.xxxxxxxx of typescript installed
 [XX:XX:XX XM] x finished 'build' in ?s with errors
 [XX:XX:XX XM] x Error previously detected. See above for error messages.
 [@uifabric/icons] started
-39 of 41: [@uifabric/icons] completed successfully in ? seconds
+XX of XX: [@uifabric/icons] completed successfully in ? seconds
 [@uifabric/webpack-utils] started
-40 of 41: [@uifabric/webpack-utils] completed successfully in ? seconds
+XX of XX: [@uifabric/webpack-utils] completed successfully in ? seconds
 
 SUCCESS (8)
 ================================
@@ -381,38 +381,38 @@ rush rebuild - Errors! ( ? seconds)
 
 Standard error:
 Your version of Node.js (12.4.0) has not been tested with this release of Rush. The Rush team will not accept issue reports for it. Please consider upgrading Rush or downgrading Node.js.
-3 of 41: [@uifabric/codepen-loader] completed with warnings in ? seconds
-6 of 41: [@uifabric/set-version] completed with warnings in ? seconds
-7 of 41: [@uifabric/merge-styles] completed with warnings in ? seconds
-8 of 41: [@uifabric/jest-serializer-merge-styles] completed with warnings in ? seconds
-10 of 41: [@uifabric/utilities] completed with warnings in ? seconds
-11 of 41: [@uifabric/styling] completed with warnings in ? seconds
+XX of XX: [@uifabric/codepen-loader] completed with warnings in ? seconds
+XX of XX: [@uifabric/set-version] completed with warnings in ? seconds
+XX of XX: [@uifabric/merge-styles] completed with warnings in ? seconds
+XX of XX: [@uifabric/jest-serializer-merge-styles] completed with warnings in ? seconds
+XX of XX: [@uifabric/utilities] completed with warnings in ? seconds
+XX of XX: [@uifabric/styling] completed with warnings in ? seconds
 
-12 of 41: [@uifabric/foundation] failed to build!
-13 of 41: [@uifabric/experiments] blocked by [@uifabric/foundation]!
-14 of 41: [@uifabric/fabric-website] blocked by [@uifabric/foundation]!
-15 of 41: [@uifabric/pr-deploy-site] blocked by [@uifabric/foundation]!
-16 of 41: [@uifabric/react-cards] blocked by [@uifabric/foundation]!
-17 of 41: [theming-designer] blocked by [@uifabric/foundation]!
-18 of 41: [vr-tests] blocked by [@uifabric/foundation]!
-19 of 41: [dom-tests] blocked by [@uifabric/foundation]!
-20 of 41: [perf-test] blocked by [@uifabric/foundation]!
-21 of 41: [test-bundles] blocked by [@uifabric/foundation]!
-22 of 41: [office-ui-fabric-react] blocked by [@uifabric/foundation]!
-23 of 41: [@uifabric/api-docs] blocked by [@uifabric/foundation]!
-24 of 41: [@uifabric/fabric-website-resources] blocked by [@uifabric/foundation]!
-25 of 41: [a11y-tests] blocked by [@uifabric/foundation]!
-26 of 41: [ssr-tests] blocked by [@uifabric/foundation]!
-27 of 41: [@uifabric/azure-themes] blocked by [@uifabric/foundation]!
-28 of 41: [@uifabric/charting] blocked by [@uifabric/foundation]!
-29 of 41: [@uifabric/date-time] blocked by [@uifabric/foundation]!
-30 of 41: [@uifabric/example-app-base] blocked by [@uifabric/foundation]!
-31 of 41: [@uifabric/foundation-scenarios] blocked by [@uifabric/foundation]!
-32 of 41: [@uifabric/lists] blocked by [@uifabric/foundation]!
-33 of 41: [@uifabric/fluent-theme] blocked by [@uifabric/foundation]!
-34 of 41: [@uifabric/tsx-editor] blocked by [@uifabric/foundation]!
-35 of 41: [@uifabric/theme-samples] blocked by [@uifabric/foundation]!
-36 of 41: [@uifabric/variants] blocked by [@uifabric/foundation]!
-37 of 41: [server-rendered-app] blocked by [@uifabric/foundation]!
-38 of 41: [todo-app] blocked by [@uifabric/foundation]!
+XX of XX: [@uifabric/foundation] failed to build!
+XX of XX: [@uifabric/experiments] blocked by [@uifabric/foundation]!
+XX of XX: [@uifabric/fabric-website] blocked by [@uifabric/foundation]!
+XX of XX: [@uifabric/pr-deploy-site] blocked by [@uifabric/foundation]!
+XX of XX: [@uifabric/react-cards] blocked by [@uifabric/foundation]!
+XX of XX: [theming-designer] blocked by [@uifabric/foundation]!
+XX of XX: [vr-tests] blocked by [@uifabric/foundation]!
+XX of XX: [dom-tests] blocked by [@uifabric/foundation]!
+XX of XX: [perf-test] blocked by [@uifabric/foundation]!
+XX of XX: [test-bundles] blocked by [@uifabric/foundation]!
+XX of XX: [office-ui-fabric-react] blocked by [@uifabric/foundation]!
+XX of XX: [@uifabric/api-docs] blocked by [@uifabric/foundation]!
+XX of XX: [@uifabric/fabric-website-resources] blocked by [@uifabric/foundation]!
+XX of XX: [a11y-tests] blocked by [@uifabric/foundation]!
+XX of XX: [ssr-tests] blocked by [@uifabric/foundation]!
+XX of XX: [@uifabric/azure-themes] blocked by [@uifabric/foundation]!
+XX of XX: [@uifabric/charting] blocked by [@uifabric/foundation]!
+XX of XX: [@uifabric/date-time] blocked by [@uifabric/foundation]!
+XX of XX: [@uifabric/example-app-base] blocked by [@uifabric/foundation]!
+XX of XX: [@uifabric/foundation-scenarios] blocked by [@uifabric/foundation]!
+XX of XX: [@uifabric/lists] blocked by [@uifabric/foundation]!
+XX of XX: [@uifabric/fluent-theme] blocked by [@uifabric/foundation]!
+XX of XX: [@uifabric/tsx-editor] blocked by [@uifabric/foundation]!
+XX of XX: [@uifabric/theme-samples] blocked by [@uifabric/foundation]!
+XX of XX: [@uifabric/variants] blocked by [@uifabric/foundation]!
+XX of XX: [server-rendered-app] blocked by [@uifabric/foundation]!
+XX of XX: [todo-app] blocked by [@uifabric/foundation]!
 [@uifabric/foundation] Returned error code: 1
