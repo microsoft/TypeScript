@@ -8546,11 +8546,13 @@ declare namespace ts.server {
         private typeAcquisition;
         private directoriesWatchedForWildcards;
         readonly canonicalConfigFilePath: NormalizedPath;
+        private getSourceOfProjectReferenceRedirect;
         /** Ref count to the project when opened from external project */
         private externalProjectRefCount;
         private projectErrors;
         private projectReferences;
         protected isInitialLoadPending: () => boolean;
+        fileExists(file: string): boolean;
         /**
          * If the project has reload from disk pending, it reloads (and then updates graph as part of that) instead of just updating the graph
          * @returns: true if set of files in the project stays the same and false - otherwise.

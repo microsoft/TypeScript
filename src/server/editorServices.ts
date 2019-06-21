@@ -1798,7 +1798,7 @@ namespace ts.server {
                 let scriptInfo: ScriptInfo | NormalizedPath;
                 let path: Path;
                 // Use the project's fileExists so that it can use caching instead of reaching to disk for the query
-                if (!isDynamic && !project.fileExists(newRootFile)) {
+                if (!isDynamic && !project.fileExistsWithCache(newRootFile)) {
                     path = normalizedPathToPath(normalizedPath, this.currentDirectory, this.toCanonicalFileName);
                     const existingValue = projectRootFilesMap.get(path)!;
                     if (isScriptInfo(existingValue)) {
@@ -1831,7 +1831,7 @@ namespace ts.server {
                 projectRootFilesMap.forEach((value, path) => {
                     if (!newRootScriptInfoMap.has(path)) {
                         if (isScriptInfo(value)) {
-                            project.removeFile(value, project.fileExists(path), /*detachFromProject*/ true);
+                            project.removeFile(value, project.fileExistsWithCache(path), /*detachFromProject*/ true);
                         }
                         else {
                             projectRootFilesMap.delete(path);

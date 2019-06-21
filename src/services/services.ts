@@ -1245,6 +1245,12 @@ namespace ts {
                     return host.resolveTypeReferenceDirectives!(typeReferenceDirectiveNames, containingFile, redirectedReference);
                 };
             }
+            if (host.setGetSourceOfProjectReferenceRedirect) {
+                compilerHost.setGetSourceOfProjectReferenceRedirect = getSource => host.setGetSourceOfProjectReferenceRedirect!(getSource);
+            }
+            if (host.useSourceInsteadOfReferenceRedirect) {
+                compilerHost.useSourceInsteadOfReferenceRedirect = () => host.useSourceInsteadOfReferenceRedirect!();
+            }
 
             const documentRegistryBucketKey = documentRegistry.getKeyForCompilationSettings(newSettings);
             const options: CreateProgramOptions = {

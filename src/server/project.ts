@@ -381,6 +381,11 @@ namespace ts.server {
         }
 
         fileExists(file: string): boolean {
+            return this.fileExistsWithCache(file);
+        }
+
+        /* @internal */
+        fileExistsWithCache(file: string): boolean {
             // As an optimization, don't hit the disks for files we already know don't exist
             // (because we're watching for their creation).
             const path = this.toPath(file);
@@ -1369,6 +1374,7 @@ namespace ts.server {
         configFileWatcher: FileWatcher | undefined;
         private directoriesWatchedForWildcards: Map<WildcardDirectoryWatcher> | undefined;
         readonly canonicalConfigFilePath: NormalizedPath;
+        private getSourceOfProjectReferenceRedirect: GetSourceOfProjectReferenceRedirect | undefined;
 
         /* @internal */
         pendingReload: ConfigFileProgramReloadLevel | undefined;
@@ -1414,6 +1420,25 @@ namespace ts.server {
             this.canonicalConfigFilePath = asNormalizedPath(projectService.toCanonicalFileName(configFileName));
         }
 
+        /* @internal */
+        setGetSourceOfProjectReferenceRedirect(getSource: GetSourceOfProjectReferenceRedirect) {
+            this.getSourceOfProjectReferenceRedirect = getSource;
+        }
+
+        /* @internal */
+        useSourceInsteadOfReferenceRedirect() {
+            return true;
+        }
+
+        fileExists(file: string): boolean {
+            // Project references go to source file instead of .d.ts file
+            if (this.getSourceOfProjectReferenceRedirect) {
+                const source = this.getSourceOfProjectReferenceRedirect(file);
+                if (source) return isString(source) ? super.fileExists(source) : true;
+            }
+            return super.fileExists(file);
+        }
+
         /**
          * If the project has reload from disk pending, it reloads (and then updates graph as part of that) instead of just updating the graph
          * @returns: true if set of files in the project stays the same and false - otherwise.
@@ -1436,6 +1461,7 @@ namespace ts.server {
                 default:
                     result = super.updateGraph();
             }
+            this.getSourceOfProjectReferenceRedirect = undefined;
             this.projectService.sendProjectLoadingFinishEvent(this);
             this.projectService.sendProjectTelemetry(this);
             return result;

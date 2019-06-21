@@ -5166,10 +5166,19 @@ namespace ts {
         /* @internal */ hasChangedAutomaticTypeDirectiveNames?: boolean;
         createHash?(data: string): string;
         getParsedCommandLine?(fileName: string): ParsedCommandLine | undefined;
+        /* @internal */ setGetSourceOfProjectReferenceRedirect?(getSource: GetSourceOfProjectReferenceRedirect): void;
+        /* @internal */ useSourceInsteadOfReferenceRedirect?(): boolean;
 
         // TODO: later handle this in better way in builder host instead once the api for tsbuild finalizes and doesn't use compilerHost as base
         /*@internal*/createDirectory?(directory: string): void;
     }
+
+    /** true if --out otherwise source file name */
+    /*@internal*/
+    export type SourceOfProjectReferenceRedirect = string | true ;
+
+    /*@internal*/
+    export type GetSourceOfProjectReferenceRedirect = (fileName: string) => SourceOfProjectReferenceRedirect | undefined;
 
     /* @internal */
     export const enum TransformFlags {

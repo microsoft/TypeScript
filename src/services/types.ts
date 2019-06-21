@@ -236,6 +236,10 @@ namespace ts {
         getDocumentPositionMapper?(generatedFileName: string, sourceFileName?: string): DocumentPositionMapper | undefined;
         /* @internal */
         getSourceFileLike?(fileName: string): SourceFileLike | undefined;
+        /* @internal */
+        setGetSourceOfProjectReferenceRedirect?(getSource: GetSourceOfProjectReferenceRedirect): void;
+        /* @internal */
+        useSourceInsteadOfReferenceRedirect?(): boolean;
     }
 
     /* @internal */
