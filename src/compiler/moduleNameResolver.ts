@@ -1487,8 +1487,8 @@ namespace ts {
     }
 
     /**
-     * LSHost may load a module from a global cache of typings.
-     * This is the minumum code needed to expose that functionality; the rest is in LSHost.
+     * A host may load a module from a global cache of typings.
+     * This is the minumum code needed to expose that functionality; the rest is in the host.
      */
     /* @internal */
     export function loadModuleFromGlobalCache(moduleName: string, projectName: string | undefined, compilerOptions: CompilerOptions, host: ModuleResolutionHost, globalCache: string): ResolvedModuleWithFailedLookupLocations {
