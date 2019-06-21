@@ -6131,7 +6131,7 @@ namespace ts {
     }
 
     export function isNamelessJSDocTypeDef(node: Node): boolean {
-        return !!getJSDocNamelessTypedefTag(node);
+        return !hasInitializer(node) && !!getJSDocNamelessTypedefTag(node);
     }
 }
 

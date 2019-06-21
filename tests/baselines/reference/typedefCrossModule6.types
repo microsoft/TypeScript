@@ -12,6 +12,9 @@ var this_is_not_the_name = true;
 >this_is_not_the_name : boolean
 >true : true
 
+/** @type {this_is_not_the_name} */
+let k;  // should fail, this_is_not_the_name is not bound to the type def
+>k : boolean
 
 /**
  * @param {numdef} p1
@@ -110,4 +113,45 @@ func4({a: 'a', b: 0, c: 'c', d: 1});
 >'c' : "c"
 >d : number
 >1 : 1
+
+
+=== tests/cases/conformance/jsdoc/d.js ===
+/**
+ * @typedef {{ a: number }}
+ */
+let recordDef;
+>recordDef : { a: number; }
+
+module.exports = { recordDef };
+>module.exports = { recordDef } : { recordDef: any; }
+>module.exports : { recordDef: any; }
+>module : { "tests/cases/conformance/jsdoc/d": { recordDef: any; }; }
+>exports : { recordDef: any; }
+>{ recordDef } : { recordDef: { a: number; }; }
+>recordDef : { a: number; }
+
+
+=== tests/cases/conformance/jsdoc/e.ts ===
+import { numdef } from './a';
+>numdef : number
+
+import { recordDef } from './d';  // commonjs exported nameless typedef
+>recordDef : any
+
+const ex: numdef = 123;
+>ex : number
+>123 : 123
+
+const ex2: recordDef = { a: ex };
+>ex2 : { a: number; }
+>{ a: ex } : { a: number; }
+>a : number
+>ex : number
+
+const ex3: recordDef = { c: 'hi' }; // should fail
+>ex3 : { a: number; }
+>{ c: 'hi' } : { c: string; }
+>c : string
+>'hi' : "hi"
+
 

@@ -2092,6 +2092,10 @@ namespace ts {
                 return unknownSymbol;
             }
             if (valueSymbol.flags & (SymbolFlags.Type | SymbolFlags.Namespace)) {
+                const declaration = <JSDocTypedefTag | JSDocCallbackTag | TypeAliasDeclaration>find(typeSymbol.declarations, d =>
+                    isJSDocTypedefTag(d));
+                if (declaration) return typeSymbol;
+
                 return valueSymbol;
             }
             const result = createSymbol(valueSymbol.flags | typeSymbol.flags, valueSymbol.escapedName);

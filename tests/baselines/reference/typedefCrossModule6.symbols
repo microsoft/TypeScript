@@ -11,24 +11,27 @@ export var numdef;
 var this_is_not_the_name = true;
 >this_is_not_the_name : Symbol(this_is_not_the_name, Decl(a.js, 8, 3))
 
+/** @type {this_is_not_the_name} */
+let k;  // should fail, this_is_not_the_name is not bound to the type def
+>k : Symbol(k, Decl(a.js, 11, 3))
 
 /**
  * @param {numdef} p1
  * @param {strdef} p2
  */
 function func1(p1, p2) {}
->func1 : Symbol(func1, Decl(a.js, 8, 32))
->p1 : Symbol(p1, Decl(a.js, 15, 15))
->p2 : Symbol(p2, Decl(a.js, 15, 18))
+>func1 : Symbol(func1, Decl(a.js, 11, 6))
+>p1 : Symbol(p1, Decl(a.js, 17, 15))
+>p2 : Symbol(p2, Decl(a.js, 17, 18))
 
 /**
  * @param {strdef} p1
  * @param {numdef} p2
  */
 export function func2(p1, p2) {}
->func2 : Symbol(func2, Decl(a.js, 15, 25))
->p1 : Symbol(p1, Decl(a.js, 21, 22))
->p2 : Symbol(p2, Decl(a.js, 21, 25))
+>func2 : Symbol(func2, Decl(a.js, 17, 25))
+>p1 : Symbol(p1, Decl(a.js, 23, 22))
+>p2 : Symbol(p2, Decl(a.js, 23, 25))
 
 
 === tests/cases/conformance/jsdoc/b.js ===
@@ -91,4 +94,42 @@ func4({a: 'a', b: 0, c: 'c', d: 1});
 >b : Symbol(b, Decl(c.js, 6, 14))
 >c : Symbol(c, Decl(c.js, 6, 20))
 >d : Symbol(d, Decl(c.js, 6, 28))
+
+
+=== tests/cases/conformance/jsdoc/d.js ===
+/**
+ * @typedef {{ a: number }}
+ */
+let recordDef;
+>recordDef : Symbol(recordDef, Decl(d.js, 3, 3), Decl(d.js, 1, 3))
+
+module.exports = { recordDef };
+>module.exports : Symbol("tests/cases/conformance/jsdoc/d", Decl(d.js, 0, 0))
+>module : Symbol(export=, Decl(d.js, 3, 14))
+>exports : Symbol(export=, Decl(d.js, 3, 14))
+>recordDef : Symbol(recordDef, Decl(d.js, 4, 18))
+
+
+=== tests/cases/conformance/jsdoc/e.ts ===
+import { numdef } from './a';
+>numdef : Symbol(numdef, Decl(e.ts, 0, 8))
+
+import { recordDef } from './d';  // commonjs exported nameless typedef
+>recordDef : Symbol(recordDef, Decl(e.ts, 1, 8))
+
+const ex: numdef = 123;
+>ex : Symbol(ex, Decl(e.ts, 3, 5))
+>numdef : Symbol(numdef, Decl(e.ts, 0, 8))
+
+const ex2: recordDef = { a: ex };
+>ex2 : Symbol(ex2, Decl(e.ts, 4, 5))
+>recordDef : Symbol(recordDef, Decl(e.ts, 1, 8))
+>a : Symbol(a, Decl(e.ts, 4, 24))
+>ex : Symbol(ex, Decl(e.ts, 3, 5))
+
+const ex3: recordDef = { c: 'hi' }; // should fail
+>ex3 : Symbol(ex3, Decl(e.ts, 5, 5))
+>recordDef : Symbol(recordDef, Decl(e.ts, 1, 8))
+>c : Symbol(c, Decl(e.ts, 5, 24))
+
 

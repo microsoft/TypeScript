@@ -1,8 +1,11 @@
+tests/cases/conformance/jsdoc/a.js(11,12): error TS2749: 'this_is_not_the_name' refers to a value, but is being used as a type here.
 tests/cases/conformance/jsdoc/b.js(5,7): error TS2345: Argument of type '123' is not assignable to parameter of type 'string'.
 tests/cases/conformance/jsdoc/b.js(15,7): error TS2345: Argument of type '123' is not assignable to parameter of type 'string'.
+tests/cases/conformance/jsdoc/e.ts(6,26): error TS2322: Type '{ c: string; }' is not assignable to type '{ a: number; }'.
+  Object literal may only specify known properties, and 'c' does not exist in type '{ a: number; }'.
 
 
-==== tests/cases/conformance/jsdoc/a.js (0 errors) ====
+==== tests/cases/conformance/jsdoc/a.js (1 errors) ====
     /**
      * @typedef {number}
      */
@@ -13,6 +16,10 @@ tests/cases/conformance/jsdoc/b.js(15,7): error TS2345: Argument of type '123' i
      */
     var this_is_not_the_name = true;
     
+    /** @type {this_is_not_the_name} */
+               ~~~~~~~~~~~~~~~~~~~~
+!!! error TS2749: 'this_is_not_the_name' refers to a value, but is being used as a type here.
+    let k;  // should fail, this_is_not_the_name is not bound to the type def
     
     /**
      * @param {numdef} p1
@@ -66,4 +73,25 @@ tests/cases/conformance/jsdoc/b.js(15,7): error TS2345: Argument of type '123' i
      */
     function func4(p1) {}
     func4({a: 'a', b: 0, c: 'c', d: 1});
+    
+    
+==== tests/cases/conformance/jsdoc/d.js (0 errors) ====
+    /**
+     * @typedef {{ a: number }}
+     */
+    let recordDef;
+    module.exports = { recordDef };
+    
+    
+==== tests/cases/conformance/jsdoc/e.ts (1 errors) ====
+    import { numdef } from './a';
+    import { recordDef } from './d';  // commonjs exported nameless typedef
+    
+    const ex: numdef = 123;
+    const ex2: recordDef = { a: ex };
+    const ex3: recordDef = { c: 'hi' }; // should fail
+                             ~~~~~~~
+!!! error TS2322: Type '{ c: string; }' is not assignable to type '{ a: number; }'.
+!!! error TS2322:   Object literal may only specify known properties, and 'c' does not exist in type '{ a: number; }'.
+    
     

@@ -14,6 +14,8 @@ export var numdef;
  */
 var this_is_not_the_name = true;
 
+/** @type {this_is_not_the_name} */
+let k;  // should fail, this_is_not_the_name is not bound to the type def
 
 /**
  * @param {numdef} p1
@@ -63,3 +65,21 @@ import { objdef } from './b';
  */
 function func4(p1) {}
 func4({a: 'a', b: 0, c: 'c', d: 1});
+
+
+// @Filename: d.js
+/**
+ * @typedef {{ a: number }}
+ */
+let recordDef;
+module.exports = { recordDef };
+
+
+// @Filename: e.ts
+import { numdef } from './a';
+import { recordDef } from './d';  // commonjs exported nameless typedef
+
+const ex: numdef = 123;
+const ex2: recordDef = { a: ex };
+const ex3: recordDef = { c: 'hi' }; // should fail
+
