@@ -2468,8 +2468,10 @@ namespace ts {
                         }
                         else {
                             forEach(resolvedRef.commandLine.fileNames, fileName => {
-                                const outputDts = getOutputDeclarationFileName(fileName, resolvedRef.commandLine, host.useCaseSensitiveFileNames());
-                                mapFromToProjectReferenceRedirectSource!.set(toPath(outputDts), fileName);
+                                if (!fileExtensionIs(fileName, Extension.Dts) && hasTSFileExtension(fileName)) {
+                                    const outputDts = getOutputDeclarationFileName(fileName, resolvedRef.commandLine, host.useCaseSensitiveFileNames());
+                                    mapFromToProjectReferenceRedirectSource!.set(toPath(outputDts), fileName);
+                                }
                             });
                         }
                     }
