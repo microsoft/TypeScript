@@ -1,6 +1,6 @@
 tests/cases/compiler/inheritedConstructorWithRestParams2.ts(32,13): error TS2345: Argument of type '3' is not assignable to parameter of type 'string'.
-tests/cases/compiler/inheritedConstructorWithRestParams2.ts(33,17): error TS2345: Argument of type '3' is not assignable to parameter of type 'string'.
-tests/cases/compiler/inheritedConstructorWithRestParams2.ts(34,17): error TS2345: Argument of type '3' is not assignable to parameter of type 'string'.
+tests/cases/compiler/inheritedConstructorWithRestParams2.ts(33,1): error TS2755: No suitable overload for this call.
+tests/cases/compiler/inheritedConstructorWithRestParams2.ts(34,1): error TS2755: No suitable overload for this call.
 
 
 ==== tests/cases/compiler/inheritedConstructorWithRestParams2.ts (3 errors) ====
@@ -39,8 +39,16 @@ tests/cases/compiler/inheritedConstructorWithRestParams2.ts(34,17): error TS2345
                 ~
 !!! error TS2345: Argument of type '3' is not assignable to parameter of type 'string'.
     new Derived("", 3, "", 3);
-                    ~
-!!! error TS2345: Argument of type '3' is not assignable to parameter of type 'string'.
+    ~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2755: No suitable overload for this call.
+!!! related TS2757 tests/cases/compiler/inheritedConstructorWithRestParams2.ts:33:20: Overload 1 of 3, '(x: string, ...y: number[]): Derived', gave the following error.
+  Argument of type '""' is not assignable to parameter of type 'number'.
+!!! related TS2757 tests/cases/compiler/inheritedConstructorWithRestParams2.ts:33:17: Overload 2 of 3, '(x1: string, x2: string, ...y: number[]): Derived', gave the following error.
+  Argument of type '3' is not assignable to parameter of type 'string'.
     new Derived("", 3, "", "");
-                    ~
-!!! error TS2345: Argument of type '3' is not assignable to parameter of type 'string'.
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2755: No suitable overload for this call.
+!!! related TS2757 tests/cases/compiler/inheritedConstructorWithRestParams2.ts:34:20: Overload 1 of 3, '(x: string, ...y: number[]): Derived', gave the following error.
+  Argument of type '""' is not assignable to parameter of type 'number'.
+!!! related TS2757 tests/cases/compiler/inheritedConstructorWithRestParams2.ts:34:17: Overload 2 of 3, '(x1: string, x2: string, ...y: number[]): Derived', gave the following error.
+  Argument of type '3' is not assignable to parameter of type 'string'.

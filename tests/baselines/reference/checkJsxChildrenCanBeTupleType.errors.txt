@@ -1,8 +1,4 @@
-tests/cases/conformance/jsx/checkJsxChildrenCanBeTupleType.tsx(17,18): error TS2322: Type '{ children: [Element, Element, Element]; }' is not assignable to type 'Readonly<ResizablePanelProps>'.
-  Types of property 'children' are incompatible.
-    Type '[Element, Element, Element]' is not assignable to type '[ReactNode, ReactNode]'.
-      Types of property 'length' are incompatible.
-        Type '3' is not assignable to type '2'.
+tests/cases/conformance/jsx/checkJsxChildrenCanBeTupleType.tsx(17,17): error TS2755: No suitable overload for this call.
 
 
 ==== tests/cases/conformance/jsx/checkJsxChildrenCanBeTupleType.tsx (1 errors) ====
@@ -23,12 +19,18 @@ tests/cases/conformance/jsx/checkJsxChildrenCanBeTupleType.tsx(17,18): error TS2
     </ResizablePanel>
     
     const testErr = <ResizablePanel>
-                     ~~~~~~~~~~~~~~
-!!! error TS2322: Type '{ children: [Element, Element, Element]; }' is not assignable to type 'Readonly<ResizablePanelProps>'.
-!!! error TS2322:   Types of property 'children' are incompatible.
-!!! error TS2322:     Type '[Element, Element, Element]' is not assignable to type '[ReactNode, ReactNode]'.
-!!! error TS2322:       Types of property 'length' are incompatible.
-!!! error TS2322:         Type '3' is not assignable to type '2'.
+                    ~~~~~~~~~~~~~~~~
+!!! error TS2755: No suitable overload for this call.
+!!! related TS2757 tests/cases/conformance/jsx/checkJsxChildrenCanBeTupleType.tsx:17:18: Overload 1 of 2, '(props: Readonly<ResizablePanelProps>): ResizablePanel', gave the following error.
+  Type '{ children: [Element, Element, Element]; }' is not assignable to type 'Readonly<ResizablePanelProps>'.
+    Types of property 'children' are incompatible.
+      Type '[Element, Element, Element]' is not assignable to type '[ReactNode, ReactNode]'.
+        Types of property 'length' are incompatible.
+          Type '3' is not assignable to type '2'.
+!!! related TS2757 tests/cases/conformance/jsx/checkJsxChildrenCanBeTupleType.tsx:17:18: Overload 2 of 2, '(props: ResizablePanelProps, context?: any): ResizablePanel', gave the following error.
+  Type '{ children: [Element, Element, Element]; }' is not assignable to type 'Readonly<ResizablePanelProps>'.
+    Types of property 'children' are incompatible.
+      Type '[Element, Element, Element]' is not assignable to type '[ReactNode, ReactNode]'.
       <div />
       <div />
       <div />

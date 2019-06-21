@@ -21120,13 +21120,20 @@ namespace ts {
          * @param signature a candidate signature we are trying whether it is a call signature
          * @param relation a relationship to check parameter and argument type
          */
-        function checkApplicableSignatureForJsxOpeningLikeElement(node: JsxOpeningLikeElement, signature: Signature, relation: Map<RelationComparisonResult>, checkMode: CheckMode, reportErrors: boolean) {
+        function checkApplicableSignatureForJsxOpeningLikeElement(
+            node: JsxOpeningLikeElement,
+            signature: Signature,
+            relation: Map<RelationComparisonResult>,
+            checkMode: CheckMode,
+            reportErrors: boolean,
+            containingMessageChain: (() => DiagnosticMessageChain | undefined) | undefined,
+        ) {
             // Stateless function components can have maximum of three arguments: "props", "context", and "updater".
             // However "context" and "updater" are implicit and can't be specify by users. Only the first parameter, props,
             // can be specified by users through attributes property.
             const paramType = getEffectiveFirstArgumentForJsxSignature(signature, node);
             const attributesType = checkExpressionWithContextualType(node.attributes, paramType, /*inferenceContext*/ undefined, checkMode);
-            return checkTypeRelatedToAndOptionallyElaborate(attributesType, paramType, relation, reportErrors ? node.tagName : undefined, node.attributes, undefined, undefined, /*breakdown*/ true);
+            return checkTypeRelatedToAndOptionallyElaborate(attributesType, paramType, relation, reportErrors ? node.tagName : undefined, node.attributes, undefined, containingMessageChain, /*breakdown*/ true);
         }
 
         function getSignatureApplicabilityError(
@@ -21139,8 +21146,7 @@ namespace ts {
             containingMessageChain: (() => DiagnosticMessageChain | undefined) | undefined,
         ) {
             if (isJsxOpeningLikeElement(node)) {
-                // TODO: Maybe containingMessageChain too?
-                return checkApplicableSignatureForJsxOpeningLikeElement(node, signature, relation, checkMode, reportErrors);
+                return checkApplicableSignatureForJsxOpeningLikeElement(node, signature, relation, checkMode, reportErrors, containingMessageChain);
             }
             const thisType = getThisTypeOfSignature(signature);
             if (thisType && thisType !== voidType && node.kind !== SyntaxKind.NewExpression) {
@@ -21151,7 +21157,7 @@ namespace ts {
                 const thisArgumentType = thisArgumentNode ? checkExpression(thisArgumentNode) : voidType;
                 const errorNode = reportErrors ? (thisArgumentNode || node) : undefined;
                 const headMessage = Diagnostics.The_this_context_of_type_0_is_not_assignable_to_method_s_this_of_type_1;
-                const r = checkTypeRelatedTo(thisArgumentType, thisType, relation, errorNode, headMessage, undefined, undefined, /*breakdown*/ true);
+                const r = checkTypeRelatedTo(thisArgumentType, thisType, relation, errorNode, headMessage, containingMessageChain, undefined, /*breakdown*/ true);
                 if (r) {
                     return r;
                 }
@@ -21512,7 +21518,7 @@ namespace ts {
                         let chain: DiagnosticMessageChain | undefined = undefined;
                         if (candidatesForArgumentError.length > 3) {
                             chain = chainDiagnosticMessages(chain, Diagnostics.The_last_overload_gave_the_following_error);
-                            chain = chainDiagnosticMessages(chain, Diagnostics.Failed_to_find_a_suitable_overload_for_this_call_from_0_overloads, candidatesForArgumentError.length);
+                            chain = chainDiagnosticMessages(chain, Diagnostics.No_suitable_overload_for_this_call);
                         }
                         const r = getSignatureApplicabilityError(node, args, last, assignableRelation, CheckMode.Normal, /*reportErrors*/ true, () => chain);
                         Debug.assert(!!r && !!r[0], "No error for last signature");
@@ -21522,15 +21528,17 @@ namespace ts {
                     }
                     else {
                         const related: DiagnosticRelatedInformation[] = [];
+                        let i = 0;
                         for (const c of candidatesForArgumentError) {
-                            const chain = chainDiagnosticMessages(undefined, Diagnostics.Overload_0_gave_the_following_error, signatureToString(c));
+                            i++;
+                            const chain = chainDiagnosticMessages(undefined, Diagnostics.Overload_0_of_1_2_gave_the_following_error, i, candidates.length, signatureToString(c));
                             const r = getSignatureApplicabilityError(node, args, c, assignableRelation, CheckMode.Normal, /*reportErrors*/ true, () => chain);
                             Debug.assert(!!r && !!r[0], "No error for signature (1)");
                             if (r) {
                                 related.push(createDiagnosticForNodeFromMessageChain(...r));
                             }
                         }
-                        diagnostics.add(createDiagnosticForNodeFromMessageChain(node, chainDiagnosticMessages(undefined, Diagnostics.Failed_to_find_a_suitable_overload_for_this_call_from_0_overloads, candidatesForArgumentError.length), related));
+                        diagnostics.add(createDiagnosticForNodeFromMessageChain(node, chainDiagnosticMessages(undefined, Diagnostics.No_suitable_overload_for_this_call), related));
                     }
                 }
                 else if (candidateForArgumentArityError) {

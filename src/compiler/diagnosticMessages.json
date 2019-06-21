@@ -2621,7 +2621,7 @@
         "category": "Error",
         "code": 2754
     },
-    "Failed to find a suitable overload for this call from {0} overloads.": {
+    "No suitable overload for this call.": {
         "category": "Error",
         "code": 2755
     },
@@ -2629,7 +2629,7 @@
         "category": "Error",
         "code": 2756
     },
-    "Overload '{0}' gave the following error.": {
+    "Overload {0} of {1}, '{2}', gave the following error.": {
         "category": "Error",
         "code": 2757
     },
