@@ -157,7 +157,7 @@ ${sanitizeDockerfileOutput(result.stderr.toString())}`;
 }
 
 function sanitizeDockerfileOutput(result: string): string {
-    return stripAbsoluteImportPaths(sanitizeTimestamps(stripANSIEscapes(normalizeNewlines(result))));
+    return stripAbsoluteImportPaths(sanitizeTimestamps(stripRushStageNumbers(stripANSIEscapes(normalizeNewlines(result)))));
 }
 
 function normalizeNewlines(result: string): string {
@@ -166,6 +166,10 @@ function normalizeNewlines(result: string): string {
 
 function stripANSIEscapes(result: string): string {
     return result.replace(/\x1b\[[0-9;]*[a-zA-Z]/g, "");
+}
+
+function stripRushStageNumbers(result: string): string {
+    return result.replace(/\d+ of \d+:/g, "XX of XX:");
 }
 
 function sanitizeTimestamps(result: string): string {

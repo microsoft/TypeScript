@@ -10,40 +10,40 @@ Starting "rush rebuild"
 Executing a maximum of 1 simultaneous processes...
 
 [@azure/abort-controller] started
-1 of 18: [@azure/abort-controller] completed successfully in ? seconds
+XX of XX: [@azure/abort-controller] completed successfully in ? seconds
 [@azure/cosmos] started
-2 of 18: [@azure/cosmos] completed successfully in ? seconds
+XX of XX: [@azure/cosmos] completed successfully in ? seconds
 [@azure/event-hubs] started
-3 of 18: [@azure/event-hubs] completed successfully in ? seconds
+XX of XX: [@azure/event-hubs] completed successfully in ? seconds
 [@azure/service-bus] started
 Warning: You have changed the public API signature for this project. Updating review/service-bus.api.md
 [@azure/storage-blob] started
-5 of 18: [@azure/storage-blob] completed successfully in ? seconds
+XX of XX: [@azure/storage-blob] completed successfully in ? seconds
 [@azure/storage-datalake] started
-6 of 18: [@azure/storage-datalake] completed successfully in ? seconds
+XX of XX: [@azure/storage-datalake] completed successfully in ? seconds
 [@azure/storage-file] started
-7 of 18: [@azure/storage-file] completed successfully in ? seconds
+XX of XX: [@azure/storage-file] completed successfully in ? seconds
 [@azure/storage-queue] started
-8 of 18: [@azure/storage-queue] completed successfully in ? seconds
+XX of XX: [@azure/storage-queue] completed successfully in ? seconds
 [@azure/template] started
-9 of 18: [@azure/template] completed successfully in ? seconds
+XX of XX: [@azure/template] completed successfully in ? seconds
 [@azure/core-http] started
-10 of 18: [@azure/core-http] completed successfully in ? seconds
+XX of XX: [@azure/core-http] completed successfully in ? seconds
 [@azure/core-paging] started
-11 of 18: [@azure/core-paging] completed successfully in ? seconds
+XX of XX: [@azure/core-paging] completed successfully in ? seconds
 [@azure/event-processor-host] started
-12 of 18: [@azure/event-processor-host] completed successfully in ? seconds
+XX of XX: [@azure/event-processor-host] completed successfully in ? seconds
 [testhub] started
-13 of 18: [testhub] completed successfully in ? seconds
+XX of XX: [testhub] completed successfully in ? seconds
 [@azure/identity] started
-14 of 18: [@azure/identity] completed successfully in ? seconds
+XX of XX: [@azure/identity] completed successfully in ? seconds
 [@azure/core-amqp] started
 [@azure/keyvault-certificates] started
-15 of 18: [@azure/keyvault-certificates] completed successfully in ? seconds
+XX of XX: [@azure/keyvault-certificates] completed successfully in ? seconds
 [@azure/keyvault-keys] started
-16 of 18: [@azure/keyvault-keys] completed successfully in ? seconds
+XX of XX: [@azure/keyvault-keys] completed successfully in ? seconds
 [@azure/keyvault-secrets] started
-17 of 18: [@azure/keyvault-secrets] completed successfully in ? seconds
+XX of XX: [@azure/keyvault-secrets] completed successfully in ? seconds
 
 SUCCESS (16)
 ================================
@@ -89,7 +89,7 @@ rush rebuild - Errors! ( ? seconds)
 
 Standard error:
 Your version of Node.js (12.4.0) has not been tested with this release of Rush. The Rush team will not accept issue reports for it. Please consider upgrading Rush or downgrading Node.js.
-4 of 18: [@azure/service-bus] completed with warnings in ? seconds
+XX of XX: [@azure/service-bus] completed with warnings in ? seconds
 
-14 of 18: [@azure/core-amqp] failed to build!
+XX of XX: [@azure/core-amqp] failed to build!
 [@azure/core-amqp] Returned error code: 2
