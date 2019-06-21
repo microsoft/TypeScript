@@ -569,21 +569,25 @@ namespace ts.codefix {
                 case SyntaxKind.AsteriskAsteriskToken:
 
                 // MultiplicativeOperator
+                // falls through
                 case SyntaxKind.AsteriskToken:
                 case SyntaxKind.SlashToken:
                 case SyntaxKind.PercentToken:
 
                 // ShiftOperator
+                // falls through
                 case SyntaxKind.LessThanLessThanToken:
                 case SyntaxKind.GreaterThanGreaterThanToken:
                 case SyntaxKind.GreaterThanGreaterThanGreaterThanToken:
 
                 // BitwiseOperator
+                // falls through
                 case SyntaxKind.AmpersandToken:
                 case SyntaxKind.BarToken:
                 case SyntaxKind.CaretToken:
 
                 // CompoundAssignmentOperator
+                // falls through
                 case SyntaxKind.MinusEqualsToken:
                 case SyntaxKind.AsteriskAsteriskEqualsToken:
                 case SyntaxKind.AsteriskEqualsToken:
@@ -597,9 +601,11 @@ namespace ts.codefix {
                 case SyntaxKind.GreaterThanGreaterThanEqualsToken:
 
                 // AdditiveOperator
+                // falls through
                 case SyntaxKind.MinusToken:
 
                 // RelationalOperator
+                // falls through
                 case SyntaxKind.LessThanToken:
                 case SyntaxKind.LessThanEqualsToken:
                 case SyntaxKind.GreaterThanToken:

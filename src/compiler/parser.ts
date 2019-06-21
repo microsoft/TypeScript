@@ -4646,7 +4646,7 @@ namespace ts {
                 case SyntaxKind.TemplateHead:                   // foo<T> `...${100}...`
                 // these are the only tokens can legally follow a type argument
                 // list. So we definitely want to treat them as type arg lists.
-
+                // falls through
                 case SyntaxKind.DotToken:                       // foo<x>.
                 case SyntaxKind.CloseParenToken:                // foo<x>)
                 case SyntaxKind.CloseBracketToken:              // foo<x>]
@@ -4674,7 +4674,7 @@ namespace ts {
                 // We don't want to treat these as type arguments.  Otherwise we'll parse this
                 // as an invocation expression.  Instead, we want to parse out the expression
                 // in isolation from the type arguments.
-
+                // falls through
                 default:
                     // Anything else treat as an expression.
                     return false;
@@ -5309,6 +5309,7 @@ namespace ts {
                 case SyntaxKind.DebuggerKeyword:
                 // 'catch' and 'finally' do not actually indicate that the code is part of a statement,
                 // however, we say they are here so that we may gracefully parse them and error later.
+                // falls through
                 case SyntaxKind.CatchKeyword:
                 case SyntaxKind.FinallyKeyword:
                     return true;
@@ -5394,6 +5395,7 @@ namespace ts {
                     return parseThrowStatement();
                 case SyntaxKind.TryKeyword:
                 // Include 'catch' and 'finally' for error recovery.
+                // falls through
                 case SyntaxKind.CatchKeyword:
                 case SyntaxKind.FinallyKeyword:
                     return parseTryStatement();
