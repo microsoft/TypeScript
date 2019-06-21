@@ -882,8 +882,8 @@ namespace ts.server {
         }
 
         private getEncodedSyntacticClassifications(args: protocol.EncodedSyntacticClassificationsRequestArgs) {
-            const { file, project } = this.getFileAndProject(args);
-            return project.getLanguageService().getEncodedSyntacticClassifications(file, args);
+            const { file, languageService } = this.getFileAndLanguageServiceForSyntacticOperation(args);
+            return languageService.getEncodedSyntacticClassifications(file, args);
         }
 
         private getEncodedSemanticClassifications(args: protocol.EncodedSemanticClassificationsRequestArgs) {
