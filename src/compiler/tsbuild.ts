@@ -1462,7 +1462,8 @@ namespace ts {
                 const refStatus = getUpToDateStatus(state, parseConfigFile(state, resolvedRef, resolvedRefPath), resolvedRefPath);
 
                 // Its a circular reference ignore the status of this project
-                if (refStatus.type === UpToDateStatusType.ComputingUpstream) {
+                if (refStatus.type === UpToDateStatusType.ComputingUpstream ||
+                    refStatus.type === UpToDateStatusType.ContainerOnly) { // Container only ignore this project
                     continue;
                 }
 
