@@ -730,7 +730,7 @@ namespace ts.projectSystem {
         }
     }
 
-    interface MakeReferenceItem extends DocumentSpanFromSubstring {
+    export interface MakeReferenceItem extends DocumentSpanFromSubstring {
         isDefinition: boolean;
         lineText: string;
     }
