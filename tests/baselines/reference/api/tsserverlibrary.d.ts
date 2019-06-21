@@ -6415,6 +6415,19 @@ declare namespace ts.server.protocol {
         body?: string[];
     }
     /**
+     * Arguments for EncodedSyntacticClassificationsRequest request.
+     */
+    interface EncodedSyntacticClassificationsRequestArgs extends FileRequestArgs {
+        /**
+         * Start position of the span.
+         */
+        start: number;
+        /**
+         * Length of the span.
+         */
+        length: number;
+    }
+    /**
      * Arguments for EncodedSemanticClassificationsRequest request.
      */
     interface EncodedSemanticClassificationsRequestArgs extends FileRequestArgs {
@@ -9075,6 +9088,7 @@ declare namespace ts.server {
         private updateErrorCheck;
         private cleanProjects;
         private cleanup;
+        private getEncodedSyntacticClassifications;
         private getEncodedSemanticClassifications;
         private getProject;
         private getConfigFileAndProject;
