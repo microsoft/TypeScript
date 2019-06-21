@@ -1442,7 +1442,8 @@ namespace ts {
                 },
                 ...(host.directoryExists ? { directoryExists: f => host.directoryExists!(f) } : {}),
                 useCaseSensitiveFileNames: () => host.useCaseSensitiveFileNames(),
-                getProgramBuildInfo: () => program.getProgramBuildInfo && program.getProgramBuildInfo()
+                getProgramBuildInfo: () => program.getProgramBuildInfo && program.getProgramBuildInfo(),
+                getSourceFileFromReference: (file, ref) => program.getSourceFileFromReference(file, ref),
             };
         }
 
@@ -2127,7 +2128,7 @@ namespace ts {
         }
 
         /** This should have similar behavior to 'processSourceFile' without diagnostics or mutation. */
-        function getSourceFileFromReference(referencingFile: SourceFile, ref: FileReference): SourceFile | undefined {
+        function getSourceFileFromReference(referencingFile: SourceFile | UnparsedSource, ref: FileReference): SourceFile | undefined {
             return getSourceFileFromReferenceWorker(resolveTripleslashReference(ref.fileName, referencingFile.fileName), fileName => filesByName.get(toPath(fileName)) || undefined);
         }
 
