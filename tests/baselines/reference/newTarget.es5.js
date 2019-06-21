@@ -78,8 +78,8 @@ function f1() {
     var g = _newTarget;
     var h = function () { return _newTarget; };
 }
-var f2 = function _b() {
-    var _newTarget = this && this instanceof _b ? this.constructor : void 0;
+var f2 = function f2() {
+    var _newTarget = this && this instanceof f2 ? this.constructor : void 0;
     var i = _newTarget;
     var j = function () { return _newTarget; };
 };

@@ -106,6 +106,77 @@ ${stripAbsoluteImportPaths(result.stderr.toString().replace(/\r\n/g, "\n"))}`;
     }
 }
 
+class DockerfileRunner extends ExternalCompileRunnerBase {
+    readonly testDir = "tests/cases/docker/";
+    kind(): TestRunnerKind {
+        return "docker";
+    }
+    initializeTests(): void {
+        // Read in and evaluate the test list
+        const testList = this.tests && this.tests.length ? this.tests : this.enumerateTestFiles();
+
+        // tslint:disable-next-line:no-this-assignment
+        const cls = this;
+        describe(`${this.kind()} code samples`, function(this: Mocha.ISuiteCallbackContext) {
+            this.timeout(cls.timeout); // 20 minutes
+            before(() => {
+                cls.exec("docker", ["build", ".", "-t", "typescript/typescript"], { cwd: Harness.IO.getWorkspaceRoot() }); // cached because workspace is hashed to determine cacheability
+            });
+            for (const test of testList) {
+                const directory = typeof test === "string" ? test : test.file;
+                const cwd = path.join(Harness.IO.getWorkspaceRoot(), cls.testDir, directory);
+                it(`should build ${directory} successfully`, () => {
+                    const imageName = `tstest/${directory}`;
+                    cls.exec("docker", ["build", "--no-cache", ".", "-t", imageName], { cwd }); // --no-cache so the latest version of the repos referenced is always fetched
+                    const cp: typeof import("child_process") = require("child_process");
+                    Harness.Baseline.runBaseline(`${cls.kind()}/${directory}.log`, cls.report(cp.spawnSync(`docker`, ["run", imageName], { cwd, timeout: cls.timeout, shell: true })));
+                });
+            }
+        });
+    }
+
+    private timeout = 1_200_000; // 20 minutes;
+    private exec(command: string, args: string[], options: { cwd: string, timeout?: number }): void {
+        const cp: typeof import("child_process") = require("child_process");
+        const stdio = isWorker ? "pipe" : "inherit";
+        const res = cp.spawnSync(command, args, { timeout: this.timeout, shell: true, stdio, ...options });
+        if (res.status !== 0) {
+            throw new Error(`${command} ${args.join(" ")} for ${options.cwd} failed: ${res.stderr && res.stderr.toString()}`);
+        }
+    }
+    report(result: ExecResult) {
+        // tslint:disable-next-line:no-null-keyword
+        return result.status === 0 && !result.stdout.length && !result.stderr.length ? null : `Exit Code: ${result.status}
+Standard output:
+${sanitizeDockerfileOutput(result.stdout.toString())}
+
+
+Standard error:
+${sanitizeDockerfileOutput(result.stderr.toString())}`;
+    }
+}
+
+function sanitizeDockerfileOutput(result: string): string {
+    return stripAbsoluteImportPaths(sanitizeTimestamps(stripANSIEscapes(normalizeNewlines(result))));
+}
+
+function normalizeNewlines(result: string): string {
+    return result.replace(/\r\n/g, "\n");
+}
+
+function stripANSIEscapes(result: string): string {
+    return result.replace(/\x1b\[[0-9;]*[a-zA-Z]/g, "");
+}
+
+function sanitizeTimestamps(result: string): string {
+    return result.replace(/\[\d?\d:\d\d:\d\d (A|P)M\]/g, "[XX:XX:XX XM]")
+        .replace(/\d+(\.\d+)? seconds?/g, "? seconds")
+        .replace(/\d+(\.\d+)? minutes?/g, "")
+        .replace(/\d+(\.\d+)?s/g, "?s")
+        .replace(/\d+.\d+.\d+-insiders.\d\d\d\d\d\d\d\d/g, "X.X.X-insiders.xxxxxxxx");
+}
+
+
 /**
  * Import types and some other error messages use absolute paths in errors as they have no context to be written relative to;
  * This is problematic for error baselines, so we grep for them and strip them out.

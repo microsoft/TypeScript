@@ -4,8 +4,8 @@
 // "test" is a comment on the default library.
 
 // @Filename: file1.ts
-//// var [|test|] = "foo";
+//// [|var [|{| "contextRangeIndex": 0 |}test|] = "foo";|]
 //// console.log([|test|]);
 
-const ranges = test.ranges();
+const [r0Def, ...ranges] = test.ranges();
 verify.renameLocations(ranges[0], { findInComments: true, ranges });

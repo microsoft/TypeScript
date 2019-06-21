@@ -54,7 +54,7 @@ namespace ts.tscWatch {
                 root.content = `import {x} from "f2"`;
                 host.reloadFS(files);
 
-                // trigger synchronization to make sure that LSHost will try to find 'f2' module on disk
+                // trigger synchronization to make sure that system will try to find 'f2' module on disk
                 host.runQueuedTimeoutCallbacks();
 
                 // ensure file has correct number of errors after edit

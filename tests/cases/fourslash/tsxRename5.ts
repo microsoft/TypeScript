@@ -13,7 +13,7 @@
 ////     size?: number;
 //// }
 ////
-//// var [|nn|]: string;
+//// [|var [|{| "contextRangeIndex": 0 |}nn|]: string;|]
 //// var x = <MyClass name={[|nn|]}></MyClass>;
 
-verify.rangesAreRenameLocations();
+verify.rangesWithSameTextAreRenameLocations("nn");

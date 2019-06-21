@@ -369,18 +369,57 @@ interface RegistrationOptions {
 }
 
 interface RequestInit {
+    /**
+     * A BodyInit object or null to set request's body.
+     */
     body?: BodyInit | null;
+    /**
+     * A string indicating how the request will interact with the browser's cache to set request's cache.
+     */
     cache?: RequestCache;
+    /**
+     * A string indicating whether credentials will be sent with the request always, never, or only when sent to a same-origin URL. Sets request's credentials.
+     */
     credentials?: RequestCredentials;
+    /**
+     * A Headers object, an object literal, or an array of two-item arrays to set request's headers.
+     */
     headers?: HeadersInit;
+    /**
+     * A cryptographic hash of the resource to be fetched by request. Sets request's integrity.
+     */
     integrity?: string;
+    /**
+     * A boolean to set request's keepalive.
+     */
     keepalive?: boolean;
+    /**
+     * A string to set request's method.
+     */
     method?: string;
+    /**
+     * A string to indicate whether the request will use CORS, or will be restricted to same-origin URLs. Sets request's mode.
+     */
     mode?: RequestMode;
+    /**
+     * A string indicating whether request follows redirects, results in an error upon encountering a redirect, or returns the redirect (in an opaque fashion). Sets request's redirect.
+     */
     redirect?: RequestRedirect;
+    /**
+     * A string whose value is a same-origin URL, "about:client", or the empty string, to set request's referrer.
+     */
     referrer?: string;
+    /**
+     * A referrer policy to set request's referrerPolicy.
+     */
     referrerPolicy?: ReferrerPolicy;
+    /**
+     * An AbortSignal to set request's signal.
+     */
     signal?: AbortSignal | null;
+    /**
+     * Can only be null. Used to disassociate request from any Window.
+     */
     window?: any;
 }
 
@@ -473,14 +512,15 @@ interface UnderlyingSource<R = any> {
 }
 
 interface WebGLContextAttributes {
-    alpha?: GLboolean;
-    antialias?: GLboolean;
-    depth?: GLboolean;
+    alpha?: boolean;
+    antialias?: boolean;
+    depth?: boolean;
+    desynchronized?: boolean;
     failIfMajorPerformanceCaveat?: boolean;
     powerPreference?: WebGLPowerPreference;
-    premultipliedAlpha?: GLboolean;
-    preserveDrawingBuffer?: GLboolean;
-    stencil?: GLboolean;
+    premultipliedAlpha?: boolean;
+    preserveDrawingBuffer?: boolean;
+    stencil?: boolean;
 }
 
 interface WebGLContextEventInit extends EventInit {
@@ -512,8 +552,7 @@ interface AbortController {
      */
     readonly signal: AbortSignal;
     /**
-     * Invoking this method will set this object's AbortSignal's aborted flag and
-     * signal to any observers that the associated activity is to be aborted.
+     * Invoking this method will set this object's AbortSignal's aborted flag and signal to any observers that the associated activity is to be aborted.
      */
     abort(): void;
 }
@@ -530,8 +569,7 @@ interface AbortSignalEventMap {
 /** A signal object that allows you to communicate with a DOM request (such as a Fetch) and abort it if required via an AbortController object. */
 interface AbortSignal extends EventTarget {
     /**
-     * Returns true if this AbortSignal's AbortController has signaled to abort, and false
-     * otherwise.
+     * Returns true if this AbortSignal's AbortController has signaled to abort, and false otherwise.
      */
     readonly aborted: boolean;
     onabort: ((this: AbortSignal, ev: Event) => any) | null;
@@ -564,6 +602,11 @@ interface AesCfbParams extends Algorithm {
 
 interface AesCmacParams extends Algorithm {
     length: number;
+}
+
+interface AnimationFrameProvider {
+    cancelAnimationFrame(handle: number): void;
+    requestAnimationFrame(callback: FrameRequestCallback): number;
 }
 
 /** A file-like object of immutable, raw data. Blobs represent data that isn't necessarily in a JavaScript-native format. The File interface is based on Blob, inheriting blob functionality and expanding it to support files on the user's system. */
@@ -619,7 +662,7 @@ declare var BroadcastChannel: {
     new(name: string): BroadcastChannel;
 };
 
-/** An interface of the Streams API provides a built-in byte length queuing strategy that can be used when constructing streams. */
+/** This Streams API interface provides a built-in byte length queuing strategy that can be used when constructing streams. */
 interface ByteLengthQueuingStrategy extends QueuingStrategy<ArrayBufferView> {
     highWaterMark: number;
     size(chunk: ArrayBufferView): number;
@@ -700,11 +743,9 @@ interface CanvasFilters {
 /** An opaque object describing a gradient. It is returned by the methods CanvasRenderingContext2D.createLinearGradient() or CanvasRenderingContext2D.createRadialGradient(). */
 interface CanvasGradient {
     /**
-     * Adds a color stop with the given color to the gradient at the given offset. 0.0 is the offset
-     * at one end of the gradient, 1.0 is the offset at the other end.
-     * Throws an "IndexSizeError" DOMException if the offset
-     * is out of range. Throws a "SyntaxError" DOMException if
-     * the color cannot be parsed.
+     * Adds a color stop with the given color to the gradient at the given offset. 0.0 is the offset at one end of the gradient, 1.0 is the offset at the other end.
+     * 
+     * Throws an "IndexSizeError" DOMException if the offset is out of range. Throws a "SyntaxError" DOMException if the color cannot be parsed.
      */
     addColorStop(offset: number, color: string): void;
 }
@@ -752,8 +793,7 @@ interface CanvasPathDrawingStyles {
 /** An opaque object describing a pattern, based on an image, a canvas, or a video, created by the CanvasRenderingContext2D.createPattern() method. */
 interface CanvasPattern {
     /**
-     * Sets the transformation matrix that will be used when rendering the pattern during a fill or
-     * stroke painting operation.
+     * Sets the transformation matrix that will be used when rendering the pattern during a fill or stroke painting operation.
      */
     setTransform(transform?: DOMMatrix2DInit): void;
 }
@@ -889,7 +929,7 @@ declare var Console: {
     new(): Console;
 };
 
-/** An interface of the Streams API provides a built-in byte length queuing strategy that can be used when constructing streams. */
+/** This Streams API interface provides a built-in byte length queuing strategy that can be used when constructing streams. */
 interface CountQueuingStrategy extends QueuingStrategy {
     highWaterMark: number;
     size(chunk: any): 1;
@@ -926,8 +966,7 @@ declare var CryptoKey: {
 
 interface CustomEvent<T = any> extends Event {
     /**
-     * Returns any custom data event was created with.
-     * Typically used for synthetic events.
+     * Returns any custom data event was created with. Typically used for synthetic events.
      */
     readonly detail: T;
     initCustomEvent(typeArg: string, canBubbleArg: boolean, cancelableArg: boolean, detailArg: T): void;
@@ -1179,8 +1218,7 @@ interface DOMStringList {
      */
     readonly length: number;
     /**
-     * Returns true if strings contains string, and false
-     * otherwise.
+     * Returns true if strings contains string, and false otherwise.
      */
     contains(string: string): boolean;
     /**
@@ -1200,7 +1238,7 @@ interface DedicatedWorkerGlobalScopeEventMap extends WorkerGlobalScopeEventMap {
 }
 
 /** (the Worker global scope) is accessible through the self keyword. Some additional global functions, namespaces objects, and constructors, not typically associated with the worker global scope, but available on it, are listed in the JavaScript Reference. See also: Functions available to workers. */
-interface DedicatedWorkerGlobalScope extends WorkerGlobalScope {
+interface DedicatedWorkerGlobalScope extends WorkerGlobalScope, AnimationFrameProvider {
     onmessage: ((this: DedicatedWorkerGlobalScope, ev: MessageEvent) => any) | null;
     close(): void;
     postMessage(message: any, transfer: Transferable[]): void;
@@ -1281,21 +1319,28 @@ interface Event {
      */
     readonly bubbles: boolean;
     cancelBubble: boolean;
+    /**
+     * Returns true or false depending on how event was initialized. Its return value does not always carry meaning, but true can indicate that part of the operation during which event was dispatched, can be canceled by invoking the preventDefault() method.
+     */
     readonly cancelable: boolean;
     /**
      * Returns true or false depending on how event was initialized. True if event invokes listeners past a ShadowRoot node that is the root of its target, and false otherwise.
      */
     readonly composed: boolean;
     /**
-     * Returns the object whose event listener's callback is currently being
-     * invoked.
+     * Returns the object whose event listener's callback is currently being invoked.
      */
     readonly currentTarget: EventTarget | null;
+    /**
+     * Returns true if preventDefault() was invoked successfully to indicate cancelation, and false otherwise.
+     */
     readonly defaultPrevented: boolean;
+    /**
+     * Returns the event's phase, which is one of NONE, CAPTURING_PHASE, AT_TARGET, and BUBBLING_PHASE.
+     */
     readonly eventPhase: number;
     /**
-     * Returns true if event was dispatched by the user agent, and
-     * false otherwise.
+     * Returns true if event was dispatched by the user agent, and false otherwise.
      */
     readonly isTrusted: boolean;
     returnValue: boolean;
@@ -1306,23 +1351,24 @@ interface Event {
      */
     readonly target: EventTarget | null;
     /**
-     * Returns the event's timestamp as the number of milliseconds measured relative to
-     * the time origin.
+     * Returns the event's timestamp as the number of milliseconds measured relative to the time origin.
      */
     readonly timeStamp: number;
     /**
-     * Returns the type of event, e.g.
-     * "click", "hashchange", or
-     * "submit".
+     * Returns the type of event, e.g. "click", "hashchange", or "submit".
      */
     readonly type: string;
+    /**
+     * Returns the item objects of event's path (objects on which listeners will be invoked), except for any nodes in shadow trees of which the shadow root's mode is "closed" that are not reachable from event's currentTarget.
+     */
     composedPath(): EventTarget[];
     initEvent(type: string, bubbles?: boolean, cancelable?: boolean): void;
+    /**
+     * If invoked when the cancelable attribute value is true, and while executing a listener for the event with passive set to false, signals to the operation that caused event to be dispatched that it needs to be canceled.
+     */
     preventDefault(): void;
     /**
-     * Invoking this method prevents event from reaching
-     * any registered event listeners after the current one finishes running and, when dispatched in a tree, also prevents event from reaching any
-     * other objects.
+     * Invoking this method prevents event from reaching any registered event listeners after the current one finishes running and, when dispatched in a tree, also prevents event from reaching any other objects.
      */
     stopImmediatePropagation(): void;
     /**
@@ -1359,8 +1405,7 @@ interface EventSource extends EventTarget {
     onmessage: ((this: EventSource, ev: MessageEvent) => any) | null;
     onopen: ((this: EventSource, ev: Event) => any) | null;
     /**
-     * Returns the state of this EventSource object's connection. It can have the
-     * values described below.
+     * Returns the state of this EventSource object's connection. It can have the values described below.
      */
     readonly readyState: number;
     /**
@@ -1368,11 +1413,12 @@ interface EventSource extends EventTarget {
      */
     readonly url: string;
     /**
-     * Returns true if the credentials mode
-     * for connection requests to the URL providing the
-     * event stream is set to "include", and false otherwise.
+     * Returns true if the credentials mode for connection requests to the URL providing the event stream is set to "include", and false otherwise.
      */
     readonly withCredentials: boolean;
+    /**
+     * Aborts any instances of the fetch algorithm started for this EventSource object, and sets the readyState attribute to CLOSED.
+     */
     close(): void;
     readonly CLOSED: number;
     readonly CONNECTING: number;
@@ -1395,18 +1441,20 @@ declare var EventSource: {
 interface EventTarget {
     /**
      * Appends an event listener for events whose type attribute value is type. The callback argument sets the callback that will be invoked when the event is dispatched.
-     * The options argument sets listener-specific options. For compatibility this can be a
-     * boolean, in which case the method behaves exactly as if the value was specified as options's capture.
+     * 
+     * The options argument sets listener-specific options. For compatibility this can be a boolean, in which case the method behaves exactly as if the value was specified as options's capture.
+     * 
      * When set to true, options's capture prevents callback from being invoked when the event's eventPhase attribute value is BUBBLING_PHASE. When false (or not present), callback will not be invoked when event's eventPhase attribute value is CAPTURING_PHASE. Either way, callback will be invoked if event's eventPhase attribute value is AT_TARGET.
+     * 
      * When set to true, options's passive indicates that the callback will not cancel the event by invoking preventDefault(). This is used to enable performance optimizations described in §2.8 Observing event listeners.
-     * When set to true, options's once indicates that the callback will only be invoked once after which the event listener will
-     * be removed.
+     * 
+     * When set to true, options's once indicates that the callback will only be invoked once after which the event listener will be removed.
+     * 
      * The event listener is appended to target's event listener list and is not appended if it has the same type, callback, and capture.
      */
     addEventListener(type: string, listener: EventListenerOrEventListenerObject | null, options?: boolean | AddEventListenerOptions): void;
     /**
-     * Dispatches a synthetic event event to target and returns true
-     * if either event's cancelable attribute value is false or its preventDefault() method was not invoked, and false otherwise.
+     * Dispatches a synthetic event event to target and returns true if either event's cancelable attribute value is false or its preventDefault() method was not invoked, and false otherwise.
      */
     dispatchEvent(event: Event): boolean;
     /**
@@ -1430,7 +1478,7 @@ declare var ExtendableEvent: {
     new(type: string, eventInitDict?: ExtendableEventInit): ExtendableEvent;
 };
 
-/** An interface of the ServiceWorker API represents the event object of a message event fired on a service worker (when a channel message is received on the ServiceWorkerGlobalScope from another context) — extends the lifetime of such events. */
+/** This ServiceWorker API interface represents the event object of a message event fired on a service worker (when a channel message is received on the ServiceWorkerGlobalScope from another context) — extends the lifetime of such events. */
 interface ExtendableMessageEvent extends ExtendableEvent {
     readonly data: any;
     readonly lastEventId: string;
@@ -1483,23 +1531,23 @@ declare var FileList: {
 };
 
 interface FileReaderEventMap {
-    "abort": ProgressEvent;
-    "error": ProgressEvent;
-    "load": ProgressEvent;
-    "loadend": ProgressEvent;
-    "loadstart": ProgressEvent;
-    "progress": ProgressEvent;
+    "abort": FileReaderProgressEvent;
+    "error": FileReaderProgressEvent;
+    "load": FileReaderProgressEvent;
+    "loadend": FileReaderProgressEvent;
+    "loadstart": FileReaderProgressEvent;
+    "progress": FileReaderProgressEvent;
 }
 
 /** Lets web applications asynchronously read the contents of files (or raw data buffers) stored on the user's computer, using File or Blob objects to specify the file or data to read. */
 interface FileReader extends EventTarget {
     readonly error: DOMException | null;
-    onabort: ((this: FileReader, ev: ProgressEvent) => any) | null;
-    onerror: ((this: FileReader, ev: ProgressEvent) => any) | null;
-    onload: ((this: FileReader, ev: ProgressEvent) => any) | null;
-    onloadend: ((this: FileReader, ev: ProgressEvent) => any) | null;
-    onloadstart: ((this: FileReader, ev: ProgressEvent) => any) | null;
-    onprogress: ((this: FileReader, ev: ProgressEvent) => any) | null;
+    onabort: ((this: FileReader, ev: FileReaderProgressEvent) => any) | null;
+    onerror: ((this: FileReader, ev: FileReaderProgressEvent) => any) | null;
+    onload: ((this: FileReader, ev: FileReaderProgressEvent) => any) | null;
+    onloadend: ((this: FileReader, ev: FileReaderProgressEvent) => any) | null;
+    onloadstart: ((this: FileReader, ev: FileReaderProgressEvent) => any) | null;
+    onprogress: ((this: FileReader, ev: FileReaderProgressEvent) => any) | null;
     readonly readyState: number;
     readonly result: string | ArrayBuffer | null;
     abort(): void;
@@ -1523,6 +1571,10 @@ declare var FileReader: {
     readonly EMPTY: number;
     readonly LOADING: number;
 };
+
+interface FileReaderProgressEvent extends ProgressEvent {
+    readonly target: FileReader | null;
+}
 
 /** Allows to read File or Blob objects in a synchronous way. */
 interface FileReaderSync {
@@ -1554,22 +1606,28 @@ declare var FormData: {
 };
 
 interface GenericTransformStream {
+    /**
+     * Returns a readable stream whose chunks are strings resulting from running encoding's decoder on the chunks written to writable.
+     */
     readonly readable: ReadableStream;
     /**
-     * Returns a writable stream which accepts string chunks and runs them through UTF-8's encoder before making them available to readable.
+     * Returns a writable stream which accepts BufferSource chunks and runs them through encoding's decoder before making them available to readable.
+     * 
      * Typically this will be used via the pipeThrough() method on a ReadableStream source.
-     * textReadable
-     * .pipeThrough(new TextEncoderStream())
-     * .pipeTo(byteWritable);
+     * 
+     * ```
+     * var decoder = new TextDecoderStream(encoding);
+     * byteReadable
+     *   .pipeThrough(decoder)
+     *   .pipeTo(textWritable);
+     * ```
+     * 
+     * If the error mode is "fatal" and encoding's decoder returns error, both readable and writable will be errored with a TypeError.
      */
     readonly writable: WritableStream;
 }
 
-interface GlobalFetch {
-    fetch(input: RequestInfo, init?: RequestInit): Promise<Response>;
-}
-
-/** An interface of the Fetch API allows you to perform various actions on HTTP request and response headers. These actions include retrieving, setting, adding to, and removing. A Headers object has an associated header list, which is initially empty and consists of zero or more name and value pairs.  You can add to this using methods like append() (see Examples.) In all methods of this interface, header names are matched by case-insensitive byte sequence. */
+/** This Fetch API interface allows you to perform various actions on HTTP request and response headers. These actions include retrieving, setting, adding to, and removing. A Headers object has an associated header list, which is initially empty and consists of zero or more name and value pairs.  You can add to this using methods like append() (see Examples.) In all methods of this interface, header names are matched by case-insensitive byte sequence. */
 interface Headers {
     append(name: string, value: string): void;
     delete(name: string): void;
@@ -1593,21 +1651,18 @@ interface HkdfCtrParams extends Algorithm {
 interface IDBArrayKey extends Array<IDBValidKey> {
 }
 
-/** An interface of the IndexedDB API represents a cursor for traversing or iterating over multiple records in a database. */
+/** This IndexedDB API interface represents a cursor for traversing or iterating over multiple records in a database. */
 interface IDBCursor {
     /**
-     * Returns the direction ("next", "nextunique", "prev" or "prevunique")
-     * of the cursor.
+     * Returns the direction ("next", "nextunique", "prev" or "prevunique") of the cursor.
      */
     readonly direction: IDBCursorDirection;
     /**
-     * Returns the key of the cursor.
-     * Throws a "InvalidStateError" DOMException if the cursor is advancing or is finished.
+     * Returns the key of the cursor. Throws a "InvalidStateError" DOMException if the cursor is advancing or is finished.
      */
     readonly key: IDBValidKey;
     /**
-     * Returns the effective key of the cursor.
-     * Throws a "InvalidStateError" DOMException if the cursor is advancing or is finished.
+     * Returns the effective key of the cursor. Throws a "InvalidStateError" DOMException if the cursor is advancing or is finished.
      */
     readonly primaryKey: IDBValidKey;
     /**
@@ -1615,28 +1670,28 @@ interface IDBCursor {
      */
     readonly source: IDBObjectStore | IDBIndex;
     /**
-     * Advances the cursor through the next count records in
-     * range.
+     * Advances the cursor through the next count records in range.
      */
     advance(count: number): void;
     /**
-     * Advances the cursor to the next record in range matching or
-     * after key.
+     * Advances the cursor to the next record in range.
      */
     continue(key?: IDBValidKey): void;
     /**
-     * Advances the cursor to the next record in range matching
-     * or after key and primaryKey. Throws an "InvalidAccessError" DOMException if the source is not an index.
+     * Advances the cursor to the next record in range matching or after key and primaryKey. Throws an "InvalidAccessError" DOMException if the source is not an index.
      */
     continuePrimaryKey(key: IDBValidKey, primaryKey: IDBValidKey): void;
     /**
      * Delete the record pointed at by the cursor with a new value.
+     * 
      * If successful, request's result will be undefined.
      */
     delete(): IDBRequest<undefined>;
     /**
      * Updated the record pointed at by the cursor with a new value.
+     * 
      * Throws a "DataError" DOMException if the effective object store uses in-line keys and the key would have changed.
+     * 
      * If successful, request's result will be the record's key.
      */
     update(value: any): IDBRequest<IDBValidKey>;
@@ -1647,7 +1702,7 @@ declare var IDBCursor: {
     new(): IDBCursor;
 };
 
-/** An interface of the IndexedDB API represents a cursor for traversing or iterating over multiple records in a database. It is the same as the IDBCursor, except that it includes the value property. */
+/** This IndexedDB API interface represents a cursor for traversing or iterating over multiple records in a database. It is the same as the IDBCursor, except that it includes the value property. */
 interface IDBCursorWithValue extends IDBCursor {
     /**
      * Returns the cursor's current value.
@@ -1667,7 +1722,7 @@ interface IDBDatabaseEventMap {
     "versionchange": IDBVersionChangeEvent;
 }
 
-/** An interface of the IndexedDB API provides a connection to a database; you can use an IDBDatabase object to open a transaction on your database then create, manipulate, and delete objects (data) in that database. The interface provides the only way to get and manage versions of the database. */
+/** This IndexedDB API interface provides a connection to a database; you can use an IDBDatabase object to open a transaction on your database then create, manipulate, and delete objects (data) in that database. The interface provides the only way to get and manage versions of the database. */
 interface IDBDatabase extends EventTarget {
     /**
      * Returns the name of the database.
@@ -1691,17 +1746,18 @@ interface IDBDatabase extends EventTarget {
     close(): void;
     /**
      * Creates a new object store with the given name and options and returns a new IDBObjectStore.
+     * 
      * Throws a "InvalidStateError" DOMException if not called within an upgrade transaction.
      */
     createObjectStore(name: string, optionalParameters?: IDBObjectStoreParameters): IDBObjectStore;
     /**
      * Deletes the object store with the given name.
+     * 
      * Throws a "InvalidStateError" DOMException if not called within an upgrade transaction.
      */
     deleteObjectStore(name: string): void;
     /**
-     * Returns a new transaction with the given mode ("readonly" or "readwrite")
-     * and scope which can be a single object store name or an array of names.
+     * Returns a new transaction with the given mode ("readonly" or "readwrite") and scope which can be a single object store name or an array of names.
      */
     transaction(storeNames: string | string[], mode?: IDBTransactionMode): IDBTransaction;
     addEventListener<K extends keyof IDBDatabaseEventMap>(type: K, listener: (this: IDBDatabase, ev: IDBDatabaseEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
@@ -1718,24 +1774,17 @@ declare var IDBDatabase: {
 /** In the following code snippet, we make a request to open a database, and include handlers for the success and error cases. For a full working example, see our To-do Notifications app (view example live.) */
 interface IDBFactory {
     /**
-     * Compares two values as keys. Returns -1 if key1 precedes key2, 1 if key2 precedes key1, and 0 if
-     * the keys are equal.
+     * Compares two values as keys. Returns -1 if key1 precedes key2, 1 if key2 precedes key1, and 0 if the keys are equal.
+     * 
      * Throws a "DataError" DOMException if either input is not a valid key.
      */
     cmp(first: any, second: any): number;
     /**
-     * Attempts to delete the named database. If the
-     * database already exists and there are open connections that don't close in response to a versionchange event, the request will be blocked until all they close. If the request
-     * is successful request's result will be null.
+     * Attempts to delete the named database. If the database already exists and there are open connections that don't close in response to a versionchange event, the request will be blocked until all they close. If the request is successful request's result will be null.
      */
     deleteDatabase(name: string): IDBOpenDBRequest;
     /**
-     * Attempts to open a connection to the named database with the specified version. If the database already exists
-     * with a lower version and there are open connections that don't close in response to a versionchange event, the request will be blocked until all they close, then an upgrade
-     * will occur. If the database already exists with a higher
-     * version the request will fail. If the request is
-     * successful request's result will
-     * be the connection.
+     * Attempts to open a connection to the named database with the current version, or 1 if it does not already exist. If the request is successful request's result will be the connection.
      */
     open(name: string, version?: number): IDBOpenDBRequest;
 }
@@ -1750,9 +1799,7 @@ interface IDBIndex {
     readonly keyPath: string | string[];
     readonly multiEntry: boolean;
     /**
-     * Updates the name of the store to newName.
-     * Throws an "InvalidStateError" DOMException if not called within an upgrade
-     * transaction.
+     * Returns the name of the index.
      */
     name: string;
     /**
@@ -1762,43 +1809,46 @@ interface IDBIndex {
     readonly unique: boolean;
     /**
      * Retrieves the number of records matching the given key or key range in query.
-     * If successful, request's result will be the
-     * count.
+     * 
+     * If successful, request's result will be the count.
      */
     count(key?: IDBValidKey | IDBKeyRange): IDBRequest<number>;
     /**
-     * Retrieves the value of the first record matching the
-     * given key or key range in query.
+     * Retrieves the value of the first record matching the given key or key range in query.
+     * 
      * If successful, request's result will be the value, or undefined if there was no matching record.
      */
     get(key: IDBValidKey | IDBKeyRange): IDBRequest<any | undefined>;
     /**
      * Retrieves the values of the records matching the given key or key range in query (up to count if given).
+     * 
      * If successful, request's result will be an Array of the values.
      */
-    getAll(query?: IDBValidKey | IDBKeyRange, count?: number): IDBRequest<any[]>;
+    getAll(query?: IDBValidKey | IDBKeyRange | null, count?: number): IDBRequest<any[]>;
     /**
      * Retrieves the keys of records matching the given key or key range in query (up to count if given).
+     * 
      * If successful, request's result will be an Array of the keys.
      */
-    getAllKeys(query?: IDBValidKey | IDBKeyRange, count?: number): IDBRequest<IDBValidKey[]>;
+    getAllKeys(query?: IDBValidKey | IDBKeyRange | null, count?: number): IDBRequest<IDBValidKey[]>;
     /**
-     * Retrieves the key of the first record matching the
-     * given key or key range in query.
+     * Retrieves the key of the first record matching the given key or key range in query.
+     * 
      * If successful, request's result will be the key, or undefined if there was no matching record.
      */
     getKey(key: IDBValidKey | IDBKeyRange): IDBRequest<IDBValidKey | undefined>;
     /**
-     * Opens a cursor over the records matching query,
-     * ordered by direction. If query is null, all records in index are matched.
+     * Opens a cursor over the records matching query, ordered by direction. If query is null, all records in index are matched.
+     * 
      * If successful, request's result will be an IDBCursorWithValue, or null if there were no matching records.
      */
-    openCursor(range?: IDBValidKey | IDBKeyRange, direction?: IDBCursorDirection): IDBRequest<IDBCursorWithValue | null>;
+    openCursor(query?: IDBValidKey | IDBKeyRange | null, direction?: IDBCursorDirection): IDBRequest<IDBCursorWithValue | null>;
     /**
      * Opens a cursor with key only flag set over the records matching query, ordered by direction. If query is null, all records in index are matched.
+     * 
      * If successful, request's result will be an IDBCursor, or null if there were no matching records.
      */
-    openKeyCursor(range?: IDBValidKey | IDBKeyRange, direction?: IDBCursorDirection): IDBRequest<IDBCursor | null>;
+    openKeyCursor(query?: IDBValidKey | IDBKeyRange | null, direction?: IDBCursorDirection): IDBRequest<IDBCursor | null>;
 }
 
 declare var IDBIndex: {
@@ -1834,15 +1884,11 @@ declare var IDBKeyRange: {
     prototype: IDBKeyRange;
     new(): IDBKeyRange;
     /**
-     * Returns a new IDBKeyRange spanning from lower to upper.
-     * If lowerOpen is true, lower is not included in the range.
-     * If upperOpen is true, upper is not included in the range.
+     * Returns a new IDBKeyRange spanning from lower to upper. If lowerOpen is true, lower is not included in the range. If upperOpen is true, upper is not included in the range.
      */
     bound(lower: any, upper: any, lowerOpen?: boolean, upperOpen?: boolean): IDBKeyRange;
     /**
-     * Returns a new IDBKeyRange starting at key with no
-     * upper bound. If open is true, key is not included in the
-     * range.
+     * Returns a new IDBKeyRange starting at key with no upper bound. If open is true, key is not included in the range.
      */
     lowerBound(lower: any, open?: boolean): IDBKeyRange;
     /**
@@ -1870,88 +1916,99 @@ interface IDBObjectStore {
      */
     readonly keyPath: string | string[];
     /**
-     * Updates the name of the store to newName.
-     * Throws "InvalidStateError" DOMException if not called within an upgrade
-     * transaction.
+     * Returns the name of the store.
      */
     name: string;
     /**
      * Returns the associated transaction.
      */
     readonly transaction: IDBTransaction;
+    /**
+     * Adds or updates a record in store with the given value and key.
+     * 
+     * If the store uses in-line keys and key is specified a "DataError" DOMException will be thrown.
+     * 
+     * If put() is used, any existing record with the key will be replaced. If add() is used, and if a record with the key already exists the request will fail, with request's error set to a "ConstraintError" DOMException.
+     * 
+     * If successful, request's result will be the record's key.
+     */
     add(value: any, key?: IDBValidKey): IDBRequest<IDBValidKey>;
     /**
      * Deletes all records in store.
-     * If successful, request's result will
-     * be undefined.
+     * 
+     * If successful, request's result will be undefined.
      */
     clear(): IDBRequest<undefined>;
     /**
-     * Retrieves the number of records matching the
-     * given key or key range in query.
+     * Retrieves the number of records matching the given key or key range in query.
+     * 
      * If successful, request's result will be the count.
      */
     count(key?: IDBValidKey | IDBKeyRange): IDBRequest<number>;
     /**
-     * Creates a new index in store with the given name, keyPath and options and returns a new IDBIndex. If the keyPath and options define constraints that cannot be
-     * satisfied with the data already in store the upgrade
-     * transaction will abort with
-     * a "ConstraintError" DOMException.
-     * Throws an "InvalidStateError" DOMException if not called within an upgrade
-     * transaction.
+     * Creates a new index in store with the given name, keyPath and options and returns a new IDBIndex. If the keyPath and options define constraints that cannot be satisfied with the data already in store the upgrade transaction will abort with a "ConstraintError" DOMException.
+     * 
+     * Throws an "InvalidStateError" DOMException if not called within an upgrade transaction.
      */
     createIndex(name: string, keyPath: string | string[], options?: IDBIndexParameters): IDBIndex;
     /**
      * Deletes records in store with the given key or in the given key range in query.
-     * If successful, request's result will
-     * be undefined.
+     * 
+     * If successful, request's result will be undefined.
      */
     delete(key: IDBValidKey | IDBKeyRange): IDBRequest<undefined>;
     /**
      * Deletes the index in store with the given name.
-     * Throws an "InvalidStateError" DOMException if not called within an upgrade
-     * transaction.
+     * 
+     * Throws an "InvalidStateError" DOMException if not called within an upgrade transaction.
      */
     deleteIndex(name: string): void;
     /**
-     * Retrieves the value of the first record matching the
-     * given key or key range in query.
+     * Retrieves the value of the first record matching the given key or key range in query.
+     * 
      * If successful, request's result will be the value, or undefined if there was no matching record.
      */
     get(query: IDBValidKey | IDBKeyRange): IDBRequest<any | undefined>;
     /**
-     * Retrieves the values of the records matching the
-     * given key or key range in query (up to count if given).
-     * If successful, request's result will
-     * be an Array of the values.
+     * Retrieves the values of the records matching the given key or key range in query (up to count if given).
+     * 
+     * If successful, request's result will be an Array of the values.
      */
-    getAll(query?: IDBValidKey | IDBKeyRange, count?: number): IDBRequest<any[]>;
+    getAll(query?: IDBValidKey | IDBKeyRange | null, count?: number): IDBRequest<any[]>;
     /**
-     * Retrieves the keys of records matching the
-     * given key or key range in query (up to count if given).
-     * If successful, request's result will
-     * be an Array of the keys.
+     * Retrieves the keys of records matching the given key or key range in query (up to count if given).
+     * 
+     * If successful, request's result will be an Array of the keys.
      */
-    getAllKeys(query?: IDBValidKey | IDBKeyRange, count?: number): IDBRequest<IDBValidKey[]>;
+    getAllKeys(query?: IDBValidKey | IDBKeyRange | null, count?: number): IDBRequest<IDBValidKey[]>;
     /**
-     * Retrieves the key of the first record matching the
-     * given key or key range in query.
+     * Retrieves the key of the first record matching the given key or key range in query.
+     * 
      * If successful, request's result will be the key, or undefined if there was no matching record.
      */
     getKey(query: IDBValidKey | IDBKeyRange): IDBRequest<IDBValidKey | undefined>;
     index(name: string): IDBIndex;
     /**
-     * Opens a cursor over the records matching query,
-     * ordered by direction. If query is null, all records in store are matched.
+     * Opens a cursor over the records matching query, ordered by direction. If query is null, all records in store are matched.
+     * 
      * If successful, request's result will be an IDBCursorWithValue pointing at the first matching record, or null if there were no matching records.
      */
-    openCursor(range?: IDBValidKey | IDBKeyRange, direction?: IDBCursorDirection): IDBRequest<IDBCursorWithValue | null>;
+    openCursor(query?: IDBValidKey | IDBKeyRange | null, direction?: IDBCursorDirection): IDBRequest<IDBCursorWithValue | null>;
     /**
      * Opens a cursor with key only flag set over the records matching query, ordered by direction. If query is null, all records in store are matched.
-     * If successful, request's result will be an IDBCursor pointing at the first matching record, or
-     * null if there were no matching records.
+     * 
+     * If successful, request's result will be an IDBCursor pointing at the first matching record, or null if there were no matching records.
      */
-    openKeyCursor(query?: IDBValidKey | IDBKeyRange, direction?: IDBCursorDirection): IDBRequest<IDBCursor | null>;
+    openKeyCursor(query?: IDBValidKey | IDBKeyRange | null, direction?: IDBCursorDirection): IDBRequest<IDBCursor | null>;
+    /**
+     * Adds or updates a record in store with the given value and key.
+     * 
+     * If the store uses in-line keys and key is specified a "DataError" DOMException will be thrown.
+     * 
+     * If put() is used, any existing record with the key will be replaced. If add() is used, and if a record with the key already exists the request will fail, with request's error set to a "ConstraintError" DOMException.
+     * 
+     * If successful, request's result will be the record's key.
+     */
     put(value: any, key?: IDBValidKey): IDBRequest<IDBValidKey>;
 }
 
@@ -1988,31 +2045,25 @@ interface IDBRequestEventMap {
 /** The request object does not initially contain any information about the result of the operation, but once information becomes available, an event is fired on the request, and the information becomes available through the properties of the IDBRequest instance. */
 interface IDBRequest<T = any> extends EventTarget {
     /**
-     * When a request is completed, returns the error (a DOMException), or null if the request succeeded. Throws
-     * a "InvalidStateError" DOMException if the request is still pending.
+     * When a request is completed, returns the error (a DOMException), or null if the request succeeded. Throws a "InvalidStateError" DOMException if the request is still pending.
      */
     readonly error: DOMException | null;
     onerror: ((this: IDBRequest<T>, ev: Event) => any) | null;
     onsuccess: ((this: IDBRequest<T>, ev: Event) => any) | null;
     /**
-     * Returns "pending" until a request is complete,
-     * then returns "done".
+     * Returns "pending" until a request is complete, then returns "done".
      */
     readonly readyState: IDBRequestReadyState;
     /**
-     * When a request is completed, returns the result,
-     * or undefined if the request failed. Throws a
-     * "InvalidStateError" DOMException if the request is still pending.
+     * When a request is completed, returns the result, or undefined if the request failed. Throws a "InvalidStateError" DOMException if the request is still pending.
      */
     readonly result: T;
     /**
-     * Returns the IDBObjectStore, IDBIndex, or IDBCursor the request was made against, or null if is was an open
-     * request.
+     * Returns the IDBObjectStore, IDBIndex, or IDBCursor the request was made against, or null if is was an open request.
      */
     readonly source: IDBObjectStore | IDBIndex | IDBCursor;
     /**
-     * Returns the IDBTransaction the request was made within.
-     * If this as an open request, then it returns an upgrade transaction while it is running, or null otherwise.
+     * Returns the IDBTransaction the request was made within. If this as an open request, then it returns an upgrade transaction while it is running, or null otherwise.
      */
     readonly transaction: IDBTransaction | null;
     addEventListener<K extends keyof IDBRequestEventMap>(type: K, listener: (this: IDBRequest<T>, ev: IDBRequestEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
@@ -2038,28 +2089,22 @@ interface IDBTransaction extends EventTarget {
      */
     readonly db: IDBDatabase;
     /**
-     * If the transaction was aborted, returns the
-     * error (a DOMException) providing the reason.
+     * If the transaction was aborted, returns the error (a DOMException) providing the reason.
      */
     readonly error: DOMException;
     /**
-     * Returns the mode the transaction was created with
-     * ("readonly" or "readwrite"), or "versionchange" for
-     * an upgrade transaction.
+     * Returns the mode the transaction was created with ("readonly" or "readwrite"), or "versionchange" for an upgrade transaction.
      */
     readonly mode: IDBTransactionMode;
     /**
-     * Returns a list of the names of object stores in the
-     * transaction's scope. For an upgrade transaction this is all object stores in the database.
+     * Returns a list of the names of object stores in the transaction's scope. For an upgrade transaction this is all object stores in the database.
      */
     readonly objectStoreNames: DOMStringList;
     onabort: ((this: IDBTransaction, ev: Event) => any) | null;
     oncomplete: ((this: IDBTransaction, ev: Event) => any) | null;
     onerror: ((this: IDBTransaction, ev: Event) => any) | null;
     /**
-     * Aborts the transaction. All pending requests will fail with
-     * a "AbortError" DOMException and all changes made to the database will be
-     * reverted.
+     * Aborts the transaction. All pending requests will fail with a "AbortError" DOMException and all changes made to the database will be reverted.
      */
     abort(): void;
     /**
@@ -2077,7 +2122,7 @@ declare var IDBTransaction: {
     new(): IDBTransaction;
 };
 
-/** An interface of the IndexedDB API indicates that the version of the database has changed, as the result of an IDBOpenDBRequest.onupgradeneeded event handler function. */
+/** This IndexedDB API interface indicates that the version of the database has changed, as the result of an IDBOpenDBRequest.onupgradeneeded event handler function. */
 interface IDBVersionChangeEvent extends Event {
     readonly newVersion: number | null;
     readonly oldVersion: number;
@@ -2090,13 +2135,11 @@ declare var IDBVersionChangeEvent: {
 
 interface ImageBitmap {
     /**
-     * Returns the intrinsic height of the image, in CSS
-     * pixels.
+     * Returns the intrinsic height of the image, in CSS pixels.
      */
     readonly height: number;
     /**
-     * Returns the intrinsic width of the image, in CSS
-     * pixels.
+     * Returns the intrinsic width of the image, in CSS pixels.
      */
     readonly width: number;
     /**
@@ -2122,15 +2165,16 @@ interface ImageBitmapOptions {
 /** The underlying pixel data of an area of a <canvas> element. It is created using the ImageData() constructor or creator methods on the CanvasRenderingContext2D object associated with a canvas: createImageData() and getImageData(). It can also be used to set a part of the canvas by using putImageData(). */
 interface ImageData {
     /**
-     * Returns the one-dimensional array containing the data in RGBA order, as integers in the
-     * range 0 to 255.
+     * Returns the one-dimensional array containing the data in RGBA order, as integers in the range 0 to 255.
      */
     readonly data: Uint8ClampedArray;
     /**
-     * Returns the actual dimensions of the data in the ImageData object, in
-     * pixels.
+     * Returns the actual dimensions of the data in the ImageData object, in pixels.
      */
     readonly height: number;
+    /**
+     * Returns the actual dimensions of the data in the ImageData object, in pixels.
+     */
     readonly width: number;
 }
 
@@ -2140,9 +2184,15 @@ declare var ImageData: {
     new(array: Uint8ClampedArray, width: number, height: number): ImageData;
 };
 
-/** An interface of the Channel Messaging API allows us to create a new message channel and send data through it via its two MessagePort properties. */
+/** This Channel Messaging API interface allows us to create a new message channel and send data through it via its two MessagePort properties. */
 interface MessageChannel {
+    /**
+     * Returns the first MessagePort object.
+     */
     readonly port1: MessagePort;
+    /**
+     * Returns the second MessagePort object.
+     */
     readonly port2: MessagePort;
 }
 
@@ -2158,24 +2208,19 @@ interface MessageEvent extends Event {
      */
     readonly data: any;
     /**
-     * Returns the last event ID string, for
-     * server-sent events.
+     * Returns the last event ID string, for server-sent events.
      */
     readonly lastEventId: string;
     /**
-     * Returns the origin of the message, for server-sent events and
-     * cross-document messaging.
+     * Returns the origin of the message, for server-sent events and cross-document messaging.
      */
     readonly origin: string;
     /**
-     * Returns the MessagePort array sent with the message, for cross-document
-     * messaging and channel messaging.
+     * Returns the MessagePort array sent with the message, for cross-document messaging and channel messaging.
      */
     readonly ports: ReadonlyArray<MessagePort>;
     /**
-     * Returns the WindowProxy of the source window, for cross-document
-     * messaging, and the MessagePort being attached, in the connect event fired at
-     * SharedWorkerGlobalScope objects.
+     * Returns the WindowProxy of the source window, for cross-document messaging, and the MessagePort being attached, in the connect event fired at SharedWorkerGlobalScope objects.
      */
     readonly source: MessageEventSource | null;
 }
@@ -2190,7 +2235,7 @@ interface MessagePortEventMap {
     "messageerror": MessageEvent;
 }
 
-/** An interface of the Channel Messaging API represents one of the two ports of a MessageChannel, allowing messages to be sent from one port and listening out for them arriving at the other. */
+/** This Channel Messaging API interface represents one of the two ports of a MessageChannel, allowing messages to be sent from one port and listening out for them arriving at the other. */
 interface MessagePort extends EventTarget {
     onmessage: ((this: MessagePort, ev: MessageEvent) => any) | null;
     onmessageerror: ((this: MessagePort, ev: MessageEvent) => any) | null;
@@ -2198,6 +2243,11 @@ interface MessagePort extends EventTarget {
      * Disconnects the port, so that it is no longer active.
      */
     close(): void;
+    /**
+     * Posts a message through the channel. Objects listed in transfer are transferred, not just cloned, meaning that they are no longer usable on the sending side.
+     * 
+     * Throws a "DataCloneError" DOMException if transfer contains duplicate objects or port, or if message could not be cloned.
+     */
     postMessage(message: any, transfer: Transferable[]): void;
     postMessage(message: any, options?: PostMessageOptions): void;
     /**
@@ -2262,7 +2312,7 @@ interface NotificationEventMap {
     "show": Event;
 }
 
-/** An interface of the Notifications API is used to configure and display desktop notifications to the user. */
+/** This Notifications API interface is used to configure and display desktop notifications to the user. */
 interface Notification extends EventTarget {
     readonly actions: ReadonlyArray<NotificationAction>;
     readonly badge: string;
@@ -2345,40 +2395,32 @@ interface OES_vertex_array_object {
 interface OffscreenCanvas extends EventTarget {
     /**
      * These attributes return the dimensions of the OffscreenCanvas object's bitmap.
-     * They can be set, to replace the bitmap with a
-     * new, transparent black bitmap of the specified dimensions (effectively resizing
-     * it).
+     * 
+     * They can be set, to replace the bitmap with a new, transparent black bitmap of the specified dimensions (effectively resizing it).
      */
     height: number;
+    /**
+     * These attributes return the dimensions of the OffscreenCanvas object's bitmap.
+     * 
+     * They can be set, to replace the bitmap with a new, transparent black bitmap of the specified dimensions (effectively resizing it).
+     */
     width: number;
     /**
-     * Returns a promise that will fulfill with a new Blob object representing a file
-     * containing the image in the OffscreenCanvas object.
-     * The argument, if provided, is a dictionary that controls the encoding options of the image
-     * file to be created. The type
-     * field specifies the file format and has a default value of "image/png"; that type
-     * is also used if the requested type isn't supported. If the image format supports variable
-     * quality (such as "image/jpeg"), then the quality field is a number in the range 0.0
-     * to 1.0 inclusive indicating the desired quality level for the resulting image.
+     * Returns a promise that will fulfill with a new Blob object representing a file containing the image in the OffscreenCanvas object.
+     * 
+     * The argument, if provided, is a dictionary that controls the encoding options of the image file to be created. The type field specifies the file format and has a default value of "image/png"; that type is also used if the requested type isn't supported. If the image format supports variable quality (such as "image/jpeg"), then the quality field is a number in the range 0.0 to 1.0 inclusive indicating the desired quality level for the resulting image.
      */
     convertToBlob(options?: ImageEncodeOptions): Promise<Blob>;
     /**
-     * Returns an object that exposes an API for drawing on the OffscreenCanvas
-     * object. contextId specifies the desired API: "2d" or "webgl". options is handled by that
-     * API.
-     * This specification defines the "2d" context below,
-     * which is similar but distinct from the "2d"
-     * context that is created from a canvas element. There is also a specification that
-     * defines a "webgl" context. [WEBGL]
-     * Returns null if the canvas has already been initialized with another context type (e.g.,
-     * trying to get a "2d" context after getting a
-     * "webgl" context).
+     * Returns an object that exposes an API for drawing on the OffscreenCanvas object. contextId specifies the desired API: "2d", "webgl", or "webgl2". options is handled by that API.
+     * 
+     * This specification defines the "2d" context below, which is similar but distinct from the "2d" context that is created from a canvas element. The WebGL specifications define the "webgl" and "webgl2" contexts. [WEBGL]
+     * 
+     * Returns null if the canvas has already been initialized with another context type (e.g., trying to get a "2d" context after getting a "webgl" context).
      */
     getContext(contextId: OffscreenRenderingContextId, options?: any): OffscreenRenderingContext | null;
     /**
-     * Returns a newly created ImageBitmap object with the image in the
-     * OffscreenCanvas object. The image in the OffscreenCanvas object is
-     * replaced with a new blank image.
+     * Returns a newly created ImageBitmap object with the image in the OffscreenCanvas object. The image in the OffscreenCanvas object is replaced with a new blank image.
      */
     transferToImageBitmap(): ImageBitmap;
 }
@@ -2398,8 +2440,11 @@ declare var OffscreenCanvasRenderingContext2D: {
     new(): OffscreenCanvasRenderingContext2D;
 };
 
-/** Of the Canvas 2D API is used to declare a path that can then be used on a CanvasRenderingContext2D object. The path methods of the CanvasRenderingContext2D interface are also present on this interface, which gives you the convenience of being able to retain and replay your path whenever desired. */
+/** This Canvas 2D API interface is used to declare a path that can then be used on a CanvasRenderingContext2D object. The path methods of the CanvasRenderingContext2D interface are also present on this interface, which gives you the convenience of being able to retain and replay your path whenever desired. */
 interface Path2D extends CanvasPath {
+    /**
+     * Adds to the path the path given by the argument.
+     */
     addPath(path: Path2D, transform?: DOMMatrix2DInit): void;
 }
 
@@ -2569,7 +2614,7 @@ declare var PromiseRejectionEvent: {
     new(type: string, eventInitDict: PromiseRejectionEventInit): PromiseRejectionEvent;
 };
 
-/** An interface of the Push API represents a push message that has been received. This event is sent to the global scope of a ServiceWorker. It contains the information sent from an application server to a PushSubscription. */
+/** This Push API interface represents a push message that has been received. This event is sent to the global scope of a ServiceWorker. It contains the information sent from an application server to a PushSubscription. */
 interface PushEvent extends ExtendableEvent {
     readonly data: PushMessageData | null;
 }
@@ -2579,7 +2624,7 @@ declare var PushEvent: {
     new(type: string, eventInitDict?: PushEventInit): PushEvent;
 };
 
-/** An interface of the Push API provides a way to receive notifications from third-party servers as well as request URLs for push notifications. */
+/** This Push API interface provides a way to receive notifications from third-party servers as well as request URLs for push notifications. */
 interface PushManager {
     getSubscription(): Promise<PushSubscription | null>;
     permissionState(options?: PushSubscriptionOptionsInit): Promise<PushPermissionState>;
@@ -2592,7 +2637,7 @@ declare var PushManager: {
     readonly supportedContentEncodings: ReadonlyArray<string>;
 };
 
-/** An interface of the Push API provides methods which let you retrieve the push data sent by a server in various formats. */
+/** This Push API interface provides methods which let you retrieve the push data sent by a server in various formats. */
 interface PushMessageData {
     arrayBuffer(): ArrayBuffer;
     blob(): Blob;
@@ -2605,7 +2650,7 @@ declare var PushMessageData: {
     new(): PushMessageData;
 };
 
-/** An interface of the Push API provides a subcription's URL endpoint and allows unsubscription from a push service. */
+/** This Push API interface provides a subcription's URL endpoint and allows unsubscription from a push service. */
 interface PushSubscription {
     readonly endpoint: string;
     readonly expirationTime: number | null;
@@ -2648,7 +2693,7 @@ interface ReadableByteStreamController {
     error(error?: any): void;
 }
 
-/** An interface of the Streams API represents a readable stream of byte data. The Fetch API offers a concrete instance of a ReadableStream through the body property of a Response object. */
+/** This Streams API interface represents a readable stream of byte data. The Fetch API offers a concrete instance of a ReadableStream through the body property of a Response object. */
 interface ReadableStream<R = any> {
     readonly locked: boolean;
     cancel(reason?: any): Promise<void>;
@@ -2708,38 +2753,30 @@ declare var ReadableStreamReader: {
     new(): ReadableStreamReader;
 };
 
-/** An interface of the Fetch API represents a resource request. */
+/** This Fetch API interface represents a resource request. */
 interface Request extends Body {
     /**
-     * Returns the cache mode associated with request, which is a string indicating
-     * how the request will interact with the browser's cache when fetching.
+     * Returns the cache mode associated with request, which is a string indicating how the request will interact with the browser's cache when fetching.
      */
     readonly cache: RequestCache;
     /**
-     * Returns the credentials mode associated with request, which is a string
-     * indicating whether credentials will be sent with the request always, never, or only when sent to a
-     * same-origin URL.
+     * Returns the credentials mode associated with request, which is a string indicating whether credentials will be sent with the request always, never, or only when sent to a same-origin URL.
      */
     readonly credentials: RequestCredentials;
     /**
-     * Returns the kind of resource requested by request, e.g., "document" or
-     * "script".
+     * Returns the kind of resource requested by request, e.g., "document" or "script".
      */
     readonly destination: RequestDestination;
     /**
-     * Returns a Headers object consisting of the headers associated with request.
-     * Note that headers added in the network layer by the user agent will not be accounted for in this
-     * object, e.g., the "Host" header.
+     * Returns a Headers object consisting of the headers associated with request. Note that headers added in the network layer by the user agent will not be accounted for in this object, e.g., the "Host" header.
      */
     readonly headers: Headers;
     /**
-     * Returns request's subresource integrity metadata, which is a cryptographic hash of
-     * the resource being fetched. Its value consists of multiple hashes separated by whitespace. [SRI]
+     * Returns request's subresource integrity metadata, which is a cryptographic hash of the resource being fetched. Its value consists of multiple hashes separated by whitespace. [SRI]
      */
     readonly integrity: string;
     /**
-     * Returns a boolean indicating whether or not request is for a history
-     * navigation (a.k.a. back-foward navigation).
+     * Returns a boolean indicating whether or not request is for a history navigation (a.k.a. back-foward navigation).
      */
     readonly isHistoryNavigation: boolean;
     /**
@@ -2747,8 +2784,7 @@ interface Request extends Body {
      */
     readonly isReloadNavigation: boolean;
     /**
-     * Returns a boolean indicating whether or not request can outlive the global in which
-     * it was created.
+     * Returns a boolean indicating whether or not request can outlive the global in which it was created.
      */
     readonly keepalive: boolean;
     /**
@@ -2756,30 +2792,23 @@ interface Request extends Body {
      */
     readonly method: string;
     /**
-     * Returns the mode associated with request, which is a string indicating
-     * whether the request will use CORS, or will be restricted to same-origin URLs.
+     * Returns the mode associated with request, which is a string indicating whether the request will use CORS, or will be restricted to same-origin URLs.
      */
     readonly mode: RequestMode;
     /**
-     * Returns the redirect mode associated with request, which is a string
-     * indicating how redirects for the request will be handled during fetching. A request will follow redirects by default.
+     * Returns the redirect mode associated with request, which is a string indicating how redirects for the request will be handled during fetching. A request will follow redirects by default.
      */
     readonly redirect: RequestRedirect;
     /**
-     * Returns the referrer of request. Its value can be a same-origin URL if
-     * explicitly set in init, the empty string to indicate no referrer, and
-     * "about:client" when defaulting to the global's default. This is used during
-     * fetching to determine the value of the `Referer` header of the request being made.
+     * Returns the referrer of request. Its value can be a same-origin URL if explicitly set in init, the empty string to indicate no referrer, and "about:client" when defaulting to the global's default. This is used during fetching to determine the value of the `Referer` header of the request being made.
      */
     readonly referrer: string;
     /**
-     * Returns the referrer policy associated with request. This is used during
-     * fetching to compute the value of the request's referrer.
+     * Returns the referrer policy associated with request. This is used during fetching to compute the value of the request's referrer.
      */
     readonly referrerPolicy: ReferrerPolicy;
     /**
-     * Returns the signal associated with request, which is an AbortSignal object indicating whether or not request has been aborted, and its abort
-     * event handler.
+     * Returns the signal associated with request, which is an AbortSignal object indicating whether or not request has been aborted, and its abort event handler.
      */
     readonly signal: AbortSignal;
     /**
@@ -2794,7 +2823,7 @@ declare var Request: {
     new(input: RequestInfo, init?: RequestInit): Request;
 };
 
-/** An interface of the Fetch API represents the response to a request. */
+/** This Fetch API interface represents the response to a request. */
 interface Response extends Body {
     readonly headers: Headers;
     readonly ok: boolean;
@@ -2818,7 +2847,7 @@ interface ServiceWorkerEventMap extends AbstractWorkerEventMap {
     "statechange": Event;
 }
 
-/** An interface of the ServiceWorker API provides a reference to a service worker. Multiple browsing contexts (e.g. pages, workers, etc.) can be associated with the same service worker, each through a unique ServiceWorker object. */
+/** This ServiceWorker API interface provides a reference to a service worker. Multiple browsing contexts (e.g. pages, workers, etc.) can be associated with the same service worker, each through a unique ServiceWorker object. */
 interface ServiceWorker extends EventTarget, AbstractWorker {
     onstatechange: ((this: ServiceWorker, ev: Event) => any) | null;
     readonly scriptURL: string;
@@ -2877,7 +2906,7 @@ interface ServiceWorkerGlobalScopeEventMap extends WorkerGlobalScopeEventMap {
     "sync": SyncEvent;
 }
 
-/** An interface of the ServiceWorker API represents the global execution context of a service worker. */
+/** This ServiceWorker API interface represents the global execution context of a service worker. */
 interface ServiceWorkerGlobalScope extends WorkerGlobalScope {
     readonly clients: Clients;
     onactivate: ((this: ServiceWorkerGlobalScope, ev: ExtendableEvent) => any) | null;
@@ -2907,7 +2936,7 @@ interface ServiceWorkerRegistrationEventMap {
     "updatefound": Event;
 }
 
-/** An interface of the ServiceWorker API represents the service worker registration. You register a service worker to control one or more pages that share the same origin. */
+/** This ServiceWorker API interface represents the service worker registration. You register a service worker to control one or more pages that share the same origin. */
 interface ServiceWorkerRegistration extends EventTarget {
     readonly active: ServiceWorker | null;
     readonly installing: ServiceWorker | null;
@@ -2943,7 +2972,7 @@ declare var StorageManager: {
     new(): StorageManager;
 };
 
-/** An interface of the Web Crypto API provides a number of low-level cryptographic functions. It is accessed via the Crypto.subtle properties available in a window context (via Window.crypto). */
+/** This Web Crypto API interface provides a number of low-level cryptographic functions. It is accessed via the Crypto.subtle properties available in a window context (via Window.crypto). */
 interface SubtleCrypto {
     decrypt(algorithm: string | RsaOaepParams | AesCtrParams | AesCbcParams | AesCmacParams | AesGcmParams | AesCfbParams, key: CryptoKey, data: Int8Array | Int16Array | Int32Array | Uint8Array | Uint16Array | Uint32Array | Uint8ClampedArray | Float32Array | Float64Array | DataView | ArrayBuffer): PromiseLike<ArrayBuffer>;
     deriveBits(algorithm: string | EcdhKeyDeriveParams | DhKeyDeriveParams | ConcatParams | HkdfCtrParams | Pbkdf2Params, baseKey: CryptoKey, length: number): PromiseLike<ArrayBuffer>;
@@ -2981,7 +3010,7 @@ declare var SyncEvent: {
     new(type: string, init: SyncEventInit): SyncEvent;
 };
 
-/** An interface of the ServiceWorker API provides an interface for registering and listing sync registrations. */
+/** This ServiceWorker API interface provides an interface for registering and listing sync registrations. */
 interface SyncManager {
     getTags(): Promise<string[]>;
     register(tag: string): Promise<void>;
@@ -2995,16 +3024,16 @@ declare var SyncManager: {
 /** A decoder for a specific method, that is a specific character encoding, like utf-8, iso-8859-2, koi8, cp1261, gbk, etc. A decoder takes a stream of bytes as input and emits a stream of code points. For a more scalable, non-native library, see StringView – a C-like representation of strings based on typed arrays. */
 interface TextDecoder extends TextDecoderCommon {
     /**
-     * Returns the result of running encoding's decoder.
-     * The method can be invoked zero or more times with options's stream set to
-     * true, and then once without options's stream (or set to false), to process
-     * a fragmented stream. If the invocation without options's stream (or set to
-     * false) has no input, it's clearest to omit both arguments.
+     * Returns the result of running encoding's decoder. The method can be invoked zero or more times with options's stream set to true, and then once without options's stream (or set to false), to process a fragmented stream. If the invocation without options's stream (or set to false) has no input, it's clearest to omit both arguments.
+     * 
+     * ```
      * var string = "", decoder = new TextDecoder(encoding), buffer;
      * while(buffer = next_chunk()) {
-     * string += decoder.decode(buffer, {stream:true});
+     *   string += decoder.decode(buffer, {stream:true});
      * }
      * string += decoder.decode(); // end-of-stream
+     * ```
+     * 
      * If the error mode is "fatal" and encoding's decoder returns error, throws a TypeError.
      */
     decode(input?: BufferSource, options?: TextDecodeOptions): string;
@@ -3016,8 +3045,17 @@ declare var TextDecoder: {
 };
 
 interface TextDecoderCommon {
+    /**
+     * Returns encoding's name, lowercased.
+     */
     readonly encoding: string;
+    /**
+     * Returns true if error mode is "fatal", and false otherwise.
+     */
     readonly fatal: boolean;
+    /**
+     * Returns true if ignore BOM flag is set, and false otherwise.
+     */
     readonly ignoreBOM: boolean;
 }
 
@@ -3047,6 +3085,9 @@ declare var TextEncoder: {
 };
 
 interface TextEncoderCommon {
+    /**
+     * Returns "utf-8".
+     */
     readonly encoding: string;
 }
 
@@ -3060,20 +3101,53 @@ declare var TextEncoderStream: {
 
 /** The dimensions of a piece of text in the canvas, as created by the CanvasRenderingContext2D.measureText() method. */
 interface TextMetrics {
+    /**
+     * Returns the measurement described below.
+     */
     readonly actualBoundingBoxAscent: number;
+    /**
+     * Returns the measurement described below.
+     */
     readonly actualBoundingBoxDescent: number;
+    /**
+     * Returns the measurement described below.
+     */
     readonly actualBoundingBoxLeft: number;
+    /**
+     * Returns the measurement described below.
+     */
     readonly actualBoundingBoxRight: number;
+    /**
+     * Returns the measurement described below.
+     */
     readonly alphabeticBaseline: number;
+    /**
+     * Returns the measurement described below.
+     */
     readonly emHeightAscent: number;
+    /**
+     * Returns the measurement described below.
+     */
     readonly emHeightDescent: number;
+    /**
+     * Returns the measurement described below.
+     */
     readonly fontBoundingBoxAscent: number;
+    /**
+     * Returns the measurement described below.
+     */
     readonly fontBoundingBoxDescent: number;
+    /**
+     * Returns the measurement described below.
+     */
     readonly hangingBaseline: number;
     /**
      * Returns the measurement described below.
      */
     readonly ideographicBaseline: number;
+    /**
+     * Returns the measurement described below.
+     */
     readonly width: number;
 }
 
@@ -3640,6 +3714,7 @@ declare var WebGLRenderingContext: {
 };
 
 interface WebGLRenderingContextBase {
+    readonly canvas: OffscreenCanvas;
     readonly drawingBufferHeight: GLsizei;
     readonly drawingBufferWidth: GLsizei;
     activeTexture(texture: GLenum): void;
@@ -4188,7 +4263,7 @@ interface WindowBase64 {
     btoa(rawString: string): string;
 }
 
-/** An interface of the ServiceWorker API represents the scope of a service worker client that is a document in a browser context, controlled by an active worker. The service worker client independently selects and uses a service worker for its own loading and sub-resources. */
+/** This ServiceWorker API interface represents the scope of a service worker client that is a document in a browser context, controlled by an active worker. The service worker client independently selects and uses a service worker for its own loading and sub-resources. */
 interface WindowClient extends Client {
     readonly ancestorOrigins: ReadonlyArray<string>;
     readonly focused: boolean;
@@ -4228,7 +4303,7 @@ interface WorkerEventMap extends AbstractWorkerEventMap {
     "message": MessageEvent;
 }
 
-/** An interface of the Web Workers API represents a background task that can be easily created and can send messages back to its creator. Creating a worker is as simple as calling the Worker() constructor and specifying a script to be run in the worker thread. */
+/** This Web Workers API interface represents a background task that can be easily created and can send messages back to its creator. Creating a worker is as simple as calling the Worker() constructor and specifying a script to be run in the worker thread. */
 interface Worker extends EventTarget, AbstractWorker {
     onmessage: ((this: Worker, ev: MessageEvent) => any) | null;
     postMessage(message: any, transfer: Transferable[]): void;
@@ -4249,8 +4324,8 @@ interface WorkerGlobalScopeEventMap {
     "error": ErrorEvent;
 }
 
-/** An interface of the Web Workers API is an interface representing the scope of any worker. Workers have no browsing context; this scope contains the information usually conveyed by Window objects — in this case event handlers, the console or the associated WorkerNavigator object. Each WorkerGlobalScope has its own event loop. */
-interface WorkerGlobalScope extends EventTarget, WorkerUtils, WindowConsole, GlobalFetch, WindowOrWorkerGlobalScope {
+/** This Web Workers API interface is an interface representing the scope of any worker. Workers have no browsing context; this scope contains the information usually conveyed by Window objects — in this case event handlers, the console or the associated WorkerNavigator object. Each WorkerGlobalScope has its own event loop. */
+interface WorkerGlobalScope extends EventTarget, WorkerUtils, WindowConsole, WindowOrWorkerGlobalScope {
     readonly caches: CacheStorage;
     readonly isSecureContext: boolean;
     readonly location: WorkerLocation;
@@ -4306,7 +4381,7 @@ interface WorkerUtils extends WindowBase64 {
     importScripts(...urls: string[]): void;
 }
 
-/** An interface of the Streams API provides a standard abstraction for writing streaming data to a destination, known as a sink. This object comes with built-in backpressure and queuing. */
+/** This Streams API interface provides a standard abstraction for writing streaming data to a destination, known as a sink. This object comes with built-in backpressure and queuing. */
 interface WritableStream<W = any> {
     readonly locked: boolean;
     abort(reason?: any): Promise<void>;
@@ -4318,12 +4393,12 @@ declare var WritableStream: {
     new<W = any>(underlyingSink?: UnderlyingSink<W>, strategy?: QueuingStrategy<W>): WritableStream<W>;
 };
 
-/** An interface of the Streams API represents a controller allowing control of a WritableStream's state. When constructing a WritableStream, the underlying sink is given a corresponding WritableStreamDefaultController instance to manipulate. */
+/** This Streams API interface represents a controller allowing control of a WritableStream's state. When constructing a WritableStream, the underlying sink is given a corresponding WritableStreamDefaultController instance to manipulate. */
 interface WritableStreamDefaultController {
     error(error?: any): void;
 }
 
-/** An interface of the Streams API is the object returned by WritableStream.getWriter() and once created locks the < writer to the WritableStream ensuring that no other streams can write to the underlying sink. */
+/** This Streams API interface is the object returned by WritableStream.getWriter() and once created locks the < writer to the WritableStream ensuring that no other streams can write to the underlying sink. */
 interface WritableStreamDefaultWriter<W = any> {
     readonly closed: Promise<void>;
     readonly desiredSize: number | null;
@@ -4351,20 +4426,19 @@ interface XMLHttpRequest extends XMLHttpRequestEventTarget {
     readonly response: any;
     /**
      * Returns the text response.
+     * 
      * Throws an "InvalidStateError" DOMException if responseType is not the empty string or "text".
      */
     readonly responseText: string;
     /**
      * Returns the response type.
-     * Can be set to change the response type. Values are:
-     * the empty string (default),
-     * "arraybuffer",
-     * "blob",
-     * "document",
-     * "json", and
-     * "text".
+     * 
+     * Can be set to change the response type. Values are: the empty string (default), "arraybuffer", "blob", "document", "json", and "text".
+     * 
      * When set: setting to "document" is ignored if current global object is not a Window object.
+     * 
      * When set: throws an "InvalidStateError" DOMException if state is loading or done.
+     * 
      * When set: throws an "InvalidAccessError" DOMException if the synchronous flag is set and current global object is a Window object.
      */
     responseType: XMLHttpRequestResponseType;
@@ -4372,21 +4446,18 @@ interface XMLHttpRequest extends XMLHttpRequestEventTarget {
     readonly status: number;
     readonly statusText: string;
     /**
-     * Can be set to a time in milliseconds. When set to a non-zero value will cause fetching to terminate after the given time has passed. When the time has passed, the
-     * request has not yet completed, and the synchronous flag is unset, a timeout event will then be dispatched, or a
-     * "TimeoutError" DOMException will be thrown otherwise (for the send() method).
+     * Can be set to a time in milliseconds. When set to a non-zero value will cause fetching to terminate after the given time has passed. When the time has passed, the request has not yet completed, and the synchronous flag is unset, a timeout event will then be dispatched, or a "TimeoutError" DOMException will be thrown otherwise (for the send() method).
+     * 
      * When set: throws an "InvalidAccessError" DOMException if the synchronous flag is set and current global object is a Window object.
      */
     timeout: number;
     /**
-     * Returns the associated XMLHttpRequestUpload object. It can be used to gather transmission information when data is
-     * transferred to a server.
+     * Returns the associated XMLHttpRequestUpload object. It can be used to gather transmission information when data is transferred to a server.
      */
     readonly upload: XMLHttpRequestUpload;
     /**
-     * True when credentials are to be included in a cross-origin request. False when they are
-     * to be excluded in a cross-origin request and when cookies are to be ignored in its response.
-     * Initially false.
+     * True when credentials are to be included in a cross-origin request. False when they are to be excluded in a cross-origin request and when cookies are to be ignored in its response. Initially false.
+     * 
      * When set: throws an "InvalidStateError" DOMException if state is not unsent or opened, or if the send() flag is set.
      */
     withCredentials: boolean;
@@ -4398,31 +4469,33 @@ interface XMLHttpRequest extends XMLHttpRequestEventTarget {
     getResponseHeader(name: string): string | null;
     /**
      * Sets the request method, request URL, and synchronous flag.
-     * Throws a "SyntaxError" DOMException if either method is not a
-     * valid HTTP method or url cannot be parsed.
-     * Throws a "SecurityError" DOMException if method is a
-     * case-insensitive match for `CONNECT`, `TRACE`, or `TRACK`.
+     * 
+     * Throws a "SyntaxError" DOMException if either method is not a valid HTTP method or url cannot be parsed.
+     * 
+     * Throws a "SecurityError" DOMException if method is a case-insensitive match for `CONNECT`, `TRACE`, or `TRACK`.
+     * 
      * Throws an "InvalidAccessError" DOMException if async is false, current global object is a Window object, and the timeout attribute is not zero or the responseType attribute is not the empty string.
      */
     open(method: string, url: string): void;
     open(method: string, url: string, async: boolean, username?: string | null, password?: string | null): void;
     /**
-     * Acts as if the `Content-Type` header value for response is mime.
-     * (It does not actually change the header though.)
+     * Acts as if the `Content-Type` header value for response is mime. (It does not actually change the header though.)
+     * 
      * Throws an "InvalidStateError" DOMException if state is loading or done.
      */
     overrideMimeType(mime: string): void;
     /**
-     * Initiates the request. The body argument provides the request body, if any,
-     * and is ignored if the request method is GET or HEAD.
+     * Initiates the request. The body argument provides the request body, if any, and is ignored if the request method is GET or HEAD.
+     * 
      * Throws an "InvalidStateError" DOMException if either state is not opened or the send() flag is set.
      */
     send(body?: BodyInit | null): void;
     /**
      * Combines a header in author request headers.
+     * 
      * Throws an "InvalidStateError" DOMException if either state is not opened or the send() flag is set.
-     * Throws a "SyntaxError" DOMException if name is not a header name
-     * or if value is not a header value.
+     * 
+     * Throws a "SyntaxError" DOMException if name is not a header name or if value is not a header value.
      */
     setRequestHeader(name: string, value: string): void;
     readonly DONE: number;
@@ -4586,6 +4659,10 @@ interface EventHandlerNonNull {
     (event: Event): any;
 }
 
+interface FrameRequestCallback {
+    (time: number): void;
+}
+
 interface PerformanceObserverCallback {
     (entries: PerformanceObserverEntryList, observer: PerformanceObserver): void;
 }
@@ -4635,8 +4712,7 @@ declare function close(): void;
 declare function postMessage(message: any, transfer: Transferable[]): void;
 declare function postMessage(message: any, options?: PostMessageOptions): void;
 /**
- * Dispatches a synthetic event event to target and returns true
- * if either event's cancelable attribute value is false or its preventDefault() method was not invoked, and false otherwise.
+ * Dispatches a synthetic event event to target and returns true if either event's cancelable attribute value is false or its preventDefault() method was not invoked, and false otherwise.
  */
 declare function dispatchEvent(event: Event): boolean;
 declare var caches: CacheStorage;
@@ -4647,8 +4723,7 @@ declare var performance: Performance;
 declare var self: WorkerGlobalScope;
 declare function msWriteProfilerMark(profilerMarkName: string): void;
 /**
- * Dispatches a synthetic event event to target and returns true
- * if either event's cancelable attribute value is false or its preventDefault() method was not invoked, and false otherwise.
+ * Dispatches a synthetic event event to target and returns true if either event's cancelable attribute value is false or its preventDefault() method was not invoked, and false otherwise.
  */
 declare function dispatchEvent(event: Event): boolean;
 declare var indexedDB: IDBFactory;
@@ -4658,7 +4733,6 @@ declare function importScripts(...urls: string[]): void;
 declare function atob(encodedString: string): string;
 declare function btoa(rawString: string): string;
 declare var console: Console;
-declare function fetch(input: RequestInfo, init?: RequestInit): Promise<Response>;
 declare var caches: CacheStorage;
 declare var crypto: Crypto;
 declare var indexedDB: IDBFactory;
@@ -4674,14 +4748,16 @@ declare function fetch(input: RequestInfo, init?: RequestInit): Promise<Response
 declare function queueMicrotask(callback: Function): void;
 declare function setInterval(handler: TimerHandler, timeout?: number, ...arguments: any[]): number;
 declare function setTimeout(handler: TimerHandler, timeout?: number, ...arguments: any[]): number;
+declare function cancelAnimationFrame(handle: number): void;
+declare function requestAnimationFrame(callback: FrameRequestCallback): number;
 declare function addEventListener<K extends keyof DedicatedWorkerGlobalScopeEventMap>(type: K, listener: (this: DedicatedWorkerGlobalScope, ev: DedicatedWorkerGlobalScopeEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
 declare function addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
 declare function removeEventListener<K extends keyof DedicatedWorkerGlobalScopeEventMap>(type: K, listener: (this: DedicatedWorkerGlobalScope, ev: DedicatedWorkerGlobalScopeEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
 declare function removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
-type BlobPart = BufferSource | Blob | string;
 type HeadersInit = Headers | string[][] | Record<string, string>;
 type BodyInit = Blob | BufferSource | FormData | URLSearchParams | ReadableStream<Uint8Array> | string;
 type RequestInfo = Request | string;
+type BlobPart = BufferSource | Blob | string;
 type DOMHighResTimeStamp = number;
 type CanvasImageSource = ImageBitmap | OffscreenCanvas;
 type OffscreenRenderingContext = OffscreenCanvasRenderingContext2D | WebGLRenderingContext;
@@ -4705,7 +4781,7 @@ type GLsizeiptr = number;
 type GLuint = number;
 type GLfloat = number;
 type GLclampf = number;
-type TexImageSource = ImageBitmap | ImageData;
+type TexImageSource = ImageBitmap | ImageData | OffscreenCanvas;
 type Float32List = Float32Array | GLfloat[];
 type Int32List = Int32Array | GLint[];
 type BufferSource = ArrayBufferView | ArrayBuffer;

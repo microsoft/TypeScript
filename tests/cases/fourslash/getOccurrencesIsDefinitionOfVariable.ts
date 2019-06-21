@@ -1,5 +1,5 @@
 /// <reference path='fourslash.ts' />
-////var [|{| "isWriteAccess": true, "isDefinition": true |}x|] = 0;
+////[|var [|{| "isWriteAccess": true, "isDefinition": true, "contextRangeIndex": 0 |}x|] = 0;|]
 ////var assignmentRightHandSide = [|x|];
 ////var assignmentRightHandSide2 = 1 + [|x|];
 ////
@@ -17,4 +17,4 @@
 ////[|{| "isWriteAccess": true |}x|] += 1;
 ////[|{| "isWriteAccess": true |}x|] <<= 1;
 
-verify.singleReferenceGroup("var x: number");
+verify.singleReferenceGroup("var x: number", "x");

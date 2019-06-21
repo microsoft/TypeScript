@@ -5,7 +5,7 @@ namespace ts.projectSystem {
         return resolutionTrace;
     }
 
-    describe("unittests:: tsserver:: resolutionCache:: tsserverProjectSystem extra resolution pass in lshost", () => {
+    describe("unittests:: tsserver:: resolutionCache:: tsserverProjectSystem extra resolution pass in server host", () => {
         it("can load typings that are proper modules", () => {
             const file1 = {
                 path: "/a/b/app.js",

@@ -1,13 +1,13 @@
 /// <reference path='fourslash.ts' />
 
 ////declare module "a" {
-////    export class [|{| "isWriteAccess": true, "isDefinition": true |}C|] {}
+////    [|export class [|{| "isWriteAccess": true, "isDefinition": true, "contextRangeIndex": 0 |}C|] {}|]
 ////}
 ////declare module "b" {
-////    export { [|C|] as [|{| "isWriteAccess": true, "isDefinition": true |}D|] } from "a";
+////    [|export { [|{| "contextRangeIndex": 2 |}C|] as [|{| "isWriteAccess": true, "isDefinition": true, "contextRangeIndex": 2 |}D|] } from "a";|]
 ////}
 ////declare module "c" {
-////    import { [|{| "isWriteAccess": true, "isDefinition": true |}D|] } from "b";
+////    [|import { [|{| "isWriteAccess": true, "isDefinition": true, "contextRangeIndex": 5 |}D|] } from "b";|]
 ////    export function f(c: [|D|]): void;
 ////}
 

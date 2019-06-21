@@ -1,20 +1,20 @@
 /// <reference path='fourslash.ts'/>
 
 // @Filename: a.ts
-////namespace [|{| "isWriteAccess": true, "isDefinition": true |}A|] {
+////[|namespace [|{| "isWriteAccess": true, "isDefinition": true, "contextRangeIndex": 0 |}A|] {
 ////    export const x = 0;
-////}
+////}|]
 
 // @Filename: b.ts
-////export import [|{| "isWriteAccess": true, "isDefinition": true |}B|] = [|A|];
+////[|export import [|{| "isWriteAccess": true, "isDefinition": true, "contextRangeIndex": 2 |}B|] = [|A|];|]
 ////[|B|].x;
 
 // @Filename: c.ts
-////import { [|{| "isWriteAccess": true, "isDefinition": true |}B|] } from "./b";
+////[|import { [|{| "isWriteAccess": true, "isDefinition": true, "contextRangeIndex": 6 |}B|] } from "./b";|]
 
 verify.noErrors();
 
-const [A0, B0, A1, B1, B2] = test.ranges();
+const [A0Def, A0, B0Def, B0, A1, B1, B2Def, B2] = test.ranges();
 const aRanges = [A0, A1];
 const bRanges = [B0, B1];
 const cRanges = [B2];

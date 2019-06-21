@@ -227,9 +227,5 @@ declare let e2: {
     a: number;
     b: number;
 };
-declare let e3: {
-    a: number;
-};
-declare let e4: {
-    a: number;
-};
+declare let e3: any;
+declare let e4: any;

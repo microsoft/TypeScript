@@ -1,7 +1,7 @@
 /// <reference path='fourslash.ts'/>
 
-////export default class [|DefaultExportedClass|] {
-////}
+////[|export default class [|{| "contextRangeIndex": 0 |}DefaultExportedClass|] {
+////}|]
 /////*
 //// *  Commenting [|{| "inComment": true |}DefaultExportedClass|]
 //// */
@@ -10,5 +10,5 @@
 ////
 ////var y = new [|DefaultExportedClass|];
 
-const ranges = test.ranges();
+const ranges = test.rangesByText().get("DefaultExportedClass");
 verify.renameLocations(ranges.filter(r => !(r.marker && r.marker.data.inComment)), { findInComments: true, ranges });
