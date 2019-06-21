@@ -1,9 +1,11 @@
 tests/cases/conformance/classes/members/classTypes/instancePropertiesInheritedIntoClassType.ts(4,13): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
 tests/cases/conformance/classes/members/classTypes/instancePropertiesInheritedIntoClassType.ts(7,13): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
-tests/cases/conformance/classes/members/classTypes/instancePropertiesInheritedIntoClassType.ts(19,14): error TS2349: Cannot invoke an expression whose type lacks a call signature. Type 'Number' has no compatible call signatures.
+tests/cases/conformance/classes/members/classTypes/instancePropertiesInheritedIntoClassType.ts(19,14): error TS2349: This expression is not callable.
+  Type 'Number' has no call signatures.
 tests/cases/conformance/classes/members/classTypes/instancePropertiesInheritedIntoClassType.ts(26,13): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
 tests/cases/conformance/classes/members/classTypes/instancePropertiesInheritedIntoClassType.ts(29,13): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
-tests/cases/conformance/classes/members/classTypes/instancePropertiesInheritedIntoClassType.ts(41,14): error TS2349: Cannot invoke an expression whose type lacks a call signature. Type 'String' has no compatible call signatures.
+tests/cases/conformance/classes/members/classTypes/instancePropertiesInheritedIntoClassType.ts(41,14): error TS2349: This expression is not callable.
+  Type 'String' has no call signatures.
 
 
 ==== tests/cases/conformance/classes/members/classTypes/instancePropertiesInheritedIntoClassType.ts (6 errors) ====
@@ -31,7 +33,8 @@ tests/cases/conformance/classes/members/classTypes/instancePropertiesInheritedIn
         r.y = 4;
         var r6 = d.y(); // error
                  ~~~~~
-!!! error TS2349: Cannot invoke an expression whose type lacks a call signature. Type 'Number' has no compatible call signatures.
+!!! error TS2349: This expression is not callable.
+!!! error TS2349:   Type 'Number' has no call signatures.
     
     }
     
@@ -59,5 +62,6 @@ tests/cases/conformance/classes/members/classTypes/instancePropertiesInheritedIn
         r.y = '';
         var r6 = d.y(); // error
                  ~~~~~
-!!! error TS2349: Cannot invoke an expression whose type lacks a call signature. Type 'String' has no compatible call signatures.
+!!! error TS2349: This expression is not callable.
+!!! error TS2349:   Type 'String' has no call signatures.
     }

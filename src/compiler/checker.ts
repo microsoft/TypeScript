@@ -22015,11 +22015,83 @@ namespace ts {
             return true;
         }
 
+        function invocationErrorDetails(apparentType: Type, kind: SignatureKind): DiagnosticMessageChain {
+            let errorInfo: DiagnosticMessageChain | undefined;
+            const isCall = kind === SignatureKind.Call;
+            if (apparentType.flags & TypeFlags.Union) {
+                const types = (apparentType as UnionType).types;
+                let hasSignatures = false;
+                for (const constituent of types) {
+                    const signatures = getSignaturesOfType(constituent, kind);
+                    if (signatures.length !== 0) {
+                        hasSignatures = true;
+                        if (errorInfo) {
+                            // Bail early if we already have an error, no chance of "No constituent of type is callable"
+                            break;
+                        }
+                    }
+                    else {
+                        // Error on the first non callable constituent only
+                        if (!errorInfo) {
+                            errorInfo = chainDiagnosticMessages(
+                                errorInfo,
+                                isCall ?
+                                    Diagnostics.Type_0_has_no_call_signatures :
+                                    Diagnostics.Type_0_has_no_construct_signatures,
+                                typeToString(constituent)
+                            );
+                            errorInfo = chainDiagnosticMessages(
+                                errorInfo,
+                                isCall ?
+                                    Diagnostics.Not_all_constituents_of_type_0_are_callable :
+                                    Diagnostics.Not_all_constituents_of_type_0_are_constructable,
+                                typeToString(apparentType)
+                            );
+                        }
+                        if (hasSignatures) {
+                            // Bail early if we already found a siganture, no chance of "No constituent of type is callable"
+                            break;
+                        }
+                    }
+                }
+                if (!hasSignatures) {
+                    errorInfo = chainDiagnosticMessages(
+                        /* detials */ undefined,
+                        isCall ?
+                            Diagnostics.No_constituent_of_type_0_is_callable :
+                            Diagnostics.No_constituent_of_type_0_is_constructable,
+                        typeToString(apparentType)
+                    );
+                }
+                if (!errorInfo) {
+                    errorInfo = chainDiagnosticMessages(
+                        errorInfo,
+                        isCall ?
+                            Diagnostics.Each_member_of_the_union_type_0_has_signatures_but_none_of_those_signatures_are_compatible_with_each_other :
+                            Diagnostics.Each_member_of_the_union_type_0_has_construct_signatures_but_none_of_those_signatures_are_compatible_with_each_other,
+                        typeToString(apparentType)
+                    );
+                }
+            }
+            else {
+                errorInfo = chainDiagnosticMessages(
+                    errorInfo,
+                    isCall ?
+                        Diagnostics.Type_0_has_no_call_signatures :
+                        Diagnostics.Type_0_has_no_construct_signatures,
+                    typeToString(apparentType)
+                );
+            }
+            return chainDiagnosticMessages(
+                errorInfo,
+                isCall ?
+                    Diagnostics.This_expression_is_not_callable :
+                    Diagnostics.This_expression_is_not_constructable
+            );
+        }
         function invocationError(node: Node, apparentType: Type, kind: SignatureKind, relatedInformation?: DiagnosticRelatedInformation) {
-            const diagnostic = error(node, (kind === SignatureKind.Call ?
-                Diagnostics.Cannot_invoke_an_expression_whose_type_lacks_a_call_signature_Type_0_has_no_compatible_call_signatures :
-                Diagnostics.Cannot_use_new_with_an_expression_whose_type_lacks_a_call_or_construct_signature
-            ), typeToString(apparentType));
+            const diagnostic: Diagnostic = createDiagnosticForNodeFromMessageChain(node, invocationErrorDetails(apparentType, kind));
+            diagnostics.add(diagnostic);
             invocationErrorRecovery(apparentType, kind, relatedInformation ? addRelatedInfo(diagnostic, relatedInformation) : diagnostic);
         }
 
@@ -22113,7 +22185,7 @@ namespace ts {
 
             const headMessage = getDiagnosticHeadMessageForDecoratorResolution(node);
             if (!callSignatures.length) {
-                let errorInfo = chainDiagnosticMessages(/*details*/ undefined, Diagnostics.Cannot_invoke_an_expression_whose_type_lacks_a_call_signature_Type_0_has_no_compatible_call_signatures, typeToString(apparentType));
+                let errorInfo = invocationErrorDetails(apparentType, SignatureKind.Call);
                 errorInfo = chainDiagnosticMessages(errorInfo, headMessage);
                 const diag = createDiagnosticForNodeFromMessageChain(node, errorInfo);
                 diagnostics.add(diag);
