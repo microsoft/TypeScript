@@ -1427,12 +1427,12 @@ namespace ts.server {
 
         /* @internal */
         useSourceInsteadOfReferenceRedirect() {
-            return true;
+            return !!this.languageServiceEnabled;
         }
 
         fileExists(file: string): boolean {
             // Project references go to source file instead of .d.ts file
-            if (this.getSourceOfProjectReferenceRedirect) {
+            if (this.languageServiceEnabled && this.getSourceOfProjectReferenceRedirect) {
                 const source = this.getSourceOfProjectReferenceRedirect(file);
                 if (source) return isString(source) ? super.fileExists(source) : true;
             }
