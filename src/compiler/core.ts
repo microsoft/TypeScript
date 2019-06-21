@@ -943,6 +943,7 @@ namespace ts {
                 case true:
 
                 // relational comparison
+                // falls through
                 case Comparison.EqualTo:
                     continue;
 

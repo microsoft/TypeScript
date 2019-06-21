@@ -427,12 +427,16 @@ namespace ts.formatting {
             // equals in binding elements: function foo([[x, y] = [1, 2]])
             case SyntaxKind.BindingElement:
             // equals in type X = ...
+            // falls through
             case SyntaxKind.TypeAliasDeclaration:
             // equal in import a = module('a');
+            // falls through
             case SyntaxKind.ImportEqualsDeclaration:
-            // equal in let a = 0;
+            // equal in let a = 0
+            // falls through
             case SyntaxKind.VariableDeclaration:
-            // equal in p = 0;
+            // equal in p = 0
+            // falls through
             case SyntaxKind.Parameter:
             case SyntaxKind.EnumMember:
             case SyntaxKind.PropertyDeclaration:
@@ -440,7 +444,8 @@ namespace ts.formatting {
                 return context.currentTokenSpan.kind === SyntaxKind.EqualsToken || context.nextTokenSpan.kind === SyntaxKind.EqualsToken;
             // "in" keyword in for (let x in []) { }
             case SyntaxKind.ForInStatement:
-            // "in" keyword in [P in keyof T]: T[P]
+            // "in" keyword in [P in keyof T]: T[P];
+            // falls through
             case SyntaxKind.TypeParameter:
                 return context.currentTokenSpan.kind === SyntaxKind.InKeyword || context.nextTokenSpan.kind === SyntaxKind.InKeyword || context.currentTokenSpan.kind === SyntaxKind.EqualsToken || context.nextTokenSpan.kind === SyntaxKind.EqualsToken;
             // Technically, "of" is not a binary operator, but format it the same way as "in"
@@ -527,9 +532,11 @@ namespace ts.formatting {
             case SyntaxKind.MethodDeclaration:
             case SyntaxKind.MethodSignature:
             // case SyntaxKind.MemberFunctionDeclaration:
+            // falls through
             case SyntaxKind.GetAccessor:
             case SyntaxKind.SetAccessor:
             // case SyntaxKind.MethodSignature:
+            // falls through
             case SyntaxKind.CallSignature:
             case SyntaxKind.FunctionExpression:
             case SyntaxKind.Constructor:
@@ -537,6 +544,7 @@ namespace ts.formatting {
             // case SyntaxKind.ConstructorDeclaration:
             // case SyntaxKind.SimpleArrowFunctionExpression:
             // case SyntaxKind.ParenthesizedArrowFunctionExpression:
+            // falls through
             case SyntaxKind.InterfaceDeclaration: // This one is not truly a function, but for formatting purposes, it acts just like one
                 return true;
         }
@@ -607,6 +615,7 @@ namespace ts.formatting {
             case SyntaxKind.WithStatement:
             // TODO
             // case SyntaxKind.ElseClause:
+            // falls through
             case SyntaxKind.CatchClause:
                 return true;
 

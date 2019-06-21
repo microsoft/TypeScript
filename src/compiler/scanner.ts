@@ -468,6 +468,7 @@ namespace ts {
               case CharacterCodes.space:
               case CharacterCodes.slash:
                   // starts of normal trivia
+                  // falls through
               case CharacterCodes.lessThan:
               case CharacterCodes.bar:
               case CharacterCodes.equals:

@@ -1666,8 +1666,8 @@ namespace ts {
                                 }
                                 break;
                             }
+                            // falls through
 
-                        // falls through
                         case UpToDateStatusType.UpToDateWithUpstreamTypes:
                         case UpToDateStatusType.OutOfDateWithPrepend:
                             if (!(buildResult & BuildResultFlags.DeclarationOutputUnchanged)) {
@@ -2098,6 +2098,7 @@ namespace ts {
                 );
             case UpToDateStatusType.ContainerOnly:
             // Don't report status on "solution" projects
+            // falls through
             case UpToDateStatusType.ComputingUpstream:
                 // Should never leak from getUptoDateStatusWorker
                 break;

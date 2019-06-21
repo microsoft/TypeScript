@@ -4796,7 +4796,9 @@ namespace ts {
 
                     // Type parameters are always visible
                     case SyntaxKind.TypeParameter:
+
                     // Source file and namespace export are always visible
+                    // falls through
                     case SyntaxKind.SourceFile:
                     case SyntaxKind.NamespaceExportDeclaration:
                         return true;
@@ -24545,7 +24547,7 @@ namespace ts {
                     if ((<CallExpression>node).expression.kind === SyntaxKind.ImportKeyword) {
                         return checkImportCallExpression(<ImportCall>node);
                     }
-                    /* falls through */
+                    // falls through
                 case SyntaxKind.NewExpression:
                     return checkCallExpression(<CallExpression>node, checkMode);
                 case SyntaxKind.TaggedTemplateExpression:
@@ -25673,7 +25675,9 @@ namespace ts {
                 switch (d.kind) {
                     case SyntaxKind.InterfaceDeclaration:
                     case SyntaxKind.TypeAliasDeclaration:
-                    // A jsdoc typedef and callback are, by definition, type aliases
+
+                    // A jsdoc typedef and callback are, by definition, type aliases.
+                    // falls through
                     case SyntaxKind.JSDocTypedefTag:
                     case SyntaxKind.JSDocCallbackTag:
                         return DeclarationSpaces.ExportType;
@@ -25692,8 +25696,9 @@ namespace ts {
                             return DeclarationSpaces.ExportValue;
                         }
                         d = (d as ExportAssignment).expression;
-                        /* falls through */
-                    // The below options all declare an Alias, which is allowed to merge with other values within the importing module
+
+                    // The below options all declare an Alias, which is allowed to merge with other values within the importing module.
+                    // falls through
                     case SyntaxKind.ImportEqualsDeclaration:
                     case SyntaxKind.NamespaceImport:
                     case SyntaxKind.ImportClause:
@@ -29634,9 +29639,10 @@ namespace ts {
                             if (className) {
                                 copySymbol(location.symbol, meaning);
                             }
-                        // falls through
+
                         // this fall-through is necessary because we would like to handle
-                        // type parameter inside class expression similar to how we handle it in classDeclaration and interface Declaration
+                        // type parameter inside class expression similar to how we handle it in classDeclaration and interface Declaration.
+                        // falls through
                         case SyntaxKind.ClassDeclaration:
                         case SyntaxKind.InterfaceDeclaration:
                             // If we didn't come from static member of class or interface,
@@ -31786,7 +31792,7 @@ namespace ts {
                 switch (prop.kind) {
                     case SyntaxKind.ShorthandPropertyAssignment:
                         checkGrammarForInvalidExclamationToken(prop.exclamationToken, Diagnostics.A_definite_assignment_assertion_is_not_permitted_in_this_context);
-                    /* tslint:disable:no-switch-case-fall-through */
+                        // falls through
                     case SyntaxKind.PropertyAssignment:
                         // Grammar checking for computedPropertyName and shorthandPropertyAssignment
                         checkGrammarForInvalidQuestionMark(prop.questionToken, Diagnostics.An_object_member_cannot_be_declared_optional);

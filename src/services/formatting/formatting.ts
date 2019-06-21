@@ -514,7 +514,8 @@ namespace ts.formatting {
                     if ((<MethodDeclaration>node).asteriskToken) {
                         return SyntaxKind.AsteriskToken;
                     }
-                // falls through
+                    // falls through
+
                 case SyntaxKind.PropertyDeclaration:
                 case SyntaxKind.Parameter:
                     const name = getNameOfDeclaration(<Declaration>node);

@@ -369,8 +369,8 @@ namespace ts {
                 case SyntaxKind.ConstKeyword:
                 case SyntaxKind.DeclareKeyword:
                 case SyntaxKind.ReadonlyKeyword:
-                    // TypeScript accessibility and readonly modifiers are elided.
-
+                // TypeScript accessibility and readonly modifiers are elided
+                // falls through
                 case SyntaxKind.ArrayType:
                 case SyntaxKind.TupleType:
                 case SyntaxKind.OptionalType:
@@ -400,12 +400,15 @@ namespace ts {
                 case SyntaxKind.MappedType:
                 case SyntaxKind.LiteralType:
                     // TypeScript type nodes are elided.
+                    // falls through
 
                 case SyntaxKind.IndexSignature:
                     // TypeScript index signatures are elided.
+                    // falls through
 
                 case SyntaxKind.Decorator:
                     // TypeScript decorators are elided. They will be emitted as part of visitClassDeclaration.
+                    // falls through
 
                 case SyntaxKind.TypeAliasDeclaration:
                     // TypeScript type-only declarations are elided.

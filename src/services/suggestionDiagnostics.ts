@@ -181,7 +181,7 @@ namespace ts {
             case SyntaxKind.FunctionExpression:
             case SyntaxKind.ArrowFunction:
                 visitedNestedConvertibleFunctions.set(getKeyFromNode(arg as FunctionLikeDeclaration), true);
-                /* falls through */
+                // falls through
             case SyntaxKind.NullKeyword:
             case SyntaxKind.Identifier: // identifier includes undefined
                 return true;

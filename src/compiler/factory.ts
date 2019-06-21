@@ -2773,7 +2773,8 @@ namespace ts {
                     break;
                 case BundleFileSectionKind.Internal:
                     if (stripInternal) break;
-                // falls through
+                    // falls through
+
                 case BundleFileSectionKind.Text:
                     (texts || (texts = [])).push(createUnparsedNode(section, node) as UnparsedTextLike);
                     break;

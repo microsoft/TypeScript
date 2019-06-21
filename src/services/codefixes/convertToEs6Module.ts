@@ -230,6 +230,7 @@ namespace ts.codefix {
                 case SyntaxKind.GetAccessor:
                 case SyntaxKind.SetAccessor:
                 // TODO: Maybe we should handle this? See fourslash test `refactorConvertToEs6Module_export_object_shorthand.ts`.
+                // falls through
                 case SyntaxKind.ShorthandPropertyAssignment:
                 case SyntaxKind.SpreadAssignment:
                     return undefined;
