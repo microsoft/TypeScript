@@ -726,7 +726,7 @@ namespace ts {
             directoryExists: host.directoryExists && (f => host.directoryExists!(f)),
             useCaseSensitiveFileNames: () => host.useCaseSensitiveFileNames(),
             getProgramBuildInfo: returnUndefined,
-            getSourceFileFromReference: returnUndefined, // TODO: Implement?
+            getSourceFileFromReference: returnUndefined,
         };
         emitFiles(
             notImplementedResolver,
