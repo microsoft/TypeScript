@@ -21412,7 +21412,8 @@ namespace ts {
             reorderCandidates(signatures, candidates);
             if (!candidates.length) {
                 if (reportErrors) {
-                    diagnostics.add(createDiagnosticForNode(node, Diagnostics.Call_target_does_not_contain_any_signatures));
+                    const errorNode = getCallErrorNode(node);
+                    diagnostics.add(createDiagnosticForNode(errorNode, Diagnostics.Call_target_does_not_contain_any_signatures));
                 }
                 return resolveErrorCall(node);
             }
@@ -21490,11 +21491,13 @@ namespace ts {
             // If candidate is undefined, it means that no candidates had a suitable arity. In that case,
             // skip the checkApplicableSignature check.
             if (reportErrors) {
+                const errorNode = getCallErrorNode(node);
+
                 if (candidateForArgumentError) {
                     checkApplicableSignature(node, args, candidateForArgumentError, assignableRelation, CheckMode.Normal, /*reportErrors*/ true);
                 }
                 else if (candidateForArgumentArityError) {
-                    diagnostics.add(getArgumentArityError(node, [candidateForArgumentArityError], args));
+                    diagnostics.add(getArgumentArityError(errorNode, [candidateForArgumentArityError], args));
                 }
                 else if (candidateForTypeArgumentError) {
                     checkTypeArguments(candidateForTypeArgumentError, (node as CallExpression | TaggedTemplateExpression | JsxOpeningLikeElement).typeArguments!, /*reportErrors*/ true, fallbackError);
@@ -21502,18 +21505,30 @@ namespace ts {
                 else {
                     const signaturesWithCorrectTypeArgumentArity = filter(signatures, s => hasCorrectTypeArgumentArity(s, typeArguments));
                     if (signaturesWithCorrectTypeArgumentArity.length === 0) {
-                        diagnostics.add(getTypeArgumentArityError(node, signatures, typeArguments!));
+                        diagnostics.add(getTypeArgumentArityError(errorNode, signatures, typeArguments!));
                     }
                     else if (!isDecorator) {
-                        diagnostics.add(getArgumentArityError(node, signaturesWithCorrectTypeArgumentArity, args));
+                        diagnostics.add(getArgumentArityError(errorNode, signaturesWithCorrectTypeArgumentArity, args));
                     }
                     else if (fallbackError) {
-                        diagnostics.add(createDiagnosticForNode(node, fallbackError));
+                        diagnostics.add(createDiagnosticForNode(errorNode, fallbackError));
                     }
                 }
             }
 
             return produceDiagnostics || !args ? resolveErrorCall(node) : getCandidateForOverloadFailure(node, candidates, args, !!candidatesOutArray);
+
+            function getCallErrorNode(node: CallLikeExpression): Node {
+                if (isCallExpression(node)) {
+                    if (isPropertyAccessExpression(node.expression)) {
+                        return node.expression.name;
+                    }
+                    else {
+                        return node.expression;
+                    }
+                }
+                return node;
+            }
 
             function chooseOverload(candidates: Signature[], relation: Map<RelationComparisonResult>, signatureHelpTrailingComma = false) {
                 candidateForArgumentError = undefined;
