@@ -22090,7 +22090,7 @@ namespace ts {
             );
         }
         function invocationError(node: Node, apparentType: Type, kind: SignatureKind, relatedInformation?: DiagnosticRelatedInformation) {
-            const diagnostic: Diagnostic = createDiagnosticForNodeFromMessageChain(node, invocationErrorDetails(apparentType, kind));
+            const diagnostic = createDiagnosticForNodeFromMessageChain(node, invocationErrorDetails(apparentType, kind));
             diagnostics.add(diagnostic);
             invocationErrorRecovery(apparentType, kind, relatedInformation ? addRelatedInfo(diagnostic, relatedInformation) : diagnostic);
         }
