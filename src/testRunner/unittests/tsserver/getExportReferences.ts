@@ -3,16 +3,18 @@ namespace ts.projectSystem {
         const exportVariable = "export const value = 0;";
         const exportArrayDestructured = "export const [valueA, valueB] = [0, 1];";
         const exportObjectDestructured = "export const { valueC, valueD: renamedD } = { valueC: 0, valueD: 1 };";
+        const exportNestedObject = "export const { nest: [valueE, { valueF }] } = { nest: [0, { valueF: 1 }] };";
 
         const mainTs: File = {
             path: "/main.ts",
-            content: 'import { value, valueA, valueB, valueC, renamedD } from "./mod";',
+            content: 'import { value, valueA, valueB, valueC, renamedD, valueE, valueF } from "./mod";',
         };
         const modTs: File = {
             path: "/mod.ts",
             content: `${exportVariable}
 ${exportArrayDestructured}
 ${exportObjectDestructured}
+${exportNestedObject}
 `,
         };
         const tsconfig: File = {
@@ -142,6 +144,39 @@ ${exportObjectDestructured}
                 symbolDisplayString: "const renamedD: number",
                 symbolName: "renamedD",
                 symbolStartOffset: protocolLocationFromSubstring(modTs.content, "renamedD").offset,
+            };
+
+            assert.deepEqual(response, expectResponse);
+        });
+
+        it("should get nested object declaration references", () => {
+            const session = makeSampleSession();
+            const response = executeSessionRequest<protocol.ReferencesRequest, protocol.ReferencesResponse>(
+                session,
+                protocol.CommandTypes.References,
+                protocolFileLocationFromSubstring(modTs, "valueF"),
+            );
+
+            const expectResponse = {
+                refs: [
+                    referenceModTs({
+                        text: "valueF",
+                        lineText: exportNestedObject,
+                        contextText: exportNestedObject,
+                    }),
+                    referenceMainTs(mainTs, "valueF"),
+                    referenceModTs(
+                        {
+                            text: "valueF",
+                            lineText: exportNestedObject,
+                            contextText: "valueF: 1",
+                        },
+                        { options: { index: 1 } },
+                    ),
+                ],
+                symbolDisplayString: "const valueF: number",
+                symbolName: "valueF",
+                symbolStartOffset: protocolLocationFromSubstring(modTs.content, "valueF").offset,
             };
 
             assert.deepEqual(response, expectResponse);
