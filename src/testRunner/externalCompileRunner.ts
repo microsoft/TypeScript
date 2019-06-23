@@ -115,7 +115,7 @@ class DockerfileRunner extends ExternalCompileRunnerBase {
         // Read in and evaluate the test list
         const testList = this.tests && this.tests.length ? this.tests : this.enumerateTestFiles();
 
-        // tslint:disable-next-line:no-this-assignment
+        // eslint-disable-next-line @typescript-eslint/no-this-alias
         const cls = this;
         describe(`${this.kind()} code samples`, function(this: Mocha.ISuiteCallbackContext) {
             this.timeout(cls.timeout); // 20 minutes
