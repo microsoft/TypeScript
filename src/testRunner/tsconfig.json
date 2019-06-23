@@ -90,6 +90,7 @@
         "unittests/services/textChanges.ts",
         "unittests/services/transpile.ts",
         "unittests/tsbuild/amdModulesWithOut.ts",
+        "unittests/tsbuild/containerOnlyReferenced.ts",
         "unittests/tsbuild/emptyFiles.ts",
         "unittests/tsbuild/graphOrdering.ts",
         "unittests/tsbuild/inferredTypeFromTransitiveModule.ts",

@@ -19,7 +19,7 @@ tests/cases/conformance/expressions/functionCalls/callOverload.ts(11,10): error 
 !!! error TS2554: Expected 2 arguments, but got 4.
     withRest('a', ...n); // no error
     withRest();
-    ~~~~~~~~~~
+    ~~~~~~~~
 !!! error TS2555: Expected at least 1 arguments, but got 0.
 !!! related TS6210 tests/cases/conformance/expressions/functionCalls/callOverload.ts:3:27: An argument for 'a' was not provided.
     withRest(...n); 

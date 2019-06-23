@@ -158,3 +158,20 @@ function f4() {
 >0 : 0
 }
 
+// Repro from #31770
+
+type KeyValue = [string, string?];
+>KeyValue : [string, (string | undefined)?]
+
+let [key, value]: KeyValue = ["foo"];
+>key : string
+>value : string | undefined
+>["foo"] : [string]
+>"foo" : "foo"
+
+value.toUpperCase();  // Error
+>value.toUpperCase() : any
+>value.toUpperCase : any
+>value : undefined
+>toUpperCase : any
+

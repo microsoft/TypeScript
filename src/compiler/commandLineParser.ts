@@ -147,6 +147,12 @@ namespace ts {
             category: Diagnostics.Basic_Options,
             description: Diagnostics.Enable_incremental_compilation,
         },
+        {
+            name: "locale",
+            type: "string",
+            category: Diagnostics.Advanced_Options,
+            description: Diagnostics.The_locale_used_when_displaying_messages_to_the_user_e_g_en_us
+        },
     ];
 
     /* @internal */
@@ -699,12 +705,6 @@ namespace ts {
             description: Diagnostics.Emit_a_UTF_8_Byte_Order_Mark_BOM_in_the_beginning_of_output_files
         },
         {
-            name: "locale",
-            type: "string",
-            category: Diagnostics.Advanced_Options,
-            description: Diagnostics.The_locale_used_when_displaying_messages_to_the_user_e_g_en_us
-        },
-        {
             name: "newLine",
             type: createMapFromTemplate({
                 crlf: NewLineKind.CarriageReturnLineFeed,
@@ -1171,7 +1171,7 @@ namespace ts {
     export interface ParsedBuildCommand {
         buildOptions: BuildOptions;
         projects: string[];
-        errors: ReadonlyArray<Diagnostic>;
+        errors: Diagnostic[];
     }
 
     /*@internal*/
