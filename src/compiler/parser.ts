@@ -5654,10 +5654,11 @@ namespace ts {
             if (token() === SyntaxKind.ConstructorKeyword) {
                 return parseExpected(SyntaxKind.ConstructorKeyword);
             }
-            if (token() === SyntaxKind.StringLiteral
-                && stripQuotes(scanner.getTokenText()) === "constructor"
-                && lookAhead(nextToken) === SyntaxKind.OpenParenToken) {
-                return parseLiteralNode();
+            if (token() === SyntaxKind.StringLiteral && lookAhead(nextToken) === SyntaxKind.OpenParenToken) {
+                return tryParse(() => {
+                    const literalNode = parseLiteralNode();
+                    return literalNode.text === "constructor" ? literalNode : undefined;
+                });
             }
         }
 

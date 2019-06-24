@@ -23,3 +23,9 @@ new class {
 };
 
 var o = { "constructor"() {} };
+
+class F {
+    "\x63onstructor"() {
+        console.log(this);
+    }
+}
