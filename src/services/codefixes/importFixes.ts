@@ -285,9 +285,9 @@ namespace ts.codefix {
         const isJs = isSourceFileJS(sourceFile);
         const choicesForEachExportingModule = flatMap(moduleSymbols, ({ moduleSymbol, importKind, exportedSymbolIsTypeOnly }) =>
             moduleSpecifiers.getModuleSpecifiers(moduleSymbol, program.getCompilerOptions(), sourceFile, host, program.getSourceFiles(), preferences, program.redirectTargetsMap)
-            .map((moduleSpecifier): FixAddNewImport | FixUseImportType =>
-                // `position` should only be undefined at a missing jsx namespace, in which case we shouldn't be looking for pure types.
-                exportedSymbolIsTypeOnly && isJs ? { kind: ImportFixKind.ImportType, moduleSpecifier, position: Debug.assertDefined(position) } : { kind: ImportFixKind.AddNew, moduleSpecifier, importKind }));
+                .map((moduleSpecifier): FixAddNewImport | FixUseImportType =>
+                    // `position` should only be undefined at a missing jsx namespace, in which case we shouldn't be looking for pure types.
+                    exportedSymbolIsTypeOnly && isJs ? { kind: ImportFixKind.ImportType, moduleSpecifier, position: Debug.assertDefined(position) } : { kind: ImportFixKind.AddNew, moduleSpecifier, importKind }));
         // Sort to keep the shortest paths first
         return sort(choicesForEachExportingModule, (a, b) => a.moduleSpecifier.length - b.moduleSpecifier.length);
     }

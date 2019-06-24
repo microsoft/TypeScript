@@ -266,7 +266,7 @@ namespace ts.refactor.convertParamsToDestructuredObject {
         const node = getTouchingToken(file, startPosition);
         const functionDeclaration = getContainingFunctionDeclaration(node);
 
-         // don't offer refactor on top-level JSDoc
+        // don't offer refactor on top-level JSDoc
         if (isTopLevelJSDoc(node)) return undefined;
 
         if (functionDeclaration

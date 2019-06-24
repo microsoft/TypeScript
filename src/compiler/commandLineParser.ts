@@ -2171,12 +2171,12 @@ namespace ts {
         return result.fileNames.length === 0 && canJsonReportNoInutFiles && (!resolutionStack || resolutionStack.length === 0);
     }
 
-     /*@internal*/
+    /*@internal*/
     export function canJsonReportNoInutFiles(raw: any) {
         return !hasProperty(raw, "files") && !hasProperty(raw, "references");
     }
 
-     /*@internal*/
+    /*@internal*/
     export function updateErrorForNoInputFiles(result: ExpandResult, configFileName: string, configFileSpecs: ConfigFileSpecs, configParseDiagnostics: Diagnostic[], canJsonReportNoInutFiles: boolean) {
         const existingErrors = configParseDiagnostics.length;
         if (shouldReportNoInputFiles(result, canJsonReportNoInutFiles)) {

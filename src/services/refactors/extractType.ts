@@ -14,8 +14,8 @@ namespace ts.refactor {
                 actions: [info.isJS ? {
                     name: extractToTypeDef, description: getLocaleSpecificMessage(Diagnostics.Extract_to_typedef)
                 } : {
-                        name: extractToTypeAlias, description: getLocaleSpecificMessage(Diagnostics.Extract_to_type_alias)
-                    }]
+                    name: extractToTypeAlias, description: getLocaleSpecificMessage(Diagnostics.Extract_to_type_alias)
+                }]
             }];
         },
         getEditsForAction(context, actionName): RefactorEditInfo {

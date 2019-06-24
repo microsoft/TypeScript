@@ -232,7 +232,6 @@ namespace ts {
                     visitNode((<ComputedPropertyName>node).expression, visitor, isExpression));
 
             // Signature elements
-
             case SyntaxKind.TypeParameter:
                 return updateTypeParameterDeclaration(<TypeParameterDeclaration>node,
                     visitNode((<TypeParameterDeclaration>node).name, visitor, isIdentifier),
@@ -254,7 +253,6 @@ namespace ts {
                     visitNode((<Decorator>node).expression, visitor, isExpression));
 
             // Type elements
-
             case SyntaxKind.PropertySignature:
                 return updatePropertySignature((<PropertySignature>node),
                     nodesVisitor((<PropertySignature>node).modifiers, visitor, isToken),
@@ -337,7 +335,6 @@ namespace ts {
                     visitNode((<IndexSignatureDeclaration>node).type, visitor, isTypeNode));
 
             // Types
-
             case SyntaxKind.TypePredicate:
                 return updateTypePredicateNode(<TypePredicateNode>node,
                     visitNode((<TypePredicateNode>node).parameterName, visitor),
@@ -436,7 +433,6 @@ namespace ts {
                     visitNode((<LiteralTypeNode>node).literal, visitor, isExpression));
 
             // Binding patterns
-
             case SyntaxKind.ObjectBindingPattern:
                 return updateObjectBindingPattern(<ObjectBindingPattern>node,
                     nodesVisitor((<ObjectBindingPattern>node).elements, visitor, isBindingElement));
@@ -453,7 +449,6 @@ namespace ts {
                     visitNode((<BindingElement>node).initializer, visitor, isExpression));
 
             // Expression
-
             case SyntaxKind.ArrayLiteralExpression:
                 return updateArrayLiteral(<ArrayLiteralExpression>node,
                     nodesVisitor((<ArrayLiteralExpression>node).elements, visitor, isExpression));
@@ -597,14 +592,12 @@ namespace ts {
                     visitNode((<MetaProperty>node).name, visitor, isIdentifier));
 
             // Misc
-
             case SyntaxKind.TemplateSpan:
                 return updateTemplateSpan(<TemplateSpan>node,
                     visitNode((<TemplateSpan>node).expression, visitor, isExpression),
                     visitNode((<TemplateSpan>node).literal, visitor, isTemplateMiddleOrTemplateTail));
 
             // Element
-
             case SyntaxKind.Block:
                 return updateBlock(<Block>node,
                     nodesVisitor((<Block>node).statements, visitor, isStatement));
@@ -819,13 +812,11 @@ namespace ts {
                     visitNode((<ExportSpecifier>node).name, visitor, isIdentifier));
 
             // Module references
-
             case SyntaxKind.ExternalModuleReference:
                 return updateExternalModuleReference(<ExternalModuleReference>node,
                     visitNode((<ExternalModuleReference>node).expression, visitor, isExpression));
 
             // JSX
-
             case SyntaxKind.JsxElement:
                 return updateJsxElement(<JsxElement>node,
                     visitNode((<JsxElement>node).openingElement, visitor, isJsxOpeningElement),
@@ -872,7 +863,6 @@ namespace ts {
                     visitNode((<JsxExpression>node).expression, visitor, isExpression));
 
             // Clauses
-
             case SyntaxKind.CaseClause:
                 return updateCaseClause(<CaseClause>node,
                     visitNode((<CaseClause>node).expression, visitor, isExpression),
@@ -892,7 +882,6 @@ namespace ts {
                     visitNode((<CatchClause>node).block, visitor, isBlock));
 
             // Property assignments
-
             case SyntaxKind.PropertyAssignment:
                 return updatePropertyAssignment(<PropertyAssignment>node,
                     visitNode((<PropertyAssignment>node).name, visitor, isPropertyName),
@@ -1017,7 +1006,6 @@ namespace ts {
                 break;
 
             // Type member
-
             case SyntaxKind.PropertySignature:
                 result = reduceNodes((<PropertySignature>node).modifiers, cbNodes, result);
                 result = reduceNode((<PropertySignature>node).name, cbNode, result);

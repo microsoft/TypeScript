@@ -77,11 +77,11 @@ namespace ts.projectSystem {
                     command: protocol.CommandTypes.CompletionInfo,
                     arguments: completionRequestArgs
                 }, {
-                        isGlobalCompletion: false,
-                        isMemberCompletion: true,
-                        isNewIdentifierLocation: false,
-                        entries: expectedCompletionEntries
-                    });
+                    isGlobalCompletion: false,
+                    isMemberCompletion: true,
+                    isNewIdentifierLocation: false,
+                    entries: expectedCompletionEntries
+                });
             });
 
             it("returns undefined correctly", () => {

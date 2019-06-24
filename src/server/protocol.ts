@@ -2188,9 +2188,9 @@ namespace ts.server.protocol {
     export type SignatureHelpTriggerCharacter = "," | "(" | "<";
     export type SignatureHelpRetriggerCharacter = SignatureHelpTriggerCharacter | ")";
 
-      /**
-       * Arguments of a signature help request.
-       */
+    /**
+     * Arguments of a signature help request.
+     */
     export interface SignatureHelpRequestArgs extends FileLocationRequestArgs {
         /**
          * Reason why signature help was invoked.
@@ -2586,8 +2586,17 @@ namespace ts.server.protocol {
     }
 
     /*@internal*/
-    export type AnyEvent = RequestCompletedEvent | DiagnosticEvent | ConfigFileDiagnosticEvent | ProjectLanguageServiceStateEvent | TelemetryEvent |
-        ProjectsUpdatedInBackgroundEvent | ProjectLoadingStartEvent | ProjectLoadingFinishEvent | SurveyReadyEvent | LargeFileReferencedEvent;
+    export type AnyEvent =
+        RequestCompletedEvent
+        | DiagnosticEvent
+        | ConfigFileDiagnosticEvent
+        | ProjectLanguageServiceStateEvent
+        | TelemetryEvent
+        | ProjectsUpdatedInBackgroundEvent
+        | ProjectLoadingStartEvent
+        | ProjectLoadingFinishEvent
+        | SurveyReadyEvent
+        | LargeFileReferencedEvent;
 
     /**
      * Arguments for reload request.
@@ -2848,14 +2857,15 @@ namespace ts.server.protocol {
         payload: TypingsInstalledTelemetryEventPayload;
     }
 
-/* __GDPR__
-   "typingsinstalled" : {
-        "${include}": ["${TypeScriptCommonProperties}"],
-        "installedPackages": { "classification": "PublicNonPersonalData", "purpose": "FeatureInsight" },
-        "installSuccess": { "classification": "SystemMetaData", "purpose": "FeatureInsight" },
-        "typingsInstallerVersion": { "classification": "SystemMetaData", "purpose": "FeatureInsight" }
-   }
- */
+    /**
+     * __GDPR__
+     * "typingsinstalled" : {
+     *     "${include}": ["${TypeScriptCommonProperties}"],
+     *     "installedPackages": { "classification": "PublicNonPersonalData", "purpose": "FeatureInsight" },
+     *     "installSuccess": { "classification": "SystemMetaData", "purpose": "FeatureInsight" },
+     *     "typingsInstallerVersion": { "classification": "SystemMetaData", "purpose": "FeatureInsight" }
+     * }
+     */
     export interface TypingsInstalledTelemetryEventPayload {
         /**
          * Comma separated list of installed typing packages

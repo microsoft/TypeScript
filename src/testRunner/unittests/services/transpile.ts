@@ -83,8 +83,8 @@ namespace ts {
 
         transpilesCorrectly("Generates no diagnostics for missing file references", `/// <reference path="file2.ts" />
 var x = 0;`, {
-                options: { compilerOptions: { module: ModuleKind.CommonJS } }
-            });
+            options: { compilerOptions: { module: ModuleKind.CommonJS } }
+        });
 
         transpilesCorrectly("Generates no diagnostics for missing module imports", `import {a} from "module2";`, {
             options: { compilerOptions: { module: ModuleKind.CommonJS } }
@@ -410,17 +410,18 @@ var x = 0;`, {
             `export class MyClass1 {` +
             `    constructor(private _elementRef: ng.ElementRef){}` +
             `}`, {
-            options: {
-                compilerOptions: {
-                    target: ScriptTarget.ES5,
-                    module: ModuleKind.CommonJS,
-                    moduleResolution: ModuleResolutionKind.NodeJs,
-                    emitDecoratorMetadata: true,
-                    experimentalDecorators: true,
-                    isolatedModules: true,
+                options: {
+                    compilerOptions: {
+                        target: ScriptTarget.ES5,
+                        module: ModuleKind.CommonJS,
+                        moduleResolution: ModuleResolutionKind.NodeJs,
+                        emitDecoratorMetadata: true,
+                        experimentalDecorators: true,
+                        isolatedModules: true,
+                    }
                 }
             }
-        });
+        );
 
         transpilesCorrectly("Correctly serialize metadata when transpile with System option",
             `import * as ng from "angular2/core";` +
@@ -429,17 +430,18 @@ var x = 0;`, {
             `export class MyClass1 {` +
             `    constructor(private _elementRef: ng.ElementRef){}` +
             `}`, {
-            options: {
-                compilerOptions: {
-                    target: ScriptTarget.ES5,
-                    module: ModuleKind.System,
-                    moduleResolution: ModuleResolutionKind.NodeJs,
-                    emitDecoratorMetadata: true,
-                    experimentalDecorators: true,
-                    isolatedModules: true,
+                options: {
+                    compilerOptions: {
+                        target: ScriptTarget.ES5,
+                        module: ModuleKind.System,
+                        moduleResolution: ModuleResolutionKind.NodeJs,
+                        emitDecoratorMetadata: true,
+                        experimentalDecorators: true,
+                        isolatedModules: true,
+                    }
                 }
             }
-        });
+        );
 
         transpilesCorrectly("Supports readonly keyword for arrays", "let x: readonly string[];", {
             options: { compilerOptions: { module: ModuleKind.CommonJS } }

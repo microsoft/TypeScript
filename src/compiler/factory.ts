@@ -3457,7 +3457,7 @@ namespace ts {
 
     export function createMemberAccessForPropertyName(target: Expression, memberName: PropertyName, location?: TextRange): MemberExpression {
         if (isComputedPropertyName(memberName)) {
-             return setTextRange(createElementAccess(target, memberName.expression), location);
+            return setTextRange(createElementAccess(target, memberName.expression), location);
         }
         else {
             const expression = setTextRange(
@@ -4494,10 +4494,8 @@ namespace ts {
             }
 
             const leftKind = getLiteralKindOfBinaryPlusOperand((<BinaryExpression>node).left);
-            const literalKind = isLiteralKind(leftKind)
-                && leftKind === getLiteralKindOfBinaryPlusOperand((<BinaryExpression>node).right)
-                    ? leftKind
-                    : SyntaxKind.Unknown;
+            const literalKind = isLiteralKind(leftKind) && leftKind === getLiteralKindOfBinaryPlusOperand((<BinaryExpression>node).right) ? leftKind :
+                SyntaxKind.Unknown;
 
             (<BinaryPlusExpression>node).cachedLiteralKind = literalKind;
             return literalKind;

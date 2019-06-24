@@ -275,12 +275,10 @@ namespace ts.codefix {
         const moduleSpecifier = reExported.text;
         const moduleSymbol = checker.getSymbolAtLocation(reExported);
         const exports = moduleSymbol ? moduleSymbol.exports! : emptyUnderscoreEscapedMap;
-        return exports.has("export=" as __String)
-            ? [[reExportDefault(moduleSpecifier)], true]
-            : !exports.has("default" as __String)
-            ? [[reExportStar(moduleSpecifier)], false]
+        return exports.has("export=" as __String) ? [[reExportDefault(moduleSpecifier)], true] :
+            !exports.has("default" as __String) ? [[reExportStar(moduleSpecifier)], false] :
             // If there's some non-default export, must include both `export *` and `export default`.
-            : exports.size > 1 ? [[reExportStar(moduleSpecifier), reExportDefault(moduleSpecifier)], true] : [[reExportDefault(moduleSpecifier)], true];
+            exports.size > 1 ? [[reExportStar(moduleSpecifier), reExportDefault(moduleSpecifier)], true] : [[reExportDefault(moduleSpecifier)], true];
     }
     function reExportStar(moduleSpecifier: string): ExportDeclaration {
         return makeExportDeclaration(/*exportClause*/ undefined, moduleSpecifier);
@@ -319,7 +317,8 @@ namespace ts.codefix {
                     return exportConst();
                 }
             }
-                // falls through
+
+            // falls through
             case SyntaxKind.ArrowFunction:
                 // `exports.f = function() {}` --> `export function f() {}`
                 return functionExpressionToDeclaration(name, modifiers, exported as FunctionExpression | ArrowFunction);

@@ -696,11 +696,9 @@ namespace ts.FindAllReferences.Core {
                 const sourceFile = decl.getSourceFile();
                 if (sourceFilesSet.has(sourceFile.fileName)) {
                     // At `module.exports = ...`, reference node is `module`
-                    const node = isBinaryExpression(decl) && isPropertyAccessExpression(decl.left)
-                        ? decl.left.expression
-                        : isExportAssignment(decl)
-                        ? Debug.assertDefined(findChildOfKind(decl, SyntaxKind.ExportKeyword, sourceFile))
-                        : getNameOfDeclaration(decl) || decl;
+                    const node = isBinaryExpression(decl) && isPropertyAccessExpression(decl.left) ? decl.left.expression :
+                        isExportAssignment(decl) ? Debug.assertDefined(findChildOfKind(decl, SyntaxKind.ExportKeyword, sourceFile)) :
+                        getNameOfDeclaration(decl) || decl;
                     references.push(nodeEntry(node));
                 }
             }
@@ -1972,11 +1970,10 @@ namespace ts.FindAllReferences.Core {
     }
 
     function isImplementation(node: Node): boolean {
-        return !!(node.flags & NodeFlags.Ambient)
-            ? !(isInterfaceDeclaration(node) || isTypeAliasDeclaration(node))
-            : (isVariableLike(node) ? hasInitializer(node)
-                : isFunctionLikeDeclaration(node) ? !!node.body
-                : isClassLike(node) || isModuleOrEnumDeclaration(node));
+        return !!(node.flags & NodeFlags.Ambient) ? !(isInterfaceDeclaration(node) || isTypeAliasDeclaration(node)) :
+            (isVariableLike(node) ? hasInitializer(node) :
+            isFunctionLikeDeclaration(node) ? !!node.body :
+            isClassLike(node) || isModuleOrEnumDeclaration(node));
     }
 
     export function getReferenceEntriesForShorthandPropertyAssignment(node: Node, checker: TypeChecker, addReference: (node: Node) => void): void {

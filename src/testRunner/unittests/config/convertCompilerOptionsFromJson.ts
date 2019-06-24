@@ -592,16 +592,16 @@ namespace ts {
     ]
   }
 }
-`, "tsconfig.json",
-                {
-                    compilerOptions: {
-                        target: undefined,
-                        module: ModuleKind.ESNext,
-                        experimentalDecorators: true,
-                    },
-                    hasParseErrors: true
-                }
-            );
+`,
+            "tsconfig.json",
+            {
+                compilerOptions: {
+                    target: undefined,
+                    module: ModuleKind.ESNext,
+                    experimentalDecorators: true,
+                },
+                hasParseErrors: true
+            });
         });
     });
 }

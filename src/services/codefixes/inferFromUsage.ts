@@ -533,7 +533,7 @@ namespace ts.codefix {
                         break;
                     }
                 }
-                    // falls through
+                // falls through
                 default:
                     return inferTypeFromContextualType(node, checker, usageContext);
             }

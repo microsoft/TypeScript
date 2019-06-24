@@ -75,11 +75,11 @@ declare function escape(string: string): string;
 declare function unescape(string: string): string;
 
 interface Symbol {
-  /** Returns a string representation of an object. */
-  toString(): string;
+    /** Returns a string representation of an object. */
+    toString(): string;
 
-  /** Returns the primitive value of the specified object. */
-  valueOf(): symbol;
+    /** Returns the primitive value of the specified object. */
+    valueOf(): symbol;
 }
 
 declare type PropertyKey = string | number | symbol;
@@ -238,7 +238,7 @@ interface ObjectConstructor {
       * Returns the names of the enumerable string properties and methods of an object.
       * @param o Object that contains the properties and methods. This can be an object that you created or an existing Document Object Model (DOM) object.
       */
-     keys(o: object): string[];
+    keys(o: object): string[];
 }
 
 /**

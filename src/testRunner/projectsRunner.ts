@@ -202,7 +202,8 @@ namespace project {
             const ignoreCase = this.vfs.ignoreCase;
             const resolutionInfo: ProjectRunnerTestCaseResolutionInfo & ts.CompilerOptions = JSON.parse(JSON.stringify(this.testCase));
             resolutionInfo.resolvedInputFiles = this.compilerResult.program!.getSourceFiles()
-                .map(({ fileName: input }) => vpath.beneath(vfs.builtFolder, input, this.vfs.ignoreCase) || vpath.beneath(vfs.testLibFolder, input, this.vfs.ignoreCase) ? utils.removeTestPathPrefixes(input) :
+                .map(({ fileName: input }) =>
+                    vpath.beneath(vfs.builtFolder, input, this.vfs.ignoreCase) || vpath.beneath(vfs.testLibFolder, input, this.vfs.ignoreCase) ? utils.removeTestPathPrefixes(input) :
                     vpath.isAbsolute(input) ? vpath.relative(cwd, input, ignoreCase) :
                     input);
 
@@ -391,11 +392,8 @@ namespace project {
     }
 
     function moduleNameToString(moduleKind: ts.ModuleKind) {
-        return moduleKind === ts.ModuleKind.AMD
-            ? "amd"
-            : moduleKind === ts.ModuleKind.CommonJS
-            ? "node"
-            : "none";
+        return moduleKind === ts.ModuleKind.AMD ? "amd" :
+            moduleKind === ts.ModuleKind.CommonJS ? "node" : "none";
     }
 
     function getErrorsBaseline(compilerResult: CompileProjectFilesResult) {

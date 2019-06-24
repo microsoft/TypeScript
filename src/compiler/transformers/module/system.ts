@@ -106,7 +106,7 @@ namespace ts {
                             createExpressionStatement(
                                 createCall(
                                     createPropertyAccess(createIdentifier("System"), "register"),
-                                /*typeArguments*/ undefined,
+                                    /*typeArguments*/ undefined,
                                     moduleName
                                         ? [moduleName, dependencies, moduleBodyFunction]
                                         : [dependencies, moduleBodyFunction]

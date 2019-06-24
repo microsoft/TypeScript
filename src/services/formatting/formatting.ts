@@ -418,7 +418,7 @@ namespace ts.formatting {
             const leadingTrivia = formattingScanner.getCurrentLeadingTrivia();
             if (leadingTrivia) {
                 indentTriviaItems(leadingTrivia, initialIndentation, /*indentNextTokenOrTrivia*/ false,
-                                  item => processRange(item, sourceFile.getLineAndCharacterOfPosition(item.pos), enclosingNode, enclosingNode, /*dynamicIndentation*/ undefined!));
+                    item => processRange(item, sourceFile.getLineAndCharacterOfPosition(item.pos), enclosingNode, enclosingNode, /*dynamicIndentation*/ undefined!));
                 trimTrailingWhitespacesForRemainingRange();
             }
         }
@@ -842,7 +842,7 @@ namespace ts.formatting {
                     if (currentTokenInfo.leadingTrivia) {
                         const commentIndentation = dynamicIndentation.getIndentationForComment(currentTokenInfo.token.kind, tokenIndentation, container);
                         indentNextTokenOrTrivia = indentTriviaItems(currentTokenInfo.leadingTrivia, commentIndentation, indentNextTokenOrTrivia,
-                                                                    item => insertIndentation(item.pos, commentIndentation, /*lineAdded*/ false));
+                            item => insertIndentation(item.pos, commentIndentation, /*lineAdded*/ false));
                     }
 
                     // indent token only if is it is in target range and does not overlap with any error ranges

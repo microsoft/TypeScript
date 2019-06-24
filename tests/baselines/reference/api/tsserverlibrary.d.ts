@@ -8080,6 +8080,15 @@ declare namespace ts.server.protocol {
         telemetryEventName: TypingsInstalledTelemetryEventName;
         payload: TypingsInstalledTelemetryEventPayload;
     }
+    /**
+     * __GDPR__
+     * "typingsinstalled" : {
+     *     "${include}": ["${TypeScriptCommonProperties}"],
+     *     "installedPackages": { "classification": "PublicNonPersonalData", "purpose": "FeatureInsight" },
+     *     "installSuccess": { "classification": "SystemMetaData", "purpose": "FeatureInsight" },
+     *     "typingsInstallerVersion": { "classification": "SystemMetaData", "purpose": "FeatureInsight" }
+     * }
+     */
     interface TypingsInstalledTelemetryEventPayload {
         /**
          * Comma separated list of installed typing packages
@@ -8645,6 +8654,25 @@ declare namespace ts.server {
         readonly eventName: typeof ProjectInfoTelemetryEvent;
         readonly data: ProjectInfoTelemetryEventData;
     }
+    /**
+     * __GDPR__
+     * "projectInfo" : {
+     *      "${include}": ["${TypeScriptCommonProperties}"],
+     *      "projectId": { "classification": "EndUserPseudonymizedInformation", "purpose": "FeatureInsight", "endpoint": "ProjectId" },
+     *      "fileStats": { "classification": "SystemMetaData", "purpose": "FeatureInsight" },
+     *      "compilerOptions": { "classification": "SystemMetaData", "purpose": "FeatureInsight" },
+     *      "extends": { "classification": "SystemMetaData", "purpose": "FeatureInsight" },
+     *      "files": { "classification": "SystemMetaData", "purpose": "FeatureInsight" },
+     *      "include": { "classification": "SystemMetaData", "purpose": "FeatureInsight" },
+     *      "exclude": { "classification": "SystemMetaData", "purpose": "FeatureInsight" },
+     *      "compileOnSave": { "classification": "SystemMetaData", "purpose": "FeatureInsight" },
+     *      "typeAcquisition": { "classification": "SystemMetaData", "purpose": "FeatureInsight" },
+     *      "configFileName": { "classification": "SystemMetaData", "purpose": "FeatureInsight" },
+     *      "projectType": { "classification": "SystemMetaData", "purpose": "FeatureInsight" },
+     *      "languageServiceEnabled": { "classification": "SystemMetaData", "purpose": "FeatureInsight" },
+     *      "version": { "classification": "SystemMetaData", "purpose": "FeatureInsight" }
+     * }
+     */
     interface ProjectInfoTelemetryEventData {
         /** Cryptographically secure hash of project file location. */
         readonly projectId: string;

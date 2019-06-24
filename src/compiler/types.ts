@@ -1117,7 +1117,8 @@ namespace ts {
     }
 
     export interface KeywordTypeNode extends TypeNode {
-        kind: SyntaxKind.AnyKeyword
+        kind:
+            | SyntaxKind.AnyKeyword
             | SyntaxKind.UnknownKeyword
             | SyntaxKind.NumberKeyword
             | SyntaxKind.BigIntKeyword
@@ -3391,8 +3392,8 @@ namespace ts {
         WriteClassExpressionAsTypeLiteral       = 1 << 11, // Write a type literal instead of (Anonymous class)
         UseTypeOfFunction                       = 1 << 12, // Write typeof instead of function type literal
         OmitParameterModifiers                  = 1 << 13, // Omit modifiers on parameters
-        UseAliasDefinedOutsideCurrentScope      = 1 << 14, // For a `type T = ... ` defined in a different file, write `T` instead of its value,
-                                                           // even though `T` can't be accessed in the current scope.
+
+        UseAliasDefinedOutsideCurrentScope      = 1 << 14, // For a `type T = ... ` defined in a different file, write `T` instead of its value, even though `T` can't be accessed in the current scope.
 
         // Error Handling
         AllowUniqueESSymbolType                 = 1 << 20, // This is bit 20 to align with the same bit in `NodeBuilderFlags`
@@ -3409,8 +3410,7 @@ namespace ts {
 
         /** @deprecated */ WriteOwnNameForAnyLike  = 0,  // Does nothing
 
-        NodeBuilderFlagsMask =
-            NoTruncation | WriteArrayAsGenericType | UseStructuralFallback | WriteTypeArgumentsOfSignature |
+        NodeBuilderFlagsMask = NoTruncation | WriteArrayAsGenericType | UseStructuralFallback | WriteTypeArgumentsOfSignature |
             UseFullyQualifiedType | SuppressAnyReturnType | MultilineObjectLiterals | WriteClassExpressionAsTypeLiteral |
             UseTypeOfFunction | OmitParameterModifiers | UseAliasDefinedOutsideCurrentScope | AllowUniqueESSymbolType | InTypeAlias,
     }
@@ -3555,23 +3555,45 @@ namespace ts {
     /** Indicates how to serialize the name for a TypeReferenceNode when emitting decorator metadata */
     /* @internal */
     export enum TypeReferenceSerializationKind {
-        Unknown,                            // The TypeReferenceNode could not be resolved. The type name
-                                            // should be emitted using a safe fallback.
-        TypeWithConstructSignatureAndValue, // The TypeReferenceNode resolves to a type with a constructor
-                                            // function that can be reached at runtime (e.g. a `class`
-                                            // declaration or a `var` declaration for the static side
-                                            // of a type, such as the global `Promise` type in lib.d.ts).
-        VoidNullableOrNeverType,            // The TypeReferenceNode resolves to a Void-like, Nullable, or Never type.
-        NumberLikeType,                     // The TypeReferenceNode resolves to a Number-like type.
-        BigIntLikeType,                     // The TypeReferenceNode resolves to a BigInt-like type.
-        StringLikeType,                     // The TypeReferenceNode resolves to a String-like type.
-        BooleanType,                        // The TypeReferenceNode resolves to a Boolean-like type.
-        ArrayLikeType,                      // The TypeReferenceNode resolves to an Array-like type.
-        ESSymbolType,                       // The TypeReferenceNode resolves to the ESSymbol type.
-        Promise,                            // The TypeReferenceNode resolved to the global Promise constructor symbol.
-        TypeWithCallSignature,              // The TypeReferenceNode resolves to a Function type or a type
-                                            // with call signatures.
-        ObjectType,                         // The TypeReferenceNode resolves to any other type.
+        // The TypeReferenceNode could not be resolved.
+        // The type name should be emitted using a safe fallback.
+        Unknown,
+
+        // The TypeReferenceNode resolves to a type with a constructor
+        // function that can be reached at runtime (e.g. a `class`
+        // declaration or a `var` declaration for the static side
+        // of a type, such as the global `Promise` type in lib.d.ts).
+        TypeWithConstructSignatureAndValue,
+
+        // The TypeReferenceNode resolves to a Void-like, Nullable, or Never type.
+        VoidNullableOrNeverType,
+
+        // The TypeReferenceNode resolves to a Number-like type.
+        NumberLikeType,
+
+        // The TypeReferenceNode resolves to a BigInt-like type.
+        BigIntLikeType,
+
+        // The TypeReferenceNode resolves to a String-like type.
+        StringLikeType,
+
+        // The TypeReferenceNode resolves to a Boolean-like type.
+        BooleanType,
+
+        // The TypeReferenceNode resolves to an Array-like type.
+        ArrayLikeType,
+
+        // The TypeReferenceNode resolves to the ESSymbol type.
+        ESSymbolType,
+
+        // The TypeReferenceNode resolved to the global Promise constructor symbol.
+        Promise,
+
+        // The TypeReferenceNode resolves to a Function type or a type with call signatures.
+        TypeWithCallSignature,
+
+        // The TypeReferenceNode resolves to any other type.
+        ObjectType,
     }
 
     /* @internal */
@@ -5613,9 +5635,13 @@ namespace ts {
     }
 
     /*@internal*/
-    export type BundleFileSection = BundleFilePrologue | BundleFileEmitHelpers |
-        BundleFileHasNoDefaultLib | BundleFileReference | BundleFilePrepend |
-        BundleFileTextLike;
+    export type BundleFileSection =
+        BundleFilePrologue
+        | BundleFileEmitHelpers
+        | BundleFileHasNoDefaultLib
+        | BundleFileReference
+        | BundleFilePrepend
+        | BundleFileTextLike;
 
     /*@internal*/
     export interface SourceFilePrologueDirectiveExpression extends TextRange {

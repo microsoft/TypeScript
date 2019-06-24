@@ -175,18 +175,18 @@ namespace ts {
                                     jsonSourceFile ?
                                         jsonSourceFile.statements.length ? jsonSourceFile.statements[0].expression : createObjectLiteral() :
                                         createFunctionExpression(
-                                        /*modifiers*/ undefined,
-                                        /*asteriskToken*/ undefined,
-                                        /*name*/ undefined,
-                                        /*typeParameters*/ undefined,
-                                        [
-                                            createParameter(/*decorators*/ undefined, /*modifiers*/ undefined, /*dotDotDotToken*/ undefined, "require"),
-                                            createParameter(/*decorators*/ undefined, /*modifiers*/ undefined, /*dotDotDotToken*/ undefined, "exports"),
-                                            ...importAliasNames
-                                        ],
-                                        /*type*/ undefined,
-                                        transformAsynchronousModuleBody(node)
-                                    )
+                                            /*modifiers*/ undefined,
+                                            /*asteriskToken*/ undefined,
+                                            /*name*/ undefined,
+                                            /*typeParameters*/ undefined,
+                                            [
+                                                createParameter(/*decorators*/ undefined, /*modifiers*/ undefined, /*dotDotDotToken*/ undefined, "require"),
+                                                createParameter(/*decorators*/ undefined, /*modifiers*/ undefined, /*dotDotDotToken*/ undefined, "exports"),
+                                                ...importAliasNames
+                                            ],
+                                            /*type*/ undefined,
+                                            transformAsynchronousModuleBody(node)
+                                        )
                                 ]
                             )
                         )

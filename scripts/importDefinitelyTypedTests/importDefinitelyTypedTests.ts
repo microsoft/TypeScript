@@ -63,42 +63,41 @@ function importDefinitelyTypedTest(tscPath: string, rwcTestPath: string, testCas
         maxBuffer: 1 * 1024 * 1024,
         cwd: testDirectoryPath
     }, (error, stdout, stderr) => {
+        console.log("importing " + testCaseName + " ...");
+        console.log(cmd);
+
+        if (error) {
             console.log("importing " + testCaseName + " ...");
             console.log(cmd);
-
-            if (error) {
-                console.log("importing " + testCaseName + " ...");
-                console.log(cmd);
-                console.log("==> error " + JSON.stringify(error));
-                console.log("==> stdout " + String(stdout));
-                console.log("==> stderr " + String(stderr));
-                console.log("\r\n");
-                return;
-            }
-
-            // copy generated file to output location
-            const outputFilePath = path.join(testDirectoryPath, "iocapture0.json");
-            const testCasePath = path.join(rwcTestPath, "DefinitelyTyped_" + testCaseName + ".json");
-            copyFileSync(outputFilePath, testCasePath);
-
-            //console.log("output generated at: " + outputFilePath);
-
-            if (!fs.existsSync(testCasePath)) {
-                throw new Error("could not find test case at: " + testCasePath);
-            }
-            else {
-                fs.unlinkSync(outputFilePath);
-                fs.rmdirSync(testDirectoryPath);
-                //console.log("testcase generated at: " + testCasePath);
-                //console.log("Done.");
-            }
-            //console.log("\r\n");
-
-        })
-        .on("error", (error: any) => {
             console.log("==> error " + JSON.stringify(error));
+            console.log("==> stdout " + String(stdout));
+            console.log("==> stderr " + String(stderr));
             console.log("\r\n");
-        });
+            return;
+        }
+
+        // copy generated file to output location
+        const outputFilePath = path.join(testDirectoryPath, "iocapture0.json");
+        const testCasePath = path.join(rwcTestPath, "DefinitelyTyped_" + testCaseName + ".json");
+        copyFileSync(outputFilePath, testCasePath);
+
+        //console.log("output generated at: " + outputFilePath);
+
+        if (!fs.existsSync(testCasePath)) {
+            throw new Error("could not find test case at: " + testCasePath);
+        }
+        else {
+            fs.unlinkSync(outputFilePath);
+            fs.rmdirSync(testDirectoryPath);
+            //console.log("testcase generated at: " + testCasePath);
+            //console.log("Done.");
+        }
+        //console.log("\r\n");
+
+    }).on("error", (error: any) => {
+        console.log("==> error " + JSON.stringify(error));
+        console.log("\r\n");
+    });
 }
 
 function importDefinitelyTypedTests(tscPath: string, rwcTestPath: string, definitelyTypedRoot: string): void {
@@ -147,7 +146,7 @@ function importDefinitelyTypedTests(tscPath: string, rwcTestPath: string, defini
                             }
                         }
                         else {
-                           importDefinitelyTypedTest(tscPath, rwcTestPath, d, tsFiles, paramFile);
+                            importDefinitelyTypedTest(tscPath, rwcTestPath, d, tsFiles, paramFile);
                         }
                     }
                     else {

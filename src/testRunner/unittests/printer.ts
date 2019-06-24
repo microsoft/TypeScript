@@ -124,9 +124,8 @@ namespace ts {
                 EmitHint.Unspecified,
                 createNew(
                     createPropertyAccess(
-                        createCall(
-                            createIdentifier("f"), /*typeArguments*/ undefined, /*argumentsArray*/ undefined),
-                            "x"),
+                        createCall(createIdentifier("f"), /*typeArguments*/ undefined, /*argumentsArray*/ undefined),
+                        "x"),
                     /*typeArguments*/ undefined,
                     /*argumentsArray*/ undefined
                 ),

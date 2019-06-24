@@ -98,10 +98,7 @@ interface ReadonlyArray<T> {
      *
      * @param depth The maximum recursion depth
      */
-    flat<U>(this:
-        ReadonlyArray<U>,
-        depth: 0
-    ): U[];
+    flat<U>(this: ReadonlyArray<U>, depth: 0): U[];
 
     /**
      * Returns a new array with all sub-array elements concatenated into it recursively up to the
@@ -110,7 +107,7 @@ interface ReadonlyArray<T> {
      * @param depth The maximum recursion depth
      */
     flat<U>(depth?: number): any[];
-  }
+}
 
 interface Array<T> {
 

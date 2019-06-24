@@ -544,7 +544,7 @@ namespace ts {
 
         if (logPerformance) {
             const end = timestamp();
-        logger.log(`${actionDescription} completed in ${end - start!} msec`);
+            logger.log(`${actionDescription} completed in ${end - start!} msec`);
             if (isString(result)) {
                 let str = result;
                 if (str.length > 128) {

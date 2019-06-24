@@ -344,9 +344,9 @@ import { } from "lib";
                 libFile);
 
             testOrganizeImports("Unused_false_positive_module_augmentation",
-            {
-                path: "/test.d.ts",
-                content: `
+                {
+                    path: "/test.d.ts",
+                    content: `
 import foo from 'foo';
 import { Caseless } from 'caseless';
 
@@ -356,12 +356,12 @@ declare module 'caseless' {
         test(name: KeyType): boolean;
     }
 }`
-            });
+                });
 
             testOrganizeImports("Unused_preserve_imports_for_module_augmentation_in_non_declaration_file",
-            {
-                path: "/test.ts",
-                content: `
+                {
+                    path: "/test.ts",
+                    content: `
 import foo from 'foo';
 import { Caseless } from 'caseless';
 
@@ -371,10 +371,10 @@ declare module 'caseless' {
         test(name: KeyType): boolean;
     }
 }`
-            });
+                });
 
             testOrganizeImports("Unused_false_positive_shorthand_assignment",
-            {
+                {
                     path: "/test.ts",
                     content: `
 import { x } from "a";
@@ -383,7 +383,7 @@ const o = { x };
                 });
 
             testOrganizeImports("Unused_false_positive_export_shorthand",
-            {
+                {
                     path: "/test.ts",
                     content: `
 import { x } from "a";

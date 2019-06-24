@@ -1252,7 +1252,7 @@ namespace ts {
     export function isValidESSymbolDeclaration(node: Node): node is VariableDeclaration | PropertyDeclaration | SignatureDeclaration {
         return isVariableDeclaration(node) ? isVarConst(node) && isIdentifier(node.name) && isVariableDeclarationInVariableStatement(node) :
             isPropertyDeclaration(node) ? hasReadonlyModifier(node) && hasStaticModifier(node) :
-                isPropertySignature(node) && hasReadonlyModifier(node);
+            isPropertySignature(node) && hasReadonlyModifier(node);
     }
 
     export function introducesArgumentsExoticObject(node: Node) {
@@ -1917,7 +1917,7 @@ namespace ts {
     export function isDefaultedExpandoInitializer(node: BinaryExpression) {
         const name = isVariableDeclaration(node.parent) ? node.parent.name :
             isBinaryExpression(node.parent) && node.parent.operatorToken.kind === SyntaxKind.EqualsToken ? node.parent.left :
-                undefined;
+            undefined;
         return name && getExpandoInitializer(node.right, isPrototypeAccess(name)) && isEntityNameExpression(name) && isSameEntityName(name, node.left);
     }
 
@@ -1984,13 +1984,13 @@ namespace ts {
     }
 
     export function isBindableObjectDefinePropertyCall(expr: CallExpression): expr is BindableObjectDefinePropertyCall {
-            return length(expr.arguments) === 3 &&
-                isPropertyAccessExpression(expr.expression) &&
-                isIdentifier(expr.expression.expression) &&
-                idText(expr.expression.expression) === "Object" &&
-                idText(expr.expression.name) === "defineProperty" &&
-                isStringOrNumericLiteralLike(expr.arguments[1]) &&
-                isEntityNameExpression(expr.arguments[0]);
+        return length(expr.arguments) === 3 &&
+            isPropertyAccessExpression(expr.expression) &&
+            isIdentifier(expr.expression.expression) &&
+            idText(expr.expression.expression) === "Object" &&
+            idText(expr.expression.name) === "defineProperty" &&
+            isStringOrNumericLiteralLike(expr.arguments[1]) &&
+            isEntityNameExpression(expr.arguments[0]);
     }
 
     function getAssignmentDeclarationKindWorker(expr: BinaryExpression | CallExpression): AssignmentDeclarationKind {
@@ -2013,8 +2013,8 @@ namespace ts {
         }
         const lhs = expr.left;
         if (isEntityNameExpression(lhs.expression) && lhs.name.escapedText === "prototype" && isObjectLiteralExpression(getInitializerOfBinaryExpression(expr))) {
-                // F.prototype = { ... }
-                return AssignmentDeclarationKind.Prototype;
+            // F.prototype = { ... }
+            return AssignmentDeclarationKind.Prototype;
         }
         return getAssignmentDeclarationPropertyAccessKind(lhs);
     }
@@ -2593,9 +2593,9 @@ namespace ts {
 
     /** Returns the node in an `extends` or `implements` clause of a class or interface. */
     export function getAllSuperTypeNodes(node: Node): ReadonlyArray<TypeNode> {
-        return isInterfaceDeclaration(node) ? getInterfaceBaseTypeNodes(node) || emptyArray
-            : isClassLike(node) ? concatenate(singleElementArray(getEffectiveBaseTypeNode(node)), getClassImplementsHeritageClauseElements(node)) || emptyArray
-                : emptyArray;
+        return isInterfaceDeclaration(node) ? getInterfaceBaseTypeNodes(node) || emptyArray :
+            isClassLike(node) ? concatenate(singleElementArray(getEffectiveBaseTypeNode(node)), getClassImplementsHeritageClauseElements(node)) || emptyArray :
+            emptyArray;
     }
 
     export function getInterfaceBaseTypeNodes(node: InterfaceDeclaration) {
@@ -2646,7 +2646,8 @@ namespace ts {
         return !!originalKeywordKind && !isContextualKeyword(originalKeywordKind);
     }
 
-    export type TriviaKind = SyntaxKind.SingleLineCommentTrivia
+    export type TriviaKind =
+        SyntaxKind.SingleLineCommentTrivia
         | SyntaxKind.MultiLineCommentTrivia
         | SyntaxKind.NewLineTrivia
         | SyntaxKind.WhitespaceTrivia
@@ -3141,8 +3142,8 @@ namespace ts {
     export function escapeString(s: string, quoteChar?: CharacterCodes.doubleQuote | CharacterCodes.singleQuote | CharacterCodes.backtick): string {
         const escapedCharsRegExp =
             quoteChar === CharacterCodes.backtick ? backtickQuoteEscapedCharsRegExp :
-                quoteChar === CharacterCodes.singleQuote ? singleQuoteEscapedCharsRegExp :
-                    doubleQuoteEscapedCharsRegExp;
+            quoteChar === CharacterCodes.singleQuote ? singleQuoteEscapedCharsRegExp :
+            doubleQuoteEscapedCharsRegExp;
         return s.replace(escapedCharsRegExp, getReplacement);
     }
 
@@ -4331,7 +4332,7 @@ namespace ts {
             const checkFlags = (<TransientSymbol>s).checkFlags;
             const accessModifier = checkFlags & CheckFlags.ContainsPrivate ? ModifierFlags.Private :
                 checkFlags & CheckFlags.ContainsPublic ? ModifierFlags.Public :
-                    ModifierFlags.Protected;
+                ModifierFlags.Protected;
             const staticModifier = checkFlags & CheckFlags.ContainsStatic ? ModifierFlags.Static : 0;
             return accessModifier | staticModifier;
         }
@@ -5383,10 +5384,9 @@ namespace ts {
     }
 
     export function getEffectiveConstraintOfTypeParameter(node: TypeParameterDeclaration): TypeNode | undefined {
-        return node.constraint ? node.constraint
-            : isJSDocTemplateTag(node.parent) && node === node.parent.typeParameters[0]
-            ? node.parent.constraint
-            : undefined;
+        return node.constraint ? node.constraint :
+            isJSDocTemplateTag(node.parent) && node === node.parent.typeParameters[0] ? node.parent.constraint :
+            undefined;
     }
 }
 

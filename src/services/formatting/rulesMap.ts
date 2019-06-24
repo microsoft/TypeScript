@@ -78,11 +78,12 @@ namespace ts.formatting {
     // In order to insert a rule to the end of sub-bucket (3), we get the index by adding
     // the values in the bitmap segments 3rd, 2nd, and 1st.
     function addRule(rules: Rule[], rule: Rule, specificTokens: boolean, constructionState: number[], rulesBucketIndex: number): void {
-        const position = rule.action === RuleAction.Ignore
-            ? specificTokens ? RulesPosition.IgnoreRulesSpecific : RulesPosition.IgnoreRulesAny
-            : rule.context !== anyContext
-            ? specificTokens ? RulesPosition.ContextRulesSpecific : RulesPosition.ContextRulesAny
-            : specificTokens ? RulesPosition.NoContextRulesSpecific : RulesPosition.NoContextRulesAny;
+        const position = rule.action === RuleAction.Ignore ?
+            specificTokens ? RulesPosition.IgnoreRulesSpecific : RulesPosition.IgnoreRulesAny :
+            rule.context !== anyContext ?
+                specificTokens ? RulesPosition.ContextRulesSpecific : RulesPosition.ContextRulesAny :
+                specificTokens ? RulesPosition.NoContextRulesSpecific : RulesPosition.NoContextRulesAny;
+
         const state = constructionState[rulesBucketIndex] || 0;
         rules.splice(getInsertionIndex(state, position), 0, rule);
         constructionState[rulesBucketIndex] = increaseInsertionIndex(state, position);

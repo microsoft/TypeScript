@@ -1102,7 +1102,7 @@ import b = require("./moduleB");
                     paths: {
                         "libs/guid": [ "src/libs/guid" ]
                     }
-                 };
+                };
                 const result = resolveModuleName("libs/guid", app.name, options, host);
                 checkResolvedModuleWithFailedLookupLocations(result, createResolvedModule(libsTypings.name), [
                     // first try to load module as file

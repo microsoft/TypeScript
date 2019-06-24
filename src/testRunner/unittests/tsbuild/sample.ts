@@ -906,7 +906,7 @@ class someClass { }`),
         "target": "esnext",
     }
 }`);
-                            },
+                    },
                     expectedDiagnostics: [
                         getExpectedDiagnosticForProjectsInBuild("src/core/tsconfig.json"),
                         [Diagnostics.Project_0_is_out_of_date_because_output_file_1_does_not_exist, "src/core/tsconfig.json", "src/core/anotherModule.js"],

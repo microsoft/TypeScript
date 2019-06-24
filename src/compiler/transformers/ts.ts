@@ -1716,7 +1716,7 @@ namespace ts {
             const left = serializeEntityNameAsExpressionFallback(node.left);
             const temp = createTempVariable(hoistVariableDeclaration);
             return createLogicalAnd(
-                    createLogicalAnd(
+                createLogicalAnd(
                     left.left,
                     createStrictInequality(createAssignment(temp, left.right), createVoidZero())
                 ),

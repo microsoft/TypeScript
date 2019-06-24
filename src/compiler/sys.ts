@@ -649,10 +649,10 @@ namespace ts {
             // crypto can be absent on reduced node installations
             let _crypto: typeof import("crypto") | undefined;
             try {
-              _crypto = require("crypto");
+                _crypto = require("crypto");
             }
             catch {
-              _crypto = undefined;
+                _crypto = undefined;
             }
 
             const Buffer: {

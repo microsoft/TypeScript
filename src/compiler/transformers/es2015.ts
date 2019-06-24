@@ -4106,10 +4106,8 @@ namespace ts {
          * Visits the `super` keyword
          */
         function visitSuperKeyword(isExpressionOfCall: boolean): LeftHandSideExpression {
-            return hierarchyFacts & HierarchyFacts.NonStaticClassElement
-                && !isExpressionOfCall
-                    ? createPropertyAccess(createFileLevelUniqueName("_super"), "prototype")
-                    : createFileLevelUniqueName("_super");
+            return hierarchyFacts & HierarchyFacts.NonStaticClassElement && !isExpressionOfCall ? createPropertyAccess(createFileLevelUniqueName("_super"), "prototype") :
+                createFileLevelUniqueName("_super");
         }
 
         function visitMetaProperty(node: MetaProperty) {

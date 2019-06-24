@@ -128,8 +128,8 @@ class TypeWriterWalker {
                     !this.isImportStatementName(node) &&
                     !this.isExportStatementName(node) &&
                     !this.isIntrinsicJsxTag(node)) ?
-                (type as ts.IntrinsicType).intrinsicName :
-                this.checker.typeToString(type, node.parent, ts.TypeFormatFlags.NoTruncation | ts.TypeFormatFlags.AllowUniqueESSymbolType);
+                    (type as ts.IntrinsicType).intrinsicName :
+                    this.checker.typeToString(type, node.parent, ts.TypeFormatFlags.NoTruncation | ts.TypeFormatFlags.AllowUniqueESSymbolType);
             return {
                 line: lineAndCharacter.line,
                 syntaxKind: node.kind,

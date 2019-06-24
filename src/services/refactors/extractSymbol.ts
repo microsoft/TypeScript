@@ -169,9 +169,9 @@ namespace ts.refactor.extractSymbol {
         readonly targetRange?: never;
         readonly errors: ReadonlyArray<Diagnostic>;
     } | {
-            readonly targetRange: TargetRange;
-            readonly errors?: never;
-        };
+        readonly targetRange: TargetRange;
+        readonly errors?: never;
+    };
 
     /*
      * Scopes that can store newly extracted method
@@ -450,29 +450,29 @@ namespace ts.refactor.extractSymbol {
                         rangeFacts |= RangeFacts.UsesThis;
                         break;
                     case SyntaxKind.LabeledStatement: {
-                            const label = (<LabeledStatement>node).label;
-                            (seenLabels || (seenLabels = [])).push(label.escapedText);
-                            forEachChild(node, visit);
-                            seenLabels.pop();
-                            break;
-                        }
+                        const label = (<LabeledStatement>node).label;
+                        (seenLabels || (seenLabels = [])).push(label.escapedText);
+                        forEachChild(node, visit);
+                        seenLabels.pop();
+                        break;
+                    }
                     case SyntaxKind.BreakStatement:
                     case SyntaxKind.ContinueStatement: {
-                            const label = (<BreakStatement | ContinueStatement>node).label;
-                            if (label) {
-                                if (!contains(seenLabels, label.escapedText)) {
-                                    // attempts to jump to label that is not in range to be extracted
-                                    (errors || (errors = [] as Diagnostic[])).push(createDiagnosticForNode(node, Messages.cannotExtractRangeContainingLabeledBreakOrContinueStatementWithTargetOutsideOfTheRange));
-                                }
+                        const label = (<BreakStatement | ContinueStatement>node).label;
+                        if (label) {
+                            if (!contains(seenLabels, label.escapedText)) {
+                                // attempts to jump to label that is not in range to be extracted
+                                (errors || (errors = [] as Diagnostic[])).push(createDiagnosticForNode(node, Messages.cannotExtractRangeContainingLabeledBreakOrContinueStatementWithTargetOutsideOfTheRange));
                             }
-                            else {
-                                if (!(permittedJumps & (node.kind === SyntaxKind.BreakStatement ? PermittedJumps.Break : PermittedJumps.Continue))) {
-                                    // attempt to break or continue in a forbidden context
-                                    (errors || (errors = [] as Diagnostic[])).push(createDiagnosticForNode(node, Messages.cannotExtractRangeContainingConditionalBreakOrContinueStatements));
-                                }
-                            }
-                            break;
                         }
+                        else {
+                            if (!(permittedJumps & (node.kind === SyntaxKind.BreakStatement ? PermittedJumps.Break : PermittedJumps.Continue))) {
+                                // attempt to break or continue in a forbidden context
+                                (errors || (errors = [] as Diagnostic[])).push(createDiagnosticForNode(node, Messages.cannotExtractRangeContainingConditionalBreakOrContinueStatements));
+                            }
+                        }
+                        break;
+                    }
                     case SyntaxKind.AwaitExpression:
                         rangeFacts |= RangeFacts.IsAsyncFunction;
                         break;

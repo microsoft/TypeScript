@@ -134,8 +134,8 @@ namespace ts {
 
         let bestMatch: PatternMatch | undefined;
         for (let i = dotSeparatedSegments.length - 2, j = candidateContainers.length - 1;
-             i >= 0;
-             i -= 1, j -= 1) {
+            i >= 0;
+            i -= 1, j -= 1) {
             bestMatch = betterMatch(bestMatch, matchSegment(candidateContainers[j], dotSeparatedSegments[i], stringToWordSpans));
         }
         return bestMatch;

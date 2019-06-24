@@ -220,11 +220,8 @@ namespace ts.Completions.StringCompletions {
     function getStringLiteralTypes(type: Type | undefined, uniques = createMap<true>()): ReadonlyArray<StringLiteralType> {
         if (!type) return emptyArray;
         type = skipConstraint(type);
-        return type.isUnion()
-            ? flatMap(type.types, t => getStringLiteralTypes(t, uniques))
-            : type.isStringLiteral() && !(type.flags & TypeFlags.EnumLiteral) && addToSeen(uniques, type.value)
-            ? [type]
-            : emptyArray;
+        return type.isUnion() ? flatMap(type.types, t => getStringLiteralTypes(t, uniques)) :
+            type.isStringLiteral() && !(type.flags & TypeFlags.EnumLiteral) && addToSeen(uniques, type.value) ? [type] : emptyArray;
     }
 
     interface NameAndKind {

@@ -137,7 +137,7 @@ namespace ts {
                         "xx\\\\" // end of line comment
                     ]
                 }`, { config: { exclude: ["xx\\"] } });
-         });
+        });
 
         it("returns object with error when json is invalid", () => {
             const parsed = parseConfigFileTextToJson("/apath/tsconfig.json", "invalid");

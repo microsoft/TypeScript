@@ -382,76 +382,76 @@ namespace ts.server {
                     break;
                 }
                 case EventInitializationFailed: {
-                        const body: protocol.TypesInstallerInitializationFailedEventBody = {
-                            message: response.message
-                        };
-                        const eventName: protocol.TypesInstallerInitializationFailedEventName = "typesInstallerInitializationFailed";
-                        this.event(body, eventName);
-                        break;
-                    }
+                    const body: protocol.TypesInstallerInitializationFailedEventBody = {
+                        message: response.message
+                    };
+                    const eventName: protocol.TypesInstallerInitializationFailedEventName = "typesInstallerInitializationFailed";
+                    this.event(body, eventName);
+                    break;
+                }
                 case EventBeginInstallTypes: {
-                        const body: protocol.BeginInstallTypesEventBody = {
-                            eventId: response.eventId,
-                            packages: response.packagesToInstall,
-                        };
-                        const eventName: protocol.BeginInstallTypesEventName = "beginInstallTypes";
-                        this.event(body, eventName);
-                        break;
-                    }
+                    const body: protocol.BeginInstallTypesEventBody = {
+                        eventId: response.eventId,
+                        packages: response.packagesToInstall,
+                    };
+                    const eventName: protocol.BeginInstallTypesEventName = "beginInstallTypes";
+                    this.event(body, eventName);
+                    break;
+                }
                 case EventEndInstallTypes: {
-                        if (this.telemetryEnabled) {
-                            const body: protocol.TypingsInstalledTelemetryEventBody = {
-                                telemetryEventName: "typingsInstalled",
-                                payload: {
-                                    installedPackages: response.packagesToInstall.join(","),
-                                    installSuccess: response.installSuccess,
-                                    typingsInstallerVersion: response.typingsInstallerVersion
-                                }
-                            };
-                            const eventName: protocol.TelemetryEventName = "telemetry";
-                            this.event(body, eventName);
-                        }
-
-                        const body: protocol.EndInstallTypesEventBody = {
-                            eventId: response.eventId,
-                            packages: response.packagesToInstall,
-                            success: response.installSuccess,
+                    if (this.telemetryEnabled) {
+                        const body: protocol.TypingsInstalledTelemetryEventBody = {
+                            telemetryEventName: "typingsInstalled",
+                            payload: {
+                                installedPackages: response.packagesToInstall.join(","),
+                                installSuccess: response.installSuccess,
+                                typingsInstallerVersion: response.typingsInstallerVersion
+                            }
                         };
-                        const eventName: protocol.EndInstallTypesEventName = "endInstallTypes";
+                        const eventName: protocol.TelemetryEventName = "telemetry";
                         this.event(body, eventName);
-                        break;
                     }
+
+                    const body: protocol.EndInstallTypesEventBody = {
+                        eventId: response.eventId,
+                        packages: response.packagesToInstall,
+                        success: response.installSuccess,
+                    };
+                    const eventName: protocol.EndInstallTypesEventName = "endInstallTypes";
+                    this.event(body, eventName);
+                    break;
+                }
                 case ActionInvalidate: {
-                        this.projectService.updateTypingsForProject(response);
-                        break;
-                    }
+                    this.projectService.updateTypingsForProject(response);
+                    break;
+                }
                 case ActionSet: {
-                        if (this.activeRequestCount > 0) {
-                            this.activeRequestCount--;
-                        }
-                        else {
-                            Debug.fail("Received too many responses");
-                        }
-
-                        while (this.requestQueue.length > 0) {
-                            const queuedRequest = this.requestQueue.shift()!;
-                            if (this.requestMap.get(queuedRequest.operationId) === queuedRequest) {
-                                this.requestMap.delete(queuedRequest.operationId);
-                                this.scheduleRequest(queuedRequest);
-                                break;
-                            }
-
-                            if (this.logger.hasLevel(LogLevel.verbose)) {
-                                this.logger.info(`Skipping defunct request for: ${queuedRequest.operationId}`);
-                            }
-                        }
-
-                        this.projectService.updateTypingsForProject(response);
-
-                        this.event(response, "setTypings");
-
-                        break;
+                    if (this.activeRequestCount > 0) {
+                        this.activeRequestCount--;
                     }
+                    else {
+                        Debug.fail("Received too many responses");
+                    }
+
+                    while (this.requestQueue.length > 0) {
+                        const queuedRequest = this.requestQueue.shift()!;
+                        if (this.requestMap.get(queuedRequest.operationId) === queuedRequest) {
+                            this.requestMap.delete(queuedRequest.operationId);
+                            this.scheduleRequest(queuedRequest);
+                            break;
+                        }
+
+                        if (this.logger.hasLevel(LogLevel.verbose)) {
+                            this.logger.info(`Skipping defunct request for: ${queuedRequest.operationId}`);
+                        }
+                    }
+
+                    this.projectService.updateTypingsForProject(response);
+
+                    this.event(response, "setTypings");
+
+                    break;
+                }
                 default:
                     assertType<never>(response);
             }
