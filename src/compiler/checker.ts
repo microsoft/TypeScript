@@ -3265,7 +3265,7 @@ namespace ts {
 
         function hasVisibleDeclarations(symbol: Symbol, shouldComputeAliasToMakeVisible: boolean): SymbolVisibilityResult | undefined {
             let aliasesToMakeVisible: LateVisibilityPaintedStatement[] | undefined;
-            if (!every(symbol.declarations, getIsDeclarationVisible)) {
+            if (!every(filter(symbol.declarations, d => d.kind !== SyntaxKind.Identifier), getIsDeclarationVisible)) {
                 return undefined;
             }
             return { accessibility: SymbolAccessibility.Accessible, aliasesToMakeVisible };
@@ -5483,7 +5483,7 @@ namespace ts {
         function getTypeFromObjectBindingPattern(pattern: ObjectBindingPattern, includePatternInType: boolean, reportErrors: boolean): Type {
             const members = createSymbolTable();
             let stringIndexInfo: IndexInfo | undefined;
-            let objectFlags = ObjectFlags.ObjectLiteral | ObjectFlags.ContainsObjectLiteral;
+            let objectFlags = ObjectFlags.ObjectLiteral | ObjectFlags.ContainsObjectOrArrayLiteral;
             forEach(pattern.elements, e => {
                 const name = e.propertyName || <Identifier>e.name;
                 if (e.dotDotDotToken) {
@@ -10805,7 +10805,7 @@ namespace ts {
                 emptyArray,
                 getIndexInfoWithReadonly(stringIndexInfo, readonly),
                 getIndexInfoWithReadonly(numberIndexInfo, readonly));
-            spread.objectFlags |= ObjectFlags.ObjectLiteral | ObjectFlags.ContainsObjectLiteral | ObjectFlags.ContainsSpread | objectFlags;
+            spread.objectFlags |= ObjectFlags.ObjectLiteral | ObjectFlags.ContainsObjectOrArrayLiteral | ObjectFlags.ContainsSpread | objectFlags;
             return spread;
         }
 
@@ -14442,7 +14442,7 @@ namespace ts {
             if (propType) {
                 return propType;
             }
-            if (everyType(type, isTupleType) && !everyType(type, t => !(<TupleTypeReference>t).target.hasRestElement)) {
+            if (everyType(type, isTupleType)) {
                 return mapType(type, t => getRestTypeOfTupleType(<TupleTypeReference>t) || undefinedType);
             }
             return undefined;
@@ -15646,12 +15646,16 @@ namespace ts {
             return !!(getObjectFlags(type) & ObjectFlags.ObjectLiteral);
         }
 
-        function widenObjectLiteralCandidates(candidates: Type[]): Type[] {
+        function isObjectOrArrayLiteralType(type: Type) {
+            return !!(getObjectFlags(type) & (ObjectFlags.ObjectLiteral | ObjectFlags.ArrayLiteral));
+        }
+
+        function unionObjectAndArrayLiteralCandidates(candidates: Type[]): Type[] {
             if (candidates.length > 1) {
-                const objectLiterals = filter(candidates, isObjectLiteralType);
+                const objectLiterals = filter(candidates, isObjectOrArrayLiteralType);
                 if (objectLiterals.length) {
-                    const objectLiteralsType = getWidenedType(getUnionType(objectLiterals, UnionReduction.Subtype));
-                    return concatenate(filter(candidates, t => !isObjectLiteralType(t)), [objectLiteralsType]);
+                    const literalsType = getUnionType(objectLiterals, UnionReduction.Subtype);
+                    return concatenate(filter(candidates, t => !isObjectOrArrayLiteralType(t)), [literalsType]);
                 }
             }
             return candidates;
@@ -15662,8 +15666,8 @@ namespace ts {
         }
 
         function getCovariantInference(inference: InferenceInfo, signature: Signature) {
-            // Extract all object literal types and replace them with a single widened and normalized type.
-            const candidates = widenObjectLiteralCandidates(inference.candidates!);
+            // Extract all object and array literal types and replace them with a single widened and normalized type.
+            const candidates = unionObjectAndArrayLiteralCandidates(inference.candidates!);
             // We widen inferred literal types if
             // all inferences were made to top-level occurrences of the type parameter, and
             // the type parameter has no constraint or its constraint includes no primitive or literal types, and
@@ -19149,22 +19153,34 @@ namespace ts {
                 const minLength = elementCount - (hasRestElement ? 1 : 0);
                 // If array literal is actually a destructuring pattern, mark it as an implied type. We do this such
                 // that we get the same behavior for "var [x, y] = []" and "[x, y] = []".
-                let tupleResult: Type | undefined;
+                let tupleResult;
                 if (inDestructuringPattern && minLength > 0) {
                     const type = cloneTypeReference(<TypeReference>createTupleType(elementTypes, minLength, hasRestElement));
                     type.pattern = node;
                     return type;
                 }
                 else if (tupleResult = getArrayLiteralTupleTypeIfApplicable(elementTypes, contextualType, hasRestElement, elementCount, inConstContext)) {
-                    return tupleResult;
+                    return createArrayLiteralType(tupleResult);
                 }
                 else if (forceTuple) {
-                    return createTupleType(elementTypes, minLength, hasRestElement);
+                    return createArrayLiteralType(createTupleType(elementTypes, minLength, hasRestElement));
                 }
             }
-            return createArrayType(elementTypes.length ?
+            return createArrayLiteralType(createArrayType(elementTypes.length ?
                 getUnionType(elementTypes, UnionReduction.Subtype) :
-                strictNullChecks ? implicitNeverType : undefinedWideningType, inConstContext);
+                strictNullChecks ? implicitNeverType : undefinedWideningType, inConstContext));
+        }
+
+        function createArrayLiteralType(type: ObjectType) {
+            if (!(getObjectFlags(type) & ObjectFlags.Reference)) {
+                return type;
+            }
+            let literalType = (<TypeReference>type).literalType;
+            if (!literalType) {
+                literalType = (<TypeReference>type).literalType = cloneTypeReference(<TypeReference>type);
+                literalType.objectFlags |= ObjectFlags.ArrayLiteral | ObjectFlags.ContainsObjectOrArrayLiteral;
+            }
+            return literalType;
         }
 
         function getArrayLiteralTupleTypeIfApplicable(elementTypes: Type[], contextualType: Type | undefined, hasRestElement: boolean, elementCount = elementTypes.length, readonly = false) {
@@ -19449,7 +19465,7 @@ namespace ts {
                 const stringIndexInfo = hasComputedStringProperty ? getObjectLiteralIndexInfo(node, offset, propertiesArray, IndexKind.String) : undefined;
                 const numberIndexInfo = hasComputedNumberProperty ? getObjectLiteralIndexInfo(node, offset, propertiesArray, IndexKind.Number) : undefined;
                 const result = createAnonymousType(node.symbol, propertiesTable, emptyArray, emptyArray, stringIndexInfo, numberIndexInfo);
-                result.objectFlags |= objectFlags | ObjectFlags.ObjectLiteral | ObjectFlags.ContainsObjectLiteral;
+                result.objectFlags |= objectFlags | ObjectFlags.ObjectLiteral | ObjectFlags.ContainsObjectOrArrayLiteral;
                 if (isJSObjectLiteral) {
                     result.objectFlags |= ObjectFlags.JSLiteral;
                 }
@@ -19645,7 +19661,7 @@ namespace ts {
             function createJsxAttributesType() {
                 objectFlags |= freshObjectLiteralFlag;
                 const result = createAnonymousType(attributes.symbol, attributesTable, emptyArray, emptyArray, /*stringIndexInfo*/ undefined, /*numberIndexInfo*/ undefined);
-                result.objectFlags |= objectFlags | ObjectFlags.ObjectLiteral | ObjectFlags.ContainsObjectLiteral;
+                result.objectFlags |= objectFlags | ObjectFlags.ObjectLiteral | ObjectFlags.ContainsObjectOrArrayLiteral;
                 return result;
             }
         }
@@ -21398,7 +21414,8 @@ namespace ts {
             reorderCandidates(signatures, candidates);
             if (!candidates.length) {
                 if (reportErrors) {
-                    diagnostics.add(createDiagnosticForNode(node, Diagnostics.Call_target_does_not_contain_any_signatures));
+                    const errorNode = getCallErrorNode(node);
+                    diagnostics.add(createDiagnosticForNode(errorNode, Diagnostics.Call_target_does_not_contain_any_signatures));
                 }
                 return resolveErrorCall(node);
             }
@@ -21476,11 +21493,13 @@ namespace ts {
             // If candidate is undefined, it means that no candidates had a suitable arity. In that case,
             // skip the checkApplicableSignature check.
             if (reportErrors) {
+                const errorNode = getCallErrorNode(node);
+
                 if (candidateForArgumentError) {
                     checkApplicableSignature(node, args, candidateForArgumentError, assignableRelation, CheckMode.Normal, /*reportErrors*/ true);
                 }
                 else if (candidateForArgumentArityError) {
-                    diagnostics.add(getArgumentArityError(node, [candidateForArgumentArityError], args));
+                    diagnostics.add(getArgumentArityError(errorNode, [candidateForArgumentArityError], args));
                 }
                 else if (candidateForTypeArgumentError) {
                     checkTypeArguments(candidateForTypeArgumentError, (node as CallExpression | TaggedTemplateExpression | JsxOpeningLikeElement).typeArguments!, /*reportErrors*/ true, fallbackError);
@@ -21488,18 +21507,30 @@ namespace ts {
                 else {
                     const signaturesWithCorrectTypeArgumentArity = filter(signatures, s => hasCorrectTypeArgumentArity(s, typeArguments));
                     if (signaturesWithCorrectTypeArgumentArity.length === 0) {
-                        diagnostics.add(getTypeArgumentArityError(node, signatures, typeArguments!));
+                        diagnostics.add(getTypeArgumentArityError(errorNode, signatures, typeArguments!));
                     }
                     else if (!isDecorator) {
-                        diagnostics.add(getArgumentArityError(node, signaturesWithCorrectTypeArgumentArity, args));
+                        diagnostics.add(getArgumentArityError(errorNode, signaturesWithCorrectTypeArgumentArity, args));
                     }
                     else if (fallbackError) {
-                        diagnostics.add(createDiagnosticForNode(node, fallbackError));
+                        diagnostics.add(createDiagnosticForNode(errorNode, fallbackError));
                     }
                 }
             }
 
             return produceDiagnostics || !args ? resolveErrorCall(node) : getCandidateForOverloadFailure(node, candidates, args, !!candidatesOutArray);
+
+            function getCallErrorNode(node: CallLikeExpression): Node {
+                if (isCallExpression(node)) {
+                    if (isPropertyAccessExpression(node.expression)) {
+                        return node.expression.name;
+                    }
+                    else {
+                        return node.expression;
+                    }
+                }
+                return node;
+            }
 
             function chooseOverload(candidates: Signature[], relation: Map<RelationComparisonResult>, signatureHelpTrailingComma = false) {
                 candidateForArgumentError = undefined;

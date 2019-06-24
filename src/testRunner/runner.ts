@@ -40,6 +40,8 @@ function createRunner(kind: TestRunnerKind): RunnerBase {
             return new UserCodeRunner();
         case "dt":
             return new DefinitelyTypedRunner();
+        case "docker":
+            return new DockerfileRunner();
     }
     return ts.Debug.fail(`Unknown runner kind ${kind}`);
 }
@@ -172,6 +174,9 @@ function handleTestConfig() {
                     case "dt":
                         runners.push(new DefinitelyTypedRunner());
                         break;
+                    case "docker":
+                        runners.push(new DockerfileRunner());
+                        break;
                 }
             }
         }
@@ -194,6 +199,7 @@ function handleTestConfig() {
         // CRON-only tests
         if (process.env.TRAVIS_EVENT_TYPE === "cron") {
             runners.push(new UserCodeRunner());
+            runners.push(new DockerfileRunner());
         }
     }
     if (runUnitTests === undefined) {

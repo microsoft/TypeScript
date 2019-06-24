@@ -131,10 +131,10 @@ namespace ts.projectSystem {
             verifyImportedDiagnostics();
             callsTrackingHost.verifyNoHostCalls();
 
-            // trigger synchronization to make sure that LSHost will try to find 'f2' module on disk
+            // trigger synchronization to make sure that the host will try to find 'f2' module on disk
             editContent(`import {x} from "f2"`);
             try {
-                // trigger synchronization to make sure that LSHost will try to find 'f2' module on disk
+                // trigger synchronization to make sure that the host will try to find 'f2' module on disk
                 verifyImportedDiagnostics();
                 assert.isTrue(false, `should not find file '${imported.path}'`);
             }

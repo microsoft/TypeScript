@@ -2615,13 +2615,6 @@ namespace ts {
         return undefined;
     }
 
-    export function tryResolveScriptReference(host: ScriptReferenceHost, sourceFile: SourceFile | UnparsedSource, reference: FileReference) {
-        if (!host.getCompilerOptions().noResolve) {
-            const referenceFileName = isRootedDiskPath(reference.fileName) ? reference.fileName : combinePaths(getDirectoryPath(sourceFile.fileName), reference.fileName);
-            return host.getSourceFile(referenceFileName);
-        }
-    }
-
     export function getAncestor(node: Node | undefined, kind: SyntaxKind): Node | undefined {
         while (node) {
             if (node.kind === kind) {
