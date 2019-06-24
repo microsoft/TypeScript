@@ -446,7 +446,13 @@ interface String {
      * position. Otherwise returns false.
      */
     startsWith(searchString: string, position?: number): boolean;
-
+    
+    /**
+     * The static String.fromCodePoint() method returns a string created by using the specified sequence of code points.
+     * @param codePoints A sequence of code points.
+     * @returns A string created by using the specified sequence of code points.
+     */
+    fromCodePoint(...codePoints: number[]): string;
     /**
      * Returns an <a> HTML anchor element and sets the name attribute to the text value
      * @param name
