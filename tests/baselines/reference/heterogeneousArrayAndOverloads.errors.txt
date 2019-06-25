@@ -1,9 +1,7 @@
-tests/cases/compiler/heterogeneousArrayAndOverloads.ts(9,20): error TS2322: Type 'number' is not assignable to type 'string'.
-tests/cases/compiler/heterogeneousArrayAndOverloads.ts(9,23): error TS2322: Type 'number' is not assignable to type 'string'.
-tests/cases/compiler/heterogeneousArrayAndOverloads.ts(9,32): error TS2322: Type 'number' is not assignable to type 'string'.
+tests/cases/compiler/heterogeneousArrayAndOverloads.ts(9,9): error TS2755: No suitable overload for this call.
 
 
-==== tests/cases/compiler/heterogeneousArrayAndOverloads.ts (3 errors) ====
+==== tests/cases/compiler/heterogeneousArrayAndOverloads.ts (1 errors) ====
     class arrTest {
         test(arg1: number[]);
         test(arg1: string[]);
@@ -13,11 +11,15 @@ tests/cases/compiler/heterogeneousArrayAndOverloads.ts(9,32): error TS2322: Type
             this.test(["hi"]);
             this.test([]);
             this.test([1, 2, "hi", 5]); // Error
-                       ~
-!!! error TS2322: Type 'number' is not assignable to type 'string'.
-                          ~
-!!! error TS2322: Type 'number' is not assignable to type 'string'.
-                                   ~
-!!! error TS2322: Type 'number' is not assignable to type 'string'.
+            ~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2755: No suitable overload for this call.
+!!! related TS2757 tests/cases/compiler/heterogeneousArrayAndOverloads.ts:9:26: Overload 1 of 2, '(arg1: number[]): any', gave the following error.
+  Type 'string' is not assignable to type 'number'.
+!!! related TS2757 tests/cases/compiler/heterogeneousArrayAndOverloads.ts:9:20: Overload 2 of 2, '(arg1: string[]): any', gave the following error.
+  Type 'number' is not assignable to type 'string'.
+!!! related TS2757 tests/cases/compiler/heterogeneousArrayAndOverloads.ts:9:23: Overload 2 of 2, '(arg1: string[]): any', gave the following error.
+  Type 'number' is not assignable to type 'string'.
+!!! related TS2757 tests/cases/compiler/heterogeneousArrayAndOverloads.ts:9:32: Overload 2 of 2, '(arg1: string[]): any', gave the following error.
+  Type 'number' is not assignable to type 'string'.
         }
     }
