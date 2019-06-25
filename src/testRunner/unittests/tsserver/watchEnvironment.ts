@@ -171,33 +171,37 @@ namespace ts.projectSystem {
             path: `${projectFolder}/node_modules/.cache/someFile.d.ts`,
             content: ""
         };
-        host.ensureFileOrFolder(nodeModulesIgnoredFileFromIgnoreDirectory);
-        host.checkTimeoutQueueLength(0);
-        verifyProject();
 
         const nodeModulesIgnoredFile: File = {
             path: `${projectFolder}/node_modules/.cacheFile.ts`,
             content: ""
         };
-        host.ensureFileOrFolder(nodeModulesIgnoredFile);
-        host.checkTimeoutQueueLength(0);
-        verifyProject();
 
         const gitIgnoredFileFromIgnoreDirectory: File = {
             path: `${projectFolder}/.git/someFile.d.ts`,
             content: ""
         };
-        host.ensureFileOrFolder(gitIgnoredFileFromIgnoreDirectory);
-        host.checkTimeoutQueueLength(0);
-        verifyProject();
 
         const gitIgnoredFile: File = {
             path: `${projectFolder}/.gitCache.d.ts`,
             content: ""
         };
-        host.ensureFileOrFolder(gitIgnoredFile);
-        host.checkTimeoutQueueLength(0);
-        verifyProject();
+        const emacsIgnoredFileFromIgnoreDirectory: File = {
+            path: `${projectFolder}/src/.#field.ts`,
+            content: ""
+        };
+
+        [
+            nodeModulesIgnoredFileFromIgnoreDirectory,
+            nodeModulesIgnoredFile,
+            gitIgnoredFileFromIgnoreDirectory,
+            gitIgnoredFile,
+            emacsIgnoredFileFromIgnoreDirectory
+        ].forEach(ignoredEntity => {
+            host.ensureFileOrFolder(ignoredEntity);
+            host.checkTimeoutQueueLength(0);
+            verifyProject();
+        });
 
         function verifyProject() {
             checkWatchedDirectories(host, emptyArray, /*recursive*/ true);

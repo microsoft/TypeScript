@@ -1177,7 +1177,9 @@ Actual: ${stringify(fullActual)}`);
         public verifyRenameLocations(startRanges: ArrayOrSingle<Range>, options: FourSlashInterface.RenameLocationsOptions) {
             const { findInStrings = false, findInComments = false, ranges = this.getRanges(), providePrefixAndSuffixTextForRename = true } = ts.isArray(options) ? { findInStrings: false, findInComments: false, ranges: options, providePrefixAndSuffixTextForRename: true } : options;
 
-            for (const startRange of toArray(startRanges)) {
+            const _startRanges = toArray(startRanges);
+            assert(_startRanges.length);
+            for (const startRange of _startRanges) {
                 this.goToRangeStart(startRange);
 
                 const renameInfo = this.languageService.getRenameInfo(this.activeFile.fileName, this.currentCaretPosition);
@@ -2731,6 +2733,7 @@ Actual: ${stringify(fullActual)}`);
 
         public verifyRangesAreOccurrences(isWriteAccess?: boolean, ranges?: Range[]) {
             ranges = ranges || this.getRanges();
+            assert(ranges.length);
             for (const r of ranges) {
                 this.goToRangeStart(r);
                 this.verifyOccurrencesAtPositionListCount(ranges.length);
@@ -2761,6 +2764,7 @@ Actual: ${stringify(fullActual)}`);
 
         public verifyRangesAreDocumentHighlights(ranges: Range[] | undefined, options: FourSlashInterface.VerifyDocumentHighlightsOptions | undefined) {
             ranges = ranges || this.getRanges();
+            assert(ranges.length);
             const fileNames = options && options.filesToSearch || unique(ranges, range => range.fileName);
             for (const range of ranges) {
                 this.goToRangeStart(range);
@@ -2930,7 +2934,9 @@ Actual: ${stringify(fullActual)}`);
         }
 
         public noMoveToNewFile() {
-            for (const range of this.getRanges()) {
+            const ranges = this.getRanges();
+            assert(ranges.length);
+            for (const range of ranges) {
                 for (const refactor of this.getApplicableRefactors(range, { allowTextChangesInNewFiles: true })) {
                     if (refactor.name === "Move to a new file") {
                         ts.Debug.fail("Did not expect to get 'move to a new file' refactor");

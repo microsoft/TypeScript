@@ -29,3 +29,5 @@ package-lock.json
 yarn.lock
 CONTRIBUTING.md
 TEST-results.xml
+.dockerignore
+Dockerfile
