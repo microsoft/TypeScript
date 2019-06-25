@@ -1,6 +1,6 @@
 # How does TypeScript formatting work?
 
-To format code you need to have a formatting context and a sourcefile.  The formatting context contains 
+To format code you need to have a formatting context and a `SourceFile`.  The formatting context contains 
 all user settings like tab size, newline character, etc. The sourcefile is self explanatory. 
 
 The end result of formatting is represented by TextChange objects which hold the new string content, and 
