@@ -3935,6 +3935,10 @@
         "category": "Message",
         "code": 6220
     },
+    "Do not emit '__esModule' in CommonJS output.": {
+        "category": "Message",
+        "code": 6221
+    },
 
     "Projects to reference": {
         "category": "Message",

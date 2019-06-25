@@ -764,6 +764,13 @@ namespace ts {
             description: Diagnostics.Do_not_generate_custom_helper_functions_like_extends_in_compiled_output
         },
         {
+            name: "noEmitUnderscoreUnderscoreESModule",
+            type: "boolean",
+            affectsEmit: true,
+            category: Diagnostics.Advanced_Options,
+            description: Diagnostics.Do_not_emit_esModule_in_CommonJS_output
+        },
+        {
             name: "noEmitOnError",
             type: "boolean",
             affectsEmit: true,

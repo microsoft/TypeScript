@@ -75,7 +75,7 @@ namespace ts {
 
 
         function shouldEmitUnderscoreUnderscoreESModule() {
-            if (!currentModuleInfo.exportEquals && isExternalModule(currentSourceFile)) {
+            if (!currentModuleInfo.exportEquals && isExternalModule(currentSourceFile) && !compilerOptions.noEmitUnderscoreUnderscoreESModule) {
                 return true;
             }
             return false;
