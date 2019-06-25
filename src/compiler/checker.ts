@@ -21201,13 +21201,11 @@ namespace ts {
 
             const errorOutputContainer: { errors?: Diagnostic[], skipLogging?: boolean } = { errors: undefined, skipLogging: true };
             if (isJsxOpeningLikeElement(node)) {
-                const r = checkApplicableSignatureForJsxOpeningLikeElement(node, signature, relation, checkMode, reportErrors, containingMessageChain, errorOutputContainer);
-                if (!r) {
-                    if (reportErrors) {
-                        Debug.assert(!!errorOutputContainer.errors, "has error 0");
-                    }
+                if (!checkApplicableSignatureForJsxOpeningLikeElement(node, signature, relation, checkMode, reportErrors, containingMessageChain, errorOutputContainer)) {
+                    Debug.assert(!reportErrors || !!errorOutputContainer.errors, "jsx should have errors when reporting errors");
                     return errorOutputContainer.errors || [];
                 }
+                return undefined;
             }
             const thisType = getThisTypeOfSignature(signature);
             if (thisType && thisType !== voidType && node.kind !== SyntaxKind.NewExpression) {
@@ -21219,7 +21217,7 @@ namespace ts {
                 const errorNode = reportErrors ? (thisArgumentNode || node) : undefined;
                 const headMessage = Diagnostics.The_this_context_of_type_0_is_not_assignable_to_method_s_this_of_type_1;
                 if (!checkTypeRelatedTo(thisArgumentType, thisType, relation, errorNode, headMessage, containingMessageChain, errorOutputContainer)) {
-                    Debug.assert(!reportErrors || !!errorOutputContainer.errors, "has error 1"); // CLEAR
+                    Debug.assert(!reportErrors || !!errorOutputContainer.errors, "this parameter should have errors when reporting errors");
                     return errorOutputContainer.errors || [];
                 }
             }
@@ -21236,7 +21234,7 @@ namespace ts {
                     // parameter types yet and therefore excess property checks may yield false positives (see #17041).
                     const checkArgType = checkMode & CheckMode.SkipContextSensitive ? getRegularTypeOfObjectLiteral(argType) : argType;
                     if (!checkTypeRelatedToAndOptionallyElaborate(checkArgType, paramType, relation, reportErrors ? arg : undefined, arg, headMessage, containingMessageChain, errorOutputContainer)) {
-                        Debug.assert(!reportErrors || !!errorOutputContainer.errors, "has error 2"); // CLEAR
+                        Debug.assert(!reportErrors || !!errorOutputContainer.errors, "parameter should have errors when reporting errors");
                         return errorOutputContainer.errors || [];
                     }
                 }
@@ -21245,7 +21243,7 @@ namespace ts {
                 const spreadType = getSpreadArgumentType(args, argCount, args.length, restType, /*context*/ undefined);
                 const errorNode = reportErrors ? argCount < args.length ? args[argCount] : node : undefined;
                 if (!checkTypeRelatedTo(spreadType, restType, relation, errorNode, headMessage, undefined, errorOutputContainer)) {
-                    Debug.assert(!reportErrors || !!errorOutputContainer.errors, "has error 3"); // CLEAR
+                    Debug.assert(!reportErrors || !!errorOutputContainer.errors, "rest parameter should have errors when reporting errors");
                     return errorOutputContainer.errors || [];
                 }
             }

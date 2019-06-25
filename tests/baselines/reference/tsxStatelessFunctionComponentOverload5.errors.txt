@@ -72,15 +72,21 @@ tests/cases/conformance/jsx/file.tsx(56,12): error TS2755: No suitable overload 
     const b6 = <MainButton {...{ onClick(e: any){} }} children={10} />;  // incorrect type for optional attribute
                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS2755: No suitable overload for this call.
-!!! related TS2322 tests/cases/conformance/jsx/file.tsx:54:51: Type 'number' is not assignable to type 'string'.
-!!! related TS2322 tests/cases/conformance/jsx/file.tsx:54:51: Type 'number' is not assignable to type 'string'.
-!!! related TS2322 tests/cases/conformance/jsx/file.tsx:54:51: Type 'number' is not assignable to type 'string'.
+!!! related TS2757 tests/cases/conformance/jsx/file.tsx:54:51: Overload 1 of 3, '(buttonProps: ButtonProps): Element', gave the following error.
+  Type 'number' is not assignable to type 'string'.
+!!! related TS2757 tests/cases/conformance/jsx/file.tsx:54:51: Overload 2 of 3, '(linkProps: LinkProps): Element', gave the following error.
+  Type 'number' is not assignable to type 'string'.
+!!! related TS2757 tests/cases/conformance/jsx/file.tsx:54:51: Overload 3 of 3, '(hyphenProps: HyphenProps): Element', gave the following error.
+  Type 'number' is not assignable to type 'string'.
     const b7 = <MainButton {...{ onClick(e: any){} }} children="hello" className />;  // incorrect type for optional attribute
                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS2755: No suitable overload for this call.
-!!! related TS2322 tests/cases/conformance/jsx/file.tsx:55:68: Type 'true' is not assignable to type 'string'.
-!!! related TS2322 tests/cases/conformance/jsx/file.tsx:55:68: Type 'true' is not assignable to type 'string'.
-!!! related TS2322 tests/cases/conformance/jsx/file.tsx:55:68: Type 'true' is not assignable to type 'string'.
+!!! related TS2757 tests/cases/conformance/jsx/file.tsx:55:68: Overload 1 of 3, '(buttonProps: ButtonProps): Element', gave the following error.
+  Type 'true' is not assignable to type 'string'.
+!!! related TS2757 tests/cases/conformance/jsx/file.tsx:55:68: Overload 2 of 3, '(linkProps: LinkProps): Element', gave the following error.
+  Type 'true' is not assignable to type 'string'.
+!!! related TS2757 tests/cases/conformance/jsx/file.tsx:55:68: Overload 3 of 3, '(hyphenProps: HyphenProps): Element', gave the following error.
+  Type 'true' is not assignable to type 'string'.
     const b8 = <MainButton data-format />;  // incorrect type for specified hyphanated name
                ~~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS2755: No suitable overload for this call.
@@ -88,4 +94,5 @@ tests/cases/conformance/jsx/file.tsx(56,12): error TS2755: No suitable overload 
   Property 'onClick' is missing in type '{ data-format: true; }' but required in type 'ButtonProps'.
 !!! related TS2757 tests/cases/conformance/jsx/file.tsx:56:13: Overload 2 of 3, '(linkProps: LinkProps): Element', gave the following error.
   Property 'to' is missing in type '{ data-format: true; }' but required in type 'LinkProps'.
-!!! related TS2322 tests/cases/conformance/jsx/file.tsx:56:24: Type 'true' is not assignable to type 'string'.
+!!! related TS2757 tests/cases/conformance/jsx/file.tsx:56:24: Overload 3 of 3, '(hyphenProps: HyphenProps): Element', gave the following error.
+  Type 'true' is not assignable to type 'string'.
