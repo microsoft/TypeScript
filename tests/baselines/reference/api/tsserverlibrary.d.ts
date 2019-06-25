@@ -8397,6 +8397,7 @@ declare namespace ts.server {
         private program;
         private externalFiles;
         private missingFilesMap;
+        private generatedFilesMap;
         private plugins;
         private lastFileExceededProgramSize;
         protected languageService: LanguageService;
@@ -8509,6 +8510,9 @@ declare namespace ts.server {
         private detachScriptInfoFromProject;
         private addMissingFileWatcher;
         private isWatchedMissingFile;
+        private createGeneratedFileWatcher;
+        private isValidGeneratedFileWatcher;
+        private clearGeneratedFileWatch;
         getScriptInfoForNormalizedPath(fileName: NormalizedPath): ScriptInfo | undefined;
         getScriptInfo(uncheckedFileName: string): ScriptInfo | undefined;
         filesToString(writeProjectFileNames: boolean): string;
