@@ -30,14 +30,4 @@ There are a lot of rules, which you can find in [rules.ts](./rules.ts) each one 
 
 ### Where is this used?
 
-The formatter is used mainly from the language service for formatting with an editor, but [services/textChanges.ts](/src/services/textChanges.ts) also uses this formatter when emitting code for quick fixes. 
-
-The formatter is not exported publicly, and so all usage comes through the language server.
-
-### Sample code
-
-```ts
-const nonFormattedText = `[js source code]`;
-const sourceFile = createSourceFile("any file name", nonFormattedText, ScriptTarget.ESNext, /*setParentNodes*/ true, ScriptKind.JS);
-const changes = formatting.formatDocument(sourceFile, formatContext);
-```
+The formatter is used mainly from any language service operation that inserts or modifies code.  The formatter is not exported publicly, and so all usage can only come through the language server.
