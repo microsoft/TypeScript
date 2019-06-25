@@ -10312,6 +10312,13 @@ namespace ts {
             }
         }
 
+        function unwrapSubstitution(type: Type): Type {
+            if (type.flags & TypeFlags.Substitution) {
+                return (type as SubstitutionType).substitute;
+            }
+            return type;
+        }
+
         // Transform an indexed access to a simpler form, if possible. Return the simpler form, or return
         // the type itself if no transformation is possible. The writing flag indicates that the type is
         // the target of an assignment.
@@ -10323,7 +10330,7 @@ namespace ts {
             type[cache] = circularConstraintType;
             // We recursively simplify the object type as it may in turn be an indexed access type. For example, with
             // '{ [P in T]: { [Q in U]: number } }[T][U]' we want to first simplify the inner indexed access type.
-            const objectType = getSimplifiedType(type.objectType, writing);
+            const objectType = unwrapSubstitution(getSimplifiedType(type.objectType, writing));
             const indexType = getSimplifiedType(type.indexType, writing);
             // T[A | B] -> T[A] | T[B] (reading)
             // T[A | B] -> T[A] & T[B] (writing)
@@ -10501,12 +10508,10 @@ namespace ts {
             let combinedMapper: TypeMapper | undefined;
             if (root.inferTypeParameters) {
                 const context = createInferenceContext(root.inferTypeParameters, /*signature*/ undefined, InferenceFlags.None);
-                if (!checkTypeInstantiable) {
-                    // We don't want inferences from constraints as they may cause us to eagerly resolve the
-                    // conditional type instead of deferring resolution. Also, we always want strict function
-                    // types rules (i.e. proper contravariance) for inferences.
-                    inferTypes(context.inferences, checkType, extendsType, InferencePriority.NoConstraints | InferencePriority.AlwaysStrict);
-                }
+                // We don't want inferences from constraints as they may cause us to eagerly resolve the
+                // conditional type instead of deferring resolution. Also, we always want strict function
+                // types rules (i.e. proper contravariance) for inferences.
+                inferTypes(context.inferences, checkType, extendsType, InferencePriority.NoConstraints | InferencePriority.AlwaysStrict);
                 combinedMapper = combineTypeMappers(mapper, context.mapper);
             }
             // Instantiate the extends type including inferences for 'infer T' type parameters
@@ -15435,6 +15440,12 @@ namespace ts {
                         else {
                             inferFromObjectTypes(source, target);
                         }
+                    }
+                }
+                if (source.flags & TypeFlags.Simplifiable) {
+                    const simplified = getSimplifiedType(source, contravariant);
+                    if (simplified !== source) {
+                        inferFromTypes(simplified, target);
                     }
                 }
 
