@@ -446,9 +446,9 @@ namespace ts {
             },
             getAugmentedPropertiesOfType,
             getRootSymbols,
-            getContextualType: nodeIn => {
+            getContextualType: (nodeIn, contextFlags) => {
                 const node = getParseTreeNode(nodeIn, isExpression);
-                return node ? getContextualType(node) : undefined;
+                return node ? getContextualType(node, contextFlags) : undefined;
             },
             getContextualTypeForObjectLiteralElement: nodeIn => {
                 const node = getParseTreeNode(nodeIn, isObjectLiteralElementLike);
@@ -16156,7 +16156,7 @@ namespace ts {
             return getWidenedType(unwidenedType);
         }
 
-        function getInferredType(context: InferenceContext, index: number): Type {
+        function getInferredType(context: InferenceContext, index: number, contextFlags?: ContextFlags): Type {
             const inference = context.inferences[index];
             if (!inference.inferredType) {
                 let inferredType: Type | undefined;
@@ -16201,7 +16201,8 @@ namespace ts {
                 const constraint = getConstraintOfTypeParameter(inference.typeParameter);
                 if (constraint) {
                     const instantiatedConstraint = instantiateType(constraint, context.nonFixingMapper);
-                    if (!inferredType || !context.compareTypes(inferredType, getTypeWithThisArgument(instantiatedConstraint, inferredType))) {
+                    const isCompletionContext = contextFlags && ((contextFlags | ContextFlags.Completion) === contextFlags);
+                    if (!inferredType || !context.compareTypes(inferredType, getTypeWithThisArgument(instantiatedConstraint, inferredType)) || isCompletionContext) {
                         inference.inferredType = inferredType = instantiatedConstraint;
                     }
                 }
@@ -16214,10 +16215,10 @@ namespace ts {
             return isInJavaScriptFile ? anyType : unknownType;
         }
 
-        function getInferredTypes(context: InferenceContext): Type[] {
+        function getInferredTypes(context: InferenceContext, contextFlags?: ContextFlags): Type[] {
             const result: Type[] = [];
             for (let i = 0; i < context.inferences.length; i++) {
-                result.push(getInferredType(context, i));
+                result.push(getInferredType(context, i, contextFlags));
             }
             return result;
         }
@@ -18925,16 +18926,16 @@ namespace ts {
         }
 
         // In a typed function call, an argument or substitution expression is contextually typed by the type of the corresponding parameter.
-        function getContextualTypeForArgument(callTarget: CallLikeExpression, arg: Expression): Type | undefined {
+        function getContextualTypeForArgument(callTarget: CallLikeExpression, arg: Expression, contextFlags?: ContextFlags): Type | undefined {
             const args = getEffectiveCallArguments(callTarget);
             const argIndex = args.indexOf(arg); // -1 for e.g. the expression of a CallExpression, or the tag of a TaggedTemplateExpression
-            return argIndex === -1 ? undefined : getContextualTypeForArgumentAtIndex(callTarget, argIndex);
+            return argIndex === -1 ? undefined : getContextualTypeForArgumentAtIndex(callTarget, argIndex, contextFlags);
         }
 
-        function getContextualTypeForArgumentAtIndex(callTarget: CallLikeExpression, argIndex: number): Type {
+        function getContextualTypeForArgumentAtIndex(callTarget: CallLikeExpression, argIndex: number, contextFlags?: ContextFlags): Type {
             // If we're already in the process of resolving the given signature, don't resolve again as
             // that could cause infinite recursion. Instead, return anySignature.
-            const signature = getNodeLinks(callTarget).resolvedSignature === resolvingSignature ? resolvingSignature : getResolvedSignature(callTarget);
+            const signature = getNodeLinks(callTarget).resolvedSignature === resolvingSignature ? resolvingSignature : getResolvedSignature(callTarget, /*candidatesOutArray*/ undefined, /*checkMode*/ undefined, contextFlags);
             if (isJsxOpeningLikeElement(callTarget) && argIndex === 0) {
                 return getEffectiveFirstArgumentForJsxSignature(signature, callTarget);
             }
@@ -19324,7 +19325,7 @@ namespace ts {
                     }
                     /* falls through */
                 case SyntaxKind.NewExpression:
-                    return getContextualTypeForArgument(<CallExpression | NewExpression>parent, node);
+                    return getContextualTypeForArgument(<CallExpression | NewExpression>parent, node, contextFlags);
                 case SyntaxKind.TypeAssertionExpression:
                 case SyntaxKind.AsExpression:
                     return isConstTypeReference((<AssertionExpression>parent).type) ? undefined : getTypeFromTypeNode((<AssertionExpression>parent).type);
@@ -21426,7 +21427,7 @@ namespace ts {
             return getInferredTypes(context);
         }
 
-        function inferTypeArguments(node: CallLikeExpression, signature: Signature, args: readonly Expression[], checkMode: CheckMode, context: InferenceContext): Type[] {
+        function inferTypeArguments(node: CallLikeExpression, signature: Signature, args: ReadonlyArray<Expression>, checkMode: CheckMode, context: InferenceContext, contextFlags?: ContextFlags): Type[] {
             if (isJsxOpeningLikeElement(node)) {
                 return inferJsxTypeArguments(node, signature, checkMode, context);
             }
@@ -21492,7 +21493,7 @@ namespace ts {
                 inferTypes(context.inferences, spreadType, restType);
             }
 
-            return getInferredTypes(context);
+            return getInferredTypes(context, contextFlags);
         }
 
         function getArrayifiedType(type: Type) {
@@ -21928,7 +21929,7 @@ namespace ts {
             return createDiagnosticForNodeArray(getSourceFileOfNode(node), typeArguments, Diagnostics.Expected_0_type_arguments_but_got_1, belowArgCount === -Infinity ? aboveArgCount : belowArgCount, argCount);
         }
 
-        function resolveCall(node: CallLikeExpression, signatures: readonly Signature[], candidatesOutArray: Signature[] | undefined, checkMode: CheckMode, fallbackError?: DiagnosticMessage): Signature {
+        function resolveCall(node: CallLikeExpression, signatures: ReadonlyArray<Signature>, candidatesOutArray: Signature[] | undefined, checkMode: CheckMode, fallbackError?: DiagnosticMessage, contextFlags?: ContextFlags): Signature {
             const isTaggedTemplate = node.kind === SyntaxKind.TaggedTemplateExpression;
             const isDecorator = node.kind === SyntaxKind.Decorator;
             const isJsxOpeningOrSelfClosingElement = isJsxOpeningLikeElement(node);
@@ -22017,7 +22018,7 @@ namespace ts {
                 result = chooseOverload(candidates, subtypeRelation, signatureHelpTrailingComma);
             }
             if (!result) {
-                result = chooseOverload(candidates, assignableRelation, signatureHelpTrailingComma);
+                result = chooseOverload(candidates, assignableRelation, signatureHelpTrailingComma, contextFlags);
             }
             if (result) {
                 return result;
@@ -22109,7 +22110,7 @@ namespace ts {
 
             return produceDiagnostics || !args ? resolveErrorCall(node) : getCandidateForOverloadFailure(node, candidates, args, !!candidatesOutArray);
 
-            function chooseOverload(candidates: Signature[], relation: Map<RelationComparisonResult>, signatureHelpTrailingComma = false) {
+            function chooseOverload(candidates: Signature[], relation: Map<RelationComparisonResult>, signatureHelpTrailingComma = false, contextFlags?: ContextFlags) {
                 candidatesForArgumentError = undefined;
                 candidateForArgumentArityError = undefined;
                 candidateForTypeArgumentError = undefined;
@@ -22146,7 +22147,7 @@ namespace ts {
                         }
                         else {
                             inferenceContext = createInferenceContext(candidate.typeParameters, candidate, /*flags*/ isInJSFile(node) ? InferenceFlags.AnyDefault : InferenceFlags.None);
-                            typeArgumentTypes = inferTypeArguments(node, candidate, args, argCheckMode | CheckMode.SkipGenericFunctions, inferenceContext);
+                            typeArgumentTypes = inferTypeArguments(node, candidate, args, argCheckMode | CheckMode.SkipGenericFunctions, inferenceContext, contextFlags);
                             argCheckMode |= inferenceContext.flags & InferenceFlags.SkippedGenericFunction ? CheckMode.SkipGenericFunctions : CheckMode.Normal;
                         }
                         checkCandidate = getSignatureInstantiation(candidate, typeArgumentTypes, isInJSFile(candidate.declaration), inferenceContext && inferenceContext.inferredTypeParameters);
@@ -22316,7 +22317,7 @@ namespace ts {
             return maxParamsIndex;
         }
 
-        function resolveCallExpression(node: CallExpression, candidatesOutArray: Signature[] | undefined, checkMode: CheckMode): Signature {
+        function resolveCallExpression(node: CallExpression, candidatesOutArray: Signature[] | undefined, checkMode: CheckMode, contextFlags?: ContextFlags): Signature {
             if (node.expression.kind === SyntaxKind.SuperKeyword) {
                 const superType = checkSuperExpression(node.expression);
                 if (isTypeAny(superType)) {
@@ -22412,7 +22413,7 @@ namespace ts {
                 error(node, Diagnostics.Value_of_type_0_is_not_callable_Did_you_mean_to_include_new, typeToString(funcType));
                 return resolveErrorCall(node);
             }
-            return resolveCall(node, callSignatures, candidatesOutArray, checkMode);
+            return resolveCall(node, callSignatures, candidatesOutArray, checkMode, /*fallbackError*/ undefined, contextFlags);
         }
 
         function isGenericFunctionReturningFunction(signature: Signature) {
@@ -22838,10 +22839,10 @@ namespace ts {
                 signature.parameters.length < getDecoratorArgumentCount(decorator, signature));
         }
 
-        function resolveSignature(node: CallLikeExpression, candidatesOutArray: Signature[] | undefined, checkMode: CheckMode): Signature {
+        function resolveSignature(node: CallLikeExpression, candidatesOutArray: Signature[] | undefined, checkMode: CheckMode, contextFlags?: ContextFlags): Signature {
             switch (node.kind) {
                 case SyntaxKind.CallExpression:
-                    return resolveCallExpression(node, candidatesOutArray, checkMode);
+                    return resolveCallExpression(node, candidatesOutArray, checkMode, contextFlags);
                 case SyntaxKind.NewExpression:
                     return resolveNewExpression(node, candidatesOutArray, checkMode);
                 case SyntaxKind.TaggedTemplateExpression:
@@ -22862,7 +22863,7 @@ namespace ts {
          *                           the function will fill it up with appropriate candidate signatures
          * @return a signature of the call-like expression or undefined if one can't be found
          */
-        function getResolvedSignature(node: CallLikeExpression, candidatesOutArray?: Signature[] | undefined, checkMode?: CheckMode): Signature {
+        function getResolvedSignature(node: CallLikeExpression, candidatesOutArray?: Signature[] | undefined, checkMode?: CheckMode, contextFlags?: ContextFlags): Signature {
             const links = getNodeLinks(node);
             // If getResolvedSignature has already been called, we will have cached the resolvedSignature.
             // However, it is possible that either candidatesOutArray was not passed in the first time,
@@ -22873,7 +22874,7 @@ namespace ts {
                 return cached;
             }
             links.resolvedSignature = resolvingSignature;
-            const result = resolveSignature(node, candidatesOutArray, checkMode || CheckMode.Normal);
+            const result = resolveSignature(node, candidatesOutArray, checkMode || CheckMode.Normal, contextFlags);
             // When CheckMode.SkipGenericFunctions is set we use resolvingSignature to indicate that call
             // resolution should be deferred.
             if (result !== resolvingSignature) {

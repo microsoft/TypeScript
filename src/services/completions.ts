@@ -1501,7 +1501,7 @@ namespace ts.Completions {
             let existingMembers: readonly Declaration[] | undefined;
 
             if (objectLikeContainer.kind === SyntaxKind.ObjectLiteralExpression) {
-                const typeForObject = typeChecker.getContextualType(objectLikeContainer);
+                const typeForObject = typeChecker.getContextualType(objectLikeContainer, ContextFlags.Completion);
                 if (!typeForObject) return GlobalsSearch.Fail;
                 isNewIdentifierLocation = hasIndexSignature(typeForObject);
                 typeMembers = getPropertiesForObjectExpression(typeForObject, objectLikeContainer, typeChecker);

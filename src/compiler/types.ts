@@ -3220,8 +3220,9 @@ namespace ts {
 
         getFullyQualifiedName(symbol: Symbol): string;
         getAugmentedPropertiesOfType(type: Type): Symbol[];
-        getRootSymbols(symbol: Symbol): readonly Symbol[];
-        getContextualType(node: Expression): Type | undefined;
+
+        getRootSymbols(symbol: Symbol): ReadonlyArray<Symbol>;
+        getContextualType(node: Expression, contextFlags?: ContextFlags): Type | undefined;
         /* @internal */ getContextualTypeForObjectLiteralElement(element: ObjectLiteralElementLike): Type | undefined;
         /* @internal */ getContextualTypeForArgumentAtIndex(call: CallLikeExpression, argIndex: number): Type | undefined;
         /* @internal */ getContextualTypeForJsxAttribute(attribute: JsxAttribute | JsxSpreadAttribute): Type | undefined;
@@ -3377,6 +3378,12 @@ namespace ts {
         None = 0,
         Literal,
         Subtype
+    }
+
+    export const enum ContextFlags {
+        None = 0,
+        Signature = 1 << 0,  // Obtaining contextual signature
+        Completion = 1 << 1,  // Obtaining constraint type for completion
     }
 
     // NOTE: If modifying this enum, must modify `TypeFormatFlags` too!
