@@ -11706,8 +11706,6 @@ namespace ts {
             containingMessageChain: (() => DiagnosticMessageChain | undefined) | undefined,
             errorOutputContainer: { errors?: Diagnostic[], skipLogging?: boolean } | undefined
         ): boolean {
-            // TODO: The first case probably still needs to set errorOutputContainer.error to something
-            // TODO: Make sure all error logging in dynamic scope sets errorOutputContainer.error instead
             if (!node || isOrHasGenericConditional(target)) return false;
             if (!checkTypeRelatedTo(source, target, relation, /*errorNode*/ undefined)
                 && elaborateDidYouMeanToCallOrConstruct(node, source, target, relation, headMessage, containingMessageChain, errorOutputContainer)) {
@@ -11958,7 +11956,7 @@ namespace ts {
                 if (moreThanOneRealChildren) {
                     if (arrayLikeTargetParts !== neverType) {
                         const realSource = createTupleType(checkJsxChildren(containingElement, CheckMode.Normal));
-                        const children = generateJsxChildren(containingElement, getInvalidTextualChildDiagnostic)
+                        const children = generateJsxChildren(containingElement, getInvalidTextualChildDiagnostic);
                         result = elaborateElementwise(children, realSource, arrayLikeTargetParts, relation, containingMessageChain, errorOutputContainer) || result;
                     }
                     else if (!isTypeRelatedTo(getIndexedAccessType(source, childrenNameType), childrenTargetType, relation)) {
@@ -12418,7 +12416,7 @@ namespace ts {
             return getObjectFlags(source) & ObjectFlags.JsxAttributes && !isUnhyphenatedJsxName(sourceProp.escapedName);
         }
 
-       /**
+        /**
          * Checks if 'source' is related to 'target' (e.g.: is a assignable to).
          * @param source The left-hand-side of the relation.
          * @param target The right-hand-side of the relation.
@@ -21207,7 +21205,15 @@ namespace ts {
             // can be specified by users through attributes property.
             const paramType = getEffectiveFirstArgumentForJsxSignature(signature, node);
             const attributesType = checkExpressionWithContextualType(node.attributes, paramType, /*inferenceContext*/ undefined, checkMode);
-            return checkTypeRelatedToAndOptionallyElaborate(attributesType, paramType, relation, reportErrors ? node.tagName : undefined, node.attributes, undefined, containingMessageChain, errorOutputContainer);
+            return checkTypeRelatedToAndOptionallyElaborate(
+                attributesType,
+                paramType,
+                relation,
+                reportErrors ? node.tagName : undefined,
+                node.attributes,
+                /*headMessage*/ undefined,
+                containingMessageChain,
+                errorOutputContainer);
         }
 
         function getSignatureApplicabilityError(
@@ -21263,7 +21269,7 @@ namespace ts {
             if (restType) {
                 const spreadType = getSpreadArgumentType(args, argCount, args.length, restType, /*context*/ undefined);
                 const errorNode = reportErrors ? argCount < args.length ? args[argCount] : node : undefined;
-                if (!checkTypeRelatedTo(spreadType, restType, relation, errorNode, headMessage, undefined, errorOutputContainer)) {
+                if (!checkTypeRelatedTo(spreadType, restType, relation, errorNode, headMessage, /*containingMessageChain*/ undefined, errorOutputContainer)) {
                     Debug.assert(!reportErrors || !!errorOutputContainer.errors, "rest parameter should have errors when reporting errors");
                     return errorOutputContainer.errors || [];
                 }
@@ -21600,19 +21606,21 @@ namespace ts {
                 if (candidatesForArgumentError) {
                     if (candidatesForArgumentError.length === 1 || candidatesForArgumentError.length > 3) {
                         const last = candidatesForArgumentError[candidatesForArgumentError.length - 1];
-                        let chain: DiagnosticMessageChain | undefined = undefined;
+                        let chain: DiagnosticMessageChain | undefined;
                         if (candidatesForArgumentError.length > 3) {
                             chain = chainDiagnosticMessages(chain, Diagnostics.The_last_overload_gave_the_following_error);
                             chain = chainDiagnosticMessages(chain, Diagnostics.No_suitable_overload_for_this_call);
                         }
                         const ds = getSignatureApplicabilityError(node, args, last, assignableRelation, CheckMode.Normal, /*reportErrors*/ true, () => chain);
-                        Debug.assert(!!ds, "No error for last signature");
                         if (ds) {
                             // if elaboration already displayed the error, don't do anything extra
                             // note that we could do this always here, but getSignatureApplicabilityError is currently not configured to do that
-                            for (const d of ds as Diagnostic[]) {
+                            for (const d of ds) {
                                 diagnostics.add(d);
                             }
+                        }
+                        else {
+                            Debug.assert(false, "No error for last overload signature");
                         }
                     }
                     else {
@@ -21620,14 +21628,16 @@ namespace ts {
                         let i = 0;
                         for (const c of candidatesForArgumentError) {
                             i++;
-                            const chain = () => chainDiagnosticMessages(undefined, Diagnostics.Overload_0_of_1_2_gave_the_following_error, i, candidates.length, signatureToString(c));
+                            const chain = () => chainDiagnosticMessages(/*details*/ undefined, Diagnostics.Overload_0_of_1_2_gave_the_following_error, i, candidates.length, signatureToString(c));
                             const ds = getSignatureApplicabilityError(node, args, c, assignableRelation, CheckMode.Normal, /*reportErrors*/ true, chain);
-                            Debug.assert(!!ds, "No error for signature (1)");
                             if (ds) {
-                                related.push(...ds as Diagnostic[])
+                                related.push(...ds);
+                            }
+                            else {
+                                Debug.assert(false, "No error for 3 or fewer overload signatures");
                             }
                         }
-                        diagnostics.add(createDiagnosticForNodeFromMessageChain(node, chainDiagnosticMessages(undefined, Diagnostics.No_suitable_overload_for_this_call), related));
+                        diagnostics.add(createDiagnosticForNodeFromMessageChain(node, chainDiagnosticMessages(/*details*/ undefined, Diagnostics.No_suitable_overload_for_this_call), related));
                     }
                 }
                 else if (candidateForArgumentArityError) {
