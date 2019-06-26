@@ -5009,5 +5009,9 @@
     "Classes may not have a field named 'constructor'.": {
         "category": "Error",
         "code": 18006
+    },
+    "JSX expressions may not use the comma operator. Did you mean to write an array?": {
+        "category": "Error",
+        "code": 18007
     }
 }
