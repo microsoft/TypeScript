@@ -17,6 +17,7 @@ namespace ts {
         readFile?(path: string, encoding?: string): string | undefined;
         getSourceFileLike?(fileName: string): SourceFileLike | undefined;
         getDocumentPositionMapper?(generatedFileName: string, sourceFileName?: string): DocumentPositionMapper | undefined;
+        /* @internal */ useSourceInsteadOfReferenceRedirect?(): boolean;
         log(s: string): void;
     }
 
@@ -70,6 +71,11 @@ namespace ts {
             if (!sourceFile) return undefined;
 
             const program = host.getProgram()!;
+            // If this is source file of project reference source (instead of redirect) there is no generated position
+            if (host.useSourceInsteadOfReferenceRedirect &&
+                host.useSourceInsteadOfReferenceRedirect() &&
+                program.getResolvedProjectReferenceToRedirect(sourceFile.fileName)) return undefined;
+
             const options = program.getCompilerOptions();
             const outPath = options.outFile || options.out;
 

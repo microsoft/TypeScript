@@ -1148,10 +1148,11 @@ namespace ts {
             useCaseSensitiveFileNames: () => useCaseSensitiveFileNames,
             getCurrentDirectory: () => currentDirectory,
             getProgram,
-            fileExists: host.fileExists && (f => host.fileExists!(f)),
-            readFile: host.readFile && ((f, encoding) => host.readFile!(f, encoding)),
-            getDocumentPositionMapper: host.getDocumentPositionMapper && ((generatedFileName, sourceFileName) => host.getDocumentPositionMapper!(generatedFileName, sourceFileName)),
-            getSourceFileLike: host.getSourceFileLike && (f => host.getSourceFileLike!(f)),
+            fileExists: maybeBind(host, host.fileExists),
+            readFile: maybeBind(host, host.readFile),
+            getDocumentPositionMapper: maybeBind(host, host.getDocumentPositionMapper),
+            useSourceInsteadOfReferenceRedirect: maybeBind(host, host.useSourceInsteadOfReferenceRedirect),
+            getSourceFileLike: maybeBind(host, host.getSourceFileLike),
             log
         });
 

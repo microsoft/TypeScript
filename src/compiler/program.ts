@@ -1411,6 +1411,13 @@ namespace ts {
             for (const newSourceFile of newSourceFiles) {
                 const filePath = newSourceFile.path;
                 addFileToFilesByName(newSourceFile, filePath, newSourceFile.resolvedPath);
+                if (useSourceOfReference) {
+                    const redirectProject = getProjectReferenceRedirectProject(newSourceFile.fileName);
+                    if (redirectProject && !(redirectProject.commandLine.options.outFile || redirectProject.commandLine.options.out)) {
+                        const redirect = getProjectReferenceOutputName(redirectProject, newSourceFile.fileName);
+                        addFileToFilesByName(newSourceFile, toPath(redirect), /*redirectedPath*/ undefined);
+                    }
+                }
                 // Set the file as found during node modules search if it was found that way in old progra,
                 if (oldProgram.isSourceFileFromExternalLibrary(oldProgram.getSourceFileByPath(filePath)!)) {
                     sourceFilesFoundSearchingNodeModules.set(filePath, true);
@@ -2240,9 +2247,11 @@ namespace ts {
             if (useSourceOfReference) {
                 const source = getSourceOfProjectReferenceRedirect(fileName);
                 if (source) {
-                    return isString(source) ?
+                    const file = isString(source) ?
                         findSourceFile(source, toPath(source), isDefaultLib, ignoreNoDefaultLib, refFile, refPos, refEnd, packageId) :
                         undefined;
+                    if (file) addFileToFilesByName(file, path, /*redirectedPath*/ undefined);
+                    return file;
                 }
             }
             const originalFileName = fileName;

@@ -373,7 +373,7 @@ fn5();
                     verifyInfosWithRandom(session, host, openInfos, closedInfos, otherWatchedFiles);
                 }
 
-                function verifyInfosWhenNoMapFile(session: TestSession, host: TestServerHost, dependencyTsOK?: true) {
+                function verifyInfosWhenNoMapFile(session: TestSession, host: TestServerHost, dependencyTsOK?: boolean) {
                     const dtsMapClosedInfo = firstDefined(closedInfos, f => f.toLowerCase() === dtsMapPath ? f : undefined);
                     verifyInfosWithRandom(
                         session,
@@ -384,46 +384,48 @@ fn5();
                     );
                 }
 
-                function verifyInfosWhenNoDtsFile(session: TestSession, host: TestServerHost, watchDts: boolean, dependencyTsAndMapOk?: true) {
+                function verifyInfosWhenNoDtsFile(session: TestSession, host: TestServerHost, watchDts: boolean, dependencyTsOk?: boolean, depedencyMapOk?: boolean) {
                     const dtsMapClosedInfo = firstDefined(closedInfos, f => f.toLowerCase() === dtsMapPath ? f : undefined);
                     const dtsClosedInfo = firstDefined(closedInfos, f => f.toLowerCase() === dtsPath ? f : undefined);
                     verifyInfosWithRandom(
                         session,
                         host,
                         openInfos,
-                        closedInfos.filter(f => (dependencyTsAndMapOk || f !== dtsMapClosedInfo) && f !== dtsClosedInfo && (dependencyTsAndMapOk || f !== dependencyTs.path)),
+                        closedInfos.filter(f => (depedencyMapOk || f !== dtsMapClosedInfo) && f !== dtsClosedInfo && (dependencyTsOk || f !== dependencyTs.path)),
                         dtsClosedInfo && watchDts ?
                             otherWatchedFiles.concat(dtsClosedInfo) :
                             otherWatchedFiles
                     );
                 }
 
-                function verifyDocumentPositionMapper(session: TestSession, dependencyMap: server.ScriptInfo, documentPositionMapper: server.ScriptInfo["documentPositionMapper"], notEqual?: true) {
+                function verifyDocumentPositionMapper(session: TestSession, dependencyMap: server.ScriptInfo | undefined, documentPositionMapper: server.ScriptInfo["documentPositionMapper"], notEqual?: true) {
                     assert.strictEqual(session.getProjectService().filenameToScriptInfo.get(dtsMapPath), dependencyMap);
-                    if (notEqual) {
-                        assert.notStrictEqual(dependencyMap.documentPositionMapper, documentPositionMapper);
-                    }
-                    else {
-                        assert.strictEqual(dependencyMap.documentPositionMapper, documentPositionMapper);
+                    if (dependencyMap) {
+                        if (notEqual) {
+                            assert.notStrictEqual(dependencyMap.documentPositionMapper, documentPositionMapper);
+                        }
+                        else {
+                            assert.strictEqual(dependencyMap.documentPositionMapper, documentPositionMapper);
+                        }
                     }
                 }
 
-                function action(verifier: DocumentPositionMapperVerifier, fn: number, session: TestSession) {
-                    const { reqName, request, expectedResponse, expectedResponseNoMap, expectedResponseNoDts } = verifier.actionGetter(fn);
-                    const { response } = session.executeCommandSeq(request);
-                    return { reqName, response, expectedResponse, expectedResponseNoMap, expectedResponseNoDts, verifier };
+                function action(verifier: DocumentPositionMapperVerifier, fn: number, session: TestSession, useDependencyChange?: boolean) {
+                    const { reqName, request, expectedResponse, expectedResponseNoMap, expectedResponseNoDts, requestDependencyChange, expectedResponseDependencyChange } = verifier.actionGetter(fn);
+                    const { response } = session.executeCommandSeq(useDependencyChange ? requestDependencyChange || request : request);
+                    return { reqName, response, expectedResponse, expectedResponseNoMap, expectedResponseNoDts, expectedResponseDependencyChange, verifier };
                 }
 
                 function firstAction(session: TestSession) {
                     verifier.forEach(v => action(v, 1, session));
                 }
 
-                function verifyAllFnActionWorker(session: TestSession, verifyAction: (result: ReturnType<typeof action>, dtsInfo: server.ScriptInfo | undefined, isFirst: boolean) => void, dtsAbsent?: true) {
+                function verifyAllFnActionWorker(session: TestSession, verifyAction: (result: ReturnType<typeof action>, dtsInfo: server.ScriptInfo | undefined, isFirst: boolean) => void, dtsAbsent?: boolean, useDependencyChange?: boolean) {
                     // action
                     let isFirst = true;
                     for (const v of verifier) {
                         for (let fn = 1; fn <= 5; fn++) {
-                            const result = action(v, fn, session);
+                            const result = action(v, fn, session, useDependencyChange);
                             const dtsInfo = session.getProjectService().filenameToScriptInfo.get(dtsPath);
                             if (dtsAbsent) {
                                 assert.isUndefined(dtsInfo);
@@ -437,33 +439,38 @@ fn5();
                     }
                 }
 
+                function dtsAbsent() {
+                    return withRefs && !contains(closedInfos, dtsPath, (a, b) => a.toLowerCase() === b.toLowerCase());
+                }
+
                 function verifyAllFnAction(
                     session: TestSession,
                     host: TestServerHost,
                     firstDocumentPositionMapperNotEquals?: true,
                     dependencyMap?: server.ScriptInfo,
-                    documentPositionMapper?: server.ScriptInfo["documentPositionMapper"]
+                    documentPositionMapper?: server.ScriptInfo["documentPositionMapper"],
+                    useDependencyChange?: boolean
                 ) {
                     // action
-                    verifyAllFnActionWorker(session, ({ reqName, response, expectedResponse }, dtsInfo, isFirst) => {
-                        assert.deepEqual(response, expectedResponse, `Failed on ${reqName}`);
+                    verifyAllFnActionWorker(session, ({ reqName, response, expectedResponse, expectedResponseDependencyChange }, dtsInfo, isFirst) => {
+                        assert.deepEqual(response, useDependencyChange ? expectedResponseDependencyChange || expectedResponse : expectedResponse, `Failed on ${reqName}`);
                         verifyInfos(session, host);
-                        assert.equal(dtsInfo!.sourceMapFilePath, dtsMapPath);
+                        if (dtsInfo) assert.equal(dtsInfo.sourceMapFilePath, dtsMapPath);
                         if (isFirst) {
                             if (dependencyMap) {
                                 verifyDocumentPositionMapper(session, dependencyMap, documentPositionMapper, firstDocumentPositionMapperNotEquals);
                                 documentPositionMapper = dependencyMap.documentPositionMapper;
                             }
                             else {
-                                dependencyMap = session.getProjectService().filenameToScriptInfo.get(dtsMapPath)!;
-                                documentPositionMapper = dependencyMap.documentPositionMapper;
+                                dependencyMap = session.getProjectService().filenameToScriptInfo.get(dtsMapPath);
+                                documentPositionMapper = dependencyMap && dependencyMap.documentPositionMapper;
                             }
                         }
                         else {
-                            verifyDocumentPositionMapper(session, dependencyMap!, documentPositionMapper);
+                            verifyDocumentPositionMapper(session, dependencyMap, documentPositionMapper);
                         }
-                    });
-                    return { dependencyMap: dependencyMap!, documentPositionMapper };
+                    }, dtsAbsent(), useDependencyChange);
+                    return { dependencyMap, documentPositionMapper };
                 }
 
                 function verifyAllFnActionWithNoMap(
@@ -474,19 +481,21 @@ fn5();
                     let sourceMapFilePath: server.ScriptInfo["sourceMapFilePath"];
                     // action
                     verifyAllFnActionWorker(session, ({ reqName, response, expectedResponse, expectedResponseNoMap }, dtsInfo, isFirst) => {
-                        assert.deepEqual(response, expectedResponseNoMap || expectedResponse, `Failed on ${reqName}`);
+                        assert.deepEqual(response, withRefs ? expectedResponse : expectedResponseNoMap || expectedResponse, `Failed on ${reqName}`);
                         verifyInfosWhenNoMapFile(session, host, dependencyTsOK);
                         assert.isUndefined(session.getProjectService().filenameToScriptInfo.get(dtsMapPath));
-                        if (isFirst) {
-                            assert.isNotString(dtsInfo!.sourceMapFilePath);
-                            assert.isNotFalse(dtsInfo!.sourceMapFilePath);
-                            assert.isDefined(dtsInfo!.sourceMapFilePath);
-                            sourceMapFilePath = dtsInfo!.sourceMapFilePath;
+                        if (!withRefs) {
+                            if (isFirst) {
+                                assert.isNotString(dtsInfo!.sourceMapFilePath);
+                                assert.isNotFalse(dtsInfo!.sourceMapFilePath);
+                                assert.isDefined(dtsInfo!.sourceMapFilePath);
+                                sourceMapFilePath = dtsInfo!.sourceMapFilePath;
+                            }
+                            else {
+                                assert.equal(dtsInfo!.sourceMapFilePath, sourceMapFilePath);
+                            }
                         }
-                        else {
-                            assert.equal(dtsInfo!.sourceMapFilePath, sourceMapFilePath);
-                        }
-                    });
+                    }, dtsAbsent());
                     return sourceMapFilePath;
                 }
 
@@ -497,7 +506,7 @@ fn5();
                 ) {
                     // action
                     verifyAllFnActionWorker(session, ({ reqName, response, expectedResponse, expectedResponseNoDts, verifier }) => {
-                        assert.deepEqual(response, expectedResponseNoDts || expectedResponse, `Failed on ${reqName}`);
+                        assert.deepEqual(response, withRefs ? expectedResponse : expectedResponseNoDts || expectedResponse, `Failed on ${reqName}`);
                         verifyInfosWhenNoDtsFile(
                             session,
                             host,
@@ -505,7 +514,8 @@ fn5();
                             // instead of succeeding to source file and then mapping using project reference (When using usage location)
                             // But watched if sourcemapper is in source project since we need to keep track of dts to update the source mapper for any potential usages
                             verifier.expectedProjectActualFiles.every(f => f.toLowerCase() !== dtsPath),
-                            dependencyTsAndMapOk,
+                            /*dependencyTsOk*/ withRefs || dependencyTsAndMapOk,
+                            /*dependencyMapOk*/ dependencyTsAndMapOk
                         );
                     }, /*dtsAbsent*/ true);
                 }
@@ -513,14 +523,15 @@ fn5();
                 function verifyScenarioWithChangesWorker(
                     change: (host: TestServerHost, session: TestSession) => void,
                     afterActionDocumentPositionMapperNotEquals: true | undefined,
-                    timeoutBeforeAction: boolean
+                    timeoutBeforeAction: boolean,
+                    useDependencyChange?: boolean
                 ) {
                     const { host, session } = openTsFile();
 
                     // Create DocumentPositionMapper
                     firstAction(session);
-                    const dependencyMap = session.getProjectService().filenameToScriptInfo.get(dtsMapPath)!;
-                    const documentPositionMapper = dependencyMap.documentPositionMapper;
+                    const dependencyMap = session.getProjectService().filenameToScriptInfo.get(dtsMapPath);
+                    const documentPositionMapper = dependencyMap && dependencyMap.documentPositionMapper;
 
                     // change
                     change(host, session);
@@ -531,21 +542,22 @@ fn5();
                     }
 
                     // action
-                    verifyAllFnAction(session, host, afterActionDocumentPositionMapperNotEquals, dependencyMap, documentPositionMapper);
+                    verifyAllFnAction(session, host, afterActionDocumentPositionMapperNotEquals, dependencyMap, documentPositionMapper, useDependencyChange);
                 }
 
                 function verifyScenarioWithChanges(
                     scenarioName: string,
                     change: (host: TestServerHost, session: TestSession) => void,
-                    afterActionDocumentPositionMapperNotEquals?: true
+                    afterActionDocumentPositionMapperNotEquals?: true,
+                    useDependencyChange?: boolean
                 ) {
                     describe(scenarioName, () => {
                         it("when timeout occurs before request", () => {
-                            verifyScenarioWithChangesWorker(change, afterActionDocumentPositionMapperNotEquals, /*timeoutBeforeAction*/ true);
+                            verifyScenarioWithChangesWorker(change, afterActionDocumentPositionMapperNotEquals, /*timeoutBeforeAction*/ true, useDependencyChange);
                         });
 
                         it("when timeout does not occur before request", () => {
-                            verifyScenarioWithChangesWorker(change, afterActionDocumentPositionMapperNotEquals, /*timeoutBeforeAction*/ false);
+                            verifyScenarioWithChangesWorker(change, afterActionDocumentPositionMapperNotEquals, /*timeoutBeforeAction*/ false, useDependencyChange);
                         });
                     });
                 }
@@ -570,12 +582,12 @@ fn5();
 
                 function verifyMainScenarioAndScriptInfoCollectionWithNoMap(session: TestSession, host: TestServerHost, dependencyTsOKInScenario?: true) {
                     // Main scenario action
-                    verifyAllFnActionWithNoMap(session, host, dependencyTsOKInScenario);
+                    verifyAllFnActionWithNoMap(session, host, withRefs || dependencyTsOKInScenario);
 
                     // Collecting at this point retains dependency.d.ts and map watcher
                     closeFilesForSession([randomFile], session);
                     openFilesForSession([randomFile], session);
-                    verifyInfosWhenNoMapFile(session, host);
+                    verifyInfosWhenNoMapFile(session, host, withRefs);
 
                     // Closing open file, removes dependencies too
                     closeFilesForSession([...openFiles, randomFile], session);
@@ -593,7 +605,8 @@ fn5();
                     verifyInfosWhenNoDtsFile(
                         session,
                         host,
-                        !!forEach(verifier, v => v.expectedProjectActualFiles.every(f => f.toLowerCase() !== dtsPath))
+                        !!forEach(verifier, v => v.expectedProjectActualFiles.every(f => f.toLowerCase() !== dtsPath)),
+                        /*dependencyTsOk*/ withRefs
                     );
 
                     // Closing open file, removes dependencies too
@@ -694,35 +707,26 @@ fn5();
                 );
 
                 if (withRefs) {
-                    it("when defining project source changes", () => {
-                        const { host, session } = openTsFile();
-
-                        // First action
-                        firstAction(session);
-
-                        // Make change, without rebuild of solution
-                        if (contains(openInfos, dependencyTs.path)) {
-                            session.executeCommandSeq<protocol.ChangeRequest>({
-                                command: protocol.CommandTypes.Change,
-                                arguments: {
-                                    file: dependencyTs.path, line: 1, offset: 1, endLine: 1, endOffset: 1, insertString: `function fooBar() { }
+                    verifyScenarioWithChanges(
+                        "when defining project source changes",
+                        (host, session) => {
+                            // Make change, without rebuild of solution
+                            if (contains(openInfos, dependencyTs.path)) {
+                                session.executeCommandSeq<protocol.ChangeRequest>({
+                                    command: protocol.CommandTypes.Change,
+                                    arguments: {
+                                        file: dependencyTs.path, line: 1, offset: 1, endLine: 1, endOffset: 1, insertString: `function fooBar() { }
 `}
-                            });
-                        }
-                        else {
-                            host.writeFile(dependencyTs.path, `function fooBar() { }
-${dependencyTs.content}`);
-                        }
-                        host.runQueuedTimeoutCallbacks();
-
-                        for (const v of verifier) {
-                            for (let fn = 1; fn <= 5; fn++) {
-                                const { reqName, request, requestDependencyChange, expectedResponseDependencyChange } = v.actionGetter(fn);
-                                const { response } = session.executeCommandSeq(requestDependencyChange || request);
-                                assert.deepEqual(response, expectedResponseDependencyChange, `Failed on ${reqName}`);
+                                });
                             }
-                        }
-                    });
+                            else {
+                                host.writeFile(dependencyTs.path, `function fooBar() { }
+${dependencyTs.content}`);
+                            }
+                        },
+                        /*afterActionDocumentPositionMapperNotEquals*/ undefined,
+                        /*useDepedencyChange*/ true
+                    );
                 }
             }
 
@@ -730,13 +734,15 @@ ${dependencyTs.content}`);
                 describe(withRefs ? "when main tsconfig has project reference" : "when main tsconfig doesnt have project reference", () => {
                     const usageVerifier: DocumentPositionMapperVerifier = {
                         openFile: mainTs,
-                        expectedProjectActualFiles: [mainTs.path, libFile.path, mainConfig.path, dtsPath],
+                        expectedProjectActualFiles: withRefs ?
+                            [mainTs.path, libFile.path, mainConfig.path, dependencyTs.path] :
+                            [mainTs.path, libFile.path, mainConfig.path, dtsPath],
                         actionGetter: gotoDefintinionFromMainTs,
                         openFileLastLine: 14
                     };
                     describe("from project that uses dependency", () => {
                         const closedInfos = withRefs ?
-                            [dependencyTs.path, dependencyConfig.path, libFile.path, dtsPath, dtsMapLocation] :
+                            [dependencyTs.path, dependencyConfig.path, libFile.path] :
                             [dependencyTs.path, libFile.path, dtsPath, dtsMapLocation];
                         verifyDocumentPositionMapperUpdates(
                             "can go to definition correctly",
@@ -764,7 +770,7 @@ ${dependencyTs.content}`);
 
                     describe("when opening depedency and usage project", () => {
                         const closedInfos = withRefs ?
-                            [libFile.path, dtsPath, dtsMapLocation, dependencyConfig.path] :
+                            [libFile.path, dependencyConfig.path] :
                             [libFile.path, dtsPath, dtsMapLocation];
                         verifyDocumentPositionMapperUpdates(
                             "goto Definition in usage and rename locations from defining project",
