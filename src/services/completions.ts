@@ -9,8 +9,8 @@ namespace ts.Completions {
     }
     export type Log = (message: string) => void;
 
-    const enum SymbolOriginInfoKind { ThisType, SymbolMemberNoExport, SymbolMemberExport, Export }
-    type SymbolOriginInfo = { kind: SymbolOriginInfoKind.ThisType } | { kind: SymbolOriginInfoKind.SymbolMemberNoExport } | SymbolOriginInfoExport;
+    const enum SymbolOriginInfoKind { ThisType, SymbolMemberNoExport, SymbolMemberExport, Export, Promise }
+    type SymbolOriginInfo = { kind: SymbolOriginInfoKind.ThisType } | { kind: SymbolOriginInfoKind.Promise } | { kind: SymbolOriginInfoKind.SymbolMemberNoExport } | SymbolOriginInfoExport;
     interface SymbolOriginInfoExport {
         kind: SymbolOriginInfoKind.SymbolMemberExport | SymbolOriginInfoKind.Export;
         moduleSymbol: Symbol;
@@ -21,6 +21,9 @@ namespace ts.Completions {
     }
     function originIsExport(origin: SymbolOriginInfo): origin is SymbolOriginInfoExport {
         return origin.kind === SymbolOriginInfoKind.SymbolMemberExport || origin.kind === SymbolOriginInfoKind.Export;
+    }
+    function originIsPromise(origin: SymbolOriginInfo): boolean {
+        return origin.kind === SymbolOriginInfoKind.Promise;
     }
 
     /**
@@ -235,6 +238,7 @@ namespace ts.Completions {
         typeChecker: TypeChecker,
         name: string,
         needsConvertPropertyAccess: boolean,
+        needsConvertAwait: boolean | undefined,
         origin: SymbolOriginInfo | undefined,
         recommendedCompletion: Symbol | undefined,
         propertyAccessToConvert: PropertyAccessExpression | undefined,
@@ -262,6 +266,12 @@ namespace ts.Completions {
             if (typeof isJsxInitializer !== "boolean") {
                 replacementSpan = createTextSpanFromNode(isJsxInitializer, sourceFile);
             }
+        }
+        if (needsConvertAwait && propertyAccessToConvert) {
+            if (insertText === undefined) insertText = name;
+            const awaitText = `(await ${propertyAccessToConvert.expression.getText()})`;
+            insertText = needsConvertPropertyAccess ? `${awaitText}${insertText}` : `${awaitText}.${insertText}`;
+            replacementSpan = createTextSpanFromBounds(propertyAccessToConvert.getStart(sourceFile), propertyAccessToConvert.end);
         }
 
         if (insertText !== undefined && !preferences.includeCompletionsWithInsertText) {
@@ -312,7 +322,7 @@ namespace ts.Completions {
         log: Log,
         kind: CompletionKind,
         preferences: UserPreferences,
-        propertyAccessToConvert?: PropertyAccessExpression | undefined,
+        propertyAccessToConvert?: PropertyAccessExpression,
         isJsxInitializer?: IsJsxInitializer,
         recommendedCompletion?: Symbol,
         symbolToOriginInfoMap?: SymbolOriginInfoMap,
@@ -330,7 +340,7 @@ namespace ts.Completions {
             if (!info) {
                 continue;
             }
-            const { name, needsConvertPropertyAccess } = info;
+            const { name, needsConvertPropertyAccess, needsConvertAwait } = info;
             if (uniques.has(name)) {
                 continue;
             }
@@ -343,6 +353,7 @@ namespace ts.Completions {
                 typeChecker,
                 name,
                 needsConvertPropertyAccess,
+                needsConvertAwait,
                 origin,
                 recommendedCompletion,
                 propertyAccessToConvert,
@@ -981,7 +992,7 @@ namespace ts.Completions {
                         if (!isTypeLocation &&
                             symbol.declarations &&
                             symbol.declarations.some(d => d.kind !== SyntaxKind.SourceFile && d.kind !== SyntaxKind.ModuleDeclaration && d.kind !== SyntaxKind.EnumDeclaration)) {
-                            addTypeProperties(typeChecker.getTypeOfSymbolAtLocation(symbol, node));
+                            addTypeProperties(typeChecker.getTypeOfSymbolAtLocation(symbol, node), !!(node.flags & NodeFlags.AwaitContext));
                         }
 
                         return;
@@ -996,13 +1007,14 @@ namespace ts.Completions {
             }
 
             if (!isTypeLocation) {
-                addTypeProperties(typeChecker.getTypeAtLocation(node));
+                addTypeProperties(typeChecker.getTypeAtLocation(node), !!(node.flags & NodeFlags.AwaitContext));
             }
         }
 
-        function addTypeProperties(type: Type): void {
+        function addTypeProperties(type: Type, insertAwait?: boolean): void {
             isNewIdentifierLocation = !!type.getStringIndexType();
 
+            const propertyAccess = node.kind === SyntaxKind.ImportType ? <ImportTypeNode>node : <PropertyAccessExpression | QualifiedName>node.parent;
             if (isUncheckedFile) {
                 // In javascript files, for union types, we don't just get the members that
                 // the individual types have in common, we also include all the members that
@@ -1013,14 +1025,25 @@ namespace ts.Completions {
             }
             else {
                 for (const symbol of type.getApparentProperties()) {
-                    if (typeChecker.isValidPropertyAccessForCompletions(node.kind === SyntaxKind.ImportType ? <ImportTypeNode>node : <PropertyAccessExpression | QualifiedName>node.parent, type, symbol)) {
+                    if (typeChecker.isValidPropertyAccessForCompletions(propertyAccess, type, symbol)) {
                         addPropertySymbol(symbol);
+                    }
+                }
+            }
+
+            if (insertAwait) {
+                const promiseType = typeChecker.getPromisedTypeOfPromise(type);
+                if (promiseType) {
+                    for (const symbol of promiseType.getApparentProperties()) {
+                        if (typeChecker.isValidPropertyAccessForCompletions(propertyAccess, promiseType, symbol)) {
+                            addPropertySymbol(symbol, /* insertAwait */ true);
+                        }
                     }
                 }
             }
         }
 
-        function addPropertySymbol(symbol: Symbol) {
+        function addPropertySymbol(symbol: Symbol, insertAwait?: boolean) {
             // For a computed property with an accessible name like `Symbol.iterator`,
             // we'll add a completion for the *name* `Symbol` instead of for the property.
             // If this is e.g. [Symbol.iterator], add a completion for `Symbol`.
@@ -1037,10 +1060,17 @@ namespace ts.Completions {
                         !moduleSymbol || !isExternalModuleSymbol(moduleSymbol) ? { kind: SymbolOriginInfoKind.SymbolMemberNoExport } : { kind: SymbolOriginInfoKind.SymbolMemberExport, moduleSymbol, isDefaultExport: false };
                 }
                 else if (preferences.includeCompletionsWithInsertText) {
-                    symbols.push(symbol);
+                    addSymbol(symbol);
                 }
             }
             else {
+                addSymbol(symbol);
+            }
+
+            function addSymbol (symbol: Symbol) {
+                if (insertAwait && !symbolToOriginInfoMap[getSymbolId(symbol)]) {
+                    symbolToOriginInfoMap[getSymbolId(symbol)] = { kind: SymbolOriginInfoKind.Promise };
+                }
                 symbols.push(symbol);
             }
         }
@@ -1978,6 +2008,7 @@ namespace ts.Completions {
     interface CompletionEntryDisplayNameForSymbol {
         readonly name: string;
         readonly needsConvertPropertyAccess: boolean;
+        readonly needsConvertAwait: boolean;
     }
     function getCompletionEntryDisplayNameForSymbol(
         symbol: Symbol,
@@ -1985,6 +2016,7 @@ namespace ts.Completions {
         origin: SymbolOriginInfo | undefined,
         kind: CompletionKind,
     ): CompletionEntryDisplayNameForSymbol | undefined {
+        const needsConvertAwait = !!(origin && originIsPromise(origin));
         const name = getSymbolName(symbol, origin, target);
         if (name === undefined
             // If the symbol is external module, don't show it in the completion list
@@ -1995,18 +2027,18 @@ namespace ts.Completions {
             return undefined;
         }
 
-        const validIdentifierResult: CompletionEntryDisplayNameForSymbol = { name, needsConvertPropertyAccess: false };
+        const validIdentifierResult: CompletionEntryDisplayNameForSymbol = { name, needsConvertPropertyAccess: false, needsConvertAwait };
         if (isIdentifierText(name, target)) return validIdentifierResult;
         switch (kind) {
             case CompletionKind.MemberLike:
                 return undefined;
             case CompletionKind.ObjectPropertyDeclaration:
                 // TODO: GH#18169
-                return { name: JSON.stringify(name), needsConvertPropertyAccess: false };
+                return { name: JSON.stringify(name), needsConvertPropertyAccess: false, needsConvertAwait };
             case CompletionKind.PropertyAccess:
             case CompletionKind.Global: // For a 'this.' completion it will be in a global context, but may have a non-identifier name.
                 // Don't add a completion for a name starting with a space. See https://github.com/Microsoft/TypeScript/pull/20547
-                return name.charCodeAt(0) === CharacterCodes.space ? undefined : { name, needsConvertPropertyAccess: true };
+                return name.charCodeAt(0) === CharacterCodes.space ? undefined : { name, needsConvertPropertyAccess: true, needsConvertAwait };
             case CompletionKind.None:
             case CompletionKind.String:
                 return validIdentifierResult;
