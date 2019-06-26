@@ -1455,9 +1455,6 @@ namespace ts {
                     return token = SyntaxKind.EndOfFileToken;
                 }
                 let ch = codePointAt(text, pos);
-                if (ch > 0x10000) {
-                    pos++;
-                }
 
                 // Special handling for shebang
                 if (ch === CharacterCodes.hash && pos === 0 && isShebangTrivia(text, pos)) {
@@ -1850,8 +1847,8 @@ namespace ts {
                         return token = SyntaxKind.Unknown;
                     default:
                         if (isIdentifierStart(ch, languageVersion)) {
-                            pos++;
-                            while (pos < end && isIdentifierPart(ch = codePointAtAndMaybeAdvance(pos), languageVersion)) pos++;
+                            pos += charSize(ch);
+                            while (pos < end && isIdentifierPart(ch = codePointAt(text, pos), languageVersion)) pos += charSize(ch);
                             tokenValue = text.substring(tokenPos, pos);
                             if (ch === CharacterCodes.backslash) {
                                 tokenValue += scanIdentifierParts();
@@ -1859,27 +1856,26 @@ namespace ts {
                             return token = getIdentifierToken();
                         }
                         else if (isWhiteSpaceSingleLine(ch)) {
-                            pos++;
+                            pos += charSize(ch);
                             continue;
                         }
                         else if (isLineBreak(ch)) {
                             tokenFlags |= TokenFlags.PrecedingLineBreak;
-                            pos++;
+                            pos += charSize(ch);
                             continue;
                         }
                         error(Diagnostics.Invalid_character);
-                        pos++;
+                        pos += charSize(ch);
                         return token = SyntaxKind.Unknown;
                 }
             }
         }
 
-        function codePointAtAndMaybeAdvance(pos: number) {
-            const ch = codePointAt(text, pos);
+        function charSize(ch: number) {
             if (ch > 0x10000) {
-                pos++;
+                return 2;
             }
-            return ch;
+            return 1;
         }
 
         function reScanGreaterToken(): SyntaxKind {
