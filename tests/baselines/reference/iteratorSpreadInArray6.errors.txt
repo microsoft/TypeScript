@@ -1,4 +1,4 @@
-tests/cases/conformance/es6/spread/iteratorSpreadInArray6.ts(15,1): error TS2755: No suitable overload for this call.
+tests/cases/conformance/es6/spread/iteratorSpreadInArray6.ts(15,1): error TS2755: No overload matches this call.
 
 
 ==== tests/cases/conformance/es6/spread/iteratorSpreadInArray6.ts (1 errors) ====
@@ -18,13 +18,13 @@ tests/cases/conformance/es6/spread/iteratorSpreadInArray6.ts(15,1): error TS2755
     var array: number[] = [0, 1];
     array.concat([...new SymbolIterator]);
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2755: No suitable overload for this call.
-!!! related TS2757 tests/cases/conformance/es6/spread/iteratorSpreadInArray6.ts:15:14: Overload 1 of 2, '(...items: ConcatArray<number>[]): number[]', gave the following error.
+!!! error TS2755: No overload matches this call.
+!!! related TS2760 tests/cases/conformance/es6/spread/iteratorSpreadInArray6.ts:15:14: Overload 1 of 2, '(...items: ConcatArray<number>[]): number[]', gave the following error.
   Argument of type 'symbol[]' is not assignable to parameter of type 'ConcatArray<number>'.
     Types of property 'slice' are incompatible.
       Type '(start?: number, end?: number) => symbol[]' is not assignable to type '(start?: number, end?: number) => number[]'.
         Type 'symbol[]' is not assignable to type 'number[]'.
           Type 'symbol' is not assignable to type 'number'.
-!!! related TS2757 tests/cases/conformance/es6/spread/iteratorSpreadInArray6.ts:15:14: Overload 2 of 2, '(...items: (number | ConcatArray<number>)[]): number[]', gave the following error.
+!!! related TS2760 tests/cases/conformance/es6/spread/iteratorSpreadInArray6.ts:15:14: Overload 2 of 2, '(...items: (number | ConcatArray<number>)[]): number[]', gave the following error.
   Argument of type 'symbol[]' is not assignable to parameter of type 'number | ConcatArray<number>'.
     Type 'symbol[]' is not assignable to type 'ConcatArray<number>'.

@@ -1,6 +1,6 @@
-tests/cases/compiler/reactDefaultPropsInferenceSuccess.tsx(27,21): error TS2755: No suitable overload for this call.
-tests/cases/compiler/reactDefaultPropsInferenceSuccess.tsx(43,22): error TS2755: No suitable overload for this call.
-tests/cases/compiler/reactDefaultPropsInferenceSuccess.tsx(64,21): error TS2755: No suitable overload for this call.
+tests/cases/compiler/reactDefaultPropsInferenceSuccess.tsx(27,21): error TS2755: No overload matches this call.
+tests/cases/compiler/reactDefaultPropsInferenceSuccess.tsx(43,22): error TS2755: No overload matches this call.
+tests/cases/compiler/reactDefaultPropsInferenceSuccess.tsx(64,21): error TS2755: No overload matches this call.
 
 
 ==== tests/cases/compiler/reactDefaultPropsInferenceSuccess.tsx (3 errors) ====
@@ -32,12 +32,12 @@ tests/cases/compiler/reactDefaultPropsInferenceSuccess.tsx(64,21): error TS2755:
     // Error: Void not assignable to boolean
     const Test2 = () => <FieldFeedback when={value => console.log(value)} />;
                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2755: No suitable overload for this call.
-!!! related TS2757 tests/cases/compiler/reactDefaultPropsInferenceSuccess.tsx:27:36: Overload 1 of 2, '(props: Readonly<Props>): FieldFeedback<Props>', gave the following error.
+!!! error TS2755: No overload matches this call.
+!!! related TS2760 tests/cases/compiler/reactDefaultPropsInferenceSuccess.tsx:27:36: Overload 1 of 2, '(props: Readonly<Props>): FieldFeedback<Props>', gave the following error.
   Type '(value: string) => void' is not assignable to type '"a" | "b" | ((value: string) => boolean) | undefined'.
     Type '(value: string) => void' is not assignable to type '(value: string) => boolean'.
       Type 'void' is not assignable to type 'boolean'.
-!!! related TS2757 tests/cases/compiler/reactDefaultPropsInferenceSuccess.tsx:27:36: Overload 2 of 2, '(props: Props, context?: any): FieldFeedback<Props>', gave the following error.
+!!! related TS2760 tests/cases/compiler/reactDefaultPropsInferenceSuccess.tsx:27:36: Overload 2 of 2, '(props: Props, context?: any): FieldFeedback<Props>', gave the following error.
   Type '(value: string) => void' is not assignable to type '"a" | "b" | ((value: string) => boolean) | undefined'.
     Type '(value: string) => void' is not assignable to type '(value: string) => boolean'.
     
@@ -57,12 +57,12 @@ tests/cases/compiler/reactDefaultPropsInferenceSuccess.tsx(64,21): error TS2755:
     // Error: Void not assignable to boolean
     const Test2a = () => <FieldFeedbackBeta when={value => console.log(value)} error>Hah</FieldFeedbackBeta>;
                          ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2755: No suitable overload for this call.
-!!! related TS2757 tests/cases/compiler/reactDefaultPropsInferenceSuccess.tsx:43:41: Overload 1 of 2, '(props: Readonly<Props>): FieldFeedbackBeta<Props>', gave the following error.
+!!! error TS2755: No overload matches this call.
+!!! related TS2760 tests/cases/compiler/reactDefaultPropsInferenceSuccess.tsx:43:41: Overload 1 of 2, '(props: Readonly<Props>): FieldFeedbackBeta<Props>', gave the following error.
   Type '(value: string) => void' is not assignable to type '"a" | "b" | ((value: string) => boolean) | undefined'.
     Type '(value: string) => void' is not assignable to type '(value: string) => boolean'.
       Type 'void' is not assignable to type 'boolean'.
-!!! related TS2757 tests/cases/compiler/reactDefaultPropsInferenceSuccess.tsx:43:41: Overload 2 of 2, '(props: Props, context?: any): FieldFeedbackBeta<Props>', gave the following error.
+!!! related TS2760 tests/cases/compiler/reactDefaultPropsInferenceSuccess.tsx:43:41: Overload 2 of 2, '(props: Props, context?: any): FieldFeedbackBeta<Props>', gave the following error.
   Type '(value: string) => void' is not assignable to type '"a" | "b" | ((value: string) => boolean) | undefined'.
     Type '(value: string) => void' is not assignable to type '(value: string) => boolean'.
     
@@ -87,11 +87,11 @@ tests/cases/compiler/reactDefaultPropsInferenceSuccess.tsx(64,21): error TS2755:
     // Error: Void not assignable to boolean
     const Test4 = () => <FieldFeedback2 when={value => console.log(value)} />;
                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2755: No suitable overload for this call.
-!!! related TS2757 tests/cases/compiler/reactDefaultPropsInferenceSuccess.tsx:64:37: Overload 1 of 2, '(props: Readonly<MyPropsProps>): FieldFeedback2<MyPropsProps>', gave the following error.
+!!! error TS2755: No overload matches this call.
+!!! related TS2760 tests/cases/compiler/reactDefaultPropsInferenceSuccess.tsx:64:37: Overload 1 of 2, '(props: Readonly<MyPropsProps>): FieldFeedback2<MyPropsProps>', gave the following error.
   Type '(value: string) => void' is not assignable to type '(value: string) => boolean'.
     Type 'void' is not assignable to type 'boolean'.
-!!! related TS2757 tests/cases/compiler/reactDefaultPropsInferenceSuccess.tsx:64:37: Overload 2 of 2, '(props: MyPropsProps, context?: any): FieldFeedback2<MyPropsProps>', gave the following error.
+!!! related TS2760 tests/cases/compiler/reactDefaultPropsInferenceSuccess.tsx:64:37: Overload 2 of 2, '(props: MyPropsProps, context?: any): FieldFeedback2<MyPropsProps>', gave the following error.
   Type '(value: string) => void' is not assignable to type '(value: string) => boolean'.
     
     // OK

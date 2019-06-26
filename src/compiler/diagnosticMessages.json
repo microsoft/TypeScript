@@ -2621,17 +2621,29 @@
         "category": "Error",
         "code": 2754
     },
-    "No suitable overload for this call.": {
+    "No overload matches this call.": {
         "category": "Error",
         "code": 2755
     },
-    "The last overload gave the following error.": {
+    "The closest overload gave the following error.": {
         "category": "Error",
         "code": 2756
     },
-    "Overload {0} of {1}, '{2}', gave the following error.": {
+    "The closest overload is declared here.": {
         "category": "Error",
         "code": 2757
+    },
+    "The last overload gave the following error.": {
+        "category": "Error",
+        "code": 2758
+    },
+    "The last overload is declared here.": {
+        "category": "Error",
+        "code": 2759
+    },
+    "Overload {0} of {1}, '{2}', gave the following error.": {
+        "category": "Error",
+        "code": 2760
     },
 
     "Import declaration '{0}' is using private name '{1}'.": {

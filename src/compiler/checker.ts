@@ -21609,18 +21609,19 @@ namespace ts {
                         let chain: DiagnosticMessageChain | undefined;
                         if (candidatesForArgumentError.length > 3) {
                             chain = chainDiagnosticMessages(chain, Diagnostics.The_last_overload_gave_the_following_error);
-                            chain = chainDiagnosticMessages(chain, Diagnostics.No_suitable_overload_for_this_call);
+                            chain = chainDiagnosticMessages(chain, Diagnostics.No_overload_matches_this_call);
                         }
-                        const ds = getSignatureApplicabilityError(node, args, last, assignableRelation, CheckMode.Normal, /*reportErrors*/ true, () => chain);
-                        if (ds) {
-                            // if elaboration already displayed the error, don't do anything extra
-                            // note that we could do this always here, but getSignatureApplicabilityError is currently not configured to do that
-                            for (const d of ds) {
+                        const diags = getSignatureApplicabilityError(node, args, last, assignableRelation, CheckMode.Normal, /*reportErrors*/ true, () => chain);
+                        if (diags) {
+                            for (const d of diags) {
+                                if (last.declaration && candidatesForArgumentError.length > 3) {
+                                    addRelatedInfo(d, createDiagnosticForNode(last.declaration, Diagnostics.The_last_overload_is_declared_here));
+                                }
                                 diagnostics.add(d);
                             }
                         }
                         else {
-                            Debug.assert(false, "No error for last overload signature");
+                            Debug.fail("No error for last overload signature");
                         }
                     }
                     else {
@@ -21629,15 +21630,15 @@ namespace ts {
                         for (const c of candidatesForArgumentError) {
                             i++;
                             const chain = () => chainDiagnosticMessages(/*details*/ undefined, Diagnostics.Overload_0_of_1_2_gave_the_following_error, i, candidates.length, signatureToString(c));
-                            const ds = getSignatureApplicabilityError(node, args, c, assignableRelation, CheckMode.Normal, /*reportErrors*/ true, chain);
-                            if (ds) {
-                                related.push(...ds);
+                            const diags = getSignatureApplicabilityError(node, args, c, assignableRelation, CheckMode.Normal, /*reportErrors*/ true, chain);
+                            if (diags) {
+                                related.push(...diags);
                             }
                             else {
-                                Debug.assert(false, "No error for 3 or fewer overload signatures");
+                                Debug.fail("No error for 3 or fewer overload signatures");
                             }
                         }
-                        diagnostics.add(createDiagnosticForNodeFromMessageChain(node, chainDiagnosticMessages(/*details*/ undefined, Diagnostics.No_suitable_overload_for_this_call), related));
+                        diagnostics.add(createDiagnosticForNodeFromMessageChain(node, chainDiagnosticMessages(/*details*/ undefined, Diagnostics.No_overload_matches_this_call), related));
                     }
                 }
                 else if (candidateForArgumentArityError) {

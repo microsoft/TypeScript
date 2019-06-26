@@ -1,6 +1,6 @@
 tests/cases/compiler/tsxNotUsingApparentTypeOfSFC.tsx(14,14): error TS2322: Type '{}' is not assignable to type 'P'.
   '{}' is assignable to the constraint of type 'P', but 'P' could be instantiated with a different subtype of constraint '{}'.
-tests/cases/compiler/tsxNotUsingApparentTypeOfSFC.tsx(15,13): error TS2755: No suitable overload for this call.
+tests/cases/compiler/tsxNotUsingApparentTypeOfSFC.tsx(15,13): error TS2755: No overload matches this call.
 
 
 ==== tests/cases/compiler/tsxNotUsingApparentTypeOfSFC.tsx (2 errors) ====
@@ -23,10 +23,10 @@ tests/cases/compiler/tsxNotUsingApparentTypeOfSFC.tsx(15,13): error TS2755: No s
 !!! error TS2322:   '{}' is assignable to the constraint of type 'P', but 'P' could be instantiated with a different subtype of constraint '{}'.
         let y = <MyComponent />;  // should error
                 ~~~~~~~~~~~~~~~
-!!! error TS2755: No suitable overload for this call.
-!!! related TS2757 tests/cases/compiler/tsxNotUsingApparentTypeOfSFC.tsx:15:14: Overload 1 of 2, '(props: Readonly<P>): MyComponent', gave the following error.
+!!! error TS2755: No overload matches this call.
+!!! related TS2760 tests/cases/compiler/tsxNotUsingApparentTypeOfSFC.tsx:15:14: Overload 1 of 2, '(props: Readonly<P>): MyComponent', gave the following error.
   Type '{}' is not assignable to type 'Readonly<P>'.
-!!! related TS2757 tests/cases/compiler/tsxNotUsingApparentTypeOfSFC.tsx:15:14: Overload 2 of 2, '(props: P, context?: any): MyComponent', gave the following error.
+!!! related TS2760 tests/cases/compiler/tsxNotUsingApparentTypeOfSFC.tsx:15:14: Overload 2 of 2, '(props: P, context?: any): MyComponent', gave the following error.
   Type '{}' is not assignable to type 'Readonly<P>'.
     
         let z = <MySFC {...wrappedProps} /> // should work

@@ -1,11 +1,11 @@
-tests/cases/conformance/es6/for-ofStatements/for-of39.ts(1,11): error TS2755: No suitable overload for this call.
+tests/cases/conformance/es6/for-ofStatements/for-of39.ts(1,11): error TS2755: No overload matches this call.
 
 
 ==== tests/cases/conformance/es6/for-ofStatements/for-of39.ts (1 errors) ====
     var map = new Map([["", true], ["", 0]]);
               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2755: No suitable overload for this call.
-!!! related TS2757 tests/cases/conformance/es6/for-ofStatements/for-of39.ts:1:19: Overload 1 of 3, '(iterable: Iterable<readonly [string, boolean]>): Map<string, boolean>', gave the following error.
+!!! error TS2755: No overload matches this call.
+!!! related TS2760 tests/cases/conformance/es6/for-ofStatements/for-of39.ts:1:19: Overload 1 of 3, '(iterable: Iterable<readonly [string, boolean]>): Map<string, boolean>', gave the following error.
   Argument of type '([string, number] | [string, true])[]' is not assignable to parameter of type 'Iterable<readonly [string, boolean]>'.
     Types of property '[Symbol.iterator]' are incompatible.
       Type '() => IterableIterator<[string, number] | [string, true]>' is not assignable to type '() => Iterator<readonly [string, boolean]>'.
@@ -17,7 +17,7 @@ tests/cases/conformance/es6/for-ofStatements/for-of39.ts(1,11): error TS2755: No
                   Type '[string, number]' is not assignable to type 'readonly [string, boolean]'.
                     Types of property '1' are incompatible.
                       Type 'number' is not assignable to type 'boolean'.
-!!! related TS2757 tests/cases/conformance/es6/for-ofStatements/for-of39.ts:1:37: Overload 2 of 3, '(entries?: readonly (readonly [string, boolean])[]): Map<string, boolean>', gave the following error.
+!!! related TS2760 tests/cases/conformance/es6/for-ofStatements/for-of39.ts:1:37: Overload 2 of 3, '(entries?: readonly (readonly [string, boolean])[]): Map<string, boolean>', gave the following error.
   Type 'number' is not assignable to type 'boolean'.
     for (var [k, v] of map) {
         k;

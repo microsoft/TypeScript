@@ -1,7 +1,7 @@
-tests/cases/conformance/jsx/file.tsx(48,12): error TS2755: No suitable overload for this call.
-tests/cases/conformance/jsx/file.tsx(54,12): error TS2755: No suitable overload for this call.
-tests/cases/conformance/jsx/file.tsx(55,12): error TS2755: No suitable overload for this call.
-tests/cases/conformance/jsx/file.tsx(56,12): error TS2755: No suitable overload for this call.
+tests/cases/conformance/jsx/file.tsx(48,12): error TS2755: No overload matches this call.
+tests/cases/conformance/jsx/file.tsx(54,12): error TS2755: No overload matches this call.
+tests/cases/conformance/jsx/file.tsx(55,12): error TS2755: No overload matches this call.
+tests/cases/conformance/jsx/file.tsx(56,12): error TS2755: No overload matches this call.
 
 
 ==== tests/cases/conformance/jsx/file.tsx (4 errors) ====
@@ -54,14 +54,14 @@ tests/cases/conformance/jsx/file.tsx(56,12): error TS2755: No suitable overload 
     // Error
     const b0 = <MainButton to='/some/path' onClick={(e)=>{}}>GO</MainButton>;  // extra property;
                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2755: No suitable overload for this call.
-!!! related TS2757 tests/cases/conformance/jsx/file.tsx:48:13: Overload 1 of 3, '(buttonProps: ButtonProps): Element', gave the following error.
+!!! error TS2755: No overload matches this call.
+!!! related TS2760 tests/cases/conformance/jsx/file.tsx:48:13: Overload 1 of 3, '(buttonProps: ButtonProps): Element', gave the following error.
   Type '{ children: string; to: string; onClick: (e: MouseEvent<any>) => void; }' is not assignable to type 'IntrinsicAttributes & ButtonProps'.
     Property 'to' does not exist on type 'IntrinsicAttributes & ButtonProps'.
-!!! related TS2757 tests/cases/conformance/jsx/file.tsx:48:13: Overload 2 of 3, '(linkProps: LinkProps): Element', gave the following error.
+!!! related TS2760 tests/cases/conformance/jsx/file.tsx:48:13: Overload 2 of 3, '(linkProps: LinkProps): Element', gave the following error.
   Type '{ children: string; to: string; onClick: (e: MouseEvent<any>) => void; }' is not assignable to type 'IntrinsicAttributes & LinkProps'.
     Property 'onClick' does not exist on type 'IntrinsicAttributes & LinkProps'.
-!!! related TS2757 tests/cases/conformance/jsx/file.tsx:48:13: Overload 3 of 3, '(hyphenProps: HyphenProps): Element', gave the following error.
+!!! related TS2760 tests/cases/conformance/jsx/file.tsx:48:13: Overload 3 of 3, '(hyphenProps: HyphenProps): Element', gave the following error.
   Type '{ children: string; to: string; onClick: (e: MouseEvent<any>) => void; }' is not assignable to type 'IntrinsicAttributes & HyphenProps'.
     Property 'to' does not exist on type 'IntrinsicAttributes & HyphenProps'.
     const b1 = <MainButton onClick={(e: any)=> {}} {...obj0}>Hello world</MainButton>;  // extra property;
@@ -71,28 +71,28 @@ tests/cases/conformance/jsx/file.tsx(56,12): error TS2755: No suitable overload 
     const b5 = <MainButton {...{ onClick(e: any) { } }} {...obj0} />;  // Spread retain method declaration (see GitHub #13365), so now there is an extra attributes
     const b6 = <MainButton {...{ onClick(e: any){} }} children={10} />;  // incorrect type for optional attribute
                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2755: No suitable overload for this call.
-!!! related TS2757 tests/cases/conformance/jsx/file.tsx:54:51: Overload 1 of 3, '(buttonProps: ButtonProps): Element', gave the following error.
+!!! error TS2755: No overload matches this call.
+!!! related TS2760 tests/cases/conformance/jsx/file.tsx:54:51: Overload 1 of 3, '(buttonProps: ButtonProps): Element', gave the following error.
   Type 'number' is not assignable to type 'string'.
-!!! related TS2757 tests/cases/conformance/jsx/file.tsx:54:51: Overload 2 of 3, '(linkProps: LinkProps): Element', gave the following error.
+!!! related TS2760 tests/cases/conformance/jsx/file.tsx:54:51: Overload 2 of 3, '(linkProps: LinkProps): Element', gave the following error.
   Type 'number' is not assignable to type 'string'.
-!!! related TS2757 tests/cases/conformance/jsx/file.tsx:54:51: Overload 3 of 3, '(hyphenProps: HyphenProps): Element', gave the following error.
+!!! related TS2760 tests/cases/conformance/jsx/file.tsx:54:51: Overload 3 of 3, '(hyphenProps: HyphenProps): Element', gave the following error.
   Type 'number' is not assignable to type 'string'.
     const b7 = <MainButton {...{ onClick(e: any){} }} children="hello" className />;  // incorrect type for optional attribute
                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2755: No suitable overload for this call.
-!!! related TS2757 tests/cases/conformance/jsx/file.tsx:55:68: Overload 1 of 3, '(buttonProps: ButtonProps): Element', gave the following error.
+!!! error TS2755: No overload matches this call.
+!!! related TS2760 tests/cases/conformance/jsx/file.tsx:55:68: Overload 1 of 3, '(buttonProps: ButtonProps): Element', gave the following error.
   Type 'true' is not assignable to type 'string'.
-!!! related TS2757 tests/cases/conformance/jsx/file.tsx:55:68: Overload 2 of 3, '(linkProps: LinkProps): Element', gave the following error.
+!!! related TS2760 tests/cases/conformance/jsx/file.tsx:55:68: Overload 2 of 3, '(linkProps: LinkProps): Element', gave the following error.
   Type 'true' is not assignable to type 'string'.
-!!! related TS2757 tests/cases/conformance/jsx/file.tsx:55:68: Overload 3 of 3, '(hyphenProps: HyphenProps): Element', gave the following error.
+!!! related TS2760 tests/cases/conformance/jsx/file.tsx:55:68: Overload 3 of 3, '(hyphenProps: HyphenProps): Element', gave the following error.
   Type 'true' is not assignable to type 'string'.
     const b8 = <MainButton data-format />;  // incorrect type for specified hyphanated name
                ~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2755: No suitable overload for this call.
-!!! related TS2757 tests/cases/conformance/jsx/file.tsx:56:13: Overload 1 of 3, '(buttonProps: ButtonProps): Element', gave the following error.
+!!! error TS2755: No overload matches this call.
+!!! related TS2760 tests/cases/conformance/jsx/file.tsx:56:13: Overload 1 of 3, '(buttonProps: ButtonProps): Element', gave the following error.
   Property 'onClick' is missing in type '{ data-format: true; }' but required in type 'ButtonProps'.
-!!! related TS2757 tests/cases/conformance/jsx/file.tsx:56:13: Overload 2 of 3, '(linkProps: LinkProps): Element', gave the following error.
+!!! related TS2760 tests/cases/conformance/jsx/file.tsx:56:13: Overload 2 of 3, '(linkProps: LinkProps): Element', gave the following error.
   Property 'to' is missing in type '{ data-format: true; }' but required in type 'LinkProps'.
-!!! related TS2757 tests/cases/conformance/jsx/file.tsx:56:24: Overload 3 of 3, '(hyphenProps: HyphenProps): Element', gave the following error.
+!!! related TS2760 tests/cases/conformance/jsx/file.tsx:56:24: Overload 3 of 3, '(hyphenProps: HyphenProps): Element', gave the following error.
   Type 'true' is not assignable to type 'string'.

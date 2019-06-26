@@ -1,4 +1,4 @@
-tests/cases/compiler/functionOverloads2.ts(4,9): error TS2755: No suitable overload for this call.
+tests/cases/compiler/functionOverloads2.ts(4,9): error TS2755: No overload matches this call.
 
 
 ==== tests/cases/compiler/functionOverloads2.ts (1 errors) ====
@@ -7,8 +7,8 @@ tests/cases/compiler/functionOverloads2.ts(4,9): error TS2755: No suitable overl
     function foo(bar: any): any { return bar };
     var x = foo(true);
             ~~~~~~~~~
-!!! error TS2755: No suitable overload for this call.
-!!! related TS2757 tests/cases/compiler/functionOverloads2.ts:4:13: Overload 1 of 2, '(bar: string): string', gave the following error.
+!!! error TS2755: No overload matches this call.
+!!! related TS2760 tests/cases/compiler/functionOverloads2.ts:4:13: Overload 1 of 2, '(bar: string): string', gave the following error.
   Argument of type 'true' is not assignable to parameter of type 'string'.
-!!! related TS2757 tests/cases/compiler/functionOverloads2.ts:4:13: Overload 2 of 2, '(bar: number): number', gave the following error.
+!!! related TS2760 tests/cases/compiler/functionOverloads2.ts:4:13: Overload 2 of 2, '(bar: number): number', gave the following error.
   Argument of type 'true' is not assignable to parameter of type 'number'.

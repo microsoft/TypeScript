@@ -1,7 +1,7 @@
 tests/cases/compiler/bigintWithLib.ts(4,1): error TS2350: Only a void function can be called with the 'new' keyword.
-tests/cases/compiler/bigintWithLib.ts(16,15): error TS2755: No suitable overload for this call.
+tests/cases/compiler/bigintWithLib.ts(16,15): error TS2755: No overload matches this call.
 tests/cases/compiler/bigintWithLib.ts(21,13): error TS2540: Cannot assign to 'length' because it is a read-only property.
-tests/cases/compiler/bigintWithLib.ts(28,16): error TS2755: No suitable overload for this call.
+tests/cases/compiler/bigintWithLib.ts(28,16): error TS2755: No overload matches this call.
 tests/cases/compiler/bigintWithLib.ts(33,13): error TS2540: Cannot assign to 'length' because it is a read-only property.
 tests/cases/compiler/bigintWithLib.ts(40,25): error TS2345: Argument of type '-1' is not assignable to parameter of type 'bigint'.
 tests/cases/compiler/bigintWithLib.ts(43,26): error TS2345: Argument of type '123' is not assignable to parameter of type 'bigint'.
@@ -27,10 +27,10 @@ tests/cases/compiler/bigintWithLib.ts(43,26): error TS2345: Argument of type '12
     bigIntArray = new BigInt64Array([1n, 2n, 3n]);
     bigIntArray = new BigInt64Array([1, 2, 3]); // should error
                   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2755: No suitable overload for this call.
-!!! related TS2757 tests/cases/compiler/bigintWithLib.ts:16:33: Overload 1 of 3, '(length?: number): BigInt64Array', gave the following error.
+!!! error TS2755: No overload matches this call.
+!!! related TS2760 tests/cases/compiler/bigintWithLib.ts:16:33: Overload 1 of 3, '(length?: number): BigInt64Array', gave the following error.
   Argument of type 'number[]' is not assignable to parameter of type 'number'.
-!!! related TS2757 tests/cases/compiler/bigintWithLib.ts:16:33: Overload 2 of 3, '(array: Iterable<bigint>): BigInt64Array', gave the following error.
+!!! related TS2760 tests/cases/compiler/bigintWithLib.ts:16:33: Overload 2 of 3, '(array: Iterable<bigint>): BigInt64Array', gave the following error.
   Argument of type 'number[]' is not assignable to parameter of type 'Iterable<bigint>'.
     Types of property '[Symbol.iterator]' are incompatible.
       Type '() => IterableIterator<number>' is not assignable to type '() => Iterator<bigint>'.
@@ -39,7 +39,7 @@ tests/cases/compiler/bigintWithLib.ts(43,26): error TS2345: Argument of type '12
             Type '(value?: any) => IteratorResult<number>' is not assignable to type '(value?: any) => IteratorResult<bigint>'.
               Type 'IteratorResult<number>' is not assignable to type 'IteratorResult<bigint>'.
                 Type 'number' is not assignable to type 'bigint'.
-!!! related TS2757 tests/cases/compiler/bigintWithLib.ts:16:33: Overload 3 of 3, '(buffer: ArrayBuffer | SharedArrayBuffer, byteOffset?: number, length?: number): BigInt64Array', gave the following error.
+!!! related TS2760 tests/cases/compiler/bigintWithLib.ts:16:33: Overload 3 of 3, '(buffer: ArrayBuffer | SharedArrayBuffer, byteOffset?: number, length?: number): BigInt64Array', gave the following error.
   Argument of type 'number[]' is not assignable to parameter of type 'ArrayBuffer | SharedArrayBuffer'.
     Type 'number[]' is missing the following properties from type 'SharedArrayBuffer': byteLength, [Symbol.species], [Symbol.toStringTag]
     bigIntArray = new BigInt64Array(new ArrayBuffer(80));
@@ -57,12 +57,12 @@ tests/cases/compiler/bigintWithLib.ts(43,26): error TS2345: Argument of type '12
     bigUintArray = new BigUint64Array([1n, 2n, 3n]);
     bigUintArray = new BigUint64Array([1, 2, 3]); // should error
                    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2755: No suitable overload for this call.
-!!! related TS2757 tests/cases/compiler/bigintWithLib.ts:28:35: Overload 1 of 3, '(length?: number): BigUint64Array', gave the following error.
+!!! error TS2755: No overload matches this call.
+!!! related TS2760 tests/cases/compiler/bigintWithLib.ts:28:35: Overload 1 of 3, '(length?: number): BigUint64Array', gave the following error.
   Argument of type 'number[]' is not assignable to parameter of type 'number'.
-!!! related TS2757 tests/cases/compiler/bigintWithLib.ts:28:35: Overload 2 of 3, '(array: Iterable<bigint>): BigUint64Array', gave the following error.
+!!! related TS2760 tests/cases/compiler/bigintWithLib.ts:28:35: Overload 2 of 3, '(array: Iterable<bigint>): BigUint64Array', gave the following error.
   Argument of type 'number[]' is not assignable to parameter of type 'Iterable<bigint>'.
-!!! related TS2757 tests/cases/compiler/bigintWithLib.ts:28:35: Overload 3 of 3, '(buffer: ArrayBuffer | SharedArrayBuffer, byteOffset?: number, length?: number): BigUint64Array', gave the following error.
+!!! related TS2760 tests/cases/compiler/bigintWithLib.ts:28:35: Overload 3 of 3, '(buffer: ArrayBuffer | SharedArrayBuffer, byteOffset?: number, length?: number): BigUint64Array', gave the following error.
   Argument of type 'number[]' is not assignable to parameter of type 'ArrayBuffer | SharedArrayBuffer'.
     Type 'number[]' is not assignable to type 'SharedArrayBuffer'.
     bigUintArray = new BigUint64Array(new ArrayBuffer(80));

@@ -2,8 +2,8 @@ tests/cases/conformance/controlFlow/controlFlowIterationErrors.ts(11,17): error 
   Type 'number' is not assignable to type 'string'.
 tests/cases/conformance/controlFlow/controlFlowIterationErrors.ts(22,17): error TS2345: Argument of type 'string | number' is not assignable to parameter of type 'string'.
   Type 'number' is not assignable to type 'string'.
-tests/cases/conformance/controlFlow/controlFlowIterationErrors.ts(34,13): error TS2755: No suitable overload for this call.
-tests/cases/conformance/controlFlow/controlFlowIterationErrors.ts(45,13): error TS2755: No suitable overload for this call.
+tests/cases/conformance/controlFlow/controlFlowIterationErrors.ts(34,13): error TS2755: No overload matches this call.
+tests/cases/conformance/controlFlow/controlFlowIterationErrors.ts(45,13): error TS2755: No overload matches this call.
 
 
 ==== tests/cases/conformance/controlFlow/controlFlowIterationErrors.ts (4 errors) ====
@@ -48,11 +48,11 @@ tests/cases/conformance/controlFlow/controlFlowIterationErrors.ts(45,13): error 
         while (cond) {
             x = foo(x);
                 ~~~~~~
-!!! error TS2755: No suitable overload for this call.
-!!! related TS2757 tests/cases/conformance/controlFlow/controlFlowIterationErrors.ts:34:17: Overload 1 of 2, '(x: string): number', gave the following error.
+!!! error TS2755: No overload matches this call.
+!!! related TS2760 tests/cases/conformance/controlFlow/controlFlowIterationErrors.ts:34:17: Overload 1 of 2, '(x: string): number', gave the following error.
   Argument of type 'string | number' is not assignable to parameter of type 'string'.
     Type 'number' is not assignable to type 'string'.
-!!! related TS2757 tests/cases/conformance/controlFlow/controlFlowIterationErrors.ts:34:17: Overload 2 of 2, '(x: number): string', gave the following error.
+!!! related TS2760 tests/cases/conformance/controlFlow/controlFlowIterationErrors.ts:34:17: Overload 2 of 2, '(x: number): string', gave the following error.
   Argument of type 'string | number' is not assignable to parameter of type 'number'.
     Type 'string' is not assignable to type 'number'.
             x;
@@ -67,11 +67,11 @@ tests/cases/conformance/controlFlow/controlFlowIterationErrors.ts(45,13): error 
             x;
             x = foo(x);
                 ~~~~~~
-!!! error TS2755: No suitable overload for this call.
-!!! related TS2757 tests/cases/conformance/controlFlow/controlFlowIterationErrors.ts:45:17: Overload 1 of 2, '(x: string): number', gave the following error.
+!!! error TS2755: No overload matches this call.
+!!! related TS2760 tests/cases/conformance/controlFlow/controlFlowIterationErrors.ts:45:17: Overload 1 of 2, '(x: string): number', gave the following error.
   Argument of type 'string | number' is not assignable to parameter of type 'string'.
     Type 'number' is not assignable to type 'string'.
-!!! related TS2757 tests/cases/conformance/controlFlow/controlFlowIterationErrors.ts:45:17: Overload 2 of 2, '(x: number): string', gave the following error.
+!!! related TS2760 tests/cases/conformance/controlFlow/controlFlowIterationErrors.ts:45:17: Overload 2 of 2, '(x: number): string', gave the following error.
   Argument of type 'string | number' is not assignable to parameter of type 'number'.
     Type 'string' is not assignable to type 'number'.
         }
