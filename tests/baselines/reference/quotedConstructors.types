@@ -60,3 +60,16 @@ var o = { "constructor"() {} };
 >{ "constructor"() {} } : { "constructor"(): void; }
 >"constructor" : () => void
 
+class F {
+>F : F
+
+    "\x63onstructor"() {
+        console.log(this);
+>console.log(this) : void
+>console.log : (message?: any, ...optionalParams: any[]) => void
+>console : Console
+>log : (message?: any, ...optionalParams: any[]) => void
+>this : this
+    }
+}
+

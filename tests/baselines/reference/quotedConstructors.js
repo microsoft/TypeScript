@@ -25,6 +25,12 @@ new class {
 
 var o = { "constructor"() {} };
 
+class F {
+    "\x63onstructor"() {
+        console.log(this);
+    }
+}
+
 
 //// [quotedConstructors.js]
 var C = /** @class */ (function () {
@@ -54,3 +60,9 @@ new /** @class */ (function () {
     return class_1;
 }());
 var o = { "constructor": function () { } };
+var F = /** @class */ (function () {
+    function F() {
+        console.log(this);
+    }
+    return F;
+}());

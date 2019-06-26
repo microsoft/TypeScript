@@ -52,3 +52,15 @@ var o = { "constructor"() {} };
 >o : Symbol(o, Decl(quotedConstructors.ts, 24, 3))
 >"constructor" : Symbol("constructor", Decl(quotedConstructors.ts, 24, 9))
 
+class F {
+>F : Symbol(F, Decl(quotedConstructors.ts, 24, 31))
+
+    "\x63onstructor"() {
+        console.log(this);
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>this : Symbol(F, Decl(quotedConstructors.ts, 24, 31))
+    }
+}
+
