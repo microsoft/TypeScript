@@ -777,6 +777,7 @@ namespace ts.server.protocol {
     /**
      * Arguments for EncodedSyntacticClassificationsRequest request.
      */
+    /** @internal */
     export interface EncodedSyntacticClassificationsRequestArgs extends FileRequestArgs {
         /**
          * Start position of the span.
@@ -799,6 +800,7 @@ namespace ts.server.protocol {
     /**
      * Arguments for EncodedSemanticClassificationsRequest request.
      */
+    /** @internal */
     export interface EncodedSemanticClassificationsRequestArgs extends FileRequestArgs {
         /**
          * Start position of the span.
