@@ -199,7 +199,7 @@ namespace ts.projectSystem {
         }
 
         function verifyUserTsConfigProject(session: TestSession) {
-            checkProjectActualFiles(session.getProjectService().configuredProjects.get(userTsconfig.path)!, [userTs.path, aDts.path, userTsconfig.path]);
+            checkProjectActualFiles(session.getProjectService().configuredProjects.get(userTsconfig.path)!, [userTs.path, aTs.path, userTsconfig.path]);
         }
 
         it("goToDefinition", () => {
@@ -470,6 +470,13 @@ namespace ts.projectSystem {
                         name: "function f(): void",
                     },
                     references: [
+                        makeReferenceEntry({
+                            file: aTs,
+                            text: "f",
+                            options: { index: 1 },
+                            contextText: "function f() {}",
+                            isDefinition: true
+                        }),
                         {
                             fileName: bTs.path,
                             isDefinition: false,
@@ -477,13 +484,6 @@ namespace ts.projectSystem {
                             isWriteAccess: false,
                             textSpan: { start: 0, length: 1 },
                         },
-                        makeReferenceEntry({
-                            file: aTs,
-                            text: "f",
-                            options: { index: 1 },
-                            contextText: "function f() {}",
-                            isDefinition: true
-                        })
                     ],
                 }
             ]);
