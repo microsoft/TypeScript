@@ -12788,6 +12788,14 @@ namespace ts {
                 if (target.flags & TypeFlags.Simplifiable) {
                     target = getSimplifiedType(target, /*writing*/ true);
                 }
+                if (source.flags & TypeFlags.Substitution) {
+                    source = (<SubstitutionType>source).substitute;
+                }
+                if (target.flags & TypeFlags.Substitution) {
+                    target = (<SubstitutionType>target).typeVariable;
+                }
+                Debug.assert(!(source.flags & TypeFlags.Substitution), "Source type was a substitution - substitutes are unhandled in relationship checking");
+                Debug.assert(!(target.flags & TypeFlags.Substitution), "Target type was a substitution - substitutes are unhandled in relationship checking");
 
                 // Try to see if we're relating something like `Foo` -> `Bar | null | undefined`.
                 // If so, reporting the `null` and `undefined` in the type is hardly useful.
