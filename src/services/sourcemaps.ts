@@ -72,9 +72,10 @@ namespace ts {
 
             const program = host.getProgram()!;
             // If this is source file of project reference source (instead of redirect) there is no generated position
-            if (host.useSourceInsteadOfReferenceRedirect &&
-                host.useSourceInsteadOfReferenceRedirect() &&
-                program.getResolvedProjectReferenceToRedirect(sourceFile.fileName)) return undefined;
+            if (useSourceInsteadOfReferenceRedirect(host) &&
+                program.getResolvedProjectReferenceToRedirect(sourceFile.fileName)) {
+                return undefined;
+            }
 
             const options = program.getCompilerOptions();
             const outPath = options.outFile || options.out;

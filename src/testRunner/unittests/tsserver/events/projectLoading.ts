@@ -110,7 +110,7 @@ namespace ts.projectSystem {
                 checkNumberOfProjects(service, { configuredProjects: 2 });
                 const project = service.configuredProjects.get(configA.path)!;
                 assert.isDefined(project);
-                verifyEvent(project, `Creating project for original file: ${aTs.path} for location: ${aDTs.path}`);
+                verifyEvent(project, `Creating project for original file: ${aTs.path}`);
             });
 
             describe("with external projects and config files ", () => {

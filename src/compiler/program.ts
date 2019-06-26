@@ -814,7 +814,7 @@ namespace ts {
         let projectReferenceRedirects: Map<ResolvedProjectReference | false> | undefined;
         let mapFromFileToProjectReferenceRedirects: Map<Path> | undefined;
         let mapFromToProjectReferenceRedirectSource: Map<SourceOfProjectReferenceRedirect> | undefined;
-        const useSourceOfReference = host.useSourceInsteadOfReferenceRedirect && host.useSourceInsteadOfReferenceRedirect();
+        const useSourceOfReference = useSourceInsteadOfReferenceRedirect(host);
 
         const shouldCreateNewSourceFile = shouldProgramCreateNewSourceFiles(oldProgram, options);
         const structuralIsReused = tryReuseStructureFromOldProgram();

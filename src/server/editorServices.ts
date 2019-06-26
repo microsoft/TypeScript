@@ -2570,7 +2570,9 @@ namespace ts.server {
 
         /*@internal*/
         getOriginalLocationEnsuringConfiguredProject(project: Project, location: DocumentPosition): DocumentPosition | undefined {
-            const originalLocation = project.getSourceMapper().tryGetSourcePosition(location);
+            const originalLocation = useSourceInsteadOfReferenceRedirect(project) && project.getResolvedProjectReferenceToRedirect(location.fileName) ?
+                location :
+                project.getSourceMapper().tryGetSourcePosition(location);
             if (!originalLocation) return undefined;
 
             const { fileName } = originalLocation;
@@ -2581,7 +2583,8 @@ namespace ts.server {
             if (!configFileName) return undefined;
 
             const configuredProject = this.findConfiguredProjectByProjectName(configFileName) ||
-                this.createAndLoadConfiguredProject(configFileName, `Creating project for original file: ${originalFileInfo.fileName} for location: ${location.fileName}`);
+                this.createAndLoadConfiguredProject(configFileName, `Creating project for original file: ${originalFileInfo.fileName}${location !== originalLocation ? " for location " + location.fileName : ""}`);
+            if (configuredProject === project) return originalLocation;
             updateProjectIfDirty(configuredProject);
             // Keep this configured project as referenced from project
             addOriginalConfiguredProject(configuredProject);

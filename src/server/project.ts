@@ -196,6 +196,14 @@ namespace ts.server {
         /*@internal*/
         originalConfiguredProjects: Map<true> | undefined;
 
+        /*@internal*/
+        useSourceInsteadOfReferenceRedirect?: () => boolean;
+
+        /*@internal*/
+        getResolvedProjectReferenceToRedirect(_fileName: string): ResolvedProjectReference | undefined {
+            return undefined;
+        }
+
         private readonly cancellationToken: ThrottledCancellationToken;
 
         public isNonTsProject() {
@@ -1526,9 +1534,7 @@ namespace ts.server {
         }
 
         /* @internal */
-        useSourceInsteadOfReferenceRedirect() {
-            return !!this.languageServiceEnabled;
-        }
+        useSourceInsteadOfReferenceRedirect = () => !!this.languageServiceEnabled;
 
         fileExists(file: string): boolean {
             // Project references go to source file instead of .d.ts file
@@ -1588,6 +1594,12 @@ namespace ts.server {
         forEachResolvedProjectReference<T>(cb: (resolvedProjectReference: ResolvedProjectReference | undefined, resolvedProjectReferencePath: Path) => T | undefined): T | undefined {
             const program = this.getCurrentProgram();
             return program && program.forEachResolvedProjectReference(cb);
+        }
+
+        /*@internal*/
+        getResolvedProjectReferenceToRedirect(fileName: string): ResolvedProjectReference | undefined {
+            const program = this.getCurrentProgram();
+            return program && program.getResolvedProjectReferenceToRedirect(fileName);
         }
 
         /*@internal*/

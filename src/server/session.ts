@@ -443,7 +443,9 @@ namespace ts.server {
 
     function getDefinitionInProject(definition: DocumentPosition | undefined, definingProject: Project, project: Project): DocumentPosition | undefined {
         if (!definition || project.containsFile(toNormalizedPath(definition.fileName))) return definition;
-        const mappedDefinition = definingProject.getLanguageService().getSourceMapper().tryGetGeneratedPosition(definition);
+        const mappedDefinition = useSourceInsteadOfReferenceRedirect(definingProject) && definingProject.getResolvedProjectReferenceToRedirect(definition.fileName) ?
+            definition :
+            definingProject.getLanguageService().getSourceMapper().tryGetGeneratedPosition(definition);
         return mappedDefinition && project.containsFile(toNormalizedPath(mappedDefinition.fileName)) ? mappedDefinition : undefined;
     }
 
@@ -472,7 +474,7 @@ namespace ts.server {
                     for (const symlinkedProject of symlinkedProjects) addToTodo({ project: symlinkedProject, location: originalLocation as TLocation }, toDo!, seenProjects);
                 });
             }
-            return originalLocation;
+            return originalLocation === location ? undefined : originalLocation;
         });
         return toDo;
     }
