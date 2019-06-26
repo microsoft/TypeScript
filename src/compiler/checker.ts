@@ -13201,7 +13201,7 @@ namespace ts {
                             const targetConstraint = getConstraintTypeFromMappedType(target);
                             const sourceKeys = getIndexType(source, /*stringsOnly*/ undefined, /*noIndexSignatures*/ true);
                             const includeOptional = modifiers & MappedTypeModifiers.IncludeOptional;
-                            const filteredByApplicability = includeOptional ? filterType(getLiteralTypeFromProperties(target, TypeFlags.StringOrNumberLiteralOrUnique), t => !!isRelatedTo(t, sourceKeys)) : undefined;
+                            const filteredByApplicability = includeOptional ? intersectTypes(targetConstraint, sourceKeys) : undefined;
                             // A source type T is related to a target type { [P in Q]: X } if Q is related to keyof T and T[Q] is related to X.
                             // A source type T is related to a target type { [P in Q]?: X } if some constituent Q' of Q is related to keyof T and T[Q'] is related to X.
                             if (includeOptional
