@@ -22509,7 +22509,10 @@ namespace ts {
                 case SyntaxKind.ElementAccessExpression:
                     const expr = (<PropertyAccessExpression | ElementAccessExpression>node).expression;
                     if (isIdentifier(expr)) {
-                        const symbol = getSymbolAtLocation(expr);
+                        let symbol = getSymbolAtLocation(expr);
+                        if (symbol && symbol.flags & SymbolFlags.Alias) {
+                            symbol = resolveAlias(symbol);
+                        }
                         return !!(symbol && (symbol.flags & SymbolFlags.Enum) && getEnumKind(symbol) === EnumKind.Literal);
                     }
             }
