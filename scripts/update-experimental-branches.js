@@ -51,9 +51,8 @@ async function main() {
                         issue_number: num,
                         body: `This PR is configured as an experiment, and currently has rebase conflicts with master - please rebase onto master and fix the conflicts.`
                     });
-                    throw new Error(`Rebase conflict detected in PR ${num} with master`);
                 }
-                return; // A PR is currently in conflict, give up
+                throw new Error(`Rebase conflict detected in PR ${num} with master`); // A PR is currently in conflict, give up
             }
             runSequence([
                 ["git", ["fetch", "origin", `pull/${num}/head:${num}`]],
