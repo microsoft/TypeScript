@@ -82,6 +82,7 @@
         "prex": "^0.4.3",
         "q": "latest",
         "remove-internal": "^2.9.2",
+        "simple-git": "^1.113.0",
         "source-map-support": "latest",
         "through2": "latest",
         "travis-fold": "latest",
@@ -102,7 +103,8 @@
         "gulp": "gulp",
         "jake": "gulp",
         "lint": "gulp lint",
-        "setup-hooks": "node scripts/link-hooks.js"
+        "setup-hooks": "node scripts/link-hooks.js",
+        "update-costly-tests": "node scripts/costly-tests.js"
     },
     "browser": {
         "fs": false,
