@@ -2625,14 +2625,6 @@
         "category": "Error",
         "code": 2755
     },
-    "The closest overload gave the following error.": {
-        "category": "Error",
-        "code": 2756
-    },
-    "The closest overload is declared here.": {
-        "category": "Error",
-        "code": 2757
-    },
     "The last overload gave the following error.": {
         "category": "Error",
         "code": 2758

@@ -21632,19 +21632,29 @@ namespace ts {
                         }
                     }
                     else {
-                        const related: DiagnosticRelatedInformation[] = [];
+                        const allDiagnostics: DiagnosticRelatedInformation[][] = [];
+                        let max = 0;
+                        let min = Number.MAX_VALUE;
+                        let minIndex = 0;
                         let i = 0;
                         for (const c of candidatesForArgumentError) {
-                            i++;
-                            const chain = () => chainDiagnosticMessages(/*details*/ undefined, Diagnostics.Overload_0_of_1_2_gave_the_following_error, i, candidates.length, signatureToString(c));
+                            const chain = () => chainDiagnosticMessages(/*details*/ undefined, Diagnostics.Overload_0_of_1_2_gave_the_following_error, i + 1, candidates.length, signatureToString(c));
                             const diags = getSignatureApplicabilityError(node, args, c, assignableRelation, CheckMode.Normal, /*reportErrors*/ true, chain);
                             if (diags) {
-                                related.push(...diags);
+                                if (diags.length <= min) {
+                                    min = diags.length;
+                                    minIndex = i;
+                                }
+                                max = Math.max(max, diags.length);
+                                allDiagnostics.push(diags);
                             }
                             else {
                                 Debug.fail("No error for 3 or fewer overload signatures");
                             }
+                            i++;
                         }
+
+                        const related = max > 1 ? allDiagnostics[minIndex] : flatten(allDiagnostics);
                         diagnostics.add(createDiagnosticForNodeFromMessageChain(node, chainDiagnosticMessages(/*details*/ undefined, Diagnostics.No_overload_matches_this_call), related));
                     }
                 }

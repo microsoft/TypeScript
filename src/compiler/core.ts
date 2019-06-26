@@ -600,6 +600,7 @@ namespace ts {
      *
      * @param array The array to flatten.
      */
+    export function flatten<T>(array: T[][]): T[];
     export function flatten<T>(array: ReadonlyArray<T | ReadonlyArray<T> | undefined>): T[];
     export function flatten<T>(array: ReadonlyArray<T | ReadonlyArray<T> | undefined> | undefined): T[] | undefined;
     export function flatten<T>(array: ReadonlyArray<T | ReadonlyArray<T> | undefined> | undefined): T[] | undefined {
