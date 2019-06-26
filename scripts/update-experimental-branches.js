@@ -18,7 +18,7 @@ async function main() {
     if (!prnums.length) {
         return; // No enlisted PRs, nothing to update
     }
-    if (!prnums.some(n => n === triggeredPR)) {
+    if (triggeredPR && !prnums.some(n => n === triggeredPR)) {
         return; // Only have work to do for enlisted PRs
     }
     console.log(`Performing experimental branch updating and merging for pull requests ${prnums.join(", ")}`);
