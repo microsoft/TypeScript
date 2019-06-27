@@ -60,7 +60,7 @@ interface Set<T> {
     clear(): void;
     delete(value: T): boolean;
     forEach(callbackfn: (value: T, value2: T, set: Set<T>) => void, thisArg?: any): void;
-    has(value: T): boolean;
+    has<U>(value: U): value is T;
     readonly size: number;
 }
 
