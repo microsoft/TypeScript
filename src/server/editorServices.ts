@@ -3,7 +3,6 @@ namespace ts.server {
     /*@internal*/
     export const maxFileSize = 4 * 1024 * 1024;
 
-    // tslint:disable variable-name
     export const ProjectsUpdatedInBackgroundEvent = "projectsUpdatedInBackground";
     export const ProjectLoadingStartEvent = "projectLoadingStart";
     export const ProjectLoadingFinishEvent = "projectLoadingFinish";
@@ -12,7 +11,6 @@ namespace ts.server {
     export const ProjectLanguageServiceStateEvent = "projectLanguageServiceState";
     export const ProjectInfoTelemetryEvent = "projectInfo";
     export const OpenFileInfoTelemetryEvent = "openFileInfo";
-    // tslint:enable variable-name
 
     export interface ProjectsUpdatedInBackgroundEvent {
         eventName: typeof ProjectsUpdatedInBackgroundEvent;

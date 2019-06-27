@@ -3095,7 +3095,7 @@ namespace ts {
 
         function getCompilerOptionsObjectLiteralSyntax() {
             if (_compilerOptionsObjectLiteralSyntax === undefined) {
-                _compilerOptionsObjectLiteralSyntax = null; // tslint:disable-line:no-null-keyword
+                _compilerOptionsObjectLiteralSyntax = null;
                 const jsonObjectLiteral = getTsConfigObjectLiteralExpression(options.configFile);
                 if (jsonObjectLiteral) {
                     for (const prop of getPropertyAssignment(jsonObjectLiteral, "compilerOptions")) {

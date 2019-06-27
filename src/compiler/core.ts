@@ -75,7 +75,7 @@ namespace ts {
 
     /** Create a MapLike with good performance. */
     function createDictionaryObject<T>(): MapLike<T> {
-        const map = Object.create(/*prototype*/ null); // tslint:disable-line:no-null-keyword
+        const map = Object.create(/*prototype*/ null);
 
         // Using 'delete' on an object causes V8 to put the object in dictionary mode.
         // This disables creation of hidden classes, which are expensive when an object is
@@ -1609,7 +1609,7 @@ namespace ts {
     }
 
     /** Does nothing. */
-    export function noop(_?: {} | null | undefined): void { } // tslint:disable-line no-empty
+    export function noop(_?: {} | null | undefined): void { }
 
     /** Do nothing and return false */
     export function returnFalse(): false { return false; }
@@ -2159,7 +2159,7 @@ namespace ts {
         return arg => f(arg) || g(arg);
     }
 
-    export function assertType<T>(_: T): void { } // tslint:disable-line no-empty
+    export function assertType<T>(_: T): void { }
 
     export function singleElementArray<T>(t: T | undefined): T[] | undefined {
         return t === undefined ? undefined : [t];

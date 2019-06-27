@@ -248,10 +248,10 @@ namespace Playback {
                 const getBase = () => recordLogFileNameBase + i;
                 while (underlying.fileExists(ts.combinePaths(getBase(), "test.json"))) i++;
                 const newLog = oldStyleLogIntoNewStyleLog(recordLog, (path, str) => underlying.writeFile(path, str), getBase());
-                underlying.writeFile(ts.combinePaths(getBase(), "test.json"), JSON.stringify(newLog, null, 4)); // tslint:disable-line:no-null-keyword
+                underlying.writeFile(ts.combinePaths(getBase(), "test.json"), JSON.stringify(newLog, null, 4));
                 const syntheticTsconfig = generateTsconfig(newLog);
                 if (syntheticTsconfig) {
-                    underlying.writeFile(ts.combinePaths(getBase(), "tsconfig.json"), JSON.stringify(syntheticTsconfig, null, 4)); // tslint:disable-line:no-null-keyword
+                    underlying.writeFile(ts.combinePaths(getBase(), "tsconfig.json"), JSON.stringify(syntheticTsconfig, null, 4));
                 }
                 recordLog = undefined;
             }

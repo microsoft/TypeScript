@@ -1,4 +1,3 @@
-// tslint:disable:no-null-keyword
 namespace vfs {
     /**
      * Posix-style path to the TypeScript compiler build outputs (including tsc.js, lib.d.ts, etc.)
@@ -1305,7 +1304,6 @@ namespace vfs {
         public isSocket() { return (this.mode & S_IFMT) === S_IFSOCK; }
     }
 
-    // tslint:disable-next-line:variable-name
     export const IOErrorMessages = Object.freeze({
         EACCES: "access denied",
         EIO: "an I/O error occurred",
@@ -1560,4 +1558,3 @@ namespace vfs {
         return text;
     }
 }
-// tslint:enable:no-null-keyword

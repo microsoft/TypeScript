@@ -22,7 +22,6 @@ namespace evaluator {
 
     // Define a custom "Symbol" constructor to attach missing built-in symbols without
     // modifying the global "Symbol" constructor
-    // tslint:disable-next-line:variable-name
     const FakeSymbol: SymbolConstructor = ((description?: string) => Symbol(description)) as any;
     (<any>FakeSymbol).prototype = Symbol.prototype;
     for (const key of Object.getOwnPropertyNames(Symbol)) {

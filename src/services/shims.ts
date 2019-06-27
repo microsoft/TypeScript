@@ -17,7 +17,6 @@
 let debugObjectHost: { CollectGarbage(): void } = (function (this: any) { return this; })(); // eslint-disable-line prefer-const
 
 // We need to use 'null' to interface with the managed side.
-/* tslint:disable:no-null-keyword */
 /* eslint-disable microsoft-typescript/no-in-operator */
 
 /* @internal */
@@ -1272,8 +1271,6 @@ namespace ts {
 }
 
 /* eslint-enable microsoft-typescript/no-in-operator */
-/* tslint:enable:no-null */
-
 
 /// TODO: this is used by VS, clean this up on both sides of the interface
 /* @internal */

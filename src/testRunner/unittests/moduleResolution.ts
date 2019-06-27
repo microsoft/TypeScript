@@ -170,7 +170,7 @@ namespace ts {
             testTypingsIgnored(["a", "b"]);
             testTypingsIgnored({ a: "b" });
             testTypingsIgnored(/*typings*/ true);
-            testTypingsIgnored(/*typings*/ null); // tslint:disable-line no-null-keyword
+            testTypingsIgnored(/*typings*/ null);
             testTypingsIgnored(/*typings*/ undefined);
         });
         it("module name as directory - load index.d.ts", () => {

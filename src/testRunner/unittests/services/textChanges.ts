@@ -1,5 +1,4 @@
 // Some tests have trailing whitespace
-// tslint:disable trim-trailing-whitespace
 
 namespace ts {
     describe("unittests:: services:: textChanges", () => {

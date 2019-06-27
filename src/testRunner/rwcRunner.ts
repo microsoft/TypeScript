@@ -1,6 +1,4 @@
 // In harness baselines, null is different than undefined. See `generateActual` in `harness.ts`.
-/* tslint:disable:no-null-keyword */
-
 namespace RWC {
     function runWithIOLog(ioLog: IoLog, fn: (oldIO: Harness.IO) => void) {
         const oldIO = Harness.IO;

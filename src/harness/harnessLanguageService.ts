@@ -1,7 +1,6 @@
 namespace Harness.LanguageService {
 
     export function makeDefaultProxy(info: ts.server.PluginCreateInfo): ts.LanguageService {
-        // tslint:disable-next-line:no-null-keyword
         const proxy = Object.create(/*prototype*/ null);
         const langSvc: any = info.languageService;
         for (const k of Object.keys(langSvc)) {

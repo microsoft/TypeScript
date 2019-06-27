@@ -1127,7 +1127,6 @@ namespace Harness {
 
         export function doErrorBaseline(baselinePath: string, inputFiles: ReadonlyArray<TestFile>, errors: ReadonlyArray<ts.Diagnostic>, pretty?: boolean) {
             Baseline.runBaseline(baselinePath.replace(/\.tsx?$/, ".errors.txt"),
-                // tslint:disable-next-line no-null-keyword
                 !errors || (errors.length === 0) ? null : getErrorBaseline(inputFiles, errors, pretty));
         }
 
@@ -1206,9 +1205,7 @@ namespace Harness {
                     const [, content] = value;
                     result += content;
                 }
-                /* tslint:disable:no-null-keyword */
                 return result || null;
-                /* tslint:enable:no-null-keyword */
             }
 
             function *iterateBaseLine(isSymbolBaseline: boolean, skipBaseline?: boolean): IterableIterator<[string, string]> {
@@ -1279,9 +1276,7 @@ namespace Harness {
                 if ((options.noEmitOnError && result.diagnostics.length !== 0) || result.maps.size === 0) {
                     // We need to return null here or the runBaseLine will actually create a empty file.
                     // Baselining isn't required here because there is no output.
-                    /* tslint:disable:no-null-keyword */
                     sourceMapCode = null;
-                    /* tslint:enable:no-null-keyword */
                 }
                 else {
                     sourceMapCode = "";
@@ -1336,7 +1331,7 @@ namespace Harness {
                 jsCode += getErrorBaseline(tsConfigFiles.concat(declFileCompilationResult.declInputFiles, declFileCompilationResult.declOtherFiles), declFileCompilationResult.declResult.diagnostics);
             }
 
-            Baseline.runBaseline(baselinePath.replace(/\.tsx?/, ts.Extension.Js), jsCode.length > 0 ? tsCode + "\r\n\r\n" + jsCode : null); // tslint:disable-line no-null-keyword
+            Baseline.runBaseline(baselinePath.replace(/\.tsx?/, ts.Extension.Js), jsCode.length > 0 ? tsCode + "\r\n\r\n" + jsCode : null);
         }
 
         function fileOutput(file: documents.TextDocument, harnessSettings: TestCaseParser.CompilerSettings): string {
@@ -1490,9 +1485,7 @@ namespace Harness {
             const opts: CompilerSettings = {};
 
             let match: RegExpExecArray | null;
-            /* tslint:disable:no-null-keyword */
             while ((match = optionRegex.exec(content)) !== null) {
-            /* tslint:enable:no-null-keyword */
                 opts[match[1]] = match[2].trim();
             }
 
@@ -1670,9 +1663,7 @@ namespace Harness {
 
             const refFileName = referencePath(relativeFileName, opts && opts.Baselinefolder, opts && opts.Subfolder);
 
-            /* tslint:disable:no-null-keyword */
             if (actual === null) {
-            /* tslint:enable:no-null-keyword */
                 actual = noContent;
             }
 
@@ -1735,7 +1726,6 @@ namespace Harness {
             const gen = generateContent();
             const writtenFiles = ts.createMap<true>();
             const errors: Error[] = [];
-            // tslint:disable-next-line:no-null-keyword
             if (gen !== null) {
                 for (let {done, value} = gen.next(); !done; { done, value } = gen.next()) {
                     const [name, content, count] = value as [string, string, number | undefined];

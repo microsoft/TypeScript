@@ -159,7 +159,6 @@ namespace ts {
                     "dev/configs/third.json": JSON.stringify({
                         extends: "./second",
                         compilerOptions: {
-                            // tslint:disable-next-line:no-null-keyword
                             module: null
                         },
                         include: ["../supplemental.*"]
@@ -169,7 +168,6 @@ namespace ts {
                         compilerOptions: {
                             module: "system"
                         },
-                        // tslint:disable-next-line:no-null-keyword
                         include: null,
                         files: ["../main.ts"]
                     }),

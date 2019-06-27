@@ -145,7 +145,7 @@ namespace ts {
 
         let symbolCount = 0;
 
-        let Symbol: new (flags: SymbolFlags, name: __String) => Symbol; // tslint:disable-line variable-name
+        let Symbol: new (flags: SymbolFlags, name: __String) => Symbol;
         let classifiableNames: UnderscoreEscapedMap<true>;
 
         const unreachableFlow: FlowNode = { flags: FlowFlags.Unreachable };

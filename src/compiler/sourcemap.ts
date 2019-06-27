@@ -309,12 +309,10 @@ namespace ts {
     }
 
     function isStringOrNull(x: any) {
-        // tslint:disable-next-line:no-null-keyword
         return typeof x === "string" || x === null;
     }
 
     export function isRawSourceMap(x: any): x is RawSourceMap {
-        // tslint:disable-next-line:no-null-keyword
         return x !== null
             && typeof x === "object"
             && x.version === 3

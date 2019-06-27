@@ -1,8 +1,5 @@
-// tslint:disable no-unnecessary-type-assertion (TODO: tslint can't find node types)
-
 namespace Harness.Parallel.Host {
     export function start() {
-        // tslint:disable-next-line:variable-name
         const Mocha = require("mocha") as typeof import("mocha");
         const Base = Mocha.reporters.Base;
         const color = Base.color;
@@ -17,7 +14,6 @@ namespace Harness.Parallel.Host {
         const { statSync, readFileSync } = require("fs") as typeof import("fs");
 
         // NOTE: paths for module and types for FailedTestReporter _do not_ line up due to our use of --outFile for run.js
-        // tslint:disable-next-line:variable-name
         const FailedTestReporter = require(path.resolve(__dirname, "../../scripts/failed-tests")) as typeof import("../../../scripts/failed-tests");
 
         const perfdataFileNameFragment = ".parallelperf";
@@ -595,7 +591,7 @@ namespace Harness.Parallel.Host {
                 consoleReporter.epilogue();
                 if (noColors) Base.useColors = savedUseColors;
 
-                IO.writeFile(perfdataFileName(configOption), JSON.stringify(newPerfData, null, 4)); // tslint:disable-line:no-null-keyword
+                IO.writeFile(perfdataFileName(configOption), JSON.stringify(newPerfData, null, 4));
 
                 if (xunitReporter) {
                     xunitReporter.done(errorResults.length, failures => process.exit(failures));

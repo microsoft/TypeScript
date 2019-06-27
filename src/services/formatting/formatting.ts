@@ -1184,7 +1184,7 @@ namespace ts.formatting {
     export function getRangeOfEnclosingComment(
         sourceFile: SourceFile,
         position: number,
-        precedingToken?: Node | null, // tslint:disable-line:no-null-keyword
+        precedingToken?: Node | null,
         tokenAtPosition = getTokenAtPosition(sourceFile, position),
     ): CommentRange | undefined {
         const jsdoc = findAncestor(tokenAtPosition, isJSDoc);

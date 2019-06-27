@@ -56,11 +56,9 @@ namespace ts {
         let requestedExternalEmitHelpers: ExternalEmitHelpers;
         let externalHelpersModule: Symbol;
 
-        // tslint:disable variable-name
         const Symbol = objectAllocator.getSymbolConstructor();
         const Type = objectAllocator.getTypeConstructor();
         const Signature = objectAllocator.getSignatureConstructor();
-        // tslint:enable variable-name
 
         let typeCount = 0;
         let symbolCount = 0;
@@ -32656,7 +32654,6 @@ namespace ts {
     }
 
     namespace JsxNames {
-        // tslint:disable variable-name
         export const JSX = "JSX" as __String;
         export const IntrinsicElements = "IntrinsicElements" as __String;
         export const ElementClass = "ElementClass" as __String;
@@ -32666,6 +32663,5 @@ namespace ts {
         export const IntrinsicAttributes = "IntrinsicAttributes" as __String;
         export const IntrinsicClassAttributes = "IntrinsicClassAttributes" as __String;
         export const LibraryManagedAttributes = "LibraryManagedAttributes" as __String;
-        // tslint:enable variable-name
     }
 }

@@ -104,7 +104,6 @@ namespace ts {
             builderProgram = createEmitAndSemanticDiagnosticsBuilderProgram(program, host, builderProgram);
             const outputFileNames: string[] = [];
             try {
-                // tslint:disable-next-line no-empty
                 do {
                     assert.isFalse(cancel);
                     if (outputFileNames.length === cancelAfterEmitLength) {

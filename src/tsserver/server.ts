@@ -1,5 +1,3 @@
-// tslint:disable no-unnecessary-type-assertion (TODO: tslint can't find node types)
-
 namespace ts.server {
     const childProcess: {
         fork(modulePath: string, args: string[], options?: { execArgv: string[], env?: MapLike<string> }): NodeChildProcess;
@@ -200,7 +198,6 @@ namespace ts.server {
         private write(s: string) {
             if (this.fd >= 0) {
                 const buf = sys.bufferFrom!(s);
-                // tslint:disable-next-line no-null-keyword
                 fs.writeSync(this.fd, buf, 0, buf.length, /*position*/ null!); // TODO: GH#18217
             }
             if (this.traceToConsole) {
@@ -959,7 +956,6 @@ namespace ts.server {
         ioSession.logError(err, "unknown");
     });
     // See https://github.com/Microsoft/TypeScript/issues/11348
-    // tslint:disable-next-line no-unnecessary-type-assertion-2
     (process as any).noAsar = true;
     // Start listening
     ioSession.listen();

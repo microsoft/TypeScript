@@ -1,6 +1,4 @@
 // In harness baselines, null is different than undefined. See `generateActual` in `harness.ts`.
-/* tslint:disable:no-null-keyword */
-
 class Test262BaselineRunner extends RunnerBase {
     private static readonly basePath = "internal/cases/test262";
     private static readonly helpersFilePath = "tests/cases/test262-harness/helpers.d.ts";

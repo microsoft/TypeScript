@@ -283,9 +283,7 @@ namespace ts.server {
                     session.onMessage(JSON.stringify(req));
                     req.seq = i;
                     i++;
-                    /* tslint:disable no-null-keyword */
                     req.arguments = null;
-                    /* tslint:enable no-null-keyword */
                     session.onMessage(JSON.stringify(req));
                     req.seq = i;
                     i++;
@@ -548,7 +546,6 @@ namespace ts.server {
             });
         });
         it("has access to the project service", () => {
-            // tslint:disable-next-line no-unused-expression
             new class extends TestSession {
                 constructor() {
                     super();
