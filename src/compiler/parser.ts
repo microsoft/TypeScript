@@ -6431,6 +6431,7 @@ namespace ts {
                 BeginningOfLine,
                 SawAsterisk,
                 SavingComments,
+                SavingBackticks, // NOTE: Only used when parsing tag comments
             }
 
             const enum PropertyLikeParse {
@@ -6691,18 +6692,23 @@ namespace ts {
                             case SyntaxKind.NewLineTrivia:
                                 if (state >= JSDocState.SawAsterisk) {
                                     state = JSDocState.BeginningOfLine;
+                                    // don't use pushComment here because we want to keep the margin unchanged
                                     comments.push(scanner.getTokenText());
                                 }
                                 indent = 0;
                                 break;
                             case SyntaxKind.AtToken:
+                                if (state === JSDocState.SavingBackticks) {
+                                    comments.push(scanner.getTokenText());
+                                    break;
+                                }
                                 scanner.setTextPos(scanner.getTextPos() - 1);
                                 // falls through
                             case SyntaxKind.EndOfFileToken:
                                 // Done
                                 break loop;
                             case SyntaxKind.WhitespaceTrivia:
-                                if (state === JSDocState.SavingComments) {
+                                if (state === JSDocState.SavingComments || state === JSDocState.SavingBackticks) {
                                     pushComment(scanner.getTokenText());
                                 }
                                 else {
@@ -6724,6 +6730,15 @@ namespace ts {
                                 }
                                 pushComment(scanner.getTokenText());
                                 break;
+                            case SyntaxKind.BacktickToken:
+                                if (state === JSDocState.SavingBackticks) {
+                                    state = JSDocState.SavingComments;
+                                }
+                                else {
+                                    state = JSDocState.SavingBackticks;
+                                }
+                                pushComment(scanner.getTokenText());
+                                break;
                             case SyntaxKind.AsteriskToken:
                                 if (state === JSDocState.BeginningOfLine) {
                                     // leading asterisks start recording on the *next* (non-whitespace) token
@@ -6734,7 +6749,9 @@ namespace ts {
                                 // record the * as a comment
                                 // falls through
                             default:
-                                state = JSDocState.SavingComments; // leading identifiers start recording as well
+                                if (state !== JSDocState.SavingBackticks) {
+                                    state = JSDocState.SavingComments; // leading identifiers start recording as well
+                                }
                                 pushComment(scanner.getTokenText());
                                 break;
                         }
