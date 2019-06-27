@@ -25,6 +25,8 @@ XX of XX: [@azure/storage-queue] completed successfully in ? seconds
 XX of XX: [@azure/template] completed successfully in ? seconds
 [@azure/abort-controller] started
 XX of XX: [@azure/abort-controller] completed successfully in ? seconds
+[@azure/core-asynciterator-polyfill] started
+XX of XX: [@azure/core-asynciterator-polyfill] completed successfully in ? seconds
 [@azure/core-http] started
 XX of XX: [@azure/core-http] completed successfully in ? seconds
 [@azure/core-paging] started
@@ -43,9 +45,10 @@ XX of XX: [@azure/keyvault-keys] completed successfully in ? seconds
 XX of XX: [@azure/keyvault-secrets] completed successfully in ? seconds
 [@azure/core-amqp] started
 
-SUCCESS (15)
+SUCCESS (16)
 ================================
 @azure/abort-controller (? seconds)
+@azure/core-asynciterator-polyfill (? seconds)
 @azure/core-http (? seconds)
 @azure/core-paging (? seconds)
 @azure/cosmos (? seconds)
