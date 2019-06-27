@@ -2328,7 +2328,10 @@ Actual: ${stringify(fullActual)}`);
         public applyCodeActionFromCompletion(markerName: string, options: FourSlashInterface.VerifyCompletionActionOptions) {
             this.goToMarker(markerName);
 
-            const details = this.getCompletionEntryDetails(options.name, options.source, options.preferences)!;
+            const details = this.getCompletionEntryDetails(options.name, options.source, options.preferences);
+            if (!details) {
+                return this.raiseError(`No completions were found for the given name, source, and preferences.`);
+            }
             const codeActions = details.codeActions!;
             if (codeActions.length !== 1) {
                 this.raiseError(`Expected one code action, got ${codeActions.length}`);
