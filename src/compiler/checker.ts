@@ -12460,7 +12460,8 @@ namespace ts {
                 if (containingMessageChain) {
                     const chain = containingMessageChain();
                     if (chain) {
-                        errorInfo = concatenateDiagnosticMessageChains(chain, errorInfo);
+                        concatenateDiagnosticMessageChains(chain, errorInfo);
+                        errorInfo = chain;
                     }
                 }
 
@@ -21655,7 +21656,7 @@ namespace ts {
                         }
 
                         const related = max > 1 ? allDiagnostics[minIndex] : flatten(allDiagnostics);
-                        diagnostics.add(createDiagnosticForNodeFromMessageChain(node, chainDiagnosticMessages(/*details*/ undefined, Diagnostics.No_overload_matches_this_call), related));
+                        diagnostics.add(createDiagnosticForNodeFromMessageChain(node, chainDiagnosticMessages(undefined, Diagnostics.No_overload_matches_this_call), related));
                     }
                 }
                 else if (candidateForArgumentArityError) {

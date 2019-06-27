@@ -20,7 +20,7 @@ namespace ts {
         messageText: string;
         category: DiagnosticCategory;
         code: number;
-        next?: ReusableDiagnosticMessageChain;
+        next?: ReusableDiagnosticMessageChain[];
     }
 
     export interface ReusableBuilderProgramState extends ReusableBuilderState {
@@ -263,20 +263,10 @@ namespace ts {
     }
 
     function convertToDiagnosticRelatedInformation(diagnostic: ReusableDiagnosticRelatedInformation, newProgram: Program): DiagnosticRelatedInformation {
-        const { file, messageText } = diagnostic;
+        const { file } = diagnostic;
         return {
             ...diagnostic,
             file: file && newProgram.getSourceFileByPath(file),
-            messageText: messageText === undefined || isString(messageText) ?
-                messageText :
-                convertToDiagnosticMessageChain(messageText, newProgram)
-        };
-    }
-
-    function convertToDiagnosticMessageChain(diagnostic: ReusableDiagnosticMessageChain, newProgram: Program): DiagnosticMessageChain {
-        return {
-            ...diagnostic,
-            next: diagnostic.next && convertToDiagnosticMessageChain(diagnostic.next, newProgram)
         };
     }
 
@@ -685,20 +675,10 @@ namespace ts {
     }
 
     function convertToReusableDiagnosticRelatedInformation(diagnostic: DiagnosticRelatedInformation): ReusableDiagnosticRelatedInformation {
-        const { file, messageText } = diagnostic;
+        const { file } = diagnostic;
         return {
             ...diagnostic,
             file: file && file.path,
-            messageText: messageText === undefined || isString(messageText) ?
-                messageText :
-                convertToReusableDiagnosticMessageChain(messageText)
-        };
-    }
-
-    function convertToReusableDiagnosticMessageChain(diagnostic: DiagnosticMessageChain): ReusableDiagnosticMessageChain {
-        return {
-            ...diagnostic,
-            next: diagnostic.next && convertToReusableDiagnosticMessageChain(diagnostic.next)
         };
     }
 
