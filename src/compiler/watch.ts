@@ -438,6 +438,7 @@ namespace ts {
     }
 }
 
+// eslint-disable-next-line no-redeclare
 namespace ts {
     export function readBuilderProgram(compilerOptions: CompilerOptions, readFile: (path: string) => string | undefined) {
         if (compilerOptions.out || compilerOptions.outFile) return undefined;

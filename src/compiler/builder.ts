@@ -1055,6 +1055,7 @@ namespace ts {
     }
 }
 
+// eslint-disable-next-line no-redeclare
 namespace ts {
     export type AffectedFileResult<T> = { result: T; affected: SourceFile | Program; } | undefined;
 

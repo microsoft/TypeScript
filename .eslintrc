@@ -99,7 +99,7 @@
         "no-multiple-empty-lines": "off",
         "no-new-func": "error",
         "no-new-wrappers": "error",
-        "no-redeclare": "off",
+        "no-redeclare": "error",
         "no-return-await": "error",
         "no-restricted-globals": ["error",
             { "name": "setTimeout" },

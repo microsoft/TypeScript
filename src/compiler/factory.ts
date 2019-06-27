@@ -3423,6 +3423,7 @@ namespace ts {
 }
 
 /* @internal */
+// eslint-disable-next-line no-redeclare
 namespace ts {
     export const nullTransformationContext: TransformationContext = {
         enableEmitNotification: noop,

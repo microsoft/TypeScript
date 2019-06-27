@@ -6,6 +6,7 @@ namespace ts {
     export const version = `${versionMajorMinor}.0-dev`;
 }
 
+// eslint-disable-next-line no-redeclare
 namespace ts {
     /**
      * Type of objects whose values are all of the same type.
@@ -68,6 +69,7 @@ namespace ts {
 }
 
 /* @internal */
+// eslint-disable-next-line no-redeclare
 namespace ts {
     export const emptyArray: never[] = [] as never[];
 

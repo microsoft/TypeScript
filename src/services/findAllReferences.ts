@@ -530,6 +530,7 @@ namespace ts.FindAllReferences {
 
 /** Encapsulates the core find-all-references algorithm. */
 /* @internal */
+// eslint-disable-next-line no-redeclare
 namespace ts.FindAllReferences.Core {
     /** Core find-all-references algorithm. Handles special cases before delegating to `getReferencedSymbolsForSymbol`. */
     export function getReferencedSymbolsForNode(position: number, node: Node, program: Program, sourceFiles: ReadonlyArray<SourceFile>, cancellationToken: CancellationToken, options: Options = {}, sourceFilesSet: ReadonlyMap<true> = arrayToSet(sourceFiles, f => f.fileName)): ReadonlyArray<SymbolAndEntries> | undefined {
