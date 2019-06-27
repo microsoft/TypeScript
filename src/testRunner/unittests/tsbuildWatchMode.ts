@@ -681,9 +681,9 @@ let x: string = 10;`);
                     const coreIndexDts = projectFileName(SubProject.core, "index.d.ts");
                     const coreAnotherModuleDts = projectFileName(SubProject.core, "anotherModule.d.ts");
                     const logicIndexDts = projectFileName(SubProject.logic, "index.d.ts");
-                    const expectedWatchedFiles = [core[0], logic[0], ...tests, libFile].map(f => f.path).concat([coreIndexDts, coreAnotherModuleDts, logicIndexDts].map(f => f.toLowerCase()));
                     const expectedWatchedDirectoriesRecursive = projectSystem.getTypeRootsFromLocation(projectPath(SubProject.tests));
                     const expectedProgramFiles = [tests[1].path, libFile.path, coreIndexDts, coreAnotherModuleDts, logicIndexDts];
+                    const expectedProjectFiles = [libFile, ...tests, ...logic.slice(1), ...core.slice(1, core.length - 1)].map(f => f.path);
 
                     function createSolutionAndWatchMode() {
                         return createSolutionAndWatchModeOfProject(allFiles, projectsLocation, `${project}/${SubProject.tests}`, tests[0].path, getOutputFileStamps);
@@ -694,12 +694,19 @@ let x: string = 10;`);
                     }
 
                     function verifyWatches(host: TsBuildWatchSystem, withTsserver?: boolean) {
-                        verifyWatchesOfProject(host, withTsserver ? expectedWatchedFiles.filter(f => f !== tests[1].path.toLowerCase()) : expectedWatchedFiles, expectedWatchedDirectoriesRecursive);
+                        verifyWatchesOfProject(
+                            host,
+                            withTsserver ?
+                                [...core.slice(0, core.length - 1), ...logic, tests[0], libFile].map(f => f.path.toLowerCase()) :
+                                [core[0], logic[0], ...tests, libFile].map(f => f.path).concat([coreIndexDts, coreAnotherModuleDts, logicIndexDts].map(f => f.toLowerCase())),
+                            expectedWatchedDirectoriesRecursive
+                        );
                     }
 
                     function verifyScenario(
                         edit: (host: TsBuildWatchSystem, solutionBuilder: SolutionBuilder<EmitAndSemanticDiagnosticsBuilderProgram>) => void,
-                        expectedFilesAfterEdit: ReadonlyArray<string>
+                        expectedProgramFilesAfterEdit: ReadonlyArray<string>,
+                        expectedProjectFilesAfterEdit: ReadonlyArray<string>
                     ) {
                         it("with tsc-watch", () => {
                             const { host, solutionBuilder, watch } = createSolutionAndWatchMode();
@@ -708,7 +715,7 @@ let x: string = 10;`);
 
                             host.checkTimeoutQueueLengthAndRun(1);
                             checkOutputErrorsIncremental(host, emptyArray);
-                            checkProgramActualFiles(watch(), expectedFilesAfterEdit);
+                            checkProgramActualFiles(watch(), expectedProgramFilesAfterEdit);
 
                         });
 
@@ -718,7 +725,7 @@ let x: string = 10;`);
                             edit(host, solutionBuilder);
 
                             host.checkTimeoutQueueLengthAndRun(2);
-                            checkProjectActualFiles(service, tests[0].path, [tests[0].path, ...expectedFilesAfterEdit]);
+                            checkProjectActualFiles(service, tests[0].path, [...expectedProjectFilesAfterEdit]);
                         });
                     }
 
@@ -748,7 +755,7 @@ function foo() {
 
                             // not ideal, but currently because of d.ts but no new file is written
                             // There will be timeout queued even though file contents are same
-                        }, expectedProgramFiles);
+                        }, expectedProgramFiles, expectedProjectFiles);
                     });
 
                     describe("non local edit in ts file, rebuilds in watch compilation", () => {
@@ -758,7 +765,7 @@ export function gfoo() {
 }`);
                             solutionBuilder.invalidateProject(logic[0].path.toLowerCase() as ResolvedConfigFilePath);
                             solutionBuilder.buildNextInvalidatedProject();
-                        }, expectedProgramFiles);
+                        }, expectedProgramFiles, expectedProjectFiles);
                     });
 
                     describe("change in project reference config file builds correctly", () => {
@@ -769,7 +776,7 @@ export function gfoo() {
                             }));
                             solutionBuilder.invalidateProject(logic[0].path.toLowerCase() as ResolvedConfigFilePath, ConfigFileProgramReloadLevel.Full);
                             solutionBuilder.buildNextInvalidatedProject();
-                        }, [tests[1].path, libFile.path, coreIndexDts, coreAnotherModuleDts, projectFilePath(SubProject.logic, "decls/index.d.ts")]);
+                        }, [tests[1].path, libFile.path, coreIndexDts, coreAnotherModuleDts, projectFilePath(SubProject.logic, "decls/index.d.ts")], expectedProjectFiles);
                     });
                 });
 
@@ -859,7 +866,9 @@ export function gfoo() {
                         const aDts = dtsFile(multiFolder ? "a/index" : "a"), bDts = dtsFile(multiFolder ? "b/index" : "b");
                         const expectedFiles = [jsFile(multiFolder ? "a/index" : "a"), aDts, jsFile(multiFolder ? "b/index" : "b"), bDts, jsFile(multiFolder ? "c/index" : "c")];
                         const expectedProgramFiles = [cTs.path, libFile.path, aDts, refs.path, bDts];
+                        const expectedProjectFiles = [cTs.path, libFile.path, aTs.path, refs.path, bTs.path];
                         const expectedWatchedFiles = expectedProgramFiles.concat(cTsconfig.path, bTsconfig.path, aTsconfig.path).map(s => s.toLowerCase());
+                        const expectedProjectWatchedFiles = expectedProjectFiles.concat(cTsconfig.path, bTsconfig.path, aTsconfig.path).map(s => s.toLowerCase());
                         const expectedWatchedDirectories = multiFolder ? [
                             getProjectPath(project).toLowerCase() // watches for directories created for resolution of b
                         ] : emptyArray;
@@ -897,22 +906,29 @@ export function gfoo() {
                         }
 
                         function verifyProject(host: TsBuildWatchSystem, service: projectSystem.TestProjectService, orphanInfos?: ReadonlyArray<string>) {
-                            verifyServerState(host, service, expectedProgramFiles, expectedWatchedFiles, expectedWatchedDirectoriesRecursive, orphanInfos);
+                            verifyServerState({ host, service, expectedProjectFiles, expectedProjectWatchedFiles, expectedWatchedDirectoriesRecursive, orphanInfos });
                         }
 
-                        function verifyServerState(
-                            host: TsBuildWatchSystem,
-                            service: projectSystem.TestProjectService,
-                            expectedProgramFiles: ReadonlyArray<string>,
-                            expectedWatchedFiles: ReadonlyArray<string>,
-                            expectedWatchedDirectoriesRecursive: ReadonlyArray<string>,
-                            orphanInfos?: ReadonlyArray<string>) {
-                            checkProjectActualFiles(service, cTsconfig.path, expectedProgramFiles.concat(cTsconfig.path));
-                            const watchedFiles = expectedWatchedFiles.filter(f => f !== cTs.path.toLowerCase());
-                            if (orphanInfos) {
+                        interface VerifyServerState {
+                            host: TsBuildWatchSystem;
+                            service: projectSystem.TestProjectService;
+                            expectedProjectFiles: ReadonlyArray<string>;
+                            expectedProjectWatchedFiles: ReadonlyArray<string>;
+                            expectedWatchedDirectoriesRecursive: ReadonlyArray<string>;
+                            orphanInfos?: ReadonlyArray<string>;
+                        }
+                        function verifyServerState({ host, service, expectedProjectFiles, expectedProjectWatchedFiles, expectedWatchedDirectoriesRecursive, orphanInfos }: VerifyServerState) {
+                            checkProjectActualFiles(service, cTsconfig.path, expectedProjectFiles.concat(cTsconfig.path));
+                            const watchedFiles = expectedProjectWatchedFiles.filter(f => f !== cTs.path.toLowerCase());
+                            const actualOrphan = arrayFrom(mapDefinedIterator(
+                                service.filenameToScriptInfo.values(),
+                                v => v.containingProjects.length === 0 ? v.fileName : undefined
+                            ));
+                            assert.equal(actualOrphan.length, orphanInfos ? orphanInfos.length : 0, `Orphans found: ${JSON.stringify(actualOrphan, /*replacer*/ undefined, " ")}`);
+                            if (orphanInfos && orphanInfos.length) {
                                 for (const orphan of orphanInfos) {
                                     const info = service.getScriptInfoForPath(orphan as Path);
-                                    assert.isDefined(info);
+                                    assert.isDefined(info, `${orphan} expected to be present. Actual: ${JSON.stringify(actualOrphan, /*replacer*/ undefined, " ")}`);
                                     assert.equal(info!.containingProjects.length, 0);
                                     watchedFiles.push(orphan);
                                 }
@@ -920,16 +936,20 @@ export function gfoo() {
                             verifyWatchesOfProject(host, watchedFiles, expectedWatchedDirectoriesRecursive, expectedWatchedDirectories);
                         }
 
-                        function verifyScenario(
-                            edit: (host: TsBuildWatchSystem, solutionBuilder: SolutionBuilder<EmitAndSemanticDiagnosticsBuilderProgram>) => void,
-                            expectedEditErrors: ReadonlyArray<string>,
-                            expectedProgramFiles: ReadonlyArray<string>,
-                            expectedWatchedFiles: ReadonlyArray<string>,
-                            expectedWatchedDirectoriesRecursive: ReadonlyArray<string>,
-                            dependencies: ReadonlyArray<[string, ReadonlyArray<string>]>,
-                            revert?: (host: TsBuildWatchSystem) => void,
-                            orphanInfosAfterEdit?: ReadonlyArray<string>,
-                            orphanInfosAfterRevert?: ReadonlyArray<string>) {
+                        interface VerifyScenario {
+                            edit: (host: TsBuildWatchSystem, solutionBuilder: SolutionBuilder<EmitAndSemanticDiagnosticsBuilderProgram>) => void;
+                            expectedEditErrors: ReadonlyArray<string>;
+                            expectedProgramFiles: ReadonlyArray<string>;
+                            expectedProjectFiles: ReadonlyArray<string>;
+                            expectedWatchedFiles: ReadonlyArray<string>;
+                            expectedProjectWatchedFiles: ReadonlyArray<string>;
+                            expectedWatchedDirectoriesRecursive: ReadonlyArray<string>;
+                            dependencies: ReadonlyArray<[string, ReadonlyArray<string>]>;
+                            revert?: (host: TsBuildWatchSystem) => void;
+                            orphanInfosAfterEdit?: ReadonlyArray<string>;
+                            orphanInfosAfterRevert?: ReadonlyArray<string>;
+                        }
+                        function verifyScenario({ edit, expectedEditErrors, expectedProgramFiles, expectedProjectFiles, expectedWatchedFiles, expectedProjectWatchedFiles, expectedWatchedDirectoriesRecursive, dependencies, revert, orphanInfosAfterEdit, orphanInfosAfterRevert }: VerifyScenario) {
                             it("with tsc-watch", () => {
                                 const { host, solutionBuilder, watch } = createSolutionAndWatchMode();
 
@@ -956,7 +976,7 @@ export function gfoo() {
                                 edit(host, solutionBuilder);
 
                                 host.checkTimeoutQueueLengthAndRun(2);
-                                verifyServerState(host, service, expectedProgramFiles, expectedWatchedFiles, expectedWatchedDirectoriesRecursive, orphanInfosAfterEdit);
+                                verifyServerState({ host, service, expectedProjectFiles, expectedProjectWatchedFiles, expectedWatchedDirectoriesRecursive, orphanInfos: orphanInfosAfterEdit });
 
                                 if (revert) {
                                     revert(host);
@@ -981,20 +1001,21 @@ export function gfoo() {
                         });
 
                         describe("non local edit updates the program and watch correctly", () => {
-                            verifyScenario(
-                                (host, solutionBuilder) => {
+                            verifyScenario({
+                                edit: (host, solutionBuilder) => {
                                     // edit
-                                    host.writeFile(bTs.path, `${bTs.content}
-export function gfoo() {
-}`);
-                                    solutionBuilder.invalidateProject(bTsconfig.path.toLowerCase() as ResolvedConfigFilePath);
+                                    host.writeFile(bTs.path, `${bTs.content}\nexport function gfoo() {\n}`);
+                                    solutionBuilder.invalidateProject((bTsconfig.path.toLowerCase() as ResolvedConfigFilePath));
                                     solutionBuilder.buildNextInvalidatedProject();
                                 },
-                                emptyArray,
+                                expectedEditErrors: emptyArray,
                                 expectedProgramFiles,
+                                expectedProjectFiles,
                                 expectedWatchedFiles,
+                                expectedProjectWatchedFiles,
                                 expectedWatchedDirectoriesRecursive,
-                                defaultDependencies);
+                                dependencies: defaultDependencies
+                            });
                         });
 
                         describe("edit on config file", () => {
@@ -1003,30 +1024,32 @@ export function gfoo() {
                                 path: getFilePathInProject(project, "nrefs/a.d.ts"),
                                 content: refs.content
                             };
-                            verifyScenario(
-                                host => {
+                            verifyScenario({
+                                edit: host => {
                                     const cTsConfigJson = JSON.parse(cTsconfig.content);
                                     host.ensureFileOrFolder(nrefs);
                                     cTsConfigJson.compilerOptions.paths = { "@ref/*": nrefsPath };
                                     host.writeFile(cTsconfig.path, JSON.stringify(cTsConfigJson));
                                 },
-                                emptyArray,
-                                expectedProgramFiles.map(nrefReplacer),
-                                expectedWatchedFiles.map(nrefReplacer),
-                                expectedWatchedDirectoriesRecursive.map(nrefReplacer),
-                                [
+                                expectedEditErrors: emptyArray,
+                                expectedProgramFiles: expectedProgramFiles.map(nrefReplacer),
+                                expectedProjectFiles: expectedProjectFiles.map(nrefReplacer),
+                                expectedWatchedFiles: expectedWatchedFiles.map(nrefReplacer),
+                                expectedProjectWatchedFiles: expectedProjectWatchedFiles.map(nrefReplacer),
+                                expectedWatchedDirectoriesRecursive: expectedWatchedDirectoriesRecursive.map(nrefReplacer),
+                                dependencies: [
                                     [aDts, [aDts]],
                                     [bDts, [bDts, aDts]],
                                     [nrefs.path, [nrefs.path]],
                                     [cTs.path, [cTs.path, nrefs.path, bDts]]
                                 ],
                                 // revert the update
-                                host => host.writeFile(cTsconfig.path, cTsconfig.content),
+                                revert: host => host.writeFile(cTsconfig.path, cTsconfig.content),
                                 // AfterEdit:: Extra watched files on server since the script infos arent deleted till next file open
-                                [refs.path.toLowerCase()],
+                                orphanInfosAfterEdit: [refs.path.toLowerCase()],
                                 // AfterRevert:: Extra watched files on server since the script infos arent deleted till next file open
-                                [nrefs.path.toLowerCase()]
-                            );
+                                orphanInfosAfterRevert: [nrefs.path.toLowerCase()]
+                            });
                         });
 
                         describe("edit in referenced config file", () => {
@@ -1035,82 +1058,84 @@ export function gfoo() {
                                 content: "export declare class A {}"
                             };
                             const expectedProgramFiles = [cTs.path, bDts, nrefs.path, refs.path, libFile.path];
+                            const expectedProjectFiles = [cTs.path, bTs.path, nrefs.path, refs.path, libFile.path];
                             const [, ...expectedWatchedDirectoriesRecursiveWithoutA] = expectedWatchedDirectoriesRecursive; // Not looking in a folder for resolution in multi folder scenario
-                            verifyScenario(
-                                host => {
+                            verifyScenario({
+                                edit: host => {
                                     const bTsConfigJson = JSON.parse(bTsconfig.content);
                                     host.ensureFileOrFolder(nrefs);
                                     bTsConfigJson.compilerOptions.paths = { "@ref/*": nrefsPath };
                                     host.writeFile(bTsconfig.path, JSON.stringify(bTsConfigJson));
                                 },
-                                emptyArray,
+                                expectedEditErrors: emptyArray,
                                 expectedProgramFiles,
-                                expectedProgramFiles.concat(cTsconfig.path, bTsconfig.path, aTsconfig.path).map(s => s.toLowerCase()),
-                                (multiFolder ? expectedWatchedDirectoriesRecursiveWithoutA : expectedWatchedDirectoriesRecursive).concat(getFilePathInProject(project, "nrefs").toLowerCase()),
-                                [
+                                expectedProjectFiles,
+                                expectedWatchedFiles: expectedProgramFiles.concat(cTsconfig.path, bTsconfig.path, aTsconfig.path).map(s => s.toLowerCase()),
+                                expectedProjectWatchedFiles: expectedProjectFiles.concat(cTsconfig.path, bTsconfig.path, aTsconfig.path).map(s => s.toLowerCase()),
+                                expectedWatchedDirectoriesRecursive: (multiFolder ? expectedWatchedDirectoriesRecursiveWithoutA : expectedWatchedDirectoriesRecursive).concat(getFilePathInProject(project, "nrefs").toLowerCase()),
+                                dependencies: [
                                     [nrefs.path, [nrefs.path]],
                                     [bDts, [bDts, nrefs.path]],
                                     [refs.path, [refs.path]],
                                     [cTs.path, [cTs.path, refs.path, bDts]],
                                 ],
                                 // revert the update
-                                host => host.writeFile(bTsconfig.path, bTsconfig.content),
+                                revert: host => host.writeFile(bTsconfig.path, bTsconfig.content),
                                 // AfterEdit:: Extra watched files on server since the script infos arent deleted till next file open
-                                [aDts.toLowerCase()],
+                                orphanInfosAfterEdit: [aTs.path.toLowerCase()],
                                 // AfterRevert:: Extra watched files on server since the script infos arent deleted till next file open
-                                [nrefs.path.toLowerCase()]
-                            );
+                                orphanInfosAfterRevert: [nrefs.path.toLowerCase()]
+                            });
                         });
 
                         describe("deleting referenced config file", () => {
                             const expectedProgramFiles = [cTs.path, bTs.path, refs.path, libFile.path];
+                            const expectedWatchedFiles = expectedProgramFiles.concat(cTsconfig.path, bTsconfig.path).map(s => s.toLowerCase());
                             const [, ...expectedWatchedDirectoriesRecursiveWithoutA] = expectedWatchedDirectoriesRecursive; // Not looking in a folder for resolution in multi folder scenario
                             // Resolutions should change now
                             // Should map to b.ts instead with options from our own config
-                            verifyScenario(
-                                host => host.deleteFile(bTsconfig.path),
-                                [
+                            verifyScenario({
+                                edit: host => host.deleteFile(bTsconfig.path),
+                                expectedEditErrors: [
                                     `${multiFolder ? "c/tsconfig.json" : "tsconfig.c.json"}(9,21): error TS6053: File '/user/username/projects/transitiveReferences/${multiFolder ? "b" : "tsconfig.b.json"}' not found.\n`
                                 ],
                                 expectedProgramFiles,
-                                expectedProgramFiles.concat(cTsconfig.path, bTsconfig.path).map(s => s.toLowerCase()),
-                                multiFolder ? expectedWatchedDirectoriesRecursiveWithoutA : expectedWatchedDirectoriesRecursive,
-                                [
+                                expectedProjectFiles: expectedProgramFiles,
+                                expectedWatchedFiles,
+                                expectedProjectWatchedFiles: expectedWatchedFiles,
+                                expectedWatchedDirectoriesRecursive: multiFolder ? expectedWatchedDirectoriesRecursiveWithoutA : expectedWatchedDirectoriesRecursive,
+                                dependencies: [
                                     [bTs.path, [bTs.path, refs.path]],
                                     [refs.path, [refs.path]],
                                     [cTs.path, [cTs.path, refs.path, bTs.path]],
                                 ],
                                 // revert the update
-                                host => host.writeFile(bTsconfig.path, bTsconfig.content),
+                                revert: host => host.writeFile(bTsconfig.path, bTsconfig.content),
                                 // AfterEdit:: Extra watched files on server since the script infos arent deleted till next file open
-                                [bDts.toLowerCase(), aDts.toLowerCase(), aTsconfig.path.toLowerCase()],
-                                // AfterRevert:: Extra watched files on server since the script infos arent deleted till next file open
-                                [bTs.path.toLowerCase()]
-                            );
+                                orphanInfosAfterEdit: [aTs.path.toLowerCase(), aTsconfig.path.toLowerCase()],
+                            });
                         });
 
                         describe("deleting transitively referenced config file", () => {
-                            verifyScenario(
-                                host => host.deleteFile(aTsconfig.path),
-                                [
+                            verifyScenario({
+                                edit: host => host.deleteFile(aTsconfig.path),
+                                expectedEditErrors: [
                                     `${multiFolder ? "b/tsconfig.json" : "tsconfig.b.json"}(10,21): error TS6053: File '/user/username/projects/transitiveReferences/${multiFolder ? "a" : "tsconfig.a.json"}' not found.\n`
                                 ],
-                                expectedProgramFiles.map(s => s.replace(aDts, aTs.path)),
-                                expectedWatchedFiles.map(s => s.replace(aDts.toLowerCase(), aTs.path.toLocaleLowerCase())),
+                                expectedProgramFiles: expectedProgramFiles.map(s => s.replace(aDts, aTs.path)),
+                                expectedProjectFiles,
+                                expectedWatchedFiles: expectedWatchedFiles.map(s => s.replace(aDts.toLowerCase(), aTs.path.toLocaleLowerCase())),
+                                expectedProjectWatchedFiles,
                                 expectedWatchedDirectoriesRecursive,
-                                [
+                                dependencies: [
                                     [aTs.path, [aTs.path]],
                                     [bDts, [bDts, aTs.path]],
                                     [refs.path, [refs.path]],
                                     [cTs.path, [cTs.path, refs.path, bDts]],
                                 ],
                                 // revert the update
-                                host => host.writeFile(aTsconfig.path, aTsconfig.content),
-                                // AfterEdit:: Extra watched files on server since the script infos arent deleted till next file open
-                                [aDts.toLowerCase()],
-                                // AfterRevert:: Extra watched files on server since the script infos arent deleted till next file open
-                                [aTs.path.toLowerCase()]
-                            );
+                                revert: host => host.writeFile(aTsconfig.path, aTsconfig.content),
+                            });
                         });
                     }
 
