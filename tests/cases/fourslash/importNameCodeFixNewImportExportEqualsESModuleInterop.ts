@@ -14,6 +14,6 @@
 goTo.marker('');
 verify.getAndApplyCodeFix(2304, 0);
 verify.currentFileContentIs(
-`import foo from './a';
+`import foo from "foo";
 
 foo`);
