@@ -419,19 +419,29 @@ namespace ts.codefix {
 
     function getDefaultLikeExportInfo(
         moduleSymbol: Symbol, checker: TypeChecker, compilerOptions: CompilerOptions,
-    ): { readonly symbol: Symbol, readonly symbolForMeaning: Symbol, readonly name: string, readonly kind: ImportKind.Default | ImportKind.Equals } | undefined {
-        const exported = getDefaultLikeExportWorker(moduleSymbol, checker);
+    ): { readonly symbol: Symbol, readonly symbolForMeaning: Symbol, readonly name: string, readonly kind: ImportKind } | undefined {
+        const exported = getDefaultLikeExportWorker(moduleSymbol, checker, compilerOptions);
         if (!exported) return undefined;
         const { symbol, kind } = exported;
         const info = getDefaultExportInfoWorker(symbol, moduleSymbol, checker, compilerOptions);
         return info && { symbol, kind, ...info };
     }
 
-    function getDefaultLikeExportWorker(moduleSymbol: Symbol, checker: TypeChecker): { readonly symbol: Symbol, readonly kind: ImportKind.Default | ImportKind.Equals } | undefined {
+    function getDefaultLikeExportWorker(moduleSymbol: Symbol, checker: TypeChecker, compilerOptions: CompilerOptions): { readonly symbol: Symbol, readonly kind: ImportKind } | undefined {
         const defaultExport = checker.tryGetMemberInModuleExports(InternalSymbolName.Default, moduleSymbol);
         if (defaultExport) return { symbol: defaultExport, kind: ImportKind.Default };
         const exportEquals = checker.resolveExternalModuleSymbol(moduleSymbol);
-        return exportEquals === moduleSymbol ? undefined : { symbol: exportEquals, kind: ImportKind.Equals };
+        return exportEquals === moduleSymbol ? undefined : { symbol: exportEquals, kind: getImportKindForExportEquals(compilerOptions) };
+    }
+
+    function getImportKindForExportEquals(compilerOptions: CompilerOptions): ImportKind {
+        if (getAllowSyntheticDefaultImports(compilerOptions)) {
+            return ImportKind.Default;
+        }
+        if (getEmitModuleKind(compilerOptions) >= ModuleKind.ES2015) {
+            return ImportKind.Namespace;
+        }
+        return ImportKind.Equals;
     }
 
     function getDefaultExportInfoWorker(defaultExport: Symbol, moduleSymbol: Symbol, checker: TypeChecker, compilerOptions: CompilerOptions): { readonly symbolForMeaning: Symbol, readonly name: string } | undefined {
