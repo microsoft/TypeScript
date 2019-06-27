@@ -561,10 +561,10 @@ sourceFile:../second/second_part2.ts
 //// [/src/2/second-output.tsbuildinfo]
 {
   "bundle": {
-    "commonSourceDirectory": "/src/second/",
+    "commonSourceDirectory": "../second",
     "sourceFiles": [
-      "/src/second/second_part1.ts",
-      "/src/second/second_part2.ts"
+      "../second/second_part1.ts",
+      "../second/second_part2.ts"
     ],
     "js": {
       "sections": [
@@ -1072,11 +1072,11 @@ sourceFile:../first_part3.ts
 //// [/src/first/bin/first-output.tsbuildinfo]
 {
   "bundle": {
-    "commonSourceDirectory": "/src/first/",
+    "commonSourceDirectory": "..",
     "sourceFiles": [
-      "/src/first/first_PART1.ts",
-      "/src/first/first_part2.ts",
-      "/src/first/first_part3.ts"
+      "../first_PART1.ts",
+      "../first_part2.ts",
+      "../first_part3.ts"
     ],
     "js": {
       "sections": [
@@ -2287,9 +2287,9 @@ sourceFile:../../third_part1.ts
 //// [/src/third/thirdjs/output/third-output.tsbuildinfo]
 {
   "bundle": {
-    "commonSourceDirectory": "/src/third/",
+    "commonSourceDirectory": "../..",
     "sourceFiles": [
-      "/src/third/third_part1.ts"
+      "../../third_part1.ts"
     ],
     "js": {
       "sections": [
@@ -2315,7 +2315,7 @@ sourceFile:../../third_part1.ts
           "pos": 1180,
           "end": 1407,
           "kind": "prepend",
-          "data": "/src/first/bin/first-output.js",
+          "data": "../../../first/bin/first-output.js",
           "texts": [
             {
               "pos": 1180,
@@ -2328,7 +2328,7 @@ sourceFile:../../third_part1.ts
           "pos": 1407,
           "end": 1908,
           "kind": "prepend",
-          "data": "/src/2/second-output.js",
+          "data": "../../../2/second-output.js",
           "texts": [
             {
               "pos": 1407,
@@ -2355,7 +2355,7 @@ sourceFile:../../third_part1.ts
           "pos": 0,
           "end": 208,
           "kind": "prepend",
-          "data": "/src/first/bin/first-output.d.ts",
+          "data": "../../../first/bin/first-output.d.ts",
           "texts": [
             {
               "pos": 0,
@@ -2368,7 +2368,7 @@ sourceFile:../../third_part1.ts
           "pos": 208,
           "end": 374,
           "kind": "prepend",
-          "data": "/src/2/second-output.d.ts",
+          "data": "../../../2/second-output.d.ts",
           "texts": [
             {
               "pos": 208,
@@ -2429,7 +2429,7 @@ var __spread = (this && this.__spread) || function () {
     return ar;
 };
 ----------------------------------------------------------------------
-prepend: (1180-1407):: /src/first/bin/first-output.js texts:: 1
+prepend: (1180-1407):: ../../../first/bin/first-output.js texts:: 1
 >>--------------------------------------------------------------------
 text: (1180-1407)
 var s = "Hello, world";
@@ -2443,7 +2443,7 @@ function f() {
 }
 
 ----------------------------------------------------------------------
-prepend: (1407-1908):: /src/2/second-output.js texts:: 1
+prepend: (1407-1908):: ../../../2/second-output.js texts:: 1
 >>--------------------------------------------------------------------
 text: (1407-1908)
 var N;
@@ -2481,7 +2481,7 @@ function forthirdthird_part1Rest() {
 ======================================================================
 File:: /src/third/thirdjs/output/third-output.d.ts
 ----------------------------------------------------------------------
-prepend: (0-208):: /src/first/bin/first-output.d.ts texts:: 1
+prepend: (0-208):: ../../../first/bin/first-output.d.ts texts:: 1
 >>--------------------------------------------------------------------
 text: (0-208)
 interface TheFirst {
@@ -2495,7 +2495,7 @@ declare function forfirstfirst_PART1Rest(): void;
 declare function f(): string;
 
 ----------------------------------------------------------------------
-prepend: (208-374):: /src/2/second-output.d.ts texts:: 1
+prepend: (208-374):: ../../../2/second-output.d.ts texts:: 1
 >>--------------------------------------------------------------------
 text: (208-374)
 declare namespace N {
