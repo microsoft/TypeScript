@@ -6416,19 +6416,6 @@ declare namespace ts.server.protocol {
         body?: string[];
     }
     /**
-     * Arguments for EncodedSemanticClassificationsRequest request.
-     */
-    interface EncodedSemanticClassificationsRequestArgs extends FileRequestArgs {
-        /**
-         * Start position of the span.
-         */
-        start: number;
-        /**
-         * Length of the span.
-         */
-        length: number;
-    }
-    /**
      * Arguments in document highlight request; include: filesToSearch, file,
      * line, offset.
      */
@@ -9076,6 +9063,7 @@ declare namespace ts.server {
         private updateErrorCheck;
         private cleanProjects;
         private cleanup;
+        private getEncodedSyntacticClassifications;
         private getEncodedSemanticClassifications;
         private getProject;
         private getConfigFileAndProject;
