@@ -307,7 +307,7 @@ ts-jest[versions] (WARN) Version X.X.X-insiders.xxxxxxxx of typescript installed
 ts-jest[versions] (WARN) Version X.X.X-insiders.xxxxxxxx of typescript installed has not been tested with ts-jest. If you're experiencing issues, consider using a supported version (>=2.7.0 <4.0.0). Please do not report issues in ts-jest if you are using unsupported versions.
 ================================
 
-BLOCKED (26)
+BLOCKED (27)
 ================================
 @uifabric/api-docs
 @uifabric/azure-themes
@@ -320,6 +320,7 @@ BLOCKED (26)
 @uifabric/fluent-theme
 @uifabric/foundation-scenarios
 @uifabric/lists
+@uifabric/mdl2-theme
 @uifabric/pr-deploy-site
 @uifabric/react-cards
 @uifabric/theme-samples
@@ -411,6 +412,7 @@ XX of XX: [@uifabric/foundation-scenarios] blocked by [@uifabric/foundation]!
 XX of XX: [@uifabric/lists] blocked by [@uifabric/foundation]!
 XX of XX: [@uifabric/fluent-theme] blocked by [@uifabric/foundation]!
 XX of XX: [@uifabric/tsx-editor] blocked by [@uifabric/foundation]!
+XX of XX: [@uifabric/mdl2-theme] blocked by [@uifabric/foundation]!
 XX of XX: [@uifabric/theme-samples] blocked by [@uifabric/foundation]!
 XX of XX: [@uifabric/variants] blocked by [@uifabric/foundation]!
 XX of XX: [server-rendered-app] blocked by [@uifabric/foundation]!

@@ -8,8 +8,7 @@
             "module": "commonjs",
             "moduleResolution": "node",
             "outDir": "bin"
-        },
-        "exclude": [ "node_modules" ]
+        }
     }
 ==== /index.ts (1 errors) ====
     /// <reference path="/typings/index.d.ts" />

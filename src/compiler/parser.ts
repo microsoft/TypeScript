@@ -4430,14 +4430,18 @@ namespace ts {
 
             if (token() !== SyntaxKind.CloseBraceToken) {
                 node.dotDotDotToken = parseOptionalToken(SyntaxKind.DotDotDotToken);
-                node.expression = parseAssignmentExpressionOrHigher();
+                // Only an AssignmentExpression is valid here per the JSX spec,
+                // but we can unambiguously parse a comma sequence and provide
+                // a better error message in grammar checking.
+                node.expression = parseExpression();
             }
             if (inExpressionContext) {
                 parseExpected(SyntaxKind.CloseBraceToken);
             }
             else {
-                parseExpected(SyntaxKind.CloseBraceToken, /*message*/ undefined, /*shouldAdvance*/ false);
-                scanJsxText();
+                if (parseExpected(SyntaxKind.CloseBraceToken, /*message*/ undefined, /*shouldAdvance*/ false)) {
+                    scanJsxText();
+                }
             }
 
             return finishNode(node);
