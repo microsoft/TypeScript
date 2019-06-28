@@ -1,14 +1,9 @@
 Exit Code: 1
 Standard output:
 
-
 Rush Multi-Project Build Tool 5.7.3 - https://rushjs.io
-
-
 Starting "rush rebuild"
-
 Executing a maximum of 1 simultaneous processes...
-
 [@azure/cosmos] started
 XX of XX: [@azure/cosmos] completed successfully in ? seconds
 [@azure/service-bus] started
@@ -44,7 +39,6 @@ XX of XX: [@azure/keyvault-keys] completed successfully in ? seconds
 [@azure/keyvault-secrets] started
 XX of XX: [@azure/keyvault-secrets] completed successfully in ? seconds
 [@azure/core-amqp] started
-
 SUCCESS (16)
 ================================
 @azure/abort-controller (? seconds)
@@ -64,18 +58,15 @@ SUCCESS (16)
 @azure/template (? seconds)
 testhub (? seconds)
 ================================
-
 SUCCESS WITH WARNINGS (1)
 ================================
 @azure/service-bus (? seconds)
 Warning: You have changed the public API signature for this project. Updating review/service-bus.api.md
 ================================
-
 BLOCKED (1)
 ================================
 @azure/event-hubs
 ================================
-
 FAILURE (1)
 ================================
 @azure/core-amqp (? seconds)
@@ -85,8 +76,6 @@ src/errors.ts(586,20): error TS7053: Element implicitly has an 'any' type becaus
 src/errors.ts(607,34): error TS7053: Element implicitly has an 'any' type because expression of type 'any' can't be used to index type 'typeof SystemErrorConditionMapper'.
 src/errors.ts(608,20): error TS7053: Element implicitly has an 'any' type because expression of type 'any' can't be used to index type 'typeof ConditionErrorNameMapper'.
 ================================
-
-
 Error: Project(s) failed to build
 rush rebuild - Errors! ( ? seconds)
 
@@ -95,7 +84,6 @@ rush rebuild - Errors! ( ? seconds)
 Standard error:
 Your version of Node.js (12.4.0) has not been tested with this release of Rush. The Rush team will not accept issue reports for it. Please consider upgrading Rush or downgrading Node.js.
 XX of XX: [@azure/service-bus] completed with warnings in ? seconds
-
 XX of XX: [@azure/core-amqp] failed to build!
 XX of XX: [@azure/event-hubs] blocked by [@azure/core-amqp]!
 [@azure/core-amqp] Returned error code: 2
