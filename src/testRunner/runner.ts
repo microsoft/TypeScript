@@ -137,6 +137,9 @@ function handleTestConfig() {
 
         const runnerConfig = testConfig.runners || testConfig.test;
         if (runnerConfig && runnerConfig.length > 0) {
+            if (testConfig.runners) {
+                runUnitTests = runnerConfig.indexOf("unittest") !== -1;
+            }
             for (const option of runnerConfig) {
                 if (!option) {
                     continue;
