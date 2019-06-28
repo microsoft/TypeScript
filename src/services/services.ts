@@ -1246,8 +1246,8 @@ namespace ts {
                     return host.resolveTypeReferenceDirectives!(typeReferenceDirectiveNames, containingFile, redirectedReference);
                 };
             }
-            if (host.setGetSourceOfProjectReferenceRedirect) {
-                compilerHost.setGetSourceOfProjectReferenceRedirect = getSource => host.setGetSourceOfProjectReferenceRedirect!(getSource);
+            if (host.setResolvedProjectReferenceCallbacks) {
+                compilerHost.setResolvedProjectReferenceCallbacks = callbacks => host.setResolvedProjectReferenceCallbacks!(callbacks);
             }
             if (host.useSourceInsteadOfReferenceRedirect) {
                 compilerHost.useSourceInsteadOfReferenceRedirect = () => host.useSourceInsteadOfReferenceRedirect!();

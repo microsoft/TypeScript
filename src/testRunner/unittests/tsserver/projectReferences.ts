@@ -727,6 +727,36 @@ ${dependencyTs.content}`);
                         /*afterActionDocumentPositionMapperNotEquals*/ undefined,
                         /*useDepedencyChange*/ true
                     );
+
+                    it("when d.ts file is not generated", () => {
+                        const host = createServerHost(files);
+                        const session = createSession(host);
+                        openFilesForSession([...openFiles, randomFile], session);
+
+                        const expectedClosedInfos = closedInfos.filter(f => f.toLowerCase() !== dtsPath && f.toLowerCase() !== dtsMapPath);
+                        // If closed infos includes dts and dtsMap, watch dts since its not present
+                        const expectedWatchedFiles = closedInfos.length === expectedClosedInfos.length ?
+                            otherWatchedFiles :
+                            otherWatchedFiles.concat(dtsPath);
+                        // Main scenario action
+                        verifyAllFnActionWorker(session, ({ reqName, response, expectedResponse }) => {
+                            assert.deepEqual(response, expectedResponse, `Failed on ${reqName}`);
+                            verifyInfosWithRandom(session, host, openInfos, expectedClosedInfos, expectedWatchedFiles);
+                            verifyDocumentPositionMapper(session, /*dependencyMap*/ undefined, /*documentPositionMapper*/ undefined);
+                        }, /*dtsAbsent*/ true);
+                        checkProject(session);
+
+                        // Collecting at this point retains dependency.d.ts and map
+                        closeFilesForSession([randomFile], session);
+                        openFilesForSession([randomFile], session);
+                        verifyInfosWithRandom(session, host, openInfos, expectedClosedInfos, expectedWatchedFiles);
+                        verifyDocumentPositionMapper(session, /*dependencyMap*/ undefined, /*documentPositionMapper*/ undefined);
+
+                        // Closing open file, removes dependencies too
+                        closeFilesForSession([...openFiles, randomFile], session);
+                        openFilesForSession([randomFile], session);
+                        verifyOnlyRandomInfos(session, host);
+                    });
                 }
             }
 

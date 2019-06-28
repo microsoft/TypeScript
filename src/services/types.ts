@@ -237,7 +237,7 @@ namespace ts {
         /* @internal */
         getSourceFileLike?(fileName: string): SourceFileLike | undefined;
         /* @internal */
-        setGetSourceOfProjectReferenceRedirect?(getSource: GetSourceOfProjectReferenceRedirect): void;
+        setResolvedProjectReferenceCallbacks?(callbacks: ResolvedProjectReferenceCallbacks): void;
         /* @internal */
         useSourceInsteadOfReferenceRedirect?(): boolean;
     }

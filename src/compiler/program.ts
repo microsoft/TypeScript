@@ -826,8 +826,11 @@ namespace ts {
                 if (!resolvedProjectReferences) {
                     resolvedProjectReferences = projectReferences.map(parseProjectReferenceConfigFile);
                 }
-                if (host.setGetSourceOfProjectReferenceRedirect) {
-                    host.setGetSourceOfProjectReferenceRedirect(getSourceOfProjectReferenceRedirect);
+                if (host.setResolvedProjectReferenceCallbacks) {
+                    host.setResolvedProjectReferenceCallbacks({
+                        getSourceOfProjectReferenceRedirect,
+                        forEachResolvedProjectReference
+                    });
                 }
                 if (rootNames.length) {
                     for (const parsedRef of resolvedProjectReferences) {
@@ -1226,8 +1229,11 @@ namespace ts {
             }
             if (projectReferences) {
                 resolvedProjectReferences = projectReferences.map(parseProjectReferenceConfigFile);
-                if (host.setGetSourceOfProjectReferenceRedirect) {
-                    host.setGetSourceOfProjectReferenceRedirect(getSourceOfProjectReferenceRedirect);
+                if (host.setResolvedProjectReferenceCallbacks) {
+                    host.setResolvedProjectReferenceCallbacks({
+                        getSourceOfProjectReferenceRedirect,
+                        forEachResolvedProjectReference
+                    });
                 }
             }
 

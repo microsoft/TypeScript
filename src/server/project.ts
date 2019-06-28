@@ -1482,7 +1482,8 @@ namespace ts.server {
         configFileWatcher: FileWatcher | undefined;
         private directoriesWatchedForWildcards: Map<WildcardDirectoryWatcher> | undefined;
         readonly canonicalConfigFilePath: NormalizedPath;
-        private getSourceOfProjectReferenceRedirect: GetSourceOfProjectReferenceRedirect | undefined;
+        private projectReferenceCallbacks: ResolvedProjectReferenceCallbacks | undefined;
+        private mapOfDeclarationDirectories: Map<true> | undefined;
 
         /* @internal */
         pendingReload: ConfigFileProgramReloadLevel | undefined;
@@ -1529,8 +1530,8 @@ namespace ts.server {
         }
 
         /* @internal */
-        setGetSourceOfProjectReferenceRedirect(getSource: GetSourceOfProjectReferenceRedirect) {
-            this.getSourceOfProjectReferenceRedirect = getSource;
+        setResolvedProjectReferenceCallbacks(projectReferenceCallbacks: ResolvedProjectReferenceCallbacks) {
+            this.projectReferenceCallbacks = projectReferenceCallbacks;
         }
 
         /* @internal */
@@ -1538,11 +1539,40 @@ namespace ts.server {
 
         fileExists(file: string): boolean {
             // Project references go to source file instead of .d.ts file
-            if (this.languageServiceEnabled && this.getSourceOfProjectReferenceRedirect) {
-                const source = this.getSourceOfProjectReferenceRedirect(file);
+            if (this.useSourceInsteadOfReferenceRedirect() && this.projectReferenceCallbacks) {
+                const source = this.projectReferenceCallbacks.getSourceOfProjectReferenceRedirect(file);
                 if (source) return isString(source) ? super.fileExists(source) : true;
             }
             return super.fileExists(file);
+        }
+
+        directoryExists(path: string): boolean {
+            if (super.directoryExists(path)) return true;
+            if (!this.useSourceInsteadOfReferenceRedirect() || !this.projectReferenceCallbacks) return false;
+
+            if (!this.mapOfDeclarationDirectories) {
+                this.mapOfDeclarationDirectories = createMap();
+                this.projectReferenceCallbacks.forEachResolvedProjectReference(ref => {
+                    if (!ref) return;
+                    const out = ref.commandLine.options.outFile || ref.commandLine.options.outDir;
+                    if (out) {
+                        this.mapOfDeclarationDirectories!.set(getDirectoryPath(this.toPath(out)), true);
+                    }
+                    else {
+                        // Set declaration's in different locations only, if they are next to source the directory present doesnt change
+                        const declarationDir = ref.commandLine.options.declarationDir || ref.commandLine.options.outDir;
+                        if (declarationDir) {
+                            this.mapOfDeclarationDirectories!.set(this.toPath(declarationDir), true);
+                        }
+                    }
+                });
+            }
+            const dirPath = this.toPath(path);
+            const dirPathWithTrailingDirectorySeparator = `${dirPath}${directorySeparator}`;
+            return !!forEachKey(
+                this.mapOfDeclarationDirectories,
+                declDirPath => dirPath === declDirPath || startsWith(declDirPath, dirPathWithTrailingDirectorySeparator)
+            );
         }
 
         /**
@@ -1553,6 +1583,8 @@ namespace ts.server {
             this.isInitialLoadPending = returnFalse;
             const reloadLevel = this.pendingReload;
             this.pendingReload = ConfigFileProgramReloadLevel.None;
+            this.projectReferenceCallbacks = undefined;
+            this.mapOfDeclarationDirectories = undefined;
             let result: boolean;
             switch (reloadLevel) {
                 case ConfigFileProgramReloadLevel.Partial:
@@ -1567,7 +1599,6 @@ namespace ts.server {
                 default:
                     result = super.updateGraph();
             }
-            this.getSourceOfProjectReferenceRedirect = undefined;
             this.projectService.sendProjectLoadingFinishEvent(this);
             this.projectService.sendProjectTelemetry(this);
             return result;
@@ -1684,6 +1715,8 @@ namespace ts.server {
             this.stopWatchingWildCards();
             this.projectErrors = undefined;
             this.configFileSpecs = undefined;
+            this.projectReferenceCallbacks = undefined;
+            this.mapOfDeclarationDirectories = undefined;
             super.close();
         }
 
