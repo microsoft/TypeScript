@@ -182,7 +182,7 @@ tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts(178,22): e
 !!! error TS2322:   Object literal may only specify known properties, and 'explicitStructural' does not exist in type '{ wrongName: number; f: (this: { y: number; }, x: number) => number; }'.
     
     ok.f(); // not enough arguments
-       ~
+       ~~~
 !!! error TS2554: Expected 1 arguments, but got 0.
 !!! related TS6210 tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts:61:46: An argument for 'x' was not provided.
     ok.f('wrong type');
@@ -204,7 +204,7 @@ tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts(178,22): e
     
     let c = new C();
     c.explicitC(); // not enough arguments
-      ~~~~~~~~~
+      ~~~~~~~~~~~
 !!! error TS2554: Expected 1 arguments, but got 0.
 !!! related TS6210 tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts:9:24: An argument for 'm' was not provided.
     c.explicitC('wrong type');
@@ -214,7 +214,7 @@ tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts(178,22): e
                     ~~~~~~~~~~~~~~~~~~~~
 !!! error TS2554: Expected 1 arguments, but got 2.
     c.explicitThis(); // not enough arguments
-      ~~~~~~~~~~~~
+      ~~~~~~~~~~~~~~
 !!! error TS2554: Expected 1 arguments, but got 0.
 !!! related TS6210 tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts:3:30: An argument for 'm' was not provided.
     c.explicitThis('wrong type 2');
@@ -224,7 +224,7 @@ tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts(178,22): e
                        ~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS2554: Expected 1 arguments, but got 2.
     c.implicitThis(); // not enough arguments
-      ~~~~~~~~~~~~
+      ~~~~~~~~~~~~~~
 !!! error TS2554: Expected 1 arguments, but got 0.
 !!! related TS6210 tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts:6:18: An argument for 'm' was not provided.
     c.implicitThis('wrong type 2');
@@ -234,7 +234,7 @@ tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts(178,22): e
                        ~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS2554: Expected 1 arguments, but got 2.
     c.explicitProperty(); // not enough arguments
-      ~~~~~~~~~~~~~~~~
+      ~~~~~~~~~~~~~~~~~~
 !!! error TS2554: Expected 1 arguments, but got 0.
 !!! related TS6210 tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts:12:41: An argument for 'm' was not provided.
     c.explicitProperty('wrong type 3');

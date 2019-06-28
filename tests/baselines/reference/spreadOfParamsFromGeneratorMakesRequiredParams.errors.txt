@@ -10,6 +10,6 @@ tests/cases/compiler/spreadOfParamsFromGeneratorMakesRequiredParams.ts(6,1): err
     ): any;
     
     call(function* (a: 'a') { }); // error, 2nd argument required
-    ~~~~
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS2554: Expected 2 arguments, but got 1.
 !!! related TS6210 tests/cases/compiler/spreadOfParamsFromGeneratorMakesRequiredParams.ts:3:5: An argument for 'args' was not provided.

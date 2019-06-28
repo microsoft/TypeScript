@@ -1,7 +1,8 @@
 tests/cases/compiler/callOnInstance.ts(1,18): error TS2300: Duplicate identifier 'D'.
 tests/cases/compiler/callOnInstance.ts(3,15): error TS2300: Duplicate identifier 'D'.
 tests/cases/compiler/callOnInstance.ts(7,25): error TS2554: Expected 0 arguments, but got 1.
-tests/cases/compiler/callOnInstance.ts(10,1): error TS2349: Cannot invoke an expression whose type lacks a call signature. Type 'C' has no compatible call signatures.
+tests/cases/compiler/callOnInstance.ts(10,1): error TS2349: This expression is not callable.
+  Type 'C' has no call signatures.
 
 
 ==== tests/cases/compiler/callOnInstance.ts (4 errors) ====
@@ -21,5 +22,6 @@ tests/cases/compiler/callOnInstance.ts(10,1): error TS2349: Cannot invoke an exp
     
     declare class C { constructor(value: number); }
     (new C(1))(); // Error for calling an instance
-    ~~~~~~~~~~~~
-!!! error TS2349: Cannot invoke an expression whose type lacks a call signature. Type 'C' has no compatible call signatures.
+    ~~~~~~~~~~
+!!! error TS2349: This expression is not callable.
+!!! error TS2349:   Type 'C' has no call signatures.
