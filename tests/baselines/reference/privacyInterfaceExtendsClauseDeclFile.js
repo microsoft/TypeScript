@@ -101,30 +101,32 @@ exports.__esModule = true;
 
 //// [privacyInterfaceExtendsClauseDeclFile_externalModule.d.ts]
 export declare module publicModule {
-    interface publicInterfaceInPublicModule {
+    export interface publicInterfaceInPublicModule {
     }
     interface privateInterfaceInPublicModule {
     }
-    interface publicInterfaceImplementingPublicInterfaceInModule extends publicInterfaceInPublicModule {
+    export interface publicInterfaceImplementingPublicInterfaceInModule extends publicInterfaceInPublicModule {
     }
-    interface publicInterfaceImplementingPrivateInterfaceInModule extends privateInterfaceInPublicModule {
+    export interface publicInterfaceImplementingPrivateInterfaceInModule extends privateInterfaceInPublicModule {
     }
-    interface publicInterfaceImplementingFromPrivateModuleInterface extends privateModule.publicInterfaceInPrivateModule {
+    export interface publicInterfaceImplementingFromPrivateModuleInterface extends privateModule.publicInterfaceInPrivateModule {
     }
-    interface publicInterfaceImplementingPrivateAndPublicInterface extends privateInterfaceInPublicModule, publicInterfaceInPublicModule {
+    export interface publicInterfaceImplementingPrivateAndPublicInterface extends privateInterfaceInPublicModule, publicInterfaceInPublicModule {
     }
+    export {};
 }
 declare module privateModule {
-    interface publicInterfaceInPrivateModule {
+    export interface publicInterfaceInPrivateModule {
     }
     interface privateInterfaceInPrivateModule {
     }
-    interface publicInterfaceImplementingPublicInterfaceInModule extends publicInterfaceInPrivateModule {
+    export interface publicInterfaceImplementingPublicInterfaceInModule extends publicInterfaceInPrivateModule {
     }
-    interface publicInterfaceImplementingPrivateInterfaceInModule extends privateInterfaceInPrivateModule {
+    export interface publicInterfaceImplementingPrivateInterfaceInModule extends privateInterfaceInPrivateModule {
     }
-    interface publicInterfaceImplementingFromPrivateModuleInterface extends privateModule.publicInterfaceInPrivateModule {
+    export interface publicInterfaceImplementingFromPrivateModuleInterface extends privateModule.publicInterfaceInPrivateModule {
     }
+    export {};
 }
 export interface publicInterface {
 }
@@ -139,14 +141,15 @@ export interface publicInterfaceImplementingFromPrivateModuleInterface extends p
 export {};
 //// [privacyInterfaceExtendsClauseDeclFile_GlobalFile.d.ts]
 declare module publicModuleInGlobal {
-    interface publicInterfaceInPublicModule {
+    export interface publicInterfaceInPublicModule {
     }
     interface privateInterfaceInPublicModule {
     }
-    interface publicInterfaceImplementingPublicInterfaceInModule extends publicInterfaceInPublicModule {
+    export interface publicInterfaceImplementingPublicInterfaceInModule extends publicInterfaceInPublicModule {
     }
-    interface publicInterfaceImplementingPrivateInterfaceInModule extends privateInterfaceInPublicModule {
+    export interface publicInterfaceImplementingPrivateInterfaceInModule extends privateInterfaceInPublicModule {
     }
+    export {};
 }
 interface publicInterfaceInGlobal {
 }

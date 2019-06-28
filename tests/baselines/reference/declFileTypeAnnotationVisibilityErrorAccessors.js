@@ -264,13 +264,13 @@ var m;
 declare module m {
     class private1 {
     }
-    class public1 {
+    export class public1 {
     }
     module m2 {
         class public2 {
         }
     }
-    class c {
+    export class c {
         readonly foo1: private1;
         readonly foo2: private1;
         foo3: private1;
@@ -287,4 +287,5 @@ declare module m {
         foo114: m2.public2;
         foo115: m2.public2;
     }
+    export {};
 }
