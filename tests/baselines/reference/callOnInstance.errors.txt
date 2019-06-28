@@ -22,6 +22,6 @@ tests/cases/compiler/callOnInstance.ts(10,1): error TS2349: This expression is n
     
     declare class C { constructor(value: number); }
     (new C(1))(); // Error for calling an instance
-    ~~~~~~~~~~~~
+    ~~~~~~~~~~
 !!! error TS2349: This expression is not callable.
 !!! error TS2349:   Type 'C' has no call signatures.

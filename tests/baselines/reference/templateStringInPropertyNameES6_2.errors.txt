@@ -9,10 +9,9 @@ tests/cases/conformance/es6/templates/templateStringInPropertyNameES6_2.ts(3,1):
 ==== tests/cases/conformance/es6/templates/templateStringInPropertyNameES6_2.ts (5 errors) ====
     var x = {
             ~
-        `abc${ 123 }def${ 456 }ghi`: 321
-    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS2349: This expression is not callable.
 !!! error TS2349:   Type '{}' has no call signatures.
+        `abc${ 123 }def${ 456 }ghi`: 321
         ~~~~~~
 !!! error TS1136: Property assignment expected.
                                    ~

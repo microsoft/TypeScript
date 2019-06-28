@@ -39,7 +39,7 @@ tests/cases/compiler/untypedFunctionCallsWithTypeParameters1.ts(41,4): error TS2
     
     var c2: C;
     var r4 = c2<number>(); // should be an error
-             ~~~~~~~~~~~~
+             ~~
 !!! error TS2349: This expression is not callable.
 !!! error TS2349:   Type 'C' has no call signatures.
     

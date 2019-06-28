@@ -11,10 +11,9 @@ tests/cases/conformance/es6/templates/templateStringInObjectLiteralES6.ts(4,1): 
             ~
         a: `abc${ 123 }def`,
     ~~~~~~~~~~~~~~~~~~~~~~~~
-        `b`: 321
-    ~~~~~~~
 !!! error TS2349: This expression is not callable.
 !!! error TS2349:   Type '{ a: string; }' has no call signatures.
+        `b`: 321
         ~~~
 !!! error TS1136: Property assignment expected.
            ~

@@ -35,7 +35,7 @@ tests/cases/conformance/types/never/neverTypeErrors2.ts(24,17): error TS2407: Th
         ~
 !!! error TS2322: Type '{}' is not assignable to type 'never'.
         x();
-        ~~~
+        ~
 !!! error TS2349: This expression is not callable.
 !!! error TS2349:   Type 'never' has no call signatures.
     }

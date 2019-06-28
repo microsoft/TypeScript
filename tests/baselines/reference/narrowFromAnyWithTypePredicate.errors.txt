@@ -31,7 +31,7 @@ tests/cases/conformance/types/any/narrowFromAnyWithTypePredicate.ts(33,7): error
           ~~~~~~
 !!! error TS2339: Property 'method' does not exist on type '{}'.
         x();
-        ~~~
+        ~
 !!! error TS2349: This expression is not callable.
 !!! error TS2349:   Type '{}' has no call signatures.
     }

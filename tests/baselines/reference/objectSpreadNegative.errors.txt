@@ -86,7 +86,7 @@ tests/cases/conformance/types/spread/objectSpreadNegative.ts(58,11): error TS233
     // functions are skipped
     let spreadFunc = { ...function () { } }
     spreadFunc(); // error, no call signature
-    ~~~~~~~~~~~~
+    ~~~~~~~~~~
 !!! error TS2349: This expression is not callable.
 !!! error TS2349:   Type '{}' has no call signatures.
     

@@ -60,7 +60,7 @@ tests/cases/compiler/computedPropertiesInDestructuring1_ES6.ts(35,5): error TS23
     
     // report errors on type errors in computed properties used in destructuring
     let [{[foo()]: bar6}] = [{bar: "bar"}];
-           ~~~~~
+           ~~~
 !!! error TS2349: This expression is not callable.
 !!! error TS2349:   Type 'String' has no call signatures.
            ~~~~~
@@ -90,7 +90,7 @@ tests/cases/compiler/computedPropertiesInDestructuring1_ES6.ts(35,5): error TS23
 !!! error TS2537: Type '{ bar: string; }' has no matching index signature for type 'string'.
     
     [{[foo()]: bar4}] = [{bar: "bar"}];
-       ~~~~~
+       ~~~
 !!! error TS2349: This expression is not callable.
 !!! error TS2349:   Type 'String' has no call signatures.
        ~~~~~

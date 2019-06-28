@@ -7,7 +7,7 @@ tests/cases/compiler/functionExpressionShadowedByParams.ts(10,9): error TS2339: 
     function b1(b1: number) {
        b1.toPrecision(2); // should not error
        b1(12); // should error
-       ~~~~~~
+       ~~
 !!! error TS2349: This expression is not callable.
 !!! error TS2349:   Type 'Number' has no call signatures.
     }

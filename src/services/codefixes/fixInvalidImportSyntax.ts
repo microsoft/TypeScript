@@ -40,7 +40,7 @@ namespace ts.codefix {
     function getActionsForUsageOfInvalidImport(context: CodeFixContext): CodeFixAction[] | undefined {
         const sourceFile = context.sourceFile;
         const targetKind = Diagnostics.This_expression_is_not_callable.code === context.errorCode ? SyntaxKind.CallExpression : SyntaxKind.NewExpression;
-        const node = findAncestor(getTokenAtPosition(sourceFile, context.span.start), a => a.kind === targetKind && a.getStart() === context.span.start && a.getEnd() === (context.span.start + context.span.length)) as CallExpression | NewExpression;
+        const node = findAncestor(getTokenAtPosition(sourceFile, context.span.start), a => a.kind === targetKind) as CallExpression | NewExpression;
         if (!node) {
             return [];
         }

@@ -14,36 +14,33 @@ tests/cases/compiler/betterErrorForAccidentalCall.ts(13,1): error TS2349: This e
     declare function foo(): string;
     
     foo()(1 as number).toString();
-    ~~~~~~~~~~~~~~~~~~
+    ~~~~~
 !!! error TS2349: This expression is not callable.
 !!! error TS2349:   Type 'String' has no call signatures.
     
     foo()   (1 as number).toString();
-    ~~~~~~~~~~~~~~~~~~~~~
+    ~~~~~
 !!! error TS2349: This expression is not callable.
 !!! error TS2349:   Type 'String' has no call signatures.
     
     foo()
     ~~~~~
-    (1 as number).toString();
-    ~~~~~~~~~~~~~
 !!! error TS2349: This expression is not callable.
 !!! error TS2349:   Type 'String' has no call signatures.
 !!! related TS2734 tests/cases/compiler/betterErrorForAccidentalCall.ts:7:1: It is highly likely that you are missing a semicolon.
+    (1 as number).toString();
     
     foo()
     ~~~~~
-        (1 + 2).toString();
-    ~~~~~~~~~~~
 !!! error TS2349: This expression is not callable.
 !!! error TS2349:   Type 'String' has no call signatures.
 !!! related TS2734 tests/cases/compiler/betterErrorForAccidentalCall.ts:10:1: It is highly likely that you are missing a semicolon.
+        (1 + 2).toString();
     
     foo()
     ~~~~~
-        (<number>1).toString();
-    ~~~~~~~~~~~~~~~
 !!! error TS2349: This expression is not callable.
 !!! error TS2349:   Type 'String' has no call signatures.
 !!! related TS2734 tests/cases/compiler/betterErrorForAccidentalCall.ts:13:1: It is highly likely that you are missing a semicolon.
+        (<number>1).toString();
     
