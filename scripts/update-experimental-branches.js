@@ -18,7 +18,7 @@ async function main() {
     if (!prnums.length) {
         return; // No enlisted PRs, nothing to update
     }
-    if (!prnums.some(n => n === triggeredPR)) {
+    if (triggeredPR && !prnums.some(n => n === triggeredPR)) {
         return; // Only have work to do for enlisted PRs
     }
     console.log(`Performing experimental branch updating and merging for pull requests ${prnums.join(", ")}`);
@@ -51,9 +51,8 @@ async function main() {
                         issue_number: num,
                         body: `This PR is configured as an experiment, and currently has rebase conflicts with master - please rebase onto master and fix the conflicts.`
                     });
-                    throw new Error(`Rebase conflict detected in PR ${num} with master`);
                 }
-                return; // A PR is currently in conflict, give up
+                throw new Error(`Rebase conflict detected in PR ${num} with master`); // A PR is currently in conflict, give up
             }
             runSequence([
                 ["git", ["fetch", "origin", `pull/${num}/head:${num}`]],

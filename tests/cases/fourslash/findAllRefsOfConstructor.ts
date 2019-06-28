@@ -2,13 +2,13 @@
 
 
 ////class A {
-////    [|constructor|](s: string) {}
+////    [|[|{| "contextRangeIndex": 0 |}constructor|](s: string) {}|]
 ////}
 ////class B extends A { }
 ////class C extends B {
-////    [|constructor|]() {
+////    [|[|{| "contextRangeIndex": 2 |}constructor|]() {
 ////        [|super|]("");
-////    }
+////    }|]
 ////}
 ////class D extends B { }
 ////class E implements A { }
@@ -19,7 +19,7 @@
 ////const e = new E();
 
 verify.noErrors();
-const [aCtr, cCtr, cSuper, aNew, bNew, cNew, dNew] = test.ranges();
+const [aCtrDef, aCtr, cCtrDef, cCtr, cSuper, aNew, bNew, cNew, dNew] = test.ranges();
 verify.referenceGroups(aCtr, [
     { definition: "class A", ranges: [aCtr, aNew] },
     { definition: "class B", ranges: [cSuper, bNew]},

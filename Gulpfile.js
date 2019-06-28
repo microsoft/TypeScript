@@ -429,6 +429,7 @@ task("runtests-parallel").flags = {
     "   --workers=<number>": "The number of parallel workers to use.",
     "   --timeout=<ms>": "Overrides the default test timeout.",
     "   --built": "Compile using the built version of the compiler.",
+    "   --skipPercent=<number>": "Skip expensive tests with <percent> chance to miss an edit. Default 5%.",
 };
 
 task("diff", () => exec(getDiffTool(), [refBaseline, localBaseline], { ignoreExitCode: true }));

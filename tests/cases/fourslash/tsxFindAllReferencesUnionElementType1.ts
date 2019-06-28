@@ -18,11 +18,11 @@
 ////     return <h1>World </h1>;
 //// }
 
-//// var [|{| "isWriteAccess": true, "isDefinition": true |}SFCComp|] = SFC1 || SFC2;
-//// <[|SFCComp|] x={ "hi" } />
+//// [|var [|{| "isWriteAccess": true, "isDefinition": true, "contextRangeIndex": 0 |}SFCComp|] = SFC1 || SFC2;|]
+//// [|<[|{| "contextRangeIndex": 2 |}SFCComp|] x={ "hi" } />|]
 
 verify.singleReferenceGroup(`var SFCComp: ((prop: {
     x: number;
 }) => JSX.Element) | ((prop: {
     x: boolean;
-}) => JSX.Element)`);
+}) => JSX.Element)`, "SFCComp");

@@ -1,7 +1,7 @@
 /// <reference path='fourslash.ts'/>
 
 ////interface IFoo<T> {
-////    [|{| "isDefinition": true |}doSomething|](v: T): T;
+////    [|[|{| "isDefinition": true, "contextRangeIndex": 0 |}doSomething|](v: T): T;|]
 ////}
 ////
 ////var x: IFoo<string>;
@@ -10,4 +10,4 @@
 ////var y: IFoo<number>;
 ////y.[|doSomething|](12);
 
-verify.singleReferenceGroup("(method) IFoo<T>.doSomething(v: T): T");
+verify.singleReferenceGroup("(method) IFoo<T>.doSomething(v: T): T", "doSomething");

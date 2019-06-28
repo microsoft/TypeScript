@@ -42,6 +42,7 @@ namespace FourSlash {
          * is a range with `text in range` "selected".
          */
         ranges: Range[];
+        rangesByText?: ts.MultiMap<Range>;
     }
 
     export interface Marker {
@@ -582,6 +583,21 @@ namespace FourSlash {
             });
         }
 
+        public verifyErrorExistsAtRange(range: Range, code: number, expectedMessage?: string) {
+            const span = ts.createTextSpanFromRange(range);
+            const hasMatchingError = ts.some(
+                this.getDiagnostics(range.fileName),
+                ({ code, messageText, start, length }) =>
+                    code === code &&
+                    (!expectedMessage || expectedMessage === messageText) &&
+                    ts.isNumber(start) && ts.isNumber(length) &&
+                    ts.textSpansEqual(span, { start, length }));
+
+            if (!hasMatchingError) {
+                this.raiseError(`No error with code ${code} found at provided range.`);
+            }
+        }
+
         public verifyNumberOfErrorsInCurrentFile(expected: number) {
             const errors = this.getDiagnostics(this.activeFile.fileName);
             const actual = errors.length;
@@ -955,12 +971,15 @@ namespace FourSlash {
             const fullExpected = ts.map<FourSlashInterface.ReferenceGroup, ReferenceGroupJson>(parts, ({ definition, ranges }) => ({
                 definition: typeof definition === "string" ? definition : { ...definition, range: ts.createTextSpanFromRange(definition.range) },
                 references: ranges.map<ts.ReferenceEntry>(r => {
-                    const { isWriteAccess = false, isDefinition = false, isInString } = (r.marker && r.marker.data || {}) as { isWriteAccess?: boolean, isDefinition?: boolean, isInString?: true };
+                    const { isWriteAccess = false, isDefinition = false, isInString, contextRangeIndex } = (r.marker && r.marker.data || {}) as { isWriteAccess?: boolean, isDefinition?: boolean, isInString?: true, contextRangeIndex?: number };
                     return {
                         fileName: r.fileName,
                         textSpan: ts.createTextSpanFromRange(r),
                         isWriteAccess,
                         isDefinition,
+                        ...(contextRangeIndex !== undefined ?
+                            { contextSpan: ts.createTextSpanFromRange(this.getRanges()[contextRangeIndex]) } :
+                            undefined),
                         ...(isInString ? { isInString: true } : undefined),
                     };
                 }),
@@ -997,8 +1016,8 @@ namespace FourSlash {
             assert.deepEqual<ReadonlyArray<ts.ReferenceEntry> | undefined>(refs, expected);
         }
 
-        public verifySingleReferenceGroup(definition: FourSlashInterface.ReferenceGroupDefinition, ranges?: Range[]) {
-            ranges = ranges || this.getRanges();
+        public verifySingleReferenceGroup(definition: FourSlashInterface.ReferenceGroupDefinition, ranges?: Range[] | string) {
+            ranges = ts.isString(ranges) ? this.rangesByText().get(ranges)! : ranges || this.getRanges();
             this.verifyReferenceGroups(ranges, [{ definition, ranges }]);
         }
 
@@ -1011,7 +1030,7 @@ Actual: ${stringify(fullActual)}`);
                 };
 
                 if ((actual === undefined) !== (expected === undefined)) {
-                    fail(`Expected ${expected}, got ${actual}`);
+                    fail(`Expected ${stringify(expected)}, got ${stringify(actual)}`);
                 }
 
                 for (const key in actual) {
@@ -1021,7 +1040,7 @@ Actual: ${stringify(fullActual)}`);
                             recur(ak, ek, path ? path + "." + key : key);
                         }
                         else if (ak !== ek) {
-                            fail(`Expected '${key}' to be '${ek}', got '${ak}'`);
+                            fail(`Expected '${key}' to be '${stringify(ek)}', got '${stringify(ak)}'`);
                         }
                     }
                 }
@@ -1173,7 +1192,9 @@ Actual: ${stringify(fullActual)}`);
         public verifyRenameLocations(startRanges: ArrayOrSingle<Range>, options: FourSlashInterface.RenameLocationsOptions) {
             const { findInStrings = false, findInComments = false, ranges = this.getRanges(), providePrefixAndSuffixTextForRename = true } = ts.isArray(options) ? { findInStrings: false, findInComments: false, ranges: options, providePrefixAndSuffixTextForRename: true } : options;
 
-            for (const startRange of toArray(startRanges)) {
+            const _startRanges = toArray(startRanges);
+            assert(_startRanges.length);
+            for (const startRange of _startRanges) {
                 this.goToRangeStart(startRange);
 
                 const renameInfo = this.languageService.getRenameInfo(this.activeFile.fileName, this.currentCaretPosition);
@@ -1189,7 +1210,15 @@ Actual: ${stringify(fullActual)}`);
                     locations && ts.sort(locations, (r1, r2) => ts.compareStringsCaseSensitive(r1.fileName, r2.fileName) || r1.textSpan.start - r2.textSpan.start);
                 assert.deepEqual(sort(references), sort(ranges.map((rangeOrOptions): ts.RenameLocation => {
                     const { range, ...prefixSuffixText } = "range" in rangeOrOptions ? rangeOrOptions : { range: rangeOrOptions };
-                    return { fileName: range.fileName, textSpan: ts.createTextSpanFromRange(range), ...prefixSuffixText };
+                    const { contextRangeIndex } = (range.marker && range.marker.data || {}) as { contextRangeIndex?: number; };
+                    return {
+                        fileName: range.fileName,
+                        textSpan: ts.createTextSpanFromRange(range),
+                        ...(contextRangeIndex !== undefined ?
+                            { contextSpan: ts.createTextSpanFromRange(this.getRanges()[contextRangeIndex]) } :
+                            undefined),
+                        ...prefixSuffixText
+                    };
                 })));
             }
         }
@@ -1844,6 +1873,7 @@ Actual: ${stringify(fullActual)}`);
                     range.end = updatePosition(range.end, editStart, editEnd, newText);
                 }
             }
+            this.testData.rangesByText = undefined;
         }
 
         private removeWhitespace(text: string): string {
@@ -2026,7 +2056,9 @@ Actual: ${stringify(fullActual)}`);
         }
 
         public rangesByText(): ts.Map<Range[]> {
+            if (this.testData.rangesByText) return this.testData.rangesByText;
             const result = ts.createMultiMap<Range>();
+            this.testData.rangesByText = result;
             for (const range of this.getRanges()) {
                 const text = this.rangeText(range);
                 result.add(text, range);
@@ -2714,8 +2746,9 @@ Actual: ${stringify(fullActual)}`);
             return this.languageService.getDocumentHighlights(this.activeFile.fileName, this.currentCaretPosition, filesToSearch);
         }
 
-        public verifyRangesAreOccurrences(isWriteAccess?: boolean) {
-            const ranges = this.getRanges();
+        public verifyRangesAreOccurrences(isWriteAccess?: boolean, ranges?: Range[]) {
+            ranges = ranges || this.getRanges();
+            assert(ranges.length);
             for (const r of ranges) {
                 this.goToRangeStart(r);
                 this.verifyOccurrencesAtPositionListCount(ranges.length);
@@ -2725,8 +2758,13 @@ Actual: ${stringify(fullActual)}`);
             }
         }
 
-        public verifyRangesWithSameTextAreRenameLocations() {
-            this.rangesByText().forEach(ranges => this.verifyRangesAreRenameLocations(ranges));
+        public verifyRangesWithSameTextAreRenameLocations(...texts: string[]) {
+            if (texts.length) {
+                texts.forEach(text => this.verifyRangesAreRenameLocations(this.rangesByText().get(text)!));
+            }
+            else {
+                this.rangesByText().forEach(ranges => this.verifyRangesAreRenameLocations(ranges));
+            }
         }
 
         public verifyRangesWithSameTextAreDocumentHighlights() {
@@ -2741,6 +2779,7 @@ Actual: ${stringify(fullActual)}`);
 
         public verifyRangesAreDocumentHighlights(ranges: Range[] | undefined, options: FourSlashInterface.VerifyDocumentHighlightsOptions | undefined) {
             ranges = ranges || this.getRanges();
+            assert(ranges.length);
             const fileNames = options && options.filesToSearch || unique(ranges, range => range.fileName);
             for (const range of ranges) {
                 this.goToRangeStart(range);
@@ -2910,7 +2949,9 @@ Actual: ${stringify(fullActual)}`);
         }
 
         public noMoveToNewFile() {
-            for (const range of this.getRanges()) {
+            const ranges = this.getRanges();
+            assert(ranges.length);
+            for (const range of ranges) {
                 for (const refactor of this.getApplicableRefactors(range, { allowTextChangesInNewFiles: true })) {
                     if (refactor.name === "Move to a new file") {
                         ts.Debug.fail("Did not expect to get 'move to a new file' refactor");
@@ -3971,7 +4012,7 @@ namespace FourSlashInterface {
             this.state.verifyGetReferencesForServerTest(expected);
         }
 
-        public singleReferenceGroup(definition: ReferenceGroupDefinition, ranges?: FourSlash.Range[]) {
+        public singleReferenceGroup(definition: ReferenceGroupDefinition, ranges?: FourSlash.Range[] | string) {
             this.state.verifySingleReferenceGroup(definition, ranges);
         }
 
@@ -3981,6 +4022,10 @@ namespace FourSlashInterface {
 
         public noErrors() {
             this.state.verifyNoErrors();
+        }
+
+        public errorExistsAtRange(range: FourSlash.Range, code: number, message?: string) {
+            this.state.verifyErrorExistsAtRange(range, code, message);
         }
 
         public numberOfErrorsInCurrentFile(expected: number) {
@@ -4093,12 +4138,12 @@ namespace FourSlashInterface {
             this.state.verifyOccurrencesAtPositionListCount(expectedCount);
         }
 
-        public rangesAreOccurrences(isWriteAccess?: boolean) {
-            this.state.verifyRangesAreOccurrences(isWriteAccess);
+        public rangesAreOccurrences(isWriteAccess?: boolean, ranges?: FourSlash.Range[]) {
+            this.state.verifyRangesAreOccurrences(isWriteAccess, ranges);
         }
 
-        public rangesWithSameTextAreRenameLocations() {
-            this.state.verifyRangesWithSameTextAreRenameLocations();
+        public rangesWithSameTextAreRenameLocations(...texts: string[]) {
+            this.state.verifyRangesWithSameTextAreRenameLocations(...texts);
         }
 
         public rangesAreRenameLocations(options?: FourSlash.Range[] | { findInStrings?: boolean, findInComments?: boolean, ranges?: FourSlash.Range[] }) {

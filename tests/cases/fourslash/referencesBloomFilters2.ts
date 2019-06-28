@@ -3,7 +3,7 @@
 // Ensure BloomFilter building logic is correct, by having one reference per file
 
 // @Filename: declaration.ts
-////var container = { [|{| "isWriteAccess": true, "isDefinition": true |}42|]: 1 };
+////var container = { [|[|{| "isWriteAccess": true, "isDefinition": true, "contextRangeIndex": 0 |}42|]: 1|] };
 
 // @Filename: expression.ts
 ////function blah() { return (container[[|42|]]) === 2;  };
@@ -12,6 +12,6 @@
 ////function blah2() { container["[|42|]"] };
 
 // @Filename: redeclaration.ts
-////container = { "[|{| "isWriteAccess": true, "isDefinition": true |}42|]" : 18 };
+////container = { [|"[|{| "isWriteAccess": true, "isDefinition": true, "contextRangeIndex": 4 |}42|]" : 18|] };
 
-verify.singleReferenceGroup("(property) 42: number");
+verify.singleReferenceGroup("(property) 42: number", "42");

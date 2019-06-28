@@ -2611,13 +2611,6 @@ namespace ts {
         return undefined;
     }
 
-    export function tryResolveScriptReference(host: ScriptReferenceHost, sourceFile: SourceFile | UnparsedSource, reference: FileReference) {
-        if (!host.getCompilerOptions().noResolve) {
-            const referenceFileName = isRootedDiskPath(reference.fileName) ? reference.fileName : combinePaths(getDirectoryPath(sourceFile.fileName), reference.fileName);
-            return host.getSourceFile(referenceFileName);
-        }
-    }
-
     export function getAncestor(node: Node | undefined, kind: SyntaxKind): Node | undefined {
         while (node) {
             if (node.kind === kind) {
@@ -5186,6 +5179,9 @@ namespace ts {
             else if (isPropertyAccessExpression(node.parent.left)) {
                 return node.parent.left.name;
             }
+        }
+        else if (isVariableDeclaration(node.parent) && isIdentifier(node.parent.name)) {
+            return node.parent.name;
         }
     }
 

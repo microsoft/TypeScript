@@ -1,7 +1,6 @@
 // @filename: /foo/tsconfig.json
 {
-    "compilerOptions": { "composite": true },
-    "exclude": [ "node_modules" ]
+    "compilerOptions": { "composite": true }
 }
 
 // @filename: /foo/node_modules/myModule/index.ts

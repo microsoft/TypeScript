@@ -31,6 +31,7 @@ async function runConsoleTests(runJs, defaultReporter, runInParallel, watchMode,
     const inspect = cmdLineOptions.inspect;
     const runners = cmdLineOptions.runners;
     const light = cmdLineOptions.light;
+    const skipPercent = process.env.CI === "true" ? 0 : cmdLineOptions.skipPercent;
     const stackTraceLimit = cmdLineOptions.stackTraceLimit;
     const testConfigFile = "test.config";
     const failed = cmdLineOptions.failed;
@@ -62,8 +63,8 @@ async function runConsoleTests(runJs, defaultReporter, runInParallel, watchMode,
         testTimeout = 400000;
     }
 
-    if (tests || runners || light || testTimeout || taskConfigsFolder || keepFailed) {
-        writeTestConfigFile(tests, runners, light, taskConfigsFolder, workerCount, stackTraceLimit, testTimeout, keepFailed);
+    if (tests || runners || light || testTimeout || taskConfigsFolder || keepFailed || skipPercent !== undefined) {
+        writeTestConfigFile(tests, runners, light, skipPercent, taskConfigsFolder, workerCount, stackTraceLimit, testTimeout, keepFailed);
     }
 
     const colors = cmdLineOptions.colors;
@@ -158,17 +159,19 @@ exports.cleanTestDirs = cleanTestDirs;
  * @param {string} tests
  * @param {string} runners
  * @param {boolean} light
+ * @param {string} skipPercent
  * @param {string} [taskConfigsFolder]
  * @param {string | number} [workerCount]
  * @param {string} [stackTraceLimit]
  * @param {string | number} [timeout]
  * @param {boolean} [keepFailed]
  */
-function writeTestConfigFile(tests, runners, light, taskConfigsFolder, workerCount, stackTraceLimit, timeout, keepFailed) {
+function writeTestConfigFile(tests, runners, light, skipPercent, taskConfigsFolder, workerCount, stackTraceLimit, timeout, keepFailed) {
     const testConfigContents = JSON.stringify({
         test: tests ? [tests] : undefined,
         runners: runners ? runners.split(",") : undefined,
         light,
+        skipPercent,
         workerCount,
         stackTraceLimit,
         taskConfigsFolder,

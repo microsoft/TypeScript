@@ -2987,6 +2987,10 @@
         "category": "Error",
         "code": 4104
     },
+    "Private or protected member '{0}' cannot be accessed on a type parameter.": {
+        "category": "Error",
+        "code": 4105
+    },
 
     "The current host does not support the '{0}' option.": {
         "category": "Error",
@@ -5023,7 +5027,10 @@
         "category": "Message",
         "code": 95079
     },
-
+    "Infer 'this' type of '{0}' from usage": {
+        "category": "Message",
+        "code": 95080
+    },
     "No value exists in scope for the shorthand property '{0}'. Either declare one or provide an initializer.": {
         "category": "Error",
         "code": 18004
@@ -5035,5 +5042,9 @@
     "Classes may not have a field named 'constructor'.": {
         "category": "Error",
         "code": 18006
+    },
+    "JSX expressions may not use the comma operator. Did you mean to write an array?": {
+        "category": "Error",
+        "code": 18007
     }
 }

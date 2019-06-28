@@ -486,6 +486,16 @@ namespace ts {
                 });
         });
 
+        it("parse build with --locale en-us", () => {
+            // --lib es6 0.ts
+            assertParseResult(["--locale", "en-us", "src"],
+                {
+                    errors: [],
+                    projects: ["src"],
+                    buildOptions: { locale: "en-us" }
+                });
+        });
+
         it("parse build with --tsBuildInfoFile", () => {
             // --lib es6 0.ts
             assertParseResult(["--tsBuildInfoFile", "build.tsbuildinfo", "tests"],

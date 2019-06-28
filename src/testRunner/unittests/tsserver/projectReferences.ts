@@ -69,21 +69,24 @@ namespace ts.projectSystem {
                 openFilesForSession([containerCompositeExec[1]], session);
                 const service = session.getProjectService();
                 checkNumberOfProjects(service, { configuredProjects: 1 });
-                const locationOfMyConst = protocolLocationFromSubstring(containerCompositeExec[1].content, "myConst");
+                const { file: myConstFile, start: myConstStart, end: myConstEnd } = protocolFileSpanFromSubstring({
+                    file: containerCompositeExec[1],
+                    text: "myConst",
+                });
                 const response = session.executeCommandSeq<protocol.RenameRequest>({
                     command: protocol.CommandTypes.Rename,
-                    arguments: {
-                        file: containerCompositeExec[1].path,
-                        ...locationOfMyConst
-                    }
+                    arguments: { file: myConstFile, ...myConstStart }
                 }).response as protocol.RenameResponseBody;
 
-
-                const myConstLen = "myConst".length;
-                const locationOfMyConstInLib = protocolLocationFromSubstring(containerLib[1].content, "myConst");
+                const locationOfMyConstInLib = protocolFileSpanWithContextFromSubstring({
+                    file: containerLib[1],
+                    text: "myConst",
+                    contextText: "export const myConst = 30;"
+                });
+                const { file: _, ...renameTextOfMyConstInLib } = locationOfMyConstInLib;
                 assert.deepEqual(response.locs, [
-                    { file: containerCompositeExec[1].path, locs: [{ start: locationOfMyConst, end: { line: locationOfMyConst.line, offset: locationOfMyConst.offset + myConstLen } }] },
-                    { file: containerLib[1].path, locs: [{ start: locationOfMyConstInLib, end: { line: locationOfMyConstInLib.line, offset: locationOfMyConstInLib.offset + myConstLen } }] }
+                    { file: myConstFile, locs: [{ start: myConstStart, end: myConstEnd }] },
+                    { file: locationOfMyConstInLib.file, locs: [renameTextOfMyConstInLib] }
                 ]);
             });
         });
@@ -169,7 +172,7 @@ fn5();
             }
             function gotoDefintinionFromMainTs(fn: number): SessionAction<protocol.DefinitionAndBoundSpanRequest, protocol.DefinitionInfoAndBoundSpan> {
                 const textSpan = usageSpan(fn);
-                const definition: protocol.FileSpan = { file: dependencyTs.path, ...definitionSpan(fn) };
+                const definition: protocol.FileSpan = { file: dependencyTs.path, ...declarationSpan(fn) };
                 const declareSpaceLength = "declare ".length;
                 return {
                     reqName: "goToDef",
@@ -184,7 +187,13 @@ fn5();
                     },
                     expectedResponseNoMap: {
                         // To the dts
-                        definitions: [{ file: dtsPath, start: { line: fn, offset: definition.start.offset + declareSpaceLength }, end: { line: fn, offset: definition.end.offset + declareSpaceLength } }],
+                        definitions: [{
+                            file: dtsPath,
+                            start: { line: fn, offset: definition.start.offset + declareSpaceLength },
+                            end: { line: fn, offset: definition.end.offset + declareSpaceLength },
+                            contextStart: { line: fn, offset: 1 },
+                            contextEnd: { line: fn, offset: 37 }
+                        }],
                         textSpan
                     },
                     expectedResponseNoDts: {
@@ -195,18 +204,29 @@ fn5();
                 };
             }
 
-            function definitionSpan(fn: number): protocol.TextSpan {
-                return { start: { line: fn, offset: 17 }, end: { line: fn, offset: 20 } };
+            function declarationSpan(fn: number): protocol.TextSpanWithContext {
+                return {
+                    start: { line: fn, offset: 17 },
+                    end: { line: fn, offset: 20 },
+                    contextStart: { line: fn, offset: 1 },
+                    contextEnd: { line: fn, offset: 26 }
+                };
             }
-            function importSpan(fn: number): protocol.TextSpan {
-                return { start: { line: fn + 1, offset: 5 }, end: { line: fn + 1, offset: 8 } };
+            function importSpan(fn: number): protocol.TextSpanWithContext {
+                return {
+                    start: { line: fn + 1, offset: 5 },
+                    end: { line: fn + 1, offset: 8 },
+                    contextStart: { line: 1, offset: 1 },
+                    contextEnd: { line: 7, offset: 27 }
+                };
             }
             function usageSpan(fn: number): protocol.TextSpan {
                 return { start: { line: fn + 8, offset: 1 }, end: { line: fn + 8, offset: 4 } };
             }
 
             function renameFromDependencyTs(fn: number): SessionAction<protocol.RenameRequest, protocol.RenameResponseBody> {
-                const triggerSpan = definitionSpan(fn);
+                const defSpan = declarationSpan(fn);
+                const { contextStart: _, contextEnd: _1, ...triggerSpan } = defSpan;
                 return {
                     reqName: "rename",
                     request: {
@@ -224,7 +244,7 @@ fn5();
                             triggerSpan
                         },
                         locs: [
-                            { file: dependencyTs.path, locs: [triggerSpan] }
+                            { file: dependencyTs.path, locs: [defSpan] }
                         ]
                     }
                 };
