@@ -8,6 +8,10 @@ declare const generator: Generator<number, string, boolean>;
 declare const never: never;
 >never : never
 
+function* g000() { // Generator<never, void, unknown>
+>g000 : () => Generator<never, void, unknown>
+}
+
 // 'yield' iteration type inference
 function* g001() { // Generator<undefined, void, unknown>
 >g001 : () => Generator<undefined, void, unknown>
@@ -32,7 +36,7 @@ function* g003() { // Generator<never, void, unknown>
 >[] : never[]
 }
 
-function* g004() { // Generator<number, void, unknown>
+function* g004() { // Generator<number, void, undefined>
 >g004 : () => Generator<number, void, undefined>
 
     yield* iterableIterator;
@@ -43,7 +47,8 @@ function* g004() { // Generator<number, void, unknown>
 function* g005() { // Generator<number, void, boolean>
 >g005 : () => Generator<number, void, boolean>
 
-    yield* generator;
+    const x = yield* generator;
+>x : string
 >yield* generator : string
 >generator : Generator<number, string, boolean>
 }
@@ -119,6 +124,40 @@ function* g202() { // Generator<1 | 2, void, never>
 >b : number
 >yield 2 : any
 >2 : 2
+}
+
+declare function f1(x: string): void;
+>f1 : { (x: string): void; (x: number): void; }
+>x : string
+
+declare function f1(x: number): void;
+>f1 : { (x: string): void; (x: number): void; }
+>x : number
+
+function* g203() { // Generator<number, void, string>
+>g203 : () => Generator<number, void, string>
+
+	const x = f1(yield 1);
+>x : void
+>f1(yield 1) : void
+>f1 : { (x: string): void; (x: number): void; }
+>yield 1 : any
+>1 : 1
+}
+
+declare function f2<T>(x: T): T;
+>f2 : <T>(x: T) => T
+>x : T
+
+function* g204() { // Generator<number, void, any>
+>g204 : () => Generator<number, void, any>
+
+	const x = f2(yield 1);
+>x : any
+>f2(yield 1) : any
+>f2 : <T>(x: T) => T
+>yield 1 : any
+>1 : 1
 }
 
 // mixed iteration types inference
@@ -239,3 +278,31 @@ function* g309<T, U, V>(x: T, y: U) { // Generator<T, U, V>
     return y;
 >y : U
 }
+
+function* g310() { // Generator<undefined, void, [(1 | undefined)?, (2 | undefined)?]>
+>g310 : () => Generator<undefined, void, [(1 | undefined)?, (2 | undefined)?]>
+
+	const [a = 1, b = 2] = yield;
+>a : any
+>1 : 1
+>b : any
+>2 : 2
+>yield : any
+}
+
+function* g311() { // Generator<undefined, void, string>
+>g311 : () => Generator<undefined, void, string>
+
+	yield* (function*() {
+>yield* (function*() {		const y: string = yield;	})() : void
+>(function*() {		const y: string = yield;	})() : Generator<undefined, void, string>
+>(function*() {		const y: string = yield;	}) : () => Generator<undefined, void, string>
+>function*() {		const y: string = yield;	} : () => Generator<undefined, void, string>
+
+		const y: string = yield;
+>y : string
+>yield : any
+
+	})();
+}
+

@@ -3,6 +3,9 @@ declare const iterableIterator: IterableIterator<number>;
 declare const generator: Generator<number, string, boolean>;
 declare const never: never;
 
+function* g000() { // Generator<never, void, unknown>
+}
+
 // 'yield' iteration type inference
 function* g001() { // Generator<undefined, void, unknown>
     yield;
@@ -16,12 +19,12 @@ function* g003() { // Generator<never, void, unknown>
     yield* [];
 }
 
-function* g004() { // Generator<number, void, unknown>
+function* g004() { // Generator<number, void, undefined>
     yield* iterableIterator;
 }
 
 function* g005() { // Generator<number, void, boolean>
-    yield* generator;
+    const x = yield* generator;
 }
 
 function* g006() { // Generator<1 | 2, void, unknown>
@@ -55,6 +58,19 @@ function* g201() { // Generator<number, void, string>
 function* g202() { // Generator<1 | 2, void, never>
     let a: string = yield 1;
     let b: number = yield 2;
+}
+
+declare function f1(x: string): void;
+declare function f1(x: number): void;
+
+function* g203() { // Generator<number, void, string>
+	const x = f1(yield 1);
+}
+
+declare function f2<T>(x: T): T;
+
+function* g204() { // Generator<number, void, any>
+	const x = f2(yield 1);
 }
 
 // mixed iteration types inference
@@ -106,7 +122,20 @@ function* g309<T, U, V>(x: T, y: U) { // Generator<T, U, V>
     return y;
 }
 
+function* g310() { // Generator<undefined, void, [(1 | undefined)?, (2 | undefined)?]>
+	const [a = 1, b = 2] = yield;
+}
+
+function* g311() { // Generator<undefined, void, string>
+	yield* (function*() {
+		const y: string = yield;
+	})();
+}
+
+
 //// [generatorReturnTypeInference.js]
+function* g000() {
+}
 // 'yield' iteration type inference
 function* g001() {
     yield;
@@ -121,7 +150,7 @@ function* g004() {
     yield* iterableIterator;
 }
 function* g005() {
-    yield* generator;
+    const x = yield* generator;
 }
 function* g006() {
     yield 1;
@@ -149,6 +178,12 @@ function* g201() {
 function* g202() {
     let a = yield 1;
     let b = yield 2;
+}
+function* g203() {
+    const x = f1(yield 1);
+}
+function* g204() {
+    const x = f2(yield 1);
 }
 // mixed iteration types inference
 function* g301() {
@@ -190,4 +225,12 @@ function* g308(x) {
 function* g309(x, y) {
     const a = yield x;
     return y;
+}
+function* g310() {
+    const [a = 1, b = 2] = yield;
+}
+function* g311() {
+    yield* (function* () {
+        const y = yield;
+    })();
 }
