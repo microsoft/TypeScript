@@ -36,9 +36,10 @@ async function main() {
 Component commits:
 ${logText.trim()}`
     const logpath = path.join(__dirname, "../", "logmessage.txt");
+    const mergebase = runSequence([["git", ["merge-base", "origin/master", currentSha]]]).trim();
     runSequence([
         ["git", ["checkout", "-b", "temp-branch"]],
-        ["git", ["reset", "origin/master", "--soft"]]
+        ["git", ["reset", mergebase, "--soft"]]
     ]);
     fs.writeFileSync(logpath, logText);
     runSequence([

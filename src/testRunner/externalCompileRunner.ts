@@ -157,7 +157,7 @@ ${sanitizeDockerfileOutput(result.stderr.toString())}`;
 }
 
 function sanitizeDockerfileOutput(result: string): string {
-    return stripAbsoluteImportPaths(sanitizeTimestamps(stripANSIEscapes(normalizeNewlines(result))));
+    return stripAbsoluteImportPaths(sanitizeTimestamps(sanitizeVersionSpecifiers(stripRushStageNumbers(stripANSIEscapes(normalizeNewlines(result))))));
 }
 
 function normalizeNewlines(result: string): string {
@@ -168,14 +168,22 @@ function stripANSIEscapes(result: string): string {
     return result.replace(/\x1b\[[0-9;]*[a-zA-Z]/g, "");
 }
 
+function stripRushStageNumbers(result: string): string {
+    return result.replace(/\d+ of \d+:/g, "XX of XX:");
+}
+
 function sanitizeTimestamps(result: string): string {
     return result.replace(/\[\d?\d:\d\d:\d\d (A|P)M\]/g, "[XX:XX:XX XM]")
         .replace(/\d+(\.\d+)? seconds?/g, "? seconds")
         .replace(/\d+(\.\d+)? minutes?/g, "")
-        .replace(/\d+(\.\d+)?s/g, "?s")
-        .replace(/\d+.\d+.\d+-insiders.\d\d\d\d\d\d\d\d/g, "X.X.X-insiders.xxxxxxxx");
+        .replace(/\d+(\.\d+)?s/g, "?s");
 }
 
+function sanitizeVersionSpecifiers(result: string): string {
+    return result
+        .replace(/\d+.\d+.\d+-insiders.\d\d\d\d\d\d\d\d/g, "X.X.X-insiders.xxxxxxxx")
+        .replace(/@\d+\.\d+\.\d+/g, "@X.X.X");
+}
 
 /**
  * Import types and some other error messages use absolute paths in errors as they have no context to be written relative to;

@@ -42,6 +42,8 @@
 //
 // TODO: figure out a better solution to the API exposure problem.
 
+/// <reference path="../../../src/compiler/diagnosticInformationMap.generated.ts" />
+
 declare module ts {
     export type MapKey = string | number;
     export interface Map<T> {
@@ -68,6 +70,21 @@ declare module ts {
         name: string;
         writeByteOrderMark: boolean;
         text: string;
+    }
+
+    enum DiagnosticCategory {
+        Warning,
+        Error,
+        Suggestion,
+        Message
+    }
+
+    interface DiagnosticMessage {
+        key: string;
+        category: DiagnosticCategory;
+        code: number;
+        message: string;
+        reportsUnnecessary?: {};
     }
 
     function flatMap<T, U>(array: ReadonlyArray<T>, mapfn: (x: T, i: number) => U | ReadonlyArray<U> | undefined): U[];
@@ -238,6 +255,7 @@ declare namespace FourSlashInterface {
         signatureHelp(...options: VerifySignatureHelpOptions[], ): void;
         // Checks that there are no compile errors.
         noErrors(): void;
+        errorExistsAtRange(range: Range, code: number, message?: string): void;
         numberOfErrorsInCurrentFile(expected: number): void;
         baselineCurrentFileBreakpointLocations(): void;
         baselineCurrentFileNameOrDottedNameSpans(): void;

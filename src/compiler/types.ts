@@ -2975,7 +2975,7 @@ namespace ts {
         // For testing purposes only.
         /* @internal */ structureIsReused?: StructureIsReused;
 
-        /* @internal */ getSourceFileFromReference(referencingFile: SourceFile, ref: FileReference): SourceFile | undefined;
+        /* @internal */ getSourceFileFromReference(referencingFile: SourceFile | UnparsedSource, ref: FileReference): SourceFile | undefined;
         /* @internal */ getLibFileFromReference(ref: FileReference): SourceFile | undefined;
 
         /** Given a source file, get the name of the package it was imported from. */
@@ -5408,6 +5408,7 @@ namespace ts {
 
         writeFile: WriteFileCallback;
         getProgramBuildInfo(): ProgramBuildInfo | undefined;
+        getSourceFileFromReference: Program["getSourceFileFromReference"];
     }
 
     export interface TransformationContext {
@@ -5738,6 +5739,7 @@ namespace ts {
         /*@internal*/ writeBundleFileInfo?: boolean;
         /*@internal*/ recordInternalSection?: boolean;
         /*@internal*/ stripInternal?: boolean;
+        /*@internal*/ relativeToBuildInfo?: (path: string) => string;
     }
 
     /* @internal */

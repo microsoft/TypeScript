@@ -1299,11 +1299,11 @@ namespace ts {
         }
     }
 
-    function getOldProgram<T extends BuilderProgram>({ options, builderPrograms, readFileWithCache }: SolutionBuilderState<T>, proj: ResolvedConfigFilePath, parsed: ParsedCommandLine) {
+    function getOldProgram<T extends BuilderProgram>({ options, builderPrograms, compilerHost }: SolutionBuilderState<T>, proj: ResolvedConfigFilePath, parsed: ParsedCommandLine) {
         if (options.force) return undefined;
         const value = builderPrograms.get(proj);
         if (value) return value;
-        return readBuilderProgram(parsed.options, readFileWithCache) as any as T;
+        return readBuilderProgram(parsed.options, compilerHost) as any as T;
     }
 
     function afterProgramCreate<T extends BuilderProgram>({ host, watch, builderPrograms }: SolutionBuilderState<T>, proj: ResolvedConfigFilePath, program: T) {
@@ -1462,7 +1462,8 @@ namespace ts {
                 const refStatus = getUpToDateStatus(state, parseConfigFile(state, resolvedRef, resolvedRefPath), resolvedRefPath);
 
                 // Its a circular reference ignore the status of this project
-                if (refStatus.type === UpToDateStatusType.ComputingUpstream) {
+                if (refStatus.type === UpToDateStatusType.ComputingUpstream ||
+                    refStatus.type === UpToDateStatusType.ContainerOnly) { // Container only ignore this project
                     continue;
                 }
 

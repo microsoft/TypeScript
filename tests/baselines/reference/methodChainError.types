@@ -1,0 +1,28 @@
+=== tests/cases/compiler/methodChainError.ts ===
+class Builder {
+>Builder : Builder
+
+    method(param: string): Builder {
+>method : (param: string) => Builder
+>param : string
+
+        return this;
+>this : this
+    }
+}
+
+new Builder()
+>new Builder()    .method("a")    .method() : Builder
+>new Builder()    .method("a")    .method : (param: string) => Builder
+>new Builder()    .method("a") : Builder
+>new Builder()    .method : (param: string) => Builder
+>new Builder() : Builder
+>Builder : typeof Builder
+
+    .method("a")
+>method : (param: string) => Builder
+>"a" : "a"
+
+    .method();
+>method : (param: string) => Builder
+

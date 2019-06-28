@@ -10097,9 +10097,9 @@ namespace ts {
             return false;
         }
 
-        function getPropertyTypeForIndexType(originalObjectType: Type, objectType: Type, indexType: Type, fullIndexType: Type, suppressNoImplicitAnyError: boolean, accessNode: ElementAccessExpression | IndexedAccessTypeNode | PropertyName | BindingName | SyntheticExpression | undefined, accessFlags: AccessFlags) {
+        function getPropertyNameFromIndex(indexType: Type, accessNode: StringLiteral | Identifier | ObjectBindingPattern | ArrayBindingPattern | ComputedPropertyName | NumericLiteral | IndexedAccessTypeNode | ElementAccessExpression | SyntheticExpression | undefined) {
             const accessExpression = accessNode && accessNode.kind === SyntaxKind.ElementAccessExpression ? accessNode : undefined;
-            const propName = isTypeUsableAsPropertyName(indexType) ?
+            return isTypeUsableAsPropertyName(indexType) ?
                 getPropertyNameFromType(indexType) :
                 accessExpression && checkThatExpressionIsProperSymbolReference(accessExpression.argumentExpression, indexType, /*reportError*/ false) ?
                     getPropertyNameForKnownSymbolName(idText((<PropertyAccessExpression>accessExpression.argumentExpression).name)) :
@@ -10107,6 +10107,11 @@ namespace ts {
                         // late bound names are handled in the first branch, so here we only need to handle normal names
                         getPropertyNameForPropertyNameNode(accessNode) :
                         undefined;
+        }
+
+        function getPropertyTypeForIndexType(originalObjectType: Type, objectType: Type, indexType: Type, fullIndexType: Type, suppressNoImplicitAnyError: boolean, accessNode: ElementAccessExpression | IndexedAccessTypeNode | PropertyName | BindingName | SyntheticExpression | undefined, accessFlags: AccessFlags) {
+            const accessExpression = accessNode && accessNode.kind === SyntaxKind.ElementAccessExpression ? accessNode : undefined;
+            const propName = getPropertyNameFromIndex(indexType, accessNode);
             if (propName !== undefined) {
                 const prop = getPropertyOfType(objectType, propName);
                 if (prop) {
@@ -13316,7 +13321,14 @@ namespace ts {
                         }
                     }
                     else if (isReadonlyArrayType(target) ? isArrayType(source) || isTupleType(source) : isArrayType(target) && isTupleType(source) && !source.target.readonly) {
-                        return isRelatedTo(getIndexTypeOfType(source, IndexKind.Number) || anyType, getIndexTypeOfType(target, IndexKind.Number) || anyType, reportErrors);
+                        if (relation !== identityRelation) {
+                            return isRelatedTo(getIndexTypeOfType(source, IndexKind.Number) || anyType, getIndexTypeOfType(target, IndexKind.Number) || anyType, reportErrors);
+                        }
+                        else {
+                            // By flags alone, we know that the `target` is a readonly array while the source is a normal array or tuple
+                            // or `target` is an array and source is a tuple - in both cases the types cannot be identical, by construction
+                            return Ternary.False;
+                        }
                     }
                     // Consider a fresh empty object literal type "closed" under the subtype relationship - this way `{} <- {[idx: string]: any} <- fresh({})`
                     // and not `{} <- fresh({}) <- {[idx: string]: any}`
@@ -14440,7 +14452,7 @@ namespace ts {
             if (propType) {
                 return propType;
             }
-            if (everyType(type, isTupleType) && !everyType(type, t => !(<TupleTypeReference>t).target.hasRestElement)) {
+            if (everyType(type, isTupleType)) {
                 return mapType(type, t => getRestTypeOfTupleType(<TupleTypeReference>t) || undefinedType);
             }
             return undefined;
@@ -20021,6 +20033,7 @@ namespace ts {
         }
 
         function checkJsxExpression(node: JsxExpression, checkMode?: CheckMode) {
+            checkGrammarJsxExpression(node);
             if (node.expression) {
                 const type = checkExpression(node.expression, checkMode);
                 if (node.dotDotDotToken && type !== anyType && !isArrayType(type)) {
@@ -21412,7 +21425,8 @@ namespace ts {
             reorderCandidates(signatures, candidates);
             if (!candidates.length) {
                 if (reportErrors) {
-                    diagnostics.add(createDiagnosticForNode(node, Diagnostics.Call_target_does_not_contain_any_signatures));
+                    const errorNode = getCallErrorNode(node);
+                    diagnostics.add(createDiagnosticForNode(errorNode, Diagnostics.Call_target_does_not_contain_any_signatures));
                 }
                 return resolveErrorCall(node);
             }
@@ -21490,11 +21504,13 @@ namespace ts {
             // If candidate is undefined, it means that no candidates had a suitable arity. In that case,
             // skip the checkApplicableSignature check.
             if (reportErrors) {
+                const errorNode = getCallErrorNode(node);
+
                 if (candidateForArgumentError) {
                     checkApplicableSignature(node, args, candidateForArgumentError, assignableRelation, CheckMode.Normal, /*reportErrors*/ true);
                 }
                 else if (candidateForArgumentArityError) {
-                    diagnostics.add(getArgumentArityError(node, [candidateForArgumentArityError], args));
+                    diagnostics.add(getArgumentArityError(errorNode, [candidateForArgumentArityError], args));
                 }
                 else if (candidateForTypeArgumentError) {
                     checkTypeArguments(candidateForTypeArgumentError, (node as CallExpression | TaggedTemplateExpression | JsxOpeningLikeElement).typeArguments!, /*reportErrors*/ true, fallbackError);
@@ -21502,18 +21518,30 @@ namespace ts {
                 else {
                     const signaturesWithCorrectTypeArgumentArity = filter(signatures, s => hasCorrectTypeArgumentArity(s, typeArguments));
                     if (signaturesWithCorrectTypeArgumentArity.length === 0) {
-                        diagnostics.add(getTypeArgumentArityError(node, signatures, typeArguments!));
+                        diagnostics.add(getTypeArgumentArityError(errorNode, signatures, typeArguments!));
                     }
                     else if (!isDecorator) {
-                        diagnostics.add(getArgumentArityError(node, signaturesWithCorrectTypeArgumentArity, args));
+                        diagnostics.add(getArgumentArityError(errorNode, signaturesWithCorrectTypeArgumentArity, args));
                     }
                     else if (fallbackError) {
-                        diagnostics.add(createDiagnosticForNode(node, fallbackError));
+                        diagnostics.add(createDiagnosticForNode(errorNode, fallbackError));
                     }
                 }
             }
 
             return produceDiagnostics || !args ? resolveErrorCall(node) : getCandidateForOverloadFailure(node, candidates, args, !!candidatesOutArray);
+
+            function getCallErrorNode(node: CallLikeExpression): Node {
+                if (isCallExpression(node)) {
+                    if (isPropertyAccessExpression(node.expression)) {
+                        return node.expression.name;
+                    }
+                    else {
+                        return node.expression;
+                    }
+                }
+                return node;
+            }
 
             function chooseOverload(candidates: Signature[], relation: Map<RelationComparisonResult>, signatureHelpTrailingComma = false) {
                 candidateForArgumentError = undefined;
@@ -22482,7 +22510,10 @@ namespace ts {
                 case SyntaxKind.ElementAccessExpression:
                     const expr = (<PropertyAccessExpression | ElementAccessExpression>node).expression;
                     if (isIdentifier(expr)) {
-                        const symbol = getSymbolAtLocation(expr);
+                        let symbol = getSymbolAtLocation(expr);
+                        if (symbol && symbol.flags & SymbolFlags.Alias) {
+                            symbol = resolveAlias(symbol);
+                        }
                         return !!(symbol && (symbol.flags & SymbolFlags.Enum) && getEnumKind(symbol) === EnumKind.Literal);
                     }
             }
@@ -25308,7 +25339,7 @@ namespace ts {
             forEach(node.types, checkSourceElement);
         }
 
-        function checkIndexedAccessIndexType(type: Type, accessNode: Node) {
+        function checkIndexedAccessIndexType(type: Type, accessNode: IndexedAccessTypeNode | ElementAccessExpression) {
             if (!(type.flags & TypeFlags.IndexedAccess)) {
                 return type;
             }
@@ -25324,8 +25355,19 @@ namespace ts {
             }
             // Check if we're indexing with a numeric type and if either object or index types
             // is a generic type with a constraint that has a numeric index signature.
-            if (getIndexInfoOfType(getApparentType(objectType), IndexKind.Number) && isTypeAssignableToKind(indexType, TypeFlags.NumberLike)) {
+            const apparentObjectType = getApparentType(objectType);
+            if (getIndexInfoOfType(apparentObjectType, IndexKind.Number) && isTypeAssignableToKind(indexType, TypeFlags.NumberLike)) {
                 return type;
+            }
+            if (isGenericObjectType(objectType)) {
+                const propertyName = getPropertyNameFromIndex(indexType, accessNode);
+                if (propertyName) {
+                    const propertySymbol = forEachType(apparentObjectType, t => getPropertyOfType(t, propertyName));
+                    if (propertySymbol && getDeclarationModifierFlagsFromSymbol(propertySymbol) & ModifierFlags.NonPublicAccessibilityModifier) {
+                        error(accessNode, Diagnostics.Private_or_protected_member_0_cannot_be_accessed_on_a_type_parameter, unescapeLeadingUnderscores(propertyName));
+                        return errorType;
+                    }
+                }
             }
             error(accessNode, Diagnostics.Type_0_cannot_be_used_to_index_type_1, typeToString(indexType), typeToString(objectType));
             return errorType;
@@ -31871,6 +31913,12 @@ namespace ts {
                 if (initializer && initializer.kind === SyntaxKind.JsxExpression && !initializer.expression) {
                     return grammarErrorOnNode(initializer, Diagnostics.JSX_attributes_must_only_be_assigned_a_non_empty_expression);
                 }
+            }
+        }
+
+        function checkGrammarJsxExpression(node: JsxExpression) {
+            if (node.expression && isCommaSequence(node.expression)) {
+                return grammarErrorOnNode(node.expression, Diagnostics.JSX_expressions_may_not_use_the_comma_operator_Did_you_mean_to_write_an_array);
             }
         }
 

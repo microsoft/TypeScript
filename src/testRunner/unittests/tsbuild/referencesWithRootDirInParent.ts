@@ -10,7 +10,6 @@ namespace ts {
         });
 
         it("verify that it builds correctly", () => {
-            const projFs = loadProjectFromDisk("tests/projects/projectReferenceWithRootDirInParent");
             const allExpectedOutputs = [
                 "/src/dist/other/other.js", "/src/dist/other/other.d.ts",
                 "/src/dist/main/a.js", "/src/dist/main/a.d.ts",
