@@ -1,55 +1,55 @@
-tests/cases/conformance/jsx/file.tsx(12,12): error TS2755: No overload matches this call.
+tests/cases/conformance/jsx/file.tsx(12,12): error TS2763: No overload matches this call.
   Overload 1 of 2, '(): Element', gave the following error.
     Type '{ extraProp: true; }' is not assignable to type 'IntrinsicAttributes'.
       Property 'extraProp' does not exist on type 'IntrinsicAttributes'.
   Overload 2 of 2, '(l: { yy: number; yy1: string; }): Element', gave the following error.
     Type '{ extraProp: true; }' is not assignable to type 'IntrinsicAttributes & { yy: number; yy1: string; }'.
       Property 'extraProp' does not exist on type 'IntrinsicAttributes & { yy: number; yy1: string; }'.
-tests/cases/conformance/jsx/file.tsx(13,12): error TS2755: No overload matches this call.
+tests/cases/conformance/jsx/file.tsx(13,12): error TS2763: No overload matches this call.
   Overload 1 of 2, '(): Element', gave the following error.
     Type '{ yy: number; }' is not assignable to type 'IntrinsicAttributes'.
       Property 'yy' does not exist on type 'IntrinsicAttributes'.
   Overload 2 of 2, '(l: { yy: number; yy1: string; }): Element', gave the following error.
     Property 'yy1' is missing in type '{ yy: number; }' but required in type '{ yy: number; yy1: string; }'.
-tests/cases/conformance/jsx/file.tsx(14,12): error TS2755: No overload matches this call.
+tests/cases/conformance/jsx/file.tsx(14,12): error TS2763: No overload matches this call.
   Overload 1 of 2, '(): Element', gave the following error.
     Type '{ yy1: true; yy: number; }' is not assignable to type 'IntrinsicAttributes'.
       Property 'yy1' does not exist on type 'IntrinsicAttributes'.
   Overload 2 of 2, '(l: { yy: number; yy1: string; }): Element', gave the following error.
     Type 'true' is not assignable to type 'string'.
-tests/cases/conformance/jsx/file.tsx(16,12): error TS2755: No overload matches this call.
+tests/cases/conformance/jsx/file.tsx(16,12): error TS2763: No overload matches this call.
   Overload 1 of 2, '(): Element', gave the following error.
     Type '{ y1: number; yy: number; yy1: string; }' is not assignable to type 'IntrinsicAttributes'.
       Property 'y1' does not exist on type 'IntrinsicAttributes'.
   Overload 2 of 2, '(l: { yy: number; yy1: string; }): Element', gave the following error.
     Type '{ y1: number; yy: number; yy1: string; }' is not assignable to type 'IntrinsicAttributes & { yy: number; yy1: string; }'.
       Property 'y1' does not exist on type 'IntrinsicAttributes & { yy: number; yy1: string; }'.
-tests/cases/conformance/jsx/file.tsx(17,12): error TS2755: No overload matches this call.
+tests/cases/conformance/jsx/file.tsx(17,12): error TS2763: No overload matches this call.
   Overload 1 of 2, '(): Element', gave the following error.
     Type '{ yy: boolean; yy1: string; }' has no properties in common with type 'IntrinsicAttributes'.
   Overload 2 of 2, '(l: { yy: number; yy1: string; }): Element', gave the following error.
     Type '{ yy: boolean; yy1: string; }' is not assignable to type '{ yy: number; yy1: string; }'.
       Types of property 'yy' are incompatible.
         Type 'boolean' is not assignable to type 'number'.
-tests/cases/conformance/jsx/file.tsx(25,12): error TS2755: No overload matches this call.
+tests/cases/conformance/jsx/file.tsx(25,12): error TS2763: No overload matches this call.
   Overload 1 of 2, '(j: { "extra-data": string; }): Element', gave the following error.
     Type 'true' is not assignable to type 'string'.
   Overload 2 of 2, '(n: { yy: string; direction?: number; }): Element', gave the following error.
     Property 'yy' is missing in type '{ extra-data: true; }' but required in type '{ yy: string; direction?: number; }'.
-tests/cases/conformance/jsx/file.tsx(26,12): error TS2755: No overload matches this call.
+tests/cases/conformance/jsx/file.tsx(26,12): error TS2763: No overload matches this call.
   Overload 1 of 2, '(j: { "extra-data": string; }): Element', gave the following error.
     Type '{ yy: string; direction: string; }' is not assignable to type 'IntrinsicAttributes & { "extra-data": string; }'.
       Property 'yy' does not exist on type 'IntrinsicAttributes & { "extra-data": string; }'.
   Overload 2 of 2, '(n: { yy: string; direction?: number; }): Element', gave the following error.
     Type 'string' is not assignable to type 'number'.
-tests/cases/conformance/jsx/file.tsx(33,12): error TS2755: No overload matches this call.
+tests/cases/conformance/jsx/file.tsx(33,12): error TS2763: No overload matches this call.
   Overload 1 of 3, '(a: { y1?: string; y2?: number; }): Element', gave the following error.
     Type 'true' is not assignable to type 'string'.
   Overload 2 of 3, '(a: { y1?: string; y2?: number; children: Element; }): Element', gave the following error.
     Type 'true' is not assignable to type 'string'.
   Overload 3 of 3, '(a: { y1: boolean; y2?: number; y3: boolean; }): Element', gave the following error.
     Type 'string' is not assignable to type 'boolean'.
-tests/cases/conformance/jsx/file.tsx(34,12): error TS2755: No overload matches this call.
+tests/cases/conformance/jsx/file.tsx(34,12): error TS2763: No overload matches this call.
   Overload 1 of 3, '(a: { y1?: string; y2?: number; }): Element', gave the following error.
     Type '{ y1: string; y2: number; y3: true; }' is not assignable to type 'IntrinsicAttributes & { y1?: string; y2?: number; }'.
       Property 'y3' does not exist on type 'IntrinsicAttributes & { y1?: string; y2?: number; }'.
@@ -58,7 +58,7 @@ tests/cases/conformance/jsx/file.tsx(34,12): error TS2755: No overload matches t
       Property 'y3' does not exist on type 'IntrinsicAttributes & { y1?: string; y2?: number; children: Element; }'.
   Overload 3 of 3, '(a: { y1: boolean; y2?: number; y3: boolean; }): Element', gave the following error.
     Type 'string' is not assignable to type 'boolean'.
-tests/cases/conformance/jsx/file.tsx(35,12): error TS2755: No overload matches this call.
+tests/cases/conformance/jsx/file.tsx(35,12): error TS2763: No overload matches this call.
   Overload 1 of 3, '(a: { y1?: string; y2?: number; }): Element', gave the following error.
     Type '{ y1: string; y2: number; children: string; }' is not assignable to type 'IntrinsicAttributes & { y1?: string; y2?: number; }'.
       Property 'children' does not exist on type 'IntrinsicAttributes & { y1?: string; y2?: number; }'.
@@ -66,7 +66,7 @@ tests/cases/conformance/jsx/file.tsx(35,12): error TS2755: No overload matches t
     Type 'string' is not assignable to type 'Element'.
   Overload 3 of 3, '(a: { y1: boolean; y2?: number; y3: boolean; }): Element', gave the following error.
     Type 'string' is not assignable to type 'boolean'.
-tests/cases/conformance/jsx/file.tsx(36,12): error TS2755: No overload matches this call.
+tests/cases/conformance/jsx/file.tsx(36,12): error TS2763: No overload matches this call.
   Overload 1 of 3, '(a: { y1?: string; y2?: number; }): Element', gave the following error.
     Type '{ children: string; y1: string; y2: number; }' is not assignable to type 'IntrinsicAttributes & { y1?: string; y2?: number; }'.
       Property 'children' does not exist on type 'IntrinsicAttributes & { y1?: string; y2?: number; }'.
@@ -90,48 +90,48 @@ tests/cases/conformance/jsx/file.tsx(36,12): error TS2755: No overload matches t
     // Error
     const c0 = <OneThing extraProp />;  // extra property;
                ~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2755: No overload matches this call.
-!!! error TS2755:   Overload 1 of 2, '(): Element', gave the following error.
-!!! error TS2755:     Type '{ extraProp: true; }' is not assignable to type 'IntrinsicAttributes'.
-!!! error TS2755:       Property 'extraProp' does not exist on type 'IntrinsicAttributes'.
-!!! error TS2755:   Overload 2 of 2, '(l: { yy: number; yy1: string; }): Element', gave the following error.
-!!! error TS2755:     Type '{ extraProp: true; }' is not assignable to type 'IntrinsicAttributes & { yy: number; yy1: string; }'.
-!!! error TS2755:       Property 'extraProp' does not exist on type 'IntrinsicAttributes & { yy: number; yy1: string; }'.
+!!! error TS2763: No overload matches this call.
+!!! error TS2763:   Overload 1 of 2, '(): Element', gave the following error.
+!!! error TS2763:     Type '{ extraProp: true; }' is not assignable to type 'IntrinsicAttributes'.
+!!! error TS2763:       Property 'extraProp' does not exist on type 'IntrinsicAttributes'.
+!!! error TS2763:   Overload 2 of 2, '(l: { yy: number; yy1: string; }): Element', gave the following error.
+!!! error TS2763:     Type '{ extraProp: true; }' is not assignable to type 'IntrinsicAttributes & { yy: number; yy1: string; }'.
+!!! error TS2763:       Property 'extraProp' does not exist on type 'IntrinsicAttributes & { yy: number; yy1: string; }'.
     const c1 = <OneThing yy={10}/>;  // missing property;
                ~~~~~~~~~~~~~~~~~~~
-!!! error TS2755: No overload matches this call.
-!!! error TS2755:   Overload 1 of 2, '(): Element', gave the following error.
-!!! error TS2755:     Type '{ yy: number; }' is not assignable to type 'IntrinsicAttributes'.
-!!! error TS2755:       Property 'yy' does not exist on type 'IntrinsicAttributes'.
-!!! error TS2755:   Overload 2 of 2, '(l: { yy: number; yy1: string; }): Element', gave the following error.
-!!! error TS2755:     Property 'yy1' is missing in type '{ yy: number; }' but required in type '{ yy: number; yy1: string; }'.
+!!! error TS2763: No overload matches this call.
+!!! error TS2763:   Overload 1 of 2, '(): Element', gave the following error.
+!!! error TS2763:     Type '{ yy: number; }' is not assignable to type 'IntrinsicAttributes'.
+!!! error TS2763:       Property 'yy' does not exist on type 'IntrinsicAttributes'.
+!!! error TS2763:   Overload 2 of 2, '(l: { yy: number; yy1: string; }): Element', gave the following error.
+!!! error TS2763:     Property 'yy1' is missing in type '{ yy: number; }' but required in type '{ yy: number; yy1: string; }'.
     const c2 = <OneThing {...obj} yy1 />; // type incompatible;
                ~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2755: No overload matches this call.
-!!! error TS2755:   Overload 1 of 2, '(): Element', gave the following error.
-!!! error TS2755:     Type '{ yy1: true; yy: number; }' is not assignable to type 'IntrinsicAttributes'.
-!!! error TS2755:       Property 'yy1' does not exist on type 'IntrinsicAttributes'.
-!!! error TS2755:   Overload 2 of 2, '(l: { yy: number; yy1: string; }): Element', gave the following error.
-!!! error TS2755:     Type 'true' is not assignable to type 'string'.
+!!! error TS2763: No overload matches this call.
+!!! error TS2763:   Overload 1 of 2, '(): Element', gave the following error.
+!!! error TS2763:     Type '{ yy1: true; yy: number; }' is not assignable to type 'IntrinsicAttributes'.
+!!! error TS2763:       Property 'yy1' does not exist on type 'IntrinsicAttributes'.
+!!! error TS2763:   Overload 2 of 2, '(l: { yy: number; yy1: string; }): Element', gave the following error.
+!!! error TS2763:     Type 'true' is not assignable to type 'string'.
     const c3 = <OneThing {...obj} {...{extra: "extra attr"}} />;  //  This is OK becuase all attribute are spread
     const c4 = <OneThing {...obj} y1={10000} />;  // extra property;
                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2755: No overload matches this call.
-!!! error TS2755:   Overload 1 of 2, '(): Element', gave the following error.
-!!! error TS2755:     Type '{ y1: number; yy: number; yy1: string; }' is not assignable to type 'IntrinsicAttributes'.
-!!! error TS2755:       Property 'y1' does not exist on type 'IntrinsicAttributes'.
-!!! error TS2755:   Overload 2 of 2, '(l: { yy: number; yy1: string; }): Element', gave the following error.
-!!! error TS2755:     Type '{ y1: number; yy: number; yy1: string; }' is not assignable to type 'IntrinsicAttributes & { yy: number; yy1: string; }'.
-!!! error TS2755:       Property 'y1' does not exist on type 'IntrinsicAttributes & { yy: number; yy1: string; }'.
+!!! error TS2763: No overload matches this call.
+!!! error TS2763:   Overload 1 of 2, '(): Element', gave the following error.
+!!! error TS2763:     Type '{ y1: number; yy: number; yy1: string; }' is not assignable to type 'IntrinsicAttributes'.
+!!! error TS2763:       Property 'y1' does not exist on type 'IntrinsicAttributes'.
+!!! error TS2763:   Overload 2 of 2, '(l: { yy: number; yy1: string; }): Element', gave the following error.
+!!! error TS2763:     Type '{ y1: number; yy: number; yy1: string; }' is not assignable to type 'IntrinsicAttributes & { yy: number; yy1: string; }'.
+!!! error TS2763:       Property 'y1' does not exist on type 'IntrinsicAttributes & { yy: number; yy1: string; }'.
     const c5 = <OneThing {...obj} {...{yy: true}} />;  // type incompatible;
                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2755: No overload matches this call.
-!!! error TS2755:   Overload 1 of 2, '(): Element', gave the following error.
-!!! error TS2755:     Type '{ yy: boolean; yy1: string; }' has no properties in common with type 'IntrinsicAttributes'.
-!!! error TS2755:   Overload 2 of 2, '(l: { yy: number; yy1: string; }): Element', gave the following error.
-!!! error TS2755:     Type '{ yy: boolean; yy1: string; }' is not assignable to type '{ yy: number; yy1: string; }'.
-!!! error TS2755:       Types of property 'yy' are incompatible.
-!!! error TS2755:         Type 'boolean' is not assignable to type 'number'.
+!!! error TS2763: No overload matches this call.
+!!! error TS2763:   Overload 1 of 2, '(): Element', gave the following error.
+!!! error TS2763:     Type '{ yy: boolean; yy1: string; }' has no properties in common with type 'IntrinsicAttributes'.
+!!! error TS2763:   Overload 2 of 2, '(l: { yy: number; yy1: string; }): Element', gave the following error.
+!!! error TS2763:     Type '{ yy: boolean; yy1: string; }' is not assignable to type '{ yy: number; yy1: string; }'.
+!!! error TS2763:       Types of property 'yy' are incompatible.
+!!! error TS2763:         Type 'boolean' is not assignable to type 'number'.
     const c6 = <OneThing {...obj2} {...{extra: "extra attr"}} />;  // Should error as there is extra attribute that doesn't match any. Current it is not
     const c7 = <OneThing {...obj2} yy />;  // Should error as there is extra attribute that doesn't match any. Current it is not
     
@@ -141,19 +141,19 @@ tests/cases/conformance/jsx/file.tsx(36,12): error TS2755: No overload matches t
     // Error
     const d1 = <TestingOneThing extra-data />
                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2755: No overload matches this call.
-!!! error TS2755:   Overload 1 of 2, '(j: { "extra-data": string; }): Element', gave the following error.
-!!! error TS2755:     Type 'true' is not assignable to type 'string'.
-!!! error TS2755:   Overload 2 of 2, '(n: { yy: string; direction?: number; }): Element', gave the following error.
-!!! error TS2755:     Property 'yy' is missing in type '{ extra-data: true; }' but required in type '{ yy: string; direction?: number; }'.
+!!! error TS2763: No overload matches this call.
+!!! error TS2763:   Overload 1 of 2, '(j: { "extra-data": string; }): Element', gave the following error.
+!!! error TS2763:     Type 'true' is not assignable to type 'string'.
+!!! error TS2763:   Overload 2 of 2, '(n: { yy: string; direction?: number; }): Element', gave the following error.
+!!! error TS2763:     Property 'yy' is missing in type '{ extra-data: true; }' but required in type '{ yy: string; direction?: number; }'.
     const d2 = <TestingOneThing yy="hello" direction="left" />
                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2755: No overload matches this call.
-!!! error TS2755:   Overload 1 of 2, '(j: { "extra-data": string; }): Element', gave the following error.
-!!! error TS2755:     Type '{ yy: string; direction: string; }' is not assignable to type 'IntrinsicAttributes & { "extra-data": string; }'.
-!!! error TS2755:       Property 'yy' does not exist on type 'IntrinsicAttributes & { "extra-data": string; }'.
-!!! error TS2755:   Overload 2 of 2, '(n: { yy: string; direction?: number; }): Element', gave the following error.
-!!! error TS2755:     Type 'string' is not assignable to type 'number'.
+!!! error TS2763: No overload matches this call.
+!!! error TS2763:   Overload 1 of 2, '(j: { "extra-data": string; }): Element', gave the following error.
+!!! error TS2763:     Type '{ yy: string; direction: string; }' is not assignable to type 'IntrinsicAttributes & { "extra-data": string; }'.
+!!! error TS2763:       Property 'yy' does not exist on type 'IntrinsicAttributes & { "extra-data": string; }'.
+!!! error TS2763:   Overload 2 of 2, '(n: { yy: string; direction?: number; }): Element', gave the following error.
+!!! error TS2763:     Type 'string' is not assignable to type 'number'.
     
     declare function TestingOptional(a: {y1?: string, y2?: number}): JSX.Element;
     declare function TestingOptional(a: {y1?: string, y2?: number, children: JSX.Element}): JSX.Element;
@@ -162,42 +162,42 @@ tests/cases/conformance/jsx/file.tsx(36,12): error TS2755: No overload matches t
     // Error
     const e1 = <TestingOptional y1 y3="hello"/>
                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2755: No overload matches this call.
-!!! error TS2755:   Overload 1 of 3, '(a: { y1?: string; y2?: number; }): Element', gave the following error.
-!!! error TS2755:     Type 'true' is not assignable to type 'string'.
-!!! error TS2755:   Overload 2 of 3, '(a: { y1?: string; y2?: number; children: Element; }): Element', gave the following error.
-!!! error TS2755:     Type 'true' is not assignable to type 'string'.
-!!! error TS2755:   Overload 3 of 3, '(a: { y1: boolean; y2?: number; y3: boolean; }): Element', gave the following error.
-!!! error TS2755:     Type 'string' is not assignable to type 'boolean'.
+!!! error TS2763: No overload matches this call.
+!!! error TS2763:   Overload 1 of 3, '(a: { y1?: string; y2?: number; }): Element', gave the following error.
+!!! error TS2763:     Type 'true' is not assignable to type 'string'.
+!!! error TS2763:   Overload 2 of 3, '(a: { y1?: string; y2?: number; children: Element; }): Element', gave the following error.
+!!! error TS2763:     Type 'true' is not assignable to type 'string'.
+!!! error TS2763:   Overload 3 of 3, '(a: { y1: boolean; y2?: number; y3: boolean; }): Element', gave the following error.
+!!! error TS2763:     Type 'string' is not assignable to type 'boolean'.
     const e2 = <TestingOptional y1="hello" y2={1000} y3 />
                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2755: No overload matches this call.
-!!! error TS2755:   Overload 1 of 3, '(a: { y1?: string; y2?: number; }): Element', gave the following error.
-!!! error TS2755:     Type '{ y1: string; y2: number; y3: true; }' is not assignable to type 'IntrinsicAttributes & { y1?: string; y2?: number; }'.
-!!! error TS2755:       Property 'y3' does not exist on type 'IntrinsicAttributes & { y1?: string; y2?: number; }'.
-!!! error TS2755:   Overload 2 of 3, '(a: { y1?: string; y2?: number; children: Element; }): Element', gave the following error.
-!!! error TS2755:     Type '{ y1: string; y2: number; y3: true; }' is not assignable to type 'IntrinsicAttributes & { y1?: string; y2?: number; children: Element; }'.
-!!! error TS2755:       Property 'y3' does not exist on type 'IntrinsicAttributes & { y1?: string; y2?: number; children: Element; }'.
-!!! error TS2755:   Overload 3 of 3, '(a: { y1: boolean; y2?: number; y3: boolean; }): Element', gave the following error.
-!!! error TS2755:     Type 'string' is not assignable to type 'boolean'.
+!!! error TS2763: No overload matches this call.
+!!! error TS2763:   Overload 1 of 3, '(a: { y1?: string; y2?: number; }): Element', gave the following error.
+!!! error TS2763:     Type '{ y1: string; y2: number; y3: true; }' is not assignable to type 'IntrinsicAttributes & { y1?: string; y2?: number; }'.
+!!! error TS2763:       Property 'y3' does not exist on type 'IntrinsicAttributes & { y1?: string; y2?: number; }'.
+!!! error TS2763:   Overload 2 of 3, '(a: { y1?: string; y2?: number; children: Element; }): Element', gave the following error.
+!!! error TS2763:     Type '{ y1: string; y2: number; y3: true; }' is not assignable to type 'IntrinsicAttributes & { y1?: string; y2?: number; children: Element; }'.
+!!! error TS2763:       Property 'y3' does not exist on type 'IntrinsicAttributes & { y1?: string; y2?: number; children: Element; }'.
+!!! error TS2763:   Overload 3 of 3, '(a: { y1: boolean; y2?: number; y3: boolean; }): Element', gave the following error.
+!!! error TS2763:     Type 'string' is not assignable to type 'boolean'.
     const e3 = <TestingOptional y1="hello" y2={1000} children="hi" />
                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2755: No overload matches this call.
-!!! error TS2755:   Overload 1 of 3, '(a: { y1?: string; y2?: number; }): Element', gave the following error.
-!!! error TS2755:     Type '{ y1: string; y2: number; children: string; }' is not assignable to type 'IntrinsicAttributes & { y1?: string; y2?: number; }'.
-!!! error TS2755:       Property 'children' does not exist on type 'IntrinsicAttributes & { y1?: string; y2?: number; }'.
-!!! error TS2755:   Overload 2 of 3, '(a: { y1?: string; y2?: number; children: Element; }): Element', gave the following error.
-!!! error TS2755:     Type 'string' is not assignable to type 'Element'.
-!!! error TS2755:   Overload 3 of 3, '(a: { y1: boolean; y2?: number; y3: boolean; }): Element', gave the following error.
-!!! error TS2755:     Type 'string' is not assignable to type 'boolean'.
+!!! error TS2763: No overload matches this call.
+!!! error TS2763:   Overload 1 of 3, '(a: { y1?: string; y2?: number; }): Element', gave the following error.
+!!! error TS2763:     Type '{ y1: string; y2: number; children: string; }' is not assignable to type 'IntrinsicAttributes & { y1?: string; y2?: number; }'.
+!!! error TS2763:       Property 'children' does not exist on type 'IntrinsicAttributes & { y1?: string; y2?: number; }'.
+!!! error TS2763:   Overload 2 of 3, '(a: { y1?: string; y2?: number; children: Element; }): Element', gave the following error.
+!!! error TS2763:     Type 'string' is not assignable to type 'Element'.
+!!! error TS2763:   Overload 3 of 3, '(a: { y1: boolean; y2?: number; y3: boolean; }): Element', gave the following error.
+!!! error TS2763:     Type 'string' is not assignable to type 'boolean'.
     const e4 = <TestingOptional y1="hello" y2={1000}>Hi</TestingOptional>
                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2755: No overload matches this call.
-!!! error TS2755:   Overload 1 of 3, '(a: { y1?: string; y2?: number; }): Element', gave the following error.
-!!! error TS2755:     Type '{ children: string; y1: string; y2: number; }' is not assignable to type 'IntrinsicAttributes & { y1?: string; y2?: number; }'.
-!!! error TS2755:       Property 'children' does not exist on type 'IntrinsicAttributes & { y1?: string; y2?: number; }'.
-!!! error TS2755:   Overload 2 of 3, '(a: { y1?: string; y2?: number; children: Element; }): Element', gave the following error.
-!!! error TS2755:     'TestingOptional' components don't accept text as child elements. Text in JSX has the type 'string', but the expected type of 'children' is 'Element'.
-!!! error TS2755:   Overload 3 of 3, '(a: { y1: boolean; y2?: number; y3: boolean; }): Element', gave the following error.
-!!! error TS2755:     Type 'string' is not assignable to type 'boolean'.
+!!! error TS2763: No overload matches this call.
+!!! error TS2763:   Overload 1 of 3, '(a: { y1?: string; y2?: number; }): Element', gave the following error.
+!!! error TS2763:     Type '{ children: string; y1: string; y2: number; }' is not assignable to type 'IntrinsicAttributes & { y1?: string; y2?: number; }'.
+!!! error TS2763:       Property 'children' does not exist on type 'IntrinsicAttributes & { y1?: string; y2?: number; }'.
+!!! error TS2763:   Overload 2 of 3, '(a: { y1?: string; y2?: number; children: Element; }): Element', gave the following error.
+!!! error TS2763:     'TestingOptional' components don't accept text as child elements. Text in JSX has the type 'string', but the expected type of 'children' is 'Element'.
+!!! error TS2763:   Overload 3 of 3, '(a: { y1: boolean; y2?: number; y3: boolean; }): Element', gave the following error.
+!!! error TS2763:     Type 'string' is not assignable to type 'boolean'.
     

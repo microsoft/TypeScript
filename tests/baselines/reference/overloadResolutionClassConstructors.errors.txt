@@ -1,4 +1,4 @@
-tests/cases/conformance/expressions/functionCalls/overloadResolutionClassConstructors.ts(27,1): error TS2755: No overload matches this call.
+tests/cases/conformance/expressions/functionCalls/overloadResolutionClassConstructors.ts(27,1): error TS2763: No overload matches this call.
   Overload 1 of 2, '(s: string): fn1', gave the following error.
     Argument of type '{}' is not assignable to parameter of type 'string'.
   Overload 2 of 2, '(s: number): fn1', gave the following error.
@@ -47,11 +47,11 @@ tests/cases/conformance/expressions/functionCalls/overloadResolutionClassConstru
     // No candidate overloads found
     new fn1({}); // Error
     ~~~~~~~~~~~
-!!! error TS2755: No overload matches this call.
-!!! error TS2755:   Overload 1 of 2, '(s: string): fn1', gave the following error.
-!!! error TS2755:     Argument of type '{}' is not assignable to parameter of type 'string'.
-!!! error TS2755:   Overload 2 of 2, '(s: number): fn1', gave the following error.
-!!! error TS2755:     Argument of type '{}' is not assignable to parameter of type 'number'.
+!!! error TS2763: No overload matches this call.
+!!! error TS2763:   Overload 1 of 2, '(s: string): fn1', gave the following error.
+!!! error TS2763:     Argument of type '{}' is not assignable to parameter of type 'string'.
+!!! error TS2763:   Overload 2 of 2, '(s: number): fn1', gave the following error.
+!!! error TS2763:     Argument of type '{}' is not assignable to parameter of type 'number'.
     
     // Generic and non - generic overload where generic overload is the only candidate when called with type arguments
     class fn2<T> {

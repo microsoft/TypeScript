@@ -1,4 +1,4 @@
-tests/cases/compiler/functionOverloads2.ts(4,9): error TS2755: No overload matches this call.
+tests/cases/compiler/functionOverloads2.ts(4,9): error TS2763: No overload matches this call.
   Overload 1 of 2, '(bar: string): string', gave the following error.
     Argument of type 'true' is not assignable to parameter of type 'string'.
   Overload 2 of 2, '(bar: number): number', gave the following error.
@@ -11,8 +11,8 @@ tests/cases/compiler/functionOverloads2.ts(4,9): error TS2755: No overload match
     function foo(bar: any): any { return bar };
     var x = foo(true);
             ~~~~~~~~~
-!!! error TS2755: No overload matches this call.
-!!! error TS2755:   Overload 1 of 2, '(bar: string): string', gave the following error.
-!!! error TS2755:     Argument of type 'true' is not assignable to parameter of type 'string'.
-!!! error TS2755:   Overload 2 of 2, '(bar: number): number', gave the following error.
-!!! error TS2755:     Argument of type 'true' is not assignable to parameter of type 'number'.
+!!! error TS2763: No overload matches this call.
+!!! error TS2763:   Overload 1 of 2, '(bar: string): string', gave the following error.
+!!! error TS2763:     Argument of type 'true' is not assignable to parameter of type 'string'.
+!!! error TS2763:   Overload 2 of 2, '(bar: number): number', gave the following error.
+!!! error TS2763:     Argument of type 'true' is not assignable to parameter of type 'number'.
