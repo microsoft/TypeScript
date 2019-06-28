@@ -80,6 +80,8 @@ interface TestConfig {
     timeout?: number;
     keepFailed?: boolean;
     skipPercent?: number;
+    shardId?: number;
+    shards?: number;
 }
 
 interface TaskSet {
@@ -113,6 +115,12 @@ function handleTestConfig() {
         }
         if (testConfig.skipPercent !== undefined) {
             skipPercent = testConfig.skipPercent;
+        }
+        if (testConfig.shardId) {
+            shardId = testConfig.shardId;
+        }
+        if (testConfig.shards) {
+            shards = testConfig.shards;
         }
 
         if (testConfig.stackTraceLimit === "full") {

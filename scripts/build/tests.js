@@ -36,6 +36,8 @@ async function runConsoleTests(runJs, defaultReporter, runInParallel, watchMode,
     const testConfigFile = "test.config";
     const failed = cmdLineOptions.failed;
     const keepFailed = cmdLineOptions.keepFailed;
+    const shards = +cmdLineOptions.shards || undefined;
+    const shardId = +cmdLineOptions.shardId || undefined;
     if (!cmdLineOptions.dirty) {
         await cleanTestDirs();
         cancelToken.throwIfCancellationRequested();
@@ -63,8 +65,8 @@ async function runConsoleTests(runJs, defaultReporter, runInParallel, watchMode,
         testTimeout = 400000;
     }
 
-    if (tests || runners || light || testTimeout || taskConfigsFolder || keepFailed || skipPercent !== undefined) {
-        writeTestConfigFile(tests, runners, light, skipPercent, taskConfigsFolder, workerCount, stackTraceLimit, testTimeout, keepFailed);
+    if (tests || runners || light || testTimeout || taskConfigsFolder || keepFailed || skipPercent !== undefined || shards || shardId) {
+        writeTestConfigFile(tests, runners, light, skipPercent, taskConfigsFolder, workerCount, stackTraceLimit, testTimeout, keepFailed, shards, shardId);
     }
 
     const colors = cmdLineOptions.colors;
@@ -165,8 +167,10 @@ exports.cleanTestDirs = cleanTestDirs;
  * @param {string} [stackTraceLimit]
  * @param {string | number} [timeout]
  * @param {boolean} [keepFailed]
+ * @param {number | undefined} [shards]
+ * @param {number | undefined} [shardId]
  */
-function writeTestConfigFile(tests, runners, light, skipPercent, taskConfigsFolder, workerCount, stackTraceLimit, timeout, keepFailed) {
+function writeTestConfigFile(tests, runners, light, skipPercent, taskConfigsFolder, workerCount, stackTraceLimit, timeout, keepFailed, shards, shardId) {
     const testConfigContents = JSON.stringify({
         test: tests ? [tests] : undefined,
         runners: runners ? runners.split(",") : undefined,
@@ -177,7 +181,9 @@ function writeTestConfigFile(tests, runners, light, skipPercent, taskConfigsFold
         taskConfigsFolder,
         noColor: !cmdLineOptions.colors,
         timeout,
-        keepFailed
+        keepFailed,
+        shards,
+        shardId
     });
     log.info("Running tests with config: " + testConfigContents);
     fs.writeFileSync("test.config", testConfigContents);

@@ -222,7 +222,7 @@ namespace Harness.Parallel.Host {
             console.log("Discovering runner-based tests...");
             const discoverStart = +(new Date());
             for (const runner of runners) {
-                for (const test of runner.enumerateTestFiles()) {
+                for (const test of runner.getTestFiles()) {
                     const file = typeof test === "string" ? test : test.file;
                     let size: number;
                     if (!perfData) {
