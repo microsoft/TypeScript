@@ -1,4 +1,14 @@
 tests/cases/compiler/promiseTypeInference.ts(10,11): error TS2755: No overload matches this call.
+  Overload 1 of 2, '(success?: (value: string) => Promise<unknown>): Promise<unknown>', gave the following error.
+    Property 'catch' is missing in type 'IPromise<number>' but required in type 'Promise<unknown>'.
+  Overload 2 of 2, '(onfulfilled?: (value: string) => number | PromiseLike<number>, onrejected?: (reason: any) => PromiseLike<never>): Promise<number>', gave the following error.
+    Type 'IPromise<number>' is not assignable to type 'number | PromiseLike<number>'.
+      Type 'IPromise<number>' is not assignable to type 'PromiseLike<number>'.
+        Types of property 'then' are incompatible.
+          Type '<U>(success?: (value: number) => IPromise<U>) => IPromise<U>' is not assignable to type '<TResult1 = number, TResult2 = never>(onfulfilled?: (value: number) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>) => PromiseLike<TResult1 | TResult2>'.
+            Types of parameters 'success' and 'onfulfilled' are incompatible.
+              Type 'TResult1 | PromiseLike<TResult1>' is not assignable to type 'IPromise<TResult1 | TResult2>'.
+                Type 'TResult1' is not assignable to type 'IPromise<TResult1 | TResult2>'.
 
 
 ==== tests/cases/compiler/promiseTypeInference.ts (1 errors) ====
@@ -14,14 +24,14 @@ tests/cases/compiler/promiseTypeInference.ts(10,11): error TS2755: No overload m
     var $$x = load("something").then(s => convert(s));
               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS2755: No overload matches this call.
-!!! related TS2760 tests/cases/compiler/promiseTypeInference.ts:10:39: Overload 1 of 2, '(success?: (value: string) => Promise<unknown>): Promise<unknown>', gave the following error.
-  Property 'catch' is missing in type 'IPromise<number>' but required in type 'Promise<unknown>'.
-!!! related TS2760 tests/cases/compiler/promiseTypeInference.ts:10:39: Overload 2 of 2, '(onfulfilled?: (value: string) => number | PromiseLike<number>, onrejected?: (reason: any) => PromiseLike<never>): Promise<number>', gave the following error.
-  Type 'IPromise<number>' is not assignable to type 'number | PromiseLike<number>'.
-    Type 'IPromise<number>' is not assignable to type 'PromiseLike<number>'.
-      Types of property 'then' are incompatible.
-        Type '<U>(success?: (value: number) => IPromise<U>) => IPromise<U>' is not assignable to type '<TResult1 = number, TResult2 = never>(onfulfilled?: (value: number) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>) => PromiseLike<TResult1 | TResult2>'.
-          Types of parameters 'success' and 'onfulfilled' are incompatible.
-            Type 'TResult1 | PromiseLike<TResult1>' is not assignable to type 'IPromise<TResult1 | TResult2>'.
-              Type 'TResult1' is not assignable to type 'IPromise<TResult1 | TResult2>'.
+!!! error TS2755:   Overload 1 of 2, '(success?: (value: string) => Promise<unknown>): Promise<unknown>', gave the following error.
+!!! error TS2755:     Property 'catch' is missing in type 'IPromise<number>' but required in type 'Promise<unknown>'.
+!!! error TS2755:   Overload 2 of 2, '(onfulfilled?: (value: string) => number | PromiseLike<number>, onrejected?: (reason: any) => PromiseLike<never>): Promise<number>', gave the following error.
+!!! error TS2755:     Type 'IPromise<number>' is not assignable to type 'number | PromiseLike<number>'.
+!!! error TS2755:       Type 'IPromise<number>' is not assignable to type 'PromiseLike<number>'.
+!!! error TS2755:         Types of property 'then' are incompatible.
+!!! error TS2755:           Type '<U>(success?: (value: number) => IPromise<U>) => IPromise<U>' is not assignable to type '<TResult1 = number, TResult2 = never>(onfulfilled?: (value: number) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>) => PromiseLike<TResult1 | TResult2>'.
+!!! error TS2755:             Types of parameters 'success' and 'onfulfilled' are incompatible.
+!!! error TS2755:               Type 'TResult1 | PromiseLike<TResult1>' is not assignable to type 'IPromise<TResult1 | TResult2>'.
+!!! error TS2755:                 Type 'TResult1' is not assignable to type 'IPromise<TResult1 | TResult2>'.
     

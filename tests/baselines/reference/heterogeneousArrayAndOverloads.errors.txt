@@ -1,4 +1,6 @@
 tests/cases/compiler/heterogeneousArrayAndOverloads.ts(9,9): error TS2755: No overload matches this call.
+  Overload 1 of 2, '(arg1: number[]): any', gave the following error.
+    Type 'string' is not assignable to type 'number'.
 
 
 ==== tests/cases/compiler/heterogeneousArrayAndOverloads.ts (1 errors) ====
@@ -13,7 +15,7 @@ tests/cases/compiler/heterogeneousArrayAndOverloads.ts(9,9): error TS2755: No ov
             this.test([1, 2, "hi", 5]); // Error
             ~~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS2755: No overload matches this call.
-!!! related TS2760 tests/cases/compiler/heterogeneousArrayAndOverloads.ts:9:26: Overload 1 of 2, '(arg1: number[]): any', gave the following error.
-  Type 'string' is not assignable to type 'number'.
+!!! error TS2755:   Overload 1 of 2, '(arg1: number[]): any', gave the following error.
+!!! error TS2755:     Type 'string' is not assignable to type 'number'.
         }
     }

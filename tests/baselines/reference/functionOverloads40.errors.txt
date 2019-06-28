@@ -1,4 +1,8 @@
 tests/cases/compiler/functionOverloads40.ts(4,9): error TS2755: No overload matches this call.
+  Overload 1 of 2, '(bar: { a: number; }[]): string', gave the following error.
+    Type 'string' is not assignable to type 'number'.
+  Overload 2 of 2, '(bar: { a: boolean; }[]): number', gave the following error.
+    Type 'string' is not assignable to type 'boolean'.
 
 
 ==== tests/cases/compiler/functionOverloads40.ts (1 errors) ====
@@ -8,8 +12,8 @@ tests/cases/compiler/functionOverloads40.ts(4,9): error TS2755: No overload matc
     var x = foo([{a:'bar'}]);
             ~~~~~~~~~~~~~~~~
 !!! error TS2755: No overload matches this call.
-!!! related TS2760 tests/cases/compiler/functionOverloads40.ts:4:15: Overload 1 of 2, '(bar: { a: number; }[]): string', gave the following error.
-  Type 'string' is not assignable to type 'number'.
-!!! related TS2760 tests/cases/compiler/functionOverloads40.ts:4:15: Overload 2 of 2, '(bar: { a: boolean; }[]): number', gave the following error.
-  Type 'string' is not assignable to type 'boolean'.
+!!! error TS2755:   Overload 1 of 2, '(bar: { a: number; }[]): string', gave the following error.
+!!! error TS2755:     Type 'string' is not assignable to type 'number'.
+!!! error TS2755:   Overload 2 of 2, '(bar: { a: boolean; }[]): number', gave the following error.
+!!! error TS2755:     Type 'string' is not assignable to type 'boolean'.
     

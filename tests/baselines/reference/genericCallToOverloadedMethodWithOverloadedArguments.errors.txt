@@ -2,8 +2,32 @@ tests/cases/conformance/types/typeRelationships/typeInference/genericCallToOverl
   Type 'Promise<number>' is not assignable to type 'Promise<string>'.
     Type 'number' is not assignable to type 'string'.
 tests/cases/conformance/types/typeRelationships/typeInference/genericCallToOverloadedMethodWithOverloadedArguments.ts(52,22): error TS2755: No overload matches this call.
+  Overload 1 of 2, '(cb: (x: number) => Promise<string>): Promise<string>', gave the following error.
+    Argument of type '{ (n: number): Promise<number>; (s: string): Promise<string>; }' is not assignable to parameter of type '(x: number) => Promise<string>'.
+      Type 'Promise<number>' is not assignable to type 'Promise<string>'.
+        Type 'number' is not assignable to type 'string'.
+  Overload 2 of 2, '(cb: (x: number) => Promise<string>, error?: (error: any) => Promise<string>): Promise<string>', gave the following error.
+    Argument of type '{ (n: number): Promise<number>; (s: string): Promise<string>; }' is not assignable to parameter of type '(x: number) => Promise<string>'.
+      Type 'Promise<number>' is not assignable to type 'Promise<string>'.
 tests/cases/conformance/types/typeRelationships/typeInference/genericCallToOverloadedMethodWithOverloadedArguments.ts(68,22): error TS2755: No overload matches this call.
+  Overload 1 of 3, '(cb: (x: number) => Promise<string>): Promise<string>', gave the following error.
+    Argument of type '{ (n: number): Promise<number>; (s: string): Promise<string>; }' is not assignable to parameter of type '(x: number) => Promise<string>'.
+      Type 'Promise<number>' is not assignable to type 'Promise<string>'.
+        Type 'number' is not assignable to type 'string'.
+  Overload 2 of 3, '(cb: (x: number) => Promise<string>, error?: (error: any) => Promise<string>): Promise<string>', gave the following error.
+    Argument of type '{ (n: number): Promise<number>; (s: string): Promise<string>; }' is not assignable to parameter of type '(x: number) => Promise<string>'.
+      Type 'Promise<number>' is not assignable to type 'Promise<string>'.
+  Overload 3 of 3, '(cb: (x: number) => Promise<string>, error?: (error: any) => string, progress?: (preservation: any) => void): Promise<string>', gave the following error.
+    Argument of type '{ (n: number): Promise<number>; (s: string): Promise<string>; }' is not assignable to parameter of type '(x: number) => Promise<string>'.
+      Type 'Promise<number>' is not assignable to type 'Promise<string>'.
 tests/cases/conformance/types/typeRelationships/typeInference/genericCallToOverloadedMethodWithOverloadedArguments.ts(84,22): error TS2755: No overload matches this call.
+  Overload 1 of 2, '(cb: (x: number) => Promise<boolean>): Promise<boolean>', gave the following error.
+    Argument of type '{ (n: number): Promise<number>; (s: string): Promise<string>; (b: boolean): Promise<boolean>; }' is not assignable to parameter of type '(x: number) => Promise<boolean>'.
+      Type 'Promise<number>' is not assignable to type 'Promise<boolean>'.
+        Type 'number' is not assignable to type 'boolean'.
+  Overload 2 of 2, '(cb: (x: number) => Promise<boolean>, error?: (error: any) => Promise<boolean>): Promise<boolean>', gave the following error.
+    Argument of type '{ (n: number): Promise<number>; (s: string): Promise<string>; (b: boolean): Promise<boolean>; }' is not assignable to parameter of type '(x: number) => Promise<boolean>'.
+      Type 'Promise<number>' is not assignable to type 'Promise<boolean>'.
 
 
 ==== tests/cases/conformance/types/typeRelationships/typeInference/genericCallToOverloadedMethodWithOverloadedArguments.ts (4 errors) ====
@@ -65,13 +89,13 @@ tests/cases/conformance/types/typeRelationships/typeInference/genericCallToOverl
         var newPromise = numPromise.then(testFunction);
                          ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS2755: No overload matches this call.
-!!! related TS2760 tests/cases/conformance/types/typeRelationships/typeInference/genericCallToOverloadedMethodWithOverloadedArguments.ts:52:38: Overload 1 of 2, '(cb: (x: number) => Promise<string>): Promise<string>', gave the following error.
-  Argument of type '{ (n: number): Promise<number>; (s: string): Promise<string>; }' is not assignable to parameter of type '(x: number) => Promise<string>'.
-    Type 'Promise<number>' is not assignable to type 'Promise<string>'.
-      Type 'number' is not assignable to type 'string'.
-!!! related TS2760 tests/cases/conformance/types/typeRelationships/typeInference/genericCallToOverloadedMethodWithOverloadedArguments.ts:52:38: Overload 2 of 2, '(cb: (x: number) => Promise<string>, error?: (error: any) => Promise<string>): Promise<string>', gave the following error.
-  Argument of type '{ (n: number): Promise<number>; (s: string): Promise<string>; }' is not assignable to parameter of type '(x: number) => Promise<string>'.
-    Type 'Promise<number>' is not assignable to type 'Promise<string>'.
+!!! error TS2755:   Overload 1 of 2, '(cb: (x: number) => Promise<string>): Promise<string>', gave the following error.
+!!! error TS2755:     Argument of type '{ (n: number): Promise<number>; (s: string): Promise<string>; }' is not assignable to parameter of type '(x: number) => Promise<string>'.
+!!! error TS2755:       Type 'Promise<number>' is not assignable to type 'Promise<string>'.
+!!! error TS2755:         Type 'number' is not assignable to type 'string'.
+!!! error TS2755:   Overload 2 of 2, '(cb: (x: number) => Promise<string>, error?: (error: any) => Promise<string>): Promise<string>', gave the following error.
+!!! error TS2755:     Argument of type '{ (n: number): Promise<number>; (s: string): Promise<string>; }' is not assignable to parameter of type '(x: number) => Promise<string>'.
+!!! error TS2755:       Type 'Promise<number>' is not assignable to type 'Promise<string>'.
     }
     
     //////////////////////////////////////
@@ -90,16 +114,16 @@ tests/cases/conformance/types/typeRelationships/typeInference/genericCallToOverl
         var newPromise = numPromise.then(testFunction);
                          ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS2755: No overload matches this call.
-!!! related TS2760 tests/cases/conformance/types/typeRelationships/typeInference/genericCallToOverloadedMethodWithOverloadedArguments.ts:68:38: Overload 1 of 3, '(cb: (x: number) => Promise<string>): Promise<string>', gave the following error.
-  Argument of type '{ (n: number): Promise<number>; (s: string): Promise<string>; }' is not assignable to parameter of type '(x: number) => Promise<string>'.
-    Type 'Promise<number>' is not assignable to type 'Promise<string>'.
-      Type 'number' is not assignable to type 'string'.
-!!! related TS2760 tests/cases/conformance/types/typeRelationships/typeInference/genericCallToOverloadedMethodWithOverloadedArguments.ts:68:38: Overload 2 of 3, '(cb: (x: number) => Promise<string>, error?: (error: any) => Promise<string>): Promise<string>', gave the following error.
-  Argument of type '{ (n: number): Promise<number>; (s: string): Promise<string>; }' is not assignable to parameter of type '(x: number) => Promise<string>'.
-    Type 'Promise<number>' is not assignable to type 'Promise<string>'.
-!!! related TS2760 tests/cases/conformance/types/typeRelationships/typeInference/genericCallToOverloadedMethodWithOverloadedArguments.ts:68:38: Overload 3 of 3, '(cb: (x: number) => Promise<string>, error?: (error: any) => string, progress?: (preservation: any) => void): Promise<string>', gave the following error.
-  Argument of type '{ (n: number): Promise<number>; (s: string): Promise<string>; }' is not assignable to parameter of type '(x: number) => Promise<string>'.
-    Type 'Promise<number>' is not assignable to type 'Promise<string>'.
+!!! error TS2755:   Overload 1 of 3, '(cb: (x: number) => Promise<string>): Promise<string>', gave the following error.
+!!! error TS2755:     Argument of type '{ (n: number): Promise<number>; (s: string): Promise<string>; }' is not assignable to parameter of type '(x: number) => Promise<string>'.
+!!! error TS2755:       Type 'Promise<number>' is not assignable to type 'Promise<string>'.
+!!! error TS2755:         Type 'number' is not assignable to type 'string'.
+!!! error TS2755:   Overload 2 of 3, '(cb: (x: number) => Promise<string>, error?: (error: any) => Promise<string>): Promise<string>', gave the following error.
+!!! error TS2755:     Argument of type '{ (n: number): Promise<number>; (s: string): Promise<string>; }' is not assignable to parameter of type '(x: number) => Promise<string>'.
+!!! error TS2755:       Type 'Promise<number>' is not assignable to type 'Promise<string>'.
+!!! error TS2755:   Overload 3 of 3, '(cb: (x: number) => Promise<string>, error?: (error: any) => string, progress?: (preservation: any) => void): Promise<string>', gave the following error.
+!!! error TS2755:     Argument of type '{ (n: number): Promise<number>; (s: string): Promise<string>; }' is not assignable to parameter of type '(x: number) => Promise<string>'.
+!!! error TS2755:       Type 'Promise<number>' is not assignable to type 'Promise<string>'.
     }
     
     //////////////////////////////////////
@@ -118,12 +142,12 @@ tests/cases/conformance/types/typeRelationships/typeInference/genericCallToOverl
         var newPromise = numPromise.then(testFunction);
                          ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS2755: No overload matches this call.
-!!! related TS2760 tests/cases/conformance/types/typeRelationships/typeInference/genericCallToOverloadedMethodWithOverloadedArguments.ts:84:38: Overload 1 of 2, '(cb: (x: number) => Promise<boolean>): Promise<boolean>', gave the following error.
-  Argument of type '{ (n: number): Promise<number>; (s: string): Promise<string>; (b: boolean): Promise<boolean>; }' is not assignable to parameter of type '(x: number) => Promise<boolean>'.
-    Type 'Promise<number>' is not assignable to type 'Promise<boolean>'.
-      Type 'number' is not assignable to type 'boolean'.
-!!! related TS2760 tests/cases/conformance/types/typeRelationships/typeInference/genericCallToOverloadedMethodWithOverloadedArguments.ts:84:38: Overload 2 of 2, '(cb: (x: number) => Promise<boolean>, error?: (error: any) => Promise<boolean>): Promise<boolean>', gave the following error.
-  Argument of type '{ (n: number): Promise<number>; (s: string): Promise<string>; (b: boolean): Promise<boolean>; }' is not assignable to parameter of type '(x: number) => Promise<boolean>'.
-    Type 'Promise<number>' is not assignable to type 'Promise<boolean>'.
+!!! error TS2755:   Overload 1 of 2, '(cb: (x: number) => Promise<boolean>): Promise<boolean>', gave the following error.
+!!! error TS2755:     Argument of type '{ (n: number): Promise<number>; (s: string): Promise<string>; (b: boolean): Promise<boolean>; }' is not assignable to parameter of type '(x: number) => Promise<boolean>'.
+!!! error TS2755:       Type 'Promise<number>' is not assignable to type 'Promise<boolean>'.
+!!! error TS2755:         Type 'number' is not assignable to type 'boolean'.
+!!! error TS2755:   Overload 2 of 2, '(cb: (x: number) => Promise<boolean>, error?: (error: any) => Promise<boolean>): Promise<boolean>', gave the following error.
+!!! error TS2755:     Argument of type '{ (n: number): Promise<number>; (s: string): Promise<string>; (b: boolean): Promise<boolean>; }' is not assignable to parameter of type '(x: number) => Promise<boolean>'.
+!!! error TS2755:       Type 'Promise<number>' is not assignable to type 'Promise<boolean>'.
     }
     

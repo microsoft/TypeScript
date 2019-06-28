@@ -21655,8 +21655,10 @@ namespace ts {
                             i++;
                         }
 
-                        const related = max > 1 ? allDiagnostics[minIndex] : flatten(allDiagnostics);
-                        diagnostics.add(createDiagnosticForNodeFromMessageChain(node, chainDiagnosticMessages(undefined, Diagnostics.No_overload_matches_this_call), related));
+                        const related = map(
+                            max > 1 ? allDiagnostics[minIndex] : flatten(allDiagnostics),
+                            d => typeof d.messageText === 'string' ? (d as DiagnosticMessageChain) : d.messageText);
+                        diagnostics.add(createDiagnosticForNodeFromMessageChain(node, chainDiagnosticMessages(related, Diagnostics.No_overload_matches_this_call)));
                     }
                 }
                 else if (candidateForArgumentArityError) {
