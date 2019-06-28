@@ -7201,13 +7201,13 @@ namespace ts {
     // }
 
     function compareMessageText(t1: string | DiagnosticMessageChain, t2: string | DiagnosticMessageChain): Comparison {
-        if (typeof t1 === 'string' && typeof t2 === 'string') {
+        if (typeof t1 === "string" && typeof t2 === "string") {
             return compareStringsCaseSensitive(t1, t2);
         }
-        else if (typeof t1 === 'string') {
+        else if (typeof t1 === "string") {
             return Comparison.LessThan;
         }
-        else if (typeof t2 === 'string') {
+        else if (typeof t2 === "string") {
             return Comparison.GreaterThan;
         }
         let res = compareStringsCaseSensitive(t1.messageText, t2.messageText);
@@ -7228,7 +7228,7 @@ namespace ts {
             return res;
         }
         for (let i = 0; i < t1.next.length; i++) {
-            res = compareMessageText(t1.next[i], t2.next[i])
+            res = compareMessageText(t1.next[i], t2.next[i]);
             if (res) {
                 return res;
             }
