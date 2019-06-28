@@ -3,7 +3,7 @@ tests/cases/conformance/es6/for-ofStatements/for-of34.ts(11,10): error TS7022: '
 
 
 ==== tests/cases/conformance/es6/for-ofStatements/for-of34.ts (2 errors) ====
-    class _StringIterator {
+    class StringIterator {
         next() {
         ~~~~
 !!! error TS7023: 'next' implicitly has return type 'any' because it does not have a return type annotation and is referenced directly or indirectly in one of its return expressions.
@@ -15,6 +15,6 @@ tests/cases/conformance/es6/for-ofStatements/for-of34.ts(11,10): error TS7022: '
         }
     }
     
-    for (var v of new _StringIterator) { }
+    for (var v of new StringIterator) { }
              ~
 !!! error TS7022: 'v' implicitly has type 'any' because it does not have a type annotation and is referenced directly or indirectly in its own initializer.

@@ -1,6 +1,6 @@
 === tests/cases/conformance/es6/for-ofStatements/for-of25.ts ===
-class _StringIterator {
->_StringIterator : _StringIterator
+class StringIterator {
+>StringIterator : StringIterator
 
     [Symbol.iterator]() {
 >[Symbol.iterator] : () => any
@@ -16,8 +16,8 @@ class _StringIterator {
 var x: any;
 >x : any
 
-for (var v of new _StringIterator) { }
+for (var v of new StringIterator) { }
 >v : any
->new _StringIterator : _StringIterator
->_StringIterator : typeof _StringIterator
+>new StringIterator : StringIterator
+>StringIterator : typeof StringIterator
 

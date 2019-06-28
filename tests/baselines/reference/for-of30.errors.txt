@@ -2,7 +2,7 @@ tests/cases/conformance/es6/for-ofStatements/for-of30.ts(16,15): error TS2759: T
 
 
 ==== tests/cases/conformance/es6/for-ofStatements/for-of30.ts (1 errors) ====
-    class _StringIterator {
+    class StringIterator {
         next() {
             return {
                 done: false,
@@ -17,6 +17,6 @@ tests/cases/conformance/es6/for-ofStatements/for-of30.ts(16,15): error TS2759: T
         }
     }
     
-    for (var v of new _StringIterator) { }
-                  ~~~~~~~~~~~~~~~~~~~
+    for (var v of new StringIterator) { }
+                  ~~~~~~~~~~~~~~~~~~
 !!! error TS2759: The 'return' property of an iterator must be a method.

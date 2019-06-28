@@ -1,9 +1,9 @@
 === tests/cases/conformance/es6/for-ofStatements/for-of14.ts ===
-class _StringIterator {
->_StringIterator : Symbol(_StringIterator, Decl(for-of14.ts, 0, 0))
+class StringIterator {
+>StringIterator : Symbol(StringIterator, Decl(for-of14.ts, 0, 0))
 
     next() {
->next : Symbol(_StringIterator.next, Decl(for-of14.ts, 0, 23))
+>next : Symbol(StringIterator.next, Decl(for-of14.ts, 0, 22))
 
         return "";
     }
@@ -12,7 +12,7 @@ class _StringIterator {
 var v: string;
 >v : Symbol(v, Decl(for-of14.ts, 6, 3))
 
-for (v of new _StringIterator) { } // Should fail because the iterator is not iterable
+for (v of new StringIterator) { } // Should fail because the iterator is not iterable
 >v : Symbol(v, Decl(for-of14.ts, 6, 3))
->_StringIterator : Symbol(_StringIterator, Decl(for-of14.ts, 0, 0))
+>StringIterator : Symbol(StringIterator, Decl(for-of14.ts, 0, 0))
 

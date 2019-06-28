@@ -59,3 +59,15 @@ async function* f2(): AsyncGenerator<number, void, boolean> {
     yield* g4; // error
     yield* g6; // ok
 }
+
+async function f3() {
+    const syncGenerator = function*() {
+        yield 1;
+        yield 2;
+    };
+
+    const o = {[Symbol.asyncIterator]: syncGenerator};
+
+    for await (const x of o) {
+    }
+}

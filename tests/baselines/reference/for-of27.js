@@ -1,11 +1,11 @@
 //// [for-of27.ts]
-class _StringIterator {
+class StringIterator {
     [Symbol.iterator]: any;
 }
 
-for (var v of new _StringIterator) { }
+for (var v of new StringIterator) { }
 
 //// [for-of27.js]
-class _StringIterator {
+class StringIterator {
 }
-for (var v of new _StringIterator) { }
+for (var v of new StringIterator) { }

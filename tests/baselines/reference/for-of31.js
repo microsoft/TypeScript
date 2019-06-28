@@ -1,5 +1,5 @@
 //// [for-of31.ts]
-class _StringIterator {
+class StringIterator {
     next() {
         return {
             // no done property
@@ -12,10 +12,10 @@ class _StringIterator {
     }
 }
 
-for (var v of new _StringIterator) { }
+for (var v of new StringIterator) { }
 
 //// [for-of31.js]
-class _StringIterator {
+class StringIterator {
     next() {
         return {
             // no done property
@@ -26,4 +26,4 @@ class _StringIterator {
         return this;
     }
 }
-for (var v of new _StringIterator) { }
+for (var v of new StringIterator) { }

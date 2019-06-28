@@ -46,8 +46,7 @@ namespace ts {
         getGlobalIterableType: (reportErrors: boolean) => Type;
         getGlobalIterableIteratorType: (reportErrors: boolean) => Type;
         getGlobalGeneratorType: (reportErrors: boolean) => Type;
-        resolveIterationMethodParameterType: (type: Type, errorNode: Node | undefined) => Type | undefined;
-        resolveIterationMethodReturnType: (type: Type, methodName: string, errorNode: Node | undefined) => Type | undefined;
+        resolveIterationType: (type: Type, errorNode: Node | undefined) => Type | undefined;
         mustHaveANextMethodDiagnostic: DiagnosticMessage;
         mustBeAMethodDiagnostic: DiagnosticMessage;
         mustHaveAValueDiagnostic: DiagnosticMessage;
@@ -544,10 +543,7 @@ namespace ts {
             getGlobalIterableType: getGlobalAsyncIterableType,
             getGlobalIterableIteratorType: getGlobalAsyncIterableIteratorType,
             getGlobalGeneratorType: getGlobalAsyncGeneratorType,
-            resolveIterationMethodParameterType: getAwaitedType,
-            resolveIterationMethodReturnType: (type: Type, methodName: string, errorNode: Node | undefined) => {
-                return getAwaitedTypeOfPromise(type, errorNode, Diagnostics.The_type_returned_by_the_0_method_of_an_async_iterator_must_be_a_promise_for_a_type_with_a_value_property, methodName);
-            },
+            resolveIterationType: getAwaitedType,
             mustHaveANextMethodDiagnostic: Diagnostics.An_async_iterator_must_have_a_next_method,
             mustBeAMethodDiagnostic: Diagnostics.The_0_property_of_an_async_iterator_must_be_a_method,
             mustHaveAValueDiagnostic: Diagnostics.The_type_returned_by_the_0_method_of_an_async_iterator_must_be_a_promise_for_a_type_with_a_value_property,
@@ -561,8 +557,7 @@ namespace ts {
             getGlobalIterableType,
             getGlobalIterableIteratorType,
             getGlobalGeneratorType,
-            resolveIterationMethodParameterType: (type, _errorNode) => type,
-            resolveIterationMethodReturnType: (type, _methodName, _errorNode) => type,
+            resolveIterationType: (type, _errorNode) => type,
             mustHaveANextMethodDiagnostic: Diagnostics.An_iterator_must_have_a_next_method,
             mustBeAMethodDiagnostic: Diagnostics.The_0_property_of_an_iterator_must_be_a_method,
             mustHaveAValueDiagnostic: Diagnostics.The_type_returned_by_the_0_method_of_an_iterator_must_have_a_value_property,
@@ -28085,7 +28080,7 @@ namespace ts {
             let nextType: Type | undefined;
             if (methodName !== "throw") {
                 const methodParameterType = methodParameterTypes ? getUnionType(methodParameterTypes) : unknownType;
-                const resolvedMethodParameterType = resolver.resolveIterationMethodParameterType(methodParameterType, errorNode) || anyType;
+                const resolvedMethodParameterType = resolver.resolveIterationType(methodParameterType, errorNode) || anyType;
                 if (methodName === "next") {
                     nextType = resolvedMethodParameterType;
                 }
@@ -28097,7 +28092,7 @@ namespace ts {
             // Resolve the *yield* and *return* types from the return type of the method (i.e. `IteratorResult`)
             let yieldType: Type;
             const methodReturnType = methodReturnTypes ? getUnionType(methodReturnTypes, UnionReduction.Subtype) : neverType;
-            const resolvedMethodReturnType = resolver.resolveIterationMethodReturnType(methodReturnType, methodName, errorNode) || anyType;
+            const resolvedMethodReturnType = resolver.resolveIterationType(methodReturnType, errorNode) || anyType;
             const iterationTypes = getIterationTypesOfIteratorResult(resolvedMethodReturnType);
             if (iterationTypes === noIterationTypes) {
                 if (errorNode) {
