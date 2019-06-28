@@ -20111,6 +20111,7 @@ namespace ts {
         }
 
         function checkJsxExpression(node: JsxExpression, checkMode?: CheckMode) {
+            checkGrammarJsxExpression(node);
             if (node.expression) {
                 const type = checkExpression(node.expression, checkMode);
                 if (node.dotDotDotToken && type !== anyType && !isArrayType(type)) {
@@ -22658,7 +22659,10 @@ namespace ts {
                 case SyntaxKind.ElementAccessExpression:
                     const expr = (<PropertyAccessExpression | ElementAccessExpression>node).expression;
                     if (isIdentifier(expr)) {
-                        const symbol = getSymbolAtLocation(expr);
+                        let symbol = getSymbolAtLocation(expr);
+                        if (symbol && symbol.flags & SymbolFlags.Alias) {
+                            symbol = resolveAlias(symbol);
+                        }
                         return !!(symbol && (symbol.flags & SymbolFlags.Enum) && getEnumKind(symbol) === EnumKind.Literal);
                     }
             }
@@ -32058,6 +32062,12 @@ namespace ts {
                 if (initializer && initializer.kind === SyntaxKind.JsxExpression && !initializer.expression) {
                     return grammarErrorOnNode(initializer, Diagnostics.JSX_attributes_must_only_be_assigned_a_non_empty_expression);
                 }
+            }
+        }
+
+        function checkGrammarJsxExpression(node: JsxExpression) {
+            if (node.expression && isCommaSequence(node.expression)) {
+                return grammarErrorOnNode(node.expression, Diagnostics.JSX_expressions_may_not_use_the_comma_operator_Did_you_mean_to_write_an_array);
             }
         }
 

@@ -1,14 +1,9 @@
 Exit Code: 1
 Standard output:
 
-
 Rush Multi-Project Build Tool 5.6.0 - https://rushjs.io
-
-
 Starting "rush rebuild"
-
 Executing a maximum of 1 simultaneous processes...
-
 [@uifabric/prettier-rules] started
 XX of XX: [@uifabric/prettier-rules] completed successfully in ? seconds
 [@uifabric/tslint-rules] started
@@ -36,9 +31,7 @@ XX of XX: [@uifabric/file-type-icons] completed successfully in ? seconds
 [@uifabric/foundation] started
 ts-jest[versions] (WARN) Version X.X.X-insiders.xxxxxxxx of typescript installed has not been tested with ts-jest. If you're experiencing issues, consider using a supported version (>=2.7.0 <4.0.0). Please do not report issues in ts-jest if you are using unsupported versions.
   ● createFactory › passes componentProps without userProps
-
     RangeError: Invalid array length
-
       189 |   for (const props of allProps) {
       190 |     classNames.push(props && props.className);
     > 191 |     assign(finalProps, ...(props as any));
@@ -46,16 +39,12 @@ ts-jest[versions] (WARN) Version X.X.X-insiders.xxxxxxxx of typescript installed
       192 |   }
       193 | 
       194 |   finalProps.className = mergeStyles(defaultStyles, classNames);
-
       at Object.__spreadArrays (../../common/temp/node_modules/.registry.npmjs.org/tslib/1.10.0/node_modules/tslib/tslib.js:182:22)
       at _constructFinalProps (src/slots.tsx:191:11)
       at result (src/slots.tsx:88:24)
       at Object.<anonymous> (src/slots.test.tsx:205:73)
-
   ● createFactory › passes userProp string as child
-
     RangeError: Invalid array length
-
       189 |   for (const props of allProps) {
       190 |     classNames.push(props && props.className);
     > 191 |     assign(finalProps, ...(props as any));
@@ -63,16 +52,12 @@ ts-jest[versions] (WARN) Version X.X.X-insiders.xxxxxxxx of typescript installed
       192 |   }
       193 | 
       194 |   finalProps.className = mergeStyles(defaultStyles, classNames);
-
       at Object.__spreadArrays (../../common/temp/node_modules/.registry.npmjs.org/tslib/1.10.0/node_modules/tslib/tslib.js:182:22)
       at _constructFinalProps (src/slots.tsx:191:11)
       at result (src/slots.tsx:88:24)
       at Object.<anonymous> (src/slots.test.tsx:210:76)
-
   ● createFactory › passes userProp integer as child
-
     RangeError: Invalid array length
-
       189 |   for (const props of allProps) {
       190 |     classNames.push(props && props.className);
     > 191 |     assign(finalProps, ...(props as any));
@@ -80,16 +65,12 @@ ts-jest[versions] (WARN) Version X.X.X-insiders.xxxxxxxx of typescript installed
       192 |   }
       193 | 
       194 |   finalProps.className = mergeStyles(defaultStyles, classNames);
-
       at Object.__spreadArrays (../../common/temp/node_modules/.registry.npmjs.org/tslib/1.10.0/node_modules/tslib/tslib.js:182:22)
       at _constructFinalProps (src/slots.tsx:191:11)
       at result (src/slots.tsx:88:24)
       at Object.<anonymous> (src/slots.test.tsx:220:76)
-
   ● createFactory › passes userProp string as defaultProp
-
     RangeError: Invalid array length
-
       189 |   for (const props of allProps) {
       190 |     classNames.push(props && props.className);
     > 191 |     assign(finalProps, ...(props as any));
@@ -97,16 +78,12 @@ ts-jest[versions] (WARN) Version X.X.X-insiders.xxxxxxxx of typescript installed
       192 |   }
       193 | 
       194 |   finalProps.className = mergeStyles(defaultStyles, classNames);
-
       at Object.__spreadArrays (../../common/temp/node_modules/.registry.npmjs.org/tslib/1.10.0/node_modules/tslib/tslib.js:182:22)
       at _constructFinalProps (src/slots.tsx:191:11)
       at result (src/slots.tsx:88:24)
       at Object.<anonymous> (src/slots.test.tsx:225:92)
-
   ● createFactory › passes userProp integer as defaultProp
-
     RangeError: Invalid array length
-
       189 |   for (const props of allProps) {
       190 |     classNames.push(props && props.className);
     > 191 |     assign(finalProps, ...(props as any));
@@ -114,16 +91,12 @@ ts-jest[versions] (WARN) Version X.X.X-insiders.xxxxxxxx of typescript installed
       192 |   }
       193 | 
       194 |   finalProps.className = mergeStyles(defaultStyles, classNames);
-
       at Object.__spreadArrays (../../common/temp/node_modules/.registry.npmjs.org/tslib/1.10.0/node_modules/tslib/tslib.js:182:22)
       at _constructFinalProps (src/slots.tsx:191:11)
       at result (src/slots.tsx:88:24)
       at Object.<anonymous> (src/slots.test.tsx:235:92)
-
   ● createFactory › merges userProps over componentProps
-
     RangeError: Invalid array length
-
       189 |   for (const props of allProps) {
       190 |     classNames.push(props && props.className);
     > 191 |     assign(finalProps, ...(props as any));
@@ -131,16 +104,12 @@ ts-jest[versions] (WARN) Version X.X.X-insiders.xxxxxxxx of typescript installed
       192 |   }
       193 | 
       194 |   finalProps.className = mergeStyles(defaultStyles, classNames);
-
       at Object.__spreadArrays (../../common/temp/node_modules/.registry.npmjs.org/tslib/1.10.0/node_modules/tslib/tslib.js:182:22)
       at _constructFinalProps (src/slots.tsx:191:11)
       at result (src/slots.tsx:88:24)
       at Object.<anonymous> (src/slots.test.tsx:245:84)
-
   ● createFactory › renders div and userProp integer as children
-
     RangeError: Invalid array length
-
       189 |   for (const props of allProps) {
       190 |     classNames.push(props && props.className);
     > 191 |     assign(finalProps, ...(props as any));
@@ -148,16 +117,12 @@ ts-jest[versions] (WARN) Version X.X.X-insiders.xxxxxxxx of typescript installed
       192 |   }
       193 | 
       194 |   finalProps.className = mergeStyles(defaultStyles, classNames);
-
       at Object.__spreadArrays (../../common/temp/node_modules/.registry.npmjs.org/tslib/1.10.0/node_modules/tslib/tslib.js:182:22)
       at _constructFinalProps (src/slots.tsx:191:11)
       at result (src/slots.tsx:88:24)
       at Object.<anonymous> (src/slots.test.tsx:255:86)
-
   ● createFactory › renders div and userProp string as children
-
     RangeError: Invalid array length
-
       189 |   for (const props of allProps) {
       190 |     classNames.push(props && props.className);
     > 191 |     assign(finalProps, ...(props as any));
@@ -165,16 +130,12 @@ ts-jest[versions] (WARN) Version X.X.X-insiders.xxxxxxxx of typescript installed
       192 |   }
       193 | 
       194 |   finalProps.className = mergeStyles(defaultStyles, classNames);
-
       at Object.__spreadArrays (../../common/temp/node_modules/.registry.npmjs.org/tslib/1.10.0/node_modules/tslib/tslib.js:182:22)
       at _constructFinalProps (src/slots.tsx:191:11)
       at result (src/slots.tsx:88:24)
       at Object.<anonymous> (src/slots.test.tsx:266:86)
-
   ● createFactory › renders userProp span function without component props
-
     RangeError: Invalid array length
-
       189 |   for (const props of allProps) {
       190 |     classNames.push(props && props.className);
     > 191 |     assign(finalProps, ...(props as any));
@@ -182,16 +143,12 @@ ts-jest[versions] (WARN) Version X.X.X-insiders.xxxxxxxx of typescript installed
       192 |   }
       193 | 
       194 |   finalProps.className = mergeStyles(defaultStyles, classNames);
-
       at Object.__spreadArrays (../../common/temp/node_modules/.registry.npmjs.org/tslib/1.10.0/node_modules/tslib/tslib.js:182:22)
       at _constructFinalProps (src/slots.tsx:191:11)
       at result (src/slots.tsx:88:24)
       at Object.<anonymous> (src/slots.test.tsx:288:61)
-
   ● createFactory › renders userProp span function with component props
-
     RangeError: Invalid array length
-
       189 |   for (const props of allProps) {
       190 |     classNames.push(props && props.className);
     > 191 |     assign(finalProps, ...(props as any));
@@ -199,16 +156,12 @@ ts-jest[versions] (WARN) Version X.X.X-insiders.xxxxxxxx of typescript installed
       192 |   }
       193 | 
       194 |   finalProps.className = mergeStyles(defaultStyles, classNames);
-
       at Object.__spreadArrays (../../common/temp/node_modules/.registry.npmjs.org/tslib/1.10.0/node_modules/tslib/tslib.js:182:22)
       at _constructFinalProps (src/slots.tsx:191:11)
       at result (src/slots.tsx:88:24)
       at Object.<anonymous> (src/slots.test.tsx:301:61)
-
   ● createFactory › renders userProp span component with component props
-
     RangeError: Invalid array length
-
       189 |   for (const props of allProps) {
       190 |     classNames.push(props && props.className);
     > 191 |     assign(finalProps, ...(props as any));
@@ -216,16 +169,12 @@ ts-jest[versions] (WARN) Version X.X.X-insiders.xxxxxxxx of typescript installed
       192 |   }
       193 | 
       194 |   finalProps.className = mergeStyles(defaultStyles, classNames);
-
       at Object.__spreadArrays (../../common/temp/node_modules/.registry.npmjs.org/tslib/1.10.0/node_modules/tslib/tslib.js:182:22)
       at _constructFinalProps (src/slots.tsx:191:11)
       at result (src/slots.tsx:88:24)
       at Object.<anonymous> (src/slots.test.tsx:314:61)
-
   ● createFactory › passes props and type arguments to userProp function
-
     RangeError: Invalid array length
-
       189 |   for (const props of allProps) {
       190 |     classNames.push(props && props.className);
     > 191 |     assign(finalProps, ...(props as any));
@@ -233,16 +182,12 @@ ts-jest[versions] (WARN) Version X.X.X-insiders.xxxxxxxx of typescript installed
       192 |   }
       193 | 
       194 |   finalProps.className = mergeStyles(defaultStyles, classNames);
-
       at Object.__spreadArrays (../../common/temp/node_modules/.registry.npmjs.org/tslib/1.10.0/node_modules/tslib/tslib.js:182:22)
       at _constructFinalProps (src/slots.tsx:191:11)
       at result (src/slots.tsx:88:24)
       at Object.<anonymous> (src/slots.test.tsx:334:43)
-
   ● getSlots › creates slots and passes merged props to them
-
     RangeError: Invalid array length
-
       189 |   for (const props of allProps) {
       190 |     classNames.push(props && props.className);
     > 191 |     assign(finalProps, ...(props as any));
@@ -250,14 +195,12 @@ ts-jest[versions] (WARN) Version X.X.X-insiders.xxxxxxxx of typescript installed
       192 |   }
       193 | 
       194 |   finalProps.className = mergeStyles(defaultStyles, classNames);
-
       at Object.__spreadArrays (../../common/temp/node_modules/.registry.npmjs.org/tslib/1.10.0/node_modules/tslib/tslib.js:182:22)
       at _constructFinalProps (src/slots.tsx:191:11)
       at result (src/slots.tsx:88:24)
       at _renderSlot (src/slots.tsx:221:100)
       at Object.slot [as testSlot1] (src/slots.tsx:142:16)
       at Object.<anonymous> (src/slots.test.tsx:399:24)
-
 [XX:XX:XX XM] x Error detected while running 'jest'
 [XX:XX:XX XM] x ------------------------------------
 [XX:XX:XX XM] x Error: Command failed: /usr/local/bin/node /office-ui-fabric-react/common/temp/node_modules/jest/bin/jest.js --config /office-ui-fabric-react/packages/foundation/jest.config.js --passWithNoTests --colors
@@ -273,7 +216,6 @@ ts-jest[versions] (WARN) Version X.X.X-insiders.xxxxxxxx of typescript installed
 XX of XX: [@uifabric/icons] completed successfully in ? seconds
 [@uifabric/webpack-utils] started
 XX of XX: [@uifabric/webpack-utils] completed successfully in ? seconds
-
 SUCCESS (8)
 ================================
 @uifabric/build (? seconds)
@@ -285,28 +227,21 @@ SUCCESS (8)
 @uifabric/tslint-rules (? seconds)
 @uifabric/webpack-utils (? seconds)
 ================================
-
 SUCCESS WITH WARNINGS (6)
 ================================
 @uifabric/codepen-loader (? seconds)
 ts-jest[versions] (WARN) Version X.X.X-insiders.xxxxxxxx of typescript installed has not been tested with ts-jest. If you're experiencing issues, consider using a supported version (>=2.7.0 <4.0.0). Please do not report issues in ts-jest if you are using unsupported versions.
-
 @uifabric/jest-serializer-merge-styles (? seconds)
 ts-jest[versions] (WARN) Version X.X.X-insiders.xxxxxxxx of typescript installed has not been tested with ts-jest. If you're experiencing issues, consider using a supported version (>=2.7.0 <4.0.0). Please do not report issues in ts-jest if you are using unsupported versions.
-
 @uifabric/merge-styles (? seconds)
 ts-jest[versions] (WARN) Version X.X.X-insiders.xxxxxxxx of typescript installed has not been tested with ts-jest. If you're experiencing issues, consider using a supported version (>=2.7.0 <4.0.0). Please do not report issues in ts-jest if you are using unsupported versions.
-
 @uifabric/set-version (? seconds)
 ts-jest[versions] (WARN) Version X.X.X-insiders.xxxxxxxx of typescript installed has not been tested with ts-jest. If you're experiencing issues, consider using a supported version (>=2.7.0 <4.0.0). Please do not report issues in ts-jest if you are using unsupported versions.
-
 @uifabric/styling (? seconds)
 ts-jest[versions] (WARN) Version X.X.X-insiders.xxxxxxxx of typescript installed has not been tested with ts-jest. If you're experiencing issues, consider using a supported version (>=2.7.0 <4.0.0). Please do not report issues in ts-jest if you are using unsupported versions.
-
 @uifabric/utilities (? seconds)
 ts-jest[versions] (WARN) Version X.X.X-insiders.xxxxxxxx of typescript installed has not been tested with ts-jest. If you're experiencing issues, consider using a supported version (>=2.7.0 <4.0.0). Please do not report issues in ts-jest if you are using unsupported versions.
 ================================
-
 BLOCKED (27)
 ================================
 @uifabric/api-docs
@@ -337,14 +272,12 @@ theming-designer
 todo-app
 vr-tests
 ================================
-
 FAILURE (1)
 ================================
 @uifabric/foundation (? seconds)
 ts-jest[versions] (WARN) Version X.X.X-insiders.xxxxxxxx of typescript installed has not been tested with ts-jest. If you're experiencing issues, consider using a supported version (>=2.7.0 <4.0.0). Please do not report issues in ts-jest if you are using unsupported versions.
   ● createFactory › passes componentProps without userProps
     RangeError: Invalid array length
-
       189 |   for (const props of allProps) {
       190 |     classNames.push(props && props.className);
     > 191 |     assign(finalProps, ...(props as any));
@@ -354,7 +287,6 @@ ts-jest[versions] (WARN) Version X.X.X-insiders.xxxxxxxx of typescript installed
 [...179 lines omitted...]
       193 | 
       194 |   finalProps.className = mergeStyles(defaultStyles, classNames);
-
       at Object.__spreadArrays (../../common/temp/node_modules/.registry.npmjs.org/tslib/1.10.0/node_modules/tslib/tslib.js:182:22)
       at _constructFinalProps (src/slots.tsx:191:11)
       at result (src/slots.tsx:88:24)
@@ -373,8 +305,6 @@ ts-jest[versions] (WARN) Version X.X.X-insiders.xxxxxxxx of typescript installed
 [XX:XX:XX XM] x finished 'build' in ?s with errors
 [XX:XX:XX XM] x Error previously detected. See above for error messages.
 ================================
-
-
 Error: Project(s) failed to build
 rush rebuild - Errors! ( ? seconds)
 
@@ -388,7 +318,6 @@ XX of XX: [@uifabric/merge-styles] completed with warnings in ? seconds
 XX of XX: [@uifabric/jest-serializer-merge-styles] completed with warnings in ? seconds
 XX of XX: [@uifabric/utilities] completed with warnings in ? seconds
 XX of XX: [@uifabric/styling] completed with warnings in ? seconds
-
 XX of XX: [@uifabric/foundation] failed to build!
 XX of XX: [@uifabric/experiments] blocked by [@uifabric/foundation]!
 XX of XX: [@uifabric/fabric-website] blocked by [@uifabric/foundation]!

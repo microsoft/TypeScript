@@ -4451,7 +4451,12 @@ declare namespace ts {
     function createAbstractBuilder(rootNames: ReadonlyArray<string> | undefined, options: CompilerOptions | undefined, host?: CompilerHost, oldProgram?: BuilderProgram, configFileParsingDiagnostics?: ReadonlyArray<Diagnostic>, projectReferences?: ReadonlyArray<ProjectReference>): BuilderProgram;
 }
 declare namespace ts {
-    function readBuilderProgram(compilerOptions: CompilerOptions, readFile: (path: string) => string | undefined): EmitAndSemanticDiagnosticsBuilderProgram | undefined;
+    interface ReadBuildProgramHost {
+        useCaseSensitiveFileNames(): boolean;
+        getCurrentDirectory(): string;
+        readFile(fileName: string): string | undefined;
+    }
+    function readBuilderProgram(compilerOptions: CompilerOptions, host: ReadBuildProgramHost): EmitAndSemanticDiagnosticsBuilderProgram | undefined;
     function createIncrementalCompilerHost(options: CompilerOptions, system?: System): CompilerHost;
     interface IncrementalProgramOptions<T extends BuilderProgram> {
         rootNames: ReadonlyArray<string>;
@@ -6414,19 +6419,6 @@ declare namespace ts.server.protocol {
          * List of error codes supported by the server.
          */
         body?: string[];
-    }
-    /**
-     * Arguments for EncodedSemanticClassificationsRequest request.
-     */
-    interface EncodedSemanticClassificationsRequestArgs extends FileRequestArgs {
-        /**
-         * Start position of the span.
-         */
-        start: number;
-        /**
-         * Length of the span.
-         */
-        length: number;
     }
     /**
      * Arguments in document highlight request; include: filesToSearch, file,
@@ -9076,6 +9068,7 @@ declare namespace ts.server {
         private updateErrorCheck;
         private cleanProjects;
         private cleanup;
+        private getEncodedSyntacticClassifications;
         private getEncodedSemanticClassifications;
         private getProject;
         private getConfigFileAndProject;
