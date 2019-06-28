@@ -674,5 +674,80 @@ fn5();
                 );
             });
         });
+
+        it("reusing d.ts files from composite and non composite projects", () => {
+            const projectLocation = "/user/username/projects/myproject";
+            const configA: File = {
+                path: `${projectLocation}/compositea/tsconfig.json`,
+                content: JSON.stringify({
+                    compilerOptions: {
+                        composite: true,
+                        outDir: "../dist/",
+                        rootDir: "../",
+                        baseUrl: "../",
+                        paths: { "@ref/*": ["./dist/*"] }
+                    }
+                })
+            };
+            const aTs: File = {
+                path: `${projectLocation}/compositea/a.ts`,
+                content: `import { b } from "@ref/compositeb/b";`
+            };
+            const a2Ts: File = {
+                path: `${projectLocation}/compositea/a2.ts`,
+                content: `export const x = 10;`
+            };
+            const configB: File = {
+                path: `${projectLocation}/compositeb/tsconfig.json`,
+                content: configA.content
+            };
+            const bTs: File = {
+                path: `${projectLocation}/compositeb/b.ts`,
+                content: "export function b() {}"
+            };
+            const bDts: File = {
+                path: `${projectLocation}/dist/compositeb/b.d.ts`,
+                content: "export declare function b(): void;"
+            };
+            const configC: File = {
+                path: `${projectLocation}/compositec/tsconfig.json`,
+                content: JSON.stringify({
+                    compilerOptions: {
+                        composite: true,
+                        outDir: "../dist/",
+                        rootDir: "../",
+                        baseUrl: "../",
+                        paths: { "@ref/*": ["./*"] }
+                    },
+                    references: [{ path: "../compositeb" }]
+                })
+            };
+            const cTs: File = {
+                path: `${projectLocation}/compositec/c.ts`,
+                content: aTs.content
+            };
+            const files = [libFile, aTs, a2Ts, configA, bDts, bTs, configB, cTs, configC];
+            const host = createServerHost(files);
+            const service = createProjectService(host);
+            service.openClientFile(aTs.path);
+            service.checkNumberOfProjects({ configuredProjects: 1 });
+
+            // project A referencing b.d.ts without project reference
+            const projectA = service.configuredProjects.get(configA.path)!;
+            assert.isDefined(projectA);
+            checkProjectActualFiles(projectA, [aTs.path, a2Ts.path, bDts.path, libFile.path, configA.path]);
+
+            // reuses b.d.ts but sets the path and resolved path since projectC has project references
+            // as the real resolution was to b.ts
+            service.openClientFile(cTs.path);
+            service.checkNumberOfProjects({ configuredProjects: 2 });
+            const projectC = service.configuredProjects.get(configC.path)!;
+            checkProjectActualFiles(projectC, [cTs.path, bDts.path, libFile.path, configC.path]);
+
+            // Now new project for project A tries to reuse b but there is no filesByName mapping for b's source location
+            host.writeFile(a2Ts.path, `${a2Ts.content}export const y = 30;`);
+            assert.isTrue(projectA.dirty);
+            projectA.updateGraph();
+        });
     });
 }
