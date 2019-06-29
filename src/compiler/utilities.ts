@@ -2201,13 +2201,13 @@ namespace ts {
         let result: (JSDoc | JSDocTag)[] | undefined;
         // Pull parameter comments from declaring function as well
         if (isVariableLike(hostNode) && hasInitializer(hostNode) && hasJSDocNodes(hostNode.initializer!)) {
-            result = addRange(result, (hostNode.initializer as HasJSDoc).jsDoc!);
+            result = append(result, last((hostNode.initializer as HasJSDoc).jsDoc!));
         }
 
         let node: Node | undefined = hostNode;
         while (node && node.parent) {
             if (hasJSDocNodes(node)) {
-                result = addRange(result, node.jsDoc!);
+                result = append(result, last(node.jsDoc!));
             }
 
             if (node.kind === SyntaxKind.Parameter) {
