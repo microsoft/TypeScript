@@ -982,34 +982,40 @@ class someClass { }`),
                 lastProjectOutputJs: "/src/tests/index.js",
                 initialBuild: {
                     modifyFs: fs => fs.writeFileSync("/src/tests/tsconfig.json", `{
+    "references": [
+        { "path": "../core" },
+        { "path": "../logic" }
+    ],
+    "files": ["index.ts"],
     "compilerOptions": {
-        "incremental": true,
-        "module": "commonjs",
+        "composite": true,
+        "declaration": true,
+        "forceConsistentCasingInFileNames": true,
+        "skipDefaultLibCheck": true,
         "esModuleInterop": false
     }
 }`),
                     expectedDiagnostics: [
-                        getExpectedDiagnosticForProjectsInBuild("src/tests/tsconfig.json"),
+                        getExpectedDiagnosticForProjectsInBuild("src/core/tsconfig.json", "src/logic/tsconfig.json", "src/tests/tsconfig.json"),
+                        [Diagnostics.Project_0_is_out_of_date_because_output_file_1_does_not_exist, "src/core/tsconfig.json", "src/core/anotherModule.js"],
+                        [Diagnostics.Building_project_0, "/src/core/tsconfig.json"],
+                        [Diagnostics.Project_0_is_out_of_date_because_output_file_1_does_not_exist, "src/logic/tsconfig.json", "src/logic/index.js"],
+                        [Diagnostics.Building_project_0, "/src/logic/tsconfig.json"],
                         [Diagnostics.Project_0_is_out_of_date_because_output_file_1_does_not_exist, "src/tests/tsconfig.json", "src/tests/index.js"],
-                        [Diagnostics.Building_project_0, "/src/tests/tsconfig.json"],
+                        [Diagnostics.Building_project_0, "/src/tests/tsconfig.json"]
                     ]
                 },
                 incrementalDtsChangedBuild: {
                     modifyFs: fs => replaceText(fs, "/src/tests/tsconfig.json", `"esModuleInterop": false`, `"esModuleInterop": true`),
                     expectedDiagnostics: [
-                        getExpectedDiagnosticForProjectsInBuild("src/tests/tsconfig.json"),
+                        getExpectedDiagnosticForProjectsInBuild("src/core/tsconfig.json", "src/logic/tsconfig.json", "src/tests/tsconfig.json"),
+                        [Diagnostics.Project_0_is_up_to_date_because_newest_input_1_is_older_than_oldest_output_2, "src/core/tsconfig.json", "src/core/anotherModule.ts", "src/core/anotherModule.js"],
+                        [Diagnostics.Project_0_is_up_to_date_because_newest_input_1_is_older_than_oldest_output_2, "src/logic/tsconfig.json", "src/logic/index.ts", "src/logic/index.js"],
                         [Diagnostics.Project_0_is_out_of_date_because_oldest_output_1_is_older_than_newest_input_2, "src/tests/tsconfig.json", "src/tests/index.js", "src/tests/tsconfig.json"],
                         [Diagnostics.Building_project_0, "/src/tests/tsconfig.json"]
                     ]
                 },
-                outputFiles: [
-                    "/src/core/anotherModule.js",
-                    "/src/core/index.js",
-                    "/src/logic/index.js",
-                    "/src/tests/index.js",
-                    "/src/tests/tsconfig.json",
-                    "/src/tests/tsconfig.tsbuildinfo"
-                ],
+                outputFiles: [],
                 baselineOnly: true,
                 verifyDiagnostics: true
             });
