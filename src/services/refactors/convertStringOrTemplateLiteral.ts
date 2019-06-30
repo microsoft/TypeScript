@@ -198,7 +198,7 @@ namespace ts.refactor.convertStringOrTemplateLiteral {
             index++;
         }
 
-        text = escapeText(text);
+        text = escapeString(text);
         return [index, text, indexes];
     }
 
@@ -247,10 +247,4 @@ namespace ts.refactor.convertStringOrTemplateLiteral {
         }
         return node;
     }
-
-    function escapeText(content: string) {
-        return content.replace("`", "\`")       // back-tick
-                      .replace("${", "$\\{");  // placeholder alike beginning
-    }
-
 }
