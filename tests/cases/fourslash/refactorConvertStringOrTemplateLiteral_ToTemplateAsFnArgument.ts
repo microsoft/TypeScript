@@ -10,4 +10,3 @@ edit.applyRefactor({
     newContent:
 `console.log(\`foobar is \${32} years old\`)`,
 });
-

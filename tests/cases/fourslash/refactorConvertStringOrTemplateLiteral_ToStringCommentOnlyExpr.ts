@@ -10,4 +10,3 @@ edit.applyRefactor({
     newContent:
 `const foo = /* C0 */ 42 /* C1 */`,
 });
-

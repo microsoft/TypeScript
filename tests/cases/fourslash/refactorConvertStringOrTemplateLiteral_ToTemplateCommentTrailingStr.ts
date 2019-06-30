@@ -10,4 +10,3 @@ edit.applyRefactor({
     newContent:
 "const foo = /* C0 */ `foo is\${ /* C1 */ /* C2 */42} years old` /* C3 */",
 });
-

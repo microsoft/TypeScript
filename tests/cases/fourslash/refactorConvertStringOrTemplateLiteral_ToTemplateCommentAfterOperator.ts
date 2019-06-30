@@ -10,4 +10,3 @@ edit.applyRefactor({
     newContent:
 "const foo = /* C0 */ `foo is\${ /* C1 */ /* C2 */42 /* C3 */} and bar is\${ /* C4 */ /* C5 */52 /* C6 */}`",
 });
-

@@ -14,4 +14,3 @@ edit.applyRefactor({
 const name = "Eddy"
 const foo = \`\${name} is \${age} years old\``,
 });
-

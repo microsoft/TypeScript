@@ -17,4 +17,3 @@ verify.not.refactorAvailable("Convert string concatenation or template literal",
 goTo.select("t", "s");
 verify.not.refactorAvailable("Convert string concatenation or template literal", "Convert to string concatenation");
 verify.not.refactorAvailable("Convert string concatenation or template literal", "Convert to template literal");
-

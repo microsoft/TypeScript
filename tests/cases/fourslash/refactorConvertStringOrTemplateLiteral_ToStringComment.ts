@@ -10,4 +10,3 @@ edit.applyRefactor({
     newContent:
 `const foo = /* H */ "HEAD " + /* C0 */ 42 /* C1 */ + " Span1 " + /* C2 */ 43 /* C3 */ + " Span2 " + /* C4 */ 44 /* C5 */ + " Span3" /* T */`,
 });
-

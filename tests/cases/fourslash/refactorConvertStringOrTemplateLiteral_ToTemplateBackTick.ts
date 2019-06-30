@@ -10,4 +10,3 @@ edit.applyRefactor({
     newContent:
 "const foo = `with back\\`tick`",
 });
-
