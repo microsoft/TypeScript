@@ -24259,7 +24259,7 @@ namespace ts {
             const elementTypes = arity ? type.typeArguments!.slice() : [];
             for (let i = arity; i < patternElements.length; i++) {
                 const e = patternElements[i];
-                if (i < patternElements.length - 1 || !(e.kind === SyntaxKind.BindingElement && (<BindingElement>e).dotDotDotToken)) {
+                if (i < patternElements.length - 1 || !(e.kind === SyntaxKind.BindingElement && e.dotDotDotToken)) {
                     elementTypes.push(!isOmittedExpression(e) && hasDefaultValue(e) ? getTypeFromBindingElement(e, /*includePatternInType*/ false, /*reportErrors*/ false) : anyType);
                     if (!isOmittedExpression(e) && !hasDefaultValue(e)) {
                         reportImplicitAny(e, anyType);
