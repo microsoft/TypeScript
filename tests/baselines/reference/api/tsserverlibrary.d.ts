@@ -4553,6 +4553,8 @@ declare namespace ts {
     interface Watch<T> {
         /** Synchronize with host and get updated program */
         getProgram(): T;
+        /** Closes the watch */
+        close(): void;
     }
     /**
      * Creates the watch what generates program using the config file
@@ -8389,6 +8391,7 @@ declare namespace ts.server {
         private program;
         private externalFiles;
         private missingFilesMap;
+        private generatedFilesMap;
         private plugins;
         private lastFileExceededProgramSize;
         protected languageService: LanguageService;
@@ -8501,6 +8504,9 @@ declare namespace ts.server {
         private detachScriptInfoFromProject;
         private addMissingFileWatcher;
         private isWatchedMissingFile;
+        private createGeneratedFileWatcher;
+        private isValidGeneratedFileWatcher;
+        private clearGeneratedFileWatch;
         getScriptInfoForNormalizedPath(fileName: NormalizedPath): ScriptInfo | undefined;
         getScriptInfo(uncheckedFileName: string): ScriptInfo | undefined;
         filesToString(writeProjectFileNames: boolean): string;

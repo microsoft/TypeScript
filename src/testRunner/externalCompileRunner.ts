@@ -201,7 +201,7 @@ function sanitizeTimestamps(result: string): string {
 function sanitizeVersionSpecifiers(result: string): string {
     return result
         .replace(/\d+.\d+.\d+-insiders.\d\d\d\d\d\d\d\d/g, "X.X.X-insiders.xxxxxxxx")
-        .replace(/([@v])\d+\.\d+\.\d+/g, "$1X.X.X");
+        .replace(/([@v\()])\d+\.\d+\.\d+/g, "$1X.X.X");
 }
 
 /**

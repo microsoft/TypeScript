@@ -2201,13 +2201,13 @@ namespace ts {
         let result: (JSDoc | JSDocTag)[] | undefined;
         // Pull parameter comments from declaring function as well
         if (isVariableLike(hostNode) && hasInitializer(hostNode) && hasJSDocNodes(hostNode.initializer!)) {
-            result = addRange(result, (hostNode.initializer as HasJSDoc).jsDoc!);
+            result = append(result, last((hostNode.initializer as HasJSDoc).jsDoc!));
         }
 
         let node: Node | undefined = hostNode;
         while (node && node.parent) {
             if (hasJSDocNodes(node)) {
-                result = addRange(result, node.jsDoc!);
+                result = append(result, last(node.jsDoc!));
             }
 
             if (node.kind === SyntaxKind.Parameter) {
@@ -2705,11 +2705,19 @@ namespace ts {
         return isStringLiteralLike(node) || isNumericLiteral(node);
     }
 
+    export function isSignedNumericLiteral(node: Node): node is PrefixUnaryExpression & { operand: NumericLiteral } {
+        return isPrefixUnaryExpression(node) && (node.operator === SyntaxKind.PlusToken || node.operator === SyntaxKind.MinusToken) && isNumericLiteral(node.operand);
+    }
+
     /**
-     * A declaration has a dynamic name if both of the following are true:
-     *   1. The declaration has a computed property name
-     *   2. The computed name is *not* expressed as Symbol.<name>, where name
-     *      is a property of the Symbol constructor that denotes a built in
+     * A declaration has a dynamic name if all of the following are true:
+     *   1. The declaration has a computed property name.
+     *   2. The computed name is *not* expressed as a StringLiteral.
+     *   3. The computed name is *not* expressed as a NumericLiteral.
+     *   4. The computed name is *not* expressed as a PlusToken or MinusToken
+     *      immediately followed by a NumericLiteral.
+     *   5. The computed name is *not* expressed as `Symbol.<name>`, where `<name>`
+     *      is a property of the Symbol constructor that denotes a built-in
      *      Symbol.
      */
     export function hasDynamicName(declaration: Declaration): declaration is DynamicNamedDeclaration {
@@ -2720,6 +2728,7 @@ namespace ts {
     export function isDynamicName(name: DeclarationName): boolean {
         return name.kind === SyntaxKind.ComputedPropertyName &&
             !isStringOrNumericLiteralLike(name.expression) &&
+            !isSignedNumericLiteral(name.expression) &&
             !isWellKnownSymbolSyntactically(name.expression);
     }
 

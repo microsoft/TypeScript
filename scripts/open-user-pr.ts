@@ -1,4 +1,5 @@
 /// <reference lib="esnext.asynciterable" />
+/// <reference lib="es2015.promise" />
 // Must reference esnext.asynciterable lib, since octokit uses AsyncIterable internally
 import Octokit = require("@octokit/rest");
 import {runSequence} from "./run-sequence";
@@ -29,7 +30,7 @@ gh.authenticate({
     token: process.argv[2]
 });
 gh.pulls.create({
-    owner: process.env.TARGET_FORK,
+    owner: process.env.TARGET_FORK!,
     repo: "TypeScript",
     maintainer_can_modify: true,
     title: `🤖 User test baselines have changed` + (process.env.TARGET_BRANCH ? ` for ${process.env.TARGET_BRANCH}` : ""),
@@ -45,9 +46,9 @@ cc ${reviewers.map(r => "@" + r).join(" ")}`,
     console.log(`Pull request ${num} created.`);
     if (!process.env.SOURCE_ISSUE) {
         await gh.pulls.createReviewRequest({
-            owner: process.env.TARGET_FORK,
+            owner: process.env.TARGET_FORK!,
             repo: "TypeScript",
-            number: num,
+            pull_number: num,
             reviewers,
         });
     }
