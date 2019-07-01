@@ -24,7 +24,7 @@ abstract class ExternalCompileRunnerBase extends RunnerBase {
      */
     initializeTests(): void {
         // Read in and evaluate the test list
-        const testList = this.tests && this.tests.length ? this.tests : this.enumerateTestFiles();
+        const testList = this.tests && this.tests.length ? this.tests : this.getTestFiles();
 
         // tslint:disable-next-line:no-this-assignment
         const cls = this;
@@ -113,7 +113,7 @@ class DockerfileRunner extends ExternalCompileRunnerBase {
     }
     initializeTests(): void {
         // Read in and evaluate the test list
-        const testList = this.tests && this.tests.length ? this.tests : this.enumerateTestFiles();
+        const testList = this.tests && this.tests.length ? this.tests : this.getTestFiles();
 
         // tslint:disable-next-line:no-this-assignment
         const cls = this;

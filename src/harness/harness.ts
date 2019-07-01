@@ -501,7 +501,7 @@ namespace Harness {
         }
 
         function enumerateTestFiles(runner: RunnerBase) {
-            return runner.enumerateTestFiles();
+            return runner.getTestFiles();
         }
 
         function listFiles(path: string, spec: RegExp, options: { recursive?: boolean } = {}) {
