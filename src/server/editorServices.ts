@@ -1003,6 +1003,12 @@ namespace ts.server {
                 fileOrDirectory => {
                     const fileOrDirectoryPath = this.toPath(fileOrDirectory);
                     project.getCachedDirectoryStructureHost().addOrDeleteFileOrDirectory(fileOrDirectory, fileOrDirectoryPath);
+
+                    // don't trigger callback on open, existing files
+                    if (project.fileIsOpen(fileOrDirectoryPath)) {
+                        return;
+                    }
+
                     if (isPathIgnored(fileOrDirectoryPath)) return;
                     const configFilename = project.getConfigFilePath();
 
@@ -1327,7 +1333,11 @@ namespace ts.server {
 
             const watches: WatchType[] = [];
             if (configFileExistenceInfo.configFileWatcherForRootOfInferredProject) {
-                watches.push(WatchType.ConfigFileForInferredRoot);
+                watches.push(
+                    configFileExistenceInfo.configFileWatcherForRootOfInferredProject === noopFileWatcher ?
+                        WatchType.NoopConfigFileForInferredRoot :
+                        WatchType.ConfigFileForInferredRoot
+                );
             }
             if (this.configuredProjects.has(canonicalConfigFilePath)) {
                 watches.push(WatchType.ConfigFile);
@@ -1343,13 +1353,16 @@ namespace ts.server {
             canonicalConfigFilePath: string,
             configFileExistenceInfo: ConfigFileExistenceInfo
         ) {
-            configFileExistenceInfo.configFileWatcherForRootOfInferredProject = this.watchFactory.watchFile(
-                this.host,
-                configFileName,
-                (_filename, eventKind) => this.onConfigFileChangeForOpenScriptInfo(configFileName, eventKind),
-                PollingInterval.High,
-                WatchType.ConfigFileForInferredRoot
-            );
+            configFileExistenceInfo.configFileWatcherForRootOfInferredProject =
+                canWatchDirectory(getDirectoryPath(canonicalConfigFilePath) as Path) ?
+                    this.watchFactory.watchFile(
+                        this.host,
+                        configFileName,
+                        (_filename, eventKind) => this.onConfigFileChangeForOpenScriptInfo(configFileName, eventKind),
+                        PollingInterval.High,
+                        WatchType.ConfigFileForInferredRoot
+                    ) :
+                    noopFileWatcher;
             this.logConfigFileWatchUpdate(configFileName, canonicalConfigFilePath, configFileExistenceInfo, ConfigFileWatcherStatus.UpdatedCallback);
         }
 
@@ -2221,7 +2234,13 @@ namespace ts.server {
         getDocumentPositionMapper(project: Project, generatedFileName: string, sourceFileName?: string): DocumentPositionMapper | undefined {
             // Since declaration info and map file watches arent updating project's directory structure host (which can cache file structure) use host
             const declarationInfo = this.getOrCreateScriptInfoNotOpenedByClient(generatedFileName, project.currentDirectory, this.host);
-            if (!declarationInfo) return undefined;
+            if (!declarationInfo) {
+                if (sourceFileName) {
+                    // Project contains source file and it generates the generated file name
+                    project.addGeneratedFileWatch(generatedFileName, sourceFileName);
+                }
+                return undefined;
+            }
 
             // Try to get from cache
             declarationInfo.getSnapshot(); // Ensure synchronized

@@ -3,7 +3,7 @@
 
 type T00 = unknown & null;  // null
 type T01 = unknown & undefined;  // undefined
-type T02 = unknown & null & undefined;  // null & undefined (which becomes never in union)
+type T02 = unknown & null & undefined;  // never
 type T03 = unknown & string;  // string
 type T04 = unknown & string[];  // string[]
 type T05 = unknown & unknown;  // unknown

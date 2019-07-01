@@ -173,7 +173,7 @@ namespace ts {
             const textPos = scanner.getTextPos();
             if (textPos <= end) {
                 if (token === SyntaxKind.Identifier) {
-                    Debug.fail(`Did not expect ${Debug.showSyntaxKind(parent)} to have an Identifier in its trivia`);
+                    Debug.fail(`Did not expect ${Debug.formatSyntaxKind(parent.kind)} to have an Identifier in its trivia`);
                 }
                 nodes.push(createNode(token, pos, textPos, parent));
             }
@@ -1467,31 +1467,39 @@ namespace ts {
             }
 
             const typeChecker = program.getTypeChecker();
-            const symbol = getSymbolAtLocationForQuickInfo(node, typeChecker);
+            const nodeForQuickInfo = getNodeForQuickInfo(node);
+            const symbol = getSymbolAtLocationForQuickInfo(nodeForQuickInfo, typeChecker);
 
             if (!symbol || typeChecker.isUnknownSymbol(symbol)) {
-                const type = shouldGetType(sourceFile, node, position) ? typeChecker.getTypeAtLocation(node) : undefined;
+                const type = shouldGetType(sourceFile, nodeForQuickInfo, position) ? typeChecker.getTypeAtLocation(nodeForQuickInfo) : undefined;
                 return type && {
                     kind: ScriptElementKind.unknown,
                     kindModifiers: ScriptElementKindModifier.none,
-                    textSpan: createTextSpanFromNode(node, sourceFile),
-                    displayParts: typeChecker.runWithCancellationToken(cancellationToken, typeChecker => typeToDisplayParts(typeChecker, type, getContainerNode(node))),
+                    textSpan: createTextSpanFromNode(nodeForQuickInfo, sourceFile),
+                    displayParts: typeChecker.runWithCancellationToken(cancellationToken, typeChecker => typeToDisplayParts(typeChecker, type, getContainerNode(nodeForQuickInfo))),
                     documentation: type.symbol ? type.symbol.getDocumentationComment(typeChecker) : undefined,
                     tags: type.symbol ? type.symbol.getJsDocTags() : undefined
                 };
             }
 
             const { symbolKind, displayParts, documentation, tags } = typeChecker.runWithCancellationToken(cancellationToken, typeChecker =>
-                SymbolDisplay.getSymbolDisplayPartsDocumentationAndSymbolKind(typeChecker, symbol, sourceFile, getContainerNode(node), node)
+                SymbolDisplay.getSymbolDisplayPartsDocumentationAndSymbolKind(typeChecker, symbol, sourceFile, getContainerNode(nodeForQuickInfo), nodeForQuickInfo)
             );
             return {
                 kind: symbolKind,
                 kindModifiers: SymbolDisplay.getSymbolModifiers(symbol),
-                textSpan: createTextSpanFromNode(node, sourceFile),
+                textSpan: createTextSpanFromNode(nodeForQuickInfo, sourceFile),
                 displayParts,
                 documentation,
                 tags,
             };
+        }
+
+        function getNodeForQuickInfo(node: Node): Node {
+            if (isNewExpression(node.parent) && node.pos === node.parent.pos) {
+                return node.parent.expression;
+            }
+            return node;
         }
 
         function shouldGetType(sourceFile: SourceFile, node: Node, position: number): boolean {
@@ -1536,13 +1544,17 @@ namespace ts {
 
         /// References and Occurrences
         function getOccurrencesAtPosition(fileName: string, position: number): ReadonlyArray<ReferenceEntry> | undefined {
-            return flatMap(getDocumentHighlights(fileName, position, [fileName]), entry => entry.highlightSpans.map<ReferenceEntry>(highlightSpan => ({
-                fileName: entry.fileName,
-                textSpan: highlightSpan.textSpan,
-                isWriteAccess: highlightSpan.kind === HighlightSpanKind.writtenReference,
-                isDefinition: false,
-                isInString: highlightSpan.isInString,
-            })));
+            return flatMap(
+                getDocumentHighlights(fileName, position, [fileName]),
+                entry => entry.highlightSpans.map<ReferenceEntry>(highlightSpan => ({
+                    fileName: entry.fileName,
+                    textSpan: highlightSpan.textSpan,
+                    isWriteAccess: highlightSpan.kind === HighlightSpanKind.writtenReference,
+                    isDefinition: false,
+                    ...highlightSpan.isInString && { isInString: true },
+                    ...highlightSpan.contextSpan && { contextSpan: highlightSpan.contextSpan }
+                }))
+            );
         }
 
         function getDocumentHighlights(fileName: string, position: number, filesToSearch: ReadonlyArray<string>): DocumentHighlights[] | undefined {
@@ -1560,8 +1572,14 @@ namespace ts {
             const node = getTouchingPropertyName(sourceFile, position);
             if (isIdentifier(node) && (isJsxOpeningElement(node.parent) || isJsxClosingElement(node.parent)) && isIntrinsicJsxName(node.escapedText)) {
                 const { openingElement, closingElement } = node.parent.parent;
-                return [openingElement, closingElement].map((node): RenameLocation =>
-                    ({ fileName: sourceFile.fileName, textSpan: createTextSpanFromNode(node.tagName, sourceFile) }));
+                return [openingElement, closingElement].map((node): RenameLocation => {
+                    const textSpan = createTextSpanFromNode(node.tagName, sourceFile);
+                    return {
+                        fileName: sourceFile.fileName,
+                        textSpan,
+                        ...FindAllReferences.toContextSpan(textSpan, sourceFile, node.parent)
+                    };
+                });
             }
             else {
                 return getReferencesWorker(node, position, { findInStrings, findInComments, providePrefixAndSuffixTextForRename, isForRename: true },
@@ -2072,6 +2090,10 @@ namespace ts {
             };
         }
 
+        function getSmartSelectionRange(fileName: string, position: number): SelectionRange {
+            return SmartSelectionRange.getSmartSelectionRange(position, syntaxTreeCache.getCurrentSourceFile(fileName));
+        }
+
         function getApplicableRefactors(fileName: string, positionOrRange: number | TextRange, preferences: UserPreferences = emptyOptions): ApplicableRefactorInfo[] {
             synchronizeHostData();
             const file = getValidSourceFile(fileName);
@@ -2119,6 +2141,7 @@ namespace ts {
             getBreakpointStatementAtPosition,
             getNavigateToItems,
             getRenameInfo,
+            getSmartSelectionRange,
             findRenameLocations,
             getNavigationBarItems,
             getNavigationTree,

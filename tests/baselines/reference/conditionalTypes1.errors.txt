@@ -391,6 +391,7 @@ tests/cases/conformance/types/conditional/conditionalTypes1.ts(288,43): error TS
         var z: T2;  // Error, T2 is distributive, T1 isn't
             ~
 !!! error TS2403: Subsequent variable declarations must have the same type.  Variable 'z' must be of type 'T1', but here has type 'Foo<T & U>'.
+!!! related TS6203 tests/cases/conformance/types/conditional/conditionalTypes1.ts:262:9: 'z' was also declared here.
     }
     
     function f33<T, U>() {

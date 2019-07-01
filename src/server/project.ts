@@ -109,12 +109,22 @@ namespace ts.server {
         return value instanceof ScriptInfo;
     }
 
+    interface GeneratedFileWatcher {
+        generatedFilePath: Path;
+        watcher: FileWatcher;
+    }
+    type GeneratedFileWatcherMap = GeneratedFileWatcher | Map<GeneratedFileWatcher>;
+    function isGeneratedFileWatcher(watch: GeneratedFileWatcherMap): watch is GeneratedFileWatcher {
+        return (watch as GeneratedFileWatcher).generatedFilePath !== undefined;
+    }
+
     export abstract class Project implements LanguageServiceHost, ModuleResolutionHost {
         private rootFiles: ScriptInfo[] = [];
         private rootFilesMap: Map<ProjectRoot> = createMap<ProjectRoot>();
         private program: Program | undefined;
         private externalFiles: SortedReadonlyArray<string> | undefined;
         private missingFilesMap: Map<FileWatcher> | undefined;
+        private generatedFilesMap: GeneratedFileWatcherMap | undefined;
         private plugins: PluginModuleWithName[] = [];
 
         /*@internal*/
@@ -198,13 +208,13 @@ namespace ts.server {
             return hasOneOrMoreJsAndNoTsFiles(this);
         }
 
-        public static resolveModule(moduleName: string, initialDir: string, host: ServerHost, log: (message: string) => void): {} | undefined {
+        public static resolveModule(moduleName: string, initialDir: string, host: ServerHost, log: (message: string) => void, logErrors?: (message: string) => void): {} | undefined {
             const resolvedPath = normalizeSlashes(host.resolvePath(combinePaths(initialDir, "node_modules")));
             log(`Loading ${moduleName} from ${initialDir} (resolved to ${resolvedPath})`);
             const result = host.require!(resolvedPath, moduleName); // TODO: GH#18217
             if (result.error) {
                 const err = result.error.stack || result.error.message || JSON.stringify(result.error);
-                log(`Failed to load module '${moduleName}': ${err}`);
+                (logErrors || log)(`Failed to load module '${moduleName}' from ${resolvedPath}: ${err}`);
                 return undefined;
             }
             return result.module;
@@ -458,6 +468,14 @@ namespace ts.server {
         }
 
         /*@internal*/
+        globalCacheResolutionModuleName = JsTyping.nonRelativeModuleNameForTypingCache;
+
+        /*@internal*/
+        fileIsOpen(filePath: Path) {
+            return this.projectService.openFiles.has(filePath);
+        }
+
+        /*@internal*/
         writeLog(s: string) {
             this.projectService.logger.info(s);
         }
@@ -560,6 +578,7 @@ namespace ts.server {
             this.lastFileExceededProgramSize = lastFileExceededProgramSize;
             this.builderState = undefined;
             this.resolutionCache.closeTypeRootsWatch();
+            this.clearGeneratedFileWatch();
             this.projectService.onUpdateLanguageServiceStateForProject(this, /*languageServiceEnabled*/ false);
         }
 
@@ -641,6 +660,7 @@ namespace ts.server {
                 clearMap(this.missingFilesMap, closeFileWatcher);
                 this.missingFilesMap = undefined!;
             }
+            this.clearGeneratedFileWatch();
 
             // signal language service to release source files acquired from document registry
             this.languageService.dispose();
@@ -934,6 +954,39 @@ namespace ts.server {
                     missingFilePath => this.addMissingFileWatcher(missingFilePath)
                 );
 
+                if (this.generatedFilesMap) {
+                    const outPath = this.compilerOptions.outFile && this.compilerOptions.out;
+                    if (isGeneratedFileWatcher(this.generatedFilesMap)) {
+                        // --out
+                        if (!outPath || !this.isValidGeneratedFileWatcher(
+                            removeFileExtension(outPath) + Extension.Dts,
+                            this.generatedFilesMap,
+                        )) {
+                            this.clearGeneratedFileWatch();
+                        }
+                    }
+                    else {
+                        // MultiFile
+                        if (outPath) {
+                            this.clearGeneratedFileWatch();
+                        }
+                        else {
+                            this.generatedFilesMap.forEach((watcher, source) => {
+                                const sourceFile = this.program!.getSourceFileByPath(source as Path);
+                                if (!sourceFile ||
+                                    sourceFile.resolvedPath !== source ||
+                                    !this.isValidGeneratedFileWatcher(
+                                        getDeclarationEmitOutputFilePathWorker(sourceFile.fileName, this.compilerOptions, this.currentDirectory, this.program!.getCommonSourceDirectory(), this.getCanonicalFileName),
+                                        watcher
+                                    )) {
+                                    closeFileWatcherOf(watcher);
+                                    (this.generatedFilesMap as Map<GeneratedFileWatcher>).delete(source);
+                                }
+                            });
+                        }
+                    }
+                }
+
                 // Watch the type locations that would be added to program as part of automatic type resolutions
                 if (this.languageServiceEnabled) {
                     this.resolutionCache.updateTypeRootsWatch();
@@ -944,7 +997,7 @@ namespace ts.server {
             this.externalFiles = this.getExternalFiles();
             enumerateInsertsAndDeletes<string, string>(this.externalFiles, oldExternalFiles, getStringComparer(!this.useCaseSensitiveFileNames()),
                 // Ensure a ScriptInfo is created for new external files. This is performed indirectly
-                // by the LSHost for files in the program when the program is retrieved above but
+                // by the host for files in the program when the program is retrieved above but
                 // the program doesn't contain external files so this must be done explicitly.
                 inserted => {
                     const scriptInfo = this.projectService.getOrCreateScriptInfoNotOpenedByClient(inserted, this.currentDirectory, this.directoryStructureHost)!;
@@ -996,6 +1049,61 @@ namespace ts.server {
 
         private isWatchedMissingFile(path: Path) {
             return !!this.missingFilesMap && this.missingFilesMap.has(path);
+        }
+
+        /* @internal */
+        addGeneratedFileWatch(generatedFile: string, sourceFile: string) {
+            if (this.compilerOptions.outFile || this.compilerOptions.out) {
+                // Single watcher
+                if (!this.generatedFilesMap) {
+                    this.generatedFilesMap = this.createGeneratedFileWatcher(generatedFile);
+                }
+            }
+            else {
+                // Map
+                const path = this.toPath(sourceFile);
+                if (this.generatedFilesMap) {
+                    if (isGeneratedFileWatcher(this.generatedFilesMap)) {
+                        Debug.fail(`${this.projectName} Expected to not have --out watcher for generated file with options: ${JSON.stringify(this.compilerOptions)}`);
+                        return;
+                    }
+                    if (this.generatedFilesMap.has(path)) return;
+                }
+                else {
+                    this.generatedFilesMap = createMap();
+                }
+                this.generatedFilesMap.set(path, this.createGeneratedFileWatcher(generatedFile));
+            }
+        }
+
+        private createGeneratedFileWatcher(generatedFile: string): GeneratedFileWatcher {
+            return {
+                generatedFilePath: this.toPath(generatedFile),
+                watcher: this.projectService.watchFactory.watchFile(
+                    this.projectService.host,
+                    generatedFile,
+                    () => this.projectService.delayUpdateProjectGraphAndEnsureProjectStructureForOpenFiles(this),
+                    PollingInterval.High,
+                    WatchType.MissingGeneratedFile,
+                    this
+                )
+            };
+        }
+
+        private isValidGeneratedFileWatcher(generateFile: string, watcher: GeneratedFileWatcher) {
+            return this.toPath(generateFile) === watcher.generatedFilePath;
+        }
+
+        private clearGeneratedFileWatch() {
+            if (this.generatedFilesMap) {
+                if (isGeneratedFileWatcher(this.generatedFilesMap)) {
+                    closeFileWatcherOf(this.generatedFilesMap);
+                }
+                else {
+                    clearMap(this.generatedFilesMap, closeFileWatcherOf);
+                }
+                this.generatedFilesMap = undefined;
+            }
         }
 
         getScriptInfoForNormalizedPath(fileName: NormalizedPath): ScriptInfo | undefined {
@@ -1142,12 +1250,11 @@ namespace ts.server {
         protected enablePlugin(pluginConfigEntry: PluginImport, searchPaths: string[], pluginConfigOverrides: Map<any> | undefined) {
             this.projectService.logger.info(`Enabling plugin ${pluginConfigEntry.name} from candidate paths: ${searchPaths.join(",")}`);
 
-            const log = (message: string) => {
-                this.projectService.logger.info(message);
-            };
-
+            const log = (message: string) => this.projectService.logger.info(message);
+            let errorLogs: string[] | undefined;
+            const logError = (message: string) => { (errorLogs || (errorLogs = [])).push(message); };
             const resolvedModule = firstDefined(searchPaths, searchPath =>
-                <PluginModuleFactory | undefined>Project.resolveModule(pluginConfigEntry.name, searchPath, this.projectService.host, log));
+                <PluginModuleFactory | undefined>Project.resolveModule(pluginConfigEntry.name, searchPath, this.projectService.host, log, logError));
             if (resolvedModule) {
                 const configurationOverride = pluginConfigOverrides && pluginConfigOverrides.get(pluginConfigEntry.name);
                 if (configurationOverride) {
@@ -1160,6 +1267,7 @@ namespace ts.server {
                 this.enableProxy(resolvedModule, pluginConfigEntry);
             }
             else {
+                forEach(errorLogs, log);
                 this.projectService.logger.info(`Couldn't find ${pluginConfigEntry.name}`);
             }
         }

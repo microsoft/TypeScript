@@ -1190,8 +1190,8 @@ namespace ts {
         return !!range && shouldBeReference === tripleSlashDirectivePrefixRegex.test(sourceFile.text.substring(range.pos, range.end));
     }
 
-    export function createTextSpanFromNode(node: Node, sourceFile?: SourceFile): TextSpan {
-        return createTextSpanFromBounds(node.getStart(sourceFile), node.getEnd());
+    export function createTextSpanFromNode(node: Node, sourceFile?: SourceFile, endNode?: Node): TextSpan {
+        return createTextSpanFromBounds(node.getStart(sourceFile), (endNode || node).getEnd());
     }
 
     export function createTextRangeFromNode(node: Node, sourceFile: SourceFile): TextRange {
@@ -1990,5 +1990,52 @@ namespace ts {
             }
         });
         return typeIsAccessible ? res : undefined;
+    }
+
+    export function syntaxUsuallyHasTrailingSemicolon(kind: SyntaxKind) {
+        return kind === SyntaxKind.VariableStatement
+            || kind === SyntaxKind.ExpressionStatement
+            || kind === SyntaxKind.DoStatement
+            || kind === SyntaxKind.ContinueStatement
+            || kind === SyntaxKind.BreakStatement
+            || kind === SyntaxKind.ReturnStatement
+            || kind === SyntaxKind.ThrowStatement
+            || kind === SyntaxKind.DebuggerStatement
+            || kind === SyntaxKind.PropertyDeclaration
+            || kind === SyntaxKind.TypeAliasDeclaration
+            || kind === SyntaxKind.ImportDeclaration
+            || kind === SyntaxKind.ImportEqualsDeclaration
+            || kind === SyntaxKind.ExportDeclaration;
+    }
+
+    export function probablyUsesSemicolons(sourceFile: SourceFile): boolean {
+        let withSemicolon = 0;
+        let withoutSemicolon = 0;
+        const nStatementsToObserve = 5;
+        forEachChild(sourceFile, function visit(node): boolean | undefined {
+            if (syntaxUsuallyHasTrailingSemicolon(node.kind)) {
+                const lastToken = node.getLastToken(sourceFile);
+                if (lastToken && lastToken.kind === SyntaxKind.SemicolonToken) {
+                    withSemicolon++;
+                }
+                else {
+                    withoutSemicolon++;
+                }
+            }
+            if (withSemicolon + withoutSemicolon >= nStatementsToObserve) {
+                return true;
+            }
+
+            return forEachChild(node, visit);
+        });
+
+        // One statement missing a semicolon isn’t sufficient evidence to say the user
+        // doesn’t want semicolons, because they may not even be done writing that statement.
+        if (withSemicolon === 0 && withoutSemicolon <= 1) {
+            return true;
+        }
+
+        // If even 2/5 places have a semicolon, the user probably wants semicolons
+        return withSemicolon / withoutSemicolon > 1 / nStatementsToObserve;
     }
 }

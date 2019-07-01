@@ -14,7 +14,7 @@ and limitations under the License.
 ***************************************************************************** */
 
 declare namespace ts {
-    const versionMajorMinor = "3.5";
+    const versionMajorMinor = "3.6";
     /** The version of the TypeScript compiler release */
     const version: string;
 }
@@ -1910,7 +1910,8 @@ declare namespace ts {
     enum ExitStatus {
         Success = 0,
         DiagnosticsPresent_OutputsSkipped = 1,
-        DiagnosticsPresent_OutputsGenerated = 2
+        DiagnosticsPresent_OutputsGenerated = 2,
+        InvalidProject_OutputsSkipped = 3
     }
     interface EmitResult {
         emitSkipped: boolean;
@@ -1969,6 +1970,7 @@ declare namespace ts {
          */
         getExportSymbolOfSymbol(symbol: Symbol): Symbol;
         getPropertySymbolOfDestructuringAssignment(location: Identifier): Symbol | undefined;
+        getTypeOfAssignmentPattern(pattern: AssignmentPattern): Type;
         getTypeAtLocation(node: Node): Type;
         getTypeFromTypeNode(node: TypeNode): Type;
         signatureToString(signature: Signature, enclosingDeclaration?: Node, flags?: TypeFormatFlags, kind?: SignatureKind): string;
@@ -2301,6 +2303,7 @@ declare namespace ts {
         MarkerType = 8192,
         JSLiteral = 16384,
         FreshLiteral = 32768,
+        ArrayLiteral = 65536,
         ClassOrInterface = 3,
     }
     interface ObjectType extends Type {
@@ -2390,8 +2393,8 @@ declare namespace ts {
         root: ConditionalRoot;
         checkType: Type;
         extendsType: Type;
-        trueType: Type;
-        falseType: Type;
+        resolvedTrueType: Type;
+        resolvedFalseType: Type;
     }
     interface SubstitutionType extends InstantiableType {
         typeVariable: TypeVariable;
@@ -2418,12 +2421,13 @@ declare namespace ts {
     enum InferencePriority {
         NakedTypeVariable = 1,
         HomomorphicMappedType = 2,
-        MappedTypeConstraint = 4,
-        ReturnType = 8,
-        LiteralKeyof = 16,
-        NoConstraints = 32,
-        AlwaysStrict = 64,
-        PriorityImpliesCombination = 28
+        PartialHomomorphicMappedType = 4,
+        MappedTypeConstraint = 8,
+        ReturnType = 16,
+        LiteralKeyof = 32,
+        NoConstraints = 64,
+        AlwaysStrict = 128,
+        PriorityImpliesCombination = 56
     }
     /** @deprecated Use FileExtensionInfo instead. */
     type JsFileExtensionInfo = FileExtensionInfo;
@@ -4421,7 +4425,7 @@ declare namespace ts {
      * The builder that can handle the changes in program and iterate through changed file to emit the files
      * The semantic diagnostics are cached per file and managed by clearing for the changed/affected files
      */
-    interface EmitAndSemanticDiagnosticsBuilderProgram extends BuilderProgram {
+    interface EmitAndSemanticDiagnosticsBuilderProgram extends SemanticDiagnosticsBuilderProgram {
         /**
          * Emits the next affected file's emit result (EmitResult and sourceFiles emitted) or returns undefined if iteration is complete
          * The first of writeFile if provided, writeFile of BuilderProgramHost if provided, writeFile of compiler host
@@ -4447,6 +4451,22 @@ declare namespace ts {
     function createAbstractBuilder(rootNames: ReadonlyArray<string> | undefined, options: CompilerOptions | undefined, host?: CompilerHost, oldProgram?: BuilderProgram, configFileParsingDiagnostics?: ReadonlyArray<Diagnostic>, projectReferences?: ReadonlyArray<ProjectReference>): BuilderProgram;
 }
 declare namespace ts {
+    interface ReadBuildProgramHost {
+        useCaseSensitiveFileNames(): boolean;
+        getCurrentDirectory(): string;
+        readFile(fileName: string): string | undefined;
+    }
+    function readBuilderProgram(compilerOptions: CompilerOptions, host: ReadBuildProgramHost): EmitAndSemanticDiagnosticsBuilderProgram | undefined;
+    function createIncrementalCompilerHost(options: CompilerOptions, system?: System): CompilerHost;
+    interface IncrementalProgramOptions<T extends BuilderProgram> {
+        rootNames: ReadonlyArray<string>;
+        options: CompilerOptions;
+        configFileParsingDiagnostics?: ReadonlyArray<Diagnostic>;
+        projectReferences?: ReadonlyArray<ProjectReference>;
+        host?: CompilerHost;
+        createProgram?: CreateProgram<T>;
+    }
+    function createIncrementalProgram<T extends BuilderProgram = EmitAndSemanticDiagnosticsBuilderProgram>({ rootNames, options, configFileParsingDiagnostics, projectReferences, host, createProgram }: IncrementalProgramOptions<T>): T;
     type WatchStatusReporter = (diagnostic: Diagnostic, newLine: string, options: CompilerOptions) => void;
     /** Create the program with rootNames and options, if they are undefined, oldProgram and new configFile diagnostics create new program */
     type CreateProgram<T extends BuilderProgram> = (rootNames: ReadonlyArray<string> | undefined, options: CompilerOptions | undefined, host?: CompilerHost, oldProgram?: T, configFileParsingDiagnostics?: ReadonlyArray<Diagnostic>, projectReferences?: ReadonlyArray<ProjectReference> | undefined) => T;
@@ -4533,6 +4553,8 @@ declare namespace ts {
     interface Watch<T> {
         /** Synchronize with host and get updated program */
         getProgram(): T;
+        /** Closes the watch */
+        close(): void;
     }
     /**
      * Creates the watch what generates program using the config file
@@ -4559,6 +4581,91 @@ declare namespace ts {
      * Creates the watch from the host for config file
      */
     function createWatchProgram<T extends BuilderProgram>(host: WatchCompilerHostOfConfigFile<T>): WatchOfConfigFile<T>;
+}
+declare namespace ts {
+    interface BuildOptions {
+        dry?: boolean;
+        force?: boolean;
+        verbose?: boolean;
+        incremental?: boolean;
+        traceResolution?: boolean;
+        [option: string]: CompilerOptionsValue | undefined;
+    }
+    type ReportEmitErrorSummary = (errorCount: number) => void;
+    interface SolutionBuilderHostBase<T extends BuilderProgram> extends ProgramHost<T> {
+        createDirectory?(path: string): void;
+        /**
+         * Should provide create directory and writeFile if done of invalidatedProjects is not invoked with
+         * writeFileCallback
+         */
+        writeFile?(path: string, data: string, writeByteOrderMark?: boolean): void;
+        getModifiedTime(fileName: string): Date | undefined;
+        setModifiedTime(fileName: string, date: Date): void;
+        deleteFile(fileName: string): void;
+        getParsedCommandLine?(fileName: string): ParsedCommandLine | undefined;
+        reportDiagnostic: DiagnosticReporter;
+        reportSolutionBuilderStatus: DiagnosticReporter;
+        afterProgramEmitAndDiagnostics?(program: T): void;
+    }
+    interface SolutionBuilderHost<T extends BuilderProgram> extends SolutionBuilderHostBase<T> {
+        reportErrorSummary?: ReportEmitErrorSummary;
+    }
+    interface SolutionBuilderWithWatchHost<T extends BuilderProgram> extends SolutionBuilderHostBase<T>, WatchHost {
+    }
+    interface SolutionBuilder<T extends BuilderProgram> {
+        build(project?: string, cancellationToken?: CancellationToken): ExitStatus;
+        clean(project?: string): ExitStatus;
+        buildReferences(project: string, cancellationToken?: CancellationToken): ExitStatus;
+        cleanReferences(project?: string): ExitStatus;
+        getNextInvalidatedProject(cancellationToken?: CancellationToken): InvalidatedProject<T> | undefined;
+    }
+    /**
+     * Create a function that reports watch status by writing to the system and handles the formating of the diagnostic
+     */
+    function createBuilderStatusReporter(system: System, pretty?: boolean): DiagnosticReporter;
+    function createSolutionBuilderHost<T extends BuilderProgram = EmitAndSemanticDiagnosticsBuilderProgram>(system?: System, createProgram?: CreateProgram<T>, reportDiagnostic?: DiagnosticReporter, reportSolutionBuilderStatus?: DiagnosticReporter, reportErrorSummary?: ReportEmitErrorSummary): SolutionBuilderHost<T>;
+    function createSolutionBuilderWithWatchHost<T extends BuilderProgram = EmitAndSemanticDiagnosticsBuilderProgram>(system?: System, createProgram?: CreateProgram<T>, reportDiagnostic?: DiagnosticReporter, reportSolutionBuilderStatus?: DiagnosticReporter, reportWatchStatus?: WatchStatusReporter): SolutionBuilderWithWatchHost<T>;
+    function createSolutionBuilder<T extends BuilderProgram>(host: SolutionBuilderHost<T>, rootNames: ReadonlyArray<string>, defaultOptions: BuildOptions): SolutionBuilder<T>;
+    function createSolutionBuilderWithWatch<T extends BuilderProgram>(host: SolutionBuilderWithWatchHost<T>, rootNames: ReadonlyArray<string>, defaultOptions: BuildOptions): SolutionBuilder<T>;
+    enum InvalidatedProjectKind {
+        Build = 0,
+        UpdateBundle = 1,
+        UpdateOutputFileStamps = 2
+    }
+    interface InvalidatedProjectBase {
+        readonly kind: InvalidatedProjectKind;
+        readonly project: ResolvedConfigFileName;
+        /**
+         *  To dispose this project and ensure that all the necessary actions are taken and state is updated accordingly
+         */
+        done(cancellationToken?: CancellationToken, writeFile?: WriteFileCallback, customTransformers?: CustomTransformers): ExitStatus;
+        getCompilerOptions(): CompilerOptions;
+        getCurrentDirectory(): string;
+    }
+    interface UpdateOutputFileStampsProject extends InvalidatedProjectBase {
+        readonly kind: InvalidatedProjectKind.UpdateOutputFileStamps;
+        updateOutputFileStatmps(): void;
+    }
+    interface BuildInvalidedProject<T extends BuilderProgram> extends InvalidatedProjectBase {
+        readonly kind: InvalidatedProjectKind.Build;
+        getBuilderProgram(): T | undefined;
+        getProgram(): Program | undefined;
+        getSourceFile(fileName: string): SourceFile | undefined;
+        getSourceFiles(): ReadonlyArray<SourceFile>;
+        getOptionsDiagnostics(cancellationToken?: CancellationToken): ReadonlyArray<Diagnostic>;
+        getGlobalDiagnostics(cancellationToken?: CancellationToken): ReadonlyArray<Diagnostic>;
+        getConfigFileParsingDiagnostics(): ReadonlyArray<Diagnostic>;
+        getSyntacticDiagnostics(sourceFile?: SourceFile, cancellationToken?: CancellationToken): ReadonlyArray<Diagnostic>;
+        getAllDependencies(sourceFile: SourceFile): ReadonlyArray<string>;
+        getSemanticDiagnostics(sourceFile?: SourceFile, cancellationToken?: CancellationToken): ReadonlyArray<Diagnostic>;
+        getSemanticDiagnosticsOfNextAffectedFile(cancellationToken?: CancellationToken, ignoreSourceFile?: (sourceFile: SourceFile) => boolean): AffectedFileResult<ReadonlyArray<Diagnostic>>;
+        emit(targetSourceFile?: SourceFile, writeFile?: WriteFileCallback, cancellationToken?: CancellationToken, emitOnlyDtsFiles?: boolean, customTransformers?: CustomTransformers): EmitResult | undefined;
+    }
+    interface UpdateBundleProject<T extends BuilderProgram> extends InvalidatedProjectBase {
+        readonly kind: InvalidatedProjectKind.UpdateBundle;
+        emit(writeFile?: WriteFileCallback, customTransformers?: CustomTransformers): EmitResult | BuildInvalidedProject<T> | undefined;
+    }
+    type InvalidatedProject<T extends BuilderProgram> = UpdateOutputFileStampsProject | BuildInvalidedProject<T> | UpdateBundleProject<T>;
 }
 declare namespace ts.server {
     type ActionSet = "action::set";
@@ -4808,6 +4915,7 @@ declare namespace ts {
         getSignatureHelpItems(fileName: string, position: number, options: SignatureHelpItemsOptions | undefined): SignatureHelpItems | undefined;
         getRenameInfo(fileName: string, position: number, options?: RenameInfoOptions): RenameInfo;
         findRenameLocations(fileName: string, position: number, findInStrings: boolean, findInComments: boolean, providePrefixAndSuffixTextForRename?: boolean): ReadonlyArray<RenameLocation> | undefined;
+        getSmartSelectionRange(fileName: string, position: number): SelectionRange;
         getDefinitionAtPosition(fileName: string, position: number): ReadonlyArray<DefinitionInfo> | undefined;
         getDefinitionAndBoundSpan(fileName: string, position: number): DefinitionInfoAndBoundSpan | undefined;
         getTypeDefinitionAtPosition(fileName: string, position: number): ReadonlyArray<DefinitionInfo> | undefined;
@@ -5068,6 +5176,12 @@ declare namespace ts {
          */
         originalTextSpan?: TextSpan;
         originalFileName?: string;
+        /**
+         * If DocumentSpan.textSpan is the span for name of the declaration,
+         * then this is the span for relevant declaration
+         */
+        contextSpan?: TextSpan;
+        originalContextSpan?: TextSpan;
     }
     interface RenameLocation extends DocumentSpan {
         readonly prefixText?: string;
@@ -5096,6 +5210,7 @@ declare namespace ts {
         fileName?: string;
         isInString?: true;
         textSpan: TextSpan;
+        contextSpan?: TextSpan;
         kind: HighlightSpanKind;
     }
     interface NavigateToItem {
@@ -5251,6 +5366,10 @@ declare namespace ts {
         documentation: SymbolDisplayPart[];
         displayParts: SymbolDisplayPart[];
         isOptional: boolean;
+    }
+    interface SelectionRange {
+        textSpan: TextSpan;
+        parent?: SelectionRange;
     }
     /**
      * Represents a single signature to show in signature help.

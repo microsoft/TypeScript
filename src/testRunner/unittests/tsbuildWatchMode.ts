@@ -17,14 +17,14 @@ namespace ts.tscWatch {
     }
 
     export function createSolutionBuilder(system: WatchedSystem, rootNames: ReadonlyArray<string>, defaultOptions?: BuildOptions) {
-        const host = createSolutionBuilderWithWatchHost(system);
-        return ts.createSolutionBuilder(host, rootNames, defaultOptions || { watch: true });
+        const host = createSolutionBuilderHost(system);
+        return ts.createSolutionBuilder(host, rootNames, defaultOptions || {});
     }
 
-    function createSolutionBuilderWithWatch(host: TsBuildWatchSystem, rootNames: ReadonlyArray<string>, defaultOptions?: BuildOptions) {
-        const solutionBuilder = createSolutionBuilder(host, rootNames, defaultOptions);
-        solutionBuilder.buildAllProjects();
-        solutionBuilder.startWatching();
+    function createSolutionBuilderWithWatch(system: TsBuildWatchSystem, rootNames: ReadonlyArray<string>, defaultOptions?: BuildOptions) {
+        const host = createSolutionBuilderWithWatchHost(system);
+        const solutionBuilder = ts.createSolutionBuilderWithWatch(host, rootNames, defaultOptions || { watch: true });
+        solutionBuilder.build();
         return solutionBuilder;
     }
 
@@ -141,6 +141,28 @@ namespace ts.tscWatch {
 
         it("creates solution in watch mode", () => {
             createSolutionInWatchMode(allFiles);
+        });
+
+        it("verify building references watches only those projects", () => {
+            const system = createTsBuildWatchSystem(allFiles, { currentDirectory: projectsLocation });
+            const host = createSolutionBuilderWithWatchHost(system);
+            const solutionBuilder = ts.createSolutionBuilderWithWatch(host, [`${project}/${SubProject.tests}`], { watch: true });
+            solutionBuilder.buildReferences(`${project}/${SubProject.tests}`);
+
+            checkWatchedFiles(system, testProjectExpectedWatchedFiles.slice(0, testProjectExpectedWatchedFiles.length - tests.length));
+            checkWatchedDirectories(system, emptyArray, /*recursive*/ false);
+            checkWatchedDirectories(system, testProjectExpectedWatchedDirectoriesRecursive, /*recursive*/ true);
+
+            checkOutputErrorsInitial(system, emptyArray);
+            const testOutput = getOutputStamps(system, SubProject.tests, "index");
+            const outputFileStamps = getOutputFileStamps(system);
+            for (const stamp of outputFileStamps.slice(0, outputFileStamps.length - testOutput.length)) {
+                assert.isDefined(stamp[1], `${stamp[0]} expected to be present`);
+            }
+            for (const stamp of testOutput) {
+                assert.isUndefined(stamp[1], `${stamp[0]} expected to be missing`);
+            }
+            return system;
         });
 
         describe("validates the changes and watched files", () => {
@@ -607,7 +629,7 @@ let x: string = 10;`);
                     // Build the composite project
                     const host = createTsBuildWatchSystem(allFiles, { currentDirectory });
                     const solutionBuilder = createSolutionBuilder(host, [solutionBuilderconfig], {});
-                    solutionBuilder.buildAllProjects();
+                    solutionBuilder.build();
                     const outputFileStamps = getOutputFileStamps(host);
                     for (const stamp of outputFileStamps) {
                         assert.isDefined(stamp[1], `${stamp[0]} expected to be present`);
@@ -676,7 +698,7 @@ let x: string = 10;`);
                     }
 
                     function verifyScenario(
-                        edit: (host: TsBuildWatchSystem, solutionBuilder: SolutionBuilder) => void,
+                        edit: (host: TsBuildWatchSystem, solutionBuilder: SolutionBuilder<EmitAndSemanticDiagnosticsBuilderProgram>) => void,
                         expectedFilesAfterEdit: ReadonlyArray<string>
                     ) {
                         it("with tsc-watch", () => {
@@ -721,8 +743,8 @@ let x: string = 10;`);
                             host.writeFile(logic[1].path, `${logic[1].content}
 function foo() {
 }`);
-                            solutionBuilder.invalidateProject(`${project}/${SubProject.logic}`);
-                            solutionBuilder.buildInvalidatedProject();
+                            solutionBuilder.invalidateProject(logic[0].path.toLowerCase() as ResolvedConfigFilePath);
+                            solutionBuilder.buildNextInvalidatedProject();
 
                             // not ideal, but currently because of d.ts but no new file is written
                             // There will be timeout queued even though file contents are same
@@ -734,8 +756,8 @@ function foo() {
                             host.writeFile(logic[1].path, `${logic[1].content}
 export function gfoo() {
 }`);
-                            solutionBuilder.invalidateProject(logic[0].path);
-                            solutionBuilder.buildInvalidatedProject();
+                            solutionBuilder.invalidateProject(logic[0].path.toLowerCase() as ResolvedConfigFilePath);
+                            solutionBuilder.buildNextInvalidatedProject();
                         }, expectedProgramFiles);
                     });
 
@@ -745,8 +767,8 @@ export function gfoo() {
                                 compilerOptions: { composite: true, declaration: true, declarationDir: "decls" },
                                 references: [{ path: "../core" }]
                             }));
-                            solutionBuilder.invalidateProject(logic[0].path, ConfigFileProgramReloadLevel.Full);
-                            solutionBuilder.buildInvalidatedProject();
+                            solutionBuilder.invalidateProject(logic[0].path.toLowerCase() as ResolvedConfigFilePath, ConfigFileProgramReloadLevel.Full);
+                            solutionBuilder.buildNextInvalidatedProject();
                         }, [tests[1].path, libFile.path, coreIndexDts, coreAnotherModuleDts, projectFilePath(SubProject.logic, "decls/index.d.ts")]);
                     });
                 });
@@ -899,7 +921,7 @@ export function gfoo() {
                         }
 
                         function verifyScenario(
-                            edit: (host: TsBuildWatchSystem, solutionBuilder: SolutionBuilder) => void,
+                            edit: (host: TsBuildWatchSystem, solutionBuilder: SolutionBuilder<EmitAndSemanticDiagnosticsBuilderProgram>) => void,
                             expectedEditErrors: ReadonlyArray<string>,
                             expectedProgramFiles: ReadonlyArray<string>,
                             expectedWatchedFiles: ReadonlyArray<string>,
@@ -965,8 +987,8 @@ export function gfoo() {
                                     host.writeFile(bTs.path, `${bTs.content}
 export function gfoo() {
 }`);
-                                    solutionBuilder.invalidateProject(bTsconfig.path);
-                                    solutionBuilder.buildInvalidatedProject();
+                                    solutionBuilder.invalidateProject(bTsconfig.path.toLowerCase() as ResolvedConfigFilePath);
+                                    solutionBuilder.buildNextInvalidatedProject();
                                 },
                                 emptyArray,
                                 expectedProgramFiles,
@@ -1140,9 +1162,7 @@ export function gfoo() {
 
         it("incremental updates in verbose mode", () => {
             const host = createTsBuildWatchSystem(allFiles, { currentDirectory: projectsLocation });
-            const solutionBuilder = createSolutionBuilder(host, [`${project}/${SubProject.tests}`], { verbose: true, watch: true });
-            solutionBuilder.buildAllProjects();
-            solutionBuilder.startWatching();
+            createSolutionBuilderWithWatch(host, [`${project}/${SubProject.tests}`], { verbose: true, watch: true });
             checkOutputErrorsInitial(host, emptyArray, /*disableConsoleClears*/ undefined, [
                 `Projects in this build: \r\n    * sample1/core/tsconfig.json\r\n    * sample1/logic/tsconfig.json\r\n    * sample1/tests/tsconfig.json\n\n`,
                 `Project 'sample1/core/tsconfig.json' is out of date because output file 'sample1/core/anotherModule.js' does not exist\n\n`,

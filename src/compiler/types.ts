@@ -2546,6 +2546,8 @@ namespace ts {
         Shared         = 1 << 10, // Referenced as antecedent more than once
         PreFinally     = 1 << 11, // Injected edge that links pre-finally label and pre-try flow
         AfterFinally   = 1 << 12, // Injected edge that links post-finally flow with the rest of the graph
+        /** @internal */
+        Cached         = 1 << 13, // Indicates that at least one cross-call cache entry exists for this node, even if not a loop participant
         Label = BranchLabel | LoopLabel,
         Condition = TrueCondition | FalseCondition
     }
@@ -2973,7 +2975,7 @@ namespace ts {
         // For testing purposes only.
         /* @internal */ structureIsReused?: StructureIsReused;
 
-        /* @internal */ getSourceFileFromReference(referencingFile: SourceFile, ref: FileReference): SourceFile | undefined;
+        /* @internal */ getSourceFileFromReference(referencingFile: SourceFile | UnparsedSource, ref: FileReference): SourceFile | undefined;
         /* @internal */ getLibFileFromReference(ref: FileReference): SourceFile | undefined;
 
         /** Given a source file, get the name of the package it was imported from. */
@@ -3066,6 +3068,9 @@ namespace ts {
 
         // Diagnostics were produced and outputs were generated in spite of them.
         DiagnosticsPresent_OutputsGenerated = 2,
+
+        // When build skipped because passed in project is invalid
+        InvalidProject_OutputsSkipped = 3,
     }
 
     export interface EmitResult {
@@ -3152,6 +3157,7 @@ namespace ts {
          */
         getExportSymbolOfSymbol(symbol: Symbol): Symbol;
         getPropertySymbolOfDestructuringAssignment(location: Identifier): Symbol | undefined;
+        getTypeOfAssignmentPattern(pattern: AssignmentPattern): Type;
         getTypeAtLocation(node: Node): Type;
         getTypeFromTypeNode(node: TypeNode): Type;
 
@@ -3749,6 +3755,8 @@ namespace ts {
         extendedContainers?: Symbol[];      // Containers (other than the parent) which this symbol is aliased in
         extendedContainersByFile?: Map<Symbol[]>;      // Containers (other than the parent) which this symbol is aliased in
         variances?: VarianceFlags[];             // Alias symbol type argument variance cache
+        deferralConstituents?: Type[];      // Calculated list of constituents for a deferred type
+        deferralParent?: Type;              // Source union/intersection of a deferred type
     }
 
     /* @internal */
@@ -3775,6 +3783,7 @@ namespace ts {
         ReverseMapped     = 1 << 13,        // Property of reverse-inferred homomorphic mapped type
         OptionalParameter = 1 << 14,        // Optional parameter
         RestParameter     = 1 << 15,        // Rest parameter
+        DeferredType      = 1 << 16,        // Calculation of the type of this symbol is deferred due to processing costs, should be fetched with `getTypeOfSymbolWithDeferredType`
         Synthetic = SyntheticProperty | SyntheticMethod,
         Discriminant = HasNonUniformType | HasLiteralType,
         Partial = ReadPartial | WritePartial
@@ -3964,6 +3973,8 @@ namespace ts {
         StructuredOrInstantiable = StructuredType | Instantiable,
         /* @internal */
         ObjectFlagsType = Nullable | Never | Object | Union | Intersection,
+        /* @internal */
+        Simplifiable = IndexedAccess | Conditional,
         // 'Narrowable' types are types where narrowing actually narrows.
         // This *should* be every type other than null, undefined, void, and never
         Narrowable = Any | Unknown | StructuredOrInstantiable | StringLike | NumberLike | BigIntLike | BooleanLike | ESSymbol | UniqueESSymbol | NonPrimitive,
@@ -3972,7 +3983,7 @@ namespace ts {
         NotPrimitiveUnion = Any | Unknown | Enum | Void | Never | StructuredOrInstantiable,
         // The following flags are aggregated during union and intersection type construction
         /* @internal */
-        IncludesMask = Any | Unknown | Primitive | Never | Object | Union,
+        IncludesMask = Any | Unknown | Primitive | Never | Object | Union | NonPrimitive,
         // The following flags are used for different purposes during union and intersection type construction
         /* @internal */
         IncludesStructuredOrInstantiable = TypeParameter,
@@ -4005,6 +4016,8 @@ namespace ts {
         restrictiveInstantiation?: Type; // Instantiation with type parameters mapped to unconstrained form
         /* @internal */
         immediateBaseConstraint?: Type;  // Immediate base constraint cache
+        /* @internal */
+        widened?: Type; // Cached widened form of the type
     }
 
     /* @internal */
@@ -4076,19 +4089,20 @@ namespace ts {
         MarkerType       = 1 << 13, // Marker type used for variance probing
         JSLiteral        = 1 << 14, // Object type declared in JS - disables errors on read/write of nonexisting members
         FreshLiteral     = 1 << 15, // Fresh object literal
+        ArrayLiteral     = 1 << 16, // Originates in an array literal
         /* @internal */
-        PrimitiveUnion   = 1 << 16, // Union of only primitive types
+        PrimitiveUnion   = 1 << 17, // Union of only primitive types
         /* @internal */
-        ContainsWideningType = 1 << 17, // Type is or contains undefined or null widening type
+        ContainsWideningType = 1 << 18, // Type is or contains undefined or null widening type
         /* @internal */
-        ContainsObjectLiteral = 1 << 18, // Type is or contains object literal type
+        ContainsObjectOrArrayLiteral = 1 << 19, // Type is or contains object literal type
         /* @internal */
-        NonInferrableType = 1 << 19, // Type is or contains anyFunctionType or silentNeverType
+        NonInferrableType = 1 << 20, // Type is or contains anyFunctionType or silentNeverType
         ClassOrInterface = Class | Interface,
         /* @internal */
-        RequiresWidening = ContainsWideningType | ContainsObjectLiteral,
+        RequiresWidening = ContainsWideningType | ContainsObjectOrArrayLiteral,
         /* @internal */
-        PropagatingFlags = ContainsWideningType | ContainsObjectLiteral | NonInferrableType
+        PropagatingFlags = ContainsWideningType | ContainsObjectOrArrayLiteral | NonInferrableType
     }
 
     /* @internal */
@@ -4141,6 +4155,8 @@ namespace ts {
     export interface TypeReference extends ObjectType {
         target: GenericType;    // Type reference target
         typeArguments?: ReadonlyArray<Type>;  // Type reference type arguments (undefined if none)
+        /* @internal */
+        literalType?: TypeReference;  // Clone of type with ObjectFlags.ArrayLiteral set
     }
 
     /* @internal */
@@ -4336,8 +4352,8 @@ namespace ts {
         root: ConditionalRoot;
         checkType: Type;
         extendsType: Type;
-        trueType: Type;
-        falseType: Type;
+        resolvedTrueType: Type;
+        resolvedFalseType: Type;
         /* @internal */
         resolvedInferredTrueType?: Type; // The `trueType` instantiated with the `combinedMapper`, if present
         /* @internal */
@@ -4422,15 +4438,16 @@ namespace ts {
     export type TypeMapper = (t: TypeParameter) => Type;
 
     export const enum InferencePriority {
-        NakedTypeVariable           = 1 << 0,  // Naked type variable in union or intersection type
-        HomomorphicMappedType       = 1 << 1,  // Reverse inference for homomorphic mapped type
-        MappedTypeConstraint        = 1 << 2,  // Reverse inference for mapped type
-        ReturnType                  = 1 << 3,  // Inference made from return type of generic function
-        LiteralKeyof                = 1 << 4,  // Inference made from a string literal to a keyof T
-        NoConstraints               = 1 << 5,  // Don't infer from constraints of instantiable types
-        AlwaysStrict                = 1 << 6,  // Always use strict rules for contravariant inferences
+        NakedTypeVariable            = 1 << 0,  // Naked type variable in union or intersection type
+        HomomorphicMappedType        = 1 << 1,  // Reverse inference for homomorphic mapped type
+        PartialHomomorphicMappedType = 1 << 2,  // Partial reverse inference for homomorphic mapped type
+        MappedTypeConstraint         = 1 << 3,  // Reverse inference for mapped type
+        ReturnType                   = 1 << 4,  // Inference made from return type of generic function
+        LiteralKeyof                 = 1 << 5,  // Inference made from a string literal to a keyof T
+        NoConstraints                = 1 << 6,  // Don't infer from constraints of instantiable types
+        AlwaysStrict                 = 1 << 7,  // Always use strict rules for contravariant inferences
 
-        PriorityImpliesCombination  = ReturnType | MappedTypeConstraint | LiteralKeyof,  // These priorities imply that the resulting type should be a combination of all candidates
+        PriorityImpliesCombination = ReturnType | MappedTypeConstraint | LiteralKeyof,  // These priorities imply that the resulting type should be a combination of all candidates
     }
 
     /* @internal */
@@ -5183,6 +5200,7 @@ namespace ts {
         ContainsYield = 1 << 17,
         ContainsHoistedDeclarationOrCompletion = 1 << 18,
         ContainsDynamicImport = 1 << 19,
+        ContainsClassFields = 1 << 20,
 
         // Please leave this as 1 << 29.
         // It is the maximum bit we can set before we outgrow the size of a v8 small integer (SMI) on an x86 system.
@@ -5325,12 +5343,13 @@ namespace ts {
         Values = 1 << 8,                // __values (used by ES2015 for..of and yield* transformations)
         Read = 1 << 9,                  // __read (used by ES2015 iterator destructuring transformation)
         Spread = 1 << 10,               // __spread (used by ES2015 array spread and argument list spread transformations)
-        Await = 1 << 11,                // __await (used by ES2017 async generator transformation)
-        AsyncGenerator = 1 << 12,       // __asyncGenerator (used by ES2017 async generator transformation)
-        AsyncDelegator = 1 << 13,       // __asyncDelegator (used by ES2017 async generator yield* transformation)
-        AsyncValues = 1 << 14,          // __asyncValues (used by ES2017 for..await..of transformation)
-        ExportStar = 1 << 15,           // __exportStar (used by CommonJS/AMD/UMD module transformation)
-        MakeTemplateObject = 1 << 16,   // __makeTemplateObject (used for constructing template string array objects)
+        SpreadArrays = 1 << 11,         // __spreadArrays (used by ES2015 array spread and argument list spread transformations)
+        Await = 1 << 12,                // __await (used by ES2017 async generator transformation)
+        AsyncGenerator = 1 << 13,       // __asyncGenerator (used by ES2017 async generator transformation)
+        AsyncDelegator = 1 << 14,       // __asyncDelegator (used by ES2017 async generator yield* transformation)
+        AsyncValues = 1 << 15,          // __asyncValues (used by ES2017 for..await..of transformation)
+        ExportStar = 1 << 16,           // __exportStar (used by CommonJS/AMD/UMD module transformation)
+        MakeTemplateObject = 1 << 17,   // __makeTemplateObject (used for constructing template string array objects)
         FirstEmitHelper = Extends,
         LastEmitHelper = MakeTemplateObject,
 
@@ -5380,6 +5399,7 @@ namespace ts {
 
         writeFile: WriteFileCallback;
         getProgramBuildInfo(): ProgramBuildInfo | undefined;
+        getSourceFileFromReference: Program["getSourceFileFromReference"];
     }
 
     export interface TransformationContext {
@@ -5710,6 +5730,7 @@ namespace ts {
         /*@internal*/ writeBundleFileInfo?: boolean;
         /*@internal*/ recordInternalSection?: boolean;
         /*@internal*/ stripInternal?: boolean;
+        /*@internal*/ relativeToBuildInfo?: (path: string) => string;
     }
 
     /* @internal */

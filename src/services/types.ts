@@ -296,6 +296,8 @@ namespace ts {
         getRenameInfo(fileName: string, position: number, options?: RenameInfoOptions): RenameInfo;
         findRenameLocations(fileName: string, position: number, findInStrings: boolean, findInComments: boolean, providePrefixAndSuffixTextForRename?: boolean): ReadonlyArray<RenameLocation> | undefined;
 
+        getSmartSelectionRange(fileName: string, position: number): SelectionRange;
+
         getDefinitionAtPosition(fileName: string, position: number): ReadonlyArray<DefinitionInfo> | undefined;
         getDefinitionAndBoundSpan(fileName: string, position: number): DefinitionInfoAndBoundSpan | undefined;
         getTypeDefinitionAtPosition(fileName: string, position: number): ReadonlyArray<DefinitionInfo> | undefined;
@@ -611,6 +613,13 @@ namespace ts {
          */
         originalTextSpan?: TextSpan;
         originalFileName?: string;
+
+        /**
+         * If DocumentSpan.textSpan is the span for name of the declaration,
+         * then this is the span for relevant declaration
+         */
+        contextSpan?: TextSpan;
+        originalContextSpan?: TextSpan;
     }
 
     export interface RenameLocation extends DocumentSpan {
@@ -645,6 +654,7 @@ namespace ts {
         fileName?: string;
         isInString?: true;
         textSpan: TextSpan;
+        contextSpan?: TextSpan;
         kind: HighlightSpanKind;
     }
 
@@ -846,6 +856,11 @@ namespace ts {
         documentation: SymbolDisplayPart[];
         displayParts: SymbolDisplayPart[];
         isOptional: boolean;
+    }
+
+    export interface SelectionRange {
+        textSpan: TextSpan;
+        parent?: SelectionRange;
     }
 
     /**

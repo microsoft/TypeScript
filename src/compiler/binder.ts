@@ -274,6 +274,9 @@ namespace ts {
                     if (isStringOrNumericLiteralLike(nameExpression)) {
                         return escapeLeadingUnderscores(nameExpression.text);
                     }
+                    if (isSignedNumericLiteral(nameExpression)) {
+                        return tokenToString(nameExpression.operator) + nameExpression.operand.text as __String;
+                    }
 
                     Debug.assert(isWellKnownSymbolSyntactically(nameExpression));
                     return getPropertyNameForKnownSymbolName(idText((<PropertyAccessExpression>nameExpression).name));
@@ -2515,7 +2518,7 @@ namespace ts {
                     break;
 
                 default:
-                    Debug.fail(Debug.showSyntaxKind(thisContainer));
+                    Debug.failBadSyntaxKind(thisContainer);
             }
         }
 
@@ -2581,7 +2584,7 @@ namespace ts {
             // Fix up parent pointers since we're going to use these nodes before we bind into them
             node.left.parent = node;
             node.right.parent = node;
-            if (isIdentifier(lhs.expression) && container === file && isNameOfExportsOrModuleExportsAliasDeclaration(file, lhs.expression)) {
+            if (isIdentifier(lhs.expression) && container === file && isExportsOrModuleExportsOrAlias(file, lhs.expression)) {
                 // This can be an alias for the 'exports' or 'module.exports' names, e.g.
                 //    var util = module.exports;
                 //    util.property = function ...
@@ -2975,21 +2978,27 @@ namespace ts {
     }
 
     export function isExportsOrModuleExportsOrAlias(sourceFile: SourceFile, node: Expression): boolean {
-        return isExportsIdentifier(node) ||
-            isModuleExportsPropertyAccessExpression(node) ||
-            isIdentifier(node) && isNameOfExportsOrModuleExportsAliasDeclaration(sourceFile, node);
-    }
-
-    function isNameOfExportsOrModuleExportsAliasDeclaration(sourceFile: SourceFile, node: Identifier): boolean {
-        const symbol = lookupSymbolForNameWorker(sourceFile, node.escapedText);
-        return !!symbol && !!symbol.valueDeclaration && isVariableDeclaration(symbol.valueDeclaration) &&
-            !!symbol.valueDeclaration.initializer && isExportsOrModuleExportsOrAliasOrAssignment(sourceFile, symbol.valueDeclaration.initializer);
-    }
-
-    function isExportsOrModuleExportsOrAliasOrAssignment(sourceFile: SourceFile, node: Expression): boolean {
-        return isExportsOrModuleExportsOrAlias(sourceFile, node) ||
-            (isAssignmentExpression(node, /*excludeCompoundAssignment*/ true) && (
-                isExportsOrModuleExportsOrAliasOrAssignment(sourceFile, node.left) || isExportsOrModuleExportsOrAliasOrAssignment(sourceFile, node.right)));
+        let i = 0;
+        const q = [node];
+        while (q.length && i < 100) {
+            i++;
+            node = q.shift()!;
+            if (isExportsIdentifier(node) || isModuleExportsPropertyAccessExpression(node)) {
+                return true;
+            }
+            else if (isIdentifier(node)) {
+                const symbol = lookupSymbolForNameWorker(sourceFile, node.escapedText);
+                if (!!symbol && !!symbol.valueDeclaration && isVariableDeclaration(symbol.valueDeclaration) && !!symbol.valueDeclaration.initializer) {
+                    const init = symbol.valueDeclaration.initializer;
+                    q.push(init);
+                    if (isAssignmentExpression(init, /*excludeCompoundAssignment*/ true)) {
+                        q.push(init.left);
+                        q.push(init.right);
+                    }
+                }
+            }
+        }
+        return false;
     }
 
     function lookupSymbolForNameWorker(container: Node, name: __String): Symbol | undefined {
@@ -3223,8 +3232,7 @@ namespace ts {
             // A ClassDeclaration is ES6 syntax.
             transformFlags = subtreeFlags | TransformFlags.AssertES2015;
 
-            // A class with a parameter property assignment, property initializer, computed property name, or decorator is
-            // TypeScript syntax.
+            // A class with a parameter property assignment or decorator is TypeScript syntax.
             // An exported declaration may be TypeScript syntax, but is handled by the visitor
             // for a namespace declaration.
             if ((subtreeFlags & TransformFlags.ContainsTypeScriptClassSyntax)
@@ -3241,8 +3249,7 @@ namespace ts {
         // A ClassExpression is ES6 syntax.
         let transformFlags = subtreeFlags | TransformFlags.AssertES2015;
 
-        // A class with a parameter property assignment, property initializer, or decorator is
-        // TypeScript syntax.
+        // A class with a parameter property assignment or decorator is TypeScript syntax.
         if (subtreeFlags & TransformFlags.ContainsTypeScriptClassSyntax
             || node.typeParameters) {
             transformFlags |= TransformFlags.AssertTypeScript;
@@ -3332,7 +3339,6 @@ namespace ts {
             || hasModifier(node, ModifierFlags.TypeScriptModifier)
             || node.typeParameters
             || node.type
-            || (node.name && isComputedPropertyName(node.name)) // While computed method names aren't typescript, the TS transform must visit them to emit property declarations correctly
             || !node.body) {
             transformFlags |= TransformFlags.AssertTypeScript;
         }
@@ -3363,7 +3369,6 @@ namespace ts {
         if (node.decorators
             || hasModifier(node, ModifierFlags.TypeScriptModifier)
             || node.type
-            || (node.name && isComputedPropertyName(node.name)) // While computed accessor names aren't typescript, the TS transform must visit them to emit property declarations correctly
             || !node.body) {
             transformFlags |= TransformFlags.AssertTypeScript;
         }
@@ -3378,12 +3383,15 @@ namespace ts {
     }
 
     function computePropertyDeclaration(node: PropertyDeclaration, subtreeFlags: TransformFlags) {
-        // A PropertyDeclaration is TypeScript syntax.
-        let transformFlags = subtreeFlags | TransformFlags.AssertTypeScript;
+        let transformFlags = subtreeFlags | TransformFlags.ContainsClassFields;
 
-        // If the PropertyDeclaration has an initializer or a computed name, we need to inform its ancestor
-        // so that it handle the transformation.
-        if (node.initializer || isComputedPropertyName(node.name)) {
+        // Decorators, TypeScript-specific modifiers, and type annotations are TypeScript syntax.
+        if (some(node.decorators) || hasModifier(node, ModifierFlags.TypeScriptModifier) || node.type) {
+            transformFlags |= TransformFlags.AssertTypeScript;
+        }
+
+        // Hoisted variables related to class properties should live within the TypeScript class wrapper.
+        if (isComputedPropertyName(node.name) || (hasStaticModifier(node) && node.initializer)) {
             transformFlags |= TransformFlags.ContainsTypeScriptClassSyntax;
         }
 

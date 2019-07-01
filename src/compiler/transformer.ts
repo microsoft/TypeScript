@@ -44,6 +44,7 @@ namespace ts {
         addRange(transformers, customTransformers && map(customTransformers.before, wrapScriptTransformerFactory));
 
         transformers.push(transformTypeScript);
+        transformers.push(transformClassFields);
 
         if (jsx === JsxEmit.React) {
             transformers.push(transformJsx);

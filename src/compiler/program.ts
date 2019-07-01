@@ -1395,7 +1395,7 @@ namespace ts {
                 const filePath = newSourceFile.path;
                 addFileToFilesByName(newSourceFile, filePath, newSourceFile.resolvedPath);
                 // Set the file as found during node modules search if it was found that way in old progra,
-                if (oldProgram.isSourceFileFromExternalLibrary(oldProgram.getSourceFileByPath(filePath)!)) {
+                if (oldProgram.isSourceFileFromExternalLibrary(oldProgram.getSourceFileByPath(newSourceFile.resolvedPath)!)) {
                     sourceFilesFoundSearchingNodeModules.set(filePath, true);
                 }
             }
@@ -1442,7 +1442,8 @@ namespace ts {
                 },
                 ...(host.directoryExists ? { directoryExists: f => host.directoryExists!(f) } : {}),
                 useCaseSensitiveFileNames: () => host.useCaseSensitiveFileNames(),
-                getProgramBuildInfo: () => program.getProgramBuildInfo && program.getProgramBuildInfo()
+                getProgramBuildInfo: () => program.getProgramBuildInfo && program.getProgramBuildInfo(),
+                getSourceFileFromReference: (file, ref) => program.getSourceFileFromReference(file, ref),
             };
         }
 
@@ -2127,7 +2128,7 @@ namespace ts {
         }
 
         /** This should have similar behavior to 'processSourceFile' without diagnostics or mutation. */
-        function getSourceFileFromReference(referencingFile: SourceFile, ref: FileReference): SourceFile | undefined {
+        function getSourceFileFromReference(referencingFile: SourceFile | UnparsedSource, ref: FileReference): SourceFile | undefined {
             return getSourceFileFromReferenceWorker(resolveTripleslashReference(ref.fileName, referencingFile.fileName), fileName => filesByName.get(toPath(fileName)) || undefined);
         }
 
@@ -2232,7 +2233,10 @@ namespace ts {
                     if (isRedirect) {
                         inputName = getProjectReferenceRedirect(fileName) || fileName;
                     }
-                    if (getNormalizedAbsolutePath(checkedName, currentDirectory) !== getNormalizedAbsolutePath(inputName, currentDirectory)) {
+                    // Check if it differs only in drive letters its ok to ignore that error:
+                    const checkedAbsolutePath = getNormalizedAbsolutePathWithoutRoot(checkedName, currentDirectory);
+                    const inputAbsolutePath = getNormalizedAbsolutePathWithoutRoot(inputName, currentDirectory);
+                    if (checkedAbsolutePath !== inputAbsolutePath) {
                         reportFileNamesDifferOnlyInCasingError(inputName, checkedName, refFile, refPos, refEnd);
                     }
                 }
@@ -2770,7 +2774,7 @@ namespace ts {
                     // Ignore file that is not emitted
                     if (!sourceFileMayBeEmitted(file, options, isSourceFileFromExternalLibrary, getResolvedProjectReferenceToRedirect)) continue;
                     if (rootPaths.indexOf(file.path) === -1) {
-                        programDiagnostics.add(createCompilerDiagnostic(Diagnostics.File_0_is_not_in_project_file_list_Projects_must_list_all_files_or_use_an_include_pattern, file.fileName));
+                        programDiagnostics.add(createCompilerDiagnostic(Diagnostics.File_0_is_not_listed_within_the_file_list_of_project_1_Projects_must_list_all_files_or_use_an_include_pattern, file.fileName, options.configFilePath || ""));
                     }
                 }
             }
@@ -2855,10 +2859,10 @@ namespace ts {
                     createDiagnosticForOptionName(Diagnostics.Option_isolatedModules_can_only_be_used_when_either_option_module_is_provided_or_option_target_is_ES2015_or_higher, "isolatedModules", "target");
                 }
 
-                const firstNonExternalModuleSourceFile = find(files, f => !isExternalModule(f) && !f.isDeclarationFile && f.scriptKind !== ScriptKind.JSON);
+                const firstNonExternalModuleSourceFile = find(files, f => !isExternalModule(f) && !isSourceFileJS(f) && !f.isDeclarationFile && f.scriptKind !== ScriptKind.JSON);
                 if (firstNonExternalModuleSourceFile) {
                     const span = getErrorSpanForNode(firstNonExternalModuleSourceFile, firstNonExternalModuleSourceFile);
-                    programDiagnostics.add(createFileDiagnostic(firstNonExternalModuleSourceFile, span.start, span.length, Diagnostics.Cannot_compile_namespaces_when_the_isolatedModules_flag_is_provided));
+                    programDiagnostics.add(createFileDiagnostic(firstNonExternalModuleSourceFile, span.start, span.length, Diagnostics.All_files_must_be_modules_when_the_isolatedModules_flag_is_provided));
                 }
             }
             else if (firstNonAmbientExternalModuleSourceFile && languageVersion < ScriptTarget.ES2015 && options.module === ModuleKind.None) {

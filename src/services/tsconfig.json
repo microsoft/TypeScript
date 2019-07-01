@@ -28,6 +28,7 @@
         "patternMatcher.ts",
         "preProcess.ts",
         "rename.ts",
+        "smartSelection.ts",
         "signatureHelp.ts",
         "sourcemaps.ts",
         "suggestionDiagnostics.ts",

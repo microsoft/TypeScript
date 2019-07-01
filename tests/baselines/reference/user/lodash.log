@@ -37,7 +37,8 @@ node_modules/lodash/_baseDifference.js(43,5): error TS2740: Type 'SetCache' is m
 node_modules/lodash/_baseDifference.js(60,42): error TS2554: Expected 2 arguments, but got 3.
 node_modules/lodash/_baseFlatten.js(19,29): error TS2322: Type '(value: any) => boolean' is not assignable to type 'boolean | undefined'.
   Type '(value: any) => boolean' is not assignable to type 'true'.
-node_modules/lodash/_baseFlatten.js(24,22): error TS2349: Cannot invoke an expression whose type lacks a call signature. Type 'Boolean' has no compatible call signatures.
+node_modules/lodash/_baseFlatten.js(24,22): error TS2349: This expression is not callable.
+  Type 'Boolean' has no call signatures.
 node_modules/lodash/_baseFlatten.js(24,22): error TS2532: Object is possibly 'undefined'.
 node_modules/lodash/_baseFlatten.js(24,22): error TS2722: Cannot invoke an object which is possibly 'undefined'.
 node_modules/lodash/_baseHas.js(16,56): error TS2345: Argument of type 'string | any[]' is not assignable to parameter of type 'string | number | symbol'.
@@ -76,7 +77,8 @@ node_modules/lodash/_baseUniq.js(33,43): error TS2554: Expected 0 arguments, but
 node_modules/lodash/_baseUniq.js(39,5): error TS2322: Type 'SetCache' is not assignable to type 'any[]'.
 node_modules/lodash/_baseUniq.js(62,40): error TS2554: Expected 2 arguments, but got 3.
 node_modules/lodash/_baseWrapperValue.js(18,21): error TS2339: Property 'value' does not exist on type 'LazyWrapper'.
-node_modules/lodash/_cloneArrayBuffer.js(11,16): error TS2351: Cannot use 'new' with an expression whose type lacks a call or construct signature.
+node_modules/lodash/_cloneArrayBuffer.js(11,20): error TS2351: This expression is not constructable.
+  Type 'Function' has no construct signatures.
 node_modules/lodash/_cloneBuffer.js(4,69): error TS2339: Property 'nodeType' does not exist on type '(buffer: any, isDeep?: boolean | undefined) => any'.
 node_modules/lodash/_cloneBuffer.js(7,80): error TS2339: Property 'nodeType' does not exist on type '{ "../../../tests/cases/user/lodash/node_modules/lodash/_cloneBuffer": (buffer: any, isDeep?: boolean | undefined) => any; }'.
 node_modules/lodash/_cloneBuffer.js(22,14): error TS2577: Return type annotation circularly references itself.
@@ -85,14 +87,22 @@ node_modules/lodash/_copySymbols.js(13,40): error TS2554: Expected 0 arguments, 
 node_modules/lodash/_copySymbolsIn.js(13,42): error TS2554: Expected 0 arguments, but got 1.
 node_modules/lodash/_createAggregator.js(19,60): error TS2554: Expected 0-1 arguments, but got 2.
 node_modules/lodash/_createCompounder.js(20,24): error TS2554: Expected 3 arguments, but got 1.
-node_modules/lodash/_createCtor.js(19,22): error TS2351: Cannot use 'new' with an expression whose type lacks a call or construct signature.
-node_modules/lodash/_createCtor.js(20,22): error TS2351: Cannot use 'new' with an expression whose type lacks a call or construct signature.
-node_modules/lodash/_createCtor.js(21,22): error TS2351: Cannot use 'new' with an expression whose type lacks a call or construct signature.
-node_modules/lodash/_createCtor.js(22,22): error TS2351: Cannot use 'new' with an expression whose type lacks a call or construct signature.
-node_modules/lodash/_createCtor.js(23,22): error TS2351: Cannot use 'new' with an expression whose type lacks a call or construct signature.
-node_modules/lodash/_createCtor.js(24,22): error TS2351: Cannot use 'new' with an expression whose type lacks a call or construct signature.
-node_modules/lodash/_createCtor.js(25,22): error TS2351: Cannot use 'new' with an expression whose type lacks a call or construct signature.
-node_modules/lodash/_createCtor.js(26,22): error TS2351: Cannot use 'new' with an expression whose type lacks a call or construct signature.
+node_modules/lodash/_createCtor.js(19,26): error TS2351: This expression is not constructable.
+  Type 'Function' has no construct signatures.
+node_modules/lodash/_createCtor.js(20,26): error TS2351: This expression is not constructable.
+  Type 'Function' has no construct signatures.
+node_modules/lodash/_createCtor.js(21,26): error TS2351: This expression is not constructable.
+  Type 'Function' has no construct signatures.
+node_modules/lodash/_createCtor.js(22,26): error TS2351: This expression is not constructable.
+  Type 'Function' has no construct signatures.
+node_modules/lodash/_createCtor.js(23,26): error TS2351: This expression is not constructable.
+  Type 'Function' has no construct signatures.
+node_modules/lodash/_createCtor.js(24,26): error TS2351: This expression is not constructable.
+  Type 'Function' has no construct signatures.
+node_modules/lodash/_createCtor.js(25,26): error TS2351: This expression is not constructable.
+  Type 'Function' has no construct signatures.
+node_modules/lodash/_createCtor.js(26,26): error TS2351: This expression is not constructable.
+  Type 'Function' has no construct signatures.
 node_modules/lodash/_createCurry.js(37,46): error TS2339: Property 'placeholder' does not exist on type '(...args: any[]) => any'.
 node_modules/lodash/_createFind.js(16,46): error TS2554: Expected 0-1 arguments, but got 2.
 node_modules/lodash/_createFind.js(21,34): error TS2454: Variable 'iteratee' is used before being assigned.
@@ -143,7 +153,8 @@ node_modules/lodash/_getRawTag.js(36,7): error TS2454: Variable 'unmasked' is us
 node_modules/lodash/_getSymbolsIn.js(19,34): error TS2554: Expected 0 arguments, but got 1.
 node_modules/lodash/_hasPath.js(35,50): error TS2454: Variable 'key' is used before being assigned.
 node_modules/lodash/_hashDelete.js(7,20): error TS8024: JSDoc '@param' tag has name 'hash', but there is no parameter with that name.
-node_modules/lodash/_initCloneArray.js(16,16): error TS2351: Cannot use 'new' with an expression whose type lacks a call or construct signature.
+node_modules/lodash/_initCloneArray.js(16,20): error TS2351: This expression is not constructable.
+  Type 'Function' has no construct signatures.
 node_modules/lodash/_initCloneArray.js(20,26): error TS2339: Property 'index' does not exist on type 'any[]'.
 node_modules/lodash/_initCloneArray.js(21,26): error TS2339: Property 'input' does not exist on type 'any[]'.
 node_modules/lodash/_insertWrapDetails.js(10,5): error TS1223: 'returns' tag already specified.
@@ -190,7 +201,8 @@ node_modules/lodash/core.js(68,58): error TS2339: Property 'Object' does not exi
 node_modules/lodash/core.js(77,82): error TS2339: Property 'nodeType' does not exist on type 'NodeModule'.
 node_modules/lodash/core.js(540,31): error TS2322: Type '(value: any) => boolean' is not assignable to type 'boolean | undefined'.
   Type '(value: any) => boolean' is not assignable to type 'true'.
-node_modules/lodash/core.js(545,24): error TS2349: Cannot invoke an expression whose type lacks a call signature. Type 'Boolean' has no compatible call signatures.
+node_modules/lodash/core.js(545,24): error TS2349: This expression is not callable.
+  Type 'Boolean' has no call signatures.
 node_modules/lodash/core.js(545,24): error TS2532: Object is possibly 'undefined'.
 node_modules/lodash/core.js(545,24): error TS2722: Cannot invoke an object which is possibly 'undefined'.
 node_modules/lodash/core.js(664,42): error TS2345: Argument of type 'boolean' is not assignable to parameter of type 'number'.

@@ -18,6 +18,7 @@ trans(([b,c]) => 'foo');
 
 trans(({d: [e,f]}) => 'foo');
 >trans : Symbol(trans, Decl(fallbackToBindingPatternForTypeInference.ts, 0, 0))
+>d : Symbol(d)
 >e : Symbol(e, Decl(fallbackToBindingPatternForTypeInference.ts, 3, 12))
 >f : Symbol(f, Decl(fallbackToBindingPatternForTypeInference.ts, 3, 14))
 

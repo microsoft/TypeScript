@@ -1,0 +1,100 @@
+=== tests/cases/conformance/expressions/propertyAccess/propertyAccessWidening.ts ===
+// Repro from #31762
+
+function g1(headerNames: any) {
+>g1 : (headerNames: any) => void
+>headerNames : any
+
+    let t = [{ hasLineBreak: false, cells: [] }];
+>t : { hasLineBreak: boolean; cells: never[]; }[]
+>[{ hasLineBreak: false, cells: [] }] : { hasLineBreak: boolean; cells: never[]; }[]
+>{ hasLineBreak: false, cells: [] } : { hasLineBreak: boolean; cells: never[]; }
+>hasLineBreak : boolean
+>false : false
+>cells : never[]
+>[] : never[]
+
+    const table = [{cells: headerNames }].concat(t);
+>table : { cells: any; }[]
+>[{cells: headerNames }].concat(t) : { cells: any; }[]
+>[{cells: headerNames }].concat : { (...items: ConcatArray<{ cells: any; }>[]): { cells: any; }[]; (...items: ({ cells: any; } | ConcatArray<{ cells: any; }>)[]): { cells: any; }[]; }
+>[{cells: headerNames }] : { cells: any; }[]
+>{cells: headerNames } : { cells: any; }
+>cells : any
+>headerNames : any
+>concat : { (...items: ConcatArray<{ cells: any; }>[]): { cells: any; }[]; (...items: ({ cells: any; } | ConcatArray<{ cells: any; }>)[]): { cells: any; }[]; }
+>t : { hasLineBreak: boolean; cells: never[]; }[]
+}
+
+function g2(headerNames: any) {
+>g2 : (headerNames: any) => void
+>headerNames : any
+
+    let t = [{ hasLineBreak: false, cells: [] }];
+>t : { hasLineBreak: boolean; cells: never[]; }[]
+>[{ hasLineBreak: false, cells: [] }] : { hasLineBreak: boolean; cells: never[]; }[]
+>{ hasLineBreak: false, cells: [] } : { hasLineBreak: boolean; cells: never[]; }
+>hasLineBreak : boolean
+>false : false
+>cells : never[]
+>[] : never[]
+
+    const table = [{cells: headerNames }]["concat"](t);
+>table : { cells: any; }[]
+>[{cells: headerNames }]["concat"](t) : { cells: any; }[]
+>[{cells: headerNames }]["concat"] : { (...items: ConcatArray<{ cells: any; }>[]): { cells: any; }[]; (...items: ({ cells: any; } | ConcatArray<{ cells: any; }>)[]): { cells: any; }[]; }
+>[{cells: headerNames }] : { cells: any; }[]
+>{cells: headerNames } : { cells: any; }
+>cells : any
+>headerNames : any
+>"concat" : "concat"
+>t : { hasLineBreak: boolean; cells: never[]; }[]
+}
+
+// Object in property or element access is widened when target of assignment
+
+function foo(options?: { a: string, b: number }) {
+>foo : (options?: { a: string; b: number; } | undefined) => void
+>options : { a: string; b: number; } | undefined
+>a : string
+>b : number
+
+    let x1 = (options || {}).a;     // Object type not widened
+>x1 : string | undefined
+>(options || {}).a : string | undefined
+>(options || {}) : { a: string; b: number; } | {}
+>options || {} : { a: string; b: number; } | {}
+>options : { a: string; b: number; } | undefined
+>{} : {}
+>a : string | undefined
+
+    let x2 = (options || {})["a"];  // Object type not widened
+>x2 : string | undefined
+>(options || {})["a"] : string | undefined
+>(options || {}) : { a: string; b: number; } | {}
+>options || {} : { a: string; b: number; } | {}
+>options : { a: string; b: number; } | undefined
+>{} : {}
+>"a" : "a"
+
+    (options || {}).a = 1;          // Object type widened, error
+>(options || {}).a = 1 : 1
+>(options || {}).a : any
+>(options || {}) : { a: string; b: number; } | {}
+>options || {} : { a: string; b: number; } | {}
+>options : { a: string; b: number; } | undefined
+>{} : {}
+>a : any
+>1 : 1
+
+    (options || {})["a"] = 1;       // Object type widened, error
+>(options || {})["a"] = 1 : 1
+>(options || {})["a"] : any
+>(options || {}) : { a: string; b: number; } | {}
+>options || {} : { a: string; b: number; } | {}
+>options : { a: string; b: number; } | undefined
+>{} : {}
+>"a" : "a"
+>1 : 1
+}
+

@@ -2073,7 +2073,7 @@ namespace ts {
     }
 
     export function importFromModuleSpecifier(node: StringLiteralLike): AnyValidImportOrReExport {
-        return tryGetImportFromModuleSpecifier(node) || Debug.fail(Debug.showSyntaxKind(node.parent));
+        return tryGetImportFromModuleSpecifier(node) || Debug.failBadSyntaxKind(node.parent);
     }
 
     export function tryGetImportFromModuleSpecifier(node: StringLiteralLike): AnyValidImportOrReExport | undefined {
@@ -2201,13 +2201,13 @@ namespace ts {
         let result: (JSDoc | JSDocTag)[] | undefined;
         // Pull parameter comments from declaring function as well
         if (isVariableLike(hostNode) && hasInitializer(hostNode) && hasJSDocNodes(hostNode.initializer!)) {
-            result = addRange(result, (hostNode.initializer as HasJSDoc).jsDoc!);
+            result = append(result, last((hostNode.initializer as HasJSDoc).jsDoc!));
         }
 
         let node: Node | undefined = hostNode;
         while (node && node.parent) {
             if (hasJSDocNodes(node)) {
-                result = addRange(result, node.jsDoc!);
+                result = append(result, last(node.jsDoc!));
             }
 
             if (node.kind === SyntaxKind.Parameter) {
@@ -2611,13 +2611,6 @@ namespace ts {
         return undefined;
     }
 
-    export function tryResolveScriptReference(host: ScriptReferenceHost, sourceFile: SourceFile | UnparsedSource, reference: FileReference) {
-        if (!host.getCompilerOptions().noResolve) {
-            const referenceFileName = isRootedDiskPath(reference.fileName) ? reference.fileName : combinePaths(getDirectoryPath(sourceFile.fileName), reference.fileName);
-            return host.getSourceFile(referenceFileName);
-        }
-    }
-
     export function getAncestor(node: Node | undefined, kind: SyntaxKind): Node | undefined {
         while (node) {
             if (node.kind === kind) {
@@ -2712,11 +2705,19 @@ namespace ts {
         return isStringLiteralLike(node) || isNumericLiteral(node);
     }
 
+    export function isSignedNumericLiteral(node: Node): node is PrefixUnaryExpression & { operand: NumericLiteral } {
+        return isPrefixUnaryExpression(node) && (node.operator === SyntaxKind.PlusToken || node.operator === SyntaxKind.MinusToken) && isNumericLiteral(node.operand);
+    }
+
     /**
-     * A declaration has a dynamic name if both of the following are true:
-     *   1. The declaration has a computed property name
-     *   2. The computed name is *not* expressed as Symbol.<name>, where name
-     *      is a property of the Symbol constructor that denotes a built in
+     * A declaration has a dynamic name if all of the following are true:
+     *   1. The declaration has a computed property name.
+     *   2. The computed name is *not* expressed as a StringLiteral.
+     *   3. The computed name is *not* expressed as a NumericLiteral.
+     *   4. The computed name is *not* expressed as a PlusToken or MinusToken
+     *      immediately followed by a NumericLiteral.
+     *   5. The computed name is *not* expressed as `Symbol.<name>`, where `<name>`
+     *      is a property of the Symbol constructor that denotes a built-in
      *      Symbol.
      */
     export function hasDynamicName(declaration: Declaration): declaration is DynamicNamedDeclaration {
@@ -2727,6 +2728,7 @@ namespace ts {
     export function isDynamicName(name: DeclarationName): boolean {
         return name.kind === SyntaxKind.ComputedPropertyName &&
             !isStringOrNumericLiteralLike(name.expression) &&
+            !isSignedNumericLiteral(name.expression) &&
             !isWellKnownSymbolSyntactically(name.expression);
     }
 
@@ -4187,78 +4189,6 @@ namespace ts {
     }
 
     /**
-     * Formats an enum value as a string for debugging and debug assertions.
-     */
-    function formatEnum(value = 0, enumObject: any, isFlags?: boolean) {
-        const members = getEnumMembers(enumObject);
-        if (value === 0) {
-            return members.length > 0 && members[0][0] === 0 ? members[0][1] : "0";
-        }
-        if (isFlags) {
-            let result = "";
-            let remainingFlags = value;
-            for (let i = members.length - 1; i >= 0 && remainingFlags !== 0; i--) {
-                const [enumValue, enumName] = members[i];
-                if (enumValue !== 0 && (remainingFlags & enumValue) === enumValue) {
-                    remainingFlags &= ~enumValue;
-                    result = `${enumName}${result ? ", " : ""}${result}`;
-                }
-            }
-            if (remainingFlags === 0) {
-                return result;
-            }
-        }
-        else {
-            for (const [enumValue, enumName] of members) {
-                if (enumValue === value) {
-                    return enumName;
-                }
-            }
-        }
-        return value.toString();
-    }
-
-    function getEnumMembers(enumObject: any) {
-        const result: [number, string][] = [];
-        for (const name in enumObject) {
-            const value = enumObject[name];
-            if (typeof value === "number") {
-                result.push([value, name]);
-            }
-        }
-
-        return stableSort<[number, string]>(result, (x, y) => compareValues(x[0], y[0]));
-    }
-
-    export function formatSyntaxKind(kind: SyntaxKind | undefined): string {
-        return formatEnum(kind, (<any>ts).SyntaxKind, /*isFlags*/ false);
-    }
-
-    export function formatModifierFlags(flags: ModifierFlags | undefined): string {
-        return formatEnum(flags, (<any>ts).ModifierFlags, /*isFlags*/ true);
-    }
-
-    export function formatTransformFlags(flags: TransformFlags | undefined): string {
-        return formatEnum(flags, (<any>ts).TransformFlags, /*isFlags*/ true);
-    }
-
-    export function formatEmitFlags(flags: EmitFlags | undefined): string {
-        return formatEnum(flags, (<any>ts).EmitFlags, /*isFlags*/ true);
-    }
-
-    export function formatSymbolFlags(flags: SymbolFlags | undefined): string {
-        return formatEnum(flags, (<any>ts).SymbolFlags, /*isFlags*/ true);
-    }
-
-    export function formatTypeFlags(flags: TypeFlags | undefined): string {
-        return formatEnum(flags, (<any>ts).TypeFlags, /*isFlags*/ true);
-    }
-
-    export function formatObjectFlags(flags: ObjectFlags | undefined): string {
-        return formatEnum(flags, (<any>ts).ObjectFlags, /*isFlags*/ true);
-    }
-
-    /**
      * Creates a new TextRange from the provided pos and end.
      *
      * @param pos The start position.
@@ -5258,6 +5188,9 @@ namespace ts {
             else if (isPropertyAccessExpression(node.parent.left)) {
                 return node.parent.left.name;
             }
+        }
+        else if (isVariableDeclaration(node.parent) && isIdentifier(node.parent.name)) {
+            return node.parent.name;
         }
     }
 
@@ -7646,6 +7579,14 @@ namespace ts {
         return root + pathComponents.slice(1).join(directorySeparator);
     }
 
+    export function getNormalizedAbsolutePathWithoutRoot(fileName: string, currentDirectory: string | undefined) {
+        return getPathWithoutRoot(getNormalizedPathComponents(fileName, currentDirectory));
+    }
+
+    function getPathWithoutRoot(pathComponents: ReadonlyArray<string>) {
+        if (pathComponents.length === 0) return "";
+        return pathComponents.slice(1).join(directorySeparator);
+    }
 }
 
 /* @internal */
@@ -8418,29 +8359,6 @@ namespace ts {
     export function changeAnyExtension(path: string, ext: string, extensions?: string | ReadonlyArray<string>, ignoreCase?: boolean) {
         const pathext = extensions !== undefined && ignoreCase !== undefined ? getAnyExtensionFromPath(path, extensions, ignoreCase) : getAnyExtensionFromPath(path);
         return pathext ? path.slice(0, path.length - pathext.length) + (startsWith(ext, ".") ? ext : "." + ext) : path;
-    }
-
-    export namespace Debug {
-        export function showSymbol(symbol: Symbol): string {
-            const symbolFlags = (ts as any).SymbolFlags;
-            return `{ flags: ${symbolFlags ? showFlags(symbol.flags, symbolFlags) : symbol.flags}; declarations: ${map(symbol.declarations, showSyntaxKind)} }`;
-        }
-
-        function showFlags(flags: number, flagsEnum: { [flag: number]: string }): string {
-            const out: string[] = [];
-            for (let pow = 0; pow <= 30; pow++) {
-                const n = 1 << pow;
-                if (flags & n) {
-                    out.push(flagsEnum[n]);
-                }
-            }
-            return out.join("|");
-        }
-
-        export function showSyntaxKind(node: Node): string {
-            const syntaxKind = (ts as any).SyntaxKind;
-            return syntaxKind ? syntaxKind[node.kind] : node.kind.toString();
-        }
     }
 
     export function tryParsePattern(pattern: string): Pattern | undefined {

@@ -14,7 +14,8 @@ node_modules/assert/test.js(141,10): error TS2339: Property 'b' does not exist o
 node_modules/assert/test.js(142,10): error TS2339: Property 'b' does not exist on type 'number[]'.
 node_modules/assert/test.js(143,10): error TS2339: Property 'a' does not exist on type 'number[]'.
 node_modules/assert/test.js(149,5): error TS2552: Cannot find name 'test'. Did you mean 'tests'?
-node_modules/assert/test.js(157,51): error TS2349: Cannot invoke an expression whose type lacks a call signature. Type 'never' has no compatible call signatures.
+node_modules/assert/test.js(157,51): error TS2349: This expression is not callable.
+  Type 'never' has no call signatures.
 node_modules/assert/test.js(161,5): error TS2552: Cannot find name 'test'. Did you mean 'tests'?
 node_modules/assert/test.js(168,5): error TS2593: Cannot find name 'test'. Do you need to install type definitions for a test runner? Try `npm i @types/jest` or `npm i @types/mocha` and then add `jest` or `mocha` to the types field in your tsconfig.
 node_modules/assert/test.js(182,5): error TS2593: Cannot find name 'test'. Do you need to install type definitions for a test runner? Try `npm i @types/jest` or `npm i @types/mocha` and then add `jest` or `mocha` to the types field in your tsconfig.

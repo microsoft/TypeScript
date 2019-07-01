@@ -81,7 +81,9 @@ src/language-html/ast.js(90,17): error TS2339: Property 'namespace' does not exi
 src/language-html/ast.js(90,34): error TS2339: Property 'namespace' does not exist on type 'Node'.
 src/language-html/ast.js(90,57): error TS2339: Property 'name' does not exist on type 'Node'.
 src/language-html/ast.js(90,69): error TS2339: Property 'name' does not exist on type 'Node'.
-src/language-html/conditional-comment.js(23,16): error TS2349: Cannot invoke an expression whose type lacks a call signature. Type 'RegExp | ((node: any) => { type: string; sourceSpan: any; })' has no compatible call signatures.
+src/language-html/conditional-comment.js(23,16): error TS2349: This expression is not callable.
+  Not all constituents of type 'RegExp | ((node: any) => { type: string; sourceSpan: any; })' are callable.
+    Type 'RegExp' has no call signatures.
 src/language-html/index.js(8,26): error TS2307: Cannot find module 'linguist-languages/data/html'.
 src/language-html/index.js(8,59): error TS2345: Argument of type '{ override: { name: string; since: string; parsers: string[]; vscodeLanguageIds: string[]; extensions: string[]; filenames: never[]; }; }' is not assignable to parameter of type '{ extend: any; override: any; }'.
   Property 'extend' is missing in type '{ override: { name: string; since: string; parsers: string[]; vscodeLanguageIds: string[]; extensions: string[]; filenames: never[]; }; }' but required in type '{ extend: any; override: any; }'.
