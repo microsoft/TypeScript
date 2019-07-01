@@ -1,4 +1,14 @@
-tests/cases/conformance/jsx/checkJsxChildrenCanBeTupleType.tsx(17,17): error TS2755: No overload matches this call.
+tests/cases/conformance/jsx/checkJsxChildrenCanBeTupleType.tsx(17,17): error TS2763: No overload matches this call.
+  Overload 1 of 2, '(props: Readonly<ResizablePanelProps>): ResizablePanel', gave the following error.
+    Type '{ children: [Element, Element, Element]; }' is not assignable to type 'Readonly<ResizablePanelProps>'.
+      Types of property 'children' are incompatible.
+        Type '[Element, Element, Element]' is not assignable to type '[ReactNode, ReactNode]'.
+          Types of property 'length' are incompatible.
+            Type '3' is not assignable to type '2'.
+  Overload 2 of 2, '(props: ResizablePanelProps, context?: any): ResizablePanel', gave the following error.
+    Type '{ children: [Element, Element, Element]; }' is not assignable to type 'Readonly<ResizablePanelProps>'.
+      Types of property 'children' are incompatible.
+        Type '[Element, Element, Element]' is not assignable to type '[ReactNode, ReactNode]'.
 
 
 ==== tests/cases/conformance/jsx/checkJsxChildrenCanBeTupleType.tsx (1 errors) ====
@@ -20,17 +30,17 @@ tests/cases/conformance/jsx/checkJsxChildrenCanBeTupleType.tsx(17,17): error TS2
     
     const testErr = <ResizablePanel>
                     ~~~~~~~~~~~~~~~~
-!!! error TS2755: No overload matches this call.
-!!! related TS2760 tests/cases/conformance/jsx/checkJsxChildrenCanBeTupleType.tsx:17:18: Overload 1 of 2, '(props: Readonly<ResizablePanelProps>): ResizablePanel', gave the following error.
-  Type '{ children: [Element, Element, Element]; }' is not assignable to type 'Readonly<ResizablePanelProps>'.
-    Types of property 'children' are incompatible.
-      Type '[Element, Element, Element]' is not assignable to type '[ReactNode, ReactNode]'.
-        Types of property 'length' are incompatible.
-          Type '3' is not assignable to type '2'.
-!!! related TS2760 tests/cases/conformance/jsx/checkJsxChildrenCanBeTupleType.tsx:17:18: Overload 2 of 2, '(props: ResizablePanelProps, context?: any): ResizablePanel', gave the following error.
-  Type '{ children: [Element, Element, Element]; }' is not assignable to type 'Readonly<ResizablePanelProps>'.
-    Types of property 'children' are incompatible.
-      Type '[Element, Element, Element]' is not assignable to type '[ReactNode, ReactNode]'.
+!!! error TS2763: No overload matches this call.
+!!! error TS2763:   Overload 1 of 2, '(props: Readonly<ResizablePanelProps>): ResizablePanel', gave the following error.
+!!! error TS2763:     Type '{ children: [Element, Element, Element]; }' is not assignable to type 'Readonly<ResizablePanelProps>'.
+!!! error TS2763:       Types of property 'children' are incompatible.
+!!! error TS2763:         Type '[Element, Element, Element]' is not assignable to type '[ReactNode, ReactNode]'.
+!!! error TS2763:           Types of property 'length' are incompatible.
+!!! error TS2763:             Type '3' is not assignable to type '2'.
+!!! error TS2763:   Overload 2 of 2, '(props: ResizablePanelProps, context?: any): ResizablePanel', gave the following error.
+!!! error TS2763:     Type '{ children: [Element, Element, Element]; }' is not assignable to type 'Readonly<ResizablePanelProps>'.
+!!! error TS2763:       Types of property 'children' are incompatible.
+!!! error TS2763:         Type '[Element, Element, Element]' is not assignable to type '[ReactNode, ReactNode]'.
       <div />
       <div />
       <div />
