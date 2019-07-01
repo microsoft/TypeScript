@@ -238,3 +238,12 @@ tests/cases/conformance/types/keyof/keyofAndIndexedAccess2.ts(108,5): error TS23
     
     type Qux<T, Q extends Bar<T>> = { [K in keyof Q]: T[Q[K]["0"]] };
     
+    // Repro from #32038
+    
+    const actions = ['resizeTo', 'resizeBy'] as const;
+    for (const action of actions) {
+    	window[action] = (x, y) => {
+    		window[action](x, y);
+    	}
+    }
+    
