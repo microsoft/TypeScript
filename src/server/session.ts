@@ -443,7 +443,7 @@ namespace ts.server {
 
     function getDefinitionInProject(definition: DocumentPosition | undefined, definingProject: Project, project: Project): DocumentPosition | undefined {
         if (!definition || project.containsFile(toNormalizedPath(definition.fileName))) return definition;
-        const mappedDefinition = useSourceInsteadOfReferenceRedirect(definingProject) && definingProject.getResolvedProjectReferenceToRedirect(definition.fileName) ?
+        const mappedDefinition = definingProject.isSourceOfProjectReferenceRedirect(definition.fileName) ?
             definition :
             definingProject.getLanguageService().getSourceMapper().tryGetGeneratedPosition(definition);
         return mappedDefinition && project.containsFile(toNormalizedPath(mappedDefinition.fileName)) ? mappedDefinition : undefined;

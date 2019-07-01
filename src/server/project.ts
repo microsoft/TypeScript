@@ -197,9 +197,6 @@ namespace ts.server {
         originalConfiguredProjects: Map<true> | undefined;
 
         /*@internal*/
-        useSourceInsteadOfReferenceRedirect?: () => boolean;
-
-        /*@internal*/
         getResolvedProjectReferenceToRedirect(_fileName: string): ResolvedProjectReference | undefined {
             return undefined;
         }
@@ -1229,6 +1226,11 @@ namespace ts.server {
         protected removeRoot(info: ScriptInfo): void {
             orderedRemoveItem(this.rootFiles, info);
             this.rootFilesMap.delete(info.path);
+        }
+
+        /*@internal*/
+        isSourceOfProjectReferenceRedirect(fileName: string) {
+            return !!this.program && this.program.isSourceOfProjectReferenceRedirect(fileName);
         }
 
         protected enableGlobalPlugins(options: CompilerOptions, pluginConfigOverrides: Map<any> | undefined) {

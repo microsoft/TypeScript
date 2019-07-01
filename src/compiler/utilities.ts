@@ -4616,10 +4616,6 @@ namespace ts {
                 return false;
         }
     }
-
-    export function useSourceInsteadOfReferenceRedirect(host: { useSourceInsteadOfReferenceRedirect?(): boolean; }) {
-        return host.useSourceInsteadOfReferenceRedirect && host.useSourceInsteadOfReferenceRedirect();
-    }
 }
 
 namespace ts {

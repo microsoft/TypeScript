@@ -1151,7 +1151,6 @@ namespace ts {
             fileExists: maybeBind(host, host.fileExists),
             readFile: maybeBind(host, host.readFile),
             getDocumentPositionMapper: maybeBind(host, host.getDocumentPositionMapper),
-            useSourceInsteadOfReferenceRedirect: maybeBind(host, host.useSourceInsteadOfReferenceRedirect),
             getSourceFileLike: maybeBind(host, host.getSourceFileLike),
             log
         });

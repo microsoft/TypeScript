@@ -814,7 +814,7 @@ namespace ts {
         let projectReferenceRedirects: Map<ResolvedProjectReference | false> | undefined;
         let mapFromFileToProjectReferenceRedirects: Map<Path> | undefined;
         let mapFromToProjectReferenceRedirectSource: Map<SourceOfProjectReferenceRedirect> | undefined;
-        const useSourceOfReference = useSourceInsteadOfReferenceRedirect(host);
+        const useSourceOfReference = !!host.useSourceInsteadOfReferenceRedirect && host.useSourceInsteadOfReferenceRedirect();
 
         const shouldCreateNewSourceFile = shouldProgramCreateNewSourceFiles(oldProgram, options);
         const structuralIsReused = tryReuseStructureFromOldProgram();
@@ -964,6 +964,7 @@ namespace ts {
             getResolvedProjectReferenceToRedirect,
             getResolvedProjectReferenceByPath,
             forEachResolvedProjectReference,
+            isSourceOfProjectReferenceRedirect,
             emitBuildInfo
         };
 
@@ -2494,6 +2495,10 @@ namespace ts {
                 });
             }
             return mapFromToProjectReferenceRedirectSource.get(toPath(file));
+        }
+
+        function isSourceOfProjectReferenceRedirect(fileName: string) {
+            return useSourceOfReference && !!getResolvedProjectReferenceToRedirect(fileName);
         }
 
         function forEachProjectReference<T>(

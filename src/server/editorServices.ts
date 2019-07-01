@@ -2570,7 +2570,7 @@ namespace ts.server {
 
         /*@internal*/
         getOriginalLocationEnsuringConfiguredProject(project: Project, location: DocumentPosition): DocumentPosition | undefined {
-            const originalLocation = useSourceInsteadOfReferenceRedirect(project) && project.getResolvedProjectReferenceToRedirect(location.fileName) ?
+            const originalLocation = project.isSourceOfProjectReferenceRedirect(location.fileName) ?
                 location :
                 project.getSourceMapper().tryGetSourcePosition(location);
             if (!originalLocation) return undefined;
