@@ -68,4 +68,6 @@ tests/cases/compiler/overloadresolutionWithConstraintCheckingDeferred.ts(19,14):
 !!! error TS2763:     Argument of type '(x: D) => G<D>' is not assignable to parameter of type '(x: B) => any'.
 !!! error TS2763:       Types of parameters 'x' and 'x' are incompatible.
 !!! error TS2763:         Property 'q' is missing in type 'B' but required in type 'D'.
+!!! related TS2728 tests/cases/compiler/overloadresolutionWithConstraintCheckingDeferred.ts:4:15: 'q' is declared here.
+!!! related TS2728 tests/cases/compiler/overloadresolutionWithConstraintCheckingDeferred.ts:4:15: 'q' is declared here.
     

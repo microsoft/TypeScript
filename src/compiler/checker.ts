@@ -21693,10 +21693,10 @@ namespace ts {
                             i++;
                         }
 
-                        const related = map(
-                            max > 1 ? allDiagnostics[minIndex] : flatten(allDiagnostics),
-                            d => typeof d.messageText === "string" ? (d as DiagnosticMessageChain) : d.messageText);
-                        diagnostics.add(createDiagnosticForNodeFromMessageChain(node, chainDiagnosticMessages(related, Diagnostics.No_overload_matches_this_call)));
+                        const diags = max > 1 ? allDiagnostics[minIndex] : flatten(allDiagnostics);
+                        const chain = map(diags, d => typeof d.messageText === "string" ? (d as DiagnosticMessageChain) : d.messageText);
+                        const related = flatMap(diags, d => (d as Diagnostic).relatedInformation) as DiagnosticRelatedInformation[];
+                        diagnostics.add(createDiagnosticForNodeFromMessageChain(node, chainDiagnosticMessages(chain, Diagnostics.No_overload_matches_this_call), related));
                     }
                 }
                 else if (candidateForArgumentArityError) {

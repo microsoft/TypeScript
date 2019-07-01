@@ -16,4 +16,6 @@ tests/cases/compiler/functionOverloads40.ts(4,9): error TS2763: No overload matc
 !!! error TS2763:     Type 'string' is not assignable to type 'number'.
 !!! error TS2763:   Overload 2 of 2, '(bar: { a: boolean; }[]): number', gave the following error.
 !!! error TS2763:     Type 'string' is not assignable to type 'boolean'.
+!!! related TS6500 tests/cases/compiler/functionOverloads40.ts:1:19: The expected type comes from property 'a' which is declared here on type '{ a: number; }'
+!!! related TS6500 tests/cases/compiler/functionOverloads40.ts:2:19: The expected type comes from property 'a' which is declared here on type '{ a: boolean; }'
     

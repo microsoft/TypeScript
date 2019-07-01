@@ -7170,36 +7170,6 @@ namespace ts {
         return d1.relatedInformation ? Comparison.LessThan : Comparison.GreaterThan;
     }
 
-    // function compareMessageText(t1: string | DiagnosticMessageChain[], t2: string | DiagnosticMessageChain[]): Comparison {
-    //     if (typeof t1 === 'string' && typeof t2 === 'string') {
-    //         return compareStringsCaseSensitive(t1, t2)
-    //     }
-    //     else if (Array.isArray(t1) && Array.isArray(t2)) {
-    //         if (t1.length < t2.length) {
-    //             return Comparison.LessThan;
-    //         }
-    //         else if (t1.length > t2.length) {
-    //             return Comparison.GreaterThan;
-    //         }
-    //         else {
-    //             for (let i = 0; i < t1.length; i++) {
-    //                 t1[i].messageText
-    //                 const res = cmps(t1[i], t2[i]);
-    //                 if (res) {
-    //                     return res;
-    //                 }
-    //             }
-    //             return Comparison.EqualTo;
-    //         }
-    //     }
-    //     else if (typeof t1 === 'string') {
-    //         return Comparison.LessThan;
-    //     }
-    //     else {
-    //         return Comparison.GreaterThan;
-    //     }
-    // }
-
     function compareMessageText(t1: string | DiagnosticMessageChain, t2: string | DiagnosticMessageChain): Comparison {
         if (typeof t1 === "string" && typeof t2 === "string") {
             return compareStringsCaseSensitive(t1, t2);
@@ -7223,15 +7193,18 @@ namespace ts {
         if (!t2.next) {
             return Comparison.GreaterThan;
         }
-        res = compareValues(t1.next.length, t2.next.length);
-        if (res) {
-            return res;
-        }
-        for (let i = 0; i < t1.next.length; i++) {
+        const len = Math.min(t1.next.length, t2.next.length);
+        for (let i = 0; i < len; i++) {
             res = compareMessageText(t1.next[i], t2.next[i]);
             if (res) {
                 return res;
             }
+        }
+        if (t1.next.length < t2.next.length) {
+            return Comparison.LessThan;
+        }
+        else if (t1.next.length > t2.next.length) {
+            return Comparison.GreaterThan;
         }
         return Comparison.EqualTo;
     }
