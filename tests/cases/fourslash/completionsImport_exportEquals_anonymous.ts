@@ -38,7 +38,7 @@ verify.applyCodeActionFromCompletion("0", {
     name: "fooBar",
     source: "/src/foo-bar",
     description: `Import 'fooBar' from module "./foo-bar"`,
-    newFileContent: `import fooBar = require("./foo-bar");
+    newFileContent: `import fooBar = require("./foo-bar")
 
 exp
 fooB`,
