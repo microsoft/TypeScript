@@ -4,7 +4,7 @@
 ////     [x: string, y: number]: number;
 //// }
 ////
-//// class C implements I4 {[|  |]}
+//// class C implements I {[|  |]}
 
 verify.not.codeFixAvailable();
 
