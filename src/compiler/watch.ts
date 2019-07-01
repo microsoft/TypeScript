@@ -608,7 +608,6 @@ namespace ts {
         /*@internal*/
         getCurrentProgram(): T;
         /** Closes the watch */
-        /*@internal*/
         close(): void;
     }
 
