@@ -82,7 +82,7 @@ rush rebuild - Errors! ( ? seconds)
 
 
 Standard error:
-Your version of Node.js (12.4.0) has not been tested with this release of Rush. The Rush team will not accept issue reports for it. Please consider upgrading Rush or downgrading Node.js.
+Your version of Node.js (12.5.0) has not been tested with this release of Rush. The Rush team will not accept issue reports for it. Please consider upgrading Rush or downgrading Node.js.
 XX of XX: [@azure/service-bus] completed with warnings in ? seconds
 XX of XX: [@azure/core-amqp] failed to build!
 XX of XX: [@azure/event-hubs] blocked by [@azure/core-amqp]!

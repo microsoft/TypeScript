@@ -311,7 +311,7 @@ rush rebuild - Errors! ( ? seconds)
 
 
 Standard error:
-Your version of Node.js (12.4.0) has not been tested with this release of Rush. The Rush team will not accept issue reports for it. Please consider upgrading Rush or downgrading Node.js.
+Your version of Node.js (12.5.0) has not been tested with this release of Rush. The Rush team will not accept issue reports for it. Please consider upgrading Rush or downgrading Node.js.
 XX of XX: [@uifabric/codepen-loader] completed with warnings in ? seconds
 XX of XX: [@uifabric/set-version] completed with warnings in ? seconds
 XX of XX: [@uifabric/merge-styles] completed with warnings in ? seconds
