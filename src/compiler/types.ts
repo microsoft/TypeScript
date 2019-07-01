@@ -5178,7 +5178,7 @@ namespace ts {
     export type SourceOfProjectReferenceRedirect = string | true;
 
     /*@internal*/
-    interface ResolvedProjectReferenceCallbacks {
+    export interface ResolvedProjectReferenceCallbacks {
         getSourceOfProjectReferenceRedirect(fileName: string): SourceOfProjectReferenceRedirect | undefined;
         forEachResolvedProjectReference<T>(cb: (resolvedProjectReference: ResolvedProjectReference | undefined, resolvedProjectReferencePath: Path) => T | undefined): T | undefined;
     }
