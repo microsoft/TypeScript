@@ -4553,6 +4553,8 @@ declare namespace ts {
     interface Watch<T> {
         /** Synchronize with host and get updated program */
         getProgram(): T;
+        /** Closes the watch */
+        close(): void;
     }
     /**
      * Creates the watch what generates program using the config file

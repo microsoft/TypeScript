@@ -7234,8 +7234,8 @@ namespace ts {
         function resolveIntersectionTypeMembers(type: IntersectionType) {
             // The members and properties collections are empty for intersection types. To get all properties of an
             // intersection type use getPropertiesOfType (only the language service uses this).
-            let callSignatures: ReadonlyArray<Signature> = emptyArray;
-            let constructSignatures: ReadonlyArray<Signature> = emptyArray;
+            let callSignatures: Signature[] | undefined;
+            let constructSignatures: Signature[] | undefined;
             let stringIndexInfo: IndexInfo | undefined;
             let numberIndexInfo: IndexInfo | undefined;
             const types = type.types;
@@ -7257,13 +7257,22 @@ namespace ts {
                             return clone;
                         });
                     }
-                    constructSignatures = concatenate(constructSignatures, signatures);
+                    constructSignatures = appendSignatures(constructSignatures, signatures);
                 }
-                callSignatures = concatenate(callSignatures, getSignaturesOfType(t, SignatureKind.Call));
+                callSignatures = appendSignatures(callSignatures, getSignaturesOfType(t, SignatureKind.Call));
                 stringIndexInfo = intersectIndexInfos(stringIndexInfo, getIndexInfoOfType(t, IndexKind.String));
                 numberIndexInfo = intersectIndexInfos(numberIndexInfo, getIndexInfoOfType(t, IndexKind.Number));
             }
-            setStructuredTypeMembers(type, emptySymbols, callSignatures, constructSignatures, stringIndexInfo, numberIndexInfo);
+            setStructuredTypeMembers(type, emptySymbols, callSignatures || emptyArray, constructSignatures || emptyArray, stringIndexInfo, numberIndexInfo);
+        }
+
+        function appendSignatures(signatures: Signature[] | undefined, newSignatures: readonly Signature[]) {
+            for (const sig of newSignatures) {
+                if (!signatures || every(signatures, s => !compareSignaturesIdentical(s, sig, /*partialMatch*/ false, /*ignoreThisTypes*/ false, /*ignoreReturnTypes*/ false, compareTypesIdentical))) {
+                    signatures = append(signatures, sig);
+                }
+            }
+            return signatures;
         }
 
         /**
@@ -14403,20 +14412,25 @@ namespace ts {
             if (!(isMatchingSignature(source, target, partialMatch))) {
                 return Ternary.False;
             }
-            // Check that the two signatures have the same number of type parameters. We might consider
-            // also checking that any type parameter constraints match, but that would require instantiating
-            // the constraints with a common set of type arguments to get relatable entities in places where
-            // type parameters occur in the constraints. The complexity of doing that doesn't seem worthwhile,
-            // particularly as we're comparing erased versions of the signatures below.
+            // Check that the two signatures have the same number of type parameters.
             if (length(source.typeParameters) !== length(target.typeParameters)) {
                 return Ternary.False;
             }
-            // Spec 1.0 Section 3.8.3 & 3.8.4:
-            // M and N (the signatures) are instantiated using type Any as the type argument for all type parameters declared by M and N
-            source = getErasedSignature(source);
-            target = getErasedSignature(target);
+            // Check that type parameter constraints and defaults match. If they do, instantiate the source
+            // signature with the type parameters of the target signature and continue the comparison.
+            if (target.typeParameters) {
+                const mapper = createTypeMapper(source.typeParameters!, target.typeParameters);
+                for (let i = 0; i < target.typeParameters.length; i++) {
+                    const s = source.typeParameters![i];
+                    const t = target.typeParameters[i];
+                    if (!(s === t || compareTypes(instantiateType(getConstraintFromTypeParameter(s), mapper) || unknownType, getConstraintFromTypeParameter(t) || unknownType) &&
+                        compareTypes(instantiateType(getDefaultFromTypeParameter(s), mapper) || unknownType, getDefaultFromTypeParameter(t) || unknownType))) {
+                        return Ternary.False;
+                    }
+                }
+                source = instantiateSignature(source, mapper, /*eraseTypeParameters*/ true);
+            }
             let result = Ternary.True;
-
             if (!ignoreThisTypes) {
                 const sourceThisType = getThisTypeOfSignature(source);
                 if (sourceThisType) {
@@ -14430,7 +14444,6 @@ namespace ts {
                     }
                 }
             }
-
             const targetLen = getParameterCount(target);
             for (let i = 0; i < targetLen; i++) {
                 const s = getTypeAtPosition(source, i);
