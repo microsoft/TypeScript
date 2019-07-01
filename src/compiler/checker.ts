@@ -338,7 +338,7 @@ namespace ts {
                 return node && getTypeArgumentConstraint(node);
             },
             getSuggestionDiagnostics: (file, ct) => {
-                if (skipTypeChecking(file, compilerOptions)) {
+                if (skipTypeChecking(file, compilerOptions, host)) {
                     return emptyArray;
                 }
 
@@ -29657,7 +29657,7 @@ namespace ts {
         function checkSourceFileWorker(node: SourceFile) {
             const links = getNodeLinks(node);
             if (!(links.flags & NodeCheckFlags.TypeChecked)) {
-                if (skipTypeChecking(node, compilerOptions)) {
+                if (skipTypeChecking(node, compilerOptions, host)) {
                     return;
                 }
 

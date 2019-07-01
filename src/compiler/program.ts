@@ -1701,7 +1701,7 @@ namespace ts {
 
         function getSemanticDiagnosticsForFileNoCache(sourceFile: SourceFile, cancellationToken: CancellationToken): Diagnostic[] | undefined {
             return runWithCancellationToken(() => {
-                if (skipTypeChecking(sourceFile, options)) {
+                if (skipTypeChecking(sourceFile, options, program)) {
                     return emptyArray;
                 }
 

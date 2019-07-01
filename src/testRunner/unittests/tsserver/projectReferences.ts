@@ -373,6 +373,9 @@ fn5();
                 otherWatchedFiles: () => readonly string[];
                 expectsDts: boolean;
                 expectsMap: boolean;
+                freshMapInfo?: boolean;
+                freshDocumentMapper?: boolean;
+                skipDtsMapCheck?: boolean;
             }
             type ActionKey = keyof ActionInfoVerifier;
             type ActionInfoGetterFn<Req = protocol.Request, Response = {}> = () => ActionInfo<Req, Response>;
@@ -385,6 +388,9 @@ fn5();
             }
             interface ActionInfoVerifier<Req = protocol.Request, Response = {}> {
                 main: ActionInfoGetter<Req, Response>;
+                change: ActionInfoGetter<Req, Response>;
+                dtsChange: ActionInfoGetter<Req, Response>;
+                mapChange: ActionInfoGetter<Req, Response>;
                 noMap: ActionInfoGetter<Req, Response>;
                 mapFileCreated: ActionInfoGetter<Req, Response>;
                 mapFileDeleted: ActionInfoGetter<Req, Response>;
@@ -461,14 +467,21 @@ fn5();
                 return info;
             }
 
-            function verifyDocumentPositionMapper(session: TestSession, dependencyMap: server.ScriptInfo | undefined, documentPositionMapper: server.ScriptInfo["documentPositionMapper"], equal: boolean) {
-                assert.strictEqual(session.getProjectService().filenameToScriptInfo.get(dtsMapPath), dependencyMap);
+            interface VerifyDocumentPositionMapper {
+                session: TestSession;
+                dependencyMap: server.ScriptInfo | undefined;
+                documentPositionMapper: server.ScriptInfo["documentPositionMapper"];
+                equal: boolean;
+                debugInfo: string;
+            }
+            function verifyDocumentPositionMapper({ session, dependencyMap, documentPositionMapper, equal, debugInfo }: VerifyDocumentPositionMapper) {
+                assert.strictEqual(session.getProjectService().filenameToScriptInfo.get(dtsMapPath), dependencyMap, debugInfo);
                 if (dependencyMap) {
                     if (equal) {
-                        assert.strictEqual(dependencyMap.documentPositionMapper, documentPositionMapper);
+                        assert.strictEqual(dependencyMap.documentPositionMapper, documentPositionMapper, debugInfo);
                     }
                     else {
-                        assert.notStrictEqual(dependencyMap.documentPositionMapper, documentPositionMapper);
+                        assert.notStrictEqual(dependencyMap.documentPositionMapper, documentPositionMapper, debugInfo);
                     }
                 }
             }
@@ -491,7 +504,6 @@ fn5();
                 sourceMapPath?: server.ScriptInfo["sourceMapFilePath"];
                 dependencyMap?: server.ScriptInfo | undefined;
                 documentPositionMapper?: server.ScriptInfo["documentPositionMapper"];
-                firstEquals?: boolean;
             }
             interface VerifyAllFnActionResult {
                 actionInfos: readonly ActionInfo[];
@@ -506,44 +518,62 @@ fn5();
                 actionKey,
                 dependencyMap,
                 documentPositionMapper,
-                firstEquals
             }: VerifyAllFnAction): VerifyAllFnActionResult {
                 const actionInfos = getActionInfo(verifiers, actionKey);
                 let sourceMapPath: server.ScriptInfo["sourceMapFilePath"] | undefined;
                 // action
                 let first = true;
-                for (const { action, closedInfos, otherWatchedFiles, expectsDts, expectsMap } of actionInfos) {
+                for (const {
+                    action,
+                    closedInfos,
+                    otherWatchedFiles,
+                    expectsDts,
+                    expectsMap,
+                    freshMapInfo,
+                    freshDocumentMapper,
+                    skipDtsMapCheck
+                } of actionInfos) {
                     for (let fn = 1; fn <= 5; fn++) {
                         const fnAction = action(fn);
                         verifyAction(session, fnAction);
-                        const dtsInfo = verifyScriptInfoPresence(session, dtsPath, expectsDts, fnAction.reqName);
-                        const dtsMapInfo = verifyScriptInfoPresence(session, dtsMapPath, expectsMap, fnAction.reqName);
+                        const debugInfo = `${actionKey}:: ${fnAction.reqName}:: ${fn}`;
+                        const dtsInfo = verifyScriptInfoPresence(session, dtsPath, expectsDts, debugInfo);
+                        const dtsMapInfo = verifyScriptInfoPresence(session, dtsMapPath, expectsMap, debugInfo);
                         verifyInfosWithRandom(
                             session,
                             host,
                             openFiles(verifiers).map(f => f.path),
                             closedInfos(),
                             otherWatchedFiles(),
-                            `${actionKey}:: ${fnAction.reqName}`
+                            debugInfo
                         );
 
                         if (dtsInfo) {
-                            if (first) {
-                                if (dtsMapInfo) {
-                                    assert.equal(dtsInfo.sourceMapFilePath, dtsMapPath, `${actionKey}:: ${fnAction.reqName}`);
-                                }
-                                else {
-                                    assert.isNotString(dtsInfo.sourceMapFilePath);
-                                    assert.isNotFalse(dtsInfo.sourceMapFilePath);
-                                    assert.isDefined(dtsInfo.sourceMapFilePath);
+                            if (first || (fn === 1 && freshMapInfo)) {
+                                if (!skipDtsMapCheck) {
+                                    if (dtsMapInfo) {
+                                        assert.equal(dtsInfo.sourceMapFilePath, dtsMapPath, debugInfo);
+                                    }
+                                    else {
+                                        assert.isNotString(dtsInfo.sourceMapFilePath, debugInfo);
+                                        assert.isNotFalse(dtsInfo.sourceMapFilePath, debugInfo);
+                                        assert.isDefined(dtsInfo.sourceMapFilePath, debugInfo);
+                                    }
                                 }
                             }
                             else {
-                                assert.equal(dtsInfo.sourceMapFilePath, sourceMapPath, `${actionKey}:: ${fnAction.reqName}`);
+                                assert.equal(dtsInfo.sourceMapFilePath, sourceMapPath, debugInfo);
                             }
                         }
-                        if (!first || firstEquals !== undefined) {
-                            verifyDocumentPositionMapper(session, dependencyMap, documentPositionMapper, !first || !!firstEquals);
+
+                        if (!first && (fn !== 1 || !freshMapInfo)) {
+                            verifyDocumentPositionMapper({
+                                session,
+                                dependencyMap,
+                                documentPositionMapper,
+                                equal: fn !== 1 || !freshDocumentMapper,
+                                debugInfo
+                            });
                         }
                         sourceMapPath = dtsInfo && dtsInfo.sourceMapFilePath;
                         dependencyMap = dtsMapInfo;
@@ -566,15 +596,22 @@ fn5();
                 openFilesForSession([randomFile], session);
 
                 const { closedInfos, otherWatchedFiles } = last(actionInfos);
+                const debugInfo = `${actionKey} Collection`;
                 verifyInfosWithRandom(
                     session,
                     host,
                     openFiles(verifiers).map(f => f.path),
                     closedInfos(),
                     otherWatchedFiles(),
-                    `${actionKey} Collection`
+                    debugInfo
                 );
-                verifyDocumentPositionMapper(session, dependencyMap, documentPositionMapper, /*equal*/ true);
+                verifyDocumentPositionMapper({
+                    session,
+                    dependencyMap,
+                    documentPositionMapper,
+                    equal: true,
+                    debugInfo
+                });
 
                 // Closing open file, removes dependencies too
                 closeFilesForSession([...openFiles(verifiers), randomFile], session);
@@ -601,7 +638,6 @@ fn5();
                     verifier,
                     withRefs,
                     change,
-                    afterActionDocumentPositionMapperNotEquals,
                     afterChangeActionKey
                 }: VerifyScenarioWithChanges,
                 timeoutBeforeAction: boolean,
@@ -619,7 +655,13 @@ fn5();
                     if (timeoutBeforeAction) {
                         host.runQueuedTimeoutCallbacks();
                         checkProject(session, verifiers);
-                        verifyDocumentPositionMapper(session, dependencyMap, documentPositionMapper, /*equal*/ true);
+                        verifyDocumentPositionMapper({
+                            session,
+                            dependencyMap,
+                            documentPositionMapper,
+                            equal: true,
+                            debugInfo: "After change timeout"
+                        });
                     }
 
                     // action
@@ -629,8 +671,7 @@ fn5();
                         verifiers,
                         actionKey: afterChangeActionKey,
                         dependencyMap,
-                        documentPositionMapper,
-                        firstEquals: !afterActionDocumentPositionMapperNotEquals
+                        documentPositionMapper
                     });
                 });
             }
@@ -638,7 +679,6 @@ fn5();
             interface VerifyScenarioWithChanges extends VerifierAndWithRefs {
                 scenarioName: string;
                 change: (host: TestServerHost, session: TestSession, verifiers: readonly DocumentPositionMapperVerifier[]) => void;
-                afterActionDocumentPositionMapperNotEquals?: true;
                 afterChangeActionKey: ActionKey;
             }
             function verifyScenarioWithChanges(verify: VerifyScenarioWithChanges) {
@@ -704,7 +744,7 @@ fn5();
                         // The dependency file is deleted when orphan files are collected
                         host.deleteFile(fileLocation);
                         // Verify with deleted action key
-                        const result = verifyAllFnAction({ session, host, verifiers, actionKey: fileDeletedKey });
+                        verifyAllFnAction({ session, host, verifiers, actionKey: fileDeletedKey });
                         checkProject(session, verifiers, noDts);
 
                         // Script info collection should behave as fileNotPresentKey
@@ -714,7 +754,7 @@ fn5();
                             verifiers,
                             {
                                 actionInfos: getActionInfo(verifiers, fileNotPresentKey),
-                                actionKey: result.actionKey,
+                                actionKey: fileNotPresentKey,
                                 dependencyMap: undefined,
                                 documentPositionMapper: undefined
                             }
@@ -748,7 +788,7 @@ fn5();
                             }
                         })
                     ),
-                    afterChangeActionKey: "main"
+                    afterChangeActionKey: "change"
                 });
 
                 // Edit dts to add new fn
@@ -764,7 +804,7 @@ fn5();
 //# sourceMappingURL=FnS.d.ts.map`
                         )
                     ),
-                    afterChangeActionKey: "main"
+                    afterChangeActionKey: "dtsChange"
                 });
 
                 // Edit map file to represent added new line
@@ -776,8 +816,7 @@ fn5();
                         dtsMapLocation,
                         `{"version":3,"file":"FnS.d.ts","sourceRoot":"","sources":["../dependency/FnS.ts"],"names":[],"mappings":"AAAA,wBAAgB,GAAG,SAAM;AACzB,wBAAgB,GAAG,SAAM;AACzB,wBAAgB,GAAG,SAAM;AACzB,wBAAgB,GAAG,SAAM;AACzB,wBAAgB,GAAG,SAAM;AACzB,eAAO,MAAM,CAAC,KAAK,CAAC"}`
                     ),
-                    afterChangeActionKey: "main",
-                    afterActionDocumentPositionMapperNotEquals: true
+                    afterChangeActionKey: "mapChange"
                 });
 
                 verifyScenarioWhenFileNotPresent({
@@ -824,7 +863,7 @@ ${dependencyTs.content}`);
                         afterChangeActionKey: "dependencyChange"
                     });
 
-                    it("when d.ts file is not generated", () => {
+                    it("when projects are not built", () => {
                         const host = createServerHost(files);
                         const session = createSession(host);
                         const verifiers = verifier(withRefs);
@@ -896,6 +935,12 @@ ${dependencyTs.content}`);
                         {
                             ...goToDefFromMainTsProjectInfoVerifier(withRefs),
                             main: () => goToDefActionInfo(withRefs),
+                            change: "main",
+                            dtsChange: "main",
+                            mapChange: () => ({
+                                ...goToDefActionInfo(withRefs),
+                                freshDocumentMapper: true
+                            }),
                             noMap: () => goToDefNoMapActionInfo(withRefs),
                             mapFileCreated: "main",
                             mapFileDeleted: () => ({
@@ -938,15 +983,6 @@ ${dependencyTs.content}`);
                     };
                 }
 
-                function renameNoMapActionInfo(): ActionInfo<protocol.RenameRequest, protocol.RenameResponseBody> {
-                    return {
-                        ...renameActionInfo(),
-                        closedInfos: () => [libFile.path, dtsLocation], // No map
-                        otherWatchedFiles: () => [dependencyConfig.path, dtsMapLocation], // watch map
-                        expectsMap: false
-                    };
-                }
-
                 function renameNoDtsActionInfo(): ActionInfo<protocol.RenameRequest, protocol.RenameResponseBody> {
                     return {
                         action: renameFromDependencyTs,
@@ -963,7 +999,18 @@ ${dependencyTs.content}`);
                         {
                             ...renameFromDependencyTsProjectInfoVerifier(),
                             main: renameActionInfo,
-                            noMap: renameNoMapActionInfo,
+                            change: "main",
+                            dtsChange: "main",
+                            mapChange: () => ({
+                                ...renameActionInfo(),
+                                freshDocumentMapper: true
+                            }),
+                            noMap: () => ({
+                                ...renameActionInfo(),
+                                closedInfos: () => [libFile.path, dtsLocation], // No map
+                                otherWatchedFiles: () => [dependencyConfig.path, dtsMapLocation], // watch map
+                                expectsMap: false
+                            }),
                             mapFileCreated: "main",
                             mapFileDeleted: "noMap",
                             noDts: renameNoDtsActionInfo,
@@ -992,24 +1039,16 @@ ${dependencyTs.content}`);
             });
 
             describe("when opening depedency and usage project", () => {
-                function closedInfos(withRefs: boolean) {
-                    // DependencyTs is open, so omit it from closed infos
-                    return () => withRefs ?
-                        [dependencyConfig.path, libFile.path] :
-                        [libFile.path, dtsPath, dtsMapLocation];
-                }
-
-                function otherWatchedFiles(withRefs: boolean) {
-                    return () => withRefs ?
-                        [mainConfig.path] : // Its in closed info
-                        [mainConfig.path, dependencyConfig.path];
-                }
-
                 function goToDefActionInfo(withRefs: boolean): ActionInfo<protocol.DefinitionAndBoundSpanRequest, protocol.DefinitionInfoAndBoundSpan> {
                     return {
                         action: goToDefFromMainTs,
-                        closedInfos: closedInfos(withRefs),
-                        otherWatchedFiles: otherWatchedFiles(withRefs),
+                        // DependencyTs is open, so omit it from closed infos
+                        closedInfos: () => withRefs ?
+                            [dependencyConfig.path, libFile.path] :
+                            [libFile.path, dtsPath, dtsMapLocation],
+                        otherWatchedFiles: () => withRefs ?
+                            [mainConfig.path] : // Its in closed info
+                            [mainConfig.path, dependencyConfig.path],
                         expectsDts: !withRefs, // Dts script info present only if no project reference
                         expectsMap: !withRefs // Map script info present only if no project reference
                     };
@@ -1018,33 +1057,30 @@ ${dependencyTs.content}`);
                 function renameActionInfo(withRefs: boolean): ActionInfo<protocol.RenameRequest, protocol.RenameResponseBody> {
                     return {
                         action: renameFromDependencyTsWithBothProjectsOpen,
-                        closedInfos: closedInfos(withRefs),
-                        otherWatchedFiles: otherWatchedFiles(withRefs),
-                        expectsDts: !withRefs, // Dts script info present only if no project reference
-                        expectsMap: !withRefs // Map script info present only if no project reference
+                        // DependencyTs is open, so omit it from closed infos
+                        closedInfos: () => withRefs ?
+                            [dependencyConfig.path, libFile.path, dtsLocation, dtsMapLocation] :
+                            [libFile.path, dtsPath, dtsMapLocation],
+                        otherWatchedFiles: () => withRefs ?
+                            [mainConfig.path] : // Its in closed info
+                            [mainConfig.path, dependencyConfig.path],
+                        expectsDts: true,
+                        expectsMap: true
                     };
-                }
-
-                function closedInfosNoMap(withRefs: boolean) {
-                    return withRefs ?
-                        closedInfos(withRefs) :
-                        () => [libFile.path, dtsPath]; // No map
-                }
-
-                function otherWatchedFilesNoMap(withRefs: boolean) {
-                    return withRefs ?
-                        otherWatchedFiles(withRefs) :
-                        () => [mainConfig.path, dependencyConfig.path, dtsMapLocation]; // Watch map file
                 }
 
                 function goToDefNoMapActionInfo(withRefs: boolean): ActionInfo<protocol.DefinitionAndBoundSpanRequest, protocol.DefinitionInfoAndBoundSpan> {
                     return {
-                        ...goToDefActionInfo(withRefs),
                         action: withRefs ?
                             goToDefFromMainTs :
                             goToDefFromMainTsWithNoMap,
-                        closedInfos: closedInfosNoMap(withRefs),
-                        otherWatchedFiles: otherWatchedFilesNoMap(withRefs),
+                        closedInfos: () => withRefs ?
+                            [dependencyConfig.path, libFile.path] :
+                            [libFile.path, dtsPath], // No map
+                        otherWatchedFiles: () => withRefs ?
+                            [mainConfig.path] : // Its in closed info
+                            [mainConfig.path, dependencyConfig.path, dtsMapLocation], // Watch map file
+                        expectsDts: !withRefs, // Dts script info present only if no project reference
                         expectsMap: false
                     };
                 }
@@ -1055,22 +1091,14 @@ ${dependencyTs.content}`);
                         action: withRefs ?
                             renameFromDependencyTsWithBothProjectsOpen :
                             renameFromDependencyTs,
-                        closedInfos: closedInfosNoMap(withRefs),
-                        otherWatchedFiles: otherWatchedFilesNoMap(withRefs),
+                        closedInfos: () => withRefs ?
+                            [dependencyConfig.path, libFile.path, dtsLocation] :
+                            [libFile.path, dtsPath], // No map
+                        otherWatchedFiles: () => withRefs ?
+                            [mainConfig.path, dtsMapLocation] : // Its in closed info
+                            [mainConfig.path, dependencyConfig.path, dtsMapLocation], // Watch map file
                         expectsMap: false
                     };
-                }
-
-                function closedInfosNoDts(withRefs: boolean) {
-                    return withRefs ?
-                        closedInfos(withRefs) :
-                        () => [libFile.path]; // No dts or map
-                }
-
-                function otherWatchedFilesNoDts(withRefs: boolean) {
-                    return withRefs ?
-                        otherWatchedFiles(withRefs) :
-                        () => [mainConfig.path, dependencyConfig.path, dtsPath]; // Watch dts
                 }
 
                 function goToDefNoDtsActionInfo(withRefs: boolean): ActionInfo<protocol.DefinitionAndBoundSpanRequest, protocol.DefinitionInfoAndBoundSpan> {
@@ -1079,7 +1107,9 @@ ${dependencyTs.content}`);
                         action: withRefs ?
                             goToDefFromMainTs :
                             goToDefFromMainTsWithNoDts,
-                        closedInfos: closedInfosNoDts(withRefs),
+                        closedInfos: () => withRefs ?
+                            [dependencyConfig.path, libFile.path] :
+                            [libFile.path], // No dts or map,
                         expectsDts: false,
                         expectsMap: false
                     };
@@ -1090,18 +1120,15 @@ ${dependencyTs.content}`);
                         action: withRefs ?
                             renameFromDependencyTsWithBothProjectsOpen :
                             renameFromDependencyTs,
-                        closedInfos: closedInfosNoDts(withRefs),
-                        otherWatchedFiles: otherWatchedFilesNoDts(withRefs),
+                        closedInfos: () => withRefs ?
+                            [dependencyConfig.path, libFile.path] :
+                            [libFile.path], // No dts or map,
+                        otherWatchedFiles: () => withRefs ?
+                            [mainConfig.path, dtsLocation] :
+                            [mainConfig.path, dependencyConfig.path, dtsPath], // Watch dts,
                         expectsDts: false,
                         expectsMap: false
                     };
-                }
-
-                function closedInfosDtsFileDeleted(withRefs: boolean) {
-                    // Map collection after file open
-                    return withRefs ?
-                        closedInfos(withRefs) :
-                        () => [libFile.path, dtsMapLocation];
                 }
 
                 verifyScenario({
@@ -1110,29 +1137,83 @@ ${dependencyTs.content}`);
                         {
                             ...goToDefFromMainTsProjectInfoVerifier(withRefs),
                             main: () => goToDefActionInfo(withRefs),
+                            change: () => ({
+                                // Because before this rename is done the closed info remains same as rename's main operation
+                                ...goToDefActionInfo(withRefs),
+                                closedInfos: () => withRefs ?
+                                    [dependencyConfig.path, libFile.path, dtsLocation, dtsMapLocation] :
+                                    [libFile.path, dtsPath, dtsMapLocation],
+                                expectsDts: true,
+                                expectsMap: true
+                            }),
+                            dtsChange: "change",
+                            mapChange: "change",
                             noMap: () => goToDefNoMapActionInfo(withRefs),
-                            mapFileCreated: "main",
-                            mapFileDeleted: "noMap",
+                            mapFileCreated: () => ({
+                                // Because before this rename is done the closed info remains same as rename's main
+                                ...goToDefActionInfo(withRefs),
+                                closedInfos: () => withRefs ?
+                                    [dependencyConfig.path, libFile.path, dtsLocation] :
+                                    [libFile.path, dtsPath, dtsMapLocation],
+                                expectsDts: true,
+                                // This operation doesnt need map so the map info path in dts is not refreshed
+                                skipDtsMapCheck: withRefs
+                            }),
+                            mapFileDeleted: () => ({
+                                // Because before this rename is done the closed info remains same as rename's noMap operation
+                                ...goToDefNoMapActionInfo(withRefs),
+                                closedInfos: () => withRefs ?
+                                    [dependencyConfig.path, libFile.path, dtsLocation] :
+                                    [libFile.path, dtsPath], // No map,
+                                expectsDts: true,
+                                // This operation doesnt need map so the map info path in dts is not refreshed
+                                skipDtsMapCheck: withRefs
+                            }),
                             noDts: () => goToDefNoDtsActionInfo(withRefs),
-                            dtsFileCreated: "main",
+                            dtsFileCreated: () => ({
+                                ...goToDefActionInfo(withRefs),
+                                // Since the project for dependency is not updated, the watcher from rename for dts still there
+                                otherWatchedFiles: () => withRefs ?
+                                    [mainConfig.path, dtsLocation] :
+                                    [mainConfig.path, dependencyConfig.path],
+                            }),
                             dtsFileDeleted: () => ({
                                 ...goToDefNoDtsActionInfo(withRefs),
                                 // Map collection after file open
-                                closedInfos: closedInfosDtsFileDeleted(withRefs),
-                                expectsMap: !withRefs
+                                closedInfos: () => withRefs ?
+                                    [dependencyConfig.path, libFile.path, dtsMapLocation] :
+                                    [libFile.path, dtsMapLocation],
+                                expectsMap: true
                             }),
                             dependencyChange: () => ({
                                 ...goToDefActionInfo(withRefs),
                                 action: goToDefFromMainTsWithDependencyChange,
-                                expectsDts: false,
-                                expectsMap: false
+                                // From rename main action
+                                closedInfos: () => withRefs ?
+                                    [dependencyConfig.path, libFile.path, dtsLocation, dtsMapLocation] :
+                                    [libFile.path, dtsPath, dtsMapLocation],
+                                expectsDts: withRefs,
+                                expectsMap: withRefs
                             }),
                             noBuild: "main"
                         },
                         {
                             ...renameFromDependencyTsProjectInfoVerifier(),
-                            main: () => renameActionInfo(withRefs),
-                            noMap: () => renameNoMapActionInfo(withRefs),
+                            main: () => ({
+                                ...renameActionInfo(withRefs),
+                                freshMapInfo: withRefs
+                            }),
+                            change: () => renameActionInfo(withRefs),
+                            dtsChange: "change",
+                            mapChange: () => ({
+                                ...renameActionInfo(withRefs),
+                                freshDocumentMapper: withRefs
+                            }),
+                            noMap: () => ({
+                                ...renameNoMapActionInfo(withRefs),
+                                freshMapInfo: withRefs,
+                                freshDocumentMapper: withRefs
+                            }),
                             mapFileCreated: "main",
                             mapFileDeleted: "noMap",
                             noDts: () => renameNoDtsActionInfo(withRefs),
@@ -1140,16 +1221,25 @@ ${dependencyTs.content}`);
                             dtsFileDeleted: () => ({
                                 ...renameNoDtsActionInfo(withRefs),
                                 // Map collection after file open
-                                closedInfos: closedInfosDtsFileDeleted(withRefs),
-                                expectsMap: !withRefs
+                                closedInfos: () => withRefs ?
+                                    [dependencyConfig.path, libFile.path, dtsMapLocation] :
+                                    [libFile.path, dtsMapLocation],
+                                expectsMap: true
                             }),
                             dependencyChange: () => ({
                                 ...renameActionInfo(withRefs),
                                 action: renameFromDependencyTsWithBothProjectsOpenWithDependencyChange
                             }),
                             noBuild: () => ({
-                                ...renameActionInfo(withRefs),
-                                expectDts: false
+                                action: renameFromDependencyTsWithBothProjectsOpen,
+                                closedInfos: () => withRefs ?
+                                    [dependencyConfig.path, libFile.path] :
+                                    [libFile.path],
+                                otherWatchedFiles: () => withRefs ?
+                                    [mainConfig.path, dtsLocation] : // Its in closed info
+                                    [mainConfig.path, dependencyConfig.path],
+                                expectsDts: false,
+                                expectsMap: false
                             })
                         }
                     ]
