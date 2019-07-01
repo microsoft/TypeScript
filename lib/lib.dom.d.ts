@@ -17144,8 +17144,10 @@ interface WindowOrWorkerGlobalScope {
     createImageBitmap(image: ImageBitmapSource, sx: number, sy: number, sw: number, sh: number): Promise<ImageBitmap>;
     fetch(input: RequestInfo, init?: RequestInit): Promise<Response>;
     queueMicrotask(callback: Function): void;
-    setInterval(handler: TimerHandler, timeout?: number, ...arguments: any[]): number;
-    setTimeout(handler: TimerHandler, timeout?: number, ...arguments: any[]): number;
+    setInterval<A extends any[]>(handler: (...args: A) => void, timeout?: number, ...arguments: A): number;
+    setInterval(handler: string, timeout?: number, ...arguments: any[]): number;
+    setTimeout<A extends any[]>(handler: (...args: A) => void, timeout?: number, ...arguments: A): number;
+    setTimeout(handler: string, timeout?: number, ...arguments: any[]): number;
 }
 
 interface WindowSessionStorage {
@@ -18232,8 +18234,10 @@ declare function createImageBitmap(image: ImageBitmapSource): Promise<ImageBitma
 declare function createImageBitmap(image: ImageBitmapSource, sx: number, sy: number, sw: number, sh: number): Promise<ImageBitmap>;
 declare function fetch(input: RequestInfo, init?: RequestInit): Promise<Response>;
 declare function queueMicrotask(callback: Function): void;
-declare function setInterval(handler: TimerHandler, timeout?: number, ...arguments: any[]): number;
-declare function setTimeout(handler: TimerHandler, timeout?: number, ...arguments: any[]): number;
+declare function setInterval<A extends any[]>(handler: (...args: A) => void, timeout?: number, ...arguments: A): number;
+declare function setInterval(handler: string, timeout?: number, ...arguments: any[]): number;
+declare function setTimeout<A extends any[]>(handler: (...args: A) => void, timeout?: number, ...arguments: A): number;
+declare function setTimeout(handler: string, timeout?: number, ...arguments: any[]): number;
 declare var sessionStorage: Storage;
 declare var localStorage: Storage;
 declare var onafterprint: ((this: Window, ev: Event) => any) | null;
