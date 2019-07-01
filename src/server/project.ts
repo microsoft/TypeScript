@@ -1077,7 +1077,7 @@ namespace ts.server {
                 const path = this.toPath(sourceFile);
                 if (this.generatedFilesMap) {
                     if (isGeneratedFileWatcher(this.generatedFilesMap)) {
-                        Debug.fail(`${this.projectName} Expected not to have --out watcher for generated file with options: ${JSON.stringify(this.compilerOptions)}`);
+                        Debug.fail(`${this.projectName} Expected to not have --out watcher for generated file with options: ${JSON.stringify(this.compilerOptions)}`);
                         return;
                     }
                     if (this.generatedFilesMap.has(path)) return;

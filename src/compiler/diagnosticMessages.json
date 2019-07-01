@@ -1236,7 +1236,7 @@
         "category": "Error",
         "code": 2348
     },
-    "Cannot invoke an expression whose type lacks a call signature. Type '{0}' has no compatible call signatures.": {
+    "This expression is not callable.": {
         "category": "Error",
         "code": 2349
     },
@@ -1244,7 +1244,7 @@
         "category": "Error",
         "code": 2350
     },
-    "Cannot use 'new' with an expression whose type lacks a call or construct signature.": {
+    "This expression is not constructable.": {
         "category": "Error",
         "code": 2351
     },
@@ -2620,6 +2620,38 @@
     "'super' may not use type arguments.": {
         "category": "Error",
         "code": 2754
+    },
+    "No constituent of type '{0}' is callable.": {
+        "category": "Error",
+        "code": 2755
+    },
+    "Not all constituents of type '{0}' are callable.": {
+        "category": "Error",
+        "code": 2756
+    },
+    "Type '{0}' has no call signatures.": {
+        "category": "Error",
+        "code": 2757
+    },
+    "Each member of the union type '{0}' has signatures, but none of those signatures are compatible with each other.": {
+        "category": "Error",
+        "code": 2758
+    },
+    "No constituent of type '{0}' is constructable.": {
+        "category": "Error",
+        "code": 2759
+    },
+    "Not all constituents of type '{0}' are constructable.": {
+        "category": "Error",
+        "code": 2760
+    },
+    "Type '{0}' has no construct signatures.": {
+        "category": "Error",
+        "code": 2761
+    },
+    "Each member of the union type '{0}' has construct signatures, but none of those signatures are compatible with each other.": {
+        "category": "Error",
+        "code": 2762
     },
 
     "Import declaration '{0}' is using private name '{1}'.": {

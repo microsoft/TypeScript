@@ -3,7 +3,8 @@ tests/cases/compiler/untypedFunctionCallsWithTypeParameters1.ts(5,10): error TS2
 tests/cases/compiler/untypedFunctionCallsWithTypeParameters1.ts(8,10): error TS2347: Untyped function calls may not accept type arguments.
 tests/cases/compiler/untypedFunctionCallsWithTypeParameters1.ts(10,7): error TS2420: Class 'C' incorrectly implements interface 'Function'.
   Type 'C' is missing the following properties from type 'Function': apply, call, bind
-tests/cases/compiler/untypedFunctionCallsWithTypeParameters1.ts(18,10): error TS2349: Cannot invoke an expression whose type lacks a call signature. Type 'C' has no compatible call signatures.
+tests/cases/compiler/untypedFunctionCallsWithTypeParameters1.ts(18,10): error TS2349: This expression is not callable.
+  Type 'C' has no call signatures.
 tests/cases/compiler/untypedFunctionCallsWithTypeParameters1.ts(22,10): error TS2347: Untyped function calls may not accept type arguments.
 tests/cases/compiler/untypedFunctionCallsWithTypeParameters1.ts(28,12): error TS2558: Expected 0 type arguments, but got 1.
 tests/cases/compiler/untypedFunctionCallsWithTypeParameters1.ts(35,4): error TS2558: Expected 0 type arguments, but got 1.
@@ -38,8 +39,9 @@ tests/cases/compiler/untypedFunctionCallsWithTypeParameters1.ts(41,4): error TS2
     
     var c2: C;
     var r4 = c2<number>(); // should be an error
-             ~~~~~~~~~~~~
-!!! error TS2349: Cannot invoke an expression whose type lacks a call signature. Type 'C' has no compatible call signatures.
+             ~~
+!!! error TS2349: This expression is not callable.
+!!! error TS2349:   Type 'C' has no call signatures.
     
     class C2 extends Function { } // error
     var c3: C2;

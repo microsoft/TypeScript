@@ -47,7 +47,7 @@ tests/cases/conformance/functions/strictBindCallApply1.ts(72,12): error TS2345: 
     
     let c00 = foo.call(undefined, 10, "hello");
     let c01 = foo.call(undefined, 10);  // Error
-                  ~~~~
+                  ~~~~~~~~~~~~~~~~~~~
 !!! error TS2554: Expected 3 arguments, but got 2.
     let c02 = foo.call(undefined, 10, 20);  // Error
                                       ~~
@@ -97,7 +97,7 @@ tests/cases/conformance/functions/strictBindCallApply1.ts(72,12): error TS2345: 
     
     let c10 = c.foo.call(c, 10, "hello");
     let c11 = c.foo.call(c, 10);  // Error
-                    ~~~~
+                    ~~~~~~~~~~~
 !!! error TS2554: Expected 3 arguments, but got 2.
     let c12 = c.foo.call(c, 10, 20);  // Error
                                 ~~
@@ -132,7 +132,7 @@ tests/cases/conformance/functions/strictBindCallApply1.ts(72,12): error TS2345: 
     
     C.call(c, 10, "hello");
     C.call(c, 10);  // Error
-      ~~~~
+      ~~~~~~~~~~~
 !!! error TS2554: Expected 3 arguments, but got 2.
     C.call(c, 10, 20);  // Error
                   ~~

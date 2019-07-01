@@ -7,18 +7,23 @@ const { runSequence } = require("./run-sequence");
 const triggeredPR = process.env.SOURCE_ISSUE || process.env.SYSTEM_PULLREQUEST_PULLREQUESTNUMBER;
 
 /**
- * This program should be invoked as `node ./scripts/update-experimental-branches <GithubAccessToken> <PR1> [PR2] [...]`
- * The order PR numbers are passed controls the order in which they are merged together.
+ * This program should be invoked as `node ./scripts/update-experimental-branches <GithubAccessToken>`
  * TODO: the following is racey - if two experiment-enlisted PRs trigger simultaneously and witness one another in an unupdated state, they'll both produce
  * a new experimental branch, but each will be missing a change from the other. There's no _great_ way to fix this beyond setting the maximum concurrency
  * of this task to 1 (so only one job is allowed to update experiments at a time). 
  */
 async function main() {
-    const prnums = process.argv.slice(3);
-    if (!prnums.length) {
-        return; // No enlisted PRs, nothing to update
-    }
-    if (triggeredPR && !prnums.some(n => n === triggeredPR)) {
+    const gh = new Octokit({
+        auth: process.argv[2]
+    });
+    const prnums = (await gh.issues.listForRepo({
+        labels: "typescript@experimental",
+        sort: "created",
+        state: "open",
+        owner: "Microsoft",
+        repo: "TypeScript",
+    })).data.filter(i => !!i.pull_request).map(i => i.number);
+    if (triggeredPR && !prnums.some(n => n === +triggeredPR)) {
         return; // Only have work to do for enlisted PRs
     }
     console.log(`Performing experimental branch updating and merging for pull requests ${prnums.join(", ")}`);
@@ -34,9 +39,6 @@ async function main() {
         ["git", ["remote", "add", "fork", remoteUrl]], // Add the remote fork
     ]);
 
-    const gh = new Octokit({
-        auth: process.argv[2]
-    });
     for (const numRaw of prnums) {
         const num = +numRaw;
         if (num) {
