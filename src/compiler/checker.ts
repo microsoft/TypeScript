@@ -4652,6 +4652,9 @@ namespace ts {
                     if (!isIdentifierText(name, compilerOptions.target) && !isNumericLiteralName(name)) {
                         return `"${escapeString(name, CharacterCodes.doubleQuote)}"`;
                     }
+                    if (isNumericLiteralName(name) && startsWith(name, "-")) {
+                        return `[${name}]`;
+                    }
                     return name;
                 }
                 if (nameType.flags & TypeFlags.UniqueESSymbol) {
