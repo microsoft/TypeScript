@@ -15354,36 +15354,11 @@ namespace ts {
                     inferFromTypes(getFalseTypeFromConditionalType(<ConditionalType>source), getFalseTypeFromConditionalType(<ConditionalType>target));
                 }
                 else if (target.flags & TypeFlags.Conditional && !contravariant) {
-                    inferFromTypes(source, getTrueTypeFromConditionalType(<ConditionalType>target));
-                    inferFromTypes(source, getFalseTypeFromConditionalType(<ConditionalType>target));
+                    const targetTypes = [getTrueTypeFromConditionalType(<ConditionalType>target), getFalseTypeFromConditionalType(<ConditionalType>target)];
+                    inferToMultipleTypes(source, targetTypes, /*isIntersection*/ false);
                 }
                 else if (target.flags & TypeFlags.UnionOrIntersection) {
-                    // We infer from types that are not naked type variables first so that inferences we
-                    // make from nested naked type variables and given slightly higher priority by virtue
-                    // of being first in the candidates array.
-                    let typeVariableCount = 0;
-                    for (const t of (<UnionOrIntersectionType>target).types) {
-                        if (getInferenceInfoForType(t)) {
-                            typeVariableCount++;
-                        }
-                        else {
-                            inferFromTypes(source, t);
-                        }
-                    }
-                    // Inferences directly to naked type variables are given lower priority as they are
-                    // less specific. For example, when inferring from Promise<string> to T | Promise<T>,
-                    // we want to infer string for T, not Promise<string> | string. For intersection types
-                    // we only infer to single naked type variables.
-                    if (target.flags & TypeFlags.Union ? typeVariableCount !== 0 : typeVariableCount === 1) {
-                        const savePriority = priority;
-                        priority |= InferencePriority.NakedTypeVariable;
-                        for (const t of (<UnionOrIntersectionType>target).types) {
-                            if (getInferenceInfoForType(t)) {
-                                inferFromTypes(source, t);
-                            }
-                        }
-                        priority = savePriority;
-                    }
+                    inferToMultipleTypes(source, (<UnionOrIntersectionType>target).types, !!(target.flags & TypeFlags.Intersection));
                 }
                 else if (source.flags & TypeFlags.Union) {
                     // Source is a union or intersection type, infer from each constituent type
@@ -15479,6 +15454,35 @@ namespace ts {
                     }
                 }
                 return undefined;
+            }
+
+            function inferToMultipleTypes(source: Type, targets: Type[], isIntersection: boolean) {
+                // We infer from types that are not naked type variables first so that inferences we
+                // make from nested naked type variables and given slightly higher priority by virtue
+                // of being first in the candidates array.
+                let typeVariableCount = 0;
+                for (const t of targets) {
+                    if (getInferenceInfoForType(t)) {
+                        typeVariableCount++;
+                    }
+                    else {
+                        inferFromTypes(source, t);
+                    }
+                }
+                // Inferences directly to naked type variables are given lower priority as they are
+                // less specific. For example, when inferring from Promise<string> to T | Promise<T>,
+                // we want to infer string for T, not Promise<string> | string. For intersection types
+                // we only infer to single naked type variables.
+                if (isIntersection ? typeVariableCount === 1 : typeVariableCount !== 0) {
+                    const savePriority = priority;
+                    priority |= InferencePriority.NakedTypeVariable;
+                    for (const t of targets) {
+                        if (getInferenceInfoForType(t)) {
+                            inferFromTypes(source, t);
+                        }
+                    }
+                    priority = savePriority;
+                }
             }
 
             function inferToMappedType(source: Type, target: MappedType, constraintType: Type): boolean {
