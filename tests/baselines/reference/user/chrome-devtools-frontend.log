@@ -6841,7 +6841,6 @@ node_modules/chrome-devtools-frontend/front_end/layer_viewer/LayerDetailsView.js
 node_modules/chrome-devtools-frontend/front_end/layer_viewer/LayerDetailsView.js(198,65): error TS2555: Expected at least 2 arguments, but got 1.
 node_modules/chrome-devtools-frontend/front_end/layer_viewer/LayerDetailsView.js(199,53): error TS2339: Property 'createChild' does not exist on type 'Element'.
 node_modules/chrome-devtools-frontend/front_end/layer_viewer/LayerDetailsView.js(200,52): error TS2555: Expected at least 2 arguments, but got 1.
-node_modules/chrome-devtools-frontend/front_end/layer_viewer/LayerDetailsView.js(239,3): error TS2322: Type 'symbol' is not assignable to type 'string'.
 node_modules/chrome-devtools-frontend/front_end/layer_viewer/LayerDetailsView.js(246,25): error TS2555: Expected at least 2 arguments, but got 1.
 node_modules/chrome-devtools-frontend/front_end/layer_viewer/LayerDetailsView.js(247,19): error TS2555: Expected at least 2 arguments, but got 1.
 node_modules/chrome-devtools-frontend/front_end/layer_viewer/LayerDetailsView.js(248,20): error TS2555: Expected at least 2 arguments, but got 1.
@@ -6934,8 +6933,6 @@ node_modules/chrome-devtools-frontend/front_end/layer_viewer/Layers3DView.js(718
 node_modules/chrome-devtools-frontend/front_end/layer_viewer/Layers3DView.js(726,44): error TS2339: Property 'clientX' does not exist on type 'Event'.
 node_modules/chrome-devtools-frontend/front_end/layer_viewer/Layers3DView.js(727,24): error TS2339: Property 'clientY' does not exist on type 'Event'.
 node_modules/chrome-devtools-frontend/front_end/layer_viewer/Layers3DView.js(762,26): error TS2339: Property 'LayerStyle' does not exist on type 'typeof Layers3DView'.
-node_modules/chrome-devtools-frontend/front_end/layer_viewer/Layers3DView.js(777,3): error TS2322: Type 'symbol' is not assignable to type 'string'.
-node_modules/chrome-devtools-frontend/front_end/layer_viewer/Layers3DView.js(778,3): error TS2322: Type 'symbol' is not assignable to type 'string'.
 node_modules/chrome-devtools-frontend/front_end/layer_viewer/Layers3DView.js(794,28): error TS2555: Expected at least 2 arguments, but got 1.
 node_modules/chrome-devtools-frontend/front_end/layer_viewer/Layers3DView.js(795,29): error TS2555: Expected at least 2 arguments, but got 1.
 node_modules/chrome-devtools-frontend/front_end/layer_viewer/Layers3DView.js(796,29): error TS2555: Expected at least 2 arguments, but got 1.
