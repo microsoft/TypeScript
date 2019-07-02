@@ -196,8 +196,8 @@ interface Array<T> {}`
         }
     }
 
-    export function checkWatchedFiles(host: TestServerHost, expectedFiles: string[]) {
-        checkMapKeys("watchedFiles", host.watchedFiles, expectedFiles);
+    export function checkWatchedFiles(host: TestServerHost, expectedFiles: string[], additionalInfo?: string) {
+        checkMapKeys(`watchedFiles:: ${additionalInfo || ""}::`, host.watchedFiles, expectedFiles);
     }
 
     export function checkWatchedFilesDetailed(host: TestServerHost, expectedFiles: ReadonlyMap<number>): void;
