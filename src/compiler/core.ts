@@ -572,6 +572,16 @@ namespace ts {
         };
     }
 
+    export function* mapByIterator<T, U, TOut, TIn>(iter: IterableIterator<T>, mapFn: (x: T, idx: number) => Generator<TOut, U, TIn>): Generator<TOut, U[] | undefined, TIn> {
+        let i = 0;
+        let result: U[] | undefined;
+        for (const e of iter) {
+            (result || (result = [])).push(yield* mapFn(e, i));
+            i++;
+        }
+        return result;
+    }
+
     // Maps from T to T and avoids allocation if all elements map to themselves
     export function sameMap<T>(array: T[], f: (x: T, i: number) => T): T[];
     export function sameMap<T>(array: ReadonlyArray<T>, f: (x: T, i: number) => T): ReadonlyArray<T>;

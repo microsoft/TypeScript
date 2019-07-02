@@ -7535,7 +7535,7 @@ namespace ts {
                     const constraint = getLowerBoundOfKeyType(checkType);
                     if (constraint !== checkType) {
                         const mapper = makeUnaryTypeMapper((<ConditionalType>type).root.checkType, constraint);
-                        return getConditionalTypeInstantiation(<ConditionalType>type, combineTypeMappers(mapper, (<ConditionalType>type).mapper));
+                        return collectGeneratorReturn(getConditionalTypeInstantiation(<ConditionalType>type, combineTypeMappers(mapper, (<ConditionalType>type).mapper)), v => instantiateType(v[0], v[1]));
                     }
                 }
                 return type;
@@ -7886,7 +7886,7 @@ namespace ts {
                 const constraint = simplified === type.checkType ? getConstraintOfType(simplified) : simplified;
                 if (constraint && constraint !== type.checkType) {
                     const mapper = makeUnaryTypeMapper(type.root.checkType, constraint);
-                    const instantiated = getConditionalTypeInstantiation(type, combineTypeMappers(mapper, type.mapper));
+                    const instantiated = collectGeneratorReturn(getConditionalTypeInstantiation(type, combineTypeMappers(mapper, type.mapper)), v => instantiateType(v[0], v[1]));
                     if (!(instantiated.flags & TypeFlags.Never)) {
                         return instantiated;
                     }
@@ -10628,9 +10628,9 @@ namespace ts {
             return type;
         }
 
-        function getConditionalType(root: ConditionalRoot, mapper: TypeMapper | undefined): Type {
-            const checkType = instantiateType(root.checkType, mapper);
-            const extendsType = instantiateType(root.extendsType, mapper);
+        function* getConditionalType(root: ConditionalRoot, mapper: TypeMapper): Generator<[Type, TypeMapper], Type, Type> {
+            const checkType = yield [root.checkType, mapper];
+            const extendsType = yield [root.extendsType, mapper];
             if (checkType === wildcardType || extendsType === wildcardType) {
                 return wildcardType;
             }
@@ -10655,14 +10655,14 @@ namespace ts {
                 }
                 // Return union of trueType and falseType for 'any' since it matches anything
                 if (checkType.flags & TypeFlags.Any) {
-                    return getUnionType([instantiateType(root.trueType, combinedMapper || mapper), instantiateType(root.falseType, mapper)]);
+                    return getUnionType([yield [root.trueType, combinedMapper || mapper], yield [root.falseType, mapper]]);
                 }
                 // Return falseType for a definitely false extends check. We check an instantiations of the two
                 // types with type parameters mapped to the wildcard type, the most permissive instantiations
                 // possible (the wildcard type is assignable to and from all types). If those are not related,
                 // then no instantiations will be and we can just return the false branch type.
                 if (!isTypeAssignableTo(getPermissiveInstantiation(checkType), getPermissiveInstantiation(inferredExtendsType))) {
-                    return instantiateType(root.falseType, mapper);
+                    return yield [root.falseType, mapper];
                 }
                 // Return trueType for a definitely true extends check. We check instantiations of the two
                 // types with type parameters mapped to their restrictive form, i.e. a form of the type parameter
@@ -10670,7 +10670,7 @@ namespace ts {
                 //   type Foo<T extends { x: any }> = T extends { x: string } ? string : number
                 // doesn't immediately resolve to 'string' instead of being deferred.
                 if (isTypeAssignableTo(getRestrictiveInstantiation(checkType), getRestrictiveInstantiation(inferredExtendsType))) {
-                    return instantiateType(root.trueType, combinedMapper || mapper);
+                    return yield [root.trueType, combinedMapper || mapper];
                 }
             }
             // Return a deferred type for a check that is neither definitely true nor definitely false
@@ -10682,7 +10682,7 @@ namespace ts {
             result.mapper = mapper;
             result.combinedMapper = combinedMapper;
             result.aliasSymbol = root.aliasSymbol;
-            result.aliasTypeArguments = instantiateTypes(root.aliasTypeArguments, mapper!); // TODO: GH#18217
+            result.aliasTypeArguments = yield* instantiateTypesStaged(root.aliasTypeArguments, mapper); // TODO: GH#18217
             return result;
         }
 
@@ -10731,7 +10731,7 @@ namespace ts {
                     aliasSymbol,
                     aliasTypeArguments
                 };
-                links.resolvedType = getConditionalType(root, /*mapper*/ undefined);
+                links.resolvedType = collectGeneratorReturn(getConditionalType(root, identityMapper), v => instantiateType(v[0], v[1]));
                 if (outerTypeParameters) {
                     root.instantiations = createMap<Type>();
                     root.instantiations.set(getTypeListId(outerTypeParameters), links.resolvedType);
@@ -11347,7 +11347,7 @@ namespace ts {
             return result;
         }
 
-        function getAnonymousTypeInstantiation(type: AnonymousType, mapper: TypeMapper) {
+        function* getAnonymousTypeInstantiation(type: AnonymousType, mapper: TypeMapper): Generator<[Type, TypeMapper], Type, Type> {
             const target = type.objectFlags & ObjectFlags.Instantiated ? type.target! : type;
             const { symbol } = target;
             const links = getSymbolLinks(symbol);
@@ -11392,7 +11392,7 @@ namespace ts {
                 let result = links.instantiations!.get(id);
                 if (!result) {
                     const newMapper = createTypeMapper(typeParameters, typeArguments);
-                    result = target.objectFlags & ObjectFlags.Mapped ? instantiateMappedType(<MappedType>target, newMapper) : instantiateAnonymousType(target, newMapper);
+                    result = yield* (target.objectFlags & ObjectFlags.Mapped ? instantiateMappedType(<MappedType>target, newMapper) : instantiateAnonymousType(target, newMapper));
                     links.instantiations!.set(id, result);
                 }
                 return result;
@@ -11444,7 +11444,7 @@ namespace ts {
             return undefined;
         }
 
-        function instantiateMappedType(type: MappedType, mapper: TypeMapper): Type {
+        function* instantiateMappedType(type: MappedType, mapper: TypeMapper): Generator<[Type, TypeMapper], Type, Type> {
             // For a homomorphic mapped type { [P in keyof T]: X }, where T is some type variable, the mapping
             // operation depends on T as follows:
             // * If T is a primitive type no mapping is performed and the result is simply T.
@@ -11457,36 +11457,36 @@ namespace ts {
             // { [P in keyof A]: X } | undefined.
             const typeVariable = getHomomorphicTypeVariable(type);
             if (typeVariable) {
-                const mappedTypeVariable = instantiateType(typeVariable, mapper);
+                const mappedTypeVariable = yield [typeVariable, mapper];
                 if (typeVariable !== mappedTypeVariable) {
-                    return mapType(mappedTypeVariable, t => {
+                    return yield* mapTypeStaged(mappedTypeVariable, function* (t) {
                         if (t.flags & (TypeFlags.AnyOrUnknown | TypeFlags.InstantiableNonPrimitive | TypeFlags.Object | TypeFlags.Intersection) && t !== wildcardType && t !== errorType) {
                             const replacementMapper = createReplacementMapper(typeVariable, t, mapper);
-                            return isArrayType(t) ? instantiateMappedArrayType(t, type, replacementMapper) :
+                            return yield* (isArrayType(t) ? instantiateMappedArrayType(t, type, replacementMapper) :
                                 isTupleType(t) ? instantiateMappedTupleType(t, type, replacementMapper) :
-                                instantiateAnonymousType(type, replacementMapper);
+                                instantiateAnonymousType(type, replacementMapper));
                         }
                         return t;
                     });
                 }
             }
-            return instantiateAnonymousType(type, mapper);
+            return yield* instantiateAnonymousType(type, mapper);
         }
 
         function getModifiedReadonlyState(state: boolean, modifiers: MappedTypeModifiers) {
             return modifiers & MappedTypeModifiers.IncludeReadonly ? true : modifiers & MappedTypeModifiers.ExcludeReadonly ? false : state;
         }
 
-        function instantiateMappedArrayType(arrayType: Type, mappedType: MappedType, mapper: TypeMapper) {
-            const elementType = instantiateMappedTypeTemplate(mappedType, numberType, /*isOptional*/ true, mapper);
+        function* instantiateMappedArrayType(arrayType: Type, mappedType: MappedType, mapper: TypeMapper): Generator<[Type, TypeMapper], Type, Type> {
+            const elementType = yield* instantiateMappedTypeTemplate(mappedType, numberType, /*isOptional*/ true, mapper);
             return elementType === errorType ? errorType :
                 createArrayType(elementType, getModifiedReadonlyState(isReadonlyArrayType(arrayType), getMappedTypeModifiers(mappedType)));
         }
 
-        function instantiateMappedTupleType(tupleType: TupleTypeReference, mappedType: MappedType, mapper: TypeMapper) {
+        function* instantiateMappedTupleType(tupleType: TupleTypeReference, mappedType: MappedType, _mapper: TypeMapper): Generator<[Type, TypeMapper], Type, Type> {
             const minLength = tupleType.target.minLength;
-            const elementTypes = map(tupleType.typeArguments || emptyArray, (_, i) =>
-                instantiateMappedTypeTemplate(mappedType, getLiteralType("" + i), i >= minLength, mapper));
+            const elementTypes = (yield* mapByIterator((tupleType.typeArguments || emptyArray) as unknown as IterableIterator<Type>, function* (_, _i): Generator<[Type, TypeMapper], Type, Type> {
+                return yield* instantiateMappedTypeTemplate(mappedType, getLiteralType("" + _i), _i >= minLength, _mapper); })) || emptyArray;
             const modifiers = getMappedTypeModifiers(mappedType);
             const newMinLength = modifiers & MappedTypeModifiers.IncludeOptional ? 0 :
                 modifiers & MappedTypeModifiers.ExcludeOptional ? getTypeReferenceArity(tupleType) - (tupleType.target.hasRestElement ? 1 : 0) :
@@ -11496,16 +11496,16 @@ namespace ts {
                 createTupleType(elementTypes, newMinLength, tupleType.target.hasRestElement, newReadonly, tupleType.target.associatedNames);
         }
 
-        function instantiateMappedTypeTemplate(type: MappedType, key: Type, isOptional: boolean, mapper: TypeMapper) {
+        function* instantiateMappedTypeTemplate(type: MappedType, key: Type, isOptional: boolean, mapper: TypeMapper): Generator<[Type, TypeMapper], Type, Type> {
             const templateMapper = combineTypeMappers(mapper, createTypeMapper([getTypeParameterFromMappedType(type)], [key]));
-            const propType = instantiateType(getTemplateTypeFromMappedType(<MappedType>type.target || type), templateMapper);
+            const propType = yield [getTemplateTypeFromMappedType(<MappedType>type.target || type), templateMapper];
             const modifiers = getMappedTypeModifiers(type);
             return strictNullChecks && modifiers & MappedTypeModifiers.IncludeOptional && !isTypeAssignableTo(undefinedType, propType) ? getOptionalType(propType) :
                 strictNullChecks && modifiers & MappedTypeModifiers.ExcludeOptional && isOptional ? getTypeWithFacts(propType, TypeFacts.NEUndefined) :
                 propType;
         }
 
-        function instantiateAnonymousType(type: AnonymousType, mapper: TypeMapper): AnonymousType {
+        function* instantiateAnonymousType(type: AnonymousType, mapper: TypeMapper): Generator<[Type, TypeMapper], Type, Type> {
             const result = <AnonymousType>createObjectType(type.objectFlags | ObjectFlags.Instantiated, type.symbol);
             if (type.objectFlags & ObjectFlags.Mapped) {
                 (<MappedType>result).declaration = (<MappedType>type).declaration;
@@ -11519,11 +11519,11 @@ namespace ts {
             result.target = type;
             result.mapper = mapper;
             result.aliasSymbol = type.aliasSymbol;
-            result.aliasTypeArguments = instantiateTypes(type.aliasTypeArguments, mapper);
+            result.aliasTypeArguments = yield* instantiateTypesStaged(type.aliasTypeArguments, mapper);
             return result;
         }
 
-        function getConditionalTypeInstantiation(type: ConditionalType, mapper: TypeMapper): Type {
+        function* getConditionalTypeInstantiation(type: ConditionalType, mapper: TypeMapper): Generator<[Type, TypeMapper], Type, Type> {
             const root = type.root;
             if (root.outerTypeParameters) {
                 // We are instantiating a conditional type that has one or more type parameters in scope. Apply the
@@ -11534,7 +11534,7 @@ namespace ts {
                 let result = root.instantiations!.get(id);
                 if (!result) {
                     const newMapper = createTypeMapper(root.outerTypeParameters, typeArguments);
-                    result = instantiateConditionalType(root, newMapper);
+                    result = yield* instantiateConditionalType(root, newMapper);
                     root.instantiations!.set(id, result);
                 }
                 return result;
@@ -11542,7 +11542,7 @@ namespace ts {
             return type;
         }
 
-        function instantiateConditionalType(root: ConditionalRoot, mapper: TypeMapper): Type {
+        function* instantiateConditionalType(root: ConditionalRoot, mapper: TypeMapper): Generator<[Type, TypeMapper], Type, Type> {
             // Check if we have a conditional type where the check type is a naked type parameter. If so,
             // the conditional type is distributive over union types and when T is instantiated to a union
             // type A | B, we produce (A extends U ? X : Y) | (B extends U ? X : Y).
@@ -11550,10 +11550,10 @@ namespace ts {
                 const checkType = <TypeParameter>root.checkType;
                 const instantiatedType = mapper(checkType);
                 if (checkType !== instantiatedType && instantiatedType.flags & (TypeFlags.Union | TypeFlags.Never)) {
-                    return mapType(instantiatedType, t => getConditionalType(root, createReplacementMapper(checkType, t, mapper)));
+                    return yield* mapTypeStaged(instantiatedType, function* (t) { return yield* getConditionalType(root, createReplacementMapper(checkType, t, mapper)); });
                 }
             }
-            return getConditionalType(root, mapper);
+            return yield* getConditionalType(root, mapper);
         }
 
         function instantiateType(type: Type, mapper: TypeMapper | undefined): Type;
@@ -11571,12 +11571,38 @@ namespace ts {
             }
             instantiationCount++;
             instantiationDepth++;
-            const result = instantiateTypeWorker(type, mapper);
+            const result = instantiationTrampoline(type, mapper);
             instantiationDepth--;
             return result;
         }
 
-        function instantiateTypeWorker(type: Type, mapper: TypeMapper): Type {
+        function instantiateTypesStaged(typeArguments: readonly Type[], mapper: TypeMapper): Generator<[Type, TypeMapper], readonly Type[], Type>;
+        function instantiateTypesStaged(typeArguments: readonly Type[] | undefined, mapper: TypeMapper): Generator<[Type, TypeMapper], readonly Type[] | undefined, Type>;
+        function* instantiateTypesStaged(typeArguments: readonly Type[] | undefined, mapper: TypeMapper): Generator<[Type, TypeMapper], readonly Type[] | undefined, Type> {
+            let newTypeArguments: readonly Type[] | undefined;
+            if (length(typeArguments)) {
+                for (let i = 0; i < typeArguments!.length; i++) {
+                    const t = typeArguments![i];
+                    const instance: Type = yield [t, mapper];
+                    if (newTypeArguments) {
+                        (newTypeArguments as Type[]).push(instance);
+                    }
+                    else if (instance !== t) {
+                        newTypeArguments = [...typeArguments!.slice(0, i), instance];
+                    }
+                }
+                if (!newTypeArguments) {
+                    newTypeArguments = typeArguments;
+                }
+            }
+            else {
+                newTypeArguments = typeArguments;
+            }
+            return newTypeArguments;
+        }
+
+        function* instantiateStaged(type: Type, mapper: TypeMapper): Generator<[Type, TypeMapper], Type, Type> {
+            Debug.assert(!!type && !!mapper);
             const flags = type.flags;
             if (flags & TypeFlags.TypeParameter) {
                 return mapper(type);
@@ -11588,44 +11614,44 @@ namespace ts {
                     // interface, in an object type literal, or in an object literal expression, we may need
                     // to instantiate the type because it might reference a type parameter.
                     return couldContainTypeVariables(type) ?
-                        getAnonymousTypeInstantiation(<AnonymousType>type, mapper) : type;
+                        yield* getAnonymousTypeInstantiation(<AnonymousType>type, mapper) : type;
                 }
                 if (objectFlags & ObjectFlags.Mapped) {
-                    return getAnonymousTypeInstantiation(<AnonymousType>type, mapper);
+                    return yield* getAnonymousTypeInstantiation(<AnonymousType>type, mapper);
                 }
                 if (objectFlags & ObjectFlags.Reference) {
                     const typeArguments = (<TypeReference>type).typeArguments;
-                    const newTypeArguments = instantiateTypes(typeArguments, mapper);
+                    const newTypeArguments = yield* instantiateTypesStaged(typeArguments, mapper);
                     return newTypeArguments !== typeArguments ? createTypeReference((<TypeReference>type).target, newTypeArguments) : type;
                 }
                 return type;
             }
             if (flags & TypeFlags.Union && !(flags & TypeFlags.Primitive)) {
                 const types = (<UnionType>type).types;
-                const newTypes = instantiateTypes(types, mapper);
-                return newTypes !== types ? getUnionType(newTypes, UnionReduction.Literal, type.aliasSymbol, instantiateTypes(type.aliasTypeArguments, mapper)) : type;
+                const newTypes = yield* instantiateTypesStaged(types, mapper);
+                return newTypes !== types ? getUnionType(newTypes, UnionReduction.Literal, type.aliasSymbol, yield* instantiateTypesStaged(type.aliasTypeArguments, mapper)) : type;
             }
             if (flags & TypeFlags.Intersection) {
                 const types = (<IntersectionType>type).types;
-                const newTypes = instantiateTypes(types, mapper);
-                return newTypes !== types ? getIntersectionType(newTypes, type.aliasSymbol, instantiateTypes(type.aliasTypeArguments, mapper)) : type;
+                const newTypes = yield* instantiateTypesStaged(types, mapper);
+                return newTypes !== types ? getIntersectionType(newTypes, type.aliasSymbol, yield* instantiateTypesStaged(type.aliasTypeArguments, mapper)) : type;
             }
             if (flags & TypeFlags.Index) {
-                return getIndexType(instantiateType((<IndexType>type).type, mapper));
+                return getIndexType(yield [(<IndexType>type).type, mapper]);
             }
             if (flags & TypeFlags.IndexedAccess) {
-                return getIndexedAccessType(instantiateType((<IndexedAccessType>type).objectType, mapper), instantiateType((<IndexedAccessType>type).indexType, mapper));
+                return getIndexedAccessType(yield [(<IndexedAccessType>type).objectType, mapper], yield [(<IndexedAccessType>type).indexType, mapper]);
             }
             if (flags & TypeFlags.Conditional) {
-                return getConditionalTypeInstantiation(<ConditionalType>type, combineTypeMappers((<ConditionalType>type).mapper, mapper));
+                return yield* getConditionalTypeInstantiation(<ConditionalType>type, combineTypeMappers((<ConditionalType>type).mapper, mapper));
             }
             if (flags & TypeFlags.Substitution) {
-                const maybeVariable = instantiateType((<SubstitutionType>type).typeVariable, mapper);
+                const maybeVariable = yield [(<SubstitutionType>type).typeVariable, mapper];
                 if (maybeVariable.flags & TypeFlags.TypeVariable) {
-                    return getSubstitutionType(maybeVariable as TypeVariable, instantiateType((<SubstitutionType>type).substitute, mapper));
+                    return getSubstitutionType(maybeVariable as TypeVariable, yield [(<SubstitutionType>type).substitute, mapper]);
                 }
                 else {
-                    const sub = instantiateType((<SubstitutionType>type).substitute, mapper);
+                    const sub = yield [(<SubstitutionType>type).substitute, mapper];
                     if (sub.flags & TypeFlags.AnyOrUnknown || isTypeAssignableTo(getRestrictiveInstantiation(maybeVariable), getRestrictiveInstantiation(sub))) {
                         return maybeVariable;
                     }
@@ -11633,6 +11659,46 @@ namespace ts {
                 }
             }
             return type;
+        }
+
+        function instantiationTrampoline(type: Type, mapper: TypeMapper): Type {
+            const genStack = [instantiateStaged(type, mapper)];
+            let result: IteratorResult<[Type, TypeMapper], Type> | undefined;
+            while (genStack.length) {
+                // 300000 stacked up generators is _probably_ going to blow the heap if it continues. Probably.
+                // Downlevel we can only fit a fraction of that - 100000 - so that's what we use here.
+                if (genStack.length > 100000) {
+                    error(currentNode, Diagnostics.Type_instantiation_is_excessively_deep_and_possibly_infinite);
+                    return errorType;
+                }
+                // Get the top generator off the stack and advance it, passing in nothing if it's said generator's
+                // first invocation, or the result of the prior finished generator otherwise
+                Debug.assert(!result || !isArray(result));
+                result = genStack[genStack.length - 1].next(...(result ? [result.value as Type] : []));
+                // If this generator is done, pop it off the stack and keep around the result for either the parent
+                // generator or the return value
+                if (result.done) {
+                    Debug.assert(result.value && !isArray(result.value));
+                    genStack.pop();
+                    continue;
+                }
+                // Generator is unfinished and returned a type+mapper tuple that it needs resolved - make a generator
+                // for that type+mapper pair and add it to the stack
+                Debug.assert(isArray(result.value));
+                genStack.push(instantiateStaged(...result.value));
+                // Adding a new generator to the stack - consume the result used above so the first
+                // `next` call of the new generator is without arguments
+                result = undefined;
+            }
+            return result!.value as Type;
+        }
+
+        function collectGeneratorReturn<TYield, TStep, TReturn>(gen: Generator<TYield, TReturn, TStep>, feedforward: (yielded: TYield) => TStep): TReturn {
+            let result;
+            for (result = gen.next(); !result.done;) {
+                result = gen.next(feedforward(result.value as TYield));
+            }
+            return (result as IteratorReturnResult<TReturn>).value;
         }
 
         function getPermissiveInstantiation(type: Type) {
@@ -16718,6 +16784,33 @@ namespace ts {
             let mappedTypes: Type[] | undefined;
             for (const t of (<UnionType>type).types) {
                 const mapped = mapper(t);
+                if (mapped) {
+                    if (!mappedTypes) {
+                        mappedTypes = [mapped];
+                    }
+                    else {
+                        mappedTypes.push(mapped);
+                    }
+                }
+            }
+            return mappedTypes && getUnionType(mappedTypes, noReductions ? UnionReduction.None : UnionReduction.Literal);
+        }
+
+        // Apply a mapping function to a type and return the resulting type. If the source type
+        // is a union type, the mapping function is applied to each constituent type and a union
+        // of the resulting types is returned.
+        function mapTypeStaged<TIn, TOut>(type: Type, mapper: (t: Type) => Generator<TOut, Type, TIn>, noReductions?: boolean): Generator<TOut, Type, TIn>;
+        function mapTypeStaged<TIn, TOut>(type: Type, mapper: (t: Type) => Generator<TOut, Type | undefined, TIn>, noReductions?: boolean): Generator<TOut, Type | undefined, TIn>;
+        function* mapTypeStaged<TIn, TOut>(type: Type, mapper: (t: Type) => Generator<TOut, Type | undefined, TIn>, noReductions?: boolean): Generator<TOut, Type | undefined, TIn> {
+            if (type.flags & TypeFlags.Never) {
+                return type;
+            }
+            if (!(type.flags & TypeFlags.Union)) {
+                return yield* mapper(type);
+            }
+            let mappedTypes: Type[] | undefined;
+            for (const t of (<UnionType>type).types) {
+                const mapped = yield* mapper(t);
                 if (mapped) {
                     if (!mappedTypes) {
                         mappedTypes = [mapped];
