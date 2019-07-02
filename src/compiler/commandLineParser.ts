@@ -245,6 +245,7 @@ namespace ts {
                 esnext: ModuleKind.ESNext
             }),
             affectsModuleResolution: true,
+            affectsEmit: true,
             paramType: Diagnostics.KIND,
             showInSimplifiedHelpView: true,
             category: Diagnostics.Basic_Options,
@@ -590,6 +591,7 @@ namespace ts {
             name: "esModuleInterop",
             type: "boolean",
             affectsSemanticDiagnostics: true,
+            affectsEmit: true,
             showInSimplifiedHelpView: true,
             category: Diagnostics.Module_Resolution_Options,
             description: Diagnostics.Enables_emit_interoperability_between_CommonJS_and_ES_Modules_via_creation_of_namespace_objects_for_all_imports_Implies_allowSyntheticDefaultImports
@@ -969,7 +971,8 @@ namespace ts {
         return typeAcquisition;
     }
 
-    function getOptionNameMap(): OptionNameMap {
+    /* @internal */
+    export function getOptionNameMap(): OptionNameMap {
         return optionNameMapCache || (optionNameMapCache = createOptionNameMap(optionDeclarations));
     }
 

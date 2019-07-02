@@ -440,16 +440,21 @@ namespace ts {
 
 // eslint-disable-next-line no-redeclare
 namespace ts {
-    export function readBuilderProgram(compilerOptions: CompilerOptions, readFile: (path: string) => string | undefined) {
+    export interface ReadBuildProgramHost {
+        useCaseSensitiveFileNames(): boolean;
+        getCurrentDirectory(): string;
+        readFile(fileName: string): string | undefined;
+    }
+    export function readBuilderProgram(compilerOptions: CompilerOptions, host: ReadBuildProgramHost) {
         if (compilerOptions.out || compilerOptions.outFile) return undefined;
         const buildInfoPath = getOutputPathForBuildInfo(compilerOptions);
         if (!buildInfoPath) return undefined;
-        const content = readFile(buildInfoPath);
+        const content = host.readFile(buildInfoPath);
         if (!content) return undefined;
         const buildInfo = getBuildInfo(content);
         if (buildInfo.version !== version) return undefined;
         if (!buildInfo.program) return undefined;
-        return createBuildProgramUsingProgramBuildInfo(buildInfo.program);
+        return createBuildProgramUsingProgramBuildInfo(buildInfo.program, buildInfoPath, host);
     }
 
     export function createIncrementalCompilerHost(options: CompilerOptions, system = sys): CompilerHost {
@@ -474,7 +479,7 @@ namespace ts {
     }: IncrementalProgramOptions<T>): T {
         host = host || createIncrementalCompilerHost(options);
         createProgram = createProgram || createEmitAndSemanticDiagnosticsBuilderProgram as any as CreateProgram<T>;
-        const oldProgram = readBuilderProgram(options, path => host!.readFile(path)) as any as T;
+        const oldProgram = readBuilderProgram(options, host) as any as T;
         return createProgram(rootNames, options, host, oldProgram, configFileParsingDiagnostics, projectReferences);
     }
 
@@ -606,7 +611,6 @@ namespace ts {
         /*@internal*/
         getCurrentProgram(): T;
         /** Closes the watch */
-        /*@internal*/
         close(): void;
     }
 
@@ -751,7 +755,7 @@ namespace ts {
             ((typeDirectiveNames, containingFile, redirectedReference) => resolutionCache.resolveTypeReferenceDirectives(typeDirectiveNames, containingFile, redirectedReference));
         const userProvidedResolution = !!host.resolveModuleNames || !!host.resolveTypeReferenceDirectives;
 
-        builderProgram = readBuilderProgram(compilerOptions, path => compilerHost.readFile(path)) as any as T;
+        builderProgram = readBuilderProgram(compilerOptions, compilerHost) as any as T;
         synchronizeProgram();
 
         // Update the wild card directory watch

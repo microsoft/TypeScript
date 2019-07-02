@@ -33,12 +33,12 @@ label: {
     (function (E) {
     })(E || (E = {}));
 }
-label: 
+label: ;
 label: class C {
 }
 label: var a = 1;
 label: let b = 1;
 label: const c = 1;
-label: 
-label: 
+label: ;
+label: ;
 label: 

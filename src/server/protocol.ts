@@ -94,6 +94,8 @@ namespace ts.server.protocol {
         ApplyChangedToOpenFiles = "applyChangedToOpenFiles",
         UpdateOpen = "updateOpen",
         /* @internal */
+        EncodedSyntacticClassificationsFull = "encodedSyntacticClassifications-full",
+        /* @internal */
         EncodedSemanticClassificationsFull = "encodedSemanticClassifications-full",
         /* @internal */
         Cleanup = "cleanup",
@@ -765,6 +767,29 @@ namespace ts.server.protocol {
     }
 
     /**
+     * A request to get encoded Syntactic classifications for a span in the file
+     */
+    /** @internal */
+    export interface EncodedSyntacticClassificationsRequest extends FileRequest {
+        arguments: EncodedSyntacticClassificationsRequestArgs;
+    }
+
+    /**
+     * Arguments for EncodedSyntacticClassificationsRequest request.
+     */
+    /** @internal */
+    export interface EncodedSyntacticClassificationsRequestArgs extends FileRequestArgs {
+        /**
+         * Start position of the span.
+         */
+        start: number;
+        /**
+         * Length of the span.
+         */
+        length: number;
+    }
+
+    /**
      * A request to get encoded semantic classifications for a span in the file
      */
     /** @internal */
@@ -775,6 +800,7 @@ namespace ts.server.protocol {
     /**
      * Arguments for EncodedSemanticClassificationsRequest request.
      */
+    /** @internal */
     export interface EncodedSemanticClassificationsRequestArgs extends FileRequestArgs {
         /**
          * Start position of the span.

@@ -847,9 +847,10 @@ namespace ts.textChanges {
 
         /** Note: output node may be mutated input node. */
         export function getNonformattedText(node: Node, sourceFile: SourceFile | undefined, newLineCharacter: string): { text: string, node: Node } {
-            const writer = new Writer(newLineCharacter);
+            const omitTrailingSemicolon = !!sourceFile && !probablyUsesSemicolons(sourceFile);
+            const writer = createWriter(newLineCharacter, omitTrailingSemicolon);
             const newLine = newLineCharacter === "\n" ? NewLineKind.LineFeed : NewLineKind.CarriageReturnLineFeed;
-            createPrinter({ newLine, neverAsciiEscape: true }, writer).writeNode(EmitHint.Unspecified, node, sourceFile, writer);
+            createPrinter({ newLine, neverAsciiEscape: true, omitTrailingSemicolon }, writer).writeNode(EmitHint.Unspecified, node, sourceFile, writer);
             return { text: writer.getText(), node: assignPositionsToNode(node) };
         }
     }
@@ -887,143 +888,168 @@ namespace ts.textChanges {
         return nodeArray;
     }
 
-    class Writer implements EmitTextWriter, PrintHandlers {
-        private lastNonTriviaPosition = 0;
-        private readonly writer: EmitTextWriter;
+    interface TextChangesWriter extends EmitTextWriter, PrintHandlers {}
 
-        public readonly onEmitNode: PrintHandlers["onEmitNode"];
-        public readonly onBeforeEmitNodeArray: PrintHandlers["onBeforeEmitNodeArray"];
-        public readonly onAfterEmitNodeArray: PrintHandlers["onAfterEmitNodeArray"];
-        public readonly onBeforeEmitToken: PrintHandlers["onBeforeEmitToken"];
-        public readonly onAfterEmitToken: PrintHandlers["onAfterEmitToken"];
+    function createWriter(newLine: string, omitTrailingSemicolon?: boolean): TextChangesWriter {
+        let lastNonTriviaPosition = 0;
 
-        constructor(newLine: string) {
-            this.writer = createTextWriter(newLine);
-            this.onEmitNode = (hint, node, printCallback) => {
-                if (node) {
-                    setPos(node, this.lastNonTriviaPosition);
-                }
-                printCallback(hint, node);
-                if (node) {
-                    setEnd(node, this.lastNonTriviaPosition);
-                }
-            };
-            this.onBeforeEmitNodeArray = nodes => {
-                if (nodes) {
-                    setPos(nodes, this.lastNonTriviaPosition);
-                }
-            };
-            this.onAfterEmitNodeArray = nodes => {
-                if (nodes) {
-                    setEnd(nodes, this.lastNonTriviaPosition);
-                }
-            };
-            this.onBeforeEmitToken = node => {
-                if (node) {
-                    setPos(node, this.lastNonTriviaPosition);
-                }
-            };
-            this.onAfterEmitToken = node => {
-                if (node) {
-                    setEnd(node, this.lastNonTriviaPosition);
-                }
-            };
-        }
 
-        private setLastNonTriviaPosition(s: string, force: boolean) {
+        const writer = omitTrailingSemicolon ? getTrailingSemicolonOmittingWriter(createTextWriter(newLine)) : createTextWriter(newLine);
+        const onEmitNode: PrintHandlers["onEmitNode"] = (hint, node, printCallback) => {
+            if (node) {
+                setPos(node, lastNonTriviaPosition);
+            }
+            printCallback(hint, node);
+            if (node) {
+                setEnd(node, lastNonTriviaPosition);
+            }
+        };
+        const onBeforeEmitNodeArray: PrintHandlers["onBeforeEmitNodeArray"] = nodes => {
+            if (nodes) {
+                setPos(nodes, lastNonTriviaPosition);
+            }
+        };
+        const onAfterEmitNodeArray: PrintHandlers["onAfterEmitNodeArray"] = nodes => {
+            if (nodes) {
+                setEnd(nodes, lastNonTriviaPosition);
+            }
+        };
+        const onBeforeEmitToken: PrintHandlers["onBeforeEmitToken"] = node => {
+            if (node) {
+                setPos(node, lastNonTriviaPosition);
+            }
+        };
+        const onAfterEmitToken: PrintHandlers["onAfterEmitToken"] = node => {
+            if (node) {
+                setEnd(node, lastNonTriviaPosition);
+            }
+        };
+
+        function setLastNonTriviaPosition(s: string, force: boolean) {
             if (force || !isTrivia(s)) {
-                this.lastNonTriviaPosition = this.writer.getTextPos();
+                lastNonTriviaPosition = writer.getTextPos();
                 let i = 0;
                 while (isWhiteSpaceLike(s.charCodeAt(s.length - i - 1))) {
                     i++;
                 }
                 // trim trailing whitespaces
-                this.lastNonTriviaPosition -= i;
+                lastNonTriviaPosition -= i;
             }
         }
 
-        write(s: string): void {
-            this.writer.write(s);
-            this.setLastNonTriviaPosition(s, /*force*/ false);
+        function write(s: string): void {
+            writer.write(s);
+            setLastNonTriviaPosition(s, /*force*/ false);
         }
-        writeComment(s: string): void {
-            this.writer.writeComment(s);
+        function writeComment(s: string): void {
+            writer.writeComment(s);
         }
-        writeKeyword(s: string): void {
-            this.writer.writeKeyword(s);
-            this.setLastNonTriviaPosition(s, /*force*/ false);
+        function writeKeyword(s: string): void {
+            writer.writeKeyword(s);
+            setLastNonTriviaPosition(s, /*force*/ false);
         }
-        writeOperator(s: string): void {
-            this.writer.writeOperator(s);
-            this.setLastNonTriviaPosition(s, /*force*/ false);
+        function writeOperator(s: string): void {
+            writer.writeOperator(s);
+            setLastNonTriviaPosition(s, /*force*/ false);
         }
-        writePunctuation(s: string): void {
-            this.writer.writePunctuation(s);
-            this.setLastNonTriviaPosition(s, /*force*/ false);
+        function writePunctuation(s: string): void {
+            writer.writePunctuation(s);
+            setLastNonTriviaPosition(s, /*force*/ false);
         }
-        writeTrailingSemicolon(s: string): void {
-            this.writer.writeTrailingSemicolon(s);
-            this.setLastNonTriviaPosition(s, /*force*/ false);
+        function writeTrailingSemicolon(s: string): void {
+            writer.writeTrailingSemicolon(s);
+            setLastNonTriviaPosition(s, /*force*/ false);
         }
-        writeParameter(s: string): void {
-            this.writer.writeParameter(s);
-            this.setLastNonTriviaPosition(s, /*force*/ false);
+        function writeParameter(s: string): void {
+            writer.writeParameter(s);
+            setLastNonTriviaPosition(s, /*force*/ false);
         }
-        writeProperty(s: string): void {
-            this.writer.writeProperty(s);
-            this.setLastNonTriviaPosition(s, /*force*/ false);
+        function writeProperty(s: string): void {
+            writer.writeProperty(s);
+            setLastNonTriviaPosition(s, /*force*/ false);
         }
-        writeSpace(s: string): void {
-            this.writer.writeSpace(s);
-            this.setLastNonTriviaPosition(s, /*force*/ false);
+        function writeSpace(s: string): void {
+            writer.writeSpace(s);
+            setLastNonTriviaPosition(s, /*force*/ false);
         }
-        writeStringLiteral(s: string): void {
-            this.writer.writeStringLiteral(s);
-            this.setLastNonTriviaPosition(s, /*force*/ false);
+        function writeStringLiteral(s: string): void {
+            writer.writeStringLiteral(s);
+            setLastNonTriviaPosition(s, /*force*/ false);
         }
-        writeSymbol(s: string, sym: Symbol): void {
-            this.writer.writeSymbol(s, sym);
-            this.setLastNonTriviaPosition(s, /*force*/ false);
+        function writeSymbol(s: string, sym: Symbol): void {
+            writer.writeSymbol(s, sym);
+            setLastNonTriviaPosition(s, /*force*/ false);
         }
-        writeLine(): void {
-            this.writer.writeLine();
+        function writeLine(): void {
+            writer.writeLine();
         }
-        increaseIndent(): void {
-            this.writer.increaseIndent();
+        function increaseIndent(): void {
+            writer.increaseIndent();
         }
-        decreaseIndent(): void {
-            this.writer.decreaseIndent();
+        function decreaseIndent(): void {
+            writer.decreaseIndent();
         }
-        getText(): string {
-            return this.writer.getText();
+        function getText(): string {
+            return writer.getText();
         }
-        rawWrite(s: string): void {
-            this.writer.rawWrite(s);
-            this.setLastNonTriviaPosition(s, /*force*/ false);
+        function rawWrite(s: string): void {
+            writer.rawWrite(s);
+            setLastNonTriviaPosition(s, /*force*/ false);
         }
-        writeLiteral(s: string): void {
-            this.writer.writeLiteral(s);
-            this.setLastNonTriviaPosition(s, /*force*/ true);
+        function writeLiteral(s: string): void {
+            writer.writeLiteral(s);
+            setLastNonTriviaPosition(s, /*force*/ true);
         }
-        getTextPos(): number {
-            return this.writer.getTextPos();
+        function getTextPos(): number {
+            return writer.getTextPos();
         }
-        getLine(): number {
-            return this.writer.getLine();
+        function getLine(): number {
+            return writer.getLine();
         }
-        getColumn(): number {
-            return this.writer.getColumn();
+        function getColumn(): number {
+            return writer.getColumn();
         }
-        getIndent(): number {
-            return this.writer.getIndent();
+        function getIndent(): number {
+            return writer.getIndent();
         }
-        isAtStartOfLine(): boolean {
-            return this.writer.isAtStartOfLine();
+        function isAtStartOfLine(): boolean {
+            return writer.isAtStartOfLine();
         }
-        clear(): void {
-            this.writer.clear();
-            this.lastNonTriviaPosition = 0;
+        function clear(): void {
+            writer.clear();
+            lastNonTriviaPosition = 0;
         }
+
+        return {
+            onEmitNode,
+            onBeforeEmitNodeArray,
+            onAfterEmitNodeArray,
+            onBeforeEmitToken,
+            onAfterEmitToken,
+            write,
+            writeComment,
+            writeKeyword,
+            writeOperator,
+            writePunctuation,
+            writeTrailingSemicolon,
+            writeParameter,
+            writeProperty,
+            writeSpace,
+            writeStringLiteral,
+            writeSymbol,
+            writeLine,
+            increaseIndent,
+            decreaseIndent,
+            getText,
+            rawWrite,
+            writeLiteral,
+            getTextPos,
+            getLine,
+            getColumn,
+            getIndent,
+            isAtStartOfLine,
+            clear
+        };
     }
 
     function getInsertionPositionAtSourceFileTop(sourceFile: SourceFile): number {

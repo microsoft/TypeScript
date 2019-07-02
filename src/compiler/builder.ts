@@ -10,18 +10,13 @@ namespace ts {
     export interface ReusableDiagnosticRelatedInformation {
         category: DiagnosticCategory;
         code: number;
-        file: Path | undefined;
+        file: string | undefined;
         start: number | undefined;
         length: number | undefined;
         messageText: string | ReusableDiagnosticMessageChain;
     }
 
-    export interface ReusableDiagnosticMessageChain {
-        messageText: string;
-        category: DiagnosticCategory;
-        code: number;
-        next?: ReusableDiagnosticMessageChain;
-    }
+    export type ReusableDiagnosticMessageChain = DiagnosticMessageChain;
 
     export interface ReusableBuilderProgramState extends ReusableBuilderState {
         /**
@@ -227,7 +222,7 @@ namespace ts {
                 // Unchanged file copy diagnostics
                 const diagnostics = oldState!.semanticDiagnosticsPerFile!.get(sourceFilePath);
                 if (diagnostics) {
-                    state.semanticDiagnosticsPerFile!.set(sourceFilePath, oldState!.hasReusableDiagnostic ? convertToDiagnostics(diagnostics as ReadonlyArray<ReusableDiagnostic>, newProgram) : diagnostics as ReadonlyArray<Diagnostic>);
+                    state.semanticDiagnosticsPerFile!.set(sourceFilePath, oldState!.hasReusableDiagnostic ? convertToDiagnostics(diagnostics as ReadonlyArray<ReusableDiagnostic>, newProgram, getCanonicalFileName) : diagnostics as ReadonlyArray<Diagnostic>);
                     if (!state.semanticDiagnosticsFromOldState) {
                         state.semanticDiagnosticsFromOldState = createMap<true>();
                     }
@@ -246,37 +241,32 @@ namespace ts {
         return state;
     }
 
-    function convertToDiagnostics(diagnostics: ReadonlyArray<ReusableDiagnostic>, newProgram: Program): ReadonlyArray<Diagnostic> {
+    function convertToDiagnostics(diagnostics: ReadonlyArray<ReusableDiagnostic>, newProgram: Program, getCanonicalFileName: GetCanonicalFileName): ReadonlyArray<Diagnostic> {
         if (!diagnostics.length) return emptyArray;
+        const buildInfoDirectory = getDirectoryPath(getNormalizedAbsolutePath(getOutputPathForBuildInfo(newProgram.getCompilerOptions())!, newProgram.getCurrentDirectory()));
         return diagnostics.map(diagnostic => {
-            const result: Diagnostic = convertToDiagnosticRelatedInformation(diagnostic, newProgram);
+            const result: Diagnostic = convertToDiagnosticRelatedInformation(diagnostic, newProgram, toPath);
             result.reportsUnnecessary = diagnostic.reportsUnnecessary;
             result.source = diagnostic.source;
             const { relatedInformation } = diagnostic;
             result.relatedInformation = relatedInformation ?
                 relatedInformation.length ?
-                    relatedInformation.map(r => convertToDiagnosticRelatedInformation(r, newProgram)) :
+                    relatedInformation.map(r => convertToDiagnosticRelatedInformation(r, newProgram, toPath)) :
                     emptyArray :
                 undefined;
             return result;
         });
+
+        function toPath(path: string) {
+            return ts.toPath(path, buildInfoDirectory, getCanonicalFileName);
+        }
     }
 
-    function convertToDiagnosticRelatedInformation(diagnostic: ReusableDiagnosticRelatedInformation, newProgram: Program): DiagnosticRelatedInformation {
-        const { file, messageText } = diagnostic;
+    function convertToDiagnosticRelatedInformation(diagnostic: ReusableDiagnosticRelatedInformation, newProgram: Program, toPath: (path: string) => Path): DiagnosticRelatedInformation {
+        const { file } = diagnostic;
         return {
             ...diagnostic,
-            file: file && newProgram.getSourceFileByPath(file),
-            messageText: messageText === undefined || isString(messageText) ?
-                messageText :
-                convertToDiagnosticMessageChain(messageText, newProgram)
-        };
-    }
-
-    function convertToDiagnosticMessageChain(diagnostic: ReusableDiagnosticMessageChain, newProgram: Program): DiagnosticMessageChain {
-        return {
-            ...diagnostic,
-            next: diagnostic.next && convertToDiagnosticMessageChain(diagnostic.next, newProgram)
+            file: file ? newProgram.getSourceFileByPath(toPath(file)) : undefined
         };
     }
 
@@ -620,19 +610,23 @@ namespace ts {
     /**
      * Gets the program information to be emitted in buildInfo so that we can use it to create new program
      */
-    function getProgramBuildInfo(state: Readonly<ReusableBuilderProgramState>): ProgramBuildInfo | undefined {
+    function getProgramBuildInfo(state: Readonly<ReusableBuilderProgramState>, getCanonicalFileName: GetCanonicalFileName): ProgramBuildInfo | undefined {
         if (state.compilerOptions.outFile || state.compilerOptions.out) return undefined;
+        const buildInfoDirectory = getDirectoryPath(getNormalizedAbsolutePath(getOutputPathForBuildInfo(state.compilerOptions)!, Debug.assertDefined(state.program).getCurrentDirectory()));
         const fileInfos: MapLike<BuilderState.FileInfo> = {};
         state.fileInfos.forEach((value, key) => {
             const signature = state.currentAffectedFilesSignatures && state.currentAffectedFilesSignatures.get(key);
-            fileInfos[key] = signature === undefined ? value : { version: value.version, signature };
+            fileInfos[relativeToBuildInfo(key)] = signature === undefined ? value : { version: value.version, signature };
         });
 
-        const result: ProgramBuildInfo = { fileInfos, options: state.compilerOptions };
+        const result: ProgramBuildInfo = {
+            fileInfos,
+            options: convertToReusableCompilerOptions(state.compilerOptions, relativeToBuildInfo)
+        };
         if (state.referencedMap) {
             const referencedMap: MapLike<string[]> = {};
             state.referencedMap.forEach((value, key) => {
-                referencedMap[key] = arrayFrom(value.keys());
+                referencedMap[relativeToBuildInfo(key)] = arrayFrom(value.keys(), relativeToBuildInfo);
             });
             result.referencedMap = referencedMap;
         }
@@ -642,9 +636,9 @@ namespace ts {
             state.exportedModulesMap.forEach((value, key) => {
                 const newValue = state.currentAffectedFilesExportedModulesMap && state.currentAffectedFilesExportedModulesMap.get(key);
                 // Not in temporary cache, use existing value
-                if (newValue === undefined) exportedModulesMap[key] = arrayFrom(value.keys());
+                if (newValue === undefined) exportedModulesMap[relativeToBuildInfo(key)] = arrayFrom(value.keys(), relativeToBuildInfo);
                 // Value in cache and has updated value map, use that
-                else if (newValue) exportedModulesMap[key] = arrayFrom(newValue.keys());
+                else if (newValue) exportedModulesMap[relativeToBuildInfo(key)] = arrayFrom(newValue.keys(), relativeToBuildInfo);
             });
             result.exportedModulesMap = exportedModulesMap;
         }
@@ -655,50 +649,78 @@ namespace ts {
             state.semanticDiagnosticsPerFile.forEach((value, key) => semanticDiagnosticsPerFile.push(
                 value.length ?
                     [
-                        key,
+                        relativeToBuildInfo(key),
                         state.hasReusableDiagnostic ?
                             value as ReadonlyArray<ReusableDiagnostic> :
-                            convertToReusableDiagnostics(value as ReadonlyArray<Diagnostic>)
+                            convertToReusableDiagnostics(value as ReadonlyArray<Diagnostic>, relativeToBuildInfo)
                     ] :
-                    key
+                    relativeToBuildInfo(key)
             ));
             result.semanticDiagnosticsPerFile = semanticDiagnosticsPerFile;
         }
 
         return result;
+
+        function relativeToBuildInfo(path: string) {
+            return ensurePathIsNonModuleName(getRelativePathFromDirectory(buildInfoDirectory, path, getCanonicalFileName));
+        }
     }
 
-    function convertToReusableDiagnostics(diagnostics: ReadonlyArray<Diagnostic>): ReadonlyArray<ReusableDiagnostic> {
+    function convertToReusableCompilerOptions(options: CompilerOptions, relativeToBuildInfo: (path: string) => string) {
+        const result: CompilerOptions = {};
+        const optionsNameMap = getOptionNameMap().optionNameMap;
+
+        for (const name in options) {
+            if (hasProperty(options, name)) {
+                result[name] = convertToReusableCompilerOptionValue(
+                    optionsNameMap.get(name.toLowerCase()),
+                    options[name] as CompilerOptionsValue,
+                    relativeToBuildInfo
+                );
+            }
+        }
+        if (result.configFilePath) {
+            result.configFilePath = relativeToBuildInfo(result.configFilePath);
+        }
+        return result;
+    }
+
+    function convertToReusableCompilerOptionValue(option: CommandLineOption | undefined, value: CompilerOptionsValue, relativeToBuildInfo: (path: string) => string) {
+        if (option) {
+            if (option.type === "list") {
+                const values = value as ReadonlyArray<string | number>;
+                if (option.element.isFilePath && values.length) {
+                    return values.map(relativeToBuildInfo);
+                }
+            }
+            else if (option.isFilePath) {
+                return relativeToBuildInfo(value as string);
+            }
+        }
+        return value;
+    }
+
+    function convertToReusableDiagnostics(diagnostics: ReadonlyArray<Diagnostic>, relativeToBuildInfo: (path: string) => string): ReadonlyArray<ReusableDiagnostic> {
         Debug.assert(!!diagnostics.length);
         return diagnostics.map(diagnostic => {
-            const result: ReusableDiagnostic = convertToReusableDiagnosticRelatedInformation(diagnostic);
+            const result: ReusableDiagnostic = convertToReusableDiagnosticRelatedInformation(diagnostic, relativeToBuildInfo);
             result.reportsUnnecessary = diagnostic.reportsUnnecessary;
             result.source = diagnostic.source;
             const { relatedInformation } = diagnostic;
             result.relatedInformation = relatedInformation ?
                 relatedInformation.length ?
-                    relatedInformation.map(r => convertToReusableDiagnosticRelatedInformation(r)) :
+                    relatedInformation.map(r => convertToReusableDiagnosticRelatedInformation(r, relativeToBuildInfo)) :
                     emptyArray :
                 undefined;
             return result;
         });
     }
 
-    function convertToReusableDiagnosticRelatedInformation(diagnostic: DiagnosticRelatedInformation): ReusableDiagnosticRelatedInformation {
-        const { file, messageText } = diagnostic;
+    function convertToReusableDiagnosticRelatedInformation(diagnostic: DiagnosticRelatedInformation, relativeToBuildInfo: (path: string) => string): ReusableDiagnosticRelatedInformation {
+        const { file } = diagnostic;
         return {
             ...diagnostic,
-            file: file && file.path,
-            messageText: messageText === undefined || isString(messageText) ?
-                messageText :
-                convertToReusableDiagnosticMessageChain(messageText)
-        };
-    }
-
-    function convertToReusableDiagnosticMessageChain(diagnostic: DiagnosticMessageChain): ReusableDiagnosticMessageChain {
-        return {
-            ...diagnostic,
-            next: diagnostic.next && convertToReusableDiagnosticMessageChain(diagnostic.next)
+            file: file ? relativeToBuildInfo(file.path) : undefined
         };
     }
 
@@ -767,7 +789,7 @@ namespace ts {
         const computeHash = host.createHash || generateDjb2Hash;
         let state = createBuilderProgramState(newProgram, getCanonicalFileName, oldState);
         let backupState: BuilderProgramState | undefined;
-        newProgram.getProgramBuildInfo = () => getProgramBuildInfo(state);
+        newProgram.getProgramBuildInfo = () => getProgramBuildInfo(state, getCanonicalFileName);
 
         // To ensure that we arent storing any references to old program or new program without state
         newProgram = undefined!; // TODO: GH#18217
@@ -980,26 +1002,35 @@ namespace ts {
         }
     }
 
-    function getMapOfReferencedSet(mapLike: MapLike<ReadonlyArray<string>> | undefined): ReadonlyMap<BuilderState.ReferencedSet> | undefined {
+    function getMapOfReferencedSet(mapLike: MapLike<ReadonlyArray<string>> | undefined, toPath: (path: string) => Path): ReadonlyMap<BuilderState.ReferencedSet> | undefined {
         if (!mapLike) return undefined;
         const map = createMap<BuilderState.ReferencedSet>();
         // Copies keys/values from template. Note that for..in will not throw if
         // template is undefined, and instead will just exit the loop.
         for (const key in mapLike) {
             if (hasProperty(mapLike, key)) {
-                map.set(key, arrayToSet(mapLike[key]));
+                map.set(toPath(key), arrayToSet(mapLike[key], toPath));
             }
         }
         return map;
     }
 
-    export function createBuildProgramUsingProgramBuildInfo(program: ProgramBuildInfo): EmitAndSemanticDiagnosticsBuilderProgram {
-        const fileInfos = createMapFromTemplate(program.fileInfos);
+    export function createBuildProgramUsingProgramBuildInfo(program: ProgramBuildInfo, buildInfoPath: string, host: ReadBuildProgramHost): EmitAndSemanticDiagnosticsBuilderProgram {
+        const buildInfoDirectory = getDirectoryPath(getNormalizedAbsolutePath(buildInfoPath, host.getCurrentDirectory()));
+        const getCanonicalFileName = createGetCanonicalFileName(host.useCaseSensitiveFileNames());
+
+        const fileInfos = createMap<BuilderState.FileInfo>();
+        for (const key in program.fileInfos) {
+            if (hasProperty(program.fileInfos, key)) {
+                fileInfos.set(toPath(key), program.fileInfos[key]);
+            }
+        }
+
         const state: ReusableBuilderProgramState = {
             fileInfos,
-            compilerOptions: program.options,
-            referencedMap: getMapOfReferencedSet(program.referencedMap),
-            exportedModulesMap: getMapOfReferencedSet(program.exportedModulesMap),
+            compilerOptions: convertFromReusableCompilerOptions(program.options, toAbsolutePath),
+            referencedMap: getMapOfReferencedSet(program.referencedMap, toPath),
+            exportedModulesMap: getMapOfReferencedSet(program.exportedModulesMap, toPath),
             semanticDiagnosticsPerFile: program.semanticDiagnosticsPerFile && arrayToMap(program.semanticDiagnosticsPerFile, value => isString(value) ? value : value[0], value => isString(value) ? emptyArray : value[1]),
             hasReusableDiagnostic: true
         };
@@ -1025,6 +1056,48 @@ namespace ts {
             emitNextAffectedFile: notImplemented,
             getSemanticDiagnosticsOfNextAffectedFile: notImplemented,
         };
+
+        function toPath(path: string) {
+            return ts.toPath(path, buildInfoDirectory, getCanonicalFileName);
+        }
+
+        function toAbsolutePath(path: string) {
+            return getNormalizedAbsolutePath(path, buildInfoDirectory);
+        }
+    }
+
+    function convertFromReusableCompilerOptions(options: CompilerOptions, toAbsolutePath: (path: string) => string) {
+        const result: CompilerOptions = {};
+        const optionsNameMap = getOptionNameMap().optionNameMap;
+
+        for (const name in options) {
+            if (hasProperty(options, name)) {
+                result[name] = convertFromReusableCompilerOptionValue(
+                    optionsNameMap.get(name.toLowerCase()),
+                    options[name] as CompilerOptionsValue,
+                    toAbsolutePath
+                );
+            }
+        }
+        if (result.configFilePath) {
+            result.configFilePath = toAbsolutePath(result.configFilePath);
+        }
+        return result;
+    }
+
+    function convertFromReusableCompilerOptionValue(option: CommandLineOption | undefined, value: CompilerOptionsValue, toAbsolutePath: (path: string) => string) {
+        if (option) {
+            if (option.type === "list") {
+                const values = value as ReadonlyArray<string | number>;
+                if (option.element.isFilePath && values.length) {
+                    return values.map(toAbsolutePath);
+                }
+            }
+            else if (option.isFilePath) {
+                return toAbsolutePath(value as string);
+            }
+        }
+        return value;
     }
 
     export function createRedirectedBuilderProgram(state: { program: Program | undefined; compilerOptions: CompilerOptions; }, configFileParsingDiagnostics: ReadonlyArray<Diagnostic>): BuilderProgram {

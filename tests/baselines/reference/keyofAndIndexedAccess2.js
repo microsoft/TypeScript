@@ -157,6 +157,15 @@ type Baz<T, Q extends Foo<T>> = { [K in keyof Q]: T[Q[K]] };
 
 type Qux<T, Q extends Bar<T>> = { [K in keyof Q]: T[Q[K]["0"]] };
 
+// Repro from #32038
+
+const actions = ['resizeTo', 'resizeBy'] as const;
+for (const action of actions) {
+	window[action] = (x, y) => {
+		window[action](x, y);
+	}
+}
+
 
 //// [keyofAndIndexedAccess2.js]
 function f1(obj, k0, k1, k2) {
@@ -252,4 +261,11 @@ export class c {
         this.a = "b";
         this["a"] = "b";
     }
+}
+// Repro from #32038
+const actions = ['resizeTo', 'resizeBy'];
+for (const action of actions) {
+    window[action] = (x, y) => {
+        window[action](x, y);
+    };
 }

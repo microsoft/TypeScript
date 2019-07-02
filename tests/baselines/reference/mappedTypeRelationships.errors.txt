@@ -387,3 +387,9 @@ tests/cases/conformance/types/mapped/mappedTypeRelationships.ts(168,5): error TS
         return t[k1][k2];
     }
     
+    // #31070
+    type Numeric<T> = { [K in keyof T]?: number };
+    function f90<T extends { x: number }>() {
+        const n: Numeric<T> = { x: 1 };
+    }
+    
