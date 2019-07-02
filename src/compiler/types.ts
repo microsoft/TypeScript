@@ -616,7 +616,12 @@ namespace ts {
     export const enum RelationComparisonResult {
         Succeeded = 1, // Should be truthy
         Failed = 2,
-        FailedAndReported = 3
+        FailedAndReported = 3,
+        ResultMask = 0x3,
+
+        ReportsUnmeasurable = 1 << 2,
+        ReportsUnreliable   = 1 << 3,
+        ReportsMask         = ReportsUnmeasurable | ReportsUnreliable
     }
 
     export interface Node extends TextRange {
