@@ -6071,6 +6071,10 @@ namespace ts {
         return node.kind === SyntaxKind.JSDocComment;
     }
 
+    export function isJSDocAuthorTag(node: Node): node is JSDocAuthorTag {
+        return node.kind === SyntaxKind.JSDocAuthorTag;
+    }
+
     export function isJSDocAugmentsTag(node: Node): node is JSDocAugmentsTag {
         return node.kind === SyntaxKind.JSDocAugmentsTag;
     }
