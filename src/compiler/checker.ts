@@ -17247,6 +17247,12 @@ namespace ts {
                         if (right.kind === SyntaxKind.TypeOfExpression && isStringLiteralLike(left)) {
                             return narrowTypeByTypeof(type, <TypeOfExpression>right, operator, left, assumeTrue);
                         }
+                        if (isConstructorAccessExpression(left) && right.kind === SyntaxKind.Identifier) {
+                            return narrowTypeByConstructor(type, left, operator, right, assumeTrue);
+                        }
+                        if (isConstructorAccessExpression(right) && left.kind === SyntaxKind.Identifier) {
+                            return narrowTypeByConstructor(type, right, operator, left, assumeTrue);
+                        }
                         if (isMatchingReference(reference, left)) {
                             return narrowTypeByEquality(type, operator, right, assumeTrue);
                         }
@@ -17275,6 +17281,13 @@ namespace ts {
                         return narrowType(type, expr.right, assumeTrue);
                 }
                 return type;
+
+                function isConstructorAccessExpression(expr: Expression): expr is AccessExpression {
+                    return (
+                        isPropertyAccessEntityNameExpression(expr) && idText(expr.name) === "constructor"
+                        || isElementAccessExpression(expr) && isStringLiteralLike(expr.argumentExpression) && expr.argumentExpression.text === "constructor"
+                    );
+                }
             }
 
             function narrowTypeByEquality(type: Type, operator: SyntaxKind, value: Expression, assumeTrue: boolean): Type {
@@ -17503,6 +17516,42 @@ namespace ts {
                     impliedType = getAssignmentReducedType(impliedType as UnionType, getBaseConstraintOrType(type));
                 }
                 return getTypeWithFacts(mapType(type, narrowTypeForTypeofSwitch(impliedType)), switchFacts);
+            }
+
+            function narrowTypeByConstructor(type: Type, constructorAccessExpr: AccessExpression, operator: SyntaxKind, identifier: Expression, assumeTrue: boolean): Type {
+                if (!assumeTrue || operator !== SyntaxKind.EqualsEqualsToken && operator !== SyntaxKind.EqualsEqualsEqualsToken) {
+                    return type;
+                }
+
+                if (!isMatchingReference(reference, constructorAccessExpr.expression)) {
+                    return declaredType;
+                }
+
+                const identifierType = getTypeOfExpression(identifier);
+                if (!isTypeSubtypeOf(identifierType, globalFunctionType)) {
+                    return type;
+                }
+
+                const prototypeProperty = getPropertyOfType(identifierType, "prototype" as __String);
+                if (!prototypeProperty) {
+                    return type;
+                }
+
+                const prototypeType = getTypeOfSymbol(prototypeProperty);
+                const candidate = !isTypeAny(prototypeType) ? prototypeType : undefined;
+                if (!candidate || candidate === globalObjectType || candidate === globalFunctionType) {
+                    return type;
+                }
+
+                return getNarrowedType(type, candidate, assumeTrue, isConstructedBy);
+
+                function isConstructedBy(source: Type, target: Type) {
+                    if (source.flags & TypeFlags.Primitive) {
+                        return areTypesComparable(source, target);
+                    }
+
+                    return isTypeDerivedFrom(source, target);
+                }
             }
 
             function narrowTypeByInstanceof(type: Type, expr: BinaryExpression, assumeTrue: boolean): Type {

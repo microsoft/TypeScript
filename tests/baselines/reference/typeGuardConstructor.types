@@ -1,0 +1,392 @@
+=== tests/cases/compiler/typeGuardConstructor.ts ===
+// Typical case
+class Foo {
+>Foo : Foo
+
+    prop1: string;
+>prop1 : string
+}
+
+let foo: Foo | number;
+>foo : number | Foo
+
+if (foo.constructor == Foo) {
+>foo.constructor == Foo : boolean
+>foo.constructor : Function
+>foo : number | Foo
+>constructor : Function
+>Foo : typeof Foo
+
+    foo.prop1; // string
+>foo.prop1 : string
+>foo : Foo
+>prop1 : string
+}
+if (foo["constructor"] == Foo) {
+>foo["constructor"] == Foo : boolean
+>foo["constructor"] : Function
+>foo : number | Foo
+>"constructor" : "constructor"
+>Foo : typeof Foo
+
+    foo.prop1; // string
+>foo.prop1 : string
+>foo : Foo
+>prop1 : string
+}
+if (foo.constructor === Foo) {
+>foo.constructor === Foo : boolean
+>foo.constructor : Function
+>foo : number | Foo
+>constructor : Function
+>Foo : typeof Foo
+
+    foo.prop1; // string
+>foo.prop1 : string
+>foo : Foo
+>prop1 : string
+}
+if (foo["constructor"] === Foo) {
+>foo["constructor"] === Foo : boolean
+>foo["constructor"] : Function
+>foo : number | Foo
+>"constructor" : "constructor"
+>Foo : typeof Foo
+
+    foo.prop1; // string
+>foo.prop1 : string
+>foo : Foo
+>prop1 : string
+}
+if (Foo == foo.constructor) {
+>Foo == foo.constructor : boolean
+>Foo : typeof Foo
+>foo.constructor : Function
+>foo : number | Foo
+>constructor : Function
+
+    foo.prop1; // string
+>foo.prop1 : string
+>foo : Foo
+>prop1 : string
+}
+if (Foo == foo["constructor"]) {
+>Foo == foo["constructor"] : boolean
+>Foo : typeof Foo
+>foo["constructor"] : Function
+>foo : number | Foo
+>"constructor" : "constructor"
+
+    foo.prop1; // string
+>foo.prop1 : string
+>foo : Foo
+>prop1 : string
+}
+if (Foo === foo.constructor) {
+>Foo === foo.constructor : boolean
+>Foo : typeof Foo
+>foo.constructor : Function
+>foo : number | Foo
+>constructor : Function
+
+    foo.prop1; // string
+>foo.prop1 : string
+>foo : Foo
+>prop1 : string
+}
+if (Foo === foo["constructor"]) {
+>Foo === foo["constructor"] : boolean
+>Foo : typeof Foo
+>foo["constructor"] : Function
+>foo : number | Foo
+>"constructor" : "constructor"
+
+    foo.prop1; // string
+>foo.prop1 : string
+>foo : Foo
+>prop1 : string
+}
+
+if (foo.constructor != Foo) {
+>foo.constructor != Foo : boolean
+>foo.constructor : Function
+>foo : number | Foo
+>constructor : Function
+>Foo : typeof Foo
+
+    foo.prop1; // ERROR
+>foo.prop1 : any
+>foo : number | Foo
+>prop1 : any
+}
+if (foo["constructor"] != Foo) {
+>foo["constructor"] != Foo : boolean
+>foo["constructor"] : Function
+>foo : number | Foo
+>"constructor" : "constructor"
+>Foo : typeof Foo
+
+    foo.prop1; // ERROR
+>foo.prop1 : any
+>foo : number | Foo
+>prop1 : any
+}
+if (foo.constructor !== Foo) {
+>foo.constructor !== Foo : boolean
+>foo.constructor : Function
+>foo : number | Foo
+>constructor : Function
+>Foo : typeof Foo
+
+    foo.prop1; // ERROR
+>foo.prop1 : any
+>foo : number | Foo
+>prop1 : any
+}
+if (foo["constructor"] !== Foo) {
+>foo["constructor"] !== Foo : boolean
+>foo["constructor"] : Function
+>foo : number | Foo
+>"constructor" : "constructor"
+>Foo : typeof Foo
+
+    foo.prop1; // ERROR
+>foo.prop1 : any
+>foo : number | Foo
+>prop1 : any
+}
+if (Foo != foo.constructor) {
+>Foo != foo.constructor : boolean
+>Foo : typeof Foo
+>foo.constructor : Function
+>foo : number | Foo
+>constructor : Function
+
+    foo.prop1; // ERROR
+>foo.prop1 : any
+>foo : number | Foo
+>prop1 : any
+}
+if (Foo != foo["constructor"]) {
+>Foo != foo["constructor"] : boolean
+>Foo : typeof Foo
+>foo["constructor"] : Function
+>foo : number | Foo
+>"constructor" : "constructor"
+
+    foo.prop1; // ERROR
+>foo.prop1 : any
+>foo : number | Foo
+>prop1 : any
+}
+if (Foo !== foo.constructor) {
+>Foo !== foo.constructor : boolean
+>Foo : typeof Foo
+>foo.constructor : Function
+>foo : number | Foo
+>constructor : Function
+
+    foo.prop1; // ERROR
+>foo.prop1 : any
+>foo : number | Foo
+>prop1 : any
+}
+if (Foo !== foo["constructor"]) {
+>Foo !== foo["constructor"] : boolean
+>Foo : typeof Foo
+>foo["constructor"] : Function
+>foo : number | Foo
+>"constructor" : "constructor"
+
+    foo.prop1; // ERROR
+>foo.prop1 : any
+>foo : number | Foo
+>prop1 : any
+}
+
+
+// Derived class case
+class Bar extends Foo {
+>Bar : Bar
+>Foo : Foo
+
+    prop2: number;
+>prop2 : number
+}
+
+let bar: Bar | boolean;
+>bar : boolean | Bar
+
+if (bar.constructor === Bar) {
+>bar.constructor === Bar : boolean
+>bar.constructor : Function
+>bar : boolean | Bar
+>constructor : Function
+>Bar : typeof Bar
+
+    bar.prop1; // string
+>bar.prop1 : string
+>bar : Bar
+>prop1 : string
+
+    bar.prop2; // number
+>bar.prop2 : number
+>bar : Bar
+>prop2 : number
+}
+if (bar.constructor === Foo) {
+>bar.constructor === Foo : boolean
+>bar.constructor : Function
+>bar : boolean | Bar
+>constructor : Function
+>Foo : typeof Foo
+
+    bar.prop1; // string
+>bar.prop1 : string
+>bar : Bar
+>prop1 : string
+
+    bar.prop2; // number
+>bar.prop2 : number
+>bar : Bar
+>prop2 : number
+}
+
+
+// Union of primitives, number, arrays, and Foo
+var x: number | "hello" | "world" | true | false | number[] | string[] | Foo;
+>x : number | boolean | Foo | "hello" | "world" | number[] | string[]
+>true : true
+>false : false
+
+if (x.constructor === Number) {
+>x.constructor === Number : boolean
+>x.constructor : Function
+>x : number | boolean | Foo | "hello" | "world" | number[] | string[]
+>constructor : Function
+>Number : NumberConstructor
+
+    x; // number
+>x : number
+}
+
+if (x.constructor === String) {
+>x.constructor === String : boolean
+>x.constructor : Function
+>x : number | boolean | Foo | "hello" | "world" | number[] | string[]
+>constructor : Function
+>String : StringConstructor
+
+    x; // "hello" | "world"
+>x : "hello" | "world"
+}
+
+if (x.constructor === Boolean) {
+>x.constructor === Boolean : boolean
+>x.constructor : Function
+>x : number | boolean | Foo | "hello" | "world" | number[] | string[]
+>constructor : Function
+>Boolean : BooleanConstructor
+
+    x; // boolean
+>x : boolean
+}
+
+if (x.constructor === Array) {
+>x.constructor === Array : boolean
+>x.constructor : Function
+>x : number | boolean | Foo | "hello" | "world" | number[] | string[]
+>constructor : Function
+>Array : ArrayConstructor
+
+    x; // number[] | string[]
+>x : number[] | string[]
+}
+
+if (x.constructor === Function) {
+>x.constructor === Function : boolean
+>x.constructor : Function
+>x : number | boolean | Foo | "hello" | "world" | number[] | string[]
+>constructor : Function
+>Function : FunctionConstructor
+
+    x; // declaredType
+>x : number | boolean | Foo | "hello" | "world" | number[] | string[]
+}
+
+if (x.constructor === Foo) {
+>x.constructor === Foo : boolean
+>x.constructor : Function
+>x : number | boolean | Foo | "hello" | "world" | number[] | string[]
+>constructor : Function
+>Foo : typeof Foo
+
+    x; // Foo
+>x : Foo
+
+    x.prop1; // string
+>x.prop1 : string
+>x : Foo
+>prop1 : string
+}
+
+
+// Narrowing any
+let a: any;
+>a : any
+
+if (a.constructor === Foo) {
+>a.constructor === Foo : boolean
+>a.constructor : any
+>a : any
+>constructor : any
+>Foo : typeof Foo
+
+    a; // Foo
+>a : Foo
+}
+if (a.constructor === "hello") {
+>a.constructor === "hello" : boolean
+>a.constructor : any
+>a : any
+>constructor : any
+>"hello" : "hello"
+
+    a; // any
+>a : any
+}
+if (a.constructor === Function) {
+>a.constructor === Function : boolean
+>a.constructor : any
+>a : any
+>constructor : any
+>Function : FunctionConstructor
+
+    a; // any
+>a : any
+}
+
+
+// If for some reason someone defines a type with it's own constructor property
+type S = {
+>S : S
+
+    constructor: () => void;
+>constructor : () => void
+
+};
+
+let s: S | string;
+>s : string | S
+
+if (s.constructor === String) {
+>s.constructor === String : boolean
+>s.constructor : Function | (() => void)
+>s : string | S
+>constructor : Function | (() => void)
+>String : StringConstructor
+
+    s; // string
+>s : string
+}
+
