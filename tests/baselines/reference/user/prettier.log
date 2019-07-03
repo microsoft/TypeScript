@@ -5,6 +5,8 @@ src/cli/util.js(60,44): error TS2345: Argument of type 'null' is not assignable 
 src/cli/util.js(119,38): error TS2339: Property 'sync' does not exist on type '(...args: any[]) => any'.
 src/cli/util.js(372,29): error TS2532: Object is possibly 'undefined'.
 src/cli/util.js(372,64): error TS2339: Property 'length' does not exist on type 'Ignore'.
+src/cli/util.js(413,36): error TS2345: Argument of type '{ dot: true; nodir: boolean; }' is not assignable to parameter of type 'GlobbyOptions'.
+  Object literal may only specify known properties, and 'nodir' does not exist in type 'GlobbyOptions'.
 src/cli/util.js(452,25): error TS2532: Object is possibly 'undefined'.
 src/cli/util.js(452,52): error TS2339: Property 'length' does not exist on type 'Ignore'.
 src/cli/util.js(510,44): error TS2345: Argument of type 'null' is not assignable to parameter of type 'number | undefined'.
