@@ -7,7 +7,7 @@ tests/cases/compiler/operationsAvailableOnPromisedType.ts(16,7): error TS2764: A
 tests/cases/compiler/operationsAvailableOnPromisedType.ts(17,5): error TS2776: This condition will always return 'false' since the types 'number' and 'Promise<number>' have no overlap. Did you forget to use 'await'?
 tests/cases/compiler/operationsAvailableOnPromisedType.ts(18,9): error TS2769: Type 'Promise<string[]>' is not an array type. Did you forget to use 'await'?
 tests/cases/compiler/operationsAvailableOnPromisedType.ts(19,21): error TS2770: Type 'Promise<string[]>' is not an array type or a string type. Did you forget to use 'await'?
-tests/cases/compiler/operationsAvailableOnPromisedType.ts(20,9): error TS2554: Expected 7 arguments, but got 4.
+tests/cases/compiler/operationsAvailableOnPromisedType.ts(20,12): error TS2345: Argument of type 'Promise<number>' is not assignable to parameter of type 'number'.
 tests/cases/compiler/operationsAvailableOnPromisedType.ts(21,11): error TS2570: Property 'prop' does not exist on type 'Promise<{ prop: string; }>'. Did you forget to use 'await'?
 tests/cases/compiler/operationsAvailableOnPromisedType.ts(23,27): error TS2770: Type 'Promise<string[]>' is not an array type or a string type. Did you forget to use 'await'?
 tests/cases/compiler/operationsAvailableOnPromisedType.ts(24,5): error TS2774: This expression is not callable. Did you forget to use 'await'?
@@ -59,10 +59,10 @@ tests/cases/compiler/operationsAvailableOnPromisedType.ts(27,5): error TS2349: T
         for (const s of c) {
                         ~
 !!! error TS2770: Type 'Promise<string[]>' is not an array type or a string type. Did you forget to use 'await'?
-            fn(b, b, c, d);
-            ~~~~~~~~~~~~~~
-!!! error TS2554: Expected 7 arguments, but got 4.
-!!! related TS6210 tests/cases/compiler/operationsAvailableOnPromisedType.ts:6:5: An argument for 'e' was not provided.
+            fn(b, b, c, d, e, f, g);
+               ~
+!!! error TS2345: Argument of type 'Promise<number>' is not assignable to parameter of type 'number'.
+!!! related TS2777 tests/cases/compiler/operationsAvailableOnPromisedType.ts:20:12: Did you forget to use 'await'?
             d.prop;
               ~~~~
 !!! error TS2570: Property 'prop' does not exist on type 'Promise<{ prop: string; }>'. Did you forget to use 'await'?

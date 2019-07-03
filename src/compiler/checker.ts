@@ -21434,6 +21434,7 @@ namespace ts {
                     const checkArgType = checkMode & CheckMode.SkipContextSensitive ? getRegularTypeOfObjectLiteral(argType) : argType;
                     if (!checkTypeRelatedToAndOptionallyElaborate(checkArgType, paramType, relation, reportErrors ? arg : undefined, arg, headMessage, containingMessageChain, errorOutputContainer)) {
                         Debug.assert(!reportErrors || !!errorOutputContainer.errors, "parameter should have errors when reporting errors");
+                        maybeAddMissingAwaitInfo(arg, checkArgType, paramType);
                         return errorOutputContainer.errors || [];
                     }
                 }
@@ -21443,10 +21444,20 @@ namespace ts {
                 const errorNode = reportErrors ? argCount < args.length ? args[argCount] : node : undefined;
                 if (!checkTypeRelatedTo(spreadType, restType, relation, errorNode, headMessage, /*containingMessageChain*/ undefined, errorOutputContainer)) {
                     Debug.assert(!reportErrors || !!errorOutputContainer.errors, "rest parameter should have errors when reporting errors");
+                    maybeAddMissingAwaitInfo(errorNode, spreadType, restType);
                     return errorOutputContainer.errors || [];
                 }
             }
             return undefined;
+
+            function maybeAddMissingAwaitInfo(errorNode: Node | undefined, source: Type, target: Type) {
+                if (errorNode && reportErrors && errorOutputContainer.errors && errorOutputContainer.errors.length) {
+                    const awaitedTypeOfSource = getAwaitedTypeOfPromise(source);
+                    if (awaitedTypeOfSource && isTypeRelatedTo(awaitedTypeOfSource, target, relation)) {
+                        addRelatedInfo(errorOutputContainer.errors[0], createDiagnosticForNode(errorNode, Diagnostics.Did_you_forget_to_use_await));
+                    }
+                }
+            }
         }
 
         /**

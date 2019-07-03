@@ -2757,6 +2757,10 @@
         "category": "Error",
         "code": 2788
     },
+    "Did you forget to use 'await'?": {
+        "category": "Error",
+        "code": 2789
+    },
 
     "Import declaration '{0}' is using private name '{1}'.": {
         "category": "Error",

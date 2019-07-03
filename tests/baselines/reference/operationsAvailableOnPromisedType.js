@@ -18,7 +18,7 @@ async function fn(
     a === b;
     [...c];
     for (const s of c) {
-        fn(b, b, c, d);
+        fn(b, b, c, d, e, f, g);
         d.prop;
     }
     for await (const s of c) {}
@@ -98,7 +98,7 @@ function fn(a, b, c, d, e, f, g) {
                     __spreadArrays(c);
                     for (_i = 0, c_2 = c; _i < c_2.length; _i++) {
                         s = c_2[_i];
-                        fn(b, b, c, d);
+                        fn(b, b, c, d, e, f, g);
                         d.prop;
                     }
                     _b.label = 1;

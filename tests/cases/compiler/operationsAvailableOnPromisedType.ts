@@ -17,7 +17,7 @@ async function fn(
     a === b;
     [...c];
     for (const s of c) {
-        fn(b, b, c, d);
+        fn(b, b, c, d, e, f, g);
         d.prop;
     }
     for await (const s of c) {}
