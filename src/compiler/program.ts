@@ -520,7 +520,6 @@ namespace ts {
         result += diag.messageText;
         indent++;
         if (diag.next) {
-            // TODO: Should be possible to optimise the common, non-tree case
             for (const kid of diag.next) {
                 result += flattenDiagnosticMessageText(kid, newLine, indent);
             }
