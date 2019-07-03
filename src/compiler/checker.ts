@@ -24537,7 +24537,9 @@ namespace ts {
                 if (awaitedTypesAreCompatible) {
                     const awaitedLeftType = getAwaitedType(leftType);
                     const awaitedRightType = getAwaitedType(rightType);
-                    wouldWorkWithAwait = !!(awaitedLeftType && awaitedRightType) && awaitedTypesAreCompatible(awaitedLeftType, awaitedRightType);
+                    wouldWorkWithAwait = !(awaitedLeftType === leftType && awaitedRightType === rightType)
+                        && !!(awaitedLeftType && awaitedRightType)
+                        && awaitedTypesAreCompatible(awaitedLeftType, awaitedRightType);
                 }
 
                 if (!tryGiveBetterPrimaryError(errNode, wouldWorkWithAwait, leftStr, rightStr)) {
@@ -24558,11 +24560,11 @@ namespace ts {
                 switch (operatorToken.kind) {
                     case SyntaxKind.EqualsEqualsEqualsToken:
                     case SyntaxKind.EqualsEqualsToken:
-                        typeName = "true";
+                        typeName = "false";
                         break;
                     case SyntaxKind.ExclamationEqualsEqualsToken:
                     case SyntaxKind.ExclamationEqualsToken:
-                        typeName = "false";
+                        typeName = "true";
                 }
 
                 if (typeName) {
