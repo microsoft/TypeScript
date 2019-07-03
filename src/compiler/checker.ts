@@ -22342,6 +22342,8 @@ namespace ts {
         function invocationErrorDetails(apparentType: Type, kind: SignatureKind): DiagnosticMessageChain {
             let errorInfo: DiagnosticMessageChain | undefined;
             const isCall = kind === SignatureKind.Call;
+            const awaitedType = getAwaitedType(apparentType);
+            const mightWorkWithAwait = awaitedType && getSignaturesOfType(awaitedType, kind).length > 0;
             if (apparentType.flags & TypeFlags.Union) {
                 const types = (apparentType as UnionType).types;
                 let hasSignatures = false;
@@ -22408,9 +22410,9 @@ namespace ts {
             }
             return chainDiagnosticMessages(
                 errorInfo,
-                isCall ?
-                    Diagnostics.This_expression_is_not_callable :
-                    Diagnostics.This_expression_is_not_constructable
+                mightWorkWithAwait
+                    ? isCall ? Diagnostics.This_expression_is_not_callable_Did_you_forget_to_use_await : Diagnostics.This_expression_is_not_constructable_Did_you_forget_to_use_await
+                    : isCall ? Diagnostics.This_expression_is_not_callable : Diagnostics.This_expression_is_not_constructable
             );
         }
         function invocationError(errorTarget: Node, apparentType: Type, kind: SignatureKind, relatedInformation?: DiagnosticRelatedInformation) {

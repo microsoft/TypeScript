@@ -24,4 +24,5 @@ async function fn(
     e();
     f();
     new g();
+    b();
 }
