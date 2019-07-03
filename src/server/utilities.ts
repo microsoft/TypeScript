@@ -227,5 +227,6 @@ namespace ts {
         NodeModulesForClosedScriptInfo = "node_modules for closed script infos in them",
         MissingSourceMapFile = "Missing source map file",
         NoopConfigFileForInferredRoot = "Noop Config file for the inferred project root",
+        MissingGeneratedFile = "Missing generated file"
     }
 }

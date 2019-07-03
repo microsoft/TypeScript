@@ -24,7 +24,7 @@ abstract class ExternalCompileRunnerBase extends RunnerBase {
      */
     initializeTests(): void {
         // Read in and evaluate the test list
-        const testList = this.tests && this.tests.length ? this.tests : this.enumerateTestFiles();
+        const testList = this.tests && this.tests.length ? this.tests : this.getTestFiles();
 
         // tslint:disable-next-line:no-this-assignment
         const cls = this;
@@ -113,7 +113,7 @@ class DockerfileRunner extends ExternalCompileRunnerBase {
     }
     initializeTests(): void {
         // Read in and evaluate the test list
-        const testList = this.tests && this.tests.length ? this.tests : this.enumerateTestFiles();
+        const testList = this.tests && this.tests.length ? this.tests : this.getTestFiles();
 
         // tslint:disable-next-line:no-this-assignment
         const cls = this;
@@ -201,7 +201,7 @@ function sanitizeTimestamps(result: string): string {
 function sanitizeVersionSpecifiers(result: string): string {
     return result
         .replace(/\d+.\d+.\d+-insiders.\d\d\d\d\d\d\d\d/g, "X.X.X-insiders.xxxxxxxx")
-        .replace(/([@v])\d+\.\d+\.\d+/g, "$1X.X.X");
+        .replace(/([@v\()])\d+\.\d+\.\d+/g, "$1X.X.X");
 }
 
 /**

@@ -65,6 +65,7 @@ namespace ts {
         let typeCount = 0;
         let symbolCount = 0;
         let enumCount = 0;
+        let instantiationCount = 0;
         let instantiationDepth = 0;
         let constraintDepth = 0;
         let currentNode: Node | undefined;
@@ -722,6 +723,7 @@ namespace ts {
             NoIndexSignatures = 1 << 0,
             Writing = 1 << 1,
             CacheSymbol = 1 << 2,
+            NoTupleBoundsCheck = 1 << 3,
         }
 
         const enum CallbackCheck {
@@ -4652,6 +4654,9 @@ namespace ts {
                     if (!isIdentifierText(name, compilerOptions.target) && !isNumericLiteralName(name)) {
                         return `"${escapeString(name, CharacterCodes.doubleQuote)}"`;
                     }
+                    if (isNumericLiteralName(name) && startsWith(name, "-")) {
+                        return `[${name}]`;
+                    }
                     return name;
                 }
                 if (nameType.flags & TypeFlags.UniqueESSymbol) {
@@ -5115,21 +5120,25 @@ namespace ts {
                 }
                 else if (isArrayLikeType(parentType)) {
                     const indexType = getLiteralType(index);
-                    const declaredType = getConstraintForLocation(getIndexedAccessType(parentType, indexType, declaration.name), declaration.name);
+                    const accessFlags = hasDefaultValue(declaration) ? AccessFlags.NoTupleBoundsCheck : 0;
+                    const declaredType = getConstraintForLocation(getIndexedAccessTypeOrUndefined(parentType, indexType, declaration.name, accessFlags) || errorType, declaration.name);
                     type = getFlowTypeOfDestructuring(declaration, declaredType);
                 }
                 else {
                     type = elementType;
                 }
             }
-            // In strict null checking mode, if a default value of a non-undefined type is specified, remove
-            // undefined from the final type.
-            if (strictNullChecks && declaration.initializer && !(getFalsyFlags(checkDeclarationInitializer(declaration)) & TypeFlags.Undefined)) {
-                type = getTypeWithFacts(type, TypeFacts.NEUndefined);
+            if (!declaration.initializer) {
+                return type;
             }
-            return declaration.initializer && !getEffectiveTypeAnnotationNode(walkUpBindingElementsAndPatterns(declaration)) ?
-                getUnionType([type, checkDeclarationInitializer(declaration)], UnionReduction.Subtype) :
-                type;
+            if (getEffectiveTypeAnnotationNode(walkUpBindingElementsAndPatterns(declaration))) {
+                // In strict null checking mode, if a default value of a non-undefined type is specified, remove
+                // undefined from the final type.
+                return strictNullChecks && !(getFalsyFlags(checkDeclarationInitializer(declaration)) & TypeFlags.Undefined) ?
+                    getTypeWithFacts(type, TypeFacts.NEUndefined) :
+                    type;
+            }
+            return getUnionType([getTypeWithFacts(type, TypeFacts.NEUndefined), checkDeclarationInitializer(declaration)], UnionReduction.Subtype);
         }
 
         function getTypeForDeclarationFromJSDocComment(declaration: Node) {
@@ -10140,7 +10149,7 @@ namespace ts {
                         propType;
                 }
                 if (everyType(objectType, isTupleType) && isNumericLiteralName(propName) && +propName >= 0) {
-                    if (accessNode && everyType(objectType, t => !(<TupleTypeReference>t).target.hasRestElement)) {
+                    if (accessNode && everyType(objectType, t => !(<TupleTypeReference>t).target.hasRestElement) && !(accessFlags & AccessFlags.NoTupleBoundsCheck)) {
                         const indexNode = getIndexNodeForAccessExpression(accessNode);
                         if (isTupleType(objectType)) {
                             error(indexNode, Diagnostics.Tuple_type_0_of_length_1_has_no_element_at_index_2,
@@ -11422,13 +11431,14 @@ namespace ts {
             if (!type || !mapper || mapper === identityMapper) {
                 return type;
             }
-            if (instantiationDepth === 50) {
+            if (instantiationDepth === 50 || instantiationCount >= 5000000) {
                 // We have reached 50 recursive type instantiations and there is a very high likelyhood we're dealing
                 // with a combination of infinite generic types that perpetually generate new type identities. We stop
                 // the recursion here by yielding the error type.
                 error(currentNode, Diagnostics.Type_instantiation_is_excessively_deep_and_possibly_infinite);
                 return errorType;
             }
+            instantiationCount++;
             instantiationDepth++;
             const result = instantiateTypeWorker(type, mapper);
             instantiationDepth--;
@@ -13287,14 +13297,14 @@ namespace ts {
                         if (!isGenericMappedType(source)) {
                             const targetConstraint = getConstraintTypeFromMappedType(target);
                             const sourceKeys = getIndexType(source, /*stringsOnly*/ undefined, /*noIndexSignatures*/ true);
-                            const hasOptionalUnionKeys = modifiers & MappedTypeModifiers.IncludeOptional && targetConstraint.flags & TypeFlags.Union;
-                            const filteredByApplicability = hasOptionalUnionKeys ? filterType(targetConstraint, t => !!isRelatedTo(t, sourceKeys)) : undefined;
+                            const includeOptional = modifiers & MappedTypeModifiers.IncludeOptional;
+                            const filteredByApplicability = includeOptional ? intersectTypes(targetConstraint, sourceKeys) : undefined;
                             // A source type T is related to a target type { [P in Q]: X } if Q is related to keyof T and T[Q] is related to X.
                             // A source type T is related to a target type { [P in Q]?: X } if some constituent Q' of Q is related to keyof T and T[Q'] is related to X.
-                            if (hasOptionalUnionKeys
+                            if (includeOptional
                                     ? !(filteredByApplicability!.flags & TypeFlags.Never)
                                     : isRelatedTo(targetConstraint, sourceKeys)) {
-                                const indexingType = hasOptionalUnionKeys ? filteredByApplicability! : getTypeParameterFromMappedType(target);
+                                const indexingType = filteredByApplicability || getTypeParameterFromMappedType(target);
                                 const indexedAccessType = getIndexedAccessType(source, indexingType);
                                 const templateType = getTemplateTypeFromMappedType(target);
                                 if (result = isRelatedTo(indexedAccessType, templateType, reportErrors)) {
@@ -15429,36 +15439,11 @@ namespace ts {
                     inferFromTypes(getFalseTypeFromConditionalType(<ConditionalType>source), getFalseTypeFromConditionalType(<ConditionalType>target));
                 }
                 else if (target.flags & TypeFlags.Conditional && !contravariant) {
-                    inferFromTypes(source, getTrueTypeFromConditionalType(<ConditionalType>target));
-                    inferFromTypes(source, getFalseTypeFromConditionalType(<ConditionalType>target));
+                    const targetTypes = [getTrueTypeFromConditionalType(<ConditionalType>target), getFalseTypeFromConditionalType(<ConditionalType>target)];
+                    inferToMultipleTypes(source, targetTypes, /*isIntersection*/ false);
                 }
                 else if (target.flags & TypeFlags.UnionOrIntersection) {
-                    // We infer from types that are not naked type variables first so that inferences we
-                    // make from nested naked type variables and given slightly higher priority by virtue
-                    // of being first in the candidates array.
-                    let typeVariableCount = 0;
-                    for (const t of (<UnionOrIntersectionType>target).types) {
-                        if (getInferenceInfoForType(t)) {
-                            typeVariableCount++;
-                        }
-                        else {
-                            inferFromTypes(source, t);
-                        }
-                    }
-                    // Inferences directly to naked type variables are given lower priority as they are
-                    // less specific. For example, when inferring from Promise<string> to T | Promise<T>,
-                    // we want to infer string for T, not Promise<string> | string. For intersection types
-                    // we only infer to single naked type variables.
-                    if (target.flags & TypeFlags.Union ? typeVariableCount !== 0 : typeVariableCount === 1) {
-                        const savePriority = priority;
-                        priority |= InferencePriority.NakedTypeVariable;
-                        for (const t of (<UnionOrIntersectionType>target).types) {
-                            if (getInferenceInfoForType(t)) {
-                                inferFromTypes(source, t);
-                            }
-                        }
-                        priority = savePriority;
-                    }
+                    inferToMultipleTypes(source, (<UnionOrIntersectionType>target).types, !!(target.flags & TypeFlags.Intersection));
                 }
                 else if (source.flags & TypeFlags.Union) {
                     // Source is a union or intersection type, infer from each constituent type
@@ -15554,6 +15539,35 @@ namespace ts {
                     }
                 }
                 return undefined;
+            }
+
+            function inferToMultipleTypes(source: Type, targets: Type[], isIntersection: boolean) {
+                // We infer from types that are not naked type variables first so that inferences we
+                // make from nested naked type variables and given slightly higher priority by virtue
+                // of being first in the candidates array.
+                let typeVariableCount = 0;
+                for (const t of targets) {
+                    if (getInferenceInfoForType(t)) {
+                        typeVariableCount++;
+                    }
+                    else {
+                        inferFromTypes(source, t);
+                    }
+                }
+                // Inferences directly to naked type variables are given lower priority as they are
+                // less specific. For example, when inferring from Promise<string> to T | Promise<T>,
+                // we want to infer string for T, not Promise<string> | string. For intersection types
+                // we only infer to single naked type variables.
+                if (isIntersection ? typeVariableCount === 1 : typeVariableCount !== 0) {
+                    const savePriority = priority;
+                    priority |= InferencePriority.NakedTypeVariable;
+                    for (const t of targets) {
+                        if (getInferenceInfoForType(t)) {
+                            inferFromTypes(source, t);
+                        }
+                    }
+                    priority = savePriority;
+                }
             }
 
             function inferToMappedType(source: Type, target: MappedType, constraintType: Type): boolean {
@@ -19287,26 +19301,7 @@ namespace ts {
         function getArrayLiteralTupleTypeIfApplicable(elementTypes: Type[], contextualType: Type | undefined, hasRestElement: boolean, elementCount = elementTypes.length, readonly = false) {
             // Infer a tuple type when the contextual type is or contains a tuple-like type
             if (readonly || (contextualType && forEachType(contextualType, isTupleLikeType))) {
-                const minLength = elementCount - (hasRestElement ? 1 : 0);
-                const pattern = contextualType && contextualType.pattern;
-                // If array literal is contextually typed by a binding pattern or an assignment pattern, pad the resulting
-                // tuple type with the corresponding binding or assignment element types to make the lengths equal.
-                if (!hasRestElement && pattern && (pattern.kind === SyntaxKind.ArrayBindingPattern || pattern.kind === SyntaxKind.ArrayLiteralExpression)) {
-                    const patternElements = (<BindingPattern | ArrayLiteralExpression>pattern).elements;
-                    for (let i = elementCount; i < patternElements.length; i++) {
-                        const e = patternElements[i];
-                        if (hasDefaultValue(e)) {
-                            elementTypes.push((<TypeReference>contextualType).typeArguments![i]);
-                        }
-                        else if (i < patternElements.length - 1 || !(e.kind === SyntaxKind.BindingElement && (<BindingElement>e).dotDotDotToken || e.kind === SyntaxKind.SpreadElement)) {
-                            if (e.kind !== SyntaxKind.OmittedExpression) {
-                                error(e, Diagnostics.Initializer_provides_no_value_for_this_binding_element_and_the_binding_element_has_no_default_value);
-                            }
-                            elementTypes.push(strictNullChecks ? implicitNeverType : undefinedWideningType);
-                        }
-                    }
-                }
-                return createTupleType(elementTypes, minLength, hasRestElement, readonly);
+                return createTupleType(elementTypes, elementCount - (hasRestElement ? 1 : 0), hasRestElement, readonly);
             }
         }
 
@@ -23906,8 +23901,10 @@ namespace ts {
                     if (isArrayLikeType(sourceType)) {
                         // We create a synthetic expression so that getIndexedAccessType doesn't get confused
                         // when the element is a SyntaxKind.ElementAccessExpression.
-                        const elementType = getIndexedAccessType(sourceType, indexType, createSyntheticExpression(element, indexType));
-                        const type = getFlowTypeOfDestructuring(element, elementType);
+                        const accessFlags = hasDefaultValue(element) ? AccessFlags.NoTupleBoundsCheck : 0;
+                        const elementType = getIndexedAccessTypeOrUndefined(sourceType, indexType, createSyntheticExpression(element, indexType), accessFlags) || errorType;
+                        const assignedType = hasDefaultValue(element) ? getTypeWithFacts(elementType, TypeFacts.NEUndefined) : elementType;
+                        const type = getFlowTypeOfDestructuring(element, assignedType);
                         return checkDestructuringAssignment(element, type, checkMode);
                     }
                     return checkDestructuringAssignment(element, elementType, checkMode);
@@ -24496,10 +24493,13 @@ namespace ts {
         function checkDeclarationInitializer(declaration: HasExpressionInitializer) {
             const initializer = getEffectiveInitializer(declaration)!;
             const type = getTypeOfExpression(initializer, /*cache*/ true);
+            const padded = isParameter(declaration) && declaration.name.kind === SyntaxKind.ArrayBindingPattern &&
+                isTupleType(type) && !type.target.hasRestElement && getTypeReferenceArity(type) < declaration.name.elements.length ?
+                padTupleType(type, declaration.name) : type;
             const widened = getCombinedNodeFlags(declaration) & NodeFlags.Const ||
                 isDeclarationReadonly(declaration) ||
                 isTypeAssertion(initializer) ||
-                isLiteralOfContextualType(type, getContextualType(initializer)) ? type : getWidenedLiteralType(type);
+                isLiteralOfContextualType(padded, getContextualType(initializer)) ? padded : getWidenedLiteralType(padded);
             if (isInJSFile(declaration)) {
                 if (widened.flags & TypeFlags.Nullable) {
                     reportImplicitAny(declaration, anyType);
@@ -24511,6 +24511,22 @@ namespace ts {
                 }
             }
             return widened;
+        }
+
+        function padTupleType(type: TupleTypeReference, pattern: ArrayBindingPattern) {
+            const patternElements = pattern.elements;
+            const arity = getTypeReferenceArity(type);
+            const elementTypes = arity ? type.typeArguments!.slice() : [];
+            for (let i = arity; i < patternElements.length; i++) {
+                const e = patternElements[i];
+                if (i < patternElements.length - 1 || !(e.kind === SyntaxKind.BindingElement && e.dotDotDotToken)) {
+                    elementTypes.push(!isOmittedExpression(e) && hasDefaultValue(e) ? getTypeFromBindingElement(e, /*includePatternInType*/ false, /*reportErrors*/ false) : anyType);
+                    if (!isOmittedExpression(e) && !hasDefaultValue(e)) {
+                        reportImplicitAny(e, anyType);
+                    }
+                }
+            }
+            return createTupleType(elementTypes, type.target.minLength, /*hasRestElement*/ false, type.target.readonly);
         }
 
         function isLiteralOfContextualType(candidateType: Type, contextualType: Type | undefined): boolean {
@@ -24761,6 +24777,7 @@ namespace ts {
         function checkExpression(node: Expression | QualifiedName, checkMode?: CheckMode, forceTuple?: boolean): Type {
             const saveCurrentNode = currentNode;
             currentNode = node;
+            instantiationCount = 0;
             const uninstantiatedType = checkExpressionWorker(node, checkMode, forceTuple);
             const type = instantiateTypeWithSingleGenericCallSignature(node, uninstantiatedType, checkMode);
             if (isConstEnumObjectType(type)) {
@@ -29482,6 +29499,7 @@ namespace ts {
             if (node) {
                 const saveCurrentNode = currentNode;
                 currentNode = node;
+                instantiationCount = 0;
                 checkSourceElementWorker(node);
                 currentNode = saveCurrentNode;
             }
@@ -29753,6 +29771,7 @@ namespace ts {
         function checkDeferredNode(node: Node) {
             const saveCurrentNode = currentNode;
             currentNode = node;
+            instantiationCount = 0;
             switch (node.kind) {
                 case SyntaxKind.FunctionExpression:
                 case SyntaxKind.ArrowFunction:

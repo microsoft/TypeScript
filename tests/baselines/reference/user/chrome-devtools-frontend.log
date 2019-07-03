@@ -28,7 +28,8 @@ node_modules/chrome-devtools-frontend/front_end/Runtime.js(280,5): error TS2322:
 node_modules/chrome-devtools-frontend/front_end/Runtime.js(283,12): error TS2554: Expected 2-3 arguments, but got 1.
 node_modules/chrome-devtools-frontend/front_end/Runtime.js(527,49): error TS2352: Conversion of type 'Window' to type 'new () => any' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
   Type 'Window' provides no match for the signature 'new (): any'.
-node_modules/chrome-devtools-frontend/front_end/Runtime.js(539,20): error TS2351: Cannot use 'new' with an expression whose type lacks a call or construct signature.
+node_modules/chrome-devtools-frontend/front_end/Runtime.js(539,24): error TS2351: This expression is not constructable.
+  Type 'Function' has no construct signatures.
 node_modules/chrome-devtools-frontend/front_end/Runtime.js(693,7): error TS2322: Type 'Promise<boolean>' is not assignable to type 'Promise<undefined>'.
   Type 'boolean' is not assignable to type 'undefined'.
 node_modules/chrome-devtools-frontend/front_end/Runtime.js(705,5): error TS2322: Type 'Promise<boolean>' is not assignable to type 'Promise<undefined>'.
@@ -6104,7 +6105,8 @@ node_modules/chrome-devtools-frontend/front_end/event_listeners/EventListenersUt
 node_modules/chrome-devtools-frontend/front_end/event_listeners/EventListenersUtils.js(295,16): error TS2339: Property 'devtoolsFrameworkEventListeners' does not exist on type 'Window'.
 node_modules/chrome-devtools-frontend/front_end/event_listeners/EventListenersUtils.js(295,68): error TS2339: Property 'devtoolsFrameworkEventListeners' does not exist on type 'Window'.
 node_modules/chrome-devtools-frontend/front_end/event_listeners/EventListenersUtils.js(296,41): error TS2339: Property 'devtoolsFrameworkEventListeners' does not exist on type 'Window'.
-node_modules/chrome-devtools-frontend/front_end/event_listeners/EventListenersUtils.js(306,37): error TS2349: Cannot invoke an expression whose type lacks a call signature. Type '(<U>(callbackfn: (value: any, index: number, array: any[]) => U, thisArg?: any) => U[]) | (<U>(callbackfn: (value: { handler: any; useCapture: boolean; passive: boolean; once: boolean; type: string; }, index: number, array: { ...; }[]) => U, thisArg?: any) => U[])' has no compatible call signatures.
+node_modules/chrome-devtools-frontend/front_end/event_listeners/EventListenersUtils.js(306,66): error TS2349: This expression is not callable.
+  Each member of the union type '(<U>(callbackfn: (value: any, index: number, array: any[]) => U, thisArg?: any) => U[]) | (<U>(callbackfn: (value: { handler: any; useCapture: boolean; passive: boolean; once: boolean; type: string; }, index: number, array: { ...; }[]) => U, thisArg?: any) => U[])' has signatures, but none of those signatures are compatible with each other.
 node_modules/chrome-devtools-frontend/front_end/event_listeners/EventListenersUtils.js(324,5): error TS2741: Property 'internalHandlers' is missing in type '{ eventListeners: any[]; }' but required in type '{ eventListeners: any[]; internalHandlers: (() => any)[]; }'.
 node_modules/chrome-devtools-frontend/front_end/event_listeners/EventListenersUtils.js(345,33): error TS2694: Namespace 'EventListeners' has no exported member 'EventListenerObjectInInspectedPage'.
 node_modules/chrome-devtools-frontend/front_end/event_listeners/EventListenersUtils.js(420,32): error TS2352: Conversion of type '{ fn: any; data: any; _data: any; }' to type '(arg0: Node) => any' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
@@ -6839,7 +6841,6 @@ node_modules/chrome-devtools-frontend/front_end/layer_viewer/LayerDetailsView.js
 node_modules/chrome-devtools-frontend/front_end/layer_viewer/LayerDetailsView.js(198,65): error TS2555: Expected at least 2 arguments, but got 1.
 node_modules/chrome-devtools-frontend/front_end/layer_viewer/LayerDetailsView.js(199,53): error TS2339: Property 'createChild' does not exist on type 'Element'.
 node_modules/chrome-devtools-frontend/front_end/layer_viewer/LayerDetailsView.js(200,52): error TS2555: Expected at least 2 arguments, but got 1.
-node_modules/chrome-devtools-frontend/front_end/layer_viewer/LayerDetailsView.js(239,3): error TS2322: Type 'symbol' is not assignable to type 'string'.
 node_modules/chrome-devtools-frontend/front_end/layer_viewer/LayerDetailsView.js(246,25): error TS2555: Expected at least 2 arguments, but got 1.
 node_modules/chrome-devtools-frontend/front_end/layer_viewer/LayerDetailsView.js(247,19): error TS2555: Expected at least 2 arguments, but got 1.
 node_modules/chrome-devtools-frontend/front_end/layer_viewer/LayerDetailsView.js(248,20): error TS2555: Expected at least 2 arguments, but got 1.
@@ -6932,8 +6933,6 @@ node_modules/chrome-devtools-frontend/front_end/layer_viewer/Layers3DView.js(718
 node_modules/chrome-devtools-frontend/front_end/layer_viewer/Layers3DView.js(726,44): error TS2339: Property 'clientX' does not exist on type 'Event'.
 node_modules/chrome-devtools-frontend/front_end/layer_viewer/Layers3DView.js(727,24): error TS2339: Property 'clientY' does not exist on type 'Event'.
 node_modules/chrome-devtools-frontend/front_end/layer_viewer/Layers3DView.js(762,26): error TS2339: Property 'LayerStyle' does not exist on type 'typeof Layers3DView'.
-node_modules/chrome-devtools-frontend/front_end/layer_viewer/Layers3DView.js(777,3): error TS2322: Type 'symbol' is not assignable to type 'string'.
-node_modules/chrome-devtools-frontend/front_end/layer_viewer/Layers3DView.js(778,3): error TS2322: Type 'symbol' is not assignable to type 'string'.
 node_modules/chrome-devtools-frontend/front_end/layer_viewer/Layers3DView.js(794,28): error TS2555: Expected at least 2 arguments, but got 1.
 node_modules/chrome-devtools-frontend/front_end/layer_viewer/Layers3DView.js(795,29): error TS2555: Expected at least 2 arguments, but got 1.
 node_modules/chrome-devtools-frontend/front_end/layer_viewer/Layers3DView.js(796,29): error TS2555: Expected at least 2 arguments, but got 1.
@@ -8941,7 +8940,8 @@ node_modules/chrome-devtools-frontend/front_end/profiler/ProfileDataGrid.js(131,
   Property '_populated' does not exist on type 'ProfileDataGridNode'.
 node_modules/chrome-devtools-frontend/front_end/profiler/ProfileDataGrid.js(133,15): error TS2339: Property '_populated' does not exist on type 'ProfileDataGridNode | ProfileDataGridTree'.
   Property '_populated' does not exist on type 'ProfileDataGridNode'.
-node_modules/chrome-devtools-frontend/front_end/profiler/ProfileDataGrid.js(140,7): error TS2349: Cannot invoke an expression whose type lacks a call signature. Type '(<T>(comparator: (arg0: T, arg1: T) => any, force: boolean) => any) | (<T>(comparator: (arg0: T, arg1: T) => any, force: boolean) => void)' has no compatible call signatures.
+node_modules/chrome-devtools-frontend/front_end/profiler/ProfileDataGrid.js(140,17): error TS2349: This expression is not callable.
+  Each member of the union type '(<T>(comparator: (arg0: T, arg1: T) => any, force: boolean) => any) | (<T>(comparator: (arg0: T, arg1: T) => any, force: boolean) => void)' has signatures, but none of those signatures are compatible with each other.
 node_modules/chrome-devtools-frontend/front_end/profiler/ProfileDataGrid.js(153,49): error TS2339: Property '_searchMatchedSelfColumn' does not exist on type 'ProfileDataGridNode'.
 node_modules/chrome-devtools-frontend/front_end/profiler/ProfileDataGrid.js(158,49): error TS2339: Property '_searchMatchedTotalColumn' does not exist on type 'ProfileDataGridNode'.
 node_modules/chrome-devtools-frontend/front_end/profiler/ProfileDataGrid.js(163,49): error TS2339: Property '_searchMatchedFunctionColumn' does not exist on type 'ProfileDataGridNode'.
@@ -10085,7 +10085,8 @@ node_modules/chrome-devtools-frontend/front_end/sdk/NetworkManager.js(955,42): e
 node_modules/chrome-devtools-frontend/front_end/sdk/NetworkManager.js(976,41): error TS2694: Namespace 'SDK.NetworkManager' has no exported member 'BlockedPattern'.
 node_modules/chrome-devtools-frontend/front_end/sdk/NetworkManager.js(1019,52): error TS2694: Namespace 'SDK.MultitargetNetworkManager' has no exported member 'InterceptionPattern'.
 node_modules/chrome-devtools-frontend/front_end/sdk/NetworkManager.js(1020,45): error TS2694: Namespace 'SDK.MultitargetNetworkManager' has no exported member 'RequestInterceptor'.
-node_modules/chrome-devtools-frontend/front_end/sdk/NetworkManager.js(1060,13): error TS2349: Cannot invoke an expression whose type lacks a call signature. Type '{}' has no compatible call signatures.
+node_modules/chrome-devtools-frontend/front_end/sdk/NetworkManager.js(1060,13): error TS2349: This expression is not callable.
+  Type '{}' has no call signatures.
 node_modules/chrome-devtools-frontend/front_end/sdk/NetworkManager.js(1084,19): error TS2339: Property 'networkAgent' does not exist on type 'Target'.
 node_modules/chrome-devtools-frontend/front_end/sdk/NetworkManager.js(1089,14): error TS7014: Function type, which lacks return-type annotation, implicitly has an 'any' return type.
 node_modules/chrome-devtools-frontend/front_end/sdk/NetworkManager.js(1101,35): error TS2345: Argument of type '{}' is not assignable to parameter of type '{ [x: string]: string; }'.
