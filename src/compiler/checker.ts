@@ -933,15 +933,16 @@ namespace ts {
         }
 
         function errorAndMaybeSuggestAwait(
-            location: Node | undefined,
+            location: Node,
             maybeMissingAwait: boolean,
-            defaultMessage: DiagnosticMessage,
-            missingAwaitMessage: DiagnosticMessage,
+            message: DiagnosticMessage,
             arg0?: string | number | undefined, arg1?: string | number | undefined, arg2?: string | number | undefined, arg3?: string | number | undefined): Diagnostic {
+            const diagnostic = error(location, message, arg0, arg1, arg2, arg3);
             if (maybeMissingAwait) {
-                return error(location, missingAwaitMessage, arg0, arg1, arg2, arg3);
+                const related = createDiagnosticForNode(location, Diagnostics.Did_you_forget_to_use_await);
+                addRelatedInfo(diagnostic, related);
             }
-            return error(location, defaultMessage, arg0, arg1, arg2, arg3);
+            return diagnostic;
         }
 
         function createSymbol(flags: SymbolFlags, name: __String, checkFlags?: CheckFlags) {
@@ -22350,11 +22351,11 @@ namespace ts {
             return true;
         }
 
-        function invocationErrorDetails(apparentType: Type, kind: SignatureKind): DiagnosticMessageChain {
+        function invocationErrorDetails(apparentType: Type, kind: SignatureKind): { messageChain: DiagnosticMessageChain, relatedMessage: DiagnosticMessage | undefined } {
             let errorInfo: DiagnosticMessageChain | undefined;
             const isCall = kind === SignatureKind.Call;
             const awaitedType = getAwaitedType(apparentType);
-            const mightWorkWithAwait = awaitedType && getSignaturesOfType(awaitedType, kind).length > 0;
+            const maybeMissingAwait = awaitedType && getSignaturesOfType(awaitedType, kind).length > 0;
             if (apparentType.flags & TypeFlags.Union) {
                 const types = (apparentType as UnionType).types;
                 let hasSignatures = false;
@@ -22419,15 +22420,20 @@ namespace ts {
                     typeToString(apparentType)
                 );
             }
-            return chainDiagnosticMessages(
-                errorInfo,
-                mightWorkWithAwait
-                    ? isCall ? Diagnostics.This_expression_is_not_callable_Did_you_forget_to_use_await : Diagnostics.This_expression_is_not_constructable_Did_you_forget_to_use_await
-                    : isCall ? Diagnostics.This_expression_is_not_callable : Diagnostics.This_expression_is_not_constructable
-            );
+            return {
+                messageChain: chainDiagnosticMessages(
+                    errorInfo,
+                    isCall ? Diagnostics.This_expression_is_not_callable : Diagnostics.This_expression_is_not_constructable
+                ),
+                relatedMessage: maybeMissingAwait ? Diagnostics.Did_you_forget_to_use_await : undefined,
+            };
         }
         function invocationError(errorTarget: Node, apparentType: Type, kind: SignatureKind, relatedInformation?: DiagnosticRelatedInformation) {
-            const diagnostic = createDiagnosticForNodeFromMessageChain(errorTarget, invocationErrorDetails(apparentType, kind));
+            const { messageChain, relatedMessage: relatedInfo } = invocationErrorDetails(apparentType, kind);
+            const diagnostic = createDiagnosticForNodeFromMessageChain(errorTarget, messageChain);
+            if (relatedInfo) {
+                addRelatedInfo(diagnostic, createDiagnosticForNode(errorTarget, relatedInfo));
+            }
             if (isCallExpression(errorTarget.parent)) {
                 const { start, length } = getDiagnosticSpanForCallNode(errorTarget.parent, /* doNotIncludeArguments */ true);
                 diagnostic.start = start;
@@ -22527,9 +22533,12 @@ namespace ts {
 
             const headMessage = getDiagnosticHeadMessageForDecoratorResolution(node);
             if (!callSignatures.length) {
-                let errorInfo = invocationErrorDetails(apparentType, SignatureKind.Call);
-                errorInfo = chainDiagnosticMessages(errorInfo, headMessage);
-                const diag = createDiagnosticForNodeFromMessageChain(node.expression, errorInfo);
+                const errorDetails = invocationErrorDetails(apparentType, SignatureKind.Call);
+                const messageChain = chainDiagnosticMessages(errorDetails.messageChain, headMessage);
+                const diag = createDiagnosticForNodeFromMessageChain(node.expression, messageChain);
+                if (errorDetails.relatedMessage) {
+                    addRelatedInfo(diag, createDiagnosticForNode(node.expression, errorDetails.relatedMessage));
+                }
                 diagnostics.add(diag);
                 invocationErrorRecovery(apparentType, SignatureKind.Call, diag);
                 return resolveErrorCall(node);
@@ -23687,14 +23696,13 @@ namespace ts {
             }
         }
 
-        function checkArithmeticOperandType(operand: Node, type: Type, diagnostic: DiagnosticMessage, missingAwaitDiagnostic: DiagnosticMessage): boolean {
+        function checkArithmeticOperandType(operand: Node, type: Type, diagnostic: DiagnosticMessage): boolean {
             if (!isTypeAssignableTo(type, numberOrBigIntType)) {
                 const awaitedType = getAwaitedType(type);
                 errorAndMaybeSuggestAwait(
                     operand,
                     !!awaitedType && isTypeAssignableTo(awaitedType, numberOrBigIntType),
-                    diagnostic,
-                    missingAwaitDiagnostic);
+                    diagnostic);
                 return false;
             }
             return true;
@@ -23892,8 +23900,7 @@ namespace ts {
                 case SyntaxKind.PlusPlusToken:
                 case SyntaxKind.MinusMinusToken:
                     const ok = checkArithmeticOperandType(node.operand, checkNonNullType(operandType, node.operand),
-                        Diagnostics.An_arithmetic_operand_must_be_of_type_any_number_bigint_or_an_enum_type,
-                        Diagnostics.An_arithmetic_operand_must_be_of_type_any_number_bigint_or_an_enum_type_Did_you_forget_to_use_await);
+                        Diagnostics.An_arithmetic_operand_must_be_of_type_any_number_bigint_or_an_enum_type);
                     if (ok) {
                         // run check only if former checks succeeded to avoid reporting cascading errors
                         checkReferenceExpression(node.operand, Diagnostics.The_operand_of_an_increment_or_decrement_operator_must_be_a_variable_or_a_property_access);
@@ -23911,8 +23918,7 @@ namespace ts {
             const ok = checkArithmeticOperandType(
                 node.operand,
                 checkNonNullType(operandType, node.operand),
-                Diagnostics.An_arithmetic_operand_must_be_of_type_any_number_bigint_or_an_enum_type,
-                Diagnostics.An_arithmetic_operand_must_be_of_type_any_number_bigint_or_an_enum_type_Did_you_forget_to_use_await);
+                Diagnostics.An_arithmetic_operand_must_be_of_type_any_number_bigint_or_an_enum_type);
             if (ok) {
                 // run check only if former checks succeeded to avoid reporting cascading errors
                 checkReferenceExpression(node.operand, Diagnostics.The_operand_of_an_increment_or_decrement_operator_must_be_a_variable_or_a_property_access);
@@ -24304,8 +24310,8 @@ namespace ts {
                     }
                     else {
                         // otherwise just check each operand separately and report errors as normal
-                        const leftOk = checkArithmeticOperandType(left, leftType, Diagnostics.The_left_hand_side_of_an_arithmetic_operation_must_be_of_type_any_number_bigint_or_an_enum_type, Diagnostics.The_left_hand_side_of_an_arithmetic_operation_must_be_of_type_any_number_bigint_or_an_enum_type_Did_you_forget_to_use_await);
-                        const rightOk = checkArithmeticOperandType(right, rightType, Diagnostics.The_right_hand_side_of_an_arithmetic_operation_must_be_of_type_any_number_bigint_or_an_enum_type, Diagnostics.The_right_hand_side_of_an_arithmetic_operation_must_be_of_type_any_number_bigint_or_an_enum_type_Did_you_forget_to_use_await);
+                        const leftOk = checkArithmeticOperandType(left, leftType, Diagnostics.The_left_hand_side_of_an_arithmetic_operation_must_be_of_type_any_number_bigint_or_an_enum_type);
+                        const rightOk = checkArithmeticOperandType(right, rightType, Diagnostics.The_right_hand_side_of_an_arithmetic_operation_must_be_of_type_any_number_bigint_or_an_enum_type);
                         let resultType: Type;
                         // If both are any or unknown, allow operation; assume it will resolve to number
                         if ((isTypeAssignableToKind(leftType, TypeFlags.AnyOrUnknown) && isTypeAssignableToKind(rightType, TypeFlags.AnyOrUnknown)) ||
@@ -24558,7 +24564,6 @@ namespace ts {
                         errNode,
                         wouldWorkWithAwait,
                         Diagnostics.Operator_0_cannot_be_applied_to_types_1_and_2,
-                        Diagnostics.Operator_0_cannot_be_applied_to_types_1_and_2_Did_you_forget_to_use_await,
                         tokenToString(operatorToken.kind),
                         leftStr,
                         rightStr,
@@ -24583,7 +24588,6 @@ namespace ts {
                         errNode,
                         maybeMissingAwait,
                         Diagnostics.This_condition_will_always_return_0_since_the_types_1_and_2_have_no_overlap,
-                        Diagnostics.This_condition_will_always_return_0_since_the_types_1_and_2_have_no_overlap_Did_you_forget_to_use_await,
                         typeName, leftStr, rightStr);
                 }
 
@@ -27937,28 +27941,22 @@ namespace ts {
                     // number and string input is allowed, we want to say that number is not an
                     // array type or a string type.
                     const yieldType = getIterationTypeOfIterable(use, IterationTypeKind.Yield, inputType, /*errorNode*/ undefined);
-                    const [defaultDiagnostic, missingAwaitDiagnostic]: [DiagnosticMessage, DiagnosticMessage | undefined] = !(use & IterationUse.AllowsStringInputFlag) || hasStringConstituent
+                    const [defaultDiagnostic, maybeMissingAwait]: [DiagnosticMessage, boolean] = !(use & IterationUse.AllowsStringInputFlag) || hasStringConstituent
                         ? downlevelIteration
-                            ? [Diagnostics.Type_0_is_not_an_array_type_or_does_not_have_a_Symbol_iterator_method_that_returns_an_iterator, Diagnostics.Type_0_is_not_an_array_type_or_does_not_have_a_Symbol_iterator_method_that_returns_an_iterator_Did_you_forget_to_use_await]
+                            ? [Diagnostics.Type_0_is_not_an_array_type_or_does_not_have_a_Symbol_iterator_method_that_returns_an_iterator, true]
                             : yieldType
-                                ? [Diagnostics.Type_0_is_not_an_array_type_or_a_string_type_Use_compiler_option_downlevelIteration_to_allow_iterating_of_iterators, undefined]
-                                : [Diagnostics.Type_0_is_not_an_array_type, Diagnostics.Type_0_is_not_an_array_type_Did_you_forget_to_use_await]
+                                ? [Diagnostics.Type_0_is_not_an_array_type_or_a_string_type_Use_compiler_option_downlevelIteration_to_allow_iterating_of_iterators, false]
+                                : [Diagnostics.Type_0_is_not_an_array_type, true]
                         : downlevelIteration
-                            ? [Diagnostics.Type_0_is_not_an_array_type_or_a_string_type_or_does_not_have_a_Symbol_iterator_method_that_returns_an_iterator, Diagnostics.Type_0_is_not_an_array_type_or_a_string_type_or_does_not_have_a_Symbol_iterator_method_that_returns_an_iterator_Did_you_forget_to_use_await]
+                            ? [Diagnostics.Type_0_is_not_an_array_type_or_a_string_type_or_does_not_have_a_Symbol_iterator_method_that_returns_an_iterator, true]
                             : yieldType
-                                ? [Diagnostics.Type_0_is_not_an_array_type_or_a_string_type_Use_compiler_option_downlevelIteration_to_allow_iterating_of_iterators, undefined]
-                                : [Diagnostics.Type_0_is_not_an_array_type_or_a_string_type, Diagnostics.Type_0_is_not_an_array_type_or_a_string_type_Did_you_forget_to_use_await];
-                    if (missingAwaitDiagnostic) {
-                        errorAndMaybeSuggestAwait(
-                            errorNode,
-                            !!getAwaitedTypeOfPromise(arrayType),
-                            defaultDiagnostic,
-                            missingAwaitDiagnostic,
-                            typeToString(arrayType));
-                    }
-                    else {
-                        error(errorNode, defaultDiagnostic, typeToString(arrayType));
-                    }
+                                ? [Diagnostics.Type_0_is_not_an_array_type_or_a_string_type_Use_compiler_option_downlevelIteration_to_allow_iterating_of_iterators, false]
+                                : [Diagnostics.Type_0_is_not_an_array_type_or_a_string_type, true];
+                    errorAndMaybeSuggestAwait(
+                        errorNode,
+                        maybeMissingAwait && !!getAwaitedTypeOfPromise(arrayType),
+                        defaultDiagnostic,
+                        typeToString(arrayType));
                 }
                 return hasStringConstituent ? stringType : undefined;
             }
@@ -28257,10 +28255,10 @@ namespace ts {
         }
 
         function reportTypeNotIterableError(errorNode: Node, type: Type, allowAsyncIterables: boolean): void {
-            const [defaultDiagnostic, missingAwaitDiagnostic] = allowAsyncIterables
-                ? [Diagnostics.Type_0_must_have_a_Symbol_asyncIterator_method_that_returns_an_async_iterator, Diagnostics.Type_0_must_have_a_Symbol_asyncIterator_method_that_returns_an_async_iterator_Did_you_forget_to_use_await]
-                : [Diagnostics.Type_0_must_have_a_Symbol_iterator_method_that_returns_an_iterator, Diagnostics.Type_0_must_have_a_Symbol_iterator_method_that_returns_an_iterator_Did_you_forget_to_use_await];
-            errorAndMaybeSuggestAwait(errorNode, !!getAwaitedTypeOfPromise(type), defaultDiagnostic, missingAwaitDiagnostic, typeToString(type));
+            const message = allowAsyncIterables
+                ? Diagnostics.Type_0_must_have_a_Symbol_asyncIterator_method_that_returns_an_async_iterator
+                : Diagnostics.Type_0_must_have_a_Symbol_iterator_method_that_returns_an_iterator;
+            errorAndMaybeSuggestAwait(errorNode, !!getAwaitedTypeOfPromise(type), message, typeToString(type));
         }
 
         /**

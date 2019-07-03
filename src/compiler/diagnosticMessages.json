@@ -2655,8 +2655,7 @@
     },
     "Cannot iterate value because the 'next' method of its iterator expects type '{1}', but for-of will always send '{0}'.": {
         "category": "Error",
-        "code": 2763
-    },
+        "code": 77   },
     "Cannot iterate value because the 'next' method of its iterator expects type '{1}', but array spread will always send '{0}'.": {
         "category": "Error",
         "code": 2764
