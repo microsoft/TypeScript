@@ -2209,6 +2209,11 @@ namespace ts {
             : node;
     }
 
+    /* @internal */
+    export function createEmptyExports() {
+        return createExportDeclaration(/*decorators*/ undefined, /*modifiers*/ undefined, createNamedExports([]), /*moduleSpecifier*/ undefined);
+    }
+
     export function createNamedExports(elements: ReadonlyArray<ExportSpecifier>) {
         const node = <NamedExports>createSynthesizedNode(SyntaxKind.NamedExports);
         node.elements = createNodeArray(elements);

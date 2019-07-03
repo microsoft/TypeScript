@@ -32,5 +32,11 @@ if (x) {
 }
 
 
+//// [out/b.d.ts]
+declare const _exports: {
+    "a": boolean;
+    "b": string;
+};
+export = _exports;
 //// [out/file1.d.ts]
 export {};

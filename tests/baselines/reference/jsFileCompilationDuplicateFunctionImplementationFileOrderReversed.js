@@ -22,3 +22,4 @@ function foo() {
 
 
 //// [out.d.ts]
+declare function foo(): number;

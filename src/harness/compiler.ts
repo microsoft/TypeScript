@@ -219,14 +219,19 @@ namespace compiler {
             return vpath.changeExtension(path, ext);
         }
 
-        public getNumberOfJsFiles() {
-            let count = this.js.size;
-            this.js.forEach(document => {
-                if (ts.fileExtensionIs(document.file, ts.Extension.Json)) {
-                    count--;
-                }
-            });
-            return count;
+        public getNumberOfJsFiles(includeJson: boolean) {
+            if (includeJson) {
+                return this.js.size;
+            }
+            else {
+                let count = this.js.size;
+                this.js.forEach(document => {
+                    if (ts.fileExtensionIs(document.file, ts.Extension.Json)) {
+                        count--;
+                    }
+                });
+                return count;
+            }
         }
     }
 

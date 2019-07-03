@@ -3660,6 +3660,7 @@ namespace ts {
         getAllAccessorDeclarations(declaration: AccessorDeclaration): AllAccessorDeclarations;
         getSymbolOfExternalModuleSpecifier(node: StringLiteralLike): Symbol | undefined;
         isBindingCapturedByNode(node: Node, decl: VariableDeclaration | BindingElement): boolean;
+        getDeclarationStatementsForSourceFile(node: SourceFile, flags: NodeBuilderFlags, tracker: SymbolTracker): Statement[] | undefined;
     }
 
     export const enum SymbolFlags {
@@ -3739,6 +3740,12 @@ namespace ts {
         PropertyOrAccessor = Property | Accessor,
 
         ClassMember = Method | Accessor | Property,
+
+        /* @internal */
+        ExportSupportsDefaultModifier = Class | Function | Interface,
+
+        /* @internal */
+        ExportDoesNotSupportDefaultModifier = ~ExportSupportsDefaultModifier,
 
         /* @internal */
         // The set of things we consider semantically classifiable.  Used to speed up the LS during

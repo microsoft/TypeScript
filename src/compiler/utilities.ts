@@ -2614,8 +2614,12 @@ namespace ts {
     }
 
     export function exportAssignmentIsAlias(node: ExportAssignment | BinaryExpression): boolean {
-        const e = isExportAssignment(node) ? node.expression : node.right;
+        const e = getExportAssignmentExpression(node);
         return isEntityNameExpression(e) || isClassExpression(e);
+    }
+
+    export function getExportAssignmentExpression(node: ExportAssignment | BinaryExpression): Expression {
+        return isExportAssignment(node) ? node.expression : node.right;
     }
 
     export function getEffectiveBaseTypeNode(node: ClassLikeDeclaration | InterfaceDeclaration) {
@@ -6773,6 +6777,21 @@ namespace ts {
         }
 
         return false;
+    }
+
+    /* @internal */
+    export function isScopeMarker(node: Node) {
+        return isExportAssignment(node) || isExportDeclaration(node);
+    }
+
+    /* @internal */
+    export function hasScopeMarker(statements: ReadonlyArray<Statement>) {
+        return some(statements, isScopeMarker);
+    }
+
+    /* @internal */
+    export function needsScopeMarker(result: Statement) {
+        return !isAnyImportOrReExport(result) && !isExportAssignment(result) && !hasModifier(result, ModifierFlags.Export) && !isAmbientModule(result);
     }
 
     /* @internal */

@@ -885,8 +885,8 @@ namespace ts.tscWatch {
                     // More comment`;
             const configFileContentAfterComment = `
                     "compilerOptions": {
-                        "allowJs": true,
-                        "declaration": true
+                        "inlineSourceMap": true,
+                        "mapRoot": "./"
                     }
                 }`;
             const configFileContentWithComment = configFileContentBeforeComment + configFileContentComment + configFileContentAfterComment;
@@ -900,8 +900,9 @@ namespace ts.tscWatch {
             const host = createWatchedSystem(files);
             const watch = createWatchOfConfigFile(configFile.path, host);
             const errors = () => [
-                getDiagnosticOfFile(watch().getCompilerOptions().configFile!, configFile.content.indexOf('"allowJs"'), '"allowJs"'.length, Diagnostics.Option_0_cannot_be_specified_with_option_1, "allowJs", "declaration"),
-                getDiagnosticOfFile(watch().getCompilerOptions().configFile!, configFile.content.indexOf('"declaration"'), '"declaration"'.length, Diagnostics.Option_0_cannot_be_specified_with_option_1, "allowJs", "declaration")
+                getDiagnosticOfFile(watch().getCompilerOptions().configFile!, configFile.content.indexOf('"inlineSourceMap"'), '"inlineSourceMap"'.length, Diagnostics.Option_0_cannot_be_specified_with_option_1, "mapRoot", "inlineSourceMap"),
+                getDiagnosticOfFile(watch().getCompilerOptions().configFile!, configFile.content.indexOf('"mapRoot"'), '"mapRoot"'.length, Diagnostics.Option_0_cannot_be_specified_with_option_1, "mapRoot", "inlineSourceMap"),
+                getDiagnosticOfFile(watch().getCompilerOptions().configFile!, configFile.content.indexOf('"mapRoot"'), '"mapRoot"'.length, Diagnostics.Option_0_cannot_be_specified_without_specifying_option_1_or_option_2, "mapRoot", "sourceMap", "declarationMap")
             ];
             const intialErrors = errors();
             checkOutputErrorsInitial(host, intialErrors);
