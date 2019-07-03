@@ -1,4 +1,4 @@
-function fn(
+async function fn(
     a: number,
     b: Promise<number>,
     c: Promise<string[]>,
@@ -15,10 +15,12 @@ function fn(
     b++;
     --b;
     a === b;
+    [...c];
     for (const s of c) {
         fn(b, b, c, d);
         d.prop;
     }
+    for await (const s of c) {}
     e();
     f();
     new g();

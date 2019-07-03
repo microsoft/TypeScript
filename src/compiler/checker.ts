@@ -27922,18 +27922,28 @@ namespace ts {
                     // number and string input is allowed, we want to say that number is not an
                     // array type or a string type.
                     const yieldType = getIterationTypeOfIterable(use, IterationTypeKind.Yield, inputType, /*errorNode*/ undefined);
-                    const diagnostic = !(use & IterationUse.AllowsStringInputFlag) || hasStringConstituent
+                    const [defaultDiagnostic, missingAwaitDiagnostic]: [DiagnosticMessage, DiagnosticMessage | undefined] = !(use & IterationUse.AllowsStringInputFlag) || hasStringConstituent
                         ? downlevelIteration
-                            ? Diagnostics.Type_0_is_not_an_array_type_or_does_not_have_a_Symbol_iterator_method_that_returns_an_iterator
+                            ? [Diagnostics.Type_0_is_not_an_array_type_or_does_not_have_a_Symbol_iterator_method_that_returns_an_iterator, Diagnostics.Type_0_is_not_an_array_type_or_does_not_have_a_Symbol_iterator_method_that_returns_an_iterator_Did_you_forget_to_use_await]
                             : yieldType
-                                ? Diagnostics.Type_0_is_not_an_array_type_or_a_string_type_Use_compiler_option_downlevelIteration_to_allow_iterating_of_iterators
-                                : Diagnostics.Type_0_is_not_an_array_type
+                                ? [Diagnostics.Type_0_is_not_an_array_type_or_a_string_type_Use_compiler_option_downlevelIteration_to_allow_iterating_of_iterators, undefined]
+                                : [Diagnostics.Type_0_is_not_an_array_type, Diagnostics.Type_0_is_not_an_array_type_Did_you_forget_to_use_await]
                         : downlevelIteration
-                            ? Diagnostics.Type_0_is_not_an_array_type_or_a_string_type_or_does_not_have_a_Symbol_iterator_method_that_returns_an_iterator
+                            ? [Diagnostics.Type_0_is_not_an_array_type_or_a_string_type_or_does_not_have_a_Symbol_iterator_method_that_returns_an_iterator, Diagnostics.Type_0_is_not_an_array_type_or_a_string_type_or_does_not_have_a_Symbol_iterator_method_that_returns_an_iterator_Did_you_forget_to_use_await]
                             : yieldType
-                                ? Diagnostics.Type_0_is_not_an_array_type_or_a_string_type_Use_compiler_option_downlevelIteration_to_allow_iterating_of_iterators
-                                : Diagnostics.Type_0_is_not_an_array_type_or_a_string_type;
-                    error(errorNode, diagnostic, typeToString(arrayType));
+                                ? [Diagnostics.Type_0_is_not_an_array_type_or_a_string_type_Use_compiler_option_downlevelIteration_to_allow_iterating_of_iterators, undefined]
+                                : [Diagnostics.Type_0_is_not_an_array_type_or_a_string_type, Diagnostics.Type_0_is_not_an_array_type_or_a_string_type_Did_you_forget_to_use_await];
+                    if (missingAwaitDiagnostic) {
+                        errorAndMaybeSuggestAwait(
+                            errorNode,
+                            !!getAwaitedTypeOfPromise(arrayType),
+                            defaultDiagnostic,
+                            missingAwaitDiagnostic,
+                            typeToString(arrayType));
+                    }
+                    else {
+                        error(errorNode, defaultDiagnostic, typeToString(arrayType));
+                    }
                 }
                 return hasStringConstituent ? stringType : undefined;
             }
@@ -28232,9 +28242,10 @@ namespace ts {
         }
 
         function reportTypeNotIterableError(errorNode: Node, type: Type, allowAsyncIterables: boolean): void {
-            error(errorNode, allowAsyncIterables
-                ? Diagnostics.Type_0_must_have_a_Symbol_asyncIterator_method_that_returns_an_async_iterator
-                : Diagnostics.Type_0_must_have_a_Symbol_iterator_method_that_returns_an_iterator, typeToString(type));
+            const [defaultDiagnostic, missingAwaitDiagnostic] = allowAsyncIterables
+                ? [Diagnostics.Type_0_must_have_a_Symbol_asyncIterator_method_that_returns_an_async_iterator, Diagnostics.Type_0_must_have_a_Symbol_asyncIterator_method_that_returns_an_async_iterator_Did_you_forget_to_use_await]
+                : [Diagnostics.Type_0_must_have_a_Symbol_iterator_method_that_returns_an_iterator, Diagnostics.Type_0_must_have_a_Symbol_iterator_method_that_returns_an_iterator_Did_you_forget_to_use_await];
+            errorAndMaybeSuggestAwait(errorNode, !!getAwaitedTypeOfPromise(type), defaultDiagnostic, missingAwaitDiagnostic, typeToString(type));
         }
 
         /**
