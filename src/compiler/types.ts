@@ -17,6 +17,7 @@ namespace ts {
         | SyntaxKind.OpenBraceToken
         | SyntaxKind.CloseBraceToken
         | SyntaxKind.LessThanToken
+        | SyntaxKind.GreaterThanToken
         | SyntaxKind.OpenBracketToken
         | SyntaxKind.CloseBracketToken
         | SyntaxKind.EqualsToken
@@ -459,6 +460,7 @@ namespace ts {
         JSDocSignature,
         JSDocTag,
         JSDocAugmentsTag,
+        JSDocAuthorTag,
         JSDocClassTag,
         JSDocCallbackTag,
         JSDocEnumTag,
@@ -2453,6 +2455,10 @@ namespace ts {
     export interface JSDocAugmentsTag extends JSDocTag {
         kind: SyntaxKind.JSDocAugmentsTag;
         class: ExpressionWithTypeArguments & { expression: Identifier | PropertyAccessEntityNameExpression };
+    }
+
+    export interface JSDocAuthorTag extends JSDocTag {
+        kind: SyntaxKind.JSDocAuthorTag;
     }
 
     export interface JSDocClassTag extends JSDocTag {

@@ -19207,7 +19207,9 @@ namespace ts {
                 }
             }
             // Result is union of signatures collected (return type is union of return types of this signature set)
-            return signatureList && createUnionSignature(signatureList[0], signatureList);
+            if (signatureList) {
+                return signatureList.length === 1 ? signatureList[0] : createUnionSignature(signatureList[0], signatureList);
+            }
         }
 
         function checkSpreadExpression(node: SpreadElement, checkMode?: CheckMode): Type {
