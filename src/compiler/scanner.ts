@@ -2087,6 +2087,8 @@ namespace ts {
                     return token = SyntaxKind.CloseBracketToken;
                 case CharacterCodes.lessThan:
                     return token = SyntaxKind.LessThanToken;
+                case CharacterCodes.greaterThan:
+                    return token = SyntaxKind.GreaterThanToken;
                 case CharacterCodes.equals:
                     return token = SyntaxKind.EqualsToken;
                 case CharacterCodes.comma:
