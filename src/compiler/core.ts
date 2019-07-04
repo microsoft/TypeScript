@@ -24,7 +24,6 @@ namespace ts {
         " __sortedArrayBrand": any;
     }
 
-
     /** ES6 Map interface, only read methods included. */
     export interface ReadonlyMap<T> {
         get(key: string): T | undefined;
@@ -45,7 +44,7 @@ namespace ts {
 
     /** ES6 Iterator type. */
     export interface Iterator<T> {
-        next(): { value: T, done: false } | { value: never, done: true };
+        next(): { value: T, done?: false } | { value: never, done: true };
     }
 
     /** Array that is only intended to be pushed to, never read. */
@@ -297,12 +296,13 @@ namespace ts {
             forEach(action: (value: T, key: string) => void): void {
                 const iterator = this.entries();
                 while (true) {
-                    const { value: entry, done } = iterator.next();
-                    if (done) {
+                    const iterResult = iterator.next();
+                    if (iterResult.done) {
                         break;
                     }
 
-                    action(entry[1], entry[0]);
+                    const [key, value] = iterResult.value;
+                    action(value, key);
                 }
             }
         };
@@ -346,11 +346,11 @@ namespace ts {
 
     export function firstDefinedIterator<T, U>(iter: Iterator<T>, callback: (element: T) => U | undefined): U | undefined {
         while (true) {
-            const { value, done } = iter.next();
-            if (done) {
+            const iterResult = iter.next();
+            if (iterResult.done) {
                 return undefined;
             }
-            const result = callback(value);
+            const result = callback(iterResult.value);
             if (result !== undefined) {
                 return result;
             }
@@ -375,7 +375,7 @@ namespace ts {
                     return { value: undefined as never, done: true };
                 }
                 i++;
-                return { value: [arrayA[i - 1], arrayB[i - 1]], done: false };
+                return { value: [arrayA[i - 1], arrayB[i - 1]] as [T, U], done: false };
             }
         };
     }
@@ -567,7 +567,7 @@ namespace ts {
         return {
             next() {
                 const iterRes = iter.next();
-                return iterRes.done ? iterRes : { value: mapFn(iterRes.value), done: false };
+                return iterRes.done ? iterRes as { done: true, value: never } : { value: mapFn(iterRes.value), done: false };
             }
         };
     }
@@ -678,7 +678,7 @@ namespace ts {
                     }
                     const iterRes = iter.next();
                     if (iterRes.done) {
-                        return iterRes;
+                        return iterRes as { done: true, value: never };
                     }
                     currentIter = getIterator(iterRes.value);
                 }
@@ -753,7 +753,7 @@ namespace ts {
                 while (true) {
                     const res = iter.next();
                     if (res.done) {
-                        return res;
+                        return res as { done: true, value: never };
                     }
                     const value = mapFn(res.value);
                     if (value !== undefined) {
@@ -1078,6 +1078,7 @@ namespace ts {
      * @param value The value to append to the array. If `value` is `undefined`, nothing is
      * appended.
      */
+    export function append<TArray extends any[] | undefined, TValue extends NonNullable<TArray>[number] | undefined>(to: TArray, value: TValue): [undefined, undefined] extends [TArray, TValue] ? TArray : NonNullable<TArray>[number][];
     export function append<T>(to: T[], value: T | undefined): T[];
     export function append<T>(to: T[] | undefined, value: T): T[];
     export function append<T>(to: T[] | undefined, value: T | undefined): T[] | undefined;
@@ -1402,8 +1403,8 @@ namespace ts {
     export function arrayFrom<T>(iterator: Iterator<T> | IterableIterator<T>): T[];
     export function arrayFrom<T, U>(iterator: Iterator<T> | IterableIterator<T>, map?: (t: T) => U): (T | U)[] {
         const result: (T | U)[] = [];
-        for (let { value, done } = iterator.next(); !done; { value, done } = iterator.next()) {
-            result.push(map ? map(value) : value);
+        for (let iterResult = iterator.next(); !iterResult.done; iterResult = iterator.next()) {
+            result.push(map ? map(iterResult.value) : iterResult.value);
         }
         return result;
     }

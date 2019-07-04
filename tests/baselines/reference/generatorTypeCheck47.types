@@ -1,4 +1,4 @@
 === tests/cases/conformance/es6/yieldExpressions/generatorTypeCheck47.ts ===
 function* g() { }
->g : () => IterableIterator<any>
+>g : () => Generator<never, void, unknown>
 

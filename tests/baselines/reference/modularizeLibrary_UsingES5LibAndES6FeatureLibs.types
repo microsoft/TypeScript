@@ -23,7 +23,7 @@ Reflect.ownKeys({});
 >{} : {}
 
 function* idGen() {
->idGen : () => IterableIterator<number>
+>idGen : () => Generator<number, void, unknown>
 
     let i = 10;
 >i : number

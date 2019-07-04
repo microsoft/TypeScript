@@ -82,11 +82,11 @@ function foo6(y = () => (() => z)(), z = 1) {
 
 // ok - used inside immediately invoked generator function
 function foo7(y = (function*() {yield z})(), z = 1) {
->foo7 : (y?: IterableIterator<number>, z?: number) => void
->y : IterableIterator<number>
->(function*() {yield z})() : IterableIterator<number>
->(function*() {yield z}) : () => IterableIterator<number>
->function*() {yield z} : () => IterableIterator<number>
+>foo7 : (y?: Generator<number, void, unknown>, z?: number) => void
+>y : Generator<number, void, unknown>
+>(function*() {yield z})() : Generator<number, void, unknown>
+>(function*() {yield z}) : () => Generator<number, void, unknown>
+>function*() {yield z} : () => Generator<number, void, unknown>
 >yield z : any
 >z : number
 >z : number

@@ -683,7 +683,7 @@ namespace vfs {
 
             if (isDirectory(node)) throw createIOError("EISDIR");
             if (!isFile(node)) throw createIOError("EBADF");
-            node.buffer = Buffer.isBuffer(data) ? data.slice() : ts.sys.bufferFrom!("" + data, encoding || "utf8");
+            node.buffer = Buffer.isBuffer(data) ? data.slice() : ts.sys.bufferFrom!("" + data, encoding || "utf8") as Buffer;
             node.size = node.buffer.byteLength;
             node.mtimeMs = time;
             node.ctimeMs = time;
@@ -1204,7 +1204,7 @@ namespace vfs {
                 }
             },
             readFileSync(path: string): Buffer {
-                return ts.sys.bufferFrom!(host.readFile(path)!, "utf8"); // TODO: GH#18217
+                return ts.sys.bufferFrom!(host.readFile(path)!, "utf8") as Buffer; // TODO: GH#18217
             }
         };
     }
