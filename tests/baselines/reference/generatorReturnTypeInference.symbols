@@ -27,7 +27,7 @@ function* g002() { // Generator<number, void, unknown>
     yield 1;
 }
 
-function* g003() { // Generator<never, void, unknown>
+function* g003() { // Generator<never, void, undefined>
 >g003 : Symbol(g003, Decl(generatorReturnTypeInference.ts, 14, 1))
 
     yield* [];

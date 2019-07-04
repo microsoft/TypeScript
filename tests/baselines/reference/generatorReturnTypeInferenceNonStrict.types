@@ -1,4 +1,4 @@
-=== tests/cases/conformance/generators/generatorReturnTypeInference.ts ===
+=== tests/cases/conformance/generators/generatorReturnTypeInferenceNonStrict.ts ===
 declare const iterableIterator: IterableIterator<number>;
 >iterableIterator : IterableIterator<number>
 
@@ -13,8 +13,8 @@ function* g000() { // Generator<never, void, unknown>
 }
 
 // 'yield' iteration type inference
-function* g001() { // Generator<undefined, void, unknown>
->g001 : () => Generator<undefined, void, unknown>
+function* g001() { // Generator<any (implicit), void, unknown>
+>g001 : () => Generator<any, void, unknown>
 
     yield;
 >yield : any
@@ -28,12 +28,14 @@ function* g002() { // Generator<number, void, unknown>
 >1 : 1
 }
 
-function* g003() { // Generator<never, void, undefined>
->g003 : () => Generator<never, void, undefined>
+function* g003() { // Generator<any (implicit), void, unknown>
+>g003 : () => Generator<any, void, undefined>
 
+    // NOTE: In strict mode, `[]` produces the type `never[]`.
+    //       In non-strict mode, `[]` produces the type `undefined[]` which is implicitly any.
     yield* [];
 >yield* [] : any
->[] : never[]
+>[] : undefined[]
 }
 
 function* g004() { // Generator<number, void, undefined>
@@ -162,8 +164,8 @@ function* g204() { // Generator<number, void, any>
 
 // mixed iteration types inference
 
-function* g301() { // Generator<undefined, void, unknown>
->g301 : () => Generator<undefined, void, unknown>
+function* g301() { // Generator<any (implicit), void, unknown>
+>g301 : () => Generator<any, void, unknown>
 
     yield;
 >yield : any
@@ -181,8 +183,8 @@ function* g302() { // Generator<number, void, unknown>
     return;
 }
 
-function* g303() { // Generator<undefined, string, unknown>
->g303 : () => Generator<undefined, string, unknown>
+function* g303() { // Generator<any (implicit), string, unknown>
+>g303 : () => Generator<any, string, unknown>
 
     yield;
 >yield : any
@@ -279,8 +281,8 @@ function* g309<T, U, V>(x: T, y: U) { // Generator<T, U, V>
 >y : U
 }
 
-function* g310() { // Generator<undefined, void, [(1 | undefined)?, (2 | undefined)?]>
->g310 : () => Generator<undefined, void, [(1 | undefined)?, (2 | undefined)?]>
+function* g310() { // Generator<any (implicit), void, [(1 | undefined)?, (2 | undefined)?]>
+>g310 : () => Generator<any, void, [1?, 2?]>
 
 	const [a = 1, b = 2] = yield;
 >a : any
@@ -290,14 +292,14 @@ function* g310() { // Generator<undefined, void, [(1 | undefined)?, (2 | undefin
 >yield : any
 }
 
-function* g311() { // Generator<undefined, void, string>
->g311 : () => Generator<undefined, void, string>
+function* g311() { // Generator<any (implicit), void, string>
+>g311 : () => Generator<any, void, string>
 
 	yield* (function*() {
 >yield* (function*() {		const y: string = yield;	})() : void
->(function*() {		const y: string = yield;	})() : Generator<undefined, void, string>
->(function*() {		const y: string = yield;	}) : () => Generator<undefined, void, string>
->function*() {		const y: string = yield;	} : () => Generator<undefined, void, string>
+>(function*() {		const y: string = yield;	})() : Generator<any, void, string>
+>(function*() {		const y: string = yield;	}) : () => Generator<any, void, string>
+>function*() {		const y: string = yield;	} : () => Generator<any, void, string>
 
 		const y: string = yield;
 >y : string

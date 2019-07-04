@@ -4210,7 +4210,7 @@
         "category": "Error",
         "code": 7024
     },
-    "Generator implicitly has type '{0}' because it does not yield any values. Consider supplying a return type.": {
+    "Generator implicitly has yield type '{0}' because it does not yield any values. Consider supplying a return type annotation.": {
         "category": "Error",
         "code": 7025
     },
@@ -4332,7 +4332,7 @@
         "category": "Error",
         "code": 7054
     },
-    "Generator implicitly has type '{0}' because it does not yield or return any values. Consider supplying a return type.": {
+    "'{0}', which lacks return-type annotation, implicitly has an '{1}' yield type.": {
         "category": "Error",
         "code": 7055
     },

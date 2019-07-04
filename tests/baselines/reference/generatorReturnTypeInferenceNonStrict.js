@@ -1,4 +1,4 @@
-//// [generatorReturnTypeInference.ts]
+//// [generatorReturnTypeInferenceNonStrict.ts]
 declare const iterableIterator: IterableIterator<number>;
 declare const generator: Generator<number, string, boolean>;
 declare const never: never;
@@ -7,7 +7,7 @@ function* g000() { // Generator<never, void, unknown>
 }
 
 // 'yield' iteration type inference
-function* g001() { // Generator<undefined, void, unknown>
+function* g001() { // Generator<any (implicit), void, unknown>
     yield;
 }
 
@@ -15,7 +15,9 @@ function* g002() { // Generator<number, void, unknown>
     yield 1;
 }
 
-function* g003() { // Generator<never, void, undefined>
+function* g003() { // Generator<any (implicit), void, unknown>
+    // NOTE: In strict mode, `[]` produces the type `never[]`.
+    //       In non-strict mode, `[]` produces the type `undefined[]` which is implicitly any.
     yield* [];
 }
 
@@ -75,7 +77,7 @@ function* g204() { // Generator<number, void, any>
 
 // mixed iteration types inference
 
-function* g301() { // Generator<undefined, void, unknown>
+function* g301() { // Generator<any (implicit), void, unknown>
     yield;
     return;
 }
@@ -85,7 +87,7 @@ function* g302() { // Generator<number, void, unknown>
     return;
 }
 
-function* g303() { // Generator<undefined, string, unknown>
+function* g303() { // Generator<any (implicit), string, unknown>
     yield;
     return "a";
 }
@@ -122,18 +124,18 @@ function* g309<T, U, V>(x: T, y: U) { // Generator<T, U, V>
     return y;
 }
 
-function* g310() { // Generator<undefined, void, [(1 | undefined)?, (2 | undefined)?]>
+function* g310() { // Generator<any (implicit), void, [(1 | undefined)?, (2 | undefined)?]>
 	const [a = 1, b = 2] = yield;
 }
 
-function* g311() { // Generator<undefined, void, string>
+function* g311() { // Generator<any (implicit), void, string>
 	yield* (function*() {
 		const y: string = yield;
 	})();
 }
 
 
-//// [generatorReturnTypeInference.js]
+//// [generatorReturnTypeInferenceNonStrict.js]
 function* g000() {
 }
 // 'yield' iteration type inference
@@ -144,6 +146,8 @@ function* g002() {
     yield 1;
 }
 function* g003() {
+    // NOTE: In strict mode, `[]` produces the type `never[]`.
+    //       In non-strict mode, `[]` produces the type `undefined[]` which is implicitly any.
     yield* [];
 }
 function* g004() {
