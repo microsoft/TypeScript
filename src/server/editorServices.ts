@@ -2234,7 +2234,13 @@ namespace ts.server {
         getDocumentPositionMapper(project: Project, generatedFileName: string, sourceFileName?: string): DocumentPositionMapper | undefined {
             // Since declaration info and map file watches arent updating project's directory structure host (which can cache file structure) use host
             const declarationInfo = this.getOrCreateScriptInfoNotOpenedByClient(generatedFileName, project.currentDirectory, this.host);
-            if (!declarationInfo) return undefined;
+            if (!declarationInfo) {
+                if (sourceFileName) {
+                    // Project contains source file and it generates the generated file name
+                    project.addGeneratedFileWatch(generatedFileName, sourceFileName);
+                }
+                return undefined;
+            }
 
             // Try to get from cache
             declarationInfo.getSnapshot(); // Ensure synchronized

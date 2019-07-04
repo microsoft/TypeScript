@@ -37,18 +37,15 @@ verify.signatureHelp({
     marker: '4',
     text: "t(eventName: string, eventName2: string | number, eventName3: any): number",
     parameterDocComment: "- So many words",
-    tags: [{ name: "callback", text: "FooHandler - A kind of magic" },
-           { name: "type", text: "{FooHandler} callback" }]
+    tags: [{ name: "type", text: "{FooHandler} callback" }]
 });
 verify.signatureHelp({
     marker: '5',
     parameterDocComment: "- Silence is golden",
-    tags: [{ name: "callback", text: "FooHandler - A kind of magic" },
-           { name: "type", text: "{FooHandler} callback" }]
+    tags: [{ name: "type", text: "{FooHandler} callback" }]
 });
 verify.signatureHelp({
     marker: '6',
     parameterDocComment: "- Osterreich mos def",
-    tags: [{ name: "callback", text: "FooHandler - A kind of magic" },
-           { name: "type", text: "{FooHandler} callback" }]
+    tags: [{ name: "type", text: "{FooHandler} callback" }]
 });

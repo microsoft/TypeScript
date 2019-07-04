@@ -1,0 +1,28 @@
+=== tests/cases/compiler/betterErrorForUnionCall.ts ===
+declare const union: { a: string } | { b: string }
+>union : Symbol(union, Decl(betterErrorForUnionCall.ts, 0, 13))
+>a : Symbol(a, Decl(betterErrorForUnionCall.ts, 0, 22))
+>b : Symbol(b, Decl(betterErrorForUnionCall.ts, 0, 38))
+
+union("");
+>union : Symbol(union, Decl(betterErrorForUnionCall.ts, 0, 13))
+
+declare const fnUnion: { a: string } | ((a: string) => void)
+>fnUnion : Symbol(fnUnion, Decl(betterErrorForUnionCall.ts, 3, 13))
+>a : Symbol(a, Decl(betterErrorForUnionCall.ts, 3, 24))
+>a : Symbol(a, Decl(betterErrorForUnionCall.ts, 3, 41))
+
+fnUnion("");
+>fnUnion : Symbol(fnUnion, Decl(betterErrorForUnionCall.ts, 3, 13))
+
+declare const fnUnion2: (<T extends number>(a: T) => void) | (<T>(a: string) => void)
+>fnUnion2 : Symbol(fnUnion2, Decl(betterErrorForUnionCall.ts, 6, 13))
+>T : Symbol(T, Decl(betterErrorForUnionCall.ts, 6, 26))
+>a : Symbol(a, Decl(betterErrorForUnionCall.ts, 6, 44))
+>T : Symbol(T, Decl(betterErrorForUnionCall.ts, 6, 26))
+>T : Symbol(T, Decl(betterErrorForUnionCall.ts, 6, 63))
+>a : Symbol(a, Decl(betterErrorForUnionCall.ts, 6, 66))
+
+fnUnion2("");
+>fnUnion2 : Symbol(fnUnion2, Decl(betterErrorForUnionCall.ts, 6, 13))
+

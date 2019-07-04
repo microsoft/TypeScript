@@ -94,6 +94,7 @@ namespace ts.projectSystem {
         describe("with main and depedency project", () => {
             const projectLocation = "/user/username/projects/myproject";
             const dependecyLocation = `${projectLocation}/dependency`;
+            const dependecyDeclsLocation = `${projectLocation}/decls`;
             const mainLocation = `${projectLocation}/main`;
             const dependencyTs: File = {
                 path: `${dependecyLocation}/FnS.ts`,
@@ -106,7 +107,7 @@ export function fn5() { }
             };
             const dependencyConfig: File = {
                 path: `${dependecyLocation}/tsconfig.json`,
-                content: JSON.stringify({ compilerOptions: { composite: true, declarationMap: true } })
+                content: JSON.stringify({ compilerOptions: { composite: true, declarationMap: true, declarationDir: "../decls" } })
             };
 
             const mainTs: File = {
@@ -117,7 +118,7 @@ export function fn5() { }
     fn3,
     fn4,
     fn5
-} from '../dependency/fns'
+} from '../decls/fns'
 
 fn1();
 fn2();
@@ -142,9 +143,9 @@ fn5();
                 path: `${projectLocation}/random/tsconfig.json`,
                 content: "{}"
             };
-            const dtsLocation = `${dependecyLocation}/FnS.d.ts`;
+            const dtsLocation = `${dependecyDeclsLocation}/FnS.d.ts`;
             const dtsPath = dtsLocation.toLowerCase() as Path;
-            const dtsMapLocation = `${dtsLocation}.map`;
+            const dtsMapLocation = `${dependecyDeclsLocation}/FnS.d.ts.map`;
             const dtsMapPath = dtsMapLocation.toLowerCase() as Path;
 
             const files = [dependencyTs, dependencyConfig, mainTs, mainConfig, libFile, randomFile, randomConfig];
@@ -217,7 +218,7 @@ fn5();
                     start: { line: fn + 1, offset: 5 },
                     end: { line: fn + 1, offset: 8 },
                     contextStart: { line: 1, offset: 1 },
-                    contextEnd: { line: 7, offset: 27 }
+                    contextEnd: { line: 7, offset: 22 }
                 };
             }
             function usageSpan(fn: number): protocol.TextSpan {
@@ -287,19 +288,25 @@ fn5();
             function verifyDocumentPositionMapperUpdates(
                 mainScenario: string,
                 verifier: ReadonlyArray<DocumentPositionMapperVerifier>,
-                closedInfos: ReadonlyArray<string>) {
+                closedInfos: ReadonlyArray<string>,
+                withRefs: boolean) {
 
                 const openFiles = verifier.map(v => v.openFile);
                 const expectedProjectActualFiles = verifier.map(v => v.expectedProjectActualFiles);
-                const actionGetters = verifier.map(v => v.actionGetter);
                 const openFileLastLines = verifier.map(v => v.openFileLastLine);
 
                 const configFiles = openFiles.map(openFile => `${getDirectoryPath(openFile.path)}/tsconfig.json`);
                 const openInfos = openFiles.map(f => f.path);
                 // When usage and dependency are used, dependency config is part of closedInfo so ignore
-                const otherWatchedFiles = verifier.length > 1 ? [configFiles[0]] : configFiles;
+                const otherWatchedFiles = withRefs && verifier.length > 1 ? [configFiles[0]] : configFiles;
                 function openTsFile(onHostCreate?: (host: TestServerHost) => void) {
                     const host = createHost(files, [mainConfig.path]);
+                    if (!withRefs) {
+                        // Erase project reference
+                        host.writeFile(mainConfig.path, JSON.stringify({
+                            compilerOptions: { composite: true, declarationMap: true }
+                        }));
+                    }
                     if (onHostCreate) {
                         onHostCreate(host);
                     }
@@ -336,7 +343,7 @@ fn5();
                     );
                 }
 
-                function verifyInfosWhenNoDtsFile(session: TestSession, host: TestServerHost, dependencyTsAndMapOk?: true) {
+                function verifyInfosWhenNoDtsFile(session: TestSession, host: TestServerHost, watchDts: boolean, dependencyTsAndMapOk?: true) {
                     const dtsMapClosedInfo = firstDefined(closedInfos, f => f.toLowerCase() === dtsMapPath ? f : undefined);
                     const dtsClosedInfo = firstDefined(closedInfos, f => f.toLowerCase() === dtsPath ? f : undefined);
                     verifyInfosWithRandom(
@@ -344,8 +351,7 @@ fn5();
                         host,
                         openInfos,
                         closedInfos.filter(f => (dependencyTsAndMapOk || f !== dtsMapClosedInfo) && f !== dtsClosedInfo && (dependencyTsAndMapOk || f !== dependencyTs.path)),
-                        // When project actual file contains dts, it needs to be watched
-                        dtsClosedInfo && expectedProjectActualFiles.some(expectedProjectActualFiles => expectedProjectActualFiles.some(f => f.toLowerCase() === dtsPath)) ?
+                        dtsClosedInfo && watchDts ?
                             otherWatchedFiles.concat(dtsClosedInfo) :
                             otherWatchedFiles
                     );
@@ -361,22 +367,22 @@ fn5();
                     }
                 }
 
-                function action(actionGetter: SessionActionGetter, fn: number, session: TestSession) {
-                    const { reqName, request, expectedResponse, expectedResponseNoMap, expectedResponseNoDts } = actionGetter(fn);
+                function action(verifier: DocumentPositionMapperVerifier, fn: number, session: TestSession) {
+                    const { reqName, request, expectedResponse, expectedResponseNoMap, expectedResponseNoDts } = verifier.actionGetter(fn);
                     const { response } = session.executeCommandSeq(request);
-                    return { reqName, response, expectedResponse, expectedResponseNoMap, expectedResponseNoDts };
+                    return { reqName, response, expectedResponse, expectedResponseNoMap, expectedResponseNoDts, verifier };
                 }
 
                 function firstAction(session: TestSession) {
-                    actionGetters.forEach(actionGetter => action(actionGetter, 1, session));
+                    verifier.forEach(v => action(v, 1, session));
                 }
 
                 function verifyAllFnActionWorker(session: TestSession, verifyAction: (result: ReturnType<typeof action>, dtsInfo: server.ScriptInfo | undefined, isFirst: boolean) => void, dtsAbsent?: true) {
                     // action
                     let isFirst = true;
-                    for (const actionGetter of actionGetters) {
+                    for (const v of verifier) {
                         for (let fn = 1; fn <= 5; fn++) {
-                            const result = action(actionGetter, fn, session);
+                            const result = action(v, fn, session);
                             const dtsInfo = session.getProjectService().filenameToScriptInfo.get(dtsPath);
                             if (dtsAbsent) {
                                 assert.isUndefined(dtsInfo);
@@ -449,9 +455,17 @@ fn5();
                     dependencyTsAndMapOk?: true
                 ) {
                     // action
-                    verifyAllFnActionWorker(session, ({ reqName, response, expectedResponse, expectedResponseNoDts }) => {
+                    verifyAllFnActionWorker(session, ({ reqName, response, expectedResponse, expectedResponseNoDts, verifier }) => {
                         assert.deepEqual(response, expectedResponseNoDts || expectedResponse, `Failed on ${reqName}`);
-                        verifyInfosWhenNoDtsFile(session, host, dependencyTsAndMapOk);
+                        verifyInfosWhenNoDtsFile(
+                            session,
+                            host,
+                            // Even when project actual file contains dts, its not watched because the dts is in another folder and module resolution just fails
+                            // instead of succeeding to source file and then mapping using project reference (When using usage location)
+                            // But watched if sourcemapper is in source project since we need to keep track of dts to update the source mapper for any potential usages
+                            verifier.expectedProjectActualFiles.every(f => f.toLowerCase() !== dtsPath),
+                            dependencyTsAndMapOk,
+                        );
                     }, /*dtsAbsent*/ true);
                 }
 
@@ -535,7 +549,11 @@ fn5();
                     // Collecting at this point retains dependency.d.ts and map watcher
                     closeFilesForSession([randomFile], session);
                     openFilesForSession([randomFile], session);
-                    verifyInfosWhenNoDtsFile(session, host);
+                    verifyInfosWhenNoDtsFile(
+                        session,
+                        host,
+                        !!forEach(verifier, v => v.expectedProjectActualFiles.every(f => f.toLowerCase() !== dtsPath))
+                    );
 
                     // Closing open file, removes dependencies too
                     closeFilesForSession([...openFiles, randomFile], session);
@@ -616,7 +634,7 @@ fn5();
                     "when dependency file's map changes",
                     host => host.writeFile(
                         dtsMapLocation,
-                        `{"version":3,"file":"FnS.d.ts","sourceRoot":"","sources":["FnS.ts"],"names":[],"mappings":"AAAA,wBAAgB,GAAG,SAAM;AACzB,wBAAgB,GAAG,SAAM;AACzB,wBAAgB,GAAG,SAAM;AACzB,wBAAgB,GAAG,SAAM;AACzB,wBAAgB,GAAG,SAAM;AACzB,eAAO,MAAM,CAAC,KAAK,CAAC"}`
+                        `{"version":3,"file":"FnS.d.ts","sourceRoot":"","sources":["../dependency/FnS.ts"],"names":[],"mappings":"AAAA,wBAAgB,GAAG,SAAM;AACzB,wBAAgB,GAAG,SAAM;AACzB,wBAAgB,GAAG,SAAM;AACzB,wBAAgB,GAAG,SAAM;AACzB,wBAAgB,GAAG,SAAM;AACzB,eAAO,MAAM,CAAC,KAAK,CAAC"}`
                     ),
                     /*afterActionDocumentPositionMapperNotEquals*/ true
                 );
@@ -635,44 +653,133 @@ fn5();
                 );
             }
 
-            const usageVerifier: DocumentPositionMapperVerifier = {
-                openFile: mainTs,
-                expectedProjectActualFiles: [mainTs.path, libFile.path, mainConfig.path, dtsPath],
-                actionGetter: gotoDefintinionFromMainTs,
-                openFileLastLine: 14
-            };
-            describe("from project that uses dependency", () => {
-                const closedInfos = [dependencyTs.path, dependencyConfig.path, libFile.path, dtsPath, dtsMapLocation];
-                verifyDocumentPositionMapperUpdates(
-                    "can go to definition correctly",
-                    [usageVerifier],
-                    closedInfos
-                );
-            });
+            function verifyScenarios(withRefs: boolean) {
+                describe(withRefs ? "when main tsconfig has project reference" : "when main tsconfig doesnt have project reference", () => {
+                    const usageVerifier: DocumentPositionMapperVerifier = {
+                        openFile: mainTs,
+                        expectedProjectActualFiles: [mainTs.path, libFile.path, mainConfig.path, dtsPath],
+                        actionGetter: gotoDefintinionFromMainTs,
+                        openFileLastLine: 14
+                    };
+                    describe("from project that uses dependency", () => {
+                        const closedInfos = withRefs ?
+                            [dependencyTs.path, dependencyConfig.path, libFile.path, dtsPath, dtsMapLocation] :
+                            [dependencyTs.path, libFile.path, dtsPath, dtsMapLocation];
+                        verifyDocumentPositionMapperUpdates(
+                            "can go to definition correctly",
+                            [usageVerifier],
+                            closedInfos,
+                            withRefs
+                        );
+                    });
 
-            const definingVerifier: DocumentPositionMapperVerifier = {
-                openFile: dependencyTs,
-                expectedProjectActualFiles: [dependencyTs.path, libFile.path, dependencyConfig.path],
-                actionGetter: renameFromDependencyTs,
-                openFileLastLine: 6
-            };
-            describe("from defining project", () => {
-                const closedInfos = [libFile.path, dtsLocation, dtsMapLocation];
-                verifyDocumentPositionMapperUpdates(
-                    "rename locations from dependency",
-                    [definingVerifier],
-                    closedInfos
-                );
-            });
+                    const definingVerifier: DocumentPositionMapperVerifier = {
+                        openFile: dependencyTs,
+                        expectedProjectActualFiles: [dependencyTs.path, libFile.path, dependencyConfig.path],
+                        actionGetter: renameFromDependencyTs,
+                        openFileLastLine: 6,
+                    };
+                    describe("from defining project", () => {
+                        const closedInfos = [libFile.path, dtsLocation, dtsMapLocation];
+                        verifyDocumentPositionMapperUpdates(
+                            "rename locations from dependency",
+                            [definingVerifier],
+                            closedInfos,
+                            withRefs
+                        );
+                    });
 
-            describe("when opening depedency and usage project", () => {
-                const closedInfos = [libFile.path, dtsPath, dtsMapLocation, dependencyConfig.path];
-                verifyDocumentPositionMapperUpdates(
-                    "goto Definition in usage and rename locations from defining project",
-                    [usageVerifier, { ...definingVerifier, actionGetter: renameFromDependencyTsWithBothProjectsOpen }],
-                    closedInfos
-                );
-            });
+                    describe("when opening depedency and usage project", () => {
+                        const closedInfos = withRefs ?
+                            [libFile.path, dtsPath, dtsMapLocation, dependencyConfig.path] :
+                            [libFile.path, dtsPath, dtsMapLocation];
+                        verifyDocumentPositionMapperUpdates(
+                            "goto Definition in usage and rename locations from defining project",
+                            [usageVerifier, { ...definingVerifier, actionGetter: renameFromDependencyTsWithBothProjectsOpen }],
+                            closedInfos,
+                            withRefs
+                        );
+                    });
+                });
+            }
+
+            verifyScenarios(/*withRefs*/ false);
+            verifyScenarios(/*withRefs*/ true);
+        });
+
+        it("reusing d.ts files from composite and non composite projects", () => {
+            const projectLocation = "/user/username/projects/myproject";
+            const configA: File = {
+                path: `${projectLocation}/compositea/tsconfig.json`,
+                content: JSON.stringify({
+                    compilerOptions: {
+                        composite: true,
+                        outDir: "../dist/",
+                        rootDir: "../",
+                        baseUrl: "../",
+                        paths: { "@ref/*": ["./dist/*"] }
+                    }
+                })
+            };
+            const aTs: File = {
+                path: `${projectLocation}/compositea/a.ts`,
+                content: `import { b } from "@ref/compositeb/b";`
+            };
+            const a2Ts: File = {
+                path: `${projectLocation}/compositea/a2.ts`,
+                content: `export const x = 10;`
+            };
+            const configB: File = {
+                path: `${projectLocation}/compositeb/tsconfig.json`,
+                content: configA.content
+            };
+            const bTs: File = {
+                path: `${projectLocation}/compositeb/b.ts`,
+                content: "export function b() {}"
+            };
+            const bDts: File = {
+                path: `${projectLocation}/dist/compositeb/b.d.ts`,
+                content: "export declare function b(): void;"
+            };
+            const configC: File = {
+                path: `${projectLocation}/compositec/tsconfig.json`,
+                content: JSON.stringify({
+                    compilerOptions: {
+                        composite: true,
+                        outDir: "../dist/",
+                        rootDir: "../",
+                        baseUrl: "../",
+                        paths: { "@ref/*": ["./*"] }
+                    },
+                    references: [{ path: "../compositeb" }]
+                })
+            };
+            const cTs: File = {
+                path: `${projectLocation}/compositec/c.ts`,
+                content: aTs.content
+            };
+            const files = [libFile, aTs, a2Ts, configA, bDts, bTs, configB, cTs, configC];
+            const host = createServerHost(files);
+            const service = createProjectService(host);
+            service.openClientFile(aTs.path);
+            service.checkNumberOfProjects({ configuredProjects: 1 });
+
+            // project A referencing b.d.ts without project reference
+            const projectA = service.configuredProjects.get(configA.path)!;
+            assert.isDefined(projectA);
+            checkProjectActualFiles(projectA, [aTs.path, a2Ts.path, bDts.path, libFile.path, configA.path]);
+
+            // reuses b.d.ts but sets the path and resolved path since projectC has project references
+            // as the real resolution was to b.ts
+            service.openClientFile(cTs.path);
+            service.checkNumberOfProjects({ configuredProjects: 2 });
+            const projectC = service.configuredProjects.get(configC.path)!;
+            checkProjectActualFiles(projectC, [cTs.path, bDts.path, libFile.path, configC.path]);
+
+            // Now new project for project A tries to reuse b but there is no filesByName mapping for b's source location
+            host.writeFile(a2Ts.path, `${a2Ts.content}export const y = 30;`);
+            assert.isTrue(projectA.dirty);
+            projectA.updateGraph();
         });
     });
 }

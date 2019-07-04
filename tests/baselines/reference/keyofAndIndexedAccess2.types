@@ -540,3 +540,35 @@ type Baz<T, Q extends Foo<T>> = { [K in keyof Q]: T[Q[K]] };
 type Qux<T, Q extends Bar<T>> = { [K in keyof Q]: T[Q[K]["0"]] };
 >Qux : Qux<T, Q>
 
+// Repro from #32038
+
+const actions = ['resizeTo', 'resizeBy'] as const;
+>actions : readonly ["resizeTo", "resizeBy"]
+>['resizeTo', 'resizeBy'] as const : readonly ["resizeTo", "resizeBy"]
+>['resizeTo', 'resizeBy'] : readonly ["resizeTo", "resizeBy"]
+>'resizeTo' : "resizeTo"
+>'resizeBy' : "resizeBy"
+
+for (const action of actions) {
+>action : "resizeTo" | "resizeBy"
+>actions : readonly ["resizeTo", "resizeBy"]
+
+	window[action] = (x, y) => {
+>window[action] = (x, y) => {		window[action](x, y);	} : (x: number, y: number) => void
+>window[action] : ((x: number, y: number) => void) & ((x: number, y: number) => void)
+>window : Window
+>action : "resizeTo" | "resizeBy"
+>(x, y) => {		window[action](x, y);	} : (x: number, y: number) => void
+>x : number
+>y : number
+
+		window[action](x, y);
+>window[action](x, y) : void
+>window[action] : ((x: number, y: number) => void) | ((x: number, y: number) => void)
+>window : Window
+>action : "resizeTo" | "resizeBy"
+>x : number
+>y : number
+	}
+}
+

@@ -1236,7 +1236,7 @@
         "category": "Error",
         "code": 2348
     },
-    "Cannot invoke an expression whose type lacks a call signature. Type '{0}' has no compatible call signatures.": {
+    "This expression is not callable.": {
         "category": "Error",
         "code": 2349
     },
@@ -1244,7 +1244,7 @@
         "category": "Error",
         "code": 2350
     },
-    "Cannot use 'new' with an expression whose type lacks a call or construct signature.": {
+    "This expression is not constructable.": {
         "category": "Error",
         "code": 2351
     },
@@ -2621,29 +2621,61 @@
         "category": "Error",
         "code": 2754
     },
-    "Cannot iterate value because the 'next' method of its iterator expects type '{1}', but for-of will always send '{0}'.": {
+    "No constituent of type '{0}' is callable.": {
         "category": "Error",
         "code": 2755
     },
-    "Cannot iterate value because the 'next' method of its iterator expects type '{1}', but array spread will always send '{0}'.": {
+    "Not all constituents of type '{0}' are callable.": {
         "category": "Error",
         "code": 2756
     },
-    "Cannot iterate value because the 'next' method of its iterator expects type '{1}', but array destructuring will always send '{0}'.": {
+    "Type '{0}' has no call signatures.": {
         "category": "Error",
         "code": 2757
     },
-    "Cannot delegate iteration to value because the 'next' method of its iterator expects type '{1}', but the containing generator will always send '{0}'.": {
+    "Each member of the union type '{0}' has signatures, but none of those signatures are compatible with each other.": {
         "category": "Error",
         "code": 2758
     },
-    "The '{0}' property of an iterator must be a method.": {
+    "No constituent of type '{0}' is constructable.": {
         "category": "Error",
         "code": 2759
     },
-    "The '{0}' property of an async iterator must be a method.": {
+    "Not all constituents of type '{0}' are constructable.": {
         "category": "Error",
         "code": 2760
+    },
+    "Type '{0}' has no construct signatures.": {
+        "category": "Error",
+        "code": 2761
+    },
+    "Each member of the union type '{0}' has construct signatures, but none of those signatures are compatible with each other.": {
+        "category": "Error",
+        "code": 2762
+    },
+    "Cannot iterate value because the 'next' method of its iterator expects type '{1}', but for-of will always send '{0}'.": {
+        "category": "Error",
+        "code": 2763
+    },
+    "Cannot iterate value because the 'next' method of its iterator expects type '{1}', but array spread will always send '{0}'.": {
+        "category": "Error",
+        "code": 2764
+    },
+    "Cannot iterate value because the 'next' method of its iterator expects type '{1}', but array destructuring will always send '{0}'.": {
+        "category": "Error",
+        "code": 2765
+    },
+    "Cannot delegate iteration to value because the 'next' method of its iterator expects type '{1}', but the containing generator will always send '{0}'.": {
+        "category": "Error",
+        "code": 2766
+    },
+    "The '{0}' property of an iterator must be a method.": {
+        "category": "Error",
+        "code": 2767
+    },
+    "The '{0}' property of an async iterator must be a method.": {
+        "category": "Error",
+        "code": 2768
     },
 
     "Import declaration '{0}' is using private name '{1}'.": {
@@ -3958,10 +3990,6 @@
     "'package.json' had a falsy '{0}' field.": {
         "category": "Message",
         "code": 6220
-    },
-    "Enable strict checking of generator types.": {
-        "category": "Message",
-        "code": 6221
     },
 
     "Projects to reference": {
