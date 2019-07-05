@@ -61,7 +61,7 @@ fnErr();
         interface CheckAllErrors {
             session: TestSession;
             host: TestServerHost;
-            expected: ReadonlyArray<GetErrDiagnostics>;
+            expected: readonly GetErrDiagnostics[];
             expectedSequenceId: number;
         }
         function checkAllErrors({ session, host, expected, expectedSequenceId }: CheckAllErrors) {
@@ -118,6 +118,40 @@ fnErr();
             });
         }
 
+        function verifyErrorsUsingSyncMethods({ openFiles, expectedSyncDiagnostics }: VerifyScenario) {
+            it("verifies the errors using sync commands", () => {
+                const host = createServerHost([dependencyTs, dependencyConfig, usageTs, usageConfig, libFile]);
+                const session = createSession(host);
+                openFilesForSession(openFiles(), session);
+                for (const { file, project, syntax, semantic, suggestion } of expectedSyncDiagnostics()) {
+                    const actualSyntax = session.executeCommandSeq<protocol.SyntacticDiagnosticsSyncRequest>({
+                        command: protocol.CommandTypes.SyntacticDiagnosticsSync,
+                        arguments: {
+                            file: file.path,
+                            projectFileName: project
+                        }
+                    }).response as protocol.Diagnostic[];
+                    assert.deepEqual(actualSyntax, syntax, `Syntax diagnostics for file: ${file.path}, project: ${project}`);
+                    const actualSemantic = session.executeCommandSeq<protocol.SemanticDiagnosticsSyncRequest>({
+                        command: protocol.CommandTypes.SemanticDiagnosticsSync,
+                        arguments: {
+                            file: file.path,
+                            projectFileName: project
+                        }
+                    }).response as protocol.Diagnostic[];
+                    assert.deepEqual(actualSemantic, semantic, `Semantic diagnostics for file: ${file.path}, project: ${project}`);
+                    const actualSuggestion = session.executeCommandSeq<protocol.SuggestionDiagnosticsSyncRequest>({
+                        command: protocol.CommandTypes.SuggestionDiagnosticsSync,
+                        arguments: {
+                            file: file.path,
+                            projectFileName: project
+                        }
+                    }).response as protocol.Diagnostic[];
+                    assert.deepEqual(actualSuggestion, suggestion, `Suggestion diagnostics for file: ${file.path}, project: ${project}`);
+                }
+            });
+        }
+
         interface GetErrDiagnostics {
             file: File;
             syntax: protocol.Diagnostic[];
@@ -126,16 +160,21 @@ fnErr();
         }
         interface GetErrForProjectDiagnostics {
             project: string;
-            errors: ReadonlyArray<GetErrDiagnostics>;
+            errors: readonly GetErrDiagnostics[];
+        }
+        interface SyncDiagnostics extends GetErrDiagnostics {
+            project?: string;
         }
         interface VerifyScenario {
-            openFiles: () => ReadonlyArray<File>;
-            expectedGetErr: () => ReadonlyArray<GetErrDiagnostics>;
-            expectedGetErrForProject: () => ReadonlyArray<GetErrForProjectDiagnostics>;
+            openFiles: () => readonly File[];
+            expectedGetErr: () => readonly GetErrDiagnostics[];
+            expectedGetErrForProject: () => readonly GetErrForProjectDiagnostics[];
+            expectedSyncDiagnostics: () => readonly SyncDiagnostics[];
         }
         function verifyScenario(scenario: VerifyScenario) {
             verifyErrorsUsingGeterr(scenario);
             verifyErrorsUsingGeterrForProject(scenario);
+            verifyErrorsUsingSyncMethods(scenario);
         }
 
         function emptyDiagnostics(file: File): GetErrDiagnostics {
@@ -169,13 +208,13 @@ fnErr();
                 file: dependencyTs,
                 syntax: emptyArray,
                 semantic: [
-                createDiagnostic(
-                    { line: 6, offset: 12 },
-                    { line: 6, offset: 13 },
-                    Diagnostics.Type_0_is_not_assignable_to_type_1,
-                    ["10", "string"],
-                    "error",
-                )
+                    createDiagnostic(
+                        { line: 6, offset: 12 },
+                        { line: 6, offset: 13 },
+                        Diagnostics.Type_0_is_not_assignable_to_type_1,
+                        ["10", "string"],
+                        "error",
+                    )
                 ],
                 suggestion: emptyArray
             };
@@ -200,6 +239,10 @@ fnErr();
             };
         }
 
+        function syncDiagnostics(diagnostics: GetErrDiagnostics, project: string): SyncDiagnostics {
+            return { project, ...diagnostics };
+        }
+
         describe("when dependency project is not open", () => {
             verifyScenario({
                 openFiles: () => [usageTs],
@@ -215,7 +258,15 @@ fnErr();
                             usageDiagnostics()
                         ]
                     }
-                ]
+                ],
+                expectedSyncDiagnostics: () => [
+                    // Without project
+                    usageDiagnostics(),
+                    emptyDiagnostics(dependencyTs),
+                    // With project
+                    syncDiagnostics(usageDiagnostics(), usageConfig.path),
+                    syncDiagnostics(emptyDiagnostics(dependencyTs), usageConfig.path),
+                ],
             });
         });
 
@@ -229,7 +280,16 @@ fnErr();
                 expectedGetErrForProject: () => [
                     usageProjectDiagnostics(),
                     dependencyProjectDiagnostics()
-                ]
+                ],
+                expectedSyncDiagnostics: () => [
+                    // Without project
+                    usageDiagnostics(),
+                    dependencyDiagnostics(),
+                    // With project
+                    syncDiagnostics(usageDiagnostics(), usageConfig.path),
+                    syncDiagnostics(emptyDiagnostics(dependencyTs), usageConfig.path),
+                    syncDiagnostics(dependencyDiagnostics(), dependencyConfig.path),
+                ],
             });
         });
     });
