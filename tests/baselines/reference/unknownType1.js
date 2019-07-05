@@ -17,7 +17,7 @@ type T12 = unknown | null | undefined;  // unknown
 type T13 = unknown | string;  // unknown
 type T14 = unknown | string[];  // unknown
 type T15 = unknown | unknown;  // unknown
-type T16 = unknown | any;  // any
+type T16 = unknown | any;  // unknown
 
 // Type variable and unknown in union and intersection
 
