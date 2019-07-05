@@ -548,6 +548,7 @@ declare namespace FourSlashInterface {
         readonly kind?: string;
         readonly kindModifiers?: string;
         readonly sortText?: completion.SortText;
+        readonly isFulfilled?: boolean;
 
         // details
         readonly text?: string;
@@ -672,10 +673,12 @@ declare namespace completion {
     type Entry = FourSlashInterface.ExpectedCompletionEntryObject;
     export const enum SortText {
         LocationPriority = "0",
-        SuggestedClassMembers = "1",
-        GlobalsOrKeywords = "2",
-        AutoImportSuggestions = "3",
-        JavascriptIdentifiers = "4"
+        LocationPriorityOptional = "1",
+        LocationPriorityFulfilled = "2",
+        SuggestedClassMembers = "3",
+        GlobalsOrKeywords = "4",
+        AutoImportSuggestions = "5",
+        JavascriptIdentifiers = "6"
     }
     export const globalThisEntry: Entry;
     export const undefinedVarEntry: Entry;

@@ -841,7 +841,19 @@ namespace FourSlash {
             assert.equal(actual.hasAction, hasAction);
             assert.equal(actual.isRecommended, isRecommended);
             assert.equal(actual.source, source);
-            assert.equal(actual.sortText, sortText || ts.Completions.SortText.LocationPriority, this.messageAtLastKnownMarker(`Actual entry: ${JSON.stringify(actual)}`));
+
+            let isSortTextEqual: boolean;
+            if (!sortText) {
+                isSortTextEqual = actual.isFulfilled
+                    ? actual.sortText === ts.Completions.SortText.LocationPriorityFulfilled
+                    : actual.kindModifiers === 'optional'
+                    ? actual.sortText === ts.Completions.SortText.LocationPriorityOptional
+                    : actual.sortText === ts.Completions.SortText.LocationPriority
+            }
+            else {
+                isSortTextEqual = actual.sortText === sortText;
+            }
+            assert.equal(isSortTextEqual, true, this.messageAtLastKnownMarker(`Actual entry: ${JSON.stringify(actual)}`));
 
             if (text !== undefined) {
                 const actualDetails = this.getCompletionEntryDetails(actual.name, actual.source)!;

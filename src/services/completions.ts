@@ -2,10 +2,12 @@
 namespace ts.Completions {
     export enum SortText {
         LocationPriority = "0",
-        SuggestedClassMembers = "1",
-        GlobalsOrKeywords = "2",
-        AutoImportSuggestions = "3",
-        JavascriptIdentifiers = "4"
+        LocationPriorityOptional = "1",
+        LocationPriorityFulfilled = "2",
+        SuggestedClassMembers = "3",
+        GlobalsOrKeywords = "4",
+        AutoImportSuggestions = "5",
+        JavascriptIdentifiers = "6"
     }
     export type Log = (message: string) => void;
 
@@ -103,6 +105,7 @@ namespace ts.Completions {
             isJsxInitializer,
             insideJsDocTagTypeExpression,
             symbolToSortTextMap,
+            fulfilledSymbols,
         } = completionData;
 
         if (location && location.parent && isJsxClosingElement(location.parent)) {
@@ -163,7 +166,8 @@ namespace ts.Completions {
                 isJsxInitializer,
                 recommendedCompletion,
                 symbolToOriginInfoMap,
-                symbolToSortTextMap
+                symbolToSortTextMap,
+                fulfilledSymbols
             );
         }
 
@@ -240,6 +244,7 @@ namespace ts.Completions {
         propertyAccessToConvert: PropertyAccessExpression | undefined,
         isJsxInitializer: IsJsxInitializer | undefined,
         preferences: UserPreferences,
+        isFulfilled: boolean
     ): CompletionEntry | undefined {
         let insertText: string | undefined;
         let replacementSpan: TextSpan | undefined;
@@ -286,6 +291,7 @@ namespace ts.Completions {
             isRecommended: trueOrUndefined(isRecommendedCompletionMatch(symbol, recommendedCompletion, typeChecker)),
             insertText,
             replacementSpan,
+            isFulfilled
         };
     }
 
@@ -317,6 +323,7 @@ namespace ts.Completions {
         recommendedCompletion?: Symbol,
         symbolToOriginInfoMap?: SymbolOriginInfoMap,
         symbolToSortTextMap?: SymbolSortTextMap,
+        fulfilledSymbols?: ReadonlyArray<Symbol>,
     ): Map<true> {
         const start = timestamp();
         // Tracks unique names.
@@ -335,9 +342,23 @@ namespace ts.Completions {
                 continue;
             }
 
+            let sortText = symbolToSortTextMap && symbolToSortTextMap[getSymbolId(symbol)];
+            let isFulfilled = false;
+            if (!sortText) {
+                fulfilledSymbols && fulfilledSymbols.forEach(fulfilledSymbol => {
+                    if (fulfilledSymbol.name === symbol.name) {
+                        sortText = SortText.LocationPriorityFulfilled;
+                        isFulfilled = true;
+                    }
+                });
+            }
+            if (!sortText) {
+                sortText = SymbolDisplay.getSymbolModifiers(symbol) === 'optional' ? SortText.LocationPriorityOptional : SortText.LocationPriority;
+            }
+
             const entry = createCompletionEntry(
                 symbol,
-                symbolToSortTextMap && symbolToSortTextMap[getSymbolId(symbol)] || SortText.LocationPriority,
+                sortText,
                 location,
                 sourceFile,
                 typeChecker,
@@ -347,7 +368,8 @@ namespace ts.Completions {
                 recommendedCompletion,
                 propertyAccessToConvert,
                 isJsxInitializer,
-                preferences
+                preferences,
+                isFulfilled
             );
             if (!entry) {
                 continue;
@@ -581,6 +603,7 @@ namespace ts.Completions {
         readonly isJsxInitializer: IsJsxInitializer;
         readonly insideJsDocTagTypeExpression: boolean;
         readonly symbolToSortTextMap: SymbolSortTextMap;
+        readonly fulfilledSymbols?: ReadonlyArray<Symbol>;
     }
     type Request = { readonly kind: CompletionDataKind.JsDocTagName | CompletionDataKind.JsDocTag } | { readonly kind: CompletionDataKind.JsDocParameterName, tag: JSDocParameterTag };
 
@@ -872,6 +895,7 @@ namespace ts.Completions {
         let isNewIdentifierLocation = false;
         let keywordFilters = KeywordCompletionFilters.None;
         let symbols: Symbol[] = [];
+        let fulfilledSymbols: Symbol[] | undefined = [];
         const symbolToOriginInfoMap: SymbolOriginInfoMap = [];
         const symbolToSortTextMap: SymbolSortTextMap = [];
 
@@ -924,7 +948,8 @@ namespace ts.Completions {
             previousToken,
             isJsxInitializer,
             insideJsDocTagTypeExpression,
-            symbolToSortTextMap
+            symbolToSortTextMap,
+            fulfilledSymbols
         };
 
         type JSDocTagWithTypeExpression = JSDocParameterTag | JSDocPropertyTag | JSDocReturnTag | JSDocTypeTag | JSDocTypedefTag;
@@ -1494,6 +1519,14 @@ namespace ts.Completions {
             if (typeMembers && typeMembers.length > 0) {
                 // Add filtered items to the completion list
                 symbols = filterObjectMembersList(typeMembers, Debug.assertDefined(existingMembers));
+                existingMembers && existingMembers.forEach(member => {
+                    if (member.kind === SyntaxKind.SpreadAssignment) {
+                        const expression = (<SpreadAssignment>member).expression;
+                        const symbol = typeChecker.getSymbolAtLocation(expression);
+                        const type = symbol && typeChecker.getTypeOfSymbolAtLocation(symbol, expression);
+                        fulfilledSymbols = type && (<ObjectType>type).properties;
+                    }
+                });
             }
             return GlobalsSearch.Success;
         }
