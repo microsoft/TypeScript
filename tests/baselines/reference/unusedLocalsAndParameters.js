@@ -110,7 +110,7 @@ var C = /** @class */ (function () {
         // Accessor declaration paramter
         set: function (v) {
         },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     return C;
@@ -125,7 +125,7 @@ var E = /** @class */ (function () {
         // Accessor declaration paramter
         set: function (v) {
         },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     return class_1;

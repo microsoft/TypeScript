@@ -17,7 +17,7 @@ var Greeter = /** @class */ (function () {
         get: function () {
             throw ''; // should not raise an error
         },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     Greeter.prototype.greeting = function () {

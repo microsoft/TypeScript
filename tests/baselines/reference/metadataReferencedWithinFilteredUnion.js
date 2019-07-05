@@ -47,7 +47,7 @@ var Class2 = /** @class */ (function () {
         get: function () {
             return undefined;
         },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     __decorate([

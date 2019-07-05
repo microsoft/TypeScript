@@ -32,7 +32,7 @@ var a = /** @class */ (function () {
         get: function () {
             return null;
         },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     return a;

@@ -113,7 +113,7 @@ var c = (function () {
         set: function (val) {
             this.b = val;
         },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     c.prototype.foo1 = function (aOrb) {

@@ -93,14 +93,14 @@ var Base = /** @class */ (function () {
     Object.defineProperty(Base.prototype, "c", {
         get: function () { return x; },
         set: function (v) { },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     Base.s = function (a) { };
     Object.defineProperty(Base, "t", {
         get: function () { return x; },
         set: function (v) { },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     return Base;
@@ -129,7 +129,7 @@ var Derived3 = /** @class */ (function (_super) {
     }
     Object.defineProperty(Derived3.prototype, "c", {
         get: function () { return x; },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     return Derived3;
@@ -141,7 +141,7 @@ var Derived4 = /** @class */ (function (_super) {
     }
     Object.defineProperty(Derived4.prototype, "c", {
         set: function (v) { },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     return Derived4;
@@ -175,7 +175,7 @@ var Derived8 = /** @class */ (function (_super) {
     }
     Object.defineProperty(Derived8, "t", {
         get: function () { return x; },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     return Derived8;
@@ -187,7 +187,7 @@ var Derived9 = /** @class */ (function (_super) {
     }
     Object.defineProperty(Derived9, "t", {
         set: function (v) { },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     return Derived9;

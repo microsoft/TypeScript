@@ -33,14 +33,14 @@ var x = (_a = {
         get: function () {
             throw 10;
         },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     }),
     Object.defineProperty(_a, 1 + 1, {
         get: function () {
             return 10;
         },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     }),
     Object.defineProperty(_a, 1 + 1, {
@@ -48,7 +48,7 @@ var x = (_a = {
             // just throw
             throw 10;
         },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     }),
     Object.defineProperty(_a, "foo", {
@@ -57,7 +57,7 @@ var x = (_a = {
                 return 10;
             }
         },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     }),
     _a.p2 = 20,

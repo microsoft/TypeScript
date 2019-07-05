@@ -58,7 +58,7 @@ var a = /** @class */ (function () {
         },
         set: function (_x) {
         },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     Object.defineProperty(a.prototype, "y", {
@@ -67,7 +67,7 @@ var a = /** @class */ (function () {
         },
         set: function (_y) {
         },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     a.prototype.z = function () {
@@ -78,7 +78,7 @@ var a = /** @class */ (function () {
         },
         set: function (_y) {
         },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     Object.defineProperty(a.prototype, "x2", {
@@ -87,7 +87,7 @@ var a = /** @class */ (function () {
         },
         set: function (_x) {
         },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     Object.defineProperty(a.prototype, "z2", {
@@ -96,7 +96,7 @@ var a = /** @class */ (function () {
         },
         set: function (_y) {
         },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     a.prototype.z2 = function () {

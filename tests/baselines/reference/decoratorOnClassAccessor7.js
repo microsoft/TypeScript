@@ -45,7 +45,7 @@ var A = /** @class */ (function () {
     Object.defineProperty(A.prototype, "x", {
         get: function () { return 0; },
         set: function (value) { },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     __decorate([
@@ -59,7 +59,7 @@ var B = /** @class */ (function () {
     Object.defineProperty(B.prototype, "x", {
         get: function () { return 0; },
         set: function (value) { },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     __decorate([
@@ -73,7 +73,7 @@ var C = /** @class */ (function () {
     Object.defineProperty(C.prototype, "x", {
         get: function () { return 0; },
         set: function (value) { },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     __decorate([
@@ -87,7 +87,7 @@ var D = /** @class */ (function () {
     Object.defineProperty(D.prototype, "x", {
         get: function () { return 0; },
         set: function (value) { },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     __decorate([
@@ -101,7 +101,7 @@ var E = /** @class */ (function () {
     Object.defineProperty(E.prototype, "x", {
         get: function () { return 0; },
         set: function (value) { },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     __decorate([
@@ -115,7 +115,7 @@ var F = /** @class */ (function () {
     Object.defineProperty(F.prototype, "x", {
         get: function () { return 0; },
         set: function (value) { },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     __decorate([

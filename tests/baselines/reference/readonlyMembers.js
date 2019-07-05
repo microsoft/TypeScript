@@ -84,7 +84,7 @@ var C = /** @class */ (function () {
     }
     Object.defineProperty(C.prototype, "c", {
         get: function () { return 1; },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     C.prototype.foo = function () {

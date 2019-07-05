@@ -44,7 +44,7 @@ var Base = /** @class */ (function () {
     Object.defineProperty(Base.prototype, "a", {
         get: function () { return 1; },
         set: function (v) { },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     return Base;
@@ -61,7 +61,7 @@ var Derived = /** @class */ (function (_super) {
     Object.defineProperty(Derived.prototype, "a", {
         get: function () { return 1; },
         set: function (v) { },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     return Derived;

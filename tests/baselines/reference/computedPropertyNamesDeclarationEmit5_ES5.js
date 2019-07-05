@@ -13,12 +13,12 @@ var v = (_a = {},
     _a["" + ""] = function () { },
     Object.defineProperty(_a, "" + "", {
         get: function () { return 0; },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     }),
     Object.defineProperty(_a, "" + "", {
         set: function (x) { },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     }),
     _a);

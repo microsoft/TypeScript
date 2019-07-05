@@ -51,7 +51,7 @@ var NonGeneric;
                 return 1;
             },
             set: function (v) { },
-            enumerable: true,
+            enumerable: false,
             configurable: true
         });
         C.prototype.fn = function () { return this; };
@@ -76,7 +76,7 @@ var Generic;
                 return null;
             },
             set: function (v) { },
-            enumerable: true,
+            enumerable: false,
             configurable: true
         });
         C.prototype.fn = function () { return this; };

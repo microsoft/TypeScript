@@ -29,7 +29,7 @@ var Test = /** @class */ (function () {
             var x = 1;
             return null;
         },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     return Test;
@@ -42,7 +42,7 @@ var Test2 = /** @class */ (function () {
             var x = 1;
             return null;
         },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     return Test2;

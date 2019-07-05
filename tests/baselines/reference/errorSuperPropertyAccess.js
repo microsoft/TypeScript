@@ -169,7 +169,7 @@ var NoBase = /** @class */ (function () {
         set: function (n) {
             _super.hasOwnProperty.call(this, '');
         },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     return NoBase;
@@ -209,7 +209,7 @@ var SomeDerived1 = /** @class */ (function (_super) {
         set: function (n) {
             n = _super.prototype.publicMember;
         },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     SomeDerived1.prototype.fn2 = function () {
@@ -243,7 +243,7 @@ var SomeDerived2 = /** @class */ (function (_super) {
         set: function (n) {
             n = _super.prototype.privateMember;
         },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     return SomeDerived2;
@@ -274,7 +274,7 @@ var SomeDerived3 = /** @class */ (function (_super) {
             _super.privateStaticMember = 3;
             _super.privateStaticFunc.call(this);
         },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     return SomeDerived3;

@@ -117,14 +117,14 @@ var a = /** @class */ (function () {
         },
         set: function (a) {
         },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     Object.defineProperty(a, "p2", {
         get: function () {
             return { x: 30, y: 40 };
         },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     a.d2 = function () {
@@ -133,7 +133,7 @@ var a = /** @class */ (function () {
         get: function () {
             return "string";
         },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     a.prototype.foo = function (ns) {

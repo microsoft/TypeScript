@@ -21,22 +21,22 @@ var C = /** @class */ (function () {
     C.b = function () { };
     Object.defineProperty(C, "c", {
         get: function () { return 1; },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     Object.defineProperty(C, "d", {
         get: function () { return 1; },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     Object.defineProperty(C, "e", {
         set: function (v) { },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     Object.defineProperty(C, "f", {
         set: function (v) { },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     C.x = 1;

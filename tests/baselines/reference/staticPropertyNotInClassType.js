@@ -51,7 +51,7 @@ var NonGeneric;
         Object.defineProperty(C, "x", {
             get: function () { return 1; },
             set: function (v) { },
-            enumerable: true,
+            enumerable: false,
             configurable: true
         });
         return C;
@@ -76,7 +76,7 @@ var Generic;
         Object.defineProperty(C, "x", {
             get: function () { return 1; },
             set: function (v) { },
-            enumerable: true,
+            enumerable: false,
             configurable: true
         });
         return C;

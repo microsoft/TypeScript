@@ -15,7 +15,7 @@ var f = /** @class */ (function () {
         set: function (value) {
             return null; // Should be an error
         },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     return f;

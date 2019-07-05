@@ -22,7 +22,7 @@ define(["require", "exports"], function (require, exports) {
                 var i;
                 return i; // Should be fine (previous bug report visibility error).
             },
-            enumerable: true,
+            enumerable: false,
             configurable: true
         });
         return Foo;

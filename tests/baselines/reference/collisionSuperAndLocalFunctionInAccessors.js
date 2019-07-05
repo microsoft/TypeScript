@@ -68,7 +68,7 @@ var Foo = /** @class */ (function () {
             function _super() {
             }
         },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     return Foo;
@@ -88,7 +88,7 @@ var b = /** @class */ (function (_super_1) {
             function _super() {
             }
         },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     return b;
@@ -112,7 +112,7 @@ var c = /** @class */ (function (_super_1) {
                 }
             };
         },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     return c;

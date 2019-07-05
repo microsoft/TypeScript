@@ -128,7 +128,7 @@ var SomeDerivedClass = /** @class */ (function (_super) {
             var x = _super.prototype.func.call(this);
             var x;
         },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     SomeDerivedClass.fn = function () {
@@ -145,7 +145,7 @@ var SomeDerivedClass = /** @class */ (function (_super) {
             var x = _super.func.call(this);
             var x;
         },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     SomeDerivedClass.prototype.returnThis = function () {

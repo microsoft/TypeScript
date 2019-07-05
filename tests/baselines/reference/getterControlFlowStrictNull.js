@@ -40,7 +40,7 @@ var B = /** @class */ (function () {
             }
             // it should error here because it returns undefined
         },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     return B;

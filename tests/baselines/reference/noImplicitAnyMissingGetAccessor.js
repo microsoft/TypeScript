@@ -39,7 +39,7 @@ var Child = /** @class */ (function (_super) {
         set: function (str) {
             this._x = str;
         },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     return Child;

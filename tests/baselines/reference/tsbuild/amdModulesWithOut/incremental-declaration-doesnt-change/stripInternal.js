@@ -11,7 +11,7 @@ define("file1", ["require", "exports"], function (require, exports) {
         Object.defineProperty(normalC.prototype, "c", {
             /*@internal*/ get: function () { return 10; },
             /*@internal*/ set: function (val) { },
-            enumerable: true,
+            enumerable: false,
             configurable: true
         });
         return normalC;
@@ -298,7 +298,7 @@ sourceFile:../lib/file1.ts
 6 >Emitted(12, 49) Source(7, 40) + SourceIndex(1)
 7 >Emitted(12, 50) Source(7, 41) + SourceIndex(1)
 ---
->>>            enumerable: true,
+>>>            enumerable: false,
 >>>            configurable: true
 >>>        });
 1 >^^^^^^^^^^^
@@ -1673,20 +1673,20 @@ sourceFile:file4.ts
       "sections": [
         {
           "pos": 0,
-          "end": 4158,
+          "end": 4159,
           "kind": "prepend",
           "data": "../lib/module.js",
           "texts": [
             {
               "pos": 0,
-              "end": 4158,
+              "end": 4159,
               "kind": "text"
             }
           ]
         },
         {
-          "pos": 4158,
-          "end": 4359,
+          "pos": 4159,
+          "end": 4360,
           "kind": "text"
         }
       ]
@@ -1721,9 +1721,9 @@ sourceFile:file4.ts
 ======================================================================
 File:: /src/app/module.js
 ----------------------------------------------------------------------
-prepend: (0-4158):: ../lib/module.js texts:: 1
+prepend: (0-4159):: ../lib/module.js texts:: 1
 >>--------------------------------------------------------------------
-text: (0-4158)
+text: (0-4159)
 /*@internal*/ var myGlob = 20;
 define("file1", ["require", "exports"], function (require, exports) {
     "use strict";
@@ -1736,7 +1736,7 @@ define("file1", ["require", "exports"], function (require, exports) {
         Object.defineProperty(normalC.prototype, "c", {
             /*@internal*/ get: function () { return 10; },
             /*@internal*/ set: function (val) { },
-            enumerable: true,
+            enumerable: false,
             configurable: true
         });
         return normalC;
@@ -1829,7 +1829,7 @@ define("file2", ["require", "exports"], function (require, exports) {
 var globalConst = 10;
 
 ----------------------------------------------------------------------
-text: (4158-4359)
+text: (4159-4360)
 define("file3", ["require", "exports"], function (require, exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -1906,7 +1906,7 @@ define("file1", ["require", "exports"], function (require, exports) {
         Object.defineProperty(normalC.prototype, "c", {
             /*@internal*/ get: function () { return 10; },
             /*@internal*/ set: function (val) { },
-            enumerable: true,
+            enumerable: false,
             configurable: true
         });
         return normalC;
@@ -2187,7 +2187,7 @@ sourceFile:file1.ts
 6 >Emitted(12, 49) Source(7, 40) + SourceIndex(1)
 7 >Emitted(12, 50) Source(7, 41) + SourceIndex(1)
 ---
->>>            enumerable: true,
+>>>            enumerable: false,
 >>>            configurable: true
 >>>        });
 1 >^^^^^^^^^^^
@@ -3511,7 +3511,7 @@ sourceFile:global.ts
       "sections": [
         {
           "pos": 0,
-          "end": 4158,
+          "end": 4159,
           "kind": "text"
         }
       ]
@@ -3568,7 +3568,7 @@ sourceFile:global.ts
 ======================================================================
 File:: /src/lib/module.js
 ----------------------------------------------------------------------
-text: (0-4158)
+text: (0-4159)
 /*@internal*/ var myGlob = 20;
 define("file1", ["require", "exports"], function (require, exports) {
     "use strict";
@@ -3581,7 +3581,7 @@ define("file1", ["require", "exports"], function (require, exports) {
         Object.defineProperty(normalC.prototype, "c", {
             /*@internal*/ get: function () { return 10; },
             /*@internal*/ set: function (val) { },
-            enumerable: true,
+            enumerable: false,
             configurable: true
         });
         return normalC;

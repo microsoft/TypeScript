@@ -38,7 +38,7 @@ var Child = /** @class */ (function (_super) {
         get: function () {
             return "";
         },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     return Child;

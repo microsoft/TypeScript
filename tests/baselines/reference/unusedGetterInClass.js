@@ -19,7 +19,7 @@ var Employee = /** @class */ (function () {
         },
         // Will not also error on the setter
         set: function (_) { },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     return Employee;
