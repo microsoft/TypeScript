@@ -1,0 +1,63 @@
+=== tests/cases/compiler/getSetEnumerable.ts ===
+class GetSetEnumerableClassGet {
+>GetSetEnumerableClassGet : GetSetEnumerableClassGet
+
+    get prop() { return true;}
+>prop : boolean
+>true : true
+}
+
+class GetSetEnumerableClassSet {
+>GetSetEnumerableClassSet : GetSetEnumerableClassSet
+
+    set prop(value: boolean) { }
+>prop : boolean
+>value : boolean
+}
+
+class GetSetEnumerableClassGetSet {
+>GetSetEnumerableClassGetSet : GetSetEnumerableClassGetSet
+
+    get prop() { return true;}
+>prop : boolean
+>true : true
+
+    set prop(value: boolean) { }
+>prop : boolean
+>value : boolean
+}
+
+const GetSetEnumerableObjectGet = {
+>GetSetEnumerableObjectGet : { readonly prop: boolean; }
+>{    get prop() { return true; }} : { readonly prop: boolean; }
+
+    get prop() { return true; }
+>prop : boolean
+>true : true
+
+};
+
+const GetSetEnumerableObjectSet = {
+>GetSetEnumerableObjectSet : { prop: boolean; }
+>{    set prop(value: boolean) { }} : { prop: boolean; }
+
+    set prop(value: boolean) { }
+>prop : boolean
+>value : boolean
+
+};
+
+const GetSetEnumerableObjectGetSet = {
+>GetSetEnumerableObjectGetSet : { prop: boolean; }
+>{    get prop() { return true; },    set prop(value: boolean) { }} : { prop: boolean; }
+
+    get prop() { return true; },
+>prop : boolean
+>true : true
+
+    set prop(value: boolean) { }
+>prop : boolean
+>value : boolean
+
+};
+
