@@ -92,19 +92,19 @@ var [c0, c1] = [...temp];
 >temp : number[]
 
 var [c2] = [];
->c2 : any
->[] : [undefined?]
+>c2 : undefined
+>[] : []
 
 var [[[c3]], [[[[c4]]]]] = [[[]], [[[[]]]]]
->c3 : any
->c4 : any
->[[[]], [[[[]]]]] : [[[undefined?]], [[[[undefined?]]]]]
->[[]] : [[undefined?]]
->[] : [undefined?]
->[[[[]]]] : [[[[undefined?]]]]
->[[[]]] : [[[undefined?]]]
->[[]] : [[undefined?]]
->[] : [undefined?]
+>c3 : undefined
+>c4 : undefined
+>[[[]], [[[[]]]]] : [[[]], [[[[]]]]]
+>[[]] : [[]]
+>[] : []
+>[[[[]]]] : [[[[]]]]
+>[[[]]] : [[[]]]
+>[[]] : [[]]
+>[] : []
 
 var [[c5], c6]: [[string|number], boolean] = [[1], true];
 >c5 : string | number

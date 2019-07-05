@@ -151,8 +151,8 @@ namespace ts {
     export function forEachEntry<T, U>(map: ReadonlyMap<T>, callback: (value: T, key: string) => U | undefined): U | undefined;
     export function forEachEntry<T, U>(map: ReadonlyUnderscoreEscapedMap<T> | ReadonlyMap<T>, callback: (value: T, key: (string & __String)) => U | undefined): U | undefined {
         const iterator = map.entries();
-        for (let { value: pair, done } = iterator.next(); !done; { value: pair, done } = iterator.next()) {
-            const [key, value] = pair;
+        for (let iterResult = iterator.next(); !iterResult.done; iterResult = iterator.next()) {
+            const [key, value] = iterResult.value;
             const result = callback(value, key as (string & __String));
             if (result) {
                 return result;
@@ -166,8 +166,8 @@ namespace ts {
     export function forEachKey<T>(map: ReadonlyMap<{}>, callback: (key: string) => T | undefined): T | undefined;
     export function forEachKey<T>(map: ReadonlyUnderscoreEscapedMap<{}> | ReadonlyMap<{}>, callback: (key: string & __String) => T | undefined): T | undefined {
         const iterator = map.keys();
-        for (let { value: key, done } = iterator.next(); !done; { value: key, done } = iterator.next()) {
-            const result = callback(key as string & __String);
+        for (let iterResult = iterator.next(); !iterResult.done; iterResult = iterator.next()) {
+            const result = callback(iterResult.value as string & __String);
             if (result) {
                 return result;
             }
@@ -6076,6 +6076,10 @@ namespace ts {
 
     export function isJSDoc(node: Node): node is JSDoc {
         return node.kind === SyntaxKind.JSDocComment;
+    }
+
+    export function isJSDocAuthorTag(node: Node): node is JSDocAuthorTag {
+        return node.kind === SyntaxKind.JSDocAuthorTag;
     }
 
     export function isJSDocAugmentsTag(node: Node): node is JSDocAugmentsTag {

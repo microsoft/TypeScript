@@ -11,14 +11,14 @@ foo("", function* () {
 >foo("", function* () {    yield* {        *[Symbol.iterator]() {            yield x => x.length        }    }}, p => undefined) : string
 >foo : <T, U>(x: T, fun: () => Iterable<(x: T) => U>, fun2: (y: U) => T) => T
 >"" : ""
->function* () {    yield* {        *[Symbol.iterator]() {            yield x => x.length        }    }} : () => IterableIterator<(x: string) => number>
+>function* () {    yield* {        *[Symbol.iterator]() {            yield x => x.length        }    }} : () => Generator<(x: string) => number, void, unknown>
 
     yield* {
->yield* {        *[Symbol.iterator]() {            yield x => x.length        }    } : any
->{        *[Symbol.iterator]() {            yield x => x.length        }    } : { [Symbol.iterator](): IterableIterator<(x: string) => number>; }
+>yield* {        *[Symbol.iterator]() {            yield x => x.length        }    } : void
+>{        *[Symbol.iterator]() {            yield x => x.length        }    } : { [Symbol.iterator](): Generator<(x: string) => number, void, unknown>; }
 
         *[Symbol.iterator]() {
->[Symbol.iterator] : () => IterableIterator<(x: string) => number>
+>[Symbol.iterator] : () => Generator<(x: string) => number, void, unknown>
 >Symbol.iterator : symbol
 >Symbol : SymbolConstructor
 >iterator : symbol
