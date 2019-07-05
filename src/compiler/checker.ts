@@ -15066,7 +15066,7 @@ namespace ts {
                     }
                     diagnostic = !noImplicitAny ? Diagnostics._0_implicitly_has_an_1_return_type_but_a_better_type_may_be_inferred_from_usage :
                         wideningKind === WideningKind.GeneratorYield ? Diagnostics._0_which_lacks_return_type_annotation_implicitly_has_an_1_yield_type :
-                            Diagnostics._0_which_lacks_return_type_annotation_implicitly_has_an_1_return_type;
+                        Diagnostics._0_which_lacks_return_type_annotation_implicitly_has_an_1_return_type;
                     break;
                 case SyntaxKind.MappedType:
                     if (noImplicitAny) {
