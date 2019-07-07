@@ -4,7 +4,7 @@
 ////for (y of []) {}
 
 verify.codeFixAll({
-    fixId: "addMissingConstInForLoop",
+    fixId: "addMissingConst",
     fixAllDescription: "Add 'const' to all unresolved variables",
     newFileContent: 
 `for (const x of []) {}

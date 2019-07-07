@@ -1,12 +1,9 @@
 /// <reference path='fourslash.ts' />
 
-////for (x in []) {}
-////for (y in []) {}
+////[x, y] = [0, 1];
 
 verify.codeFixAll({
     fixId: "addMissingConst",
     fixAllDescription: "Add 'const' to all unresolved variables",
-    newFileContent: 
-`for (const x in []) {}
-for (const y in []) {}`
+    newFileContent: "const [x, y] = [0, 1];"
 });
