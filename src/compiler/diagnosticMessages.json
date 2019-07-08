@@ -2655,7 +2655,8 @@
     },
     "Cannot iterate value because the 'next' method of its iterator expects type '{1}', but for-of will always send '{0}'.": {
         "category": "Error",
-        "code": 77   },
+        "code": 2673
+    },
     "Cannot iterate value because the 'next' method of its iterator expects type '{1}', but array spread will always send '{0}'.": {
         "category": "Error",
         "code": 2764
@@ -2692,73 +2693,9 @@
         "category": "Error",
         "code": 2772
     },
-    "Operator '{0}' cannot be applied to types '{1}' and '{2}'. Did you forget to use 'await'?": {
-        "category": "Error",
-        "code": 2773
-    },
-    "An arithmetic operand must be of type 'any', 'number', 'bigint' or an enum type. Did you forget to use 'await'?": {
-        "category": "Error",
-        "code": 2774
-    },
-    "The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type. Did you forget to use 'await'?": {
-        "category": "Error",
-        "code": 2775
-    },
-    "This expression is not callable. Did you forget to use 'await'?": {
-        "category": "Error",
-        "code": 2776
-    },
-    "This expression is not constructable. Did you forget to use 'await'?": {
-        "category": "Error",
-        "code": 2777
-    },
-    "The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type. Did you forget to use 'await'?": {
-        "category": "Error",
-        "code": 2778
-    },
-    "Type '{0}' must have a '[Symbol.iterator]()' method that returns an iterator. Did you forget to use 'await'?": {
-        "category": "Error",
-        "code": 2779
-    },
-    "Type '{0}' must have a '[Symbol.asyncIterator]()' method that returns an async iterator. Did you forget to use 'await'?": {
-        "category": "Error",
-        "code": 2780
-    },
-    "Type '{0}' is not an array type. Did you forget to use 'await'?": {
-        "category": "Error",
-        "code": 2781
-    },
-    "Type '{0}' is not an array type or a string type. Did you forget to use 'await'?": {
-        "category": "Error",
-        "code": 2782
-    },
-    "Type '{0}' is not an array type or does not have a '[Symbol.iterator]()' method that returns an iterator. Did you forget to use 'await'?": {
-        "category": "Error",
-        "code": 2783
-    },
-    "Type '{0}' is not an array type or a string type or does not have a '[Symbol.iterator]()' method that returns an iterator. Did you forget to use 'await'?": {
-        "category": "Error",
-        "code": 2784
-    },
-    "Argument of type '{0}' is not assignable to parameter of type '{1}'. Did you forget to use 'await'?": {
-        "category": "Error",
-        "code": 2785
-    },
-    "Type '{0}' has no call signatures. Did you forget to use 'await'?": {
-        "category": "Error",
-        "code": 2786
-    },
-    "Type '{0}' has no construct signatures. Did you forget to use 'await'?": {
-        "category": "Error",
-        "code": 2787
-    },
-    "This condition will always return '{0}' since the types '{1}' and '{2}' have no overlap. Did you forget to use 'await'?": {
-        "category": "Error",
-        "code": 2788
-    },
     "Did you forget to use 'await'?": {
         "category": "Error",
-        "code": 2789
+        "code": 2773
     },
 
     "Import declaration '{0}' is using private name '{1}'.": {
