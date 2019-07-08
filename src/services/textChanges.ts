@@ -425,9 +425,6 @@ namespace ts.textChanges {
             else if (isStringLiteral(before) && isImportDeclaration(before.parent) || isNamedImports(before)) {
                 return { suffix: ", " };
             }
-            else if (isForInitializer(before)) {
-                return { suffix: " " };
-            }
             return Debug.failBadSyntaxKind(before); // We haven't handled this kind of node yet -- add it
         }
 

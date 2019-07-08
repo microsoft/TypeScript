@@ -9,7 +9,7 @@ namespace ts.codefix {
     registerCodeFix({
         errorCodes,
         getCodeActions: (context) => {
-            const changes = textChanges.ChangeTracker.with(context, t => makeChange(t, context.sourceFile, context.span.start));
+            const changes = textChanges.ChangeTracker.with(context, t => makeChange(t, context.sourceFile, context.span.start, context.program));
             if (changes.length > 0) {
                 return [createCodeFixAction(fixId, changes, Diagnostics.Add_const_to_unresolved_variable, fixId, Diagnostics.Add_const_to_all_unresolved_variables)];
             }
@@ -17,27 +17,28 @@ namespace ts.codefix {
         fixIds: [fixId],
         getAllCodeActions: context => {
             const fixedNodes = new NodeSet();
-            return codeFixAll(context, errorCodes, (changes, diag) => makeChange(changes, diag.file, diag.start, fixedNodes));
+            return codeFixAll(context, errorCodes, (changes, diag) => makeChange(changes, diag.file, diag.start, context.program, fixedNodes));
         },
     });
 
-    function makeChange(changeTracker: textChanges.ChangeTracker, sourceFile: SourceFile, pos: number, fixedNodes?: NodeSet<Node>) {
+    function makeChange(changeTracker: textChanges.ChangeTracker, sourceFile: SourceFile, pos: number, program: Program, fixedNodes?: NodeSet<Node>) {
         const token = getTokenAtPosition(sourceFile, pos);
-
         const forInitializer = findAncestor(token, node =>
-            isForInOrOfStatement(node.parent) ? node.parent.initializer === node
-                : isPossiblyPartOfDestructuring(node) ? false : "quit");
+            isForInOrOfStatement(node.parent) ? node.parent.initializer === node :
+            isPossiblyPartOfDestructuring(node) ? false : "quit"
+        );
         if (forInitializer) return applyChange(changeTracker, forInitializer, sourceFile, fixedNodes);
 
         const parent = token.parent;
-        const standaloneInitializer = isExpressionStatement(parent.parent);
-        if (standaloneInitializer) return applyChange(changeTracker, parent, sourceFile, fixedNodes);
+        if (isBinaryExpression(parent) && isExpressionStatement(parent.parent)) {
+            return applyChange(changeTracker, token, sourceFile, fixedNodes);
+        }
 
-        const arrayLiteralInitializer = isArrayLiteralExpression(token.parent);
-        if (arrayLiteralInitializer) {
-            const availableIdentifiers: string[] = []; // TODO: where to get/gather this information from?
-            const noIdentifiersDeclared = parent.forEachChild(node => availableIdentifiers.indexOf(node.getFullText()) < 0);
-            if (!noIdentifiersDeclared) return;
+        if (isArrayLiteralExpression(parent)) {
+            const checker = program.getTypeChecker();
+            if (!every(parent.elements, element => arrayElementCouldBeVariableDeclaration(element, checker))) {
+                return;
+            }
 
             return applyChange(changeTracker, parent, sourceFile, fixedNodes);
         }
@@ -45,7 +46,7 @@ namespace ts.codefix {
 
     function applyChange(changeTracker: textChanges.ChangeTracker, initializer: Node, sourceFile: SourceFile, fixedNodes?: NodeSet<Node>) {
         if (!fixedNodes || fixedNodes.tryAdd(initializer)) {
-            changeTracker.insertNodeBefore(sourceFile, initializer, createToken(SyntaxKind.ConstKeyword));
+            changeTracker.insertModifierBefore(sourceFile, SyntaxKind.ConstKeyword, initializer);
         }
     }
 
@@ -60,5 +61,13 @@ namespace ts.codefix {
             default:
                 return false;
         }
+    }
+
+    function arrayElementCouldBeVariableDeclaration(expression: Expression, checker: TypeChecker) {
+        const identifier =
+            isIdentifier(expression) ? expression :
+            isAssignmentExpression(expression, /*excludeCompoundAssignment*/ true) && isIdentifier(expression.left) ? expression.left :
+            undefined;
+        return !!identifier && !checker.getSymbolAtLocation(identifier);
     }
 }
