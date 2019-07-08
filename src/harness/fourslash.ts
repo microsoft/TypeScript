@@ -1497,13 +1497,7 @@ Actual: ${stringify(fullActual)}`);
                     const diagnostics = ts.getPreEmitDiagnostics(this.languageService.getProgram()!); // TODO: GH#18217
                     for (const diagnostic of diagnostics) {
                         if (!ts.isString(diagnostic.messageText)) {
-                            let chainedMessage: ts.DiagnosticMessageChain | undefined = diagnostic.messageText;
-                            let indentation = " ";
-                            while (chainedMessage) {
-                                resultString += indentation + chainedMessage.messageText + Harness.IO.newLine();
-                                chainedMessage = chainedMessage.next;
-                                indentation = indentation + " ";
-                            }
+                            resultString += this.flattenChainedMessage(diagnostic.messageText);
                         }
                         else {
                             resultString += "  " + diagnostic.messageText + Harness.IO.newLine();
@@ -1519,6 +1513,17 @@ Actual: ${stringify(fullActual)}`);
             }
 
             Harness.Baseline.runBaseline(ts.Debug.assertDefined(this.testData.globalOptions[MetadataOptionNames.baselineFile]), resultString);
+        }
+
+        private flattenChainedMessage(diag: ts.DiagnosticMessageChain, indent = " ") {
+            let result = "";
+            result += indent + diag.messageText + Harness.IO.newLine();
+            if (diag.next) {
+                for (const kid of diag.next) {
+                    result += this.flattenChainedMessage(kid, indent + " ");
+                }
+            }
+            return result;
         }
 
         public baselineQuickInfo() {

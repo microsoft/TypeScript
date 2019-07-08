@@ -7125,8 +7125,8 @@ namespace ts {
         };
     }
 
-    export function chainDiagnosticMessages(details: DiagnosticMessageChain | undefined, message: DiagnosticMessage, ...args: (string | number | undefined)[]): DiagnosticMessageChain;
-    export function chainDiagnosticMessages(details: DiagnosticMessageChain | undefined, message: DiagnosticMessage): DiagnosticMessageChain {
+    export function chainDiagnosticMessages(details: DiagnosticMessageChain | DiagnosticMessageChain[] | undefined, message: DiagnosticMessage, ...args: (string | number | undefined)[]): DiagnosticMessageChain;
+    export function chainDiagnosticMessages(details: DiagnosticMessageChain | DiagnosticMessageChain[] | undefined, message: DiagnosticMessage): DiagnosticMessageChain {
         let text = getLocaleSpecificMessage(message);
 
         if (arguments.length > 2) {
@@ -7138,18 +7138,17 @@ namespace ts {
             category: message.category,
             code: message.code,
 
-            next: details
+            next: details === undefined || Array.isArray(details) ? details : [details]
         };
     }
 
-    export function concatenateDiagnosticMessageChains(headChain: DiagnosticMessageChain, tailChain: DiagnosticMessageChain): DiagnosticMessageChain {
+    export function concatenateDiagnosticMessageChains(headChain: DiagnosticMessageChain, tailChain: DiagnosticMessageChain): void {
         let lastChain = headChain;
         while (lastChain.next) {
-            lastChain = lastChain.next;
+            lastChain = lastChain.next[0];
         }
 
-        lastChain.next = tailChain;
-        return headChain;
+        lastChain.next = [tailChain];
     }
 
     function getDiagnosticFilePath(diagnostic: Diagnostic): string | undefined {
@@ -7185,29 +7184,42 @@ namespace ts {
     }
 
     function compareMessageText(t1: string | DiagnosticMessageChain, t2: string | DiagnosticMessageChain): Comparison {
-        let text1: string | DiagnosticMessageChain | undefined = t1;
-        let text2: string | DiagnosticMessageChain | undefined = t2;
-        while (text1 && text2) {
-            // We still have both chains.
-            const string1 = isString(text1) ? text1 : text1.messageText;
-            const string2 = isString(text2) ? text2 : text2.messageText;
-
-            const res = compareStringsCaseSensitive(string1, string2);
+        if (typeof t1 === "string" && typeof t2 === "string") {
+            return compareStringsCaseSensitive(t1, t2);
+        }
+        else if (typeof t1 === "string") {
+            return Comparison.LessThan;
+        }
+        else if (typeof t2 === "string") {
+            return Comparison.GreaterThan;
+        }
+        let res = compareStringsCaseSensitive(t1.messageText, t2.messageText);
+        if (res) {
+            return res;
+        }
+        if (!t1.next && !t2.next) {
+            return Comparison.EqualTo;
+        }
+        if (!t1.next) {
+            return Comparison.LessThan;
+        }
+        if (!t2.next) {
+            return Comparison.GreaterThan;
+        }
+        const len = Math.min(t1.next.length, t2.next.length);
+        for (let i = 0; i < len; i++) {
+            res = compareMessageText(t1.next[i], t2.next[i]);
             if (res) {
                 return res;
             }
-
-            text1 = isString(text1) ? undefined : text1.next;
-            text2 = isString(text2) ? undefined : text2.next;
         }
-
-        if (!text1 && !text2) {
-            // if the chains are done, then these messages are the same.
-            return Comparison.EqualTo;
+        if (t1.next.length < t2.next.length) {
+            return Comparison.LessThan;
         }
-
-        // We still have one chain remaining.  The shorter chain should come first.
-        return text1 ? Comparison.GreaterThan : Comparison.LessThan;
+        else if (t1.next.length > t2.next.length) {
+            return Comparison.GreaterThan;
+        }
+        return Comparison.EqualTo;
     }
 
     export function getEmitScriptTarget(compilerOptions: CompilerOptions) {
@@ -8105,7 +8117,7 @@ namespace ts {
             visitDirectory(basePath, combinePaths(currentDirectory, basePath), depth);
         }
 
-        return flatten<string>(results);
+        return flatten(results);
 
         function visitDirectory(path: string, absolutePath: string, depth: number | undefined) {
             const canonicalPath = toCanonical(realpath(absolutePath));

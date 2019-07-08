@@ -2677,6 +2677,22 @@
         "category": "Error",
         "code": 2768
     },
+    "No overload matches this call.": {
+        "category": "Error",
+        "code": 2769
+    },
+    "The last overload gave the following error.": {
+        "category": "Error",
+        "code": 2770
+    },
+    "The last overload is declared here.": {
+        "category": "Error",
+        "code": 2771
+    },
+    "Overload {0} of {1}, '{2}', gave the following error.": {
+        "category": "Error",
+        "code": 2772
+    },
 
     "Import declaration '{0}' is using private name '{1}'.": {
         "category": "Error",
