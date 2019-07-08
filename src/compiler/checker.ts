@@ -21453,6 +21453,10 @@ namespace ts {
 
             function maybeAddMissingAwaitInfo(errorNode: Node | undefined, source: Type, target: Type) {
                 if (errorNode && reportErrors && errorOutputContainer.errors && errorOutputContainer.errors.length) {
+                    // Bail if target is Promise-like---something else is wrong
+                    if (getAwaitedTypeOfPromise(target)) {
+                        return;
+                    }
                     const awaitedTypeOfSource = getAwaitedTypeOfPromise(source);
                     if (awaitedTypeOfSource && isTypeRelatedTo(awaitedTypeOfSource, target, relation)) {
                         addRelatedInfo(errorOutputContainer.errors[0], createDiagnosticForNode(errorNode, Diagnostics.Did_you_forget_to_use_await));
