@@ -66,6 +66,8 @@ interface Array<T> {}`
             params.newLine,
             params.useWindowsStylePaths,
             params.environmentVariables);
+        // Just like sys, patch the host to use writeFile
+        patchWriteFileEnsuringDirectory(host);
         return host;
     }
 
@@ -990,6 +992,19 @@ interface Array<T> {}`
         }
     }
 
+    export type TestServerHostTrackingWrittenFiles = TestServerHost & { writtenFiles: Map<true>; };
+
+    export function changeToHostTrackingWrittenFiles(inputHost: TestServerHost) {
+        const host = inputHost as TestServerHostTrackingWrittenFiles;
+        const originalWriteFile = host.writeFile;
+        host.writtenFiles = createMap<true>();
+        host.writeFile = (fileName, content) => {
+            originalWriteFile.call(host, fileName, content);
+            const path = host.toFullPath(fileName);
+            host.writtenFiles.set(path, true);
+        };
+        return host;
+    }
     export const tsbuildProjectsLocation = "/user/username/projects";
     export function getTsBuildProjectFilePath(project: string, file: string) {
         return `${tsbuildProjectsLocation}/${project}/${file}`;

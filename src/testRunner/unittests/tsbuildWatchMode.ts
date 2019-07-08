@@ -2,18 +2,12 @@ namespace ts.tscWatch {
     import projectsLocation = TestFSWithWatch.tsbuildProjectsLocation;
     import getFilePathInProject = TestFSWithWatch.getTsBuildProjectFilePath;
     import getFileFromProject = TestFSWithWatch.getTsBuildProjectFile;
-    type TsBuildWatchSystem = WatchedSystem & { writtenFiles: Map<true>; };
+    type TsBuildWatchSystem = TestFSWithWatch.TestServerHostTrackingWrittenFiles;
 
     function createTsBuildWatchSystem(fileOrFolderList: ReadonlyArray<TestFSWithWatch.FileOrFolderOrSymLink>, params?: TestFSWithWatch.TestServerHostCreationParameters) {
-        const host = createWatchedSystem(fileOrFolderList, params) as TsBuildWatchSystem;
-        const originalWriteFile = host.writeFile;
-        host.writtenFiles = createMap<true>();
-        host.writeFile = (fileName, content) => {
-            originalWriteFile.call(host, fileName, content);
-            const path = host.toFullPath(fileName);
-            host.writtenFiles.set(path, true);
-        };
-        return host;
+        return TestFSWithWatch.changeToHostTrackingWrittenFiles(
+            createWatchedSystem(fileOrFolderList, params)
+        );
     }
 
     export function createSolutionBuilder(system: WatchedSystem, rootNames: ReadonlyArray<string>, defaultOptions?: BuildOptions) {

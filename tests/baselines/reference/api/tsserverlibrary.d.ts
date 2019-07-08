@@ -8463,7 +8463,6 @@ declare namespace ts.server {
         getGlobalProjectErrors(): ReadonlyArray<Diagnostic>;
         getAllProjectErrors(): ReadonlyArray<Diagnostic>;
         getLanguageService(ensureSynchronized?: boolean): LanguageService;
-        private shouldEmitFile;
         getCompileOnSaveAffectedFileList(scriptInfo: ScriptInfo): string[];
         /**
          * Returns true if emit was conducted

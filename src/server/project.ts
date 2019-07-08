@@ -537,8 +537,11 @@ namespace ts.server {
             return this.projectService.getSourceFileLike(fileName, this);
         }
 
-        private shouldEmitFile(scriptInfo: ScriptInfo) {
-            return scriptInfo && !scriptInfo.isDynamicOrHasMixedContent();
+        /*@internal*/
+        shouldEmitFile(scriptInfo: ScriptInfo | undefined) {
+            return scriptInfo &&
+                !scriptInfo.isDynamicOrHasMixedContent() &&
+                !this.program!.isSourceOfProjectReferenceRedirect(scriptInfo.path);
         }
 
         getCompileOnSaveAffectedFileList(scriptInfo: ScriptInfo): string[] {
@@ -548,7 +551,7 @@ namespace ts.server {
             updateProjectIfDirty(this);
             this.builderState = BuilderState.create(this.program!, this.projectService.toCanonicalFileName, this.builderState);
             return mapDefined(BuilderState.getFilesAffectedBy(this.builderState, this.program!, scriptInfo.path, this.cancellationToken, data => this.projectService.host.createHash!(data)), // TODO: GH#18217
-                sourceFile => this.shouldEmitFile(this.projectService.getScriptInfoForPath(sourceFile.path)!) ? sourceFile.fileName : undefined);
+                sourceFile => this.shouldEmitFile(this.projectService.getScriptInfoForPath(sourceFile.path)) ? sourceFile.fileName : undefined);
         }
 
         /**

@@ -1030,7 +1030,9 @@ namespace ts.server {
 
         private getEmitOutput(args: protocol.FileRequestArgs): EmitOutput {
             const { file, project } = this.getFileAndProject(args);
-            return project.getLanguageService().getEmitOutput(file);
+            return project.shouldEmitFile(project.getScriptInfo(file)) ?
+                project.getLanguageService().getEmitOutput(file) :
+                { emitSkipped: true, outputFiles: [] };
         }
 
         private mapDefinitionInfo(definitions: ReadonlyArray<DefinitionInfo>, project: Project): ReadonlyArray<protocol.FileSpanWithContext> {

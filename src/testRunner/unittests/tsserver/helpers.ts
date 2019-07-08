@@ -498,7 +498,7 @@ namespace ts.projectSystem {
         return protocolToLocation(str)(start);
     }
 
-    function protocolToLocation(text: string): (pos: number) => protocol.Location {
+    export function protocolToLocation(text: string): (pos: number) => protocol.Location {
         const lineStarts = computeLineStarts(text);
         return pos => {
             const x = computeLineAndCharacterOfPosition(lineStarts, pos);
