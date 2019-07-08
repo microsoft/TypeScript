@@ -295,8 +295,8 @@ namespace Harness.Parallel.Host {
                     worker.accumulatedOutput += d.toString();
                     console.log(`[Worker ${i}]`, d.toString());
                 };
-                worker.process.stderr.on("data", appendOutput);
-                worker.process.stdout.on("data", appendOutput);
+                worker.process.stderr!.on("data", appendOutput);
+                worker.process.stdout!.on("data", appendOutput);
                 const killChild = (timeout: TaskTimeout) => {
                     worker.process.kill();
                     console.error(`Worker exceeded ${timeout.duration}ms timeout ${worker.currentTasks && worker.currentTasks.length ? `while running test '${worker.currentTasks[0].file}'.` : `during test setup.`}`);

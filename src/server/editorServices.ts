@@ -2832,8 +2832,9 @@ namespace ts.server {
             let assignOrphanScriptInfosToInferredProject = false;
             if (openFiles) {
                 while (true) {
-                    const { value: file, done } = openFiles.next();
-                    if (done) break;
+                    const iterResult = openFiles.next();
+                    if (iterResult.done) break;
+                    const file = iterResult.value;
                     const scriptInfo = this.getScriptInfo(file.fileName);
                     Debug.assert(!scriptInfo || !scriptInfo.isScriptOpen(), "Script should not exist and not be open already");
                     // Create script infos so we have the new content for all the open files before we do any updates to projects
@@ -2850,8 +2851,9 @@ namespace ts.server {
 
             if (changedFiles) {
                 while (true) {
-                    const { value: file, done } = changedFiles.next();
-                    if (done) break;
+                    const iterResult = changedFiles.next();
+                    if (iterResult.done) break;
+                    const file = iterResult.value;
                     const scriptInfo = this.getScriptInfo(file.fileName)!;
                     Debug.assert(!!scriptInfo);
                     // Make edits to script infos and marks containing project as dirty
@@ -2887,8 +2889,9 @@ namespace ts.server {
         /* @internal */
         applyChangesToFile(scriptInfo: ScriptInfo, changes: Iterator<TextChange>) {
             while (true) {
-                const { value: change, done } = changes.next();
-                if (done) break;
+                const iterResult = changes.next();
+                if (iterResult.done) break;
+                const change = iterResult.value;
                 scriptInfo.editContent(change.span.start, change.span.start + change.span.length, change.newText);
             }
         }

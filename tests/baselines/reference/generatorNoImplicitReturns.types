@@ -1,7 +1,7 @@
 === tests/cases/conformance/es6/yieldExpressions/generatorNoImplicitReturns.ts ===
  
 function* testGenerator () { 
->testGenerator : () => IterableIterator<string>
+>testGenerator : () => Generator<string, void, unknown>
 
   if (Math.random() > 0.5) { 
 >Math.random() > 0.5 : boolean
