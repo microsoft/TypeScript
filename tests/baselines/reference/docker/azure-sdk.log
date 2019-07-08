@@ -22,6 +22,8 @@ XX of XX: [@azure/template] completed successfully in ? seconds
 XX of XX: [@azure/abort-controller] completed successfully in ? seconds
 [@azure/core-asynciterator-polyfill] started
 XX of XX: [@azure/core-asynciterator-polyfill] completed successfully in ? seconds
+[@azure/core-auth] started
+XX of XX: [@azure/core-auth] completed successfully in ? seconds
 [@azure/core-http] started
 XX of XX: [@azure/core-http] completed successfully in ? seconds
 [@azure/core-paging] started
@@ -35,22 +37,37 @@ XX of XX: [@azure/identity] completed successfully in ? seconds
 [@azure/keyvault-certificates] started
 XX of XX: [@azure/keyvault-certificates] completed successfully in ? seconds
 [@azure/keyvault-keys] started
-XX of XX: [@azure/keyvault-keys] completed successfully in ? seconds
+npm ERR! code ELIFECYCLE
+npm ERR! errno 2
+npm ERR! @azure/keyvault-keys@X.X.X-preview.2 extract-api: `tsc -p . && api-extractor run --local`
+npm ERR! Exit status 2
+npm ERR! 
+npm ERR! Failed at the @azure/keyvault-keys@X.X.X-preview.2 extract-api script.
+npm ERR! This is probably not a problem with npm. There is likely additional logging output above.
+npm ERR! A complete log of this run can be found in:
+npm ERR!     /root/.npm/_logs/2019-07-08T22_53_59_926Z-debug.log
 [@azure/keyvault-secrets] started
-XX of XX: [@azure/keyvault-secrets] completed successfully in ? seconds
+npm ERR! code ELIFECYCLE
+npm ERR! errno 2
+npm ERR! @azure/keyvault-secrets@X.X.X-preview.2 extract-api: `tsc -p . && api-extractor run --local`
+npm ERR! Exit status 2
+npm ERR! 
+npm ERR! Failed at the @azure/keyvault-secrets@X.X.X-preview.2 extract-api script.
+npm ERR! This is probably not a problem with npm. There is likely additional logging output above.
+npm ERR! A complete log of this run can be found in:
+npm ERR!     /root/.npm/_logs/2019-07-08T22_54_03_696Z-debug.log
 [@azure/core-amqp] started
-SUCCESS (16)
+SUCCESS (15)
 ================================
 @azure/abort-controller (? seconds)
 @azure/core-asynciterator-polyfill (? seconds)
+@azure/core-auth (? seconds)
 @azure/core-http (? seconds)
 @azure/core-paging (? seconds)
 @azure/cosmos (? seconds)
 @azure/event-processor-host (? seconds)
 @azure/identity (? seconds)
 @azure/keyvault-certificates (? seconds)
-@azure/keyvault-keys (? seconds)
-@azure/keyvault-secrets (? seconds)
 @azure/storage-blob (? seconds)
 @azure/storage-datalake (? seconds)
 @azure/storage-file (? seconds)
@@ -67,7 +84,7 @@ BLOCKED (1)
 ================================
 @azure/event-hubs
 ================================
-FAILURE (1)
+FAILURE (3)
 ================================
 @azure/core-amqp (? seconds)
 >>> @azure/core-amqp
@@ -75,6 +92,26 @@ tsc -p . && rollup -c 2>&1
 src/errors.ts(586,20): error TS7053: Element implicitly has an 'any' type because expression of type 'any' can't be used to index type 'typeof ConditionErrorNameMapper'.
 src/errors.ts(607,34): error TS7053: Element implicitly has an 'any' type because expression of type 'any' can't be used to index type 'typeof SystemErrorConditionMapper'.
 src/errors.ts(608,20): error TS7053: Element implicitly has an 'any' type because expression of type 'any' can't be used to index type 'typeof ConditionErrorNameMapper'.
+@azure/keyvault-keys (? seconds)
+npm ERR! code ELIFECYCLE
+npm ERR! errno 2
+npm ERR! @azure/keyvault-keys@X.X.X-preview.2 extract-api: `tsc -p . && api-extractor run --local`
+npm ERR! Exit status 2
+npm ERR!
+npm ERR! Failed at the @azure/keyvault-keys@X.X.X-preview.2 extract-api script.
+npm ERR! This is probably not a problem with npm. There is likely additional logging output above.
+npm ERR! A complete log of this run can be found in:
+npm ERR!     /root/.npm/_logs/2019-07-08T22_53_59_926Z-debug.log
+@azure/keyvault-secrets (? seconds)
+npm ERR! code ELIFECYCLE
+npm ERR! errno 2
+npm ERR! @azure/keyvault-secrets@X.X.X-preview.2 extract-api: `tsc -p . && api-extractor run --local`
+npm ERR! Exit status 2
+npm ERR!
+npm ERR! Failed at the @azure/keyvault-secrets@X.X.X-preview.2 extract-api script.
+npm ERR! This is probably not a problem with npm. There is likely additional logging output above.
+npm ERR! A complete log of this run can be found in:
+npm ERR!     /root/.npm/_logs/2019-07-08T22_54_03_696Z-debug.log
 ================================
 Error: Project(s) failed to build
 rush rebuild - Errors! ( ? seconds)
@@ -84,6 +121,10 @@ rush rebuild - Errors! ( ? seconds)
 Standard error:
 Your version of Node.js (X.X.X) has not been tested with this release of Rush. The Rush team will not accept issue reports for it. Please consider upgrading Rush or downgrading Node.js.
 XX of XX: [@azure/service-bus] completed with warnings in ? seconds
+XX of XX: [@azure/keyvault-keys] failed to build!
+XX of XX: [@azure/keyvault-secrets] failed to build!
 XX of XX: [@azure/core-amqp] failed to build!
 XX of XX: [@azure/event-hubs] blocked by [@azure/core-amqp]!
 [@azure/core-amqp] Returned error code: 2
+[@azure/keyvault-keys] Returned error code: 2
+[@azure/keyvault-secrets] Returned error code: 2
