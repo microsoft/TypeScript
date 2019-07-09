@@ -711,13 +711,13 @@ namespace FourSlash {
         private verifyDefinitionTextSpan(defs: ts.DefinitionInfoAndBoundSpan, startMarkerName: string) {
             const range = this.testData.ranges.find(range => this.markerName(range.marker!) === startMarkerName);
 
-            if (!range && !defs.textSpan) {
-                return;
-            }
-
             if (!range) {
+                if (!defs.textSpan) {
+                    return;
+                }
                 this.raiseError(`goToDefinitionsAndBoundSpan failed - found a TextSpan ${JSON.stringify(defs.textSpan)} when it wasn't expected.`);
             }
+
             else if (defs.textSpan.start !== range.pos || defs.textSpan.length !== range.end - range.pos) {
                 const expected: ts.TextSpan = {
                     start: range.pos, length: range.end - range.pos
@@ -1046,10 +1046,8 @@ Actual: ${stringify(fullActual)}`);
                 }
 
                 for (const key in expected) {
-                    if (ts.hasProperty(expected as any, key)) {
-                        if (!ts.hasProperty(actual as any, key)) {
-                            fail(`${msgPrefix}Missing property '${key}'`);
-                        }
+                    if (ts.hasProperty(expected as any, key) && !ts.hasProperty(actual as any, key)) {
+                           fail(`${msgPrefix}Missing property '${key}'`);
                     }
                 }
             };
