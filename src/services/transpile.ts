@@ -144,12 +144,11 @@ namespace ts {
                 // If value is not a string, this will fail
                 options[opt.name] = parseCustomTypeOption(opt, value, diagnostics);
             }
-            else {
-                if (!forEachEntry(opt.type, v => v === value)) {
+            else if (!forEachEntry(opt.type, v => v === value)) {
                     // Supplied value isn't a valid enum value.
                     diagnostics.push(createCompilerDiagnosticForInvalidCustomType(opt));
                 }
-            }
+            
         }
 
         return options;
