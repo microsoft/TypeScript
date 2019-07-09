@@ -32,9 +32,9 @@ namespace ts {
      */
     function clearScreenIfNotWatchingForFileChanges(system: System, diagnostic: Diagnostic, options: CompilerOptions): boolean {
         if (system.clearScreen &&
-            !options.preserveWatchOutput &&
-            !options.extendedDiagnostics &&
-            !options.diagnostics &&
+            !(options.preserveWatchOutput || 
+            options.extendedDiagnostics ||
+            options.diagnostics) &&
             contains(screenStartingMessageCodes, diagnostic.code)) {
             system.clearScreen();
             return true;
