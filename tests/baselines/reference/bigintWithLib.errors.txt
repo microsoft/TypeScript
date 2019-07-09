@@ -1,5 +1,5 @@
 tests/cases/compiler/bigintWithLib.ts(4,1): error TS2350: Only a void function can be called with the 'new' keyword.
-tests/cases/compiler/bigintWithLib.ts(16,15): error TS2769: No overload matches this call.
+tests/cases/compiler/bigintWithLib.ts(16,33): error TS2769: No overload matches this call.
   Overload 1 of 3, '(length?: number): BigInt64Array', gave the following error.
     Argument of type 'number[]' is not assignable to parameter of type 'number'.
   Overload 2 of 3, '(array: Iterable<bigint>): BigInt64Array', gave the following error.
@@ -17,7 +17,7 @@ tests/cases/compiler/bigintWithLib.ts(16,15): error TS2769: No overload matches 
     Argument of type 'number[]' is not assignable to parameter of type 'ArrayBuffer | SharedArrayBuffer'.
       Type 'number[]' is missing the following properties from type 'SharedArrayBuffer': byteLength, [Symbol.species], [Symbol.toStringTag]
 tests/cases/compiler/bigintWithLib.ts(21,13): error TS2540: Cannot assign to 'length' because it is a read-only property.
-tests/cases/compiler/bigintWithLib.ts(28,16): error TS2769: No overload matches this call.
+tests/cases/compiler/bigintWithLib.ts(28,35): error TS2769: No overload matches this call.
   Overload 1 of 3, '(length?: number): BigUint64Array', gave the following error.
     Argument of type 'number[]' is not assignable to parameter of type 'number'.
   Overload 2 of 3, '(array: Iterable<bigint>): BigUint64Array', gave the following error.
@@ -49,7 +49,7 @@ tests/cases/compiler/bigintWithLib.ts(43,26): error TS2345: Argument of type '12
     bigIntArray = new BigInt64Array(10);
     bigIntArray = new BigInt64Array([1n, 2n, 3n]);
     bigIntArray = new BigInt64Array([1, 2, 3]); // should error
-                  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                                    ~~~~~~~~~
 !!! error TS2769: No overload matches this call.
 !!! error TS2769:   Overload 1 of 3, '(length?: number): BigInt64Array', gave the following error.
 !!! error TS2769:     Argument of type 'number[]' is not assignable to parameter of type 'number'.
@@ -81,7 +81,7 @@ tests/cases/compiler/bigintWithLib.ts(43,26): error TS2345: Argument of type '12
     bigUintArray = new BigUint64Array(10);
     bigUintArray = new BigUint64Array([1n, 2n, 3n]);
     bigUintArray = new BigUint64Array([1, 2, 3]); // should error
-                   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                                      ~~~~~~~~~
 !!! error TS2769: No overload matches this call.
 !!! error TS2769:   Overload 1 of 3, '(length?: number): BigUint64Array', gave the following error.
 !!! error TS2769:     Argument of type 'number[]' is not assignable to parameter of type 'number'.

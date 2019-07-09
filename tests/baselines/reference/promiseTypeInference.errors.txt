@@ -1,4 +1,4 @@
-tests/cases/compiler/promiseTypeInference.ts(10,11): error TS2769: No overload matches this call.
+tests/cases/compiler/promiseTypeInference.ts(10,39): error TS2769: No overload matches this call.
   Overload 1 of 2, '(success?: (value: string) => Promise<unknown>): Promise<unknown>', gave the following error.
     Property 'catch' is missing in type 'IPromise<number>' but required in type 'Promise<unknown>'.
   Overload 2 of 2, '(onfulfilled?: (value: string) => number | PromiseLike<number>, onrejected?: (reason: any) => PromiseLike<never>): Promise<number>', gave the following error.
@@ -22,7 +22,7 @@ tests/cases/compiler/promiseTypeInference.ts(10,11): error TS2769: No overload m
     declare function convert(s: string): IPromise<number>;
     
     var $$x = load("something").then(s => convert(s));
-              ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                                          ~~~~~~~~~~
 !!! error TS2769: No overload matches this call.
 !!! error TS2769:   Overload 1 of 2, '(success?: (value: string) => Promise<unknown>): Promise<unknown>', gave the following error.
 !!! error TS2769:     Property 'catch' is missing in type 'IPromise<number>' but required in type 'Promise<unknown>'.

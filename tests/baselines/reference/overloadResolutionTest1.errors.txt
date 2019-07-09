@@ -1,14 +1,14 @@
-tests/cases/compiler/overloadResolutionTest1.ts(7,12): error TS2769: No overload matches this call.
+tests/cases/compiler/overloadResolutionTest1.ts(7,18): error TS2769: No overload matches this call.
   Overload 1 of 2, '(bar: { a: number; }[]): string', gave the following error.
     Type 'string' is not assignable to type 'number'.
   Overload 2 of 2, '(bar: { a: boolean; }[]): number', gave the following error.
     Type 'string' is not assignable to type 'boolean'.
-tests/cases/compiler/overloadResolutionTest1.ts(18,10): error TS2769: No overload matches this call.
+tests/cases/compiler/overloadResolutionTest1.ts(18,16): error TS2769: No overload matches this call.
   Overload 1 of 2, '(bar: { a: number; }): string', gave the following error.
     Type 'string' is not assignable to type 'number'.
   Overload 2 of 2, '(bar: { a: boolean; }): number', gave the following error.
     Type 'string' is not assignable to type 'boolean'.
-tests/cases/compiler/overloadResolutionTest1.ts(24,9): error TS2769: No overload matches this call.
+tests/cases/compiler/overloadResolutionTest1.ts(24,15): error TS2769: No overload matches this call.
   Overload 1 of 2, '(bar: { a: number; }): number', gave the following error.
     Type 'true' is not assignable to type 'number'.
   Overload 2 of 2, '(bar: { a: string; }): string', gave the following error.
@@ -23,7 +23,7 @@ tests/cases/compiler/overloadResolutionTest1.ts(24,9): error TS2769: No overload
     var x1 = foo([{a:true}]); // works
     var x11 = foo([{a:0}]); // works
     var x111 = foo([{a:"s"}]); // error - does not match any signature
-               ~~~~~~~~~~~~~~
+                     ~
 !!! error TS2769: No overload matches this call.
 !!! error TS2769:   Overload 1 of 2, '(bar: { a: number; }[]): string', gave the following error.
 !!! error TS2769:     Type 'string' is not assignable to type 'number'.
@@ -42,7 +42,7 @@ tests/cases/compiler/overloadResolutionTest1.ts(24,9): error TS2769: No overload
     var x2 = foo2({a:0}); // works
     var x3 = foo2({a:true}); // works
     var x4 = foo2({a:"s"}); // error
-             ~~~~~~~~~~~~~
+                   ~
 !!! error TS2769: No overload matches this call.
 !!! error TS2769:   Overload 1 of 2, '(bar: { a: number; }): string', gave the following error.
 !!! error TS2769:     Type 'string' is not assignable to type 'number'.
@@ -56,7 +56,7 @@ tests/cases/compiler/overloadResolutionTest1.ts(24,9): error TS2769: No overload
     function foo4(bar:{a:string;}):string;
     function foo4(bar:{a:any;}):any{ return bar };
     var x = foo4({a:true}); // error
-            ~~~~~~~~~~~~~~
+                  ~
 !!! error TS2769: No overload matches this call.
 !!! error TS2769:   Overload 1 of 2, '(bar: { a: number; }): number', gave the following error.
 !!! error TS2769:     Type 'true' is not assignable to type 'number'.

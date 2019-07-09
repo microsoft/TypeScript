@@ -21836,9 +21836,18 @@ namespace ts {
                         }
 
                         const diags = max > 1 ? allDiagnostics[minIndex] : flatten(allDiagnostics);
-                        const chain = map(diags, d => typeof d.messageText === "string" ? (d as DiagnosticMessageChain) : d.messageText);
+                        Debug.assert(diags.length > 0, "No errors reported for 3 or fewer overload signatures");
+                        const chain = chainDiagnosticMessages(
+                            map(diags, d => typeof d.messageText === "string" ? (d as DiagnosticMessageChain) : d.messageText),
+                            Diagnostics.No_overload_matches_this_call);
                         const related = flatMap(diags, d => (d as Diagnostic).relatedInformation) as DiagnosticRelatedInformation[];
-                        diagnostics.add(createDiagnosticForNodeFromMessageChain(node, chainDiagnosticMessages(chain, Diagnostics.No_overload_matches_this_call), related));
+                        if (every(diags, d => d.start === diags[0].start && d.length === diags[0].length && d.file === diags[0].file)) {
+                            const { file, start, length } = diags[0];
+                            diagnostics.add({ file, start, length, code: chain.code, category: chain.category, messageText: chain, relatedInformation: related });
+                        }
+                        else {
+                            diagnostics.add(createDiagnosticForNodeFromMessageChain(node, chain, related));
+                        }
                     }
                 }
                 else if (candidateForArgumentArityError) {
