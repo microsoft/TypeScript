@@ -610,11 +610,10 @@ namespace ts.Completions.StringCompletions {
                 const packageName = unmangleScopedPackageName(typeDirectoryName);
                 if (options.types && !contains(options.types, packageName)) continue;
 
-                if (fragmentDirectory === undefined) {
-                    if (!seen.has(packageName)) {
-                        result.push(nameAndKind(packageName, ScriptElementKind.externalModuleName, /*extension*/ undefined));
-                        seen.set(packageName, true);
-                    }
+                if (fragmentDirectory === undefined && !seen.has(packageName)) {
+                     result.push(nameAndKind(packageName, ScriptElementKind.externalModuleName, /*extension*/ undefined));
+                     seen.set(packageName, true);
+                    
                 }
                 else {
                     const baseDirectory = combinePaths(directory, typeDirectoryName);
