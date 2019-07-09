@@ -34,10 +34,8 @@ namespace ts.server {
     }
 
     function setIsEqualTo(arr1: string[] | undefined, arr2: string[] | undefined): boolean {
-        if (arr1 === arr2) {
-            return true;
-        }
-        if ((arr1 || emptyArray).length === 0 && (arr2 || emptyArray).length === 0) {
+      
+        if (arr1 === arr2 || ((arr1 || emptyArray).length === 0 && (arr2 || emptyArray).length === 0)) {
             return true;
         }
         const set: Map<boolean> = createMap<boolean>();
@@ -54,6 +52,7 @@ namespace ts.server {
             if (isSet === undefined) {
                 return false;
             }
+            
             if (isSet === true) {
                 set.set(v, false);
                 unique--;
@@ -64,8 +63,8 @@ namespace ts.server {
 
     function typeAcquisitionChanged(opt1: TypeAcquisition, opt2: TypeAcquisition): boolean {
         return opt1.enable !== opt2.enable ||
-            !setIsEqualTo(opt1.include, opt2.include) ||
-            !setIsEqualTo(opt1.exclude, opt2.exclude);
+            !(setIsEqualTo(opt1.include, opt2.include) && 
+            setIsEqualTo(opt1.exclude, opt2.exclude));
     }
 
     function compilerOptionsChanged(opt1: CompilerOptions, opt2: CompilerOptions): boolean {
