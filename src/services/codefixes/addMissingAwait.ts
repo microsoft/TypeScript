@@ -1,5 +1,3 @@
-/* tslint:disable */
-
 /* @internal */
 namespace ts.codefix {
     const fixId = "addMissingAwait";
@@ -23,7 +21,7 @@ namespace ts.codefix {
         getCodeActions: context => {
             const { sourceFile, span, program } = context;
             const expression = getAwaitableExpression(sourceFile, span);
-            if (!expression) {
+            if (!expression || !isMissingAwaitError(context)) {
                 return;
             }
 
@@ -41,6 +39,16 @@ namespace ts.codefix {
             return fixes;
         },
     });
+
+    function isMissingAwaitError({ sourceFile, cancellationToken, program, errorCode, span }: CodeFixContext) {
+        const checker = program.getDiagnosticsProducingTypeChecker();
+        const diagnostics = checker.getDiagnostics(sourceFile, cancellationToken);
+        return some(diagnostics, ({ start, length, relatedInformation, code }) =>
+            isNumber(start) && isNumber(length) && textSpansEqual({ start, length }, span) &&
+            code === errorCode &&
+            !!relatedInformation &&
+            some(relatedInformation, related => related.code === Diagnostics.Did_you_forget_to_use_await.code));
+    }
 
     function getAwaitableExpression(sourceFile: SourceFile, span: TextSpan) {
         const token = getTokenAtPosition(sourceFile, span.start);
