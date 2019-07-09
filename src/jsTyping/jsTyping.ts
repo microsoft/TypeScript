@@ -70,6 +70,10 @@ namespace ts.JsTyping {
 
     export const nodeCoreModules = arrayToSet(nodeCoreModuleList);
 
+    export function nonRelativeModuleNameForTypingCache(moduleName: string) {
+        return nodeCoreModules.has(moduleName) ? "node" : moduleName;
+    }
+
     /**
      * A map of loose file names to library names that we are confident require typings
      */
@@ -150,7 +154,7 @@ namespace ts.JsTyping {
         // add typings for unresolved imports
         if (unresolvedImports) {
             const module = deduplicate<string>(
-                unresolvedImports.map(moduleId => nodeCoreModules.has(moduleId) ? "node" : moduleId),
+                unresolvedImports.map(nonRelativeModuleNameForTypingCache),
                 equateStringsCaseSensitive,
                 compareStringsCaseSensitive);
             addInferredTypings(module, "Inferred typings from unresolved imports");

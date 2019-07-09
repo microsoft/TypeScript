@@ -62,7 +62,7 @@ type T11 = ReturnType<(s: string) => void>;  // void
 >s : string
 
 type T12 = ReturnType<(<T>() => T)>;  // {}
->T12 : {}
+>T12 : unknown
 
 type T13 = ReturnType<(<T extends U, U extends number[]>() => T)>;  // number[]
 >T13 : number[]
@@ -110,7 +110,7 @@ type ArgumentType<T extends (x: any) => any> = T extends (a: infer A) => any ? A
 >a : A
 
 type T20 = ArgumentType<() => void>;  // {}
->T20 : {}
+>T20 : unknown
 
 type T21 = ArgumentType<(x: string) => number>;  // string
 >T21 : string
@@ -211,8 +211,8 @@ type T52 = X3<{ a: (x: string) => void, b: (x: string) => void }>;  // string
 >b : (x: string) => void
 >x : string
 
-type T53 = X3<{ a: (x: number) => void, b: (x: string) => void }>;  // string & number
->T53 : number & string
+type T53 = X3<{ a: (x: number) => void, b: (x: string) => void }>;  // never
+>T53 : never
 >a : (x: number) => void
 >x : number
 >b : (x: string) => void

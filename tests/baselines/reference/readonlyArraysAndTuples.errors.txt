@@ -2,16 +2,23 @@ tests/cases/conformance/types/tuple/readonlyArraysAndTuples.ts(9,12): error TS13
 tests/cases/conformance/types/tuple/readonlyArraysAndTuples.ts(10,15): error TS1354: 'readonly' type modifier is only permitted on array and tuple literal types.
 tests/cases/conformance/types/tuple/readonlyArraysAndTuples.ts(11,12): error TS1354: 'readonly' type modifier is only permitted on array and tuple literal types.
 tests/cases/conformance/types/tuple/readonlyArraysAndTuples.ts(12,12): error TS1354: 'readonly' type modifier is only permitted on array and tuple literal types.
-tests/cases/conformance/types/tuple/readonlyArraysAndTuples.ts(15,5): error TS2740: Type 'readonly string[]' is missing the following properties from type 'string[]': pop, push, reverse, shift, and 3 more.
-tests/cases/conformance/types/tuple/readonlyArraysAndTuples.ts(17,5): error TS2740: Type 'readonly [string, string]' is missing the following properties from type 'string[]': pop, push, reverse, shift, and 3 more.
+tests/cases/conformance/types/tuple/readonlyArraysAndTuples.ts(15,5): error TS4104: The type 'readonly string[]' is 'readonly' and cannot be assigned to the mutable type 'string[]'.
+tests/cases/conformance/types/tuple/readonlyArraysAndTuples.ts(17,5): error TS4104: The type 'readonly [string, string]' is 'readonly' and cannot be assigned to the mutable type 'string[]'.
 tests/cases/conformance/types/tuple/readonlyArraysAndTuples.ts(21,5): error TS2739: Type 'string[]' is missing the following properties from type '[string, string]': 0, 1
 tests/cases/conformance/types/tuple/readonlyArraysAndTuples.ts(22,5): error TS2740: Type 'readonly string[]' is missing the following properties from type '[string, string]': 0, 1, pop, push, and 5 more.
-tests/cases/conformance/types/tuple/readonlyArraysAndTuples.ts(23,5): error TS2740: Type 'readonly [string, string]' is missing the following properties from type '[string, string]': pop, push, reverse, shift, and 3 more.
+tests/cases/conformance/types/tuple/readonlyArraysAndTuples.ts(23,5): error TS4104: The type 'readonly [string, string]' is 'readonly' and cannot be assigned to the mutable type '[string, string]'.
 tests/cases/conformance/types/tuple/readonlyArraysAndTuples.ts(24,5): error TS2739: Type 'string[]' is missing the following properties from type 'readonly [string, string]': 0, 1
 tests/cases/conformance/types/tuple/readonlyArraysAndTuples.ts(25,5): error TS2739: Type 'readonly string[]' is missing the following properties from type 'readonly [string, string]': 0, 1
+tests/cases/conformance/types/tuple/readonlyArraysAndTuples.ts(30,3): error TS2540: Cannot assign to '0' because it is a read-only property.
+tests/cases/conformance/types/tuple/readonlyArraysAndTuples.ts(31,3): error TS2540: Cannot assign to '1' because it is a read-only property.
+tests/cases/conformance/types/tuple/readonlyArraysAndTuples.ts(32,1): error TS2542: Index signature in type 'readonly [number, number, ...number[]]' only permits reading.
+tests/cases/conformance/types/tuple/readonlyArraysAndTuples.ts(33,8): error TS2542: Index signature in type 'readonly [number, number, ...number[]]' only permits reading.
+tests/cases/conformance/types/tuple/readonlyArraysAndTuples.ts(34,1): error TS2542: Index signature in type 'readonly [number, number, ...number[]]' only permits reading.
+tests/cases/conformance/types/tuple/readonlyArraysAndTuples.ts(35,1): error TS2542: Index signature in type 'readonly [number, number, ...number[]]' only permits reading.
+tests/cases/conformance/types/tuple/readonlyArraysAndTuples.ts(36,8): error TS2542: Index signature in type 'readonly [number, number, ...number[]]' only permits reading.
 
 
-==== tests/cases/conformance/types/tuple/readonlyArraysAndTuples.ts (11 errors) ====
+==== tests/cases/conformance/types/tuple/readonlyArraysAndTuples.ts (18 errors) ====
     type T10 = string[];
     type T11 = Array<string>;
     type T12 = readonly string[];
@@ -36,11 +43,11 @@ tests/cases/conformance/types/tuple/readonlyArraysAndTuples.ts(25,5): error TS27
     function f1(ma: string[], ra: readonly string[], mt: [string, string], rt: readonly [string, string]) {
         ma = ra;  // Error
         ~~
-!!! error TS2740: Type 'readonly string[]' is missing the following properties from type 'string[]': pop, push, reverse, shift, and 3 more.
+!!! error TS4104: The type 'readonly string[]' is 'readonly' and cannot be assigned to the mutable type 'string[]'.
         ma = mt;
         ma = rt;  // Error
         ~~
-!!! error TS2740: Type 'readonly [string, string]' is missing the following properties from type 'string[]': pop, push, reverse, shift, and 3 more.
+!!! error TS4104: The type 'readonly [string, string]' is 'readonly' and cannot be assigned to the mutable type 'string[]'.
         ra = ma;
         ra = mt;
         ra = rt;
@@ -52,7 +59,7 @@ tests/cases/conformance/types/tuple/readonlyArraysAndTuples.ts(25,5): error TS27
 !!! error TS2740: Type 'readonly string[]' is missing the following properties from type '[string, string]': 0, 1, pop, push, and 5 more.
         mt = rt;  // Error
         ~~
-!!! error TS2740: Type 'readonly [string, string]' is missing the following properties from type '[string, string]': pop, push, reverse, shift, and 3 more.
+!!! error TS4104: The type 'readonly [string, string]' is 'readonly' and cannot be assigned to the mutable type '[string, string]'.
         rt = ma;  // Error
         ~~
 !!! error TS2739: Type 'string[]' is missing the following properties from type 'readonly [string, string]': 0, 1
@@ -61,4 +68,27 @@ tests/cases/conformance/types/tuple/readonlyArraysAndTuples.ts(25,5): error TS27
 !!! error TS2739: Type 'readonly string[]' is missing the following properties from type 'readonly [string, string]': 0, 1
         rt = mt;
     }
+    
+    declare var v: readonly[number, number, ...number[]];
+    v[0] = 1;        // Error
+      ~
+!!! error TS2540: Cannot assign to '0' because it is a read-only property.
+    v[1] = 1;        // Error
+      ~
+!!! error TS2540: Cannot assign to '1' because it is a read-only property.
+    v[2] = 1;        // Error
+    ~~~~
+!!! error TS2542: Index signature in type 'readonly [number, number, ...number[]]' only permits reading.
+    delete v[2];     // Error
+           ~~~~
+!!! error TS2542: Index signature in type 'readonly [number, number, ...number[]]' only permits reading.
+    v[0 + 1] = 1;    // Error
+    ~~~~~~~~
+!!! error TS2542: Index signature in type 'readonly [number, number, ...number[]]' only permits reading.
+    v[0 + 2] = 1;    // Error
+    ~~~~~~~~
+!!! error TS2542: Index signature in type 'readonly [number, number, ...number[]]' only permits reading.
+    delete v[0 + 1]; // Error
+           ~~~~~~~~
+!!! error TS2542: Index signature in type 'readonly [number, number, ...number[]]' only permits reading.
     

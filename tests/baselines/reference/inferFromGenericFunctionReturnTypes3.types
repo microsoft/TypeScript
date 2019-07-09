@@ -231,9 +231,9 @@ function objectToMap(obj: any) {
 >Object.keys(obj).map(key => [key, obj[key]]) : [string, any][]
 >Object.keys(obj).map : <U>(callbackfn: (value: string, index: number, array: string[]) => U, thisArg?: any) => U[]
 >Object.keys(obj) : string[]
->Object.keys : (o: {}) => string[]
+>Object.keys : { (o: object): string[]; (o: {}): string[]; }
 >Object : ObjectConstructor
->keys : (o: {}) => string[]
+>keys : { (o: object): string[]; (o: {}): string[]; }
 >obj : any
 >map : <U>(callbackfn: (value: string, index: number, array: string[]) => U, thisArg?: any) => U[]
 >key => [key, obj[key]] : (key: string) => [string, any]
@@ -505,4 +505,71 @@ let x: Foo[] = bar(() => !!true ? [{ state: State.A }] : [{ state: State.B }]); 
 >State.B : State.B
 >State : typeof State
 >B : State.B
+
+// Repros from #31443
+
+enum Enum { A, B }
+>Enum : Enum
+>A : Enum.A
+>B : Enum.B
+
+class ClassWithConvert<T> {
+>ClassWithConvert : ClassWithConvert<T>
+
+  constructor(val: T) { }
+>val : T
+
+  convert(converter: { to: (v: T) => T; }) { }
+>convert : (converter: { to: (v: T) => T; }) => void
+>converter : { to: (v: T) => T; }
+>to : (v: T) => T
+>v : T
+}
+
+function fn<T>(arg: ClassWithConvert<T>, f: () => ClassWithConvert<T>) { }
+>fn : <T>(arg: ClassWithConvert<T>, f: () => ClassWithConvert<T>) => void
+>arg : ClassWithConvert<T>
+>f : () => ClassWithConvert<T>
+
+fn(new ClassWithConvert(Enum.A), () => new ClassWithConvert(Enum.A));
+>fn(new ClassWithConvert(Enum.A), () => new ClassWithConvert(Enum.A)) : void
+>fn : <T>(arg: ClassWithConvert<T>, f: () => ClassWithConvert<T>) => void
+>new ClassWithConvert(Enum.A) : ClassWithConvert<Enum>
+>ClassWithConvert : typeof ClassWithConvert
+>Enum.A : Enum.A
+>Enum : typeof Enum
+>A : Enum.A
+>() => new ClassWithConvert(Enum.A) : () => ClassWithConvert<Enum>
+>new ClassWithConvert(Enum.A) : ClassWithConvert<Enum>
+>ClassWithConvert : typeof ClassWithConvert
+>Enum.A : Enum.A
+>Enum : typeof Enum
+>A : Enum.A
+
+type Func<T> = (x: T) => T;
+>Func : Func<T>
+>x : T
+
+declare function makeFoo<T>(x: T): Func<T>;
+>makeFoo : <T>(x: T) => Func<T>
+>x : T
+
+declare function baz<U>(x: Func<U>, y: Func<U>): void;
+>baz : <U>(x: Func<U>, y: Func<U>) => void
+>x : Func<U>
+>y : Func<U>
+
+baz(makeFoo(Enum.A), makeFoo(Enum.A));
+>baz(makeFoo(Enum.A), makeFoo(Enum.A)) : void
+>baz : <U>(x: Func<U>, y: Func<U>) => void
+>makeFoo(Enum.A) : Func<Enum>
+>makeFoo : <T>(x: T) => Func<T>
+>Enum.A : Enum.A
+>Enum : typeof Enum
+>A : Enum.A
+>makeFoo(Enum.A) : Func<Enum>
+>makeFoo : <T>(x: T) => Func<T>
+>Enum.A : Enum.A
+>Enum : typeof Enum
+>A : Enum.A
 

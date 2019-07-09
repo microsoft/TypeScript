@@ -25,6 +25,24 @@ namespace ts {
         }
     }
 
+    export interface ReusableBuilderState {
+        /**
+         * Information of the file eg. its version, signature etc
+         */
+        fileInfos: ReadonlyMap<BuilderState.FileInfo>;
+        /**
+         * Contains the map of ReferencedSet=Referenced files of the file if module emit is enabled
+         * Otherwise undefined
+         * Thus non undefined value indicates, module emit
+         */
+        readonly referencedMap?: ReadonlyMap<BuilderState.ReferencedSet> | undefined;
+        /**
+         * Contains the map of exported modules ReferencedSet=exported module files from the file if module emit is enabled
+         * Otherwise undefined
+         */
+        readonly exportedModulesMap?: ReadonlyMap<BuilderState.ReferencedSet> | undefined;
+    }
+
     export interface BuilderState {
         /**
          * Information of the file eg. its version, signature etc
@@ -196,14 +214,14 @@ namespace ts.BuilderState {
     /**
      * Returns true if oldState is reusable, that is the emitKind = module/non module has not changed
      */
-    export function canReuseOldState(newReferencedMap: ReadonlyMap<ReferencedSet> | undefined, oldState: Readonly<BuilderState> | undefined) {
+    export function canReuseOldState(newReferencedMap: ReadonlyMap<ReferencedSet> | undefined, oldState: Readonly<ReusableBuilderState> | undefined) {
         return oldState && !oldState.referencedMap === !newReferencedMap;
     }
 
     /**
      * Creates the state of file references and signature for the new program from oldState if it is safe
      */
-    export function create(newProgram: Program, getCanonicalFileName: GetCanonicalFileName, oldState?: Readonly<BuilderState>): BuilderState {
+    export function create(newProgram: Program, getCanonicalFileName: GetCanonicalFileName, oldState?: Readonly<ReusableBuilderState>): BuilderState {
         const fileInfos = createMap<FileInfo>();
         const referencedMap = newProgram.getCompilerOptions().module !== ModuleKind.None ? createMap<ReferencedSet>() : undefined;
         const exportedModulesMap = referencedMap ? createMap<ReferencedSet>() : undefined;
@@ -212,7 +230,7 @@ namespace ts.BuilderState {
 
         // Create the reference map, and set the file infos
         for (const sourceFile of newProgram.getSourceFiles()) {
-            const version = sourceFile.version;
+            const version = Debug.assertDefined(sourceFile.version, "Program intended to be used with Builder should have source files with versions set");
             const oldInfo = useOldState ? oldState!.fileInfos.get(sourceFile.path) : undefined;
             if (referencedMap) {
                 const newReferences = getReferencedFiles(newProgram, sourceFile, getCanonicalFileName);
@@ -303,7 +321,7 @@ namespace ts.BuilderState {
     /**
      * Returns if the shape of the signature has changed since last emit
      */
-    function updateShapeSignature(state: Readonly<BuilderState>, programOfThisState: Program, sourceFile: SourceFile, cacheToUpdateSignature: Map<string>, cancellationToken: CancellationToken | undefined, computeHash: ComputeHash, exportedModulesMapCache?: ComputingExportedModulesMap) {
+    export function updateShapeSignature(state: Readonly<BuilderState>, programOfThisState: Program, sourceFile: SourceFile, cacheToUpdateSignature: Map<string>, cancellationToken: CancellationToken | undefined, computeHash: ComputeHash, exportedModulesMapCache?: ComputingExportedModulesMap) {
         Debug.assert(!!sourceFile);
         Debug.assert(!exportedModulesMapCache || !!state.exportedModulesMap, "Compute visible to outside map only if visibleToOutsideReferencedMap present in the state");
 
@@ -409,8 +427,8 @@ namespace ts.BuilderState {
                 const references = state.referencedMap.get(path);
                 if (references) {
                     const iterator = references.keys();
-                    for (let { value, done } = iterator.next(); !done; { value, done } = iterator.next()) {
-                        queue.push(value as Path);
+                    for (let iterResult = iterator.next(); !iterResult.done; iterResult = iterator.next()) {
+                        queue.push(iterResult.value as Path);
                     }
                 }
             }

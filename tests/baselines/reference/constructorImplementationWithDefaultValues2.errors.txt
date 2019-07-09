@@ -1,7 +1,10 @@
 tests/cases/conformance/classes/constructorDeclarations/constructorParameters/constructorImplementationWithDefaultValues2.ts(3,17): error TS2322: Type '1' is not assignable to type 'string'.
 tests/cases/conformance/classes/constructorDeclarations/constructorParameters/constructorImplementationWithDefaultValues2.ts(10,17): error TS2322: Type '1' is not assignable to type 'T'.
+  '1' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint '{}'.
 tests/cases/conformance/classes/constructorDeclarations/constructorParameters/constructorImplementationWithDefaultValues2.ts(10,27): error TS2322: Type 'T' is not assignable to type 'U'.
+  'T' is assignable to the constraint of type 'U', but 'U' could be instantiated with a different subtype of constraint '{}'.
 tests/cases/conformance/classes/constructorDeclarations/constructorParameters/constructorImplementationWithDefaultValues2.ts(17,17): error TS2322: Type 'Date' is not assignable to type 'T'.
+  'Date' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint 'Date'.
 
 
 ==== tests/cases/conformance/classes/constructorDeclarations/constructorParameters/constructorImplementationWithDefaultValues2.ts (4 errors) ====
@@ -19,8 +22,10 @@ tests/cases/conformance/classes/constructorDeclarations/constructorParameters/co
         constructor(x: T = 1, public y: U = x) { // error
                     ~~~~~~~~
 !!! error TS2322: Type '1' is not assignable to type 'T'.
+!!! error TS2322:   '1' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint '{}'.
                               ~~~~~~~~~~~~~~~
 !!! error TS2322: Type 'T' is not assignable to type 'U'.
+!!! error TS2322:   'T' is assignable to the constraint of type 'U', but 'U' could be instantiated with a different subtype of constraint '{}'.
             var z = x;
         }
     }
@@ -30,6 +35,7 @@ tests/cases/conformance/classes/constructorDeclarations/constructorParameters/co
         constructor(x: T = new Date()) { // error
                     ~~~~~~~~~~~~~~~~~
 !!! error TS2322: Type 'Date' is not assignable to type 'T'.
+!!! error TS2322:   'Date' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint 'Date'.
             var y = x;
         }
     }

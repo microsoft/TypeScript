@@ -77,6 +77,8 @@ namespace ts {
                     return visitObjectLiteralExpression(node as ObjectLiteralExpression);
                 case SyntaxKind.BinaryExpression:
                     return visitBinaryExpression(node as BinaryExpression, noDestructuringValue);
+                case SyntaxKind.CatchClause:
+                    return visitCatchClause(node as CatchClause);
                 case SyntaxKind.VariableDeclaration:
                     return visitVariableDeclaration(node as VariableDeclaration);
                 case SyntaxKind.ForOfStatement:
@@ -268,6 +270,28 @@ namespace ts {
                     visitNode(node.left, visitorNoDestructuringValue, isExpression),
                     visitNode(node.right, noDestructuringValue ? visitorNoDestructuringValue : visitor, isExpression)
                 );
+            }
+            return visitEachChild(node, visitor, context);
+        }
+
+        function visitCatchClause(node: CatchClause) {
+            if (node.variableDeclaration &&
+                isBindingPattern(node.variableDeclaration.name) &&
+                node.variableDeclaration.name.transformFlags & TransformFlags.ContainsObjectRestOrSpread) {
+                const name = getGeneratedNameForNode(node.variableDeclaration.name);
+                const updatedDecl = updateVariableDeclaration(node.variableDeclaration, node.variableDeclaration.name, /*type*/ undefined, name);
+                const visitedBindings = flattenDestructuringBinding(updatedDecl, visitor, context, FlattenLevel.ObjectRest);
+                let block = visitNode(node.block, visitor, isBlock);
+                if (some(visitedBindings)) {
+                    block = updateBlock(block, [
+                        createVariableStatement(/*modifiers*/ undefined, visitedBindings),
+                        ...block.statements,
+                    ]);
+                }
+                return updateCatchClause(
+                    node,
+                    updateVariableDeclaration(node.variableDeclaration, name, /*type*/ undefined, /*initializer*/ undefined),
+                    block);
             }
             return visitEachChild(node, visitor, context);
         }
@@ -689,12 +713,12 @@ namespace ts {
                 enableSubstitutionForAsyncMethodsWithSuper();
                 const variableStatement = createSuperAccessVariableStatement(resolver, node, capturedSuperProperties);
                 substitutedSuperAccessors[getNodeId(variableStatement)] = true;
-                addStatementsAfterPrologue(statements, [variableStatement]);
+                insertStatementsAfterStandardPrologue(statements, [variableStatement]);
             }
 
             statements.push(returnStatement);
 
-            addStatementsAfterPrologue(statements, endLexicalEnvironment());
+            insertStatementsAfterStandardPrologue(statements, endLexicalEnvironment());
             const block = updateBlock(node.body!, statements);
 
             if (emitSuperHelpers && hasSuperElementAccess) {
@@ -726,7 +750,7 @@ namespace ts {
             const leadingStatements = endLexicalEnvironment();
             if (statementOffset > 0 || some(statements) || some(leadingStatements)) {
                 const block = convertToFunctionBody(body, /*multiLine*/ true);
-                addStatementsAfterPrologue(statements, leadingStatements);
+                insertStatementsAfterStandardPrologue(statements, leadingStatements);
                 addRange(statements, block.statements.slice(statementOffset));
                 return updateBlock(block, setTextRange(createNodeArray(statements), block.statements));
             }
@@ -916,7 +940,7 @@ namespace ts {
         }
     }
 
-    const assignHelper: EmitHelper = {
+    export const assignHelper: UnscopedEmitHelper = {
         name: "typescript:assign",
         scoped: false,
         priority: 1,
@@ -948,7 +972,7 @@ namespace ts {
         );
     }
 
-    const awaitHelper: EmitHelper = {
+    export const awaitHelper: UnscopedEmitHelper = {
         name: "typescript:await",
         scoped: false,
         text: `
@@ -960,7 +984,7 @@ namespace ts {
         return createCall(getHelperName("__await"), /*typeArguments*/ undefined, [expression]);
     }
 
-    const asyncGeneratorHelper: EmitHelper = {
+    export const asyncGeneratorHelper: UnscopedEmitHelper = {
         name: "typescript:asyncGenerator",
         scoped: false,
         text: `
@@ -995,7 +1019,7 @@ namespace ts {
         );
     }
 
-    const asyncDelegator: EmitHelper = {
+    export const asyncDelegator: UnscopedEmitHelper = {
         name: "typescript:asyncDelegator",
         scoped: false,
         text: `
@@ -1019,7 +1043,7 @@ namespace ts {
         );
     }
 
-    const asyncValues: EmitHelper = {
+    export const asyncValues: UnscopedEmitHelper = {
         name: "typescript:asyncValues",
         scoped: false,
         text: `

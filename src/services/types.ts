@@ -230,7 +230,6 @@ namespace ts {
 
         isKnownTypesPackageName?(name: string): boolean;
         installPackage?(options: InstallPackageOptions): Promise<ApplyCodeActionCommandResult>;
-        /* @internal */ inspectValue?(options: InspectValueOptions): Promise<ValueInfo>;
         writeFile?(fileName: string, content: string): void;
 
         /* @internal */
@@ -296,6 +295,8 @@ namespace ts {
 
         getRenameInfo(fileName: string, position: number, options?: RenameInfoOptions): RenameInfo;
         findRenameLocations(fileName: string, position: number, findInStrings: boolean, findInComments: boolean, providePrefixAndSuffixTextForRename?: boolean): ReadonlyArray<RenameLocation> | undefined;
+
+        getSmartSelectionRange(fileName: string, position: number): SelectionRange;
 
         getDefinitionAtPosition(fileName: string, position: number): ReadonlyArray<DefinitionInfo> | undefined;
         getDefinitionAndBoundSpan(fileName: string, position: number): DefinitionInfoAndBoundSpan | undefined;
@@ -534,22 +535,12 @@ namespace ts {
 
     // Publicly, this type is just `{}`. Internally it is a union of all the actions we use.
     // See `commands?: {}[]` in protocol.ts
-    export type CodeActionCommand = InstallPackageAction | GenerateTypesAction;
+    export type CodeActionCommand = InstallPackageAction;
 
     export interface InstallPackageAction {
         /* @internal */ readonly type: "install package";
         /* @internal */ readonly file: string;
         /* @internal */ readonly packageName: string;
-    }
-
-    export interface GenerateTypesAction extends GenerateTypesOptions {
-        /* @internal */ readonly type: "generate types";
-    }
-
-    export interface GenerateTypesOptions {
-        readonly file: string; // File that was importing fileToGenerateTypesFor; used for formatting options.
-        readonly fileToGenerateTypesFor: string;
-        readonly outputFileName: string;
     }
 
     /**
@@ -622,6 +613,13 @@ namespace ts {
          */
         originalTextSpan?: TextSpan;
         originalFileName?: string;
+
+        /**
+         * If DocumentSpan.textSpan is the span for name of the declaration,
+         * then this is the span for relevant declaration
+         */
+        contextSpan?: TextSpan;
+        originalContextSpan?: TextSpan;
     }
 
     export interface RenameLocation extends DocumentSpan {
@@ -656,6 +654,7 @@ namespace ts {
         fileName?: string;
         isInString?: true;
         textSpan: TextSpan;
+        contextSpan?: TextSpan;
         kind: HighlightSpanKind;
     }
 
@@ -857,6 +856,11 @@ namespace ts {
         documentation: SymbolDisplayPart[];
         displayParts: SymbolDisplayPart[];
         isOptional: boolean;
+    }
+
+    export interface SelectionRange {
+        textSpan: TextSpan;
+        parent?: SelectionRange;
     }
 
     /**

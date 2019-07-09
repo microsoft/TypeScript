@@ -26,7 +26,7 @@
 ////}
 ////jsDocM/*4q*/ultiLine(/*4*/);
 ////
-/////** this is multiple line jsdoc stule comment
+/////** multiple line jsdoc comments no longer merge
 ////*New line1
 ////*New Line2*/
 /////** Shoul mege this line as well
@@ -99,13 +99,13 @@
 ////    return /*18*/a + b;
 ////}
 /////*15*/s/*16q*/um(/*16*/10, /*17*/20);
-/////** This is multiplication function*/
-/////** @param */
-/////** @param a first number*/
-/////** @param b */
-/////** @param c {
-//// @param d @anotherTag*/
-/////** @param e LastParam @anotherTag*/
+/////** This is multiplication function
+//// * @param 
+//// * @param a first number
+//// * @param b
+//// * @param c {
+//// @param d @anotherTag
+//// * @param e LastParam @anotherTag*/
 ////function multiply(/*19aq*/a: number, /*20aq*/b: number, /*21aq*/c?: number, /*22aq*/d?, /*23aq*/e?) {
 ////}
 ////mult/*19q*/iply(/*19*/10,/*20*/ 20,/*21*/ 30, /*22*/40, /*23*/50);
@@ -214,26 +214,26 @@ verify.quickInfoAt("3q", "function jsDocSingleLine(): void", "this is eg of sing
 verify.signatureHelp({ marker: "4", docComment: "this is multiple line jsdoc stule comment\nNew line1\nNew Line2" });
 verify.quickInfoAt("4q", "function jsDocMultiLine(): void", "this is multiple line jsdoc stule comment\nNew line1\nNew Line2");
 
-verify.signatureHelp({ marker: "5", docComment: "this is multiple line jsdoc stule comment\nNew line1\nNew Line2\nShoul mege this line as well\nand this too\nAnother this one too" });
-verify.quickInfoAt("5q", "function jsDocMultiLineMerge(): void", "this is multiple line jsdoc stule comment\nNew line1\nNew Line2\nShoul mege this line as well\nand this too\nAnother this one too");
+verify.signatureHelp({ marker: "5", docComment: "Another this one too" });
+verify.quickInfoAt("5q", "function jsDocMultiLineMerge(): void", "Another this one too");
 
 verify.signatureHelp({ marker: "6", docComment: "jsdoc comment" });
 verify.quickInfoAt("6q", "function jsDocMixedComments1(): void", "jsdoc comment");
 
-verify.signatureHelp({ marker: "7", docComment: "jsdoc comment\nanother jsDocComment" });
-verify.quickInfoAt("7q", "function jsDocMixedComments2(): void", "jsdoc comment\nanother jsDocComment");
+verify.signatureHelp({ marker: "7", docComment: "another jsDocComment" });
+verify.quickInfoAt("7q", "function jsDocMixedComments2(): void", "another jsDocComment");
 
-verify.signatureHelp({ marker: "8", docComment: "jsdoc comment\n* triplestar jsDocComment" });
-verify.quickInfoAt("8q", "function jsDocMixedComments3(): void", "jsdoc comment\n* triplestar jsDocComment");
+verify.signatureHelp({ marker: "8", docComment: "* triplestar jsDocComment" });
+verify.quickInfoAt("8q", "function jsDocMixedComments3(): void", "* triplestar jsDocComment");
 
-verify.signatureHelp({ marker: "9", docComment: "jsdoc comment\nanother jsDocComment" });
-verify.quickInfoAt("9q", "function jsDocMixedComments4(): void", "jsdoc comment\nanother jsDocComment");
+verify.signatureHelp({ marker: "9", docComment: "another jsDocComment" });
+verify.quickInfoAt("9q", "function jsDocMixedComments4(): void", "another jsDocComment");
 
-verify.signatureHelp({ marker: "10", docComment: "jsdoc comment\nanother jsDocComment" });
-verify.quickInfoAt("10q", "function jsDocMixedComments5(): void", "jsdoc comment\nanother jsDocComment");
+verify.signatureHelp({ marker: "10", docComment: "another jsDocComment" });
+verify.quickInfoAt("10q", "function jsDocMixedComments5(): void", "another jsDocComment");
 
-verify.signatureHelp({ marker: "11", docComment: "another jsDocComment\njsdoc comment" });
-verify.quickInfoAt("11q", "function jsDocMixedComments6(): void", "another jsDocComment\njsdoc comment");
+verify.signatureHelp({ marker: "11", docComment: "jsdoc comment" });
+verify.quickInfoAt("11q", "function jsDocMixedComments6(): void", "jsdoc comment");
 
 verify.signatureHelp({ marker: "12", docComment: "" });
 verify.quickInfoAt("12q", "function noHelpComment1(): void");

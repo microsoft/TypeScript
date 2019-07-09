@@ -335,6 +335,7 @@ namespace ts.server {
         RootOfInferredProjectFalse = "Open file was set as not inferred root",
     }
 
+    /*@internal*/
     interface ConfigFileExistenceInfo {
         /**
          * Cached value of existence of config file
@@ -1002,7 +1003,13 @@ namespace ts.server {
                 fileOrDirectory => {
                     const fileOrDirectoryPath = this.toPath(fileOrDirectory);
                     project.getCachedDirectoryStructureHost().addOrDeleteFileOrDirectory(fileOrDirectory, fileOrDirectoryPath);
-                    if (isPathInNodeModulesStartingWithDot(fileOrDirectoryPath)) return;
+
+                    // don't trigger callback on open, existing files
+                    if (project.fileIsOpen(fileOrDirectoryPath)) {
+                        return;
+                    }
+
+                    if (isPathIgnored(fileOrDirectoryPath)) return;
                     const configFilename = project.getConfigFilePath();
 
                     // If the the added or created file or directory is not supported file name, ignore the file
@@ -1326,7 +1333,11 @@ namespace ts.server {
 
             const watches: WatchType[] = [];
             if (configFileExistenceInfo.configFileWatcherForRootOfInferredProject) {
-                watches.push(WatchType.ConfigFileForInferredRoot);
+                watches.push(
+                    configFileExistenceInfo.configFileWatcherForRootOfInferredProject === noopFileWatcher ?
+                        WatchType.NoopConfigFileForInferredRoot :
+                        WatchType.ConfigFileForInferredRoot
+                );
             }
             if (this.configuredProjects.has(canonicalConfigFilePath)) {
                 watches.push(WatchType.ConfigFile);
@@ -1342,13 +1353,16 @@ namespace ts.server {
             canonicalConfigFilePath: string,
             configFileExistenceInfo: ConfigFileExistenceInfo
         ) {
-            configFileExistenceInfo.configFileWatcherForRootOfInferredProject = this.watchFactory.watchFile(
-                this.host,
-                configFileName,
-                (_filename, eventKind) => this.onConfigFileChangeForOpenScriptInfo(configFileName, eventKind),
-                PollingInterval.High,
-                WatchType.ConfigFileForInferredRoot
-            );
+            configFileExistenceInfo.configFileWatcherForRootOfInferredProject =
+                canWatchDirectory(getDirectoryPath(canonicalConfigFilePath) as Path) ?
+                    this.watchFactory.watchFile(
+                        this.host,
+                        configFileName,
+                        (_filename, eventKind) => this.onConfigFileChangeForOpenScriptInfo(configFileName, eventKind),
+                        PollingInterval.High,
+                        WatchType.ConfigFileForInferredRoot
+                    ) :
+                    noopFileWatcher;
             this.logConfigFileWatchUpdate(configFileName, canonicalConfigFilePath, configFileExistenceInfo, ConfigFileWatcherStatus.UpdatedCallback);
         }
 
@@ -1606,7 +1620,8 @@ namespace ts.server {
                 this.documentRegistry,
                 compilerOptions,
                 /*lastFileExceededProgramSize*/ this.getFilenameForExceededTotalSizeLimitForNonTsFiles(projectFileName, compilerOptions, files, externalFilePropertyReader),
-                options.compileOnSave === undefined ? true : options.compileOnSave);
+                options.compileOnSave === undefined ? true : options.compileOnSave,
+                /*projectFilePath*/ undefined, this.currentPluginConfigOverrides);
             project.excludedFiles = excludedFiles;
 
             this.addFilesToNonInferredProject(project, files, externalFilePropertyReader, typeAcquisition);
@@ -2071,7 +2086,7 @@ namespace ts.server {
                 watchDir,
                 (fileOrDirectory) => {
                     const fileOrDirectoryPath = this.toPath(fileOrDirectory);
-                    if (isPathInNodeModulesStartingWithDot(fileOrDirectoryPath)) return;
+                    if (isPathIgnored(fileOrDirectoryPath)) return;
 
                     // Has extension
                     Debug.assert(result.refCount > 0);
@@ -2219,7 +2234,13 @@ namespace ts.server {
         getDocumentPositionMapper(project: Project, generatedFileName: string, sourceFileName?: string): DocumentPositionMapper | undefined {
             // Since declaration info and map file watches arent updating project's directory structure host (which can cache file structure) use host
             const declarationInfo = this.getOrCreateScriptInfoNotOpenedByClient(generatedFileName, project.currentDirectory, this.host);
-            if (!declarationInfo) return undefined;
+            if (!declarationInfo) {
+                if (sourceFileName) {
+                    // Project contains source file and it generates the generated file name
+                    project.addGeneratedFileWatch(generatedFileName, sourceFileName);
+                }
+                return undefined;
+            }
 
             // Try to get from cache
             declarationInfo.getSnapshot(); // Ensure synchronized
@@ -2811,8 +2832,9 @@ namespace ts.server {
             let assignOrphanScriptInfosToInferredProject = false;
             if (openFiles) {
                 while (true) {
-                    const { value: file, done } = openFiles.next();
-                    if (done) break;
+                    const iterResult = openFiles.next();
+                    if (iterResult.done) break;
+                    const file = iterResult.value;
                     const scriptInfo = this.getScriptInfo(file.fileName);
                     Debug.assert(!scriptInfo || !scriptInfo.isScriptOpen(), "Script should not exist and not be open already");
                     // Create script infos so we have the new content for all the open files before we do any updates to projects
@@ -2829,8 +2851,9 @@ namespace ts.server {
 
             if (changedFiles) {
                 while (true) {
-                    const { value: file, done } = changedFiles.next();
-                    if (done) break;
+                    const iterResult = changedFiles.next();
+                    if (iterResult.done) break;
+                    const file = iterResult.value;
                     const scriptInfo = this.getScriptInfo(file.fileName)!;
                     Debug.assert(!!scriptInfo);
                     // Make edits to script infos and marks containing project as dirty
@@ -2866,8 +2889,9 @@ namespace ts.server {
         /* @internal */
         applyChangesToFile(scriptInfo: ScriptInfo, changes: Iterator<TextChange>) {
             while (true) {
-                const { value: change, done } = changes.next();
-                if (done) break;
+                const iterResult = changes.next();
+                if (iterResult.done) break;
+                const change = iterResult.value;
                 scriptInfo.editContent(change.span.start, change.span.start + change.span.length, change.newText);
             }
         }

@@ -1,0 +1,92 @@
+=== tests/cases/compiler/objectFromEntries.ts ===
+const o = Object.fromEntries([['a', 1], ['b', 2], ['c', 3]]);
+>o : { [x: string]: number; [x: number]: number; }
+>Object.fromEntries([['a', 1], ['b', 2], ['c', 3]]) : { [x: string]: number; [x: number]: number; }
+>Object.fromEntries : { <T = any>(entries: Iterable<readonly [string | number | symbol, T]>): { [x: string]: T; [x: number]: T; }; (entries: Iterable<readonly any[]>): any; }
+>Object : ObjectConstructor
+>fromEntries : { <T = any>(entries: Iterable<readonly [string | number | symbol, T]>): { [x: string]: T; [x: number]: T; }; (entries: Iterable<readonly any[]>): any; }
+>[['a', 1], ['b', 2], ['c', 3]] : [string, number][]
+>['a', 1] : [string, number]
+>'a' : "a"
+>1 : 1
+>['b', 2] : [string, number]
+>'b' : "b"
+>2 : 2
+>['c', 3] : [string, number]
+>'c' : "c"
+>3 : 3
+
+const o2 = Object.fromEntries(new URLSearchParams());
+>o2 : { [x: string]: string; [x: number]: string; }
+>Object.fromEntries(new URLSearchParams()) : { [x: string]: string; [x: number]: string; }
+>Object.fromEntries : { <T = any>(entries: Iterable<readonly [string | number | symbol, T]>): { [x: string]: T; [x: number]: T; }; (entries: Iterable<readonly any[]>): any; }
+>Object : ObjectConstructor
+>fromEntries : { <T = any>(entries: Iterable<readonly [string | number | symbol, T]>): { [x: string]: T; [x: number]: T; }; (entries: Iterable<readonly any[]>): any; }
+>new URLSearchParams() : URLSearchParams
+>URLSearchParams : { new (init?: string | URLSearchParams | string[][] | Record<string, string>): URLSearchParams; prototype: URLSearchParams; }
+
+const o3 = Object.fromEntries(new Map([[Symbol("key"), "value"]]));
+>o3 : { [x: string]: string; [x: number]: string; }
+>Object.fromEntries(new Map([[Symbol("key"), "value"]])) : { [x: string]: string; [x: number]: string; }
+>Object.fromEntries : { <T = any>(entries: Iterable<readonly [string | number | symbol, T]>): { [x: string]: T; [x: number]: T; }; (entries: Iterable<readonly any[]>): any; }
+>Object : ObjectConstructor
+>fromEntries : { <T = any>(entries: Iterable<readonly [string | number | symbol, T]>): { [x: string]: T; [x: number]: T; }; (entries: Iterable<readonly any[]>): any; }
+>new Map([[Symbol("key"), "value"]]) : Map<symbol, string>
+>Map : MapConstructor
+>[[Symbol("key"), "value"]] : [symbol, string][]
+>[Symbol("key"), "value"] : [symbol, string]
+>Symbol("key") : symbol
+>Symbol : SymbolConstructor
+>"key" : "key"
+>"value" : "value"
+
+const frozenArray = Object.freeze([['a', 1], ['b', 2], ['c', 3]]);
+>frozenArray : readonly (string | number)[][]
+>Object.freeze([['a', 1], ['b', 2], ['c', 3]]) : readonly (string | number)[][]
+>Object.freeze : { <T>(a: T[]): readonly T[]; <T extends Function>(f: T): T; <T>(o: T): Readonly<T>; }
+>Object : ObjectConstructor
+>freeze : { <T>(a: T[]): readonly T[]; <T extends Function>(f: T): T; <T>(o: T): Readonly<T>; }
+>[['a', 1], ['b', 2], ['c', 3]] : (string | number)[][]
+>['a', 1] : (string | number)[]
+>'a' : "a"
+>1 : 1
+>['b', 2] : (string | number)[]
+>'b' : "b"
+>2 : 2
+>['c', 3] : (string | number)[]
+>'c' : "c"
+>3 : 3
+
+const o4 = Object.fromEntries(frozenArray);
+>o4 : any
+>Object.fromEntries(frozenArray) : any
+>Object.fromEntries : { <T = any>(entries: Iterable<readonly [string | number | symbol, T]>): { [x: string]: T; [x: number]: T; }; (entries: Iterable<readonly any[]>): any; }
+>Object : ObjectConstructor
+>fromEntries : { <T = any>(entries: Iterable<readonly [string | number | symbol, T]>): { [x: string]: T; [x: number]: T; }; (entries: Iterable<readonly any[]>): any; }
+>frozenArray : readonly (string | number)[][]
+
+const frozenArray2: readonly [string, number][] = Object.freeze([['a', 1], ['b', 2], ['c', 3]]);
+>frozenArray2 : readonly [string, number][]
+>Object.freeze([['a', 1], ['b', 2], ['c', 3]]) : readonly [string, number][]
+>Object.freeze : { <T>(a: T[]): readonly T[]; <T extends Function>(f: T): T; <T>(o: T): Readonly<T>; }
+>Object : ObjectConstructor
+>freeze : { <T>(a: T[]): readonly T[]; <T extends Function>(f: T): T; <T>(o: T): Readonly<T>; }
+>[['a', 1], ['b', 2], ['c', 3]] : [string, number][]
+>['a', 1] : [string, number]
+>'a' : "a"
+>1 : 1
+>['b', 2] : [string, number]
+>'b' : "b"
+>2 : 2
+>['c', 3] : [string, number]
+>'c' : "c"
+>3 : 3
+
+const o5 = Object.fromEntries(frozenArray2);
+>o5 : { [x: string]: number; [x: number]: number; }
+>Object.fromEntries(frozenArray2) : { [x: string]: number; [x: number]: number; }
+>Object.fromEntries : { <T = any>(entries: Iterable<readonly [string | number | symbol, T]>): { [x: string]: T; [x: number]: T; }; (entries: Iterable<readonly any[]>): any; }
+>Object : ObjectConstructor
+>fromEntries : { <T = any>(entries: Iterable<readonly [string | number | symbol, T]>): { [x: string]: T; [x: number]: T; }; (entries: Iterable<readonly any[]>): any; }
+>frozenArray2 : readonly [string, number][]
+

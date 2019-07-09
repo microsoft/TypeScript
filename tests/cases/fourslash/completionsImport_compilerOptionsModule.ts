@@ -33,9 +33,22 @@
 ////const a = import("./a"); // Does not make this an external module
 ////fo/*dts*/
 
-verify.completions({ marker: ["b"], excludes: "foo", preferences: { includeCompletionsForModuleExports: true } });
+verify.completions({
+    marker: ["b"],
+    excludes: "foo",
+    preferences: { includeCompletionsForModuleExports: true }
+});
 verify.completions({
     marker: ["c", "ccheck", "cts", "d", "dcheck", "dts"],
-    includes: [{ name: "foo", source: "/node_modules/a/index", text: "const foo: 0", kind: "const", kindModifiers: "export,declare", hasAction: true, sourceDisplay: "a" }],
+    includes: [{
+        name: "foo",
+        source: "/node_modules/a/index",
+        text: "const foo: 0",
+        kind: "const",
+        kindModifiers: "export,declare",
+        hasAction: true,
+        sourceDisplay: "a",
+        sortText: completion.SortText.AutoImportSuggestions
+    }],
     preferences: { includeCompletionsForModuleExports: true },
 });

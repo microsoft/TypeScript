@@ -390,7 +390,6 @@ namespace ts.projectSystem {
             const typingsInstaller: server.ITypingsInstaller = {
                 isKnownTypesPackageName: returnFalse,
                 installPackage: notImplemented,
-                inspectValue: notImplemented,
                 enqueueInstallTypingsRequest: (proj, typeAcquisition, unresolvedImports) => {
                     assert.isUndefined(request);
                     request = JSON.stringify(server.createInstallTypingsRequest(proj, typeAcquisition, unresolvedImports || server.emptyArray, cachePath));
@@ -1340,6 +1339,26 @@ var x = 10;`
                 const info = Debug.assertDefined(service.getScriptInfoForPath(file2.path as Path));
                 assert.equal(info.containingProjects.length, 0);
             }
+        });
+
+        it("no project structure update on directory watch invoke on open file save", () => {
+            const projectRootPath = "/users/username/projects/project";
+            const file1: File = {
+                path: `${projectRootPath}/a.ts`,
+                content: "export const a = 10;"
+            };
+            const config: File = {
+                path: `${projectRootPath}/tsconfig.json`,
+                content: "{}"
+            };
+            const files = [file1, config];
+            const host = createServerHost(files);
+            const service = createProjectService(host);
+            service.openClientFile(file1.path);
+            checkNumberOfProjects(service, { configuredProjects: 1 });
+
+            host.modifyFile(file1.path, file1.content, { invokeFileDeleteCreateAsPartInsteadOfChange: true });
+            host.checkTimeoutQueueLength(0);
         });
 
         it("handles delayed directory watch invoke on file creation", () => {

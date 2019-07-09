@@ -64,7 +64,7 @@ label: {
     (function (E) {
     })(E || (E = {}));
 }
-label: 
+label: ;
 label: {
     var C = /** @class */ (function () {
         function C() {
@@ -75,6 +75,6 @@ label: {
 label: var a = 1;
 label: var b = 1;
 label: var c = 1;
-label: 
-label: 
+label: ;
+label: ;
 label: 

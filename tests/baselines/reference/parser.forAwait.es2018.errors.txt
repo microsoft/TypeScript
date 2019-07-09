@@ -52,6 +52,7 @@ tests/cases/conformance/parser/ecmascript2018/forAwait/topLevelWithExprIsError.t
         for await (const x of y) {
             ~~~~~
 !!! error TS1103: A 'for-await-of' statement is only allowed within an async function or async generator.
+!!! related TS1356 tests/cases/conformance/parser/ecmascript2018/forAwait/inFunctionDeclWithDeclIsError.ts:1:10: Did you mean to mark this function as 'async'?
         }
     }
 ==== tests/cases/conformance/parser/ecmascript2018/forAwait/inFunctionDeclWithExprIsError.ts (1 errors) ====
@@ -60,6 +61,7 @@ tests/cases/conformance/parser/ecmascript2018/forAwait/topLevelWithExprIsError.t
         for await (x of y) {
             ~~~~~
 !!! error TS1103: A 'for-await-of' statement is only allowed within an async function or async generator.
+!!! related TS1356 tests/cases/conformance/parser/ecmascript2018/forAwait/inFunctionDeclWithExprIsError.ts:1:10: Did you mean to mark this function as 'async'?
         }
     }
 ==== tests/cases/conformance/parser/ecmascript2018/forAwait/inAsyncFunctionWithDeclIsOk.ts (0 errors) ====
@@ -92,6 +94,7 @@ tests/cases/conformance/parser/ecmascript2018/forAwait/topLevelWithExprIsError.t
         for await (const x of y) {
             ~~~~~
 !!! error TS1103: A 'for-await-of' statement is only allowed within an async function or async generator.
+!!! related TS1356 tests/cases/conformance/parser/ecmascript2018/forAwait/inGeneratorWithDeclIsError.ts:1:11: Did you mean to mark this function as 'async'?
         }
     }
 ==== tests/cases/conformance/parser/ecmascript2018/forAwait/inGeneratorWithExprIsError.ts (1 errors) ====
@@ -100,6 +103,7 @@ tests/cases/conformance/parser/ecmascript2018/forAwait/topLevelWithExprIsError.t
         for await (x of y) {
             ~~~~~
 !!! error TS1103: A 'for-await-of' statement is only allowed within an async function or async generator.
+!!! related TS1356 tests/cases/conformance/parser/ecmascript2018/forAwait/inGeneratorWithExprIsError.ts:1:11: Did you mean to mark this function as 'async'?
         }
     }
     

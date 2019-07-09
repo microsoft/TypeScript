@@ -28,7 +28,7 @@ edit.deleteAtCaret('constructor(val: T) { }'.length);
 verify.quickInfos({
     Asig: "constructor A<string>(): A<string>",
     Bsig: "constructor B<string>(val: string): B<string>",
-    Csig: "constructor C<{}>(): C<{}>", // Cannot resolve signature
+    Csig: "constructor C<unknown>(): C<unknown>", // Cannot resolve signature
     Dsig: "constructor D<string>(val: string): D<string>" // Cannot resolve signature
 });
 
@@ -37,6 +37,6 @@ edit.deleteAtCaret("val: T".length);
 verify.quickInfos({
     Asig: "constructor A<string>(): A<string>",
     Bsig: "constructor B<string>(val: string): B<string>",
-    Csig: "constructor C<{}>(): C<{}>", // Cannot resolve signature
+    Csig: "constructor C<unknown>(): C<unknown>", // Cannot resolve signature
     Dsig: "constructor D<string>(): D<string>"
 });

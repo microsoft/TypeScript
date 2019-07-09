@@ -4,8 +4,8 @@
 // @Filename: a.js
 ////function bar() {
 ////}
-////bar.prototype.[|x|] = 10;
+////[|bar.prototype.[|{| "contextRangeIndex": 0 |}x|] = 10;|]
 ////var t = new bar();
-////t.[|x|] = 11;
+////[|t.[|{| "contextRangeIndex": 2 |}x|] = 11;|]
 
-verify.rangesAreRenameLocations();
+verify.rangesWithSameTextAreRenameLocations("x");

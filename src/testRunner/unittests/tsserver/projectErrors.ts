@@ -216,7 +216,7 @@ namespace ts.projectSystem {
                 },
                 startGroup: noop,
                 endGroup: noop,
-                getLogFileName: () => undefined
+                getLogFileName: returnUndefined
             };
             return {
                 errorLogger,
@@ -475,6 +475,90 @@ namespace ts.projectSystem {
                     host.runQueuedImmediateCallbacks(1);
                     checkErrorMessage(session, "suggestionDiag", { file: openFile, diagnostics: [] });
                 }
+                checkCompleteEvent(session, 2, expectedSequenceId);
+                session.clearMessages();
+            }
+        });
+
+        it("Correct errors when resolution resolves to file that has same ambient module and is also module", () => {
+            const projectRootPath = "/users/username/projects/myproject";
+            const aFile: File = {
+                path: `${projectRootPath}/src/a.ts`,
+                content: `import * as myModule from "@custom/plugin";
+function foo() {
+  // hello
+}`
+            };
+            const config: File = {
+                path: `${projectRootPath}/tsconfig.json`,
+                content: JSON.stringify({ include: ["src"] })
+            };
+            const plugin: File = {
+                path: `${projectRootPath}/node_modules/@custom/plugin/index.d.ts`,
+                content: `import './proposed';
+declare module '@custom/plugin' {
+    export const version: string;
+}`
+            };
+            const pluginProposed: File = {
+                path: `${projectRootPath}/node_modules/@custom/plugin/proposed.d.ts`,
+                content: `declare module '@custom/plugin' {
+    export const bar = 10;
+}`
+            };
+            const files = [libFile, aFile, config, plugin, pluginProposed];
+            const host = createServerHost(files);
+            const session = createSession(host, { canUseEvents: true });
+            const service = session.getProjectService();
+            openFilesForSession([aFile], session);
+
+            checkNumberOfProjects(service, { configuredProjects: 1 });
+            session.clearMessages();
+            checkErrors();
+
+            session.executeCommandSeq<protocol.ChangeRequest>({
+                command: protocol.CommandTypes.Change,
+                arguments: {
+                    file: aFile.path,
+                    line: 3,
+                    offset: 8,
+                    endLine: 3,
+                    endOffset: 8,
+                    insertString: "o"
+                }
+            });
+            checkErrors();
+
+            function checkErrors() {
+                host.checkTimeoutQueueLength(0);
+                const expectedSequenceId = session.getNextSeq();
+                session.executeCommandSeq<protocol.GeterrRequest>({
+                    command: server.CommandNames.Geterr,
+                    arguments: {
+                        delay: 0,
+                        files: [aFile.path],
+                    }
+                });
+
+                host.checkTimeoutQueueLengthAndRun(1);
+
+                checkErrorMessage(session, "syntaxDiag", { file: aFile.path, diagnostics: [] }, /*isMostRecent*/ true);
+                session.clearMessages();
+
+                host.runQueuedImmediateCallbacks(1);
+
+                checkErrorMessage(session, "semanticDiag", { file: aFile.path, diagnostics: [] });
+                session.clearMessages();
+
+                host.runQueuedImmediateCallbacks(1);
+
+                checkErrorMessage(session, "suggestionDiag", {
+                    file: aFile.path,
+                    diagnostics: [
+                        createDiagnostic({ line: 1, offset: 1 }, { line: 1, offset: 44 }, Diagnostics._0_is_declared_but_its_value_is_never_read, ["myModule"], "suggestion", /*reportsUnnecessary*/ true),
+                        createDiagnostic({ line: 2, offset: 10 }, { line: 2, offset: 13 }, Diagnostics._0_is_declared_but_its_value_is_never_read, ["foo"], "suggestion", /*reportsUnnecessary*/ true)
+                    ],
+                });
                 checkCompleteEvent(session, 2, expectedSequenceId);
                 session.clearMessages();
             }

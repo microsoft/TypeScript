@@ -8,6 +8,7 @@
 
     "files": [
         "core.ts",
+        "debug.ts",
         "performance.ts",
         "semver.ts",
 
@@ -29,6 +30,7 @@
         "transformers/utilities.ts",
         "transformers/destructuring.ts",
         "transformers/ts.ts",
+        "transformers/classFields.ts",
         "transformers/es2017.ts",
         "transformers/es2018.ts",
         "transformers/es2019.ts",
@@ -53,6 +55,5 @@
         "moduleSpecifiers.ts",
         "watch.ts",
         "tsbuild.ts",
-        "inspectValue.ts",
     ]
 }

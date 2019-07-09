@@ -29,6 +29,13 @@ function f4(...args: readonly string[]) {
 
 //// [readonlyRestParameters.js]
 "use strict";
+var __spreadArrays = (this && this.__spreadArrays) || function () {
+    for (var s = 0, i = 0, il = arguments.length; i < il; i++) s += arguments[i].length;
+    for (var r = Array(s), k = 0, i = 0; i < il; i++)
+        for (var a = arguments[i], j = 0, jl = a.length; j < jl; j++, k++)
+            r[k] = a[j];
+    return r;
+};
 function f0(a, b) {
     f0(a, b);
     f1(a, b);
@@ -41,7 +48,7 @@ function f1() {
     }
     f0.apply(void 0, args); // Error
     f1('abc', 'def');
-    f1.apply(void 0, ['abc'].concat(args));
+    f1.apply(void 0, __spreadArrays(['abc'], args));
     f1.apply(void 0, args);
 }
 function f2() {
@@ -51,10 +58,10 @@ function f2() {
     }
     f0.apply(void 0, args);
     f1('abc', 'def');
-    f1.apply(void 0, ['abc'].concat(args));
+    f1.apply(void 0, __spreadArrays(['abc'], args));
     f1.apply(void 0, args);
     f2('abc', 'def');
-    f2.apply(void 0, ['abc'].concat(args)); // Error
+    f2.apply(void 0, __spreadArrays(['abc'], args)); // Error
     f2.apply(void 0, args);
 }
 function f4() {

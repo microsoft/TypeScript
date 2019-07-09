@@ -1,0 +1,92 @@
+=== tests/cases/compiler/requiredMappedTypeModifierTrumpsVariance.ts ===
+const a: Required<{ a?: 1; x: 1 }> = { a: 1, x: 1 };
+>a : Symbol(a, Decl(requiredMappedTypeModifierTrumpsVariance.ts, 0, 5))
+>Required : Symbol(Required, Decl(lib.es5.d.ts, --, --))
+>a : Symbol(a, Decl(requiredMappedTypeModifierTrumpsVariance.ts, 0, 19))
+>x : Symbol(x, Decl(requiredMappedTypeModifierTrumpsVariance.ts, 0, 26))
+>a : Symbol(a, Decl(requiredMappedTypeModifierTrumpsVariance.ts, 0, 38))
+>x : Symbol(x, Decl(requiredMappedTypeModifierTrumpsVariance.ts, 0, 44))
+
+const b: Required<{ b?: 1; x: 1 }> = { b: 1, x: 1 };
+>b : Symbol(b, Decl(requiredMappedTypeModifierTrumpsVariance.ts, 1, 5))
+>Required : Symbol(Required, Decl(lib.es5.d.ts, --, --))
+>b : Symbol(b, Decl(requiredMappedTypeModifierTrumpsVariance.ts, 1, 19))
+>x : Symbol(x, Decl(requiredMappedTypeModifierTrumpsVariance.ts, 1, 26))
+>b : Symbol(b, Decl(requiredMappedTypeModifierTrumpsVariance.ts, 1, 38))
+>x : Symbol(x, Decl(requiredMappedTypeModifierTrumpsVariance.ts, 1, 44))
+
+export let A = a;
+>A : Symbol(A, Decl(requiredMappedTypeModifierTrumpsVariance.ts, 2, 10))
+>a : Symbol(a, Decl(requiredMappedTypeModifierTrumpsVariance.ts, 0, 5))
+
+export let B = b;
+>B : Symbol(B, Decl(requiredMappedTypeModifierTrumpsVariance.ts, 3, 10))
+>b : Symbol(b, Decl(requiredMappedTypeModifierTrumpsVariance.ts, 1, 5))
+
+A = b; // Should Error
+>A : Symbol(A, Decl(requiredMappedTypeModifierTrumpsVariance.ts, 2, 10))
+>b : Symbol(b, Decl(requiredMappedTypeModifierTrumpsVariance.ts, 1, 5))
+
+B = a; // Should Error
+>B : Symbol(B, Decl(requiredMappedTypeModifierTrumpsVariance.ts, 3, 10))
+>a : Symbol(a, Decl(requiredMappedTypeModifierTrumpsVariance.ts, 0, 5))
+
+a.b; // Property 'b' does not exist on type 'Required<{ a?: 1; x: 1; }>'.
+>a : Symbol(a, Decl(requiredMappedTypeModifierTrumpsVariance.ts, 0, 5))
+
+b.a; // Property 'a' does not exist on type 'Required<{ b?: 1; x: 1; }>'.
+>b : Symbol(b, Decl(requiredMappedTypeModifierTrumpsVariance.ts, 1, 5))
+
+interface Foo<T> {
+>Foo : Symbol(Foo, Decl(requiredMappedTypeModifierTrumpsVariance.ts, 8, 4))
+>T : Symbol(T, Decl(requiredMappedTypeModifierTrumpsVariance.ts, 10, 14))
+
+    a: Required<T>;
+>a : Symbol(Foo.a, Decl(requiredMappedTypeModifierTrumpsVariance.ts, 10, 18))
+>Required : Symbol(Required, Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(requiredMappedTypeModifierTrumpsVariance.ts, 10, 14))
+}
+const aa: Foo<{ a?: 1; x: 1 }> = { a: { a: 1, x: 1 } };
+>aa : Symbol(aa, Decl(requiredMappedTypeModifierTrumpsVariance.ts, 13, 5))
+>Foo : Symbol(Foo, Decl(requiredMappedTypeModifierTrumpsVariance.ts, 8, 4))
+>a : Symbol(a, Decl(requiredMappedTypeModifierTrumpsVariance.ts, 13, 15))
+>x : Symbol(x, Decl(requiredMappedTypeModifierTrumpsVariance.ts, 13, 22))
+>a : Symbol(a, Decl(requiredMappedTypeModifierTrumpsVariance.ts, 13, 34))
+>a : Symbol(a, Decl(requiredMappedTypeModifierTrumpsVariance.ts, 13, 39))
+>x : Symbol(x, Decl(requiredMappedTypeModifierTrumpsVariance.ts, 13, 45))
+
+const bb: Foo<{ b?: 1; x: 1 }> = { a: { b: 1, x: 1 } };
+>bb : Symbol(bb, Decl(requiredMappedTypeModifierTrumpsVariance.ts, 14, 5))
+>Foo : Symbol(Foo, Decl(requiredMappedTypeModifierTrumpsVariance.ts, 8, 4))
+>b : Symbol(b, Decl(requiredMappedTypeModifierTrumpsVariance.ts, 14, 15))
+>x : Symbol(x, Decl(requiredMappedTypeModifierTrumpsVariance.ts, 14, 22))
+>a : Symbol(a, Decl(requiredMappedTypeModifierTrumpsVariance.ts, 14, 34))
+>b : Symbol(b, Decl(requiredMappedTypeModifierTrumpsVariance.ts, 14, 39))
+>x : Symbol(x, Decl(requiredMappedTypeModifierTrumpsVariance.ts, 14, 45))
+
+export let AA = aa;
+>AA : Symbol(AA, Decl(requiredMappedTypeModifierTrumpsVariance.ts, 15, 10))
+>aa : Symbol(aa, Decl(requiredMappedTypeModifierTrumpsVariance.ts, 13, 5))
+
+export let BB = bb;
+>BB : Symbol(BB, Decl(requiredMappedTypeModifierTrumpsVariance.ts, 16, 10))
+>bb : Symbol(bb, Decl(requiredMappedTypeModifierTrumpsVariance.ts, 14, 5))
+
+AA = bb; // Should Error
+>AA : Symbol(AA, Decl(requiredMappedTypeModifierTrumpsVariance.ts, 15, 10))
+>bb : Symbol(bb, Decl(requiredMappedTypeModifierTrumpsVariance.ts, 14, 5))
+
+BB = aa; // Should Error
+>BB : Symbol(BB, Decl(requiredMappedTypeModifierTrumpsVariance.ts, 16, 10))
+>aa : Symbol(aa, Decl(requiredMappedTypeModifierTrumpsVariance.ts, 13, 5))
+
+aa.a.b; // Property 'b' does not exist on type 'Required<{ a?: 1; x: 1; }>'.
+>aa.a : Symbol(Foo.a, Decl(requiredMappedTypeModifierTrumpsVariance.ts, 10, 18))
+>aa : Symbol(aa, Decl(requiredMappedTypeModifierTrumpsVariance.ts, 13, 5))
+>a : Symbol(Foo.a, Decl(requiredMappedTypeModifierTrumpsVariance.ts, 10, 18))
+
+bb.a.a; // Property 'a' does not exist on type 'Required<{ b?: 1; x: 1; }>'.
+>bb.a : Symbol(Foo.a, Decl(requiredMappedTypeModifierTrumpsVariance.ts, 10, 18))
+>bb : Symbol(bb, Decl(requiredMappedTypeModifierTrumpsVariance.ts, 14, 5))
+>a : Symbol(Foo.a, Decl(requiredMappedTypeModifierTrumpsVariance.ts, 10, 18))
+

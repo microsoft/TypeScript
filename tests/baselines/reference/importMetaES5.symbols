@@ -3,7 +3,7 @@
 (async () => {
   const response = await fetch(new URL("../hamsters.jpg", import.meta.url).toString());
 >response : Symbol(response, Decl(example.ts, 2, 7))
->fetch : Symbol(fetch, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
+>fetch : Symbol(fetch, Decl(lib.dom.d.ts, --, --))
 >new URL("../hamsters.jpg", import.meta.url).toString : Symbol(Object.toString, Decl(lib.es5.d.ts, --, --))
 >URL : Symbol(URL, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
 >toString : Symbol(Object.toString, Decl(lib.es5.d.ts, --, --))

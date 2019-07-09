@@ -134,7 +134,9 @@ namespace ts {
                     break;
                 }
                 default: {
-                    const val = option.type.keys().next().value;
+                    const iterResult = option.type.keys().next();
+                    if (iterResult.done) return Debug.fail("Expected 'option.type' to have entries");
+                    const val = iterResult.value;
                     if (option.isTSConfigOnly) {
                         args = ["-p", "tsconfig.json"];
                         configObject = { compilerOptions: { [option.name]: val } };
