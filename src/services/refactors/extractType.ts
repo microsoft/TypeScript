@@ -97,11 +97,10 @@ namespace ts.refactor {
                         return true;
                     }
                 }
-                else {
-                    if (isThisIdentifier(node.exprName.left) && !rangeContainsSkipTrivia(selection, node.parent, file)) {
+                else if (isThisIdentifier(node.exprName.left) && !rangeContainsSkipTrivia(selection, node.parent, file)) {
                         return true;
-                    }
                 }
+                
             }
             return forEachChild(node, visitor);
         }
