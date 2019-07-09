@@ -6,7 +6,7 @@ tests/cases/conformance/jsx/file.tsx(9,14): error TS2769: No overload matches th
     Type 'number' is not assignable to type 'string'.
   Overload 3 of 3, '(attr: { b: unknown; a: number; }): Element', gave the following error.
     Property 'b' is missing in type '{ a: number; }' but required in type '{ b: unknown; a: number; }'.
-tests/cases/conformance/jsx/file.tsx(10,14): error TS2769: No overload matches this call.
+tests/cases/conformance/jsx/file.tsx(10,15): error TS2769: No overload matches this call.
   Overload 1 of 3, '(): Element', gave the following error.
     Type 'T & { ignore-prop: true; }' has no properties in common with type 'IntrinsicAttributes'.
   Overload 2 of 3, '(attr: { b: unknown; a: string; "ignore-prop": boolean; }): Element', gave the following error.
@@ -39,7 +39,7 @@ tests/cases/conformance/jsx/file.tsx(10,14): error TS2769: No overload matches t
 !!! related TS6500 tests/cases/conformance/jsx/file.tsx:4:52: The expected type comes from property 'a' which is declared here on type 'IntrinsicAttributes & { b: unknown; a: string; "ignore-prop": boolean; }'
 !!! related TS2728 tests/cases/conformance/jsx/file.tsx:5:49: 'b' is declared here.
         let a2 = <OverloadComponent {...arg1} ignore-prop />  // missing a
-                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                  ~~~~~~~~~~~~~~~~~
 !!! error TS2769: No overload matches this call.
 !!! error TS2769:   Overload 1 of 3, '(): Element', gave the following error.
 !!! error TS2769:     Type 'T & { ignore-prop: true; }' has no properties in common with type 'IntrinsicAttributes'.

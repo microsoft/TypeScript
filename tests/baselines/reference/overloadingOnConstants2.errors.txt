@@ -1,5 +1,5 @@
 tests/cases/compiler/overloadingOnConstants2.ts(9,10): error TS2394: This overload signature is not compatible with its implementation signature.
-tests/cases/compiler/overloadingOnConstants2.ts(15,9): error TS2769: No overload matches this call.
+tests/cases/compiler/overloadingOnConstants2.ts(15,13): error TS2769: No overload matches this call.
   Overload 1 of 2, '(x: "hi", items: string[]): D', gave the following error.
     Argument of type '"um"' is not assignable to parameter of type '"hi"'.
   Overload 2 of 2, '(x: "bye", items: string[]): E', gave the following error.
@@ -26,7 +26,7 @@ tests/cases/compiler/overloadingOnConstants2.ts(19,10): error TS2394: This overl
     var a: D = foo("hi", []); // D
     var b: E = foo("bye", []); // E 
     var c = foo("um", []); // error
-            ~~~~~~~~~~~~~
+                ~~~~
 !!! error TS2769: No overload matches this call.
 !!! error TS2769:   Overload 1 of 2, '(x: "hi", items: string[]): D', gave the following error.
 !!! error TS2769:     Argument of type '"um"' is not assignable to parameter of type '"hi"'.

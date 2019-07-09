@@ -1,10 +1,10 @@
 tests/cases/conformance/types/union/unionTypeCallSignatures.ts(9,43): error TS2345: Argument of type '"hello"' is not assignable to parameter of type 'number'.
-tests/cases/conformance/types/union/unionTypeCallSignatures.ts(10,1): error TS2769: No overload matches this call.
+tests/cases/conformance/types/union/unionTypeCallSignatures.ts(10,29): error TS2769: No overload matches this call.
   Overload 1 of 2, '(a: number): number | Date', gave the following error.
     Argument of type 'true' is not assignable to parameter of type 'number'.
   Overload 2 of 2, '(a: string): string | boolean', gave the following error.
     Argument of type 'true' is not assignable to parameter of type 'string'.
-tests/cases/conformance/types/union/unionTypeCallSignatures.ts(15,1): error TS2769: No overload matches this call.
+tests/cases/conformance/types/union/unionTypeCallSignatures.ts(15,29): error TS2769: No overload matches this call.
   Overload 1 of 2, '(a: number): number | Date', gave the following error.
     Argument of type 'true' is not assignable to parameter of type 'number'.
   Overload 2 of 2, '(a: string): string | boolean', gave the following error.
@@ -48,7 +48,7 @@ tests/cases/conformance/types/union/unionTypeCallSignatures.ts(73,12): error TS2
                                               ~~~~~~~
 !!! error TS2345: Argument of type '"hello"' is not assignable to parameter of type 'number'.
     unionOfDifferentReturnType1(true); // error in type of parameter
-    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                                ~~~~
 !!! error TS2769: No overload matches this call.
 !!! error TS2769:   Overload 1 of 2, '(a: number): number | Date', gave the following error.
 !!! error TS2769:     Argument of type 'true' is not assignable to parameter of type 'number'.
@@ -59,7 +59,7 @@ tests/cases/conformance/types/union/unionTypeCallSignatures.ts(73,12): error TS2
     numOrDate = unionOfDifferentReturnType1(10);
     strOrBoolean = unionOfDifferentReturnType1("hello");
     unionOfDifferentReturnType1(true); // error in type of parameter
-    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                                ~~~~
 !!! error TS2769: No overload matches this call.
 !!! error TS2769:   Overload 1 of 2, '(a: number): number | Date', gave the following error.
 !!! error TS2769:     Argument of type 'true' is not assignable to parameter of type 'number'.

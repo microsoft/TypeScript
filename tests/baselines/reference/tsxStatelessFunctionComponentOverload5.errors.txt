@@ -1,4 +1,4 @@
-tests/cases/conformance/jsx/file.tsx(48,12): error TS2769: No overload matches this call.
+tests/cases/conformance/jsx/file.tsx(48,13): error TS2769: No overload matches this call.
   Overload 1 of 3, '(buttonProps: ButtonProps): Element', gave the following error.
     Type '{ children: string; to: string; onClick: (e: MouseEvent<any>) => void; }' is not assignable to type 'IntrinsicAttributes & ButtonProps'.
       Property 'to' does not exist on type 'IntrinsicAttributes & ButtonProps'.
@@ -8,14 +8,14 @@ tests/cases/conformance/jsx/file.tsx(48,12): error TS2769: No overload matches t
   Overload 3 of 3, '(hyphenProps: HyphenProps): Element', gave the following error.
     Type '{ children: string; to: string; onClick: (e: MouseEvent<any>) => void; }' is not assignable to type 'IntrinsicAttributes & HyphenProps'.
       Property 'to' does not exist on type 'IntrinsicAttributes & HyphenProps'.
-tests/cases/conformance/jsx/file.tsx(54,12): error TS2769: No overload matches this call.
+tests/cases/conformance/jsx/file.tsx(54,51): error TS2769: No overload matches this call.
   Overload 1 of 3, '(buttonProps: ButtonProps): Element', gave the following error.
     Type 'number' is not assignable to type 'string'.
   Overload 2 of 3, '(linkProps: LinkProps): Element', gave the following error.
     Type 'number' is not assignable to type 'string'.
   Overload 3 of 3, '(hyphenProps: HyphenProps): Element', gave the following error.
     Type 'number' is not assignable to type 'string'.
-tests/cases/conformance/jsx/file.tsx(55,12): error TS2769: No overload matches this call.
+tests/cases/conformance/jsx/file.tsx(55,68): error TS2769: No overload matches this call.
   Overload 1 of 3, '(buttonProps: ButtonProps): Element', gave the following error.
     Type 'true' is not assignable to type 'string'.
   Overload 2 of 3, '(linkProps: LinkProps): Element', gave the following error.
@@ -80,7 +80,7 @@ tests/cases/conformance/jsx/file.tsx(56,12): error TS2769: No overload matches t
     
     // Error
     const b0 = <MainButton to='/some/path' onClick={(e)=>{}}>GO</MainButton>;  // extra property;
-               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                ~~~~~~~~~~
 !!! error TS2769: No overload matches this call.
 !!! error TS2769:   Overload 1 of 3, '(buttonProps: ButtonProps): Element', gave the following error.
 !!! error TS2769:     Type '{ children: string; to: string; onClick: (e: MouseEvent<any>) => void; }' is not assignable to type 'IntrinsicAttributes & ButtonProps'.
@@ -97,7 +97,7 @@ tests/cases/conformance/jsx/file.tsx(56,12): error TS2769: No overload matches t
     const b4 = <MainButton {...obj3} to />;  // Should error because Incorrect type; but attributes are any so everything is allowed
     const b5 = <MainButton {...{ onClick(e: any) { } }} {...obj0} />;  // Spread retain method declaration (see GitHub #13365), so now there is an extra attributes
     const b6 = <MainButton {...{ onClick(e: any){} }} children={10} />;  // incorrect type for optional attribute
-               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                                                      ~~~~~~~~
 !!! error TS2769: No overload matches this call.
 !!! error TS2769:   Overload 1 of 3, '(buttonProps: ButtonProps): Element', gave the following error.
 !!! error TS2769:     Type 'number' is not assignable to type 'string'.
@@ -109,7 +109,7 @@ tests/cases/conformance/jsx/file.tsx(56,12): error TS2769: No overload matches t
 !!! related TS6500 tests/cases/conformance/jsx/file.tsx:4:5: The expected type comes from property 'children' which is declared here on type 'IntrinsicAttributes & LinkProps'
 !!! related TS6500 tests/cases/conformance/jsx/file.tsx:4:5: The expected type comes from property 'children' which is declared here on type 'IntrinsicAttributes & HyphenProps'
     const b7 = <MainButton {...{ onClick(e: any){} }} children="hello" className />;  // incorrect type for optional attribute
-               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                                                                       ~~~~~~~~~
 !!! error TS2769: No overload matches this call.
 !!! error TS2769:   Overload 1 of 3, '(buttonProps: ButtonProps): Element', gave the following error.
 !!! error TS2769:     Type 'true' is not assignable to type 'string'.

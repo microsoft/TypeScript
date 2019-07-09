@@ -1,4 +1,4 @@
-tests/cases/conformance/expressions/functionCalls/overloadResolution.ts(27,1): error TS2769: No overload matches this call.
+tests/cases/conformance/expressions/functionCalls/overloadResolution.ts(27,5): error TS2769: No overload matches this call.
   Overload 1 of 2, '(s: string): string', gave the following error.
     Argument of type '{}' is not assignable to parameter of type 'string'.
   Overload 2 of 2, '(s: number): number', gave the following error.
@@ -8,12 +8,12 @@ tests/cases/conformance/expressions/functionCalls/overloadResolution.ts(63,5): e
 tests/cases/conformance/expressions/functionCalls/overloadResolution.ts(70,21): error TS2345: Argument of type '3' is not assignable to parameter of type 'string'.
 tests/cases/conformance/expressions/functionCalls/overloadResolution.ts(71,21): error TS2345: Argument of type '""' is not assignable to parameter of type 'number'.
 tests/cases/conformance/expressions/functionCalls/overloadResolution.ts(81,5): error TS2344: Type 'boolean' does not satisfy the constraint 'number'.
-tests/cases/conformance/expressions/functionCalls/overloadResolution.ts(84,1): error TS2769: No overload matches this call.
+tests/cases/conformance/expressions/functionCalls/overloadResolution.ts(84,5): error TS2769: No overload matches this call.
   Overload 1 of 2, '(n: string, m: any): any', gave the following error.
     Argument of type 'true' is not assignable to parameter of type 'string'.
   Overload 2 of 2, '(n: number, m: any): any', gave the following error.
     Argument of type 'true' is not assignable to parameter of type 'number'.
-tests/cases/conformance/expressions/functionCalls/overloadResolution.ts(85,1): error TS2769: No overload matches this call.
+tests/cases/conformance/expressions/functionCalls/overloadResolution.ts(85,11): error TS2769: No overload matches this call.
   Overload 1 of 2, '(n: any, m: number): any', gave the following error.
     Argument of type 'true' is not assignable to parameter of type 'number'.
   Overload 2 of 2, '(n: any, m: string): any', gave the following error.
@@ -50,7 +50,7 @@ tests/cases/conformance/expressions/functionCalls/overloadResolution.ts(91,22): 
     
     // No candidate overloads found
     fn1({}); // Error
-    ~~~~~~~
+        ~~
 !!! error TS2769: No overload matches this call.
 !!! error TS2769:   Overload 1 of 2, '(s: string): string', gave the following error.
 !!! error TS2769:     Argument of type '{}' is not assignable to parameter of type 'string'.
@@ -123,14 +123,14 @@ tests/cases/conformance/expressions/functionCalls/overloadResolution.ts(91,22): 
     
     // Generic overloads with constraints called without type arguments but with types that do not satisfy the constraints
     fn4(true, null); // Error
-    ~~~~~~~~~~~~~~~
+        ~~~~
 !!! error TS2769: No overload matches this call.
 !!! error TS2769:   Overload 1 of 2, '(n: string, m: any): any', gave the following error.
 !!! error TS2769:     Argument of type 'true' is not assignable to parameter of type 'string'.
 !!! error TS2769:   Overload 2 of 2, '(n: number, m: any): any', gave the following error.
 !!! error TS2769:     Argument of type 'true' is not assignable to parameter of type 'number'.
     fn4(null, true); // Error
-    ~~~~~~~~~~~~~~~
+              ~~~~
 !!! error TS2769: No overload matches this call.
 !!! error TS2769:   Overload 1 of 2, '(n: any, m: number): any', gave the following error.
 !!! error TS2769:     Argument of type 'true' is not assignable to parameter of type 'number'.
