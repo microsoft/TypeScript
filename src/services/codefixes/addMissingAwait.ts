@@ -1,5 +1,6 @@
 /* @internal */
 namespace ts.codefix {
+    type ContextualTrackChangesFunction = (cb: (changeTracker: textChanges.ChangeTracker) => void) => FileTextChanges[];
     const awaitPrecedence = getOperatorPrecedence(SyntaxKind.AwaitExpression, undefined!);
     const fixId = "addMissingAwait";
     const errorCodes = [
@@ -19,29 +20,54 @@ namespace ts.codefix {
     registerCodeFix({
         fixIds: [fixId],
         errorCodes,
-        getCodeActions: context => {
-            const { sourceFile, span, program } = context;
-            const expression = getAwaitableExpression(sourceFile, span);
-            if (!expression || !isMissingAwaitError(context)) {
-                return;
-            }
-
-            const changes = textChanges.ChangeTracker.with(context, t => makeChange(t, sourceFile, expression));
-            const fixes = [createCodeFixAction(fixId, changes, Diagnostics.Add_await, fixId, Diagnostics.Fix_all_expressions_possibly_missing_await)];
-            const awaitableInitializer = findAwaitableInitializer(expression, sourceFile, program);
-            if (awaitableInitializer) {
-                const initializerChanges = textChanges.ChangeTracker.with(context, t => makeChange(t, sourceFile, awaitableInitializer));
-                fixes.push(createCodeFixActionNoFixId(
-                    "addMissingAwaitToInitializer",
-                    initializerChanges,
-                    [Diagnostics.Add_await_to_initializer_for_0, expression.getText(sourceFile)]));
-            }
-
-            return fixes;
+        getCodeActions: getAllPossibleFixesForError,
+        getAllCodeActions: context => {
+            const { sourceFile, program, cancellationToken } = context;
+            const checker = context.program.getTypeChecker();
+            return codeFixAll(context, errorCodes, (t, diagnostic) => {
+                const expression = getAwaitableExpression(sourceFile, diagnostic.code, diagnostic, cancellationToken, program);
+                if (!expression) {
+                    return;
+                }
+                const trackChanges: ContextualTrackChangesFunction = cb => (cb(t), []);
+                return getDeclarationSiteFix(context, expression, checker, trackChanges)
+                    || getUseSiteFix(context, expression, checker, trackChanges);
+            });
         },
     });
 
-    function isMissingAwaitError({ sourceFile, cancellationToken, program, errorCode, span }: CodeFixContext) {
+    function getAllPossibleFixesForError(context: CodeFixContext) {
+        const { sourceFile, errorCode, span, cancellationToken, program } = context;
+        const expression = getAwaitableExpression(sourceFile, errorCode, span, cancellationToken, program);
+        if (!expression) {
+            return;
+        }
+
+        const checker = context.program.getTypeChecker();
+        const trackChanges: ContextualTrackChangesFunction = cb => textChanges.ChangeTracker.with(context, cb);
+        return compact([
+            getDeclarationSiteFix(context, expression, checker, trackChanges),
+            getUseSiteFix(context, expression, checker, trackChanges)]);
+    }
+
+    function getDeclarationSiteFix(context: CodeFixContext | CodeFixAllContext, expression: Expression, checker: TypeChecker, trackChanges: ContextualTrackChangesFunction) {
+        const { sourceFile } = context;
+        const awaitableInitializer = findAwaitableInitializer(expression, sourceFile, checker);
+        if (awaitableInitializer) {
+            const initializerChanges = trackChanges(t => makeChange(t, sourceFile, checker, awaitableInitializer));
+            return createCodeFixActionNoFixId(
+                "addMissingAwaitToInitializer",
+                initializerChanges,
+                [Diagnostics.Add_await_to_initializer_for_0, expression.getText(sourceFile)]);
+        }
+    }
+
+    function getUseSiteFix(context: CodeFixContext | CodeFixAllContext, expression: Expression, checker: TypeChecker, trackChanges: ContextualTrackChangesFunction) {
+        const changes = trackChanges(t => makeChange(t, context.sourceFile, checker, expression));
+        return createCodeFixAction(fixId, changes, Diagnostics.Add_await, fixId, Diagnostics.Fix_all_expressions_possibly_missing_await);
+    }
+
+    function isMissingAwaitError(sourceFile: SourceFile, errorCode: number, span: TextSpan, cancellationToken: CancellationToken, program: Program) {
         const checker = program.getDiagnosticsProducingTypeChecker();
         const diagnostics = checker.getDiagnostics(sourceFile, cancellationToken);
         return some(diagnostics, ({ start, length, relatedInformation, code }) =>
@@ -51,22 +77,23 @@ namespace ts.codefix {
             some(relatedInformation, related => related.code === Diagnostics.Did_you_forget_to_use_await.code));
     }
 
-    function getAwaitableExpression(sourceFile: SourceFile, span: TextSpan): Expression | undefined {
+    function getAwaitableExpression(sourceFile: SourceFile, errorCode: number, span: TextSpan, cancellationToken: CancellationToken, program: Program): Expression | undefined {
         const token = getTokenAtPosition(sourceFile, span.start);
-        return findAncestor(token, node => {
+        const expression = findAncestor(token, node => {
             if (node.getStart(sourceFile) < span.start || node.getEnd() > textSpanEnd(span)) {
                 return "quit";
             }
             return isExpression(node) && textSpansEqual(span, createTextSpanFromNode(node, sourceFile));
         }) as Expression | undefined;
+
+        return isMissingAwaitError(sourceFile, errorCode, span, cancellationToken, program) ? expression : undefined;
     }
 
-    function findAwaitableInitializer(expression: Node, sourceFile: SourceFile, program: Program): Expression | undefined {
+    function findAwaitableInitializer(expression: Node, sourceFile: SourceFile, checker: TypeChecker): Expression | undefined {
         if (!isIdentifier(expression)) {
             return;
         }
 
-        const checker = program.getTypeChecker();
         const symbol = checker.getSymbolAtLocation(expression);
         if (!symbol) {
             return;
@@ -95,7 +122,18 @@ namespace ts.codefix {
         return declaration.initializer;
     }
 
-    function makeChange(changeTracker: textChanges.ChangeTracker, sourceFile: SourceFile, insertionSite: Expression) {
+    function makeChange(changeTracker: textChanges.ChangeTracker, sourceFile: SourceFile, checker: TypeChecker, insertionSite: Expression) {
+        if (isBinaryExpression(insertionSite)) {
+            const { left, right } = insertionSite;
+            const leftType = checker.getTypeAtLocation(left);
+            const rightType = checker.getTypeAtLocation(right);
+            const newLeft = checker.getPromisedTypeOfPromise(leftType) ? createAwait(left) : left;
+            const newRight = checker.getPromisedTypeOfPromise(rightType) ? createAwait(right) : right;
+            changeTracker.replaceNode(sourceFile, left, newLeft);
+            changeTracker.replaceNode(sourceFile, right, newRight);
+            return;
+        }
+
         const parentExpression = tryCast(insertionSite.parent, isExpression);
         const awaitExpression = createAwait(insertionSite);
         changeTracker.replaceRange(
