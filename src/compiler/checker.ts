@@ -23713,9 +23713,9 @@ namespace ts {
             }
         }
 
-        function checkArithmeticOperandType(operand: Node, type: Type, diagnostic: DiagnosticMessage, tryAwait = false): boolean {
+        function checkArithmeticOperandType(operand: Node, type: Type, diagnostic: DiagnosticMessage, isAwaitValid = false): boolean {
             if (!isTypeAssignableTo(type, numberOrBigIntType)) {
-                const awaitedType = tryAwait && getAwaitedTypeOfPromise(type);
+                const awaitedType = isAwaitValid && getAwaitedTypeOfPromise(type);
                 errorAndMaybeSuggestAwait(
                     operand,
                     !!awaitedType && isTypeAssignableTo(awaitedType, numberOrBigIntType),
@@ -24327,8 +24327,8 @@ namespace ts {
                     }
                     else {
                         // otherwise just check each operand separately and report errors as normal
-                        const leftOk = checkArithmeticOperandType(left, leftType, Diagnostics.The_left_hand_side_of_an_arithmetic_operation_must_be_of_type_any_number_bigint_or_an_enum_type, /*tryAwait*/ true);
-                        const rightOk = checkArithmeticOperandType(right, rightType, Diagnostics.The_right_hand_side_of_an_arithmetic_operation_must_be_of_type_any_number_bigint_or_an_enum_type, /*tryAwait*/ true);
+                        const leftOk = checkArithmeticOperandType(left, leftType, Diagnostics.The_left_hand_side_of_an_arithmetic_operation_must_be_of_type_any_number_bigint_or_an_enum_type, /*isAwaitValid*/ true);
+                        const rightOk = checkArithmeticOperandType(right, rightType, Diagnostics.The_right_hand_side_of_an_arithmetic_operation_must_be_of_type_any_number_bigint_or_an_enum_type, /*isAwaitValid*/ true);
                         let resultType: Type;
                         // If both are any or unknown, allow operation; assume it will resolve to number
                         if ((isTypeAssignableToKind(leftType, TypeFlags.AnyOrUnknown) && isTypeAssignableToKind(rightType, TypeFlags.AnyOrUnknown)) ||
