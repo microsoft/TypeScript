@@ -171,19 +171,19 @@ export class someClass { }
 {
   "program": {
     "fileInfos": {
-      "/lib/lib.d.ts": {
+      "../../lib/lib.d.ts": {
         "version": "-15964756381",
         "signature": "-15964756381"
       },
-      "/src/core/anothermodule.ts": {
+      "./anothermodule.ts": {
         "version": "-2676574883",
         "signature": "25219880154"
       },
-      "/src/core/index.ts": {
+      "./index.ts": {
         "version": "-13387000654",
         "signature": "12514354613"
       },
-      "/src/core/some_decl.d.ts": {
+      "./some_decl.d.ts": {
         "version": "-9253692965",
         "signature": "-9253692965"
       }
@@ -193,15 +193,15 @@ export class someClass { }
       "declaration": true,
       "declarationMap": true,
       "skipDefaultLibCheck": true,
-      "configFilePath": "/src/core/tsconfig.json"
+      "configFilePath": "./tsconfig.json"
     },
     "referencedMap": {},
     "exportedModulesMap": {},
     "semanticDiagnosticsPerFile": [
-      "/lib/lib.d.ts",
-      "/src/core/anothermodule.ts",
-      "/src/core/index.ts",
-      "/src/core/some_decl.d.ts"
+      "../../lib/lib.d.ts",
+      "./anothermodule.ts",
+      "./index.ts",
+      "./some_decl.d.ts"
     ]
   },
   "version": "FakeTSVersion"
@@ -211,19 +211,19 @@ export class someClass { }
 {
   "program": {
     "fileInfos": {
-      "/lib/lib.d.ts": {
+      "../../lib/lib.d.ts": {
         "version": "-15964756381",
         "signature": "-15964756381"
       },
-      "/src/core/index.ts": {
+      "../core/index.ts": {
         "version": "-2069755619",
         "signature": "-2069755619"
       },
-      "/src/core/anothermodule.ts": {
+      "../core/anothermodule.ts": {
         "version": "7652028357",
         "signature": "7652028357"
       },
-      "/src/logic/index.ts": {
+      "./index.ts": {
         "version": "-5786964698",
         "signature": "-6548680073"
       }
@@ -234,24 +234,24 @@ export class someClass { }
       "sourceMap": true,
       "forceConsistentCasingInFileNames": true,
       "skipDefaultLibCheck": true,
-      "configFilePath": "/src/logic/tsconfig.json"
+      "configFilePath": "./tsconfig.json"
     },
     "referencedMap": {
-      "/src/logic/index.ts": [
-        "/src/core/anothermodule.d.ts",
-        "/src/core/index.d.ts"
+      "./index.ts": [
+        "../core/anothermodule.d.ts",
+        "../core/index.d.ts"
       ]
     },
     "exportedModulesMap": {
-      "/src/logic/index.ts": [
-        "/src/core/anothermodule.d.ts"
+      "./index.ts": [
+        "../core/anothermodule.d.ts"
       ]
     },
     "semanticDiagnosticsPerFile": [
-      "/lib/lib.d.ts",
-      "/src/core/anothermodule.ts",
-      "/src/core/index.ts",
-      "/src/logic/index.ts"
+      "../../lib/lib.d.ts",
+      "../core/anothermodule.ts",
+      "../core/index.ts",
+      "./index.ts"
     ]
   },
   "version": "FakeTSVersion"
@@ -261,23 +261,23 @@ export class someClass { }
 {
   "program": {
     "fileInfos": {
-      "/lib/lib.d.ts": {
+      "../../lib/lib.d.ts": {
         "version": "-15964756381",
         "signature": "-15964756381"
       },
-      "/src/core/index.ts": {
+      "../core/index.ts": {
         "version": "-2069755619",
         "signature": "-2069755619"
       },
-      "/src/core/anothermodule.ts": {
+      "../core/anothermodule.ts": {
         "version": "7652028357",
         "signature": "7652028357"
       },
-      "/src/logic/index.ts": {
+      "../logic/index.ts": {
         "version": "-6548680073",
         "signature": "-6548680073"
       },
-      "/src/tests/index.ts": {
+      "./index.ts": {
         "version": "12336236525",
         "signature": "-9209611"
       }
@@ -287,32 +287,32 @@ export class someClass { }
       "declaration": true,
       "forceConsistentCasingInFileNames": true,
       "skipDefaultLibCheck": true,
-      "configFilePath": "/src/tests/tsconfig.json"
+      "configFilePath": "./tsconfig.json"
     },
     "referencedMap": {
-      "/src/logic/index.ts": [
-        "/src/core/anothermodule.d.ts"
+      "../logic/index.ts": [
+        "../core/anothermodule.d.ts"
       ],
-      "/src/tests/index.ts": [
-        "/src/core/anothermodule.d.ts",
-        "/src/core/index.d.ts",
-        "/src/logic/index.d.ts"
+      "./index.ts": [
+        "../core/anothermodule.d.ts",
+        "../core/index.d.ts",
+        "../logic/index.d.ts"
       ]
     },
     "exportedModulesMap": {
-      "/src/logic/index.ts": [
-        "/src/core/anothermodule.d.ts"
+      "../logic/index.ts": [
+        "../core/anothermodule.d.ts"
       ],
-      "/src/tests/index.ts": [
-        "/src/core/anothermodule.d.ts"
+      "./index.ts": [
+        "../core/anothermodule.d.ts"
       ]
     },
     "semanticDiagnosticsPerFile": [
-      "/lib/lib.d.ts",
-      "/src/core/anothermodule.ts",
-      "/src/core/index.ts",
-      "/src/logic/index.ts",
-      "/src/tests/index.ts"
+      "../../lib/lib.d.ts",
+      "../core/anothermodule.ts",
+      "../core/index.ts",
+      "../logic/index.ts",
+      "./index.ts"
     ]
   },
   "version": "FakeTSVersion"

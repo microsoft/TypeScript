@@ -5,7 +5,7 @@
 >response : Symbol(response, Decl(example.ts, 2, 7))
 >fetch : Symbol(fetch, Decl(lib.dom.d.ts, --, --))
 >new URL("../hamsters.jpg", import.meta.url).toString : Symbol(Object.toString, Decl(lib.es5.d.ts, --, --))
->URL : Symbol(URL, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
+>URL : Symbol(URL, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
 >toString : Symbol(Object.toString, Decl(lib.es5.d.ts, --, --))
 
   const blob = await response.blob();
@@ -26,7 +26,7 @@
 >image : Symbol(image, Decl(example.ts, 7, 7))
 >src : Symbol(HTMLImageElement.src, Decl(lib.dom.d.ts, --, --))
 >URL.createObjectURL : Symbol(createObjectURL, Decl(lib.dom.d.ts, --, --))
->URL : Symbol(URL, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
+>URL : Symbol(URL, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
 >createObjectURL : Symbol(createObjectURL, Decl(lib.dom.d.ts, --, --))
 >blob : Symbol(blob, Decl(example.ts, 3, 7))
 

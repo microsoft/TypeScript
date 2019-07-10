@@ -502,30 +502,29 @@ namespace ts {
         return output;
     }
 
-    export function flattenDiagnosticMessageText(messageText: string | DiagnosticMessageChain | undefined, newLine: string): string {
-        if (isString(messageText)) {
-            return messageText;
+    export function flattenDiagnosticMessageText(diag: string | DiagnosticMessageChain | undefined, newLine: string, indent = 0): string {
+        if (isString(diag)) {
+            return diag;
         }
-        else {
-            let diagnosticChain = messageText;
-            let result = "";
+        else if (diag === undefined) {
+            return "";
+        }
+        let result = "";
+        if (indent) {
+            result += newLine;
 
-            let indent = 0;
-            while (diagnosticChain) {
-                if (indent) {
-                    result += newLine;
-
-                    for (let i = 0; i < indent; i++) {
-                        result += "  ";
-                    }
-                }
-                result += diagnosticChain.messageText;
-                indent++;
-                diagnosticChain = diagnosticChain.next;
+            for (let i = 0; i < indent; i++) {
+                result += "  ";
             }
-
-            return result;
         }
+        result += diag.messageText;
+        indent++;
+        if (diag.next) {
+            for (const kid of diag.next) {
+                result += flattenDiagnosticMessageText(kid, newLine, indent);
+            }
+        }
+        return result;
     }
 
     /* @internal */
@@ -1395,7 +1394,7 @@ namespace ts {
                 const filePath = newSourceFile.path;
                 addFileToFilesByName(newSourceFile, filePath, newSourceFile.resolvedPath);
                 // Set the file as found during node modules search if it was found that way in old progra,
-                if (oldProgram.isSourceFileFromExternalLibrary(oldProgram.getSourceFileByPath(filePath)!)) {
+                if (oldProgram.isSourceFileFromExternalLibrary(oldProgram.getSourceFileByPath(newSourceFile.resolvedPath)!)) {
                     sourceFilesFoundSearchingNodeModules.set(filePath, true);
                 }
             }

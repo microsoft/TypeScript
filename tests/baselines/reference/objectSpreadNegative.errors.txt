@@ -10,7 +10,8 @@ tests/cases/conformance/types/spread/objectSpreadNegative.ts(33,19): error TS269
 tests/cases/conformance/types/spread/objectSpreadNegative.ts(34,20): error TS2698: Spread types may only be created from object types.
 tests/cases/conformance/types/spread/objectSpreadNegative.ts(36,20): error TS2698: Spread types may only be created from object types.
 tests/cases/conformance/types/spread/objectSpreadNegative.ts(38,19): error TS2698: Spread types may only be created from object types.
-tests/cases/conformance/types/spread/objectSpreadNegative.ts(43,1): error TS2349: Cannot invoke an expression whose type lacks a call signature. Type '{}' has no compatible call signatures.
+tests/cases/conformance/types/spread/objectSpreadNegative.ts(43,1): error TS2349: This expression is not callable.
+  Type '{}' has no call signatures.
 tests/cases/conformance/types/spread/objectSpreadNegative.ts(47,1): error TS2322: Type '12' is not assignable to type 'undefined'.
 tests/cases/conformance/types/spread/objectSpreadNegative.ts(53,9): error TS2339: Property 'm' does not exist on type '{ p: number; }'.
 tests/cases/conformance/types/spread/objectSpreadNegative.ts(58,11): error TS2339: Property 'a' does not exist on type '{}'.
@@ -85,8 +86,9 @@ tests/cases/conformance/types/spread/objectSpreadNegative.ts(58,11): error TS233
     // functions are skipped
     let spreadFunc = { ...function () { } }
     spreadFunc(); // error, no call signature
-    ~~~~~~~~~~~~
-!!! error TS2349: Cannot invoke an expression whose type lacks a call signature. Type '{}' has no compatible call signatures.
+    ~~~~~~~~~~
+!!! error TS2349: This expression is not callable.
+!!! error TS2349:   Type '{}' has no call signatures.
     
     // write-only properties get skipped
     let setterOnly = { ...{ set b (bad: number) { } } };

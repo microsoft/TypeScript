@@ -33,6 +33,17 @@ var t5 = new new Date;
 // Can be an expression
 new String;
 
+// Error on union
+declare const union: { a: string } | { b: string }
+new union;
+
+// Error on union with one constructor
+declare const ctorUnion: { a: string } | (new (a: string) => void)
+new ctorUnion("");
+
+// Error on union with incompatible constructors
+declare const ctorUnion2: (new <T extends number>(a: T) => void) | (new <T>(a: string) => void)
+new ctorUnion2("");
 
 module M {
     export class T {

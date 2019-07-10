@@ -72,9 +72,13 @@ namespace ts.SmartSelectionRange {
         function pushSelectionRange(start: number, end: number): void {
             // Skip empty ranges
             if (start !== end) {
-                // Skip ranges that are identical to the parent
                 const textSpan = createTextSpanFromBounds(start, end);
-                if (!selectionRange || !textSpansEqual(textSpan, selectionRange.textSpan)) {
+                if (!selectionRange || (
+                    // Skip ranges that are identical to the parent
+                    !textSpansEqual(textSpan, selectionRange.textSpan) &&
+                    // Skip ranges that don’t contain the original position
+                    textSpanIntersectsWithPosition(textSpan, pos)
+                )) {
                     selectionRange = { textSpan, ...selectionRange && { parent: selectionRange } };
                 }
             }

@@ -57,7 +57,7 @@ const arrowFunc = (p: Promise<number>) => {
 };
 
 function* generatorFunc(p: Promise<number>) {
->generatorFunc : (p: Promise<number>) => IterableIterator<number>
+>generatorFunc : (p: Promise<number>) => Generator<number, void, unknown>
 >p : Promise<number>
 
   for await (const _ of []);
