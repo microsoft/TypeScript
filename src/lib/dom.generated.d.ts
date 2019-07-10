@@ -133,6 +133,34 @@ interface AudioWorkletNodeOptions extends AudioNodeOptions {
     processorOptions?: any;
 }
 
+interface AuthenticationExtensionsClientInputs {
+    appid?: string;
+    authnSel?: AuthenticatorSelectionList;
+    exts?: boolean;
+    loc?: boolean;
+    txAuthGeneric?: txAuthGenericArg;
+    txAuthSimple?: string;
+    uvi?: boolean;
+    uvm?: boolean;
+}
+
+interface AuthenticationExtensionsClientOutputs {
+    appid?: boolean;
+    authnSel?: boolean;
+    exts?: AuthenticationExtensionsSupported;
+    loc?: Coordinates;
+    txAuthGeneric?: ArrayBuffer;
+    txAuthSimple?: string;
+    uvi?: ArrayBuffer;
+    uvm?: UvmEntries;
+}
+
+interface AuthenticatorSelectionCriteria {
+    authenticatorAttachment?: AuthenticatorAttachment;
+    requireResidentKey?: boolean;
+    userVerification?: UserVerificationRequirement;
+}
+
 interface BiquadFilterOptions extends AudioNodeOptions {
     Q?: number;
     detune?: number;
@@ -158,6 +186,7 @@ interface CacheQueryOptions {
 
 interface CanvasRenderingContext2DSettings {
     alpha?: boolean;
+    desynchronized?: boolean;
 }
 
 interface ChannelMergerOptions extends AudioNodeOptions {
@@ -251,11 +280,13 @@ interface ConvolverOptions extends AudioNodeOptions {
 }
 
 interface CredentialCreationOptions {
+    publicKey?: PublicKeyCredentialCreationOptions;
     signal?: AbortSignal;
 }
 
 interface CredentialRequestOptions {
     mediation?: CredentialMediationRequirement;
+    publicKey?: PublicKeyCredentialRequestOptions;
     signal?: AbortSignal;
 }
 
@@ -549,6 +580,10 @@ interface IIRFilterOptions extends AudioNodeOptions {
     feedforward: number[];
 }
 
+interface ImageBitmapRenderingContextSettings {
+    alpha?: boolean;
+}
+
 interface ImageEncodeOptions {
     quality?: number;
     type?: string;
@@ -700,7 +735,6 @@ interface MediaTrackCapabilities {
     resizeMode?: string[];
     sampleRate?: ULongRange;
     sampleSize?: ULongRange;
-    volume?: DoubleRange;
     width?: ULongRange;
 }
 
@@ -719,7 +753,6 @@ interface MediaTrackConstraintSet {
     resizeMode?: ConstrainDOMString;
     sampleRate?: ConstrainULong;
     sampleSize?: ConstrainULong;
-    volume?: ConstrainDouble;
     width?: ConstrainULong;
 }
 
@@ -742,7 +775,6 @@ interface MediaTrackSettings {
     resizeMode?: string;
     sampleRate?: number;
     sampleSize?: number;
-    volume?: number;
     width?: number;
 }
 
@@ -761,7 +793,6 @@ interface MediaTrackSupportedConstraints {
     resizeMode?: boolean;
     sampleRate?: boolean;
     sampleSize?: boolean;
-    volume?: boolean;
     width?: boolean;
 }
 
@@ -1031,6 +1062,52 @@ interface PropertyIndexedKeyframes {
     easing?: string | string[];
     offset?: number | (number | null)[];
     [property: string]: string | string[] | number | null | (number | null)[] | undefined;
+}
+
+interface PublicKeyCredentialCreationOptions {
+    attestation?: AttestationConveyancePreference;
+    authenticatorSelection?: AuthenticatorSelectionCriteria;
+    challenge: BufferSource;
+    excludeCredentials?: PublicKeyCredentialDescriptor[];
+    extensions?: AuthenticationExtensionsClientInputs;
+    pubKeyCredParams: PublicKeyCredentialParameters[];
+    rp: PublicKeyCredentialRpEntity;
+    timeout?: number;
+    user: PublicKeyCredentialUserEntity;
+}
+
+interface PublicKeyCredentialDescriptor {
+    id: BufferSource;
+    transports?: AuthenticatorTransport[];
+    type: PublicKeyCredentialType;
+}
+
+interface PublicKeyCredentialEntity {
+    icon?: string;
+    name: string;
+}
+
+interface PublicKeyCredentialParameters {
+    alg: COSEAlgorithmIdentifier;
+    type: PublicKeyCredentialType;
+}
+
+interface PublicKeyCredentialRequestOptions {
+    allowCredentials?: PublicKeyCredentialDescriptor[];
+    challenge: BufferSource;
+    extensions?: AuthenticationExtensionsClientInputs;
+    rpId?: string;
+    timeout?: number;
+    userVerification?: UserVerificationRequirement;
+}
+
+interface PublicKeyCredentialRpEntity extends PublicKeyCredentialEntity {
+    id?: string;
+}
+
+interface PublicKeyCredentialUserEntity extends PublicKeyCredentialEntity {
+    displayName: string;
+    id: BufferSource;
 }
 
 interface PushPermissionDescriptor extends PermissionDescriptor {
@@ -1761,6 +1838,11 @@ interface WorkletOptions {
     credentials?: RequestCredentials;
 }
 
+interface txAuthGenericArg {
+    content: ArrayBuffer;
+    contentType: string;
+}
+
 interface EventListener {
     (evt: Event): void;
 }
@@ -1974,7 +2056,7 @@ interface ApplicationCacheEventMap {
     "error": Event;
     "noupdate": Event;
     "obsolete": Event;
-    "progress": ProgressEvent;
+    "progress": ProgressEvent<ApplicationCache>;
     "updateready": Event;
 }
 
@@ -1992,7 +2074,7 @@ interface ApplicationCache extends EventTarget {
     /** @deprecated */
     onobsolete: ((this: ApplicationCache, ev: Event) => any) | null;
     /** @deprecated */
-    onprogress: ((this: ApplicationCache, ev: ProgressEvent) => any) | null;
+    onprogress: ((this: ApplicationCache, ev: ProgressEvent<ApplicationCache>) => any) | null;
     /** @deprecated */
     onupdateready: ((this: ApplicationCache, ev: Event) => any) | null;
     /** @deprecated */
@@ -2284,6 +2366,35 @@ interface AudioWorkletNode extends AudioNode {
 declare var AudioWorkletNode: {
     prototype: AudioWorkletNode;
     new(context: BaseAudioContext, name: string, options?: AudioWorkletNodeOptions): AudioWorkletNode;
+};
+
+interface AuthenticatorAssertionResponse extends AuthenticatorResponse {
+    readonly authenticatorData: ArrayBuffer;
+    readonly signature: ArrayBuffer;
+    readonly userHandle: ArrayBuffer | null;
+}
+
+declare var AuthenticatorAssertionResponse: {
+    prototype: AuthenticatorAssertionResponse;
+    new(): AuthenticatorAssertionResponse;
+};
+
+interface AuthenticatorAttestationResponse extends AuthenticatorResponse {
+    readonly attestationObject: ArrayBuffer;
+}
+
+declare var AuthenticatorAttestationResponse: {
+    prototype: AuthenticatorAttestationResponse;
+    new(): AuthenticatorAttestationResponse;
+};
+
+interface AuthenticatorResponse {
+    readonly clientDataJSON: ArrayBuffer;
+}
+
+declare var AuthenticatorResponse: {
+    prototype: AuthenticatorResponse;
+    new(): AuthenticatorResponse;
 };
 
 interface BarProp {
@@ -2684,9 +2795,9 @@ interface CSSStyleDeclaration {
     captionSide: string | null;
     caretColor: string;
     clear: string | null;
-    clip: string | null;
-    clipPath: string | null;
-    clipRule: string | null;
+    clip: string;
+    clipPath: string;
+    clipRule: string;
     color: string | null;
     colorInterpolationFilters: string;
     columnCount: string;
@@ -2793,8 +2904,13 @@ interface CSSStyleDeclaration {
     markerEnd: string | null;
     markerMid: string | null;
     markerStart: string | null;
-    mask: string | null;
-    maskImage: string | null;
+    mask: string;
+    maskComposite: string;
+    maskImage: string;
+    maskPosition: string;
+    maskRepeat: string;
+    maskSize: string;
+    maskType: string;
     maxHeight: string | null;
     maxWidth: string | null;
     minHeight: string | null;
@@ -2856,11 +2972,11 @@ interface CSSStyleDeclaration {
     outlineOffset: string;
     outlineStyle: string;
     outlineWidth: string;
-    overflow: string | null;
+    overflow: string;
     overflowAnchor: string;
     overflowWrap: string;
-    overflowX: string | null;
-    overflowY: string | null;
+    overflowX: string;
+    overflowY: string;
     padding: string | null;
     paddingBottom: string | null;
     paddingLeft: string | null;
@@ -3026,6 +3142,7 @@ interface CSSStyleDeclaration {
     webkitFlexWrap: string;
     /** @deprecated */
     webkitJustifyContent: string;
+    webkitLineClamp: string;
     /** @deprecated */
     webkitMask: string;
     /** @deprecated */
@@ -4327,7 +4444,7 @@ interface DocumentEventMap extends GlobalEventHandlersEventMap, DocumentAndEleme
     "fullscreenerror": Event;
     "pointerlockchange": Event;
     "pointerlockerror": Event;
-    "readystatechange": ProgressEvent;
+    "readystatechange": ProgressEvent<Document>;
     "visibilitychange": Event;
 }
 
@@ -4486,7 +4603,7 @@ interface Document extends Node, NonElementParentNode, DocumentOrShadowRoot, Par
      * Fires when the state of the object has changed.
      * @param ev The event
      */
-    onreadystatechange: ((this: Document, ev: ProgressEvent) => any) | null;
+    onreadystatechange: ((this: Document, ev: ProgressEvent<Document>) => any) | null;
     onvisibilitychange: ((this: Document, ev: Event) => any) | null;
     /**
      * Returns document's origin.
@@ -4599,7 +4716,6 @@ interface Document extends Node, NonElementParentNode, DocumentOrShadowRoot, Par
     createEvent(eventInterface: "ErrorEvent"): ErrorEvent;
     createEvent(eventInterface: "Event"): Event;
     createEvent(eventInterface: "Events"): Event;
-    createEvent(eventInterface: "FileReaderProgressEvent"): FileReaderProgressEvent;
     createEvent(eventInterface: "FocusEvent"): FocusEvent;
     createEvent(eventInterface: "FocusNavigationEvent"): FocusNavigationEvent;
     createEvent(eventInterface: "GamepadEvent"): GamepadEvent;
@@ -4850,7 +4966,6 @@ interface DocumentEvent {
     createEvent(eventInterface: "ErrorEvent"): ErrorEvent;
     createEvent(eventInterface: "Event"): Event;
     createEvent(eventInterface: "Events"): Event;
-    createEvent(eventInterface: "FileReaderProgressEvent"): FileReaderProgressEvent;
     createEvent(eventInterface: "FocusEvent"): FocusEvent;
     createEvent(eventInterface: "FocusNavigationEvent"): FocusNavigationEvent;
     createEvent(eventInterface: "GamepadEvent"): GamepadEvent;
@@ -5256,7 +5371,7 @@ interface Event {
      */
     readonly type: string;
     /**
-     * Returns the item objects of event's path (objects on which listeners will be invoked), except for any nodes in shadow trees of which the shadow root's mode is "closed" that are not reachable from event's currentTarget.
+     * Returns the invocation target objects of event's path (objects on which listeners will be invoked), except for any nodes in shadow trees of which the shadow root's mode is "closed" that are not reachable from event's currentTarget.
      */
     composedPath(): EventTarget[];
     initEvent(type: string, bubbles?: boolean, cancelable?: boolean): void;
@@ -5418,23 +5533,23 @@ declare var FileList: {
 };
 
 interface FileReaderEventMap {
-    "abort": FileReaderProgressEvent;
-    "error": FileReaderProgressEvent;
-    "load": FileReaderProgressEvent;
-    "loadend": FileReaderProgressEvent;
-    "loadstart": FileReaderProgressEvent;
-    "progress": FileReaderProgressEvent;
+    "abort": ProgressEvent<FileReader>;
+    "error": ProgressEvent<FileReader>;
+    "load": ProgressEvent<FileReader>;
+    "loadend": ProgressEvent<FileReader>;
+    "loadstart": ProgressEvent<FileReader>;
+    "progress": ProgressEvent<FileReader>;
 }
 
 /** Lets web applications asynchronously read the contents of files (or raw data buffers) stored on the user's computer, using File or Blob objects to specify the file or data to read. */
 interface FileReader extends EventTarget {
     readonly error: DOMException | null;
-    onabort: ((this: FileReader, ev: FileReaderProgressEvent) => any) | null;
-    onerror: ((this: FileReader, ev: FileReaderProgressEvent) => any) | null;
-    onload: ((this: FileReader, ev: FileReaderProgressEvent) => any) | null;
-    onloadend: ((this: FileReader, ev: FileReaderProgressEvent) => any) | null;
-    onloadstart: ((this: FileReader, ev: FileReaderProgressEvent) => any) | null;
-    onprogress: ((this: FileReader, ev: FileReaderProgressEvent) => any) | null;
+    onabort: ((this: FileReader, ev: ProgressEvent<FileReader>) => any) | null;
+    onerror: ((this: FileReader, ev: ProgressEvent<FileReader>) => any) | null;
+    onload: ((this: FileReader, ev: ProgressEvent<FileReader>) => any) | null;
+    onloadend: ((this: FileReader, ev: ProgressEvent<FileReader>) => any) | null;
+    onloadstart: ((this: FileReader, ev: ProgressEvent<FileReader>) => any) | null;
+    onprogress: ((this: FileReader, ev: ProgressEvent<FileReader>) => any) | null;
     readonly readyState: number;
     readonly result: string | ArrayBuffer | null;
     abort(): void;
@@ -5458,10 +5573,6 @@ declare var FileReader: {
     readonly EMPTY: number;
     readonly LOADING: number;
 };
-
-interface FileReaderProgressEvent extends ProgressEvent {
-    readonly target: FileReader | null;
-}
 
 /** Focus-related events like focus, blur, focusin, or focusout. */
 interface FocusEvent extends UIEvent {
@@ -6348,9 +6459,11 @@ interface HTMLCanvasElement extends HTMLElement {
      * Returns an object that provides methods and properties for drawing and manipulating images and graphics on a canvas element in a document. A context object includes information about colors, line widths, fonts, and other graphic parameters that can be drawn on a canvas.
      * @param contextId The identifier (ID) of the type of canvas to create. Internet Explorer 9 and Internet Explorer 10 support only a 2-D context using canvas.getContext("2d"); IE11 Preview also supports 3-D or WebGL context using canvas.getContext("experimental-webgl");
      */
-    getContext(contextId: "2d", contextAttributes?: CanvasRenderingContext2DSettings): CanvasRenderingContext2D | null;
-    getContext(contextId: "webgl" | "experimental-webgl", contextAttributes?: WebGLContextAttributes): WebGLRenderingContext | null;
-    getContext(contextId: string, contextAttributes?: {}): CanvasRenderingContext2D | WebGLRenderingContext | null;
+    getContext(contextId: "2d", options?: CanvasRenderingContext2DSettings): CanvasRenderingContext2D | null;
+    getContext(contextId: "bitmaprenderer", options?: ImageBitmapRenderingContextSettings): ImageBitmapRenderingContext | null;
+    getContext(contextId: "webgl", options?: WebGLContextAttributes): WebGLRenderingContext | null;
+    getContext(contextId: "webgl2", options?: WebGLContextAttributes): WebGL2RenderingContext | null;
+    getContext(contextId: string, options?: any): RenderingContext | null;
     toBlob(callback: BlobCallback, type?: string, quality?: any): void;
     /**
      * Returns the content of the current canvas as an image that you can use as a source for another canvas or an HTML element.
@@ -7849,7 +7962,6 @@ interface HTMLObjectElement extends HTMLElement {
      * Sets or retrieves the MIME type of the object.
      */
     type: string;
-    typeMustMatch: boolean;
     /**
      * Sets or retrieves the URL, often with a bookmark extension (#name), to use as a client-side image map.
      */
@@ -9584,7 +9696,7 @@ interface ImageBitmapRenderingContext {
     /**
      * Returns the canvas element that the context is bound to.
      */
-    readonly canvas: HTMLCanvasElement;
+    readonly canvas: HTMLCanvasElement | OffscreenCanvas;
     /**
      * Transfers the underlying bitmap data from imageBitmap to context, and the bitmap becomes the contents of the canvas element to which context is bound.
      */
@@ -10385,7 +10497,6 @@ interface MediaStreamTrackEventMap {
     "ended": Event;
     "isolationchange": Event;
     "mute": Event;
-    "overconstrained": MediaStreamErrorEvent;
     "unmute": Event;
 }
 
@@ -10400,7 +10511,6 @@ interface MediaStreamTrack extends EventTarget {
     onended: ((this: MediaStreamTrack, ev: Event) => any) | null;
     onisolationchange: ((this: MediaStreamTrack, ev: Event) => any) | null;
     onmute: ((this: MediaStreamTrack, ev: Event) => any) | null;
-    onoverconstrained: ((this: MediaStreamTrack, ev: MediaStreamErrorEvent) => any) | null;
     onunmute: ((this: MediaStreamTrack, ev: Event) => any) | null;
     readonly readyState: MediaStreamTrackState;
     applyConstraints(constraints?: MediaTrackConstraints): Promise<void>;
@@ -10521,9 +10631,21 @@ declare var MessagePort: {
 
 /** Provides contains information about a MIME type associated with a particular plugin. NavigatorPlugins.mimeTypes returns an array of this object. */
 interface MimeType {
+    /**
+     * Returns the MIME type's description.
+     */
     readonly description: string;
+    /**
+     * Returns the Plugin object that implements this MIME type.
+     */
     readonly enabledPlugin: Plugin;
+    /**
+     * Returns the MIME type's typical file extensions, in a comma-separated list.
+     */
     readonly suffixes: string;
+    /**
+     * Returns the MIME type.
+     */
     readonly type: string;
 }
 
@@ -10535,9 +10657,9 @@ declare var MimeType: {
 /** Returns an array of MimeType instances, each of which contains information about a supported browser plugins. This object is returned by NavigatorPlugins.mimeTypes. */
 interface MimeTypeArray {
     readonly length: number;
-    item(index: number): Plugin;
-    namedItem(type: string): Plugin;
-    [index: number]: Plugin;
+    item(index: number): MimeType | null;
+    namedItem(name: string): MimeType | null;
+    [index: number]: MimeType;
 }
 
 declare var MimeTypeArray: {
@@ -10695,30 +10817,23 @@ declare var NavigationPreloadManager: {
 };
 
 /** The state and the identity of the user agent. It allows scripts to query it and to register themselves to carry on some activities. */
-interface Navigator extends NavigatorID, NavigatorOnLine, NavigatorContentUtils, NavigatorStorageUtils, MSNavigatorDoNotTrack, MSFileSaver, NavigatorBeacon, NavigatorConcurrentHardware, NavigatorUserMedia, NavigatorLanguage, NavigatorStorage, NavigatorAutomationInformation {
+interface Navigator extends NavigatorID, NavigatorLanguage, NavigatorOnLine, NavigatorContentUtils, NavigatorCookies, NavigatorPlugins, NavigatorConcurrentHardware, NavigatorStorage, NavigatorAutomationInformation, MSFileSaver, MSNavigatorDoNotTrack, NavigatorBeacon {
     readonly activeVRDisplays: ReadonlyArray<VRDisplay>;
-    readonly authentication: WebAuthentication;
     readonly clipboard: Clipboard;
-    readonly cookieEnabled: boolean;
     readonly credentials: CredentialsContainer;
     readonly doNotTrack: string | null;
-    gamepadInputEmulation: GamepadInputEmulationType;
     readonly geolocation: Geolocation;
     readonly maxTouchPoints: number;
     readonly mediaDevices: MediaDevices;
-    readonly mimeTypes: MimeTypeArray;
     readonly msManipulationViewsEnabled: boolean;
     readonly msMaxTouchPoints: number;
     readonly msPointerEnabled: boolean;
     readonly permissions: Permissions;
-    readonly plugins: PluginArray;
     readonly pointerEnabled: boolean;
     readonly serviceWorker: ServiceWorkerContainer;
-    readonly webdriver: boolean;
     getGamepads(): (Gamepad | null)[];
     getUserMedia(constraints: MediaStreamConstraints, successCallback: NavigatorUserMediaSuccessCallback, errorCallback: NavigatorUserMediaErrorCallback): void;
     getVRDisplays(): Promise<VRDisplay[]>;
-    javaEnabled(): boolean;
     msLaunchUri(uri: string, successCallback?: MSLaunchUriCallback, noHandlerCallback?: MSLaunchUriCallback): void;
     requestMediaKeySystemAccess(keySystem: string, supportedConfigurations: MediaKeySystemConfiguration[]): Promise<MediaKeySystemAccess>;
     vibrate(pattern: number | number[]): boolean;
@@ -10742,18 +10857,26 @@ interface NavigatorConcurrentHardware {
 }
 
 interface NavigatorContentUtils {
+    registerProtocolHandler(scheme: string, url: string, title: string): void;
+    unregisterProtocolHandler(scheme: string, url: string): void;
+}
+
+interface NavigatorCookies {
+    readonly cookieEnabled: boolean;
 }
 
 interface NavigatorID {
     readonly appCodeName: string;
     readonly appName: string;
     readonly appVersion: string;
+    readonly oscpu: string;
     readonly platform: string;
     readonly product: string;
     readonly productSub: string;
     readonly userAgent: string;
     readonly vendor: string;
     readonly vendorSub: string;
+    taintEnabled(): boolean;
 }
 
 interface NavigatorLanguage {
@@ -10765,17 +10888,14 @@ interface NavigatorOnLine {
     readonly onLine: boolean;
 }
 
+interface NavigatorPlugins {
+    readonly mimeTypes: MimeTypeArray;
+    readonly plugins: PluginArray;
+    javaEnabled(): boolean;
+}
+
 interface NavigatorStorage {
     readonly storage: StorageManager;
-}
-
-interface NavigatorStorageUtils {
-}
-
-interface NavigatorUserMedia {
-    readonly mediaDevices: MediaDevices;
-    getDisplayMedia(constraints: MediaStreamConstraints): Promise<MediaStream>;
-    getUserMedia(constraints: MediaStreamConstraints, successCallback: NavigatorUserMediaSuccessCallback, errorCallback: NavigatorUserMediaErrorCallback): void;
 }
 
 /** Node is an interface from which a number of DOM API object types inherit. It allows those types to be treated similarly; for example, inheriting the same set of methods, or being tested in the same way. */
@@ -11214,12 +11334,16 @@ interface OffscreenCanvas extends EventTarget {
      */
     convertToBlob(options?: ImageEncodeOptions): Promise<Blob>;
     /**
-     * Returns an object that exposes an API for drawing on the OffscreenCanvas object. contextId specifies the desired API: "2d", "webgl", or "webgl2". options is handled by that API.
+     * Returns an object that exposes an API for drawing on the OffscreenCanvas object. contextId specifies the desired API: "2d", "bitmaprenderer", "webgl", or "webgl2". options is handled by that API.
      * 
      * This specification defines the "2d" context below, which is similar but distinct from the "2d" context that is created from a canvas element. The WebGL specifications define the "webgl" and "webgl2" contexts. [WEBGL]
      * 
      * Returns null if the canvas has already been initialized with another context type (e.g., trying to get a "2d" context after getting a "webgl" context).
      */
+    getContext(contextId: "2d", options?: CanvasRenderingContext2DSettings): OffscreenCanvasRenderingContext2D | null;
+    getContext(contextId: "bitmaprenderer", options?: ImageBitmapRenderingContextSettings): ImageBitmapRenderingContext | null;
+    getContext(contextId: "webgl", options?: WebGLContextAttributes): WebGLRenderingContext | null;
+    getContext(contextId: "webgl2", options?: WebGLContextAttributes): WebGL2RenderingContext | null;
     getContext(contextId: OffscreenRenderingContextId, options?: any): OffscreenRenderingContext | null;
     /**
      * Returns a newly created ImageBitmap object with the image in the OffscreenCanvas object. The image in the OffscreenCanvas object is replaced with a new blank image.
@@ -11725,13 +11849,27 @@ declare var Permissions: {
 
 /** Provides information about a browser plugin. */
 interface Plugin {
+    /**
+     * Returns the plugin's description.
+     */
     readonly description: string;
+    /**
+     * Returns the plugin library's filename, if applicable on the current platform.
+     */
     readonly filename: string;
+    /**
+     * Returns the number of MIME types, represented by MimeType objects, supported by the plugin.
+     */
     readonly length: number;
+    /**
+     * Returns the plugin's name.
+     */
     readonly name: string;
-    readonly version: string;
-    item(index: number): MimeType;
-    namedItem(type: string): MimeType;
+    /**
+     * Returns the specified MimeType object.
+     */
+    item(index: number): MimeType | null;
+    namedItem(name: string): MimeType | null;
     [index: number]: MimeType;
 }
 
@@ -11743,8 +11881,8 @@ declare var Plugin: {
 /** Used to store a list of Plugin objects describing the available plugins; it's returned by the window.navigator.plugins property. The PluginArray is not a JavaScript array, but has the length property and supports accessing individual items using bracket notation (plugins[2]), as well as via item(index) and namedItem("name") methods. */
 interface PluginArray {
     readonly length: number;
-    item(index: number): Plugin;
-    namedItem(name: string): Plugin;
+    item(index: number): Plugin | null;
+    namedItem(name: string): Plugin | null;
     refresh(reload?: boolean): void;
     [index: number]: Plugin;
 }
@@ -11809,9 +11947,10 @@ declare var ProcessingInstruction: {
 };
 
 /** Events measuring progress of an underlying process, like an HTTP request (for an XMLHttpRequest, or the loading of the underlying resource of an <img>, <audio>, <video>, <style> or <link>). */
-interface ProgressEvent extends Event {
+interface ProgressEvent<T extends EventTarget = EventTarget> extends Event {
     readonly lengthComputable: boolean;
     readonly loaded: number;
+    readonly target: T | null;
     readonly total: number;
 }
 
@@ -11828,6 +11967,18 @@ interface PromiseRejectionEvent extends Event {
 declare var PromiseRejectionEvent: {
     prototype: PromiseRejectionEvent;
     new(type: string, eventInitDict: PromiseRejectionEventInit): PromiseRejectionEvent;
+};
+
+interface PublicKeyCredential extends Credential {
+    readonly rawId: ArrayBuffer;
+    readonly response: AuthenticatorResponse;
+    getClientExtensionResults(): AuthenticationExtensionsClientOutputs;
+}
+
+declare var PublicKeyCredential: {
+    prototype: PublicKeyCredential;
+    new(): PublicKeyCredential;
+    isUserVerifyingPlatformAuthenticatorAvailable(): Promise<boolean>;
 };
 
 /** This Push API interface provides a way to receive notifications from third-party servers as well as request URLs for push notifications. */
@@ -12872,8 +13023,9 @@ declare var SVGCircleElement: {
 };
 
 /** Provides access to the properties of <clipPath> elements, as well as methods to manipulate them. */
-interface SVGClipPathElement extends SVGGraphicsElement {
+interface SVGClipPathElement extends SVGElement {
     readonly clipPathUnits: SVGAnimatedEnumeration;
+    readonly transform: SVGAnimatedTransformList;
     addEventListener<K extends keyof SVGElementEventMap>(type: K, listener: (this: SVGClipPathElement, ev: SVGElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
     removeEventListener<K extends keyof SVGElementEventMap>(type: K, listener: (this: SVGClipPathElement, ev: SVGElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
@@ -13777,7 +13929,7 @@ declare var SVGMarkerElement: {
 };
 
 /** Provides access to the properties of <mask> elements, as well as methods to manipulate them. */
-interface SVGMaskElement extends SVGElement, SVGTests {
+interface SVGMaskElement extends SVGElement {
     readonly height: SVGAnimatedLength;
     readonly maskContentUnits: SVGAnimatedEnumeration;
     readonly maskUnits: SVGAnimatedEnumeration;
@@ -16272,6 +16424,970 @@ declare var WebAuthnAssertion: {
     new(): WebAuthnAssertion;
 };
 
+interface WebGL2RenderingContext extends WebGLRenderingContextBase, WebGL2RenderingContextBase, WebGL2RenderingContextOverloads {
+}
+
+declare var WebGL2RenderingContext: {
+    prototype: WebGL2RenderingContext;
+    new(): WebGL2RenderingContext;
+    readonly ACTIVE_ATTRIBUTES: GLenum;
+    readonly ACTIVE_TEXTURE: GLenum;
+    readonly ACTIVE_UNIFORMS: GLenum;
+    readonly ALIASED_LINE_WIDTH_RANGE: GLenum;
+    readonly ALIASED_POINT_SIZE_RANGE: GLenum;
+    readonly ALPHA: GLenum;
+    readonly ALPHA_BITS: GLenum;
+    readonly ALWAYS: GLenum;
+    readonly ARRAY_BUFFER: GLenum;
+    readonly ARRAY_BUFFER_BINDING: GLenum;
+    readonly ATTACHED_SHADERS: GLenum;
+    readonly BACK: GLenum;
+    readonly BLEND: GLenum;
+    readonly BLEND_COLOR: GLenum;
+    readonly BLEND_DST_ALPHA: GLenum;
+    readonly BLEND_DST_RGB: GLenum;
+    readonly BLEND_EQUATION: GLenum;
+    readonly BLEND_EQUATION_ALPHA: GLenum;
+    readonly BLEND_EQUATION_RGB: GLenum;
+    readonly BLEND_SRC_ALPHA: GLenum;
+    readonly BLEND_SRC_RGB: GLenum;
+    readonly BLUE_BITS: GLenum;
+    readonly BOOL: GLenum;
+    readonly BOOL_VEC2: GLenum;
+    readonly BOOL_VEC3: GLenum;
+    readonly BOOL_VEC4: GLenum;
+    readonly BROWSER_DEFAULT_WEBGL: GLenum;
+    readonly BUFFER_SIZE: GLenum;
+    readonly BUFFER_USAGE: GLenum;
+    readonly BYTE: GLenum;
+    readonly CCW: GLenum;
+    readonly CLAMP_TO_EDGE: GLenum;
+    readonly COLOR_ATTACHMENT0: GLenum;
+    readonly COLOR_BUFFER_BIT: GLenum;
+    readonly COLOR_CLEAR_VALUE: GLenum;
+    readonly COLOR_WRITEMASK: GLenum;
+    readonly COMPILE_STATUS: GLenum;
+    readonly COMPRESSED_TEXTURE_FORMATS: GLenum;
+    readonly CONSTANT_ALPHA: GLenum;
+    readonly CONSTANT_COLOR: GLenum;
+    readonly CONTEXT_LOST_WEBGL: GLenum;
+    readonly CULL_FACE: GLenum;
+    readonly CULL_FACE_MODE: GLenum;
+    readonly CURRENT_PROGRAM: GLenum;
+    readonly CURRENT_VERTEX_ATTRIB: GLenum;
+    readonly CW: GLenum;
+    readonly DECR: GLenum;
+    readonly DECR_WRAP: GLenum;
+    readonly DELETE_STATUS: GLenum;
+    readonly DEPTH_ATTACHMENT: GLenum;
+    readonly DEPTH_BITS: GLenum;
+    readonly DEPTH_BUFFER_BIT: GLenum;
+    readonly DEPTH_CLEAR_VALUE: GLenum;
+    readonly DEPTH_COMPONENT: GLenum;
+    readonly DEPTH_COMPONENT16: GLenum;
+    readonly DEPTH_FUNC: GLenum;
+    readonly DEPTH_RANGE: GLenum;
+    readonly DEPTH_STENCIL: GLenum;
+    readonly DEPTH_STENCIL_ATTACHMENT: GLenum;
+    readonly DEPTH_TEST: GLenum;
+    readonly DEPTH_WRITEMASK: GLenum;
+    readonly DITHER: GLenum;
+    readonly DONT_CARE: GLenum;
+    readonly DST_ALPHA: GLenum;
+    readonly DST_COLOR: GLenum;
+    readonly DYNAMIC_DRAW: GLenum;
+    readonly ELEMENT_ARRAY_BUFFER: GLenum;
+    readonly ELEMENT_ARRAY_BUFFER_BINDING: GLenum;
+    readonly EQUAL: GLenum;
+    readonly FASTEST: GLenum;
+    readonly FLOAT: GLenum;
+    readonly FLOAT_MAT2: GLenum;
+    readonly FLOAT_MAT3: GLenum;
+    readonly FLOAT_MAT4: GLenum;
+    readonly FLOAT_VEC2: GLenum;
+    readonly FLOAT_VEC3: GLenum;
+    readonly FLOAT_VEC4: GLenum;
+    readonly FRAGMENT_SHADER: GLenum;
+    readonly FRAMEBUFFER: GLenum;
+    readonly FRAMEBUFFER_ATTACHMENT_OBJECT_NAME: GLenum;
+    readonly FRAMEBUFFER_ATTACHMENT_OBJECT_TYPE: GLenum;
+    readonly FRAMEBUFFER_ATTACHMENT_TEXTURE_CUBE_MAP_FACE: GLenum;
+    readonly FRAMEBUFFER_ATTACHMENT_TEXTURE_LEVEL: GLenum;
+    readonly FRAMEBUFFER_BINDING: GLenum;
+    readonly FRAMEBUFFER_COMPLETE: GLenum;
+    readonly FRAMEBUFFER_INCOMPLETE_ATTACHMENT: GLenum;
+    readonly FRAMEBUFFER_INCOMPLETE_DIMENSIONS: GLenum;
+    readonly FRAMEBUFFER_INCOMPLETE_MISSING_ATTACHMENT: GLenum;
+    readonly FRAMEBUFFER_UNSUPPORTED: GLenum;
+    readonly FRONT: GLenum;
+    readonly FRONT_AND_BACK: GLenum;
+    readonly FRONT_FACE: GLenum;
+    readonly FUNC_ADD: GLenum;
+    readonly FUNC_REVERSE_SUBTRACT: GLenum;
+    readonly FUNC_SUBTRACT: GLenum;
+    readonly GENERATE_MIPMAP_HINT: GLenum;
+    readonly GEQUAL: GLenum;
+    readonly GREATER: GLenum;
+    readonly GREEN_BITS: GLenum;
+    readonly HIGH_FLOAT: GLenum;
+    readonly HIGH_INT: GLenum;
+    readonly IMPLEMENTATION_COLOR_READ_FORMAT: GLenum;
+    readonly IMPLEMENTATION_COLOR_READ_TYPE: GLenum;
+    readonly INCR: GLenum;
+    readonly INCR_WRAP: GLenum;
+    readonly INT: GLenum;
+    readonly INT_VEC2: GLenum;
+    readonly INT_VEC3: GLenum;
+    readonly INT_VEC4: GLenum;
+    readonly INVALID_ENUM: GLenum;
+    readonly INVALID_FRAMEBUFFER_OPERATION: GLenum;
+    readonly INVALID_OPERATION: GLenum;
+    readonly INVALID_VALUE: GLenum;
+    readonly INVERT: GLenum;
+    readonly KEEP: GLenum;
+    readonly LEQUAL: GLenum;
+    readonly LESS: GLenum;
+    readonly LINEAR: GLenum;
+    readonly LINEAR_MIPMAP_LINEAR: GLenum;
+    readonly LINEAR_MIPMAP_NEAREST: GLenum;
+    readonly LINES: GLenum;
+    readonly LINE_LOOP: GLenum;
+    readonly LINE_STRIP: GLenum;
+    readonly LINE_WIDTH: GLenum;
+    readonly LINK_STATUS: GLenum;
+    readonly LOW_FLOAT: GLenum;
+    readonly LOW_INT: GLenum;
+    readonly LUMINANCE: GLenum;
+    readonly LUMINANCE_ALPHA: GLenum;
+    readonly MAX_COMBINED_TEXTURE_IMAGE_UNITS: GLenum;
+    readonly MAX_CUBE_MAP_TEXTURE_SIZE: GLenum;
+    readonly MAX_FRAGMENT_UNIFORM_VECTORS: GLenum;
+    readonly MAX_RENDERBUFFER_SIZE: GLenum;
+    readonly MAX_TEXTURE_IMAGE_UNITS: GLenum;
+    readonly MAX_TEXTURE_SIZE: GLenum;
+    readonly MAX_VARYING_VECTORS: GLenum;
+    readonly MAX_VERTEX_ATTRIBS: GLenum;
+    readonly MAX_VERTEX_TEXTURE_IMAGE_UNITS: GLenum;
+    readonly MAX_VERTEX_UNIFORM_VECTORS: GLenum;
+    readonly MAX_VIEWPORT_DIMS: GLenum;
+    readonly MEDIUM_FLOAT: GLenum;
+    readonly MEDIUM_INT: GLenum;
+    readonly MIRRORED_REPEAT: GLenum;
+    readonly NEAREST: GLenum;
+    readonly NEAREST_MIPMAP_LINEAR: GLenum;
+    readonly NEAREST_MIPMAP_NEAREST: GLenum;
+    readonly NEVER: GLenum;
+    readonly NICEST: GLenum;
+    readonly NONE: GLenum;
+    readonly NOTEQUAL: GLenum;
+    readonly NO_ERROR: GLenum;
+    readonly ONE: GLenum;
+    readonly ONE_MINUS_CONSTANT_ALPHA: GLenum;
+    readonly ONE_MINUS_CONSTANT_COLOR: GLenum;
+    readonly ONE_MINUS_DST_ALPHA: GLenum;
+    readonly ONE_MINUS_DST_COLOR: GLenum;
+    readonly ONE_MINUS_SRC_ALPHA: GLenum;
+    readonly ONE_MINUS_SRC_COLOR: GLenum;
+    readonly OUT_OF_MEMORY: GLenum;
+    readonly PACK_ALIGNMENT: GLenum;
+    readonly POINTS: GLenum;
+    readonly POLYGON_OFFSET_FACTOR: GLenum;
+    readonly POLYGON_OFFSET_FILL: GLenum;
+    readonly POLYGON_OFFSET_UNITS: GLenum;
+    readonly RED_BITS: GLenum;
+    readonly RENDERBUFFER: GLenum;
+    readonly RENDERBUFFER_ALPHA_SIZE: GLenum;
+    readonly RENDERBUFFER_BINDING: GLenum;
+    readonly RENDERBUFFER_BLUE_SIZE: GLenum;
+    readonly RENDERBUFFER_DEPTH_SIZE: GLenum;
+    readonly RENDERBUFFER_GREEN_SIZE: GLenum;
+    readonly RENDERBUFFER_HEIGHT: GLenum;
+    readonly RENDERBUFFER_INTERNAL_FORMAT: GLenum;
+    readonly RENDERBUFFER_RED_SIZE: GLenum;
+    readonly RENDERBUFFER_STENCIL_SIZE: GLenum;
+    readonly RENDERBUFFER_WIDTH: GLenum;
+    readonly RENDERER: GLenum;
+    readonly REPEAT: GLenum;
+    readonly REPLACE: GLenum;
+    readonly RGB: GLenum;
+    readonly RGB565: GLenum;
+    readonly RGB5_A1: GLenum;
+    readonly RGBA: GLenum;
+    readonly RGBA4: GLenum;
+    readonly SAMPLER_2D: GLenum;
+    readonly SAMPLER_CUBE: GLenum;
+    readonly SAMPLES: GLenum;
+    readonly SAMPLE_ALPHA_TO_COVERAGE: GLenum;
+    readonly SAMPLE_BUFFERS: GLenum;
+    readonly SAMPLE_COVERAGE: GLenum;
+    readonly SAMPLE_COVERAGE_INVERT: GLenum;
+    readonly SAMPLE_COVERAGE_VALUE: GLenum;
+    readonly SCISSOR_BOX: GLenum;
+    readonly SCISSOR_TEST: GLenum;
+    readonly SHADER_TYPE: GLenum;
+    readonly SHADING_LANGUAGE_VERSION: GLenum;
+    readonly SHORT: GLenum;
+    readonly SRC_ALPHA: GLenum;
+    readonly SRC_ALPHA_SATURATE: GLenum;
+    readonly SRC_COLOR: GLenum;
+    readonly STATIC_DRAW: GLenum;
+    readonly STENCIL_ATTACHMENT: GLenum;
+    readonly STENCIL_BACK_FAIL: GLenum;
+    readonly STENCIL_BACK_FUNC: GLenum;
+    readonly STENCIL_BACK_PASS_DEPTH_FAIL: GLenum;
+    readonly STENCIL_BACK_PASS_DEPTH_PASS: GLenum;
+    readonly STENCIL_BACK_REF: GLenum;
+    readonly STENCIL_BACK_VALUE_MASK: GLenum;
+    readonly STENCIL_BACK_WRITEMASK: GLenum;
+    readonly STENCIL_BITS: GLenum;
+    readonly STENCIL_BUFFER_BIT: GLenum;
+    readonly STENCIL_CLEAR_VALUE: GLenum;
+    readonly STENCIL_FAIL: GLenum;
+    readonly STENCIL_FUNC: GLenum;
+    readonly STENCIL_INDEX8: GLenum;
+    readonly STENCIL_PASS_DEPTH_FAIL: GLenum;
+    readonly STENCIL_PASS_DEPTH_PASS: GLenum;
+    readonly STENCIL_REF: GLenum;
+    readonly STENCIL_TEST: GLenum;
+    readonly STENCIL_VALUE_MASK: GLenum;
+    readonly STENCIL_WRITEMASK: GLenum;
+    readonly STREAM_DRAW: GLenum;
+    readonly SUBPIXEL_BITS: GLenum;
+    readonly TEXTURE: GLenum;
+    readonly TEXTURE0: GLenum;
+    readonly TEXTURE1: GLenum;
+    readonly TEXTURE10: GLenum;
+    readonly TEXTURE11: GLenum;
+    readonly TEXTURE12: GLenum;
+    readonly TEXTURE13: GLenum;
+    readonly TEXTURE14: GLenum;
+    readonly TEXTURE15: GLenum;
+    readonly TEXTURE16: GLenum;
+    readonly TEXTURE17: GLenum;
+    readonly TEXTURE18: GLenum;
+    readonly TEXTURE19: GLenum;
+    readonly TEXTURE2: GLenum;
+    readonly TEXTURE20: GLenum;
+    readonly TEXTURE21: GLenum;
+    readonly TEXTURE22: GLenum;
+    readonly TEXTURE23: GLenum;
+    readonly TEXTURE24: GLenum;
+    readonly TEXTURE25: GLenum;
+    readonly TEXTURE26: GLenum;
+    readonly TEXTURE27: GLenum;
+    readonly TEXTURE28: GLenum;
+    readonly TEXTURE29: GLenum;
+    readonly TEXTURE3: GLenum;
+    readonly TEXTURE30: GLenum;
+    readonly TEXTURE31: GLenum;
+    readonly TEXTURE4: GLenum;
+    readonly TEXTURE5: GLenum;
+    readonly TEXTURE6: GLenum;
+    readonly TEXTURE7: GLenum;
+    readonly TEXTURE8: GLenum;
+    readonly TEXTURE9: GLenum;
+    readonly TEXTURE_2D: GLenum;
+    readonly TEXTURE_BINDING_2D: GLenum;
+    readonly TEXTURE_BINDING_CUBE_MAP: GLenum;
+    readonly TEXTURE_CUBE_MAP: GLenum;
+    readonly TEXTURE_CUBE_MAP_NEGATIVE_X: GLenum;
+    readonly TEXTURE_CUBE_MAP_NEGATIVE_Y: GLenum;
+    readonly TEXTURE_CUBE_MAP_NEGATIVE_Z: GLenum;
+    readonly TEXTURE_CUBE_MAP_POSITIVE_X: GLenum;
+    readonly TEXTURE_CUBE_MAP_POSITIVE_Y: GLenum;
+    readonly TEXTURE_CUBE_MAP_POSITIVE_Z: GLenum;
+    readonly TEXTURE_MAG_FILTER: GLenum;
+    readonly TEXTURE_MIN_FILTER: GLenum;
+    readonly TEXTURE_WRAP_S: GLenum;
+    readonly TEXTURE_WRAP_T: GLenum;
+    readonly TRIANGLES: GLenum;
+    readonly TRIANGLE_FAN: GLenum;
+    readonly TRIANGLE_STRIP: GLenum;
+    readonly UNPACK_ALIGNMENT: GLenum;
+    readonly UNPACK_COLORSPACE_CONVERSION_WEBGL: GLenum;
+    readonly UNPACK_FLIP_Y_WEBGL: GLenum;
+    readonly UNPACK_PREMULTIPLY_ALPHA_WEBGL: GLenum;
+    readonly UNSIGNED_BYTE: GLenum;
+    readonly UNSIGNED_INT: GLenum;
+    readonly UNSIGNED_SHORT: GLenum;
+    readonly UNSIGNED_SHORT_4_4_4_4: GLenum;
+    readonly UNSIGNED_SHORT_5_5_5_1: GLenum;
+    readonly UNSIGNED_SHORT_5_6_5: GLenum;
+    readonly VALIDATE_STATUS: GLenum;
+    readonly VENDOR: GLenum;
+    readonly VERSION: GLenum;
+    readonly VERTEX_ATTRIB_ARRAY_BUFFER_BINDING: GLenum;
+    readonly VERTEX_ATTRIB_ARRAY_ENABLED: GLenum;
+    readonly VERTEX_ATTRIB_ARRAY_NORMALIZED: GLenum;
+    readonly VERTEX_ATTRIB_ARRAY_POINTER: GLenum;
+    readonly VERTEX_ATTRIB_ARRAY_SIZE: GLenum;
+    readonly VERTEX_ATTRIB_ARRAY_STRIDE: GLenum;
+    readonly VERTEX_ATTRIB_ARRAY_TYPE: GLenum;
+    readonly VERTEX_SHADER: GLenum;
+    readonly VIEWPORT: GLenum;
+    readonly ZERO: GLenum;
+    readonly ACTIVE_UNIFORM_BLOCKS: GLenum;
+    readonly ALREADY_SIGNALED: GLenum;
+    readonly ANY_SAMPLES_PASSED: GLenum;
+    readonly ANY_SAMPLES_PASSED_CONSERVATIVE: GLenum;
+    readonly COLOR: GLenum;
+    readonly COLOR_ATTACHMENT1: GLenum;
+    readonly COLOR_ATTACHMENT10: GLenum;
+    readonly COLOR_ATTACHMENT11: GLenum;
+    readonly COLOR_ATTACHMENT12: GLenum;
+    readonly COLOR_ATTACHMENT13: GLenum;
+    readonly COLOR_ATTACHMENT14: GLenum;
+    readonly COLOR_ATTACHMENT15: GLenum;
+    readonly COLOR_ATTACHMENT2: GLenum;
+    readonly COLOR_ATTACHMENT3: GLenum;
+    readonly COLOR_ATTACHMENT4: GLenum;
+    readonly COLOR_ATTACHMENT5: GLenum;
+    readonly COLOR_ATTACHMENT6: GLenum;
+    readonly COLOR_ATTACHMENT7: GLenum;
+    readonly COLOR_ATTACHMENT8: GLenum;
+    readonly COLOR_ATTACHMENT9: GLenum;
+    readonly COMPARE_REF_TO_TEXTURE: GLenum;
+    readonly CONDITION_SATISFIED: GLenum;
+    readonly COPY_READ_BUFFER: GLenum;
+    readonly COPY_READ_BUFFER_BINDING: GLenum;
+    readonly COPY_WRITE_BUFFER: GLenum;
+    readonly COPY_WRITE_BUFFER_BINDING: GLenum;
+    readonly CURRENT_QUERY: GLenum;
+    readonly DEPTH: GLenum;
+    readonly DEPTH24_STENCIL8: GLenum;
+    readonly DEPTH32F_STENCIL8: GLenum;
+    readonly DEPTH_COMPONENT24: GLenum;
+    readonly DEPTH_COMPONENT32F: GLenum;
+    readonly DRAW_BUFFER0: GLenum;
+    readonly DRAW_BUFFER1: GLenum;
+    readonly DRAW_BUFFER10: GLenum;
+    readonly DRAW_BUFFER11: GLenum;
+    readonly DRAW_BUFFER12: GLenum;
+    readonly DRAW_BUFFER13: GLenum;
+    readonly DRAW_BUFFER14: GLenum;
+    readonly DRAW_BUFFER15: GLenum;
+    readonly DRAW_BUFFER2: GLenum;
+    readonly DRAW_BUFFER3: GLenum;
+    readonly DRAW_BUFFER4: GLenum;
+    readonly DRAW_BUFFER5: GLenum;
+    readonly DRAW_BUFFER6: GLenum;
+    readonly DRAW_BUFFER7: GLenum;
+    readonly DRAW_BUFFER8: GLenum;
+    readonly DRAW_BUFFER9: GLenum;
+    readonly DRAW_FRAMEBUFFER: GLenum;
+    readonly DRAW_FRAMEBUFFER_BINDING: GLenum;
+    readonly DYNAMIC_COPY: GLenum;
+    readonly DYNAMIC_READ: GLenum;
+    readonly FLOAT_32_UNSIGNED_INT_24_8_REV: GLenum;
+    readonly FLOAT_MAT2x3: GLenum;
+    readonly FLOAT_MAT2x4: GLenum;
+    readonly FLOAT_MAT3x2: GLenum;
+    readonly FLOAT_MAT3x4: GLenum;
+    readonly FLOAT_MAT4x2: GLenum;
+    readonly FLOAT_MAT4x3: GLenum;
+    readonly FRAGMENT_SHADER_DERIVATIVE_HINT: GLenum;
+    readonly FRAMEBUFFER_ATTACHMENT_ALPHA_SIZE: GLenum;
+    readonly FRAMEBUFFER_ATTACHMENT_BLUE_SIZE: GLenum;
+    readonly FRAMEBUFFER_ATTACHMENT_COLOR_ENCODING: GLenum;
+    readonly FRAMEBUFFER_ATTACHMENT_COMPONENT_TYPE: GLenum;
+    readonly FRAMEBUFFER_ATTACHMENT_DEPTH_SIZE: GLenum;
+    readonly FRAMEBUFFER_ATTACHMENT_GREEN_SIZE: GLenum;
+    readonly FRAMEBUFFER_ATTACHMENT_RED_SIZE: GLenum;
+    readonly FRAMEBUFFER_ATTACHMENT_STENCIL_SIZE: GLenum;
+    readonly FRAMEBUFFER_ATTACHMENT_TEXTURE_LAYER: GLenum;
+    readonly FRAMEBUFFER_DEFAULT: GLenum;
+    readonly FRAMEBUFFER_INCOMPLETE_MULTISAMPLE: GLenum;
+    readonly HALF_FLOAT: GLenum;
+    readonly INTERLEAVED_ATTRIBS: GLenum;
+    readonly INT_2_10_10_10_REV: GLenum;
+    readonly INT_SAMPLER_2D: GLenum;
+    readonly INT_SAMPLER_2D_ARRAY: GLenum;
+    readonly INT_SAMPLER_3D: GLenum;
+    readonly INT_SAMPLER_CUBE: GLenum;
+    readonly INVALID_INDEX: GLenum;
+    readonly MAX: GLenum;
+    readonly MAX_3D_TEXTURE_SIZE: GLenum;
+    readonly MAX_ARRAY_TEXTURE_LAYERS: GLenum;
+    readonly MAX_CLIENT_WAIT_TIMEOUT_WEBGL: GLenum;
+    readonly MAX_COLOR_ATTACHMENTS: GLenum;
+    readonly MAX_COMBINED_FRAGMENT_UNIFORM_COMPONENTS: GLenum;
+    readonly MAX_COMBINED_UNIFORM_BLOCKS: GLenum;
+    readonly MAX_COMBINED_VERTEX_UNIFORM_COMPONENTS: GLenum;
+    readonly MAX_DRAW_BUFFERS: GLenum;
+    readonly MAX_ELEMENTS_INDICES: GLenum;
+    readonly MAX_ELEMENTS_VERTICES: GLenum;
+    readonly MAX_ELEMENT_INDEX: GLenum;
+    readonly MAX_FRAGMENT_INPUT_COMPONENTS: GLenum;
+    readonly MAX_FRAGMENT_UNIFORM_BLOCKS: GLenum;
+    readonly MAX_FRAGMENT_UNIFORM_COMPONENTS: GLenum;
+    readonly MAX_PROGRAM_TEXEL_OFFSET: GLenum;
+    readonly MAX_SAMPLES: GLenum;
+    readonly MAX_SERVER_WAIT_TIMEOUT: GLenum;
+    readonly MAX_TEXTURE_LOD_BIAS: GLenum;
+    readonly MAX_TRANSFORM_FEEDBACK_INTERLEAVED_COMPONENTS: GLenum;
+    readonly MAX_TRANSFORM_FEEDBACK_SEPARATE_ATTRIBS: GLenum;
+    readonly MAX_TRANSFORM_FEEDBACK_SEPARATE_COMPONENTS: GLenum;
+    readonly MAX_UNIFORM_BLOCK_SIZE: GLenum;
+    readonly MAX_UNIFORM_BUFFER_BINDINGS: GLenum;
+    readonly MAX_VARYING_COMPONENTS: GLenum;
+    readonly MAX_VERTEX_OUTPUT_COMPONENTS: GLenum;
+    readonly MAX_VERTEX_UNIFORM_BLOCKS: GLenum;
+    readonly MAX_VERTEX_UNIFORM_COMPONENTS: GLenum;
+    readonly MIN: GLenum;
+    readonly MIN_PROGRAM_TEXEL_OFFSET: GLenum;
+    readonly OBJECT_TYPE: GLenum;
+    readonly PACK_ROW_LENGTH: GLenum;
+    readonly PACK_SKIP_PIXELS: GLenum;
+    readonly PACK_SKIP_ROWS: GLenum;
+    readonly PIXEL_PACK_BUFFER: GLenum;
+    readonly PIXEL_PACK_BUFFER_BINDING: GLenum;
+    readonly PIXEL_UNPACK_BUFFER: GLenum;
+    readonly PIXEL_UNPACK_BUFFER_BINDING: GLenum;
+    readonly QUERY_RESULT: GLenum;
+    readonly QUERY_RESULT_AVAILABLE: GLenum;
+    readonly R11F_G11F_B10F: GLenum;
+    readonly R16F: GLenum;
+    readonly R16I: GLenum;
+    readonly R16UI: GLenum;
+    readonly R32F: GLenum;
+    readonly R32I: GLenum;
+    readonly R32UI: GLenum;
+    readonly R8: GLenum;
+    readonly R8I: GLenum;
+    readonly R8UI: GLenum;
+    readonly R8_SNORM: GLenum;
+    readonly RASTERIZER_DISCARD: GLenum;
+    readonly READ_BUFFER: GLenum;
+    readonly READ_FRAMEBUFFER: GLenum;
+    readonly READ_FRAMEBUFFER_BINDING: GLenum;
+    readonly RED: GLenum;
+    readonly RED_INTEGER: GLenum;
+    readonly RENDERBUFFER_SAMPLES: GLenum;
+    readonly RG: GLenum;
+    readonly RG16F: GLenum;
+    readonly RG16I: GLenum;
+    readonly RG16UI: GLenum;
+    readonly RG32F: GLenum;
+    readonly RG32I: GLenum;
+    readonly RG32UI: GLenum;
+    readonly RG8: GLenum;
+    readonly RG8I: GLenum;
+    readonly RG8UI: GLenum;
+    readonly RG8_SNORM: GLenum;
+    readonly RGB10_A2: GLenum;
+    readonly RGB10_A2UI: GLenum;
+    readonly RGB16F: GLenum;
+    readonly RGB16I: GLenum;
+    readonly RGB16UI: GLenum;
+    readonly RGB32F: GLenum;
+    readonly RGB32I: GLenum;
+    readonly RGB32UI: GLenum;
+    readonly RGB8: GLenum;
+    readonly RGB8I: GLenum;
+    readonly RGB8UI: GLenum;
+    readonly RGB8_SNORM: GLenum;
+    readonly RGB9_E5: GLenum;
+    readonly RGBA16F: GLenum;
+    readonly RGBA16I: GLenum;
+    readonly RGBA16UI: GLenum;
+    readonly RGBA32F: GLenum;
+    readonly RGBA32I: GLenum;
+    readonly RGBA32UI: GLenum;
+    readonly RGBA8: GLenum;
+    readonly RGBA8I: GLenum;
+    readonly RGBA8UI: GLenum;
+    readonly RGBA8_SNORM: GLenum;
+    readonly RGBA_INTEGER: GLenum;
+    readonly RGB_INTEGER: GLenum;
+    readonly RG_INTEGER: GLenum;
+    readonly SAMPLER_2D_ARRAY: GLenum;
+    readonly SAMPLER_2D_ARRAY_SHADOW: GLenum;
+    readonly SAMPLER_2D_SHADOW: GLenum;
+    readonly SAMPLER_3D: GLenum;
+    readonly SAMPLER_BINDING: GLenum;
+    readonly SAMPLER_CUBE_SHADOW: GLenum;
+    readonly SEPARATE_ATTRIBS: GLenum;
+    readonly SIGNALED: GLenum;
+    readonly SIGNED_NORMALIZED: GLenum;
+    readonly SRGB: GLenum;
+    readonly SRGB8: GLenum;
+    readonly SRGB8_ALPHA8: GLenum;
+    readonly STATIC_COPY: GLenum;
+    readonly STATIC_READ: GLenum;
+    readonly STENCIL: GLenum;
+    readonly STREAM_COPY: GLenum;
+    readonly STREAM_READ: GLenum;
+    readonly SYNC_CONDITION: GLenum;
+    readonly SYNC_FENCE: GLenum;
+    readonly SYNC_FLAGS: GLenum;
+    readonly SYNC_FLUSH_COMMANDS_BIT: GLenum;
+    readonly SYNC_GPU_COMMANDS_COMPLETE: GLenum;
+    readonly SYNC_STATUS: GLenum;
+    readonly TEXTURE_2D_ARRAY: GLenum;
+    readonly TEXTURE_3D: GLenum;
+    readonly TEXTURE_BASE_LEVEL: GLenum;
+    readonly TEXTURE_BINDING_2D_ARRAY: GLenum;
+    readonly TEXTURE_BINDING_3D: GLenum;
+    readonly TEXTURE_COMPARE_FUNC: GLenum;
+    readonly TEXTURE_COMPARE_MODE: GLenum;
+    readonly TEXTURE_IMMUTABLE_FORMAT: GLenum;
+    readonly TEXTURE_IMMUTABLE_LEVELS: GLenum;
+    readonly TEXTURE_MAX_LEVEL: GLenum;
+    readonly TEXTURE_MAX_LOD: GLenum;
+    readonly TEXTURE_MIN_LOD: GLenum;
+    readonly TEXTURE_WRAP_R: GLenum;
+    readonly TIMEOUT_EXPIRED: GLenum;
+    readonly TIMEOUT_IGNORED: GLint64;
+    readonly TRANSFORM_FEEDBACK: GLenum;
+    readonly TRANSFORM_FEEDBACK_ACTIVE: GLenum;
+    readonly TRANSFORM_FEEDBACK_BINDING: GLenum;
+    readonly TRANSFORM_FEEDBACK_BUFFER: GLenum;
+    readonly TRANSFORM_FEEDBACK_BUFFER_BINDING: GLenum;
+    readonly TRANSFORM_FEEDBACK_BUFFER_MODE: GLenum;
+    readonly TRANSFORM_FEEDBACK_BUFFER_SIZE: GLenum;
+    readonly TRANSFORM_FEEDBACK_BUFFER_START: GLenum;
+    readonly TRANSFORM_FEEDBACK_PAUSED: GLenum;
+    readonly TRANSFORM_FEEDBACK_PRIMITIVES_WRITTEN: GLenum;
+    readonly TRANSFORM_FEEDBACK_VARYINGS: GLenum;
+    readonly UNIFORM_ARRAY_STRIDE: GLenum;
+    readonly UNIFORM_BLOCK_ACTIVE_UNIFORMS: GLenum;
+    readonly UNIFORM_BLOCK_ACTIVE_UNIFORM_INDICES: GLenum;
+    readonly UNIFORM_BLOCK_BINDING: GLenum;
+    readonly UNIFORM_BLOCK_DATA_SIZE: GLenum;
+    readonly UNIFORM_BLOCK_INDEX: GLenum;
+    readonly UNIFORM_BLOCK_REFERENCED_BY_FRAGMENT_SHADER: GLenum;
+    readonly UNIFORM_BLOCK_REFERENCED_BY_VERTEX_SHADER: GLenum;
+    readonly UNIFORM_BUFFER: GLenum;
+    readonly UNIFORM_BUFFER_BINDING: GLenum;
+    readonly UNIFORM_BUFFER_OFFSET_ALIGNMENT: GLenum;
+    readonly UNIFORM_BUFFER_SIZE: GLenum;
+    readonly UNIFORM_BUFFER_START: GLenum;
+    readonly UNIFORM_IS_ROW_MAJOR: GLenum;
+    readonly UNIFORM_MATRIX_STRIDE: GLenum;
+    readonly UNIFORM_OFFSET: GLenum;
+    readonly UNIFORM_SIZE: GLenum;
+    readonly UNIFORM_TYPE: GLenum;
+    readonly UNPACK_IMAGE_HEIGHT: GLenum;
+    readonly UNPACK_ROW_LENGTH: GLenum;
+    readonly UNPACK_SKIP_IMAGES: GLenum;
+    readonly UNPACK_SKIP_PIXELS: GLenum;
+    readonly UNPACK_SKIP_ROWS: GLenum;
+    readonly UNSIGNALED: GLenum;
+    readonly UNSIGNED_INT_10F_11F_11F_REV: GLenum;
+    readonly UNSIGNED_INT_24_8: GLenum;
+    readonly UNSIGNED_INT_2_10_10_10_REV: GLenum;
+    readonly UNSIGNED_INT_5_9_9_9_REV: GLenum;
+    readonly UNSIGNED_INT_SAMPLER_2D: GLenum;
+    readonly UNSIGNED_INT_SAMPLER_2D_ARRAY: GLenum;
+    readonly UNSIGNED_INT_SAMPLER_3D: GLenum;
+    readonly UNSIGNED_INT_SAMPLER_CUBE: GLenum;
+    readonly UNSIGNED_INT_VEC2: GLenum;
+    readonly UNSIGNED_INT_VEC3: GLenum;
+    readonly UNSIGNED_INT_VEC4: GLenum;
+    readonly UNSIGNED_NORMALIZED: GLenum;
+    readonly VERTEX_ARRAY_BINDING: GLenum;
+    readonly VERTEX_ATTRIB_ARRAY_DIVISOR: GLenum;
+    readonly VERTEX_ATTRIB_ARRAY_INTEGER: GLenum;
+    readonly WAIT_FAILED: GLenum;
+};
+
+interface WebGL2RenderingContextBase {
+    beginQuery(target: GLenum, query: WebGLQuery): void;
+    beginTransformFeedback(primitiveMode: GLenum): void;
+    bindBufferBase(target: GLenum, index: GLuint, buffer: WebGLBuffer | null): void;
+    bindBufferRange(target: GLenum, index: GLuint, buffer: WebGLBuffer | null, offset: GLintptr, size: GLsizeiptr): void;
+    bindSampler(unit: GLuint, sampler: WebGLSampler | null): void;
+    bindTransformFeedback(target: GLenum, tf: WebGLTransformFeedback | null): void;
+    bindVertexArray(array: WebGLVertexArrayObject | null): void;
+    blitFramebuffer(srcX0: GLint, srcY0: GLint, srcX1: GLint, srcY1: GLint, dstX0: GLint, dstY0: GLint, dstX1: GLint, dstY1: GLint, mask: GLbitfield, filter: GLenum): void;
+    clearBufferfi(buffer: GLenum, drawbuffer: GLint, depth: GLfloat, stencil: GLint): void;
+    clearBufferfv(buffer: GLenum, drawbuffer: GLint, values: Float32List, srcOffset?: GLuint): void;
+    clearBufferiv(buffer: GLenum, drawbuffer: GLint, values: Int32List, srcOffset?: GLuint): void;
+    clearBufferuiv(buffer: GLenum, drawbuffer: GLint, values: Uint32List, srcOffset?: GLuint): void;
+    clientWaitSync(sync: WebGLSync, flags: GLbitfield, timeout: GLuint64): GLenum;
+    compressedTexImage3D(target: GLenum, level: GLint, internalformat: GLenum, width: GLsizei, height: GLsizei, depth: GLsizei, border: GLint, imageSize: GLsizei, offset: GLintptr): void;
+    compressedTexImage3D(target: GLenum, level: GLint, internalformat: GLenum, width: GLsizei, height: GLsizei, depth: GLsizei, border: GLint, srcData: ArrayBufferView, srcOffset?: GLuint, srcLengthOverride?: GLuint): void;
+    compressedTexSubImage3D(target: GLenum, level: GLint, xoffset: GLint, yoffset: GLint, zoffset: GLint, width: GLsizei, height: GLsizei, depth: GLsizei, format: GLenum, imageSize: GLsizei, offset: GLintptr): void;
+    compressedTexSubImage3D(target: GLenum, level: GLint, xoffset: GLint, yoffset: GLint, zoffset: GLint, width: GLsizei, height: GLsizei, depth: GLsizei, format: GLenum, srcData: ArrayBufferView, srcOffset?: GLuint, srcLengthOverride?: GLuint): void;
+    copyBufferSubData(readTarget: GLenum, writeTarget: GLenum, readOffset: GLintptr, writeOffset: GLintptr, size: GLsizeiptr): void;
+    copyTexSubImage3D(target: GLenum, level: GLint, xoffset: GLint, yoffset: GLint, zoffset: GLint, x: GLint, y: GLint, width: GLsizei, height: GLsizei): void;
+    createQuery(): WebGLQuery | null;
+    createSampler(): WebGLSampler | null;
+    createTransformFeedback(): WebGLTransformFeedback | null;
+    createVertexArray(): WebGLVertexArrayObject | null;
+    deleteQuery(query: WebGLQuery | null): void;
+    deleteSampler(sampler: WebGLSampler | null): void;
+    deleteSync(sync: WebGLSync | null): void;
+    deleteTransformFeedback(tf: WebGLTransformFeedback | null): void;
+    deleteVertexArray(vertexArray: WebGLVertexArrayObject | null): void;
+    drawArraysInstanced(mode: GLenum, first: GLint, count: GLsizei, instanceCount: GLsizei): void;
+    drawBuffers(buffers: GLenum[]): void;
+    drawElementsInstanced(mode: GLenum, count: GLsizei, type: GLenum, offset: GLintptr, instanceCount: GLsizei): void;
+    drawRangeElements(mode: GLenum, start: GLuint, end: GLuint, count: GLsizei, type: GLenum, offset: GLintptr): void;
+    endQuery(target: GLenum): void;
+    endTransformFeedback(): void;
+    fenceSync(condition: GLenum, flags: GLbitfield): WebGLSync | null;
+    framebufferTextureLayer(target: GLenum, attachment: GLenum, texture: WebGLTexture | null, level: GLint, layer: GLint): void;
+    getActiveUniformBlockName(program: WebGLProgram, uniformBlockIndex: GLuint): string | null;
+    getActiveUniformBlockParameter(program: WebGLProgram, uniformBlockIndex: GLuint, pname: GLenum): any;
+    getActiveUniforms(program: WebGLProgram, uniformIndices: GLuint[], pname: GLenum): any;
+    getBufferSubData(target: GLenum, srcByteOffset: GLintptr, dstBuffer: ArrayBufferView, dstOffset?: GLuint, length?: GLuint): void;
+    getFragDataLocation(program: WebGLProgram, name: string): GLint;
+    getIndexedParameter(target: GLenum, index: GLuint): any;
+    getInternalformatParameter(target: GLenum, internalformat: GLenum, pname: GLenum): any;
+    getQuery(target: GLenum, pname: GLenum): WebGLQuery | null;
+    getQueryParameter(query: WebGLQuery, pname: GLenum): any;
+    getSamplerParameter(sampler: WebGLSampler, pname: GLenum): any;
+    getSyncParameter(sync: WebGLSync, pname: GLenum): any;
+    getTransformFeedbackVarying(program: WebGLProgram, index: GLuint): WebGLActiveInfo | null;
+    getUniformBlockIndex(program: WebGLProgram, uniformBlockName: string): GLuint;
+    getUniformIndices(program: WebGLProgram, uniformNames: string[]): GLuint[] | null;
+    invalidateFramebuffer(target: GLenum, attachments: GLenum[]): void;
+    invalidateSubFramebuffer(target: GLenum, attachments: GLenum[], x: GLint, y: GLint, width: GLsizei, height: GLsizei): void;
+    isQuery(query: WebGLQuery | null): GLboolean;
+    isSampler(sampler: WebGLSampler | null): GLboolean;
+    isSync(sync: WebGLSync | null): GLboolean;
+    isTransformFeedback(tf: WebGLTransformFeedback | null): GLboolean;
+    isVertexArray(vertexArray: WebGLVertexArrayObject | null): GLboolean;
+    pauseTransformFeedback(): void;
+    readBuffer(src: GLenum): void;
+    renderbufferStorageMultisample(target: GLenum, samples: GLsizei, internalformat: GLenum, width: GLsizei, height: GLsizei): void;
+    resumeTransformFeedback(): void;
+    samplerParameterf(sampler: WebGLSampler, pname: GLenum, param: GLfloat): void;
+    samplerParameteri(sampler: WebGLSampler, pname: GLenum, param: GLint): void;
+    texImage3D(target: GLenum, level: GLint, internalformat: GLint, width: GLsizei, height: GLsizei, depth: GLsizei, border: GLint, format: GLenum, type: GLenum, pboOffset: GLintptr): void;
+    texImage3D(target: GLenum, level: GLint, internalformat: GLint, width: GLsizei, height: GLsizei, depth: GLsizei, border: GLint, format: GLenum, type: GLenum, source: TexImageSource): void;
+    texImage3D(target: GLenum, level: GLint, internalformat: GLint, width: GLsizei, height: GLsizei, depth: GLsizei, border: GLint, format: GLenum, type: GLenum, srcData: ArrayBufferView | null): void;
+    texImage3D(target: GLenum, level: GLint, internalformat: GLint, width: GLsizei, height: GLsizei, depth: GLsizei, border: GLint, format: GLenum, type: GLenum, srcData: ArrayBufferView, srcOffset: GLuint): void;
+    texStorage2D(target: GLenum, levels: GLsizei, internalformat: GLenum, width: GLsizei, height: GLsizei): void;
+    texStorage3D(target: GLenum, levels: GLsizei, internalformat: GLenum, width: GLsizei, height: GLsizei, depth: GLsizei): void;
+    texSubImage3D(target: GLenum, level: GLint, xoffset: GLint, yoffset: GLint, zoffset: GLint, width: GLsizei, height: GLsizei, depth: GLsizei, format: GLenum, type: GLenum, pboOffset: GLintptr): void;
+    texSubImage3D(target: GLenum, level: GLint, xoffset: GLint, yoffset: GLint, zoffset: GLint, width: GLsizei, height: GLsizei, depth: GLsizei, format: GLenum, type: GLenum, source: TexImageSource): void;
+    texSubImage3D(target: GLenum, level: GLint, xoffset: GLint, yoffset: GLint, zoffset: GLint, width: GLsizei, height: GLsizei, depth: GLsizei, format: GLenum, type: GLenum, srcData: ArrayBufferView | null, srcOffset?: GLuint): void;
+    transformFeedbackVaryings(program: WebGLProgram, varyings: string[], bufferMode: GLenum): void;
+    uniform1ui(location: WebGLUniformLocation | null, v0: GLuint): void;
+    uniform1uiv(location: WebGLUniformLocation | null, data: Uint32List, srcOffset?: GLuint, srcLength?: GLuint): void;
+    uniform2ui(location: WebGLUniformLocation | null, v0: GLuint, v1: GLuint): void;
+    uniform2uiv(location: WebGLUniformLocation | null, data: Uint32List, srcOffset?: GLuint, srcLength?: GLuint): void;
+    uniform3ui(location: WebGLUniformLocation | null, v0: GLuint, v1: GLuint, v2: GLuint): void;
+    uniform3uiv(location: WebGLUniformLocation | null, data: Uint32List, srcOffset?: GLuint, srcLength?: GLuint): void;
+    uniform4ui(location: WebGLUniformLocation | null, v0: GLuint, v1: GLuint, v2: GLuint, v3: GLuint): void;
+    uniform4uiv(location: WebGLUniformLocation | null, data: Uint32List, srcOffset?: GLuint, srcLength?: GLuint): void;
+    uniformBlockBinding(program: WebGLProgram, uniformBlockIndex: GLuint, uniformBlockBinding: GLuint): void;
+    uniformMatrix2x3fv(location: WebGLUniformLocation | null, transpose: GLboolean, data: Float32List, srcOffset?: GLuint, srcLength?: GLuint): void;
+    uniformMatrix2x4fv(location: WebGLUniformLocation | null, transpose: GLboolean, data: Float32List, srcOffset?: GLuint, srcLength?: GLuint): void;
+    uniformMatrix3x2fv(location: WebGLUniformLocation | null, transpose: GLboolean, data: Float32List, srcOffset?: GLuint, srcLength?: GLuint): void;
+    uniformMatrix3x4fv(location: WebGLUniformLocation | null, transpose: GLboolean, data: Float32List, srcOffset?: GLuint, srcLength?: GLuint): void;
+    uniformMatrix4x2fv(location: WebGLUniformLocation | null, transpose: GLboolean, data: Float32List, srcOffset?: GLuint, srcLength?: GLuint): void;
+    uniformMatrix4x3fv(location: WebGLUniformLocation | null, transpose: GLboolean, data: Float32List, srcOffset?: GLuint, srcLength?: GLuint): void;
+    vertexAttribDivisor(index: GLuint, divisor: GLuint): void;
+    vertexAttribI4i(index: GLuint, x: GLint, y: GLint, z: GLint, w: GLint): void;
+    vertexAttribI4iv(index: GLuint, values: Int32List): void;
+    vertexAttribI4ui(index: GLuint, x: GLuint, y: GLuint, z: GLuint, w: GLuint): void;
+    vertexAttribI4uiv(index: GLuint, values: Uint32List): void;
+    vertexAttribIPointer(index: GLuint, size: GLint, type: GLenum, stride: GLsizei, offset: GLintptr): void;
+    waitSync(sync: WebGLSync, flags: GLbitfield, timeout: GLint64): void;
+    readonly ACTIVE_UNIFORM_BLOCKS: GLenum;
+    readonly ALREADY_SIGNALED: GLenum;
+    readonly ANY_SAMPLES_PASSED: GLenum;
+    readonly ANY_SAMPLES_PASSED_CONSERVATIVE: GLenum;
+    readonly COLOR: GLenum;
+    readonly COLOR_ATTACHMENT1: GLenum;
+    readonly COLOR_ATTACHMENT10: GLenum;
+    readonly COLOR_ATTACHMENT11: GLenum;
+    readonly COLOR_ATTACHMENT12: GLenum;
+    readonly COLOR_ATTACHMENT13: GLenum;
+    readonly COLOR_ATTACHMENT14: GLenum;
+    readonly COLOR_ATTACHMENT15: GLenum;
+    readonly COLOR_ATTACHMENT2: GLenum;
+    readonly COLOR_ATTACHMENT3: GLenum;
+    readonly COLOR_ATTACHMENT4: GLenum;
+    readonly COLOR_ATTACHMENT5: GLenum;
+    readonly COLOR_ATTACHMENT6: GLenum;
+    readonly COLOR_ATTACHMENT7: GLenum;
+    readonly COLOR_ATTACHMENT8: GLenum;
+    readonly COLOR_ATTACHMENT9: GLenum;
+    readonly COMPARE_REF_TO_TEXTURE: GLenum;
+    readonly CONDITION_SATISFIED: GLenum;
+    readonly COPY_READ_BUFFER: GLenum;
+    readonly COPY_READ_BUFFER_BINDING: GLenum;
+    readonly COPY_WRITE_BUFFER: GLenum;
+    readonly COPY_WRITE_BUFFER_BINDING: GLenum;
+    readonly CURRENT_QUERY: GLenum;
+    readonly DEPTH: GLenum;
+    readonly DEPTH24_STENCIL8: GLenum;
+    readonly DEPTH32F_STENCIL8: GLenum;
+    readonly DEPTH_COMPONENT24: GLenum;
+    readonly DEPTH_COMPONENT32F: GLenum;
+    readonly DRAW_BUFFER0: GLenum;
+    readonly DRAW_BUFFER1: GLenum;
+    readonly DRAW_BUFFER10: GLenum;
+    readonly DRAW_BUFFER11: GLenum;
+    readonly DRAW_BUFFER12: GLenum;
+    readonly DRAW_BUFFER13: GLenum;
+    readonly DRAW_BUFFER14: GLenum;
+    readonly DRAW_BUFFER15: GLenum;
+    readonly DRAW_BUFFER2: GLenum;
+    readonly DRAW_BUFFER3: GLenum;
+    readonly DRAW_BUFFER4: GLenum;
+    readonly DRAW_BUFFER5: GLenum;
+    readonly DRAW_BUFFER6: GLenum;
+    readonly DRAW_BUFFER7: GLenum;
+    readonly DRAW_BUFFER8: GLenum;
+    readonly DRAW_BUFFER9: GLenum;
+    readonly DRAW_FRAMEBUFFER: GLenum;
+    readonly DRAW_FRAMEBUFFER_BINDING: GLenum;
+    readonly DYNAMIC_COPY: GLenum;
+    readonly DYNAMIC_READ: GLenum;
+    readonly FLOAT_32_UNSIGNED_INT_24_8_REV: GLenum;
+    readonly FLOAT_MAT2x3: GLenum;
+    readonly FLOAT_MAT2x4: GLenum;
+    readonly FLOAT_MAT3x2: GLenum;
+    readonly FLOAT_MAT3x4: GLenum;
+    readonly FLOAT_MAT4x2: GLenum;
+    readonly FLOAT_MAT4x3: GLenum;
+    readonly FRAGMENT_SHADER_DERIVATIVE_HINT: GLenum;
+    readonly FRAMEBUFFER_ATTACHMENT_ALPHA_SIZE: GLenum;
+    readonly FRAMEBUFFER_ATTACHMENT_BLUE_SIZE: GLenum;
+    readonly FRAMEBUFFER_ATTACHMENT_COLOR_ENCODING: GLenum;
+    readonly FRAMEBUFFER_ATTACHMENT_COMPONENT_TYPE: GLenum;
+    readonly FRAMEBUFFER_ATTACHMENT_DEPTH_SIZE: GLenum;
+    readonly FRAMEBUFFER_ATTACHMENT_GREEN_SIZE: GLenum;
+    readonly FRAMEBUFFER_ATTACHMENT_RED_SIZE: GLenum;
+    readonly FRAMEBUFFER_ATTACHMENT_STENCIL_SIZE: GLenum;
+    readonly FRAMEBUFFER_ATTACHMENT_TEXTURE_LAYER: GLenum;
+    readonly FRAMEBUFFER_DEFAULT: GLenum;
+    readonly FRAMEBUFFER_INCOMPLETE_MULTISAMPLE: GLenum;
+    readonly HALF_FLOAT: GLenum;
+    readonly INTERLEAVED_ATTRIBS: GLenum;
+    readonly INT_2_10_10_10_REV: GLenum;
+    readonly INT_SAMPLER_2D: GLenum;
+    readonly INT_SAMPLER_2D_ARRAY: GLenum;
+    readonly INT_SAMPLER_3D: GLenum;
+    readonly INT_SAMPLER_CUBE: GLenum;
+    readonly INVALID_INDEX: GLenum;
+    readonly MAX: GLenum;
+    readonly MAX_3D_TEXTURE_SIZE: GLenum;
+    readonly MAX_ARRAY_TEXTURE_LAYERS: GLenum;
+    readonly MAX_CLIENT_WAIT_TIMEOUT_WEBGL: GLenum;
+    readonly MAX_COLOR_ATTACHMENTS: GLenum;
+    readonly MAX_COMBINED_FRAGMENT_UNIFORM_COMPONENTS: GLenum;
+    readonly MAX_COMBINED_UNIFORM_BLOCKS: GLenum;
+    readonly MAX_COMBINED_VERTEX_UNIFORM_COMPONENTS: GLenum;
+    readonly MAX_DRAW_BUFFERS: GLenum;
+    readonly MAX_ELEMENTS_INDICES: GLenum;
+    readonly MAX_ELEMENTS_VERTICES: GLenum;
+    readonly MAX_ELEMENT_INDEX: GLenum;
+    readonly MAX_FRAGMENT_INPUT_COMPONENTS: GLenum;
+    readonly MAX_FRAGMENT_UNIFORM_BLOCKS: GLenum;
+    readonly MAX_FRAGMENT_UNIFORM_COMPONENTS: GLenum;
+    readonly MAX_PROGRAM_TEXEL_OFFSET: GLenum;
+    readonly MAX_SAMPLES: GLenum;
+    readonly MAX_SERVER_WAIT_TIMEOUT: GLenum;
+    readonly MAX_TEXTURE_LOD_BIAS: GLenum;
+    readonly MAX_TRANSFORM_FEEDBACK_INTERLEAVED_COMPONENTS: GLenum;
+    readonly MAX_TRANSFORM_FEEDBACK_SEPARATE_ATTRIBS: GLenum;
+    readonly MAX_TRANSFORM_FEEDBACK_SEPARATE_COMPONENTS: GLenum;
+    readonly MAX_UNIFORM_BLOCK_SIZE: GLenum;
+    readonly MAX_UNIFORM_BUFFER_BINDINGS: GLenum;
+    readonly MAX_VARYING_COMPONENTS: GLenum;
+    readonly MAX_VERTEX_OUTPUT_COMPONENTS: GLenum;
+    readonly MAX_VERTEX_UNIFORM_BLOCKS: GLenum;
+    readonly MAX_VERTEX_UNIFORM_COMPONENTS: GLenum;
+    readonly MIN: GLenum;
+    readonly MIN_PROGRAM_TEXEL_OFFSET: GLenum;
+    readonly OBJECT_TYPE: GLenum;
+    readonly PACK_ROW_LENGTH: GLenum;
+    readonly PACK_SKIP_PIXELS: GLenum;
+    readonly PACK_SKIP_ROWS: GLenum;
+    readonly PIXEL_PACK_BUFFER: GLenum;
+    readonly PIXEL_PACK_BUFFER_BINDING: GLenum;
+    readonly PIXEL_UNPACK_BUFFER: GLenum;
+    readonly PIXEL_UNPACK_BUFFER_BINDING: GLenum;
+    readonly QUERY_RESULT: GLenum;
+    readonly QUERY_RESULT_AVAILABLE: GLenum;
+    readonly R11F_G11F_B10F: GLenum;
+    readonly R16F: GLenum;
+    readonly R16I: GLenum;
+    readonly R16UI: GLenum;
+    readonly R32F: GLenum;
+    readonly R32I: GLenum;
+    readonly R32UI: GLenum;
+    readonly R8: GLenum;
+    readonly R8I: GLenum;
+    readonly R8UI: GLenum;
+    readonly R8_SNORM: GLenum;
+    readonly RASTERIZER_DISCARD: GLenum;
+    readonly READ_BUFFER: GLenum;
+    readonly READ_FRAMEBUFFER: GLenum;
+    readonly READ_FRAMEBUFFER_BINDING: GLenum;
+    readonly RED: GLenum;
+    readonly RED_INTEGER: GLenum;
+    readonly RENDERBUFFER_SAMPLES: GLenum;
+    readonly RG: GLenum;
+    readonly RG16F: GLenum;
+    readonly RG16I: GLenum;
+    readonly RG16UI: GLenum;
+    readonly RG32F: GLenum;
+    readonly RG32I: GLenum;
+    readonly RG32UI: GLenum;
+    readonly RG8: GLenum;
+    readonly RG8I: GLenum;
+    readonly RG8UI: GLenum;
+    readonly RG8_SNORM: GLenum;
+    readonly RGB10_A2: GLenum;
+    readonly RGB10_A2UI: GLenum;
+    readonly RGB16F: GLenum;
+    readonly RGB16I: GLenum;
+    readonly RGB16UI: GLenum;
+    readonly RGB32F: GLenum;
+    readonly RGB32I: GLenum;
+    readonly RGB32UI: GLenum;
+    readonly RGB8: GLenum;
+    readonly RGB8I: GLenum;
+    readonly RGB8UI: GLenum;
+    readonly RGB8_SNORM: GLenum;
+    readonly RGB9_E5: GLenum;
+    readonly RGBA16F: GLenum;
+    readonly RGBA16I: GLenum;
+    readonly RGBA16UI: GLenum;
+    readonly RGBA32F: GLenum;
+    readonly RGBA32I: GLenum;
+    readonly RGBA32UI: GLenum;
+    readonly RGBA8: GLenum;
+    readonly RGBA8I: GLenum;
+    readonly RGBA8UI: GLenum;
+    readonly RGBA8_SNORM: GLenum;
+    readonly RGBA_INTEGER: GLenum;
+    readonly RGB_INTEGER: GLenum;
+    readonly RG_INTEGER: GLenum;
+    readonly SAMPLER_2D_ARRAY: GLenum;
+    readonly SAMPLER_2D_ARRAY_SHADOW: GLenum;
+    readonly SAMPLER_2D_SHADOW: GLenum;
+    readonly SAMPLER_3D: GLenum;
+    readonly SAMPLER_BINDING: GLenum;
+    readonly SAMPLER_CUBE_SHADOW: GLenum;
+    readonly SEPARATE_ATTRIBS: GLenum;
+    readonly SIGNALED: GLenum;
+    readonly SIGNED_NORMALIZED: GLenum;
+    readonly SRGB: GLenum;
+    readonly SRGB8: GLenum;
+    readonly SRGB8_ALPHA8: GLenum;
+    readonly STATIC_COPY: GLenum;
+    readonly STATIC_READ: GLenum;
+    readonly STENCIL: GLenum;
+    readonly STREAM_COPY: GLenum;
+    readonly STREAM_READ: GLenum;
+    readonly SYNC_CONDITION: GLenum;
+    readonly SYNC_FENCE: GLenum;
+    readonly SYNC_FLAGS: GLenum;
+    readonly SYNC_FLUSH_COMMANDS_BIT: GLenum;
+    readonly SYNC_GPU_COMMANDS_COMPLETE: GLenum;
+    readonly SYNC_STATUS: GLenum;
+    readonly TEXTURE_2D_ARRAY: GLenum;
+    readonly TEXTURE_3D: GLenum;
+    readonly TEXTURE_BASE_LEVEL: GLenum;
+    readonly TEXTURE_BINDING_2D_ARRAY: GLenum;
+    readonly TEXTURE_BINDING_3D: GLenum;
+    readonly TEXTURE_COMPARE_FUNC: GLenum;
+    readonly TEXTURE_COMPARE_MODE: GLenum;
+    readonly TEXTURE_IMMUTABLE_FORMAT: GLenum;
+    readonly TEXTURE_IMMUTABLE_LEVELS: GLenum;
+    readonly TEXTURE_MAX_LEVEL: GLenum;
+    readonly TEXTURE_MAX_LOD: GLenum;
+    readonly TEXTURE_MIN_LOD: GLenum;
+    readonly TEXTURE_WRAP_R: GLenum;
+    readonly TIMEOUT_EXPIRED: GLenum;
+    readonly TIMEOUT_IGNORED: GLint64;
+    readonly TRANSFORM_FEEDBACK: GLenum;
+    readonly TRANSFORM_FEEDBACK_ACTIVE: GLenum;
+    readonly TRANSFORM_FEEDBACK_BINDING: GLenum;
+    readonly TRANSFORM_FEEDBACK_BUFFER: GLenum;
+    readonly TRANSFORM_FEEDBACK_BUFFER_BINDING: GLenum;
+    readonly TRANSFORM_FEEDBACK_BUFFER_MODE: GLenum;
+    readonly TRANSFORM_FEEDBACK_BUFFER_SIZE: GLenum;
+    readonly TRANSFORM_FEEDBACK_BUFFER_START: GLenum;
+    readonly TRANSFORM_FEEDBACK_PAUSED: GLenum;
+    readonly TRANSFORM_FEEDBACK_PRIMITIVES_WRITTEN: GLenum;
+    readonly TRANSFORM_FEEDBACK_VARYINGS: GLenum;
+    readonly UNIFORM_ARRAY_STRIDE: GLenum;
+    readonly UNIFORM_BLOCK_ACTIVE_UNIFORMS: GLenum;
+    readonly UNIFORM_BLOCK_ACTIVE_UNIFORM_INDICES: GLenum;
+    readonly UNIFORM_BLOCK_BINDING: GLenum;
+    readonly UNIFORM_BLOCK_DATA_SIZE: GLenum;
+    readonly UNIFORM_BLOCK_INDEX: GLenum;
+    readonly UNIFORM_BLOCK_REFERENCED_BY_FRAGMENT_SHADER: GLenum;
+    readonly UNIFORM_BLOCK_REFERENCED_BY_VERTEX_SHADER: GLenum;
+    readonly UNIFORM_BUFFER: GLenum;
+    readonly UNIFORM_BUFFER_BINDING: GLenum;
+    readonly UNIFORM_BUFFER_OFFSET_ALIGNMENT: GLenum;
+    readonly UNIFORM_BUFFER_SIZE: GLenum;
+    readonly UNIFORM_BUFFER_START: GLenum;
+    readonly UNIFORM_IS_ROW_MAJOR: GLenum;
+    readonly UNIFORM_MATRIX_STRIDE: GLenum;
+    readonly UNIFORM_OFFSET: GLenum;
+    readonly UNIFORM_SIZE: GLenum;
+    readonly UNIFORM_TYPE: GLenum;
+    readonly UNPACK_IMAGE_HEIGHT: GLenum;
+    readonly UNPACK_ROW_LENGTH: GLenum;
+    readonly UNPACK_SKIP_IMAGES: GLenum;
+    readonly UNPACK_SKIP_PIXELS: GLenum;
+    readonly UNPACK_SKIP_ROWS: GLenum;
+    readonly UNSIGNALED: GLenum;
+    readonly UNSIGNED_INT_10F_11F_11F_REV: GLenum;
+    readonly UNSIGNED_INT_24_8: GLenum;
+    readonly UNSIGNED_INT_2_10_10_10_REV: GLenum;
+    readonly UNSIGNED_INT_5_9_9_9_REV: GLenum;
+    readonly UNSIGNED_INT_SAMPLER_2D: GLenum;
+    readonly UNSIGNED_INT_SAMPLER_2D_ARRAY: GLenum;
+    readonly UNSIGNED_INT_SAMPLER_3D: GLenum;
+    readonly UNSIGNED_INT_SAMPLER_CUBE: GLenum;
+    readonly UNSIGNED_INT_VEC2: GLenum;
+    readonly UNSIGNED_INT_VEC3: GLenum;
+    readonly UNSIGNED_INT_VEC4: GLenum;
+    readonly UNSIGNED_NORMALIZED: GLenum;
+    readonly VERTEX_ARRAY_BINDING: GLenum;
+    readonly VERTEX_ATTRIB_ARRAY_DIVISOR: GLenum;
+    readonly VERTEX_ATTRIB_ARRAY_INTEGER: GLenum;
+    readonly WAIT_FAILED: GLenum;
+}
+
+interface WebGL2RenderingContextOverloads {
+    bufferData(target: GLenum, size: GLsizeiptr, usage: GLenum): void;
+    bufferData(target: GLenum, srcData: BufferSource | null, usage: GLenum): void;
+    bufferData(target: GLenum, srcData: ArrayBufferView, usage: GLenum, srcOffset: GLuint, length?: GLuint): void;
+    bufferSubData(target: GLenum, dstByteOffset: GLintptr, srcData: BufferSource): void;
+    bufferSubData(target: GLenum, dstByteOffset: GLintptr, srcData: ArrayBufferView, srcOffset: GLuint, length?: GLuint): void;
+    compressedTexImage2D(target: GLenum, level: GLint, internalformat: GLenum, width: GLsizei, height: GLsizei, border: GLint, imageSize: GLsizei, offset: GLintptr): void;
+    compressedTexImage2D(target: GLenum, level: GLint, internalformat: GLenum, width: GLsizei, height: GLsizei, border: GLint, srcData: ArrayBufferView, srcOffset?: GLuint, srcLengthOverride?: GLuint): void;
+    compressedTexSubImage2D(target: GLenum, level: GLint, xoffset: GLint, yoffset: GLint, width: GLsizei, height: GLsizei, format: GLenum, imageSize: GLsizei, offset: GLintptr): void;
+    compressedTexSubImage2D(target: GLenum, level: GLint, xoffset: GLint, yoffset: GLint, width: GLsizei, height: GLsizei, format: GLenum, srcData: ArrayBufferView, srcOffset?: GLuint, srcLengthOverride?: GLuint): void;
+    readPixels(x: GLint, y: GLint, width: GLsizei, height: GLsizei, format: GLenum, type: GLenum, dstData: ArrayBufferView | null): void;
+    readPixels(x: GLint, y: GLint, width: GLsizei, height: GLsizei, format: GLenum, type: GLenum, offset: GLintptr): void;
+    readPixels(x: GLint, y: GLint, width: GLsizei, height: GLsizei, format: GLenum, type: GLenum, dstData: ArrayBufferView, dstOffset: GLuint): void;
+    texImage2D(target: GLenum, level: GLint, internalformat: GLint, width: GLsizei, height: GLsizei, border: GLint, format: GLenum, type: GLenum, pixels: ArrayBufferView | null): void;
+    texImage2D(target: GLenum, level: GLint, internalformat: GLint, format: GLenum, type: GLenum, source: TexImageSource): void;
+    texImage2D(target: GLenum, level: GLint, internalformat: GLint, width: GLsizei, height: GLsizei, border: GLint, format: GLenum, type: GLenum, pboOffset: GLintptr): void;
+    texImage2D(target: GLenum, level: GLint, internalformat: GLint, width: GLsizei, height: GLsizei, border: GLint, format: GLenum, type: GLenum, source: TexImageSource): void;
+    texImage2D(target: GLenum, level: GLint, internalformat: GLint, width: GLsizei, height: GLsizei, border: GLint, format: GLenum, type: GLenum, srcData: ArrayBufferView, srcOffset: GLuint): void;
+    texSubImage2D(target: GLenum, level: GLint, xoffset: GLint, yoffset: GLint, width: GLsizei, height: GLsizei, format: GLenum, type: GLenum, pixels: ArrayBufferView | null): void;
+    texSubImage2D(target: GLenum, level: GLint, xoffset: GLint, yoffset: GLint, format: GLenum, type: GLenum, source: TexImageSource): void;
+    texSubImage2D(target: GLenum, level: GLint, xoffset: GLint, yoffset: GLint, width: GLsizei, height: GLsizei, format: GLenum, type: GLenum, pboOffset: GLintptr): void;
+    texSubImage2D(target: GLenum, level: GLint, xoffset: GLint, yoffset: GLint, width: GLsizei, height: GLsizei, format: GLenum, type: GLenum, source: TexImageSource): void;
+    texSubImage2D(target: GLenum, level: GLint, xoffset: GLint, yoffset: GLint, width: GLsizei, height: GLsizei, format: GLenum, type: GLenum, srcData: ArrayBufferView, srcOffset: GLuint): void;
+    uniform1fv(location: WebGLUniformLocation | null, data: Float32List, srcOffset?: GLuint, srcLength?: GLuint): void;
+    uniform1iv(location: WebGLUniformLocation | null, data: Int32List, srcOffset?: GLuint, srcLength?: GLuint): void;
+    uniform2fv(location: WebGLUniformLocation | null, data: Float32List, srcOffset?: GLuint, srcLength?: GLuint): void;
+    uniform2iv(location: WebGLUniformLocation | null, data: Int32List, srcOffset?: GLuint, srcLength?: GLuint): void;
+    uniform3fv(location: WebGLUniformLocation | null, data: Float32List, srcOffset?: GLuint, srcLength?: GLuint): void;
+    uniform3iv(location: WebGLUniformLocation | null, data: Int32List, srcOffset?: GLuint, srcLength?: GLuint): void;
+    uniform4fv(location: WebGLUniformLocation | null, data: Float32List, srcOffset?: GLuint, srcLength?: GLuint): void;
+    uniform4iv(location: WebGLUniformLocation | null, data: Int32List, srcOffset?: GLuint, srcLength?: GLuint): void;
+    uniformMatrix2fv(location: WebGLUniformLocation | null, transpose: GLboolean, data: Float32List, srcOffset?: GLuint, srcLength?: GLuint): void;
+    uniformMatrix3fv(location: WebGLUniformLocation | null, transpose: GLboolean, data: Float32List, srcOffset?: GLuint, srcLength?: GLuint): void;
+    uniformMatrix4fv(location: WebGLUniformLocation | null, transpose: GLboolean, data: Float32List, srcOffset?: GLuint, srcLength?: GLuint): void;
+}
+
 /** Part of the WebGL API and represents the information returned by calling the WebGLRenderingContext.getActiveAttrib() and WebGLRenderingContext.getActiveUniform() methods. */
 interface WebGLActiveInfo {
     readonly name: string;
@@ -16329,6 +17445,14 @@ declare var WebGLProgram: {
     new(): WebGLProgram;
 };
 
+interface WebGLQuery extends WebGLObject {
+}
+
+declare var WebGLQuery: {
+    prototype: WebGLQuery;
+    new(): WebGLQuery;
+};
+
 /** Part of the WebGL API and represents a buffer that can contain an image, or can be source or target of an rendering operation. */
 interface WebGLRenderbuffer extends WebGLObject {
 }
@@ -16339,7 +17463,7 @@ declare var WebGLRenderbuffer: {
 };
 
 /** Provides an interface to the OpenGL ES 2.0 graphics rendering context for the drawing surface of an HTML <canvas> element. */
-interface WebGLRenderingContext extends WebGLRenderingContextBase {
+interface WebGLRenderingContext extends WebGLRenderingContextBase, WebGLRenderingContextOverloads {
 }
 
 declare var WebGLRenderingContext: {
@@ -16659,9 +17783,6 @@ interface WebGLRenderingContextBase {
     blendEquationSeparate(modeRGB: GLenum, modeAlpha: GLenum): void;
     blendFunc(sfactor: GLenum, dfactor: GLenum): void;
     blendFuncSeparate(srcRGB: GLenum, dstRGB: GLenum, srcAlpha: GLenum, dstAlpha: GLenum): void;
-    bufferData(target: GLenum, size: GLsizeiptr, usage: GLenum): void;
-    bufferData(target: GLenum, data: BufferSource | null, usage: GLenum): void;
-    bufferSubData(target: GLenum, offset: GLintptr, data: BufferSource): void;
     checkFramebufferStatus(target: GLenum): GLenum;
     clear(mask: GLbitfield): void;
     clearColor(red: GLclampf, green: GLclampf, blue: GLclampf, alpha: GLclampf): void;
@@ -16669,8 +17790,6 @@ interface WebGLRenderingContextBase {
     clearStencil(s: GLint): void;
     colorMask(red: GLboolean, green: GLboolean, blue: GLboolean, alpha: GLboolean): void;
     compileShader(shader: WebGLShader): void;
-    compressedTexImage2D(target: GLenum, level: GLint, internalformat: GLenum, width: GLsizei, height: GLsizei, border: GLint, data: ArrayBufferView): void;
-    compressedTexSubImage2D(target: GLenum, level: GLint, xoffset: GLint, yoffset: GLint, width: GLsizei, height: GLsizei, format: GLenum, data: ArrayBufferView): void;
     copyTexImage2D(target: GLenum, level: GLint, internalformat: GLenum, x: GLint, y: GLint, width: GLsizei, height: GLsizei, border: GLint): void;
     copyTexSubImage2D(target: GLenum, level: GLint, xoffset: GLint, yoffset: GLint, x: GLint, y: GLint, width: GLsizei, height: GLsizei): void;
     createBuffer(): WebGLBuffer | null;
@@ -16760,7 +17879,6 @@ interface WebGLRenderingContextBase {
     linkProgram(program: WebGLProgram): void;
     pixelStorei(pname: GLenum, param: GLint | GLboolean): void;
     polygonOffset(factor: GLfloat, units: GLfloat): void;
-    readPixels(x: GLint, y: GLint, width: GLsizei, height: GLsizei, format: GLenum, type: GLenum, pixels: ArrayBufferView | null): void;
     renderbufferStorage(target: GLenum, internalformat: GLenum, width: GLsizei, height: GLsizei): void;
     sampleCoverage(value: GLclampf, invert: GLboolean): void;
     scissor(x: GLint, y: GLint, width: GLsizei, height: GLsizei): void;
@@ -16771,31 +17889,16 @@ interface WebGLRenderingContextBase {
     stencilMaskSeparate(face: GLenum, mask: GLuint): void;
     stencilOp(fail: GLenum, zfail: GLenum, zpass: GLenum): void;
     stencilOpSeparate(face: GLenum, fail: GLenum, zfail: GLenum, zpass: GLenum): void;
-    texImage2D(target: GLenum, level: GLint, internalformat: GLint, width: GLsizei, height: GLsizei, border: GLint, format: GLenum, type: GLenum, pixels: ArrayBufferView | null): void;
-    texImage2D(target: GLenum, level: GLint, internalformat: GLint, format: GLenum, type: GLenum, source: TexImageSource): void;
     texParameterf(target: GLenum, pname: GLenum, param: GLfloat): void;
     texParameteri(target: GLenum, pname: GLenum, param: GLint): void;
-    texSubImage2D(target: GLenum, level: GLint, xoffset: GLint, yoffset: GLint, width: GLsizei, height: GLsizei, format: GLenum, type: GLenum, pixels: ArrayBufferView | null): void;
-    texSubImage2D(target: GLenum, level: GLint, xoffset: GLint, yoffset: GLint, format: GLenum, type: GLenum, source: TexImageSource): void;
     uniform1f(location: WebGLUniformLocation | null, x: GLfloat): void;
-    uniform1fv(location: WebGLUniformLocation | null, v: Float32List): void;
     uniform1i(location: WebGLUniformLocation | null, x: GLint): void;
-    uniform1iv(location: WebGLUniformLocation | null, v: Int32List): void;
     uniform2f(location: WebGLUniformLocation | null, x: GLfloat, y: GLfloat): void;
-    uniform2fv(location: WebGLUniformLocation | null, v: Float32List): void;
     uniform2i(location: WebGLUniformLocation | null, x: GLint, y: GLint): void;
-    uniform2iv(location: WebGLUniformLocation | null, v: Int32List): void;
     uniform3f(location: WebGLUniformLocation | null, x: GLfloat, y: GLfloat, z: GLfloat): void;
-    uniform3fv(location: WebGLUniformLocation | null, v: Float32List): void;
     uniform3i(location: WebGLUniformLocation | null, x: GLint, y: GLint, z: GLint): void;
-    uniform3iv(location: WebGLUniformLocation | null, v: Int32List): void;
     uniform4f(location: WebGLUniformLocation | null, x: GLfloat, y: GLfloat, z: GLfloat, w: GLfloat): void;
-    uniform4fv(location: WebGLUniformLocation | null, v: Float32List): void;
     uniform4i(location: WebGLUniformLocation | null, x: GLint, y: GLint, z: GLint, w: GLint): void;
-    uniform4iv(location: WebGLUniformLocation | null, v: Int32List): void;
-    uniformMatrix2fv(location: WebGLUniformLocation | null, transpose: GLboolean, value: Float32List): void;
-    uniformMatrix3fv(location: WebGLUniformLocation | null, transpose: GLboolean, value: Float32List): void;
-    uniformMatrix4fv(location: WebGLUniformLocation | null, transpose: GLboolean, value: Float32List): void;
     useProgram(program: WebGLProgram | null): void;
     validateProgram(program: WebGLProgram): void;
     vertexAttrib1f(index: GLuint, x: GLfloat): void;
@@ -17106,6 +18209,38 @@ interface WebGLRenderingContextBase {
     readonly ZERO: GLenum;
 }
 
+interface WebGLRenderingContextOverloads {
+    bufferData(target: GLenum, size: GLsizeiptr, usage: GLenum): void;
+    bufferData(target: GLenum, data: BufferSource | null, usage: GLenum): void;
+    bufferSubData(target: GLenum, offset: GLintptr, data: BufferSource): void;
+    compressedTexImage2D(target: GLenum, level: GLint, internalformat: GLenum, width: GLsizei, height: GLsizei, border: GLint, data: ArrayBufferView): void;
+    compressedTexSubImage2D(target: GLenum, level: GLint, xoffset: GLint, yoffset: GLint, width: GLsizei, height: GLsizei, format: GLenum, data: ArrayBufferView): void;
+    readPixels(x: GLint, y: GLint, width: GLsizei, height: GLsizei, format: GLenum, type: GLenum, pixels: ArrayBufferView | null): void;
+    texImage2D(target: GLenum, level: GLint, internalformat: GLint, width: GLsizei, height: GLsizei, border: GLint, format: GLenum, type: GLenum, pixels: ArrayBufferView | null): void;
+    texImage2D(target: GLenum, level: GLint, internalformat: GLint, format: GLenum, type: GLenum, source: TexImageSource): void;
+    texSubImage2D(target: GLenum, level: GLint, xoffset: GLint, yoffset: GLint, width: GLsizei, height: GLsizei, format: GLenum, type: GLenum, pixels: ArrayBufferView | null): void;
+    texSubImage2D(target: GLenum, level: GLint, xoffset: GLint, yoffset: GLint, format: GLenum, type: GLenum, source: TexImageSource): void;
+    uniform1fv(location: WebGLUniformLocation | null, v: Float32List): void;
+    uniform1iv(location: WebGLUniformLocation | null, v: Int32List): void;
+    uniform2fv(location: WebGLUniformLocation | null, v: Float32List): void;
+    uniform2iv(location: WebGLUniformLocation | null, v: Int32List): void;
+    uniform3fv(location: WebGLUniformLocation | null, v: Float32List): void;
+    uniform3iv(location: WebGLUniformLocation | null, v: Int32List): void;
+    uniform4fv(location: WebGLUniformLocation | null, v: Float32List): void;
+    uniform4iv(location: WebGLUniformLocation | null, v: Int32List): void;
+    uniformMatrix2fv(location: WebGLUniformLocation | null, transpose: GLboolean, value: Float32List): void;
+    uniformMatrix3fv(location: WebGLUniformLocation | null, transpose: GLboolean, value: Float32List): void;
+    uniformMatrix4fv(location: WebGLUniformLocation | null, transpose: GLboolean, value: Float32List): void;
+}
+
+interface WebGLSampler extends WebGLObject {
+}
+
+declare var WebGLSampler: {
+    prototype: WebGLSampler;
+    new(): WebGLSampler;
+};
+
 /** The WebGLShader is part of the WebGL API and can either be a vertex or a fragment shader. A WebGLProgram requires both types of shaders. */
 interface WebGLShader extends WebGLObject {
 }
@@ -17127,6 +18262,14 @@ declare var WebGLShaderPrecisionFormat: {
     new(): WebGLShaderPrecisionFormat;
 };
 
+interface WebGLSync extends WebGLObject {
+}
+
+declare var WebGLSync: {
+    prototype: WebGLSync;
+    new(): WebGLSync;
+};
+
 /** Part of the WebGL API and represents an opaque texture object providing storage and state for texturing operations. */
 interface WebGLTexture extends WebGLObject {
 }
@@ -17136,6 +18279,14 @@ declare var WebGLTexture: {
     new(): WebGLTexture;
 };
 
+interface WebGLTransformFeedback extends WebGLObject {
+}
+
+declare var WebGLTransformFeedback: {
+    prototype: WebGLTransformFeedback;
+    new(): WebGLTransformFeedback;
+};
+
 /** Part of the WebGL API and represents the location of a uniform variable in a shader program. */
 interface WebGLUniformLocation {
 }
@@ -17143,6 +18294,14 @@ interface WebGLUniformLocation {
 declare var WebGLUniformLocation: {
     prototype: WebGLUniformLocation;
     new(): WebGLUniformLocation;
+};
+
+interface WebGLVertexArrayObject extends WebGLObject {
+}
+
+declare var WebGLVertexArrayObject: {
+    prototype: WebGLVertexArrayObject;
+    new(): WebGLVertexArrayObject;
 };
 
 interface WebGLVertexArrayObjectOES extends WebGLObject {
@@ -17289,9 +18448,9 @@ interface WindowEventMap extends GlobalEventHandlersEventMap, WindowEventHandler
     "play": Event;
     "playing": Event;
     "popstate": PopStateEvent;
-    "progress": ProgressEvent;
+    "progress": ProgressEvent<Window>;
     "ratechange": Event;
-    "readystatechange": ProgressEvent;
+    "readystatechange": ProgressEvent<Window>;
     "reset": Event;
     "resize": UIEvent;
     "scroll": Event;
@@ -17319,11 +18478,6 @@ interface WindowEventMap extends GlobalEventHandlersEventMap, WindowEventHandler
 
 /** A window containing a DOM document; the document property points to the DOM document loaded in that window. */
 interface Window extends EventTarget, WindowTimers, WindowSessionStorage, WindowLocalStorage, WindowConsole, GlobalEventHandlers, IDBEnvironment, WindowBase64, AnimationFrameProvider, WindowOrWorkerGlobalScope, WindowEventHandlers {
-    Blob: typeof Blob;
-    TextDecoder: typeof TextDecoder;
-    TextEncoder: typeof TextEncoder;
-    URL: typeof URL;
-    URLSearchParams: typeof URLSearchParams;
     readonly applicationCache: ApplicationCache;
     readonly caches: CacheStorage;
     readonly clientInformation: Navigator;
@@ -17375,7 +18529,7 @@ interface Window extends EventTarget, WindowTimers, WindowSessionStorage, Window
     onmspointerup: ((this: Window, ev: Event) => any) | null;
     /** @deprecated */
     onorientationchange: ((this: Window, ev: Event) => any) | null;
-    onreadystatechange: ((this: Window, ev: ProgressEvent) => any) | null;
+    onreadystatechange: ((this: Window, ev: ProgressEvent<Window>) => any) | null;
     onvrdisplayactivate: ((this: Window, ev: Event) => any) | null;
     onvrdisplayblur: ((this: Window, ev: Event) => any) | null;
     onvrdisplayconnect: ((this: Window, ev: Event) => any) | null;
@@ -17403,14 +18557,14 @@ interface Window extends EventTarget, WindowTimers, WindowSessionStorage, Window
     readonly scrollX: number;
     readonly scrollY: number;
     readonly scrollbars: BarProp;
-    readonly self: Window;
+    readonly self: Window & typeof globalThis;
     readonly speechSynthesis: SpeechSynthesis;
     status: string;
     readonly statusbar: BarProp;
     readonly styleMedia: StyleMedia;
     readonly toolbar: BarProp;
     readonly top: Window;
-    readonly window: Window;
+    readonly window: Window & typeof globalThis;
     alert(message?: any): void;
     blur(): void;
     /** @deprecated */
@@ -17725,13 +18879,13 @@ declare var XMLHttpRequest: {
 };
 
 interface XMLHttpRequestEventTargetEventMap {
-    "abort": ProgressEvent;
-    "error": ProgressEvent;
-    "load": ProgressEvent;
-    "loadend": ProgressEvent;
-    "loadstart": ProgressEvent;
-    "progress": ProgressEvent;
-    "timeout": ProgressEvent;
+    "abort": ProgressEvent<XMLHttpRequestEventTarget>;
+    "error": ProgressEvent<XMLHttpRequestEventTarget>;
+    "load": ProgressEvent<XMLHttpRequestEventTarget>;
+    "loadend": ProgressEvent<XMLHttpRequestEventTarget>;
+    "loadstart": ProgressEvent<XMLHttpRequestEventTarget>;
+    "progress": ProgressEvent<XMLHttpRequestEventTarget>;
+    "timeout": ProgressEvent<XMLHttpRequestEventTarget>;
 }
 
 interface XMLHttpRequestEventTarget extends EventTarget {
@@ -18313,11 +19467,6 @@ declare var Image: {
 declare var Option: {
     new(text?: string, value?: string, defaultSelected?: boolean, selected?: boolean): HTMLOptionElement;
 };
-declare var Blob: typeof Blob;
-declare var TextDecoder: typeof TextDecoder;
-declare var TextEncoder: typeof TextEncoder;
-declare var URL: typeof URL;
-declare var URLSearchParams: typeof URLSearchParams;
 declare var applicationCache: ApplicationCache;
 declare var caches: CacheStorage;
 declare var clientInformation: Navigator;
@@ -18369,7 +19518,7 @@ declare var onmspointerover: ((this: Window, ev: Event) => any) | null;
 declare var onmspointerup: ((this: Window, ev: Event) => any) | null;
 /** @deprecated */
 declare var onorientationchange: ((this: Window, ev: Event) => any) | null;
-declare var onreadystatechange: ((this: Window, ev: ProgressEvent) => any) | null;
+declare var onreadystatechange: ((this: Window, ev: ProgressEvent<Window>) => any) | null;
 declare var onvrdisplayactivate: ((this: Window, ev: Event) => any) | null;
 declare var onvrdisplayblur: ((this: Window, ev: Event) => any) | null;
 declare var onvrdisplayconnect: ((this: Window, ev: Event) => any) | null;
@@ -18397,14 +19546,14 @@ declare var screenY: number;
 declare var scrollX: number;
 declare var scrollY: number;
 declare var scrollbars: BarProp;
-declare var self: Window;
+declare var self: Window & typeof globalThis;
 declare var speechSynthesis: SpeechSynthesis;
 declare var status: string;
 declare var statusbar: BarProp;
 declare var styleMedia: StyleMedia;
 declare var toolbar: BarProp;
 declare var top: Window;
-declare var window: Window;
+declare var window: Window & typeof globalThis;
 declare function alert(message?: any): void;
 declare function blur(): void;
 /** @deprecated */
@@ -18760,10 +19909,10 @@ type BodyInit = Blob | BufferSource | FormData | URLSearchParams | ReadableStrea
 type RequestInfo = Request | string;
 type BlobPart = BufferSource | Blob | string;
 type DOMHighResTimeStamp = number;
-type RenderingContext = CanvasRenderingContext2D | ImageBitmapRenderingContext | WebGLRenderingContext;
+type RenderingContext = CanvasRenderingContext2D | ImageBitmapRenderingContext | WebGLRenderingContext | WebGL2RenderingContext;
 type HTMLOrSVGImageElement = HTMLImageElement | SVGImageElement;
 type CanvasImageSource = HTMLOrSVGImageElement | HTMLVideoElement | HTMLCanvasElement | ImageBitmap | OffscreenCanvas;
-type OffscreenRenderingContext = OffscreenCanvasRenderingContext2D | WebGLRenderingContext;
+type OffscreenRenderingContext = OffscreenCanvasRenderingContext2D | ImageBitmapRenderingContext | WebGLRenderingContext | WebGL2RenderingContext;
 type MessageEventSource = WindowProxy | MessagePort | ServiceWorker;
 type HTMLOrSVGScriptElement = HTMLScriptElement | SVGScriptElement;
 type ImageBitmapSource = CanvasImageSource | Blob | ImageData;
@@ -18776,6 +19925,12 @@ type ConstrainBoolean = boolean | ConstrainBooleanParameters;
 type ConstrainDOMString = string | string[] | ConstrainDOMStringParameters;
 type PerformanceEntryList = PerformanceEntry[];
 type VibratePattern = number | number[];
+type COSEAlgorithmIdentifier = number;
+type AuthenticatorSelectionList = AAGUID[];
+type AAGUID = BufferSource;
+type AuthenticationExtensionsSupported = string[];
+type UvmEntry = number[];
+type UvmEntries = UvmEntry[];
 type AlgorithmIdentifier = string | Algorithm;
 type HashAlgorithmIdentifier = AlgorithmIdentifier;
 type BigInteger = Uint8Array;
@@ -18793,6 +19948,9 @@ type GLclampf = number;
 type TexImageSource = ImageBitmap | ImageData | HTMLImageElement | HTMLCanvasElement | HTMLVideoElement | OffscreenCanvas;
 type Float32List = Float32Array | GLfloat[];
 type Int32List = Int32Array | GLint[];
+type GLint64 = number;
+type GLuint64 = number;
+type Uint32List = Uint32Array | GLuint[];
 type BufferSource = ArrayBufferView | ArrayBuffer;
 type DOMTimeStamp = number;
 type LineAndPositionSetting = number | AutoKeyword;
@@ -18810,8 +19968,11 @@ type WindowProxy = Window;
 type AlignSetting = "start" | "center" | "end" | "left" | "right";
 type AnimationPlayState = "idle" | "running" | "paused" | "finished";
 type AppendMode = "segments" | "sequence";
+type AttestationConveyancePreference = "none" | "indirect" | "direct";
 type AudioContextLatencyCategory = "balanced" | "interactive" | "playback";
 type AudioContextState = "suspended" | "running" | "closed";
+type AuthenticatorAttachment = "platform" | "cross-platform";
+type AuthenticatorTransport = "usb" | "nfc" | "ble" | "internal";
 type AutoKeyword = "auto";
 type AutomationRate = "a-rate" | "k-rate";
 type BinaryType = "blob" | "arraybuffer";
@@ -18839,7 +20000,6 @@ type FillMode = "none" | "forwards" | "backwards" | "both" | "auto";
 type FullscreenNavigationUI = "auto" | "show" | "hide";
 type GamepadHand = "" | "left" | "right";
 type GamepadHapticActuatorType = "vibration";
-type GamepadInputEmulationType = "mouse" | "keyboard" | "gamepad";
 type GamepadMappingType = "" | "standard";
 type IDBCursorDirection = "next" | "nextunique" | "prev" | "prevunique";
 type IDBRequestReadyState = "pending" | "done";
@@ -18865,7 +20025,7 @@ type NavigationReason = "up" | "down" | "left" | "right";
 type NavigationType = "navigate" | "reload" | "back_forward" | "prerender";
 type NotificationDirection = "auto" | "ltr" | "rtl";
 type NotificationPermission = "default" | "denied" | "granted";
-type OffscreenRenderingContextId = "2d" | "webgl";
+type OffscreenRenderingContextId = "2d" | "bitmaprenderer" | "webgl" | "webgl2";
 type OrientationLockType = "any" | "natural" | "landscape" | "portrait" | "portrait-primary" | "portrait-secondary" | "landscape-primary" | "landscape-secondary";
 type OrientationType = "portrait-primary" | "portrait-secondary" | "landscape-primary" | "landscape-secondary";
 type OscillatorType = "sine" | "square" | "sawtooth" | "triangle" | "custom";
@@ -18877,6 +20037,7 @@ type PermissionName = "geolocation" | "notifications" | "push" | "midi" | "camer
 type PermissionState = "granted" | "denied" | "prompt";
 type PlaybackDirection = "normal" | "reverse" | "alternate" | "alternate-reverse";
 type PositionAlignSetting = "line-left" | "center" | "line-right" | "auto";
+type PublicKeyCredentialType = "public-key";
 type PushEncryptionKeyName = "p256dh" | "auth";
 type PushPermissionState = "denied" | "granted" | "prompt";
 type RTCBundlePolicy = "balanced" | "max-compat" | "max-bundle";
@@ -18932,6 +20093,7 @@ type TextTrackKind = "subtitles" | "captions" | "descriptions" | "chapters" | "m
 type TextTrackMode = "disabled" | "hidden" | "showing";
 type TouchType = "direct" | "stylus";
 type Transport = "usb" | "nfc" | "ble";
+type UserVerificationRequirement = "required" | "preferred" | "discouraged";
 type VRDisplayEventReason = "mounted" | "navigation" | "requested" | "unmounted";
 type VideoFacingModeEnum = "user" | "environment" | "left" | "right";
 type VisibilityState = "hidden" | "visible" | "prerender";
