@@ -752,6 +752,12 @@ namespace ts {
             description: Diagnostics.Disable_size_limitations_on_JavaScript_projects
         },
         {
+            name: "disableSourceOfProjectReferenceRedirect",
+            type: "boolean",
+            category: Diagnostics.Advanced_Options,
+            description: Diagnostics.Disable_using_source_of_project_reference_redirect_files
+        },
+        {
             name: "noImplicitUseStrict",
             type: "boolean",
             affectsSemanticDiagnostics: true,

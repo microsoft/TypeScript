@@ -239,7 +239,7 @@ namespace ts {
         /* @internal */
         setResolvedProjectReferenceCallbacks?(callbacks: ResolvedProjectReferenceCallbacks): void;
         /* @internal */
-        useSourceInsteadOfReferenceRedirect?(): boolean;
+        useSourceOfProjectReferenceRedirect?(): boolean;
     }
 
     /* @internal */

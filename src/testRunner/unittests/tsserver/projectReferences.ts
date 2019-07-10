@@ -417,6 +417,7 @@ fn5();
 
             interface VerifierAndWithRefs {
                 withRefs: boolean;
+                disableSourceOfProjectReferenceRedirect?: true;
                 verifier: (withRefs: boolean) => readonly DocumentPositionMapperVerifier[];
             }
 
@@ -426,7 +427,7 @@ fn5();
             interface OpenTsFile extends VerifierAndWithRefs {
                 onHostCreate?: (host: TestServerHost) => void;
             }
-            function openTsFile({ withRefs, verifier, onHostCreate }: OpenTsFile) {
+            function openTsFile({ withRefs, disableSourceOfProjectReferenceRedirect, verifier, onHostCreate }: OpenTsFile) {
                 const host = createHost(files, [mainConfig.path]);
                 if (!withRefs) {
                     // Erase project reference
@@ -434,11 +435,22 @@ fn5();
                         compilerOptions: { composite: true, declarationMap: true }
                     }));
                 }
+                else if (disableSourceOfProjectReferenceRedirect) {
+                    // Erase project reference
+                    host.writeFile(mainConfig.path, JSON.stringify({
+                        compilerOptions: {
+                            composite: true,
+                            declarationMap: true,
+                            disableSourceOfProjectReferenceRedirect: !!disableSourceOfProjectReferenceRedirect
+                        },
+                        references: [{ path: "../dependency" }]
+                    }));
+                }
                 if (onHostCreate) {
                     onHostCreate(host);
                 }
                 const session = createSession(host);
-                const verifiers = verifier(withRefs);
+                const verifiers = verifier(withRefs && !disableSourceOfProjectReferenceRedirect);
                 openFilesForSession([...openFiles(verifiers), randomFile], session);
                 return { host, session, verifiers };
             }
@@ -786,9 +798,9 @@ fn5();
                 });
             }
 
-            function verifyScenarioWorker({ mainScenario, verifier }: VerifyScenario, withRefs: boolean) {
+            function verifyScenarioWorker({ mainScenario, verifier }: VerifyScenario, withRefs: boolean, disableSourceOfProjectReferenceRedirect?: true) {
                 it(mainScenario, () => {
-                    const { host, session, verifiers } = openTsFile({ withRefs, verifier });
+                    const { host, session, verifiers } = openTsFile({ withRefs, disableSourceOfProjectReferenceRedirect, verifier });
                     checkProject(session, verifiers);
                     verifyScenarioAndScriptInfoCollection(session, host, verifiers, "main");
                 });
@@ -798,6 +810,7 @@ fn5();
                     scenarioName: "when usage file changes, document position mapper doesnt change",
                     verifier,
                     withRefs,
+                    disableSourceOfProjectReferenceRedirect,
                     change: (_host, session, verifiers) => verifiers.forEach(
                         verifier => session.executeCommandSeq<protocol.ChangeRequest>({
                             command: protocol.CommandTypes.Change,
@@ -819,6 +832,7 @@ fn5();
                     scenarioName: "when dependency .d.ts changes, document position mapper doesnt change",
                     verifier,
                     withRefs,
+                    disableSourceOfProjectReferenceRedirect,
                     change: host => host.writeFile(
                         dtsLocation,
                         host.readFile(dtsLocation)!.replace(
@@ -835,6 +849,7 @@ fn5();
                     scenarioName: "when dependency file's map changes",
                     verifier,
                     withRefs,
+                    disableSourceOfProjectReferenceRedirect,
                     change: host => host.writeFile(
                         dtsMapLocation,
                         `{"version":3,"file":"FnS.d.ts","sourceRoot":"","sources":["../dependency/FnS.ts"],"names":[],"mappings":"AAAA,wBAAgB,GAAG,SAAM;AACzB,wBAAgB,GAAG,SAAM;AACzB,wBAAgB,GAAG,SAAM;AACzB,wBAAgB,GAAG,SAAM;AACzB,wBAAgB,GAAG,SAAM;AACzB,eAAO,MAAM,CAAC,KAAK,CAAC"}`
@@ -846,6 +861,7 @@ fn5();
                     scenarioName: "with depedency files map file",
                     verifier,
                     withRefs,
+                    disableSourceOfProjectReferenceRedirect,
                     fileLocation: dtsMapLocation,
                     fileNotPresentKey: "noMap",
                     fileCreatedKey: "mapFileCreated",
@@ -856,6 +872,7 @@ fn5();
                     scenarioName: "with depedency .d.ts file",
                     verifier,
                     withRefs,
+                    disableSourceOfProjectReferenceRedirect,
                     fileLocation: dtsLocation,
                     fileNotPresentKey: "noDts",
                     fileCreatedKey: "dtsFileCreated",
@@ -863,7 +880,7 @@ fn5();
                     noDts: true
                 });
 
-                if (withRefs) {
+                if (withRefs && !disableSourceOfProjectReferenceRedirect) {
                     verifyScenarioWithChanges({
                         scenarioName: "when defining project source changes",
                         verifier,
@@ -905,6 +922,9 @@ ${dependencyTs.content}`);
                     verifyScenarioWorker(scenario, /*withRefs*/ false);
                 });
                 describe("when main tsconfig has project reference", () => {
+                    verifyScenarioWorker(scenario, /*withRefs*/ true);
+                });
+                describe("when main tsconfig has but has disableSourceOfProjectReferenceRedirect", () => {
                     verifyScenarioWorker(scenario, /*withRefs*/ true);
                 });
             }

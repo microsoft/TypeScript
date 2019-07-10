@@ -1540,11 +1540,12 @@ namespace ts.server {
         }
 
         /* @internal */
-        useSourceInsteadOfReferenceRedirect = () => !!this.languageServiceEnabled;
+        useSourceOfProjectReferenceRedirect = () => !!this.languageServiceEnabled &&
+            !this.getCompilerOptions().disableSourceOfProjectReferenceRedirect;
 
         fileExists(file: string): boolean {
             // Project references go to source file instead of .d.ts file
-            if (this.useSourceInsteadOfReferenceRedirect() && this.projectReferenceCallbacks) {
+            if (this.useSourceOfProjectReferenceRedirect() && this.projectReferenceCallbacks) {
                 const source = this.projectReferenceCallbacks.getSourceOfProjectReferenceRedirect(file);
                 if (source) return isString(source) ? super.fileExists(source) : true;
             }
@@ -1553,7 +1554,7 @@ namespace ts.server {
 
         directoryExists(path: string): boolean {
             if (super.directoryExists(path)) return true;
-            if (!this.useSourceInsteadOfReferenceRedirect() || !this.projectReferenceCallbacks) return false;
+            if (!this.useSourceOfProjectReferenceRedirect() || !this.projectReferenceCallbacks) return false;
 
             if (!this.mapOfDeclarationDirectories) {
                 this.mapOfDeclarationDirectories = createMap();

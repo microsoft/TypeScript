@@ -2583,7 +2583,7 @@ namespace ts.server {
             if (!configFileName) return undefined;
 
             const configuredProject = this.findConfiguredProjectByProjectName(configFileName) ||
-                this.createAndLoadConfiguredProject(configFileName, `Creating project for original file: ${originalFileInfo.fileName}${location !== originalLocation ? " for location " + location.fileName : ""}`);
+                this.createAndLoadConfiguredProject(configFileName, `Creating project for original file: ${originalFileInfo.fileName}${location !== originalLocation ? " for location: " + location.fileName : ""}`);
             if (configuredProject === project) return originalLocation;
             updateProjectIfDirty(configuredProject);
             // Keep this configured project as referenced from project

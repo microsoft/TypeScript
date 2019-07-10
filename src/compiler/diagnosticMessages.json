@@ -3967,6 +3967,10 @@
         "category": "Message",
         "code": 6220
     },
+    "Disable using source of project reference redirect files.": {
+        "category": "Message",
+        "code": 6221
+    },
 
     "Projects to reference": {
         "category": "Message",

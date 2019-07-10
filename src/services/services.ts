@@ -1248,8 +1248,8 @@ namespace ts {
             if (host.setResolvedProjectReferenceCallbacks) {
                 compilerHost.setResolvedProjectReferenceCallbacks = callbacks => host.setResolvedProjectReferenceCallbacks!(callbacks);
             }
-            if (host.useSourceInsteadOfReferenceRedirect) {
-                compilerHost.useSourceInsteadOfReferenceRedirect = () => host.useSourceInsteadOfReferenceRedirect!();
+            if (host.useSourceOfProjectReferenceRedirect) {
+                compilerHost.useSourceOfProjectReferenceRedirect = () => host.useSourceOfProjectReferenceRedirect!();
             }
 
             const documentRegistryBucketKey = documentRegistry.getKeyForCompilationSettings(newSettings);

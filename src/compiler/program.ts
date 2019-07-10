@@ -814,7 +814,7 @@ namespace ts {
         let projectReferenceRedirects: Map<ResolvedProjectReference | false> | undefined;
         let mapFromFileToProjectReferenceRedirects: Map<Path> | undefined;
         let mapFromToProjectReferenceRedirectSource: Map<SourceOfProjectReferenceRedirect> | undefined;
-        const useSourceOfReference = !!host.useSourceInsteadOfReferenceRedirect && host.useSourceInsteadOfReferenceRedirect();
+        const useSourceOfProjectReferenceRedirect = !!host.useSourceOfProjectReferenceRedirect && host.useSourceOfProjectReferenceRedirect();
 
         const shouldCreateNewSourceFile = shouldProgramCreateNewSourceFiles(oldProgram, options);
         const structuralIsReused = tryReuseStructureFromOldProgram();
@@ -836,7 +836,7 @@ namespace ts {
                     for (const parsedRef of resolvedProjectReferences) {
                         if (!parsedRef) continue;
                         const out = parsedRef.commandLine.options.outFile || parsedRef.commandLine.options.out;
-                        if (useSourceOfReference) {
+                        if (useSourceOfProjectReferenceRedirect) {
                             if (out || getEmitModuleKind(parsedRef.commandLine.options) === ModuleKind.None) {
                                 for (const fileName of parsedRef.commandLine.fileNames) {
                                     processSourceFile(fileName, /*isDefaultLib*/ false, /*ignoreNoDefaultLib*/ false, /*packageId*/ undefined);
@@ -1418,7 +1418,7 @@ namespace ts {
             for (const newSourceFile of newSourceFiles) {
                 const filePath = newSourceFile.path;
                 addFileToFilesByName(newSourceFile, filePath, newSourceFile.resolvedPath);
-                if (useSourceOfReference) {
+                if (useSourceOfProjectReferenceRedirect) {
                     const redirectProject = getProjectReferenceRedirectProject(newSourceFile.fileName);
                     if (redirectProject && !(redirectProject.commandLine.options.outFile || redirectProject.commandLine.options.out)) {
                         const redirect = getProjectReferenceOutputName(redirectProject, newSourceFile.fileName);
@@ -2252,7 +2252,7 @@ namespace ts {
 
         // Get source file from normalized fileName
         function findSourceFile(fileName: string, path: Path, isDefaultLib: boolean, ignoreNoDefaultLib: boolean, refFile: SourceFile, refPos: number, refEnd: number, packageId: PackageId | undefined): SourceFile | undefined {
-            if (useSourceOfReference) {
+            if (useSourceOfProjectReferenceRedirect) {
                 const source = getSourceOfProjectReferenceRedirect(fileName);
                 if (source) {
                     const file = isString(source) ?
@@ -2309,7 +2309,7 @@ namespace ts {
             }
 
             let redirectedPath: Path | undefined;
-            if (refFile && !useSourceOfReference) {
+            if (refFile && !useSourceOfProjectReferenceRedirect) {
                 const redirectProject = getProjectReferenceRedirectProject(fileName);
                 if (redirectProject) {
                     if (redirectProject.commandLine.options.outFile || redirectProject.commandLine.options.out) {
@@ -2498,7 +2498,7 @@ namespace ts {
         }
 
         function isSourceOfProjectReferenceRedirect(fileName: string) {
-            return useSourceOfReference && !!getResolvedProjectReferenceToRedirect(fileName);
+            return useSourceOfProjectReferenceRedirect && !!getResolvedProjectReferenceToRedirect(fileName);
         }
 
         function forEachProjectReference<T>(
