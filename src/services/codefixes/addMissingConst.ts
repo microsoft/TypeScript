@@ -42,6 +42,19 @@ namespace ts.codefix {
 
             return applyChange(changeTracker, parent, sourceFile, fixedNodes);
         }
+
+        const commaExpression = findAncestor(token, node =>
+            isExpressionStatement(node.parent) ? true :
+            isPossiblyPartOfCommaSeperatedInitializer(node) ? false : "quit"
+        );
+        if (commaExpression) {
+            const checker = program.getTypeChecker();
+            if (!expressionCouldBeVariableDeclaration(commaExpression, checker)) {
+                return;
+            }
+
+            return applyChange(changeTracker, commaExpression, sourceFile, fixedNodes);
+        }
     }
 
     function applyChange(changeTracker: textChanges.ChangeTracker, initializer: Node, sourceFile: SourceFile, fixedNodes?: NodeSet<Node>) {
@@ -63,11 +76,34 @@ namespace ts.codefix {
         }
     }
 
-    function arrayElementCouldBeVariableDeclaration(expression: Expression, checker: TypeChecker) {
+    function arrayElementCouldBeVariableDeclaration(expression: Expression, checker: TypeChecker): boolean {
         const identifier =
             isIdentifier(expression) ? expression :
             isAssignmentExpression(expression, /*excludeCompoundAssignment*/ true) && isIdentifier(expression.left) ? expression.left :
             undefined;
         return !!identifier && !checker.getSymbolAtLocation(identifier);
+    }
+
+    function isPossiblyPartOfCommaSeperatedInitializer(node: Node): boolean {
+        switch (node.kind) {
+            case SyntaxKind.Identifier:
+            case SyntaxKind.BinaryExpression:
+            case SyntaxKind.CommaToken:
+                return true;
+            default:
+                return false;
+        }
+    }
+
+    function expressionCouldBeVariableDeclaration(expression: Node, checker: TypeChecker): boolean {
+        if (!isBinaryExpression(expression)) {
+            return false;
+        }
+        
+        if (expression.operatorToken.kind === SyntaxKind.CommaToken) {
+            return every([expression.left, expression.right], expression => expressionCouldBeVariableDeclaration(expression, checker));
+        }
+
+        return isIdentifier(expression.left) && !checker.getSymbolAtLocation(expression.left);
     }
 }
