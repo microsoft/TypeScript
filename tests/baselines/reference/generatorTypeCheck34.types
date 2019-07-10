@@ -1,13 +1,13 @@
 === tests/cases/conformance/es6/yieldExpressions/generatorTypeCheck34.ts ===
 function* g() {
->g : () => IterableIterator<number>
+>g : () => Generator<number, void, unknown>
 
     yield 0;
 >yield 0 : any
 >0 : 0
 
     function* g2() {
->g2 : () => IterableIterator<string>
+>g2 : () => Generator<never, string, unknown>
 
         return "";
 >"" : ""

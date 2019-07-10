@@ -1,11 +1,11 @@
 === tests/cases/conformance/es6/functionDeclarations/FunctionDeclaration9_es6.ts ===
 function * foo() {
->foo : () => IterableIterator<any>
+>foo : () => Generator<any, void, unknown>
 
   var v = { [yield]: foo }
->v : { [x: number]: () => IterableIterator<any>; }
->{ [yield]: foo } : { [x: number]: () => IterableIterator<any>; }
->[yield] : () => IterableIterator<any>
+>v : { [x: number]: () => Generator<any, void, unknown>; }
+>{ [yield]: foo } : { [x: number]: () => Generator<any, void, unknown>; }
+>[yield] : () => Generator<any, void, unknown>
 >yield : any
->foo : () => IterableIterator<any>
+>foo : () => Generator<any, void, unknown>
 }

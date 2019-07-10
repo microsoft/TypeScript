@@ -1236,7 +1236,7 @@
         "category": "Error",
         "code": 2348
     },
-    "Cannot invoke an expression whose type lacks a call signature. Type '{0}' has no compatible call signatures.": {
+    "This expression is not callable.": {
         "category": "Error",
         "code": 2349
     },
@@ -1244,7 +1244,7 @@
         "category": "Error",
         "code": 2350
     },
-    "Cannot use 'new' with an expression whose type lacks a call or construct signature.": {
+    "This expression is not constructable.": {
         "category": "Error",
         "code": 2351
     },
@@ -1764,7 +1764,7 @@
         "category": "Error",
         "code": 2489
     },
-    "The type returned by the 'next()' method of an iterator must have a 'value' property.": {
+    "The type returned by the '{0}()' method of an iterator must have a 'value' property.": {
         "category": "Error",
         "code": 2490
     },
@@ -1992,7 +1992,7 @@
         "category": "Error",
         "code": 2546
     },
-    "The type returned by the 'next()' method of an async iterator must be a promise for a type with a 'value' property.": {
+    "The type returned by the '{0}()' method of an async iterator must be a promise for a type with a 'value' property.": {
         "category": "Error",
         "code": 2547
     },
@@ -2620,6 +2620,82 @@
     "'super' may not use type arguments.": {
         "category": "Error",
         "code": 2754
+    },
+    "No constituent of type '{0}' is callable.": {
+        "category": "Error",
+        "code": 2755
+    },
+    "Not all constituents of type '{0}' are callable.": {
+        "category": "Error",
+        "code": 2756
+    },
+    "Type '{0}' has no call signatures.": {
+        "category": "Error",
+        "code": 2757
+    },
+    "Each member of the union type '{0}' has signatures, but none of those signatures are compatible with each other.": {
+        "category": "Error",
+        "code": 2758
+    },
+    "No constituent of type '{0}' is constructable.": {
+        "category": "Error",
+        "code": 2759
+    },
+    "Not all constituents of type '{0}' are constructable.": {
+        "category": "Error",
+        "code": 2760
+    },
+    "Type '{0}' has no construct signatures.": {
+        "category": "Error",
+        "code": 2761
+    },
+    "Each member of the union type '{0}' has construct signatures, but none of those signatures are compatible with each other.": {
+        "category": "Error",
+        "code": 2762
+    },
+    "Cannot iterate value because the 'next' method of its iterator expects type '{1}', but for-of will always send '{0}'.": {
+        "category": "Error",
+        "code": 2763
+    },
+    "Cannot iterate value because the 'next' method of its iterator expects type '{1}', but array spread will always send '{0}'.": {
+        "category": "Error",
+        "code": 2764
+    },
+    "Cannot iterate value because the 'next' method of its iterator expects type '{1}', but array destructuring will always send '{0}'.": {
+        "category": "Error",
+        "code": 2765
+    },
+    "Cannot delegate iteration to value because the 'next' method of its iterator expects type '{1}', but the containing generator will always send '{0}'.": {
+        "category": "Error",
+        "code": 2766
+    },
+    "The '{0}' property of an iterator must be a method.": {
+        "category": "Error",
+        "code": 2767
+    },
+    "The '{0}' property of an async iterator must be a method.": {
+        "category": "Error",
+        "code": 2768
+    },
+    "No overload matches this call.": {
+        "category": "Error",
+        "code": 2769
+    },
+    "The last overload gave the following error.": {
+        "category": "Error",
+        "code": 2770
+    },
+    "The last overload is declared here.": {
+        "category": "Error",
+        "code": 2771
+    },
+    "Overload {0} of {1}, '{2}', gave the following error.": {
+        "category": "Error",
+        "code": 2772
+    },
+    "Did you forget to use 'await'?": {
+        "category": "Error",
+        "code": 2773
     },
 
     "Import declaration '{0}' is using private name '{1}'.": {
@@ -4182,7 +4258,7 @@
         "category": "Error",
         "code": 7024
     },
-    "Generator implicitly has type '{0}' because it does not yield any values. Consider supplying a return type.": {
+    "Generator implicitly has yield type '{0}' because it does not yield any values. Consider supplying a return type annotation.": {
         "category": "Error",
         "code": 7025
     },
@@ -4304,6 +4380,11 @@
         "category": "Error",
         "code": 7054
     },
+    "'{0}', which lacks return-type annotation, implicitly has an '{1}' yield type.": {
+        "category": "Error",
+        "code": 7055
+    },
+
     "You cannot rename this element.": {
         "category": "Error",
         "code": 8000
@@ -5009,5 +5090,9 @@
     "Classes may not have a field named 'constructor'.": {
         "category": "Error",
         "code": 18006
+    },
+    "JSX expressions may not use the comma operator. Did you mean to write an array?": {
+        "category": "Error",
+        "code": 18007
     }
 }

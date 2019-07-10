@@ -22,7 +22,7 @@ var _m = [[x13, y13], { x: x13, y: y13 }], a3 = _m[0], b3 = _m[1];
 //// [declarationEmitDestructuringArrayPattern2.d.ts]
 declare var x10: number, y10: string, z10: boolean;
 declare var x11: number, y11: string;
-declare var a11: any, b11: any, c11: any;
+declare var a11: undefined, b11: undefined, c11: undefined;
 declare var a2: number, b2: string, x12: number, c2: boolean;
 declare var x13: number, y13: string;
 declare var a3: (string | number)[], b3: {

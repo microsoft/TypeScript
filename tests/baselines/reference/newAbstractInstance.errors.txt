@@ -1,10 +1,12 @@
-tests/cases/compiler/newAbstractInstance.ts(3,1): error TS2351: Cannot use 'new' with an expression whose type lacks a call or construct signature.
+tests/cases/compiler/newAbstractInstance.ts(3,5): error TS2351: This expression is not constructable.
+  Type 'B' has no construct signatures.
 
 
 ==== tests/cases/compiler/newAbstractInstance.ts (1 errors) ====
     abstract class B { }
     declare const b: B;
     new b();
-    ~~~~~~~
-!!! error TS2351: Cannot use 'new' with an expression whose type lacks a call or construct signature.
+        ~
+!!! error TS2351: This expression is not constructable.
+!!! error TS2351:   Type 'B' has no construct signatures.
     

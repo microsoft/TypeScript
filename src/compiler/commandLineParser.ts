@@ -40,6 +40,7 @@ namespace ts {
         ["es2017.string", "lib.es2017.string.d.ts"],
         ["es2017.intl", "lib.es2017.intl.d.ts"],
         ["es2017.typedarrays", "lib.es2017.typedarrays.d.ts"],
+        ["es2018.asyncgenerator", "lib.es2018.asyncgenerator.d.ts"],
         ["es2018.asynciterable", "lib.es2018.asynciterable.d.ts"],
         ["es2018.intl", "lib.es2018.intl.d.ts"],
         ["es2018.promise", "lib.es2018.promise.d.ts"],
@@ -245,6 +246,7 @@ namespace ts {
                 esnext: ModuleKind.ESNext
             }),
             affectsModuleResolution: true,
+            affectsEmit: true,
             paramType: Diagnostics.KIND,
             showInSimplifiedHelpView: true,
             category: Diagnostics.Basic_Options,
@@ -590,6 +592,7 @@ namespace ts {
             name: "esModuleInterop",
             type: "boolean",
             affectsSemanticDiagnostics: true,
+            affectsEmit: true,
             showInSimplifiedHelpView: true,
             category: Diagnostics.Module_Resolution_Options,
             description: Diagnostics.Enables_emit_interoperability_between_CommonJS_and_ES_Modules_via_creation_of_namespace_objects_for_all_imports_Implies_allowSyntheticDefaultImports
@@ -969,7 +972,8 @@ namespace ts {
         return typeAcquisition;
     }
 
-    function getOptionNameMap(): OptionNameMap {
+    /* @internal */
+    export function getOptionNameMap(): OptionNameMap {
         return optionNameMapCache || (optionNameMapCache = createOptionNameMap(optionDeclarations));
     }
 
@@ -1896,7 +1900,9 @@ namespace ts {
                 case "object":
                     return {};
                 default:
-                    return option.type.keys().next().value;
+                    const iterResult = option.type.keys().next();
+                    if (!iterResult.done) return iterResult.value;
+                    return Debug.fail("Expected 'option.type' to have entries.");
             }
         }
 

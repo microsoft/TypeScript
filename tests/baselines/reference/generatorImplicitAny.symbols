@@ -1,0 +1,4 @@
+=== tests/cases/conformance/generators/generatorImplicitAny.ts ===
+function* g() {}
+>g : Symbol(g, Decl(generatorImplicitAny.ts, 0, 0))
+

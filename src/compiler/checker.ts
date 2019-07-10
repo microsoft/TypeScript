@@ -7,6 +7,56 @@ namespace ts {
     let nextMergeId = 1;
     let nextFlowId = 1;
 
+    const enum IterationUse {
+        AllowsSyncIterablesFlag = 1 << 0,
+        AllowsAsyncIterablesFlag = 1 << 1,
+        AllowsStringInputFlag = 1 << 2,
+        ForOfFlag = 1 << 3,
+        YieldStarFlag = 1 << 4,
+        SpreadFlag = 1 << 5,
+        DestructuringFlag = 1 << 6,
+
+        // Spread, Destructuring, Array element assignment
+        Element = AllowsSyncIterablesFlag,
+        Spread = AllowsSyncIterablesFlag | SpreadFlag,
+        Destructuring = AllowsSyncIterablesFlag | DestructuringFlag,
+
+        ForOf = AllowsSyncIterablesFlag | AllowsStringInputFlag | ForOfFlag,
+        ForAwaitOf = AllowsSyncIterablesFlag | AllowsAsyncIterablesFlag | AllowsStringInputFlag | ForOfFlag,
+
+        YieldStar = AllowsSyncIterablesFlag | YieldStarFlag,
+        AsyncYieldStar = AllowsSyncIterablesFlag | AllowsAsyncIterablesFlag | YieldStarFlag,
+
+        GeneratorReturnType = AllowsSyncIterablesFlag,
+        AsyncGeneratorReturnType = AllowsAsyncIterablesFlag,
+
+    }
+
+    const enum IterationTypeKind {
+        Yield,
+        Return,
+        Next,
+    }
+
+    interface IterationTypesResolver {
+        iterableCacheKey: "iterationTypesOfAsyncIterable" | "iterationTypesOfIterable";
+        iteratorCacheKey: "iterationTypesOfAsyncIterator" | "iterationTypesOfIterator";
+        iteratorSymbolName: "asyncIterator" | "iterator";
+        getGlobalIteratorType: (reportErrors: boolean) => Type;
+        getGlobalIterableType: (reportErrors: boolean) => Type;
+        getGlobalIterableIteratorType: (reportErrors: boolean) => Type;
+        getGlobalGeneratorType: (reportErrors: boolean) => Type;
+        resolveIterationType: (type: Type, errorNode: Node | undefined) => Type | undefined;
+        mustHaveANextMethodDiagnostic: DiagnosticMessage;
+        mustBeAMethodDiagnostic: DiagnosticMessage;
+        mustHaveAValueDiagnostic: DiagnosticMessage;
+    }
+
+    const enum WideningKind {
+        Normal,
+        GeneratorYield
+    }
+
     export function getNodeId(node: Node): number {
         if (!node.id) {
             node.id = nextNodeId;
@@ -65,6 +115,7 @@ namespace ts {
         let typeCount = 0;
         let symbolCount = 0;
         let enumCount = 0;
+        let instantiationCount = 0;
         let instantiationDepth = 0;
         let constraintDepth = 0;
         let currentNode: Node | undefined;
@@ -480,6 +531,44 @@ namespace ts {
 
         const enumNumberIndexInfo = createIndexInfo(stringType, /*isReadonly*/ true);
 
+        const iterationTypesCache = createMap<IterationTypes>(); // cache for common IterationTypes instances
+        const noIterationTypes: IterationTypes = {
+            get yieldType(): Type { throw new Error("Not supported"); },
+            get returnType(): Type { throw new Error("Not supported"); },
+            get nextType(): Type { throw new Error("Not supported"); },
+        };
+        const anyIterationTypes = createIterationTypes(anyType, anyType, anyType);
+        const anyIterationTypesExceptNext = createIterationTypes(anyType, anyType, unknownType);
+        const defaultIterationTypes = createIterationTypes(neverType, anyType, undefinedType); // default iteration types for `Iterator`.
+
+        const asyncIterationTypesResolver: IterationTypesResolver = {
+            iterableCacheKey: "iterationTypesOfAsyncIterable",
+            iteratorCacheKey: "iterationTypesOfAsyncIterator",
+            iteratorSymbolName: "asyncIterator",
+            getGlobalIteratorType: getGlobalAsyncIteratorType,
+            getGlobalIterableType: getGlobalAsyncIterableType,
+            getGlobalIterableIteratorType: getGlobalAsyncIterableIteratorType,
+            getGlobalGeneratorType: getGlobalAsyncGeneratorType,
+            resolveIterationType: getAwaitedType,
+            mustHaveANextMethodDiagnostic: Diagnostics.An_async_iterator_must_have_a_next_method,
+            mustBeAMethodDiagnostic: Diagnostics.The_0_property_of_an_async_iterator_must_be_a_method,
+            mustHaveAValueDiagnostic: Diagnostics.The_type_returned_by_the_0_method_of_an_async_iterator_must_be_a_promise_for_a_type_with_a_value_property,
+        };
+
+        const syncIterationTypesResolver: IterationTypesResolver = {
+            iterableCacheKey: "iterationTypesOfIterable",
+            iteratorCacheKey: "iterationTypesOfIterator",
+            iteratorSymbolName: "iterator",
+            getGlobalIteratorType,
+            getGlobalIterableType,
+            getGlobalIterableIteratorType,
+            getGlobalGeneratorType,
+            resolveIterationType: (type, _errorNode) => type,
+            mustHaveANextMethodDiagnostic: Diagnostics.An_iterator_must_have_a_next_method,
+            mustBeAMethodDiagnostic: Diagnostics.The_0_property_of_an_iterator_must_be_a_method,
+            mustHaveAValueDiagnostic: Diagnostics.The_type_returned_by_the_0_method_of_an_iterator_must_have_a_value_property,
+        };
+
         interface DuplicateInfoForSymbol {
             readonly firstFileLocations: Node[];
             readonly secondFileLocations: Node[];
@@ -532,9 +621,13 @@ namespace ts {
         let deferredGlobalIterableType: GenericType;
         let deferredGlobalIteratorType: GenericType;
         let deferredGlobalIterableIteratorType: GenericType;
+        let deferredGlobalGeneratorType: GenericType;
+        let deferredGlobalIteratorYieldResultType: GenericType;
+        let deferredGlobalIteratorReturnResultType: GenericType;
         let deferredGlobalAsyncIterableType: GenericType;
         let deferredGlobalAsyncIteratorType: GenericType;
         let deferredGlobalAsyncIterableIteratorType: GenericType;
+        let deferredGlobalAsyncGeneratorType: GenericType;
         let deferredGlobalTemplateStringsArrayType: ObjectType;
         let deferredGlobalImportMetaType: ObjectType;
         let deferredGlobalExtractSymbol: Symbol;
@@ -722,6 +815,7 @@ namespace ts {
             NoIndexSignatures = 1 << 0,
             Writing = 1 << 1,
             CacheSymbol = 1 << 2,
+            NoTupleBoundsCheck = 1 << 3,
         }
 
         const enum CallbackCheck {
@@ -836,6 +930,19 @@ namespace ts {
         }
         function errorOrSuggestion(isError: boolean, location: Node, message: DiagnosticMessage | DiagnosticMessageChain, arg0?: string | number, arg1?: string | number, arg2?: string | number, arg3?: string | number): void {
             addErrorOrSuggestion(isError, "message" in message ? createDiagnosticForNode(location, message, arg0, arg1, arg2, arg3) : createDiagnosticForNodeFromMessageChain(location, message));
+        }
+
+        function errorAndMaybeSuggestAwait(
+            location: Node,
+            maybeMissingAwait: boolean,
+            message: DiagnosticMessage,
+            arg0?: string | number | undefined, arg1?: string | number | undefined, arg2?: string | number | undefined, arg3?: string | number | undefined): Diagnostic {
+            const diagnostic = error(location, message, arg0, arg1, arg2, arg3);
+            if (maybeMissingAwait) {
+                const related = createDiagnosticForNode(location, Diagnostics.Did_you_forget_to_use_await);
+                addRelatedInfo(diagnostic, related);
+            }
+            return diagnostic;
         }
 
         function createSymbol(flags: SymbolFlags, name: __String, checkFlags?: CheckFlags) {
@@ -4652,6 +4759,9 @@ namespace ts {
                     if (!isIdentifierText(name, compilerOptions.target) && !isNumericLiteralName(name)) {
                         return `"${escapeString(name, CharacterCodes.doubleQuote)}"`;
                     }
+                    if (isNumericLiteralName(name) && startsWith(name, "-")) {
+                        return `[${name}]`;
+                    }
                     return name;
                 }
                 if (nameType.flags & TypeFlags.UniqueESSymbol) {
@@ -5103,7 +5213,7 @@ namespace ts {
                 // This elementType will be used if the specific property corresponding to this index is not
                 // present (aka the tuple element property). This call also checks that the parentType is in
                 // fact an iterable or array (depending on target language).
-                const elementType = checkIteratedTypeOrElementType(parentType, pattern, /*allowStringInput*/ false, /*allowAsyncIterables*/ false);
+                const elementType = checkIteratedTypeOrElementType(IterationUse.Destructuring, parentType, undefinedType, pattern);
                 const index = pattern.elements.indexOf(declaration);
                 if (declaration.dotDotDotToken) {
                     // If the parent is a tuple type, the rest element has a tuple type of the
@@ -5115,21 +5225,25 @@ namespace ts {
                 }
                 else if (isArrayLikeType(parentType)) {
                     const indexType = getLiteralType(index);
-                    const declaredType = getConstraintForLocation(getIndexedAccessType(parentType, indexType, declaration.name), declaration.name);
+                    const accessFlags = hasDefaultValue(declaration) ? AccessFlags.NoTupleBoundsCheck : 0;
+                    const declaredType = getConstraintForLocation(getIndexedAccessTypeOrUndefined(parentType, indexType, declaration.name, accessFlags) || errorType, declaration.name);
                     type = getFlowTypeOfDestructuring(declaration, declaredType);
                 }
                 else {
                     type = elementType;
                 }
             }
-            // In strict null checking mode, if a default value of a non-undefined type is specified, remove
-            // undefined from the final type.
-            if (strictNullChecks && declaration.initializer && !(getFalsyFlags(checkDeclarationInitializer(declaration)) & TypeFlags.Undefined)) {
-                type = getTypeWithFacts(type, TypeFacts.NEUndefined);
+            if (!declaration.initializer) {
+                return type;
             }
-            return declaration.initializer && !getEffectiveTypeAnnotationNode(walkUpBindingElementsAndPatterns(declaration)) ?
-                getUnionType([type, checkDeclarationInitializer(declaration)], UnionReduction.Subtype) :
-                type;
+            if (getEffectiveTypeAnnotationNode(walkUpBindingElementsAndPatterns(declaration))) {
+                // In strict null checking mode, if a default value of a non-undefined type is specified, remove
+                // undefined from the final type.
+                return strictNullChecks && !(getFalsyFlags(checkDeclarationInitializer(declaration)) & TypeFlags.Undefined) ?
+                    getTypeWithFacts(type, TypeFacts.NEUndefined) :
+                    type;
+            }
+            return getUnionType([getTypeWithFacts(type, TypeFacts.NEUndefined), checkDeclarationInitializer(declaration)], UnionReduction.Subtype);
         }
 
         function getTypeForDeclarationFromJSDocComment(declaration: Node) {
@@ -7234,8 +7348,8 @@ namespace ts {
         function resolveIntersectionTypeMembers(type: IntersectionType) {
             // The members and properties collections are empty for intersection types. To get all properties of an
             // intersection type use getPropertiesOfType (only the language service uses this).
-            let callSignatures: ReadonlyArray<Signature> = emptyArray;
-            let constructSignatures: ReadonlyArray<Signature> = emptyArray;
+            let callSignatures: Signature[] | undefined;
+            let constructSignatures: Signature[] | undefined;
             let stringIndexInfo: IndexInfo | undefined;
             let numberIndexInfo: IndexInfo | undefined;
             const types = type.types;
@@ -7257,13 +7371,22 @@ namespace ts {
                             return clone;
                         });
                     }
-                    constructSignatures = concatenate(constructSignatures, signatures);
+                    constructSignatures = appendSignatures(constructSignatures, signatures);
                 }
-                callSignatures = concatenate(callSignatures, getSignaturesOfType(t, SignatureKind.Call));
+                callSignatures = appendSignatures(callSignatures, getSignaturesOfType(t, SignatureKind.Call));
                 stringIndexInfo = intersectIndexInfos(stringIndexInfo, getIndexInfoOfType(t, IndexKind.String));
                 numberIndexInfo = intersectIndexInfos(numberIndexInfo, getIndexInfoOfType(t, IndexKind.Number));
             }
-            setStructuredTypeMembers(type, emptySymbols, callSignatures, constructSignatures, stringIndexInfo, numberIndexInfo);
+            setStructuredTypeMembers(type, emptySymbols, callSignatures || emptyArray, constructSignatures || emptyArray, stringIndexInfo, numberIndexInfo);
+        }
+
+        function appendSignatures(signatures: Signature[] | undefined, newSignatures: readonly Signature[]) {
+            for (const sig of newSignatures) {
+                if (!signatures || every(signatures, s => !compareSignaturesIdentical(s, sig, /*partialMatch*/ false, /*ignoreThisTypes*/ false, /*ignoreReturnTypes*/ false, compareTypesIdentical))) {
+                    signatures = append(signatures, sig);
+                }
+            }
+            return signatures;
         }
 
         /**
@@ -9322,11 +9445,15 @@ namespace ts {
         }
 
         function getGlobalAsyncIteratorType(reportErrors: boolean) {
-            return deferredGlobalAsyncIteratorType || (deferredGlobalAsyncIteratorType = getGlobalType("AsyncIterator" as __String, /*arity*/ 1, reportErrors)) || emptyGenericType;
+            return deferredGlobalAsyncIteratorType || (deferredGlobalAsyncIteratorType = getGlobalType("AsyncIterator" as __String, /*arity*/ 3, reportErrors)) || emptyGenericType;
         }
 
         function getGlobalAsyncIterableIteratorType(reportErrors: boolean) {
             return deferredGlobalAsyncIterableIteratorType || (deferredGlobalAsyncIterableIteratorType = getGlobalType("AsyncIterableIterator" as __String, /*arity*/ 1, reportErrors)) || emptyGenericType;
+        }
+
+        function getGlobalAsyncGeneratorType(reportErrors: boolean) {
+            return deferredGlobalAsyncGeneratorType || (deferredGlobalAsyncGeneratorType = getGlobalType("AsyncGenerator" as __String, /*arity*/ 3, reportErrors)) || emptyGenericType;
         }
 
         function getGlobalIterableType(reportErrors: boolean) {
@@ -9334,11 +9461,23 @@ namespace ts {
         }
 
         function getGlobalIteratorType(reportErrors: boolean) {
-            return deferredGlobalIteratorType || (deferredGlobalIteratorType = getGlobalType("Iterator" as __String, /*arity*/ 1, reportErrors)) || emptyGenericType;
+            return deferredGlobalIteratorType || (deferredGlobalIteratorType = getGlobalType("Iterator" as __String, /*arity*/ 3, reportErrors)) || emptyGenericType;
         }
 
         function getGlobalIterableIteratorType(reportErrors: boolean) {
             return deferredGlobalIterableIteratorType || (deferredGlobalIterableIteratorType = getGlobalType("IterableIterator" as __String, /*arity*/ 1, reportErrors)) || emptyGenericType;
+        }
+
+        function getGlobalGeneratorType(reportErrors: boolean) {
+            return deferredGlobalGeneratorType || (deferredGlobalGeneratorType = getGlobalType("Generator" as __String, /*arity*/ 3, reportErrors)) || emptyGenericType;
+        }
+
+        function getGlobalIteratorYieldResultType(reportErrors: boolean) {
+            return deferredGlobalIteratorYieldResultType || (deferredGlobalIteratorYieldResultType = getGlobalType("IteratorYieldResult" as __String, /*arity*/ 1, reportErrors)) || emptyGenericType;
+        }
+
+        function getGlobalIteratorReturnResultType(reportErrors: boolean) {
+            return deferredGlobalIteratorReturnResultType || (deferredGlobalIteratorReturnResultType = getGlobalType("IteratorReturnResult" as __String, /*arity*/ 1, reportErrors)) || emptyGenericType;
         }
 
         function getGlobalTypeOrUndefined(name: __String, arity = 0): ObjectType | undefined {
@@ -9369,20 +9508,22 @@ namespace ts {
             return createTypeFromGenericGlobalType(getGlobalTypedPropertyDescriptorType(), [propertyType]);
         }
 
-        function createAsyncIterableType(iteratedType: Type): Type {
-            return createTypeFromGenericGlobalType(getGlobalAsyncIterableType(/*reportErrors*/ true), [iteratedType]);
-        }
-
-        function createAsyncIterableIteratorType(iteratedType: Type): Type {
-            return createTypeFromGenericGlobalType(getGlobalAsyncIterableIteratorType(/*reportErrors*/ true), [iteratedType]);
+        function createAsyncGeneratorType(yieldType: Type, returnType: Type, nextType: Type) {
+            const globalAsyncGeneratorType = getGlobalAsyncGeneratorType(/*reportErrors*/ true);
+            if (globalAsyncGeneratorType !== emptyGenericType) {
+                yieldType = getAwaitedType(yieldType) || unknownType;
+                returnType = getAwaitedType(returnType) || unknownType;
+                nextType = getAwaitedType(nextType) || unknownType;
+            }
+            return createTypeFromGenericGlobalType(globalAsyncGeneratorType, [yieldType, returnType, nextType]);
         }
 
         function createIterableType(iteratedType: Type): Type {
             return createTypeFromGenericGlobalType(getGlobalIterableType(/*reportErrors*/ true), [iteratedType]);
         }
 
-        function createIterableIteratorType(iteratedType: Type): Type {
-            return createTypeFromGenericGlobalType(getGlobalIterableIteratorType(/*reportErrors*/ true), [iteratedType]);
+        function createGeneratorType(yieldType: Type, returnType: Type, nextType: Type) {
+            return createTypeFromGenericGlobalType(getGlobalGeneratorType(/*reportErrors*/ true), [yieldType, returnType, nextType]);
         }
 
         function createArrayType(elementType: Type, readonly?: boolean): ObjectType {
@@ -10131,7 +10272,7 @@ namespace ts {
                         propType;
                 }
                 if (everyType(objectType, isTupleType) && isNumericLiteralName(propName) && +propName >= 0) {
-                    if (accessNode && everyType(objectType, t => !(<TupleTypeReference>t).target.hasRestElement)) {
+                    if (accessNode && everyType(objectType, t => !(<TupleTypeReference>t).target.hasRestElement) && !(accessFlags & AccessFlags.NoTupleBoundsCheck)) {
                         const indexNode = getIndexNodeForAccessExpression(accessNode);
                         if (isTupleType(objectType)) {
                             error(indexNode, Diagnostics.Tuple_type_0_of_length_1_has_no_element_at_index_2,
@@ -11413,13 +11554,14 @@ namespace ts {
             if (!type || !mapper || mapper === identityMapper) {
                 return type;
             }
-            if (instantiationDepth === 50) {
+            if (instantiationDepth === 50 || instantiationCount >= 5000000) {
                 // We have reached 50 recursive type instantiations and there is a very high likelyhood we're dealing
                 // with a combination of infinite generic types that perpetually generate new type identities. We stop
                 // the recursion here by yielding the error type.
                 error(currentNode, Diagnostics.Type_instantiation_is_excessively_deep_and_possibly_infinite);
                 return errorType;
             }
+            instantiationCount++;
             instantiationDepth++;
             const result = instantiateTypeWorker(type, mapper);
             instantiationDepth--;
@@ -11664,7 +11806,7 @@ namespace ts {
             return isTypeComparableTo(type1, type2) || isTypeComparableTo(type2, type1);
         }
 
-        function checkTypeAssignableTo(source: Type, target: Type, errorNode: Node | undefined, headMessage?: DiagnosticMessage, containingMessageChain?: () => DiagnosticMessageChain | undefined, errorOutputObject?: { error?: Diagnostic }): boolean {
+        function checkTypeAssignableTo(source: Type, target: Type, errorNode: Node | undefined, headMessage?: DiagnosticMessage, containingMessageChain?: () => DiagnosticMessageChain | undefined, errorOutputObject?: { errors?: Diagnostic[] }): boolean {
             return checkTypeRelatedTo(source, target, assignableRelation, errorNode, headMessage, containingMessageChain, errorOutputObject);
         }
 
@@ -11673,13 +11815,22 @@ namespace ts {
          * attempt to issue more specific errors on, for example, specific object literal properties or tuple members.
          */
         function checkTypeAssignableToAndOptionallyElaborate(source: Type, target: Type, errorNode: Node | undefined, expr: Expression | undefined, headMessage?: DiagnosticMessage, containingMessageChain?: () => DiagnosticMessageChain | undefined): boolean {
-            return checkTypeRelatedToAndOptionallyElaborate(source, target, assignableRelation, errorNode, expr, headMessage, containingMessageChain);
+            return checkTypeRelatedToAndOptionallyElaborate(source, target, assignableRelation, errorNode, expr, headMessage, containingMessageChain, /*errorOutputContainer*/ undefined);
         }
 
-        function checkTypeRelatedToAndOptionallyElaborate(source: Type, target: Type, relation: Map<RelationComparisonResult>, errorNode: Node | undefined, expr: Expression | undefined, headMessage?: DiagnosticMessage, containingMessageChain?: () => DiagnosticMessageChain | undefined): boolean {
+        function checkTypeRelatedToAndOptionallyElaborate(
+            source: Type,
+            target: Type,
+            relation: Map<RelationComparisonResult>,
+            errorNode: Node | undefined,
+            expr: Expression | undefined,
+            headMessage: DiagnosticMessage | undefined,
+            containingMessageChain: (() => DiagnosticMessageChain | undefined) | undefined,
+            errorOutputContainer: { errors?: Diagnostic[], skipLogging?: boolean } | undefined
+        ): boolean {
             if (isTypeRelatedTo(source, target, relation)) return true;
-            if (!errorNode || !elaborateError(expr, source, target, relation, headMessage)) {
-                return checkTypeRelatedTo(source, target, relation, errorNode, headMessage, containingMessageChain);
+            if (!errorNode || !elaborateError(expr, source, target, relation, headMessage, containingMessageChain, errorOutputContainer)) {
+                return checkTypeRelatedTo(source, target, relation, errorNode, headMessage, containingMessageChain, errorOutputContainer);
             }
             return false;
         }
@@ -11688,35 +11839,52 @@ namespace ts {
             return !!(type.flags & TypeFlags.Conditional || (type.flags & TypeFlags.Intersection && some((type as IntersectionType).types, isOrHasGenericConditional)));
         }
 
-        function elaborateError(node: Expression | undefined, source: Type, target: Type, relation: Map<RelationComparisonResult>, headMessage: DiagnosticMessage | undefined): boolean {
+        function elaborateError(
+            node: Expression | undefined,
+            source: Type,
+            target: Type,
+            relation: Map<RelationComparisonResult>,
+            headMessage: DiagnosticMessage | undefined,
+            containingMessageChain: (() => DiagnosticMessageChain | undefined) | undefined,
+            errorOutputContainer: { errors?: Diagnostic[], skipLogging?: boolean } | undefined
+        ): boolean {
             if (!node || isOrHasGenericConditional(target)) return false;
-            if (!checkTypeRelatedTo(source, target, relation, /*errorNode*/ undefined) && elaborateDidYouMeanToCallOrConstruct(node, source, target, relation, headMessage)) {
+            if (!checkTypeRelatedTo(source, target, relation, /*errorNode*/ undefined)
+                && elaborateDidYouMeanToCallOrConstruct(node, source, target, relation, headMessage, containingMessageChain, errorOutputContainer)) {
                 return true;
             }
             switch (node.kind) {
                 case SyntaxKind.JsxExpression:
                 case SyntaxKind.ParenthesizedExpression:
-                    return elaborateError((node as ParenthesizedExpression | JsxExpression).expression, source, target, relation, headMessage);
+                    return elaborateError((node as ParenthesizedExpression | JsxExpression).expression, source, target, relation, headMessage, containingMessageChain, errorOutputContainer);
                 case SyntaxKind.BinaryExpression:
                     switch ((node as BinaryExpression).operatorToken.kind) {
                         case SyntaxKind.EqualsToken:
                         case SyntaxKind.CommaToken:
-                            return elaborateError((node as BinaryExpression).right, source, target, relation, headMessage);
+                            return elaborateError((node as BinaryExpression).right, source, target, relation, headMessage, containingMessageChain, errorOutputContainer);
                     }
                     break;
                 case SyntaxKind.ObjectLiteralExpression:
-                    return elaborateObjectLiteral(node as ObjectLiteralExpression, source, target, relation);
+                    return elaborateObjectLiteral(node as ObjectLiteralExpression, source, target, relation, containingMessageChain, errorOutputContainer);
                 case SyntaxKind.ArrayLiteralExpression:
-                    return elaborateArrayLiteral(node as ArrayLiteralExpression, source, target, relation);
+                    return elaborateArrayLiteral(node as ArrayLiteralExpression, source, target, relation, containingMessageChain, errorOutputContainer);
                 case SyntaxKind.JsxAttributes:
-                    return elaborateJsxComponents(node as JsxAttributes, source, target, relation);
+                    return elaborateJsxComponents(node as JsxAttributes, source, target, relation, containingMessageChain, errorOutputContainer);
                 case SyntaxKind.ArrowFunction:
-                    return elaborateArrowFunction(node as ArrowFunction, source, target, relation);
+                    return elaborateArrowFunction(node as ArrowFunction, source, target, relation, containingMessageChain, errorOutputContainer);
             }
             return false;
         }
 
-        function elaborateDidYouMeanToCallOrConstruct(node: Expression, source: Type, target: Type, relation: Map<RelationComparisonResult>, headMessage: DiagnosticMessage | undefined): boolean {
+        function elaborateDidYouMeanToCallOrConstruct(
+            node: Expression,
+            source: Type,
+            target: Type,
+            relation: Map<RelationComparisonResult>,
+            headMessage: DiagnosticMessage | undefined,
+            containingMessageChain: (() => DiagnosticMessageChain | undefined) | undefined,
+            errorOutputContainer: { errors?: Diagnostic[], skipLogging?: boolean } | undefined
+        ): boolean {
             const callSignatures = getSignaturesOfType(source, SignatureKind.Call);
             const constructSignatures = getSignaturesOfType(source, SignatureKind.Construct);
             for (const signatures of [constructSignatures, callSignatures]) {
@@ -11724,9 +11892,9 @@ namespace ts {
                     const returnType = getReturnTypeOfSignature(s);
                     return !(returnType.flags & (TypeFlags.Any | TypeFlags.Never)) && checkTypeRelatedTo(returnType, target, relation, /*errorNode*/ undefined);
                 })) {
-                    const resultObj: { error?: Diagnostic } = {};
-                    checkTypeAssignableTo(source, target, node, headMessage, /*containingChain*/ undefined, resultObj);
-                    const diagnostic = resultObj.error!;
+                    const resultObj: { errors?: Diagnostic[] } = errorOutputContainer || {};
+                    checkTypeAssignableTo(source, target, node, headMessage, containingMessageChain, resultObj);
+                    const diagnostic = resultObj.errors![resultObj.errors!.length - 1];
                     addRelatedInfo(diagnostic, createDiagnosticForNode(
                         node,
                         signatures === constructSignatures ? Diagnostics.Did_you_mean_to_use_new_with_this_expression : Diagnostics.Did_you_mean_to_call_this_expression
@@ -11737,7 +11905,14 @@ namespace ts {
             return false;
         }
 
-        function elaborateArrowFunction(node: ArrowFunction, source: Type, target: Type, relation: Map<RelationComparisonResult>): boolean {
+        function elaborateArrowFunction(
+            node: ArrowFunction,
+            source: Type,
+            target: Type,
+            relation: Map<RelationComparisonResult>,
+            containingMessageChain: (() => DiagnosticMessageChain | undefined) | undefined,
+            errorOutputContainer: { errors?: Diagnostic[], skipLogging?: boolean } | undefined
+        ): boolean {
             // Don't elaborate blocks
             if (isBlock(node.body)) {
                 return false;
@@ -11758,15 +11933,15 @@ namespace ts {
             const sourceReturn = getReturnTypeOfSignature(sourceSig);
             const targetReturn = getUnionType(map(targetSignatures, getReturnTypeOfSignature));
             if (!checkTypeRelatedTo(sourceReturn, targetReturn, relation, /*errorNode*/ undefined)) {
-                const elaborated = returnExpression && elaborateError(returnExpression, sourceReturn, targetReturn, relation, /*headMessage*/ undefined);
+                const elaborated = returnExpression && elaborateError(returnExpression, sourceReturn, targetReturn, relation, /*headMessage*/ undefined, containingMessageChain, errorOutputContainer);
                 if (elaborated) {
                     return elaborated;
                 }
-                const resultObj: { error?: Diagnostic } = {};
-                checkTypeRelatedTo(sourceReturn, targetReturn, relation, returnExpression, /*message*/ undefined, /*chain*/ undefined, resultObj);
-                if (resultObj.error) {
+                const resultObj: { errors?: Diagnostic[] } = errorOutputContainer || {};
+                checkTypeRelatedTo(sourceReturn, targetReturn, relation, returnExpression, /*message*/ undefined, containingMessageChain, resultObj);
+                if (resultObj.errors) {
                     if (target.symbol && length(target.symbol.declarations)) {
-                        addRelatedInfo(resultObj.error, createDiagnosticForNode(
+                        addRelatedInfo(resultObj.errors[resultObj.errors.length - 1], createDiagnosticForNode(
                             target.symbol.declarations[0],
                             Diagnostics.The_expected_type_comes_from_the_return_type_of_this_signature,
                         ));
@@ -11783,7 +11958,14 @@ namespace ts {
          * If that element would issue an error, we first attempt to dive into that element's inner expression and issue a more specific error by recuring into `elaborateError`
          * Otherwise, we issue an error on _every_ element which fail the assignability check
          */
-        function elaborateElementwise(iterator: ElaborationIterator, source: Type, target: Type, relation: Map<RelationComparisonResult>) {
+        function elaborateElementwise(
+            iterator: ElaborationIterator,
+            source: Type,
+            target: Type,
+            relation: Map<RelationComparisonResult>,
+            containingMessageChain: (() => DiagnosticMessageChain | undefined) | undefined,
+            errorOutputContainer: { errors?: Diagnostic[], skipLogging?: boolean } | undefined
+        ) {
             // Assignability failure - check each prop individually, and if that fails, fall back on the bad error span
             let reportedError = false;
             for (let status = iterator.next(); !status.done; status = iterator.next()) {
@@ -11792,22 +11974,22 @@ namespace ts {
                 if (!targetPropType || targetPropType.flags & TypeFlags.IndexedAccess) continue; // Don't elaborate on indexes on generic variables
                 const sourcePropType = getIndexedAccessTypeOrUndefined(source, nameType);
                 if (sourcePropType && !checkTypeRelatedTo(sourcePropType, targetPropType, relation, /*errorNode*/ undefined)) {
-                    const elaborated = next && elaborateError(next, sourcePropType, targetPropType, relation, /*headMessage*/ undefined);
+                    const elaborated = next && elaborateError(next, sourcePropType, targetPropType, relation, /*headMessage*/ undefined, containingMessageChain, errorOutputContainer);
                     if (elaborated) {
                         reportedError = true;
                     }
                     else {
                         // Issue error on the prop itself, since the prop couldn't elaborate the error
-                        const resultObj: { error?: Diagnostic } = {};
+                        const resultObj: { errors?: Diagnostic[] } = errorOutputContainer || {};
                         // Use the expression type, if available
                         const specificSource = next ? checkExpressionForMutableLocation(next, CheckMode.Normal, sourcePropType) : sourcePropType;
-                        const result = checkTypeRelatedTo(specificSource, targetPropType, relation, prop, errorMessage, /*containingChain*/ undefined, resultObj);
+                        const result = checkTypeRelatedTo(specificSource, targetPropType, relation, prop, errorMessage, containingMessageChain, resultObj);
                         if (result && specificSource !== sourcePropType) {
                             // If for whatever reason the expression type doesn't yield an error, make sure we still issue an error on the sourcePropType
-                            checkTypeRelatedTo(sourcePropType, targetPropType, relation, prop, errorMessage, /*containingChain*/ undefined, resultObj);
+                            checkTypeRelatedTo(sourcePropType, targetPropType, relation, prop, errorMessage, containingMessageChain, resultObj);
                         }
-                        if (resultObj.error) {
-                            const reportedDiag = resultObj.error;
+                        if (resultObj.errors) {
+                            const reportedDiag = resultObj.errors[resultObj.errors.length - 1];
                             const propertyName = isTypeUsableAsPropertyName(nameType) ? getPropertyNameFromType(nameType) : undefined;
                             const targetProp = propertyName !== undefined ? getPropertyOfType(target, propertyName) : undefined;
 
@@ -11890,8 +12072,15 @@ namespace ts {
             return filter(children, i => !isJsxText(i) || !i.containsOnlyTriviaWhiteSpaces);
         }
 
-        function elaborateJsxComponents(node: JsxAttributes, source: Type, target: Type, relation: Map<RelationComparisonResult>) {
-            let result = elaborateElementwise(generateJsxAttributes(node), source, target, relation);
+        function elaborateJsxComponents(
+            node: JsxAttributes,
+            source: Type,
+            target: Type,
+            relation: Map<RelationComparisonResult>,
+            containingMessageChain: (() => DiagnosticMessageChain | undefined) | undefined,
+            errorOutputContainer: { errors?: Diagnostic[], skipLogging?: boolean } | undefined
+        ) {
+            let result = elaborateElementwise(generateJsxAttributes(node), source, target, relation, containingMessageChain, errorOutputContainer);
             let invalidTextDiagnostic: DiagnosticMessage | undefined;
             if (isJsxOpeningElement(node.parent) && isJsxElement(node.parent.parent)) {
                 const containingElement = node.parent.parent;
@@ -11909,17 +12098,21 @@ namespace ts {
                 if (moreThanOneRealChildren) {
                     if (arrayLikeTargetParts !== neverType) {
                         const realSource = createTupleType(checkJsxChildren(containingElement, CheckMode.Normal));
-                        result = elaborateElementwise(generateJsxChildren(containingElement, getInvalidTextualChildDiagnostic), realSource, arrayLikeTargetParts, relation) || result;
+                        const children = generateJsxChildren(containingElement, getInvalidTextualChildDiagnostic);
+                        result = elaborateElementwise(children, realSource, arrayLikeTargetParts, relation, containingMessageChain, errorOutputContainer) || result;
                     }
                     else if (!isTypeRelatedTo(getIndexedAccessType(source, childrenNameType), childrenTargetType, relation)) {
                         // arity mismatch
                         result = true;
-                        error(
+                        const diag = error(
                             containingElement.openingElement.tagName,
                             Diagnostics.This_JSX_tag_s_0_prop_expects_a_single_child_of_type_1_but_multiple_children_were_provided,
                             childrenPropName,
                             typeToString(childrenTargetType)
                         );
+                        if (errorOutputContainer && errorOutputContainer.skipLogging) {
+                            (errorOutputContainer.errors || (errorOutputContainer.errors = [])).push(diag);
+                        }
                     }
                 }
                 else {
@@ -11931,19 +12124,24 @@ namespace ts {
                                 (function*() { yield elem; })(),
                                 source,
                                 target,
-                                relation
+                                relation,
+                                containingMessageChain,
+                                errorOutputContainer
                             ) || result;
                         }
                     }
                     else if (!isTypeRelatedTo(getIndexedAccessType(source, childrenNameType), childrenTargetType, relation)) {
                         // arity mismatch
                         result = true;
-                        error(
+                        const diag = error(
                             containingElement.openingElement.tagName,
                             Diagnostics.This_JSX_tag_s_0_prop_expects_type_1_which_requires_multiple_children_but_only_a_single_child_was_provided,
                             childrenPropName,
                             typeToString(childrenTargetType)
                         );
+                        if (errorOutputContainer && errorOutputContainer.skipLogging) {
+                            (errorOutputContainer.errors || (errorOutputContainer.errors = [])).push(diag);
+                        }
                     }
                 }
             }
@@ -11975,15 +12173,22 @@ namespace ts {
             }
         }
 
-        function elaborateArrayLiteral(node: ArrayLiteralExpression, source: Type, target: Type, relation: Map<RelationComparisonResult>) {
+        function elaborateArrayLiteral(
+            node: ArrayLiteralExpression,
+            source: Type,
+            target: Type,
+            relation: Map<RelationComparisonResult>,
+            containingMessageChain: (() => DiagnosticMessageChain | undefined) | undefined,
+            errorOutputContainer: { errors?: Diagnostic[], skipLogging?: boolean } | undefined
+        ) {
             if (target.flags & TypeFlags.Primitive) return false;
             if (isTupleLikeType(source)) {
-                return elaborateElementwise(generateLimitedTupleElements(node, target), source, target, relation);
+                return elaborateElementwise(generateLimitedTupleElements(node, target), source, target, relation, containingMessageChain, errorOutputContainer);
             }
             // recreate a tuple from the elements, if possible
             const tupleizedType = checkArrayLiteral(node, CheckMode.Contextual, /*forceTuple*/ true);
             if (isTupleLikeType(tupleizedType)) {
-                return elaborateElementwise(generateLimitedTupleElements(node, target), tupleizedType, target, relation);
+                return elaborateElementwise(generateLimitedTupleElements(node, target), tupleizedType, target, relation, containingMessageChain, errorOutputContainer);
             }
             return false;
         }
@@ -12012,9 +12217,16 @@ namespace ts {
             }
         }
 
-        function elaborateObjectLiteral(node: ObjectLiteralExpression, source: Type, target: Type, relation: Map<RelationComparisonResult>) {
+        function elaborateObjectLiteral(
+            node: ObjectLiteralExpression,
+            source: Type,
+            target: Type,
+            relation: Map<RelationComparisonResult>,
+            containingMessageChain: (() => DiagnosticMessageChain | undefined) | undefined,
+            errorOutputContainer: { errors?: Diagnostic[], skipLogging?: boolean } | undefined
+        ) {
             if (target.flags & TypeFlags.Primitive) return false;
-            return elaborateElementwise(generateObjectLiteralElements(node), source, target, relation);
+            return elaborateElementwise(generateObjectLiteralElements(node), source, target, relation, containingMessageChain, errorOutputContainer);
         }
 
         /**
@@ -12355,6 +12567,7 @@ namespace ts {
          * @param errorNode The suggested node upon which all errors will be reported, if defined. This may or may not be the actual node used.
          * @param headMessage If the error chain should be prepended by a head message, then headMessage will be used.
          * @param containingMessageChain A chain of errors to prepend any new errors found.
+         * @param errorOutputContainer Return the diagnostic. Do not log if 'skipLogging' is truthy.
          */
         function checkTypeRelatedTo(
             source: Type,
@@ -12363,9 +12576,8 @@ namespace ts {
             errorNode: Node | undefined,
             headMessage?: DiagnosticMessage,
             containingMessageChain?: () => DiagnosticMessageChain | undefined,
-            errorOutputContainer?: { error?: Diagnostic }
+            errorOutputContainer?: { errors?: Diagnostic[], skipLogging?: boolean },
         ): boolean {
-
             let errorInfo: DiagnosticMessageChain | undefined;
             let relatedInfo: [DiagnosticRelatedInformation, ...DiagnosticRelatedInformation[]] | undefined;
             let maybeKeys: string[];
@@ -12381,13 +12593,17 @@ namespace ts {
 
             const result = isRelatedTo(source, target, /*reportErrors*/ !!errorNode, headMessage);
             if (overflow) {
-                error(errorNode, Diagnostics.Excessive_stack_depth_comparing_types_0_and_1, typeToString(source), typeToString(target));
+                const diag = error(errorNode, Diagnostics.Excessive_stack_depth_comparing_types_0_and_1, typeToString(source), typeToString(target));
+                if (errorOutputContainer) {
+                    (errorOutputContainer.errors || (errorOutputContainer.errors = [])).push(diag);
+                }
             }
             else if (errorInfo) {
                 if (containingMessageChain) {
                     const chain = containingMessageChain();
                     if (chain) {
-                        errorInfo = concatenateDiagnosticMessageChains(chain, errorInfo);
+                        concatenateDiagnosticMessageChains(chain, errorInfo);
+                        errorInfo = chain;
                     }
                 }
 
@@ -12404,15 +12620,19 @@ namespace ts {
                         }
                     }
                 }
-
                 const diag = createDiagnosticForNodeFromMessageChain(errorNode!, errorInfo, relatedInformation);
                 if (relatedInfo) {
                     addRelatedInfo(diag, ...relatedInfo);
                 }
                 if (errorOutputContainer) {
-                    errorOutputContainer.error = diag;
+                    (errorOutputContainer.errors || (errorOutputContainer.errors = [])).push(diag);
                 }
-                diagnostics.add(diag); // TODO: GH#18217
+                if (!errorOutputContainer || !errorOutputContainer.skipLogging) {
+                    diagnostics.add(diag);
+                }
+            }
+            if (errorNode && errorOutputContainer && errorOutputContainer.skipLogging && result === Ternary.False) {
+                Debug.assert(!!errorOutputContainer.errors, "missed opportunity to interact with error.");
             }
             return result !== Ternary.False;
 
@@ -13200,14 +13420,14 @@ namespace ts {
                         if (!isGenericMappedType(source)) {
                             const targetConstraint = getConstraintTypeFromMappedType(target);
                             const sourceKeys = getIndexType(source, /*stringsOnly*/ undefined, /*noIndexSignatures*/ true);
-                            const hasOptionalUnionKeys = modifiers & MappedTypeModifiers.IncludeOptional && targetConstraint.flags & TypeFlags.Union;
-                            const filteredByApplicability = hasOptionalUnionKeys ? filterType(targetConstraint, t => !!isRelatedTo(t, sourceKeys)) : undefined;
+                            const includeOptional = modifiers & MappedTypeModifiers.IncludeOptional;
+                            const filteredByApplicability = includeOptional ? intersectTypes(targetConstraint, sourceKeys) : undefined;
                             // A source type T is related to a target type { [P in Q]: X } if Q is related to keyof T and T[Q] is related to X.
                             // A source type T is related to a target type { [P in Q]?: X } if some constituent Q' of Q is related to keyof T and T[Q'] is related to X.
-                            if (hasOptionalUnionKeys
+                            if (includeOptional
                                     ? !(filteredByApplicability!.flags & TypeFlags.Never)
                                     : isRelatedTo(targetConstraint, sourceKeys)) {
-                                const indexingType = hasOptionalUnionKeys ? filteredByApplicability! : getTypeParameterFromMappedType(target);
+                                const indexingType = filteredByApplicability || getTypeParameterFromMappedType(target);
                                 const indexedAccessType = getIndexedAccessType(source, indexingType);
                                 const templateType = getTemplateTypeFromMappedType(target);
                                 if (result = isRelatedTo(indexedAccessType, templateType, reportErrors)) {
@@ -13321,7 +13541,14 @@ namespace ts {
                         }
                     }
                     else if (isReadonlyArrayType(target) ? isArrayType(source) || isTupleType(source) : isArrayType(target) && isTupleType(source) && !source.target.readonly) {
-                        return isRelatedTo(getIndexTypeOfType(source, IndexKind.Number) || anyType, getIndexTypeOfType(target, IndexKind.Number) || anyType, reportErrors);
+                        if (relation !== identityRelation) {
+                            return isRelatedTo(getIndexTypeOfType(source, IndexKind.Number) || anyType, getIndexTypeOfType(target, IndexKind.Number) || anyType, reportErrors);
+                        }
+                        else {
+                            // By flags alone, we know that the `target` is a readonly array while the source is a normal array or tuple
+                            // or `target` is an array and source is a tuple - in both cases the types cannot be identical, by construction
+                            return Ternary.False;
+                        }
                     }
                     // Consider a fresh empty object literal type "closed" under the subtype relationship - this way `{} <- {[idx: string]: any} <- fresh({})`
                     // and not `{} <- fresh({}) <- {[idx: string]: any}`
@@ -14318,20 +14545,25 @@ namespace ts {
             if (!(isMatchingSignature(source, target, partialMatch))) {
                 return Ternary.False;
             }
-            // Check that the two signatures have the same number of type parameters. We might consider
-            // also checking that any type parameter constraints match, but that would require instantiating
-            // the constraints with a common set of type arguments to get relatable entities in places where
-            // type parameters occur in the constraints. The complexity of doing that doesn't seem worthwhile,
-            // particularly as we're comparing erased versions of the signatures below.
+            // Check that the two signatures have the same number of type parameters.
             if (length(source.typeParameters) !== length(target.typeParameters)) {
                 return Ternary.False;
             }
-            // Spec 1.0 Section 3.8.3 & 3.8.4:
-            // M and N (the signatures) are instantiated using type Any as the type argument for all type parameters declared by M and N
-            source = getErasedSignature(source);
-            target = getErasedSignature(target);
+            // Check that type parameter constraints and defaults match. If they do, instantiate the source
+            // signature with the type parameters of the target signature and continue the comparison.
+            if (target.typeParameters) {
+                const mapper = createTypeMapper(source.typeParameters!, target.typeParameters);
+                for (let i = 0; i < target.typeParameters.length; i++) {
+                    const s = source.typeParameters![i];
+                    const t = target.typeParameters[i];
+                    if (!(s === t || compareTypes(instantiateType(getConstraintFromTypeParameter(s), mapper) || unknownType, getConstraintFromTypeParameter(t) || unknownType) &&
+                        compareTypes(instantiateType(getDefaultFromTypeParameter(s), mapper) || unknownType, getDefaultFromTypeParameter(t) || unknownType))) {
+                        return Ternary.False;
+                    }
+                }
+                source = instantiateSignature(source, mapper, /*eraseTypeParameters*/ true);
+            }
             let result = Ternary.True;
-
             if (!ignoreThisTypes) {
                 const sourceThisType = getThisTypeOfSignature(source);
                 if (sourceThisType) {
@@ -14345,7 +14577,6 @@ namespace ts {
                     }
                 }
             }
-
             const targetLen = getParameterCount(target);
             for (let i = 0; i < targetLen; i++) {
                 const s = getTypeAtPosition(source, i);
@@ -14494,6 +14725,25 @@ namespace ts {
         function getWidenedLiteralLikeTypeForContextualType(type: Type, contextualType: Type | undefined) {
             if (!isLiteralOfContextualType(type, contextualType)) {
                 type = getWidenedUniqueESSymbolType(getWidenedLiteralType(type));
+            }
+            return type;
+        }
+
+        function getWidenedLiteralLikeTypeForContextualReturnTypeIfNeeded(type: Type | undefined, contextualSignatureReturnType: Type | undefined, isAsync: boolean) {
+            if (type && isUnitType(type)) {
+                const contextualType = !contextualSignatureReturnType ? undefined :
+                    isAsync ? getPromisedTypeOfPromise(contextualSignatureReturnType) :
+                    contextualSignatureReturnType;
+                type = getWidenedLiteralLikeTypeForContextualType(type, contextualType);
+            }
+            return type;
+        }
+
+        function getWidenedLiteralLikeTypeForContextualIterationTypeIfNeeded(type: Type | undefined, contextualSignatureReturnType: Type | undefined, kind: IterationTypeKind, isAsyncGenerator: boolean) {
+            if (type && isUnitType(type)) {
+                const contextualType = !contextualSignatureReturnType ? undefined :
+                    getIterationTypeOfGeneratorFunctionReturnType(kind, contextualSignatureReturnType, isAsyncGenerator);
+                type = getWidenedLiteralLikeTypeForContextualType(type, contextualType);
             }
             return type;
         }
@@ -14854,7 +15104,7 @@ namespace ts {
             return errorReported;
         }
 
-        function reportImplicitAny(declaration: Declaration, type: Type) {
+        function reportImplicitAny(declaration: Declaration, type: Type, wideningKind?: WideningKind) {
             const typeAsString = typeToString(getWidenedType(type));
             if (isInJSFile(declaration) && !isCheckJsEnabledForFile(getSourceFileOfNode(declaration), compilerOptions)) {
                 // Only report implicit any errors/suggestions in TS and ts-check JS files
@@ -14900,10 +15150,17 @@ namespace ts {
                 case SyntaxKind.FunctionExpression:
                 case SyntaxKind.ArrowFunction:
                     if (noImplicitAny && !(declaration as NamedDeclaration).name) {
-                        error(declaration, Diagnostics.Function_expression_which_lacks_return_type_annotation_implicitly_has_an_0_return_type, typeAsString);
+                        if (wideningKind === WideningKind.GeneratorYield) {
+                            error(declaration, Diagnostics.Generator_implicitly_has_yield_type_0_because_it_does_not_yield_any_values_Consider_supplying_a_return_type_annotation, typeAsString);
+                        }
+                        else {
+                            error(declaration, Diagnostics.Function_expression_which_lacks_return_type_annotation_implicitly_has_an_0_return_type, typeAsString);
+                        }
                         return;
                     }
-                    diagnostic = noImplicitAny ? Diagnostics._0_which_lacks_return_type_annotation_implicitly_has_an_1_return_type : Diagnostics._0_implicitly_has_an_1_return_type_but_a_better_type_may_be_inferred_from_usage;
+                    diagnostic = !noImplicitAny ? Diagnostics._0_implicitly_has_an_1_return_type_but_a_better_type_may_be_inferred_from_usage :
+                        wideningKind === WideningKind.GeneratorYield ? Diagnostics._0_which_lacks_return_type_annotation_implicitly_has_an_1_yield_type :
+                            Diagnostics._0_which_lacks_return_type_annotation_implicitly_has_an_1_return_type;
                     break;
                 case SyntaxKind.MappedType:
                     if (noImplicitAny) {
@@ -14916,11 +15173,11 @@ namespace ts {
             errorOrSuggestion(noImplicitAny, declaration, diagnostic, declarationNameToString(getNameOfDeclaration(declaration)), typeAsString);
         }
 
-        function reportErrorsFromWidening(declaration: Declaration, type: Type) {
+        function reportErrorsFromWidening(declaration: Declaration, type: Type, wideningKind?: WideningKind) {
             if (produceDiagnostics && noImplicitAny && getObjectFlags(type) & ObjectFlags.ContainsWideningType) {
                 // Report implicit any error within type if possible, otherwise report error on declaration
                 if (!reportWideningErrorsInType(type)) {
-                    reportImplicitAny(declaration, type);
+                    reportImplicitAny(declaration, type, wideningKind);
                 }
             }
         }
@@ -15042,7 +15299,11 @@ namespace ts {
         }
 
         function isTypeParameterAtTopLevel(type: Type, typeParameter: TypeParameter): boolean {
-            return type === typeParameter || !!(type.flags & TypeFlags.UnionOrIntersection) && some((<UnionOrIntersectionType>type).types, t => isTypeParameterAtTopLevel(t, typeParameter));
+            return !!(type === typeParameter ||
+                type.flags & TypeFlags.UnionOrIntersection && some((<UnionOrIntersectionType>type).types, t => isTypeParameterAtTopLevel(t, typeParameter)) ||
+                type.flags & TypeFlags.Conditional && (
+                    isTypeParameterAtTopLevel(getTrueTypeFromConditionalType(<ConditionalType>type), typeParameter) ||
+                    isTypeParameterAtTopLevel(getFalseTypeFromConditionalType(<ConditionalType>type), typeParameter)));
         }
 
         /** Create an object with properties named in the string literal type. Every property has type `any` */
@@ -15129,7 +15390,7 @@ namespace ts {
             return getTypeFromInference(inference) || unknownType;
         }
 
-        function* getUnmatchedProperties(source: Type, target: Type, requireOptionalProperties: boolean, matchDiscriminantProperties: boolean) {
+        function* getUnmatchedProperties(source: Type, target: Type, requireOptionalProperties: boolean, matchDiscriminantProperties: boolean): IterableIterator<Symbol> {
             const properties = target.flags & TypeFlags.Union ? getPossiblePropertiesOfUnionType(target as UnionType) : getPropertiesOfType(target);
             for (const targetProp of properties) {
                 if (requireOptionalProperties || !(targetProp.flags & SymbolFlags.Optional || getCheckFlags(targetProp) & CheckFlags.Partial)) {
@@ -15151,7 +15412,8 @@ namespace ts {
         }
 
         function getUnmatchedProperty(source: Type, target: Type, requireOptionalProperties: boolean, matchDiscriminantProperties: boolean): Symbol | undefined {
-            return getUnmatchedProperties(source, target, requireOptionalProperties, matchDiscriminantProperties).next().value;
+            const result = getUnmatchedProperties(source, target, requireOptionalProperties, matchDiscriminantProperties).next();
+            if (!result.done) return result.value;
         }
 
         function tupleTypesDefinitelyUnrelated(source: TupleTypeReference, target: TupleTypeReference) {
@@ -15331,36 +15593,11 @@ namespace ts {
                     inferFromTypes(getFalseTypeFromConditionalType(<ConditionalType>source), getFalseTypeFromConditionalType(<ConditionalType>target));
                 }
                 else if (target.flags & TypeFlags.Conditional && !contravariant) {
-                    inferFromTypes(source, getTrueTypeFromConditionalType(<ConditionalType>target));
-                    inferFromTypes(source, getFalseTypeFromConditionalType(<ConditionalType>target));
+                    const targetTypes = [getTrueTypeFromConditionalType(<ConditionalType>target), getFalseTypeFromConditionalType(<ConditionalType>target)];
+                    inferToMultipleTypes(source, targetTypes, /*isIntersection*/ false);
                 }
                 else if (target.flags & TypeFlags.UnionOrIntersection) {
-                    // We infer from types that are not naked type variables first so that inferences we
-                    // make from nested naked type variables and given slightly higher priority by virtue
-                    // of being first in the candidates array.
-                    let typeVariableCount = 0;
-                    for (const t of (<UnionOrIntersectionType>target).types) {
-                        if (getInferenceInfoForType(t)) {
-                            typeVariableCount++;
-                        }
-                        else {
-                            inferFromTypes(source, t);
-                        }
-                    }
-                    // Inferences directly to naked type variables are given lower priority as they are
-                    // less specific. For example, when inferring from Promise<string> to T | Promise<T>,
-                    // we want to infer string for T, not Promise<string> | string. For intersection types
-                    // we only infer to single naked type variables.
-                    if (target.flags & TypeFlags.Union ? typeVariableCount !== 0 : typeVariableCount === 1) {
-                        const savePriority = priority;
-                        priority |= InferencePriority.NakedTypeVariable;
-                        for (const t of (<UnionOrIntersectionType>target).types) {
-                            if (getInferenceInfoForType(t)) {
-                                inferFromTypes(source, t);
-                            }
-                        }
-                        priority = savePriority;
-                    }
+                    inferToMultipleTypes(source, (<UnionOrIntersectionType>target).types, !!(target.flags & TypeFlags.Intersection));
                 }
                 else if (source.flags & TypeFlags.Union) {
                     // Source is a union or intersection type, infer from each constituent type
@@ -15456,6 +15693,35 @@ namespace ts {
                     }
                 }
                 return undefined;
+            }
+
+            function inferToMultipleTypes(source: Type, targets: Type[], isIntersection: boolean) {
+                // We infer from types that are not naked type variables first so that inferences we
+                // make from nested naked type variables and given slightly higher priority by virtue
+                // of being first in the candidates array.
+                let typeVariableCount = 0;
+                for (const t of targets) {
+                    if (getInferenceInfoForType(t)) {
+                        typeVariableCount++;
+                    }
+                    else {
+                        inferFromTypes(source, t);
+                    }
+                }
+                // Inferences directly to naked type variables are given lower priority as they are
+                // less specific. For example, when inferring from Promise<string> to T | Promise<T>,
+                // we want to infer string for T, not Promise<string> | string. For intersection types
+                // we only infer to single naked type variables.
+                if (isIntersection ? typeVariableCount === 1 : typeVariableCount !== 0) {
+                    const savePriority = priority;
+                    priority |= InferencePriority.NakedTypeVariable;
+                    for (const t of targets) {
+                        if (getInferenceInfoForType(t)) {
+                            inferFromTypes(source, t);
+                        }
+                    }
+                    priority = savePriority;
+                }
             }
 
             function inferToMappedType(source: Type, target: MappedType, constraintType: Type): boolean {
@@ -16126,12 +16392,12 @@ namespace ts {
 
         function getTypeOfDestructuredArrayElement(type: Type, index: number) {
             return everyType(type, isTupleLikeType) && getTupleElementType(type, index) ||
-                checkIteratedTypeOrElementType(type, /*errorNode*/ undefined, /*allowStringInput*/ false, /*allowAsyncIterables*/ false) ||
+                checkIteratedTypeOrElementType(IterationUse.Destructuring, type, undefinedType, /*errorNode*/ undefined) ||
                 errorType;
         }
 
         function getTypeOfDestructuredSpreadExpression(type: Type) {
-            return createArrayType(checkIteratedTypeOrElementType(type, /*errorNode*/ undefined, /*allowStringInput*/ false, /*allowAsyncIterables*/ false) || errorType);
+            return createArrayType(checkIteratedTypeOrElementType(IterationUse.Destructuring, type, undefinedType, /*errorNode*/ undefined) || errorType);
         }
 
         function getAssignedTypeOfBinaryExpression(node: BinaryExpression): Type {
@@ -18254,7 +18520,7 @@ namespace ts {
                     // There was no contextual ThisType<T> for the containing object literal, so the contextual type
                     // for 'this' is the non-null form of the contextual type for the containing object literal or
                     // the type of the object literal itself.
-                    return contextualType ? getNonNullableType(contextualType) : checkExpressionCached(containingLiteral);
+                    return getWidenedType(contextualType ? getNonNullableType(contextualType) : checkExpressionCached(containingLiteral));
                 }
                 // In an assignment of the form 'obj.xxx = function(...)' or 'obj[xxx] = function(...)', the
                 // contextual type for 'this' is 'obj'.
@@ -18271,7 +18537,7 @@ namespace ts {
                             }
                         }
 
-                        return checkExpressionCached(expression);
+                        return getWidenedType(checkExpressionCached(expression));
                     }
                 }
             }
@@ -18408,7 +18674,7 @@ namespace ts {
                 if (contextualReturnType) {
                     return node.asteriskToken
                         ? contextualReturnType
-                        : getIteratedTypeOfGenerator(contextualReturnType, (functionFlags & FunctionFlags.Async) !== 0);
+                        : getIterationTypeOfGeneratorFunctionReturnType(IterationTypeKind.Yield, contextualReturnType, (functionFlags & FunctionFlags.Async) !== 0);
                 }
             }
 
@@ -18641,7 +18907,7 @@ namespace ts {
         function getContextualTypeForElementExpression(arrayContextualType: Type | undefined, index: number): Type | undefined {
             return arrayContextualType && (
                 getTypeOfPropertyOfContextualType(arrayContextualType, "" + index as __String)
-                || getIteratedTypeOrElementType(arrayContextualType, /*errorNode*/ undefined, /*allowStringInput*/ false, /*allowAsyncIterables*/ false, /*checkAssignability*/ false));
+                || getIteratedTypeOrElementType(IterationUse.Element, arrayContextualType, undefinedType, /*errorNode*/ undefined, /*checkAssignability*/ false));
         }
 
         // In a contextually typed conditional expression, the true/false expressions are contextually typed by the same type.
@@ -18839,6 +19105,10 @@ namespace ts {
                 case SyntaxKind.AwaitExpression:
                     return getContextualTypeForAwaitOperand(<AwaitExpression>parent);
                 case SyntaxKind.CallExpression:
+                    if ((<CallExpression>parent).expression.kind === SyntaxKind.ImportKeyword) {
+                        return stringType;
+                    }
+                    /* falls through */
                 case SyntaxKind.NewExpression:
                     return getContextualTypeForArgument(<CallExpression | NewExpression>parent, node);
                 case SyntaxKind.TypeAssertionExpression:
@@ -19095,7 +19365,9 @@ namespace ts {
                 }
             }
             // Result is union of signatures collected (return type is union of return types of this signature set)
-            return signatureList && createUnionSignature(signatureList[0], signatureList);
+            if (signatureList) {
+                return signatureList.length === 1 ? signatureList[0] : createUnionSignature(signatureList[0], signatureList);
+            }
         }
 
         function checkSpreadExpression(node: SpreadElement, checkMode?: CheckMode): Type {
@@ -19104,7 +19376,7 @@ namespace ts {
             }
 
             const arrayOrIterableType = checkExpression(node.expression, checkMode);
-            return checkIteratedTypeOrElementType(arrayOrIterableType, node.expression, /*allowStringInput*/ false, /*allowAsyncIterables*/ false);
+            return checkIteratedTypeOrElementType(IterationUse.Spread, arrayOrIterableType, undefinedType, node.expression);
         }
 
         function hasDefaultValue(node: BindingElement | Expression): boolean {
@@ -19137,7 +19409,7 @@ namespace ts {
                     // if there is no index type / iterated type.
                     const restArrayType = checkExpression((<SpreadElement>e).expression, checkMode, forceTuple);
                     const restElementType = getIndexTypeOfType(restArrayType, IndexKind.Number) ||
-                        getIteratedTypeOrElementType(restArrayType, /*errorNode*/ undefined, /*allowStringInput*/ false, /*allowAsyncIterables*/ false, /*checkAssignability*/ false);
+                        getIteratedTypeOrElementType(IterationUse.Destructuring, restArrayType, undefinedType, /*errorNode*/ undefined, /*checkAssignability*/ false);
                     if (restElementType) {
                         elementTypes.push(restElementType);
                     }
@@ -19189,26 +19461,7 @@ namespace ts {
         function getArrayLiteralTupleTypeIfApplicable(elementTypes: Type[], contextualType: Type | undefined, hasRestElement: boolean, elementCount = elementTypes.length, readonly = false) {
             // Infer a tuple type when the contextual type is or contains a tuple-like type
             if (readonly || (contextualType && forEachType(contextualType, isTupleLikeType))) {
-                const minLength = elementCount - (hasRestElement ? 1 : 0);
-                const pattern = contextualType && contextualType.pattern;
-                // If array literal is contextually typed by a binding pattern or an assignment pattern, pad the resulting
-                // tuple type with the corresponding binding or assignment element types to make the lengths equal.
-                if (!hasRestElement && pattern && (pattern.kind === SyntaxKind.ArrayBindingPattern || pattern.kind === SyntaxKind.ArrayLiteralExpression)) {
-                    const patternElements = (<BindingPattern | ArrayLiteralExpression>pattern).elements;
-                    for (let i = elementCount; i < patternElements.length; i++) {
-                        const e = patternElements[i];
-                        if (hasDefaultValue(e)) {
-                            elementTypes.push((<TypeReference>contextualType).typeArguments![i]);
-                        }
-                        else if (i < patternElements.length - 1 || !(e.kind === SyntaxKind.BindingElement && (<BindingElement>e).dotDotDotToken || e.kind === SyntaxKind.SpreadElement)) {
-                            if (e.kind !== SyntaxKind.OmittedExpression) {
-                                error(e, Diagnostics.Initializer_provides_no_value_for_this_binding_element_and_the_binding_element_has_no_default_value);
-                            }
-                            elementTypes.push(strictNullChecks ? implicitNeverType : undefinedWideningType);
-                        }
-                    }
-                }
-                return createTupleType(elementTypes, minLength, hasRestElement, readonly);
+                return createTupleType(elementTypes, elementCount - (hasRestElement ? 1 : 0), hasRestElement, readonly);
             }
         }
 
@@ -20026,6 +20279,7 @@ namespace ts {
         }
 
         function checkJsxExpression(node: JsxExpression, checkMode?: CheckMode) {
+            checkGrammarJsxExpression(node);
             if (node.expression) {
                 const type = checkExpression(node.expression, checkMode);
                 if (node.dotDotDotToken && type !== anyType && !isArrayType(type)) {
@@ -21114,24 +21368,48 @@ namespace ts {
          * @param signature a candidate signature we are trying whether it is a call signature
          * @param relation a relationship to check parameter and argument type
          */
-        function checkApplicableSignatureForJsxOpeningLikeElement(node: JsxOpeningLikeElement, signature: Signature, relation: Map<RelationComparisonResult>, checkMode: CheckMode, reportErrors: boolean) {
+        function checkApplicableSignatureForJsxOpeningLikeElement(
+            node: JsxOpeningLikeElement,
+            signature: Signature,
+            relation: Map<RelationComparisonResult>,
+            checkMode: CheckMode,
+            reportErrors: boolean,
+            containingMessageChain: (() => DiagnosticMessageChain | undefined) | undefined,
+            errorOutputContainer: { errors?: Diagnostic[], skipLogging?: boolean }
+        ) {
             // Stateless function components can have maximum of three arguments: "props", "context", and "updater".
             // However "context" and "updater" are implicit and can't be specify by users. Only the first parameter, props,
             // can be specified by users through attributes property.
             const paramType = getEffectiveFirstArgumentForJsxSignature(signature, node);
             const attributesType = checkExpressionWithContextualType(node.attributes, paramType, /*inferenceContext*/ undefined, checkMode);
-            return checkTypeRelatedToAndOptionallyElaborate(attributesType, paramType, relation, reportErrors ? node.tagName : undefined, node.attributes);
+            return checkTypeRelatedToAndOptionallyElaborate(
+                attributesType,
+                paramType,
+                relation,
+                reportErrors ? node.tagName : undefined,
+                node.attributes,
+                /*headMessage*/ undefined,
+                containingMessageChain,
+                errorOutputContainer);
         }
 
-        function checkApplicableSignature(
+        function getSignatureApplicabilityError(
             node: CallLikeExpression,
             args: ReadonlyArray<Expression>,
             signature: Signature,
             relation: Map<RelationComparisonResult>,
             checkMode: CheckMode,
-            reportErrors: boolean) {
+            reportErrors: boolean,
+            containingMessageChain: (() => DiagnosticMessageChain | undefined) | undefined,
+        ) {
+
+            const errorOutputContainer: { errors?: Diagnostic[], skipLogging?: boolean } = { errors: undefined, skipLogging: true };
             if (isJsxOpeningLikeElement(node)) {
-                return checkApplicableSignatureForJsxOpeningLikeElement(node, signature, relation, checkMode, reportErrors);
+                if (!checkApplicableSignatureForJsxOpeningLikeElement(node, signature, relation, checkMode, reportErrors, containingMessageChain, errorOutputContainer)) {
+                    Debug.assert(!reportErrors || !!errorOutputContainer.errors, "jsx should have errors when reporting errors");
+                    return errorOutputContainer.errors || [];
+                }
+                return undefined;
             }
             const thisType = getThisTypeOfSignature(signature);
             if (thisType && thisType !== voidType && node.kind !== SyntaxKind.NewExpression) {
@@ -21142,8 +21420,9 @@ namespace ts {
                 const thisArgumentType = thisArgumentNode ? checkExpression(thisArgumentNode) : voidType;
                 const errorNode = reportErrors ? (thisArgumentNode || node) : undefined;
                 const headMessage = Diagnostics.The_this_context_of_type_0_is_not_assignable_to_method_s_this_of_type_1;
-                if (!checkTypeRelatedTo(thisArgumentType, thisType, relation, errorNode, headMessage)) {
-                    return false;
+                if (!checkTypeRelatedTo(thisArgumentType, thisType, relation, errorNode, headMessage, containingMessageChain, errorOutputContainer)) {
+                    Debug.assert(!reportErrors || !!errorOutputContainer.errors, "this parameter should have errors when reporting errors");
+                    return errorOutputContainer.errors || [];
                 }
             }
             const headMessage = Diagnostics.Argument_of_type_0_is_not_assignable_to_parameter_of_type_1;
@@ -21158,17 +21437,36 @@ namespace ts {
                     // we obtain the regular type of any object literal arguments because we may not have inferred complete
                     // parameter types yet and therefore excess property checks may yield false positives (see #17041).
                     const checkArgType = checkMode & CheckMode.SkipContextSensitive ? getRegularTypeOfObjectLiteral(argType) : argType;
-                    if (!checkTypeRelatedToAndOptionallyElaborate(checkArgType, paramType, relation, reportErrors ? arg : undefined, arg, headMessage)) {
-                        return false;
+                    if (!checkTypeRelatedToAndOptionallyElaborate(checkArgType, paramType, relation, reportErrors ? arg : undefined, arg, headMessage, containingMessageChain, errorOutputContainer)) {
+                        Debug.assert(!reportErrors || !!errorOutputContainer.errors, "parameter should have errors when reporting errors");
+                        maybeAddMissingAwaitInfo(arg, checkArgType, paramType);
+                        return errorOutputContainer.errors || [];
                     }
                 }
             }
             if (restType) {
                 const spreadType = getSpreadArgumentType(args, argCount, args.length, restType, /*context*/ undefined);
                 const errorNode = reportErrors ? argCount < args.length ? args[argCount] : node : undefined;
-                return checkTypeRelatedTo(spreadType, restType, relation, errorNode, headMessage);
+                if (!checkTypeRelatedTo(spreadType, restType, relation, errorNode, headMessage, /*containingMessageChain*/ undefined, errorOutputContainer)) {
+                    Debug.assert(!reportErrors || !!errorOutputContainer.errors, "rest parameter should have errors when reporting errors");
+                    maybeAddMissingAwaitInfo(errorNode, spreadType, restType);
+                    return errorOutputContainer.errors || [];
+                }
             }
-            return true;
+            return undefined;
+
+            function maybeAddMissingAwaitInfo(errorNode: Node | undefined, source: Type, target: Type) {
+                if (errorNode && reportErrors && errorOutputContainer.errors && errorOutputContainer.errors.length) {
+                    // Bail if target is Promise-like---something else is wrong
+                    if (getAwaitedTypeOfPromise(target)) {
+                        return;
+                    }
+                    const awaitedTypeOfSource = getAwaitedTypeOfPromise(source);
+                    if (awaitedTypeOfSource && isTypeRelatedTo(awaitedTypeOfSource, target, relation)) {
+                        addRelatedInfo(errorOutputContainer.errors[0], createDiagnosticForNode(errorNode, Diagnostics.Did_you_forget_to_use_await));
+                    }
+                }
+            }
         }
 
         /**
@@ -21290,8 +21588,34 @@ namespace ts {
                     return Debug.fail();
             }
         }
+        function getDiagnosticSpanForCallNode(node: CallExpression, doNotIncludeArguments?: boolean) {
+            let start: number;
+            let length: number;
+            const sourceFile = getSourceFileOfNode(node);
 
-        function getArgumentArityError(node: Node, signatures: ReadonlyArray<Signature>, args: ReadonlyArray<Expression>) {
+            if (isPropertyAccessExpression(node.expression)) {
+                const nameSpan = getErrorSpanForNode(sourceFile, node.expression.name);
+                start = nameSpan.start;
+                length = doNotIncludeArguments ? nameSpan.length : node.end - start;
+            }
+            else {
+                const expressionSpan = getErrorSpanForNode(sourceFile, node.expression);
+                start = expressionSpan.start;
+                length = doNotIncludeArguments ? expressionSpan.length : node.end - start;
+            }
+            return { start, length, sourceFile };
+        }
+        function getDiagnosticForCallNode(node: CallLikeExpression, message: DiagnosticMessage, arg0?: string | number, arg1?: string | number, arg2?: string | number, arg3?: string | number): DiagnosticWithLocation {
+            if (isCallExpression(node)) {
+                const { sourceFile, start, length } = getDiagnosticSpanForCallNode(node);
+                return createFileDiagnostic(sourceFile, start, length, message, arg0, arg1, arg2, arg3);
+            }
+            else {
+                return createDiagnosticForNode(node, message, arg0, arg1, arg2, arg3);
+            }
+        }
+
+        function getArgumentArityError(node: CallLikeExpression, signatures: ReadonlyArray<Signature>, args: ReadonlyArray<Expression>) {
             let min = Number.POSITIVE_INFINITY;
             let max = Number.NEGATIVE_INFINITY;
             let belowArgCount = Number.NEGATIVE_INFINITY;
@@ -21338,11 +21662,11 @@ namespace ts {
                 }
             }
             if (min < argCount && argCount < max) {
-                return createDiagnosticForNode(node, Diagnostics.No_overload_expects_0_arguments_but_overloads_do_exist_that_expect_either_1_or_2_arguments, argCount, belowArgCount, aboveArgCount);
+                return getDiagnosticForCallNode(node, Diagnostics.No_overload_expects_0_arguments_but_overloads_do_exist_that_expect_either_1_or_2_arguments, argCount, belowArgCount, aboveArgCount);
             }
 
             if (!hasSpreadArgument && argCount < min) {
-                const diagnostic = createDiagnosticForNode(node, error, paramRange, argCount);
+                const diagnostic = getDiagnosticForCallNode(node, error, paramRange, argCount);
                 return related ? addRelatedInfo(diagnostic, related) : diagnostic;
             }
 
@@ -21417,8 +21741,7 @@ namespace ts {
             reorderCandidates(signatures, candidates);
             if (!candidates.length) {
                 if (reportErrors) {
-                    const errorNode = getCallErrorNode(node);
-                    diagnostics.add(createDiagnosticForNode(errorNode, Diagnostics.Call_target_does_not_contain_any_signatures));
+                    diagnostics.add(getDiagnosticForCallNode(node, Diagnostics.Call_target_does_not_contain_any_signatures));
                 }
                 return resolveErrorCall(node);
             }
@@ -21461,7 +21784,7 @@ namespace ts {
             //     function foo(): void;
             //     foo<number>(0);
             //
-            let candidateForArgumentError: Signature | undefined;
+            let candidatesForArgumentError: Signature[] | undefined;
             let candidateForArgumentArityError: Signature | undefined;
             let candidateForTypeArgumentError: Signature | undefined;
             let result: Signature | undefined;
@@ -21496,13 +21819,67 @@ namespace ts {
             // If candidate is undefined, it means that no candidates had a suitable arity. In that case,
             // skip the checkApplicableSignature check.
             if (reportErrors) {
-                const errorNode = getCallErrorNode(node);
+                if (candidatesForArgumentError) {
+                    if (candidatesForArgumentError.length === 1 || candidatesForArgumentError.length > 3) {
+                        const last = candidatesForArgumentError[candidatesForArgumentError.length - 1];
+                        let chain: DiagnosticMessageChain | undefined;
+                        if (candidatesForArgumentError.length > 3) {
+                            chain = chainDiagnosticMessages(chain, Diagnostics.The_last_overload_gave_the_following_error);
+                            chain = chainDiagnosticMessages(chain, Diagnostics.No_overload_matches_this_call);
+                        }
+                        const diags = getSignatureApplicabilityError(node, args, last, assignableRelation, CheckMode.Normal, /*reportErrors*/ true, () => chain);
+                        if (diags) {
+                            for (const d of diags) {
+                                if (last.declaration && candidatesForArgumentError.length > 3) {
+                                    addRelatedInfo(d, createDiagnosticForNode(last.declaration, Diagnostics.The_last_overload_is_declared_here));
+                                }
+                                diagnostics.add(d);
+                            }
+                        }
+                        else {
+                            Debug.fail("No error for last overload signature");
+                        }
+                    }
+                    else {
+                        const allDiagnostics: DiagnosticRelatedInformation[][] = [];
+                        let max = 0;
+                        let min = Number.MAX_VALUE;
+                        let minIndex = 0;
+                        let i = 0;
+                        for (const c of candidatesForArgumentError) {
+                            const chain = () => chainDiagnosticMessages(/*details*/ undefined, Diagnostics.Overload_0_of_1_2_gave_the_following_error, i + 1, candidates.length, signatureToString(c));
+                            const diags = getSignatureApplicabilityError(node, args, c, assignableRelation, CheckMode.Normal, /*reportErrors*/ true, chain);
+                            if (diags) {
+                                if (diags.length <= min) {
+                                    min = diags.length;
+                                    minIndex = i;
+                                }
+                                max = Math.max(max, diags.length);
+                                allDiagnostics.push(diags);
+                            }
+                            else {
+                                Debug.fail("No error for 3 or fewer overload signatures");
+                            }
+                            i++;
+                        }
 
-                if (candidateForArgumentError) {
-                    checkApplicableSignature(node, args, candidateForArgumentError, assignableRelation, CheckMode.Normal, /*reportErrors*/ true);
+                        const diags = max > 1 ? allDiagnostics[minIndex] : flatten(allDiagnostics);
+                        Debug.assert(diags.length > 0, "No errors reported for 3 or fewer overload signatures");
+                        const chain = chainDiagnosticMessages(
+                            map(diags, d => typeof d.messageText === "string" ? (d as DiagnosticMessageChain) : d.messageText),
+                            Diagnostics.No_overload_matches_this_call);
+                        const related = flatMap(diags, d => (d as Diagnostic).relatedInformation) as DiagnosticRelatedInformation[];
+                        if (every(diags, d => d.start === diags[0].start && d.length === diags[0].length && d.file === diags[0].file)) {
+                            const { file, start, length } = diags[0];
+                            diagnostics.add({ file, start, length, code: chain.code, category: chain.category, messageText: chain, relatedInformation: related });
+                        }
+                        else {
+                            diagnostics.add(createDiagnosticForNodeFromMessageChain(node, chain, related));
+                        }
+                    }
                 }
                 else if (candidateForArgumentArityError) {
-                    diagnostics.add(getArgumentArityError(errorNode, [candidateForArgumentArityError], args));
+                    diagnostics.add(getArgumentArityError(node, [candidateForArgumentArityError], args));
                 }
                 else if (candidateForTypeArgumentError) {
                     checkTypeArguments(candidateForTypeArgumentError, (node as CallExpression | TaggedTemplateExpression | JsxOpeningLikeElement).typeArguments!, /*reportErrors*/ true, fallbackError);
@@ -21510,33 +21887,21 @@ namespace ts {
                 else {
                     const signaturesWithCorrectTypeArgumentArity = filter(signatures, s => hasCorrectTypeArgumentArity(s, typeArguments));
                     if (signaturesWithCorrectTypeArgumentArity.length === 0) {
-                        diagnostics.add(getTypeArgumentArityError(errorNode, signatures, typeArguments!));
+                        diagnostics.add(getTypeArgumentArityError(node, signatures, typeArguments!));
                     }
                     else if (!isDecorator) {
-                        diagnostics.add(getArgumentArityError(errorNode, signaturesWithCorrectTypeArgumentArity, args));
+                        diagnostics.add(getArgumentArityError(node, signaturesWithCorrectTypeArgumentArity, args));
                     }
                     else if (fallbackError) {
-                        diagnostics.add(createDiagnosticForNode(errorNode, fallbackError));
+                        diagnostics.add(getDiagnosticForCallNode(node, fallbackError));
                     }
                 }
             }
 
             return produceDiagnostics || !args ? resolveErrorCall(node) : getCandidateForOverloadFailure(node, candidates, args, !!candidatesOutArray);
 
-            function getCallErrorNode(node: CallLikeExpression): Node {
-                if (isCallExpression(node)) {
-                    if (isPropertyAccessExpression(node.expression)) {
-                        return node.expression.name;
-                    }
-                    else {
-                        return node.expression;
-                    }
-                }
-                return node;
-            }
-
             function chooseOverload(candidates: Signature[], relation: Map<RelationComparisonResult>, signatureHelpTrailingComma = false) {
-                candidateForArgumentError = undefined;
+                candidatesForArgumentError = undefined;
                 candidateForArgumentArityError = undefined;
                 candidateForTypeArgumentError = undefined;
 
@@ -21545,8 +21910,8 @@ namespace ts {
                     if (typeArguments || !hasCorrectArity(node, args, candidate, signatureHelpTrailingComma)) {
                         return undefined;
                     }
-                    if (!checkApplicableSignature(node, args, candidate, relation, CheckMode.Normal, /*reportErrors*/ false)) {
-                        candidateForArgumentError = candidate;
+                    if (getSignatureApplicabilityError(node, args, candidate, relation, CheckMode.Normal, /*reportErrors*/ false, /*containingMessageChain*/ undefined)) {
+                        candidatesForArgumentError = [candidate];
                         return undefined;
                     }
                     return candidate;
@@ -21586,11 +21951,9 @@ namespace ts {
                     else {
                         checkCandidate = candidate;
                     }
-                    if (!checkApplicableSignature(node, args, checkCandidate, relation, argCheckMode, /*reportErrors*/ false)) {
+                    if (getSignatureApplicabilityError(node, args, checkCandidate, relation, argCheckMode, /*reportErrors*/ false, /*containingMessageChain*/ undefined)) {
                         // Give preference to error candidates that have no rest parameters (as they are more specific)
-                        if (!candidateForArgumentError || getEffectiveRestType(candidateForArgumentError) || !getEffectiveRestType(checkCandidate)) {
-                            candidateForArgumentError = checkCandidate;
-                        }
+                        (candidatesForArgumentError || (candidatesForArgumentError = [])).push(checkCandidate);
                         continue;
                     }
                     if (argCheckMode) {
@@ -21608,11 +21971,9 @@ namespace ts {
                                 continue;
                             }
                         }
-                        if (!checkApplicableSignature(node, args, checkCandidate, relation, argCheckMode, /*reportErrors*/ false)) {
+                        if (getSignatureApplicabilityError(node, args, checkCandidate, relation, argCheckMode, /*reportErrors*/ false, /*containingMessageChain*/ undefined)) {
                             // Give preference to error candidates that have no rest parameters (as they are more specific)
-                            if (!candidateForArgumentError || getEffectiveRestType(candidateForArgumentError) || !getEffectiveRestType(checkCandidate)) {
-                                candidateForArgumentError = checkCandidate;
-                            }
+                            (candidatesForArgumentError || (candidatesForArgumentError = [])).push(checkCandidate);
                             continue;
                         }
                     }
@@ -21817,7 +22178,7 @@ namespace ts {
                             relatedInformation = createDiagnosticForNode(node.expression, Diagnostics.It_is_highly_likely_that_you_are_missing_a_semicolon);
                         }
                     }
-                    invocationError(node, apparentType, SignatureKind.Call, relatedInformation);
+                    invocationError(node.expression, apparentType, SignatureKind.Call, relatedInformation);
                 }
                 return resolveErrorCall(node);
             }
@@ -21934,7 +22295,7 @@ namespace ts {
                 return signature;
             }
 
-            invocationError(node, expressionType, SignatureKind.Construct);
+            invocationError(node.expression, expressionType, SignatureKind.Construct);
             return resolveErrorCall(node);
         }
 
@@ -22007,11 +22368,95 @@ namespace ts {
             return true;
         }
 
-        function invocationError(node: Node, apparentType: Type, kind: SignatureKind, relatedInformation?: DiagnosticRelatedInformation) {
-            const diagnostic = error(node, (kind === SignatureKind.Call ?
-                Diagnostics.Cannot_invoke_an_expression_whose_type_lacks_a_call_signature_Type_0_has_no_compatible_call_signatures :
-                Diagnostics.Cannot_use_new_with_an_expression_whose_type_lacks_a_call_or_construct_signature
-            ), typeToString(apparentType));
+        function invocationErrorDetails(apparentType: Type, kind: SignatureKind): { messageChain: DiagnosticMessageChain, relatedMessage: DiagnosticMessage | undefined } {
+            let errorInfo: DiagnosticMessageChain | undefined;
+            const isCall = kind === SignatureKind.Call;
+            const awaitedType = getAwaitedType(apparentType);
+            const maybeMissingAwait = awaitedType && getSignaturesOfType(awaitedType, kind).length > 0;
+            if (apparentType.flags & TypeFlags.Union) {
+                const types = (apparentType as UnionType).types;
+                let hasSignatures = false;
+                for (const constituent of types) {
+                    const signatures = getSignaturesOfType(constituent, kind);
+                    if (signatures.length !== 0) {
+                        hasSignatures = true;
+                        if (errorInfo) {
+                            // Bail early if we already have an error, no chance of "No constituent of type is callable"
+                            break;
+                        }
+                    }
+                    else {
+                        // Error on the first non callable constituent only
+                        if (!errorInfo) {
+                            errorInfo = chainDiagnosticMessages(
+                                errorInfo,
+                                isCall ?
+                                    Diagnostics.Type_0_has_no_call_signatures :
+                                    Diagnostics.Type_0_has_no_construct_signatures,
+                                typeToString(constituent)
+                            );
+                            errorInfo = chainDiagnosticMessages(
+                                errorInfo,
+                                isCall ?
+                                    Diagnostics.Not_all_constituents_of_type_0_are_callable :
+                                    Diagnostics.Not_all_constituents_of_type_0_are_constructable,
+                                typeToString(apparentType)
+                            );
+                        }
+                        if (hasSignatures) {
+                            // Bail early if we already found a siganture, no chance of "No constituent of type is callable"
+                            break;
+                        }
+                    }
+                }
+                if (!hasSignatures) {
+                    errorInfo = chainDiagnosticMessages(
+                        /* detials */ undefined,
+                        isCall ?
+                            Diagnostics.No_constituent_of_type_0_is_callable :
+                            Diagnostics.No_constituent_of_type_0_is_constructable,
+                        typeToString(apparentType)
+                    );
+                }
+                if (!errorInfo) {
+                    errorInfo = chainDiagnosticMessages(
+                        errorInfo,
+                        isCall ?
+                            Diagnostics.Each_member_of_the_union_type_0_has_signatures_but_none_of_those_signatures_are_compatible_with_each_other :
+                            Diagnostics.Each_member_of_the_union_type_0_has_construct_signatures_but_none_of_those_signatures_are_compatible_with_each_other,
+                        typeToString(apparentType)
+                    );
+                }
+            }
+            else {
+                errorInfo = chainDiagnosticMessages(
+                    errorInfo,
+                    isCall ?
+                        Diagnostics.Type_0_has_no_call_signatures :
+                        Diagnostics.Type_0_has_no_construct_signatures,
+                    typeToString(apparentType)
+                );
+            }
+            return {
+                messageChain: chainDiagnosticMessages(
+                    errorInfo,
+                    isCall ? Diagnostics.This_expression_is_not_callable : Diagnostics.This_expression_is_not_constructable
+                ),
+                relatedMessage: maybeMissingAwait ? Diagnostics.Did_you_forget_to_use_await : undefined,
+            };
+        }
+        function invocationError(errorTarget: Node, apparentType: Type, kind: SignatureKind, relatedInformation?: DiagnosticRelatedInformation) {
+            const { messageChain, relatedMessage: relatedInfo } = invocationErrorDetails(apparentType, kind);
+            const diagnostic = createDiagnosticForNodeFromMessageChain(errorTarget, messageChain);
+            if (relatedInfo) {
+                addRelatedInfo(diagnostic, createDiagnosticForNode(errorTarget, relatedInfo));
+            }
+            if (isCallExpression(errorTarget.parent)) {
+                const { start, length } = getDiagnosticSpanForCallNode(errorTarget.parent, /* doNotIncludeArguments */ true);
+                diagnostic.start = start;
+                diagnostic.length = length;
+            }
+            diagnostics.add(diagnostic);
             invocationErrorRecovery(apparentType, kind, relatedInformation ? addRelatedInfo(diagnostic, relatedInformation) : diagnostic);
         }
 
@@ -22049,7 +22494,7 @@ namespace ts {
             }
 
             if (!callSignatures.length) {
-                invocationError(node, apparentType, SignatureKind.Call);
+                invocationError(node.tag, apparentType, SignatureKind.Call);
                 return resolveErrorCall(node);
             }
 
@@ -22105,9 +22550,12 @@ namespace ts {
 
             const headMessage = getDiagnosticHeadMessageForDecoratorResolution(node);
             if (!callSignatures.length) {
-                let errorInfo = chainDiagnosticMessages(/*details*/ undefined, Diagnostics.Cannot_invoke_an_expression_whose_type_lacks_a_call_signature_Type_0_has_no_compatible_call_signatures, typeToString(apparentType));
-                errorInfo = chainDiagnosticMessages(errorInfo, headMessage);
-                const diag = createDiagnosticForNodeFromMessageChain(node, errorInfo);
+                const errorDetails = invocationErrorDetails(apparentType, SignatureKind.Call);
+                const messageChain = chainDiagnosticMessages(errorDetails.messageChain, headMessage);
+                const diag = createDiagnosticForNodeFromMessageChain(node.expression, messageChain);
+                if (errorDetails.relatedMessage) {
+                    addRelatedInfo(diag, createDiagnosticForNode(node.expression, errorDetails.relatedMessage));
+                }
                 diagnostics.add(diag);
                 invocationErrorRecovery(apparentType, SignatureKind.Call, diag);
                 return resolveErrorCall(node);
@@ -22502,7 +22950,10 @@ namespace ts {
                 case SyntaxKind.ElementAccessExpression:
                     const expr = (<PropertyAccessExpression | ElementAccessExpression>node).expression;
                     if (isIdentifier(expr)) {
-                        const symbol = getSymbolAtLocation(expr);
+                        let symbol = getSymbolAtLocation(expr);
+                        if (symbol && symbol.flags & SymbolFlags.Alias) {
+                            symbol = resolveAlias(symbol);
+                        }
                         return !!(symbol && (symbol.flags & SymbolFlags.Enum) && getEnumKind(symbol) === EnumKind.Literal);
                     }
             }
@@ -22827,106 +23278,128 @@ namespace ts {
             }
 
             const functionFlags = getFunctionFlags(func);
-            let type: Type;
-            if (func.body.kind !== SyntaxKind.Block) {
-                type = checkExpressionCached(func.body, checkMode && checkMode & ~CheckMode.SkipGenericFunctions);
-                if (functionFlags & FunctionFlags.Async) {
+            const isAsync = (functionFlags & FunctionFlags.Async) !== 0;
+            const isGenerator = (functionFlags & FunctionFlags.Generator) !== 0;
+
+            let returnType: Type | undefined;
+            let yieldType: Type | undefined;
+            let nextType: Type | undefined;
+            let fallbackReturnType: Type = voidType;
+            if (func.body.kind !== SyntaxKind.Block) { // Async or normal arrow function
+                returnType = checkExpressionCached(func.body, checkMode && checkMode & ~CheckMode.SkipGenericFunctions);
+                if (isAsync) {
                     // From within an async function you can return either a non-promise value or a promise. Any
                     // Promise/A+ compatible implementation will always assimilate any foreign promise, so the
                     // return type of the body should be unwrapped to its awaited type, which we will wrap in
                     // the native Promise<T> type later in this function.
-                    type = checkAwaitedType(type, /*errorNode*/ func, Diagnostics.The_return_type_of_an_async_function_must_either_be_a_valid_promise_or_must_not_contain_a_callable_then_member);
+                    returnType = checkAwaitedType(returnType, /*errorNode*/ func, Diagnostics.The_return_type_of_an_async_function_must_either_be_a_valid_promise_or_must_not_contain_a_callable_then_member);
                 }
             }
-            else {
-                let types = checkAndAggregateReturnExpressionTypes(func, checkMode);
-                if (functionFlags & FunctionFlags.Generator) { // Generator or AsyncGenerator function
-                    types = concatenate(checkAndAggregateYieldOperandTypes(func, checkMode), types);
-                    if (!types || types.length === 0) {
-                        const iterableIteratorAny = functionFlags & FunctionFlags.Async
-                            ? createAsyncIterableIteratorType(anyType) // AsyncGenerator function
-                            : createIterableIteratorType(anyType); // Generator function
-                        if (noImplicitAny) {
-                            error(func.asteriskToken,
-                                Diagnostics.Generator_implicitly_has_type_0_because_it_does_not_yield_any_values_Consider_supplying_a_return_type, typeToString(iterableIteratorAny));
-                        }
-                        return iterableIteratorAny;
-                    }
+            else if (isGenerator) { // Generator or AsyncGenerator function
+                const returnTypes = checkAndAggregateReturnExpressionTypes(func, checkMode);
+                if (!returnTypes) {
+                    fallbackReturnType = neverType;
                 }
-                else {
-                    if (!types) {
-                        // For an async function, the return type will not be never, but rather a Promise for never.
-                        return functionFlags & FunctionFlags.Async
-                            ? createPromiseReturnType(func, neverType) // Async function
-                            : neverType; // Normal function
-                    }
-                    if (types.length === 0) {
-                        // For an async function, the return type will not be void, but rather a Promise for void.
-                        return functionFlags & FunctionFlags.Async
-                            ? createPromiseReturnType(func, voidType) // Async function
-                            : voidType; // Normal function
-                    }
+                else if (returnTypes.length > 0) {
+                    returnType = getUnionType(returnTypes, UnionReduction.Subtype);
+                }
+                const { yieldTypes, nextTypes } = checkAndAggregateYieldOperandTypes(func, checkMode);
+                yieldType = some(yieldTypes) ? getUnionType(yieldTypes, UnionReduction.Subtype) : undefined;
+                nextType = some(nextTypes) ? getIntersectionType(nextTypes) : undefined;
+            }
+            else { // Async or normal function
+                const types = checkAndAggregateReturnExpressionTypes(func, checkMode);
+                if (!types) {
+                    // For an async function, the return type will not be never, but rather a Promise for never.
+                    return functionFlags & FunctionFlags.Async
+                        ? createPromiseReturnType(func, neverType) // Async function
+                        : neverType; // Normal function
+                }
+                if (types.length === 0) {
+                    // For an async function, the return type will not be void, but rather a Promise for void.
+                    return functionFlags & FunctionFlags.Async
+                        ? createPromiseReturnType(func, voidType) // Async function
+                        : voidType; // Normal function
                 }
 
                 // Return a union of the return expression types.
-                type = getUnionType(types, UnionReduction.Subtype);
+                returnType = getUnionType(types, UnionReduction.Subtype);
             }
 
-            const contextualSignature = getContextualSignatureForFunctionLikeDeclaration(func);
-            if (!contextualSignature) {
-                reportErrorsFromWidening(func, type);
-            }
-
-            if (isUnitType(type)) {
-                let contextualType = !contextualSignature ? undefined :
-                    contextualSignature === getSignatureFromDeclaration(func) ? type :
-                    getReturnTypeOfSignature(contextualSignature);
-                if (contextualType) {
-                    switch (functionFlags & FunctionFlags.AsyncGenerator) {
-                        case FunctionFlags.AsyncGenerator:
-                            contextualType = getIteratedTypeOfGenerator(contextualType, /*isAsyncGenerator*/ true);
-                            break;
-                        case FunctionFlags.Generator:
-                            contextualType = getIteratedTypeOfGenerator(contextualType, /*isAsyncGenerator*/ false);
-                            break;
-                        case FunctionFlags.Async:
-                            contextualType = getPromisedTypeOfPromise(contextualType);
-                            break;
+            if (returnType || yieldType || nextType) {
+                const contextualSignature = getContextualSignatureForFunctionLikeDeclaration(func);
+                if (!contextualSignature) {
+                    if (yieldType) reportErrorsFromWidening(func, yieldType, WideningKind.GeneratorYield);
+                    if (returnType) reportErrorsFromWidening(func, returnType);
+                    if (nextType) reportErrorsFromWidening(func, nextType);
+                }
+                if (returnType && isUnitType(returnType) ||
+                    yieldType && isUnitType(yieldType) ||
+                    nextType && isUnitType(nextType)) {
+                    const contextualType = !contextualSignature ? undefined :
+                        contextualSignature === getSignatureFromDeclaration(func) ? isGenerator ? undefined : returnType :
+                        getReturnTypeOfSignature(contextualSignature);
+                    if (isGenerator) {
+                        yieldType = getWidenedLiteralLikeTypeForContextualIterationTypeIfNeeded(yieldType, contextualType, IterationTypeKind.Yield, isAsync);
+                        returnType = getWidenedLiteralLikeTypeForContextualIterationTypeIfNeeded(returnType, contextualType, IterationTypeKind.Return, isAsync);
+                        nextType = getWidenedLiteralLikeTypeForContextualIterationTypeIfNeeded(nextType, contextualType, IterationTypeKind.Next, isAsync);
+                    }
+                    else {
+                        returnType = getWidenedLiteralLikeTypeForContextualReturnTypeIfNeeded(returnType, contextualType, isAsync);
                     }
                 }
-                type = getWidenedLiteralLikeTypeForContextualType(type, contextualType);
+
+                if (yieldType) yieldType = getWidenedType(yieldType);
+                if (returnType) returnType = getWidenedType(returnType);
+                if (nextType) nextType = getWidenedType(nextType);
             }
 
-            const widenedType = getWidenedType(type);
-            switch (functionFlags & FunctionFlags.AsyncGenerator) {
-                case FunctionFlags.AsyncGenerator:
-                    return createAsyncIterableIteratorType(widenedType);
-                case FunctionFlags.Generator:
-                    return createIterableIteratorType(widenedType);
-                case FunctionFlags.Async:
-                    // From within an async function you can return either a non-promise value or a promise. Any
-                    // Promise/A+ compatible implementation will always assimilate any foreign promise, so the
-                    // return type of the body is awaited type of the body, wrapped in a native Promise<T> type.
-                    return createPromiseType(widenedType);
-                default:
-                    return widenedType;
+            if (isGenerator) {
+                return createGeneratorReturnType(yieldType || neverType, returnType || fallbackReturnType, nextType || unknownType, isAsync);
+            }
+            else {
+                // From within an async function you can return either a non-promise value or a promise. Any
+                // Promise/A+ compatible implementation will always assimilate any foreign promise, so the
+                // return type of the body is awaited type of the body, wrapped in a native Promise<T> type.
+                return isAsync
+                    ? createPromiseType(returnType || fallbackReturnType)
+                    : returnType || fallbackReturnType;
             }
         }
 
-        function checkAndAggregateYieldOperandTypes(func: FunctionLikeDeclaration, checkMode: CheckMode | undefined): Type[] {
-            const aggregatedTypes: Type[] = [];
+        function createGeneratorReturnType(yieldType: Type, returnType: Type, nextType: Type, isAsyncGenerator: boolean) {
+            return isAsyncGenerator
+                ? createAsyncGeneratorType(yieldType, returnType, nextType)
+                : createGeneratorType(yieldType, returnType, nextType);
+        }
+
+        function checkAndAggregateYieldOperandTypes(func: FunctionLikeDeclaration, checkMode: CheckMode | undefined) {
+            const yieldTypes: Type[] = [];
+            const nextTypes: Type[] = [];
             const isAsync = (getFunctionFlags(func) & FunctionFlags.Async) !== 0;
             forEachYieldExpression(<Block>func.body, yieldExpression => {
-                pushIfUnique(aggregatedTypes, getYieldedTypeOfYieldExpression(yieldExpression, isAsync, checkMode));
+                const yieldExpressionType = yieldExpression.expression ? checkExpression(yieldExpression.expression, checkMode) : undefinedWideningType;
+                pushIfUnique(yieldTypes, getYieldedTypeOfYieldExpression(yieldExpression, yieldExpressionType, anyType, isAsync));
+                let nextType: Type | undefined;
+                if (yieldExpression.asteriskToken) {
+                    const iterationTypes = getIterationTypesOfIterable(
+                        yieldExpressionType,
+                        isAsync ? IterationUse.AsyncYieldStar : IterationUse.YieldStar,
+                        yieldExpression.expression);
+                    nextType = iterationTypes && iterationTypes.nextType;
+                }
+                else {
+                    nextType = getContextualType(yieldExpression);
+                }
+                if (nextType) pushIfUnique(nextTypes, nextType);
             });
-            return aggregatedTypes;
+            return { yieldTypes, nextTypes };
         }
 
-        function getYieldedTypeOfYieldExpression(node: YieldExpression, isAsync: boolean, checkMode?: CheckMode): Type | undefined {
+        function getYieldedTypeOfYieldExpression(node: YieldExpression, expressionType: Type, sentType: Type, isAsync: boolean): Type | undefined {
             const errorNode = node.expression || node;
-            const expressionType = node.expression ? checkExpression(node.expression, checkMode) : undefinedWideningType;
             // A `yield*` expression effectively yields everything that its operand yields
-            const yieldedType = node.asteriskToken ? checkIteratedTypeOrElementType(expressionType, errorNode, /*allowStringInput*/ false, isAsync) : expressionType;
+            const yieldedType = node.asteriskToken ? checkIteratedTypeOrElementType(isAsync ? IterationUse.AsyncYieldStar : IterationUse.YieldStar, expressionType, sentType, errorNode) : expressionType;
             return !isAsync ? yieldedType : getAwaitedType(yieldedType, errorNode, node.asteriskToken
                 ? Diagnostics.Type_of_iterated_elements_of_a_yield_Asterisk_operand_must_either_be_a_valid_promise_or_must_not_contain_a_callable_then_member
                 : Diagnostics.Type_of_yield_operand_in_an_async_generator_must_either_be_a_valid_promise_or_must_not_contain_a_callable_then_member);
@@ -23072,8 +23545,11 @@ namespace ts {
                 return;
             }
 
+            const functionFlags = getFunctionFlags(func);
+            const type = returnType && getReturnOrPromisedType(returnType, functionFlags);
+
             // Functions with with an explicitly specified 'void' or 'any' return type don't need any return expressions.
-            if (returnType && maybeTypeOfKind(returnType, TypeFlags.Any | TypeFlags.Void)) {
+            if (type && maybeTypeOfKind(type, TypeFlags.Any | TypeFlags.Void)) {
                 return;
             }
 
@@ -23085,20 +23561,20 @@ namespace ts {
 
             const hasExplicitReturn = func.flags & NodeFlags.HasExplicitReturn;
 
-            if (returnType && returnType.flags & TypeFlags.Never) {
+            if (type && type.flags & TypeFlags.Never) {
                 error(getEffectiveReturnTypeNode(func), Diagnostics.A_function_returning_never_cannot_have_a_reachable_end_point);
             }
-            else if (returnType && !hasExplicitReturn) {
+            else if (type && !hasExplicitReturn) {
                 // minimal check: function has syntactic return type annotation and no explicit return statements in the body
                 // this function does not conform to the specification.
                 // NOTE: having returnType !== undefined is a precondition for entering this branch so func.type will always be present
                 error(getEffectiveReturnTypeNode(func), Diagnostics.A_function_whose_declared_type_is_neither_void_nor_any_must_return_a_value);
             }
-            else if (returnType && strictNullChecks && !isTypeAssignableTo(undefinedType, returnType)) {
+            else if (type && strictNullChecks && !isTypeAssignableTo(undefinedType, type)) {
                 error(getEffectiveReturnTypeNode(func), Diagnostics.Function_lacks_ending_return_statement_and_return_type_does_not_include_undefined);
             }
             else if (compilerOptions.noImplicitReturns) {
-                if (!returnType) {
+                if (!type) {
                     // If return type annotation is omitted check if function has any explicit return statements.
                     // If it does not have any - its inferred return type is void - don't do any checks.
                     // Otherwise get inferred return type from function body and report error only if it is not void / anytype
@@ -23188,22 +23664,20 @@ namespace ts {
             }
         }
 
-        function getReturnOrPromisedType(node: FunctionLikeDeclaration | MethodSignature, functionFlags: FunctionFlags) {
-            const type = getReturnTypeFromAnnotation(node);
-            return type && ((functionFlags & FunctionFlags.AsyncGenerator) === FunctionFlags.Async) ?
-                getAwaitedType(type) || errorType : type;
+        function getReturnOrPromisedType(type: Type | undefined, functionFlags: FunctionFlags) {
+            const isGenerator = !!(functionFlags & FunctionFlags.Generator);
+            const isAsync = !!(functionFlags & FunctionFlags.Async);
+            return type && isGenerator ? getIterationTypeOfGeneratorFunctionReturnType(IterationTypeKind.Return, type, isAsync) || errorType :
+                type && isAsync ? getAwaitedType(type) || errorType :
+                type;
         }
 
         function checkFunctionExpressionOrObjectLiteralMethodDeferred(node: ArrowFunction | FunctionExpression | MethodDeclaration) {
             Debug.assert(node.kind !== SyntaxKind.MethodDeclaration || isObjectLiteralMethod(node));
 
             const functionFlags = getFunctionFlags(node);
-            const returnOrPromisedType = getReturnOrPromisedType(node, functionFlags);
-
-            if ((functionFlags & FunctionFlags.Generator) === 0) { // Async function or normal function
-                // return is not necessary in the body of generators
-                checkAllCodePathsInNonVoidFunctionReturnOrThrow(node, returnOrPromisedType);
-            }
+            const returnType = getReturnTypeFromAnnotation(node);
+            checkAllCodePathsInNonVoidFunctionReturnOrThrow(node, returnType);
 
             if (node.body) {
                 if (!getEffectiveReturnTypeNode(node)) {
@@ -23225,6 +23699,7 @@ namespace ts {
                     // check assignability of the awaited type of the expression body against the promised type of
                     // its return type annotation.
                     const exprType = checkExpression(node.body);
+                    const returnOrPromisedType = getReturnOrPromisedType(returnType, functionFlags);
                     if (returnOrPromisedType) {
                         if ((functionFlags & FunctionFlags.AsyncGenerator) === FunctionFlags.Async) { // Async function
                             const awaitedType = checkAwaitedType(exprType, node.body, Diagnostics.The_return_type_of_an_async_function_must_either_be_a_valid_promise_or_must_not_contain_a_callable_then_member);
@@ -23240,7 +23715,11 @@ namespace ts {
 
         function checkArithmeticOperandType(operand: Node, type: Type, diagnostic: DiagnosticMessage): boolean {
             if (!isTypeAssignableTo(type, numberOrBigIntType)) {
-                error(operand, diagnostic);
+                const awaitedType = getAwaitedType(type);
+                errorAndMaybeSuggestAwait(
+                    operand,
+                    !!awaitedType && isTypeAssignableTo(awaitedType, numberOrBigIntType),
+                    diagnostic);
                 return false;
             }
             return true;
@@ -23627,7 +24106,7 @@ namespace ts {
             // This elementType will be used if the specific property corresponding to this index is not
             // present (aka the tuple element property). This call also checks that the parentType is in
             // fact an iterable or array (depending on target language).
-            const elementType = checkIteratedTypeOrElementType(sourceType, node, /*allowStringInput*/ false, /*allowAsyncIterables*/ false) || errorType;
+            const elementType = checkIteratedTypeOrElementType(IterationUse.Destructuring, sourceType, undefinedType, node) || errorType;
             for (let i = 0; i < elements.length; i++) {
                 checkArrayLiteralDestructuringElementAssignment(node, sourceType, i, elementType, checkMode);
             }
@@ -23644,8 +24123,10 @@ namespace ts {
                     if (isArrayLikeType(sourceType)) {
                         // We create a synthetic expression so that getIndexedAccessType doesn't get confused
                         // when the element is a SyntaxKind.ElementAccessExpression.
-                        const elementType = getIndexedAccessType(sourceType, indexType, createSyntheticExpression(element, indexType));
-                        const type = getFlowTypeOfDestructuring(element, elementType);
+                        const accessFlags = hasDefaultValue(element) ? AccessFlags.NoTupleBoundsCheck : 0;
+                        const elementType = getIndexedAccessTypeOrUndefined(sourceType, indexType, createSyntheticExpression(element, indexType), accessFlags) || errorType;
+                        const assignedType = hasDefaultValue(element) ? getTypeWithFacts(elementType, TypeFacts.NEUndefined) : elementType;
+                        const type = getFlowTypeOfDestructuring(element, assignedType);
                         return checkDestructuringAssignment(element, type, checkMode);
                     }
                     return checkDestructuringAssignment(element, elementType, checkMode);
@@ -23856,7 +24337,7 @@ namespace ts {
                         ) {
                             resultType = numberType;
                         }
-                        // At least one is assignable to bigint, so both should be only assignable to bigint
+                        // At least one is assignable to bigint, so check that both are
                         else if (isTypeAssignableToKind(leftType, TypeFlags.BigIntLike) && isTypeAssignableToKind(rightType, TypeFlags.BigIntLike)) {
                             switch (operator) {
                                 case SyntaxKind.GreaterThanGreaterThanGreaterThanToken:
@@ -23865,8 +24346,9 @@ namespace ts {
                             }
                             resultType = bigintType;
                         }
+                        // Exactly one of leftType/rightType is assignable to bigint
                         else {
-                            reportOperatorError();
+                            reportOperatorError((awaitedLeft, awaitedRight) => isTypeAssignableToKind(awaitedLeft, TypeFlags.BigIntLike) && isTypeAssignableToKind(awaitedRight, TypeFlags.BigIntLike));
                             resultType = errorType;
                         }
                         if (leftOk && rightOk) {
@@ -23911,7 +24393,14 @@ namespace ts {
                     }
 
                     if (!resultType) {
-                        reportOperatorError();
+                        // Types that have a reasonably good chance of being a valid operand type.
+                        // If both types have an awaited type of one of these, we’ll assume the user
+                        // might be missing an await without doing an exhaustive check that inserting
+                        // await(s) will actually be a completely valid binary expression.
+                        const closeEnoughKind = TypeFlags.NumberLike | TypeFlags.BigIntLike | TypeFlags.StringLike | TypeFlags.AnyOrUnknown;
+                        reportOperatorError((awaitedLeft, awaitedRight) =>
+                            isTypeAssignableToKind(awaitedLeft, closeEnoughKind) &&
+                            isTypeAssignableToKind(awaitedRight, closeEnoughKind));
                         return anyType;
                     }
 
@@ -23926,21 +24415,18 @@ namespace ts {
                     if (checkForDisallowedESSymbolOperand(operator)) {
                         leftType = getBaseTypeOfLiteralType(checkNonNullType(leftType, left));
                         rightType = getBaseTypeOfLiteralType(checkNonNullType(rightType, right));
-                        if (!(isTypeComparableTo(leftType, rightType) || isTypeComparableTo(rightType, leftType) ||
-                            (isTypeAssignableTo(leftType, numberOrBigIntType) && isTypeAssignableTo(rightType, numberOrBigIntType))
-                        )) {
-                            reportOperatorError();
-                        }
+                        reportOperatorErrorUnless((left, right) =>
+                            isTypeComparableTo(left, right) || isTypeComparableTo(right, left) || (
+                                isTypeAssignableTo(left, numberOrBigIntType) && isTypeAssignableTo(right, numberOrBigIntType)));
                     }
                     return booleanType;
                 case SyntaxKind.EqualsEqualsToken:
                 case SyntaxKind.ExclamationEqualsToken:
                 case SyntaxKind.EqualsEqualsEqualsToken:
                 case SyntaxKind.ExclamationEqualsEqualsToken:
-                    if (!isTypeEqualityComparableTo(leftType, rightType) && !isTypeEqualityComparableTo(rightType, leftType)) {
-                        reportOperatorError();
-                    }
+                    reportOperatorErrorUnless((left, right) => isTypeEqualityComparableTo(left, right) || isTypeEqualityComparableTo(right, left));
                     return booleanType;
+
                 case SyntaxKind.InstanceOfKeyword:
                     return checkInstanceOfExpression(left, right, leftType, rightType);
                 case SyntaxKind.InKeyword:
@@ -24067,12 +24553,33 @@ namespace ts {
                 }
             }
 
-            function reportOperatorError() {
-                const [leftStr, rightStr] = getTypeNamesForErrorDisplay(leftType, rightType);
+            /**
+             * Returns true if an error is reported
+             */
+            function reportOperatorErrorUnless(typesAreCompatible: (left: Type, right: Type) => boolean): boolean {
+                if (!typesAreCompatible(leftType, rightType)) {
+                    reportOperatorError(typesAreCompatible);
+                    return true;
+                }
+                return false;
+            }
+
+            function reportOperatorError(awaitedTypesAreCompatible?: (left: Type, right: Type) => boolean) {
+                let wouldWorkWithAwait = false;
                 const errNode = errorNode || operatorToken;
-                if (!tryGiveBetterPrimaryError(errNode, leftStr, rightStr)) {
-                    error(
+                const [leftStr, rightStr] = getTypeNamesForErrorDisplay(leftType, rightType);
+                if (awaitedTypesAreCompatible) {
+                    const awaitedLeftType = getAwaitedType(leftType);
+                    const awaitedRightType = getAwaitedType(rightType);
+                    wouldWorkWithAwait = !(awaitedLeftType === leftType && awaitedRightType === rightType)
+                        && !!(awaitedLeftType && awaitedRightType)
+                        && awaitedTypesAreCompatible(awaitedLeftType, awaitedRightType);
+                }
+
+                if (!tryGiveBetterPrimaryError(errNode, wouldWorkWithAwait, leftStr, rightStr)) {
+                    errorAndMaybeSuggestAwait(
                         errNode,
+                        wouldWorkWithAwait,
                         Diagnostics.Operator_0_cannot_be_applied_to_types_1_and_2,
                         tokenToString(operatorToken.kind),
                         leftStr,
@@ -24081,15 +24588,26 @@ namespace ts {
                 }
             }
 
-            function tryGiveBetterPrimaryError(errNode: Node, leftStr: string, rightStr: string) {
+            function tryGiveBetterPrimaryError(errNode: Node, maybeMissingAwait: boolean, leftStr: string, rightStr: string) {
+                let typeName: string | undefined;
                 switch (operatorToken.kind) {
                     case SyntaxKind.EqualsEqualsEqualsToken:
                     case SyntaxKind.EqualsEqualsToken:
-                        return error(errNode, Diagnostics.This_condition_will_always_return_0_since_the_types_1_and_2_have_no_overlap, "false", leftStr, rightStr);
+                        typeName = "false";
+                        break;
                     case SyntaxKind.ExclamationEqualsEqualsToken:
                     case SyntaxKind.ExclamationEqualsToken:
-                        return error(errNode, Diagnostics.This_condition_will_always_return_0_since_the_types_1_and_2_have_no_overlap, "true", leftStr, rightStr);
-                    }
+                        typeName = "true";
+                }
+
+                if (typeName) {
+                    return errorAndMaybeSuggestAwait(
+                        errNode,
+                        maybeMissingAwait,
+                        Diagnostics.This_condition_will_always_return_0_since_the_types_1_and_2_have_no_overlap,
+                        typeName, leftStr, rightStr);
+                }
+
                 return undefined;
             }
         }
@@ -24133,33 +24651,44 @@ namespace ts {
                 return anyType;
             }
 
+            const isAsync = (functionFlags & FunctionFlags.Async) !== 0;
             if (node.asteriskToken) {
                 // Async generator functions prior to ESNext require the __await, __asyncDelegator,
                 // and __asyncValues helpers
-                if ((functionFlags & FunctionFlags.AsyncGenerator) === FunctionFlags.AsyncGenerator &&
-                    languageVersion < ScriptTarget.ESNext) {
+                if (isAsync && languageVersion < ScriptTarget.ESNext) {
                     checkExternalEmitHelpers(node, ExternalEmitHelpers.AsyncDelegatorIncludes);
                 }
 
                 // Generator functions prior to ES2015 require the __values helper
-                if ((functionFlags & FunctionFlags.AsyncGenerator) === FunctionFlags.Generator &&
-                    languageVersion < ScriptTarget.ES2015 && compilerOptions.downlevelIteration) {
+                if (!isAsync && languageVersion < ScriptTarget.ES2015 && compilerOptions.downlevelIteration) {
                     checkExternalEmitHelpers(node, ExternalEmitHelpers.Values);
                 }
             }
 
-            const isAsync = (functionFlags & FunctionFlags.Async) !== 0;
-            const yieldedType = getYieldedTypeOfYieldExpression(node, isAsync)!; // TODO: GH#18217
             // There is no point in doing an assignability check if the function
             // has no explicit return type because the return type is directly computed
             // from the yield expressions.
             const returnType = getReturnTypeFromAnnotation(func);
-            if (returnType) {
-                const signatureElementType = getIteratedTypeOfGenerator(returnType, isAsync) || anyType;
-                checkTypeAssignableToAndOptionallyElaborate(yieldedType, signatureElementType, node.expression || node, node.expression);
+            const iterationTypes = returnType && getIterationTypesOfGeneratorFunctionReturnType(returnType, isAsync);
+            const signatureYieldType = iterationTypes && iterationTypes.yieldType || anyType;
+            const signatureNextType = iterationTypes && iterationTypes.nextType || anyType;
+            const resolvedSignatureNextType = isAsync ? getAwaitedType(signatureNextType) || anyType : signatureNextType;
+            const yieldExpressionType = node.expression ? checkExpression(node.expression) : undefinedWideningType;
+            const yieldedType = getYieldedTypeOfYieldExpression(node, yieldExpressionType, resolvedSignatureNextType, isAsync);
+            if (returnType && yieldedType) {
+                checkTypeAssignableToAndOptionallyElaborate(yieldedType, signatureYieldType, node.expression || node, node.expression);
             }
 
-            // Both yield and yield* expressions have type 'any'
+            if (node.asteriskToken) {
+                const use = isAsync ? IterationUse.AsyncYieldStar : IterationUse.YieldStar;
+                return getIterationTypeOfIterable(use, IterationTypeKind.Return, yieldExpressionType, node.expression)
+                    || anyType;
+            }
+            else if (returnType) {
+                return getIterationTypeOfGeneratorFunctionReturnType(IterationTypeKind.Next, returnType, isAsync)
+                    || anyType;
+            }
+
             return anyType;
         }
 
@@ -24234,10 +24763,13 @@ namespace ts {
         function checkDeclarationInitializer(declaration: HasExpressionInitializer) {
             const initializer = getEffectiveInitializer(declaration)!;
             const type = getTypeOfExpression(initializer, /*cache*/ true);
+            const padded = isParameter(declaration) && declaration.name.kind === SyntaxKind.ArrayBindingPattern &&
+                isTupleType(type) && !type.target.hasRestElement && getTypeReferenceArity(type) < declaration.name.elements.length ?
+                padTupleType(type, declaration.name) : type;
             const widened = getCombinedNodeFlags(declaration) & NodeFlags.Const ||
                 isDeclarationReadonly(declaration) ||
                 isTypeAssertion(initializer) ||
-                isLiteralOfContextualType(type, getContextualType(initializer)) ? type : getWidenedLiteralType(type);
+                isLiteralOfContextualType(padded, getContextualType(initializer)) ? padded : getWidenedLiteralType(padded);
             if (isInJSFile(declaration)) {
                 if (widened.flags & TypeFlags.Nullable) {
                     reportImplicitAny(declaration, anyType);
@@ -24249,6 +24781,22 @@ namespace ts {
                 }
             }
             return widened;
+        }
+
+        function padTupleType(type: TupleTypeReference, pattern: ArrayBindingPattern) {
+            const patternElements = pattern.elements;
+            const arity = getTypeReferenceArity(type);
+            const elementTypes = arity ? type.typeArguments!.slice() : [];
+            for (let i = arity; i < patternElements.length; i++) {
+                const e = patternElements[i];
+                if (i < patternElements.length - 1 || !(e.kind === SyntaxKind.BindingElement && e.dotDotDotToken)) {
+                    elementTypes.push(!isOmittedExpression(e) && hasDefaultValue(e) ? getTypeFromBindingElement(e, /*includePatternInType*/ false, /*reportErrors*/ false) : anyType);
+                    if (!isOmittedExpression(e) && !hasDefaultValue(e)) {
+                        reportImplicitAny(e, anyType);
+                    }
+                }
+            }
+            return createTupleType(elementTypes, type.target.minLength, /*hasRestElement*/ false, type.target.readonly);
         }
 
         function isLiteralOfContextualType(candidateType: Type, contextualType: Type | undefined): boolean {
@@ -24499,6 +25047,7 @@ namespace ts {
         function checkExpression(node: Expression | QualifiedName, checkMode?: CheckMode, forceTuple?: boolean): Type {
             const saveCurrentNode = currentNode;
             currentNode = node;
+            instantiationCount = 0;
             const uninstantiatedType = checkExpressionWorker(node, checkMode, forceTuple);
             const type = instantiateTypeWithSingleGenericCallSignature(node, uninstantiatedType, checkMode);
             if (isConstEnumObjectType(type)) {
@@ -24857,18 +25406,17 @@ namespace ts {
                             error(returnTypeNode, Diagnostics.A_generator_cannot_have_a_void_type_annotation);
                         }
                         else {
-                            const generatorElementType = getIteratedTypeOfGenerator(returnType, (functionFlags & FunctionFlags.Async) !== 0) || anyType;
-                            const iterableIteratorInstantiation = functionFlags & FunctionFlags.Async
-                                ? createAsyncIterableIteratorType(generatorElementType) // AsyncGenerator function
-                                : createIterableIteratorType(generatorElementType); // Generator function
-
-                            // Naively, one could check that IterableIterator<any> is assignable to the return type annotation.
+                            // Naively, one could check that Generator<any, any, any> is assignable to the return type annotation.
                             // However, that would not catch the error in the following case.
                             //
                             //    interface BadGenerator extends Iterable<number>, Iterator<string> { }
                             //    function* g(): BadGenerator { } // Iterable and Iterator have different types!
                             //
-                            checkTypeAssignableTo(iterableIteratorInstantiation, returnType, returnTypeNode);
+                            const generatorYieldType = getIterationTypeOfGeneratorFunctionReturnType(IterationTypeKind.Yield, returnType, (functionFlags & FunctionFlags.Async) !== 0) || anyType;
+                            const generatorReturnType = getIterationTypeOfGeneratorFunctionReturnType(IterationTypeKind.Return, returnType, (functionFlags & FunctionFlags.Async) !== 0) || generatorYieldType;
+                            const generatorNextType = getIterationTypeOfGeneratorFunctionReturnType(IterationTypeKind.Next, returnType, (functionFlags & FunctionFlags.Async) !== 0) || unknownType;
+                            const generatorInstantiation = createGeneratorReturnType(generatorYieldType, generatorReturnType, generatorNextType, !!(functionFlags & FunctionFlags.Async));
+                            checkTypeAssignableTo(generatorInstantiation, returnType, returnTypeNode);
                         }
                     }
                     else if ((functionFlags & FunctionFlags.AsyncGenerator) === FunctionFlags.Async) {
@@ -25759,9 +26307,9 @@ namespace ts {
             }
         }
 
-        function getAwaitedTypeOfPromise(type: Type, errorNode?: Node, diagnosticMessage?: DiagnosticMessage): Type | undefined {
+        function getAwaitedTypeOfPromise(type: Type, errorNode?: Node, diagnosticMessage?: DiagnosticMessage, arg0?: string | number): Type | undefined {
             const promisedType = getPromisedTypeOfPromise(type, errorNode);
-            return promisedType && getAwaitedType(promisedType, errorNode, diagnosticMessage);
+            return promisedType && getAwaitedType(promisedType, errorNode, diagnosticMessage, arg0);
         }
 
         /**
@@ -25829,11 +26377,11 @@ namespace ts {
          * Promise-like type; otherwise, it is the type of the expression. This is used to reflect
          * The runtime behavior of the `await` keyword.
          */
-        function checkAwaitedType(type: Type, errorNode: Node, diagnosticMessage: DiagnosticMessage): Type {
-            return getAwaitedType(type, errorNode, diagnosticMessage) || errorType;
+        function checkAwaitedType(type: Type, errorNode: Node, diagnosticMessage: DiagnosticMessage, arg0?: string | number): Type {
+            return getAwaitedType(type, errorNode, diagnosticMessage, arg0) || errorType;
         }
 
-        function getAwaitedType(type: Type, errorNode?: Node, diagnosticMessage?: DiagnosticMessage): Type | undefined {
+        function getAwaitedType(type: Type, errorNode?: Node, diagnosticMessage?: DiagnosticMessage, arg0?: string | number): Type | undefined {
             const typeAsAwaitable = <PromiseOrAwaitableType>type;
             if (typeAsAwaitable.awaitedTypeOfType) {
                 return typeAsAwaitable.awaitedTypeOfType;
@@ -25846,7 +26394,7 @@ namespace ts {
             if (type.flags & TypeFlags.Union) {
                 let types: Type[] | undefined;
                 for (const constituentType of (<UnionType>type).types) {
-                    types = append<Type>(types, getAwaitedType(constituentType, errorNode, diagnosticMessage));
+                    types = append<Type>(types, getAwaitedType(constituentType, errorNode, diagnosticMessage, arg0));
                 }
 
                 if (!types) {
@@ -25900,7 +26448,7 @@ namespace ts {
                 // Keep track of the type we're about to unwrap to avoid bad recursive promise types.
                 // See the comments above for more information.
                 awaitedTypeStack.push(type.id);
-                const awaitedType = getAwaitedType(promisedType, errorNode, diagnosticMessage);
+                const awaitedType = getAwaitedType(promisedType, errorNode, diagnosticMessage, arg0);
                 awaitedTypeStack.pop();
 
                 if (!awaitedType) {
@@ -25929,7 +26477,7 @@ namespace ts {
             if (thenFunction && getSignaturesOfType(thenFunction, SignatureKind.Call).length > 0) {
                 if (errorNode) {
                     if (!diagnosticMessage) return Debug.fail();
-                    error(errorNode, diagnosticMessage);
+                    error(errorNode, diagnosticMessage, arg0);
                 }
                 return undefined;
             }
@@ -26413,11 +26961,7 @@ namespace ts {
 
             const body = node.kind === SyntaxKind.MethodSignature ? undefined : node.body;
             checkSourceElement(body);
-
-            if ((functionFlags & FunctionFlags.Generator) === 0) { // Async function or normal function
-                const returnOrPromisedType = getReturnOrPromisedType(node, functionFlags);
-                checkAllCodePathsInNonVoidFunctionReturnOrThrow(node, returnOrPromisedType);
-            }
+            checkAllCodePathsInNonVoidFunctionReturnOrThrow(node, getReturnTypeFromAnnotation(node));
 
             if (produceDiagnostics && !getEffectiveReturnTypeNode(node)) {
                 // Report an implicit any error if there is no body, no explicit return type, and node is not a private method
@@ -27019,7 +27563,7 @@ namespace ts {
                     // check the binding pattern with empty elements
                     if (needCheckWidenedType) {
                         if (isArrayBindingPattern(node.name)) {
-                            checkIteratedTypeOrElementType(widenedType, node, /* allowStringInput */ false, /* allowAsyncIterables */ false);
+                            checkIteratedTypeOrElementType(IterationUse.Destructuring, widenedType, undefinedType, node);
                         }
                         else if (strictNullChecks) {
                             checkNonNullNonVoidType(widenedType, node);
@@ -27317,15 +27861,16 @@ namespace ts {
 
         function checkRightHandSideOfForOf(rhsExpression: Expression, awaitModifier: AwaitKeywordToken | undefined): Type {
             const expressionType = checkNonNullExpression(rhsExpression);
-            return checkIteratedTypeOrElementType(expressionType, rhsExpression, /*allowStringInput*/ true, awaitModifier !== undefined);
+            const use = awaitModifier ? IterationUse.ForAwaitOf : IterationUse.ForOf;
+            return checkIteratedTypeOrElementType(use, expressionType, undefinedType, rhsExpression);
         }
 
-        function checkIteratedTypeOrElementType(inputType: Type, errorNode: Node | undefined, allowStringInput: boolean, allowAsyncIterables: boolean): Type {
+        function checkIteratedTypeOrElementType(use: IterationUse, inputType: Type, sentType: Type, errorNode: Node | undefined): Type {
             if (isTypeAny(inputType)) {
                 return inputType;
             }
 
-            return getIteratedTypeOrElementType(inputType, errorNode, allowStringInput, allowAsyncIterables, /*checkAssignability*/ true) || anyType;
+            return getIteratedTypeOrElementType(use, inputType, sentType, errorNode, /*checkAssignability*/ true) || anyType;
         }
 
         /**
@@ -27333,7 +27878,8 @@ namespace ts {
          * we want to get the iterated type of an iterable for ES2015 or later, or the iterated type
          * of a iterable (if defined globally) or element type of an array like for ES2015 or earlier.
          */
-        function getIteratedTypeOrElementType(inputType: Type, errorNode: Node | undefined, allowStringInput: boolean, allowAsyncIterables: boolean, checkAssignability: boolean): Type | undefined {
+        function getIteratedTypeOrElementType(use: IterationUse, inputType: Type, sentType: Type, errorNode: Node | undefined, checkAssignability: boolean): Type | undefined {
+            const allowAsyncIterables = (use & IterationUse.AllowsAsyncIterablesFlag) !== 0;
             if (inputType === neverType) {
                 reportTypeNotIterableError(errorNode!, inputType, allowAsyncIterables); // TODO: GH#18217
                 return undefined;
@@ -27347,9 +27893,22 @@ namespace ts {
             // downlevelIteration is requested.
             if (uplevelIteration || downlevelIteration || allowAsyncIterables) {
                 // We only report errors for an invalid iterable type in ES2015 or higher.
-                const iteratedType = getIteratedTypeOfIterable(inputType, uplevelIteration ? errorNode : undefined, allowAsyncIterables, /*allowSyncIterables*/ true, checkAssignability);
-                if (iteratedType || uplevelIteration) {
-                    return iteratedType;
+                const iterationTypes = getIterationTypesOfIterable(inputType, use, uplevelIteration ? errorNode : undefined);
+                if (checkAssignability) {
+                    if (iterationTypes) {
+                        const diagnostic =
+                            use & IterationUse.ForOfFlag ? Diagnostics.Cannot_iterate_value_because_the_next_method_of_its_iterator_expects_type_1_but_for_of_will_always_send_0 :
+                            use & IterationUse.SpreadFlag ? Diagnostics.Cannot_iterate_value_because_the_next_method_of_its_iterator_expects_type_1_but_array_spread_will_always_send_0 :
+                            use & IterationUse.DestructuringFlag ? Diagnostics.Cannot_iterate_value_because_the_next_method_of_its_iterator_expects_type_1_but_array_destructuring_will_always_send_0 :
+                            use & IterationUse.YieldStarFlag ? Diagnostics.Cannot_delegate_iteration_to_value_because_the_next_method_of_its_iterator_expects_type_1_but_the_containing_generator_will_always_send_0 :
+                            undefined;
+                        if (diagnostic) {
+                            checkTypeAssignableTo(sentType, iterationTypes.nextType, errorNode, diagnostic);
+                        }
+                    }
+                }
+                if (iterationTypes || uplevelIteration) {
+                    return iterationTypes && iterationTypes.yieldType;
                 }
             }
 
@@ -27360,7 +27919,7 @@ namespace ts {
             // If strings are permitted, remove any string-like constituents from the array type.
             // This allows us to find other non-string element types from an array unioned with
             // a string.
-            if (allowStringInput) {
+            if (use & IterationUse.AllowsStringInputFlag) {
                 if (arrayType.flags & TypeFlags.Union) {
                     // After we remove all types that are StringLike, we will know if there was a string constituent
                     // based on whether the result of filter is a new array.
@@ -27398,19 +27957,23 @@ namespace ts {
                     // want to say that number is not an array type. But if the input was just
                     // number and string input is allowed, we want to say that number is not an
                     // array type or a string type.
-                    const isIterable = !!getIteratedTypeOfIterable(inputType, /* errorNode */ undefined, allowAsyncIterables, /*allowSyncIterables*/ true, checkAssignability);
-                    const diagnostic = !allowStringInput || hasStringConstituent
+                    const yieldType = getIterationTypeOfIterable(use, IterationTypeKind.Yield, inputType, /*errorNode*/ undefined);
+                    const [defaultDiagnostic, maybeMissingAwait]: [DiagnosticMessage, boolean] = !(use & IterationUse.AllowsStringInputFlag) || hasStringConstituent
                         ? downlevelIteration
-                            ? Diagnostics.Type_0_is_not_an_array_type_or_does_not_have_a_Symbol_iterator_method_that_returns_an_iterator
-                            : isIterable
-                                ? Diagnostics.Type_0_is_not_an_array_type_or_a_string_type_Use_compiler_option_downlevelIteration_to_allow_iterating_of_iterators
-                                : Diagnostics.Type_0_is_not_an_array_type
+                            ? [Diagnostics.Type_0_is_not_an_array_type_or_does_not_have_a_Symbol_iterator_method_that_returns_an_iterator, true]
+                            : yieldType
+                                ? [Diagnostics.Type_0_is_not_an_array_type_or_a_string_type_Use_compiler_option_downlevelIteration_to_allow_iterating_of_iterators, false]
+                                : [Diagnostics.Type_0_is_not_an_array_type, true]
                         : downlevelIteration
-                            ? Diagnostics.Type_0_is_not_an_array_type_or_a_string_type_or_does_not_have_a_Symbol_iterator_method_that_returns_an_iterator
-                            : isIterable
-                                ? Diagnostics.Type_0_is_not_an_array_type_or_a_string_type_Use_compiler_option_downlevelIteration_to_allow_iterating_of_iterators
-                                : Diagnostics.Type_0_is_not_an_array_type_or_a_string_type;
-                    error(errorNode, diagnostic, typeToString(arrayType));
+                            ? [Diagnostics.Type_0_is_not_an_array_type_or_a_string_type_or_does_not_have_a_Symbol_iterator_method_that_returns_an_iterator, true]
+                            : yieldType
+                                ? [Diagnostics.Type_0_is_not_an_array_type_or_a_string_type_Use_compiler_option_downlevelIteration_to_allow_iterating_of_iterators, false]
+                                : [Diagnostics.Type_0_is_not_an_array_type_or_a_string_type, true];
+                    errorAndMaybeSuggestAwait(
+                        errorNode,
+                        maybeMissingAwait && !!getAwaitedTypeOfPromise(arrayType),
+                        defaultDiagnostic,
+                        typeToString(arrayType));
                 }
                 return hasStringConstituent ? stringType : undefined;
             }
@@ -27429,33 +27992,82 @@ namespace ts {
         }
 
         /**
-         * We want to treat type as an iterable, and get the type it is an iterable of. The iterable
-         * must have the following structure (annotated with the names of the variables below):
+         * Gets the requested "iteration type" from an `Iterable`-like or `AsyncIterable`-like type.
+         */
+        function getIterationTypeOfIterable(use: IterationUse, typeKind: IterationTypeKind, inputType: Type, errorNode: Node | undefined): Type | undefined {
+            if (isTypeAny(inputType)) {
+                return undefined;
+            }
+
+            const iterationTypes = getIterationTypesOfIterable(inputType, use, errorNode);
+            return iterationTypes && iterationTypes[getIterationTypesKeyFromIterationTypeKind(typeKind)];
+        }
+
+        function createIterationTypes(yieldType: Type = neverType, returnType: Type = neverType, nextType: Type = unknownType): IterationTypes {
+            // `yieldType` and `returnType` are defaulted to `neverType` they each will be combined
+            // via `getUnionType` when merging iteration types. `nextType` is defined as `unknownType`
+            // as it is combined via `getIntersectionType` when merging iteration types.
+
+            // Use the cache only for intrinsic types to keep it small as they are likely to be
+            // more frequently created (i.e. `Iterator<number, void, unknown>`). Iteration types
+            // are also cached on the type they are requested for, so we shouldn't need to maintain
+            // the cache for less-frequently used types.
+            if (yieldType.flags & TypeFlags.Intrinsic &&
+                returnType.flags & (TypeFlags.Any | TypeFlags.Never | TypeFlags.Unknown | TypeFlags.Void | TypeFlags.Undefined) &&
+                nextType.flags & (TypeFlags.Any | TypeFlags.Never | TypeFlags.Unknown | TypeFlags.Void | TypeFlags.Undefined)) {
+                const id = getTypeListId([yieldType, returnType, nextType]);
+                let iterationTypes = iterationTypesCache.get(id);
+                if (!iterationTypes) {
+                    iterationTypes = { yieldType, returnType, nextType };
+                    iterationTypesCache.set(id, iterationTypes);
+                }
+                return iterationTypes;
+            }
+            return { yieldType, returnType, nextType };
+        }
+
+        /**
+         * Combines multiple `IterationTypes` records.
          *
-         *     { // iterable
-         *         [Symbol.iterator]: { // iteratorMethod
-         *             (): Iterator<T>
-         *         }
-         *     }
+         * If `array` is empty or all elements are missing or are references to `noIterationTypes`,
+         * then `noIterationTypes` is returned. Otherwise, an `IterationTypes` record is returned
+         * for the combined iteration types.
+         */
+        function combineIterationTypes(array: (IterationTypes | undefined)[]) {
+            let yieldTypes: Type[] | undefined;
+            let returnTypes: Type[] | undefined;
+            let nextTypes: Type[] | undefined;
+            for (const iterationTypes of array) {
+                if (iterationTypes === undefined || iterationTypes === noIterationTypes) {
+                    continue;
+                }
+                if (iterationTypes === anyIterationTypes) {
+                    return anyIterationTypes;
+                }
+                yieldTypes = append(yieldTypes, iterationTypes.yieldType);
+                returnTypes = append(returnTypes, iterationTypes.returnType);
+                nextTypes = append(nextTypes, iterationTypes.nextType);
+            }
+            if (yieldTypes || returnTypes || nextTypes) {
+                return createIterationTypes(
+                    yieldTypes && getUnionType(yieldTypes),
+                    returnTypes && getUnionType(returnTypes),
+                    nextTypes && getIntersectionType(nextTypes));
+            }
+            return noIterationTypes;
+        }
+
+        /**
+         * Gets the *yield*, *return*, and *next* types from an `Iterable`-like or `AsyncIterable`-like type.
          *
-         * For an async iterable, we expect the following structure:
-         *
-         *     { // iterable
-         *         [Symbol.asyncIterator]: { // iteratorMethod
-         *             (): AsyncIterator<T>
-         *         }
-         *     }
-         *
-         * T is the type we are after. At every level that involves analyzing return types
-         * of signatures, we union the return types of all the signatures.
+         * At every level that involves analyzing return types of signatures, we union the return types of all the signatures.
          *
          * Another thing to note is that at any step of this process, we could run into a dead end,
          * meaning either the property is missing, or we run into the anyType. If either of these things
-         * happens, we return undefined to signal that we could not find the iterated type. If a property
-         * is missing, and the previous step did not result in 'any', then we also give an error if the
+         * happens, we return `undefined` to signal that we could not find the iteration type. If a property
+         * is missing, and the previous step did not result in `any`, then we also give an error if the
          * caller requested it. Then the caller can decide what to do in the case where there is no iterated
-         * type. This is different from returning anyType, because that would signify that we have matched the
-         * whole pattern and that T (above) is 'any'.
+         * type.
          *
          * For a **for-of** statement, `yield*` (in a normal generator), spread, array
          * destructuring, or normal generator we will only ever look for a `[Symbol.iterator]()`
@@ -27466,185 +28078,458 @@ namespace ts {
          * For a **for-await-of** statement or a `yield*` in an async generator we will look for
          * the `[Symbol.asyncIterator]()` method first, and then the `[Symbol.iterator]()` method.
          */
-        function getIteratedTypeOfIterable(type: Type, errorNode: Node | undefined, allowAsyncIterables: boolean, allowSyncIterables: boolean, checkAssignability: boolean): Type | undefined {
+        function getIterationTypesOfIterable(type: Type, use: IterationUse, errorNode: Node | undefined) {
             if (isTypeAny(type)) {
-                return undefined;
+                return anyIterationTypes;
             }
 
-            return mapType(type, getIteratedType);
-
-            function getIteratedType(type: Type) {
-                const typeAsIterable = <IterableOrIteratorType>type;
-                if (allowAsyncIterables) {
-                    if (typeAsIterable.iteratedTypeOfAsyncIterable) {
-                        return typeAsIterable.iteratedTypeOfAsyncIterable;
+            if (!(type.flags & TypeFlags.Union)) {
+                const iterationTypes = getIterationTypesOfIterableWorker(type, use, errorNode);
+                if (iterationTypes === noIterationTypes) {
+                    if (errorNode) {
+                        reportTypeNotIterableError(errorNode, type, !!(use & IterationUse.AllowsAsyncIterablesFlag));
                     }
-
-                    // As an optimization, if the type is an instantiation of the global `AsyncIterable<T>`
-                    // or the global `AsyncIterableIterator<T>` then just grab its type argument.
-                    if (isReferenceToType(type, getGlobalAsyncIterableType(/*reportErrors*/ false)) ||
-                        isReferenceToType(type, getGlobalAsyncIterableIteratorType(/*reportErrors*/ false))) {
-                        return typeAsIterable.iteratedTypeOfAsyncIterable = (<GenericType>type).typeArguments![0];
-                    }
-                }
-
-                if (allowSyncIterables) {
-                    if (typeAsIterable.iteratedTypeOfIterable) {
-                        return allowAsyncIterables
-                            ? typeAsIterable.iteratedTypeOfAsyncIterable = getAwaitedType(typeAsIterable.iteratedTypeOfIterable)
-                            : typeAsIterable.iteratedTypeOfIterable;
-                    }
-
-                    // As an optimization, if the type is an instantiation of the global `Iterable<T>` or
-                    // `IterableIterator<T>` then just grab its type argument.
-                    if (isReferenceToType(type, getGlobalIterableType(/*reportErrors*/ false)) ||
-                        isReferenceToType(type, getGlobalIterableIteratorType(/*reportErrors*/ false))) {
-                        return allowAsyncIterables
-                            ? typeAsIterable.iteratedTypeOfAsyncIterable = getAwaitedType((<GenericType>type).typeArguments![0])
-                            : typeAsIterable.iteratedTypeOfIterable = (<GenericType>type).typeArguments![0];
-                    }
-                }
-
-                const asyncMethodType = allowAsyncIterables && getTypeOfPropertyOfType(type, getPropertyNameForKnownSymbolName("asyncIterator"));
-                const methodType = asyncMethodType || (allowSyncIterables ? getTypeOfPropertyOfType(type, getPropertyNameForKnownSymbolName("iterator")) : undefined);
-                if (isTypeAny(methodType)) {
                     return undefined;
                 }
+                return iterationTypes;
+            }
 
-                const signatures = methodType ? getSignaturesOfType(methodType, SignatureKind.Call) : undefined;
-                if (!some(signatures)) {
+            const cacheKey = use & IterationUse.AllowsAsyncIterablesFlag ? "iterationTypesOfAsyncIterable" : "iterationTypesOfIterable";
+            const cachedTypes = (type as IterableOrIteratorType)[cacheKey];
+            if (cachedTypes) return cachedTypes === noIterationTypes ? undefined : cachedTypes;
+
+            let allIterationTypes: IterationTypes[] | undefined;
+            for (const constituent of (type as UnionType).types) {
+                const iterationTypes = getIterationTypesOfIterableWorker(constituent, use, errorNode);
+                if (iterationTypes === noIterationTypes) {
                     if (errorNode) {
-                        // only report on the first error
-                        reportTypeNotIterableError(errorNode, type, allowAsyncIterables);
+                        reportTypeNotIterableError(errorNode, type, !!(use & IterationUse.AllowsAsyncIterablesFlag));
                         errorNode = undefined;
                     }
-                    return undefined;
                 }
-
-                const returnType = getUnionType(map(signatures, getReturnTypeOfSignature), UnionReduction.Subtype);
-                const iteratedType = getIteratedTypeOfIterator(returnType, errorNode, /*isAsyncIterator*/ !!asyncMethodType);
-                if (checkAssignability && errorNode && iteratedType) {
-                    // If `checkAssignability` was specified, we were called from
-                    // `checkIteratedTypeOrElementType`. As such, we need to validate that
-                    // the type passed in is actually an Iterable.
-                    checkTypeAssignableTo(type, asyncMethodType
-                        ? createAsyncIterableType(iteratedType)
-                        : createIterableType(iteratedType), errorNode);
-                }
-
-                if (iteratedType) {
-                    return allowAsyncIterables
-                        ? typeAsIterable.iteratedTypeOfAsyncIterable = asyncMethodType ? iteratedType : getAwaitedType(iteratedType)
-                        : typeAsIterable.iteratedTypeOfIterable = iteratedType;
+                else {
+                    allIterationTypes = append(allIterationTypes, iterationTypes);
                 }
             }
+
+            const iterationTypes = allIterationTypes ? combineIterationTypes(allIterationTypes) : noIterationTypes;
+            (type as IterableOrIteratorType)[cacheKey] = iterationTypes;
+            return iterationTypes === noIterationTypes ? undefined : iterationTypes;
+        }
+
+        function getAsyncFromSyncIterationTypes(iterationTypes: IterationTypes, errorNode: Node | undefined) {
+            if (iterationTypes === noIterationTypes) return noIterationTypes;
+            if (iterationTypes === anyIterationTypes) return anyIterationTypes;
+            const { yieldType, returnType, nextType } = iterationTypes;
+            return createIterationTypes(
+                getAwaitedType(yieldType, errorNode) || anyType,
+                getAwaitedType(returnType, errorNode) || anyType,
+                nextType);
+        }
+
+        /**
+         * Gets the *yield*, *return*, and *next* types from a non-union type.
+         *
+         * If we are unable to find the *yield*, *return*, and *next* types, `noIterationTypes` is
+         * returned to indicate to the caller that it should report an error. Otherwise, an
+         * `IterationTypes` record is returned.
+         *
+         * NOTE: You probably don't want to call this directly and should be calling
+         * `getIterationTypesOfIterable` instead.
+         */
+        function getIterationTypesOfIterableWorker(type: Type, use: IterationUse, errorNode: Node | undefined) {
+            if (isTypeAny(type)) {
+                return anyIterationTypes;
+            }
+
+            if (use & IterationUse.AllowsAsyncIterablesFlag) {
+                const iterationTypes =
+                    getIterationTypesOfIterableCached(type, asyncIterationTypesResolver) ||
+                    getIterationTypesOfIterableFast(type, asyncIterationTypesResolver);
+                if (iterationTypes) {
+                    return iterationTypes;
+                }
+            }
+
+            if (use & IterationUse.AllowsSyncIterablesFlag) {
+                const iterationTypes =
+                    getIterationTypesOfIterableCached(type, syncIterationTypesResolver) ||
+                    getIterationTypesOfIterableFast(type, syncIterationTypesResolver);
+                if (iterationTypes) {
+                    if (use & IterationUse.AllowsAsyncIterablesFlag) {
+                        // for a sync iterable in an async context, only use the cached types if they are valid.
+                        if (iterationTypes !== noIterationTypes) {
+                            return (type as IterableOrIteratorType).iterationTypesOfAsyncIterable = getAsyncFromSyncIterationTypes(iterationTypes, errorNode);
+                        }
+                    }
+                    else {
+                        return iterationTypes;
+                    }
+                }
+            }
+
+            if (use & IterationUse.AllowsAsyncIterablesFlag) {
+                const iterationTypes = getIterationTypesOfIterableSlow(type, asyncIterationTypesResolver, errorNode);
+                if (iterationTypes !== noIterationTypes) {
+                    return iterationTypes;
+                }
+            }
+
+            if (use & IterationUse.AllowsSyncIterablesFlag) {
+                const iterationTypes = getIterationTypesOfIterableSlow(type, syncIterationTypesResolver, errorNode);
+                if (iterationTypes !== noIterationTypes) {
+                    if (use & IterationUse.AllowsAsyncIterablesFlag) {
+                        return (type as IterableOrIteratorType).iterationTypesOfAsyncIterable = iterationTypes
+                            ? getAsyncFromSyncIterationTypes(iterationTypes, errorNode)
+                            : noIterationTypes;
+                    }
+                    else {
+                        return iterationTypes;
+                    }
+                }
+            }
+
+            return noIterationTypes;
+        }
+
+        /**
+         * Gets the *yield*, *return*, and *next* types of an `Iterable`-like or
+         * `AsyncIterable`-like type from the cache.
+         *
+         * NOTE: You probably don't want to call this directly and should be calling
+         * `getIterationTypesOfIterable` instead.
+         */
+        function getIterationTypesOfIterableCached(type: Type, resolver: IterationTypesResolver) {
+            return (type as IterableOrIteratorType)[resolver.iterableCacheKey];
+        }
+
+        /**
+         * Gets the *yield*, *return*, and *next* types of an `Iterable`-like or `AsyncIterable`-like
+         * type from from common heuristics.
+         *
+         * If we previously analyzed this type and found no iteration types, `noIterationTypes` is
+         * returned. If we found iteration types, an `IterationTypes` record is returned.
+         * Otherwise, we return `undefined` to indicate to the caller it should perform a more
+         * exhaustive analysis.
+         *
+         * NOTE: You probably don't want to call this directly and should be calling
+         * `getIterationTypesOfIterable` instead.
+         */
+        function getIterationTypesOfIterableFast(type: Type, resolver: IterationTypesResolver) {
+            // As an optimization, if the type is an instantiation of one of the following global types, then
+            // just grab its related type argument:
+            // - `Iterable<T>` or `AsyncIterable<T>`
+            // - `IterableIterator<T>` or `AsyncIterableIterator<T>`
+            let globalType: Type;
+            if (isReferenceToType(type, globalType = resolver.getGlobalIterableType(/*reportErrors*/ false)) ||
+                isReferenceToType(type, globalType = resolver.getGlobalIterableIteratorType(/*reportErrors*/ false))) {
+                const [yieldType] = (type as GenericType).typeArguments!;
+                // The "return" and "next" types of `Iterable` and `IterableIterator` are defined by the
+                // iteration types of their `[Symbol.iterator]()` method. The same is true for their async cousins.
+                // While we define these as `any` and `undefined` in our libs by default, a custom lib *could* use
+                // different definitions.
+                const globalIterationTypes =
+                    getIterationTypesOfIterableCached(globalType, resolver) ||
+                    getIterationTypesOfIterableSlow(globalType, resolver, /*errorNode*/ undefined);
+                const { returnType, nextType } = globalIterationTypes === noIterationTypes ? defaultIterationTypes : globalIterationTypes;
+                return (type as IterableOrIteratorType)[resolver.iterableCacheKey] = createIterationTypes(yieldType, returnType, nextType);
+            }
+
+            // As an optimization, if the type is an instantiation of the following global type, then
+            // just grab its related type arguments:
+            // - `Generator<T, TReturn, TNext>` or `AsyncGenerator<T, TReturn, TNext>`
+            if (isReferenceToType(type, resolver.getGlobalGeneratorType(/*reportErrors*/ false))) {
+                const [yieldType, returnType, nextType] = (type as GenericType).typeArguments!;
+                return (type as IterableOrIteratorType)[resolver.iterableCacheKey] = createIterationTypes(yieldType, returnType, nextType);
+            }
+        }
+
+        /**
+         * Gets the *yield*, *return*, and *next* types of an `Iterable`-like or `AsyncIterable`-like
+         * type from its members.
+         *
+         * If we successfully found the *yield*, *return*, and *next* types, an `IterationTypes`
+         * record is returned. Otherwise, `noIterationTypes` is returned.
+         *
+         * NOTE: You probably don't want to call this directly and should be calling
+         * `getIterationTypesOfIterable` instead.
+         */
+        function getIterationTypesOfIterableSlow(type: Type, resolver: IterationTypesResolver, errorNode: Node | undefined) {
+            const method = getPropertyOfType(type, getPropertyNameForKnownSymbolName(resolver.iteratorSymbolName));
+            const methodType = method && !(method.flags & SymbolFlags.Optional) ? getTypeOfSymbol(method) : undefined;
+            if (isTypeAny(methodType)) {
+                return (type as IterableOrIteratorType)[resolver.iterableCacheKey] = anyIterationTypes;
+            }
+
+            const signatures = methodType ? getSignaturesOfType(methodType, SignatureKind.Call) : undefined;
+            if (!some(signatures)) {
+                return (type as IterableOrIteratorType)[resolver.iterableCacheKey] = noIterationTypes;
+            }
+
+            const iteratorType = getUnionType(map(signatures, getReturnTypeOfSignature), UnionReduction.Subtype);
+            const iterationTypes = getIterationTypesOfIterator(iteratorType, resolver, errorNode) || noIterationTypes;
+            return (type as IterableOrIteratorType)[resolver.iterableCacheKey] = iterationTypes;
         }
 
         function reportTypeNotIterableError(errorNode: Node, type: Type, allowAsyncIterables: boolean): void {
-            error(errorNode, allowAsyncIterables
+            const message = allowAsyncIterables
                 ? Diagnostics.Type_0_must_have_a_Symbol_asyncIterator_method_that_returns_an_async_iterator
-                : Diagnostics.Type_0_must_have_a_Symbol_iterator_method_that_returns_an_iterator, typeToString(type));
+                : Diagnostics.Type_0_must_have_a_Symbol_iterator_method_that_returns_an_iterator;
+            errorAndMaybeSuggestAwait(errorNode, !!getAwaitedTypeOfPromise(type), message, typeToString(type));
         }
 
         /**
-         * This function has very similar logic as getIteratedTypeOfIterable, except that it operates on
-         * Iterators instead of Iterables. Here is the structure:
+         * Gets the *yield*, *return*, and *next* types from an `Iterator`-like or `AsyncIterator`-like type.
          *
-         *  { // iterator
-         *      next: { // nextMethod
-         *          (): { // nextResult
-         *              value: T // nextValue
-         *          }
-         *      }
-         *  }
-         *
-         * For an async iterator, we expect the following structure:
-         *
-         *  { // iterator
-         *      next: { // nextMethod
-         *          (): PromiseLike<{ // nextResult
-         *              value: T // nextValue
-         *          }>
-         *      }
-         *  }
+         * If we successfully found the *yield*, *return*, and *next* types, an `IterationTypes`
+         * record is returned. Otherwise, `undefined` is returned.
          */
-        function getIteratedTypeOfIterator(type: Type, errorNode: Node | undefined, isAsyncIterator: boolean): Type | undefined {
+        function getIterationTypesOfIterator(type: Type, resolver: IterationTypesResolver, errorNode: Node | undefined) {
             if (isTypeAny(type)) {
-                return undefined;
+                return anyIterationTypes;
             }
 
-            const typeAsIterator = <IterableOrIteratorType>type;
-            if (isAsyncIterator ? typeAsIterator.iteratedTypeOfAsyncIterator : typeAsIterator.iteratedTypeOfIterator) {
-                return isAsyncIterator ? typeAsIterator.iteratedTypeOfAsyncIterator : typeAsIterator.iteratedTypeOfIterator;
-            }
-
-            // As an optimization, if the type is an instantiation of the global `Iterator<T>` (for
-            // a non-async iterator) or the global `AsyncIterator<T>` (for an async-iterator) then
-            // just grab its type argument.
-            const getIteratorType = isAsyncIterator ? getGlobalAsyncIteratorType : getGlobalIteratorType;
-            if (isReferenceToType(type, getIteratorType(/*reportErrors*/ false))) {
-                return isAsyncIterator
-                    ? typeAsIterator.iteratedTypeOfAsyncIterator = (<GenericType>type).typeArguments![0]
-                    : typeAsIterator.iteratedTypeOfIterator = (<GenericType>type).typeArguments![0];
-            }
-
-            // Both async and non-async iterators must have a `next` method.
-            const nextMethod = getTypeOfPropertyOfType(type, "next" as __String);
-            if (isTypeAny(nextMethod)) {
-                return undefined;
-            }
-
-            const nextMethodSignatures = nextMethod ? getSignaturesOfType(nextMethod, SignatureKind.Call) : emptyArray;
-            if (nextMethodSignatures.length === 0) {
-                if (errorNode) {
-                    error(errorNode, isAsyncIterator
-                        ? Diagnostics.An_async_iterator_must_have_a_next_method
-                        : Diagnostics.An_iterator_must_have_a_next_method);
-                }
-                return undefined;
-            }
-
-            let nextResult: Type | undefined = getUnionType(map(nextMethodSignatures, getReturnTypeOfSignature), UnionReduction.Subtype);
-            if (isTypeAny(nextResult)) {
-                return undefined;
-            }
-
-            // For an async iterator, we must get the awaited type of the return type.
-            if (isAsyncIterator) {
-                nextResult = getAwaitedTypeOfPromise(nextResult, errorNode, Diagnostics.The_type_returned_by_the_next_method_of_an_async_iterator_must_be_a_promise_for_a_type_with_a_value_property);
-                if (isTypeAny(nextResult)) {
-                    return undefined;
-                }
-            }
-
-            const nextValue = nextResult && getTypeOfPropertyOfType(nextResult, "value" as __String);
-            if (!nextValue) {
-                if (errorNode) {
-                    error(errorNode, isAsyncIterator
-                        ? Diagnostics.The_type_returned_by_the_next_method_of_an_async_iterator_must_be_a_promise_for_a_type_with_a_value_property
-                        : Diagnostics.The_type_returned_by_the_next_method_of_an_iterator_must_have_a_value_property);
-                }
-                return undefined;
-            }
-
-            return isAsyncIterator
-                ? typeAsIterator.iteratedTypeOfAsyncIterator = nextValue
-                : typeAsIterator.iteratedTypeOfIterator = nextValue;
+            const iterationTypes =
+                getIterationTypesOfIteratorCached(type, resolver) ||
+                getIterationTypesOfIteratorFast(type, resolver) ||
+                getIterationTypesOfIteratorSlow(type, resolver, errorNode);
+            return iterationTypes === noIterationTypes ? undefined : iterationTypes;
         }
 
         /**
-         * A generator may have a return type of `Iterator<T>`, `Iterable<T>`, or
-         * `IterableIterator<T>`. An async generator may have a return type of `AsyncIterator<T>`,
-         * `AsyncIterable<T>`, or `AsyncIterableIterator<T>`. This function can be used to extract
-         * the iterated type from this return type for contextual typing and verifying signatures.
+         * Gets the iteration types of an `Iterator`-like or `AsyncIterator`-like type from the
+         * cache.
+         *
+         * NOTE: You probably don't want to call this directly and should be calling
+         * `getIterationTypesOfIterator` instead.
          */
-        function getIteratedTypeOfGenerator(returnType: Type, isAsyncGenerator: boolean): Type | undefined {
+        function getIterationTypesOfIteratorCached(type: Type, resolver: IterationTypesResolver) {
+            return (type as IterableOrIteratorType)[resolver.iteratorCacheKey];
+        }
+
+        /**
+         * Gets the iteration types of an `Iterator`-like or `AsyncIterator`-like type from the
+         * cache or from common heuristics.
+         *
+         * If we previously analyzed this type and found no iteration types, `noIterationTypes` is
+         * returned. If we found iteration types, an `IterationTypes` record is returned.
+         * Otherwise, we return `undefined` to indicate to the caller it should perform a more
+         * exhaustive analysis.
+         *
+         * NOTE: You probably don't want to call this directly and should be calling
+         * `getIterationTypesOfIterator` instead.
+         */
+        function getIterationTypesOfIteratorFast(type: Type, resolver: IterationTypesResolver) {
+            // As an optimization, if the type is an instantiation of one of the following global types,
+            // then just grab its related type argument:
+            // - `IterableIterator<T>` or `AsyncIterableIterator<T>`
+            // - `Iterator<T, TReturn, TNext>` or `AsyncIterator<T, TReturn, TNext>`
+            // - `Generator<T, TReturn, TNext>` or `AsyncGenerator<T, TReturn, TNext>`
+            const globalType = resolver.getGlobalIterableIteratorType(/*reportErrors*/ false);
+            if (isReferenceToType(type, globalType)) {
+                const [yieldType] = (type as GenericType).typeArguments!;
+                // The "return" and "next" types of `IterableIterator` and `AsyncIterableIterator` are defined by the
+                // iteration types of their `next`, `return`, and `throw` methods. While we define these as `any`
+                // and `undefined` in our libs by default, a custom lib *could* use different definitions.
+                const globalIterationTypes =
+                    getIterationTypesOfIteratorCached(globalType, resolver) ||
+                    getIterationTypesOfIteratorSlow(globalType, resolver, /*errorNode*/ undefined);
+                const { returnType, nextType } = globalIterationTypes === noIterationTypes ? defaultIterationTypes : globalIterationTypes;
+                return (type as IterableOrIteratorType)[resolver.iteratorCacheKey] = createIterationTypes(yieldType, returnType, nextType);
+            }
+            if (isReferenceToType(type, resolver.getGlobalIteratorType(/*reportErrors*/ false)) ||
+                isReferenceToType(type, resolver.getGlobalGeneratorType(/*reportErrors*/ false))) {
+                const [yieldType, returnType, nextType] = (type as GenericType).typeArguments!;
+                return (type as IterableOrIteratorType)[resolver.iteratorCacheKey] = createIterationTypes(yieldType, returnType, nextType);
+            }
+        }
+
+        function isIteratorResult(type: Type, kind: IterationTypeKind.Yield | IterationTypeKind.Return) {
+            // From https://tc39.github.io/ecma262/#sec-iteratorresult-interface:
+            // > [done] is the result status of an iterator `next` method call. If the end of the iterator was reached `done` is `true`.
+            // > If the end was not reached `done` is `false` and a value is available.
+            // > If a `done` property (either own or inherited) does not exist, it is consider to have the value `false`.
+            const doneType = getTypeOfPropertyOfType(type, "done" as __String) || falseType;
+            return isTypeAssignableTo(kind === IterationTypeKind.Yield ? falseType : trueType, doneType);
+        }
+
+        function isYieldIteratorResult(type: Type) {
+            return isIteratorResult(type, IterationTypeKind.Yield);
+        }
+
+        function isReturnIteratorResult(type: Type) {
+            return isIteratorResult(type, IterationTypeKind.Return);
+        }
+
+        /**
+         * Gets the *yield* and *return* types of an `IteratorResult`-like type.
+         *
+         * If we are unable to determine a *yield* or a *return* type, `noIterationTypes` is
+         * returned to indicate to the caller that it should handle the error. Otherwise, an
+         * `IterationTypes` record is returned.
+         */
+        function getIterationTypesOfIteratorResult(type: Type) {
+            if (isTypeAny(type)) {
+                return anyIterationTypes;
+            }
+
+            const cachedTypes = (type as IterableOrIteratorType).iterationTypesOfIteratorResult;
+            if (cachedTypes) {
+                return cachedTypes;
+            }
+
+            // As an optimization, if the type is an instantiation of one of the global `IteratorYieldResult<T>`
+            // or `IteratorReturnResult<TReturn>` types, then just grab its type argument.
+            if (isReferenceToType(type, getGlobalIteratorYieldResultType(/*reportErrors*/ false))) {
+                const yieldType = (type as GenericType).typeArguments![0];
+                return (type as IterableOrIteratorType).iterationTypesOfIteratorResult = createIterationTypes(yieldType, /*returnType*/ undefined, /*nextType*/ undefined);
+            }
+            if (isReferenceToType(type, getGlobalIteratorReturnResultType(/*reportErrors*/ false))) {
+                const returnType = (type as GenericType).typeArguments![0];
+                return (type as IterableOrIteratorType).iterationTypesOfIteratorResult = createIterationTypes(/*yieldType*/ undefined, returnType, /*nextType*/ undefined);
+            }
+
+            // Choose any constituents that can produce the requested iteration type.
+            const yieldIteratorResult = filterType(type, isYieldIteratorResult);
+            const yieldType = yieldIteratorResult !== neverType ? getTypeOfPropertyOfType(yieldIteratorResult, "value" as __String) : undefined;
+
+            const returnIteratorResult = filterType(type, isReturnIteratorResult);
+            const returnType = returnIteratorResult !== neverType ? getTypeOfPropertyOfType(returnIteratorResult, "value" as __String) : undefined;
+
+            if (!yieldType && !returnType) {
+                return (type as IterableOrIteratorType).iterationTypesOfIteratorResult = noIterationTypes;
+            }
+
+            // From https://tc39.github.io/ecma262/#sec-iteratorresult-interface
+            // > ... If the iterator does not have a return value, `value` is `undefined`. In that case, the
+            // > `value` property may be absent from the conforming object if it does not inherit an explicit
+            // > `value` property.
+            return (type as IterableOrIteratorType).iterationTypesOfIteratorResult = createIterationTypes(yieldType, returnType || voidType, /*nextType*/ undefined);
+        }
+
+        /**
+         * Gets the *yield*, *return*, and *next* types of a the `next()`, `return()`, or
+         * `throw()` method of an `Iterator`-like or `AsyncIterator`-like type.
+         *
+         * If we successfully found the *yield*, *return*, and *next* types, an `IterationTypes`
+         * record is returned. Otherwise, we return `undefined`.
+         */
+        function getIterationTypesOfMethod(type: Type, resolver: IterationTypesResolver, methodName: "next" | "return" | "throw", errorNode: Node | undefined): IterationTypes | undefined {
+            const method = getPropertyOfType(type, methodName as __String);
+
+            // Ignore 'return' or 'throw' if they are missing.
+            if (!method && methodName !== "next") {
+                return undefined;
+            }
+
+            const methodType = method && !(methodName === "next" && (method.flags & SymbolFlags.Optional))
+                ? methodName === "next" ? getTypeOfSymbol(method) : getTypeWithFacts(getTypeOfSymbol(method), TypeFacts.NEUndefinedOrNull)
+                : undefined;
+
+            if (isTypeAny(methodType)) {
+                // `return()` and `throw()` don't provide a *next* type.
+                return methodName === "next" ? anyIterationTypes : anyIterationTypesExceptNext;
+            }
+
+            // Both async and non-async iterators *must* have a `next` method.
+            const methodSignatures = methodType ? getSignaturesOfType(methodType, SignatureKind.Call) : emptyArray;
+            if (methodSignatures.length === 0) {
+                if (errorNode) {
+                    const diagnostic = methodName === "next"
+                        ? resolver.mustHaveANextMethodDiagnostic
+                        : resolver.mustBeAMethodDiagnostic;
+                    error(errorNode, diagnostic, methodName);
+                }
+                return methodName === "next" ? anyIterationTypes : undefined;
+            }
+
+            // Extract the first parameter and return type of each signature.
+            let methodParameterTypes: Type[] | undefined;
+            let methodReturnTypes: Type[] | undefined;
+            for (const signature of methodSignatures) {
+                if (methodName !== "throw" && some(signature.parameters)) {
+                    methodParameterTypes = append(methodParameterTypes, getTypeAtPosition(signature, 0));
+                }
+                methodReturnTypes = append(methodReturnTypes, getReturnTypeOfSignature(signature));
+            }
+
+            // Resolve the *next* or *return* type from the first parameter of a `next()` or
+            // `return()` method, respectively.
+            let returnTypes: Type[] | undefined;
+            let nextType: Type | undefined;
+            if (methodName !== "throw") {
+                const methodParameterType = methodParameterTypes ? getUnionType(methodParameterTypes) : unknownType;
+                const resolvedMethodParameterType = resolver.resolveIterationType(methodParameterType, errorNode) || anyType;
+                if (methodName === "next") {
+                    nextType = resolvedMethodParameterType;
+                }
+                else if (methodName === "return") {
+                    returnTypes = append(returnTypes, resolvedMethodParameterType);
+                }
+            }
+
+            // Resolve the *yield* and *return* types from the return type of the method (i.e. `IteratorResult`)
+            let yieldType: Type;
+            const methodReturnType = methodReturnTypes ? getUnionType(methodReturnTypes, UnionReduction.Subtype) : neverType;
+            const resolvedMethodReturnType = resolver.resolveIterationType(methodReturnType, errorNode) || anyType;
+            const iterationTypes = getIterationTypesOfIteratorResult(resolvedMethodReturnType);
+            if (iterationTypes === noIterationTypes) {
+                if (errorNode) {
+                    error(errorNode, resolver.mustHaveAValueDiagnostic, methodName);
+                }
+                yieldType = anyType;
+                returnTypes = append(returnTypes, anyType);
+            }
+            else {
+                yieldType = iterationTypes.yieldType;
+                returnTypes = append(returnTypes, iterationTypes.returnType);
+            }
+
+            return createIterationTypes(yieldType, getUnionType(returnTypes), nextType);
+        }
+
+        /**
+         * Gets the *yield*, *return*, and *next* types of an `Iterator`-like or `AsyncIterator`-like
+         * type from its members.
+         *
+         * If we successfully found the *yield*, *return*, and *next* types, an `IterationTypes`
+         * record is returned. Otherwise, `noIterationTypes` is returned.
+         *
+         * NOTE: You probably don't want to call this directly and should be calling
+         * `getIterationTypesOfIterator` instead.
+         */
+        function getIterationTypesOfIteratorSlow(type: Type, resolver: IterationTypesResolver, errorNode: Node | undefined) {
+            const iterationTypes = combineIterationTypes([
+                getIterationTypesOfMethod(type, resolver, "next", errorNode),
+                getIterationTypesOfMethod(type, resolver, "return", errorNode),
+                getIterationTypesOfMethod(type, resolver, "throw", errorNode),
+            ]);
+            return (type as IterableOrIteratorType)[resolver.iteratorCacheKey] = iterationTypes;
+        }
+
+        /**
+         * Gets the requested "iteration type" from a type that is either `Iterable`-like, `Iterator`-like,
+         * `IterableIterator`-like, or `Generator`-like (for a non-async generator); or `AsyncIterable`-like,
+         * `AsyncIterator`-like, `AsyncIterableIterator`-like, or `AsyncGenerator`-like (for an async generator).
+         */
+        function getIterationTypeOfGeneratorFunctionReturnType(kind: IterationTypeKind, returnType: Type, isAsyncGenerator: boolean): Type | undefined {
             if (isTypeAny(returnType)) {
                 return undefined;
             }
 
-            return getIteratedTypeOfIterable(returnType, /*errorNode*/ undefined, /*allowAsyncIterables*/ isAsyncGenerator, /*allowSyncIterables*/ !isAsyncGenerator, /*checkAssignability*/ false)
-                || getIteratedTypeOfIterator(returnType, /*errorNode*/ undefined, isAsyncGenerator);
+            const iterationTypes = getIterationTypesOfGeneratorFunctionReturnType(returnType, isAsyncGenerator);
+            return iterationTypes && iterationTypes[getIterationTypesKeyFromIterationTypeKind(kind)];
+        }
+
+        function getIterationTypesOfGeneratorFunctionReturnType(type: Type, isAsyncGenerator: boolean) {
+            if (isTypeAny(type)) {
+                return anyIterationTypes;
+            }
+
+            const use = isAsyncGenerator ? IterationUse.AsyncGeneratorReturnType : IterationUse.GeneratorReturnType;
+            const resolver = isAsyncGenerator ? asyncIterationTypesResolver : syncIterationTypesResolver;
+            return getIterationTypesOfIterable(type, use, /*errorNode*/ undefined) ||
+                getIterationTypesOfIterator(type, resolver, /*errorNode*/ undefined);
         }
 
         function checkBreakOrContinueStatement(node: BreakOrContinueStatement) {
@@ -27654,10 +28539,16 @@ namespace ts {
             // TODO: Check that target label is valid
         }
 
+        function unwrapReturnType(returnType: Type, functionFlags: FunctionFlags) {
+            const isGenerator = !!(functionFlags & FunctionFlags.Generator);
+            const isAsync = !!(functionFlags & FunctionFlags.Async);
+            return isGenerator ? getIterationTypeOfGeneratorFunctionReturnType(IterationTypeKind.Return, returnType, isAsync) || errorType :
+                isAsync ? getPromisedTypeOfPromise(returnType) || errorType :
+                returnType;
+        }
+
         function isUnwrappedReturnTypeVoidOrAny(func: SignatureDeclaration, returnType: Type): boolean {
-            const unwrappedReturnType = (getFunctionFlags(func) & FunctionFlags.AsyncGenerator) === FunctionFlags.Async
-                ? getPromisedTypeOfPromise(returnType) // Async function
-                : returnType; // AsyncGenerator function, Generator function, or normal function
+            const unwrappedReturnType = unwrapReturnType(returnType, getFunctionFlags(func));
             return !!unwrappedReturnType && maybeTypeOfKind(unwrappedReturnType, TypeFlags.Void | TypeFlags.AnyOrUnknown);
         }
 
@@ -27676,17 +28567,9 @@ namespace ts {
             const signature = getSignatureFromDeclaration(func);
             const returnType = getReturnTypeOfSignature(signature);
             const functionFlags = getFunctionFlags(func);
-            const isGenerator = functionFlags & FunctionFlags.Generator;
             if (strictNullChecks || node.expression || returnType.flags & TypeFlags.Never) {
                 const exprType = node.expression ? checkExpressionCached(node.expression) : undefinedType;
-                if (isGenerator) { // AsyncGenerator function or Generator function
-                    // A generator does not need its return expressions checked against its return type.
-                    // Instead, the yield expressions are checked against the element type.
-                    // TODO: Check return types of generators when return type tracking is added
-                    // for generators.
-                    return;
-                }
-                else if (func.kind === SyntaxKind.SetAccessor) {
+                if (func.kind === SyntaxKind.SetAccessor) {
                     if (node.expression) {
                         error(node, Diagnostics.Setters_cannot_return_a_value);
                     }
@@ -27697,22 +28580,19 @@ namespace ts {
                     }
                 }
                 else if (getReturnTypeFromAnnotation(func)) {
-                    if (functionFlags & FunctionFlags.Async) { // Async function
-                        const promisedType = getPromisedTypeOfPromise(returnType);
-                        const awaitedType = checkAwaitedType(exprType, node, Diagnostics.The_return_type_of_an_async_function_must_either_be_a_valid_promise_or_must_not_contain_a_callable_then_member);
-                        if (promisedType) {
-                            // If the function has a return type, but promisedType is
-                            // undefined, an error will be reported in checkAsyncFunctionReturnType
-                            // so we don't need to report one here.
-                            checkTypeAssignableToAndOptionallyElaborate(awaitedType, promisedType, node, node.expression);
-                        }
-                    }
-                    else {
-                        checkTypeAssignableToAndOptionallyElaborate(exprType, returnType, node, node.expression);
+                    const unwrappedReturnType = unwrapReturnType(returnType, functionFlags);
+                    const unwrappedExprType = functionFlags & FunctionFlags.Async
+                        ? checkAwaitedType(exprType, node, Diagnostics.The_return_type_of_an_async_function_must_either_be_a_valid_promise_or_must_not_contain_a_callable_then_member)
+                        : exprType;
+                    if (unwrappedReturnType) {
+                        // If the function has a return type, but promisedType is
+                        // undefined, an error will be reported in checkAsyncFunctionReturnType
+                        // so we don't need to report one here.
+                        checkTypeAssignableToAndOptionallyElaborate(unwrappedExprType, unwrappedReturnType, node, node.expression);
                     }
                 }
             }
-            else if (func.kind !== SyntaxKind.Constructor && compilerOptions.noImplicitReturns && !isUnwrappedReturnTypeVoidOrAny(func, returnType) && !isGenerator) {
+            else if (func.kind !== SyntaxKind.Constructor && compilerOptions.noImplicitReturns && !isUnwrappedReturnTypeVoidOrAny(func, returnType)) {
                 // The function has a return type, but the return statement doesn't have an expression.
                 error(node, Diagnostics.Not_all_code_paths_return_a_value);
             }
@@ -29220,6 +30100,7 @@ namespace ts {
             if (node) {
                 const saveCurrentNode = currentNode;
                 currentNode = node;
+                instantiationCount = 0;
                 checkSourceElementWorker(node);
                 currentNode = saveCurrentNode;
             }
@@ -29491,6 +30372,7 @@ namespace ts {
         function checkDeferredNode(node: Node) {
             const saveCurrentNode = currentNode;
             currentNode = node;
+            instantiationCount = 0;
             switch (node.kind) {
                 case SyntaxKind.FunctionExpression:
                 case SyntaxKind.ArrowFunction:
@@ -30191,7 +31073,7 @@ namespace ts {
             const node = cast(expr.parent, isArrayLiteralExpression);
             //    [{ property1: p1, property2 }] = elems;
             const typeOfArrayLiteral = getTypeOfAssignmentPattern(node) || errorType;
-            const elementType = checkIteratedTypeOrElementType(typeOfArrayLiteral, expr.parent, /*allowStringInput*/ false, /*allowAsyncIterables*/ false) || errorType;
+            const elementType = checkIteratedTypeOrElementType(IterationUse.Destructuring, typeOfArrayLiteral, undefinedType, expr.parent) || errorType;
             return checkArrayLiteralDestructuringElementAssignment(node, typeOfArrayLiteral, node.elements.indexOf(expr), elementType);
         }
 
@@ -31905,6 +32787,12 @@ namespace ts {
             }
         }
 
+        function checkGrammarJsxExpression(node: JsxExpression) {
+            if (node.expression && isCommaSequence(node.expression)) {
+                return grammarErrorOnNode(node.expression, Diagnostics.JSX_expressions_may_not_use_the_comma_operator_Did_you_mean_to_write_an_array);
+            }
+        }
+
         function checkGrammarForInOrForOfStatement(forInOrOfStatement: ForInOrOfStatement): boolean {
             if (checkGrammarStatementInAmbientContext(forInOrOfStatement)) {
                 return true;
@@ -32650,5 +33538,13 @@ namespace ts {
         export const IntrinsicClassAttributes = "IntrinsicClassAttributes" as __String;
         export const LibraryManagedAttributes = "LibraryManagedAttributes" as __String;
         // tslint:enable variable-name
+    }
+
+    function getIterationTypesKeyFromIterationTypeKind(typeKind: IterationTypeKind) {
+        switch (typeKind) {
+            case IterationTypeKind.Yield: return "yieldType";
+            case IterationTypeKind.Return: return "returnType";
+            case IterationTypeKind.Next: return "nextType";
+        }
     }
 }

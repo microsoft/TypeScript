@@ -468,6 +468,8 @@ namespace ts {
                             visitNode(cbNode, (<JSDocPropertyLikeTag>node).typeExpression)
                         : visitNode(cbNode, (<JSDocPropertyLikeTag>node).typeExpression) ||
                             visitNode(cbNode, (<JSDocPropertyLikeTag>node).name));
+            case SyntaxKind.JSDocAuthorTag:
+                return visitNode(cbNode, (node as JSDocTag).tagName);
             case SyntaxKind.JSDocAugmentsTag:
                 return visitNode(cbNode, (node as JSDocTag).tagName) ||
                     visitNode(cbNode, (<JSDocAugmentsTag>node).class);
@@ -4430,14 +4432,18 @@ namespace ts {
 
             if (token() !== SyntaxKind.CloseBraceToken) {
                 node.dotDotDotToken = parseOptionalToken(SyntaxKind.DotDotDotToken);
-                node.expression = parseAssignmentExpressionOrHigher();
+                // Only an AssignmentExpression is valid here per the JSX spec,
+                // but we can unambiguously parse a comma sequence and provide
+                // a better error message in grammar checking.
+                node.expression = parseExpression();
             }
             if (inExpressionContext) {
                 parseExpected(SyntaxKind.CloseBraceToken);
             }
             else {
-                parseExpected(SyntaxKind.CloseBraceToken, /*message*/ undefined, /*shouldAdvance*/ false);
-                scanJsxText();
+                if (parseExpected(SyntaxKind.CloseBraceToken, /*message*/ undefined, /*shouldAdvance*/ false)) {
+                    scanJsxText();
+                }
             }
 
             return finishNode(node);
@@ -6427,6 +6433,7 @@ namespace ts {
                 BeginningOfLine,
                 SawAsterisk,
                 SavingComments,
+                SavingBackticks, // NOTE: Only used when parsing tag comments
             }
 
             const enum PropertyLikeParse {
@@ -6616,6 +6623,9 @@ namespace ts {
 
                     let tag: JSDocTag | undefined;
                     switch (tagName.escapedText) {
+                        case "author":
+                            tag = parseAuthorTag(start, tagName, margin);
+                            break;
                         case "augments":
                         case "extends":
                             tag = parseAugmentsTag(start, tagName);
@@ -6687,18 +6697,23 @@ namespace ts {
                             case SyntaxKind.NewLineTrivia:
                                 if (state >= JSDocState.SawAsterisk) {
                                     state = JSDocState.BeginningOfLine;
+                                    // don't use pushComment here because we want to keep the margin unchanged
                                     comments.push(scanner.getTokenText());
                                 }
                                 indent = 0;
                                 break;
                             case SyntaxKind.AtToken:
+                                if (state === JSDocState.SavingBackticks) {
+                                    comments.push(scanner.getTokenText());
+                                    break;
+                                }
                                 scanner.setTextPos(scanner.getTextPos() - 1);
                                 // falls through
                             case SyntaxKind.EndOfFileToken:
                                 // Done
                                 break loop;
                             case SyntaxKind.WhitespaceTrivia:
-                                if (state === JSDocState.SavingComments) {
+                                if (state === JSDocState.SavingComments || state === JSDocState.SavingBackticks) {
                                     pushComment(scanner.getTokenText());
                                 }
                                 else {
@@ -6720,6 +6735,15 @@ namespace ts {
                                 }
                                 pushComment(scanner.getTokenText());
                                 break;
+                            case SyntaxKind.BacktickToken:
+                                if (state === JSDocState.SavingBackticks) {
+                                    state = JSDocState.SavingComments;
+                                }
+                                else {
+                                    state = JSDocState.SavingBackticks;
+                                }
+                                pushComment(scanner.getTokenText());
+                                break;
                             case SyntaxKind.AsteriskToken:
                                 if (state === JSDocState.BeginningOfLine) {
                                     // leading asterisks start recording on the *next* (non-whitespace) token
@@ -6730,7 +6754,9 @@ namespace ts {
                                 // record the * as a comment
                                 // falls through
                             default:
-                                state = JSDocState.SavingComments; // leading identifiers start recording as well
+                                if (state !== JSDocState.SavingBackticks) {
+                                    state = JSDocState.SavingComments; // leading identifiers start recording as well
+                                }
                                 pushComment(scanner.getTokenText());
                                 break;
                         }
@@ -6877,6 +6903,69 @@ namespace ts {
                     result.tagName = tagName;
                     result.typeExpression = parseJSDocTypeExpression(/*mayOmitBraces*/ true);
                     return finishNode(result);
+                }
+
+                function parseAuthorTag(start: number, tagName: Identifier, indent: number): JSDocAuthorTag {
+                    const result = <JSDocAuthorTag>createNode(SyntaxKind.JSDocAuthorTag, start);
+                    result.tagName = tagName;
+
+                    const authorInfoWithEmail = tryParse(() => tryParseAuthorNameAndEmail());
+                    if (!authorInfoWithEmail) {
+                        return finishNode(result);
+                    }
+
+                    result.comment = authorInfoWithEmail;
+
+                    if (lookAhead(() => nextToken() !== SyntaxKind.NewLineTrivia)) {
+                        const comment = parseTagComments(indent);
+                        if (comment) {
+                            result.comment += comment;
+                        }
+                    }
+
+                    return finishNode(result);
+                }
+
+                function tryParseAuthorNameAndEmail(): string | undefined {
+                    const comments: string[] = [];
+                    let seenLessThan = false;
+                    let seenGreaterThan = false;
+                    let token = scanner.getToken();
+
+                    loop: while (true) {
+                        switch (token) {
+                            case SyntaxKind.Identifier:
+                            case SyntaxKind.WhitespaceTrivia:
+                            case SyntaxKind.DotToken:
+                            case SyntaxKind.AtToken:
+                                comments.push(scanner.getTokenText());
+                                break;
+                            case SyntaxKind.LessThanToken:
+                                if (seenLessThan || seenGreaterThan) {
+                                    return;
+                                }
+                                seenLessThan = true;
+                                comments.push(scanner.getTokenText());
+                                break;
+                            case SyntaxKind.GreaterThanToken:
+                                if (!seenLessThan || seenGreaterThan) {
+                                    return;
+                                }
+                                seenGreaterThan = true;
+                                comments.push(scanner.getTokenText());
+                                scanner.setTextPos(scanner.getTokenPos() + 1);
+                                break loop;
+                            case SyntaxKind.NewLineTrivia:
+                            case SyntaxKind.EndOfFileToken:
+                                break loop;
+                        }
+
+                        token = nextTokenJSDoc();
+                    }
+
+                    if (seenLessThan && seenGreaterThan) {
+                        return comments.length === 0 ? undefined : comments.join("");
+                    }
                 }
 
                 function parseAugmentsTag(start: number, tagName: Identifier): JSDocAugmentsTag {

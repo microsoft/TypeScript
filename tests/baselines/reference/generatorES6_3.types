@@ -1,7 +1,7 @@
 === tests/cases/compiler/generatorES6_3.ts ===
 var v = function*() {
->v : () => IterableIterator<number>
->function*() {    yield 0} : () => IterableIterator<number>
+>v : () => Generator<number, void, unknown>
+>function*() {    yield 0} : () => Generator<number, void, unknown>
 
     yield 0
 >yield 0 : any

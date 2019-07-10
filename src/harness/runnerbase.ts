@@ -2,6 +2,9 @@ type TestRunnerKind = CompilerTestKind | FourslashTestKind | "project" | "rwc" |
 type CompilerTestKind = "conformance" | "compiler";
 type FourslashTestKind = "fourslash" | "fourslash-shims" | "fourslash-shims-pp" | "fourslash-server";
 
+let shards = 1;
+let shardId = 1;
+
 abstract class RunnerBase {
     // contains the tests to run
     public tests: (string | Harness.FileBasedTest)[] = [];
@@ -18,6 +21,14 @@ abstract class RunnerBase {
     abstract kind(): TestRunnerKind;
 
     abstract enumerateTestFiles(): (string | Harness.FileBasedTest)[];
+
+    getTestFiles(): ReturnType<this["enumerateTestFiles"]> {
+        const all = this.enumerateTestFiles();
+        if (shards === 1) {
+            return all as ReturnType<this["enumerateTestFiles"]>;
+        }
+        return all.filter((_val, idx) => idx % shards === (shardId - 1)) as ReturnType<this["enumerateTestFiles"]>;
+    }
 
     /** The working directory where tests are found. Needed for batch testing where the input path will differ from the output path inside baselines */
     public workingDirectory = "";

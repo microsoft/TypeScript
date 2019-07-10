@@ -57,30 +57,59 @@ var t5 = new new Date;
 new String;
 >String : Symbol(String, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 
+// Error on union
+declare const union: { a: string } | { b: string }
+>union : Symbol(union, Decl(newOperator.ts, 36, 13))
+>a : Symbol(a, Decl(newOperator.ts, 36, 22))
+>b : Symbol(b, Decl(newOperator.ts, 36, 38))
+
+new union;
+>union : Symbol(union, Decl(newOperator.ts, 36, 13))
+
+// Error on union with one constructor
+declare const ctorUnion: { a: string } | (new (a: string) => void)
+>ctorUnion : Symbol(ctorUnion, Decl(newOperator.ts, 40, 13))
+>a : Symbol(a, Decl(newOperator.ts, 40, 26))
+>a : Symbol(a, Decl(newOperator.ts, 40, 47))
+
+new ctorUnion("");
+>ctorUnion : Symbol(ctorUnion, Decl(newOperator.ts, 40, 13))
+
+// Error on union with incompatible constructors
+declare const ctorUnion2: (new <T extends number>(a: T) => void) | (new <T>(a: string) => void)
+>ctorUnion2 : Symbol(ctorUnion2, Decl(newOperator.ts, 44, 13))
+>T : Symbol(T, Decl(newOperator.ts, 44, 32))
+>a : Symbol(a, Decl(newOperator.ts, 44, 50))
+>T : Symbol(T, Decl(newOperator.ts, 44, 32))
+>T : Symbol(T, Decl(newOperator.ts, 44, 73))
+>a : Symbol(a, Decl(newOperator.ts, 44, 76))
+
+new ctorUnion2("");
+>ctorUnion2 : Symbol(ctorUnion2, Decl(newOperator.ts, 44, 13))
 
 module M {
->M : Symbol(M, Decl(newOperator.ts, 33, 11))
+>M : Symbol(M, Decl(newOperator.ts, 45, 19))
 
     export class T {
->T : Symbol(T, Decl(newOperator.ts, 36, 10))
+>T : Symbol(T, Decl(newOperator.ts, 47, 10))
 
         x: number;
->x : Symbol(T.x, Decl(newOperator.ts, 37, 20))
+>x : Symbol(T.x, Decl(newOperator.ts, 48, 20))
     }
 }
 
 class S {
->S : Symbol(S, Decl(newOperator.ts, 40, 1))
+>S : Symbol(S, Decl(newOperator.ts, 51, 1))
 
     public get xs(): M.T[] {
->xs : Symbol(S.xs, Decl(newOperator.ts, 42, 9))
->M : Symbol(M, Decl(newOperator.ts, 33, 11))
->T : Symbol(M.T, Decl(newOperator.ts, 36, 10))
+>xs : Symbol(S.xs, Decl(newOperator.ts, 53, 9))
+>M : Symbol(M, Decl(newOperator.ts, 45, 19))
+>T : Symbol(M.T, Decl(newOperator.ts, 47, 10))
 
         return new M.T[];
->M.T : Symbol(M.T, Decl(newOperator.ts, 36, 10))
->M : Symbol(M, Decl(newOperator.ts, 33, 11))
->T : Symbol(M.T, Decl(newOperator.ts, 36, 10))
+>M.T : Symbol(M.T, Decl(newOperator.ts, 47, 10))
+>M : Symbol(M, Decl(newOperator.ts, 45, 19))
+>T : Symbol(M.T, Decl(newOperator.ts, 47, 10))
     }
 }
 

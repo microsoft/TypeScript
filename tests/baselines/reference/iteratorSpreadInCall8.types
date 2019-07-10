@@ -38,8 +38,8 @@ class SymbolIterator {
     }
 }
 
-class StringIterator {
->StringIterator : StringIterator
+class _StringIterator {
+>_StringIterator : _StringIterator
 
     next() {
 >next : () => { value: string; done: boolean; }
@@ -69,13 +69,13 @@ class StringIterator {
     }
 }
 
-new Foo(...new SymbolIterator, ...new StringIterator);
->new Foo(...new SymbolIterator, ...new StringIterator) : any
+new Foo(...new SymbolIterator, ...new _StringIterator);
+>new Foo(...new SymbolIterator, ...new _StringIterator) : any
 >Foo : typeof Foo
 >...new SymbolIterator : symbol
 >new SymbolIterator : SymbolIterator
 >SymbolIterator : typeof SymbolIterator
->...new StringIterator : string
->new StringIterator : StringIterator
->StringIterator : typeof StringIterator
+>...new _StringIterator : string
+>new _StringIterator : _StringIterator
+>_StringIterator : typeof _StringIterator
 

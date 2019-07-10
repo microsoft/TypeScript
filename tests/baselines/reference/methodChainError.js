@@ -1,5 +1,6 @@
 //// [methodChainError.ts]
 class Builder {
+    notMethod: string
     method(param: string): Builder {
         return this;
     }
@@ -7,7 +8,14 @@ class Builder {
 
 new Builder()
     .method("a")
-    .method();
+    .method()
+    .method("a");
+
+    
+new Builder()
+    .method("a")
+    .notMethod()
+    .method("a");
 
 //// [methodChainError.js]
 var Builder = /** @class */ (function () {
@@ -20,4 +28,9 @@ var Builder = /** @class */ (function () {
 }());
 new Builder()
     .method("a")
-    .method();
+    .method()
+    .method("a");
+new Builder()
+    .method("a")
+    .notMethod()
+    .method("a");
