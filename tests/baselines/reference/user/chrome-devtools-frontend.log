@@ -11,8 +11,10 @@ Standard output:
 ../../../../built/local/lib.dom.d.ts(12625,13): error TS2300: Duplicate identifier 'Request'.
 ../../../../built/local/lib.dom.d.ts(17341,11): error TS2300: Duplicate identifier 'Window'.
 ../../../../built/local/lib.dom.d.ts(17475,13): error TS2300: Duplicate identifier 'Window'.
+../../../../built/local/lib.es2015.iterable.d.ts(41,6): error TS2300: Duplicate identifier 'IteratorResult'.
 ../../../../built/local/lib.es5.d.ts(1416,11): error TS2300: Duplicate identifier 'ArrayLike'.
 ../../../../built/local/lib.es5.d.ts(1452,6): error TS2300: Duplicate identifier 'Record'.
+../../../../node_modules/@types/node/index.d.ts(77,11): error TS2300: Duplicate identifier 'IteratorResult'.
 ../../../../node_modules/@types/node/index.d.ts(150,13): error TS2403: Subsequent variable declarations must have the same type.  Variable 'module' must be of type '{}', but here has type 'NodeModule'.
 node_modules/chrome-devtools-frontend/front_end/Runtime.js(43,8): error TS2339: Property '_importScriptPathPrefix' does not exist on type 'Window'.
 node_modules/chrome-devtools-frontend/front_end/Runtime.js(77,16): error TS7014: Function type, which lacks return-type annotation, implicitly has an 'any' return type.
@@ -722,7 +724,11 @@ node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighth
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(15687,1): error TS2304: Cannot find name 'fs'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(15694,1): error TS2322: Type 'Promise<void | any[]>' is not assignable to type 'Promise<any[]>'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(15695,1): error TS2304: Cannot find name 'fs'.
-node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(15695,78): error TS2345: Argument of type '0' is not assignable to parameter of type '(string | number)[]'.
+node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(15695,78): error TS2769: No overload matches this call.
+  Overload 1 of 2, '(value: any, replacer?: (this: any, key: string, value: any) => any, space?: string | number): string', gave the following error.
+    Argument of type '0' is not assignable to parameter of type '(this: any, key: string, value: any) => any'.
+  Overload 2 of 2, '(value: any, replacer?: (string | number)[], space?: string | number): string', gave the following error.
+    Argument of type '0' is not assignable to parameter of type '(string | number)[]'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(15791,19): error TS2304: Cannot find name 'fs'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(15810,1): error TS2304: Cannot find name 'fs'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(15814,1): error TS2304: Cannot find name 'fs'.
@@ -908,9 +914,11 @@ node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighth
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(29961,8): error TS2339: Property 'on' does not exist on type 'Stream'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(29962,8): error TS2339: Property 'on' does not exist on type 'Stream'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(30114,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'end' must be of type 'any', but here has type 'number'.
-node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(30311,40): error TS2345: Argument of type '(x: string) => string | number' is not assignable to parameter of type '(substring: string, ...args: any[]) => string'.
-  Type 'string | number' is not assignable to type 'string'.
-    Type 'number' is not assignable to type 'string'.
+node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(30311,40): error TS2769: No overload matches this call.
+  The last overload gave the following error.
+    Argument of type '(x: string) => string | number' is not assignable to parameter of type '(substring: string, ...args: any[]) => string'.
+      Type 'string | number' is not assignable to type 'string'.
+        Type 'number' is not assignable to type 'string'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(30729,1): error TS2323: Cannot redeclare exported variable 'isArray'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(30734,1): error TS2323: Cannot redeclare exported variable 'isBoolean'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(30739,1): error TS2323: Cannot redeclare exported variable 'isNull'.
@@ -3456,7 +3464,11 @@ node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(8795,39): error
   Property 'offset' does not exist on type '{ node: any; start: number; end: number; collapse: any; coverStart: any; coverEnd: any; }'.
 node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(8799,38): error TS2339: Property 'offset' does not exist on type '{ node: any; start: number; end: number; collapse: any; coverStart: any; coverEnd: any; } | { node: any; offset: number; }'.
   Property 'offset' does not exist on type '{ node: any; start: number; end: number; collapse: any; coverStart: any; coverEnd: any; }'.
-node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(8817,16): error TS2345: Argument of type 'boolean' is not assignable to parameter of type 'number'.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(8817,16): error TS2769: No overload matches this call.
+  Overload 1 of 2, '(timeoutId: Timer): void', gave the following error.
+    Argument of type 'boolean' is not assignable to parameter of type 'Timer'.
+  Overload 2 of 2, '(handle?: number): void', gave the following error.
+    Argument of type 'boolean' is not assignable to parameter of type 'number'.
 node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(8818,3): error TS2322: Type 'Timer' is not assignable to type 'boolean'.
 node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(8840,24): error TS2339: Property 'div' does not exist on type 'ContentEditableInput'.
 node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(8847,10): error TS2339: Property 'div' does not exist on type 'ContentEditableInput'.
@@ -5084,11 +5096,23 @@ node_modules/chrome-devtools-frontend/front_end/dom_extension/DOMExtension.js(27
 node_modules/chrome-devtools-frontend/front_end/dom_extension/DOMExtension.js(279,24): error TS2339: Property 'getComponentSelection' does not exist on type 'Node'.
 node_modules/chrome-devtools-frontend/front_end/dom_extension/DOMExtension.js(289,16): error TS2339: Property 'window' does not exist on type 'Node'.
 node_modules/chrome-devtools-frontend/front_end/dom_extension/DOMExtension.js(293,19): error TS2339: Property 'removeChildren' does not exist on type 'Element'.
-node_modules/chrome-devtools-frontend/front_end/dom_extension/DOMExtension.js(305,42): error TS2559: Type 'string' has no properties in common with type 'ElementCreationOptions'.
+node_modules/chrome-devtools-frontend/front_end/dom_extension/DOMExtension.js(305,10): error TS2769: No overload matches this call.
+  Overload 1 of 3, '(tagName: "object" | "link" | "small" | "sub" | "sup" | "track" | "progress" | "a" | "abbr" | "address" | "applet" | "area" | "article" | "aside" | "audio" | "b" | "base" | "basefont" | "bdi" | ... 99 more ... | "wbr", options?: ElementCreationOptions): HTMLElement | ... 70 more ... | HTMLUListElement', gave the following error.
+    Argument of type 'string' is not assignable to parameter of type '"object" | "link" | "small" | "sub" | "sup" | "track" | "progress" | "a" | "abbr" | "address" | "applet" | "area" | "article" | "aside" | "audio" | "b" | "base" | "basefont" | "bdi" | ... 99 more ... | "wbr"'.
+  Overload 2 of 3, '(tagName: "listing" | "xmp", options?: ElementCreationOptions): HTMLPreElement', gave the following error.
+    Argument of type 'string' is not assignable to parameter of type '"listing" | "xmp"'.
+  Overload 3 of 3, '(tagName: string, options?: ElementCreationOptions): HTMLElement', gave the following error.
+    Type 'string' has no properties in common with type 'ElementCreationOptions'.
 node_modules/chrome-devtools-frontend/front_end/dom_extension/DOMExtension.js(314,34): error TS2345: Argument of type 'string | number' is not assignable to parameter of type 'string'.
   Type 'number' is not assignable to type 'string'.
 node_modules/chrome-devtools-frontend/front_end/dom_extension/DOMExtension.js(323,20): error TS2339: Property 'createElementWithClass' does not exist on type 'Document'.
-node_modules/chrome-devtools-frontend/front_end/dom_extension/DOMExtension.js(324,49): error TS2559: Type 'string' has no properties in common with type 'ElementCreationOptions'.
+node_modules/chrome-devtools-frontend/front_end/dom_extension/DOMExtension.js(324,17): error TS2769: No overload matches this call.
+  Overload 1 of 3, '(tagName: "object" | "link" | "small" | "sub" | "sup" | "track" | "progress" | "a" | "abbr" | "address" | "applet" | "area" | "article" | "aside" | "audio" | "b" | "base" | "basefont" | "bdi" | ... 99 more ... | "wbr", options?: ElementCreationOptions): HTMLElement | ... 70 more ... | HTMLUListElement', gave the following error.
+    Argument of type 'string' is not assignable to parameter of type '"object" | "link" | "small" | "sub" | "sup" | "track" | "progress" | "a" | "abbr" | "address" | "applet" | "area" | "article" | "aside" | "audio" | "b" | "base" | "basefont" | "bdi" | ... 99 more ... | "wbr"'.
+  Overload 2 of 3, '(tagName: "listing" | "xmp", options?: ElementCreationOptions): HTMLPreElement', gave the following error.
+    Argument of type 'string' is not assignable to parameter of type '"listing" | "xmp"'.
+  Overload 3 of 3, '(tagName: string, options?: ElementCreationOptions): HTMLElement', gave the following error.
+    Type 'string' has no properties in common with type 'ElementCreationOptions'.
 node_modules/chrome-devtools-frontend/front_end/dom_extension/DOMExtension.js(338,19): error TS2339: Property 'createElementWithClass' does not exist on type 'Document'.
 node_modules/chrome-devtools-frontend/front_end/dom_extension/DOMExtension.js(346,20): error TS2551: Property 'createSVGElement' does not exist on type 'Document'. Did you mean 'createElementNS'?
 node_modules/chrome-devtools-frontend/front_end/dom_extension/DOMExtension.js(360,19): error TS2551: Property 'createSVGElement' does not exist on type 'Document'. Did you mean 'createElementNS'?
@@ -5222,21 +5246,25 @@ node_modules/chrome-devtools-frontend/front_end/elements/ComputedStyleWidget.js(
 node_modules/chrome-devtools-frontend/front_end/elements/ComputedStyleWidget.js(52,56): error TS2555: Expected at least 2 arguments, but got 1.
 node_modules/chrome-devtools-frontend/front_end/elements/ComputedStyleWidget.js(58,78): error TS2555: Expected at least 2 arguments, but got 1.
 node_modules/chrome-devtools-frontend/front_end/elements/ComputedStyleWidget.js(73,12): error TS2339: Property '_filterRegex' does not exist on type 'ComputedStyleWidget'.
-node_modules/chrome-devtools-frontend/front_end/elements/ComputedStyleWidget.js(91,24): error TS2345: Argument of type '(Promise<ComputedStyle> | Promise<CSSMatchedStyles>)[]' is not assignable to parameter of type 'Iterable<ComputedStyle | PromiseLike<ComputedStyle>>'.
-  Types of property '[Symbol.iterator]' are incompatible.
-    Type '() => IterableIterator<Promise<ComputedStyle> | Promise<CSSMatchedStyles>>' is not assignable to type '() => Iterator<ComputedStyle | PromiseLike<ComputedStyle>>'.
-      Type 'IterableIterator<Promise<ComputedStyle> | Promise<CSSMatchedStyles>>' is not assignable to type 'Iterator<ComputedStyle | PromiseLike<ComputedStyle>>'.
-        Types of property 'next' are incompatible.
-          Type '{ (value?: any): IteratorResult<Promise<ComputedStyle> | Promise<CSSMatchedStyles>>; (value?: any): IteratorResult<Promise<ComputedStyle> | Promise<CSSMatchedStyles>>; }' is not assignable to type '{ (value?: any): IteratorResult<ComputedStyle | PromiseLike<ComputedStyle>>; (value?: any): IteratorResult<ComputedStyle | PromiseLike<ComputedStyle>>; }'.
-            Type 'IteratorResult<Promise<ComputedStyle> | Promise<CSSMatchedStyles>>' is not assignable to type 'IteratorResult<ComputedStyle | PromiseLike<ComputedStyle>>'.
-              Type 'Promise<ComputedStyle> | Promise<CSSMatchedStyles>' is not assignable to type 'ComputedStyle | PromiseLike<ComputedStyle>'.
-                Type 'Promise<CSSMatchedStyles>' is not assignable to type 'ComputedStyle | PromiseLike<ComputedStyle>'.
-                  Type 'Promise<CSSMatchedStyles>' is not assignable to type 'PromiseLike<ComputedStyle>'.
-                    Types of property 'then' are incompatible.
-                      Type '<TResult1 = CSSMatchedStyles, TResult2 = never>(onfulfilled?: (value: CSSMatchedStyles) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>) => Promise<...>' is not assignable to type '<TResult1 = ComputedStyle, TResult2 = never>(onfulfilled?: (value: ComputedStyle) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>) => PromiseLike<TResult1 | TResult2>'.
-                        Types of parameters 'onfulfilled' and 'onfulfilled' are incompatible.
-                          Types of parameters 'value' and 'value' are incompatible.
-                            Property 'computedStyle' is missing in type 'CSSMatchedStyles' but required in type 'ComputedStyle'.
+node_modules/chrome-devtools-frontend/front_end/elements/ComputedStyleWidget.js(91,24): error TS2769: No overload matches this call.
+  The last overload gave the following error.
+    Argument of type '(Promise<ComputedStyle> | Promise<CSSMatchedStyles>)[]' is not assignable to parameter of type 'Iterable<ComputedStyle | PromiseLike<ComputedStyle>>'.
+      Types of property '[Symbol.iterator]' are incompatible.
+        Type '() => IterableIterator<Promise<ComputedStyle> | Promise<CSSMatchedStyles>>' is not assignable to type '() => Iterator<ComputedStyle | PromiseLike<ComputedStyle>, any, undefined>'.
+          Type 'IterableIterator<Promise<ComputedStyle> | Promise<CSSMatchedStyles>>' is not assignable to type 'Iterator<ComputedStyle | PromiseLike<ComputedStyle>, any, undefined>'.
+            Types of property 'next' are incompatible.
+              Type '{ (...args: [] | [undefined]): IteratorResult<Promise<ComputedStyle> | Promise<CSSMatchedStyles>, any>; (value?: any): IteratorResult<Promise<ComputedStyle> | Promise<CSSMatchedStyles>, any>; }' is not assignable to type '{ (...args: [] | [undefined]): IteratorResult<ComputedStyle | PromiseLike<ComputedStyle>, any>; (value?: any): IteratorResult<ComputedStyle | PromiseLike<ComputedStyle>, any>; }'.
+                Type 'IteratorResult<Promise<ComputedStyle> | Promise<CSSMatchedStyles>, any>' is not assignable to type 'IteratorResult<ComputedStyle | PromiseLike<ComputedStyle>, any>'.
+                  Type 'IteratorYieldResult<Promise<ComputedStyle> | Promise<CSSMatchedStyles>>' is not assignable to type 'IteratorResult<ComputedStyle | PromiseLike<ComputedStyle>, any>'.
+                    Type 'IteratorYieldResult<Promise<ComputedStyle> | Promise<CSSMatchedStyles>>' is not assignable to type 'IteratorYieldResult<ComputedStyle | PromiseLike<ComputedStyle>>'.
+                      Type 'Promise<ComputedStyle> | Promise<CSSMatchedStyles>' is not assignable to type 'ComputedStyle | PromiseLike<ComputedStyle>'.
+                        Type 'Promise<CSSMatchedStyles>' is not assignable to type 'ComputedStyle | PromiseLike<ComputedStyle>'.
+                          Type 'Promise<CSSMatchedStyles>' is not assignable to type 'PromiseLike<ComputedStyle>'.
+                            Types of property 'then' are incompatible.
+                              Type '<TResult1 = CSSMatchedStyles, TResult2 = never>(onfulfilled?: (value: CSSMatchedStyles) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>) => Promise<...>' is not assignable to type '<TResult1 = ComputedStyle, TResult2 = never>(onfulfilled?: (value: ComputedStyle) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>) => PromiseLike<TResult1 | TResult2>'.
+                                Types of parameters 'onfulfilled' and 'onfulfilled' are incompatible.
+                                  Types of parameters 'value' and 'value' are incompatible.
+                                    Property 'computedStyle' is missing in type 'CSSMatchedStyles' but required in type 'ComputedStyle'.
 node_modules/chrome-devtools-frontend/front_end/elements/ComputedStyleWidget.js(147,52): error TS2339: Property 'keysArray' does not exist on type 'Map<string, string>'.
 node_modules/chrome-devtools-frontend/front_end/elements/ComputedStyleWidget.js(179,50): error TS2339: Property 'createChild' does not exist on type 'Element'.
 node_modules/chrome-devtools-frontend/front_end/elements/ComputedStyleWidget.js(200,74): error TS2339: Property 'consume' does not exist on type 'Event'.
@@ -5530,21 +5558,25 @@ node_modules/chrome-devtools-frontend/front_end/elements/InspectElementModeContr
           Type 'T' is not assignable to type 'OverlayModel'.
 node_modules/chrome-devtools-frontend/front_end/elements/InspectElementModeController.js(91,24): error TS2694: Namespace 'Protocol' has no exported member 'Overlay'.
 node_modules/chrome-devtools-frontend/front_end/elements/MetricsSidebarPane.js(56,27): error TS2339: Property 'removeChildren' does not exist on type 'Element'.
-node_modules/chrome-devtools-frontend/front_end/elements/MetricsSidebarPane.js(82,24): error TS2345: Argument of type '(Promise<Map<string, string>> | Promise<InlineStyleResult>)[]' is not assignable to parameter of type 'Iterable<Map<string, string> | PromiseLike<Map<string, string>>>'.
-  Types of property '[Symbol.iterator]' are incompatible.
-    Type '() => IterableIterator<Promise<Map<string, string>> | Promise<InlineStyleResult>>' is not assignable to type '() => Iterator<Map<string, string> | PromiseLike<Map<string, string>>>'.
-      Type 'IterableIterator<Promise<Map<string, string>> | Promise<InlineStyleResult>>' is not assignable to type 'Iterator<Map<string, string> | PromiseLike<Map<string, string>>>'.
-        Types of property 'next' are incompatible.
-          Type '{ (value?: any): IteratorResult<Promise<Map<string, string>> | Promise<InlineStyleResult>>; (value?: any): IteratorResult<Promise<Map<string, string>> | Promise<InlineStyleResult>>; }' is not assignable to type '{ (value?: any): IteratorResult<Map<string, string> | PromiseLike<Map<string, string>>>; (value?: any): IteratorResult<Map<string, string> | PromiseLike<Map<string, string>>>; }'.
-            Type 'IteratorResult<Promise<Map<string, string>> | Promise<InlineStyleResult>>' is not assignable to type 'IteratorResult<Map<string, string> | PromiseLike<Map<string, string>>>'.
-              Type 'Promise<Map<string, string>> | Promise<InlineStyleResult>' is not assignable to type 'Map<string, string> | PromiseLike<Map<string, string>>'.
-                Type 'Promise<InlineStyleResult>' is not assignable to type 'Map<string, string> | PromiseLike<Map<string, string>>'.
-                  Type 'Promise<InlineStyleResult>' is not assignable to type 'PromiseLike<Map<string, string>>'.
-                    Types of property 'then' are incompatible.
-                      Type '<TResult1 = InlineStyleResult, TResult2 = never>(onfulfilled?: (value: InlineStyleResult) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>) => Promise<...>' is not assignable to type '<TResult1 = Map<string, string>, TResult2 = never>(onfulfilled?: (value: Map<string, string>) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>) => PromiseLike<...>'.
-                        Types of parameters 'onfulfilled' and 'onfulfilled' are incompatible.
-                          Types of parameters 'value' and 'value' are incompatible.
-                            Type 'InlineStyleResult' is missing the following properties from type 'Map<string, string>': clear, delete, forEach, get, and 8 more.
+node_modules/chrome-devtools-frontend/front_end/elements/MetricsSidebarPane.js(82,24): error TS2769: No overload matches this call.
+  The last overload gave the following error.
+    Argument of type '(Promise<Map<string, string>> | Promise<InlineStyleResult>)[]' is not assignable to parameter of type 'Iterable<Map<string, string> | PromiseLike<Map<string, string>>>'.
+      Types of property '[Symbol.iterator]' are incompatible.
+        Type '() => IterableIterator<Promise<Map<string, string>> | Promise<InlineStyleResult>>' is not assignable to type '() => Iterator<Map<string, string> | PromiseLike<Map<string, string>>, any, undefined>'.
+          Type 'IterableIterator<Promise<Map<string, string>> | Promise<InlineStyleResult>>' is not assignable to type 'Iterator<Map<string, string> | PromiseLike<Map<string, string>>, any, undefined>'.
+            Types of property 'next' are incompatible.
+              Type '{ (...args: [] | [undefined]): IteratorResult<Promise<Map<string, string>> | Promise<InlineStyleResult>, any>; (value?: any): IteratorResult<Promise<Map<string, string>> | Promise<InlineStyleResult>, any>; }' is not assignable to type '{ (...args: [] | [undefined]): IteratorResult<Map<string, string> | PromiseLike<Map<string, string>>, any>; (value?: any): IteratorResult<Map<string, string> | PromiseLike<Map<string, string>>, any>; }'.
+                Type 'IteratorResult<Promise<Map<string, string>> | Promise<InlineStyleResult>, any>' is not assignable to type 'IteratorResult<Map<string, string> | PromiseLike<Map<string, string>>, any>'.
+                  Type 'IteratorYieldResult<Promise<Map<string, string>> | Promise<InlineStyleResult>>' is not assignable to type 'IteratorResult<Map<string, string> | PromiseLike<Map<string, string>>, any>'.
+                    Type 'IteratorYieldResult<Promise<Map<string, string>> | Promise<InlineStyleResult>>' is not assignable to type 'IteratorYieldResult<Map<string, string> | PromiseLike<Map<string, string>>>'.
+                      Type 'Promise<Map<string, string>> | Promise<InlineStyleResult>' is not assignable to type 'Map<string, string> | PromiseLike<Map<string, string>>'.
+                        Type 'Promise<InlineStyleResult>' is not assignable to type 'Map<string, string> | PromiseLike<Map<string, string>>'.
+                          Type 'Promise<InlineStyleResult>' is not assignable to type 'PromiseLike<Map<string, string>>'.
+                            Types of property 'then' are incompatible.
+                              Type '<TResult1 = InlineStyleResult, TResult2 = never>(onfulfilled?: (value: InlineStyleResult) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>) => Promise<...>' is not assignable to type '<TResult1 = Map<string, string>, TResult2 = never>(onfulfilled?: (value: Map<string, string>) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>) => PromiseLike<...>'.
+                                Types of parameters 'onfulfilled' and 'onfulfilled' are incompatible.
+                                  Types of parameters 'value' and 'value' are incompatible.
+                                    Type 'InlineStyleResult' is missing the following properties from type 'Map<string, string>': clear, delete, forEach, get, and 8 more.
 node_modules/chrome-devtools-frontend/front_end/elements/MetricsSidebarPane.js(120,11): error TS2339: Property 'consume' does not exist on type 'Event'.
 node_modules/chrome-devtools-frontend/front_end/elements/MetricsSidebarPane.js(164,22): error TS2339: Property 'toFixedIfFloating' does not exist on type 'NumberConstructor'.
 node_modules/chrome-devtools-frontend/front_end/elements/MetricsSidebarPane.js(179,18): error TS2345: Argument of type 'string' is not assignable to parameter of type 'number'.
@@ -8181,8 +8213,13 @@ node_modules/chrome-devtools-frontend/front_end/persistence/IsolatedFileSystem.j
 node_modules/chrome-devtools-frontend/front_end/persistence/IsolatedFileSystem.js(267,17): error TS2304: Cannot find name 'FileEntry'.
 node_modules/chrome-devtools-frontend/front_end/persistence/IsolatedFileSystem.js(278,17): error TS2304: Cannot find name 'FileError'.
 node_modules/chrome-devtools-frontend/front_end/persistence/IsolatedFileSystem.js(317,14): error TS7014: Function type, which lacks return-type annotation, implicitly has an 'any' return type.
-node_modules/chrome-devtools-frontend/front_end/persistence/IsolatedFileSystem.js(344,31): error TS2345: Argument of type 'string | ArrayBuffer' is not assignable to parameter of type 'string'.
-  Type 'ArrayBuffer' is not assignable to type 'string'.
+node_modules/chrome-devtools-frontend/front_end/persistence/IsolatedFileSystem.js(344,31): error TS2769: No overload matches this call.
+  Overload 1 of 2, '(rawString: string): string', gave the following error.
+    Argument of type 'string | ArrayBuffer' is not assignable to parameter of type 'string'.
+      Type 'ArrayBuffer' is not assignable to type 'string'.
+  Overload 2 of 2, '(data: string): string', gave the following error.
+    Argument of type 'string | ArrayBuffer' is not assignable to parameter of type 'string'.
+      Type 'ArrayBuffer' is not assignable to type 'string'.
 node_modules/chrome-devtools-frontend/front_end/persistence/IsolatedFileSystem.js(357,14): error TS7014: Function type, which lacks return-type annotation, implicitly has an 'any' return type.
 node_modules/chrome-devtools-frontend/front_end/persistence/IsolatedFileSystem.js(364,17): error TS2304: Cannot find name 'FileEntry'.
 node_modules/chrome-devtools-frontend/front_end/persistence/IsolatedFileSystem.js(372,17): error TS2304: Cannot find name 'FileWriter'.
@@ -8286,8 +8323,7 @@ node_modules/chrome-devtools-frontend/front_end/platform/utilities.js(402,8): er
 node_modules/chrome-devtools-frontend/front_end/platform/utilities.js(403,23): error TS2345: Argument of type 'string' is not assignable to parameter of type 'number'.
 node_modules/chrome-devtools-frontend/front_end/platform/utilities.js(412,16): error TS2339: Property 'isValid' does not exist on type 'Date'.
 node_modules/chrome-devtools-frontend/front_end/platform/utilities.js(419,16): error TS2339: Property 'toISO8601Compact' does not exist on type 'Date'.
-node_modules/chrome-devtools-frontend/front_end/platform/utilities.js(545,5): error TS2322: Type '{ value: (comparator: (arg0: number, arg1: number) => number, leftBound: number, rightBound: number, sortWindowLeft: number, sortWindowRight: number) => number[]; }' is not assignable to type 'number[]'.
-  Object literal may only specify known properties, but 'value' does not exist in type 'number[]'. Did you mean to write 'values'?
+node_modules/chrome-devtools-frontend/front_end/platform/utilities.js(560,7): error TS2740: Type '{ value: (comparator: (arg0: number, arg1: number) => number, leftBound: number, rightBound: number, sortWindowLeft: number, sortWindowRight: number) => number[]; }' is missing the following properties from type 'number[]': length, pop, push, concat, and 28 more.
 node_modules/chrome-devtools-frontend/front_end/platform/utilities.js(716,84): error TS2339: Property 'lowerBound' does not exist on type 'any[]'.
 node_modules/chrome-devtools-frontend/front_end/platform/utilities.js(718,84): error TS2339: Property 'upperBound' does not exist on type 'any[]'.
 node_modules/chrome-devtools-frontend/front_end/platform/utilities.js(720,83): error TS2339: Property 'lowerBound' does not exist on type 'any[]'.
@@ -12619,12 +12655,12 @@ node_modules/chrome-devtools-frontend/front_end/timeline_model/TimelineModel.js(
 node_modules/chrome-devtools-frontend/front_end/timeline_model/TimelineModel.js(1260,29): error TS2339: Property 'MetadataEvents' does not exist on type 'typeof TimelineModel'.
 node_modules/chrome-devtools-frontend/front_end/timeline_model/TimelineModel.js(1423,31): error TS2694: Namespace 'TimelineModel' has no exported member 'InvalidationCause'.
 node_modules/chrome-devtools-frontend/front_end/timeline_model/TimelineModel.js(1433,61): error TS2694: Namespace 'Protocol' has no exported member 'Runtime'.
-node_modules/chrome-devtools-frontend/front_end/timeline_model/TimelineModel.js(1524,30): error TS2488: Type 'Iterator<InvalidationTrackingEvent>' must have a '[Symbol.iterator]()' method that returns an iterator.
+node_modules/chrome-devtools-frontend/front_end/timeline_model/TimelineModel.js(1524,30): error TS2488: Type 'Iterator<InvalidationTrackingEvent, any, undefined>' must have a '[Symbol.iterator]()' method that returns an iterator.
 node_modules/chrome-devtools-frontend/front_end/timeline_model/TimelineModel.js(1532,22): error TS2339: Property 'linkedRecalcStyleEvent' does not exist on type 'InvalidationTrackingEvent'.
 node_modules/chrome-devtools-frontend/front_end/timeline_model/TimelineModel.js(1548,18): error TS2339: Property 'linkedRecalcStyleEvent' does not exist on type 'InvalidationTrackingEvent'.
 node_modules/chrome-devtools-frontend/front_end/timeline_model/TimelineModel.js(1600,23): error TS2339: Property 'linkedRecalcStyleEvent' does not exist on type 'InvalidationTrackingEvent'.
-node_modules/chrome-devtools-frontend/front_end/timeline_model/TimelineModel.js(1609,30): error TS2488: Type 'Iterator<InvalidationTrackingEvent>' must have a '[Symbol.iterator]()' method that returns an iterator.
-node_modules/chrome-devtools-frontend/front_end/timeline_model/TimelineModel.js(1642,30): error TS2488: Type 'Iterator<InvalidationTrackingEvent>' must have a '[Symbol.iterator]()' method that returns an iterator.
+node_modules/chrome-devtools-frontend/front_end/timeline_model/TimelineModel.js(1609,30): error TS2488: Type 'Iterator<InvalidationTrackingEvent, any, undefined>' must have a '[Symbol.iterator]()' method that returns an iterator.
+node_modules/chrome-devtools-frontend/front_end/timeline_model/TimelineModel.js(1642,30): error TS2488: Type 'Iterator<InvalidationTrackingEvent, any, undefined>' must have a '[Symbol.iterator]()' method that returns an iterator.
 node_modules/chrome-devtools-frontend/front_end/timeline_model/TimelineModel.js(1709,67): error TS2339: Property '_asyncEvents' does not exist on type 'typeof TimelineAsyncEventTracker'.
 node_modules/chrome-devtools-frontend/front_end/timeline_model/TimelineModel.js(1714,49): error TS2339: Property '_asyncEvents' does not exist on type 'typeof TimelineAsyncEventTracker'.
 node_modules/chrome-devtools-frontend/front_end/timeline_model/TimelineModel.js(1730,45): error TS2339: Property '_asyncEvents' does not exist on type 'typeof TimelineAsyncEventTracker'.
@@ -13524,25 +13560,31 @@ node_modules/chrome-devtools-frontend/front_end/ui/View.js(411,5): error TS2322:
   Property '_vbox' does not exist on type '{ appendApplicableItems(locationName: string): void; appendView(view: { viewId(): string; title(): string; isCloseable(): boolean; isTransient(): boolean; toolbarItems(): Promise<ToolbarItem[]>; widget(): Promise<...>; disposeView(): void; }, insertBefore?: { ...; }): void; showView(view: { ...; }, insertBefore?: { ...'.
 node_modules/chrome-devtools-frontend/front_end/ui/View.js(440,18): error TS2339: Property 'tabIndex' does not exist on type 'Element'.
 node_modules/chrome-devtools-frontend/front_end/ui/View.js(454,38): error TS2339: Property 'hasFocus' does not exist on type 'Element'.
-node_modules/chrome-devtools-frontend/front_end/ui/View.js(461,44): error TS2345: Argument of type '(Promise<void> | Promise<ToolbarItem[]>)[]' is not assignable to parameter of type 'Iterable<void | PromiseLike<void>>'.
-  Types of property '[Symbol.iterator]' are incompatible.
-    Type '() => IterableIterator<Promise<void> | Promise<ToolbarItem[]>>' is not assignable to type '() => Iterator<void | PromiseLike<void>>'.
-      Type 'IterableIterator<Promise<void> | Promise<ToolbarItem[]>>' is not assignable to type 'Iterator<void | PromiseLike<void>>'.
-        Types of property 'next' are incompatible.
-          Type '{ (value?: any): IteratorResult<Promise<void> | Promise<ToolbarItem[]>>; (value?: any): IteratorResult<Promise<void> | Promise<ToolbarItem[]>>; }' is not assignable to type '{ (value?: any): IteratorResult<void | PromiseLike<void>>; (value?: any): IteratorResult<void | PromiseLike<void>>; }'.
-            Type 'IteratorResult<Promise<void> | Promise<ToolbarItem[]>>' is not assignable to type 'IteratorResult<void | PromiseLike<void>>'.
-              Type 'Promise<void> | Promise<ToolbarItem[]>' is not assignable to type 'void | PromiseLike<void>'.
-                Type 'Promise<ToolbarItem[]>' is not assignable to type 'void | PromiseLike<void>'.
-                  Type 'Promise<ToolbarItem[]>' is not assignable to type 'PromiseLike<void>'.
-                    Types of property 'then' are incompatible.
-                      Type '<TResult1 = ToolbarItem[], TResult2 = never>(onfulfilled?: (value: ToolbarItem[]) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>) => Promise<TResult1 | TResult2>' is not assignable to type '<TResult1 = void, TResult2 = never>(onfulfilled?: (value: void) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>) => PromiseLike<TResult1 | TResult2>'.
-                        Types of parameters 'onfulfilled' and 'onfulfilled' are incompatible.
-                          Types of parameters 'value' and 'value' are incompatible.
-                            Type 'ToolbarItem[]' is not assignable to type 'void'.
+node_modules/chrome-devtools-frontend/front_end/ui/View.js(461,44): error TS2769: No overload matches this call.
+  The last overload gave the following error.
+    Argument of type '(Promise<void> | Promise<ToolbarItem[]>)[]' is not assignable to parameter of type 'Iterable<void | PromiseLike<void>>'.
+      Types of property '[Symbol.iterator]' are incompatible.
+        Type '() => IterableIterator<Promise<void> | Promise<ToolbarItem[]>>' is not assignable to type '() => Iterator<void | PromiseLike<void>, any, undefined>'.
+          Type 'IterableIterator<Promise<void> | Promise<ToolbarItem[]>>' is not assignable to type 'Iterator<void | PromiseLike<void>, any, undefined>'.
+            Types of property 'next' are incompatible.
+              Type '{ (...args: [] | [undefined]): IteratorResult<Promise<void> | Promise<ToolbarItem[]>, any>; (value?: any): IteratorResult<Promise<void> | Promise<ToolbarItem[]>, any>; }' is not assignable to type '{ (...args: [] | [undefined]): IteratorResult<void | PromiseLike<void>, any>; (value?: any): IteratorResult<void | PromiseLike<void>, any>; }'.
+                Type 'IteratorResult<Promise<void> | Promise<ToolbarItem[]>, any>' is not assignable to type 'IteratorResult<void | PromiseLike<void>, any>'.
+                  Type 'IteratorYieldResult<Promise<void> | Promise<ToolbarItem[]>>' is not assignable to type 'IteratorResult<void | PromiseLike<void>, any>'.
+                    Type 'IteratorYieldResult<Promise<void> | Promise<ToolbarItem[]>>' is not assignable to type 'IteratorYieldResult<void | PromiseLike<void>>'.
+                      Type 'Promise<void> | Promise<ToolbarItem[]>' is not assignable to type 'void | PromiseLike<void>'.
+                        Type 'Promise<ToolbarItem[]>' is not assignable to type 'void | PromiseLike<void>'.
+                          Type 'Promise<ToolbarItem[]>' is not assignable to type 'PromiseLike<void>'.
+                            Types of property 'then' are incompatible.
+                              Type '<TResult1 = ToolbarItem[], TResult2 = never>(onfulfilled?: (value: ToolbarItem[]) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>) => Promise<TResult1 | TResult2>' is not assignable to type '<TResult1 = void, TResult2 = never>(onfulfilled?: (value: void) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>) => PromiseLike<TResult1 | TResult2>'.
+                                Types of parameters 'onfulfilled' and 'onfulfilled' are incompatible.
+                                  Types of parameters 'value' and 'value' are incompatible.
+                                    Type 'ToolbarItem[]' is not assignable to type 'void'.
 node_modules/chrome-devtools-frontend/front_end/ui/View.js(495,24): error TS2339: Property 'createTextChild' does not exist on type 'Element'.
 node_modules/chrome-devtools-frontend/front_end/ui/View.js(496,24): error TS2339: Property 'tabIndex' does not exist on type 'Element'.
 node_modules/chrome-devtools-frontend/front_end/ui/View.js(501,25): error TS2339: Property 'createChild' does not exist on type 'Element'.
-node_modules/chrome-devtools-frontend/front_end/ui/View.js(520,44): error TS2345: Argument of type '(Promise<void> | Promise<ToolbarItem[]>)[]' is not assignable to parameter of type 'Iterable<void | PromiseLike<void>>'.
+node_modules/chrome-devtools-frontend/front_end/ui/View.js(520,44): error TS2769: No overload matches this call.
+  The last overload gave the following error.
+    Argument of type '(Promise<void> | Promise<ToolbarItem[]>)[]' is not assignable to parameter of type 'Iterable<void | PromiseLike<void>>'.
 node_modules/chrome-devtools-frontend/front_end/ui/View.js(556,36): error TS2339: Property 'keyCode' does not exist on type 'Event'.
 node_modules/chrome-devtools-frontend/front_end/ui/View.js(558,22): error TS2339: Property 'key' does not exist on type 'Event'.
 node_modules/chrome-devtools-frontend/front_end/ui/View.js(560,22): error TS2339: Property 'key' does not exist on type 'Event'.
@@ -13615,8 +13657,12 @@ node_modules/chrome-devtools-frontend/front_end/ui/XWidget.js(56,19): error TS23
 node_modules/chrome-devtools-frontend/front_end/ui/XWidget.js(75,15): error TS7014: Function type, which lacks return-type annotation, implicitly has an 'any' return type.
 node_modules/chrome-devtools-frontend/front_end/ui/XWidget.js(82,15): error TS7014: Function type, which lacks return-type annotation, implicitly has an 'any' return type.
 node_modules/chrome-devtools-frontend/front_end/ui/XWidget.js(89,15): error TS7014: Function type, which lacks return-type annotation, implicitly has an 'any' return type.
-node_modules/chrome-devtools-frontend/front_end/ui/XWidget.js(100,79): error TS2345: Argument of type '{ passive: boolean; capture: false; }' is not assignable to parameter of type 'boolean | EventListenerOptions'.
-  Object literal may only specify known properties, and 'passive' does not exist in type 'EventListenerOptions'.
+node_modules/chrome-devtools-frontend/front_end/ui/XWidget.js(100,7): error TS2769: No overload matches this call.
+  Overload 1 of 2, '(type: "fullscreenchange" | "fullscreenerror", listener: (this: Element, ev: Event) => any, options?: boolean | EventListenerOptions): void', gave the following error.
+    Argument of type '"scroll"' is not assignable to parameter of type '"fullscreenchange" | "fullscreenerror"'.
+  Overload 2 of 2, '(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void', gave the following error.
+    Argument of type '{ passive: boolean; capture: false; }' is not assignable to parameter of type 'boolean | EventListenerOptions'.
+      Object literal may only specify known properties, and 'passive' does not exist in type 'EventListenerOptions'.
 node_modules/chrome-devtools-frontend/front_end/ui/XWidget.js(108,19): error TS2551: Property '_scrollTop' does not exist on type 'Element'. Did you mean 'scrollTop'?
 node_modules/chrome-devtools-frontend/front_end/ui/XWidget.js(109,37): error TS2551: Property '_scrollTop' does not exist on type 'Element'. Did you mean 'scrollTop'?
 node_modules/chrome-devtools-frontend/front_end/ui/XWidget.js(110,19): error TS2551: Property '_scrollLeft' does not exist on type 'Element'. Did you mean 'scrollLeft'?
