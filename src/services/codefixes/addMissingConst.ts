@@ -99,7 +99,7 @@ namespace ts.codefix {
         if (!isBinaryExpression(expression)) {
             return false;
         }
-        
+
         if (expression.operatorToken.kind === SyntaxKind.CommaToken) {
             return every([expression.left, expression.right], expression => expressionCouldBeVariableDeclaration(expression, checker));
         }
