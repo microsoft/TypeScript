@@ -205,7 +205,7 @@ ts-jest[versions] (WARN) Version X.X.X-insiders.xxxxxxxx of typescript installed
 [XX:XX:XX XM] x ------------------------------------
 [XX:XX:XX XM] x Error: Command failed: /usr/local/bin/node /office-ui-fabric-react/common/temp/node_modules/jest/bin/jest.js --config /office-ui-fabric-react/packages/foundation/jest.config.js --passWithNoTests --colors
     at ChildProcess.<anonymous> (/office-ui-fabric-react/common/temp/node_modules/.registry.npmjs.org/just-scripts-utils/0.8.1/node_modules/just-scripts-utils/lib/exec.js:70:31)
-    at ChildProcess.emit (events.js:200:13)
+    at ChildProcess.emit (events.js:203:13)
     at ChildProcess.EventEmitter.emit (domain.js:494:23)
     at Process.ChildProcess._handle.onexit (internal/child_process.js:272:12)
 [XX:XX:XX XM] x ------------------------------------
@@ -297,7 +297,7 @@ ts-jest[versions] (WARN) Version X.X.X-insiders.xxxxxxxx of typescript installed
 [XX:XX:XX XM] x ------------------------------------
 [XX:XX:XX XM] x Error: Command failed: /usr/local/bin/node /office-ui-fabric-react/common/temp/node_modules/jest/bin/jest.js --config /office-ui-fabric-react/packages/foundation/jest.config.js --passWithNoTests --colors
     at ChildProcess.<anonymous> (/office-ui-fabric-react/common/temp/node_modules/.registry.npmjs.org/just-scripts-utils/0.8.1/node_modules/just-scripts-utils/lib/exec.js:70:31)
-    at ChildProcess.emit (events.js:200:13)
+    at ChildProcess.emit (events.js:203:13)
     at ChildProcess.EventEmitter.emit (domain.js:494:23)
     at Process.ChildProcess._handle.onexit (internal/child_process.js:272:12)
 [XX:XX:XX XM] x ------------------------------------

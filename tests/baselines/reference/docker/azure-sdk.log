@@ -5,9 +5,16 @@ Rush Multi-Project Build Tool 5.7.3 - https://rushjs.io
 Starting "rush rebuild"
 Executing a maximum of 1 simultaneous processes...
 [@azure/cosmos] started
-XX of XX: [@azure/cosmos] completed successfully in ? seconds
+npm ERR! code ELIFECYCLE
+npm ERR! errno 2
+npm ERR! @azure/cosmos@X.X.X compile: `echo Using TypeScript && tsc --version && tsc -p tsconfig.prod.json --pretty`
+npm ERR! Exit status 2
+npm ERR! 
+npm ERR! Failed at the @azure/cosmos@X.X.X compile script.
+npm ERR! This is probably not a problem with npm. There is likely additional logging output above.
+npm ERR! A complete log of this run can be found in:
+npm ERR!     /root/.npm/_logs/2019-07-10T13_39_33_862Z-debug.log
 [@azure/service-bus] started
-Warning: You have changed the public API signature for this project. Updating review/service-bus.api.md
 [@azure/storage-blob] started
 XX of XX: [@azure/storage-blob] completed successfully in ? seconds
 [@azure/storage-datalake] started
@@ -22,8 +29,12 @@ XX of XX: [@azure/template] completed successfully in ? seconds
 XX of XX: [@azure/abort-controller] completed successfully in ? seconds
 [@azure/core-asynciterator-polyfill] started
 XX of XX: [@azure/core-asynciterator-polyfill] completed successfully in ? seconds
+[@azure/core-auth] started
+XX of XX: [@azure/core-auth] completed successfully in ? seconds
 [@azure/core-http] started
 XX of XX: [@azure/core-http] completed successfully in ? seconds
+[@azure/core-arm] started
+XX of XX: [@azure/core-arm] completed successfully in ? seconds
 [@azure/core-paging] started
 XX of XX: [@azure/core-paging] completed successfully in ? seconds
 [@azure/event-processor-host] started
@@ -33,24 +44,37 @@ XX of XX: [testhub] completed successfully in ? seconds
 [@azure/identity] started
 XX of XX: [@azure/identity] completed successfully in ? seconds
 [@azure/keyvault-certificates] started
-XX of XX: [@azure/keyvault-certificates] completed successfully in ? seconds
 [@azure/keyvault-keys] started
-XX of XX: [@azure/keyvault-keys] completed successfully in ? seconds
+npm ERR! code ELIFECYCLE
+npm ERR! errno 2
+npm ERR! @azure/keyvault-keys@X.X.X-preview.2 extract-api: `tsc -p . && api-extractor run --local`
+npm ERR! Exit status 2
+npm ERR! 
+npm ERR! Failed at the @azure/keyvault-keys@X.X.X-preview.2 extract-api script.
+npm ERR! This is probably not a problem with npm. There is likely additional logging output above.
+npm ERR! A complete log of this run can be found in:
+npm ERR!     /root/.npm/_logs/2019-07-10T13_41_42_464Z-debug.log
 [@azure/keyvault-secrets] started
-XX of XX: [@azure/keyvault-secrets] completed successfully in ? seconds
+npm ERR! code ELIFECYCLE
+npm ERR! errno 2
+npm ERR! @azure/keyvault-secrets@X.X.X-preview.2 extract-api: `tsc -p . && api-extractor run --local`
+npm ERR! Exit status 2
+npm ERR! 
+npm ERR! Failed at the @azure/keyvault-secrets@X.X.X-preview.2 extract-api script.
+npm ERR! This is probably not a problem with npm. There is likely additional logging output above.
+npm ERR! A complete log of this run can be found in:
+npm ERR!     /root/.npm/_logs/2019-07-10T13_41_46_371Z-debug.log
 [@azure/core-amqp] started
-SUCCESS (16)
+SUCCESS (14)
 ================================
 @azure/abort-controller (? seconds)
+@azure/core-arm (? seconds)
 @azure/core-asynciterator-polyfill (? seconds)
+@azure/core-auth (? seconds)
 @azure/core-http (? seconds)
 @azure/core-paging (? seconds)
-@azure/cosmos (? seconds)
 @azure/event-processor-host (? seconds)
 @azure/identity (? seconds)
-@azure/keyvault-certificates (? seconds)
-@azure/keyvault-keys (? seconds)
-@azure/keyvault-secrets (? seconds)
 @azure/storage-blob (? seconds)
 @azure/storage-datalake (? seconds)
 @azure/storage-file (? seconds)
@@ -58,16 +82,11 @@ SUCCESS (16)
 @azure/template (? seconds)
 testhub (? seconds)
 ================================
-SUCCESS WITH WARNINGS (1)
-================================
-@azure/service-bus (? seconds)
-Warning: You have changed the public API signature for this project. Updating review/service-bus.api.md
-================================
 BLOCKED (1)
 ================================
 @azure/event-hubs
 ================================
-FAILURE (1)
+FAILURE (6)
 ================================
 @azure/core-amqp (? seconds)
 >>> @azure/core-amqp
@@ -75,6 +94,50 @@ tsc -p . && rollup -c 2>&1
 src/errors.ts(586,20): error TS7053: Element implicitly has an 'any' type because expression of type 'any' can't be used to index type 'typeof ConditionErrorNameMapper'.
 src/errors.ts(607,34): error TS7053: Element implicitly has an 'any' type because expression of type 'any' can't be used to index type 'typeof SystemErrorConditionMapper'.
 src/errors.ts(608,20): error TS7053: Element implicitly has an 'any' type because expression of type 'any' can't be used to index type 'typeof ConditionErrorNameMapper'.
+@azure/cosmos ( ? seconds)
+npm ERR! code ELIFECYCLE
+npm ERR! errno 2
+npm ERR! @azure/cosmos@X.X.X compile: `echo Using TypeScript && tsc --version && tsc -p tsconfig.prod.json --pretty`
+npm ERR! Exit status 2
+npm ERR!
+npm ERR! Failed at the @azure/cosmos@X.X.X compile script.
+npm ERR! This is probably not a problem with npm. There is likely additional logging output above.
+npm ERR! A complete log of this run can be found in:
+npm ERR!     /root/.npm/_logs/2019-07-10T13_39_33_862Z-debug.log
+@azure/keyvault-certificates (? seconds)
+>>> @azure/keyvault-certificates
+tsc && rollup -c rollup.config.js 2>&1
+error TS2318: Cannot find global type 'AsyncGenerator'.
+src/index.ts(154,60): error TS2739: Type '{}' is missing the following properties from type 'AsyncIterableIterator<CertificateAttributes>': [Symbol.asyncIterator], next
+src/index.ts(180,128): error TS2322: Type '{}' is not assignable to type 'AsyncIterableIterator<CertificateAttributes>'.
+src/index.ts(232,101): error TS2739: Type '{}' is missing the following properties from type 'AsyncIterableIterator<CertificateIssuer>': [Symbol.asyncIterator], next
+src/index.ts(381,103): error TS2739: Type '{}' is missing the following properties from type 'AsyncIterableIterator<DeletedCertificate>': [Symbol.asyncIterator], next
+@azure/keyvault-keys (? seconds)
+npm ERR! code ELIFECYCLE
+npm ERR! errno 2
+npm ERR! @azure/keyvault-keys@X.X.X-preview.2 extract-api: `tsc -p . && api-extractor run --local`
+npm ERR! Exit status 2
+npm ERR!
+npm ERR! Failed at the @azure/keyvault-keys@X.X.X-preview.2 extract-api script.
+npm ERR! This is probably not a problem with npm. There is likely additional logging output above.
+npm ERR! A complete log of this run can be found in:
+npm ERR!     /root/.npm/_logs/2019-07-10T13_41_42_464Z-debug.log
+@azure/keyvault-secrets (? seconds)
+npm ERR! code ELIFECYCLE
+npm ERR! errno 2
+npm ERR! @azure/keyvault-secrets@X.X.X-preview.2 extract-api: `tsc -p . && api-extractor run --local`
+npm ERR! Exit status 2
+npm ERR!
+npm ERR! Failed at the @azure/keyvault-secrets@X.X.X-preview.2 extract-api script.
+npm ERR! This is probably not a problem with npm. There is likely additional logging output above.
+npm ERR! A complete log of this run can be found in:
+npm ERR!     /root/.npm/_logs/2019-07-10T13_41_46_371Z-debug.log
+@azure/service-bus ( ? seconds)
+>>> @azure/service-bus
+tsc -p . && rollup -c 2>&1 && npm run extract-api
+error TS2318: Cannot find global type 'AsyncGenerator'.
+src/receiver.ts(193,32): error TS2739: Type '{}' is missing the following properties from type 'AsyncIterableIterator<ServiceBusMessage>': [Symbol.asyncIterator], next
+src/receiver.ts(742,32): error TS2322: Type '{}' is not assignable to type 'AsyncIterableIterator<ServiceBusMessage>'.
 ================================
 Error: Project(s) failed to build
 rush rebuild - Errors! ( ? seconds)
@@ -83,7 +146,16 @@ rush rebuild - Errors! ( ? seconds)
 
 Standard error:
 Your version of Node.js (X.X.X) has not been tested with this release of Rush. The Rush team will not accept issue reports for it. Please consider upgrading Rush or downgrading Node.js.
-XX of XX: [@azure/service-bus] completed with warnings in ? seconds
+XX of XX: [@azure/cosmos] failed to build!
+XX of XX: [@azure/service-bus] failed to build!
+XX of XX: [@azure/keyvault-certificates] failed to build!
+XX of XX: [@azure/keyvault-keys] failed to build!
+XX of XX: [@azure/keyvault-secrets] failed to build!
 XX of XX: [@azure/core-amqp] failed to build!
 XX of XX: [@azure/event-hubs] blocked by [@azure/core-amqp]!
 [@azure/core-amqp] Returned error code: 2
+[@azure/cosmos] Returned error code: 2
+[@azure/keyvault-certificates] Returned error code: 2
+[@azure/keyvault-keys] Returned error code: 2
+[@azure/keyvault-secrets] Returned error code: 2
+[@azure/service-bus] Returned error code: 2

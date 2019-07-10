@@ -1,5 +1,7 @@
 Exit Code: 1
 Standard output:
+../../../../../built/local/lib.es2015.iterable.d.ts(41,6): error TS2300: Duplicate identifier 'IteratorResult'.
+../../../../../node_modules/@types/node/index.d.ts(77,11): error TS2300: Duplicate identifier 'IteratorResult'.
 node_modules/@typescript-eslint/typescript-estree/dist/parser.d.ts(1,8): error TS1259: Module '"/prettier/prettier/node_modules/typescript/lib/typescript"' can only be default-imported using the 'esModuleInterop' flag
 src/cli/util.js(60,44): error TS2345: Argument of type 'null' is not assignable to parameter of type 'number | undefined'.
 src/cli/util.js(119,38): error TS2339: Property 'sync' does not exist on type '(...args: any[]) => any'.
@@ -114,17 +116,36 @@ src/language-html/parser-html.js(161,14): error TS2339: Property 'tagDefinition'
 src/language-html/parser-html.js(194,29): error TS2345: Argument of type '{ type: any; value: any; raw: any; }' is not assignable to parameter of type 'Node'.
   Type '{ type: any; value: any; raw: any; }' is missing the following properties from type 'Node': sourceSpan, visit
 src/language-html/preprocess.js(28,19): error TS2554: Expected 0-1 arguments, but got 2.
-src/language-html/printer-html.js(313,13): error TS2345: Argument of type '"" | ">" | "/>" | "}}" | "]>" | "><!--<![endif]-->" | "[endif]-->" | "]><!-->"' is not assignable to parameter of type 'ConcatArray<never>'.
-  Type '""' is not assignable to type 'ConcatArray<never>'.
-src/language-html/printer-html.js(470,11): error TS2345: Argument of type '{ type: string; parts: any; }[]' is not assignable to parameter of type 'ConcatArray<never>'.
-  Types of property 'slice' are incompatible.
-    Type '(start?: number | undefined, end?: number | undefined) => { type: string; parts: any; }[]' is not assignable to type '(start?: number | undefined, end?: number | undefined) => never[]'.
-      Type '{ type: string; parts: any; }[]' is not assignable to type 'never[]'.
-        Type '{ type: string; parts: any; }' is not assignable to type 'never'.
-src/language-html/printer-html.js(491,11): error TS2345: Argument of type '"" | ">" | "/>" | "}}" | "]>" | "><!--<![endif]-->" | "[endif]-->" | "]><!-->"' is not assignable to parameter of type 'ConcatArray<never>'.
-  Type '""' is not assignable to type 'ConcatArray<never>'.
-src/language-html/printer-html.js(514,11): error TS2345: Argument of type '"" | ">" | "/>" | "}}" | "]>" | "><!--<![endif]-->" | "[endif]-->" | "]><!-->"' is not assignable to parameter of type 'ConcatArray<never>'.
-  Type '""' is not assignable to type 'ConcatArray<never>'.
+src/language-html/printer-html.js(313,13): error TS2769: No overload matches this call.
+  Overload 1 of 2, '(...items: ConcatArray<never>[]): never[]', gave the following error.
+    Argument of type '"" | ">" | "/>" | "}}" | "]>" | "><!--<![endif]-->" | "[endif]-->" | "]><!-->"' is not assignable to parameter of type 'ConcatArray<never>'.
+      Type '""' is not assignable to type 'ConcatArray<never>'.
+  Overload 2 of 2, '(...items: ConcatArray<never>[]): never[]', gave the following error.
+    Argument of type '"" | ">" | "/>" | "}}" | "]>" | "><!--<![endif]-->" | "[endif]-->" | "]><!-->"' is not assignable to parameter of type 'ConcatArray<never>'.
+      Type '""' is not assignable to type 'ConcatArray<never>'.
+src/language-html/printer-html.js(470,11): error TS2769: No overload matches this call.
+  Overload 1 of 2, '(...items: ConcatArray<never>[]): never[]', gave the following error.
+    Argument of type '{ type: string; parts: any; }[]' is not assignable to parameter of type 'ConcatArray<never>'.
+      Types of property 'slice' are incompatible.
+        Type '(start?: number | undefined, end?: number | undefined) => { type: string; parts: any; }[]' is not assignable to type '(start?: number | undefined, end?: number | undefined) => never[]'.
+          Type '{ type: string; parts: any; }[]' is not assignable to type 'never[]'.
+            Type '{ type: string; parts: any; }' is not assignable to type 'never'.
+  Overload 2 of 2, '(...items: ConcatArray<never>[]): never[]', gave the following error.
+    Argument of type '{ type: string; parts: any; }[]' is not assignable to parameter of type 'ConcatArray<never>'.
+src/language-html/printer-html.js(491,11): error TS2769: No overload matches this call.
+  Overload 1 of 2, '(...items: ConcatArray<never>[]): never[]', gave the following error.
+    Argument of type '"" | ">" | "/>" | "}}" | "]>" | "><!--<![endif]-->" | "[endif]-->" | "]><!-->"' is not assignable to parameter of type 'ConcatArray<never>'.
+      Type '""' is not assignable to type 'ConcatArray<never>'.
+  Overload 2 of 2, '(...items: ConcatArray<never>[]): never[]', gave the following error.
+    Argument of type '"" | ">" | "/>" | "}}" | "]>" | "><!--<![endif]-->" | "[endif]-->" | "]><!-->"' is not assignable to parameter of type 'ConcatArray<never>'.
+      Type '""' is not assignable to type 'ConcatArray<never>'.
+src/language-html/printer-html.js(514,11): error TS2769: No overload matches this call.
+  Overload 1 of 2, '(...items: ConcatArray<never>[]): never[]', gave the following error.
+    Argument of type '"" | ">" | "/>" | "}}" | "]>" | "><!--<![endif]-->" | "[endif]-->" | "]><!-->"' is not assignable to parameter of type 'ConcatArray<never>'.
+      Type '""' is not assignable to type 'ConcatArray<never>'.
+  Overload 2 of 2, '(...items: ConcatArray<never>[]): never[]', gave the following error.
+    Argument of type '"" | ">" | "/>" | "}}" | "]>" | "><!--<![endif]-->" | "[endif]-->" | "]><!-->"' is not assignable to parameter of type 'ConcatArray<never>'.
+      Type '""' is not assignable to type 'ConcatArray<never>'.
 src/language-html/printer-html.js(637,55): error TS2554: Expected 0 arguments, but got 1.
 src/language-html/syntax-vue.js(14,11): error TS2339: Property 'left' does not exist on type '{ left: string; operator: any; right: any; } | undefined'.
 src/language-html/syntax-vue.js(14,17): error TS2339: Property 'operator' does not exist on type '{ left: string; operator: any; right: any; } | undefined'.
@@ -155,17 +176,32 @@ src/language-js/printer-estree.js(262,36): error TS2304: Cannot find name 'Doc'.
 src/language-js/printer-estree.js(263,62): error TS2304: Cannot find name 'Doc'.
 src/language-js/printer-estree.js(270,12): error TS2304: Cannot find name 'FastPath'.
 src/language-js/printer-estree.js(271,12): error TS2304: Cannot find name 'Options'.
-src/language-js/printer-estree.js(397,9): error TS2345: Argument of type '{ type: string; parts: any; } | { type: string; contents: any; n: any; }' is not assignable to parameter of type 'ConcatArray<never>'.
-  Type '{ type: string; parts: any; }' is missing the following properties from type 'ConcatArray<never>': length, join, slice
-src/language-js/printer-estree.js(1470,28): error TS2345: Argument of type '{ type: string; parts: any; }' is not assignable to parameter of type 'string | { type: string; id: any; contents: any; break: boolean; expandedStates: any; } | ConcatArray<string | { type: string; id: any; contents: any; break: boolean; expandedStates: any; }>'.
-  Type '{ type: string; parts: any; }' is missing the following properties from type '{ type: string; id: any; contents: any; break: boolean; expandedStates: any; }': id, contents, break, expandedStates
+src/language-js/printer-estree.js(397,9): error TS2769: No overload matches this call.
+  Overload 1 of 2, '(...items: ConcatArray<never>[]): never[]', gave the following error.
+    Argument of type '{ type: string; parts: any; } | { type: string; contents: any; n: any; }' is not assignable to parameter of type 'ConcatArray<never>'.
+      Type '{ type: string; parts: any; }' is missing the following properties from type 'ConcatArray<never>': length, join, slice
+  Overload 2 of 2, '(...items: ConcatArray<never>[]): never[]', gave the following error.
+    Argument of type '{ type: string; parts: any; } | { type: string; contents: any; n: any; }' is not assignable to parameter of type 'ConcatArray<never>'.
+      Type '{ type: string; parts: any; }' is not assignable to type 'ConcatArray<never>'.
+src/language-js/printer-estree.js(1470,28): error TS2769: No overload matches this call.
+  Overload 1 of 2, '(...items: ConcatArray<string | { type: string; id: any; contents: any; break: boolean; expandedStates: any; }>[]): (string | { type: string; id: any; contents: any; break: boolean; expandedStates: any; })[]', gave the following error.
+    Argument of type '{ type: string; parts: any; }' is not assignable to parameter of type 'ConcatArray<string | { type: string; id: any; contents: any; break: boolean; expandedStates: any; }>'.
+      Type '{ type: string; parts: any; }' is missing the following properties from type 'ConcatArray<string | { type: string; id: any; contents: any; break: boolean; expandedStates: any; }>': length, join, slice
+  Overload 2 of 2, '(...items: (string | { type: string; id: any; contents: any; break: boolean; expandedStates: any; } | ConcatArray<string | { type: string; id: any; contents: any; break: boolean; expandedStates: any; }>)[]): (string | { ...; })[]', gave the following error.
+    Argument of type '{ type: string; parts: any; }' is not assignable to parameter of type 'string | { type: string; id: any; contents: any; break: boolean; expandedStates: any; } | ConcatArray<string | { type: string; id: any; contents: any; break: boolean; expandedStates: any; }>'.
+      Type '{ type: string; parts: any; }' is missing the following properties from type '{ type: string; id: any; contents: any; break: boolean; expandedStates: any; }': id, contents, break, expandedStates
 src/language-js/printer-estree.js(1890,20): error TS2345: Argument of type '" "' is not assignable to parameter of type '{ type: string; id: any; contents: any; break: boolean; expandedStates: any; }'.
 src/language-js/printer-estree.js(1892,20): error TS2345: Argument of type '{ type: string; parts: any; }' is not assignable to parameter of type '{ type: string; id: any; contents: any; break: boolean; expandedStates: any; }'.
 src/language-js/printer-estree.js(1894,18): error TS2345: Argument of type '"while ("' is not assignable to parameter of type '{ type: string; id: any; contents: any; break: boolean; expandedStates: any; }'.
 src/language-js/printer-estree.js(1903,9): error TS2345: Argument of type '")"' is not assignable to parameter of type '{ type: string; id: any; contents: any; break: boolean; expandedStates: any; }'.
 src/language-js/printer-estree.js(2426,28): error TS2345: Argument of type 'any' is not assignable to parameter of type 'never'.
-src/language-js/printer-estree.js(3513,11): error TS2345: Argument of type 'never[] | { type: string; parts: any; }' is not assignable to parameter of type 'ConcatArray<never>'.
-  Type '{ type: string; parts: any; }' is not assignable to type 'ConcatArray<never>'.
+src/language-js/printer-estree.js(3513,11): error TS2769: No overload matches this call.
+  Overload 1 of 2, '(...items: ConcatArray<never>[]): never[]', gave the following error.
+    Argument of type 'never[] | { type: string; parts: any; }' is not assignable to parameter of type 'ConcatArray<never>'.
+      Type '{ type: string; parts: any; }' is not assignable to type 'ConcatArray<never>'.
+  Overload 2 of 2, '(...items: ConcatArray<never>[]): never[]', gave the following error.
+    Argument of type 'never[] | { type: string; parts: any; }' is not assignable to parameter of type 'ConcatArray<never>'.
+      Type '{ type: string; parts: any; }' is not assignable to type 'ConcatArray<never>'.
 src/language-js/printer-estree.js(4031,23): error TS2532: Object is possibly 'undefined'.
 src/language-js/printer-estree.js(4032,24): error TS2532: Object is possibly 'undefined'.
 src/language-js/printer-estree.js(4360,5): error TS2345: Argument of type '"" | { type: string; parts: any; } | { type: string; contents: any; }' is not assignable to parameter of type 'string'.
@@ -174,13 +210,17 @@ src/language-js/printer-estree.js(4364,16): error TS2345: Argument of type '{ ty
 src/language-js/printer-estree.js(4406,9): error TS2345: Argument of type '{ type: string; parts: any; }' is not assignable to parameter of type 'string'.
 src/language-js/printer-estree.js(4708,9): error TS2554: Expected 0-2 arguments, but got 3.
 src/language-js/printer-estree.js(5939,55): error TS2554: Expected 0-1 arguments, but got 2.
-src/language-js/printer-estree.js(5975,7): error TS2345: Argument of type '(string | number)[]' is not assignable to parameter of type '((childPath: any) => any) | ConcatArray<(childPath: any) => any>'.
-  Type '(string | number)[]' is not assignable to type 'ConcatArray<(childPath: any) => any>'.
-    Types of property 'slice' are incompatible.
-      Type '(start?: number | undefined, end?: number | undefined) => (string | number)[]' is not assignable to type '(start?: number | undefined, end?: number | undefined) => ((childPath: any) => any)[]'.
-        Type '(string | number)[]' is not assignable to type '((childPath: any) => any)[]'.
-          Type 'string | number' is not assignable to type '(childPath: any) => any'.
-            Type 'string' is not assignable to type '(childPath: any) => any'.
+src/language-js/printer-estree.js(5975,7): error TS2769: No overload matches this call.
+  Overload 1 of 2, '(...items: ConcatArray<(childPath: any) => any>[]): ((childPath: any) => any)[]', gave the following error.
+    Argument of type '(string | number)[]' is not assignable to parameter of type 'ConcatArray<(childPath: any) => any>'.
+      Types of property 'slice' are incompatible.
+        Type '(start?: number | undefined, end?: number | undefined) => (string | number)[]' is not assignable to type '(start?: number | undefined, end?: number | undefined) => ((childPath: any) => any)[]'.
+          Type '(string | number)[]' is not assignable to type '((childPath: any) => any)[]'.
+            Type 'string | number' is not assignable to type '(childPath: any) => any'.
+              Type 'string' is not assignable to type '(childPath: any) => any'.
+  Overload 2 of 2, '(...items: (((childPath: any) => any) | ConcatArray<(childPath: any) => any>)[]): ((childPath: any) => any)[]', gave the following error.
+    Argument of type '(string | number)[]' is not assignable to parameter of type '((childPath: any) => any) | ConcatArray<(childPath: any) => any>'.
+      Type '(string | number)[]' is not assignable to type 'ConcatArray<(childPath: any) => any>'.
 src/language-markdown/index.js(8,26): error TS2307: Cannot find module 'linguist-languages/data/markdown'.
 src/language-markdown/index.js(20,5): error TS2345: Argument of type '{ override: { since: string; parsers: string[]; vscodeLanguageIds: string[]; }; }' is not assignable to parameter of type '{ extend: any; override: any; }'.
   Property 'extend' is missing in type '{ override: { since: string; parsers: string[]; vscodeLanguageIds: string[]; }; }' but required in type '{ extend: any; override: any; }'.
@@ -192,8 +232,13 @@ src/language-markdown/utils.js(208,39): error TS2345: Argument of type 'any[]' i
 src/language-yaml/index.js(8,26): error TS2307: Cannot find module 'linguist-languages/data/yaml'.
 src/language-yaml/index.js(8,59): error TS2345: Argument of type '{ override: { since: string; parsers: string[]; vscodeLanguageIds: string[]; }; }' is not assignable to parameter of type '{ extend: any; override: any; }'.
   Property 'extend' is missing in type '{ override: { since: string; parsers: string[]; vscodeLanguageIds: string[]; }; }' but required in type '{ extend: any; override: any; }'.
-src/language-yaml/printer-yaml.js(226,41): error TS2345: Argument of type '"" | { type: string; parts: any; }' is not assignable to parameter of type 'ConcatArray<never>'.
-  Type '""' is not assignable to type 'ConcatArray<never>'.
+src/language-yaml/printer-yaml.js(226,41): error TS2769: No overload matches this call.
+  Overload 1 of 2, '(...items: ConcatArray<never>[]): never[]', gave the following error.
+    Argument of type '"" | { type: string; parts: any; }' is not assignable to parameter of type 'ConcatArray<never>'.
+      Type '""' is not assignable to type 'ConcatArray<never>'.
+  Overload 2 of 2, '(...items: ConcatArray<never>[]): never[]', gave the following error.
+    Argument of type '"" | { type: string; parts: any; }' is not assignable to parameter of type 'ConcatArray<never>'.
+      Type '""' is not assignable to type 'ConcatArray<never>'.
 src/main/core-options.js(51,43): error TS1005: '}' expected.
 src/main/core-options.js(63,5): error TS2322: Type '{ since: string; category: string; type: "int"; default: number; range: { start: number; end: number; step: number; }; description: any; cliCategory: string; }' is not assignable to type 'OptionInfo'.
   Object literal may only specify known properties, and 'cliCategory' does not exist in type 'OptionInfo'.
@@ -241,8 +286,13 @@ src/main/options-normalizer.js(90,44): error TS2345: Argument of type '{ name: s
   Object literal may only specify known properties, and 'name' does not exist in type 'SchemaHandlers<any>'.
 src/main/options-normalizer.js(99,11): error TS2345: Argument of type '{ name: any; sourceName: any; }' is not assignable to parameter of type 'SchemaHandlers<any>'.
   Object literal may only specify known properties, and 'name' does not exist in type 'SchemaHandlers<any>'.
-src/main/options-normalizer.js(143,13): error TS2345: Argument of type 'string | never[]' is not assignable to parameter of type 'ConcatArray<never>'.
-  Type 'string' is not assignable to type 'ConcatArray<never>'.
+src/main/options-normalizer.js(143,13): error TS2769: No overload matches this call.
+  Overload 1 of 2, '(...items: ConcatArray<never>[]): never[]', gave the following error.
+    Argument of type 'string | never[]' is not assignable to parameter of type 'ConcatArray<never>'.
+      Type 'string' is not assignable to type 'ConcatArray<never>'.
+  Overload 2 of 2, '(...items: ConcatArray<never>[]): never[]', gave the following error.
+    Argument of type 'string | never[]' is not assignable to parameter of type 'ConcatArray<never>'.
+      Type 'string' is not assignable to type 'ConcatArray<never>'.
 src/main/options-normalizer.js(198,51): error TS2559: Type '{ name: any; }' has no properties in common with type 'SchemaHandlers<any>'.
 src/main/parser.js(21,44): error TS2345: Argument of type 'PropertyDescriptor | undefined' is not assignable to parameter of type 'PropertyDescriptor & ThisType<any>'.
   Type 'undefined' is not assignable to type 'PropertyDescriptor & ThisType<any>'.
