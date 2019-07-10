@@ -1059,21 +1059,19 @@ namespace ts.Completions {
                     symbolToOriginInfoMap[getSymbolId(firstAccessibleSymbol)] =
                         !moduleSymbol || !isExternalModuleSymbol(moduleSymbol) ? { kind: SymbolOriginInfoKind.SymbolMemberNoExport } : { kind: SymbolOriginInfoKind.SymbolMemberExport, moduleSymbol, isDefaultExport: false };
                 }
-                else {
-                    addSymbol(symbol);
+                else if(preferences.includeCompletionsWithInsertText) {
+                    addPromiseSymbolOriginInfo(symbol);
                 }
             }
             else {
-                addSymbol(symbol);
+                addPromiseSymbolOriginInfo(symbol);
             }
 
-            function addSymbol (symbol: Symbol) {
-                if (preferences.includeCompletionsWithInsertText) {
-                    if (insertAwait && !symbolToOriginInfoMap[getSymbolId(symbol)]) {
-                        symbolToOriginInfoMap[getSymbolId(symbol)] = { kind: SymbolOriginInfoKind.Promise };
-                    }
-                    symbols.push(symbol);
+            function addPromiseSymbolOriginInfo (symbol: Symbol) {
+                if (insertAwait && preferences.includeCompletionsWithInsertText && !symbolToOriginInfoMap[getSymbolId(symbol)]) {
+                    symbolToOriginInfoMap[getSymbolId(symbol)] = { kind: SymbolOriginInfoKind.Promise };
                 }
+                symbols.push(symbol);
             }
         }
 
