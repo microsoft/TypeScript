@@ -51,11 +51,9 @@ tests/cases/compiler/operationsAvailableOnPromisedType.ts(27,5): error TS2349: T
         b++;
         ~
 !!! error TS2356: An arithmetic operand must be of type 'any', 'number', 'bigint' or an enum type.
-!!! related TS2773 tests/cases/compiler/operationsAvailableOnPromisedType.ts:15:5: Did you forget to use 'await'?
         --b;
           ~
 !!! error TS2356: An arithmetic operand must be of type 'any', 'number', 'bigint' or an enum type.
-!!! related TS2773 tests/cases/compiler/operationsAvailableOnPromisedType.ts:16:7: Did you forget to use 'await'?
         a === b;
         ~~~~~~~
 !!! error TS2367: This condition will always return 'false' since the types 'number' and 'Promise<number>' have no overlap.
