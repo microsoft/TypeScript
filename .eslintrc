@@ -12,7 +12,7 @@
         "es6": true
     },
     "plugins": [
-        "@typescript-eslint", "microsoft-typescript"
+        "@typescript-eslint", "microsoft-typescript", "import"
     ],
     "rules": {
         "@typescript-eslint/adjacent-overload-signatures": "error",
@@ -68,6 +68,10 @@
         "microsoft-typescript/no-in-operator": "error",
         "microsoft-typescript/debug-assert": "error",
         "microsoft-typescript/no-keywords": "error",
+
+        "import/no-extraneous-dependencies": ["error", {
+            "optionalDependencies": false
+        }],
 
         "arrow-body-style": "off",
         "arrow-parens": "off",
