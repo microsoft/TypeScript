@@ -1,6 +1,6 @@
 //// [declarationsWithRecursiveInternalTypesProduceUniqueTypeParams.ts]
 // Note that both of the following have an `any` in their return type from where we bottom out the type printout
-// for havign too many instances of the same symbol nesting.
+// for having too many instances of the same symbol nesting.
 
 // Slightly simplified repro from https://github.com/microsoft/TypeScript/issues/30732 so it's easier to read and debug
 export type Key<U> = keyof U;
@@ -43,7 +43,7 @@ void p3.result.three;
 //// [declarationsWithRecursiveInternalTypesProduceUniqueTypeParams.js]
 "use strict";
 // Note that both of the following have an `any` in their return type from where we bottom out the type printout
-// for havign too many instances of the same symbol nesting.
+// for having too many instances of the same symbol nesting.
 var __assign = (this && this.__assign) || function () {
     __assign = Object.assign || function(t) {
         for (var s, i = 1, n = arguments.length; i < n; i++) {
