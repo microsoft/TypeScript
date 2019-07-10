@@ -340,7 +340,7 @@ namespace ts.refactor.extractSymbol {
             // For understanding how skipTrivia functioned:
             Debug.assert(!positionIsSynthesized(nodeToCheck.pos), "This failure could trigger https://github.com/Microsoft/TypeScript/issues/20809");
 
-            if (!isStatement(nodeToCheck) && !(isExpressionNode(nodeToCheck) && isExtractableExpression(nodeToCheck))) {
+            if (!(isStatement(nodeToCheck) || (isExpressionNode(nodeToCheck) && isExtractableExpression(nodeToCheck)))) {
                 return [createDiagnosticForNode(nodeToCheck, Messages.statementOrExpressionExpected)];
             }
 
