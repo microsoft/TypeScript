@@ -145,10 +145,10 @@ my.predicate.type = class {
 // global-ish prefixes
 var min = window.min || {};
 >min : typeof min
->window.min || {} : any
->window.min : error
->window : Window
->min : any
+>window.min || {} : typeof min | {}
+>window.min : typeof min
+>window : Window & typeof globalThis
+>min : typeof min
 >{} : {}
 
 min.nest = this.min.nest || function () { };
@@ -172,13 +172,13 @@ min.nest.other = self.min.nest.other || class { };
 >nest : { (): void; other: typeof other; }
 >other : typeof other
 >self.min.nest.other || class { } : typeof other
->self.min.nest.other : error
->self.min.nest : any
->self.min : any
->self : Window
->min : any
->nest : any
->other : any
+>self.min.nest.other : typeof other
+>self.min.nest : { (): void; other: typeof other; }
+>self.min : typeof min
+>self : Window & typeof globalThis
+>min : typeof min
+>nest : { (): void; other: typeof other; }
+>other : typeof other
 >class { } : typeof other
 
 min.property = global.min.property || {};
