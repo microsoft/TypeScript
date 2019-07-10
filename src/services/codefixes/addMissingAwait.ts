@@ -1,5 +1,6 @@
 /* @internal */
 namespace ts.codefix {
+    const awaitPrecedence = getOperatorPrecedence(SyntaxKind.AwaitExpression, undefined!);
     const fixId = "addMissingAwait";
     const errorCodes = [
         Diagnostics.An_arithmetic_operand_must_be_of_type_any_number_bigint_or_an_enum_type.code,
@@ -50,17 +51,17 @@ namespace ts.codefix {
             some(relatedInformation, related => related.code === Diagnostics.Did_you_forget_to_use_await.code));
     }
 
-    function getAwaitableExpression(sourceFile: SourceFile, span: TextSpan) {
+    function getAwaitableExpression(sourceFile: SourceFile, span: TextSpan): Expression | undefined {
         const token = getTokenAtPosition(sourceFile, span.start);
         return findAncestor(token, node => {
             if (node.getStart(sourceFile) < span.start || node.getEnd() > textSpanEnd(span)) {
                 return "quit";
             }
-            return textSpansEqual(span, createTextSpanFromNode(node, sourceFile)) && isExpressionNode(node);
-        });
+            return isExpression(node) && textSpansEqual(span, createTextSpanFromNode(node, sourceFile));
+        }) as Expression | undefined;
     }
 
-    function findAwaitableInitializer(expression: Node, sourceFile: SourceFile, program: Program): Node | undefined {
+    function findAwaitableInitializer(expression: Node, sourceFile: SourceFile, program: Program): Expression | undefined {
         if (!isIdentifier(expression)) {
             return;
         }
@@ -94,7 +95,14 @@ namespace ts.codefix {
         return declaration.initializer;
     }
 
-    function makeChange(changeTracker: textChanges.ChangeTracker, sourceFile: SourceFile, insertionSite: Node) {
-        changeTracker.insertModifierBefore(sourceFile, SyntaxKind.AwaitKeyword, insertionSite);
+    function makeChange(changeTracker: textChanges.ChangeTracker, sourceFile: SourceFile, insertionSite: Expression) {
+        const parentExpression = tryCast(insertionSite.parent, isExpression);
+        const awaitExpression = createAwait(insertionSite);
+        changeTracker.replaceRange(
+            sourceFile,
+            rangeOfNode(insertionSite),
+            parentExpression && getExpressionPrecedence(parentExpression) > awaitPrecedence
+                ? createParen(awaitExpression)
+                : awaitExpression);
     }
 }
