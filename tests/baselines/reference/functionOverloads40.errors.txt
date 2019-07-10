@@ -1,4 +1,8 @@
-tests/cases/compiler/functionOverloads40.ts(4,15): error TS2322: Type 'string' is not assignable to type 'boolean'.
+tests/cases/compiler/functionOverloads40.ts(4,15): error TS2769: No overload matches this call.
+  Overload 1 of 2, '(bar: { a: number; }[]): string', gave the following error.
+    Type 'string' is not assignable to type 'number'.
+  Overload 2 of 2, '(bar: { a: boolean; }[]): number', gave the following error.
+    Type 'string' is not assignable to type 'boolean'.
 
 
 ==== tests/cases/compiler/functionOverloads40.ts (1 errors) ====
@@ -7,6 +11,11 @@ tests/cases/compiler/functionOverloads40.ts(4,15): error TS2322: Type 'string' i
     function foo(bar:{a:any;}[]):any{ return bar }
     var x = foo([{a:'bar'}]);
                   ~
-!!! error TS2322: Type 'string' is not assignable to type 'boolean'.
+!!! error TS2769: No overload matches this call.
+!!! error TS2769:   Overload 1 of 2, '(bar: { a: number; }[]): string', gave the following error.
+!!! error TS2769:     Type 'string' is not assignable to type 'number'.
+!!! error TS2769:   Overload 2 of 2, '(bar: { a: boolean; }[]): number', gave the following error.
+!!! error TS2769:     Type 'string' is not assignable to type 'boolean'.
+!!! related TS6500 tests/cases/compiler/functionOverloads40.ts:1:19: The expected type comes from property 'a' which is declared here on type '{ a: number; }'
 !!! related TS6500 tests/cases/compiler/functionOverloads40.ts:2:19: The expected type comes from property 'a' which is declared here on type '{ a: boolean; }'
     

@@ -72,6 +72,7 @@ tests/cases/conformance/types/asyncGenerators/types.asyncGenerators.es2018.2.ts(
         yield* Promise.resolve([1, 2]);
                ~~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS2504: Type 'Promise<number[]>' must have a '[Symbol.asyncIterator]()' method that returns an async iterator.
+!!! related TS2773 tests/cases/conformance/types/asyncGenerators/types.asyncGenerators.es2018.2.ts:8:12: Did you forget to use 'await'?
     }
     const assignability1: () => AsyncIterableIterator<number> = async function * () {
           ~~~~~~~~~~~~~~

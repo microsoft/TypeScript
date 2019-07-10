@@ -4599,7 +4599,7 @@ namespace ts {
         messageText: string;
         category: DiagnosticCategory;
         code: number;
-        next?: DiagnosticMessageChain;
+        next?: DiagnosticMessageChain[];
     }
 
     export interface Diagnostic extends DiagnosticRelatedInformation {
