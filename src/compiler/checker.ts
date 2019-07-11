@@ -26403,7 +26403,11 @@ namespace ts {
          * The runtime behavior of the `await` keyword.
          */
         function checkAwaitedType(type: Type, errorNode: Node, diagnosticMessage: DiagnosticMessage, arg0?: string | number): Type {
-            return getAwaitedType(type, errorNode, diagnosticMessage, arg0) || errorType;
+            const awaitedType = getAwaitedType(type, errorNode, diagnosticMessage, arg0);
+            if (awaitedType === type) {
+                addErrorOrSuggestion(/*isError*/ false, createDiagnosticForNode(errorNode, Diagnostics.await_has_no_effect_on_the_type_of_this_expression));
+            }
+            return awaitedType || errorType;
         }
 
         function getAwaitedType(type: Type, errorNode?: Node, diagnosticMessage?: DiagnosticMessage, arg0?: string | number): Type | undefined {
