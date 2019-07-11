@@ -26,7 +26,13 @@ namespace ts.codefix {
             return;
         }
 
-        const parenthesizedExpression = awaitExpression && tryCast(awaitExpression.parent, isParenthesizedExpression);
-        changeTracker.replaceNode(sourceFile, parenthesizedExpression || awaitExpression, awaitExpression.expression);
+        const parenthesizedExpression = tryCast(awaitExpression.parent, isParenthesizedExpression);
+        // (await 0).toFixed() should keep its parens (or add an extra dot for 0..toFixed())
+        if (parenthesizedExpression && isPropertyAccessExpression(parenthesizedExpression.parent) && isDecimalIntegerLiteral(awaitExpression.expression)) {
+            changeTracker.replaceNode(sourceFile, awaitExpression, awaitExpression.expression);
+        }
+        else {
+            changeTracker.replaceNode(sourceFile, parenthesizedExpression || awaitExpression, awaitExpression.expression);
+        }
     }
 }

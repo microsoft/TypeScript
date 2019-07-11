@@ -3,6 +3,8 @@
 ////  await "";
 ////  await 0;
 ////  (await "").toLowerCase();
+////  (await 0).toFixed();
+////  (await 3.2).toFixed();
 ////}
 
 verify.codeFix({
@@ -13,6 +15,8 @@ verify.codeFix({
   "";
   await 0;
   (await "").toLowerCase();
+  (await 0).toFixed();
+  (await 3.2).toFixed();
 }`
 });
 
@@ -24,5 +28,7 @@ verify.codeFixAll({
   "";
   0;
   "".toLowerCase();
+  (0).toFixed();
+  3.2.toFixed();
 }`
 });
