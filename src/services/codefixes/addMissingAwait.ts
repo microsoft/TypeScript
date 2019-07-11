@@ -21,6 +21,7 @@ namespace ts.codefix {
         Diagnostics.Type_0_must_have_a_Symbol_iterator_method_that_returns_an_iterator.code,
         Diagnostics.Type_0_must_have_a_Symbol_asyncIterator_method_that_returns_an_async_iterator.code,
         Diagnostics.Argument_of_type_0_is_not_assignable_to_parameter_of_type_1.code,
+        Diagnostics.Property_0_does_not_exist_on_type_1.code,
         ...callableConstructableErrorCodes,
     ];
 
