@@ -20,4 +20,6 @@ declare const a: string | undefined;
 declare const foo: {
     a: string;
 };
-declare const bar: {};
+declare const bar: {
+    a?(): void;
+};

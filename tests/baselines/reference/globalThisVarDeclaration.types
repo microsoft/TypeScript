@@ -25,24 +25,24 @@ globalThis.b;
 
 // DOM access is not supported until the index signature is handled more strictly
 self.a;
->self.a : any
->self : Window
->a : any
+>self.a : number
+>self : Window & typeof globalThis
+>a : number
 
 self.b;
->self.b : any
->self : Window
->b : any
+>self.b : number
+>self : Window & typeof globalThis
+>b : number
 
 window.a;
->window.a : any
->window : Window
->a : any
+>window.a : number
+>window : Window & typeof globalThis
+>a : number
 
 window.b;
->window.b : any
->window : Window
->b : any
+>window.b : number
+>window : Window & typeof globalThis
+>b : number
 
 top.a;
 >top.a : any
@@ -81,24 +81,24 @@ globalThis.b;
 
 // same here -- no DOM access to globalThis yet
 self.a;
->self.a : any
->self : Window
->a : any
+>self.a : number
+>self : Window & typeof globalThis
+>a : number
 
 self.b;
->self.b : any
->self : Window
->b : any
+>self.b : number
+>self : Window & typeof globalThis
+>b : number
 
 window.a;
->window.a : any
->window : Window
->a : any
+>window.a : number
+>window : Window & typeof globalThis
+>a : number
 
 window.b;
->window.b : any
->window : Window
->b : any
+>window.b : number
+>window : Window & typeof globalThis
+>b : number
 
 top.a;
 >top.a : any

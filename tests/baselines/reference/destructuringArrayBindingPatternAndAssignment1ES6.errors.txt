@@ -1,6 +1,6 @@
-tests/cases/conformance/es6/destructuring/destructuringArrayBindingPatternAndAssignment1ES6.ts(43,6): error TS2525: Initializer provides no value for this binding element and the binding element has no default value.
-tests/cases/conformance/es6/destructuring/destructuringArrayBindingPatternAndAssignment1ES6.ts(44,8): error TS2525: Initializer provides no value for this binding element and the binding element has no default value.
-tests/cases/conformance/es6/destructuring/destructuringArrayBindingPatternAndAssignment1ES6.ts(44,18): error TS2525: Initializer provides no value for this binding element and the binding element has no default value.
+tests/cases/conformance/es6/destructuring/destructuringArrayBindingPatternAndAssignment1ES6.ts(43,6): error TS2493: Tuple type '[]' of length '0' has no element at index '0'.
+tests/cases/conformance/es6/destructuring/destructuringArrayBindingPatternAndAssignment1ES6.ts(44,8): error TS2493: Tuple type '[]' of length '0' has no element at index '0'.
+tests/cases/conformance/es6/destructuring/destructuringArrayBindingPatternAndAssignment1ES6.ts(44,18): error TS2493: Tuple type '[]' of length '0' has no element at index '0'.
 
 
 ==== tests/cases/conformance/es6/destructuring/destructuringArrayBindingPatternAndAssignment1ES6.ts (3 errors) ====
@@ -48,12 +48,12 @@ tests/cases/conformance/es6/destructuring/destructuringArrayBindingPatternAndAss
     var [c0, c1] = [...temp];
     var [c2] = [];
          ~~
-!!! error TS2525: Initializer provides no value for this binding element and the binding element has no default value.
+!!! error TS2493: Tuple type '[]' of length '0' has no element at index '0'.
     var [[[c3]], [[[[c4]]]]] = [[[]], [[[[]]]]]
            ~~
-!!! error TS2525: Initializer provides no value for this binding element and the binding element has no default value.
+!!! error TS2493: Tuple type '[]' of length '0' has no element at index '0'.
                      ~~
-!!! error TS2525: Initializer provides no value for this binding element and the binding element has no default value.
+!!! error TS2493: Tuple type '[]' of length '0' has no element at index '0'.
     var [[c5], c6]: [[string|number], boolean] = [[1], true];
     var [, c7] = [1, 2, 3];
     var [,,, c8] = [1, 2, 3, 4];

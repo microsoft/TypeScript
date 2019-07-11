@@ -58,7 +58,8 @@ lib/Page.js(189,15): error TS2503: Cannot find namespace 'Protocol'.
 lib/Page.js(284,15): error TS2503: Cannot find namespace 'Protocol'.
 lib/Page.js(369,20): error TS2503: Cannot find namespace 'Protocol'.
 lib/Page.js(432,7): error TS2740: Type '(...args: any[]) => Promise<any>' is missing the following properties from type 'Window': Blob, TextDecoder, TextEncoder, URL, and 232 more.
-lib/Page.js(442,9): error TS2349: Cannot invoke an expression whose type lacks a call signature. Type 'Window' has no compatible call signatures.
+lib/Page.js(442,9): error TS2349: This expression is not callable.
+  Type 'Window' has no call signatures.
 lib/Page.js(478,15): error TS2503: Cannot find namespace 'Protocol'.
 lib/Page.js(488,22): error TS2503: Cannot find namespace 'Protocol'.
 lib/Page.js(501,15): error TS2503: Cannot find namespace 'Protocol'.

@@ -1764,7 +1764,7 @@
         "category": "Error",
         "code": 2489
     },
-    "The type returned by the 'next()' method of an iterator must have a 'value' property.": {
+    "The type returned by the '{0}()' method of an iterator must have a 'value' property.": {
         "category": "Error",
         "code": 2490
     },
@@ -1992,7 +1992,7 @@
         "category": "Error",
         "code": 2546
     },
-    "The type returned by the 'next()' method of an async iterator must be a promise for a type with a 'value' property.": {
+    "The type returned by the '{0}()' method of an async iterator must be a promise for a type with a 'value' property.": {
         "category": "Error",
         "code": 2547
     },
@@ -2652,6 +2652,50 @@
     "Each member of the union type '{0}' has construct signatures, but none of those signatures are compatible with each other.": {
         "category": "Error",
         "code": 2762
+    },
+    "Cannot iterate value because the 'next' method of its iterator expects type '{1}', but for-of will always send '{0}'.": {
+        "category": "Error",
+        "code": 2763
+    },
+    "Cannot iterate value because the 'next' method of its iterator expects type '{1}', but array spread will always send '{0}'.": {
+        "category": "Error",
+        "code": 2764
+    },
+    "Cannot iterate value because the 'next' method of its iterator expects type '{1}', but array destructuring will always send '{0}'.": {
+        "category": "Error",
+        "code": 2765
+    },
+    "Cannot delegate iteration to value because the 'next' method of its iterator expects type '{1}', but the containing generator will always send '{0}'.": {
+        "category": "Error",
+        "code": 2766
+    },
+    "The '{0}' property of an iterator must be a method.": {
+        "category": "Error",
+        "code": 2767
+    },
+    "The '{0}' property of an async iterator must be a method.": {
+        "category": "Error",
+        "code": 2768
+    },
+    "No overload matches this call.": {
+        "category": "Error",
+        "code": 2769
+    },
+    "The last overload gave the following error.": {
+        "category": "Error",
+        "code": 2770
+    },
+    "The last overload is declared here.": {
+        "category": "Error",
+        "code": 2771
+    },
+    "Overload {0} of {1}, '{2}', gave the following error.": {
+        "category": "Error",
+        "code": 2772
+    },
+    "Did you forget to use 'await'?": {
+        "category": "Error",
+        "code": 2773
     },
 
     "Import declaration '{0}' is using private name '{1}'.": {
@@ -4218,7 +4262,7 @@
         "category": "Error",
         "code": 7024
     },
-    "Generator implicitly has type '{0}' because it does not yield any values. Consider supplying a return type.": {
+    "Generator implicitly has yield type '{0}' because it does not yield any values. Consider supplying a return type annotation.": {
         "category": "Error",
         "code": 7025
     },
@@ -4340,6 +4384,11 @@
         "category": "Error",
         "code": 7054
     },
+    "'{0}', which lacks return-type annotation, implicitly has an '{1}' yield type.": {
+        "category": "Error",
+        "code": 7055
+    },
+
     "You cannot rename this element.": {
         "category": "Error",
         "code": 8000
@@ -5033,6 +5082,14 @@
     "Infer 'this' type of '{0}' from usage": {
         "category": "Message",
         "code": 95080
+    },
+    "Add 'const' to unresolved variable": {
+        "category": "Message",
+        "code": 95081
+    },
+    "Add 'const' to all unresolved variables": {
+        "category": "Message",
+        "code": 95082
     },
     "No value exists in scope for the shorthand property '{0}'. Either declare one or provide an initializer.": {
         "category": "Error",

@@ -438,10 +438,13 @@ namespace ts.projectSystem {
     export function configuredProjectAt(projectService: server.ProjectService, index: number) {
         const values = projectService.configuredProjects.values();
         while (index > 0) {
-            values.next();
+            const iterResult = values.next();
+            if (iterResult.done) return Debug.fail("Expected a result.");
             index--;
         }
-        return values.next().value;
+        const iterResult = values.next();
+        if (iterResult.done) return Debug.fail("Expected a result.");
+        return iterResult.value;
     }
 
     export function checkProjectActualFiles(project: server.Project, expectedFiles: ReadonlyArray<string>) {

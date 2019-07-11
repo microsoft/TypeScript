@@ -1,10 +1,14 @@
-tests/cases/compiler/promiseTypeInference.ts(10,39): error TS2322: Type 'IPromise<number>' is not assignable to type 'number | PromiseLike<number>'.
-  Type 'IPromise<number>' is not assignable to type 'PromiseLike<number>'.
-    Types of property 'then' are incompatible.
-      Type '<U>(success?: (value: number) => IPromise<U>) => IPromise<U>' is not assignable to type '<TResult1 = number, TResult2 = never>(onfulfilled?: (value: number) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>) => PromiseLike<TResult1 | TResult2>'.
-        Types of parameters 'success' and 'onfulfilled' are incompatible.
-          Type 'TResult1 | PromiseLike<TResult1>' is not assignable to type 'IPromise<TResult1 | TResult2>'.
-            Type 'TResult1' is not assignable to type 'IPromise<TResult1 | TResult2>'.
+tests/cases/compiler/promiseTypeInference.ts(10,39): error TS2769: No overload matches this call.
+  Overload 1 of 2, '(success?: (value: string) => Promise<unknown>): Promise<unknown>', gave the following error.
+    Property 'catch' is missing in type 'IPromise<number>' but required in type 'Promise<unknown>'.
+  Overload 2 of 2, '(onfulfilled?: (value: string) => number | PromiseLike<number>, onrejected?: (reason: any) => PromiseLike<never>): Promise<number>', gave the following error.
+    Type 'IPromise<number>' is not assignable to type 'number | PromiseLike<number>'.
+      Type 'IPromise<number>' is not assignable to type 'PromiseLike<number>'.
+        Types of property 'then' are incompatible.
+          Type '<U>(success?: (value: number) => IPromise<U>) => IPromise<U>' is not assignable to type '<TResult1 = number, TResult2 = never>(onfulfilled?: (value: number) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>) => PromiseLike<TResult1 | TResult2>'.
+            Types of parameters 'success' and 'onfulfilled' are incompatible.
+              Type 'TResult1 | PromiseLike<TResult1>' is not assignable to type 'IPromise<TResult1 | TResult2>'.
+                Type 'TResult1' is not assignable to type 'IPromise<TResult1 | TResult2>'.
 
 
 ==== tests/cases/compiler/promiseTypeInference.ts (1 errors) ====
@@ -19,12 +23,18 @@ tests/cases/compiler/promiseTypeInference.ts(10,39): error TS2322: Type 'IPromis
     
     var $$x = load("something").then(s => convert(s));
                                           ~~~~~~~~~~
-!!! error TS2322: Type 'IPromise<number>' is not assignable to type 'number | PromiseLike<number>'.
-!!! error TS2322:   Type 'IPromise<number>' is not assignable to type 'PromiseLike<number>'.
-!!! error TS2322:     Types of property 'then' are incompatible.
-!!! error TS2322:       Type '<U>(success?: (value: number) => IPromise<U>) => IPromise<U>' is not assignable to type '<TResult1 = number, TResult2 = never>(onfulfilled?: (value: number) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>) => PromiseLike<TResult1 | TResult2>'.
-!!! error TS2322:         Types of parameters 'success' and 'onfulfilled' are incompatible.
-!!! error TS2322:           Type 'TResult1 | PromiseLike<TResult1>' is not assignable to type 'IPromise<TResult1 | TResult2>'.
-!!! error TS2322:             Type 'TResult1' is not assignable to type 'IPromise<TResult1 | TResult2>'.
+!!! error TS2769: No overload matches this call.
+!!! error TS2769:   Overload 1 of 2, '(success?: (value: string) => Promise<unknown>): Promise<unknown>', gave the following error.
+!!! error TS2769:     Property 'catch' is missing in type 'IPromise<number>' but required in type 'Promise<unknown>'.
+!!! error TS2769:   Overload 2 of 2, '(onfulfilled?: (value: string) => number | PromiseLike<number>, onrejected?: (reason: any) => PromiseLike<never>): Promise<number>', gave the following error.
+!!! error TS2769:     Type 'IPromise<number>' is not assignable to type 'number | PromiseLike<number>'.
+!!! error TS2769:       Type 'IPromise<number>' is not assignable to type 'PromiseLike<number>'.
+!!! error TS2769:         Types of property 'then' are incompatible.
+!!! error TS2769:           Type '<U>(success?: (value: number) => IPromise<U>) => IPromise<U>' is not assignable to type '<TResult1 = number, TResult2 = never>(onfulfilled?: (value: number) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>) => PromiseLike<TResult1 | TResult2>'.
+!!! error TS2769:             Types of parameters 'success' and 'onfulfilled' are incompatible.
+!!! error TS2769:               Type 'TResult1 | PromiseLike<TResult1>' is not assignable to type 'IPromise<TResult1 | TResult2>'.
+!!! error TS2769:                 Type 'TResult1' is not assignable to type 'IPromise<TResult1 | TResult2>'.
+!!! related TS2728 /.ts/lib.es5.d.ts:1413:5: 'catch' is declared here.
+!!! related TS6502 tests/cases/compiler/promiseTypeInference.ts:2:23: The expected type comes from the return type of this signature.
 !!! related TS6502 /.ts/lib.es5.d.ts:1406:57: The expected type comes from the return type of this signature.
     
