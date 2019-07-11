@@ -396,7 +396,8 @@ namespace ts.codefix {
         // "default" is a keyword and not a legal identifier for the import, so we don't expect it here
         Debug.assert(symbolName !== InternalSymbolName.Default);
 
-        const fixes = arrayFrom(flatMapIterator(getExportInfos(symbolName, getMeaningFromLocation(symbolToken), cancellationToken, sourceFile, checker, program, preferences, host).entries(), ([_, exportInfos]) =>
+        const exportInfos = getExportInfos(symbolName, getMeaningFromLocation(symbolToken), cancellationToken, sourceFile, checker, program, preferences, host);
+        const fixes = arrayFrom(flatMapIterator(exportInfos.entries(), ([_, exportInfos]) =>
             getFixForImport(exportInfos, symbolName, symbolToken.getStart(sourceFile), program, sourceFile, host, preferences)));
         return { fixes, symbolName };
     }
@@ -647,7 +648,7 @@ namespace ts.codefix {
                 redirectTargetsMap);
 
             // Paths here are not node_modules, so we don’t care about them;
-            // returning anyting will trigger a lookup in package.json.
+            // returning anything will trigger a lookup in package.json.
             if (!pathIsRelative(specifier) && !isRootedDiskPath(specifier)) {
                 const components = getPathComponents(getPackageNameFromTypesPackageName(specifier)).slice(1);
                 // Scoped packages
@@ -713,30 +714,16 @@ namespace ts.codefix {
 
     function createLazyPackageJsonDependencyReader(fromFile: SourceFile, host: LanguageServiceHost) {
         const packageJsonPaths = findPackageJsons(getDirectoryPath(fromFile.fileName), host);
-        const dependencyIterator = readPackageJsonDependencies();
+        const dependencyIterator = readPackageJsonDependencies(host, packageJsonPaths);
         let seenDeps: Map<true> | undefined;
-        function *readPackageJsonDependencies() {
-            type PackageJson = Record<typeof dependencyKeys[number], Record<string, string> | undefined>;
-            const dependencyKeys = ["dependencies", "devDependencies", "optionalDependencies"] as const;
-            for (const fileName of packageJsonPaths) {
-                const content = readJson(fileName, { readFile: host.readFile ? host.readFile.bind(host) : sys.readFile }) as PackageJson;
-                for (const key of dependencyKeys) {
-                    const dependencyHash = content[key];
-                    if (!dependencyHash) {
-                        continue;
-                    }
-                    for (const packageName in dependencyHash) {
-                        yield packageName;
-                    }
-                }
-            }
-        }
+        let usesNodeCoreModules: boolean | undefined;
+        return { allowsImporting };
 
         function containsDependency(dependency: string) {
             if ((seenDeps || (seenDeps = createMap())).has(dependency)) {
                 return true;
             }
-            let packageName: string;
+            let packageName: string | void;
             while (packageName = dependencyIterator.next().value) {
                 seenDeps.set(packageName, true);
                 if (packageName === dependency) {
@@ -746,7 +733,6 @@ namespace ts.codefix {
             return false;
         }
 
-        let usesNodeCoreModules: boolean | undefined;
         function allowsImporting(moduleSpecifier: string): boolean {
             if (!packageJsonPaths.length) {
                 return true;
@@ -768,12 +754,23 @@ namespace ts.codefix {
             return containsDependency(moduleSpecifier)
                 || containsDependency(getTypesPackageName(moduleSpecifier));
         }
+    }
 
-        return {
-            packageJsonPaths,
-            containsDependency,
-            allowsImporting
-        };
+    function *readPackageJsonDependencies(host: LanguageServiceHost, packageJsonPaths: string[]) {
+        type PackageJson = Record<typeof dependencyKeys[number], Record<string, string> | undefined>;
+        const dependencyKeys = ["dependencies", "devDependencies", "optionalDependencies"] as const;
+        for (const fileName of packageJsonPaths) {
+            const content = readJson(fileName, { readFile: host.readFile ? host.readFile.bind(host) : sys.readFile }) as PackageJson;
+            for (const key of dependencyKeys) {
+                const dependencies = content[key];
+                if (!dependencies) {
+                    continue;
+                }
+                for (const packageName in dependencies) {
+                    yield packageName;
+                }
+            }
+        }
     }
 
     function consumesNodeCoreModules(sourceFile: SourceFile): boolean {
