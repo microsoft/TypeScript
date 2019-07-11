@@ -1,7 +1,6 @@
 /* @internal */
 namespace ts.codefix {
     type ContextualTrackChangesFunction = (cb: (changeTracker: textChanges.ChangeTracker) => void) => FileTextChanges[];
-    const awaitPrecedence = getOperatorPrecedence(SyntaxKind.AwaitExpression, undefined!);
     const fixId = "addMissingAwait";
     const errorCodes = [
         Diagnostics.An_arithmetic_operand_must_be_of_type_any_number_bigint_or_an_enum_type.code,
@@ -139,13 +138,6 @@ namespace ts.codefix {
             return;
         }
 
-        const parentExpression = tryCast(insertionSite.parent, isExpression);
-        const awaitExpression = createAwait(insertionSite);
-        changeTracker.replaceRange(
-            sourceFile,
-            rangeOfNode(insertionSite),
-            parentExpression && getExpressionPrecedence(parentExpression) > awaitPrecedence
-                ? createParen(awaitExpression)
-                : awaitExpression);
+        changeTracker.replaceNode(sourceFile, insertionSite, createAwait(insertionSite));
     }
 }
