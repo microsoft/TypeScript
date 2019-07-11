@@ -2829,7 +2829,7 @@ Actual: ${stringify(fullActual)}`);
         }
 
         public verifyCodeFixAvailable(negative: boolean, expected: FourSlashInterface.VerifyCodeFixAvailableOptions[] | undefined): void {
-            assert(!negative || !expected);
+            assert(!(negative && expected), "Cannot provide an expected code fix with a negated assertion");
             const codeFixes = this.getCodeFixes(this.activeFile.fileName);
             const actuals = codeFixes.map((fix): FourSlashInterface.VerifyCodeFixAvailableOptions => ({ description: fix.description, commands: fix.commands }));
             this.assertObjectsEqual(actuals, negative ? ts.emptyArray : expected);
