@@ -29,7 +29,19 @@ namespace ts.codefix {
     registerCodeFix({
         fixIds: [fixId],
         errorCodes,
-        getCodeActions: getAllPossibleFixesForError,
+        getCodeActions: context => {
+            const { sourceFile, errorCode, span, cancellationToken, program } = context;
+            const expression = getAwaitableExpression(sourceFile, errorCode, span, cancellationToken, program);
+            if (!expression) {
+                return;
+            }
+
+            const checker = context.program.getTypeChecker();
+            const trackChanges: ContextualTrackChangesFunction = cb => textChanges.ChangeTracker.with(context, cb);
+            return compact([
+                getDeclarationSiteFix(context, expression, errorCode, checker, trackChanges),
+                getUseSiteFix(context, expression, errorCode, checker, trackChanges)]);
+        },
         getAllCodeActions: context => {
             const { sourceFile, program, cancellationToken } = context;
             const checker = context.program.getTypeChecker();
@@ -44,20 +56,6 @@ namespace ts.codefix {
             });
         },
     });
-
-    function getAllPossibleFixesForError(context: CodeFixContext) {
-        const { sourceFile, errorCode, span, cancellationToken, program } = context;
-        const expression = getAwaitableExpression(sourceFile, errorCode, span, cancellationToken, program);
-        if (!expression) {
-            return;
-        }
-
-        const checker = context.program.getTypeChecker();
-        const trackChanges: ContextualTrackChangesFunction = cb => textChanges.ChangeTracker.with(context, cb);
-        return compact([
-            getDeclarationSiteFix(context, expression, errorCode, checker, trackChanges),
-            getUseSiteFix(context, expression, errorCode, checker, trackChanges)]);
-    }
 
     function getDeclarationSiteFix(context: CodeFixContext | CodeFixAllContext, expression: Expression, errorCode: number, checker: TypeChecker, trackChanges: ContextualTrackChangesFunction) {
         const { sourceFile } = context;
