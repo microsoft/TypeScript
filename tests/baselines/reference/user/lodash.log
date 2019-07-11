@@ -173,7 +173,6 @@ node_modules/lodash/_overRest.js(24,27): error TS2532: Object is possibly 'undef
 node_modules/lodash/_overRest.js(27,27): error TS2532: Object is possibly 'undefined'.
 node_modules/lodash/_overRest.js(28,22): error TS2532: Object is possibly 'undefined'.
 node_modules/lodash/_overRest.js(31,15): error TS2538: Type 'undefined' cannot be used as an index type.
-node_modules/lodash/_root.js(4,56): error TS2339: Property 'Object' does not exist on type 'Window'.
 node_modules/lodash/_stackSet.js(21,22): error TS2339: Property '__data__' does not exist on type 'ListCache'.
 node_modules/lodash/_stackSet.js(24,26): error TS2339: Property 'size' does not exist on type 'ListCache'.
 node_modules/lodash/_unicodeWords.js(62,20): error TS8024: JSDoc '@param' tag has name 'The', but there is no parameter with that name.
@@ -197,7 +196,6 @@ node_modules/lodash/cloneDeep.js(26,27): error TS2345: Argument of type 'number'
 node_modules/lodash/cloneDeepWith.js(37,27): error TS2345: Argument of type 'number' is not assignable to parameter of type 'boolean'.
 node_modules/lodash/cloneWith.js(39,27): error TS2345: Argument of type 'number' is not assignable to parameter of type 'boolean'.
 node_modules/lodash/conforms.js(32,41): error TS2345: Argument of type 'number' is not assignable to parameter of type 'boolean'.
-node_modules/lodash/core.js(68,58): error TS2339: Property 'Object' does not exist on type 'Window'.
 node_modules/lodash/core.js(77,82): error TS2339: Property 'nodeType' does not exist on type 'NodeModule'.
 node_modules/lodash/core.js(540,31): error TS2322: Type '(value: any) => boolean' is not assignable to type 'boolean | undefined'.
   Type '(value: any) => boolean' is not assignable to type 'true'.
