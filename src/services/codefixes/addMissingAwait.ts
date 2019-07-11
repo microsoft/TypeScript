@@ -2,6 +2,7 @@
 namespace ts.codefix {
     type ContextualTrackChangesFunction = (cb: (changeTracker: textChanges.ChangeTracker) => void) => FileTextChanges[];
     const fixId = "addMissingAwait";
+    const propertyAccessCode = Diagnostics.Property_0_does_not_exist_on_type_1.code;
     const callableConstructableErrorCodes = [
         Diagnostics.This_expression_is_not_callable.code,
         Diagnostics.This_expression_is_not_constructable.code,
@@ -21,7 +22,7 @@ namespace ts.codefix {
         Diagnostics.Type_0_must_have_a_Symbol_iterator_method_that_returns_an_iterator.code,
         Diagnostics.Type_0_must_have_a_Symbol_asyncIterator_method_that_returns_an_async_iterator.code,
         Diagnostics.Argument_of_type_0_is_not_assignable_to_parameter_of_type_1.code,
-        Diagnostics.Property_0_does_not_exist_on_type_1.code,
+        propertyAccessCode,
         ...callableConstructableErrorCodes,
     ];
 
@@ -139,6 +140,12 @@ namespace ts.codefix {
             const newRight = checker.getPromisedTypeOfPromise(rightType) ? createAwait(right) : right;
             changeTracker.replaceNode(sourceFile, left, newLeft);
             changeTracker.replaceNode(sourceFile, right, newRight);
+        }
+        else if (errorCode === propertyAccessCode && isPropertyAccessExpression(insertionSite.parent)) {
+            changeTracker.replaceNode(
+                sourceFile,
+                insertionSite.parent.expression,
+                createParen(createAwait(insertionSite.parent.expression)));
         }
         else if (contains(callableConstructableErrorCodes, errorCode) && isCallOrNewExpression(insertionSite.parent)) {
             changeTracker.replaceNode(sourceFile, insertionSite, createParen(createAwait(insertionSite)));
