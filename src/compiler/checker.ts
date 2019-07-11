@@ -3699,14 +3699,10 @@ namespace ts {
                         return createInferTypeNode(typeParameterToDeclarationWithConstraint(type as TypeParameter, context, /*constraintNode*/ undefined));
                     }
                     if (context.flags & NodeBuilderFlags.GenerateNamesForShadowedTypeParams &&
-                        type.flags & TypeFlags.TypeParameter &&
-                        length(type.symbol.declarations) &&
-                        isTypeParameterDeclaration(type.symbol.declarations[0]) &&
-                        typeParameterShadowsNameInScope(type, context) &&
                         !isTypeSymbolAccessible(type.symbol, context.enclosingDeclaration)) {
-                        const name = (type.symbol.declarations[0] as TypeParameterDeclaration).name;
+                        const name = typeParameterToName(type, context);
                         context.approximateLength += idText(name).length;
-                        return createTypeReferenceNode(getGeneratedNameForNode(name, GeneratedIdentifierFlags.Optimistic | GeneratedIdentifierFlags.ReservedInNestedScopes), /*typeArguments*/ undefined);
+                        return createTypeReferenceNode(createIdentifier(idText(name)), /*typeArguments*/ undefined);
                     }
                     // Ignore constraint/default when creating a usage (as opposed to declaration) of a type parameter.
                     return type.symbol
@@ -4237,21 +4233,10 @@ namespace ts {
                 return createSignatureDeclaration(kind, typeParameters, parameters, returnTypeNode, typeArguments);
             }
 
-            function typeParameterShadowsNameInScope(type: TypeParameter, context: NodeBuilderContext) {
-                return !!resolveName(context.enclosingDeclaration, type.symbol.escapedName, SymbolFlags.Type, /*nameNotFoundArg*/ undefined, type.symbol.escapedName, /*isUse*/ false);
-            }
-
             function typeParameterToDeclarationWithConstraint(type: TypeParameter, context: NodeBuilderContext, constraintNode: TypeNode | undefined): TypeParameterDeclaration {
                 const savedContextFlags = context.flags;
                 context.flags &= ~NodeBuilderFlags.WriteTypeParametersInQualifiedName; // Avoids potential infinite loop when building for a claimspace with a generic
-                const shouldUseGeneratedName =
-                    context.flags & NodeBuilderFlags.GenerateNamesForShadowedTypeParams &&
-                    type.symbol.declarations && type.symbol.declarations[0] &&
-                    isTypeParameterDeclaration(type.symbol.declarations[0]) &&
-                    typeParameterShadowsNameInScope(type, context);
-                const name = shouldUseGeneratedName
-                    ? getGeneratedNameForNode((type.symbol.declarations[0] as TypeParameterDeclaration).name, GeneratedIdentifierFlags.Optimistic | GeneratedIdentifierFlags.ReservedInNestedScopes)
-                    : symbolToName(type.symbol, context, SymbolFlags.Type, /*expectsIdentifier*/ true);
+                const name = typeParameterToName(type, context);
                 const defaultParameter = getDefaultFromTypeParameter(type);
                 const defaultParameterNode = defaultParameter && typeToTypeNodeHelper(defaultParameter, context);
                 context.flags = savedContextFlags;
@@ -4584,6 +4569,35 @@ namespace ts {
                 }
             }
 
+            function typeParameterShadowsNameInScope(escapedName: __String, context: NodeBuilderContext) {
+                return !!resolveName(context.enclosingDeclaration, escapedName, SymbolFlags.Type, /*nameNotFoundArg*/ undefined, escapedName, /*isUse*/ false);
+            }
+
+            function typeParameterToName(type: TypeParameter, context: NodeBuilderContext) {
+                if (context.flags & NodeBuilderFlags.GenerateNamesForShadowedTypeParams && context.typeParameterNames) {
+                    const cached = context.typeParameterNames.get("" + getTypeId(type));
+                    if (cached) {
+                        return cached;
+                    }
+                }
+                let result = symbolToName(type.symbol, context, SymbolFlags.Type, /*expectsIdentifier*/ true);
+                if (context.flags & NodeBuilderFlags.GenerateNamesForShadowedTypeParams) {
+                    const rawtext = result.escapedText as string;
+                    let i = 0;
+                    let text = rawtext;
+                    while ((context.typeParameterNamesByText && context.typeParameterNamesByText.get(text)) || typeParameterShadowsNameInScope(text as __String, context)) {
+                        i++;
+                        text = `${rawtext}_${i}`;
+                    }
+                    if (text !== rawtext) {
+                        result = createIdentifier(text, result.typeArguments);
+                    }
+                    (context.typeParameterNames || (context.typeParameterNames = createMap())).set("" + getTypeId(type), result);
+                    (context.typeParameterNamesByText || (context.typeParameterNamesByText = createMap())).set(result.escapedText as string, true);
+                }
+                return result;
+            }
+
             function symbolToName(symbol: Symbol, context: NodeBuilderContext, meaning: SymbolFlags, expectsIdentifier: true): Identifier;
             function symbolToName(symbol: Symbol, context: NodeBuilderContext, meaning: SymbolFlags, expectsIdentifier: false): EntityName;
             function symbolToName(symbol: Symbol, context: NodeBuilderContext, meaning: SymbolFlags, expectsIdentifier: boolean): EntityName {
@@ -4745,6 +4759,8 @@ namespace ts {
             approximateLength: number;
             truncating?: boolean;
             typeParameterSymbolList?: Map<true>;
+            typeParameterNames?: Map<Identifier>;
+            typeParameterNamesByText?: Map<true>;
         }
 
         function isDefaultBindingContext(location: Node) {
