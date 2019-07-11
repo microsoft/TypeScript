@@ -1325,7 +1325,7 @@ namespace ts.Completions {
             /** Bucket B */
             const aliasesToAlreadyIncludedSymbols = createMap<true>();
             /** Bucket C */
-            const aliasesToReturnIfOriginalsAreMissing = createMap<{ alias: Symbol, moduleSymbol: Symbol, insertAt: number }>();
+            const aliasesToReturnIfOriginalsAreMissing = createMap<{ alias: Symbol, moduleSymbol: Symbol }>();
 
             codefix.forEachExternalModuleToImportFrom(typeChecker, host, preferences, program.redirectTargetsMap, sourceFile, program.getSourceFiles(), moduleSymbol => {
                 // Perf -- ignore other modules if this is a request for details
@@ -1363,7 +1363,7 @@ namespace ts.Completions {
                         const nearestExportSymbolId = getSymbolId(Debug.assertDefined(getNearestExportSymbol(symbol)));
                         const symbolHasBeenSeen = !!symbolToOriginInfoMap[nearestExportSymbolId] || aliasesToAlreadyIncludedSymbols.has(nearestExportSymbolId.toString());
                         if (!symbolHasBeenSeen) {
-                            aliasesToReturnIfOriginalsAreMissing.set(nearestExportSymbolId.toString(), { alias: symbol, moduleSymbol, insertAt: symbols.length });
+                            aliasesToReturnIfOriginalsAreMissing.set(nearestExportSymbolId.toString(), { alias: symbol, moduleSymbol });
                             aliasesToAlreadyIncludedSymbols.set(getSymbolId(symbol).toString(), true);
                         }
                         else {
@@ -1382,16 +1382,16 @@ namespace ts.Completions {
 
             // By this point, any potential duplicates that were actually duplicates have been
             // removed, so the rest need to be added. (Step 4 in diagrammed example)
-            aliasesToReturnIfOriginalsAreMissing.forEach(({ alias, moduleSymbol, insertAt }) => pushSymbol(alias, moduleSymbol, insertAt));
+            aliasesToReturnIfOriginalsAreMissing.forEach(({ alias, moduleSymbol }) => pushSymbol(alias, moduleSymbol));
 
-            function pushSymbol(symbol: Symbol, moduleSymbol: Symbol, insertAt = symbols.length) {
+            function pushSymbol(symbol: Symbol, moduleSymbol: Symbol) {
                 const isDefaultExport = symbol.escapedName === InternalSymbolName.Default;
                 if (isDefaultExport) {
                     symbol = getLocalSymbolForExportDefault(symbol) || symbol;
                 }
                 const origin: SymbolOriginInfoExport = { kind: SymbolOriginInfoKind.Export, moduleSymbol, isDefaultExport };
                 if (detailsEntryId || stringContainsCharactersInOrder(getSymbolName(symbol, origin, target).toLowerCase(), tokenTextLowerCase)) {
-                    symbols.splice(insertAt, 0, symbol);
+                    symbols.push(symbol);
                     symbolToSortTextMap[getSymbolId(symbol)] = SortText.AutoImportSuggestions;
                     symbolToOriginInfoMap[getSymbolId(symbol)] = origin;
                 }
