@@ -548,7 +548,6 @@ declare namespace FourSlashInterface {
         readonly kind?: string;
         readonly kindModifiers?: string;
         readonly sortText?: completion.SortText;
-        readonly isFulfilled?: boolean;
 
         // details
         readonly text?: string;

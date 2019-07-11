@@ -21,9 +21,9 @@
 verify.completions({
   marker: ['a'],
   exact: [
-    { name: 'B', isFulfilled: true, kindModifiers: 'optional', sortText: completion.SortText.LocationPriorityFulfilled, kind: 'property' },
-    { name: 'a', isFulfilled: true, sortText: completion.SortText.LocationPriorityFulfilled, kind: 'property' },
-    { name: 'c', isFulfilled: false, kindModifiers: 'optional', sortText: completion.SortText.LocationPriorityOptional, kind: 'property' },
-    { name: 'd', isFulfilled: false, sortText: completion.SortText.LocationPriority, kind: 'property' }
+    { name: 'B', kindModifiers: 'optional', sortText: completion.SortText.LocationPriorityFulfilled, kind: 'property' },
+    { name: 'a', sortText: completion.SortText.LocationPriorityFulfilled, kind: 'property' },
+    { name: 'c', kindModifiers: 'optional', sortText: completion.SortText.LocationPriorityOptional, kind: 'property' },
+    { name: 'd', sortText: completion.SortText.LocationPriority, kind: 'property' }
   ]
 });

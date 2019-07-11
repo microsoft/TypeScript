@@ -844,11 +844,8 @@ namespace FourSlash {
 
             let isSortTextEqual: boolean;
             if (!sortText) {
-                isSortTextEqual = actual.isFulfilled
-                    ? actual.sortText === ts.Completions.SortText.LocationPriorityFulfilled
-                    : actual.kindModifiers === 'optional'
-                    ? actual.sortText === ts.Completions.SortText.LocationPriorityOptional
-                    : actual.sortText === ts.Completions.SortText.LocationPriority
+                isSortTextEqual = [ts.Completions.SortText.LocationPriorityFulfilled, ts.Completions.SortText.LocationPriority].indexOf(actual.sortText as ts.Completions.SortText) !== -1
+                    || (actual.kindModifiers === "optional" && actual.sortText === ts.Completions.SortText.LocationPriorityOptional);
             }
             else {
                 isSortTextEqual = actual.sortText === sortText;

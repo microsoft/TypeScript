@@ -919,7 +919,6 @@ namespace ts {
         hasAction?: true;
         source?: string;
         isRecommended?: true;
-        isFulfilled?: boolean;
     }
 
     export interface CompletionEntryDetails {

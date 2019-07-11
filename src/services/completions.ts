@@ -244,7 +244,6 @@ namespace ts.Completions {
         propertyAccessToConvert: PropertyAccessExpression | undefined,
         isJsxInitializer: IsJsxInitializer | undefined,
         preferences: UserPreferences,
-        isFulfilled: boolean
     ): CompletionEntry | undefined {
         let insertText: string | undefined;
         let replacementSpan: TextSpan | undefined;
@@ -291,7 +290,6 @@ namespace ts.Completions {
             isRecommended: trueOrUndefined(isRecommendedCompletionMatch(symbol, recommendedCompletion, typeChecker)),
             insertText,
             replacementSpan,
-            isFulfilled
         };
     }
 
@@ -343,17 +341,17 @@ namespace ts.Completions {
             }
 
             let sortText = symbolToSortTextMap && symbolToSortTextMap[getSymbolId(symbol)];
-            let isFulfilled = false;
             if (!sortText) {
-                fulfilledSymbols && fulfilledSymbols.forEach(fulfilledSymbol => {
-                    if (fulfilledSymbol.name === symbol.name) {
-                        sortText = SortText.LocationPriorityFulfilled;
-                        isFulfilled = true;
-                    }
-                });
+                if (fulfilledSymbols && fulfilledSymbols.length > 0) {
+                    fulfilledSymbols.forEach(fulfilledSymbol => {
+                        if (fulfilledSymbol.name === symbol.name) {
+                            sortText = SortText.LocationPriorityFulfilled;
+                        }
+                    });
+                }
             }
             if (!sortText) {
-                sortText = SymbolDisplay.getSymbolModifiers(symbol) === 'optional' ? SortText.LocationPriorityOptional : SortText.LocationPriority;
+                sortText = SymbolDisplay.getSymbolModifiers(symbol) === "optional" ? SortText.LocationPriorityOptional : SortText.LocationPriority;
             }
 
             const entry = createCompletionEntry(
@@ -369,7 +367,6 @@ namespace ts.Completions {
                 propertyAccessToConvert,
                 isJsxInitializer,
                 preferences,
-                isFulfilled
             );
             if (!entry) {
                 continue;
@@ -1519,14 +1516,16 @@ namespace ts.Completions {
             if (typeMembers && typeMembers.length > 0) {
                 // Add filtered items to the completion list
                 symbols = filterObjectMembersList(typeMembers, Debug.assertDefined(existingMembers));
-                existingMembers && existingMembers.forEach(member => {
-                    if (member.kind === SyntaxKind.SpreadAssignment) {
-                        const expression = (<SpreadAssignment>member).expression;
-                        const symbol = typeChecker.getSymbolAtLocation(expression);
-                        const type = symbol && typeChecker.getTypeOfSymbolAtLocation(symbol, expression);
-                        fulfilledSymbols = type && (<ObjectType>type).properties;
-                    }
-                });
+                if (existingMembers && existingMembers.length > 0) {
+                    existingMembers.forEach(member => {
+                        if (member.kind === SyntaxKind.SpreadAssignment) {
+                            const expression = (<SpreadAssignment>member).expression;
+                            const symbol = typeChecker.getSymbolAtLocation(expression);
+                            const type = symbol && typeChecker.getTypeOfSymbolAtLocation(symbol, expression);
+                            fulfilledSymbols = type && (<ObjectType>type).properties;
+                        }
+                    });
+                }
             }
             return GlobalsSearch.Success;
         }
