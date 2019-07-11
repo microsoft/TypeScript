@@ -2844,7 +2844,7 @@ Actual: ${stringify(fullActual)}`);
                 }
             }
             else if (typeof expected === "string") {
-                this.assertObjectsEqual(codeFixes.map(({ fixName }) => fixName), [expected]);
+                this.assertObjectsEqual(codeFixes.map(fix => fix.fixName), [expected]);
             }
             else {
                 const actuals = codeFixes.map((fix): FourSlashInterface.VerifyCodeFixAvailableOptions => ({ description: fix.description, commands: fix.commands }));
