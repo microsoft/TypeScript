@@ -7247,9 +7247,11 @@ namespace ts {
         }
 
         function combineUnionParameters(left: Signature, right: Signature) {
-            const longest = getParameterCount(left) >= getParameterCount(right) ? left : right;
+            const leftCount = getParameterCount(left);
+            const rightCount = getParameterCount(right);
+            const longest = leftCount >= rightCount ? left : right;
             const shorter = longest === left ? right : left;
-            const longestCount = getParameterCount(longest);
+            const longestCount = longest === left ? leftCount : rightCount;
             const eitherHasEffectiveRest = (hasEffectiveRestParameter(left) || hasEffectiveRestParameter(right));
             const needsExtraRestElement = eitherHasEffectiveRest && !hasEffectiveRestParameter(longest);
             const params = new Array<Symbol>(longestCount + (needsExtraRestElement ? 1 : 0));
@@ -7259,11 +7261,16 @@ namespace ts {
                 const unionParamType = getIntersectionType([longestParamType, shorterParamType]);
                 const isRestParam = eitherHasEffectiveRest && !needsExtraRestElement && i === (longestCount - 1);
                 const isOptional = i >= getMinArgumentCount(longest) && i >= getMinArgumentCount(shorter);
-                const leftName = getParameterNameAtPosition(left, i);
-                const rightName = getParameterNameAtPosition(right, i);
+                const leftName = i >= leftCount ? undefined : getParameterNameAtPosition(left, i);
+                const rightName = i >= rightCount ? undefined : getParameterNameAtPosition(right, i);
+
+                const paramName = leftName === rightName ? leftName :
+                    !leftName ? rightName :
+                    !rightName ? leftName :
+                    undefined;
                 const paramSymbol = createSymbol(
                     SymbolFlags.FunctionScopedVariable | (isOptional && !isRestParam ? SymbolFlags.Optional : 0),
-                    leftName === rightName ? leftName : `arg${i}` as __String
+                    paramName || `arg${i}` as __String
                 );
                 paramSymbol.type = isRestParam ? createArrayType(unionParamType) : unionParamType;
                 params[i] = paramSymbol;
