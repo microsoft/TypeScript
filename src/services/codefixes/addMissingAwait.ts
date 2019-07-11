@@ -140,7 +140,7 @@ namespace ts.codefix {
     }
 
     function isInsideAwaitableBody(node: Node) {
-        return !!findAncestor(node, ancestor =>
+        return node.kind & NodeFlags.AwaitContext || !!findAncestor(node, ancestor =>
             ancestor.parent && isArrowFunction(ancestor.parent) && ancestor.parent.body === ancestor ||
             isBlock(ancestor) && (
                 ancestor.parent.kind === SyntaxKind.FunctionDeclaration ||
