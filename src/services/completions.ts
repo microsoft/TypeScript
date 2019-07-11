@@ -1351,7 +1351,7 @@ namespace ts.Completions {
                     if (typeChecker.getMergedSymbol(symbol.parent!) !== resolvedModuleSymbol) {
                         continue;
                     }
-                    // If `!!d.name.originalKeywordKind`, this is `export { _break as break };` -- skip this and prefer the keyword completion.
+                    // If this is `export { _break as break };` (a keyword) -- skip this and prefer the keyword completion.
                     if (some(symbol.declarations, d => isExportSpecifier(d) && !!d.propertyName && isIdentifierANonContextualKeyword(d.name))) {
                         continue;
                     }
@@ -1397,10 +1397,8 @@ namespace ts.Completions {
         }
 
         function getNearestExportSymbol(fromSymbol: Symbol) {
-            return forEachAlias(typeChecker, fromSymbol, alias => {
-                if (some(alias.declarations, d => isExportSpecifier(d) || !!d.localSymbol)) {
-                    return alias;
-                }
+            return findAlias(typeChecker, fromSymbol, alias => {
+                return some(alias.declarations, d => isExportSpecifier(d) || !!d.localSymbol);
             });
         }
 
@@ -2330,12 +2328,11 @@ namespace ts.Completions {
         return nodeIsMissing(left);
     }
 
-    function forEachAlias<T>(typeChecker: TypeChecker, symbol: Symbol, predicateMapper: (symbol: Symbol) => T | undefined): T | undefined {
+    function findAlias(typeChecker: TypeChecker, symbol: Symbol, predicate: (symbol: Symbol) => boolean): Symbol | undefined {
         let currentAlias: Symbol | undefined = symbol;
         while (currentAlias.flags & SymbolFlags.Alias && (currentAlias = typeChecker.getImmediateAliasedSymbol(currentAlias))) {
-            const mappedValue = predicateMapper(currentAlias);
-            if (mappedValue) {
-                return mappedValue;
+            if (predicate(currentAlias)) {
+                return currentAlias;
             }
         }
     }
