@@ -482,7 +482,6 @@ namespace ts.formatting {
                 case SyntaxKind.ArrayLiteralExpression:
                 case SyntaxKind.Block:
                 case SyntaxKind.ModuleBlock:
-                case SyntaxKind.ObjectLiteralExpression:
                 case SyntaxKind.TypeLiteral:
                 case SyntaxKind.MappedType:
                 case SyntaxKind.TupleType:
@@ -524,6 +523,8 @@ namespace ts.formatting {
                         return rangeIsOnOneLine(sourceFile, child!);
                     }
                     return true;
+                case SyntaxKind.CallExpression:
+                    return childKind !== SyntaxKind.ObjectLiteralExpression
                 case SyntaxKind.DoStatement:
                 case SyntaxKind.WhileStatement:
                 case SyntaxKind.ForInStatement:
