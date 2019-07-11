@@ -1358,9 +1358,10 @@ namespace ts.Completions {
                     // If `!!d.parent.parent.moduleSpecifier`, this is `export { foo } from "foo"` re-export, which creates a new symbol (thus isn't caught by the first check).
                     if (some(symbol.declarations, d => isExportSpecifier(d) && !d.propertyName && !!d.parent.parent.moduleSpecifier)) {
                         // Walk the export chain back one module (step 1 or 2 in diagrammed example)
-                        const nearestExportSymbol = Debug.assertDefined(getNearestExportSymbol(symbol));
-                        if (!symbolHasBeenSeen(nearestExportSymbol)) {
-                            aliasesToReturnIfOriginalsAreMissing.set(getSymbolId(nearestExportSymbol).toString(), { alias: symbol, moduleSymbol, insertAt: symbols.length });
+                        const nearestExportSymbolId = getSymbolId(Debug.assertDefined(getNearestExportSymbol(symbol)));
+                        const symbolHasBeenSeen = !!symbolToOriginInfoMap[nearestExportSymbolId] || aliasesToAlreadyIncludedSymbols.has(nearestExportSymbolId.toString());
+                        if (!symbolHasBeenSeen) {
+                            aliasesToReturnIfOriginalsAreMissing.set(nearestExportSymbolId.toString(), { alias: symbol, moduleSymbol, insertAt: symbols.length });
                             aliasesToAlreadyIncludedSymbols.set(getSymbolId(symbol).toString(), true);
                         }
                         else {
@@ -1392,11 +1393,6 @@ namespace ts.Completions {
                     symbolToSortTextMap[getSymbolId(symbol)] = SortText.AutoImportSuggestions;
                     symbolToOriginInfoMap[getSymbolId(symbol)] = origin;
                 }
-            }
-
-            function symbolHasBeenSeen(symbol: Symbol) {
-                const symbolId = getSymbolId(symbol);
-                return !!symbolToOriginInfoMap[symbolId] || aliasesToAlreadyIncludedSymbols.has(symbolId.toString());
             }
         }
 
