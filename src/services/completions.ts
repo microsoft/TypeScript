@@ -1316,6 +1316,8 @@ namespace ts.Completions {
          * 4. After we’ve iterated through every symbol of every module, any symbol left in Bucket C means that step 3 didn’t
          *    occur for that symbol---that is, the original symbol is not in Bucket A, so we should include the alias. Move
          *    everything from Bucket C to Bucket A.
+         *
+         * Note: Bucket A is passed in as the parameter `symbols` and mutated.
          */
         function getSymbolsFromOtherSourceFileExports(/** Bucket A */ symbols: Symbol[], tokenText: string, target: ScriptTarget, host: LanguageServiceHost): void {
             const tokenTextLowerCase = tokenText.toLowerCase();
