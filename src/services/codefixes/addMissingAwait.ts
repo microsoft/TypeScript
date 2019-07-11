@@ -88,6 +88,9 @@ namespace ts.codefix {
 
     function getAwaitableExpression(sourceFile: SourceFile, errorCode: number, span: TextSpan, cancellationToken: CancellationToken, program: Program): Expression | undefined {
         const token = getTokenAtPosition(sourceFile, span.start);
+        // Checker has already done work to determine that await might be possible, and has attached
+        // related info to the node, so start by finding the expression that exactly matches up
+        // with the diagnostic range.
         const expression = findAncestor(token, node => {
             if (node.getStart(sourceFile) < span.start || node.getEnd() > textSpanEnd(span)) {
                 return "quit";
@@ -95,7 +98,11 @@ namespace ts.codefix {
             return isExpression(node) && textSpansEqual(span, createTextSpanFromNode(node, sourceFile));
         }) as Expression | undefined;
 
-        return isMissingAwaitError(sourceFile, errorCode, span, cancellationToken, program) ? expression : undefined;
+        return expression
+            && isMissingAwaitError(sourceFile, errorCode, span, cancellationToken, program)
+            && isInsideAwaitableBody(expression)
+                ? expression
+                : undefined;
     }
 
     function findAwaitableInitializer(expression: Node, sourceFile: SourceFile, checker: TypeChecker): Expression | undefined {
@@ -116,7 +123,8 @@ namespace ts.codefix {
             !declaration.initializer ||
             variableStatement.getSourceFile() !== sourceFile ||
             hasModifier(variableStatement, ModifierFlags.Export) ||
-            !variableName) {
+            !variableName ||
+            !isInsideAwaitableBody(declaration.initializer)) {
             return;
         }
 
@@ -129,6 +137,16 @@ namespace ts.codefix {
         }
 
         return declaration.initializer;
+    }
+
+    function isInsideAwaitableBody(node: Node) {
+        return !!findAncestor(node, ancestor =>
+            ancestor.parent && isArrowFunction(ancestor.parent) && ancestor.parent.body === ancestor ||
+            isBlock(ancestor) && (
+                ancestor.parent.kind === SyntaxKind.FunctionDeclaration ||
+                ancestor.parent.kind === SyntaxKind.FunctionExpression ||
+                ancestor.parent.kind === SyntaxKind.ArrowFunction ||
+                ancestor.parent.kind === SyntaxKind.MethodDeclaration));
     }
 
     function makeChange(changeTracker: textChanges.ChangeTracker, errorCode: number, sourceFile: SourceFile, checker: TypeChecker, insertionSite: Expression) {
