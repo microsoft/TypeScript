@@ -2,6 +2,7 @@
 ////async function f() {
 ////  await "";
 ////  await 0;
+////  (await "").toLowerCase();
 ////}
 
 verify.codeFix({
@@ -11,6 +12,7 @@ verify.codeFix({
 `async function f() {
   "";
   await 0;
+  (await "").toLowerCase();
 }`
 });
 
@@ -21,5 +23,6 @@ verify.codeFixAll({
 `async function f() {
   "";
   0;
+  "".toLowerCase();
 }`
 });
