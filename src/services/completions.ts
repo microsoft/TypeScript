@@ -1239,6 +1239,9 @@ namespace ts.Completions {
                     case SyntaxKind.AsKeyword:
                         return parentKind === SyntaxKind.AsExpression;
 
+                    case SyntaxKind.LessThanToken:
+                        return parentKind === SyntaxKind.TypeReference;
+
                     case SyntaxKind.ExtendsKeyword:
                         return parentKind === SyntaxKind.TypeParameter;
                 }
