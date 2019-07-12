@@ -1349,18 +1349,17 @@ namespace ts.Completions {
                 }
 
                 for (const symbol of typeChecker.getExportsOfModule(moduleSymbol)) {
-                    // If `symbol.parent !== ...`, this is an `export * from "foo"` re-export. Those don't create new symbols.
-                    if (typeChecker.getMergedSymbol(symbol.parent!) !== resolvedModuleSymbol) {
-                        continue;
-                    }
                     // If this is `export { _break as break };` (a keyword) -- skip this and prefer the keyword completion.
                     if (some(symbol.declarations, d => isExportSpecifier(d) && !!d.propertyName && isIdentifierANonContextualKeyword(d.name))) {
                         continue;
                     }
+                    // If `symbol.parent !== moduleSymbol`, this is an `export * from "foo"` re-export. Those don't create new symbols.
+                    const isExportStarFromReExport = typeChecker.getMergedSymbol(symbol.parent!) !== resolvedModuleSymbol;
                     // If `!!d.parent.parent.moduleSpecifier`, this is `export { foo } from "foo"` re-export, which creates a new symbol (thus isn't caught by the first check).
-                    if (some(symbol.declarations, d => isExportSpecifier(d) && !d.propertyName && !!d.parent.parent.moduleSpecifier)) {
-                        // Walk the export chain back one module (step 1 or 2 in diagrammed example)
-                        const nearestExportSymbolId = getSymbolId(Debug.assertDefined(getNearestExportSymbol(symbol)));
+                    if (isExportStarFromReExport || some(symbol.declarations, d => isExportSpecifier(d) && !d.propertyName && !!d.parent.parent.moduleSpecifier)) {
+                        // Walk the export chain back one module (step 1 or 2 in diagrammed example).
+                        // Or, in the case of `export * from "foo"`, `symbol` already points to the original export, so just use that.
+                        const nearestExportSymbolId = getSymbolId(isExportStarFromReExport ? symbol : Debug.assertDefined(getNearestExportSymbol(symbol)));
                         const symbolHasBeenSeen = !!symbolToOriginInfoMap[nearestExportSymbolId] || aliasesToAlreadyIncludedSymbols.has(nearestExportSymbolId.toString());
                         if (!symbolHasBeenSeen) {
                             aliasesToReturnIfOriginalsAreMissing.set(nearestExportSymbolId.toString(), { alias: symbol, moduleSymbol });
