@@ -185,3 +185,15 @@ export class O extends N {
         this.another2 = param;
     }
 }
+
+var x = /** @type {*} */(null);
+
+export class VariableBase extends x {}
+
+export class HasStatics {
+    static staticMethod() {}
+}
+
+export class ExtendsStatics extends HasStatics {
+    static also() {}
+}

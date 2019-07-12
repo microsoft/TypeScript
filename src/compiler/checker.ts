@@ -4973,7 +4973,6 @@ namespace ts {
                                 /*modifiers*/ undefined,
                                 typeToTypeNodeHelper(typeExpr ? getTypeFromTypeNode(typeExpr) : errorType, context)
                             ), modifierFlags);
-                        
                         }
                         else {
                             addResult(createEnumDeclaration(
@@ -4996,10 +4995,11 @@ namespace ts {
                         const typeParamDecls = map(localParams, p => typeParameterToDeclaration(p, context));
                         const classType = getDeclaredTypeOfClassOrInterface(symbol);
                         const baseTypes = getBaseTypes(classType); // classes should only have one base type
-                        const heritageClauses = !length(baseTypes) ? undefined : [createHeritageClause(SyntaxKind.ExtendsKeyword, map(baseTypes, serializeBaseType))];
+                        const heritageClauses = !length(baseTypes) ? undefined : [createHeritageClause(SyntaxKind.ExtendsKeyword, map(baseTypes, b => serializeBaseType(b, localName)))];
                         const members = flatMap<Symbol, ClassElement>(getPropertiesOfType(classType), p => serializePropertySymbolForClass(p, /*isStatic*/ false, baseTypes[0]));
                         const staticType = getTypeOfSymbol(symbol);
-                        const staticMembers = flatMap<Symbol, ClassElement>(getPropertiesOfType(staticType), p => serializePropertySymbolForClass(p, /*isStatic*/ true, /*staticBase*/ undefined));
+                        const staticBaseType = getBaseConstructorTypeOfClass(staticType as InterfaceType);
+                        const staticMembers = flatMap<Symbol, ClassElement>(getPropertiesOfType(staticType), p => serializePropertySymbolForClass(p, /*isStatic*/ true, staticBaseType));
                         const constructors = serializeSignatures(SignatureKind.Construct, staticType, baseTypes[0], SyntaxKind.Constructor) as ConstructorDeclaration[];
                         for (const c of constructors) {
                             // A constructor's return type and type parameters are supposed to be controlled by the enclosing class declaration
@@ -5031,7 +5031,7 @@ namespace ts {
                         const constructSignatures = serializeSignatures(SignatureKind.Construct, interfaceType, amalgamatedBase, SyntaxKind.ConstructSignature) as ConstructSignatureDeclaration[];
                         const indexSignatures = serializeIndexSignatures(interfaceType, amalgamatedBase);
 
-                        const heritageClauses = !length(baseTypes) ? undefined : [createHeritageClause(SyntaxKind.ExtendsKeyword, map(baseTypes, serializeBaseType))];
+                        const heritageClauses = !length(baseTypes) ? undefined : [createHeritageClause(SyntaxKind.ExtendsKeyword, map(baseTypes, b => serializeBaseType(b, localName)))];
                         addResult(createInterfaceDeclaration(
                             /*decorators*/ undefined,
                             /*modifiers*/ undefined,
@@ -5204,7 +5204,7 @@ namespace ts {
                         const staticFlag = isStatic ? ModifierFlags.Static : 0;
                         const rawName = unescapeLeadingUnderscores(p.escapedName);
                         const name = getPropertyNameNodeForSymbolFromNameType(p, context) || createIdentifier(rawName);
-                        if (p.flags & SymbolFlags.Property || p.flags & SymbolFlags.Accessor) {
+                        if (p.flags & (SymbolFlags.Property | SymbolFlags.Accessor | SymbolFlags.Variable)) {
                             return createProperty(
                                 /*decorators*/ undefined,
                                 createModifiersFromModifierFlags((isReadonlySymbol(p) ? ModifierFlags.Readonly : 0) | staticFlag),
@@ -5214,7 +5214,7 @@ namespace ts {
                                 /*initializer*/ undefined // interface members can't have initializers, however class members _can_
                             );
                         }
-                        if (p.flags & SymbolFlags.Method) {
+                        if (p.flags & (SymbolFlags.Method | SymbolFlags.Function)) {
                             const type = getTypeOfSymbol(p);
                             const signatures = getSignaturesOfType(type, SignatureKind.Call);
                             const results = [];
@@ -5313,7 +5313,7 @@ namespace ts {
                     return results;
                 }
 
-                function serializeBaseType(t: Type) {
+                function serializeBaseType(t: Type, rootName: string) {
                     let typeArgs: TypeNode[] | undefined;
                     let reference: Expression;
                     if ((t as TypeReference).target) {
@@ -5324,8 +5324,12 @@ namespace ts {
                         reference = symbolToExpression(t.symbol, context, SymbolFlags.Type);
                     }
                     else {
-                        // TODO: can non-reference, un-symboled types be in interface `extends`? If so, how do we make a clause that they refer to
-                        return Debug.fail(`Unsure how to declaration emit serialize interface base type: ${typeToString(t)}`);
+                        const tempName = getUnusedName(`${rootName}_base`);
+                        const statement = createVariableStatement(/*modifiers*/ undefined, createVariableDeclarationList([
+                            createVariableDeclaration(tempName, typeToTypeNodeHelper(t, context))
+                        ], NodeFlags.Const));
+                        addResult(statement, ModifierFlags.None);
+                        reference = createIdentifier(tempName);
                     }
                     return createExpressionWithTypeArguments(typeArgs, reference);
                 }
@@ -5341,9 +5345,11 @@ namespace ts {
                     }
                 }
 
-                function getUnusedName(input: string, symbol: Symbol): string {
-                    if (context.remappedSymbolNames!.has("" + getSymbolId(symbol))) {
-                        return context.remappedSymbolNames!.get("" + getSymbolId(symbol))!;
+                function getUnusedName(input: string, symbol?: Symbol): string {
+                    if (symbol) {
+                        if (context.remappedSymbolNames!.has("" + getSymbolId(symbol))) {
+                            return context.remappedSymbolNames!.get("" + getSymbolId(symbol))!;
+                        }
                     }
                     if (input === InternalSymbolName.Default) {
                         input = "_default";
@@ -5358,7 +5364,9 @@ namespace ts {
                         input = `${original}_${i}`;
                     }
                     context.usedSymbolNames!.set(input, true);
-                    context.remappedSymbolNames!.set("" + getSymbolId(symbol), input);
+                    if (symbol) {
+                        context.remappedSymbolNames!.set("" + getSymbolId(symbol), input);
+                    }
                     return input;
                 }
             }

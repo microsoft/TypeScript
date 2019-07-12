@@ -305,3 +305,27 @@ export class O extends N {
     }
 }
 
+var x = /** @type {*} */(null);
+>x : any
+>(null) : any
+>null : null
+
+export class VariableBase extends x {}
+>VariableBase : VariableBase
+>x : any
+
+export class HasStatics {
+>HasStatics : HasStatics
+
+    static staticMethod() {}
+>staticMethod : () => void
+}
+
+export class ExtendsStatics extends HasStatics {
+>ExtendsStatics : ExtendsStatics
+>HasStatics : HasStatics
+
+    static also() {}
+>also : () => void
+}
+

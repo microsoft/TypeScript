@@ -181,6 +181,18 @@ export class O extends N {
     }
 }
 
+var x = /** @type {*} */(null);
+
+export class VariableBase extends x {}
+
+export class HasStatics {
+    static staticMethod() {}
+}
+
+export class ExtendsStatics extends HasStatics {
+    static also() {}
+}
+
 
 //// [index.js]
 "use strict";
@@ -408,6 +420,31 @@ var O = /** @class */ (function (_super) {
     return O;
 }(N));
 exports.O = O;
+var x = /** @type {*} */ (null);
+var VariableBase = /** @class */ (function (_super) {
+    __extends(VariableBase, _super);
+    function VariableBase() {
+        return _super !== null && _super.apply(this, arguments) || this;
+    }
+    return VariableBase;
+}(x));
+exports.VariableBase = VariableBase;
+var HasStatics = /** @class */ (function () {
+    function HasStatics() {
+    }
+    HasStatics.staticMethod = function () { };
+    return HasStatics;
+}());
+exports.HasStatics = HasStatics;
+var ExtendsStatics = /** @class */ (function (_super) {
+    __extends(ExtendsStatics, _super);
+    function ExtendsStatics() {
+        return _super !== null && _super.apply(this, arguments) || this;
+    }
+    ExtendsStatics.also = function () { };
+    return ExtendsStatics;
+}(HasStatics));
+exports.ExtendsStatics = ExtendsStatics;
 
 
 //// [index.d.ts]
@@ -473,4 +510,14 @@ export class N<T> extends L {
 export class O<U> extends N<U> {
     constructor(param: U);
     another2: U;
+}
+declare const VariableBase_base: any;
+export class VariableBase extends VariableBase_base {
+    [x: string]: any;
+}
+export class HasStatics {
+    static staticMethod(): void;
+}
+export class ExtendsStatics extends HasStatics {
+    static also(): void;
 }

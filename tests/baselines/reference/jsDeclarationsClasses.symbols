@@ -283,3 +283,25 @@ export class O extends N {
     }
 }
 
+var x = /** @type {*} */(null);
+>x : Symbol(x, Decl(index.js, 182, 3))
+
+export class VariableBase extends x {}
+>VariableBase : Symbol(VariableBase, Decl(index.js, 182, 31))
+>x : Symbol(x, Decl(index.js, 182, 3))
+
+export class HasStatics {
+>HasStatics : Symbol(HasStatics, Decl(index.js, 184, 38))
+
+    static staticMethod() {}
+>staticMethod : Symbol(HasStatics.staticMethod, Decl(index.js, 186, 25))
+}
+
+export class ExtendsStatics extends HasStatics {
+>ExtendsStatics : Symbol(ExtendsStatics, Decl(index.js, 188, 1))
+>HasStatics : Symbol(HasStatics, Decl(index.js, 184, 38))
+
+    static also() {}
+>also : Symbol(ExtendsStatics.also, Decl(index.js, 190, 48))
+}
+

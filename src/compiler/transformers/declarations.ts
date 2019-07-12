@@ -255,6 +255,9 @@ namespace ts {
                 return bundle;
             }
             else if (isSourceFileJS(node)) {
+                refs = createMap<SourceFile>();
+                libs = createMap<boolean>();
+                currentSourceFile = node;
                 return updateSourceFileNode(node, resolver.getDeclarationStatementsForSourceFile(node, declarationEmitNodeBuilderFlags, symbolTracker) || emptyArray);
             }
 
