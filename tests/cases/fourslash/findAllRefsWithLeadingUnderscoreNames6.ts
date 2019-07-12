@@ -2,7 +2,7 @@
 
 ////class Foo {
 ////    public _bar;
-////    public [|{| "isDefinition": true |}__bar|];
+////    [|public [|{| "isDefinition": true, "contextRangeIndex": 0 |}__bar|];|]
 ////    public ___bar;
 ////    public ____bar;
 ////}
@@ -13,4 +13,4 @@
 ////x.___bar;
 ////x.____bar;
 
-verify.singleReferenceGroup("(property) Foo.__bar: any");
+verify.singleReferenceGroup("(property) Foo.__bar: any", "__bar");

@@ -422,3 +422,31 @@ function test<T extends { a: string, b: string }>(obj: T): T {
 >T : Symbol(T, Decl(literalTypeWidening.ts, 132, 14))
 }
 
+// Repro from #32169
+
+declare function f<T>(x: T): NonNullable<T>;
+>f : Symbol(f, Decl(literalTypeWidening.ts, 135, 1))
+>T : Symbol(T, Decl(literalTypeWidening.ts, 139, 19))
+>x : Symbol(x, Decl(literalTypeWidening.ts, 139, 22))
+>T : Symbol(T, Decl(literalTypeWidening.ts, 139, 19))
+>NonNullable : Symbol(NonNullable, Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(literalTypeWidening.ts, 139, 19))
+
+enum E { A, B }
+>E : Symbol(E, Decl(literalTypeWidening.ts, 139, 44))
+>A : Symbol(E.A, Decl(literalTypeWidening.ts, 140, 8))
+>B : Symbol(E.B, Decl(literalTypeWidening.ts, 140, 11))
+
+const a = f(E.A);
+>a : Symbol(a, Decl(literalTypeWidening.ts, 141, 5))
+>f : Symbol(f, Decl(literalTypeWidening.ts, 135, 1))
+>E.A : Symbol(E.A, Decl(literalTypeWidening.ts, 140, 8))
+>E : Symbol(E, Decl(literalTypeWidening.ts, 139, 44))
+>A : Symbol(E.A, Decl(literalTypeWidening.ts, 140, 8))
+
+const b: E.A = a;
+>b : Symbol(b, Decl(literalTypeWidening.ts, 142, 5))
+>E : Symbol(E, Decl(literalTypeWidening.ts, 139, 44))
+>A : Symbol(E.A, Decl(literalTypeWidening.ts, 140, 8))
+>a : Symbol(a, Decl(literalTypeWidening.ts, 141, 5))
+

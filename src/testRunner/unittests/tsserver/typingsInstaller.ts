@@ -986,14 +986,15 @@ namespace ts.projectSystem {
         });
 
         it("should redo resolution that resolved to '.js' file after typings are installed", () => {
+            const projects = `/user/username/projects`;
             const file: TestFSWithWatch.File = {
-                path: "/a/b/app.js",
+                path: `${projects}/a/b/app.js`,
                 content: `
                 import * as commander from "commander";`
             };
-            const cachePath = "/a/cache";
+            const cachePath = `${projects}/a/cache`;
             const commanderJS: TestFSWithWatch.File = {
-                path: "/node_modules/commander/index.js",
+                path: `${projects}/node_modules/commander/index.js`,
                 content: "module.exports = 0",
             };
 
@@ -1013,10 +1014,17 @@ namespace ts.projectSystem {
             const service = createProjectService(host, { typingsInstaller: installer });
             service.openClientFile(file.path);
 
-            checkWatchedFiles(host, [...flatMap(["/a/b", "/a", ""], x => [x + "/tsconfig.json", x + "/jsconfig.json"]), "/a/lib/lib.d.ts"]);
+            checkWatchedFiles(host, [...getConfigFilesToWatch(getDirectoryPath(file.path)), "/a/lib/lib.d.ts"]);
             checkWatchedDirectories(host, [], /*recursive*/ false);
             // Does not include cachePath because that is handled by typingsInstaller
-            checkWatchedDirectories(host, ["/node_modules", "/a/b/node_modules", "/a/b/node_modules/@types", "/a/b/bower_components"], /*recursive*/ true);
+            checkWatchedDirectories(host, [
+                `${projects}/node_modules`,
+                `${projects}/a/node_modules`,
+                `${projects}/a/b/node_modules`,
+                `${projects}/a/node_modules/@types`,
+                `${projects}/a/b/node_modules/@types`,
+                `${projects}/a/b/bower_components`
+            ], /*recursive*/ true);
 
             service.checkNumberOfProjects({ inferredProjects: 1 });
             checkProjectActualFiles(service.inferredProjects[0], [file.path, commanderJS.path]);
@@ -1772,6 +1780,70 @@ namespace ts.projectSystem {
                     import * as b from "foo/a/b";
                     import * as c from "foo/a/c";
             `, ["foo"], [fooAA, fooAB, fooAC]);
+        });
+
+        it("should handle node core modules", () => {
+            const file: TestFSWithWatch.File = {
+                path: "/a/b/app.js",
+                content: `// @ts-check
+
+const net = require("net");
+const stream = require("stream");`
+            };
+            const nodeTyping: TestFSWithWatch.File = {
+                path: `${globalTypingsCacheLocation}/node_modules/node/index.d.ts`,
+                content: `
+declare module "net" {
+    export type n = number;
+}
+declare module "stream" {
+    export type s = string;
+}`,
+            };
+
+            const host = createServerHost([file, libFile]);
+            const installer = new (class extends Installer {
+                constructor() {
+                    super(host, { globalTypingsCacheLocation, typesRegistry: createTypesRegistry("node") });
+                }
+                installWorker(_requestId: number, _args: string[], _cwd: string, cb: TI.RequestCompletedAction) {
+                    executeCommand(this, host, ["node"], [nodeTyping], cb);
+                }
+            })();
+            const projectService = createProjectService(host, { typingsInstaller: installer });
+            projectService.openClientFile(file.path);
+            projectService.checkNumberOfProjects({ inferredProjects: 1 });
+
+            const proj = projectService.inferredProjects[0];
+            checkProjectActualFiles(proj, [file.path, libFile.path]);
+            installer.installAll(/*expectedCount*/ 1);
+            host.checkTimeoutQueueLengthAndRun(2);
+            checkProjectActualFiles(proj, [file.path, libFile.path, nodeTyping.path]);
+            projectService.applyChangesInOpenFiles(
+                /*openFiles*/ undefined,
+                arrayIterator([{
+                    fileName: file.path,
+                    changes: arrayIterator([{
+                        span: {
+                            start: file.content.indexOf(`"stream"`) + 2,
+                            length: 0
+                        },
+                        newText: " "
+                    }])
+                }]),
+                /*closedFiles*/ undefined
+            );
+            // Below timeout Updates the typings to empty array because of "s tream" as unsresolved import
+            // and schedules the update graph because of this.
+            host.checkTimeoutQueueLengthAndRun(2);
+            checkProjectActualFiles(proj, [file.path, libFile.path, nodeTyping.path]);
+
+            // Here, since typings doesnt contain node typings and resolution fails and
+            // node typings go out of project,
+            // but because we handle core node modules when resolving from typings cache
+            // node typings are included in the project
+            host.checkTimeoutQueueLengthAndRun(2);
+            checkProjectActualFiles(proj, [file.path, libFile.path, nodeTyping.path]);
         });
     });
 

@@ -1190,8 +1190,8 @@ namespace ts {
         return !!range && shouldBeReference === tripleSlashDirectivePrefixRegex.test(sourceFile.text.substring(range.pos, range.end));
     }
 
-    export function createTextSpanFromNode(node: Node, sourceFile?: SourceFile): TextSpan {
-        return createTextSpanFromBounds(node.getStart(sourceFile), node.getEnd());
+    export function createTextSpanFromNode(node: Node, sourceFile?: SourceFile, endNode?: Node): TextSpan {
+        return createTextSpanFromBounds(node.getStart(sourceFile), (endNode || node).getEnd());
     }
 
     export function createTextRangeFromNode(node: Node, sourceFile: SourceFile): TextRange {
@@ -1990,5 +1990,101 @@ namespace ts {
             }
         });
         return typeIsAccessible ? res : undefined;
+    }
+
+    export function syntaxUsuallyHasTrailingSemicolon(kind: SyntaxKind) {
+        return kind === SyntaxKind.VariableStatement
+            || kind === SyntaxKind.ExpressionStatement
+            || kind === SyntaxKind.DoStatement
+            || kind === SyntaxKind.ContinueStatement
+            || kind === SyntaxKind.BreakStatement
+            || kind === SyntaxKind.ReturnStatement
+            || kind === SyntaxKind.ThrowStatement
+            || kind === SyntaxKind.DebuggerStatement
+            || kind === SyntaxKind.PropertyDeclaration
+            || kind === SyntaxKind.TypeAliasDeclaration
+            || kind === SyntaxKind.ImportDeclaration
+            || kind === SyntaxKind.ImportEqualsDeclaration
+            || kind === SyntaxKind.ExportDeclaration;
+    }
+
+    export function probablyUsesSemicolons(sourceFile: SourceFile): boolean {
+        let withSemicolon = 0;
+        let withoutSemicolon = 0;
+        const nStatementsToObserve = 5;
+        forEachChild(sourceFile, function visit(node): boolean | undefined {
+            if (syntaxUsuallyHasTrailingSemicolon(node.kind)) {
+                const lastToken = node.getLastToken(sourceFile);
+                if (lastToken && lastToken.kind === SyntaxKind.SemicolonToken) {
+                    withSemicolon++;
+                }
+                else {
+                    withoutSemicolon++;
+                }
+            }
+            if (withSemicolon + withoutSemicolon >= nStatementsToObserve) {
+                return true;
+            }
+
+            return forEachChild(node, visit);
+        });
+
+        // One statement missing a semicolon isn’t sufficient evidence to say the user
+        // doesn’t want semicolons, because they may not even be done writing that statement.
+        if (withSemicolon === 0 && withoutSemicolon <= 1) {
+            return true;
+        }
+
+        // If even 2/5 places have a semicolon, the user probably wants semicolons
+        return withSemicolon / withoutSemicolon > 1 / nStatementsToObserve;
+    }
+
+    export function tryGetDirectories(host: LanguageServiceHost, directoryName: string): string[] {
+        return tryIOAndConsumeErrors(host, host.getDirectories, directoryName) || [];
+    }
+
+    export function tryReadDirectory(host: LanguageServiceHost, path: string, extensions?: ReadonlyArray<string>, exclude?: ReadonlyArray<string>, include?: ReadonlyArray<string>): ReadonlyArray<string> {
+        return tryIOAndConsumeErrors(host, host.readDirectory, path, extensions, exclude, include) || emptyArray;
+    }
+
+    export function tryFileExists(host: LanguageServiceHost, path: string): boolean {
+        return tryIOAndConsumeErrors(host, host.fileExists, path);
+    }
+
+    export function tryDirectoryExists(host: LanguageServiceHost, path: string): boolean {
+        return tryAndIgnoreErrors(() => directoryProbablyExists(path, host)) || false;
+    }
+
+    export function tryAndIgnoreErrors<T>(cb: () => T): T | undefined {
+        try { return cb(); }
+        catch { return undefined; }
+    }
+
+    export function tryIOAndConsumeErrors<T>(host: LanguageServiceHost, toApply: ((...a: any[]) => T) | undefined, ...args: any[]) {
+        return tryAndIgnoreErrors(() => toApply && toApply.apply(host, args));
+    }
+
+    export function findPackageJsons(directory: string, host: LanguageServiceHost): string[] {
+        const paths: string[] = [];
+        forEachAncestorDirectory(directory, ancestor => {
+            const currentConfigPath = findConfigFile(ancestor, (f) => tryFileExists(host, f), "package.json");
+            if (!currentConfigPath) {
+                return true; // break out
+            }
+            paths.push(currentConfigPath);
+        });
+        return paths;
+    }
+
+    export function findPackageJson(directory: string, host: LanguageServiceHost): string | undefined {
+        let packageJson: string | undefined;
+        forEachAncestorDirectory(directory, ancestor => {
+            if (ancestor === "node_modules") return true;
+            packageJson = findConfigFile(ancestor, (f) => tryFileExists(host, f), "package.json");
+            if (packageJson) {
+                return true; // break out
+            }
+        });
+        return packageJson;
     }
 }

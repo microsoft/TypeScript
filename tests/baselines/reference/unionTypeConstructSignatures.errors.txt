@@ -1,11 +1,17 @@
 tests/cases/conformance/types/union/unionTypeConstructSignatures.ts(9,47): error TS2345: Argument of type '"hello"' is not assignable to parameter of type 'number'.
-tests/cases/conformance/types/union/unionTypeConstructSignatures.ts(10,33): error TS2345: Argument of type 'true' is not assignable to parameter of type 'string'.
-tests/cases/conformance/types/union/unionTypeConstructSignatures.ts(15,33): error TS2345: Argument of type 'true' is not assignable to parameter of type 'string'.
+tests/cases/conformance/types/union/unionTypeConstructSignatures.ts(10,33): error TS2769: No overload matches this call.
+  Overload 1 of 2, '(a: number): number | Date', gave the following error.
+    Argument of type 'true' is not assignable to parameter of type 'number'.
+  Overload 2 of 2, '(a: string): string | boolean', gave the following error.
+    Argument of type 'true' is not assignable to parameter of type 'string'.
+tests/cases/conformance/types/union/unionTypeConstructSignatures.ts(15,33): error TS2769: No overload matches this call.
+  Overload 1 of 2, '(a: number): number | Date', gave the following error.
+    Argument of type 'true' is not assignable to parameter of type 'number'.
+  Overload 2 of 2, '(a: string): string | boolean', gave the following error.
+    Argument of type 'true' is not assignable to parameter of type 'string'.
 tests/cases/conformance/types/union/unionTypeConstructSignatures.ts(16,1): error TS2554: Expected 1 arguments, but got 0.
-tests/cases/conformance/types/union/unionTypeConstructSignatures.ts(19,36): error TS2345: Argument of type '10' is not assignable to parameter of type 'number & string'.
-  Type '10' is not assignable to type 'string'.
-tests/cases/conformance/types/union/unionTypeConstructSignatures.ts(20,36): error TS2345: Argument of type '"hello"' is not assignable to parameter of type 'number & string'.
-  Type '"hello"' is not assignable to type 'number'.
+tests/cases/conformance/types/union/unionTypeConstructSignatures.ts(19,36): error TS2345: Argument of type '10' is not assignable to parameter of type 'never'.
+tests/cases/conformance/types/union/unionTypeConstructSignatures.ts(20,36): error TS2345: Argument of type '"hello"' is not assignable to parameter of type 'never'.
 tests/cases/conformance/types/union/unionTypeConstructSignatures.ts(21,1): error TS2554: Expected 1 arguments, but got 0.
 tests/cases/conformance/types/union/unionTypeConstructSignatures.ts(24,1): error TS2554: Expected 1 arguments, but got 0.
 tests/cases/conformance/types/union/unionTypeConstructSignatures.ts(26,40): error TS2345: Argument of type '"hello"' is not assignable to parameter of type 'number'.
@@ -42,14 +48,22 @@ tests/cases/conformance/types/union/unionTypeConstructSignatures.ts(70,12): erro
 !!! error TS2345: Argument of type '"hello"' is not assignable to parameter of type 'number'.
     new unionOfDifferentReturnType1(true); // error in type of parameter
                                     ~~~~
-!!! error TS2345: Argument of type 'true' is not assignable to parameter of type 'string'.
+!!! error TS2769: No overload matches this call.
+!!! error TS2769:   Overload 1 of 2, '(a: number): number | Date', gave the following error.
+!!! error TS2769:     Argument of type 'true' is not assignable to parameter of type 'number'.
+!!! error TS2769:   Overload 2 of 2, '(a: string): string | boolean', gave the following error.
+!!! error TS2769:     Argument of type 'true' is not assignable to parameter of type 'string'.
     
     var unionOfDifferentReturnType1: { new (a: number): number; new (a: string): string; } | { new (a: number): Date; new (a: string): boolean; };
     numOrDate = new unionOfDifferentReturnType1(10);
     strOrBoolean = new unionOfDifferentReturnType1("hello");
     new unionOfDifferentReturnType1(true); // error in type of parameter
                                     ~~~~
-!!! error TS2345: Argument of type 'true' is not assignable to parameter of type 'string'.
+!!! error TS2769: No overload matches this call.
+!!! error TS2769:   Overload 1 of 2, '(a: number): number | Date', gave the following error.
+!!! error TS2769:     Argument of type 'true' is not assignable to parameter of type 'number'.
+!!! error TS2769:   Overload 2 of 2, '(a: string): string | boolean', gave the following error.
+!!! error TS2769:     Argument of type 'true' is not assignable to parameter of type 'string'.
     new unionOfDifferentReturnType1(); // error missing parameter
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS2554: Expected 1 arguments, but got 0.
@@ -58,12 +72,10 @@ tests/cases/conformance/types/union/unionTypeConstructSignatures.ts(70,12): erro
     var unionOfDifferentParameterTypes: { new (a: number): number; } | { new (a: string): Date; };
     new unionOfDifferentParameterTypes(10);// error - no call signatures
                                        ~~
-!!! error TS2345: Argument of type '10' is not assignable to parameter of type 'number & string'.
-!!! error TS2345:   Type '10' is not assignable to type 'string'.
+!!! error TS2345: Argument of type '10' is not assignable to parameter of type 'never'.
     new unionOfDifferentParameterTypes("hello");// error - no call signatures
                                        ~~~~~~~
-!!! error TS2345: Argument of type '"hello"' is not assignable to parameter of type 'number & string'.
-!!! error TS2345:   Type '"hello"' is not assignable to type 'number'.
+!!! error TS2345: Argument of type '"hello"' is not assignable to parameter of type 'never'.
     new unionOfDifferentParameterTypes();// error - no call signatures
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS2554: Expected 1 arguments, but got 0.

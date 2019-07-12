@@ -1,87 +1,92 @@
 // @ts-check
 /// <reference lib="esnext.asynciterable" />
 const Octokit = require("@octokit/rest");
-const {runSequence} = require("./run-sequence");
+const { runSequence } = require("./run-sequence");
+
+// The first is used by bot-based kickoffs, the second by automatic triggers
+const triggeredPR = process.env.SOURCE_ISSUE || process.env.SYSTEM_PULLREQUEST_PULLREQUESTNUMBER;
 
 /**
- * This program should be invoked as `node ./scripts/update-experimental-branches <GithubAccessToken> <Branch1> [Branch2] [...]`
+ * This program should be invoked as `node ./scripts/update-experimental-branches <GithubAccessToken>`
+ * TODO: the following is racey - if two experiment-enlisted PRs trigger simultaneously and witness one another in an unupdated state, they'll both produce
+ * a new experimental branch, but each will be missing a change from the other. There's no _great_ way to fix this beyond setting the maximum concurrency
+ * of this task to 1 (so only one job is allowed to update experiments at a time). 
  */
 async function main() {
-    const branchesRaw = process.argv[3];
-    const branches = process.argv.slice(3);
-    if (!branches.length) {
-        throw new Error(`No experimental branches, aborting...`);
-    }
-    console.log(`Performing experimental branch updating and merging for branches ${branchesRaw}`);
-
-    const gh = new Octokit();
-    gh.authenticate({
-        type: "token",
-        token: process.argv[2]
+    const gh = new Octokit({
+        auth: process.argv[2]
     });
-    
-    // Fetch all relevant refs
-    runSequence([
-        ["git", ["fetch", "origin", "master:master", ...branches.map(b => `${b}:${b}`)]]
-    ])
-    
+    const prnums = (await gh.issues.listForRepo({
+        labels: "typescript@experimental",
+        sort: "created",
+        state: "open",
+        owner: "Microsoft",
+        repo: "TypeScript",
+    })).data.filter(i => !!i.pull_request).map(i => i.number);
+    if (triggeredPR && !prnums.some(n => n === +triggeredPR)) {
+        return; // Only have work to do for enlisted PRs
+    }
+    console.log(`Performing experimental branch updating and merging for pull requests ${prnums.join(", ")}`);
+
+    const userName = process.env.GH_USERNAME;
+    const remoteUrl = `https://${process.argv[2]}@github.com/${userName}/TypeScript.git`;
+
     // Forcibly cleanup workspace
     runSequence([
-        ["git", ["clean", "-fdx"]],
         ["git", ["checkout", "."]],
+        ["git", ["fetch", "-fu", "origin", "master:master"]],
         ["git", ["checkout", "master"]],
+        ["git", ["remote", "add", "fork", remoteUrl]], // Add the remote fork
     ]);
-    
-    // Update branches
-    for (const branch of branches) {
-        // Checkout, then get the merge base
-        const mergeBase = runSequence([
-            ["git", ["checkout", branch]],
-            ["git", ["merge-base", branch, "master"]],
-        ]);
-        // Simulate the merge and abort if there are conflicts
-        const mergeTree = runSequence([
-            ["git", ["merge-tree", mergeBase, branch, "master"]]
-        ]);
-        if (mergeTree.indexOf(`===${"="}===`)) { // 7 equals is the center of the merge conflict marker
-            const res = await gh.pulls.list({owner: "Microsoft", repo: "TypeScript", base: branch});
-            if (res && res.data && res.data[0]) {
-                const pr = res.data[0];
-                await gh.issues.createComment({
-                    owner: "Microsoft",
-                    repo: "TypeScript",
-                    number: pr.number,
-                    body: `This PR is configured as an experiment, and currently has merge conflicts with master - please rebase onto master and fix the conflicts.`
-                });
+
+    for (const numRaw of prnums) {
+        const num = +numRaw;
+        if (num) {
+            // PR number rather than branch name - lookup info
+            const inputPR = await gh.pulls.get({ owner: "Microsoft", repo: "TypeScript", pull_number: num });
+            // GH calculates the rebaseable-ness of a PR into its target, so we can just use that here
+            if (!inputPR.data.rebaseable) {
+                if (+triggeredPR === num) {
+                    await gh.issues.createComment({
+                        owner: "Microsoft",
+                        repo: "TypeScript",
+                        issue_number: num,
+                        body: `This PR is configured as an experiment, and currently has rebase conflicts with master - please rebase onto master and fix the conflicts.`
+                    });
+                }
+                throw new Error(`Rebase conflict detected in PR ${num} with master`); // A PR is currently in conflict, give up
             }
-            throw new Error(`Merge conflict detected on branch ${branch} with master`);
+            runSequence([
+                ["git", ["fetch", "origin", `pull/${num}/head:${num}`]],
+                ["git", ["checkout", `${num}`]],
+                ["git", ["rebase", "master"]],
+                ["git", ["push", "-f", "-u", "fork", `${num}`]], // Keep a rebased copy of this branch in our fork
+            ]);
+
         }
-        // Merge is good - apply a rebase and (force) push
-        runSequence([
-            ["git", ["rebase", "master"]],
-            ["git", ["push", "-f", "-u", "origin", branch]],
-        ]);
+        else {
+            throw new Error(`Invalid PR number: ${numRaw}`);
+        }
     }
 
     // Return to `master` and make a new `experimental` branch
     runSequence([
         ["git", ["checkout", "master"]],
-        ["git", ["branch", "-D", "experimental"]],
         ["git", ["checkout", "-b", "experimental"]],
     ]);
 
     // Merge each branch into `experimental` (which, if there is a conflict, we now know is from inter-experiment conflict)
-    for (const branch of branches) {
+    for (const branch of prnums) {
         // Find the merge base
         const mergeBase = runSequence([
             ["git", ["merge-base", branch, "experimental"]],
         ]);
         // Simulate the merge and abort if there are conflicts
         const mergeTree = runSequence([
-            ["git", ["merge-tree", mergeBase, branch, "experimental"]]
+            ["git", ["merge-tree", mergeBase.trim(), branch, "experimental"]]
         ]);
-        if (mergeTree.indexOf(`===${"="}===`)) { // 7 equals is the center of the merge conflict marker
-            throw new Error(`Merge conflict detected on branch ${branch} with other experiment`);
+        if (mergeTree.indexOf(`===${"="}===`) >= 0) { // 7 equals is the center of the merge conflict marker
+            throw new Error(`Merge conflict detected involving PR ${branch} with other experiment`);
         }
         // Merge (always producing a merge commit)
         runSequence([
@@ -90,7 +95,7 @@ async function main() {
     }
     // Every branch merged OK, force push the replacement `experimental` branch
     runSequence([
-        ["git", ["push", "-f", "-u", "origin", "experimental"]],
+        ["git", ["push", "-f", "-u", "fork", "experimental"]],
     ]);
 }
 

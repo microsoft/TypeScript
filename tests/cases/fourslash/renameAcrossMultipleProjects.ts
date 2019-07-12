@@ -1,7 +1,7 @@
 /// <reference path="fourslash.ts" />
 
 //@Filename: a.ts
-////var [|x|]: number;
+////[|var [|{| "contextRangeIndex": 0 |}x|]: number;|]
 
 //@Filename: b.ts
 /////// <reference path="a.ts" />
@@ -11,4 +11,4 @@
 /////// <reference path="a.ts" />
 ////[|x|]++;
 
-verify.rangesAreRenameLocations();
+verify.rangesWithSameTextAreRenameLocations("x");

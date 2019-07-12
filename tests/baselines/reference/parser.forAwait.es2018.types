@@ -70,7 +70,7 @@ async function f8() {
 }
 === tests/cases/conformance/parser/ecmascript2018/forAwait/inAsyncGeneratorWithDeclIsOk.ts ===
 async function* f9() {
->f9 : () => AsyncIterableIterator<any>
+>f9 : () => AsyncGenerator<never, void, unknown>
 
     let y: any;
 >y : any
@@ -82,7 +82,7 @@ async function* f9() {
 }
 === tests/cases/conformance/parser/ecmascript2018/forAwait/inAsyncGeneratorWithExpressionIsOk.ts ===
 async function* f10() {
->f10 : () => AsyncIterableIterator<any>
+>f10 : () => AsyncGenerator<never, void, unknown>
 
     let x: any, y: any;
 >x : any
@@ -95,7 +95,7 @@ async function* f10() {
 }
 === tests/cases/conformance/parser/ecmascript2018/forAwait/inGeneratorWithDeclIsError.ts ===
 function* f11() {
->f11 : () => IterableIterator<any>
+>f11 : () => Generator<never, void, unknown>
 
     let y: any;
 >y : any
@@ -107,7 +107,7 @@ function* f11() {
 }
 === tests/cases/conformance/parser/ecmascript2018/forAwait/inGeneratorWithExprIsError.ts ===
 function* f12() {
->f12 : () => IterableIterator<any>
+>f12 : () => Generator<never, void, unknown>
 
     let x: any, y: any;
 >x : any

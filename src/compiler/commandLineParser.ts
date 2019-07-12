@@ -40,6 +40,7 @@ namespace ts {
         ["es2017.string", "lib.es2017.string.d.ts"],
         ["es2017.intl", "lib.es2017.intl.d.ts"],
         ["es2017.typedarrays", "lib.es2017.typedarrays.d.ts"],
+        ["es2018.asyncgenerator", "lib.es2018.asyncgenerator.d.ts"],
         ["es2018.asynciterable", "lib.es2018.asynciterable.d.ts"],
         ["es2018.intl", "lib.es2018.intl.d.ts"],
         ["es2018.promise", "lib.es2018.promise.d.ts"],
@@ -147,6 +148,12 @@ namespace ts {
             category: Diagnostics.Basic_Options,
             description: Diagnostics.Enable_incremental_compilation,
         },
+        {
+            name: "locale",
+            type: "string",
+            category: Diagnostics.Advanced_Options,
+            description: Diagnostics.The_locale_used_when_displaying_messages_to_the_user_e_g_en_us
+        },
     ];
 
     /* @internal */
@@ -239,6 +246,7 @@ namespace ts {
                 esnext: ModuleKind.ESNext
             }),
             affectsModuleResolution: true,
+            affectsEmit: true,
             paramType: Diagnostics.KIND,
             showInSimplifiedHelpView: true,
             category: Diagnostics.Basic_Options,
@@ -584,6 +592,7 @@ namespace ts {
             name: "esModuleInterop",
             type: "boolean",
             affectsSemanticDiagnostics: true,
+            affectsEmit: true,
             showInSimplifiedHelpView: true,
             category: Diagnostics.Module_Resolution_Options,
             description: Diagnostics.Enables_emit_interoperability_between_CommonJS_and_ES_Modules_via_creation_of_namespace_objects_for_all_imports_Implies_allowSyntheticDefaultImports
@@ -697,12 +706,6 @@ namespace ts {
             affectsEmit: true,
             category: Diagnostics.Advanced_Options,
             description: Diagnostics.Emit_a_UTF_8_Byte_Order_Mark_BOM_in_the_beginning_of_output_files
-        },
-        {
-            name: "locale",
-            type: "string",
-            category: Diagnostics.Advanced_Options,
-            description: Diagnostics.The_locale_used_when_displaying_messages_to_the_user_e_g_en_us
         },
         {
             name: "newLine",
@@ -969,7 +972,8 @@ namespace ts {
         return typeAcquisition;
     }
 
-    function getOptionNameMap(): OptionNameMap {
+    /* @internal */
+    export function getOptionNameMap(): OptionNameMap {
         return optionNameMapCache || (optionNameMapCache = createOptionNameMap(optionDeclarations));
     }
 
@@ -1022,8 +1026,7 @@ namespace ts {
         }
     }
 
-    /* @internal */
-    export interface OptionsBase {
+    interface OptionsBase {
         [option: string]: CompilerOptionsValue | undefined;
     }
 
@@ -1172,7 +1175,7 @@ namespace ts {
     export interface ParsedBuildCommand {
         buildOptions: BuildOptions;
         projects: string[];
-        errors: ReadonlyArray<Diagnostic>;
+        errors: Diagnostic[];
     }
 
     /*@internal*/
@@ -1897,7 +1900,9 @@ namespace ts {
                 case "object":
                     return {};
                 default:
-                    return option.type.keys().next().value;
+                    const iterResult = option.type.keys().next();
+                    if (!iterResult.done) return iterResult.value;
+                    return Debug.fail("Expected 'option.type' to have entries.");
             }
         }
 

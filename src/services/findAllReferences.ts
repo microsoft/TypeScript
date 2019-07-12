@@ -16,9 +16,15 @@ namespace ts.FindAllReferences {
     export const enum EntryKind { Span, Node, StringLiteral, SearchedLocalFoundProperty, SearchedPropertyFoundLocal }
     export type NodeEntryKind = EntryKind.Node | EntryKind.StringLiteral | EntryKind.SearchedLocalFoundProperty | EntryKind.SearchedPropertyFoundLocal;
     export type Entry = NodeEntry | SpanEntry;
+    export interface ContextWithStartAndEndNode {
+        start: Node;
+        end: Node;
+    }
+    export type ContextNode = Node | ContextWithStartAndEndNode;
     export interface NodeEntry {
         readonly kind: NodeEntryKind;
         readonly node: Node;
+        readonly context?: ContextNode;
     }
     export interface SpanEntry {
         readonly kind: EntryKind.Span;
@@ -26,7 +32,143 @@ namespace ts.FindAllReferences {
         readonly textSpan: TextSpan;
     }
     export function nodeEntry(node: Node, kind: NodeEntryKind = EntryKind.Node): NodeEntry {
-        return { kind, node: (node as NamedDeclaration).name || node };
+        return {
+            kind,
+            node: (node as NamedDeclaration).name || node,
+            context: getContextNodeForNodeEntry(node)
+        };
+    }
+
+    export function isContextWithStartAndEndNode(node: ContextNode): node is ContextWithStartAndEndNode {
+        return node && (node as Node).kind === undefined;
+    }
+
+    function getContextNodeForNodeEntry(node: Node): ContextNode | undefined {
+        if (isDeclaration(node)) {
+            return getContextNode(node);
+        }
+
+        if (!node.parent) return undefined;
+
+        if (!isDeclaration(node.parent) && !isExportAssignment(node.parent)) {
+            // Special property assignment in javascript
+            if (isInJSFile(node)) {
+                const binaryExpression = isBinaryExpression(node.parent) ?
+                    node.parent :
+                    isPropertyAccessExpression(node.parent) &&
+                        isBinaryExpression(node.parent.parent) &&
+                        node.parent.parent.left === node.parent ?
+                        node.parent.parent :
+                        undefined;
+                if (binaryExpression && getAssignmentDeclarationKind(binaryExpression) !== AssignmentDeclarationKind.None) {
+                    return getContextNode(binaryExpression);
+                }
+            }
+
+            // Jsx Tags
+            if (isJsxOpeningElement(node.parent) || isJsxClosingElement(node.parent)) {
+                return node.parent.parent;
+            }
+            else if (isJsxSelfClosingElement(node.parent) ||
+                isLabeledStatement(node.parent) ||
+                isBreakOrContinueStatement(node.parent)) {
+                return node.parent;
+            }
+            else if (isStringLiteralLike(node)) {
+                const validImport = tryGetImportFromModuleSpecifier(node);
+                if (validImport) {
+                    const declOrStatement = findAncestor(validImport, node =>
+                        isDeclaration(node) ||
+                        isStatement(node) ||
+                        isJSDocTag(node)
+                    )! as NamedDeclaration | Statement | JSDocTag;
+                    return isDeclaration(declOrStatement) ?
+                        getContextNode(declOrStatement) :
+                        declOrStatement;
+                }
+            }
+
+            // Handle computed property name
+            const propertyName = findAncestor(node, isComputedPropertyName);
+            return propertyName ?
+                getContextNode(propertyName.parent) :
+                undefined;
+        }
+
+        if (node.parent.name === node || // node is name of declaration, use parent
+            isConstructorDeclaration(node.parent) ||
+            isExportAssignment(node.parent) ||
+            // Property name of the import export specifier or binding pattern, use parent
+            ((isImportOrExportSpecifier(node.parent) || isBindingElement(node.parent))
+                && node.parent.propertyName === node) ||
+            // Is default export
+            (node.kind === SyntaxKind.DefaultKeyword && hasModifier(node.parent, ModifierFlags.ExportDefault))) {
+            return getContextNode(node.parent);
+        }
+
+        return undefined;
+    }
+
+    export function getContextNode(node: NamedDeclaration | BinaryExpression | ForInOrOfStatement | undefined): ContextNode | undefined {
+        if (!node) return undefined;
+        switch (node.kind) {
+            case SyntaxKind.VariableDeclaration:
+                return !isVariableDeclarationList(node.parent) || node.parent.declarations.length !== 1 ?
+                    node :
+                    isVariableStatement(node.parent.parent) ?
+                        node.parent.parent :
+                        isForInOrOfStatement(node.parent.parent) ?
+                            getContextNode(node.parent.parent) :
+                            node.parent;
+
+            case SyntaxKind.BindingElement:
+                return getContextNode(node.parent.parent as NamedDeclaration);
+
+            case SyntaxKind.ImportSpecifier:
+                return node.parent.parent.parent;
+
+            case SyntaxKind.ExportSpecifier:
+            case SyntaxKind.NamespaceImport:
+                return node.parent.parent;
+
+            case SyntaxKind.ImportClause:
+                return node.parent;
+
+            case SyntaxKind.BinaryExpression:
+                return isExpressionStatement(node.parent) ?
+                    node.parent :
+                    node;
+
+            case SyntaxKind.ForOfStatement:
+            case SyntaxKind.ForInStatement:
+                return {
+                    start: (node as ForInOrOfStatement).initializer,
+                    end: (node as ForInOrOfStatement).expression
+                };
+
+            case SyntaxKind.PropertyAssignment:
+            case SyntaxKind.ShorthandPropertyAssignment:
+                return isArrayLiteralOrObjectLiteralDestructuringPattern(node.parent) ?
+                    getContextNode(
+                        findAncestor(node.parent, node =>
+                            isBinaryExpression(node) || isForInOrOfStatement(node)
+                        ) as BinaryExpression | ForInOrOfStatement
+                    ) :
+                    node;
+
+            default:
+                return node;
+        }
+    }
+
+    export function toContextSpan(textSpan: TextSpan, sourceFile: SourceFile, context?: ContextNode): { contextSpan: TextSpan } | undefined {
+        if (!context) return undefined;
+        const contextSpan = isContextWithStartAndEndNode(context) ?
+            getTextSpan(context.start, sourceFile, context.end) :
+            getTextSpan(context, sourceFile);
+        return contextSpan.start !== textSpan.start || contextSpan.length !== textSpan.length ?
+            { contextSpan } :
+            undefined;
     }
 
     export interface Options {
@@ -123,7 +265,16 @@ namespace ts.FindAllReferences {
                     const { symbol } = def;
                     const { displayParts, kind } = getDefinitionKindAndDisplayParts(symbol, checker, originalNode);
                     const name = displayParts.map(p => p.text).join("");
-                    return { node: symbol.declarations ? getNameOfDeclaration(first(symbol.declarations)) || first(symbol.declarations) : originalNode, name, kind, displayParts };
+                    const declaration = symbol.declarations ? first(symbol.declarations) : undefined;
+                    return {
+                        node: declaration ?
+                            getNameOfDeclaration(declaration) || declaration :
+                            originalNode,
+                        name,
+                        kind,
+                        displayParts,
+                        context: getContextNode(declaration)
+                    };
                 }
                 case DefinitionKind.Label: {
                     const { node } = def;
@@ -150,9 +301,19 @@ namespace ts.FindAllReferences {
             }
         })();
 
-        const { node, name, kind, displayParts } = info;
+        const { node, name, kind, displayParts, context } = info;
         const sourceFile = node.getSourceFile();
-        return { containerKind: ScriptElementKind.unknown, containerName: "", fileName: sourceFile.fileName, kind, name, textSpan: getTextSpan(isComputedPropertyName(node) ? node.expression : node, sourceFile), displayParts };
+        const textSpan = getTextSpan(isComputedPropertyName(node) ? node.expression : node, sourceFile);
+        return {
+            containerKind: ScriptElementKind.unknown,
+            containerName: "",
+            fileName: sourceFile.fileName,
+            kind,
+            name,
+            textSpan,
+            displayParts,
+            ...toContextSpan(textSpan, sourceFile, context)
+        };
     }
 
     function getDefinitionKindAndDisplayParts(symbol: Symbol, checker: TypeChecker, node: Node): { displayParts: SymbolDisplayPart[], kind: ScriptElementKind } {
@@ -168,14 +329,13 @@ namespace ts.FindAllReferences {
     }
 
     export function toReferenceEntry(entry: Entry): ReferenceEntry {
-        const { textSpan, fileName } = entryToDocumentSpan(entry);
+        const documentSpan = entryToDocumentSpan(entry);
         if (entry.kind === EntryKind.Span) {
-            return { textSpan, fileName, isWriteAccess: false, isDefinition: false };
+            return { ...documentSpan, isWriteAccess: false, isDefinition: false };
         }
         const { kind, node } = entry;
         return {
-            textSpan,
-            fileName,
+            ...documentSpan,
             isWriteAccess: isWriteAccessForReference(node),
             isDefinition: node.kind === SyntaxKind.DefaultKeyword
                 || !!getDeclarationFromName(node)
@@ -190,7 +350,12 @@ namespace ts.FindAllReferences {
         }
         else {
             const sourceFile = entry.node.getSourceFile();
-            return { textSpan: getTextSpan(entry.node, sourceFile), fileName: sourceFile.fileName };
+            const textSpan = getTextSpan(entry.node, sourceFile);
+            return {
+                textSpan,
+                fileName: sourceFile.fileName,
+                ...toContextSpan(textSpan, sourceFile, entry.context)
+            };
         }
     }
 
@@ -223,14 +388,16 @@ namespace ts.FindAllReferences {
     }
 
     function toImplementationLocation(entry: Entry, checker: TypeChecker): ImplementationLocation {
+        const documentSpan = entryToDocumentSpan(entry);
         if (entry.kind !== EntryKind.Span) {
             const { node } = entry;
-            const sourceFile = node.getSourceFile();
-            return { textSpan: getTextSpan(node, sourceFile), fileName: sourceFile.fileName, ...implementationKindDisplayParts(node, checker) };
+            return {
+                ...documentSpan,
+                ...implementationKindDisplayParts(node, checker)
+            };
         }
         else {
-            const { textSpan, fileName } = entry;
-            return { textSpan, fileName, kind: ScriptElementKind.unknown, displayParts: [] };
+            return { ...documentSpan, kind: ScriptElementKind.unknown, displayParts: [] };
         }
     }
 
@@ -257,26 +424,32 @@ namespace ts.FindAllReferences {
     }
 
     export function toHighlightSpan(entry: Entry): { fileName: string, span: HighlightSpan } {
+        const documentSpan = entryToDocumentSpan(entry);
         if (entry.kind === EntryKind.Span) {
-            const { fileName, textSpan } = entry;
-            return { fileName, span: { textSpan, kind: HighlightSpanKind.reference } };
+            return {
+                fileName: documentSpan.fileName,
+                span: {
+                    textSpan: documentSpan.textSpan,
+                    kind: HighlightSpanKind.reference
+                }
+            };
         }
 
-        const { node, kind } = entry;
-        const sourceFile = node.getSourceFile();
-        const writeAccess = isWriteAccessForReference(node);
+        const writeAccess = isWriteAccessForReference(entry.node);
         const span: HighlightSpan = {
-            textSpan: getTextSpan(node, sourceFile),
+            textSpan: documentSpan.textSpan,
             kind: writeAccess ? HighlightSpanKind.writtenReference : HighlightSpanKind.reference,
-            isInString: kind === EntryKind.StringLiteral ? true : undefined,
+            isInString: entry.kind === EntryKind.StringLiteral ? true : undefined,
+            ...documentSpan.contextSpan && { contextSpan: documentSpan.contextSpan }
         };
-        return { fileName: sourceFile.fileName, span };
+        return { fileName: documentSpan.fileName, span };
     }
 
-    function getTextSpan(node: Node, sourceFile: SourceFile): TextSpan {
+    function getTextSpan(node: Node, sourceFile: SourceFile, endNode?: Node): TextSpan {
         let start = node.getStart(sourceFile);
-        let end = node.getEnd();
+        let end = (endNode || node).getEnd();
         if (node.kind === SyntaxKind.StringLiteral) {
+            Debug.assert(endNode === undefined);
             start += 1;
             end -= 1;
         }

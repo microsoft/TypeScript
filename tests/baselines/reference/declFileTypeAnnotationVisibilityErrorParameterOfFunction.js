@@ -111,16 +111,17 @@ var m;
 declare module m {
     class private1 {
     }
-    class public1 {
+    export class public1 {
     }
-    function foo3(param: private1): void;
-    function foo4(param?: private1): void;
-    function foo13(param: public1): void;
-    function foo14(param?: public1): void;
+    export function foo3(param: private1): void;
+    export function foo4(param?: private1): void;
+    export function foo13(param: public1): void;
+    export function foo14(param?: public1): void;
     module m2 {
         class public2 {
         }
     }
-    function foo113(param: m2.public2): void;
-    function foo114(param?: m2.public2): void;
+    export function foo113(param: m2.public2): void;
+    export function foo114(param?: m2.public2): void;
+    export {};
 }

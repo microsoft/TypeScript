@@ -40,7 +40,7 @@ async function f1() {
     }
 }
 async function * f2() {
->f2 : () => AsyncIterableIterator<any>
+>f2 : () => AsyncGenerator<never, void, unknown>
 
     let y: number;
 >y : number

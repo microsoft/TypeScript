@@ -58,10 +58,22 @@ namespace ts.projectSystem {
 
             assert.equal(aFile.content, bFile.content);
             const abLocs: protocol.RenameTextSpan[] = [
-                protocolRenameSpanFromSubstring(aFile.content, "C"),
-                protocolRenameSpanFromSubstring(aFile.content, "C", { index: 1 }),
+                protocolRenameSpanFromSubstring({
+                    fileText: aFile.content,
+                    text: "C",
+                    contextText: `import {C} from "./c/fc";`
+                }),
+                protocolRenameSpanFromSubstring({
+                    fileText: aFile.content,
+                    text: "C",
+                    options: { index: 1 }
+                }),
             ];
-            const span = protocolRenameSpanFromSubstring(cFile.content, "C");
+            const span = protocolRenameSpanFromSubstring({
+                fileText: cFile.content,
+                text: "C",
+                contextText: "export const C = 8"
+            });
             const cLocs: protocol.RenameTextSpan[] = [span];
             assert.deepEqual<protocol.RenameResponseBody | undefined>(response, {
                 info: {
