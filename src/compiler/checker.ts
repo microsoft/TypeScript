@@ -13443,14 +13443,14 @@ namespace ts {
                         if (!isGenericMappedType(source)) {
                             const targetConstraint = getConstraintTypeFromMappedType(target);
                             const sourceKeys = getIndexType(source, /*stringsOnly*/ undefined, /*noIndexSignatures*/ true);
-                            const includeOptional = modifiers & MappedTypeModifiers.IncludeOptional;
-                            const filteredByApplicability = includeOptional ? intersectTypes(targetConstraint, sourceKeys) : undefined;
+                            const hasOptionalUnionKeys = modifiers & MappedTypeModifiers.IncludeOptional && targetConstraint.flags & TypeFlags.Union;
+                            const filteredByApplicability = hasOptionalUnionKeys ? filterType(targetConstraint, t => !!isRelatedTo(t, sourceKeys)) : undefined;
                             // A source type T is related to a target type { [P in Q]: X } if Q is related to keyof T and T[Q] is related to X.
                             // A source type T is related to a target type { [P in Q]?: X } if some constituent Q' of Q is related to keyof T and T[Q'] is related to X.
-                            if (includeOptional
+                            if (hasOptionalUnionKeys
                                     ? !(filteredByApplicability!.flags & TypeFlags.Never)
                                     : isRelatedTo(targetConstraint, sourceKeys)) {
-                                const indexingType = filteredByApplicability || getTypeParameterFromMappedType(target);
+                                const indexingType = hasOptionalUnionKeys ? filteredByApplicability! : getTypeParameterFromMappedType(target);
                                 const indexedAccessType = getIndexedAccessType(source, indexingType);
                                 const templateType = getTemplateTypeFromMappedType(target);
                                 if (result = isRelatedTo(indexedAccessType, templateType, reportErrors)) {
