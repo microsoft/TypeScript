@@ -6795,6 +6795,12 @@ namespace ts {
     }
 
     /* @internal */
+    export function isExternalModuleIndicator(result: Statement) {
+        // Exported top-level member indicates moduleness
+        return isAnyImportOrReExport(result) || isExportAssignment(result) || hasModifier(result, ModifierFlags.Export);
+    }
+
+    /* @internal */
     export function isForInOrOfStatement(node: Node): node is ForInOrOfStatement {
         return node.kind === SyntaxKind.ForInStatement || node.kind === SyntaxKind.ForOfStatement;
     }

@@ -4792,7 +4792,7 @@ namespace ts {
                     visitedSymbols.set("" + getSymbolId(symbol), true);
                     serializeSymbol(symbol, /*isPrivate*/ false);
                 });
-                if (context.enclosingDeclaration && ((isSourceFile(context.enclosingDeclaration) && isExternalOrCommonJsModule(context.enclosingDeclaration)) || isModuleDeclaration(context.enclosingDeclaration)) && !hasScopeMarker(results) && some(results, needsScopeMarker)) {
+                if (context.enclosingDeclaration && ((isSourceFile(context.enclosingDeclaration) && isExternalOrCommonJsModule(context.enclosingDeclaration)) || isModuleDeclaration(context.enclosingDeclaration)) && (!some(results, isExternalModuleIndicator) || (!hasScopeMarker(results) && some(results, needsScopeMarker)))) {
                     results.push(createEmptyExports());
                 }
                 // TODO: Cleanup pass: Merge redundant export declarations
@@ -5012,7 +5012,7 @@ namespace ts {
                             case SyntaxKind.ImportEqualsDeclaration:
                                 // Could be a local `import localName = ns.member` or
                                 // an external `import localName = require("whatever")`
-                                const isLocalImport = !target.parent!.valueDeclaration || !isSourceFile(target.parent!.valueDeclaration);
+                                const isLocalImport = !(target.flags & SymbolFlags.ValueModule);
                                 addResult(createImportEqualsDeclaration(
                                     /*decorators*/ undefined,
                                     /*modifiers*/ undefined,
@@ -5021,9 +5021,10 @@ namespace ts {
                                 ), isLocalImport ? modifierFlags : ModifierFlags.None);
                                 break;
                             case SyntaxKind.NamespaceExportDeclaration:
-                                // synthesize export * from "moduleReference"
-                                // Straightforward - only one thing to do - make an export declaration
-                                addResult(createExportDeclaration(/*decorators*/ undefined, /*modifiers*/ undefined, /*exportClause*/ undefined, createLiteral(getSpecifierForModuleSymbol(symbol, context))), ModifierFlags.None);
+                                // export as namespace foo
+                                // TODO: Not part of a file's local or export symbol tables
+                                // Is bound into file.symbol.globalExports instead, which we don't currently traverse
+                                addResult(createNamespaceExportDeclaration(idText((node as NamespaceExportDeclaration).name)), ModifierFlags.None);
                                 break;
                             case SyntaxKind.ImportClause:
                                 addResult(createImportDeclaration(
@@ -5038,7 +5039,7 @@ namespace ts {
                                     /*decorators*/ undefined,
                                     /*modifiers*/ undefined,
                                     createImportClause(/*importClause*/ undefined, createNamespaceImport(createIdentifier(localName))),
-                                    createLiteral(getSpecifierForModuleSymbol(target.parent!, context))
+                                    createLiteral(getSpecifierForModuleSymbol(target, context))
                                 ), ModifierFlags.None);
                                 break;
                             case SyntaxKind.ImportSpecifier:
@@ -5075,6 +5076,15 @@ namespace ts {
                     }
                     if (symbol.flags & SymbolFlags.Property && symbol.escapedName === InternalSymbolName.ExportEquals) {
                         serializeExportAssignment(symbol);
+                    }
+                    if (symbol.flags & SymbolFlags.ExportStar) {
+                        // synthesize export * from "moduleReference"
+                        // Straightforward - only one thing to do - make an export declaration
+                        for (const node of symbol.declarations) {
+                            const resolvedModule = resolveExternalModuleName(node, (node as ExportDeclaration).moduleSpecifier!);
+                            if (!resolvedModule) continue;
+                            addResult(createExportDeclaration(/*decorators*/ undefined, /*modifiers*/ undefined, /*exportClause*/ undefined, createLiteral(getSpecifierForModuleSymbol(resolvedModule, context))), ModifierFlags.None);
+                        }
                     }
                     if (needsPostExportDefault) {
                         addResult(createExportAssignment(/*decorators*/ undefined, /*modifiers*/ undefined, /*isExportAssignment*/ false, createIdentifier(localName)), ModifierFlags.None);

@@ -755,11 +755,6 @@ namespace ts {
             }
         }
 
-        function isExternalModuleIndicator(result: LateVisibilityPaintedStatement | ExportAssignment) {
-            // Exported top-level member indicates moduleness
-            return isAnyImportOrReExport(result) || isExportAssignment(result) || hasModifier(result, ModifierFlags.Export);
-        }
-
         function visitDeclarationSubtree(input: Node): VisitResult<Node> {
             if (shouldStripInternal(input)) return;
             if (isDeclaration(input)) {
