@@ -1992,10 +1992,6 @@ namespace ts {
         return typeIsAccessible ? res : undefined;
     }
 
-    export function isDecimalIntegerLiteral(node: Node, sourceFile: SourceFile): node is NumericLiteral {
-        return isNumericLiteral(node) && /^\d+$/.test(node.getText(sourceFile));
-    }
-
     export function syntaxUsuallyHasTrailingSemicolon(kind: SyntaxKind) {
         return kind === SyntaxKind.VariableStatement
             || kind === SyntaxKind.ExpressionStatement

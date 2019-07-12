@@ -27,34 +27,7 @@ namespace ts.codefix {
         }
 
         const parenthesizedExpression = tryCast(awaitExpression.parent, isParenthesizedExpression);
-        const preserveParens = parenthesizedExpression && (
-            // (await 0).toFixed() should keep its parens (or add an extra dot for 0..toFixed())
-            isPropertyAccessExpression(parenthesizedExpression.parent) && isDecimalIntegerLiteral(awaitExpression.expression, sourceFile) ||
-            // new (await c).Class()
-            isPropertyAccessExpressionInNewExpression(parenthesizedExpression.parent) ||
-            // (await new C).foo
-            isNewExpressionWithoutParens(awaitExpression.expression)
-        );
-
-        if (preserveParens) {
-            changeTracker.replaceNode(sourceFile, awaitExpression, awaitExpression.expression);
-        }
-        else {
-            changeTracker.replaceNode(sourceFile, parenthesizedExpression || awaitExpression, awaitExpression.expression);
-        }
-    }
-
-    function isPropertyAccessExpressionInNewExpression(expression: Node) {
-        return isPropertyAccessExpression(expression) && !!findAncestor(expression, ancestor => {
-            return isPropertyAccessExpression(ancestor)
-                ? false
-                : isNewExpression(ancestor)
-                    ? true
-                    : "quit";
-        });
-    }
-
-    function isNewExpressionWithoutParens(expression: Node) {
-        return isNewExpression(expression) && expression.getLastToken() === expression.expression;
+        const removeParens = parenthesizedExpression && (isIdentifier(awaitExpression.expression) || isCallExpression(awaitExpression.expression));
+        changeTracker.replaceNode(sourceFile, removeParens ? parenthesizedExpression || awaitExpression : awaitExpression, awaitExpression.expression);
     }
 }
