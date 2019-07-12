@@ -1992,8 +1992,8 @@ namespace ts {
         return typeIsAccessible ? res : undefined;
     }
 
-    export function isDecimalIntegerLiteral(node: Node): node is NumericLiteral {
-        return isNumericLiteral(node) && /^\d+$/.test(node.text);
+    export function isDecimalIntegerLiteral(node: Node, sourceFile: SourceFile): node is NumericLiteral {
+        return isNumericLiteral(node) && /^\d+$/.test(node.getText(sourceFile));
     }
 
     export function syntaxUsuallyHasTrailingSemicolon(kind: SyntaxKind) {
