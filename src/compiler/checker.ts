@@ -3760,7 +3760,7 @@ namespace ts {
                         return createInferTypeNode(typeParameterToDeclarationWithConstraint(type as TypeParameter, context, /*constraintNode*/ undefined));
                     }
                     if (context.flags & NodeBuilderFlags.GenerateNamesForShadowedTypeParams &&
-                        !isTypeSymbolAccessible(type.symbol, context.enclosingDeclaration)) {
+                        type.flags & TypeFlags.TypeParameter && !isTypeSymbolAccessible(type.symbol, context.enclosingDeclaration)) {
                         const name = typeParameterToName(type, context);
                         context.approximateLength += idText(name).length;
                         return createTypeReferenceNode(createIdentifier(idText(name)), /*typeArguments*/ undefined);
@@ -4642,6 +4642,9 @@ namespace ts {
                     }
                 }
                 let result = symbolToName(type.symbol, context, SymbolFlags.Type, /*expectsIdentifier*/ true);
+                if (!(result.kind & SyntaxKind.Identifier)) {
+                    return createIdentifier("(Missing type parameter)");
+                }
                 if (context.flags & NodeBuilderFlags.GenerateNamesForShadowedTypeParams) {
                     const rawtext = result.escapedText as string;
                     let i = 0;
