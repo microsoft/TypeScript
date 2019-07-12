@@ -1224,6 +1224,7 @@ namespace ts {
         SyntaxKind.NullKeyword,
         SyntaxKind.NumberKeyword,
         SyntaxKind.ObjectKeyword,
+        SyntaxKind.ReadonlyKeyword,
         SyntaxKind.StringKeyword,
         SyntaxKind.SymbolKeyword,
         SyntaxKind.TrueKeyword,
@@ -1751,8 +1752,8 @@ namespace ts {
 
     function getSynthesizedDeepCloneWorker<T extends Node>(node: T, renameMap?: Map<Identifier>, checker?: TypeChecker, callback?: (originalNode: Node, clone: Node) => any): T {
         const visited = (renameMap || checker || callback) ?
-        visitEachChild(node, wrapper, nullTransformationContext) :
-        visitEachChild(node, getSynthesizedDeepClone, nullTransformationContext);
+            visitEachChild(node, wrapper, nullTransformationContext) :
+            visitEachChild(node, getSynthesizedDeepClone, nullTransformationContext);
 
         if (visited === node) {
             // This only happens for leaf nodes - internal nodes always see their children change.
