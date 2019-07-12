@@ -490,6 +490,9 @@ namespace ts.formatting {
                 else if (SmartIndenter.childStartsOnTheSameLineWithElseInIfStatement(parent, node, startLine, sourceFile)) {
                     return { indentation: parentDynamicIndentation.getIndentation(), delta };
                 }
+                else if (SmartIndenter.childStartsInlineWithPreviousObject(parent, node, startLine, sourceFile)) {
+                    return { indentation: parentDynamicIndentation.getIndentation(), delta };
+                }
                 else {
                     return { indentation: parentDynamicIndentation.getIndentation() + parentDynamicIndentation.getDelta(node), delta };
                 }

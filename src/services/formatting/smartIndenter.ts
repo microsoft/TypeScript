@@ -322,6 +322,26 @@ namespace ts.formatting {
             return false;
         }
 
+        export function childStartsInlineWithPreviousObject(parent: Node, child: TextRangeWithKind, childStartLine: number, sourceFile: SourceFileLike): boolean {
+            if (parent.kind === SyntaxKind.CallExpression) {
+                const parentCallExpression = <CallExpression>parent;
+                const currentNode = find(parentCallExpression.arguments, arg => arg.pos === child.pos);
+                if (!currentNode) return false; // Shouldn't happen
+
+                const currentIndex = parentCallExpression.arguments.indexOf(currentNode);
+                if (currentIndex === 0) return false; // Can't look at previous node if first
+
+                const previousNode = parentCallExpression.arguments[currentIndex - 1];
+                const lineOfPreviousNode = getLineAndCharacterOfPosition(sourceFile, previousNode.getEnd()).line;
+
+                if (childStartLine === lineOfPreviousNode) {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
         export function getContainingList(node: Node, sourceFile: SourceFile): NodeArray<Node> | undefined {
             return node.parent && getListByRange(node.getStart(sourceFile), node.getEnd(), node.parent, sourceFile);
         }
@@ -482,6 +502,7 @@ namespace ts.formatting {
                 case SyntaxKind.ArrayLiteralExpression:
                 case SyntaxKind.Block:
                 case SyntaxKind.ModuleBlock:
+                case SyntaxKind.ObjectLiteralExpression:
                 case SyntaxKind.TypeLiteral:
                 case SyntaxKind.MappedType:
                 case SyntaxKind.TupleType:
@@ -523,8 +544,6 @@ namespace ts.formatting {
                         return rangeIsOnOneLine(sourceFile, child!);
                     }
                     return true;
-                case SyntaxKind.CallExpression:
-                    return childKind !== SyntaxKind.ObjectLiteralExpression
                 case SyntaxKind.DoStatement:
                 case SyntaxKind.WhileStatement:
                 case SyntaxKind.ForInStatement:
