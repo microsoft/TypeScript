@@ -38,6 +38,7 @@ namespace ts.Completions {
         InterfaceElementKeywords,       // Keywords inside interface body
         ConstructorParameterKeywords,   // Keywords at constructor parameter
         FunctionLikeBodyKeywords,       // Keywords at function like body
+        TypeAssertionKeywords,
         TypeKeywords,
         Last = TypeKeywords
     }
@@ -441,7 +442,7 @@ namespace ts.Completions {
             (symbol.escapedName === InternalSymbolName.ExportEquals))
             // Name of "export default foo;" is "foo". Name of "export default 0" is the filename converted to camelCase.
             ? firstDefined(symbol.declarations, d => isExportAssignment(d) && isIdentifier(d.expression) ? d.expression.text : undefined)
-                || codefix.moduleSymbolToValidIdentifier(origin.moduleSymbol, target)
+            || codefix.moduleSymbolToValidIdentifier(origin.moduleSymbol, target)
             : symbol.name;
     }
 
@@ -632,9 +633,9 @@ namespace ts.Completions {
                     // At `,`, treat this as the next argument after the comma.
                     ? checker.getContextualTypeForArgumentAtIndex(argInfo.invocation, argInfo.argumentIndex + (previousToken.kind === SyntaxKind.CommaToken ? 1 : 0))
                     : isEqualityOperatorKind(previousToken.kind) && isBinaryExpression(parent) && isEqualityOperatorKind(parent.operatorToken.kind)
-                    // completion at `x ===/**/` should be for the right side
-                    ? checker.getTypeAtLocation(parent.left)
-                    : checker.getContextualType(previousToken as Expression);
+                        // completion at `x ===/**/` should be for the right side
+                        ? checker.getTypeAtLocation(parent.left)
+                        : checker.getContextualType(previousToken as Expression);
         }
     }
 
@@ -1181,7 +1182,11 @@ namespace ts.Completions {
         function filterGlobalCompletion(symbols: Symbol[]): void {
             const isTypeOnly = isTypeOnlyCompletion();
             const allowTypes = isTypeOnly || !isContextTokenValueLocation(contextToken) && isPossiblyTypeArgumentPosition(contextToken, sourceFile, typeChecker);
-            if (isTypeOnly) keywordFilters = KeywordCompletionFilters.TypeKeywords;
+            if (isTypeOnly) {
+                keywordFilters = isInsideTypeAssertion()
+                    ? KeywordCompletionFilters.TypeAssertionKeywords
+                    : KeywordCompletionFilters.TypeKeywords;
+            }
 
             filterMutate(symbols, symbol => {
                 if (!isSourceFile(location)) {
@@ -1209,6 +1214,10 @@ namespace ts.Completions {
                 // expressions are value space (which includes the value namespaces)
                 return !!(getCombinedLocalAndExportSymbolFlags(symbol) & SymbolFlags.Value);
             });
+        }
+
+        function isInsideTypeAssertion(): boolean {
+            return isAsExpression(contextToken.parent);
         }
 
         function isTypeOnlyCompletion(): boolean {
@@ -1434,7 +1443,7 @@ namespace ts.Completions {
             //   3. at the end of a regular expression (due to trailing flags like '/foo/g').
             return (isRegularExpressionLiteral(contextToken) || isStringTextContainingNode(contextToken)) && (
                 rangeContainsPositionExclusive(createTextRangeFromSpan(createTextSpanFromNode(contextToken)), position) ||
-                    position === contextToken.end && (!!contextToken.isUnterminated || isRegularExpressionLiteral(contextToken)));
+                position === contextToken.end && (!!contextToken.isUnterminated || isRegularExpressionLiteral(contextToken)));
         }
 
         /**
@@ -1944,8 +1953,8 @@ namespace ts.Completions {
 
             return baseSymbols.filter(propertySymbol =>
                 !existingMemberNames.has(propertySymbol.escapedName) &&
-                    !!propertySymbol.declarations &&
-                    !(getDeclarationModifierFlagsFromSymbol(propertySymbol) & ModifierFlags.Private));
+                !!propertySymbol.declarations &&
+                !(getDeclarationModifierFlagsFromSymbol(propertySymbol) & ModifierFlags.Private));
         }
 
         /**
@@ -2057,6 +2066,8 @@ namespace ts.Completions {
                     return isParameterPropertyModifier(kind);
                 case KeywordCompletionFilters.FunctionLikeBodyKeywords:
                     return isFunctionLikeBodyKeyword(kind);
+                case KeywordCompletionFilters.TypeAssertionKeywords:
+                    return isTypeKeyword(kind) || kind === SyntaxKind.ConstKeyword;
                 case KeywordCompletionFilters.TypeKeywords:
                     return isTypeKeyword(kind);
                 default:
