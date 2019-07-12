@@ -1155,6 +1155,7 @@ declare namespace ts {
         expression: JsxTagNameExpression;
     }
     interface JsxAttributes extends ObjectLiteralExpressionBase<JsxAttributeLike> {
+        kind: SyntaxKind.JsxAttributes;
         parent: JsxOpeningLikeElement;
     }
     interface JsxOpeningElement extends Expression {
