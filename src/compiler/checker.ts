@@ -15266,13 +15266,21 @@ namespace ts {
                 const inference = inferences[i];
                 if (t === inference.typeParameter) {
                     if (fix && !inference.isFixed) {
+                        clearCachedInferences(inferences);
                         inference.isFixed = true;
-                        inference.inferredType = undefined;
                     }
                     return getInferredType(context, i);
                 }
             }
             return t;
+        }
+
+        function clearCachedInferences(inferences: InferenceInfo[]) {
+            for (const inference of inferences) {
+                if (!inference.isFixed) {
+                    inference.inferredType = undefined;
+                }
+            }
         }
 
         function createInferenceInfo(typeParameter: TypeParameter): InferenceInfo {
@@ -15554,17 +15562,17 @@ namespace ts {
                                 if (contravariant && !bivariant) {
                                     if (!contains(inference.contraCandidates, candidate)) {
                                         inference.contraCandidates = append(inference.contraCandidates, candidate);
-                                        inference.inferredType = undefined;
+                                        clearCachedInferences(inferences);
                                     }
                                 }
                                 else if (!contains(inference.candidates, candidate)) {
                                     inference.candidates = append(inference.candidates, candidate);
-                                    inference.inferredType = undefined;
+                                    clearCachedInferences(inferences);
                                 }
                             }
                             if (!(priority & InferencePriority.ReturnType) && target.flags & TypeFlags.TypeParameter && inference.topLevel && !isTypeParameterAtTopLevel(originalTarget, <TypeParameter>target)) {
                                 inference.topLevel = false;
-                                inference.inferredType = undefined;
+                                clearCachedInferences(inferences);
                             }
                         }
                         return;
