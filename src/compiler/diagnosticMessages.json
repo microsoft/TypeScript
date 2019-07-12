@@ -2076,10 +2076,6 @@
         "category": "Error",
         "code": 2569
     },
-    "Property '{0}' does not exist on type '{1}'. Did you forget to use 'await'?": {
-        "category": "Error",
-        "code": 2570
-    },
     "Object is of type 'unknown'.": {
         "category": "Error",
         "code": 2571
@@ -5087,6 +5083,19 @@
         "category": "Message",
         "code": 95082
     },
+    "Add 'await'": {
+        "category": "Message",
+        "code": 95083
+    },
+    "Add 'await' to initializer for '{0}'": {
+        "category": "Message",
+        "code": 95084
+    },
+    "Fix all expressions possibly missing 'await'": {
+        "category": "Message",
+        "code": 95085
+    },
+
     "No value exists in scope for the shorthand property '{0}'. Either declare one or provide an initializer.": {
         "category": "Error",
         "code": 18004
