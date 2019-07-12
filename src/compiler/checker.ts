@@ -22431,7 +22431,7 @@ namespace ts {
                 !numCallSignatures && !numConstructSignatures && !(apparentFuncType.flags & (TypeFlags.Union | TypeFlags.Never)) && isTypeAssignableTo(funcType, globalFunctionType);
         }
 
-        function resolveNewExpression(node: NewExpression, candidatesOutArray: Signature[] | undefined, checkMode: CheckMode): Signature {
+        function resolveNewExpression(node: NewExpression, candidatesOutArray: Signature[] | undefined, checkMode: CheckMode, contextFlags?: ContextFlags): Signature {
             if (node.arguments && languageVersion < ScriptTarget.ES5) {
                 const spreadIndex = getSpreadArgumentIndex(node.arguments);
                 if (spreadIndex >= 0) {
@@ -22484,7 +22484,7 @@ namespace ts {
                     return resolveErrorCall(node);
                 }
 
-                return resolveCall(node, constructSignatures, candidatesOutArray, checkMode);
+                return resolveCall(node, constructSignatures, candidatesOutArray, checkMode, /*fallbackError*/ undefined, contextFlags);
             }
 
             // If expressionType's apparent type is an object type with no construct signatures but
@@ -22493,7 +22493,7 @@ namespace ts {
             // operation is Any. It is an error to have a Void this type.
             const callSignatures = getSignaturesOfType(expressionType, SignatureKind.Call);
             if (callSignatures.length) {
-                const signature = resolveCall(node, callSignatures, candidatesOutArray, checkMode);
+                const signature = resolveCall(node, callSignatures, candidatesOutArray, checkMode, /*fallbackError*/ undefined, contextFlags);
                 if (!noImplicitAny) {
                     if (signature.declaration && !isJSConstructor(signature.declaration) && getReturnTypeOfSignature(signature) !== voidType) {
                         error(node, Diagnostics.Only_a_void_function_can_be_called_with_the_new_keyword);
@@ -22844,7 +22844,7 @@ namespace ts {
                 case SyntaxKind.CallExpression:
                     return resolveCallExpression(node, candidatesOutArray, checkMode, contextFlags);
                 case SyntaxKind.NewExpression:
-                    return resolveNewExpression(node, candidatesOutArray, checkMode);
+                    return resolveNewExpression(node, candidatesOutArray, checkMode, contextFlags);
                 case SyntaxKind.TaggedTemplateExpression:
                     return resolveTaggedTemplateExpression(node, candidatesOutArray, checkMode);
                 case SyntaxKind.Decorator:
