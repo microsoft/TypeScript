@@ -22750,7 +22750,7 @@ namespace ts {
                  isVariableDeclaration(decl.parent) && getSymbolOfNode(decl.parent));
             const prototype = assignmentSymbol && assignmentSymbol.exports && assignmentSymbol.exports.get("prototype" as __String);
             const init = prototype && prototype.valueDeclaration && getAssignedJSPrototype(prototype.valueDeclaration);
-            return init ? checkExpression(init) : undefined;
+            return init ? getWidenedType(checkExpressionCached(init)) : undefined;
         }
 
         function getAssignedJSPrototype(node: Node) {
