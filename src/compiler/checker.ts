@@ -4739,6 +4739,26 @@ namespace ts {
                 }
             }
 
+            // See getNameForSymbolFromNameType for a stringy equivalent
+            function getPropertyNameNodeForSymbolFromNameType(symbol: Symbol, context: NodeBuilderContext) {
+                const nameType = symbol.nameType;
+                if (nameType) {
+                    if (nameType.flags & TypeFlags.StringOrNumberLiteral) {
+                        const name = "" + (<StringLiteralType | NumberLiteralType>nameType).value;
+                        if (!isIdentifierText(name, compilerOptions.target) && !isNumericLiteralName(name)) {
+                            return createLiteral(name);
+                        }
+                        if (isNumericLiteralName(name) && startsWith(name, "-")) {
+                            return createComputedPropertyName(createLiteral(+name));
+                        }
+                        return isIdentifierText(name, compilerOptions.target) ? createIdentifier(name) : createLiteral(isNumericLiteralName(name) ? +name : name) as StringLiteral | NumericLiteral;
+                    }
+                    if (nameType.flags & TypeFlags.UniqueESSymbol) {
+                        return createComputedPropertyName(symbolToExpression((<UniqueESSymbolType>nameType).symbol, context, SymbolFlags.Value));
+                    }
+                }
+            }
+
             function cloneNodeBuilderContext(context: NodeBuilderContext): NodeBuilderContext {
                 const initial: NodeBuilderContext = { ...context };
                 // Make type parameters created within this context not consume the name outside this context
@@ -4760,6 +4780,8 @@ namespace ts {
 
             function symbolTableToDeclarationStatements(symbolTable: SymbolTable, context: NodeBuilderContext): Statement[] {
                 // TODO: Use `setOriginalNode` on original declarations where possible so these declarations see some kind of declaration mapping
+                // We save this off here so it's not adjusted by well-meaning declaration emit codepaths which want to apply more specific contexts
+                const enclosingDeclaration = context.enclosingDeclaration!;
                 const results: Statement[] = [];
                 const visitedSymbols: Map<true> = createMap();
                 const subcontext: typeof context = {
@@ -4792,7 +4814,7 @@ namespace ts {
                     visitedSymbols.set("" + getSymbolId(symbol), true);
                     serializeSymbol(symbol, /*isPrivate*/ false);
                 });
-                if (context.enclosingDeclaration && ((isSourceFile(context.enclosingDeclaration) && isExternalOrCommonJsModule(context.enclosingDeclaration)) || isModuleDeclaration(context.enclosingDeclaration)) && (!some(results, isExternalModuleIndicator) || (!hasScopeMarker(results) && some(results, needsScopeMarker)))) {
+                if (enclosingDeclaration && ((isSourceFile(enclosingDeclaration) && isExternalOrCommonJsModule(enclosingDeclaration)) || isModuleDeclaration(enclosingDeclaration)) && (!some(results, isExternalModuleIndicator) || (!hasScopeMarker(results) && some(results, needsScopeMarker)))) {
                     results.push(createEmptyExports());
                 }
                 // TODO: Cleanup pass: Merge redundant export declarations
@@ -4802,15 +4824,15 @@ namespace ts {
                 // Note: This _mutates_ `node` without using `updateNode` - the assumption being that all nodes should be manufactured fresh by the node builder
                 function addResult(node: Statement, additionalModifierFlags: ModifierFlags) {
                     let newModifierFlags: ModifierFlags = ModifierFlags.None;
-                    if (((additionalModifierFlags & ModifierFlags.Export) && context.enclosingDeclaration &&
-                        ((isSourceFile(context.enclosingDeclaration) && isExternalOrCommonJsModule(context.enclosingDeclaration)) ||
-                        (isAmbientModule(context.enclosingDeclaration) && !isGlobalScopeAugmentation(context.enclosingDeclaration)))) &&
+                    if (((additionalModifierFlags & ModifierFlags.Export) && enclosingDeclaration &&
+                        ((isSourceFile(enclosingDeclaration) && isExternalOrCommonJsModule(enclosingDeclaration)) ||
+                        (isAmbientModule(enclosingDeclaration) && !isGlobalScopeAugmentation(enclosingDeclaration)))) &&
                         (isEnumDeclaration(node) || isVariableStatement(node) || isFunctionDeclaration(node) || isClassDeclaration(node) || (isModuleDeclaration(node) && !isExternalModuleAugmentation(node) && !isGlobalScopeAugmentation(node)) || isInterfaceDeclaration(node) || isTypeDeclaration(node))
                     ) {
                         // Classes, namespaces, variables, functions, interfaces, and types should all be `export`ed in a module context if not private
                         newModifierFlags |= ModifierFlags.Export;
                     }
-                    if (!(newModifierFlags & ModifierFlags.Export) && (!context.enclosingDeclaration || !(context.enclosingDeclaration.flags & NodeFlags.Ambient)) && (isEnumDeclaration(node) || isVariableStatement(node) || isFunctionDeclaration(node) || isClassDeclaration(node) || isModuleDeclaration(node))) {
+                    if (!(newModifierFlags & ModifierFlags.Export) && (!enclosingDeclaration || !(enclosingDeclaration.flags & NodeFlags.Ambient)) && (isEnumDeclaration(node) || isVariableStatement(node) || isFunctionDeclaration(node) || isClassDeclaration(node) || isModuleDeclaration(node))) {
                         // Classes, namespaces, variables, enums, and functions all need `declare` modifiers to be valid in a declaration file top-level scope
                         newModifierFlags |= ModifierFlags.Ambient;
                     }
@@ -4888,7 +4910,7 @@ namespace ts {
                             // Add a namespace
                             const fakespace = createModuleDeclaration(/*decorators*/ undefined, /*modifiers*/ undefined, createIdentifier(localName), createModuleBlock([]), NodeFlags.Namespace);
                             fakespace.flags ^= NodeFlags.Synthesized; // unset synthesized so it is usable as an enclosing declaration
-                            fakespace.parent = context.enclosingDeclaration as SourceFile | NamespaceDeclaration;
+                            fakespace.parent = enclosingDeclaration as SourceFile | NamespaceDeclaration;
                             fakespace.locals = createSymbolTable(props);
                             fakespace.symbol = props[0].parent!;
                             const declarations = mapDefined(props, p => {
@@ -4920,7 +4942,7 @@ namespace ts {
                         const flags = !(symbol.flags & SymbolFlags.BlockScopedVariable) ? undefined : isConstVariable(symbol) ? NodeFlags.Const : NodeFlags.Let;
                         const name = (needsPostExportDefault || !(symbol.flags & SymbolFlags.Property)) ? localName : getUnusedName(localName, symbol);
                         const statement = createVariableStatement(/*modifiers*/ undefined, createVariableDeclarationList([
-                            createVariableDeclaration(name, typeToTypeNodeHelper(getTypeOfSymbol(symbol), context))
+                            createVariableDeclaration(name, serializeTypeForDeclaration(getTypeOfSymbol(symbol), symbol))
                         ], flags));
                         addResult(statement, name !== localName ? modifierFlags & ~ModifierFlags.Export : modifierFlags);
                         if (name !== localName) {
@@ -5158,25 +5180,26 @@ namespace ts {
                             return [];
                         }
                         const staticFlag = isStatic ? ModifierFlags.Static : 0;
+                        const rawName = unescapeLeadingUnderscores(p.escapedName);
+                        const name = getPropertyNameNodeForSymbolFromNameType(p, context) || createIdentifier(rawName);
                         if (p.flags & SymbolFlags.Property || p.flags & SymbolFlags.Accessor) {
                             return createProperty(
                                 /*decorators*/ undefined,
                                 createModifiersFromModifierFlags((isReadonlySymbol(p) ? ModifierFlags.Readonly : 0) | staticFlag),
-                                unescapeLeadingUnderscores(p.escapedName), // TODO: Computed names!?!?!
+                                name,
                                 p.flags & SymbolFlags.Optional ? createToken(SyntaxKind.QuestionToken) : undefined,
-                                typeToTypeNodeHelper(getTypeOfSymbol(p), context),
+                                serializeTypeForDeclaration(getTypeOfSymbol(p), p),
                                 /*initializer*/ undefined // interface members can't have initializers, however class members _can_
                             );
                         }
                         if (p.flags & SymbolFlags.Method) {
                             const type = getTypeOfSymbol(p);
-                            const memberName = unescapeLeadingUnderscores(p.escapedName); // TODO: Computed names!?!?!
                             const signatures = getSignaturesOfType(type, SignatureKind.Call);
                             const results = [];
                             for (const sig of signatures) {
                                 // Each overload becomes a seperate method declaration, in order
                                 const decl = signatureToSignatureDeclarationHelper(sig, methodKind, context) as MethodDeclaration;
-                                decl.name = createIdentifier(memberName);
+                                decl.name = name; // TODO: Clone
                                 if (staticFlag) {
                                     decl.modifiers = createNodeArray(createModifiersFromModifierFlags(staticFlag));
                                 }
@@ -5198,6 +5221,21 @@ namespace ts {
 
                 function serializePropertySymbolForInterface(p: Symbol, baseType: Type | undefined) {
                     return makeSerializePropertySymbol<TypeElement>((_decorators, mods, name, question, type, initializer) => createPropertySignature(mods, name, question, type, initializer), SyntaxKind.MethodSignature)(p, /*isStatic*/ false, baseType);
+                }
+
+                /**
+                 * Unlike `typeToTypeNodeHelper`, this handles setting up the `AllowUniqueESSymbolType` flag
+                 * so a `unique symbol` is returned when appropriate for the input symbol, rather than `typeof sym`
+                 */
+                function serializeTypeForDeclaration(type: Type, symbol: Symbol) {
+                    const oldFlags = context.flags;
+                    if (type.flags & TypeFlags.UniqueESSymbol &&
+                        type.symbol === symbol) {
+                        context.flags |= NodeBuilderFlags.AllowUniqueESSymbolType;
+                    }
+                    const result = typeToTypeNodeHelper(type, context);
+                    context.flags = oldFlags;
+                    return result;
                 }
 
                 function serializeSignatures(kind: SignatureKind, input: Type, baseType: Type | undefined, outputKind: SyntaxKind) {
@@ -5276,7 +5314,7 @@ namespace ts {
                     }
                     visitedSymbols.set("" + getSymbolId(symbol), true);
                     // Only actually serialize symbols within the correct enclosing declaration, otherwise do nothing with the out-of-context symbol
-                    if (length(symbol.declarations) && some(symbol.declarations, d => !!findAncestor(d, n => n === context.enclosingDeclaration))) {
+                    if (length(symbol.declarations) && some(symbol.declarations, d => !!findAncestor(d, n => n === enclosingDeclaration))) {
                         serializeSymbol(symbol, isPrivate);
                     }
                 }
