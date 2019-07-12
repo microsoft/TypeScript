@@ -51,4 +51,3 @@ export function ff(s) {
         return Target[s]
     }
 }
-

@@ -48,7 +48,6 @@ export function ff(s) {
 }
 
 
-
 //// [index.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
@@ -112,71 +111,16 @@ export const Target: {
     /** @type {number} */
     OK_I_GUESS: number;
 };
-export enum Target {
-}
+export type Target = string;
 export const Second: {
     OK: number;
     /** @type {number} */
     FINE: number;
 };
-export enum Second {
-}
+export type Second = number;
 export const Fs: {
     ADD1: (n: any) => any;
     ID: (n: any) => any;
     SUB1: (n: any) => number;
 };
-export enum Fs {
-}
-
-
-//// [DtsFileErrors]
-
-
-out/index.d.ts(3,14): error TS2567: Enum declarations can only merge with namespace or other enum declarations.
-out/index.d.ts(10,13): error TS2567: Enum declarations can only merge with namespace or other enum declarations.
-out/index.d.ts(12,14): error TS2567: Enum declarations can only merge with namespace or other enum declarations.
-out/index.d.ts(17,13): error TS2567: Enum declarations can only merge with namespace or other enum declarations.
-out/index.d.ts(19,14): error TS2567: Enum declarations can only merge with namespace or other enum declarations.
-out/index.d.ts(24,13): error TS2567: Enum declarations can only merge with namespace or other enum declarations.
-
-
-==== ./out/index.d.ts (6 errors) ====
-    export function consume(t: string, s: number, f: (arg0: number) => number): void;
-    export function ff(s: string): any;
-    export const Target: {
-                 ~~~~~~
-!!! error TS2567: Enum declarations can only merge with namespace or other enum declarations.
-        START: string;
-        MIDDLE: string;
-        END: string;
-        /** @type {number} */
-        OK_I_GUESS: number;
-    };
-    export enum Target {
-                ~~~~~~
-!!! error TS2567: Enum declarations can only merge with namespace or other enum declarations.
-    }
-    export const Second: {
-                 ~~~~~~
-!!! error TS2567: Enum declarations can only merge with namespace or other enum declarations.
-        OK: number;
-        /** @type {number} */
-        FINE: number;
-    };
-    export enum Second {
-                ~~~~~~
-!!! error TS2567: Enum declarations can only merge with namespace or other enum declarations.
-    }
-    export const Fs: {
-                 ~~
-!!! error TS2567: Enum declarations can only merge with namespace or other enum declarations.
-        ADD1: (n: any) => any;
-        ID: (n: any) => any;
-        SUB1: (n: any) => number;
-    };
-    export enum Fs {
-                ~~
-!!! error TS2567: Enum declarations can only merge with namespace or other enum declarations.
-    }
-    
+export type Fs = (arg0: number) => number;
