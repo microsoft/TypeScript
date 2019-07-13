@@ -3003,6 +3003,12 @@ namespace ts {
                 // fast path, `symbol` is either already the alias or isn't aliased
                 return symbol;
             }
+            // Check if container is a thing with an `export=` which points directly at `symbol`, and if so, return
+            // the container itself as the alias for the symbol
+            const exportEquals = container.exports && container.exports.get(InternalSymbolName.ExportEquals);
+            if (exportEquals && symbolRefersToTarget(exportEquals)) {
+                return container;
+            }
             const exports = getExportsOfSymbol(container);
             const quick = exports.get(symbol.escapedName);
             if (quick && symbolRefersToTarget(quick)) {
@@ -3988,6 +3994,7 @@ namespace ts {
                     else if (context.flags & NodeBuilderFlags.WriteClassExpressionAsTypeLiteral &&
                         type.symbol.valueDeclaration &&
                         isClassLike(type.symbol.valueDeclaration) &&
+                        findAncestor(type.symbol.valueDeclaration, d => d === getSourceFileOfNode(context.enclosingDeclaration)) && // Use `import` types for refs to other scopes, only anonymize something defined in the same scope
                         !isValueSymbolAccessible(type.symbol, context.enclosingDeclaration)
                     ) {
                         return createAnonymousTypeNode(type);
@@ -4404,6 +4411,12 @@ namespace ts {
                             for (const parent of sortedParents) {
                                 const parentChain = getSymbolChain(parent, getQualifiedLeftMeaning(meaning), /*endOfChain*/ false);
                                 if (parentChain) {
+                                    if (parent.exports && parent.exports.get(InternalSymbolName.ExportEquals) && resolveSymbol(parent.exports.get(InternalSymbolName.ExportEquals)) === resolveSymbol(symbol)) {
+                                        // parentChain root _is_ symbol - symbol is a module export=, so it kinda looks like it's own parent
+                                        // No need to lookup an alias for the symbol in itself
+                                        accessibleSymbolChain = parentChain;
+                                        break;
+                                    }
                                     accessibleSymbolChain = parentChain.concat(accessibleSymbolChain || [getAliasForSymbolInContainer(parent, symbol) || symbol]);
                                     break;
                                 }
@@ -4792,7 +4805,7 @@ namespace ts {
                 // TODO: Use `setOriginalNode` on original declarations where possible so these declarations see some kind of declaration mapping
                 // We save this off here so it's not adjusted by well-meaning declaration emit codepaths which want to apply more specific contexts
                 const enclosingDeclaration = context.enclosingDeclaration!;
-                const results: Statement[] = [];
+                let results: Statement[] = [];
                 const visitedSymbols: Map<true> = createMap();
                 const subcontext: NodeBuilderContext = {
                     ...context,
@@ -4814,18 +4827,45 @@ namespace ts {
                     });
                 }
                 context = subcontext;
-                symbolTable.forEach((symbol, _name) => {
-                    if (visitedSymbols.has("" + getSymbolId(symbol))) {
-                        return; // Already printed
-                    }
-                    visitedSymbols.set("" + getSymbolId(symbol), true);
-                    serializeSymbol(symbol, /*isPrivate*/ false);
-                });
+                const exportEquals = symbolTable.get(InternalSymbolName.ExportEquals);
+                if (exportEquals && symbolTable.size > 1) {
+                    // export= merged with other stuff - likely due to JS declarations. This is strangeish to deal with, but essentially we just
+                    // filter the symbol table and stuff the non-export= members into a merged namespace
+                    // We use `serializeSymbolRecursive` here, since it'll mark the `export=` symbol as visited, so it'll be skipped
+                    // when we go over the entire table looking for other exports to merge in
+                    serializeSymbolRecursive(exportEquals, /*isPrivate*/ false);
+                    const oldResults = results;
+                    results = [];
+                    visitSymbolTable(symbolTable);
+                    const nsMembers = results;
+                    results = oldResults;
+                    const nsname = getUnusedName("_exports", exportEquals);
+                    addResult(createModuleDeclaration(
+                        /*decorators*/ undefined,
+                        /*modifiers*/ undefined,
+                        createIdentifier(nsname),
+                        createModuleBlock(nsMembers),
+                        NodeFlags.Namespace
+                    ), ModifierFlags.None);
+                    return results;
+                }
+
+                visitSymbolTable(symbolTable);
                 if (enclosingDeclaration && ((isSourceFile(enclosingDeclaration) && isExternalOrCommonJsModule(enclosingDeclaration)) || isModuleDeclaration(enclosingDeclaration)) && (!some(results, isExternalModuleIndicator) || (!hasScopeMarker(results) && some(results, needsScopeMarker)))) {
                     results.push(createEmptyExports());
                 }
                 // TODO: Cleanup pass: Merge redundant export declarations
                 return results;
+
+                function visitSymbolTable(symbolTable: SymbolTable) {
+                    symbolTable.forEach((symbol, _name) => {
+                        if (visitedSymbols.has("" + getSymbolId(symbol))) {
+                            return; // Already printed
+                        }
+                        visitedSymbols.set("" + getSymbolId(symbol), true);
+                        serializeSymbol(symbol, /*isPrivate*/ false);
+                    });
+                }
 
                 // Appends a `declare` and/or `export` modifier if the context requires it, and then adds `node` to `result` and returns `node`
                 // Note: This _mutates_ `node` without using `updateNode` - the assumption being that all nodes should be manufactured fresh by the node builder

@@ -30,3 +30,25 @@ export {}; // flag file as module
  * @param {T} x
  * @returns {T}
  */
+
+// @filename: mixed.js
+/**
+ * @typedef {{x: string} | number | LocalThing | ExportedThing} SomeType
+ */
+/**
+ * @param {number} x
+ * @returns {SomeType}
+ */
+function doTheThing(x) {
+    return {x: ""+x};
+}
+class ExportedThing {
+    z = "ok"
+}
+module.exports = {
+    doTheThing,
+    ExportedThing,
+};
+class LocalThing {
+    y = "ok"
+}

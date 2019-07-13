@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/jsdoc/declarations/jsDeclarationsTypeAliases.ts] ////
+
 //// [index.js]
 export {}; // flag file as module
 /**
@@ -26,6 +28,28 @@ export {}; // flag file as module
  * @returns {T}
  */
 
+//// [mixed.js]
+/**
+ * @typedef {{x: string} | number | LocalThing | ExportedThing} SomeType
+ */
+/**
+ * @param {number} x
+ * @returns {SomeType}
+ */
+function doTheThing(x) {
+    return {x: ""+x};
+}
+class ExportedThing {
+    z = "ok"
+}
+module.exports = {
+    doTheThing,
+    ExportedThing,
+};
+class LocalThing {
+    y = "ok"
+}
+
 
 //// [index.js]
 "use strict";
@@ -52,6 +76,33 @@ exports.__esModule = true;
  * @param {T} x
  * @returns {T}
  */
+//// [mixed.js]
+/**
+ * @typedef {{x: string} | number | LocalThing | ExportedThing} SomeType
+ */
+/**
+ * @param {number} x
+ * @returns {SomeType}
+ */
+function doTheThing(x) {
+    return { x: "" + x };
+}
+var ExportedThing = /** @class */ (function () {
+    function ExportedThing() {
+        this.z = "ok";
+    }
+    return ExportedThing;
+}());
+module.exports = {
+    doTheThing: doTheThing,
+    ExportedThing: ExportedThing
+};
+var LocalThing = /** @class */ (function () {
+    function LocalThing() {
+        this.y = "ok";
+    }
+    return LocalThing;
+}());
 
 
 //// [index.d.ts]
@@ -61,3 +112,23 @@ export type MixinName<T> = T & {
     name: string;
 };
 export type Identity<T> = (x: T) => T;
+//// [mixed.d.ts]
+declare class LocalThing {
+    y: string;
+}
+declare class ExportedThing {
+    z: string;
+}
+declare function doTheThing(x: number): number | {
+    x: string;
+} | LocalThing | ExportedThing;
+declare const _exports: {
+    doTheThing: typeof doTheThing;
+    ExportedThing: typeof ExportedThing;
+};
+export = _exports;
+declare namespace _exports {
+    export type SomeType = number | {
+        x: string;
+    } | LocalThing | ExportedThing;
+}
