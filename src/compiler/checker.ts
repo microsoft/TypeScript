@@ -3144,7 +3144,7 @@ namespace ts {
                     case SyntaxKind.ClassExpression:
                     case SyntaxKind.InterfaceDeclaration:
                         // Type parameters are bound into `members` lists so they can merge across declarations
-                        // This is troublesome, since in all other respects, they behave like locals T.T
+                        // This is troublesome, since in all other respects, they behave like locals :cries:
                         // TODO: the below is shared with similar code in `resolveName` - in fact, rephrasing all this symbol
                         // lookup logic in terms of `resolveName` would be nice
                         // The below is used to lookup type parameters within a class or interface, as they are added to the class/interface locals
@@ -3152,9 +3152,9 @@ namespace ts {
                         // trigger resolving late-bound names, which we may already be in the process of doing while we're here!
                         let table: UnderscoreEscapedMap<Symbol> | undefined;
                         // TODO: Should this filtered table be cached in some way?
-                        (getSymbolOfNode(location as ClassLikeDeclaration | InterfaceDeclaration).members || emptySymbols).forEach((symbol, key) => {
-                            if (symbol.flags & (SymbolFlags.Type & ~SymbolFlags.Assignment)) {
-                                (table || (table = createSymbolTable())).set(key, symbol);
+                        (getSymbolOfNode(location as ClassLikeDeclaration | InterfaceDeclaration).members || emptySymbols).forEach((memberSymbol, key) => {
+                            if (memberSymbol.flags & (SymbolFlags.Type & ~SymbolFlags.Assignment)) {
+                                (table || (table = createSymbolTable())).set(key, memberSymbol);
                             }
                         });
                         if (table && (result = callback(table))) {
@@ -4765,10 +4765,17 @@ namespace ts {
             function cloneNodeBuilderContext(context: NodeBuilderContext): NodeBuilderContext {
                 const initial: NodeBuilderContext = { ...context };
                 // Make type parameters created within this context not consume the name outside this context
-                // The symbol serializer ends up creating many sibling scopes that all need "seperate" contexts when
+                // The symbol serializer ends up creating many sibling scopes that all need "separate" contexts when
                 // it comes to naming things - within a normal `typeToTypeNode` call, the node builder only ever descends
                 // through the type tree, so the only cases where we could have used distinct sibling scopes was when there
                 // were multiple generic overloads with similar generated type parameter names
+                // The effect:
+                // When we write out
+                // export const x: <T>(x: T) => T
+                // export const y: <T>(x: T) => T
+                // we write it out like that, rather than as
+                // export const x: <T>(x: T) => T
+                // export const y: <T_1>(x: T_1) => T_1
                 if (initial.typeParameterNames) {
                     initial.typeParameterNames = cloneMap(initial.typeParameterNames);
                 }
@@ -4787,23 +4794,20 @@ namespace ts {
                 const enclosingDeclaration = context.enclosingDeclaration!;
                 const results: Statement[] = [];
                 const visitedSymbols: Map<true> = createMap();
-                const subcontext: typeof context = {
+                const subcontext: NodeBuilderContext = {
                     ...context,
-                    usedSymbolNames: createMap(),
+                    usedSymbolNames: mapMap(symbolTable, (_symbol, name) => [unescapeLeadingUnderscores(name), true]),
                     remappedSymbolNames: createMap(),
                     tracker: {
                         ...context.tracker,
                         trackSymbol: (sym, decl, meaning) => {
-                            const accessibleChain = getAccessibleSymbolChain(sym, decl, meaning!, /*usOnlyExternalAliasing*/ false);
+                            const accessibleChain = getAccessibleSymbolChain(sym, decl, meaning, /*usOnlyExternalAliasing*/ false);
                             if (length(accessibleChain)) {
                                 serializeSymbolRecursive(accessibleChain![0], /*isPrivate*/ true);
                             }
                         }
                     }
                 };
-                symbolTable.forEach((_symbol, name) => {
-                    subcontext.usedSymbolNames!.set(unescapeLeadingUnderscores(name), true);
-                });
                 if (context.usedSymbolNames) {
                     context.usedSymbolNames.forEach((_, name) => {
                         subcontext.usedSymbolNames!.set(name, true);
