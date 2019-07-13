@@ -4,6 +4,10 @@
 // @declaration: true
 // @filename: conn.js
 
+/**
+ * @typedef {string | number} Whatever
+ */
+
 class Conn {
     constructor() {}
     item = 3;

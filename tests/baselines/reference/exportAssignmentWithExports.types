@@ -3,7 +3,7 @@ export class C { }
 >C : C
 
 class D { }
->D : D
+>D : import("tests/cases/compiler/exportAssignmentWithExports")
 
 export = D;
 >D : import("tests/cases/compiler/exportAssignmentWithExports")

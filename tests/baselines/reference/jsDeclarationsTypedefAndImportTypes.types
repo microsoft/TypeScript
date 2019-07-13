@@ -1,6 +1,10 @@
 === tests/cases/conformance/jsdoc/declarations/conn.js ===
+/**
+ * @typedef {string | number} Whatever
+ */
+
 class Conn {
->Conn : Conn
+>Conn : import("tests/cases/conformance/jsdoc/declarations/conn")
 
     constructor() {}
     item = 3;
@@ -12,11 +16,11 @@ class Conn {
 }
 
 module.exports = Conn;
->module.exports = Conn : typeof Conn
->module.exports : typeof Conn
->module : { "tests/cases/conformance/jsdoc/declarations/conn": typeof Conn; }
->exports : typeof Conn
->Conn : typeof Conn
+>module.exports = Conn : typeof import("tests/cases/conformance/jsdoc/declarations/conn")
+>module.exports : typeof import("tests/cases/conformance/jsdoc/declarations/conn")
+>module : { "tests/cases/conformance/jsdoc/declarations/conn": typeof import("tests/cases/conformance/jsdoc/declarations/conn"); }
+>exports : typeof import("tests/cases/conformance/jsdoc/declarations/conn")
+>Conn : typeof import("tests/cases/conformance/jsdoc/declarations/conn")
 
 === tests/cases/conformance/jsdoc/declarations/usage.js ===
 /**

@@ -2715,6 +2715,10 @@ namespace ts {
             if (!exported || exported === unknownSymbol || exported === moduleSymbol || moduleSymbol.exports!.size === 1 || exported.flags & SymbolFlags.Alias) {
                 return exported;
             }
+            const links = getSymbolLinks(exported);
+            if (links.cjsExportMerged) {
+                return links.cjsExportMerged;
+            }
             const merged = cloneSymbol(exported);
             if (merged.exports === undefined) {
                 merged.flags = merged.flags | SymbolFlags.ValueModule;
@@ -2724,7 +2728,8 @@ namespace ts {
                 if (name === InternalSymbolName.ExportEquals) return;
                 merged.exports!.set(name, merged.exports!.has(name) ? mergeSymbol(merged.exports!.get(name)!, s) : s);
             });
-            return merged;
+            getSymbolLinks(merged).cjsExportMerged = merged;
+            return links.cjsExportMerged = merged;
         }
 
         // An external module with an 'export =' declaration may be referenced as an ES6 module provided the 'export ='
@@ -2994,7 +2999,7 @@ namespace ts {
             function fileSymbolIfFileSymbolExportEqualsContainer(d: Declaration) {
                 const fileSymbol = getExternalModuleContainer(d);
                 const exported = fileSymbol && fileSymbol.exports && fileSymbol.exports.get(InternalSymbolName.ExportEquals);
-                return resolveSymbol(exported) === resolveSymbol(container) ? fileSymbol : undefined;
+                return exported && container && getSymbolIfSameReference(exported, container) ? fileSymbol : undefined;
             }
         }
 
@@ -3006,24 +3011,29 @@ namespace ts {
             // Check if container is a thing with an `export=` which points directly at `symbol`, and if so, return
             // the container itself as the alias for the symbol
             const exportEquals = container.exports && container.exports.get(InternalSymbolName.ExportEquals);
-            if (exportEquals && symbolRefersToTarget(exportEquals)) {
+            if (exportEquals && getSymbolIfSameReference(exportEquals, symbol)) {
                 return container;
             }
             const exports = getExportsOfSymbol(container);
             const quick = exports.get(symbol.escapedName);
-            if (quick && symbolRefersToTarget(quick)) {
+            if (quick && getSymbolIfSameReference(quick, symbol)) {
                 return quick;
             }
             return forEachEntry(exports, exported => {
-                if (symbolRefersToTarget(exported)) {
+                if (getSymbolIfSameReference(exported, symbol)) {
                     return exported;
                 }
             });
+        }
 
-            function symbolRefersToTarget(s: Symbol) {
-                if (s === symbol || resolveSymbol(s) === symbol || resolveSymbol(s) === resolveSymbol(symbol)) {
-                    return s;
-                }
+        /**
+         * Checks if two symbols, through aliasing and/or merging, refer to the same thing
+         */
+        function getSymbolIfSameReference(s1: Symbol, s2: Symbol) {
+            if (getMergedSymbol(s1) === getMergedSymbol(s2) ||
+                getMergedSymbol(resolveSymbol(s1)) === getMergedSymbol(s2) ||
+                getMergedSymbol(resolveSymbol(s1)) === getMergedSymbol(resolveSymbol(s2))) {
+                return s1;
             }
         }
 
@@ -4411,7 +4421,7 @@ namespace ts {
                             for (const parent of sortedParents) {
                                 const parentChain = getSymbolChain(parent, getQualifiedLeftMeaning(meaning), /*endOfChain*/ false);
                                 if (parentChain) {
-                                    if (parent.exports && parent.exports.get(InternalSymbolName.ExportEquals) && resolveSymbol(parent.exports.get(InternalSymbolName.ExportEquals)) === resolveSymbol(symbol)) {
+                                    if (parent.exports && parent.exports.get(InternalSymbolName.ExportEquals) && getSymbolIfSameReference(parent.exports.get(InternalSymbolName.ExportEquals)!, symbol)) {
                                         // parentChain root _is_ symbol - symbol is a module export=, so it kinda looks like it's own parent
                                         // No need to lookup an alias for the symbol in itself
                                         accessibleSymbolChain = parentChain;
@@ -4608,17 +4618,30 @@ namespace ts {
                     const typeParameterNodes = index === (chain.length - 1) ? overrideTypeArguments : lookupTypeParameterNodes(chain, index, context);
                     const symbol = chain[index];
 
+                    const parent = chain[index - 1];
+                    let symbolName: string | undefined;
                     if (index === 0) {
-                       context.flags |= NodeBuilderFlags.InInitialEntityName;
-                    }
-                    const symbolName = getNameOfSymbolAsWritten(symbol, context);
-                    context.approximateLength += symbolName.length + 1;
-                    if (index === 0) {
+                        context.flags |= NodeBuilderFlags.InInitialEntityName;
+                        symbolName = getNameOfSymbolAsWritten(symbol, context);
                         context.flags ^= NodeBuilderFlags.InInitialEntityName;
                     }
+                    else {
+                        if (parent && getExportsOfSymbol(parent)) {
+                            const exports = getExportsOfSymbol(parent);
+                            forEachEntry(exports, (sym, name) => {
+                                if (getSymbolIfSameReference(sym, symbol) && !isLateBoundName(name) && name !== InternalSymbolName.ExportEquals) {
+                                    symbolName = unescapeLeadingUnderscores(name);
+                                    return true;
+                                }
+                            });
+                        }
+                    }
+                    if (!symbolName) {
+                        symbolName = getNameOfSymbolAsWritten(symbol, context);
+                    }
+                    context.approximateLength += symbolName.length + 1;
 
-                    const parent = chain[index - 1];
-                    if (!(context.flags & NodeBuilderFlags.ForbidIndexedAccessSymbolReferences) && parent && getMembersOfSymbol(parent) && getMembersOfSymbol(parent).get(symbol.escapedName) === symbol) {
+                    if (!(context.flags & NodeBuilderFlags.ForbidIndexedAccessSymbolReferences) && parent && getMembersOfSymbol(parent) && getMembersOfSymbol(parent).get(symbol.escapedName) && getSymbolIfSameReference(getMembersOfSymbol(parent).get(symbol.escapedName)!, symbol)) {
                         // Should use an indexed access
                         const LHS = createAccessFromSymbolChain(chain, index - 1, stopper);
                         if (isIndexedAccessTypeNode(LHS)) {
@@ -4839,12 +4862,18 @@ namespace ts {
                     visitSymbolTable(symbolTable);
                     const nsMembers = results;
                     results = oldResults;
-                    const nsname = getUnusedName("_exports", exportEquals);
+                    const aliasDecl = getDeclarationOfAliasSymbol(exportEquals);
+                    // serialize what the alias points to, preserve the declaration's intializer
+                    const target = aliasDecl && getTargetOfAliasDeclaration(aliasDecl, /*dontRecursivelyResolve*/ true);
+                    const nsname = target ? symbolToName(target, context, SymbolFlags.All, /*expectsIdentifier*/ false) : createIdentifier(getUnusedName("_exports", exportEquals));
+                    const members = createModuleBlock(nsMembers);
+                    const nsBody = isIdentifier(nsname) ? members
+                        : createNamespaceBodyWithQualifiedName(nsname, members);
                     addResult(createModuleDeclaration(
                         /*decorators*/ undefined,
                         /*modifiers*/ undefined,
-                        createIdentifier(nsname),
-                        createModuleBlock(nsMembers),
+                        isIdentifier(nsname) ? nsname : getFirstIdentifier(nsname),
+                        nsBody,
                         NodeFlags.Namespace
                     ), ModifierFlags.None);
                     return results;
@@ -4856,6 +4885,22 @@ namespace ts {
                 }
                 // TODO: Cleanup pass: Merge redundant export declarations
                 return results;
+
+                function createNamespaceBodyWithQualifiedName(name: QualifiedName, members: ModuleBlock): NamespaceBody {
+                    let result: NamespaceBody = members;
+                    let qualified: (typeof name)["left"] = name;
+                    do {
+                        result = createModuleDeclaration(
+                            /*decorators*/ undefined,
+                            /*modifiers*/ undefined,
+                            qualified.right,
+                            result,
+                            NodeFlags.Namespace
+                        ) as NamespaceDeclaration;
+                        qualified = qualified.left;
+                    } while (qualified.kind === SyntaxKind.QualifiedName);
+                    return result;
+                }
 
                 function visitSymbolTable(symbolTable: SymbolTable) {
                     symbolTable.forEach((symbol, _name) => {

@@ -3810,6 +3810,7 @@ namespace ts {
         variances?: VarianceFlags[];             // Alias symbol type argument variance cache
         deferralConstituents?: Type[];      // Calculated list of constituents for a deferred type
         deferralParent?: Type;              // Source union/intersection of a deferred type
+        cjsExportMerged?: Symbol;           // Version of the symbol with all non export= exports merged with the export= target
     }
 
     /* @internal */

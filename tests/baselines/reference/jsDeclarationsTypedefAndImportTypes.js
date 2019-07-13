@@ -1,6 +1,10 @@
 //// [tests/cases/conformance/jsdoc/declarations/jsDeclarationsTypedefAndImportTypes.ts] ////
 
 //// [conn.js]
+/**
+ * @typedef {string | number} Whatever
+ */
+
 class Conn {
     constructor() {}
     item = 3;
@@ -29,6 +33,9 @@ module.exports = {
 
 
 //// [conn.js]
+/**
+ * @typedef {string | number} Whatever
+ */
 var Conn = /** @class */ (function () {
     function Conn() {
         this.item = 3;
@@ -61,6 +68,9 @@ declare class Conn {
     method(): void;
 }
 export = Conn;
+declare namespace Conn {
+    export type Whatever = string | number;
+}
 //// [usage.d.ts]
 declare class Wrap {
     constructor(c: import("./conn"));
