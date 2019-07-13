@@ -9868,7 +9868,7 @@ namespace ts {
             return links.resolvedType;
         }
 
-        function addTypeToIntersection(typeSet: Type[], includes: TypeFlags, type: Type) {
+        function addTypeToIntersection(typeSet: Map<Type>, includes: TypeFlags, type: Type) {
             const flags = type.flags;
             if (flags & TypeFlags.Intersection) {
                 return addTypesToIntersection(typeSet, includes, (<IntersectionType>type).types);
@@ -9876,20 +9876,20 @@ namespace ts {
             if (isEmptyAnonymousObjectType(type)) {
                 if (!(includes & TypeFlags.IncludesEmptyObject)) {
                     includes |= TypeFlags.IncludesEmptyObject;
-                    typeSet.push(type);
+                    typeSet.set(type.id.toString(), type);
                 }
             }
             else {
                 if (flags & TypeFlags.AnyOrUnknown) {
                     if (type === wildcardType) includes |= TypeFlags.IncludesWildcard;
                 }
-                else if ((strictNullChecks || !(flags & TypeFlags.Nullable)) && !contains(typeSet, type)) {
+                else if ((strictNullChecks || !(flags & TypeFlags.Nullable)) && !typeSet.has(type.id.toString())) {
                     if (type.flags & TypeFlags.Unit && includes & TypeFlags.Unit) {
                         // We have seen two distinct unit types which means we should reduce to an
                         // empty intersection. Adding TypeFlags.NonPrimitive causes that to happen.
                         includes |= TypeFlags.NonPrimitive;
                     }
-                    typeSet.push(type);
+                    typeSet.set(type.id.toString(), type);
                 }
                 includes |= flags & TypeFlags.IncludesMask;
             }
@@ -9898,7 +9898,7 @@ namespace ts {
 
         // Add the given types to the given type set. Order is preserved, freshness is removed from literal
         // types, duplicates are removed, and nested types of the given kind are flattened into the set.
-        function addTypesToIntersection(typeSet: Type[], includes: TypeFlags, types: ReadonlyArray<Type>) {
+        function addTypesToIntersection(typeSet: Map<Type>, includes: TypeFlags, types: ReadonlyArray<Type>) {
             for (const type of types) {
                 includes = addTypeToIntersection(typeSet, includes, getRegularTypeOfLiteralType(type));
             }
@@ -10005,8 +10005,9 @@ namespace ts {
         // Also, unlike union types, the order of the constituent types is preserved in order that overload resolution
         // for intersections of types with signatures can be deterministic.
         function getIntersectionType(types: ReadonlyArray<Type>, aliasSymbol?: Symbol, aliasTypeArguments?: ReadonlyArray<Type>): Type {
-            const typeSet: Type[] = [];
-            const includes = addTypesToIntersection(typeSet, 0, types);
+            const typeMembershipMap: Map<Type> = createMap();
+            const includes = addTypesToIntersection(typeMembershipMap, 0, types);
+            const typeSet: Type[] = arrayFrom(typeMembershipMap.values());
             // An intersection type is considered empty if it contains
             // the type never, or
             // more than one unit type or,
