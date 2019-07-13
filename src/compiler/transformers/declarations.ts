@@ -204,9 +204,6 @@ namespace ts {
                 const bundle = createBundle(map(node.sourceFiles,
                     sourceFile => {
                         if (sourceFile.isDeclarationFile) return undefined!; // Omit declaration files from bundle results, too // TODO: GH#18217
-                        if (isSourceFileJS(sourceFile)) {
-                            return updateSourceFileNode(sourceFile, resolver.getDeclarationStatementsForSourceFile(sourceFile, declarationEmitNodeBuilderFlags, symbolTracker) || emptyArray);
-                        }
                         hasNoDefaultLib = hasNoDefaultLib || sourceFile.hasNoDefaultLib;
                         currentSourceFile = sourceFile;
                         enclosingDeclaration = sourceFile;
@@ -221,7 +218,7 @@ namespace ts {
                         if (isExternalModule(sourceFile)) {
                             resultHasExternalModuleIndicator = false; // unused in external module bundle emit (all external modules are within module blocks, therefore are known to be modules)
                             needsDeclare = false;
-                            const statements = visitNodes(sourceFile.statements, visitDeclarationStatements);
+                            const statements = isSourceFileJS(sourceFile) ? createNodeArray(resolver.getDeclarationStatementsForSourceFile(sourceFile, declarationEmitNodeBuilderFlags, symbolTracker)) : visitNodes(sourceFile.statements, visitDeclarationStatements);
                             const newFile = updateSourceFileNode(sourceFile, [createModuleDeclaration(
                                 [],
                                 [createModifier(SyntaxKind.DeclareKeyword)],
@@ -231,7 +228,7 @@ namespace ts {
                             return newFile;
                         }
                         needsDeclare = true;
-                        const updated = visitNodes(sourceFile.statements, visitDeclarationStatements);
+                        const updated = isSourceFileJS(sourceFile) ? createNodeArray(resolver.getDeclarationStatementsForSourceFile(sourceFile, declarationEmitNodeBuilderFlags, symbolTracker)) : visitNodes(sourceFile.statements, visitDeclarationStatements);
                         return updateSourceFileNode(sourceFile, transformAndReplaceLatePaintedStatements(updated), /*isDeclarationFile*/ true, /*referencedFiles*/ [], /*typeReferences*/ [], /*hasNoDefaultLib*/ false, /*libReferences*/ []);
                     }
                 ), mapDefined(node.prepends, prepend => {
@@ -254,12 +251,6 @@ namespace ts {
                 refs.forEach(referenceVisitor);
                 return bundle;
             }
-            else if (isSourceFileJS(node)) {
-                refs = createMap<SourceFile>();
-                libs = createMap<boolean>();
-                currentSourceFile = node;
-                return updateSourceFileNode(node, resolver.getDeclarationStatementsForSourceFile(node, declarationEmitNodeBuilderFlags, symbolTracker) || emptyArray);
-            }
 
             // Single source file
             needsDeclare = true;
@@ -279,12 +270,19 @@ namespace ts {
             const references: FileReference[] = [];
             const outputFilePath = getDirectoryPath(normalizeSlashes(getOutputPathsFor(node, host, /*forceDtsPaths*/ true).declarationFilePath!));
             const referenceVisitor = mapReferencesIntoArray(references, outputFilePath);
-            const statements = visitNodes(node.statements, visitDeclarationStatements);
-            let combinedStatements = setTextRange(createNodeArray(transformAndReplaceLatePaintedStatements(statements)), node.statements);
-            refs.forEach(referenceVisitor);
-            emittedImports = filter(combinedStatements, isAnyImportSyntax);
-            if (isExternalModule(node) && (!resultHasExternalModuleIndicator || (needsScopeFixMarker && !resultHasScopeMarker))) {
-                combinedStatements = setTextRange(createNodeArray([...combinedStatements, createEmptyExports()]), combinedStatements);
+            let combinedStatements: NodeArray<Statement>;
+            if (isSourceFileJS(currentSourceFile)) {
+                combinedStatements = createNodeArray(resolver.getDeclarationStatementsForSourceFile(node, declarationEmitNodeBuilderFlags, symbolTracker));
+                emittedImports = filter(combinedStatements, isAnyImportSyntax);
+            }
+            else {
+                const statements = visitNodes(node.statements, visitDeclarationStatements);
+                combinedStatements = setTextRange(createNodeArray(transformAndReplaceLatePaintedStatements(statements)), node.statements);
+                refs.forEach(referenceVisitor);
+                emittedImports = filter(combinedStatements, isAnyImportSyntax);
+                if (isExternalModule(node) && (!resultHasExternalModuleIndicator || (needsScopeFixMarker && !resultHasScopeMarker))) {
+                    combinedStatements = setTextRange(createNodeArray([...combinedStatements, createEmptyExports()]), combinedStatements);
+                }
             }
             const updated = updateSourceFileNode(node, combinedStatements, /*isDeclarationFile*/ true, references, getFileReferencesForUsedTypeReferences(), node.hasNoDefaultLib, getLibReferences());
             updated.exportedModulesFromDeclarationEmit = exportedModulesFromDeclarationEmit;
