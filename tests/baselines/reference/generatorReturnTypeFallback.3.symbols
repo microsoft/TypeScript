@@ -1,0 +1,9 @@
+=== tests/cases/conformance/generators/generatorReturnTypeFallback.3.ts ===
+// Do not allow generators to fallback to IterableIterator while in strictNullChecks mode if they need a type for the sent value.
+// NOTE: In non-strictNullChecks mode, `undefined` (the default sent value) is assignable to everything.
+function* f() {
+>f : Symbol(f, Decl(generatorReturnTypeFallback.3.ts, 0, 0))
+
+    const x: string = yield 1;
+>x : Symbol(x, Decl(generatorReturnTypeFallback.3.ts, 3, 9))
+}
