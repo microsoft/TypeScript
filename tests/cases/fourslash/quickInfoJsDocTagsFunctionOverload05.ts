@@ -1,6 +1,6 @@
 /// <reference path='fourslash.ts'/>
 
-// @Filename: quickInfoJsDocTagsFunctionOverload.ts
+// @Filename: quickInfoJsDocTagsFunctionOverload05.ts
 ////declare function /*1*/foo(): void;
 ////
 /////**
