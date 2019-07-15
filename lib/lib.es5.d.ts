@@ -1433,6 +1433,11 @@ type Required<T> = {
 };
 
 /**
+ * Construct a true subset of T as defined by U 
+ */
+type Subset<T extends U, U> = U;
+
+/**
  * Make all properties in T readonly
  */
 type Readonly<T> = {

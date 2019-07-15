@@ -1,0 +1,165 @@
+=== tests/cases/compiler/subsetTests.ts ===
+interface User {
+>User : Symbol(User, Decl(subsetTests.ts, 0, 0))
+
+    name: string;
+>name : Symbol(User.name, Decl(subsetTests.ts, 0, 16))
+
+    age: number;
+>age : Symbol(User.age, Decl(subsetTests.ts, 1, 17))
+
+    contact: {
+>contact : Symbol(User.contact, Decl(subsetTests.ts, 2, 16))
+
+        email: string;
+>email : Symbol(email, Decl(subsetTests.ts, 3, 14))
+
+        phone: string;
+>phone : Symbol(phone, Decl(subsetTests.ts, 4, 22))
+
+        address: {
+>address : Symbol(address, Decl(subsetTests.ts, 5, 22))
+
+            street: string;
+>street : Symbol(street, Decl(subsetTests.ts, 6, 18))
+
+            country: string;
+>country : Symbol(country, Decl(subsetTests.ts, 7, 27))
+
+            zipcode: number;
+>zipcode : Symbol(zipcode, Decl(subsetTests.ts, 8, 28))
+        }
+    };
+    password: string;
+>password : Symbol(User.password, Decl(subsetTests.ts, 11, 6))
+}
+
+type PersonalInformation = Subset<User, {
+>PersonalInformation : Symbol(PersonalInformation, Decl(subsetTests.ts, 13, 1))
+>User : Symbol(User, Decl(subsetTests.ts, 0, 0))
+
+    name: string;
+>name : Symbol(name, Decl(subsetTests.ts, 15, 41))
+
+    age: number;
+>age : Symbol(age, Decl(subsetTests.ts, 16, 17))
+
+}>; // Fine
+
+const test: PersonalInformation = {
+>test : Symbol(test, Decl(subsetTests.ts, 20, 5))
+>PersonalInformation : Symbol(PersonalInformation, Decl(subsetTests.ts, 13, 1))
+
+    name: 'Hans',
+>name : Symbol(name, Decl(subsetTests.ts, 20, 35))
+
+    age: 21,
+>age : Symbol(age, Decl(subsetTests.ts, 21, 17))
+
+    password: 'string' // Error: password does not exist in type
+>password : Symbol(password, Decl(subsetTests.ts, 22, 12))
+
+};
+
+type WronglyTypedPersonalInformation = Subset<User, {
+>WronglyTypedPersonalInformation : Symbol(WronglyTypedPersonalInformation, Decl(subsetTests.ts, 24, 2))
+>User : Symbol(User, Decl(subsetTests.ts, 0, 0))
+
+    name: string;
+>name : Symbol(name, Decl(subsetTests.ts, 26, 53))
+
+    age: string; // Error: Types of property age are incompatible
+>age : Symbol(age, Decl(subsetTests.ts, 27, 17))
+
+}>;
+
+type ExcessPersonalInformation = Subset<User, {
+>ExcessPersonalInformation : Symbol(ExcessPersonalInformation, Decl(subsetTests.ts, 29, 3))
+>User : Symbol(User, Decl(subsetTests.ts, 0, 0))
+
+    name: string;
+>name : Symbol(name, Decl(subsetTests.ts, 31, 47))
+
+    favoriteColor: string; // Error: Property favoriteColor is missing in type User
+>favoriteColor : Symbol(favoriteColor, Decl(subsetTests.ts, 32, 17))
+
+}>;
+
+// This also works for "deep" properties
+
+type ShippingInformation = Subset<User, {
+>ShippingInformation : Symbol(ShippingInformation, Decl(subsetTests.ts, 34, 3))
+>User : Symbol(User, Decl(subsetTests.ts, 0, 0))
+
+    name: string;
+>name : Symbol(name, Decl(subsetTests.ts, 38, 41))
+
+    contact: {
+>contact : Symbol(contact, Decl(subsetTests.ts, 39, 17))
+
+        address: {
+>address : Symbol(address, Decl(subsetTests.ts, 40, 14))
+
+            street: string;
+>street : Symbol(street, Decl(subsetTests.ts, 41, 18))
+
+            zipcode: number;
+>zipcode : Symbol(zipcode, Decl(subsetTests.ts, 42, 27))
+        }
+    }
+}>; // Fine (Omitting properties of nested properties is ok too)
+
+type WronglyTypedShippingInformation = Subset<User, {
+>WronglyTypedShippingInformation : Symbol(WronglyTypedShippingInformation, Decl(subsetTests.ts, 46, 3))
+>User : Symbol(User, Decl(subsetTests.ts, 0, 0))
+
+    name: string;
+>name : Symbol(name, Decl(subsetTests.ts, 48, 53))
+
+    contact: {
+>contact : Symbol(contact, Decl(subsetTests.ts, 49, 17))
+
+        address: {
+>address : Symbol(address, Decl(subsetTests.ts, 50, 14))
+
+            street: {
+>street : Symbol(street, Decl(subsetTests.ts, 51, 18))
+
+                name: string;
+>name : Symbol(name, Decl(subsetTests.ts, 52, 21))
+
+                nr: number;
+>nr : Symbol(nr, Decl(subsetTests.ts, 53, 29))
+
+            }; // Error: Types of property street are incompatible
+            zipcode: number;
+>zipcode : Symbol(zipcode, Decl(subsetTests.ts, 55, 14))
+        }
+    }
+}>;
+
+type ExcessShippingInformation = Subset<User, {
+>ExcessShippingInformation : Symbol(ExcessShippingInformation, Decl(subsetTests.ts, 59, 3))
+>User : Symbol(User, Decl(subsetTests.ts, 0, 0))
+
+    name: string;
+>name : Symbol(name, Decl(subsetTests.ts, 61, 47))
+
+    contact: {
+>contact : Symbol(contact, Decl(subsetTests.ts, 62, 17))
+
+        address: {
+>address : Symbol(address, Decl(subsetTests.ts, 63, 14))
+
+            street: string;
+>street : Symbol(street, Decl(subsetTests.ts, 64, 18))
+
+            zipcode: number;
+>zipcode : Symbol(zipcode, Decl(subsetTests.ts, 65, 27))
+
+            state: string; // Error: Property state is missing in type User
+>state : Symbol(state, Decl(subsetTests.ts, 66, 28))
+        }
+    }
+}>;
+
