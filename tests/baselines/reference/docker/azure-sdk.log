@@ -1,7 +1,7 @@
 Exit Code: 1
 Standard output:
 
-Rush Multi-Project Build Tool 5.7.3 - https://rushjs.io
+Rush Multi-Project Build Tool 5.10.1 - https://rushjs.io
 Starting "rush rebuild"
 Executing a maximum of 1 simultaneous processes...
 [@azure/cosmos] started
@@ -13,7 +13,7 @@ npm ERR!
 npm ERR! Failed at the @azure/cosmos@X.X.X compile script.
 npm ERR! This is probably not a problem with npm. There is likely additional logging output above.
 npm ERR! A complete log of this run can be found in:
-npm ERR!     /root/.npm/_logs/2019-07-11T13_39_53_628Z-debug.log
+npm ERR!     /root/.npm/_logs/2019-07-15T13_35_10_789Z-debug.log
 [@azure/service-bus] started
 [@azure/storage-blob] started
 XX of XX: [@azure/storage-blob] completed successfully in ? seconds
@@ -38,7 +38,7 @@ npm ERR!
 npm ERR! Failed at the @azure/core-http@X.X.X-preview.1 build:tsc script.
 npm ERR! This is probably not a problem with npm. There is likely additional logging output above.
 npm ERR! A complete log of this run can be found in:
-npm ERR!     /root/.npm/_logs/2019-07-11T13_41_08_804Z-debug.log
+npm ERR!     /root/.npm/_logs/2019-07-15T13_36_24_862Z-debug.log
 ERROR: "build:tsc" exited with 2.
 npm ERR! code ELIFECYCLE
 npm ERR! errno 1
@@ -48,7 +48,7 @@ npm ERR!
 npm ERR! Failed at the @azure/core-http@X.X.X-preview.1 build:lib script.
 npm ERR! This is probably not a problem with npm. There is likely additional logging output above.
 npm ERR! A complete log of this run can be found in:
-npm ERR!     /root/.npm/_logs/2019-07-11T13_41_08_852Z-debug.log
+npm ERR!     /root/.npm/_logs/2019-07-15T13_36_24_938Z-debug.log
 ERROR: "build:lib" exited with 1.
 [@azure/core-paging] started
 XX of XX: [@azure/core-paging] completed successfully in ? seconds
@@ -90,7 +90,7 @@ npm ERR!
 npm ERR! Failed at the @azure/core-http@X.X.X-preview.1 build:tsc script.
 npm ERR! This is probably not a problem with npm. There is likely additional logging output above.
 npm ERR! A complete log of this run can be found in:
-npm ERR!     /root/.npm/_logs/2019-07-11T13_41_08_804Z-debug.log
+npm ERR!     /root/.npm/_logs/2019-07-15T13_36_24_862Z-debug.log
 ERROR: "build:tsc" exited with 2.
 npm ERR! code ELIFECYCLE
 npm ERR! errno 1
@@ -100,7 +100,7 @@ npm ERR!
 npm ERR! Failed at the @azure/core-http@X.X.X-preview.1 build:lib script.
 npm ERR! This is probably not a problem with npm. There is likely additional logging output above.
 npm ERR! A complete log of this run can be found in:
-npm ERR!     /root/.npm/_logs/2019-07-11T13_41_08_852Z-debug.log
+npm ERR!     /root/.npm/_logs/2019-07-15T13_36_24_938Z-debug.log
 ERROR: "build:lib" exited with 1.
 @azure/cosmos ( ? seconds)
 npm ERR! code ELIFECYCLE
@@ -111,7 +111,7 @@ npm ERR!
 npm ERR! Failed at the @azure/cosmos@X.X.X compile script.
 npm ERR! This is probably not a problem with npm. There is likely additional logging output above.
 npm ERR! A complete log of this run can be found in:
-npm ERR!     /root/.npm/_logs/2019-07-11T13_39_53_628Z-debug.log
+npm ERR!     /root/.npm/_logs/2019-07-15T13_35_10_789Z-debug.log
 @azure/service-bus ( ? seconds)
 >>> @azure/service-bus
 tsc -p . && rollup -c 2>&1 && npm run extract-api
