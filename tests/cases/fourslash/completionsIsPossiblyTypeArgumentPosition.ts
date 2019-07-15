@@ -10,8 +10,8 @@
 ////x < {| "valueOnly": true |}
 ////f < {| "valueOnly": true |}
 ////g < {| "valueOnly": false |}
-////const something: C<{| "valueOnly": false |};
-////const something2: C<C<{| "valueOnly": false |};
+////const something: C<{| "typeOnly": true |};
+////const something2: C<C<{| "typeOnly": true |};
 ////new C<{| "valueOnly": false |};
 ////new C<C<{| "valueOnly": false |};
 ////
@@ -20,7 +20,10 @@
 ////new callAndConstruct<callAndConstruct</*callAndConstruct*/
 
 for (const marker of test.markers()) {
-    if (marker.data && marker.data.valueOnly) {
+    if (marker.data && marker.data.typeOnly) {
+        verify.completions({ marker, includes: "T", excludes: "x" });
+    }
+    else if (marker.data && marker.data.valueOnly) {
         verify.completions({ marker, includes: "x", excludes: "T" });
     }
     else {
