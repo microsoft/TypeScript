@@ -798,7 +798,7 @@ namespace FourSlash {
                         const name = typeof include === "string" ? include : include.name;
                         const found = nameToEntries.get(name);
                         if (!found) throw this.raiseError(`No completion ${name} found`);
-                        assert(found.length === 1); // Must use 'exact' for multiple completions with same name
+                        assert(found.length === 1, `Must use 'exact' for multiple completions with same name: '${name}'`);
                         this.verifyCompletionEntry(ts.first(found), include);
                     }
                 }
@@ -2828,11 +2828,28 @@ Actual: ${stringify(fullActual)}`);
             }
         }
 
-        public verifyCodeFixAvailable(negative: boolean, expected: FourSlashInterface.VerifyCodeFixAvailableOptions[] | undefined): void {
-            assert(!negative || !expected);
+        public verifyCodeFixAvailable(negative: boolean, expected: FourSlashInterface.VerifyCodeFixAvailableOptions[] | string | undefined): void {
             const codeFixes = this.getCodeFixes(this.activeFile.fileName);
-            const actuals = codeFixes.map((fix): FourSlashInterface.VerifyCodeFixAvailableOptions => ({ description: fix.description, commands: fix.commands }));
-            this.assertObjectsEqual(actuals, negative ? ts.emptyArray : expected);
+            if (negative) {
+                if (typeof expected === "undefined") {
+                    this.assertObjectsEqual(codeFixes, ts.emptyArray);
+                }
+                else if (typeof expected === "string") {
+                    if (codeFixes.some(fix => fix.fixName === expected)) {
+                        this.raiseError(`Expected not to find a fix with the name '${expected}', but one exists.`);
+                    }
+                }
+                else {
+                    assert(typeof expected === "undefined" || typeof expected === "string", "With a negated assertion, 'expected' must be undefined or a string value of a codefix name.");
+                }
+            }
+            else if (typeof expected === "string") {
+                this.assertObjectsEqual(codeFixes.map(fix => fix.fixName), [expected]);
+            }
+            else {
+                const actuals = codeFixes.map((fix): FourSlashInterface.VerifyCodeFixAvailableOptions => ({ description: fix.description, commands: fix.commands }));
+                this.assertObjectsEqual(actuals, negative ? ts.emptyArray : expected);
+            }
         }
 
         public verifyApplicableRefactorAvailableAtMarker(negative: boolean, markerName: string) {

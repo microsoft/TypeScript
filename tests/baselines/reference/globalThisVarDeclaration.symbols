@@ -24,16 +24,24 @@ globalThis.b;
 
 // DOM access is not supported until the index signature is handled more strictly
 self.a;
+>self.a : Symbol(a, Decl(b.js, 0, 3))
 >self : Symbol(self, Decl(lib.dom.d.ts, --, --))
+>a : Symbol(a, Decl(b.js, 0, 3))
 
 self.b;
+>self.b : Symbol(b, Decl(actual.ts, 0, 3))
 >self : Symbol(self, Decl(lib.dom.d.ts, --, --))
+>b : Symbol(b, Decl(actual.ts, 0, 3))
 
 window.a;
+>window.a : Symbol(a, Decl(b.js, 0, 3))
 >window : Symbol(window, Decl(lib.dom.d.ts, --, --))
+>a : Symbol(a, Decl(b.js, 0, 3))
 
 window.b;
+>window.b : Symbol(b, Decl(actual.ts, 0, 3))
 >window : Symbol(window, Decl(lib.dom.d.ts, --, --))
+>b : Symbol(b, Decl(actual.ts, 0, 3))
 
 top.a;
 >top : Symbol(top, Decl(lib.dom.d.ts, --, --))
@@ -67,16 +75,24 @@ globalThis.b;
 
 // same here -- no DOM access to globalThis yet
 self.a;
+>self.a : Symbol(a, Decl(b.js, 0, 3))
 >self : Symbol(self, Decl(lib.dom.d.ts, --, --))
+>a : Symbol(a, Decl(b.js, 0, 3))
 
 self.b;
+>self.b : Symbol(b, Decl(actual.ts, 0, 3))
 >self : Symbol(self, Decl(lib.dom.d.ts, --, --))
+>b : Symbol(b, Decl(actual.ts, 0, 3))
 
 window.a;
+>window.a : Symbol(a, Decl(b.js, 0, 3))
 >window : Symbol(window, Decl(lib.dom.d.ts, --, --))
+>a : Symbol(a, Decl(b.js, 0, 3))
 
 window.b;
+>window.b : Symbol(b, Decl(actual.ts, 0, 3))
 >window : Symbol(window, Decl(lib.dom.d.ts, --, --))
+>b : Symbol(b, Decl(actual.ts, 0, 3))
 
 top.a;
 >top : Symbol(top, Decl(lib.dom.d.ts, --, --))

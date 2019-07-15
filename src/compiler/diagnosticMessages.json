@@ -2076,10 +2076,6 @@
         "category": "Error",
         "code": 2569
     },
-    "Property '{0}' does not exist on type '{1}'. Did you forget to use 'await'?": {
-        "category": "Error",
-        "code": 2570
-    },
     "Object is of type 'unknown'.": {
         "category": "Error",
         "code": 2571
@@ -4639,6 +4635,11 @@
         "category": "Suggestion",
         "code": 80006
     },
+    "'await' has no effect on the type of this expression.": {
+        "category": "Suggestion",
+        "code": 80007
+    },
+
     "Add missing 'super()' call": {
         "category": "Message",
         "code": 90001
@@ -5079,13 +5080,38 @@
         "category": "Message",
         "code": 95080
     },
+    "Add 'const' to unresolved variable": {
+        "category": "Message",
+        "code": 95081
+    },
+    "Add 'const' to all unresolved variables": {
+        "category": "Message",
+        "code": 95082
+    },
+    "Add 'await'": {
+        "category": "Message",
+        "code": 95083
+    },
+    "Add 'await' to initializer for '{0}'": {
+        "category": "Message",
+        "code": 95084
+    },
+    "Fix all expressions possibly missing 'await'": {
+        "category": "Message",
+        "code": 95085
+    },
+    "Remove unnecessary 'await'": {
+        "category": "Message",
+        "code": 95086
+    },
+    "Remove all unnecessary uses of 'await'": {
+        "category": "Message",
+        "code": 95087
+    },
+
     "No value exists in scope for the shorthand property '{0}'. Either declare one or provide an initializer.": {
         "category": "Error",
         "code": 18004
-    },
-    "Quoted constructors have previously been interpreted as methods, which is incorrect. In TypeScript 3.6, they will be correctly parsed as constructors. In the meantime, consider using 'constructor()' to write a constructor, or '[\"constructor\"]()' to write a method.": {
-        "category": "Error",
-        "code": 18005
     },
     "Classes may not have a field named 'constructor'.": {
         "category": "Error",

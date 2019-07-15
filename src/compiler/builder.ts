@@ -612,7 +612,8 @@ namespace ts {
      */
     function getProgramBuildInfo(state: Readonly<ReusableBuilderProgramState>, getCanonicalFileName: GetCanonicalFileName): ProgramBuildInfo | undefined {
         if (state.compilerOptions.outFile || state.compilerOptions.out) return undefined;
-        const buildInfoDirectory = getDirectoryPath(getNormalizedAbsolutePath(getOutputPathForBuildInfo(state.compilerOptions)!, Debug.assertDefined(state.program).getCurrentDirectory()));
+        const currentDirectory = Debug.assertDefined(state.program).getCurrentDirectory();
+        const buildInfoDirectory = getDirectoryPath(getNormalizedAbsolutePath(getOutputPathForBuildInfo(state.compilerOptions)!, currentDirectory));
         const fileInfos: MapLike<BuilderState.FileInfo> = {};
         state.fileInfos.forEach((value, key) => {
             const signature = state.currentAffectedFilesSignatures && state.currentAffectedFilesSignatures.get(key);
@@ -621,7 +622,7 @@ namespace ts {
 
         const result: ProgramBuildInfo = {
             fileInfos,
-            options: convertToReusableCompilerOptions(state.compilerOptions, relativeToBuildInfo)
+            options: convertToReusableCompilerOptions(state.compilerOptions, relativeToBuildInfoEnsuringAbsolutePath)
         };
         if (state.referencedMap) {
             const referencedMap: MapLike<string[]> = {};
@@ -660,6 +661,10 @@ namespace ts {
         }
 
         return result;
+
+        function relativeToBuildInfoEnsuringAbsolutePath(path: string) {
+            return relativeToBuildInfo(getNormalizedAbsolutePath(path, currentDirectory));
+        }
 
         function relativeToBuildInfo(path: string) {
             return ensurePathIsNonModuleName(getRelativePathFromDirectory(buildInfoDirectory, path, getCanonicalFileName));
