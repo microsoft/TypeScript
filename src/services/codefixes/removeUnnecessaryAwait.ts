@@ -26,8 +26,18 @@ namespace ts.codefix {
             return;
         }
 
-        const parenthesizedExpression = tryCast(awaitExpression.parent, isParenthesizedExpression);
-        const removeParens = parenthesizedExpression && (isIdentifier(awaitExpression.expression) || isCallExpression(awaitExpression.expression));
-        changeTracker.replaceNode(sourceFile, removeParens ? parenthesizedExpression || awaitExpression : awaitExpression, awaitExpression.expression);
+        let expressionToReplace: Node = awaitExpression;
+        const hasSurroundingParens = isParenthesizedExpression(awaitExpression.parent);
+        if (hasSurroundingParens) {
+            const leftMostExpression = getLeftmostExpression(awaitExpression.expression, /*stopAtCallExpressions*/ false);
+            if (isIdentifier(leftMostExpression)) {
+                const precedingToken = findPrecedingToken(awaitExpression.parent.pos, sourceFile);
+                if (precedingToken && precedingToken.kind !== SyntaxKind.NewKeyword) {
+                    expressionToReplace = awaitExpression.parent;
+                }
+            }
+        }
+
+        changeTracker.replaceNode(sourceFile, expressionToReplace, awaitExpression.expression);
     }
 }
