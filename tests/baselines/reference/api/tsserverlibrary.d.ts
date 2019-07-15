@@ -5404,7 +5404,7 @@ declare namespace ts {
         argumentCount: number;
     }
     interface CompletionInfo {
-        /** Not true for all glboal completions. This will be true if the enclosing scope matches a few syntax kinds. See `isSnippetScope`. */
+        /** Not true for all global completions. This will be true if the enclosing scope matches a few syntax kinds. See `isSnippetScope`. */
         isGlobalCompletion: boolean;
         isMemberCompletion: boolean;
         /**
