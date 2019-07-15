@@ -4850,6 +4850,7 @@ namespace ts {
                     });
                 }
                 context = subcontext;
+                let addingDeclare = true;
                 const exportEquals = symbolTable.get(InternalSymbolName.ExportEquals);
                 if (exportEquals && symbolTable.size > 1) {
                     // export= merged with other stuff - likely due to JS declarations. This is strangeish to deal with, but essentially we just
@@ -4858,8 +4859,11 @@ namespace ts {
                     // when we go over the entire table looking for other exports to merge in
                     serializeSymbolRecursive(exportEquals, /*isPrivate*/ false);
                     const oldResults = results;
+                    const oldAddingDeclare = addingDeclare;
                     results = [];
+                    addingDeclare = false;
                     visitSymbolTable(symbolTable);
+                    addingDeclare = oldAddingDeclare;
                     const nsMembers = results;
                     results = oldResults;
                     const aliasDecl = getDeclarationOfAliasSymbol(exportEquals);
@@ -4924,7 +4928,7 @@ namespace ts {
                         // Classes, namespaces, variables, functions, interfaces, and types should all be `export`ed in a module context if not private
                         newModifierFlags |= ModifierFlags.Export;
                     }
-                    if (!(newModifierFlags & ModifierFlags.Export) && (!enclosingDeclaration || !(enclosingDeclaration.flags & NodeFlags.Ambient)) && (isEnumDeclaration(node) || isVariableStatement(node) || isFunctionDeclaration(node) || isClassDeclaration(node) || isModuleDeclaration(node))) {
+                    if (addingDeclare && !(newModifierFlags & ModifierFlags.Export) && (!enclosingDeclaration || !(enclosingDeclaration.flags & NodeFlags.Ambient)) && (isEnumDeclaration(node) || isVariableStatement(node) || isFunctionDeclaration(node) || isClassDeclaration(node) || isModuleDeclaration(node))) {
                         // Classes, namespaces, variables, enums, and functions all need `declare` modifiers to be valid in a declaration file top-level scope
                         newModifierFlags |= ModifierFlags.Ambient;
                     }
