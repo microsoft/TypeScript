@@ -1882,6 +1882,7 @@ namespace ts {
     }
 
     export interface JsxAttributes extends ObjectLiteralExpressionBase<JsxAttributeLike> {
+        kind: SyntaxKind.JsxAttributes;
         parent: JsxOpeningLikeElement;
     }
 

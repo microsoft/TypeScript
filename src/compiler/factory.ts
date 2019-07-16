@@ -4701,7 +4701,7 @@ namespace ts {
         }
     }
 
-    function getLeftmostExpression(node: Expression, stopAtCallExpressions: boolean) {
+    export function getLeftmostExpression(node: Expression, stopAtCallExpressions: boolean) {
         while (true) {
             switch (node.kind) {
                 case SyntaxKind.PostfixUnaryExpression:

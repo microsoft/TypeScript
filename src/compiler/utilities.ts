@@ -3150,6 +3150,23 @@ namespace ts {
         return s.replace(escapedCharsRegExp, getReplacement);
     }
 
+    /**
+     * Strip off existed single quotes or double quotes from a given string
+     *
+     * @return non-quoted string
+     */
+    export function stripQuotes(name: string) {
+        const length = name.length;
+        if (length >= 2 && name.charCodeAt(0) === name.charCodeAt(length - 1) && startsWithQuote(name)) {
+            return name.substring(1, length - 1);
+        }
+        return name;
+    }
+
+    export function startsWithQuote(name: string): boolean {
+        return isSingleOrDoubleQuote(name.charCodeAt(0));
+    }
+
     function getReplacement(c: string, offset: number, input: string) {
         if (c.charCodeAt(0) === CharacterCodes.nullCharacter) {
             const lookAhead = input.charCodeAt(offset + c.length);
@@ -7468,7 +7485,7 @@ namespace ts {
     export function getDirectoryPath(path: Path): Path;
     /**
      * Returns the path except for its basename. Semantics align with NodeJS's `path.dirname`
-     * except that we support URL's as well.
+     * except that we support URLs as well.
      *
      * ```ts
      * getDirectoryPath("/path/to/file.ext") === "/path/to"
