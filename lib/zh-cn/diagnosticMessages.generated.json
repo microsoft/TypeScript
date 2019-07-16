@@ -445,7 +445,7 @@
   "Function_overload_must_be_static_2387": "函数重载必须为静态。",
   "Function_overload_must_not_be_static_2388": "函数重载不能为静态。",
   "Generate_get_and_set_accessors_95046": "生成 \"get\" 和 \"set\" 访问器",
-  "Generates_a_sourcemap_for_each_corresponding_d_ts_file_6000": "为每个相应的 \".d.ts\" 文件生成 sourcemap。",
+  "Generates_a_sourcemap_for_each_corresponding_d_ts_file_6000": "为每个相应的 \".d.ts\" 文件生成源映射。",
   "Generates_corresponding_d_ts_file_6002": "生成相应的 \".d.ts\" 文件。",
   "Generates_corresponding_map_file_6043": "生成相应的 \".map\" 文件。",
   "Generator_implicitly_has_type_0_because_it_does_not_yield_any_values_Consider_supplying_a_return_typ_7025": "生成器隐式具有类型“{0}”，因为它不生成任何值。请考虑提供一个返回类型。",
