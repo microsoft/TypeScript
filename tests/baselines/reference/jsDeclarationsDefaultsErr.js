@@ -69,15 +69,15 @@ exports.default = x;
 
 //// [index1.d.ts]
 export type Cls = string | number;
+export default Cls;
 declare class Cls {
     static y: string;
     x: number;
 }
-export default Cls;
 //// [index2.d.ts]
 export default class C {
 }
 //// [index3.d.ts]
 export type _default = string | number;
-declare const x: 12;
 export { x as default };
+declare const x: 12;

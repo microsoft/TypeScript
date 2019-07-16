@@ -29,13 +29,13 @@ module.exports.Strings = Strings;
 
 
 //// [index.d.ts]
+declare var Strings_1: {
+    a: string;
+    b: string;
+};
 export declare const thing: string;
 export declare const also: string;
 export declare namespace desc {
     export const item: string;
 }
-declare var Strings_1: {
-    a: string;
-    b: string;
-};
 export { Strings_1 as Strings };

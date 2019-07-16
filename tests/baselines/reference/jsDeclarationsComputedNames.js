@@ -67,8 +67,6 @@ exports.MyClass = MyClass;
 
 
 //// [index.d.ts]
-declare const TopLevelSym: unique symbol;
-declare const InnerSym: unique symbol;
 declare const _exports: {
     [TopLevelSym](x?: number): number;
     items: {
@@ -78,12 +76,14 @@ declare const _exports: {
     };
 };
 export = _exports;
-//// [index2.d.ts]
-declare const InnerSym: unique symbol;
 declare const TopLevelSym: unique symbol;
+declare const InnerSym: unique symbol;
+//// [index2.d.ts]
 export class MyClass {
     static [TopLevelSym]: number;
     constructor(_p?: typeof TopLevelSym | typeof InnerSym);
     [InnerSym]: string;
 }
+declare const InnerSym: unique symbol;
+declare const TopLevelSym: unique symbol;
 export {};

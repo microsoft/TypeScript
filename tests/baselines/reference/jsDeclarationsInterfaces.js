@@ -149,13 +149,9 @@ export interface C<T_1, U_1> {
     method(...args: any[]): number;
     optMethod?(): number;
 }
-interface G {
-}
-interface HH {
-}
 export interface I {
 }
-interface J {
+export interface J {
 }
 export interface K extends I, J {
     x: string;
@@ -232,4 +228,8 @@ export interface CC extends Y {
         y: 0;
     };
 }
-export { G, HH as H, I as II, J as JJ };
+export interface G {
+}
+interface HH {
+}
+export { HH as H, I as II, J as JJ };

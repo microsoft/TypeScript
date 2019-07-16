@@ -129,8 +129,6 @@ export namespace b {
 }
 export function c(): void;
 export namespace c {
-    class Cls {
-    }
     export { Cls };
 }
 export function d(a: number, b: number): string;
@@ -141,7 +139,9 @@ export namespace f {
 }
 export function i(): void;
 export function j(): void;
-declare function g(a: {
+declare class Cls {
+}
+export function g(a: {
     x: string;
 }, b: {
     y: typeof b;
@@ -151,4 +151,4 @@ declare function hh(a: {
 }, b: {
     y: typeof b;
 }): void;
-export { g, hh as h, i as ii, j as jj };
+export { hh as h, i as ii, j as jj };

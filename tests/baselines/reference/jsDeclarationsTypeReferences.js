@@ -26,5 +26,4 @@ module.exports = {
 
 //// [index.d.ts]
 /// <reference types="node" />
-declare const thing: import("fs").Something;
-export { thing };
+export const thing: import("fs").Something;

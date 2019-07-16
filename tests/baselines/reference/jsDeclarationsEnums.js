@@ -123,13 +123,9 @@ export enum A {
 export enum B {
     Member = 0
 }
-declare enum C {
-}
-declare enum DD {
-}
 export enum E {
 }
-declare enum F {
+export enum F {
 }
 export enum G {
     A = 1,
@@ -164,4 +160,8 @@ export const enum L {
     C = 4,
     Mask = 7
 }
-export { C, DD as D, E as EE, F as FF };
+export enum C {
+}
+declare enum DD {
+}
+export { DD as D, E as EE, F as FF };

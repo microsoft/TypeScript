@@ -1514,7 +1514,7 @@ namespace ts {
                         // falls through
                     case SyntaxKind.ModuleDeclaration:
                         const moduleExports = getSymbolOfNode(location as SourceFile | ModuleDeclaration).exports!;
-                        if (location.kind === SyntaxKind.SourceFile || isAmbientModule(location)) {
+                        if (location.kind === SyntaxKind.SourceFile || (isModuleDeclaration(location) && location.flags & NodeFlags.Ambient && !isGlobalScopeAugmentation(location))) {
 
                             // It's an external module. First see if the module has an export default and if the local
                             // name of that export default matches.
@@ -4860,6 +4860,7 @@ namespace ts {
                 const enclosingDeclaration = context.enclosingDeclaration!;
                 let results: Statement[] = [];
                 const visitedSymbols: Map<true> = createMap();
+                let deferredPrivates: Map<Symbol> | undefined;
                 const subcontext: NodeBuilderContext = {
                     ...context,
                     usedSymbolNames: mapMap(symbolTable, (_symbol, name) => [unescapeLeadingUnderscores(name), true]),
@@ -4869,7 +4870,7 @@ namespace ts {
                         trackSymbol: (sym, decl, meaning) => {
                             const accessibleChain = getAccessibleSymbolChain(sym, decl, meaning, /*usOnlyExternalAliasing*/ false);
                             if (length(accessibleChain)) {
-                                serializeSymbolRecursive(accessibleChain![0], /*isPrivate*/ true);
+                                includePrivateSymbol(accessibleChain![0]);
                             }
                         }
                     }
@@ -4884,26 +4885,27 @@ namespace ts {
                 const exportEquals = symbolTable.get(InternalSymbolName.ExportEquals);
                 if (exportEquals && symbolTable.size > 1) {
                     // export= merged with other stuff - likely due to JS declarations. This is strangeish to deal with, but essentially we just
-                    // filter the symbol table and stuff the non-export= members into a merged namespace
-                    // We use `serializeSymbolRecursive` here, since it'll mark the `export=` symbol as visited, so it'll be skipped
-                    // when we go over the entire table looking for other exports to merge in
+                    // filter the symbol table and stuff export declarations for the non-export= members into a merged namespace
 
-                    serializeSymbolRecursive(exportEquals, /*isPrivate*/ false);
-                    const oldResults = results;
-                    const oldAddingDeclare = addingDeclare;
-                    results = [];
-                    addingDeclare = false;
-                    visitSymbolTable(symbolTable);
-                    addingDeclare = oldAddingDeclare;
-                    const nsMembers = results;
-                    results = oldResults;
+                    deferredPrivates = createMap();
+                    serializeSymbol(exportEquals, /*isPrivate*/ false);
+                    visitSymbolTable(symbolTable, deferredPrivates, /*markExportsPrivate*/ true);
+                    deferredPrivates = undefined;
+
+                    // Lookup the name of what the export= points to, so we name the ns merging in the other top-level imports correctly
                     const aliasDecl = getDeclarationOfAliasSymbol(exportEquals);
-                    // serialize what the alias points to, preserve the declaration's intializer
                     const target = aliasDecl && getTargetOfAliasDeclaration(aliasDecl, /*dontRecursivelyResolve*/ true);
                     const nsname = target ? symbolToName(target, context, SymbolFlags.All, /*expectsIdentifier*/ false) : createIdentifier(getUnusedName("_exports", exportEquals));
-                    const members = createModuleBlock(nsMembers);
-                    const nsBody = isIdentifier(nsname) ? members
-                        : createNamespaceBodyWithQualifiedName(nsname, members);
+
+                    const nsBody = createModuleBlock([createExportDeclaration(
+                        /*decorators*/ undefined,
+                        /*modifiers*/ undefined,
+                        createNamedExports(map(filter(arrayFrom(symbolTable.values()), n => n.escapedName !== InternalSymbolName.ExportEquals), s => {
+                            const name = symbolName(s);
+                            const localName = getInternalSymbolName(s, name);
+                            return createExportSpecifier(name === localName ? undefined : localName, name);
+                        }))
+                    )]);
                     const firstId = getFirstIdentifier(nsname);
                     const existingDeclIdx = findIndex(results, r => isModuleDeclaration(r) && isIdentifier(r.name) && idText(firstId) === idText(r.name));
                     if (existingDeclIdx >= 0) {
@@ -4929,25 +4931,20 @@ namespace ts {
                 }
 
                 visitSymbolTable(symbolTable);
-                if (enclosingDeclaration && ((isSourceFile(enclosingDeclaration) && isExternalOrCommonJsModule(enclosingDeclaration)) || isModuleDeclaration(enclosingDeclaration)) && (!some(results, isExternalModuleIndicator) || (!hasScopeMarker(results) && some(results, needsScopeMarker)))) {
-                    results.push(createEmptyExports());
-                }
                 return mergeRedundantStatements(results);
 
                 function mergeRedundantStatements(statements: Statement[]) {
-                    // Pass 1: Flatten `export namespace _exports {} export = _exports;`
-                    if (statements.length === 2) {
-                        const exportAssignment = find(statements, isExportAssignment);
-                        const ns = find(statements, isModuleDeclaration);
-                        if (ns && exportAssignment && exportAssignment.isExportEquals &&
-                            isIdentifier(exportAssignment.expression) && isIdentifier(ns.name) && idText(ns.name) === idText(exportAssignment.expression) &&
-                            ns.body && isModuleBlock(ns.body)) {
-                            results = [];
-                            forEach(ns.body.statements, s => {
-                                addResult(s, ModifierFlags.None); // Recalculates the ambient flag
-                            });
-                            statements = results;
-                        }
+                    // Pass 1: Flatten `export namespace _exports {} export = _exports;` so long as the `export=` only points at a single namespace declaration
+                    const exportAssignment = find(statements, isExportAssignment);
+                    const ns = find(statements, isModuleDeclaration);
+                    if (ns && exportAssignment && exportAssignment.isExportEquals &&
+                        isIdentifier(exportAssignment.expression) && isIdentifier(ns.name) && idText(ns.name) === idText(exportAssignment.expression) &&
+                        ns.body && isModuleBlock(ns.body) && !find(statements, s => s !== ns && isNamedDeclaration(s) && isIdentifier(s.name) && idText(ns.name as Identifier) === idText(s.name))) {
+                        results = [];
+                        forEach(ns.body.statements, s => {
+                            addResult(s, ModifierFlags.None); // Recalculates the ambient flag
+                        });
+                        statements = [...filter(statements, s => s !== ns && s !== exportAssignment), ...results];
                     }
                     // Pass 2: Combine all `export {}` declarations
                     const exports = filter(statements, d => isExportDeclaration(d) && !d.moduleSpecifier && !!d.exportClause) as ExportDeclaration[];
@@ -4960,7 +4957,56 @@ namespace ts {
                             /*moduleSpecifier*/ undefined
                         )];
                     }
+                    // Pass 3: Move all `export {}`'s to `export` modifiers where possible
+                    const exportDecl = find(statements, d => isExportDeclaration(d) && !d.moduleSpecifier && !!d.exportClause) as ExportDeclaration | undefined;
+                    if (exportDecl) {
+                        const replacements = mapDefined(exportDecl.exportClause!.elements, e => {
+                            if (!e.propertyName) {
+                                // export {name} - look thru `statements` for `name`, and if all results can take an `export` modifier, do so and filter it
+                                const associated = filter(statements, s => (isNamedDeclaration(s) && isIdentifier(s.name) && idText(s.name) === idText(e.name)) ||
+                                    (isVariableStatement(s) && length(s.declarationList.declarations) === 1 && isIdentifier(s.declarationList.declarations[0].name) && idText(s.declarationList.declarations[0].name) === idText(e.name)));
+                                if (length(associated) && every(associated, canHaveExportModifier)) {
+                                    forEach(associated, addExportModifier);
+                                    return undefined;
+                                }
+                            }
+                            return e;
+                        });
+                        if (!length(replacements)) {
+                            // all clauses removed, filter the export declaration
+                            statements = filter(statements, s => s !== exportDecl);
+                        }
+                        else {
+                            // some items filtered, others not - update the export declaration
+                            // (mutating because why not, we're building a whole new tree here anyway)
+                            exportDecl.exportClause!.elements = createNodeArray(replacements);
+                        }
+                    }
+
+                    // Not a cleanup, but as a final step: If there is a mix of `export` and non-`export` declarations, but no `export =` or `export {}` add a `export {};` so
+                    // declaration privacy is respected.
+                    if (enclosingDeclaration &&
+                        ((isSourceFile(enclosingDeclaration) && isExternalOrCommonJsModule(enclosingDeclaration)) || isModuleDeclaration(enclosingDeclaration)) &&
+                        (!some(statements, isExternalModuleIndicator) || (!hasScopeMarker(statements) && some(statements, needsScopeMarker)))) {
+                        statements.push(createEmptyExports());
+                    }
                     return statements;
+                }
+
+                function canHaveExportModifier(node: Statement) {
+                    return isEnumDeclaration(node) ||
+                            isVariableStatement(node) ||
+                            isFunctionDeclaration(node) ||
+                            isClassDeclaration(node) ||
+                            (isModuleDeclaration(node) && !isExternalModuleAugmentation(node) && !isGlobalScopeAugmentation(node)) ||
+                            isInterfaceDeclaration(node) ||
+                            isTypeDeclaration(node);
+                }
+
+                function addExportModifier(statement: Statement) {
+                    const flags = (getModifierFlags(statement) | ModifierFlags.Export) & ~ModifierFlags.Ambient;
+                    statement.modifiers = createNodeArray(createModifiersFromModifierFlags(flags));
+                    statement.modifierFlagsCache = 0;
                 }
 
                 function appendModuleBody(existingBody: NamespaceBody, toAdd: NamespaceBody) {
@@ -4976,30 +5022,24 @@ namespace ts {
                     return createModuleBlock([existingBody, toAdd]);
                 }
 
-                function createNamespaceBodyWithQualifiedName(name: QualifiedName, members: ModuleBlock): NamespaceBody {
-                    let result: NamespaceBody = members;
-                    let qualified: (typeof name)["left"] = name;
-                    do {
-                        result = createModuleDeclaration(
-                            /*decorators*/ undefined,
-                            /*modifiers*/ undefined,
-                            qualified.right,
-                            result,
-                            NodeFlags.Namespace
-                        ) as NamespaceDeclaration;
-                        qualified = qualified.left;
-                    } while (qualified.kind === SyntaxKind.QualifiedName);
-                    return result;
+                function visitSymbolTable(symbolTable: SymbolTable, privates?: Map<Symbol>, markExportsPrivate?: boolean) {
+                    const oldDeferredList = deferredPrivates;
+                    deferredPrivates = privates || createMap();
+                    symbolTable.forEach((symbol: Symbol) => {
+                        serializeSymbol(symbol, markExportsPrivate || /*isPrivate*/ false);
+                    });
+                    // deferredPrivates will be filled up by visiting the symbol table
+                    // And will continue to iterate as elements are added while visited `deferredPrivates`
+                    // (As that's how a map iterator is defined to work)
+                    deferredPrivates.forEach((symbol: Symbol) => {
+                        serializeSymbol(symbol, /*isPrivate*/ true);
+                    });
+                    deferredPrivates = oldDeferredList;
                 }
 
-                function visitSymbolTable(symbolTable: SymbolTable) {
-                    symbolTable.forEach((symbol, _name) => {
-                        if (visitedSymbols.has("" + getSymbolId(symbol))) {
-                            return; // Already printed
-                        }
-                        visitedSymbols.set("" + getSymbolId(symbol), true);
-                        serializeSymbol(symbol, /*isPrivate*/ false);
-                    });
+                function includePrivateSymbol(symbol: Symbol) {
+                    Debug.assertDefined(deferredPrivates);
+                    deferredPrivates!.set("" + getSymbolId(symbol), symbol);
                 }
 
                 // Appends a `declare` and/or `export` modifier if the context requires it, and then adds `node` to `result` and returns `node`
@@ -5009,7 +5049,7 @@ namespace ts {
                     if (((additionalModifierFlags & ModifierFlags.Export) && enclosingDeclaration &&
                         ((isSourceFile(enclosingDeclaration) && (isExternalOrCommonJsModule(enclosingDeclaration) || isJsonSourceFile(enclosingDeclaration))) ||
                         (isAmbientModule(enclosingDeclaration) && !isGlobalScopeAugmentation(enclosingDeclaration)))) &&
-                        (isEnumDeclaration(node) || isVariableStatement(node) || isFunctionDeclaration(node) || isClassDeclaration(node) || (isModuleDeclaration(node) && !isExternalModuleAugmentation(node) && !isGlobalScopeAugmentation(node)) || isInterfaceDeclaration(node) || isTypeDeclaration(node))
+                        canHaveExportModifier(node)
                     ) {
                         // Classes, namespaces, variables, functions, interfaces, and types should all be `export`ed in a module context if not private
                         newModifierFlags |= ModifierFlags.Export;
@@ -5027,14 +5067,6 @@ namespace ts {
                     }
                     results.push(node);
                     return node;
-                }
-
-                function serializeSymbol(symbol: Symbol, isPrivate: boolean) {
-                    const oldContext = context;
-                    context = cloneNodeBuilderContext(context);
-                    const result = serializeSymbolWorker(symbol, isPrivate);
-                    context = oldContext;
-                    return result;
                 }
 
                 function getInternalSymbolName(symbol: Symbol, localName: string) {
@@ -5168,8 +5200,7 @@ namespace ts {
                             createVariableDeclaration(name, serializeTypeForDeclaration(getTypeOfSymbol(symbol), symbol))
                         ], flags));
                         addResult(statement, name !== localName ? modifierFlags & ~ModifierFlags.Export : modifierFlags);
-                        if (name !== localName) {
-                            Debug.assert(!isPrivate, "Had a local module member masquerading as an exported module member - this should not be possible");
+                        if (name !== localName && !isPrivate) {
                             // We rename the variable declaration we generate for Property symbols since they may have a name which conflicts with a local declaration. Eg,
                             // `module.exports.g = g` - we want to make a variable declaration with type `typeof g` (ergo, we must emit `g`)
                             // and so we can't name the variable declaration `g` (since there's already a local `g`) - so we anonymize the local variable declaration and make
@@ -5250,7 +5281,7 @@ namespace ts {
                         const target = getTargetOfAliasDeclaration(node, /*dontRecursivelyResolve*/ true);
                         if (!target) return;
                         const targetName = getInternalSymbolName(target, unescapeLeadingUnderscores(target.escapedName));
-                        serializeSymbolRecursive(target, /*isPrivate*/ true); // the target may be within the same scope - attempt to serialize it first
+                        includePrivateSymbol(target); // the target may be within the same scope - attempt to serialize it first
                         switch (node.kind) {
                             case SyntaxKind.ImportEqualsDeclaration:
                                 // Could be a local `import localName = ns.member` or
@@ -5362,7 +5393,7 @@ namespace ts {
                         const first = isEntityNameExpression(expr) ? getFirstIdentifier(expr) : undefined;
                         const referenced = first && resolveEntityName(first, SymbolFlags.All, /*ignoreErrors*/ true, /*dontResolveAlias*/ true, enclosingDeclaration);
                         if (referenced || target) {
-                            serializeSymbolRecursive(referenced || target, /*isPrivate*/ true);
+                            includePrivateSymbol(referenced || target);
                         }
 
                         if (isExportAssignment) {
@@ -5406,7 +5437,7 @@ namespace ts {
                             !some(getPropertiesOfType(typeToSerialize), p => isLateBoundName(p.escapedName)) &&
                             every(getPropertiesOfType(typeToSerialize), p => isIdentifierText(symbolName(p), languageVersion) && !isStringAKeyword(symbolName(p)))) {
                             // If there are no index signatures and `typeToSerialize` is an object type, emit as a namespace instead of a const
-                            serializeAsFunctionNamespaceMerge(typeToSerialize, varName, ModifierFlags.Export);
+                            serializeAsFunctionNamespaceMerge(typeToSerialize, varName, isExportAssignment ? ModifierFlags.None : ModifierFlags.Export);
                         }
                         else {
                             const statement = createVariableStatement(/*modifiers*/ undefined, createVariableDeclarationList([
@@ -5585,14 +5616,19 @@ namespace ts {
                     }
                 }
 
-                function serializeSymbolRecursive(symbol: Symbol, isPrivate: boolean) {
+                function serializeSymbol(symbol: Symbol, isPrivate: boolean) {
                     if (visitedSymbols.has("" + getSymbolId(symbol))) {
                         return; // Already printed
                     }
                     visitedSymbols.set("" + getSymbolId(symbol), true);
                     // Only actually serialize symbols within the correct enclosing declaration, otherwise do nothing with the out-of-context symbol
-                    if (length(symbol.declarations) && some(symbol.declarations, d => !!findAncestor(d, n => n === enclosingDeclaration))) {
-                        serializeSymbol(symbol, isPrivate);
+                    const skipMembershipCheck = !isPrivate; // We only call this on exported symbols when we know they're in the correct scope 
+                    if (skipMembershipCheck || (!!length(symbol.declarations) && some(symbol.declarations, d => !!findAncestor(d, n => n === enclosingDeclaration)))) {
+                        const oldContext = context;
+                        context = cloneNodeBuilderContext(context);
+                        const result = serializeSymbolWorker(symbol, isPrivate);
+                        context = oldContext;
+                        return result;
                     }
                 }
 

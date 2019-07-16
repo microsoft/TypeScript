@@ -58,8 +58,8 @@ require("./globalNs");
 export class Foo {
 }
 //// [bar.d.ts]
-import ns = require("./bar");
 export = ns;
+import ns = require("./bar");
 //// [bin.d.ts]
 export {};
 //// [globalNs.d.ts]

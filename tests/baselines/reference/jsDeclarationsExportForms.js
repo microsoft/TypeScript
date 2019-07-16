@@ -145,23 +145,22 @@ export * from "./cls";
 export * from "./func";
 export * from "./cls";
 //// [baz.d.ts]
-import { Foo } from "./cls";
 export { Foo };
+import { Foo } from "./cls";
 //// [bat.d.ts]
-import * as ns from "./cls";
 export default ns;
+import * as ns from "./cls";
 //// [ban.d.ts]
-import * as ns from "./cls";
 export { ns };
+import * as ns from "./cls";
 //// [bol.d.ts]
-import * as ns from "./cls";
 export { ns as classContainer };
+import * as ns from "./cls";
 //// [cjs.d.ts]
-declare const ns: typeof import("./cls");
-export { ns };
+export const ns: typeof import("./cls");
 //// [cjs2.d.ts]
-declare const ns: typeof import("./cls");
 export = ns;
+declare const ns: typeof import("./cls");
 //// [cjs3.d.ts]
 declare var ns_1: typeof import("./cls");
 export { ns_1 as ns };

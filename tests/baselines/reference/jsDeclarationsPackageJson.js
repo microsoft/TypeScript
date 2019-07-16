@@ -103,6 +103,7 @@ export declare namespace config {
     export const o: string[];
 }
 //// [index.d.ts]
+export = j;
 declare const j: {
     "name": string;
     "version": string;
@@ -132,4 +133,3 @@ declare const j: {
         "o": string[];
     };
 };
-export = j;

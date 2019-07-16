@@ -44,6 +44,7 @@ export declare namespace obj {
     })[];
 }
 //// [index.d.ts]
+export = j;
 declare const j: {
     "x": number;
     "y": number;
@@ -63,4 +64,3 @@ declare const j: {
         })[];
     };
 };
-export = j;

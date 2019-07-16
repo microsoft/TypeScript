@@ -131,6 +131,12 @@ declare var f_1: {
     <T>(a: T): T;
     self: any;
 };
+declare var g_1: typeof g;
+declare var h_1: typeof hh;
+declare var i_1: () => void;
+declare var ii_1: () => void;
+declare var jj_1: () => void;
+declare var j_1: () => void;
 declare function g(a: {
     x: string;
 }, b: {
@@ -139,7 +145,6 @@ declare function g(a: {
         cat: string;
     };
 }): void;
-declare var g_1: typeof g;
 declare function hh(a: {
     x: string;
 }, b: {
@@ -148,9 +153,4 @@ declare function hh(a: {
         cat: string;
     };
 }): void;
-declare var h_1: typeof hh;
-declare var i_1: () => void;
-declare var ii_1: () => void;
-declare var jj_1: () => void;
-declare var j_1: () => void;
 export { a_1 as a, b_1 as b, c_1 as c, d_1 as d, e_1 as e, f_1 as f, g_1 as g, h_1 as h, i_1 as i, ii_1 as ii, jj_1 as jj, j_1 as j };

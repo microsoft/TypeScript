@@ -126,11 +126,11 @@ export default class Foo {
 export const X: typeof Foo;
 export { Foo as Bar };
 //// [index4.d.ts]
-import Fab from "./index3";
+export default Bar;
 declare class Bar extends Fab {
     x: Bar;
 }
-export default Bar;
+import Fab from "./index3";
 //// [index5.d.ts]
 type _default = string | number;
 declare var _default: 12;

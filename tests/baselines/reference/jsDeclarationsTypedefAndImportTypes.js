@@ -63,18 +63,18 @@ module.exports = {
 
 
 //// [conn.d.ts]
+export = Conn;
+type Whatever = string | number;
 declare class Conn {
     item: number;
     method(): void;
 }
-export = Conn;
 declare namespace Conn {
-    export type Whatever = string | number;
+    export { Whatever };
 }
 //// [usage.d.ts]
-declare class Wrap {
+export type Conn = import("./conn");
+export class Wrap {
     constructor(c: import("./conn"));
     connItem: number;
 }
-export { Wrap };
-export type Conn = import("./conn");

@@ -481,13 +481,9 @@ export class F<T, U> {
     constructor(a: T, b: U);
     field: T & U;
 }
-declare class G {
-}
-declare class HH {
-}
 export class I {
 }
-declare class J {
+export class J {
 }
 export class K {
     p1: number;
@@ -517,4 +513,8 @@ export class HasStatics {
 export class ExtendsStatics extends HasStatics {
     static also(): void;
 }
-export { G, HH as H, I as II, J as JJ };
+export class G {
+}
+declare class HH {
+}
+export { HH as H, I as II, J as JJ };

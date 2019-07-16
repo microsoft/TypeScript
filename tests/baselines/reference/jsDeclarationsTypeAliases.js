@@ -113,16 +113,16 @@ export type MixinName<T> = T & {
 };
 export type Identity<T> = (x: T) => T;
 //// [mixed.d.ts]
-declare class LocalThing {
-    y: string;
-}
-declare function doTheThing(x: number): number | {
-    x: string;
-} | LocalThing | typeof ExportedThing;
-declare class ExportedThing {
-    z: string;
-}
 export type SomeType = number | {
     x: string;
 } | LocalThing | ExportedThing;
-export { doTheThing, ExportedThing };
+export function doTheThing(x: number): number | {
+    x: string;
+} | LocalThing | ExportedThing;
+export class ExportedThing {
+    z: string;
+}
+declare class LocalThing {
+    y: string;
+}
+export {};
