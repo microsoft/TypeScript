@@ -13,7 +13,7 @@ verify.codeFix({
     newFileContent: {
         "/dir/tsconfig.json":
 `{
-    "compilerOptions": { "jsx": true },
+    "compilerOptions": { "jsx": "react" },
 }`,
     },
 });
