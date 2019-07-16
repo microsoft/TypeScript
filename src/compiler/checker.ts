@@ -5622,7 +5622,7 @@ namespace ts {
                     }
                     visitedSymbols.set("" + getSymbolId(symbol), true);
                     // Only actually serialize symbols within the correct enclosing declaration, otherwise do nothing with the out-of-context symbol
-                    const skipMembershipCheck = !isPrivate; // We only call this on exported symbols when we know they're in the correct scope 
+                    const skipMembershipCheck = !isPrivate; // We only call this on exported symbols when we know they're in the correct scope
                     if (skipMembershipCheck || (!!length(symbol.declarations) && some(symbol.declarations, d => !!findAncestor(d, n => n === enclosingDeclaration)))) {
                         const oldContext = context;
                         context = cloneNodeBuilderContext(context);
