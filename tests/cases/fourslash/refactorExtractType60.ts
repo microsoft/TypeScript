@@ -1,16 +1,17 @@
 /// <reference path='fourslash.ts' />
+/// Doesn't duplicate comments - #31629
 
-//// function foo(a: /*a*/{ a: number | string, b: string }/*b*/) { }
+//// type a = /*a*/{ x: string } /* foo */ | string /* bar */ /*b*/;
 
 goTo.select("a", "b");
 edit.applyRefactor({
     refactorName: "Extract type",
-    actionName: "Extract to interface",
-    actionDescription: "Extract to interface",
-    newContent: `interface /*RENAME*/NewType {
-    a: number | string;
-    b: string;
-}
+    actionName: "Extract to type alias",
+    actionDescription: "Extract to type alias",
+    newContent: 
+`type /*RENAME*/NewType = {
+    x: string;
+} /* foo */ | string /* bar */;
 
-function foo(a: NewType) { }`,
+type a = NewType;`
 });

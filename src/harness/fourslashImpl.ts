@@ -3164,7 +3164,7 @@ namespace FourSlash {
 
             if (renamePosition === undefined) {
                 if (editInfo.renameLocation !== undefined) {
-                    this.raiseError(`Did not expect a rename location, got ${editInfo.renameLocation}`);
+                    this.raiseError(`Did not expect a rename location, got ${editInfo.renameLocation} - did you miss a /*RENAME*/ inside your 'newContent'?`);
                 }
             }
             else {
