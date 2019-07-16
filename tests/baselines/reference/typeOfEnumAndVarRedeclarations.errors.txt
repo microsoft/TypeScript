@@ -14,9 +14,11 @@ tests/cases/compiler/typeOfEnumAndVarRedeclarations.ts(10,70): error TS2375: Dup
     var x: { readonly a: E; readonly b: E; readonly [x: number]: string; }; // Shouldnt error
         ~
 !!! error TS2403: Subsequent variable declarations must have the same type.  Variable 'x' must be of type 'typeof E', but here has type '{ readonly [x: number]: string; readonly a: E; readonly b: E; }'.
+!!! related TS6203 tests/cases/compiler/typeOfEnumAndVarRedeclarations.ts:7:5: 'x' was also declared here.
     var y = E;
     var y: { readonly a: E; readonly b: E; readonly [x: number]: string; readonly [x: number]: string } // two errors: the types are not identical and duplicate signatures
         ~
 !!! error TS2403: Subsequent variable declarations must have the same type.  Variable 'y' must be of type 'typeof E', but here has type '{ readonly [x: number]: string; readonly a: E; readonly b: E; }'.
+!!! related TS6203 tests/cases/compiler/typeOfEnumAndVarRedeclarations.ts:9:5: 'y' was also declared here.
                                                                          ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS2375: Duplicate number index signature.

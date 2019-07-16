@@ -12,12 +12,12 @@ class B {
 >B : B
 
     m() {
->m : () => number
+>m : () => any
 
         return this.x;
->this.x : number
+>this.x : any
 >this : this
->x : number
+>x : any
     }
 }
 

@@ -7,7 +7,7 @@ tests/cases/compiler/qualify.ts(47,13): error TS2322: Type 'I4' is not assignabl
 tests/cases/compiler/qualify.ts(48,13): error TS2322: Type 'I4' is not assignable to type '(k: I3) => void'.
   Type 'I4' provides no match for the signature '(k: I3): void'.
 tests/cases/compiler/qualify.ts(49,13): error TS2741: Property 'k' is missing in type 'I4' but required in type '{ k: I3; }'.
-tests/cases/compiler/qualify.ts(58,5): error TS2741: Property 'p' is missing in type 'I' but required in type 'I'.
+tests/cases/compiler/qualify.ts(58,5): error TS2741: Property 'p' is missing in type 'I' but required in type 'T.I'.
 
 
 ==== tests/cases/compiler/qualify.ts (8 errors) ====
@@ -88,7 +88,7 @@ tests/cases/compiler/qualify.ts(58,5): error TS2741: Property 'p' is missing in 
     var y:I;
     var x:T.I=y;
         ~
-!!! error TS2741: Property 'p' is missing in type 'I' but required in type 'I'.
+!!! error TS2741: Property 'p' is missing in type 'I' but required in type 'T.I'.
 !!! related TS2728 tests/cases/compiler/qualify.ts:18:9: 'p' is declared here.
     
     

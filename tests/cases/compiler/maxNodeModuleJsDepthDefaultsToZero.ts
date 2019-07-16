@@ -11,8 +11,7 @@
         "module": "commonjs",
         "moduleResolution": "node",
         "outDir": "bin"
-    },
-    "exclude": [ "node_modules" ]
+    }
 }
 // @filename: /node_modules/shortid/node_modules/z/index.js
 // z will not be found because maxNodeModulesJsDepth: 0

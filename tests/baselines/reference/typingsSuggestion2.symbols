@@ -1,0 +1,4 @@
+=== tests/cases/conformance/typings/a.ts ===
+module.exports = 1;
+No type information for this code.
+No type information for this code.

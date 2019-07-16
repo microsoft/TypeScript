@@ -673,8 +673,8 @@ function f22<T>(x: T extends (infer U)[] ? U[] : never) {
 >x : T extends (infer U)[] ? U[] : never
 
     let e = x[0];  // {}
->e : {}
->x[0] : {}
+>e : unknown
+>x[0] : unknown
 >x : T extends (infer U)[] ? U[] : never
 >0 : 0
 }

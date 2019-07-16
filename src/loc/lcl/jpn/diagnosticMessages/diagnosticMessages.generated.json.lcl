@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <LCX SchemaVersion="6.0" Name="f:\ddSetup\sources\typescript\localization\compiler2.resx" PsrId="306" FileType="1" SrcCul="en-US" TgtCul="ja-JP" xmlns="http://schemas.microsoft.com/locstudio/2006/6/lcx">
   <Props>
     <Str Name="CustomName1" Val="Custom 1" />
@@ -3301,7 +3301,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Emit the source alongside the sourcemaps within a single file; requires '--inlineSourceMap' or '--sourceMap' to be set.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[単一ファイル内で sourcemap と共にソースを生成します。'--inlineSourceMap' または '--sourceMap' を設定する必要があります。]]></Val>
+            <Val><![CDATA[単一ファイル内でソースマップと共にソースを生成します。'--inlineSourceMap' または '--sourceMap' を設定する必要があります。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -4123,7 +4123,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Generates a sourcemap for each corresponding '.d.ts' file.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[対応する各 '.d.ts' ファイルに sourcemap を生成します。]]></Val>
+            <Val><![CDATA[対応する各 '.d.ts' ファイルにソースマップを生成します。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />

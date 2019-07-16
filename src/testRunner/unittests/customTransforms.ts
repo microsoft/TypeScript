@@ -129,5 +129,40 @@ namespace ts {
             },
             { sourceMap: true }
         );
+
+        emitsCorrectly("skipTriviaExternalSourceFiles",
+            [
+                {
+                    file: "source.ts",
+                    // The source file contains preceding trivia (e.g. whitespace) to try to confuse the `skipSourceTrivia` function.
+                    text: "         original;"
+                },
+            ],
+            {
+                before: [
+                    context => {
+                        const transformSourceFile: Transformer<SourceFile> = node => visitNode(node, function visitor(node: Node): Node {
+                            if (isIdentifier(node) && node.text === "original") {
+                                const newNode = createIdentifier("changed");
+                                setSourceMapRange(newNode, {
+                                    pos: 0,
+                                    end: 7,
+                                    // Do not provide a custom skipTrivia function for `source`.
+                                    source: createSourceMapSource("another.html", "changed;")
+                                });
+                                return newNode;
+                            }
+                            return visitEachChild(node, visitor, context);
+                        });
+                        return {
+                            transformSourceFile,
+                            transformBundle: node => createBundle(map(node.sourceFiles, transformSourceFile), node.prepends),
+                        };
+                    }
+                ]
+            },
+            { sourceMap: true, outFile: "source.js" }
+        );
+
     });
 }

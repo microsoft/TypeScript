@@ -133,11 +133,21 @@ namespace ts.SignatureHelp {
     }
 
     function containsPrecedingToken(startingToken: Node, sourceFile: SourceFile, container: Node) {
-        const precedingToken = Debug.assertDefined(
-            findPrecedingToken(startingToken.getFullStart(), sourceFile, startingToken.parent, /*excludeJsdoc*/ true)
-        );
-
-        return rangeContainsRange(container, precedingToken);
+        const pos = startingToken.getFullStart();
+        // There’s a possibility that `startingToken.parent` contains only `startingToken` and
+        // missing nodes, none of which are valid to be returned by `findPrecedingToken`. In that
+        // case, the preceding token we want is actually higher up the tree—almost definitely the
+        // next parent, but theoretically the situation with missing nodes might be happening on
+        // multiple nested levels.
+        let currentParent: Node | undefined = startingToken.parent;
+        while (currentParent) {
+            const precedingToken = findPrecedingToken(pos, sourceFile, currentParent, /*excludeJsdoc*/ true);
+            if (precedingToken) {
+                return rangeContainsRange(container, precedingToken);
+            }
+            currentParent = currentParent.parent;
+        }
+        return Debug.fail("Could not find preceding token");
     }
 
     export interface ArgumentInfoForCompletions {
@@ -452,10 +462,10 @@ namespace ts.SignatureHelp {
     }
 
     function getContainingArgumentInfo(node: Node, position: number, sourceFile: SourceFile, checker: TypeChecker, isManuallyInvoked: boolean): ArgumentListInfo | undefined {
-        for (let n = node; isManuallyInvoked || (!isBlock(n) && !isSourceFile(n)); n = n.parent) {
+        for (let n = node; !isSourceFile(n) && (isManuallyInvoked || !isBlock(n)); n = n.parent) {
             // If the node is not a subspan of its parent, this is a big problem.
             // There have been crashes that might be caused by this violation.
-            Debug.assert(rangeContainsRange(n.parent, n), "Not a subspan", () => `Child: ${Debug.showSyntaxKind(n)}, parent: ${Debug.showSyntaxKind(n.parent)}`);
+            Debug.assert(rangeContainsRange(n.parent, n), "Not a subspan", () => `Child: ${Debug.formatSyntaxKind(n.kind)}, parent: ${Debug.formatSyntaxKind(n.parent.kind)}`);
             const argumentInfo = getImmediatelyContainingArgumentOrContextualParameterInfo(n, position, sourceFile, checker);
             if (argumentInfo) {
                 return argumentInfo;
@@ -559,14 +569,14 @@ namespace ts.SignatureHelp {
         const parameters = (typeParameters || emptyArray).map(t => createSignatureHelpParameterForTypeParameter(t, checker, enclosingDeclaration, sourceFile, printer));
         const parameterParts = mapToDisplayParts(writer => {
             const thisParameter = candidateSignature.thisParameter ? [checker.symbolToParameterDeclaration(candidateSignature.thisParameter, enclosingDeclaration, signatureHelpNodeBuilderFlags)!] : [];
-            const params = createNodeArray([...thisParameter, ...candidateSignature.parameters.map(param => checker.symbolToParameterDeclaration(param, enclosingDeclaration, signatureHelpNodeBuilderFlags)!)]);
+            const params = createNodeArray([...thisParameter, ...checker.getExpandedParameters(candidateSignature).map(param => checker.symbolToParameterDeclaration(param, enclosingDeclaration, signatureHelpNodeBuilderFlags)!)]);
             printer.writeList(ListFormat.CallExpressionArguments, params, sourceFile, writer);
         });
         return { isVariadic: false, parameters, prefix: [punctuationPart(SyntaxKind.LessThanToken)], suffix: [punctuationPart(SyntaxKind.GreaterThanToken), ...parameterParts] };
     }
 
     function itemInfoForParameters(candidateSignature: Signature, checker: TypeChecker, enclosingDeclaration: Node, sourceFile: SourceFile): SignatureHelpItemInfo {
-        const isVariadic = candidateSignature.hasRestParameter;
+        const isVariadic = checker.hasEffectiveRestParameter(candidateSignature);
         const printer = createPrinter({ removeComments: true });
         const typeParameterParts = mapToDisplayParts(writer => {
             if (candidateSignature.typeParameters && candidateSignature.typeParameters.length) {
@@ -574,7 +584,7 @@ namespace ts.SignatureHelp {
                 printer.writeList(ListFormat.TypeParameters, args, sourceFile, writer);
             }
         });
-        const parameters = candidateSignature.parameters.map(p => createSignatureHelpParameterForParameter(p, checker, enclosingDeclaration, sourceFile, printer));
+        const parameters = checker.getExpandedParameters(candidateSignature).map(p => createSignatureHelpParameterForParameter(p, checker, enclosingDeclaration, sourceFile, printer));
         return { isVariadic, parameters, prefix: [...typeParameterParts, punctuationPart(SyntaxKind.OpenParenToken)], suffix: [punctuationPart(SyntaxKind.CloseParenToken)] };
     }
 

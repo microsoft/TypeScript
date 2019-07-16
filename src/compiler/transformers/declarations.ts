@@ -9,6 +9,34 @@ namespace ts {
         return result.diagnostics;
     }
 
+    function hasInternalAnnotation(range: CommentRange, currentSourceFile: SourceFile) {
+        const comment = currentSourceFile.text.substring(range.pos, range.end);
+        return stringContains(comment, "@internal");
+    }
+
+    export function isInternalDeclaration(node: Node, currentSourceFile: SourceFile) {
+        const parseTreeNode = getParseTreeNode(node);
+        if (parseTreeNode && parseTreeNode.kind === SyntaxKind.Parameter) {
+            const paramIdx = (parseTreeNode.parent as FunctionLike).parameters.indexOf(parseTreeNode as ParameterDeclaration);
+            const previousSibling = paramIdx > 0 ? (parseTreeNode.parent as FunctionLike).parameters[paramIdx - 1] : undefined;
+            const text = currentSourceFile.text;
+            const commentRanges = previousSibling
+                ? concatenate(
+                    // to handle
+                    // ... parameters, /* @internal */
+                    // public param: string
+                    getTrailingCommentRanges(text, skipTrivia(text, previousSibling.end + 1, /* stopAfterLineBreak */ false, /* stopAtComments */ true)),
+                    getLeadingCommentRanges(text, node.pos)
+                )
+                : getTrailingCommentRanges(text, skipTrivia(text, node.pos, /* stopAfterLineBreak */ false, /* stopAtComments */ true));
+            return commentRanges && commentRanges.length && hasInternalAnnotation(last(commentRanges), currentSourceFile);
+        }
+        const leadingCommentRanges = parseTreeNode && getLeadingCommentRangesOfNode(parseTreeNode, currentSourceFile);
+        return !!forEach(leadingCommentRanges, range => {
+            return hasInternalAnnotation(range, currentSourceFile);
+        });
+    }
+
     const declarationEmitNodeBuilderFlags =
         NodeBuilderFlags.MultilineObjectLiterals |
         NodeBuilderFlags.WriteClassExpressionAsTypeLiteral |
@@ -35,7 +63,7 @@ namespace ts {
         let enclosingDeclaration: Node;
         let necessaryTypeReferences: Map<true> | undefined;
         let lateMarkedStatements: LateVisibilityPaintedStatement[] | undefined;
-        let lateStatementReplacementMap: Map<VisitResult<LateVisibilityPaintedStatement>>;
+        let lateStatementReplacementMap: Map<VisitResult<LateVisibilityPaintedStatement | ExportAssignment>>;
         let suppressNewDiagnosticContexts: boolean;
         let exportedModulesFromDeclarationEmit: Symbol[] | undefined;
 
@@ -61,7 +89,7 @@ namespace ts {
         const { noResolve, stripInternal } = options;
         return transformRoot;
 
-        function recordTypeReferenceDirectivesIfNecessary(typeReferenceDirectives: string[] | undefined): void {
+        function recordTypeReferenceDirectivesIfNecessary(typeReferenceDirectives: ReadonlyArray<string> | undefined): void {
             if (!typeReferenceDirectives) {
                 return;
             }
@@ -162,6 +190,10 @@ namespace ts {
             }
         }
 
+        function createEmptyExports() {
+            return createExportDeclaration(/*decorators*/ undefined, /*modifiers*/ undefined, createNamedExports([]), /*moduleSpecifier*/ undefined);
+        }
+
         function transformRoot(node: Bundle): Bundle;
         function transformRoot(node: SourceFile): SourceFile;
         function transformRoot(node: SourceFile | Bundle): SourceFile | Bundle;
@@ -207,8 +239,14 @@ namespace ts {
                     }
                 ), mapDefined(node.prepends, prepend => {
                     if (prepend.kind === SyntaxKind.InputFiles) {
-                        return createUnparsedSourceFile(prepend.declarationText, prepend.declarationMapPath, prepend.declarationMapText);
+                        const sourceFile = createUnparsedSourceFile(prepend, "dts", stripInternal);
+                        hasNoDefaultLib = hasNoDefaultLib || !!sourceFile.hasNoDefaultLib;
+                        collectReferences(sourceFile, refs);
+                        recordTypeReferenceDirectivesIfNecessary(sourceFile.typeReferenceDirectives);
+                        collectLibs(sourceFile, libs);
+                        return sourceFile;
                     }
+                    return prepend;
                 }));
                 bundle.syntheticFileReferences = [];
                 bundle.syntheticTypeReferences = getFileReferencesForUsedTypeReferences();
@@ -243,7 +281,7 @@ namespace ts {
             refs.forEach(referenceVisitor);
             const emittedImports = filter(combinedStatements, isAnyImportSyntax);
             if (isExternalModule(node) && (!resultHasExternalModuleIndicator || (needsScopeFixMarker && !resultHasScopeMarker))) {
-                combinedStatements = setTextRange(createNodeArray([...combinedStatements, createExportDeclaration(/*decorators*/ undefined, /*modifiers*/ undefined, createNamedExports([]), /*moduleSpecifier*/ undefined)]), combinedStatements);
+                combinedStatements = setTextRange(createNodeArray([...combinedStatements, createEmptyExports()]), combinedStatements);
             }
             const updated = updateSourceFileNode(node, combinedStatements, /*isDeclarationFile*/ true, references, getFileReferencesForUsedTypeReferences(), node.hasNoDefaultLib, getLibReferences());
             updated.exportedModulesFromDeclarationEmit = exportedModulesFromDeclarationEmit;
@@ -311,10 +349,10 @@ namespace ts {
             }
         }
 
-        function collectReferences(sourceFile: SourceFile, ret: Map<SourceFile>) {
-            if (noResolve || isSourceFileJS(sourceFile)) return ret;
+        function collectReferences(sourceFile: SourceFile | UnparsedSource, ret: Map<SourceFile>) {
+            if (noResolve || (!isUnparsedSource(sourceFile) && isSourceFileJS(sourceFile))) return ret;
             forEach(sourceFile.referencedFiles, f => {
-                const elem = tryResolveScriptReference(host, sourceFile, f);
+                const elem = host.getSourceFileFromReference(sourceFile, f);
                 if (elem) {
                     ret.set("" + getOriginalNodeId(elem), elem);
                 }
@@ -322,7 +360,7 @@ namespace ts {
             return ret;
         }
 
-        function collectLibs(sourceFile: SourceFile, ret: Map<boolean>) {
+        function collectLibs(sourceFile: SourceFile | UnparsedSource, ret: Map<boolean>) {
             forEach(sourceFile.libReferenceDirectives, ref => {
                 const lib = host.getLibFileFromReference(ref);
                 if (lib) {
@@ -636,7 +674,7 @@ namespace ts {
                 }
                 const priorNeedsDeclare = needsDeclare;
                 needsDeclare = i.parent && isSourceFile(i.parent) && !(isExternalModule(i.parent) && isBundledEmit);
-                const result = transformTopLevelDeclaration(i, /*privateDeclaration*/ true);
+                const result = transformTopLevelDeclaration(i);
                 needsDeclare = priorNeedsDeclare;
                 lateStatementReplacementMap.set("" + getOriginalNodeId(i), result);
             }
@@ -651,12 +689,12 @@ namespace ts {
                     if (lateStatementReplacementMap.has(key)) {
                         const result = lateStatementReplacementMap.get(key);
                         lateStatementReplacementMap.delete(key);
-                        if (result && isSourceFile(statement.parent)) {
+                        if (result) {
                             if (isArray(result) ? some(result, needsScopeMarker) : needsScopeMarker(result)) {
                                 // Top-level declarations in .d.ts files are always considered exported even without a modifier unless there's an export assignment or specifier
                                 needsScopeFixMarker = true;
                             }
-                            if (isArray(result) ? some(result, isExternalModuleIndicator) : isExternalModuleIndicator(result)) {
+                            if (isSourceFile(statement.parent) && (isArray(result) ? some(result, isExternalModuleIndicator) : isExternalModuleIndicator(result))) {
                                 resultHasExternalModuleIndicator = true;
                             }
                         }
@@ -667,12 +705,12 @@ namespace ts {
             }
         }
 
-        function isExternalModuleIndicator(result: LateVisibilityPaintedStatement) {
+        function isExternalModuleIndicator(result: LateVisibilityPaintedStatement | ExportAssignment) {
             // Exported top-level member indicates moduleness
             return isAnyImportOrReExport(result) || isExportAssignment(result) || hasModifier(result, ModifierFlags.Export);
         }
 
-        function needsScopeMarker(result: LateVisibilityPaintedStatement) {
+        function needsScopeMarker(result: LateVisibilityPaintedStatement | ExportAssignment) {
             return !isAnyImportOrReExport(result) && !isExportAssignment(result) && !hasModifier(result, ModifierFlags.Export) && !isAmbientModule(result);
         }
 
@@ -905,8 +943,8 @@ namespace ts {
                 case SyntaxKind.ExportDeclaration: {
                     if (isSourceFile(input.parent)) {
                         resultHasExternalModuleIndicator = true;
-                        resultHasScopeMarker = true;
                     }
+                    resultHasScopeMarker = true;
                     // Always visible if the parent node isn't dropped for being not visible
                     // Rewrite external module names if necessary
                     return updateExportDeclaration(input, /*decorators*/ undefined, input.modifiers, input.exportClause, rewriteModuleSpecifier(input, input.moduleSpecifier));
@@ -915,8 +953,8 @@ namespace ts {
                     // Always visible if the parent node isn't dropped for being not visible
                     if (isSourceFile(input.parent)) {
                         resultHasExternalModuleIndicator = true;
-                        resultHasScopeMarker = true;
                     }
+                    resultHasScopeMarker = true;
                     if (input.expression.kind === SyntaxKind.Identifier) {
                         return input;
                     }
@@ -939,7 +977,19 @@ namespace ts {
             return input;
         }
 
-        function transformTopLevelDeclaration(input: LateVisibilityPaintedStatement, isPrivate?: boolean) {
+        function stripExportModifiers(statement: Statement): Statement {
+            if (isImportEqualsDeclaration(statement) || hasModifier(statement, ModifierFlags.Default)) {
+                // `export import` statements should remain as-is, as imports are _not_ implicitly exported in an ambient namespace
+                // Likewise, `export default` classes and the like and just be `default`, so we preserve their `export` modifiers, too
+                return statement;
+            }
+            const clone = getMutableClone(statement);
+            const modifiers = createModifiersFromModifierFlags(getModifierFlags(statement) & (ModifierFlags.All ^ ModifierFlags.Export));
+            clone.modifiers = modifiers.length ? createNodeArray(modifiers) : undefined;
+            return clone;
+        }
+
+        function transformTopLevelDeclaration(input: LateVisibilityPaintedStatement) {
             if (shouldStripInternal(input)) return;
             switch (input.kind) {
                 case SyntaxKind.ImportEqualsDeclaration: {
@@ -972,7 +1022,7 @@ namespace ts {
                     return cleanup(updateTypeAliasDeclaration(
                         input,
                         /*decorators*/ undefined,
-                        ensureModifiers(input, isPrivate),
+                        ensureModifiers(input),
                         input.name,
                         visitNodes(input.typeParameters, visitDeclarationSubtree, isTypeParameterDeclaration),
                         visitNode(input.type, visitDeclarationSubtree, isTypeNode)
@@ -981,7 +1031,7 @@ namespace ts {
                     return cleanup(updateInterfaceDeclaration(
                         input,
                         /*decorators*/ undefined,
-                        ensureModifiers(input, isPrivate),
+                        ensureModifiers(input),
                         input.name,
                         ensureTypeParams(input, input.typeParameters),
                         transformHeritageClauses(input.heritageClauses),
@@ -993,7 +1043,7 @@ namespace ts {
                     const clean = cleanup(updateFunctionDeclaration(
                         input,
                         /*decorators*/ undefined,
-                        ensureModifiers(input, isPrivate),
+                        ensureModifiers(input),
                         /*asteriskToken*/ undefined,
                         input.name,
                         ensureTypeParams(input, input.typeParameters),
@@ -1002,16 +1052,62 @@ namespace ts {
                         /*body*/ undefined
                     ));
                     if (clean && resolver.isExpandoFunctionDeclaration(input)) {
-                        const declarations = mapDefined(resolver.getPropertiesOfContainerFunction(input), p => {
+                        const props = resolver.getPropertiesOfContainerFunction(input);
+                        const fakespace = createModuleDeclaration(/*decorators*/ undefined, /*modifiers*/ undefined, clean.name || createIdentifier("_default"), createModuleBlock([]), NodeFlags.Namespace);
+                        fakespace.flags ^= NodeFlags.Synthesized; // unset synthesized so it is usable as an enclosing declaration
+                        fakespace.parent = enclosingDeclaration as SourceFile | NamespaceDeclaration;
+                        fakespace.locals = createSymbolTable(props);
+                        fakespace.symbol = props[0].parent!;
+                        const declarations = mapDefined(props, p => {
                             if (!isPropertyAccessExpression(p.valueDeclaration)) {
                                 return undefined;
                             }
-                            const type = resolver.createTypeOfDeclaration(p.valueDeclaration, enclosingDeclaration, declarationEmitNodeBuilderFlags, symbolTracker);
+                            getSymbolAccessibilityDiagnostic = createGetSymbolAccessibilityDiagnosticForNode(p.valueDeclaration);
+                            const type = resolver.createTypeOfDeclaration(p.valueDeclaration, fakespace, declarationEmitNodeBuilderFlags, symbolTracker);
+                            getSymbolAccessibilityDiagnostic = oldDiag;
                             const varDecl = createVariableDeclaration(unescapeLeadingUnderscores(p.escapedName), type, /*initializer*/ undefined);
                             return createVariableStatement(/*modifiers*/ undefined, createVariableDeclarationList([varDecl]));
                         });
-                        const namespaceDecl = createModuleDeclaration(/*decorators*/ undefined, ensureModifiers(input, isPrivate), input.name!, createModuleBlock(declarations), NodeFlags.Namespace);
-                        return [clean, namespaceDecl];
+                        const namespaceDecl = createModuleDeclaration(/*decorators*/ undefined, ensureModifiers(input), input.name!, createModuleBlock(declarations), NodeFlags.Namespace);
+
+                        if (!hasModifier(clean, ModifierFlags.Default)) {
+                            return [clean, namespaceDecl];
+                        }
+
+                        const modifiers = createModifiersFromModifierFlags((getModifierFlags(clean) & ~ModifierFlags.ExportDefault) | ModifierFlags.Ambient);
+                        const cleanDeclaration = updateFunctionDeclaration(
+                            clean,
+                            /*decorators*/ undefined,
+                            modifiers,
+                            /*asteriskToken*/ undefined,
+                            clean.name,
+                            clean.typeParameters,
+                            clean.parameters,
+                            clean.type,
+                            /*body*/ undefined
+                        );
+
+                        const namespaceDeclaration = updateModuleDeclaration(
+                            namespaceDecl,
+                            /*decorators*/ undefined,
+                            modifiers,
+                            namespaceDecl.name,
+                            namespaceDecl.body
+                        );
+
+                        const exportDefaultDeclaration = createExportAssignment(
+                            /*decorators*/ undefined,
+                            /*modifiers*/ undefined,
+                            /*isExportEquals*/ false,
+                            namespaceDecl.name
+                        );
+
+                        if (isSourceFile(input.parent)) {
+                            resultHasExternalModuleIndicator = true;
+                        }
+                        resultHasScopeMarker = true;
+
+                        return [cleanDeclaration, namespaceDeclaration, exportDefaultDeclaration];
                     }
                     else {
                         return clean;
@@ -1021,10 +1117,32 @@ namespace ts {
                     needsDeclare = false;
                     const inner = input.body;
                     if (inner && inner.kind === SyntaxKind.ModuleBlock) {
+                        const oldNeedsScopeFix = needsScopeFixMarker;
+                        const oldHasScopeFix = resultHasScopeMarker;
+                        resultHasScopeMarker = false;
+                        needsScopeFixMarker = false;
                         const statements = visitNodes(inner.statements, visitDeclarationStatements);
-                        const body = updateModuleBlock(inner, transformAndReplaceLatePaintedStatements(statements));
+                        let lateStatements = transformAndReplaceLatePaintedStatements(statements);
+                        if (input.flags & NodeFlags.Ambient) {
+                            needsScopeFixMarker = false; // If it was `declare`'d everything is implicitly exported already, ignore late printed "privates"
+                        }
+                        // With the final list of statements, there are 3 possibilities:
+                        // 1. There's an export assignment or export declaration in the namespace - do nothing
+                        // 2. Everything is exported and there are no export assignments or export declarations - strip all export modifiers
+                        // 3. Some things are exported, some are not, and there's no marker - add an empty marker
+                        if (!isGlobalScopeAugmentation(input) && !hasScopeMarker(lateStatements) && !resultHasScopeMarker) {
+                            if (needsScopeFixMarker) {
+                                lateStatements = createNodeArray([...lateStatements, createEmptyExports()]);
+                            }
+                            else {
+                                lateStatements = visitNodes(lateStatements, stripExportModifiers);
+                            }
+                        }
+                        const body = updateModuleBlock(inner, lateStatements);
                         needsDeclare = previousNeedsDeclare;
-                        const mods = ensureModifiers(input, isPrivate);
+                        needsScopeFixMarker = oldNeedsScopeFix;
+                        resultHasScopeMarker = oldHasScopeFix;
+                        const mods = ensureModifiers(input);
                         return cleanup(updateModuleDeclaration(
                             input,
                             /*decorators*/ undefined,
@@ -1035,7 +1153,7 @@ namespace ts {
                     }
                     else {
                         needsDeclare = previousNeedsDeclare;
-                        const mods = ensureModifiers(input, isPrivate);
+                        const mods = ensureModifiers(input);
                         needsDeclare = false;
                         visitNode(inner, visitDeclarationStatements);
                         // eagerly transform nested namespaces (the nesting doesn't need any elision or painting done)
@@ -1052,14 +1170,14 @@ namespace ts {
                     }
                 }
                 case SyntaxKind.ClassDeclaration: {
-                    const modifiers = createNodeArray(ensureModifiers(input, isPrivate));
+                    const modifiers = createNodeArray(ensureModifiers(input));
                     const typeParameters = ensureTypeParams(input, input.typeParameters);
                     const ctor = getFirstConstructorWithBody(input);
                     let parameterProperties: ReadonlyArray<PropertyDeclaration> | undefined;
                     if (ctor) {
                         const oldDiag = getSymbolAccessibilityDiagnostic;
-                        parameterProperties = compact(flatMap(ctor.parameters, param => {
-                            if (!hasModifier(param, ModifierFlags.ParameterPropertyModifier)) return;
+                        parameterProperties = compact(flatMap(ctor.parameters, (param) => {
+                            if (!hasModifier(param, ModifierFlags.ParameterPropertyModifier) || shouldStripInternal(param)) return;
                             getSymbolAccessibilityDiagnostic = createGetSymbolAccessibilityDiagnosticForNode(param);
                             if (param.name.kind === SyntaxKind.Identifier) {
                                 return preserveJsDoc(createProperty(
@@ -1146,10 +1264,10 @@ namespace ts {
                     }
                 }
                 case SyntaxKind.VariableStatement: {
-                    return cleanup(transformVariableStatement(input, isPrivate));
+                    return cleanup(transformVariableStatement(input));
                 }
                 case SyntaxKind.EnumDeclaration: {
-                    return cleanup(updateEnumDeclaration(input, /*decorators*/ undefined, createNodeArray(ensureModifiers(input, isPrivate)), input.name, createNodeArray(mapDefined(input.members, m => {
+                    return cleanup(updateEnumDeclaration(input, /*decorators*/ undefined, createNodeArray(ensureModifiers(input)), input.name, createNodeArray(mapDefined(input.members, m => {
                         if (shouldStripInternal(m)) return;
                         // Rewrite enum values to their constants, if available
                         const constValue = resolver.getConstantValue(m);
@@ -1177,11 +1295,11 @@ namespace ts {
             }
         }
 
-        function transformVariableStatement(input: VariableStatement, privateDeclaration?: boolean) {
+        function transformVariableStatement(input: VariableStatement) {
             if (!forEach(input.declarationList.declarations, getBindingNameVisible)) return;
             const nodes = visitNodes(input.declarationList.declarations, visitDeclarationSubtree);
             if (!length(nodes)) return;
-            return updateVariableStatement(input, createNodeArray(ensureModifiers(input, privateDeclaration)), updateVariableDeclarationList(input.declarationList, nodes));
+            return updateVariableStatement(input, createNodeArray(ensureModifiers(input)), updateVariableDeclarationList(input.declarationList, nodes));
         }
 
         function recreateBindingPattern(d: BindingPattern): VariableDeclaration[] {
@@ -1220,47 +1338,33 @@ namespace ts {
             errorNameNode = undefined;
         }
 
-        function hasInternalAnnotation(range: CommentRange) {
-            const comment = currentSourceFile.text.substring(range.pos, range.end);
-            return stringContains(comment, "@internal");
-        }
-
         function shouldStripInternal(node: Node) {
-            if (stripInternal && node) {
-                const leadingCommentRanges = getLeadingCommentRangesOfNode(getParseTreeNode(node), currentSourceFile);
-                if (forEach(leadingCommentRanges, hasInternalAnnotation)) {
-                    return true;
-                }
-            }
-            return false;
+            return !!stripInternal && !!node && isInternalDeclaration(node, currentSourceFile);
         }
 
         function isScopeMarker(node: Node) {
             return isExportAssignment(node) || isExportDeclaration(node);
         }
 
-        function hasScopeMarker(node: Node) {
-            if (isModuleBlock(node)) {
-                return some(node.statements, isScopeMarker);
-            }
-            return false;
+        function hasScopeMarker(statements: ReadonlyArray<Statement>) {
+            return some(statements, isScopeMarker);
         }
 
-        function ensureModifiers(node: Node, privateDeclaration?: boolean): ReadonlyArray<Modifier> | undefined {
+        function ensureModifiers(node: Node): ReadonlyArray<Modifier> | undefined {
             const currentFlags = getModifierFlags(node);
-            const newFlags = ensureModifierFlags(node, privateDeclaration);
+            const newFlags = ensureModifierFlags(node);
             if (currentFlags === newFlags) {
                 return node.modifiers;
             }
             return createModifiersFromModifierFlags(newFlags);
         }
 
-        function ensureModifierFlags(node: Node, privateDeclaration?: boolean): ModifierFlags {
+        function ensureModifierFlags(node: Node): ModifierFlags {
             let mask = ModifierFlags.All ^ (ModifierFlags.Public | ModifierFlags.Async); // No async modifiers in declaration files
             let additions = (needsDeclare && !isAlwaysType(node)) ? ModifierFlags.Ambient : ModifierFlags.None;
             const parentIsFile = node.parent.kind === SyntaxKind.SourceFile;
             if (!parentIsFile || (isBundledEmit && parentIsFile && isExternalModule(node.parent as SourceFile))) {
-                mask ^= ((privateDeclaration || (isBundledEmit && parentIsFile) || hasScopeMarker(node.parent) ? 0 : ModifierFlags.Export) | ModifierFlags.Ambient);
+                mask ^= ModifierFlags.Ambient;
                 additions = ModifierFlags.None;
             }
             return maskModifierFlags(node, mask, additions);

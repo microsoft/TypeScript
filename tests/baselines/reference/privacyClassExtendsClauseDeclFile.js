@@ -368,30 +368,32 @@ var publicClassExtendingPublicClassInGlobal = /** @class */ (function (_super) {
 
 //// [privacyClassExtendsClauseDeclFile_externalModule.d.ts]
 export declare module publicModule {
-    class publicClassInPublicModule {
+    export class publicClassInPublicModule {
         private f1;
     }
     class privateClassInPublicModule {
     }
-    class publicClassExtendingPublicClassInModule extends publicClassInPublicModule {
+    export class publicClassExtendingPublicClassInModule extends publicClassInPublicModule {
     }
-    class publicClassExtendingPrivateClassInModule extends privateClassInPublicModule {
+    export class publicClassExtendingPrivateClassInModule extends privateClassInPublicModule {
     }
-    class publicClassExtendingFromPrivateModuleClass extends privateModule.publicClassInPrivateModule {
+    export class publicClassExtendingFromPrivateModuleClass extends privateModule.publicClassInPrivateModule {
     }
+    export {};
 }
 declare module privateModule {
-    class publicClassInPrivateModule {
+    export class publicClassInPrivateModule {
         private f1;
     }
     class privateClassInPrivateModule {
     }
-    class publicClassExtendingPublicClassInModule extends publicClassInPrivateModule {
+    export class publicClassExtendingPublicClassInModule extends publicClassInPrivateModule {
     }
-    class publicClassExtendingPrivateClassInModule extends privateClassInPrivateModule {
+    export class publicClassExtendingPrivateClassInModule extends privateClassInPrivateModule {
     }
-    class publicClassExtendingFromPrivateModuleClass extends privateModule.publicClassInPrivateModule {
+    export class publicClassExtendingFromPrivateModuleClass extends privateModule.publicClassInPrivateModule {
     }
+    export {};
 }
 export declare class publicClass {
     private f1;
@@ -407,15 +409,16 @@ export declare class publicClassExtendingFromPrivateModuleClass extends privateM
 export {};
 //// [privacyClassExtendsClauseDeclFile_GlobalFile.d.ts]
 declare module publicModuleInGlobal {
-    class publicClassInPublicModule {
+    export class publicClassInPublicModule {
         private f1;
     }
     class privateClassInPublicModule {
     }
-    class publicClassExtendingPublicClassInModule extends publicClassInPublicModule {
+    export class publicClassExtendingPublicClassInModule extends publicClassInPublicModule {
     }
-    class publicClassExtendingPrivateClassInModule extends privateClassInPublicModule {
+    export class publicClassExtendingPrivateClassInModule extends privateClassInPublicModule {
     }
+    export {};
 }
 declare class publicClassInGlobal {
 }

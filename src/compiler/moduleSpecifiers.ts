@@ -175,9 +175,9 @@ namespace ts.moduleSpecifiers {
 
     function discoverProbableSymlinks(files: ReadonlyArray<SourceFile>, getCanonicalFileName: GetCanonicalFileName, cwd: string): ReadonlyMap<string> {
         const result = createMap<string>();
-        const symlinks = mapDefined(files, sf =>
-            sf.resolvedModules && firstDefinedIterator(sf.resolvedModules.values(), res =>
-                res && res.originalPath && res.resolvedFileName !== res.originalPath ? [res.resolvedFileName, res.originalPath] : undefined));
+        const symlinks = flatten<readonly [string, string]>(mapDefined(files, sf =>
+            sf.resolvedModules && compact(arrayFrom(mapIterator(sf.resolvedModules.values(), res =>
+                res && res.originalPath && res.resolvedFileName !== res.originalPath ? [res.resolvedFileName, res.originalPath] as const : undefined)))));
         for (const [resolvedPath, originalPath] of symlinks) {
             const [commonResolved, commonOriginal] = guessDirectorySymlink(resolvedPath, originalPath, cwd, getCanonicalFileName);
             result.set(commonOriginal, commonResolved);
@@ -437,6 +437,8 @@ namespace ts.moduleSpecifiers {
             case Extension.Jsx:
             case Extension.Json:
                 return ext;
+            case Extension.TsBuildInfo:
+                return Debug.fail(`Extension ${Extension.TsBuildInfo} is unsupported:: FileName:: ${fileName}`);
             default:
                 return Debug.assertNever(ext);
         }

@@ -34,6 +34,12 @@ function f4() {
     ({ ["x" + ""]: x } = 0);  // Errpr
 }
 
+// Repro from #31770
+
+type KeyValue = [string, string?];
+let [key, value]: KeyValue = ["foo"];
+value.toUpperCase();  // Error
+
 
 //// [destructuringControlFlow.js]
 "use strict";
@@ -69,3 +75,5 @@ function f4() {
     (x = 0["x"]); // Error
     (_a = "x" + "", x = 0[_a]); // Errpr
 }
+var _a = ["foo"], key = _a[0], value = _a[1];
+value.toUpperCase(); // Error

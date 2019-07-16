@@ -1,13 +1,13 @@
 tests/cases/compiler/overloadingStaticFunctionsInFunctions.ts(1,14): error TS1005: '(' expected.
 tests/cases/compiler/overloadingStaticFunctionsInFunctions.ts(2,3): error TS1128: Declaration or statement expected.
-tests/cases/compiler/overloadingStaticFunctionsInFunctions.ts(2,10): error TS2582: Cannot find name 'test'. Do you need to install type definitions for a test runner? Try `npm i @types/jest` or `npm i @types/mocha`  and then add `jest` or `mocha` to the types field in your tsconfig.
+tests/cases/compiler/overloadingStaticFunctionsInFunctions.ts(2,10): error TS2582: Cannot find name 'test'. Do you need to install type definitions for a test runner? Try `npm i @types/jest` or `npm i @types/mocha`.
 tests/cases/compiler/overloadingStaticFunctionsInFunctions.ts(3,3): error TS1128: Declaration or statement expected.
-tests/cases/compiler/overloadingStaticFunctionsInFunctions.ts(3,10): error TS2582: Cannot find name 'test'. Do you need to install type definitions for a test runner? Try `npm i @types/jest` or `npm i @types/mocha`  and then add `jest` or `mocha` to the types field in your tsconfig.
+tests/cases/compiler/overloadingStaticFunctionsInFunctions.ts(3,10): error TS2582: Cannot find name 'test'. Do you need to install type definitions for a test runner? Try `npm i @types/jest` or `npm i @types/mocha`.
 tests/cases/compiler/overloadingStaticFunctionsInFunctions.ts(3,15): error TS2304: Cannot find name 'name'.
 tests/cases/compiler/overloadingStaticFunctionsInFunctions.ts(3,19): error TS1005: ',' expected.
 tests/cases/compiler/overloadingStaticFunctionsInFunctions.ts(3,20): error TS2693: 'string' only refers to a type, but is being used as a value here.
 tests/cases/compiler/overloadingStaticFunctionsInFunctions.ts(4,3): error TS1128: Declaration or statement expected.
-tests/cases/compiler/overloadingStaticFunctionsInFunctions.ts(4,10): error TS2582: Cannot find name 'test'. Do you need to install type definitions for a test runner? Try `npm i @types/jest` or `npm i @types/mocha`  and then add `jest` or `mocha` to the types field in your tsconfig.
+tests/cases/compiler/overloadingStaticFunctionsInFunctions.ts(4,10): error TS2582: Cannot find name 'test'. Do you need to install type definitions for a test runner? Try `npm i @types/jest` or `npm i @types/mocha`.
 tests/cases/compiler/overloadingStaticFunctionsInFunctions.ts(4,15): error TS2304: Cannot find name 'name'.
 tests/cases/compiler/overloadingStaticFunctionsInFunctions.ts(4,20): error TS1109: Expression expected.
 tests/cases/compiler/overloadingStaticFunctionsInFunctions.ts(4,21): error TS2693: 'any' only refers to a type, but is being used as a value here.
@@ -22,12 +22,12 @@ tests/cases/compiler/overloadingStaticFunctionsInFunctions.ts(4,25): error TS100
       ~~~~~~
 !!! error TS1128: Declaration or statement expected.
              ~~~~
-!!! error TS2582: Cannot find name 'test'. Do you need to install type definitions for a test runner? Try `npm i @types/jest` or `npm i @types/mocha`  and then add `jest` or `mocha` to the types field in your tsconfig.
+!!! error TS2582: Cannot find name 'test'. Do you need to install type definitions for a test runner? Try `npm i @types/jest` or `npm i @types/mocha`.
       static test(name:string)
       ~~~~~~
 !!! error TS1128: Declaration or statement expected.
              ~~~~
-!!! error TS2582: Cannot find name 'test'. Do you need to install type definitions for a test runner? Try `npm i @types/jest` or `npm i @types/mocha`  and then add `jest` or `mocha` to the types field in your tsconfig.
+!!! error TS2582: Cannot find name 'test'. Do you need to install type definitions for a test runner? Try `npm i @types/jest` or `npm i @types/mocha`.
                   ~~~~
 !!! error TS2304: Cannot find name 'name'.
                       ~
@@ -38,7 +38,7 @@ tests/cases/compiler/overloadingStaticFunctionsInFunctions.ts(4,25): error TS100
       ~~~~~~
 !!! error TS1128: Declaration or statement expected.
              ~~~~
-!!! error TS2582: Cannot find name 'test'. Do you need to install type definitions for a test runner? Try `npm i @types/jest` or `npm i @types/mocha`  and then add `jest` or `mocha` to the types field in your tsconfig.
+!!! error TS2582: Cannot find name 'test'. Do you need to install type definitions for a test runner? Try `npm i @types/jest` or `npm i @types/mocha`.
                   ~~~~
 !!! error TS2304: Cannot find name 'name'.
                        ~

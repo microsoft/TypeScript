@@ -1,5 +1,6 @@
 tests/cases/conformance/expressions/propertyAccess/propertyAccessStringIndexSignatureNoImplicitAny.ts(10,7): error TS2339: Property 'nope' does not exist on type 'Empty'.
-tests/cases/conformance/expressions/propertyAccess/propertyAccessStringIndexSignatureNoImplicitAny.ts(11,1): error TS7017: Element implicitly has an 'any' type because type 'Empty' has no index signature.
+tests/cases/conformance/expressions/propertyAccess/propertyAccessStringIndexSignatureNoImplicitAny.ts(11,1): error TS7053: Element implicitly has an 'any' type because expression of type '"not allowed either"' can't be used to index type 'Empty'.
+  Property 'not allowed either' does not exist on type 'Empty'.
 
 
 ==== tests/cases/conformance/expressions/propertyAccess/propertyAccessStringIndexSignatureNoImplicitAny.ts (2 errors) ====
@@ -17,5 +18,6 @@ tests/cases/conformance/expressions/propertyAccess/propertyAccessStringIndexSign
 !!! error TS2339: Property 'nope' does not exist on type 'Empty'.
     empty["not allowed either"];
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS7017: Element implicitly has an 'any' type because type 'Empty' has no index signature.
+!!! error TS7053: Element implicitly has an 'any' type because expression of type '"not allowed either"' can't be used to index type 'Empty'.
+!!! error TS7053:   Property 'not allowed either' does not exist on type 'Empty'.
     

@@ -198,7 +198,7 @@ i3_i = {
     l: this.f,
 >l : any
 >this.f : any
->this : any
+>this : typeof globalThis
 >f : any
 
     /** own x*/
@@ -206,7 +206,7 @@ i3_i = {
 >x : any
 >this.f(10) : any
 >this.f : any
->this : any
+>this : typeof globalThis
 >f : any
 >10 : 10
 
@@ -214,22 +214,22 @@ i3_i = {
 >nc_x : any
 >this.l(this.x) : any
 >this.l : any
->this : any
+>this : typeof globalThis
 >l : any
 >this.x : any
->this : any
+>this : typeof globalThis
 >x : any
 
     nc_f: this.f,
 >nc_f : any
 >this.f : any
->this : any
+>this : typeof globalThis
 >f : any
 
     nc_l: this.l
 >nc_l : any
 >this.l : any
->this : any
+>this : typeof globalThis
 >l : any
 
 };

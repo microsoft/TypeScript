@@ -19,8 +19,18 @@
 verify.completions({
     marker: "",
     exact: [
-        "undefined",
-        { name: "foo", source: "/foo/lib/foo", sourceDisplay: "./foo", text: "const foo: 0", kind: "const", kindModifiers: "export", hasAction: true },
+        completion.globalThisEntry,
+        completion.undefinedVarEntry,
+        {
+            name: "foo",
+            source: "/foo/lib/foo",
+            sourceDisplay: "./foo",
+            text: "const foo: 0",
+            kind: "const",
+            kindModifiers: "export",
+            hasAction: true,
+            sortText: completion.SortText.AutoImportSuggestions
+        },
         ...completion.statementKeywordsWithTypes,
     ],
     preferences: { includeCompletionsForModuleExports: true },

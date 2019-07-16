@@ -108,7 +108,7 @@ namespace ts.GoToDefinition {
     export function getReferenceAtPosition(sourceFile: SourceFile, position: number, program: Program): { fileName: string, file: SourceFile } | undefined {
         const referencePath = findReferenceInPosition(sourceFile.referencedFiles, position);
         if (referencePath) {
-            const file = tryResolveScriptReference(program, sourceFile, referencePath);
+            const file = program.getSourceFileFromReference(sourceFile, referencePath);
             return file && { fileName: referencePath.fileName, file };
         }
 
@@ -273,13 +273,19 @@ namespace ts.GoToDefinition {
     function createDefinitionInfoFromName(declaration: Declaration, symbolKind: ScriptElementKind, symbolName: string, containerName: string): DefinitionInfo {
         const name = getNameOfDeclaration(declaration) || declaration;
         const sourceFile = name.getSourceFile();
+        const textSpan = createTextSpanFromNode(name, sourceFile);
         return {
             fileName: sourceFile.fileName,
-            textSpan: createTextSpanFromNode(name, sourceFile),
+            textSpan,
             kind: symbolKind,
             name: symbolName,
             containerKind: undefined!, // TODO: GH#18217
-            containerName
+            containerName,
+            ...FindAllReferences.toContextSpan(
+                textSpan,
+                sourceFile,
+                FindAllReferences.getContextNode(declaration)
+            )
         };
     }
 

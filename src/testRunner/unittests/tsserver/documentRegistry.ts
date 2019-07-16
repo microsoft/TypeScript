@@ -41,13 +41,13 @@ namespace ts.projectSystem {
 
         function changeFileToNotImportModule(service: TestProjectService) {
             const info = service.getScriptInfo(file.path)!;
-            service.applyChangesToFile(info, [{ span: { start: 0, length: importModuleContent.length }, newText: "" }]);
+            service.applyChangesToFile(info, singleIterator({ span: { start: 0, length: importModuleContent.length }, newText: "" }));
             checkProject(service, /*moduleIsOrphan*/ true);
         }
 
         function changeFileToImportModule(service: TestProjectService) {
             const info = service.getScriptInfo(file.path)!;
-            service.applyChangesToFile(info, [{ span: { start: 0, length: 0 }, newText: importModuleContent }]);
+            service.applyChangesToFile(info, singleIterator({ span: { start: 0, length: 0 }, newText: importModuleContent }));
             checkProject(service, /*moduleIsOrphan*/ false);
         }
 

@@ -73,6 +73,7 @@ tests/cases/conformance/statements/for-inStatements/for-inStatementsInvalid.ts(6
             for (var x in this) { }
                      ~
 !!! error TS2403: Subsequent variable declarations must have the same type.  Variable 'x' must be of type 'string', but here has type 'Extract<keyof this, string>'.
+!!! related TS6203 tests/cases/conformance/statements/for-inStatements/for-inStatementsInvalid.ts:29:18: 'x' was also declared here.
             return null;
         }
     
@@ -96,6 +97,7 @@ tests/cases/conformance/statements/for-inStatements/for-inStatementsInvalid.ts(6
             for (var x in this) { }
                      ~
 !!! error TS2403: Subsequent variable declarations must have the same type.  Variable 'x' must be of type 'string', but here has type 'Extract<keyof this, string>'.
+!!! related TS6203 tests/cases/conformance/statements/for-inStatements/for-inStatementsInvalid.ts:46:18: 'x' was also declared here.
     
             for (var x in super.biz) { }
             for (var x in super.biz()) { }

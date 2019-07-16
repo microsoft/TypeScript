@@ -391,9 +391,9 @@ export function keys<K extends string, V>(obj: Record<K, V>): K[] {
   return Object.keys(obj) as K[]
 >Object.keys(obj) as K[] : K[]
 >Object.keys(obj) : string[]
->Object.keys : (o: {}) => string[]
+>Object.keys : (o: object) => string[]
 >Object : ObjectConstructor
->keys : (o: {}) => string[]
+>keys : (o: object) => string[]
 >obj : Record<K, V>
 }
 
@@ -453,4 +453,28 @@ function test<T extends { a: string, b: string }>(obj: T): T {
 >'hello' : "hello"
 >rest : Pick<T, Exclude<keyof T, "a">>
 }
+
+// Repro from #32169
+
+declare function f<T>(x: T): NonNullable<T>;
+>f : <T>(x: T) => NonNullable<T>
+>x : T
+
+enum E { A, B }
+>E : E
+>A : E.A
+>B : E.B
+
+const a = f(E.A);
+>a : E.A
+>f(E.A) : E.A
+>f : <T>(x: T) => NonNullable<T>
+>E.A : E.A
+>E : typeof E
+>A : E.A
+
+const b: E.A = a;
+>b : E.A
+>E : any
+>a : E.A
 

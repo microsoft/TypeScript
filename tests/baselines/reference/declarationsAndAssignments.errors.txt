@@ -1,4 +1,4 @@
-tests/cases/conformance/es6/destructuring/declarationsAndAssignments.ts(5,16): error TS2525: Initializer provides no value for this binding element and the binding element has no default value.
+tests/cases/conformance/es6/destructuring/declarationsAndAssignments.ts(5,16): error TS2493: Tuple type '[number, string]' of length '2' has no element at index '2'.
 tests/cases/conformance/es6/destructuring/declarationsAndAssignments.ts(22,17): error TS2353: Object literal may only specify known properties, and 'x' does not exist in type '{}'.
 tests/cases/conformance/es6/destructuring/declarationsAndAssignments.ts(22,23): error TS2353: Object literal may only specify known properties, and 'y' does not exist in type '{}'.
 tests/cases/conformance/es6/destructuring/declarationsAndAssignments.ts(23,25): error TS2353: Object literal may only specify known properties, and 'y' does not exist in type '{ x: any; }'.
@@ -6,11 +6,11 @@ tests/cases/conformance/es6/destructuring/declarationsAndAssignments.ts(24,19): 
 tests/cases/conformance/es6/destructuring/declarationsAndAssignments.ts(28,28): error TS2353: Object literal may only specify known properties, and 'y' does not exist in type '{ x: any; }'.
 tests/cases/conformance/es6/destructuring/declarationsAndAssignments.ts(29,22): error TS2353: Object literal may only specify known properties, and 'x' does not exist in type '{ y: any; }'.
 tests/cases/conformance/es6/destructuring/declarationsAndAssignments.ts(58,9): error TS2403: Subsequent variable declarations must have the same type.  Variable 'y' must be of type 'string | number', but here has type 'string'.
-tests/cases/conformance/es6/destructuring/declarationsAndAssignments.ts(62,10): error TS2525: Initializer provides no value for this binding element and the binding element has no default value.
-tests/cases/conformance/es6/destructuring/declarationsAndAssignments.ts(62,13): error TS2525: Initializer provides no value for this binding element and the binding element has no default value.
-tests/cases/conformance/es6/destructuring/declarationsAndAssignments.ts(62,16): error TS2525: Initializer provides no value for this binding element and the binding element has no default value.
-tests/cases/conformance/es6/destructuring/declarationsAndAssignments.ts(63,13): error TS2525: Initializer provides no value for this binding element and the binding element has no default value.
-tests/cases/conformance/es6/destructuring/declarationsAndAssignments.ts(63,16): error TS2525: Initializer provides no value for this binding element and the binding element has no default value.
+tests/cases/conformance/es6/destructuring/declarationsAndAssignments.ts(62,10): error TS2493: Tuple type '[]' of length '0' has no element at index '0'.
+tests/cases/conformance/es6/destructuring/declarationsAndAssignments.ts(62,13): error TS2493: Tuple type '[]' of length '0' has no element at index '1'.
+tests/cases/conformance/es6/destructuring/declarationsAndAssignments.ts(62,16): error TS2493: Tuple type '[]' of length '0' has no element at index '2'.
+tests/cases/conformance/es6/destructuring/declarationsAndAssignments.ts(63,13): error TS2493: Tuple type '[number]' of length '1' has no element at index '1'.
+tests/cases/conformance/es6/destructuring/declarationsAndAssignments.ts(63,16): error TS2493: Tuple type '[number]' of length '1' has no element at index '2'.
 tests/cases/conformance/es6/destructuring/declarationsAndAssignments.ts(67,9): error TS2461: Type '{}' is not an array type.
 tests/cases/conformance/es6/destructuring/declarationsAndAssignments.ts(68,9): error TS2461: Type '{ 0: number; 1: number; }' is not an array type.
 tests/cases/conformance/es6/destructuring/declarationsAndAssignments.ts(73,11): error TS2525: Initializer provides no value for this binding element and the binding element has no default value.
@@ -29,7 +29,7 @@ tests/cases/conformance/es6/destructuring/declarationsAndAssignments.ts(138,9): 
         var [x, y] = [1, "hello"];
         var [x, y, z] = [1, "hello"];
                    ~
-!!! error TS2525: Initializer provides no value for this binding element and the binding element has no default value.
+!!! error TS2493: Tuple type '[number, string]' of length '2' has no element at index '2'.
         var [,, x] = [0, 1, 2];
         var x: number;
         var y: string;
@@ -97,21 +97,22 @@ tests/cases/conformance/es6/destructuring/declarationsAndAssignments.ts(138,9): 
         var y: string;
             ~
 !!! error TS2403: Subsequent variable declarations must have the same type.  Variable 'y' must be of type 'string | number', but here has type 'string'.
+!!! related TS6203 tests/cases/conformance/es6/destructuring/declarationsAndAssignments.ts:56:17: 'y' was also declared here.
     }
     
     function f8() {
         var [a, b, c] = [];   // Error, [] is an empty tuple
              ~
-!!! error TS2525: Initializer provides no value for this binding element and the binding element has no default value.
+!!! error TS2493: Tuple type '[]' of length '0' has no element at index '0'.
                 ~
-!!! error TS2525: Initializer provides no value for this binding element and the binding element has no default value.
+!!! error TS2493: Tuple type '[]' of length '0' has no element at index '1'.
                    ~
-!!! error TS2525: Initializer provides no value for this binding element and the binding element has no default value.
+!!! error TS2493: Tuple type '[]' of length '0' has no element at index '2'.
         var [d, e, f] = [1];  // Error, [1] is a tuple
                 ~
-!!! error TS2525: Initializer provides no value for this binding element and the binding element has no default value.
+!!! error TS2493: Tuple type '[number]' of length '1' has no element at index '1'.
                    ~
-!!! error TS2525: Initializer provides no value for this binding element and the binding element has no default value.
+!!! error TS2493: Tuple type '[number]' of length '1' has no element at index '2'.
     }
     
     function f9() {

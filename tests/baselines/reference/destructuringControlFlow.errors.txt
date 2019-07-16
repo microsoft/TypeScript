@@ -1,9 +1,10 @@
 tests/cases/conformance/es6/destructuring/destructuringControlFlow.ts(31,8): error TS2339: Property 'x' does not exist on type 'Number'.
 tests/cases/conformance/es6/destructuring/destructuringControlFlow.ts(32,9): error TS2339: Property 'x' does not exist on type 'Number'.
 tests/cases/conformance/es6/destructuring/destructuringControlFlow.ts(33,9): error TS2537: Type 'Number' has no matching index signature for type 'string'.
+tests/cases/conformance/es6/destructuring/destructuringControlFlow.ts(40,1): error TS2532: Object is possibly 'undefined'.
 
 
-==== tests/cases/conformance/es6/destructuring/destructuringControlFlow.ts (3 errors) ====
+==== tests/cases/conformance/es6/destructuring/destructuringControlFlow.ts (4 errors) ====
     function f1(obj: { a?: string }) {
         if (obj.a) {
             obj = {};
@@ -44,4 +45,12 @@ tests/cases/conformance/es6/destructuring/destructuringControlFlow.ts(33,9): err
             ~~~~~~~~
 !!! error TS2537: Type 'Number' has no matching index signature for type 'string'.
     }
+    
+    // Repro from #31770
+    
+    type KeyValue = [string, string?];
+    let [key, value]: KeyValue = ["foo"];
+    value.toUpperCase();  // Error
+    ~~~~~
+!!! error TS2532: Object is possibly 'undefined'.
     

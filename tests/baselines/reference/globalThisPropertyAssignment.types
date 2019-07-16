@@ -1,0 +1,28 @@
+=== tests/cases/conformance/es2019/globalThisPropertyAssignment.js ===
+this.x = 1
+>this.x = 1 : 1
+>this.x : number
+>this : typeof globalThis
+>x : number
+>1 : 1
+
+var y = 2
+>y : number
+>2 : 2
+
+// should work in JS
+window.z = 3
+>window.z = 3 : 3
+>window.z : any
+>window : Window & typeof globalThis
+>z : any
+>3 : 3
+
+// should work in JS (even though it's a secondary declaration)
+globalThis.alpha = 4
+>globalThis.alpha = 4 : 4
+>globalThis.alpha : number
+>globalThis : typeof globalThis
+>alpha : number
+>4 : 4
+

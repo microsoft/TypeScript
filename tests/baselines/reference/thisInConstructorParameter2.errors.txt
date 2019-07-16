@@ -10,11 +10,13 @@ tests/cases/compiler/thisInConstructorParameter2.ts(5,39): error TS2333: 'this' 
                    ~~~~
 !!! error TS2334: 'this' cannot be referenced in a static property initializer.
     
-        constructor(public z = this, zz = this) { }
+        constructor(public z = this, zz = this, zzz = (p = this) => this) {
                                ~~~~
 !!! error TS2333: 'this' cannot be referenced in constructor arguments.
                                           ~~~~
 !!! error TS2333: 'this' cannot be referenced in constructor arguments.
+            zzz = (p = this) => this;
+        }
     
         foo(zz = this) { zz.x; }
         static bar(zz = this) { zz.y; }
