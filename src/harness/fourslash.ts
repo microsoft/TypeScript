@@ -4681,6 +4681,9 @@ namespace FourSlashInterface {
             ];
         }
 
+        export const typeAssertionKeywords: ReadonlyArray<ExpectedCompletionEntry> =
+            globalTypesPlus([keywordEntry("const")]);
+
         function getInJsKeywords(keywords: ReadonlyArray<ExpectedCompletionEntryObject>): ReadonlyArray<ExpectedCompletionEntryObject> {
             return keywords.filter(keyword => {
                 switch (keyword.name) {
