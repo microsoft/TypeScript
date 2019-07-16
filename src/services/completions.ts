@@ -1249,13 +1249,11 @@ namespace ts.Completions {
                         return parentKind === SyntaxKind.AsExpression;
 
                     case SyntaxKind.LessThanToken:
-                        return parentKind === SyntaxKind.TypeReference;
+                        return parentKind === SyntaxKind.TypeReference ||
+                            parentKind === SyntaxKind.TypeAssertionExpression;
 
                     case SyntaxKind.ExtendsKeyword:
                         return parentKind === SyntaxKind.TypeParameter;
-
-                    case SyntaxKind.LessThanToken:
-                        return parentKind === SyntaxKind.TypeAssertionExpression;
                 }
             }
             return false;
