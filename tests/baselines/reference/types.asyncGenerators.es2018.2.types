@@ -32,7 +32,7 @@ const assignability1: () => AsyncIterableIterator<number> = async function * () 
 >async function * () {    yield "a";} : () => AsyncGenerator<string, void, unknown>
 
     yield "a";
->yield "a" : any
+>yield "a" : undefined
 >"a" : "a"
 
 };
@@ -65,7 +65,7 @@ const assignability4: () => AsyncIterable<number> = async function * () {
 >async function * () {    yield "a";} : () => AsyncGenerator<string, void, unknown>
 
     yield "a";
->yield "a" : any
+>yield "a" : undefined
 >"a" : "a"
 
 };
@@ -98,7 +98,7 @@ const assignability7: () => AsyncIterator<number> = async function * () {
 >async function * () {    yield "a";} : () => AsyncGenerator<string, void, unknown>
 
     yield "a";
->yield "a" : any
+>yield "a" : undefined
 >"a" : "a"
 
 };

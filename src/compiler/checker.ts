@@ -24740,6 +24740,12 @@ namespace ts {
                     || anyType;
             }
 
+            const contextualReturnType = getContextualReturnType(func);
+            if (contextualReturnType) {
+                return getIterationTypeOfGeneratorFunctionReturnType(IterationTypeKind.Next, contextualReturnType, isAsync)
+                    || anyType;
+            }
+
             return anyType;
         }
 
