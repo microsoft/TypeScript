@@ -248,7 +248,7 @@ namespace ts.server {
         isKnownTypesPackageName(name: string): boolean {
             // We want to avoid looking this up in the registry as that is expensive. So first check that it's actually an NPM package.
             const validationResult = JsTyping.validatePackageName(name);
-            if (validationResult !== JsTyping.PackageNameValidationResult.Ok) {
+            if (validationResult !== JsTyping.NameValidationResult.Ok) {
                 return false;
             }
 
