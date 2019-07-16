@@ -1636,23 +1636,6 @@ namespace ts {
         return !!location.parent && isImportOrExportSpecifier(location.parent) && location.parent.propertyName === location;
     }
 
-    /**
-     * Strip off existed single quotes or double quotes from a given string
-     *
-     * @return non-quoted string
-     */
-    export function stripQuotes(name: string) {
-        const length = name.length;
-        if (length >= 2 && name.charCodeAt(0) === name.charCodeAt(length - 1) && startsWithQuote(name)) {
-            return name.substring(1, length - 1);
-        }
-        return name;
-    }
-
-    export function startsWithQuote(name: string): boolean {
-        return isSingleOrDoubleQuote(name.charCodeAt(0));
-    }
-
     export function scriptKindIs(fileName: string, host: LanguageServiceHost, ...scriptKinds: ScriptKind[]): boolean {
         const scriptKind = getScriptKind(fileName, host);
         return some(scriptKinds, k => k === scriptKind);
@@ -2037,5 +2020,54 @@ namespace ts {
 
         // If even 2/5 places have a semicolon, the user probably wants semicolons
         return withSemicolon / withoutSemicolon > 1 / nStatementsToObserve;
+    }
+
+    export function tryGetDirectories(host: LanguageServiceHost, directoryName: string): string[] {
+        return tryIOAndConsumeErrors(host, host.getDirectories, directoryName) || [];
+    }
+
+    export function tryReadDirectory(host: LanguageServiceHost, path: string, extensions?: ReadonlyArray<string>, exclude?: ReadonlyArray<string>, include?: ReadonlyArray<string>): ReadonlyArray<string> {
+        return tryIOAndConsumeErrors(host, host.readDirectory, path, extensions, exclude, include) || emptyArray;
+    }
+
+    export function tryFileExists(host: LanguageServiceHost, path: string): boolean {
+        return tryIOAndConsumeErrors(host, host.fileExists, path);
+    }
+
+    export function tryDirectoryExists(host: LanguageServiceHost, path: string): boolean {
+        return tryAndIgnoreErrors(() => directoryProbablyExists(path, host)) || false;
+    }
+
+    export function tryAndIgnoreErrors<T>(cb: () => T): T | undefined {
+        try { return cb(); }
+        catch { return undefined; }
+    }
+
+    export function tryIOAndConsumeErrors<T>(host: LanguageServiceHost, toApply: ((...a: any[]) => T) | undefined, ...args: any[]) {
+        return tryAndIgnoreErrors(() => toApply && toApply.apply(host, args));
+    }
+
+    export function findPackageJsons(directory: string, host: LanguageServiceHost): string[] {
+        const paths: string[] = [];
+        forEachAncestorDirectory(directory, ancestor => {
+            const currentConfigPath = findConfigFile(ancestor, (f) => tryFileExists(host, f), "package.json");
+            if (!currentConfigPath) {
+                return true; // break out
+            }
+            paths.push(currentConfigPath);
+        });
+        return paths;
+    }
+
+    export function findPackageJson(directory: string, host: LanguageServiceHost): string | undefined {
+        let packageJson: string | undefined;
+        forEachAncestorDirectory(directory, ancestor => {
+            if (ancestor === "node_modules") return true;
+            packageJson = findConfigFile(ancestor, (f) => tryFileExists(host, f), "package.json");
+            if (packageJson) {
+                return true; // break out
+            }
+        });
+        return packageJson;
     }
 }

@@ -9,8 +9,8 @@ const foo = { a! }
 >a : string
 
 const bar = {
->bar : {}
->{    a ? () { }} : {}
+>bar : { a?(): void; }
+>{    a ? () { }} : { a?(): void; }
 
     a ? () { }
 >a : (() => void) | undefined

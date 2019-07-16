@@ -19,11 +19,19 @@ node_modules/adonis-framework/src/Config/index.js(37,15): error TS2304: Cannot f
 node_modules/adonis-framework/src/Config/index.js(39,15): error TS2304: Cannot find name 'Mixed'.
 node_modules/adonis-framework/src/Config/index.js(58,15): error TS2304: Cannot find name 'Mixed'.
 node_modules/adonis-framework/src/Encryption/index.js(53,15): error TS2304: Cannot find name 'Mixed'.
-node_modules/adonis-framework/src/Encryption/index.js(71,34): error TS2345: Argument of type 'string' is not assignable to parameter of type '"utf8" | "ascii" | "binary" | undefined'.
+node_modules/adonis-framework/src/Encryption/index.js(71,34): error TS2769: No overload matches this call.
+  Overload 1 of 4, '(data: Binary, input_encoding: undefined, output_encoding: HexBase64BinaryEncoding): string', gave the following error.
+    Argument of type 'string' is not assignable to parameter of type 'undefined'.
+  Overload 2 of 4, '(data: string, input_encoding: "utf8" | "ascii" | "binary" | undefined, output_encoding: HexBase64BinaryEncoding): string', gave the following error.
+    Argument of type 'string' is not assignable to parameter of type '"utf8" | "ascii" | "binary" | undefined'.
 node_modules/adonis-framework/src/Encryption/index.js(77,50): error TS2345: Argument of type 'Buffer' is not assignable to parameter of type 'string'.
 node_modules/adonis-framework/src/Encryption/index.js(85,23): error TS8024: JSDoc '@param' tag has name 'value', but there is no parameter with that name.
 node_modules/adonis-framework/src/Encryption/index.js(87,15): error TS2304: Cannot find name 'Mixed'.
-node_modules/adonis-framework/src/Encryption/index.js(101,62): error TS2345: Argument of type 'string' is not assignable to parameter of type 'Utf8AsciiBinaryEncoding'.
+node_modules/adonis-framework/src/Encryption/index.js(101,21): error TS2769: No overload matches this call.
+  Overload 1 of 4, '(data: Binary, input_encoding: undefined, output_encoding: Utf8AsciiBinaryEncoding): string', gave the following error.
+    Argument of type '"base64"' is not assignable to parameter of type 'undefined'.
+  Overload 2 of 4, '(data: string, input_encoding: "binary" | "base64" | "hex" | undefined, output_encoding: Utf8AsciiBinaryEncoding): string', gave the following error.
+    Argument of type 'string' is not assignable to parameter of type 'Utf8AsciiBinaryEncoding'.
 node_modules/adonis-framework/src/Encryption/index.js(114,15): error TS2304: Cannot find name 'Mixed'.
 node_modules/adonis-framework/src/Encryption/index.js(119,23): error TS2554: Expected 2 arguments, but got 1.
 node_modules/adonis-framework/src/Encryption/index.js(183,15): error TS2304: Cannot find name 'Mixed'.
@@ -164,14 +172,14 @@ node_modules/adonis-framework/src/Server/index.js(252,24): error TS1005: '}' exp
 node_modules/adonis-framework/src/Session/CookieManager.js(45,14): error TS2304: Cannot find name 'Mixed'.
 node_modules/adonis-framework/src/Session/CookieManager.js(60,15): error TS2304: Cannot find name 'Mixed'.
 node_modules/adonis-framework/src/Session/CookieManager.js(72,15): error TS2304: Cannot find name 'Stirng'.
-node_modules/adonis-framework/src/Session/Drivers/Cookie/index.js(77,15): error TS2322: Type 'IterableIterator<any>' is not assignable to type 'boolean'.
-node_modules/adonis-framework/src/Session/Drivers/Cookie/index.js(88,15): error TS2322: Type 'IterableIterator<any>' is not assignable to type 'boolean'.
+node_modules/adonis-framework/src/Session/Drivers/Cookie/index.js(77,15): error TS2322: Type 'Generator<any, any, any>' is not assignable to type 'boolean'.
+node_modules/adonis-framework/src/Session/Drivers/Cookie/index.js(88,15): error TS2322: Type 'Generator<any, any, any>' is not assignable to type 'boolean'.
 node_modules/adonis-framework/src/Session/Drivers/Cookie/index.js(118,14): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
 node_modules/adonis-framework/src/Session/Drivers/File/index.js(25,14): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
 node_modules/adonis-framework/src/Session/Drivers/File/index.js(79,15): error TS2505: A generator cannot have a 'void' type annotation.
 node_modules/adonis-framework/src/Session/Drivers/Redis/index.js(23,14): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
-node_modules/adonis-framework/src/Session/Drivers/Redis/index.js(59,15): error TS2322: Type 'IterableIterator<any>' is not assignable to type 'boolean'.
-node_modules/adonis-framework/src/Session/Drivers/Redis/index.js(72,15): error TS2322: Type 'IterableIterator<any>' is not assignable to type 'boolean'.
+node_modules/adonis-framework/src/Session/Drivers/Redis/index.js(59,15): error TS2322: Type 'Generator<any, any, any>' is not assignable to type 'boolean'.
+node_modules/adonis-framework/src/Session/Drivers/Redis/index.js(72,15): error TS2322: Type 'Generator<any, any, any>' is not assignable to type 'boolean'.
 node_modules/adonis-framework/src/Session/SessionManager.js(13,21): error TS2307: Cannot find module 'adonis-fold'.
 node_modules/adonis-framework/src/Session/SessionManager.js(69,22): error TS2339: Property 'drivers' does not exist on type 'Function'.
 node_modules/adonis-framework/src/Session/SessionManager.js(69,49): error TS2339: Property 'drivers' does not exist on type 'Function'.
@@ -194,15 +202,15 @@ node_modules/adonis-framework/src/Session/index.js(107,92): error TS2339: Proper
 node_modules/adonis-framework/src/Session/index.js(107,126): error TS2339: Property 'driver' does not exist on type 'Function'.
 node_modules/adonis-framework/src/Session/index.js(123,23): error TS2532: Object is possibly 'undefined'.
 node_modules/adonis-framework/src/Session/index.js(137,5): error TS2532: Object is possibly 'undefined'.
-node_modules/adonis-framework/src/Session/index.js(168,15): error TS2322: Type 'IterableIterator<any>' is not assignable to type 'boolean'.
+node_modules/adonis-framework/src/Session/index.js(168,15): error TS2322: Type 'Generator<any, any, any>' is not assignable to type 'boolean'.
 node_modules/adonis-framework/src/Session/index.js(199,15): error TS2304: Cannot find name 'Mixed'.
 node_modules/adonis-framework/src/Session/index.js(201,15): error TS2304: Cannot find name 'Mixed'.
-node_modules/adonis-framework/src/Session/index.js(204,15): error TS2322: Type 'IterableIterator<any>' is not assignable to type 'boolean'.
-node_modules/adonis-framework/src/Session/index.js(234,15): error TS2322: Type 'IterableIterator<any>' is not assignable to type 'boolean'.
+node_modules/adonis-framework/src/Session/index.js(204,15): error TS2322: Type 'Generator<any, any, any>' is not assignable to type 'boolean'.
+node_modules/adonis-framework/src/Session/index.js(234,15): error TS2322: Type 'Generator<any, any, any>' is not assignable to type 'boolean'.
 node_modules/adonis-framework/src/Session/index.js(247,15): error TS2304: Cannot find name 'Mixed'.
 node_modules/adonis-framework/src/Session/index.js(249,15): error TS2304: Cannot find name 'Mixed'.
 node_modules/adonis-framework/src/Session/index.js(267,15): error TS2304: Cannot find name 'Mixed'.
-node_modules/adonis-framework/src/Session/index.js(287,15): error TS2322: Type 'IterableIterator<any>' is not assignable to type 'boolean'.
+node_modules/adonis-framework/src/Session/index.js(287,15): error TS2322: Type 'Generator<any, any, any>' is not assignable to type 'boolean'.
 node_modules/adonis-framework/src/Session/index.js(293,12): error TS2532: Object is possibly 'undefined'.
 node_modules/adonis-framework/src/View/Form/index.js(75,11): error TS2532: Object is possibly 'undefined'.
 node_modules/adonis-framework/src/View/Form/index.js(115,15): error TS2304: Cannot find name 'Mixed'.

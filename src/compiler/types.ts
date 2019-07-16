@@ -1882,6 +1882,7 @@ namespace ts {
     }
 
     export interface JsxAttributes extends ObjectLiteralExpressionBase<JsxAttributeLike> {
+        kind: SyntaxKind.JsxAttributes;
         parent: JsxOpeningLikeElement;
     }
 
@@ -4577,7 +4578,7 @@ namespace ts {
         messageText: string;
         category: DiagnosticCategory;
         code: number;
-        next?: DiagnosticMessageChain;
+        next?: DiagnosticMessageChain[];
     }
 
     export interface Diagnostic extends DiagnosticRelatedInformation {

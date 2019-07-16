@@ -4123,7 +4123,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Generates a sourcemap for each corresponding '.d.ts' file.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[为每个相应的 ".d.ts" 文件生成 sourcemap。]]></Val>
+            <Val><![CDATA[为每个相应的 ".d.ts" 文件生成源映射。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />

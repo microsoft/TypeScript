@@ -111,14 +111,14 @@ function fn10() { }
 
 //Function overloads that differ only by type parameter constraints where constraints are structually identical
 function fn11<T extends Window>();
->fn11 : { <T extends Window>(): any; <S extends Window>(): any; }
+>fn11 : { <T extends Window>(): any; <S extends Window & typeof globalThis>(): any; }
 
 function fn11<S extends typeof window>();
->fn11 : { <T extends Window>(): any; <S extends Window>(): any; }
->window : Window
+>fn11 : { <T extends Window>(): any; <S extends Window & typeof globalThis>(): any; }
+>window : Window & typeof globalThis
 
 function fn11() { }
->fn11 : { <T extends Window>(): any; <S extends Window>(): any; }
+>fn11 : { <T extends Window>(): any; <S extends Window & typeof globalThis>(): any; }
 
 //Function overloads that differ only by type parameter constraints where constraints include infinitely recursive type reference
 interface List<T> {

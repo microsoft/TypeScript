@@ -393,3 +393,7 @@ tests/cases/conformance/types/mapped/mappedTypeRelationships.ts(168,5): error TS
         const n: Numeric<T> = { x: 1 };
     }
     
+    function f<T extends { x: {} }>(): Partial<T> {
+        return undefined! as T;
+    }
+    

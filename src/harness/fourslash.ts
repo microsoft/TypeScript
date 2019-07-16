@@ -798,7 +798,7 @@ namespace FourSlash {
                         const name = typeof include === "string" ? include : include.name;
                         const found = nameToEntries.get(name);
                         if (!found) throw this.raiseError(`No completion ${name} found`);
-                        assert(found.length === 1); // Must use 'exact' for multiple completions with same name
+                        assert(found.length === 1, `Must use 'exact' for multiple completions with same name: '${name}'`);
                         this.verifyCompletionEntry(ts.first(found), include);
                     }
                 }
@@ -1497,13 +1497,7 @@ Actual: ${stringify(fullActual)}`);
                     const diagnostics = ts.getPreEmitDiagnostics(this.languageService.getProgram()!); // TODO: GH#18217
                     for (const diagnostic of diagnostics) {
                         if (!ts.isString(diagnostic.messageText)) {
-                            let chainedMessage: ts.DiagnosticMessageChain | undefined = diagnostic.messageText;
-                            let indentation = " ";
-                            while (chainedMessage) {
-                                resultString += indentation + chainedMessage.messageText + Harness.IO.newLine();
-                                chainedMessage = chainedMessage.next;
-                                indentation = indentation + " ";
-                            }
+                            resultString += this.flattenChainedMessage(diagnostic.messageText);
                         }
                         else {
                             resultString += "  " + diagnostic.messageText + Harness.IO.newLine();
@@ -1519,6 +1513,17 @@ Actual: ${stringify(fullActual)}`);
             }
 
             Harness.Baseline.runBaseline(ts.Debug.assertDefined(this.testData.globalOptions[MetadataOptionNames.baselineFile]), resultString);
+        }
+
+        private flattenChainedMessage(diag: ts.DiagnosticMessageChain, indent = " ") {
+            let result = "";
+            result += indent + diag.messageText + Harness.IO.newLine();
+            if (diag.next) {
+                for (const kid of diag.next) {
+                    result += this.flattenChainedMessage(kid, indent + " ");
+                }
+            }
+            return result;
         }
 
         public baselineQuickInfo() {
@@ -2823,11 +2828,28 @@ Actual: ${stringify(fullActual)}`);
             }
         }
 
-        public verifyCodeFixAvailable(negative: boolean, expected: FourSlashInterface.VerifyCodeFixAvailableOptions[] | undefined): void {
-            assert(!negative || !expected);
+        public verifyCodeFixAvailable(negative: boolean, expected: FourSlashInterface.VerifyCodeFixAvailableOptions[] | string | undefined): void {
             const codeFixes = this.getCodeFixes(this.activeFile.fileName);
-            const actuals = codeFixes.map((fix): FourSlashInterface.VerifyCodeFixAvailableOptions => ({ description: fix.description, commands: fix.commands }));
-            this.assertObjectsEqual(actuals, negative ? ts.emptyArray : expected);
+            if (negative) {
+                if (typeof expected === "undefined") {
+                    this.assertObjectsEqual(codeFixes, ts.emptyArray);
+                }
+                else if (typeof expected === "string") {
+                    if (codeFixes.some(fix => fix.fixName === expected)) {
+                        this.raiseError(`Expected not to find a fix with the name '${expected}', but one exists.`);
+                    }
+                }
+                else {
+                    assert(typeof expected === "undefined" || typeof expected === "string", "With a negated assertion, 'expected' must be undefined or a string value of a codefix name.");
+                }
+            }
+            else if (typeof expected === "string") {
+                this.assertObjectsEqual(codeFixes.map(fix => fix.fixName), [expected]);
+            }
+            else {
+                const actuals = codeFixes.map((fix): FourSlashInterface.VerifyCodeFixAvailableOptions => ({ description: fix.description, commands: fix.commands }));
+                this.assertObjectsEqual(actuals, negative ? ts.emptyArray : expected);
+            }
         }
 
         public verifyApplicableRefactorAvailableAtMarker(negative: boolean, markerName: string) {

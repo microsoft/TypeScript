@@ -185,7 +185,7 @@ declare namespace FourSlashInterface {
             applyChanges?: boolean,
             commands?: {}[],
         });
-        codeFixAvailable(options?: ReadonlyArray<VerifyCodeFixAvailableOptions>): void;
+        codeFixAvailable(options?: ReadonlyArray<VerifyCodeFixAvailableOptions> | string): void;
         applicableRefactorAvailableAtMarker(markerName: string): void;
         codeFixDiagnosticsAvailableAtMarkers(markerNames: string[], diagnosticCode?: number): void;
         applicableRefactorAvailableForRange(): void;

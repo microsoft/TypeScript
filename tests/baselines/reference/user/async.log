@@ -91,7 +91,6 @@ node_modules/async/dist/async.js(31,18): error TS8029: JSDoc '@param' tag has na
 node_modules/async/dist/async.js(31,28): error TS1003: Identifier expected.
 node_modules/async/dist/async.js(31,29): error TS1003: Identifier expected.
 node_modules/async/dist/async.js(31,30): error TS1003: Identifier expected.
-node_modules/async/dist/async.js(257,56): error TS2339: Property 'Object' does not exist on type 'Window'.
 node_modules/async/dist/async.js(298,7): error TS2454: Variable 'unmasked' is used before being assigned.
 node_modules/async/dist/async.js(622,80): error TS2339: Property 'nodeType' does not exist on type 'NodeModule'.
 node_modules/async/dist/async.js(748,84): error TS2339: Property 'nodeType' does not exist on type 'NodeModule'.
