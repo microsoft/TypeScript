@@ -2713,6 +2713,11 @@ namespace ts {
         return token !== undefined && isNonContextualKeyword(token);
     }
 
+    export function isStringAKeyword(name: string) {
+        const token = stringToToken(name);
+        return token !== undefined && isKeyword(token);
+    }
+
     export function isIdentifierANonContextualKeyword({ originalKeywordKind }: Identifier): boolean {
         return !!originalKeywordKind && !isContextualKeyword(originalKeywordKind);
     }

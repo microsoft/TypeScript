@@ -5404,7 +5404,7 @@ namespace ts {
                             !getIndexInfoOfType(typeToSerialize, IndexKind.String) &&
                             !getIndexInfoOfType(typeToSerialize, IndexKind.String) &&
                             !some(getPropertiesOfType(typeToSerialize), p => isLateBoundName(p.escapedName)) &&
-                            every(getPropertiesOfType(typeToSerialize), p => isIdentifierText(symbolName(p), languageVersion))) {
+                            every(getPropertiesOfType(typeToSerialize), p => isIdentifierText(symbolName(p), languageVersion) && !isStringAKeyword(symbolName(p)))) {
                             // If there are no index signatures and `typeToSerialize` is an object type, emit as a namespace instead of a const
                             serializeAsFunctionNamespaceMerge(typeToSerialize, varName, ModifierFlags.Export);
                         }
