@@ -1183,7 +1183,7 @@ namespace ts.Completions {
             const isTypeOnly = isTypeOnlyCompletion();
             const allowTypes = isTypeOnly || !isContextTokenValueLocation(contextToken) && isPossiblyTypeArgumentPosition(contextToken, sourceFile, typeChecker);
             if (isTypeOnly) {
-                keywordFilters = isInsideTypeAssertion()
+                keywordFilters = isTypeAssertion()
                     ? KeywordCompletionFilters.TypeAssertionKeywords
                     : KeywordCompletionFilters.TypeKeywords;
             }
@@ -1216,8 +1216,8 @@ namespace ts.Completions {
             });
         }
 
-        function isInsideTypeAssertion(): boolean {
-            return isAsExpression(contextToken.parent);
+        function isTypeAssertion(): boolean {
+            return isAssertionExpression(contextToken.parent);
         }
 
         function isTypeOnlyCompletion(): boolean {
@@ -1249,6 +1249,9 @@ namespace ts.Completions {
 
                     case SyntaxKind.ExtendsKeyword:
                         return parentKind === SyntaxKind.TypeParameter;
+
+                    case SyntaxKind.LessThanToken:
+                        return parentKind === SyntaxKind.TypeAssertionExpression;
                 }
             }
             return false;
