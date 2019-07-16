@@ -26,10 +26,10 @@ module.exports = j;
 
 
 //// [obj.d.ts]
-declare const x: number;
-declare const y: number;
-declare namespace obj {
-    const items: ({
+export declare const x: number;
+export declare const y: number;
+export declare namespace obj {
+    export const items: ({
         "x": number;
         "y"?: undefined;
         "err"?: undefined;
