@@ -865,7 +865,7 @@ namespace FourSlash {
             ts.zipWith(actual, expected, (completion, expectedCompletion, index) => {
                 const name = typeof expectedCompletion === "string" ? expectedCompletion : expectedCompletion.name;
                 if (completion.name !== name) {
-                    this.raiseError(`${marker ? JSON.stringify(marker) : "" } Expected completion at index ${index} to be ${name}, got ${completion.name}`);
+                    this.raiseError(`${marker ? JSON.stringify(marker) : ""} Expected completion at index ${index} to be ${name}, got ${completion.name}`);
                 }
                 this.verifyCompletionEntry(completion, expectedCompletion);
             });
@@ -3759,7 +3759,7 @@ namespace FourSlashInterface {
     }
 
     export class Plugins {
-        constructor (private state: FourSlash.TestState) {
+        constructor(private state: FourSlash.TestState) {
         }
 
         public configurePlugin(pluginName: string, configuration: any): void {
@@ -4582,7 +4582,7 @@ namespace FourSlashInterface {
         export const keywords: ReadonlyArray<ExpectedCompletionEntryObject> = keywordsWithUndefined.filter(k => k.name !== "undefined");
 
         export const typeKeywords: ReadonlyArray<ExpectedCompletionEntryObject> =
-            ["false", "null", "true", "void", "any", "boolean", "keyof", "never", "number", "object", "string", "symbol", "undefined", "unique", "unknown", "bigint"].map(keywordEntry);
+            ["false", "null", "true", "void", "any", "boolean", "keyof", "never", "readonly", "number", "object", "string", "symbol", "undefined", "unique", "unknown", "bigint"].map(keywordEntry);
 
         const globalTypeDecls: ReadonlyArray<ExpectedCompletionEntryObject> = [
             interfaceEntry("Symbol"),
@@ -4697,6 +4697,9 @@ namespace FourSlashInterface {
                 ...typeKeywords,
             ];
         }
+
+        export const typeAssertionKeywords: ReadonlyArray<ExpectedCompletionEntry> =
+            globalTypesPlus([keywordEntry("const")]);
 
         function getInJsKeywords(keywords: ReadonlyArray<ExpectedCompletionEntryObject>): ReadonlyArray<ExpectedCompletionEntryObject> {
             return keywords.filter(keyword => {
