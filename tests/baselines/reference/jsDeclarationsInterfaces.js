@@ -151,16 +151,12 @@ export interface C<T_1, U_1> {
 }
 interface G {
 }
-export { G };
 interface HH {
 }
-export { HH as H };
 export interface I {
 }
-export { I as II };
 interface J {
 }
-export { J as JJ };
 export interface K extends I, J {
     x: string;
 }
@@ -236,3 +232,4 @@ export interface CC extends Y {
         y: 0;
     };
 }
+export { G, HH as H, I as II, J as JJ };

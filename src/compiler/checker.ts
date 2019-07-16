@@ -2314,15 +2314,35 @@ namespace ts {
 
         function getTargetOfExportAssignment(node: ExportAssignment | BinaryExpression, dontResolveAlias: boolean): Symbol | undefined {
             const expression = (isExportAssignment(node) ? node.expression : node.right) as EntityNameExpression | ClassExpression;
+            return getTargetOfAliasLikeExpression(expression, dontResolveAlias);
+        }
+
+        function getTargetOfAliasLikeExpression(expression: Expression, dontResolveAlias: boolean) {
             if (isClassExpression(expression)) {
-                return checkExpression(expression).symbol;
+                return checkExpressionCached(expression).symbol;
+            }
+            if (!isEntityName(expression) && !isEntityNameExpression(expression)) {
+                return undefined;
             }
             const aliasLike = resolveEntityName(expression, SymbolFlags.Value | SymbolFlags.Type | SymbolFlags.Namespace, /*ignoreErrors*/ true, dontResolveAlias);
             if (aliasLike) {
                 return aliasLike;
             }
-            checkExpression(expression);
+            checkExpressionCached(expression);
             return getNodeLinks(expression).resolvedSymbol;
+        }
+
+        function getTargetOfPropertyAssignment(node: PropertyAssignment, dontRecursivelyResolve: boolean): Symbol | undefined {
+            const expression = node.initializer;
+            return getTargetOfAliasLikeExpression(expression, dontRecursivelyResolve);
+        }
+
+        function getTargetOfPropertyAccessExpression(node: PropertyAccessExpression, dontRecursivelyResolve: boolean): Symbol | undefined {
+            if (!(isBinaryExpression(node.parent) && node.parent.left === node && node.parent.operatorToken.kind === SyntaxKind.EqualsToken)) {
+                return undefined;
+            }
+
+            return getTargetOfAliasLikeExpression(node.parent.right, dontRecursivelyResolve);
         }
 
         function getTargetOfAliasDeclaration(node: Declaration, dontRecursivelyResolve = false): Symbol | undefined {
@@ -2342,6 +2362,12 @@ namespace ts {
                     return getTargetOfExportAssignment((<ExportAssignment | BinaryExpression>node), dontRecursivelyResolve);
                 case SyntaxKind.NamespaceExportDeclaration:
                     return getTargetOfNamespaceExportDeclaration(<NamespaceExportDeclaration>node, dontRecursivelyResolve);
+                case SyntaxKind.ShorthandPropertyAssignment:
+                    return resolveEntityName((node as ShorthandPropertyAssignment).name, SymbolFlags.Value | SymbolFlags.Type | SymbolFlags.Namespace, /*ignoreErrors*/ true, dontRecursivelyResolve);
+                case SyntaxKind.PropertyAssignment:
+                    return getTargetOfPropertyAssignment(node as PropertyAssignment, dontRecursivelyResolve);
+                case SyntaxKind.PropertyAccessExpression:
+                    return getTargetOfPropertyAccessExpression(node as PropertyAccessExpression, dontRecursivelyResolve);
                 default:
                     return Debug.fail();
             }
@@ -3152,7 +3178,11 @@ namespace ts {
                         }
                         // falls through
                     case SyntaxKind.ModuleDeclaration:
-                        if (result = callback(getSymbolOfNode(location as ModuleDeclaration).exports!)) {
+                        const sym = getSymbolOfNode(location as ModuleDeclaration);
+                        // `sym` may not have exports if this module declaration is backed by the symbol for a `const` that's being rewritten
+                        // into a namespace - in such cases, it's best to just let the namespace appear empty (the const members couldn't have referred
+                        // to one another anyway)
+                        if (result = callback(sym.exports || emptySymbols)) {
                             return result;
                         }
                         break;
@@ -4857,6 +4887,7 @@ namespace ts {
                     // filter the symbol table and stuff the non-export= members into a merged namespace
                     // We use `serializeSymbolRecursive` here, since it'll mark the `export=` symbol as visited, so it'll be skipped
                     // when we go over the entire table looking for other exports to merge in
+
                     serializeSymbolRecursive(exportEquals, /*isPrivate*/ false);
                     const oldResults = results;
                     const oldAddingDeclare = addingDeclare;
@@ -4873,22 +4904,77 @@ namespace ts {
                     const members = createModuleBlock(nsMembers);
                     const nsBody = isIdentifier(nsname) ? members
                         : createNamespaceBodyWithQualifiedName(nsname, members);
-                    addResult(createModuleDeclaration(
-                        /*decorators*/ undefined,
-                        /*modifiers*/ undefined,
-                        isIdentifier(nsname) ? nsname : getFirstIdentifier(nsname),
-                        nsBody,
-                        NodeFlags.Namespace
-                    ), ModifierFlags.None);
-                    return results;
+                    const firstId = getFirstIdentifier(nsname);
+                    const existingDeclIdx = findIndex(results, r => isModuleDeclaration(r) && isIdentifier(r.name) && idText(firstId) === idText(r.name));
+                    if (existingDeclIdx >= 0) {
+                        const existing = results[existingDeclIdx] as ModuleDeclaration;
+                        results.splice(existingDeclIdx, 1, updateModuleDeclaration(
+                            existing,
+                            /*decorators*/ undefined,
+                            existing.modifiers,
+                            firstId,
+                            appendModuleBody(existing.body as NamespaceBody, nsBody)
+                        ));
+                    }
+                    else {
+                        addResult(createModuleDeclaration(
+                            /*decorators*/ undefined,
+                            /*modifiers*/ undefined,
+                            isIdentifier(nsname) ? nsname : getFirstIdentifier(nsname),
+                            nsBody,
+                            NodeFlags.Namespace
+                        ), ModifierFlags.None);
+                    }
+                    return mergeRedundantStatements(results);
                 }
 
                 visitSymbolTable(symbolTable);
                 if (enclosingDeclaration && ((isSourceFile(enclosingDeclaration) && isExternalOrCommonJsModule(enclosingDeclaration)) || isModuleDeclaration(enclosingDeclaration)) && (!some(results, isExternalModuleIndicator) || (!hasScopeMarker(results) && some(results, needsScopeMarker)))) {
                     results.push(createEmptyExports());
                 }
-                // TODO: Cleanup pass: Merge redundant export declarations
-                return results;
+                return mergeRedundantStatements(results);
+
+                function mergeRedundantStatements(statements: Statement[]) {
+                    // Pass 1: Flatten `export namespace _exports {} export = _exports;`
+                    if (statements.length === 2) {
+                        const exportAssignment = find(statements, isExportAssignment);
+                        const ns = find(statements, isModuleDeclaration);
+                        if (ns && exportAssignment && exportAssignment.isExportEquals &&
+                            isIdentifier(exportAssignment.expression) && isIdentifier(ns.name) && idText(ns.name) === idText(exportAssignment.expression) &&
+                            ns.body && isModuleBlock(ns.body)) {
+                            results = [];
+                            forEach(ns.body.statements, s => {
+                                addResult(s, ModifierFlags.None); // Recalculates the ambient flag
+                            });
+                            statements = results;
+                        }
+                    }
+                    // Pass 2: Combine all `export {}` declarations
+                    const exports = filter(statements, d => isExportDeclaration(d) && !d.moduleSpecifier && !!d.exportClause) as ExportDeclaration[];
+                    if (length(exports) > 1) {
+                        const nonExports = filter(statements, d => !isExportDeclaration(d) || !!d.moduleSpecifier || !d.exportClause);
+                        statements = [...nonExports, createExportDeclaration(
+                            /*decorators*/ undefined,
+                            /*modifiers*/ undefined,
+                            createNamedExports(flatMap(exports, e => e.exportClause!.elements)),
+                            /*moduleSpecifier*/ undefined
+                        )];
+                    }
+                    return statements;
+                }
+
+                function appendModuleBody(existingBody: NamespaceBody, toAdd: NamespaceBody) {
+                    if (isModuleBlock(existingBody) && isModuleBlock(toAdd)) {
+                        return updateModuleBlock(existingBody, [...existingBody.statements, ...toAdd.statements]);
+                    }
+                    if (isModuleBlock(existingBody)) {
+                        return updateModuleBlock(existingBody, [...existingBody.statements, toAdd]);
+                    }
+                    if (isModuleBlock(toAdd)) {
+                        return updateModuleBlock(toAdd, [existingBody, ...toAdd.statements]);
+                    }
+                    return createModuleBlock([existingBody, toAdd]);
+                }
 
                 function createNamespaceBodyWithQualifiedName(name: QualifiedName, members: ModuleBlock): NamespaceBody {
                     let result: NamespaceBody = members;
@@ -4955,7 +5041,7 @@ namespace ts {
                     if (context.remappedSymbolNames!.has("" + getSymbolId(symbol))) {
                         return context.remappedSymbolNames!.get("" + getSymbolId(symbol))!;
                     }
-                    if (localName === InternalSymbolName.Default) {
+                    if (localName === InternalSymbolName.Default || localName === InternalSymbolName.Class || localName === InternalSymbolName.Function) {
                         const flags = context.flags;
                         context.flags |= NodeBuilderFlags.InInitialEntityName;
                         const nameCandidate = getNameOfSymbolAsWritten(symbol, context);
@@ -4963,6 +5049,73 @@ namespace ts {
                         localName = isIdentifierText(nameCandidate, languageVersion) && !isStringANonContextualKeyword(nameCandidate) ? nameCandidate : getUnusedName(`_default`, symbol);
                     }
                     return localName;
+                }
+
+                function serializeAsFunctionNamespaceMerge(type: Type, localName: string, modifierFlags: ModifierFlags) {
+                    const signatures = getSignaturesOfType(type, SignatureKind.Call);
+                    for (const sig of signatures) {
+                        // Each overload becomes a seperate function declaration, in order
+                        const decl = signatureToSignatureDeclarationHelper(sig, SyntaxKind.FunctionDeclaration, context) as FunctionDeclaration;
+                        decl.name = createIdentifier(localName);
+                        addResult(decl, modifierFlags);
+                    }
+                    const props = getPropertiesOfType(type);
+                    if (length(props)) {
+                        // Add a namespace
+                        const fakespace = createModuleDeclaration(/*decorators*/ undefined, /*modifiers*/ undefined, createIdentifier(localName), createModuleBlock([]), NodeFlags.Namespace);
+                        fakespace.flags ^= NodeFlags.Synthesized; // unset synthesized so it is usable as an enclosing declaration
+                        fakespace.parent = enclosingDeclaration as SourceFile | NamespaceDeclaration;
+                        fakespace.locals = createSymbolTable(props);
+                        fakespace.symbol = props[0].parent!;
+                        const oldResults = results;
+                        results = [];
+                        const oldAddingDeclare = addingDeclare;
+                        addingDeclare = false;
+                        forEach(props, p => {
+                            const subcontext = { ...context, enclosingDeclaration: fakespace };
+                            const oldContext = context;
+                            context = subcontext;
+                            serializeMaybeAliasAssignment(p);
+                            context = oldContext;
+                        });
+                        addingDeclare = oldAddingDeclare;
+                        const declarations = results;
+                        results = oldResults;
+                        fakespace.flags ^= NodeFlags.Synthesized; // reset synthesized
+                        fakespace.parent = undefined!;
+                        fakespace.locals = undefined!;
+                        fakespace.symbol = undefined!;
+                        fakespace.body = createModuleBlock(declarations);
+                        addResult(fakespace, modifierFlags); // namespaces can never be default exported
+                    }
+                }
+
+                function serializeAsClass(symbol: Symbol, localName: string, modifierFlags: ModifierFlags) {
+                    const localParams = getLocalTypeParametersOfClassOrInterfaceOrTypeAlias(symbol);
+                    const typeParamDecls = map(localParams, p => typeParameterToDeclaration(p, context));
+                    const classType = getDeclaredTypeOfClassOrInterface(symbol);
+                    const baseTypes = getBaseTypes(classType); // classes should only have one base type
+                    const staticType = getTypeOfSymbol(symbol);
+                    const staticBaseType = getBaseConstructorTypeOfClass(staticType as InterfaceType);
+                    const heritageClauses = !length(baseTypes) ? undefined : [createHeritageClause(SyntaxKind.ExtendsKeyword, map(baseTypes, b => serializeBaseType(b, staticBaseType, localName)))];
+                    const members = flatMap<Symbol, ClassElement>(getPropertiesOfType(classType), p => serializePropertySymbolForClass(p, /*isStatic*/ false, baseTypes[0]));
+                    const staticMembers = flatMap<Symbol, ClassElement>(getPropertiesOfType(staticType), p => serializePropertySymbolForClass(p, /*isStatic*/ true, staticBaseType));
+                    const constructors = serializeSignatures(SignatureKind.Construct, staticType, baseTypes[0], SyntaxKind.Constructor) as ConstructorDeclaration[];
+                    for (const c of constructors) {
+                        // A constructor's return type and type parameters are supposed to be controlled by the enclosing class declaration
+                        // `signatureToSignatureDeclarationHelper` appends them regardless, so for now we delete them here
+                        c.type = undefined;
+                        c.typeParameters = undefined;
+                    }
+                    const indexSignatures = serializeIndexSignatures(classType, baseTypes[0]);
+                    addResult(createClassDeclaration(
+                        /*decorators*/ undefined,
+                        /*modifiers*/ undefined,
+                        localName,
+                        typeParamDecls,
+                        heritageClauses,
+                        [...indexSignatures, ...staticMembers, ...constructors, ...members]
+                    ), modifierFlags);
                 }
 
                 // Synthesize declarations for a symbol - might be an Interface, a Class, a Namespace, a Type, a Variable (const, let, or var), an Alias
@@ -4994,33 +5147,7 @@ namespace ts {
                     const modifierFlags = (!isPrivate ? ModifierFlags.Export : 0) | (isDefault && !needsPostExportDefault ? ModifierFlags.Default : 0);
                     if (symbol.flags & SymbolFlags.Function) {
                         const type = getTypeOfSymbol(symbol);
-                        const signatures = getSignaturesOfType(type, SignatureKind.Call);
-                        for (const sig of signatures) {
-                            // Each overload becomes a seperate function declaration, in order
-                            const decl = signatureToSignatureDeclarationHelper(sig, SyntaxKind.FunctionDeclaration, context) as FunctionDeclaration;
-                            decl.name = createIdentifier(localName);
-                            addResult(decl, modifierFlags);
-                        }
-                        const props = getPropertiesOfType(type);
-                        if (length(props)) {
-                            // Add a namespace
-                            const fakespace = createModuleDeclaration(/*decorators*/ undefined, /*modifiers*/ undefined, createIdentifier(localName), createModuleBlock([]), NodeFlags.Namespace);
-                            fakespace.flags ^= NodeFlags.Synthesized; // unset synthesized so it is usable as an enclosing declaration
-                            fakespace.parent = enclosingDeclaration as SourceFile | NamespaceDeclaration;
-                            fakespace.locals = createSymbolTable(props);
-                            fakespace.symbol = props[0].parent!;
-                            const declarations = mapDefined(props, p => {
-                                const subcontext = { ...context, enclosingDeclaration: fakespace };
-                                const varDecl = createVariableDeclaration(unescapeLeadingUnderscores(p.escapedName), typeToTypeNodeHelper(getTypeOfSymbol(p), subcontext), /*initializer*/ undefined);
-                                return createVariableStatement(/*modifiers*/ undefined, createVariableDeclarationList([varDecl]));
-                            });
-                            fakespace.flags ^= NodeFlags.Synthesized; // reset synthesized
-                            fakespace.parent = undefined!;
-                            fakespace.locals = undefined!;
-                            fakespace.symbol = undefined!;
-                            fakespace.body = createModuleBlock(declarations);
-                            addResult(fakespace, modifierFlags); // namespaces can never be default exported
-                        }
+                        serializeAsFunctionNamespaceMerge(type, localName, modifierFlags);
                     }
                     if (symbol.flags & SymbolFlags.TypeAlias) {
                         const aliasType = getDeclaredTypeOfTypeAlias(symbol);
@@ -5087,31 +5214,7 @@ namespace ts {
                         }
                     }
                     if (symbol.flags & SymbolFlags.Class) {
-                        const localParams = getLocalTypeParametersOfClassOrInterfaceOrTypeAlias(symbol);
-                        const typeParamDecls = map(localParams, p => typeParameterToDeclaration(p, context));
-                        const classType = getDeclaredTypeOfClassOrInterface(symbol);
-                        const baseTypes = getBaseTypes(classType); // classes should only have one base type
-                        const heritageClauses = !length(baseTypes) ? undefined : [createHeritageClause(SyntaxKind.ExtendsKeyword, map(baseTypes, b => serializeBaseType(b, localName)))];
-                        const members = flatMap<Symbol, ClassElement>(getPropertiesOfType(classType), p => serializePropertySymbolForClass(p, /*isStatic*/ false, baseTypes[0]));
-                        const staticType = getTypeOfSymbol(symbol);
-                        const staticBaseType = getBaseConstructorTypeOfClass(staticType as InterfaceType);
-                        const staticMembers = flatMap<Symbol, ClassElement>(getPropertiesOfType(staticType), p => serializePropertySymbolForClass(p, /*isStatic*/ true, staticBaseType));
-                        const constructors = serializeSignatures(SignatureKind.Construct, staticType, baseTypes[0], SyntaxKind.Constructor) as ConstructorDeclaration[];
-                        for (const c of constructors) {
-                            // A constructor's return type and type parameters are supposed to be controlled by the enclosing class declaration
-                            // `signatureToSignatureDeclarationHelper` appends them regardless, so for now we delete them here
-                            c.type = undefined;
-                            c.typeParameters = undefined;
-                        }
-                        const indexSignatures = serializeIndexSignatures(classType, baseTypes[0]);
-                        addResult(createClassDeclaration(
-                            /*decorators*/ undefined,
-                            /*modifiers*/ undefined,
-                            localName,
-                            typeParamDecls,
-                            heritageClauses,
-                            [...indexSignatures, ...staticMembers, ...constructors, ...members]
-                        ), modifierFlags);
+                        serializeAsClass(symbol, localName, modifierFlags);
                     }
                     if (symbol.flags & SymbolFlags.Namespace) {
                         // TODO - Support namespace serialization
@@ -5127,7 +5230,7 @@ namespace ts {
                         const constructSignatures = serializeSignatures(SignatureKind.Construct, interfaceType, amalgamatedBase, SyntaxKind.ConstructSignature) as ConstructSignatureDeclaration[];
                         const indexSignatures = serializeIndexSignatures(interfaceType, amalgamatedBase);
 
-                        const heritageClauses = !length(baseTypes) ? undefined : [createHeritageClause(SyntaxKind.ExtendsKeyword, map(baseTypes, b => serializeBaseType(b, localName)))];
+                        const heritageClauses = !length(baseTypes) ? undefined : [createHeritageClause(SyntaxKind.ExtendsKeyword, mapDefined(baseTypes, b => trySerializeAsTypeReference(b)))];
                         addResult(createInterfaceDeclaration(
                             /*decorators*/ undefined,
                             /*modifiers*/ undefined,
@@ -5197,14 +5300,14 @@ namespace ts {
                                 serializeExportSpecifier(unescapeLeadingUnderscores(symbol.escapedName), targetName);
                                 break;
                             case SyntaxKind.ExportAssignment:
-                                serializeExportAssignment(symbol);
+                                serializeMaybeAliasAssignment(symbol);
                                 break;
                             case SyntaxKind.BinaryExpression:
                                 // Could be best encoded as though an export specifier or as though an export assignment
                                 // If name is default or export=, do an export assignment
                                 // Otherwise do an export specifier
                                 if (symbol.escapedName === InternalSymbolName.Default || symbol.escapedName === InternalSymbolName.ExportEquals) {
-                                    serializeExportAssignment(symbol);
+                                    serializeMaybeAliasAssignment(symbol);
                                 }
                                 else {
                                     serializeExportSpecifier(localName, targetName);
@@ -5215,7 +5318,7 @@ namespace ts {
                         }
                     }
                     if (symbol.flags & SymbolFlags.Property && symbol.escapedName === InternalSymbolName.ExportEquals) {
-                        serializeExportAssignment(symbol);
+                        serializeMaybeAliasAssignment(symbol);
                     }
                     if (symbol.flags & SymbolFlags.ExportStar) {
                         // synthesize export * from "moduleReference"
@@ -5235,13 +5338,18 @@ namespace ts {
                     addResult(createExportDeclaration(/*decorators*/ undefined, /*modifiers*/ undefined, createNamedExports([createExportSpecifier(localName !== targetName ? targetName : undefined, localName)])), ModifierFlags.None);
                 }
 
-                function serializeExportAssignment(symbol: Symbol) {
+                function serializeMaybeAliasAssignment(symbol: Symbol) {
+                    if (symbol.flags & SymbolFlags.Prototype) {
+                        return;
+                    }
                     const name = unescapeLeadingUnderscores(symbol.escapedName);
-                    const isExportEquals = name !== InternalSymbolName.Default;
+                    const isExportEquals = name === InternalSymbolName.ExportEquals;
+                    const isDefault = name === InternalSymbolName.Default;
+                    const isExportAssignment = isExportEquals || isDefault;
                     // synthesize export = ref
                     // ref should refer to either be a locally scoped symbol which we need to emit, or
                     // a reference to another namespace/module which we may need to emit an `import` statement for
-                    const aliasDecl = getDeclarationOfAliasSymbol(symbol);
+                    const aliasDecl = symbol.declarations && getDeclarationOfAliasSymbol(symbol);
                     // serialize what the alias points to, preserve the declaration's intializer
                     const target = aliasDecl && getTargetOfAliasDeclaration(aliasDecl, /*dontRecursivelyResolve*/ true);
                     if (target) {
@@ -5250,35 +5358,73 @@ namespace ts {
                         // Also, in case `target` refers to a namespace member, look at the declaration and serialize the leftmost symbol in it
                         // eg, `namespace A { export class B {} }; exports = A.B;`
                         // Technically, this is all that's required in the case where the assignment is an entity name expression
-                        const expr = getExportAssignmentExpression(aliasDecl as ExportAssignment | BinaryExpression);
+                        const expr = isExportAssignment ? getExportAssignmentExpression(aliasDecl as ExportAssignment | BinaryExpression) : getPropertyAssignmentAliasLikeExpression(aliasDecl as ShorthandPropertyAssignment | PropertyAssignment | PropertyAccessExpression);
                         const first = isEntityNameExpression(expr) ? getFirstIdentifier(expr) : undefined;
-                        const referenced = first && getSymbolOfNode(first);
-                        if (referenced) {
-                            serializeSymbolRecursive(referenced, /*isPrivate*/ true);
+                        const referenced = first && resolveEntityName(first, SymbolFlags.All, /*ignoreErrors*/ true, /*dontResolveAlias*/ true, enclosingDeclaration);
+                        if (referenced || target) {
+                            serializeSymbolRecursive(referenced || target, /*isPrivate*/ true);
                         }
 
-                        results.push(createExportAssignment(
-                            /*decorators*/ undefined,
-                            /*modifiers*/ undefined,
-                            isExportEquals,
-                            symbolToExpression(target, context, SymbolFlags.All)
-                        ));
+                        if (isExportAssignment) {
+                            results.push(createExportAssignment(
+                                /*decorators*/ undefined,
+                                /*modifiers*/ undefined,
+                                isExportEquals,
+                                symbolToExpression(target, context, SymbolFlags.All)
+                            ));
+                        }
+                        else {
+                            if (first === expr) {
+                                // serialize as `export {target as name}`
+                                serializeExportSpecifier(name, idText(first));
+                            }
+                            else if (isClassExpression(expr)) {
+                                serializeExportSpecifier(name, getInternalSymbolName(target, symbolName(target)));
+                            }
+                            else {
+                                // serialze as `import _Ref = t.arg.et; export { _Ref as name }`
+                                const varName = getUnusedName(name, symbol);
+                                addResult(createImportEqualsDeclaration(
+                                    /*decorators*/ undefined,
+                                    /*modifiers*/ undefined,
+                                    createIdentifier(varName),
+                                    symbolToName(target, context, SymbolFlags.All, /*expectsIdentifier*/ false)
+                                ), ModifierFlags.None);
+                                serializeExportSpecifier(name, varName);
+                            }
+                        }
                     }
                     else {
                         // serialize as an anonymous property declaration
                         const varName = getUnusedName(name, symbol);
-                        const statement = createVariableStatement(/*modifiers*/ undefined, createVariableDeclarationList([
-                            // We have to use `getWidenedType` here since the object within a json file is unwidened within the file
-                            // (Unwidened types can only exist in expression contexts and should never be serialized)
-                            createVariableDeclaration(varName, typeToTypeNodeHelper(getWidenedType(getTypeOfSymbol(symbol)), context))
-                        ], NodeFlags.Const));
-                        addResult(statement, ModifierFlags.None);
-                        results.push(createExportAssignment(
-                            /*decorators*/ undefined,
-                            /*modifiers*/ undefined,
-                            isExportEquals,
-                            createIdentifier(varName)
-                        ));
+                        // We have to use `getWidenedType` here since the object within a json file is unwidened within the file
+                        // (Unwidened types can only exist in expression contexts and should never be serialized)
+                        const typeToSerialize = getWidenedType(getTypeOfSymbol(symbol));
+                        if (getObjectFlags(typeToSerialize) & (ObjectFlags.Anonymous | ObjectFlags.Mapped) &&
+                            !getIndexInfoOfType(typeToSerialize, IndexKind.String) &&
+                            !getIndexInfoOfType(typeToSerialize, IndexKind.String) &&
+                            !some(getPropertiesOfType(typeToSerialize), p => isLateBoundName(p.escapedName)) &&
+                            every(getPropertiesOfType(typeToSerialize), p => isIdentifierText(symbolName(p), languageVersion))) {
+                            // If there are no index signatures and `typeToSerialize` is an object type, emit as a namespace instead of a const
+                            serializeAsFunctionNamespaceMerge(typeToSerialize, varName, ModifierFlags.Export);
+                        }
+                        else {
+                            const statement = createVariableStatement(/*modifiers*/ undefined, createVariableDeclarationList([
+                                createVariableDeclaration(varName, typeToTypeNodeHelper(typeToSerialize, context))
+                            ], NodeFlags.Const));
+                            addResult(statement, name === varName ? ModifierFlags.Export : ModifierFlags.None);
+                        }
+                        if (isExportAssignment) {
+                            results.push(createExportAssignment(
+                                /*decorators*/ undefined,
+                                /*modifiers*/ undefined,
+                                isExportEquals,
+                                createIdentifier(varName)
+                            ));
+                        }
+                        else if (name !== varName) {
+                            serializeExportSpecifier(name, varName);
+                        }
                     }
                 }
 
@@ -5409,25 +5555,34 @@ namespace ts {
                     return results;
                 }
 
-                function serializeBaseType(t: Type, rootName: string) {
+                function serializeBaseType(t: Type, staticType: Type, rootName: string) {
+                    const ref = trySerializeAsTypeReference(t);
+                    if (ref) {
+                        return ref;
+                    }
+                    const tempName = getUnusedName(`${rootName}_base`);
+                    const statement = createVariableStatement(/*modifiers*/ undefined, createVariableDeclarationList([
+                        createVariableDeclaration(tempName, typeToTypeNodeHelper(staticType, context))
+                    ], NodeFlags.Const));
+                    addResult(statement, ModifierFlags.None);
+                    return createExpressionWithTypeArguments(/*typeArgs*/ undefined, createIdentifier(tempName));
+                }
+
+                function trySerializeAsTypeReference(t: Type) {
                     let typeArgs: TypeNode[] | undefined;
-                    let reference: Expression;
-                    if ((t as TypeReference).target) {
+                    let reference: Expression | undefined;
+                    // We don't use `isValueSymbolAccessible` below. since that considers alternative containers (like modules)
+                    // which we can't write out in a syntactically valid way as an expression
+                    if ((t as TypeReference).target && getAccessibleSymbolChain((t as TypeReference).target.symbol, enclosingDeclaration, SymbolFlags.Value, /*useOnlyExternalAliasing*/ false)) {
                         typeArgs = map((t as TypeReference).typeArguments, t => typeToTypeNodeHelper(t, context));
                         reference = symbolToExpression((t as TypeReference).target.symbol, context, SymbolFlags.Type);
                     }
-                    else if (t.symbol) {
+                    else if (t.symbol && getAccessibleSymbolChain(t.symbol, enclosingDeclaration, SymbolFlags.Value, /*useOnlyExternalAliasing*/ false)) {
                         reference = symbolToExpression(t.symbol, context, SymbolFlags.Type);
                     }
-                    else {
-                        const tempName = getUnusedName(`${rootName}_base`);
-                        const statement = createVariableStatement(/*modifiers*/ undefined, createVariableDeclarationList([
-                            createVariableDeclaration(tempName, typeToTypeNodeHelper(t, context))
-                        ], NodeFlags.Const));
-                        addResult(statement, ModifierFlags.None);
-                        reference = createIdentifier(tempName);
+                    if (reference) {
+                        return createExpressionWithTypeArguments(typeArgs, reference);
                     }
-                    return createExpressionWithTypeArguments(typeArgs, reference);
                 }
 
                 function serializeSymbolRecursive(symbol: Symbol, isPrivate: boolean) {
@@ -5741,7 +5896,10 @@ namespace ts {
                 exportSymbol = getTargetOfExportSpecifier(<ExportSpecifier>node.parent, SymbolFlags.Value | SymbolFlags.Type | SymbolFlags.Namespace | SymbolFlags.Alias);
             }
             let result: Node[] | undefined;
+            let visited: Map<true> | undefined;
             if (exportSymbol) {
+                visited = createMap();
+                visited.set("" + getSymbolId(exportSymbol), true);
                 buildVisibleNodeList(exportSymbol.declarations);
             }
             return result;
@@ -5763,7 +5921,9 @@ namespace ts {
                         const firstIdentifier = getFirstIdentifier(internalModuleReference);
                         const importSymbol = resolveName(declaration, firstIdentifier.escapedText, SymbolFlags.Value | SymbolFlags.Type | SymbolFlags.Namespace,
                             undefined, undefined, /*isUse*/ false);
-                        if (importSymbol) {
+                        const id = importSymbol && "" + getSymbolId(importSymbol);
+                        if (importSymbol && !visited!.has(id!)) {
+                            visited!.set(id!, true);
                             buildVisibleNodeList(importSymbol.declarations);
                         }
                     }

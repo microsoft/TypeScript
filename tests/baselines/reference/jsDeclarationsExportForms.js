@@ -157,10 +157,8 @@ export { ns };
 import * as ns from "./cls";
 export { ns as classContainer };
 //// [cjs.d.ts]
-declare const _exports: {
-    ns: typeof import("./cls");
-};
-export = _exports;
+declare const ns: typeof import("./cls");
+export { ns };
 //// [cjs2.d.ts]
 declare const ns: typeof import("./cls");
 export = ns;

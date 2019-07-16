@@ -483,16 +483,12 @@ export class F<T, U> {
 }
 declare class G {
 }
-export { G };
 declare class HH {
 }
-export { HH as H };
 export class I {
 }
-export { I as II };
 declare class J {
 }
-export { J as JJ };
 export class K {
     p1: number;
     p2: string;
@@ -521,3 +517,4 @@ export class HasStatics {
 export class ExtendsStatics extends HasStatics {
     static also(): void;
 }
+export { G, HH as H, I as II, J as JJ };

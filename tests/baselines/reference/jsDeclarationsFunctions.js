@@ -125,19 +125,19 @@ exports.jj = j;
 export function a(): void;
 export function b(): void;
 export namespace b {
-    var cat: string;
+    export const cat: string;
 }
 export function c(): void;
 export namespace c {
-    var Cls: {
-        new (): {};
-    };
+    class Cls {
+    }
+    export { Cls };
 }
 export function d(a: number, b: number): string;
 export function e<T, U>(a: T, b: U): T & U;
 export function f<T>(a: T): T;
 export namespace f {
-    var self: typeof f;
+    export { f as self };
 }
 export function i(): void;
 export function j(): void;
@@ -146,12 +146,9 @@ declare function g(a: {
 }, b: {
     y: typeof b;
 }): void;
-export { g };
 declare function hh(a: {
     x: string;
 }, b: {
     y: typeof b;
 }): void;
-export { hh as h };
-export { i as ii };
-export { j as jj };
+export { g, hh as h, i as ii, j as jj };

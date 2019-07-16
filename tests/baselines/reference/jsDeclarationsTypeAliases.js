@@ -116,19 +116,13 @@ export type Identity<T> = (x: T) => T;
 declare class LocalThing {
     y: string;
 }
+declare function doTheThing(x: number): number | {
+    x: string;
+} | LocalThing | typeof ExportedThing;
 declare class ExportedThing {
     z: string;
 }
-declare function doTheThing(x: number): number | {
+export type SomeType = number | {
     x: string;
 } | LocalThing | ExportedThing;
-declare const _exports: {
-    doTheThing: typeof doTheThing;
-    ExportedThing: typeof ExportedThing;
-};
-export = _exports;
-declare namespace _exports {
-    export type SomeType = number | {
-        x: string;
-    } | LocalThing | ExportedThing;
-}
+export { doTheThing, ExportedThing };

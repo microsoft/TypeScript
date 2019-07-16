@@ -125,16 +125,12 @@ export enum B {
 }
 declare enum C {
 }
-export { C };
 declare enum DD {
 }
-export { DD as D };
 export enum E {
 }
-export { E as EE };
 declare enum F {
 }
-export { F as FF };
 export enum G {
     A = 1,
     B = 2,
@@ -168,3 +164,4 @@ export const enum L {
     C = 4,
     Mask = 7
 }
+export { C, DD as D, E as EE, F as FF };

@@ -76,10 +76,5 @@ declare class Wrap {
     constructor(c: import("./conn"));
     connItem: number;
 }
-declare const _exports: {
-    Wrap: typeof Wrap;
-};
-export = _exports;
-declare namespace _exports {
-    export type Conn = import("./conn");
-}
+export { Wrap };
+export type Conn = import("./conn");

@@ -26,26 +26,23 @@ module.exports = j;
 
 
 //// [obj.d.ts]
-declare const _exports: {
-    "x": number;
-    "y": number;
-    "obj": {
-        "items": ({
-            "x": number;
-            "y"?: undefined;
-            "err"?: undefined;
-        } | {
-            "x": number;
-            "y": number;
-            "err"?: undefined;
-        } | {
-            "x": number;
-            "err": boolean;
-            "y"?: undefined;
-        })[];
-    };
-};
-export = _exports;
+declare const x: number;
+declare const y: number;
+declare namespace obj {
+    const items: ({
+        "x": number;
+        "y"?: undefined;
+        "err"?: undefined;
+    } | {
+        "x": number;
+        "y": number;
+        "err"?: undefined;
+    } | {
+        "x": number;
+        "err": boolean;
+        "y"?: undefined;
+    })[];
+}
 //// [index.d.ts]
 declare const j: {
     "x": number;
