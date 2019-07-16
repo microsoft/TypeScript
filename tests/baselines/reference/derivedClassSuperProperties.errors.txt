@@ -12,7 +12,6 @@ tests/cases/conformance/classes/constructorDeclarations/superCalls/derivedClassS
 tests/cases/conformance/classes/constructorDeclarations/superCalls/derivedClassSuperProperties.ts(37,15): error TS17009: 'super' must be called before accessing 'this' in the constructor of a derived class.
 tests/cases/conformance/classes/constructorDeclarations/superCalls/derivedClassSuperProperties.ts(52,15): error TS17009: 'super' must be called before accessing 'this' in the constructor of a derived class.
 tests/cases/conformance/classes/constructorDeclarations/superCalls/derivedClassSuperProperties.ts(68,15): error TS17009: 'super' must be called before accessing 'this' in the constructor of a derived class.
-tests/cases/conformance/classes/constructorDeclarations/superCalls/derivedClassSuperProperties.ts(84,33): error TS2333: 'this' cannot be referenced in constructor arguments.
 tests/cases/conformance/classes/constructorDeclarations/superCalls/derivedClassSuperProperties.ts(91,5): error TS2376: A 'super' call must be the first statement in the constructor to refer to 'super' or 'this' when a derived class contains initialized properties or has parameter properties.
 tests/cases/conformance/classes/constructorDeclarations/superCalls/derivedClassSuperProperties.ts(92,19): error TS17009: 'super' must be called before accessing 'this' in the constructor of a derived class.
 tests/cases/conformance/classes/constructorDeclarations/superCalls/derivedClassSuperProperties.ts(101,5): error TS2376: A 'super' call must be the first statement in the constructor to refer to 'super' or 'this' when a derived class contains initialized properties or has parameter properties.
@@ -31,7 +30,7 @@ tests/cases/conformance/classes/constructorDeclarations/superCalls/derivedClassS
 tests/cases/conformance/classes/constructorDeclarations/superCalls/derivedClassSuperProperties.ts(302,14): error TS17009: 'super' must be called before accessing 'this' in the constructor of a derived class.
 
 
-==== tests/cases/conformance/classes/constructorDeclarations/superCalls/derivedClassSuperProperties.ts (31 errors) ====
+==== tests/cases/conformance/classes/constructorDeclarations/superCalls/derivedClassSuperProperties.ts (30 errors) ====
     declare const decorate: any;
     
     class Base {
@@ -156,8 +155,6 @@ tests/cases/conformance/classes/constructorDeclarations/superCalls/derivedClassS
         prop = true;
         constructor() {
             const lambda = (param = this) => {};
-                                    ~~~~
-!!! error TS2333: 'this' cannot be referenced in constructor arguments.
             super();
         }
     }
