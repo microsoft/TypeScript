@@ -15458,6 +15458,7 @@ namespace ts {
             let visited: Map<boolean>;
             let bivariant = false;
             let propagationType: Type;
+            let inferenceCount = 0;
             let allowComplexConstraintInference = true;
             inferFromTypes(originalSource, originalTarget);
 
@@ -15561,6 +15562,7 @@ namespace ts {
                                 clearCachedInferences(inferences);
                             }
                         }
+                        inferenceCount++;
                         return;
                     }
                     else {
@@ -15610,12 +15612,15 @@ namespace ts {
                     inferFromTypes(getTrueTypeFromConditionalType(<ConditionalType>source), getTrueTypeFromConditionalType(<ConditionalType>target));
                     inferFromTypes(getFalseTypeFromConditionalType(<ConditionalType>source), getFalseTypeFromConditionalType(<ConditionalType>target));
                 }
+                else if (target.flags & TypeFlags.Union) {
+                    inferToUnionType(source, <UnionType>target);
+                }
+                else if (target.flags & TypeFlags.Intersection) {
+                    inferToMultipleTypes(source, (<UnionOrIntersectionType>target).types, /*isIntersection*/ true);
+                }
                 else if (target.flags & TypeFlags.Conditional && !contravariant) {
                     const targetTypes = [getTrueTypeFromConditionalType(<ConditionalType>target), getFalseTypeFromConditionalType(<ConditionalType>target)];
                     inferToMultipleTypes(source, targetTypes, /*isIntersection*/ false);
-                }
-                else if (target.flags & TypeFlags.UnionOrIntersection) {
-                    inferToMultipleTypes(source, (<UnionOrIntersectionType>target).types, !!(target.flags & TypeFlags.Intersection));
                 }
                 else if (source.flags & TypeFlags.Union) {
                     // Source is a union or intersection type, infer from each constituent type
@@ -15739,6 +15744,46 @@ namespace ts {
                         }
                     }
                     priority = savePriority;
+                }
+            }
+
+            function inferToUnionType(source: Type, target: UnionType) {
+                const sources = source.flags & TypeFlags.Union ? (<UnionType>source).types : [source];
+                const matched = new Array<boolean>(sources.length);
+                let typeVariableCount = 0;
+                // First infer to types that are not naked type variables. For each source type we
+                // track whether inferences were made from that particular type to some target.
+                for (const t of target.types) {
+                    if (getInferenceInfoForType(t)) {
+                        typeVariableCount++;
+                    }
+                    else {
+                        for (let i = 0; i < sources.length; i++) {
+                            const count = inferenceCount;
+                            inferFromTypes(sources[i], t);
+                            if (count !== inferenceCount) matched[i] = true;
+                        }
+                    }
+                }
+                // If there are naked type variables in the target, create a union of the source types
+                // from which no inferences have been made so far and infer from that union to each naked
+                // type variable. If there is more than one naked type variable, give lower priority to
+                // the inferences as they are less specific.
+                if (typeVariableCount > 0) {
+                    const unmatched = flatMap(sources, (s, i) => matched![i] ? undefined : s);
+                    if (unmatched.length) {
+                        const s = getUnionType(unmatched);
+                        const savePriority = priority;
+                        if (typeVariableCount > 1) {
+                            priority |= InferencePriority.NakedTypeVariable;
+                        }
+                        for (const t of target.types) {
+                            if (getInferenceInfoForType(t)) {
+                                inferFromTypes(s, t);
+                            }
+                        }
+                        priority = savePriority;
+                    }
                 }
             }
 
