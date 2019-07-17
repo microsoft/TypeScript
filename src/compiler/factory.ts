@@ -2950,7 +2950,7 @@ namespace ts {
             node.declarationMapText = declarationMapTextOrBuildInfoPath;
             node.javascriptPath = javascriptPath;
             node.declarationPath = declarationPath,
-            node.buildInfoPath = buildInfoPath;
+                node.buildInfoPath = buildInfoPath;
             node.buildInfo = buildInfo;
             node.oldFileOfCurrentEmit = oldFileOfCurrentEmit;
         }
@@ -3461,7 +3461,7 @@ namespace ts {
 
     export function createMemberAccessForPropertyName(target: Expression, memberName: PropertyName, location?: TextRange): MemberExpression {
         if (isComputedPropertyName(memberName)) {
-             return setTextRange(createElementAccess(target, memberName.expression), location);
+            return setTextRange(createElementAccess(target, memberName.expression), location);
         }
         else {
             const expression = setTextRange(
@@ -4182,7 +4182,7 @@ namespace ts {
     export function getNamespaceMemberName(ns: Identifier, name: Identifier, allowComments?: boolean, allowSourceMaps?: boolean): PropertyAccessExpression {
         const qualifiedName = createPropertyAccess(ns, nodeIsSynthesized(name) ? name : getSynthesizedClone(name));
         setTextRange(qualifiedName, name);
-        let emitFlags: EmitFlags = 0;
+        let emitFlags: EmitFlags = EmitFlags.None;
         if (!allowSourceMaps) emitFlags |= EmitFlags.NoSourceMap;
         if (!allowComments) emitFlags |= EmitFlags.NoComments;
         if (emitFlags) setEmitFlags(qualifiedName, emitFlags);
@@ -4500,8 +4500,8 @@ namespace ts {
             const leftKind = getLiteralKindOfBinaryPlusOperand((<BinaryExpression>node).left);
             const literalKind = isLiteralKind(leftKind)
                 && leftKind === getLiteralKindOfBinaryPlusOperand((<BinaryExpression>node).right)
-                    ? leftKind
-                    : SyntaxKind.Unknown;
+                ? leftKind
+                : SyntaxKind.Unknown;
 
             (<BinaryPlusExpression>node).cachedLiteralKind = literalKind;
             return literalKind;
@@ -4724,7 +4724,7 @@ namespace ts {
                     if (stopAtCallExpressions) {
                         return node;
                     }
-                    // falls through
+                // falls through
                 case SyntaxKind.AsExpression:
                 case SyntaxKind.ElementAccessExpression:
                 case SyntaxKind.PropertyAccessExpression:
@@ -4747,7 +4747,7 @@ namespace ts {
         return body;
     }
 
-    export function isCommaSequence(node: Expression): node is BinaryExpression & {operatorToken: Token<SyntaxKind.CommaToken>} | CommaListExpression {
+    export function isCommaSequence(node: Expression): node is BinaryExpression & { operatorToken: Token<SyntaxKind.CommaToken> } | CommaListExpression {
         return node.kind === SyntaxKind.BinaryExpression && (<BinaryExpression>node).operatorToken.kind === SyntaxKind.CommaToken ||
             node.kind === SyntaxKind.CommaListExpression;
     }

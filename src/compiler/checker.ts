@@ -957,7 +957,7 @@ namespace ts {
         }
 
         function getExcludedSymbolFlags(flags: SymbolFlags): SymbolFlags {
-            let result: SymbolFlags = 0;
+            let result: SymbolFlags = SymbolFlags.None;
             if (flags & SymbolFlags.BlockScopedVariable) result |= SymbolFlags.BlockScopedVariableExcludes;
             if (flags & SymbolFlags.FunctionScopedVariable) result |= SymbolFlags.FunctionScopedVariableExcludes;
             if (flags & SymbolFlags.Property) result |= SymbolFlags.PropertyExcludes;
