@@ -113,19 +113,19 @@ declare function f4<T>(x: string & T): T;
 >f4 : <T>(x: string & T) => T
 >x : string & T
 
-var d1 = f4("abc");
->d1 : string
+const d1 = f4("abc");
+>d1 : "abc"
 >f4("abc") : "abc"
 >f4 : <T>(x: string & T) => T
 >"abc" : "abc"
 
-var d2 = f4(s);
+const d2 = f4(s);
 >d2 : unknown
 >f4(s) : unknown
 >f4 : <T>(x: string & T) => T
 >s : string
 
-var d3 = f4(42);  // Error
+const d3 = f4(42);  // Error
 >d3 : any
 >f4(42) : any
 >f4 : <T>(x: string & T) => T

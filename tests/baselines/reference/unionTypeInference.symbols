@@ -94,23 +94,23 @@ declare function f4<T>(x: string & T): T;
 >T : Symbol(T, Decl(unionTypeInference.ts, 26, 20))
 >T : Symbol(T, Decl(unionTypeInference.ts, 26, 20))
 
-var d1 = f4("abc");
->d1 : Symbol(d1, Decl(unionTypeInference.ts, 28, 3))
+const d1 = f4("abc");
+>d1 : Symbol(d1, Decl(unionTypeInference.ts, 28, 5))
 >f4 : Symbol(f4, Decl(unionTypeInference.ts, 24, 21))
 
-var d2 = f4(s);
->d2 : Symbol(d2, Decl(unionTypeInference.ts, 29, 3))
+const d2 = f4(s);
+>d2 : Symbol(d2, Decl(unionTypeInference.ts, 29, 5))
 >f4 : Symbol(f4, Decl(unionTypeInference.ts, 24, 21))
 >s : Symbol(s, Decl(unionTypeInference.ts, 1, 13))
 
-var d3 = f4(42);  // Error
->d3 : Symbol(d3, Decl(unionTypeInference.ts, 30, 3))
+const d3 = f4(42);  // Error
+>d3 : Symbol(d3, Decl(unionTypeInference.ts, 30, 5))
 >f4 : Symbol(f4, Decl(unionTypeInference.ts, 24, 21))
 
 // Repros from #32434
 
 declare function foo<T>(x: T | Promise<T>): void;
->foo : Symbol(foo, Decl(unionTypeInference.ts, 30, 16))
+>foo : Symbol(foo, Decl(unionTypeInference.ts, 30, 18))
 >T : Symbol(T, Decl(unionTypeInference.ts, 34, 21))
 >x : Symbol(x, Decl(unionTypeInference.ts, 34, 24))
 >T : Symbol(T, Decl(unionTypeInference.ts, 34, 21))
@@ -122,7 +122,7 @@ declare let x: false | Promise<true>;
 >Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --))
 
 foo(x);
->foo : Symbol(foo, Decl(unionTypeInference.ts, 30, 16))
+>foo : Symbol(foo, Decl(unionTypeInference.ts, 30, 18))
 >x : Symbol(x, Decl(unionTypeInference.ts, 35, 11))
 
 declare function bar<T>(x: T, y: string | T): T;
