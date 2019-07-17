@@ -28,9 +28,9 @@ const c5 = f3("abc");  // never
 
 declare function f4<T>(x: string & T): T;
 
-var d1 = f4("abc");
-var d2 = f4(s);
-var d3 = f4(42);  // Error
+const d1 = f4("abc");
+const d2 = f4(s);
+const d3 = f4(42);  // Error
 
 // Repros from #32434
 
