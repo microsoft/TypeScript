@@ -1,177 +1,435 @@
 === tests/cases/compiler/isArray.ts ===
-var maybeArray = [] as Array<number> | number;
->maybeArray : number | number[]
->[] as Array<number> | number : number | number[]
->[] : never[]
+interface MyArray<T> extends Array<T> { manifest: any; }
+>manifest : any
 
-if (Array.isArray(maybeArray)) {
->Array.isArray(maybeArray) : boolean
->Array.isArray : { (arg: {} | ReadonlyArray<any> | null | undefined): arg is ReadonlyArray<any>; (arg: any): arg is any[]; }
+interface MyReadOnlyArray<T> extends ReadonlyArray<T> { manifest: any; }
+>manifest : any
+
+function fn1(arg: string | string[]) {
+>fn1 : (arg: string | string[]) => void
+>arg : string | string[]
+
+    if (Array.isArray(arg)) arg.push(""); // Should OK
+>Array.isArray(arg) : boolean
+>Array.isArray : <T>(arg: T) => arg is T extends readonly any[] ? T : any[] extends T ? T & any[] : never
 >Array : ArrayConstructor
->isArray : { (arg: {} | ReadonlyArray<any> | null | undefined): arg is ReadonlyArray<any>; (arg: any): arg is any[]; }
->maybeArray : number | number[]
-
-    maybeArray.length; // OK
->maybeArray.length : number
->maybeArray : number[]
->length : number
-
-    const str: string = maybeArray[0]; // Expect error
->str : string
->maybeArray[0] : number
->maybeArray : number[]
->0 : 0
-
-    maybeArray.push(42); // OK
->maybeArray.push(42) : number
->maybeArray.push : (...items: number[]) => number
->maybeArray : number[]
->push : (...items: number[]) => number
->42 : 42
-
-} else {
-    maybeArray.toFixed(2); // OK
->maybeArray.toFixed(2) : string
->maybeArray.toFixed : (fractionDigits?: number | undefined) => string
->maybeArray : number
->toFixed : (fractionDigits?: number | undefined) => string
->2 : 2
+>isArray : <T>(arg: T) => arg is T extends readonly any[] ? T : any[] extends T ? T & any[] : never
+>arg : string | string[]
+>arg.push("") : number
+>arg.push : (...items: string[]) => number
+>arg : string[]
+>push : (...items: string[]) => number
+>"" : ""
 }
 
+function fn2(arg: unknown) {
+>fn2 : (arg: unknown) => void
+>arg : unknown
 
-var maybeReadonlyArray = [] as ReadonlyArray<number> | number;
->maybeReadonlyArray : number | ReadonlyArray<number>
->[] as ReadonlyArray<number> | number : number | ReadonlyArray<number>
->[] : never[]
-
-if (Array.isArray(maybeReadonlyArray)) {
->Array.isArray(maybeReadonlyArray) : boolean
->Array.isArray : { (arg: {} | ReadonlyArray<any> | null | undefined): arg is ReadonlyArray<any>; (arg: any): arg is any[]; }
+    if (Array.isArray(arg)) arg.push(""); // Should OK
+>Array.isArray(arg) : boolean
+>Array.isArray : <T>(arg: T) => arg is T extends readonly any[] ? T : any[] extends T ? T & any[] : never
 >Array : ArrayConstructor
->isArray : { (arg: {} | ReadonlyArray<any> | null | undefined): arg is ReadonlyArray<any>; (arg: any): arg is any[]; }
->maybeReadonlyArray : number | ReadonlyArray<number>
+>isArray : <T>(arg: T) => arg is T extends readonly any[] ? T : any[] extends T ? T & any[] : never
+>arg : unknown
+>arg.push("") : number
+>arg.push : (...items: any[]) => number
+>arg : any[]
+>push : (...items: any[]) => number
+>"" : ""
+}
 
-    maybeReadonlyArray.length; // OK
->maybeReadonlyArray.length : number
->maybeReadonlyArray : ReadonlyArray<number>
->length : number
+function fn3(arg: object) {
+>fn3 : (arg: object) => void
+>arg : object
 
-    const str: string = maybeReadonlyArray[0]; // Expect error
->str : string
->maybeReadonlyArray[0] : number
->maybeReadonlyArray : ReadonlyArray<number>
->0 : 0
+    if (Array.isArray(arg)) arg.push(""); // Should OK
+>Array.isArray(arg) : boolean
+>Array.isArray : <T>(arg: T) => arg is T extends readonly any[] ? T : any[] extends T ? T & any[] : never
+>Array : ArrayConstructor
+>isArray : <T>(arg: T) => arg is T extends readonly any[] ? T : any[] extends T ? T & any[] : never
+>arg : object
+>arg.push("") : number
+>arg.push : (...items: any[]) => number
+>arg : object & any[]
+>push : (...items: any[]) => number
+>"" : ""
+}
 
-    maybeReadonlyArray.push(42); // Expect error
->maybeReadonlyArray.push(42) : any
->maybeReadonlyArray.push : any
->maybeReadonlyArray : ReadonlyArray<number>
+function fn4(arg: {}) {
+>fn4 : (arg: {}) => void
+>arg : {}
+
+    if (Array.isArray(arg)) arg.push(""); // Should OK
+>Array.isArray(arg) : boolean
+>Array.isArray : <T>(arg: T) => arg is T extends readonly any[] ? T : any[] extends T ? T & any[] : never
+>Array : ArrayConstructor
+>isArray : <T>(arg: T) => arg is T extends readonly any[] ? T : any[] extends T ? T & any[] : never
+>arg : {}
+>arg.push("") : number
+>arg.push : (...items: any[]) => number
+>arg : any[]
+>push : (...items: any[]) => number
+>"" : ""
+}
+
+function fn5(arg: string | ReadonlyArray<string>) {
+>fn5 : (arg: string | readonly string[]) => void
+>arg : string | readonly string[]
+
+    if (Array.isArray(arg)) arg.push(10); // Should FAIL
+>Array.isArray(arg) : boolean
+>Array.isArray : <T>(arg: T) => arg is T extends readonly any[] ? T : any[] extends T ? T & any[] : never
+>Array : ArrayConstructor
+>isArray : <T>(arg: T) => arg is T extends readonly any[] ? T : any[] extends T ? T & any[] : never
+>arg : string | readonly string[]
+>arg.push(10) : any
+>arg.push : any
+>arg : readonly string[]
 >push : any
->42 : 42
+>10 : 10
 
-} else {
-    maybeReadonlyArray.toFixed(2); // OK
->maybeReadonlyArray.toFixed(2) : string
->maybeReadonlyArray.toFixed : (fractionDigits?: number | undefined) => string
->maybeReadonlyArray : number
->toFixed : (fractionDigits?: number | undefined) => string
->2 : 2
+    if (Array.isArray(arg)) arg.push(""); // Should FAIL
+>Array.isArray(arg) : boolean
+>Array.isArray : <T>(arg: T) => arg is T extends readonly any[] ? T : any[] extends T ? T & any[] : never
+>Array : ArrayConstructor
+>isArray : <T>(arg: T) => arg is T extends readonly any[] ? T : any[] extends T ? T & any[] : never
+>arg : string | readonly string[]
+>arg.push("") : any
+>arg.push : any
+>arg : readonly string[]
+>push : any
+>"" : ""
+
+    if (Array.isArray(arg)) arg.indexOf(""); // Should OK
+>Array.isArray(arg) : boolean
+>Array.isArray : <T>(arg: T) => arg is T extends readonly any[] ? T : any[] extends T ? T & any[] : never
+>Array : ArrayConstructor
+>isArray : <T>(arg: T) => arg is T extends readonly any[] ? T : any[] extends T ? T & any[] : never
+>arg : string | readonly string[]
+>arg.indexOf("") : number
+>arg.indexOf : (searchElement: string, fromIndex?: number | undefined) => number
+>arg : readonly string[]
+>indexOf : (searchElement: string, fromIndex?: number | undefined) => number
+>"" : ""
+
+    if (!Array.isArray(arg)) arg.toUpperCase(); // Should OK
+>!Array.isArray(arg) : boolean
+>Array.isArray(arg) : boolean
+>Array.isArray : <T>(arg: T) => arg is T extends readonly any[] ? T : any[] extends T ? T & any[] : never
+>Array : ArrayConstructor
+>isArray : <T>(arg: T) => arg is T extends readonly any[] ? T : any[] extends T ? T & any[] : never
+>arg : string | readonly string[]
+>arg.toUpperCase() : string
+>arg.toUpperCase : () => string
+>arg : string
+>toUpperCase : () => string
 }
 
+function fn6(arg: string | string[]) {
+>fn6 : (arg: string | string[]) => void
+>arg : string | string[]
 
-var readonlyArrayOrNullish: ReadonlyArray<number> | undefined | null;
->readonlyArrayOrNullish : ReadonlyArray<number> | null | undefined
+    if (Array.isArray(arg)) arg.push(10); // Should FAIL
+>Array.isArray(arg) : boolean
+>Array.isArray : <T>(arg: T) => arg is T extends readonly any[] ? T : any[] extends T ? T & any[] : never
+>Array : ArrayConstructor
+>isArray : <T>(arg: T) => arg is T extends readonly any[] ? T : any[] extends T ? T & any[] : never
+>arg : string | string[]
+>arg.push(10) : number
+>arg.push : (...items: string[]) => number
+>arg : string[]
+>push : (...items: string[]) => number
+>10 : 10
+}
+
+function fn7(arg: boolean | number[] | string[]) {
+>fn7 : (arg: boolean | string[] | number[]) => void
+>arg : boolean | string[] | number[]
+
+    if (Array.isArray(arg)) arg.push(null as any as string & number); // Should OK
+>Array.isArray(arg) : boolean
+>Array.isArray : <T>(arg: T) => arg is T extends readonly any[] ? T : any[] extends T ? T & any[] : never
+>Array : ArrayConstructor
+>isArray : <T>(arg: T) => arg is T extends readonly any[] ? T : any[] extends T ? T & any[] : never
+>arg : boolean | string[] | number[]
+>arg.push(null as any as string & number) : number
+>arg.push : ((...items: string[]) => number) | ((...items: number[]) => number)
+>arg : string[] | number[]
+>push : ((...items: string[]) => number) | ((...items: number[]) => number)
+>null as any as string & number : never
+>null as any : any
+>null : null
+}
+
+function fn8(arg: string | number[] | readonly string[]) {
+>fn8 : (arg: string | readonly string[] | number[]) => void
+>arg : string | readonly string[] | number[]
+
+    if (Array.isArray(arg)) arg.push(10); // Should FAIL
+>Array.isArray(arg) : boolean
+>Array.isArray : <T>(arg: T) => arg is T extends readonly any[] ? T : any[] extends T ? T & any[] : never
+>Array : ArrayConstructor
+>isArray : <T>(arg: T) => arg is T extends readonly any[] ? T : any[] extends T ? T & any[] : never
+>arg : string | readonly string[] | number[]
+>arg.push(10) : any
+>arg.push : any
+>arg : readonly string[] | number[]
+>push : any
+>10 : 10
+}
+
+function fn9(arg: string | number[] | readonly string[]) {
+>fn9 : (arg: string | readonly string[] | number[]) => void
+>arg : string | readonly string[] | number[]
+
+    if (Array.isArray(arg)) arg.push(10); // Should FAIL
+>Array.isArray(arg) : boolean
+>Array.isArray : <T>(arg: T) => arg is T extends readonly any[] ? T : any[] extends T ? T & any[] : never
+>Array : ArrayConstructor
+>isArray : <T>(arg: T) => arg is T extends readonly any[] ? T : any[] extends T ? T & any[] : never
+>arg : string | readonly string[] | number[]
+>arg.push(10) : any
+>arg.push : any
+>arg : readonly string[] | number[]
+>push : any
+>10 : 10
+}
+
+function fn10(arg: string | MyArray<string>) {
+>fn10 : (arg: string | MyArray<string>) => void
+>arg : string | MyArray<string>
+
+    if (Array.isArray(arg)) arg.push(10); // Should FAIL
+>Array.isArray(arg) : boolean
+>Array.isArray : <T>(arg: T) => arg is T extends readonly any[] ? T : any[] extends T ? T & any[] : never
+>Array : ArrayConstructor
+>isArray : <T>(arg: T) => arg is T extends readonly any[] ? T : any[] extends T ? T & any[] : never
+>arg : string | MyArray<string>
+>arg.push(10) : number
+>arg.push : (...items: string[]) => number
+>arg : MyArray<string>
+>push : (...items: string[]) => number
+>10 : 10
+
+    if (Array.isArray(arg)) arg.push(""); // Should OK
+>Array.isArray(arg) : boolean
+>Array.isArray : <T>(arg: T) => arg is T extends readonly any[] ? T : any[] extends T ? T & any[] : never
+>Array : ArrayConstructor
+>isArray : <T>(arg: T) => arg is T extends readonly any[] ? T : any[] extends T ? T & any[] : never
+>arg : string | MyArray<string>
+>arg.push("") : number
+>arg.push : (...items: string[]) => number
+>arg : MyArray<string>
+>push : (...items: string[]) => number
+>"" : ""
+
+    if (Array.isArray(arg)) arg.manifest; // Should OK
+>Array.isArray(arg) : boolean
+>Array.isArray : <T>(arg: T) => arg is T extends readonly any[] ? T : any[] extends T ? T & any[] : never
+>Array : ArrayConstructor
+>isArray : <T>(arg: T) => arg is T extends readonly any[] ? T : any[] extends T ? T & any[] : never
+>arg : string | MyArray<string>
+>arg.manifest : any
+>arg : MyArray<string>
+>manifest : any
+}
+
+function fn11(arg: string | MyReadOnlyArray<string>) {
+>fn11 : (arg: string | MyReadOnlyArray<string>) => void
+>arg : string | MyReadOnlyArray<string>
+
+    if (Array.isArray(arg)) arg.push(""); // Should FAIL
+>Array.isArray(arg) : boolean
+>Array.isArray : <T>(arg: T) => arg is T extends readonly any[] ? T : any[] extends T ? T & any[] : never
+>Array : ArrayConstructor
+>isArray : <T>(arg: T) => arg is T extends readonly any[] ? T : any[] extends T ? T & any[] : never
+>arg : string | MyReadOnlyArray<string>
+>arg.push("") : any
+>arg.push : any
+>arg : MyReadOnlyArray<string>
+>push : any
+>"" : ""
+
+    if (Array.isArray(arg)) arg.indexOf(10); // Should FAIL
+>Array.isArray(arg) : boolean
+>Array.isArray : <T>(arg: T) => arg is T extends readonly any[] ? T : any[] extends T ? T & any[] : never
+>Array : ArrayConstructor
+>isArray : <T>(arg: T) => arg is T extends readonly any[] ? T : any[] extends T ? T & any[] : never
+>arg : string | MyReadOnlyArray<string>
+>arg.indexOf(10) : number
+>arg.indexOf : (searchElement: string, fromIndex?: number | undefined) => number
+>arg : MyReadOnlyArray<string>
+>indexOf : (searchElement: string, fromIndex?: number | undefined) => number
+>10 : 10
+
+    if (Array.isArray(arg)) arg.indexOf(""); // Should OK
+>Array.isArray(arg) : boolean
+>Array.isArray : <T>(arg: T) => arg is T extends readonly any[] ? T : any[] extends T ? T & any[] : never
+>Array : ArrayConstructor
+>isArray : <T>(arg: T) => arg is T extends readonly any[] ? T : any[] extends T ? T & any[] : never
+>arg : string | MyReadOnlyArray<string>
+>arg.indexOf("") : number
+>arg.indexOf : (searchElement: string, fromIndex?: number | undefined) => number
+>arg : MyReadOnlyArray<string>
+>indexOf : (searchElement: string, fromIndex?: number | undefined) => number
+>"" : ""
+
+    if (Array.isArray(arg)) arg.manifest; // Should OK
+>Array.isArray(arg) : boolean
+>Array.isArray : <T>(arg: T) => arg is T extends readonly any[] ? T : any[] extends T ? T & any[] : never
+>Array : ArrayConstructor
+>isArray : <T>(arg: T) => arg is T extends readonly any[] ? T : any[] extends T ? T & any[] : never
+>arg : string | MyReadOnlyArray<string>
+>arg.manifest : any
+>arg : MyReadOnlyArray<string>
+>manifest : any
+}
+
+function fn12<T>(arg: T | T[]) {
+>fn12 : <T>(arg: T | T[]) => void
+>arg : T | T[]
+
+    if (Array.isArray(arg)) arg.push(null as any as T); // Should OK
+>Array.isArray(arg) : boolean
+>Array.isArray : <T>(arg: T) => arg is T extends readonly any[] ? T : any[] extends T ? T & any[] : never
+>Array : ArrayConstructor
+>isArray : <T>(arg: T) => arg is T extends readonly any[] ? T : any[] extends T ? T & any[] : never
+>arg : T | T[]
+>arg.push(null as any as T) : number
+>arg.push : (...items: T[]) => number
+>arg : T[]
+>push : (...items: T[]) => number
+>null as any as T : T
+>null as any : any
+>null : null
+}
+
+function fn13<T>(arg: T | ReadonlyArray<T>) {
+>fn13 : <T>(arg: T | readonly T[]) => void
+>arg : T | readonly T[]
+
+    if (Array.isArray(arg)) arg.push(null as any as T); // Should fail
+>Array.isArray(arg) : boolean
+>Array.isArray : <T>(arg: T) => arg is T extends readonly any[] ? T : any[] extends T ? T & any[] : never
+>Array : ArrayConstructor
+>isArray : <T>(arg: T) => arg is T extends readonly any[] ? T : any[] extends T ? T & any[] : never
+>arg : T | readonly T[]
+>arg.push(null as any as T) : any
+>arg.push : any
+>arg : readonly T[]
+>push : any
+>null as any as T : T
+>null as any : any
 >null : null
 
-if (Array.isArray(readonlyArrayOrNullish)) {
->Array.isArray(readonlyArrayOrNullish) : boolean
->Array.isArray : { (arg: {} | ReadonlyArray<any> | null | undefined): arg is ReadonlyArray<any>; (arg: any): arg is any[]; }
+    if (Array.isArray(arg)) arg.indexOf(null as any as T); // OK
+>Array.isArray(arg) : boolean
+>Array.isArray : <T>(arg: T) => arg is T extends readonly any[] ? T : any[] extends T ? T & any[] : never
 >Array : ArrayConstructor
->isArray : { (arg: {} | ReadonlyArray<any> | null | undefined): arg is ReadonlyArray<any>; (arg: any): arg is any[]; }
->readonlyArrayOrNullish : ReadonlyArray<number> | null | undefined
+>isArray : <T>(arg: T) => arg is T extends readonly any[] ? T : any[] extends T ? T & any[] : never
+>arg : T | readonly T[]
+>arg.indexOf(null as any as T) : number
+>arg.indexOf : (searchElement: T, fromIndex?: number | undefined) => number
+>arg : readonly T[]
+>indexOf : (searchElement: T, fromIndex?: number | undefined) => number
+>null as any as T : T
+>null as any : any
+>null : null
+}
 
-    readonlyArrayOrNullish.length; // OK
->readonlyArrayOrNullish.length : number
->readonlyArrayOrNullish : ReadonlyArray<number>
->length : number
+function fn14<T>(arg: T | [T]) {
+>fn14 : <T>(arg: T | [T]) => void
+>arg : T | [T]
 
-    const str: string = readonlyArrayOrNullish[0]; // Expect error
->str : string
->readonlyArrayOrNullish[0] : number
->readonlyArrayOrNullish : ReadonlyArray<number>
->0 : 0
+    if (Array.isArray(arg)) arg.push(null as any as T); // Should OK
+>Array.isArray(arg) : boolean
+>Array.isArray : <T>(arg: T) => arg is T extends readonly any[] ? T : any[] extends T ? T & any[] : never
+>Array : ArrayConstructor
+>isArray : <T>(arg: T) => arg is T extends readonly any[] ? T : any[] extends T ? T & any[] : never
+>arg : T | [T]
+>arg.push(null as any as T) : number
+>arg.push : (...items: T[]) => number
+>arg : [T]
+>push : (...items: T[]) => number
+>null as any as T : T
+>null as any : any
+>null : null
+}
 
-    readonlyArrayOrNullish.push(42); // Expect error
->readonlyArrayOrNullish.push(42) : any
->readonlyArrayOrNullish.push : any
->readonlyArrayOrNullish : ReadonlyArray<number>
+function fn15<T>(arg: T | readonly [T]) {
+>fn15 : <T>(arg: T | readonly [T]) => void
+>arg : T | readonly [T]
+
+    if (Array.isArray(arg)) arg.push(null as any as T); // Should fail
+>Array.isArray(arg) : boolean
+>Array.isArray : <T>(arg: T) => arg is T extends readonly any[] ? T : any[] extends T ? T & any[] : never
+>Array : ArrayConstructor
+>isArray : <T>(arg: T) => arg is T extends readonly any[] ? T : any[] extends T ? T & any[] : never
+>arg : T | readonly [T]
+>arg.push(null as any as T) : any
+>arg.push : any
+>arg : readonly [T]
 >push : any
->42 : 42
+>null as any as T : T
+>null as any : any
+>null : null
 
-} else {
-    readonlyArrayOrNullish.X; // Expect error
->readonlyArrayOrNullish.X : any
->readonlyArrayOrNullish : null | undefined
->X : any
+    if (Array.isArray(arg)) arg.indexOf(null as any as T); // Should OK
+>Array.isArray(arg) : boolean
+>Array.isArray : <T>(arg: T) => arg is T extends readonly any[] ? T : any[] extends T ? T & any[] : never
+>Array : ArrayConstructor
+>isArray : <T>(arg: T) => arg is T extends readonly any[] ? T : any[] extends T ? T & any[] : never
+>arg : T | readonly [T]
+>arg.indexOf(null as any as T) : number
+>arg.indexOf : (searchElement: T, fromIndex?: number | undefined) => number
+>arg : readonly [T]
+>indexOf : (searchElement: T, fromIndex?: number | undefined) => number
+>null as any as T : T
+>null as any : any
+>null : null
 }
 
+function fn16<T extends string | string[]>(arg: T) {
+>fn16 : <T extends string | string[]>(arg: T) => void
+>arg : T
 
-var someUnknown: unknown;
->someUnknown : unknown
-
-if (Array.isArray(someUnknown)) {
->Array.isArray(someUnknown) : boolean
->Array.isArray : { (arg: {} | ReadonlyArray<any> | null | undefined): arg is ReadonlyArray<any>; (arg: any): arg is any[]; }
+    if (Array.isArray(arg)) arg.push("10"); // Should OK
+>Array.isArray(arg) : boolean
+>Array.isArray : <T>(arg: T) => arg is T extends readonly any[] ? T : any[] extends T ? T & any[] : never
 >Array : ArrayConstructor
->isArray : { (arg: {} | ReadonlyArray<any> | null | undefined): arg is ReadonlyArray<any>; (arg: any): arg is any[]; }
->someUnknown : unknown
-
-    someUnknown.length; // OK
->someUnknown.length : number
->someUnknown : any[]
->length : number
-
-    const str: string = someUnknown[0]; // OK
->str : string
->someUnknown[0] : any
->someUnknown : any[]
->0 : 0
-
-    someUnknown.push("anything"); // OK
->someUnknown.push("anything") : number
->someUnknown.push : (...items: any[]) => number
->someUnknown : any[]
->push : (...items: any[]) => number
->"anything" : "anything"
+>isArray : <T>(arg: T) => arg is T extends readonly any[] ? T : any[] extends T ? T & any[] : never
+>arg : T
+>arg.push("10") : number
+>arg.push : (...items: string[]) => number
+>arg : T extends readonly any[] ? T : any[] extends T ? T & any[] : never
+>push : (...items: string[]) => number
+>"10" : "10"
 }
 
+function fn17() {
+>fn17 : () => void
 
-var someAny: any;
->someAny : any
+    const s: Array<string | string[]> = [];
+>s : (string | string[])[]
+>[] : never[]
 
-if (Array.isArray(someAny)) {
->Array.isArray(someAny) : boolean
->Array.isArray : { (arg: {} | ReadonlyArray<any> | null | undefined): arg is ReadonlyArray<any>; (arg: any): arg is any[]; }
+    const arrs = s.filter(Array.isArray);
+>arrs : string[][]
+>s.filter(Array.isArray) : string[][]
+>s.filter : { <S extends string | string[]>(callbackfn: (value: string | string[], index: number, array: (string | string[])[]) => value is S, thisArg?: any): S[]; (callbackfn: (value: string | string[], index: number, array: (string | string[])[]) => unknown, thisArg?: any): (string | string[])[]; }
+>s : (string | string[])[]
+>filter : { <S extends string | string[]>(callbackfn: (value: string | string[], index: number, array: (string | string[])[]) => value is S, thisArg?: any): S[]; (callbackfn: (value: string | string[], index: number, array: (string | string[])[]) => unknown, thisArg?: any): (string | string[])[]; }
+>Array.isArray : <T>(arg: T) => arg is T extends readonly any[] ? T : any[] extends T ? T & any[] : never
 >Array : ArrayConstructor
->isArray : { (arg: {} | ReadonlyArray<any> | null | undefined): arg is ReadonlyArray<any>; (arg: any): arg is any[]; }
->someAny : any
+>isArray : <T>(arg: T) => arg is T extends readonly any[] ? T : any[] extends T ? T & any[] : never
 
-    someAny.length; // OK
->someAny.length : number
->someAny : any[]
->length : number
-
-    const str: string = someAny[0]; // OK
->str : string
->someAny[0] : any
->someAny : any[]
->0 : 0
-
-    someAny.push("anything"); // OK
->someAny.push("anything") : number
->someAny.push : (...items: any[]) => number
->someAny : any[]
->push : (...items: any[]) => number
->"anything" : "anything"
+    arrs.push(["one"]);
+>arrs.push(["one"]) : number
+>arrs.push : (...items: string[][]) => number
+>arrs : string[][]
+>push : (...items: string[][]) => number
+>["one"] : string[]
+>"one" : "one"
 }
 

@@ -1,51 +1,84 @@
 // @strictNullChecks: true
 
-var maybeArray = [] as Array<number> | number;
+interface MyArray<T> extends Array<T> { manifest: any; }
+interface MyReadOnlyArray<T> extends ReadonlyArray<T> { manifest: any; }
 
-if (Array.isArray(maybeArray)) {
-    maybeArray.length; // OK
-    const str: string = maybeArray[0]; // Expect error
-    maybeArray.push(42); // OK
-} else {
-    maybeArray.toFixed(2); // OK
+function fn1(arg: string | string[]) {
+    if (Array.isArray(arg)) arg.push(""); // Should OK
 }
 
-
-var maybeReadonlyArray = [] as ReadonlyArray<number> | number;
-
-if (Array.isArray(maybeReadonlyArray)) {
-    maybeReadonlyArray.length; // OK
-    const str: string = maybeReadonlyArray[0]; // Expect error
-    maybeReadonlyArray.push(42); // Expect error
-} else {
-    maybeReadonlyArray.toFixed(2); // OK
+function fn2(arg: unknown) {
+    if (Array.isArray(arg)) arg.push(""); // Should OK
 }
 
-
-var readonlyArrayOrNullish: ReadonlyArray<number> | undefined | null;
-
-if (Array.isArray(readonlyArrayOrNullish)) {
-    readonlyArrayOrNullish.length; // OK
-    const str: string = readonlyArrayOrNullish[0]; // Expect error
-    readonlyArrayOrNullish.push(42); // Expect error
-} else {
-    readonlyArrayOrNullish.X; // Expect error
+function fn3(arg: object) {
+    if (Array.isArray(arg)) arg.push(""); // Should OK
 }
 
-
-var someUnknown: unknown;
-
-if (Array.isArray(someUnknown)) {
-    someUnknown.length; // OK
-    const str: string = someUnknown[0]; // OK
-    someUnknown.push("anything"); // OK
+function fn4(arg: {}) {
+    if (Array.isArray(arg)) arg.push(""); // Should OK
 }
 
+function fn5(arg: string | ReadonlyArray<string>) {
+    if (Array.isArray(arg)) arg.push(10); // Should FAIL
+    if (Array.isArray(arg)) arg.push(""); // Should FAIL
+    if (Array.isArray(arg)) arg.indexOf(""); // Should OK
+    if (!Array.isArray(arg)) arg.toUpperCase(); // Should OK
+}
 
-var someAny: any;
+function fn6(arg: string | string[]) {
+    if (Array.isArray(arg)) arg.push(10); // Should FAIL
+}
 
-if (Array.isArray(someAny)) {
-    someAny.length; // OK
-    const str: string = someAny[0]; // OK
-    someAny.push("anything"); // OK
+function fn7(arg: boolean | number[] | string[]) {
+    if (Array.isArray(arg)) arg.push(null as any as string & number); // Should OK
+}
+
+function fn8(arg: string | number[] | readonly string[]) {
+    if (Array.isArray(arg)) arg.push(10); // Should FAIL
+}
+
+function fn9(arg: string | number[] | readonly string[]) {
+    if (Array.isArray(arg)) arg.push(10); // Should FAIL
+}
+
+function fn10(arg: string | MyArray<string>) {
+    if (Array.isArray(arg)) arg.push(10); // Should FAIL
+    if (Array.isArray(arg)) arg.push(""); // Should OK
+    if (Array.isArray(arg)) arg.manifest; // Should OK
+}
+
+function fn11(arg: string | MyReadOnlyArray<string>) {
+    if (Array.isArray(arg)) arg.push(""); // Should FAIL
+    if (Array.isArray(arg)) arg.indexOf(10); // Should FAIL
+    if (Array.isArray(arg)) arg.indexOf(""); // Should OK
+    if (Array.isArray(arg)) arg.manifest; // Should OK
+}
+
+function fn12<T>(arg: T | T[]) {
+    if (Array.isArray(arg)) arg.push(null as any as T); // Should OK
+}
+
+function fn13<T>(arg: T | ReadonlyArray<T>) {
+    if (Array.isArray(arg)) arg.push(null as any as T); // Should fail
+    if (Array.isArray(arg)) arg.indexOf(null as any as T); // OK
+}
+
+function fn14<T>(arg: T | [T]) {
+    if (Array.isArray(arg)) arg.push(null as any as T); // Should OK
+}
+
+function fn15<T>(arg: T | readonly [T]) {
+    if (Array.isArray(arg)) arg.push(null as any as T); // Should fail
+    if (Array.isArray(arg)) arg.indexOf(null as any as T); // Should OK
+}
+
+function fn16<T extends string | string[]>(arg: T) {
+    if (Array.isArray(arg)) arg.push("10"); // Should OK
+}
+
+function fn17() {
+    const s: Array<string | string[]> = [];
+    const arrs = s.filter(Array.isArray);
+    arrs.push(["one"]);
 }
