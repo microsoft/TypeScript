@@ -1,94 +1,140 @@
 === tests/cases/conformance/types/typeRelationships/typeInference/unionTypeInference.ts ===
-// Verify that inferences made *to* a type parameter in a union type are secondary
-// to inferences made directly to that type parameter
+declare const b: boolean;
+>b : Symbol(b, Decl(unionTypeInference.ts, 0, 13))
 
-function f<T>(x: T, y: string|T): T {
->f : Symbol(f, Decl(unionTypeInference.ts, 0, 0))
->T : Symbol(T, Decl(unionTypeInference.ts, 3, 11))
->x : Symbol(x, Decl(unionTypeInference.ts, 3, 14))
->T : Symbol(T, Decl(unionTypeInference.ts, 3, 11))
->y : Symbol(y, Decl(unionTypeInference.ts, 3, 19))
->T : Symbol(T, Decl(unionTypeInference.ts, 3, 11))
->T : Symbol(T, Decl(unionTypeInference.ts, 3, 11))
+declare const s: string;
+>s : Symbol(s, Decl(unionTypeInference.ts, 1, 13))
 
-    return x;
->x : Symbol(x, Decl(unionTypeInference.ts, 3, 14))
-}
+declare const sn: string | number;
+>sn : Symbol(sn, Decl(unionTypeInference.ts, 2, 13))
 
-var a1: number;
->a1 : Symbol(a1, Decl(unionTypeInference.ts, 7, 3), Decl(unionTypeInference.ts, 8, 3))
+declare function f1<T>(x: T, y: string | T): T;
+>f1 : Symbol(f1, Decl(unionTypeInference.ts, 2, 34))
+>T : Symbol(T, Decl(unionTypeInference.ts, 4, 20))
+>x : Symbol(x, Decl(unionTypeInference.ts, 4, 23))
+>T : Symbol(T, Decl(unionTypeInference.ts, 4, 20))
+>y : Symbol(y, Decl(unionTypeInference.ts, 4, 28))
+>T : Symbol(T, Decl(unionTypeInference.ts, 4, 20))
+>T : Symbol(T, Decl(unionTypeInference.ts, 4, 20))
 
-var a1 = f(1, 2);
->a1 : Symbol(a1, Decl(unionTypeInference.ts, 7, 3), Decl(unionTypeInference.ts, 8, 3))
->f : Symbol(f, Decl(unionTypeInference.ts, 0, 0))
+const a1 = f1(1, 2);  // 1 | 2
+>a1 : Symbol(a1, Decl(unionTypeInference.ts, 6, 5))
+>f1 : Symbol(f1, Decl(unionTypeInference.ts, 2, 34))
 
-var a2: number;
->a2 : Symbol(a2, Decl(unionTypeInference.ts, 9, 3), Decl(unionTypeInference.ts, 10, 3))
+const a2 = f1(1, "hello");  // 1
+>a2 : Symbol(a2, Decl(unionTypeInference.ts, 7, 5))
+>f1 : Symbol(f1, Decl(unionTypeInference.ts, 2, 34))
 
-var a2 = f(1, "hello");
->a2 : Symbol(a2, Decl(unionTypeInference.ts, 9, 3), Decl(unionTypeInference.ts, 10, 3))
->f : Symbol(f, Decl(unionTypeInference.ts, 0, 0))
+const a3 = f1(1, sn);  // number
+>a3 : Symbol(a3, Decl(unionTypeInference.ts, 8, 5))
+>f1 : Symbol(f1, Decl(unionTypeInference.ts, 2, 34))
+>sn : Symbol(sn, Decl(unionTypeInference.ts, 2, 13))
 
-var a3: number;
->a3 : Symbol(a3, Decl(unionTypeInference.ts, 11, 3), Decl(unionTypeInference.ts, 12, 3))
-
-var a3 = f(1, a1 || "hello");
->a3 : Symbol(a3, Decl(unionTypeInference.ts, 11, 3), Decl(unionTypeInference.ts, 12, 3))
->f : Symbol(f, Decl(unionTypeInference.ts, 0, 0))
->a1 : Symbol(a1, Decl(unionTypeInference.ts, 7, 3), Decl(unionTypeInference.ts, 8, 3))
-
-var a4: any;
->a4 : Symbol(a4, Decl(unionTypeInference.ts, 13, 3), Decl(unionTypeInference.ts, 14, 3))
-
-var a4 = f(undefined, "abc");
->a4 : Symbol(a4, Decl(unionTypeInference.ts, 13, 3), Decl(unionTypeInference.ts, 14, 3))
->f : Symbol(f, Decl(unionTypeInference.ts, 0, 0))
+const a4 = f1(undefined, "abc");  // undefined
+>a4 : Symbol(a4, Decl(unionTypeInference.ts, 9, 5))
+>f1 : Symbol(f1, Decl(unionTypeInference.ts, 2, 34))
 >undefined : Symbol(undefined)
 
-function g<T>(value: [string, T]): T {
->g : Symbol(g, Decl(unionTypeInference.ts, 14, 29))
->T : Symbol(T, Decl(unionTypeInference.ts, 16, 11))
->value : Symbol(value, Decl(unionTypeInference.ts, 16, 14))
->T : Symbol(T, Decl(unionTypeInference.ts, 16, 11))
->T : Symbol(T, Decl(unionTypeInference.ts, 16, 11))
+const a5 = f1("foo", "bar");  // "foo"
+>a5 : Symbol(a5, Decl(unionTypeInference.ts, 10, 5))
+>f1 : Symbol(f1, Decl(unionTypeInference.ts, 2, 34))
 
-    return value[1];
->value : Symbol(value, Decl(unionTypeInference.ts, 16, 14))
->1 : Symbol(1)
-}
+const a6 = f1(true, false);  // boolean
+>a6 : Symbol(a6, Decl(unionTypeInference.ts, 11, 5))
+>f1 : Symbol(f1, Decl(unionTypeInference.ts, 2, 34))
 
-var b1: boolean;
->b1 : Symbol(b1, Decl(unionTypeInference.ts, 20, 3), Decl(unionTypeInference.ts, 21, 3))
+const a7 = f1("hello", 1);  // Error
+>a7 : Symbol(a7, Decl(unionTypeInference.ts, 12, 5))
+>f1 : Symbol(f1, Decl(unionTypeInference.ts, 2, 34))
 
-var b1 = g(["string", true]);
->b1 : Symbol(b1, Decl(unionTypeInference.ts, 20, 3), Decl(unionTypeInference.ts, 21, 3))
->g : Symbol(g, Decl(unionTypeInference.ts, 14, 29))
+declare function f2<T>(value: [string, T]): T;
+>f2 : Symbol(f2, Decl(unionTypeInference.ts, 12, 26))
+>T : Symbol(T, Decl(unionTypeInference.ts, 14, 20))
+>value : Symbol(value, Decl(unionTypeInference.ts, 14, 23))
+>T : Symbol(T, Decl(unionTypeInference.ts, 14, 20))
+>T : Symbol(T, Decl(unionTypeInference.ts, 14, 20))
 
-function h<T>(x: string|boolean|T): T {
->h : Symbol(h, Decl(unionTypeInference.ts, 21, 29))
->T : Symbol(T, Decl(unionTypeInference.ts, 23, 11))
->x : Symbol(x, Decl(unionTypeInference.ts, 23, 14))
->T : Symbol(T, Decl(unionTypeInference.ts, 23, 11))
->T : Symbol(T, Decl(unionTypeInference.ts, 23, 11))
+var b1 = f2(["string", true]);  // boolean
+>b1 : Symbol(b1, Decl(unionTypeInference.ts, 16, 3))
+>f2 : Symbol(f2, Decl(unionTypeInference.ts, 12, 26))
 
-    return typeof x === "string" || typeof x === "boolean" ? undefined : x;
->x : Symbol(x, Decl(unionTypeInference.ts, 23, 14))
->x : Symbol(x, Decl(unionTypeInference.ts, 23, 14))
->undefined : Symbol(undefined)
->x : Symbol(x, Decl(unionTypeInference.ts, 23, 14))
-}
+declare function f3<T>(x: string | false | T): T;
+>f3 : Symbol(f3, Decl(unionTypeInference.ts, 16, 30))
+>T : Symbol(T, Decl(unionTypeInference.ts, 18, 20))
+>x : Symbol(x, Decl(unionTypeInference.ts, 18, 23))
+>T : Symbol(T, Decl(unionTypeInference.ts, 18, 20))
+>T : Symbol(T, Decl(unionTypeInference.ts, 18, 20))
 
-var c1: number;
->c1 : Symbol(c1, Decl(unionTypeInference.ts, 27, 3), Decl(unionTypeInference.ts, 28, 3))
+const c1 = f3(5);  // 5
+>c1 : Symbol(c1, Decl(unionTypeInference.ts, 20, 5))
+>f3 : Symbol(f3, Decl(unionTypeInference.ts, 16, 30))
 
-var c1 = h(5);
->c1 : Symbol(c1, Decl(unionTypeInference.ts, 27, 3), Decl(unionTypeInference.ts, 28, 3))
->h : Symbol(h, Decl(unionTypeInference.ts, 21, 29))
+const c2 = f3(sn);  // number
+>c2 : Symbol(c2, Decl(unionTypeInference.ts, 21, 5))
+>f3 : Symbol(f3, Decl(unionTypeInference.ts, 16, 30))
+>sn : Symbol(sn, Decl(unionTypeInference.ts, 2, 13))
 
-var c2: string;
->c2 : Symbol(c2, Decl(unionTypeInference.ts, 29, 3), Decl(unionTypeInference.ts, 30, 3))
+const c3 = f3(true);  // true
+>c3 : Symbol(c3, Decl(unionTypeInference.ts, 22, 5))
+>f3 : Symbol(f3, Decl(unionTypeInference.ts, 16, 30))
 
-var c2 = h("abc");
->c2 : Symbol(c2, Decl(unionTypeInference.ts, 29, 3), Decl(unionTypeInference.ts, 30, 3))
->h : Symbol(h, Decl(unionTypeInference.ts, 21, 29))
+const c4 = f3(b);  // true
+>c4 : Symbol(c4, Decl(unionTypeInference.ts, 23, 5))
+>f3 : Symbol(f3, Decl(unionTypeInference.ts, 16, 30))
+>b : Symbol(b, Decl(unionTypeInference.ts, 0, 13))
+
+const c5 = f3("abc");  // never
+>c5 : Symbol(c5, Decl(unionTypeInference.ts, 24, 5))
+>f3 : Symbol(f3, Decl(unionTypeInference.ts, 16, 30))
+
+declare function f4<T>(x: string & T): T;
+>f4 : Symbol(f4, Decl(unionTypeInference.ts, 24, 21))
+>T : Symbol(T, Decl(unionTypeInference.ts, 26, 20))
+>x : Symbol(x, Decl(unionTypeInference.ts, 26, 23))
+>T : Symbol(T, Decl(unionTypeInference.ts, 26, 20))
+>T : Symbol(T, Decl(unionTypeInference.ts, 26, 20))
+
+var d1 = f4("abc");
+>d1 : Symbol(d1, Decl(unionTypeInference.ts, 28, 3))
+>f4 : Symbol(f4, Decl(unionTypeInference.ts, 24, 21))
+
+var d2 = f4(s);
+>d2 : Symbol(d2, Decl(unionTypeInference.ts, 29, 3))
+>f4 : Symbol(f4, Decl(unionTypeInference.ts, 24, 21))
+>s : Symbol(s, Decl(unionTypeInference.ts, 1, 13))
+
+var d3 = f4(42);  // Error
+>d3 : Symbol(d3, Decl(unionTypeInference.ts, 30, 3))
+>f4 : Symbol(f4, Decl(unionTypeInference.ts, 24, 21))
+
+// Repros from #32434
+
+declare function foo<T>(x: T | Promise<T>): void;
+>foo : Symbol(foo, Decl(unionTypeInference.ts, 30, 16))
+>T : Symbol(T, Decl(unionTypeInference.ts, 34, 21))
+>x : Symbol(x, Decl(unionTypeInference.ts, 34, 24))
+>T : Symbol(T, Decl(unionTypeInference.ts, 34, 21))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(unionTypeInference.ts, 34, 21))
+
+declare let x: false | Promise<true>;
+>x : Symbol(x, Decl(unionTypeInference.ts, 35, 11))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --))
+
+foo(x);
+>foo : Symbol(foo, Decl(unionTypeInference.ts, 30, 16))
+>x : Symbol(x, Decl(unionTypeInference.ts, 35, 11))
+
+declare function bar<T>(x: T, y: string | T): T;
+>bar : Symbol(bar, Decl(unionTypeInference.ts, 36, 7))
+>T : Symbol(T, Decl(unionTypeInference.ts, 38, 21))
+>x : Symbol(x, Decl(unionTypeInference.ts, 38, 24))
+>T : Symbol(T, Decl(unionTypeInference.ts, 38, 21))
+>y : Symbol(y, Decl(unionTypeInference.ts, 38, 29))
+>T : Symbol(T, Decl(unionTypeInference.ts, 38, 21))
+>T : Symbol(T, Decl(unionTypeInference.ts, 38, 21))
+
+const y = bar(1, 2);
+>y : Symbol(y, Decl(unionTypeInference.ts, 39, 5))
+>bar : Symbol(bar, Decl(unionTypeInference.ts, 36, 7))
 
