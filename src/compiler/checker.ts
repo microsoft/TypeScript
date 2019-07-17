@@ -15773,7 +15773,7 @@ namespace ts {
                 // type variable. If there is more than one naked type variable, give lower priority to
                 // the inferences as they are less specific.
                 if (typeVariableCount > 0) {
-                    const unmatched = flatMap(sources, (s, i) => matched![i] ? undefined : s);
+                    const unmatched = flatMap(sources, (s, i) => matched[i] ? undefined : s);
                     if (unmatched.length) {
                         const s = getUnionType(unmatched);
                         const savePriority = priority;
