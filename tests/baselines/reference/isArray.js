@@ -169,9 +169,12 @@ function fn15(arg, t) {
 function fn16(arg) {
     if (Array.isArray(arg))
         arg.push("10"); // Should OK
+    if (Array.isArray(arg))
+        arg.push(10); // Should fail
 }
 function fn17() {
     var s = [];
     var arrs = s.filter(Array.isArray);
-    arrs.push(["one"]);
+    arrs.push(["one"]); // Should OK
+    arrs.push("str"); // Should fail
 }

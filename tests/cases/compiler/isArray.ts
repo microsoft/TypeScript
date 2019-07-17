@@ -75,10 +75,12 @@ function fn15<T>(arg: T | readonly [T], t: T) {
 
 function fn16<T extends string | string[]>(arg: T) {
     if (Array.isArray(arg)) arg.push("10"); // Should OK
+    if (Array.isArray(arg)) arg.push(10); // Should fail
 }
 
 function fn17() {
     const s: Array<string | string[]> = [];
     const arrs = s.filter(Array.isArray);
-    arrs.push(["one"]);
+    arrs.push(["one"]); // Should OK
+    arrs.push("str");  // Should fail
 }

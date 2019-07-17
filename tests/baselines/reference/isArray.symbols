@@ -343,27 +343,41 @@ function fn16<T extends string | string[]>(arg: T) {
 >arg.push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
 >arg : Symbol(arg, Decl(isArray.ts, 73, 43))
 >push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+
+    if (Array.isArray(arg)) arg.push(10); // Should fail
+>Array.isArray : Symbol(ArrayConstructor.isArray, Decl(lib.es5.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>isArray : Symbol(ArrayConstructor.isArray, Decl(lib.es5.d.ts, --, --))
+>arg : Symbol(arg, Decl(isArray.ts, 73, 43))
+>arg.push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+>arg : Symbol(arg, Decl(isArray.ts, 73, 43))
+>push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
 }
 
 function fn17() {
->fn17 : Symbol(fn17, Decl(isArray.ts, 75, 1))
+>fn17 : Symbol(fn17, Decl(isArray.ts, 76, 1))
 
     const s: Array<string | string[]> = [];
->s : Symbol(s, Decl(isArray.ts, 78, 9))
+>s : Symbol(s, Decl(isArray.ts, 79, 9))
 >Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 
     const arrs = s.filter(Array.isArray);
->arrs : Symbol(arrs, Decl(isArray.ts, 79, 9))
+>arrs : Symbol(arrs, Decl(isArray.ts, 80, 9))
 >s.filter : Symbol(Array.filter, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
->s : Symbol(s, Decl(isArray.ts, 78, 9))
+>s : Symbol(s, Decl(isArray.ts, 79, 9))
 >filter : Symbol(Array.filter, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >Array.isArray : Symbol(ArrayConstructor.isArray, Decl(lib.es5.d.ts, --, --))
 >Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >isArray : Symbol(ArrayConstructor.isArray, Decl(lib.es5.d.ts, --, --))
 
-    arrs.push(["one"]);
+    arrs.push(["one"]); // Should OK
 >arrs.push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
->arrs : Symbol(arrs, Decl(isArray.ts, 79, 9))
+>arrs : Symbol(arrs, Decl(isArray.ts, 80, 9))
+>push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+
+    arrs.push("str");  // Should fail
+>arrs.push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+>arrs : Symbol(arrs, Decl(isArray.ts, 80, 9))
 >push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
 }
 

@@ -112,11 +112,17 @@ tests/cases/compiler/isArray.ts(83,15): error TS2345: Argument of type '"str"' i
     
     function fn16<T extends string | string[]>(arg: T) {
         if (Array.isArray(arg)) arg.push("10"); // Should OK
+        if (Array.isArray(arg)) arg.push(10); // Should fail
+                                         ~~
+!!! error TS2345: Argument of type '10' is not assignable to parameter of type 'string'.
     }
     
     function fn17() {
         const s: Array<string | string[]> = [];
         const arrs = s.filter(Array.isArray);
-        arrs.push(["one"]);
+        arrs.push(["one"]); // Should OK
+        arrs.push("str");  // Should fail
+                  ~~~~~
+!!! error TS2345: Argument of type '"str"' is not assignable to parameter of type 'string[]'.
     }
     

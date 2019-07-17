@@ -397,6 +397,18 @@ function fn16<T extends string | string[]>(arg: T) {
 >arg : T extends readonly any[] ? T : any[] extends T ? T & any[] : never
 >push : (...items: string[]) => number
 >"10" : "10"
+
+    if (Array.isArray(arg)) arg.push(10); // Should fail
+>Array.isArray(arg) : boolean
+>Array.isArray : <T>(arg: T) => arg is T extends readonly any[] ? T : any[] extends T ? T & any[] : never
+>Array : ArrayConstructor
+>isArray : <T>(arg: T) => arg is T extends readonly any[] ? T : any[] extends T ? T & any[] : never
+>arg : T
+>arg.push(10) : number
+>arg.push : (...items: string[]) => number
+>arg : T extends readonly any[] ? T : any[] extends T ? T & any[] : never
+>push : (...items: string[]) => number
+>10 : 10
 }
 
 function fn17() {
@@ -416,12 +428,19 @@ function fn17() {
 >Array : ArrayConstructor
 >isArray : <T>(arg: T) => arg is T extends readonly any[] ? T : any[] extends T ? T & any[] : never
 
-    arrs.push(["one"]);
+    arrs.push(["one"]); // Should OK
 >arrs.push(["one"]) : number
 >arrs.push : (...items: string[][]) => number
 >arrs : string[][]
 >push : (...items: string[][]) => number
 >["one"] : string[]
 >"one" : "one"
+
+    arrs.push("str");  // Should fail
+>arrs.push("str") : number
+>arrs.push : (...items: string[][]) => number
+>arrs : string[][]
+>push : (...items: string[][]) => number
+>"str" : "str"
 }
 
