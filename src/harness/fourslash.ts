@@ -798,7 +798,7 @@ namespace FourSlash {
                         const name = typeof include === "string" ? include : include.name;
                         const found = nameToEntries.get(name);
                         if (!found) throw this.raiseError(`No completion ${name} found`);
-                        assert(found.length === 1, `Must use 'exact' for multiple completions with same name: '${name}'`);
+                        assert(found.length === 1); // Must use 'exact' for multiple completions with same name
                         this.verifyCompletionEntry(ts.first(found), include);
                     }
                 }
