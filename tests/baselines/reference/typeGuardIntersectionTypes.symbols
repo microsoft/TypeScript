@@ -176,17 +176,17 @@ function identifyBeast(beast: Beast) {
 >beast : Symbol(beast, Decl(typeGuardIntersectionTypes.ts, 64, 23))
 
             if (beast.legs === 4) {
->beast.legs : Symbol(Legged.legs, Decl(typeGuardIntersectionTypes.ts, 56, 21))
+>beast.legs : Symbol(legs, Decl(typeGuardIntersectionTypes.ts, 55, 38), Decl(typeGuardIntersectionTypes.ts, 56, 21))
 >beast : Symbol(beast, Decl(typeGuardIntersectionTypes.ts, 64, 23))
->legs : Symbol(Legged.legs, Decl(typeGuardIntersectionTypes.ts, 56, 21))
+>legs : Symbol(legs, Decl(typeGuardIntersectionTypes.ts, 55, 38), Decl(typeGuardIntersectionTypes.ts, 56, 21))
 
                 log(`pegasus - 4 legs, wings`);
 >log : Symbol(log, Decl(typeGuardIntersectionTypes.ts, 48, 1))
             }
             else if (beast.legs === 2) {
->beast.legs : Symbol(Legged.legs, Decl(typeGuardIntersectionTypes.ts, 56, 21))
+>beast.legs : Symbol(legs, Decl(typeGuardIntersectionTypes.ts, 55, 38), Decl(typeGuardIntersectionTypes.ts, 56, 21))
 >beast : Symbol(beast, Decl(typeGuardIntersectionTypes.ts, 64, 23))
->legs : Symbol(Legged.legs, Decl(typeGuardIntersectionTypes.ts, 56, 21))
+>legs : Symbol(legs, Decl(typeGuardIntersectionTypes.ts, 55, 38), Decl(typeGuardIntersectionTypes.ts, 56, 21))
 
                 log(`bird - 2 legs, wings`);
 >log : Symbol(log, Decl(typeGuardIntersectionTypes.ts, 48, 1))
@@ -194,9 +194,9 @@ function identifyBeast(beast: Beast) {
             else {
                 log(`unknown - ${beast.legs} legs, wings`);
 >log : Symbol(log, Decl(typeGuardIntersectionTypes.ts, 48, 1))
->beast.legs : Symbol(Legged.legs, Decl(typeGuardIntersectionTypes.ts, 56, 21))
+>beast.legs : Symbol(legs, Decl(typeGuardIntersectionTypes.ts, 55, 38), Decl(typeGuardIntersectionTypes.ts, 56, 21))
 >beast : Symbol(beast, Decl(typeGuardIntersectionTypes.ts, 64, 23))
->legs : Symbol(Legged.legs, Decl(typeGuardIntersectionTypes.ts, 56, 21))
+>legs : Symbol(legs, Decl(typeGuardIntersectionTypes.ts, 55, 38), Decl(typeGuardIntersectionTypes.ts, 56, 21))
             }
         }
 
@@ -204,9 +204,9 @@ function identifyBeast(beast: Beast) {
         else {
             log(`manbearpig - ${beast.legs} legs, no wings`);
 >log : Symbol(log, Decl(typeGuardIntersectionTypes.ts, 48, 1))
->beast.legs : Symbol(Legged.legs, Decl(typeGuardIntersectionTypes.ts, 56, 21))
+>beast.legs : Symbol(legs, Decl(typeGuardIntersectionTypes.ts, 55, 38), Decl(typeGuardIntersectionTypes.ts, 56, 21))
 >beast : Symbol(beast, Decl(typeGuardIntersectionTypes.ts, 64, 23))
->legs : Symbol(Legged.legs, Decl(typeGuardIntersectionTypes.ts, 56, 21))
+>legs : Symbol(legs, Decl(typeGuardIntersectionTypes.ts, 55, 38), Decl(typeGuardIntersectionTypes.ts, 56, 21))
         }
     }
 
