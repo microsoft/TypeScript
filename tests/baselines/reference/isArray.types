@@ -333,23 +333,22 @@ function fn13<T>(arg: T | ReadonlyArray<T>, t: T) {
 >t : T
 }
 
-function fn14<T>(arg: T | [T]) {
->fn14 : <T>(arg: T | [T]) => void
+function fn14<T>(arg: T | [T], t: T) {
+>fn14 : <T>(arg: T | [T], t: T) => void
 >arg : T | [T]
+>t : T
 
-    if (Array.isArray(arg)) arg.push(null as any as T); // Should OK
+    if (Array.isArray(arg)) arg.push(t); // Should OK
 >Array.isArray(arg) : boolean
 >Array.isArray : <T>(arg: T) => arg is T extends readonly any[] ? T : any[] extends T ? T & any[] : never
 >Array : ArrayConstructor
 >isArray : <T>(arg: T) => arg is T extends readonly any[] ? T : any[] extends T ? T & any[] : never
 >arg : T | [T]
->arg.push(null as any as T) : number
+>arg.push(t) : number
 >arg.push : (...items: T[]) => number
 >arg : [T]
 >push : (...items: T[]) => number
->null as any as T : T
->null as any : any
->null : null
+>t : T
 }
 
 function fn15<T>(arg: T | readonly [T], t: T) {

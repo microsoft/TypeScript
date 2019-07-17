@@ -283,14 +283,16 @@ function fn13<T>(arg: T | ReadonlyArray<T>, t: T) {
 >t : Symbol(t, Decl(isArray.ts, 59, 43))
 }
 
-function fn14<T>(arg: T | [T]) {
+function fn14<T>(arg: T | [T], t: T) {
 >fn14 : Symbol(fn14, Decl(isArray.ts, 62, 1))
 >T : Symbol(T, Decl(isArray.ts, 64, 14))
 >arg : Symbol(arg, Decl(isArray.ts, 64, 17))
 >T : Symbol(T, Decl(isArray.ts, 64, 14))
 >T : Symbol(T, Decl(isArray.ts, 64, 14))
+>t : Symbol(t, Decl(isArray.ts, 64, 30))
+>T : Symbol(T, Decl(isArray.ts, 64, 14))
 
-    if (Array.isArray(arg)) arg.push(null as any as T); // Should OK
+    if (Array.isArray(arg)) arg.push(t); // Should OK
 >Array.isArray : Symbol(ArrayConstructor.isArray, Decl(lib.es5.d.ts, --, --))
 >Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >isArray : Symbol(ArrayConstructor.isArray, Decl(lib.es5.d.ts, --, --))
@@ -298,7 +300,7 @@ function fn14<T>(arg: T | [T]) {
 >arg.push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
 >arg : Symbol(arg, Decl(isArray.ts, 64, 17))
 >push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
->T : Symbol(T, Decl(isArray.ts, 64, 14))
+>t : Symbol(t, Decl(isArray.ts, 64, 30))
 }
 
 function fn15<T>(arg: T | readonly [T], t: T) {

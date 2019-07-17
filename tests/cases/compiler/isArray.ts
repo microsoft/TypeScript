@@ -64,8 +64,8 @@ function fn13<T>(arg: T | ReadonlyArray<T>, t: T) {
     if (Array.isArray(arg)) arg.indexOf(t); // OK
 }
 
-function fn14<T>(arg: T | [T]) {
-    if (Array.isArray(arg)) arg.push(null as any as T); // Should OK
+function fn14<T>(arg: T | [T], t: T) {
+    if (Array.isArray(arg)) arg.push(t); // Should OK
 }
 
 function fn15<T>(arg: T | readonly [T], t: T) {
