@@ -143,23 +143,22 @@ function fn6(arg: string | string[]) {
 >10 : 10
 }
 
-function fn7(arg: boolean | number[] | string[]) {
->fn7 : (arg: boolean | string[] | number[]) => void
+function fn7(arg: boolean | number[] | string[], stringAndNumber: string & number) {
+>fn7 : (arg: boolean | string[] | number[], stringAndNumber: never) => void
 >arg : boolean | string[] | number[]
+>stringAndNumber : never
 
-    if (Array.isArray(arg)) arg.push(null as any as string & number); // Should OK
+    if (Array.isArray(arg)) arg.push(stringAndNumber); // Should OK
 >Array.isArray(arg) : boolean
 >Array.isArray : <T>(arg: T) => arg is T extends readonly any[] ? T : any[] extends T ? T & any[] : never
 >Array : ArrayConstructor
 >isArray : <T>(arg: T) => arg is T extends readonly any[] ? T : any[] extends T ? T & any[] : never
 >arg : boolean | string[] | number[]
->arg.push(null as any as string & number) : number
+>arg.push(stringAndNumber) : number
 >arg.push : ((...items: string[]) => number) | ((...items: number[]) => number)
 >arg : string[] | number[]
 >push : ((...items: string[]) => number) | ((...items: number[]) => number)
->null as any as string & number : never
->null as any : any
->null : null
+>stringAndNumber : never
 }
 
 function fn8(arg: string | number[] | readonly string[]) {
@@ -286,56 +285,52 @@ function fn11(arg: string | MyReadOnlyArray<string>) {
 >manifest : any
 }
 
-function fn12<T>(arg: T | T[]) {
->fn12 : <T>(arg: T | T[]) => void
+function fn12<T>(arg: T | T[], t: T) {
+>fn12 : <T>(arg: T | T[], t: T) => void
 >arg : T | T[]
+>t : T
 
-    if (Array.isArray(arg)) arg.push(null as any as T); // Should OK
+    if (Array.isArray(arg)) arg.push(t); // Should OK
 >Array.isArray(arg) : boolean
 >Array.isArray : <T>(arg: T) => arg is T extends readonly any[] ? T : any[] extends T ? T & any[] : never
 >Array : ArrayConstructor
 >isArray : <T>(arg: T) => arg is T extends readonly any[] ? T : any[] extends T ? T & any[] : never
 >arg : T | T[]
->arg.push(null as any as T) : number
+>arg.push(t) : number
 >arg.push : (...items: T[]) => number
 >arg : T[]
 >push : (...items: T[]) => number
->null as any as T : T
->null as any : any
->null : null
+>t : T
 }
 
-function fn13<T>(arg: T | ReadonlyArray<T>) {
->fn13 : <T>(arg: T | readonly T[]) => void
+function fn13<T>(arg: T | ReadonlyArray<T>, t: T) {
+>fn13 : <T>(arg: T | readonly T[], t: T) => void
 >arg : T | readonly T[]
+>t : T
 
-    if (Array.isArray(arg)) arg.push(null as any as T); // Should fail
+    if (Array.isArray(arg)) arg.push(t); // Should fail
 >Array.isArray(arg) : boolean
 >Array.isArray : <T>(arg: T) => arg is T extends readonly any[] ? T : any[] extends T ? T & any[] : never
 >Array : ArrayConstructor
 >isArray : <T>(arg: T) => arg is T extends readonly any[] ? T : any[] extends T ? T & any[] : never
 >arg : T | readonly T[]
->arg.push(null as any as T) : any
+>arg.push(t) : any
 >arg.push : any
 >arg : readonly T[]
 >push : any
->null as any as T : T
->null as any : any
->null : null
+>t : T
 
-    if (Array.isArray(arg)) arg.indexOf(null as any as T); // OK
+    if (Array.isArray(arg)) arg.indexOf(t); // OK
 >Array.isArray(arg) : boolean
 >Array.isArray : <T>(arg: T) => arg is T extends readonly any[] ? T : any[] extends T ? T & any[] : never
 >Array : ArrayConstructor
 >isArray : <T>(arg: T) => arg is T extends readonly any[] ? T : any[] extends T ? T & any[] : never
 >arg : T | readonly T[]
->arg.indexOf(null as any as T) : number
+>arg.indexOf(t) : number
 >arg.indexOf : (searchElement: T, fromIndex?: number | undefined) => number
 >arg : readonly T[]
 >indexOf : (searchElement: T, fromIndex?: number | undefined) => number
->null as any as T : T
->null as any : any
->null : null
+>t : T
 }
 
 function fn14<T>(arg: T | [T]) {
@@ -357,37 +352,34 @@ function fn14<T>(arg: T | [T]) {
 >null : null
 }
 
-function fn15<T>(arg: T | readonly [T]) {
->fn15 : <T>(arg: T | readonly [T]) => void
+function fn15<T>(arg: T | readonly [T], t: T) {
+>fn15 : <T>(arg: T | readonly [T], t: T) => void
 >arg : T | readonly [T]
+>t : T
 
-    if (Array.isArray(arg)) arg.push(null as any as T); // Should fail
+    if (Array.isArray(arg)) arg.push(t); // Should fail
 >Array.isArray(arg) : boolean
 >Array.isArray : <T>(arg: T) => arg is T extends readonly any[] ? T : any[] extends T ? T & any[] : never
 >Array : ArrayConstructor
 >isArray : <T>(arg: T) => arg is T extends readonly any[] ? T : any[] extends T ? T & any[] : never
 >arg : T | readonly [T]
->arg.push(null as any as T) : any
+>arg.push(t) : any
 >arg.push : any
 >arg : readonly [T]
 >push : any
->null as any as T : T
->null as any : any
->null : null
+>t : T
 
-    if (Array.isArray(arg)) arg.indexOf(null as any as T); // Should OK
+    if (Array.isArray(arg)) arg.indexOf(t); // Should OK
 >Array.isArray(arg) : boolean
 >Array.isArray : <T>(arg: T) => arg is T extends readonly any[] ? T : any[] extends T ? T & any[] : never
 >Array : ArrayConstructor
 >isArray : <T>(arg: T) => arg is T extends readonly any[] ? T : any[] extends T ? T & any[] : never
 >arg : T | readonly [T]
->arg.indexOf(null as any as T) : number
+>arg.indexOf(t) : number
 >arg.indexOf : (searchElement: T, fromIndex?: number | undefined) => number
 >arg : readonly [T]
 >indexOf : (searchElement: T, fromIndex?: number | undefined) => number
->null as any as T : T
->null as any : any
->null : null
+>t : T
 }
 
 function fn16<T extends string | string[]>(arg: T) {

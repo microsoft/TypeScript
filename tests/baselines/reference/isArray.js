@@ -29,8 +29,8 @@ function fn6(arg: string | string[]) {
     if (Array.isArray(arg)) arg.push(10); // Should FAIL
 }
 
-function fn7(arg: boolean | number[] | string[]) {
-    if (Array.isArray(arg)) arg.push(null as any as string & number); // Should OK
+function fn7(arg: boolean | number[] | string[], stringAndNumber: string & number) {
+    if (Array.isArray(arg)) arg.push(stringAndNumber); // Should OK
 }
 
 function fn8(arg: string | number[] | readonly string[]) {
@@ -54,32 +54,34 @@ function fn11(arg: string | MyReadOnlyArray<string>) {
     if (Array.isArray(arg)) arg.manifest; // Should OK
 }
 
-function fn12<T>(arg: T | T[]) {
-    if (Array.isArray(arg)) arg.push(null as any as T); // Should OK
+function fn12<T>(arg: T | T[], t: T) {
+    if (Array.isArray(arg)) arg.push(t); // Should OK
 }
 
-function fn13<T>(arg: T | ReadonlyArray<T>) {
-    if (Array.isArray(arg)) arg.push(null as any as T); // Should fail
-    if (Array.isArray(arg)) arg.indexOf(null as any as T); // OK
+function fn13<T>(arg: T | ReadonlyArray<T>, t: T) {
+    if (Array.isArray(arg)) arg.push(t); // Should fail
+    if (Array.isArray(arg)) arg.indexOf(t); // OK
 }
 
 function fn14<T>(arg: T | [T]) {
     if (Array.isArray(arg)) arg.push(null as any as T); // Should OK
 }
 
-function fn15<T>(arg: T | readonly [T]) {
-    if (Array.isArray(arg)) arg.push(null as any as T); // Should fail
-    if (Array.isArray(arg)) arg.indexOf(null as any as T); // Should OK
+function fn15<T>(arg: T | readonly [T], t: T) {
+    if (Array.isArray(arg)) arg.push(t); // Should fail
+    if (Array.isArray(arg)) arg.indexOf(t); // Should OK
 }
 
 function fn16<T extends string | string[]>(arg: T) {
     if (Array.isArray(arg)) arg.push("10"); // Should OK
+    if (Array.isArray(arg)) arg.push(10); // Should fail
 }
 
 function fn17() {
     const s: Array<string | string[]> = [];
     const arrs = s.filter(Array.isArray);
-    arrs.push(["one"]);
+    arrs.push(["one"]); // Should OK
+    arrs.push("str");  // Should fail
 }
 
 
@@ -114,9 +116,9 @@ function fn6(arg) {
     if (Array.isArray(arg))
         arg.push(10); // Should FAIL
 }
-function fn7(arg) {
+function fn7(arg, stringAndNumber) {
     if (Array.isArray(arg))
-        arg.push(null); // Should OK
+        arg.push(stringAndNumber); // Should OK
 }
 function fn8(arg) {
     if (Array.isArray(arg))
@@ -144,25 +146,25 @@ function fn11(arg) {
     if (Array.isArray(arg))
         arg.manifest; // Should OK
 }
-function fn12(arg) {
+function fn12(arg, t) {
     if (Array.isArray(arg))
-        arg.push(null); // Should OK
+        arg.push(t); // Should OK
 }
-function fn13(arg) {
+function fn13(arg, t) {
     if (Array.isArray(arg))
-        arg.push(null); // Should fail
+        arg.push(t); // Should fail
     if (Array.isArray(arg))
-        arg.indexOf(null); // OK
+        arg.indexOf(t); // OK
 }
 function fn14(arg) {
     if (Array.isArray(arg))
         arg.push(null); // Should OK
 }
-function fn15(arg) {
+function fn15(arg, t) {
     if (Array.isArray(arg))
-        arg.push(null); // Should fail
+        arg.push(t); // Should fail
     if (Array.isArray(arg))
-        arg.indexOf(null); // Should OK
+        arg.indexOf(t); // Should OK
 }
 function fn16(arg) {
     if (Array.isArray(arg))

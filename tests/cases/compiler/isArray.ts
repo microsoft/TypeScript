@@ -30,8 +30,8 @@ function fn6(arg: string | string[]) {
     if (Array.isArray(arg)) arg.push(10); // Should FAIL
 }
 
-function fn7(arg: boolean | number[] | string[]) {
-    if (Array.isArray(arg)) arg.push(null as any as string & number); // Should OK
+function fn7(arg: boolean | number[] | string[], stringAndNumber: string & number) {
+    if (Array.isArray(arg)) arg.push(stringAndNumber); // Should OK
 }
 
 function fn8(arg: string | number[] | readonly string[]) {
@@ -55,22 +55,22 @@ function fn11(arg: string | MyReadOnlyArray<string>) {
     if (Array.isArray(arg)) arg.manifest; // Should OK
 }
 
-function fn12<T>(arg: T | T[]) {
-    if (Array.isArray(arg)) arg.push(null as any as T); // Should OK
+function fn12<T>(arg: T | T[], t: T) {
+    if (Array.isArray(arg)) arg.push(t); // Should OK
 }
 
-function fn13<T>(arg: T | ReadonlyArray<T>) {
-    if (Array.isArray(arg)) arg.push(null as any as T); // Should fail
-    if (Array.isArray(arg)) arg.indexOf(null as any as T); // OK
+function fn13<T>(arg: T | ReadonlyArray<T>, t: T) {
+    if (Array.isArray(arg)) arg.push(t); // Should fail
+    if (Array.isArray(arg)) arg.indexOf(t); // OK
 }
 
 function fn14<T>(arg: T | [T]) {
     if (Array.isArray(arg)) arg.push(null as any as T); // Should OK
 }
 
-function fn15<T>(arg: T | readonly [T]) {
-    if (Array.isArray(arg)) arg.push(null as any as T); // Should fail
-    if (Array.isArray(arg)) arg.indexOf(null as any as T); // Should OK
+function fn15<T>(arg: T | readonly [T], t: T) {
+    if (Array.isArray(arg)) arg.push(t); // Should fail
+    if (Array.isArray(arg)) arg.indexOf(t); // Should OK
 }
 
 function fn16<T extends string | string[]>(arg: T) {

@@ -121,11 +121,12 @@ function fn6(arg: string | string[]) {
 >push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
 }
 
-function fn7(arg: boolean | number[] | string[]) {
+function fn7(arg: boolean | number[] | string[], stringAndNumber: string & number) {
 >fn7 : Symbol(fn7, Decl(isArray.ts, 28, 1))
 >arg : Symbol(arg, Decl(isArray.ts, 30, 13))
+>stringAndNumber : Symbol(stringAndNumber, Decl(isArray.ts, 30, 48))
 
-    if (Array.isArray(arg)) arg.push(null as any as string & number); // Should OK
+    if (Array.isArray(arg)) arg.push(stringAndNumber); // Should OK
 >Array.isArray : Symbol(ArrayConstructor.isArray, Decl(lib.es5.d.ts, --, --))
 >Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >isArray : Symbol(ArrayConstructor.isArray, Decl(lib.es5.d.ts, --, --))
@@ -133,6 +134,7 @@ function fn7(arg: boolean | number[] | string[]) {
 >arg.push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >arg : Symbol(arg, Decl(isArray.ts, 30, 13))
 >push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>stringAndNumber : Symbol(stringAndNumber, Decl(isArray.ts, 30, 48))
 }
 
 function fn8(arg: string | number[] | readonly string[]) {
@@ -232,14 +234,16 @@ function fn11(arg: string | MyReadOnlyArray<string>) {
 >manifest : Symbol(MyReadOnlyArray.manifest, Decl(isArray.ts, 1, 55))
 }
 
-function fn12<T>(arg: T | T[]) {
+function fn12<T>(arg: T | T[], t: T) {
 >fn12 : Symbol(fn12, Decl(isArray.ts, 53, 1))
 >T : Symbol(T, Decl(isArray.ts, 55, 14))
 >arg : Symbol(arg, Decl(isArray.ts, 55, 17))
 >T : Symbol(T, Decl(isArray.ts, 55, 14))
 >T : Symbol(T, Decl(isArray.ts, 55, 14))
+>t : Symbol(t, Decl(isArray.ts, 55, 30))
+>T : Symbol(T, Decl(isArray.ts, 55, 14))
 
-    if (Array.isArray(arg)) arg.push(null as any as T); // Should OK
+    if (Array.isArray(arg)) arg.push(t); // Should OK
 >Array.isArray : Symbol(ArrayConstructor.isArray, Decl(lib.es5.d.ts, --, --))
 >Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >isArray : Symbol(ArrayConstructor.isArray, Decl(lib.es5.d.ts, --, --))
@@ -247,26 +251,28 @@ function fn12<T>(arg: T | T[]) {
 >arg.push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
 >arg : Symbol(arg, Decl(isArray.ts, 55, 17))
 >push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
->T : Symbol(T, Decl(isArray.ts, 55, 14))
+>t : Symbol(t, Decl(isArray.ts, 55, 30))
 }
 
-function fn13<T>(arg: T | ReadonlyArray<T>) {
+function fn13<T>(arg: T | ReadonlyArray<T>, t: T) {
 >fn13 : Symbol(fn13, Decl(isArray.ts, 57, 1))
 >T : Symbol(T, Decl(isArray.ts, 59, 14))
 >arg : Symbol(arg, Decl(isArray.ts, 59, 17))
 >T : Symbol(T, Decl(isArray.ts, 59, 14))
 >ReadonlyArray : Symbol(ReadonlyArray, Decl(lib.es5.d.ts, --, --))
 >T : Symbol(T, Decl(isArray.ts, 59, 14))
+>t : Symbol(t, Decl(isArray.ts, 59, 43))
+>T : Symbol(T, Decl(isArray.ts, 59, 14))
 
-    if (Array.isArray(arg)) arg.push(null as any as T); // Should fail
+    if (Array.isArray(arg)) arg.push(t); // Should fail
 >Array.isArray : Symbol(ArrayConstructor.isArray, Decl(lib.es5.d.ts, --, --))
 >Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >isArray : Symbol(ArrayConstructor.isArray, Decl(lib.es5.d.ts, --, --))
 >arg : Symbol(arg, Decl(isArray.ts, 59, 17))
 >arg : Symbol(arg, Decl(isArray.ts, 59, 17))
->T : Symbol(T, Decl(isArray.ts, 59, 14))
+>t : Symbol(t, Decl(isArray.ts, 59, 43))
 
-    if (Array.isArray(arg)) arg.indexOf(null as any as T); // OK
+    if (Array.isArray(arg)) arg.indexOf(t); // OK
 >Array.isArray : Symbol(ArrayConstructor.isArray, Decl(lib.es5.d.ts, --, --))
 >Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >isArray : Symbol(ArrayConstructor.isArray, Decl(lib.es5.d.ts, --, --))
@@ -274,7 +280,7 @@ function fn13<T>(arg: T | ReadonlyArray<T>) {
 >arg.indexOf : Symbol(ReadonlyArray.indexOf, Decl(lib.es5.d.ts, --, --))
 >arg : Symbol(arg, Decl(isArray.ts, 59, 17))
 >indexOf : Symbol(ReadonlyArray.indexOf, Decl(lib.es5.d.ts, --, --))
->T : Symbol(T, Decl(isArray.ts, 59, 14))
+>t : Symbol(t, Decl(isArray.ts, 59, 43))
 }
 
 function fn14<T>(arg: T | [T]) {
@@ -295,22 +301,24 @@ function fn14<T>(arg: T | [T]) {
 >T : Symbol(T, Decl(isArray.ts, 64, 14))
 }
 
-function fn15<T>(arg: T | readonly [T]) {
+function fn15<T>(arg: T | readonly [T], t: T) {
 >fn15 : Symbol(fn15, Decl(isArray.ts, 66, 1))
 >T : Symbol(T, Decl(isArray.ts, 68, 14))
 >arg : Symbol(arg, Decl(isArray.ts, 68, 17))
 >T : Symbol(T, Decl(isArray.ts, 68, 14))
 >T : Symbol(T, Decl(isArray.ts, 68, 14))
+>t : Symbol(t, Decl(isArray.ts, 68, 39))
+>T : Symbol(T, Decl(isArray.ts, 68, 14))
 
-    if (Array.isArray(arg)) arg.push(null as any as T); // Should fail
+    if (Array.isArray(arg)) arg.push(t); // Should fail
 >Array.isArray : Symbol(ArrayConstructor.isArray, Decl(lib.es5.d.ts, --, --))
 >Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >isArray : Symbol(ArrayConstructor.isArray, Decl(lib.es5.d.ts, --, --))
 >arg : Symbol(arg, Decl(isArray.ts, 68, 17))
 >arg : Symbol(arg, Decl(isArray.ts, 68, 17))
->T : Symbol(T, Decl(isArray.ts, 68, 14))
+>t : Symbol(t, Decl(isArray.ts, 68, 39))
 
-    if (Array.isArray(arg)) arg.indexOf(null as any as T); // Should OK
+    if (Array.isArray(arg)) arg.indexOf(t); // Should OK
 >Array.isArray : Symbol(ArrayConstructor.isArray, Decl(lib.es5.d.ts, --, --))
 >Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >isArray : Symbol(ArrayConstructor.isArray, Decl(lib.es5.d.ts, --, --))
@@ -318,7 +326,7 @@ function fn15<T>(arg: T | readonly [T]) {
 >arg.indexOf : Symbol(ReadonlyArray.indexOf, Decl(lib.es5.d.ts, --, --))
 >arg : Symbol(arg, Decl(isArray.ts, 68, 17))
 >indexOf : Symbol(ReadonlyArray.indexOf, Decl(lib.es5.d.ts, --, --))
->T : Symbol(T, Decl(isArray.ts, 68, 14))
+>t : Symbol(t, Decl(isArray.ts, 68, 39))
 }
 
 function fn16<T extends string | string[]>(arg: T) {

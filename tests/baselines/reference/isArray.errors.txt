@@ -10,9 +10,11 @@ tests/cases/compiler/isArray.ts(50,33): error TS2339: Property 'push' does not e
 tests/cases/compiler/isArray.ts(51,41): error TS2345: Argument of type '10' is not assignable to parameter of type 'string'.
 tests/cases/compiler/isArray.ts(61,33): error TS2339: Property 'push' does not exist on type 'readonly T[]'.
 tests/cases/compiler/isArray.ts(70,33): error TS2339: Property 'push' does not exist on type 'readonly [T]'.
+tests/cases/compiler/isArray.ts(76,38): error TS2345: Argument of type '10' is not assignable to parameter of type 'string'.
+tests/cases/compiler/isArray.ts(83,15): error TS2345: Argument of type '"str"' is not assignable to parameter of type 'string[]'.
 
 
-==== tests/cases/compiler/isArray.ts (10 errors) ====
+==== tests/cases/compiler/isArray.ts (12 errors) ====
     interface MyArray<T> extends Array<T> { manifest: any; }
     interface MyReadOnlyArray<T> extends ReadonlyArray<T> { manifest: any; }
     
@@ -49,8 +51,8 @@ tests/cases/compiler/isArray.ts(70,33): error TS2339: Property 'push' does not e
 !!! error TS2345: Argument of type '10' is not assignable to parameter of type 'string'.
     }
     
-    function fn7(arg: boolean | number[] | string[]) {
-        if (Array.isArray(arg)) arg.push(null as any as string & number); // Should OK
+    function fn7(arg: boolean | number[] | string[], stringAndNumber: string & number) {
+        if (Array.isArray(arg)) arg.push(stringAndNumber); // Should OK
     }
     
     function fn8(arg: string | number[] | readonly string[]) {
@@ -86,26 +88,26 @@ tests/cases/compiler/isArray.ts(70,33): error TS2339: Property 'push' does not e
         if (Array.isArray(arg)) arg.manifest; // Should OK
     }
     
-    function fn12<T>(arg: T | T[]) {
-        if (Array.isArray(arg)) arg.push(null as any as T); // Should OK
+    function fn12<T>(arg: T | T[], t: T) {
+        if (Array.isArray(arg)) arg.push(t); // Should OK
     }
     
-    function fn13<T>(arg: T | ReadonlyArray<T>) {
-        if (Array.isArray(arg)) arg.push(null as any as T); // Should fail
+    function fn13<T>(arg: T | ReadonlyArray<T>, t: T) {
+        if (Array.isArray(arg)) arg.push(t); // Should fail
                                     ~~~~
 !!! error TS2339: Property 'push' does not exist on type 'readonly T[]'.
-        if (Array.isArray(arg)) arg.indexOf(null as any as T); // OK
+        if (Array.isArray(arg)) arg.indexOf(t); // OK
     }
     
     function fn14<T>(arg: T | [T]) {
         if (Array.isArray(arg)) arg.push(null as any as T); // Should OK
     }
     
-    function fn15<T>(arg: T | readonly [T]) {
-        if (Array.isArray(arg)) arg.push(null as any as T); // Should fail
+    function fn15<T>(arg: T | readonly [T], t: T) {
+        if (Array.isArray(arg)) arg.push(t); // Should fail
                                     ~~~~
 !!! error TS2339: Property 'push' does not exist on type 'readonly [T]'.
-        if (Array.isArray(arg)) arg.indexOf(null as any as T); // Should OK
+        if (Array.isArray(arg)) arg.indexOf(t); // Should OK
     }
     
     function fn16<T extends string | string[]>(arg: T) {
