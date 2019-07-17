@@ -34,6 +34,7 @@ tests/webTestServer.js.map
 tests/webhost/*.d.ts
 tests/webhost/webtsc.js
 tests/cases/**/*.js
+!tests/cases/docker/*.js/
 tests/cases/**/*.js.map
 *.config
 scripts/debug.bat
@@ -44,6 +45,7 @@ scripts/ior.js
 scripts/authors.js
 scripts/configurePrerelease.js
 scripts/open-user-pr.js
+scripts/open-cherry-pick-pr.js
 scripts/processDiagnosticMessages.d.ts
 scripts/processDiagnosticMessages.js
 scripts/produceLKG.js

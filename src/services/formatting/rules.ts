@@ -98,7 +98,7 @@ namespace ts.formatting {
             rule("SpaceAfterConditionalClosingParen", SyntaxKind.CloseParenToken, SyntaxKind.OpenBracketToken, [isControlDeclContext], RuleAction.Space),
 
             rule("NoSpaceBetweenFunctionKeywordAndStar", SyntaxKind.FunctionKeyword, SyntaxKind.AsteriskToken, [isFunctionDeclarationOrFunctionExpressionContext], RuleAction.Delete),
-            rule("SpaceAfterStarInGeneratorDeclaration", SyntaxKind.AsteriskToken, [SyntaxKind.Identifier, SyntaxKind.OpenParenToken], [isFunctionDeclarationOrFunctionExpressionContext], RuleAction.Space),
+            rule("SpaceAfterStarInGeneratorDeclaration", SyntaxKind.AsteriskToken, SyntaxKind.Identifier, [isFunctionDeclarationOrFunctionExpressionContext], RuleAction.Space),
 
             rule("SpaceAfterFunctionInFuncDecl", SyntaxKind.FunctionKeyword, anyToken, [isFunctionDeclContext], RuleAction.Space),
             // Insert new line after { and before } in multi-line contexts.
@@ -229,6 +229,7 @@ namespace ts.formatting {
 
             rule("NoSpaceBeforeNonNullAssertionOperator", anyToken, SyntaxKind.ExclamationToken, [isNonJsxSameLineTokenContext, isNonNullAssertionContext], RuleAction.Delete),
             rule("NoSpaceAfterNewKeywordOnConstructorSignature", SyntaxKind.NewKeyword, SyntaxKind.OpenParenToken, [isNonJsxSameLineTokenContext, isConstructorSignatureContext], RuleAction.Delete),
+            rule("SpaceLessThanAndNonJSXTypeAnnotation", SyntaxKind.LessThanToken, SyntaxKind.LessThanToken, [isNonJsxSameLineTokenContext], RuleAction.Space),
         ];
 
         // These rules are applied after high priority
@@ -241,8 +242,8 @@ namespace ts.formatting {
             rule("NoSpaceAfterComma", SyntaxKind.CommaToken, anyToken, [isOptionDisabledOrUndefined("insertSpaceAfterCommaDelimiter"), isNonJsxSameLineTokenContext, isNonJsxElementOrFragmentContext], RuleAction.Delete),
 
             // Insert space after function keyword for anonymous functions
-            rule("SpaceAfterAnonymousFunctionKeyword", SyntaxKind.FunctionKeyword, SyntaxKind.OpenParenToken, [isOptionEnabled("insertSpaceAfterFunctionKeywordForAnonymousFunctions"), isFunctionDeclContext], RuleAction.Space),
-            rule("NoSpaceAfterAnonymousFunctionKeyword", SyntaxKind.FunctionKeyword, SyntaxKind.OpenParenToken, [isOptionDisabledOrUndefined("insertSpaceAfterFunctionKeywordForAnonymousFunctions"), isFunctionDeclContext], RuleAction.Delete),
+            rule("SpaceAfterAnonymousFunctionKeyword", [SyntaxKind.FunctionKeyword, SyntaxKind.AsteriskToken], SyntaxKind.OpenParenToken, [isOptionEnabled("insertSpaceAfterFunctionKeywordForAnonymousFunctions"), isFunctionDeclContext], RuleAction.Space),
+            rule("NoSpaceAfterAnonymousFunctionKeyword", [SyntaxKind.FunctionKeyword, SyntaxKind.AsteriskToken], SyntaxKind.OpenParenToken, [isOptionDisabledOrUndefined("insertSpaceAfterFunctionKeywordForAnonymousFunctions"), isFunctionDeclContext], RuleAction.Delete),
 
             // Insert space after keywords in control flow statements
             rule("SpaceAfterKeywordInControl", keywords, SyntaxKind.OpenParenToken, [isOptionEnabled("insertSpaceAfterKeywordsInControlFlowStatements"), isControlDeclContext], RuleAction.Space),
@@ -349,6 +350,18 @@ namespace ts.formatting {
         ];
     }
 
+    /**
+     * A rule takes a two tokens (left/right) and a particular context
+     * for which you're meant to look at them. You then declare what should the
+     * whitespace annotation be between these tokens via the action param.
+     *
+     * @param debugName Name to print
+     * @param left The left side of the comparison
+     * @param right The right side of the comparison
+     * @param context A set of filters to narrow down the space in which this formatter rule applies
+     * @param action a declaration of the expected whitespace
+     * @param flags whether the rule deletes a line or not, defaults to no-op
+     */
     function rule(
         debugName: string,
         left: SyntaxKind | ReadonlyArray<SyntaxKind> | TokenRange,
@@ -442,7 +455,7 @@ namespace ts.formatting {
             case SyntaxKind.ForInStatement:
             // "in" keyword in [P in keyof T]: T[P]
             case SyntaxKind.TypeParameter:
-                return context.currentTokenSpan.kind === SyntaxKind.InKeyword || context.nextTokenSpan.kind === SyntaxKind.InKeyword;
+                return context.currentTokenSpan.kind === SyntaxKind.InKeyword || context.nextTokenSpan.kind === SyntaxKind.InKeyword || context.currentTokenSpan.kind === SyntaxKind.EqualsToken || context.nextTokenSpan.kind === SyntaxKind.EqualsToken;
             // Technically, "of" is not a binary operator, but format it the same way as "in"
             case SyntaxKind.ForOfStatement:
                 return context.currentTokenSpan.kind === SyntaxKind.OfKeyword || context.nextTokenSpan.kind === SyntaxKind.OfKeyword;

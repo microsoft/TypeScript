@@ -5,7 +5,7 @@
 // @allowJs: true
 
 // @Filename: /a.js
-/////** @typedef {number} [|{| "isWriteAccess": true, "isDefinition": true |}T|] */
+/////** [|@typedef {number} [|{| "isWriteAccess": true, "isDefinition": true, "contextRangeIndex": 0 |}T|]|] */
 ////
 /////**
 //// * @return {[|T|]}
@@ -17,4 +17,4 @@
 //// */
 ////function f2(obj) { return 0; }
 
-verify.singleReferenceGroup("type T = number");
+verify.singleReferenceGroup("type T = number", "T");

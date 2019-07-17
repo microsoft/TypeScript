@@ -1,7 +1,7 @@
-tests/cases/conformance/parser/ecmascript5/Expressions/parserUnaryExpression1.ts(1,3): error TS2357: The operand of an increment or decrement operator must be a variable or a property access.
+tests/cases/conformance/parser/ecmascript5/Expressions/parserUnaryExpression1.ts(1,3): error TS2356: An arithmetic operand must be of type 'any', 'number', 'bigint' or an enum type.
 
 
 ==== tests/cases/conformance/parser/ecmascript5/Expressions/parserUnaryExpression1.ts (1 errors) ====
     ++this;
       ~~~~
-!!! error TS2357: The operand of an increment or decrement operator must be a variable or a property access.
+!!! error TS2356: An arithmetic operand must be of type 'any', 'number', 'bigint' or an enum type.

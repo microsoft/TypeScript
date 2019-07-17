@@ -1,0 +1,157 @@
+=== tests/cases/compiler/contravariantInferenceAndTypeGuard.ts ===
+interface ListItem<TData> {
+>ListItem : Symbol(ListItem, Decl(contravariantInferenceAndTypeGuard.ts, 0, 0))
+>TData : Symbol(TData, Decl(contravariantInferenceAndTypeGuard.ts, 0, 19))
+
+    prev: ListItem<TData> | null;
+>prev : Symbol(ListItem.prev, Decl(contravariantInferenceAndTypeGuard.ts, 0, 27))
+>ListItem : Symbol(ListItem, Decl(contravariantInferenceAndTypeGuard.ts, 0, 0))
+>TData : Symbol(TData, Decl(contravariantInferenceAndTypeGuard.ts, 0, 19))
+
+    next: ListItem<TData> | null;
+>next : Symbol(ListItem.next, Decl(contravariantInferenceAndTypeGuard.ts, 1, 33))
+>ListItem : Symbol(ListItem, Decl(contravariantInferenceAndTypeGuard.ts, 0, 0))
+>TData : Symbol(TData, Decl(contravariantInferenceAndTypeGuard.ts, 0, 19))
+
+    data: TData;
+>data : Symbol(ListItem.data, Decl(contravariantInferenceAndTypeGuard.ts, 2, 33))
+>TData : Symbol(TData, Decl(contravariantInferenceAndTypeGuard.ts, 0, 19))
+}
+type IteratorFn<TData, TResult, TContext = List<TData>> = (this: TContext, item: TData, node: ListItem<TData>, list: List<TData>) => TResult;
+>IteratorFn : Symbol(IteratorFn, Decl(contravariantInferenceAndTypeGuard.ts, 4, 1))
+>TData : Symbol(TData, Decl(contravariantInferenceAndTypeGuard.ts, 5, 16))
+>TResult : Symbol(TResult, Decl(contravariantInferenceAndTypeGuard.ts, 5, 22))
+>TContext : Symbol(TContext, Decl(contravariantInferenceAndTypeGuard.ts, 5, 31))
+>List : Symbol(List, Decl(contravariantInferenceAndTypeGuard.ts, 6, 161))
+>TData : Symbol(TData, Decl(contravariantInferenceAndTypeGuard.ts, 5, 16))
+>this : Symbol(this, Decl(contravariantInferenceAndTypeGuard.ts, 5, 59))
+>TContext : Symbol(TContext, Decl(contravariantInferenceAndTypeGuard.ts, 5, 31))
+>item : Symbol(item, Decl(contravariantInferenceAndTypeGuard.ts, 5, 74))
+>TData : Symbol(TData, Decl(contravariantInferenceAndTypeGuard.ts, 5, 16))
+>node : Symbol(node, Decl(contravariantInferenceAndTypeGuard.ts, 5, 87))
+>ListItem : Symbol(ListItem, Decl(contravariantInferenceAndTypeGuard.ts, 0, 0))
+>TData : Symbol(TData, Decl(contravariantInferenceAndTypeGuard.ts, 5, 16))
+>list : Symbol(list, Decl(contravariantInferenceAndTypeGuard.ts, 5, 110))
+>List : Symbol(List, Decl(contravariantInferenceAndTypeGuard.ts, 6, 161))
+>TData : Symbol(TData, Decl(contravariantInferenceAndTypeGuard.ts, 5, 16))
+>TResult : Symbol(TResult, Decl(contravariantInferenceAndTypeGuard.ts, 5, 22))
+
+type FilterFn<TData, TResult extends TData, TContext = List<TData>> = (this: TContext, item: TData, node: ListItem<TData>, list: List<TData>) => item is TResult;
+>FilterFn : Symbol(FilterFn, Decl(contravariantInferenceAndTypeGuard.ts, 5, 141))
+>TData : Symbol(TData, Decl(contravariantInferenceAndTypeGuard.ts, 6, 14))
+>TResult : Symbol(TResult, Decl(contravariantInferenceAndTypeGuard.ts, 6, 20))
+>TData : Symbol(TData, Decl(contravariantInferenceAndTypeGuard.ts, 6, 14))
+>TContext : Symbol(TContext, Decl(contravariantInferenceAndTypeGuard.ts, 6, 43))
+>List : Symbol(List, Decl(contravariantInferenceAndTypeGuard.ts, 6, 161))
+>TData : Symbol(TData, Decl(contravariantInferenceAndTypeGuard.ts, 6, 14))
+>this : Symbol(this, Decl(contravariantInferenceAndTypeGuard.ts, 6, 71))
+>TContext : Symbol(TContext, Decl(contravariantInferenceAndTypeGuard.ts, 6, 43))
+>item : Symbol(item, Decl(contravariantInferenceAndTypeGuard.ts, 6, 86))
+>TData : Symbol(TData, Decl(contravariantInferenceAndTypeGuard.ts, 6, 14))
+>node : Symbol(node, Decl(contravariantInferenceAndTypeGuard.ts, 6, 99))
+>ListItem : Symbol(ListItem, Decl(contravariantInferenceAndTypeGuard.ts, 0, 0))
+>TData : Symbol(TData, Decl(contravariantInferenceAndTypeGuard.ts, 6, 14))
+>list : Symbol(list, Decl(contravariantInferenceAndTypeGuard.ts, 6, 122))
+>List : Symbol(List, Decl(contravariantInferenceAndTypeGuard.ts, 6, 161))
+>TData : Symbol(TData, Decl(contravariantInferenceAndTypeGuard.ts, 6, 14))
+>item : Symbol(item, Decl(contravariantInferenceAndTypeGuard.ts, 6, 86))
+>TResult : Symbol(TResult, Decl(contravariantInferenceAndTypeGuard.ts, 6, 20))
+
+declare class List<TData> {
+>List : Symbol(List, Decl(contravariantInferenceAndTypeGuard.ts, 6, 161))
+>TData : Symbol(TData, Decl(contravariantInferenceAndTypeGuard.ts, 8, 19))
+
+    filter<TContext, TResult extends TData>(fn: FilterFn<TData, TResult, TContext>, context: TContext): List<TResult>;
+>filter : Symbol(List.filter, Decl(contravariantInferenceAndTypeGuard.ts, 8, 27), Decl(contravariantInferenceAndTypeGuard.ts, 9, 118), Decl(contravariantInferenceAndTypeGuard.ts, 10, 79), Decl(contravariantInferenceAndTypeGuard.ts, 11, 95))
+>TContext : Symbol(TContext, Decl(contravariantInferenceAndTypeGuard.ts, 9, 11))
+>TResult : Symbol(TResult, Decl(contravariantInferenceAndTypeGuard.ts, 9, 20))
+>TData : Symbol(TData, Decl(contravariantInferenceAndTypeGuard.ts, 8, 19))
+>fn : Symbol(fn, Decl(contravariantInferenceAndTypeGuard.ts, 9, 44))
+>FilterFn : Symbol(FilterFn, Decl(contravariantInferenceAndTypeGuard.ts, 5, 141))
+>TData : Symbol(TData, Decl(contravariantInferenceAndTypeGuard.ts, 8, 19))
+>TResult : Symbol(TResult, Decl(contravariantInferenceAndTypeGuard.ts, 9, 20))
+>TContext : Symbol(TContext, Decl(contravariantInferenceAndTypeGuard.ts, 9, 11))
+>context : Symbol(context, Decl(contravariantInferenceAndTypeGuard.ts, 9, 83))
+>TContext : Symbol(TContext, Decl(contravariantInferenceAndTypeGuard.ts, 9, 11))
+>List : Symbol(List, Decl(contravariantInferenceAndTypeGuard.ts, 6, 161))
+>TResult : Symbol(TResult, Decl(contravariantInferenceAndTypeGuard.ts, 9, 20))
+
+    filter<TResult extends TData>(fn: FilterFn<TData, TResult>): List<TResult>;
+>filter : Symbol(List.filter, Decl(contravariantInferenceAndTypeGuard.ts, 8, 27), Decl(contravariantInferenceAndTypeGuard.ts, 9, 118), Decl(contravariantInferenceAndTypeGuard.ts, 10, 79), Decl(contravariantInferenceAndTypeGuard.ts, 11, 95))
+>TResult : Symbol(TResult, Decl(contravariantInferenceAndTypeGuard.ts, 10, 11))
+>TData : Symbol(TData, Decl(contravariantInferenceAndTypeGuard.ts, 8, 19))
+>fn : Symbol(fn, Decl(contravariantInferenceAndTypeGuard.ts, 10, 34))
+>FilterFn : Symbol(FilterFn, Decl(contravariantInferenceAndTypeGuard.ts, 5, 141))
+>TData : Symbol(TData, Decl(contravariantInferenceAndTypeGuard.ts, 8, 19))
+>TResult : Symbol(TResult, Decl(contravariantInferenceAndTypeGuard.ts, 10, 11))
+>List : Symbol(List, Decl(contravariantInferenceAndTypeGuard.ts, 6, 161))
+>TResult : Symbol(TResult, Decl(contravariantInferenceAndTypeGuard.ts, 10, 11))
+
+    filter<TContext>(fn: IteratorFn<TData, boolean, TContext>, context: TContext): List<TData>;
+>filter : Symbol(List.filter, Decl(contravariantInferenceAndTypeGuard.ts, 8, 27), Decl(contravariantInferenceAndTypeGuard.ts, 9, 118), Decl(contravariantInferenceAndTypeGuard.ts, 10, 79), Decl(contravariantInferenceAndTypeGuard.ts, 11, 95))
+>TContext : Symbol(TContext, Decl(contravariantInferenceAndTypeGuard.ts, 11, 11))
+>fn : Symbol(fn, Decl(contravariantInferenceAndTypeGuard.ts, 11, 21))
+>IteratorFn : Symbol(IteratorFn, Decl(contravariantInferenceAndTypeGuard.ts, 4, 1))
+>TData : Symbol(TData, Decl(contravariantInferenceAndTypeGuard.ts, 8, 19))
+>TContext : Symbol(TContext, Decl(contravariantInferenceAndTypeGuard.ts, 11, 11))
+>context : Symbol(context, Decl(contravariantInferenceAndTypeGuard.ts, 11, 62))
+>TContext : Symbol(TContext, Decl(contravariantInferenceAndTypeGuard.ts, 11, 11))
+>List : Symbol(List, Decl(contravariantInferenceAndTypeGuard.ts, 6, 161))
+>TData : Symbol(TData, Decl(contravariantInferenceAndTypeGuard.ts, 8, 19))
+
+    filter(fn: IteratorFn<TData, boolean>): List<TData>;
+>filter : Symbol(List.filter, Decl(contravariantInferenceAndTypeGuard.ts, 8, 27), Decl(contravariantInferenceAndTypeGuard.ts, 9, 118), Decl(contravariantInferenceAndTypeGuard.ts, 10, 79), Decl(contravariantInferenceAndTypeGuard.ts, 11, 95))
+>fn : Symbol(fn, Decl(contravariantInferenceAndTypeGuard.ts, 12, 11))
+>IteratorFn : Symbol(IteratorFn, Decl(contravariantInferenceAndTypeGuard.ts, 4, 1))
+>TData : Symbol(TData, Decl(contravariantInferenceAndTypeGuard.ts, 8, 19))
+>List : Symbol(List, Decl(contravariantInferenceAndTypeGuard.ts, 6, 161))
+>TData : Symbol(TData, Decl(contravariantInferenceAndTypeGuard.ts, 8, 19))
+}
+interface Test {
+>Test : Symbol(Test, Decl(contravariantInferenceAndTypeGuard.ts, 13, 1))
+
+    a: string;
+>a : Symbol(Test.a, Decl(contravariantInferenceAndTypeGuard.ts, 14, 16))
+}
+const list2 = new List<Test | null>();
+>list2 : Symbol(list2, Decl(contravariantInferenceAndTypeGuard.ts, 17, 5))
+>List : Symbol(List, Decl(contravariantInferenceAndTypeGuard.ts, 6, 161))
+>Test : Symbol(Test, Decl(contravariantInferenceAndTypeGuard.ts, 13, 1))
+
+const filter1 = list2.filter(function(item, node, list): item is Test {
+>filter1 : Symbol(filter1, Decl(contravariantInferenceAndTypeGuard.ts, 18, 5))
+>list2.filter : Symbol(List.filter, Decl(contravariantInferenceAndTypeGuard.ts, 8, 27), Decl(contravariantInferenceAndTypeGuard.ts, 9, 118), Decl(contravariantInferenceAndTypeGuard.ts, 10, 79), Decl(contravariantInferenceAndTypeGuard.ts, 11, 95))
+>list2 : Symbol(list2, Decl(contravariantInferenceAndTypeGuard.ts, 17, 5))
+>filter : Symbol(List.filter, Decl(contravariantInferenceAndTypeGuard.ts, 8, 27), Decl(contravariantInferenceAndTypeGuard.ts, 9, 118), Decl(contravariantInferenceAndTypeGuard.ts, 10, 79), Decl(contravariantInferenceAndTypeGuard.ts, 11, 95))
+>item : Symbol(item, Decl(contravariantInferenceAndTypeGuard.ts, 18, 38))
+>node : Symbol(node, Decl(contravariantInferenceAndTypeGuard.ts, 18, 43))
+>list : Symbol(list, Decl(contravariantInferenceAndTypeGuard.ts, 18, 49))
+>item : Symbol(item, Decl(contravariantInferenceAndTypeGuard.ts, 18, 38))
+>Test : Symbol(Test, Decl(contravariantInferenceAndTypeGuard.ts, 13, 1))
+
+    this.b; // $ExpectType string
+>this.b : Symbol(b, Decl(contravariantInferenceAndTypeGuard.ts, 24, 4))
+>this : Symbol(this, Decl(contravariantInferenceAndTypeGuard.ts, 6, 71))
+>b : Symbol(b, Decl(contravariantInferenceAndTypeGuard.ts, 24, 4))
+
+    item; // $ExpectType Test | null
+>item : Symbol(item, Decl(contravariantInferenceAndTypeGuard.ts, 18, 38))
+
+    node; // $ExpectType ListItem<Test | null>
+>node : Symbol(node, Decl(contravariantInferenceAndTypeGuard.ts, 18, 43))
+
+    list; // $ExpectType List<Test | null>
+>list : Symbol(list, Decl(contravariantInferenceAndTypeGuard.ts, 18, 49))
+
+    return !!item;
+>item : Symbol(item, Decl(contravariantInferenceAndTypeGuard.ts, 18, 38))
+
+}, {b: 'c'});
+>b : Symbol(b, Decl(contravariantInferenceAndTypeGuard.ts, 24, 4))
+
+const x: List<Test> = filter1; // $ExpectType List<Test>
+>x : Symbol(x, Decl(contravariantInferenceAndTypeGuard.ts, 25, 5))
+>List : Symbol(List, Decl(contravariantInferenceAndTypeGuard.ts, 6, 161))
+>Test : Symbol(Test, Decl(contravariantInferenceAndTypeGuard.ts, 13, 1))
+>filter1 : Symbol(filter1, Decl(contravariantInferenceAndTypeGuard.ts, 18, 5))
+

@@ -1,9 +1,7 @@
-tests/cases/conformance/types/nonPrimitive/nonPrimitiveUnionIntersection.ts(1,5): error TS2322: Type '""' is not assignable to type 'object & string'.
-  Type '""' is not assignable to type 'object'.
+tests/cases/conformance/types/nonPrimitive/nonPrimitiveUnionIntersection.ts(1,5): error TS2322: Type '""' is not assignable to type 'never'.
 tests/cases/conformance/types/nonPrimitive/nonPrimitiveUnionIntersection.ts(3,5): error TS2322: Type '123' is not assignable to type 'object & {}'.
   Type '123' is not assignable to type 'object'.
-tests/cases/conformance/types/nonPrimitive/nonPrimitiveUnionIntersection.ts(4,1): error TS2322: Type 'string' is not assignable to type 'object & string'.
-  Type 'string' is not assignable to type 'object'.
+tests/cases/conformance/types/nonPrimitive/nonPrimitiveUnionIntersection.ts(4,1): error TS2322: Type 'string' is not assignable to type 'never'.
 tests/cases/conformance/types/nonPrimitive/nonPrimitiveUnionIntersection.ts(8,38): error TS2322: Type '{ bar: string; }' is not assignable to type 'object & { err: string; }'.
   Object literal may only specify known properties, and 'bar' does not exist in type 'object & { err: string; }'.
 
@@ -11,8 +9,7 @@ tests/cases/conformance/types/nonPrimitive/nonPrimitiveUnionIntersection.ts(8,38
 ==== tests/cases/conformance/types/nonPrimitive/nonPrimitiveUnionIntersection.ts (4 errors) ====
     var a: object & string = ""; // error
         ~
-!!! error TS2322: Type '""' is not assignable to type 'object & string'.
-!!! error TS2322:   Type '""' is not assignable to type 'object'.
+!!! error TS2322: Type '""' is not assignable to type 'never'.
     var b: object | string = ""; // ok
     var c: object & {} = 123; // error
         ~
@@ -20,8 +17,7 @@ tests/cases/conformance/types/nonPrimitive/nonPrimitiveUnionIntersection.ts(8,38
 !!! error TS2322:   Type '123' is not assignable to type 'object'.
     a = b; // error
     ~
-!!! error TS2322: Type 'string' is not assignable to type 'object & string'.
-!!! error TS2322:   Type 'string' is not assignable to type 'object'.
+!!! error TS2322: Type 'string' is not assignable to type 'never'.
     b = a; // ok
     
     const foo: object & {} = {bar: 'bar'}; // ok

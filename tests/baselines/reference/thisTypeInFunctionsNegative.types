@@ -143,7 +143,7 @@ let impl: I = {
 >explicitVoid2 : () => any
 >() => this.a : () => any
 >this.a : any
->this : any
+>this : typeof globalThis
 >a : any
 
     explicitStructural: () => 12,
@@ -751,7 +751,7 @@ function initializer(this: C = new C()): number { return this.n; }
 > : any
 >number : any
 >this.n : any
->this : any
+>this : typeof globalThis
 >n : any
 
 // can't name parameters 'this' in a lambda.
@@ -766,7 +766,7 @@ c.explicitProperty = (this, m) => m + this.n;
 >m + this.n : any
 >m : number
 >this.n : any
->this : any
+>this : typeof globalThis
 >n : any
 
 const f2 = <T>(this: {n: number}, m: number) => m + this.n;
@@ -778,7 +778,7 @@ const f2 = <T>(this: {n: number}, m: number) => m + this.n;
 >m + this.n : any
 >m : number
 >this.n : any
->this : any
+>this : typeof globalThis
 >n : any
 
 const f3 = async (this: {n: number}, m: number) => m + this.n;
@@ -790,7 +790,7 @@ const f3 = async (this: {n: number}, m: number) => m + this.n;
 >m + this.n : any
 >m : number
 >this.n : any
->this : any
+>this : typeof globalThis
 >n : any
 
 const f4 = async <T>(this: {n: number}, m: number) => m + this.n;
@@ -802,6 +802,6 @@ const f4 = async <T>(this: {n: number}, m: number) => m + this.n;
 >m + this.n : any
 >m : number
 >this.n : any
->this : any
+>this : typeof globalThis
 >n : any
 

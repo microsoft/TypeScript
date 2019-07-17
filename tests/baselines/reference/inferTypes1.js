@@ -31,6 +31,7 @@ type T15 = ReturnType<any>;  // any
 type T16 = ReturnType<never>;  // never
 type T17 = ReturnType<string>;  // Error
 type T18 = ReturnType<Function>;  // Error
+type T19<T extends any[]> = ReturnType<(x: string, ...args: T) => T[]>;  // T[]
 
 type U10 = InstanceType<typeof C>;  // C
 type U11 = InstanceType<any>;  // any
@@ -68,7 +69,7 @@ type X3<T> = T extends { a: (x: infer U) => void, b: (x: infer U) => void } ? U 
 type T50 = X3<{}>;  // never
 type T51 = X3<{ a: (x: string) => void }>;  // never
 type T52 = X3<{ a: (x: string) => void, b: (x: string) => void }>;  // string
-type T53 = X3<{ a: (x: number) => void, b: (x: string) => void }>;  // string & number
+type T53 = X3<{ a: (x: number) => void, b: (x: string) => void }>;  // never
 type T54 = X3<{ a: (x: number) => void, b: () => void }>;  // number
 
 type T60 = infer U;  // Error
@@ -167,6 +168,16 @@ type EnsureIsString<T> = T extends MustBeString<infer U> ? U : never;
 type Test1 = EnsureIsString<"hello">;  // "hello"
 type Test2 = EnsureIsString<42>;  // never
 
+// Repros from #26856
+
+function invoker <K extends string | number | symbol, A extends any[]> (key: K, ...args: A) {
+    return <T extends Record<K, (...args: A) => any>> (obj: T): ReturnType<T[K]> => obj[key](...args)
+}
+
+const result = invoker('test', true)({ test: (a: boolean) => 123 })
+
+type Foo2<A extends any[]> = ReturnType<(...args: A) => string>;
+
 
 //// [inferTypes1.js]
 "use strict";
@@ -182,3 +193,12 @@ var C = /** @class */ (function () {
 }());
 var z1 = ex.customClass;
 var z2 = ex.obj.nested.attr;
+// Repros from #26856
+function invoker(key) {
+    var args = [];
+    for (var _i = 1; _i < arguments.length; _i++) {
+        args[_i - 1] = arguments[_i];
+    }
+    return function (obj) { return obj[key].apply(obj, args); };
+}
+var result = invoker('test', true)({ test: function (a) { return 123; } });

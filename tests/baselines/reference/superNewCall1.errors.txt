@@ -1,5 +1,6 @@
 tests/cases/compiler/superNewCall1.ts(8,5): error TS2377: Constructors for derived classes must contain a 'super' call.
-tests/cases/compiler/superNewCall1.ts(9,9): error TS2351: Cannot use 'new' with an expression whose type lacks a call or construct signature.
+tests/cases/compiler/superNewCall1.ts(9,13): error TS2351: This expression is not constructable.
+  Type 'A<number, string>' has no construct signatures.
 tests/cases/compiler/superNewCall1.ts(9,13): error TS17011: 'super' must be called before accessing a property of 'super' in the constructor of a derived class.
 
 
@@ -15,8 +16,9 @@ tests/cases/compiler/superNewCall1.ts(9,13): error TS17011: 'super' must be call
         ~~~~~~~~~~~~~~~
             new super(value => String(value));
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2351: Cannot use 'new' with an expression whose type lacks a call or construct signature.
+                ~~~~~
+!!! error TS2351: This expression is not constructable.
+!!! error TS2351:   Type 'A<number, string>' has no construct signatures.
                 ~~~~~
 !!! error TS17011: 'super' must be called before accessing a property of 'super' in the constructor of a derived class.
         }

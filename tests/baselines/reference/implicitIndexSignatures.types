@@ -196,3 +196,62 @@ function f4() {
 >o2 : { 0: string; 1: string; count: number; }
 }
 
+function f5() {
+>f5 : () => void
+
+    enum E1 { A, B }
+>E1 : E1
+>A : E1.A
+>B : E1.B
+
+    enum E2 { A = "A", B = "B" }
+>E2 : E2
+>A : E2.A
+>"A" : "A"
+>B : E2.B
+>"B" : "B"
+
+    enum E3 { A = 0, B = "B" }
+>E3 : E3
+>A : E3.A
+>0 : 0
+>B : E3.B
+>"B" : "B"
+
+    const v1 = getStringIndexValue(E1);
+>v1 : string | E1
+>getStringIndexValue(E1) : string | E1
+>getStringIndexValue : <T>(map: { [x: string]: T; }) => T
+>E1 : typeof E1
+
+    const v2 = getStringIndexValue(E2);
+>v2 : E2
+>getStringIndexValue(E2) : E2
+>getStringIndexValue : <T>(map: { [x: string]: T; }) => T
+>E2 : typeof E2
+
+    const v3 = getStringIndexValue(E3);
+>v3 : string | E3.A
+>getStringIndexValue(E3) : string | E3.A
+>getStringIndexValue : <T>(map: { [x: string]: T; }) => T
+>E3 : typeof E3
+
+    const v4 = getNumberIndexValue(E1);
+>v4 : string
+>getNumberIndexValue(E1) : string
+>getNumberIndexValue : <T>(map: { [x: number]: T; }) => T
+>E1 : typeof E1
+
+    const v5 = getNumberIndexValue(E2);
+>v5 : unknown
+>getNumberIndexValue(E2) : unknown
+>getNumberIndexValue : <T>(map: { [x: number]: T; }) => T
+>E2 : typeof E2
+
+    const v6 = getNumberIndexValue(E3);
+>v6 : string
+>getNumberIndexValue(E3) : string
+>getNumberIndexValue : <T>(map: { [x: number]: T; }) => T
+>E3 : typeof E3
+}
+

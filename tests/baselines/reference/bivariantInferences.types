@@ -3,9 +3,9 @@
 
 interface Array<T> {
     equalsShallow<T>(this: ReadonlyArray<T>, other: ReadonlyArray<T>): boolean;
->equalsShallow : <T>(this: ReadonlyArray<T>, other: ReadonlyArray<T>) => boolean
->this : ReadonlyArray<T>
->other : ReadonlyArray<T>
+>equalsShallow : <T>(this: readonly T[], other: readonly T[]) => boolean
+>this : readonly T[]
+>other : readonly T[]
 }
 
 declare const a: (string | number)[] | null[] | undefined[] | {}[];
@@ -19,8 +19,8 @@ declare const b: (string | number)[] | null[] | undefined[] | {}[];
 let x = a.equalsShallow(b);
 >x : boolean
 >a.equalsShallow(b) : boolean
->a.equalsShallow : (<T>(this: ReadonlyArray<T>, other: ReadonlyArray<T>) => boolean) | (<T>(this: ReadonlyArray<T>, other: ReadonlyArray<T>) => boolean) | (<T>(this: ReadonlyArray<T>, other: ReadonlyArray<T>) => boolean) | (<T>(this: ReadonlyArray<T>, other: ReadonlyArray<T>) => boolean)
+>a.equalsShallow : (<T>(this: readonly T[], other: readonly T[]) => boolean) | (<T>(this: readonly T[], other: readonly T[]) => boolean) | (<T>(this: readonly T[], other: readonly T[]) => boolean) | (<T>(this: readonly T[], other: readonly T[]) => boolean)
 >a : (string | number)[] | null[] | undefined[] | {}[]
->equalsShallow : (<T>(this: ReadonlyArray<T>, other: ReadonlyArray<T>) => boolean) | (<T>(this: ReadonlyArray<T>, other: ReadonlyArray<T>) => boolean) | (<T>(this: ReadonlyArray<T>, other: ReadonlyArray<T>) => boolean) | (<T>(this: ReadonlyArray<T>, other: ReadonlyArray<T>) => boolean)
+>equalsShallow : (<T>(this: readonly T[], other: readonly T[]) => boolean) | (<T>(this: readonly T[], other: readonly T[]) => boolean) | (<T>(this: readonly T[], other: readonly T[]) => boolean) | (<T>(this: readonly T[], other: readonly T[]) => boolean)
 >b : (string | number)[] | null[] | undefined[] | {}[]
 

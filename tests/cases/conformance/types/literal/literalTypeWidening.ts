@@ -127,3 +127,17 @@ export type LangCode = keyof typeof langCodeSet
 export const langCodes = keys(langCodeSet)
 
 const arr: Obj[] = langCodes.map(code => ({ code }))
+
+// Repro from #29081
+
+function test<T extends { a: string, b: string }>(obj: T): T {
+    let { a, ...rest } = obj;
+    return { a: 'hello', ...rest } as T;
+}
+
+// Repro from #32169
+
+declare function f<T>(x: T): NonNullable<T>;
+enum E { A, B }
+const a = f(E.A);
+const b: E.A = a;

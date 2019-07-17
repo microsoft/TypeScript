@@ -1,0 +1,46 @@
+=== tests/cases/compiler/nonObjectUnionNestedExcessPropertyCheck.ts ===
+interface IProps {
+>IProps : Symbol(IProps, Decl(nonObjectUnionNestedExcessPropertyCheck.ts, 0, 0))
+
+    iconProp?: string;
+>iconProp : Symbol(IProps.iconProp, Decl(nonObjectUnionNestedExcessPropertyCheck.ts, 0, 18))
+
+    nestedProp?: {
+>nestedProp : Symbol(IProps.nestedProp, Decl(nonObjectUnionNestedExcessPropertyCheck.ts, 1, 22))
+
+        testBool?: boolean;
+>testBool : Symbol(testBool, Decl(nonObjectUnionNestedExcessPropertyCheck.ts, 2, 18))
+    }
+}
+
+interface INestedProps {
+>INestedProps : Symbol(INestedProps, Decl(nonObjectUnionNestedExcessPropertyCheck.ts, 5, 1))
+
+    nestedProps?: IProps;
+>nestedProps : Symbol(INestedProps.nestedProps, Decl(nonObjectUnionNestedExcessPropertyCheck.ts, 7, 24))
+>IProps : Symbol(IProps, Decl(nonObjectUnionNestedExcessPropertyCheck.ts, 0, 0))
+}
+
+// These are the types of errors we want:
+const propB1: IProps | number = { INVALID_PROP_NAME: 'share', iconProp: 'test' };
+>propB1 : Symbol(propB1, Decl(nonObjectUnionNestedExcessPropertyCheck.ts, 12, 5))
+>IProps : Symbol(IProps, Decl(nonObjectUnionNestedExcessPropertyCheck.ts, 0, 0))
+>INVALID_PROP_NAME : Symbol(INVALID_PROP_NAME, Decl(nonObjectUnionNestedExcessPropertyCheck.ts, 12, 33))
+>iconProp : Symbol(iconProp, Decl(nonObjectUnionNestedExcessPropertyCheck.ts, 12, 61))
+
+// Nested typing works here and we also get an expected error:
+const propB2: IProps | number = { nestedProp: { asdfasdf: 'test' }, iconProp: 'test' };
+>propB2 : Symbol(propB2, Decl(nonObjectUnionNestedExcessPropertyCheck.ts, 15, 5))
+>IProps : Symbol(IProps, Decl(nonObjectUnionNestedExcessPropertyCheck.ts, 0, 0))
+>nestedProp : Symbol(nestedProp, Decl(nonObjectUnionNestedExcessPropertyCheck.ts, 15, 33))
+>asdfasdf : Symbol(asdfasdf, Decl(nonObjectUnionNestedExcessPropertyCheck.ts, 15, 47))
+>iconProp : Symbol(iconProp, Decl(nonObjectUnionNestedExcessPropertyCheck.ts, 15, 67))
+
+// Want an error generated here but there isn't one.
+const propA1: INestedProps | number = { nestedProps: { INVALID_PROP_NAME: 'share', iconProp: 'test' } };
+>propA1 : Symbol(propA1, Decl(nonObjectUnionNestedExcessPropertyCheck.ts, 18, 5))
+>INestedProps : Symbol(INestedProps, Decl(nonObjectUnionNestedExcessPropertyCheck.ts, 5, 1))
+>nestedProps : Symbol(nestedProps, Decl(nonObjectUnionNestedExcessPropertyCheck.ts, 18, 39))
+>INVALID_PROP_NAME : Symbol(INVALID_PROP_NAME, Decl(nonObjectUnionNestedExcessPropertyCheck.ts, 18, 54))
+>iconProp : Symbol(iconProp, Decl(nonObjectUnionNestedExcessPropertyCheck.ts, 18, 82))
+

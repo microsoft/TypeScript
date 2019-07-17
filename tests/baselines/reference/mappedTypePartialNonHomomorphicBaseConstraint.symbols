@@ -1,0 +1,21 @@
+=== tests/cases/compiler/mappedTypePartialNonHomomorphicBaseConstraint.ts ===
+export type Errors<D> = { readonly [K in keyof D | "base"]?: string[] };
+>Errors : Symbol(Errors, Decl(mappedTypePartialNonHomomorphicBaseConstraint.ts, 0, 0))
+>D : Symbol(D, Decl(mappedTypePartialNonHomomorphicBaseConstraint.ts, 0, 19))
+>K : Symbol(K, Decl(mappedTypePartialNonHomomorphicBaseConstraint.ts, 0, 36))
+>D : Symbol(D, Decl(mappedTypePartialNonHomomorphicBaseConstraint.ts, 0, 19))
+
+class Model<D> {
+>Model : Symbol(Model, Decl(mappedTypePartialNonHomomorphicBaseConstraint.ts, 0, 72))
+>D : Symbol(D, Decl(mappedTypePartialNonHomomorphicBaseConstraint.ts, 2, 12))
+
+  getErrors(): Errors<D> {
+>getErrors : Symbol(Model.getErrors, Decl(mappedTypePartialNonHomomorphicBaseConstraint.ts, 2, 16))
+>Errors : Symbol(Errors, Decl(mappedTypePartialNonHomomorphicBaseConstraint.ts, 0, 0))
+>D : Symbol(D, Decl(mappedTypePartialNonHomomorphicBaseConstraint.ts, 2, 12))
+
+    return { base: ["some base error"] };
+>base : Symbol(base, Decl(mappedTypePartialNonHomomorphicBaseConstraint.ts, 4, 12))
+  }
+}
+

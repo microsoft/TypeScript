@@ -685,3 +685,25 @@ type PCCB = ProductComplementComplement['b'];
 >PCCB : Symbol(PCCB, Decl(conditionalTypes2.ts, 187, 45))
 >ProductComplementComplement : Symbol(ProductComplementComplement, Decl(conditionalTypes2.ts, 181, 34))
 
+// Repro from #31326
+
+type Hmm<T, U extends T> = U extends T ? { [K in keyof U]: number } : never;
+>Hmm : Symbol(Hmm, Decl(conditionalTypes2.ts, 188, 45))
+>T : Symbol(T, Decl(conditionalTypes2.ts, 192, 9))
+>U : Symbol(U, Decl(conditionalTypes2.ts, 192, 11))
+>T : Symbol(T, Decl(conditionalTypes2.ts, 192, 9))
+>U : Symbol(U, Decl(conditionalTypes2.ts, 192, 11))
+>T : Symbol(T, Decl(conditionalTypes2.ts, 192, 9))
+>K : Symbol(K, Decl(conditionalTypes2.ts, 192, 44))
+>U : Symbol(U, Decl(conditionalTypes2.ts, 192, 11))
+
+type What = Hmm<{}, { a: string }>
+>What : Symbol(What, Decl(conditionalTypes2.ts, 192, 76))
+>Hmm : Symbol(Hmm, Decl(conditionalTypes2.ts, 188, 45))
+>a : Symbol(a, Decl(conditionalTypes2.ts, 193, 21))
+
+const w: What = { a: 4 };
+>w : Symbol(w, Decl(conditionalTypes2.ts, 194, 5))
+>What : Symbol(What, Decl(conditionalTypes2.ts, 192, 76))
+>a : Symbol(a, Decl(conditionalTypes2.ts, 194, 17))
+

@@ -31,8 +31,9 @@ namespace ts {
         scanJsxIdentifier(): SyntaxKind;
         scanJsxAttributeValue(): SyntaxKind;
         reScanJsxToken(): JsxTokenSyntaxKind;
+        reScanLessThanToken(): SyntaxKind;
         scanJsxToken(): JsxTokenSyntaxKind;
-        scanJSDocToken(): JsDocSyntaxKind;
+        scanJsDocToken(): JSDocSyntaxKind;
         scan(): SyntaxKind;
         getText(): string;
         // Sets the text for the scanner to scan.  An optional subrange starting point and length
@@ -196,6 +197,7 @@ namespace ts {
         "|=": SyntaxKind.BarEqualsToken,
         "^=": SyntaxKind.CaretEqualsToken,
         "@": SyntaxKind.AtToken,
+        "`": SyntaxKind.BacktickToken
     });
 
     /*
@@ -297,7 +299,6 @@ namespace ts {
     }
 
     const tokenStrings = makeReverseMap(textToToken);
-
     export function tokenToString(t: SyntaxKind): string | undefined {
         return tokenStrings[t];
     }
@@ -337,13 +338,14 @@ namespace ts {
         return result;
     }
 
-    export function getPositionOfLineAndCharacter(sourceFile: SourceFileLike, line: number, character: number): number {
-        return computePositionOfLineAndCharacter(getLineStarts(sourceFile), line, character, sourceFile.text);
-    }
-
+    export function getPositionOfLineAndCharacter(sourceFile: SourceFileLike, line: number, character: number): number;
     /* @internal */
-    export function getPositionOfLineAndCharacterWithEdits(sourceFile: SourceFileLike, line: number, character: number): number {
-        return computePositionOfLineAndCharacter(getLineStarts(sourceFile), line, character, sourceFile.text, /*allowEdits*/ true);
+    // tslint:disable-next-line:unified-signatures
+    export function getPositionOfLineAndCharacter(sourceFile: SourceFileLike, line: number, character: number, allowEdits?: true): number;
+    export function getPositionOfLineAndCharacter(sourceFile: SourceFileLike, line: number, character: number, allowEdits?: true): number {
+        return sourceFile.getPositionOfLineAndCharacter ?
+            sourceFile.getPositionOfLineAndCharacter(line, character, allowEdits) :
+            computePositionOfLineAndCharacter(getLineStarts(sourceFile), line, character, sourceFile.text, allowEdits);
     }
 
     /* @internal */
@@ -621,13 +623,15 @@ namespace ts {
 
     const shebangTriviaRegex = /^#!.*/;
 
-    function isShebangTrivia(text: string, pos: number) {
+    /*@internal*/
+    export function isShebangTrivia(text: string, pos: number) {
         // Shebangs check must only be done at the start of the file
         Debug.assert(pos === 0);
         return shebangTriviaRegex.test(text);
     }
 
-    function scanShebangTrivia(text: string, pos: number) {
+    /*@internal*/
+    export function scanShebangTrivia(text: string, pos: number) {
         const shebang = shebangTriviaRegex.exec(text)![0];
         pos = pos + shebang.length;
         return pos;
@@ -659,8 +663,15 @@ namespace ts {
         let pendingKind!: CommentKind;
         let pendingHasTrailingNewLine!: boolean;
         let hasPendingCommentRange = false;
-        let collecting = trailing || pos === 0;
+        let collecting = trailing;
         let accumulator = initial;
+        if (pos === 0) {
+            collecting = true;
+            const shebang = getShebang(text);
+            if (shebang) {
+                pos = shebang.length;
+            }
+        }
         scan: while (pos >= 0 && pos < text.length) {
             const ch = text.charCodeAt(pos);
             switch (ch) {
@@ -873,8 +884,9 @@ namespace ts {
             scanJsxIdentifier,
             scanJsxAttributeValue,
             reScanJsxToken,
+            reScanLessThanToken,
             scanJsxToken,
-            scanJSDocToken,
+            scanJsDocToken,
             scan,
             getText,
             setText,
@@ -976,7 +988,7 @@ namespace ts {
             }
 
             if (decimalFragment !== undefined || tokenFlags & TokenFlags.Scientific) {
-                checkForIdentifierStartAfterNumericLiteral();
+                checkForIdentifierStartAfterNumericLiteral(start, decimalFragment === undefined && !!(tokenFlags & TokenFlags.Scientific));
                 return {
                     type: SyntaxKind.NumericLiteral,
                     value: "" + +result // if value is not an integer, it can be safely coerced to a number
@@ -985,20 +997,31 @@ namespace ts {
             else {
                 tokenValue = result;
                 const type = checkBigIntSuffix(); // if value is an integer, check whether it is a bigint
-                checkForIdentifierStartAfterNumericLiteral();
+                checkForIdentifierStartAfterNumericLiteral(start);
                 return { type, value: tokenValue };
             }
         }
 
-        function checkForIdentifierStartAfterNumericLiteral() {
+        function checkForIdentifierStartAfterNumericLiteral(numericStart: number, isScientific?: boolean) {
             if (!isIdentifierStart(text.charCodeAt(pos), languageVersion)) {
                 return;
             }
 
             const identifierStart = pos;
             const { length } = scanIdentifierParts();
-            error(Diagnostics.An_identifier_or_keyword_cannot_immediately_follow_a_numeric_literal, identifierStart, length);
-            pos = identifierStart;
+
+            if (length === 1 && text[identifierStart] === "n") {
+                if (isScientific) {
+                    error(Diagnostics.A_bigint_literal_cannot_use_exponential_notation, numericStart, identifierStart - numericStart + 1);
+                }
+                else {
+                    error(Diagnostics.A_bigint_literal_must_be_an_integer, numericStart, identifierStart - numericStart + 1);
+                }
+            }
+            else {
+                error(Diagnostics.An_identifier_or_keyword_cannot_immediately_follow_a_numeric_literal, identifierStart, length);
+                pos = identifierStart;
+            }
         }
 
         function scanOctalDigits(): number {
@@ -1927,6 +1950,14 @@ namespace ts {
             return token = scanJsxToken();
         }
 
+        function reScanLessThanToken(): SyntaxKind {
+            if (token === SyntaxKind.LessThanLessThanToken) {
+                pos = tokenPos + 1;
+                return token = SyntaxKind.LessThanToken;
+            }
+            return token;
+        }
+
         function scanJsxToken(): JsxTokenSyntaxKind {
             startPos = tokenPos = pos;
 
@@ -1982,6 +2013,7 @@ namespace ts {
                 pos++;
             }
 
+            tokenValue = text.substring(startPos, pos);
             return firstNonWhitespace === -1 ? SyntaxKind.JsxTextAllWhiteSpaces : SyntaxKind.JsxText;
         }
 
@@ -2018,7 +2050,7 @@ namespace ts {
             }
         }
 
-        function scanJSDocToken(): JsDocSyntaxKind {
+        function scanJsDocToken(): JSDocSyntaxKind {
             startPos = tokenPos = pos;
             tokenFlags = 0;
             if (pos >= end) {
@@ -2054,6 +2086,8 @@ namespace ts {
                     return token = SyntaxKind.CloseBracketToken;
                 case CharacterCodes.lessThan:
                     return token = SyntaxKind.LessThanToken;
+                case CharacterCodes.greaterThan:
+                    return token = SyntaxKind.GreaterThanToken;
                 case CharacterCodes.equals:
                     return token = SyntaxKind.EqualsToken;
                 case CharacterCodes.comma:
@@ -2061,12 +2095,7 @@ namespace ts {
                 case CharacterCodes.dot:
                     return token = SyntaxKind.DotToken;
                 case CharacterCodes.backtick:
-                    while (pos < end && text.charCodeAt(pos) !== CharacterCodes.backtick) {
-                        pos++;
-                    }
-                    tokenValue = text.substring(tokenPos + 1, pos);
-                    pos++;
-                    return token = SyntaxKind.NoSubstitutionTemplateLiteral;
+                    return token = SyntaxKind.BacktickToken;
             }
 
             if (isIdentifierStart(ch, ScriptTarget.Latest)) {

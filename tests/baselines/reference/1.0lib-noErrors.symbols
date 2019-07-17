@@ -98,12 +98,12 @@ declare function encodeURI(uri: string): string;
   * Encodes a text string as a valid component of a Uniform Resource Identifier (URI).
   * @param uriComponent A value representing an encoded URI component.
   */
-declare function encodeURIComponent(uriComponent: string): string;
+declare function encodeURIComponent(uriComponent: string | number | boolean): string;
 >encodeURIComponent : Symbol(encodeURIComponent, Decl(1.0lib-noErrors.ts, 73, 48))
 >uriComponent : Symbol(uriComponent, Decl(1.0lib-noErrors.ts, 79, 36))
 
 interface PropertyDescriptor {
->PropertyDescriptor : Symbol(PropertyDescriptor, Decl(1.0lib-noErrors.ts, 79, 66))
+>PropertyDescriptor : Symbol(PropertyDescriptor, Decl(1.0lib-noErrors.ts, 79, 85))
 
     configurable?: boolean;
 >configurable : Symbol(PropertyDescriptor.configurable, Decl(1.0lib-noErrors.ts, 81, 30))
@@ -130,7 +130,7 @@ interface PropertyDescriptorMap {
 
     [s: string]: PropertyDescriptor;
 >s : Symbol(s, Decl(1.0lib-noErrors.ts, 91, 5))
->PropertyDescriptor : Symbol(PropertyDescriptor, Decl(1.0lib-noErrors.ts, 79, 66))
+>PropertyDescriptor : Symbol(PropertyDescriptor, Decl(1.0lib-noErrors.ts, 79, 85))
 }
 
 interface Object {
@@ -217,7 +217,7 @@ declare var Object: {
 >getOwnPropertyDescriptor : Symbol(getOwnPropertyDescriptor, Decl(1.0lib-noErrors.ts, 141, 32))
 >o : Symbol(o, Decl(1.0lib-noErrors.ts, 149, 29))
 >p : Symbol(p, Decl(1.0lib-noErrors.ts, 149, 36))
->PropertyDescriptor : Symbol(PropertyDescriptor, Decl(1.0lib-noErrors.ts, 79, 66))
+>PropertyDescriptor : Symbol(PropertyDescriptor, Decl(1.0lib-noErrors.ts, 79, 85))
 
     /** 
       * Returns the names of the own properties of an object. The own properties of an object are those that are defined directly 
@@ -250,7 +250,7 @@ declare var Object: {
 >o : Symbol(o, Decl(1.0lib-noErrors.ts, 171, 19))
 >p : Symbol(p, Decl(1.0lib-noErrors.ts, 171, 26))
 >attributes : Symbol(attributes, Decl(1.0lib-noErrors.ts, 171, 37))
->PropertyDescriptor : Symbol(PropertyDescriptor, Decl(1.0lib-noErrors.ts, 79, 66))
+>PropertyDescriptor : Symbol(PropertyDescriptor, Decl(1.0lib-noErrors.ts, 79, 85))
 
     /**
       * Adds one or more properties to an object, and/or modifies attributes of existing properties. 
@@ -2084,3 +2084,4 @@ declare var Array: {
 >prototype : Symbol(prototype, Decl(1.0lib-noErrors.ts, 1140, 31))
 >Array : Symbol(Array, Decl(1.0lib-noErrors.ts, 973, 23), Decl(1.0lib-noErrors.ts, 1133, 11))
 }
+

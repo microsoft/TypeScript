@@ -97,7 +97,7 @@ class Test262BaselineRunner extends RunnerBase {
     public initializeTests() {
         // this will set up a series of describe/it blocks to run between the setup and cleanup phases
         if (this.tests.length === 0) {
-            const testFiles = this.enumerateTestFiles();
+            const testFiles = this.getTestFiles();
             testFiles.forEach(fn => {
                 this.runTest(fn);
             });

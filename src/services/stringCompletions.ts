@@ -21,7 +21,17 @@ namespace ts.Completions.StringCompletions {
                 return convertPathCompletions(completion.paths);
             case StringLiteralCompletionKind.Properties: {
                 const entries: CompletionEntry[] = [];
-                getCompletionEntriesFromSymbols(completion.symbols, entries, sourceFile, sourceFile, checker, ScriptTarget.ESNext, log, CompletionKind.String, preferences); // Target will not be used, so arbitrary
+                getCompletionEntriesFromSymbols(
+                    completion.symbols,
+                    entries,
+                    sourceFile,
+                    sourceFile,
+                    checker,
+                    ScriptTarget.ESNext,
+                    log,
+                    CompletionKind.String,
+                    preferences
+                ); // Target will not be used, so arbitrary
                 return { isGlobalCompletion: false, isMemberCompletion: true, isNewIdentifierLocation: completion.hasIndexSignature, entries };
             }
             case StringLiteralCompletionKind.Types: {
@@ -60,7 +70,7 @@ namespace ts.Completions.StringCompletions {
         const isGlobalCompletion = false; // We don't want the editor to offer any other completions, such as snippets, inside a comment.
         const isNewIdentifierLocation = true; // The user may type in a path that doesn't yet exist, creating a "new identifier" with respect to the collection of identifiers the server is aware of.
         const entries = pathCompletions.map(({ name, kind, span, extension }): CompletionEntry =>
-            ({ name, kind, kindModifiers: kindModifiersFromExtension(extension), sortText: "0", replacementSpan: span }));
+            ({ name, kind, kindModifiers: kindModifiersFromExtension(extension), sortText: SortText.LocationPriority, replacementSpan: span }));
         return { isGlobalCompletion, isMemberCompletion: false, isNewIdentifierLocation, entries };
     }
     function kindModifiersFromExtension(extension: Extension | undefined): ScriptElementKindModifier {
@@ -71,6 +81,7 @@ namespace ts.Completions.StringCompletions {
             case Extension.Jsx: return ScriptElementKindModifier.jsxModifier;
             case Extension.Ts: return ScriptElementKindModifier.tsModifier;
             case Extension.Tsx: return ScriptElementKindModifier.tsxModifier;
+            case Extension.TsBuildInfo: return Debug.fail(`Extension ${Extension.TsBuildInfo} is unsupported.`);
             case undefined: return ScriptElementKindModifier.none;
             default:
                 return Debug.assertNever(extension);
@@ -616,30 +627,6 @@ namespace ts.Completions.StringCompletions {
         }
     }
 
-    function findPackageJsons(directory: string, host: LanguageServiceHost): string[] {
-        const paths: string[] = [];
-        forEachAncestorDirectory(directory, ancestor => {
-            const currentConfigPath = findConfigFile(ancestor, (f) => tryFileExists(host, f), "package.json");
-            if (!currentConfigPath) {
-                return true; // break out
-            }
-            paths.push(currentConfigPath);
-        });
-        return paths;
-    }
-
-    function findPackageJson(directory: string, host: LanguageServiceHost): string | undefined {
-        let packageJson: string | undefined;
-        forEachAncestorDirectory(directory, ancestor => {
-            if (ancestor === "node_modules") return true;
-            packageJson = findConfigFile(ancestor, (f) => tryFileExists(host, f), "package.json");
-            if (packageJson) {
-                return true; // break out
-            }
-        });
-        return packageJson;
-    }
-
     function enumerateNodeModulesVisibleToScript(host: LanguageServiceHost, scriptPath: string): ReadonlyArray<string> {
         if (!host.readFile || !host.fileExists) return emptyArray;
 
@@ -694,31 +681,6 @@ namespace ts.Completions.StringCompletions {
     const tripleSlashDirectiveFragmentRegex = /^(\/\/\/\s*<reference\s+(path|types)\s*=\s*(?:'|"))([^\3"]*)$/;
 
     const nodeModulesDependencyKeys: ReadonlyArray<string> = ["dependencies", "devDependencies", "peerDependencies", "optionalDependencies"];
-
-    function tryGetDirectories(host: LanguageServiceHost, directoryName: string): string[] {
-        return tryIOAndConsumeErrors(host, host.getDirectories, directoryName) || [];
-    }
-
-    function tryReadDirectory(host: LanguageServiceHost, path: string, extensions?: ReadonlyArray<string>, exclude?: ReadonlyArray<string>, include?: ReadonlyArray<string>): ReadonlyArray<string> {
-        return tryIOAndConsumeErrors(host, host.readDirectory, path, extensions, exclude, include) || emptyArray;
-    }
-
-    function tryFileExists(host: LanguageServiceHost, path: string): boolean {
-        return tryIOAndConsumeErrors(host, host.fileExists, path);
-    }
-
-    function tryDirectoryExists(host: LanguageServiceHost, path: string): boolean {
-        return tryAndIgnoreErrors(() => directoryProbablyExists(path, host)) || false;
-    }
-
-    function tryIOAndConsumeErrors<T>(host: LanguageServiceHost, toApply: ((...a: any[]) => T) | undefined, ...args: any[]) {
-        return tryAndIgnoreErrors(() => toApply && toApply.apply(host, args));
-    }
-
-    function tryAndIgnoreErrors<T>(cb: () => T): T | undefined {
-        try { return cb(); }
-        catch { return undefined; }
-    }
 
     function containsSlash(fragment: string) {
         return stringContains(fragment, directorySeparator);

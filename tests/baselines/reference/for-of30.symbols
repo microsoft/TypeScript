@@ -13,10 +13,10 @@ class StringIterator {
 >value : Symbol(value, Decl(for-of30.ts, 3, 24))
         }
     }
-    
+
     return = 0;
 >return : Symbol(StringIterator.return, Decl(for-of30.ts, 6, 5))
-    
+
     [Symbol.iterator]() {
 >[Symbol.iterator] : Symbol(StringIterator[Symbol.iterator], Decl(for-of30.ts, 8, 15))
 >Symbol.iterator : Symbol(SymbolConstructor.iterator, Decl(lib.es2015.iterable.d.ts, --, --))

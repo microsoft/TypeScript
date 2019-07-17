@@ -9,11 +9,11 @@
 //// }
 //// class MyClass {
 ////   props: {
-////     [|{| "isDefinition": true |}name|]?: string;
+////     [|[|{| "isDefinition": true, "contextRangeIndex": 0 |}name|]?: string;|]
 ////     size?: number;
 //// }
 ////
 ////
-//// var x = <MyClass [|{| "isWriteAccess": true, "isDefinition": true |}name|]='hello'/>;
+//// var x = <MyClass [|[|{| "isWriteAccess": true, "isDefinition": true, "contextRangeIndex": 2 |}name|]='hello'|]/>;
 
-verify.singleReferenceGroup("(property) name?: string");
+verify.singleReferenceGroup("(property) name?: string", "name");

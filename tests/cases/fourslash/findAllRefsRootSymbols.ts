@@ -1,11 +1,11 @@
 /// <reference path="fourslash.ts" />
 
-////interface I { [|{| "isDefinition": true |}x|]: {}; }
-////interface J { [|{| "isDefinition": true |}x|]: {}; }
-////declare const o: (I | J) & { [|{| "isWriteAccess": true, "isDefinition": true |}x|]: string };
+////interface I { [|[|{| "isDefinition": true, "contextRangeIndex": 0 |}x|]: {};|] }
+////interface J { [|[|{| "isDefinition": true, "contextRangeIndex": 2 |}x|]: {};|] }
+////declare const o: (I | J) & { [|[|{| "isWriteAccess": true, "isDefinition": true, "contextRangeIndex": 4 |}x|]: string|] };
 ////o.[|x|];
 
-const [r0, r1, r2, r3] = test.ranges();
+const [r0Def, r0, r1Def, r1, r2Def, r2, r3] = test.ranges();
 const i = { definition: "(property) I.x: {}", ranges: [r0] };
 const j = { definition: "(property) J.x: {}", ranges: [r1] };
 const anon = { definition: "(property) x: string", ranges: [r2] };

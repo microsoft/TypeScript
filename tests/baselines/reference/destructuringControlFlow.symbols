@@ -1,0 +1,137 @@
+=== tests/cases/conformance/es6/destructuring/destructuringControlFlow.ts ===
+function f1(obj: { a?: string }) {
+>f1 : Symbol(f1, Decl(destructuringControlFlow.ts, 0, 0))
+>obj : Symbol(obj, Decl(destructuringControlFlow.ts, 0, 12))
+>a : Symbol(a, Decl(destructuringControlFlow.ts, 0, 18))
+
+    if (obj.a) {
+>obj.a : Symbol(a, Decl(destructuringControlFlow.ts, 0, 18))
+>obj : Symbol(obj, Decl(destructuringControlFlow.ts, 0, 12))
+>a : Symbol(a, Decl(destructuringControlFlow.ts, 0, 18))
+
+        obj = {};
+>obj : Symbol(obj, Decl(destructuringControlFlow.ts, 0, 12))
+
+        let a1 = obj["a"];  // string | undefined
+>a1 : Symbol(a1, Decl(destructuringControlFlow.ts, 3, 11))
+>obj : Symbol(obj, Decl(destructuringControlFlow.ts, 0, 12))
+>"a" : Symbol(a, Decl(destructuringControlFlow.ts, 0, 18))
+
+        let a2 = obj.a;  // string | undefined
+>a2 : Symbol(a2, Decl(destructuringControlFlow.ts, 4, 11))
+>obj.a : Symbol(a, Decl(destructuringControlFlow.ts, 0, 18))
+>obj : Symbol(obj, Decl(destructuringControlFlow.ts, 0, 12))
+>a : Symbol(a, Decl(destructuringControlFlow.ts, 0, 18))
+    }
+}
+
+function f2(obj: [number, string] | null[]) {
+>f2 : Symbol(f2, Decl(destructuringControlFlow.ts, 6, 1))
+>obj : Symbol(obj, Decl(destructuringControlFlow.ts, 8, 12))
+
+    let a0 = obj[0];  // number | null
+>a0 : Symbol(a0, Decl(destructuringControlFlow.ts, 9, 7))
+>obj : Symbol(obj, Decl(destructuringControlFlow.ts, 8, 12))
+>0 : Symbol(0)
+
+    let a1 = obj[1];  // string | null
+>a1 : Symbol(a1, Decl(destructuringControlFlow.ts, 10, 7))
+>obj : Symbol(obj, Decl(destructuringControlFlow.ts, 8, 12))
+>1 : Symbol(1)
+
+    let [b0, b1] = obj;
+>b0 : Symbol(b0, Decl(destructuringControlFlow.ts, 11, 9))
+>b1 : Symbol(b1, Decl(destructuringControlFlow.ts, 11, 12))
+>obj : Symbol(obj, Decl(destructuringControlFlow.ts, 8, 12))
+
+    ([a0, a1] = obj);
+>a0 : Symbol(a0, Decl(destructuringControlFlow.ts, 9, 7))
+>a1 : Symbol(a1, Decl(destructuringControlFlow.ts, 10, 7))
+>obj : Symbol(obj, Decl(destructuringControlFlow.ts, 8, 12))
+
+    if (obj[0] && obj[1]) {
+>obj : Symbol(obj, Decl(destructuringControlFlow.ts, 8, 12))
+>0 : Symbol(0)
+>obj : Symbol(obj, Decl(destructuringControlFlow.ts, 8, 12))
+>1 : Symbol(1)
+
+        let c0 = obj[0];  // number
+>c0 : Symbol(c0, Decl(destructuringControlFlow.ts, 14, 11))
+>obj : Symbol(obj, Decl(destructuringControlFlow.ts, 8, 12))
+>0 : Symbol(0)
+
+        let c1 = obj[1];  // string
+>c1 : Symbol(c1, Decl(destructuringControlFlow.ts, 15, 11))
+>obj : Symbol(obj, Decl(destructuringControlFlow.ts, 8, 12))
+>1 : Symbol(1)
+
+        let [d0, d1] = obj;
+>d0 : Symbol(d0, Decl(destructuringControlFlow.ts, 16, 13))
+>d1 : Symbol(d1, Decl(destructuringControlFlow.ts, 16, 16))
+>obj : Symbol(obj, Decl(destructuringControlFlow.ts, 8, 12))
+
+        ([c0, c1] = obj);
+>c0 : Symbol(c0, Decl(destructuringControlFlow.ts, 14, 11))
+>c1 : Symbol(c1, Decl(destructuringControlFlow.ts, 15, 11))
+>obj : Symbol(obj, Decl(destructuringControlFlow.ts, 8, 12))
+    }
+}
+
+function f3(obj: { a?: number, b?: string }) {
+>f3 : Symbol(f3, Decl(destructuringControlFlow.ts, 19, 1))
+>obj : Symbol(obj, Decl(destructuringControlFlow.ts, 21, 12))
+>a : Symbol(a, Decl(destructuringControlFlow.ts, 21, 18))
+>b : Symbol(b, Decl(destructuringControlFlow.ts, 21, 30))
+
+    if (obj.a && obj.b) {
+>obj.a : Symbol(a, Decl(destructuringControlFlow.ts, 21, 18))
+>obj : Symbol(obj, Decl(destructuringControlFlow.ts, 21, 12))
+>a : Symbol(a, Decl(destructuringControlFlow.ts, 21, 18))
+>obj.b : Symbol(b, Decl(destructuringControlFlow.ts, 21, 30))
+>obj : Symbol(obj, Decl(destructuringControlFlow.ts, 21, 12))
+>b : Symbol(b, Decl(destructuringControlFlow.ts, 21, 30))
+
+        let { a, b } = obj;  // number, string
+>a : Symbol(a, Decl(destructuringControlFlow.ts, 23, 13))
+>b : Symbol(b, Decl(destructuringControlFlow.ts, 23, 16))
+>obj : Symbol(obj, Decl(destructuringControlFlow.ts, 21, 12))
+
+        ({ a, b } = obj);
+>a : Symbol(a, Decl(destructuringControlFlow.ts, 24, 10))
+>b : Symbol(b, Decl(destructuringControlFlow.ts, 24, 13))
+>obj : Symbol(obj, Decl(destructuringControlFlow.ts, 21, 12))
+    }
+}
+
+function f4() {
+>f4 : Symbol(f4, Decl(destructuringControlFlow.ts, 26, 1))
+
+    let x: boolean;
+>x : Symbol(x, Decl(destructuringControlFlow.ts, 29, 7))
+
+    ({ x } = 0);  // Error
+>x : Symbol(x, Decl(destructuringControlFlow.ts, 30, 6))
+
+    ({ ["x"]: x } = 0);  // Error
+>["x"] : Symbol(["x"], Decl(destructuringControlFlow.ts, 31, 6))
+>"x" : Symbol(["x"], Decl(destructuringControlFlow.ts, 31, 6))
+>x : Symbol(x, Decl(destructuringControlFlow.ts, 29, 7))
+
+    ({ ["x" + ""]: x } = 0);  // Errpr
+>["x" + ""] : Symbol(["x" + ""], Decl(destructuringControlFlow.ts, 32, 6))
+>x : Symbol(x, Decl(destructuringControlFlow.ts, 29, 7))
+}
+
+// Repro from #31770
+
+type KeyValue = [string, string?];
+>KeyValue : Symbol(KeyValue, Decl(destructuringControlFlow.ts, 33, 1))
+
+let [key, value]: KeyValue = ["foo"];
+>key : Symbol(key, Decl(destructuringControlFlow.ts, 38, 5))
+>value : Symbol(value, Decl(destructuringControlFlow.ts, 38, 9))
+>KeyValue : Symbol(KeyValue, Decl(destructuringControlFlow.ts, 33, 1))
+
+value.toUpperCase();  // Error
+>value : Symbol(value, Decl(destructuringControlFlow.ts, 38, 9))
+

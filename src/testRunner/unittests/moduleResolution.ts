@@ -80,7 +80,7 @@ namespace ts {
         }
     }
 
-    describe("Node module resolution - relative paths", () => {
+    describe("unittests:: moduleResolution:: Node module resolution - relative paths", () => {
 
         function testLoadAsFile(containingFileName: string, moduleFileNameNoExt: string, moduleName: string): void {
             for (const ext of supportedTSExtensions) {
@@ -200,7 +200,7 @@ namespace ts {
         });
     });
 
-    describe("Node module resolution - non-relative paths", () => {
+    describe("unittests:: moduleResolution:: Node module resolution - non-relative paths", () => {
         it("computes correct commonPrefix for moduleName cache", () => {
             const resolutionCache = createModuleResolutionCache("/", (f) => f);
             let cache = resolutionCache.getOrCreateCacheForModuleName("a");
@@ -457,7 +457,7 @@ namespace ts {
         });
     });
 
-    describe("Module resolution - relative imports", () => {
+    describe("unittests:: moduleResolution:: Relative imports", () => {
         function test(files: Map<string>, currentDirectory: string, rootFiles: string[], expectedFilesCount: number, relativeNamesToCheck: string[]) {
             const options: CompilerOptions = { module: ModuleKind.CommonJS };
             const host: CompilerHost = {
@@ -530,7 +530,7 @@ export = C;
         });
     });
 
-    describe("Files with different casing", () => {
+    describe("unittests:: moduleResolution:: Files with different casing with forceConsistentCasingInFileNames", () => {
         let library: SourceFile;
         function test(files: Map<string>, options: CompilerOptions, currentDirectory: string, useCaseSensitiveFileNames: boolean, rootFiles: string[], diagnosticCodes: number[]): void {
             const getCanonicalFileName = createGetCanonicalFileName(useCaseSensitiveFileNames);
@@ -649,9 +649,25 @@ import b = require("./moduleB");
             });
             test(files, { module: ModuleKind.CommonJS, forceConsistentCasingInFileNames: true }, "/a/B/c", /*useCaseSensitiveFileNames*/ false, ["moduleD.ts"], []);
         });
+
+        it("should succeed when the two files in program differ only in drive letter in their names", () => {
+            const files = createMapFromTemplate({
+                "d:/someFolder/moduleA.ts": `import a = require("D:/someFolder/moduleC")`,
+                "d:/someFolder/moduleB.ts": `import a = require("./moduleC")`,
+                "D:/someFolder/moduleC.ts": "export const x = 10",
+            });
+            test(
+                files,
+                { module: ModuleKind.CommonJS, forceConsistentCasingInFileNames: true },
+                "d:/someFolder",
+                /*useCaseSensitiveFileNames*/ false,
+                ["d:/someFolder/moduleA.ts", "d:/someFolder/moduleB.ts"],
+                []
+            );
+        });
     });
 
-    describe("baseUrl augmented module resolution", () => {
+    describe("unittests:: moduleResolution:: baseUrl augmented module resolution", () => {
 
         it("module resolution without path mappings/rootDirs", () => {
             test(/*hasDirectoryExists*/ false);
@@ -1098,7 +1114,7 @@ import b = require("./moduleB");
         });
     });
 
-    describe("ModuleResolutionHost.directoryExists", () => {
+    describe("unittests:: moduleResolution:: ModuleResolutionHost.directoryExists", () => {
         it("No 'fileExists' calls if containing directory is missing", () => {
             const host: ModuleResolutionHost = {
                 readFile: notImplemented,
@@ -1111,7 +1127,7 @@ import b = require("./moduleB");
         });
     });
 
-    describe("Type reference directive resolution: ", () => {
+    describe("unittests:: moduleResolution:: Type reference directive resolution: ", () => {
         function testWorker(hasDirectoryExists: boolean, typesRoot: string | undefined, typeDirective: string, primary: boolean, initialFile: File, targetFile: File, ...otherFiles: File[]) {
             const host = createModuleResolutionHost(hasDirectoryExists, ...[initialFile, targetFile].concat(...otherFiles));
             const result = resolveTypeReferenceDirective(typeDirective, initialFile.name, typesRoot ? { typeRoots: [typesRoot] } : {}, host);

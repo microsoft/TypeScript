@@ -10,6 +10,7 @@ tests/cases/compiler/functionArgShadowing.ts(10,7): error TS2403: Subsequent var
        var x: B = new B();
            ~
 !!! error TS2403: Subsequent variable declarations must have the same type.  Variable 'x' must be of type 'A', but here has type 'B'.
+!!! related TS6203 tests/cases/compiler/functionArgShadowing.ts:3:14: 'x' was also declared here.
          x.bar(); // the property bar does not exist on a value of type A
            ~~~
 !!! error TS2339: Property 'bar' does not exist on type 'A'.
@@ -20,6 +21,7 @@ tests/cases/compiler/functionArgShadowing.ts(10,7): error TS2403: Subsequent var
     		var p: string;
     		    ~
 !!! error TS2403: Subsequent variable declarations must have the same type.  Variable 'p' must be of type 'number', but here has type 'string'.
+!!! related TS6203 tests/cases/compiler/functionArgShadowing.ts:9:14: 'p' was also declared here.
     
     		var n: number = p;
     	}

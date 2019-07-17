@@ -137,7 +137,7 @@ let impl: I = {
 >explicitVoid2 : () => any
 >() => this.a : () => any
 >this.a : any
->this : any
+>this : typeof globalThis
 >a : any
 
     explicitVoid1() { return 12; },
@@ -431,7 +431,7 @@ let unboundToSpecified: (this: { y: number }, x: number) => number = x => x + th
 >x + this.y : any
 >x : number
 >this.y : any
->this : any
+>this : typeof globalThis
 >y : any
 
 let specifiedToSpecified: (this: {y: number}, x: number) => number = explicitStructural;
@@ -589,7 +589,7 @@ c.explicitC = m => m + this.n;
 >m + this.n : any
 >m : number
 >this.n : any
->this : any
+>this : typeof globalThis
 >n : any
 
 c.explicitThis = m => m + this.n;
@@ -602,7 +602,7 @@ c.explicitThis = m => m + this.n;
 >m + this.n : any
 >m : number
 >this.n : any
->this : any
+>this : typeof globalThis
 >n : any
 
 c.explicitProperty = m => m + this.n;
@@ -615,7 +615,7 @@ c.explicitProperty = m => m + this.n;
 >m + this.n : any
 >m : number
 >this.n : any
->this : any
+>this : typeof globalThis
 >n : any
 
 //NOTE: this=C here, I guess?

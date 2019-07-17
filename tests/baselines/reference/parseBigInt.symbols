@@ -131,15 +131,12 @@ const unaryPlusHex = +0x123n;
 
 { const scientific = 1e2n; }
 >scientific : Symbol(scientific, Decl(parseBigInt.ts, 56, 7))
->n : Symbol(n, Decl(parseBigInt.ts, 56, 24))
 
 { const decimal = 4.1n; }
 >decimal : Symbol(decimal, Decl(parseBigInt.ts, 57, 7))
->n : Symbol(n, Decl(parseBigInt.ts, 57, 21))
 
 { const leadingDecimal = .1n; }
 >leadingDecimal : Symbol(leadingDecimal, Decl(parseBigInt.ts, 58, 7))
->n : Symbol(n, Decl(parseBigInt.ts, 58, 27))
 
 const emptyBinary = 0bn; // should error but infer 0n
 >emptyBinary : Symbol(emptyBinary, Decl(parseBigInt.ts, 59, 5))
