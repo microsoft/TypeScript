@@ -1031,7 +1031,7 @@ namespace ts.Completions {
                 }
             }
 
-            if (insertAwait) {
+            if (insertAwait && preferences.includeCompletionsWithInsertText) {
                 const promiseType = typeChecker.getPromisedTypeOfPromise(type);
                 if (promiseType) {
                     for (const symbol of promiseType.getApparentProperties()) {
@@ -1059,19 +1059,20 @@ namespace ts.Completions {
                     symbolToOriginInfoMap[getSymbolId(firstAccessibleSymbol)] =
                         !moduleSymbol || !isExternalModuleSymbol(moduleSymbol) ? { kind: SymbolOriginInfoKind.SymbolMemberNoExport } : { kind: SymbolOriginInfoKind.SymbolMemberExport, moduleSymbol, isDefaultExport: false };
                 }
-                else if(preferences.includeCompletionsWithInsertText) {
+                else if (preferences.includeCompletionsWithInsertText) {
                     addPromiseSymbolOriginInfo(symbol);
+                    symbols.push(symbol);
                 }
             }
             else {
                 addPromiseSymbolOriginInfo(symbol);
+                symbols.push(symbol);
             }
 
             function addPromiseSymbolOriginInfo (symbol: Symbol) {
                 if (insertAwait && preferences.includeCompletionsWithInsertText && !symbolToOriginInfoMap[getSymbolId(symbol)]) {
                     symbolToOriginInfoMap[getSymbolId(symbol)] = { kind: SymbolOriginInfoKind.Promise };
                 }
-                symbols.push(symbol);
             }
         }
 
