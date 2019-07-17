@@ -627,9 +627,8 @@ namespace ts {
             }
             else {
                 const savedSubtreeTransformFlags = subtreeTransformFlags;
-                subtreeTransformFlags = TransformFlags.None;
                 bindChildrenWorker(node);
-                subtreeTransformFlags = savedSubtreeTransformFlags | computeTransformFlagsForNode(node, subtreeTransformFlags);
+                subtreeTransformFlags = savedSubtreeTransformFlags | computeTransformFlagsForNode(node, TransformFlags.None);
             }
         }
 
@@ -2310,7 +2309,7 @@ namespace ts {
                     if (node.parent.kind !== SyntaxKind.JSDocTypeLiteral) {
                         break;
                     }
-                    // falls through
+                // falls through
                 case SyntaxKind.JSDocPropertyTag:
                     const propTag = node as JSDocPropertyLikeTag;
                     const flags = propTag.isBracketed || propTag.typeExpression && propTag.typeExpression.type.kind === SyntaxKind.JSDocOptionalType ?
@@ -2377,8 +2376,8 @@ namespace ts {
             }
             const diag = !isSourceFile(node.parent) ? Diagnostics.Global_module_exports_may_only_appear_at_top_level
                 : !isExternalModule(node.parent) ? Diagnostics.Global_module_exports_may_only_appear_in_module_files
-                : !node.parent.isDeclarationFile ? Diagnostics.Global_module_exports_may_only_appear_in_declaration_files
-                : undefined;
+                    : !node.parent.isDeclarationFile ? Diagnostics.Global_module_exports_may_only_appear_in_declaration_files
+                        : undefined;
             if (diag) {
                 file.bindDiagnostics.push(createDiagnosticForNode(node, diag));
             }
@@ -2669,9 +2668,9 @@ namespace ts {
             }
             let init = !node ? undefined :
                 isVariableDeclaration(node) ? node.initializer :
-                isBinaryExpression(node) ? node.right :
-                isPropertyAccessExpression(node) && isBinaryExpression(node.parent) ? node.parent.right :
-                undefined;
+                    isBinaryExpression(node) ? node.right :
+                        isPropertyAccessExpression(node) && isBinaryExpression(node.parent) ? node.parent.right :
+                            undefined;
             init = init && getRightMostAssignedExpression(init);
             if (init) {
                 const isPrototypeAssignment = isPrototypeAccess(isVariableDeclaration(node) ? node.name : isBinaryExpression(node) ? node.left : node);
