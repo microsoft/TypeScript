@@ -15500,15 +15500,10 @@ namespace ts {
                     // of all their possible values.
                     let matchingTypes: Type[] | undefined;
                     for (const t of (<UnionOrIntersectionType>source).types) {
-                        if (typeIdenticalToSomeType(t, (<UnionOrIntersectionType>target).types)) {
-                            (matchingTypes || (matchingTypes = [])).push(t);
-                            inferFromTypes(t, t);
-                        }
-                        else if (t.flags & (TypeFlags.NumberLiteral | TypeFlags.StringLiteral)) {
-                            const b = getBaseTypeOfLiteralType(t);
-                            if (typeIdenticalToSomeType(b, (<UnionOrIntersectionType>target).types)) {
-                                (matchingTypes || (matchingTypes = [])).push(t, b);
-                            }
+                        const matched = findMatchedType(t, <UnionOrIntersectionType>target);
+                        if (matched) {
+                            (matchingTypes || (matchingTypes = [])).push(matched);
+                            inferFromTypes(matched, matched);
                         }
                     }
                     // Next, to improve the quality of inferences, reduce the source and target types by
@@ -15517,6 +15512,14 @@ namespace ts {
                     if (matchingTypes) {
                         source = removeTypesFromUnionOrIntersection(<UnionOrIntersectionType>source, matchingTypes);
                         target = removeTypesFromUnionOrIntersection(<UnionOrIntersectionType>target, matchingTypes);
+                    }
+                }
+                else if (target.flags & TypeFlags.Union && !(target.flags & TypeFlags.EnumLiteral) || target.flags & TypeFlags.Intersection) {
+                    const matched = findMatchedType(source, <UnionOrIntersectionType>target);
+                    if (matched) {
+                        inferFromTypes(matched, matched);
+                        source = target.flags & TypeFlags.Union ? neverType : unknownType;
+                        target = removeTypesFromUnionOrIntersection(<UnionOrIntersectionType>target, [matched]);
                     }
                 }
                 else if (target.flags & (TypeFlags.IndexedAccess | TypeFlags.Substitution)) {
@@ -15953,6 +15956,19 @@ namespace ts {
                 }
             }
             return false;
+        }
+
+        function findMatchedType(type: Type, target: UnionOrIntersectionType) {
+            if (typeIdenticalToSomeType(type, target.types)) {
+                return type;
+            }
+            if (type.flags & (TypeFlags.NumberLiteral | TypeFlags.StringLiteral) && target.flags & TypeFlags.Union) {
+                const base = getBaseTypeOfLiteralType(type);
+                if (typeIdenticalToSomeType(base, target.types)) {
+                    return base;
+                }
+            }
+            return undefined;
         }
 
         /**
