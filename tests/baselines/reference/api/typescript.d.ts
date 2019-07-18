@@ -2600,7 +2600,7 @@ declare namespace ts {
         UMD = 3,
         System = 4,
         ES2015 = 5,
-        ESNext = 6
+        ESNext = 99
     }
     enum JsxEmit {
         None = 0,
@@ -2640,9 +2640,9 @@ declare namespace ts {
         ES2018 = 5,
         ES2019 = 6,
         ES2020 = 7,
-        ESNext = 8,
+        ESNext = 99,
         JSON = 100,
-        Latest = 8
+        Latest = 99
     }
     enum LanguageVariant {
         Standard = 0,

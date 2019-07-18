@@ -70,7 +70,7 @@ export function multiply(a, b) { return a * b; }
       "incremental": true,
       "listFiles": true,
       "listEmittedFiles": true,
-      "target": 8,
+      "target": 99,
       "configFilePath": "./tsconfig.json"
     },
     "referencedMap": {},
