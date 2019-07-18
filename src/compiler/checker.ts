@@ -15587,7 +15587,8 @@ namespace ts {
                         }
                     }
                 }
-                if (getObjectFlags(source) & ObjectFlags.Reference && getObjectFlags(target) & ObjectFlags.Reference && (<TypeReference>source).target === (<TypeReference>target).target) {
+                if (getObjectFlags(source) & ObjectFlags.Reference && getObjectFlags(target) & ObjectFlags.Reference && (
+                    (<TypeReference>source).target === (<TypeReference>target).target || isArrayType(source) && isArrayType(target))) {
                     // If source and target are references to the same generic type, infer from type arguments
                     inferFromTypeArguments((<TypeReference>source).typeArguments || emptyArray, (<TypeReference>target).typeArguments || emptyArray, getVariances((<TypeReference>source).target));
                 }
