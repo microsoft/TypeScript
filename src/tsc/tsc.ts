@@ -138,6 +138,7 @@ namespace ts {
                     configParseResult.errors.forEach(reportDiagnostic);
                     return sys.exit(ExitStatus.DiagnosticsPresent_OutputsSkipped);
                 }
+                // eslint-disable-next-line no-null/no-null
                 sys.write(JSON.stringify(convertToTSConfig(configParseResult, configFileName, sys), null, 4) + sys.newLine);
                 return sys.exit(ExitStatus.Success);
             }
@@ -155,6 +156,7 @@ namespace ts {
         }
         else {
             if (commandLineOptions.showConfig) {
+                // eslint-disable-next-line no-null/no-null
                 sys.write(JSON.stringify(convertToTSConfig(commandLine, combinePaths(sys.getCurrentDirectory(), "tsconfig.json"), sys), null, 4) + sys.newLine);
                 return sys.exit(ExitStatus.Success);
             }

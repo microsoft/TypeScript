@@ -68,6 +68,7 @@
         "eslint-formatter-autolinkable-stylish": "latest",
         "eslint-plugin-import": "2.18.0",
         "eslint-plugin-microsoft-typescript": "0.1.11",
+        "eslint-plugin-no-null": "1.0.2",
         "fancy-log": "latest",
         "fs-extra": "^6.0.1",
         "glob": "latest",

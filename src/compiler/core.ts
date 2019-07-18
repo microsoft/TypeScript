@@ -74,7 +74,7 @@ namespace ts {
 
     /** Create a MapLike with good performance. */
     function createDictionaryObject<T>(): MapLike<T> {
-        const map = Object.create(/*prototype*/ null);
+        const map = Object.create(/*prototype*/ null); // eslint-disable-line no-null/no-null
 
         // Using 'delete' on an object causes V8 to put the object in dictionary mode.
         // This disables creation of hidden classes, which are expensive when an object is

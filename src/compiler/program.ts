@@ -2084,7 +2084,7 @@ namespace ts {
 
             function collectDynamicImportOrRequireCalls(file: SourceFile) {
                 const r = /import|require/g;
-                while (r.exec(file.text) !== null) {
+                while (r.exec(file.text) !== null) { // eslint-disable-line no-null/no-null
                     const node = getNodeAtPosition(file, r.lastIndex);
                     if (isRequireCall(node, /*checkArgumentIsStringLiteralLike*/ true)) {
                         imports = append(imports, node.arguments[0]);
@@ -3094,7 +3094,7 @@ namespace ts {
 
         function getCompilerOptionsObjectLiteralSyntax() {
             if (_compilerOptionsObjectLiteralSyntax === undefined) {
-                _compilerOptionsObjectLiteralSyntax = null;
+                _compilerOptionsObjectLiteralSyntax = null; // eslint-disable-line no-null/no-null
                 const jsonObjectLiteral = getTsConfigObjectLiteralExpression(options.configFile);
                 if (jsonObjectLiteral) {
                     for (const prop of getPropertyAssignment(jsonObjectLiteral, "compilerOptions")) {

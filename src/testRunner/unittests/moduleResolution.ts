@@ -170,7 +170,7 @@ namespace ts {
             testTypingsIgnored(["a", "b"]);
             testTypingsIgnored({ a: "b" });
             testTypingsIgnored(/*typings*/ true);
-            testTypingsIgnored(/*typings*/ null);
+            testTypingsIgnored(/*typings*/ null); // eslint-disable-line no-null/no-null
             testTypingsIgnored(/*typings*/ undefined);
         });
         it("module name as directory - load index.d.ts", () => {

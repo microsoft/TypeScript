@@ -198,6 +198,7 @@ namespace ts.server {
         private write(s: string) {
             if (this.fd >= 0) {
                 const buf = sys.bufferFrom!(s);
+                // eslint-disable-next-line no-null/no-null
                 fs.writeSync(this.fd, buf, 0, buf.length, /*position*/ null!); // TODO: GH#18217
             }
             if (this.traceToConsole) {

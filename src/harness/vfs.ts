@@ -652,7 +652,7 @@ namespace vfs {
          * NOTE: do not rename this method as it is intended to align with the same named export of the "fs" module.
          */
         public readFileSync(path: string, encoding?: string | null): string | Buffer;
-        public readFileSync(path: string, encoding: string | null = null) {
+        public readFileSync(path: string, encoding: string | null = null) { // eslint-disable-line no-null/no-null
             const { node } = this._walk(this._resolve(path));
             if (!node) throw createIOError("ENOENT");
             if (isDirectory(node)) throw createIOError("EISDIR");
@@ -667,6 +667,7 @@ namespace vfs {
          *
          * NOTE: do not rename this method as it is intended to align with the same named export of the "fs" module.
          */
+        // eslint-disable-next-line no-null/no-null
         public writeFileSync(path: string, data: string | Buffer, encoding: string | null = null) {
             if (this.isReadonly) throw createIOError("EROFS");
 
@@ -1114,6 +1115,8 @@ namespace vfs {
                 const value = normalizeFileSetEntry(files[key]);
                 const path = dirname ? vpath.resolve(dirname, key) : key;
                 vpath.validate(path, vpath.ValidationFlags.Absolute);
+
+                // eslint-disable-next-line no-null/no-null
                 if (value === null || value === undefined || value instanceof Rmdir || value instanceof Unlink) {
                     if (this.stringComparer(vpath.dirname(path), path) === 0) {
                         throw new TypeError("Roots cannot be deleted.");
@@ -1508,6 +1511,7 @@ namespace vfs {
         return builtLocalCS;
     }
 
+    /* eslint-disable no-null/no-null */
     function normalizeFileSetEntry(value: FileSet[string]) {
         if (value === undefined ||
             value === null ||
@@ -1522,6 +1526,7 @@ namespace vfs {
         }
         return typeof value === "string" || Buffer.isBuffer(value) ? new File(value) : new Directory(value);
     }
+    /* eslint-enable no-null/no-null */
 
     export function formatPatch(patch: FileSet) {
         return formatPatchWorker("", patch);
@@ -1532,6 +1537,7 @@ namespace vfs {
         for (const name of Object.keys(container)) {
             const entry = normalizeFileSetEntry(container[name]);
             const file = dirname ? vpath.combine(dirname, name) : name;
+            // eslint-disable-next-line no-null/no-null
             if (entry === null || entry === undefined || entry instanceof Unlink || entry instanceof Rmdir) {
                 text += `//// [${file}] unlink\r\n`;
             }

@@ -68,18 +68,19 @@ namespace ts {
             return sourceIndex;
         }
 
+        /* eslint-disable microsoft-typescript/boolean-trivia, no-null/no-null */
         function setSourceContent(sourceIndex: number, content: string | null) {
             enter();
             if (content !== null) {
                 if (!sourcesContent) sourcesContent = [];
                 while (sourcesContent.length < sourceIndex) {
-                    // eslint-disable-next-line microsoft-typescript/boolean-trivia
                     sourcesContent.push(null);
                 }
                 sourcesContent[sourceIndex] = content;
             }
             exit();
         }
+        /* eslint-enable microsoft-typescript/boolean-trivia, no-null/no-null */
 
         function addName(name: string) {
             enter();
@@ -309,6 +310,7 @@ namespace ts {
         }
     }
 
+    /* eslint-disable no-null/no-null */
     function isStringOrNull(x: any) {
         return typeof x === "string" || x === null;
     }
@@ -324,6 +326,7 @@ namespace ts {
             && (x.sourcesContent === undefined || x.sourcesContent === null || isArray(x.sourcesContent) && every(x.sourcesContent, isStringOrNull))
             && (x.names === undefined || x.names === null || isArray(x.names) && every(x.names, isString));
     }
+    /* eslint-enable no-null/no-null */
 
     export function tryParseRawSourceMap(text: string) {
         try {

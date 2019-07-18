@@ -283,7 +283,7 @@ namespace ts.server {
                     session.onMessage(JSON.stringify(req));
                     req.seq = i;
                     i++;
-                    req.arguments = null;
+                    req.arguments = null; // eslint-disable-line no-null/no-null
                     session.onMessage(JSON.stringify(req));
                     req.seq = i;
                     i++;

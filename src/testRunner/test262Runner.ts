@@ -67,6 +67,7 @@ class Test262BaselineRunner extends RunnerBase {
 
             it("has the expected errors", () => {
                 const errors = testState.compilerResult.diagnostics;
+                // eslint-disable-next-line no-null/no-null
                 const baseline = errors.length === 0 ? null : Harness.Compiler.getErrorBaseline(testState.inputFiles, errors);
                 Harness.Baseline.runBaseline(testState.filename + ".errors.txt", baseline, Test262BaselineRunner.baselineOptions);
             });

@@ -95,6 +95,7 @@ class UserCodeRunner extends ExternalCompileRunnerBase {
         return "user";
     }
     report(result: ExecResult) {
+        // eslint-disable-next-line no-null/no-null
         return result.status === 0 && !result.stdout.length && !result.stderr.length ? null : `Exit Code: ${result.status}
 Standard output:
 ${sortErrors(stripAbsoluteImportPaths(result.stdout.toString().replace(/\r\n/g, "\n")))}
@@ -144,6 +145,7 @@ class DockerfileRunner extends ExternalCompileRunnerBase {
         }
     }
     report(result: ExecResult) {
+        // eslint-disable-next-line no-null/no-null
         return result.status === 0 && !result.stdout.length && !result.stderr.length ? null : `Exit Code: ${result.status}
 Standard output:
 ${sanitizeDockerfileOutput(result.stdout.toString())}
@@ -248,6 +250,8 @@ class DefinitelyTypedRunner extends ExternalCompileRunnerBase {
     report(result: ExecResult, cwd: string) {
         const stdout = removeExpectedErrors(result.stdout.toString(), cwd);
         const stderr = result.stderr.toString();
+
+        // eslint-disable-next-line no-null/no-null
         return !stdout.length && !stderr.length ? null : `Exit Code: ${result.status}
 Standard output:
 ${stdout.replace(/\r\n/g, "\n")}

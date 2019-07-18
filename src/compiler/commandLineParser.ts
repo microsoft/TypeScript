@@ -1642,7 +1642,7 @@ namespace ts {
 
                 case SyntaxKind.NullKeyword:
                     reportInvalidOptionValue(option && option.name === "extends"); // "extends" is the only option we don't allow null/undefined for
-                    return null;
+                    return null; // eslint-disable-line no-null/no-null
 
                 case SyntaxKind.StringLiteral:
                     if (!isDoubleQuotedString(valueExpression)) {
@@ -2013,7 +2013,7 @@ namespace ts {
     }
 
     function isNullOrUndefined(x: any): x is null | undefined {
-        return x === undefined || x === null;
+        return x === undefined || x === null; // eslint-disable-line no-null/no-null
     }
 
     function directoryOfCombinedPath(fileName: string, basePath: string) {

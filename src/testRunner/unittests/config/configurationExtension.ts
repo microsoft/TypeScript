@@ -159,7 +159,7 @@ namespace ts {
                     "dev/configs/third.json": JSON.stringify({
                         extends: "./second",
                         compilerOptions: {
-                            module: null
+                            module: null // eslint-disable-line no-null/no-null
                         },
                         include: ["../supplemental.*"]
                     }),
@@ -168,7 +168,7 @@ namespace ts {
                         compilerOptions: {
                             module: "system"
                         },
-                        include: null,
+                        include: null, // eslint-disable-line no-null/no-null
                         files: ["../main.ts"]
                     }),
                     "dev/configs/fifth.json": JSON.stringify({

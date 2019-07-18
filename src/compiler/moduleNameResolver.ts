@@ -130,8 +130,9 @@ namespace ts {
             return;
         }
         const value = jsonContent[fieldName];
-        if (typeof value !== typeOfTag || value === null) {
+        if (typeof value !== typeOfTag || value === null) { // eslint-disable-line no-null/no-null
             if (state.traceEnabled) {
+                // eslint-disable-next-line no-null/no-null
                 trace(state.host, Diagnostics.Expected_type_of_0_field_in_package_json_to_be_1_got_2, fieldName, typeOfTag, value === null ? "null" : typeof value);
             }
             return;
@@ -420,6 +421,7 @@ namespace ts {
                             const packageJsonPath = combinePaths(root, normalized, "package.json");
                             // `types-publisher` sometimes creates packages with `"typings": null` for packages that don't provide their own types.
                             // See `createNotNeededPackageJSON` in the types-publisher` repo.
+                            // eslint-disable-next-line no-null/no-null
                             const isNotNeededPackage = host.fileExists(packageJsonPath) && (readJson(packageJsonPath, host) as PackageJson).typings === null;
                             if (!isNotNeededPackage) {
                                 const baseFileName = getBaseFileName(normalized);

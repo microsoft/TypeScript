@@ -54,6 +54,7 @@ namespace ts {
         }
 
         export function assertDefined<T>(value: T | null | undefined, message?: string): T {
+            // eslint-disable-next-line no-null/no-null
             if (value === undefined || value === null) return fail(message);
             return value;
         }

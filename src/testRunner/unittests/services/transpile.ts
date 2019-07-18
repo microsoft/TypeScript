@@ -51,6 +51,7 @@ namespace ts {
                     oldTranspileDiagnostics = undefined!;
                 });
 
+                /* eslint-disable no-null/no-null */
                 it("Correct errors for " + justName, () => {
                     Harness.Baseline.runBaseline(justName.replace(/\.tsx?$/, ".errors.txt"),
                         transpileResult.diagnostics!.length === 0 ? null : Harness.Compiler.getErrorBaseline(toBeCompiled, transpileResult.diagnostics!));
@@ -62,6 +63,7 @@ namespace ts {
                             oldTranspileDiagnostics.length === 0 ? null : Harness.Compiler.getErrorBaseline(toBeCompiled, oldTranspileDiagnostics));
                     });
                 }
+                /* eslint-enable no-null/no-null */
 
                 it("Correct output for " + justName, () => {
                     Harness.Baseline.runBaseline(justName.replace(/\.tsx?$/, Extension.Js), transpileResult.outputText);

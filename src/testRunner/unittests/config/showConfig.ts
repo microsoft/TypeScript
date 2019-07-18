@@ -29,6 +29,7 @@ namespace ts {
                     }
                     const initResult = convertToTSConfig(commandLine, configPath, configParseHost);
 
+                    // eslint-disable-next-line no-null/no-null
                     Harness.Baseline.runBaseline(outputFileName, JSON.stringify(initResult, null, 4) + "\n");
                 });
             });

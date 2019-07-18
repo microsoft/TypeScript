@@ -591,6 +591,7 @@ namespace Harness.Parallel.Host {
                 consoleReporter.epilogue();
                 if (noColors) Base.useColors = savedUseColors;
 
+                // eslint-disable-next-line no-null/no-null
                 IO.writeFile(perfdataFileName(configOption), JSON.stringify(newPerfData, null, 4));
 
                 if (xunitReporter) {

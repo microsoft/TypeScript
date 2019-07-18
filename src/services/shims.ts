@@ -309,9 +309,11 @@ namespace ts {
         public getChangeRange(oldSnapshot: IScriptSnapshot): TextChangeRange | undefined {
             const oldSnapshotShim = <ScriptSnapshotShimAdapter>oldSnapshot;
             const encoded = this.scriptSnapshotShim.getChangeRange(oldSnapshotShim.scriptSnapshotShim);
+            /* eslint-disable no-null/no-null */
             if (encoded === null) {
                 return null!; // TODO: GH#18217
             }
+            /* eslint-enable no-null/no-null */
 
             const decoded: { span: { start: number; length: number; }; newLength: number; } = JSON.parse(encoded!); // TODO: GH#18217
             return createTextChangeRange(
@@ -396,6 +398,7 @@ namespace ts {
 
         public getCompilationSettings(): CompilerOptions {
             const settingsJson = this.shimHost.getCompilationSettings();
+            // eslint-disable-next-line no-null/no-null
             if (settingsJson === null || settingsJson === "") {
                 throw Error("LanguageServiceShimHostAdapter.getCompilationSettings: empty compilationSettings");
             }
@@ -429,6 +432,7 @@ namespace ts {
         }
 
         public getLocalizedDiagnosticMessages() {
+            /* eslint-disable no-null/no-null */
             const diagnosticMessagesJson = this.shimHost.getLocalizedDiagnosticMessages();
             if (diagnosticMessagesJson === null || diagnosticMessagesJson === "") {
                 return null;
@@ -441,6 +445,7 @@ namespace ts {
                 this.log(e.description || "diagnosticMessages.generated.json has invalid JSON format");
                 return null;
             }
+            /* eslint-enable no-null/no-null */
         }
 
         public getCancellationToken(): HostCancellationToken {
@@ -632,7 +637,7 @@ namespace ts {
         public dispose(dummy: {}): void {
             this.logger.log("dispose()");
             this.languageService.dispose();
-            this.languageService = null!;
+            this.languageService = null!; // eslint-disable-line no-null/no-null
 
             // force a GC
             if (debugObjectHost && debugObjectHost.CollectGarbage) {
@@ -640,7 +645,7 @@ namespace ts {
                 this.logger.log("CollectGarbage()");
             }
 
-            this.logger = null!;
+            this.logger = null!; // eslint-disable-line no-null/no-null
 
             super.dispose(dummy);
         }
@@ -653,7 +658,7 @@ namespace ts {
         public refresh(throwOnError: boolean): void {
             this.forwardJSONCall(
                 `refresh(${throwOnError})`,
-                () => null
+                () => null // eslint-disable-line no-null/no-null
             );
         }
 
@@ -662,7 +667,7 @@ namespace ts {
                 "cleanupSemanticCache()",
                 () => {
                     this.languageService.cleanupSemanticCache();
-                    return null;
+                    return null; // eslint-disable-line no-null/no-null
                 });
         }
 
