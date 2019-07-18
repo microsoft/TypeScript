@@ -31,7 +31,28 @@
 //// let opt = <MainButton wrong /*6*/ />;
 
 verify.completions(
-    { marker: ["1", "6"], exact: ["onClick", "children", "className", "goTo"] },
-    { marker: "2", exact: ["onClick", "className", "goTo"] },
-    { marker: ["3", "4", "5"], exact: ["children", "className"] },
+    {
+        marker: ["1", "6"],
+        exact: [
+          "onClick",
+          { name: "children", kind: "JSX attribute", kindModifiers: "optional", sortText: completion.SortText.OptionalMember },
+          { name: "className", kind: "JSX attribute", kindModifiers: "optional", sortText: completion.SortText.OptionalMember },
+          "goTo"
+        ]
+    },
+    {
+      marker: "2",
+      exact: [
+        "onClick",
+        { name: "className", kind: "JSX attribute", kindModifiers: "optional", sortText: completion.SortText.OptionalMember },
+        "goTo"
+      ]
+    },
+    {
+      marker: ["3", "4", "5"],
+      exact: [
+        { name: "children", kind: "JSX attribute", kindModifiers: "optional", sortText: completion.SortText.OptionalMember },
+        { name: "className", kind: "JSX attribute", kindModifiers: "optional", sortText: completion.SortText.OptionalMember }
+      ]
+    },
 );
