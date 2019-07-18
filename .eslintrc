@@ -12,7 +12,7 @@
         "es6": true
     },
     "plugins": [
-        "@typescript-eslint", "microsoft-typescript", "no-null", "import"
+        "@typescript-eslint", "microsoft-typescript", "jsdoc", "no-null", "import"
     ],
     "rules": {
         "@typescript-eslint/adjacent-overload-signatures": "error",
@@ -76,6 +76,10 @@
         /** eslint-plugin-no-null */
         "no-null/no-null": "error",
 
+        /** eslint-plugin-jsdoc */
+        "jsdoc/check-alignment": "error",
+
+        /** eslint */
         "arrow-body-style": "off",
         "arrow-parens": "off",
         "brace-style": ["error", "stroustrup", { "allowSingleLine": true }],
@@ -147,8 +151,10 @@
             "@typescript-eslint/prefer-function-type": "off",
             "@typescript-eslint/unified-signatures": "off",
 
+            /** eslint-plugin-microsoft-typescript */
             "microsoft-typescript/no-keywords": "off",
 
+            /** eslint */
             "no-var": "off"
         }
     }]
