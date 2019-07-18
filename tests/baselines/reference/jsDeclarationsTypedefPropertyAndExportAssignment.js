@@ -111,17 +111,13 @@ export type TaskGroup = {
     traceEventNames: string[];
 };
 export const taskGroups: {
-    parseHTML: {
-        id: "parseHTML";
-        label: string;
-    };
-    styleLayout: {
-        id: "styleLayout";
+    [P in TaskGroupIds]: {
+        id: P;
         label: string;
     };
 };
 export const taskNameToGroup: {
-    [x: string]: TaskGroup;
+    [index: string]: TaskGroup;
 };
 //// [index.d.ts]
 export = MainThreadTasks;

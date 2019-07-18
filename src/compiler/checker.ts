@@ -4861,26 +4861,29 @@ namespace ts {
                 let results: Statement[] = [];
                 const visitedSymbols: Map<true> = createMap();
                 let deferredPrivates: Map<Symbol> | undefined;
-                const subcontext: NodeBuilderContext = {
-                    ...context,
+                const oldcontext = context;
+                context = {
+                    ...oldcontext,
                     usedSymbolNames: mapMap(symbolTable, (_symbol, name) => [unescapeLeadingUnderscores(name), true]),
                     remappedSymbolNames: createMap(),
                     tracker: {
-                        ...context.tracker,
+                        ...oldcontext.tracker,
                         trackSymbol: (sym, decl, meaning) => {
                             const accessibleChain = getAccessibleSymbolChain(sym, decl, meaning, /*usOnlyExternalAliasing*/ false);
                             if (length(accessibleChain)) {
                                 includePrivateSymbol(accessibleChain![0]);
                             }
+                            else if (oldcontext.tracker && oldcontext.tracker.trackSymbol) {
+                                oldcontext.tracker.trackSymbol(sym, decl, meaning);
+                            }
                         }
                     }
                 };
-                if (context.usedSymbolNames) {
-                    context.usedSymbolNames.forEach((_, name) => {
-                        subcontext.usedSymbolNames!.set(name, true);
+                if (oldcontext.usedSymbolNames) {
+                    oldcontext.usedSymbolNames.forEach((_, name) => {
+                        context.usedSymbolNames!.set(name, true);
                     });
                 }
-                context = subcontext;
                 let addingDeclare = true;
                 const exportEquals = symbolTable.get(InternalSymbolName.ExportEquals);
                 if (exportEquals && symbolTable.size > 1) {
@@ -5523,6 +5526,13 @@ namespace ts {
                  * so a `unique symbol` is returned when appropriate for the input symbol, rather than `typeof sym`
                  */
                 function serializeTypeForDeclaration(type: Type, symbol: Symbol) {
+                    const declWithExistingAnnotation = find(symbol.declarations, s => !!getEffectiveTypeAnnotationNode(s) && !!findAncestor(s, n => n === enclosingDeclaration));
+                    if (declWithExistingAnnotation && !isFunctionLikeDeclaration(declWithExistingAnnotation)) {
+                        // try to reuse the existing annotation
+                        const existing = getEffectiveTypeAnnotationNode(declWithExistingAnnotation)!;
+                        const transformed = visitNode(existing, visitExistingNodeTreeSymbols);
+                        return transformed === existing ? getMutableClone(existing) : transformed;
+                    }
                     const oldFlags = context.flags;
                     if (type.flags & TypeFlags.UniqueESSymbol &&
                         type.symbol === symbol) {
@@ -5531,6 +5541,89 @@ namespace ts {
                     const result = typeToTypeNodeHelper(type, context);
                     context.flags = oldFlags;
                     return result;
+
+                    function visitExistingNodeTreeSymbols<T extends Node>(node: T): Node {
+                        if (isJSDocAllType(node)) {
+                            return createKeywordTypeNode(SyntaxKind.AnyKeyword);
+                        }
+                        if (isJSDocUnknownType(node)) {
+                            return createKeywordTypeNode(SyntaxKind.UnknownKeyword);
+                        }
+                        if (isJSDocNullableType(node)) {
+                            return createUnionTypeNode([visitNode(node.type, visitExistingNodeTreeSymbols), createKeywordTypeNode(SyntaxKind.NullKeyword)]);
+                        }
+                        if (isJSDocOptionalType(node)) {
+                            return createUnionTypeNode([visitNode(node.type, visitExistingNodeTreeSymbols), createKeywordTypeNode(SyntaxKind.UndefinedKeyword)]);
+                        }
+                        if (isJSDocNonNullableType(node)) {
+                            return visitNode(node.type, visitExistingNodeTreeSymbols);
+                        }
+                        if ((isExpressionWithTypeArguments(node) || isTypeReferenceNode(node)) && isJSDocIndexSignature(node)) {
+                            return createTypeLiteralNode([createIndexSignature(
+                                /*decorators*/ undefined,
+                                /*modifiers*/ undefined,
+                                [createParameter(
+                                    /*decorators*/ undefined,
+                                    /*modifiers*/ undefined,
+                                    /*dotdotdotToken*/ undefined,
+                                    "index",
+                                    /*questionToken*/ undefined,
+                                    visitNode(node.typeArguments![0], visitExistingNodeTreeSymbols)
+                                )],
+                                visitNode(node.typeArguments![1], visitExistingNodeTreeSymbols)
+                            )]);
+                        }
+                        if (isJSDocFunctionType(node)) {
+                            if (isJSDocConstructSignature(node)) {
+                                let newTypeNode: TypeNode | undefined;
+                                return createConstructorTypeNode(
+                                    visitNodes(node.typeParameters, visitExistingNodeTreeSymbols),
+                                    mapDefined(node.parameters, (p, i) => p.name && isIdentifier(p.name) && p.name.escapedText === "new" ? (newTypeNode = p.type, undefined) : createParameter(
+                                        /*decorators*/ undefined,
+                                        /*modifiers*/ undefined,
+                                        p.dotDotDotToken,
+                                        p.name || p.dotDotDotToken ? `args` : `arg${i}`,
+                                        p.questionToken,
+                                        visitNode(p.type, visitExistingNodeTreeSymbols),
+                                        /*initializer*/ undefined
+                                    )),
+                                    visitNode(newTypeNode || node.type, visitExistingNodeTreeSymbols)
+                                );
+                            }
+                            else {
+                                return createFunctionTypeNode(
+                                    visitNodes(node.typeParameters, visitExistingNodeTreeSymbols),
+                                    map(node.parameters, (p, i) => createParameter(
+                                        /*decorators*/ undefined,
+                                        /*modifiers*/ undefined,
+                                        p.dotDotDotToken,
+                                        p.name || p.dotDotDotToken ? `args` : `arg${i}`,
+                                        p.questionToken,
+                                        visitNode(p.type, visitExistingNodeTreeSymbols),
+                                        /*initializer*/ undefined
+                                    )),
+                                    visitNode(node.type, visitExistingNodeTreeSymbols)
+                                );
+                            }
+                        }
+
+                        if (isEntityName(node) || isEntityNameExpression(node)) {
+                            const leftmost = getFirstIdentifier(node);
+                            const sym = resolveEntityName(leftmost, SymbolFlags.All, /*ignoreErrors*/ true, /*dontResolveALias*/ true);
+                            if (sym) {
+                                includePrivateSymbol(sym);
+                                if (isIdentifier(node) && sym.flags & SymbolFlags.TypeParameter) {
+                                    const name = typeParameterToName(getDeclaredTypeOfSymbol(sym), context);
+                                    if (idText(name) !== idText(node)) {
+                                        return name;
+                                    }
+                                    return node;
+                                }
+                            }
+                        }
+
+                        return visitEachChild(node, visitExistingNodeTreeSymbols, nullTransformationContext);
+                    }
                 }
 
                 function serializeSignatures(kind: SignatureKind, input: Type, baseType: Type | undefined, outputKind: SyntaxKind) {

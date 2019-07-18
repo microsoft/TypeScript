@@ -188,6 +188,19 @@ namespace ts {
             }
         }
 
+        function transformDeclarationsForJS(sourceFile: SourceFile) {
+            const oldDiag = getSymbolAccessibilityDiagnostic;
+            getSymbolAccessibilityDiagnostic = (s) => ({
+                diagnosticMessage: s.errorModuleName
+                    ? Diagnostics.Declaration_emit_for_this_file_requires_using_private_name_0_from_module_1_An_explicit_type_annotation_may_unblock_declaration_emit
+                    : Diagnostics.Declaration_emit_for_this_file_requires_using_private_name_0_An_explicit_type_annotation_may_unblock_declaration_emit,
+                errorNode: s.errorNode || sourceFile
+            });
+            const result = resolver.getDeclarationStatementsForSourceFile(sourceFile, declarationEmitNodeBuilderFlags, symbolTracker);
+            getSymbolAccessibilityDiagnostic = oldDiag;
+            return result;
+        }
+
         function transformRoot(node: Bundle): Bundle;
         function transformRoot(node: SourceFile): SourceFile;
         function transformRoot(node: SourceFile | Bundle): SourceFile | Bundle;
@@ -218,7 +231,7 @@ namespace ts {
                         if (isExternalModule(sourceFile)) {
                             resultHasExternalModuleIndicator = false; // unused in external module bundle emit (all external modules are within module blocks, therefore are known to be modules)
                             needsDeclare = false;
-                            const statements = isSourceFileJS(sourceFile) ? createNodeArray(resolver.getDeclarationStatementsForSourceFile(sourceFile, declarationEmitNodeBuilderFlags, symbolTracker)) : visitNodes(sourceFile.statements, visitDeclarationStatements);
+                            const statements = isSourceFileJS(sourceFile) ? createNodeArray(transformDeclarationsForJS(sourceFile)) : visitNodes(sourceFile.statements, visitDeclarationStatements);
                             const newFile = updateSourceFileNode(sourceFile, [createModuleDeclaration(
                                 [],
                                 [createModifier(SyntaxKind.DeclareKeyword)],
@@ -228,7 +241,7 @@ namespace ts {
                             return newFile;
                         }
                         needsDeclare = true;
-                        const updated = isSourceFileJS(sourceFile) ? createNodeArray(resolver.getDeclarationStatementsForSourceFile(sourceFile, declarationEmitNodeBuilderFlags, symbolTracker)) : visitNodes(sourceFile.statements, visitDeclarationStatements);
+                        const updated = isSourceFileJS(sourceFile) ? createNodeArray(transformDeclarationsForJS(sourceFile)) : visitNodes(sourceFile.statements, visitDeclarationStatements);
                         return updateSourceFileNode(sourceFile, transformAndReplaceLatePaintedStatements(updated), /*isDeclarationFile*/ true, /*referencedFiles*/ [], /*typeReferences*/ [], /*hasNoDefaultLib*/ false, /*libReferences*/ []);
                     }
                 ), mapDefined(node.prepends, prepend => {
@@ -272,7 +285,7 @@ namespace ts {
             const referenceVisitor = mapReferencesIntoArray(references, outputFilePath);
             let combinedStatements: NodeArray<Statement>;
             if (isSourceFileJS(currentSourceFile)) {
-                combinedStatements = createNodeArray(resolver.getDeclarationStatementsForSourceFile(node, declarationEmitNodeBuilderFlags, symbolTracker));
+                combinedStatements = createNodeArray(transformDeclarationsForJS(node));
                 emittedImports = filter(combinedStatements, isAnyImportSyntax);
             }
             else {

@@ -6181,7 +6181,7 @@ namespace ts {
         return node.kind === SyntaxKind.JSDocTypeExpression;
     }
 
-    export function isJSDocAllType(node: JSDocAllType): node is JSDocAllType {
+    export function isJSDocAllType(node: Node): node is JSDocAllType {
         return node.kind === SyntaxKind.JSDocAllType;
     }
 
