@@ -3485,11 +3485,17 @@ namespace ts {
         };
     }
 
-    export function getResolvedExternalModuleName(host: EmitHost, file: SourceFile, referenceFile?: SourceFile): string {
+    export interface ResolveModuleNameResolutionHost {
+        getCanonicalFileName(p: string): string;
+        getCommonSourceDirectory(): string;
+        getCurrentDirectory(): string;
+    }
+
+    export function getResolvedExternalModuleName(host: ResolveModuleNameResolutionHost, file: SourceFile, referenceFile?: SourceFile): string {
         return file.moduleName || getExternalModuleNameFromPath(host, file.fileName, referenceFile && referenceFile.fileName);
     }
 
-    export function getExternalModuleNameFromDeclaration(host: EmitHost, resolver: EmitResolver, declaration: ImportEqualsDeclaration | ImportDeclaration | ExportDeclaration | ModuleDeclaration | ImportTypeNode): string | undefined {
+    export function getExternalModuleNameFromDeclaration(host: ResolveModuleNameResolutionHost, resolver: EmitResolver, declaration: ImportEqualsDeclaration | ImportDeclaration | ExportDeclaration | ModuleDeclaration | ImportTypeNode): string | undefined {
         const file = resolver.getExternalModuleFileFromDeclaration(declaration);
         if (!file || file.isDeclarationFile) {
             return undefined;
@@ -3500,7 +3506,7 @@ namespace ts {
     /**
      * Resolves a local path to a path which is absolute to the base of the emit
      */
-    export function getExternalModuleNameFromPath(host: EmitHost, fileName: string, referencePath?: string): string {
+    export function getExternalModuleNameFromPath(host: ResolveModuleNameResolutionHost, fileName: string, referencePath?: string): string {
         const getCanonicalFileName = (f: string) => host.getCanonicalFileName(f);
         const dir = toPath(referencePath ? getDirectoryPath(referencePath) : host.getCommonSourceDirectory(), host.getCurrentDirectory(), getCanonicalFileName);
         const filePath = getNormalizedAbsolutePath(fileName, host.getCurrentDirectory());
@@ -5257,6 +5263,17 @@ namespace ts {
     function getDeclarationIdentifier(node: Declaration | Expression): Identifier | undefined {
         const name = getNameOfDeclaration(node);
         return name && isIdentifier(name) ? name : undefined;
+    }
+
+    /** @internal */
+    export function nodeHasName(statement: Node, name: Identifier) {
+        if (isNamedDeclaration(statement) && isIdentifier(statement.name) && idText(statement.name as Identifier) === idText(name)) {
+            return true;
+        }
+        if (isVariableStatement(statement) && some(statement.declarationList.declarations, d => nodeHasName(d, name))) {
+            return true;
+        }
+        return false;
     }
 
     export function getNameOfJSDocTypedef(declaration: JSDocTypedefTag): Identifier | undefined {

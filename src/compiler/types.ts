@@ -3660,7 +3660,7 @@ namespace ts {
         getAllAccessorDeclarations(declaration: AccessorDeclaration): AllAccessorDeclarations;
         getSymbolOfExternalModuleSpecifier(node: StringLiteralLike): Symbol | undefined;
         isBindingCapturedByNode(node: Node, decl: VariableDeclaration | BindingElement): boolean;
-        getDeclarationStatementsForSourceFile(node: SourceFile, flags: NodeBuilderFlags, tracker: SymbolTracker): Statement[] | undefined;
+        getDeclarationStatementsForSourceFile(node: SourceFile, flags: NodeBuilderFlags, tracker: SymbolTracker, bundled?: boolean): Statement[] | undefined;
     }
 
     export const enum SymbolFlags {

@@ -3256,7 +3256,7 @@ namespace ts {
                     // and if symbolFromSymbolTable or alias resolution matches the symbol,
                     // check the symbol can be qualified, it is only then this symbol is accessible
                     !some(symbolFromSymbolTable.declarations, hasNonGlobalAugmentationExternalModuleSymbol) &&
-                    (ignoreQualification || canQualifySymbol(symbolFromSymbolTable, meaning));
+                    (ignoreQualification || canQualifySymbol(getMergedSymbol(symbolFromSymbolTable), meaning));
             }
 
             function trySymbolTable(symbols: SymbolTable, ignoreQualification: boolean | undefined): Symbol[] | undefined {
@@ -3648,8 +3648,8 @@ namespace ts {
                     withContext(enclosingDeclaration, flags, tracker, context => symbolToParameterDeclaration(symbol, context)),
                 typeParameterToDeclaration: (parameter: TypeParameter, enclosingDeclaration?: Node, flags?: NodeBuilderFlags, tracker?: SymbolTracker) =>
                     withContext(enclosingDeclaration, flags, tracker, context => typeParameterToDeclaration(parameter, context)),
-                symbolTableToDeclarationStatements: (symbolTable: SymbolTable, enclosingDeclaration?: Node, flags?: NodeBuilderFlags, tracker?: SymbolTracker) =>
-                    withContext(enclosingDeclaration, flags, tracker, context => symbolTableToDeclarationStatements(symbolTable, context)),
+                symbolTableToDeclarationStatements: (symbolTable: SymbolTable, enclosingDeclaration?: Node, flags?: NodeBuilderFlags, tracker?: SymbolTracker, bundled?: boolean) =>
+                    withContext(enclosingDeclaration, flags, tracker, context => symbolTableToDeclarationStatements(symbolTable, context, bundled)),
             };
 
             function withContext<T>(enclosingDeclaration: Node | undefined, flags: NodeBuilderFlags | undefined, tracker: SymbolTracker | undefined, cb: (context: NodeBuilderContext) => T): T | undefined {
@@ -4854,7 +4854,7 @@ namespace ts {
                 return initial;
             }
 
-            function symbolTableToDeclarationStatements(symbolTable: SymbolTable, context: NodeBuilderContext): Statement[] {
+            function symbolTableToDeclarationStatements(symbolTable: SymbolTable, context: NodeBuilderContext, bundled?: boolean): Statement[] {
                 // TODO: Use `setOriginalNode` on original declarations where possible so these declarations see some kind of declaration mapping
                 // We save this off here so it's not adjusted by well-meaning declaration emit codepaths which want to apply more specific contexts
                 const enclosingDeclaration = context.enclosingDeclaration!;
@@ -4884,7 +4884,7 @@ namespace ts {
                         context.usedSymbolNames!.set(name, true);
                     });
                 }
-                let addingDeclare = true;
+                let addingDeclare = !bundled;
                 const exportEquals = symbolTable.get(InternalSymbolName.ExportEquals);
                 if (exportEquals && symbolTable.size > 1) {
                     // export= merged with other stuff - likely due to JS declarations. This is strangeish to deal with, but essentially we just
@@ -4898,7 +4898,15 @@ namespace ts {
                     // Lookup the name of what the export= points to, so we name the ns merging in the other top-level imports correctly
                     const aliasDecl = getDeclarationOfAliasSymbol(exportEquals);
                     const target = aliasDecl && getTargetOfAliasDeclaration(aliasDecl, /*dontRecursivelyResolve*/ true);
+
+                    // We have to setup `deferredPrivates` again because `includePrivateSymbol` and/or `symbolToName` may use it :3
+                    deferredPrivates = createMap();
+                    if (target) {
+                        includePrivateSymbol(target);
+                    }
                     const nsname = target ? symbolToName(target, context, SymbolFlags.All, /*expectsIdentifier*/ false) : createIdentifier(getUnusedName("_exports", exportEquals));
+                    visitSymbolTable(emptySymbols, deferredPrivates, /*markExportsPrivate*/ true);
+                    deferredPrivates = undefined;
 
                     const nsBody = createModuleBlock([createExportDeclaration(
                         /*decorators*/ undefined,
@@ -4942,7 +4950,7 @@ namespace ts {
                     const ns = find(statements, isModuleDeclaration);
                     if (ns && exportAssignment && exportAssignment.isExportEquals &&
                         isIdentifier(exportAssignment.expression) && isIdentifier(ns.name) && idText(ns.name) === idText(exportAssignment.expression) &&
-                        ns.body && isModuleBlock(ns.body) && !find(statements, s => s !== ns && isNamedDeclaration(s) && isIdentifier(s.name) && idText(ns.name as Identifier) === idText(s.name))) {
+                        ns.body && isModuleBlock(ns.body) && !find(statements, s => s !== ns && nodeHasName(s, ns.name as Identifier))) {
                         results = [];
                         forEach(ns.body.statements, s => {
                             addResult(s, ModifierFlags.None); // Recalculates the ambient flag
@@ -4966,8 +4974,7 @@ namespace ts {
                         const replacements = mapDefined(exportDecl.exportClause!.elements, e => {
                             if (!e.propertyName) {
                                 // export {name} - look thru `statements` for `name`, and if all results can take an `export` modifier, do so and filter it
-                                const associated = filter(statements, s => (isNamedDeclaration(s) && isIdentifier(s.name) && idText(s.name) === idText(e.name)) ||
-                                    (isVariableStatement(s) && length(s.declarationList.declarations) === 1 && isIdentifier(s.declarationList.declarations[0].name) && idText(s.declarationList.declarations[0].name) === idText(e.name)));
+                                const associated = filter(statements, s => nodeHasName(s, e.name));
                                 if (length(associated) && every(associated, canHaveExportModifier)) {
                                     forEach(associated, addExportModifier);
                                     return undefined;
@@ -5606,6 +5613,15 @@ namespace ts {
                                 );
                             }
                         }
+                        if (isLiteralImportTypeNode(node)) {
+                            return updateImportTypeNode(
+                                node,
+                                updateLiteralTypeNode(node.argument, rewriteModuleSpecifier(node, node.argument.literal)),
+                                node.qualifier,
+                                visitNodes(node.typeArguments, visitExistingNodeTreeSymbols, isTypeNode),
+                                node.isTypeOf
+                            );
+                        }
 
                         if (isEntityName(node) || isEntityNameExpression(node)) {
                             const leftmost = getFirstIdentifier(node);
@@ -5623,6 +5639,33 @@ namespace ts {
                         }
 
                         return visitEachChild(node, visitExistingNodeTreeSymbols, nullTransformationContext);
+                    }
+
+                    function rewriteModuleSpecifier(parent: ImportTypeNode, lit: StringLiteral) {
+                        if (bundled) {
+                            if (context.tracker && context.tracker.moduleResolverHost) {
+                                const targetFile = getExternalModuleFileFromDeclaration(parent);
+                                if (targetFile) {
+                                    const getCanonicalFileName = createGetCanonicalFileName(!!host.useCaseSensitiveFileNames);
+                                    const resolverHost = {
+                                        getCanonicalFileName,
+                                        getCurrentDirectory: context.tracker.moduleResolverHost.getCurrentDirectory ? () => context.tracker.moduleResolverHost!.getCurrentDirectory!() : () => "",
+                                        getCommonSourceDirectory: () => context.tracker.moduleResolverHost!.getCommonSourceDirectory()
+                                    };
+                                    const newName = getResolvedExternalModuleName(resolverHost, targetFile);
+                                    return createLiteral(newName);
+                                }
+                            }
+                        }
+                        else {
+                            if (context.tracker && context.tracker.trackExternalModuleSymbolOfImportTypeNode) {
+                                const moduleSym = resolveExternalModuleNameWorker(lit, lit, /*moduleNotFoundError*/ undefined);
+                                if (moduleSym) {
+                                    context.tracker.trackExternalModuleSymbolOfImportTypeNode(moduleSym);
+                                }
+                            }
+                        }
+                        return lit;
                     }
                 }
 
@@ -33108,14 +33151,14 @@ namespace ts {
                     const parseDecl = getParseTreeNode(decl);
                     return !!parseNode && !!parseDecl && (isVariableDeclaration(parseDecl) || isBindingElement(parseDecl)) && isBindingCapturedByNode(parseNode, parseDecl);
                 },
-                getDeclarationStatementsForSourceFile: (node, flags, tracker) => {
+                getDeclarationStatementsForSourceFile: (node, flags, tracker, bundled) => {
                     const n = getParseTreeNode(node) as SourceFile;
                     Debug.assert(n && n.kind === SyntaxKind.SourceFile, "Non-sourcefile node passed into getDeclarationsForSourceFile");
                     const sym = getSymbolOfNode(node);
                     if (!sym) {
-                        return !node.locals ? [] : nodeBuilder.symbolTableToDeclarationStatements(node.locals, node, flags, tracker);
+                        return !node.locals ? [] : nodeBuilder.symbolTableToDeclarationStatements(node.locals, node, flags, tracker, bundled);
                     }
-                    return !sym.exports ? [] : nodeBuilder.symbolTableToDeclarationStatements(sym.exports, node, flags, tracker);
+                    return !sym.exports ? [] : nodeBuilder.symbolTableToDeclarationStatements(sym.exports, node, flags, tracker, bundled);
                 }
             };
 

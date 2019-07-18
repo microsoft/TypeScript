@@ -13,11 +13,25 @@ namespace ts {
         referenced: boolean;
     }
 
-    export function getModuleInstanceState(node: ModuleDeclaration): ModuleInstanceState {
-        return node.body ? getModuleInstanceStateWorker(node.body) : ModuleInstanceState.Instantiated;
+    export function getModuleInstanceState(node: ModuleDeclaration, visited?: Map<ModuleInstanceState | undefined>): ModuleInstanceState {
+        if (node.body && !node.body.parent) {
+            setParentPointers(node, node.body); // getModuleInstanceStateForAliasTarget needs to walk up the parent chain, so parent pointers must be set on this tree already
+        }
+        return node.body ? getModuleInstanceStateWorker(node.body, visited) : ModuleInstanceState.Instantiated;
     }
 
-    function getModuleInstanceStateWorker(node: Node): ModuleInstanceState {
+    function getModuleInstanceStateWorker(node: Node, visited = createMap<ModuleInstanceState | undefined>()) {
+        const nodeId = "" + getNodeId(node);
+        if (visited.has(nodeId)) {
+            return visited.get(nodeId) || ModuleInstanceState.NonInstantiated;
+        }
+        visited.set(nodeId, undefined);
+        const result = getModuleInstanceStateWorkerWorker(node, visited);
+        visited.set(nodeId, result);
+        return result;
+    }
+
+    function getModuleInstanceStateWorkerWorker(node: Node, visited: Map<ModuleInstanceState | undefined>): ModuleInstanceState {
         // A module is uninstantiated if it contains only
         switch (node.kind) {
             // 1. interface declarations, type alias declarations
@@ -37,11 +51,27 @@ namespace ts {
                     return ModuleInstanceState.NonInstantiated;
                 }
                 break;
-            // 4. other uninstantiated module declarations.
+            // 4. Export alias declarations pointing at only uninstantiated modules or things uninstantiated modules contain
+            case SyntaxKind.ExportDeclaration:
+                if (!(node as ExportDeclaration).moduleSpecifier && !!(node as ExportDeclaration).exportClause) {
+                    let state = ModuleInstanceState.NonInstantiated;
+                    for (const specifier of (node as ExportDeclaration).exportClause!.elements) {
+                        const specifierState = getModuleInstanceStateForAliasTarget(specifier, visited);
+                        if (specifierState > state) {
+                            state = specifierState;
+                        }
+                        if (state === ModuleInstanceState.Instantiated) {
+                            return state;
+                        }
+                    }
+                    return state;
+                }
+                break;
+            // 5. other uninstantiated module declarations.
             case SyntaxKind.ModuleBlock: {
                 let state = ModuleInstanceState.NonInstantiated;
                 forEachChild(node, n => {
-                    const childState = getModuleInstanceStateWorker(n);
+                    const childState = getModuleInstanceStateWorker(n, visited);
                     switch (childState) {
                         case ModuleInstanceState.NonInstantiated:
                             // child is non-instantiated - continue searching
@@ -61,7 +91,7 @@ namespace ts {
                 return state;
             }
             case SyntaxKind.ModuleDeclaration:
-                return getModuleInstanceState(node as ModuleDeclaration);
+                return getModuleInstanceState(node as ModuleDeclaration, visited);
             case SyntaxKind.Identifier:
                 // Only jsdoc typedef definition can exist in jsdoc namespace, and it should
                 // be considered the same as type alias
@@ -70,6 +100,36 @@ namespace ts {
                 }
         }
         return ModuleInstanceState.Instantiated;
+    }
+
+    function getModuleInstanceStateForAliasTarget(specifier: ExportSpecifier, visited: Map<ModuleInstanceState | undefined>) {
+        const name = specifier.propertyName || specifier.name;
+        let p: Node | undefined = specifier.parent;
+        while (p) {
+            if (isBlock(p) || isModuleBlock(p) || isSourceFile(p)) {
+                const statements = p.statements;
+                let found: ModuleInstanceState | undefined;
+                for (const statement of statements) {
+                    if (nodeHasName(statement, name)) {
+                        if (!statement.parent) {
+                            setParentPointers(p, statement);
+                        }
+                        const state = getModuleInstanceStateWorker(statement, visited);
+                        if (found === undefined || state > found) {
+                            found = state;
+                        }
+                        if (found === ModuleInstanceState.Instantiated) {
+                            return found;
+                        }
+                    }
+                }
+                if (found !== undefined) {
+                    return found;
+                }
+            }
+            p = p.parent;
+        }
+        return ModuleInstanceState.Instantiated; // Couldn't locate, assume could refer to a value
     }
 
     const enum ContainerFlags {

@@ -188,7 +188,7 @@ namespace ts {
             }
         }
 
-        function transformDeclarationsForJS(sourceFile: SourceFile) {
+        function transformDeclarationsForJS(sourceFile: SourceFile, bundled?: boolean) {
             const oldDiag = getSymbolAccessibilityDiagnostic;
             getSymbolAccessibilityDiagnostic = (s) => ({
                 diagnosticMessage: s.errorModuleName
@@ -196,7 +196,7 @@ namespace ts {
                     : Diagnostics.Declaration_emit_for_this_file_requires_using_private_name_0_An_explicit_type_annotation_may_unblock_declaration_emit,
                 errorNode: s.errorNode || sourceFile
             });
-            const result = resolver.getDeclarationStatementsForSourceFile(sourceFile, declarationEmitNodeBuilderFlags, symbolTracker);
+            const result = resolver.getDeclarationStatementsForSourceFile(sourceFile, declarationEmitNodeBuilderFlags, symbolTracker, bundled);
             getSymbolAccessibilityDiagnostic = oldDiag;
             return result;
         }
@@ -228,10 +228,10 @@ namespace ts {
                         resultHasScopeMarker = false;
                         collectReferences(sourceFile, refs);
                         collectLibs(sourceFile, libs);
-                        if (isExternalModule(sourceFile)) {
+                        if (isExternalOrCommonJsModule(sourceFile) || isJsonSourceFile(sourceFile)) {
                             resultHasExternalModuleIndicator = false; // unused in external module bundle emit (all external modules are within module blocks, therefore are known to be modules)
                             needsDeclare = false;
-                            const statements = isSourceFileJS(sourceFile) ? createNodeArray(transformDeclarationsForJS(sourceFile)) : visitNodes(sourceFile.statements, visitDeclarationStatements);
+                            const statements = isSourceFileJS(sourceFile) ? createNodeArray(transformDeclarationsForJS(sourceFile, /*bundled*/ true)) : visitNodes(sourceFile.statements, visitDeclarationStatements);
                             const newFile = updateSourceFileNode(sourceFile, [createModuleDeclaration(
                                 [],
                                 [createModifier(SyntaxKind.DeclareKeyword)],
