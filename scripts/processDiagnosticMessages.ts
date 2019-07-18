@@ -66,7 +66,6 @@ function buildInfoFileOutput(messageTable: InputDiagnosticMessageTable, inputFil
         "    function diag(code: number, category: DiagnosticCategory, key: string, message: string, reportsUnnecessary?: {}): DiagnosticMessage {\r\n" +
         "        return { code, category, key, message, reportsUnnecessary };\r\n" +
         "    }\r\n" +
-        "    // tslint:disable-next-line variable-name\r\n" +
         "    export const Diagnostics = {\r\n";
     messageTable.forEach(({ code, category, reportsUnnecessary }, name) => {
         const propName = convertPropertyName(name);
