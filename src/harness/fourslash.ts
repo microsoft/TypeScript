@@ -798,7 +798,7 @@ namespace FourSlash {
                         const name = typeof include === "string" ? include : include.name;
                         const found = nameToEntries.get(name);
                         if (!found) throw this.raiseError(`No completion ${name} found`);
-                        assert(found.length === 1, `Must use 'exact' for multiple completions with same name: '${name}'`);
+                        assert(found.length === 1); // Must use 'exact' for multiple completions with same name
                         this.verifyCompletionEntry(ts.first(found), include);
                     }
                 }
@@ -865,7 +865,7 @@ namespace FourSlash {
             ts.zipWith(actual, expected, (completion, expectedCompletion, index) => {
                 const name = typeof expectedCompletion === "string" ? expectedCompletion : expectedCompletion.name;
                 if (completion.name !== name) {
-                    this.raiseError(`${marker ? JSON.stringify(marker) : "" } Expected completion at index ${index} to be ${name}, got ${completion.name}`);
+                    this.raiseError(`${marker ? JSON.stringify(marker) : ""} Expected completion at index ${index} to be ${name}, got ${completion.name}`);
                 }
                 this.verifyCompletionEntry(completion, expectedCompletion);
             });
@@ -948,7 +948,7 @@ namespace FourSlash {
 
             const actual = checker.typeToString(type);
             if (actual !== expected) {
-                this.raiseError(`Expected: '${expected}', actual: '${actual}'`);
+                this.raiseError(displayExpectedAndActualString(expected, actual));
             }
         }
 
@@ -1024,9 +1024,7 @@ namespace FourSlash {
         private assertObjectsEqual<T>(fullActual: T, fullExpected: T, msgPrefix = ""): void {
             const recur = <U>(actual: U, expected: U, path: string) => {
                 const fail = (msg: string) => {
-                    this.raiseError(`${msgPrefix} At ${path}: ${msg}
-Expected: ${stringify(fullExpected)}
-Actual: ${stringify(fullActual)}`);
+                    this.raiseError(`${msgPrefix} At ${path}: ${msg} ${displayExpectedAndActualString(stringify(fullExpected), stringify(fullActual))}`);
                 };
 
                 if ((actual === undefined) !== (expected === undefined)) {
@@ -1058,9 +1056,7 @@ Actual: ${stringify(fullActual)}`);
                 if (fullActual === fullExpected) {
                     return;
                 }
-                this.raiseError(`${msgPrefix}
-Expected: ${stringify(fullExpected)}
-Actual: ${stringify(fullActual)}`);
+                this.raiseError(`${msgPrefix} ${displayExpectedAndActualString(stringify(fullExpected), stringify(fullActual))}`);
             }
             recur(fullActual, fullExpected, "");
 
@@ -2111,9 +2107,7 @@ Actual: ${stringify(fullActual)}`);
         public verifyCurrentLineContent(text: string) {
             const actual = this.getCurrentLineContent();
             if (actual !== text) {
-                throw new Error("verifyCurrentLineContent\n" +
-                    "\tExpected: \"" + text + "\"\n" +
-                    "\t  Actual: \"" + actual + "\"");
+                throw new Error("verifyCurrentLineContent\n" + displayExpectedAndActualString(text, actual, /* quoted */ true));
             }
         }
 
@@ -2139,25 +2133,19 @@ Actual: ${stringify(fullActual)}`);
         public verifyTextAtCaretIs(text: string) {
             const actual = this.getFileContent(this.activeFile.fileName).substring(this.currentCaretPosition, this.currentCaretPosition + text.length);
             if (actual !== text) {
-                throw new Error("verifyTextAtCaretIs\n" +
-                    "\tExpected: \"" + text + "\"\n" +
-                    "\t  Actual: \"" + actual + "\"");
+                throw new Error("verifyTextAtCaretIs\n" + displayExpectedAndActualString(text, actual, /* quoted */ true));
             }
         }
 
         public verifyCurrentNameOrDottedNameSpanText(text: string) {
             const span = this.languageService.getNameOrDottedNameSpan(this.activeFile.fileName, this.currentCaretPosition, this.currentCaretPosition);
             if (!span) {
-                return this.raiseError("verifyCurrentNameOrDottedNameSpanText\n" +
-                    "\tExpected: \"" + text + "\"\n" +
-                    "\t  Actual: undefined");
+                return this.raiseError("verifyCurrentNameOrDottedNameSpanText\n" + displayExpectedAndActualString("\"" + text + "\"", "undefined"));
             }
 
             const actual = this.getFileContent(this.activeFile.fileName).substring(span.start, ts.textSpanEnd(span));
             if (actual !== text) {
-                this.raiseError("verifyCurrentNameOrDottedNameSpanText\n" +
-                    "\tExpected: \"" + text + "\"\n" +
-                    "\t  Actual: \"" + actual + "\"");
+                this.raiseError("verifyCurrentNameOrDottedNameSpanText\n" + displayExpectedAndActualString(text, actual, /* quoted */ true));
             }
         }
 
@@ -3690,7 +3678,7 @@ ${code}
             expected = makeWhitespaceVisible(expected);
             actual = makeWhitespaceVisible(actual);
         }
-        return `Expected:\n${expected}\nActual:\n${actual}`;
+        return displayExpectedAndActualString(expected, actual);
     }
 
     function differOnlyByWhitespace(a: string, b: string) {
@@ -3709,6 +3697,14 @@ ${code}
                 }
             }
         }
+    }
+
+    function displayExpectedAndActualString(expected: string, actual: string, quoted = false) {
+        const expectMsg = "\x1b[1mExpected\x1b[0m\x1b[31m";
+        const actualMsg = "\x1b[1mActual\x1b[0m\x1b[31m";
+        const expectedString = quoted ? "\"" + expected + "\"" : expected;
+        const actualString = quoted ? "\"" + actual + "\"" : actual;
+        return `\n${expectMsg}:\n${expectedString}\n\n${actualMsg}:\n${actualString}`;
     }
 }
 
@@ -3759,7 +3755,7 @@ namespace FourSlashInterface {
     }
 
     export class Plugins {
-        constructor (private state: FourSlash.TestState) {
+        constructor(private state: FourSlash.TestState) {
         }
 
         public configurePlugin(pluginName: string, configuration: any): void {
@@ -4582,7 +4578,7 @@ namespace FourSlashInterface {
         export const keywords: ReadonlyArray<ExpectedCompletionEntryObject> = keywordsWithUndefined.filter(k => k.name !== "undefined");
 
         export const typeKeywords: ReadonlyArray<ExpectedCompletionEntryObject> =
-            ["false", "null", "true", "void", "any", "boolean", "keyof", "never", "number", "object", "string", "symbol", "undefined", "unique", "unknown", "bigint"].map(keywordEntry);
+            ["false", "null", "true", "void", "any", "boolean", "keyof", "never", "readonly", "number", "object", "string", "symbol", "undefined", "unique", "unknown", "bigint"].map(keywordEntry);
 
         const globalTypeDecls: ReadonlyArray<ExpectedCompletionEntryObject> = [
             interfaceEntry("Symbol"),
@@ -4697,6 +4693,9 @@ namespace FourSlashInterface {
                 ...typeKeywords,
             ];
         }
+
+        export const typeAssertionKeywords: ReadonlyArray<ExpectedCompletionEntry> =
+            globalTypesPlus([keywordEntry("const")]);
 
         function getInJsKeywords(keywords: ReadonlyArray<ExpectedCompletionEntryObject>): ReadonlyArray<ExpectedCompletionEntryObject> {
             return keywords.filter(keyword => {

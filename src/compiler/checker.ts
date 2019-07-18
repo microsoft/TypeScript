@@ -42,10 +42,10 @@ namespace ts {
         iterableCacheKey: "iterationTypesOfAsyncIterable" | "iterationTypesOfIterable";
         iteratorCacheKey: "iterationTypesOfAsyncIterator" | "iterationTypesOfIterator";
         iteratorSymbolName: "asyncIterator" | "iterator";
-        getGlobalIteratorType: (reportErrors: boolean) => Type;
-        getGlobalIterableType: (reportErrors: boolean) => Type;
-        getGlobalIterableIteratorType: (reportErrors: boolean) => Type;
-        getGlobalGeneratorType: (reportErrors: boolean) => Type;
+        getGlobalIteratorType: (reportErrors: boolean) => GenericType;
+        getGlobalIterableType: (reportErrors: boolean) => GenericType;
+        getGlobalIterableIteratorType: (reportErrors: boolean) => GenericType;
+        getGlobalGeneratorType: (reportErrors: boolean) => GenericType;
         resolveIterationType: (type: Type, errorNode: Node | undefined) => Type | undefined;
         mustHaveANextMethodDiagnostic: DiagnosticMessage;
         mustBeAMethodDiagnostic: DiagnosticMessage;
@@ -9531,22 +9531,8 @@ namespace ts {
             return createTypeFromGenericGlobalType(getGlobalTypedPropertyDescriptorType(), [propertyType]);
         }
 
-        function createAsyncGeneratorType(yieldType: Type, returnType: Type, nextType: Type) {
-            const globalAsyncGeneratorType = getGlobalAsyncGeneratorType(/*reportErrors*/ true);
-            if (globalAsyncGeneratorType !== emptyGenericType) {
-                yieldType = getAwaitedType(yieldType) || unknownType;
-                returnType = getAwaitedType(returnType) || unknownType;
-                nextType = getAwaitedType(nextType) || unknownType;
-            }
-            return createTypeFromGenericGlobalType(globalAsyncGeneratorType, [yieldType, returnType, nextType]);
-        }
-
         function createIterableType(iteratedType: Type): Type {
             return createTypeFromGenericGlobalType(getGlobalIterableType(/*reportErrors*/ true), [iteratedType]);
-        }
-
-        function createGeneratorType(yieldType: Type, returnType: Type, nextType: Type) {
-            return createTypeFromGenericGlobalType(getGlobalGeneratorType(/*reportErrors*/ true), [yieldType, returnType, nextType]);
         }
 
         function createArrayType(elementType: Type, readonly?: boolean): ObjectType {
@@ -9904,7 +9890,7 @@ namespace ts {
             return links.resolvedType;
         }
 
-        function addTypeToIntersection(typeSet: Type[], includes: TypeFlags, type: Type) {
+        function addTypeToIntersection(typeSet: Map<Type>, includes: TypeFlags, type: Type) {
             const flags = type.flags;
             if (flags & TypeFlags.Intersection) {
                 return addTypesToIntersection(typeSet, includes, (<IntersectionType>type).types);
@@ -9912,20 +9898,20 @@ namespace ts {
             if (isEmptyAnonymousObjectType(type)) {
                 if (!(includes & TypeFlags.IncludesEmptyObject)) {
                     includes |= TypeFlags.IncludesEmptyObject;
-                    typeSet.push(type);
+                    typeSet.set(type.id.toString(), type);
                 }
             }
             else {
                 if (flags & TypeFlags.AnyOrUnknown) {
                     if (type === wildcardType) includes |= TypeFlags.IncludesWildcard;
                 }
-                else if ((strictNullChecks || !(flags & TypeFlags.Nullable)) && !contains(typeSet, type)) {
+                else if ((strictNullChecks || !(flags & TypeFlags.Nullable)) && !typeSet.has(type.id.toString())) {
                     if (type.flags & TypeFlags.Unit && includes & TypeFlags.Unit) {
                         // We have seen two distinct unit types which means we should reduce to an
                         // empty intersection. Adding TypeFlags.NonPrimitive causes that to happen.
                         includes |= TypeFlags.NonPrimitive;
                     }
-                    typeSet.push(type);
+                    typeSet.set(type.id.toString(), type);
                 }
                 includes |= flags & TypeFlags.IncludesMask;
             }
@@ -9934,7 +9920,7 @@ namespace ts {
 
         // Add the given types to the given type set. Order is preserved, freshness is removed from literal
         // types, duplicates are removed, and nested types of the given kind are flattened into the set.
-        function addTypesToIntersection(typeSet: Type[], includes: TypeFlags, types: ReadonlyArray<Type>) {
+        function addTypesToIntersection(typeSet: Map<Type>, includes: TypeFlags, types: ReadonlyArray<Type>) {
             for (const type of types) {
                 includes = addTypeToIntersection(typeSet, includes, getRegularTypeOfLiteralType(type));
             }
@@ -10041,8 +10027,9 @@ namespace ts {
         // Also, unlike union types, the order of the constituent types is preserved in order that overload resolution
         // for intersections of types with signatures can be deterministic.
         function getIntersectionType(types: ReadonlyArray<Type>, aliasSymbol?: Symbol, aliasTypeArguments?: ReadonlyArray<Type>): Type {
-            const typeSet: Type[] = [];
-            const includes = addTypesToIntersection(typeSet, 0, types);
+            const typeMembershipMap: Map<Type> = createMap();
+            const includes = addTypesToIntersection(typeMembershipMap, 0, types);
+            const typeSet: Type[] = arrayFrom(typeMembershipMap.values());
             // An intersection type is considered empty if it contains
             // the type never, or
             // more than one unit type or,
@@ -20583,10 +20570,15 @@ namespace ts {
                 }
                 propType = getConstraintForLocation(getTypeOfSymbol(prop), node);
             }
+            return getFlowTypeOfAccessExpression(node, prop, propType, right);
+        }
+
+        function getFlowTypeOfAccessExpression(node: ElementAccessExpression | PropertyAccessExpression | QualifiedName, prop: Symbol | undefined, propType: Type, errorNode: Node) {
             // Only compute control flow type if this is a property access expression that isn't an
             // assignment target, and the referenced property was declared as a variable, property,
             // accessor, or optional method.
-            if (node.kind !== SyntaxKind.PropertyAccessExpression ||
+            const assignmentKind = getAssignmentTargetKind(node);
+            if (node.kind !== SyntaxKind.ElementAccessExpression && node.kind !== SyntaxKind.PropertyAccessExpression ||
                 assignmentKind === AssignmentKind.Definite ||
                 prop && !(prop.flags & (SymbolFlags.Variable | SymbolFlags.Property | SymbolFlags.Accessor)) && !(prop.flags & SymbolFlags.Method && propType.flags & TypeFlags.Union)) {
                 return propType;
@@ -20596,7 +20588,7 @@ namespace ts {
             // and if we are in a constructor of the same class as the property declaration, assume that
             // the property is uninitialized at the top of the control flow.
             let assumeUninitialized = false;
-            if (strictNullChecks && strictPropertyInitialization && left.kind === SyntaxKind.ThisKeyword) {
+            if (strictNullChecks && strictPropertyInitialization && node.expression.kind === SyntaxKind.ThisKeyword) {
                 const declaration = prop && prop.valueDeclaration;
                 if (declaration && isInstancePropertyWithoutInitializer(declaration)) {
                     const flowContainer = getControlFlowContainer(node);
@@ -20613,7 +20605,7 @@ namespace ts {
             }
             const flowType = getFlowTypeOfReference(node, propType, assumeUninitialized ? getOptionalType(propType) : propType);
             if (assumeUninitialized && !(getFalsyFlags(propType) & TypeFlags.Undefined) && getFalsyFlags(flowType) & TypeFlags.Undefined) {
-                error(right, Diagnostics.Property_0_is_used_before_being_assigned, symbolToString(prop!)); // TODO: GH#18217
+                error(errorNode, Diagnostics.Property_0_is_used_before_being_assigned, symbolToString(prop!)); // TODO: GH#18217
                 // Return the declared type to reduce follow-on errors
                 return propType;
             }
@@ -20970,7 +20962,7 @@ namespace ts {
                 AccessFlags.Writing | (isGenericObjectType(objectType) && !isThisTypeParameter(objectType) ? AccessFlags.NoIndexSignatures : 0) :
                 AccessFlags.None;
             const indexedAccessType = getIndexedAccessTypeOrUndefined(objectType, effectiveIndexType, node, accessFlags) || errorType;
-            return checkIndexedAccessIndexType(indexedAccessType, node);
+            return checkIndexedAccessIndexType(getFlowTypeOfAccessExpression(node, indexedAccessType.symbol, indexedAccessType, indexExpression), node);
         }
 
         function checkThatExpressionIsProperSymbolReference(expression: Expression, expressionType: Type, reportError: boolean): boolean {
@@ -23397,9 +23389,36 @@ namespace ts {
         }
 
         function createGeneratorReturnType(yieldType: Type, returnType: Type, nextType: Type, isAsyncGenerator: boolean) {
-            return isAsyncGenerator
-                ? createAsyncGeneratorType(yieldType, returnType, nextType)
-                : createGeneratorType(yieldType, returnType, nextType);
+            const resolver = isAsyncGenerator ? asyncIterationTypesResolver : syncIterationTypesResolver;
+            const globalGeneratorType = resolver.getGlobalGeneratorType(/*reportErrors*/ false);
+            yieldType = resolver.resolveIterationType(yieldType, /*errorNode*/ undefined) || unknownType;
+            returnType = resolver.resolveIterationType(returnType, /*errorNode*/ undefined) || unknownType;
+            nextType = resolver.resolveIterationType(nextType, /*errorNode*/ undefined) || unknownType;
+            if (globalGeneratorType === emptyGenericType) {
+                // Fall back to the global IterableIterator if returnType is assignable to the expected return iteration
+                // type of IterableIterator, and the expected next iteration type of IterableIterator is assignable to
+                // nextType.
+                const globalType = resolver.getGlobalIterableIteratorType(/*reportErrors*/ false);
+                const iterationTypes = globalType !== emptyGenericType ? getIterationTypesOfGlobalIterableType(globalType, resolver) : undefined;
+                const iterableIteratorReturnType = iterationTypes ? iterationTypes.returnType : anyType;
+                const iterableIteratorNextType = iterationTypes ? iterationTypes.nextType : undefinedType;
+                if (isTypeAssignableTo(returnType, iterableIteratorReturnType) &&
+                    isTypeAssignableTo(iterableIteratorNextType, nextType)) {
+                    if (globalType !== emptyGenericType) {
+                        return createTypeFromGenericGlobalType(globalType, [yieldType]);
+                    }
+
+                    // The global IterableIterator type doesn't exist, so report an error
+                    resolver.getGlobalIterableIteratorType(/*reportErrors*/ true);
+                    return emptyObjectType;
+                }
+
+                // The global Generator type doesn't exist, so report an error
+                resolver.getGlobalGeneratorType(/*reportErrors*/ true);
+                return emptyObjectType;
+            }
+
+            return createTypeFromGenericGlobalType(globalGeneratorType, [yieldType, returnType, nextType]);
         }
 
         function checkAndAggregateYieldOperandTypes(func: FunctionLikeDeclaration, checkMode: CheckMode | undefined) {
@@ -24716,6 +24735,12 @@ namespace ts {
             }
             else if (returnType) {
                 return getIterationTypeOfGeneratorFunctionReturnType(IterationTypeKind.Next, returnType, isAsync)
+                    || anyType;
+            }
+
+            const contextualReturnType = getContextualReturnType(func);
+            if (contextualReturnType) {
+                return getIterationTypeOfGeneratorFunctionReturnType(IterationTypeKind.Next, contextualReturnType, isAsync)
                     || anyType;
             }
 
@@ -28240,6 +28265,13 @@ namespace ts {
             return (type as IterableOrIteratorType)[resolver.iterableCacheKey];
         }
 
+        function getIterationTypesOfGlobalIterableType(globalType: Type, resolver: IterationTypesResolver) {
+            const globalIterationTypes =
+                getIterationTypesOfIterableCached(globalType, resolver) ||
+                getIterationTypesOfIterableSlow(globalType, resolver, /*errorNode*/ undefined);
+            return globalIterationTypes === noIterationTypes ? defaultIterationTypes : globalIterationTypes;
+        }
+
         /**
          * Gets the *yield*, *return*, and *next* types of an `Iterable`-like or `AsyncIterable`-like
          * type from from common heuristics.
@@ -28265,10 +28297,7 @@ namespace ts {
                 // iteration types of their `[Symbol.iterator]()` method. The same is true for their async cousins.
                 // While we define these as `any` and `undefined` in our libs by default, a custom lib *could* use
                 // different definitions.
-                const globalIterationTypes =
-                    getIterationTypesOfIterableCached(globalType, resolver) ||
-                    getIterationTypesOfIterableSlow(globalType, resolver, /*errorNode*/ undefined);
-                const { returnType, nextType } = globalIterationTypes === noIterationTypes ? defaultIterationTypes : globalIterationTypes;
+                const { returnType, nextType } = getIterationTypesOfGlobalIterableType(globalType, resolver);
                 return (type as IterableOrIteratorType)[resolver.iterableCacheKey] = createIterationTypes(yieldType, returnType, nextType);
             }
 

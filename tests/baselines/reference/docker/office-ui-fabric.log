@@ -10,12 +10,24 @@ XX of XX: [@uifabric/prettier-rules] completed successfully in ? seconds
 XX of XX: [@uifabric/tslint-rules] completed successfully in ? seconds
 [@uifabric/codepen-loader] started
 ts-jest[versions] (WARN) Version X.X.X-insiders.xxxxxxxx of typescript installed has not been tested with ts-jest. If you're experiencing issues, consider using a supported version (>=2.7.0 <4.0.0). Please do not report issues in ts-jest if you are using unsupported versions.
+ PASS  src/__tests__/codepenTransform.test.ts
+  codepen transform
+    ✓ handles examples with function components (225ms)
+    ✓ handles examples with class components (38ms)
+    ✓ handles examples importing exampleData (115ms)
+    ✓ handles examples importing TestImages (45ms)
+    ✓ handles examples importing PeopleExampleData (288ms)
+Test Suites: 1 passed, 1 total
+Tests:       5 passed, 5 total
+Snapshots:   4 passed, 4 total
+Time:        ?s
+Ran all test suites.
 [@uifabric/build] started
 XX of XX: [@uifabric/build] completed successfully in ? seconds
 [@uifabric/migration] started
 XX of XX: [@uifabric/migration] completed successfully in ? seconds
 [@uifabric/set-version] started
-ts-jest[versions] (WARN) Version X.X.X-insiders.xxxxxxxx of typescript installed has not been tested with ts-jest. If you're experiencing issues, consider using a supported version (>=2.7.0 <4.0.0). Please do not report issues in ts-jest if you are using unsupported versions.
+XX of XX: [@uifabric/set-version] completed successfully in ? seconds
 [@uifabric/merge-styles] started
 ts-jest[versions] (WARN) Version X.X.X-insiders.xxxxxxxx of typescript installed has not been tested with ts-jest. If you're experiencing issues, consider using a supported version (>=2.7.0 <4.0.0). Please do not report issues in ts-jest if you are using unsupported versions.
 [@uifabric/jest-serializer-merge-styles] started
@@ -204,7 +216,7 @@ ts-jest[versions] (WARN) Version X.X.X-insiders.xxxxxxxx of typescript installed
 [XX:XX:XX XM] x Error detected while running 'jest'
 [XX:XX:XX XM] x ------------------------------------
 [XX:XX:XX XM] x Error: Command failed: /usr/local/bin/node /office-ui-fabric-react/common/temp/node_modules/jest/bin/jest.js --config /office-ui-fabric-react/packages/foundation/jest.config.js --passWithNoTests --colors
-    at ChildProcess.<anonymous> (/office-ui-fabric-react/common/temp/node_modules/.registry.npmjs.org/just-scripts-utils/0.8.1/node_modules/just-scripts-utils/lib/exec.js:70:31)
+    at ChildProcess.<anonymous> (/office-ui-fabric-react/common/temp/node_modules/.registry.npmjs.org/just-scripts-utils/0.8.2/node_modules/just-scripts-utils/lib/exec.js:70:31)
     at ChildProcess.emit (events.js:203:13)
     at ChildProcess.EventEmitter.emit (domain.js:494:23)
     at Process.ChildProcess._handle.onexit (internal/child_process.js:272:12)
@@ -216,26 +228,37 @@ ts-jest[versions] (WARN) Version X.X.X-insiders.xxxxxxxx of typescript installed
 XX of XX: [@uifabric/icons] completed successfully in ? seconds
 [@uifabric/webpack-utils] started
 XX of XX: [@uifabric/webpack-utils] completed successfully in ? seconds
-SUCCESS (8)
+SUCCESS (9)
 ================================
 @uifabric/build (? seconds)
 @uifabric/file-type-icons (? seconds)
 @uifabric/icons (? seconds)
 @uifabric/migration (? seconds)
 @uifabric/prettier-rules (? seconds)
+@uifabric/set-version (? seconds)
 @uifabric/test-utilities (? seconds)
 @uifabric/tslint-rules (? seconds)
 @uifabric/webpack-utils (? seconds)
 ================================
-SUCCESS WITH WARNINGS (6)
+SUCCESS WITH WARNINGS (5)
 ================================
 @uifabric/codepen-loader (? seconds)
 ts-jest[versions] (WARN) Version X.X.X-insiders.xxxxxxxx of typescript installed has not been tested with ts-jest. If you're experiencing issues, consider using a supported version (>=2.7.0 <4.0.0). Please do not report issues in ts-jest if you are using unsupported versions.
+ PASS  src/__tests__/codepenTransform.test.ts
+  codepen transform
+    ✓ handles examples with function components (225ms)
+    ✓ handles examples with class components (38ms)
+    ✓ handles examples importing exampleData (115ms)
+    ✓ handles examples importing TestImages (45ms)
+    ✓ handles examples importing PeopleExampleData (288ms)
+Test Suites: 1 passed, 1 total
+Tests:       5 passed, 5 total
+Snapshots:   4 passed, 4 total
+Time:        ?s
+Ran all test suites.
 @uifabric/jest-serializer-merge-styles (? seconds)
 ts-jest[versions] (WARN) Version X.X.X-insiders.xxxxxxxx of typescript installed has not been tested with ts-jest. If you're experiencing issues, consider using a supported version (>=2.7.0 <4.0.0). Please do not report issues in ts-jest if you are using unsupported versions.
 @uifabric/merge-styles (? seconds)
-ts-jest[versions] (WARN) Version X.X.X-insiders.xxxxxxxx of typescript installed has not been tested with ts-jest. If you're experiencing issues, consider using a supported version (>=2.7.0 <4.0.0). Please do not report issues in ts-jest if you are using unsupported versions.
-@uifabric/set-version (? seconds)
 ts-jest[versions] (WARN) Version X.X.X-insiders.xxxxxxxx of typescript installed has not been tested with ts-jest. If you're experiencing issues, consider using a supported version (>=2.7.0 <4.0.0). Please do not report issues in ts-jest if you are using unsupported versions.
 @uifabric/styling (? seconds)
 ts-jest[versions] (WARN) Version X.X.X-insiders.xxxxxxxx of typescript installed has not been tested with ts-jest. If you're experiencing issues, consider using a supported version (>=2.7.0 <4.0.0). Please do not report issues in ts-jest if you are using unsupported versions.
@@ -296,7 +319,7 @@ ts-jest[versions] (WARN) Version X.X.X-insiders.xxxxxxxx of typescript installed
 [XX:XX:XX XM] x Error detected while running 'jest'
 [XX:XX:XX XM] x ------------------------------------
 [XX:XX:XX XM] x Error: Command failed: /usr/local/bin/node /office-ui-fabric-react/common/temp/node_modules/jest/bin/jest.js --config /office-ui-fabric-react/packages/foundation/jest.config.js --passWithNoTests --colors
-    at ChildProcess.<anonymous> (/office-ui-fabric-react/common/temp/node_modules/.registry.npmjs.org/just-scripts-utils/0.8.1/node_modules/just-scripts-utils/lib/exec.js:70:31)
+    at ChildProcess.<anonymous> (/office-ui-fabric-react/common/temp/node_modules/.registry.npmjs.org/just-scripts-utils/0.8.2/node_modules/just-scripts-utils/lib/exec.js:70:31)
     at ChildProcess.emit (events.js:203:13)
     at ChildProcess.EventEmitter.emit (domain.js:494:23)
     at Process.ChildProcess._handle.onexit (internal/child_process.js:272:12)
@@ -313,7 +336,6 @@ rush rebuild - Errors! ( ? seconds)
 Standard error:
 Your version of Node.js (X.X.X) has not been tested with this release of Rush. The Rush team will not accept issue reports for it. Please consider upgrading Rush or downgrading Node.js.
 XX of XX: [@uifabric/codepen-loader] completed with warnings in ? seconds
-XX of XX: [@uifabric/set-version] completed with warnings in ? seconds
 XX of XX: [@uifabric/merge-styles] completed with warnings in ? seconds
 XX of XX: [@uifabric/jest-serializer-merge-styles] completed with warnings in ? seconds
 XX of XX: [@uifabric/utilities] completed with warnings in ? seconds

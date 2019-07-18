@@ -696,6 +696,7 @@ declare namespace completion {
     export const typeKeywords: ReadonlyArray<Entry>;
     export const globalTypes: ReadonlyArray<Entry>;
     export function globalTypesPlus(plus: ReadonlyArray<FourSlashInterface.ExpectedCompletionEntry>): ReadonlyArray<Entry>;
+    export const typeAssertionKeywords: ReadonlyArray<Entry>;
     export const classElementKeywords: ReadonlyArray<Entry>;
     export const classElementInJsKeywords: ReadonlyArray<Entry>;
     export const constructorParameterKeywords: ReadonlyArray<Entry>;
