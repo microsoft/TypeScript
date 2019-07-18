@@ -672,8 +672,8 @@ declare namespace completion {
     type Entry = FourSlashInterface.ExpectedCompletionEntryObject;
     export const enum SortText {
         LocationPriority = "0",
-        LocationPriorityOptional = "1",
-        LocationPriorityFulfilled = "2",
+        OptionalMember = "1",
+        MemberDeclaredBySpreadAssignment = "2",
         SuggestedClassMembers = "3",
         GlobalsOrKeywords = "4",
         AutoImportSuggestions = "5",

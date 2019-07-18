@@ -2,8 +2,8 @@
 namespace ts.Completions {
     export enum SortText {
         LocationPriority = "0",
-        LocationPriorityOptional = "1",
-        LocationPriorityFulfilled = "2",
+        OptionalMember = "1",
+        MemberDeclaredBySpreadAssignment = "2",
         SuggestedClassMembers = "3",
         GlobalsOrKeywords = "4",
         AutoImportSuggestions = "5",
@@ -105,7 +105,6 @@ namespace ts.Completions {
             isJsxInitializer,
             insideJsDocTagTypeExpression,
             symbolToSortTextMap,
-            fulfilledSymbols,
         } = completionData;
 
         if (location && location.parent && isJsxClosingElement(location.parent)) {
@@ -167,7 +166,6 @@ namespace ts.Completions {
                 recommendedCompletion,
                 symbolToOriginInfoMap,
                 symbolToSortTextMap,
-                fulfilledSymbols
             );
         }
 
@@ -321,7 +319,6 @@ namespace ts.Completions {
         recommendedCompletion?: Symbol,
         symbolToOriginInfoMap?: SymbolOriginInfoMap,
         symbolToSortTextMap?: SymbolSortTextMap,
-        fulfilledSymbols?: ReadonlyArray<Symbol>,
     ): Map<true> {
         const start = timestamp();
         // Tracks unique names.
@@ -340,23 +337,9 @@ namespace ts.Completions {
                 continue;
             }
 
-            let sortText = symbolToSortTextMap && symbolToSortTextMap[getSymbolId(symbol)];
-            if (!sortText) {
-                if (fulfilledSymbols && fulfilledSymbols.length > 0) {
-                    fulfilledSymbols.forEach(fulfilledSymbol => {
-                        if (fulfilledSymbol.name === symbol.name) {
-                            sortText = SortText.LocationPriorityFulfilled;
-                        }
-                    });
-                }
-            }
-            if (!sortText) {
-                sortText = SymbolDisplay.getSymbolModifiers(symbol) === "optional" ? SortText.LocationPriorityOptional : SortText.LocationPriority;
-            }
-
             const entry = createCompletionEntry(
                 symbol,
-                sortText,
+                symbolToSortTextMap && symbolToSortTextMap[getSymbolId(symbol)] || SortText.LocationPriority,
                 location,
                 sourceFile,
                 typeChecker,
@@ -366,7 +349,7 @@ namespace ts.Completions {
                 recommendedCompletion,
                 propertyAccessToConvert,
                 isJsxInitializer,
-                preferences,
+                preferences
             );
             if (!entry) {
                 continue;
@@ -600,7 +583,6 @@ namespace ts.Completions {
         readonly isJsxInitializer: IsJsxInitializer;
         readonly insideJsDocTagTypeExpression: boolean;
         readonly symbolToSortTextMap: SymbolSortTextMap;
-        readonly fulfilledSymbols?: ReadonlyArray<Symbol>;
     }
     type Request = { readonly kind: CompletionDataKind.JsDocTagName | CompletionDataKind.JsDocTag } | { readonly kind: CompletionDataKind.JsDocParameterName, tag: JSDocParameterTag };
 
@@ -892,7 +874,6 @@ namespace ts.Completions {
         let isNewIdentifierLocation = false;
         let keywordFilters = KeywordCompletionFilters.None;
         let symbols: Symbol[] = [];
-        let fulfilledSymbols: Symbol[] | undefined = [];
         const symbolToOriginInfoMap: SymbolOriginInfoMap = [];
         const symbolToSortTextMap: SymbolSortTextMap = [];
 
@@ -946,7 +927,6 @@ namespace ts.Completions {
             isJsxInitializer,
             insideJsDocTagTypeExpression,
             symbolToSortTextMap,
-            fulfilledSymbols
         };
 
         type JSDocTagWithTypeExpression = JSDocParameterTag | JSDocPropertyTag | JSDocReturnTag | JSDocTypeTag | JSDocTypedefTag;
@@ -1516,18 +1496,19 @@ namespace ts.Completions {
             if (typeMembers && typeMembers.length > 0) {
                 // Add filtered items to the completion list
                 symbols = filterObjectMembersList(typeMembers, Debug.assertDefined(existingMembers));
-                if (existingMembers && existingMembers.length > 0) {
-                    existingMembers.forEach(member => {
-                        if (member.kind === SyntaxKind.SpreadAssignment) {
-                            const expression = (<SpreadAssignment>member).expression;
-                            const symbol = typeChecker.getSymbolAtLocation(expression);
-                            const type = symbol && typeChecker.getTypeOfSymbolAtLocation(symbol, expression);
-                            fulfilledSymbols = type && (<ObjectType>type).properties;
-                        }
-                    });
-                }
             }
+            setSortTextToOptionalMember();
+
             return GlobalsSearch.Success;
+        }
+
+        // Set SortText to OptionalMember if it is an optinoal member
+        function setSortTextToOptionalMember() {
+            symbols.forEach(m => {
+                if (SymbolDisplay.getSymbolModifiers(m) === "optional") {
+                    symbolToSortTextMap[getSymbolId(m)] = symbolToSortTextMap[getSymbolId(m)] || SortText.OptionalMember;
+                }
+            });
         }
 
         /**
@@ -1898,6 +1879,7 @@ namespace ts.Completions {
                 return contextualMemberSymbols;
             }
 
+            const fulfilledSymbols: Symbol[] = [];
             const existingMemberNames = createUnderscoreEscapedMap<boolean>();
             for (const m of existingMembers) {
                 // Ignore omitted expressions for missing members
@@ -1906,7 +1888,8 @@ namespace ts.Completions {
                     m.kind !== SyntaxKind.BindingElement &&
                     m.kind !== SyntaxKind.MethodDeclaration &&
                     m.kind !== SyntaxKind.GetAccessor &&
-                    m.kind !== SyntaxKind.SetAccessor) {
+                    m.kind !== SyntaxKind.SetAccessor &&
+                    m.kind !== SyntaxKind.SpreadAssignment) {
                     continue;
                 }
 
@@ -1917,7 +1900,16 @@ namespace ts.Completions {
 
                 let existingName: __String | undefined;
 
-                if (isBindingElement(m) && m.propertyName) {
+                if (isSpreadAssignment(m)) {
+                    const expression = m.expression;
+                    const symbol = typeChecker.getSymbolAtLocation(expression);
+                    const type = symbol && typeChecker.getTypeOfSymbolAtLocation(symbol, expression);
+                    const properties = type && (<ObjectType>type).properties;
+                    if (properties) {
+                        fulfilledSymbols.push(...properties);
+                    }
+                }
+                else if (isBindingElement(m) && m.propertyName) {
                     // include only identifiers in completion list
                     if (m.propertyName.kind === SyntaxKind.Identifier) {
                         existingName = m.propertyName.escapedText;
@@ -1934,7 +1926,18 @@ namespace ts.Completions {
                 existingMemberNames.set(existingName!, true); // TODO: GH#18217
             }
 
-            return contextualMemberSymbols.filter(m => !existingMemberNames.get(m.escapedName));
+            const filteredSymbols = contextualMemberSymbols.filter(m => !existingMemberNames.get(m.escapedName));
+
+            // Set SortText to MemberDeclaredBySpreadAssignment if it is fulfilled by spread assignment
+            for (const fulfilledSymbol of fulfilledSymbols) {
+                for (const contextualMemberSymbol of filteredSymbols) {
+                    if (contextualMemberSymbol.name === fulfilledSymbol.name) {
+                        symbolToSortTextMap[getSymbolId(contextualMemberSymbol)] = SortText.MemberDeclaredBySpreadAssignment;
+                    }
+                }
+            }
+
+            return filteredSymbols;
         }
 
         /**
