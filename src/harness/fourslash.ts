@@ -4951,20 +4951,8 @@ namespace FourSlashInterface {
             "let",
             "package",
             "yield",
-            "any",
             "async",
             "await",
-            "boolean",
-            "keyof",
-            "never",
-            "readonly",
-            "number",
-            "object",
-            "string",
-            "symbol",
-            "unique",
-            "unknown",
-            "bigint",
         ].map(keywordEntry);
 
         export const undefinedVarEntry: ExpectedCompletionEntry = {
@@ -5099,20 +5087,8 @@ namespace FourSlashInterface {
             "let",
             "package",
             "yield",
-            "any",
             "async",
             "await",
-            "boolean",
-            "keyof",
-            "never",
-            "readonly",
-            "number",
-            "object",
-            "string",
-            "symbol",
-            "unique",
-            "unknown",
-            "bigint",
         ].map(keywordEntry);
 
         export const insideMethodInJsKeywords = getInJsKeywords(insideMethodKeywords);

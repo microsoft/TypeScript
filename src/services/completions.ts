@@ -1182,7 +1182,7 @@ namespace ts.Completions {
         function filterGlobalCompletion(symbols: Symbol[]): void {
             const isTypeOnly = isTypeOnlyCompletion();
             const allowTypes = isTypeOnly || !isContextTokenValueLocation(contextToken) && isPossiblyTypeArgumentPosition(contextToken, sourceFile, typeChecker);
-            if (isTypeOnly) {
+            if (allowTypes) {
                 keywordFilters = isTypeAssertion()
                     ? KeywordCompletionFilters.TypeAssertionKeywords
                     : KeywordCompletionFilters.TypeKeywords;
@@ -2060,7 +2060,10 @@ namespace ts.Completions {
                 case KeywordCompletionFilters.None:
                     return false;
                 case KeywordCompletionFilters.All:
-                    return isFunctionLikeBodyKeyword(kind) || kind === SyntaxKind.DeclareKeyword || kind === SyntaxKind.ModuleKeyword;
+                    return isFunctionLikeBodyKeyword(kind)
+                        || kind === SyntaxKind.DeclareKeyword
+                        || kind === SyntaxKind.ModuleKeyword
+                        || isTypeKeyword(kind) && kind !== SyntaxKind.UndefinedKeyword;
                 case KeywordCompletionFilters.FunctionLikeBodyKeywords:
                     return isFunctionLikeBodyKeyword(kind);
                 case KeywordCompletionFilters.ClassElementKeywords:
@@ -2133,8 +2136,7 @@ namespace ts.Completions {
     function isFunctionLikeBodyKeyword(kind: SyntaxKind) {
         return kind === SyntaxKind.AsyncKeyword
             || kind === SyntaxKind.AwaitKeyword
-            || !isContextualKeyword(kind) && !isClassMemberCompletionKeyword(kind)
-            || isTypeKeyword(kind) && kind !== SyntaxKind.UndefinedKeyword;
+            || !isContextualKeyword(kind) && !isClassMemberCompletionKeyword(kind);
     }
 
     function keywordForNode(node: Node): SyntaxKind {
