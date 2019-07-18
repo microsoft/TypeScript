@@ -2060,16 +2060,15 @@ namespace ts.Completions {
                 case KeywordCompletionFilters.None:
                     return false;
                 case KeywordCompletionFilters.All:
-                    return kind === SyntaxKind.AsyncKeyword || SyntaxKind.AwaitKeyword || !isContextualKeyword(kind) && !isClassMemberCompletionKeyword(kind) || kind === SyntaxKind.DeclareKeyword || kind === SyntaxKind.ModuleKeyword
-                        || isTypeKeyword(kind) && kind !== SyntaxKind.UndefinedKeyword;
+                    return isFunctionLikeBodyKeyword(kind) || kind === SyntaxKind.DeclareKeyword || kind === SyntaxKind.ModuleKeyword;
+                case KeywordCompletionFilters.FunctionLikeBodyKeywords:
+                    return isFunctionLikeBodyKeyword(kind);
                 case KeywordCompletionFilters.ClassElementKeywords:
                     return isClassMemberCompletionKeyword(kind);
                 case KeywordCompletionFilters.InterfaceElementKeywords:
                     return isInterfaceOrTypeLiteralCompletionKeyword(kind);
                 case KeywordCompletionFilters.ConstructorParameterKeywords:
                     return isParameterPropertyModifier(kind);
-                case KeywordCompletionFilters.FunctionLikeBodyKeywords:
-                    return isFunctionLikeBodyKeyword(kind);
                 case KeywordCompletionFilters.TypeAssertionKeywords:
                     return isTypeKeyword(kind) || kind === SyntaxKind.ConstKeyword;
                 case KeywordCompletionFilters.TypeKeywords:
@@ -2132,7 +2131,10 @@ namespace ts.Completions {
     }
 
     function isFunctionLikeBodyKeyword(kind: SyntaxKind) {
-        return kind === SyntaxKind.AsyncKeyword || kind === SyntaxKind.AwaitKeyword || !isContextualKeyword(kind) && !isClassMemberCompletionKeyword(kind);
+        return kind === SyntaxKind.AsyncKeyword
+            || kind === SyntaxKind.AwaitKeyword
+            || !isContextualKeyword(kind) && !isClassMemberCompletionKeyword(kind)
+            || isTypeKeyword(kind) && kind !== SyntaxKind.UndefinedKeyword;
     }
 
     function keywordForNode(node: Node): SyntaxKind {
