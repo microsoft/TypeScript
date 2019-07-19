@@ -1,8 +1,15 @@
 /// <reference path='fourslash.ts'/>
 
 //// class Foo<T> { }
-//// function test() {
-////     new Foo<str/*1*/
+//// class Bar { }
+//// function includesTypes() {
+////     new Foo</*1*/
+//// }
+//// function excludesTypes1() {
+////     new Bar</*2*/
+//// }
+//// function excludesTypes2() {
+////     1</*3*/
 //// }
 
 verify.completions(
@@ -12,5 +19,9 @@ verify.completions(
             { name: "string", sortText: completion.SortText.GlobalsOrKeywords },
             { name: "String", sortText: completion.SortText.GlobalsOrKeywords },
         ],
+    },
+    {
+        marker: ["2", "3"],
+        excludes: ["string"]
     }
 );
