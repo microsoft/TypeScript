@@ -30,7 +30,7 @@ node_modules/adonis-framework/src/Encryption/index.js(87,15): error TS2304: Cann
 node_modules/adonis-framework/src/Encryption/index.js(101,21): error TS2769: No overload matches this call.
   Overload 1 of 4, '(data: Binary, input_encoding: undefined, output_encoding: Utf8AsciiBinaryEncoding): string', gave the following error.
     Argument of type '"base64"' is not assignable to parameter of type 'undefined'.
-  Overload 2 of 4, '(data: string, input_encoding: "binary" | "base64" | "hex" | undefined, output_encoding: Utf8AsciiBinaryEncoding): string', gave the following error.
+  Overload 2 of 4, '(data: string, input_encoding: "base64" | "binary" | "hex" | undefined, output_encoding: Utf8AsciiBinaryEncoding): string', gave the following error.
     Argument of type 'string' is not assignable to parameter of type 'Utf8AsciiBinaryEncoding'.
 node_modules/adonis-framework/src/Encryption/index.js(114,15): error TS2304: Cannot find name 'Mixed'.
 node_modules/adonis-framework/src/Encryption/index.js(119,23): error TS2554: Expected 2 arguments, but got 1.

@@ -12,11 +12,11 @@ XX of XX: [@uifabric/tslint-rules] completed successfully in ? seconds
 ts-jest[versions] (WARN) Version X.X.X-insiders.xxxxxxxx of typescript installed has not been tested with ts-jest. If you're experiencing issues, consider using a supported version (>=2.7.0 <4.0.0). Please do not report issues in ts-jest if you are using unsupported versions.
  PASS  src/__tests__/codepenTransform.test.ts
   codepen transform
-    ✓ handles examples with function components (225ms)
+    ✓ handles examples with function components (256ms)
     ✓ handles examples with class components (38ms)
-    ✓ handles examples importing exampleData (115ms)
-    ✓ handles examples importing TestImages (45ms)
-    ✓ handles examples importing PeopleExampleData (288ms)
+    ✓ handles examples importing exampleData (125ms)
+    ✓ handles examples importing TestImages (33ms)
+    ✓ handles examples importing PeopleExampleData (270ms)
 Test Suites: 1 passed, 1 total
 Tests:       5 passed, 5 total
 Snapshots:   4 passed, 4 total
@@ -246,11 +246,11 @@ SUCCESS WITH WARNINGS (5)
 ts-jest[versions] (WARN) Version X.X.X-insiders.xxxxxxxx of typescript installed has not been tested with ts-jest. If you're experiencing issues, consider using a supported version (>=2.7.0 <4.0.0). Please do not report issues in ts-jest if you are using unsupported versions.
  PASS  src/__tests__/codepenTransform.test.ts
   codepen transform
-    ✓ handles examples with function components (225ms)
+    ✓ handles examples with function components (256ms)
     ✓ handles examples with class components (38ms)
-    ✓ handles examples importing exampleData (115ms)
-    ✓ handles examples importing TestImages (45ms)
-    ✓ handles examples importing PeopleExampleData (288ms)
+    ✓ handles examples importing exampleData (125ms)
+    ✓ handles examples importing TestImages (33ms)
+    ✓ handles examples importing PeopleExampleData (270ms)
 Test Suites: 1 passed, 1 total
 Tests:       5 passed, 5 total
 Snapshots:   4 passed, 4 total
