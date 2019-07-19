@@ -797,7 +797,7 @@ namespace FourSlash {
                     for (const include of toArray(options.includes)) {
                         const name = typeof include === "string" ? include : include.name;
                         const found = nameToEntries.get(name);
-                        if (!found) throw this.raiseError(`No completion ${name} found`);
+                        if (!found) throw this.raiseError(`Includes: completion '${name}' not found.`);
                         assert(found.length === 1); // Must use 'exact' for multiple completions with same name
                         this.verifyCompletionEntry(ts.first(found), include);
                     }
@@ -806,7 +806,7 @@ namespace FourSlash {
                     for (const exclude of toArray(options.excludes)) {
                         assert(typeof exclude === "string");
                         if (nameToEntries.has(exclude)) {
-                            this.raiseError(`Did not expect to get a completion named ${exclude}`);
+                            this.raiseError(`Excludes: unexpected completion '${exclude}' found.`);
                         }
                     }
                 }
@@ -4827,40 +4827,23 @@ namespace FourSlashInterface {
             "interface",
             "let",
             "package",
-            "private",
-            "protected",
-            "public",
-            "static",
             "yield",
-            "abstract",
-            "as",
             "any",
             "async",
             "await",
             "boolean",
-            "constructor",
             "declare",
-            "get",
-            "infer",
-            "is",
             "keyof",
             "module",
-            "namespace",
             "never",
             "readonly",
-            "require",
             "number",
             "object",
-            "set",
             "string",
             "symbol",
-            "type",
             "unique",
             "unknown",
-            "from",
-            "global",
             "bigint",
-            "of",
         ].map(keywordEntry);
 
         export const statementKeywords: ReadonlyArray<ExpectedCompletionEntryObject> = statementKeywordsWithTypes.filter(k => {
@@ -5041,40 +5024,23 @@ namespace FourSlashInterface {
             "interface",
             "let",
             "package",
-            "private",
-            "protected",
-            "public",
-            "static",
             "yield",
-            "abstract",
-            "as",
             "any",
             "async",
             "await",
             "boolean",
-            "constructor",
             "declare",
-            "get",
-            "infer",
-            "is",
             "keyof",
             "module",
-            "namespace",
             "never",
             "readonly",
-            "require",
             "number",
             "object",
-            "set",
             "string",
             "symbol",
-            "type",
             "unique",
             "unknown",
-            "from",
-            "global",
             "bigint",
-            "of",
         ].map(keywordEntry);
 
         export const globalInJsKeywords = getInJsKeywords(globalKeywords);
@@ -5126,11 +5092,6 @@ namespace FourSlashInterface {
         ].map(keywordEntry);
 
         export const insideMethodInJsKeywords = getInJsKeywords(insideMethodKeywords);
-
-        export const globalKeywordsPlusUndefined: ReadonlyArray<ExpectedCompletionEntryObject> = (() => {
-            const i = ts.findIndex(globalKeywords, x => x.name === "unique");
-            return [...globalKeywords.slice(0, i), keywordEntry("undefined"), ...globalKeywords.slice(i)];
-        })();
 
         export const globals: ReadonlyArray<ExpectedCompletionEntryObject> = [
             globalThisEntry,
