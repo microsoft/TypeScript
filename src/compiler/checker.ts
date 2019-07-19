@@ -1022,7 +1022,11 @@ namespace ts {
         function mergeSymbol(target: Symbol, source: Symbol, unidirectional = false): Symbol {
             if (!(target.flags & getExcludedSymbolFlags(source.flags)) ||
                 (source.flags | target.flags) & SymbolFlags.Assignment) {
-                Debug.assert(source !== target);
+                if (source === target) {
+                    // This can happen when an export assigned namespace exports something also erroneously exported at the top level
+                    // See `declarationFileNoCrashOnExtraExportModifier` for an example
+                    return target;
+                }
                 if (!(target.flags & SymbolFlags.Transient)) {
                     const resolvedTarget = resolveSymbol(target);
                     if (resolvedTarget === unknownSymbol) {
