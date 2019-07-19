@@ -1506,15 +1506,6 @@ namespace ts.Completions {
             return GlobalsSearch.Success;
         }
 
-        // Set SortText to OptionalMember if it is an optinoal member
-        function setSortTextToOptionalMember() {
-            symbols.forEach(m => {
-                if (SymbolDisplay.getSymbolModifiers(m) === "optional") {
-                    symbolToSortTextMap[getSymbolId(m)] = symbolToSortTextMap[getSymbolId(m)] || SortText.OptionalMember;
-                }
-            });
-        }
-
         /**
          * Aggregates relevant symbols for completion in import clauses and export clauses
          * whose declarations have a module specifier; for instance, symbols will be aggregated for
@@ -1884,7 +1875,7 @@ namespace ts.Completions {
                 return contextualMemberSymbols;
             }
 
-            const membersDeclaredBySpreadAssignment: Symbol[] = [];
+            const membersDeclaredBySpreadAssignment = createMap<boolean>();
             const existingMemberNames = createUnderscoreEscapedMap<boolean>();
             for (const m of existingMembers) {
                 // Ignore omitted expressions for missing members
@@ -1911,7 +1902,9 @@ namespace ts.Completions {
                     const type = symbol && typeChecker.getTypeOfSymbolAtLocation(symbol, expression);
                     const properties = type && (<ObjectType>type).properties;
                     if (properties) {
-                        membersDeclaredBySpreadAssignment.push(...properties);
+                        properties.forEach(property => {
+                            membersDeclaredBySpreadAssignment.set(property.name, true);
+                        });
                     }
                 }
                 else if (isBindingElement(m) && m.propertyName) {
@@ -1932,18 +1925,28 @@ namespace ts.Completions {
             }
 
             const filteredSymbols = contextualMemberSymbols.filter(m => !existingMemberNames.get(m.escapedName));
-            setSortTextToMemberDeclaredBySpreadAssignment(membersDeclaredBySpreadAssignment, contextualMemberSymbols);
+            setSortTextToMemberDeclaredBySpreadAssignment(membersDeclaredBySpreadAssignment, filteredSymbols);
 
             return filteredSymbols;
         }
 
+        // Set SortText to OptionalMember if it is an optinoal member
+        function setSortTextToOptionalMember() {
+            symbols.forEach(m => {
+                if (m.flags & SymbolFlags.Optional) {
+                    symbolToSortTextMap[getSymbolId(m)] = symbolToSortTextMap[getSymbolId(m)] || SortText.OptionalMember;
+                }
+            });
+        }
+
         // Set SortText to MemberDeclaredBySpreadAssignment if it is fulfilled by spread assignment
-        function setSortTextToMemberDeclaredBySpreadAssignment(membersDeclaredBySpreadAssignment: Symbol[], contextualMemberSymbols: Symbol[]): void {
-            for (const fulfilledSymbol of membersDeclaredBySpreadAssignment) {
-                for (const contextualMemberSymbol of contextualMemberSymbols) {
-                    if (contextualMemberSymbol.name === fulfilledSymbol.name) {
-                        symbolToSortTextMap[getSymbolId(contextualMemberSymbol)] = SortText.MemberDeclaredBySpreadAssignment;
-                    }
+        function setSortTextToMemberDeclaredBySpreadAssignment(membersDeclaredBySpreadAssignment: Map<boolean>, contextualMemberSymbols: Symbol[]): void {
+            if (membersDeclaredBySpreadAssignment.size === 0) {
+                return;
+            }
+            for (const contextualMemberSymbol of contextualMemberSymbols) {
+                if (membersDeclaredBySpreadAssignment.has(contextualMemberSymbol.name)) {
+                    symbolToSortTextMap[getSymbolId(contextualMemberSymbol)] = SortText.MemberDeclaredBySpreadAssignment;
                 }
             }
         }
@@ -1999,7 +2002,7 @@ namespace ts.Completions {
          */
         function filterJsxAttributes(symbols: Symbol[], attributes: NodeArray<JsxAttribute | JsxSpreadAttribute>): Symbol[] {
             const seenNames = createUnderscoreEscapedMap<boolean>();
-            const membersDeclaredBySpreadAssignment: Symbol[] = [];
+            const membersDeclaredBySpreadAssignment = createMap<boolean>();
             for (const attr of attributes) {
                 // If this is the current item we are editing right now, do not filter it out
                 if (isCurrentlyEditingNode(attr)) {
@@ -2015,7 +2018,9 @@ namespace ts.Completions {
                     const type = symbol && typeChecker.getTypeOfSymbolAtLocation(symbol, expression);
                     const properties = type && (<ObjectType>type).properties;
                     if (properties) {
-                        membersDeclaredBySpreadAssignment.push(...properties);
+                        properties.forEach(property => {
+                            membersDeclaredBySpreadAssignment.set(property.name, true);
+                        });
                     }
                 }
             }

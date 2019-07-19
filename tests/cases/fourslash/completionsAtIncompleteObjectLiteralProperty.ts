@@ -10,5 +10,5 @@
 
 verify.completions({
     marker: "",
-    exact: ["abc"],
+    exact: [{ name: 'abc', kind: 'property', kindModifiers: 'declare,optional', sortText: completion.SortText.OptionalMember }],
 });
