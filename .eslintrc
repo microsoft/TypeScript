@@ -42,7 +42,6 @@
         "@typescript-eslint/no-object-literal-type-assertion": "off",
         "@typescript-eslint/no-parameter-properties": "off",
         "@typescript-eslint/no-this-alias": "error",
-        "@typescript-eslint/no-triple-slash-reference": "off",
         "@typescript-eslint/no-unnecessary-qualifier": "error",
         "@typescript-eslint/no-unnecessary-type-assertion": "error",
         "@typescript-eslint/no-use-before-define": "off",
@@ -53,6 +52,7 @@
         "@typescript-eslint/prefer-namespace-keyword": "error",
         "semi": "off",
         "@typescript-eslint/semi": "error",
+        "@typescript-eslint/triple-slash-reference": "error",
         "@typescript-eslint/type-annotation-spacing": "error",
         "@typescript-eslint/unified-signatures": "error",
 
