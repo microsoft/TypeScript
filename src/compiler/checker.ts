@@ -25727,16 +25727,15 @@ namespace ts {
                     if (superCallShouldBeFirst) {
                         // Until we have better flow analysis, it is an error to place the super call within any kind of block or conditional
                         // See GH #8277
-                        if (superCall.parent.parent !== node.body) {
+                        if (!superCallIsRootLevelInConstructor(superCall, node.body!)) {
                             error(superCall, Diagnostics.A_super_call_must_be_a_root_level_statement_within_a_constructor_of_a_derived_class_that_contains_initialized_properties_or_has_parameter_properties);
                         }
                         // Skip past any prologue directives to check statements for referring to 'super' or 'this' before a super call
                         else {
-                            const statements = node.body.statements;
                             let superCallStatement: ExpressionStatement | undefined;
 
-                            for (const statement of statements) {
-                                if (isExpressionStatement(statement) && isSuperCall(statement.expression)) {
+                            for (const statement of node.body!.statements) {
+                                if (isExpressionStatement(statement) && isOrWrapsSuperCall(statement.expression)) {
                                     superCallStatement = statement;
                                     break;
                                 }
@@ -25759,7 +25758,25 @@ namespace ts {
             }
         }
 
-        function nodeImmediatelyReferencesSuperOrThis(node: Statement): boolean {
+        function superCallIsRootLevelInConstructor(superCall: Node, body: Block) {
+            let expressionParent = superCall.parent;
+
+            while (isParenthesizedExpression(expressionParent)) {
+                expressionParent = expressionParent.parent;
+            }
+
+            return expressionParent.parent === body;
+        }
+
+        function isOrWrapsSuperCall(expression: Node) {
+            while (isParenthesizedExpression(expression)) {
+                expression = expression.expression;
+            }
+
+            return isSuperCall(expression);
+        }
+
+        function nodeImmediatelyReferencesSuperOrThis(node: Node): boolean {
             if (node.kind === SyntaxKind.SuperKeyword || node.kind === SyntaxKind.ThisKeyword) {
                 return true;
             }

@@ -153,6 +153,29 @@ class DerivedWithFunctionExpression extends Base {
     }
 }
 
+class DerivedWithParenthesis extends Base {
+    prop = true;
+    constructor() {
+        (super());
+    }
+}
+
+class DerivedWithParenthesisAfterStatement extends Base {
+    prop = true;
+    constructor() {
+        this.prop;
+        (super());
+    }
+}
+
+class DerivedWithParenthesisBeforeStatement extends Base {
+    prop = true;
+    constructor() {
+        (super());
+        this.prop;
+    }
+}
+
 class DerivedWithClassDeclaration extends Base {
     prop = true;
     constructor() {

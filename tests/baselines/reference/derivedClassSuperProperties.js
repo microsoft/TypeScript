@@ -151,6 +151,29 @@ class DerivedWithFunctionExpression extends Base {
     }
 }
 
+class DerivedWithParenthesis extends Base {
+    prop = true;
+    constructor() {
+        (super());
+    }
+}
+
+class DerivedWithParenthesisAfterStatement extends Base {
+    prop = true;
+    constructor() {
+        this.prop;
+        (super());
+    }
+}
+
+class DerivedWithParenthesisBeforeStatement extends Base {
+    prop = true;
+    constructor() {
+        (super());
+        this.prop;
+    }
+}
+
 class DerivedWithClassDeclaration extends Base {
     prop = true;
     constructor() {
@@ -548,6 +571,38 @@ var DerivedWithFunctionExpression = /** @class */ (function (_super) {
         return _this;
     }
     return DerivedWithFunctionExpression;
+}(Base));
+var DerivedWithParenthesis = /** @class */ (function (_super) {
+    __extends(DerivedWithParenthesis, _super);
+    function DerivedWithParenthesis() {
+        var _this = this;
+        _this.prop = true;
+        (_this = _super.call(this) || this);
+        return _this;
+    }
+    return DerivedWithParenthesis;
+}(Base));
+var DerivedWithParenthesisAfterStatement = /** @class */ (function (_super) {
+    __extends(DerivedWithParenthesisAfterStatement, _super);
+    function DerivedWithParenthesisAfterStatement() {
+        var _this = this;
+        _this.prop = true;
+        _this.prop;
+        (_this = _super.call(this) || this);
+        return _this;
+    }
+    return DerivedWithParenthesisAfterStatement;
+}(Base));
+var DerivedWithParenthesisBeforeStatement = /** @class */ (function (_super) {
+    __extends(DerivedWithParenthesisBeforeStatement, _super);
+    function DerivedWithParenthesisBeforeStatement() {
+        var _this = this;
+        _this.prop = true;
+        (_this = _super.call(this) || this);
+        _this.prop;
+        return _this;
+    }
+    return DerivedWithParenthesisBeforeStatement;
 }(Base));
 var DerivedWithClassDeclaration = /** @class */ (function (_super) {
     __extends(DerivedWithClassDeclaration, _super);

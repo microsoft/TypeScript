@@ -377,6 +377,64 @@ class DerivedWithFunctionExpression extends Base {
     }
 }
 
+class DerivedWithParenthesis extends Base {
+>DerivedWithParenthesis : DerivedWithParenthesis
+>Base : Base
+
+    prop = true;
+>prop : boolean
+>true : true
+
+    constructor() {
+        (super());
+>(super()) : void
+>super() : void
+>super : typeof Base
+    }
+}
+
+class DerivedWithParenthesisAfterStatement extends Base {
+>DerivedWithParenthesisAfterStatement : DerivedWithParenthesisAfterStatement
+>Base : Base
+
+    prop = true;
+>prop : boolean
+>true : true
+
+    constructor() {
+        this.prop;
+>this.prop : boolean
+>this : this
+>prop : boolean
+
+        (super());
+>(super()) : void
+>super() : void
+>super : typeof Base
+    }
+}
+
+class DerivedWithParenthesisBeforeStatement extends Base {
+>DerivedWithParenthesisBeforeStatement : DerivedWithParenthesisBeforeStatement
+>Base : Base
+
+    prop = true;
+>prop : boolean
+>true : true
+
+    constructor() {
+        (super());
+>(super()) : void
+>super() : void
+>super : typeof Base
+
+        this.prop;
+>this.prop : boolean
+>this : this
+>prop : boolean
+    }
+}
+
 class DerivedWithClassDeclaration extends Base {
 >DerivedWithClassDeclaration : DerivedWithClassDeclaration
 >Base : Base
