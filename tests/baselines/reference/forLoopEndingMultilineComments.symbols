@@ -17,13 +17,13 @@ export function consoleTestResultHandler(testResult: any): boolean {
         void a;
 >a : Symbol(a, Decl(forLoopEndingMultilineComments.ts, 0, 11))
 
-        /* tslint:disable:no-console */
+        /* eslint-disable no-console */
         if (a) {
 >a : Symbol(a, Decl(forLoopEndingMultilineComments.ts, 0, 11))
 
         } else {
         }
-        /* tslint:enable:no-console */
+        /* eslint-enable no-console */
     }
 
     return true;
