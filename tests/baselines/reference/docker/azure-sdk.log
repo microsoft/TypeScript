@@ -5,16 +5,11 @@ Rush Multi-Project Build Tool 5.10.1 - https://rushjs.io
 Starting "rush rebuild"
 Executing a maximum of 1 simultaneous processes...
 [@azure/cosmos] started
-npm ERR! code ELIFECYCLE
-npm ERR! errno 2
-npm ERR! @azure/cosmos@X.X.X compile: `echo Using TypeScript && tsc --version && tsc -p tsconfig.prod.json --pretty`
-npm ERR! Exit status 2
-npm ERR! 
-npm ERR! Failed at the @azure/cosmos@X.X.X compile script.
-npm ERR! This is probably not a problem with npm. There is likely additional logging output above.
-npm ERR! A complete log of this run can be found in:
-npm ERR!     /root/.npm/_logs/2019-07-15T13_35_10_789Z-debug.log
+XX of XX: [@azure/cosmos] completed successfully in ? seconds
+[@azure/event-processor-host] started
+XX of XX: [@azure/event-processor-host] completed successfully in ? seconds
 [@azure/service-bus] started
+Warning: You have changed the public API signature for this project. Updating review/service-bus.api.md
 [@azure/storage-blob] started
 XX of XX: [@azure/storage-blob] completed successfully in ? seconds
 [@azure/storage-file] started
@@ -23,6 +18,8 @@ XX of XX: [@azure/storage-file] completed successfully in ? seconds
 XX of XX: [@azure/storage-queue] completed successfully in ? seconds
 [@azure/template] started
 XX of XX: [@azure/template] completed successfully in ? seconds
+[testhub] started
+XX of XX: [testhub] completed successfully in ? seconds
 [@azure/abort-controller] started
 XX of XX: [@azure/abort-controller] completed successfully in ? seconds
 [@azure/core-asynciterator-polyfill] started
@@ -38,7 +35,7 @@ npm ERR!
 npm ERR! Failed at the @azure/core-http@X.X.X-preview.1 build:tsc script.
 npm ERR! This is probably not a problem with npm. There is likely additional logging output above.
 npm ERR! A complete log of this run can be found in:
-npm ERR!     /root/.npm/_logs/2019-07-15T13_36_24_862Z-debug.log
+npm ERR!     /root/.npm/_logs/2019-07-19T13_40_31_496Z-debug.log
 ERROR: "build:tsc" exited with 2.
 npm ERR! code ELIFECYCLE
 npm ERR! errno 1
@@ -48,26 +45,28 @@ npm ERR!
 npm ERR! Failed at the @azure/core-http@X.X.X-preview.1 build:lib script.
 npm ERR! This is probably not a problem with npm. There is likely additional logging output above.
 npm ERR! A complete log of this run can be found in:
-npm ERR!     /root/.npm/_logs/2019-07-15T13_36_24_938Z-debug.log
+npm ERR!     /root/.npm/_logs/2019-07-19T13_40_31_533Z-debug.log
 ERROR: "build:lib" exited with 1.
 [@azure/core-paging] started
 XX of XX: [@azure/core-paging] completed successfully in ? seconds
-[@azure/event-processor-host] started
-XX of XX: [@azure/event-processor-host] completed successfully in ? seconds
-[testhub] started
-XX of XX: [testhub] completed successfully in ? seconds
-SUCCESS (10)
+SUCCESS (11)
 ================================
 @azure/abort-controller (? seconds)
 @azure/core-asynciterator-polyfill (? seconds)
 @azure/core-auth (? seconds)
 @azure/core-paging (? seconds)
+@azure/cosmos (? seconds)
 @azure/event-processor-host (? seconds)
 @azure/storage-blob (? seconds)
 @azure/storage-file (? seconds)
 @azure/storage-queue (? seconds)
 @azure/template (? seconds)
 testhub (? seconds)
+================================
+SUCCESS WITH WARNINGS (1)
+================================
+@azure/service-bus (? seconds)
+Warning: You have changed the public API signature for this project. Updating review/service-bus.api.md
 ================================
 BLOCKED (7)
 ================================
@@ -79,7 +78,7 @@ BLOCKED (7)
 @azure/keyvault-keys
 @azure/keyvault-secrets
 ================================
-FAILURE (3)
+FAILURE (1)
 ================================
 @azure/core-http (? seconds)
 npm ERR! code ELIFECYCLE
@@ -90,7 +89,7 @@ npm ERR!
 npm ERR! Failed at the @azure/core-http@X.X.X-preview.1 build:tsc script.
 npm ERR! This is probably not a problem with npm. There is likely additional logging output above.
 npm ERR! A complete log of this run can be found in:
-npm ERR!     /root/.npm/_logs/2019-07-15T13_36_24_862Z-debug.log
+npm ERR!     /root/.npm/_logs/2019-07-19T13_40_31_496Z-debug.log
 ERROR: "build:tsc" exited with 2.
 npm ERR! code ELIFECYCLE
 npm ERR! errno 1
@@ -100,24 +99,8 @@ npm ERR!
 npm ERR! Failed at the @azure/core-http@X.X.X-preview.1 build:lib script.
 npm ERR! This is probably not a problem with npm. There is likely additional logging output above.
 npm ERR! A complete log of this run can be found in:
-npm ERR!     /root/.npm/_logs/2019-07-15T13_36_24_938Z-debug.log
+npm ERR!     /root/.npm/_logs/2019-07-19T13_40_31_533Z-debug.log
 ERROR: "build:lib" exited with 1.
-@azure/cosmos ( ? seconds)
-npm ERR! code ELIFECYCLE
-npm ERR! errno 2
-npm ERR! @azure/cosmos@X.X.X compile: `echo Using TypeScript && tsc --version && tsc -p tsconfig.prod.json --pretty`
-npm ERR! Exit status 2
-npm ERR!
-npm ERR! Failed at the @azure/cosmos@X.X.X compile script.
-npm ERR! This is probably not a problem with npm. There is likely additional logging output above.
-npm ERR! A complete log of this run can be found in:
-npm ERR!     /root/.npm/_logs/2019-07-15T13_35_10_789Z-debug.log
-@azure/service-bus ( ? seconds)
->>> @azure/service-bus
-tsc -p . && rollup -c 2>&1 && npm run extract-api
-error TS2318: Cannot find global type 'AsyncGenerator'.
-src/receiver.ts(193,32): error TS2739: Type '{}' is missing the following properties from type 'AsyncIterableIterator<ServiceBusMessage>': [Symbol.asyncIterator], next
-src/receiver.ts(742,32): error TS2322: Type '{}' is not assignable to type 'AsyncIterableIterator<ServiceBusMessage>'.
 ================================
 Error: Project(s) failed to build
 rush rebuild - Errors! ( ? seconds)
@@ -126,8 +109,7 @@ rush rebuild - Errors! ( ? seconds)
 
 Standard error:
 Your version of Node.js (X.X.X) has not been tested with this release of Rush. The Rush team will not accept issue reports for it. Please consider upgrading Rush or downgrading Node.js.
-XX of XX: [@azure/cosmos] failed to build!
-XX of XX: [@azure/service-bus] failed to build!
+XX of XX: [@azure/service-bus] completed with warnings in ? seconds
 XX of XX: [@azure/core-http] failed to build!
 XX of XX: [@azure/core-arm] blocked by [@azure/core-http]!
 XX of XX: [@azure/identity] blocked by [@azure/core-http]!
@@ -137,5 +119,3 @@ XX of XX: [@azure/keyvault-certificates] blocked by [@azure/core-http]!
 XX of XX: [@azure/keyvault-keys] blocked by [@azure/core-http]!
 XX of XX: [@azure/keyvault-secrets] blocked by [@azure/core-http]!
 [@azure/core-http] Returned error code: 1
-[@azure/cosmos] Returned error code: 2
-[@azure/service-bus] Returned error code: 2
