@@ -947,11 +947,13 @@ namespace ts.Completions {
             // Right of dot member completion list
             completionKind = CompletionKind.PropertyAccess;
 
-            // Since this is qualified name check its a type node location
+            // Since this is qualified name check it's a type node location
             const isImportType = isLiteralImportTypeNode(node);
-            const isTypeLocation = insideJsDocTagTypeExpression || (isImportType && !(node as ImportTypeNode).isTypeOf) || isPartOfTypeNode(node.parent);
+            const isTypeLocation = insideJsDocTagTypeExpression
+                || (isImportType && !(node as ImportTypeNode).isTypeOf)
+                || isPartOfTypeNode(node.parent)
+                || isPossiblyTypeArgumentPosition(contextToken, sourceFile, typeChecker);
             const isRhsOfImportDeclaration = isInRightSideOfInternalImportEqualsDeclaration(node);
-            const allowTypeOrValue = isRhsOfImportDeclaration || (!isTypeLocation && isPossiblyTypeArgumentPosition(contextToken, sourceFile, typeChecker));
             if (isEntityName(node) || isImportType) {
                 const isNamespaceName = isModuleDeclaration(node.parent);
                 if (isNamespaceName) isNewIdentifierLocation = true;
@@ -968,7 +970,7 @@ namespace ts.Completions {
                             isNamespaceName
                                 // At `namespace N.M/**/`, if this is the only declaration of `M`, don't include `M` as a completion.
                                 ? symbol => !!(symbol.flags & SymbolFlags.Namespace) && !symbol.declarations.every(d => d.parent === node.parent)
-                                : allowTypeOrValue ?
+                                : isRhsOfImportDeclaration ?
                                     // Any kind is allowed when dotting off namespace in internal import equals declaration
                                     symbol => isValidTypeAccess(symbol) || isValidValueAccess(symbol) :
                                     isTypeLocation ? isValidTypeAccess : isValidValueAccess;
@@ -1181,8 +1183,7 @@ namespace ts.Completions {
 
         function filterGlobalCompletion(symbols: Symbol[]): void {
             const isTypeOnly = isTypeOnlyCompletion();
-            const allowTypes = isTypeOnly || !isContextTokenValueLocation(contextToken) && isPossiblyTypeArgumentPosition(contextToken, sourceFile, typeChecker);
-            if (allowTypes) {
+            if (isTypeOnly) {
                 keywordFilters = isTypeAssertion()
                     ? KeywordCompletionFilters.TypeAssertionKeywords
                     : KeywordCompletionFilters.TypeKeywords;
@@ -1202,12 +1203,9 @@ namespace ts.Completions {
                         return !!(symbol.flags & SymbolFlags.Namespace);
                     }
 
-                    if (allowTypes) {
-                        // Its a type, but you can reach it by namespace.type as well
-                        const symbolAllowedAsType = symbolCanBeReferencedAtTypeLocation(symbol);
-                        if (symbolAllowedAsType || isTypeOnly) {
-                            return symbolAllowedAsType;
-                        }
+                    if (isTypeOnly) {
+                        // It's a type, but you can reach it by namespace.type as well
+                        return symbolCanBeReferencedAtTypeLocation(symbol);
                     }
                 }
 
@@ -1221,7 +1219,11 @@ namespace ts.Completions {
         }
 
         function isTypeOnlyCompletion(): boolean {
-            return insideJsDocTagTypeExpression || !isContextTokenValueLocation(contextToken) && (isPartOfTypeNode(location) || isContextTokenTypeLocation(contextToken));
+            return insideJsDocTagTypeExpression
+                || !isContextTokenValueLocation(contextToken) &&
+                (isPossiblyTypeArgumentPosition(contextToken, sourceFile, typeChecker)
+                 || isPartOfTypeNode(location)
+                 || isContextTokenTypeLocation(contextToken));
         }
 
         function isContextTokenValueLocation(contextToken: Node) {
