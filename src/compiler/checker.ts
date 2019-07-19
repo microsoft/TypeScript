@@ -4904,7 +4904,12 @@ namespace ts {
                     if (target) {
                         includePrivateSymbol(target);
                     }
+                    // Disable symbol tracking for printing the name of this thing, as the name will always be visible except when
+                    // it's an annonymous class expression, which we'd like to ignore, since we're going to hoist the expression to a statement anyway
+                    const oldTracker = context.tracker.trackSymbol;
+                    context.tracker.trackSymbol = noop;
                     const nsname = target ? symbolToName(target, context, SymbolFlags.All, /*expectsIdentifier*/ false) : createIdentifier(getUnusedName("_exports", exportEquals));
+                    context.tracker.trackSymbol = oldTracker;
                     visitSymbolTable(emptySymbols, deferredPrivates, /*markExportsPrivate*/ true);
                     deferredPrivates = undefined;
 
@@ -5202,7 +5207,9 @@ namespace ts {
                     }
                     // Need to skip over export= symbols below - json source files get a single `Property` flagged
                     // symbol of name `export=` which needs to be handled like an alias. It's not great, but it is what it is.
-                    if (symbol.flags & (SymbolFlags.BlockScopedVariable | SymbolFlags.FunctionScopedVariable | SymbolFlags.Property) && symbol.escapedName !== InternalSymbolName.ExportEquals) {
+                    if (symbol.flags & (SymbolFlags.BlockScopedVariable | SymbolFlags.FunctionScopedVariable | SymbolFlags.Property)
+                        && symbol.escapedName !== InternalSymbolName.ExportEquals
+                        && !(symbol.flags & SymbolFlags.Class)) { // A Class + Property merge is made for a `module.exports.Member = class {}`, and it doesn't serialize well as either a class _or_ a property symbol - in fact, _it behaves like an alias!_
                         // `var` is `FunctionScopedVariable`, `const` and `let` are `BlockScopedVariable`, and `module.exports.thing =` is `Property`
                         const flags = !(symbol.flags & SymbolFlags.BlockScopedVariable) ? undefined : isConstVariable(symbol) ? NodeFlags.Const : NodeFlags.Let;
                         const name = (needsPostExportDefault || !(symbol.flags & SymbolFlags.Property)) ? localName : getUnusedName(localName, symbol);
@@ -5255,7 +5262,15 @@ namespace ts {
                         }
                     }
                     if (symbol.flags & SymbolFlags.Class) {
-                        serializeAsClass(symbol, localName, modifierFlags);
+                        if (symbol.flags & SymbolFlags.Property) {
+                            // Looks like a `module.exports.Sub = class {}` - if we serialze `symbol` as a class, the result will have no members,
+                            // since the classiness is actually from the target of the effective alias the symbol is. yes. A BlockScopedVariable|Class|Property
+                            // _really_ acts like an Alias, and none of a BlockScopedVariable, Class, or Property. This is the travesty of JS binding today.
+                            serializeAsAlias(symbol, localName, modifierFlags);
+                        }
+                        else {
+                            serializeAsClass(symbol, localName, modifierFlags);
+                        }
                     }
                     if (symbol.flags & SymbolFlags.Namespace) {
                         // TODO - Support namespace serialization
@@ -5282,14 +5297,33 @@ namespace ts {
                         ), modifierFlags);
                     }
                     if (symbol.flags & SymbolFlags.Alias) {
-                        // exported alias symbol
-                        // synthesize an alias, eg `export { symbolName as Name }`
-                        // best to merge many of these together - need to mark the alias `symbol` points
-                        // at as something we need to serialize as a private declaration as well
-                        const node = getDeclarationOfAliasSymbol(symbol);
-                        if (!node) return Debug.fail();
-                        const target = getTargetOfAliasDeclaration(node, /*dontRecursivelyResolve*/ true);
-                        if (!target) return;
+                        serializeAsAlias(symbol, localName, modifierFlags);
+                    }
+                    if (symbol.flags & SymbolFlags.Property && symbol.escapedName === InternalSymbolName.ExportEquals) {
+                        serializeMaybeAliasAssignment(symbol);
+                    }
+                    if (symbol.flags & SymbolFlags.ExportStar) {
+                        // synthesize export * from "moduleReference"
+                        // Straightforward - only one thing to do - make an export declaration
+                        for (const node of symbol.declarations) {
+                            const resolvedModule = resolveExternalModuleName(node, (node as ExportDeclaration).moduleSpecifier!);
+                            if (!resolvedModule) continue;
+                            addResult(createExportDeclaration(/*decorators*/ undefined, /*modifiers*/ undefined, /*exportClause*/ undefined, createLiteral(getSpecifierForModuleSymbol(resolvedModule, context))), ModifierFlags.None);
+                        }
+                    }
+                    if (needsPostExportDefault) {
+                        addResult(createExportAssignment(/*decorators*/ undefined, /*modifiers*/ undefined, /*isExportAssignment*/ false, createIdentifier(localName)), ModifierFlags.None);
+                    }
+                }
+
+                function serializeAsAlias(symbol: Symbol, localName: string, modifierFlags: ModifierFlags) {
+                    // synthesize an alias, eg `export { symbolName as Name }`
+                    // need to mark the alias `symbol` points
+                    // at as something we need to serialize as a private declaration as well
+                    const node = getDeclarationOfAliasSymbol(symbol);
+                    if (!node) return Debug.fail();
+                    const target = getTargetOfAliasDeclaration(node, /*dontRecursivelyResolve*/ true);
+                    if (target) {
                         const targetName = getInternalSymbolName(target, unescapeLeadingUnderscores(target.escapedName));
                         includePrivateSymbol(target); // the target may be within the same scope - attempt to serialize it first
                         switch (node.kind) {
@@ -5354,24 +5388,11 @@ namespace ts {
                                     serializeExportSpecifier(localName, targetName);
                                 }
                                 break;
+                            case SyntaxKind.PropertyAccessExpression:
+                                break; // A PAE alias is _always_ going to exist as an append to a top-level export, where our top level handlign should always be sufficient to encode the export action itself
                             default:
                                 return Debug.failBadSyntaxKind(node, "Unhandled alias declaration kind in symbol serializer!");
                         }
-                    }
-                    if (symbol.flags & SymbolFlags.Property && symbol.escapedName === InternalSymbolName.ExportEquals) {
-                        serializeMaybeAliasAssignment(symbol);
-                    }
-                    if (symbol.flags & SymbolFlags.ExportStar) {
-                        // synthesize export * from "moduleReference"
-                        // Straightforward - only one thing to do - make an export declaration
-                        for (const node of symbol.declarations) {
-                            const resolvedModule = resolveExternalModuleName(node, (node as ExportDeclaration).moduleSpecifier!);
-                            if (!resolvedModule) continue;
-                            addResult(createExportDeclaration(/*decorators*/ undefined, /*modifiers*/ undefined, /*exportClause*/ undefined, createLiteral(getSpecifierForModuleSymbol(resolvedModule, context))), ModifierFlags.None);
-                        }
-                    }
-                    if (needsPostExportDefault) {
-                        addResult(createExportAssignment(/*decorators*/ undefined, /*modifiers*/ undefined, /*isExportAssignment*/ false, createIdentifier(localName)), ModifierFlags.None);
                     }
                 }
 
@@ -5406,6 +5427,10 @@ namespace ts {
                             includePrivateSymbol(referenced || target);
                         }
 
+                        // Disable symbol tracker (we already added the alias target above, which will always be reachable except in the class
+                        // expression case, which we'd expressly like to ignore anyway)
+                        const oldTrack = context.tracker.trackSymbol;
+                        context.tracker.trackSymbol = noop;
                         if (isExportAssignment) {
                             results.push(createExportAssignment(
                                 /*decorators*/ undefined,
@@ -5434,6 +5459,7 @@ namespace ts {
                                 serializeExportSpecifier(name, varName);
                             }
                         }
+                        context.tracker.trackSymbol = oldTrack;
                     }
                     else {
                         // serialize as an anonymous property declaration
