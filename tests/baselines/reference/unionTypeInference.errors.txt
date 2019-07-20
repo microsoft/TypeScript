@@ -39,6 +39,17 @@ tests/cases/conformance/types/typeRelationships/typeInference/unionTypeInference
                   ~~
 !!! error TS2345: Argument of type '42' is not assignable to parameter of type 'never'.
     
+    export interface Foo<T> {
+        then<U>(f: (x: T) => U | Foo<U>, g: U): Foo<U>;
+    }
+    export interface Bar<T> {
+        then<S>(f: (x: T) => S | Bar<S>, g: S): Bar<S>;
+    }
+    
+    function qux(p1: Foo<void>, p2: Bar<void>) {
+        p1 = p2;
+    }
+    
     // Repros from #32434
     
     declare function foo<T>(x: T | Promise<T>): void;

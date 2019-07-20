@@ -31,6 +31,17 @@ const d1 = f4("abc");
 const d2 = f4(s);
 const d3 = f4(42);  // Error
 
+export interface Foo<T> {
+    then<U>(f: (x: T) => U | Foo<U>, g: U): Foo<U>;
+}
+export interface Bar<T> {
+    then<S>(f: (x: T) => S | Bar<S>, g: S): Bar<S>;
+}
+
+function qux(p1: Foo<void>, p2: Bar<void>) {
+    p1 = p2;
+}
+
 // Repros from #32434
 
 declare function foo<T>(x: T | Promise<T>): void;
@@ -43,6 +54,7 @@ const y = bar(1, 2);
 
 //// [unionTypeInference.js]
 "use strict";
+exports.__esModule = true;
 var a1 = f1(1, 2); // 1 | 2
 var a2 = f1(1, "hello"); // 1
 var a3 = f1(1, sn); // number
@@ -59,5 +71,8 @@ var c5 = f3("abc"); // never
 var d1 = f4("abc");
 var d2 = f4(s);
 var d3 = f4(42); // Error
+function qux(p1, p2) {
+    p1 = p2;
+}
 foo(x);
 var y = bar(1, 2);

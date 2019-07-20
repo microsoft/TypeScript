@@ -131,6 +131,32 @@ const d3 = f4(42);  // Error
 >f4 : <T>(x: string & T) => T
 >42 : 42
 
+export interface Foo<T> {
+    then<U>(f: (x: T) => U | Foo<U>, g: U): Foo<U>;
+>then : <U>(f: (x: T) => U | Foo<U>, g: U) => Foo<U>
+>f : (x: T) => U | Foo<U>
+>x : T
+>g : U
+}
+export interface Bar<T> {
+    then<S>(f: (x: T) => S | Bar<S>, g: S): Bar<S>;
+>then : <S>(f: (x: T) => S | Bar<S>, g: S) => Bar<S>
+>f : (x: T) => S | Bar<S>
+>x : T
+>g : S
+}
+
+function qux(p1: Foo<void>, p2: Bar<void>) {
+>qux : (p1: Foo<void>, p2: Bar<void>) => void
+>p1 : Foo<void>
+>p2 : Bar<void>
+
+    p1 = p2;
+>p1 = p2 : Bar<void>
+>p1 : Foo<void>
+>p2 : Bar<void>
+}
+
 // Repros from #32434
 
 declare function foo<T>(x: T | Promise<T>): void;

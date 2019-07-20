@@ -107,34 +107,83 @@ const d3 = f4(42);  // Error
 >d3 : Symbol(d3, Decl(unionTypeInference.ts, 30, 5))
 >f4 : Symbol(f4, Decl(unionTypeInference.ts, 24, 21))
 
+export interface Foo<T> {
+>Foo : Symbol(Foo, Decl(unionTypeInference.ts, 30, 18))
+>T : Symbol(T, Decl(unionTypeInference.ts, 32, 21))
+
+    then<U>(f: (x: T) => U | Foo<U>, g: U): Foo<U>;
+>then : Symbol(Foo.then, Decl(unionTypeInference.ts, 32, 25))
+>U : Symbol(U, Decl(unionTypeInference.ts, 33, 9))
+>f : Symbol(f, Decl(unionTypeInference.ts, 33, 12))
+>x : Symbol(x, Decl(unionTypeInference.ts, 33, 16))
+>T : Symbol(T, Decl(unionTypeInference.ts, 32, 21))
+>U : Symbol(U, Decl(unionTypeInference.ts, 33, 9))
+>Foo : Symbol(Foo, Decl(unionTypeInference.ts, 30, 18))
+>U : Symbol(U, Decl(unionTypeInference.ts, 33, 9))
+>g : Symbol(g, Decl(unionTypeInference.ts, 33, 36))
+>U : Symbol(U, Decl(unionTypeInference.ts, 33, 9))
+>Foo : Symbol(Foo, Decl(unionTypeInference.ts, 30, 18))
+>U : Symbol(U, Decl(unionTypeInference.ts, 33, 9))
+}
+export interface Bar<T> {
+>Bar : Symbol(Bar, Decl(unionTypeInference.ts, 34, 1))
+>T : Symbol(T, Decl(unionTypeInference.ts, 35, 21))
+
+    then<S>(f: (x: T) => S | Bar<S>, g: S): Bar<S>;
+>then : Symbol(Bar.then, Decl(unionTypeInference.ts, 35, 25))
+>S : Symbol(S, Decl(unionTypeInference.ts, 36, 9))
+>f : Symbol(f, Decl(unionTypeInference.ts, 36, 12))
+>x : Symbol(x, Decl(unionTypeInference.ts, 36, 16))
+>T : Symbol(T, Decl(unionTypeInference.ts, 35, 21))
+>S : Symbol(S, Decl(unionTypeInference.ts, 36, 9))
+>Bar : Symbol(Bar, Decl(unionTypeInference.ts, 34, 1))
+>S : Symbol(S, Decl(unionTypeInference.ts, 36, 9))
+>g : Symbol(g, Decl(unionTypeInference.ts, 36, 36))
+>S : Symbol(S, Decl(unionTypeInference.ts, 36, 9))
+>Bar : Symbol(Bar, Decl(unionTypeInference.ts, 34, 1))
+>S : Symbol(S, Decl(unionTypeInference.ts, 36, 9))
+}
+
+function qux(p1: Foo<void>, p2: Bar<void>) {
+>qux : Symbol(qux, Decl(unionTypeInference.ts, 37, 1))
+>p1 : Symbol(p1, Decl(unionTypeInference.ts, 39, 13))
+>Foo : Symbol(Foo, Decl(unionTypeInference.ts, 30, 18))
+>p2 : Symbol(p2, Decl(unionTypeInference.ts, 39, 27))
+>Bar : Symbol(Bar, Decl(unionTypeInference.ts, 34, 1))
+
+    p1 = p2;
+>p1 : Symbol(p1, Decl(unionTypeInference.ts, 39, 13))
+>p2 : Symbol(p2, Decl(unionTypeInference.ts, 39, 27))
+}
+
 // Repros from #32434
 
 declare function foo<T>(x: T | Promise<T>): void;
->foo : Symbol(foo, Decl(unionTypeInference.ts, 30, 18))
->T : Symbol(T, Decl(unionTypeInference.ts, 34, 21))
->x : Symbol(x, Decl(unionTypeInference.ts, 34, 24))
->T : Symbol(T, Decl(unionTypeInference.ts, 34, 21))
+>foo : Symbol(foo, Decl(unionTypeInference.ts, 41, 1))
+>T : Symbol(T, Decl(unionTypeInference.ts, 45, 21))
+>x : Symbol(x, Decl(unionTypeInference.ts, 45, 24))
+>T : Symbol(T, Decl(unionTypeInference.ts, 45, 21))
 >Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --))
->T : Symbol(T, Decl(unionTypeInference.ts, 34, 21))
+>T : Symbol(T, Decl(unionTypeInference.ts, 45, 21))
 
 declare let x: false | Promise<true>;
->x : Symbol(x, Decl(unionTypeInference.ts, 35, 11))
+>x : Symbol(x, Decl(unionTypeInference.ts, 46, 11))
 >Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --))
 
 foo(x);
->foo : Symbol(foo, Decl(unionTypeInference.ts, 30, 18))
->x : Symbol(x, Decl(unionTypeInference.ts, 35, 11))
+>foo : Symbol(foo, Decl(unionTypeInference.ts, 41, 1))
+>x : Symbol(x, Decl(unionTypeInference.ts, 46, 11))
 
 declare function bar<T>(x: T, y: string | T): T;
->bar : Symbol(bar, Decl(unionTypeInference.ts, 36, 7))
->T : Symbol(T, Decl(unionTypeInference.ts, 38, 21))
->x : Symbol(x, Decl(unionTypeInference.ts, 38, 24))
->T : Symbol(T, Decl(unionTypeInference.ts, 38, 21))
->y : Symbol(y, Decl(unionTypeInference.ts, 38, 29))
->T : Symbol(T, Decl(unionTypeInference.ts, 38, 21))
->T : Symbol(T, Decl(unionTypeInference.ts, 38, 21))
+>bar : Symbol(bar, Decl(unionTypeInference.ts, 47, 7))
+>T : Symbol(T, Decl(unionTypeInference.ts, 49, 21))
+>x : Symbol(x, Decl(unionTypeInference.ts, 49, 24))
+>T : Symbol(T, Decl(unionTypeInference.ts, 49, 21))
+>y : Symbol(y, Decl(unionTypeInference.ts, 49, 29))
+>T : Symbol(T, Decl(unionTypeInference.ts, 49, 21))
+>T : Symbol(T, Decl(unionTypeInference.ts, 49, 21))
 
 const y = bar(1, 2);
->y : Symbol(y, Decl(unionTypeInference.ts, 39, 5))
->bar : Symbol(bar, Decl(unionTypeInference.ts, 36, 7))
+>y : Symbol(y, Decl(unionTypeInference.ts, 50, 5))
+>bar : Symbol(bar, Decl(unionTypeInference.ts, 47, 7))
 
