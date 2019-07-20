@@ -32,6 +32,17 @@ const d1 = f4("abc");
 const d2 = f4(s);
 const d3 = f4(42);  // Error
 
+export interface Foo<T> {
+    then<U>(f: (x: T) => U | Foo<U>, g: U): Foo<U>;
+}
+export interface Bar<T> {
+    then<S>(f: (x: T) => S | Bar<S>, g: S): Bar<S>;
+}
+
+function qux(p1: Foo<void>, p2: Bar<void>) {
+    p1 = p2;
+}
+
 // Repros from #32434
 
 declare function foo<T>(x: T | Promise<T>): void;
