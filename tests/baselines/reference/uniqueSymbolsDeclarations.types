@@ -832,7 +832,7 @@ const o4: Context = {
 >method3 : () => AsyncGenerator<unique symbol, void, unknown>
 
         yield s; // yield type should not widen due to contextual type
->yield s : any
+>yield s : undefined
 >s : unique symbol
 
     },
@@ -840,7 +840,7 @@ const o4: Context = {
 >method4 : () => Generator<unique symbol, void, unknown>
 
         yield s; // yield type should not widen due to contextual type
->yield s : any
+>yield s : undefined
 >s : unique symbol
 
     },

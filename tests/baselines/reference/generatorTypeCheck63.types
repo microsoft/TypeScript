@@ -32,7 +32,7 @@ export function strategy<T extends StrategicState>(stratName: string, gen: (a: T
 >stratName : string
             }
             yield next;
->yield next : any
+>yield next : undefined
 >next : T
         }
     }
@@ -97,7 +97,7 @@ export const Nothing3: Strategy<State> = strategy("Nothing", function* (state: S
 >state : State
 
     yield state;
->yield state : any
+>yield state : undefined
 >state : State
 
     return 1;

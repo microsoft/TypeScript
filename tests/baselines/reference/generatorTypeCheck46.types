@@ -24,7 +24,7 @@ foo("", function* () {
 >iterator : symbol
 
             yield x => x.length
->yield x => x.length : any
+>yield x => x.length : undefined
 >x => x.length : (x: string) => number
 >x : string
 >x.length : number
