@@ -15958,9 +15958,14 @@ namespace ts {
             }
         }
 
+        function isTypeReferenceToSameTarget(source: Type, target: Type) {
+            return !!(getObjectFlags(source) & ObjectFlags.Reference && getObjectFlags(target) & ObjectFlags.Reference &&
+                (<TypeReference>source).target === (<TypeReference>target).target);
+        }
+
         function typeIdenticalToSomeType(type: Type, types: Type[]): boolean {
             for (const t of types) {
-                if (isTypeIdenticalTo(t, type)) {
+                if (t === type || !isTypeReferenceToSameTarget(t, type) && isTypeIdenticalTo(t, type)) {
                     return true;
                 }
             }
