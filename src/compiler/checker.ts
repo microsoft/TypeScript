@@ -15459,6 +15459,7 @@ namespace ts {
             let bivariant = false;
             let propagationType: Type;
             let inferenceCount = 0;
+            let inferenceBlocked = false;
             let allowComplexConstraintInference = true;
             inferFromTypes(originalSource, originalTarget);
 
@@ -15655,6 +15656,7 @@ namespace ts {
                     if (source.flags & (TypeFlags.Object | TypeFlags.Intersection)) {
                         const key = source.id + "," + target.id;
                         if (visited && visited.get(key)) {
+                            inferenceBlocked = true;
                             return;
                         }
                         (visited || (visited = createMap<boolean>())).set(key, true);
@@ -15667,6 +15669,7 @@ namespace ts {
                         const symbol = isNonConstructorObject ? target.symbol : undefined;
                         if (symbol) {
                             if (contains(symbolStack, symbol)) {
+                                inferenceBlocked = true;
                                 return;
                             }
                             (symbolStack || (symbolStack = [])).push(symbol);
@@ -15755,6 +15758,8 @@ namespace ts {
                 const sources = source.flags & TypeFlags.Union ? (<UnionType>source).types : [source];
                 const matched = new Array<boolean>(sources.length);
                 let typeVariableCount = 0;
+                const saveInferenceBlocked = inferenceBlocked;
+                inferenceBlocked = false;
                 // First infer to types that are not naked type variables. For each source type we
                 // track whether inferences were made from that particular type to some target.
                 for (const t of target.types) {
@@ -15771,14 +15776,15 @@ namespace ts {
                 }
                 // If there are naked type variables in the target, create a union of the source types
                 // from which no inferences have been made so far and infer from that union to each naked
-                // type variable. If there is more than one naked type variable, give lower priority to
-                // the inferences as they are less specific.
+                // type variable. If there is more than one naked type variable, or if inference was blocked
+                // (meaning we didn't explore the types fully), give lower priority to the inferences as
+                // they are less specific.
                 if (typeVariableCount > 0) {
                     const unmatched = flatMap(sources, (s, i) => matched[i] ? undefined : s);
                     if (unmatched.length) {
                         const s = getUnionType(unmatched);
                         const savePriority = priority;
-                        if (typeVariableCount > 1) {
+                        if (typeVariableCount > 1 || inferenceBlocked) {
                             priority |= InferencePriority.NakedTypeVariable;
                         }
                         for (const t of target.types) {
@@ -15789,6 +15795,7 @@ namespace ts {
                         priority = savePriority;
                     }
                 }
+                inferenceBlocked = saveInferenceBlocked;
             }
 
             function inferToMappedType(source: Type, target: MappedType, constraintType: Type): boolean {
