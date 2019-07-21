@@ -13540,6 +13540,9 @@ namespace ts {
                     if (relation !== identityRelation) {
                         source = getApparentType(source);
                     }
+                    else if (isGenericMappedType(source)) {
+                        return Ternary.False;
+                    }
                     if (getObjectFlags(source) & ObjectFlags.Reference && getObjectFlags(target) & ObjectFlags.Reference && (<TypeReference>source).target === (<TypeReference>target).target &&
                         !(getObjectFlags(source) & ObjectFlags.MarkerType || getObjectFlags(target) & ObjectFlags.MarkerType)) {
                         // We have type references to the same generic type, and the type references are not marker
@@ -15456,7 +15459,7 @@ namespace ts {
 
         function inferTypes(inferences: InferenceInfo[], originalSource: Type, originalTarget: Type, priority: InferencePriority = 0, contravariant = false) {
             let symbolStack: Symbol[];
-            let visited: Map<boolean>;
+            let visited: Map<number>;
             let bivariant = false;
             let propagationType: Type;
             let inferenceCount = 0;
@@ -15656,15 +15659,17 @@ namespace ts {
                     }
                     if (source.flags & (TypeFlags.Object | TypeFlags.Intersection)) {
                         const key = source.id + "," + target.id;
-                        if (visited && visited.get(key)) {
-                            inferenceBlocked = true;
+                        const visitCount = visited && visited.get(key);
+                        if (visitCount !== undefined) {
+                            inferenceCount += visitCount;
                             return;
                         }
-                        (visited || (visited = createMap<boolean>())).set(key, true);
+                        (visited || (visited = createMap<number>())).set(key, 0);
                         // If we are already processing another target type with the same associated symbol (such as
                         // an instantiation of the same generic type), we do not explore this target as it would yield
                         // no further inferences. We exclude the static side of classes from this check since it shares
                         // its symbol with the instance side which would lead to false positives.
+                        const startCount = inferenceCount;
                         const isNonConstructorObject = target.flags & TypeFlags.Object &&
                             !(getObjectFlags(target) & ObjectFlags.Anonymous && target.symbol && target.symbol.flags & SymbolFlags.Class);
                         const symbol = isNonConstructorObject ? target.symbol : undefined;
@@ -15680,14 +15685,21 @@ namespace ts {
                         else {
                             inferFromObjectTypes(source, target);
                         }
+                        visited.set(key, inferenceCount - startCount);
                     }
                 }
 
                 function inferFromTypesOnce(source: Type, target: Type) {
                     const key = source.id + "," + target.id;
-                    if (!visited || !visited.get(key)) {
-                        (visited || (visited = createMap<boolean>())).set(key, true);
+                    const count = visited && visited.get(key);
+                    if (count !== undefined) {
+                        inferenceCount += count;
+                    }
+                    else {
+                        (visited || (visited = createMap<number>())).set(key, 0);
+                        const startCount = inferenceCount;
                         inferFromTypes(source, target);
+                        visited.set(key, inferenceCount - startCount);
                     }
                 }
             }
@@ -15780,23 +15792,28 @@ namespace ts {
                 // type variable. If there is more than one naked type variable, or if inference was blocked
                 // (meaning we didn't explore the types fully), give lower priority to the inferences as
                 // they are less specific.
-                if (typeVariableCount > 0) {
+                if (typeVariableCount === 1 && !inferenceBlocked) {
                     const unmatched = flatMap(sources, (s, i) => matched[i] ? undefined : s);
                     if (unmatched.length) {
                         const s = getUnionType(unmatched);
-                        const savePriority = priority;
-                        if (typeVariableCount > 1 || inferenceBlocked) {
-                            priority |= InferencePriority.NakedTypeVariable;
-                        }
                         for (const t of target.types) {
                             if (getInferenceInfoForType(t)) {
                                 inferFromTypes(s, t);
                             }
                         }
-                        priority = savePriority;
                     }
                 }
-                inferenceBlocked = saveInferenceBlocked;
+                inferenceBlocked = inferenceBlocked || saveInferenceBlocked;
+                if (typeVariableCount > 0) {
+                    const savePriority = priority;
+                    priority |= InferencePriority.NakedTypeVariable;
+                    for (const t of target.types) {
+                        if (getInferenceInfoForType(t)) {
+                            inferFromTypes(source, t);
+                        }
+                    }
+                    priority = savePriority;
+                }
             }
 
             function inferToMappedType(source: Type, target: MappedType, constraintType: Type): boolean {
@@ -15958,14 +15975,13 @@ namespace ts {
             }
         }
 
-        function isTypeReferenceToSameTarget(source: Type, target: Type) {
-            return !!(getObjectFlags(source) & ObjectFlags.Reference && getObjectFlags(target) & ObjectFlags.Reference &&
-                (<TypeReference>source).target === (<TypeReference>target).target);
+        function isMatchableType(type: Type) {
+            return !(type.flags & TypeFlags.Object) || !!(getObjectFlags(type) & ObjectFlags.Anonymous);
         }
 
         function typeIdenticalToSomeType(type: Type, types: Type[]): boolean {
             for (const t of types) {
-                if (t === type || !isTypeReferenceToSameTarget(t, type) && isTypeIdenticalTo(t, type)) {
+                if (t === type || isMatchableType(t) && isMatchableType(type) && isTypeIdenticalTo(t, type)) {
                     return true;
                 }
             }
