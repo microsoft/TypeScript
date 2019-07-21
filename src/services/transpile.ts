@@ -134,18 +134,20 @@ namespace ts {
         options = cloneCompilerOptions(options);
 
         for (const opt of commandLineOptionsStringToEnum) {
-            if (hasProperty(options, opt.name)) {
+            if (!hasProperty(options, opt.name)) {
+                continue;
+            }
 
-                const value = options[opt.name];
-                // Value should be a key of opt.type
-                if (isString(value)) {
-                    // If value is not a string, this will fail
-                    options[opt.name] = parseCustomTypeOption(opt, value, diagnostics);
-                }
-                else if (!forEachEntry(opt.type, v => v === value)) {
+            const value = options[opt.name];
+            // Value should be a key of opt.type
+            if (isString(value)) {
+                // If value is not a string, this will fail
+                options[opt.name] = parseCustomTypeOption(opt, value, diagnostics);
+            }
+            else {
+                if (!forEachEntry(opt.type, v => v === value)) {
                     // Supplied value isn't a valid enum value.
                     diagnostics.push(createCompilerDiagnosticForInvalidCustomType(opt));
-
                 }
             }
         }
