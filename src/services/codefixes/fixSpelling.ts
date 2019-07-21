@@ -81,14 +81,12 @@ namespace ts.codefix {
         return flags;
     }
 
-    function getResolvedSourceFileFromImportDeclaration(sourceFile: SourceFile, context: CodeFixContextBase, importDeclaration: ImportDeclaration): SourceFile | undefined {
-        if (!(importDeclaration && isStringLiteralLike(importDeclaration.moduleSpecifier))) return undefined;
+    function getResolvedSourceFileFromImportDeclaration (sourceFile: SourceFile, context: CodeFixContextBase, importDeclaration: ImportDeclaration): SourceFile | undefined {
+        if (!importDeclaration || !isStringLiteralLike(importDeclaration.moduleSpecifier)) return undefined;
 
         const resolvedModule = getResolvedModule(sourceFile, importDeclaration.moduleSpecifier.text);
-        if (resolvedModule) return context.program.getSourceFile(resolvedModule.resolvedFileName);
+        if (!resolvedModule) return undefined;
 
-        return undefined;
-
-
+        return context.program.getSourceFile(resolvedModule.resolvedFileName);
     }
 }
