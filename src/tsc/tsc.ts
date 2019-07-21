@@ -24,10 +24,10 @@ namespace ts {
     }
 
     function shouldBePretty(options: CompilerOptions | BuildOptions) {
-        if (!options || typeof options.pretty === "undefined") {
-            return defaultIsPretty();
+        if (options && typeof options.pretty !== "undefined") {
+            return options.pretty;
         }
-        return options.pretty;
+        return defaultIsPretty();
     }
 
     function padLeft(s: string, length: number) {

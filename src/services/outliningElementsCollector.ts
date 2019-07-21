@@ -73,31 +73,30 @@ namespace ts.OutliningElementsCollector {
         const lineStarts = sourceFile.getLineStarts();
         for (let i = 0; i < lineStarts.length; i++) {
             const currentLineStart = lineStarts[i];
-            const lineEnd = i + 1 === lineStarts.length ? sourceFile.getEnd() : lineStarts[i + 1] - 1;
+            const newlinePosition = i + 1 === lineStarts.length ? sourceFile.getEnd() : lineStarts[i + 1] - 1;
+            // If the character before \n is \r, decrement line end by 1.
+            const lineEnd = sourceFile.text.charCodeAt(newlinePosition - 1) === CharacterCodes.carriageReturn ? newlinePosition - 1 : newlinePosition;
             const lineText = sourceFile.text.substring(currentLineStart, lineEnd);
-            const result = isRegionDelimiter(lineText);
+            const regionDelimiterRegExp = /^\s*\/\/\s*#(end)?region(?:\s+(.*))?(?:\r)?$/;
+            const result = regionDelimiterRegExp.exec(lineText);
             if (!result || isInComment(sourceFile, currentLineStart)) {
                 continue;
             }
 
-            if (!result[1]) {
-                const span = createTextSpanFromBounds(sourceFile.text.indexOf("//", currentLineStart), lineEnd);
-                regions.push(createOutliningSpan(span, OutliningSpanKind.Region, span, /*autoCollapse*/ false, result[2] || "#region"));
-            }
-            else {
+            if (result[1]) {
                 const region = regions.pop();
                 if (region) {
                     region.textSpan.length = lineEnd - region.textSpan.start;
                     region.hintSpan.length = lineEnd - region.textSpan.start;
                     out.push(region);
                 }
+
+            }
+            else {
+                const span = createTextSpanFromBounds(sourceFile.text.indexOf("//", currentLineStart), lineEnd);
+                regions.push(createOutliningSpan(span, OutliningSpanKind.Region, span, /*autoCollapse*/ false, result[2] || "#region"));
             }
         }
-    }
-
-    const regionDelimiterRegExp = /^\s*\/\/\s*#(end)?region(?:\s+(.*))?(?:\r)?$/;
-    function isRegionDelimiter(lineText: string) {
-        return regionDelimiterRegExp.exec(lineText);
     }
 
     function addOutliningForLeadingCommentsForNode(n: Node, sourceFile: SourceFile, cancellationToken: CancellationToken, out: Push<OutliningSpan>): void {
@@ -113,7 +112,9 @@ namespace ts.OutliningElementsCollector {
                 case SyntaxKind.SingleLineCommentTrivia:
                     // never fold region delimiters into single-line comment regions
                     const commentText = sourceText.slice(pos, end);
-                    if (isRegionDelimiter(commentText)) {
+                    const regionDelimiterRegExp = /^\s*\/\/\s*#(end)?region(?:\s+(.*))?(?:\r)?$/;
+                    const result = regionDelimiterRegExp.exec(commentText);
+                    if (result) {
                         combineAndAddMultipleSingleLineComments();
                         singleLineCommentCount = 0;
                         break;
@@ -124,6 +125,7 @@ namespace ts.OutliningElementsCollector {
                     if (singleLineCommentCount === 0) {
                         firstSingleLineCommentStart = pos;
                     }
+                    
                     lastSingleLineCommentEnd = end;
                     singleLineCommentCount++;
                     break;
@@ -178,7 +180,7 @@ namespace ts.OutliningElementsCollector {
                         else if (tryStatement.finallyBlock === n) {
                             return spanForNode(findChildOfKind(tryStatement, SyntaxKind.FinallyKeyword, sourceFile)!);
                         }
-                        // falls through
+                    // falls through
                     default:
                         // Block was a standalone block.  In this case we want to only collapse
                         // the span of the block, independent of any parent span.

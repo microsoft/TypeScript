@@ -6091,7 +6091,7 @@ namespace ts {
         }
 
         function parseModuleDeclaration(node: ModuleDeclaration): ModuleDeclaration {
-            let flags: NodeFlags = 0;
+            let flags: NodeFlags = NodeFlags.None;
             if (token() === SyntaxKind.GlobalKeyword) {
                 // global augmentation
                 return parseAmbientExternalModuleDeclaration(node);
