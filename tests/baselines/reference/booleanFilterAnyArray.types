@@ -44,7 +44,7 @@ var ys: any[];
 
 var ys = realanys.filter(Boolean)
 >ys : any[]
->realanys.filter(Boolean) : any[]
+>realanys.filter(Boolean) : unknown[]
 >realanys.filter : { <S extends any>(callbackfn: (value: any, index: number, array: any[]) => value is S, thisArg?: any): S[]; (callbackfn: (value: any, index: number, array: any[]) => unknown, thisArg?: any): any[]; }
 >realanys : any[]
 >filter : { <S extends any>(callbackfn: (value: any, index: number, array: any[]) => value is S, thisArg?: any): S[]; (callbackfn: (value: any, index: number, array: any[]) => unknown, thisArg?: any): any[]; }

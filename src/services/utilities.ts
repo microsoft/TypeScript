@@ -227,11 +227,10 @@ namespace ts {
     }
 
     export function hasPropertyAccessExpressionWithName(node: CallExpression, funcName: string): boolean {
-        if (!isPropertyAccessExpression(node.expression)) {
-            return false;
+        if (isPropertyAccessExpression(node.expression)) {
+            return node.expression.name.text === funcName;
         }
-
-        return node.expression.name.text === funcName;
+        return false;
     }
 
     export function isJumpStatementTarget(node: Node): node is Identifier & { parent: BreakOrContinueStatement } {

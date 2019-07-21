@@ -6,10 +6,12 @@ namespace ts.refactor {
     registerRefactor(refactorName, {
         getAvailableActions(context): ReadonlyArray<ApplicableRefactorInfo> {
             const i = getImportToConvert(context);
-            if (!i) return emptyArray;
-            const description = i.kind === SyntaxKind.NamespaceImport ? Diagnostics.Convert_namespace_import_to_named_imports.message : Diagnostics.Convert_named_imports_to_namespace_import.message;
-            const actionName = i.kind === SyntaxKind.NamespaceImport ? actionNameNamespaceToNamed : actionNameNamedToNamespace;
-            return [{ name: refactorName, description, actions: [{ name: actionName, description }] }];
+            if (i) {
+                const description = i.kind === SyntaxKind.NamespaceImport ? Diagnostics.Convert_namespace_import_to_named_imports.message : Diagnostics.Convert_named_imports_to_namespace_import.message;
+                const actionName = i.kind === SyntaxKind.NamespaceImport ? actionNameNamespaceToNamed : actionNameNamedToNamespace;
+                return [{ name: refactorName, description, actions: [{ name: actionName, description }] }];
+            }
+            return emptyArray;
         },
         getEditsForAction(context, actionName): RefactorEditInfo {
             Debug.assert(actionName === actionNameNamespaceToNamed || actionName === actionNameNamedToNamespace);
