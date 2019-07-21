@@ -53,11 +53,11 @@ namespace ts {
             return "";
         }
 
-        if (!commonPathComponents) { // Can happen when all input files are .d.ts files
-            return currentDirectory;
+        if (commonPathComponents) { // Can happen when all input files are .d.ts files
+            return getPathFromPathComponents(commonPathComponents);
         }
 
-        return getPathFromPathComponents(commonPathComponents);
+        return currentDirectory;
     }
 
     interface OutputFingerprint {
