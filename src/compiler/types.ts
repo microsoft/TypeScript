@@ -4635,55 +4635,52 @@ namespace ts {
 
     export type CompilerOptionsValue = string | number | boolean | (string | number)[] | string[] | MapLike<string[]> | PluginImport[] | ProjectReference[] | null | undefined;
 
-    export interface CompilerOptions {
-        /*@internal*/ all?: boolean;
+    /** Public facing TSConfig options */
+    export interface PublicCompilerOptions {
+        /**
+         * Allow JavaScript files to be compiled.
+         *
+         * @grouping Runtime
+         */
         allowJs?: boolean;
-        /*@internal*/ allowNonTsExtensions?: boolean;
+        /** Allow default imports from modules with no default export. This does not affect code emit, just typechecking.. */
         allowSyntheticDefaultImports?: boolean;
         allowUmdGlobalAccess?: boolean;
         allowUnreachableCode?: boolean;
         allowUnusedLabels?: boolean;
         alwaysStrict?: boolean;  // Always combine with strict property
         baseUrl?: string;
-        /** An error if set - this should only go through the -b pipeline and not actually be observed */
-        /*@internal*/
-        build?: boolean;
         charset?: string;
         checkJs?: boolean;
-        /* @internal */ configFilePath?: string;
-        /** configFile is set as non enumerable property so as to avoid checking of json source files */
-        /* @internal */ readonly configFile?: TsConfigSourceFile;
+        build?: boolean;
         declaration?: boolean;
         declarationMap?: boolean;
         emitDeclarationOnly?: boolean;
         declarationDir?: string;
-        /* @internal */ diagnostics?: boolean;
-        /* @internal */ extendedDiagnostics?: boolean;
         disableSizeLimit?: boolean;
         downlevelIteration?: boolean;
         emitBOM?: boolean;
         emitDecoratorMetadata?: boolean;
         experimentalDecorators?: boolean;
         forceConsistentCasingInFileNames?: boolean;
-        /*@internal*/help?: boolean;
         importHelpers?: boolean;
-        /*@internal*/init?: boolean;
         inlineSourceMap?: boolean;
         inlineSources?: boolean;
         isolatedModules?: boolean;
         jsx?: JsxEmit;
         keyofStringsOnly?: boolean;
         lib?: string[];
-        /*@internal*/listEmittedFiles?: boolean;
-        /*@internal*/listFiles?: boolean;
         locale?: string;
         mapRoot?: string;
+        /** 
+         * @grouping JavaScript
+         * @playground false
+         */
         maxNodeModuleJsDepth?: number;
         module?: ModuleKind;
         moduleResolution?: ModuleResolutionKind;
         newLine?: NewLineKind;
         noEmit?: boolean;
-        /*@internal*/noEmitForJsFiles?: boolean;
         noEmitHelpers?: boolean;
         noEmitOnError?: boolean;
         noErrorTruncation?: boolean;
@@ -4701,12 +4698,9 @@ namespace ts {
         outDir?: string;
         outFile?: string;
         paths?: MapLike<string[]>;
-        /*@internal*/ plugins?: PluginImport[];
         preserveConstEnums?: boolean;
         preserveSymlinks?: boolean;
-        /* @internal */ preserveWatchOutput?: boolean;
         project?: string;
-        /* @internal */ pretty?: boolean;
         reactNamespace?: string;
         jsxFactory?: string;
         composite?: boolean;
@@ -4719,7 +4713,15 @@ namespace ts {
         skipDefaultLibCheck?: boolean;
         sourceMap?: boolean;
         sourceRoot?: string;
+        /**
+         * Enable all strict type checking options
+         * @grouping Strict Checks
+         */
         strict?: boolean;
+        /**
+         * Disable [bivariant parameter](https://www.typescriptlang.org/docs/handbook/release-notes/typescript-2-6.html#strict-function-types) checking for function types.
+         * @grouping Strict Checks
+         */
         strictFunctionTypes?: boolean;  // Always combine with strict property
         strictBindCallApply?: boolean;  // Always combine with strict property
         strictNullChecks?: boolean;  // Always combine with strict property
@@ -4727,17 +4729,35 @@ namespace ts {
         stripInternal?: boolean;
         suppressExcessPropertyErrors?: boolean;
         suppressImplicitAnyIndexErrors?: boolean;
-        /* @internal */ suppressOutputPathCheck?: boolean;
         target?: ScriptTarget; // TODO: GH#18217 frequently asserted as defined
         traceResolution?: boolean;
         resolveJsonModule?: boolean;
         types?: string[];
         /** Paths used to compute primary types search locations */
         typeRoots?: string[];
+        esModuleInterop?: boolean;
+    }
+
+    export interface CompilerOptions extends PublicCompilerOptions {
+        /*@internal*/ all?: boolean;
+        /*@internal*/ allowNonTsExtensions?: boolean;
+        /*@internal */ configFilePath?: string;
+        /** configFile is set as non enumerable property so as to avoid checking of json source files */
+        /*@internal */ readonly configFile?: TsConfigSourceFile;
+        /*@internal */ diagnostics?: boolean;
+        /*@internal */ extendedDiagnostics?: boolean;
+        /*@internal*/help?: boolean;
+        /*@internal*/init?: boolean;
+        /*@internal*/listEmittedFiles?: boolean;
+        /*@internal*/listFiles?: boolean;
+        /*@internal*/noEmitForJsFiles?: boolean;
+        /*@internal*/ plugins?: PluginImport[];
+        /*@internal */ preserveWatchOutput?: boolean;
+        /*@internal */ pretty?: boolean;
+        /*@internal */ suppressOutputPathCheck?: boolean;
         /*@internal*/ version?: boolean;
         /*@internal*/ watch?: boolean;
-        esModuleInterop?: boolean;
-        /* @internal */ showConfig?: boolean;
+        /*@internal */ showConfig?: boolean;
 
         [option: string]: CompilerOptionsValue | TsConfigSourceFile | undefined;
     }
