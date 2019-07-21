@@ -1,0 +1,32 @@
+tests/cases/compiler/booleanFilterAnyArray.ts(18,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'ys' must be of type 'any[]', but here has type 'unknown[]'.
+
+
+==== tests/cases/compiler/booleanFilterAnyArray.ts (1 errors) ====
+    interface Bullean { }
+    interface BulleanConstructor {
+        new(v1?: any): Bullean;
+        <T>(v2?: T): v2 is T;
+    }
+    
+    interface Ari<T> {
+        filter<S extends T>(cb1: (value: T) => value is S): T extends any ? Ari<any> : Ari<S>;
+        filter(cb2: (value: T) => unknown): Ari<T>;
+    }
+    declare var Bullean: BulleanConstructor;
+    declare let anys: Ari<any>;
+    var xs: Ari<any>;
+    var xs = anys.filter(Bullean)
+    
+    declare let realanys: any[];
+    var ys: any[];
+    var ys = realanys.filter(Boolean)
+        ~~
+!!! error TS2403: Subsequent variable declarations must have the same type.  Variable 'ys' must be of type 'any[]', but here has type 'unknown[]'.
+!!! related TS6203 tests/cases/compiler/booleanFilterAnyArray.ts:17:5: 'ys' was also declared here.
+    
+    var foo = [{ name: 'x' }]
+    var foor: Array<{name: string}>
+    var foor = foo.filter(x => x.name)
+    var foos: Array<boolean>
+    var foos = [true, true, false, null].filter((thing): thing is boolean => thing !== null)
+    
