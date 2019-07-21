@@ -41,7 +41,15 @@ const generateLibs = () => {
             .pipe(concat(relativeTarget, { newLine: "\n\n" }))
             .pipe(dest("built/local"))));
 };
-task("lib", generateLibs)
+
+const updateCompilerLibTypes = () => {
+    return src("src/compiler/types.ts")
+    .pipe(transform(content => content.replace(/export type AvailableLibOptions = string | .*;$/gm, 
+                                               `export type AvailableLibOptions = string | "${ libraries.libNames.join(`" | "`) }";`)))
+    .pipe(dest("src/compiler/"));
+}
+
+task("lib", series(generateLibs, updateCompilerLibTypes))
 task("lib").description = "Builds the library targets";
 
 const cleanLib = () => del(libs.map(lib => lib.target));

@@ -4635,13 +4635,12 @@ namespace ts {
 
     export type CompilerOptionsValue = string | number | boolean | (string | number)[] | string[] | MapLike<string[]> | PluginImport[] | ProjectReference[] | null | undefined;
 
+    // The initial string negates the work somewhat internally, yes, but it does mean that machines can pull out the rest of the values from the enum  while allowing all values
+    export type AvailableLibOptions = string | "ES5" | "ES6" | "ES2015" | "ES7" | "ES2016" | "ES2017" | "ES2018" | "ESNext" | "DOM" | "DOM.Iterable" | "WebWorker" | "ScriptHost" | "ES2015.Core" | "ES2015.Collection" | "ES2015.Generator" | "ES2015.Iterable" | "ES2015.Promise" | "ES2015.Proxy" | "ES2015.Reflect" | "ES2015.Symbol" | "ES2015.Symbol.WellKnown" | "ES2016.Array.Include" | "ES2017.object" | "ES2017.Intl" | "ES2017.SharedMemory" | "ES2017.String" | "ES2017.TypedArrays" | "ES2018.Intl" | "ES2018.Promise" | "ES2018.RegExp" | "ESNext.AsyncIterable" | "ESNext.Array" | "ESNext.Intl" | "ESNext.Symbol";
+
     /** Public facing TSConfig options */
     export interface PublicCompilerOptions {
-        /**
-         * Allow JavaScript files to be compiled.
-         *
-         * @grouping Runtime
-         */
+        /** Allow JavaScript files to be compiled. */
         allowJs?: boolean;
         /** Allow default imports from modules with no default export. This does not affect code emit, just typechecking.. */
         allowSyntheticDefaultImports?: boolean;
@@ -4669,13 +4668,9 @@ namespace ts {
         isolatedModules?: boolean;
         jsx?: JsxEmit;
         keyofStringsOnly?: boolean;
-        lib?: string[];
+        lib?: AvailableLibOptions[];
         locale?: string;
         mapRoot?: string;
-        /** 
-         * @grouping JavaScript
-         * @playground false
-         */
         maxNodeModuleJsDepth?: number;
         module?: ModuleKind;
         moduleResolution?: ModuleResolutionKind;
