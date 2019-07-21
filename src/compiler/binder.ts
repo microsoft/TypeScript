@@ -1228,7 +1228,7 @@ namespace ts {
 
         function bindCaseBlock(node: CaseBlock): void {
             const savedSubtreeTransformFlags = subtreeTransformFlags;
-            subtreeTransformFlags = subtreeTransformFlags.None;
+            subtreeTransformFlags = 0;
             const clauses = node.clauses;
             let fallthroughFlow = unreachableFlow;
             for (let i = 0; i < clauses.length; i++) {

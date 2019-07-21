@@ -1435,7 +1435,7 @@ namespace ts {
 
         function scan(): SyntaxKind {
             startPos = pos;
-            tokenFlags = TokenFlags.None;
+            tokenFlags = 0;
             let asteriskSeen = false;
             while (true) {
                 tokenPos = pos;
@@ -2052,7 +2052,7 @@ namespace ts {
 
         function scanJsDocToken(): JSDocSyntaxKind {
             startPos = tokenPos = pos;
-            tokenFlags = TokenFlags.None;
+            tokenFlags = 0;
             if (pos >= end) {
                 return token = SyntaxKind.EndOfFileToken;
             }
@@ -2192,7 +2192,7 @@ namespace ts {
             tokenPos = textPos;
             token = SyntaxKind.Unknown;
             tokenValue = undefined!;
-            tokenFlags = TokenFlags.None;
+            tokenFlags = 0;
         }
 
         function setInJSDocType(inType: boolean) {

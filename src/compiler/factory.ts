@@ -4140,7 +4140,7 @@ namespace ts {
         return getName(node, allowComments, allowSourceMaps);
     }
 
-    function getName(node: Declaration, allowComments?: boolean, allowSourceMaps?: boolean, emitFlags: EmitFlags = EmitFlags.None) {
+    function getName(node: Declaration, allowComments?: boolean, allowSourceMaps?: boolean, emitFlags: EmitFlags = 0) {
         const nodeName = getNameOfDeclaration(node);
         if (nodeName && isIdentifier(nodeName) && !isGeneratedIdentifier(nodeName)) {
             const name = getMutableClone(nodeName);
@@ -4182,7 +4182,7 @@ namespace ts {
     export function getNamespaceMemberName(ns: Identifier, name: Identifier, allowComments?: boolean, allowSourceMaps?: boolean): PropertyAccessExpression {
         const qualifiedName = createPropertyAccess(ns, nodeIsSynthesized(name) ? name : getSynthesizedClone(name));
         setTextRange(qualifiedName, name);
-        let emitFlags: EmitFlags = EmitFlags.None;
+        let emitFlags: EmitFlags = 0;
         if (!allowSourceMaps) emitFlags |= EmitFlags.NoSourceMap;
         if (!allowComments) emitFlags |= EmitFlags.NoComments;
         if (emitFlags) setEmitFlags(qualifiedName, emitFlags);

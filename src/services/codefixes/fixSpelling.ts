@@ -68,7 +68,7 @@ namespace ts.codefix {
     }
 
     function convertSemanticMeaningToSymbolFlags(meaning: SemanticMeaning): SymbolFlags {
-        let flags = SymbolFlags.None;
+        let flags = 0;
         if (meaning & SemanticMeaning.Namespace) {
             flags |= SymbolFlags.Namespace;
         }
@@ -81,12 +81,12 @@ namespace ts.codefix {
         return flags;
     }
 
-    function getResolvedSourceFileFromImportDeclaration(sourceFile: SourceFile, context: CodeFixContextBase, importDeclaration: ImportDeclaration): SourceFile | undefined {
-        if (!(importDeclaration && isStringLiteralLike(importDeclaration.moduleSpecifier))) return undefined;
+    function getResolvedSourceFileFromImportDeclaration (sourceFile: SourceFile, context: CodeFixContextBase, importDeclaration: ImportDeclaration): SourceFile | undefined {
+        if (!importDeclaration || !isStringLiteralLike(importDeclaration.moduleSpecifier)) return undefined;
 
         const resolvedModule = getResolvedModule(sourceFile, importDeclaration.moduleSpecifier.text);
-        if (resolvedModule) return context.program.getSourceFile(resolvedModule.resolvedFileName);
+        if (!resolvedModule) return undefined;
 
-        return undefined;
+        return context.program.getSourceFile(resolvedModule.resolvedFileName);
     }
 }
