@@ -85,11 +85,11 @@ var PublicX = /** @class */ (function () {
 }());
 var publicX;
 var privateOptionalX;
-var o2 = __assign({}, publicX, privateOptionalX);
+var o2 = __assign(__assign({}, publicX), privateOptionalX);
 var sn = o2.x; // error, x is private
 var optionalString;
 var optionalNumber;
-var allOptional = __assign({}, optionalString, optionalNumber);
+var allOptional = __assign(__assign({}, optionalString), optionalNumber);
 ;
 ;
 var spread = __assign({ b: true }, { s: "foo" });
@@ -97,8 +97,8 @@ spread = { s: "foo" }; // error, missing 'b'
 var b = { b: false };
 spread = b; // error, missing 's'
 // literal repeats are not allowed, but spread repeats are fine
-var duplicated = __assign({ b: 'bad' }, o, { b: 'bad' }, o2, { b: 'bad' });
-var duplicatedSpread = __assign({}, o, o);
+var duplicated = __assign(__assign(__assign(__assign({ b: 'bad' }, o), { b: 'bad' }), o2), { b: 'bad' });
+var duplicatedSpread = __assign(__assign({}, o), o);
 // primitives are not allowed, except for falsy ones
 var spreadNum = __assign({}, 12);
 var spreadSum = __assign({}, 1 + 1);

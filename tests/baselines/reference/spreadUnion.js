@@ -26,6 +26,6 @@ var union;
 var o3;
 var o3 = __assign({}, union);
 var o4;
-var o4 = __assign({}, union, { a: false });
+var o4 = __assign(__assign({}, union), { a: false });
 var o5;
-var o5 = __assign({}, union, union);
+var o5 = __assign(__assign({}, union), union);
