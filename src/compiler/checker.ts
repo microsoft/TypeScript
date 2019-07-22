@@ -15463,7 +15463,7 @@ namespace ts {
             let bivariant = false;
             let propagationType: Type;
             let inferenceCount = 0;
-            let inferenceBlocked = false;
+            let inferenceIncomplete = false;
             let allowComplexConstraintInference = true;
             inferFromTypes(originalSource, originalTarget);
 
@@ -15710,14 +15710,16 @@ namespace ts {
             function inferToMultipleTypes(source: Type, targets: Type[], targetFlags: TypeFlags) {
                 let typeVariableCount = 0;
                 if (targetFlags & TypeFlags.Union) {
+                    let nakedTypeVariable: Type | undefined;
                     const sources = source.flags & TypeFlags.Union ? (<UnionType>source).types : [source];
                     const matched = new Array<boolean>(sources.length);
-                    const saveInferenceBlocked = inferenceBlocked;
-                    inferenceBlocked = false;
+                    const saveInferenceIncomplete = inferenceIncomplete;
+                    inferenceIncomplete = false;
                     // First infer to types that are not naked type variables. For each source type we
                     // track whether inferences were made from that particular type to some target.
                     for (const t of targets) {
                         if (getInferenceInfoForType(t)) {
+                            nakedTypeVariable = t;
                             typeVariableCount++;
                         }
                         else {
@@ -15728,21 +15730,18 @@ namespace ts {
                             }
                         }
                     }
-                    // If the target has a single naked type variable and inference wasn't blocked (meaning
-                    // we explored the types fully), create a union of the source types from which no inferences
+                    const inferenceComplete = !inferenceIncomplete;
+                    inferenceIncomplete = inferenceIncomplete || saveInferenceIncomplete;
+                    // If the target has a single naked type variable and inference completed (meaning we
+                    // explored the types fully), create a union of the source types from which no inferences
                     // have been made so far and infer from that union to the naked type variable.
-                    if (typeVariableCount === 1 && !inferenceBlocked) {
+                    if (typeVariableCount === 1 && inferenceComplete) {
                         const unmatched = flatMap(sources, (s, i) => matched[i] ? undefined : s);
                         if (unmatched.length) {
-                            const s = getUnionType(unmatched);
-                            for (const t of targets) {
-                                if (getInferenceInfoForType(t)) {
-                                    inferFromTypes(s, t);
-                                }
-                            }
+                            inferFromTypes(getUnionType(unmatched), nakedTypeVariable!);
+                            return;
                         }
                     }
-                    inferenceBlocked = inferenceBlocked || saveInferenceBlocked;
                 }
                 else {
                     // We infer from types that are not naked type variables first so that inferences we
@@ -15839,7 +15838,7 @@ namespace ts {
                 const symbol = isNonConstructorObject ? target.symbol : undefined;
                 if (symbol) {
                     if (contains(symbolStack, symbol)) {
-                        inferenceBlocked = true;
+                        inferenceIncomplete = true;
                         return;
                     }
                     (symbolStack || (symbolStack = [])).push(symbol);
@@ -15955,10 +15954,13 @@ namespace ts {
         }
 
         function isMatchableType(type: Type) {
+            // We exclude non-anonymous object types because some frameworks (e.g. Ember) rely on the ability to
+            // infer between types that don't witness their type variables. Such types would otherwise be eliminated
+            // because they appear identical.
             return !(type.flags & TypeFlags.Object) || !!(getObjectFlags(type) & ObjectFlags.Anonymous);
         }
 
-        function typeIdenticalToSomeType(type: Type, types: Type[]): boolean {
+        function typeMatchedBySomeType(type: Type, types: Type[]): boolean {
             for (const t of types) {
                 if (t === type || isMatchableType(t) && isMatchableType(type) && isTypeIdenticalTo(t, type)) {
                     return true;
@@ -15968,12 +15970,12 @@ namespace ts {
         }
 
         function findMatchedType(type: Type, target: UnionOrIntersectionType) {
-            if (typeIdenticalToSomeType(type, target.types)) {
+            if (typeMatchedBySomeType(type, target.types)) {
                 return type;
             }
             if (type.flags & (TypeFlags.NumberLiteral | TypeFlags.StringLiteral) && target.flags & TypeFlags.Union) {
                 const base = getBaseTypeOfLiteralType(type);
-                if (typeIdenticalToSomeType(base, target.types)) {
+                if (typeMatchedBySomeType(base, target.types)) {
                     return base;
                 }
             }
@@ -15987,7 +15989,7 @@ namespace ts {
         function removeTypesFromUnionOrIntersection(type: UnionOrIntersectionType, typesToRemove: Type[]) {
             const reducedTypes: Type[] = [];
             for (const t of type.types) {
-                if (!typeIdenticalToSomeType(t, typesToRemove)) {
+                if (!typeMatchedBySomeType(t, typesToRemove)) {
                     reducedTypes.push(t);
                 }
             }
