@@ -6501,7 +6501,8 @@ node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn_loo
 node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn_loose.js(258,55): error TS2339: Property 'end' does not exist on type 'true'.
 node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn_loose.js(1365,5): error TS2339: Property 'next' does not exist on type 'LooseParser'.
 node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn_loose.js(1366,12): error TS2339: Property 'parseTopLevel' does not exist on type 'LooseParser'.
-node_modules/chrome-devtools-frontend/front_end/har_importer/HARImporter.js(26,11): error TS2403: Subsequent variable declarations must have the same type.  Variable 'page' must be of type 'any', but here has type 'HARPage'.
+node_modules/chrome-devtools-frontend/front_end/har_importer/HARImporter.js(16,32): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+node_modules/chrome-devtools-frontend/front_end/har_importer/HARImporter.js(16,52): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
 node_modules/chrome-devtools-frontend/front_end/har_importer/HARImporter.js(46,5): error TS2322: Type 'Date' is not assignable to type 'number'.
 node_modules/chrome-devtools-frontend/front_end/heap_profiler_test_runner/HeapProfilerTestRunner.js(320,70): error TS2339: Property 'heap_profiler' does not exist on type 'any[]'.
 node_modules/chrome-devtools-frontend/front_end/heap_profiler_test_runner/HeapProfilerTestRunner.js(321,35): error TS2339: Property 'heap_profiler' does not exist on type 'any[]'.
