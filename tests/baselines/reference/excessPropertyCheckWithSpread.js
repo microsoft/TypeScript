@@ -30,4 +30,4 @@ var __assign = (this && this.__assign) || function () {
     return __assign.apply(this, arguments);
 };
 f(__assign({ a: 1 }, i));
-f(__assign({ a: 1 }, l, r));
+f(__assign(__assign({ a: 1 }, l), r));
