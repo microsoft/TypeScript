@@ -39,9 +39,7 @@ declare class exports {
     t: number;
 }
 declare class Sub {
-    instance: {
-        t: number;
-    };
+    instance: import(".");
 }
 declare namespace exports {
     export { Sub };

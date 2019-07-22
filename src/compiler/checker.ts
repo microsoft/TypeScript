@@ -3020,7 +3020,18 @@ namespace ts {
                 const res = append(additionalContainers, container);
                 return concatenate(res, reexportContainers);
             }
-            const candidates = mapDefined(symbol.declarations, d => !isAmbientModule(d) && d.parent && hasNonGlobalAugmentationExternalModuleSymbol(d.parent) ? getSymbolOfNode(d.parent) : undefined);
+            const candidates = mapDefined(symbol.declarations, d => {
+                if (!isAmbientModule(d) && d.parent && hasNonGlobalAugmentationExternalModuleSymbol(d.parent)) {
+                    return getSymbolOfNode(d.parent)
+                }
+                if (isClassExpression(d) && isBinaryExpression(d.parent) && d.parent.operatorToken.kind === SyntaxKind.EqualsToken && isAccessExpression(d.parent.left) && isEntityNameExpression(d.parent.left.expression)) {
+                    if (isModuleExportsPropertyAccessExpression(d.parent.left) || isExportsIdentifier(d.parent.left.expression)) {
+                        return getSymbolOfNode(getSourceFileOfNode(d));
+                    }
+                    checkExpressionCached(d.parent.left.expression);
+                    return getNodeLinks(d.parent.left.expression).resolvedSymbol;
+                }
+            });
             if (!length(candidates)) {
                 return undefined;
             }
@@ -4423,6 +4434,10 @@ namespace ts {
 
             function lookupSymbolChain(symbol: Symbol, context: NodeBuilderContext, meaning: SymbolFlags, yieldModuleSymbol?: boolean) {
                 context.tracker.trackSymbol!(symbol, context.enclosingDeclaration, meaning); // TODO: GH#18217
+                return lookupSymbolChainWorker(symbol, context, meaning, yieldModuleSymbol);
+            }
+
+            function lookupSymbolChainWorker(symbol: Symbol, context: NodeBuilderContext, meaning: SymbolFlags, yieldModuleSymbol?: boolean) {
                 // Try to get qualified name if the symbol is not a type parameter and there is an enclosing declaration.
                 let chain: Symbol[];
                 const isTypeParameter = symbol.flags & SymbolFlags.TypeParameter;
@@ -4873,9 +4888,13 @@ namespace ts {
                     tracker: {
                         ...oldcontext.tracker,
                         trackSymbol: (sym, decl, meaning) => {
-                            const accessibleChain = getAccessibleSymbolChain(sym, decl, meaning, /*usOnlyExternalAliasing*/ false);
-                            if (length(accessibleChain)) {
-                                includePrivateSymbol(accessibleChain![0]);
+                            const acessibleResult = isSymbolAccessible(sym, decl, meaning, /*computeALiases*/ false);
+                            if (acessibleResult.accessibility === SymbolAccessibility.Accessible) {
+                                // Lookup the root symbol of the chain of refs we'll use to access it and serialize it
+                                const chain = lookupSymbolChainWorker(sym, context, meaning);
+                                if (!(sym.flags & SymbolFlags.Property)) {
+                                    includePrivateSymbol(chain[0]);
+                                }
                             }
                             else if (oldcontext.tracker && oldcontext.tracker.trackSymbol) {
                                 oldcontext.tracker.trackSymbol(sym, decl, meaning);
@@ -5508,6 +5527,11 @@ namespace ts {
                     initializer: Expression | undefined
                 ) => T, methodKind: SyntaxKind): (p: Symbol, isStatic: boolean, baseType: Type | undefined) => (T | T[]) {
                     return function serializePropertySymbol(p: Symbol, isStatic: boolean, baseType: Type | undefined) {
+                        if (isStatic && (p.flags & (SymbolFlags.Type | SymbolFlags.Namespace | SymbolFlags.Alias))) {
+                            // Only value-only-meaning symbols can be correctly encoded as class statics, type/namespace/alias meaning symbols
+                            // need to be merged namespace members
+                            return [];
+                        }
                         if (p.flags & SymbolFlags.Prototype || (baseType && getPropertyOfType(baseType, p.escapedName)
                             && isReadonlySymbol(getPropertyOfType(baseType, p.escapedName)!) === isReadonlySymbol(p)
                             && (p.flags & SymbolFlags.Optional) === (getPropertyOfType(baseType, p.escapedName)!.flags & SymbolFlags.Optional)
@@ -5783,10 +5807,13 @@ namespace ts {
                 }
 
                 function serializeSymbol(symbol: Symbol, isPrivate: boolean) {
-                    if (visitedSymbols.has("" + getSymbolId(symbol))) {
+                    // cache visited list based on merged symbol, since we want to use the unmerged top-level symbol, but
+                    // still skip reserializing it if we encounter the merged product later on
+                    const visitedSym = getMergedSymbol(symbol);
+                    if (visitedSymbols.has("" + getSymbolId(visitedSym))) {
                         return; // Already printed
                     }
-                    visitedSymbols.set("" + getSymbolId(symbol), true);
+                    visitedSymbols.set("" + getSymbolId(visitedSym), true);
                     // Only actually serialize symbols within the correct enclosing declaration, otherwise do nothing with the out-of-context symbol
                     const skipMembershipCheck = !isPrivate; // We only call this on exported symbols when we know they're in the correct scope
                     if (skipMembershipCheck || (!!length(symbol.declarations) && some(symbol.declarations, d => !!findAncestor(d, n => n === enclosingDeclaration)))) {
