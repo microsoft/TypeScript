@@ -1359,7 +1359,9 @@ namespace ts.Completions {
                     if (isExportStarFromReExport || some(symbol.declarations, d => isExportSpecifier(d) && !d.propertyName && !!d.parent.parent.moduleSpecifier)) {
                         // Walk the export chain back one module (step 1 or 2 in diagrammed example).
                         // Or, in the case of `export * from "foo"`, `symbol` already points to the original export, so just use that.
-                        const nearestExportSymbolId = getSymbolId(isExportStarFromReExport ? symbol : Debug.assertDefined(getNearestExportSymbol(symbol)));
+                        const nearestExportSymbol = isExportStarFromReExport ? symbol : getNearestExportSymbol(symbol);
+                        if (!nearestExportSymbol) continue;
+                        const nearestExportSymbolId = getSymbolId(nearestExportSymbol);
                         const symbolHasBeenSeen = !!symbolToOriginInfoMap[nearestExportSymbolId] || aliasesToAlreadyIncludedSymbols.has(nearestExportSymbolId.toString());
                         if (!symbolHasBeenSeen) {
                             aliasesToReturnIfOriginalsAreMissing.set(nearestExportSymbolId.toString(), { alias: symbol, moduleSymbol });
