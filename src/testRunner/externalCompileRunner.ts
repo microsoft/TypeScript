@@ -193,6 +193,7 @@ function sanitizeUnimportantGulpOutput(result: string): string {
 function sanitizeTimestamps(result: string): string {
     return result.replace(/\[\d?\d:\d\d:\d\d (A|P)M\]/g, "[XX:XX:XX XM]")
         .replace(/\[\d?\d:\d\d:\d\d\]/g, "[XX:XX:XX]")
+        .replace(/\/\d+-\d+-[\d_TZ]+-debug.log/g, "\/XXXX-XX-XXXXXXXXX-debug.log")
         .replace(/\d+(\.\d+)? sec(onds?)?/g, "? seconds")
         .replace(/\d+(\.\d+)? min(utes?)?/g, "")
         .replace(/\d+(\.\d+)?( m)?s/g, "?s");
@@ -201,6 +202,7 @@ function sanitizeTimestamps(result: string): string {
 function sanitizeVersionSpecifiers(result: string): string {
     return result
         .replace(/\d+.\d+.\d+-insiders.\d\d\d\d\d\d\d\d/g, "X.X.X-insiders.xxxxxxxx")
+        .replace(/Rush Multi-Project Build Tool (\d+)\.\d+\.\d+/g, "Rush Multi-Project Build Tool $1.X.X")
         .replace(/([@v\()])\d+\.\d+\.\d+/g, "$1X.X.X");
 }
 
