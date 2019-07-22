@@ -3,6 +3,17 @@
 // @Filename: foo.js
 ////function f() {}
 ////f.prototype.x = 0;
+////f.prototype.method = function () {};
+////Object.defineProperty(f, 'staticProp', { 
+////    set: function() {}, 
+////    get: function(){
+////    } 
+////});
+////Object.defineProperty(f, 'name', { 
+////    set: function() {}, 
+////    get: function(){
+////    } 
+////}); 
 
 verify.navigationTree({
     "text": "<global>",
@@ -10,11 +21,47 @@ verify.navigationTree({
     "childItems": [
         {
             "text": "f",
-            "kind": "function"
-        },
-        {
-            "text": "x",
-            "kind": "property"
+            "kind": "class",
+            "childItems": [
+                {
+                    "text": "constructor",
+                    "kind": "constructor"
+                },
+                {
+                    "text": "method",
+                    "kind": "function"
+                },
+                {
+                    "text": "name",
+                    "childItems": [
+                        {
+                            "text": "get",
+                            "kind": "function"
+                        },
+                        {
+                            "text": "set",
+                            "kind": "function"
+                        }
+                    ]
+                },
+                {
+                    "text": "staticProp",
+                    "childItems": [
+                        {
+                            "text": "get",
+                            "kind": "function"
+                        },
+                        {
+                            "text": "set",
+                            "kind": "function"
+                        }
+                    ]
+                },
+                {
+                    "text": "x",
+                    "kind": "property"
+                }
+            ]
         }
     ]
 });
@@ -26,17 +73,33 @@ verify.navigationBar([
         "childItems": [
             {
                 "text": "f",
-                "kind": "function"
-            },
-            {
-                "text": "x",
-                "kind": "property"
+                "kind": "class"
             }
         ]
     },
     {
         "text": "f",
-        "kind": "function",
+        "kind": "class",
+        "childItems": [
+            {
+                "text": "constructor",
+                "kind": "constructor"
+            },
+            {
+                "text": "method",
+                "kind": "function"
+            },
+            {
+                "text": "name"
+            },
+            {
+                "text": "staticProp"
+            },
+            {
+                "text": "x",
+                "kind": "property"
+            }
+        ],
         "indent": 1
     }
 ]);
