@@ -15577,7 +15577,7 @@ namespace ts {
                         // Infer to the simplified version of an indexed access, if possible, to (hopefully) expose more bare type parameters to the inference engine
                         const simplified = getSimplifiedType(target, /*writing*/ false);
                         if (simplified !== target) {
-                            inferFromTypesOnce(source, simplified);
+                            invokeOnce(source, simplified, inferFromTypes);
                         }
                         else if (target.flags & TypeFlags.IndexedAccess) {
                             const indexType = getSimplifiedType((target as IndexedAccessType).indexType, /*writing*/ false);
@@ -15586,7 +15586,7 @@ namespace ts {
                             if (indexType.flags & TypeFlags.Instantiable) {
                                 const simplified = distributeIndexOverObjectType(getSimplifiedType((target as IndexedAccessType).objectType, /*writing*/ false), indexType, /*writing*/ false);
                                 if (simplified && simplified !== target) {
-                                    inferFromTypesOnce(source, simplified);
+                                    invokeOnce(source, simplified, inferFromTypes);
                                 }
                             }
                         }
@@ -15621,15 +15621,12 @@ namespace ts {
                     inferFromTypes(getTrueTypeFromConditionalType(<ConditionalType>source), getTrueTypeFromConditionalType(<ConditionalType>target));
                     inferFromTypes(getFalseTypeFromConditionalType(<ConditionalType>source), getFalseTypeFromConditionalType(<ConditionalType>target));
                 }
-                else if (target.flags & TypeFlags.Union) {
-                    inferToUnionType(source, <UnionType>target);
-                }
-                else if (target.flags & TypeFlags.Intersection) {
-                    inferToMultipleTypes(source, (<UnionOrIntersectionType>target).types, /*isIntersection*/ true);
-                }
                 else if (target.flags & TypeFlags.Conditional && !contravariant) {
                     const targetTypes = [getTrueTypeFromConditionalType(<ConditionalType>target), getFalseTypeFromConditionalType(<ConditionalType>target)];
-                    inferToMultipleTypes(source, targetTypes, /*isIntersection*/ false);
+                    inferToMultipleTypes(source, targetTypes, target.flags);
+                }
+                else if (target.flags & TypeFlags.UnionOrIntersection) {
+                    inferToMultipleTypes(source, (<UnionOrIntersectionType>target).types, target.flags);
                 }
                 else if (source.flags & TypeFlags.Union) {
                     // Source is a union or intersection type, infer from each constituent type
@@ -15658,50 +15655,22 @@ namespace ts {
                         source = apparentSource;
                     }
                     if (source.flags & (TypeFlags.Object | TypeFlags.Intersection)) {
-                        const key = source.id + "," + target.id;
-                        const visitCount = visited && visited.get(key);
-                        if (visitCount !== undefined) {
-                            inferenceCount += visitCount;
-                            return;
-                        }
-                        (visited || (visited = createMap<number>())).set(key, 0);
-                        // If we are already processing another target type with the same associated symbol (such as
-                        // an instantiation of the same generic type), we do not explore this target as it would yield
-                        // no further inferences. We exclude the static side of classes from this check since it shares
-                        // its symbol with the instance side which would lead to false positives.
-                        const startCount = inferenceCount;
-                        const isNonConstructorObject = target.flags & TypeFlags.Object &&
-                            !(getObjectFlags(target) & ObjectFlags.Anonymous && target.symbol && target.symbol.flags & SymbolFlags.Class);
-                        const symbol = isNonConstructorObject ? target.symbol : undefined;
-                        if (symbol) {
-                            if (contains(symbolStack, symbol)) {
-                                inferenceBlocked = true;
-                                return;
-                            }
-                            (symbolStack || (symbolStack = [])).push(symbol);
-                            inferFromObjectTypes(source, target);
-                            symbolStack.pop();
-                        }
-                        else {
-                            inferFromObjectTypes(source, target);
-                        }
-                        visited.set(key, inferenceCount - startCount);
+                        invokeOnce(source, target, inferFromObjectTypes);
                     }
                 }
+            }
 
-                function inferFromTypesOnce(source: Type, target: Type) {
-                    const key = source.id + "," + target.id;
-                    const count = visited && visited.get(key);
-                    if (count !== undefined) {
-                        inferenceCount += count;
-                    }
-                    else {
-                        (visited || (visited = createMap<number>())).set(key, 0);
-                        const startCount = inferenceCount;
-                        inferFromTypes(source, target);
-                        visited.set(key, inferenceCount - startCount);
-                    }
+            function invokeOnce(source: Type, target: Type, action: (source: Type, target: Type) => void) {
+                const key = source.id + "," + target.id;
+                const count = visited && visited.get(key);
+                if (count !== undefined) {
+                    inferenceCount += count;
+                    return;
                 }
+                (visited || (visited = createMap<number>())).set(key, 0);
+                const startCount = inferenceCount;
+                action(source, target);
+                visited.set(key, inferenceCount - startCount);
             }
 
             function inferFromTypeArguments(sourceTypes: readonly Type[], targetTypes: readonly Type[], variances: readonly VarianceFlags[]) {
@@ -15738,76 +15707,64 @@ namespace ts {
                 return undefined;
             }
 
-            function inferToMultipleTypes(source: Type, targets: Type[], isIntersection: boolean) {
-                // We infer from types that are not naked type variables first so that inferences we
-                // make from nested naked type variables and given slightly higher priority by virtue
-                // of being first in the candidates array.
+            function inferToMultipleTypes(source: Type, targets: Type[], targetFlags: TypeFlags) {
                 let typeVariableCount = 0;
-                for (const t of targets) {
-                    if (getInferenceInfoForType(t)) {
-                        typeVariableCount++;
+                if (targetFlags & TypeFlags.Union) {
+                    const sources = source.flags & TypeFlags.Union ? (<UnionType>source).types : [source];
+                    const matched = new Array<boolean>(sources.length);
+                    const saveInferenceBlocked = inferenceBlocked;
+                    inferenceBlocked = false;
+                    // First infer to types that are not naked type variables. For each source type we
+                    // track whether inferences were made from that particular type to some target.
+                    for (const t of targets) {
+                        if (getInferenceInfoForType(t)) {
+                            typeVariableCount++;
+                        }
+                        else {
+                            for (let i = 0; i < sources.length; i++) {
+                                const count = inferenceCount;
+                                inferFromTypes(sources[i], t);
+                                if (count !== inferenceCount) matched[i] = true;
+                            }
+                        }
                     }
-                    else {
-                        inferFromTypes(source, t);
+                    // If the target has a single naked type variable and inference wasn't blocked (meaning
+                    // we explored the types fully), create a union of the source types from which no inferences
+                    // have been made so far and infer from that union to the naked type variable.
+                    if (typeVariableCount === 1 && !inferenceBlocked) {
+                        const unmatched = flatMap(sources, (s, i) => matched[i] ? undefined : s);
+                        if (unmatched.length) {
+                            const s = getUnionType(unmatched);
+                            for (const t of targets) {
+                                if (getInferenceInfoForType(t)) {
+                                    inferFromTypes(s, t);
+                                }
+                            }
+                        }
+                    }
+                    inferenceBlocked = inferenceBlocked || saveInferenceBlocked;
+                }
+                else {
+                    // We infer from types that are not naked type variables first so that inferences we
+                    // make from nested naked type variables and given slightly higher priority by virtue
+                    // of being first in the candidates array.
+                    for (const t of targets) {
+                        if (getInferenceInfoForType(t)) {
+                            typeVariableCount++;
+                        }
+                        else {
+                            inferFromTypes(source, t);
+                        }
                     }
                 }
                 // Inferences directly to naked type variables are given lower priority as they are
                 // less specific. For example, when inferring from Promise<string> to T | Promise<T>,
                 // we want to infer string for T, not Promise<string> | string. For intersection types
                 // we only infer to single naked type variables.
-                if (isIntersection ? typeVariableCount === 1 : typeVariableCount !== 0) {
+                if (targetFlags & TypeFlags.Intersection ? typeVariableCount === 1 : typeVariableCount > 0) {
                     const savePriority = priority;
                     priority |= InferencePriority.NakedTypeVariable;
                     for (const t of targets) {
-                        if (getInferenceInfoForType(t)) {
-                            inferFromTypes(source, t);
-                        }
-                    }
-                    priority = savePriority;
-                }
-            }
-
-            function inferToUnionType(source: Type, target: UnionType) {
-                const sources = source.flags & TypeFlags.Union ? (<UnionType>source).types : [source];
-                const matched = new Array<boolean>(sources.length);
-                let typeVariableCount = 0;
-                const saveInferenceBlocked = inferenceBlocked;
-                inferenceBlocked = false;
-                // First infer to types that are not naked type variables. For each source type we
-                // track whether inferences were made from that particular type to some target.
-                for (const t of target.types) {
-                    if (getInferenceInfoForType(t)) {
-                        typeVariableCount++;
-                    }
-                    else {
-                        for (let i = 0; i < sources.length; i++) {
-                            const count = inferenceCount;
-                            inferFromTypes(sources[i], t);
-                            if (count !== inferenceCount) matched[i] = true;
-                        }
-                    }
-                }
-                // If there are naked type variables in the target, create a union of the source types
-                // from which no inferences have been made so far and infer from that union to each naked
-                // type variable. If there is more than one naked type variable, or if inference was blocked
-                // (meaning we didn't explore the types fully), give lower priority to the inferences as
-                // they are less specific.
-                if (typeVariableCount === 1 && !inferenceBlocked) {
-                    const unmatched = flatMap(sources, (s, i) => matched[i] ? undefined : s);
-                    if (unmatched.length) {
-                        const s = getUnionType(unmatched);
-                        for (const t of target.types) {
-                            if (getInferenceInfoForType(t)) {
-                                inferFromTypes(s, t);
-                            }
-                        }
-                    }
-                }
-                inferenceBlocked = inferenceBlocked || saveInferenceBlocked;
-                if (typeVariableCount > 0) {
-                    const savePriority = priority;
-                    priority |= InferencePriority.NakedTypeVariable;
-                    for (const t of target.types) {
                         if (getInferenceInfoForType(t)) {
                             inferFromTypes(source, t);
                         }
@@ -15873,6 +15830,28 @@ namespace ts {
             }
 
             function inferFromObjectTypes(source: Type, target: Type) {
+                // If we are already processing another target type with the same associated symbol (such as
+                // an instantiation of the same generic type), we do not explore this target as it would yield
+                // no further inferences. We exclude the static side of classes from this check since it shares
+                // its symbol with the instance side which would lead to false positives.
+                const isNonConstructorObject = target.flags & TypeFlags.Object &&
+                    !(getObjectFlags(target) & ObjectFlags.Anonymous && target.symbol && target.symbol.flags & SymbolFlags.Class);
+                const symbol = isNonConstructorObject ? target.symbol : undefined;
+                if (symbol) {
+                    if (contains(symbolStack, symbol)) {
+                        inferenceBlocked = true;
+                        return;
+                    }
+                    (symbolStack || (symbolStack = [])).push(symbol);
+                    inferFromObjectTypesWorker(source, target);
+                    symbolStack.pop();
+                }
+                else {
+                    inferFromObjectTypesWorker(source, target);
+                }
+            }
+
+            function inferFromObjectTypesWorker(source: Type, target: Type) {
                 if (isGenericMappedType(source) && isGenericMappedType(target)) {
                     // The source and target types are generic types { [P in S]: X } and { [P in T]: Y }, so we infer
                     // from S to T and from X to Y.
