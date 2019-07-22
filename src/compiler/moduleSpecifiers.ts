@@ -185,6 +185,10 @@ namespace ts.moduleSpecifiers {
         return result;
     });
 
+    export function clearSymlinksCache() {
+        discoverProbableSymlinks.clear();
+    }
+
     /**
      * Looks for existing imports that use symlinks to this module.
      * Symlinks will be returned first so they are preferred over the real path.
