@@ -1656,7 +1656,7 @@ namespace ts {
             }
             cachedArgs = args;
             return value = callback(...args);
-        };
+        }
     }
 
     /**
