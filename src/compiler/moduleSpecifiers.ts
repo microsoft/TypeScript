@@ -173,7 +173,7 @@ namespace ts.moduleSpecifiers {
         return [getPathFromPathComponents(aParts), getPathFromPathComponents(bParts)];
     }
 
-    function discoverProbableSymlinks(files: ReadonlyArray<SourceFile>, getCanonicalFileName: GetCanonicalFileName, cwd: string): ReadonlyMap<string> {
+    const discoverProbableSymlinks = memoizeOne((files: ReadonlyArray<SourceFile>, getCanonicalFileName: GetCanonicalFileName, cwd: string): ReadonlyMap<string> => {
         const result = createMap<string>();
         const symlinks = flatten<readonly [string, string]>(mapDefined(files, sf =>
             sf.resolvedModules && compact(arrayFrom(mapIterator(sf.resolvedModules.values(), res =>
@@ -183,7 +183,7 @@ namespace ts.moduleSpecifiers {
             result.set(commonOriginal, commonResolved);
         }
         return result;
-    }
+    });
 
     /**
      * Looks for existing imports that use symlinks to this module.

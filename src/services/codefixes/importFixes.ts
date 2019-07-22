@@ -637,6 +637,9 @@ namespace ts.codefix {
         });
 
         function getNodeModulesPackageNameFromFileName(importedFileName: string): string | undefined {
+            if (!stringContains(importedFileName, "node_modules")) {
+                return undefined;
+            }
             const specifier = moduleSpecifiers.getModuleSpecifier(
                 compilerOptions,
                 from,
