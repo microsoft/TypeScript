@@ -1645,10 +1645,16 @@ namespace ts {
         };
     }
 
-    export function memoizeOne<ArgsT extends unknown[], ReturnT>(callback: (...args: ArgsT) => ReturnT) {
+    export function memoizeOne<ArgsT extends unknown[], ReturnT>(callback: (...args: ArgsT) => ReturnT): typeof callback & { clear: () => void } {
         let value: ReturnT;
         let cachedArgs: ArgsT;
-        return (...args: ArgsT) => {
+        runMemoized.clear = () => {
+            value = undefined!;
+            cachedArgs = undefined!;
+        };
+        return runMemoized;
+
+        function runMemoized(...args: ArgsT) {
             const length = args.length;
             if (cachedArgs && cachedArgs.length === length) {
                 for (let i = 0; i < length; i++) {
@@ -1663,7 +1669,6 @@ namespace ts {
             return value = callback(...args);
         };
     }
-
 
     /**
      * High-order function, composes functions. Note that functions are composed inside-out;

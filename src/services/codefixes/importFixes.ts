@@ -635,6 +635,7 @@ namespace ts.codefix {
                 }
             }
         });
+        moduleSpecifiers.clearSymlinksCache();
 
         function getNodeModulesPackageNameFromFileName(importedFileName: string): string | undefined {
             if (!stringContains(importedFileName, "node_modules")) {
