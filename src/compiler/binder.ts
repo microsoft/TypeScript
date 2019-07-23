@@ -2767,8 +2767,8 @@ namespace ts {
 
             if (!isBindingPattern(node.name)) {
                 const isEnum = isInJSFile(node) && !!getJSDocEnumTag(node);
-                const enumFlags = (isEnum ? SymbolFlags.RegularEnum : SymbolFlags.None);
-                const enumExcludes = (isEnum ? SymbolFlags.RegularEnumExcludes : SymbolFlags.None);
+                const enumFlags = (isEnum ? SymbolFlags.TypeAlias : SymbolFlags.None);
+                const enumExcludes = (isEnum ? SymbolFlags.TypeAliasExcludes : SymbolFlags.None);
                 if (isBlockOrCatchScoped(node)) {
                     bindBlockScopedDeclaration(node, SymbolFlags.BlockScopedVariable | enumFlags, SymbolFlags.BlockScopedVariableExcludes | enumExcludes);
                 }
