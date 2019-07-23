@@ -15515,16 +15515,18 @@ namespace ts {
                     // removing the identically matched constituents. For example, when inferring from
                     // 'string | string[]' to 'string | T' we reduce the types to 'string[]' and 'T'.
                     if (matchingTypes) {
-                        source = removeTypesFromUnionOrIntersection(<UnionOrIntersectionType>source, matchingTypes);
-                        target = removeTypesFromUnionOrIntersection(<UnionOrIntersectionType>target, matchingTypes);
+                        const s = removeTypesFromUnionOrIntersection(<UnionOrIntersectionType>source, matchingTypes);
+                        const t = removeTypesFromUnionOrIntersection(<UnionOrIntersectionType>target, matchingTypes);
+                        if (!(s && t)) return;
+                        source = s;
+                        target = t;
                     }
                 }
                 else if (target.flags & TypeFlags.Union && !(target.flags & TypeFlags.EnumLiteral) || target.flags & TypeFlags.Intersection) {
                     const matched = findMatchedType(source, <UnionOrIntersectionType>target);
                     if (matched) {
                         inferFromTypes(matched, matched);
-                        source = target.flags & TypeFlags.Union ? neverType : unknownType;
-                        target = removeTypesFromUnionOrIntersection(<UnionOrIntersectionType>target, [matched]);
+                        return;
                     }
                 }
                 else if (target.flags & (TypeFlags.IndexedAccess | TypeFlags.Substitution)) {
@@ -15993,7 +15995,7 @@ namespace ts {
                     reducedTypes.push(t);
                 }
             }
-            return type.flags & TypeFlags.Union ? getUnionType(reducedTypes) : getIntersectionType(reducedTypes);
+            return reducedTypes.length ? type.flags & TypeFlags.Union ? getUnionType(reducedTypes) : getIntersectionType(reducedTypes) : undefined;
         }
 
         function hasPrimitiveConstraint(type: TypeParameter): boolean {
