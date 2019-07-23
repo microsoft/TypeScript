@@ -73,7 +73,7 @@ exports.testRecFun = function (parent) {
     return {
         result: parent,
         deeper: function (child) {
-            return exports.testRecFun(__assign({}, parent, child));
+            return exports.testRecFun(__assign(__assign({}, parent), child));
         }
     };
 };

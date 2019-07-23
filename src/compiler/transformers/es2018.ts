@@ -229,14 +229,39 @@ namespace ts {
             if (node.transformFlags & TransformFlags.ContainsObjectRestOrSpread) {
                 // spread elements emit like so:
                 // non-spread elements are chunked together into object literals, and then all are passed to __assign:
-                //     { a, ...o, b } => __assign({a}, o, {b});
+                //     { a, ...o, b } => __assign(__assign({a}, o), {b});
                 // If the first element is a spread element, then the first argument to __assign is {}:
-                //     { ...o, a, b, ...o2 } => __assign({}, o, {a, b}, o2)
+                //     { ...o, a, b, ...o2 } => __assign(__assign(__assign({}, o), {a, b}), o2)
+                //
+                // We cannot call __assign with more than two elements, since any element could cause side effects. For
+                // example:
+                //      var k = { a: 1, b: 2 };
+                //      var o = { a: 3, ...k, b: k.a++ };
+                //      // expected: { a: 1, b: 1 }
+                // If we translate the above to `__assign({ a: 3 }, k, { b: k.a++ })`, the `k.a++` will evaluate before
+                // `k` is spread and we end up with `{ a: 2, b: 1 }`.
+                //
+                // This also occurs for spread elements, not just property assignments:
+                //      var k = { a: 1, get b() { l = { z: 9 }; return 2; } };
+                //      var l = { c: 3 };
+                //      var o = { ...k, ...l };
+                //      // expected: { a: 1, b: 2, z: 9 }
+                // If we translate the above to `__assign({}, k, l)`, the `l` will evaluate before `k` is spread and we
+                // end up with `{ a: 1, b: 2, c: 3 }`
                 const objects = chunkObjectLiteralElements(node.properties);
                 if (objects.length && objects[0].kind !== SyntaxKind.ObjectLiteralExpression) {
                     objects.unshift(createObjectLiteral());
                 }
-                return createAssignHelper(context, objects);
+                let expression: Expression = objects[0];
+                if (objects.length > 1) {
+                    for (let i = 1; i < objects.length; i++) {
+                        expression = createAssignHelper(context, [expression, objects[i]]);
+                    }
+                    return expression;
+                }
+                else {
+                    return createAssignHelper(context, objects);
+                }
             }
             return visitEachChild(node, visitor, context);
         }
