@@ -13,7 +13,7 @@ Standard error:
 {"type":"warning","data":"package.json: No license field"}
 {"type":"warning","data":"../package.json: No license field"}
 {"type":"warning","data":"vscode-web@X.X.X: No license field"}
-[XX:XX:XX] 'compile' errored after 25 s
+[XX:XX:XX] 'compile' errored after ?s
 [XX:XX:XX] Error: Found 1 errors
     at Stream.<anonymous> (/vscode/build/lib/reporter.js:74:29)
     at _end (/vscode/node_modules/through/index.js:65:9)
