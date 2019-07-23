@@ -685,7 +685,6 @@ declare namespace completion {
     export const globalInJsKeywords: ReadonlyArray<Entry>;
     export const insideMethodKeywords: ReadonlyArray<Entry>;
     export const insideMethodInJsKeywords: ReadonlyArray<Entry>;
-    export const globalKeywordsPlusUndefined: ReadonlyArray<Entry>;
     export const globalsVars: ReadonlyArray<Entry>;
     export function globalsInsideFunction(plus: ReadonlyArray<Entry>): ReadonlyArray<Entry>;
     export function globalsInJsInsideFunction(plus: ReadonlyArray<Entry>): ReadonlyArray<Entry>;
@@ -696,6 +695,7 @@ declare namespace completion {
     export const typeKeywords: ReadonlyArray<Entry>;
     export const globalTypes: ReadonlyArray<Entry>;
     export function globalTypesPlus(plus: ReadonlyArray<FourSlashInterface.ExpectedCompletionEntry>): ReadonlyArray<Entry>;
+    export const typeAssertionKeywords: ReadonlyArray<Entry>;
     export const classElementKeywords: ReadonlyArray<Entry>;
     export const classElementInJsKeywords: ReadonlyArray<Entry>;
     export const constructorParameterKeywords: ReadonlyArray<Entry>;

@@ -283,25 +283,13 @@ namespace ts.codefix {
         preferences: UserPreferences,
     ): ReadonlyArray<FixAddNewImport | FixUseImportType> {
         const isJs = isSourceFileJS(sourceFile);
-        const { allowsImporting } = createLazyPackageJsonDependencyReader(sourceFile, host);
         const choicesForEachExportingModule = flatMap(moduleSymbols, ({ moduleSymbol, importKind, exportedSymbolIsTypeOnly }) =>
             moduleSpecifiers.getModuleSpecifiers(moduleSymbol, program.getCompilerOptions(), sourceFile, host, program.getSourceFiles(), preferences, program.redirectTargetsMap)
             .map((moduleSpecifier): FixAddNewImport | FixUseImportType =>
                 // `position` should only be undefined at a missing jsx namespace, in which case we shouldn't be looking for pure types.
                 exportedSymbolIsTypeOnly && isJs ? { kind: ImportFixKind.ImportType, moduleSpecifier, position: Debug.assertDefined(position) } : { kind: ImportFixKind.AddNew, moduleSpecifier, importKind }));
-
-        // Sort by presence in package.json, then shortest paths first
-        return sort(choicesForEachExportingModule, (a, b) => {
-            const allowsImportingA = allowsImporting(a.moduleSpecifier);
-            const allowsImportingB = allowsImporting(b.moduleSpecifier);
-            if (allowsImportingA && !allowsImportingB) {
-                return -1;
-            }
-            if (allowsImportingB && !allowsImportingA) {
-                return 1;
-            }
-            return a.moduleSpecifier.length - b.moduleSpecifier.length;
-        });
+        // Sort to keep the shortest paths first
+        return sort(choicesForEachExportingModule, (a, b) => a.moduleSpecifier.length - b.moduleSpecifier.length);
     }
 
     function getFixesForAddImport(
@@ -392,8 +380,7 @@ namespace ts.codefix {
         // "default" is a keyword and not a legal identifier for the import, so we don't expect it here
         Debug.assert(symbolName !== InternalSymbolName.Default);
 
-        const exportInfos = getExportInfos(symbolName, getMeaningFromLocation(symbolToken), cancellationToken, sourceFile, checker, program, preferences, host);
-        const fixes = arrayFrom(flatMapIterator(exportInfos.entries(), ([_, exportInfos]) =>
+        const fixes = arrayFrom(flatMapIterator(getExportInfos(symbolName, getMeaningFromLocation(symbolToken), cancellationToken, sourceFile, checker, program).entries(), ([_, exportInfos]) =>
             getFixForImport(exportInfos, symbolName, symbolToken.getStart(sourceFile), program, sourceFile, host, preferences)));
         return { fixes, symbolName };
     }
@@ -406,8 +393,6 @@ namespace ts.codefix {
         sourceFile: SourceFile,
         checker: TypeChecker,
         program: Program,
-        preferences: UserPreferences,
-        host: LanguageServiceHost
     ): ReadonlyMap<ReadonlyArray<SymbolExportInfo>> {
         // For each original symbol, keep all re-exports of that symbol together so we can call `getCodeActionsForImport` on the whole group at once.
         // Maps symbol id to info for modules providing that symbol (original export + re-exports).
@@ -415,7 +400,7 @@ namespace ts.codefix {
         function addSymbol(moduleSymbol: Symbol, exportedSymbol: Symbol, importKind: ImportKind): void {
             originalSymbolToExportInfos.add(getUniqueSymbolId(exportedSymbol, checker).toString(), { moduleSymbol, importKind, exportedSymbolIsTypeOnly: isTypeOnlySymbol(exportedSymbol, checker) });
         }
-        forEachExternalModuleToImportFrom(checker, host, preferences, program.redirectTargetsMap, sourceFile, program.getSourceFiles(), moduleSymbol => {
+        forEachExternalModuleToImportFrom(checker, sourceFile, program.getSourceFiles(), moduleSymbol => {
             cancellationToken.throwIfCancellationRequested();
 
             const defaultInfo = getDefaultLikeExportInfo(moduleSymbol, checker, program.getCompilerOptions());
@@ -576,44 +561,12 @@ namespace ts.codefix {
         return some(declarations, decl => !!(getMeaningFromDeclaration(decl) & meaning));
     }
 
-    export function forEachExternalModuleToImportFrom(checker: TypeChecker, host: LanguageServiceHost, preferences: UserPreferences, redirectTargetsMap: RedirectTargetsMap, from: SourceFile, allSourceFiles: ReadonlyArray<SourceFile>, cb: (module: Symbol) => void) {
-        const { allowsImporting } = createLazyPackageJsonDependencyReader(from, host);
-        const compilerOptions = host.getCompilationSettings();
-        const getCanonicalFileName = hostGetCanonicalFileName(host);
+    export function forEachExternalModuleToImportFrom(checker: TypeChecker, from: SourceFile, allSourceFiles: ReadonlyArray<SourceFile>, cb: (module: Symbol) => void) {
         forEachExternalModule(checker, allSourceFiles, (module, sourceFile) => {
-            if (sourceFile === undefined && allowsImporting(stripQuotes(module.getName()))) {
+            if (sourceFile === undefined || sourceFile !== from && isImportablePath(from.fileName, sourceFile.fileName)) {
                 cb(module);
             }
-            else if (sourceFile && sourceFile !== from && isImportablePath(from.fileName, sourceFile.fileName)) {
-                const moduleSpecifier = getNodeModulesPackageNameFromFileName(sourceFile.fileName);
-                if (!moduleSpecifier || allowsImporting(moduleSpecifier)) {
-                    cb(module);
-                }
-            }
         });
-
-        function getNodeModulesPackageNameFromFileName(importedFileName: string): string | undefined {
-            const specifier = moduleSpecifiers.getModuleSpecifier(
-                compilerOptions,
-                from,
-                toPath(from.fileName, /*basePath*/ undefined, getCanonicalFileName),
-                importedFileName,
-                host,
-                allSourceFiles,
-                preferences,
-                redirectTargetsMap);
-
-            // Paths here are not node_modules, so we don’t care about them;
-            // returning anything will trigger a lookup in package.json.
-            if (!pathIsRelative(specifier) && !isRootedDiskPath(specifier)) {
-                const components = getPathComponents(getPackageNameFromTypesPackageName(specifier)).slice(1);
-                // Scoped packages
-                if (startsWith(components[0], "@")) {
-                    return `${components[0]}/${components[1]}`;
-                }
-                return components[0];
-            }
-        }
     }
 
     function forEachExternalModule(checker: TypeChecker, allSourceFiles: ReadonlyArray<SourceFile>, cb: (module: Symbol, sourceFile: SourceFile | undefined) => void) {
@@ -666,70 +619,5 @@ namespace ts.codefix {
         }
         // Need `|| "_"` to ensure result isn't empty.
         return !isStringANonContextualKeyword(res) ? res || "_" : `_${res}`;
-    }
-
-    function createLazyPackageJsonDependencyReader(fromFile: SourceFile, host: LanguageServiceHost) {
-        const packageJsonPaths = findPackageJsons(getDirectoryPath(fromFile.fileName), host);
-        const dependencyIterator = readPackageJsonDependencies(host, packageJsonPaths);
-        let seenDeps: Map<true> | undefined;
-        let usesNodeCoreModules: boolean | undefined;
-        return { allowsImporting };
-
-        function containsDependency(dependency: string) {
-            if ((seenDeps || (seenDeps = createMap())).has(dependency)) {
-                return true;
-            }
-            let packageName: string | void;
-            while (packageName = dependencyIterator.next().value) {
-                seenDeps.set(packageName, true);
-                if (packageName === dependency) {
-                    return true;
-                }
-            }
-            return false;
-        }
-
-        function allowsImporting(moduleSpecifier: string): boolean {
-            if (!packageJsonPaths.length) {
-                return true;
-            }
-
-            // If we’re in JavaScript, it can be difficult to tell whether the user wants to import
-            // from Node core modules or not. We can start by seeing if the user is actually using
-            // any node core modules, as opposed to simply having @types/node accidentally as a
-            // dependency of a dependency.
-            if (isSourceFileJS(fromFile) && JsTyping.nodeCoreModules.has(moduleSpecifier)) {
-                if (usesNodeCoreModules === undefined) {
-                    usesNodeCoreModules = consumesNodeCoreModules(fromFile);
-                }
-                if (usesNodeCoreModules) {
-                    return true;
-                }
-            }
-
-            return containsDependency(moduleSpecifier)
-                || containsDependency(getTypesPackageName(moduleSpecifier));
-        }
-    }
-
-    function *readPackageJsonDependencies(host: LanguageServiceHost, packageJsonPaths: string[]) {
-        type PackageJson = Record<typeof dependencyKeys[number], Record<string, string> | undefined>;
-        const dependencyKeys = ["dependencies", "devDependencies", "optionalDependencies"] as const;
-        for (const fileName of packageJsonPaths) {
-            const content = readJson(fileName, { readFile: host.readFile ? host.readFile.bind(host) : sys.readFile }) as PackageJson;
-            for (const key of dependencyKeys) {
-                const dependencies = content[key];
-                if (!dependencies) {
-                    continue;
-                }
-                for (const packageName in dependencies) {
-                    yield packageName;
-                }
-            }
-        }
-    }
-
-    function consumesNodeCoreModules(sourceFile: SourceFile): boolean {
-        return some(sourceFile.imports, ({ text }) => JsTyping.nodeCoreModules.has(text));
     }
 }
