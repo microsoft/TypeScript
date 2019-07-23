@@ -3,7 +3,7 @@ Standard output:
 
 Rush Multi-Project Build Tool 5.X.X - https://rushjs.io
 Starting "rush rebuild"
-Executing a maximum of 1 simultaneous processes...
+Executing a maximum of ?simultaneous processes...
 XX of XX: [@azure/abort-controller] completed successfully in ? seconds
 XX of XX: [@azure/core-asynciterator-polyfill] completed successfully in ? seconds
 XX of XX: [@azure/core-paging] completed successfully in ? seconds
