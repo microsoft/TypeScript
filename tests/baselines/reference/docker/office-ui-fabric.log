@@ -2,143 +2,62 @@ Exit Code: 1
 Standard output:
 @uifabric/codepen-loader: yarn run vX.X.X
 @uifabric/codepen-loader: $ just-scripts build --production --lint
-@uifabric/codepen-loader: [XX:XX:XX XM] ■ started 'build'
-@uifabric/codepen-loader: [XX:XX:XX XM] ■ started 'clean'
 @uifabric/codepen-loader: [XX:XX:XX XM] ■ Removing [lib, temp, dist, coverage, lib-commonjs]
-@uifabric/codepen-loader: [XX:XX:XX XM] ■ finished 'clean' in ?s
-@uifabric/codepen-loader: [XX:XX:XX XM] ■ started 'copy'
 @uifabric/codepen-loader: [XX:XX:XX XM] ■ Copying [../office-ui-fabric-react/src/utilities/exampleData.ts, ../office-ui-fabric-react/src/components/ExtendedPicker/examples/PeopleExampleData.ts, ../office-ui-fabric-react/src/common/TestImages.ts] to 'lib'
-@uifabric/codepen-loader: [XX:XX:XX XM] ■ finished 'copy' in ?s
-@uifabric/codepen-loader: [XX:XX:XX XM] ■ started 'ts'
 @uifabric/codepen-loader: [XX:XX:XX XM] ■ Running /office-ui-fabric-react/node_modules/typescript/lib/tsc.js with /office-ui-fabric-react/packages/codepen-loader/tsconfig.json
 @uifabric/codepen-loader: [XX:XX:XX XM] ■ Executing: /usr/local/bin/node "/office-ui-fabric-react/node_modules/typescript/lib/tsc.js" --module commonjs --outDir "./lib" --project "/office-ui-fabric-react/packages/codepen-loader/tsconfig.json"
-@uifabric/codepen-loader: [XX:XX:XX XM] ■ started 'jest'
 @uifabric/codepen-loader: [XX:XX:XX XM] ■ Running Jest
 @uifabric/codepen-loader: [XX:XX:XX XM] ■ /usr/local/bin/node "/office-ui-fabric-react/node_modules/jest/bin/jest.js" --config "/office-ui-fabric-react/packages/codepen-loader/jest.config.js" --passWithNoTests --colors
-@uifabric/codepen-loader: [XX:XX:XX XM] ■ finished 'ts' in ?s
 @uifabric/codepen-loader:  PASS  src/__tests__/codepenTransform.test.ts
-@uifabric/codepen-loader: [XX:XX:XX XM] ■ finished 'jest' in ?s
-@uifabric/codepen-loader: [XX:XX:XX XM] ■ finished 'build' in ?s
 @uifabric/codepen-loader: Done in ?s.
 @uifabric/build: yarn run vX.X.X
 @uifabric/build: $ node ./just-scripts.js no-op --production --lint
-@uifabric/build: [XX:XX:XX XM] ■ started 'no-op'
-@uifabric/build: [XX:XX:XX XM] ■ finished 'no-op' in ?s
 @uifabric/build: Done in ?s.
 @uifabric/migration: yarn run vX.X.X
 @uifabric/migration: $ just-scripts build --production --lint
-@uifabric/migration: [XX:XX:XX XM] ■ started 'build'
-@uifabric/migration: [XX:XX:XX XM] ■ started 'clean'
 @uifabric/migration: [XX:XX:XX XM] ■ Removing [lib, temp, dist, lib-amd, lib-commonjs, lib-es2015, coverage, src/**/*.scss.ts]
-@uifabric/migration: [XX:XX:XX XM] ■ finished 'clean' in ?s
-@uifabric/migration: [XX:XX:XX XM] ■ started 'copy'
-@uifabric/migration: [XX:XX:XX XM] ■ finished 'copy' in ?s
-@uifabric/migration: [XX:XX:XX XM] ■ started 'ts:commonjs-only'
 @uifabric/migration: [XX:XX:XX XM] ■ Running /office-ui-fabric-react/node_modules/typescript/lib/tsc.js with /office-ui-fabric-react/packages/migration/tsconfig.json
 @uifabric/migration: [XX:XX:XX XM] ■ Executing: /usr/local/bin/node "/office-ui-fabric-react/node_modules/typescript/lib/tsc.js" --pretty --target es5 --inlineSources --sourceRoot "../src" --outDir lib --module commonjs --project "/office-ui-fabric-react/packages/migration/tsconfig.json"
-@uifabric/migration: [XX:XX:XX XM] ■ finished 'ts:commonjs-only' in ?s
-@uifabric/migration: [XX:XX:XX XM] ■ finished 'build' in ?s
 @uifabric/migration: Done in ?s.
 @uifabric/set-version: yarn run vX.X.X
 @uifabric/set-version: $ just-scripts build --production --lint
-@uifabric/set-version: [XX:XX:XX XM] ■ started 'build'
-@uifabric/set-version: [XX:XX:XX XM] ■ started 'clean'
 @uifabric/set-version: [XX:XX:XX XM] ■ Removing [lib, temp, dist, lib-amd, lib-commonjs, lib-es2015, coverage, src/**/*.scss.ts]
-@uifabric/set-version: [XX:XX:XX XM] ■ finished 'clean' in ?s
-@uifabric/set-version: [XX:XX:XX XM] ■ started 'copy'
-@uifabric/set-version: [XX:XX:XX XM] ■ finished 'copy' in ?s
-@uifabric/set-version: [XX:XX:XX XM] ■ started 'sass'
-@uifabric/set-version: [XX:XX:XX XM] ■ finished 'sass' in ?s
-@uifabric/set-version: [XX:XX:XX XM] ■ started 'validate'
-@uifabric/set-version: [XX:XX:XX XM] ■ started 'ts'
-@uifabric/set-version: [XX:XX:XX XM] ■ started 'tslint'
-@uifabric/set-version: [XX:XX:XX XM] ■ started 'ts:commonjs'
-@uifabric/set-version: [XX:XX:XX XM] ■ started 'ts:esm'
 @uifabric/set-version: [XX:XX:XX XM] ■ Running tslint
 @uifabric/set-version: [XX:XX:XX XM] ■ /usr/local/bin/node "/office-ui-fabric-react/node_modules/tslint/lib/tslintCli.js" --project "/office-ui-fabric-react/packages/set-version/tsconfig.json" -t stylish -r /office-ui-fabric-react/node_modules/tslint-microsoft-contrib
 @uifabric/set-version: [XX:XX:XX XM] ■ Running /office-ui-fabric-react/node_modules/typescript/lib/tsc.js with /office-ui-fabric-react/packages/set-version/tsconfig.json
 @uifabric/set-version: [XX:XX:XX XM] ■ Executing: /usr/local/bin/node "/office-ui-fabric-react/node_modules/typescript/lib/tsc.js" --pretty --target es5 --inlineSources --sourceRoot "../src" --outDir lib-commonjs --module commonjs --project "/office-ui-fabric-react/packages/set-version/tsconfig.json"
 @uifabric/set-version: [XX:XX:XX XM] ■ Running /office-ui-fabric-react/node_modules/typescript/lib/tsc.js with /office-ui-fabric-react/packages/set-version/tsconfig.json
 @uifabric/set-version: [XX:XX:XX XM] ■ Executing: /usr/local/bin/node "/office-ui-fabric-react/node_modules/typescript/lib/tsc.js" --pretty --target es5 --inlineSources --sourceRoot "../src" --outDir lib --module es2015 --project "/office-ui-fabric-react/packages/set-version/tsconfig.json"
-@uifabric/set-version: [XX:XX:XX XM] ■ started 'ts:amd'
 @uifabric/set-version: [XX:XX:XX XM] ■ Running /office-ui-fabric-react/node_modules/typescript/lib/tsc.js with /office-ui-fabric-react/packages/set-version/tsconfig.json
 @uifabric/set-version: [XX:XX:XX XM] ■ Executing: /usr/local/bin/node "/office-ui-fabric-react/node_modules/typescript/lib/tsc.js" --pretty --target es5 --inlineSources --sourceRoot "../src" --outDir lib-amd --module amd --project "/office-ui-fabric-react/packages/set-version/tsconfig.json"
-@uifabric/set-version: [XX:XX:XX XM] ■ finished 'tslint' in ?s
-@uifabric/set-version: [XX:XX:XX XM] ■ finished 'validate' in ?s
-@uifabric/set-version: [XX:XX:XX XM] ■ finished 'ts:amd' in ?s
-@uifabric/set-version: [XX:XX:XX XM] ■ finished 'ts:commonjs' in ?s
-@uifabric/set-version: [XX:XX:XX XM] ■ finished 'ts:esm' in ?s
-@uifabric/set-version: [XX:XX:XX XM] ■ finished 'ts' in ?s
-@uifabric/set-version: [XX:XX:XX XM] ■ started 'webpack'
-@uifabric/set-version: [XX:XX:XX XM] ■ started 'lint-imports'
 @uifabric/set-version: [XX:XX:XX XM] ■ Running Webpack
 @uifabric/set-version: [XX:XX:XX XM] ■ Webpack Config Path: null
 @uifabric/set-version: [XX:XX:XX XM] ■ webpack.config.js not found, skipping webpack
-@uifabric/set-version: [XX:XX:XX XM] ■ finished 'webpack' in ?s
-@uifabric/set-version: [XX:XX:XX XM] ■ finished 'lint-imports' in ?s
-@uifabric/set-version: [XX:XX:XX XM] ■ finished 'build' in ?s
 @uifabric/set-version: Done in ?s.
 @uifabric/webpack-utils: yarn run vX.X.X
 @uifabric/webpack-utils: $ just-scripts build --production --lint
-@uifabric/webpack-utils: [XX:XX:XX XM] ■ started 'build'
-@uifabric/webpack-utils: [XX:XX:XX XM] ■ started 'build:node-lib'
-@uifabric/webpack-utils: [XX:XX:XX XM] ■ started 'clean'
 @uifabric/webpack-utils: [XX:XX:XX XM] ■ Removing [lib, temp, dist, lib-amd, lib-commonjs, lib-es2015, coverage, src/**/*.scss.ts]
-@uifabric/webpack-utils: [XX:XX:XX XM] ■ finished 'clean' in ?s
-@uifabric/webpack-utils: [XX:XX:XX XM] ■ started 'copy'
-@uifabric/webpack-utils: [XX:XX:XX XM] ■ finished 'copy' in ?s
-@uifabric/webpack-utils: [XX:XX:XX XM] ■ started 'validate'
-@uifabric/webpack-utils: [XX:XX:XX XM] ■ started 'tslint'
 @uifabric/webpack-utils: [XX:XX:XX XM] ■ Running tslint
 @uifabric/webpack-utils: [XX:XX:XX XM] ■ /usr/local/bin/node "/office-ui-fabric-react/node_modules/tslint/lib/tslintCli.js" --project "/office-ui-fabric-react/packages/webpack-utils/tsconfig.json" -t stylish -r /office-ui-fabric-react/node_modules/tslint-microsoft-contrib
-@uifabric/webpack-utils: [XX:XX:XX XM] ■ finished 'tslint' in ?s
-@uifabric/webpack-utils: [XX:XX:XX XM] ■ finished 'validate' in ?s
-@uifabric/webpack-utils: [XX:XX:XX XM] ■ started 'ts:commonjs-only'
 @uifabric/webpack-utils: [XX:XX:XX XM] ■ Running /office-ui-fabric-react/node_modules/typescript/lib/tsc.js with /office-ui-fabric-react/packages/webpack-utils/tsconfig.json
 @uifabric/webpack-utils: [XX:XX:XX XM] ■ Executing: /usr/local/bin/node "/office-ui-fabric-react/node_modules/typescript/lib/tsc.js" --pretty --target es5 --inlineSources --sourceRoot "../src" --outDir lib --module commonjs --project "/office-ui-fabric-react/packages/webpack-utils/tsconfig.json"
-@uifabric/webpack-utils: [XX:XX:XX XM] ■ finished 'ts:commonjs-only' in ?s
-@uifabric/webpack-utils: [XX:XX:XX XM] ■ finished 'build:node-lib' in ?s
-@uifabric/webpack-utils: [XX:XX:XX XM] ■ finished 'build' in ?s
 @uifabric/webpack-utils: Done in ?s.
 @uifabric/merge-styles: yarn run vX.X.X
 @uifabric/merge-styles: $ just-scripts build --production --lint
-@uifabric/merge-styles: [XX:XX:XX XM] ■ started 'build'
-@uifabric/merge-styles: [XX:XX:XX XM] ■ started 'clean'
 @uifabric/merge-styles: [XX:XX:XX XM] ■ Removing [lib, temp, dist, lib-amd, lib-commonjs, lib-es2015, coverage, src/**/*.scss.ts]
-@uifabric/merge-styles: [XX:XX:XX XM] ■ finished 'clean' in ?s
-@uifabric/merge-styles: [XX:XX:XX XM] ■ started 'copy'
-@uifabric/merge-styles: [XX:XX:XX XM] ■ finished 'copy' in ?s
-@uifabric/merge-styles: [XX:XX:XX XM] ■ started 'sass'
-@uifabric/merge-styles: [XX:XX:XX XM] ■ finished 'sass' in ?s
-@uifabric/merge-styles: [XX:XX:XX XM] ■ started 'validate'
-@uifabric/merge-styles: [XX:XX:XX XM] ■ started 'ts'
-@uifabric/merge-styles: [XX:XX:XX XM] ■ started 'tslint'
-@uifabric/merge-styles: [XX:XX:XX XM] ■ started 'ts:commonjs'
-@uifabric/merge-styles: [XX:XX:XX XM] ■ started 'ts:esm'
 @uifabric/merge-styles: [XX:XX:XX XM] ■ Running tslint
 @uifabric/merge-styles: [XX:XX:XX XM] ■ /usr/local/bin/node "/office-ui-fabric-react/node_modules/tslint/lib/tslintCli.js" --project "/office-ui-fabric-react/packages/merge-styles/tsconfig.json" -t stylish -r /office-ui-fabric-react/node_modules/tslint-microsoft-contrib
 @uifabric/merge-styles: [XX:XX:XX XM] ■ Running /office-ui-fabric-react/node_modules/typescript/lib/tsc.js with /office-ui-fabric-react/packages/merge-styles/tsconfig.json
 @uifabric/merge-styles: [XX:XX:XX XM] ■ Executing: /usr/local/bin/node "/office-ui-fabric-react/node_modules/typescript/lib/tsc.js" --pretty --target es5 --inlineSources --sourceRoot "../src" --outDir lib-commonjs --module commonjs --project "/office-ui-fabric-react/packages/merge-styles/tsconfig.json"
 @uifabric/merge-styles: [XX:XX:XX XM] ■ Running /office-ui-fabric-react/node_modules/typescript/lib/tsc.js with /office-ui-fabric-react/packages/merge-styles/tsconfig.json
 @uifabric/merge-styles: [XX:XX:XX XM] ■ Executing: /usr/local/bin/node "/office-ui-fabric-react/node_modules/typescript/lib/tsc.js" --pretty --target es5 --inlineSources --sourceRoot "../src" --outDir lib --module es2015 --project "/office-ui-fabric-react/packages/merge-styles/tsconfig.json"
-@uifabric/merge-styles: [XX:XX:XX XM] ■ started 'ts:amd'
 @uifabric/merge-styles: [XX:XX:XX XM] ■ Running /office-ui-fabric-react/node_modules/typescript/lib/tsc.js with /office-ui-fabric-react/packages/merge-styles/tsconfig.json
 @uifabric/merge-styles: [XX:XX:XX XM] ■ Executing: /usr/local/bin/node "/office-ui-fabric-react/node_modules/typescript/lib/tsc.js" --pretty --target es5 --inlineSources --sourceRoot "../src" --outDir lib-amd --module amd --project "/office-ui-fabric-react/packages/merge-styles/tsconfig.json"
-@uifabric/merge-styles: [XX:XX:XX XM] ■ finished 'tslint' in ?s
-@uifabric/merge-styles: [XX:XX:XX XM] ■ started 'jest'
 @uifabric/merge-styles: [XX:XX:XX XM] ■ Running Jest
 @uifabric/merge-styles: [XX:XX:XX XM] ■ /usr/local/bin/node "/office-ui-fabric-react/node_modules/jest/bin/jest.js" --config "/office-ui-fabric-react/packages/merge-styles/jest.config.js" --passWithNoTests --colors
-@uifabric/merge-styles: [XX:XX:XX XM] ■ finished 'ts:esm' in ?s
-@uifabric/merge-styles: [XX:XX:XX XM] ■ finished 'ts:amd' in ?s
-@uifabric/merge-styles: [XX:XX:XX XM] ■ finished 'ts:commonjs' in ?s
-@uifabric/merge-styles: [XX:XX:XX XM] ■ finished 'ts' in ?s
-@uifabric/merge-styles: [XX:XX:XX XM] ■ started 'webpack'
-@uifabric/merge-styles: [XX:XX:XX XM] ■ started 'lint-imports'
 @uifabric/merge-styles: [XX:XX:XX XM] ■ Running Webpack
 @uifabric/merge-styles: [XX:XX:XX XM] ■ Webpack Config Path: /office-ui-fabric-react/packages/merge-styles/webpack.config.js
 @uifabric/merge-styles: Webpack version: 4.29.5
-@uifabric/merge-styles: [XX:XX:XX XM] ■ finished 'lint-imports' in ?s
-@uifabric/merge-styles: [XX:XX:XX XM] ■ finished 'webpack' in ?s
 @uifabric/merge-styles:  PASS  src/styleToClassName.test.ts
 @uifabric/merge-styles:  PASS  src/mergeStyleSets.test.ts
 @uifabric/merge-styles:  PASS  src/concatStyleSets.test.ts
@@ -152,96 +71,46 @@ Standard output:
 @uifabric/merge-styles:  PASS  src/server.test.ts
 @uifabric/merge-styles:  PASS  src/fontFace.test.ts
 @uifabric/merge-styles:  PASS  src/transforms/kebabRules.test.ts
-@uifabric/merge-styles: [XX:XX:XX XM] ■ finished 'jest' in ?s
-@uifabric/merge-styles: [XX:XX:XX XM] ■ finished 'validate' in ?s
 @uifabric/merge-styles: [XX:XX:XX XM] ■ Extracting Public API surface from '/office-ui-fabric-react/packages/merge-styles/lib/index.d.ts'
-@uifabric/merge-styles: [XX:XX:XX XM] ■ finished 'build' in ?s
 @uifabric/merge-styles: Done in ?s.
 @uifabric/jest-serializer-merge-styles: yarn run vX.X.X
 @uifabric/jest-serializer-merge-styles: $ just-scripts build --production --lint
-@uifabric/jest-serializer-merge-styles: [XX:XX:XX XM] ■ started 'build'
-@uifabric/jest-serializer-merge-styles: [XX:XX:XX XM] ■ started 'ts'
-@uifabric/jest-serializer-merge-styles: [XX:XX:XX XM] ■ started 'ts:commonjs'
-@uifabric/jest-serializer-merge-styles: [XX:XX:XX XM] ■ started 'ts:esm'
 @uifabric/jest-serializer-merge-styles: [XX:XX:XX XM] ■ Running /office-ui-fabric-react/node_modules/typescript/lib/tsc.js with /office-ui-fabric-react/packages/jest-serializer-merge-styles/tsconfig.json
 @uifabric/jest-serializer-merge-styles: [XX:XX:XX XM] ■ Executing: /usr/local/bin/node "/office-ui-fabric-react/node_modules/typescript/lib/tsc.js" --pretty --target es5 --inlineSources --sourceRoot "../src" --outDir lib-commonjs --module commonjs --project "/office-ui-fabric-react/packages/jest-serializer-merge-styles/tsconfig.json"
 @uifabric/jest-serializer-merge-styles: [XX:XX:XX XM] ■ Running /office-ui-fabric-react/node_modules/typescript/lib/tsc.js with /office-ui-fabric-react/packages/jest-serializer-merge-styles/tsconfig.json
 @uifabric/jest-serializer-merge-styles: [XX:XX:XX XM] ■ Executing: /usr/local/bin/node "/office-ui-fabric-react/node_modules/typescript/lib/tsc.js" --pretty --target es5 --inlineSources --sourceRoot "../src" --outDir lib --module es2015 --project "/office-ui-fabric-react/packages/jest-serializer-merge-styles/tsconfig.json"
-@uifabric/jest-serializer-merge-styles: [XX:XX:XX XM] ■ started 'ts:amd'
 @uifabric/jest-serializer-merge-styles: [XX:XX:XX XM] ■ Running /office-ui-fabric-react/node_modules/typescript/lib/tsc.js with /office-ui-fabric-react/packages/jest-serializer-merge-styles/tsconfig.json
 @uifabric/jest-serializer-merge-styles: [XX:XX:XX XM] ■ Executing: /usr/local/bin/node "/office-ui-fabric-react/node_modules/typescript/lib/tsc.js" --pretty --target es5 --inlineSources --sourceRoot "../src" --outDir lib-amd --module amd --project "/office-ui-fabric-react/packages/jest-serializer-merge-styles/tsconfig.json"
-@uifabric/jest-serializer-merge-styles: [XX:XX:XX XM] ■ finished 'ts:amd' in ?s
-@uifabric/jest-serializer-merge-styles: [XX:XX:XX XM] ■ finished 'ts:esm' in ?s
-@uifabric/jest-serializer-merge-styles: [XX:XX:XX XM] ■ finished 'ts:commonjs' in ?s
-@uifabric/jest-serializer-merge-styles: [XX:XX:XX XM] ■ finished 'ts' in ?s
-@uifabric/jest-serializer-merge-styles: [XX:XX:XX XM] ■ started 'jest'
 @uifabric/jest-serializer-merge-styles: [XX:XX:XX XM] ■ Running Jest
 @uifabric/jest-serializer-merge-styles: [XX:XX:XX XM] ■ /usr/local/bin/node "/office-ui-fabric-react/node_modules/jest/bin/jest.js" --config "/office-ui-fabric-react/packages/jest-serializer-merge-styles/jest.config.js" --passWithNoTests --colors
 @uifabric/jest-serializer-merge-styles:  PASS  src/index.test.tsx
-@uifabric/jest-serializer-merge-styles: [XX:XX:XX XM] ■ finished 'jest' in ?s
-@uifabric/jest-serializer-merge-styles: [XX:XX:XX XM] ■ finished 'build' in ?s
 @uifabric/jest-serializer-merge-styles: Done in ?s.
 @uifabric/test-utilities: yarn run vX.X.X
 @uifabric/test-utilities: $ just-scripts build --production --lint
-@uifabric/test-utilities: [XX:XX:XX XM] ■ started 'build'
-@uifabric/test-utilities: [XX:XX:XX XM] ■ started 'clean'
 @uifabric/test-utilities: [XX:XX:XX XM] ■ Removing [lib, temp, dist, lib-amd, lib-commonjs, lib-es2015, coverage, src/**/*.scss.ts]
-@uifabric/test-utilities: [XX:XX:XX XM] ■ finished 'clean' in ?s
-@uifabric/test-utilities: [XX:XX:XX XM] ■ started 'ts'
-@uifabric/test-utilities: [XX:XX:XX XM] ■ started 'ts:commonjs'
-@uifabric/test-utilities: [XX:XX:XX XM] ■ started 'ts:esm'
 @uifabric/test-utilities: [XX:XX:XX XM] ■ Running /office-ui-fabric-react/node_modules/typescript/lib/tsc.js with /office-ui-fabric-react/packages/test-utilities/tsconfig.json
 @uifabric/test-utilities: [XX:XX:XX XM] ■ Executing: /usr/local/bin/node "/office-ui-fabric-react/node_modules/typescript/lib/tsc.js" --pretty --target es5 --inlineSources --sourceRoot "../src" --outDir lib-commonjs --module commonjs --project "/office-ui-fabric-react/packages/test-utilities/tsconfig.json"
 @uifabric/test-utilities: [XX:XX:XX XM] ■ Running /office-ui-fabric-react/node_modules/typescript/lib/tsc.js with /office-ui-fabric-react/packages/test-utilities/tsconfig.json
 @uifabric/test-utilities: [XX:XX:XX XM] ■ Executing: /usr/local/bin/node "/office-ui-fabric-react/node_modules/typescript/lib/tsc.js" --pretty --target es5 --inlineSources --sourceRoot "../src" --outDir lib --module es2015 --project "/office-ui-fabric-react/packages/test-utilities/tsconfig.json"
-@uifabric/test-utilities: [XX:XX:XX XM] ■ started 'ts:amd'
 @uifabric/test-utilities: [XX:XX:XX XM] ■ Running /office-ui-fabric-react/node_modules/typescript/lib/tsc.js with /office-ui-fabric-react/packages/test-utilities/tsconfig.json
 @uifabric/test-utilities: [XX:XX:XX XM] ■ Executing: /usr/local/bin/node "/office-ui-fabric-react/node_modules/typescript/lib/tsc.js" --pretty --target es5 --inlineSources --sourceRoot "../src" --outDir lib-amd --module amd --project "/office-ui-fabric-react/packages/test-utilities/tsconfig.json"
-@uifabric/test-utilities: [XX:XX:XX XM] ■ finished 'ts:esm' in ?s
-@uifabric/test-utilities: [XX:XX:XX XM] ■ finished 'ts:commonjs' in ?s
-@uifabric/test-utilities: [XX:XX:XX XM] ■ finished 'ts:amd' in ?s
-@uifabric/test-utilities: [XX:XX:XX XM] ■ finished 'ts' in ?s
-@uifabric/test-utilities: [XX:XX:XX XM] ■ finished 'build' in ?s
 @uifabric/test-utilities: Done in ?s.
 @uifabric/utilities: yarn run vX.X.X
 @uifabric/utilities: $ just-scripts build --production --lint
-@uifabric/utilities: [XX:XX:XX XM] ■ started 'build'
-@uifabric/utilities: [XX:XX:XX XM] ■ started 'clean'
 @uifabric/utilities: [XX:XX:XX XM] ■ Removing [lib, temp, dist, lib-amd, lib-commonjs, lib-es2015, coverage, src/**/*.scss.ts]
-@uifabric/utilities: [XX:XX:XX XM] ■ finished 'clean' in ?s
-@uifabric/utilities: [XX:XX:XX XM] ■ started 'copy'
-@uifabric/utilities: [XX:XX:XX XM] ■ finished 'copy' in ?s
-@uifabric/utilities: [XX:XX:XX XM] ■ started 'sass'
-@uifabric/utilities: [XX:XX:XX XM] ■ finished 'sass' in ?s
-@uifabric/utilities: [XX:XX:XX XM] ■ started 'validate'
-@uifabric/utilities: [XX:XX:XX XM] ■ started 'ts'
-@uifabric/utilities: [XX:XX:XX XM] ■ started 'tslint'
-@uifabric/utilities: [XX:XX:XX XM] ■ started 'ts:commonjs'
-@uifabric/utilities: [XX:XX:XX XM] ■ started 'ts:esm'
 @uifabric/utilities: [XX:XX:XX XM] ■ Running tslint
 @uifabric/utilities: [XX:XX:XX XM] ■ /usr/local/bin/node "/office-ui-fabric-react/node_modules/tslint/lib/tslintCli.js" --project "/office-ui-fabric-react/packages/utilities/tsconfig.json" -t stylish -r /office-ui-fabric-react/node_modules/tslint-microsoft-contrib
 @uifabric/utilities: [XX:XX:XX XM] ■ Running /office-ui-fabric-react/node_modules/typescript/lib/tsc.js with /office-ui-fabric-react/packages/utilities/tsconfig.json
 @uifabric/utilities: [XX:XX:XX XM] ■ Executing: /usr/local/bin/node "/office-ui-fabric-react/node_modules/typescript/lib/tsc.js" --pretty --target es5 --inlineSources --sourceRoot "../src" --outDir lib-commonjs --module commonjs --project "/office-ui-fabric-react/packages/utilities/tsconfig.json"
 @uifabric/utilities: [XX:XX:XX XM] ■ Running /office-ui-fabric-react/node_modules/typescript/lib/tsc.js with /office-ui-fabric-react/packages/utilities/tsconfig.json
 @uifabric/utilities: [XX:XX:XX XM] ■ Executing: /usr/local/bin/node "/office-ui-fabric-react/node_modules/typescript/lib/tsc.js" --pretty --target es5 --inlineSources --sourceRoot "../src" --outDir lib --module es2015 --project "/office-ui-fabric-react/packages/utilities/tsconfig.json"
-@uifabric/utilities: [XX:XX:XX XM] ■ started 'ts:amd'
 @uifabric/utilities: [XX:XX:XX XM] ■ Running /office-ui-fabric-react/node_modules/typescript/lib/tsc.js with /office-ui-fabric-react/packages/utilities/tsconfig.json
 @uifabric/utilities: [XX:XX:XX XM] ■ Executing: /usr/local/bin/node "/office-ui-fabric-react/node_modules/typescript/lib/tsc.js" --pretty --target es5 --inlineSources --sourceRoot "../src" --outDir lib-amd --module amd --project "/office-ui-fabric-react/packages/utilities/tsconfig.json"
-@uifabric/utilities: [XX:XX:XX XM] ■ finished 'tslint' in ?s
-@uifabric/utilities: [XX:XX:XX XM] ■ started 'jest'
 @uifabric/utilities: [XX:XX:XX XM] ■ Running Jest
 @uifabric/utilities: [XX:XX:XX XM] ■ /usr/local/bin/node "/office-ui-fabric-react/node_modules/jest/bin/jest.js" --config "/office-ui-fabric-react/packages/utilities/jest.config.js" --passWithNoTests --colors
-@uifabric/utilities: [XX:XX:XX XM] ■ finished 'ts:amd' in ?s
-@uifabric/utilities: [XX:XX:XX XM] ■ finished 'ts:esm' in ?s
-@uifabric/utilities: [XX:XX:XX XM] ■ finished 'ts:commonjs' in ?s
-@uifabric/utilities: [XX:XX:XX XM] ■ finished 'ts' in ?s
-@uifabric/utilities: [XX:XX:XX XM] ■ started 'webpack'
-@uifabric/utilities: [XX:XX:XX XM] ■ started 'lint-imports'
 @uifabric/utilities: [XX:XX:XX XM] ■ Running Webpack
 @uifabric/utilities: [XX:XX:XX XM] ■ Webpack Config Path: null
 @uifabric/utilities: [XX:XX:XX XM] ■ webpack.config.js not found, skipping webpack
-@uifabric/utilities: [XX:XX:XX XM] ■ finished 'webpack' in ?s
-@uifabric/utilities: [XX:XX:XX XM] ■ finished 'lint-imports' in ?s
 @uifabric/utilities:  PASS  src/warn/warnControlledUsage.test.ts
 @uifabric/utilities:  PASS  src/focus.test.tsx
 @uifabric/utilities:  PASS  src/styled.test.tsx
@@ -277,138 +146,63 @@ Standard output:
 @uifabric/utilities:  PASS  src/BaseComponent.test.tsx
 @uifabric/utilities:  PASS  src/keyboard.test.ts
 @uifabric/utilities:  PASS  src/css.test.ts
-@uifabric/utilities: [XX:XX:XX XM] ■ finished 'jest' in ?s
-@uifabric/utilities: [XX:XX:XX XM] ■ finished 'validate' in ?s
 @uifabric/utilities: [XX:XX:XX XM] ■ Extracting Public API surface from '/office-ui-fabric-react/packages/utilities/lib/index.d.ts'
-@uifabric/utilities: [XX:XX:XX XM] ■ finished 'build' in ?s
 @uifabric/utilities: Done in ?s.
 @uifabric/styling: yarn run vX.X.X
 @uifabric/styling: $ just-scripts build --production --lint
-@uifabric/styling: [XX:XX:XX XM] ■ started 'build'
-@uifabric/styling: [XX:XX:XX XM] ■ started 'clean'
 @uifabric/styling: [XX:XX:XX XM] ■ Removing [lib, temp, dist, lib-amd, lib-commonjs, lib-es2015, coverage, src/**/*.scss.ts]
-@uifabric/styling: [XX:XX:XX XM] ■ finished 'clean' in ?s
-@uifabric/styling: [XX:XX:XX XM] ■ started 'copy'
-@uifabric/styling: [XX:XX:XX XM] ■ finished 'copy' in ?s
-@uifabric/styling: [XX:XX:XX XM] ■ started 'sass'
-@uifabric/styling: [XX:XX:XX XM] ■ finished 'sass' in ?s
-@uifabric/styling: [XX:XX:XX XM] ■ started 'validate'
-@uifabric/styling: [XX:XX:XX XM] ■ started 'ts'
-@uifabric/styling: [XX:XX:XX XM] ■ started 'tslint'
-@uifabric/styling: [XX:XX:XX XM] ■ started 'ts:commonjs'
-@uifabric/styling: [XX:XX:XX XM] ■ started 'ts:esm'
 @uifabric/styling: [XX:XX:XX XM] ■ Running tslint
 @uifabric/styling: [XX:XX:XX XM] ■ /usr/local/bin/node "/office-ui-fabric-react/node_modules/tslint/lib/tslintCli.js" --project "/office-ui-fabric-react/packages/styling/tsconfig.json" -t stylish -r /office-ui-fabric-react/node_modules/tslint-microsoft-contrib
 @uifabric/styling: [XX:XX:XX XM] ■ Running /office-ui-fabric-react/node_modules/typescript/lib/tsc.js with /office-ui-fabric-react/packages/styling/tsconfig.json
 @uifabric/styling: [XX:XX:XX XM] ■ Executing: /usr/local/bin/node "/office-ui-fabric-react/node_modules/typescript/lib/tsc.js" --pretty --target es5 --inlineSources --sourceRoot "../src" --outDir lib-commonjs --module commonjs --project "/office-ui-fabric-react/packages/styling/tsconfig.json"
 @uifabric/styling: [XX:XX:XX XM] ■ Running /office-ui-fabric-react/node_modules/typescript/lib/tsc.js with /office-ui-fabric-react/packages/styling/tsconfig.json
 @uifabric/styling: [XX:XX:XX XM] ■ Executing: /usr/local/bin/node "/office-ui-fabric-react/node_modules/typescript/lib/tsc.js" --pretty --target es5 --inlineSources --sourceRoot "../src" --outDir lib --module es2015 --project "/office-ui-fabric-react/packages/styling/tsconfig.json"
-@uifabric/styling: [XX:XX:XX XM] ■ started 'ts:amd'
 @uifabric/styling: [XX:XX:XX XM] ■ Running /office-ui-fabric-react/node_modules/typescript/lib/tsc.js with /office-ui-fabric-react/packages/styling/tsconfig.json
 @uifabric/styling: [XX:XX:XX XM] ■ Executing: /usr/local/bin/node "/office-ui-fabric-react/node_modules/typescript/lib/tsc.js" --pretty --target es5 --inlineSources --sourceRoot "../src" --outDir lib-amd --module amd --project "/office-ui-fabric-react/packages/styling/tsconfig.json"
-@uifabric/styling: [XX:XX:XX XM] ■ finished 'tslint' in ?s
-@uifabric/styling: [XX:XX:XX XM] ■ started 'jest'
 @uifabric/styling: [XX:XX:XX XM] ■ Running Jest
 @uifabric/styling: [XX:XX:XX XM] ■ /usr/local/bin/node "/office-ui-fabric-react/node_modules/jest/bin/jest.js" --config "/office-ui-fabric-react/packages/styling/jest.config.js" --passWithNoTests --colors
-@uifabric/styling: [XX:XX:XX XM] ■ finished 'ts:amd' in ?s
-@uifabric/styling: [XX:XX:XX XM] ■ finished 'ts:esm' in ?s
-@uifabric/styling: [XX:XX:XX XM] ■ finished 'ts:commonjs' in ?s
-@uifabric/styling: [XX:XX:XX XM] ■ finished 'ts' in ?s
-@uifabric/styling: [XX:XX:XX XM] ■ started 'webpack'
-@uifabric/styling: [XX:XX:XX XM] ■ started 'lint-imports'
 @uifabric/styling: [XX:XX:XX XM] ■ Running Webpack
 @uifabric/styling: [XX:XX:XX XM] ■ Webpack Config Path: null
 @uifabric/styling: [XX:XX:XX XM] ■ webpack.config.js not found, skipping webpack
-@uifabric/styling: [XX:XX:XX XM] ■ finished 'webpack' in ?s
-@uifabric/styling: [XX:XX:XX XM] ■ finished 'lint-imports' in ?s
-@uifabric/styling:  PASS  src/styles/theme.test.ts
+@uifabric/styling:  PASS  src/styles/theme.test.ts (?s)
 @uifabric/styling:  PASS  src/styles/scheme.test.ts
 @uifabric/styling:  PASS  src/styles/getGlobalClassNames.test.ts
 @uifabric/styling:  PASS  src/utilities/icons.test.ts
 @uifabric/styling:  PASS  src/styles/fonts.test.ts
-@uifabric/styling: [XX:XX:XX XM] ■ finished 'jest' in ?s
-@uifabric/styling: [XX:XX:XX XM] ■ finished 'validate' in ?s
 @uifabric/styling: [XX:XX:XX XM] ■ Extracting Public API surface from '/office-ui-fabric-react/packages/styling/lib/index.d.ts'
-@uifabric/styling: [XX:XX:XX XM] ■ finished 'build' in ?s
 @uifabric/styling: Done in ?s.
 @uifabric/file-type-icons: yarn run vX.X.X
 @uifabric/file-type-icons: $ just-scripts build --production --lint
-@uifabric/file-type-icons: [XX:XX:XX XM] ■ started 'build'
-@uifabric/file-type-icons: [XX:XX:XX XM] ■ started 'clean'
 @uifabric/file-type-icons: [XX:XX:XX XM] ■ Removing [lib, temp, dist, lib-amd, lib-commonjs, lib-es2015, coverage, src/**/*.scss.ts]
-@uifabric/file-type-icons: [XX:XX:XX XM] ■ finished 'clean' in ?s
-@uifabric/file-type-icons: [XX:XX:XX XM] ■ started 'copy'
-@uifabric/file-type-icons: [XX:XX:XX XM] ■ finished 'copy' in ?s
-@uifabric/file-type-icons: [XX:XX:XX XM] ■ started 'sass'
-@uifabric/file-type-icons: [XX:XX:XX XM] ■ finished 'sass' in ?s
-@uifabric/file-type-icons: [XX:XX:XX XM] ■ started 'validate'
-@uifabric/file-type-icons: [XX:XX:XX XM] ■ started 'ts'
-@uifabric/file-type-icons: [XX:XX:XX XM] ■ started 'tslint'
-@uifabric/file-type-icons: [XX:XX:XX XM] ■ started 'ts:commonjs'
-@uifabric/file-type-icons: [XX:XX:XX XM] ■ started 'ts:esm'
 @uifabric/file-type-icons: [XX:XX:XX XM] ■ Running tslint
 @uifabric/file-type-icons: [XX:XX:XX XM] ■ /usr/local/bin/node "/office-ui-fabric-react/node_modules/tslint/lib/tslintCli.js" --project "/office-ui-fabric-react/packages/file-type-icons/tsconfig.json" -t stylish -r /office-ui-fabric-react/node_modules/tslint-microsoft-contrib
 @uifabric/file-type-icons: [XX:XX:XX XM] ■ Running /office-ui-fabric-react/node_modules/typescript/lib/tsc.js with /office-ui-fabric-react/packages/file-type-icons/tsconfig.json
 @uifabric/file-type-icons: [XX:XX:XX XM] ■ Executing: /usr/local/bin/node "/office-ui-fabric-react/node_modules/typescript/lib/tsc.js" --pretty --target es5 --inlineSources --sourceRoot "../src" --outDir lib-commonjs --module commonjs --project "/office-ui-fabric-react/packages/file-type-icons/tsconfig.json"
 @uifabric/file-type-icons: [XX:XX:XX XM] ■ Running /office-ui-fabric-react/node_modules/typescript/lib/tsc.js with /office-ui-fabric-react/packages/file-type-icons/tsconfig.json
 @uifabric/file-type-icons: [XX:XX:XX XM] ■ Executing: /usr/local/bin/node "/office-ui-fabric-react/node_modules/typescript/lib/tsc.js" --pretty --target es5 --inlineSources --sourceRoot "../src" --outDir lib --module es2015 --project "/office-ui-fabric-react/packages/file-type-icons/tsconfig.json"
-@uifabric/file-type-icons: [XX:XX:XX XM] ■ started 'ts:amd'
 @uifabric/file-type-icons: [XX:XX:XX XM] ■ Running /office-ui-fabric-react/node_modules/typescript/lib/tsc.js with /office-ui-fabric-react/packages/file-type-icons/tsconfig.json
 @uifabric/file-type-icons: [XX:XX:XX XM] ■ Executing: /usr/local/bin/node "/office-ui-fabric-react/node_modules/typescript/lib/tsc.js" --pretty --target es5 --inlineSources --sourceRoot "../src" --outDir lib-amd --module amd --project "/office-ui-fabric-react/packages/file-type-icons/tsconfig.json"
-@uifabric/file-type-icons: [XX:XX:XX XM] ■ finished 'tslint' in ?s
-@uifabric/file-type-icons: [XX:XX:XX XM] ■ finished 'validate' in ?s
-@uifabric/file-type-icons: [XX:XX:XX XM] ■ finished 'ts:esm' in ?s
-@uifabric/file-type-icons: [XX:XX:XX XM] ■ finished 'ts:commonjs' in ?s
-@uifabric/file-type-icons: [XX:XX:XX XM] ■ finished 'ts:amd' in ?s
-@uifabric/file-type-icons: [XX:XX:XX XM] ■ finished 'ts' in ?s
-@uifabric/file-type-icons: [XX:XX:XX XM] ■ started 'webpack'
-@uifabric/file-type-icons: [XX:XX:XX XM] ■ started 'lint-imports'
 @uifabric/file-type-icons: [XX:XX:XX XM] ■ Running Webpack
 @uifabric/file-type-icons: [XX:XX:XX XM] ■ Webpack Config Path: null
 @uifabric/file-type-icons: [XX:XX:XX XM] ■ webpack.config.js not found, skipping webpack
-@uifabric/file-type-icons: [XX:XX:XX XM] ■ finished 'webpack' in ?s
-@uifabric/file-type-icons: [XX:XX:XX XM] ■ finished 'lint-imports' in ?s
-@uifabric/file-type-icons: [XX:XX:XX XM] ■ finished 'build' in ?s
 @uifabric/file-type-icons: Done in ?s.
 @uifabric/foundation: yarn run vX.X.X
 @uifabric/foundation: $ just-scripts build --production --lint
-@uifabric/foundation: [XX:XX:XX XM] ■ started 'build'
-@uifabric/foundation: [XX:XX:XX XM] ■ started 'clean'
 @uifabric/foundation: [XX:XX:XX XM] ■ Removing [lib, temp, dist, lib-amd, lib-commonjs, lib-es2015, coverage, src/**/*.scss.ts]
-@uifabric/foundation: [XX:XX:XX XM] ■ finished 'clean' in ?s
-@uifabric/foundation: [XX:XX:XX XM] ■ started 'copy'
-@uifabric/foundation: [XX:XX:XX XM] ■ finished 'copy' in ?s
-@uifabric/foundation: [XX:XX:XX XM] ■ started 'sass'
-@uifabric/foundation: [XX:XX:XX XM] ■ finished 'sass' in ?s
-@uifabric/foundation: [XX:XX:XX XM] ■ started 'validate'
-@uifabric/foundation: [XX:XX:XX XM] ■ started 'ts'
-@uifabric/foundation: [XX:XX:XX XM] ■ started 'tslint'
-@uifabric/foundation: [XX:XX:XX XM] ■ started 'ts:commonjs'
-@uifabric/foundation: [XX:XX:XX XM] ■ started 'ts:esm'
 @uifabric/foundation: [XX:XX:XX XM] ■ Running tslint
 @uifabric/foundation: [XX:XX:XX XM] ■ /usr/local/bin/node "/office-ui-fabric-react/node_modules/tslint/lib/tslintCli.js" --project "/office-ui-fabric-react/packages/foundation/tsconfig.json" -t stylish -r /office-ui-fabric-react/node_modules/tslint-microsoft-contrib
 @uifabric/foundation: [XX:XX:XX XM] ■ Running /office-ui-fabric-react/node_modules/typescript/lib/tsc.js with /office-ui-fabric-react/packages/foundation/tsconfig.json
 @uifabric/foundation: [XX:XX:XX XM] ■ Executing: /usr/local/bin/node "/office-ui-fabric-react/node_modules/typescript/lib/tsc.js" --pretty --target es5 --inlineSources --sourceRoot "../src" --outDir lib-commonjs --module commonjs --project "/office-ui-fabric-react/packages/foundation/tsconfig.json"
 @uifabric/foundation: [XX:XX:XX XM] ■ Running /office-ui-fabric-react/node_modules/typescript/lib/tsc.js with /office-ui-fabric-react/packages/foundation/tsconfig.json
 @uifabric/foundation: [XX:XX:XX XM] ■ Executing: /usr/local/bin/node "/office-ui-fabric-react/node_modules/typescript/lib/tsc.js" --pretty --target es5 --inlineSources --sourceRoot "../src" --outDir lib --module es2015 --project "/office-ui-fabric-react/packages/foundation/tsconfig.json"
-@uifabric/foundation: [XX:XX:XX XM] ■ started 'ts:amd'
 @uifabric/foundation: [XX:XX:XX XM] ■ Running /office-ui-fabric-react/node_modules/typescript/lib/tsc.js with /office-ui-fabric-react/packages/foundation/tsconfig.json
 @uifabric/foundation: [XX:XX:XX XM] ■ Executing: /usr/local/bin/node "/office-ui-fabric-react/node_modules/typescript/lib/tsc.js" --pretty --target es5 --inlineSources --sourceRoot "../src" --outDir lib-amd --module amd --project "/office-ui-fabric-react/packages/foundation/tsconfig.json"
-@uifabric/foundation: [XX:XX:XX XM] ■ finished 'tslint' in ?s
-@uifabric/foundation: [XX:XX:XX XM] ■ started 'jest'
 @uifabric/foundation: [XX:XX:XX XM] ■ Running Jest
 @uifabric/foundation: [XX:XX:XX XM] ■ /usr/local/bin/node "/office-ui-fabric-react/node_modules/jest/bin/jest.js" --config "/office-ui-fabric-react/packages/foundation/jest.config.js" --passWithNoTests --colors
-@uifabric/foundation: [XX:XX:XX XM] ■ finished 'ts:esm' in ?s
-@uifabric/foundation: [XX:XX:XX XM] ■ finished 'ts:amd' in ?s
-@uifabric/foundation: [XX:XX:XX XM] ■ finished 'ts:commonjs' in ?s
-@uifabric/foundation: [XX:XX:XX XM] ■ finished 'ts' in ?s
-@uifabric/foundation: [XX:XX:XX XM] ■ started 'webpack'
-@uifabric/foundation: [XX:XX:XX XM] ■ started 'lint-imports'
 @uifabric/foundation: [XX:XX:XX XM] ■ Running Webpack
 @uifabric/foundation: [XX:XX:XX XM] ■ Webpack Config Path: /office-ui-fabric-react/packages/foundation/webpack.config.js
 @uifabric/foundation: Webpack version: 4.29.5
-@uifabric/foundation: [XX:XX:XX XM] ■ finished 'lint-imports' in ?s
-@uifabric/foundation:  FAIL  src/slots.test.tsx
+@uifabric/foundation:  FAIL  src/slots.test.tsx (?s)
 @uifabric/foundation:  PASS  src/hooks/controlled.test.tsx
 @uifabric/foundation: info Visit https://yarnpkg.com/en/docs/cli/run for documentation about this command.
 
@@ -631,12 +425,10 @@ lerna info Executing command in 40 packages: "yarn run build --production --lint
 @uifabric/foundation: [XX:XX:XX XM] x ------------------------------------
 @uifabric/foundation: [XX:XX:XX XM] x Error: Command failed: /usr/local/bin/node /office-ui-fabric-react/node_modules/jest/bin/jest.js --config /office-ui-fabric-react/packages/foundation/jest.config.js --passWithNoTests --colors
 @uifabric/foundation:     at ChildProcess.<anonymous> (/office-ui-fabric-react/node_modules/just-scripts-utils/lib/exec.js:70:31)
-@uifabric/foundation:     at ChildProcess.emit (events.js:200:13)
+@uifabric/foundation:     at ChildProcess.emit (events.js:203:13)
 @uifabric/foundation:     at ChildProcess.EventEmitter.emit (domain.js:494:23)
 @uifabric/foundation:     at Process.ChildProcess._handle.onexit (internal/child_process.js:272:12)
 @uifabric/foundation: [XX:XX:XX XM] x ------------------------------------
-@uifabric/foundation: [XX:XX:XX XM] x finished 'validate' in ?s with errors
-@uifabric/foundation: [XX:XX:XX XM] x finished 'build' in ?s with errors
 @uifabric/foundation: [XX:XX:XX XM] x Error previously detected. See above for error messages.
 @uifabric/foundation: [XX:XX:XX XM] x Other tasks that did not complete: [webpack]
 @uifabric/foundation: error Command failed with exit code 1.

@@ -4,49 +4,38 @@ Standard output:
 Rush Multi-Project Build Tool 5.X.X - https://rushjs.io
 Starting "rush rebuild"
 Executing a maximum of 1 simultaneous processes...
-[@azure/cosmos] started
-XX of XX: [@azure/cosmos] completed successfully in ? seconds
-[@azure/event-processor-host] started
-XX of XX: [@azure/event-processor-host] completed successfully in ? seconds
-[@azure/storage-blob] started
-XX of XX: [@azure/storage-blob] completed successfully in ? seconds
-[@azure/storage-file] started
-XX of XX: [@azure/storage-file] completed successfully in ? seconds
-[@azure/storage-queue] started
-XX of XX: [@azure/storage-queue] completed successfully in ? seconds
-[@azure/template] started
-XX of XX: [@azure/template] completed successfully in ? seconds
-[testhub] started
-XX of XX: [testhub] completed successfully in ? seconds
-[@azure/abort-controller] started
 XX of XX: [@azure/abort-controller] completed successfully in ? seconds
-[@azure/core-asynciterator-polyfill] started
 XX of XX: [@azure/core-asynciterator-polyfill] completed successfully in ? seconds
-[@azure/core-auth] started
+XX of XX: [@azure/core-paging] completed successfully in ? seconds
+XX of XX: [@azure/cosmos] completed successfully in ? seconds
+XX of XX: [@azure/event-processor-host] completed successfully in ? seconds
+Warning: You have changed the public API signature for this project. Updating review/service-bus.api.md
+XX of XX: [@azure/storage-blob] completed successfully in ? seconds
+XX of XX: [@azure/storage-file] completed successfully in ? seconds
+XX of XX: [@azure/storage-queue] completed successfully in ? seconds
+XX of XX: [@azure/template] completed successfully in ? seconds
+XX of XX: [testhub] completed successfully in ? seconds
 XX of XX: [@azure/core-auth] completed successfully in ? seconds
-[@azure/core-http] started
 npm ERR! code ELIFECYCLE
 npm ERR! errno 2
-npm ERR! @azure/core-http@X.X.X-preview.1 build:tsc: `tsc -p tsconfig.es.json`
+npm ERR! @azure/core-http@X.X.X-preview.2 build:tsc: `tsc -p tsconfig.es.json`
 npm ERR! Exit status 2
 npm ERR! 
-npm ERR! Failed at the @azure/core-http@X.X.X-preview.1 build:tsc script.
+npm ERR! Failed at the @azure/core-http@X.X.X-preview.2 build:tsc script.
 npm ERR! This is probably not a problem with npm. There is likely additional logging output above.
 npm ERR! A complete log of this run can be found in:
 npm ERR!     /root/.npm/_logs/XXXX-XX-XXXXXXXXX-debug.log
 ERROR: "build:tsc" exited with 2.
 npm ERR! code ELIFECYCLE
 npm ERR! errno 1
-npm ERR! @azure/core-http@X.X.X-preview.1 build:lib: `run-s build:tsc build:rollup build:minify-browser`
+npm ERR! @azure/core-http@X.X.X-preview.2 build:lib: `run-s build:tsc build:rollup build:minify-browser`
 npm ERR! Exit status 1
 npm ERR! 
-npm ERR! Failed at the @azure/core-http@X.X.X-preview.1 build:lib script.
+npm ERR! Failed at the @azure/core-http@X.X.X-preview.2 build:lib script.
 npm ERR! This is probably not a problem with npm. There is likely additional logging output above.
 npm ERR! A complete log of this run can be found in:
 npm ERR!     /root/.npm/_logs/XXXX-XX-XXXXXXXXX-debug.log
 ERROR: "build:lib" exited with 1.
-[@azure/core-paging] started
-XX of XX: [@azure/core-paging] completed successfully in ? seconds
 SUCCESS (11)
 ================================
 @azure/abort-controller (? seconds)
@@ -61,7 +50,12 @@ SUCCESS (11)
 @azure/template (? seconds)
 testhub (? seconds)
 ================================
-BLOCKED (8)
+SUCCESS WITH WARNINGS (1)
+================================
+@azure/service-bus (? seconds)
+Warning: You have changed the public API signature for this project. Updating review/service-bus.api.md
+================================
+BLOCKED (7)
 ================================
 @azure/core-amqp
 @azure/core-arm
@@ -70,27 +64,26 @@ BLOCKED (8)
 @azure/keyvault-certificates
 @azure/keyvault-keys
 @azure/keyvault-secrets
-@azure/service-bus
 ================================
 FAILURE (1)
 ================================
 @azure/core-http (? seconds)
 npm ERR! code ELIFECYCLE
 npm ERR! errno 2
-npm ERR! @azure/core-http@X.X.X-preview.1 build:tsc: `tsc -p tsconfig.es.json`
+npm ERR! @azure/core-http@X.X.X-preview.2 build:tsc: `tsc -p tsconfig.es.json`
 npm ERR! Exit status 2
 npm ERR!
-npm ERR! Failed at the @azure/core-http@X.X.X-preview.1 build:tsc script.
+npm ERR! Failed at the @azure/core-http@X.X.X-preview.2 build:tsc script.
 npm ERR! This is probably not a problem with npm. There is likely additional logging output above.
 npm ERR! A complete log of this run can be found in:
 npm ERR!     /root/.npm/_logs/XXXX-XX-XXXXXXXXX-debug.log
 ERROR: "build:tsc" exited with 2.
 npm ERR! code ELIFECYCLE
 npm ERR! errno 1
-npm ERR! @azure/core-http@X.X.X-preview.1 build:lib: `run-s build:tsc build:rollup build:minify-browser`
+npm ERR! @azure/core-http@X.X.X-preview.2 build:lib: `run-s build:tsc build:rollup build:minify-browser`
 npm ERR! Exit status 1
 npm ERR!
-npm ERR! Failed at the @azure/core-http@X.X.X-preview.1 build:lib script.
+npm ERR! Failed at the @azure/core-http@X.X.X-preview.2 build:lib script.
 npm ERR! This is probably not a problem with npm. There is likely additional logging output above.
 npm ERR! A complete log of this run can be found in:
 npm ERR!     /root/.npm/_logs/XXXX-XX-XXXXXXXXX-debug.log
@@ -103,6 +96,7 @@ rush rebuild - Errors! ( ? seconds)
 
 Standard error:
 Your version of Node.js (X.X.X) has not been tested with this release of Rush. The Rush team will not accept issue reports for it. Please consider upgrading Rush or downgrading Node.js.
+XX of XX: [@azure/service-bus] completed with warnings in ? seconds
 XX of XX: [@azure/core-http] failed to build!
 XX of XX: [@azure/core-arm] blocked by [@azure/core-http]!
 XX of XX: [@azure/keyvault-certificates] blocked by [@azure/core-http]!
@@ -111,5 +105,4 @@ XX of XX: [@azure/keyvault-secrets] blocked by [@azure/core-http]!
 XX of XX: [@azure/identity] blocked by [@azure/core-http]!
 XX of XX: [@azure/core-amqp] blocked by [@azure/core-http]!
 XX of XX: [@azure/event-hubs] blocked by [@azure/core-http]!
-XX of XX: [@azure/service-bus] blocked by [@azure/core-http]!
 [@azure/core-http] Returned error code: 1
