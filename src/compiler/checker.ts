@@ -516,7 +516,6 @@ namespace ts {
         const noConstraintType = createAnonymousType(undefined, emptySymbols, emptyArray, emptyArray, undefined, undefined);
         const circularConstraintType = createAnonymousType(undefined, emptySymbols, emptyArray, emptyArray, undefined, undefined);
         const resolvingDefaultType = createAnonymousType(undefined, emptySymbols, emptyArray, emptyArray, undefined, undefined);
-        const resolvingConditionalType = createAnonymousType(undefined, emptySymbols, emptyArray, emptyArray, undefined, undefined);
 
         const markerSuperType = createTypeParameter();
         const markerSubType = createTypeParameter();
@@ -789,6 +788,7 @@ namespace ts {
 
         const enum TypeSystemPropertyName {
             Type,
+            ResolvedType,
             ResolvedBaseConstructorType,
             DeclaredType,
             ResolvedReturnType,
@@ -5020,6 +5020,8 @@ namespace ts {
             switch (propertyName) {
                 case TypeSystemPropertyName.Type:
                     return !!getSymbolLinks(<Symbol>target).type;
+                case TypeSystemPropertyName.ResolvedType:
+                    return !!getNodeLinks(target as Node).resolvedType;
                 case TypeSystemPropertyName.EnumTagType:
                     return !!(getNodeLinks(target as JSDocEnumTag).resolvedEnumType);
                 case TypeSystemPropertyName.DeclaredType:
@@ -5036,8 +5038,10 @@ namespace ts {
             return Debug.assertNever(propertyName);
         }
 
-        // Pop an entry from the type resolution stack and return its associated result value. The result value will
-        // be true if no circularities were detected, or false if a circularity was found.
+        /**
+         * Pop an entry from the type resolution stack and return its associated result value. The result value will
+         * be true if no circularities were detected, or false if a circularity was found.
+         */
         function popTypeResolution(): boolean {
             resolutionTargets.pop();
             resolutionPropertyNames.pop();
@@ -10716,7 +10720,9 @@ namespace ts {
         function getTypeFromConditionalTypeNode(node: ConditionalTypeNode): Type {
             const links = getNodeLinks(node);
             if (!links.resolvedType) {
-                links.resolvedType = resolvingConditionalType;
+                if (!pushTypeResolution(node, TypeSystemPropertyName.ResolvedType)) {
+                    return errorType;
+                }
                 const checkType = getTypeFromTypeNode(node.checkType);
                 const aliasSymbol = getAliasSymbolForTypeNode(node);
                 const aliasTypeArguments = getTypeArgumentsForAliasSymbol(aliasSymbol);
@@ -10735,7 +10741,15 @@ namespace ts {
                     aliasSymbol,
                     aliasTypeArguments
                 };
-                links.resolvedType = getConditionalType(root, /*mapper*/ undefined);
+                const resolvedType = getConditionalType(root, /*mapper*/ undefined);
+                if (!popTypeResolution()) {
+                    if (aliasSymbol) {
+                        return reportCircularityError(aliasSymbol);
+                    }
+                    error(node, Diagnostics.Conditional_type_circularly_references_itself);
+                    return errorType;
+                }
+                links.resolvedType = resolvedType;
                 if (outerTypeParameters) {
                     root.instantiations = createMap<Type>();
                     root.instantiations.set(getTypeListId(outerTypeParameters), links.resolvedType);

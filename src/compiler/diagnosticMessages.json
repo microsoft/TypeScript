@@ -2693,6 +2693,10 @@
         "category": "Error",
         "code": 2773
     },
+    "Conditional type circularly references itself.": {
+        "category":"Error",
+        "code": 2774
+    },
 
     "Import declaration '{0}' is using private name '{1}'.": {
         "category": "Error",
