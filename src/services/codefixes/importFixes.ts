@@ -435,13 +435,9 @@ namespace ts.codefix {
     }
 
     function getImportKindForExportEquals(compilerOptions: CompilerOptions): ImportKind {
-        if (getAllowSyntheticDefaultImports(compilerOptions)) {
-            return ImportKind.Default;
-        }
-        if (getEmitModuleKind(compilerOptions) >= ModuleKind.ES2015) {
-            return ImportKind.Namespace;
-        }
-        return ImportKind.Equals;
+        return getAllowSyntheticDefaultImports(compilerOptions)
+            ? ImportKind.Default
+            : ImportKind.Equals;
     }
 
     function getDefaultExportInfoWorker(defaultExport: Symbol, moduleSymbol: Symbol, checker: TypeChecker, compilerOptions: CompilerOptions): { readonly symbolForMeaning: Symbol, readonly name: string } | undefined {
