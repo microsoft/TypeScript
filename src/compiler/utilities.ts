@@ -7289,6 +7289,10 @@ namespace ts {
             moduleKind === ModuleKind.System;
     }
 
+    export function getEsModuleInterop(compilerOptions: CompilerOptions) {
+        return compilerOptions.esModuleInterop;
+    }
+
     export function getEmitDeclarations(compilerOptions: CompilerOptions): boolean {
         return !!(compilerOptions.declaration || compilerOptions.composite);
     }

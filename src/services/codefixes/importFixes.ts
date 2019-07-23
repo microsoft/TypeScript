@@ -420,17 +420,22 @@ namespace ts.codefix {
     function getDefaultLikeExportInfo(
         moduleSymbol: Symbol, checker: TypeChecker, compilerOptions: CompilerOptions,
     ): { readonly symbol: Symbol, readonly symbolForMeaning: Symbol, readonly name: string, readonly kind: ImportKind.Default | ImportKind.Equals } | undefined {
-        const exported = getDefaultLikeExportWorker(moduleSymbol, checker);
+        const exported = getDefaultLikeExportWorker(moduleSymbol, checker, compilerOptions);
         if (!exported) return undefined;
         const { symbol, kind } = exported;
         const info = getDefaultExportInfoWorker(symbol, moduleSymbol, checker, compilerOptions);
         return info && { symbol, kind, ...info };
     }
 
-    function getDefaultLikeExportWorker(moduleSymbol: Symbol, checker: TypeChecker): { readonly symbol: Symbol, readonly kind: ImportKind.Default | ImportKind.Equals } | undefined {
+    function getDefaultLikeExportWorker(moduleSymbol: Symbol, checker: TypeChecker, compilerOptions: CompilerOptions): { readonly symbol: Symbol, readonly kind: ImportKind.Default | ImportKind.Equals } | undefined {
         const defaultExport = checker.tryGetMemberInModuleExports(InternalSymbolName.Default, moduleSymbol);
         if (defaultExport) return { symbol: defaultExport, kind: ImportKind.Default };
         const exportEquals = checker.resolveExternalModuleSymbol(moduleSymbol);
+
+        // When ESModule interop is on we want to always use default style instead
+        if (getEsModuleInterop(compilerOptions)) {
+            return { symbol: exportEquals, kind: ImportKind.Default };
+        }
         return exportEquals === moduleSymbol ? undefined : { symbol: exportEquals, kind: ImportKind.Equals };
     }
 
@@ -550,6 +555,7 @@ namespace ts.codefix {
                     defaultImport === undefined ? undefined : createIdentifier(defaultImport),
                     namedImports.map(n => createImportSpecifier(/*propertyName*/ undefined, createIdentifier(n))), moduleSpecifier, quotePreference));
         }
+
         if (namespaceLikeImport) {
             insertImport(changes, sourceFile, namespaceLikeImport.importKind === ImportKind.Equals
                 ? createImportEqualsDeclaration(/*decorators*/ undefined, /*modifiers*/ undefined, createIdentifier(namespaceLikeImport.name), createExternalModuleReference(quotedModuleSpecifier))
