@@ -111,7 +111,7 @@ Standard output:
 @uifabric/utilities: [XX:XX:XX XM] ■ Running Webpack
 @uifabric/utilities: [XX:XX:XX XM] ■ Webpack Config Path: null
 @uifabric/utilities: [XX:XX:XX XM] ■ webpack.config.js not found, skipping webpack
-@uifabric/utilities:  PASS  src/warn/warnControlledUsage.test.ts (?s)
+@uifabric/utilities:  PASS  src/warn/warnControlledUsage.test.ts
 @uifabric/utilities:  PASS  src/focus.test.tsx
 @uifabric/utilities:  PASS  src/styled.test.tsx
 @uifabric/utilities:  PASS  src/EventGroup.test.ts
@@ -164,7 +164,7 @@ Standard output:
 @uifabric/styling: [XX:XX:XX XM] ■ Running Webpack
 @uifabric/styling: [XX:XX:XX XM] ■ Webpack Config Path: null
 @uifabric/styling: [XX:XX:XX XM] ■ webpack.config.js not found, skipping webpack
-@uifabric/styling:  PASS  src/styles/theme.test.ts (?s)
+@uifabric/styling:  PASS  src/styles/theme.test.ts
 @uifabric/styling:  PASS  src/styles/scheme.test.ts
 @uifabric/styling:  PASS  src/styles/getGlobalClassNames.test.ts
 @uifabric/styling:  PASS  src/utilities/icons.test.ts
@@ -202,7 +202,7 @@ Standard output:
 @uifabric/foundation: [XX:XX:XX XM] ■ Running Webpack
 @uifabric/foundation: [XX:XX:XX XM] ■ Webpack Config Path: /office-ui-fabric-react/packages/foundation/webpack.config.js
 @uifabric/foundation: Webpack version: 4.29.5
-@uifabric/foundation:  FAIL  src/slots.test.tsx (?s)
+@uifabric/foundation:  FAIL  src/slots.test.tsx
 @uifabric/foundation:  PASS  src/hooks/controlled.test.tsx
 @uifabric/foundation: info Visit https://yarnpkg.com/en/docs/cli/run for documentation about this command.
 
