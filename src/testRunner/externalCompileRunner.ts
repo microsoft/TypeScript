@@ -185,7 +185,8 @@ function stripRushStageNumbers(result: string): string {
  * so we purge as much of the gulp output as we can
  */
 function sanitizeUnimportantGulpOutput(result: string): string {
-    return result.replace(/^.*(\] (Starting)|(Finished)).*$/gm, "") // task start/end messages (nondeterministic order)
+    return result.replace(/^.*(\] (Starting)|(Finished)).*$/gm, "") // "gulp" task start/end messages (nondeterministic order)
+        .replace(/^.*(\] . (finished)|(started)).*$/gm, "") // "just" task start/end messages (nondeterministic order)
         .replace(/^.*\] Respawned to PID: \d+.*$/gm, "") // PID of child is OS and system-load dependent (likely stableish in a container but still dangerous)
         .replace(/\n+/g, "\n");
 }
