@@ -197,7 +197,8 @@ function sanitizeTimestamps(result: string): string {
         .replace(/\/\d+-\d+-[\d_TZ]+-debug.log/g, "\/XXXX-XX-XXXXXXXXX-debug.log")
         .replace(/\d+(\.\d+)? sec(onds?)?/g, "? seconds")
         .replace(/\d+(\.\d+)? min(utes?)?/g, "")
-        .replace(/\d+(\.\d+)?( m)?s/g, "?s");
+        .replace(/\d+(\.\d+)?( m)?s/g, "?s")
+        .replace(/ \(\?s\)/g, "");
 }
 
 function sanitizeVersionSpecifiers(result: string): string {
