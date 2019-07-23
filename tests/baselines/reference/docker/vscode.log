@@ -4,31 +4,24 @@ yarn run vX.X.X
 $ gulp compile --max_old_space_size=4095
 [XX:XX:XX] Node flags detected: --max_old_space_size=4095
 [XX:XX:XX] Using gulpfile /vscode/gulpfile.js
-[XX:XX:XX] Error: /vscode/src/vs/workbench/browser/parts/titlebar/titlebarPart.ts(560,5): Type 'null' is not assignable to type 'string'.
-[XX:XX:XX] Error: /vscode/src/vs/base/browser/ui/menu/menubar.ts(742,7): Type '"underline" | null' is not assignable to type 'string'.
-  Type 'null' is not assignable to type 'string'.
-[XX:XX:XX] Error: /vscode/src/vs/editor/browser/controller/textAreaInput.ts(208,33): Property 'locale' does not exist on type 'CompositionEvent'.
-[XX:XX:XX] Error: /vscode/src/vs/editor/browser/controller/textAreaInput.ts(225,33): Property 'locale' does not exist on type 'CompositionEvent'.
-[XX:XX:XX] Error: /vscode/src/vs/workbench/browser/parts/titlebar/titlebarPart.ts(560,5): Type 'null' is not assignable to type 'string'.
-[XX:XX:XX] Error: /vscode/src/vs/base/browser/ui/menu/menubar.ts(742,7): Type '"underline" | null' is not assignable to type 'string'.
-  Type 'null' is not assignable to type 'string'.
-[XX:XX:XX] Error: /vscode/src/vs/editor/browser/controller/textAreaInput.ts(208,33): Property 'locale' does not exist on type 'CompositionEvent'.
-[XX:XX:XX] Error: /vscode/src/vs/editor/browser/controller/textAreaInput.ts(225,33): Property 'locale' does not exist on type 'CompositionEvent'.
+[XX:XX:XX] Error: /vscode/node_modules/@types/node/index.d.ts(179,11): Duplicate identifier 'IteratorResult'.
 info Visit https://yarnpkg.com/en/docs/cli/run for documentation about this command.
 
 
 
 Standard error:
-[XX:XX:XX] 'compile' errored after 
-[XX:XX:XX] Error: Found 4 errors
+{"type":"warning","data":"package.json: No license field"}
+{"type":"warning","data":"../package.json: No license field"}
+{"type":"warning","data":"vscode-web@X.X.X: No license field"}
+[XX:XX:XX] 'compile' errored after 26 s
+[XX:XX:XX] Error: Found 1 errors
     at Stream.<anonymous> (/vscode/build/lib/reporter.js:74:29)
     at _end (/vscode/node_modules/through/index.js:65:9)
     at Stream.stream.end (/vscode/node_modules/through/index.js:74:5)
-    at Stream.onend (internal/streams/legacy.js:42:10)
-    at Stream.emit (events.js:203:15)
-    at Stream.EventEmitter.emit (domain.js:466:23)
-    at drain (/vscode/node_modules/through/index.js:34:23)
-    at Stream.stream.queue.stream.push (/vscode/node_modules/through/index.js:45:5)
-    at Stream.end (/vscode/node_modules/through/index.js:15:35)
-    at _end (/vscode/node_modules/through/index.js:65:9)
+    at StreamFilter.onend (/vscode/node_modules/readable-stream/lib/_stream_readable.js:570:10)
+    at Object.onceWrapper (events.js:286:20)
+    at StreamFilter.emit (events.js:203:15)
+    at StreamFilter.EventEmitter.emit (domain.js:466:23)
+    at endReadableNT (/vscode/node_modules/readable-stream/lib/_stream_readable.js:992:12)
+    at process._tickCallback (internal/process/next_tick.js:63:19)
 error Command failed with exit code 1.

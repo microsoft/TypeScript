@@ -111,7 +111,7 @@ Standard output:
 @uifabric/utilities: [XX:XX:XX XM] ■ Running Webpack
 @uifabric/utilities: [XX:XX:XX XM] ■ Webpack Config Path: null
 @uifabric/utilities: [XX:XX:XX XM] ■ webpack.config.js not found, skipping webpack
-@uifabric/utilities:  PASS  src/warn/warnControlledUsage.test.ts
+@uifabric/utilities:  PASS  src/warn/warnControlledUsage.test.ts (?s)
 @uifabric/utilities:  PASS  src/focus.test.tsx
 @uifabric/utilities:  PASS  src/styled.test.tsx
 @uifabric/utilities:  PASS  src/EventGroup.test.ts
