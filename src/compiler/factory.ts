@@ -75,7 +75,7 @@ namespace ts {
         if (typeof value === "number") {
             return createNumericLiteral(value + "");
         }
-        // eslint-disable-next-line microsoft-typescript/no-in-operator
+        // eslint-disable-next-line no-in-operator
         if (typeof value === "object" && "base10Value" in value) { // PseudoBigInt
             return createBigIntLiteral(pseudoBigIntToString(value) + "n");
         }

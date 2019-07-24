@@ -607,7 +607,7 @@ namespace ts.codefix {
         }
 
         // return undefined argName when arg is null or undefined
-        // eslint-disable-next-line microsoft-typescript/no-in-operator
+        // eslint-disable-next-line no-in-operator
         if (!name || "identifier" in name && name.identifier.text === "undefined") {
             return undefined;
         }

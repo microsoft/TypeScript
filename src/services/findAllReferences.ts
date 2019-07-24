@@ -1439,7 +1439,7 @@ namespace ts.FindAllReferences.Core {
     }
 
     function addReference(referenceLocation: Node, relatedSymbol: Symbol | RelatedSymbol, state: State): void {
-        const { kind, symbol } = "kind" in relatedSymbol ? relatedSymbol : { kind: undefined, symbol: relatedSymbol }; // eslint-disable-line microsoft-typescript/no-in-operator
+        const { kind, symbol } = "kind" in relatedSymbol ? relatedSymbol : { kind: undefined, symbol: relatedSymbol }; // eslint-disable-line no-in-operator
         const addRef = state.referenceAdder(symbol);
         if (state.options.implementations) {
             addImplementationReferences(referenceLocation, addRef, state);

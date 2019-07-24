@@ -363,7 +363,7 @@ namespace Playback {
 
     function recordReplay<T extends ts.AnyFunction>(original: T, underlying: any) {
         function createWrapper(record: T, replay: T): T {
-            // eslint-disable-next-line microsoft-typescript/only-arrow-functions
+            // eslint-disable-next-line only-arrow-functions
             return <any>(function () {
                 if (replayLog !== undefined) {
                     return replay.apply(undefined, arguments);

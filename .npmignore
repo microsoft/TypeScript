@@ -11,6 +11,7 @@ src
 tests
 Jakefile.js
 .eslintrc
+.eslintignore
 .editorconfig
 .failed-tests
 .git

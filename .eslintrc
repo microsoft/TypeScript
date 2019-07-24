@@ -12,7 +12,7 @@
         "es6": true
     },
     "plugins": [
-        "@typescript-eslint", "microsoft-typescript", "jsdoc", "no-null", "import"
+        "@typescript-eslint", "jsdoc", "no-null", "import"
     ],
     "rules": {
         "@typescript-eslint/adjacent-overload-signatures": "error",
@@ -56,19 +56,19 @@
         "@typescript-eslint/type-annotation-spacing": "error",
         "@typescript-eslint/unified-signatures": "error",
 
-        /** eslint-plugin-microsoft-typescript */
-        "microsoft-typescript/object-literal-surrounding-space": "error",
-        "microsoft-typescript/no-type-assertion-whitespace": "error",
-        "microsoft-typescript/type-operator-spacing": "error",
-        "microsoft-typescript/only-arrow-functions": ["error", {
+        /** scripts/eslint/rules */
+        "object-literal-surrounding-space": "error",
+        "no-type-assertion-whitespace": "error",
+        "type-operator-spacing": "error",
+        "only-arrow-functions": ["error", {
             "allowNamedFunctions": true ,
             "allowDeclarations": true
         }],
-        "microsoft-typescript/no-double-space": "error",
-        "microsoft-typescript/boolean-trivia": "error",
-        "microsoft-typescript/no-in-operator": "error",
-        "microsoft-typescript/debug-assert": "error",
-        "microsoft-typescript/no-keywords": "error",
+        "no-double-space": "error",
+        "boolean-trivia": "error",
+        "no-in-operator": "error",
+        "debug-assert": "error",
+        "no-keywords": "error",
 
         /** eslint-plugin-import */
         "import/no-extraneous-dependencies": ["error", { "optionalDependencies": false }],
@@ -151,8 +151,8 @@
             "@typescript-eslint/prefer-function-type": "off",
             "@typescript-eslint/unified-signatures": "off",
 
-            /** eslint-plugin-microsoft-typescript */
-            "microsoft-typescript/no-keywords": "off",
+            /** scripts/eslint/rules */
+            "no-keywords": "off",
 
             /** eslint */
             "no-var": "off"

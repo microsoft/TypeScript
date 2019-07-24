@@ -318,20 +318,39 @@ task("clean-tests").description = "Cleans the outputs for the test infrastructur
 
 const watchTests = () => watchProject("src/testRunner", cmdLineOptions);
 
+const buildRules = () => buildProject("scripts/eslint");
+task("build-rules", buildRules);
+task("build-rules").description = "Compiles eslint rules to js";
+
+const cleanRules = () => cleanProject("scripts/eslint");
+cleanTasks.push(cleanRules);
+task("clean-rules", cleanRules);
+task("clean-rules").description = "Cleans the outputs for the eslint rules";
+
+const runRulesTests = () => runConsoleTests("built/eslint/tests", "mocha-fivemat-progress-reporter", /*runInParallel*/ false, /*watchMode*/ false);
+task("run-rules-tests", series(buildRules, runRulesTests));
+task("run-rules-tests").description = "Runs the eslint rule tests";
+
 const lintFoldStart = async () => { if (fold.isTravis()) console.log(fold.start("lint")); };
 const lintFoldEnd = async () => { if (fold.isTravis()) console.log(fold.end("lint")); };
 const eslint = async () => {
     const args = [
-        "node_modules/eslint/bin/eslint", "-f", "autolinkable-stylish", "-c", ".eslintrc", "--ext", ".ts", "."
+        "node_modules/eslint/bin/eslint",
+        "--format", "autolinkable-stylish",
+        "--config", ".eslintrc",
+        "--ext", ".ts", ".",
+        "--rulesdir", "built/eslint/rules/",
     ];
 
     if (cmdLineOptions.fix) {
         args.push("--fix");
     }
+
     log(`Linting: ${args.join(" ")}`);
     return exec(process.execPath, args);
 }
-const lint = series([lintFoldStart, eslint, lintFoldEnd]);
+
+const lint = series([buildRules, lintFoldStart, eslint, lintFoldEnd]);
 lint.displayName = "lint";
 task("lint", lint);
 task("lint").description = "Runs eslint on the compiler sources.";

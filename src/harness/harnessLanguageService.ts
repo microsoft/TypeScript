@@ -4,7 +4,7 @@ namespace Harness.LanguageService {
         const proxy = Object.create(/*prototype*/ null); // eslint-disable-line no-null/no-null
         const langSvc: any = info.languageService;
         for (const k of Object.keys(langSvc)) {
-            // eslint-disable-next-line microsoft-typescript/only-arrow-functions
+            // eslint-disable-next-line only-arrow-functions
             proxy[k] = function () {
                 return langSvc[k].apply(langSvc, arguments);
             };
@@ -799,7 +799,7 @@ namespace Harness.LanguageService {
                             create(info: ts.server.PluginCreateInfo) {
                                 const proxy = makeDefaultProxy(info);
                                 const langSvc: any = info.languageService;
-                                // eslint-disable-next-line microsoft-typescript/only-arrow-functions
+                                // eslint-disable-next-line only-arrow-functions
                                 proxy.getQuickInfoAtPosition = function () {
                                     const parts = langSvc.getQuickInfoAtPosition.apply(langSvc, arguments);
                                     if (parts.displayParts.length > 0) {

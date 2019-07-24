@@ -55,6 +55,7 @@
         "@types/travis-fold": "latest",
         "@types/xml2js": "^0.4.0",
         "@typescript-eslint/eslint-plugin": "1.13.0",
+        "@typescript-eslint/experimental-utils": "1.13.0",
         "@typescript-eslint/parser": "1.13.0",
         "async": "latest",
         "azure-devops-node-api": "^8.0.0",
@@ -68,7 +69,6 @@
         "eslint-formatter-autolinkable-stylish": "1.0.0",
         "eslint-plugin-import": "2.18.2",
         "eslint-plugin-jsdoc": "15.6.1",
-        "eslint-plugin-microsoft-typescript": "0.2.0",
         "eslint-plugin-no-null": "1.0.2",
         "fancy-log": "latest",
         "fs-extra": "^6.0.1",
@@ -112,6 +112,7 @@
         "gulp": "gulp",
         "jake": "gulp",
         "lint": "gulp lint",
+        "lint:test": "gulp run-rules-tests",
         "setup-hooks": "node scripts/link-hooks.js",
         "update-costly-tests": "node scripts/costly-tests.js"
     },

@@ -47,7 +47,7 @@ namespace Harness.Parallel.Host {
             constructor(info: ErrorInfo | TestInfo) {
                 super(info.name[info.name.length - 1]);
                 this.info = info;
-                this.state = "error" in info ? "failed" : "passed"; // eslint-disable-line microsoft-typescript/no-in-operator
+                this.state = "error" in info ? "failed" : "passed"; // eslint-disable-line no-in-operator
                 this.pending = false;
             }
         }
@@ -540,7 +540,7 @@ namespace Harness.Parallel.Host {
                 function replayTest(runner: Mocha.Runner, test: RemoteTest) {
                     runner.emit("test", test);
                     if (test.isFailed()) {
-                        runner.emit("fail", test, "error" in test.info ? rebuildError(test.info) : new Error("Unknown error")); // eslint-disable-line microsoft-typescript/no-in-operator
+                        runner.emit("fail", test, "error" in test.info ? rebuildError(test.info) : new Error("Unknown error")); // eslint-disable-line no-in-operator
                     }
                     else {
                         runner.emit("pass", test);
