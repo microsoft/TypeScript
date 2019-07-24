@@ -1,0 +1,16 @@
+tests/cases/compiler/valueUsedAsTypeArgument.ts(5,20): error TS2774: 'Something' refers to a value, but is being used as a type argument here. Did you mean 'typeof Something'?
+tests/cases/compiler/valueUsedAsTypeArgument.ts(7,10): error TS2749: 'Something' refers to a value, but is being used as a type here.
+
+
+==== tests/cases/compiler/valueUsedAsTypeArgument.ts (2 errors) ====
+    type Foo<T> = { items: T };
+    
+    const Something = [];
+    
+    type SomeFoo = Foo<Something>;
+                       ~~~~~~~~~
+!!! error TS2774: 'Something' refers to a value, but is being used as a type argument here. Did you mean 'typeof Something'?
+    
+    const x: Something = [];
+             ~~~~~~~~~
+!!! error TS2749: 'Something' refers to a value, but is being used as a type here.

@@ -2001,7 +2001,16 @@ namespace ts {
         function checkAndReportErrorForUsingValueAsType(errorLocation: Node, name: __String, meaning: SymbolFlags): boolean {
             if (meaning & (SymbolFlags.Type & ~SymbolFlags.Namespace)) {
                 const symbol = resolveSymbol(resolveName(errorLocation, name, ~SymbolFlags.Type & SymbolFlags.Value, /*nameNotFoundMessage*/undefined, /*nameArg*/ undefined, /*isUse*/ false));
-                if (symbol && !(symbol.flags & SymbolFlags.Namespace)) {
+                const symbolIsValue = symbol && !(symbol.flags & SymbolFlags.Namespace);
+                const grandparentNode = errorLocation.parent.parent as NodeWithTypeArguments;
+                const isTypeArgument = grandparentNode && grandparentNode.typeArguments && grandparentNode.typeArguments.indexOf(errorLocation.parent as TypeNode) > -1;
+
+                if (symbolIsValue && isTypeArgument){
+                    const unescapedName = unescapeLeadingUnderscores(name);
+                    error(errorLocation, Diagnostics._0_refers_to_a_value_but_is_being_used_as_a_type_argument_here_Did_you_mean_typeof_1, unescapedName, unescapedName);
+                    return true;
+                }
+                else if (symbolIsValue) {
                     error(errorLocation, Diagnostics._0_refers_to_a_value_but_is_being_used_as_a_type_here, unescapeLeadingUnderscores(name));
                     return true;
                 }

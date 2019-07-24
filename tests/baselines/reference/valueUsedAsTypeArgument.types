@@ -1,0 +1,16 @@
+=== tests/cases/compiler/valueUsedAsTypeArgument.ts ===
+type Foo<T> = { items: T };
+>Foo : Foo<T>
+>items : T
+
+const Something = [];
+>Something : any[]
+>[] : undefined[]
+
+type SomeFoo = Foo<Something>;
+>SomeFoo : Foo<any>
+
+const x: Something = [];
+>x : any
+>[] : undefined[]
+
