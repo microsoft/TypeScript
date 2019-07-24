@@ -14,3 +14,6 @@ tests/cases/compiler/valueUsedAsTypeArgument.ts(7,10): error TS2749: 'Something'
     const x: Something = [];
              ~~~~~~~~~
 !!! error TS2749: 'Something' refers to a value, but is being used as a type here.
+    
+    type LiteralNumberFoo = Foo<1>;
+    type LiteralStringFoo = Foo<'test'>;

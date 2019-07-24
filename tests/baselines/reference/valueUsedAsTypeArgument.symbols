@@ -15,3 +15,11 @@ type SomeFoo = Foo<Something>;
 const x: Something = [];
 >x : Symbol(x, Decl(valueUsedAsTypeArgument.ts, 6, 5))
 
+type LiteralNumberFoo = Foo<1>;
+>LiteralNumberFoo : Symbol(LiteralNumberFoo, Decl(valueUsedAsTypeArgument.ts, 6, 24))
+>Foo : Symbol(Foo, Decl(valueUsedAsTypeArgument.ts, 0, 0))
+
+type LiteralStringFoo = Foo<'test'>;
+>LiteralStringFoo : Symbol(LiteralStringFoo, Decl(valueUsedAsTypeArgument.ts, 8, 31))
+>Foo : Symbol(Foo, Decl(valueUsedAsTypeArgument.ts, 0, 0))
+

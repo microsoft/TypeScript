@@ -14,3 +14,9 @@ const x: Something = [];
 >x : any
 >[] : undefined[]
 
+type LiteralNumberFoo = Foo<1>;
+>LiteralNumberFoo : Foo<1>
+
+type LiteralStringFoo = Foo<'test'>;
+>LiteralStringFoo : Foo<"test">
+

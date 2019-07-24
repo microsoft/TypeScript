@@ -7,6 +7,9 @@ type SomeFoo = Foo<Something>;
 
 const x: Something = [];
 
+type LiteralNumberFoo = Foo<1>;
+type LiteralStringFoo = Foo<'test'>;
+
 //// [valueUsedAsTypeArgument.js]
 var Something = [];
 var x = [];
