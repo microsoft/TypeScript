@@ -2003,7 +2003,7 @@ namespace ts {
                 const symbol = resolveSymbol(resolveName(errorLocation, name, ~SymbolFlags.Type & SymbolFlags.Value, /*nameNotFoundMessage*/undefined, /*nameArg*/ undefined, /*isUse*/ false));
                 const symbolIsValue = symbol && !(symbol.flags & SymbolFlags.Namespace);
 
-                if (symbolIsValue && isIdentifierATypeArgument(errorLocation)){
+                if (symbolIsValue && isIdentifierATypeArgument(errorLocation)) {
                     const unescapedName = unescapeLeadingUnderscores(name);
                     error(errorLocation, Diagnostics._0_refers_to_a_value_but_is_being_used_as_a_type_argument_here_Did_you_mean_typeof_1, unescapedName, unescapedName);
                     return true;
@@ -2015,7 +2015,7 @@ namespace ts {
             }
             return false;
         }
-    
+
         function isIdentifierATypeArgument(node: Node): boolean {
             const grandparentNode = node.parent.parent as NodeWithTypeArguments;
             if (grandparentNode && grandparentNode.typeArguments) {
