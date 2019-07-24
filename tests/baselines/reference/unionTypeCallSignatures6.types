@@ -1,0 +1,81 @@
+=== tests/cases/conformance/types/union/unionTypeCallSignatures6.ts ===
+// #31547
+type F1 = (this: { a: string }) => void;
+>F1 : F1
+>this : { a: string; }
+>a : string
+
+type F2 = (this: { b: number }) => void;
+>F2 : F2
+>this : { b: number; }
+>b : number
+
+declare var f1: F1 | F2;
+>f1 : F1 | F2
+
+f1(); // error
+>f1() : any
+>f1 : F1 | F2
+
+type A = { a: string };
+>A : A
+>a : string
+
+type B = { b: number };
+>B : B
+>b : number
+
+type C = { c: string };
+>C : C
+>c : string
+
+type D = { d: number };
+>D : D
+>d : number
+
+interface F3 {
+  (this: A): void;
+>this : A
+
+  (this: B): void;
+>this : B
+}
+interface F4 {
+  (this: C): void;
+>this : C
+
+  (this: B): void;
+>this : B
+}
+
+declare var x1: A & {
+>x1 : A & { f: F3 | F4; }
+
+    f: F3 | F4
+>f : F3 | F4
+}
+x1.f(); // error
+>x1.f() : any
+>x1.f : F3 | F4
+>x1 : A & { f: F3 | F4; }
+>f : F3 | F4
+
+interface F5 {
+  (this: C): void;
+>this : C
+
+  (this: B): void;
+>this : B
+}
+declare var x2: B & {
+>x2 : B & { f: F3 | F5; }
+
+  f: F3 | F5;
+>f : F3 | F5
+}
+x2.f();
+>x2.f() : any
+>x2.f : F3 | F5
+>x2 : B & { f: F3 | F5; }
+>f : F3 | F5
+

@@ -1,0 +1,98 @@
+=== tests/cases/conformance/types/union/unionTypeCallSignatures6.ts ===
+// #31547
+type F1 = (this: { a: string }) => void;
+>F1 : Symbol(F1, Decl(unionTypeCallSignatures6.ts, 0, 0))
+>this : Symbol(this, Decl(unionTypeCallSignatures6.ts, 1, 11))
+>a : Symbol(a, Decl(unionTypeCallSignatures6.ts, 1, 18))
+
+type F2 = (this: { b: number }) => void;
+>F2 : Symbol(F2, Decl(unionTypeCallSignatures6.ts, 1, 40))
+>this : Symbol(this, Decl(unionTypeCallSignatures6.ts, 2, 11))
+>b : Symbol(b, Decl(unionTypeCallSignatures6.ts, 2, 18))
+
+declare var f1: F1 | F2;
+>f1 : Symbol(f1, Decl(unionTypeCallSignatures6.ts, 3, 11))
+>F1 : Symbol(F1, Decl(unionTypeCallSignatures6.ts, 0, 0))
+>F2 : Symbol(F2, Decl(unionTypeCallSignatures6.ts, 1, 40))
+
+f1(); // error
+>f1 : Symbol(f1, Decl(unionTypeCallSignatures6.ts, 3, 11))
+
+type A = { a: string };
+>A : Symbol(A, Decl(unionTypeCallSignatures6.ts, 4, 5))
+>a : Symbol(a, Decl(unionTypeCallSignatures6.ts, 6, 10))
+
+type B = { b: number };
+>B : Symbol(B, Decl(unionTypeCallSignatures6.ts, 6, 23))
+>b : Symbol(b, Decl(unionTypeCallSignatures6.ts, 7, 10))
+
+type C = { c: string };
+>C : Symbol(C, Decl(unionTypeCallSignatures6.ts, 7, 23))
+>c : Symbol(c, Decl(unionTypeCallSignatures6.ts, 8, 10))
+
+type D = { d: number };
+>D : Symbol(D, Decl(unionTypeCallSignatures6.ts, 8, 23))
+>d : Symbol(d, Decl(unionTypeCallSignatures6.ts, 9, 10))
+
+interface F3 {
+>F3 : Symbol(F3, Decl(unionTypeCallSignatures6.ts, 9, 23))
+
+  (this: A): void;
+>this : Symbol(this, Decl(unionTypeCallSignatures6.ts, 12, 3))
+>A : Symbol(A, Decl(unionTypeCallSignatures6.ts, 4, 5))
+
+  (this: B): void;
+>this : Symbol(this, Decl(unionTypeCallSignatures6.ts, 13, 3))
+>B : Symbol(B, Decl(unionTypeCallSignatures6.ts, 6, 23))
+}
+interface F4 {
+>F4 : Symbol(F4, Decl(unionTypeCallSignatures6.ts, 14, 1))
+
+  (this: C): void;
+>this : Symbol(this, Decl(unionTypeCallSignatures6.ts, 16, 3))
+>C : Symbol(C, Decl(unionTypeCallSignatures6.ts, 7, 23))
+
+  (this: B): void;
+>this : Symbol(this, Decl(unionTypeCallSignatures6.ts, 17, 3))
+>B : Symbol(B, Decl(unionTypeCallSignatures6.ts, 6, 23))
+}
+
+declare var x1: A & {
+>x1 : Symbol(x1, Decl(unionTypeCallSignatures6.ts, 20, 11))
+>A : Symbol(A, Decl(unionTypeCallSignatures6.ts, 4, 5))
+
+    f: F3 | F4
+>f : Symbol(f, Decl(unionTypeCallSignatures6.ts, 20, 21))
+>F3 : Symbol(F3, Decl(unionTypeCallSignatures6.ts, 9, 23))
+>F4 : Symbol(F4, Decl(unionTypeCallSignatures6.ts, 14, 1))
+}
+x1.f(); // error
+>x1.f : Symbol(f, Decl(unionTypeCallSignatures6.ts, 20, 21))
+>x1 : Symbol(x1, Decl(unionTypeCallSignatures6.ts, 20, 11))
+>f : Symbol(f, Decl(unionTypeCallSignatures6.ts, 20, 21))
+
+interface F5 {
+>F5 : Symbol(F5, Decl(unionTypeCallSignatures6.ts, 23, 7))
+
+  (this: C): void;
+>this : Symbol(this, Decl(unionTypeCallSignatures6.ts, 26, 3))
+>C : Symbol(C, Decl(unionTypeCallSignatures6.ts, 7, 23))
+
+  (this: B): void;
+>this : Symbol(this, Decl(unionTypeCallSignatures6.ts, 27, 3))
+>B : Symbol(B, Decl(unionTypeCallSignatures6.ts, 6, 23))
+}
+declare var x2: B & {
+>x2 : Symbol(x2, Decl(unionTypeCallSignatures6.ts, 29, 11))
+>B : Symbol(B, Decl(unionTypeCallSignatures6.ts, 6, 23))
+
+  f: F3 | F5;
+>f : Symbol(f, Decl(unionTypeCallSignatures6.ts, 29, 21))
+>F3 : Symbol(F3, Decl(unionTypeCallSignatures6.ts, 9, 23))
+>F5 : Symbol(F5, Decl(unionTypeCallSignatures6.ts, 23, 7))
+}
+x2.f();
+>x2.f : Symbol(f, Decl(unionTypeCallSignatures6.ts, 29, 21))
+>x2 : Symbol(x2, Decl(unionTypeCallSignatures6.ts, 29, 11))
+>f : Symbol(f, Decl(unionTypeCallSignatures6.ts, 29, 21))
+

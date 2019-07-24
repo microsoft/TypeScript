@@ -1,0 +1,54 @@
+tests/cases/conformance/types/union/unionTypeCallSignatures6.ts(5,1): error TS2684: The 'this' context of type 'void' is not assignable to method's 'this' of type '{ a: string; } & { b: number; }'.
+  Type 'void' is not assignable to type '{ a: string; }'.
+tests/cases/conformance/types/union/unionTypeCallSignatures6.ts(24,1): error TS2684: The 'this' context of type 'A & { f: F3 | F4; }' is not assignable to method's 'this' of type 'A & C'.
+  Property 'c' is missing in type 'A & { f: F3 | F4; }' but required in type 'C'.
+tests/cases/conformance/types/union/unionTypeCallSignatures6.ts(33,1): error TS2684: The 'this' context of type 'B & { f: F3 | F5; }' is not assignable to method's 'this' of type 'A & C'.
+  Property 'a' is missing in type 'B & { f: F3 | F5; }' but required in type 'A'.
+
+
+==== tests/cases/conformance/types/union/unionTypeCallSignatures6.ts (3 errors) ====
+    // #31547
+    type F1 = (this: { a: string }) => void;
+    type F2 = (this: { b: number }) => void;
+    declare var f1: F1 | F2;
+    f1(); // error
+    ~~~~
+!!! error TS2684: The 'this' context of type 'void' is not assignable to method's 'this' of type '{ a: string; } & { b: number; }'.
+!!! error TS2684:   Type 'void' is not assignable to type '{ a: string; }'.
+    
+    type A = { a: string };
+    type B = { b: number };
+    type C = { c: string };
+    type D = { d: number };
+    
+    interface F3 {
+      (this: A): void;
+      (this: B): void;
+    }
+    interface F4 {
+      (this: C): void;
+      (this: B): void;
+    }
+    
+    declare var x1: A & {
+        f: F3 | F4
+    }
+    x1.f(); // error
+    ~~
+!!! error TS2684: The 'this' context of type 'A & { f: F3 | F4; }' is not assignable to method's 'this' of type 'A & C'.
+!!! error TS2684:   Property 'c' is missing in type 'A & { f: F3 | F4; }' but required in type 'C'.
+!!! related TS2728 tests/cases/conformance/types/union/unionTypeCallSignatures6.ts:9:12: 'c' is declared here.
+    
+    interface F5 {
+      (this: C): void;
+      (this: B): void;
+    }
+    declare var x2: B & {
+      f: F3 | F5;
+    }
+    x2.f();
+    ~~
+!!! error TS2684: The 'this' context of type 'B & { f: F3 | F5; }' is not assignable to method's 'this' of type 'A & C'.
+!!! error TS2684:   Property 'a' is missing in type 'B & { f: F3 | F5; }' but required in type 'A'.
+!!! related TS2728 tests/cases/conformance/types/union/unionTypeCallSignatures6.ts:7:12: 'a' is declared here.
+    
