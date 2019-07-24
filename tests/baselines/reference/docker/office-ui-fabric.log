@@ -1,371 +1,436 @@
 Exit Code: 1
 Standard output:
-
-Rush Multi-Project Build Tool 5.6.0 - https://rushjs.io
-Starting "rush rebuild"
-Executing a maximum of 1 simultaneous processes...
-[@uifabric/prettier-rules] started
-XX of XX: [@uifabric/prettier-rules] completed successfully in ? seconds
-[@uifabric/tslint-rules] started
-XX of XX: [@uifabric/tslint-rules] completed successfully in ? seconds
-[@uifabric/codepen-loader] started
-ts-jest[versions] (WARN) Version X.X.X-insiders.xxxxxxxx of typescript installed has not been tested with ts-jest. If you're experiencing issues, consider using a supported version (>=2.7.0 <4.0.0). Please do not report issues in ts-jest if you are using unsupported versions.
- PASS  src/__tests__/codepenTransform.test.ts
-  codepen transform
-    ✓ handles examples with function components (256ms)
-    ✓ handles examples with class components (38ms)
-    ✓ handles examples importing exampleData (125ms)
-    ✓ handles examples importing TestImages (33ms)
-    ✓ handles examples importing PeopleExampleData (270ms)
-Test Suites: 1 passed, 1 total
-Tests:       5 passed, 5 total
-Snapshots:   4 passed, 4 total
-Time:        ?s
-Ran all test suites.
-[@uifabric/build] started
-XX of XX: [@uifabric/build] completed successfully in ? seconds
-[@uifabric/migration] started
-XX of XX: [@uifabric/migration] completed successfully in ? seconds
-[@uifabric/set-version] started
-XX of XX: [@uifabric/set-version] completed successfully in ? seconds
-[@uifabric/merge-styles] started
-ts-jest[versions] (WARN) Version X.X.X-insiders.xxxxxxxx of typescript installed has not been tested with ts-jest. If you're experiencing issues, consider using a supported version (>=2.7.0 <4.0.0). Please do not report issues in ts-jest if you are using unsupported versions.
-[@uifabric/jest-serializer-merge-styles] started
-ts-jest[versions] (WARN) Version X.X.X-insiders.xxxxxxxx of typescript installed has not been tested with ts-jest. If you're experiencing issues, consider using a supported version (>=2.7.0 <4.0.0). Please do not report issues in ts-jest if you are using unsupported versions.
-[@uifabric/test-utilities] started
-XX of XX: [@uifabric/test-utilities] completed successfully in ? seconds
-[@uifabric/utilities] started
-ts-jest[versions] (WARN) Version X.X.X-insiders.xxxxxxxx of typescript installed has not been tested with ts-jest. If you're experiencing issues, consider using a supported version (>=2.7.0 <4.0.0). Please do not report issues in ts-jest if you are using unsupported versions.
-[@uifabric/styling] started
-ts-jest[versions] (WARN) Version X.X.X-insiders.xxxxxxxx of typescript installed has not been tested with ts-jest. If you're experiencing issues, consider using a supported version (>=2.7.0 <4.0.0). Please do not report issues in ts-jest if you are using unsupported versions.
-[@uifabric/file-type-icons] started
-XX of XX: [@uifabric/file-type-icons] completed successfully in ? seconds
-[@uifabric/foundation] started
-ts-jest[versions] (WARN) Version X.X.X-insiders.xxxxxxxx of typescript installed has not been tested with ts-jest. If you're experiencing issues, consider using a supported version (>=2.7.0 <4.0.0). Please do not report issues in ts-jest if you are using unsupported versions.
-  ● createFactory › passes componentProps without userProps
-    RangeError: Invalid array length
-      189 |   for (const props of allProps) {
-      190 |     classNames.push(props && props.className);
-    > 191 |     assign(finalProps, ...(props as any));
-          |           ^
-      192 |   }
-      193 | 
-      194 |   finalProps.className = mergeStyles(defaultStyles, classNames);
-      at Object.__spreadArrays (../../common/temp/node_modules/.registry.npmjs.org/tslib/1.10.0/node_modules/tslib/tslib.js:182:22)
-      at _constructFinalProps (src/slots.tsx:191:11)
-      at result (src/slots.tsx:88:24)
-      at Object.<anonymous> (src/slots.test.tsx:205:73)
-  ● createFactory › passes userProp string as child
-    RangeError: Invalid array length
-      189 |   for (const props of allProps) {
-      190 |     classNames.push(props && props.className);
-    > 191 |     assign(finalProps, ...(props as any));
-          |           ^
-      192 |   }
-      193 | 
-      194 |   finalProps.className = mergeStyles(defaultStyles, classNames);
-      at Object.__spreadArrays (../../common/temp/node_modules/.registry.npmjs.org/tslib/1.10.0/node_modules/tslib/tslib.js:182:22)
-      at _constructFinalProps (src/slots.tsx:191:11)
-      at result (src/slots.tsx:88:24)
-      at Object.<anonymous> (src/slots.test.tsx:210:76)
-  ● createFactory › passes userProp integer as child
-    RangeError: Invalid array length
-      189 |   for (const props of allProps) {
-      190 |     classNames.push(props && props.className);
-    > 191 |     assign(finalProps, ...(props as any));
-          |           ^
-      192 |   }
-      193 | 
-      194 |   finalProps.className = mergeStyles(defaultStyles, classNames);
-      at Object.__spreadArrays (../../common/temp/node_modules/.registry.npmjs.org/tslib/1.10.0/node_modules/tslib/tslib.js:182:22)
-      at _constructFinalProps (src/slots.tsx:191:11)
-      at result (src/slots.tsx:88:24)
-      at Object.<anonymous> (src/slots.test.tsx:220:76)
-  ● createFactory › passes userProp string as defaultProp
-    RangeError: Invalid array length
-      189 |   for (const props of allProps) {
-      190 |     classNames.push(props && props.className);
-    > 191 |     assign(finalProps, ...(props as any));
-          |           ^
-      192 |   }
-      193 | 
-      194 |   finalProps.className = mergeStyles(defaultStyles, classNames);
-      at Object.__spreadArrays (../../common/temp/node_modules/.registry.npmjs.org/tslib/1.10.0/node_modules/tslib/tslib.js:182:22)
-      at _constructFinalProps (src/slots.tsx:191:11)
-      at result (src/slots.tsx:88:24)
-      at Object.<anonymous> (src/slots.test.tsx:225:92)
-  ● createFactory › passes userProp integer as defaultProp
-    RangeError: Invalid array length
-      189 |   for (const props of allProps) {
-      190 |     classNames.push(props && props.className);
-    > 191 |     assign(finalProps, ...(props as any));
-          |           ^
-      192 |   }
-      193 | 
-      194 |   finalProps.className = mergeStyles(defaultStyles, classNames);
-      at Object.__spreadArrays (../../common/temp/node_modules/.registry.npmjs.org/tslib/1.10.0/node_modules/tslib/tslib.js:182:22)
-      at _constructFinalProps (src/slots.tsx:191:11)
-      at result (src/slots.tsx:88:24)
-      at Object.<anonymous> (src/slots.test.tsx:235:92)
-  ● createFactory › merges userProps over componentProps
-    RangeError: Invalid array length
-      189 |   for (const props of allProps) {
-      190 |     classNames.push(props && props.className);
-    > 191 |     assign(finalProps, ...(props as any));
-          |           ^
-      192 |   }
-      193 | 
-      194 |   finalProps.className = mergeStyles(defaultStyles, classNames);
-      at Object.__spreadArrays (../../common/temp/node_modules/.registry.npmjs.org/tslib/1.10.0/node_modules/tslib/tslib.js:182:22)
-      at _constructFinalProps (src/slots.tsx:191:11)
-      at result (src/slots.tsx:88:24)
-      at Object.<anonymous> (src/slots.test.tsx:245:84)
-  ● createFactory › renders div and userProp integer as children
-    RangeError: Invalid array length
-      189 |   for (const props of allProps) {
-      190 |     classNames.push(props && props.className);
-    > 191 |     assign(finalProps, ...(props as any));
-          |           ^
-      192 |   }
-      193 | 
-      194 |   finalProps.className = mergeStyles(defaultStyles, classNames);
-      at Object.__spreadArrays (../../common/temp/node_modules/.registry.npmjs.org/tslib/1.10.0/node_modules/tslib/tslib.js:182:22)
-      at _constructFinalProps (src/slots.tsx:191:11)
-      at result (src/slots.tsx:88:24)
-      at Object.<anonymous> (src/slots.test.tsx:255:86)
-  ● createFactory › renders div and userProp string as children
-    RangeError: Invalid array length
-      189 |   for (const props of allProps) {
-      190 |     classNames.push(props && props.className);
-    > 191 |     assign(finalProps, ...(props as any));
-          |           ^
-      192 |   }
-      193 | 
-      194 |   finalProps.className = mergeStyles(defaultStyles, classNames);
-      at Object.__spreadArrays (../../common/temp/node_modules/.registry.npmjs.org/tslib/1.10.0/node_modules/tslib/tslib.js:182:22)
-      at _constructFinalProps (src/slots.tsx:191:11)
-      at result (src/slots.tsx:88:24)
-      at Object.<anonymous> (src/slots.test.tsx:266:86)
-  ● createFactory › renders userProp span function without component props
-    RangeError: Invalid array length
-      189 |   for (const props of allProps) {
-      190 |     classNames.push(props && props.className);
-    > 191 |     assign(finalProps, ...(props as any));
-          |           ^
-      192 |   }
-      193 | 
-      194 |   finalProps.className = mergeStyles(defaultStyles, classNames);
-      at Object.__spreadArrays (../../common/temp/node_modules/.registry.npmjs.org/tslib/1.10.0/node_modules/tslib/tslib.js:182:22)
-      at _constructFinalProps (src/slots.tsx:191:11)
-      at result (src/slots.tsx:88:24)
-      at Object.<anonymous> (src/slots.test.tsx:288:61)
-  ● createFactory › renders userProp span function with component props
-    RangeError: Invalid array length
-      189 |   for (const props of allProps) {
-      190 |     classNames.push(props && props.className);
-    > 191 |     assign(finalProps, ...(props as any));
-          |           ^
-      192 |   }
-      193 | 
-      194 |   finalProps.className = mergeStyles(defaultStyles, classNames);
-      at Object.__spreadArrays (../../common/temp/node_modules/.registry.npmjs.org/tslib/1.10.0/node_modules/tslib/tslib.js:182:22)
-      at _constructFinalProps (src/slots.tsx:191:11)
-      at result (src/slots.tsx:88:24)
-      at Object.<anonymous> (src/slots.test.tsx:301:61)
-  ● createFactory › renders userProp span component with component props
-    RangeError: Invalid array length
-      189 |   for (const props of allProps) {
-      190 |     classNames.push(props && props.className);
-    > 191 |     assign(finalProps, ...(props as any));
-          |           ^
-      192 |   }
-      193 | 
-      194 |   finalProps.className = mergeStyles(defaultStyles, classNames);
-      at Object.__spreadArrays (../../common/temp/node_modules/.registry.npmjs.org/tslib/1.10.0/node_modules/tslib/tslib.js:182:22)
-      at _constructFinalProps (src/slots.tsx:191:11)
-      at result (src/slots.tsx:88:24)
-      at Object.<anonymous> (src/slots.test.tsx:314:61)
-  ● createFactory › passes props and type arguments to userProp function
-    RangeError: Invalid array length
-      189 |   for (const props of allProps) {
-      190 |     classNames.push(props && props.className);
-    > 191 |     assign(finalProps, ...(props as any));
-          |           ^
-      192 |   }
-      193 | 
-      194 |   finalProps.className = mergeStyles(defaultStyles, classNames);
-      at Object.__spreadArrays (../../common/temp/node_modules/.registry.npmjs.org/tslib/1.10.0/node_modules/tslib/tslib.js:182:22)
-      at _constructFinalProps (src/slots.tsx:191:11)
-      at result (src/slots.tsx:88:24)
-      at Object.<anonymous> (src/slots.test.tsx:334:43)
-  ● getSlots › creates slots and passes merged props to them
-    RangeError: Invalid array length
-      189 |   for (const props of allProps) {
-      190 |     classNames.push(props && props.className);
-    > 191 |     assign(finalProps, ...(props as any));
-          |           ^
-      192 |   }
-      193 | 
-      194 |   finalProps.className = mergeStyles(defaultStyles, classNames);
-      at Object.__spreadArrays (../../common/temp/node_modules/.registry.npmjs.org/tslib/1.10.0/node_modules/tslib/tslib.js:182:22)
-      at _constructFinalProps (src/slots.tsx:191:11)
-      at result (src/slots.tsx:88:24)
-      at _renderSlot (src/slots.tsx:221:100)
-      at Object.slot [as testSlot1] (src/slots.tsx:142:16)
-      at Object.<anonymous> (src/slots.test.tsx:399:24)
-[XX:XX:XX XM] x Error detected while running 'jest'
-[XX:XX:XX XM] x ------------------------------------
-[XX:XX:XX XM] x Error: Command failed: /usr/local/bin/node /office-ui-fabric-react/common/temp/node_modules/jest/bin/jest.js --config /office-ui-fabric-react/packages/foundation/jest.config.js --passWithNoTests --colors
-    at ChildProcess.<anonymous> (/office-ui-fabric-react/common/temp/node_modules/.registry.npmjs.org/just-scripts-utils/0.8.2/node_modules/just-scripts-utils/lib/exec.js:70:31)
-    at ChildProcess.emit (events.js:203:13)
-    at ChildProcess.EventEmitter.emit (domain.js:494:23)
-    at Process.ChildProcess._handle.onexit (internal/child_process.js:272:12)
-[XX:XX:XX XM] x ------------------------------------
-[XX:XX:XX XM] x finished 'validate' in ?s with errors
-[XX:XX:XX XM] x finished 'build' in ?s with errors
-[XX:XX:XX XM] x Error previously detected. See above for error messages.
-[@uifabric/icons] started
-XX of XX: [@uifabric/icons] completed successfully in ? seconds
-[@uifabric/webpack-utils] started
-XX of XX: [@uifabric/webpack-utils] completed successfully in ? seconds
-SUCCESS (9)
-================================
-@uifabric/build (? seconds)
-@uifabric/file-type-icons (? seconds)
-@uifabric/icons (? seconds)
-@uifabric/migration (? seconds)
-@uifabric/prettier-rules (? seconds)
-@uifabric/set-version (? seconds)
-@uifabric/test-utilities (? seconds)
-@uifabric/tslint-rules (? seconds)
-@uifabric/webpack-utils (? seconds)
-================================
-SUCCESS WITH WARNINGS (5)
-================================
-@uifabric/codepen-loader (? seconds)
-ts-jest[versions] (WARN) Version X.X.X-insiders.xxxxxxxx of typescript installed has not been tested with ts-jest. If you're experiencing issues, consider using a supported version (>=2.7.0 <4.0.0). Please do not report issues in ts-jest if you are using unsupported versions.
- PASS  src/__tests__/codepenTransform.test.ts
-  codepen transform
-    ✓ handles examples with function components (256ms)
-    ✓ handles examples with class components (38ms)
-    ✓ handles examples importing exampleData (125ms)
-    ✓ handles examples importing TestImages (33ms)
-    ✓ handles examples importing PeopleExampleData (270ms)
-Test Suites: 1 passed, 1 total
-Tests:       5 passed, 5 total
-Snapshots:   4 passed, 4 total
-Time:        ?s
-Ran all test suites.
-@uifabric/jest-serializer-merge-styles (? seconds)
-ts-jest[versions] (WARN) Version X.X.X-insiders.xxxxxxxx of typescript installed has not been tested with ts-jest. If you're experiencing issues, consider using a supported version (>=2.7.0 <4.0.0). Please do not report issues in ts-jest if you are using unsupported versions.
-@uifabric/merge-styles (? seconds)
-ts-jest[versions] (WARN) Version X.X.X-insiders.xxxxxxxx of typescript installed has not been tested with ts-jest. If you're experiencing issues, consider using a supported version (>=2.7.0 <4.0.0). Please do not report issues in ts-jest if you are using unsupported versions.
-@uifabric/styling (? seconds)
-ts-jest[versions] (WARN) Version X.X.X-insiders.xxxxxxxx of typescript installed has not been tested with ts-jest. If you're experiencing issues, consider using a supported version (>=2.7.0 <4.0.0). Please do not report issues in ts-jest if you are using unsupported versions.
-@uifabric/utilities (? seconds)
-ts-jest[versions] (WARN) Version X.X.X-insiders.xxxxxxxx of typescript installed has not been tested with ts-jest. If you're experiencing issues, consider using a supported version (>=2.7.0 <4.0.0). Please do not report issues in ts-jest if you are using unsupported versions.
-================================
-BLOCKED (27)
-================================
-@uifabric/api-docs
-@uifabric/azure-themes
-@uifabric/charting
-@uifabric/date-time
-@uifabric/example-app-base
-@uifabric/experiments
-@uifabric/fabric-website
-@uifabric/fabric-website-resources
-@uifabric/fluent-theme
-@uifabric/foundation-scenarios
-@uifabric/lists
-@uifabric/mdl2-theme
-@uifabric/pr-deploy-site
-@uifabric/react-cards
-@uifabric/theme-samples
-@uifabric/tsx-editor
-@uifabric/variants
-a11y-tests
-dom-tests
-office-ui-fabric-react
-perf-test
-server-rendered-app
-ssr-tests
-test-bundles
-theming-designer
-todo-app
-vr-tests
-================================
-FAILURE (1)
-================================
-@uifabric/foundation (? seconds)
-ts-jest[versions] (WARN) Version X.X.X-insiders.xxxxxxxx of typescript installed has not been tested with ts-jest. If you're experiencing issues, consider using a supported version (>=2.7.0 <4.0.0). Please do not report issues in ts-jest if you are using unsupported versions.
-  ● createFactory › passes componentProps without userProps
-    RangeError: Invalid array length
-      189 |   for (const props of allProps) {
-      190 |     classNames.push(props && props.className);
-    > 191 |     assign(finalProps, ...(props as any));
-          |           ^
-      192 |   }
-      193 | 
-[...179 lines omitted...]
-      193 | 
-      194 |   finalProps.className = mergeStyles(defaultStyles, classNames);
-      at Object.__spreadArrays (../../common/temp/node_modules/.registry.npmjs.org/tslib/1.10.0/node_modules/tslib/tslib.js:182:22)
-      at _constructFinalProps (src/slots.tsx:191:11)
-      at result (src/slots.tsx:88:24)
-      at _renderSlot (src/slots.tsx:221:100)
-      at Object.slot [as testSlot1] (src/slots.tsx:142:16)
-      at Object.<anonymous> (src/slots.test.tsx:399:24)
-[XX:XX:XX XM] x Error detected while running 'jest'
-[XX:XX:XX XM] x ------------------------------------
-[XX:XX:XX XM] x Error: Command failed: /usr/local/bin/node /office-ui-fabric-react/common/temp/node_modules/jest/bin/jest.js --config /office-ui-fabric-react/packages/foundation/jest.config.js --passWithNoTests --colors
-    at ChildProcess.<anonymous> (/office-ui-fabric-react/common/temp/node_modules/.registry.npmjs.org/just-scripts-utils/0.8.2/node_modules/just-scripts-utils/lib/exec.js:70:31)
-    at ChildProcess.emit (events.js:203:13)
-    at ChildProcess.EventEmitter.emit (domain.js:494:23)
-    at Process.ChildProcess._handle.onexit (internal/child_process.js:272:12)
-[XX:XX:XX XM] x ------------------------------------
-[XX:XX:XX XM] x finished 'validate' in ?s with errors
-[XX:XX:XX XM] x finished 'build' in ?s with errors
-[XX:XX:XX XM] x Error previously detected. See above for error messages.
-================================
-Error: Project(s) failed to build
-rush rebuild - Errors! ( ? seconds)
+@uifabric/codepen-loader: yarn run vX.X.X
+@uifabric/codepen-loader: $ just-scripts build --production --lint
+@uifabric/codepen-loader: [XX:XX:XX XM] ■ Removing [lib, temp, dist, coverage, lib-commonjs]
+@uifabric/codepen-loader: [XX:XX:XX XM] ■ Copying [../office-ui-fabric-react/src/utilities/exampleData.ts, ../office-ui-fabric-react/src/components/ExtendedPicker/examples/PeopleExampleData.ts, ../office-ui-fabric-react/src/common/TestImages.ts] to 'lib'
+@uifabric/codepen-loader: [XX:XX:XX XM] ■ Running /office-ui-fabric-react/node_modules/typescript/lib/tsc.js with /office-ui-fabric-react/packages/codepen-loader/tsconfig.json
+@uifabric/codepen-loader: [XX:XX:XX XM] ■ Executing: /usr/local/bin/node "/office-ui-fabric-react/node_modules/typescript/lib/tsc.js" --module commonjs --outDir "./lib" --project "/office-ui-fabric-react/packages/codepen-loader/tsconfig.json"
+@uifabric/codepen-loader: [XX:XX:XX XM] ■ Running Jest
+@uifabric/codepen-loader: [XX:XX:XX XM] ■ /usr/local/bin/node "/office-ui-fabric-react/node_modules/jest/bin/jest.js" --config "/office-ui-fabric-react/packages/codepen-loader/jest.config.js" --passWithNoTests --colors
+@uifabric/codepen-loader:  PASS  src/__tests__/codepenTransform.test.ts
+@uifabric/codepen-loader: Done in ?s.
+@uifabric/build: yarn run vX.X.X
+@uifabric/build: $ node ./just-scripts.js no-op --production --lint
+@uifabric/build: Done in ?s.
+@uifabric/migration: yarn run vX.X.X
+@uifabric/migration: $ just-scripts build --production --lint
+@uifabric/migration: [XX:XX:XX XM] ■ Removing [lib, temp, dist, lib-amd, lib-commonjs, lib-es2015, coverage, src/**/*.scss.ts]
+@uifabric/migration: [XX:XX:XX XM] ■ Running /office-ui-fabric-react/node_modules/typescript/lib/tsc.js with /office-ui-fabric-react/packages/migration/tsconfig.json
+@uifabric/migration: [XX:XX:XX XM] ■ Executing: /usr/local/bin/node "/office-ui-fabric-react/node_modules/typescript/lib/tsc.js" --pretty --target es5 --inlineSources --sourceRoot "../src" --outDir lib --module commonjs --project "/office-ui-fabric-react/packages/migration/tsconfig.json"
+@uifabric/migration: Done in ?s.
+@uifabric/set-version: yarn run vX.X.X
+@uifabric/set-version: $ just-scripts build --production --lint
+@uifabric/set-version: [XX:XX:XX XM] ■ Removing [lib, temp, dist, lib-amd, lib-commonjs, lib-es2015, coverage, src/**/*.scss.ts]
+@uifabric/set-version: [XX:XX:XX XM] ■ Running tslint
+@uifabric/set-version: [XX:XX:XX XM] ■ /usr/local/bin/node "/office-ui-fabric-react/node_modules/tslint/lib/tslintCli.js" --project "/office-ui-fabric-react/packages/set-version/tsconfig.json" -t stylish -r /office-ui-fabric-react/node_modules/tslint-microsoft-contrib
+@uifabric/set-version: [XX:XX:XX XM] ■ Running /office-ui-fabric-react/node_modules/typescript/lib/tsc.js with /office-ui-fabric-react/packages/set-version/tsconfig.json
+@uifabric/set-version: [XX:XX:XX XM] ■ Executing: /usr/local/bin/node "/office-ui-fabric-react/node_modules/typescript/lib/tsc.js" --pretty --target es5 --inlineSources --sourceRoot "../src" --outDir lib-commonjs --module commonjs --project "/office-ui-fabric-react/packages/set-version/tsconfig.json"
+@uifabric/set-version: [XX:XX:XX XM] ■ Running /office-ui-fabric-react/node_modules/typescript/lib/tsc.js with /office-ui-fabric-react/packages/set-version/tsconfig.json
+@uifabric/set-version: [XX:XX:XX XM] ■ Executing: /usr/local/bin/node "/office-ui-fabric-react/node_modules/typescript/lib/tsc.js" --pretty --target es5 --inlineSources --sourceRoot "../src" --outDir lib --module es2015 --project "/office-ui-fabric-react/packages/set-version/tsconfig.json"
+@uifabric/set-version: [XX:XX:XX XM] ■ Running /office-ui-fabric-react/node_modules/typescript/lib/tsc.js with /office-ui-fabric-react/packages/set-version/tsconfig.json
+@uifabric/set-version: [XX:XX:XX XM] ■ Executing: /usr/local/bin/node "/office-ui-fabric-react/node_modules/typescript/lib/tsc.js" --pretty --target es5 --inlineSources --sourceRoot "../src" --outDir lib-amd --module amd --project "/office-ui-fabric-react/packages/set-version/tsconfig.json"
+@uifabric/set-version: [XX:XX:XX XM] ■ Running Webpack
+@uifabric/set-version: [XX:XX:XX XM] ■ Webpack Config Path: null
+@uifabric/set-version: [XX:XX:XX XM] ■ webpack.config.js not found, skipping webpack
+@uifabric/set-version: Done in ?s.
+@uifabric/webpack-utils: yarn run vX.X.X
+@uifabric/webpack-utils: $ just-scripts build --production --lint
+@uifabric/webpack-utils: [XX:XX:XX XM] ■ Removing [lib, temp, dist, lib-amd, lib-commonjs, lib-es2015, coverage, src/**/*.scss.ts]
+@uifabric/webpack-utils: [XX:XX:XX XM] ■ Running tslint
+@uifabric/webpack-utils: [XX:XX:XX XM] ■ /usr/local/bin/node "/office-ui-fabric-react/node_modules/tslint/lib/tslintCli.js" --project "/office-ui-fabric-react/packages/webpack-utils/tsconfig.json" -t stylish -r /office-ui-fabric-react/node_modules/tslint-microsoft-contrib
+@uifabric/webpack-utils: [XX:XX:XX XM] ■ Running /office-ui-fabric-react/node_modules/typescript/lib/tsc.js with /office-ui-fabric-react/packages/webpack-utils/tsconfig.json
+@uifabric/webpack-utils: [XX:XX:XX XM] ■ Executing: /usr/local/bin/node "/office-ui-fabric-react/node_modules/typescript/lib/tsc.js" --pretty --target es5 --inlineSources --sourceRoot "../src" --outDir lib --module commonjs --project "/office-ui-fabric-react/packages/webpack-utils/tsconfig.json"
+@uifabric/webpack-utils: Done in ?s.
+@uifabric/merge-styles: yarn run vX.X.X
+@uifabric/merge-styles: $ just-scripts build --production --lint
+@uifabric/merge-styles: [XX:XX:XX XM] ■ Removing [lib, temp, dist, lib-amd, lib-commonjs, lib-es2015, coverage, src/**/*.scss.ts]
+@uifabric/merge-styles: [XX:XX:XX XM] ■ Running tslint
+@uifabric/merge-styles: [XX:XX:XX XM] ■ /usr/local/bin/node "/office-ui-fabric-react/node_modules/tslint/lib/tslintCli.js" --project "/office-ui-fabric-react/packages/merge-styles/tsconfig.json" -t stylish -r /office-ui-fabric-react/node_modules/tslint-microsoft-contrib
+@uifabric/merge-styles: [XX:XX:XX XM] ■ Running /office-ui-fabric-react/node_modules/typescript/lib/tsc.js with /office-ui-fabric-react/packages/merge-styles/tsconfig.json
+@uifabric/merge-styles: [XX:XX:XX XM] ■ Executing: /usr/local/bin/node "/office-ui-fabric-react/node_modules/typescript/lib/tsc.js" --pretty --target es5 --inlineSources --sourceRoot "../src" --outDir lib-commonjs --module commonjs --project "/office-ui-fabric-react/packages/merge-styles/tsconfig.json"
+@uifabric/merge-styles: [XX:XX:XX XM] ■ Running /office-ui-fabric-react/node_modules/typescript/lib/tsc.js with /office-ui-fabric-react/packages/merge-styles/tsconfig.json
+@uifabric/merge-styles: [XX:XX:XX XM] ■ Executing: /usr/local/bin/node "/office-ui-fabric-react/node_modules/typescript/lib/tsc.js" --pretty --target es5 --inlineSources --sourceRoot "../src" --outDir lib --module es2015 --project "/office-ui-fabric-react/packages/merge-styles/tsconfig.json"
+@uifabric/merge-styles: [XX:XX:XX XM] ■ Running /office-ui-fabric-react/node_modules/typescript/lib/tsc.js with /office-ui-fabric-react/packages/merge-styles/tsconfig.json
+@uifabric/merge-styles: [XX:XX:XX XM] ■ Executing: /usr/local/bin/node "/office-ui-fabric-react/node_modules/typescript/lib/tsc.js" --pretty --target es5 --inlineSources --sourceRoot "../src" --outDir lib-amd --module amd --project "/office-ui-fabric-react/packages/merge-styles/tsconfig.json"
+@uifabric/merge-styles: [XX:XX:XX XM] ■ Running Jest
+@uifabric/merge-styles: [XX:XX:XX XM] ■ /usr/local/bin/node "/office-ui-fabric-react/node_modules/jest/bin/jest.js" --config "/office-ui-fabric-react/packages/merge-styles/jest.config.js" --passWithNoTests --colors
+@uifabric/merge-styles: [XX:XX:XX XM] ■ Running Webpack
+@uifabric/merge-styles: [XX:XX:XX XM] ■ Webpack Config Path: /office-ui-fabric-react/packages/merge-styles/webpack.config.js
+@uifabric/merge-styles: Webpack version: 4.29.5
+@uifabric/merge-styles:  PASS  src/styleToClassName.test.ts
+@uifabric/merge-styles:  PASS  src/mergeStyleSets.test.ts
+@uifabric/merge-styles:  PASS  src/concatStyleSets.test.ts
+@uifabric/merge-styles:  PASS  src/mergeStyles.test.ts
+@uifabric/merge-styles:  PASS  src/transforms/rtlifyRules.test.ts
+@uifabric/merge-styles:  PASS  src/transforms/prefixRules.test.ts
+@uifabric/merge-styles:  PASS  src/transforms/provideUnits.test.ts
+@uifabric/merge-styles:  PASS  src/keyframes.test.ts
+@uifabric/merge-styles:  PASS  src/Stylesheet.test.ts
+@uifabric/merge-styles:  PASS  src/extractStyleParts.test.ts
+@uifabric/merge-styles:  PASS  src/server.test.ts
+@uifabric/merge-styles:  PASS  src/fontFace.test.ts
+@uifabric/merge-styles:  PASS  src/transforms/kebabRules.test.ts
+@uifabric/merge-styles: [XX:XX:XX XM] ■ Extracting Public API surface from '/office-ui-fabric-react/packages/merge-styles/lib/index.d.ts'
+@uifabric/merge-styles: Done in ?s.
+@uifabric/jest-serializer-merge-styles: yarn run vX.X.X
+@uifabric/jest-serializer-merge-styles: $ just-scripts build --production --lint
+@uifabric/jest-serializer-merge-styles: [XX:XX:XX XM] ■ Running /office-ui-fabric-react/node_modules/typescript/lib/tsc.js with /office-ui-fabric-react/packages/jest-serializer-merge-styles/tsconfig.json
+@uifabric/jest-serializer-merge-styles: [XX:XX:XX XM] ■ Executing: /usr/local/bin/node "/office-ui-fabric-react/node_modules/typescript/lib/tsc.js" --pretty --target es5 --inlineSources --sourceRoot "../src" --outDir lib-commonjs --module commonjs --project "/office-ui-fabric-react/packages/jest-serializer-merge-styles/tsconfig.json"
+@uifabric/jest-serializer-merge-styles: [XX:XX:XX XM] ■ Running /office-ui-fabric-react/node_modules/typescript/lib/tsc.js with /office-ui-fabric-react/packages/jest-serializer-merge-styles/tsconfig.json
+@uifabric/jest-serializer-merge-styles: [XX:XX:XX XM] ■ Executing: /usr/local/bin/node "/office-ui-fabric-react/node_modules/typescript/lib/tsc.js" --pretty --target es5 --inlineSources --sourceRoot "../src" --outDir lib --module es2015 --project "/office-ui-fabric-react/packages/jest-serializer-merge-styles/tsconfig.json"
+@uifabric/jest-serializer-merge-styles: [XX:XX:XX XM] ■ Running /office-ui-fabric-react/node_modules/typescript/lib/tsc.js with /office-ui-fabric-react/packages/jest-serializer-merge-styles/tsconfig.json
+@uifabric/jest-serializer-merge-styles: [XX:XX:XX XM] ■ Executing: /usr/local/bin/node "/office-ui-fabric-react/node_modules/typescript/lib/tsc.js" --pretty --target es5 --inlineSources --sourceRoot "../src" --outDir lib-amd --module amd --project "/office-ui-fabric-react/packages/jest-serializer-merge-styles/tsconfig.json"
+@uifabric/jest-serializer-merge-styles: [XX:XX:XX XM] ■ Running Jest
+@uifabric/jest-serializer-merge-styles: [XX:XX:XX XM] ■ /usr/local/bin/node "/office-ui-fabric-react/node_modules/jest/bin/jest.js" --config "/office-ui-fabric-react/packages/jest-serializer-merge-styles/jest.config.js" --passWithNoTests --colors
+@uifabric/jest-serializer-merge-styles:  PASS  src/index.test.tsx
+@uifabric/jest-serializer-merge-styles: Done in ?s.
+@uifabric/test-utilities: yarn run vX.X.X
+@uifabric/test-utilities: $ just-scripts build --production --lint
+@uifabric/test-utilities: [XX:XX:XX XM] ■ Removing [lib, temp, dist, lib-amd, lib-commonjs, lib-es2015, coverage, src/**/*.scss.ts]
+@uifabric/test-utilities: [XX:XX:XX XM] ■ Running /office-ui-fabric-react/node_modules/typescript/lib/tsc.js with /office-ui-fabric-react/packages/test-utilities/tsconfig.json
+@uifabric/test-utilities: [XX:XX:XX XM] ■ Executing: /usr/local/bin/node "/office-ui-fabric-react/node_modules/typescript/lib/tsc.js" --pretty --target es5 --inlineSources --sourceRoot "../src" --outDir lib-commonjs --module commonjs --project "/office-ui-fabric-react/packages/test-utilities/tsconfig.json"
+@uifabric/test-utilities: [XX:XX:XX XM] ■ Running /office-ui-fabric-react/node_modules/typescript/lib/tsc.js with /office-ui-fabric-react/packages/test-utilities/tsconfig.json
+@uifabric/test-utilities: [XX:XX:XX XM] ■ Executing: /usr/local/bin/node "/office-ui-fabric-react/node_modules/typescript/lib/tsc.js" --pretty --target es5 --inlineSources --sourceRoot "../src" --outDir lib --module es2015 --project "/office-ui-fabric-react/packages/test-utilities/tsconfig.json"
+@uifabric/test-utilities: [XX:XX:XX XM] ■ Running /office-ui-fabric-react/node_modules/typescript/lib/tsc.js with /office-ui-fabric-react/packages/test-utilities/tsconfig.json
+@uifabric/test-utilities: [XX:XX:XX XM] ■ Executing: /usr/local/bin/node "/office-ui-fabric-react/node_modules/typescript/lib/tsc.js" --pretty --target es5 --inlineSources --sourceRoot "../src" --outDir lib-amd --module amd --project "/office-ui-fabric-react/packages/test-utilities/tsconfig.json"
+@uifabric/test-utilities: Done in ?s.
+@uifabric/utilities: yarn run vX.X.X
+@uifabric/utilities: $ just-scripts build --production --lint
+@uifabric/utilities: [XX:XX:XX XM] ■ Removing [lib, temp, dist, lib-amd, lib-commonjs, lib-es2015, coverage, src/**/*.scss.ts]
+@uifabric/utilities: [XX:XX:XX XM] ■ Running tslint
+@uifabric/utilities: [XX:XX:XX XM] ■ /usr/local/bin/node "/office-ui-fabric-react/node_modules/tslint/lib/tslintCli.js" --project "/office-ui-fabric-react/packages/utilities/tsconfig.json" -t stylish -r /office-ui-fabric-react/node_modules/tslint-microsoft-contrib
+@uifabric/utilities: [XX:XX:XX XM] ■ Running /office-ui-fabric-react/node_modules/typescript/lib/tsc.js with /office-ui-fabric-react/packages/utilities/tsconfig.json
+@uifabric/utilities: [XX:XX:XX XM] ■ Executing: /usr/local/bin/node "/office-ui-fabric-react/node_modules/typescript/lib/tsc.js" --pretty --target es5 --inlineSources --sourceRoot "../src" --outDir lib-commonjs --module commonjs --project "/office-ui-fabric-react/packages/utilities/tsconfig.json"
+@uifabric/utilities: [XX:XX:XX XM] ■ Running /office-ui-fabric-react/node_modules/typescript/lib/tsc.js with /office-ui-fabric-react/packages/utilities/tsconfig.json
+@uifabric/utilities: [XX:XX:XX XM] ■ Executing: /usr/local/bin/node "/office-ui-fabric-react/node_modules/typescript/lib/tsc.js" --pretty --target es5 --inlineSources --sourceRoot "../src" --outDir lib --module es2015 --project "/office-ui-fabric-react/packages/utilities/tsconfig.json"
+@uifabric/utilities: [XX:XX:XX XM] ■ Running /office-ui-fabric-react/node_modules/typescript/lib/tsc.js with /office-ui-fabric-react/packages/utilities/tsconfig.json
+@uifabric/utilities: [XX:XX:XX XM] ■ Executing: /usr/local/bin/node "/office-ui-fabric-react/node_modules/typescript/lib/tsc.js" --pretty --target es5 --inlineSources --sourceRoot "../src" --outDir lib-amd --module amd --project "/office-ui-fabric-react/packages/utilities/tsconfig.json"
+@uifabric/utilities: [XX:XX:XX XM] ■ Running Jest
+@uifabric/utilities: [XX:XX:XX XM] ■ /usr/local/bin/node "/office-ui-fabric-react/node_modules/jest/bin/jest.js" --config "/office-ui-fabric-react/packages/utilities/jest.config.js" --passWithNoTests --colors
+@uifabric/utilities: [XX:XX:XX XM] ■ Running Webpack
+@uifabric/utilities: [XX:XX:XX XM] ■ Webpack Config Path: null
+@uifabric/utilities: [XX:XX:XX XM] ■ webpack.config.js not found, skipping webpack
+@uifabric/utilities:  PASS  src/warn/warnControlledUsage.test.ts
+@uifabric/utilities:  PASS  src/focus.test.tsx
+@uifabric/utilities:  PASS  src/styled.test.tsx
+@uifabric/utilities:  PASS  src/EventGroup.test.ts
+@uifabric/utilities:  PASS  src/array.test.ts
+@uifabric/utilities:  PASS  src/customizations/Customizer.test.tsx
+@uifabric/utilities:  PASS  src/math.test.ts
+@uifabric/utilities:  PASS  src/warn/warn.test.ts
+@uifabric/utilities:  PASS  src/dom/dom.test.ts
+@uifabric/utilities:  PASS  src/customizations/customizable.test.tsx
+@uifabric/utilities:  PASS  src/initials.test.ts
+@uifabric/utilities:  PASS  src/selection/Selection.test.ts
+@uifabric/utilities:  PASS  src/initializeFocusRects.test.ts
+@uifabric/utilities:  PASS  src/memoize.test.ts
+@uifabric/utilities:  PASS  src/osDetector.test.ts
+@uifabric/utilities:  PASS  src/mobileDetector.test.ts
+@uifabric/utilities:  PASS  src/aria.test.ts
+@uifabric/utilities:  PASS  src/rtl.test.ts
+@uifabric/utilities:  PASS  src/setFocusVisibility.test.ts
+@uifabric/utilities:  PASS  src/properties.test.ts
+@uifabric/utilities:  PASS  src/asAsync.test.tsx
+@uifabric/utilities:  PASS  src/object.test.ts
+@uifabric/utilities:  PASS  src/classNamesFunction.test.ts
+@uifabric/utilities:  PASS  src/merge.test.ts
+@uifabric/utilities:  PASS  src/customizations/Customizations.test.ts
+@uifabric/utilities:  PASS  src/safeSetTimeout.test.tsx
+@uifabric/utilities:  PASS  src/safeRequestAnimationFrame.test.tsx
+@uifabric/utilities:  PASS  src/overflow.test.ts
+@uifabric/utilities:  PASS  src/appendFunction.test.ts
+@uifabric/utilities:  PASS  src/controlled.test.ts
+@uifabric/utilities:  PASS  src/extendComponent.test.tsx
+@uifabric/utilities:  PASS  src/initializeComponentRef.test.tsx
+@uifabric/utilities:  PASS  src/BaseComponent.test.tsx
+@uifabric/utilities:  PASS  src/keyboard.test.ts
+@uifabric/utilities:  PASS  src/css.test.ts
+@uifabric/utilities: [XX:XX:XX XM] ■ Extracting Public API surface from '/office-ui-fabric-react/packages/utilities/lib/index.d.ts'
+@uifabric/utilities: Done in ?s.
+@uifabric/styling: yarn run vX.X.X
+@uifabric/styling: $ just-scripts build --production --lint
+@uifabric/styling: [XX:XX:XX XM] ■ Removing [lib, temp, dist, lib-amd, lib-commonjs, lib-es2015, coverage, src/**/*.scss.ts]
+@uifabric/styling: [XX:XX:XX XM] ■ Running tslint
+@uifabric/styling: [XX:XX:XX XM] ■ /usr/local/bin/node "/office-ui-fabric-react/node_modules/tslint/lib/tslintCli.js" --project "/office-ui-fabric-react/packages/styling/tsconfig.json" -t stylish -r /office-ui-fabric-react/node_modules/tslint-microsoft-contrib
+@uifabric/styling: [XX:XX:XX XM] ■ Running /office-ui-fabric-react/node_modules/typescript/lib/tsc.js with /office-ui-fabric-react/packages/styling/tsconfig.json
+@uifabric/styling: [XX:XX:XX XM] ■ Executing: /usr/local/bin/node "/office-ui-fabric-react/node_modules/typescript/lib/tsc.js" --pretty --target es5 --inlineSources --sourceRoot "../src" --outDir lib-commonjs --module commonjs --project "/office-ui-fabric-react/packages/styling/tsconfig.json"
+@uifabric/styling: [XX:XX:XX XM] ■ Running /office-ui-fabric-react/node_modules/typescript/lib/tsc.js with /office-ui-fabric-react/packages/styling/tsconfig.json
+@uifabric/styling: [XX:XX:XX XM] ■ Executing: /usr/local/bin/node "/office-ui-fabric-react/node_modules/typescript/lib/tsc.js" --pretty --target es5 --inlineSources --sourceRoot "../src" --outDir lib --module es2015 --project "/office-ui-fabric-react/packages/styling/tsconfig.json"
+@uifabric/styling: [XX:XX:XX XM] ■ Running /office-ui-fabric-react/node_modules/typescript/lib/tsc.js with /office-ui-fabric-react/packages/styling/tsconfig.json
+@uifabric/styling: [XX:XX:XX XM] ■ Executing: /usr/local/bin/node "/office-ui-fabric-react/node_modules/typescript/lib/tsc.js" --pretty --target es5 --inlineSources --sourceRoot "../src" --outDir lib-amd --module amd --project "/office-ui-fabric-react/packages/styling/tsconfig.json"
+@uifabric/styling: [XX:XX:XX XM] ■ Running Jest
+@uifabric/styling: [XX:XX:XX XM] ■ /usr/local/bin/node "/office-ui-fabric-react/node_modules/jest/bin/jest.js" --config "/office-ui-fabric-react/packages/styling/jest.config.js" --passWithNoTests --colors
+@uifabric/styling: [XX:XX:XX XM] ■ Running Webpack
+@uifabric/styling: [XX:XX:XX XM] ■ Webpack Config Path: null
+@uifabric/styling: [XX:XX:XX XM] ■ webpack.config.js not found, skipping webpack
+@uifabric/styling:  PASS  src/styles/theme.test.ts
+@uifabric/styling:  PASS  src/styles/scheme.test.ts
+@uifabric/styling:  PASS  src/styles/getGlobalClassNames.test.ts
+@uifabric/styling:  PASS  src/utilities/icons.test.ts
+@uifabric/styling:  PASS  src/styles/fonts.test.ts
+@uifabric/styling: [XX:XX:XX XM] ■ Extracting Public API surface from '/office-ui-fabric-react/packages/styling/lib/index.d.ts'
+@uifabric/styling: Done in ?s.
+@uifabric/file-type-icons: yarn run vX.X.X
+@uifabric/file-type-icons: $ just-scripts build --production --lint
+@uifabric/file-type-icons: [XX:XX:XX XM] ■ Removing [lib, temp, dist, lib-amd, lib-commonjs, lib-es2015, coverage, src/**/*.scss.ts]
+@uifabric/file-type-icons: [XX:XX:XX XM] ■ Running tslint
+@uifabric/file-type-icons: [XX:XX:XX XM] ■ /usr/local/bin/node "/office-ui-fabric-react/node_modules/tslint/lib/tslintCli.js" --project "/office-ui-fabric-react/packages/file-type-icons/tsconfig.json" -t stylish -r /office-ui-fabric-react/node_modules/tslint-microsoft-contrib
+@uifabric/file-type-icons: [XX:XX:XX XM] ■ Running /office-ui-fabric-react/node_modules/typescript/lib/tsc.js with /office-ui-fabric-react/packages/file-type-icons/tsconfig.json
+@uifabric/file-type-icons: [XX:XX:XX XM] ■ Executing: /usr/local/bin/node "/office-ui-fabric-react/node_modules/typescript/lib/tsc.js" --pretty --target es5 --inlineSources --sourceRoot "../src" --outDir lib-commonjs --module commonjs --project "/office-ui-fabric-react/packages/file-type-icons/tsconfig.json"
+@uifabric/file-type-icons: [XX:XX:XX XM] ■ Running /office-ui-fabric-react/node_modules/typescript/lib/tsc.js with /office-ui-fabric-react/packages/file-type-icons/tsconfig.json
+@uifabric/file-type-icons: [XX:XX:XX XM] ■ Executing: /usr/local/bin/node "/office-ui-fabric-react/node_modules/typescript/lib/tsc.js" --pretty --target es5 --inlineSources --sourceRoot "../src" --outDir lib --module es2015 --project "/office-ui-fabric-react/packages/file-type-icons/tsconfig.json"
+@uifabric/file-type-icons: [XX:XX:XX XM] ■ Running /office-ui-fabric-react/node_modules/typescript/lib/tsc.js with /office-ui-fabric-react/packages/file-type-icons/tsconfig.json
+@uifabric/file-type-icons: [XX:XX:XX XM] ■ Executing: /usr/local/bin/node "/office-ui-fabric-react/node_modules/typescript/lib/tsc.js" --pretty --target es5 --inlineSources --sourceRoot "../src" --outDir lib-amd --module amd --project "/office-ui-fabric-react/packages/file-type-icons/tsconfig.json"
+@uifabric/file-type-icons: [XX:XX:XX XM] ■ Running Webpack
+@uifabric/file-type-icons: [XX:XX:XX XM] ■ Webpack Config Path: null
+@uifabric/file-type-icons: [XX:XX:XX XM] ■ webpack.config.js not found, skipping webpack
+@uifabric/file-type-icons: Done in ?s.
+@uifabric/foundation: yarn run vX.X.X
+@uifabric/foundation: $ just-scripts build --production --lint
+@uifabric/foundation: [XX:XX:XX XM] ■ Removing [lib, temp, dist, lib-amd, lib-commonjs, lib-es2015, coverage, src/**/*.scss.ts]
+@uifabric/foundation: [XX:XX:XX XM] ■ Running tslint
+@uifabric/foundation: [XX:XX:XX XM] ■ /usr/local/bin/node "/office-ui-fabric-react/node_modules/tslint/lib/tslintCli.js" --project "/office-ui-fabric-react/packages/foundation/tsconfig.json" -t stylish -r /office-ui-fabric-react/node_modules/tslint-microsoft-contrib
+@uifabric/foundation: [XX:XX:XX XM] ■ Running /office-ui-fabric-react/node_modules/typescript/lib/tsc.js with /office-ui-fabric-react/packages/foundation/tsconfig.json
+@uifabric/foundation: [XX:XX:XX XM] ■ Executing: /usr/local/bin/node "/office-ui-fabric-react/node_modules/typescript/lib/tsc.js" --pretty --target es5 --inlineSources --sourceRoot "../src" --outDir lib-commonjs --module commonjs --project "/office-ui-fabric-react/packages/foundation/tsconfig.json"
+@uifabric/foundation: [XX:XX:XX XM] ■ Running /office-ui-fabric-react/node_modules/typescript/lib/tsc.js with /office-ui-fabric-react/packages/foundation/tsconfig.json
+@uifabric/foundation: [XX:XX:XX XM] ■ Executing: /usr/local/bin/node "/office-ui-fabric-react/node_modules/typescript/lib/tsc.js" --pretty --target es5 --inlineSources --sourceRoot "../src" --outDir lib --module es2015 --project "/office-ui-fabric-react/packages/foundation/tsconfig.json"
+@uifabric/foundation: [XX:XX:XX XM] ■ Running /office-ui-fabric-react/node_modules/typescript/lib/tsc.js with /office-ui-fabric-react/packages/foundation/tsconfig.json
+@uifabric/foundation: [XX:XX:XX XM] ■ Executing: /usr/local/bin/node "/office-ui-fabric-react/node_modules/typescript/lib/tsc.js" --pretty --target es5 --inlineSources --sourceRoot "../src" --outDir lib-amd --module amd --project "/office-ui-fabric-react/packages/foundation/tsconfig.json"
+@uifabric/foundation: [XX:XX:XX XM] ■ Running Jest
+@uifabric/foundation: [XX:XX:XX XM] ■ /usr/local/bin/node "/office-ui-fabric-react/node_modules/jest/bin/jest.js" --config "/office-ui-fabric-react/packages/foundation/jest.config.js" --passWithNoTests --colors
+@uifabric/foundation: [XX:XX:XX XM] ■ Running Webpack
+@uifabric/foundation: [XX:XX:XX XM] ■ Webpack Config Path: /office-ui-fabric-react/packages/foundation/webpack.config.js
+@uifabric/foundation: Webpack version: 4.29.5
+@uifabric/foundation:  FAIL  src/slots.test.tsx
+@uifabric/foundation:  PASS  src/hooks/controlled.test.tsx
+@uifabric/foundation: info Visit https://yarnpkg.com/en/docs/cli/run for documentation about this command.
 
 
 
 Standard error:
-Your version of Node.js (X.X.X) has not been tested with this release of Rush. The Rush team will not accept issue reports for it. Please consider upgrading Rush or downgrading Node.js.
-XX of XX: [@uifabric/codepen-loader] completed with warnings in ? seconds
-XX of XX: [@uifabric/merge-styles] completed with warnings in ? seconds
-XX of XX: [@uifabric/jest-serializer-merge-styles] completed with warnings in ? seconds
-XX of XX: [@uifabric/utilities] completed with warnings in ? seconds
-XX of XX: [@uifabric/styling] completed with warnings in ? seconds
-XX of XX: [@uifabric/foundation] failed to build!
-XX of XX: [@uifabric/experiments] blocked by [@uifabric/foundation]!
-XX of XX: [@uifabric/fabric-website] blocked by [@uifabric/foundation]!
-XX of XX: [@uifabric/pr-deploy-site] blocked by [@uifabric/foundation]!
-XX of XX: [@uifabric/react-cards] blocked by [@uifabric/foundation]!
-XX of XX: [theming-designer] blocked by [@uifabric/foundation]!
-XX of XX: [vr-tests] blocked by [@uifabric/foundation]!
-XX of XX: [dom-tests] blocked by [@uifabric/foundation]!
-XX of XX: [perf-test] blocked by [@uifabric/foundation]!
-XX of XX: [test-bundles] blocked by [@uifabric/foundation]!
-XX of XX: [office-ui-fabric-react] blocked by [@uifabric/foundation]!
-XX of XX: [@uifabric/api-docs] blocked by [@uifabric/foundation]!
-XX of XX: [@uifabric/fabric-website-resources] blocked by [@uifabric/foundation]!
-XX of XX: [a11y-tests] blocked by [@uifabric/foundation]!
-XX of XX: [ssr-tests] blocked by [@uifabric/foundation]!
-XX of XX: [@uifabric/azure-themes] blocked by [@uifabric/foundation]!
-XX of XX: [@uifabric/charting] blocked by [@uifabric/foundation]!
-XX of XX: [@uifabric/date-time] blocked by [@uifabric/foundation]!
-XX of XX: [@uifabric/example-app-base] blocked by [@uifabric/foundation]!
-XX of XX: [@uifabric/foundation-scenarios] blocked by [@uifabric/foundation]!
-XX of XX: [@uifabric/lists] blocked by [@uifabric/foundation]!
-XX of XX: [@uifabric/fluent-theme] blocked by [@uifabric/foundation]!
-XX of XX: [@uifabric/tsx-editor] blocked by [@uifabric/foundation]!
-XX of XX: [@uifabric/mdl2-theme] blocked by [@uifabric/foundation]!
-XX of XX: [@uifabric/theme-samples] blocked by [@uifabric/foundation]!
-XX of XX: [@uifabric/variants] blocked by [@uifabric/foundation]!
-XX of XX: [server-rendered-app] blocked by [@uifabric/foundation]!
-XX of XX: [todo-app] blocked by [@uifabric/foundation]!
-[@uifabric/foundation] Returned error code: 1
+info cli using local version of lerna
+lerna notice cli vX.X.X
+lerna info Executing command in 40 packages: "yarn run build --production --lint"
+@uifabric/codepen-loader: ts-jest[versions] (WARN) Version X.X.X-insiders.xxxxxxxx of typescript installed has not been tested with ts-jest. If you're experiencing issues, consider using a supported version (>=2.7.0 <4.0.0). Please do not report issues in ts-jest if you are using unsupported versions.
+@uifabric/set-version: [XX:XX:XX XM] ▲ One of these [node-sass, postcss, autoprefixer] is not installed, so this task has no effect
+@uifabric/merge-styles: [XX:XX:XX XM] ▲ One of these [node-sass, postcss, autoprefixer] is not installed, so this task has no effect
+@uifabric/merge-styles: ts-jest[versions] (WARN) Version X.X.X-insiders.xxxxxxxx of typescript installed has not been tested with ts-jest. If you're experiencing issues, consider using a supported version (>=2.7.0 <4.0.0). Please do not report issues in ts-jest if you are using unsupported versions.
+@uifabric/jest-serializer-merge-styles: ts-jest[versions] (WARN) Version X.X.X-insiders.xxxxxxxx of typescript installed has not been tested with ts-jest. If you're experiencing issues, consider using a supported version (>=2.7.0 <4.0.0). Please do not report issues in ts-jest if you are using unsupported versions.
+@uifabric/utilities: [XX:XX:XX XM] ▲ One of these [node-sass, postcss, autoprefixer] is not installed, so this task has no effect
+@uifabric/utilities: ts-jest[versions] (WARN) Version X.X.X-insiders.xxxxxxxx of typescript installed has not been tested with ts-jest. If you're experiencing issues, consider using a supported version (>=2.7.0 <4.0.0). Please do not report issues in ts-jest if you are using unsupported versions.
+@uifabric/styling: [XX:XX:XX XM] ▲ One of these [node-sass, postcss, autoprefixer] is not installed, so this task has no effect
+@uifabric/styling: ts-jest[versions] (WARN) Version X.X.X-insiders.xxxxxxxx of typescript installed has not been tested with ts-jest. If you're experiencing issues, consider using a supported version (>=2.7.0 <4.0.0). Please do not report issues in ts-jest if you are using unsupported versions.
+@uifabric/file-type-icons: [XX:XX:XX XM] ▲ One of these [node-sass, postcss, autoprefixer] is not installed, so this task has no effect
+@uifabric/foundation: [XX:XX:XX XM] ▲ One of these [node-sass, postcss, autoprefixer] is not installed, so this task has no effect
+@uifabric/foundation: ts-jest[versions] (WARN) Version X.X.X-insiders.xxxxxxxx of typescript installed has not been tested with ts-jest. If you're experiencing issues, consider using a supported version (>=2.7.0 <4.0.0). Please do not report issues in ts-jest if you are using unsupported versions.
+@uifabric/foundation:   ● createFactory › passes componentProps without userProps
+@uifabric/foundation:     RangeError: Invalid array length
+@uifabric/foundation: 
+@uifabric/foundation:       189 |   for (const props of allProps) {
+@uifabric/foundation:       190 |     classNames.push(props && props.className);
+@uifabric/foundation:     > 191 |     assign(finalProps, ...(props as any));
+@uifabric/foundation:           |           ^
+@uifabric/foundation:       192 |   }
+@uifabric/foundation:       193 | 
+@uifabric/foundation:       194 |   finalProps.className = mergeStyles(defaultStyles, classNames);
+@uifabric/foundation: 
+@uifabric/foundation:       at Object.__spreadArrays (../../node_modules/tslib/tslib.js:182:22)
+@uifabric/foundation:       at _constructFinalProps (src/slots.tsx:191:11)
+@uifabric/foundation:       at result (src/slots.tsx:88:24)
+@uifabric/foundation:       at Object.<anonymous> (src/slots.test.tsx:205:73)
+@uifabric/foundation:   ● createFactory › passes userProp string as child
+@uifabric/foundation:     RangeError: Invalid array length
+@uifabric/foundation: 
+@uifabric/foundation:       189 |   for (const props of allProps) {
+@uifabric/foundation:       190 |     classNames.push(props && props.className);
+@uifabric/foundation:     > 191 |     assign(finalProps, ...(props as any));
+@uifabric/foundation:           |           ^
+@uifabric/foundation:       192 |   }
+@uifabric/foundation:       193 | 
+@uifabric/foundation:       194 |   finalProps.className = mergeStyles(defaultStyles, classNames);
+@uifabric/foundation: 
+@uifabric/foundation:       at Object.__spreadArrays (../../node_modules/tslib/tslib.js:182:22)
+@uifabric/foundation:       at _constructFinalProps (src/slots.tsx:191:11)
+@uifabric/foundation:       at result (src/slots.tsx:88:24)
+@uifabric/foundation:       at Object.<anonymous> (src/slots.test.tsx:210:76)
+@uifabric/foundation:   ● createFactory › passes userProp integer as child
+@uifabric/foundation:     RangeError: Invalid array length
+@uifabric/foundation: 
+@uifabric/foundation:       189 |   for (const props of allProps) {
+@uifabric/foundation:       190 |     classNames.push(props && props.className);
+@uifabric/foundation:     > 191 |     assign(finalProps, ...(props as any));
+@uifabric/foundation:           |           ^
+@uifabric/foundation:       192 |   }
+@uifabric/foundation:       193 | 
+@uifabric/foundation:       194 |   finalProps.className = mergeStyles(defaultStyles, classNames);
+@uifabric/foundation: 
+@uifabric/foundation:       at Object.__spreadArrays (../../node_modules/tslib/tslib.js:182:22)
+@uifabric/foundation:       at _constructFinalProps (src/slots.tsx:191:11)
+@uifabric/foundation:       at result (src/slots.tsx:88:24)
+@uifabric/foundation:       at Object.<anonymous> (src/slots.test.tsx:220:76)
+@uifabric/foundation:   ● createFactory › passes userProp string as defaultProp
+@uifabric/foundation:     RangeError: Invalid array length
+@uifabric/foundation: 
+@uifabric/foundation:       189 |   for (const props of allProps) {
+@uifabric/foundation:       190 |     classNames.push(props && props.className);
+@uifabric/foundation:     > 191 |     assign(finalProps, ...(props as any));
+@uifabric/foundation:           |           ^
+@uifabric/foundation:       192 |   }
+@uifabric/foundation:       193 | 
+@uifabric/foundation:       194 |   finalProps.className = mergeStyles(defaultStyles, classNames);
+@uifabric/foundation: 
+@uifabric/foundation:       at Object.__spreadArrays (../../node_modules/tslib/tslib.js:182:22)
+@uifabric/foundation:       at _constructFinalProps (src/slots.tsx:191:11)
+@uifabric/foundation:       at result (src/slots.tsx:88:24)
+@uifabric/foundation:       at Object.<anonymous> (src/slots.test.tsx:225:92)
+@uifabric/foundation:   ● createFactory › passes userProp integer as defaultProp
+@uifabric/foundation:     RangeError: Invalid array length
+@uifabric/foundation: 
+@uifabric/foundation:       189 |   for (const props of allProps) {
+@uifabric/foundation:       190 |     classNames.push(props && props.className);
+@uifabric/foundation:     > 191 |     assign(finalProps, ...(props as any));
+@uifabric/foundation:           |           ^
+@uifabric/foundation:       192 |   }
+@uifabric/foundation:       193 | 
+@uifabric/foundation:       194 |   finalProps.className = mergeStyles(defaultStyles, classNames);
+@uifabric/foundation: 
+@uifabric/foundation:       at Object.__spreadArrays (../../node_modules/tslib/tslib.js:182:22)
+@uifabric/foundation:       at _constructFinalProps (src/slots.tsx:191:11)
+@uifabric/foundation:       at result (src/slots.tsx:88:24)
+@uifabric/foundation:       at Object.<anonymous> (src/slots.test.tsx:235:92)
+@uifabric/foundation:   ● createFactory › merges userProps over componentProps
+@uifabric/foundation:     RangeError: Invalid array length
+@uifabric/foundation: 
+@uifabric/foundation:       189 |   for (const props of allProps) {
+@uifabric/foundation:       190 |     classNames.push(props && props.className);
+@uifabric/foundation:     > 191 |     assign(finalProps, ...(props as any));
+@uifabric/foundation:           |           ^
+@uifabric/foundation:       192 |   }
+@uifabric/foundation:       193 | 
+@uifabric/foundation:       194 |   finalProps.className = mergeStyles(defaultStyles, classNames);
+@uifabric/foundation: 
+@uifabric/foundation:       at Object.__spreadArrays (../../node_modules/tslib/tslib.js:182:22)
+@uifabric/foundation:       at _constructFinalProps (src/slots.tsx:191:11)
+@uifabric/foundation:       at result (src/slots.tsx:88:24)
+@uifabric/foundation:       at Object.<anonymous> (src/slots.test.tsx:245:84)
+@uifabric/foundation:   ● createFactory › renders div and userProp integer as children
+@uifabric/foundation:     RangeError: Invalid array length
+@uifabric/foundation: 
+@uifabric/foundation:       189 |   for (const props of allProps) {
+@uifabric/foundation:       190 |     classNames.push(props && props.className);
+@uifabric/foundation:     > 191 |     assign(finalProps, ...(props as any));
+@uifabric/foundation:           |           ^
+@uifabric/foundation:       192 |   }
+@uifabric/foundation:       193 | 
+@uifabric/foundation:       194 |   finalProps.className = mergeStyles(defaultStyles, classNames);
+@uifabric/foundation: 
+@uifabric/foundation:       at Object.__spreadArrays (../../node_modules/tslib/tslib.js:182:22)
+@uifabric/foundation:       at _constructFinalProps (src/slots.tsx:191:11)
+@uifabric/foundation:       at result (src/slots.tsx:88:24)
+@uifabric/foundation:       at Object.<anonymous> (src/slots.test.tsx:255:86)
+@uifabric/foundation:   ● createFactory › renders div and userProp string as children
+@uifabric/foundation:     RangeError: Invalid array length
+@uifabric/foundation: 
+@uifabric/foundation:       189 |   for (const props of allProps) {
+@uifabric/foundation:       190 |     classNames.push(props && props.className);
+@uifabric/foundation:     > 191 |     assign(finalProps, ...(props as any));
+@uifabric/foundation:           |           ^
+@uifabric/foundation:       192 |   }
+@uifabric/foundation:       193 | 
+@uifabric/foundation:       194 |   finalProps.className = mergeStyles(defaultStyles, classNames);
+@uifabric/foundation: 
+@uifabric/foundation:       at Object.__spreadArrays (../../node_modules/tslib/tslib.js:182:22)
+@uifabric/foundation:       at _constructFinalProps (src/slots.tsx:191:11)
+@uifabric/foundation:       at result (src/slots.tsx:88:24)
+@uifabric/foundation:       at Object.<anonymous> (src/slots.test.tsx:266:86)
+@uifabric/foundation:   ● createFactory › renders userProp span function without component props
+@uifabric/foundation:     RangeError: Invalid array length
+@uifabric/foundation: 
+@uifabric/foundation:       189 |   for (const props of allProps) {
+@uifabric/foundation:       190 |     classNames.push(props && props.className);
+@uifabric/foundation:     > 191 |     assign(finalProps, ...(props as any));
+@uifabric/foundation:           |           ^
+@uifabric/foundation:       192 |   }
+@uifabric/foundation:       193 | 
+@uifabric/foundation:       194 |   finalProps.className = mergeStyles(defaultStyles, classNames);
+@uifabric/foundation: 
+@uifabric/foundation:       at Object.__spreadArrays (../../node_modules/tslib/tslib.js:182:22)
+@uifabric/foundation:       at _constructFinalProps (src/slots.tsx:191:11)
+@uifabric/foundation:       at result (src/slots.tsx:88:24)
+@uifabric/foundation:       at Object.<anonymous> (src/slots.test.tsx:288:61)
+@uifabric/foundation:   ● createFactory › renders userProp span function with component props
+@uifabric/foundation:     RangeError: Invalid array length
+@uifabric/foundation: 
+@uifabric/foundation:       189 |   for (const props of allProps) {
+@uifabric/foundation:       190 |     classNames.push(props && props.className);
+@uifabric/foundation:     > 191 |     assign(finalProps, ...(props as any));
+@uifabric/foundation:           |           ^
+@uifabric/foundation:       192 |   }
+@uifabric/foundation:       193 | 
+@uifabric/foundation:       194 |   finalProps.className = mergeStyles(defaultStyles, classNames);
+@uifabric/foundation: 
+@uifabric/foundation:       at Object.__spreadArrays (../../node_modules/tslib/tslib.js:182:22)
+@uifabric/foundation:       at _constructFinalProps (src/slots.tsx:191:11)
+@uifabric/foundation:       at result (src/slots.tsx:88:24)
+@uifabric/foundation:       at Object.<anonymous> (src/slots.test.tsx:301:61)
+@uifabric/foundation:   ● createFactory › renders userProp span component with component props
+@uifabric/foundation:     RangeError: Invalid array length
+@uifabric/foundation: 
+@uifabric/foundation:       189 |   for (const props of allProps) {
+@uifabric/foundation:       190 |     classNames.push(props && props.className);
+@uifabric/foundation:     > 191 |     assign(finalProps, ...(props as any));
+@uifabric/foundation:           |           ^
+@uifabric/foundation:       192 |   }
+@uifabric/foundation:       193 | 
+@uifabric/foundation:       194 |   finalProps.className = mergeStyles(defaultStyles, classNames);
+@uifabric/foundation: 
+@uifabric/foundation:       at Object.__spreadArrays (../../node_modules/tslib/tslib.js:182:22)
+@uifabric/foundation:       at _constructFinalProps (src/slots.tsx:191:11)
+@uifabric/foundation:       at result (src/slots.tsx:88:24)
+@uifabric/foundation:       at Object.<anonymous> (src/slots.test.tsx:314:61)
+@uifabric/foundation:   ● createFactory › passes props and type arguments to userProp function
+@uifabric/foundation:     RangeError: Invalid array length
+@uifabric/foundation: 
+@uifabric/foundation:       189 |   for (const props of allProps) {
+@uifabric/foundation:       190 |     classNames.push(props && props.className);
+@uifabric/foundation:     > 191 |     assign(finalProps, ...(props as any));
+@uifabric/foundation:           |           ^
+@uifabric/foundation:       192 |   }
+@uifabric/foundation:       193 | 
+@uifabric/foundation:       194 |   finalProps.className = mergeStyles(defaultStyles, classNames);
+@uifabric/foundation: 
+@uifabric/foundation:       at Object.__spreadArrays (../../node_modules/tslib/tslib.js:182:22)
+@uifabric/foundation:       at _constructFinalProps (src/slots.tsx:191:11)
+@uifabric/foundation:       at result (src/slots.tsx:88:24)
+@uifabric/foundation:       at Object.<anonymous> (src/slots.test.tsx:334:43)
+@uifabric/foundation:   ● getSlots › creates slots and passes merged props to them
+@uifabric/foundation:     RangeError: Invalid array length
+@uifabric/foundation: 
+@uifabric/foundation:       189 |   for (const props of allProps) {
+@uifabric/foundation:       190 |     classNames.push(props && props.className);
+@uifabric/foundation:     > 191 |     assign(finalProps, ...(props as any));
+@uifabric/foundation:           |           ^
+@uifabric/foundation:       192 |   }
+@uifabric/foundation:       193 | 
+@uifabric/foundation:       194 |   finalProps.className = mergeStyles(defaultStyles, classNames);
+@uifabric/foundation: 
+@uifabric/foundation:       at Object.__spreadArrays (../../node_modules/tslib/tslib.js:182:22)
+@uifabric/foundation:       at _constructFinalProps (src/slots.tsx:191:11)
+@uifabric/foundation:       at result (src/slots.tsx:88:24)
+@uifabric/foundation:       at _renderSlot (src/slots.tsx:221:100)
+@uifabric/foundation:       at Object.slot [as testSlot1] (src/slots.tsx:142:16)
+@uifabric/foundation:       at Object.<anonymous> (src/slots.test.tsx:399:24)
+@uifabric/foundation: [XX:XX:XX XM] x Error detected while running 'jest'
+@uifabric/foundation: [XX:XX:XX XM] x ------------------------------------
+@uifabric/foundation: [XX:XX:XX XM] x Error: Command failed: /usr/local/bin/node /office-ui-fabric-react/node_modules/jest/bin/jest.js --config /office-ui-fabric-react/packages/foundation/jest.config.js --passWithNoTests --colors
+@uifabric/foundation:     at ChildProcess.<anonymous> (/office-ui-fabric-react/node_modules/just-scripts-utils/lib/exec.js:70:31)
+@uifabric/foundation:     at ChildProcess.emit (events.js:203:13)
+@uifabric/foundation:     at ChildProcess.EventEmitter.emit (domain.js:494:23)
+@uifabric/foundation:     at Process.ChildProcess._handle.onexit (internal/child_process.js:272:12)
+@uifabric/foundation: [XX:XX:XX XM] x ------------------------------------
+@uifabric/foundation: [XX:XX:XX XM] x Error previously detected. See above for error messages.
+@uifabric/foundation: [XX:XX:XX XM] x Other tasks that did not complete: [webpack]
+@uifabric/foundation: error Command failed with exit code 1.
+lerna ERR! yarn run build --production --lint exited 1 in '@uifabric/foundation'
+lerna WARN complete Waiting for 1 child process to exit. CTRL-C to exit immediately.
