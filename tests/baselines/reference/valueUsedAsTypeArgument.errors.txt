@@ -1,23 +1,37 @@
-tests/cases/compiler/valueUsedAsTypeArgument.ts(5,20): error TS2774: 'Something' refers to a value, but is being used as a type argument here. Did you mean 'typeof Something'?
-tests/cases/compiler/valueUsedAsTypeArgument.ts(6,16): error TS2749: 'Something' refers to a value, but is being used as a type here.
-tests/cases/compiler/valueUsedAsTypeArgument.ts(8,10): error TS2749: 'Something' refers to a value, but is being used as a type here.
+tests/cases/compiler/valueUsedAsTypeArgument.ts(7,20): error TS2774: 'Something' refers to a value, but is being used as a type argument here. Did you mean 'typeof Something'?
+tests/cases/compiler/valueUsedAsTypeArgument.ts(10,16): error TS2749: 'Something' refers to a value, but is being used as a type here.
+tests/cases/compiler/valueUsedAsTypeArgument.ts(13,28): error TS2774: 'Something' refers to a value, but is being used as a type argument here. Did you mean 'typeof Something'?
+tests/cases/compiler/valueUsedAsTypeArgument.ts(16,10): error TS2749: 'Something' refers to a value, but is being used as a type here.
 
 
-==== tests/cases/compiler/valueUsedAsTypeArgument.ts (3 errors) ====
+==== tests/cases/compiler/valueUsedAsTypeArgument.ts (4 errors) ====
     type Foo<T> = { items: T };
+    type Other<U> = {};
     
     const Something = [];
     
+    // Type argument, should show new error
     type SomeFoo = Foo<Something>;
                        ~~~~~~~~~
 !!! error TS2774: 'Something' refers to a value, but is being used as a type argument here. Did you mean 'typeof Something'?
+    
+    // Type alias
     type SomeBar = Something;
                    ~~~~~~~~~
 !!! error TS2749: 'Something' refers to a value, but is being used as a type here.
     
+    // Nested type arguments, should show new error
+    type SomeOther = Other<Foo<Something>>;
+                               ~~~~~~~~~
+!!! error TS2774: 'Something' refers to a value, but is being used as a type argument here. Did you mean 'typeof Something'?
+    
+    // Misuse of value
     const x: Something = [];
              ~~~~~~~~~
 !!! error TS2749: 'Something' refers to a value, but is being used as a type here.
     
+    // Numeric literal type
     type LiteralNumberFoo = Foo<1>;
+    
+    // String literal type
     type LiteralStringFoo = Foo<'test'>;

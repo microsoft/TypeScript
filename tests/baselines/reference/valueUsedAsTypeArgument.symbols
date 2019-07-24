@@ -5,24 +5,39 @@ type Foo<T> = { items: T };
 >items : Symbol(items, Decl(valueUsedAsTypeArgument.ts, 0, 15))
 >T : Symbol(T, Decl(valueUsedAsTypeArgument.ts, 0, 9))
 
+type Other<U> = {};
+>Other : Symbol(Other, Decl(valueUsedAsTypeArgument.ts, 0, 27))
+>U : Symbol(U, Decl(valueUsedAsTypeArgument.ts, 1, 11))
+
 const Something = [];
->Something : Symbol(Something, Decl(valueUsedAsTypeArgument.ts, 2, 5))
+>Something : Symbol(Something, Decl(valueUsedAsTypeArgument.ts, 3, 5))
 
+// Type argument, should show new error
 type SomeFoo = Foo<Something>;
->SomeFoo : Symbol(SomeFoo, Decl(valueUsedAsTypeArgument.ts, 2, 21))
+>SomeFoo : Symbol(SomeFoo, Decl(valueUsedAsTypeArgument.ts, 3, 21))
 >Foo : Symbol(Foo, Decl(valueUsedAsTypeArgument.ts, 0, 0))
 
+// Type alias
 type SomeBar = Something;
->SomeBar : Symbol(SomeBar, Decl(valueUsedAsTypeArgument.ts, 4, 30))
+>SomeBar : Symbol(SomeBar, Decl(valueUsedAsTypeArgument.ts, 6, 30))
 
-const x: Something = [];
->x : Symbol(x, Decl(valueUsedAsTypeArgument.ts, 7, 5))
-
-type LiteralNumberFoo = Foo<1>;
->LiteralNumberFoo : Symbol(LiteralNumberFoo, Decl(valueUsedAsTypeArgument.ts, 7, 24))
+// Nested type arguments, should show new error
+type SomeOther = Other<Foo<Something>>;
+>SomeOther : Symbol(SomeOther, Decl(valueUsedAsTypeArgument.ts, 9, 25))
+>Other : Symbol(Other, Decl(valueUsedAsTypeArgument.ts, 0, 27))
 >Foo : Symbol(Foo, Decl(valueUsedAsTypeArgument.ts, 0, 0))
 
+// Misuse of value
+const x: Something = [];
+>x : Symbol(x, Decl(valueUsedAsTypeArgument.ts, 15, 5))
+
+// Numeric literal type
+type LiteralNumberFoo = Foo<1>;
+>LiteralNumberFoo : Symbol(LiteralNumberFoo, Decl(valueUsedAsTypeArgument.ts, 15, 24))
+>Foo : Symbol(Foo, Decl(valueUsedAsTypeArgument.ts, 0, 0))
+
+// String literal type
 type LiteralStringFoo = Foo<'test'>;
->LiteralStringFoo : Symbol(LiteralStringFoo, Decl(valueUsedAsTypeArgument.ts, 9, 31))
+>LiteralStringFoo : Symbol(LiteralStringFoo, Decl(valueUsedAsTypeArgument.ts, 18, 31))
 >Foo : Symbol(Foo, Decl(valueUsedAsTypeArgument.ts, 0, 0))
 
