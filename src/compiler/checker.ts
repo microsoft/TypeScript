@@ -6482,16 +6482,11 @@ namespace ts {
                     return errorType;
                 }
 
-                let declaration: JSDocTypedefTag | JSDocCallbackTag | TypeAliasDeclaration | JSDocEnumTag | undefined = find(symbol.declarations, d =>
-                    isJSDocTypeAlias(d) || d.kind === SyntaxKind.TypeAliasDeclaration) as JSDocTypedefTag | JSDocCallbackTag | TypeAliasDeclaration | undefined;
+                const declaration = find(symbol.declarations, isTypeAlias);
                 if (!declaration) {
-                    const declWithEnum = find(symbol.declarations, d => !!getJSDocEnumTag(d));
-                    if (!declWithEnum) {
-                        return Debug.fail("Type alias symbol with no valid declaration found");
-                    }
-                    declaration = getJSDocEnumTag(declWithEnum)!;
+                    return Debug.fail("Type alias symbol with no valid declaration found");
                 }
-                const typeNode = isJSDocTypeAlias(declaration) || isJSDocEnumTag(declaration) ? declaration.typeExpression : declaration.type;
+                const typeNode = isJSDocTypeAlias(declaration) ? declaration.typeExpression : declaration.type;
                 // If typeNode is missing, we will error in checkJSDocTypedefTag.
                 let type = typeNode ? getTypeFromTypeNode(typeNode) : errorType;
 
@@ -6507,7 +6502,7 @@ namespace ts {
                 }
                 else {
                     type = errorType;
-                    error(isJSDocEnumTag(declaration) ? declaration : declaration.name, Diagnostics.Type_alias_0_circularly_references_itself, symbolToString(symbol));
+                    error(isJSDocEnumTag(declaration) ? declaration : declaration.name || declaration, Diagnostics.Type_alias_0_circularly_references_itself, symbolToString(symbol));
                 }
                 links.declaredType = type;
             }
