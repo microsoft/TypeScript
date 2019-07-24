@@ -5159,7 +5159,7 @@ interface EventTarget {
      */
     addEventListener(type: string, listener: EventListenerOrEventListenerObject | null, options?: boolean | AddEventListenerOptions): void;
     /**
-     * Dispatches a synthetic event event to target and returns true
+     * Dispatches a synthetic event to target and returns true
      * if either event's cancelable attribute value is false or its preventDefault() method was not invoked, and false otherwise.
      */
     dispatchEvent(event: Event): boolean;
