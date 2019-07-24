@@ -12,14 +12,17 @@ type SomeFoo = Foo<Something>;
 >SomeFoo : Symbol(SomeFoo, Decl(valueUsedAsTypeArgument.ts, 2, 21))
 >Foo : Symbol(Foo, Decl(valueUsedAsTypeArgument.ts, 0, 0))
 
+type SomeBar = Something;
+>SomeBar : Symbol(SomeBar, Decl(valueUsedAsTypeArgument.ts, 4, 30))
+
 const x: Something = [];
->x : Symbol(x, Decl(valueUsedAsTypeArgument.ts, 6, 5))
+>x : Symbol(x, Decl(valueUsedAsTypeArgument.ts, 7, 5))
 
 type LiteralNumberFoo = Foo<1>;
->LiteralNumberFoo : Symbol(LiteralNumberFoo, Decl(valueUsedAsTypeArgument.ts, 6, 24))
+>LiteralNumberFoo : Symbol(LiteralNumberFoo, Decl(valueUsedAsTypeArgument.ts, 7, 24))
 >Foo : Symbol(Foo, Decl(valueUsedAsTypeArgument.ts, 0, 0))
 
 type LiteralStringFoo = Foo<'test'>;
->LiteralStringFoo : Symbol(LiteralStringFoo, Decl(valueUsedAsTypeArgument.ts, 8, 31))
+>LiteralStringFoo : Symbol(LiteralStringFoo, Decl(valueUsedAsTypeArgument.ts, 9, 31))
 >Foo : Symbol(Foo, Decl(valueUsedAsTypeArgument.ts, 0, 0))
 

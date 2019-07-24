@@ -10,6 +10,9 @@ const Something = [];
 type SomeFoo = Foo<Something>;
 >SomeFoo : Foo<any>
 
+type SomeBar = Something;
+>SomeBar : any
+
 const x: Something = [];
 >x : any
 >[] : undefined[]
