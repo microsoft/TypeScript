@@ -27,6 +27,9 @@ namespace ts.NavigationBar {
     let parentsStack: NavigationBarNode[] = [];
     let parent: NavigationBarNode;
 
+    let trackedEs5ClassesStack: (Map<boolean> | undefined)[] = [];
+    let trackedEs5Classes: Map<boolean> | undefined;
+
     // NavigationBarItem requires an array, but will not mutate it, so just give it this for performance.
     let emptyChildItemArray: NavigationBarItem[] = [];
 
@@ -117,6 +120,13 @@ namespace ts.NavigationBar {
         };
     }
 
+    function addTrackedEs5Class(name: string) {
+        if (!trackedEs5Classes) {
+            trackedEs5Classes = createMap();
+        }
+        trackedEs5Classes.set(name, true);
+    }
+
     /**
      * Add a new level of NavigationBarNodes.
      * This pushes to the stack, so you must call `endNode` when you are done adding to this node.
@@ -127,6 +137,7 @@ namespace ts.NavigationBar {
 
         // Save the old parent
         parentsStack.push(parent);
+        trackedEs5ClassesStack.push(trackedEs5Classes);
         parent = navNode;
     }
 
@@ -137,6 +148,7 @@ namespace ts.NavigationBar {
             sortChildren(parent.children);
         }
         parent = parentsStack.pop()!;
+        trackedEs5Classes = trackedEs5ClassesStack.pop();
     }
 
     function addNodeWithRecursiveChild(node: Node, child: Node | undefined, name?: DeclarationName): void {
@@ -230,8 +242,14 @@ namespace ts.NavigationBar {
                 }
                 break;
 
-            case SyntaxKind.ArrowFunction:
             case SyntaxKind.FunctionDeclaration:
+                const nameNode = (<FunctionLikeDeclaration>node).name;
+                if (nameNode && isIdentifier(nameNode)) {
+                    addTrackedEs5Class(nameNode.text);
+                }
+                addNodeWithRecursiveChild(node, (<FunctionLikeDeclaration>node).body);
+                break;
+            case SyntaxKind.ArrowFunction:
             case SyntaxKind.FunctionExpression:
                 addNodeWithRecursiveChild(node, (<FunctionLikeDeclaration>node).body);
                 break;
@@ -309,8 +327,23 @@ namespace ts.NavigationBar {
                         endNode();
                         return;
                     }
+                    case AssignmentDeclarationKind.Property: {
+                        const binaryExpression = (node as BinaryExpression);
+                        const assignmentTarget = binaryExpression.left as PropertyAccessExpression;
+                        const targetFunction = assignmentTarget.expression;
+                        if (isIdentifier(targetFunction) && trackedEs5Classes && trackedEs5Classes.has(targetFunction.text)) {
+                            if (isFunctionExpression(binaryExpression.right) || isArrowFunction(binaryExpression.right)) {
+                                addNodeWithRecursiveChild(node, binaryExpression.right, targetFunction);
+                            }
+                            else {
+                                startNode(binaryExpression, targetFunction);
+                                    addNodeWithRecursiveChild(binaryExpression.left, binaryExpression.right, assignmentTarget.name);
+                                endNode();
+                            }
+                        }
+                        return;
+                    }
                     case AssignmentDeclarationKind.ThisProperty:
-                    case AssignmentDeclarationKind.Property:
                     case AssignmentDeclarationKind.None:
                     case AssignmentDeclarationKind.ObjectDefinePropertyExports:
                         break;
@@ -414,10 +447,12 @@ namespace ts.NavigationBar {
                     a.children = a.node === ctorFunction ? concatenate([ctor], b.children || [b]) : concatenate(a.children || [a], [ctor]);
                 }
                 else {
-                    a.children = concatenate(a.children || [a], b.children || [b]);
-                    if (a.children) {
-                        mergeChildren(a.children, a);
-                        sortChildren(a.children);
+                    if (a.children || b.children) {
+                        a.children = concatenate(a.children || [a], b.children || [b]);
+                        if (a.children) {
+                            mergeChildren(a.children, a);
+                            sortChildren(a.children);
+                        }
                     }
                 }
 
