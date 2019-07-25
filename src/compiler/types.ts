@@ -1812,6 +1812,11 @@ namespace ts {
 
     /** @internal */
     export type BindableObjectDefinePropertyCall = CallExpression & { arguments: { 0: EntityNameExpression, 1: StringLiteralLike | NumericLiteral, 2: ObjectLiteralExpression } };
+    /** @internal */
+    export type BindableElementAccessExpression = ElementAccessExpression & {
+        expression: EntityNameExpression;
+        argumentExpression: StringLiteralLike | NumericLiteral;
+    };
 
     // see: https://tc39.github.io/ecma262/#prod-SuperCall
     export interface SuperCall extends CallExpression {

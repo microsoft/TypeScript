@@ -5455,13 +5455,15 @@ namespace ts {
             let types: Type[] | undefined;
             for (const declaration of symbol.declarations) {
                 const expression = (isBinaryExpression(declaration) || isCallExpression(declaration)) ? declaration :
-                    isPropertyAccessExpression(declaration) ? isBinaryExpression(declaration.parent) ? declaration.parent : declaration :
+                    (isPropertyAccessExpression(declaration) || isElementAccessExpression(declaration)) ? isBinaryExpression(declaration.parent) ? declaration.parent : declaration :
                     undefined;
                 if (!expression) {
                     return errorType;
                 }
 
-                const kind = isPropertyAccessExpression(expression) ? getAssignmentDeclarationPropertyAccessKind(expression) : getAssignmentDeclarationKind(expression);
+                const kind = (isPropertyAccessExpression(expression) || isElementAccessExpression(expression))
+                    ? getAssignmentDeclarationPropertyAccessKind(expression)
+                    : getAssignmentDeclarationKind(expression);
                 if (kind === AssignmentDeclarationKind.ThisProperty) {
                     if (isDeclarationInConstructor(expression)) {
                         definedInConstructor = true;
@@ -5831,8 +5833,8 @@ namespace ts {
                 type = widenTypeForVariableLikeDeclaration(checkExpressionCached((<ExportAssignment>declaration).expression), declaration);
             }
             else if (isInJSFile(declaration) &&
-                (isCallExpression(declaration) || isBinaryExpression(declaration) || isPropertyAccessExpression(declaration) && isBinaryExpression(declaration.parent))) {
-                type = getWidenedTypeForAssignmentDeclaration(symbol);
+                (isCallExpression(declaration) || isBinaryExpression(declaration) || (isPropertyAccessExpression(declaration) || isBindableElementAccessExpression(declaration)) && isBinaryExpression(declaration.parent))) {
+                type = getWidenedTypeFromAssignmentDeclaration(symbol);
             }
             else if (isJSDocPropertyLikeTag(declaration)
                 || isPropertyAccessExpression(declaration)

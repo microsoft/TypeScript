@@ -2483,7 +2483,7 @@ namespace ts {
             if (!setCommonJsModuleIndicator(node)) {
                 return;
             }
-            const lhs = node.left as PropertyAccessEntityNameExpression;
+            const lhs = node.left as PropertyAccessEntityNameExpression | BindableElementAccessExpression;
             const symbol = forEachIdentifierInEntityName(lhs.expression, /*parent*/ undefined, (id, symbol) => {
                 if (symbol) {
                     addDeclarationToSymbol(symbol, id, SymbolFlags.Module | SymbolFlags.Assignment);
@@ -2494,7 +2494,7 @@ namespace ts {
                 const flags = isClassExpression(node.right) ?
                     SymbolFlags.Property | SymbolFlags.ExportValue | SymbolFlags.Class :
                     SymbolFlags.Property | SymbolFlags.ExportValue;
-                declareSymbol(symbol.exports!, symbol, lhs, flags, SymbolFlags.None);
+                declareSymbol(symbol.exports!, symbol, lhs as any, flags, SymbolFlags.None);
             }
         }
 
