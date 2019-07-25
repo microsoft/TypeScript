@@ -15497,37 +15497,27 @@ namespace ts {
                         }
                         return;
                     }
-                    // Find each source constituent type that has an identically matching target constituent
-                    // type, and for each such type infer from the type to itself. When inferring from a
-                    // type to itself we effectively find all type parameter occurrences within that type
-                    // and infer themselves as their type arguments. We have special handling for numeric
-                    // and string literals because the number and string types are not represented as unions
-                    // of all their possible values.
-                    let matchingTypes: Type[] | undefined;
-                    for (const t of (<UnionOrIntersectionType>source).types) {
-                        const matched = findMatchedType(t, <UnionOrIntersectionType>target);
-                        if (matched) {
-                            (matchingTypes || (matchingTypes = [])).push(matched);
-                            inferFromTypes(matched, matched);
-                        }
-                    }
-                    // Next, to improve the quality of inferences, reduce the source and target types by
-                    // removing the identically matched constituents. For example, when inferring from
-                    // 'string | string[]' to 'string | T' we reduce the types to 'string[]' and 'T'.
-                    if (matchingTypes) {
-                        const s = removeTypesFromUnionOrIntersection(<UnionOrIntersectionType>source, matchingTypes);
-                        const t = removeTypesFromUnionOrIntersection(<UnionOrIntersectionType>target, matchingTypes);
-                        if (!(s && t)) return;
-                        source = s;
-                        target = t;
-                    }
-                }
-                else if (target.flags & TypeFlags.Union && !(target.flags & TypeFlags.EnumLiteral) || target.flags & TypeFlags.Intersection) {
-                    const matched = findMatchedType(source, <UnionOrIntersectionType>target);
-                    if (matched) {
-                        inferFromTypes(matched, matched);
+                    // First, infer between exactly matching source and target constituents and remove
+                    // the matching types. Types exactly match when they are identical or, in union
+                    // types, when the source is a literal and the target is the corresponding primitive.
+                    const matching = target.flags & TypeFlags.Union ? isTypeOrBaseExactlyMatchedBy : isTypeExactlyMatchedBy;
+                    const [tempSources, tempTargets] = inferFromMatchingTypes((<UnionOrIntersectionType>source).types, (<UnionOrIntersectionType>target).types, matching);
+                    // Next, infer between closely matching source and target constituents and remove
+                    // the matching types. Types closely match when they are instantiations of the same
+                    // object type or instantiations of the same type alias.
+                    const [sources, targets] = inferFromMatchingTypes(tempSources, tempTargets, isTypeCloselyMatchedBy);
+                    if (sources.length === 0 || targets.length === 0) {
                         return;
                     }
+                    source = source.flags & TypeFlags.Union ? getUnionType(sources) : getIntersectionType(sources);
+                    target = target.flags & TypeFlags.Union ? getUnionType(targets) : getIntersectionType(targets);
+                }
+                else if (target.flags & TypeFlags.Union && !(target.flags & TypeFlags.EnumLiteral) || target.flags & TypeFlags.Intersection) {
+                    // This block of code is an optimized version of the block above for the simpler case
+                    // of a singleton source type.
+                    const matching = target.flags & TypeFlags.Union ? isTypeOrBaseExactlyMatchedBy : isTypeExactlyMatchedBy;
+                    if (inferFromMatchingType(source, (<UnionOrIntersectionType>target).types, matching)) return;
+                    if (inferFromMatchingType(source, (<UnionOrIntersectionType>target).types, isTypeCloselyMatchedBy)) return;
                 }
                 else if (target.flags & (TypeFlags.IndexedAccess | TypeFlags.Substitution)) {
                     target = getActualTypeVariable(target);
@@ -15673,6 +15663,35 @@ namespace ts {
                 const startCount = inferenceCount;
                 action(source, target);
                 visited.set(key, inferenceCount - startCount);
+            }
+
+            function inferFromMatchingType(source: Type, targets: Type[], matches: (s: Type, t: Type) => boolean) {
+                let matched = false;
+                for (const t of targets) {
+                    if (matches(source, t)) {
+                        inferFromTypes(source, t);
+                        matched = true;
+                    }
+                }
+                return matched;
+            }
+
+            function inferFromMatchingTypes(sources: Type[], targets: Type[], matches: (s: Type, t: Type) => boolean): [Type[], Type[]] {
+                let matchedSources: Type[] | undefined;
+                let matchedTargets: Type[] | undefined;
+                for (const t of targets) {
+                    for (const s of sources) {
+                        if (matches(s, t)) {
+                            inferFromTypes(s, t);
+                            matchedSources = appendIfUnique(matchedSources, s);
+                            matchedTargets = appendIfUnique(matchedTargets, t);
+                        }
+                    }
+                }
+                return [
+                    matchedSources ? filter(sources, t => !contains(matchedSources, t)) : sources,
+                    matchedTargets ? filter(targets, t => !contains(matchedTargets, t)) : targets,
+                ];
             }
 
             function inferFromTypeArguments(sourceTypes: readonly Type[], targetTypes: readonly Type[], variances: readonly VarianceFlags[]) {
@@ -15955,47 +15974,24 @@ namespace ts {
             }
         }
 
-        function isMatchableType(type: Type) {
+        function isNonObjectOrAnonymousType(type: Type) {
             // We exclude non-anonymous object types because some frameworks (e.g. Ember) rely on the ability to
             // infer between types that don't witness their type variables. Such types would otherwise be eliminated
             // because they appear identical.
             return !(type.flags & TypeFlags.Object) || !!(getObjectFlags(type) & ObjectFlags.Anonymous);
         }
 
-        function typeMatchedBySomeType(type: Type, types: Type[]): boolean {
-            for (const t of types) {
-                if (t === type || isMatchableType(t) && isMatchableType(type) && isTypeIdenticalTo(t, type)) {
-                    return true;
-                }
-            }
-            return false;
+        function isTypeExactlyMatchedBy(s: Type, t: Type) {
+            return s === t || isNonObjectOrAnonymousType(s) && isNonObjectOrAnonymousType(t) && isTypeIdenticalTo(s, t);
         }
 
-        function findMatchedType(type: Type, target: UnionOrIntersectionType) {
-            if (typeMatchedBySomeType(type, target.types)) {
-                return type;
-            }
-            if (type.flags & (TypeFlags.NumberLiteral | TypeFlags.StringLiteral) && target.flags & TypeFlags.Union) {
-                const base = getBaseTypeOfLiteralType(type);
-                if (typeMatchedBySomeType(base, target.types)) {
-                    return base;
-                }
-            }
-            return undefined;
+        function isTypeOrBaseExactlyMatchedBy(s: Type, t: Type) {
+            return isTypeExactlyMatchedBy(s, t) || !!(s.flags & (TypeFlags.StringLiteral | TypeFlags.NumberLiteral)) && isTypeIdenticalTo(getBaseTypeOfLiteralType(s), t);
         }
 
-        /**
-         * Return a new union or intersection type computed by removing a given set of types
-         * from a given union or intersection type.
-         */
-        function removeTypesFromUnionOrIntersection(type: UnionOrIntersectionType, typesToRemove: Type[]) {
-            const reducedTypes: Type[] = [];
-            for (const t of type.types) {
-                if (!typeMatchedBySomeType(t, typesToRemove)) {
-                    reducedTypes.push(t);
-                }
-            }
-            return reducedTypes.length ? type.flags & TypeFlags.Union ? getUnionType(reducedTypes) : getIntersectionType(reducedTypes) : undefined;
+        function isTypeCloselyMatchedBy(s: Type, t: Type) {
+            return !!(s.flags & TypeFlags.Object && t.flags & TypeFlags.Object && s.symbol && s.symbol === t.symbol ||
+                s.aliasSymbol && s.aliasTypeArguments && s.aliasSymbol === t.aliasSymbol);
         }
 
         function hasPrimitiveConstraint(type: TypeParameter): boolean {
