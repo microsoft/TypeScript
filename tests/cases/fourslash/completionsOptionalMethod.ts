@@ -5,7 +5,4 @@
 ////declare const x: { m?(): void };
 ////x./**/
 
-verify.completions({
-  marker: "",
-  exact: { name: 'm', kind: 'method', kindModifiers: 'declare,optional', sortText: completion.SortText.OptionalMember }
-});
+verify.completions({ marker: "", exact: "m" });

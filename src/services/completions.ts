@@ -985,7 +985,6 @@ namespace ts.Completions {
                             symbol.declarations.some(d => d.kind !== SyntaxKind.SourceFile && d.kind !== SyntaxKind.ModuleDeclaration && d.kind !== SyntaxKind.EnumDeclaration)) {
                             addTypeProperties(typeChecker.getTypeOfSymbolAtLocation(symbol, node));
                         }
-                        setSortTextToOptionalMember();
 
                         return;
                     }
@@ -995,13 +994,11 @@ namespace ts.Completions {
             if (isMetaProperty(node) && (node.keywordToken === SyntaxKind.NewKeyword || node.keywordToken === SyntaxKind.ImportKeyword)) {
                 const completion = (node.keywordToken === SyntaxKind.NewKeyword) ? "target" : "meta";
                 symbols.push(typeChecker.createSymbol(SymbolFlags.Property, escapeLeadingUnderscores(completion)));
-                setSortTextToOptionalMember();
                 return;
             }
 
             if (!isTypeLocation) {
                 addTypeProperties(typeChecker.getTypeAtLocation(node));
-                setSortTextToOptionalMember();
             }
         }
 
@@ -1581,7 +1578,6 @@ namespace ts.Completions {
                     return type && typeChecker.getPropertiesOfType(classElementModifierFlags & ModifierFlags.Static ? typeChecker.getTypeOfSymbolAtLocation(type.symbol, decl) : type);
                 });
                 symbols = filterClassMembersList(baseSymbols, decl.members, classElementModifierFlags);
-                setSortTextToOptionalMember();
             }
 
             return GlobalsSearch.Success;
@@ -2026,7 +2022,7 @@ namespace ts.Completions {
             }
             const filteredSymbols = symbols.filter(a => !seenNames.get(a.escapedName));
 
-            setSortTextToMemberDeclaredBySpreadAssignment(membersDeclaredBySpreadAssignment, symbols);
+            setSortTextToMemberDeclaredBySpreadAssignment(membersDeclaredBySpreadAssignment, filteredSymbols);
 
             return filteredSymbols;
         }
