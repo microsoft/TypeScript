@@ -2046,6 +2046,18 @@ namespace ts {
             isEntityNameExpression(expr.arguments[0]);
     }
 
+    type BindableElementAccessExpression = ElementAccessExpression & { argumentExpression: StringLiteralLike | NumericLiteral };
+    function isBindableElementAccessExpression(expr: Expression): expr is BindableElementAccessExpression {
+        return isElementAccessExpression(expr) && isStringOrNumericLiteralLike(expr.argumentExpression);
+    }
+
+    function getNameOrArgumentText(expr: PropertyAccessExpression | BindableElementAccessExpression) {
+        if (isPropertyAccessExpression(expr)) {
+            return expr.name.escapedText;
+        }
+        return expr.argumentExpression.text;
+    }
+
     function getAssignmentDeclarationKindWorker(expr: BinaryExpression | CallExpression): AssignmentDeclarationKind {
         if (isCallExpression(expr)) {
             if (!isBindableObjectDefinePropertyCall(expr)) {
@@ -2061,18 +2073,18 @@ namespace ts {
             return AssignmentDeclarationKind.ObjectDefinePropertyValue;
         }
         if (expr.operatorToken.kind !== SyntaxKind.EqualsToken ||
-            !isPropertyAccessExpression(expr.left)) {
+            !(isPropertyAccessExpression(expr.left) || isBindableElementAccessExpression(expr.left))) {
             return AssignmentDeclarationKind.None;
         }
         const lhs = expr.left;
-        if (isEntityNameExpression(lhs.expression) && lhs.name.escapedText === "prototype" && isObjectLiteralExpression(getInitializerOfBinaryExpression(expr))) {
+        if (isEntityNameExpression(lhs.expression) && getNameOrArgumentText(lhs) === "prototype" && isObjectLiteralExpression(getInitializerOfBinaryExpression(expr))) {
             // F.prototype = { ... }
             return AssignmentDeclarationKind.Prototype;
         }
         return getAssignmentDeclarationPropertyAccessKind(lhs);
     }
 
-    export function getAssignmentDeclarationPropertyAccessKind(lhs: PropertyAccessExpression): AssignmentDeclarationKind {
+    export function getAssignmentDeclarationPropertyAccessKind(lhs: PropertyAccessExpression | BindableElementAccessExpression): AssignmentDeclarationKind {
         if (lhs.expression.kind === SyntaxKind.ThisKeyword) {
             return AssignmentDeclarationKind.ThisProperty;
         }
@@ -2087,13 +2099,13 @@ namespace ts {
             }
 
             let nextToLast = lhs;
-            while (isPropertyAccessExpression(nextToLast.expression)) {
+            while (isBindableElementAccessExpression(nextToLast.expression)) {
                 nextToLast = nextToLast.expression;
             }
-            Debug.assert(isIdentifier(nextToLast.expression));
-            const id = nextToLast.expression as Identifier;
-            if (id.escapedText === "exports" ||
-                id.escapedText === "module" && nextToLast.name.escapedText === "exports") {
+            const twoFromLast = tryCast(nextToLast.expression, isIdentifier) || cast(nextToLast.expression, isStringOrNumericLiteralLike);
+            const twoFromLastText = getTextOfIdentifierOrLiteral(twoFromLast);
+            if (twoFromLastText === "exports" ||
+                twoFromLastText === "module" && getNameOrArgumentText(nextToLast) === "exports") {
                 // exports.name = expr OR module.exports.name = expr
                 return AssignmentDeclarationKind.ExportsProperty;
             }
