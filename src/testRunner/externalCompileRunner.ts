@@ -119,7 +119,14 @@ class DockerfileRunner extends ExternalCompileRunnerBase {
         const cls = this;
         describe(`${this.kind()} code samples`, function(this: Mocha.ISuiteCallbackContext) {
             this.timeout(cls.timeout); // 20 minutes
+            let tsRev: string;
             before(() => {
+                const cp: typeof import("child_process") = require("child_process");
+                const revOut = cp.spawnSync("git", ["rev-parse", "HEAD"], { cwd: Harness.IO.getWorkspaceRoot() });
+                if (revOut.status !== 0) {
+                    throw new Error(`git rev-parse failed with output: ${revOut.stderr && revOut.stderr.toString()}`);
+                }
+                tsRev = revOut.stdout.toString().trim();
                 cls.exec("docker", ["build", ".", "-t", "typescript/typescript"], { cwd: Harness.IO.getWorkspaceRoot() }); // cached because workspace is hashed to determine cacheability
             });
             for (const test of testList) {
@@ -127,7 +134,7 @@ class DockerfileRunner extends ExternalCompileRunnerBase {
                 const cwd = path.join(Harness.IO.getWorkspaceRoot(), cls.testDir, directory);
                 it(`should build ${directory} successfully`, () => {
                     const imageName = `tstest/${directory}`;
-                    cls.exec("docker", ["build", "--no-cache", ".", "-t", imageName], { cwd }); // --no-cache so the latest version of the repos referenced is always fetched
+                    cls.exec("docker", ["build", "--no-cache", ".", "-t", imageName, "--build-arg", `TS_SHA=${tsRev}`], { cwd }); // --no-cache so the latest version of the repos referenced is always fetched
                     const cp: typeof import("child_process") = require("child_process");
                     Harness.Baseline.runBaseline(`${cls.kind()}/${directory}.log`, cls.report(cp.spawnSync(`docker`, ["run", imageName], { cwd, timeout: cls.timeout, shell: true })));
                 });

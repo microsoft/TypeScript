@@ -1,0 +1,1359 @@
+Exit Code: 1
+Standard output:
+yarn run vX.X.X
+$ yarn build:index && yarn link-self && yarn build:tests
+$ tsc && rollup -c rollup.config.js
+$ yarn link && yarn link broccoli-typescript-compiler
+success Registered "broccoli-typescript-compiler".
+info You can now run `yarn link "broccoli-typescript-compiler"` in the projects where you want to use this package and it will be used instead.
+success Using linked package for "broccoli-typescript-compiler".
+$ tsc -p tests/tsconfig.json
+Done in ?s.
+TAP version 13
+ok 1 plugin-cases > basic resolutions
+ok 2 plugin-cases > node resolution
+ok 3 plugin-cases > web worker
+not ok 4 config-parser > extended config > should be able to find the extended config
+  ---
+  message: "Died on test #1     at Object.<anonymous> (/bts/dist/tests/config-parser-test.js:68:15): realpath is not a function"
+  severity: failed
+  actual: null
+  expected: undefined
+  stack: TypeError: realpath is not a function
+    at visitDirectory (/bts/node_modules/typescript/lib/typescript.js:16111:45)
+    at Object.matchFiles (/bts/node_modules/typescript/lib/typescript.js:16107:13)
+    at Object.readDirectory (/bts/dist/index.cjs.js:60:19)
+    at getFileNamesFromConfigSpecs (/bts/node_modules/typescript/lib/typescript.js:26324:40)
+    at matchFileNames (/bts/node_modules/typescript/lib/typescript.js:26244:16)
+    at getFileNames (/bts/node_modules/typescript/lib/typescript.js:25812:26)
+    at parseJsonConfigFileContentWorker (/bts/node_modules/typescript/lib/typescript.js:25745:18)
+    at Object.parseJsonSourceFileConfigFileContent (/bts/node_modules/typescript/lib/typescript.js:25705:16)
+    at ConfigParser.parseConfigContent (/bts/dist/index.cjs.js:134:15)
+    at ConfigParser.parseConfig (/bts/dist/index.cjs.js:87:23)
+  ...
+ok 5 path-utils > relativePathWithin
+ok 6 plugin-rebuild > compiles basic typescript
+ok 7 plugin-rebuild > handles missing files
+not ok ?submodule typescript version > matches installed typescript version
+  ---
+  message: "Installed Typescript version (X.X.X-insiders.xxxxxxxx) does not match
+      the test fixture version in 'vendor/typescript' (X.X.X)"
+  severity: failed
+  actual: "X.X.X-insiders.xxxxxxxx"
+  expected: "3.6.0"
+  stack:     at Object.<anonymous> (/bts/dist/tests/submodule-version-test.js:6:16)
+  ...
+index.ts(1,5): error TS2322: Type '"string"' is not assignable to type 'number'.
+ok 9 throwOnError > does not throw on type errors by default
+ok 10 throwOnError > throws on type errors when throwOnErrors is set to true
+ok 11 throwOnError > throws on type errors if NODE_ENV is 'production'
+index.ts(1,5): error TS2322: Type '"string"' is not assignable to type 'number'.
+ok 12 throwOnError > does not throw by default if NODE_ENV is not 'production'
+index.ts(1,5): error TS2322: Type '"string"' is not assignable to type 'number'.
+ok 13 throwOnError > does not throw when NODE_ENV is 'production' if throwOnError is explicitly false
+ok 14 typescript-project-cases > baseline > amd
+ok 15 typescript-project-cases > baseline > commonjs
+ok 16 typescript-project-cases > baseline2 > amd
+ok 17 typescript-project-cases > baseline2 > commonjs
+ok 18 typescript-project-cases > baseline3 > amd
+ok 19 typescript-project-cases > baseline3 > commonjs
+ok 20 typescript-project-cases > declarationDir > amd
+ok 21 typescript-project-cases > declarationDir > commonjs
+ok 22 typescript-project-cases > declarationDir2 > amd
+ok 23 typescript-project-cases > declarationDir2 > commonjs
+ok 24 typescript-project-cases > declarationDir3 > amd
+ok 25 typescript-project-cases > declarationDir3 > commonjs
+ok 26 typescript-project-cases > declarationsCascadingImports > amd
+ok 27 typescript-project-cases > declarationsCascadingImports > commonjs
+ok 28 typescript-project-cases > declarationsExportNamespace > amd
+ok 29 typescript-project-cases > declarationsExportNamespace > commonjs
+ok 30 typescript-project-cases > declarationsGlobalImport > amd
+ok 31 typescript-project-cases > declarationsGlobalImport > commonjs
+ok 32 typescript-project-cases > declarationsImportedInPrivate > amd
+ok 33 typescript-project-cases > declarationsImportedInPrivate > commonjs
+ok 34 typescript-project-cases > declarationsImportedUseInFunction > amd
+ok 35 typescript-project-cases > declarationsImportedUseInFunction > commonjs
+ok 36 typescript-project-cases > declarationsIndirectImportShouldResultInError > amd
+ok 37 typescript-project-cases > declarationsIndirectImportShouldResultInError > commonjs
+ok 38 typescript-project-cases > declarationsMultipleTimesImport > amd
+ok 39 typescript-project-cases > declarationsMultipleTimesImport > commonjs
+ok 40 typescript-project-cases > declarationsMultipleTimesMultipleImport > amd
+ok 41 typescript-project-cases > declarationsMultipleTimesMultipleImport > commonjs
+ok 42 typescript-project-cases > declarationsSimpleImport > amd
+ok 43 typescript-project-cases > declarationsSimpleImport > commonjs
+ok 44 typescript-project-cases > declareExportAdded > amd
+ok 45 typescript-project-cases > declareExportAdded > commonjs
+not ok 46 typescript-project-cases > defaultExcludeNodeModulesAndOutDir > amd
+  ---
+  message: "Promise rejected during "amd": realpath is not a function
+        at broccoli-typescript-compiler
+-~- created here: -~-
+    at TypescriptCompiler.Plugin (/bts/node_modules/broccoli-plugin/index.js:7:31)
+    at new TypescriptCompiler (/bts/dist/index.cjs.js:883:27)
+    at Object.typescript [as default] (/bts/dist/index.cjs.js:876:12)
+    at Object.<anonymous> (/bts/dist/tests/typescript-project-cases-test.js:29:82)
+    at Generator.next (<anonymous>)
+    at fulfilled (/bts/dist/tests/typescript-project-cases-test.js:5:58)
+-~- (end) -~-"
+  severity: failed
+  actual: null
+  expected: undefined
+  stack: TypeError: realpath is not a function
+    at visitDirectory (/bts/node_modules/typescript/lib/typescript.js:16111:45)
+    at Object.matchFiles (/bts/node_modules/typescript/lib/typescript.js:16107:13)
+    at Object.readDirectory (/bts/dist/index.cjs.js:60:19)
+    at getFileNamesFromConfigSpecs (/bts/node_modules/typescript/lib/typescript.js:26324:40)
+    at matchFileNames (/bts/node_modules/typescript/lib/typescript.js:26244:16)
+    at getFileNames (/bts/node_modules/typescript/lib/typescript.js:25812:26)
+    at parseJsonConfigFileContentWorker (/bts/node_modules/typescript/lib/typescript.js:25745:18)
+    at Object.parseJsonSourceFileConfigFileContent (/bts/node_modules/typescript/lib/typescript.js:25705:16)
+    at ConfigParser.parseConfigContent (/bts/dist/index.cjs.js:134:15)
+    at ConfigParser.parseConfig (/bts/dist/index.cjs.js:87:23)
+  ...
+not ok 47 typescript-project-cases > defaultExcludeNodeModulesAndOutDir > commonjs
+  ---
+  message: "Promise rejected during "commonjs": realpath is not a function
+        at broccoli-typescript-compiler
+-~- created here: -~-
+    at TypescriptCompiler.Plugin (/bts/node_modules/broccoli-plugin/index.js:7:31)
+    at new TypescriptCompiler (/bts/dist/index.cjs.js:883:27)
+    at Object.typescript [as default] (/bts/dist/index.cjs.js:876:12)
+    at Object.<anonymous> (/bts/dist/tests/typescript-project-cases-test.js:29:82)
+    at Generator.next (<anonymous>)
+    at fulfilled (/bts/dist/tests/typescript-project-cases-test.js:5:58)
+-~- (end) -~-"
+  severity: failed
+  actual: null
+  expected: undefined
+  stack: TypeError: realpath is not a function
+    at visitDirectory (/bts/node_modules/typescript/lib/typescript.js:16111:45)
+    at Object.matchFiles (/bts/node_modules/typescript/lib/typescript.js:16107:13)
+    at Object.readDirectory (/bts/dist/index.cjs.js:60:19)
+    at getFileNamesFromConfigSpecs (/bts/node_modules/typescript/lib/typescript.js:26324:40)
+    at matchFileNames (/bts/node_modules/typescript/lib/typescript.js:26244:16)
+    at getFileNames (/bts/node_modules/typescript/lib/typescript.js:25812:26)
+    at parseJsonConfigFileContentWorker (/bts/node_modules/typescript/lib/typescript.js:25745:18)
+    at Object.parseJsonSourceFileConfigFileContent (/bts/node_modules/typescript/lib/typescript.js:25705:16)
+    at ConfigParser.parseConfigContent (/bts/dist/index.cjs.js:134:15)
+    at ConfigParser.parseConfig (/bts/dist/index.cjs.js:87:23)
+  ...
+not ok 48 typescript-project-cases > defaultExcludeNodeModulesAndOutDirWithAllowJS > amd
+  ---
+  message: "Promise rejected during "amd": realpath is not a function
+        at broccoli-typescript-compiler
+-~- created here: -~-
+    at TypescriptCompiler.Plugin (/bts/node_modules/broccoli-plugin/index.js:7:31)
+    at new TypescriptCompiler (/bts/dist/index.cjs.js:883:27)
+    at Object.typescript [as default] (/bts/dist/index.cjs.js:876:12)
+    at Object.<anonymous> (/bts/dist/tests/typescript-project-cases-test.js:29:82)
+    at Generator.next (<anonymous>)
+    at fulfilled (/bts/dist/tests/typescript-project-cases-test.js:5:58)
+-~- (end) -~-"
+  severity: failed
+  actual: null
+  expected: undefined
+  stack: TypeError: realpath is not a function
+    at visitDirectory (/bts/node_modules/typescript/lib/typescript.js:16111:45)
+    at Object.matchFiles (/bts/node_modules/typescript/lib/typescript.js:16107:13)
+    at Object.readDirectory (/bts/dist/index.cjs.js:60:19)
+    at getFileNamesFromConfigSpecs (/bts/node_modules/typescript/lib/typescript.js:26324:40)
+    at matchFileNames (/bts/node_modules/typescript/lib/typescript.js:26244:16)
+    at getFileNames (/bts/node_modules/typescript/lib/typescript.js:25812:26)
+    at parseJsonConfigFileContentWorker (/bts/node_modules/typescript/lib/typescript.js:25745:18)
+    at Object.parseJsonSourceFileConfigFileContent (/bts/node_modules/typescript/lib/typescript.js:25705:16)
+    at ConfigParser.parseConfigContent (/bts/dist/index.cjs.js:134:15)
+    at ConfigParser.parseConfig (/bts/dist/index.cjs.js:87:23)
+  ...
+not ok 49 typescript-project-cases > defaultExcludeNodeModulesAndOutDirWithAllowJS > commonjs
+  ---
+  message: "Promise rejected during "commonjs": realpath is not a function
+        at broccoli-typescript-compiler
+-~- created here: -~-
+    at TypescriptCompiler.Plugin (/bts/node_modules/broccoli-plugin/index.js:7:31)
+    at new TypescriptCompiler (/bts/dist/index.cjs.js:883:27)
+    at Object.typescript [as default] (/bts/dist/index.cjs.js:876:12)
+    at Object.<anonymous> (/bts/dist/tests/typescript-project-cases-test.js:29:82)
+    at Generator.next (<anonymous>)
+    at fulfilled (/bts/dist/tests/typescript-project-cases-test.js:5:58)
+-~- (end) -~-"
+  severity: failed
+  actual: null
+  expected: undefined
+  stack: TypeError: realpath is not a function
+    at visitDirectory (/bts/node_modules/typescript/lib/typescript.js:16111:45)
+    at Object.matchFiles (/bts/node_modules/typescript/lib/typescript.js:16107:13)
+    at Object.readDirectory (/bts/dist/index.cjs.js:60:19)
+    at getFileNamesFromConfigSpecs (/bts/node_modules/typescript/lib/typescript.js:26324:40)
+    at matchFileNames (/bts/node_modules/typescript/lib/typescript.js:26244:16)
+    at getFileNames (/bts/node_modules/typescript/lib/typescript.js:25812:26)
+    at parseJsonConfigFileContentWorker (/bts/node_modules/typescript/lib/typescript.js:25745:18)
+    at Object.parseJsonSourceFileConfigFileContent (/bts/node_modules/typescript/lib/typescript.js:25705:16)
+    at ConfigParser.parseConfigContent (/bts/dist/index.cjs.js:134:15)
+    at ConfigParser.parseConfig (/bts/dist/index.cjs.js:87:23)
+  ...
+not ok 50 typescript-project-cases > defaultExcludeNodeModulesAndRelativePathOutDir > amd
+  ---
+  message: "Promise rejected during "amd": realpath is not a function
+        at broccoli-typescript-compiler
+-~- created here: -~-
+    at TypescriptCompiler.Plugin (/bts/node_modules/broccoli-plugin/index.js:7:31)
+    at new TypescriptCompiler (/bts/dist/index.cjs.js:883:27)
+    at Object.typescript [as default] (/bts/dist/index.cjs.js:876:12)
+    at Object.<anonymous> (/bts/dist/tests/typescript-project-cases-test.js:29:82)
+    at Generator.next (<anonymous>)
+    at fulfilled (/bts/dist/tests/typescript-project-cases-test.js:5:58)
+-~- (end) -~-"
+  severity: failed
+  actual: null
+  expected: undefined
+  stack: TypeError: realpath is not a function
+    at visitDirectory (/bts/node_modules/typescript/lib/typescript.js:16111:45)
+    at Object.matchFiles (/bts/node_modules/typescript/lib/typescript.js:16107:13)
+    at Object.readDirectory (/bts/dist/index.cjs.js:60:19)
+    at getFileNamesFromConfigSpecs (/bts/node_modules/typescript/lib/typescript.js:26324:40)
+    at matchFileNames (/bts/node_modules/typescript/lib/typescript.js:26244:16)
+    at getFileNames (/bts/node_modules/typescript/lib/typescript.js:25812:26)
+    at parseJsonConfigFileContentWorker (/bts/node_modules/typescript/lib/typescript.js:25745:18)
+    at Object.parseJsonSourceFileConfigFileContent (/bts/node_modules/typescript/lib/typescript.js:25705:16)
+    at ConfigParser.parseConfigContent (/bts/dist/index.cjs.js:134:15)
+    at ConfigParser.parseConfig (/bts/dist/index.cjs.js:87:23)
+  ...
+not ok 51 typescript-project-cases > defaultExcludeNodeModulesAndRelativePathOutDir > commonjs
+  ---
+  message: "Promise rejected during "commonjs": realpath is not a function
+        at broccoli-typescript-compiler
+-~- created here: -~-
+    at TypescriptCompiler.Plugin (/bts/node_modules/broccoli-plugin/index.js:7:31)
+    at new TypescriptCompiler (/bts/dist/index.cjs.js:883:27)
+    at Object.typescript [as default] (/bts/dist/index.cjs.js:876:12)
+    at Object.<anonymous> (/bts/dist/tests/typescript-project-cases-test.js:29:82)
+    at Generator.next (<anonymous>)
+    at fulfilled (/bts/dist/tests/typescript-project-cases-test.js:5:58)
+-~- (end) -~-"
+  severity: failed
+  actual: null
+  expected: undefined
+  stack: TypeError: realpath is not a function
+    at visitDirectory (/bts/node_modules/typescript/lib/typescript.js:16111:45)
+    at Object.matchFiles (/bts/node_modules/typescript/lib/typescript.js:16107:13)
+    at Object.readDirectory (/bts/dist/index.cjs.js:60:19)
+    at getFileNamesFromConfigSpecs (/bts/node_modules/typescript/lib/typescript.js:26324:40)
+    at matchFileNames (/bts/node_modules/typescript/lib/typescript.js:26244:16)
+    at getFileNames (/bts/node_modules/typescript/lib/typescript.js:25812:26)
+    at parseJsonConfigFileContentWorker (/bts/node_modules/typescript/lib/typescript.js:25745:18)
+    at Object.parseJsonSourceFileConfigFileContent (/bts/node_modules/typescript/lib/typescript.js:25705:16)
+    at ConfigParser.parseConfigContent (/bts/dist/index.cjs.js:134:15)
+    at ConfigParser.parseConfig (/bts/dist/index.cjs.js:87:23)
+  ...
+not ok 52 typescript-project-cases > defaultExcludeNodeModulesAndRelativePathOutDirWithAllowJS > amd
+  ---
+  message: "Promise rejected during "amd": realpath is not a function
+        at broccoli-typescript-compiler
+-~- created here: -~-
+    at TypescriptCompiler.Plugin (/bts/node_modules/broccoli-plugin/index.js:7:31)
+    at new TypescriptCompiler (/bts/dist/index.cjs.js:883:27)
+    at Object.typescript [as default] (/bts/dist/index.cjs.js:876:12)
+    at Object.<anonymous> (/bts/dist/tests/typescript-project-cases-test.js:29:82)
+    at Generator.next (<anonymous>)
+    at fulfilled (/bts/dist/tests/typescript-project-cases-test.js:5:58)
+-~- (end) -~-"
+  severity: failed
+  actual: null
+  expected: undefined
+  stack: TypeError: realpath is not a function
+    at visitDirectory (/bts/node_modules/typescript/lib/typescript.js:16111:45)
+    at Object.matchFiles (/bts/node_modules/typescript/lib/typescript.js:16107:13)
+    at Object.readDirectory (/bts/dist/index.cjs.js:60:19)
+    at getFileNamesFromConfigSpecs (/bts/node_modules/typescript/lib/typescript.js:26324:40)
+    at matchFileNames (/bts/node_modules/typescript/lib/typescript.js:26244:16)
+    at getFileNames (/bts/node_modules/typescript/lib/typescript.js:25812:26)
+    at parseJsonConfigFileContentWorker (/bts/node_modules/typescript/lib/typescript.js:25745:18)
+    at Object.parseJsonSourceFileConfigFileContent (/bts/node_modules/typescript/lib/typescript.js:25705:16)
+    at ConfigParser.parseConfigContent (/bts/dist/index.cjs.js:134:15)
+    at ConfigParser.parseConfig (/bts/dist/index.cjs.js:87:23)
+  ...
+not ok 53 typescript-project-cases > defaultExcludeNodeModulesAndRelativePathOutDirWithAllowJS > commonjs
+  ---
+  message: "Promise rejected during "commonjs": realpath is not a function
+        at broccoli-typescript-compiler
+-~- created here: -~-
+    at TypescriptCompiler.Plugin (/bts/node_modules/broccoli-plugin/index.js:7:31)
+    at new TypescriptCompiler (/bts/dist/index.cjs.js:883:27)
+    at Object.typescript [as default] (/bts/dist/index.cjs.js:876:12)
+    at Object.<anonymous> (/bts/dist/tests/typescript-project-cases-test.js:29:82)
+    at Generator.next (<anonymous>)
+    at fulfilled (/bts/dist/tests/typescript-project-cases-test.js:5:58)
+-~- (end) -~-"
+  severity: failed
+  actual: null
+  expected: undefined
+  stack: TypeError: realpath is not a function
+    at visitDirectory (/bts/node_modules/typescript/lib/typescript.js:16111:45)
+    at Object.matchFiles (/bts/node_modules/typescript/lib/typescript.js:16107:13)
+    at Object.readDirectory (/bts/dist/index.cjs.js:60:19)
+    at getFileNamesFromConfigSpecs (/bts/node_modules/typescript/lib/typescript.js:26324:40)
+    at matchFileNames (/bts/node_modules/typescript/lib/typescript.js:26244:16)
+    at getFileNames (/bts/node_modules/typescript/lib/typescript.js:25812:26)
+    at parseJsonConfigFileContentWorker (/bts/node_modules/typescript/lib/typescript.js:25745:18)
+    at Object.parseJsonSourceFileConfigFileContent (/bts/node_modules/typescript/lib/typescript.js:25705:16)
+    at ConfigParser.parseConfigContent (/bts/dist/index.cjs.js:134:15)
+    at ConfigParser.parseConfig (/bts/dist/index.cjs.js:87:23)
+  ...
+not ok 54 typescript-project-cases > defaultExcludeOnlyNodeModules > amd
+  ---
+  message: "Promise rejected during "amd": realpath is not a function
+        at broccoli-typescript-compiler
+-~- created here: -~-
+    at TypescriptCompiler.Plugin (/bts/node_modules/broccoli-plugin/index.js:7:31)
+    at new TypescriptCompiler (/bts/dist/index.cjs.js:883:27)
+    at Object.typescript [as default] (/bts/dist/index.cjs.js:876:12)
+    at Object.<anonymous> (/bts/dist/tests/typescript-project-cases-test.js:29:82)
+    at Generator.next (<anonymous>)
+    at fulfilled (/bts/dist/tests/typescript-project-cases-test.js:5:58)
+-~- (end) -~-"
+  severity: failed
+  actual: null
+  expected: undefined
+  stack: TypeError: realpath is not a function
+    at visitDirectory (/bts/node_modules/typescript/lib/typescript.js:16111:45)
+    at Object.matchFiles (/bts/node_modules/typescript/lib/typescript.js:16107:13)
+    at Object.readDirectory (/bts/dist/index.cjs.js:60:19)
+    at getFileNamesFromConfigSpecs (/bts/node_modules/typescript/lib/typescript.js:26324:40)
+    at matchFileNames (/bts/node_modules/typescript/lib/typescript.js:26244:16)
+    at getFileNames (/bts/node_modules/typescript/lib/typescript.js:25812:26)
+    at parseJsonConfigFileContentWorker (/bts/node_modules/typescript/lib/typescript.js:25745:18)
+    at Object.parseJsonSourceFileConfigFileContent (/bts/node_modules/typescript/lib/typescript.js:25705:16)
+    at ConfigParser.parseConfigContent (/bts/dist/index.cjs.js:134:15)
+    at ConfigParser.parseConfig (/bts/dist/index.cjs.js:87:23)
+  ...
+not ok 55 typescript-project-cases > defaultExcludeOnlyNodeModules > commonjs
+  ---
+  message: "Promise rejected during "commonjs": realpath is not a function
+        at broccoli-typescript-compiler
+-~- created here: -~-
+    at TypescriptCompiler.Plugin (/bts/node_modules/broccoli-plugin/index.js:7:31)
+    at new TypescriptCompiler (/bts/dist/index.cjs.js:883:27)
+    at Object.typescript [as default] (/bts/dist/index.cjs.js:876:12)
+    at Object.<anonymous> (/bts/dist/tests/typescript-project-cases-test.js:29:82)
+    at Generator.next (<anonymous>)
+    at fulfilled (/bts/dist/tests/typescript-project-cases-test.js:5:58)
+-~- (end) -~-"
+  severity: failed
+  actual: null
+  expected: undefined
+  stack: TypeError: realpath is not a function
+    at visitDirectory (/bts/node_modules/typescript/lib/typescript.js:16111:45)
+    at Object.matchFiles (/bts/node_modules/typescript/lib/typescript.js:16107:13)
+    at Object.readDirectory (/bts/dist/index.cjs.js:60:19)
+    at getFileNamesFromConfigSpecs (/bts/node_modules/typescript/lib/typescript.js:26324:40)
+    at matchFileNames (/bts/node_modules/typescript/lib/typescript.js:26244:16)
+    at getFileNames (/bts/node_modules/typescript/lib/typescript.js:25812:26)
+    at parseJsonConfigFileContentWorker (/bts/node_modules/typescript/lib/typescript.js:25745:18)
+    at Object.parseJsonSourceFileConfigFileContent (/bts/node_modules/typescript/lib/typescript.js:25705:16)
+    at ConfigParser.parseConfigContent (/bts/dist/index.cjs.js:134:15)
+    at ConfigParser.parseConfig (/bts/dist/index.cjs.js:87:23)
+  ...
+ok 56 typescript-project-cases > emitDecoratorMetadataCommonJSISolatedModules > amd
+ok 57 typescript-project-cases > emitDecoratorMetadataCommonJSISolatedModules > commonjs
+ok 58 typescript-project-cases > emitDecoratorMetadataCommonJSISolatedModulesNoResolve > amd
+ok 59 typescript-project-cases > emitDecoratorMetadataCommonJSISolatedModulesNoResolve > commonjs
+ok 60 typescript-project-cases > emitDecoratorMetadataSystemJS > amd
+ok 61 typescript-project-cases > emitDecoratorMetadataSystemJS > commonjs
+ok 62 typescript-project-cases > emitDecoratorMetadataSystemJSISolatedModules > amd
+ok 63 typescript-project-cases > emitDecoratorMetadataSystemJSISolatedModules > commonjs
+ok 64 typescript-project-cases > emitDecoratorMetadataSystemJSISolatedModulesNoResolve > amd
+ok 65 typescript-project-cases > emitDecoratorMetadataSystemJSISolatedModulesNoResolve > commonjs
+not ok 66 typescript-project-cases > jsFileCompilationDifferentNamesNotSpecified > amd
+  ---
+  message: "Promise rejected during "amd": realpath is not a function
+        at broccoli-typescript-compiler
+-~- created here: -~-
+    at TypescriptCompiler.Plugin (/bts/node_modules/broccoli-plugin/index.js:7:31)
+    at new TypescriptCompiler (/bts/dist/index.cjs.js:883:27)
+    at Object.typescript [as default] (/bts/dist/index.cjs.js:876:12)
+    at Object.<anonymous> (/bts/dist/tests/typescript-project-cases-test.js:29:82)
+    at Generator.next (<anonymous>)
+    at fulfilled (/bts/dist/tests/typescript-project-cases-test.js:5:58)
+-~- (end) -~-"
+  severity: failed
+  actual: null
+  expected: undefined
+  stack: TypeError: realpath is not a function
+    at visitDirectory (/bts/node_modules/typescript/lib/typescript.js:16111:45)
+    at Object.matchFiles (/bts/node_modules/typescript/lib/typescript.js:16107:13)
+    at Object.readDirectory (/bts/dist/index.cjs.js:60:19)
+    at getFileNamesFromConfigSpecs (/bts/node_modules/typescript/lib/typescript.js:26324:40)
+    at matchFileNames (/bts/node_modules/typescript/lib/typescript.js:26244:16)
+    at getFileNames (/bts/node_modules/typescript/lib/typescript.js:25812:26)
+    at parseJsonConfigFileContentWorker (/bts/node_modules/typescript/lib/typescript.js:25745:18)
+    at Object.parseJsonSourceFileConfigFileContent (/bts/node_modules/typescript/lib/typescript.js:25705:16)
+    at ConfigParser.parseConfigContent (/bts/dist/index.cjs.js:134:15)
+    at ConfigParser.parseConfig (/bts/dist/index.cjs.js:87:23)
+  ...
+not ok 67 typescript-project-cases > jsFileCompilationDifferentNamesNotSpecified > commonjs
+  ---
+  message: "Promise rejected during "commonjs": realpath is not a function
+        at broccoli-typescript-compiler
+-~- created here: -~-
+    at TypescriptCompiler.Plugin (/bts/node_modules/broccoli-plugin/index.js:7:31)
+    at new TypescriptCompiler (/bts/dist/index.cjs.js:883:27)
+    at Object.typescript [as default] (/bts/dist/index.cjs.js:876:12)
+    at Object.<anonymous> (/bts/dist/tests/typescript-project-cases-test.js:29:82)
+    at Generator.next (<anonymous>)
+    at fulfilled (/bts/dist/tests/typescript-project-cases-test.js:5:58)
+-~- (end) -~-"
+  severity: failed
+  actual: null
+  expected: undefined
+  stack: TypeError: realpath is not a function
+    at visitDirectory (/bts/node_modules/typescript/lib/typescript.js:16111:45)
+    at Object.matchFiles (/bts/node_modules/typescript/lib/typescript.js:16107:13)
+    at Object.readDirectory (/bts/dist/index.cjs.js:60:19)
+    at getFileNamesFromConfigSpecs (/bts/node_modules/typescript/lib/typescript.js:26324:40)
+    at matchFileNames (/bts/node_modules/typescript/lib/typescript.js:26244:16)
+    at getFileNames (/bts/node_modules/typescript/lib/typescript.js:25812:26)
+    at parseJsonConfigFileContentWorker (/bts/node_modules/typescript/lib/typescript.js:25745:18)
+    at Object.parseJsonSourceFileConfigFileContent (/bts/node_modules/typescript/lib/typescript.js:25705:16)
+    at ConfigParser.parseConfigContent (/bts/dist/index.cjs.js:134:15)
+    at ConfigParser.parseConfig (/bts/dist/index.cjs.js:87:23)
+  ...
+not ok 68 typescript-project-cases > jsFileCompilationDifferentNamesNotSpecifiedWithAllowJs > amd
+  ---
+  message: "Promise rejected during "amd": realpath is not a function
+        at broccoli-typescript-compiler
+-~- created here: -~-
+    at TypescriptCompiler.Plugin (/bts/node_modules/broccoli-plugin/index.js:7:31)
+    at new TypescriptCompiler (/bts/dist/index.cjs.js:883:27)
+    at Object.typescript [as default] (/bts/dist/index.cjs.js:876:12)
+    at Object.<anonymous> (/bts/dist/tests/typescript-project-cases-test.js:29:82)
+    at Generator.next (<anonymous>)
+    at fulfilled (/bts/dist/tests/typescript-project-cases-test.js:5:58)
+-~- (end) -~-"
+  severity: failed
+  actual: null
+  expected: undefined
+  stack: TypeError: realpath is not a function
+    at visitDirectory (/bts/node_modules/typescript/lib/typescript.js:16111:45)
+    at Object.matchFiles (/bts/node_modules/typescript/lib/typescript.js:16107:13)
+    at Object.readDirectory (/bts/dist/index.cjs.js:60:19)
+    at getFileNamesFromConfigSpecs (/bts/node_modules/typescript/lib/typescript.js:26324:40)
+    at matchFileNames (/bts/node_modules/typescript/lib/typescript.js:26244:16)
+    at getFileNames (/bts/node_modules/typescript/lib/typescript.js:25812:26)
+    at parseJsonConfigFileContentWorker (/bts/node_modules/typescript/lib/typescript.js:25745:18)
+    at Object.parseJsonSourceFileConfigFileContent (/bts/node_modules/typescript/lib/typescript.js:25705:16)
+    at ConfigParser.parseConfigContent (/bts/dist/index.cjs.js:134:15)
+    at ConfigParser.parseConfig (/bts/dist/index.cjs.js:87:23)
+  ...
+not ok 69 typescript-project-cases > jsFileCompilationDifferentNamesNotSpecifiedWithAllowJs > commonjs
+  ---
+  message: "Promise rejected during "commonjs": realpath is not a function
+        at broccoli-typescript-compiler
+-~- created here: -~-
+    at TypescriptCompiler.Plugin (/bts/node_modules/broccoli-plugin/index.js:7:31)
+    at new TypescriptCompiler (/bts/dist/index.cjs.js:883:27)
+    at Object.typescript [as default] (/bts/dist/index.cjs.js:876:12)
+    at Object.<anonymous> (/bts/dist/tests/typescript-project-cases-test.js:29:82)
+    at Generator.next (<anonymous>)
+    at fulfilled (/bts/dist/tests/typescript-project-cases-test.js:5:58)
+-~- (end) -~-"
+  severity: failed
+  actual: null
+  expected: undefined
+  stack: TypeError: realpath is not a function
+    at visitDirectory (/bts/node_modules/typescript/lib/typescript.js:16111:45)
+    at Object.matchFiles (/bts/node_modules/typescript/lib/typescript.js:16107:13)
+    at Object.readDirectory (/bts/dist/index.cjs.js:60:19)
+    at getFileNamesFromConfigSpecs (/bts/node_modules/typescript/lib/typescript.js:26324:40)
+    at matchFileNames (/bts/node_modules/typescript/lib/typescript.js:26244:16)
+    at getFileNames (/bts/node_modules/typescript/lib/typescript.js:25812:26)
+    at parseJsonConfigFileContentWorker (/bts/node_modules/typescript/lib/typescript.js:25745:18)
+    at Object.parseJsonSourceFileConfigFileContent (/bts/node_modules/typescript/lib/typescript.js:25705:16)
+    at ConfigParser.parseConfigContent (/bts/dist/index.cjs.js:134:15)
+    at ConfigParser.parseConfig (/bts/dist/index.cjs.js:87:23)
+  ...
+ok 70 typescript-project-cases > jsFileCompilationDifferentNamesSpecified > amd
+ok 71 typescript-project-cases > jsFileCompilationDifferentNamesSpecified > commonjs
+ok 72 typescript-project-cases > jsFileCompilationDifferentNamesSpecifiedWithAllowJs > amd
+ok 73 typescript-project-cases > jsFileCompilationDifferentNamesSpecifiedWithAllowJs > commonjs
+ok 74 typescript-project-cases > jsFileCompilationSameNameDTsSpecified > amd
+ok 75 typescript-project-cases > jsFileCompilationSameNameDTsSpecified > commonjs
+ok 76 typescript-project-cases > jsFileCompilationSameNameDTsSpecifiedWithAllowJs > amd
+ok 77 typescript-project-cases > jsFileCompilationSameNameDTsSpecifiedWithAllowJs > commonjs
+not ok 78 typescript-project-cases > jsFileCompilationSameNameDtsNotSpecified > amd
+  ---
+  message: "Promise rejected during "amd": realpath is not a function
+        at broccoli-typescript-compiler
+-~- created here: -~-
+    at TypescriptCompiler.Plugin (/bts/node_modules/broccoli-plugin/index.js:7:31)
+    at new TypescriptCompiler (/bts/dist/index.cjs.js:883:27)
+    at Object.typescript [as default] (/bts/dist/index.cjs.js:876:12)
+    at Object.<anonymous> (/bts/dist/tests/typescript-project-cases-test.js:29:82)
+    at Generator.next (<anonymous>)
+    at fulfilled (/bts/dist/tests/typescript-project-cases-test.js:5:58)
+-~- (end) -~-"
+  severity: failed
+  actual: null
+  expected: undefined
+  stack: TypeError: realpath is not a function
+    at visitDirectory (/bts/node_modules/typescript/lib/typescript.js:16111:45)
+    at Object.matchFiles (/bts/node_modules/typescript/lib/typescript.js:16107:13)
+    at Object.readDirectory (/bts/dist/index.cjs.js:60:19)
+    at getFileNamesFromConfigSpecs (/bts/node_modules/typescript/lib/typescript.js:26324:40)
+    at matchFileNames (/bts/node_modules/typescript/lib/typescript.js:26244:16)
+    at getFileNames (/bts/node_modules/typescript/lib/typescript.js:25812:26)
+    at parseJsonConfigFileContentWorker (/bts/node_modules/typescript/lib/typescript.js:25745:18)
+    at Object.parseJsonSourceFileConfigFileContent (/bts/node_modules/typescript/lib/typescript.js:25705:16)
+    at ConfigParser.parseConfigContent (/bts/dist/index.cjs.js:134:15)
+    at ConfigParser.parseConfig (/bts/dist/index.cjs.js:87:23)
+  ...
+not ok 79 typescript-project-cases > jsFileCompilationSameNameDtsNotSpecified > commonjs
+  ---
+  message: "Promise rejected during "commonjs": realpath is not a function
+        at broccoli-typescript-compiler
+-~- created here: -~-
+    at TypescriptCompiler.Plugin (/bts/node_modules/broccoli-plugin/index.js:7:31)
+    at new TypescriptCompiler (/bts/dist/index.cjs.js:883:27)
+    at Object.typescript [as default] (/bts/dist/index.cjs.js:876:12)
+    at Object.<anonymous> (/bts/dist/tests/typescript-project-cases-test.js:29:82)
+    at Generator.next (<anonymous>)
+    at fulfilled (/bts/dist/tests/typescript-project-cases-test.js:5:58)
+-~- (end) -~-"
+  severity: failed
+  actual: null
+  expected: undefined
+  stack: TypeError: realpath is not a function
+    at visitDirectory (/bts/node_modules/typescript/lib/typescript.js:16111:45)
+    at Object.matchFiles (/bts/node_modules/typescript/lib/typescript.js:16107:13)
+    at Object.readDirectory (/bts/dist/index.cjs.js:60:19)
+    at getFileNamesFromConfigSpecs (/bts/node_modules/typescript/lib/typescript.js:26324:40)
+    at matchFileNames (/bts/node_modules/typescript/lib/typescript.js:26244:16)
+    at getFileNames (/bts/node_modules/typescript/lib/typescript.js:25812:26)
+    at parseJsonConfigFileContentWorker (/bts/node_modules/typescript/lib/typescript.js:25745:18)
+    at Object.parseJsonSourceFileConfigFileContent (/bts/node_modules/typescript/lib/typescript.js:25705:16)
+    at ConfigParser.parseConfigContent (/bts/dist/index.cjs.js:134:15)
+    at ConfigParser.parseConfig (/bts/dist/index.cjs.js:87:23)
+  ...
+not ok 80 typescript-project-cases > jsFileCompilationSameNameDtsNotSpecifiedWithAllowJs > amd
+  ---
+  message: "Promise rejected during "amd": realpath is not a function
+        at broccoli-typescript-compiler
+-~- created here: -~-
+    at TypescriptCompiler.Plugin (/bts/node_modules/broccoli-plugin/index.js:7:31)
+    at new TypescriptCompiler (/bts/dist/index.cjs.js:883:27)
+    at Object.typescript [as default] (/bts/dist/index.cjs.js:876:12)
+    at Object.<anonymous> (/bts/dist/tests/typescript-project-cases-test.js:29:82)
+    at Generator.next (<anonymous>)
+    at fulfilled (/bts/dist/tests/typescript-project-cases-test.js:5:58)
+-~- (end) -~-"
+  severity: failed
+  actual: null
+  expected: undefined
+  stack: TypeError: realpath is not a function
+    at visitDirectory (/bts/node_modules/typescript/lib/typescript.js:16111:45)
+    at Object.matchFiles (/bts/node_modules/typescript/lib/typescript.js:16107:13)
+    at Object.readDirectory (/bts/dist/index.cjs.js:60:19)
+    at getFileNamesFromConfigSpecs (/bts/node_modules/typescript/lib/typescript.js:26324:40)
+    at matchFileNames (/bts/node_modules/typescript/lib/typescript.js:26244:16)
+    at getFileNames (/bts/node_modules/typescript/lib/typescript.js:25812:26)
+    at parseJsonConfigFileContentWorker (/bts/node_modules/typescript/lib/typescript.js:25745:18)
+    at Object.parseJsonSourceFileConfigFileContent (/bts/node_modules/typescript/lib/typescript.js:25705:16)
+    at ConfigParser.parseConfigContent (/bts/dist/index.cjs.js:134:15)
+    at ConfigParser.parseConfig (/bts/dist/index.cjs.js:87:23)
+  ...
+not ok 81 typescript-project-cases > jsFileCompilationSameNameDtsNotSpecifiedWithAllowJs > commonjs
+  ---
+  message: "Promise rejected during "commonjs": realpath is not a function
+        at broccoli-typescript-compiler
+-~- created here: -~-
+    at TypescriptCompiler.Plugin (/bts/node_modules/broccoli-plugin/index.js:7:31)
+    at new TypescriptCompiler (/bts/dist/index.cjs.js:883:27)
+    at Object.typescript [as default] (/bts/dist/index.cjs.js:876:12)
+    at Object.<anonymous> (/bts/dist/tests/typescript-project-cases-test.js:29:82)
+    at Generator.next (<anonymous>)
+    at fulfilled (/bts/dist/tests/typescript-project-cases-test.js:5:58)
+-~- (end) -~-"
+  severity: failed
+  actual: null
+  expected: undefined
+  stack: TypeError: realpath is not a function
+    at visitDirectory (/bts/node_modules/typescript/lib/typescript.js:16111:45)
+    at Object.matchFiles (/bts/node_modules/typescript/lib/typescript.js:16107:13)
+    at Object.readDirectory (/bts/dist/index.cjs.js:60:19)
+    at getFileNamesFromConfigSpecs (/bts/node_modules/typescript/lib/typescript.js:26324:40)
+    at matchFileNames (/bts/node_modules/typescript/lib/typescript.js:26244:16)
+    at getFileNames (/bts/node_modules/typescript/lib/typescript.js:25812:26)
+    at parseJsonConfigFileContentWorker (/bts/node_modules/typescript/lib/typescript.js:25745:18)
+    at Object.parseJsonSourceFileConfigFileContent (/bts/node_modules/typescript/lib/typescript.js:25705:16)
+    at ConfigParser.parseConfigContent (/bts/dist/index.cjs.js:134:15)
+    at ConfigParser.parseConfig (/bts/dist/index.cjs.js:87:23)
+  ...
+not ok 82 typescript-project-cases > jsFileCompilationSameNameFilesNotSpecified > amd
+  ---
+  message: "Promise rejected during "amd": realpath is not a function
+        at broccoli-typescript-compiler
+-~- created here: -~-
+    at TypescriptCompiler.Plugin (/bts/node_modules/broccoli-plugin/index.js:7:31)
+    at new TypescriptCompiler (/bts/dist/index.cjs.js:883:27)
+    at Object.typescript [as default] (/bts/dist/index.cjs.js:876:12)
+    at Object.<anonymous> (/bts/dist/tests/typescript-project-cases-test.js:29:82)
+    at Generator.next (<anonymous>)
+    at fulfilled (/bts/dist/tests/typescript-project-cases-test.js:5:58)
+-~- (end) -~-"
+  severity: failed
+  actual: null
+  expected: undefined
+  stack: TypeError: realpath is not a function
+    at visitDirectory (/bts/node_modules/typescript/lib/typescript.js:16111:45)
+    at Object.matchFiles (/bts/node_modules/typescript/lib/typescript.js:16107:13)
+    at Object.readDirectory (/bts/dist/index.cjs.js:60:19)
+    at getFileNamesFromConfigSpecs (/bts/node_modules/typescript/lib/typescript.js:26324:40)
+    at matchFileNames (/bts/node_modules/typescript/lib/typescript.js:26244:16)
+    at getFileNames (/bts/node_modules/typescript/lib/typescript.js:25812:26)
+    at parseJsonConfigFileContentWorker (/bts/node_modules/typescript/lib/typescript.js:25745:18)
+    at Object.parseJsonSourceFileConfigFileContent (/bts/node_modules/typescript/lib/typescript.js:25705:16)
+    at ConfigParser.parseConfigContent (/bts/dist/index.cjs.js:134:15)
+    at ConfigParser.parseConfig (/bts/dist/index.cjs.js:87:23)
+  ...
+not ok 83 typescript-project-cases > jsFileCompilationSameNameFilesNotSpecified > commonjs
+  ---
+  message: "Promise rejected during "commonjs": realpath is not a function
+        at broccoli-typescript-compiler
+-~- created here: -~-
+    at TypescriptCompiler.Plugin (/bts/node_modules/broccoli-plugin/index.js:7:31)
+    at new TypescriptCompiler (/bts/dist/index.cjs.js:883:27)
+    at Object.typescript [as default] (/bts/dist/index.cjs.js:876:12)
+    at Object.<anonymous> (/bts/dist/tests/typescript-project-cases-test.js:29:82)
+    at Generator.next (<anonymous>)
+    at fulfilled (/bts/dist/tests/typescript-project-cases-test.js:5:58)
+-~- (end) -~-"
+  severity: failed
+  actual: null
+  expected: undefined
+  stack: TypeError: realpath is not a function
+    at visitDirectory (/bts/node_modules/typescript/lib/typescript.js:16111:45)
+    at Object.matchFiles (/bts/node_modules/typescript/lib/typescript.js:16107:13)
+    at Object.readDirectory (/bts/dist/index.cjs.js:60:19)
+    at getFileNamesFromConfigSpecs (/bts/node_modules/typescript/lib/typescript.js:26324:40)
+    at matchFileNames (/bts/node_modules/typescript/lib/typescript.js:26244:16)
+    at getFileNames (/bts/node_modules/typescript/lib/typescript.js:25812:26)
+    at parseJsonConfigFileContentWorker (/bts/node_modules/typescript/lib/typescript.js:25745:18)
+    at Object.parseJsonSourceFileConfigFileContent (/bts/node_modules/typescript/lib/typescript.js:25705:16)
+    at ConfigParser.parseConfigContent (/bts/dist/index.cjs.js:134:15)
+    at ConfigParser.parseConfig (/bts/dist/index.cjs.js:87:23)
+  ...
+not ok 84 typescript-project-cases > jsFileCompilationSameNameFilesNotSpecifiedWithAllowJs > amd
+  ---
+  message: "Promise rejected during "amd": realpath is not a function
+        at broccoli-typescript-compiler
+-~- created here: -~-
+    at TypescriptCompiler.Plugin (/bts/node_modules/broccoli-plugin/index.js:7:31)
+    at new TypescriptCompiler (/bts/dist/index.cjs.js:883:27)
+    at Object.typescript [as default] (/bts/dist/index.cjs.js:876:12)
+    at Object.<anonymous> (/bts/dist/tests/typescript-project-cases-test.js:29:82)
+    at Generator.next (<anonymous>)
+    at fulfilled (/bts/dist/tests/typescript-project-cases-test.js:5:58)
+-~- (end) -~-"
+  severity: failed
+  actual: null
+  expected: undefined
+  stack: TypeError: realpath is not a function
+    at visitDirectory (/bts/node_modules/typescript/lib/typescript.js:16111:45)
+    at Object.matchFiles (/bts/node_modules/typescript/lib/typescript.js:16107:13)
+    at Object.readDirectory (/bts/dist/index.cjs.js:60:19)
+    at getFileNamesFromConfigSpecs (/bts/node_modules/typescript/lib/typescript.js:26324:40)
+    at matchFileNames (/bts/node_modules/typescript/lib/typescript.js:26244:16)
+    at getFileNames (/bts/node_modules/typescript/lib/typescript.js:25812:26)
+    at parseJsonConfigFileContentWorker (/bts/node_modules/typescript/lib/typescript.js:25745:18)
+    at Object.parseJsonSourceFileConfigFileContent (/bts/node_modules/typescript/lib/typescript.js:25705:16)
+    at ConfigParser.parseConfigContent (/bts/dist/index.cjs.js:134:15)
+    at ConfigParser.parseConfig (/bts/dist/index.cjs.js:87:23)
+  ...
+not ok 85 typescript-project-cases > jsFileCompilationSameNameFilesNotSpecifiedWithAllowJs > commonjs
+  ---
+  message: "Promise rejected during "commonjs": realpath is not a function
+        at broccoli-typescript-compiler
+-~- created here: -~-
+    at TypescriptCompiler.Plugin (/bts/node_modules/broccoli-plugin/index.js:7:31)
+    at new TypescriptCompiler (/bts/dist/index.cjs.js:883:27)
+    at Object.typescript [as default] (/bts/dist/index.cjs.js:876:12)
+    at Object.<anonymous> (/bts/dist/tests/typescript-project-cases-test.js:29:82)
+    at Generator.next (<anonymous>)
+    at fulfilled (/bts/dist/tests/typescript-project-cases-test.js:5:58)
+-~- (end) -~-"
+  severity: failed
+  actual: null
+  expected: undefined
+  stack: TypeError: realpath is not a function
+    at visitDirectory (/bts/node_modules/typescript/lib/typescript.js:16111:45)
+    at Object.matchFiles (/bts/node_modules/typescript/lib/typescript.js:16107:13)
+    at Object.readDirectory (/bts/dist/index.cjs.js:60:19)
+    at getFileNamesFromConfigSpecs (/bts/node_modules/typescript/lib/typescript.js:26324:40)
+    at matchFileNames (/bts/node_modules/typescript/lib/typescript.js:26244:16)
+    at getFileNames (/bts/node_modules/typescript/lib/typescript.js:25812:26)
+    at parseJsonConfigFileContentWorker (/bts/node_modules/typescript/lib/typescript.js:25745:18)
+    at Object.parseJsonSourceFileConfigFileContent (/bts/node_modules/typescript/lib/typescript.js:25705:16)
+    at ConfigParser.parseConfigContent (/bts/dist/index.cjs.js:134:15)
+    at ConfigParser.parseConfig (/bts/dist/index.cjs.js:87:23)
+  ...
+ok 86 typescript-project-cases > jsFileCompilationSameNameFilesSpecified > amd
+ok 87 typescript-project-cases > jsFileCompilationSameNameFilesSpecified > commonjs
+ok 88 typescript-project-cases > jsFileCompilationSameNameFilesSpecifiedWithAllowJs > amd
+ok 89 typescript-project-cases > jsFileCompilationSameNameFilesSpecifiedWithAllowJs > commonjs
+ok 90 typescript-project-cases > maprootUrlsourcerootUrlMixedSubfolderNoOutdir > amd
+ok 91 typescript-project-cases > maprootUrlsourcerootUrlMixedSubfolderNoOutdir > commonjs
+ok 92 typescript-project-cases > maprootUrlsourcerootUrlMixedSubfolderSpecifyOutputDirectory > amd
+ok 93 typescript-project-cases > maprootUrlsourcerootUrlMixedSubfolderSpecifyOutputDirectory > commonjs
+ok 94 typescript-project-cases > maprootUrlsourcerootUrlMixedSubfolderSpecifyOutputFile > amd
+ok 95 typescript-project-cases > maprootUrlsourcerootUrlMixedSubfolderSpecifyOutputFile > commonjs
+ok 96 typescript-project-cases > maprootUrlsourcerootUrlMixedSubfolderSpecifyOutputFileAndOutputDirectory > amd
+ok 97 typescript-project-cases > maprootUrlsourcerootUrlMixedSubfolderSpecifyOutputFileAndOutputDirectory > commonjs
+ok 98 typescript-project-cases > maprootUrlsourcerootUrlModuleMultifolderNoOutdir > amd
+ok 99 typescript-project-cases > maprootUrlsourcerootUrlModuleMultifolderNoOutdir > commonjs
+ok 100 typescript-project-cases > maprootUrlsourcerootUrlModuleMultifolderSpecifyOutputDirectory > amd
+ok 101 typescript-project-cases > maprootUrlsourcerootUrlModuleMultifolderSpecifyOutputDirectory > commonjs
+ok 102 typescript-project-cases > maprootUrlsourcerootUrlModuleMultifolderSpecifyOutputFile > amd
+ok 103 typescript-project-cases > maprootUrlsourcerootUrlModuleMultifolderSpecifyOutputFile > commonjs
+ok 104 typescript-project-cases > maprootUrlsourcerootUrlModuleSimpleNoOutdir > amd
+ok 105 typescript-project-cases > maprootUrlsourcerootUrlModuleSimpleNoOutdir > commonjs
+ok 106 typescript-project-cases > maprootUrlsourcerootUrlModuleSimpleSpecifyOutputDirectory > amd
+ok 107 typescript-project-cases > maprootUrlsourcerootUrlModuleSimpleSpecifyOutputDirectory > commonjs
+ok 108 typescript-project-cases > maprootUrlsourcerootUrlModuleSimpleSpecifyOutputFile > amd
+ok 109 typescript-project-cases > maprootUrlsourcerootUrlModuleSimpleSpecifyOutputFile > commonjs
+ok 110 typescript-project-cases > maprootUrlsourcerootUrlModuleSubfolderNoOutdir > amd
+ok 111 typescript-project-cases > maprootUrlsourcerootUrlModuleSubfolderNoOutdir > commonjs
+ok 112 typescript-project-cases > maprootUrlsourcerootUrlModuleSubfolderSpecifyOutputDirectory > amd
+ok 113 typescript-project-cases > maprootUrlsourcerootUrlModuleSubfolderSpecifyOutputDirectory > commonjs
+ok 114 typescript-project-cases > maprootUrlsourcerootUrlModuleSubfolderSpecifyOutputFile > amd
+ok 115 typescript-project-cases > maprootUrlsourcerootUrlModuleSubfolderSpecifyOutputFile > commonjs
+ok 116 typescript-project-cases > maprootUrlsourcerootUrlMultifolderNoOutdir > amd
+ok 117 typescript-project-cases > maprootUrlsourcerootUrlMultifolderNoOutdir > commonjs
+ok 118 typescript-project-cases > maprootUrlsourcerootUrlMultifolderSpecifyOutputDirectory > amd
+ok 119 typescript-project-cases > maprootUrlsourcerootUrlMultifolderSpecifyOutputDirectory > commonjs
+ok 120 typescript-project-cases > maprootUrlsourcerootUrlMultifolderSpecifyOutputFile > amd
+ok 121 typescript-project-cases > maprootUrlsourcerootUrlMultifolderSpecifyOutputFile > commonjs
+ok 122 typescript-project-cases > maprootUrlsourcerootUrlSimpleNoOutdir > amd
+ok 123 typescript-project-cases > maprootUrlsourcerootUrlSimpleNoOutdir > commonjs
+ok 124 typescript-project-cases > maprootUrlsourcerootUrlSimpleSpecifyOutputDirectory > amd
+ok 125 typescript-project-cases > maprootUrlsourcerootUrlSimpleSpecifyOutputDirectory > commonjs
+ok 126 typescript-project-cases > maprootUrlsourcerootUrlSimpleSpecifyOutputFile > amd
+ok 127 typescript-project-cases > maprootUrlsourcerootUrlSimpleSpecifyOutputFile > commonjs
+ok 128 typescript-project-cases > maprootUrlsourcerootUrlSingleFileNoOutdir > amd
+ok 129 typescript-project-cases > maprootUrlsourcerootUrlSingleFileNoOutdir > commonjs
+ok 130 typescript-project-cases > maprootUrlsourcerootUrlSingleFileSpecifyOutputDirectory > amd
+ok 131 typescript-project-cases > maprootUrlsourcerootUrlSingleFileSpecifyOutputDirectory > commonjs
+ok 132 typescript-project-cases > maprootUrlsourcerootUrlSingleFileSpecifyOutputFile > amd
+ok 133 typescript-project-cases > maprootUrlsourcerootUrlSingleFileSpecifyOutputFile > commonjs
+ok 134 typescript-project-cases > maprootUrlsourcerootUrlSubfolderNoOutdir > amd
+ok 135 typescript-project-cases > maprootUrlsourcerootUrlSubfolderNoOutdir > commonjs
+ok 136 typescript-project-cases > maprootUrlsourcerootUrlSubfolderSpecifyOutputDirectory > amd
+ok 137 typescript-project-cases > maprootUrlsourcerootUrlSubfolderSpecifyOutputDirectory > commonjs
+ok 138 typescript-project-cases > maprootUrlsourcerootUrlSubfolderSpecifyOutputFile > amd
+ok 139 typescript-project-cases > maprootUrlsourcerootUrlSubfolderSpecifyOutputFile > commonjs
+ok 140 typescript-project-cases > noProjectOptionAndInputFiles > amd
+ok 141 typescript-project-cases > noProjectOptionAndInputFiles > commonjs
+not ok 142 typescript-project-cases > nodeModulesImportHigher > amd
+  ---
+  message: "Promise rejected during "amd": realpath is not a function
+        at broccoli-typescript-compiler
+-~- created here: -~-
+    at TypescriptCompiler.Plugin (/bts/node_modules/broccoli-plugin/index.js:7:31)
+    at new TypescriptCompiler (/bts/dist/index.cjs.js:883:27)
+    at Object.typescript [as default] (/bts/dist/index.cjs.js:876:12)
+    at Object.<anonymous> (/bts/dist/tests/typescript-project-cases-test.js:29:82)
+    at Generator.next (<anonymous>)
+    at fulfilled (/bts/dist/tests/typescript-project-cases-test.js:5:58)
+-~- (end) -~-"
+  severity: failed
+  actual: null
+  expected: undefined
+  stack: TypeError: realpath is not a function
+    at visitDirectory (/bts/node_modules/typescript/lib/typescript.js:16111:45)
+    at Object.matchFiles (/bts/node_modules/typescript/lib/typescript.js:16107:13)
+    at Object.readDirectory (/bts/dist/index.cjs.js:60:19)
+    at getFileNamesFromConfigSpecs (/bts/node_modules/typescript/lib/typescript.js:26324:40)
+    at matchFileNames (/bts/node_modules/typescript/lib/typescript.js:26244:16)
+    at getFileNames (/bts/node_modules/typescript/lib/typescript.js:25812:26)
+    at parseJsonConfigFileContentWorker (/bts/node_modules/typescript/lib/typescript.js:25745:18)
+    at Object.parseJsonSourceFileConfigFileContent (/bts/node_modules/typescript/lib/typescript.js:25705:16)
+    at ConfigParser.parseConfigContent (/bts/dist/index.cjs.js:134:15)
+    at ConfigParser.parseConfig (/bts/dist/index.cjs.js:87:23)
+  ...
+not ok 143 typescript-project-cases > nodeModulesImportHigher > commonjs
+  ---
+  message: "Promise rejected during "commonjs": realpath is not a function
+        at broccoli-typescript-compiler
+-~- created here: -~-
+    at TypescriptCompiler.Plugin (/bts/node_modules/broccoli-plugin/index.js:7:31)
+    at new TypescriptCompiler (/bts/dist/index.cjs.js:883:27)
+    at Object.typescript [as default] (/bts/dist/index.cjs.js:876:12)
+    at Object.<anonymous> (/bts/dist/tests/typescript-project-cases-test.js:29:82)
+    at Generator.next (<anonymous>)
+    at fulfilled (/bts/dist/tests/typescript-project-cases-test.js:5:58)
+-~- (end) -~-"
+  severity: failed
+  actual: null
+  expected: undefined
+  stack: TypeError: realpath is not a function
+    at visitDirectory (/bts/node_modules/typescript/lib/typescript.js:16111:45)
+    at Object.matchFiles (/bts/node_modules/typescript/lib/typescript.js:16107:13)
+    at Object.readDirectory (/bts/dist/index.cjs.js:60:19)
+    at getFileNamesFromConfigSpecs (/bts/node_modules/typescript/lib/typescript.js:26324:40)
+    at matchFileNames (/bts/node_modules/typescript/lib/typescript.js:26244:16)
+    at getFileNames (/bts/node_modules/typescript/lib/typescript.js:25812:26)
+    at parseJsonConfigFileContentWorker (/bts/node_modules/typescript/lib/typescript.js:25745:18)
+    at Object.parseJsonSourceFileConfigFileContent (/bts/node_modules/typescript/lib/typescript.js:25705:16)
+    at ConfigParser.parseConfigContent (/bts/dist/index.cjs.js:134:15)
+    at ConfigParser.parseConfig (/bts/dist/index.cjs.js:87:23)
+  ...
+not ok 144 typescript-project-cases > nodeModulesMaxDepthExceeded > amd
+  ---
+  message: "Promise rejected during "amd": realpath is not a function
+        at broccoli-typescript-compiler
+-~- created here: -~-
+    at TypescriptCompiler.Plugin (/bts/node_modules/broccoli-plugin/index.js:7:31)
+    at new TypescriptCompiler (/bts/dist/index.cjs.js:883:27)
+    at Object.typescript [as default] (/bts/dist/index.cjs.js:876:12)
+    at Object.<anonymous> (/bts/dist/tests/typescript-project-cases-test.js:29:82)
+    at Generator.next (<anonymous>)
+    at fulfilled (/bts/dist/tests/typescript-project-cases-test.js:5:58)
+-~- (end) -~-"
+  severity: failed
+  actual: null
+  expected: undefined
+  stack: TypeError: realpath is not a function
+    at visitDirectory (/bts/node_modules/typescript/lib/typescript.js:16111:45)
+    at Object.matchFiles (/bts/node_modules/typescript/lib/typescript.js:16107:13)
+    at Object.readDirectory (/bts/dist/index.cjs.js:60:19)
+    at getFileNamesFromConfigSpecs (/bts/node_modules/typescript/lib/typescript.js:26324:40)
+    at matchFileNames (/bts/node_modules/typescript/lib/typescript.js:26244:16)
+    at getFileNames (/bts/node_modules/typescript/lib/typescript.js:25812:26)
+    at parseJsonConfigFileContentWorker (/bts/node_modules/typescript/lib/typescript.js:25745:18)
+    at Object.parseJsonSourceFileConfigFileContent (/bts/node_modules/typescript/lib/typescript.js:25705:16)
+    at ConfigParser.parseConfigContent (/bts/dist/index.cjs.js:134:15)
+    at ConfigParser.parseConfig (/bts/dist/index.cjs.js:87:23)
+  ...
+not ok 145 typescript-project-cases > nodeModulesMaxDepthExceeded > commonjs
+  ---
+  message: "Promise rejected during "commonjs": realpath is not a function
+        at broccoli-typescript-compiler
+-~- created here: -~-
+    at TypescriptCompiler.Plugin (/bts/node_modules/broccoli-plugin/index.js:7:31)
+    at new TypescriptCompiler (/bts/dist/index.cjs.js:883:27)
+    at Object.typescript [as default] (/bts/dist/index.cjs.js:876:12)
+    at Object.<anonymous> (/bts/dist/tests/typescript-project-cases-test.js:29:82)
+    at Generator.next (<anonymous>)
+    at fulfilled (/bts/dist/tests/typescript-project-cases-test.js:5:58)
+-~- (end) -~-"
+  severity: failed
+  actual: null
+  expected: undefined
+  stack: TypeError: realpath is not a function
+    at visitDirectory (/bts/node_modules/typescript/lib/typescript.js:16111:45)
+    at Object.matchFiles (/bts/node_modules/typescript/lib/typescript.js:16107:13)
+    at Object.readDirectory (/bts/dist/index.cjs.js:60:19)
+    at getFileNamesFromConfigSpecs (/bts/node_modules/typescript/lib/typescript.js:26324:40)
+    at matchFileNames (/bts/node_modules/typescript/lib/typescript.js:26244:16)
+    at getFileNames (/bts/node_modules/typescript/lib/typescript.js:25812:26)
+    at parseJsonConfigFileContentWorker (/bts/node_modules/typescript/lib/typescript.js:25745:18)
+    at Object.parseJsonSourceFileConfigFileContent (/bts/node_modules/typescript/lib/typescript.js:25705:16)
+    at ConfigParser.parseConfigContent (/bts/dist/index.cjs.js:134:15)
+    at ConfigParser.parseConfig (/bts/dist/index.cjs.js:87:23)
+  ...
+not ok 146 typescript-project-cases > nodeModulesMaxDepthIncreased > amd
+  ---
+  message: "Promise rejected during "amd": realpath is not a function
+        at broccoli-typescript-compiler
+-~- created here: -~-
+    at TypescriptCompiler.Plugin (/bts/node_modules/broccoli-plugin/index.js:7:31)
+    at new TypescriptCompiler (/bts/dist/index.cjs.js:883:27)
+    at Object.typescript [as default] (/bts/dist/index.cjs.js:876:12)
+    at Object.<anonymous> (/bts/dist/tests/typescript-project-cases-test.js:29:82)
+    at Generator.next (<anonymous>)
+    at fulfilled (/bts/dist/tests/typescript-project-cases-test.js:5:58)
+-~- (end) -~-"
+  severity: failed
+  actual: null
+  expected: undefined
+  stack: TypeError: realpath is not a function
+    at visitDirectory (/bts/node_modules/typescript/lib/typescript.js:16111:45)
+    at Object.matchFiles (/bts/node_modules/typescript/lib/typescript.js:16107:13)
+    at Object.readDirectory (/bts/dist/index.cjs.js:60:19)
+    at getFileNamesFromConfigSpecs (/bts/node_modules/typescript/lib/typescript.js:26324:40)
+    at matchFileNames (/bts/node_modules/typescript/lib/typescript.js:26244:16)
+    at getFileNames (/bts/node_modules/typescript/lib/typescript.js:25812:26)
+    at parseJsonConfigFileContentWorker (/bts/node_modules/typescript/lib/typescript.js:25745:18)
+    at Object.parseJsonSourceFileConfigFileContent (/bts/node_modules/typescript/lib/typescript.js:25705:16)
+    at ConfigParser.parseConfigContent (/bts/dist/index.cjs.js:134:15)
+    at ConfigParser.parseConfig (/bts/dist/index.cjs.js:87:23)
+  ...
+not ok 147 typescript-project-cases > nodeModulesMaxDepthIncreased > commonjs
+  ---
+  message: "Promise rejected during "commonjs": realpath is not a function
+        at broccoli-typescript-compiler
+-~- created here: -~-
+    at TypescriptCompiler.Plugin (/bts/node_modules/broccoli-plugin/index.js:7:31)
+    at new TypescriptCompiler (/bts/dist/index.cjs.js:883:27)
+    at Object.typescript [as default] (/bts/dist/index.cjs.js:876:12)
+    at Object.<anonymous> (/bts/dist/tests/typescript-project-cases-test.js:29:82)
+    at Generator.next (<anonymous>)
+    at fulfilled (/bts/dist/tests/typescript-project-cases-test.js:5:58)
+-~- (end) -~-"
+  severity: failed
+  actual: null
+  expected: undefined
+  stack: TypeError: realpath is not a function
+    at visitDirectory (/bts/node_modules/typescript/lib/typescript.js:16111:45)
+    at Object.matchFiles (/bts/node_modules/typescript/lib/typescript.js:16107:13)
+    at Object.readDirectory (/bts/dist/index.cjs.js:60:19)
+    at getFileNamesFromConfigSpecs (/bts/node_modules/typescript/lib/typescript.js:26324:40)
+    at matchFileNames (/bts/node_modules/typescript/lib/typescript.js:26244:16)
+    at getFileNames (/bts/node_modules/typescript/lib/typescript.js:25812:26)
+    at parseJsonConfigFileContentWorker (/bts/node_modules/typescript/lib/typescript.js:25745:18)
+    at Object.parseJsonSourceFileConfigFileContent (/bts/node_modules/typescript/lib/typescript.js:25705:16)
+    at ConfigParser.parseConfigContent (/bts/dist/index.cjs.js:134:15)
+    at ConfigParser.parseConfig (/bts/dist/index.cjs.js:87:23)
+  ...
+ok 148 typescript-project-cases > nonRelative > amd
+ok 149 typescript-project-cases > nonRelative > commonjs
+ok 150 typescript-project-cases > outMixedSubfolderNoOutdir > amd
+ok 151 typescript-project-cases > outMixedSubfolderNoOutdir > commonjs
+ok 152 typescript-project-cases > outMixedSubfolderSpecifyOutputDirectory > amd
+ok 153 typescript-project-cases > outMixedSubfolderSpecifyOutputDirectory > commonjs
+ok 154 typescript-project-cases > outMixedSubfolderSpecifyOutputFile > amd
+ok 155 typescript-project-cases > outMixedSubfolderSpecifyOutputFile > commonjs
+ok 156 typescript-project-cases > outMixedSubfolderSpecifyOutputFileAndOutputDirectory > amd
+ok 157 typescript-project-cases > outMixedSubfolderSpecifyOutputFileAndOutputDirectory > commonjs
+ok 158 typescript-project-cases > outModuleMultifolderNoOutdir > amd
+ok 159 typescript-project-cases > outModuleMultifolderNoOutdir > commonjs
+ok 160 typescript-project-cases > outModuleMultifolderSpecifyOutputDirectory > amd
+ok 161 typescript-project-cases > outModuleMultifolderSpecifyOutputDirectory > commonjs
+ok 162 typescript-project-cases > outModuleMultifolderSpecifyOutputFile > amd
+ok 163 typescript-project-cases > outModuleMultifolderSpecifyOutputFile > commonjs
+ok 164 typescript-project-cases > outModuleSimpleNoOutdir > amd
+ok 165 typescript-project-cases > outModuleSimpleNoOutdir > commonjs
+ok 166 typescript-project-cases > outModuleSimpleSpecifyOutputDirectory > amd
+ok 167 typescript-project-cases > outModuleSimpleSpecifyOutputDirectory > commonjs
+ok 168 typescript-project-cases > outModuleSimpleSpecifyOutputFile > amd
+ok 169 typescript-project-cases > outModuleSimpleSpecifyOutputFile > commonjs
+ok 170 typescript-project-cases > outModuleSubfolderNoOutdir > amd
+ok 171 typescript-project-cases > outModuleSubfolderNoOutdir > commonjs
+ok 172 typescript-project-cases > outModuleSubfolderSpecifyOutputDirectory > amd
+ok 173 typescript-project-cases > outModuleSubfolderSpecifyOutputDirectory > commonjs
+ok 174 typescript-project-cases > outModuleSubfolderSpecifyOutputFile > amd
+ok 175 typescript-project-cases > outModuleSubfolderSpecifyOutputFile > commonjs
+ok 176 typescript-project-cases > outMultifolderNoOutdir > amd
+ok 177 typescript-project-cases > outMultifolderNoOutdir > commonjs
+ok 178 typescript-project-cases > outMultifolderSpecifyOutputDirectory > amd
+ok 179 typescript-project-cases > outMultifolderSpecifyOutputDirectory > commonjs
+ok 180 typescript-project-cases > outMultifolderSpecifyOutputFile > amd
+ok 181 typescript-project-cases > outMultifolderSpecifyOutputFile > commonjs
+ok 182 typescript-project-cases > outSimpleNoOutdir > amd
+ok 183 typescript-project-cases > outSimpleNoOutdir > commonjs
+ok 184 typescript-project-cases > outSimpleSpecifyOutputDirectory > amd
+ok 185 typescript-project-cases > outSimpleSpecifyOutputDirectory > commonjs
+ok 186 typescript-project-cases > outSimpleSpecifyOutputFile > amd
+ok 187 typescript-project-cases > outSimpleSpecifyOutputFile > commonjs
+ok 188 typescript-project-cases > outSingleFileNoOutdir > amd
+ok 189 typescript-project-cases > outSingleFileNoOutdir > commonjs
+ok 190 typescript-project-cases > outSingleFileSpecifyOutputDirectory > amd
+ok 191 typescript-project-cases > outSingleFileSpecifyOutputDirectory > commonjs
+ok 192 typescript-project-cases > outSingleFileSpecifyOutputFile > amd
+ok 193 typescript-project-cases > outSingleFileSpecifyOutputFile > commonjs
+ok 194 typescript-project-cases > outSubfolderNoOutdir > amd
+ok 195 typescript-project-cases > outSubfolderNoOutdir > commonjs
+ok 196 typescript-project-cases > outSubfolderSpecifyOutputDirectory > amd
+ok 197 typescript-project-cases > outSubfolderSpecifyOutputDirectory > commonjs
+ok 198 typescript-project-cases > outSubfolderSpecifyOutputFile > amd
+ok 199 typescript-project-cases > outSubfolderSpecifyOutputFile > commonjs
+ok 200 typescript-project-cases > privacyCheckOnImportedModuleDeclarationsInsideModule > amd
+ok 201 typescript-project-cases > privacyCheckOnImportedModuleDeclarationsInsideModule > commonjs
+ok 202 typescript-project-cases > projectOptionTest > amd
+ok 203 typescript-project-cases > projectOptionTest > commonjs
+ok 204 typescript-project-cases > prologueEmit > amd
+ok 205 typescript-project-cases > prologueEmit > commonjs
+ok 206 typescript-project-cases > quotesInFileAndDirectoryNames > amd
+ok 207 typescript-project-cases > quotesInFileAndDirectoryNames > commonjs
+ok 208 typescript-project-cases > referenceResolutionSameFileTwice > amd
+ok 209 typescript-project-cases > referenceResolutionSameFileTwice > commonjs
+ok 210 typescript-project-cases > referenceResolutionSameFileTwiceNoResolve > amd
+ok 211 typescript-project-cases > referenceResolutionSameFileTwiceNoResolve > commonjs
+ok 212 typescript-project-cases > rootDirectory > amd
+ok 213 typescript-project-cases > rootDirectory > commonjs
+ok 214 typescript-project-cases > rootDirectoryErrors > amd
+ok 215 typescript-project-cases > rootDirectoryErrors > commonjs
+ok 216 typescript-project-cases > sourcemapMixedSubfolderNoOutdir > amd
+ok 217 typescript-project-cases > sourcemapMixedSubfolderNoOutdir > commonjs
+ok 218 typescript-project-cases > sourcemapMixedSubfolderSpecifyOutputDirectory > amd
+ok 219 typescript-project-cases > sourcemapMixedSubfolderSpecifyOutputDirectory > commonjs
+ok 220 typescript-project-cases > sourcemapMixedSubfolderSpecifyOutputFile > amd
+ok 221 typescript-project-cases > sourcemapMixedSubfolderSpecifyOutputFile > commonjs
+ok 222 typescript-project-cases > sourcemapMixedSubfolderSpecifyOutputFileAndOutputDirectory > amd
+ok 223 typescript-project-cases > sourcemapMixedSubfolderSpecifyOutputFileAndOutputDirectory > commonjs
+ok 224 typescript-project-cases > sourcemapModuleMultifolderNoOutdir > amd
+ok 225 typescript-project-cases > sourcemapModuleMultifolderNoOutdir > commonjs
+ok 226 typescript-project-cases > sourcemapModuleMultifolderSpecifyOutputDirectory > amd
+ok 227 typescript-project-cases > sourcemapModuleMultifolderSpecifyOutputDirectory > commonjs
+ok 228 typescript-project-cases > sourcemapModuleMultifolderSpecifyOutputFile > amd
+ok 229 typescript-project-cases > sourcemapModuleMultifolderSpecifyOutputFile > commonjs
+ok 230 typescript-project-cases > sourcemapModuleSimpleNoOutdir > amd
+ok 231 typescript-project-cases > sourcemapModuleSimpleNoOutdir > commonjs
+ok 232 typescript-project-cases > sourcemapModuleSimpleSpecifyOutputDirectory > amd
+ok 233 typescript-project-cases > sourcemapModuleSimpleSpecifyOutputDirectory > commonjs
+ok 234 typescript-project-cases > sourcemapModuleSimpleSpecifyOutputFile > amd
+ok 235 typescript-project-cases > sourcemapModuleSimpleSpecifyOutputFile > commonjs
+ok 236 typescript-project-cases > sourcemapModuleSubfolderNoOutdir > amd
+ok 237 typescript-project-cases > sourcemapModuleSubfolderNoOutdir > commonjs
+ok 238 typescript-project-cases > sourcemapModuleSubfolderSpecifyOutputDirectory > amd
+ok 239 typescript-project-cases > sourcemapModuleSubfolderSpecifyOutputDirectory > commonjs
+ok 240 typescript-project-cases > sourcemapModuleSubfolderSpecifyOutputFile > amd
+ok 241 typescript-project-cases > sourcemapModuleSubfolderSpecifyOutputFile > commonjs
+ok 242 typescript-project-cases > sourcemapMultifolderNoOutdir > amd
+ok 243 typescript-project-cases > sourcemapMultifolderNoOutdir > commonjs
+ok 244 typescript-project-cases > sourcemapMultifolderSpecifyOutputDirectory > amd
+ok 245 typescript-project-cases > sourcemapMultifolderSpecifyOutputDirectory > commonjs
+ok 246 typescript-project-cases > sourcemapMultifolderSpecifyOutputFile > amd
+ok 247 typescript-project-cases > sourcemapMultifolderSpecifyOutputFile > commonjs
+ok 248 typescript-project-cases > sourcemapSimpleNoOutdir > amd
+ok 249 typescript-project-cases > sourcemapSimpleNoOutdir > commonjs
+ok 250 typescript-project-cases > sourcemapSimpleSpecifyOutputDirectory > amd
+ok 251 typescript-project-cases > sourcemapSimpleSpecifyOutputDirectory > commonjs
+ok 252 typescript-project-cases > sourcemapSimpleSpecifyOutputFile > amd
+ok 253 typescript-project-cases > sourcemapSimpleSpecifyOutputFile > commonjs
+ok 254 typescript-project-cases > sourcemapSingleFileNoOutdir > amd
+ok 255 typescript-project-cases > sourcemapSingleFileNoOutdir > commonjs
+ok 256 typescript-project-cases > sourcemapSingleFileSpecifyOutputDirectory > amd
+ok 257 typescript-project-cases > sourcemapSingleFileSpecifyOutputDirectory > commonjs
+ok 258 typescript-project-cases > sourcemapSingleFileSpecifyOutputFile > amd
+ok 259 typescript-project-cases > sourcemapSingleFileSpecifyOutputFile > commonjs
+ok 260 typescript-project-cases > sourcemapSubfolderNoOutdir > amd
+ok 261 typescript-project-cases > sourcemapSubfolderNoOutdir > commonjs
+ok 262 typescript-project-cases > sourcemapSubfolderSpecifyOutputDirectory > amd
+ok 263 typescript-project-cases > sourcemapSubfolderSpecifyOutputDirectory > commonjs
+ok 264 typescript-project-cases > sourcemapSubfolderSpecifyOutputFile > amd
+ok 265 typescript-project-cases > sourcemapSubfolderSpecifyOutputFile > commonjs
+ok 266 typescript-project-cases > sourcerootUrlMixedSubfolderNoOutdir > amd
+ok 267 typescript-project-cases > sourcerootUrlMixedSubfolderNoOutdir > commonjs
+ok 268 typescript-project-cases > sourcerootUrlMixedSubfolderSpecifyOutputDirectory > amd
+ok 269 typescript-project-cases > sourcerootUrlMixedSubfolderSpecifyOutputDirectory > commonjs
+ok 270 typescript-project-cases > sourcerootUrlMixedSubfolderSpecifyOutputFile > amd
+ok 271 typescript-project-cases > sourcerootUrlMixedSubfolderSpecifyOutputFile > commonjs
+ok 272 typescript-project-cases > sourcerootUrlMixedSubfolderSpecifyOutputFileAndOutputDirectory > amd
+ok 273 typescript-project-cases > sourcerootUrlMixedSubfolderSpecifyOutputFileAndOutputDirectory > commonjs
+ok 274 typescript-project-cases > sourcerootUrlModuleMultifolderNoOutdir > amd
+ok 275 typescript-project-cases > sourcerootUrlModuleMultifolderNoOutdir > commonjs
+ok 276 typescript-project-cases > sourcerootUrlModuleMultifolderSpecifyOutputDirectory > amd
+ok 277 typescript-project-cases > sourcerootUrlModuleMultifolderSpecifyOutputDirectory > commonjs
+ok 278 typescript-project-cases > sourcerootUrlModuleMultifolderSpecifyOutputFile > amd
+ok 279 typescript-project-cases > sourcerootUrlModuleMultifolderSpecifyOutputFile > commonjs
+ok 280 typescript-project-cases > sourcerootUrlModuleSimpleNoOutdir > amd
+ok 281 typescript-project-cases > sourcerootUrlModuleSimpleNoOutdir > commonjs
+ok 282 typescript-project-cases > sourcerootUrlModuleSimpleSpecifyOutputDirectory > amd
+ok 283 typescript-project-cases > sourcerootUrlModuleSimpleSpecifyOutputDirectory > commonjs
+ok 284 typescript-project-cases > sourcerootUrlModuleSimpleSpecifyOutputFile > amd
+ok 285 typescript-project-cases > sourcerootUrlModuleSimpleSpecifyOutputFile > commonjs
+ok 286 typescript-project-cases > sourcerootUrlModuleSubfolderNoOutdir > amd
+ok 287 typescript-project-cases > sourcerootUrlModuleSubfolderNoOutdir > commonjs
+ok 288 typescript-project-cases > sourcerootUrlModuleSubfolderSpecifyOutputDirectory > amd
+ok 289 typescript-project-cases > sourcerootUrlModuleSubfolderSpecifyOutputDirectory > commonjs
+ok 290 typescript-project-cases > sourcerootUrlModuleSubfolderSpecifyOutputFile > amd
+ok 291 typescript-project-cases > sourcerootUrlModuleSubfolderSpecifyOutputFile > commonjs
+ok 292 typescript-project-cases > sourcerootUrlMultifolderNoOutdir > amd
+ok 293 typescript-project-cases > sourcerootUrlMultifolderNoOutdir > commonjs
+ok 294 typescript-project-cases > sourcerootUrlMultifolderSpecifyOutputDirectory > amd
+ok 295 typescript-project-cases > sourcerootUrlMultifolderSpecifyOutputDirectory > commonjs
+ok 296 typescript-project-cases > sourcerootUrlMultifolderSpecifyOutputFile > amd
+ok 297 typescript-project-cases > sourcerootUrlMultifolderSpecifyOutputFile > commonjs
+ok 298 typescript-project-cases > sourcerootUrlSimpleNoOutdir > amd
+ok 299 typescript-project-cases > sourcerootUrlSimpleNoOutdir > commonjs
+ok 300 typescript-project-cases > sourcerootUrlSimpleSpecifyOutputDirectory > amd
+ok 301 typescript-project-cases > sourcerootUrlSimpleSpecifyOutputDirectory > commonjs
+ok 302 typescript-project-cases > sourcerootUrlSimpleSpecifyOutputFile > amd
+ok 303 typescript-project-cases > sourcerootUrlSimpleSpecifyOutputFile > commonjs
+ok 304 typescript-project-cases > sourcerootUrlSingleFileNoOutdir > amd
+ok 305 typescript-project-cases > sourcerootUrlSingleFileNoOutdir > commonjs
+ok 306 typescript-project-cases > sourcerootUrlSingleFileSpecifyOutputDirectory > amd
+ok 307 typescript-project-cases > sourcerootUrlSingleFileSpecifyOutputDirectory > commonjs
+ok 308 typescript-project-cases > sourcerootUrlSingleFileSpecifyOutputFile > amd
+ok 309 typescript-project-cases > sourcerootUrlSingleFileSpecifyOutputFile > commonjs
+ok 310 typescript-project-cases > sourcerootUrlSubfolderNoOutdir > amd
+ok 311 typescript-project-cases > sourcerootUrlSubfolderNoOutdir > commonjs
+ok 312 typescript-project-cases > sourcerootUrlSubfolderSpecifyOutputDirectory > amd
+ok 313 typescript-project-cases > sourcerootUrlSubfolderSpecifyOutputDirectory > commonjs
+ok 314 typescript-project-cases > sourcerootUrlSubfolderSpecifyOutputFile > amd
+ok 315 typescript-project-cases > sourcerootUrlSubfolderSpecifyOutputFile > commonjs
+not ok 316 typescript-project-cases > specifyExcludeUsingRelativepath > amd
+  ---
+  message: "Promise rejected during "amd": realpath is not a function
+        at broccoli-typescript-compiler
+-~- created here: -~-
+    at TypescriptCompiler.Plugin (/bts/node_modules/broccoli-plugin/index.js:7:31)
+    at new TypescriptCompiler (/bts/dist/index.cjs.js:883:27)
+    at Object.typescript [as default] (/bts/dist/index.cjs.js:876:12)
+    at Object.<anonymous> (/bts/dist/tests/typescript-project-cases-test.js:29:82)
+    at Generator.next (<anonymous>)
+    at fulfilled (/bts/dist/tests/typescript-project-cases-test.js:5:58)
+-~- (end) -~-"
+  severity: failed
+  actual: null
+  expected: undefined
+  stack: TypeError: realpath is not a function
+    at visitDirectory (/bts/node_modules/typescript/lib/typescript.js:16111:45)
+    at Object.matchFiles (/bts/node_modules/typescript/lib/typescript.js:16107:13)
+    at Object.readDirectory (/bts/dist/index.cjs.js:60:19)
+    at getFileNamesFromConfigSpecs (/bts/node_modules/typescript/lib/typescript.js:26324:40)
+    at matchFileNames (/bts/node_modules/typescript/lib/typescript.js:26244:16)
+    at getFileNames (/bts/node_modules/typescript/lib/typescript.js:25812:26)
+    at parseJsonConfigFileContentWorker (/bts/node_modules/typescript/lib/typescript.js:25745:18)
+    at Object.parseJsonSourceFileConfigFileContent (/bts/node_modules/typescript/lib/typescript.js:25705:16)
+    at ConfigParser.parseConfigContent (/bts/dist/index.cjs.js:134:15)
+    at ConfigParser.parseConfig (/bts/dist/index.cjs.js:87:23)
+  ...
+not ok 317 typescript-project-cases > specifyExcludeUsingRelativepath > commonjs
+  ---
+  message: "Promise rejected during "commonjs": realpath is not a function
+        at broccoli-typescript-compiler
+-~- created here: -~-
+    at TypescriptCompiler.Plugin (/bts/node_modules/broccoli-plugin/index.js:7:31)
+    at new TypescriptCompiler (/bts/dist/index.cjs.js:883:27)
+    at Object.typescript [as default] (/bts/dist/index.cjs.js:876:12)
+    at Object.<anonymous> (/bts/dist/tests/typescript-project-cases-test.js:29:82)
+    at Generator.next (<anonymous>)
+    at fulfilled (/bts/dist/tests/typescript-project-cases-test.js:5:58)
+-~- (end) -~-"
+  severity: failed
+  actual: null
+  expected: undefined
+  stack: TypeError: realpath is not a function
+    at visitDirectory (/bts/node_modules/typescript/lib/typescript.js:16111:45)
+    at Object.matchFiles (/bts/node_modules/typescript/lib/typescript.js:16107:13)
+    at Object.readDirectory (/bts/dist/index.cjs.js:60:19)
+    at getFileNamesFromConfigSpecs (/bts/node_modules/typescript/lib/typescript.js:26324:40)
+    at matchFileNames (/bts/node_modules/typescript/lib/typescript.js:26244:16)
+    at getFileNames (/bts/node_modules/typescript/lib/typescript.js:25812:26)
+    at parseJsonConfigFileContentWorker (/bts/node_modules/typescript/lib/typescript.js:25745:18)
+    at Object.parseJsonSourceFileConfigFileContent (/bts/node_modules/typescript/lib/typescript.js:25705:16)
+    at ConfigParser.parseConfigContent (/bts/dist/index.cjs.js:134:15)
+    at ConfigParser.parseConfig (/bts/dist/index.cjs.js:87:23)
+  ...
+not ok 318 typescript-project-cases > specifyExcludeUsingRelativepathWithAllowJS > amd
+  ---
+  message: "Promise rejected during "amd": realpath is not a function
+        at broccoli-typescript-compiler
+-~- created here: -~-
+    at TypescriptCompiler.Plugin (/bts/node_modules/broccoli-plugin/index.js:7:31)
+    at new TypescriptCompiler (/bts/dist/index.cjs.js:883:27)
+    at Object.typescript [as default] (/bts/dist/index.cjs.js:876:12)
+    at Object.<anonymous> (/bts/dist/tests/typescript-project-cases-test.js:29:82)
+    at Generator.next (<anonymous>)
+    at fulfilled (/bts/dist/tests/typescript-project-cases-test.js:5:58)
+-~- (end) -~-"
+  severity: failed
+  actual: null
+  expected: undefined
+  stack: TypeError: realpath is not a function
+    at visitDirectory (/bts/node_modules/typescript/lib/typescript.js:16111:45)
+    at Object.matchFiles (/bts/node_modules/typescript/lib/typescript.js:16107:13)
+    at Object.readDirectory (/bts/dist/index.cjs.js:60:19)
+    at getFileNamesFromConfigSpecs (/bts/node_modules/typescript/lib/typescript.js:26324:40)
+    at matchFileNames (/bts/node_modules/typescript/lib/typescript.js:26244:16)
+    at getFileNames (/bts/node_modules/typescript/lib/typescript.js:25812:26)
+    at parseJsonConfigFileContentWorker (/bts/node_modules/typescript/lib/typescript.js:25745:18)
+    at Object.parseJsonSourceFileConfigFileContent (/bts/node_modules/typescript/lib/typescript.js:25705:16)
+    at ConfigParser.parseConfigContent (/bts/dist/index.cjs.js:134:15)
+    at ConfigParser.parseConfig (/bts/dist/index.cjs.js:87:23)
+  ...
+not ok 319 typescript-project-cases > specifyExcludeUsingRelativepathWithAllowJS > commonjs
+  ---
+  message: "Promise rejected during "commonjs": realpath is not a function
+        at broccoli-typescript-compiler
+-~- created here: -~-
+    at TypescriptCompiler.Plugin (/bts/node_modules/broccoli-plugin/index.js:7:31)
+    at new TypescriptCompiler (/bts/dist/index.cjs.js:883:27)
+    at Object.typescript [as default] (/bts/dist/index.cjs.js:876:12)
+    at Object.<anonymous> (/bts/dist/tests/typescript-project-cases-test.js:29:82)
+    at Generator.next (<anonymous>)
+    at fulfilled (/bts/dist/tests/typescript-project-cases-test.js:5:58)
+-~- (end) -~-"
+  severity: failed
+  actual: null
+  expected: undefined
+  stack: TypeError: realpath is not a function
+    at visitDirectory (/bts/node_modules/typescript/lib/typescript.js:16111:45)
+    at Object.matchFiles (/bts/node_modules/typescript/lib/typescript.js:16107:13)
+    at Object.readDirectory (/bts/dist/index.cjs.js:60:19)
+    at getFileNamesFromConfigSpecs (/bts/node_modules/typescript/lib/typescript.js:26324:40)
+    at matchFileNames (/bts/node_modules/typescript/lib/typescript.js:26244:16)
+    at getFileNames (/bts/node_modules/typescript/lib/typescript.js:25812:26)
+    at parseJsonConfigFileContentWorker (/bts/node_modules/typescript/lib/typescript.js:25745:18)
+    at Object.parseJsonSourceFileConfigFileContent (/bts/node_modules/typescript/lib/typescript.js:25705:16)
+    at ConfigParser.parseConfigContent (/bts/dist/index.cjs.js:134:15)
+    at ConfigParser.parseConfig (/bts/dist/index.cjs.js:87:23)
+  ...
+not ok 320 typescript-project-cases > specifyExcludeWithOutUsingRelativePath > amd
+  ---
+  message: "Promise rejected during "amd": realpath is not a function
+        at broccoli-typescript-compiler
+-~- created here: -~-
+    at TypescriptCompiler.Plugin (/bts/node_modules/broccoli-plugin/index.js:7:31)
+    at new TypescriptCompiler (/bts/dist/index.cjs.js:883:27)
+    at Object.typescript [as default] (/bts/dist/index.cjs.js:876:12)
+    at Object.<anonymous> (/bts/dist/tests/typescript-project-cases-test.js:29:82)
+    at Generator.next (<anonymous>)
+    at fulfilled (/bts/dist/tests/typescript-project-cases-test.js:5:58)
+-~- (end) -~-"
+  severity: failed
+  actual: null
+  expected: undefined
+  stack: TypeError: realpath is not a function
+    at visitDirectory (/bts/node_modules/typescript/lib/typescript.js:16111:45)
+    at Object.matchFiles (/bts/node_modules/typescript/lib/typescript.js:16107:13)
+    at Object.readDirectory (/bts/dist/index.cjs.js:60:19)
+    at getFileNamesFromConfigSpecs (/bts/node_modules/typescript/lib/typescript.js:26324:40)
+    at matchFileNames (/bts/node_modules/typescript/lib/typescript.js:26244:16)
+    at getFileNames (/bts/node_modules/typescript/lib/typescript.js:25812:26)
+    at parseJsonConfigFileContentWorker (/bts/node_modules/typescript/lib/typescript.js:25745:18)
+    at Object.parseJsonSourceFileConfigFileContent (/bts/node_modules/typescript/lib/typescript.js:25705:16)
+    at ConfigParser.parseConfigContent (/bts/dist/index.cjs.js:134:15)
+    at ConfigParser.parseConfig (/bts/dist/index.cjs.js:87:23)
+  ...
+not ok 321 typescript-project-cases > specifyExcludeWithOutUsingRelativePath > commonjs
+  ---
+  message: "Promise rejected during "commonjs": realpath is not a function
+        at broccoli-typescript-compiler
+-~- created here: -~-
+    at TypescriptCompiler.Plugin (/bts/node_modules/broccoli-plugin/index.js:7:31)
+    at new TypescriptCompiler (/bts/dist/index.cjs.js:883:27)
+    at Object.typescript [as default] (/bts/dist/index.cjs.js:876:12)
+    at Object.<anonymous> (/bts/dist/tests/typescript-project-cases-test.js:29:82)
+    at Generator.next (<anonymous>)
+    at fulfilled (/bts/dist/tests/typescript-project-cases-test.js:5:58)
+-~- (end) -~-"
+  severity: failed
+  actual: null
+  expected: undefined
+  stack: TypeError: realpath is not a function
+    at visitDirectory (/bts/node_modules/typescript/lib/typescript.js:16111:45)
+    at Object.matchFiles (/bts/node_modules/typescript/lib/typescript.js:16107:13)
+    at Object.readDirectory (/bts/dist/index.cjs.js:60:19)
+    at getFileNamesFromConfigSpecs (/bts/node_modules/typescript/lib/typescript.js:26324:40)
+    at matchFileNames (/bts/node_modules/typescript/lib/typescript.js:26244:16)
+    at getFileNames (/bts/node_modules/typescript/lib/typescript.js:25812:26)
+    at parseJsonConfigFileContentWorker (/bts/node_modules/typescript/lib/typescript.js:25745:18)
+    at Object.parseJsonSourceFileConfigFileContent (/bts/node_modules/typescript/lib/typescript.js:25705:16)
+    at ConfigParser.parseConfigContent (/bts/dist/index.cjs.js:134:15)
+    at ConfigParser.parseConfig (/bts/dist/index.cjs.js:87:23)
+  ...
+not ok 322 typescript-project-cases > specifyExcludeWithOutUsingRelativePathWithAllowJS > amd
+  ---
+  message: "Promise rejected during "amd": realpath is not a function
+        at broccoli-typescript-compiler
+-~- created here: -~-
+    at TypescriptCompiler.Plugin (/bts/node_modules/broccoli-plugin/index.js:7:31)
+    at new TypescriptCompiler (/bts/dist/index.cjs.js:883:27)
+    at Object.typescript [as default] (/bts/dist/index.cjs.js:876:12)
+    at Object.<anonymous> (/bts/dist/tests/typescript-project-cases-test.js:29:82)
+    at Generator.next (<anonymous>)
+    at fulfilled (/bts/dist/tests/typescript-project-cases-test.js:5:58)
+-~- (end) -~-"
+  severity: failed
+  actual: null
+  expected: undefined
+  stack: TypeError: realpath is not a function
+    at visitDirectory (/bts/node_modules/typescript/lib/typescript.js:16111:45)
+    at Object.matchFiles (/bts/node_modules/typescript/lib/typescript.js:16107:13)
+    at Object.readDirectory (/bts/dist/index.cjs.js:60:19)
+    at getFileNamesFromConfigSpecs (/bts/node_modules/typescript/lib/typescript.js:26324:40)
+    at matchFileNames (/bts/node_modules/typescript/lib/typescript.js:26244:16)
+    at getFileNames (/bts/node_modules/typescript/lib/typescript.js:25812:26)
+    at parseJsonConfigFileContentWorker (/bts/node_modules/typescript/lib/typescript.js:25745:18)
+    at Object.parseJsonSourceFileConfigFileContent (/bts/node_modules/typescript/lib/typescript.js:25705:16)
+    at ConfigParser.parseConfigContent (/bts/dist/index.cjs.js:134:15)
+    at ConfigParser.parseConfig (/bts/dist/index.cjs.js:87:23)
+  ...
+not ok 323 typescript-project-cases > specifyExcludeWithOutUsingRelativePathWithAllowJS > commonjs
+  ---
+  message: "Promise rejected during "commonjs": realpath is not a function
+        at broccoli-typescript-compiler
+-~- created here: -~-
+    at TypescriptCompiler.Plugin (/bts/node_modules/broccoli-plugin/index.js:7:31)
+    at new TypescriptCompiler (/bts/dist/index.cjs.js:883:27)
+    at Object.typescript [as default] (/bts/dist/index.cjs.js:876:12)
+    at Object.<anonymous> (/bts/dist/tests/typescript-project-cases-test.js:29:82)
+    at Generator.next (<anonymous>)
+    at fulfilled (/bts/dist/tests/typescript-project-cases-test.js:5:58)
+-~- (end) -~-"
+  severity: failed
+  actual: null
+  expected: undefined
+  stack: TypeError: realpath is not a function
+    at visitDirectory (/bts/node_modules/typescript/lib/typescript.js:16111:45)
+    at Object.matchFiles (/bts/node_modules/typescript/lib/typescript.js:16107:13)
+    at Object.readDirectory (/bts/dist/index.cjs.js:60:19)
+    at getFileNamesFromConfigSpecs (/bts/node_modules/typescript/lib/typescript.js:26324:40)
+    at matchFileNames (/bts/node_modules/typescript/lib/typescript.js:26244:16)
+    at getFileNames (/bts/node_modules/typescript/lib/typescript.js:25812:26)
+    at parseJsonConfigFileContentWorker (/bts/node_modules/typescript/lib/typescript.js:25745:18)
+    at Object.parseJsonSourceFileConfigFileContent (/bts/node_modules/typescript/lib/typescript.js:25705:16)
+    at ConfigParser.parseConfigContent (/bts/dist/index.cjs.js:134:15)
+    at ConfigParser.parseConfig (/bts/dist/index.cjs.js:87:23)
+  ...
+ok 324 typescript-project-cases > visibilityOfTypeUsedAcrossModules > amd
+ok 325 typescript-project-cases > visibilityOfTypeUsedAcrossModules > commonjs
+1..325
+# pass 287
+# skip 0
+# todo 0
+# fail 38
+
+
+
+Standard error:
+
+dist/index.js → dist/index.cjs.js...
+(!) Mixing named and default exports
+Consumers of your bundle will have to use bundle['default'] to access the default export, which may not be what you want. Use `output.exports: 'named'` to disable this warning
+created dist/index.cjs.js in ?s
+../outputdir_module_multifolder_ref/m2.js.map
+../outputdir_module_multifolder_ref/m2.js
+../outputdir_module_multifolder_ref/m2.d.ts
+../outputdir_module_multifolder_ref/m2.js.map
+../outputdir_module_multifolder_ref/m2.js
+../outputdir_module_multifolder_ref/m2.d.ts
+../outputdir_multifolder_ref/m2.js.map
+../outputdir_multifolder_ref/m2.js
+../outputdir_multifolder_ref/m2.d.ts
+../outputdir_multifolder_ref/m2.js.map
+../outputdir_multifolder_ref/m2.js
+../outputdir_multifolder_ref/m2.d.ts
+../outputdir_module_multifolder_ref/m2.js
+../outputdir_module_multifolder_ref/m2.d.ts
+../outputdir_module_multifolder_ref/m2.js
+../outputdir_module_multifolder_ref/m2.d.ts
+../outputdir_multifolder_ref/m2.js
+../outputdir_multifolder_ref/m2.d.ts
+../outputdir_multifolder_ref/m2.js
+../outputdir_multifolder_ref/m2.d.ts
+../outputdir_module_multifolder_ref/m2.js.map
+../outputdir_module_multifolder_ref/m2.js
+../outputdir_module_multifolder_ref/m2.d.ts
+../outputdir_module_multifolder_ref/m2.js.map
+../outputdir_module_multifolder_ref/m2.js
+../outputdir_module_multifolder_ref/m2.d.ts
+../outputdir_multifolder_ref/m2.js.map
+../outputdir_multifolder_ref/m2.js
+../outputdir_multifolder_ref/m2.d.ts
+../outputdir_multifolder_ref/m2.js.map
+../outputdir_multifolder_ref/m2.js
+../outputdir_multifolder_ref/m2.d.ts
+../outputdir_module_multifolder_ref/m2.js.map
+../outputdir_module_multifolder_ref/m2.js
+../outputdir_module_multifolder_ref/m2.d.ts
+../outputdir_module_multifolder_ref/m2.js.map
+../outputdir_module_multifolder_ref/m2.js
+../outputdir_module_multifolder_ref/m2.d.ts
+../outputdir_multifolder_ref/m2.js.map
+../outputdir_multifolder_ref/m2.js
+../outputdir_multifolder_ref/m2.d.ts
+../outputdir_multifolder_ref/m2.js.map
+../outputdir_multifolder_ref/m2.js
+../outputdir_multifolder_ref/m2.d.ts
