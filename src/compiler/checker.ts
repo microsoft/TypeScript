@@ -21557,7 +21557,7 @@ namespace ts {
                 return objectType;
             }
 
-            if (isConstEnumObjectType(objectType) && indexExpression.kind !== SyntaxKind.StringLiteral) {
+            if (isConstEnumObjectType(objectType) && !isStringLiteralLike(indexExpression)) {
                 error(indexExpression, Diagnostics.A_const_enum_member_can_only_be_accessed_using_a_string_literal);
                 return errorType;
             }
@@ -30287,7 +30287,7 @@ namespace ts {
             return node.kind === SyntaxKind.Identifier ||
                 node.kind === SyntaxKind.PropertyAccessExpression && isConstantMemberAccess((<PropertyAccessExpression>node).expression) ||
                 node.kind === SyntaxKind.ElementAccessExpression && isConstantMemberAccess((<ElementAccessExpression>node).expression) &&
-                    (<ElementAccessExpression>node).argumentExpression.kind === SyntaxKind.StringLiteral;
+                    isStringLiteralLike((<ElementAccessExpression>node).argumentExpression);
         }
 
         function checkEnumDeclaration(node: EnumDeclaration) {
