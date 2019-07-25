@@ -345,5 +345,68 @@ namespace ts.projectSystem {
         it("inferred projects per project root with case insensitive system", () => {
             verifyProjectRootWithCaseSensitivity(/*useCaseSensitiveFileNames*/ false);
         });
+
+        it("should still retain configured project created while opening the file", () => {
+            const projectRoot = "/user/username/projects/project";
+            const appFile: File = {
+                path: `${projectRoot}/app.ts`,
+                content: `const app = 20;`
+            };
+            const config: File = {
+                path: `${projectRoot}/tsconfig.json`,
+                content: "{}"
+            };
+            const jsFile1: File = {
+                path: `${projectRoot}/jsFile1.js`,
+                content: `const jsFile1 = 10;`
+            };
+            const jsFile2: File = {
+                path: `${projectRoot}/jsFile2.js`,
+                content: `const jsFile2 = 10;`
+            };
+            const host = createServerHost([appFile, libFile, config, jsFile1, jsFile2]);
+            const projectService = createProjectService(host);
+            const originalSet = projectService.configuredProjects.set;
+            const originalDelete = projectService.configuredProjects.delete;
+            const configuredCreated = createMap<true>();
+            const configuredRemoved = createMap<true>();
+            projectService.configuredProjects.set = (key, value) => {
+                assert.isFalse(configuredCreated.has(key));
+                configuredCreated.set(key, true);
+                return originalSet.call(projectService.configuredProjects, key, value);
+            };
+            projectService.configuredProjects.delete = key => {
+                assert.isFalse(configuredRemoved.has(key));
+                configuredRemoved.set(key, true);
+                return originalDelete.call(projectService.configuredProjects, key);
+            };
+
+            projectService.openClientFile(jsFile1.path);
+            checkNumberOfProjects(projectService, { inferredProjects: 1 });
+            checkProjectActualFiles(projectService.inferredProjects[0], [jsFile1.path, libFile.path]);
+            checkConfiguredProjectCreatedAndDeleted();
+
+            projectService.closeClientFile(jsFile1.path);
+            checkNumberOfProjects(projectService, { inferredProjects: 1 });
+            projectService.openClientFile(jsFile2.path);
+            checkNumberOfProjects(projectService, { inferredProjects: 1 });
+            checkProjectActualFiles(projectService.inferredProjects[0], [jsFile2.path, libFile.path]);
+            checkConfiguredProjectCreatedAndDeleted();
+
+            projectService.openClientFile(jsFile1.path);
+            checkNumberOfProjects(projectService, { inferredProjects: 2 });
+            checkProjectActualFiles(projectService.inferredProjects[0], [jsFile2.path, libFile.path]);
+            checkProjectActualFiles(projectService.inferredProjects[1], [jsFile1.path, libFile.path]);
+            checkConfiguredProjectCreatedAndDeleted();
+
+            function checkConfiguredProjectCreatedAndDeleted() {
+                assert.equal(configuredCreated.size, 1);
+                assert.isTrue(configuredCreated.has(config.path));
+                assert.equal(configuredRemoved.size, 1);
+                assert.isTrue(configuredRemoved.has(config.path));
+                configuredCreated.clear();
+                configuredRemoved.clear();
+            }
+        });
     });
 }
