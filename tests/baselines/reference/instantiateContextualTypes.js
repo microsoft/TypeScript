@@ -139,6 +139,40 @@ declare const outerBoxOfString: OuterBox<string>;
 
 passContentsToFunc(outerBoxOfString, box => box.value);
 
+// Repro from #32349
+
+type DooDad = 'SOMETHING' | 'ELSE' ;
+
+class Interesting {
+	public compiles = () : Promise<DooDad> => {
+		return Promise.resolve().then(() => {
+			if (1 < 2) {
+				return 'SOMETHING';
+			}
+			return 'ELSE';
+		});
+	};
+	public doesnt = () : Promise<DooDad> => {
+		return Promise.resolve().then(() => {
+			return 'ELSE';
+		});
+	};
+	public slightlyDifferentErrorMessage = () : Promise<DooDad> => {
+		return Promise.resolve().then(() => {
+			if (1 < 2) {
+				return 'SOMETHING';
+			}
+			return 'SOMETHING';
+		});
+	};
+}
+
+// Repro from #32349
+
+declare function invoke<T>(f: () => T): T;
+
+let xx: 0 | 1 | 2 = invoke(() => 1);
+
 
 //// [instantiateContextualTypes.js]
 // #6611
@@ -162,3 +196,29 @@ var N1;
     createElement2(InferFunctionTypes, [(foo) => "" + foo]);
 })(N1 || (N1 = {}));
 passContentsToFunc(outerBoxOfString, box => box.value);
+class Interesting {
+    constructor() {
+        this.compiles = () => {
+            return Promise.resolve().then(() => {
+                if (1 < 2) {
+                    return 'SOMETHING';
+                }
+                return 'ELSE';
+            });
+        };
+        this.doesnt = () => {
+            return Promise.resolve().then(() => {
+                return 'ELSE';
+            });
+        };
+        this.slightlyDifferentErrorMessage = () => {
+            return Promise.resolve().then(() => {
+                if (1 < 2) {
+                    return 'SOMETHING';
+                }
+                return 'SOMETHING';
+            });
+        };
+    }
+}
+let xx = invoke(() => 1);

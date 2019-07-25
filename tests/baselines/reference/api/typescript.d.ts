@@ -1155,6 +1155,7 @@ declare namespace ts {
         expression: JsxTagNameExpression;
     }
     interface JsxAttributes extends ObjectLiteralExpressionBase<JsxAttributeLike> {
+        kind: SyntaxKind.JsxAttributes;
         parent: JsxOpeningLikeElement;
     }
     interface JsxOpeningElement extends Expression {
@@ -2600,7 +2601,7 @@ declare namespace ts {
         UMD = 3,
         System = 4,
         ES2015 = 5,
-        ESNext = 6
+        ESNext = 99
     }
     enum JsxEmit {
         None = 0,
@@ -2640,9 +2641,9 @@ declare namespace ts {
         ES2018 = 5,
         ES2019 = 6,
         ES2020 = 7,
-        ESNext = 8,
+        ESNext = 99,
         JSON = 100,
-        Latest = 8
+        Latest = 99
     }
     enum LanguageVariant {
         Standard = 0,
@@ -5404,7 +5405,7 @@ declare namespace ts {
         argumentCount: number;
     }
     interface CompletionInfo {
-        /** Not true for all glboal completions. This will be true if the enclosing scope matches a few syntax kinds. See `isSnippetScope`. */
+        /** Not true for all global completions. This will be true if the enclosing scope matches a few syntax kinds. See `isSnippetScope`. */
         isGlobalCompletion: boolean;
         isMemberCompletion: boolean;
         /**

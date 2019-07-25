@@ -34,6 +34,14 @@
 ////    ;
 ////
 ////callableThing4(/*4*/);
+////
+////declare const callableThing5: 
+////    | (<U>(a1: U) => void)
+////    | (() => void) 
+////    ;
+////
+////callableThing5(/*5*/1)
+////
 
 verify.signatureHelp({
     marker: "1",
@@ -50,4 +58,8 @@ verify.signatureHelp({
 {
     marker: "4",
     text: "callableThing4(arg0: { x: number; } & { y: number; } & { z: number; } & { u: number; } & { v: number; } & { w: number; }): void"
+},
+{
+    marker: "5",
+    text: "callableThing5(a1: number): void"
 });

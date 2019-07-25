@@ -1467,5 +1467,22 @@ var x = 10;`
                 openFilesForSession([{ file, projectRootPath }], session);
             }
         });
+
+        it("assert when removing project", () => {
+            const host = createServerHost([commonFile1, commonFile2, libFile]);
+            const service = createProjectService(host);
+            service.openClientFile(commonFile1.path);
+            const project = service.inferredProjects[0];
+            checkProjectActualFiles(project, [commonFile1.path, libFile.path]);
+            // Intentionally create scriptinfo and attach it to project
+            const info = service.getOrCreateScriptInfoForNormalizedPath(commonFile2.path as server.NormalizedPath, /*openedByClient*/ false)!;
+            info.attachToProject(project);
+            try {
+                service.applyChangesInOpenFiles(/*openFiles*/ undefined, /*changedFiles*/ undefined, [commonFile1.path]);
+            }
+            catch (e) {
+                assert.isTrue(e.message.indexOf("Debug Failure. False expression: Found script Info still attached to project") === 0);
+            }
+        });
     });
 }

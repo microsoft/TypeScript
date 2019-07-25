@@ -1,17 +1,31 @@
 class C {
-    "constructor"() {} // Error in 3.5
+    "constructor"() {
+        console.log(this);
+    }
 }
 
 class D {
-    'constructor'() {} // Error in 3.5
+    'constructor'() {
+        console.log(this);
+    }
 }
 
 class E {
-    ['constructor']() {}
+    ['constructor']() {
+        console.log(this);
+    }
 }
 
 new class {
-    "constructor"() {} // Error in 3.5
+    "constructor"() {
+        console.log(this);
+    }
 };
 
 var o = { "constructor"() {} };
+
+class F {
+    "\x63onstructor"() {
+        console.log(this);
+    }
+}

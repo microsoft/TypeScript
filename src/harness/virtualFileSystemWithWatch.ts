@@ -30,7 +30,7 @@ interface Array<T> {}`
         return combinePaths(getDirectoryPath(libFile.path), "tsc.js");
     }
 
-    interface TestServerHostCreationParameters {
+    export interface TestServerHostCreationParameters {
         useCaseSensitiveFileNames?: boolean;
         executingFilePath?: string;
         currentDirectory?: string;

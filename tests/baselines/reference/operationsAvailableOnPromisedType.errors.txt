@@ -8,7 +8,7 @@ tests/cases/compiler/operationsAvailableOnPromisedType.ts(17,5): error TS2367: T
 tests/cases/compiler/operationsAvailableOnPromisedType.ts(18,9): error TS2461: Type 'Promise<string[]>' is not an array type.
 tests/cases/compiler/operationsAvailableOnPromisedType.ts(19,21): error TS2495: Type 'Promise<string[]>' is not an array type or a string type.
 tests/cases/compiler/operationsAvailableOnPromisedType.ts(20,12): error TS2345: Argument of type 'Promise<number>' is not assignable to parameter of type 'number'.
-tests/cases/compiler/operationsAvailableOnPromisedType.ts(21,11): error TS2570: Property 'prop' does not exist on type 'Promise<{ prop: string; }>'. Did you forget to use 'await'?
+tests/cases/compiler/operationsAvailableOnPromisedType.ts(21,11): error TS2339: Property 'prop' does not exist on type 'Promise<{ prop: string; }>'.
 tests/cases/compiler/operationsAvailableOnPromisedType.ts(23,27): error TS2495: Type 'Promise<string[]>' is not an array type or a string type.
 tests/cases/compiler/operationsAvailableOnPromisedType.ts(24,5): error TS2349: This expression is not callable.
   Type 'Promise<() => void>' has no call signatures.
@@ -72,7 +72,8 @@ tests/cases/compiler/operationsAvailableOnPromisedType.ts(27,5): error TS2349: T
 !!! related TS2773 tests/cases/compiler/operationsAvailableOnPromisedType.ts:20:12: Did you forget to use 'await'?
             d.prop;
               ~~~~
-!!! error TS2570: Property 'prop' does not exist on type 'Promise<{ prop: string; }>'. Did you forget to use 'await'?
+!!! error TS2339: Property 'prop' does not exist on type 'Promise<{ prop: string; }>'.
+!!! related TS2773 tests/cases/compiler/operationsAvailableOnPromisedType.ts:21:11: Did you forget to use 'await'?
         }
         for await (const s of c) {}
                               ~

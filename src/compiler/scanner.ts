@@ -197,6 +197,7 @@ namespace ts {
         "|=": SyntaxKind.BarEqualsToken,
         "^=": SyntaxKind.CaretEqualsToken,
         "@": SyntaxKind.AtToken,
+        "`": SyntaxKind.BacktickToken
     });
 
     /*
@@ -298,7 +299,6 @@ namespace ts {
     }
 
     const tokenStrings = makeReverseMap(textToToken);
-
     export function tokenToString(t: SyntaxKind): string | undefined {
         return tokenStrings[t];
     }
