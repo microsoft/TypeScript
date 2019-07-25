@@ -381,30 +381,54 @@ namespace ts.projectSystem {
                 return originalDelete.call(projectService.configuredProjects, key);
             };
 
+            // Do not remove config project when opening jsFile that is not present as part of config project
             projectService.openClientFile(jsFile1.path);
-            checkNumberOfProjects(projectService, { inferredProjects: 1 });
+            checkNumberOfProjects(projectService, { inferredProjects: 1, configuredProjects: 1 });
             checkProjectActualFiles(projectService.inferredProjects[0], [jsFile1.path, libFile.path]);
-            checkConfiguredProjectCreatedAndDeleted();
+            const project = projectService.configuredProjects.get(config.path)!;
+            checkProjectActualFiles(project, [appFile.path, config.path, libFile.path]);
+            checkConfiguredProjectCreatedAndNotDeleted();
 
+            // Do not remove config project when opening jsFile that is not present as part of config project
             projectService.closeClientFile(jsFile1.path);
-            checkNumberOfProjects(projectService, { inferredProjects: 1 });
+            checkNumberOfProjects(projectService, { inferredProjects: 1, configuredProjects: 1 });
             projectService.openClientFile(jsFile2.path);
-            checkNumberOfProjects(projectService, { inferredProjects: 1 });
+            checkNumberOfProjects(projectService, { inferredProjects: 1, configuredProjects: 1 });
             checkProjectActualFiles(projectService.inferredProjects[0], [jsFile2.path, libFile.path]);
-            checkConfiguredProjectCreatedAndDeleted();
+            checkProjectActualFiles(project, [appFile.path, config.path, libFile.path]);
+            checkConfiguredProjectNotCreatedAndNotDeleted();
 
+            // Do not remove config project when opening jsFile that is not present as part of config project
             projectService.openClientFile(jsFile1.path);
+            checkNumberOfProjects(projectService, { inferredProjects: 2, configuredProjects: 1 });
+            checkProjectActualFiles(projectService.inferredProjects[0], [jsFile2.path, libFile.path]);
+            checkProjectActualFiles(projectService.inferredProjects[1], [jsFile1.path, libFile.path]);
+            checkProjectActualFiles(project, [appFile.path, config.path, libFile.path]);
+            checkConfiguredProjectNotCreatedAndNotDeleted();
+
+            // When opening file that doesnt fall back to the config file, we remove the config project
+            projectService.openClientFile(libFile.path);
             checkNumberOfProjects(projectService, { inferredProjects: 2 });
             checkProjectActualFiles(projectService.inferredProjects[0], [jsFile2.path, libFile.path]);
             checkProjectActualFiles(projectService.inferredProjects[1], [jsFile1.path, libFile.path]);
-            checkConfiguredProjectCreatedAndDeleted();
+            checkConfiguredProjectNotCreatedButDeleted();
 
-            function checkConfiguredProjectCreatedAndDeleted() {
+            function checkConfiguredProjectCreatedAndNotDeleted() {
                 assert.equal(configuredCreated.size, 1);
                 assert.isTrue(configuredCreated.has(config.path));
+                assert.equal(configuredRemoved.size, 0);
+                configuredCreated.clear();
+            }
+
+            function checkConfiguredProjectNotCreatedAndNotDeleted() {
+                assert.equal(configuredCreated.size, 0);
+                assert.equal(configuredRemoved.size, 0);
+            }
+
+            function checkConfiguredProjectNotCreatedButDeleted() {
+                assert.equal(configuredCreated.size, 0);
                 assert.equal(configuredRemoved.size, 1);
                 assert.isTrue(configuredRemoved.has(config.path));
-                configuredCreated.clear();
                 configuredRemoved.clear();
             }
         });
