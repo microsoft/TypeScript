@@ -15500,7 +15500,7 @@ namespace ts {
                     // First, infer between exactly matching source and target constituents and remove
                     // the matching types. Types exactly match when they are identical or, in union
                     // types, when the source is a literal and the target is the corresponding primitive.
-                    const matching = target.flags & TypeFlags.Union ? isTypeOrBaseExactlyMatchedBy : isTypeExactlyMatchedBy;
+                    const matching = target.flags & TypeFlags.Union ? isTypeOrBaseIdenticalTo : isTypeIdenticalTo;
                     const [tempSources, tempTargets] = inferFromMatchingTypes((<UnionOrIntersectionType>source).types, (<UnionOrIntersectionType>target).types, matching);
                     // Next, infer between closely matching source and target constituents and remove
                     // the matching types. Types closely match when they are instantiations of the same
@@ -15515,7 +15515,7 @@ namespace ts {
                 else if (target.flags & TypeFlags.Union && !(target.flags & TypeFlags.EnumLiteral) || target.flags & TypeFlags.Intersection) {
                     // This block of code is an optimized version of the block above for the simpler case
                     // of a singleton source type.
-                    const matching = target.flags & TypeFlags.Union ? isTypeOrBaseExactlyMatchedBy : isTypeExactlyMatchedBy;
+                    const matching = target.flags & TypeFlags.Union ? isTypeOrBaseIdenticalTo : isTypeIdenticalTo;
                     if (inferFromMatchingType(source, (<UnionOrIntersectionType>target).types, matching)) return;
                     if (inferFromMatchingType(source, (<UnionOrIntersectionType>target).types, isTypeCloselyMatchedBy)) return;
                 }
@@ -15974,19 +15974,8 @@ namespace ts {
             }
         }
 
-        function isNonObjectOrAnonymousType(type: Type) {
-            // We exclude non-anonymous object types because some frameworks (e.g. Ember) rely on the ability to
-            // infer between types that don't witness their type variables. Such types would otherwise be eliminated
-            // because they appear identical.
-            return !(type.flags & TypeFlags.Object) || !!(getObjectFlags(type) & ObjectFlags.Anonymous);
-        }
-
-        function isTypeExactlyMatchedBy(s: Type, t: Type) {
-            return s === t || isNonObjectOrAnonymousType(s) && isNonObjectOrAnonymousType(t) && isTypeIdenticalTo(s, t);
-        }
-
-        function isTypeOrBaseExactlyMatchedBy(s: Type, t: Type) {
-            return isTypeExactlyMatchedBy(s, t) || !!(s.flags & (TypeFlags.StringLiteral | TypeFlags.NumberLiteral)) && isTypeIdenticalTo(getBaseTypeOfLiteralType(s), t);
+        function isTypeOrBaseIdenticalTo(s: Type, t: Type) {
+            return isTypeIdenticalTo(s, t) || !!(s.flags & (TypeFlags.StringLiteral | TypeFlags.NumberLiteral)) && isTypeIdenticalTo(getBaseTypeOfLiteralType(s), t);
         }
 
         function isTypeCloselyMatchedBy(s: Type, t: Type) {
