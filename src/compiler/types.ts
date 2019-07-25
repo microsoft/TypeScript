@@ -455,6 +455,8 @@ namespace ts {
         JSDocOptionalType,
         JSDocFunctionType,
         JSDocVariadicType,
+        // https://jsdoc.app/about-namepaths.html
+        JSDocNamepathType,
         JSDocComment,
         JSDocTypeLiteral,
         JSDocSignature,
@@ -2427,6 +2429,11 @@ namespace ts {
 
     export interface JSDocVariadicType extends JSDocType {
         kind: SyntaxKind.JSDocVariadicType;
+        type: TypeNode;
+    }
+
+    export interface JSDocNamepathType extends JSDocType {
+        kind: SyntaxKind.JSDocNamepathType;
         type: TypeNode;
     }
 

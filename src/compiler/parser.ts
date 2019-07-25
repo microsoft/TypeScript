@@ -2429,8 +2429,16 @@ namespace ts {
         function parseJSDocType(): TypeNode {
             scanner.setInJSDocType(true);
             const dotdotdot = parseOptionalToken(SyntaxKind.DotDotDotToken);
+            const moduleSpecifier = parseOptionalToken(SyntaxKind.ModuleKeyword);
             let type = parseTypeOrTypePredicate();
             scanner.setInJSDocType(false);
+            if (moduleSpecifier) {
+                const moduleTag = createNode(SyntaxKind.JSDocNamepathType, moduleSpecifier.pos) as JSDocNamepathType;
+                while (token() !== SyntaxKind.CloseBraceToken && token() !== SyntaxKind.EndOfFileToken) {
+                    nextTokenJSDoc();
+                }
+                type = finishNode(moduleTag);
+            }
             if (dotdotdot) {
                 const variadic = createNode(SyntaxKind.JSDocVariadicType, dotdotdot.pos) as JSDocVariadicType;
                 variadic.type = type;
