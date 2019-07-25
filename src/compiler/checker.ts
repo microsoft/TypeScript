@@ -33840,7 +33840,7 @@ namespace ts {
         }
 
         function isStringOrNumberLiteralExpression(expr: Expression) {
-            return expr.kind === SyntaxKind.StringLiteral || expr.kind === SyntaxKind.NumericLiteral ||
+            return isStringOrNumericLiteralLike(expr) ||
                 expr.kind === SyntaxKind.PrefixUnaryExpression && (<PrefixUnaryExpression>expr).operator === SyntaxKind.MinusToken &&
                 (<PrefixUnaryExpression>expr).operand.kind === SyntaxKind.NumericLiteral;
         }
