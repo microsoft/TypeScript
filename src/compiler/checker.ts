@@ -13759,7 +13759,7 @@ namespace ts {
                             if (sourceProperty === targetProperty) continue;
                             // We compare the source property to the target in the context of a single discriminant type.
                             const saveIsInt = isIntersectionConstituent;
-                            isIntersectionConstituent = false; // TODOOOOO: Probably not needed
+                            isIntersectionConstituent = false;
                             const related = propertyRelatedTo(source, target, sourceProperty, targetProperty, _ => combination[i], /*reportErrors*/ false);
                             isIntersectionConstituent = saveIsInt;
                             // If the target property could not be found, or if the properties were not related,
