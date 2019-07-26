@@ -73,12 +73,9 @@ namespace ts.OutliningElementsCollector {
         const lineStarts = sourceFile.getLineStarts();
         for (let i = 0; i < lineStarts.length; i++) {
             const currentLineStart = lineStarts[i];
-            const newlinePosition = i + 1 === lineStarts.length ? sourceFile.getEnd() : lineStarts[i + 1] - 1;
-            // If the character before \n is \r, decrement line end by 1.
-            const lineEnd = sourceFile.text.charCodeAt(newlinePosition - 1) === CharacterCodes.carriageReturn ? newlinePosition - 1 : newlinePosition;
+            const lineEnd = sourceFile.getLineEndOfPosition(currentLineStart);
             const lineText = sourceFile.text.substring(currentLineStart, lineEnd);
-            const regionDelimiterRegExp = /^\s*\/\/\s*#(end)?region(?:\s+(.*))?(?:\r)?$/;
-            const result = regionDelimiterRegExp.exec(lineText);
+            const result = isRegionDelimiter(lineText);
             if (!result || isInComment(sourceFile, currentLineStart)) {
                 continue;
             }
@@ -98,6 +95,11 @@ namespace ts.OutliningElementsCollector {
         }
     }
 
+    const regionDelimiterRegExp = /^\s*\/\/\s*#(end)?region(?:\s+(.*))?(?:\r)?$/;
+    function isRegionDelimiter(lineText: string) {
+        return regionDelimiterRegExp.exec(lineText);
+    }
+
     function addOutliningForLeadingCommentsForNode(n: Node, sourceFile: SourceFile, cancellationToken: CancellationToken, out: Push<OutliningSpan>): void {
         const comments = getLeadingCommentRangesOfNode(n, sourceFile);
         if (!comments) return;
@@ -111,9 +113,7 @@ namespace ts.OutliningElementsCollector {
                 case SyntaxKind.SingleLineCommentTrivia:
                     // never fold region delimiters into single-line comment regions
                     const commentText = sourceText.slice(pos, end);
-                    const regionDelimiterRegExp = /^\s*\/\/\s*#(end)?region(?:\s+(.*))?(?:\r)?$/;
-                    const result = regionDelimiterRegExp.exec(commentText);
-                    if (result) {
+                    if (isRegionDelimiter(commentText)) {
                         combineAndAddMultipleSingleLineComments();
                         singleLineCommentCount = 0;
                         break;
