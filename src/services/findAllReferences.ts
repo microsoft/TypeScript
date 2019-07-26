@@ -709,10 +709,26 @@ namespace ts.FindAllReferences.Core {
         return references.length ? [{ definition: { type: DefinitionKind.Symbol, symbol }, references }] : emptyArray;
     }
 
+    /** As in a `readonly prop: any` or `constructor(readonly prop: any)`, not a `readonly any[]`. */
+    function isMemberModifyingReadonlyKeyword(node: Node): boolean {
+        return node.kind === SyntaxKind.ReadonlyKeyword && hasReadonlyModifier(node.parent);
+    }
+
     /** getReferencedSymbols for special node kinds. */
     function getReferencedSymbolsSpecial(node: Node, sourceFiles: ReadonlyArray<SourceFile>, cancellationToken: CancellationToken): SymbolAndEntries[] | undefined {
         if (isTypeKeyword(node.kind)) {
-            return getAllReferencesForKeyword(sourceFiles, node.kind, cancellationToken);
+            // A modifier readonly (like on a property declaration) is not special;
+            // a readonly type keyword (like `readonly string[]`) is.
+            if (isMemberModifyingReadonlyKeyword(node)) {
+                return undefined;
+            }
+            // Likewise, when we *are* looking for a special keyword, make sure we
+            // *don’t* include readonly member modifiers.
+            return getAllReferencesForKeyword(
+                sourceFiles,
+                node.kind,
+                cancellationToken,
+                node.kind === SyntaxKind.ReadonlyKeyword ? not(isMemberModifyingReadonlyKeyword) : undefined);
         }
 
         // Labels
@@ -1235,11 +1251,14 @@ namespace ts.FindAllReferences.Core {
         }
     }
 
-    function getAllReferencesForKeyword(sourceFiles: ReadonlyArray<SourceFile>, keywordKind: SyntaxKind, cancellationToken: CancellationToken): SymbolAndEntries[] | undefined {
+    function getAllReferencesForKeyword(sourceFiles: ReadonlyArray<SourceFile>, keywordKind: SyntaxKind, cancellationToken: CancellationToken, filter?: (node: Node) => boolean): SymbolAndEntries[] | undefined {
         const references = flatMap(sourceFiles, sourceFile => {
             cancellationToken.throwIfCancellationRequested();
-            return mapDefined(getPossibleSymbolReferenceNodes(sourceFile, tokenToString(keywordKind)!, sourceFile), referenceLocation =>
-                referenceLocation.kind === keywordKind ? nodeEntry(referenceLocation) : undefined);
+            return mapDefined(getPossibleSymbolReferenceNodes(sourceFile, tokenToString(keywordKind)!, sourceFile), referenceLocation => {
+                if (referenceLocation.kind === keywordKind && (!filter || filter(referenceLocation))) {
+                    return nodeEntry(referenceLocation);
+                }
+            });
         });
         return references.length ? [{ definition: { type: DefinitionKind.Keyword, node: references[0].node }, references }] : undefined;
     }
