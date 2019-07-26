@@ -478,11 +478,11 @@ namespace ts {
     /*@internal*/
     interface NodeBuffer extends Uint8Array {
         constructor: any;
-        write(string: string, encoding?: BufferEncoding): number;
-        write(string: string, offset: number, encoding?: BufferEncoding): number;
-        write(string: string, offset: number, length: number, encoding?: BufferEncoding): number;
+        write(str: string, encoding?: BufferEncoding): number;
+        write(str: string, offset: number, encoding?: BufferEncoding): number;
+        write(str: string, offset: number, length: number, encoding?: BufferEncoding): number;
         toString(encoding?: string, start?: number, end?: number): string;
-        toJSON(): { type: 'Buffer'; data: number[] };
+        toJSON(): { type: "Buffer"; data: number[] };
         equals(otherBuffer: Uint8Array): boolean;
         compare(
             otherBuffer: Uint8Array,
@@ -534,9 +534,7 @@ namespace ts {
         writeFloatBE(value: number, offset: number): number;
         writeDoubleLE(value: number, offset: number): number;
         writeDoubleBE(value: number, offset: number): number;
-    
         fill(value: string | Uint8Array | number, offset?: number, end?: number, encoding?: BufferEncoding): this;
-    
         indexOf(value: string | number | Uint8Array, byteOffset?: number, encoding?: BufferEncoding): number;
         lastIndexOf(value: string | number | Uint8Array, byteOffset?: number, encoding?: BufferEncoding): number;
         entries(): IterableIterator<[number, number]>;
