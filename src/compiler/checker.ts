@@ -15310,7 +15310,7 @@ namespace ts {
                 objectFlags & ObjectFlags.Reference && forEach((<TypeReference>type).typeArguments, couldContainTypeVariables) ||
                 objectFlags & ObjectFlags.Anonymous && type.symbol && type.symbol.flags & (SymbolFlags.Function | SymbolFlags.Method | SymbolFlags.Class | SymbolFlags.TypeLiteral | SymbolFlags.ObjectLiteral) && type.symbol.declarations ||
                 objectFlags & ObjectFlags.Mapped ||
-                type.flags & TypeFlags.UnionOrIntersection && couldUnionOrIntersectionContainTypeVariables(<UnionOrIntersectionType>type));
+                type.flags & TypeFlags.UnionOrIntersection && !(type.flags & TypeFlags.EnumLiteral) && couldUnionOrIntersectionContainTypeVariables(<UnionOrIntersectionType>type));
         }
 
         function couldUnionOrIntersectionContainTypeVariables(type: UnionOrIntersectionType): boolean {
@@ -15487,37 +15487,47 @@ namespace ts {
                     inferFromTypeArguments(source.aliasTypeArguments, target.aliasTypeArguments!, getAliasVariances(source.aliasSymbol));
                     return;
                 }
-                if (source.flags & TypeFlags.Union && target.flags & TypeFlags.Union && !(source.flags & TypeFlags.EnumLiteral && target.flags & TypeFlags.EnumLiteral) ||
-                    source.flags & TypeFlags.Intersection && target.flags & TypeFlags.Intersection) {
-                    // Source and target are both unions or both intersections. If source and target
-                    // are the same type, just relate each constituent type to itself.
-                    if (source === target) {
-                        for (const t of (<UnionOrIntersectionType>source).types) {
-                            inferFromTypes(t, t);
-                        }
-                        return;
+                if (source === target && source.flags & TypeFlags.UnionOrIntersection) {
+                    // When source and target are the same union or intersection type, just relate each constituent
+                    // type to itself.
+                    for (const t of (<UnionOrIntersectionType>source).types) {
+                        inferFromTypes(t, t);
                     }
-                    // First, infer between exactly matching source and target constituents and remove
-                    // the matching types. Types exactly match when they are identical or, in union
-                    // types, when the source is a literal and the target is the corresponding primitive.
-                    const matching = target.flags & TypeFlags.Union ? isTypeOrBaseIdenticalTo : isTypeIdenticalTo;
-                    const [tempSources, tempTargets] = inferFromMatchingTypes((<UnionOrIntersectionType>source).types, (<UnionOrIntersectionType>target).types, matching);
-                    // Next, infer between closely matching source and target constituents and remove
-                    // the matching types. Types closely match when they are instantiations of the same
-                    // object type or instantiations of the same type alias.
-                    const [sources, targets] = inferFromMatchingTypes(tempSources, tempTargets, isTypeCloselyMatchedBy);
-                    if (sources.length === 0 || targets.length === 0) {
-                        return;
-                    }
-                    source = source.flags & TypeFlags.Union ? getUnionType(sources) : getIntersectionType(sources);
-                    target = target.flags & TypeFlags.Union ? getUnionType(targets) : getIntersectionType(targets);
+                    return;
                 }
-                else if (target.flags & TypeFlags.Union && !(target.flags & TypeFlags.EnumLiteral) || target.flags & TypeFlags.Intersection) {
-                    // This block of code is an optimized version of the block above for the simpler case
-                    // of a singleton source type.
-                    const matching = target.flags & TypeFlags.Union ? isTypeOrBaseIdenticalTo : isTypeIdenticalTo;
-                    if (inferFromMatchingType(source, (<UnionOrIntersectionType>target).types, matching)) return;
-                    if (inferFromMatchingType(source, (<UnionOrIntersectionType>target).types, isTypeCloselyMatchedBy)) return;
+                if (target.flags & TypeFlags.Union) {
+                    if (source.flags & TypeFlags.Union) {
+                        // First, infer between identically matching source and target constituents and remove the
+                        // matching types.
+                        const [tempSources, tempTargets] = inferFromMatchingTypes((<UnionType>source).types, (<UnionType>target).types, isTypeOrBaseIdenticalTo);
+                        // Next, infer between closely matching source and target constituents and remove
+                        // the matching types. Types closely match when they are instantiations of the same
+                        // object type or instantiations of the same type alias.
+                        const [sources, targets] = inferFromMatchingTypes(tempSources, tempTargets, isTypeCloselyMatchedBy);
+                        if (sources.length === 0 || targets.length === 0) {
+                            return;
+                        }
+                        source = getUnionType(sources);
+                        target = getUnionType(targets);
+                    }
+                    else {
+                        if (inferFromMatchingType(source, (<UnionType>target).types, isTypeOrBaseIdenticalTo)) return;
+                        if (inferFromMatchingType(source, (<UnionType>target).types, isTypeCloselyMatchedBy)) return;
+                    }
+                }
+                else if (target.flags & TypeFlags.Intersection && some((<IntersectionType>target).types, t => !!getInferenceInfoForType(t))) {
+                    if (source.flags & TypeFlags.Intersection) {
+                        // Infer between identically matching source and target constituents and remove the matching types.
+                        const [sources, targets] = inferFromMatchingTypes((<IntersectionType>source).types, (<IntersectionType>target).types, isTypeIdenticalTo);
+                        if (sources.length === 0 || targets.length === 0) {
+                            return;
+                        }
+                        source = getIntersectionType(sources);
+                        target = getIntersectionType(targets);
+                    }
+                    else if (!(source.flags & TypeFlags.Union)) {
+                        if (inferFromMatchingType(source, (<IntersectionType>target).types, isTypeIdenticalTo)) return;
+                    }
                 }
                 else if (target.flags & (TypeFlags.IndexedAccess | TypeFlags.Substitution)) {
                     target = getActualTypeVariable(target);
