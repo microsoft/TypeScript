@@ -1589,7 +1589,8 @@ declare namespace ts {
     export interface JSDocClassTag extends JSDocTag {
         kind: SyntaxKind.JSDocClassTag;
     }
-    export interface JSDocEnumTag extends JSDocTag {
+    export interface JSDocEnumTag extends JSDocTag, Declaration {
+        parent: JSDoc;
         kind: SyntaxKind.JSDocEnumTag;
         typeExpression?: JSDocTypeExpression;
     }

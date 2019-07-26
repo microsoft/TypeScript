@@ -2147,11 +2147,11 @@ namespace ts {
         return !!name && name.escapedText === "new";
     }
 
-    export function isJSDocTypeAlias(node: Node): node is JSDocTypedefTag | JSDocCallbackTag {
-        return node.kind === SyntaxKind.JSDocTypedefTag || node.kind === SyntaxKind.JSDocCallbackTag;
+    export function isJSDocTypeAlias(node: Node): node is JSDocTypedefTag | JSDocCallbackTag | JSDocEnumTag {
+        return node.kind === SyntaxKind.JSDocTypedefTag || node.kind === SyntaxKind.JSDocCallbackTag || node.kind === SyntaxKind.JSDocEnumTag;
     }
 
-    export function isTypeAlias(node: Node): node is JSDocTypedefTag | JSDocCallbackTag | TypeAliasDeclaration {
+    export function isTypeAlias(node: Node): node is JSDocTypedefTag | JSDocCallbackTag | JSDocEnumTag | TypeAliasDeclaration {
         return isJSDocTypeAlias(node) || isTypeAliasDeclaration(node);
     }
 
@@ -5091,7 +5091,7 @@ namespace ts {
      * attempt to draw the name from the node the declaration is on (as that declaration is what its' symbol
      * will be merged with)
      */
-    function nameForNamelessJSDocTypedef(declaration: JSDocTypedefTag): Identifier | undefined {
+    function nameForNamelessJSDocTypedef(declaration: JSDocTypedefTag | JSDocEnumTag): Identifier | undefined {
         const hostNode = declaration.parent.parent;
         if (!hostNode) {
             return undefined;
@@ -5177,6 +5177,8 @@ namespace ts {
             }
             case SyntaxKind.JSDocTypedefTag:
                 return getNameOfJSDocTypedef(declaration as JSDocTypedefTag);
+            case SyntaxKind.JSDocEnumTag:
+                return nameForNamelessJSDocTypedef(declaration as JSDocEnumTag);
             case SyntaxKind.ExportAssignment: {
                 const { expression } = declaration as ExportAssignment;
                 return isIdentifier(expression) ? expression : undefined;

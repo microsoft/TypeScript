@@ -1680,6 +1680,7 @@ namespace ts {
                         break;
                     case SyntaxKind.JSDocTypedefTag:
                     case SyntaxKind.JSDocCallbackTag:
+                    case SyntaxKind.JSDocEnumTag:
                         // js type aliases do not resolve names from their host, so skip past it
                         location = getJSDocHost(location);
                         break;
@@ -2025,7 +2026,7 @@ namespace ts {
             // Block-scoped variables cannot be used before their definition
             const declaration = find(
                 result.declarations,
-                d => isBlockOrCatchScoped(d) || isClassLike(d) || (d.kind === SyntaxKind.EnumDeclaration) || isInJSFile(d) && !!getJSDocEnumTag(d));
+                d => isBlockOrCatchScoped(d) || isClassLike(d) || (d.kind === SyntaxKind.EnumDeclaration));
 
             if (declaration === undefined) return Debug.fail("Declaration to checkResolvedBlockScopedVariable is undefined");
 
@@ -4851,6 +4852,7 @@ namespace ts {
                 switch (node.kind) {
                     case SyntaxKind.JSDocCallbackTag:
                     case SyntaxKind.JSDocTypedefTag:
+                    case SyntaxKind.JSDocEnumTag:
                         // Top-level jsdoc type aliases are considered exported
                         // First parent is comment node, second is hosting declaration or token; we only care about those tokens or declarations whose parent is a source file
                         return !!(node.parent && node.parent.parent && node.parent.parent.parent && isSourceFile(node.parent.parent.parent));
@@ -6156,6 +6158,7 @@ namespace ts {
                     case SyntaxKind.TypeAliasDeclaration:
                     case SyntaxKind.JSDocTemplateTag:
                     case SyntaxKind.JSDocTypedefTag:
+                    case SyntaxKind.JSDocEnumTag:
                     case SyntaxKind.JSDocCallbackTag:
                     case SyntaxKind.MappedType:
                     case SyntaxKind.ConditionalType:
@@ -6489,8 +6492,10 @@ namespace ts {
                     return errorType;
                 }
 
-                const declaration = <JSDocTypedefTag | JSDocCallbackTag | TypeAliasDeclaration>find(symbol.declarations, d =>
-                    isJSDocTypeAlias(d) || d.kind === SyntaxKind.TypeAliasDeclaration);
+                const declaration = find(symbol.declarations, isTypeAlias);
+                if (!declaration) {
+                    return Debug.fail("Type alias symbol with no valid declaration found");
+                }
                 const typeNode = isJSDocTypeAlias(declaration) ? declaration.typeExpression : declaration.type;
                 // If typeNode is missing, we will error in checkJSDocTypedefTag.
                 let type = typeNode ? getTypeFromTypeNode(typeNode) : errorType;
@@ -6507,7 +6512,7 @@ namespace ts {
                 }
                 else {
                     type = errorType;
-                    error(declaration.name, Diagnostics.Type_alias_0_circularly_references_itself, symbolToString(symbol));
+                    error(isJSDocEnumTag(declaration) ? declaration : declaration.name || declaration, Diagnostics.Type_alias_0_circularly_references_itself, symbolToString(symbol));
                 }
                 links.declaredType = type;
             }
@@ -7176,8 +7181,9 @@ namespace ts {
             }
             let result: Signature[] | undefined;
             for (let i = 0; i < signatureLists.length; i++) {
-                // Allow matching non-generic signatures to have excess parameters and different return types
-                const match = i === listIndex ? signature : findMatchingSignature(signatureLists[i], signature, /*partialMatch*/ true, /*ignoreThisTypes*/ true, /*ignoreReturnTypes*/ true);
+                // Allow matching non-generic signatures to have excess parameters and different return types.
+                // Prefer matching this types if possible.
+                const match = i === listIndex ? signature : findMatchingSignature(signatureLists[i], signature, /*partialMatch*/ true, /*ignoreThisTypes*/ false, /*ignoreReturnTypes*/ true);
                 if (!match) {
                     return undefined;
                 }
@@ -7200,7 +7206,7 @@ namespace ts {
                 }
                 for (const signature of signatureLists[i]) {
                     // Only process signatures with parameter lists that aren't already in the result list
-                    if (!result || !findMatchingSignature(result, signature, /*partialMatch*/ false, /*ignoreThisTypes*/ true, /*ignoreReturnTypes*/ true)) {
+                    if (!result || !findMatchingSignature(result, signature, /*partialMatch*/ false, /*ignoreThisTypes*/ false, /*ignoreReturnTypes*/ true)) {
                         const unionSignatures = findMatchingSignatures(signatureLists, signature, i);
                         if (unionSignatures) {
                             let s = signature;
@@ -7209,7 +7215,7 @@ namespace ts {
                                 let thisParameter = signature.thisParameter;
                                 const firstThisParameterOfUnionSignatures = forEach(unionSignatures, sig => sig.thisParameter);
                                 if (firstThisParameterOfUnionSignatures) {
-                                    const thisType = getUnionType(map(unionSignatures, sig => sig.thisParameter ? getTypeOfSymbol(sig.thisParameter) : anyType), UnionReduction.Subtype);
+                                    const thisType = getIntersectionType(mapDefined(unionSignatures, sig => sig.thisParameter && getTypeOfSymbol(sig.thisParameter)));
                                     thisParameter = createSymbolWithType(firstThisParameterOfUnionSignatures, thisType);
                                 }
                                 s = createUnionSignature(signature, unionSignatures);
@@ -7248,8 +7254,8 @@ namespace ts {
             }
             // A signature `this` type might be a read or a write position... It's very possible that it should be invariant
             // and we should refuse to merge signatures if there are `this` types and they do not match. However, so as to be
-            // permissive when calling, for now, we'll union the `this` types just like the overlapping-union-signature check does
-            const thisType = getUnionType([getTypeOfSymbol(left), getTypeOfSymbol(right)], UnionReduction.Subtype);
+            // permissive when calling, for now, we'll intersect the `this` types just like we do for param types in union signatures.
+            const thisType = getIntersectionType([getTypeOfSymbol(left), getTypeOfSymbol(right)]);
             return createSymbolWithType(left, thisType);
         }
 
@@ -9157,21 +9163,6 @@ namespace ts {
             const type = getTypeReferenceTypeWorker(node, symbol, typeArguments);
             if (type) {
                 return type;
-            }
-
-            // JS enums are 'string' or 'number', not an enum type.
-            const enumTag = isInJSFile(node) && symbol.valueDeclaration && getJSDocEnumTag(symbol.valueDeclaration);
-            if (enumTag) {
-                const links = getNodeLinks(enumTag);
-                if (!pushTypeResolution(enumTag, TypeSystemPropertyName.EnumTagType)) {
-                    return errorType;
-                }
-                let type = enumTag.typeExpression ? getTypeFromTypeNode(enumTag.typeExpression) : errorType;
-                if (!popTypeResolution()) {
-                    type = errorType;
-                    error(node, Diagnostics.Enum_type_0_circularly_references_itself, symbolToString(symbol));
-                }
-                return (links.resolvedEnumType = type);
             }
 
             // Get type from reference to named type that cannot be generic (enum or type parameter)
@@ -26409,6 +26400,7 @@ namespace ts {
                     // A jsdoc typedef and callback are, by definition, type aliases
                     case SyntaxKind.JSDocTypedefTag:
                     case SyntaxKind.JSDocCallbackTag:
+                    case SyntaxKind.JSDocEnumTag:
                         return DeclarationSpaces.ExportType;
                     case SyntaxKind.ModuleDeclaration:
                         return isAmbientModule(d as ModuleDeclaration) || getModuleInstanceState(d as ModuleDeclaration) !== ModuleInstanceState.NonInstantiated
@@ -30325,6 +30317,7 @@ namespace ts {
                     return checkJSDocAugmentsTag(node as JSDocAugmentsTag);
                 case SyntaxKind.JSDocTypedefTag:
                 case SyntaxKind.JSDocCallbackTag:
+                case SyntaxKind.JSDocEnumTag:
                     return checkJSDocTypeAliasTag(node as JSDocTypedefTag);
                 case SyntaxKind.JSDocTemplateTag:
                     return checkJSDocTemplateTag(node as JSDocTemplateTag);
