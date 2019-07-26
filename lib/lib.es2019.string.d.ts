@@ -25,9 +25,9 @@ interface String {
   /** Removes the leading white space and line terminator characters from a string. */
   trimStart(): string;
 
-  /** Removes the trailing white space and line terminator characters from a string. */
+  /** Removes the leading white space and line terminator characters from a string. */
   trimLeft(): string;
 
-  /** Removes the leading white space and line terminator characters from a string. */
+  /** Removes the trailing white space and line terminator characters from a string. */
   trimRight(): string;
 }

@@ -18,27 +18,27 @@ and limitations under the License.
 /// <reference no-default-lib="true"/>
 
 
-/// <reference lib="es2015.iterable" />
+/// <reference lib="es2018.asynciterable" />
 
-interface Generator<T = unknown, TReturn = any, TNext = unknown> extends Iterator<T, TReturn, TNext> {
+interface AsyncGenerator<T = unknown, TReturn = any, TNext = unknown> extends AsyncIterator<T, TReturn, TNext> {
     // NOTE: 'next' is defined using a tuple to ensure we report the correct assignability errors in all places.
-    next(...args: [] | [TNext]): IteratorResult<T, TReturn>;
-    return(value: TReturn): IteratorResult<T, TReturn>;
-    throw(e: any): IteratorResult<T, TReturn>;
-    [Symbol.iterator](): Generator<T, TReturn, TNext>;
+    next(...args: [] | [TNext | PromiseLike<TNext>]): Promise<IteratorResult<T, TReturn>>;
+    return(value: TReturn | PromiseLike<TReturn>): Promise<IteratorResult<T, TReturn>>;
+    throw(e: any): Promise<IteratorResult<T, TReturn>>;
+    [Symbol.asyncIterator](): AsyncGenerator<T, TReturn, TNext>;
 }
 
-interface GeneratorFunction {
+interface AsyncGeneratorFunction {
     /**
-     * Creates a new Generator object.
+     * Creates a new AsyncGenerator object.
      * @param args A list of arguments the function accepts.
      */
-    new (...args: any[]): Generator;
+    new (...args: any[]): AsyncGenerator;
     /**
-     * Creates a new Generator object.
+     * Creates a new AsyncGenerator object.
      * @param args A list of arguments the function accepts.
      */
-    (...args: any[]): Generator;
+    (...args: any[]): AsyncGenerator;
     /**
      * The length of the arguments.
      */
@@ -50,20 +50,20 @@ interface GeneratorFunction {
     /**
      * A reference to the prototype.
      */
-    readonly prototype: Generator;
+    readonly prototype: AsyncGenerator;
 }
 
-interface GeneratorFunctionConstructor {
+interface AsyncGeneratorFunctionConstructor {
     /**
-     * Creates a new Generator function.
+     * Creates a new AsyncGenerator function.
      * @param args A list of arguments the function accepts.
      */
-    new (...args: string[]): GeneratorFunction;
+    new (...args: string[]): AsyncGeneratorFunction;
     /**
-     * Creates a new Generator function.
+     * Creates a new AsyncGenerator function.
      * @param args A list of arguments the function accepts.
      */
-    (...args: string[]): GeneratorFunction;
+    (...args: string[]): AsyncGeneratorFunction;
     /**
      * The length of the arguments.
      */
@@ -75,5 +75,5 @@ interface GeneratorFunctionConstructor {
     /**
      * A reference to the prototype.
      */
-    readonly prototype: GeneratorFunction;
+    readonly prototype: AsyncGeneratorFunction;
 }
