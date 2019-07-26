@@ -7181,8 +7181,9 @@ namespace ts {
             }
             let result: Signature[] | undefined;
             for (let i = 0; i < signatureLists.length; i++) {
-                // Allow matching non-generic signatures to have excess parameters and different return types
-                const match = i === listIndex ? signature : findMatchingSignature(signatureLists[i], signature, /*partialMatch*/ true, /*ignoreThisTypes*/ true, /*ignoreReturnTypes*/ true);
+                // Allow matching non-generic signatures to have excess parameters and different return types.
+                // Prefer matching this types if possible.
+                const match = i === listIndex ? signature : findMatchingSignature(signatureLists[i], signature, /*partialMatch*/ true, /*ignoreThisTypes*/ false, /*ignoreReturnTypes*/ true);
                 if (!match) {
                     return undefined;
                 }
@@ -7205,7 +7206,7 @@ namespace ts {
                 }
                 for (const signature of signatureLists[i]) {
                     // Only process signatures with parameter lists that aren't already in the result list
-                    if (!result || !findMatchingSignature(result, signature, /*partialMatch*/ false, /*ignoreThisTypes*/ true, /*ignoreReturnTypes*/ true)) {
+                    if (!result || !findMatchingSignature(result, signature, /*partialMatch*/ false, /*ignoreThisTypes*/ false, /*ignoreReturnTypes*/ true)) {
                         const unionSignatures = findMatchingSignatures(signatureLists, signature, i);
                         if (unionSignatures) {
                             let s = signature;
@@ -7214,7 +7215,7 @@ namespace ts {
                                 let thisParameter = signature.thisParameter;
                                 const firstThisParameterOfUnionSignatures = forEach(unionSignatures, sig => sig.thisParameter);
                                 if (firstThisParameterOfUnionSignatures) {
-                                    const thisType = getUnionType(map(unionSignatures, sig => sig.thisParameter ? getTypeOfSymbol(sig.thisParameter) : anyType), UnionReduction.Subtype);
+                                    const thisType = getIntersectionType(mapDefined(unionSignatures, sig => sig.thisParameter && getTypeOfSymbol(sig.thisParameter)));
                                     thisParameter = createSymbolWithType(firstThisParameterOfUnionSignatures, thisType);
                                 }
                                 s = createUnionSignature(signature, unionSignatures);
@@ -7253,8 +7254,8 @@ namespace ts {
             }
             // A signature `this` type might be a read or a write position... It's very possible that it should be invariant
             // and we should refuse to merge signatures if there are `this` types and they do not match. However, so as to be
-            // permissive when calling, for now, we'll union the `this` types just like the overlapping-union-signature check does
-            const thisType = getUnionType([getTypeOfSymbol(left), getTypeOfSymbol(right)], UnionReduction.Subtype);
+            // permissive when calling, for now, we'll intersect the `this` types just like we do for param types in union signatures.
+            const thisType = getIntersectionType([getTypeOfSymbol(left), getTypeOfSymbol(right)]);
             return createSymbolWithType(left, thisType);
         }
 
