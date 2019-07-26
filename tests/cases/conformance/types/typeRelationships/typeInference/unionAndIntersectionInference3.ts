@@ -40,3 +40,17 @@ declare let g2: <U>(x: Foo2<U> | Bar2<U>) => Promise<U>;
 
 g1 = g2;
 g2 = g1;
+
+// Repro from #32572
+
+declare function foo1<T>(obj: string[] & Iterable<T>): T;
+declare function foo2<T>(obj: string[] & T): T;
+
+declare let sa: string[];
+declare let sx: string[] & { extra: number };
+
+let x1 = foo1(sa);  // string
+let y1 = foo1(sx);  // string
+
+let x2 = foo2(sa);  // unknown
+let y2 = foo2(sx);  // { extra: number }
