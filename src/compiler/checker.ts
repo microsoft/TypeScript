@@ -20698,7 +20698,7 @@ namespace ts {
 
         function checkPropertyNotUsedBeforeDeclaration(prop: Symbol, node: PropertyAccessExpression | QualifiedName, right: Identifier): void {
             const { valueDeclaration } = prop;
-            if (!valueDeclaration) {
+            if (!valueDeclaration || getSourceFileOfNode(node).isDeclarationFile) {
                 return;
             }
 
