@@ -161,10 +161,10 @@ Standard output:
 @uifabric/styling: [XX:XX:XX XM] ■ Executing: /usr/local/bin/node "/office-ui-fabric-react/node_modules/typescript/lib/tsc.js" --pretty --target es5 --inlineSources --sourceRoot "../src" --outDir lib-amd --module amd --project "/office-ui-fabric-react/packages/styling/tsconfig.json"
 @uifabric/styling: [XX:XX:XX XM] ■ Running Jest
 @uifabric/styling: [XX:XX:XX XM] ■ /usr/local/bin/node "/office-ui-fabric-react/node_modules/jest/bin/jest.js" --config "/office-ui-fabric-react/packages/styling/jest.config.js" --passWithNoTests --colors
+@uifabric/styling:  PASS  src/styles/theme.test.ts
 @uifabric/styling: [XX:XX:XX XM] ■ Running Webpack
 @uifabric/styling: [XX:XX:XX XM] ■ Webpack Config Path: null
 @uifabric/styling: [XX:XX:XX XM] ■ webpack.config.js not found, skipping webpack
-@uifabric/styling:  PASS  src/styles/theme.test.ts
 @uifabric/styling:  PASS  src/styles/scheme.test.ts
 @uifabric/styling:  PASS  src/styles/getGlobalClassNames.test.ts
 @uifabric/styling:  PASS  src/utilities/icons.test.ts
