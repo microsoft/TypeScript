@@ -405,7 +405,7 @@ interface Array<T> {}`
             return s;
         }
 
-        private now() {
+        now() {
             this.time += timeIncrements;
             return new Date(this.time);
         }

@@ -16,9 +16,17 @@ namespace ts.tscWatch {
         return host;
     }
 
+
     export function createSolutionBuilder(system: WatchedSystem, rootNames: ReadonlyArray<string>, defaultOptions?: BuildOptions) {
         const host = createSolutionBuilderHost(system);
+        host.now = system.now.bind(system);
         return ts.createSolutionBuilder(host, rootNames, defaultOptions || {});
+    }
+
+    export function createSolutionBuilderWithWatchHost(system: WatchedSystem) {
+        const host = ts.createSolutionBuilderWithWatchHost(system);
+        host.now = system.now.bind(system);
+        return host;
     }
 
     function createSolutionBuilderWithWatch(system: TsBuildWatchSystem, rootNames: ReadonlyArray<string>, defaultOptions?: BuildOptions) {
