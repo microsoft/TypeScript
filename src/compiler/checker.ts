@@ -1680,6 +1680,7 @@ namespace ts {
                         break;
                     case SyntaxKind.JSDocTypedefTag:
                     case SyntaxKind.JSDocCallbackTag:
+                    case SyntaxKind.JSDocEnumTag:
                         // js type aliases do not resolve names from their host, so skip past it
                         location = getJSDocHost(location);
                         break;
@@ -4851,6 +4852,7 @@ namespace ts {
                 switch (node.kind) {
                     case SyntaxKind.JSDocCallbackTag:
                     case SyntaxKind.JSDocTypedefTag:
+                    case SyntaxKind.JSDocEnumTag:
                         // Top-level jsdoc type aliases are considered exported
                         // First parent is comment node, second is hosting declaration or token; we only care about those tokens or declarations whose parent is a source file
                         return !!(node.parent && node.parent.parent && node.parent.parent.parent && isSourceFile(node.parent.parent.parent));
@@ -6149,6 +6151,7 @@ namespace ts {
                     case SyntaxKind.TypeAliasDeclaration:
                     case SyntaxKind.JSDocTemplateTag:
                     case SyntaxKind.JSDocTypedefTag:
+                    case SyntaxKind.JSDocEnumTag:
                     case SyntaxKind.JSDocCallbackTag:
                     case SyntaxKind.MappedType:
                     case SyntaxKind.ConditionalType:
@@ -26316,6 +26319,7 @@ namespace ts {
                     // A jsdoc typedef and callback are, by definition, type aliases
                     case SyntaxKind.JSDocTypedefTag:
                     case SyntaxKind.JSDocCallbackTag:
+                    case SyntaxKind.JSDocEnumTag:
                         return DeclarationSpaces.ExportType;
                     case SyntaxKind.ModuleDeclaration:
                         return isAmbientModule(d as ModuleDeclaration) || getModuleInstanceState(d as ModuleDeclaration) !== ModuleInstanceState.NonInstantiated
@@ -30232,6 +30236,7 @@ namespace ts {
                     return checkJSDocAugmentsTag(node as JSDocAugmentsTag);
                 case SyntaxKind.JSDocTypedefTag:
                 case SyntaxKind.JSDocCallbackTag:
+                case SyntaxKind.JSDocEnumTag:
                     return checkJSDocTypeAliasTag(node as JSDocTypedefTag);
                 case SyntaxKind.JSDocTemplateTag:
                     return checkJSDocTemplateTag(node as JSDocTemplateTag);
