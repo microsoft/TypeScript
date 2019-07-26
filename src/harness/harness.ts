@@ -53,7 +53,7 @@ namespace Utils {
 
     export function byteLength(s: string, encoding?: string): number {
         // stub implementation if Buffer is not available (in-browser case)
-        return Buffer.byteLength(s, encoding as "hex" | "utf-8" | undefined); // TODO: copy full type from node lib?
+        return Buffer.byteLength(s, encoding as ts.BufferEncoding | undefined);
     }
 
     export function evalFile(fileContents: string, fileName: string, nodeContext?: any) {
