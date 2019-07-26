@@ -33,7 +33,7 @@ namespace ts.tscWatch {
         return [f, host.getModifiedTime(f), host.writtenFiles.has(host.toFullPath(f))] as OutputFileStamp;
     }
 
-    describe("unittests:: tsbuild-watch program updates", () => {
+    describe("unittests:: tsbuild:: watchMode:: program updates", () => {
         const project = "sample1";
         const enum SubProject {
             core = "core",
