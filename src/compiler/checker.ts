@@ -10720,9 +10720,6 @@ namespace ts {
         function getTypeFromConditionalTypeNode(node: ConditionalTypeNode): Type {
             const links = getNodeLinks(node);
             if (!links.resolvedType) {
-                if (!pushTypeResolution(node, TypeSystemPropertyName.ResolvedType)) {
-                    return errorType;
-                }
                 const checkType = getTypeFromTypeNode(node.checkType);
                 const aliasSymbol = getAliasSymbolForTypeNode(node);
                 const aliasTypeArguments = getTypeArgumentsForAliasSymbol(aliasSymbol);
@@ -10742,13 +10739,6 @@ namespace ts {
                     aliasTypeArguments
                 };
                 const resolvedType = getConditionalType(root, /*mapper*/ undefined);
-                if (!popTypeResolution()) {
-                    if (aliasSymbol) {
-                        return reportCircularityError(aliasSymbol);
-                    }
-                    error(node, Diagnostics.Conditional_type_circularly_references_itself);
-                    return errorType;
-                }
                 links.resolvedType = resolvedType;
                 if (outerTypeParameters) {
                     root.instantiations = createMap<Type>();
@@ -11420,7 +11410,8 @@ namespace ts {
 
         function maybeTypeParameterReference(node: Node) {
             return !(node.kind === SyntaxKind.QualifiedName ||
-                node.parent.kind === SyntaxKind.TypeReference && (<TypeReferenceNode>node.parent).typeArguments && node === (<TypeReferenceNode>node.parent).typeName);
+                node.parent.kind === SyntaxKind.TypeReference && (<TypeReferenceNode>node.parent).typeArguments && node === (<TypeReferenceNode>node.parent).typeName ||
+                node.parent.kind === SyntaxKind.ImportType && (node.parent as ImportTypeNode).typeArguments && node === (node.parent as ImportTypeNode).qualifier);
         }
 
         function isTypeParameterPossiblyReferenced(tp: TypeParameter, node: Node) {
