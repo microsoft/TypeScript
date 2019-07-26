@@ -1893,15 +1893,7 @@ namespace ts.Completions {
                 let existingName: __String | undefined;
 
                 if (isSpreadAssignment(m)) {
-                    const expression = m.expression;
-                    const symbol = typeChecker.getSymbolAtLocation(expression);
-                    const type = symbol && typeChecker.getTypeOfSymbolAtLocation(symbol, expression);
-                    const properties = type && (<ObjectType>type).properties;
-                    if (properties) {
-                        properties.forEach(property => {
-                            membersDeclaredBySpreadAssignment.set(property.name, true);
-                        });
-                    }
+                    setMembersDeclaredBySpreadAssignment(m, membersDeclaredBySpreadAssignment);
                 }
                 else if (isBindingElement(m) && m.propertyName) {
                     // include only identifiers in completion list
@@ -1924,6 +1916,18 @@ namespace ts.Completions {
             setSortTextToMemberDeclaredBySpreadAssignment(membersDeclaredBySpreadAssignment, filteredSymbols);
 
             return filteredSymbols;
+        }
+
+        function setMembersDeclaredBySpreadAssignment(declaration: SpreadAssignment | JsxSpreadAttribute, membersDeclaredBySpreadAssignment: Map<boolean>) {
+            const expression = declaration.expression;
+            const symbol = typeChecker.getSymbolAtLocation(expression);
+            const type = symbol && typeChecker.getTypeOfSymbolAtLocation(symbol, expression);
+            const properties = type && (<ObjectType>type).properties;
+            if (properties) {
+                properties.forEach(property => {
+                    membersDeclaredBySpreadAssignment.set(property.name, true);
+                });
+            }
         }
 
         // Set SortText to OptionalMember if it is an optinoal member
@@ -2009,15 +2013,7 @@ namespace ts.Completions {
                     seenNames.set(attr.name.escapedText, true);
                 }
                 else if (isJsxSpreadAttribute(attr)) {
-                    const expression = attr.expression;
-                    const symbol = typeChecker.getSymbolAtLocation(expression);
-                    const type = symbol && typeChecker.getTypeOfSymbolAtLocation(symbol, expression);
-                    const properties = type && (<ObjectType>type).properties;
-                    if (properties) {
-                        properties.forEach(property => {
-                            membersDeclaredBySpreadAssignment.set(property.name, true);
-                        });
-                    }
+                    setMembersDeclaredBySpreadAssignment(attr, membersDeclaredBySpreadAssignment);
                 }
             }
             const filteredSymbols = symbols.filter(a => !seenNames.get(a.escapedName));
