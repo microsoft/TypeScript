@@ -634,13 +634,17 @@ namespace ts.projectSystem {
                 path: "/a/main.js",
                 content: "var y = 1"
             };
+            const f3 = {
+                path: "/main.js",
+                content: "var y = 1"
+            };
             const config = {
                 path: "/a/tsconfig.json",
                 content: JSON.stringify({
                     compilerOptions: { allowJs: true }
                 })
             };
-            const host = createServerHost([f1, f2, config]);
+            const host = createServerHost([f1, f2, f3, config]);
             const projectService = createProjectService(host);
             projectService.setHostConfiguration({
                 extraFileExtensions: [
@@ -652,13 +656,19 @@ namespace ts.projectSystem {
             projectService.checkNumberOfProjects({ configuredProjects: 1 });
             checkProjectActualFiles(configuredProjectAt(projectService, 0), [f1.path, config.path]);
 
-            // Should close configured project with next file open
+            // Since f2 refers to config file as the default project, it needs to be kept alive
             projectService.closeClientFile(f1.path);
-
             projectService.openClientFile(f2.path);
+            projectService.checkNumberOfProjects({ inferredProjects: 1, configuredProjects: 1 });
+            assert.isDefined(projectService.configuredProjects.get(config.path));
+            checkProjectActualFiles(projectService.inferredProjects[0], [f2.path]);
+
+            // Should close configured project with next file open
+            projectService.closeClientFile(f2.path);
+            projectService.openClientFile(f3.path);
             projectService.checkNumberOfProjects({ inferredProjects: 1 });
             assert.isUndefined(projectService.configuredProjects.get(config.path));
-            checkProjectActualFiles(projectService.inferredProjects[0], [f2.path]);
+            checkProjectActualFiles(projectService.inferredProjects[0], [f3.path]);
         });
 
         it("tsconfig script block support", () => {
