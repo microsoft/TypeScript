@@ -26232,8 +26232,9 @@ namespace ts {
 
             let duplicateFunctionDeclaration = false;
             let multipleConstructorImplementation = false;
+            let hasNonAmbientClass = false;
             for (const current of declarations) {
-                const node = <SignatureDeclaration>current;
+                const node = <SignatureDeclaration | ClassDeclaration | ClassExpression>current;
                 const inAmbientContext = node.flags & NodeFlags.Ambient;
                 const inAmbientContextOrInterface = node.parent.kind === SyntaxKind.InterfaceDeclaration || node.parent.kind === SyntaxKind.TypeLiteral || inAmbientContext;
                 if (inAmbientContextOrInterface) {
@@ -26245,6 +26246,10 @@ namespace ts {
                     //     declare function foo();
                     // 2. mixing ambient and non-ambient declarations is a separate error that will be reported - do not want to report an extra one
                     previousDeclaration = undefined;
+                }
+
+                if ((node.kind === SyntaxKind.ClassDeclaration || node.kind === SyntaxKind.ClassExpression) && !inAmbientContext) {
+                    hasNonAmbientClass = true;
                 }
 
                 if (node.kind === SyntaxKind.FunctionDeclaration || node.kind === SyntaxKind.MethodDeclaration || node.kind === SyntaxKind.MethodSignature || node.kind === SyntaxKind.Constructor) {
@@ -26292,6 +26297,16 @@ namespace ts {
             if (duplicateFunctionDeclaration) {
                 forEach(declarations, declaration => {
                     error(getNameOfDeclaration(declaration), Diagnostics.Duplicate_function_implementation);
+                });
+            }
+
+            if (hasNonAmbientClass && !isConstructor && symbol.flags & SymbolFlags.Function) {
+                // A non-ambient class cannot be an implementation for a non-constructor function/class merge
+                // TODO: The below just replicates our older error from when classes and functions were
+                // entirely unable to merge - a more helpful message like "Class declaration cannot implement overload list"
+                // might be warranted. :shrug:
+                forEach(declarations, declaration => {
+                    addDuplicateDeclarationError(getNameOfDeclaration(declaration) || declaration, Diagnostics.Duplicate_identifier_0, symbolName(symbol), filter(declarations, d => d !== declaration));
                 });
             }
 
@@ -31599,7 +31614,7 @@ namespace ts {
             if (!symbol || !(symbol.flags & SymbolFlags.Function)) {
                 return false;
             }
-            return !!forEachEntry(getExportsOfSymbol(symbol), p => p.flags & SymbolFlags.Value && isPropertyAccessExpression(p.valueDeclaration));
+            return !!forEachEntry(getExportsOfSymbol(symbol), p => p.flags & SymbolFlags.Value && p.valueDeclaration && isPropertyAccessExpression(p.valueDeclaration));
         }
 
         function getPropertiesOfContainerFunction(node: Declaration): Symbol[] {

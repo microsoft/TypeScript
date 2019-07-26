@@ -1,14 +1,8 @@
-tests/cases/compiler/targetTypeTest1.ts(1,15): error TS2300: Duplicate identifier 'Point'.
-tests/cases/compiler/targetTypeTest1.ts(14,10): error TS2300: Duplicate identifier 'Point'.
 tests/cases/compiler/targetTypeTest1.ts(19,18): error TS2384: Overload signatures must all be ambient or non-ambient.
-tests/cases/compiler/targetTypeTest1.ts(53,15): error TS2300: Duplicate identifier 'C'.
-tests/cases/compiler/targetTypeTest1.ts(60,10): error TS2300: Duplicate identifier 'C'.
 
 
-==== tests/cases/compiler/targetTypeTest1.ts (5 errors) ====
+==== tests/cases/compiler/targetTypeTest1.ts (1 errors) ====
     declare class Point
-                  ~~~~~
-!!! error TS2300: Duplicate identifier 'Point'.
     {
           constructor(x: number, y: number);
           public x: number;
@@ -22,8 +16,6 @@ tests/cases/compiler/targetTypeTest1.ts(60,10): error TS2300: Duplicate identifi
     // Because Point is a constructor function, this is inferred
     // to be Point and return type is inferred to be void
     function Point(x, y) {
-             ~~~~~
-!!! error TS2300: Duplicate identifier 'Point'.
         this.x = x;
         this.y = y;
     }
@@ -65,8 +57,6 @@ tests/cases/compiler/targetTypeTest1.ts(60,10): error TS2300: Duplicate identifi
     }
     
     declare class C {
-                  ~
-!!! error TS2300: Duplicate identifier 'C'.
         constructor(a:number, b:number);
     	public a : number;
     	public b: number;    
@@ -74,8 +64,6 @@ tests/cases/compiler/targetTypeTest1.ts(60,10): error TS2300: Duplicate identifi
     } 
     
     function C(a,b) {
-             ~
-!!! error TS2300: Duplicate identifier 'C'.
     	this.a=a;
     	this.b=b;
     }
