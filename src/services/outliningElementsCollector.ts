@@ -71,8 +71,7 @@ namespace ts.OutliningElementsCollector {
     function addRegionOutliningSpans(sourceFile: SourceFile, out: Push<OutliningSpan>): void {
         const regions: OutliningSpan[] = [];
         const lineStarts = sourceFile.getLineStarts();
-        for (let i = 0; i < lineStarts.length; i++) {
-            const currentLineStart = lineStarts[i];
+        for (const currentLineStart of lineStarts) {
             const lineEnd = sourceFile.getLineEndOfPosition(currentLineStart);
             const lineText = sourceFile.text.substring(currentLineStart, lineEnd);
             const result = isRegionDelimiter(lineText);
