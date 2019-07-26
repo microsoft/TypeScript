@@ -10,7 +10,7 @@
 ////const e = [|E|].A;
 
 verify.singleReferenceGroup(
-`enum E
+`type E = string
 const E: {
     A: string;
 }`, "E");
