@@ -161,3 +161,47 @@ g2 = g1;
 >g2 : Symbol(g2, Decl(unionAndIntersectionInference3.ts, 35, 11))
 >g1 : Symbol(g1, Decl(unionAndIntersectionInference3.ts, 34, 11))
 
+// Repro from #32572
+
+declare function foo1<T>(obj: string[] & Iterable<T>): T;
+>foo1 : Symbol(foo1, Decl(unionAndIntersectionInference3.ts, 38, 8))
+>T : Symbol(T, Decl(unionAndIntersectionInference3.ts, 42, 22))
+>obj : Symbol(obj, Decl(unionAndIntersectionInference3.ts, 42, 25))
+>Iterable : Symbol(Iterable, Decl(lib.es2015.iterable.d.ts, --, --))
+>T : Symbol(T, Decl(unionAndIntersectionInference3.ts, 42, 22))
+>T : Symbol(T, Decl(unionAndIntersectionInference3.ts, 42, 22))
+
+declare function foo2<T>(obj: string[] & T): T;
+>foo2 : Symbol(foo2, Decl(unionAndIntersectionInference3.ts, 42, 57))
+>T : Symbol(T, Decl(unionAndIntersectionInference3.ts, 43, 22))
+>obj : Symbol(obj, Decl(unionAndIntersectionInference3.ts, 43, 25))
+>T : Symbol(T, Decl(unionAndIntersectionInference3.ts, 43, 22))
+>T : Symbol(T, Decl(unionAndIntersectionInference3.ts, 43, 22))
+
+declare let sa: string[];
+>sa : Symbol(sa, Decl(unionAndIntersectionInference3.ts, 45, 11))
+
+declare let sx: string[] & { extra: number };
+>sx : Symbol(sx, Decl(unionAndIntersectionInference3.ts, 46, 11))
+>extra : Symbol(extra, Decl(unionAndIntersectionInference3.ts, 46, 28))
+
+let x1 = foo1(sa);  // string
+>x1 : Symbol(x1, Decl(unionAndIntersectionInference3.ts, 48, 3))
+>foo1 : Symbol(foo1, Decl(unionAndIntersectionInference3.ts, 38, 8))
+>sa : Symbol(sa, Decl(unionAndIntersectionInference3.ts, 45, 11))
+
+let y1 = foo1(sx);  // string
+>y1 : Symbol(y1, Decl(unionAndIntersectionInference3.ts, 49, 3))
+>foo1 : Symbol(foo1, Decl(unionAndIntersectionInference3.ts, 38, 8))
+>sx : Symbol(sx, Decl(unionAndIntersectionInference3.ts, 46, 11))
+
+let x2 = foo2(sa);  // unknown
+>x2 : Symbol(x2, Decl(unionAndIntersectionInference3.ts, 51, 3))
+>foo2 : Symbol(foo2, Decl(unionAndIntersectionInference3.ts, 42, 57))
+>sa : Symbol(sa, Decl(unionAndIntersectionInference3.ts, 45, 11))
+
+let y2 = foo2(sx);  // { extra: number }
+>y2 : Symbol(y2, Decl(unionAndIntersectionInference3.ts, 52, 3))
+>foo2 : Symbol(foo2, Decl(unionAndIntersectionInference3.ts, 42, 57))
+>sx : Symbol(sx, Decl(unionAndIntersectionInference3.ts, 46, 11))
+
