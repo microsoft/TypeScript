@@ -788,7 +788,6 @@ namespace ts {
 
         const enum TypeSystemPropertyName {
             Type,
-            ResolvedType,
             ResolvedBaseConstructorType,
             DeclaredType,
             ResolvedReturnType,
@@ -5020,8 +5019,6 @@ namespace ts {
             switch (propertyName) {
                 case TypeSystemPropertyName.Type:
                     return !!getSymbolLinks(<Symbol>target).type;
-                case TypeSystemPropertyName.ResolvedType:
-                    return !!getNodeLinks(target as Node).resolvedType;
                 case TypeSystemPropertyName.EnumTagType:
                     return !!(getNodeLinks(target as JSDocEnumTag).resolvedEnumType);
                 case TypeSystemPropertyName.DeclaredType:
@@ -10738,8 +10735,7 @@ namespace ts {
                     aliasSymbol,
                     aliasTypeArguments
                 };
-                const resolvedType = getConditionalType(root, /*mapper*/ undefined);
-                links.resolvedType = resolvedType;
+                links.resolvedType = getConditionalType(root, /*mapper*/ undefined);
                 if (outerTypeParameters) {
                     root.instantiations = createMap<Type>();
                     root.instantiations.set(getTypeListId(outerTypeParameters), links.resolvedType);
