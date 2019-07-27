@@ -15462,7 +15462,7 @@ namespace ts {
             let visited: Map<number>;
             let bivariant = false;
             let propagationType: Type;
-            let inferenceCount = 0;
+            let inferenceMatch = false;
             let inferenceIncomplete = false;
             let allowComplexConstraintInference = true;
             inferFromTypes(originalSource, originalTarget);
@@ -15576,7 +15576,7 @@ namespace ts {
                                 clearCachedInferences(inferences);
                             }
                         }
-                        inferenceCount++;
+                        inferenceMatch = true;
                         return;
                     }
                     else {
@@ -15668,15 +15668,21 @@ namespace ts {
 
             function invokeOnce(source: Type, target: Type, action: (source: Type, target: Type) => void) {
                 const key = source.id + "," + target.id;
-                const count = visited && visited.get(key);
-                if (count !== undefined) {
-                    inferenceCount += count;
+                const status = visited && visited.get(key);
+                if (status !== undefined) {
+                    if (status & 1) inferenceMatch = true;
+                    if (status & 2) inferenceIncomplete = true;
                     return;
                 }
                 (visited || (visited = createMap<number>())).set(key, 0);
-                const startCount = inferenceCount;
+                const saveInferenceMatch = inferenceMatch;
+                const saveInferenceIncomplete = inferenceIncomplete;
+                inferenceMatch = false;
+                inferenceIncomplete = false;
                 action(source, target);
-                visited.set(key, inferenceCount - startCount);
+                visited.set(key, (inferenceMatch ? 1 : 0) | (inferenceIncomplete ? 2 : 0));
+                inferenceMatch = inferenceMatch || saveInferenceMatch;
+                inferenceIncomplete = inferenceIncomplete || saveInferenceIncomplete;
             }
 
             function inferFromMatchingType(source: Type, targets: Type[], matches: (s: Type, t: Type) => boolean) {
@@ -15759,9 +15765,11 @@ namespace ts {
                         }
                         else {
                             for (let i = 0; i < sources.length; i++) {
-                                const count = inferenceCount;
+                                const saveInferenceMatch = inferenceMatch;
+                                inferenceMatch = false;
                                 inferFromTypes(sources[i], t);
-                                if (count !== inferenceCount) matched[i] = true;
+                                if (inferenceMatch) matched[i] = true;
+                                inferenceMatch = inferenceMatch || saveInferenceMatch;
                             }
                         }
                     }
