@@ -481,3 +481,29 @@ let xx: 0 | 1 | 2 = invoke(() => 1);
 >xx : Symbol(xx, Decl(instantiateContextualTypes.ts, 172, 3))
 >invoke : Symbol(invoke, Decl(instantiateContextualTypes.ts, 166, 1))
 
+// Repro from #32416
+
+declare function assignPartial<T>(target: T, partial: Partial<T>): T;
+>assignPartial : Symbol(assignPartial, Decl(instantiateContextualTypes.ts, 172, 36))
+>T : Symbol(T, Decl(instantiateContextualTypes.ts, 176, 31))
+>target : Symbol(target, Decl(instantiateContextualTypes.ts, 176, 34))
+>T : Symbol(T, Decl(instantiateContextualTypes.ts, 176, 31))
+>partial : Symbol(partial, Decl(instantiateContextualTypes.ts, 176, 44))
+>Partial : Symbol(Partial, Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(instantiateContextualTypes.ts, 176, 31))
+>T : Symbol(T, Decl(instantiateContextualTypes.ts, 176, 31))
+
+let obj = {
+>obj : Symbol(obj, Decl(instantiateContextualTypes.ts, 178, 3))
+
+  foo(bar: string) {}
+>foo : Symbol(foo, Decl(instantiateContextualTypes.ts, 178, 11))
+>bar : Symbol(bar, Decl(instantiateContextualTypes.ts, 179, 6))
+}
+
+assignPartial(obj, { foo(...args) {} });  // args has type [string]
+>assignPartial : Symbol(assignPartial, Decl(instantiateContextualTypes.ts, 172, 36))
+>obj : Symbol(obj, Decl(instantiateContextualTypes.ts, 178, 3))
+>foo : Symbol(foo, Decl(instantiateContextualTypes.ts, 182, 20))
+>args : Symbol(args, Decl(instantiateContextualTypes.ts, 182, 25))
+
