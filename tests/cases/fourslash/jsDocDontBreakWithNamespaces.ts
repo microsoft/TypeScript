@@ -5,13 +5,27 @@
 //// * @returns {module:@nodefuel/web~Webserver~wsServer#hello} Websocket server object
 //// */
 ////function foo() { }
-////foo(''/**/);
+////foo(''/*foo*/);
+////
+/////**
+//// * @type {module:xxxxx} */
+//// */
+////function bar() { }
+////bar(''/*bar*/);
+
 
 verify.signatureHelp({
-  marker: "",
+  marker: "foo",
   text: "foo(): any",
   docComment: "",
   tags: [
-      { name: "returns", text: "Websocket server object" },
+    { name: "returns", text: "Websocket server object" },
   ],
+});
+
+verify.signatureHelp({
+  marker: "bar",
+  text: "bar(): void",
+  docComment: "",
+  tags: [],
 });
