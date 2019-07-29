@@ -45,6 +45,149 @@ namespace ts.Completions {
 
     const enum GlobalsSearch { Continue, Success, Fail }
 
+    /**
+     * Gathers symbols that can be imported from other files, deduplicating along the way. Symbols can be “duplicates”
+     * if re-exported from another module, e.g. `export { foo } from "./a"`. That syntax creates a fresh symbol, but
+     * it’s just an alias to the first, and both have the same name, so we generally want to filter those aliases out,
+     * if and only if the the first can be imported (it may be excluded due to package.json filtering in
+     * `codefix.forEachExternalModuleToImportFrom`).
+     *
+     * Example. Imagine a chain of node_modules re-exporting one original symbol:
+     *
+     * ```js
+     *  node_modules/x/index.js         node_modules/y/index.js           node_modules/z/index.js
+     * +-----------------------+      +--------------------------+      +--------------------------+
+     * |                       |      |                          |      |                          |
+     * | export const foo = 0; | <--- | export { foo } from 'x'; | <--- | export { foo } from 'y'; |
+     * |                       |      |                          |      |                          |
+     * +-----------------------+      +--------------------------+      +--------------------------+
+     * ```
+     *
+     * Also imagine three buckets, which we’ll reference soon:
+     *
+     * ```md
+     * |                  |      |                      |      |                   |
+     * |   **Bucket A**   |      |    **Bucket B**      |      |    **Bucket C**   |
+     * |    Symbols to    |      | Aliases to symbols   |      | Symbols to return |
+     * |    definitely    |      | in Buckets A or C    |      | if nothing better |
+     * |      return      |      | (don’t return these) |      |    comes along    |
+     * |__________________|      |______________________|      |___________________|
+     * ```
+     *
+     * We _probably_ want to show `foo` from 'x', but not from 'y' or 'z'. However, if 'x' is not in a package.json, it
+     * will not appear in a `forEachExternalModuleToImportFrom` iteration. Furthermore, the order of iterations is not
+     * guaranteed, as it is host-dependent. Therefore, when presented with the symbol `foo` from module 'y' alone, we
+     * may not be sure whether or not it should go in the list. So, we’ll take the following steps:
+     *
+     * 1. Resolve alias `foo` from 'y' to the export declaration in 'x', get the symbol there, and see if that symbol is
+     *    already in Bucket A (symbols we already know will be returned). If it is, put `foo` from 'y' in Bucket B
+     *    (symbols that are aliases to symbols in Bucket A). If it’s not, put it in Bucket C.
+     * 2. Next, imagine we see `foo` from module 'z'. Again, we resolve the alias to the nearest export, which is in 'y'.
+     *    At this point, if that nearest export from 'y' is in _any_ of the three buckets, we know the symbol in 'z'
+     *    should never be returned in the final list, so put it in Bucket B.
+     * 3. Next, imagine we see `foo` from module 'x', the original. Syntactically, it doesn’t look like a re-export, so
+     *    we can just check Bucket C to see if we put any aliases to the original in there. If they exist, throw them out.
+     *    Put this symbol in Bucket A.
+     * 4. After we’ve iterated through every symbol of every module, any symbol left in Bucket C means that step 3 didn’t
+     *    occur for that symbol---that is, the original symbol is not in Bucket A, so we should include the alias. Move
+     *    everything from Bucket C to Bucket A.
+     */
+    const getSymbolsFromOtherSourceFileExports = memoizeOne((program: Program, importingSourceFile: SourceFile, detailsEntryId: CompletionEntryIdentifier | undefined, preferences: UserPreferences, host: LanguageServiceHost): { symbol: Symbol, symbolName: string, skipFilter: boolean, origin: SymbolOriginInfoExport }[] => {
+        const seenResolvedModules = createMap<true>();
+        /** Bucket B */
+        const aliasesToAlreadyIncludedSymbols = createMap<true>();
+        /** Bucket C */
+        const aliasesToReturnIfOriginalsAreMissing = createMap<{ alias: Symbol, moduleSymbol: Symbol }>();
+        /** Bucket A */
+        const results: { symbol: Symbol, symbolName: string, skipFilter: boolean, origin: SymbolOriginInfoExport }[] = [];
+        /** Ids present in `results` for faster lookup */
+        const resultSymbolIds = createMap<true>();
+        const target = program.getCompilerOptions().target!;
+        const typeChecker = program.getTypeChecker();
+
+        codefix.forEachExternalModuleToImportFrom(typeChecker, host, preferences, program.redirectTargetsMap, importingSourceFile, program.getSourceFiles(), moduleSymbol => {
+            // Perf -- ignore other modules if this is a request for details
+            if (detailsEntryId && detailsEntryId.source && stripQuotes(moduleSymbol.name) !== detailsEntryId.source) {
+                return;
+            }
+
+            const resolvedModuleSymbol = typeChecker.resolveExternalModuleSymbol(moduleSymbol);
+            // resolvedModuleSymbol may be a namespace. A namespace may be `export =` by multiple module declarations, but only keep the first one.
+            if (!addToSeen(seenResolvedModules, getSymbolId(resolvedModuleSymbol))) {
+                return;
+            }
+
+            if (resolvedModuleSymbol !== moduleSymbol &&
+                // Don't add another completion for `export =` of a symbol that's already global.
+                // So in `declare namespace foo {} declare module "foo" { export = foo; }`, there will just be the global completion for `foo`.
+                every(resolvedModuleSymbol.declarations, d => !!d.getSourceFile().externalModuleIndicator)) {
+                pushSymbol(resolvedModuleSymbol, moduleSymbol, /*skipFilter*/ true);
+            }
+
+            for (const symbol of typeChecker.getExportsOfModule(moduleSymbol)) {
+                // If this is `export { _break as break };` (a keyword) -- skip this and prefer the keyword completion.
+                if (some(symbol.declarations, d => isExportSpecifier(d) && !!d.propertyName && isIdentifierANonContextualKeyword(d.name))) {
+                    continue;
+                }
+                // If `symbol.parent !== moduleSymbol`, this is an `export * from "foo"` re-export. Those don't create new symbols.
+                const isExportStarFromReExport = typeChecker.getMergedSymbol(symbol.parent!) !== resolvedModuleSymbol;
+                // If `!!d.parent.parent.moduleSpecifier`, this is `export { foo } from "foo"` re-export, which creates a new symbol (thus isn't caught by the first check).
+                if (isExportStarFromReExport || some(symbol.declarations, d => isExportSpecifier(d) && !d.propertyName && !!d.parent.parent.moduleSpecifier)) {
+                    // Walk the export chain back one module (step 1 or 2 in diagrammed example).
+                    // Or, in the case of `export * from "foo"`, `symbol` already points to the original export, so just use that.
+                    const nearestExportSymbol = isExportStarFromReExport ? symbol : getNearestExportSymbol(typeChecker, symbol);
+                    if (!nearestExportSymbol) continue;
+                    const nearestExportSymbolId = getSymbolId(nearestExportSymbol).toString();
+                    const symbolHasBeenSeen = resultSymbolIds.has(nearestExportSymbolId) || aliasesToAlreadyIncludedSymbols.has(nearestExportSymbolId);
+                    if (!symbolHasBeenSeen) {
+                        aliasesToReturnIfOriginalsAreMissing.set(nearestExportSymbolId, { alias: symbol, moduleSymbol });
+                        aliasesToAlreadyIncludedSymbols.set(getSymbolId(symbol).toString(), true);
+                    }
+                    else {
+                        // Perf - we know this symbol is an alias to one that’s already covered in `symbols`, so store it here
+                        // in case another symbol re-exports this one; that way we can short-circuit as soon as we see this symbol id.
+                        addToSeen(aliasesToAlreadyIncludedSymbols, getSymbolId(symbol));
+                    }
+                }
+                else {
+                    // This is not a re-export, so see if we have any aliases pending and remove them (step 3 in diagrammed example)
+                    aliasesToReturnIfOriginalsAreMissing.delete(getSymbolId(symbol).toString());
+                    pushSymbol(symbol, moduleSymbol);
+                }
+            }
+        });
+
+        // By this point, any potential duplicates that were actually duplicates have been
+        // removed, so the rest need to be added. (Step 4 in diagrammed example)
+        aliasesToReturnIfOriginalsAreMissing.forEach(({ alias, moduleSymbol }) => pushSymbol(alias, moduleSymbol));
+        return results;
+
+        function pushSymbol(symbol: Symbol, moduleSymbol: Symbol, skipFilter = false) {
+            const isDefaultExport = symbol.escapedName === InternalSymbolName.Default;
+            if (isDefaultExport) {
+                symbol = getLocalSymbolForExportDefault(symbol) || symbol;
+            }
+            addToSeen(resultSymbolIds, getSymbolId(symbol));
+            const origin: SymbolOriginInfoExport = { kind: SymbolOriginInfoKind.Export, moduleSymbol, isDefaultExport };
+            results.push({
+                symbol,
+                symbolName: getSymbolName(symbol, origin, target),
+                origin,
+                skipFilter,
+            });
+        }
+    }, ([prevProgram, prevSourceFile, prevDetailsEntry, prevPreferences], [, sourceFile, detailsEntry, preferences, host]) => {
+        const canUseCache = prevProgram.structureIsReused === StructureIsReused.Completely
+            && prevSourceFile.fileName === sourceFile.fileName
+            && (!prevDetailsEntry || prevDetailsEntry === detailsEntry)
+            && prevPreferences.includeCompletionsForModuleExports === preferences.includeCompletionsForModuleExports
+            && prevPreferences.includeCompletionsWithInsertText === preferences.includeCompletionsWithInsertText;
+        if (host.log && !detailsEntry) {
+            host.log("getSymbolsFromOtherSourceFileExports: " + (canUseCache ? "Using cached list" : "Recomputing list"));
+        }
+        return canUseCache;
+    });
+
     export function getCompletionsAtPosition(host: LanguageServiceHost, program: Program, log: Log, sourceFile: SourceFile, position: number, preferences: UserPreferences, triggerCharacter: CompletionsTriggerCharacter | undefined): CompletionInfo | undefined {
         const typeChecker = program.getTypeChecker();
         const compilerOptions = program.getCompilerOptions();
@@ -1153,7 +1296,8 @@ namespace ts.Completions {
 
             if (shouldOfferImportCompletions()) {
                 const lowerCaseTokenText = previousToken && isIdentifier(previousToken) ? previousToken.text.toLowerCase() : "";
-                getSymbolsFromOtherSourceFileExports(program.getCompilerOptions().target!, host).forEach(({ symbol, symbolName, skipFilter, origin }) => {
+                const getImportSuggestionSymbols = detailsEntryId ? getSymbolsFromOtherSourceFileExports.withoutCachingResult : getSymbolsFromOtherSourceFileExports;
+                getImportSuggestionSymbols(program, sourceFile, detailsEntryId, preferences, host).forEach(({ symbol, symbolName, skipFilter, origin }) => {
                     if (detailsEntryId || skipFilter || stringContainsCharactersInOrder(symbolName.toLowerCase(), lowerCaseTokenText)) {
                         const symbolId = getSymbolId(symbol);
                         symbols.push(symbol);
@@ -1276,143 +1420,6 @@ namespace ts.Completions {
                 !!(sym.flags & SymbolFlags.Module) &&
                 addToSeen(seenModules, getSymbolId(sym)) &&
                 typeChecker.getExportsOfModule(sym).some(e => symbolCanBeReferencedAtTypeLocation(e, seenModules));
-        }
-
-        /**
-         * Gathers symbols that can be imported from other files, deduplicating along the way. Symbols can be “duplicates”
-         * if re-exported from another module, e.g. `export { foo } from "./a"`. That syntax creates a fresh symbol, but
-         * it’s just an alias to the first, and both have the same name, so we generally want to filter those aliases out,
-         * if and only if the the first can be imported (it may be excluded due to package.json filtering in
-         * `codefix.forEachExternalModuleToImportFrom`).
-         *
-         * Example. Imagine a chain of node_modules re-exporting one original symbol:
-         *
-         * ```js
-         *  node_modules/x/index.js         node_modules/y/index.js           node_modules/z/index.js
-         * +-----------------------+      +--------------------------+      +--------------------------+
-         * |                       |      |                          |      |                          |
-         * | export const foo = 0; | <--- | export { foo } from 'x'; | <--- | export { foo } from 'y'; |
-         * |                       |      |                          |      |                          |
-         * +-----------------------+      +--------------------------+      +--------------------------+
-         * ```
-         *
-         * Also imagine three buckets, which we’ll reference soon:
-         *
-         * ```md
-         * |                  |      |                      |      |                   |
-         * |   **Bucket A**   |      |    **Bucket B**      |      |    **Bucket C**   |
-         * |    Symbols to    |      | Aliases to symbols   |      | Symbols to return |
-         * |    definitely    |      | in Buckets A or C    |      | if nothing better |
-         * |      return      |      | (don’t return these) |      |    comes along    |
-         * |__________________|      |______________________|      |___________________|
-         * ```
-         *
-         * We _probably_ want to show `foo` from 'x', but not from 'y' or 'z'. However, if 'x' is not in a package.json, it
-         * will not appear in a `forEachExternalModuleToImportFrom` iteration. Furthermore, the order of iterations is not
-         * guaranteed, as it is host-dependent. Therefore, when presented with the symbol `foo` from module 'y' alone, we
-         * may not be sure whether or not it should go in the list. So, we’ll take the following steps:
-         *
-         * 1. Resolve alias `foo` from 'y' to the export declaration in 'x', get the symbol there, and see if that symbol is
-         *    already in Bucket A (symbols we already know will be returned). If it is, put `foo` from 'y' in Bucket B
-         *    (symbols that are aliases to symbols in Bucket A). If it’s not, put it in Bucket C.
-         * 2. Next, imagine we see `foo` from module 'z'. Again, we resolve the alias to the nearest export, which is in 'y'.
-         *    At this point, if that nearest export from 'y' is in _any_ of the three buckets, we know the symbol in 'z'
-         *    should never be returned in the final list, so put it in Bucket B.
-         * 3. Next, imagine we see `foo` from module 'x', the original. Syntactically, it doesn’t look like a re-export, so
-         *    we can just check Bucket C to see if we put any aliases to the original in there. If they exist, throw them out.
-         *    Put this symbol in Bucket A.
-         * 4. After we’ve iterated through every symbol of every module, any symbol left in Bucket C means that step 3 didn’t
-         *    occur for that symbol---that is, the original symbol is not in Bucket A, so we should include the alias. Move
-         *    everything from Bucket C to Bucket A.
-         */
-        function getSymbolsFromOtherSourceFileExports(target: ScriptTarget, host: LanguageServiceHost): { symbol: Symbol, symbolName: string, skipFilter: boolean, origin: SymbolOriginInfoExport }[] {
-            const seenResolvedModules = createMap<true>();
-            /** Bucket B */
-            const aliasesToAlreadyIncludedSymbols = createMap<true>();
-            /** Bucket C */
-            const aliasesToReturnIfOriginalsAreMissing = createMap<{ alias: Symbol, moduleSymbol: Symbol }>();
-            /** Bucket A */
-            const results: { symbol: Symbol, symbolName: string, skipFilter: boolean, origin: SymbolOriginInfoExport }[] = [];
-            /** Ids present in `results` for faster lookup */
-            const resultSymbolIds = createMap<true>();
-
-            codefix.forEachExternalModuleToImportFrom(typeChecker, host, preferences, program.redirectTargetsMap, sourceFile, program.getSourceFiles(), moduleSymbol => {
-                // Perf -- ignore other modules if this is a request for details
-                if (detailsEntryId && detailsEntryId.source && stripQuotes(moduleSymbol.name) !== detailsEntryId.source) {
-                    return;
-                }
-
-                const resolvedModuleSymbol = typeChecker.resolveExternalModuleSymbol(moduleSymbol);
-                // resolvedModuleSymbol may be a namespace. A namespace may be `export =` by multiple module declarations, but only keep the first one.
-                if (!addToSeen(seenResolvedModules, getSymbolId(resolvedModuleSymbol))) {
-                    return;
-                }
-
-                if (resolvedModuleSymbol !== moduleSymbol &&
-                    // Don't add another completion for `export =` of a symbol that's already global.
-                    // So in `declare namespace foo {} declare module "foo" { export = foo; }`, there will just be the global completion for `foo`.
-                    every(resolvedModuleSymbol.declarations, d => !!d.getSourceFile().externalModuleIndicator)) {
-                    pushSymbol(resolvedModuleSymbol, moduleSymbol, /*skipFilter*/ true);
-                }
-
-                for (const symbol of typeChecker.getExportsOfModule(moduleSymbol)) {
-                    // If this is `export { _break as break };` (a keyword) -- skip this and prefer the keyword completion.
-                    if (some(symbol.declarations, d => isExportSpecifier(d) && !!d.propertyName && isIdentifierANonContextualKeyword(d.name))) {
-                        continue;
-                    }
-                    // If `symbol.parent !== moduleSymbol`, this is an `export * from "foo"` re-export. Those don't create new symbols.
-                    const isExportStarFromReExport = typeChecker.getMergedSymbol(symbol.parent!) !== resolvedModuleSymbol;
-                    // If `!!d.parent.parent.moduleSpecifier`, this is `export { foo } from "foo"` re-export, which creates a new symbol (thus isn't caught by the first check).
-                    if (isExportStarFromReExport || some(symbol.declarations, d => isExportSpecifier(d) && !d.propertyName && !!d.parent.parent.moduleSpecifier)) {
-                        // Walk the export chain back one module (step 1 or 2 in diagrammed example).
-                        // Or, in the case of `export * from "foo"`, `symbol` already points to the original export, so just use that.
-                        const nearestExportSymbol = isExportStarFromReExport ? symbol : getNearestExportSymbol(symbol);
-                        if (!nearestExportSymbol) continue;
-                        const nearestExportSymbolId = getSymbolId(nearestExportSymbol).toString();
-                        const symbolHasBeenSeen = resultSymbolIds.has(nearestExportSymbolId) || aliasesToAlreadyIncludedSymbols.has(nearestExportSymbolId);
-                        if (!symbolHasBeenSeen) {
-                            aliasesToReturnIfOriginalsAreMissing.set(nearestExportSymbolId, { alias: symbol, moduleSymbol });
-                            aliasesToAlreadyIncludedSymbols.set(getSymbolId(symbol).toString(), true);
-                        }
-                        else {
-                            // Perf - we know this symbol is an alias to one that’s already covered in `symbols`, so store it here
-                            // in case another symbol re-exports this one; that way we can short-circuit as soon as we see this symbol id.
-                            addToSeen(aliasesToAlreadyIncludedSymbols, getSymbolId(symbol));
-                        }
-                    }
-                    else {
-                        // This is not a re-export, so see if we have any aliases pending and remove them (step 3 in diagrammed example)
-                        aliasesToReturnIfOriginalsAreMissing.delete(getSymbolId(symbol).toString());
-                        pushSymbol(symbol, moduleSymbol);
-                    }
-                }
-            });
-
-            // By this point, any potential duplicates that were actually duplicates have been
-            // removed, so the rest need to be added. (Step 4 in diagrammed example)
-            aliasesToReturnIfOriginalsAreMissing.forEach(({ alias, moduleSymbol }) => pushSymbol(alias, moduleSymbol));
-            return results;
-
-            function pushSymbol(symbol: Symbol, moduleSymbol: Symbol, skipFilter = false) {
-                const isDefaultExport = symbol.escapedName === InternalSymbolName.Default;
-                if (isDefaultExport) {
-                    symbol = getLocalSymbolForExportDefault(symbol) || symbol;
-                }
-                addToSeen(resultSymbolIds, getSymbolId(symbol));
-                const origin: SymbolOriginInfoExport = { kind: SymbolOriginInfoKind.Export, moduleSymbol, isDefaultExport };
-                results.push({
-                    symbol,
-                    symbolName: getSymbolName(symbol, origin, target),
-                    origin,
-                    skipFilter,
-                });
-            }
-        }
-
-        function getNearestExportSymbol(fromSymbol: Symbol) {
-            return findAlias(typeChecker, fromSymbol, alias => {
-                return some(alias.declarations, d => isExportSpecifier(d) || !!d.localSymbol);
-            });
         }
 
         /**
@@ -2339,6 +2346,13 @@ namespace ts.Completions {
 
     function binaryExpressionMayBeOpenTag({ left }: BinaryExpression): boolean {
         return nodeIsMissing(left);
+    }
+
+
+    function getNearestExportSymbol(typeChecker: TypeChecker, fromSymbol: Symbol) {
+        return findAlias(typeChecker, fromSymbol, alias => {
+            return some(alias.declarations, d => isExportSpecifier(d) || !!d.localSymbol);
+        });
     }
 
     function findAlias(typeChecker: TypeChecker, symbol: Symbol, predicate: (symbol: Symbol) => boolean): Symbol | undefined {
