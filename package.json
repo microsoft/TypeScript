@@ -47,7 +47,7 @@
         "@types/mkdirp": "latest",
         "@types/mocha": "latest",
         "@types/ms": "latest",
-        "@types/node": "8.5.5",
+        "@types/node": "latest",
         "@types/node-fetch": "^2.3.4",
         "@types/q": "latest",
         "@types/source-map-support": "latest",
