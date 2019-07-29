@@ -82,13 +82,13 @@ declare const console: { log(msg: any): void; };`;
         return fs;
     }
 
-    export function verifyOutputsPresent(fs: vfs.FileSystem, outputs: readonly string[]) {
+    export function verifyOutputsPresent(fs: vfs.FileSystem, outputs: ReadonlyArray<string>) {
         for (const output of outputs) {
             assert(fs.existsSync(output), `Expect file ${output} to exist`);
         }
     }
 
-    export function verifyOutputsAbsent(fs: vfs.FileSystem, outputs: readonly string[]) {
+    export function verifyOutputsAbsent(fs: vfs.FileSystem, outputs: ReadonlyArray<string>) {
         for (const output of outputs) {
             assert.isFalse(fs.existsSync(output), `Expect file ${output} to not exist`);
         }

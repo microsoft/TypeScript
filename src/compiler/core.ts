@@ -2200,13 +2200,13 @@ namespace ts {
         return result;
     }
 
-    export function cartesianProduct<T>(arrays: readonly T[][]) {
+    export function cartesianProduct<T>(arrays: ReadonlyArray<T>[]) {
         const result: T[][] = [];
         cartesianProductWorker(arrays, result, /*outer*/ undefined, 0);
         return result;
     }
 
-    function cartesianProductWorker<T>(arrays: readonly (readonly T[])[], result: (readonly T[])[], outer: readonly T[] | undefined, index: number) {
+    function cartesianProductWorker<T>(arrays: ReadonlyArray<ReadonlyArray<T>>, result: (ReadonlyArray<T>)[], outer: ReadonlyArray<T> | undefined, index: number) {
         for (const element of arrays[index]) {
             let inner: T[];
             if (outer) {

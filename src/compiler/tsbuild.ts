@@ -372,7 +372,7 @@ namespace ts {
         readonly extendedConfigCache: Map<ExtendedConfigCacheEntry>;
 
         readonly builderPrograms: ConfigFileMap<T>;
-        readonly diagnostics: ConfigFileMap<readonly Diagnostic[]>;
+        readonly diagnostics: ConfigFileMap<ReadonlyArray<Diagnostic>>;
         readonly projectPendingBuild: ConfigFileMap<ConfigFileProgramReloadLevel>;
         readonly projectErrorsReported: ConfigFileMap<true>;
 
@@ -380,7 +380,7 @@ namespace ts {
         readonly moduleResolutionCache: ModuleResolutionCache | undefined;
 
         // Mutable state
-        buildOrder: readonly ResolvedConfigFileName[] | undefined;
+        buildOrder: ReadonlyArray<ResolvedConfigFileName> | undefined;
         readFileWithCache: (f: string) => string | undefined;
         projectCompilerOptions: CompilerOptions;
         cache: SolutionBuilderStateCache | undefined;
@@ -524,7 +524,7 @@ namespace ts {
         return resolveConfigFileProjectName(resolvePath(state.currentDirectory, name));
     }
 
-    function createBuildOrder(state: SolutionBuilderState, roots: readonly ResolvedConfigFileName[]): readonly ResolvedConfigFileName[] {
+    function createBuildOrder(state: SolutionBuilderState, roots: ReadonlyArray<ResolvedConfigFileName>): ReadonlyArray<ResolvedConfigFileName> {
         const temporaryMarks = createMap() as ConfigFileMap<true>;
         const permanentMarks = createMap() as ConfigFileMap<true>;
         const circularityReportStack: string[] = [];
@@ -683,7 +683,7 @@ namespace ts {
         readonly kind: InvalidatedProjectKind;
         readonly project: ResolvedConfigFileName;
         /*@internal*/ readonly projectPath: ResolvedConfigFilePath;
-        /*@internal*/ readonly buildOrder: readonly ResolvedConfigFileName[];
+        /*@internal*/ readonly buildOrder: ReadonlyArray<ResolvedConfigFileName>;
         /**
          *  To dispose this project and ensure that all the necessary actions are taken and state is updated accordingly
          */
@@ -750,7 +750,7 @@ namespace ts {
         project: ResolvedConfigFileName,
         projectPath: ResolvedConfigFilePath,
         config: ParsedCommandLine,
-        buildOrder: readonly ResolvedConfigFileName[]
+        buildOrder: ReadonlyArray<ResolvedConfigFileName>
     ): UpdateOutputFileStampsProject {
         let updateOutputFileStampsPending = true;
         return {
@@ -780,7 +780,7 @@ namespace ts {
         projectPath: ResolvedConfigFilePath,
         projectIndex: number,
         config: ParsedCommandLine,
-        buildOrder: readonly ResolvedConfigFileName[],
+        buildOrder: ReadonlyArray<ResolvedConfigFileName>,
     ): BuildInvalidedProject<T> | UpdateBundleProject<T> {
         enum Step {
             CreateProgram,
@@ -1195,7 +1195,7 @@ namespace ts {
 
     function getNextInvalidatedProject<T extends BuilderProgram>(
         state: SolutionBuilderState<T>,
-        buildOrder: readonly ResolvedConfigFileName[],
+        buildOrder: ReadonlyArray<ResolvedConfigFileName>,
         reportQueue: boolean
     ): InvalidatedProject<T> | undefined {
         if (!state.projectPendingBuild.size) return undefined;
@@ -1631,7 +1631,7 @@ namespace ts {
         projectPath: ResolvedConfigFilePath,
         projectIndex: number,
         config: ParsedCommandLine,
-        buildOrder: readonly ResolvedConfigFileName[],
+        buildOrder: ReadonlyArray<ResolvedConfigFileName>,
         buildResult: BuildResultFlags
     ) {
         // Queue only if there are no errors
@@ -1913,7 +1913,7 @@ namespace ts {
         );
     }
 
-    function startWatching(state: SolutionBuilderState, buildOrder: readonly ResolvedConfigFileName[]) {
+    function startWatching(state: SolutionBuilderState, buildOrder: ReadonlyArray<ResolvedConfigFileName>) {
         if (!state.watchAllProjectsPending) return;
         state.watchAllProjectsPending = false;
         for (const resolved of buildOrder) {
@@ -1990,7 +1990,7 @@ namespace ts {
         reportAndStoreErrors(state, proj, [state.configFileCache.get(proj) as Diagnostic]);
     }
 
-    function reportErrorSummary(state: SolutionBuilderState, buildOrder: readonly ResolvedConfigFileName[]) {
+    function reportErrorSummary(state: SolutionBuilderState, buildOrder: ReadonlyArray<ResolvedConfigFileName>) {
         if (!state.needsSummary || (!state.watch && !state.host.reportErrorSummary)) return;
         state.needsSummary = false;
         const { diagnostics } = state;
@@ -2014,7 +2014,7 @@ namespace ts {
     /**
      * Report the build ordering inferred from the current project graph if we're in verbose mode
      */
-    function reportBuildQueue(state: SolutionBuilderState, buildQueue: readonly ResolvedConfigFileName[]) {
+    function reportBuildQueue(state: SolutionBuilderState, buildQueue: ReadonlyArray<ResolvedConfigFileName>) {
         if (state.options.verbose) {
             reportStatus(state, Diagnostics.Projects_in_this_build_Colon_0, buildQueue.map(s => "\r\n    * " + relName(state, s)).join(""));
         }

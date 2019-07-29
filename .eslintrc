@@ -4,7 +4,7 @@
         "warnOnUnsupportedTypeScriptVersion": false,
         "ecmaVersion": 6,
         "sourceType": "module",
-        "project": "./src/tsconfig-base.json"
+        "project": "./tsconfig.eslint.json"
     },
     "env": {
         "browser": false,
@@ -16,11 +16,12 @@
     ],
     "rules": {
         "@typescript-eslint/adjacent-overload-signatures": "error",
-        "@typescript-eslint/array-type": "off",
+        "@typescript-eslint/array-type": ["error", { "default": "array", "readonly": "generic" }],
         "@typescript-eslint/ban-types": "off",
         "camelcase": "off",
         "@typescript-eslint/camelcase": ["error", { "properties": "never", "allow": ["^[A-Za-z][a-zA-Za-z]+_[A-Za-z]+$"] }],
         "@typescript-eslint/class-name-casing": "error",
+        "@typescript-eslint/consistent-type-assertions": "off",
         "@typescript-eslint/consistent-type-definitions": ["error", "interface"],
         "@typescript-eslint/explicit-member-accessibility": "off",
         "@typescript-eslint/import/order": "off",
@@ -34,13 +35,11 @@
         }],
         "@typescript-eslint/interface-name-prefix": "error",
         "@typescript-eslint/member-ordering": "off",
-        "@typescript-eslint/no-angle-bracket-type-assertion": "off",
         "@typescript-eslint/no-empty-interface": "off",
         "@typescript-eslint/no-explicit-any": "off",
         "@typescript-eslint/no-inferrable-types": "error",
         "@typescript-eslint/no-misused-new": "error",
         "@typescript-eslint/no-namespace": "off",
-        "@typescript-eslint/no-object-literal-type-assertion": "off",
         "@typescript-eslint/no-parameter-properties": "off",
         "@typescript-eslint/no-this-alias": "error",
         "@typescript-eslint/no-unnecessary-qualifier": "error",

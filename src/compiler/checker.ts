@@ -7402,7 +7402,7 @@ namespace ts {
             setStructuredTypeMembers(type, emptySymbols, callSignatures || emptyArray, constructSignatures || emptyArray, stringIndexInfo, numberIndexInfo);
         }
 
-        function appendSignatures(signatures: Signature[] | undefined, newSignatures: readonly Signature[]) {
+        function appendSignatures(signatures: Signature[] | undefined, newSignatures: ReadonlyArray<Signature>) {
             for (const sig of newSignatures) {
                 if (!signatures || every(signatures, s => !compareSignaturesIdentical(s, sig, /*partialMatch*/ false, /*ignoreThisTypes*/ false, /*ignoreReturnTypes*/ false, compareTypesIdentical))) {
                     signatures = append(signatures, sig);
@@ -13226,7 +13226,7 @@ namespace ts {
                 return result;
             }
 
-            function propagateSidebandVarianceFlags(typeArguments: readonly Type[], variances: VarianceFlags[]) {
+            function propagateSidebandVarianceFlags(typeArguments: ReadonlyArray<Type>, variances: VarianceFlags[]) {
                 for (let i = 0; i < variances.length; i++) {
                     const v = variances[i];
                     if (v & VarianceFlags.Unmeasurable) {
@@ -15677,7 +15677,7 @@ namespace ts {
                 }
             }
 
-            function inferFromTypeArguments(sourceTypes: readonly Type[], targetTypes: readonly Type[], variances: readonly VarianceFlags[]) {
+            function inferFromTypeArguments(sourceTypes: ReadonlyArray<Type>, targetTypes: ReadonlyArray<Type>, variances: ReadonlyArray<VarianceFlags>) {
                 const count = sourceTypes.length < targetTypes.length ? sourceTypes.length : targetTypes.length;
                 for (let i = 0; i < count; i++) {
                     if (i < variances.length && (variances[i] & VarianceFlags.VarianceMask) === VarianceFlags.Contravariant) {

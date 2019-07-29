@@ -996,7 +996,7 @@ namespace ts {
         }
     }
 
-    function addToAffectedFilesPendingEmit(state: BuilderProgramState, affectedFilesPendingEmit: readonly Path[]) {
+    function addToAffectedFilesPendingEmit(state: BuilderProgramState, affectedFilesPendingEmit: ReadonlyArray<Path>) {
         state.affectedFilesPendingEmit = concatenate(state.affectedFilesPendingEmit, affectedFilesPendingEmit);
         // affectedFilesPendingEmitIndex === undefined
         // - means the emit state.affectedFilesPendingEmit was undefined before adding current affected files

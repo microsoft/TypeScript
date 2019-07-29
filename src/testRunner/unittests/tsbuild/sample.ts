@@ -407,8 +407,8 @@ namespace ts {
 
                 function verifyBuildNextResult(
                     expected: SolutionBuilderResult<ExitStatus> | undefined,
-                    presentOutputs: readonly string[],
-                    absentOutputs: readonly string[]
+                    presentOutputs: ReadonlyArray<string>,
+                    absentOutputs: ReadonlyArray<string>
                 ) {
                     const project = builder.getNextInvalidatedProject();
                     const result = project && project.done();

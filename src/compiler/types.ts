@@ -3039,8 +3039,8 @@ namespace ts {
 
     /*@internal*/
     export interface EmitTransformers {
-        scriptTransformers: readonly TransformerFactory<SourceFile | Bundle>[];
-        declarationTransformers: readonly TransformerFactory<SourceFile | Bundle>[];
+        scriptTransformers: ReadonlyArray<TransformerFactory<SourceFile | Bundle>>;
+        declarationTransformers: ReadonlyArray<TransformerFactory<SourceFile | Bundle>>;
     }
 
     export interface SourceMapSpan {
@@ -6098,7 +6098,7 @@ namespace ts {
             (U extends any ? (k: U) => void : never) extends ((k: infer I) => void) ? I : never;
 
     /* @internal */
-    type ArgumentDefinitionToFieldUnion<T extends readonly PragmaArgumentSpecification<any>[]> = {
+    type ArgumentDefinitionToFieldUnion<T extends ReadonlyArray<PragmaArgumentSpecification<any>>> = {
         [K in keyof T]: PragmaArgTypeOptional<T[K], T[K] extends {name: infer TName} ? TName extends string ? TName : never : never>
     }[Extract<keyof T, number>]; // The mapped type maps over only the tuple members, but this reindex gets _all_ members - by extracting only `number` keys, we get only the tuple members
 
@@ -6107,7 +6107,7 @@ namespace ts {
      */
     /* @internal */
     type PragmaArgumentType<KPrag extends keyof ConcretePragmaSpecs> =
-        ConcretePragmaSpecs[KPrag] extends { args: readonly PragmaArgumentSpecification<any>[] }
+        ConcretePragmaSpecs[KPrag] extends { args: ReadonlyArray<PragmaArgumentSpecification<any>> }
             ? UnionToIntersection<ArgumentDefinitionToFieldUnion<ConcretePragmaSpecs[KPrag]["args"]>>
             : never;
 
