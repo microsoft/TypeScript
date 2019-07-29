@@ -16,11 +16,9 @@ declare class Point
 >add : Symbol(Point.add, Decl(targetTypeTest1.ts, 4, 23))
 >dx : Symbol(dx, Decl(targetTypeTest1.ts, 5, 17))
 >dy : Symbol(dy, Decl(targetTypeTest1.ts, 5, 28))
->Point : Symbol(Point, Decl(targetTypeTest1.ts, 8, 1), Decl(targetTypeTest1.ts, 22, 17))
 
       static origin: Point;
 >origin : Symbol(Point.origin, Decl(targetTypeTest1.ts, 5, 48))
->Point : Symbol(Point, Decl(targetTypeTest1.ts, 8, 1), Decl(targetTypeTest1.ts, 22, 17))
 
 }
 

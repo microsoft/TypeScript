@@ -3661,8 +3661,8 @@ namespace ts {
 
         Enum = RegularEnum | ConstEnum,
         Variable = FunctionScopedVariable | BlockScopedVariable,
-        Value = Variable | Property | EnumMember | ObjectLiteral | Function | Class | Enum | ValueModule | Method | GetAccessor | SetAccessor | Assignment,
-        Type = Class | Interface | Enum | EnumMember | TypeLiteral | TypeParameter | TypeAlias | Assignment,
+        Value = Variable | Property | EnumMember | ObjectLiteral | Function | Class | Enum | ValueModule | Method | GetAccessor | SetAccessor,
+        Type = Class | Interface | Enum | EnumMember | TypeLiteral | TypeParameter | TypeAlias,
         Namespace = ValueModule | NamespaceModule | Enum,
         Module = ValueModule | NamespaceModule,
         Accessor = GetAccessor | SetAccessor,
@@ -3683,7 +3683,7 @@ namespace ts {
         InterfaceExcludes = Type & ~(Interface | Class),
         RegularEnumExcludes = (Value | Type) & ~(RegularEnum | ValueModule), // regular enums merge only with regular enums and modules
         ConstEnumExcludes = (Value | Type) & ~ConstEnum, // const enums merge only with const enums
-        ValueModuleExcludes = Value & ~(Function | Class | RegularEnum | ValueModule | Assignment),
+        ValueModuleExcludes = Value & ~(Function | Class | RegularEnum | ValueModule),
         NamespaceModuleExcludes = 0,
         MethodExcludes = Value & ~Method,
         GetAccessorExcludes = Value & ~SetAccessor,
