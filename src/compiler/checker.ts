@@ -29319,7 +29319,7 @@ namespace ts {
 
             // NOTE: assignability is checked in checkClassDeclaration
             const baseProperties = getPropertiesOfType(baseType);
-            outer: for (const baseProperty of baseProperties) {
+            basePropertyCheck: for (const baseProperty of baseProperties) {
                 const base = getTargetSymbol(baseProperty);
 
                 if (base.flags & SymbolFlags.Prototype) {
@@ -29343,16 +29343,15 @@ namespace ts {
                     // If there is no declaration for the derived class (as in the case of class expressions),
                     // then the class cannot be declared abstract.
                     if (baseDeclarationFlags & ModifierFlags.Abstract && (!derivedClassDecl || !hasModifier(derivedClassDecl, ModifierFlags.Abstract))) {
-                        // getPropertyOfObjectType will return a single symbol even if the property can be found
-                        // on multiple declarations, so it’s possible for derived === base to be true even when
-                        // another base type introduced from declaration merging to contain the property as well,
-                        // which should satisfy the abstract member requirement.
+                        // Searches other base types for a declaration that would satisfy the inherited abstract member.
+                        // (The class may have more than one base type via declaration merging with an interface with the
+                        // same name.)
                         for (const otherBaseType of getBaseTypes(type)) {
                             if (otherBaseType === baseType) continue;
                             const baseSymbol = getPropertyOfObjectType(otherBaseType, base.escapedName);
                             const derivedElsewhere = baseSymbol && getTargetSymbol(baseSymbol);
                             if (derivedElsewhere && derivedElsewhere !== base) {
-                                continue outer;
+                                continue basePropertyCheck;
                             }
                         }
 
