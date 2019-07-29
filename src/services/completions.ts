@@ -1152,7 +1152,15 @@ namespace ts.Completions {
             }
 
             if (shouldOfferImportCompletions()) {
-                getSymbolsFromOtherSourceFileExports(symbols, previousToken && isIdentifier(previousToken) ? previousToken.text : "", program.getCompilerOptions().target!, host);
+                const lowerCaseTokenText = previousToken && isIdentifier(previousToken) ? previousToken.text.toLowerCase() : "";
+                getSymbolsFromOtherSourceFileExports(program.getCompilerOptions().target!, host).forEach(({ symbol, symbolName, skipFilter, origin }) => {
+                    if (detailsEntryId || skipFilter || stringContainsCharactersInOrder(symbolName.toLowerCase(), lowerCaseTokenText)) {
+                        const symbolId = getSymbolId(symbol);
+                        symbols.push(symbol);
+                        symbolToOriginInfoMap[symbolId] = origin;
+                        symbolToSortTextMap[symbolId] = SortText.AutoImportSuggestions;
+                    }
+                });
             }
             filterGlobalCompletion(symbols);
         }
@@ -1316,16 +1324,17 @@ namespace ts.Completions {
          * 4. After we’ve iterated through every symbol of every module, any symbol left in Bucket C means that step 3 didn’t
          *    occur for that symbol---that is, the original symbol is not in Bucket A, so we should include the alias. Move
          *    everything from Bucket C to Bucket A.
-         *
-         * Note: Bucket A is passed in as the parameter `symbols` and mutated.
          */
-        function getSymbolsFromOtherSourceFileExports(/** Bucket A */ symbols: Symbol[], tokenText: string, target: ScriptTarget, host: LanguageServiceHost): void {
-            const tokenTextLowerCase = tokenText.toLowerCase();
+        function getSymbolsFromOtherSourceFileExports(target: ScriptTarget, host: LanguageServiceHost): { symbol: Symbol, symbolName: string, skipFilter: boolean, origin: SymbolOriginInfoExport }[] {
             const seenResolvedModules = createMap<true>();
             /** Bucket B */
             const aliasesToAlreadyIncludedSymbols = createMap<true>();
             /** Bucket C */
             const aliasesToReturnIfOriginalsAreMissing = createMap<{ alias: Symbol, moduleSymbol: Symbol }>();
+            /** Bucket A */
+            const results: { symbol: Symbol, symbolName: string, skipFilter: boolean, origin: SymbolOriginInfoExport }[] = [];
+            /** Ids present in `results` for faster lookup */
+            const resultSymbolIds = createMap<true>();
 
             codefix.forEachExternalModuleToImportFrom(typeChecker, host, preferences, program.redirectTargetsMap, sourceFile, program.getSourceFiles(), moduleSymbol => {
                 // Perf -- ignore other modules if this is a request for details
@@ -1343,9 +1352,7 @@ namespace ts.Completions {
                     // Don't add another completion for `export =` of a symbol that's already global.
                     // So in `declare namespace foo {} declare module "foo" { export = foo; }`, there will just be the global completion for `foo`.
                     every(resolvedModuleSymbol.declarations, d => !!d.getSourceFile().externalModuleIndicator)) {
-                    symbols.push(resolvedModuleSymbol);
-                    symbolToSortTextMap[getSymbolId(resolvedModuleSymbol)] = SortText.AutoImportSuggestions;
-                    symbolToOriginInfoMap[getSymbolId(resolvedModuleSymbol)] = { kind: SymbolOriginInfoKind.Export, moduleSymbol, isDefaultExport: false };
+                    pushSymbol(resolvedModuleSymbol, moduleSymbol, /*skipFilter*/ true);
                 }
 
                 for (const symbol of typeChecker.getExportsOfModule(moduleSymbol)) {
@@ -1361,10 +1368,10 @@ namespace ts.Completions {
                         // Or, in the case of `export * from "foo"`, `symbol` already points to the original export, so just use that.
                         const nearestExportSymbol = isExportStarFromReExport ? symbol : getNearestExportSymbol(symbol);
                         if (!nearestExportSymbol) continue;
-                        const nearestExportSymbolId = getSymbolId(nearestExportSymbol);
-                        const symbolHasBeenSeen = !!symbolToOriginInfoMap[nearestExportSymbolId] || aliasesToAlreadyIncludedSymbols.has(nearestExportSymbolId.toString());
+                        const nearestExportSymbolId = getSymbolId(nearestExportSymbol).toString();
+                        const symbolHasBeenSeen = resultSymbolIds.has(nearestExportSymbolId) || aliasesToAlreadyIncludedSymbols.has(nearestExportSymbolId);
                         if (!symbolHasBeenSeen) {
-                            aliasesToReturnIfOriginalsAreMissing.set(nearestExportSymbolId.toString(), { alias: symbol, moduleSymbol });
+                            aliasesToReturnIfOriginalsAreMissing.set(nearestExportSymbolId, { alias: symbol, moduleSymbol });
                             aliasesToAlreadyIncludedSymbols.set(getSymbolId(symbol).toString(), true);
                         }
                         else {
@@ -1384,18 +1391,21 @@ namespace ts.Completions {
             // By this point, any potential duplicates that were actually duplicates have been
             // removed, so the rest need to be added. (Step 4 in diagrammed example)
             aliasesToReturnIfOriginalsAreMissing.forEach(({ alias, moduleSymbol }) => pushSymbol(alias, moduleSymbol));
+            return results;
 
-            function pushSymbol(symbol: Symbol, moduleSymbol: Symbol) {
+            function pushSymbol(symbol: Symbol, moduleSymbol: Symbol, skipFilter = false) {
                 const isDefaultExport = symbol.escapedName === InternalSymbolName.Default;
                 if (isDefaultExport) {
                     symbol = getLocalSymbolForExportDefault(symbol) || symbol;
                 }
+                addToSeen(resultSymbolIds, getSymbolId(symbol));
                 const origin: SymbolOriginInfoExport = { kind: SymbolOriginInfoKind.Export, moduleSymbol, isDefaultExport };
-                if (detailsEntryId || stringContainsCharactersInOrder(getSymbolName(symbol, origin, target).toLowerCase(), tokenTextLowerCase)) {
-                    symbols.push(symbol);
-                    symbolToSortTextMap[getSymbolId(symbol)] = SortText.AutoImportSuggestions;
-                    symbolToOriginInfoMap[getSymbolId(symbol)] = origin;
-                }
+                results.push({
+                    symbol,
+                    symbolName: getSymbolName(symbol, origin, target),
+                    origin,
+                    skipFilter,
+                });
             }
         }
 
