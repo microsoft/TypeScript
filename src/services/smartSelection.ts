@@ -64,6 +64,13 @@ namespace ts.SmartSelectionRange {
                     parentNode = node;
                     break;
                 }
+
+                // If we made it to the end of the for loop, we’re done.
+                // In practice, I’ve only seen this happen at the very end
+                // of a SourceFile.
+                if (i === children.length - 1) {
+                    break outer;
+                }
             }
         }
 

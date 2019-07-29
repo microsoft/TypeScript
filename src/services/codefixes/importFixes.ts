@@ -445,9 +445,12 @@ namespace ts.codefix {
             const aliased = checker.getImmediateAliasedSymbol(defaultExport);
             return aliased && getDefaultExportInfoWorker(aliased, Debug.assertDefined(aliased.parent), checker, compilerOptions);
         }
-        else {
-            return { symbolForMeaning: defaultExport, name: moduleSymbolToValidIdentifier(moduleSymbol, compilerOptions.target!) };
+
+        if (defaultExport.escapedName !== InternalSymbolName.Default &&
+            defaultExport.escapedName !== InternalSymbolName.ExportEquals) {
+            return { symbolForMeaning: defaultExport, name: defaultExport.getName() };
         }
+        return { symbolForMeaning: defaultExport, name: moduleSymbolToValidIdentifier(moduleSymbol, compilerOptions.target!) };
     }
 
     function getNameForExportDefault(symbol: Symbol): string | undefined {

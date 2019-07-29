@@ -185,7 +185,8 @@ function stripRushStageNumbers(result: string): string {
  * so we purge as much of the gulp output as we can
  */
 function sanitizeUnimportantGulpOutput(result: string): string {
-    return result.replace(/^.*(\] (Starting)|(Finished)).*$/gm, "") // task start/end messages (nondeterministic order)
+    return result.replace(/^.*(\] (Starting)|(Finished)).*$/gm, "") // "gulp" task start/end messages (nondeterministic order)
+        .replace(/^.*(\] . (finished)|(started)).*$/gm, "") // "just" task start/end messages (nondeterministic order)
         .replace(/^.*\] Respawned to PID: \d+.*$/gm, "") // PID of child is OS and system-load dependent (likely stableish in a container but still dangerous)
         .replace(/\n+/g, "\n");
 }
@@ -193,14 +194,17 @@ function sanitizeUnimportantGulpOutput(result: string): string {
 function sanitizeTimestamps(result: string): string {
     return result.replace(/\[\d?\d:\d\d:\d\d (A|P)M\]/g, "[XX:XX:XX XM]")
         .replace(/\[\d?\d:\d\d:\d\d\]/g, "[XX:XX:XX]")
+        .replace(/\/\d+-\d+-[\d_TZ]+-debug.log/g, "\/XXXX-XX-XXXXXXXXX-debug.log")
         .replace(/\d+(\.\d+)? sec(onds?)?/g, "? seconds")
         .replace(/\d+(\.\d+)? min(utes?)?/g, "")
-        .replace(/\d+(\.\d+)?( m)?s/g, "?s");
+        .replace(/\d+(\.\d+)? ?m?s/g, "?s")
+        .replace(/ \(\?s\)/g, "");
 }
 
 function sanitizeVersionSpecifiers(result: string): string {
     return result
         .replace(/\d+.\d+.\d+-insiders.\d\d\d\d\d\d\d\d/g, "X.X.X-insiders.xxxxxxxx")
+        .replace(/Rush Multi-Project Build Tool (\d+)\.\d+\.\d+/g, "Rush Multi-Project Build Tool $1.X.X")
         .replace(/([@v\()])\d+\.\d+\.\d+/g, "$1X.X.X");
 }
 
