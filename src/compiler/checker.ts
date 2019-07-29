@@ -19099,10 +19099,13 @@ namespace ts {
 
         // Return the contextual type for a given expression node. During overload resolution, a contextual type may temporarily
         // be "pushed" onto a node using the contextualType property.
-        function getApparentTypeOfContextualType(node: Expression, contextFlags?: ContextFlags): Type | undefined {
-            const contextualType = instantiateContextualType(getContextualType(node, contextFlags), node, contextFlags);
-            if (contextualType) {
-                const apparentType = mapType(contextualType, getApparentType, /*noReductions*/ true);
+        function getApparentTypeOfContextualType(node: Expression | MethodDeclaration, contextFlags?: ContextFlags): Type | undefined {
+            const contextualType = isObjectLiteralMethod(node) ?
+                getContextualTypeForObjectLiteralMethod(node, contextFlags) :
+                getContextualType(node, contextFlags);
+            const instantiatedType = instantiateContextualType(contextualType, node, contextFlags);
+            if (instantiatedType) {
+                const apparentType = mapType(instantiatedType, getApparentType, /*noReductions*/ true);
                 if (apparentType.flags & TypeFlags.Union) {
                     if (isObjectLiteralExpression(node)) {
                         return discriminateContextualTypeByObjectMembers(node, apparentType as UnionType);
@@ -19426,9 +19429,7 @@ namespace ts {
             if (typeTagSignature) {
                 return typeTagSignature;
             }
-            const type = isObjectLiteralMethod(node) ?
-                getContextualTypeForObjectLiteralMethod(node, ContextFlags.Signature) :
-                getApparentTypeOfContextualType(node, ContextFlags.Signature);
+            const type = getApparentTypeOfContextualType(node, ContextFlags.Signature);
             if (!type) {
                 return undefined;
             }
