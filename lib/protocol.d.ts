@@ -63,7 +63,8 @@ declare namespace ts.server.protocol {
         GetEditsForRefactor = "getEditsForRefactor",
         OrganizeImports = "organizeImports",
         GetEditsForFileRename = "getEditsForFileRename",
-        ConfigurePlugin = "configurePlugin"
+        ConfigurePlugin = "configurePlugin",
+        SelectionRange = "selectionRange"
     }
     /**
      * A TypeScript Server message
@@ -567,19 +568,6 @@ declare namespace ts.server.protocol {
         body?: string[];
     }
     /**
-     * Arguments for EncodedSemanticClassificationsRequest request.
-     */
-    interface EncodedSemanticClassificationsRequestArgs extends FileRequestArgs {
-        /**
-         * Start position of the span.
-         */
-        start: number;
-        /**
-         * Length of the span.
-         */
-        length: number;
-    }
-    /**
      * Arguments in document highlight request; include: filesToSearch, file,
      * line, offset.
      */
@@ -648,15 +636,21 @@ declare namespace ts.server.protocol {
          */
         file: string;
     }
+    interface TextSpanWithContext extends TextSpan {
+        contextStart?: Location;
+        contextEnd?: Location;
+    }
+    interface FileSpanWithContext extends FileSpan, TextSpanWithContext {
+    }
     interface DefinitionInfoAndBoundSpan {
-        definitions: ReadonlyArray<FileSpan>;
+        definitions: ReadonlyArray<FileSpanWithContext>;
         textSpan: TextSpan;
     }
     /**
      * Definition response message.  Gives text range for definition.
      */
     interface DefinitionResponse extends Response {
-        body?: FileSpan[];
+        body?: FileSpanWithContext[];
     }
     interface DefinitionInfoAndBoundSpanReponse extends Response {
         body?: DefinitionInfoAndBoundSpan;
@@ -665,13 +659,13 @@ declare namespace ts.server.protocol {
      * Definition response message.  Gives text range for definition.
      */
     interface TypeDefinitionResponse extends Response {
-        body?: FileSpan[];
+        body?: FileSpanWithContext[];
     }
     /**
      * Implementation response message.  Gives text range for implementations.
      */
     interface ImplementationResponse extends Response {
-        body?: FileSpan[];
+        body?: FileSpanWithContext[];
     }
     /**
      * Request to get brace completion for a location in the file.
@@ -708,7 +702,7 @@ declare namespace ts.server.protocol {
         command: CommandTypes.Occurrences;
     }
     /** @deprecated */
-    interface OccurrencesResponseItem extends FileSpan {
+    interface OccurrencesResponseItem extends FileSpanWithContext {
         /**
          * True if the occurrence is a write location, false otherwise.
          */
@@ -734,7 +728,7 @@ declare namespace ts.server.protocol {
     /**
      * Span augmented with extra information that denotes the kind of the highlighting to be used for span.
      */
-    interface HighlightSpan extends TextSpan {
+    interface HighlightSpan extends TextSpanWithContext {
         kind: HighlightSpanKind;
     }
     /**
@@ -764,7 +758,7 @@ declare namespace ts.server.protocol {
     interface ReferencesRequest extends FileLocationRequest {
         command: CommandTypes.References;
     }
-    interface ReferencesResponseItem extends FileSpan {
+    interface ReferencesResponseItem extends FileSpanWithContext {
         /** Text of line containing the reference.  Including this
          *  with the response avoids latency of editor loading files
          * to show text of reference line (the server already has
@@ -879,7 +873,7 @@ declare namespace ts.server.protocol {
         /** The text spans in this group */
         locs: RenameTextSpan[];
     }
-    interface RenameTextSpan extends TextSpan {
+    interface RenameTextSpan extends TextSpanWithContext {
         readonly prefixText?: string;
         readonly suffixText?: string;
     }
@@ -1023,6 +1017,22 @@ declare namespace ts.server.protocol {
     interface ConfigurePluginRequest extends Request {
         command: CommandTypes.ConfigurePlugin;
         arguments: ConfigurePluginRequestArguments;
+    }
+    interface ConfigurePluginResponse extends Response {
+    }
+    interface SelectionRangeRequest extends FileRequest {
+        command: CommandTypes.SelectionRange;
+        arguments: SelectionRangeRequestArgs;
+    }
+    interface SelectionRangeRequestArgs extends FileRequestArgs {
+        locations: Location[];
+    }
+    interface SelectionRangeResponse extends Response {
+        body?: SelectionRange[];
+    }
+    interface SelectionRange {
+        textSpan: TextSpan;
+        parent?: SelectionRange;
     }
     /**
      *  Information found in an "open" request.
@@ -2409,6 +2419,9 @@ declare namespace ts.server.protocol {
         ES2015 = "ES2015",
         ES2016 = "ES2016",
         ES2017 = "ES2017",
+        ES2018 = "ES2018",
+        ES2019 = "ES2019",
+        ES2020 = "ES2020",
         ESNext = "ESNext"
     }
 }

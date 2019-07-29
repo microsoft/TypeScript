@@ -18,8 +18,18 @@ and limitations under the License.
 /// <reference no-default-lib="true"/>
 
 
-/// <reference lib="es2018" />
-/// <reference lib="es2019.array" />
-/// <reference lib="es2019.object" />
-/// <reference lib="es2019.string" />
-/// <reference lib="es2019.symbol" />
+/// <reference lib="es2015.iterable" />
+
+interface ObjectConstructor {
+    /**
+     * Returns an object created by key-value entries for properties and methods
+     * @param entries An iterable object that contains key-value entries for properties and methods.
+     */
+    fromEntries<T = any>(entries: Iterable<readonly [PropertyKey, T]>): { [k in PropertyKey]: T };
+
+    /**
+     * Returns an object created by key-value entries for properties and methods
+     * @param entries An iterable object that contains key-value entries for properties and methods.
+     */
+    fromEntries(entries: Iterable<readonly any[]>): any;
+}

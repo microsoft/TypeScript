@@ -18,8 +18,8 @@ and limitations under the License.
 /// <reference no-default-lib="true"/>
 
 
-/// <reference lib="es2018" />
-/// <reference lib="es2019.array" />
-/// <reference lib="es2019.object" />
-/// <reference lib="es2019.string" />
-/// <reference lib="es2019.symbol" />
+/// <reference lib="es2020" />
+/// <reference lib="dom" />
+/// <reference lib="webworker.importscripts" />
+/// <reference lib="scripthost" />
+/// <reference lib="dom.iterable" />
