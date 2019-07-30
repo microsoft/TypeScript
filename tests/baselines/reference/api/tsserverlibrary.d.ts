@@ -8086,15 +8086,6 @@ declare namespace ts.server.protocol {
         telemetryEventName: TypingsInstalledTelemetryEventName;
         payload: TypingsInstalledTelemetryEventPayload;
     }
-    /**
-     * __GDPR__
-     * "typingsinstalled" : {
-     *     "${include}": ["${TypeScriptCommonProperties}"],
-     *     "installedPackages": { "classification": "PublicNonPersonalData", "purpose": "FeatureInsight" },
-     *     "installSuccess": { "classification": "SystemMetaData", "purpose": "FeatureInsight" },
-     *     "typingsInstallerVersion": { "classification": "SystemMetaData", "purpose": "FeatureInsight" }
-     * }
-     */
     interface TypingsInstalledTelemetryEventPayload {
         /**
          * Comma separated list of installed typing packages
