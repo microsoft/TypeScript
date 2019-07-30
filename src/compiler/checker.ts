@@ -29973,7 +29973,10 @@ namespace ts {
         function checkAliasSymbol(node: ImportEqualsDeclaration | ImportClause | NamespaceImport | ImportSpecifier | ExportSpecifier) {
             const symbol = getSymbolOfNode(node);
             const target = resolveAlias(symbol);
-            if (target !== unknownSymbol) {
+
+            const shouldSkipWithJSRequireTargets = !isInJSFile(node) && moduleKind !== ModuleKind.ES2015;
+
+            if (shouldSkipWithJSRequireTargets && target !== unknownSymbol) {
                 // For external modules symbol represents local symbol for an alias.
                 // This local symbol will merge any other local declarations (excluding other aliases)
                 // and symbol.flags will contains combined representation for all merged declaration.
@@ -30004,9 +30007,7 @@ namespace ts {
         function checkImportBinding(node: ImportEqualsDeclaration | ImportClause | NamespaceImport | ImportSpecifier) {
             checkCollisionWithRequireExportsInGeneratedCode(node, node.name!);
             checkCollisionWithGlobalPromiseInGeneratedCode(node, node.name!);
-            if (!isInJSFile(node)) {
-                checkAliasSymbol(node);
-            }
+            checkAliasSymbol(node);
         }
 
         function checkImportDeclaration(node: ImportDeclaration) {
