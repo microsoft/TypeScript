@@ -1809,11 +1809,14 @@ namespace ts {
                 const declName = getNameOfDeclaration(typeAlias);
                 if ((isJSDocEnumTag(typeAlias) || !typeAlias.fullName) && declName && isPropertyAccessEntityNameExpression(declName.parent)) {
                     // typdef anchored to an A.B.C assignment - we need to bind into B's namespace under name C
-                    bindPotentiallyMissingNamespaces(file.symbol, declName.parent, getIsTopLevelNamespaceishAssignment(declName.parent), !!findAncestor(declName, d => isPropertyAccessExpression(d) && d.name.escapedText === "prototype"));
-                    const oldContainer = container;
-                    container = isPropertyAccessExpression(declName.parent.expression) ? declName.parent.expression.name : declName.parent.expression;
-                    declareModuleMember(typeAlias, SymbolFlags.TypeAlias, SymbolFlags.TypeAliasExcludes);
-                    container = oldContainer;
+                    const isTL = getIsTopLevelNamespaceishAssignment(declName.parent);
+                    if (isTL) {
+                        bindPotentiallyMissingNamespaces(file.symbol, declName.parent, isTL, !!findAncestor(declName, d => isPropertyAccessExpression(d) && d.name.escapedText === "prototype"));
+                        const oldContainer = container;
+                        container = isPropertyAccessExpression(declName.parent.expression) ? declName.parent.expression.name : declName.parent.expression;
+                        declareModuleMember(typeAlias, SymbolFlags.TypeAlias, SymbolFlags.TypeAliasExcludes);
+                        container = oldContainer;
+                    }
                 }
                 else if (isJSDocEnumTag(typeAlias) || !typeAlias.fullName || typeAlias.fullName.kind === SyntaxKind.Identifier) {
                     parent = typeAlias.parent;
