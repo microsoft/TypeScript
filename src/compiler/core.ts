@@ -1645,54 +1645,29 @@ namespace ts {
         };
     }
 
-    interface MemoizedFunction<ArgsT extends unknown[], ReturnT> {
-        (...args: ArgsT): ReturnT;
-        /** Potentially reads from the cache, but does not write to it. */
-        withoutCachingResult(...args: ArgsT): ReturnT;
-        clear(): void;
-    }
-
-    export function memoizeOne<ArgsT extends unknown[], ReturnT>(
-        callback: (...args: ArgsT) => ReturnT,
-        shouldUseCachedValue: (prevArgs: ArgsT, args: ArgsT) => boolean = argsAreEqual,
-    ): MemoizedFunction<ArgsT, ReturnT> {
+    export function memoizeOne<ArgsT extends unknown[], ReturnT>(callback: (...args: ArgsT) => ReturnT): typeof callback & { clear: () => void } {
         let value: ReturnT;
         let cachedArgs: ArgsT;
         runMemoized.clear = () => {
             value = undefined!;
             cachedArgs = undefined!;
         };
-        runMemoized.withoutCachingResult = (...args: ArgsT) => {
-            const lastArgs = cachedArgs;
-            const lastValue = value;
-            const newValue = runMemoized(...args);
-            cachedArgs = lastArgs;
-            value = lastValue;
-            return newValue;
-        };
         return runMemoized;
 
         function runMemoized(...args: ArgsT) {
-            if (cachedArgs && shouldUseCachedValue(cachedArgs, args)) {
-                cachedArgs = args;
+            const length = args.length;
+            if (cachedArgs && cachedArgs.length === length) {
+                for (let i = 0; i < length; i++) {
+                    if (args[i] !== cachedArgs[i]) {
+                        cachedArgs = args;
+                        return value = callback(...args);
+                    }
+                }
                 return value;
             }
             cachedArgs = args;
             return value = callback(...args);
         }
-    }
-
-    function argsAreEqual<T extends unknown[]>(prevArgs: T, args: T): boolean {
-        const length = args.length;
-        if (prevArgs && prevArgs.length === length) {
-            for (let i = 0; i < length; i++) {
-                if (args[i] !== prevArgs[i]) {
-                    return false;
-                }
-            }
-            return true;
-        }
-        return false;
     }
 
     /**
