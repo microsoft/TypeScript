@@ -582,6 +582,16 @@ namespace ts {
         return result;
     }
 
+
+    export function collectGeneratorReturn<TYield, TStep, TReturn>(gen: Generator<TYield, TReturn, TStep>, feedforward: (yielded: TYield) => TStep): TReturn {
+        let result;
+        for (result = gen.next(); !result.done;) {
+            result = gen.next(feedforward(result.value as TYield));
+        }
+        return (result as IteratorReturnResult<TReturn>).value;
+    }
+
+
     // Maps from T to T and avoids allocation if all elements map to themselves
     export function sameMap<T>(array: T[], f: (x: T, i: number) => T): T[];
     export function sameMap<T>(array: ReadonlyArray<T>, f: (x: T, i: number) => T): ReadonlyArray<T>;

@@ -11791,14 +11791,6 @@ namespace ts {
             return result!.value as Type;
         }
 
-        function collectGeneratorReturn<TYield, TStep, TReturn>(gen: Generator<TYield, TReturn, TStep>, feedforward: (yielded: TYield) => TStep): TReturn {
-            let result;
-            for (result = gen.next(); !result.done;) {
-                result = gen.next(feedforward(result.value as TYield));
-            }
-            return (result as IteratorReturnResult<TReturn>).value;
-        }
-
         function getPermissiveInstantiation(type: Type) {
             return type.flags & (TypeFlags.Primitive | TypeFlags.AnyOrUnknown | TypeFlags.Never) ? type :
                 type.permissiveInstantiation || (type.permissiveInstantiation = instantiateType(type, permissiveMapper));
