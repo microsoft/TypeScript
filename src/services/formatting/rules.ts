@@ -457,7 +457,7 @@ namespace ts.formatting {
                 return context.currentTokenSpan.kind === SyntaxKind.EqualsToken || context.nextTokenSpan.kind === SyntaxKind.EqualsToken;
             // "in" keyword in for (let x in []) { }
             case SyntaxKind.ForInStatement:
-            // "in" keyword in [P in keyof T]: T[P];
+            // "in" keyword in [P in keyof T]: T[P]
             // falls through
             case SyntaxKind.TypeParameter:
                 return context.currentTokenSpan.kind === SyntaxKind.InKeyword || context.nextTokenSpan.kind === SyntaxKind.InKeyword || context.currentTokenSpan.kind === SyntaxKind.EqualsToken || context.nextTokenSpan.kind === SyntaxKind.EqualsToken;
