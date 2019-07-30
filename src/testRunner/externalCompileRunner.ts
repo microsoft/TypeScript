@@ -5,7 +5,7 @@ const del: typeof import("del") = require("del");
 interface ExecResult {
     stdout: Buffer;
     stderr: Buffer;
-    status: number;
+    status: number | null;
 }
 
 interface UserConfig {
