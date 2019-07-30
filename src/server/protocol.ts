@@ -2883,7 +2883,7 @@ namespace ts.server.protocol {
         payload: TypingsInstalledTelemetryEventPayload;
     }
 
-    /**
+    /*
      * __GDPR__
      * "typingsinstalled" : {
      *     "${include}": ["${TypeScriptCommonProperties}"],

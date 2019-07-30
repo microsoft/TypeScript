@@ -48,7 +48,7 @@ namespace ts.server {
         readonly data: ProjectInfoTelemetryEventData;
     }
 
-    /**
+    /*
      * __GDPR__
      * "projectInfo" : {
      *      "${include}": ["${TypeScriptCommonProperties}"],
