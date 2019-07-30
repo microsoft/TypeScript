@@ -6026,6 +6026,21 @@ namespace ts {
             return links.type;
         }
 
+        function* getInstantiatedTypeOfInstantiatedSymbol(symbol: Symbol): Generator<[Type, TypeMapper], Type, Type> {
+            const links = getSymbolLinks(symbol);
+            if (!links.type) {
+                if (!pushTypeResolution(symbol, TypeSystemPropertyName.Type)) {
+                    return links.type = errorType;
+                }
+                let type = yield [yield* getInstantiatedTypeOfSymbol(links.target!), links.mapper!];
+                if (!popTypeResolution()) {
+                    type = reportCircularityError(symbol);
+                }
+                links.type = type;
+            }
+            return links.type;
+        }
+
         function getTypeOfInstantiatedSymbol(symbol: Symbol): Type {
             const links = getSymbolLinks(symbol);
             if (!links.type) {
@@ -6068,6 +6083,16 @@ namespace ts {
                 links.type = links.deferralParent!.flags & TypeFlags.Union ? getUnionType(links.deferralConstituents!) : getIntersectionType(links.deferralConstituents!);
             }
             return links.type;
+        }
+
+        function* getInstantiatedTypeOfSymbol(symbol: Symbol): Generator<[Type, TypeMapper], Type, Type> {
+            if (getCheckFlags(symbol) & CheckFlags.DeferredType) {
+                return getTypeOfSymbolWithDeferredType(symbol);
+            }
+            if (getCheckFlags(symbol) & CheckFlags.Instantiated) {
+                return yield* getInstantiatedTypeOfInstantiatedSymbol(symbol);
+            }
+            return getTypeOfSymbol(symbol);
         }
 
         function getTypeOfSymbol(symbol: Symbol): Type {
@@ -10258,6 +10283,45 @@ namespace ts {
                         undefined;
         }
 
+        function* getInstantiatedPropertyTypeForIndexType(objectType: Type, indexType: Type, accessFlags: AccessFlags): Generator<[Type, TypeMapper], Type | undefined, Type> {
+            const propName = getPropertyNameFromIndex(indexType, /*accessNode*/ undefined);
+            if (propName !== undefined) {
+                const prop = getPropertyOfType(objectType, propName);
+                if (prop) {
+                    return yield* getInstantiatedTypeOfSymbol(prop);
+                }
+                if (everyType(objectType, isTupleType) && isNumericLiteralName(propName) && +propName >= 0) {
+                    return mapType(objectType, t => getRestTypeOfTupleType(<TupleTypeReference>t) || undefinedType);
+                }
+            }
+            if (!(indexType.flags & TypeFlags.Nullable) && isTypeAssignableToKind(indexType, TypeFlags.StringLike | TypeFlags.NumberLike | TypeFlags.ESSymbolLike)) {
+                if (objectType.flags & (TypeFlags.Any | TypeFlags.Never)) {
+                    return objectType;
+                }
+                const stringIndexInfo = getIndexInfoOfType(objectType, IndexKind.String);
+                const indexInfo = isTypeAssignableToKind(indexType, TypeFlags.NumberLike) && getIndexInfoOfType(objectType, IndexKind.Number) || stringIndexInfo;
+                if (indexInfo) {
+                    if (accessFlags & AccessFlags.NoIndexSignatures && indexInfo === stringIndexInfo) {
+                        return undefined;
+                    }
+                    return indexInfo.type;
+                }
+                if (indexType.flags & TypeFlags.Never) {
+                    return neverType;
+                }
+                if (isJSLiteralType(objectType)) {
+                    return anyType;
+                }
+            }
+            if (isJSLiteralType(objectType)) {
+                return anyType;
+            }
+            if (isTypeAny(indexType)) {
+                return indexType;
+            }
+            return undefined;
+        }
+
         function getPropertyTypeForIndexType(originalObjectType: Type, objectType: Type, indexType: Type, fullIndexType: Type, suppressNoImplicitAnyError: boolean, accessNode: ElementAccessExpression | IndexedAccessTypeNode | PropertyName | BindingName | SyntheticExpression | undefined, accessFlags: AccessFlags) {
             const accessExpression = accessNode && accessNode.kind === SyntaxKind.ElementAccessExpression ? accessNode : undefined;
             const propName = getPropertyNameFromIndex(indexType, accessNode);
@@ -10532,7 +10596,7 @@ namespace ts {
             return getIndexedAccessTypeOrUndefined(objectType, indexType, accessNode, AccessFlags.None) || (accessNode ? errorType : unknownType);
         }
 
-        function getIndexedAccessTypeOrUndefined(objectType: Type, indexType: Type, accessNode?: ElementAccessExpression | IndexedAccessTypeNode | PropertyName | BindingName | SyntheticExpression, accessFlags = AccessFlags.None): Type | undefined {
+        function getSimpleOrGenericIndexedAccess(objectType: Type, indexType: Type, accessNode?: ElementAccessExpression | IndexedAccessTypeNode | PropertyName | BindingName | SyntheticExpression): Type | undefined {
             if (objectType === wildcardType || indexType === wildcardType) {
                 return wildcardType;
             }
@@ -10557,6 +10621,40 @@ namespace ts {
                     indexedAccessTypes.set(id, type = createIndexedAccessType(objectType, indexType));
                 }
                 return type;
+            }
+        }
+
+        function* getInstantiatedIndexedAccessType(objectType: Type, indexType: Type, accessFlags = AccessFlags.None): Generator<[Type, TypeMapper], Type | undefined, Type> {
+            const simple = getSimpleOrGenericIndexedAccess(objectType, indexType);
+            if (simple) {
+                return simple;
+            }
+
+            // In the following we resolve T[K] to the type of the property in T selected by K.
+            // We treat boolean as different from other unions to improve errors;
+            // skipping straight to getPropertyTypeForIndexType gives errors with 'boolean' instead of 'true'.
+            const apparentObjectType = getApparentType(objectType);
+            if (indexType.flags & TypeFlags.Union && !(indexType.flags & TypeFlags.Boolean)) {
+                const propTypes: Type[] = [];
+                for (const t of (<UnionType>indexType).types) {
+                    const propType = yield* getInstantiatedPropertyTypeForIndexType(apparentObjectType, t, accessFlags);
+                    if (propType) {
+                        propTypes.push(propType);
+                    }
+                    else {
+                        // If there's no error node, we can immeditely stop, since error reporting is off
+                        return undefined;
+                    }
+                }
+                return accessFlags & AccessFlags.Writing ? getIntersectionType(propTypes) : getUnionType(propTypes);
+            }
+            return yield* getInstantiatedPropertyTypeForIndexType(apparentObjectType, indexType, accessFlags | AccessFlags.CacheSymbol);
+        }
+
+        function getIndexedAccessTypeOrUndefined(objectType: Type, indexType: Type, accessNode?: ElementAccessExpression | IndexedAccessTypeNode | PropertyName | BindingName | SyntheticExpression, accessFlags = AccessFlags.None): Type | undefined {
+            const simple = getSimpleOrGenericIndexedAccess(objectType, indexType, accessNode);
+            if (simple) {
+                return simple;
             }
             // In the following we resolve T[K] to the type of the property in T selected by K.
             // We treat boolean as different from other unions to improve errors;
@@ -11640,7 +11738,7 @@ namespace ts {
                 return getIndexType(yield [(<IndexType>type).type, mapper]);
             }
             if (flags & TypeFlags.IndexedAccess) {
-                return getIndexedAccessType(yield [(<IndexedAccessType>type).objectType, mapper], yield [(<IndexedAccessType>type).indexType, mapper]);
+                return (yield* getInstantiatedIndexedAccessType(yield [(<IndexedAccessType>type).objectType, mapper], yield [(<IndexedAccessType>type).indexType, mapper])) || unknownType;
             }
             if (flags & TypeFlags.Conditional) {
                 return yield* getConditionalTypeInstantiation(<ConditionalType>type, combineTypeMappers((<ConditionalType>type).mapper, mapper));
