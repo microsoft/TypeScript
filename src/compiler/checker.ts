@@ -29974,7 +29974,7 @@ namespace ts {
             const symbol = getSymbolOfNode(node);
             const target = resolveAlias(symbol);
             if (target !== unknownSymbol) {
-                // For external modules symbol represent local symbol for an alias.
+                // For external modules symbol represents local symbol for an alias.
                 // This local symbol will merge any other local declarations (excluding other aliases)
                 // and symbol.flags will contains combined representation for all merged declaration.
                 // Based on symbol.flags we can compute a set of excluded meanings (meaning that resolved alias should not have,
@@ -30004,7 +30004,9 @@ namespace ts {
         function checkImportBinding(node: ImportEqualsDeclaration | ImportClause | NamespaceImport | ImportSpecifier) {
             checkCollisionWithRequireExportsInGeneratedCode(node, node.name!);
             checkCollisionWithGlobalPromiseInGeneratedCode(node, node.name!);
-            checkAliasSymbol(node);
+            if (!isInJSFile(node)) {
+                checkAliasSymbol(node);
+            }
         }
 
         function checkImportDeclaration(node: ImportDeclaration) {
