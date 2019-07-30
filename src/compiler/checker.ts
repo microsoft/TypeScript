@@ -11772,7 +11772,12 @@ namespace ts {
                 // Get the top generator off the stack and advance it, passing in nothing if it's said generator's
                 // first invocation, or the result of the prior finished generator otherwise
                 Debug.assert(!result || !isArray(result));
-                result = genStack[genStack.length - 1].next(...(result ? [result.value as Type] : []));
+                if (result) {
+                    result = genStack[genStack.length - 1].next(result.value as Type);
+                }
+                else {
+                    result = genStack[genStack.length - 1].next();
+                }
                 // If this generator is done, pop it off the stack and keep around the result for either the parent
                 // generator or the return value
                 if (result.done) {
@@ -11783,7 +11788,7 @@ namespace ts {
                 // Generator is unfinished and returned a type+mapper tuple that it needs resolved - make a generator
                 // for that type+mapper pair and add it to the stack
                 Debug.assert(isArray(result.value));
-                genStack.push(instantiateStaged(...result.value));
+                genStack.push(instantiateStaged(result.value[0], result.value[1]));
                 // Adding a new generator to the stack - consume the result used above so the first
                 // `next` call of the new generator is without arguments
                 result = undefined;
