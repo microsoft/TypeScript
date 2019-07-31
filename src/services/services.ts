@@ -1286,7 +1286,7 @@ namespace ts {
             else {
                 for (const newFile of newProgram.getSourceFiles()) {
                     const oldFile = program.getSourceFile(newFile.fileName);
-                    if (oldFile && newFile !== oldFile && (newFile.symbol.exports || newFile.symbol.exportSymbol)) {
+                    if (oldFile && newFile !== oldFile && newFile.symbol && (newFile.symbol.exports || newFile.symbol.exportSymbol)) {
                         importSuggestionsCache.clearOthers(newFile.fileName);
                     }
                 }
