@@ -29974,9 +29974,8 @@ namespace ts {
             const symbol = getSymbolOfNode(node);
             const target = resolveAlias(symbol);
 
-            const shouldSkipWithJSRequireTargets = !isInJSFile(node) && moduleKind !== ModuleKind.ES2015;
-
-            if (shouldSkipWithJSRequireTargets && target !== unknownSymbol) {
+            const shouldSkipWithJSExpandoTargets = symbol.flags & SymbolFlags.Assignment;
+            if (!shouldSkipWithJSExpandoTargets && target !== unknownSymbol) {
                 // For external modules symbol represents local symbol for an alias.
                 // This local symbol will merge any other local declarations (excluding other aliases)
                 // and symbol.flags will contains combined representation for all merged declaration.
