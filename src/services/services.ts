@@ -1261,12 +1261,6 @@ namespace ts {
                 projectReferences
             };
             const newProgram = createProgram(options);
-            if (!program || program.structureIsReused !== StructureIsReused.Completely) {
-                importSuggestionsCache.clear();
-            }
-
-            program = newProgram;
-
             // hostCache is captured in the closure for 'getOrCreateSourceFile' but it should not be used past this point.
             // It needs to be cleared to allow all collected snapshots to be released
             hostCache = undefined;
@@ -1278,7 +1272,27 @@ namespace ts {
 
             // Make sure all the nodes in the program are both bound, and have their parent
             // pointers set property.
-            program.getTypeChecker();
+            newProgram.getTypeChecker();
+
+            if (!program || program.structureIsReused === StructureIsReused.Not || program.structureIsReused === StructureIsReused.SafeModules) {
+                importSuggestionsCache.clear();
+            }
+            else if (
+                program.structureIsReused === StructureIsReused.ModuleReferencesChanged &&
+                !arrayIsEqualTo(program.getSourceFiles(), newProgram.getSourceFiles(), (a, b) => a.fileName === b.fileName)
+            ) {
+                importSuggestionsCache.clear();
+            }
+            else {
+                for (const newFile of newProgram.getSourceFiles()) {
+                    const oldFile = program.getSourceFile(newFile.fileName);
+                    if (oldFile && newFile !== oldFile && (newFile.symbol.exports || newFile.symbol.exportSymbol)) {
+                        importSuggestionsCache.clearOthers(newFile.fileName);
+                    }
+                }
+            }
+
+            program = newProgram;
             return;
 
             function fileExists(fileName: string): boolean {

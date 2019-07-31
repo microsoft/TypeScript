@@ -1205,7 +1205,7 @@ namespace ts {
                 return oldProgram.structureIsReused = StructureIsReused.Not;
             }
 
-            Debug.assert(!(oldProgram.structureIsReused! & (StructureIsReused.Completely | StructureIsReused.SafeModules)));
+            Debug.assert(!oldProgram.structureIsReused);
 
             // there is an old program, check if we can reuse its structure
             const oldRootNames = oldProgram.getRootFileNames();
@@ -1314,22 +1314,19 @@ namespace ts {
 
                     // check imports and module augmentations
                     collectExternalModuleReferences(newSourceFile);
-                    if (!arrayIsEqualTo(oldSourceFile.imports, newSourceFile.imports, moduleNameIsEqualTo)) {
-                        // imports has changed
-                        oldProgram.structureIsReused = StructureIsReused.SafeModules;
-                    }
                     if (!arrayIsEqualTo(oldSourceFile.moduleAugmentations, newSourceFile.moduleAugmentations, moduleNameIsEqualTo)) {
                         // moduleAugmentations has changed
                         oldProgram.structureIsReused = StructureIsReused.SafeModules;
                     }
-                    if ((oldSourceFile.flags & NodeFlags.PermanentlySetIncrementalFlags) !== (newSourceFile.flags & NodeFlags.PermanentlySetIncrementalFlags)) {
+                    else if (
                         // dynamicImport has changed
-                        oldProgram.structureIsReused = StructureIsReused.SafeModules;
-                    }
-
-                    if (!arrayIsEqualTo(oldSourceFile.typeReferenceDirectives, newSourceFile.typeReferenceDirectives, fileReferenceIsEqualTo)) {
+                        (oldSourceFile.flags & NodeFlags.PermanentlySetIncrementalFlags) !== (newSourceFile.flags & NodeFlags.PermanentlySetIncrementalFlags) ||
+                        // imports has changed
+                        !arrayIsEqualTo(oldSourceFile.imports, newSourceFile.imports, moduleNameIsEqualTo) ||
                         // 'types' references has changed
-                        oldProgram.structureIsReused = StructureIsReused.SafeModules;
+                        !arrayIsEqualTo(oldSourceFile.typeReferenceDirectives, newSourceFile.typeReferenceDirectives, fileReferenceIsEqualTo)
+                     ) {
+                        oldProgram.structureIsReused = StructureIsReused.ModuleReferencesChanged;
                     }
 
                     // tentatively approve the file
