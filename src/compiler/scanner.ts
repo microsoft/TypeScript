@@ -2099,7 +2099,7 @@ namespace ts {
             }
 
             if (isIdentifierStart(ch, ScriptTarget.Latest)) {
-                while (isIdentifierPart(text.charCodeAt(pos), ScriptTarget.Latest) && pos < end) {
+                while (isIdentifierPart(text.charCodeAt(pos), ScriptTarget.Latest) || text.charCodeAt(pos) === CharacterCodes.minus && pos < end) {
                     pos++;
                 }
                 tokenValue = text.substring(tokenPos, pos);
