@@ -1155,6 +1155,8 @@ namespace ts {
             log
         });
 
+        const importSuggestionsCache = Completions.createImportSuggestionsCache();
+
         function getValidSourceFile(fileName: string): SourceFile {
             const sourceFile = program.getSourceFile(fileName);
             if (!sourceFile) {
@@ -1258,7 +1260,12 @@ namespace ts {
                 oldProgram: program,
                 projectReferences
             };
-            program = createProgram(options);
+            const newProgram = createProgram(options);
+            if (!program || program.structureIsReused !== StructureIsReused.Completely) {
+                importSuggestionsCache.clear();
+            }
+
+            program = newProgram;
 
             // hostCache is captured in the closure for 'getOrCreateSourceFile' but it should not be used past this point.
             // It needs to be cleared to allow all collected snapshots to be released
@@ -1297,6 +1304,7 @@ namespace ts {
             function onReleaseOldSourceFile(oldSourceFile: SourceFile, oldOptions: CompilerOptions) {
                 const oldSettingsKey = documentRegistry.getKeyForCompilationSettings(oldOptions);
                 documentRegistry.releaseDocumentWithKey(oldSourceFile.resolvedPath, oldSettingsKey);
+                importSuggestionsCache.delete(oldSourceFile.fileName);
             }
 
             function getOrCreateSourceFile(fileName: string, languageVersion: ScriptTarget, onError?: (message: string) => void, shouldCreateNewSourceFile?: boolean): SourceFile | undefined {
@@ -1437,7 +1445,9 @@ namespace ts {
                 getValidSourceFile(fileName),
                 position,
                 fullPreferences,
-                options.triggerCharacter);
+                options.triggerCharacter,
+                importSuggestionsCache,
+            );
         }
 
         function getCompletionEntryDetails(fileName: string, position: number, name: string, formattingOptions: FormatCodeSettings | undefined, source: string | undefined, preferences: UserPreferences = emptyOptions): CompletionEntryDetails | undefined {
@@ -1452,12 +1462,13 @@ namespace ts {
                 (formattingOptions && formatting.getFormatContext(formattingOptions))!, // TODO: GH#18217
                 preferences,
                 cancellationToken,
+                importSuggestionsCache,
             );
         }
 
         function getCompletionEntrySymbol(fileName: string, position: number, name: string, source?: string): Symbol | undefined {
             synchronizeHostData();
-            return Completions.getCompletionEntrySymbol(program, log, getValidSourceFile(fileName), position, { name, source }, host);
+            return Completions.getCompletionEntrySymbol(program, log, getValidSourceFile(fileName), position, { name, source }, host, importSuggestionsCache);
         }
 
         function getQuickInfoAtPosition(fileName: string, position: number): QuickInfo | undefined {
