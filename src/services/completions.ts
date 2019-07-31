@@ -69,10 +69,14 @@ namespace ts.Completions {
                     // If the symbol/moduleSymbol was a merged symbol, it will have a new identity
                     // in the checker, even though the symbols to merge are the same (guaranteed by
                     // cache invalidation in synchronizeHostData).
-                    suggestion.symbol = checker.getMergedSymbol(suggestion.origin.isDefaultExport
-                        ? suggestion.symbol.declarations[0].localSymbol || suggestion.symbol.declarations[0].symbol
-                        : suggestion.symbol.declarations[0].symbol);
-                    suggestion.origin.moduleSymbol = checker.getMergedSymbol(suggestion.origin.moduleSymbol.valueDeclaration.symbol);
+                    if (suggestion.symbol.declarations && suggestion.symbol.declarations.length > 1) {
+                        suggestion.symbol = checker.getMergedSymbol(suggestion.origin.isDefaultExport
+                            ? suggestion.symbol.declarations[0].localSymbol || suggestion.symbol.declarations[0].symbol
+                            : suggestion.symbol.declarations[0].symbol);
+                    }
+                    if (suggestion.origin.moduleSymbol.declarations && suggestion.origin.moduleSymbol.declarations.length > 1) {
+                        suggestion.origin.moduleSymbol = checker.getMergedSymbol(suggestion.origin.moduleSymbol.declarations[0].symbol);
+                    }
                 });
                 return suggestions;
             }
@@ -1399,9 +1403,12 @@ namespace ts.Completions {
         function getSymbolsFromOtherSourceFileExports(target: ScriptTarget, host: LanguageServiceHost): AutoImportSuggestion[] {
             const cached = importSuggestionsCache.get(sourceFile.fileName, typeChecker);
             if (cached) {
+                log("getSymbolsFromOtherSourceFileExports: Using cached list");
                 return cached;
             }
 
+            const startTime = timestamp();
+            log("getSymbolsFromOtherSourceFileExports: Recomputing list");
             const seenResolvedModules = createMap<true>();
             /** Bucket B */
             const aliasesToAlreadyIncludedSymbols = createMap<true>();
@@ -1467,6 +1474,7 @@ namespace ts.Completions {
             // By this point, any potential duplicates that were actually duplicates have been
             // removed, so the rest need to be added. (Step 4 in diagrammed example)
             aliasesToReturnIfOriginalsAreMissing.forEach(({ alias, moduleSymbol }) => pushSymbol(alias, moduleSymbol));
+            log(`getSymbolsFromOtherSourceFileExports: ${timestamp() - startTime}`);
             return results;
 
             function pushSymbol(symbol: Symbol, moduleSymbol: Symbol, skipFilter = false) {
