@@ -1274,20 +1274,23 @@ namespace ts {
             // pointers set property.
             newProgram.getTypeChecker();
 
-            if (!program || program.structureIsReused === StructureIsReused.Not || program.structureIsReused === StructureIsReused.SafeModules) {
-                importSuggestionsCache.clear();
-            }
-            else if (
-                program.structureIsReused === StructureIsReused.ModuleReferencesChanged &&
-                !arrayIsEqualTo(program.getSourceFiles(), newProgram.getSourceFiles(), (a, b) => a.fileName === b.fileName)
-            ) {
-                importSuggestionsCache.clear();
-            }
-            else {
-                for (const newFile of newProgram.getSourceFiles()) {
-                    const oldFile = program.getSourceFile(newFile.fileName);
-                    if (oldFile && newFile !== oldFile && newFile.symbol && (newFile.symbol.exports || newFile.symbol.exportSymbol)) {
-                        importSuggestionsCache.clearOthers(newFile.fileName);
+            // If the auto-imports cache isn’t being used, don’t bother invalidating it
+            if (!importSuggestionsCache.isEmpty()) {
+                if (!program || program.structureIsReused === StructureIsReused.Not || program.structureIsReused === StructureIsReused.SafeModules) {
+                    importSuggestionsCache.clear();
+                }
+                else if (
+                    program.structureIsReused === StructureIsReused.ModuleReferencesChanged &&
+                    !arrayIsEqualTo(program.getSourceFiles(), newProgram.getSourceFiles(), (a, b) => a.fileName === b.fileName)
+                ) {
+                    importSuggestionsCache.clear();
+                }
+                else {
+                    for (const newFile of newProgram.getSourceFiles()) {
+                        const oldFile = program.getSourceFile(newFile.fileName);
+                        if (oldFile && newFile !== oldFile && newFile.symbol && (newFile.symbol.exports || newFile.symbol.exportSymbol)) {
+                            importSuggestionsCache.clearOthers(newFile.fileName);
+                        }
                     }
                 }
             }

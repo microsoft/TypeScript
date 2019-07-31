@@ -53,6 +53,7 @@ namespace ts.Completions {
     }
     export interface AutoImportSuggestionsCache {
         clear(): void;
+        isEmpty(): boolean;
         clearOthers(fileName: string): void;
         get(fileName: string, checker: TypeChecker): AutoImportSuggestion[] | undefined;
         set(fileName: string, suggestions: AutoImportSuggestion[]): void;
@@ -88,6 +89,7 @@ namespace ts.Completions {
                     cache.set(fileName, entry);
                 }
             },
+            isEmpty: () => cache.size === 0,
         };
     }
 
