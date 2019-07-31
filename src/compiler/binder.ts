@@ -706,6 +706,9 @@ namespace ts {
                 case SyntaxKind.CaseClause:
                     bindCaseClause(<CaseClause>node);
                     break;
+                case SyntaxKind.ExpressionStatement:
+                    bindExpressionStatement(<ExpressionStatement>node);
+                    break;
                 case SyntaxKind.LabeledStatement:
                     bindLabeledStatement(<LabeledStatement>node);
                     break;
@@ -894,6 +897,11 @@ namespace ts {
         function createFlowAssignment(antecedent: FlowNode, node: Expression | VariableDeclaration | BindingElement): FlowNode {
             setFlowNodeReferenced(antecedent);
             return flowNodeCreated({ flags: FlowFlags.Assignment, antecedent, node });
+        }
+
+        function createFlowCall(antecedent: FlowNode, node: CallExpression): FlowNode {
+            setFlowNodeReferenced(antecedent);
+            return flowNodeCreated({ flags: FlowFlags.Call, antecedent, node });
         }
 
         function createFlowArrayMutation(antecedent: FlowNode, node: CallExpression | BinaryExpression): FlowNode {
@@ -1274,6 +1282,20 @@ namespace ts {
 
         function popActiveLabel() {
             activeLabels!.pop();
+        }
+
+        function isDottedName(node: Expression) {
+            return node.kind === SyntaxKind.Identifier || node.kind === SyntaxKind.PropertyAccessExpression && isQualifiedName((<PropertyAccessExpression>node).expression);
+        }
+
+        function bindExpressionStatement(node: ExpressionStatement): void {
+            bind(node.expression);
+            if (node.expression.kind === SyntaxKind.CallExpression) {
+                const call = <CallExpression>node.expression;
+                if (isDottedName(call.expression) && call.arguments.length >= 1) {
+                    currentFlow = createFlowCall(currentFlow, call);
+                }
+            }
         }
 
         function bindLabeledStatement(node: LabeledStatement): void {

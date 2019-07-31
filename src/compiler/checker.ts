@@ -16864,6 +16864,44 @@ namespace ts {
             return false;
         }
 
+        function getTypeOfDottedName(node: Expression) {
+            if (node.kind === SyntaxKind.Identifier) {
+                const symbol = getResolvedSymbol(<Identifier>node);
+                const nonAliasSymbol = symbol.flags & SymbolFlags.Alias ? resolveAlias(symbol) : symbol;
+                return nonAliasSymbol.flags & (SymbolFlags.Function | SymbolFlags.Class | SymbolFlags.ValueModule) ? getTypeOfSymbol(nonAliasSymbol) : undefined;
+            }
+            if (node.kind === SyntaxKind.PropertyAccessExpression) {
+                const type = getTypeOfDottedName((<PropertyAccessExpression>node).expression);
+                if (type) {
+                    const prop = getPropertyOfType(type, (<PropertyAccessExpression>node).name.escapedText);
+                    return prop && prop.flags & (SymbolFlags.Function | SymbolFlags.Method | SymbolFlags.Class | SymbolFlags.ValueModule) ? getTypeOfSymbol(prop) : undefined;
+                }
+            }
+        }
+
+        function getIsAssertCall(node: CallExpression) {
+            const type = getTypeOfDottedName(node.expression);
+            if (type) {
+                const signature = getSingleCallSignature(type);
+                if (signature && signature.declaration) {
+                    const typeNode = getEffectiveReturnTypeNode(signature.declaration);
+                    if (typeNode && typeNode.kind === SyntaxKind.UnionType) {
+                        const types = (<UnionTypeNode>typeNode).types;
+                        return types.length === 2 && types[0].kind === SyntaxKind.VoidKeyword && types[1].kind === SyntaxKind.NeverKeyword;
+                    }
+                }
+            }
+            return false;
+        }
+
+        function isAssertCall(node: CallExpression) {
+            const links = getNodeLinks(node);
+            if (links.isAssertCall === undefined) {
+                links.isAssertCall = getIsAssertCall(node);
+            }
+            return links.isAssertCall;
+        }
+
         function reportFlowControlError(node: Node) {
             const block = <Block | ModuleBlock | SourceFile>findAncestor(node, isFunctionOrModuleBlock);
             const sourceFile = getSourceFileOfNode(node);
@@ -16962,6 +17000,13 @@ namespace ts {
                             }
                         }
                     }
+                    else if (flags & FlowFlags.Call) {
+                        type = getTypeAtFlowCall(<FlowCall>flow);
+                        if (!type) {
+                            flow = (<FlowCall>flow).antecedent;
+                            continue;
+                        }
+                    }
                     else if (flags & FlowFlags.Condition) {
                         type = getTypeAtFlowCondition(<FlowCondition>flow);
                     }
@@ -17054,6 +17099,32 @@ namespace ts {
                     return getNonNullableTypeIfNeeded(getTypeFromFlowType(getTypeAtFlowNode(flow.antecedent)));
                 }
                 // Assignment doesn't affect reference
+                return undefined;
+            }
+
+            function narrowTypeByAssertion(type: Type, expr: Expression): Type {
+                const node = skipParentheses(expr);
+                if (node.kind === SyntaxKind.BinaryExpression) {
+                    if ((<BinaryExpression>node).operatorToken.kind === SyntaxKind.AmpersandAmpersandToken) {
+                        return narrowTypeByAssertion(narrowTypeByAssertion(type, (<BinaryExpression>node).left), (<BinaryExpression>node).right);
+                    }
+                    if ((<BinaryExpression>node).operatorToken.kind === SyntaxKind.BarBarToken) {
+                        return getUnionType([narrowTypeByAssertion(type, (<BinaryExpression>node).left), narrowTypeByAssertion(type, (<BinaryExpression>node).right)]);
+                    }
+                }
+                return narrowType(type, node, /*assumeTrue*/ true);
+            }
+
+            function getTypeAtFlowCall(flow: FlowCall): FlowType | undefined {
+                if (isAssertCall(flow.node)) {
+                    const flowType = getTypeAtFlowNode(flow.antecedent);
+                    const type = getTypeFromFlowType(flowType);
+                    const narrowedType = narrowTypeByAssertion(type, flow.node.arguments[0]);
+                    if (narrowedType === type) {
+                        return flowType;
+                    }
+                    return createFlowType(narrowedType, isIncomplete(flowType));
+                }
                 return undefined;
             }
 

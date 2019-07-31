@@ -2550,12 +2550,13 @@ namespace ts {
         FalseCondition = 1 << 6,  // Condition known to be false
         SwitchClause   = 1 << 7,  // Switch statement clause
         ArrayMutation  = 1 << 8,  // Potential array mutation
-        Referenced     = 1 << 9,  // Referenced as antecedent once
-        Shared         = 1 << 10, // Referenced as antecedent more than once
-        PreFinally     = 1 << 11, // Injected edge that links pre-finally label and pre-try flow
-        AfterFinally   = 1 << 12, // Injected edge that links post-finally flow with the rest of the graph
+        Call           = 1 << 9,  // Potential assertion call
+        Referenced     = 1 << 10, // Referenced as antecedent once
+        Shared         = 1 << 11, // Referenced as antecedent more than once
+        PreFinally     = 1 << 12, // Injected edge that links pre-finally label and pre-try flow
+        AfterFinally   = 1 << 13, // Injected edge that links post-finally flow with the rest of the graph
         /** @internal */
-        Cached         = 1 << 13, // Indicates that at least one cross-call cache entry exists for this node, even if not a loop participant
+        Cached         = 1 << 14, // Indicates that at least one cross-call cache entry exists for this node, even if not a loop participant
         Label = BranchLabel | LoopLabel,
         Condition = TrueCondition | FalseCondition
     }
@@ -2574,7 +2575,7 @@ namespace ts {
     }
 
     export type FlowNode =
-        | AfterFinallyFlow | PreFinallyFlow | FlowStart | FlowLabel | FlowAssignment | FlowCondition | FlowSwitchClause | FlowArrayMutation;
+        | AfterFinallyFlow | PreFinallyFlow | FlowStart | FlowLabel | FlowAssignment | FlowCall | FlowCondition | FlowSwitchClause | FlowArrayMutation;
     export interface FlowNodeBase {
         flags: FlowFlags;
         id?: number;     // Node id used by flow type cache in checker
@@ -2596,6 +2597,11 @@ namespace ts {
     // i.e. an identifier or a dotted name that starts with an identifier or 'this'.
     export interface FlowAssignment extends FlowNodeBase {
         node: Expression | VariableDeclaration | BindingElement;
+        antecedent: FlowNode;
+    }
+
+    export interface FlowCall extends FlowNodeBase {
+        node: CallExpression;
         antecedent: FlowNode;
     }
 
@@ -3902,6 +3908,7 @@ namespace ts {
         resolvedSymbol?: Symbol;          // Cached name resolution result
         resolvedIndexInfo?: IndexInfo;    // Cached indexing info resolution result
         maybeTypePredicate?: boolean;     // Cached check whether call expression might reference a type predicate
+        isAssertCall?: boolean;
         enumMemberValue?: string | number;  // Constant value of enum member
         isVisible?: boolean;              // Is this node visible
         containsArgumentsReference?: boolean; // Whether a function-like declaration contains an 'arguments' reference
