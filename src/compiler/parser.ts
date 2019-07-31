@@ -605,6 +605,8 @@ namespace ts {
 
         let parsingContext: ParsingContext;
 
+        let notParenthesizedArrow: Map<true> | undefined;
+
         // Flags that dictate what parsing context we're in.  For example:
         // Whether or not we are in strict parsing mode.  All that changes in strict parsing mode is
         // that some tokens that would be considered identifiers may be considered keywords.
@@ -826,6 +828,7 @@ namespace ts {
             identifiers = undefined!;
             syntaxCursor = undefined;
             sourceText = undefined!;
+            notParenthesizedArrow = undefined!;
         }
 
         function parseSourceFileWorker(fileName: string, languageVersion: ScriptTarget, setParentNodes: boolean, scriptKind: ScriptKind): SourceFile {
@@ -3676,7 +3679,17 @@ namespace ts {
         }
 
         function parsePossibleParenthesizedArrowFunctionExpressionHead(): ArrowFunction | undefined {
-            return parseParenthesizedArrowFunctionExpressionHead(/*allowAmbiguity*/ false);
+            const tokenPos = scanner.getTokenPos();
+            if (notParenthesizedArrow && notParenthesizedArrow.has(tokenPos.toString())) {
+                return undefined;
+            }
+
+            const result = parseParenthesizedArrowFunctionExpressionHead(/*allowAmbiguity*/ false);
+            if (!result) {
+                (notParenthesizedArrow || (notParenthesizedArrow = createMap())).set(tokenPos.toString(), true);
+            }
+
+            return result;
         }
 
         function tryParseAsyncSimpleArrowFunctionExpression(): ArrowFunction | undefined {
