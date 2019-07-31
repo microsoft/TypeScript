@@ -1,0 +1,21 @@
+=== tests/cases/compiler/spliceES6.ts ===
+// see #32638
+var arr1 = [0].splice(0)
+>arr1 : number[]
+>[0].splice(0) : number[]
+>[0].splice : { (start: number, deleteCount: number): number[]; (start: number, deleteCount: number, ...items: number[]): number[]; (start: number, deleteCount?: number): number[]; }
+>[0] : number[]
+>0 : 0
+>splice : { (start: number, deleteCount: number): number[]; (start: number, deleteCount: number, ...items: number[]): number[]; (start: number, deleteCount?: number): number[]; }
+>0 : 0
+
+var arr2 = [0].splice(0, 1)
+>arr2 : number[]
+>[0].splice(0, 1) : number[]
+>[0].splice : { (start: number, deleteCount: number): number[]; (start: number, deleteCount: number, ...items: number[]): number[]; (start: number, deleteCount?: number): number[]; }
+>[0] : number[]
+>0 : 0
+>splice : { (start: number, deleteCount: number): number[]; (start: number, deleteCount: number, ...items: number[]): number[]; (start: number, deleteCount?: number): number[]; }
+>0 : 0
+>1 : 1
+
