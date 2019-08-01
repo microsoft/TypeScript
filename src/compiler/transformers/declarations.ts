@@ -738,8 +738,8 @@ namespace ts {
             const oldDiag = getSymbolAccessibilityDiagnostic;
 
             // Setup diagnostic-related flags before first potential `cleanup` call, otherwise
-            // We'd see a TDZ violation ar runtime
-            const canProdiceDiagnostic = canProduceDiagnostics(input);
+            // We'd see a TDZ violation at runtime
+            const canProduceDiagnostic = canProduceDiagnostics(input);
             const oldWithinObjectLiteralType = suppressNewDiagnosticContexts;
             let shouldEnterSuppressNewDiagnosticsContextContext = ((input.kind === SyntaxKind.TypeLiteral || input.kind === SyntaxKind.MappedType) && input.parent.kind !== SyntaxKind.TypeAliasDeclaration);
 
@@ -751,7 +751,7 @@ namespace ts {
                 }
             }
 
-            if (canProdiceDiagnostic && !suppressNewDiagnosticContexts) {
+            if (canProduceDiagnostic && !suppressNewDiagnosticContexts) {
                 getSymbolAccessibilityDiagnostic = createGetSymbolAccessibilityDiagnosticForNode(input as DeclarationDiagnosticProducing);
             }
 
@@ -913,13 +913,13 @@ namespace ts {
             return cleanup(visitEachChild(input, visitDeclarationSubtree, context));
 
             function cleanup<T extends Node>(returnValue: T | undefined): T | undefined {
-                if (returnValue && canProdiceDiagnostic && hasDynamicName(input as Declaration)) {
+                if (returnValue && canProduceDiagnostic && hasDynamicName(input as Declaration)) {
                     checkName(input as DeclarationDiagnosticProducing);
                 }
                 if (isEnclosingDeclaration(input)) {
                     enclosingDeclaration = previousEnclosingDeclaration;
                 }
-                if (canProdiceDiagnostic && !suppressNewDiagnosticContexts) {
+                if (canProduceDiagnostic && !suppressNewDiagnosticContexts) {
                     getSymbolAccessibilityDiagnostic = oldDiag;
                 }
                 if (shouldEnterSuppressNewDiagnosticsContextContext) {
