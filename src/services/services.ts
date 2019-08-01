@@ -1370,22 +1370,29 @@ namespace ts {
                 return;
             }
             if (!program || program.structureIsReused === StructureIsReused.Not || program.structureIsReused === StructureIsReused.SafeModules) {
+                log("cleanImportSuggestionsCache: clearing due to new program structure");
                 importSuggestionsCache.clear();
                 return;
             }
             const sourceFiles = newProgram.getSourceFiles();
             if (sourceFiles.length !== program.getSourceFiles().length) {
+                log("cleanImportSuggestionsCache: clearing due to files added or removed from program");
                 importSuggestionsCache.clear();
                 return;
             }
             for (const newFile of sourceFiles) {
                 const oldFile = program.getSourceFile(newFile.fileName);
                 if (!oldFile) {
+                    log("cleanImportSuggestionsCache: clearing due to new file in program");
                     importSuggestionsCache.clear();
                     return;
                 }
                 if (newFile !== oldFile && newFile.symbol && (newFile.symbol.exports || newFile.symbol.exportSymbol)) {
                     importSuggestionsCache.clearOthers(newFile.fileName);
+                }
+                if (importSuggestionsCache.isEmpty()) {
+                    log(`cleanImportSuggestionsCache: clearing due to edits to files with exports`);
+                    return;
                 }
             }
         }
