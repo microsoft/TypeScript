@@ -1387,7 +1387,7 @@ namespace ts {
                     importSuggestionsCache.clear();
                     return;
                 }
-                if (newFile !== oldFile && newFile.symbol && (newFile.symbol.exports || newFile.symbol.exportSymbol)) {
+                if (newFile !== oldFile && newFile.symbol && newFile.symbol !== oldFile.symbol && (newFile.symbol.exports || newFile.symbol.exportSymbol)) {
                     importSuggestionsCache.clearOthers(newFile.fileName);
                 }
                 if (importSuggestionsCache.isEmpty()) {
