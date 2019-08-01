@@ -5,16 +5,14 @@
 
 // @Filename: /foo.d.ts
 ////declare module "foo" {
-////  const _default: number;
-////  export = _default;
+////  const foo: number;
+////  export = foo;
 ////}
 
 // @Filename: /index.js
-////foo/**/
+////[|foo|]
 
-goTo.marker('');
-verify.getAndApplyCodeFix(2304, 0);
-verify.currentFileContentIs(
-`import foo from "foo";
+goTo.file('/index.js');
+verify.importFixAtPosition([`import foo from "foo";
 
-foo`);
+foo`]);
