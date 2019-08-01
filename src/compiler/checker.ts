@@ -17809,8 +17809,12 @@ namespace ts {
             return type;
         }
 
+        function isExportOrExportExpression(location: Node) {
+            return !!findAncestor(location, e => e.parent && isExportAssignment(e.parent) && e.parent.expression === e && isEntityNameExpression(e));
+        }
+
         function markAliasReferenced(symbol: Symbol, location: Node) {
-            if (isNonLocalAlias(symbol, /*excludes*/ SymbolFlags.Value) && !isInTypeQuery(location) && (compilerOptions.preserveConstEnums || !isConstEnumOrConstEnumOnlyModule(resolveAlias(symbol)))) {
+            if (isNonLocalAlias(symbol, /*excludes*/ SymbolFlags.Value) && !isInTypeQuery(location) && ((compilerOptions.preserveConstEnums && isExportOrExportExpression(location)) || !isConstEnumOrConstEnumOnlyModule(resolveAlias(symbol)))) {
                 markAliasSymbolAsReferenced(symbol);
             }
         }
