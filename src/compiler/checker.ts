@@ -5037,8 +5037,10 @@ namespace ts {
             return Debug.assertNever(propertyName);
         }
 
-        // Pop an entry from the type resolution stack and return its associated result value. The result value will
-        // be true if no circularities were detected, or false if a circularity was found.
+        /**
+         * Pop an entry from the type resolution stack and return its associated result value. The result value will
+         * be true if no circularities were detected, or false if a circularity was found.
+         */
         function popTypeResolution(): boolean {
             resolutionTargets.pop();
             resolutionPropertyNames.pop();
@@ -11402,7 +11404,8 @@ namespace ts {
 
         function maybeTypeParameterReference(node: Node) {
             return !(node.kind === SyntaxKind.QualifiedName ||
-                node.parent.kind === SyntaxKind.TypeReference && (<TypeReferenceNode>node.parent).typeArguments && node === (<TypeReferenceNode>node.parent).typeName);
+                node.parent.kind === SyntaxKind.TypeReference && (<TypeReferenceNode>node.parent).typeArguments && node === (<TypeReferenceNode>node.parent).typeName ||
+                node.parent.kind === SyntaxKind.ImportType && (node.parent as ImportTypeNode).typeArguments && node === (node.parent as ImportTypeNode).qualifier);
         }
 
         function isTypeParameterPossiblyReferenced(tp: TypeParameter, node: Node) {
