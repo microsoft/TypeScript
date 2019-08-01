@@ -1274,26 +1274,7 @@ namespace ts {
             // pointers set property.
             newProgram.getTypeChecker();
 
-            // If the auto-imports cache isn’t being used, don’t bother invalidating it
-            if (!importSuggestionsCache.isEmpty()) {
-                if (!program || program.structureIsReused === StructureIsReused.Not || program.structureIsReused === StructureIsReused.SafeModules) {
-                    importSuggestionsCache.clear();
-                }
-                else if (
-                    program.structureIsReused === StructureIsReused.ModuleReferencesChanged &&
-                    !arrayIsEqualTo(program.getSourceFiles(), newProgram.getSourceFiles(), (a, b) => a.fileName === b.fileName)
-                ) {
-                    importSuggestionsCache.clear();
-                }
-                else {
-                    for (const newFile of newProgram.getSourceFiles()) {
-                        const oldFile = program.getSourceFile(newFile.fileName);
-                        if (oldFile && newFile !== oldFile && newFile.symbol && (newFile.symbol.exports || newFile.symbol.exportSymbol)) {
-                            importSuggestionsCache.clearOthers(newFile.fileName);
-                        }
-                    }
-                }
-            }
+            cleanImportSuggestionsCache(newProgram);
 
             program = newProgram;
             return;
@@ -1380,6 +1361,32 @@ namespace ts {
 
                 // Could not find this file in the old program, create a new SourceFile for it.
                 return documentRegistry.acquireDocumentWithKey(fileName, path, newSettings, documentRegistryBucketKey, hostFileInformation.scriptSnapshot, hostFileInformation.version, hostFileInformation.scriptKind);
+            }
+        }
+
+        function cleanImportSuggestionsCache(newProgram: Program) {
+            // If the auto-imports cache isn’t being used, don’t bother invalidating it
+            if (importSuggestionsCache.isEmpty()) {
+                return;
+            }
+            if (!program || program.structureIsReused === StructureIsReused.Not || program.structureIsReused === StructureIsReused.SafeModules) {
+                importSuggestionsCache.clear();
+                return;
+            }
+            const sourceFiles = newProgram.getSourceFiles();
+            if (sourceFiles.length !== program.getSourceFiles().length) {
+                importSuggestionsCache.clear();
+                return;
+            }
+            for (const newFile of sourceFiles) {
+                const oldFile = program.getSourceFile(newFile.fileName);
+                if (!oldFile) {
+                    importSuggestionsCache.clear();
+                    return;
+                }
+                if (newFile !== oldFile && newFile.symbol && (newFile.symbol.exports || newFile.symbol.exportSymbol)) {
+                    importSuggestionsCache.clearOthers(newFile.fileName);
+                }
             }
         }
 
