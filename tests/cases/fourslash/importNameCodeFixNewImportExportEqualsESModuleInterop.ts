@@ -1,6 +1,7 @@
 /// <reference path="fourslash.ts" />
 
 // @EsModuleInterop: true
+// @Module: es2015
 
 // @Filename: /foo.d.ts
 ////declare module "foo" {

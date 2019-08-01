@@ -435,7 +435,7 @@ namespace ts.codefix {
     }
 
     function getImportKindForExportEquals(compilerOptions: CompilerOptions): ImportKind {
-        return getAllowSyntheticDefaultImports(compilerOptions)
+        return getAllowSyntheticDefaultImports(compilerOptions) && getEmitModuleKind(compilerOptions) >= ModuleKind.ES2015
             ? ImportKind.Default
             : ImportKind.Equals;
     }
