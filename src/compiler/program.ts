@@ -814,7 +814,10 @@ namespace ts {
         let mapFromFileToProjectReferenceRedirects: Map<Path> | undefined;
 
         const shouldCreateNewSourceFile = shouldProgramCreateNewSourceFiles(oldProgram, options);
-        const structuralIsReused = tryReuseStructureFromOldProgram();
+        // We set `structuralIsReused` to `undefined` because `tryReuseStructureFromOldProgram` calls `tryReuseStructureFromOldProgram` which checks
+        // `structuralIsReused`, which would be a TDZ violation if it was not set in advance to `undefined`.
+        let structuralIsReused: StructureIsReused | undefined;
+        structuralIsReused = tryReuseStructureFromOldProgram();
         if (structuralIsReused !== StructureIsReused.Completely) {
             processingDefaultLibFiles = [];
             processingOtherFiles = [];

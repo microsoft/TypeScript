@@ -344,7 +344,8 @@ namespace FourSlash {
                     "getDocumentHighlights",
                 ];
                 const proxy = {} as ts.LanguageService;
-                for (const k in ls) {
+                const keys = ts.getAllKeys(ls);
+                for (const k of keys) {
                     const key = k as keyof typeof ls;
                     if (cacheableMembers.indexOf(key) === -1) {
                         proxy[key] = (...args: any[]) => (ls[key] as Function)(...args);
