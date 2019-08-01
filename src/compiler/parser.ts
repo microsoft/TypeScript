@@ -513,7 +513,7 @@ namespace ts {
         performance.mark("beforeParse");
         let result: SourceFile;
         try {
-            if (etwLogger) etwLogger.logStartParseSourceFile(fileName);
+            perfLogger.logStartParseSourceFile(fileName);
             if (languageVersion === ScriptTarget.JSON) {
                 result = Parser.parseSourceFile(fileName, sourceText, languageVersion, /*syntaxCursor*/ undefined, setParentNodes, ScriptKind.JSON);
             }
@@ -522,7 +522,7 @@ namespace ts {
             }
         }
         finally {
-            if (etwLogger) etwLogger.logStopParseSourceFile();
+            perfLogger.logStopParseSourceFile();
         }
 
         performance.mark("afterParse");

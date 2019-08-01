@@ -107,10 +107,10 @@ namespace ts {
     export function bindSourceFile(file: SourceFile, options: CompilerOptions) {
         try {
             performance.mark("beforeBind");
-            if (etwLogger) etwLogger.logStartBindFile("" + file.fileName);
+            perfLogger.logStartBindFile("" + file.fileName);
             binder(file, options);
         } finally {
-            if (etwLogger) etwLogger.logStopBindFile();
+            perfLogger.logStopBindFile();
             performance.mark("afterBind");
             performance.measure("Bind", "beforeBind", "afterBind");
         }

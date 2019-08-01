@@ -666,7 +666,7 @@ namespace ts {
             }
 
             try {
-                if (etwLogger) etwLogger.logStartResolveModule(moduleName /* , containingFile, ModuleResolutionKind[moduleResolution]*/);
+                perfLogger.logStartResolveModule(moduleName /* , containingFile, ModuleResolutionKind[moduleResolution]*/);
                 switch (moduleResolution) {
                     case ModuleResolutionKind.NodeJs:
                         result = nodeModuleNameResolver(moduleName, containingFile, compilerOptions, host, cache, redirectedReference);
@@ -679,8 +679,8 @@ namespace ts {
                 }
             }
             finally {
-                if (etwLogger && result && result.resolvedModule) etwLogger.logInfoEvent(`Module "${moduleName}" resolved to "${result.resolvedModule.resolvedFileName}"`);
-                if (etwLogger) etwLogger.logStopResolveModule((result && result.resolvedModule) ? "" + result.resolvedModule.resolvedFileName : "null");
+                if (result && result.resolvedModule) perfLogger.logInfoEvent(`Module "${moduleName}" resolved to "${result.resolvedModule.resolvedFileName}"`);
+                perfLogger.logStopResolveModule((result && result.resolvedModule) ? "" + result.resolvedModule.resolvedFileName : "null");
              }
 
             if (perFolderCache) {

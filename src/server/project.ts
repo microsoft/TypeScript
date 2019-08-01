@@ -851,7 +851,7 @@ namespace ts.server {
          * @returns: true if set of files in the project stays the same and false - otherwise.
          */
         updateGraph(): boolean {
-            if (etwLogger) etwLogger.logStartUpdateGraph();
+            perfLogger.logStartUpdateGraph();
             try {
                 this.resolutionCache.startRecordingFilesWithChangedResolutions();
 
@@ -890,7 +890,7 @@ namespace ts.server {
                 }
                 return !hasNewProgram;
             } finally {
-                if (etwLogger) etwLogger.logStopUpdateGraph();
+                perfLogger.logStopUpdateGraph();
             }
         }
 

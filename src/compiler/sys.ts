@@ -1088,7 +1088,7 @@ namespace ts {
 
             function readFile(fileName: string, _encoding?: string): string | undefined {
                 try {
-                    if (etwLogger) etwLogger.logStartReadFile(fileName);
+                    perfLogger.logStartReadFile(fileName);
                     if (!fileExists(fileName)) {
                         return undefined;
                     }
@@ -1116,12 +1116,12 @@ namespace ts {
                     // Default is UTF-8 with no byte order mark
                     return buffer.toString("utf8");
                 } finally {
-                    if (etwLogger) etwLogger.logStopReadFile();
+                    perfLogger.logStopReadFile();
                 }
             }
 
             function writeFile(fileName: string, data: string, writeByteOrderMark?: boolean): void {
-                if (etwLogger) etwLogger.logEvent("WriteFile: " + fileName);
+                perfLogger.logEvent("WriteFile: " + fileName);
                 // If a BOM is required, emit one
                 if (writeByteOrderMark) {
                     data = byteOrderMarkIndicator + data;
@@ -1141,7 +1141,7 @@ namespace ts {
             }
 
             function getAccessibleFileSystemEntries(path: string): FileSystemEntries {
-                if (etwLogger) etwLogger.logEvent("ReadDir: " + (path || "."));
+                perfLogger.logEvent("ReadDir: " + (path || "."));
                 try {
                     const entries = _fs.readdirSync(path || ".").sort();
                     const files: string[] = [];
@@ -1203,7 +1203,7 @@ namespace ts {
             }
 
             function getDirectories(path: string): string[] {
-                if (etwLogger) etwLogger.logEvent("ReadDir: " + path);
+                perfLogger.logEvent("ReadDir: " + path);
                 return filter<string>(_fs.readdirSync(path), dir => fileSystemEntryExists(combinePaths(path, dir), FileSystemEntryKind.Directory));
             }
 

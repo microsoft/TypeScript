@@ -7,6 +7,7 @@
     "references": [],
 
     "files": [
+        "perfLogger.ts",
         "core.ts",
         "debug.ts",
         "performance.ts",

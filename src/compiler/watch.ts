@@ -1006,18 +1006,18 @@ namespace ts {
             try {
                 switch (reloadLevel) {
                     case ConfigFileProgramReloadLevel.Partial:
-                        if (etwLogger) etwLogger.logStartUpdateProgram("PartialConfigReload");
+                        perfLogger.logStartUpdateProgram("PartialConfigReload");
                         return reloadFileNamesFromConfigFile();
                     case ConfigFileProgramReloadLevel.Full:
-                        if (etwLogger) etwLogger.logStartUpdateProgram("FullConfigReload");
+                        perfLogger.logStartUpdateProgram("FullConfigReload");
                         return reloadConfigFile();
                     default:
-                        if (etwLogger) etwLogger.logStartUpdateProgram("SynchronizeProgram");
+                        perfLogger.logStartUpdateProgram("SynchronizeProgram");
                         synchronizeProgram();
                         return;
                 }
             } finally {
-                if (etwLogger) etwLogger.logStopUpdateProgram("Done");
+                perfLogger.logStopUpdateProgram("Done");
             }
         }
 

@@ -151,14 +151,14 @@ namespace ts.server {
 
         private static run(self: ThrottledOperations, operationId: string, cb: () => void) {
             try {
-                if (etwLogger) etwLogger.logStartScheduledOperation(operationId);
+                perfLogger.logStartScheduledOperation(operationId);
                 self.pendingTimeouts.delete(operationId);
                 if (self.logger) {
                     self.logger.info(`Running: ${operationId}`);
                 }
                 cb();
             } finally {
-                if (etwLogger) etwLogger.logStopScheduledOperation();
+                perfLogger.logStopScheduledOperation();
             }
         }
     }
@@ -180,7 +180,7 @@ namespace ts.server {
             self.timerId = undefined;
 
             try {
-                if (etwLogger) etwLogger.logStartScheduledOperation("GC collect");
+                perfLogger.logStartScheduledOperation("GC collect");
                 const log = self.logger.hasLevel(LogLevel.requestTime);
                 const before = log && self.host.getMemoryUsage!(); // TODO: GH#18217
 
@@ -190,7 +190,7 @@ namespace ts.server {
                     self.logger.perftrc(`GC::before ${before}, after ${after}`);
                 }
             } finally {
-                if (etwLogger) etwLogger.logStopScheduledOperation();
+                perfLogger.logStopScheduledOperation();
             }
         }
     }
