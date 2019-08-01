@@ -730,6 +730,7 @@ namespace ts {
 
             const nodeVersion = getNodeMajorVersion();
             const isNode4OrLater = nodeVersion! >= 4;
+            const isLinuxOrMacOs = process.platform === "linux" || process.platform === "darwin";
 
             const platform: string = _os.platform();
             const useCaseSensitiveFileNames = isFileSystemCaseSensitive();
@@ -1029,6 +1030,12 @@ namespace ts {
 
             function fsWatch(fileOrDirectory: string, entryKind: FileSystemEntryKind.File | FileSystemEntryKind.Directory, callback: FsWatchCallback, recursive: boolean, fallbackPollingWatchFile: HostWatchFile, pollingInterval?: number): FileWatcher {
                 let options: any;
+                const lastDirectoryPartWithDirectorySeparator = isLinuxOrMacOs ?
+                    fileOrDirectory.substr(fileOrDirectory.lastIndexOf(directorySeparator)) :
+                    undefined;
+                const lastDirectoryPart = isLinuxOrMacOs ?
+                    lastDirectoryPartWithDirectorySeparator!.slice(directorySeparator.length) :
+                    undefined;
                 /** Watcher for the file system entry depending on whether it is missing or present */
                 let watcher = !fileSystemEntryExists(fileOrDirectory, entryKind) ?
                     watchMissingFileSystemEntry() :
@@ -1072,11 +1079,12 @@ namespace ts {
                         }
                     }
                     try {
-
                         const presentWatcher = _fs.watch(
                             fileOrDirectory,
                             options,
-                            callback
+                            isLinuxOrMacOs ?
+                                callbackChangingToMissingFileSystemEntry :
+                                callback
                         );
                         // Watch the missing file or directory or error
                         presentWatcher.on("error", () => invokeCallbackAndUpdateWatcher(watchMissingFileSystemEntry));
@@ -1088,6 +1096,18 @@ namespace ts {
                         // so instead of throwing error, use fs.watchFile
                         return watchPresentFileSystemEntryWithFsWatchFile();
                     }
+                }
+
+                function callbackChangingToMissingFileSystemEntry(event: "rename" | "change", relativeName: string | undefined) {
+                    // because relativeName is not guaranteed to be correct we need to check on each rename with few combinations
+                    // Eg on ubuntoo while watchin app/node_modules the relativeName is "node_modules" which is neither relative nor full path
+                    return event === "rename" &&
+                        (!relativeName ||
+                            relativeName === lastDirectoryPart ||
+                            relativeName.lastIndexOf(lastDirectoryPartWithDirectorySeparator!) === relativeName.length - lastDirectoryPartWithDirectorySeparator!.length) &&
+                        !fileSystemEntryExists(fileOrDirectory, entryKind) ?
+                        invokeCallbackAndUpdateWatcher(watchMissingFileSystemEntry) :
+                        callback(event, relativeName);
                 }
 
                 /**
