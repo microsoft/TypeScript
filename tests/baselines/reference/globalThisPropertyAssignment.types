@@ -14,7 +14,7 @@ var y = 2
 window.z = 3
 >window.z = 3 : 3
 >window.z : any
->window : Window
+>window : Window & typeof globalThis
 >z : any
 >3 : 3
 

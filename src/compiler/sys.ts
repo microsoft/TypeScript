@@ -473,58 +473,80 @@ namespace ts {
     }
 
     /*@internal*/
+    export type BufferEncoding = "ascii" | "utf8" | "utf-8" | "utf16le" | "ucs2" | "ucs-2" | "base64" | "latin1" | "binary" | "hex";
+
+    /*@internal*/
     interface NodeBuffer extends Uint8Array {
-        write(str: string, offset?: number, length?: number, encoding?: string): number;
+        constructor: any;
+        write(str: string, encoding?: BufferEncoding): number;
+        write(str: string, offset: number, encoding?: BufferEncoding): number;
+        write(str: string, offset: number, length: number, encoding?: BufferEncoding): number;
         toString(encoding?: string, start?: number, end?: number): string;
-        toJSON(): { type: "Buffer", data: any[] };
-        equals(otherBuffer: Buffer): boolean;
-        compare(otherBuffer: Buffer, targetStart?: number, targetEnd?: number, sourceStart?: number, sourceEnd?: number): number;
-        copy(targetBuffer: Buffer, targetStart?: number, sourceStart?: number, sourceEnd?: number): number;
-        slice(start?: number, end?: number): Buffer;
-        writeUIntLE(value: number, offset: number, byteLength: number, noAssert?: boolean): number;
-        writeUIntBE(value: number, offset: number, byteLength: number, noAssert?: boolean): number;
-        writeIntLE(value: number, offset: number, byteLength: number, noAssert?: boolean): number;
-        writeIntBE(value: number, offset: number, byteLength: number, noAssert?: boolean): number;
-        readUIntLE(offset: number, byteLength: number, noAssert?: boolean): number;
-        readUIntBE(offset: number, byteLength: number, noAssert?: boolean): number;
-        readIntLE(offset: number, byteLength: number, noAssert?: boolean): number;
-        readIntBE(offset: number, byteLength: number, noAssert?: boolean): number;
-        readUInt8(offset: number, noAssert?: boolean): number;
-        readUInt16LE(offset: number, noAssert?: boolean): number;
-        readUInt16BE(offset: number, noAssert?: boolean): number;
-        readUInt32LE(offset: number, noAssert?: boolean): number;
-        readUInt32BE(offset: number, noAssert?: boolean): number;
-        readInt8(offset: number, noAssert?: boolean): number;
-        readInt16LE(offset: number, noAssert?: boolean): number;
-        readInt16BE(offset: number, noAssert?: boolean): number;
-        readInt32LE(offset: number, noAssert?: boolean): number;
-        readInt32BE(offset: number, noAssert?: boolean): number;
-        readFloatLE(offset: number, noAssert?: boolean): number;
-        readFloatBE(offset: number, noAssert?: boolean): number;
-        readDoubleLE(offset: number, noAssert?: boolean): number;
-        readDoubleBE(offset: number, noAssert?: boolean): number;
+        toJSON(): { type: "Buffer"; data: number[] };
+        equals(otherBuffer: Uint8Array): boolean;
+        compare(
+            otherBuffer: Uint8Array,
+            targetStart?: number,
+            targetEnd?: number,
+            sourceStart?: number,
+            sourceEnd?: number
+        ): number;
+        copy(targetBuffer: Uint8Array, targetStart?: number, sourceStart?: number, sourceEnd?: number): number;
+        slice(begin?: number, end?: number): Buffer;
+        subarray(begin?: number, end?: number): Buffer;
+        writeUIntLE(value: number, offset: number, byteLength: number): number;
+        writeUIntBE(value: number, offset: number, byteLength: number): number;
+        writeIntLE(value: number, offset: number, byteLength: number): number;
+        writeIntBE(value: number, offset: number, byteLength: number): number;
+        readUIntLE(offset: number, byteLength: number): number;
+        readUIntBE(offset: number, byteLength: number): number;
+        readIntLE(offset: number, byteLength: number): number;
+        readIntBE(offset: number, byteLength: number): number;
+        readUInt8(offset: number): number;
+        readUInt16LE(offset: number): number;
+        readUInt16BE(offset: number): number;
+        readUInt32LE(offset: number): number;
+        readUInt32BE(offset: number): number;
+        readInt8(offset: number): number;
+        readInt16LE(offset: number): number;
+        readInt16BE(offset: number): number;
+        readInt32LE(offset: number): number;
+        readInt32BE(offset: number): number;
+        readFloatLE(offset: number): number;
+        readFloatBE(offset: number): number;
+        readDoubleLE(offset: number): number;
+        readDoubleBE(offset: number): number;
+        reverse(): this;
         swap16(): Buffer;
         swap32(): Buffer;
         swap64(): Buffer;
-        writeUInt8(value: number, offset: number, noAssert?: boolean): number;
-        writeUInt16LE(value: number, offset: number, noAssert?: boolean): number;
-        writeUInt16BE(value: number, offset: number, noAssert?: boolean): number;
-        writeUInt32LE(value: number, offset: number, noAssert?: boolean): number;
-        writeUInt32BE(value: number, offset: number, noAssert?: boolean): number;
-        writeInt8(value: number, offset: number, noAssert?: boolean): number;
-        writeInt16LE(value: number, offset: number, noAssert?: boolean): number;
-        writeInt16BE(value: number, offset: number, noAssert?: boolean): number;
-        writeInt32LE(value: number, offset: number, noAssert?: boolean): number;
-        writeInt32BE(value: number, offset: number, noAssert?: boolean): number;
-        writeFloatLE(value: number, offset: number, noAssert?: boolean): number;
-        writeFloatBE(value: number, offset: number, noAssert?: boolean): number;
-        writeDoubleLE(value: number, offset: number, noAssert?: boolean): number;
-        writeDoubleBE(value: number, offset: number, noAssert?: boolean): number;
-        fill(value: any, offset?: number, end?: number): this;
-        indexOf(value: string | number | Buffer, byteOffset?: number, encoding?: string): number;
-        lastIndexOf(value: string | number | Buffer, byteOffset?: number, encoding?: string): number;
+        writeUInt8(value: number, offset: number): number;
+        writeUInt16LE(value: number, offset: number): number;
+        writeUInt16BE(value: number, offset: number): number;
+        writeUInt32LE(value: number, offset: number): number;
+        writeUInt32BE(value: number, offset: number): number;
+        writeInt8(value: number, offset: number): number;
+        writeInt16LE(value: number, offset: number): number;
+        writeInt16BE(value: number, offset: number): number;
+        writeInt32LE(value: number, offset: number): number;
+        writeInt32BE(value: number, offset: number): number;
+        writeFloatLE(value: number, offset: number): number;
+        writeFloatBE(value: number, offset: number): number;
+        writeDoubleLE(value: number, offset: number): number;
+        writeDoubleBE(value: number, offset: number): number;
+        readBigUInt64BE(offset?: number): bigint;
+        readBigUInt64LE(offset?: number): bigint;
+        readBigInt64BE(offset?: number): bigint;
+        readBigInt64LE(offset?: number): bigint;
+        writeBigInt64BE(value: bigint, offset?: number): number;
+        writeBigInt64LE(value: bigint, offset?: number): number;
+        writeBigUInt64BE(value: bigint, offset?: number): number;
+        writeBigUInt64LE(value: bigint, offset?: number): number;
+        fill(value: string | Uint8Array | number, offset?: number, end?: number, encoding?: BufferEncoding): this;
+        indexOf(value: string | number | Uint8Array, byteOffset?: number, encoding?: BufferEncoding): number;
+        lastIndexOf(value: string | number | Uint8Array, byteOffset?: number, encoding?: BufferEncoding): number;
         entries(): IterableIterator<[number, number]>;
-        includes(value: string | number | Buffer, byteOffset?: number, encoding?: string): boolean;
+        includes(value: string | number | Buffer, byteOffset?: number, encoding?: BufferEncoding): boolean;
         keys(): IterableIterator<number>;
         values(): IterableIterator<number>;
     }

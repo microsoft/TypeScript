@@ -502,30 +502,29 @@ namespace ts {
         return output;
     }
 
-    export function flattenDiagnosticMessageText(messageText: string | DiagnosticMessageChain | undefined, newLine: string): string {
-        if (isString(messageText)) {
-            return messageText;
+    export function flattenDiagnosticMessageText(diag: string | DiagnosticMessageChain | undefined, newLine: string, indent = 0): string {
+        if (isString(diag)) {
+            return diag;
         }
-        else {
-            let diagnosticChain = messageText;
-            let result = "";
+        else if (diag === undefined) {
+            return "";
+        }
+        let result = "";
+        if (indent) {
+            result += newLine;
 
-            let indent = 0;
-            while (diagnosticChain) {
-                if (indent) {
-                    result += newLine;
-
-                    for (let i = 0; i < indent; i++) {
-                        result += "  ";
-                    }
-                }
-                result += diagnosticChain.messageText;
-                indent++;
-                diagnosticChain = diagnosticChain.next;
+            for (let i = 0; i < indent; i++) {
+                result += "  ";
             }
-
-            return result;
         }
+        result += diag.messageText;
+        indent++;
+        if (diag.next) {
+            for (const kid of diag.next) {
+                result += flattenDiagnosticMessageText(kid, newLine, indent);
+            }
+        }
+        return result;
     }
 
     /* @internal */
@@ -763,7 +762,7 @@ namespace ts {
         let resolveModuleNamesWorker: (moduleNames: string[], containingFile: string, reusedNames?: string[], redirectedReference?: ResolvedProjectReference) => ResolvedModuleFull[];
         const hasInvalidatedResolution = host.hasInvalidatedResolution || returnFalse;
         if (host.resolveModuleNames) {
-            resolveModuleNamesWorker = (moduleNames, containingFile, reusedNames, redirectedReference) => host.resolveModuleNames!(Debug.assertEachDefined(moduleNames), containingFile, reusedNames, redirectedReference).map(resolved => {
+            resolveModuleNamesWorker = (moduleNames, containingFile, reusedNames, redirectedReference) => host.resolveModuleNames!(Debug.assertEachDefined(moduleNames), containingFile, reusedNames, redirectedReference, options).map(resolved => {
                 // An older host may have omitted extension, in which case we should infer it from the file extension of resolvedFileName.
                 if (!resolved || (resolved as ResolvedModuleFull).extension !== undefined) {
                     return resolved as ResolvedModuleFull;
@@ -781,7 +780,7 @@ namespace ts {
 
         let resolveTypeReferenceDirectiveNamesWorker: (typeDirectiveNames: string[], containingFile: string, redirectedReference?: ResolvedProjectReference) => (ResolvedTypeReferenceDirective | undefined)[];
         if (host.resolveTypeReferenceDirectives) {
-            resolveTypeReferenceDirectiveNamesWorker = (typeDirectiveNames, containingFile, redirectedReference) => host.resolveTypeReferenceDirectives!(Debug.assertEachDefined(typeDirectiveNames), containingFile, redirectedReference);
+            resolveTypeReferenceDirectiveNamesWorker = (typeDirectiveNames, containingFile, redirectedReference) => host.resolveTypeReferenceDirectives!(Debug.assertEachDefined(typeDirectiveNames), containingFile, redirectedReference, options);
         }
         else {
             const loader = (typesRef: string, containingFile: string, redirectedReference: ResolvedProjectReference | undefined) => resolveTypeReferenceDirective(typesRef, containingFile, options, host, redirectedReference).resolvedTypeReferenceDirective!; // TODO: GH#18217

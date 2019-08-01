@@ -248,7 +248,7 @@ node_modules/bluebird/js/release/reduce.js(133,18): error TS2339: Property 'prom
 node_modules/bluebird/js/release/schedule.js(7,26): error TS2339: Property 'getNativePromise' does not exist on type 'typeof ret'.
 node_modules/bluebird/js/release/schedule.js(8,10): error TS2339: Property 'isNode' does not exist on type 'typeof ret'.
 node_modules/bluebird/js/release/schedule.js(23,31): error TS2339: Property 'standalone' does not exist on type 'Navigator'.
-node_modules/bluebird/js/release/schedule.js(23,52): error TS2339: Property 'cordova' does not exist on type 'Window'.
+node_modules/bluebird/js/release/schedule.js(23,52): error TS2339: Property 'cordova' does not exist on type 'Window & typeof globalThis'.
 node_modules/bluebird/js/release/settle.js(10,6): error TS2339: Property 'inherits' does not exist on type 'typeof ret'.
 node_modules/bluebird/js/release/settle.js(13,10): error TS2339: Property '_values' does not exist on type 'SettledPromiseArray'.
 node_modules/bluebird/js/release/settle.js(14,32): error TS2339: Property '_totalResolved' does not exist on type 'SettledPromiseArray'.

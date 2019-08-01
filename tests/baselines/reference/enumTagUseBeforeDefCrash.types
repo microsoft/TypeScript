@@ -3,7 +3,7 @@
  * @enum {number}
  */
 var foo = { };
->foo : typeof foo
+>foo : {}
 >{ } : {}
 
 /**

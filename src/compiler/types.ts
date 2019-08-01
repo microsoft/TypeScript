@@ -17,6 +17,7 @@ namespace ts {
         | SyntaxKind.OpenBraceToken
         | SyntaxKind.CloseBraceToken
         | SyntaxKind.LessThanToken
+        | SyntaxKind.GreaterThanToken
         | SyntaxKind.OpenBracketToken
         | SyntaxKind.CloseBracketToken
         | SyntaxKind.EqualsToken
@@ -459,6 +460,7 @@ namespace ts {
         JSDocSignature,
         JSDocTag,
         JSDocAugmentsTag,
+        JSDocAuthorTag,
         JSDocClassTag,
         JSDocCallbackTag,
         JSDocEnumTag,
@@ -1880,6 +1882,7 @@ namespace ts {
     }
 
     export interface JsxAttributes extends ObjectLiteralExpressionBase<JsxAttributeLike> {
+        kind: SyntaxKind.JsxAttributes;
         parent: JsxOpeningLikeElement;
     }
 
@@ -2455,11 +2458,16 @@ namespace ts {
         class: ExpressionWithTypeArguments & { expression: Identifier | PropertyAccessEntityNameExpression };
     }
 
+    export interface JSDocAuthorTag extends JSDocTag {
+        kind: SyntaxKind.JSDocAuthorTag;
+    }
+
     export interface JSDocClassTag extends JSDocTag {
         kind: SyntaxKind.JSDocClassTag;
     }
 
-    export interface JSDocEnumTag extends JSDocTag {
+    export interface JSDocEnumTag extends JSDocTag, Declaration {
+        parent: JSDoc;
         kind: SyntaxKind.JSDocEnumTag;
         typeExpression?: JSDocTypeExpression;
     }
@@ -4267,13 +4275,23 @@ namespace ts {
         regularType: ResolvedType;  // Regular version of fresh type
     }
 
+    /* @internal */
+    export interface IterationTypes {
+        readonly yieldType: Type;
+        readonly returnType: Type;
+        readonly nextType: Type;
+    }
+
     // Just a place to cache element types of iterables and iterators
     /* @internal */
     export interface IterableOrIteratorType extends ObjectType, UnionType {
-        iteratedTypeOfIterable?: Type;
-        iteratedTypeOfIterator?: Type;
-        iteratedTypeOfAsyncIterable?: Type;
-        iteratedTypeOfAsyncIterator?: Type;
+        iterationTypesOfGeneratorReturnType?: IterationTypes;
+        iterationTypesOfAsyncGeneratorReturnType?: IterationTypes;
+        iterationTypesOfIterable?: IterationTypes;
+        iterationTypesOfIterator?: IterationTypes;
+        iterationTypesOfAsyncIterable?: IterationTypes;
+        iterationTypesOfAsyncIterator?: IterationTypes;
+        iterationTypesOfIteratorResult?: IterationTypes;
     }
 
     /* @internal */
@@ -4561,7 +4579,7 @@ namespace ts {
         messageText: string;
         category: DiagnosticCategory;
         code: number;
-        next?: DiagnosticMessageChain;
+        next?: DiagnosticMessageChain[];
     }
 
     export interface Diagnostic extends DiagnosticRelatedInformation {
@@ -4743,7 +4761,7 @@ namespace ts {
         UMD = 3,
         System = 4,
         ES2015 = 5,
-        ESNext = 6
+        ESNext = 99
     }
 
     export const enum JsxEmit {
@@ -4791,7 +4809,7 @@ namespace ts {
         ES2018 = 5,
         ES2019 = 6,
         ES2020 = 7,
-        ESNext = 8,
+        ESNext = 99,
         JSON = 100,
         Latest = ESNext,
     }
@@ -5155,11 +5173,11 @@ namespace ts {
          * If resolveModuleNames is implemented then implementation for members from ModuleResolutionHost can be just
          * 'throw new Error("NotImplemented")'
          */
-        resolveModuleNames?(moduleNames: string[], containingFile: string, reusedNames?: string[], redirectedReference?: ResolvedProjectReference): (ResolvedModule | undefined)[];
+        resolveModuleNames?(moduleNames: string[], containingFile: string, reusedNames: string[] | undefined, redirectedReference: ResolvedProjectReference | undefined, options: CompilerOptions): (ResolvedModule | undefined)[];
         /**
          * This method is a companion for 'resolveModuleNames' and is used to resolve 'types' references to actual type declaration files
          */
-        resolveTypeReferenceDirectives?(typeReferenceDirectiveNames: string[], containingFile: string, redirectedReference?: ResolvedProjectReference): (ResolvedTypeReferenceDirective | undefined)[];
+        resolveTypeReferenceDirectives?(typeReferenceDirectiveNames: string[], containingFile: string, redirectedReference: ResolvedProjectReference | undefined, options: CompilerOptions): (ResolvedTypeReferenceDirective | undefined)[];
         getEnvironmentVariable?(name: string): string | undefined;
         /* @internal */ onReleaseOldSourceFile?(oldSourceFile: SourceFile, oldOptions: CompilerOptions, hasSourceFileByPath: boolean): void;
         /* @internal */ hasInvalidatedResolution?: HasInvalidatedResolution;
