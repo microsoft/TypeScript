@@ -44,7 +44,10 @@ class HomePage {
 }
 
 
-                           )  
+                   username   
+
+
+        this.props.username   
 
 
     if (this.props.username) {
