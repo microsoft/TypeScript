@@ -100,7 +100,6 @@ namespace ts.SmartSelectionRange {
      * @param sourceFile The source file containing the nodes.
      * @param pos The position to check.
      * @param node The candidate node to snap to.
-     * @param nextNode The next sibling node in the tree.
      */
     function positionShouldSnapToNode(sourceFile: SourceFile, pos: number, node: Node) {
         // Can’t use 'ts.positionBelongsToNode()' here because it cleverly accounts
