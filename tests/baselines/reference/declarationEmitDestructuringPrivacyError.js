@@ -22,5 +22,6 @@ var m;
 declare module m {
     class c {
     }
-    var x: number, y: c, z: number;
+    export var x: number, y: c, z: number;
+    export {};
 }

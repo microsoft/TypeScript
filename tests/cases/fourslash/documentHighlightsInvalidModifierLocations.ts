@@ -6,5 +6,5 @@
 ////function f([|readonly|] p) {}
 
 for (const r of test.ranges()) {
-    verify.documentHighlightsOf(r, [r]);
+    verify.documentHighlightsOf(r, test.ranges());
 }

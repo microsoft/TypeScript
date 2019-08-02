@@ -1,5 +1,5 @@
-tests/cases/compiler/downlevelLetConst16.ts(151,15): error TS2525: Initializer provides no value for this binding element and the binding element has no default value.
-tests/cases/compiler/downlevelLetConst16.ts(164,17): error TS2525: Initializer provides no value for this binding element and the binding element has no default value.
+tests/cases/compiler/downlevelLetConst16.ts(151,15): error TS2493: Tuple type '[]' of length '0' has no element at index '0'.
+tests/cases/compiler/downlevelLetConst16.ts(164,17): error TS2493: Tuple type '[]' of length '0' has no element at index '0'.
 tests/cases/compiler/downlevelLetConst16.ts(195,14): error TS2461: Type 'undefined' is not an array type.
 tests/cases/compiler/downlevelLetConst16.ts(202,15): error TS2339: Property 'a' does not exist on type 'undefined'.
 tests/cases/compiler/downlevelLetConst16.ts(216,16): error TS2461: Type 'undefined' is not an array type.
@@ -159,7 +159,7 @@ tests/cases/compiler/downlevelLetConst16.ts(223,17): error TS2339: Property 'a' 
         }
         for (let [y] = []; ;) {
                   ~
-!!! error TS2525: Initializer provides no value for this binding element and the binding element has no default value.
+!!! error TS2493: Tuple type '[]' of length '0' has no element at index '0'.
             use(y);
         }
         for (let {a: z} = {a: 1}; ;) {
@@ -174,7 +174,7 @@ tests/cases/compiler/downlevelLetConst16.ts(223,17): error TS2339: Property 'a' 
         }
         for (const [y] = []; ;) {
                     ~
-!!! error TS2525: Initializer provides no value for this binding element and the binding element has no default value.
+!!! error TS2493: Tuple type '[]' of length '0' has no element at index '0'.
             use(y);
         }
         for (const {a: z} = { a: 1 }; ;) {

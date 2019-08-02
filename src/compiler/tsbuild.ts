@@ -564,8 +564,51 @@ namespace ts {
     }
 
     function getBuildOrder(state: SolutionBuilderState) {
-        return state.buildOrder ||
-            (state.buildOrder = createBuildOrder(state, state.rootNames.map(f => resolveProjectName(state, f))));
+        return state.buildOrder || createStateBuildOrder(state);
+    }
+
+    function createStateBuildOrder(state: SolutionBuilderState) {
+        const buildOrder = createBuildOrder(state, state.rootNames.map(f => resolveProjectName(state, f)));
+        if (arrayIsEqualTo(state.buildOrder, buildOrder)) return state.buildOrder!;
+
+        // Clear all to ResolvedConfigFilePaths cache to start fresh
+        state.resolvedConfigFilePaths.clear();
+        const currentProjects = arrayToSet(
+            buildOrder,
+            resolved => toResolvedConfigFilePath(state, resolved)
+        ) as ConfigFileMap<true>;
+
+        const noopOnDelete = { onDeleteValue: noop };
+        // Config file cache
+        mutateMapSkippingNewValues(state.configFileCache, currentProjects, noopOnDelete);
+        mutateMapSkippingNewValues(state.projectStatus, currentProjects, noopOnDelete);
+        mutateMapSkippingNewValues(state.buildInfoChecked, currentProjects, noopOnDelete);
+        mutateMapSkippingNewValues(state.builderPrograms, currentProjects, noopOnDelete);
+        mutateMapSkippingNewValues(state.diagnostics, currentProjects, noopOnDelete);
+        mutateMapSkippingNewValues(state.projectPendingBuild, currentProjects, noopOnDelete);
+        mutateMapSkippingNewValues(state.projectErrorsReported, currentProjects, noopOnDelete);
+
+        // Remove watches for the program no longer in the solution
+        if (state.watch) {
+            mutateMapSkippingNewValues(
+                state.allWatchedConfigFiles,
+                currentProjects,
+                { onDeleteValue: closeFileWatcher }
+            );
+
+            mutateMapSkippingNewValues(
+                state.allWatchedWildcardDirectories,
+                currentProjects,
+                { onDeleteValue: existingMap => existingMap.forEach(closeFileWatcherOf) }
+            );
+
+            mutateMapSkippingNewValues(
+                state.allWatchedInputFiles,
+                currentProjects,
+                { onDeleteValue: existingMap => existingMap.forEach(closeFileWatcher) }
+            );
+        }
+        return state.buildOrder = buildOrder;
     }
 
     function getBuildOrderFor(state: SolutionBuilderState, project: string | undefined, onlyReferences: boolean | undefined) {
@@ -1299,11 +1342,11 @@ namespace ts {
         }
     }
 
-    function getOldProgram<T extends BuilderProgram>({ options, builderPrograms, readFileWithCache }: SolutionBuilderState<T>, proj: ResolvedConfigFilePath, parsed: ParsedCommandLine) {
+    function getOldProgram<T extends BuilderProgram>({ options, builderPrograms, compilerHost }: SolutionBuilderState<T>, proj: ResolvedConfigFilePath, parsed: ParsedCommandLine) {
         if (options.force) return undefined;
         const value = builderPrograms.get(proj);
         if (value) return value;
-        return readBuilderProgram(parsed.options, readFileWithCache) as any as T;
+        return readBuilderProgram(parsed.options, compilerHost) as any as T;
     }
 
     function afterProgramCreate<T extends BuilderProgram>({ host, watch, builderPrograms }: SolutionBuilderState<T>, proj: ResolvedConfigFilePath, program: T) {

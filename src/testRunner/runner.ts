@@ -65,6 +65,7 @@ let runUnitTests: boolean | undefined;
 let stackTraceLimit: number | "full" | undefined;
 let noColors = false;
 let keepFailed = false;
+let skipPercent = 5;
 
 interface TestConfig {
     light?: boolean;
@@ -78,6 +79,9 @@ interface TestConfig {
     noColors?: boolean;
     timeout?: number;
     keepFailed?: boolean;
+    skipPercent?: number;
+    shardId?: number;
+    shards?: number;
 }
 
 interface TaskSet {
@@ -109,6 +113,15 @@ function handleTestConfig() {
         if (testConfig.keepFailed) {
             keepFailed = true;
         }
+        if (testConfig.skipPercent !== undefined) {
+            skipPercent = testConfig.skipPercent;
+        }
+        if (testConfig.shardId) {
+            shardId = testConfig.shardId;
+        }
+        if (testConfig.shards) {
+            shards = testConfig.shards;
+        }
 
         if (testConfig.stackTraceLimit === "full") {
             (<any>Error).stackTraceLimit = Infinity;
@@ -124,6 +137,9 @@ function handleTestConfig() {
 
         const runnerConfig = testConfig.runners || testConfig.test;
         if (runnerConfig && runnerConfig.length > 0) {
+            if (testConfig.runners) {
+                runUnitTests = runnerConfig.indexOf("unittest") !== -1;
+            }
             for (const option of runnerConfig) {
                 if (!option) {
                     continue;

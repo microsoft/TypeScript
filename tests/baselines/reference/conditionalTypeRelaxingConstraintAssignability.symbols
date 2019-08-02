@@ -71,3 +71,47 @@ new Elem('' as ElChildren); // error
 >Elem : Symbol(Elem, Decl(conditionalTypeRelaxingConstraintAssignability.ts, 8, 83))
 >ElChildren : Symbol(ElChildren, Decl(conditionalTypeRelaxingConstraintAssignability.ts, 0, 0), Decl(conditionalTypeRelaxingConstraintAssignability.ts, 2, 20))
 
+// Repro from #31766
+
+interface I { a: string }
+>I : Symbol(I, Decl(conditionalTypeRelaxingConstraintAssignability.ts, 22, 27))
+>a : Symbol(I.a, Decl(conditionalTypeRelaxingConstraintAssignability.ts, 26, 13))
+
+type DeepPartial<T> =
+>DeepPartial : Symbol(DeepPartial, Decl(conditionalTypeRelaxingConstraintAssignability.ts, 26, 25))
+>T : Symbol(T, Decl(conditionalTypeRelaxingConstraintAssignability.ts, 28, 17))
+
+    T extends object ? {[K in keyof T]?: DeepPartial<T[K]>} : T;
+>T : Symbol(T, Decl(conditionalTypeRelaxingConstraintAssignability.ts, 28, 17))
+>K : Symbol(K, Decl(conditionalTypeRelaxingConstraintAssignability.ts, 29, 25))
+>T : Symbol(T, Decl(conditionalTypeRelaxingConstraintAssignability.ts, 28, 17))
+>DeepPartial : Symbol(DeepPartial, Decl(conditionalTypeRelaxingConstraintAssignability.ts, 26, 25))
+>T : Symbol(T, Decl(conditionalTypeRelaxingConstraintAssignability.ts, 28, 17))
+>K : Symbol(K, Decl(conditionalTypeRelaxingConstraintAssignability.ts, 29, 25))
+>T : Symbol(T, Decl(conditionalTypeRelaxingConstraintAssignability.ts, 28, 17))
+
+declare function f<T>(t: T, partial: DeepPartial<T>): T;
+>f : Symbol(f, Decl(conditionalTypeRelaxingConstraintAssignability.ts, 29, 64))
+>T : Symbol(T, Decl(conditionalTypeRelaxingConstraintAssignability.ts, 31, 19))
+>t : Symbol(t, Decl(conditionalTypeRelaxingConstraintAssignability.ts, 31, 22))
+>T : Symbol(T, Decl(conditionalTypeRelaxingConstraintAssignability.ts, 31, 19))
+>partial : Symbol(partial, Decl(conditionalTypeRelaxingConstraintAssignability.ts, 31, 27))
+>DeepPartial : Symbol(DeepPartial, Decl(conditionalTypeRelaxingConstraintAssignability.ts, 26, 25))
+>T : Symbol(T, Decl(conditionalTypeRelaxingConstraintAssignability.ts, 31, 19))
+>T : Symbol(T, Decl(conditionalTypeRelaxingConstraintAssignability.ts, 31, 19))
+
+function g(p1: I, p2: Partial<I>): I {
+>g : Symbol(g, Decl(conditionalTypeRelaxingConstraintAssignability.ts, 31, 56))
+>p1 : Symbol(p1, Decl(conditionalTypeRelaxingConstraintAssignability.ts, 33, 11))
+>I : Symbol(I, Decl(conditionalTypeRelaxingConstraintAssignability.ts, 22, 27))
+>p2 : Symbol(p2, Decl(conditionalTypeRelaxingConstraintAssignability.ts, 33, 17))
+>Partial : Symbol(Partial, Decl(lib.es5.d.ts, --, --))
+>I : Symbol(I, Decl(conditionalTypeRelaxingConstraintAssignability.ts, 22, 27))
+>I : Symbol(I, Decl(conditionalTypeRelaxingConstraintAssignability.ts, 22, 27))
+
+  return f(p1, p2);
+>f : Symbol(f, Decl(conditionalTypeRelaxingConstraintAssignability.ts, 29, 64))
+>p1 : Symbol(p1, Decl(conditionalTypeRelaxingConstraintAssignability.ts, 33, 11))
+>p2 : Symbol(p2, Decl(conditionalTypeRelaxingConstraintAssignability.ts, 33, 17))
+}
+

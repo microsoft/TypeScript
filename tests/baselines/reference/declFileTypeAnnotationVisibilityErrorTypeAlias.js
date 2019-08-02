@@ -95,11 +95,12 @@ interface Window {
 }
 declare module M {
     type W = Window | string;
-    module N {
+    export module N {
         class Window {
         }
         var p: W;
     }
+    export {};
 }
 declare module M1 {
     type W = Window | string;
@@ -118,7 +119,8 @@ declare module M2 {
         class public1 {
         }
     }
-    type t2 = private1;
-    type t12 = public1;
-    type t112 = m3.public1;
+    export type t2 = private1;
+    export type t12 = public1;
+    export type t112 = m3.public1;
+    export {};
 }

@@ -5,7 +5,7 @@ const del: typeof import("del") = require("del");
 interface ExecResult {
     stdout: Buffer;
     stderr: Buffer;
-    status: number;
+    status: number | null;
 }
 
 interface UserConfig {
@@ -24,7 +24,7 @@ abstract class ExternalCompileRunnerBase extends RunnerBase {
      */
     initializeTests(): void {
         // Read in and evaluate the test list
-        const testList = this.tests && this.tests.length ? this.tests : this.enumerateTestFiles();
+        const testList = this.tests && this.tests.length ? this.tests : this.getTestFiles();
 
         // tslint:disable-next-line:no-this-assignment
         const cls = this;
@@ -113,7 +113,7 @@ class DockerfileRunner extends ExternalCompileRunnerBase {
     }
     initializeTests(): void {
         // Read in and evaluate the test list
-        const testList = this.tests && this.tests.length ? this.tests : this.enumerateTestFiles();
+        const testList = this.tests && this.tests.length ? this.tests : this.getTestFiles();
 
         // tslint:disable-next-line:no-this-assignment
         const cls = this;
@@ -157,7 +157,15 @@ ${sanitizeDockerfileOutput(result.stderr.toString())}`;
 }
 
 function sanitizeDockerfileOutput(result: string): string {
-    return stripAbsoluteImportPaths(sanitizeTimestamps(stripRushStageNumbers(stripANSIEscapes(normalizeNewlines(result)))));
+    return [
+        normalizeNewlines,
+        stripANSIEscapes,
+        stripRushStageNumbers,
+        sanitizeVersionSpecifiers,
+        sanitizeTimestamps,
+        sanitizeUnimportantGulpOutput,
+        stripAbsoluteImportPaths,
+    ].reduce((result, f) => f(result), result);
 }
 
 function normalizeNewlines(result: string): string {
@@ -172,14 +180,33 @@ function stripRushStageNumbers(result: string): string {
     return result.replace(/\d+ of \d+:/g, "XX of XX:");
 }
 
-function sanitizeTimestamps(result: string): string {
-    return result.replace(/\[\d?\d:\d\d:\d\d (A|P)M\]/g, "[XX:XX:XX XM]")
-        .replace(/\d+(\.\d+)? seconds?/g, "? seconds")
-        .replace(/\d+(\.\d+)? minutes?/g, "")
-        .replace(/\d+(\.\d+)?s/g, "?s")
-        .replace(/\d+.\d+.\d+-insiders.\d\d\d\d\d\d\d\d/g, "X.X.X-insiders.xxxxxxxx");
+/**
+ * Gulp's output order within a `parallel` block is nondeterministic (and there's no way to configure it to execute in series),
+ * so we purge as much of the gulp output as we can
+ */
+function sanitizeUnimportantGulpOutput(result: string): string {
+    return result.replace(/^.*(\] (Starting)|(Finished)).*$/gm, "") // "gulp" task start/end messages (nondeterministic order)
+        .replace(/^.*(\] . (finished)|(started)).*$/gm, "") // "just" task start/end messages (nondeterministic order)
+        .replace(/^.*\] Respawned to PID: \d+.*$/gm, "") // PID of child is OS and system-load dependent (likely stableish in a container but still dangerous)
+        .replace(/\n+/g, "\n");
 }
 
+function sanitizeTimestamps(result: string): string {
+    return result.replace(/\[\d?\d:\d\d:\d\d (A|P)M\]/g, "[XX:XX:XX XM]")
+        .replace(/\[\d?\d:\d\d:\d\d\]/g, "[XX:XX:XX]")
+        .replace(/\/\d+-\d+-[\d_TZ]+-debug.log/g, "\/XXXX-XX-XXXXXXXXX-debug.log")
+        .replace(/\d+(\.\d+)? sec(onds?)?/g, "? seconds")
+        .replace(/\d+(\.\d+)? min(utes?)?/g, "")
+        .replace(/\d+(\.\d+)? ?m?s/g, "?s")
+        .replace(/ \(\?s\)/g, "");
+}
+
+function sanitizeVersionSpecifiers(result: string): string {
+    return result
+        .replace(/\d+.\d+.\d+-insiders.\d\d\d\d\d\d\d\d/g, "X.X.X-insiders.xxxxxxxx")
+        .replace(/Rush Multi-Project Build Tool (\d+)\.\d+\.\d+/g, "Rush Multi-Project Build Tool $1.X.X")
+        .replace(/([@v\()])\d+\.\d+\.\d+/g, "$1X.X.X");
+}
 
 /**
  * Import types and some other error messages use absolute paths in errors as they have no context to be written relative to;

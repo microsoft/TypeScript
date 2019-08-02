@@ -2,7 +2,7 @@
 var f = () => {this.window;}
 >f : () => void
 >() => {this.window;} : () => void
->this.window : Window
+>this.window : Window & typeof globalThis
 >this : typeof globalThis
->window : Window
+>window : Window & typeof globalThis
 
