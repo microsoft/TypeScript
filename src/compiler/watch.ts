@@ -1003,22 +1003,21 @@ namespace ts {
             timerToUpdateProgram = undefined;
             reportWatchDiagnostic(Diagnostics.File_change_detected_Starting_incremental_compilation);
 
-            try {
-                switch (reloadLevel) {
-                    case ConfigFileProgramReloadLevel.Partial:
-                        perfLogger.logStartUpdateProgram("PartialConfigReload");
-                        return reloadFileNamesFromConfigFile();
-                    case ConfigFileProgramReloadLevel.Full:
-                        perfLogger.logStartUpdateProgram("FullConfigReload");
-                        return reloadConfigFile();
-                    default:
-                        perfLogger.logStartUpdateProgram("SynchronizeProgram");
-                        synchronizeProgram();
-                        return;
-                }
-            } finally {
-                perfLogger.logStopUpdateProgram("Done");
+            switch (reloadLevel) {
+                case ConfigFileProgramReloadLevel.Partial:
+                    perfLogger.logStartUpdateProgram("PartialConfigReload");
+                    reloadFileNamesFromConfigFile();
+                    break;
+                case ConfigFileProgramReloadLevel.Full:
+                    perfLogger.logStartUpdateProgram("FullConfigReload");
+                    reloadConfigFile();
+                    break;
+                default:
+                    perfLogger.logStartUpdateProgram("SynchronizeProgram");
+                    synchronizeProgram();
+                    break;
             }
+            perfLogger.logStopUpdateProgram("Done");
         }
 
         function reloadFileNamesFromConfigFile() {

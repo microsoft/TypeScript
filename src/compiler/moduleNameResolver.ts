@@ -665,23 +665,19 @@ namespace ts {
                 }
             }
 
-            try {
-                perfLogger.logStartResolveModule(moduleName /* , containingFile, ModuleResolutionKind[moduleResolution]*/);
-                switch (moduleResolution) {
-                    case ModuleResolutionKind.NodeJs:
-                        result = nodeModuleNameResolver(moduleName, containingFile, compilerOptions, host, cache, redirectedReference);
-                        break;
-                    case ModuleResolutionKind.Classic:
-                        result = classicNameResolver(moduleName, containingFile, compilerOptions, host, cache, redirectedReference);
-                        break;
-                    default:
-                        return Debug.fail(`Unexpected moduleResolution: ${moduleResolution}`);
-                }
+            perfLogger.logStartResolveModule(moduleName /* , containingFile, ModuleResolutionKind[moduleResolution]*/);
+            switch (moduleResolution) {
+                case ModuleResolutionKind.NodeJs:
+                    result = nodeModuleNameResolver(moduleName, containingFile, compilerOptions, host, cache, redirectedReference);
+                    break;
+                case ModuleResolutionKind.Classic:
+                    result = classicNameResolver(moduleName, containingFile, compilerOptions, host, cache, redirectedReference);
+                    break;
+                default:
+                    return Debug.fail(`Unexpected moduleResolution: ${moduleResolution}`);
             }
-            finally {
-                if (result && result.resolvedModule) perfLogger.logInfoEvent(`Module "${moduleName}" resolved to "${result.resolvedModule.resolvedFileName}"`);
-                perfLogger.logStopResolveModule((result && result.resolvedModule) ? "" + result.resolvedModule.resolvedFileName : "null");
-             }
+            if (result && result.resolvedModule) perfLogger.logInfoEvent(`Module "${moduleName}" resolved to "${result.resolvedModule.resolvedFileName}"`);
+            perfLogger.logStopResolveModule((result && result.resolvedModule) ? "" + result.resolvedModule.resolvedFileName : "null");
 
             if (perFolderCache) {
                 perFolderCache.set(moduleName, result);
