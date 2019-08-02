@@ -1,0 +1,14 @@
+=== tests/cases/compiler/extendedUnicodePlaneIdentifiers.ts ===
+const 𝑚 = 4;
+>𝑚 : Symbol(𝑚, Decl(extendedUnicodePlaneIdentifiers.ts, 0, 5))
+
+const 𝑀 = 5;
+>𝑀 : Symbol(𝑀, Decl(extendedUnicodePlaneIdentifiers.ts, 1, 5))
+
+console.log(𝑀 + 𝑚); // 9
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>𝑀 : Symbol(𝑀, Decl(extendedUnicodePlaneIdentifiers.ts, 1, 5))
+>𝑚 : Symbol(𝑚, Decl(extendedUnicodePlaneIdentifiers.ts, 0, 5))
+
