@@ -10647,10 +10647,16 @@ namespace ts {
             let combinedMapper: TypeMapper | undefined;
             if (root.inferTypeParameters) {
                 const context = createInferenceContext(root.inferTypeParameters, /*signature*/ undefined, InferenceFlags.None);
-                // We don't want inferences from constraints as they may cause us to eagerly resolve the
-                // conditional type instead of deferring resolution. Also, we always want strict function
-                // types rules (i.e. proper contravariance) for inferences.
-                inferTypes(context.inferences, checkType, extendsType, InferencePriority.NoConstraints | InferencePriority.AlwaysStrict);
+                // We skip inference of the possible `infer` types unles the `extendsType` _is_ an infer type
+                // if it was, it's trivial to say that extendsType = checkType, however such a pattern is used to
+                // "reset" the type being build up during constraint calculation and avoid making an apparently "infinite" constraint
+                // so in those cases we refain from performing inference and retain the uninfered type parameter
+                if (!checkTypeInstantiable || !some(root.inferTypeParameters, t => t === extendsType)) {
+                    // We don't want inferences from constraints as they may cause us to eagerly resolve the
+                    // conditional type instead of deferring resolution. Also, we always want strict function
+                    // types rules (i.e. proper contravariance) for inferences.
+                    inferTypes(context.inferences, checkType, extendsType, InferencePriority.NoConstraints | InferencePriority.AlwaysStrict);
+                }
                 combinedMapper = combineTypeMappers(mapper, context.mapper);
             }
             // Instantiate the extends type including inferences for 'infer T' type parameters
