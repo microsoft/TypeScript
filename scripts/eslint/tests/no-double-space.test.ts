@@ -1,4 +1,4 @@
-import { RuleTester, ROOT_DIR } from "./support/RuleTester";
+import { RuleTester, ROOT_DIR, FILENAME } from "./support/RuleTester";
 import rule = require("../rules/no-double-space");
 
 const ruleTester = new RuleTester({
@@ -15,51 +15,69 @@ const ruleTester = new RuleTester({
 
 ruleTester.run("no-double-space", rule, {
     valid: [{
+        filename: FILENAME,
         code: `const a = {};`,
     }, {
+        filename: FILENAME,
         code: `function fn() {}`,
     }, {
+        filename: FILENAME,
         code: `const a = "  ";`,
     }, {
+        filename: FILENAME,
         code: `// ^                                ^`,
     }, {
+        filename: FILENAME,
         code: `class Cl {}`,
     }, {
+        filename: FILENAME,
         code: `// comment `,
     }, {
+        filename: FILENAME,
         code: `/* comment */`,
     }, {
+        filename: FILENAME,
         code: `"  string  ";`,
     }, {
+        filename: FILENAME,
         code: `/  regexp  /g;`,
     }, {
+        filename: FILENAME,
         code: `const rgx = /  regexp  /g;`,
     }, {
+        filename: FILENAME,
         code: "const str = ` string template`;",
     }, {
+        filename: FILENAME,
         code: `  // comment`,
     }, {
+        filename: FILENAME,
         code: `   /* comment */`,
     }, {
+        filename: FILENAME,
         code: `//  `,
     }, {
+        filename: FILENAME,
         code: `
 const a =
   1;
         `,
     }, {
+        filename: FILENAME,
         code: `
 /**
  * comment
  */
         `,
     }, {
+        filename: FILENAME,
         code: `
 // comment
 //  - comment
 //  - comment
         `,
     }, {
+        filename: FILENAME,
         code: `
 interface Props {
   prop: string[];  // comment prop
@@ -67,6 +85,7 @@ interface Props {
 }
         `,
     }, {
+        filename: FILENAME,
         code: `
 /**
  * Returns a JSON-encoded value of the type: string[]
@@ -76,6 +95,7 @@ interface Props {
  */
         `,
     }, {
+        filename: FILENAME,
         code: `
 const obj = {
   content: "function f() {  1; }",
@@ -84,27 +104,35 @@ const obj = {
     }],
 
     invalid: [{
+        filename: FILENAME,
         code: `const  a  = {};`,
         errors: [{ messageId: "noDoubleSpaceError", line: 1, column: 6 }],
     }, {
+        filename: FILENAME,
         code: `function  fn() {}`,
         errors: [{ messageId: "noDoubleSpaceError", line: 1, column: 9 }],
     }, {
+        filename: FILENAME,
         code: `class  Cl {}`,
         errors: [{ messageId: "noDoubleSpaceError", line: 1, column: 6 }],
     }, {
+        filename: FILENAME,
         code: "const str =  ` string template`;",
         errors: [{ messageId: "noDoubleSpaceError", line: 1, column: 12 }],
     }, {
+        filename: FILENAME,
         code: `/** comment  */`,
         errors: [{ messageId: "noDoubleSpaceError", line: 1, column: 12 }],
     }, {
+        filename: FILENAME,
         code: `/** comment  with  many spaces   */`,
         errors: [{ messageId: "noDoubleSpaceError", line: 1, column: 12 }],
     }, {
+        filename: FILENAME,
         code: `// comment  with  many spaces`,
         errors: [{ messageId: "noDoubleSpaceError", line: 1, column: 11 }],
     }, {
+        filename: FILENAME,
         code: `
 const a = 1;
 const b = 2;

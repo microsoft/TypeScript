@@ -15,7 +15,7 @@
         "noResolve": false,
         "strict": true,
         "module": "commonjs",
-        "target": "es5",
+        "target": "es6",
         "outDir": "../../built/eslint",
         "lib": ["es2015", "es2016"]
     },
@@ -24,5 +24,9 @@
         "rules",
         "tests",
         "tests/support/*.json"
+    ],
+
+    "exclude": [
+        "tests/fixtures"
     ]
 }
