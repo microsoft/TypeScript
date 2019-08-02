@@ -710,8 +710,10 @@ namespace ts.FindAllReferences.Core {
     }
 
     /** As in a `readonly prop: any` or `constructor(readonly prop: any)`, not a `readonly any[]`. */
-    function isReadonlyModifierForMemberDeclaration(node: Node): boolean {
-        return node.kind === SyntaxKind.ReadonlyKeyword && hasReadonlyModifier(node.parent);
+    function isReadonlyTypeOperator(node: Node): boolean {
+        return node.kind === SyntaxKind.ReadonlyKeyword
+            && isTypeOperatorNode(node.parent)
+            && node.parent.operator === SyntaxKind.ReadonlyKeyword;
     }
 
     /** getReferencedSymbols for special node kinds. */
@@ -719,7 +721,7 @@ namespace ts.FindAllReferences.Core {
         if (isTypeKeyword(node.kind)) {
             // A modifier readonly (like on a property declaration) is not special;
             // a readonly type keyword (like `readonly string[]`) is.
-            if (isReadonlyModifierForMemberDeclaration(node)) {
+            if (node.kind === SyntaxKind.ReadonlyKeyword && !isReadonlyTypeOperator(node)) {
                 return undefined;
             }
             // Likewise, when we *are* looking for a special keyword, make sure we
@@ -728,7 +730,7 @@ namespace ts.FindAllReferences.Core {
                 sourceFiles,
                 node.kind,
                 cancellationToken,
-                node.kind === SyntaxKind.ReadonlyKeyword ? not(isReadonlyModifierForMemberDeclaration) : undefined);
+                node.kind === SyntaxKind.ReadonlyKeyword ? isReadonlyTypeOperator : undefined);
         }
 
         // Labels
