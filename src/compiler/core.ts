@@ -4,8 +4,6 @@ namespace ts {
     export const versionMajorMinor = "3.6";
     /** The version of the TypeScript compiler release */
     export const version = `${versionMajorMinor}.0-dev`;
-
-    perfLogger.logInfoEvent(`Starting TypeScript v${versionMajorMinor} with command line: ${JSON.stringify(process.argv)}`);
 }
 
 namespace ts {

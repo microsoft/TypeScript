@@ -7,10 +7,10 @@
     "references": [],
 
     "files": [
-        "perfLogger.ts",
         "core.ts",
         "debug.ts",
         "performance.ts",
+        "perfLogger.ts",
         "semver.ts",
 
         "types.ts",
