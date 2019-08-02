@@ -110,7 +110,8 @@
     "browser": {
         "fs": false,
         "os": false,
-        "path": false
+        "path": false,
+        "@microsoft/typescript-etw": false
     },
     "dependencies": {}
 }
