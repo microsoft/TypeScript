@@ -194,7 +194,7 @@ namespace ts.NavigationBar {
                 // Handle named bindings in imports e.g.:
                 //    import * as NS from "mod";
                 //    import {a, b as B} from "mod";
-                const {namedBindings} = importClause;
+                const { namedBindings } = importClause;
                 if (namedBindings) {
                     if (namedBindings.kind === SyntaxKind.NamespaceImport) {
                         addLeafNode(namedBindings);
@@ -660,7 +660,16 @@ namespace ts.NavigationBar {
         else if (isCallExpression(parent)) {
             const name = getCalledExpressionName(parent.expression);
             if (name !== undefined) {
-                const args = mapDefined(parent.arguments, a => isStringLiteralLike(a) ? a.getText(curSourceFile) : undefined).join(", ");
+                const args = mapDefined(parent.arguments, a => {
+                    if (isStringLiteralLike(a)) {
+                        const line = curSourceFile.getLineAndCharacterOfPosition(a.pos).line;
+                        const endOfLine = getEndLinePosition(line, curSourceFile);
+
+                        return a.getText(curSourceFile).substring(0, endOfLine - a.pos);
+                    }
+
+                    return undefined;
+                }).join(", ");
                 return `${name}(${args}) callback`;
             }
         }
