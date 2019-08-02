@@ -5124,7 +5124,10 @@ namespace ts {
                 }
                 break;
             case SyntaxKind.ExpressionStatement:
-                const expr = hostNode.expression;
+                let expr = hostNode.expression;
+                if (expr.kind === SyntaxKind.BinaryExpression && (expr as BinaryExpression).operatorToken.kind === SyntaxKind.EqualsToken) {
+                    expr = (expr as BinaryExpression).left;
+                }
                 switch (expr.kind) {
                     case SyntaxKind.PropertyAccessExpression:
                         return (expr as PropertyAccessExpression).name;
