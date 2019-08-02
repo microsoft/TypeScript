@@ -459,26 +459,84 @@ export class C {
     };
 }
 export class D {
+    /**
+     * @param {number} a
+     * @param {number} b
+     */
     constructor(a: number, b: number);
 }
+/**
+ * @template T,U
+ */
 export class E<T, U> {
+    /**
+     * @type {string}
+     */
     static staticField: string;
+    /**
+     * @type {string}
+     * @readonly
+     */
     static staticReadonlyField: string;
     static staticInitializedField: number;
+    /**
+     * @return {string}
+     */
     static s1: string;
+    /**
+     * @return {string}
+     */
     static readonly s2: string;
+    /**
+     * @param {string} _p
+     */
     static s3: string;
+    /**
+     * @param {T} a
+     * @param {U} b
+     */
     constructor(a: T, b: U);
+    /**
+     * @type {T & U}
+     */
     field: T & U;
+    /**
+     * @type {T & U}
+     * @readonly
+     */
     readonlyField: T & U;
     initializedField: number;
+    /**
+     * @return {U}
+     */
     f1: U;
+    /**
+     * @return {U}
+     */
     readonly f2: U;
+    /**
+     * @param {U} _p
+     */
     f3: U;
 }
+/**
+ * @template T,U
+ */
 export class F<T, U> {
+    /**
+     * @template A,B
+     * @param {A} a
+     * @param {B} b
+     */
     static create<A_1, B_1>(a: A_1, b: B_1): F<A_1, B_1>;
+    /**
+     * @param {T} a
+     * @param {U} b
+     */
     constructor(a: T, b: U);
+    /**
+     * @type {T & U}
+     */
     field: T & U;
 }
 export class I {
@@ -495,11 +553,24 @@ export class L extends K {
 export class M {
     prop: number;
 }
+/**
+ * @template T
+ */
 export class N<T> extends L {
+    /**
+     * @param {T} param
+     */
     constructor(param: T);
     another: T;
 }
+/**
+ * @template U
+ * @extends {N<U>}
+ */
 export class O<U> extends N<U> {
+    /**
+     * @param {U} param
+     */
     constructor(param: U);
     another2: U;
 }

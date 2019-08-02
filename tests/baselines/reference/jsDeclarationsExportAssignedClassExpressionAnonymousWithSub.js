@@ -35,6 +35,9 @@ module.exports.Sub = /** @class */ (function () {
 //// [index.d.ts]
 export = exports;
 declare class exports {
+    /**
+     * @param {number} p
+     */
     constructor(p: number);
     t: number;
 }

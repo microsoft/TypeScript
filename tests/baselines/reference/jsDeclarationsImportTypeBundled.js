@@ -34,6 +34,12 @@ declare module "folder/mod1" {
     type Item = {
         x: number;
     };
+    /**
+     * @typedef {{x: number}} Item
+     */
+    /**
+     * @type {Item};
+     */
     const x: Item;
     namespace x {
         export { Item };
@@ -41,5 +47,6 @@ declare module "folder/mod1" {
 }
 declare module "index" {
     export = items;
+    /** @type {(typeof import("./folder/mod1"))[]} */
     const items: (typeof import("folder/mod1"))[];
 }

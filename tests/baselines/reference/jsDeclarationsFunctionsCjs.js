@@ -137,6 +137,10 @@ declare var i_1: () => void;
 declare var ii_1: () => void;
 declare var jj_1: () => void;
 declare var j_1: () => void;
+/**
+ * @param {{x: string}} a
+ * @param {{y: typeof module.exports.b}} b
+ */
 declare function g(a: {
     x: string;
 }, b: {
@@ -145,6 +149,10 @@ declare function g(a: {
         cat: string;
     };
 }): void;
+/**
+ * @param {{x: string}} a
+ * @param {{y: typeof module.exports.b}} b
+ */
 declare function hh(a: {
     x: string;
 }, b: {

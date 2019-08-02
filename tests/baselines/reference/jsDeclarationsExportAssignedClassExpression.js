@@ -23,6 +23,9 @@ module.exports = /** @class */ (function () {
 //// [index.d.ts]
 export = Thing;
 declare class Thing {
+    /**
+     * @param {number} p
+     */
     constructor(p: number);
     t: number;
 }

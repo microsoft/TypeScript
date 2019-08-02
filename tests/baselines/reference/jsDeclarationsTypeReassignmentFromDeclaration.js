@@ -19,4 +19,5 @@ module.exports = items;
 
 //// [index.d.ts]
 export = items;
+/** @type {typeof import("/some-mod")} */
 declare const items: typeof import("/some-mod");

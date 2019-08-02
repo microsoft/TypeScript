@@ -116,6 +116,13 @@ export type Identity<T> = (x: T) => T;
 export type SomeType = number | {
     x: string;
 } | LocalThing | ExportedThing;
+/**
+ * @typedef {{x: string} | number | LocalThing | ExportedThing} SomeType
+ */
+/**
+ * @param {number} x
+ * @returns {SomeType}
+ */
 export function doTheThing(x: number): number | {
     x: string;
 } | LocalThing | ExportedThing;

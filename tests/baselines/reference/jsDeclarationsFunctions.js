@@ -131,8 +131,23 @@ export function c(): void;
 export namespace c {
     export { Cls };
 }
+/**
+ * @param {number} a
+ * @param {number} b
+ * @return {string}
+ */
 export function d(a: number, b: number): string;
+/**
+ * @template T,U
+ * @param {T} a
+ * @param {U} b
+ * @return {T & U}
+ */
 export function e<T, U>(a: T, b: U): T & U;
+/**
+ * @template T
+ * @param {T} a
+ */
 export function f<T>(a: T): T;
 export namespace f {
     export { f as self };
@@ -141,11 +156,19 @@ export function i(): void;
 export function j(): void;
 declare class Cls {
 }
+/**
+ * @param {{x: string}} a
+ * @param {{y: typeof b}} b
+ */
 export function g(a: {
     x: string;
 }, b: {
     y: typeof b;
 }): void;
+/**
+ * @param {{x: string}} a
+ * @param {{y: typeof b}} b
+ */
 declare function hh(a: {
     x: string;
 }, b: {

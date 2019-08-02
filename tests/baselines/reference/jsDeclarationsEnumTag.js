@@ -102,9 +102,16 @@ exports.ff = ff;
 
 
 //// [index.d.ts]
+/**
+ * @param {Target} t
+ * @param {Second} s
+ * @param {Fs} f
+ */
 export function consume(t: string, s: number, f: (arg0: number) => number): void;
+/** @param {string} s */
 export function ff(s: string): any;
 export type Target = string;
+/** @enum {string} */
 export const Target: {
     START: string;
     MIDDLE: string;
@@ -113,12 +120,14 @@ export const Target: {
     OK_I_GUESS: number;
 };
 export type Second = number;
+/** @enum number */
 export const Second: {
     OK: number;
     /** @type {number} */
     FINE: number;
 };
 export type Fs = (arg0: number) => number;
+/** @enum {function(number): number} */
 export const Fs: {
     ADD1: (n: any) => any;
     ID: (n: any) => any;

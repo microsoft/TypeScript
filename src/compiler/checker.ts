@@ -4995,6 +4995,7 @@ namespace ts {
                             createNamedExports(flatMap(exports, e => e.exportClause!.elements)),
                             /*moduleSpecifier*/ undefined
                         )];
+                        // TODO combine multiple `export {a} from "..."` into a single statement
                     }
                     // Pass 3: Move all `export {}`'s to `export` modifiers where possible
                     const exportDecl = find(statements, d => isExportDeclaration(d) && !d.moduleSpecifier && !!d.exportClause) as ExportDeclaration | undefined;
@@ -5127,7 +5128,7 @@ namespace ts {
                         // Each overload becomes a seperate function declaration, in order
                         const decl = signatureToSignatureDeclarationHelper(sig, SyntaxKind.FunctionDeclaration, context) as FunctionDeclaration;
                         decl.name = createIdentifier(localName);
-                        addResult(decl, modifierFlags);
+                        addResult(setTextRange(decl, sig.declaration), modifierFlags);
                     }
                     const props = getPropertiesOfType(type);
                     if (length(props)) {
@@ -5178,14 +5179,14 @@ namespace ts {
                         c.typeParameters = undefined;
                     }
                     const indexSignatures = serializeIndexSignatures(classType, baseTypes[0]);
-                    addResult(createClassDeclaration(
+                    addResult(setTextRange(createClassDeclaration(
                         /*decorators*/ undefined,
                         /*modifiers*/ undefined,
                         localName,
                         typeParamDecls,
                         heritageClauses,
                         [...indexSignatures, ...staticMembers, ...constructors, ...members]
-                    ), modifierFlags);
+                    ), filter(symbol.declarations, d => isClassDeclaration(d) || isClassExpression(d))[0]), modifierFlags);
                 }
 
                 // Synthesize declarations for a symbol - might be an Interface, a Class, a Namespace, a Type, a Variable (const, let, or var), an Alias
@@ -5236,9 +5237,13 @@ namespace ts {
                         // `var` is `FunctionScopedVariable`, `const` and `let` are `BlockScopedVariable`, and `module.exports.thing =` is `Property`
                         const flags = !(symbol.flags & SymbolFlags.BlockScopedVariable) ? undefined : isConstVariable(symbol) ? NodeFlags.Const : NodeFlags.Let;
                         const name = (needsPostExportDefault || !(symbol.flags & SymbolFlags.Property)) ? localName : getUnusedName(localName, symbol);
-                        const statement = createVariableStatement(/*modifiers*/ undefined, createVariableDeclarationList([
+                        let textRange: Node | undefined = filter(symbol.declarations, d => isVariableDeclaration(d))[0];
+                        if (textRange && isVariableDeclarationList(textRange.parent) && textRange.parent.declarations.length === 1) {
+                            textRange = textRange.parent.parent;
+                        }
+                        const statement = setTextRange(createVariableStatement(/*modifiers*/ undefined, createVariableDeclarationList([
                             createVariableDeclaration(name, serializeTypeForDeclaration(getTypeOfSymbol(symbol), symbol))
-                        ], flags));
+                        ], flags)), textRange);
                         addResult(statement, name !== localName ? modifierFlags & ~ModifierFlags.Export : modifierFlags);
                         if (name !== localName && !isPrivate) {
                             // We rename the variable declaration we generate for Property symbols since they may have a name which conflicts with a local declaration. Eg,
@@ -5374,7 +5379,8 @@ namespace ts {
                                 break;
                             case SyntaxKind.ExportSpecifier:
                                 // does not use localName because the symbol name in this case refers to the name in the exports table, which we must exactly preserve
-                                serializeExportSpecifier(unescapeLeadingUnderscores(symbol.escapedName), targetName);
+                                const specifier = (node.parent.parent as ExportDeclaration).moduleSpecifier;
+                                serializeExportSpecifier(unescapeLeadingUnderscores(symbol.escapedName), targetName, specifier && isStringLiteralLike(specifier) ? createLiteral(specifier.text) : undefined);
                                 break;
                             case SyntaxKind.ExportAssignment:
                                 serializeMaybeAliasAssignment(symbol);
@@ -5398,8 +5404,13 @@ namespace ts {
                     }
                 }
 
-                function serializeExportSpecifier(localName: string, targetName: string) {
-                    addResult(createExportDeclaration(/*decorators*/ undefined, /*modifiers*/ undefined, createNamedExports([createExportSpecifier(localName !== targetName ? targetName : undefined, localName)])), ModifierFlags.None);
+                function serializeExportSpecifier(localName: string, targetName: string, specifier?: Expression) {
+                    addResult(createExportDeclaration(
+                        /*decorators*/ undefined,
+                        /*modifiers*/ undefined,
+                        createNamedExports([createExportSpecifier(localName !== targetName ? targetName : undefined, localName)]),
+                        specifier
+                    ), ModifierFlags.None);
                 }
 
                 function serializeMaybeAliasAssignment(symbol: Symbol) {
@@ -5521,14 +5532,14 @@ namespace ts {
                         const rawName = unescapeLeadingUnderscores(p.escapedName);
                         const name = getPropertyNameNodeForSymbolFromNameType(p, context) || createIdentifier(rawName);
                         if (p.flags & (SymbolFlags.Property | SymbolFlags.Accessor | SymbolFlags.Variable)) {
-                            return createProperty(
+                            return setTextRange(createProperty(
                                 /*decorators*/ undefined,
                                 createModifiersFromModifierFlags((isReadonlySymbol(p) ? ModifierFlags.Readonly : 0) | staticFlag),
                                 name,
                                 p.flags & SymbolFlags.Optional ? createToken(SyntaxKind.QuestionToken) : undefined,
                                 serializeTypeForDeclaration(getTypeOfSymbol(p), p),
                                 /*initializer*/ undefined // interface members can't have initializers, however class members _can_
-                            );
+                            ), filter(p.declarations, d => isPropertyDeclaration(d) || isAccessor(d) || isVariableDeclaration(d) || isPropertySignature(d) || isBinaryExpression(d) || isPropertyAccessExpression(d))[0]);
                         }
                         if (p.flags & (SymbolFlags.Method | SymbolFlags.Function)) {
                             const type = getTypeOfSymbol(p);
@@ -5544,7 +5555,7 @@ namespace ts {
                                 if (p.flags & SymbolFlags.Optional) {
                                     decl.questionToken = createToken(SyntaxKind.QuestionToken);
                                 }
-                                results.push(decl);
+                                results.push(setTextRange(decl, sig.declaration));
                             }
                             return results as unknown as T[];
                         }
@@ -5731,7 +5742,7 @@ namespace ts {
                     for (const sig of signatures) {
                         // Each overload becomes a seperate constructor declaration, in order
                         const decl = signatureToSignatureDeclarationHelper(sig, outputKind, context);
-                        results.push(decl);
+                        results.push(setTextRange(decl, sig.declaration));
                     }
                     return results;
                 }

@@ -81,6 +81,9 @@ declare const InnerSym: unique symbol;
 //// [index2.d.ts]
 export class MyClass {
     static [TopLevelSym]: number;
+    /**
+     * @param {typeof TopLevelSym | typeof InnerSym} _p
+     */
     constructor(_p?: typeof TopLevelSym | typeof InnerSym);
     [InnerSym]: string;
 }

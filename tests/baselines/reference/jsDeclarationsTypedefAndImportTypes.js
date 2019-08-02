@@ -65,6 +65,9 @@ module.exports = {
 //// [conn.d.ts]
 export = Conn;
 type Whatever = string | number;
+/**
+ * @typedef {string | number} Whatever
+ */
 declare class Conn {
     item: number;
     method(): void;
@@ -74,7 +77,13 @@ declare namespace Conn {
 }
 //// [usage.d.ts]
 export type Conn = import("./conn");
+/**
+ * @typedef {import("./conn")} Conn
+ */
 export class Wrap {
+    /**
+     * @param {Conn} c
+     */
     constructor(c: import("./conn"));
     connItem: number;
 }
