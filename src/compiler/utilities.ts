@@ -4466,8 +4466,7 @@ namespace ts {
         map.clear();
     }
 
-    export interface MutateMapOptions<T, U> {
-        createNewValue(key: string, valueInNewMap: U): T;
+    export interface MutateMapSkippingNewValuesOptions<T, U> {
         onDeleteValue(existingValue: T, key: string): void;
 
         /**
@@ -4482,8 +4481,12 @@ namespace ts {
     /**
      * Mutates the map with newMap such that keys in map will be same as newMap.
      */
-    export function mutateMap<T, U>(map: Map<T>, newMap: ReadonlyMap<U>, options: MutateMapOptions<T, U>) {
-        const { createNewValue, onDeleteValue, onExistingValue } = options;
+    export function mutateMapSkippingNewValues<T, U>(
+        map: Map<T>,
+        newMap: ReadonlyMap<U>,
+        options: MutateMapSkippingNewValuesOptions<T, U>
+    ) {
+        const { onDeleteValue, onExistingValue } = options;
         // Needs update
         map.forEach((existingValue, key) => {
             const valueInNewMap = newMap.get(key);
@@ -4497,7 +4500,20 @@ namespace ts {
                 onExistingValue(existingValue, valueInNewMap, key);
             }
         });
+    }
 
+    export interface MutateMapOptions<T, U> extends MutateMapSkippingNewValuesOptions<T, U> {
+        createNewValue(key: string, valueInNewMap: U): T;
+    }
+
+    /**
+     * Mutates the map with newMap such that keys in map will be same as newMap.
+     */
+    export function mutateMap<T, U>(map: Map<T>, newMap: ReadonlyMap<U>, options: MutateMapOptions<T, U>) {
+        // Needs update
+        mutateMapSkippingNewValues(map, newMap, options);
+
+        const { createNewValue } = options;
         // Add new values that are not already present
         newMap.forEach((valueInNewMap, key) => {
             if (!map.has(key)) {

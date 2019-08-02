@@ -314,6 +314,11 @@ interface Array<T> {}`
         invokeFileDeleteCreateAsPartInsteadOfChange: boolean;
     }
 
+    export enum Tsc_WatchFile {
+        DynamicPolling = "DynamicPriorityPolling",
+        SingleFileWatcherPerName = "SingleFileWatcherPerName"
+    }
+
     export enum Tsc_WatchDirectory {
         WatchFile = "RecursiveDirectoryUsingFsWatchFile",
         NonRecursiveWatchDirectory = "RecursiveDirectoryUsingNonRecursiveWatchDirectory",
@@ -339,7 +344,7 @@ interface Array<T> {}`
         readonly watchedFiles = createMultiMap<TestFileWatcher>();
         private readonly executingFilePath: string;
         private readonly currentDirectory: string;
-        private readonly dynamicPriorityWatchFile: HostWatchFile | undefined;
+        private readonly customWatchFile: HostWatchFile | undefined;
         private readonly customRecursiveWatchDirectory: HostWatchDirectory | undefined;
         public require: ((initialPath: string, moduleName: string) => server.RequireResult) | undefined;
 
@@ -349,9 +354,23 @@ interface Array<T> {}`
             this.executingFilePath = this.getHostSpecificPath(executingFilePath);
             this.currentDirectory = this.getHostSpecificPath(currentDirectory);
             this.reloadFS(fileOrFolderorSymLinkList);
-            this.dynamicPriorityWatchFile = this.environmentVariables && this.environmentVariables.get("TSC_WATCHFILE") === "DynamicPriorityPolling" ?
-                createDynamicPriorityPollingWatchFile(this) :
-                undefined;
+            const tscWatchFile = this.environmentVariables && this.environmentVariables.get("TSC_WATCHFILE") as Tsc_WatchFile;
+            switch (tscWatchFile) {
+                case Tsc_WatchFile.DynamicPolling:
+                    this.customWatchFile = createDynamicPriorityPollingWatchFile(this);
+                    break;
+                case Tsc_WatchFile.SingleFileWatcherPerName:
+                    this.customWatchFile = createSingleFileWatcherPerName(
+                        this.watchFileWorker.bind(this),
+                        this.useCaseSensitiveFileNames
+                    );
+                    break;
+                case undefined:
+                    break;
+                default:
+                    Debug.assertNever(tscWatchFile);
+            }
+
             const tscWatchDirectory = this.environmentVariables && this.environmentVariables.get("TSC_WATCHDIRECTORY") as Tsc_WatchDirectory;
             if (tscWatchDirectory === Tsc_WatchDirectory.WatchFile) {
                 const watchDirectory: HostWatchDirectory = (directory, cb) => this.watchFile(directory, () => cb(directory), PollingInterval.Medium);
@@ -405,7 +424,7 @@ interface Array<T> {}`
             return s;
         }
 
-        private now() {
+        now() {
             this.time += timeIncrements;
             return new Date(this.time);
         }
@@ -854,10 +873,14 @@ interface Array<T> {}`
         }
 
         watchFile(fileName: string, cb: FileWatcherCallback, pollingInterval: number) {
-            if (this.dynamicPriorityWatchFile) {
-                return this.dynamicPriorityWatchFile(fileName, cb, pollingInterval);
+            if (this.customWatchFile) {
+                return this.customWatchFile(fileName, cb, pollingInterval);
             }
 
+            return this.watchFileWorker(fileName, cb);
+        }
+
+        private watchFileWorker(fileName: string, cb: FileWatcherCallback) {
             const path = this.toFullPath(fileName);
             const callback: TestFileWatcher = { fileName, cb };
             this.watchedFiles.add(path, callback);
