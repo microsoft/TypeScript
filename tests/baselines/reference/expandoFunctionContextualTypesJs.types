@@ -10,7 +10,7 @@
   */
 const MyComponent = () => /* @type {any} */(null);
 >MyComponent : { (): any; defaultProps?: Partial<{ color: "red" | "blue"; }>; }
->() => /* @type {any} */(null) : { (): any; defaultProps: { color: "red"; }; }
+>() => /* @type {any} */(null) : { (): any; defaultProps: Partial<{ color: "red" | "blue"; }>; }
 >(null) : null
 >null : null
 

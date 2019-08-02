@@ -350,7 +350,11 @@ namespace ts.refactor {
             }
             if (namedBindings) {
                 if (namedBindingsUnused) {
-                    changes.delete(sourceFile, namedBindings);
+                    changes.replaceNode(
+                        sourceFile,
+                        importDecl.importClause,
+                        updateImportClause(importDecl.importClause, name, /*namedBindings*/ undefined)
+                    );
                 }
                 else if (namedBindings.kind === SyntaxKind.NamedImports) {
                     for (const element of namedBindings.elements) {

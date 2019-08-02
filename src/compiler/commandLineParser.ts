@@ -40,6 +40,7 @@ namespace ts {
         ["es2017.string", "lib.es2017.string.d.ts"],
         ["es2017.intl", "lib.es2017.intl.d.ts"],
         ["es2017.typedarrays", "lib.es2017.typedarrays.d.ts"],
+        ["es2018.asyncgenerator", "lib.es2018.asyncgenerator.d.ts"],
         ["es2018.asynciterable", "lib.es2018.asynciterable.d.ts"],
         ["es2018.intl", "lib.es2018.intl.d.ts"],
         ["es2018.promise", "lib.es2018.promise.d.ts"],
@@ -1899,7 +1900,9 @@ namespace ts {
                 case "object":
                     return {};
                 default:
-                    return option.type.keys().next().value;
+                    const iterResult = option.type.keys().next();
+                    if (!iterResult.done) return iterResult.value;
+                    return Debug.fail("Expected 'option.type' to have entries.");
             }
         }
 

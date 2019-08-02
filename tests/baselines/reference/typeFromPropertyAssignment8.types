@@ -48,10 +48,10 @@ my.app.Application()
 === tests/cases/conformance/salsa/b.js ===
 var min = window.min || {};
 >min : typeof min
->window.min || {} : any
->window.min : error
->window : Window
->min : any
+>window.min || {} : typeof min | {}
+>window.min : typeof min
+>window : Window & typeof globalThis
+>min : typeof min
 >{} : {}
 
 min.app = min.app || {};

@@ -68,12 +68,13 @@ namespace ts {
                 // Use an iterator.
                 const iterator = map.entries();
                 while (true) {
-                    const { value: tuple, done } = iterator.next();
-                    if (done) {
+                    const iterResult = iterator.next();
+                    if (iterResult.done) {
                         break;
                     }
 
-                    doForEach(tuple[1], tuple[0]);
+                    const [key, value] = iterResult.value;
+                    doForEach(value, key);
                 }
             }
 

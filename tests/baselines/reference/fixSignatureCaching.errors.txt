@@ -56,7 +56,7 @@ tests/cases/conformance/fixSignatureCaching.ts(979,37): error TS2580: Cannot fin
 tests/cases/conformance/fixSignatureCaching.ts(980,23): error TS2304: Cannot find name 'define'.
 tests/cases/conformance/fixSignatureCaching.ts(980,48): error TS2304: Cannot find name 'define'.
 tests/cases/conformance/fixSignatureCaching.ts(981,16): error TS2304: Cannot find name 'define'.
-tests/cases/conformance/fixSignatureCaching.ts(983,44): error TS2339: Property 'MobileDetect' does not exist on type 'Window'.
+tests/cases/conformance/fixSignatureCaching.ts(983,44): error TS2339: Property 'MobileDetect' does not exist on type 'Window & typeof globalThis'.
 
 
 ==== tests/cases/conformance/fixSignatureCaching.ts (59 errors) ====
@@ -1160,7 +1160,7 @@ tests/cases/conformance/fixSignatureCaching.ts(983,44): error TS2339: Property '
         } else if (typeof window !== 'undefined') {
             return function (factory) { window.MobileDetect = factory(); };
                                                ~~~~~~~~~~~~
-!!! error TS2339: Property 'MobileDetect' does not exist on type 'Window'.
+!!! error TS2339: Property 'MobileDetect' does not exist on type 'Window & typeof globalThis'.
         } else {
             // please file a bug if you get this error!
             throw new Error('unknown environment');

@@ -31,3 +31,18 @@ describe("Public APIs", () => {
         verifyApi("tsserverlibrary.d.ts");
     });
 });
+
+describe("Public APIs:: token to string", () => {
+    function assertDefinedTokenToString(initial: ts.SyntaxKind, last: ts.SyntaxKind) {
+        for (let t = initial; t <= last; t++) {
+            assert.isDefined(ts.tokenToString(t), `Expected tokenToString defined for ${ts.Debug.formatSyntaxKind(t)}`);
+        }
+    }
+
+    it("for punctuations", () => {
+        assertDefinedTokenToString(ts.SyntaxKind.FirstPunctuation, ts.SyntaxKind.LastPunctuation);
+    });
+    it("for keywords", () => {
+        assertDefinedTokenToString(ts.SyntaxKind.FirstKeyword, ts.SyntaxKind.LastKeyword);
+    });
+});
