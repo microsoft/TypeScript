@@ -29986,8 +29986,10 @@ namespace ts {
         function checkAliasSymbol(node: ImportEqualsDeclaration | ImportClause | NamespaceImport | ImportSpecifier | ExportSpecifier) {
             const symbol = getSymbolOfNode(node);
             const target = resolveAlias(symbol);
-            if (target !== unknownSymbol) {
-                // For external modules symbol represent local symbol for an alias.
+
+            const shouldSkipWithJSExpandoTargets = symbol.flags & SymbolFlags.Assignment;
+            if (!shouldSkipWithJSExpandoTargets && target !== unknownSymbol) {
+                // For external modules symbol represents local symbol for an alias.
                 // This local symbol will merge any other local declarations (excluding other aliases)
                 // and symbol.flags will contains combined representation for all merged declaration.
                 // Based on symbol.flags we can compute a set of excluded meanings (meaning that resolved alias should not have,
