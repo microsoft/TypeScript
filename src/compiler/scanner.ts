@@ -1347,10 +1347,7 @@ namespace ts {
             while (pos < end) {
                 let ch = codePointAt(text, pos);
                 if (isIdentifierPart(ch, languageVersion)) {
-                    pos++;
-                    if (ch > 0x10000) {
-                        pos++;
-                    }
+                    pos += charSize(ch);
                 }
                 else if (ch === CharacterCodes.backslash) {
                     ch = peekUnicodeEscape();
