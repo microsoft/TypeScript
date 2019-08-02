@@ -9,7 +9,7 @@
 ////}
 
 // @Filename: /index.ts
-////[|foo|]
+////foo
 
 goTo.file('/index.ts');
 verify.importFixAtPosition([`import foo = require("foo");

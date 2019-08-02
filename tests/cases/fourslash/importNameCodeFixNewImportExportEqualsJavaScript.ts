@@ -9,10 +9,23 @@
 ////  export = foo;
 ////}
 
-// @Filename: /index.js
-////[|foo|]
+// @Filename: /a.js
+////foo
 
-goTo.file('/index.js');
-verify.importFixAtPosition([`import foo from "foo";
+// @Filename: /b.js
+////import "";
+////
+////foo
+
+// 1. JavaScript should default to 'const ... = require...' without compiler flags set
+goTo.file('/a.js');
+verify.importFixAtPosition([`const foo = require("foo");
+
+foo`]);
+
+// 2. If there are any ImportDeclarations, assume a default import is fine
+goTo.file('/b.js');
+verify.importFixAtPosition([`import "";
+import foo from "foo";
 
 foo`]);

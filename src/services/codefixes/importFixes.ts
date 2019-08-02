@@ -135,7 +135,8 @@ namespace ts.codefix {
         Named,
         Default,
         Namespace,
-        Equals
+        Equals,
+        ConstEquals
     }
 
     /** Information about how a symbol is exported from a module. (We don't need to store the exported symbol, just its module.) */
@@ -431,13 +432,28 @@ namespace ts.codefix {
         const defaultExport = checker.tryGetMemberInModuleExports(InternalSymbolName.Default, moduleSymbol);
         if (defaultExport) return { symbol: defaultExport, kind: ImportKind.Default };
         const exportEquals = checker.resolveExternalModuleSymbol(moduleSymbol);
-        return exportEquals === moduleSymbol ? undefined : { symbol: exportEquals, kind: getImportKindForExportEquals(importingFile, compilerOptions) };
+        return exportEquals === moduleSymbol ? undefined : { symbol: exportEquals, kind: getImportKindForExportEquals(importingFile, compilerOptions, checker) };
     }
 
-    function getImportKindForExportEquals(importingFile: SourceFile, compilerOptions: CompilerOptions): ImportKind {
-        return (isInJSFile(importingFile) || getAllowSyntheticDefaultImports(compilerOptions) && getEmitModuleKind(compilerOptions) >= ModuleKind.ES2015)
-            ? ImportKind.Default
-            : ImportKind.Equals;
+    function getImportKindForExportEquals(importingFile: SourceFile, compilerOptions: CompilerOptions, checker: TypeChecker): ImportKind {
+        if (getAllowSyntheticDefaultImports(compilerOptions) && getEmitModuleKind(compilerOptions) >= ModuleKind.ES2015) {
+            return ImportKind.Default;
+        }
+        if (isInJSFile(importingFile)) {
+            return some(importingFile.statements, isImportDeclaration) ? ImportKind.Default : ImportKind.ConstEquals;
+        }
+        for (const statement of importingFile.statements) {
+            if (isImportEqualsDeclaration(statement)) {
+                return ImportKind.Equals;
+            }
+            if (isImportDeclaration(statement) && statement.importClause && statement.importClause.name) {
+                const moduleSymbol = checker.getImmediateAliasedSymbol(statement.importClause.symbol);
+                if (moduleSymbol && moduleSymbol.name !== InternalSymbolName.Default) {
+                    return ImportKind.Default;
+                }
+            }
+        }
+        return ImportKind.Equals;
     }
 
     function getDefaultExportInfoWorker(defaultExport: Symbol, moduleSymbol: Symbol, checker: TypeChecker, compilerOptions: CompilerOptions): { readonly symbolForMeaning: Symbol, readonly name: string } | undefined {
@@ -549,7 +565,10 @@ namespace ts.codefix {
     interface ImportsCollection {
         readonly defaultImport: string | undefined;
         readonly namedImports: string[];
-        readonly namespaceLikeImport: { readonly importKind: ImportKind.Equals | ImportKind.Namespace, readonly name: string } | undefined;
+        readonly namespaceLikeImport: {
+            readonly importKind: ImportKind.Equals | ImportKind.Namespace | ImportKind.ConstEquals;
+            readonly name: string;
+        } | undefined;
     }
     function addNewImports(changes: textChanges.ChangeTracker, sourceFile: SourceFile, moduleSpecifier: string, quotePreference: QuotePreference, { defaultImport, namedImports, namespaceLikeImport }: ImportsCollection): void {
         const quotedModuleSpecifier = makeStringLiteral(moduleSpecifier, quotePreference);
@@ -560,10 +579,23 @@ namespace ts.codefix {
                     namedImports.map(n => createImportSpecifier(/*propertyName*/ undefined, createIdentifier(n))), moduleSpecifier, quotePreference));
         }
         if (namespaceLikeImport) {
-            insertImport(changes, sourceFile, namespaceLikeImport.importKind === ImportKind.Equals
-                ? createImportEqualsDeclaration(/*decorators*/ undefined, /*modifiers*/ undefined, createIdentifier(namespaceLikeImport.name), createExternalModuleReference(quotedModuleSpecifier))
-                : createImportDeclaration(/*decorators*/ undefined, /*modifiers*/ undefined, createImportClause(/*name*/ undefined, createNamespaceImport(createIdentifier(namespaceLikeImport.name))), quotedModuleSpecifier));
+            insertImport(
+                changes,
+                sourceFile,
+                namespaceLikeImport.importKind === ImportKind.Equals ? createImportEqualsDeclaration(/*decorators*/ undefined, /*modifiers*/ undefined, createIdentifier(namespaceLikeImport.name), createExternalModuleReference(quotedModuleSpecifier)) :
+                namespaceLikeImport.importKind === ImportKind.ConstEquals ? createConstEqualsRequireDeclaration(namespaceLikeImport.name, quotedModuleSpecifier) :
+                createImportDeclaration(/*decorators*/ undefined, /*modifiers*/ undefined, createImportClause(/*name*/ undefined, createNamespaceImport(createIdentifier(namespaceLikeImport.name))), quotedModuleSpecifier));
         }
+    }
+
+    function createConstEqualsRequireDeclaration(name: string, quotedModuleSpecifier: StringLiteral): VariableStatement {
+        return createVariableStatement(/*modifiers*/ undefined, createVariableDeclarationList([
+            createVariableDeclaration(
+                createIdentifier(name),
+                /*type*/ undefined,
+                createCall(createIdentifier("require"), /*typeArguments*/ undefined, [quotedModuleSpecifier])
+            )
+        ], NodeFlags.Const));
     }
 
     function symbolHasMeaning({ declarations }: Symbol, meaning: SemanticMeaning): boolean {
