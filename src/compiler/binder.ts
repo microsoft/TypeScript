@@ -1808,10 +1808,10 @@ namespace ts {
                 bind(typeAlias.typeExpression);
                 const declName = getNameOfDeclaration(typeAlias);
                 if ((isJSDocEnumTag(typeAlias) || !typeAlias.fullName) && declName && isPropertyAccessEntityNameExpression(declName.parent)) {
-                    // typdef anchored to an A.B.C assignment - we need to bind into B's namespace under name C
-                    const isTL = getIsTopLevelNamespaceishAssignment(declName.parent);
-                    if (isTL) {
-                        bindPotentiallyMissingNamespaces(file.symbol, declName.parent, isTL, !!findAncestor(declName, d => isPropertyAccessExpression(d) && d.name.escapedText === "prototype"));
+                    // typedef anchored to an A.B.C assignment - we need to bind into B's namespace under name C
+                    const isTopLevel = isTopLevelNamespaceAssignment(declName.parent);
+                    if (isTopLevel) {
+                        bindPotentiallyMissingNamespaces(file.symbol, declName.parent, isTopLevel, !!findAncestor(declName, d => isPropertyAccessExpression(d) && d.name.escapedText === "prototype"));
                         const oldContainer = container;
                         container = isPropertyAccessExpression(declName.parent.expression) ? declName.parent.expression.name : declName.parent.expression;
                         declareModuleMember(typeAlias, SymbolFlags.TypeAlias, SymbolFlags.TypeAliasExcludes);
@@ -2654,7 +2654,7 @@ namespace ts {
             declareSymbol(symbolTable, namespaceSymbol, declaration, includes | SymbolFlags.Assignment, excludes & ~SymbolFlags.Assignment);
         }
 
-        function getIsTopLevelNamespaceishAssignment(propertyAccess: PropertyAccessEntityNameExpression) {
+        function isTopLevelNamespaceAssignment(propertyAccess: PropertyAccessEntityNameExpression) {
             return isBinaryExpression(propertyAccess.parent)
                 ? getParentOfBinaryExpression(propertyAccess.parent).parent.kind === SyntaxKind.SourceFile
                 : propertyAccess.parent.parent.kind === SyntaxKind.SourceFile;
@@ -2662,7 +2662,7 @@ namespace ts {
 
         function bindPropertyAssignment(name: EntityNameExpression, propertyAccess: PropertyAccessEntityNameExpression, isPrototypeProperty: boolean) {
             let namespaceSymbol = lookupSymbolForPropertyAccess(name);
-            const isToplevel = getIsTopLevelNamespaceishAssignment(propertyAccess);
+            const isToplevel = isTopLevelNamespaceAssignment(propertyAccess);
             namespaceSymbol = bindPotentiallyMissingNamespaces(namespaceSymbol, propertyAccess.expression, isToplevel, isPrototypeProperty);
             bindPotentiallyNewExpandoMemberToNamespace(propertyAccess, namespaceSymbol, isPrototypeProperty);
         }
