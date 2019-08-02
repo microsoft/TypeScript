@@ -1,7 +1,7 @@
 === tests/cases/conformance/jsdoc/declarations/index.js ===
 /** @enum {string} */
 export const Target = {
->Target : Symbol(Target, Decl(index.js, 1, 12))
+>Target : Symbol(Target, Decl(index.js, 1, 12), Decl(index.js, 0, 4))
 
     START: "start",
 >START : Symbol(START, Decl(index.js, 1, 23))
@@ -18,7 +18,7 @@ export const Target = {
 }
 /** @enum number */
 export const Second = {
->Second : Symbol(Second, Decl(index.js, 9, 12))
+>Second : Symbol(Second, Decl(index.js, 9, 12), Decl(index.js, 8, 4))
 
     OK: 1,
 >OK : Symbol(OK, Decl(index.js, 9, 23))
@@ -29,7 +29,7 @@ export const Second = {
 }
 /** @enum {function(number): number} */
 export const Fs = {
->Fs : Symbol(Fs, Decl(index.js, 15, 12))
+>Fs : Symbol(Fs, Decl(index.js, 15, 12), Decl(index.js, 14, 4))
 
     ADD1: n => n + 1,
 >ADD1 : Symbol(ADD1, Decl(index.js, 15, 19))
@@ -77,7 +77,7 @@ export function consume(t,s,f) {
     var v = Target.START
 >v : Symbol(v, Decl(index.js, 34, 7))
 >Target.START : Symbol(START, Decl(index.js, 1, 23))
->Target : Symbol(Target, Decl(index.js, 1, 12))
+>Target : Symbol(Target, Decl(index.js, 1, 12), Decl(index.js, 0, 4))
 >START : Symbol(START, Decl(index.js, 1, 23))
 
     v = 'something else' // allowed, like Typescript's classic enums and unlike its string enums
@@ -90,14 +90,14 @@ export function ff(s) {
 
     // element access with arbitrary string is an error only with noImplicitAny
     if (!Target[s]) {
->Target : Symbol(Target, Decl(index.js, 1, 12))
+>Target : Symbol(Target, Decl(index.js, 1, 12), Decl(index.js, 0, 4))
 >s : Symbol(s, Decl(index.js, 38, 19))
 
         return null
     }
     else {
         return Target[s]
->Target : Symbol(Target, Decl(index.js, 1, 12))
+>Target : Symbol(Target, Decl(index.js, 1, 12), Decl(index.js, 0, 4))
 >s : Symbol(s, Decl(index.js, 38, 19))
     }
 }

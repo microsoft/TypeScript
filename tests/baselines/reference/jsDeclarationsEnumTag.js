@@ -104,6 +104,7 @@ exports.ff = ff;
 //// [index.d.ts]
 export function consume(t: string, s: number, f: (arg0: number) => number): void;
 export function ff(s: string): any;
+export type Target = string;
 export const Target: {
     START: string;
     MIDDLE: string;
@@ -111,16 +112,15 @@ export const Target: {
     /** @type {number} */
     OK_I_GUESS: number;
 };
-export type Target = string;
+export type Second = number;
 export const Second: {
     OK: number;
     /** @type {number} */
     FINE: number;
 };
-export type Second = number;
+export type Fs = (arg0: number) => number;
 export const Fs: {
     ADD1: (n: any) => any;
     ID: (n: any) => any;
     SUB1: (n: any) => number;
 };
-export type Fs = (arg0: number) => number;

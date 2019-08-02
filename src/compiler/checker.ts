@@ -5249,40 +5249,19 @@ namespace ts {
                         }
                     }
                     if (symbol.flags & SymbolFlags.Enum) {
-                        if (symbol.flags & SymbolFlags.Variable) {
-                            // Oh boy, this symbol really refers to an `@enum`'d variable declaration. We already emitted the variable
-                            // declaration part above, but we can't just emit `export const Foo = {}; export enum Foo {}` - that's
-                            // a symbol merge error. To get the same behavior without a bad merge, we'll do this:
-                            //    export const Foo = {
-                            //        MEMBER: string;
-                            //    };
-                            //    export type Foo = string;
-                            // Make sense? Yes - the @enum tag does nothing nominal and looks nothing like a real enum.
-                            // TODO: the @enum tag has nothing to do with enums and is a glorified @typedef - it should bind that way, too
-                            const typeExpr = getJSDocEnumTag(symbol.valueDeclaration)!.typeExpression;
-                            addResult(createTypeAliasDeclaration(
-                                /*decorators*/ undefined,
-                                /*modifiers*/ undefined,
-                                localName,
-                                /*modifiers*/ undefined,
-                                typeToTypeNodeHelper(typeExpr ? getTypeFromTypeNode(typeExpr) : errorType, context)
-                            ), modifierFlags);
-                        }
-                        else {
-                            addResult(createEnumDeclaration(
-                                /*decorators*/ undefined,
-                                createModifiersFromModifierFlags(isConstEnumSymbol(symbol) ? ModifierFlags.Const : 0),
-                                localName,
-                                map(filter(getPropertiesOfType(getTypeOfSymbol(symbol)), p => !!(p.flags & SymbolFlags.EnumMember)), p => {
-                                    // TODO: Handle computed names
-                                    // I hate that to get the initialized value we need to walk back to the declarations here; but there's no
-                                    // other way to get the possible const value of an enum member that I'm aware of, as the value is cached
-                                    // _on the declaration_, not on the declaration's symbol...
-                                    const initializedValue = p.declarations && p.declarations[0] && isEnumMember(p.declarations[0]) && getConstantValue(p.declarations[0] as EnumMember);
-                                    return createEnumMember(unescapeLeadingUnderscores(p.escapedName), initializedValue === undefined ? undefined : createLiteral(initializedValue));
-                                })
-                            ), modifierFlags);
-                        }
+                        addResult(createEnumDeclaration(
+                            /*decorators*/ undefined,
+                            createModifiersFromModifierFlags(isConstEnumSymbol(symbol) ? ModifierFlags.Const : 0),
+                            localName,
+                            map(filter(getPropertiesOfType(getTypeOfSymbol(symbol)), p => !!(p.flags & SymbolFlags.EnumMember)), p => {
+                                // TODO: Handle computed names
+                                // I hate that to get the initialized value we need to walk back to the declarations here; but there's no
+                                // other way to get the possible const value of an enum member that I'm aware of, as the value is cached
+                                // _on the declaration_, not on the declaration's symbol...
+                                const initializedValue = p.declarations && p.declarations[0] && isEnumMember(p.declarations[0]) && getConstantValue(p.declarations[0] as EnumMember);
+                                return createEnumMember(unescapeLeadingUnderscores(p.escapedName), initializedValue === undefined ? undefined : createLiteral(initializedValue));
+                            })
+                        ), modifierFlags);
                     }
                     if (symbol.flags & SymbolFlags.Class) {
                         if (symbol.flags & SymbolFlags.Property) {
