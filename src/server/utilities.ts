@@ -150,16 +150,13 @@ namespace ts.server {
         }
 
         private static run(self: ThrottledOperations, operationId: string, cb: () => void) {
-            try {
-                perfLogger.logStartScheduledOperation(operationId);
-                self.pendingTimeouts.delete(operationId);
-                if (self.logger) {
-                    self.logger.info(`Running: ${operationId}`);
-                }
-                cb();
-            } finally {
-                perfLogger.logStopScheduledOperation();
+            perfLogger.logStartScheduledOperation(operationId);
+            self.pendingTimeouts.delete(operationId);
+            if (self.logger) {
+                self.logger.info(`Running: ${operationId}`);
             }
+            cb();
+            perfLogger.logStopScheduledOperation();
         }
     }
 
@@ -179,19 +176,16 @@ namespace ts.server {
         private static run(self: GcTimer) {
             self.timerId = undefined;
 
-            try {
-                perfLogger.logStartScheduledOperation("GC collect");
-                const log = self.logger.hasLevel(LogLevel.requestTime);
-                const before = log && self.host.getMemoryUsage!(); // TODO: GH#18217
+            perfLogger.logStartScheduledOperation("GC collect");
+            const log = self.logger.hasLevel(LogLevel.requestTime);
+            const before = log && self.host.getMemoryUsage!(); // TODO: GH#18217
 
-                self.host.gc!(); // TODO: GH#18217
-                if (log) {
-                    const after = self.host.getMemoryUsage!(); // TODO: GH#18217
-                    self.logger.perftrc(`GC::before ${before}, after ${after}`);
-                }
-            } finally {
-                perfLogger.logStopScheduledOperation();
+            self.host.gc!(); // TODO: GH#18217
+            if (log) {
+                const after = self.host.getMemoryUsage!(); // TODO: GH#18217
+                self.logger.perftrc(`GC::before ${before}, after ${after}`);
             }
+            perfLogger.logStopScheduledOperation();
         }
     }
 
