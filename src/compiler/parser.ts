@@ -4659,6 +4659,7 @@ namespace ts {
                 case SyntaxKind.ExclamationEqualsEqualsToken:   // foo<x> !==
                 case SyntaxKind.AmpersandAmpersandToken:        // foo<x> &&
                 case SyntaxKind.BarBarToken:                    // foo<x> ||
+                case SyntaxKind.QuestionQuestionToken:          // foo<x> ??
                 case SyntaxKind.CaretToken:                     // foo<x> ^
                 case SyntaxKind.AmpersandToken:                 // foo<x> &
                 case SyntaxKind.BarToken:                       // foo<x> |

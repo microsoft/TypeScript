@@ -3044,6 +3044,10 @@ namespace ts {
         return createBinary(left, SyntaxKind.BarBarToken, right);
     }
 
+    export function createNullishCoalescing(left: Expression, right: Expression) {
+        return createBinary(left, SyntaxKind.QuestionQuestionToken, right);
+    }
+
     export function createLogicalNot(operand: Expression) {
         return createPrefix(SyntaxKind.ExclamationToken, operand);
     }

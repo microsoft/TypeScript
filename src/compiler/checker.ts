@@ -11524,7 +11524,7 @@ namespace ts {
                     return isContextSensitive((<ConditionalExpression>node).whenTrue) ||
                         isContextSensitive((<ConditionalExpression>node).whenFalse);
                 case SyntaxKind.BinaryExpression:
-                    return (<BinaryExpression>node).operatorToken.kind === SyntaxKind.BarBarToken &&
+                    return ((<BinaryExpression>node).operatorToken.kind === SyntaxKind.BarBarToken || (<BinaryExpression>node).operatorToken.kind === SyntaxKind.QuestionQuestionToken) &&
                         (isContextSensitive((<BinaryExpression>node).left) || isContextSensitive((<BinaryExpression>node).right));
                 case SyntaxKind.PropertyAssignment:
                     return isContextSensitive((<PropertyAssignment>node).initializer);
@@ -18477,6 +18477,7 @@ namespace ts {
                     }
                     return contextSensitive === true ? getTypeOfExpression(left) : contextSensitive;
                 case SyntaxKind.BarBarToken:
+                case SyntaxKind.QuestionQuestionToken:
                     // When an || expression has a contextual type, the operands are contextually typed by that type, except
                     // when that type originates in a binding pattern, the right operand is contextually typed by the type of
                     // the left operand. When an || expression has no contextual type, the right operand is contextually typed
@@ -23761,7 +23762,7 @@ namespace ts {
                 return checkDestructuringAssignment(left, checkExpression(right, checkMode), checkMode, right.kind === SyntaxKind.ThisKeyword);
             }
             let leftType: Type;
-            if (operator === SyntaxKind.AmpersandAmpersandToken || operator === SyntaxKind.BarBarToken) {
+            if (operator === SyntaxKind.AmpersandAmpersandToken || operator === SyntaxKind.BarBarToken || operator === SyntaxKind.QuestionQuestionToken) {
                 leftType = checkTruthinessExpression(left, checkMode);
             }
             else {
@@ -23916,6 +23917,10 @@ namespace ts {
                 case SyntaxKind.BarBarToken:
                     return getTypeFacts(leftType) & TypeFacts.Falsy ?
                         getUnionType([removeDefinitelyFalsyTypes(leftType), rightType], UnionReduction.Subtype) :
+                        leftType;
+                case SyntaxKind.QuestionQuestionToken:
+                    return getTypeFacts(leftType) & TypeFacts.EQUndefinedOrNull ?
+                        getUnionType([getNonNullableType(leftType), rightType], UnionReduction.Subtype) :
                         leftType;
                 case SyntaxKind.EqualsToken:
                     const declKind = isBinaryExpression(left.parent) ? getAssignmentDeclarationKind(left.parent) : AssignmentDeclarationKind.None;

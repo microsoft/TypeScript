@@ -2988,6 +2988,7 @@ namespace ts {
 
     export function getBinaryOperatorPrecedence(kind: SyntaxKind): number {
         switch (kind) {
+            case SyntaxKind.QuestionQuestionToken:
             case SyntaxKind.BarBarToken:
                 return 5;
             case SyntaxKind.AmpersandAmpersandToken:

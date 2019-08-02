@@ -934,7 +934,8 @@ namespace ts {
                 else {
                     return node.kind === SyntaxKind.BinaryExpression && (
                         (<BinaryExpression>node).operatorToken.kind === SyntaxKind.AmpersandAmpersandToken ||
-                        (<BinaryExpression>node).operatorToken.kind === SyntaxKind.BarBarToken);
+                        (<BinaryExpression>node).operatorToken.kind === SyntaxKind.BarBarToken ||
+                        (<BinaryExpression>node).operatorToken.kind === SyntaxKind.QuestionQuestionToken);
                 }
             }
         }
@@ -1367,7 +1368,7 @@ namespace ts {
 
         function bindBinaryExpressionFlow(node: BinaryExpression) {
             const operator = node.operatorToken.kind;
-            if (operator === SyntaxKind.AmpersandAmpersandToken || operator === SyntaxKind.BarBarToken) {
+            if (operator === SyntaxKind.AmpersandAmpersandToken || operator === SyntaxKind.BarBarToken || operator === SyntaxKind.QuestionQuestionToken) {
                 if (isTopLevelLogicalExpression(node)) {
                     const postExpressionLabel = createBranchLabel();
                     bindLogicalExpression(node, postExpressionLabel, postExpressionLabel);
@@ -3147,7 +3148,10 @@ namespace ts {
         const operatorTokenKind = node.operatorToken.kind;
         const leftKind = node.left.kind;
 
-        if (operatorTokenKind === SyntaxKind.EqualsToken && leftKind === SyntaxKind.ObjectLiteralExpression) {
+        if (operatorTokenKind === SyntaxKind.QuestionQuestionToken) {
+            transformFlags |= TransformFlags.AssertESNext;
+        }
+        else if (operatorTokenKind === SyntaxKind.EqualsToken && leftKind === SyntaxKind.ObjectLiteralExpression) {
             // Destructuring object assignments with are ES2015 syntax
             // and possibly ES2018 if they contain rest
             transformFlags |= TransformFlags.AssertES2018 | TransformFlags.AssertES2015 | TransformFlags.AssertDestructuringAssignment;

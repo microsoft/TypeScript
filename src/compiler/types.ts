@@ -181,6 +181,7 @@ namespace ts {
         QuestionToken,
         ColonToken,
         AtToken,
+        QuestionQuestionToken,
         /** Only the JSDoc scanner produces BacktickToken. The normal scanner produces NoSubstitutionTemplateLiteral and related kinds. */
         BacktickToken,
         // Assignments
@@ -1497,6 +1498,7 @@ namespace ts {
     export type LogicalOperator
         = SyntaxKind.AmpersandAmpersandToken
         | SyntaxKind.BarBarToken
+        | SyntaxKind.QuestionQuestionToken
         ;
 
     // see: https://tc39.github.io/ecma262/#prod-LogicalANDExpression
