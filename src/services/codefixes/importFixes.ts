@@ -358,7 +358,10 @@ namespace ts.codefix {
             case ModuleKind.AMD:
             case ModuleKind.CommonJS:
             case ModuleKind.UMD:
-                return isInJSFile(importingFile) ? ImportKind.Default : ImportKind.Equals;
+                if (isInJSFile(importingFile)) {
+                    return isExternalModule(importingFile) ? ImportKind.Namespace : ImportKind.ConstEquals;
+                 }
+                 return ImportKind.Equals;
             case ModuleKind.System:
             case ModuleKind.ES2015:
             case ModuleKind.ESNext:
@@ -432,15 +435,15 @@ namespace ts.codefix {
         const defaultExport = checker.tryGetMemberInModuleExports(InternalSymbolName.Default, moduleSymbol);
         if (defaultExport) return { symbol: defaultExport, kind: ImportKind.Default };
         const exportEquals = checker.resolveExternalModuleSymbol(moduleSymbol);
-        return exportEquals === moduleSymbol ? undefined : { symbol: exportEquals, kind: getImportKindForExportEquals(importingFile, compilerOptions, checker) };
+        return exportEquals === moduleSymbol ? undefined : { symbol: exportEquals, kind: getExportEqualsImportKind(importingFile, compilerOptions, checker) };
     }
 
-    function getImportKindForExportEquals(importingFile: SourceFile, compilerOptions: CompilerOptions, checker: TypeChecker): ImportKind {
+    function getExportEqualsImportKind(importingFile: SourceFile, compilerOptions: CompilerOptions, checker: TypeChecker): ImportKind {
         if (getAllowSyntheticDefaultImports(compilerOptions) && getEmitModuleKind(compilerOptions) >= ModuleKind.ES2015) {
             return ImportKind.Default;
         }
         if (isInJSFile(importingFile)) {
-            return some(importingFile.statements, isImportDeclaration) ? ImportKind.Default : ImportKind.ConstEquals;
+            return isExternalModule(importingFile) ? ImportKind.Default : ImportKind.ConstEquals;
         }
         for (const statement of importingFile.statements) {
             if (isImportEqualsDeclaration(statement)) {

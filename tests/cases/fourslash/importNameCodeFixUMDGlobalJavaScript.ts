@@ -14,7 +14,7 @@
 //// export as namespace bar1; 
 
 verify.importFixAtPosition([
-`import bar1 from "./foo";
+`import * as bar1 from "./foo";
 
 export function test() { };
 bar1.bar;`
