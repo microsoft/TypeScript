@@ -284,7 +284,7 @@ namespace ts.codefix {
         preferences: UserPreferences,
     ): ReadonlyArray<FixAddNewImport | FixUseImportType> {
         const isJs = isSourceFileJS(sourceFile);
-        const { allowsImporting } = createLazyPackageJsonDependencyReader(sourceFile, host);
+        const { allowsImportingSpecifier } = createLazyPackageJsonDependencyReader(sourceFile, host, preferences, program.redirectTargetsMap);
         const choicesForEachExportingModule = flatMap(moduleSymbols, ({ moduleSymbol, importKind, exportedSymbolIsTypeOnly }) =>
             moduleSpecifiers.getModuleSpecifiers(moduleSymbol, program.getCompilerOptions(), sourceFile, host, program.getSourceFiles(), preferences, program.redirectTargetsMap)
             .map((moduleSpecifier): FixAddNewImport | FixUseImportType =>
@@ -293,8 +293,8 @@ namespace ts.codefix {
 
         // Sort by presence in package.json, then shortest paths first
         return sort(choicesForEachExportingModule, (a, b) => {
-            const allowsImportingA = allowsImporting(a.moduleSpecifier);
-            const allowsImportingB = allowsImporting(b.moduleSpecifier);
+            const allowsImportingA = allowsImportingSpecifier(a.moduleSpecifier);
+            const allowsImportingB = allowsImportingSpecifier(b.moduleSpecifier);
             if (allowsImportingA && !allowsImportingB) {
                 return -1;
             }
@@ -621,47 +621,18 @@ namespace ts.codefix {
     }
 
     export function forEachExternalModuleToImportFrom(checker: TypeChecker, host: LanguageServiceHost, preferences: UserPreferences, redirectTargetsMap: RedirectTargetsMap, from: SourceFile, allSourceFiles: ReadonlyArray<SourceFile>, cb: (module: Symbol) => void) {
-        const { allowsImporting } = createLazyPackageJsonDependencyReader(from, host);
-        const compilerOptions = host.getCompilationSettings();
-        const getCanonicalFileName = hostGetCanonicalFileName(host);
+        const { allowsImportingAmbientModule, allowsImportingSourceFile } = createLazyPackageJsonDependencyReader(from, host, preferences, redirectTargetsMap);
         forEachExternalModule(checker, allSourceFiles, (module, sourceFile) => {
-            if (sourceFile === undefined && allowsImporting(stripQuotes(module.getName()))) {
+            if (sourceFile === undefined && allowsImportingAmbientModule(module, allSourceFiles)) {
                 cb(module);
             }
             else if (sourceFile && sourceFile !== from && isImportablePath(from.fileName, sourceFile.fileName)) {
-                const moduleSpecifier = getNodeModulesPackageNameFromFileName(sourceFile.fileName);
-                if (!moduleSpecifier || allowsImporting(moduleSpecifier)) {
+                if (allowsImportingSourceFile(sourceFile, allSourceFiles)) {
                     cb(module);
                 }
             }
         });
         moduleSpecifiers.clearSymlinksCache();
-
-        function getNodeModulesPackageNameFromFileName(importedFileName: string): string | undefined {
-            if (!stringContains(importedFileName, "node_modules")) {
-                return undefined;
-            }
-            const specifier = moduleSpecifiers.getModuleSpecifier(
-                compilerOptions,
-                from,
-                toPath(from.fileName, /*basePath*/ undefined, getCanonicalFileName),
-                importedFileName,
-                host,
-                allSourceFiles,
-                preferences,
-                redirectTargetsMap);
-
-            // Paths here are not node_modules, so we don’t care about them;
-            // returning anything will trigger a lookup in package.json.
-            if (!pathIsRelative(specifier) && !isRootedDiskPath(specifier)) {
-                const components = getPathComponents(getPackageNameFromTypesPackageName(specifier)).slice(1);
-                // Scoped packages
-                if (startsWith(components[0], "@")) {
-                    return `${components[0]}/${components[1]}`;
-                }
-                return components[0];
-            }
-        }
     }
 
     function forEachExternalModule(checker: TypeChecker, allSourceFiles: ReadonlyArray<SourceFile>, cb: (module: Symbol, sourceFile: SourceFile | undefined) => void) {
@@ -716,12 +687,13 @@ namespace ts.codefix {
         return !isStringANonContextualKeyword(res) ? res || "_" : `_${res}`;
     }
 
-    function createLazyPackageJsonDependencyReader(fromFile: SourceFile, host: LanguageServiceHost) {
+    function createLazyPackageJsonDependencyReader(fromFile: SourceFile, host: LanguageServiceHost, preferences: UserPreferences, redirectTargetsMap: RedirectTargetsMap) {
         const packageJsonPaths = findPackageJsons(getDirectoryPath(fromFile.fileName), host);
         const dependencyIterator = readPackageJsonDependencies(host, packageJsonPaths);
+        const getCanonicalFileName = hostGetCanonicalFileName(host);
         let seenDeps: Map<true> | undefined;
         let usesNodeCoreModules: boolean | undefined;
-        return { allowsImporting };
+        return { allowsImportingAmbientModule, allowsImportingSourceFile, allowsImportingSpecifier };
 
         function containsDependency(dependency: string) {
             if ((seenDeps || (seenDeps = createMap())).has(dependency)) {
@@ -737,11 +709,60 @@ namespace ts.codefix {
             return false;
         }
 
-        function allowsImporting(moduleSpecifier: string): boolean {
+        function moduleSpecifierIsCoveredByPackageJson(specifier: string) {
+            const root = getPathComponents(specifier)[1];
+            return containsDependency(root) || containsDependency(getTypesPackageName(root));
+        }
+
+        function allowsImportingAmbientModule(moduleSymbol: Symbol, allSourceFiles: readonly SourceFile[]): boolean {
             if (!packageJsonPaths.length) {
                 return true;
             }
 
+            const declaringSourceFile = moduleSymbol.valueDeclaration.getSourceFile();
+            const declaringNodeModuleName = getNodeModulesPackageNameFromFileName(declaringSourceFile.fileName, fromFile, allSourceFiles);
+            if (typeof declaringNodeModuleName === "undefined") {
+                return true;
+            }
+
+            const declaredModuleSpecifier = stripQuotes(moduleSymbol.getName());
+            if (isAllowedCoreNodeModulesImport(declaredModuleSpecifier)) {
+                return true;
+            }
+
+            return moduleSpecifierIsCoveredByPackageJson(declaringNodeModuleName)
+                || moduleSpecifierIsCoveredByPackageJson(declaredModuleSpecifier);
+        }
+
+        function allowsImportingSourceFile(sourceFile: SourceFile, allSourceFiles: readonly SourceFile[]): boolean {
+            if (!packageJsonPaths.length) {
+                return true;
+            }
+
+            const moduleSpecifier = getNodeModulesPackageNameFromFileName(sourceFile.fileName, fromFile, allSourceFiles);
+            if (!moduleSpecifier) {
+                return true;
+            }
+
+            return containsDependency(moduleSpecifier)
+                || containsDependency(getTypesPackageName(moduleSpecifier));
+        }
+
+        /**
+         * Fast approximation from string-only input. Use `allowsImportingSourceFile` and `allowsImportingAmbientModule`
+         * for better accuracy when possible.
+         */
+        function allowsImportingSpecifier(moduleSpecifier: string) {
+            if (!packageJsonPaths.length || isAllowedCoreNodeModulesImport(moduleSpecifier)) {
+                return true;
+            }
+            if (pathIsRelative(moduleSpecifier) || isRootedDiskPath(moduleSpecifier)) {
+                return true;
+            }
+            return moduleSpecifierIsCoveredByPackageJson(moduleSpecifier);
+        }
+
+        function isAllowedCoreNodeModulesImport(moduleSpecifier: string) {
             // If we’re in JavaScript, it can be difficult to tell whether the user wants to import
             // from Node core modules or not. We can start by seeing if the user is actually using
             // any node core modules, as opposed to simply having @types/node accidentally as a
@@ -754,9 +775,33 @@ namespace ts.codefix {
                     return true;
                 }
             }
+            return false;
+        }
 
-            return containsDependency(moduleSpecifier)
-                || containsDependency(getTypesPackageName(moduleSpecifier));
+        function getNodeModulesPackageNameFromFileName(importedFileName: string, importingFile: SourceFile, allSourceFiles: readonly SourceFile[]): string | undefined {
+            if (!stringContains(importedFileName, "node_modules")) {
+                return undefined;
+            }
+            const specifier = moduleSpecifiers.getModuleSpecifier(
+                host.getCompilationSettings(),
+                importingFile,
+                toPath(importingFile.fileName, /*basePath*/ undefined, getCanonicalFileName),
+                importedFileName,
+                host,
+                allSourceFiles,
+                preferences,
+                redirectTargetsMap);
+
+            // Paths here are not node_modules, so we don’t care about them;
+            // returning anything will trigger a lookup in package.json.
+            if (!pathIsRelative(specifier) && !isRootedDiskPath(specifier)) {
+                const components = getPathComponents(getPackageNameFromTypesPackageName(specifier)).slice(1);
+                // Scoped packages
+                if (startsWith(components[0], "@")) {
+                    return `${components[0]}/${components[1]}`;
+                }
+                return components[0];
+            }
         }
     }
 
