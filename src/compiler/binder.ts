@@ -1284,12 +1284,14 @@ namespace ts {
             activeLabels!.pop();
         }
 
-        function isDottedName(node: Expression) {
-            return node.kind === SyntaxKind.Identifier || node.kind === SyntaxKind.PropertyAccessExpression && isQualifiedName((<PropertyAccessExpression>node).expression);
+        function isDottedName(node: Expression): boolean {
+            return node.kind === SyntaxKind.Identifier || node.kind === SyntaxKind.PropertyAccessExpression && isDottedName((<PropertyAccessExpression>node).expression);
         }
 
         function bindExpressionStatement(node: ExpressionStatement): void {
             bind(node.expression);
+            // A top level call expression with a dotted function name and at least one argument
+            // is potentially an assertion and is therefore included in the control flow.
             if (node.expression.kind === SyntaxKind.CallExpression) {
                 const call = <CallExpression>node.expression;
                 if (isDottedName(call.expression) && call.arguments.length >= 1) {

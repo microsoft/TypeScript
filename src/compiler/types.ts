@@ -32,6 +32,7 @@ namespace ts {
         | SyntaxKind.AbstractKeyword
         | SyntaxKind.AnyKeyword
         | SyntaxKind.AsKeyword
+        | SyntaxKind.AssertsKeyword
         | SyntaxKind.BigIntKeyword
         | SyntaxKind.BooleanKeyword
         | SyntaxKind.BreakKeyword
@@ -250,6 +251,7 @@ namespace ts {
         // Contextual keywords
         AbstractKeyword,
         AsKeyword,
+        AssertsKeyword,
         AnyKeyword,
         AsyncKeyword,
         AwaitKeyword,
@@ -734,6 +736,7 @@ namespace ts {
     export type AwaitKeywordToken = Token<SyntaxKind.AwaitKeyword>;
     export type PlusToken = Token<SyntaxKind.PlusToken>;
     export type MinusToken = Token<SyntaxKind.MinusToken>;
+    export type AssertsToken = Token<SyntaxKind.AssertsKeyword>;
 
     export type Modifier
         = Token<SyntaxKind.AbstractKeyword>
@@ -1177,8 +1180,9 @@ namespace ts {
     export interface TypePredicateNode extends TypeNode {
         kind: SyntaxKind.TypePredicate;
         parent: SignatureDeclaration | JSDocTypeExpression;
+        assertsModifier?: AssertsToken;
         parameterName: Identifier | ThisTypeNode;
-        type: TypeNode;
+        type?: TypeNode;
     }
 
     export interface TypeQueryNode extends TypeNode {
@@ -3493,25 +3497,32 @@ namespace ts {
 
     export const enum TypePredicateKind {
         This,
-        Identifier
+        Identifier,
+        Assertion
     }
 
-    export interface TypePredicateBase {
-        kind: TypePredicateKind;
+    export interface ThisTypePredicate {
+        kind: TypePredicateKind.This;
+        parameterName: undefined;
+        parameterIndex: undefined;
         type: Type;
     }
 
-    export interface ThisTypePredicate extends TypePredicateBase {
-        kind: TypePredicateKind.This;
-    }
-
-    export interface IdentifierTypePredicate extends TypePredicateBase {
+    export interface IdentifierTypePredicate {
         kind: TypePredicateKind.Identifier;
         parameterName: string;
         parameterIndex: number;
+        type: Type;
     }
 
-    export type TypePredicate = IdentifierTypePredicate | ThisTypePredicate;
+    export interface AssertionTypePredicate {
+        kind: TypePredicateKind.Assertion;
+        parameterName: string;
+        parameterIndex: number;
+        type: Type | undefined;
+    }
+
+    export type TypePredicate = ThisTypePredicate | IdentifierTypePredicate | AssertionTypePredicate;
 
     /* @internal */
     export type AnyImportSyntax = ImportDeclaration | ImportEqualsDeclaration;
@@ -3907,8 +3918,9 @@ namespace ts {
         resolvedSignature?: Signature;    // Cached signature of signature node or call expression
         resolvedSymbol?: Symbol;          // Cached name resolution result
         resolvedIndexInfo?: IndexInfo;    // Cached indexing info resolution result
-        maybeTypePredicate?: boolean;     // Cached check whether call expression might reference a type predicate
-        isAssertCall?: boolean;
+        //maybeTypePredicate?: boolean;     // Cached check whether call expression might reference a type predicate
+        //isAssertCall?: boolean;
+        resolvedTypePredicate?: TypePredicate; // Cached type predicate for call expression
         enumMemberValue?: string | number;  // Constant value of enum member
         isVisible?: boolean;              // Is this node visible
         containsArgumentsReference?: boolean; // Whether a function-like declaration contains an 'arguments' reference

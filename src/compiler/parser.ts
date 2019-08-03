@@ -2992,6 +2992,8 @@ namespace ts {
                     return parseParenthesizedType();
                 case SyntaxKind.ImportKeyword:
                     return parseImportType();
+                case SyntaxKind.AssertsKeyword:
+                    return lookAhead(nextTokenIsIdentifierOrKeywordOnSameLine) ? parseAssertsTypePredicate() : parseTypeReference();
                 default:
                     return parseTypeReference();
             }
@@ -3032,6 +3034,7 @@ namespace ts {
                 case SyntaxKind.DotDotDotToken:
                 case SyntaxKind.InferKeyword:
                 case SyntaxKind.ImportKeyword:
+                case SyntaxKind.AssertsKeyword:
                     return true;
                 case SyntaxKind.FunctionKeyword:
                     return !inStartOfParameter;
@@ -3223,6 +3226,16 @@ namespace ts {
                 nextToken();
                 return id;
             }
+        }
+
+        function parseAssertsTypePredicate(): TypeNode {
+            const node = <TypePredicateNode>createNode(SyntaxKind.TypePredicate);
+            node.assertsModifier = parseExpectedToken(SyntaxKind.AssertsKeyword);
+            node.parameterName = parseIdentifier();
+            if (parseOptional(SyntaxKind.IsKeyword)) {
+                node.type = parseType();
+            }
+            return finishNode(node);
         }
 
         function parseType(): TypeNode {

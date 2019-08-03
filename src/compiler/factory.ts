@@ -667,17 +667,18 @@ namespace ts {
         return <KeywordTypeNode>createSynthesizedNode(kind);
     }
 
-    export function createTypePredicateNode(parameterName: Identifier | ThisTypeNode | string, type: TypeNode) {
+    export function createTypePredicateNode(assertsModifier: AssertsToken | undefined, parameterName: Identifier | ThisTypeNode | string, type: TypeNode | undefined) {
         const node = createSynthesizedNode(SyntaxKind.TypePredicate) as TypePredicateNode;
+        node.assertsModifier = assertsModifier;
         node.parameterName = asName(parameterName);
         node.type = type;
         return node;
     }
 
-    export function updateTypePredicateNode(node: TypePredicateNode, parameterName: Identifier | ThisTypeNode, type: TypeNode) {
+    export function updateTypePredicateNode(node: TypePredicateNode, assertsModifier: AssertsToken | undefined, parameterName: Identifier | ThisTypeNode, type: TypeNode | undefined) {
         return node.parameterName !== parameterName
             || node.type !== type
-            ? updateNode(createTypePredicateNode(parameterName, type), node)
+            ? updateNode(createTypePredicateNode(assertsModifier, parameterName, type), node)
             : node;
     }
 
