@@ -2151,10 +2151,6 @@ namespace ts {
         return arg => f(arg) || g(arg);
     }
 
-    export function not<T extends unknown[]>(f: (...args: T) => boolean): (...args: T) => boolean {
-        return (...args) => !f(...args);
-    }
-
     export function assertType<T>(_: T): void { } // tslint:disable-line no-empty
 
     export function singleElementArray<T>(t: T | undefined): T[] | undefined {
