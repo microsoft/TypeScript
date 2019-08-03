@@ -8670,16 +8670,6 @@ namespace ts {
             }
         }
 
-        // function hasAssertionTypePredicate(signature: Signature): boolean {
-        //     const predicate = getTypePredicateOfSignature(signature);
-        //     return !!predicate && predicate.kind === TypePredicateKind.Assertion;
-        // }
-
-        // function hasBooleanTypePredicate(signature: Signature): boolean {
-        //     const predicate = getTypePredicateOfSignature(signature);
-        //     return !!predicate && (predicate.kind === TypePredicateKind.This || predicate.kind === TypePredicateKind.Identifier);
-        // }
-
         function getTypePredicateOfSignature(signature: Signature): TypePredicate | undefined {
             if (!signature.resolvedTypePredicate) {
                 if (signature.target) {
