@@ -14,67 +14,78 @@ const ruleTester = new RuleTester({
 });
 
 ruleTester.run("boolean-trivia", rule, {
-    valid: [{
-        filename: FILENAME,
-        code: `
+    valid: [
+        {
+            filename: FILENAME,
+            code: `
 const fn = (prop: boolean) => {};
 fn(/* boolean prop */ true);
-        `,
-    }, {
-        filename: FILENAME,
-        code: `
+            `,
+        },
+        {
+            filename: FILENAME,
+            code: `
 const fn = (prop: null) => {};
 fn(/* null prop */ null);
-        `,
-    }, {
-        filename: FILENAME,
-        code: `
+            `,
+        },
+        {
+            filename: FILENAME,
+            code: `
 const fn = (prop: null) => {};
 fn(/*null prop*/ null);
-        `,
-    }, {
-        filename: FILENAME,
-        code: `
+            `,
+        },
+        {
+            filename: FILENAME,
+            code: `
 const fn = (prop: boolean) => {};
 fn(/* comment */
     false
 );
-        `,
-    }, {
-        filename: FILENAME,
-        code: `
+            `,
+        },
+        {
+            filename: FILENAME,
+            code: `
 const fn = (prop: boolean) => {};
 fn.apply(null, true);
         `,
-    }],
+        },
+    ],
 
-    invalid: [{
-        filename: FILENAME,
-        code: `
+    invalid: [
+        {
+            filename: FILENAME,
+            code: `
 const fn = (prop: null) => {};
 fn(null);
-        `,
-        errors: [{ messageId: "booleanTriviaArgumentError" }],
-    }, {
-        filename: FILENAME,
-        code: `
+            `,
+            errors: [{ messageId: "booleanTriviaArgumentError" }],
+        },
+        {
+            filename: FILENAME,
+            code: `
 const fn = (prop: boolean) => {};
 fn(false);
-        `,
-        errors: [{ messageId: "booleanTriviaArgumentError" }],
-    }, {
-        filename: FILENAME,
-        code: `
+            `,
+            errors: [{ messageId: "booleanTriviaArgumentError" }],
+        },
+        {
+            filename: FILENAME,
+            code: `
 const fn = (prop: boolean) => {};
 fn(/* boolean arg */false);
-        `,
-        errors: [{ messageId: "booleanTriviaArgumentSpaceError" }],
-    }, {
-        filename: FILENAME,
-        code: `
+            `,
+            errors: [{ messageId: "booleanTriviaArgumentSpaceError" }],
+        },
+        {
+            filename: FILENAME,
+            code: `
 const fn = (prop: boolean) => {};
 fn(/* first comment */ /* second comment */ false);
-        `,
-        errors: [{ messageId: "booleanTriviaArgumentError" }],
-    }],
+            `,
+            errors: [{ messageId: "booleanTriviaArgumentError" }],
+        },
+    ],
 });
