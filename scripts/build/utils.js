@@ -25,10 +25,11 @@ const isWindows = /^win/.test(process.platform);
  * @property {boolean} [ignoreExitCode]
  * @property {import("prex").CancellationToken} [cancelToken]
  * @property {boolean} [hidePrompt]
+ * @property {boolean} [waitForExit=true]
  */
 function exec(cmd, args, options = {}) {
     return /**@type {Promise<{exitCode: number}>}*/(new Promise((resolve, reject) => {
-        const { ignoreExitCode, cancelToken = CancellationToken.none } = options;
+        const { ignoreExitCode, cancelToken = CancellationToken.none, waitForExit = true } = options;
         cancelToken.throwIfCancellationRequested();
 
         // TODO (weswig): Update child_process types to add windowsVerbatimArguments to the type definition
@@ -43,19 +44,25 @@ function exec(cmd, args, options = {}) {
             proc.kill("SIGTERM");
             reject(new CancelError());
         });
-        proc.on("exit", exitCode => {
-            registration.unregister();
-            if (exitCode === 0 || ignoreExitCode) {
-                resolve({ exitCode });
-            }
-            else {
-                reject(new Error(`Process exited with code: ${exitCode}`));
-            }
-        });
-        proc.on("error", error => {
-            registration.unregister();
-            reject(error);
-        });
+        if (waitForExit) {
+            proc.on("exit", exitCode => {
+                registration.unregister();
+                if (exitCode === 0 || ignoreExitCode) {
+                    resolve({ exitCode });
+                }
+                else {
+                    reject(new Error(`Process exited with code: ${exitCode}`));
+                }
+            });
+            proc.on("error", error => {
+                registration.unregister();
+                reject(error);
+            });
+        }
+        else {
+            proc.unref();
+            resolve({ exitCode: undefined });
+        }
     }));
 }
 exports.exec = exec;
