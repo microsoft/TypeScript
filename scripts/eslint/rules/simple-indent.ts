@@ -1,10 +1,7 @@
 import { TSESTree } from "@typescript-eslint/experimental-utils";
 import { createRule } from "./utils";
 
-type MessageId = "simpleIndentError";
-type Options = any;
-
-export = createRule<Options, MessageId>({
+export = createRule({
     name: "simple-indent",
     meta: {
         docs: {
