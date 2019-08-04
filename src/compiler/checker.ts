@@ -20266,7 +20266,7 @@ namespace ts {
             }
 
             function generateInitialErrorChain(): DiagnosticMessageChain {
-                return chainDiagnosticMessages(undefined, Diagnostics.This_expression_cannot_be_used_as_a_JSX_component);
+                return chainDiagnosticMessages(/* details */ undefined, Diagnostics.This_expression_cannot_be_used_as_a_JSX_component);
             }
         }
 
