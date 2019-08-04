@@ -5917,7 +5917,7 @@ namespace ts {
         // If fileName is provided, gets all the diagnostics associated with that file name.
         // Otherwise, returns all the diagnostics (global and file associated) in this collection.
         getDiagnostics(): Diagnostic[];
-        getDiagnostics(fileName: string): DiagnosticWithLocation[];
+        getDiagnostics(fileName: string): DiagnosticWithLocation[]; // eslint-disable-line @typescript-eslint/unified-signatures
 
         reattachFileDiagnostics(newFile: SourceFile): void;
     }

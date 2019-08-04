@@ -1146,7 +1146,7 @@ foo().hello`
             const currentDirectory = "/user/username/projects/myproject";
             const field = "fullscreen";
             const fieldWithoutReadonly = `interface Document {
-	${field}: boolean;
+    ${field}: boolean;
 }`;
 
             const libFileWithDocument: File = {
@@ -1227,13 +1227,13 @@ var y: number;
             const aFile: File = {
                 path: `${currentDirectory}/a.ts`,
                 content: `interface Document {
-	${field}: boolean;
+    ${field}: boolean;
 }`
             };
             const bFile: File = {
                 path: `${currentDirectory}/b.d.ts`,
                 content: `interface Document {
-	${field}: boolean;
+    ${field}: boolean;
 }`
             };
             const libFileWithDocument: File = {

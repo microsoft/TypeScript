@@ -422,14 +422,14 @@ function myFunc() { return 100; }`, /*isLocal*/ true);
                 content: `
 interface SomeObject
 {
-	message: string;
+    message: string;
 }
 
 export function createSomeObject(): SomeObject
 {
-	return {
-		message: "new Object"
-	};
+    return {
+        message: "new Object"
+    };
 }`
             };
             const libraryTsconfig: File = {

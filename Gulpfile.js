@@ -333,13 +333,13 @@ task("run-rules-tests").description = "Runs the eslint rule tests";
 
 const lintFoldStart = async () => { if (fold.isTravis()) console.log(fold.start("lint")); };
 const lintFoldEnd = async () => { if (fold.isTravis()) console.log(fold.end("lint")); };
-const eslint = async () => {
+const eslint = (path) => async () => {
     const args = [
         "node_modules/eslint/bin/eslint",
         "--format", "autolinkable-stylish",
-        "--config", ".eslintrc",
-        "--ext", ".ts", ".",
         "--rulesdir", "built/eslint/rules/",
+        "--ext", ".ts",
+        `"${ path }"`,
     ];
 
     if (cmdLineOptions.fix) {
@@ -350,13 +350,15 @@ const eslint = async () => {
     return exec(process.execPath, args);
 }
 
-const lint = series([buildRules, lintFoldStart, eslint, lintFoldEnd]);
+const lintScripts = series([buildRules, eslint("scripts/**/*.ts")]);
+lintScripts.displayName = "lint-scripts";
+task("lint-scripts", lintScripts);
+task("lint-scripts").description = "Runs eslint on the scripts sources.";
+
+const lint = series([buildRules, lintFoldStart, eslint("src/**/*.ts"), lintFoldEnd]);
 lint.displayName = "lint";
 task("lint", lint);
 task("lint").description = "Runs eslint on the compiler sources.";
-task("lint").flags = {
-    "   --f[iles]=<regex>": "pattern to match files to lint",
-};
 
 const buildCancellationToken = () => buildProject("src/cancellationToken");
 const cleanCancellationToken = () => cleanProject("src/cancellationToken");

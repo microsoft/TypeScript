@@ -104,7 +104,7 @@ module TestModule {
 }
             `,
             errors: [
-                { messageId: 'simpleIndentError', line: 3, column: 2 },
+                { messageId: "simpleIndentError", line: 3, column: 2 },
             ],
         },
         {
@@ -112,14 +112,14 @@ module TestModule {
 function a() {
 \t\tvar test = 123;
 }
-			`,
+            `,
             output: `
 function a() {
         var test = 123;
 }
-			`,
+            `,
             errors: [
-				{ messageId: 'simpleIndentError', line: 3, column: 3 },
+                { messageId: "simpleIndentError", line: 3, column: 3 },
             ],
         },
         {
@@ -142,10 +142,10 @@ class TestClass {
 }
             `,
             errors: [
-                { messageId: 'simpleIndentError', line: 3, column: 2 },
-                { messageId: 'simpleIndentError', line: 5, column: 2 },
-                { messageId: 'simpleIndentError', line: 6, column: 3 },
-                { messageId: 'simpleIndentError', line: 7, column: 2 },
+                { messageId: "simpleIndentError", line: 3, column: 2 },
+                { messageId: "simpleIndentError", line: 5, column: 2 },
+                { messageId: "simpleIndentError", line: 6, column: 3 },
+                { messageId: "simpleIndentError", line: 7, column: 2 },
             ],
         },
         {
@@ -164,9 +164,9 @@ var obj = {
 };
             `,
             errors: [
-                { messageId: 'simpleIndentError', line: 3, column: 2 },
-                { messageId: 'simpleIndentError', line: 4, column: 2 },
-                { messageId: 'simpleIndentError', line: 5, column: 2 },
+                { messageId: "simpleIndentError", line: 3, column: 2 },
+                { messageId: "simpleIndentError", line: 4, column: 2 },
+                { messageId: "simpleIndentError", line: 5, column: 2 },
             ]
         },
         {
@@ -183,7 +183,7 @@ enum TestEnum {
 }
             `,
             errors: [
-                { messageId: 'simpleIndentError', line: 3, column: 2 },
+                { messageId: "simpleIndentError", line: 3, column: 2 },
             ],
         },
         {
@@ -214,12 +214,12 @@ switch (integerValue) {
 }
             `,
             errors: [
-                { messageId: 'simpleIndentError', line: 3, column: 2 },
-                { messageId: 'simpleIndentError', line: 4, column: 3 },
-                { messageId: 'simpleIndentError', line: 5, column: 3 },
-                { messageId: 'simpleIndentError', line: 9, column: 2 },
-                { messageId: 'simpleIndentError', line: 10, column: 3 },
-                { messageId: 'simpleIndentError', line: 11, column: 3 },
+                { messageId: "simpleIndentError", line: 3, column: 2 },
+                { messageId: "simpleIndentError", line: 4, column: 3 },
+                { messageId: "simpleIndentError", line: 5, column: 3 },
+                { messageId: "simpleIndentError", line: 9, column: 2 },
+                { messageId: "simpleIndentError", line: 10, column: 3 },
+                { messageId: "simpleIndentError", line: 11, column: 3 },
             ]
         },
         {
@@ -234,8 +234,8 @@ for (var i = 0; i < 1; ++i) {
 }
             `,
             errors: [
-				{ messageId: 'simpleIndentError', line: 3, column: 2 },
-			]
+                { messageId: "simpleIndentError", line: 3, column: 2 },
+            ],
         },
         {
             code: `
@@ -249,7 +249,7 @@ while (i < 1) {
 }
             `,
             errors: [
-                { messageId: 'simpleIndentError', line: 3, column: 2 },
+                { messageId: "simpleIndentError", line: 3, column: 2 },
             ]
         },
         {
@@ -264,7 +264,7 @@ do {
 } while (i < 1);
             `,
             errors: [
-                { messageId: 'simpleIndentError', line: 3, column: 2 },
+                { messageId: "simpleIndentError", line: 3, column: 2 },
             ]
         },
         {
@@ -279,7 +279,7 @@ if (i < 1) {
 }
             `,
             errors: [
-                { messageId: 'simpleIndentError', line: 3, column: 2 },
+                { messageId: "simpleIndentError", line: 3, column: 2 },
             ]
         },
         {
@@ -296,7 +296,7 @@ var arr = [
 ];
             `,
             errors: [
-                { messageId: 'simpleIndentError', line: 3, column: 2 },
+                { messageId: "simpleIndentError", line: 3, column: 2 },
             ]
         },
         {
@@ -325,8 +325,8 @@ var arr2 = [
 ];
             `,
             errors: [
-                { messageId: 'simpleIndentError', line: 4, column: 3 },
-                { messageId: 'simpleIndentError', line: 9, column: 3 },
+                { messageId: "simpleIndentError", line: 4, column: 3 },
+                { messageId: "simpleIndentError", line: 9, column: 3 },
             ]
         }
     ],

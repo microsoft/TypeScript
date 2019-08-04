@@ -1,4 +1,4 @@
-import { TSESTree } from "@typescript-eslint/typescript-estree";
+import { TSESTree } from "@typescript-eslint/experimental-utils";
 import { createRule } from "./utils";
 
 type MessageId = "simpleIndentError";
@@ -15,7 +15,7 @@ export = createRule<Options, MessageId>({
         messages: {
             simpleIndentError: "4 space indentation expected",
         },
-        fixable: 'whitespace',
+        fixable: "whitespace",
         schema: [],
         type: "layout",
     },
@@ -29,8 +29,8 @@ export = createRule<Options, MessageId>({
         const checkIndent = (node: TSESTree.Program) => {
             const lines = sourceCode.getLines();
             const linesLen = lines.length;
-              let totalLen = 0;
 
+            let totalLen = 0;
             for (let i = 0; i < linesLen; i++) {
                 const lineNumber = i + 1;
                 const line = lines[i];
@@ -48,7 +48,7 @@ export = createRule<Options, MessageId>({
                     }
 
                     context.report({
-                        messageId: 'simpleIndentError',
+                        messageId: "simpleIndentError",
                         node,
                         loc: { column: indentEnd, line: lineNumber },
                         fix(fixer) {
@@ -63,10 +63,10 @@ export = createRule<Options, MessageId>({
 
                 totalLen += lineLen;
             }
-        }
+        };
 
         return {
             Program: checkIndent,
-        }
+        };
     },
 });

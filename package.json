@@ -104,6 +104,7 @@
     "scripts": {
         "pretest": "gulp tests",
         "test": "gulp runtests-parallel --light=false",
+        "test:eslint-rules": "gulp run-rules-tests",
         "build": "npm run build:compiler && npm run build:tests",
         "build:compiler": "gulp local",
         "build:tests": "gulp tests",
@@ -112,7 +113,7 @@
         "gulp": "gulp",
         "jake": "gulp",
         "lint": "gulp lint",
-        "lint:test": "gulp run-rules-tests",
+        "lint:scripts": "gulp lint-scripts",
         "setup-hooks": "node scripts/link-hooks.js",
         "update-costly-tests": "node scripts/costly-tests.js"
     },

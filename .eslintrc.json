@@ -21,14 +21,6 @@
         "@typescript-eslint/camelcase": ["error", { "properties": "never", "allow": ["^[A-Za-z][a-zA-Za-z]+_[A-Za-z]+$"] }],
         "@typescript-eslint/class-name-casing": "error",
         "@typescript-eslint/consistent-type-definitions": ["error", "interface"],
-        "indent": "off",
-        "@typescript-eslint/indent": ["error", 4, {
-            "flatTernaryExpressions": true,
-            "FunctionDeclaration": { "parameters": 1, "body": 1 },
-            "CallExpression": { "arguments": 1 },
-            "ignoredNodes": ["TSTypeAnnotation"],
-            "SwitchCase": 1
-        }],
         "@typescript-eslint/interface-name-prefix": "error",
         "@typescript-eslint/no-inferrable-types": "error",
         "@typescript-eslint/no-misused-new": "error",
@@ -44,7 +36,7 @@
         "@typescript-eslint/type-annotation-spacing": "error",
         "@typescript-eslint/unified-signatures": "error",
 
-        /** scripts/eslint/rules */
+        // scripts/eslint/rules
         "object-literal-surrounding-space": "error",
         "no-type-assertion-whitespace": "error",
         "type-operator-spacing": "error",
@@ -55,19 +47,20 @@
         "no-double-space": "error",
         "boolean-trivia": "error",
         "no-in-operator": "error",
+        "simple-indent": "error",
         "debug-assert": "error",
         "no-keywords": "error",
 
-        /** eslint-plugin-import */
+        // eslint-plugin-import
         "import/no-extraneous-dependencies": ["error", { "optionalDependencies": false }],
 
-        /** eslint-plugin-no-null */
+        // eslint-plugin-no-null
         "no-null/no-null": "error",
 
-        /** eslint-plugin-jsdoc */
+        // eslint-plugin-jsdoc
         "jsdoc/check-alignment": "error",
 
-        /** eslint */
+        // eslint
         "brace-style": ["error", "stroustrup", { "allowSingleLine": true }],
         "constructor-super": "error",
         "curly": ["error", "multi-line"],
@@ -109,7 +102,7 @@
         "quotes": ["error", "double", { "avoidEscape": true, "allowTemplateLiterals": true }],
         "space-in-parens": "error",
         "unicode-bom": ["error", "never"],
-        "use-isnan": "error",
+        "use-isnan": "error"
     },
     "overrides": [{
         "files": ["src/lib/*.d.ts"],
@@ -118,10 +111,10 @@
             "@typescript-eslint/prefer-function-type": "off",
             "@typescript-eslint/unified-signatures": "off",
 
-            /** scripts/eslint/rules */
+            // scripts/eslint/rules
             "no-keywords": "off",
 
-            /** eslint */
+            // eslint
             "no-var": "off"
         }
     }]
