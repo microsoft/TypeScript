@@ -360,8 +360,8 @@ namespace ts.codefix {
             case ModuleKind.UMD:
                 if (isInJSFile(importingFile)) {
                     return isExternalModule(importingFile) ? ImportKind.Namespace : ImportKind.ConstEquals;
-                 }
-                 return ImportKind.Equals;
+                }
+                return ImportKind.Equals;
             case ModuleKind.System:
             case ModuleKind.ES2015:
             case ModuleKind.ESNext:

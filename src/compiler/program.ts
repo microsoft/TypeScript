@@ -814,7 +814,7 @@ namespace ts {
         // We set `structuralIsReused` to `undefined` because `tryReuseStructureFromOldProgram` calls `tryReuseStructureFromOldProgram` which checks
         // `structuralIsReused`, which would be a TDZ violation if it was not set in advance to `undefined`.
         let structuralIsReused: StructureIsReused | undefined;
-        structuralIsReused = tryReuseStructureFromOldProgram();
+        structuralIsReused = tryReuseStructureFromOldProgram(); // eslint-disable-line prefer-const
         if (structuralIsReused !== StructureIsReused.Completely) {
             processingDefaultLibFiles = [];
             processingOtherFiles = [];

@@ -83,7 +83,7 @@ namespace ts {
         let currentSourceFile: SourceFile;
         let refs: Map<SourceFile>;
         let libs: Map<boolean>;
-        let emittedImports: readonly AnyImportSyntax[] | undefined; // must be declared in container so it can be `undefined` while transformer's first pass
+        let emittedImports: ReadonlyArray<AnyImportSyntax> | undefined; // must be declared in container so it can be `undefined` while transformer's first pass
         const resolver = context.getEmitResolver();
         const options = context.getCompilerOptions();
         const newLine = getNewLineCharacter(options);
