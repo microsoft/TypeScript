@@ -2693,6 +2693,14 @@
         "category": "Error",
         "code": 2773
     },
+    "This expression cannot be used as a JSX component.": {
+        "category": "Error",
+        "code": 2774
+    },
+    "Its return type '{0}' is not a valid JSX element.": {
+        "category": "Error",
+        "code": 2775
+    },
 
     "Import declaration '{0}' is using private name '{1}'.": {
         "category": "Error",
