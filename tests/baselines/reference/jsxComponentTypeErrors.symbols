@@ -1,0 +1,78 @@
+=== tests/cases/compiler/jsxComponentTypeErrors.tsx ===
+namespace JSX {
+>JSX : Symbol(JSX, Decl(jsxComponentTypeErrors.tsx, 0, 0))
+
+  export interface Element {
+>Element : Symbol(Element, Decl(jsxComponentTypeErrors.tsx, 0, 15))
+
+    type: 'element';
+>type : Symbol(Element.type, Decl(jsxComponentTypeErrors.tsx, 1, 28))
+  }
+  export interface ElementClass {
+>ElementClass : Symbol(ElementClass, Decl(jsxComponentTypeErrors.tsx, 3, 3))
+
+    type: 'element-class';
+>type : Symbol(ElementClass.type, Decl(jsxComponentTypeErrors.tsx, 4, 33))
+  }
+}
+
+const FunctionComponent = () => ({
+>FunctionComponent : Symbol(FunctionComponent, Decl(jsxComponentTypeErrors.tsx, 9, 5))
+
+  type: 'string',
+>type : Symbol(type, Decl(jsxComponentTypeErrors.tsx, 9, 34))
+
+});
+
+class ClassComponent {
+>ClassComponent : Symbol(ClassComponent, Decl(jsxComponentTypeErrors.tsx, 11, 3))
+
+  type = 'string';
+>type : Symbol(ClassComponent.type, Decl(jsxComponentTypeErrors.tsx, 13, 22))
+}
+
+const MixedComponent = Math.random() ? FunctionComponent : ClassComponent;
+>MixedComponent : Symbol(MixedComponent, Decl(jsxComponentTypeErrors.tsx, 17, 5))
+>Math.random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
+>Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
+>FunctionComponent : Symbol(FunctionComponent, Decl(jsxComponentTypeErrors.tsx, 9, 5))
+>ClassComponent : Symbol(ClassComponent, Decl(jsxComponentTypeErrors.tsx, 11, 3))
+
+const elem1 = <FunctionComponent />;
+>elem1 : Symbol(elem1, Decl(jsxComponentTypeErrors.tsx, 19, 5))
+>FunctionComponent : Symbol(FunctionComponent, Decl(jsxComponentTypeErrors.tsx, 9, 5))
+
+const elem2 = <ClassComponent />;
+>elem2 : Symbol(elem2, Decl(jsxComponentTypeErrors.tsx, 20, 5))
+>ClassComponent : Symbol(ClassComponent, Decl(jsxComponentTypeErrors.tsx, 11, 3))
+
+const elem3 = <MixedComponent />;
+>elem3 : Symbol(elem3, Decl(jsxComponentTypeErrors.tsx, 21, 5))
+>MixedComponent : Symbol(MixedComponent, Decl(jsxComponentTypeErrors.tsx, 17, 5))
+
+const obj = {
+>obj : Symbol(obj, Decl(jsxComponentTypeErrors.tsx, 23, 5))
+
+  MemberFunctionComponent() {
+>MemberFunctionComponent : Symbol(MemberFunctionComponent, Decl(jsxComponentTypeErrors.tsx, 23, 13))
+
+    return {};
+  },
+  MemberClassComponent: class {},
+>MemberClassComponent : Symbol(MemberClassComponent, Decl(jsxComponentTypeErrors.tsx, 26, 4))
+
+};
+
+const elem4 = <obj.MemberFunctionComponent />;
+>elem4 : Symbol(elem4, Decl(jsxComponentTypeErrors.tsx, 30, 5))
+>obj.MemberFunctionComponent : Symbol(MemberFunctionComponent, Decl(jsxComponentTypeErrors.tsx, 23, 13))
+>obj : Symbol(obj, Decl(jsxComponentTypeErrors.tsx, 23, 5))
+>MemberFunctionComponent : Symbol(MemberFunctionComponent, Decl(jsxComponentTypeErrors.tsx, 23, 13))
+
+const elem5 = <obj.MemberClassComponent />;
+>elem5 : Symbol(elem5, Decl(jsxComponentTypeErrors.tsx, 31, 5))
+>obj.MemberClassComponent : Symbol(MemberClassComponent, Decl(jsxComponentTypeErrors.tsx, 26, 4))
+>obj : Symbol(obj, Decl(jsxComponentTypeErrors.tsx, 23, 5))
+>MemberClassComponent : Symbol(MemberClassComponent, Decl(jsxComponentTypeErrors.tsx, 26, 4))
+

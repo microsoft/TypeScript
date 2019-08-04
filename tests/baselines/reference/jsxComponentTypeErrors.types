@@ -1,0 +1,88 @@
+=== tests/cases/compiler/jsxComponentTypeErrors.tsx ===
+namespace JSX {
+  export interface Element {
+    type: 'element';
+>type : "element"
+  }
+  export interface ElementClass {
+    type: 'element-class';
+>type : "element-class"
+  }
+}
+
+const FunctionComponent = () => ({
+>FunctionComponent : () => { type: string; }
+>() => ({  type: 'string',}) : () => { type: string; }
+>({  type: 'string',}) : { type: string; }
+>{  type: 'string',} : { type: string; }
+
+  type: 'string',
+>type : string
+>'string' : "string"
+
+});
+
+class ClassComponent {
+>ClassComponent : ClassComponent
+
+  type = 'string';
+>type : string
+>'string' : "string"
+}
+
+const MixedComponent = Math.random() ? FunctionComponent : ClassComponent;
+>MixedComponent : (() => { type: string; }) | typeof ClassComponent
+>Math.random() ? FunctionComponent : ClassComponent : (() => { type: string; }) | typeof ClassComponent
+>Math.random() : number
+>Math.random : () => number
+>Math : Math
+>random : () => number
+>FunctionComponent : () => { type: string; }
+>ClassComponent : typeof ClassComponent
+
+const elem1 = <FunctionComponent />;
+>elem1 : JSX.Element
+><FunctionComponent /> : JSX.Element
+>FunctionComponent : () => { type: string; }
+
+const elem2 = <ClassComponent />;
+>elem2 : JSX.Element
+><ClassComponent /> : JSX.Element
+>ClassComponent : typeof ClassComponent
+
+const elem3 = <MixedComponent />;
+>elem3 : JSX.Element
+><MixedComponent /> : JSX.Element
+>MixedComponent : (() => { type: string; }) | typeof ClassComponent
+
+const obj = {
+>obj : { MemberFunctionComponent(): {}; MemberClassComponent: typeof MemberClassComponent; }
+>{  MemberFunctionComponent() {    return {};  },  MemberClassComponent: class {},} : { MemberFunctionComponent(): {}; MemberClassComponent: typeof MemberClassComponent; }
+
+  MemberFunctionComponent() {
+>MemberFunctionComponent : () => {}
+
+    return {};
+>{} : {}
+
+  },
+  MemberClassComponent: class {},
+>MemberClassComponent : typeof MemberClassComponent
+>class {} : typeof MemberClassComponent
+
+};
+
+const elem4 = <obj.MemberFunctionComponent />;
+>elem4 : JSX.Element
+><obj.MemberFunctionComponent /> : JSX.Element
+>obj.MemberFunctionComponent : () => {}
+>obj : { MemberFunctionComponent(): {}; MemberClassComponent: typeof MemberClassComponent; }
+>MemberFunctionComponent : () => {}
+
+const elem5 = <obj.MemberClassComponent />;
+>elem5 : JSX.Element
+><obj.MemberClassComponent /> : JSX.Element
+>obj.MemberClassComponent : typeof MemberClassComponent
+>obj : { MemberFunctionComponent(): {}; MemberClassComponent: typeof MemberClassComponent; }
+>MemberClassComponent : typeof MemberClassComponent
+
