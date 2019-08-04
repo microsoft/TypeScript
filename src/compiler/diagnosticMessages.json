@@ -2701,6 +2701,14 @@
         "category": "Error",
         "code": 2775
     },
+    "Its instance type '{0}' is not a valid JSX element.": {
+        "category": "Error",
+        "code": 2776
+    },
+    "Its element type '{0}' is not a valid JSX element.": {
+        "category": "Error",
+        "code": 2777
+    },
 
     "Import declaration '{0}' is using private name '{1}'.": {
         "category": "Error",
