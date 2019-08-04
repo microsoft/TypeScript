@@ -32,5 +32,6 @@
     ],
     "exclude": [
         "./lib"
-    ]
+    ],
+    "compileOnSave": true
 }

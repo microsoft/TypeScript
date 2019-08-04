@@ -1743,6 +1743,17 @@ namespace ts {
         return false;
     }
 
+    interface TsConfigJson {
+        compilerOptions?: OptionsBase;
+        references?: readonly ProjectReference[];
+        files?: readonly string[];
+        include?: readonly string[];
+        exclude?: readonly string[];
+        compileOnSave?: boolean;
+        extends?: string;
+        typeAcquisition?: TypeAcquisition;
+    }
+
     /**
      * Generate an uncommented, complete tsconfig for use with "--showConfig"
      * @param configParseResult options to be generated into tsconfig.json
@@ -1764,7 +1775,7 @@ namespace ts {
             f => getRelativePathFromFile(getNormalizedAbsolutePath(configFileName, host.getCurrentDirectory()), getNormalizedAbsolutePath(f, host.getCurrentDirectory()), getCanonicalFileName)
         );
         const optionMap = serializeCompilerOptions(configParseResult.options, { configFilePath: getNormalizedAbsolutePath(configFileName, host.getCurrentDirectory()), useCaseSensitiveFileNames: host.useCaseSensitiveFileNames });
-        const config = {
+        const config: TsConfigJson = {
             compilerOptions: {
                 ...arrayFrom(optionMap.entries()).reduce((prev, cur) => ({ ...prev, [cur[0]]: cur[1] }), {}),
                 showConfig: undefined,
@@ -1778,13 +1789,13 @@ namespace ts {
                 build: undefined,
                 version: undefined,
             },
-            references: map(configParseResult.projectReferences, r => ({ ...r, path: r.originalPath, originalPath: undefined })),
+            references: map(configParseResult.projectReferences, r => ({ ...r, path: r.originalPath!, originalPath: undefined })),
             files: length(files) ? files : undefined,
             ...(configParseResult.configFileSpecs ? {
                 include: filterSameAsDefaultInclude(configParseResult.configFileSpecs.validatedIncludeSpecs),
                 exclude: configParseResult.configFileSpecs.validatedExcludeSpecs
             } : {}),
-            compilerOnSave: !!configParseResult.compileOnSave ? true : undefined
+            compileOnSave: !!configParseResult.compileOnSave ? true : undefined
         };
         return config;
     }
