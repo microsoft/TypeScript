@@ -2,20 +2,18 @@ Exit Code: 1
 Standard output:
 
 Rush Multi-Project Build Tool 5.X.X - https://rushjs.io
+Node.js version is 12.7.0 (pre-LTS)
 Starting "rush rebuild"
 Executing a maximum of ?simultaneous processes...
 XX of XX: [@azure/abort-controller] completed successfully in ? seconds
 XX of XX: [@azure/core-asynciterator-polyfill] completed successfully in ? seconds
+XX of XX: [@azure/core-auth] completed successfully in ? seconds
 XX of XX: [@azure/core-paging] completed successfully in ? seconds
 XX of XX: [@azure/cosmos] completed successfully in ? seconds
-XX of XX: [@azure/event-processor-host] completed successfully in ? seconds
 Warning: You have changed the public API signature for this project. Updating review/service-bus.api.md
 XX of XX: [@azure/storage-blob] completed successfully in ? seconds
 XX of XX: [@azure/storage-file] completed successfully in ? seconds
 XX of XX: [@azure/storage-queue] completed successfully in ? seconds
-XX of XX: [@azure/template] completed successfully in ? seconds
-XX of XX: [testhub] completed successfully in ? seconds
-XX of XX: [@azure/core-auth] completed successfully in ? seconds
 npm ERR! code ELIFECYCLE
 npm ERR! errno 2
 npm ERR! @azure/core-http@X.X.X-preview.2 build:tsc: `tsc -p tsconfig.es.json`
@@ -36,7 +34,9 @@ npm ERR! This is probably not a problem with npm. There is likely additional log
 npm ERR! A complete log of this run can be found in:
 npm ERR!     /root/.npm/_logs/XXXX-XX-XXXXXXXXX-debug.log
 ERROR: "build:lib" exited with 1.
-SUCCESS (11)
+XX of XX: [@azure/event-processor-host] completed successfully in ? seconds
+XX of XX: [testhub] completed successfully in ? seconds
+SUCCESS (10)
 ================================
 @azure/abort-controller (? seconds)
 @azure/core-asynciterator-polyfill (? seconds)
@@ -47,7 +47,6 @@ SUCCESS (11)
 @azure/storage-blob (? seconds)
 @azure/storage-file (? seconds)
 @azure/storage-queue (? seconds)
-@azure/template (? seconds)
 testhub (? seconds)
 ================================
 SUCCESS WITH WARNINGS (1)
@@ -55,7 +54,7 @@ SUCCESS WITH WARNINGS (1)
 @azure/service-bus (? seconds)
 Warning: You have changed the public API signature for this project. Updating review/service-bus.api.md
 ================================
-BLOCKED (7)
+BLOCKED (8)
 ================================
 @azure/core-amqp
 @azure/core-arm
@@ -64,6 +63,7 @@ BLOCKED (7)
 @azure/keyvault-certificates
 @azure/keyvault-keys
 @azure/keyvault-secrets
+@azure/template
 ================================
 FAILURE (1)
 ================================
@@ -95,7 +95,6 @@ rush rebuild - Errors! ( ? seconds)
 
 
 Standard error:
-Your version of Node.js (X.X.X) has not been tested with this release of Rush. The Rush team will not accept issue reports for it. Please consider upgrading Rush or downgrading Node.js.
 XX of XX: [@azure/service-bus] completed with warnings in ? seconds
 XX of XX: [@azure/core-http] failed to build!
 XX of XX: [@azure/core-arm] blocked by [@azure/core-http]!
@@ -105,4 +104,5 @@ XX of XX: [@azure/keyvault-secrets] blocked by [@azure/core-http]!
 XX of XX: [@azure/identity] blocked by [@azure/core-http]!
 XX of XX: [@azure/core-amqp] blocked by [@azure/core-http]!
 XX of XX: [@azure/event-hubs] blocked by [@azure/core-http]!
+XX of XX: [@azure/template] blocked by [@azure/core-http]!
 [@azure/core-http] Returned error code: 1

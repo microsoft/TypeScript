@@ -759,7 +759,7 @@ namespace ts {
         let resolveModuleNamesWorker: (moduleNames: string[], containingFile: string, reusedNames?: string[], redirectedReference?: ResolvedProjectReference) => ResolvedModuleFull[];
         const hasInvalidatedResolution = host.hasInvalidatedResolution || returnFalse;
         if (host.resolveModuleNames) {
-            resolveModuleNamesWorker = (moduleNames, containingFile, reusedNames, redirectedReference) => host.resolveModuleNames!(Debug.assertEachDefined(moduleNames), containingFile, reusedNames, redirectedReference).map(resolved => {
+            resolveModuleNamesWorker = (moduleNames, containingFile, reusedNames, redirectedReference) => host.resolveModuleNames!(Debug.assertEachDefined(moduleNames), containingFile, reusedNames, redirectedReference, options).map(resolved => {
                 // An older host may have omitted extension, in which case we should infer it from the file extension of resolvedFileName.
                 if (!resolved || (resolved as ResolvedModuleFull).extension !== undefined) {
                     return resolved as ResolvedModuleFull;
@@ -777,7 +777,7 @@ namespace ts {
 
         let resolveTypeReferenceDirectiveNamesWorker: (typeDirectiveNames: string[], containingFile: string, redirectedReference?: ResolvedProjectReference) => (ResolvedTypeReferenceDirective | undefined)[];
         if (host.resolveTypeReferenceDirectives) {
-            resolveTypeReferenceDirectiveNamesWorker = (typeDirectiveNames, containingFile, redirectedReference) => host.resolveTypeReferenceDirectives!(Debug.assertEachDefined(typeDirectiveNames), containingFile, redirectedReference);
+            resolveTypeReferenceDirectiveNamesWorker = (typeDirectiveNames, containingFile, redirectedReference) => host.resolveTypeReferenceDirectives!(Debug.assertEachDefined(typeDirectiveNames), containingFile, redirectedReference, options);
         }
         else {
             const loader = (typesRef: string, containingFile: string, redirectedReference: ResolvedProjectReference | undefined) => resolveTypeReferenceDirective(typesRef, containingFile, options, host, redirectedReference).resolvedTypeReferenceDirective!; // TODO: GH#18217
@@ -811,7 +811,10 @@ namespace ts {
         let mapFromFileToProjectReferenceRedirects: Map<Path> | undefined;
 
         const shouldCreateNewSourceFile = shouldProgramCreateNewSourceFiles(oldProgram, options);
-        const structuralIsReused = tryReuseStructureFromOldProgram();
+        // We set `structuralIsReused` to `undefined` because `tryReuseStructureFromOldProgram` calls `tryReuseStructureFromOldProgram` which checks
+        // `structuralIsReused`, which would be a TDZ violation if it was not set in advance to `undefined`.
+        let structuralIsReused: StructureIsReused | undefined;
+        structuralIsReused = tryReuseStructureFromOldProgram();
         if (structuralIsReused !== StructureIsReused.Completely) {
             processingDefaultLibFiles = [];
             processingOtherFiles = [];

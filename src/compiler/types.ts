@@ -3683,8 +3683,8 @@ namespace ts {
 
         Enum = RegularEnum | ConstEnum,
         Variable = FunctionScopedVariable | BlockScopedVariable,
-        Value = Variable | Property | EnumMember | ObjectLiteral | Function | Class | Enum | ValueModule | Method | GetAccessor | SetAccessor | Assignment,
-        Type = Class | Interface | Enum | EnumMember | TypeLiteral | TypeParameter | TypeAlias | Assignment,
+        Value = Variable | Property | EnumMember | ObjectLiteral | Function | Class | Enum | ValueModule | Method | GetAccessor | SetAccessor,
+        Type = Class | Interface | Enum | EnumMember | TypeLiteral | TypeParameter | TypeAlias,
         Namespace = ValueModule | NamespaceModule | Enum,
         Module = ValueModule | NamespaceModule,
         Accessor = GetAccessor | SetAccessor,
@@ -3705,7 +3705,7 @@ namespace ts {
         InterfaceExcludes = Type & ~(Interface | Class),
         RegularEnumExcludes = (Value | Type) & ~(RegularEnum | ValueModule), // regular enums merge only with regular enums and modules
         ConstEnumExcludes = (Value | Type) & ~ConstEnum, // const enums merge only with const enums
-        ValueModuleExcludes = Value & ~(Function | Class | RegularEnum | ValueModule | Assignment),
+        ValueModuleExcludes = Value & ~(Function | Class | RegularEnum | ValueModule),
         NamespaceModuleExcludes = 0,
         MethodExcludes = Value & ~Method,
         GetAccessorExcludes = Value & ~SetAccessor,
@@ -5195,11 +5195,11 @@ namespace ts {
          * If resolveModuleNames is implemented then implementation for members from ModuleResolutionHost can be just
          * 'throw new Error("NotImplemented")'
          */
-        resolveModuleNames?(moduleNames: string[], containingFile: string, reusedNames?: string[], redirectedReference?: ResolvedProjectReference): (ResolvedModule | undefined)[];
+        resolveModuleNames?(moduleNames: string[], containingFile: string, reusedNames: string[] | undefined, redirectedReference: ResolvedProjectReference | undefined, options: CompilerOptions): (ResolvedModule | undefined)[];
         /**
          * This method is a companion for 'resolveModuleNames' and is used to resolve 'types' references to actual type declaration files
          */
-        resolveTypeReferenceDirectives?(typeReferenceDirectiveNames: string[], containingFile: string, redirectedReference?: ResolvedProjectReference): (ResolvedTypeReferenceDirective | undefined)[];
+        resolveTypeReferenceDirectives?(typeReferenceDirectiveNames: string[], containingFile: string, redirectedReference: ResolvedProjectReference | undefined, options: CompilerOptions): (ResolvedTypeReferenceDirective | undefined)[];
         getEnvironmentVariable?(name: string): string | undefined;
         /* @internal */ onReleaseOldSourceFile?(oldSourceFile: SourceFile, oldOptions: CompilerOptions, hasSourceFileByPath: boolean): void;
         /* @internal */ hasInvalidatedResolution?: HasInvalidatedResolution;

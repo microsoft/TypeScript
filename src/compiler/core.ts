@@ -1384,6 +1384,17 @@ namespace ts {
         return keys;
     }
 
+    export function getAllKeys(obj: object): string[] {
+        const result: string[] = [];
+        do {
+            const names = Object.getOwnPropertyNames(obj);
+            for (const name of names) {
+                pushIfUnique(result, name);
+            }
+        } while (obj = Object.getPrototypeOf(obj));
+        return result;
+    }
+
     export function getOwnValues<T>(sparseArray: T[]): T[] {
         const values: T[] = [];
         for (const key in sparseArray) {

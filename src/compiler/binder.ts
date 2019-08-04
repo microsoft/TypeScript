@@ -490,11 +490,11 @@ namespace ts {
                 //       and should never be merged directly with other augmentation, and the latter case would be possible if automatic merge is allowed.
                 if (isJSDocTypeAlias(node)) Debug.assert(isInJSFile(node)); // We shouldn't add symbols for JSDoc nodes if not in a JS file.
                 if ((!isAmbientModule(node) && (hasExportModifier || container.flags & NodeFlags.ExportContext)) || isJSDocTypeAlias(node)) {
-                    if (hasModifier(node, ModifierFlags.Default) && !getDeclarationName(node)) {
+                    if (!container.locals || (hasModifier(node, ModifierFlags.Default) && !getDeclarationName(node))) {
                         return declareSymbol(container.symbol.exports!, container.symbol, node, symbolFlags, symbolExcludes); // No local symbol for an unnamed default!
                     }
                     const exportKind = symbolFlags & SymbolFlags.Value ? SymbolFlags.ExportValue : 0;
-                    const local = declareSymbol(container.locals!, /*parent*/ undefined, node, exportKind, symbolExcludes);
+                    const local = declareSymbol(container.locals, /*parent*/ undefined, node, exportKind, symbolExcludes);
                     local.exportSymbol = declareSymbol(container.symbol.exports!, container.symbol, node, symbolFlags, symbolExcludes);
                     node.localSymbol = local;
                     return local;
@@ -1806,7 +1806,19 @@ namespace ts {
                 currentFlow = { flags: FlowFlags.Start };
                 parent = typeAlias;
                 bind(typeAlias.typeExpression);
-                if (isJSDocEnumTag(typeAlias) || !typeAlias.fullName || typeAlias.fullName.kind === SyntaxKind.Identifier) {
+                const declName = getNameOfDeclaration(typeAlias);
+                if ((isJSDocEnumTag(typeAlias) || !typeAlias.fullName) && declName && isPropertyAccessEntityNameExpression(declName.parent)) {
+                    // typedef anchored to an A.B.C assignment - we need to bind into B's namespace under name C
+                    const isTopLevel = isTopLevelNamespaceAssignment(declName.parent);
+                    if (isTopLevel) {
+                        bindPotentiallyMissingNamespaces(file.symbol, declName.parent, isTopLevel, !!findAncestor(declName, d => isPropertyAccessExpression(d) && d.name.escapedText === "prototype"));
+                        const oldContainer = container;
+                        container = isPropertyAccessExpression(declName.parent.expression) ? declName.parent.expression.name : declName.parent.expression;
+                        declareModuleMember(typeAlias, SymbolFlags.TypeAlias, SymbolFlags.TypeAliasExcludes);
+                        container = oldContainer;
+                    }
+                }
+                else if (isJSDocEnumTag(typeAlias) || !typeAlias.fullName || typeAlias.fullName.kind === SyntaxKind.Identifier) {
                     parent = typeAlias.parent;
                     bindBlockScopedDeclaration(typeAlias, SymbolFlags.TypeAlias, SymbolFlags.TypeAliasExcludes);
                 }
@@ -2607,7 +2619,7 @@ namespace ts {
         }
 
         function bindPotentiallyMissingNamespaces(namespaceSymbol: Symbol | undefined, entityName: EntityNameExpression, isToplevel: boolean, isPrototypeProperty: boolean) {
-            if (isToplevel && !isPrototypeProperty && (!namespaceSymbol || !(namespaceSymbol.flags & SymbolFlags.Namespace))) {
+            if (isToplevel && !isPrototypeProperty) {
                 // make symbols or add declarations for intermediate containers
                 const flags = SymbolFlags.Module | SymbolFlags.Assignment;
                 const excludeFlags = SymbolFlags.ValueModuleExcludes & ~SymbolFlags.Assignment;
@@ -2642,11 +2654,15 @@ namespace ts {
             declareSymbol(symbolTable, namespaceSymbol, declaration, includes | SymbolFlags.Assignment, excludes & ~SymbolFlags.Assignment);
         }
 
-        function bindPropertyAssignment(name: EntityNameExpression, propertyAccess: PropertyAccessEntityNameExpression, isPrototypeProperty: boolean) {
-            let namespaceSymbol = lookupSymbolForPropertyAccess(name);
-            const isToplevel = isBinaryExpression(propertyAccess.parent)
+        function isTopLevelNamespaceAssignment(propertyAccess: PropertyAccessEntityNameExpression) {
+            return isBinaryExpression(propertyAccess.parent)
                 ? getParentOfBinaryExpression(propertyAccess.parent).parent.kind === SyntaxKind.SourceFile
                 : propertyAccess.parent.parent.kind === SyntaxKind.SourceFile;
+        }
+
+        function bindPropertyAssignment(name: EntityNameExpression, propertyAccess: PropertyAccessEntityNameExpression, isPrototypeProperty: boolean) {
+            let namespaceSymbol = lookupSymbolForPropertyAccess(name);
+            const isToplevel = isTopLevelNamespaceAssignment(propertyAccess);
             namespaceSymbol = bindPotentiallyMissingNamespaces(namespaceSymbol, propertyAccess.expression, isToplevel, isPrototypeProperty);
             bindPotentiallyNewExpandoMemberToNamespace(propertyAccess, namespaceSymbol, isPrototypeProperty);
         }

@@ -9,7 +9,7 @@ namespace ts.tscWatch {
             };
             const files = [file1, libFile];
             const environmentVariables = createMap<string>();
-            environmentVariables.set("TSC_WATCHFILE", "DynamicPriorityPolling");
+            environmentVariables.set("TSC_WATCHFILE", TestFSWithWatch.Tsc_WatchFile.DynamicPolling);
             const host = createWatchedSystem(files, { environmentVariables });
             const watch = createWatchOfFilesAndCompilerOptions([file1.path], host);
 
