@@ -12,3 +12,25 @@ console.log(𝑀 + 𝑚); // 9
 >𝑀 : Symbol(𝑀, Decl(extendedUnicodePlaneIdentifiers.ts, 1, 5))
 >𝑚 : Symbol(𝑚, Decl(extendedUnicodePlaneIdentifiers.ts, 0, 5))
 
+// lower 8 bits look like 'a'
+const ၡ = 6;
+>ၡ : Symbol(ၡ, Decl(extendedUnicodePlaneIdentifiers.ts, 5, 5))
+
+console.log(ၡ ** ၡ);
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>ၡ : Symbol(ၡ, Decl(extendedUnicodePlaneIdentifiers.ts, 5, 5))
+>ၡ : Symbol(ၡ, Decl(extendedUnicodePlaneIdentifiers.ts, 5, 5))
+
+// lower 8 bits aren't a valid unicode character
+const ဒ = 7;
+>ဒ : Symbol(ဒ, Decl(extendedUnicodePlaneIdentifiers.ts, 9, 5))
+
+console.log(ဒ ** ဒ);
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>ဒ : Symbol(ဒ, Decl(extendedUnicodePlaneIdentifiers.ts, 9, 5))
+>ဒ : Symbol(ဒ, Decl(extendedUnicodePlaneIdentifiers.ts, 9, 5))
+
