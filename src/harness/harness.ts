@@ -726,6 +726,7 @@ namespace Harness {
             includeBuiltFile?: string;
             baselineFile?: string;
             libFiles?: string;
+            noTypesAndSymbols?: boolean;
         }
 
         // Additional options not already in ts.optionDeclarations
@@ -742,6 +743,7 @@ namespace Harness {
             { name: "currentDirectory", type: "string" },
             { name: "symlink", type: "string" },
             { name: "link", type: "string" },
+            { name: "noTypesAndSymbols", type: "boolean" },
             // Emitted js baseline will print full paths for every output file
             { name: "fullEmitPaths", type: "boolean" }
         ];

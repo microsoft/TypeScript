@@ -436,10 +436,10 @@ task("runtests-parallel").flags = {
     "   --shardId": "1-based ID of this shard (default: 1)",
 };
 
-task("diff", () => exec(getDiffTool(), [refBaseline, localBaseline], { ignoreExitCode: true }));
+task("diff", () => exec(getDiffTool(), [refBaseline, localBaseline], { ignoreExitCode: true, waitForExit: false }));
 task("diff").description = "Diffs the compiler baselines using the diff tool specified by the 'DIFF' environment variable";
 
-task("diff-rwc", () => exec(getDiffTool(), [refRwcBaseline, localRwcBaseline], { ignoreExitCode: true }));
+task("diff-rwc", () => exec(getDiffTool(), [refRwcBaseline, localRwcBaseline], { ignoreExitCode: true, waitForExit: false }));
 task("diff-rwc").description = "Diffs the RWC baselines using the diff tool specified by the 'DIFF' environment variable";
 
 /**
