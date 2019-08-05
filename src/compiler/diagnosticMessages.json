@@ -855,6 +855,10 @@
         "category": "Error",
         "code": 1259
     },
+    "Keyword must not contain escaped characters": {
+        "category": "Error",
+        "code": 1260
+    },
     "'with' statements are not allowed in an async function block.": {
         "category": "Error",
         "code": 1300

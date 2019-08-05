@@ -1376,6 +1376,9 @@ namespace ts {
                 if (ch >= CharacterCodes.a && ch <= CharacterCodes.z) {
                     const keyword = textToKeyword.get(tokenValue);
                     if (keyword !== undefined) {
+                        if (tokenFlags & TokenFlags.ExtendedUnicodeEscape || "" + tokenValue !== text.substring(tokenPos, pos)) {
+                            error(Diagnostics.Keyword_must_not_contain_escaped_characters, tokenPos, pos - tokenPos);
+                        }
                         return token = keyword;
                     }
                 }
