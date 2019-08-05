@@ -34,3 +34,34 @@ console.log(ဒ ** ဒ);
 >ဒ : Symbol(ဒ, Decl(extendedUnicodePlaneIdentifiers.ts, 9, 5))
 >ဒ : Symbol(ဒ, Decl(extendedUnicodePlaneIdentifiers.ts, 9, 5))
 
+// a mix, for good measure
+const ဒၡ𝑀 = 7;
+>ဒၡ𝑀 : Symbol(ဒၡ𝑀, Decl(extendedUnicodePlaneIdentifiers.ts, 13, 5))
+
+console.log(ဒၡ𝑀 ** ဒၡ𝑀);
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>ဒၡ𝑀 : Symbol(ဒၡ𝑀, Decl(extendedUnicodePlaneIdentifiers.ts, 13, 5))
+>ဒၡ𝑀 : Symbol(ဒၡ𝑀, Decl(extendedUnicodePlaneIdentifiers.ts, 13, 5))
+
+const ၡ𝑀ဒ = 7;
+>ၡ𝑀ဒ : Symbol(ၡ𝑀ဒ, Decl(extendedUnicodePlaneIdentifiers.ts, 16, 5))
+
+console.log(ၡ𝑀ဒ ** ၡ𝑀ဒ);
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>ၡ𝑀ဒ : Symbol(ၡ𝑀ဒ, Decl(extendedUnicodePlaneIdentifiers.ts, 16, 5))
+>ၡ𝑀ဒ : Symbol(ၡ𝑀ဒ, Decl(extendedUnicodePlaneIdentifiers.ts, 16, 5))
+
+const 𝑀ဒၡ = 7;
+>𝑀ဒၡ : Symbol(𝑀ဒၡ, Decl(extendedUnicodePlaneIdentifiers.ts, 19, 5))
+
+console.log(𝑀ဒၡ ** 𝑀ဒၡ);
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>𝑀ဒၡ : Symbol(𝑀ဒၡ, Decl(extendedUnicodePlaneIdentifiers.ts, 19, 5))
+>𝑀ဒၡ : Symbol(𝑀ဒၡ, Decl(extendedUnicodePlaneIdentifiers.ts, 19, 5))
+

@@ -44,3 +44,43 @@ console.log(ဒ ** ဒ);
 >ဒ : 7
 >ဒ : 7
 
+// a mix, for good measure
+const ဒၡ𝑀 = 7;
+>ဒၡ𝑀 : 7
+>7 : 7
+
+console.log(ဒၡ𝑀 ** ဒၡ𝑀);
+>console.log(ဒၡ𝑀 ** ဒၡ𝑀) : void
+>console.log : (message?: any, ...optionalParams: any[]) => void
+>console : Console
+>log : (message?: any, ...optionalParams: any[]) => void
+>ဒၡ𝑀 ** ဒၡ𝑀 : number
+>ဒၡ𝑀 : 7
+>ဒၡ𝑀 : 7
+
+const ၡ𝑀ဒ = 7;
+>ၡ𝑀ဒ : 7
+>7 : 7
+
+console.log(ၡ𝑀ဒ ** ၡ𝑀ဒ);
+>console.log(ၡ𝑀ဒ ** ၡ𝑀ဒ) : void
+>console.log : (message?: any, ...optionalParams: any[]) => void
+>console : Console
+>log : (message?: any, ...optionalParams: any[]) => void
+>ၡ𝑀ဒ ** ၡ𝑀ဒ : number
+>ၡ𝑀ဒ : 7
+>ၡ𝑀ဒ : 7
+
+const 𝑀ဒၡ = 7;
+>𝑀ဒၡ : 7
+>7 : 7
+
+console.log(𝑀ဒၡ ** 𝑀ဒၡ);
+>console.log(𝑀ဒၡ ** 𝑀ဒၡ) : void
+>console.log : (message?: any, ...optionalParams: any[]) => void
+>console : Console
+>log : (message?: any, ...optionalParams: any[]) => void
+>𝑀ဒၡ ** 𝑀ဒၡ : number
+>𝑀ဒၡ : 7
+>𝑀ဒၡ : 7
+

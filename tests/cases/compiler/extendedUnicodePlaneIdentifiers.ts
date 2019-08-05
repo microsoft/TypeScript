@@ -10,3 +10,13 @@ console.log(ၡ ** ၡ);
 // lower 8 bits aren't a valid unicode character
 const ဒ = 7;
 console.log(ဒ ** ဒ);
+
+// a mix, for good measure
+const ဒၡ𝑀 = 7;
+console.log(ဒၡ𝑀 ** ဒၡ𝑀);
+
+const ၡ𝑀ဒ = 7;
+console.log(ၡ𝑀ဒ ** ၡ𝑀ဒ);
+
+const 𝑀ဒၡ = 7;
+console.log(𝑀ဒၡ ** 𝑀ဒၡ);
