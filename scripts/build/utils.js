@@ -37,7 +37,7 @@ function exec(cmd, args, options = {}) {
         const command = isWindows ? [possiblyQuote(cmd), ...args] : [`${cmd} ${args.join(" ")}`];
 
         if (!options.hidePrompt) log(`> ${chalk.green(cmd)} ${args.join(" ")}`);
-        const proc = spawn(isWindows ? "cmd" : "/bin/sh", [subshellFlag, ...command], { stdio: "inherit", windowsVerbatimArguments: true });
+        const proc = spawn(isWindows ? "cmd" : "/bin/sh", [subshellFlag, ...command], { stdio: waitForExit ? "inherit" : "ignore", windowsVerbatimArguments: true });
         const registration = cancelToken.register(() => {
             log(`${chalk.red("killing")} '${chalk.green(cmd)} ${args.join(" ")}'...`);
             proc.kill("SIGINT");
@@ -61,7 +61,8 @@ function exec(cmd, args, options = {}) {
         }
         else {
             proc.unref();
-            resolve({ exitCode: undefined });
+            // wait a short period in order to allow the process to start successfully before Node exits.
+            setTimeout(() => resolve({ exitCode: undefined }), 100);
         }
     }));
 }
