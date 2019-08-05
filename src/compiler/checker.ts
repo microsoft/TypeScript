@@ -14272,20 +14272,42 @@ namespace ts {
         function discriminateTypeByDiscriminableItems(target: UnionType, discriminators: [() => Type, __String][], related: (source: Type, target: Type) => boolean | Ternary): Type | undefined;
         function discriminateTypeByDiscriminableItems(target: UnionType, discriminators: [() => Type, __String][], related: (source: Type, target: Type) => boolean | Ternary, defaultValue: Type): Type;
         function discriminateTypeByDiscriminableItems(target: UnionType, discriminators: [() => Type, __String][], related: (source: Type, target: Type) => boolean | Ternary, defaultValue?: Type) {
-            let match: Type | undefined;
+            // `candidates` maps a `target` constituent to the number
+            // of discriminant properties the constituent matches.
+            const candidates: Map<number> = createMap();
+            let matchedProperties = 0;
             for (const [getDiscriminatingType, propertyName] of discriminators) {
+                let matched = 0;
                 for (const type of target.types) {
                     const targetType = getTypeOfPropertyOfType(type, propertyName);
                     if (targetType && related(getDiscriminatingType(), targetType)) {
-                        if (match) {
-                            if (type === match) continue; // Finding multiple fields which discriminate to the same type is fine
-                            return defaultValue;
-                        }
-                        match = type;
+                        matched = 1;
+                        const strId = "" + type.id;
+                        candidates.set(strId, (candidates.get(strId) || 0) + 1);
                     }
                 }
+                matchedProperties += matched;
             }
-            return match || defaultValue;
+            /*
+             * `matchID` has type:
+             * - string when exactly one `target` constituent matches all matched properties.
+             * - false when more than one `target` constituent matches all matched properties.
+             * - undefined when no `target` constituent matches all matched properties.
+             *
+             * We only proceed in the first case. The second case introduces ambiguity that we choose
+             * not to resolve: selecting an arbitrary type would be wrong, and combining the matches
+             * would require synthesizing a new union type.
+             */
+            let matchID: string | false | undefined;
+            candidates.forEach((value, id) => {
+                if (matchID !== false && value === matchedProperties) {
+                    matchID = matchID === undefined ? id : false;
+                }
+            });
+            if (typeof matchID === "string") {
+                return firstDefined(target.types, type => "" + type.id === matchID ? type : undefined) || defaultValue;
+            }
+            return defaultValue;
         }
 
         /**
