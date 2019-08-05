@@ -566,6 +566,8 @@ namespace ts {
         return emitNode && emitNode.flags || 0;
     }
 
+    const escapeNoSubstitutionTemplateLiteralText = compose(escapeString, escapeTemplateSubstitution);
+    const escapeNonAsciiNoSubstitutionTemplateLiteralText = compose(escapeNonAsciiString, escapeTemplateSubstitution);
     export function getLiteralText(node: LiteralLikeNode, sourceFile: SourceFile, neverAsciiEscape: boolean | undefined) {
         // If we don't need to downlevel and we can reach the original source text using
         // the node's parent reference, then simply get the text as it was originally written.
@@ -576,7 +578,11 @@ namespace ts {
             return getSourceTextOfNodeFromSourceFile(sourceFile, node);
         }
 
-        const escapeText = neverAsciiEscape || (getEmitFlags(node) & EmitFlags.NoAsciiEscaping) ? escapeString : escapeNonAsciiString;
+        // If a NoSubstitutionTemplateLiteral appears to have a substitution in it, the original text
+        // had to include a backslash: `not \${a} substitution`.
+        const escapeText = neverAsciiEscape || (getEmitFlags(node) & EmitFlags.NoAsciiEscaping) ?
+            node.kind === SyntaxKind.NoSubstitutionTemplateLiteral ? escapeNoSubstitutionTemplateLiteralText : escapeString :
+            node.kind === SyntaxKind.NoSubstitutionTemplateLiteral ? escapeNonAsciiNoSubstitutionTemplateLiteralText : escapeNonAsciiString;
 
         // If we can't reach the original source text, use the canonical form if it's a number,
         // or a (possibly escaped) quoted form of the original text if it's string-like.
@@ -3111,6 +3117,11 @@ namespace ts {
             fileDiags.unshift(...nonFileDiagnostics);
             return fileDiags;
         }
+    }
+
+    const templateSubstitutionRegExp = /\$\{/g;
+    function escapeTemplateSubstitution(str: string): string {
+        return str.replace(templateSubstitutionRegExp, "\\${");
     }
 
     // This consists of the first 19 unprintable ASCII characters, canonical escapes, lineSeparator,
