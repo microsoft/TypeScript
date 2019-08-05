@@ -1,7 +1,7 @@
 namespace ts {
     // https://github.com/microsoft/TypeScript/issues/31696
     it("unittests:: tsbuild:: synthesized module specifiers to referenced projects resolve correctly", () => {
-        const fs = vfs.createFromFileSystem(Harness.IO, /*ignoreCase*/ false, {
+        const baseFs = vfs.createFromFileSystem(Harness.IO, /*ignoreCase*/ false, {
             files: {
                 "/src/common/nominal.ts": "export declare type Nominal<T, Name extends string> = T & {\n\t[Symbol.species]: Name;\n};\n",
                 "/src/common/tsconfig.json": JSON.stringify({
@@ -46,14 +46,13 @@ namespace ts {
             },
             cwd: "/"
         });
+        const fs = baseFs.makeReadonly().shadow();
         const sys = new fakes.System(fs, { executingFilePath: "/", newLine: "\n" });
         const host = new fakes.SolutionBuilderHost(sys);
         const builder = createSolutionBuilder(host, ["/tsconfig.json"], { dry: false, force: false, verbose: false });
         builder.build("/tsconfig.json");
 
-        const data = host.vfs.readFileSync("/lib/src/sub-project-2/index.d.ts", "utf8");
-
-        // Prior to fixing GH31696 the import below was `import("../../lib/src/common/nonterminal")`
-        assert.equal(data, `declare const variable: {\n    key: import("../common/nominal").Nominal<string, "MyNominal">;\n};\nexport declare function getVar(): keyof typeof variable;\nexport {};\n`);
+        // Prior to fixing GH31696 the import in `/lib/src/sub-project-2/index.d.ts` was `import("../../lib/src/common/nonterminal")`, which was invalid.
+        Harness.Baseline.runMultifileBaseline("tsbuild/moduleSpecifiers", "", () => vfs.iteratePatch(fs.diff(baseFs)));
     });
 }
