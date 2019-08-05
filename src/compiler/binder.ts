@@ -1285,7 +1285,8 @@ namespace ts {
         }
 
         function isDottedName(node: Expression): boolean {
-            return node.kind === SyntaxKind.Identifier || node.kind === SyntaxKind.PropertyAccessExpression && isDottedName((<PropertyAccessExpression>node).expression);
+            return node.kind === SyntaxKind.Identifier || node.kind === SyntaxKind.ThisKeyword ||
+                node.kind === SyntaxKind.PropertyAccessExpression && isDottedName((<PropertyAccessExpression>node).expression);
         }
 
         function bindExpressionStatement(node: ExpressionStatement): void {

@@ -3211,6 +3211,7 @@ namespace ts {
             const type = parseType();
             if (typePredicateVariable) {
                 const node = <TypePredicateNode>createNode(SyntaxKind.TypePredicate, typePredicateVariable.pos);
+                node.assertsModifier = undefined;
                 node.parameterName = typePredicateVariable;
                 node.type = type;
                 return finishNode(node);
@@ -3232,9 +3233,7 @@ namespace ts {
             const node = <TypePredicateNode>createNode(SyntaxKind.TypePredicate);
             node.assertsModifier = parseExpectedToken(SyntaxKind.AssertsKeyword);
             node.parameterName = parseIdentifier();
-            if (parseOptional(SyntaxKind.IsKeyword)) {
-                node.type = parseType();
-            }
+            node.type = parseOptional(SyntaxKind.IsKeyword) ? parseType() : undefined;
             return finishNode(node);
         }
 

@@ -16838,16 +16838,18 @@ namespace ts {
             // that reference function, method, class or value module symbols; or variable, property or
             // parameter symbols with declarations that have explicit type annotations. Such references are
             // resolvable with no possibility of triggering circularities in control flow analysis.
-            if (node.kind === SyntaxKind.Identifier) {
-                const symbol = getResolvedSymbol(<Identifier>node);
-                return getExplicitTypeOfSymbol(symbol.flags & SymbolFlags.Alias ? resolveAlias(symbol) : symbol);
-            }
-            if (node.kind === SyntaxKind.PropertyAccessExpression) {
-                const type = getTypeOfDottedName((<PropertyAccessExpression>node).expression);
-                if (type) {
-                    const prop = getPropertyOfType(type, (<PropertyAccessExpression>node).name.escapedText);
-                    return prop && getExplicitTypeOfSymbol(prop);
-                }
+            switch (node.kind) {
+                case SyntaxKind.Identifier:
+                    const symbol = getResolvedSymbol(<Identifier>node);
+                    return getExplicitTypeOfSymbol(symbol.flags & SymbolFlags.Alias ? resolveAlias(symbol) : symbol);
+                case SyntaxKind.ThisKeyword:
+                    return checkThisExpression(node);
+                case SyntaxKind.PropertyAccessExpression:
+                    const type = getTypeOfDottedName((<PropertyAccessExpression>node).expression);
+                    if (type) {
+                        const prop = getPropertyOfType(type, (<PropertyAccessExpression>node).name.escapedText);
+                        return prop && getExplicitTypeOfSymbol(prop);
+                    }
             }
         }
 
