@@ -1,0 +1,31 @@
+=== tests/cases/conformance/scanner/ecmascript5/scannerUnicodeEscapeInKeyword2.ts ===
+var \u0061wait = 12; // ok
+>\u0061wait : number
+>12 : 12
+
+async function main() {
+>main : () => Promise<void>
+
+    \u0061wait 12; // not ok
+>\u0061wait 12 : 12
+>12 : 12
+}
+
+var \u0079ield = 12; // ok
+>\u0079ield : number
+>12 : 12
+
+function *gen() {
+>gen : () => Generator<number, void, unknown>
+
+    \u0079ield 12; //not ok
+>\u0079ield 12 : any
+>12 : 12
+}
+
+type typ\u0065 = 12; // ok
+>typ\u0065 : 12
+
+typ\u0065 notok = 0; // not ok
+>notok : 0
+

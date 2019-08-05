@@ -1,0 +1,25 @@
+=== tests/cases/conformance/scanner/ecmascript5/scannerUnicodeEscapeInKeyword2.ts ===
+var \u0061wait = 12; // ok
+>\u0061wait : Symbol(\u0061wait, Decl(scannerUnicodeEscapeInKeyword2.ts, 0, 3))
+
+async function main() {
+>main : Symbol(main, Decl(scannerUnicodeEscapeInKeyword2.ts, 0, 20))
+
+    \u0061wait 12; // not ok
+}
+
+var \u0079ield = 12; // ok
+>\u0079ield : Symbol(\u0079ield, Decl(scannerUnicodeEscapeInKeyword2.ts, 5, 3))
+
+function *gen() {
+>gen : Symbol(gen, Decl(scannerUnicodeEscapeInKeyword2.ts, 5, 20))
+
+    \u0079ield 12; //not ok
+}
+
+type typ\u0065 = 12; // ok
+>typ\u0065 : Symbol(typ\u0065, Decl(scannerUnicodeEscapeInKeyword2.ts, 8, 1))
+
+typ\u0065 notok = 0; // not ok
+>notok : Symbol(notok, Decl(scannerUnicodeEscapeInKeyword2.ts, 10, 20))
+

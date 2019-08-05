@@ -1082,7 +1082,16 @@ namespace ts {
             return currentToken;
         }
 
-        function nextToken(): SyntaxKind {
+        function nextToken(tokenReparsedAsIdentifier?: boolean): SyntaxKind {
+            if (isKeyword(currentToken)) {
+                // if the keyword had an escape
+                if ((scanner.hasExtendedUnicodeEscape() || (scanner.getTokenValue() && scanner.getTokenText() !== scanner.getTokenValue()))
+                // and the keyword is non-contextual or is in its recognized-as-keyword context
+                && (!tokenReparsedAsIdentifier || (!isContextualKeyword(currentToken) && !isFutureReservedKeyword(currentToken)))) {
+                    // issue a parse error for the escape
+                    parseErrorAt(scanner.getTokenPos(), scanner.getTextPos(), Diagnostics.Keyword_must_not_contain_escaped_characters);
+                }
+            }
             return currentToken = scanner.scan();
         }
 
@@ -1376,7 +1385,7 @@ namespace ts {
                     node.originalKeywordKind = token();
                 }
                 node.escapedText = escapeLeadingUnderscores(internIdentifier(scanner.getTokenValue()));
-                nextToken();
+                nextToken(/*tokenReparsedAsIdentifier*/ true);
                 return finishNode(node);
             }
 

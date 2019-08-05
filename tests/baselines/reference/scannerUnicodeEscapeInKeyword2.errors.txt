@@ -1,0 +1,26 @@
+tests/cases/conformance/scanner/ecmascript5/scannerUnicodeEscapeInKeyword2.ts(3,5): error TS1260: Keyword must not contain escaped characters
+tests/cases/conformance/scanner/ecmascript5/scannerUnicodeEscapeInKeyword2.ts(8,5): error TS1260: Keyword must not contain escaped characters
+tests/cases/conformance/scanner/ecmascript5/scannerUnicodeEscapeInKeyword2.ts(13,1): error TS1260: Keyword must not contain escaped characters
+
+
+==== tests/cases/conformance/scanner/ecmascript5/scannerUnicodeEscapeInKeyword2.ts (3 errors) ====
+    var \u0061wait = 12; // ok
+    async function main() {
+        \u0061wait 12; // not ok
+        ~~~~~~~~~~
+!!! error TS1260: Keyword must not contain escaped characters
+    }
+    
+    var \u0079ield = 12; // ok
+    function *gen() {
+        \u0079ield 12; //not ok
+        ~~~~~~~~~~
+!!! error TS1260: Keyword must not contain escaped characters
+    }
+    
+    type typ\u0065 = 12; // ok
+    
+    typ\u0065 notok = 0; // not ok
+    ~~~~~~~~~
+!!! error TS1260: Keyword must not contain escaped characters
+    
