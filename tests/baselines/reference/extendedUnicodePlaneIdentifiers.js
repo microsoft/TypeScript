@@ -23,6 +23,20 @@ console.log(𝑀ဒၡ ** 𝑀ဒၡ);
 
 const 𝓱𝓮𝓵𝓵𝓸 = "𝔀𝓸𝓻𝓵𝓭";
 
+const Ɐⱱ = "ok"; // BMP
+
+const 𓀸𓀹𓀺 = "ok"; // SMP
+
+const 𡚭𡚮𡚯 = "ok"; // SIP
+
+const 𡚭𓀺ⱱ𝓮 = "ok";
+
+const 𓀺ⱱ𝓮𡚭 = "ok";
+
+const ⱱ𝓮𡚭𓀺 = "ok";
+
+const 𝓮𡚭𓀺ⱱ = "ok";
+
 
 //// [extendedUnicodePlaneIdentifiers.js]
 const 𝑚 = 4;
@@ -42,3 +56,10 @@ console.log(ၡ𝑀ဒ ** ၡ𝑀ဒ);
 const 𝑀ဒၡ = 7;
 console.log(𝑀ဒၡ ** 𝑀ဒၡ);
 const 𝓱𝓮𝓵𝓵𝓸 = "𝔀𝓸𝓻𝓵𝓭";
+const Ɐⱱ = "ok"; // BMP
+const 𓀸𓀹𓀺 = "ok"; // SMP
+const 𡚭𡚮𡚯 = "ok"; // SIP
+const 𡚭𓀺ⱱ𝓮 = "ok";
+const 𓀺ⱱ𝓮𡚭 = "ok";
+const ⱱ𝓮𡚭𓀺 = "ok";
+const 𝓮𡚭𓀺ⱱ = "ok";

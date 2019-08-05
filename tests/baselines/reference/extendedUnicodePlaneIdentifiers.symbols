@@ -68,3 +68,24 @@ console.log(𝑀ဒၡ ** 𝑀ဒၡ);
 const 𝓱𝓮𝓵𝓵𝓸 = "𝔀𝓸𝓻𝓵𝓭";
 >𝓱𝓮𝓵𝓵𝓸 : Symbol(𝓱𝓮𝓵𝓵𝓸, Decl(extendedUnicodePlaneIdentifiers.ts, 22, 5))
 
+const Ɐⱱ = "ok"; // BMP
+>Ɐⱱ : Symbol(Ɐⱱ, Decl(extendedUnicodePlaneIdentifiers.ts, 24, 5))
+
+const 𓀸𓀹𓀺 = "ok"; // SMP
+>𓀸𓀹𓀺 : Symbol(𓀸𓀹𓀺, Decl(extendedUnicodePlaneIdentifiers.ts, 26, 5))
+
+const 𡚭𡚮𡚯 = "ok"; // SIP
+>𡚭𡚮𡚯 : Symbol(𡚭𡚮𡚯, Decl(extendedUnicodePlaneIdentifiers.ts, 28, 5))
+
+const 𡚭𓀺ⱱ𝓮 = "ok";
+>𡚭𓀺ⱱ𝓮 : Symbol(𡚭𓀺ⱱ𝓮, Decl(extendedUnicodePlaneIdentifiers.ts, 30, 5))
+
+const 𓀺ⱱ𝓮𡚭 = "ok";
+>𓀺ⱱ𝓮𡚭 : Symbol(𓀺ⱱ𝓮𡚭, Decl(extendedUnicodePlaneIdentifiers.ts, 32, 5))
+
+const ⱱ𝓮𡚭𓀺 = "ok";
+>ⱱ𝓮𡚭𓀺 : Symbol(ⱱ𝓮𡚭𓀺, Decl(extendedUnicodePlaneIdentifiers.ts, 34, 5))
+
+const 𝓮𡚭𓀺ⱱ = "ok";
+>𝓮𡚭𓀺ⱱ : Symbol(𝓮𡚭𓀺ⱱ, Decl(extendedUnicodePlaneIdentifiers.ts, 36, 5))
+
