@@ -65,3 +65,6 @@ console.log(𝑀ဒၡ ** 𝑀ဒၡ);
 >𝑀ဒၡ : Symbol(𝑀ဒၡ, Decl(extendedUnicodePlaneIdentifiers.ts, 19, 5))
 >𝑀ဒၡ : Symbol(𝑀ဒၡ, Decl(extendedUnicodePlaneIdentifiers.ts, 19, 5))
 
+const 𝓱𝓮𝓵𝓵𝓸 = "𝔀𝓸𝓻𝓵𝓭";
+>𝓱𝓮𝓵𝓵𝓸 : Symbol(𝓱𝓮𝓵𝓵𝓸, Decl(extendedUnicodePlaneIdentifiers.ts, 22, 5))
+

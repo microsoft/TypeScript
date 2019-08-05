@@ -21,6 +21,8 @@ console.log(ၡ𝑀ဒ ** ၡ𝑀ဒ);
 const 𝑀ဒၡ = 7;
 console.log(𝑀ဒၡ ** 𝑀ဒၡ);
 
+const 𝓱𝓮𝓵𝓵𝓸 = "𝔀𝓸𝓻𝓵𝓭";
+
 
 //// [extendedUnicodePlaneIdentifiers.js]
 const 𝑚 = 4;
@@ -39,3 +41,4 @@ const ၡ𝑀ဒ = 7;
 console.log(ၡ𝑀ဒ ** ၡ𝑀ဒ);
 const 𝑀ဒၡ = 7;
 console.log(𝑀ဒၡ ** 𝑀ဒၡ);
+const 𝓱𝓮𝓵𝓵𝓸 = "𝔀𝓸𝓻𝓵𝓭";
