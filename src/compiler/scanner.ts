@@ -1014,7 +1014,7 @@ namespace ts {
         }
 
         function checkForIdentifierStartAfterNumericLiteral(numericStart: number, isScientific?: boolean) {
-            if (!isIdentifierStart(text.charCodeAt(pos), languageVersion)) {
+            if (!isIdentifierStart(codePointAt(text, pos), languageVersion)) {
                 return;
             }
 
@@ -2039,17 +2039,22 @@ namespace ts {
         // they allow dashes
         function scanJsxIdentifier(): SyntaxKind {
             if (tokenIsIdentifierOrKeyword(token)) {
-                const firstCharPosition = pos;
+                // An identifier or keyword has already been parsed - check for a `-` and then append it and everything after it to the token
+                // Do note that this means that `scanJsxIdentifier` effectively _mutates_ the visible token without advancing to a new token
+                // Any caller should be expecting this behavior and should only read the pos or token value after calling it.
                 while (pos < end) {
                     const ch = text.charCodeAt(pos);
-                    if (ch === CharacterCodes.minus || ((firstCharPosition === pos) ? isIdentifierStart(ch, languageVersion) : isIdentifierPart(ch, languageVersion))) {
+                    if (ch === CharacterCodes.minus) {
+                        tokenValue += "-";
                         pos++;
+                        continue;
                     }
-                    else {
+                    const oldPos = pos;
+                    tokenValue += scanIdentifierParts(); // reuse `scanIdentifierParts` so unicode escapes are handled
+                    if (pos === oldPos) {
                         break;
                     }
                 }
-                tokenValue += text.substring(firstCharPosition, pos);
             }
             return token;
         }
@@ -2075,8 +2080,8 @@ namespace ts {
                 return token = SyntaxKind.EndOfFileToken;
             }
 
-            const ch = text.charCodeAt(pos);
-            pos++;
+            const ch = codePointAt(text, pos);
+            pos += charSize(ch);
             switch (ch) {
                 case CharacterCodes.tab:
                 case CharacterCodes.verticalTab:
@@ -2117,8 +2122,9 @@ namespace ts {
             }
 
             if (isIdentifierStart(ch, ScriptTarget.Latest)) {
-                while (isIdentifierPart(text.charCodeAt(pos), ScriptTarget.Latest) && pos < end) {
-                    pos++;
+                let nextChar: number;
+                while (isIdentifierPart(nextChar = codePointAt(text, pos), ScriptTarget.Latest) && pos < end) {
+                    pos += charSize(nextChar);
                 }
                 tokenValue = text.substring(tokenPos, pos);
                 return token = getIdentifierToken();
