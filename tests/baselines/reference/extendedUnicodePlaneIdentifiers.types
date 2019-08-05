@@ -1,0 +1,18 @@
+=== tests/cases/compiler/extendedUnicodePlaneIdentifiers.ts ===
+const 𝑚 = 4;
+>𝑚 : 4
+>4 : 4
+
+const 𝑀 = 5;
+>𝑀 : 5
+>5 : 5
+
+console.log(𝑀 + 𝑚); // 9
+>console.log(𝑀 + 𝑚) : void
+>console.log : (message?: any, ...optionalParams: any[]) => void
+>console : Console
+>log : (message?: any, ...optionalParams: any[]) => void
+>𝑀 + 𝑚 : number
+>𝑀 : 5
+>𝑚 : 4
+
