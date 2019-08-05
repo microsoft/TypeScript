@@ -1086,14 +1086,12 @@ namespace ts {
                 return (directoryName, callback) => fsWatchFile(directoryName, () => callback(directoryName), PollingInterval.Medium);
             }
 
-            function readFile(fileName: string, _encoding?: string): string | undefined {
-                perfLogger.logStartReadFile(fileName);
+            function readFileWorker(fileName: string, _encoding?: string): string | undefined {
                 if (!fileExists(fileName)) {
                     return undefined;
                 }
                 const buffer = _fs.readFileSync(fileName);
                 let len = buffer.length;
-                let result: string;
                 if (len >= 2 && buffer[0] === 0xFE && buffer[1] === 0xFF) {
                     // Big endian UTF-16 byte order mark detected. Since big endian is not supported by node.js,
                     // flip all byte pairs and treat as little endian.
@@ -1103,22 +1101,25 @@ namespace ts {
                         buffer[i] = buffer[i + 1];
                         buffer[i + 1] = temp;
                     }
-                    result = buffer.toString("utf16le", 2);
+                    return buffer.toString("utf16le", 2);
                 }
-                else if (len >= 2 && buffer[0] === 0xFF && buffer[1] === 0xFE) {
+                if (len >= 2 && buffer[0] === 0xFF && buffer[1] === 0xFE) {
                     // Little endian UTF-16 byte order mark detected
-                    result = buffer.toString("utf16le", 2);
+                    return buffer.toString("utf16le", 2);
                 }
-                else if (len >= 3 && buffer[0] === 0xEF && buffer[1] === 0xBB && buffer[2] === 0xBF) {
+                if (len >= 3 && buffer[0] === 0xEF && buffer[1] === 0xBB && buffer[2] === 0xBF) {
                     // UTF-8 byte order mark detected
-                    result = buffer.toString("utf8", 3);
+                    return buffer.toString("utf8", 3);
                 }
-                else {
-                    // Default is UTF-8 with no byte order mark
-                    result = buffer.toString("utf8");
-                }
+                // Default is UTF-8 with no byte order mark
+                return buffer.toString("utf8");
+            }
+
+            function readFile(fileName: string, _encoding?: string): string | undefined {
+                perfLogger.logStartReadFile(fileName);
+                const file = readFileWorker(fileName, _encoding);
                 perfLogger.logStopReadFile();
-                return result;
+                return file;
             }
 
             function writeFile(fileName: string, data: string, writeByteOrderMark?: boolean): void {
