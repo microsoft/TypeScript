@@ -42,6 +42,7 @@
         "@types/gulp-sourcemaps": "0.0.32",
         "@types/jake": "latest",
         "@types/merge2": "latest",
+        "@types/microsoft__typescript-etw": "latest",
         "@types/minimatch": "latest",
         "@types/minimist": "latest",
         "@types/mkdirp": "latest",
@@ -109,7 +110,8 @@
     "browser": {
         "fs": false,
         "os": false,
-        "path": false
+        "path": false,
+        "@microsoft/typescript-etw": false
     },
     "dependencies": {}
 }
