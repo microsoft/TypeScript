@@ -12,6 +12,10 @@
 //// */
 ////function bar() { }
 ////bar(''/*bar*/);
+////
+/////** @type {function(module:xxxx, module:xxxx): module:xxxxx} */
+////function zee() { }
+////zee(''/*zee*/);
 
 
 verify.signatureHelp({
@@ -28,4 +32,14 @@ verify.signatureHelp({
   text: "bar(): void",
   docComment: "",
   tags: [],
+});
+
+
+verify.signatureHelp({
+  marker: "zee",
+  text: "zee(): any",
+  docComment: "",
+  tags: [
+    { name: "type", text: "{function(module:xxxx, module:xxxx): module:xxxxx}" },
+  ],
 });
