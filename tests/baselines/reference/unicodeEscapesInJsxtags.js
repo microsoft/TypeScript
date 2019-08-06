@@ -15,13 +15,20 @@ let ab = <\u0061-b></a-b>; // works
 let ac = <a-\u0063></a-c>; // works
 let compa = <Comp\u0061 x={12} />; // works
 
+let a2 = <\u{0061}></a>; // works
+let ab2 = <\u{0061}-b></a-b>; // works
+let ac2 = <a-\u{0063}></a-c>; // works
+let compa2 = <Comp\u{0061} x={12} />; // works
+
 
 //// [file.js]
-"use strict";
-exports.__esModule = true;
-var React = require("react");
-var Compa = function (x) { return React.createElement("div", null, "" + x); };
-var a = React.createElement("a", null); // works
-var ab = React.createElement("a-b", null); // works
-var ac = React.createElement("a-c", null); // works
-var compa = React.createElement(Comp\u0061, { x: 12 }); // works
+import * as React from "react";
+const Compa = (x) => React.createElement("div", null, "" + x);
+let a = React.createElement("a", null); // works
+let ab = React.createElement("a-b", null); // works
+let ac = React.createElement("a-c", null); // works
+let compa = React.createElement(Comp\u0061, { x: 12 }); // works
+let a2 = React.createElement("a", null); // works
+let ab2 = React.createElement("a-b", null); // works
+let ac2 = React.createElement("a-c", null); // works
+let compa2 = React.createElement(Comp\u{0061}, { x: 12 }); // works

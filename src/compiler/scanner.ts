@@ -2145,6 +2145,14 @@ namespace ts {
                     return token = SyntaxKind.BacktickToken;
                 case CharacterCodes.backslash:
                     pos--;
+                    const extendedCookedChar = peekExtendedUnicodeEscape();
+                    if (extendedCookedChar >= 0 && isIdentifierStart(extendedCookedChar, languageVersion)) {
+                        pos += 3;
+                        tokenFlags |= TokenFlags.ExtendedUnicodeEscape;
+                        tokenValue = scanExtendedUnicodeEscape() + scanIdentifierParts();
+                        return token = getIdentifierToken();
+                    }
+
                     const cookedChar = peekUnicodeEscape();
                     if (cookedChar >= 0 && isIdentifierStart(cookedChar, languageVersion)) {
                         pos += 6;
