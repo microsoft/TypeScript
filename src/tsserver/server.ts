@@ -975,7 +975,7 @@ namespace ts.server {
     // the log. This is so that language service plugins which use
     // console.log don't break the message passing between tsserver
     // and the client
-    console.log = (msg) => logger.msg(msg, Msg.Info);
-    console.warn = (msg) => logger.msg(msg, Msg.Err);
-    console.error = (msg) => logger.msg(msg, Msg.Err);
+    console.log = (...args) => logger.msg(args.length === 1 ? args[0] : args.join(", "), Msg.Info);
+    console.warn = (...args) => logger.msg(args.length === 1 ? args[0] : args.join(", "), Msg.Err);
+    console.error = (...args) => logger.msg(args.length === 1 ? args[0] : args.join(", "), Msg.Err);
 }
