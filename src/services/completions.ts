@@ -101,7 +101,6 @@ namespace ts.Completions {
         position: number,
         preferences: UserPreferences,
         triggerCharacter: CompletionsTriggerCharacter | undefined,
-        importSuggestionsCache: AutoImportSuggestionsCache,
     ): CompletionInfo | undefined {
         const typeChecker = program.getTypeChecker();
         const compilerOptions = program.getCompilerOptions();
@@ -121,7 +120,7 @@ namespace ts.Completions {
             return getLabelCompletionAtPosition(contextToken.parent);
         }
 
-        const completionData = getCompletionData(program, log, sourceFile, isUncheckedFile(sourceFile, compilerOptions), position, preferences, /*detailsEntryId*/ undefined, host, importSuggestionsCache);
+        const completionData = getCompletionData(program, log, sourceFile, isUncheckedFile(sourceFile, compilerOptions), position, preferences, /*detailsEntryId*/ undefined, host);
         if (!completionData) {
             return undefined;
         }
@@ -471,10 +470,9 @@ namespace ts.Completions {
         position: number,
         entryId: CompletionEntryIdentifier,
         host: LanguageServiceHost,
-        importSuggestionsCache: AutoImportSuggestionsCache,
     ): SymbolCompletion | { type: "request", request: Request } | { type: "literal", literal: string | number | PseudoBigInt } | { type: "none" } {
         const compilerOptions = program.getCompilerOptions();
-        const completionData = getCompletionData(program, log, sourceFile, isUncheckedFile(sourceFile, compilerOptions), position, { includeCompletionsForModuleExports: true, includeCompletionsWithInsertText: true }, entryId, host, importSuggestionsCache);
+        const completionData = getCompletionData(program, log, sourceFile, isUncheckedFile(sourceFile, compilerOptions), position, { includeCompletionsForModuleExports: true, includeCompletionsWithInsertText: true }, entryId, host);
         if (!completionData) {
             return { type: "none" };
         }
@@ -525,7 +523,6 @@ namespace ts.Completions {
         formatContext: formatting.FormatContext,
         preferences: UserPreferences,
         cancellationToken: CancellationToken,
-        importSuggestionsCache: AutoImportSuggestionsCache,
     ): CompletionEntryDetails | undefined {
         const typeChecker = program.getTypeChecker();
         const compilerOptions = program.getCompilerOptions();
@@ -537,7 +534,7 @@ namespace ts.Completions {
         }
 
         // Compute all the completion symbols again.
-        const symbolCompletion = getSymbolCompletionFromEntryId(program, log, sourceFile, position, entryId, host, importSuggestionsCache);
+        const symbolCompletion = getSymbolCompletionFromEntryId(program, log, sourceFile, position, entryId, host);
         switch (symbolCompletion.type) {
             case "request": {
                 const { request } = symbolCompletion;
@@ -629,9 +626,8 @@ namespace ts.Completions {
         position: number,
         entryId: CompletionEntryIdentifier,
         host: LanguageServiceHost,
-        importSuggestionsCache: AutoImportSuggestionsCache,
     ): Symbol | undefined {
-        const completion = getSymbolCompletionFromEntryId(program, log, sourceFile, position, entryId, host, importSuggestionsCache);
+        const completion = getSymbolCompletionFromEntryId(program, log, sourceFile, position, entryId, host);
         return completion.type === "symbol" ? completion.symbol : undefined;
     }
 
@@ -731,7 +727,6 @@ namespace ts.Completions {
         preferences: Pick<UserPreferences, "includeCompletionsForModuleExports" | "includeCompletionsWithInsertText">,
         detailsEntryId: CompletionEntryIdentifier | undefined,
         host: LanguageServiceHost,
-        importSuggestionsCache: AutoImportSuggestionsCache,
     ): CompletionData | Request | undefined {
         const typeChecker = program.getTypeChecker();
 
@@ -981,6 +976,7 @@ namespace ts.Completions {
 
         log("getCompletionData: Semantic work: " + (timestamp() - semanticStart));
 
+        const importSuggestionsCache = host.getImportSuggestionsCache && host.getImportSuggestionsCache();
         const contextualType = previousToken && getContextualType(previousToken, position, sourceFile, typeChecker);
         const literals = mapDefined(contextualType && (contextualType.isUnion() ? contextualType.types : [contextualType]), t => t.isLiteral() ? t.value : undefined);
 
@@ -1228,7 +1224,7 @@ namespace ts.Completions {
             if (shouldOfferImportCompletions()) {
                 const lowerCaseTokenText = previousToken && isIdentifier(previousToken) ? previousToken.text.toLowerCase() : "";
                 const autoImportSuggestions = getSymbolsFromOtherSourceFileExports(program.getCompilerOptions().target!, host);
-                if (!detailsEntryId) {
+                if (!detailsEntryId && importSuggestionsCache) {
                     importSuggestionsCache.set(sourceFile.fileName, autoImportSuggestions);
                 }
                 autoImportSuggestions.forEach(({ symbol, symbolName, skipFilter, origin }) => {
@@ -1411,7 +1407,7 @@ namespace ts.Completions {
          *    everything from Bucket C to Bucket A.
          */
         function getSymbolsFromOtherSourceFileExports(target: ScriptTarget, host: LanguageServiceHost): AutoImportSuggestion[] {
-            const cached = importSuggestionsCache.get(sourceFile.fileName, typeChecker);
+            const cached = importSuggestionsCache && importSuggestionsCache.get(sourceFile.fileName, typeChecker);
             if (cached) {
                 log("getSymbolsFromOtherSourceFileExports: Using cached list");
                 return cached;

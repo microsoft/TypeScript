@@ -255,6 +255,8 @@ namespace ts {
         getSourceFileLike?(fileName: string): SourceFileLike | undefined;
         /* @internal */
         getPackageJsonDependencyInfo?(dependencyName: string, startingPath: string, inGroup?: PackageJsonDependencyGroup): PackageJsonDependencyInfo;
+        /* @internal */
+        getImportSuggestionsCache?(): Completions.AutoImportSuggestionsCache;
     }
 
     /* @internal */

@@ -1155,8 +1155,6 @@ namespace ts {
             log
         });
 
-        const importSuggestionsCache = Completions.createImportSuggestionsCache();
-
         function getValidSourceFile(fileName: string): SourceFile {
             const sourceFile = program.getSourceFile(fileName);
             if (!sourceFile) {
@@ -1256,7 +1254,7 @@ namespace ts {
                 oldProgram: program,
                 projectReferences
             };
-            const newProgram = createProgram(options);
+            program = createProgram(options);
             // hostCache is captured in the closure for 'getOrCreateSourceFile' but it should not be used past this point.
             // It needs to be cleared to allow all collected snapshots to be released
             hostCache = undefined;
@@ -1268,11 +1266,7 @@ namespace ts {
 
             // Make sure all the nodes in the program are both bound, and have their parent
             // pointers set property.
-            newProgram.getTypeChecker();
-
-            cleanImportSuggestionsCache(newProgram);
-
-            program = newProgram;
+            program.getTypeChecker();
             return;
 
             function fileExists(fileName: string): boolean {
@@ -1298,7 +1292,6 @@ namespace ts {
             function onReleaseOldSourceFile(oldSourceFile: SourceFile, oldOptions: CompilerOptions) {
                 const oldSettingsKey = documentRegistry.getKeyForCompilationSettings(oldOptions);
                 documentRegistry.releaseDocumentWithKey(oldSourceFile.resolvedPath, oldSettingsKey);
-                importSuggestionsCache.delete(oldSourceFile.fileName);
             }
 
             function getOrCreateSourceFile(fileName: string, languageVersion: ScriptTarget, onError?: (message: string) => void, shouldCreateNewSourceFile?: boolean): SourceFile | undefined {
@@ -1357,39 +1350,6 @@ namespace ts {
 
                 // Could not find this file in the old program, create a new SourceFile for it.
                 return documentRegistry.acquireDocumentWithKey(fileName, path, newSettings, documentRegistryBucketKey, hostFileInformation.scriptSnapshot, hostFileInformation.version, hostFileInformation.scriptKind);
-            }
-        }
-
-        function cleanImportSuggestionsCache(newProgram: Program) {
-            // If the auto-imports cache isn’t being used, don’t bother invalidating it
-            if (importSuggestionsCache.isEmpty()) {
-                return;
-            }
-            if (!program || program.structureIsReused === StructureIsReused.Not || program.structureIsReused === StructureIsReused.SafeModules) {
-                log("cleanImportSuggestionsCache: clearing due to new program structure");
-                importSuggestionsCache.clear();
-                return;
-            }
-            const sourceFiles = newProgram.getSourceFiles();
-            if (sourceFiles.length !== program.getSourceFiles().length) {
-                log("cleanImportSuggestionsCache: clearing due to files added or removed from program");
-                importSuggestionsCache.clear();
-                return;
-            }
-            for (const newFile of sourceFiles) {
-                const oldFile = program.getSourceFile(newFile.fileName);
-                if (!oldFile) {
-                    log("cleanImportSuggestionsCache: clearing due to new file in program");
-                    importSuggestionsCache.clear();
-                    return;
-                }
-                if (newFile !== oldFile && newFile.symbol && newFile.symbol !== oldFile.symbol && (newFile.symbol.exports || newFile.symbol.exportSymbol)) {
-                    importSuggestionsCache.clearOthers(newFile.fileName);
-                }
-                if (importSuggestionsCache.isEmpty()) {
-                    log(`cleanImportSuggestionsCache: clearing due to edits to files with exports`);
-                    return;
-                }
             }
         }
 
@@ -1473,7 +1433,6 @@ namespace ts {
                 position,
                 fullPreferences,
                 options.triggerCharacter,
-                importSuggestionsCache,
             );
         }
 
@@ -1489,13 +1448,12 @@ namespace ts {
                 (formattingOptions && formatting.getFormatContext(formattingOptions))!, // TODO: GH#18217
                 preferences,
                 cancellationToken,
-                importSuggestionsCache,
             );
         }
 
         function getCompletionEntrySymbol(fileName: string, position: number, name: string, source?: string): Symbol | undefined {
             synchronizeHostData();
-            return Completions.getCompletionEntrySymbol(program, log, getValidSourceFile(fileName), position, { name, source }, host, importSuggestionsCache);
+            return Completions.getCompletionEntrySymbol(program, log, getValidSourceFile(fileName), position, { name, source }, host);
         }
 
         function getQuickInfoAtPosition(fileName: string, position: number): QuickInfo | undefined {

@@ -199,6 +199,9 @@ namespace ts.server {
 
         private readonly cancellationToken: ThrottledCancellationToken;
 
+        /*@internal*/
+        importSuggestionsCache = Completions.createImportSuggestionsCache();
+
         public isNonTsProject() {
             updateProjectIfDirty(this);
             return allFilesAreJsOrDts(this);
