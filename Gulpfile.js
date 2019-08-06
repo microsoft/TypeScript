@@ -318,18 +318,18 @@ task("clean-tests").description = "Cleans the outputs for the test infrastructur
 
 const watchTests = () => watchProject("src/testRunner", cmdLineOptions);
 
-const buildRules = () => buildProject("scripts/eslint");
-task("build-rules", buildRules);
-task("build-rules").description = "Compiles eslint rules to js";
+const buildEslintRules = () => buildProject("scripts/eslint");
+task("build-eslint-rules", buildEslintRules);
+task("build-eslint-rules").description = "Compiles eslint rules to js";
 
-const cleanRules = () => cleanProject("scripts/eslint");
-cleanTasks.push(cleanRules);
-task("clean-rules", cleanRules);
-task("clean-rules").description = "Cleans the outputs for the eslint rules";
+const cleanEslintRules = () => cleanProject("scripts/eslint");
+cleanTasks.push(cleanEslintRules);
+task("clean-eslint-rules", cleanEslintRules);
+task("clean-eslint-rules").description = "Cleans the outputs for the eslint rules";
 
-const runRulesTests = () => runConsoleTests("built/eslint/tests", "mocha-fivemat-progress-reporter", /*runInParallel*/ false, /*watchMode*/ false);
-task("run-rules-tests", series(buildRules, runRulesTests));
-task("run-rules-tests").description = "Runs the eslint rule tests";
+const runEslintRulesTests = () => runConsoleTests("built/eslint/tests", "mocha-fivemat-progress-reporter", /*runInParallel*/ false, /*watchMode*/ false);
+task("run-eslint-rules-tests", series(buildEslintRules, runEslintRulesTests));
+task("run-eslint-rules-tests").description = "Runs the eslint rule tests";
 
 const lintFoldStart = async () => { if (fold.isTravis()) console.log(fold.start("lint")); };
 const lintFoldEnd = async () => { if (fold.isTravis()) console.log(fold.end("lint")); };
@@ -350,15 +350,20 @@ const eslint = (path) => async () => {
     return exec(process.execPath, args);
 }
 
-const lintScripts = series([buildRules, eslint("scripts/**/*.ts")]);
+const lintScripts = eslint("scripts/**/*.ts");
 lintScripts.displayName = "lint-scripts";
-task("lint-scripts", lintScripts);
+task("lint-scripts", series([buildEslintRules, lintFoldStart, lintScripts, lintFoldEnd]));
 task("lint-scripts").description = "Runs eslint on the scripts sources.";
 
-const lint = series([buildRules, lintFoldStart, eslint("src/**/*.ts"), lintFoldEnd]);
+const lintCompiler = eslint("src/**/*.ts");
+lintCompiler.displayName = "lint-compiler";
+task("lint-compiler", series([buildEslintRules, lintFoldStart, lintCompiler, lintFoldEnd]));
+task("lint-compiler").description = "Runs eslint on the compiler sources.";
+
+const lint = series([buildEslintRules, lintFoldStart, lintScripts, lintCompiler, lintFoldEnd]);
 lint.displayName = "lint";
-task("lint", lint);
-task("lint").description = "Runs eslint on the compiler sources.";
+task("lint", series([buildEslintRules, lintFoldStart, lint, lintFoldEnd]));
+task("lint").description = "Runs eslint on the compiler and scripts sources.";
 
 const buildCancellationToken = () => buildProject("src/cancellationToken");
 const cleanCancellationToken = () => cleanProject("src/cancellationToken");
