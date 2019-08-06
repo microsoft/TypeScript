@@ -18815,6 +18815,17 @@ namespace ts {
             return false;
         }
 
+        function getContextualIterationType(kind: IterationTypeKind, functionDecl: SignatureDeclaration): Type | undefined {
+            const isAsync = !!(getFunctionFlags(functionDecl) & FunctionFlags.Async);
+            const contextualReturnType = getContextualReturnType(functionDecl);
+            if (contextualReturnType) {
+                return getIterationTypeOfGeneratorFunctionReturnType(kind, contextualReturnType, isAsync)
+                    || undefined;
+            }
+
+            return undefined;
+        }
+
         function getContextualReturnType(functionDecl: SignatureDeclaration): Type | undefined {
             // If the containing function has a return type annotation, is a constructor, or is a get accessor whose
             // corresponding set accessor has a type annotation, return statements in the function are contextually typed
@@ -23480,7 +23491,11 @@ namespace ts {
             }
 
             if (isGenerator) {
-                return createGeneratorReturnType(yieldType || neverType, returnType || fallbackReturnType, nextType || unknownType, isAsync);
+                return createGeneratorReturnType(
+                    yieldType || neverType,
+                    returnType || fallbackReturnType,
+                    nextType || getContextualIterationType(IterationTypeKind.Next, func) || unknownType,
+                    isAsync);
             }
             else {
                 // From within an async function you can return either a non-promise value or a promise. Any
@@ -24841,13 +24856,7 @@ namespace ts {
                     || anyType;
             }
 
-            const contextualReturnType = getContextualReturnType(func);
-            if (contextualReturnType) {
-                return getIterationTypeOfGeneratorFunctionReturnType(IterationTypeKind.Next, contextualReturnType, isAsync)
-                    || anyType;
-            }
-
-            return anyType;
+            return getContextualIterationType(IterationTypeKind.Next, func) || anyType;
         }
 
         function checkConditionalExpression(node: ConditionalExpression, checkMode?: CheckMode): Type {
