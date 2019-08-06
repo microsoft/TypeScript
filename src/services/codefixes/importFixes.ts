@@ -648,29 +648,24 @@ namespace ts.codefix {
 
     function createLazyPackageJsonDependencyReader(fromFile: SourceFile, host: LanguageServiceHost, preferences: UserPreferences, redirectTargetsMap: RedirectTargetsMap) {
         const packageJsonPaths = findPackageJsons(getDirectoryPath(fromFile.fileName), host);
-        const dependencyIterator = readPackageJsonDependencies(host, packageJsonPaths);
         const getCanonicalFileName = hostGetCanonicalFileName(host);
-        let seenDeps: Map<true> | undefined;
         let usesNodeCoreModules: boolean | undefined;
         return { allowsImportingAmbientModule, allowsImportingSourceFile, allowsImportingSpecifier };
 
-        function containsDependency(dependency: string) {
-            if ((seenDeps || (seenDeps = createMap())).has(dependency)) {
-                return true;
-            }
-            let packageName: string | void;
-            while (packageName = dependencyIterator.next().value) {
-                seenDeps.set(packageName, true);
-                if (packageName === dependency) {
+        function moduleSpecifierIsCoveredByPackageJson(specifier: string) {
+            if (host.getPackageJsonDependencyInfo) {
+                const root = getPathComponents(specifier)[1];
+                const dependencyInfo = host.getPackageJsonDependencyInfo(root, fromFile.fileName, PackageJsonDependencyGroup.Dependencies | PackageJsonDependencyGroup.DevDependencies | PackageJsonDependencyGroup.OptionalDependencies);
+                if (dependencyInfo.foundDependency || !dependencyInfo.foundPackageJsonFileNames.length) {
                     return true;
                 }
+                const typesDependencyInfo = host.getPackageJsonDependencyInfo(getTypesPackageName(root), fromFile.fileName, PackageJsonDependencyGroup.Dependencies | PackageJsonDependencyGroup.DevDependencies | PackageJsonDependencyGroup.OptionalDependencies);
+                if (typesDependencyInfo.foundDependency || !typesDependencyInfo.foundPackageJsonFileNames.length) {
+                    return true;
+                }
+                return false;
             }
-            return false;
-        }
-
-        function moduleSpecifierIsCoveredByPackageJson(specifier: string) {
-            const root = getPathComponents(specifier)[1];
-            return containsDependency(root) || containsDependency(getTypesPackageName(root));
+            return true;
         }
 
         function allowsImportingAmbientModule(moduleSymbol: Symbol, allSourceFiles: readonly SourceFile[]): boolean {
@@ -703,8 +698,7 @@ namespace ts.codefix {
                 return true;
             }
 
-            return containsDependency(moduleSpecifier)
-                || containsDependency(getTypesPackageName(moduleSpecifier));
+            return moduleSpecifierIsCoveredByPackageJson(moduleSpecifier);
         }
 
         /**
@@ -760,23 +754,6 @@ namespace ts.codefix {
                     return `${components[0]}/${components[1]}`;
                 }
                 return components[0];
-            }
-        }
-    }
-
-    function *readPackageJsonDependencies(host: LanguageServiceHost, packageJsonPaths: string[]) {
-        type PackageJson = Record<typeof dependencyKeys[number], Record<string, string> | undefined>;
-        const dependencyKeys = ["dependencies", "devDependencies", "optionalDependencies"] as const;
-        for (const fileName of packageJsonPaths) {
-            const content = readJson(fileName, { readFile: host.readFile ? host.readFile.bind(host) : sys.readFile }) as PackageJson;
-            for (const key of dependencyKeys) {
-                const dependencies = content[key];
-                if (!dependencies) {
-                    continue;
-                }
-                for (const packageName in dependencies) {
-                    yield packageName;
-                }
             }
         }
     }

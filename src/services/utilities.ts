@@ -2048,14 +2048,16 @@ namespace ts {
         return tryAndIgnoreErrors(() => toApply && toApply.apply(host, args));
     }
 
-    export function findPackageJsons(directory: string, host: LanguageServiceHost): string[] {
+    export function findPackageJsons(startDirectory: string, host: LanguageServiceHost, stopDirectory?: string): string[] {
         const paths: string[] = [];
-        forEachAncestorDirectory(directory, ancestor => {
-            const currentConfigPath = findConfigFile(ancestor, (f) => tryFileExists(host, f), "package.json");
-            if (!currentConfigPath) {
-                return true; // break out
+        forEachAncestorDirectory(startDirectory, ancestor => {
+            if (ancestor === stopDirectory) {
+                return true;
             }
-            paths.push(currentConfigPath);
+            const currentConfigPath = combinePaths(ancestor, "package.json");
+            if (tryFileExists(host, currentConfigPath)) {
+                paths.push(currentConfigPath);
+            }
         });
         return paths;
     }

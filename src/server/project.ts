@@ -124,6 +124,7 @@ namespace ts.server {
         private program: Program | undefined;
         private externalFiles: SortedReadonlyArray<string> | undefined;
         private missingFilesMap: Map<FileWatcher> | undefined;
+        private packageJsonFilesMap: Map<FileWatcher> | undefined;
         private generatedFilesMap: GeneratedFileWatcherMap | undefined;
         private plugins: PluginModuleWithName[] = [];
 
@@ -230,6 +231,9 @@ namespace ts.server {
         public readonly getCanonicalFileName: GetCanonicalFileName;
 
         /*@internal*/
+        private readonly packageJsonCache: PackageJsonCache;
+
+        /*@internal*/
         constructor(
             /*@internal*/ readonly projectName: string,
             readonly projectKind: ProjectKind,
@@ -279,6 +283,7 @@ namespace ts.server {
             }
             this.markAsDirty();
             this.projectService.pendingEnsureProjectForOpenFiles = true;
+            this.packageJsonCache = createPackageJsonCache(this);
         }
 
         isKnownTypesPackageName(name: string): boolean {
@@ -659,6 +664,10 @@ namespace ts.server {
             if (this.missingFilesMap) {
                 clearMap(this.missingFilesMap, closeFileWatcher);
                 this.missingFilesMap = undefined!;
+            }
+            if (this.packageJsonFilesMap) {
+                clearMap(this.packageJsonFilesMap, closeFileWatcher);
+                this.packageJsonFilesMap = undefined;
             }
             this.clearGeneratedFileWatch();
 
@@ -1316,6 +1325,83 @@ namespace ts.server {
         /** Starts a new check for diagnostics. Call this if some file has updated that would cause diagnostics to be changed. */
         refreshDiagnostics() {
             this.projectService.sendProjectsUpdatedInBackgroundEvent();
+        }
+
+        /*@internal*/
+        getPackageJsonDependencyInfo(dependencyName: string, startingPath: string, inGroup: PackageJsonDependencyGroup = PackageJsonDependencyGroup.All): PackageJsonDependencyInfo {
+            const packageJsonCache = this.packageJsonCache;
+            const watchPackageJsonFile = this.watchPackageJsonFile.bind(this);
+            const foundPackageJsonFileNames: string[] = [];
+            const result: PackageJsonDependencyInfo = { foundPackageJsonFileNames };
+            forEachAncestorDirectory(getDirectoryPath(startingPath), function processDirectory(directory): boolean | undefined {
+                switch (packageJsonCache.directoryHasPackageJson(directory)) {
+                    // Continue
+                    case Ternary.False: return;
+                    // Sync and check same directory again
+                    case Ternary.Maybe:
+                        packageJsonCache.searchDirectoryAndAncestors(directory);
+                        return processDirectory(directory);
+                    // Check package.json
+                    case Ternary.True:
+                        const packageJsonFileName = combinePaths(directory, "package.json");
+                        watchPackageJsonFile(packageJsonFileName);
+                        const info = Debug.assertDefined(packageJsonCache.get(packageJsonFileName));
+                        foundPackageJsonFileNames.push(packageJsonFileName);
+                        const dependencyGroups = [
+                            [PackageJsonDependencyGroup.Dependencies, info.dependencies],
+                            [PackageJsonDependencyGroup.DevDependencies, info.devDependencies],
+                            [PackageJsonDependencyGroup.OptionalDependencies, info.optionalDependencies],
+                            [PackageJsonDependencyGroup.PeerDependencies, info.peerDependencies],
+                        ] as const;
+
+                        for (const [group, deps] of dependencyGroups) {
+                            if (deps && (inGroup & group)) {
+                                const dep = deps.get(dependencyName);
+                                if (dep) {
+                                    result.foundDependency = {
+                                        dependencyGroup: group,
+                                        packageJsonFileName,
+                                        versionString: dep,
+                                    };
+                                    return true;
+                                }
+                            }
+                        }
+                }
+            });
+
+            return result;
+        }
+
+        /*@internal*/
+        onDiscoveredNewPackageJson(fileName: string) {
+            this.packageJsonCache.addOrUpdate(fileName);
+            this.watchPackageJsonFile(fileName);
+        }
+
+        private watchPackageJsonFile(fileName: string) {
+            const watchers = this.packageJsonFilesMap || (this.packageJsonFilesMap = createMap());
+            if (!watchers.has(fileName)) {
+                watchers.set(fileName, this.projectService.watchFactory.watchFile(
+                    this.projectService.host,
+                    fileName,
+                    (fileName, eventKind) => {
+                        switch (eventKind) {
+                            case FileWatcherEventKind.Created:
+                                return Debug.fail();
+                            case FileWatcherEventKind.Changed:
+                                this.packageJsonCache.addOrUpdate(fileName);
+                                break;
+                            case FileWatcherEventKind.Deleted:
+                                this.packageJsonCache.delete(fileName);
+                                watchers.get(fileName)!.close();
+                                watchers.delete(fileName);
+                        }
+                    },
+                    PollingInterval.Low,
+                    WatchType.PackageJsonFile,
+                ));
+            }
         }
     }
 

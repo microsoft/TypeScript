@@ -169,6 +169,23 @@ namespace ts {
         packageName: string;
     }
 
+    export const enum PackageJsonDependencyGroup {
+        Dependencies,
+        DevDependencies,
+        PeerDependencies,
+        OptionalDependencies,
+        All = Dependencies | DevDependencies | PeerDependencies | OptionalDependencies,
+    }
+
+    export interface PackageJsonDependencyInfo {
+        foundPackageJsonFileNames: readonly string[];
+        foundDependency?: {
+            packageJsonFileName: string;
+            dependencyGroup: PackageJsonDependencyGroup;
+            versionString: string;
+        };
+    }
+
     //
     // Public interface of the host of a language service instance.
     //
@@ -236,6 +253,8 @@ namespace ts {
         getDocumentPositionMapper?(generatedFileName: string, sourceFileName?: string): DocumentPositionMapper | undefined;
         /* @internal */
         getSourceFileLike?(fileName: string): SourceFileLike | undefined;
+        /* @internal */
+        getPackageJsonDependencyInfo?(dependencyName: string, startingPath: string, inGroup?: PackageJsonDependencyGroup): PackageJsonDependencyInfo;
     }
 
     /* @internal */

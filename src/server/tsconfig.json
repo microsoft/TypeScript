@@ -21,6 +21,7 @@
         "typingsCache.ts",
         "project.ts",
         "editorServices.ts",
+        "packageJsonCache.ts",
         "session.ts",
         "scriptVersionCache.ts"
     ]
