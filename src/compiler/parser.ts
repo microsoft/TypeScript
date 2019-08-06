@@ -1093,7 +1093,7 @@ namespace ts {
                 // and the keyword is non-contextual or is in its recognized-as-keyword context
                 && (!tokenReparsedAsIdentifier || (!isContextualKeyword(currentToken) && !isFutureReservedKeyword(currentToken)))) {
                     // issue a parse error for the escape
-                    parseErrorAt(scanner.getTokenPos(), scanner.getTextPos(), Diagnostics.Keyword_must_not_contain_escaped_characters);
+                    parseErrorAt(scanner.getTokenPos(), scanner.getTextPos(), Diagnostics.This_keyword_must_not_contain_an_escaped_character);
                 }
             }
             return currentToken = scanner.scan();
