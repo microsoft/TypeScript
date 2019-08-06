@@ -1599,6 +1599,10 @@ namespace ts.server {
                 return emptyArray;
             }
 
+            function dtsChangeCanAffectEmit(compilationSettings: CompilerOptions) {
+                return getEmitDeclarations(compilationSettings) || !!compilationSettings.emitDecoratorMetadata;
+            }
+
             return combineProjectOutput(
                 info,
                 path => this.projectService.getScriptInfoForPath(path)!,
@@ -1610,8 +1614,8 @@ namespace ts.server {
 
                     const compilationSettings = project.getCompilationSettings();
 
-                    if (!!compilationSettings.noEmit || fileExtensionIs(info.fileName, Extension.Dts) && !getEmitDeclarations(compilationSettings)) {
-                        // avoid triggering emit when a change is made in a .d.ts when declaration emit is disabled
+                    if (!!compilationSettings.noEmit || fileExtensionIs(info.fileName, Extension.Dts) && !dtsChangeCanAffectEmit(compilationSettings)) {
+                        // avoid triggering emit when a change is made in a .d.ts when declaration emit and decorator metadata emit are disabled
                         return undefined;
                     }
 

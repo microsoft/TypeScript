@@ -598,6 +598,15 @@ namespace ts.projectSystem {
                 /*expectDTSEmit*/ true
                 );
             });
+
+            it("should return results if change is made in a global declaration file with decorator emit enabled", () => {
+                testDTS(
+                /*dtsFileContents*/ "declare const x: string;",
+                /*tsFileContents*/ "var y = 1;",
+                /*opts*/ { experimentalDecorators: true, emitDecoratorMetadata: true },
+                /*expectDTSEmit*/ true
+                );
+            });
         });
 
         describe("tsserverProjectSystem emit with outFile or out setting", () => {
