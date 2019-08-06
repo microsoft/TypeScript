@@ -7305,10 +7305,14 @@ namespace ts {
                         return createMissingNode<Identifier>(SyntaxKind.Identifier, /*reportAtCurrentPosition*/ !message, message || Diagnostics.Identifier_expected);
                     }
 
+                    identifierCount++;
                     const pos = scanner.getTokenPos();
                     const end = scanner.getTextPos();
                     const result = <Identifier>createNode(SyntaxKind.Identifier, pos);
-                    result.escapedText = escapeLeadingUnderscores(scanner.getTokenText());
+                    if (token() !== SyntaxKind.Identifier) {
+                        result.originalKeywordKind = token();
+                    }
+                    result.escapedText = escapeLeadingUnderscores(internIdentifier(scanner.getTokenValue()));
                     finishNode(result, end);
 
                     nextTokenJSDoc();

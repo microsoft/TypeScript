@@ -2113,14 +2113,26 @@ namespace ts {
                     return token = SyntaxKind.DotToken;
                 case CharacterCodes.backtick:
                     return token = SyntaxKind.BacktickToken;
+                case CharacterCodes.backslash:
+                    pos--;
+                    const cookedChar = peekUnicodeEscape();
+                    if (cookedChar >= 0 && isIdentifierStart(cookedChar, languageVersion)) {
+                        pos += 6;
+                        tokenValue = String.fromCharCode(cookedChar) + scanIdentifierParts();
+                        return token = getIdentifierToken();
+                    }
+                    error(Diagnostics.Invalid_character);
+                    pos++;
+                    return token = SyntaxKind.Unknown;
             }
 
-            if (isIdentifierStart(ch, ScriptTarget.Latest)) {
-                let nextChar: number;
-                while (isIdentifierPart(nextChar = codePointAt(text, pos), ScriptTarget.Latest) && pos < end) {
-                    pos += charSize(nextChar);
-                }
+            if (isIdentifierStart(ch, languageVersion)) {
+                let char = ch;
+                while (pos < end && isIdentifierPart(char = codePointAt(text, pos), languageVersion)) pos += charSize(char);
                 tokenValue = text.substring(tokenPos, pos);
+                if (char === CharacterCodes.backslash) {
+                    tokenValue += scanIdentifierParts();
+                }
                 return token = getIdentifierToken();
             }
             else {
@@ -2241,7 +2253,7 @@ namespace ts {
 
     /* @internal */
     function charSize(ch: number) {
-        if (ch > 0x10000) {
+        if (ch >= 0x10000) {
             return 2;
         }
         return 1;
