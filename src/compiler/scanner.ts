@@ -1341,6 +1341,19 @@ namespace ts {
             return -1;
         }
 
+
+        function peekExtendedUnicodeEscape(): number {
+            if (languageVersion >= ScriptTarget.ES2015 && codePointAt(text, pos + 1) === CharacterCodes.u && codePointAt(text, pos + 2) === CharacterCodes.openBrace) {
+                const start = pos;
+                pos += 3;
+                const escapedValueString = scanMinimumNumberOfHexDigits(1, /*canHaveSeparators*/ false);
+                const escapedValue = escapedValueString ? parseInt(escapedValueString, 16) : -1;
+                pos = start;
+                return escapedValue;
+            }
+            return -1;
+        }
+
         function scanIdentifierParts(): string {
             let result = "";
             let start = pos;
@@ -1350,6 +1363,14 @@ namespace ts {
                     pos += charSize(ch);
                 }
                 else if (ch === CharacterCodes.backslash) {
+                    ch = peekExtendedUnicodeEscape();
+                    if (ch >= 0 && isIdentifierPart(ch, languageVersion)) {
+                        pos += 3;
+                        tokenFlags |= TokenFlags.ExtendedUnicodeEscape;
+                        result += scanExtendedUnicodeEscape();
+                        start = pos;
+                        continue;
+                    }
                     ch = peekUnicodeEscape();
                     if (!(ch >= 0 && isIdentifierPart(ch, languageVersion))) {
                         break;
@@ -1835,12 +1856,21 @@ namespace ts {
                         pos++;
                         return token = SyntaxKind.AtToken;
                     case CharacterCodes.backslash:
+                        const extendedCookedChar = peekExtendedUnicodeEscape();
+                        if (extendedCookedChar >= 0 && isIdentifierStart(extendedCookedChar, languageVersion)) {
+                            pos += 3;
+                            tokenFlags |= TokenFlags.ExtendedUnicodeEscape;
+                            tokenValue = scanExtendedUnicodeEscape() + scanIdentifierParts();
+                            return token = getIdentifierToken();
+                        }
+
                         const cookedChar = peekUnicodeEscape();
                         if (cookedChar >= 0 && isIdentifierStart(cookedChar, languageVersion)) {
                             pos += 6;
                             tokenValue = String.fromCharCode(cookedChar) + scanIdentifierParts();
                             return token = getIdentifierToken();
                         }
+
                         error(Diagnostics.Invalid_character);
                         pos++;
                         return token = SyntaxKind.Unknown;
