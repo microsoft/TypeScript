@@ -832,12 +832,13 @@ namespace ts {
 
     /* @internal */
     export function isIdentifierText(name: string, languageVersion: ScriptTarget | undefined): boolean {
-        if (!isIdentifierStart(name.charCodeAt(0), languageVersion)) {
+        let ch = codePointAt(name, 0);
+        if (!isIdentifierStart(ch, languageVersion)) {
             return false;
         }
 
-        for (let i = 1; i < name.length; i++) {
-            if (!isIdentifierPart(name.charCodeAt(i), languageVersion)) {
+        for (let i = charSize(ch); i < name.length; i += charSize(ch)) {
+            if (!isIdentifierPart(ch = codePointAt(name, i), languageVersion)) {
                 return false;
             }
         }
@@ -1870,13 +1871,6 @@ namespace ts {
             }
         }
 
-        function charSize(ch: number) {
-            if (ch > 0x10000) {
-                return 2;
-            }
-            return 1;
-        }
-
         function reScanGreaterToken(): SyntaxKind {
             if (token === SyntaxKind.GreaterThanToken) {
                 if (text.charCodeAt(pos) === CharacterCodes.greaterThan) {
@@ -2244,4 +2238,12 @@ namespace ts {
         }
         return first;
     };
+
+    /* @internal */
+    function charSize(ch: number) {
+        if (ch > 0x10000) {
+            return 2;
+        }
+        return 1;
+    }
 }

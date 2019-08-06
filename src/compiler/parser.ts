@@ -512,12 +512,16 @@ namespace ts {
     export function createSourceFile(fileName: string, sourceText: string, languageVersion: ScriptTarget, setParentNodes = false, scriptKind?: ScriptKind): SourceFile {
         performance.mark("beforeParse");
         let result: SourceFile;
+
+        perfLogger.logStartParseSourceFile(fileName);
         if (languageVersion === ScriptTarget.JSON) {
             result = Parser.parseSourceFile(fileName, sourceText, languageVersion, /*syntaxCursor*/ undefined, setParentNodes, ScriptKind.JSON);
         }
         else {
             result = Parser.parseSourceFile(fileName, sourceText, languageVersion, /*syntaxCursor*/ undefined, setParentNodes, scriptKind);
         }
+        perfLogger.logStopParseSourceFile();
+
         performance.mark("afterParse");
         performance.measure("Parse", "beforeParse", "afterParse");
         return result;

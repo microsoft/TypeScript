@@ -577,10 +577,10 @@ namespace ts.FindAllReferences {
     // If a reference is a class expression, the exported node would be its parent.
     // If a reference is a variable declaration, the exported node would be the variable statement.
     function getExportNode(parent: Node, node: Node): Node | undefined {
-        if (parent.kind === SyntaxKind.VariableDeclaration) {
-            const p = parent as VariableDeclaration;
-            return p.name !== node ? undefined :
-                p.parent.kind === SyntaxKind.CatchClause ? undefined : p.parent.parent.kind === SyntaxKind.VariableStatement ? p.parent.parent : undefined;
+        const declaration = isVariableDeclaration(parent) ? parent : isBindingElement(parent) ? walkUpBindingElementsAndPatterns(parent) : undefined;
+        if (declaration) {
+            return (parent as VariableDeclaration | BindingElement).name !== node ? undefined :
+                isCatchClause(declaration.parent) ? undefined : isVariableStatement(declaration.parent.parent) ? declaration.parent.parent : undefined;
         }
         else {
             return parent;
