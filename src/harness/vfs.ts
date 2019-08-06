@@ -1525,8 +1525,11 @@ namespace vfs {
         return typeof value === "string" || Buffer.isBuffer(value) ? new File(value) : new Directory(value);
     }
 
-    export function formatPatch(patch: FileSet) {
-        return formatPatchWorker("", patch);
+    export function formatPatch(patch: FileSet): string;
+    export function formatPatch(patch: FileSet | undefined): string | null;
+    export function formatPatch(patch: FileSet | undefined) {
+        // tslint:disable-next-line:no-null-keyword
+        return patch ? formatPatchWorker("", patch) : null;
     }
 
     function formatPatchWorker(dirname: string, container: FileSet): string {
@@ -1558,6 +1561,25 @@ namespace vfs {
             }
         }
         return text;
+    }
+
+    export function iteratePatch(patch: FileSet | undefined): IterableIterator<[string, string]> | null {
+        // tslint:disable-next-line:no-null-keyword
+        return patch ? Harness.Compiler.iterateOutputs(iteratePatchWorker("", patch)) : null;
+    }
+
+    function* iteratePatchWorker(dirname: string, container: FileSet): IterableIterator<documents.TextDocument> {
+        for (const name of Object.keys(container)) {
+            const entry = normalizeFileSetEntry(container[name]);
+            const file = dirname ? vpath.combine(dirname, name) : name;
+            if (entry instanceof Directory) {
+                yield* ts.arrayFrom(iteratePatchWorker(file, entry.files));
+            }
+            else if (entry instanceof File) {
+                const content = typeof entry.data === "string" ? entry.data : entry.data.toString("utf8");
+                yield new documents.TextDocument(file, content);
+            }
+        }
     }
 }
 // tslint:enable:no-null-keyword
