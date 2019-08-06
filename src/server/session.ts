@@ -2508,7 +2508,6 @@ namespace ts.server {
 
             let request: protocol.Request | undefined;
             let relevantFile: protocol.FileRequestArgs | undefined;
-            let commandSucceeded = false;
             try {
                 request = <protocol.Request>JSON.parse(message);
                 relevantFile = request.arguments && (request as protocol.FileRequest).arguments.file ? (request as protocol.FileRequest).arguments : undefined;
@@ -2527,8 +2526,6 @@ namespace ts.server {
                 }
 
                 // Note: Log before writing the response, else the editor can complete its activity before the server does
-                // Set 'commandSucceded' flag to ensure logStopCommand doesn't get called twice (e.g. if doOutput throws)
-                commandSucceeded = true;
                 perfLogger.logStopCommand("" + request.command, "Success");
                 if (response) {
                     this.doOutput(response, request.command, request.seq, /*success*/ true);
@@ -2540,13 +2537,13 @@ namespace ts.server {
             catch (err) {
                 if (err instanceof OperationCanceledException) {
                     // Handle cancellation exceptions
-                    if (!commandSucceeded) perfLogger.logStopCommand("" + (request && request.command), "Canceled: " + err);
+                    perfLogger.logStopCommand("" + (request && request.command), "Canceled: " + err);
                     this.doOutput({ canceled: true }, request!.command, request!.seq, /*success*/ true);
                     return;
                 }
 
                 this.logErrorWorker(err, message, relevantFile);
-                if (!commandSucceeded) perfLogger.logStopCommand("" + (request && request.command), "Error: " + err);
+                perfLogger.logStopCommand("" + (request && request.command), "Error: " + err);
 
                 this.doOutput(
                     /*info*/ undefined,
