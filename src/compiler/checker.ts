@@ -3527,13 +3527,22 @@ namespace ts {
         }
 
         function getTypeNamesForErrorDisplay(left: Type, right: Type): [string, string] {
-            let leftStr = typeToString(left);
-            let rightStr = typeToString(right);
+          let leftStr = isAnonymousAndHasNoParent(left)
+              ? typeToString(left, left.symbol.valueDeclaration)
+              : typeToString(left);
+
+          let rightStr = isAnonymousAndHasNoParent(right)
+              ? typeToString(right, right.symbol.valueDeclaration)
+              : typeToString(right);
             if (leftStr === rightStr) {
                 leftStr = typeToString(left, /*enclosingDeclaration*/ undefined, TypeFormatFlags.UseFullyQualifiedType);
                 rightStr = typeToString(right, /*enclosingDeclaration*/ undefined, TypeFormatFlags.UseFullyQualifiedType);
             }
             return [leftStr, rightStr];
+        }
+
+        function isAnonymousAndHasNoParent(type: Type): boolean {
+          return type.symbol && type.symbol.parent === undefined && (type as ObjectType).objectFlags === ObjectFlags.Anonymous;
         }
 
         function toNodeBuilderFlags(flags = TypeFormatFlags.None): NodeBuilderFlags {
@@ -12704,8 +12713,12 @@ namespace ts {
             }
 
             function tryElaborateErrorsForPrimitivesAndObjects(source: Type, target: Type) {
-                const sourceType = typeToString(source);
-                const targetType = typeToString(target);
+                const sourceType = isAnonymousAndHasNoParent(source)
+                                    ? typeToString(source, source.symbol.valueDeclaration)
+                                    : typeToString(source);
+                const targetType = isAnonymousAndHasNoParent(target)
+                                    ? typeToString(target, target.symbol.valueDeclaration)
+                                    : typeToString(target);
 
                 if ((globalStringType === source && stringType === target) ||
                     (globalNumberType === source && numberType === target) ||

@@ -16,3 +16,8 @@ foo(a);
 function test(): {[A in "foo"]: A} {
   return {foo: "bar"};
 }
+
+// Repro for #32358
+
+const foo = { bar: 'a' };
+const x = ({ [foo.bar]: c }) => undefined;
