@@ -771,6 +771,7 @@ namespace ts {
 
     export const awaiterHelper: UnscopedEmitHelper = {
         name: "typescript:awaiter",
+        importName: "__awaiter",
         scoped: false,
         priority: 5,
         text: `

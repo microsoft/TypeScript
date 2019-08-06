@@ -18,18 +18,11 @@ namespace ts {
             }
 
             if (isExternalModule(node) || compilerOptions.isolatedModules) {
-                const externalHelpersModuleName = getOrCreateExternalHelpersModuleNameIfNeeded(node, compilerOptions);
-                if (externalHelpersModuleName) {
+                const externalHelpersImportDeclaration = createExternalHelpersImportDeclarationIfNeeded(node, compilerOptions);
+                if (externalHelpersImportDeclaration) {
                     const statements: Statement[] = [];
                     const statementOffset = addPrologue(statements, node.statements);
-                    const tslibImport = createImportDeclaration(
-                        /*decorators*/ undefined,
-                        /*modifiers*/ undefined,
-                        createImportClause(/*name*/ undefined, createNamespaceImport(externalHelpersModuleName)),
-                        createLiteral(externalHelpersModuleNameText)
-                    );
-                    addEmitFlags(tslibImport, EmitFlags.NeverApplyImportHelper);
-                    append(statements, tslibImport);
+                    append(statements, externalHelpersImportDeclaration);
 
                     addRange(statements, visitNodes(node.statements, visitor, isStatement, statementOffset));
                     return updateSourceFileNode(

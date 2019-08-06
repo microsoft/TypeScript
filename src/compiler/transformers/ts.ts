@@ -3292,6 +3292,7 @@ namespace ts {
 
     export const decorateHelper: UnscopedEmitHelper = {
         name: "typescript:decorate",
+        importName: "__decorate",
         scoped: false,
         priority: 2,
         text: `
@@ -3317,6 +3318,7 @@ namespace ts {
 
     export const metadataHelper: UnscopedEmitHelper = {
         name: "typescript:metadata",
+        importName: "__metadata",
         scoped: false,
         priority: 3,
         text: `
@@ -3342,6 +3344,7 @@ namespace ts {
 
     export const paramHelper: UnscopedEmitHelper = {
         name: "typescript:param",
+        importName: "__param",
         scoped: false,
         priority: 4,
         text: `

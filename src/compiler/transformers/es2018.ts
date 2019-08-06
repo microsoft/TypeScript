@@ -995,6 +995,7 @@ namespace ts {
 
     export const assignHelper: UnscopedEmitHelper = {
         name: "typescript:assign",
+        importName: "__assign",
         scoped: false,
         priority: 1,
         text: `
@@ -1027,6 +1028,7 @@ namespace ts {
 
     export const awaitHelper: UnscopedEmitHelper = {
         name: "typescript:await",
+        importName: "__await",
         scoped: false,
         text: `
             var __await = (this && this.__await) || function (v) { return this instanceof __await ? (this.v = v, this) : new __await(v); }`
@@ -1039,6 +1041,7 @@ namespace ts {
 
     export const asyncGeneratorHelper: UnscopedEmitHelper = {
         name: "typescript:asyncGenerator",
+        importName: "__asyncGenerator",
         scoped: false,
         text: `
             var __asyncGenerator = (this && this.__asyncGenerator) || function (thisArg, _arguments, generator) {
@@ -1074,6 +1077,7 @@ namespace ts {
 
     export const asyncDelegator: UnscopedEmitHelper = {
         name: "typescript:asyncDelegator",
+        importName: "__asyncDelegator",
         scoped: false,
         text: `
             var __asyncDelegator = (this && this.__asyncDelegator) || function (o) {
@@ -1098,6 +1102,7 @@ namespace ts {
 
     export const asyncValues: UnscopedEmitHelper = {
         name: "typescript:asyncValues",
+        importName: "__asyncValues",
         scoped: false,
         text: `
             var __asyncValues = (this && this.__asyncValues) || function (o) {

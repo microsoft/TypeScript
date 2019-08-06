@@ -4362,6 +4362,7 @@ namespace ts {
 
     export const extendsHelper: UnscopedEmitHelper = {
         name: "typescript:extends",
+        importName: "__extends",
         scoped: false,
         priority: 0,
         text: `
@@ -4383,6 +4384,7 @@ namespace ts {
 
     export const templateObjectHelper: UnscopedEmitHelper = {
         name: "typescript:makeTemplateObject",
+        importName: "__makeTemplateObject",
         scoped: false,
         priority: 0,
         text: `

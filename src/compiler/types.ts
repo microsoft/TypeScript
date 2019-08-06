@@ -4760,6 +4760,10 @@ namespace ts {
         AMD = 2,
         UMD = 3,
         System = 4,
+
+        // NOTE: ES module kinds should be contiguous to more easily check whether a module kind is *any* ES module kind.
+        //       Non-ES module kinds should not come between ES2015 (the earliest ES module kind) and ESNext (the last ES
+        //       module kind).
         ES2015 = 5,
         ESNext = 99
     }
@@ -5289,6 +5293,7 @@ namespace ts {
         tokenSourceMapRanges?: (SourceMapRange | undefined)[]; // The text range to use when emitting source mappings for tokens
         constantValue?: string | number;         // The constant value of an expression
         externalHelpersModuleName?: Identifier;  // The local name for an imported helpers module
+        externalHelpers?: boolean;
         helpers?: EmitHelper[];                  // Emit helpers for the node
         startsOnNewLine?: boolean;               // If the node should begin on a new line
     }
@@ -5336,6 +5341,8 @@ namespace ts {
 
     export interface UnscopedEmitHelper extends EmitHelper {
         readonly scoped: false;                                         // Indicates whether the helper MUST be emitted in the current scope.
+        /* @internal */
+        readonly importName?: string;                                   // The name of the helper to use when importing via `--importHelpers`.
         readonly text: string;                                          // ES3-compatible raw script text, or a function yielding such a string
     }
 
