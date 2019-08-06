@@ -2023,15 +2023,15 @@ namespace ts {
         return withSemicolon / withoutSemicolon > 1 / nStatementsToObserve;
     }
 
-    export function tryGetDirectories(host: LanguageServiceHost, directoryName: string): string[] {
+    export function tryGetDirectories(host: Pick<LanguageServiceHost, "getDirectories">, directoryName: string): string[] {
         return tryIOAndConsumeErrors(host, host.getDirectories, directoryName) || [];
     }
 
-    export function tryReadDirectory(host: LanguageServiceHost, path: string, extensions?: ReadonlyArray<string>, exclude?: ReadonlyArray<string>, include?: ReadonlyArray<string>): ReadonlyArray<string> {
+    export function tryReadDirectory(host: Pick<LanguageServiceHost, "readDirectory">, path: string, extensions?: ReadonlyArray<string>, exclude?: ReadonlyArray<string>, include?: ReadonlyArray<string>): ReadonlyArray<string> {
         return tryIOAndConsumeErrors(host, host.readDirectory, path, extensions, exclude, include) || emptyArray;
     }
 
-    export function tryFileExists(host: LanguageServiceHost, path: string): boolean {
+    export function tryFileExists(host: Pick<LanguageServiceHost, "fileExists">, path: string): boolean {
         return tryIOAndConsumeErrors(host, host.fileExists, path);
     }
 
@@ -2044,11 +2044,11 @@ namespace ts {
         catch { return undefined; }
     }
 
-    export function tryIOAndConsumeErrors<T>(host: LanguageServiceHost, toApply: ((...a: any[]) => T) | undefined, ...args: any[]) {
+    export function tryIOAndConsumeErrors<T>(host: unknown, toApply: ((...a: any[]) => T) | undefined, ...args: any[]) {
         return tryAndIgnoreErrors(() => toApply && toApply.apply(host, args));
     }
 
-    export function findPackageJsons(startDirectory: string, host: LanguageServiceHost, stopDirectory?: string): string[] {
+    export function findPackageJsons(startDirectory: string, host: Pick<LanguageServiceHost, "fileExists">, stopDirectory?: string): string[] {
         const paths: string[] = [];
         forEachAncestorDirectory(startDirectory, ancestor => {
             if (ancestor === stopDirectory) {

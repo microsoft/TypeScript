@@ -170,10 +170,10 @@ namespace ts {
     }
 
     export const enum PackageJsonDependencyGroup {
-        Dependencies,
-        DevDependencies,
-        PeerDependencies,
-        OptionalDependencies,
+        Dependencies         = 1 << 0,
+        DevDependencies      = 1 << 1,
+        PeerDependencies     = 1 << 2,
+        OptionalDependencies = 1 << 3,
         All = Dependencies | DevDependencies | PeerDependencies | OptionalDependencies,
     }
 

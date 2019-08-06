@@ -654,7 +654,7 @@ namespace ts.codefix {
 
         function moduleSpecifierIsCoveredByPackageJson(specifier: string) {
             if (host.getPackageJsonDependencyInfo) {
-                const root = getPathComponents(specifier)[1];
+                const root = getNodeModuleRootSpecifier(specifier);
                 const dependencyInfo = host.getPackageJsonDependencyInfo(root, fromFile.fileName, PackageJsonDependencyGroup.Dependencies | PackageJsonDependencyGroup.DevDependencies | PackageJsonDependencyGroup.OptionalDependencies);
                 if (dependencyInfo.foundDependency || !dependencyInfo.foundPackageJsonFileNames.length) {
                     return true;
@@ -748,13 +748,17 @@ namespace ts.codefix {
             // Paths here are not node_modules, so we don’t care about them;
             // returning anything will trigger a lookup in package.json.
             if (!pathIsRelative(specifier) && !isRootedDiskPath(specifier)) {
-                const components = getPathComponents(getPackageNameFromTypesPackageName(specifier)).slice(1);
-                // Scoped packages
-                if (startsWith(components[0], "@")) {
-                    return `${components[0]}/${components[1]}`;
-                }
-                return components[0];
+                return getNodeModuleRootSpecifier(specifier);
             }
+        }
+
+        function getNodeModuleRootSpecifier(fullSpecifier: string): string {
+            const components = getPathComponents(getPackageNameFromTypesPackageName(fullSpecifier)).slice(1);
+            // Scoped packages
+            if (startsWith(components[0], "@")) {
+                return `${components[0]}/${components[1]}`;
+            }
+            return components[0];
         }
     }
 
