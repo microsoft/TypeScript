@@ -27,9 +27,14 @@ async function copyLibFiles() {
 
 async function copyLocalizedDiagnostics() {
     const dir = await fs.readdir(source);
+    const ignoredFolders = ["enu"];
+
     for (const d of dir) {
         const fileName = path.join(source, d);
-        if (fs.statSync(fileName).isDirectory()) {
+        if (
+            fs.statSync(fileName).isDirectory() &&
+            ignoredFolders.indexOf(d) < 0
+        ) {
             await fs.copy(fileName, path.join(dest, d));
         }
     }

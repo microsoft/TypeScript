@@ -5,10 +5,10 @@ function* g(): IterableIterator<(x: string) => number> {
 
     yield * {
 >yield * {        *[Symbol.iterator]() {            yield x => x.length;        }    } : void
->{        *[Symbol.iterator]() {            yield x => x.length;        }    } : { [Symbol.iterator](): Generator<(x: string) => number, void, unknown>; }
+>{        *[Symbol.iterator]() {            yield x => x.length;        }    } : { [Symbol.iterator](): Generator<(x: string) => number, void, undefined>; }
 
         *[Symbol.iterator]() {
->[Symbol.iterator] : () => Generator<(x: string) => number, void, unknown>
+>[Symbol.iterator] : () => Generator<(x: string) => number, void, undefined>
 >Symbol.iterator : symbol
 >Symbol : SymbolConstructor
 >iterator : symbol
