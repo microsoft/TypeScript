@@ -2405,8 +2405,11 @@ namespace ts {
                 // This way a chain of imports can be elided if ultimately the final input is only used in a type
                 // position.
                 if (isInternalModuleImportEqualsDeclaration(node)) {
-                    // import foo = <symbol>
-                    checkExpressionCached(<Expression>node.moduleReference);
+                    const target = resolveSymbol(symbol);
+                    if (target === unknownSymbol || target.flags & SymbolFlags.Value) {
+                        // import foo = <symbol>
+                        checkExpressionCached(<Expression>node.moduleReference);
+                    }
                 }
             }
         }
