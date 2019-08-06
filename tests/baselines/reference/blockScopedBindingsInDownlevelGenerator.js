@@ -43,7 +43,7 @@ var __values = (this && this.__values) || function(o) {
             return { value: o && o[i++], done: !o };
         }
     };
-    throw new TypeError(s ? "Object not iterable." : "Symbol.iterator is not defined.");
+    throw new TypeError(s ? "Object is not iterable." : "Symbol.iterator is not defined.");
 };
 function a() {
     var _loop_1, _a, _b, i, e_1_1;

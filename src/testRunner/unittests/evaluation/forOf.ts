@@ -66,7 +66,7 @@ describe("unittests:: evaluation:: forOfEvaluation", () => {
         }
         `, { downlevelIteration: true, target: ts.ScriptTarget.ES5 });
 
-        assert.throws(() => result.main(), "undefined is not iterable (cannot read property Symbol(Symbol.iterator))");
+        assert.throws(() => result.main(), /cannot read property.*Symbol\(Symbol\.iterator\).*/i);
     });
 
     it("es5 over object with no Symbol.iterator with no Symbol", () => {
@@ -93,7 +93,7 @@ describe("unittests:: evaluation:: forOfEvaluation", () => {
         }
         `, { downlevelIteration: true, target: ts.ScriptTarget.ES5 });
 
-        assert.throws(() => result.main(), "Object not iterable");
+        assert.throws(() => result.main(), "Object is not iterable");
     });
 
     it("es5 over object with Symbol.iterator", () => {
@@ -110,7 +110,7 @@ describe("unittests:: evaluation:: forOfEvaluation", () => {
                 {
                     output.push(value)
                 }
-                
+
             }`, { downlevelIteration: true, target: ts.ScriptTarget.ES5 });
 
         result.main();
