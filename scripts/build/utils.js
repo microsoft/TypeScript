@@ -25,10 +25,11 @@ const isWindows = /^win/.test(process.platform);
  * @property {boolean} [ignoreExitCode]
  * @property {import("prex").CancellationToken} [cancelToken]
  * @property {boolean} [hidePrompt]
+ * @property {boolean} [waitForExit=true]
  */
 function exec(cmd, args, options = {}) {
     return /**@type {Promise<{exitCode: number}>}*/(new Promise((resolve, reject) => {
-        const { ignoreExitCode, cancelToken = CancellationToken.none } = options;
+        const { ignoreExitCode, cancelToken = CancellationToken.none, waitForExit = true } = options;
         cancelToken.throwIfCancellationRequested();
 
         // TODO (weswig): Update child_process types to add windowsVerbatimArguments to the type definition
@@ -36,26 +37,33 @@ function exec(cmd, args, options = {}) {
         const command = isWindows ? [possiblyQuote(cmd), ...args] : [`${cmd} ${args.join(" ")}`];
 
         if (!options.hidePrompt) log(`> ${chalk.green(cmd)} ${args.join(" ")}`);
-        const proc = spawn(isWindows ? "cmd" : "/bin/sh", [subshellFlag, ...command], { stdio: "inherit", windowsVerbatimArguments: true });
+        const proc = spawn(isWindows ? "cmd" : "/bin/sh", [subshellFlag, ...command], { stdio: waitForExit ? "inherit" : "ignore", windowsVerbatimArguments: true });
         const registration = cancelToken.register(() => {
             log(`${chalk.red("killing")} '${chalk.green(cmd)} ${args.join(" ")}'...`);
             proc.kill("SIGINT");
             proc.kill("SIGTERM");
             reject(new CancelError());
         });
-        proc.on("exit", exitCode => {
-            registration.unregister();
-            if (exitCode === 0 || ignoreExitCode) {
-                resolve({ exitCode });
-            }
-            else {
-                reject(new Error(`Process exited with code: ${exitCode}`));
-            }
-        });
-        proc.on("error", error => {
-            registration.unregister();
-            reject(error);
-        });
+        if (waitForExit) {
+            proc.on("exit", exitCode => {
+                registration.unregister();
+                if (exitCode === 0 || ignoreExitCode) {
+                    resolve({ exitCode });
+                }
+                else {
+                    reject(new Error(`Process exited with code: ${exitCode}`));
+                }
+            });
+            proc.on("error", error => {
+                registration.unregister();
+                reject(error);
+            });
+        }
+        else {
+            proc.unref();
+            // wait a short period in order to allow the process to start successfully before Node exits.
+            setTimeout(() => resolve({ exitCode: undefined }), 100);
+        }
     }));
 }
 exports.exec = exec;

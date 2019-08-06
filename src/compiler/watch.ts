@@ -1005,13 +1005,19 @@ namespace ts {
 
             switch (reloadLevel) {
                 case ConfigFileProgramReloadLevel.Partial:
-                    return reloadFileNamesFromConfigFile();
+                    perfLogger.logStartUpdateProgram("PartialConfigReload");
+                    reloadFileNamesFromConfigFile();
+                    break;
                 case ConfigFileProgramReloadLevel.Full:
-                    return reloadConfigFile();
+                    perfLogger.logStartUpdateProgram("FullConfigReload");
+                    reloadConfigFile();
+                    break;
                 default:
+                    perfLogger.logStartUpdateProgram("SynchronizeProgram");
                     synchronizeProgram();
-                    return;
+                    break;
             }
+            perfLogger.logStopUpdateProgram("Done");
         }
 
         function reloadFileNamesFromConfigFile() {
