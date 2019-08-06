@@ -1,7 +1,5 @@
 Exit Code: 1
 Standard output:
-../../../../../built/local/lib.es2015.iterable.d.ts(41,6): error TS2300: Duplicate identifier 'IteratorResult'.
-../../../../../node_modules/@types/node/index.d.ts(77,11): error TS2300: Duplicate identifier 'IteratorResult'.
 node_modules/@typescript-eslint/typescript-estree/dist/parser.d.ts(1,8): error TS1259: Module '"/prettier/prettier/node_modules/typescript/lib/typescript"' can only be default-imported using the 'esModuleInterop' flag
 src/cli/util.js(60,44): error TS2345: Argument of type 'null' is not assignable to parameter of type 'number | undefined'.
 src/cli/util.js(119,38): error TS2339: Property 'sync' does not exist on type '(...args: any[]) => any'.
