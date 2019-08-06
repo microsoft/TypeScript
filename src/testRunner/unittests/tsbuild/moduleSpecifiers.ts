@@ -1,6 +1,6 @@
 namespace ts {
     // https://github.com/microsoft/TypeScript/issues/31696
-    it("unittests:: tsbuild:: synthesized module specifiers to referenced projects resolve correctly", () => {
+    it("unittests:: tsbuild:: moduleSpecifiers:: synthesized module specifiers to referenced projects resolve correctly", () => {
         const baseFs = vfs.createFromFileSystem(Harness.IO, /*ignoreCase*/ false, {
             files: {
                 "/src/common/nominal.ts": "export declare type Nominal<T, Name extends string> = T & {\n\t[Symbol.species]: Name;\n};\n",
@@ -33,6 +33,7 @@ namespace ts {
                 }),
                 "/tsconfig.base.json": JSON.stringify({
                     compilerOptions: {
+                        skipLibCheck: true,
                         rootDir: "./",
                         outDir: "lib",
                         lib: ["dom", "es2015", "es2015.symbol.wellknown"]
