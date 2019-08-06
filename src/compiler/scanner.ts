@@ -1015,7 +1015,7 @@ namespace ts {
         }
 
         function checkForIdentifierStartAfterNumericLiteral(numericStart: number, isScientific?: boolean) {
-            if (!isIdentifierStart(text.charCodeAt(pos), languageVersion)) {
+            if (!isIdentifierStart(codePointAt(text, pos), languageVersion)) {
                 return;
             }
 
@@ -2063,17 +2063,22 @@ namespace ts {
         // they allow dashes
         function scanJsxIdentifier(): SyntaxKind {
             if (tokenIsIdentifierOrKeyword(token)) {
-                const firstCharPosition = pos;
+                // An identifier or keyword has already been parsed - check for a `-` and then append it and everything after it to the token
+                // Do note that this means that `scanJsxIdentifier` effectively _mutates_ the visible token without advancing to a new token
+                // Any caller should be expecting this behavior and should only read the pos or token value after calling it.
                 while (pos < end) {
                     const ch = text.charCodeAt(pos);
-                    if (ch === CharacterCodes.minus || ((firstCharPosition === pos) ? isIdentifierStart(ch, languageVersion) : isIdentifierPart(ch, languageVersion))) {
+                    if (ch === CharacterCodes.minus) {
+                        tokenValue += "-";
                         pos++;
+                        continue;
                     }
-                    else {
+                    const oldPos = pos;
+                    tokenValue += scanIdentifierParts(); // reuse `scanIdentifierParts` so unicode escapes are handled
+                    if (pos === oldPos) {
                         break;
                     }
                 }
-                tokenValue += text.substring(firstCharPosition, pos);
             }
             return token;
         }
@@ -2099,8 +2104,8 @@ namespace ts {
                 return token = SyntaxKind.EndOfFileToken;
             }
 
-            const ch = text.charCodeAt(pos);
-            pos++;
+            const ch = codePointAt(text, pos);
+            pos += charSize(ch);
             switch (ch) {
                 case CharacterCodes.tab:
                 case CharacterCodes.verticalTab:
@@ -2138,13 +2143,34 @@ namespace ts {
                     return token = SyntaxKind.DotToken;
                 case CharacterCodes.backtick:
                     return token = SyntaxKind.BacktickToken;
+                case CharacterCodes.backslash:
+                    pos--;
+                    const extendedCookedChar = peekExtendedUnicodeEscape();
+                    if (extendedCookedChar >= 0 && isIdentifierStart(extendedCookedChar, languageVersion)) {
+                        pos += 3;
+                        tokenFlags |= TokenFlags.ExtendedUnicodeEscape;
+                        tokenValue = scanExtendedUnicodeEscape() + scanIdentifierParts();
+                        return token = getIdentifierToken();
+                    }
+
+                    const cookedChar = peekUnicodeEscape();
+                    if (cookedChar >= 0 && isIdentifierStart(cookedChar, languageVersion)) {
+                        pos += 6;
+                        tokenValue = String.fromCharCode(cookedChar) + scanIdentifierParts();
+                        return token = getIdentifierToken();
+                    }
+                    error(Diagnostics.Invalid_character);
+                    pos++;
+                    return token = SyntaxKind.Unknown;
             }
 
-            if (isIdentifierStart(ch, ScriptTarget.Latest)) {
-                while (isIdentifierPart(text.charCodeAt(pos), ScriptTarget.Latest) && pos < end) {
-                    pos++;
-                }
+            if (isIdentifierStart(ch, languageVersion)) {
+                let char = ch;
+                while (pos < end && isIdentifierPart(char = codePointAt(text, pos), languageVersion)) pos += charSize(char);
                 tokenValue = text.substring(tokenPos, pos);
+                if (char === CharacterCodes.backslash) {
+                    tokenValue += scanIdentifierParts();
+                }
                 return token = getIdentifierToken();
             }
             else {
@@ -2265,7 +2291,7 @@ namespace ts {
 
     /* @internal */
     function charSize(ch: number) {
-        if (ch > 0x10000) {
+        if (ch >= 0x10000) {
             return 2;
         }
         return 1;
