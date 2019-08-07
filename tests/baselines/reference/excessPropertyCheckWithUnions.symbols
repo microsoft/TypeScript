@@ -221,3 +221,36 @@ const abac: AB = {
     }
 }
 
+// Excess property checks must match all discriminable properties
+type Button = { tag: 'button'; type?: 'submit'; };
+>Button : Symbol(Button, Decl(excessPropertyCheckWithUnions.ts, 74, 1))
+>tag : Symbol(tag, Decl(excessPropertyCheckWithUnions.ts, 77, 15))
+>type : Symbol(type, Decl(excessPropertyCheckWithUnions.ts, 77, 30))
+
+type Anchor = { tag: 'a'; type?: string; href: string };
+>Anchor : Symbol(Anchor, Decl(excessPropertyCheckWithUnions.ts, 77, 50))
+>tag : Symbol(tag, Decl(excessPropertyCheckWithUnions.ts, 78, 15))
+>type : Symbol(type, Decl(excessPropertyCheckWithUnions.ts, 78, 25))
+>href : Symbol(href, Decl(excessPropertyCheckWithUnions.ts, 78, 40))
+
+type Union = Button | Anchor;
+>Union : Symbol(Union, Decl(excessPropertyCheckWithUnions.ts, 78, 56))
+>Button : Symbol(Button, Decl(excessPropertyCheckWithUnions.ts, 74, 1))
+>Anchor : Symbol(Anchor, Decl(excessPropertyCheckWithUnions.ts, 77, 50))
+
+const obj: Union = {
+>obj : Symbol(obj, Decl(excessPropertyCheckWithUnions.ts, 81, 5))
+>Union : Symbol(Union, Decl(excessPropertyCheckWithUnions.ts, 78, 56))
+
+    tag: 'button',
+>tag : Symbol(tag, Decl(excessPropertyCheckWithUnions.ts, 81, 20))
+
+    type: 'submit',
+>type : Symbol(type, Decl(excessPropertyCheckWithUnions.ts, 82, 18))
+
+    // should have error here
+    href: 'foo',
+>href : Symbol(href, Decl(excessPropertyCheckWithUnions.ts, 83, 19))
+
+};
+
