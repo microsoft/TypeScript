@@ -3527,13 +3527,8 @@ namespace ts {
         }
 
         function getTypeNamesForErrorDisplay(left: Type, right: Type): [string, string] {
-          let leftStr = isAnonymousAndHasNoParent(left)
-              ? typeToString(left, left.symbol.valueDeclaration)
-              : typeToString(left);
-
-          let rightStr = isAnonymousAndHasNoParent(right)
-              ? typeToString(right, right.symbol.valueDeclaration)
-              : typeToString(right);
+            let leftStr = hasNoContextSymbolvalueDeclaration(left) ? typeToString(left, left.symbol.valueDeclaration) : typeToString(left);
+            let rightStr = hasNoContextSymbolvalueDeclaration(right) ? typeToString(right, right.symbol.valueDeclaration) : typeToString(right);
             if (leftStr === rightStr) {
                 leftStr = typeToString(left, /*enclosingDeclaration*/ undefined, TypeFormatFlags.UseFullyQualifiedType);
                 rightStr = typeToString(right, /*enclosingDeclaration*/ undefined, TypeFormatFlags.UseFullyQualifiedType);
@@ -3541,8 +3536,9 @@ namespace ts {
             return [leftStr, rightStr];
         }
 
-        function isAnonymousAndHasNoParent(type: Type): boolean {
-          return type.symbol && type.symbol.parent === undefined && (type as ObjectType).objectFlags === ObjectFlags.Anonymous;
+        function hasNoContextSymbolvalueDeclaration(type: Type): boolean {
+            if (type.symbol === undefined || type.symbol.valueDeclaration === undefined) return false;
+            return isExpression(type.symbol.valueDeclaration) ? !isContextSensitive(type.symbol.valueDeclaration) : false;
         }
 
         function toNodeBuilderFlags(flags = TypeFormatFlags.None): NodeBuilderFlags {
@@ -12713,12 +12709,8 @@ namespace ts {
             }
 
             function tryElaborateErrorsForPrimitivesAndObjects(source: Type, target: Type) {
-                const sourceType = isAnonymousAndHasNoParent(source)
-                                    ? typeToString(source, source.symbol.valueDeclaration)
-                                    : typeToString(source);
-                const targetType = isAnonymousAndHasNoParent(target)
-                                    ? typeToString(target, target.symbol.valueDeclaration)
-                                    : typeToString(target);
+                const sourceType = hasNoContextSymbolvalueDeclaration(source) ? typeToString(source, source.symbol.valueDeclaration) : typeToString(source);
+                const targetType = hasNoContextSymbolvalueDeclaration(target) ? typeToString(target, target.symbol.valueDeclaration) : typeToString(target);
 
                 if ((globalStringType === source && stringType === target) ||
                     (globalNumberType === source && numberType === target) ||
