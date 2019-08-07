@@ -67,8 +67,10 @@ lib/Page.js(511,15): error TS2503: Cannot find namespace 'Protocol'.
 lib/Page.js(536,15): error TS2503: Cannot find namespace 'Protocol'.
 lib/Page.js(589,14): error TS2503: Cannot find namespace 'Protocol'.
 lib/Page.js(890,19): error TS2503: Cannot find namespace 'Protocol'.
+lib/PipeTransport.js(19,5): error TS1213: Identifier expected. 'implements' is a reserved word in strict mode. Class definitions are automatically in strict mode.
 lib/Target.js(22,15): error TS2503: Cannot find namespace 'Protocol'.
 lib/Target.js(118,15): error TS2503: Cannot find namespace 'Protocol'.
+lib/WebSocketTransport.js(19,5): error TS1213: Identifier expected. 'implements' is a reserved word in strict mode. Class definitions are automatically in strict mode.
 lib/Worker.js(25,50): error TS2503: Cannot find namespace 'Protocol'.
 lib/Worker.js(26,24): error TS2503: Cannot find namespace 'Protocol'.
 lib/Worker.js(33,26): error TS2503: Cannot find namespace 'Protocol'.

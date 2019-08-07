@@ -218,6 +218,8 @@ node_modules/chrome-devtools-frontend/front_end/accessibility/AccessibilityNodeV
 node_modules/chrome-devtools-frontend/front_end/accessibility/AccessibilityNodeView.js(522,20): error TS2339: Property 'createTextChild' does not exist on type 'Element'.
 node_modules/chrome-devtools-frontend/front_end/accessibility/AccessibilityNodeView.js(535,24): error TS2694: Namespace 'Protocol' has no exported member 'Accessibility'.
 node_modules/chrome-devtools-frontend/front_end/accessibility/AccessibilityNodeView.js(619,26): error TS2339: Property 'removeChildren' does not exist on type 'Element'.
+node_modules/chrome-devtools-frontend/front_end/accessibility/AccessibilitySidebarView.js(71,7): error TS1213: Identifier expected. 'protected' is a reserved word in strict mode. Class definitions are automatically in strict mode.
+node_modules/chrome-devtools-frontend/front_end/accessibility/AccessibilitySidebarView.js(169,7): error TS1213: Identifier expected. 'protected' is a reserved word in strict mode. Class definitions are automatically in strict mode.
 node_modules/chrome-devtools-frontend/front_end/accessibility/AccessibilitySidebarView.js(195,29): error TS2339: Property 'createChild' does not exist on type 'Element'.
 node_modules/chrome-devtools-frontend/front_end/animation/AnimationGroupPreviewUI.js(7,11): error TS2339: Property 'AnimationGroupPreviewUI' does not exist on type '{ new (effect?: AnimationEffect, timeline?: AnimationTimeline): Animation; prototype: Animation; }'.
 node_modules/chrome-devtools-frontend/front_end/animation/AnimationGroupPreviewUI.js(14,18): error TS2339: Property 'createChild' does not exist on type 'Element'.
@@ -513,6 +515,9 @@ node_modules/chrome-devtools-frontend/front_end/audits2/Audits2Panel.js(989,15):
 node_modules/chrome-devtools-frontend/front_end/audits2/Audits2Panel.js(1013,17): error TS2339: Property 'title' does not exist on type 'Element'.
 node_modules/chrome-devtools-frontend/front_end/audits2/lighthouse/renderer/category-renderer.js(12,15): error TS2304: Cannot find name 'DOM'.
 node_modules/chrome-devtools-frontend/front_end/audits2/lighthouse/renderer/category-renderer.js(13,15): error TS2304: Cannot find name 'DetailsRenderer'.
+node_modules/chrome-devtools-frontend/front_end/audits2/lighthouse/renderer/category-renderer.js(16,10): error TS1213: Identifier expected. 'private' is a reserved word in strict mode. Class definitions are automatically in strict mode.
+node_modules/chrome-devtools-frontend/front_end/audits2/lighthouse/renderer/category-renderer.js(18,10): error TS1213: Identifier expected. 'private' is a reserved word in strict mode. Class definitions are automatically in strict mode.
+node_modules/chrome-devtools-frontend/front_end/audits2/lighthouse/renderer/category-renderer.js(20,10): error TS1213: Identifier expected. 'private' is a reserved word in strict mode. Class definitions are automatically in strict mode.
 node_modules/chrome-devtools-frontend/front_end/audits2/lighthouse/renderer/category-renderer.js(27,15): error TS2503: Cannot find namespace 'ReportRenderer'.
 node_modules/chrome-devtools-frontend/front_end/audits2/lighthouse/renderer/category-renderer.js(74,27): error TS2304: Cannot find name 'Util'.
 node_modules/chrome-devtools-frontend/front_end/audits2/lighthouse/renderer/category-renderer.js(75,47): error TS2304: Cannot find name 'Util'.
@@ -557,6 +562,8 @@ node_modules/chrome-devtools-frontend/front_end/audits2/lighthouse/renderer/crc-
 node_modules/chrome-devtools-frontend/front_end/audits2/lighthouse/renderer/crc-details-renderer.js(161,9): error TS2304: Cannot find name 'Util'.
 node_modules/chrome-devtools-frontend/front_end/audits2/lighthouse/renderer/crc-details-renderer.js(184,8): error TS2339: Property 'CriticalRequestChainRenderer' does not exist on type 'Window & typeof globalThis'.
 node_modules/chrome-devtools-frontend/front_end/audits2/lighthouse/renderer/details-renderer.js(12,15): error TS2304: Cannot find name 'DOM'.
+node_modules/chrome-devtools-frontend/front_end/audits2/lighthouse/renderer/details-renderer.js(15,10): error TS1213: Identifier expected. 'private' is a reserved word in strict mode. Class definitions are automatically in strict mode.
+node_modules/chrome-devtools-frontend/front_end/audits2/lighthouse/renderer/details-renderer.js(17,10): error TS1213: Identifier expected. 'private' is a reserved word in strict mode. Class definitions are automatically in strict mode.
 node_modules/chrome-devtools-frontend/front_end/audits2/lighthouse/renderer/details-renderer.js(41,42): error TS2352: Conversion of type '{ type: string; text: string; }' to type '{ type: string; url: { text: string; }; mimeType: { text: string; }; }' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
   Type '{ type: string; text: string; }' is missing the following properties from type '{ type: string; url: { text: string; }; mimeType: { text: string; }; }': url, mimeType
 node_modules/chrome-devtools-frontend/front_end/audits2/lighthouse/renderer/details-renderer.js(43,42): error TS2352: Conversion of type '{ type: string; text: string; }' to type '{ type: string; scale: number; items: { timing: number; timestamp: number; data: string; }[]; }' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
@@ -571,11 +578,13 @@ node_modules/chrome-devtools-frontend/front_end/audits2/lighthouse/renderer/deta
   Type '{ type: string; text: string; }' is missing the following properties from type '{ type: string; header: { text: string; }; items: { type: string; text: string; }[]; }': header, items
 node_modules/chrome-devtools-frontend/front_end/audits2/lighthouse/renderer/details-renderer.js(73,22): error TS2304: Cannot find name 'Util'.
 node_modules/chrome-devtools-frontend/front_end/audits2/lighthouse/renderer/details-renderer.js(141,23): error TS2345: Argument of type '{ text: string; }' is not assignable to parameter of type 'string'.
+node_modules/chrome-devtools-frontend/front_end/audits2/lighthouse/renderer/details-renderer.js(212,7): error TS1213: Identifier expected. 'protected' is a reserved word in strict mode. Class definitions are automatically in strict mode.
 node_modules/chrome-devtools-frontend/front_end/audits2/lighthouse/renderer/details-renderer.js(266,20): error TS2304: Cannot find name 'Util'.
 node_modules/chrome-devtools-frontend/front_end/audits2/lighthouse/renderer/details-renderer.js(268,18): error TS2304: Cannot find name 'Util'.
 node_modules/chrome-devtools-frontend/front_end/audits2/lighthouse/renderer/details-renderer.js(298,8): error TS2339: Property 'DetailsRenderer' does not exist on type 'Window & typeof globalThis'.
 node_modules/chrome-devtools-frontend/front_end/audits2/lighthouse/renderer/details-renderer.js(327,17): error TS2300: Duplicate identifier 'NodeDetailsJSON'.
 node_modules/chrome-devtools-frontend/front_end/audits2/lighthouse/renderer/details-renderer.js(355,17): error TS2300: Duplicate identifier 'NodeDetailsJSON'.
+node_modules/chrome-devtools-frontend/front_end/audits2/lighthouse/renderer/dom.js(15,10): error TS1213: Identifier expected. 'private' is a reserved word in strict mode. Class definitions are automatically in strict mode.
 node_modules/chrome-devtools-frontend/front_end/audits2/lighthouse/renderer/dom.js(63,67): error TS2339: Property 'querySelector' does not exist on type 'Node'.
 node_modules/chrome-devtools-frontend/front_end/audits2/lighthouse/renderer/dom.js(76,43): error TS2345: Argument of type 'true' is not assignable to parameter of type 'string'.
 node_modules/chrome-devtools-frontend/front_end/audits2/lighthouse/renderer/dom.js(156,28): error TS2339: Property 'querySelector' does not exist on type 'Node'.
@@ -583,6 +592,9 @@ node_modules/chrome-devtools-frontend/front_end/audits2/lighthouse/renderer/dom.
 node_modules/chrome-devtools-frontend/front_end/audits2/lighthouse/renderer/dom.js(177,8): error TS2339: Property 'DOM' does not exist on type 'Window & typeof globalThis'.
 node_modules/chrome-devtools-frontend/front_end/audits2/lighthouse/renderer/report-renderer.js(19,15): error TS2304: Cannot find name 'DOM'.
 node_modules/chrome-devtools-frontend/front_end/audits2/lighthouse/renderer/report-renderer.js(20,15): error TS2304: Cannot find name 'CategoryRenderer'.
+node_modules/chrome-devtools-frontend/front_end/audits2/lighthouse/renderer/report-renderer.js(23,10): error TS1213: Identifier expected. 'private' is a reserved word in strict mode. Class definitions are automatically in strict mode.
+node_modules/chrome-devtools-frontend/front_end/audits2/lighthouse/renderer/report-renderer.js(25,10): error TS1213: Identifier expected. 'private' is a reserved word in strict mode. Class definitions are automatically in strict mode.
+node_modules/chrome-devtools-frontend/front_end/audits2/lighthouse/renderer/report-renderer.js(27,10): error TS1213: Identifier expected. 'private' is a reserved word in strict mode. Class definitions are automatically in strict mode.
 node_modules/chrome-devtools-frontend/front_end/audits2/lighthouse/renderer/report-renderer.js(59,9): error TS2304: Cannot find name 'Util'.
 node_modules/chrome-devtools-frontend/front_end/audits2/lighthouse/renderer/report-renderer.js(87,9): error TS2304: Cannot find name 'Util'.
 node_modules/chrome-devtools-frontend/front_end/audits2/lighthouse/renderer/report-renderer.js(110,47): error TS2304: Cannot find name 'Util'.
@@ -595,6 +607,7 @@ node_modules/chrome-devtools-frontend/front_end/audits2_test_runner/Audits2TestR
 node_modules/chrome-devtools-frontend/front_end/audits2_test_runner/Audits2TestRunner.js(89,29): error TS2339: Property 'disabled' does not exist on type 'Element'.
 node_modules/chrome-devtools-frontend/front_end/audits2_test_runner/Audits2TestRunner.js(102,24): error TS2488: Type 'NodeListOf<Element>' must have a '[Symbol.iterator]()' method that returns an iterator.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker.js(6,8): error TS2339: Property 'importScripts' does not exist on type 'Window & typeof globalThis'.
+node_modules/chrome-devtools-frontend/front_end/audits2_worker/Audits2Service.js(5,5): error TS1213: Identifier expected. 'interface' is a reserved word in strict mode. Class definitions are automatically in strict mode.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/Audits2Service.js(10,14): error TS7014: Function type, which lacks return-type annotation, implicitly has an 'any' return type.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/Audits2Service.js(33,14): error TS7014: Function type, which lacks return-type annotation, implicitly has an 'any' return type.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/Audits2Service.js(33,31): error TS1003: Identifier expected.
@@ -4316,6 +4329,7 @@ node_modules/chrome-devtools-frontend/front_end/data_grid/DataGrid.js(82,54): er
 node_modules/chrome-devtools-frontend/front_end/data_grid/DataGrid.js(84,47): error TS2339: Property 'createChild' does not exist on type 'Element'.
 node_modules/chrome-devtools-frontend/front_end/data_grid/DataGrid.js(86,45): error TS2339: Property 'createChild' does not exist on type 'Element'.
 node_modules/chrome-devtools-frontend/front_end/data_grid/DataGrid.js(89,50): error TS2339: Property 'createChild' does not exist on type 'Element'.
+node_modules/chrome-devtools-frontend/front_end/data_grid/DataGrid.js(91,9): error TS1213: Identifier expected. 'protected' is a reserved word in strict mode. Class definitions are automatically in strict mode.
 node_modules/chrome-devtools-frontend/front_end/data_grid/DataGrid.js(94,42): error TS2339: Property 'createChild' does not exist on type 'Element'.
 node_modules/chrome-devtools-frontend/front_end/data_grid/DataGrid.js(96,45): error TS2339: Property 'createChild' does not exist on type 'Element'.
 node_modules/chrome-devtools-frontend/front_end/data_grid/DataGrid.js(98,48): error TS2339: Property 'createChild' does not exist on type 'Element'.
@@ -4344,10 +4358,12 @@ node_modules/chrome-devtools-frontend/front_end/data_grid/DataGrid.js(261,24): e
 node_modules/chrome-devtools-frontend/front_end/data_grid/DataGrid.js(262,27): error TS2339: Property 'createChild' does not exist on type 'Element'.
 node_modules/chrome-devtools-frontend/front_end/data_grid/DataGrid.js(263,34): error TS2339: Property 'createChild' does not exist on type 'Element'.
 node_modules/chrome-devtools-frontend/front_end/data_grid/DataGrid.js(264,32): error TS2339: Property 'createChild' does not exist on type 'Element'.
+node_modules/chrome-devtools-frontend/front_end/data_grid/DataGrid.js(270,7): error TS1213: Identifier expected. 'protected' is a reserved word in strict mode. Class definitions are automatically in strict mode.
 node_modules/chrome-devtools-frontend/front_end/data_grid/DataGrid.js(275,28): error TS2339: Property 'style' does not exist on type 'Element'.
 node_modules/chrome-devtools-frontend/front_end/data_grid/DataGrid.js(275,76): error TS2339: Property 'style' does not exist on type 'Element'.
 node_modules/chrome-devtools-frontend/front_end/data_grid/DataGrid.js(277,24): error TS2339: Property 'style' does not exist on type 'Element'.
 node_modules/chrome-devtools-frontend/front_end/data_grid/DataGrid.js(278,27): error TS2339: Property 'style' does not exist on type 'Element'.
+node_modules/chrome-devtools-frontend/front_end/data_grid/DataGrid.js(284,7): error TS1213: Identifier expected. 'protected' is a reserved word in strict mode. Class definitions are automatically in strict mode.
 node_modules/chrome-devtools-frontend/front_end/data_grid/DataGrid.js(288,22): error TS2339: Property 'removeChildren' does not exist on type 'NODE_TYPE'.
 node_modules/chrome-devtools-frontend/front_end/data_grid/DataGrid.js(289,22): error TS2339: Property 'dataGrid' does not exist on type 'NODE_TYPE'.
 node_modules/chrome-devtools-frontend/front_end/data_grid/DataGrid.js(290,22): error TS2339: Property '_isRoot' does not exist on type 'NODE_TYPE'.
@@ -4471,9 +4487,12 @@ node_modules/chrome-devtools-frontend/front_end/data_grid/DataGrid.js(1162,54): 
 node_modules/chrome-devtools-frontend/front_end/data_grid/DataGrid.js(1170,23): error TS2339: Property 'offsetWidth' does not exist on type 'Element'.
 node_modules/chrome-devtools-frontend/front_end/data_grid/DataGrid.js(1175,40): error TS2339: Property '__position' does not exist on type 'Element | { __index: number; __position: number; }'.
   Property '__position' does not exist on type 'Element'.
+node_modules/chrome-devtools-frontend/front_end/data_grid/DataGrid.js(1319,7): error TS1213: Identifier expected. 'protected' is a reserved word in strict mode. Class definitions are automatically in strict mode.
 node_modules/chrome-devtools-frontend/front_end/data_grid/DataGrid.js(1324,19): error TS2339: Property '_dataGridNode' does not exist on type 'Element'.
 node_modules/chrome-devtools-frontend/front_end/data_grid/DataGrid.js(1334,14): error TS2551: Property 'dirty' does not exist on type 'DataGridNode<NODE_TYPE>'. Did you mean '_dirty'?
 node_modules/chrome-devtools-frontend/front_end/data_grid/DataGrid.js(1336,14): error TS2551: Property 'inactive' does not exist on type 'DataGridNode<NODE_TYPE>'. Did you mean '_inactive'?
+node_modules/chrome-devtools-frontend/front_end/data_grid/DataGrid.js(1349,7): error TS1213: Identifier expected. 'protected' is a reserved word in strict mode. Class definitions are automatically in strict mode.
+node_modules/chrome-devtools-frontend/front_end/data_grid/DataGrid.js(1357,7): error TS1213: Identifier expected. 'protected' is a reserved word in strict mode. Class definitions are automatically in strict mode.
 node_modules/chrome-devtools-frontend/front_end/data_grid/DataGrid.js(1360,13): error TS2339: Property 'removeChildren' does not exist on type 'Element'.
 node_modules/chrome-devtools-frontend/front_end/data_grid/DataGrid.js(1390,48): error TS2339: Property '_isRoot' does not exist on type 'NODE_TYPE'.
 node_modules/chrome-devtools-frontend/front_end/data_grid/DataGrid.js(1391,28): error TS2339: Property 'expanded' does not exist on type 'NODE_TYPE'.
@@ -4574,6 +4593,7 @@ node_modules/chrome-devtools-frontend/front_end/data_grid/ViewportDataGrid.js(32
   'ViewportDataGridNode<any>' is assignable to the constraint of type 'NODE_TYPE', but 'NODE_TYPE' could be instantiated with a different subtype of constraint '{}'.
 node_modules/chrome-devtools-frontend/front_end/data_grid/ViewportDataGrid.js(43,41): error TS2339: Property 'flatChildren' does not exist on type 'NODE_TYPE'.
 node_modules/chrome-devtools-frontend/front_end/data_grid/ViewportDataGrid.js(87,49): error TS2339: Property 'isScrolledToBottom' does not exist on type 'Element'.
+node_modules/chrome-devtools-frontend/front_end/data_grid/ViewportDataGrid.js(93,7): error TS1213: Identifier expected. 'protected' is a reserved word in strict mode. Class definitions are automatically in strict mode.
 node_modules/chrome-devtools-frontend/front_end/data_grid/ViewportDataGrid.js(104,51): error TS2339: Property 'isScrolledToBottom' does not exist on type 'Element'.
 node_modules/chrome-devtools-frontend/front_end/data_grid/ViewportDataGrid.js(108,49): error TS2339: Property 'window' does not exist on type 'Element'.
 node_modules/chrome-devtools-frontend/front_end/data_grid/ViewportDataGrid.js(133,33): error TS2339: Property 'flatChildren' does not exist on type 'NODE_TYPE'.
@@ -4584,6 +4604,7 @@ node_modules/chrome-devtools-frontend/front_end/data_grid/ViewportDataGrid.js(24
 node_modules/chrome-devtools-frontend/front_end/data_grid/ViewportDataGrid.js(256,50): error TS2339: Property 'offsetHeight' does not exist on type 'Element'.
 node_modules/chrome-devtools-frontend/front_end/data_grid/ViewportDataGrid.js(257,47): error TS2339: Property 'offsetHeight' does not exist on type 'Element'.
 node_modules/chrome-devtools-frontend/front_end/data_grid/ViewportDataGrid.js(272,1): error TS8022: JSDoc '@extends' is not attached to a class.
+node_modules/chrome-devtools-frontend/front_end/data_grid/ViewportDataGrid.js(316,7): error TS1213: Identifier expected. 'protected' is a reserved word in strict mode. Class definitions are automatically in strict mode.
 node_modules/chrome-devtools-frontend/front_end/data_grid/ViewportDataGrid.js(320,22): error TS2352: Conversion of type 'NODE_TYPE' to type 'ViewportDataGridNode<any>' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
 node_modules/chrome-devtools-frontend/front_end/data_grid/ViewportDataGrid.js(334,21): error TS2322: Type 'NODE_TYPE[]' is not assignable to type 'ViewportDataGridNode<any>[]'.
   Type 'NODE_TYPE' is not assignable to type 'ViewportDataGridNode<any>'.
@@ -4608,6 +4629,7 @@ node_modules/chrome-devtools-frontend/front_end/data_grid/ViewportDataGrid.js(41
 node_modules/chrome-devtools-frontend/front_end/data_grid/ViewportDataGrid.js(438,19): error TS2339: Property 'scheduleUpdateStructure' does not exist on type 'DataGrid<any>'.
 node_modules/chrome-devtools-frontend/front_end/data_grid/ViewportDataGrid.js(447,19): error TS2339: Property '_stickToBottom' does not exist on type 'DataGrid<any>'.
 node_modules/chrome-devtools-frontend/front_end/data_grid/ViewportDataGrid.js(450,19): error TS2339: Property 'scheduleUpdateStructure' does not exist on type 'DataGrid<any>'.
+node_modules/chrome-devtools-frontend/front_end/data_grid/ViewportDataGrid.js(454,7): error TS1213: Identifier expected. 'protected' is a reserved word in strict mode. Class definitions are automatically in strict mode.
 node_modules/chrome-devtools-frontend/front_end/data_grid/ViewportDataGrid.js(467,21): error TS2339: Property 'scheduleUpdate' does not exist on type 'DataGrid<any>'.
 node_modules/chrome-devtools-frontend/front_end/data_grid/ViewportDataGrid.js(477,19): error TS2339: Property '_revealViewportNode' does not exist on type 'DataGrid<any>'.
 node_modules/chrome-devtools-frontend/front_end/devices/DevicesView.js(11,36): error TS2339: Property 'createChild' does not exist on type 'Element'.
@@ -5073,6 +5095,7 @@ node_modules/chrome-devtools-frontend/front_end/elements/ElementsPanel.js(889,16
 node_modules/chrome-devtools-frontend/front_end/elements/ElementsPanel.js(890,16): error TS7014: Function type, which lacks return-type annotation, implicitly has an 'any' return type.
 node_modules/chrome-devtools-frontend/front_end/elements/ElementsPanel.js(905,15): error TS2339: Property '_pendingNodeReveal' does not exist on type 'ElementsPanel'.
 node_modules/chrome-devtools-frontend/front_end/elements/ElementsPanel.js(912,15): error TS2339: Property '_pendingNodeReveal' does not exist on type 'ElementsPanel'.
+node_modules/chrome-devtools-frontend/front_end/elements/ElementsSidebarPane.js(34,7): error TS1213: Identifier expected. 'protected' is a reserved word in strict mode. Class definitions are automatically in strict mode.
 node_modules/chrome-devtools-frontend/front_end/elements/ElementsTreeElement.js(44,50): error TS2339: Property 'createChild' does not exist on type 'Element'.
 node_modules/chrome-devtools-frontend/front_end/elements/ElementsTreeElement.js(111,73): error TS2555: Expected at least 2 arguments, but got 1.
 node_modules/chrome-devtools-frontend/front_end/elements/ElementsTreeElement.js(239,29): error TS2339: Property 'style' does not exist on type 'Element'.
@@ -5257,6 +5280,7 @@ node_modules/chrome-devtools-frontend/front_end/elements/EventListenersWidget.js
 node_modules/chrome-devtools-frontend/front_end/elements/EventListenersWidget.js(71,22): error TS2555: Expected at least 2 arguments, but got 1.
 node_modules/chrome-devtools-frontend/front_end/elements/EventListenersWidget.js(73,22): error TS2555: Expected at least 2 arguments, but got 1.
 node_modules/chrome-devtools-frontend/front_end/elements/EventListenersWidget.js(77,53): error TS2555: Expected at least 2 arguments, but got 1.
+node_modules/chrome-devtools-frontend/front_end/elements/EventListenersWidget.js(85,7): error TS1213: Identifier expected. 'protected' is a reserved word in strict mode. Class definitions are automatically in strict mode.
 node_modules/chrome-devtools-frontend/front_end/elements/EventListenersWidget.js(129,52): error TS2339: Property 'value' does not exist on type 'EventTarget'.
 node_modules/chrome-devtools-frontend/front_end/elements/InspectElementModeController.js(40,55): error TS2345: Argument of type 'this' is not assignable to parameter of type '{ modelAdded(model: T): void; modelRemoved(model: T): void; }'.
   Type 'InspectElementModeController' is not assignable to type '{ modelAdded(model: T): void; modelRemoved(model: T): void; }'.
@@ -5265,6 +5289,7 @@ node_modules/chrome-devtools-frontend/front_end/elements/InspectElementModeContr
         Types of parameters 'overlayModel' and 'model' are incompatible.
           Type 'T' is not assignable to type 'OverlayModel'.
 node_modules/chrome-devtools-frontend/front_end/elements/InspectElementModeController.js(91,24): error TS2694: Namespace 'Protocol' has no exported member 'Overlay'.
+node_modules/chrome-devtools-frontend/front_end/elements/MetricsSidebarPane.js(43,7): error TS1213: Identifier expected. 'protected' is a reserved word in strict mode. Class definitions are automatically in strict mode.
 node_modules/chrome-devtools-frontend/front_end/elements/MetricsSidebarPane.js(56,27): error TS2339: Property 'removeChildren' does not exist on type 'Element'.
 node_modules/chrome-devtools-frontend/front_end/elements/MetricsSidebarPane.js(82,24): error TS2769: No overload matches this call.
   The last overload gave the following error.
@@ -5318,9 +5343,11 @@ node_modules/chrome-devtools-frontend/front_end/elements/MetricsSidebarPane.js(3
 node_modules/chrome-devtools-frontend/front_end/elements/MetricsSidebarPane.js(441,14): error TS2339: Property 'originalPropertyData' does not exist on type 'MetricsSidebarPane'.
 node_modules/chrome-devtools-frontend/front_end/elements/PlatformFontsWidget.js(48,45): error TS2555: Expected at least 2 arguments, but got 1.
 node_modules/chrome-devtools-frontend/front_end/elements/PlatformFontsWidget.js(49,50): error TS2339: Property 'createChild' does not exist on type 'Element'.
+node_modules/chrome-devtools-frontend/front_end/elements/PlatformFontsWidget.js(54,7): error TS1213: Identifier expected. 'protected' is a reserved word in strict mode. Class definitions are automatically in strict mode.
 node_modules/chrome-devtools-frontend/front_end/elements/PlatformFontsWidget.js(68,32): error TS2694: Namespace 'Protocol' has no exported member 'CSS'.
 node_modules/chrome-devtools-frontend/front_end/elements/PlatformFontsWidget.js(95,50): error TS2555: Expected at least 2 arguments, but got 1.
 node_modules/chrome-devtools-frontend/front_end/elements/PlatformFontsWidget.js(95,88): error TS2555: Expected at least 2 arguments, but got 1.
+node_modules/chrome-devtools-frontend/front_end/elements/PropertiesWidget.js(59,7): error TS1213: Identifier expected. 'protected' is a reserved word in strict mode. Class definitions are automatically in strict mode.
 node_modules/chrome-devtools-frontend/front_end/elements/PropertiesWidget.js(69,27): error TS2339: Property 'removeChildren' does not exist on type 'Element'.
 node_modules/chrome-devtools-frontend/front_end/elements/PropertiesWidget.js(131,27): error TS2339: Property 'removeChildren' does not exist on type 'Element'.
 node_modules/chrome-devtools-frontend/front_end/elements/StylePropertyHighlighter.js(29,25): error TS2339: Property 'property' does not exist on type 'TreeElement'.
@@ -6163,6 +6190,7 @@ node_modules/chrome-devtools-frontend/front_end/heap_profiler_test_runner/HeapPr
 node_modules/chrome-devtools-frontend/front_end/heap_snapshot_worker.js(6,8): error TS2339: Property 'importScripts' does not exist on type 'Window & typeof globalThis'.
 node_modules/chrome-devtools-frontend/front_end/heap_snapshot_worker/HeapSnapshot.js(37,15): error TS2355: A function whose declared type is neither 'void' nor 'any' must return a value.
 node_modules/chrome-devtools-frontend/front_end/heap_snapshot_worker/HeapSnapshot.js(87,5): error TS2322: Type 'void' is not assignable to type 'HeapSnapshotNode'.
+node_modules/chrome-devtools-frontend/front_end/heap_snapshot_worker/HeapSnapshot.js(129,7): error TS1213: Identifier expected. 'protected' is a reserved word in strict mode. Class definitions are automatically in strict mode.
 node_modules/chrome-devtools-frontend/front_end/heap_snapshot_worker/HeapSnapshot.js(144,15): error TS2355: A function whose declared type is neither 'void' nor 'any' must return a value.
 node_modules/chrome-devtools-frontend/front_end/heap_snapshot_worker/HeapSnapshot.js(149,15): error TS2355: A function whose declared type is neither 'void' nor 'any' must return a value.
 node_modules/chrome-devtools-frontend/front_end/heap_snapshot_worker/HeapSnapshot.js(164,15): error TS2355: A function whose declared type is neither 'void' nor 'any' must return a value.
@@ -6170,7 +6198,9 @@ node_modules/chrome-devtools-frontend/front_end/heap_snapshot_worker/HeapSnapsho
 node_modules/chrome-devtools-frontend/front_end/heap_snapshot_worker/HeapSnapshot.js(188,5): error TS2322: Type 'void' is not assignable to type 'HeapSnapshotNode'.
 node_modules/chrome-devtools-frontend/front_end/heap_snapshot_worker/HeapSnapshot.js(314,5): error TS2322: Type 'void' is not assignable to type 'HeapSnapshotNode'.
 node_modules/chrome-devtools-frontend/front_end/heap_snapshot_worker/HeapSnapshot.js(352,10): error TS1345: An expression of type 'void' cannot be tested for truthiness
+node_modules/chrome-devtools-frontend/front_end/heap_snapshot_worker/HeapSnapshot.js(613,7): error TS1213: Identifier expected. 'protected' is a reserved word in strict mode. Class definitions are automatically in strict mode.
 node_modules/chrome-devtools-frontend/front_end/heap_snapshot_worker/HeapSnapshot.js(759,34): error TS2555: Expected at least 2 arguments, but got 1.
+node_modules/chrome-devtools-frontend/front_end/heap_snapshot_worker/HeapSnapshot.js(856,7): error TS1213: Identifier expected. 'protected' is a reserved word in strict mode. Class definitions are automatically in strict mode.
 node_modules/chrome-devtools-frontend/front_end/heap_snapshot_worker/HeapSnapshot.js(918,34): error TS2345: Argument of type 'Uint32Array' is not assignable to parameter of type 'number[]'.
   Type 'Uint32Array' is missing the following properties from type 'number[]': pop, push, concat, shift, and 5 more.
 node_modules/chrome-devtools-frontend/front_end/heap_snapshot_worker/HeapSnapshot.js(920,34): error TS2345: Argument of type 'Uint32Array' is not assignable to parameter of type 'number[]'.
@@ -6184,6 +6214,7 @@ node_modules/chrome-devtools-frontend/front_end/heap_snapshot_worker/HeapSnapsho
 node_modules/chrome-devtools-frontend/front_end/heap_snapshot_worker/HeapSnapshot.js(1253,14): error TS2339: Property 'nodeIndex' does not exist on type 'void'.
 node_modules/chrome-devtools-frontend/front_end/heap_snapshot_worker/HeapSnapshot.js(1254,23): error TS2339: Property 'id' does not exist on type 'void'.
 node_modules/chrome-devtools-frontend/front_end/heap_snapshot_worker/HeapSnapshot.js(1255,29): error TS2339: Property 'selfSize' does not exist on type 'void'.
+node_modules/chrome-devtools-frontend/front_end/heap_snapshot_worker/HeapSnapshot.js(1264,7): error TS1213: Identifier expected. 'protected' is a reserved word in strict mode. Class definitions are automatically in strict mode.
 node_modules/chrome-devtools-frontend/front_end/heap_snapshot_worker/HeapSnapshot.js(1273,14): error TS7014: Function type, which lacks return-type annotation, implicitly has an 'any' return type.
 node_modules/chrome-devtools-frontend/front_end/heap_snapshot_worker/HeapSnapshot.js(1345,12): error TS2339: Property 'nodeIndex' does not exist on type 'void'.
 node_modules/chrome-devtools-frontend/front_end/heap_snapshot_worker/HeapSnapshot.js(1355,31): error TS2345: Argument of type 'void' is not assignable to parameter of type 'HeapSnapshotNode'.
@@ -6209,6 +6240,8 @@ node_modules/chrome-devtools-frontend/front_end/heap_snapshot_worker/HeapSnapsho
 node_modules/chrome-devtools-frontend/front_end/heap_snapshot_worker/HeapSnapshot.js(1666,16): error TS1345: An expression of type 'void' cannot be tested for truthiness
 node_modules/chrome-devtools-frontend/front_end/heap_snapshot_worker/HeapSnapshot.js(1666,40): error TS2339: Property 'flag' does not exist on type 'void'.
 node_modules/chrome-devtools-frontend/front_end/heap_snapshot_worker/HeapSnapshot.js(1862,40): error TS2339: Property 'lowerBound' does not exist on type 'any[]'.
+node_modules/chrome-devtools-frontend/front_end/heap_snapshot_worker/HeapSnapshot.js(1880,7): error TS1213: Identifier expected. 'protected' is a reserved word in strict mode. Class definitions are automatically in strict mode.
+node_modules/chrome-devtools-frontend/front_end/heap_snapshot_worker/HeapSnapshot.js(1887,7): error TS1213: Identifier expected. 'protected' is a reserved word in strict mode. Class definitions are automatically in strict mode.
 node_modules/chrome-devtools-frontend/front_end/heap_snapshot_worker/HeapSnapshot.js(1945,27): error TS2339: Property 'id' does not exist on type 'void'.
 node_modules/chrome-devtools-frontend/front_end/heap_snapshot_worker/HeapSnapshot.js(1952,17): error TS2339: Property 'id' does not exist on type 'void'.
 node_modules/chrome-devtools-frontend/front_end/heap_snapshot_worker/HeapSnapshot.js(1955,33): error TS2339: Property 'selfSize' does not exist on type 'void'.
@@ -6241,6 +6274,7 @@ node_modules/chrome-devtools-frontend/front_end/heap_snapshot_worker/HeapSnapsho
 node_modules/chrome-devtools-frontend/front_end/heap_snapshot_worker/HeapSnapshot.js(2524,18): error TS2339: Property 'rawName' does not exist on type 'HeapSnapshotNode'.
 node_modules/chrome-devtools-frontend/front_end/heap_snapshot_worker/HeapSnapshot.js(2527,16): error TS2365: Operator '<' cannot be applied to types 'string' and 'number'.
 node_modules/chrome-devtools-frontend/front_end/heap_snapshot_worker/HeapSnapshot.js(2527,30): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+node_modules/chrome-devtools-frontend/front_end/heap_snapshot_worker/HeapSnapshot.js(2536,7): error TS1213: Identifier expected. 'protected' is a reserved word in strict mode. Class definitions are automatically in strict mode.
 node_modules/chrome-devtools-frontend/front_end/heap_snapshot_worker/HeapSnapshot.js(2541,17): error TS2339: Property 'isUserRoot' does not exist on type 'HeapSnapshotNode'.
 node_modules/chrome-devtools-frontend/front_end/heap_snapshot_worker/HeapSnapshot.js(2541,38): error TS2339: Property 'isDocumentDOMTreesRoot' does not exist on type 'HeapSnapshotNode'.
 node_modules/chrome-devtools-frontend/front_end/heap_snapshot_worker/HeapSnapshot.js(2546,14): error TS7014: Function type, which lacks return-type annotation, implicitly has an 'any' return type.
@@ -6797,7 +6831,10 @@ node_modules/chrome-devtools-frontend/front_end/network/NetworkConfigView.js(116
 node_modules/chrome-devtools-frontend/front_end/network/NetworkConfigView.js(126,44): error TS2339: Property 'createChild' does not exist on type 'Element'.
 node_modules/chrome-devtools-frontend/front_end/network/NetworkConfigView.js(137,35): error TS2339: Property 'disabled' does not exist on type 'Element'.
 node_modules/chrome-devtools-frontend/front_end/network/NetworkConfigView.js(138,34): error TS2339: Property 'disabled' does not exist on type 'Element'.
+node_modules/chrome-devtools-frontend/front_end/network/NetworkDataGridNode.js(90,7): error TS1213: Identifier expected. 'protected' is a reserved word in strict mode. Class definitions are automatically in strict mode.
 node_modules/chrome-devtools-frontend/front_end/network/NetworkDataGridNode.js(121,13): error TS2339: Property 'style' does not exist on type 'Element'.
+node_modules/chrome-devtools-frontend/front_end/network/NetworkDataGridNode.js(184,7): error TS1213: Identifier expected. 'protected' is a reserved word in strict mode. Class definitions are automatically in strict mode.
+node_modules/chrome-devtools-frontend/front_end/network/NetworkDataGridNode.js(226,7): error TS1213: Identifier expected. 'protected' is a reserved word in strict mode. Class definitions are automatically in strict mode.
 node_modules/chrome-devtools-frontend/front_end/network/NetworkDataGridNode.js(241,33): error TS2339: Property 'request' does not exist on type 'ViewportDataGridNode<any>'.
 node_modules/chrome-devtools-frontend/front_end/network/NetworkDataGridNode.js(392,25): error TS2339: Property 'displayType' does not exist on type 'NetworkNode'.
 node_modules/chrome-devtools-frontend/front_end/network/NetworkDataGridNode.js(393,25): error TS2339: Property 'displayType' does not exist on type 'NetworkNode'.
@@ -7007,6 +7044,7 @@ node_modules/chrome-devtools-frontend/front_end/network/NetworkManageCustomHeade
 node_modules/chrome-devtools-frontend/front_end/network/NetworkManageCustomHeadersView.js(134,26): error TS2339: Property 'createChild' does not exist on type 'Element'.
 node_modules/chrome-devtools-frontend/front_end/network/NetworkOverview.js(103,30): error TS2339: Property 'offsetWidth' does not exist on type 'Element'.
 node_modules/chrome-devtools-frontend/front_end/network/NetworkOverview.js(104,31): error TS2339: Property 'offsetHeight' does not exist on type 'Element'.
+node_modules/chrome-devtools-frontend/front_end/network/NetworkOverview.js(141,7): error TS1213: Identifier expected. 'protected' is a reserved word in strict mode. Class definitions are automatically in strict mode.
 node_modules/chrome-devtools-frontend/front_end/network/NetworkOverview.js(147,18): error TS2339: Property 'window' does not exist on type 'Element'.
 node_modules/chrome-devtools-frontend/front_end/network/NetworkOverview.js(242,31): error TS2339: Property 'offsetHeight' does not exist on type 'Element'.
 node_modules/chrome-devtools-frontend/front_end/network/NetworkPanel.js(58,54): error TS2339: Property 'createChild' does not exist on type 'Element'.
@@ -7112,8 +7150,12 @@ node_modules/chrome-devtools-frontend/front_end/network/RequestHeadersView.js(48
 node_modules/chrome-devtools-frontend/front_end/network/RequestHeadersView.js(496,11): error TS2339: Property 'consume' does not exist on type 'Event'.
 node_modules/chrome-devtools-frontend/front_end/network/RequestHeadersView.js(514,51): error TS2555: Expected at least 2 arguments, but got 1.
 node_modules/chrome-devtools-frontend/front_end/network/RequestHeadersView.js(514,84): error TS2555: Expected at least 2 arguments, but got 1.
+node_modules/chrome-devtools-frontend/front_end/network/RequestPreviewView.js(41,7): error TS1213: Identifier expected. 'protected' is a reserved word in strict mode. Class definitions are automatically in strict mode.
 node_modules/chrome-devtools-frontend/front_end/network/RequestPreviewView.js(60,40): error TS2555: Expected at least 2 arguments, but got 1.
 node_modules/chrome-devtools-frontend/front_end/network/RequestPreviewView.js(93,38): error TS2555: Expected at least 2 arguments, but got 1.
+node_modules/chrome-devtools-frontend/front_end/network/RequestResponseView.js(38,10): error TS1213: Identifier expected. 'protected' is a reserved word in strict mode. Class definitions are automatically in strict mode.
+node_modules/chrome-devtools-frontend/front_end/network/RequestResponseView.js(66,7): error TS1213: Identifier expected. 'protected' is a reserved word in strict mode. Class definitions are automatically in strict mode.
+node_modules/chrome-devtools-frontend/front_end/network/RequestResponseView.js(97,7): error TS1213: Identifier expected. 'protected' is a reserved word in strict mode. Class definitions are automatically in strict mode.
 node_modules/chrome-devtools-frontend/front_end/network/RequestResponseView.js(118,40): error TS2555: Expected at least 2 arguments, but got 1.
 node_modules/chrome-devtools-frontend/front_end/network/RequestResponseView.js(121,38): error TS2555: Expected at least 2 arguments, but got 1.
 node_modules/chrome-devtools-frontend/front_end/network/RequestTimingView.js(54,23): error TS2555: Expected at least 2 arguments, but got 1.
@@ -7543,6 +7585,7 @@ node_modules/chrome-devtools-frontend/front_end/perf_ui/TimelineOverviewPane.js(
 node_modules/chrome-devtools-frontend/front_end/perf_ui/TimelineOverviewPane.js(375,15): error TS2355: A function whose declared type is neither 'void' nor 'any' must return a value.
 node_modules/chrome-devtools-frontend/front_end/perf_ui/TimelineOverviewPane.js(381,15): error TS2355: A function whose declared type is neither 'void' nor 'any' must return a value.
 node_modules/chrome-devtools-frontend/front_end/perf_ui/TimelineOverviewPane.js(395,33): error TS2339: Property 'createChild' does not exist on type 'Element'.
+node_modules/chrome-devtools-frontend/front_end/perf_ui/TimelineOverviewPane.js(415,7): error TS1213: Identifier expected. 'protected' is a reserved word in strict mode. Class definitions are automatically in strict mode.
 node_modules/chrome-devtools-frontend/front_end/perf_ui/TimelineOverviewPane.js(495,14): error TS2339: Property 'createChild' does not exist on type 'DocumentFragment'.
 node_modules/chrome-devtools-frontend/front_end/perf_ui/TimelineOverviewPane.js(508,61): error TS2339: Property 'boxInWindow' does not exist on type 'Element'.
 node_modules/chrome-devtools-frontend/front_end/performance_test_runner/TimelineTestRunner.js(74,72): error TS2554: Expected 0 arguments, but got 1.
@@ -8300,9 +8343,12 @@ node_modules/chrome-devtools-frontend/front_end/profiler/ProfileDataGrid.js(176,
 node_modules/chrome-devtools-frontend/front_end/profiler/ProfileDataGrid.js(194,20): error TS2339: Property 'createChild' does not exist on type 'Element'.
 node_modules/chrome-devtools-frontend/front_end/profiler/ProfileDataGrid.js(201,14): error TS7014: Function type, which lacks return-type annotation, implicitly has an 'any' return type.
 node_modules/chrome-devtools-frontend/front_end/profiler/ProfileDataGrid.js(218,29): error TS2339: Property 'callUID' does not exist on type 'DataGridNode<any>'.
+node_modules/chrome-devtools-frontend/front_end/profiler/ProfileDataGrid.js(266,7): error TS1213: Identifier expected. 'protected' is a reserved word in strict mode. Class definitions are automatically in strict mode.
+node_modules/chrome-devtools-frontend/front_end/profiler/ProfileDataGrid.js(287,7): error TS1213: Identifier expected. 'protected' is a reserved word in strict mode. Class definitions are automatically in strict mode.
 node_modules/chrome-devtools-frontend/front_end/profiler/ProfileDataGrid.js(407,14): error TS7014: Function type, which lacks return-type annotation, implicitly has an 'any' return type.
 node_modules/chrome-devtools-frontend/front_end/profiler/ProfileDataGrid.js(412,48): error TS2322: Type 'this' is not assignable to type 'ProfileDataGridNode'.
   Type 'ProfileDataGridTree' is missing the following properties from type 'ProfileDataGridNode': profileNode, callUID, self, functionName, and 74 more.
+node_modules/chrome-devtools-frontend/front_end/profiler/ProfileDataGrid.js(416,7): error TS1213: Identifier expected. 'protected' is a reserved word in strict mode. Class definitions are automatically in strict mode.
 node_modules/chrome-devtools-frontend/front_end/profiler/ProfileDataGrid.js(479,34): error TS2339: Property '_searchMatchedSelfColumn' does not exist on type 'ProfileDataGridNode'.
 node_modules/chrome-devtools-frontend/front_end/profiler/ProfileDataGrid.js(480,34): error TS2339: Property '_searchMatchedTotalColumn' does not exist on type 'ProfileDataGridNode'.
 node_modules/chrome-devtools-frontend/front_end/profiler/ProfileDataGrid.js(481,34): error TS2339: Property '_searchMatchedFunctionColumn' does not exist on type 'ProfileDataGridNode'.
@@ -8354,6 +8400,7 @@ node_modules/chrome-devtools-frontend/front_end/profiler/ProfileView.js(35,52): 
 node_modules/chrome-devtools-frontend/front_end/profiler/ProfileView.js(39,54): error TS2555: Expected at least 2 arguments, but got 1.
 node_modules/chrome-devtools-frontend/front_end/profiler/ProfileView.js(43,52): error TS2555: Expected at least 2 arguments, but got 1.
 node_modules/chrome-devtools-frontend/front_end/profiler/ProfileView.js(57,23): error TS2339: Property 'createChild' does not exist on type 'Element'.
+node_modules/chrome-devtools-frontend/front_end/profiler/ProfileView.js(67,7): error TS1213: Identifier expected. 'protected' is a reserved word in strict mode. Class definitions are automatically in strict mode.
 node_modules/chrome-devtools-frontend/front_end/profiler/ProfileView.js(78,53): error TS2555: Expected at least 2 arguments, but got 1.
 node_modules/chrome-devtools-frontend/front_end/profiler/ProfileView.js(79,53): error TS2555: Expected at least 2 arguments, but got 1.
 node_modules/chrome-devtools-frontend/front_end/profiler/ProfileView.js(80,52): error TS2555: Expected at least 2 arguments, but got 1.
@@ -8436,6 +8483,7 @@ node_modules/chrome-devtools-frontend/front_end/protocol/InspectorBackend.js(312
 node_modules/chrome-devtools-frontend/front_end/protocol/InspectorBackend.js(320,15): error TS7014: Function type, which lacks return-type annotation, implicitly has an 'any' return type.
 node_modules/chrome-devtools-frontend/front_end/protocol/InspectorBackend.js(422,49): error TS2339: Property 'context' does not exist on type 'Console'.
 node_modules/chrome-devtools-frontend/front_end/protocol/InspectorBackend.js(422,67): error TS2339: Property 'context' does not exist on type 'Console'.
+node_modules/chrome-devtools-frontend/front_end/protocol/InspectorBackend.js(437,7): error TS1213: Identifier expected. 'protected' is a reserved word in strict mode. Class definitions are automatically in strict mode.
 node_modules/chrome-devtools-frontend/front_end/protocol/InspectorBackend.js(463,14): error TS7014: Function type, which lacks return-type annotation, implicitly has an 'any' return type.
 node_modules/chrome-devtools-frontend/front_end/protocol/InspectorBackend.js(541,14): error TS7014: Function type, which lacks return-type annotation, implicitly has an 'any' return type.
 node_modules/chrome-devtools-frontend/front_end/protocol/InspectorBackend.js(634,14): error TS7014: Function type, which lacks return-type annotation, implicitly has an 'any' return type.
@@ -8545,6 +8593,7 @@ node_modules/chrome-devtools-frontend/front_end/resources/ApplicationPanelSideba
 node_modules/chrome-devtools-frontend/front_end/resources/ApplicationPanelSidebar.js(282,31): error TS2339: Property 'asParsedURL' does not exist on type 'string'.
 node_modules/chrome-devtools-frontend/front_end/resources/ApplicationPanelSidebar.js(336,34): error TS2339: Property 'remove' does not exist on type 'Map<DOMStorage, DOMStorageTreeElement>'.
 node_modules/chrome-devtools-frontend/front_end/resources/ApplicationPanelSidebar.js(594,20): error TS2339: Property 'itemURL' does not exist on type 'BaseStorageTreeElement'.
+node_modules/chrome-devtools-frontend/front_end/resources/ApplicationPanelSidebar.js(605,7): error TS1213: Identifier expected. 'protected' is a reserved word in strict mode. Class definitions are automatically in strict mode.
 node_modules/chrome-devtools-frontend/front_end/resources/ApplicationPanelSidebar.js(751,32): error TS2555: Expected at least 2 arguments, but got 1.
 node_modules/chrome-devtools-frontend/front_end/resources/ApplicationPanelSidebar.js(785,52): error TS2555: Expected at least 2 arguments, but got 1.
 node_modules/chrome-devtools-frontend/front_end/resources/ApplicationPanelSidebar.js(825,31): error TS2339: Property 'remove' does not exist on type 'SWCacheTreeElement[]'.
@@ -8794,6 +8843,11 @@ node_modules/chrome-devtools-frontend/front_end/resources/StorageItemsView.js(22
 node_modules/chrome-devtools-frontend/front_end/resources/StorageItemsView.js(40,60): error TS2345: Argument of type 'Function' is not assignable to parameter of type '(arg0: { data: any; }) => any'.
   Type 'Function' provides no match for the signature '(arg0: { data: any; }): any'.
 node_modules/chrome-devtools-frontend/front_end/resources/StorageItemsView.js(49,52): error TS2555: Expected at least 2 arguments, but got 1.
+node_modules/chrome-devtools-frontend/front_end/resources/StorageItemsView.js(66,7): error TS1213: Identifier expected. 'protected' is a reserved word in strict mode. Class definitions are automatically in strict mode.
+node_modules/chrome-devtools-frontend/front_end/resources/StorageItemsView.js(83,7): error TS1213: Identifier expected. 'protected' is a reserved word in strict mode. Class definitions are automatically in strict mode.
+node_modules/chrome-devtools-frontend/front_end/resources/StorageItemsView.js(91,7): error TS1213: Identifier expected. 'protected' is a reserved word in strict mode. Class definitions are automatically in strict mode.
+node_modules/chrome-devtools-frontend/front_end/resources/StorageItemsView.js(99,7): error TS1213: Identifier expected. 'protected' is a reserved word in strict mode. Class definitions are automatically in strict mode.
+node_modules/chrome-devtools-frontend/front_end/resources/StorageItemsView.js(107,7): error TS1213: Identifier expected. 'protected' is a reserved word in strict mode. Class definitions are automatically in strict mode.
 node_modules/chrome-devtools-frontend/front_end/screencast/InputModel.js(11,31): error TS2339: Property 'inputAgent' does not exist on type 'Target'.
 node_modules/chrome-devtools-frontend/front_end/screencast/InputModel.js(36,70): error TS2339: Property 'charCode' does not exist on type 'Event'.
 node_modules/chrome-devtools-frontend/front_end/screencast/InputModel.js(43,28): error TS2339: Property 'keyIdentifier' does not exist on type 'Event'.
@@ -9248,6 +9302,8 @@ node_modules/chrome-devtools-frontend/front_end/sdk/LayerTreeBase.js(152,26): er
 node_modules/chrome-devtools-frontend/front_end/sdk/LayerTreeBase.js(154,26): error TS2694: Namespace 'Protocol' has no exported member 'DOM'.
 node_modules/chrome-devtools-frontend/front_end/sdk/LayerTreeBase.js(168,25): error TS2694: Namespace 'Protocol' has no exported member 'DOM'.
 node_modules/chrome-devtools-frontend/front_end/sdk/LayerTreeBase.js(175,25): error TS2694: Namespace 'Protocol' has no exported member 'DOM'.
+node_modules/chrome-devtools-frontend/front_end/sdk/LayerTreeBase.js(229,7): error TS1213: Identifier expected. 'protected' is a reserved word in strict mode. Class definitions are automatically in strict mode.
+node_modules/chrome-devtools-frontend/front_end/sdk/LayerTreeBase.js(244,7): error TS1213: Identifier expected. 'protected' is a reserved word in strict mode. Class definitions are automatically in strict mode.
 node_modules/chrome-devtools-frontend/front_end/sdk/LayerTreeBase.js(251,14): error TS7014: Function type, which lacks return-type annotation, implicitly has an 'any' return type.
 node_modules/chrome-devtools-frontend/front_end/sdk/LayerTreeBase.js(284,33): error TS2339: Property 'keysArray' does not exist on type 'Map<number, DOMNode>'.
 node_modules/chrome-devtools-frontend/front_end/sdk/LogModel.js(14,12): error TS2339: Property 'registerLogDispatcher' does not exist on type 'Target'.
@@ -9439,6 +9495,7 @@ node_modules/chrome-devtools-frontend/front_end/sdk/PerformanceMetricsModel.js(1
 node_modules/chrome-devtools-frontend/front_end/sdk/PerformanceMetricsModel.js(29,41): error TS2694: Namespace 'Protocol' has no exported member 'Performance'.
 node_modules/chrome-devtools-frontend/front_end/sdk/ProfileTreeModel.js(9,24): error TS2694: Namespace 'Protocol' has no exported member 'Runtime'.
 node_modules/chrome-devtools-frontend/front_end/sdk/ProfileTreeModel.js(12,26): error TS2694: Namespace 'Protocol' has no exported member 'Runtime'.
+node_modules/chrome-devtools-frontend/front_end/sdk/ProfileTreeModel.js(70,7): error TS1213: Identifier expected. 'protected' is a reserved word in strict mode. Class definitions are automatically in strict mode.
 node_modules/chrome-devtools-frontend/front_end/sdk/ProfileTreeModel.js(80,10): error TS2339: Property 'depth' does not exist on type 'ProfileNode'.
 node_modules/chrome-devtools-frontend/front_end/sdk/ProfileTreeModel.js(86,26): error TS2339: Property 'depth' does not exist on type 'ProfileNode'.
 node_modules/chrome-devtools-frontend/front_end/sdk/ProfileTreeModel.js(93,15): error TS2339: Property 'depth' does not exist on type 'ProfileNode'.
@@ -10063,6 +10120,7 @@ node_modules/chrome-devtools-frontend/front_end/source_frame/SourceCodeDiff.js(2
 node_modules/chrome-devtools-frontend/front_end/source_frame/SourceCodeDiff.js(283,22): error TS2339: Property 'setGutterDecoration' does not exist on type 'CodeMirrorTextEditor'.
 node_modules/chrome-devtools-frontend/front_end/source_frame/SourceCodeDiff.js(284,22): error TS2339: Property 'toggleLineClass' does not exist on type 'CodeMirrorTextEditor'.
 node_modules/chrome-devtools-frontend/front_end/source_frame/SourceFrame.js(41,18): error TS2555: Expected at least 2 arguments, but got 1.
+node_modules/chrome-devtools-frontend/front_end/source_frame/SourceFrame.js(85,7): error TS1213: Identifier expected. 'protected' is a reserved word in strict mode. Class definitions are automatically in strict mode.
 node_modules/chrome-devtools-frontend/front_end/source_frame/SourceFrame.js(371,32): error TS2339: Property 'lowerBound' does not exist on type 'any[]'.
 node_modules/chrome-devtools-frontend/front_end/source_frame/SourceFrame.js(435,15): error TS2339: Property '__fromRegExpQuery' does not exist on type 'RegExp'.
 node_modules/chrome-devtools-frontend/front_end/source_frame/SourceFrame.js(459,15): error TS2339: Property '__fromRegExpQuery' does not exist on type 'RegExp'.
@@ -10215,6 +10273,7 @@ node_modules/chrome-devtools-frontend/front_end/sources/EventListenerBreakpoints
 node_modules/chrome-devtools-frontend/front_end/sources/EventListenerBreakpointsSidebarPane.js(106,41): error TS2339: Property 'checked' does not exist on type 'Element'.
 node_modules/chrome-devtools-frontend/front_end/sources/EventListenerBreakpointsSidebarPane.js(120,14): error TS2339: Property 'checked' does not exist on type 'Element'.
 node_modules/chrome-devtools-frontend/front_end/sources/EventListenerBreakpointsSidebarPane.js(121,14): error TS2339: Property 'indeterminate' does not exist on type 'Element'.
+node_modules/chrome-devtools-frontend/front_end/sources/FilteredUISourceCodeListProvider.js(88,7): error TS1213: Identifier expected. 'protected' is a reserved word in strict mode. Class definitions are automatically in strict mode.
 node_modules/chrome-devtools-frontend/front_end/sources/FilteredUISourceCodeListProvider.js(140,21): error TS2339: Property 'title' does not exist on type 'Element'.
 node_modules/chrome-devtools-frontend/front_end/sources/FilteredUISourceCodeListProvider.js(159,13): error TS2339: Property 'removeChildren' does not exist on type 'Element'.
 node_modules/chrome-devtools-frontend/front_end/sources/FilteredUISourceCodeListProvider.js(163,25): error TS2339: Property 'createChild' does not exist on type 'Element'.
@@ -10340,10 +10399,12 @@ node_modules/chrome-devtools-frontend/front_end/sources/NavigatorView.js(192,55)
   'UISourceCode' is assignable to the constraint of type 'K', but 'K' could be instantiated with a different subtype of constraint '{}'.
 node_modules/chrome-devtools-frontend/front_end/sources/NavigatorView.js(194,22): error TS2339: Property 'updateTitle' does not exist on type 'V'.
 node_modules/chrome-devtools-frontend/front_end/sources/NavigatorView.js(212,22): error TS2339: Property 'updateTitle' does not exist on type 'NavigatorTreeNode'.
+node_modules/chrome-devtools-frontend/front_end/sources/NavigatorView.js(247,7): error TS1213: Identifier expected. 'protected' is a reserved word in strict mode. Class definitions are automatically in strict mode.
 node_modules/chrome-devtools-frontend/front_end/sources/NavigatorView.js(283,55): error TS2345: Argument of type 'UISourceCode' is not assignable to parameter of type 'K'.
   'UISourceCode' is assignable to the constraint of type 'K', but 'K' could be instantiated with a different subtype of constraint '{}'.
 node_modules/chrome-devtools-frontend/front_end/sources/NavigatorView.js(336,33): error TS2345: Argument of type 'UISourceCode' is not assignable to parameter of type 'K'.
   'UISourceCode' is assignable to the constraint of type 'K', but 'K' could be instantiated with a different subtype of constraint '{}'.
+node_modules/chrome-devtools-frontend/front_end/sources/NavigatorView.js(362,7): error TS1213: Identifier expected. 'protected' is a reserved word in strict mode. Class definitions are automatically in strict mode.
 node_modules/chrome-devtools-frontend/front_end/sources/NavigatorView.js(388,58): error TS2339: Property 'reverse' does not exist on type 'string'.
 node_modules/chrome-devtools-frontend/front_end/sources/NavigatorView.js(499,29): error TS2339: Property '_boostOrder' does not exist on type 'TreeElement'.
 node_modules/chrome-devtools-frontend/front_end/sources/NavigatorView.js(527,28): error TS2339: Property '_boostOrder' does not exist on type 'TreeElement'.
@@ -10373,6 +10434,7 @@ node_modules/chrome-devtools-frontend/front_end/sources/NavigatorView.js(762,18)
 node_modules/chrome-devtools-frontend/front_end/sources/NavigatorView.js(767,18): error TS2555: Expected at least 2 arguments, but got 1.
 node_modules/chrome-devtools-frontend/front_end/sources/NavigatorView.js(771,48): error TS2555: Expected at least 2 arguments, but got 1.
 node_modules/chrome-devtools-frontend/front_end/sources/NavigatorView.js(779,56): error TS2555: Expected at least 2 arguments, but got 1.
+node_modules/chrome-devtools-frontend/front_end/sources/NavigatorView.js(788,7): error TS1213: Identifier expected. 'protected' is a reserved word in strict mode. Class definitions are automatically in strict mode.
 node_modules/chrome-devtools-frontend/front_end/sources/NavigatorView.js(803,50): error TS2339: Property 'hasFocus' does not exist on type 'Element'.
 node_modules/chrome-devtools-frontend/front_end/sources/NavigatorView.js(851,14): error TS2339: Property 'parent' does not exist on type 'NavigatorGroupTreeNode'.
 node_modules/chrome-devtools-frontend/front_end/sources/NavigatorView.js(852,12): error TS2339: Property 'parent' does not exist on type 'NavigatorGroupTreeNode'.
@@ -10541,6 +10603,7 @@ node_modules/chrome-devtools-frontend/front_end/sources/ThreadsSidebarPane.js(38
 node_modules/chrome-devtools-frontend/front_end/sources/ThreadsSidebarPane.js(39,31): error TS2339: Property 'createChild' does not exist on type 'Element'.
 node_modules/chrome-devtools-frontend/front_end/sources/ThreadsSidebarPane.js(49,40): error TS2555: Expected at least 2 arguments, but got 1.
 node_modules/chrome-devtools-frontend/front_end/sources/UISourceCodeFrame.js(204,19): error TS2339: Property 'addAll' does not exist on type 'Set<Message>'.
+node_modules/chrome-devtools-frontend/front_end/sources/UISourceCodeFrame.js(293,7): error TS1213: Identifier expected. 'protected' is a reserved word in strict mode. Class definitions are automatically in strict mode.
 node_modules/chrome-devtools-frontend/front_end/sources/UISourceCodeFrame.js(437,32): error TS2339: Property 'enclosingNodeOrSelfWithClass' does not exist on type 'EventTarget'.
 node_modules/chrome-devtools-frontend/front_end/sources/UISourceCodeFrame.js(438,22): error TS2339: Property 'enclosingNodeOrSelfWithClass' does not exist on type 'EventTarget'.
 node_modules/chrome-devtools-frontend/front_end/sources/UISourceCodeFrame.js(443,29): error TS2339: Property 'clientX' does not exist on type 'Event'.
@@ -10838,9 +10901,11 @@ node_modules/chrome-devtools-frontend/front_end/text_editor/CodeMirrorTextEditor
 node_modules/chrome-devtools-frontend/front_end/text_editor/CodeMirrorTextEditor.js(252,22): error TS2339: Property 'token' does not exist on type 'void'.
 node_modules/chrome-devtools-frontend/front_end/text_editor/CodeMirrorTextEditor.js(252,70): error TS2339: Property 'token' does not exist on type 'void'.
 node_modules/chrome-devtools-frontend/front_end/text_editor/CodeMirrorTextEditor.js(283,13): error TS2403: Subsequent variable declarations must have the same type.  Variable 'extension' must be of type 'Extension', but here has type 'any'.
+node_modules/chrome-devtools-frontend/front_end/text_editor/CodeMirrorTextEditor.js(360,7): error TS1213: Identifier expected. 'protected' is a reserved word in strict mode. Class definitions are automatically in strict mode.
 node_modules/chrome-devtools-frontend/front_end/text_editor/CodeMirrorTextEditor.js(391,57): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
 node_modules/chrome-devtools-frontend/front_end/text_editor/CodeMirrorTextEditor.js(395,29): error TS2339: Property 'constrain' does not exist on type 'NumberConstructor'.
 node_modules/chrome-devtools-frontend/front_end/text_editor/CodeMirrorTextEditor.js(449,60): error TS2339: Property 'constrain' does not exist on type 'NumberConstructor'.
+node_modules/chrome-devtools-frontend/front_end/text_editor/CodeMirrorTextEditor.js(526,7): error TS1213: Identifier expected. 'protected' is a reserved word in strict mode. Class definitions are automatically in strict mode.
 node_modules/chrome-devtools-frontend/front_end/text_editor/CodeMirrorTextEditor.js(557,9): error TS2339: Property 'consume' does not exist on type 'Event'.
 node_modules/chrome-devtools-frontend/front_end/text_editor/CodeMirrorTextEditor.js(565,9): error TS2339: Property 'consume' does not exist on type 'Event'.
 node_modules/chrome-devtools-frontend/front_end/text_editor/CodeMirrorTextEditor.js(588,9): error TS2365: Operator '>=' cannot be applied to types 'number' and 'void'.
@@ -10858,6 +10923,8 @@ node_modules/chrome-devtools-frontend/front_end/text_editor/CodeMirrorTextEditor
 node_modules/chrome-devtools-frontend/front_end/text_editor/CodeMirrorTextEditor.js(624,56): error TS2339: Property 'end' does not exist on type 'void'.
 node_modules/chrome-devtools-frontend/front_end/text_editor/CodeMirrorTextEditor.js(624,73): error TS2339: Property 'type' does not exist on type 'void'.
 node_modules/chrome-devtools-frontend/front_end/text_editor/CodeMirrorTextEditor.js(631,5): error TS2322: Type 'void' is not assignable to type 'boolean'.
+node_modules/chrome-devtools-frontend/front_end/text_editor/CodeMirrorTextEditor.js(691,7): error TS1213: Identifier expected. 'protected' is a reserved word in strict mode. Class definitions are automatically in strict mode.
+node_modules/chrome-devtools-frontend/front_end/text_editor/CodeMirrorTextEditor.js(700,7): error TS1213: Identifier expected. 'protected' is a reserved word in strict mode. Class definitions are automatically in strict mode.
 node_modules/chrome-devtools-frontend/front_end/text_editor/CodeMirrorTextEditor.js(723,14): error TS1345: An expression of type 'void' cannot be tested for truthiness
 node_modules/chrome-devtools-frontend/front_end/text_editor/CodeMirrorTextEditor.js(735,14): error TS7014: Function type, which lacks return-type annotation, implicitly has an 'any' return type.
 node_modules/chrome-devtools-frontend/front_end/text_editor/CodeMirrorTextEditor.js(751,9): error TS2345: Argument of type 'void' is not assignable to parameter of type '{ clear: () => void; find: () => void; changed: () => void; }'.
@@ -11252,10 +11319,17 @@ node_modules/chrome-devtools-frontend/front_end/timeline/TimelinePanel.js(1215,2
 node_modules/chrome-devtools-frontend/front_end/timeline/TimelinePanel.js(1220,22): error TS2339: Property 'disabled' does not exist on type 'Element'.
 node_modules/chrome-devtools-frontend/front_end/timeline/TimelinePanel.js(1224,29): error TS2339: Property 'classList' does not exist on type 'Node & ParentNode'.
 node_modules/chrome-devtools-frontend/front_end/timeline/TimelinePanel.js(1234,22): error TS2339: Property 'focus' does not exist on type 'Element'.
+node_modules/chrome-devtools-frontend/front_end/timeline/TimelineTreeView.js(48,7): error TS1213: Identifier expected. 'protected' is a reserved word in strict mode. Class definitions are automatically in strict mode.
+node_modules/chrome-devtools-frontend/front_end/timeline/TimelineTreeView.js(56,7): error TS1213: Identifier expected. 'protected' is a reserved word in strict mode. Class definitions are automatically in strict mode.
+node_modules/chrome-devtools-frontend/front_end/timeline/TimelineTreeView.js(94,7): error TS1213: Identifier expected. 'protected' is a reserved word in strict mode. Class definitions are automatically in strict mode.
+node_modules/chrome-devtools-frontend/front_end/timeline/TimelineTreeView.js(126,7): error TS1213: Identifier expected. 'protected' is a reserved word in strict mode. Class definitions are automatically in strict mode.
 node_modules/chrome-devtools-frontend/front_end/timeline/TimelineTreeView.js(134,53): error TS2555: Expected at least 2 arguments, but got 1.
 node_modules/chrome-devtools-frontend/front_end/timeline/TimelineTreeView.js(162,76): error TS2339: Property 'value' does not exist on type 'Element'.
 node_modules/chrome-devtools-frontend/front_end/timeline/TimelineTreeView.js(173,59): error TS2555: Expected at least 2 arguments, but got 1.
+node_modules/chrome-devtools-frontend/front_end/timeline/TimelineTreeView.js(237,7): error TS1213: Identifier expected. 'protected' is a reserved word in strict mode. Class definitions are automatically in strict mode.
+node_modules/chrome-devtools-frontend/front_end/timeline/TimelineTreeView.js(274,7): error TS1213: Identifier expected. 'protected' is a reserved word in strict mode. Class definitions are automatically in strict mode.
 node_modules/chrome-devtools-frontend/front_end/timeline/TimelineTreeView.js(280,5): error TS2740: Type 'TopDownRootNode' is missing the following properties from type 'Node': id, event, parent, _groupId, and 4 more.
+node_modules/chrome-devtools-frontend/front_end/timeline/TimelineTreeView.js(285,7): error TS1213: Identifier expected. 'protected' is a reserved word in strict mode. Class definitions are automatically in strict mode.
 node_modules/chrome-devtools-frontend/front_end/timeline/TimelineTreeView.js(289,45): error TS2555: Expected at least 2 arguments, but got 1.
 node_modules/chrome-devtools-frontend/front_end/timeline/TimelineTreeView.js(289,68): error TS2345: Argument of type '{ id: string; title: any; width: string; fixedWidth: true; sortable: true; }' is not assignable to parameter of type '{ id: string; title: string; titleDOMFragment: DocumentFragment; sortable: boolean; sort: string; align: string; fixedWidth: boolean; editable: boolean; nonSelectable: boolean; longText: boolean; disclosure: boolean; weight: number; }'.
   Object literal may only specify known properties, and 'width' does not exist in type '{ id: string; title: string; titleDOMFragment: DocumentFragment; sortable: boolean; sort: string; align: string; fixedWidth: boolean; editable: boolean; nonSelectable: boolean; longText: boolean; disclosure: boolean; weight: number; }'.
@@ -11269,6 +11343,7 @@ node_modules/chrome-devtools-frontend/front_end/timeline/TimelineTreeView.js(372
 node_modules/chrome-devtools-frontend/front_end/timeline/TimelineTreeView.js(375,44): error TS2339: Property 'createChild' does not exist on type 'Element'.
 node_modules/chrome-devtools-frontend/front_end/timeline/TimelineTreeView.js(376,35): error TS2555: Expected at least 2 arguments, but got 1.
 node_modules/chrome-devtools-frontend/front_end/timeline/TimelineTreeView.js(407,32): error TS2339: Property '_profileNode' does not exist on type 'DataGridNode<any>'.
+node_modules/chrome-devtools-frontend/front_end/timeline/TimelineTreeView.js(415,7): error TS1213: Identifier expected. 'protected' is a reserved word in strict mode. Class definitions are automatically in strict mode.
 node_modules/chrome-devtools-frontend/front_end/timeline/TimelineTreeView.js(524,26): error TS2339: Property 'createChild' does not exist on type 'Element'.
 node_modules/chrome-devtools-frontend/front_end/timeline/TimelineTreeView.js(581,24): error TS2339: Property 'createChild' does not exist on type 'Element'.
 node_modules/chrome-devtools-frontend/front_end/timeline/TimelineTreeView.js(590,12): error TS2339: Property 'createChild' does not exist on type 'Element'.
@@ -11887,6 +11962,7 @@ node_modules/chrome-devtools-frontend/front_end/ui/GlassPane.js(325,25): error T
 node_modules/chrome-devtools-frontend/front_end/ui/GlassPane.js(327,27): error TS2339: Property 'style' does not exist on type 'Element'.
 node_modules/chrome-devtools-frontend/front_end/ui/GlassPane.js(329,27): error TS2339: Property 'style' does not exist on type 'Element'.
 node_modules/chrome-devtools-frontend/front_end/ui/GlassPane.js(331,25): error TS2339: Property 'positionAt' does not exist on type 'Element'.
+node_modules/chrome-devtools-frontend/front_end/ui/GlassPane.js(336,7): error TS1213: Identifier expected. 'protected' is a reserved word in strict mode. Class definitions are automatically in strict mode.
 node_modules/chrome-devtools-frontend/front_end/ui/HistoryInput.js(16,26): error TS2339: Property '_constructor' does not exist on type 'typeof HistoryInput'.
 node_modules/chrome-devtools-frontend/front_end/ui/HistoryInput.js(17,23): error TS2339: Property '_constructor' does not exist on type 'typeof HistoryInput'.
 node_modules/chrome-devtools-frontend/front_end/ui/HistoryInput.js(19,65): error TS2339: Property '_constructor' does not exist on type 'typeof HistoryInput'.
@@ -12323,6 +12399,7 @@ node_modules/chrome-devtools-frontend/front_end/ui/TextPrompt.js(601,32): error 
 node_modules/chrome-devtools-frontend/front_end/ui/TextPrompt.js(610,54): error TS2339: Property 'isAncestor' does not exist on type 'Element'.
 node_modules/chrome-devtools-frontend/front_end/ui/TextPrompt.js(622,35): error TS2339: Property 'getComponentSelection' does not exist on type 'Element'.
 node_modules/chrome-devtools-frontend/front_end/ui/TextPrompt.js(627,7): error TS2322: Type 'ChildNode' is not assignable to type 'Element'.
+node_modules/chrome-devtools-frontend/front_end/ui/ThrottledWidget.js(19,7): error TS1213: Identifier expected. 'protected' is a reserved word in strict mode. Class definitions are automatically in strict mode.
 node_modules/chrome-devtools-frontend/front_end/ui/Toolbar.js(43,50): error TS2339: Property 'createChild' does not exist on type 'Element'.
 node_modules/chrome-devtools-frontend/front_end/ui/Toolbar.js(48,45): error TS2339: Property 'createChild' does not exist on type 'DocumentFragment'.
 node_modules/chrome-devtools-frontend/front_end/ui/Toolbar.js(134,47): error TS2339: Property 'boxInWindow' does not exist on type 'Element'.
@@ -12584,6 +12661,7 @@ node_modules/chrome-devtools-frontend/front_end/ui/Widget.js(45,18): error TS233
 node_modules/chrome-devtools-frontend/front_end/ui/Widget.js(88,16): error TS2339: Property '__widget' does not exist on type 'Node'.
 node_modules/chrome-devtools-frontend/front_end/ui/Widget.js(90,19): error TS2339: Property 'parentNodeOrShadowHost' does not exist on type 'Node'.
 node_modules/chrome-devtools-frontend/front_end/ui/Widget.js(95,23): error TS2339: Property '__widget' does not exist on type 'Node'.
+node_modules/chrome-devtools-frontend/front_end/ui/Widget.js(123,7): error TS1213: Identifier expected. 'protected' is a reserved word in strict mode. Class definitions are automatically in strict mode.
 node_modules/chrome-devtools-frontend/front_end/ui/Widget.js(168,14): error TS7014: Function type, which lacks return-type annotation, implicitly has an 'any' return type.
 node_modules/chrome-devtools-frontend/front_end/ui/Widget.js(215,14): error TS7014: Function type, which lacks return-type annotation, implicitly has an 'any' return type.
 node_modules/chrome-devtools-frontend/front_end/ui/Widget.js(251,46): error TS2339: Property '__widget' does not exist on type 'Element'.
