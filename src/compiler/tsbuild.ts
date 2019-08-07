@@ -273,6 +273,26 @@ namespace ts {
     export interface SolutionBuilderWithWatchHost<T extends BuilderProgram> extends SolutionBuilderHostBase<T>, WatchHost {
     }
 
+    /*@internal*/
+    export type BuildOrder = readonly ResolvedConfigFileName[];
+    /*@internal*/
+    export interface CircularBuildOrder {
+        buildOrder: BuildOrder;
+        circularDiagnostics: readonly Diagnostic[];
+    }
+    /*@internal*/
+    export type AnyBuildOrder = BuildOrder | CircularBuildOrder;
+
+    /*@internal*/
+    export function isCircularBuildOrder(buildOrder: AnyBuildOrder): buildOrder is CircularBuildOrder {
+        return !!buildOrder && !!(buildOrder as CircularBuildOrder).buildOrder;
+    }
+
+    /*@internal*/
+    export function getBuildOrderFromAnyBuildOrder(anyBuildOrder: AnyBuildOrder): BuildOrder {
+        return isCircularBuildOrder(anyBuildOrder) ? anyBuildOrder.buildOrder : anyBuildOrder;
+    }
+
     export interface SolutionBuilder<T extends BuilderProgram> {
         build(project?: string, cancellationToken?: CancellationToken): ExitStatus;
         clean(project?: string): ExitStatus;
@@ -281,7 +301,7 @@ namespace ts {
         getNextInvalidatedProject(cancellationToken?: CancellationToken): InvalidatedProject<T> | undefined;
 
         // Currently used for testing but can be made public if needed:
-        /*@internal*/ getBuildOrder(): ReadonlyArray<ResolvedConfigFileName>;
+        /*@internal*/ getBuildOrder(): AnyBuildOrder;
 
         // Testing only
         /*@internal*/ getUpToDateStatusOfProject(project: string): UpToDateStatus;
@@ -379,7 +399,7 @@ namespace ts {
         readonly moduleResolutionCache: ModuleResolutionCache | undefined;
 
         // Mutable state
-        buildOrder: readonly ResolvedConfigFileName[] | undefined;
+        buildOrder: AnyBuildOrder | undefined;
         readFileWithCache: (f: string) => string | undefined;
         projectCompilerOptions: CompilerOptions;
         cache: SolutionBuilderStateCache | undefined;
@@ -523,16 +543,19 @@ namespace ts {
         return resolveConfigFileProjectName(resolvePath(state.currentDirectory, name));
     }
 
-    function createBuildOrder(state: SolutionBuilderState, roots: readonly ResolvedConfigFileName[]): readonly ResolvedConfigFileName[] {
+    function createBuildOrder(state: SolutionBuilderState, roots: readonly ResolvedConfigFileName[]): AnyBuildOrder {
         const temporaryMarks = createMap() as ConfigFileMap<true>;
         const permanentMarks = createMap() as ConfigFileMap<true>;
         const circularityReportStack: string[] = [];
         let buildOrder: ResolvedConfigFileName[] | undefined;
+        let circularDiagnostics: Diagnostic[] | undefined;
         for (const root of roots) {
             visit(root);
         }
 
-        return buildOrder || emptyArray;
+        return circularDiagnostics ?
+            { buildOrder: buildOrder || emptyArray, circularDiagnostics } :
+            buildOrder || emptyArray;
 
         function visit(configFileName: ResolvedConfigFileName, inCircularContext?: boolean) {
             const projPath = toResolvedConfigFilePath(state, configFileName);
@@ -541,8 +564,12 @@ namespace ts {
             // Circular
             if (temporaryMarks.has(projPath)) {
                 if (!inCircularContext) {
-                    // TODO:: Do we report this as error?
-                    reportStatus(state, Diagnostics.Project_references_may_not_form_a_circular_graph_Cycle_detected_Colon_0, circularityReportStack.join("\r\n"));
+                    (circularDiagnostics || (circularDiagnostics = [])).push(
+                        createCompilerDiagnostic(
+                            Diagnostics.Project_references_may_not_form_a_circular_graph_Cycle_detected_Colon_0,
+                            circularityReportStack.join("\r\n")
+                        )
+                    );
                 }
                 return;
             }
@@ -569,12 +596,11 @@ namespace ts {
 
     function createStateBuildOrder(state: SolutionBuilderState) {
         const buildOrder = createBuildOrder(state, state.rootNames.map(f => resolveProjectName(state, f)));
-        if (arrayIsEqualTo(state.buildOrder, buildOrder)) return state.buildOrder!;
 
         // Clear all to ResolvedConfigFilePaths cache to start fresh
         state.resolvedConfigFilePaths.clear();
         const currentProjects = arrayToSet(
-            buildOrder,
+            getBuildOrderFromAnyBuildOrder(buildOrder),
             resolved => toResolvedConfigFilePath(state, resolved)
         ) as ConfigFileMap<true>;
 
@@ -611,9 +637,10 @@ namespace ts {
         return state.buildOrder = buildOrder;
     }
 
-    function getBuildOrderFor(state: SolutionBuilderState, project: string | undefined, onlyReferences: boolean | undefined) {
+    function getBuildOrderFor(state: SolutionBuilderState, project: string | undefined, onlyReferences: boolean | undefined): AnyBuildOrder | undefined {
         const resolvedProject = project && resolveProjectName(state, project);
         const buildOrderFromState = getBuildOrder(state);
+        if (isCircularBuildOrder(buildOrderFromState)) return buildOrderFromState;
         if (resolvedProject) {
             const projectPath = toResolvedConfigFilePath(state, resolvedProject);
             const projectIndex = findIndex(
@@ -622,7 +649,8 @@ namespace ts {
             );
             if (projectIndex === -1) return undefined;
         }
-        const buildOrder = resolvedProject ? createBuildOrder(state, [resolvedProject]) : buildOrderFromState;
+        const buildOrder = resolvedProject ? createBuildOrder(state, [resolvedProject]) as BuildOrder : buildOrderFromState;
+        Debug.assert(!isCircularBuildOrder(buildOrder));
         Debug.assert(!onlyReferences || resolvedProject !== undefined);
         Debug.assert(!onlyReferences || buildOrder[buildOrder.length - 1] === resolvedProject);
         return onlyReferences ? buildOrder.slice(0, buildOrder.length - 1) : buildOrder;
@@ -702,7 +730,7 @@ namespace ts {
         state.allProjectBuildPending = false;
         if (state.options.watch) { reportWatchStatus(state, Diagnostics.Starting_compilation_in_watch_mode); }
         enableCache(state);
-        const buildOrder = getBuildOrder(state);
+        const buildOrder = getBuildOrderFromAnyBuildOrder(getBuildOrder(state));
         buildOrder.forEach(configFileName =>
             state.projectPendingBuild.set(
                 toResolvedConfigFilePath(state, configFileName),
@@ -1237,10 +1265,11 @@ namespace ts {
 
     function getNextInvalidatedProject<T extends BuilderProgram>(
         state: SolutionBuilderState<T>,
-        buildOrder: readonly ResolvedConfigFileName[],
+        buildOrder: AnyBuildOrder,
         reportQueue: boolean
     ): InvalidatedProject<T> | undefined {
         if (!state.projectPendingBuild.size) return undefined;
+        if (isCircularBuildOrder(buildOrder)) return undefined;
         if (state.currentInvalidatedProject) {
             // Only if same buildOrder the currentInvalidated project can be sent again
             return arrayIsEqualTo(state.currentInvalidatedProject.buildOrder, buildOrder) ?
@@ -1763,16 +1792,23 @@ namespace ts {
         reportErrorSummary(state, buildOrder);
         startWatching(state, buildOrder);
 
-        return errorProjects ?
-            successfulProjects ?
-                ExitStatus.DiagnosticsPresent_OutputsGenerated :
-                ExitStatus.DiagnosticsPresent_OutputsSkipped :
-            ExitStatus.Success;
+        return isCircularBuildOrder(buildOrder) ?
+            ExitStatus.ProjectReferenceCycle_OutputsSkupped :
+            errorProjects ?
+                successfulProjects ?
+                    ExitStatus.DiagnosticsPresent_OutputsGenerated :
+                    ExitStatus.DiagnosticsPresent_OutputsSkipped :
+                ExitStatus.Success;
     }
 
     function clean(state: SolutionBuilderState, project?: string, onlyReferences?: boolean) {
         const buildOrder = getBuildOrderFor(state, project, onlyReferences);
         if (!buildOrder) return ExitStatus.InvalidProject_OutputsSkipped;
+
+        if (isCircularBuildOrder(buildOrder)) {
+            reportErrors(state, buildOrder.circularDiagnostics);
+            return ExitStatus.ProjectReferenceCycle_OutputsSkupped;
+        }
 
         const { options, host } = state;
         const filesToDelete = options.dry ? [] as string[] : undefined;
@@ -1955,10 +1991,10 @@ namespace ts {
         );
     }
 
-    function startWatching(state: SolutionBuilderState, buildOrder: readonly ResolvedConfigFileName[]) {
+    function startWatching(state: SolutionBuilderState, buildOrder: AnyBuildOrder) {
         if (!state.watchAllProjectsPending) return;
         state.watchAllProjectsPending = false;
-        for (const resolved of buildOrder) {
+        for (const resolved of getBuildOrderFromAnyBuildOrder(buildOrder)) {
             const resolvedPath = toResolvedConfigFilePath(state, resolved);
             // Watch this file
             watchConfigFile(state, resolved, resolvedPath);
@@ -2032,24 +2068,33 @@ namespace ts {
         reportAndStoreErrors(state, proj, [state.configFileCache.get(proj) as Diagnostic]);
     }
 
-    function reportErrorSummary(state: SolutionBuilderState, buildOrder: readonly ResolvedConfigFileName[]) {
-        if (!state.needsSummary || (!state.watch && !state.host.reportErrorSummary)) return;
+    function reportErrorSummary(state: SolutionBuilderState, buildOrder: AnyBuildOrder) {
+        if (!state.needsSummary) return;
         state.needsSummary = false;
+        const canReportSummary = state.watch || !!state.host.reportErrorSummary;
         const { diagnostics } = state;
-        // Report errors from the other projects
-        buildOrder.forEach(project => {
-            const projectPath = toResolvedConfigFilePath(state, project);
-            if (!state.projectErrorsReported.has(projectPath)) {
-                reportErrors(state, diagnostics.get(projectPath) || emptyArray);
-            }
-        });
         let totalErrors = 0;
-        diagnostics.forEach(singleProjectErrors => totalErrors += getErrorCountForSummary(singleProjectErrors));
+        if (isCircularBuildOrder(buildOrder)) {
+            reportBuildQueue(state, buildOrder.buildOrder);
+            reportErrors(state, buildOrder.circularDiagnostics);
+            if (canReportSummary) totalErrors += getErrorCountForSummary(buildOrder.circularDiagnostics);
+        }
+        else {
+            // Report errors from the other projects
+            buildOrder.forEach(project => {
+                const projectPath = toResolvedConfigFilePath(state, project);
+                if (!state.projectErrorsReported.has(projectPath)) {
+                    reportErrors(state, diagnostics.get(projectPath) || emptyArray);
+                }
+            });
+            if (canReportSummary) diagnostics.forEach(singleProjectErrors => totalErrors += getErrorCountForSummary(singleProjectErrors));
+        }
+
         if (state.watch) {
             reportWatchStatus(state, getWatchErrorSummaryDiagnosticMessage(totalErrors), totalErrors);
         }
-        else {
-            state.host.reportErrorSummary!(totalErrors);
+        else if (state.host.reportErrorSummary) {
+            state.host.reportErrorSummary(totalErrors);
         }
     }
 

@@ -3079,6 +3079,9 @@ namespace ts {
 
         // When build skipped because passed in project is invalid
         InvalidProject_OutputsSkipped = 3,
+
+        // When build is skipped because project references form cycle
+        ProjectReferenceCycle_OutputsSkupped = 4,
     }
 
     export interface EmitResult {

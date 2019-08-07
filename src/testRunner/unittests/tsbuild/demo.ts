@@ -76,5 +76,36 @@ namespace ts {
                 notExpectedOutputs: emptyArray
             });
         });
+
+        it("in circular branch reports the error about it by stopping build", () => {
+            verifyBuild({
+                modifyDiskLayout: fs => replaceText(
+                    fs,
+                    "/src/core/tsconfig.json",
+                    "}",
+                    `},
+  "references": [
+    {
+      "path": "../zoo"
+    }
+  ]`
+                ),
+                expectedExitStatus: ExitStatus.ProjectReferenceCycle_OutputsSkupped,
+                expectedDiagnostics: [
+                    getExpectedDiagnosticForProjectsInBuild("src/animals/tsconfig.json", "src/zoo/tsconfig.json", "src/core/tsconfig.json", "src/tsconfig.json"),
+                    [
+                        Diagnostics.Project_references_may_not_form_a_circular_graph_Cycle_detected_Colon_0,
+                        [
+                            "/src/tsconfig.json",
+                            "/src/core/tsconfig.json",
+                            "/src/zoo/tsconfig.json",
+                            "/src/animals/tsconfig.json"
+                        ].join("\r\n")
+                    ]
+                ],
+                expectedOutputs: emptyArray,
+                notExpectedOutputs: [...coreOutputs(), ...animalOutputs(), ...zooOutputs()]
+            });
+        });
     });
 }
