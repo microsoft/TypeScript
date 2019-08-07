@@ -14269,20 +14269,25 @@ namespace ts {
         function discriminateTypeByDiscriminableItems(target: UnionType, discriminators: [() => Type, __String][], related: (source: Type, target: Type) => boolean | Ternary): Type | undefined;
         function discriminateTypeByDiscriminableItems(target: UnionType, discriminators: [() => Type, __String][], related: (source: Type, target: Type) => boolean | Ternary, defaultValue: Type): Type;
         function discriminateTypeByDiscriminableItems(target: UnionType, discriminators: [() => Type, __String][], related: (source: Type, target: Type) => boolean | Ternary, defaultValue?: Type) {
-            let match: Type | undefined;
+            // undefined=unknown, true=discriminated, false=not discriminated
+            // The state of each type progresses from left to right. Discriminated types stop at 'true'.
+            let discriminable = target.types.map(_ => undefined) as (boolean | undefined)[];
             for (const [getDiscriminatingType, propertyName] of discriminators) {
+                let i = 0
                 for (const type of target.types) {
                     const targetType = getTypeOfPropertyOfType(type, propertyName);
                     if (targetType && related(getDiscriminatingType(), targetType)) {
-                        if (match) {
-                            if (type === match) continue; // Finding multiple fields which discriminate to the same type is fine
-                            return defaultValue;
-                        }
-                        match = type;
+                        discriminable[i] = discriminable[i] === undefined ? true : discriminable[i]
                     }
+                    else {
+                        discriminable[i] = false
+                    }
+                    i++
                 }
             }
-            return match || defaultValue;
+            let match = discriminable.indexOf(true);
+            // make sure exactly 1 matches before returning it
+            return match === -1 || discriminable.indexOf(true, match + 1) !== -1 ? defaultValue : target.types[match];
         }
 
         /**
