@@ -617,6 +617,7 @@ namespace ts {
         isLiteralConstDeclaration: notImplemented,
         getJsxFactoryEntity: notImplemented,
         getAllAccessorDeclarations: notImplemented,
+        getAllAccessorSignatures: notImplemented,
         getSymbolOfExternalModuleSpecifier: notImplemented,
         isBindingCapturedByNode: notImplemented,
     };
@@ -1211,6 +1212,9 @@ namespace ts {
                     case SyntaxKind.GetAccessor:
                     case SyntaxKind.SetAccessor:
                         return emitAccessorDeclaration(<AccessorDeclaration>node);
+                    case SyntaxKind.GetAccessorSignature:
+                    case SyntaxKind.SetAccessorSignature:
+                        return emitAccessorSignature(<AccessorSignature>node);
                     case SyntaxKind.CallSignature:
                         return emitCallSignature(<CallSignatureDeclaration>node);
                     case SyntaxKind.ConstructSignature:
@@ -1863,6 +1867,19 @@ namespace ts {
             writeSpace();
             emit(node.name);
             emitSignatureAndBody(node, emitSignatureHead);
+        }
+
+        function emitAccessorSignature(node: AccessorSignature) {
+            pushNameGenerationScope(node);
+            emitDecorators(node, node.decorators);
+            emitModifiers(node, node.modifiers);
+            writeKeyword(node.kind === SyntaxKind.GetAccessorSignature ? "get" : "set");
+            writeSpace();
+            emit(node.name);
+            emitParameters(node, node.parameters);
+            emitTypeAnnotation(node.type);
+            writeTrailingSemicolon();
+            popNameGenerationScope(node);
         }
 
         function emitCallSignature(node: CallSignatureDeclaration) {

@@ -295,7 +295,9 @@ namespace ts {
         MethodDeclaration,
         Constructor,
         GetAccessor,
+        GetAccessorSignature,
         SetAccessor,
+        SetAccessorSignature,
         CallSignature,
         ConstructSignature,
         IndexSignature,
@@ -648,6 +650,7 @@ namespace ts {
         | ConstructSignatureDeclaration
         | MethodSignature
         | PropertySignature
+        | AccessorSignature
         | ArrowFunction
         | ParenthesizedExpression
         | SpreadAssignment
@@ -871,6 +874,7 @@ namespace ts {
         | CallSignatureDeclaration
         | ConstructSignatureDeclaration
         | MethodSignature
+        | AccessorSignature
         | IndexSignatureDeclaration
         | FunctionTypeNode
         | ConstructorTypeNode
@@ -1108,6 +1112,23 @@ namespace ts {
     }
 
     export type AccessorDeclaration = GetAccessorDeclaration | SetAccessorDeclaration;
+
+    export interface GetAccessorSignature extends SignatureDeclarationBase, TypeElement {
+        kind: SyntaxKind.GetAccessorSignature;
+        parent: ObjectTypeDeclaration;
+        name: PropertyName;
+    }
+
+    export interface SetAccessorSignature extends SignatureDeclarationBase, TypeElement {
+        kind: SyntaxKind.SetAccessorSignature;
+        parent: ObjectTypeDeclaration;
+        name: PropertyName;
+    }
+
+    export type AccessorSignature = GetAccessorSignature | SetAccessorSignature;
+    export type GetAccessorLike = GetAccessorDeclaration | GetAccessorSignature;
+    export type SetAccessorLike = SetAccessorDeclaration | SetAccessorSignature;
+    export type AccessorLike = AccessorDeclaration | AccessorSignature;
 
     export interface IndexSignatureDeclaration extends SignatureDeclarationBase, ClassElement, TypeElement {
         kind: SyntaxKind.IndexSignature;
@@ -3560,6 +3581,14 @@ namespace ts {
         setAccessor: SetAccessorDeclaration | undefined;
     }
 
+    /* @internal */
+    export interface AllAccessorSignatures {
+        firstAccessor: AccessorSignature;
+        secondAccessor: AccessorSignature | undefined;
+        getAccessor: GetAccessorSignature | undefined;
+        setAccessor: SetAccessorSignature | undefined;
+    }
+
     /** Indicates how to serialize the name for a TypeReferenceNode when emitting decorator metadata */
     /* @internal */
     export enum TypeReferenceSerializationKind {
@@ -3620,6 +3649,7 @@ namespace ts {
         isLiteralConstDeclaration(node: VariableDeclaration | PropertyDeclaration | PropertySignature | ParameterDeclaration): boolean;
         getJsxFactoryEntity(location?: Node): EntityName | undefined;
         getAllAccessorDeclarations(declaration: AccessorDeclaration): AllAccessorDeclarations;
+        getAllAccessorSignatures(declaration: AccessorSignature): AllAccessorSignatures;
         getSymbolOfExternalModuleSpecifier(node: StringLiteralLike): Symbol | undefined;
         isBindingCapturedByNode(node: Node, decl: VariableDeclaration | BindingElement): boolean;
     }

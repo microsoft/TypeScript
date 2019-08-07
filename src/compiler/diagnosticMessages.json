@@ -3036,6 +3036,27 @@
         "code": 4105
     },
 
+    "Parameter type of setter '{0}' from exported interface has or is using name '{1}' from private module '{2}'.": {
+        "category": "Error",
+        "code": 4106
+    },
+    "Parameter type of setter '{0}' from exported interface has or is using private name '{1}'.": {
+        "category": "Error",
+        "code": 4107
+    },
+    "Return type of getter '{0}' from exported interface has or is using name '{1}' from external module {2} but cannot be named.": {
+        "category": "Error",
+        "code": 4108
+    },
+    "Return type of getter '{0}' from exported interface has or is using name '{1}' from private module '{2}'.": {
+        "category": "Error",
+        "code": 4109
+    },
+    "Return type of getter '{0}' from exported interface has or is using private name '{1}'.": {
+        "category": "Error",
+        "code": 4110
+    },
+
     "The current host does not support the '{0}' option.": {
         "category": "Error",
         "code": 5001

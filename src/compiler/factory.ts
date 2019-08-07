@@ -600,6 +600,66 @@ namespace ts {
             : node;
     }
 
+    export function createGetAccessorSignature(
+        decorators: ReadonlyArray<Decorator> | undefined,
+        modifiers: ReadonlyArray<Modifier> | undefined,
+        name: string | PropertyName,
+        parameters: ReadonlyArray<ParameterDeclaration>,
+        type: TypeNode | undefined) {
+        const node = <GetAccessorSignature>createSynthesizedNode(SyntaxKind.GetAccessorSignature);
+        node.decorators = asNodeArray(decorators);
+        node.modifiers = asNodeArray(modifiers);
+        node.name = asName(name);
+        node.typeParameters = undefined;
+        node.parameters = createNodeArray(parameters);
+        node.type = type;
+        return node;
+    }
+
+    export function updateGetAccessorSignature(
+        node: GetAccessorSignature,
+        decorators: ReadonlyArray<Decorator> | undefined,
+        modifiers: ReadonlyArray<Modifier> | undefined,
+        name: PropertyName,
+        parameters: ReadonlyArray<ParameterDeclaration>,
+        type: TypeNode | undefined) {
+        return node.decorators !== decorators
+            || node.modifiers !== modifiers
+            || node.name !== name
+            || node.parameters !== parameters
+            || node.type !== type
+            ? updateNode(createGetAccessorSignature(decorators, modifiers, name, parameters, type), node)
+            : node;
+    }
+
+    export function createSetAccessorSignature(
+        decorators: ReadonlyArray<Decorator> | undefined,
+        modifiers: ReadonlyArray<Modifier> | undefined,
+        name: string | PropertyName,
+        parameters: ReadonlyArray<ParameterDeclaration>) {
+        const node = <SetAccessorSignature>createSynthesizedNode(SyntaxKind.SetAccessorSignature);
+        node.decorators = asNodeArray(decorators);
+        node.modifiers = asNodeArray(modifiers);
+        node.name = asName(name);
+        node.typeParameters = undefined;
+        node.parameters = createNodeArray(parameters);
+        return node;
+    }
+
+    export function updateSetAccessorSignature(
+        node: SetAccessorSignature,
+        decorators: ReadonlyArray<Decorator> | undefined,
+        modifiers: ReadonlyArray<Modifier> | undefined,
+        name: PropertyName,
+        parameters: ReadonlyArray<ParameterDeclaration>) {
+        return node.decorators !== decorators
+            || node.modifiers !== modifiers
+            || node.name !== name
+            || node.parameters !== parameters
+            ? updateNode(createSetAccessorSignature(decorators, modifiers, name, parameters), node)
+            : node;
+    }
+
     export function createCallSignature(typeParameters: ReadonlyArray<TypeParameterDeclaration> | undefined, parameters: ReadonlyArray<ParameterDeclaration>, type: TypeNode | undefined) {
         return createSignatureDeclaration(SyntaxKind.CallSignature, typeParameters, parameters, type) as CallSignatureDeclaration;
     }

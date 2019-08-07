@@ -149,6 +149,8 @@ namespace ts {
             case SyntaxKind.Constructor:
             case SyntaxKind.GetAccessor:
             case SyntaxKind.SetAccessor:
+            case SyntaxKind.GetAccessorSignature:
+            case SyntaxKind.SetAccessorSignature:
             case SyntaxKind.FunctionExpression:
             case SyntaxKind.FunctionDeclaration:
             case SyntaxKind.ArrowFunction:
@@ -2006,6 +2008,8 @@ namespace ts {
                 switch (node.kind) {
                     case SyntaxKind.ConstructSignature:
                     case SyntaxKind.MethodSignature:
+                    case SyntaxKind.GetAccessorSignature:
+                    case SyntaxKind.SetAccessorSignature:
                     case SyntaxKind.IndexSignature:
                     case SyntaxKind.PropertySignature:
                     case SyntaxKind.CallSignature:
@@ -2702,6 +2706,14 @@ namespace ts {
             return finishNode(node);
         }
 
+        function parseAccessorSignature(node: AccessorSignature, kind: AccessorSignature["kind"]): AccessorSignature {
+            node.kind = kind;
+            node.name = parsePropertyName();
+            fillSignature(SyntaxKind.ColonToken, SignatureFlags.Type, node);
+            parseTypeMemberSemicolon();
+            return finishNode(node);
+        }
+
         function parsePropertyOrMethodSignature(node: PropertySignature | MethodSignature): PropertySignature | MethodSignature {
             node.name = parsePropertyName();
             node.questionToken = parseOptionalToken(SyntaxKind.QuestionToken);
@@ -2730,10 +2742,10 @@ namespace ts {
             if (token() === SyntaxKind.OpenParenToken || token() === SyntaxKind.LessThanToken) {
                 return true;
             }
-            let idToken = false;
+            let idToken: SyntaxKind | undefined;
             // Eat up all modifiers, but hold on to the last one in case it is actually an identifier
             while (isModifierKind(token())) {
-                idToken = true;
+                idToken = token();
                 nextToken();
             }
             // Index signatures and computed property names are type members
@@ -2742,12 +2754,17 @@ namespace ts {
             }
             // Try to get the first property-like token following all modifiers
             if (isLiteralPropertyName()) {
-                idToken = true;
+                idToken = token();
                 nextToken();
             }
             // If we were able to get any potential identifier, check that it is
             // the start of a member declaration
-            if (idToken) {
+            if (idToken !== undefined) {
+                // If we have a non-keyword identifier, or if we have an accessor, then it's safe to parse.
+                if (!isKeyword(idToken) || idToken === SyntaxKind.SetKeyword || idToken === SyntaxKind.GetKeyword) {
+                    return true;
+                }
+
                 return token() === SyntaxKind.OpenParenToken ||
                     token() === SyntaxKind.LessThanToken ||
                     token() === SyntaxKind.QuestionToken ||
@@ -2765,8 +2782,18 @@ namespace ts {
             if (token() === SyntaxKind.NewKeyword && lookAhead(nextTokenIsOpenParenOrLessThan)) {
                 return parseSignatureMember(SyntaxKind.ConstructSignature);
             }
+
             const node = <TypeElement>createNodeWithJSDoc(SyntaxKind.Unknown);
             node.modifiers = parseModifiers();
+
+            if (parseContextualModifier(SyntaxKind.GetKeyword)) {
+                return parseAccessorSignature(<AccessorSignature>node, SyntaxKind.GetAccessorSignature);
+            }
+
+            if (parseContextualModifier(SyntaxKind.SetKeyword)) {
+                return parseAccessorSignature(<AccessorSignature>node, SyntaxKind.SetAccessorSignature);
+            }
+
             if (isIndexSignature()) {
                 return parseIndexSignatureDeclaration(<IndexSignatureDeclaration>node);
             }

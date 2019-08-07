@@ -317,6 +317,21 @@ namespace ts {
                     visitParameterList((<SetAccessorDeclaration>node).parameters, visitor, context, nodesVisitor),
                     visitFunctionBody((<SetAccessorDeclaration>node).body!, visitor, context));
 
+            case SyntaxKind.GetAccessorSignature:
+                return updateGetAccessorSignature(<GetAccessorSignature>node,
+                    nodesVisitor((<GetAccessorSignature>node).decorators, visitor, isDecorator),
+                    nodesVisitor((<GetAccessorSignature>node).modifiers, visitor, isModifier),
+                    visitNode((<GetAccessorSignature>node).name, visitor, isPropertyName),
+                    nodesVisitor((<GetAccessorSignature>node).parameters, visitor, isParameter),
+                    visitNode((<GetAccessorSignature>node).type, visitor, isTypeNode));
+
+            case SyntaxKind.SetAccessorSignature:
+                return updateSetAccessorSignature(<SetAccessorSignature>node,
+                    nodesVisitor((<SetAccessorSignature>node).decorators, visitor, isDecorator),
+                    nodesVisitor((<SetAccessorSignature>node).modifiers, visitor, isModifier),
+                    visitNode((<SetAccessorSignature>node).name, visitor, isPropertyName),
+                    visitNodes((<SetAccessorSignature>node).parameters, visitor, isParameter));
+
             case SyntaxKind.CallSignature:
                 return updateCallSignature(<CallSignatureDeclaration>node,
                     nodesVisitor((<CallSignatureDeclaration>node).typeParameters, visitor, isTypeParameterDeclaration),
@@ -1034,6 +1049,15 @@ namespace ts {
                 result = reduceNode((<PropertyDeclaration>node).initializer, cbNode, result);
                 break;
 
+            case SyntaxKind.MethodSignature:
+                result = reduceNodes((<MethodSignature>node).decorators, cbNodes, result);
+                result = reduceNodes((<MethodSignature>node).modifiers, cbNodes, result);
+                result = reduceNode((<MethodSignature>node).name, cbNode, result);
+                result = reduceNodes((<MethodSignature>node).typeParameters, cbNodes, result);
+                result = reduceNodes((<MethodSignature>node).parameters, cbNodes, result);
+                result = reduceNode((<MethodSignature>node).type, cbNode, result);
+                break;
+
             case SyntaxKind.MethodDeclaration:
                 result = reduceNodes((<MethodDeclaration>node).decorators, cbNodes, result);
                 result = reduceNodes((<MethodDeclaration>node).modifiers, cbNodes, result);
@@ -1060,11 +1084,26 @@ namespace ts {
                 break;
 
             case SyntaxKind.SetAccessor:
-                result = reduceNodes((<GetAccessorDeclaration>node).decorators, cbNodes, result);
-                result = reduceNodes((<GetAccessorDeclaration>node).modifiers, cbNodes, result);
-                result = reduceNode((<GetAccessorDeclaration>node).name, cbNode, result);
-                result = reduceNodes((<GetAccessorDeclaration>node).parameters, cbNodes, result);
-                result = reduceNode((<GetAccessorDeclaration>node).body, cbNode, result);
+                result = reduceNodes((<SetAccessorDeclaration>node).decorators, cbNodes, result);
+                result = reduceNodes((<SetAccessorDeclaration>node).modifiers, cbNodes, result);
+                result = reduceNode((<SetAccessorDeclaration>node).name, cbNode, result);
+                result = reduceNodes((<SetAccessorDeclaration>node).parameters, cbNodes, result);
+                result = reduceNode((<SetAccessorDeclaration>node).body, cbNode, result);
+                break;
+
+            case SyntaxKind.GetAccessorSignature:
+                result = reduceNodes((<GetAccessorSignature>node).decorators, cbNodes, result);
+                result = reduceNodes((<GetAccessorSignature>node).modifiers, cbNodes, result);
+                result = reduceNode((<GetAccessorSignature>node).name, cbNode, result);
+                result = reduceNodes((<GetAccessorSignature>node).parameters, cbNodes, result);
+                result = reduceNode((<GetAccessorSignature>node).type, cbNode, result);
+                break;
+
+            case SyntaxKind.SetAccessorSignature:
+                result = reduceNodes((<SetAccessorSignature>node).decorators, cbNodes, result);
+                result = reduceNodes((<SetAccessorSignature>node).modifiers, cbNodes, result);
+                result = reduceNode((<SetAccessorSignature>node).name, cbNode, result);
+                result = reduceNodes((<SetAccessorSignature>node).parameters, cbNodes, result);
                 break;
 
             // Binding patterns

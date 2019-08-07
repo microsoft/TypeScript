@@ -1502,6 +1502,8 @@ namespace ts {
                 case SyntaxKind.MethodSignature:
                 case SyntaxKind.GetAccessor:
                 case SyntaxKind.SetAccessor:
+                case SyntaxKind.GetAccessorSignature:
+                case SyntaxKind.SetAccessorSignature:
                 case SyntaxKind.CallSignature:
                 case SyntaxKind.JSDocSignature:
                 case SyntaxKind.JSDocFunctionType:
@@ -1600,6 +1602,8 @@ namespace ts {
                 case SyntaxKind.Constructor:
                 case SyntaxKind.GetAccessor:
                 case SyntaxKind.SetAccessor:
+                case SyntaxKind.GetAccessorSignature:
+                case SyntaxKind.SetAccessorSignature:
                 case SyntaxKind.FunctionDeclaration:
                 case SyntaxKind.FunctionExpression:
                 case SyntaxKind.ArrowFunction:
@@ -2236,8 +2240,10 @@ namespace ts {
                 case SyntaxKind.Constructor:
                     return declareSymbolAndAddToSymbolTable(<Declaration>node, SymbolFlags.Constructor, /*symbolExcludes:*/ SymbolFlags.None);
                 case SyntaxKind.GetAccessor:
+                case SyntaxKind.GetAccessorSignature:
                     return bindPropertyOrMethodOrAccessor(<Declaration>node, SymbolFlags.GetAccessor, SymbolFlags.GetAccessorExcludes);
                 case SyntaxKind.SetAccessor:
+                case SyntaxKind.SetAccessorSignature:
                     return bindPropertyOrMethodOrAccessor(<Declaration>node, SymbolFlags.SetAccessor, SymbolFlags.SetAccessorExcludes);
                 case SyntaxKind.FunctionType:
                 case SyntaxKind.JSDocFunctionType:
@@ -3750,6 +3756,8 @@ namespace ts {
             case SyntaxKind.TypeParameter:
             case SyntaxKind.PropertySignature:
             case SyntaxKind.MethodSignature:
+            case SyntaxKind.GetAccessorSignature:
+            case SyntaxKind.SetAccessorSignature:
             case SyntaxKind.CallSignature:
             case SyntaxKind.ConstructSignature:
             case SyntaxKind.IndexSignature:
@@ -3934,6 +3942,8 @@ namespace ts {
             case SyntaxKind.TypeParameter:
             case SyntaxKind.PropertySignature:
             case SyntaxKind.MethodSignature:
+            case SyntaxKind.GetAccessorSignature:
+            case SyntaxKind.SetAccessorSignature:
             case SyntaxKind.CallSignature:
             case SyntaxKind.ConstructSignature:
             case SyntaxKind.IndexSignature:

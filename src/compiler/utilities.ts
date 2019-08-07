@@ -746,6 +746,8 @@ namespace ts {
             case SyntaxKind.CallSignature:
             case SyntaxKind.ConstructSignature:
             case SyntaxKind.MethodSignature:
+            case SyntaxKind.GetAccessorSignature:
+            case SyntaxKind.SetAccessorSignature:
             case SyntaxKind.IndexSignature:
             case SyntaxKind.FunctionType:
             case SyntaxKind.ConstructorType:
@@ -921,6 +923,8 @@ namespace ts {
             case SyntaxKind.MethodDeclaration:
             case SyntaxKind.GetAccessor:
             case SyntaxKind.SetAccessor:
+            case SyntaxKind.GetAccessorSignature:
+            case SyntaxKind.SetAccessorSignature:
             case SyntaxKind.TypeAliasDeclaration:
             case SyntaxKind.PropertyDeclaration:
             case SyntaxKind.PropertySignature:
@@ -1097,6 +1101,8 @@ namespace ts {
                     case SyntaxKind.MethodSignature:
                     case SyntaxKind.GetAccessor:
                     case SyntaxKind.SetAccessor:
+                    case SyntaxKind.GetAccessorSignature:
+                    case SyntaxKind.SetAccessorSignature:
                         return node === (<FunctionLikeDeclaration>parent).type;
                     case SyntaxKind.CallSignature:
                     case SyntaxKind.ConstructSignature:
@@ -1400,6 +1406,8 @@ namespace ts {
                 case SyntaxKind.Constructor:
                 case SyntaxKind.GetAccessor:
                 case SyntaxKind.SetAccessor:
+                case SyntaxKind.GetAccessorSignature:
+                case SyntaxKind.SetAccessorSignature:
                 case SyntaxKind.CallSignature:
                 case SyntaxKind.ConstructSignature:
                 case SyntaxKind.IndexSignature:
@@ -1456,6 +1464,8 @@ namespace ts {
                 case SyntaxKind.Constructor:
                 case SyntaxKind.GetAccessor:
                 case SyntaxKind.SetAccessor:
+                case SyntaxKind.GetAccessorSignature:
+                case SyntaxKind.SetAccessorSignature:
                     return node;
                 case SyntaxKind.Decorator:
                     // Decorators are always applied outside of the body of a class or method.
@@ -2520,6 +2530,8 @@ namespace ts {
             case SyntaxKind.MethodSignature:
             case SyntaxKind.GetAccessor:
             case SyntaxKind.SetAccessor:
+            case SyntaxKind.GetAccessorSignature:
+            case SyntaxKind.SetAccessorSignature:
             case SyntaxKind.EnumMember:
             case SyntaxKind.PropertyAssignment:
             case SyntaxKind.PropertyAccessExpression:
@@ -3518,7 +3530,7 @@ namespace ts {
         return find(node.members, (member): member is ConstructorDeclaration & { body: FunctionBody } => isConstructorDeclaration(member) && nodeIsPresent(member.body));
     }
 
-    function getSetAccessorValueParameter(accessor: SetAccessorDeclaration): ParameterDeclaration | undefined {
+    function getSetAccessorValueParameter(accessor: SetAccessorLike): ParameterDeclaration | undefined {
         if (accessor && accessor.parameters.length > 0) {
             const hasThis = accessor.parameters.length === 2 && parameterIsThisKeyword(accessor.parameters[0]);
             return accessor.parameters[hasThis ? 1 : 0];
@@ -3526,7 +3538,7 @@ namespace ts {
     }
 
     /** Get the type annotation for the value parameter. */
-    export function getSetAccessorTypeAnnotationNode(accessor: SetAccessorDeclaration): TypeNode | undefined {
+    export function getSetAccessorTypeAnnotationNode(accessor: SetAccessorLike): TypeNode | undefined {
         const parameter = getSetAccessorValueParameter(accessor);
         return parameter && parameter.type;
     }
@@ -3551,6 +3563,23 @@ namespace ts {
 
     export function identifierIsThisKeyword(id: Identifier): boolean {
         return id.originalKeywordKind === SyntaxKind.ThisKeyword;
+    }
+
+    export function getOtherAccessorLikeKind(node: AccessorLike) {
+        return isGetAccessorDeclaration(node) ? SyntaxKind.SetAccessor :
+            isGetAccessorSignature(node) ? SyntaxKind.SetAccessorSignature :
+            isSetAccessorDeclaration(node) ? SyntaxKind.GetAccessor :
+            SyntaxKind.GetAccessorSignature;
+    }
+
+    export function getOtherAccessorDeclarationKind(node: AccessorLike) {
+        return isGetAccessorLike(node) ? SyntaxKind.SetAccessor :
+            SyntaxKind.GetAccessor;
+    }
+
+    export function getOtherAccessorSignatureKind(node: AccessorLike) {
+        return isGetAccessorLike(node) ? SyntaxKind.SetAccessorSignature :
+            SyntaxKind.GetAccessorSignature;
     }
 
     export function getAllAccessorDeclarations(declarations: NodeArray<Declaration>, accessor: AccessorDeclaration): AllAccessorDeclarations {
@@ -3641,7 +3670,7 @@ namespace ts {
      * Gets the effective type annotation of the value parameter of a set accessor. If the node
      * was parsed in a JavaScript file, gets the type annotation from JSDoc.
      */
-    export function getEffectiveSetAccessorTypeAnnotationNode(node: SetAccessorDeclaration): TypeNode | undefined {
+    export function getEffectiveSetAccessorTypeAnnotationNode(node: SetAccessorLike): TypeNode | undefined {
         const parameter = getSetAccessorValueParameter(node);
         return parameter && getEffectiveTypeAnnotationNode(parameter);
     }
@@ -5541,6 +5570,46 @@ namespace ts {
         return node.kind === SyntaxKind.SetAccessor;
     }
 
+    export function isGetAccessorSignature(node: Node): node is GetAccessorSignature {
+        return node.kind === SyntaxKind.GetAccessorSignature;
+    }
+
+    export function isSetAccessorSignature(node: Node): node is SetAccessorSignature {
+        return node.kind === SyntaxKind.SetAccessorSignature;
+    }
+
+    export function isGetAccessorLike(node: Node): node is GetAccessorLike {
+        const kind = node.kind;
+        return kind === SyntaxKind.GetAccessor
+            || kind === SyntaxKind.GetAccessorSignature;
+    }
+
+    export function isSetAccessorLike(node: Node): node is SetAccessorLike {
+        const kind = node.kind;
+        return kind === SyntaxKind.SetAccessor
+            || kind === SyntaxKind.SetAccessorSignature;
+    }
+
+    export function isAccessorDeclaration(node: Node): node is AccessorDeclaration {
+        const kind = node.kind;
+        return kind === SyntaxKind.GetAccessor
+            || kind === SyntaxKind.SetAccessor;
+    }
+
+    export function isAccessorSignature(node: Node): node is AccessorSignature {
+        const kind = node.kind;
+        return kind === SyntaxKind.GetAccessorSignature
+            || kind === SyntaxKind.SetAccessorSignature;
+    }
+
+    export function isAccessorLike(node: Node): node is AccessorLike {
+        const kind = node.kind;
+        return kind === SyntaxKind.GetAccessor
+            || kind === SyntaxKind.GetAccessorSignature
+            || kind === SyntaxKind.SetAccessor
+            || kind === SyntaxKind.SetAccessorSignature;
+    }
+
     export function isCallSignatureDeclaration(node: Node): node is CallSignatureDeclaration {
         return node.kind === SyntaxKind.CallSignature;
     }
@@ -5553,9 +5622,10 @@ namespace ts {
         return node.kind === SyntaxKind.IndexSignature;
     }
 
+    /** @deprecated Use `isAccessorDeclaration` instead. */
     /* @internal */
     export function isGetOrSetAccessorDeclaration(node: Node): node is AccessorDeclaration {
-        return node.kind === SyntaxKind.SetAccessor || node.kind === SyntaxKind.GetAccessor;
+        return isAccessorDeclaration(node);
     }
 
     // Type
@@ -6347,6 +6417,8 @@ namespace ts {
     export function isFunctionLikeKind(kind: SyntaxKind): boolean {
         switch (kind) {
             case SyntaxKind.MethodSignature:
+            case SyntaxKind.GetAccessorSignature:
+            case SyntaxKind.SetAccessorSignature:
             case SyntaxKind.CallSignature:
             case SyntaxKind.JSDocSignature:
             case SyntaxKind.ConstructSignature:
@@ -6381,8 +6453,9 @@ namespace ts {
         return node && (node.kind === SyntaxKind.ClassDeclaration || node.kind === SyntaxKind.ClassExpression);
     }
 
+    /** @deprecated Use `isAccessorDeclaration` instead. */
     export function isAccessor(node: Node): node is AccessorDeclaration {
-        return node && (node.kind === SyntaxKind.GetAccessor || node.kind === SyntaxKind.SetAccessor);
+        return isAccessorDeclaration(node);
     }
 
     /* @internal */
@@ -6405,6 +6478,8 @@ namespace ts {
             || kind === SyntaxKind.CallSignature
             || kind === SyntaxKind.PropertySignature
             || kind === SyntaxKind.MethodSignature
+            || kind === SyntaxKind.GetAccessorSignature
+            || kind === SyntaxKind.SetAccessorSignature
             || kind === SyntaxKind.IndexSignature;
     }
 
@@ -6955,12 +7030,14 @@ namespace ts {
         return node.kind >= SyntaxKind.FirstJSDocTagNode && node.kind <= SyntaxKind.LastJSDocTagNode;
     }
 
+    /** @deprecated Use `isSetAccessorDeclaration` instead. */
     export function isSetAccessor(node: Node): node is SetAccessorDeclaration {
-        return node.kind === SyntaxKind.SetAccessor;
+        return isSetAccessorDeclaration(node);
     }
 
+    /** @deprecated Use `isGetAccessorDeclaration` instead. */
     export function isGetAccessor(node: Node): node is GetAccessorDeclaration {
-        return node.kind === SyntaxKind.GetAccessor;
+        return isGetAccessorDeclaration(node);
     }
 
     /** True if has jsdoc nodes attached to it. */

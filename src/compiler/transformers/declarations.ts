@@ -393,7 +393,24 @@ namespace ts {
             }
         }
 
-        function ensureParameter(p: ParameterDeclaration, modifierMask?: ModifierFlags): ParameterDeclaration {
+        function ensureParameter(node: Node, p: ParameterDeclaration, modifierMask?: ModifierFlags): ParameterDeclaration {
+            let type: TypeNode | undefined;
+            let name: BindingName | undefined;
+            let noType = false;
+            if (isAccessorLike(node) && !isThisIdentifier(p.name)) {
+                if (!hasModifier(node, ModifierFlags.Private)) {
+                    type = p.type || (isAccessorDeclaration(node)
+                        ? getTypeAnnotationFromAllAccessorDeclarations(node)
+                        : getTypeAnnotationFromAllAccessorSignatures(node));
+                }
+                else {
+                    name = createIdentifier("value");
+                    noType = true;
+                }
+            }
+            else {
+                type = p.type;
+            }
             let oldDiag: typeof getSymbolAccessibilityDiagnostic | undefined;
             if (!suppressNewDiagnosticContexts) {
                 oldDiag = getSymbolAccessibilityDiagnostic;
@@ -404,9 +421,9 @@ namespace ts {
                 /*decorators*/ undefined,
                 maskModifiers(p, modifierMask),
                 p.dotDotDotToken,
-                filterBindingPatternInitializers(p.name),
+                name || filterBindingPatternInitializers(p.name),
                 resolver.isOptionalParameter(p) ? (p.questionToken || createToken(SyntaxKind.QuestionToken)) : undefined,
-                ensureType(p, p.type, /*ignorePrivate*/ true), // Ignore private param props, since this type is going straight back into a param
+                noType ? undefined : ensureType(p, type, /*ignorePrivate*/ true), // Ignore private param props, since this type is going straight back into a param
                 ensureNoInitializer(p)
             );
             if (!suppressNewDiagnosticContexts) {
@@ -435,6 +452,8 @@ namespace ts {
             | ConstructSignatureDeclaration
             | VariableDeclaration
             | MethodSignature
+            | GetAccessorSignature
+            | SetAccessorSignature
             | CallSignatureDeclaration
             | ParameterDeclaration
             | PropertyDeclaration
@@ -525,10 +544,10 @@ namespace ts {
         }
 
         function updateParamsList(node: Node, params: NodeArray<ParameterDeclaration>, modifierMask?: ModifierFlags) {
-            if (hasModifier(node, ModifierFlags.Private)) {
+            if (hasModifier(node, ModifierFlags.Private) && !isSetAccessorLike(node)) {
                 return undefined!; // TODO: GH#18217
             }
-            const newParams = map(params, p => ensureParameter(p, modifierMask));
+            const newParams = map(params, p => ensureParameter(node, p, modifierMask));
             if (!newParams) {
                 return undefined!; // TODO: GH#18217
             }
@@ -846,6 +865,24 @@ namespace ts {
                             input.name,
                             input.questionToken
                         ));
+                    }
+                    case SyntaxKind.GetAccessorSignature: {
+                        const accessorType = getTypeAnnotationFromAllAccessorSignatures(input);
+                        return cleanup(updateGetAccessorSignature(
+                            input,
+                            /*decorators*/ undefined,
+                            ensureModifiers(input),
+                            input.name,
+                            updateParamsList(input, input.parameters),
+                            !hasModifier(input, ModifierFlags.Private) ? ensureType(input, accessorType) : undefined));
+                    }
+                    case SyntaxKind.SetAccessorSignature: {
+                        return cleanup(updateSetAccessorSignature(
+                            input,
+                            /*decorators*/ undefined,
+                            ensureModifiers(input),
+                            input.name,
+                            updateParamsList(input, input.parameters)));
                     }
                     case SyntaxKind.CallSignature: {
                         return cleanup(updateCallSignature(
@@ -1374,17 +1411,35 @@ namespace ts {
             return maskModifierFlags(node, mask, additions);
         }
 
-        function ensureAccessor(node: AccessorDeclaration): PropertyDeclaration | undefined {
+        function getTypeAnnotationFromAllAccessorDeclarations(node: AccessorDeclaration) {
             const accessors = resolver.getAllAccessorDeclarations(node);
-            if (node.kind !== accessors.firstAccessor.kind) {
-                return;
-            }
             let accessorType = getTypeAnnotationFromAccessor(node);
             if (!accessorType && accessors.secondAccessor) {
                 accessorType = getTypeAnnotationFromAccessor(accessors.secondAccessor);
                 // If we end up pulling the type from the second accessor, we also need to change the diagnostic context to get the expected error message
                 getSymbolAccessibilityDiagnostic = createGetSymbolAccessibilityDiagnosticForNode(accessors.secondAccessor);
             }
+            return accessorType;
+        }
+
+        function getTypeAnnotationFromAllAccessorSignatures(node: AccessorSignature) {
+            const accessors = resolver.getAllAccessorSignatures(node);
+            let accessorType = getTypeAnnotationFromAccessor(node);
+            if (!accessorType && accessors.secondAccessor) {
+                accessorType = getTypeAnnotationFromAccessor(accessors.secondAccessor);
+                // If we end up pulling the type from the second accessor, we also need to change the diagnostic context to get the expected error message
+                getSymbolAccessibilityDiagnostic = createGetSymbolAccessibilityDiagnosticForNode(accessors.secondAccessor);
+            }
+            return accessorType;
+        }
+
+        function ensureAccessor(node: AccessorDeclaration): PropertyDeclaration | undefined {
+            const accessors = resolver.getAllAccessorDeclarations(node);
+            if (node.kind !== accessors.firstAccessor.kind) {
+                return;
+            }
+
+            const accessorType = getTypeAnnotationFromAllAccessorDeclarations(node);
             const prop = createProperty(/*decorators*/ undefined, maskModifiers(node, /*mask*/ undefined, (!accessors.setAccessor) ? ModifierFlags.Readonly : ModifierFlags.None), node.name, node.questionToken, ensureType(node, accessorType), /*initializer*/ undefined);
             const leadingsSyntheticCommentRanges = accessors.secondAccessor && getLeadingCommentRangesOfNode(accessors.secondAccessor, currentSourceFile);
             if (leadingsSyntheticCommentRanges) {
@@ -1441,9 +1496,9 @@ namespace ts {
         return flags;
     }
 
-    function getTypeAnnotationFromAccessor(accessor: AccessorDeclaration): TypeNode | undefined {
+    function getTypeAnnotationFromAccessor(accessor: AccessorLike): TypeNode | undefined {
         if (accessor) {
-            return accessor.kind === SyntaxKind.GetAccessor
+            return isGetAccessorLike(accessor)
                 ? accessor.type // Getter - return type
                 : accessor.parameters.length > 0
                     ? accessor.parameters[0].type // Setter parameter type
@@ -1501,6 +1556,8 @@ namespace ts {
         | MethodDeclaration
         | GetAccessorDeclaration
         | SetAccessorDeclaration
+        | GetAccessorSignature
+        | SetAccessorSignature
         | PropertyDeclaration
         | PropertySignature
         | MethodSignature
@@ -1522,6 +1579,8 @@ namespace ts {
             case SyntaxKind.MethodDeclaration:
             case SyntaxKind.GetAccessor:
             case SyntaxKind.SetAccessor:
+            case SyntaxKind.GetAccessorSignature:
+            case SyntaxKind.SetAccessorSignature:
             case SyntaxKind.PropertyDeclaration:
             case SyntaxKind.PropertySignature:
             case SyntaxKind.MethodSignature:

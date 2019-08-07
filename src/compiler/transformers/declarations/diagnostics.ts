@@ -15,6 +15,8 @@ namespace ts {
         | BindingElement
         | SetAccessorDeclaration
         | GetAccessorDeclaration
+        | SetAccessorSignature
+        | GetAccessorSignature
         | ConstructSignatureDeclaration
         | CallSignatureDeclaration
         | MethodDeclaration
@@ -34,8 +36,10 @@ namespace ts {
             isPropertyDeclaration(node) ||
             isPropertySignature(node) ||
             isBindingElement(node) ||
-            isSetAccessor(node) ||
-            isGetAccessor(node) ||
+            isSetAccessorDeclaration(node) ||
+            isGetAccessorDeclaration(node) ||
+            isSetAccessorSignature(node) ||
+            isGetAccessorSignature(node) ||
             isConstructSignatureDeclaration(node) ||
             isCallSignatureDeclaration(node) ||
             isMethodDeclaration(node) ||
@@ -130,6 +134,9 @@ namespace ts {
         }
         else if (isSetAccessor(node) || isGetAccessor(node)) {
             return getAccessorDeclarationTypeVisibilityError;
+        }
+        else if (isAccessorSignature(node)) {
+            return getAccessorSignatureTypeVisibilityError;
         }
         else if (isConstructSignatureDeclaration(node) || isCallSignatureDeclaration(node) || isMethodDeclaration(node) || isMethodSignature(node) || isFunctionDeclaration(node) || isIndexSignatureDeclaration(node)) {
             return getReturnTypeVisibilityError;
@@ -232,6 +239,29 @@ namespace ts {
                         Diagnostics.Return_type_of_public_getter_0_from_exported_class_has_or_is_using_name_1_from_private_module_2 :
                     Diagnostics.Return_type_of_public_getter_0_from_exported_class_has_or_is_using_private_name_1;
                 }
+            }
+            return {
+                diagnosticMessage,
+                errorNode: (node as NamedDeclaration).name!,
+                typeName: (node as NamedDeclaration).name
+            };
+        }
+
+        function getAccessorSignatureTypeVisibilityError(symbolAccessibilityResult: SymbolAccessibilityResult): SymbolAccessibilityDiagnostic {
+            let diagnosticMessage: DiagnosticMessage;
+            if (node.kind === SyntaxKind.SetAccessorSignature) {
+                // Getters can infer the return type from the returned expression, but setters cannot, so the
+                // "_from_external_module_1_but_cannot_be_named" case cannot occur.
+                diagnosticMessage = symbolAccessibilityResult.errorModuleName ?
+                    Diagnostics.Parameter_type_of_setter_0_from_exported_interface_has_or_is_using_name_1_from_private_module_2 :
+                    Diagnostics.Parameter_type_of_setter_0_from_exported_interface_has_or_is_using_private_name_1;
+            }
+            else {
+                diagnosticMessage = symbolAccessibilityResult.errorModuleName ?
+                    symbolAccessibilityResult.accessibility === SymbolAccessibility.CannotBeNamed ?
+                    Diagnostics.Return_type_of_getter_0_from_exported_interface_has_or_is_using_name_1_from_external_module_2_but_cannot_be_named :
+                    Diagnostics.Return_type_of_getter_0_from_exported_interface_has_or_is_using_name_1_from_private_module_2 :
+                    Diagnostics.Return_type_of_getter_0_from_exported_interface_has_or_is_using_private_name_1;
             }
             return {
                 diagnosticMessage,
