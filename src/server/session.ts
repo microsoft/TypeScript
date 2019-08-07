@@ -42,6 +42,11 @@ namespace ts.server {
         return false;
     }
 
+
+    function dtsChangeCanAffectEmit(compilationSettings: CompilerOptions) {
+        return getEmitDeclarations(compilationSettings) || !!compilationSettings.emitDecoratorMetadata;
+    }
+
     function formatDiag(fileName: NormalizedPath, project: Project, diag: Diagnostic): protocol.Diagnostic {
         const scriptInfo = project.getScriptInfoForNormalizedPath(fileName)!; // TODO: GH#18217
         return {
@@ -731,7 +736,9 @@ namespace ts.server {
                 }
                 return;
             }
-            this.host.write(formatMessage(msg, this.logger, this.byteLength, this.host.newLine));
+            const msgText = formatMessage(msg, this.logger, this.byteLength, this.host.newLine);
+            perfLogger.logEvent(`Response message size: ${msgText.length}`);
+            this.host.write(msgText);
         }
 
         public event<T extends object>(body: T, eventName: string): void {
@@ -1604,15 +1611,22 @@ namespace ts.server {
                 path => this.projectService.getScriptInfoForPath(path)!,
                 projects,
                 (project, info) => {
-                    let result: protocol.CompileOnSaveAffectedFileListSingleProject | undefined;
-                    if (project.compileOnSaveEnabled && project.languageServiceEnabled && !project.isOrphan() && !project.getCompilationSettings().noEmit) {
-                        result = {
-                            projectFileName: project.getProjectName(),
-                            fileNames: project.getCompileOnSaveAffectedFileList(info),
-                            projectUsesOutFile: !!project.getCompilationSettings().outFile || !!project.getCompilationSettings().out
-                        };
+                    if (!project.compileOnSaveEnabled || !project.languageServiceEnabled || project.isOrphan()) {
+                        return undefined;
                     }
-                    return result;
+
+                    const compilationSettings = project.getCompilationSettings();
+
+                    if (!!compilationSettings.noEmit || fileExtensionIs(info.fileName, Extension.Dts) && !dtsChangeCanAffectEmit(compilationSettings)) {
+                        // avoid triggering emit when a change is made in a .d.ts when declaration emit and decorator metadata emit are disabled
+                        return undefined;
+                    }
+
+                    return {
+                        projectFileName: project.getProjectName(),
+                        fileNames: project.getCompileOnSaveAffectedFileList(info),
+                        projectUsesOutFile: !!compilationSettings.outFile || !!compilationSettings.out
+                    };
                 }
             );
         }
@@ -2509,6 +2523,8 @@ namespace ts.server {
             try {
                 request = <protocol.Request>JSON.parse(message);
                 relevantFile = request.arguments && (request as protocol.FileRequest).arguments.file ? (request as protocol.FileRequest).arguments : undefined;
+
+                perfLogger.logStartCommand("" + request.command, message.substring(0, 100));
                 const { response, responseRequired } = this.executeCommand(request);
 
                 if (this.logger.hasLevel(LogLevel.requestTime)) {
@@ -2521,6 +2537,8 @@ namespace ts.server {
                     }
                 }
 
+                // Note: Log before writing the response, else the editor can complete its activity before the server does
+                perfLogger.logStopCommand("" + request.command, "Success");
                 if (response) {
                     this.doOutput(response, request.command, request.seq, /*success*/ true);
                 }
@@ -2531,10 +2549,14 @@ namespace ts.server {
             catch (err) {
                 if (err instanceof OperationCanceledException) {
                     // Handle cancellation exceptions
+                    perfLogger.logStopCommand("" + (request && request.command), "Canceled: " + err);
                     this.doOutput({ canceled: true }, request!.command, request!.seq, /*success*/ true);
                     return;
                 }
+
                 this.logErrorWorker(err, message, relevantFile);
+                perfLogger.logStopCommand("" + (request && request.command), "Error: " + err);
+
                 this.doOutput(
                     /*info*/ undefined,
                     request ? request.command : CommandNames.Unknown,

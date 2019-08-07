@@ -832,12 +832,13 @@ namespace ts {
 
     /* @internal */
     export function isIdentifierText(name: string, languageVersion: ScriptTarget | undefined): boolean {
-        if (!isIdentifierStart(name.charCodeAt(0), languageVersion)) {
+        let ch = codePointAt(name, 0);
+        if (!isIdentifierStart(ch, languageVersion)) {
             return false;
         }
 
-        for (let i = 1; i < name.length; i++) {
-            if (!isIdentifierPart(name.charCodeAt(i), languageVersion)) {
+        for (let i = charSize(ch); i < name.length; i += charSize(ch)) {
+            if (!isIdentifierPart(ch = codePointAt(name, i), languageVersion)) {
                 return false;
             }
         }
@@ -1015,7 +1016,7 @@ namespace ts {
         }
 
         function checkForIdentifierStartAfterNumericLiteral(numericStart: number, isScientific?: boolean) {
-            if (!isIdentifierStart(text.charCodeAt(pos), languageVersion)) {
+            if (!isIdentifierStart(codePointAt(text, pos), languageVersion)) {
                 return;
             }
 
@@ -1342,6 +1343,19 @@ namespace ts {
             return -1;
         }
 
+
+        function peekExtendedUnicodeEscape(): number {
+            if (languageVersion >= ScriptTarget.ES2015 && codePointAt(text, pos + 1) === CharacterCodes.u && codePointAt(text, pos + 2) === CharacterCodes.openBrace) {
+                const start = pos;
+                pos += 3;
+                const escapedValueString = scanMinimumNumberOfHexDigits(1, /*canHaveSeparators*/ false);
+                const escapedValue = escapedValueString ? parseInt(escapedValueString, 16) : -1;
+                pos = start;
+                return escapedValue;
+            }
+            return -1;
+        }
+
         function scanIdentifierParts(): string {
             let result = "";
             let start = pos;
@@ -1351,6 +1365,14 @@ namespace ts {
                     pos += charSize(ch);
                 }
                 else if (ch === CharacterCodes.backslash) {
+                    ch = peekExtendedUnicodeEscape();
+                    if (ch >= 0 && isIdentifierPart(ch, languageVersion)) {
+                        pos += 3;
+                        tokenFlags |= TokenFlags.ExtendedUnicodeEscape;
+                        result += scanExtendedUnicodeEscape();
+                        start = pos;
+                        continue;
+                    }
                     ch = peekUnicodeEscape();
                     if (!(ch >= 0 && isIdentifierPart(ch, languageVersion))) {
                         break;
@@ -1836,12 +1858,21 @@ namespace ts {
                         pos++;
                         return token = SyntaxKind.AtToken;
                     case CharacterCodes.backslash:
+                        const extendedCookedChar = peekExtendedUnicodeEscape();
+                        if (extendedCookedChar >= 0 && isIdentifierStart(extendedCookedChar, languageVersion)) {
+                            pos += 3;
+                            tokenFlags |= TokenFlags.ExtendedUnicodeEscape;
+                            tokenValue = scanExtendedUnicodeEscape() + scanIdentifierParts();
+                            return token = getIdentifierToken();
+                        }
+
                         const cookedChar = peekUnicodeEscape();
                         if (cookedChar >= 0 && isIdentifierStart(cookedChar, languageVersion)) {
                             pos += 6;
                             tokenValue = String.fromCharCode(cookedChar) + scanIdentifierParts();
                             return token = getIdentifierToken();
                         }
+
                         error(Diagnostics.Invalid_character);
                         pos++;
                         return token = SyntaxKind.Unknown;
@@ -1869,13 +1900,6 @@ namespace ts {
                         return token = SyntaxKind.Unknown;
                 }
             }
-        }
-
-        function charSize(ch: number) {
-            if (ch > 0x10000) {
-                return 2;
-            }
-            return 1;
         }
 
         function reScanGreaterToken(): SyntaxKind {
@@ -2040,17 +2064,22 @@ namespace ts {
         // they allow dashes
         function scanJsxIdentifier(): SyntaxKind {
             if (tokenIsIdentifierOrKeyword(token)) {
-                const firstCharPosition = pos;
+                // An identifier or keyword has already been parsed - check for a `-` and then append it and everything after it to the token
+                // Do note that this means that `scanJsxIdentifier` effectively _mutates_ the visible token without advancing to a new token
+                // Any caller should be expecting this behavior and should only read the pos or token value after calling it.
                 while (pos < end) {
                     const ch = text.charCodeAt(pos);
-                    if (ch === CharacterCodes.minus || ((firstCharPosition === pos) ? isIdentifierStart(ch, languageVersion) : isIdentifierPart(ch, languageVersion))) {
+                    if (ch === CharacterCodes.minus) {
+                        tokenValue += "-";
                         pos++;
+                        continue;
                     }
-                    else {
+                    const oldPos = pos;
+                    tokenValue += scanIdentifierParts(); // reuse `scanIdentifierParts` so unicode escapes are handled
+                    if (pos === oldPos) {
                         break;
                     }
                 }
-                tokenValue += text.substring(firstCharPosition, pos);
             }
             return token;
         }
@@ -2076,8 +2105,8 @@ namespace ts {
                 return token = SyntaxKind.EndOfFileToken;
             }
 
-            const ch = text.charCodeAt(pos);
-            pos++;
+            const ch = codePointAt(text, pos);
+            pos += charSize(ch);
             switch (ch) {
                 case CharacterCodes.tab:
                 case CharacterCodes.verticalTab:
@@ -2115,13 +2144,34 @@ namespace ts {
                     return token = SyntaxKind.DotToken;
                 case CharacterCodes.backtick:
                     return token = SyntaxKind.BacktickToken;
+                case CharacterCodes.backslash:
+                    pos--;
+                    const extendedCookedChar = peekExtendedUnicodeEscape();
+                    if (extendedCookedChar >= 0 && isIdentifierStart(extendedCookedChar, languageVersion)) {
+                        pos += 3;
+                        tokenFlags |= TokenFlags.ExtendedUnicodeEscape;
+                        tokenValue = scanExtendedUnicodeEscape() + scanIdentifierParts();
+                        return token = getIdentifierToken();
+                    }
+
+                    const cookedChar = peekUnicodeEscape();
+                    if (cookedChar >= 0 && isIdentifierStart(cookedChar, languageVersion)) {
+                        pos += 6;
+                        tokenValue = String.fromCharCode(cookedChar) + scanIdentifierParts();
+                        return token = getIdentifierToken();
+                    }
+                    error(Diagnostics.Invalid_character);
+                    pos++;
+                    return token = SyntaxKind.Unknown;
             }
 
-            if (isIdentifierStart(ch, ScriptTarget.Latest)) {
-                while (isIdentifierPart(text.charCodeAt(pos), ScriptTarget.Latest) && pos < end) {
-                    pos++;
-                }
+            if (isIdentifierStart(ch, languageVersion)) {
+                let char = ch;
+                while (pos < end && isIdentifierPart(char = codePointAt(text, pos), languageVersion)) pos += charSize(char);
                 tokenValue = text.substring(tokenPos, pos);
+                if (char === CharacterCodes.backslash) {
+                    tokenValue += scanIdentifierParts();
+                }
                 return token = getIdentifierToken();
             }
             else {
@@ -2239,4 +2289,12 @@ namespace ts {
         }
         return first;
     };
+
+    /* @internal */
+    function charSize(ch: number) {
+        if (ch >= 0x10000) {
+            return 2;
+        }
+        return 1;
+    }
 }

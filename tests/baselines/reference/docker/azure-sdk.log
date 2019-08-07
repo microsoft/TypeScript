@@ -5,15 +5,6 @@ Rush Multi-Project Build Tool 5.X.X - https://rushjs.io
 Node.js version is 12.7.0 (pre-LTS)
 Starting "rush rebuild"
 Executing a maximum of ?simultaneous processes...
-XX of XX: [@azure/abort-controller] completed successfully in ? seconds
-XX of XX: [@azure/core-asynciterator-polyfill] completed successfully in ? seconds
-XX of XX: [@azure/core-auth] completed successfully in ? seconds
-XX of XX: [@azure/core-paging] completed successfully in ? seconds
-XX of XX: [@azure/cosmos] completed successfully in ? seconds
-Warning: You have changed the public API signature for this project. Updating review/service-bus.api.md
-XX of XX: [@azure/storage-blob] completed successfully in ? seconds
-XX of XX: [@azure/storage-file] completed successfully in ? seconds
-XX of XX: [@azure/storage-queue] completed successfully in ? seconds
 npm ERR! code ELIFECYCLE
 npm ERR! errno 2
 npm ERR! @azure/core-http@X.X.X-preview.2 build:tsc: `tsc -p tsconfig.es.json`
@@ -34,14 +25,25 @@ npm ERR! This is probably not a problem with npm. There is likely additional log
 npm ERR! A complete log of this run can be found in:
 npm ERR!     /root/.npm/_logs/XXXX-XX-XXXXXXXXX-debug.log
 ERROR: "build:lib" exited with 1.
+XX of XX: [@azure/core-tracing] completed successfully in ? seconds
 XX of XX: [@azure/event-processor-host] completed successfully in ? seconds
+XX of XX: [@azure/abort-controller] completed successfully in ? seconds
+XX of XX: [@azure/core-asynciterator-polyfill] completed successfully in ? seconds
+XX of XX: [@azure/core-auth] completed successfully in ? seconds
+XX of XX: [@azure/core-paging] completed successfully in ? seconds
+XX of XX: [@azure/cosmos] completed successfully in ? seconds
+Warning: You have changed the public API signature for this project. Updating review/service-bus.api.md
+XX of XX: [@azure/storage-blob] completed successfully in ? seconds
+XX of XX: [@azure/storage-file] completed successfully in ? seconds
+XX of XX: [@azure/storage-queue] completed successfully in ? seconds
 XX of XX: [testhub] completed successfully in ? seconds
-SUCCESS (10)
+SUCCESS (11)
 ================================
 @azure/abort-controller (? seconds)
 @azure/core-asynciterator-polyfill (? seconds)
 @azure/core-auth (? seconds)
 @azure/core-paging (? seconds)
+@azure/core-tracing (? seconds)
 @azure/cosmos (? seconds)
 @azure/event-processor-host (? seconds)
 @azure/storage-blob (? seconds)
@@ -67,7 +69,7 @@ BLOCKED (8)
 ================================
 FAILURE (1)
 ================================
-@azure/core-http (? seconds)
+@azure/core-http ( ? seconds)
 npm ERR! code ELIFECYCLE
 npm ERR! errno 2
 npm ERR! @azure/core-http@X.X.X-preview.2 build:tsc: `tsc -p tsconfig.es.json`
@@ -95,7 +97,7 @@ rush rebuild - Errors! ( ? seconds)
 
 
 Standard error:
-XX of XX: [@azure/service-bus] completed with warnings in ? seconds
+
 XX of XX: [@azure/core-http] failed to build!
 XX of XX: [@azure/core-arm] blocked by [@azure/core-http]!
 XX of XX: [@azure/keyvault-certificates] blocked by [@azure/core-http]!
@@ -105,4 +107,5 @@ XX of XX: [@azure/identity] blocked by [@azure/core-http]!
 XX of XX: [@azure/core-amqp] blocked by [@azure/core-http]!
 XX of XX: [@azure/event-hubs] blocked by [@azure/core-http]!
 XX of XX: [@azure/template] blocked by [@azure/core-http]!
+XX of XX: [@azure/service-bus] completed with warnings in ? seconds
 [@azure/core-http] Returned error code: 1
