@@ -1,0 +1,19 @@
+=== tests/cases/conformance/classes/propertyMemberDeclarations/memberAccessorDeclarations/ambientAccessors.ts ===
+// ok to use accessors in ambient class in ES3
+declare class C {
+>C : C
+
+    get x(): string;
+>x : string
+
+    set x(value: string);
+>x : string
+>value : string
+
+    static get y(): string;
+>y : string
+
+    static set y(value: string);
+>y : string
+>value : string
+}

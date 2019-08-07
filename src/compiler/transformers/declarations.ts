@@ -830,10 +830,32 @@ namespace ts {
                         return cleanup(sig);
                     }
                     case SyntaxKind.GetAccessor: {
+                        // For now, only emit class accessors as accessors if they were already declared in an ambient context.
+                        if (input.flags & NodeFlags.Ambient) {
+                            const accessorType = getTypeAnnotationFromAllAccessorDeclarations(input);
+                            return cleanup(updateGetAccessor(
+                                input,
+                                /*decorators*/ undefined,
+                                ensureModifiers(input),
+                                input.name,
+                                updateParamsList(input, input.parameters),
+                                !hasModifier(input, ModifierFlags.Private) ? ensureType(input, accessorType) : undefined,
+                                /*body*/ undefined));
+                        }
                         const newNode = ensureAccessor(input);
                         return cleanup(newNode);
                     }
                     case SyntaxKind.SetAccessor: {
+                        // For now, only emit class accessors as accessors if they were already declared in an ambient context.
+                        if (input.flags & NodeFlags.Ambient) {
+                            return cleanup(updateSetAccessor(
+                                input,
+                                /*decorators*/ undefined,
+                                ensureModifiers(input),
+                                input.name,
+                                updateParamsList(input, input.parameters),
+                                /*body*/ undefined));
+                        }
                         const newNode = ensureAccessor(input);
                         return cleanup(newNode);
                     }

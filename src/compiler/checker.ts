@@ -33082,13 +33082,15 @@ namespace ts {
 
         function checkGrammarAccessor(accessor: AccessorLike): boolean {
             if (isAccessorDeclaration(accessor)) {
-                if (languageVersion < ScriptTarget.ES5) {
-                    return grammarErrorOnNode(accessor.name, Diagnostics.Accessors_are_only_available_when_targeting_ECMAScript_5_and_higher);
+                if (!(accessor.flags & NodeFlags.Ambient)) {
+                    if (languageVersion < ScriptTarget.ES5) {
+                        return grammarErrorOnNode(accessor.name, Diagnostics.Accessors_are_only_available_when_targeting_ECMAScript_5_and_higher);
+                    }
+                    else if (accessor.body === undefined && !hasModifier(accessor, ModifierFlags.Abstract) && !(accessor.flags & NodeFlags.Ambient)) {
+                        return grammarErrorAtPos(accessor, accessor.end - 1, ";".length, Diagnostics._0_expected, "{");
+                    }
                 }
-                else if (accessor.body === undefined && !hasModifier(accessor, ModifierFlags.Abstract) && !(accessor.flags & NodeFlags.Ambient)) {
-                    return grammarErrorAtPos(accessor, accessor.end - 1, ";".length, Diagnostics._0_expected, "{");
-                }
-                else if (accessor.body && hasModifier(accessor, ModifierFlags.Abstract)) {
+                if (accessor.body && hasModifier(accessor, ModifierFlags.Abstract)) {
                     return grammarErrorOnNode(accessor, Diagnostics.An_abstract_accessor_cannot_have_an_implementation);
                 }
             }
