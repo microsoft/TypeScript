@@ -327,7 +327,7 @@ export class someClass2 { }`);
             const allFiles = [libFile, ...core, logic[1], ...tests];
             const host = createTsBuildWatchSystem(allFiles, { currentDirectory: projectsLocation });
             createSolutionBuilderWithWatch(host, [`${project}/${SubProject.tests}`]);
-            checkWatchedFiles(host, [core[0], core[1], core[2]!, logic[0], ...tests].map(f => f.path.toLowerCase())); // TODO: type assertion should be necessary
+            checkWatchedFiles(host, [core[0], core[1], core[2]!, logic[0], ...tests].map(f => f.path.toLowerCase()));
             checkWatchedDirectories(host, emptyArray, /*recursive*/ false);
             checkWatchedDirectories(host, [projectPath(SubProject.core)], /*recursive*/ true);
             checkOutputErrorsInitial(host, [
