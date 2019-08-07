@@ -1526,14 +1526,13 @@ namespace vfs {
         }
         return typeof value === "string" || Buffer.isBuffer(value) ? new File(value) : new Directory(value);
     }
-    /* eslint-enable no-null/no-null */
 
     export function formatPatch(patch: FileSet): string;
     export function formatPatch(patch: FileSet | undefined): string | null;
     export function formatPatch(patch: FileSet | undefined) {
-        // tslint:disable-next-line:no-null-keyword
         return patch ? formatPatchWorker("", patch) : null;
     }
+    /* eslint-enable no-null/no-null */
 
     function formatPatchWorker(dirname: string, container: FileSet): string {
         let text = "";
@@ -1568,7 +1567,7 @@ namespace vfs {
     }
 
     export function iteratePatch(patch: FileSet | undefined): IterableIterator<[string, string]> | null {
-        // tslint:disable-next-line:no-null-keyword
+        // eslint-disable-next-line no-null/no-null
         return patch ? Harness.Compiler.iterateOutputs(iteratePatchWorker("", patch)) : null;
     }
 

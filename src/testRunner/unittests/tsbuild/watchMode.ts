@@ -135,7 +135,7 @@ namespace ts.tscWatch {
             tests = subProjectFiles(SubProject.tests);
             ui = subProjectFiles(SubProject.ui);
             allFiles = [libFile, ...core, ...logic, ...tests, ...ui];
-            testProjectExpectedWatchedFiles = [core[0], core[1], core[2]!, ...logic, ...tests].map(f => f.path.toLowerCase()); // tslint:disable-line no-unnecessary-type-assertion (TODO: type assertion should be necessary)
+            testProjectExpectedWatchedFiles = [core[0], core[1], core[2]!, ...logic, ...tests].map(f => f.path.toLowerCase());
             testProjectExpectedWatchedDirectoriesRecursive = [projectPath(SubProject.core), projectPath(SubProject.logic)];
         });
 
