@@ -199,9 +199,6 @@ namespace ts.server {
 
         private readonly cancellationToken: ThrottledCancellationToken;
 
-        /*@internal*/
-        importSuggestionsCache = Completions.createImportSuggestionsCache();
-
         public isNonTsProject() {
             updateProjectIfDirty(this);
             return allFilesAreJsOrDts(this);
@@ -235,6 +232,8 @@ namespace ts.server {
 
         /*@internal*/
         private readonly packageJsonCache: PackageJsonCache;
+
+        private importSuggestionsCache = Completions.createImportSuggestionsCache();
 
         /*@internal*/
         constructor(
@@ -1380,6 +1379,11 @@ namespace ts.server {
         onDiscoveredNewPackageJson(fileName: string) {
             this.packageJsonCache.addOrUpdate(fileName);
             this.watchPackageJsonFile(fileName);
+        }
+
+        /*@internal*/
+        getImportSuggestionsCache() {
+            return this.importSuggestionsCache;
         }
 
         private watchPackageJsonFile(fileName: string) {
