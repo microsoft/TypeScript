@@ -42,6 +42,11 @@ namespace ts.server {
         return false;
     }
 
+
+    function dtsChangeCanAffectEmit(compilationSettings: CompilerOptions) {
+        return getEmitDeclarations(compilationSettings) || !!compilationSettings.emitDecoratorMetadata;
+    }
+
     function formatDiag(fileName: NormalizedPath, project: Project, diag: Diagnostic): protocol.Diagnostic {
         const scriptInfo = project.getScriptInfoForNormalizedPath(fileName)!; // TODO: GH#18217
         return {
@@ -1597,10 +1602,6 @@ namespace ts.server {
             const info = this.projectService.getScriptInfo(args.file);
             if (!info) {
                 return emptyArray;
-            }
-
-            function dtsChangeCanAffectEmit(compilationSettings: CompilerOptions) {
-                return getEmitDeclarations(compilationSettings) || !!compilationSettings.emitDecoratorMetadata;
             }
 
             return combineProjectOutput(
