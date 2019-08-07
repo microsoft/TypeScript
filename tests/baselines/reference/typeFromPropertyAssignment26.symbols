@@ -1,10 +1,10 @@
 === tests/cases/conformance/salsa/bug24730.js ===
 var UI = {}
->UI : Symbol(UI, Decl(bug24730.js, 0, 3), Decl(bug24730.js, 0, 11))
+>UI : Symbol(UI, Decl(bug24730.js, 0, 3), Decl(bug24730.js, 0, 11), Decl(bug24730.js, 5, 2))
 
 UI.TreeElement = class {
 >UI.TreeElement : Symbol(UI.TreeElement, Decl(bug24730.js, 0, 11))
->UI : Symbol(UI, Decl(bug24730.js, 0, 3), Decl(bug24730.js, 0, 11))
+>UI : Symbol(UI, Decl(bug24730.js, 0, 3), Decl(bug24730.js, 0, 11), Decl(bug24730.js, 5, 2))
 >TreeElement : Symbol(UI.TreeElement, Decl(bug24730.js, 0, 11))
 
     constructor() {
@@ -16,16 +16,16 @@ UI.TreeElement = class {
 };
 UI.context = new UI.TreeElement()
 >UI.context : Symbol(UI.context, Decl(bug24730.js, 5, 2))
->UI : Symbol(UI, Decl(bug24730.js, 0, 3), Decl(bug24730.js, 0, 11))
+>UI : Symbol(UI, Decl(bug24730.js, 0, 3), Decl(bug24730.js, 0, 11), Decl(bug24730.js, 5, 2))
 >context : Symbol(UI.context, Decl(bug24730.js, 5, 2))
 >UI.TreeElement : Symbol(UI.TreeElement, Decl(bug24730.js, 0, 11))
->UI : Symbol(UI, Decl(bug24730.js, 0, 3), Decl(bug24730.js, 0, 11))
+>UI : Symbol(UI, Decl(bug24730.js, 0, 3), Decl(bug24730.js, 0, 11), Decl(bug24730.js, 5, 2))
 >TreeElement : Symbol(UI.TreeElement, Decl(bug24730.js, 0, 11))
 
 class C extends UI.TreeElement {
 >C : Symbol(C, Decl(bug24730.js, 6, 33))
 >UI.TreeElement : Symbol(UI.TreeElement, Decl(bug24730.js, 0, 11))
->UI : Symbol(UI, Decl(bug24730.js, 0, 3), Decl(bug24730.js, 0, 11))
+>UI : Symbol(UI, Decl(bug24730.js, 0, 3), Decl(bug24730.js, 0, 11), Decl(bug24730.js, 5, 2))
 >TreeElement : Symbol(UI.TreeElement, Decl(bug24730.js, 0, 11))
 
     onpopulate() {

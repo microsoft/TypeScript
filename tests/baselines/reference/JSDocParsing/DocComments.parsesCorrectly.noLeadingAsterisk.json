@@ -17,6 +17,7 @@
                 "end": 13,
                 "modifierFlagsCache": 0,
                 "transformFlags": 0,
+                "originalKeywordKind": "TypeKeyword",
                 "escapedText": "type"
             },
             "typeExpression": {

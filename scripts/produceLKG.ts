@@ -30,7 +30,7 @@ async function copyLocalizedDiagnostics() {
     for (const d of dir) {
         const fileName = path.join(source, d);
         if (fs.statSync(fileName).isDirectory()) {
-            if (d === 'tslint') continue;
+            if (d === 'tslint' || d === 'enu') continue;
             await fs.copy(fileName, path.join(dest, d));
         }
     }

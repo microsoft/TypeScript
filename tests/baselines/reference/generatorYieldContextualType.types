@@ -6,7 +6,7 @@ declare function f1<T, R, S>(gen: () => Generator<R, T, S>): void;
 f1<0, 0, 1>(function* () {
 >f1<0, 0, 1>(function* () {	const a = yield 0;	return 0;}) : void
 >f1 : <T, R, S>(gen: () => Generator<R, T, S>) => void
->function* () {	const a = yield 0;	return 0;} : () => Generator<0, 0, unknown>
+>function* () {	const a = yield 0;	return 0;} : () => Generator<0, 0, 1>
 
 	const a = yield 0;
 >a : 1
@@ -25,7 +25,7 @@ declare function f2<T, R, S>(gen: () => Generator<R, T, S> | AsyncGenerator<R, T
 f2<0, 0, 1>(async function* () {
 >f2<0, 0, 1>(async function* () {	const a = yield 0;	return 0;}) : void
 >f2 : <T, R, S>(gen: () => Generator<R, T, S> | AsyncGenerator<R, T, S>) => void
->async function* () {	const a = yield 0;	return 0;} : () => AsyncGenerator<0, 0, unknown>
+>async function* () {	const a = yield 0;	return 0;} : () => AsyncGenerator<0, 0, 1>
 
 	const a = yield 0;
 >a : 1

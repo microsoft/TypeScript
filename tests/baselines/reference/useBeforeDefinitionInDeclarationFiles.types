@@ -1,0 +1,26 @@
+=== tests/cases/compiler/declaration.d.ts ===
+export declare class ClassWithSymbols {
+>ClassWithSymbols : ClassWithSymbols
+
+  public readonly [Namespace.locallyExportedCustomSymbol]: string;
+>[Namespace.locallyExportedCustomSymbol] : string
+>Namespace.locallyExportedCustomSymbol : unique symbol
+>Namespace : typeof Namespace
+>locallyExportedCustomSymbol : unique symbol
+
+  public [Namespace.fullyExportedCustomSymbol](): void;
+>[Namespace.fullyExportedCustomSymbol] : () => void
+>Namespace.fullyExportedCustomSymbol : unique symbol
+>Namespace : typeof Namespace
+>fullyExportedCustomSymbol : unique symbol
+}
+export namespace Namespace {
+>Namespace : typeof Namespace
+
+  export const locallyExportedCustomSymbol: unique symbol;
+>locallyExportedCustomSymbol : unique symbol
+
+  export const fullyExportedCustomSymbol: unique symbol;
+>fullyExportedCustomSymbol : unique symbol
+}
+

@@ -180,6 +180,18 @@ namespace ts.server {
         }
 
         msg(s: string, type: Msg = Msg.Err) {
+            switch (type) {
+                case Msg.Info:
+                    perfLogger.logInfoEvent(s);
+                break;
+                case Msg.Perf:
+                    perfLogger.logPerfEvent(s);
+                break;
+                default: // Msg.Err
+                    perfLogger.logErrEvent(s);
+                break;
+            }
+
             if (!this.canWrite) return;
 
             s = `[${nowString()}] ${s}\n`;

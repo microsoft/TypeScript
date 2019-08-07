@@ -29,7 +29,7 @@ async function * inferReturnType3() {
 }
 const assignability1: () => AsyncIterableIterator<number> = async function * () {
 >assignability1 : () => AsyncIterableIterator<number>
->async function * () {    yield "a";} : () => AsyncGenerator<string, void, unknown>
+>async function * () {    yield "a";} : () => AsyncGenerator<string, void, undefined>
 
     yield "a";
 >yield "a" : undefined
@@ -62,7 +62,7 @@ const assignability3: () => AsyncIterableIterator<number> = async function * () 
 };
 const assignability4: () => AsyncIterable<number> = async function * () {
 >assignability4 : () => AsyncIterable<number>
->async function * () {    yield "a";} : () => AsyncGenerator<string, void, unknown>
+>async function * () {    yield "a";} : () => AsyncGenerator<string, void, undefined>
 
     yield "a";
 >yield "a" : undefined
@@ -95,7 +95,7 @@ const assignability6: () => AsyncIterable<number> = async function * () {
 };
 const assignability7: () => AsyncIterator<number> = async function * () {
 >assignability7 : () => AsyncIterator<number, any, undefined>
->async function * () {    yield "a";} : () => AsyncGenerator<string, void, unknown>
+>async function * () {    yield "a";} : () => AsyncGenerator<string, void, undefined>
 
     yield "a";
 >yield "a" : undefined

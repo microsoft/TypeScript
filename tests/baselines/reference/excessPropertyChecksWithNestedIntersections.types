@@ -65,7 +65,7 @@ let e: D = { a: { x: 2 }, c: 5 }; // error - types of property x are incompatibl
 >c : number
 >5 : 5
 
-let f: D = { a: { x: 'hello', y: 2 }, c: 5 }; // should be an error
+let f: D = { a: { x: 'hello', y: 2 }, c: 5 }; // error - y does not exist in type A
 >f : D
 >{ a: { x: 'hello', y: 2 }, c: 5 } : { a: { x: string; y: number; }; c: number; }
 >a : { x: string; y: number; }

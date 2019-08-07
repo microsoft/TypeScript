@@ -20,7 +20,7 @@ let c: B = { a: { x: 'hello', y: 2 } }; // error - y does not exist in type A
 
 let d: D = { a: { x: 'hello' }, c: 5 }; // ok
 let e: D = { a: { x: 2 }, c: 5 }; // error - types of property x are incompatible
-let f: D = { a: { x: 'hello', y: 2 }, c: 5 }; // should be an error
+let f: D = { a: { x: 'hello', y: 2 }, c: 5 }; // error - y does not exist in type A
 
 // https://github.com/Microsoft/TypeScript/issues/18075
 
