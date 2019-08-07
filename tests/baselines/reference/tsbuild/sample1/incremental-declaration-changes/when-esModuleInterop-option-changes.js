@@ -37,8 +37,8 @@ exports.m = mod;
   "program": {
     "fileInfos": {
       "../../lib/lib.d.ts": {
-        "version": "-15964756381",
-        "signature": "-15964756381"
+        "version": "3858781397",
+        "signature": "3858781397"
       },
       "../core/index.ts": {
         "version": "-13851440507",

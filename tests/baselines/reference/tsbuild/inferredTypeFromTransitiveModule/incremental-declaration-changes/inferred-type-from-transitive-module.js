@@ -31,8 +31,8 @@ export declare const lazyBar: LazyAction<() => void, typeof import("./lazyIndex"
   "program": {
     "fileInfos": {
       "../../lib/lib.d.ts": {
-        "version": "-15964756381",
-        "signature": "-15964756381"
+        "version": "3858781397",
+        "signature": "3858781397"
       },
       "../bar.ts": {
         "version": "747071916",

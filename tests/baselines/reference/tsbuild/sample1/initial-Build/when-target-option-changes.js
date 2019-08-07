@@ -13,7 +13,7 @@ interface Number { toExponential: any; }
 interface Object {}
 interface RegExp {}
 interface String { charAt: any; }
-interface Array<T> {}
+interface Array<T> { length: number; [n: number]: T; }
 interface ReadonlyArray<T> {}
 declare const console: { log(msg: any): void; };
 
@@ -46,8 +46,8 @@ export function multiply(a, b) { return a * b; }
   "program": {
     "fileInfos": {
       "../../lib/lib.esnext.d.ts": {
-        "version": "-15964756381",
-        "signature": "-15964756381"
+        "version": "3858781397",
+        "signature": "3858781397"
       },
       "../../lib/lib.esnext.full.d.ts": {
         "version": "8926001564",
