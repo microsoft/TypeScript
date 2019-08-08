@@ -181,13 +181,13 @@ namespace ts.server {
             switch (type) {
                 case Msg.Info:
                     perfLogger.logInfoEvent(s);
-                break;
+                    break;
                 case Msg.Perf:
                     perfLogger.logPerfEvent(s);
-                break;
+                    break;
                 default: // Msg.Err
                     perfLogger.logErrEvent(s);
-                break;
+                    break;
             }
 
             if (!this.canWrite) return;
