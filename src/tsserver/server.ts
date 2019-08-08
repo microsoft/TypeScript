@@ -982,4 +982,12 @@ namespace ts.server {
     if (ts.sys.tryEnableSourceMapsForHost && /^development$/i.test(ts.sys.getEnvironmentVariable("NODE_ENV"))) {
         ts.sys.tryEnableSourceMapsForHost();
     }
+
+    // Overwrites the current console messages to instead write to
+    // the log. This is so that language service plugins which use
+    // console.log don't break the message passing between tsserver
+    // and the client
+    console.log = (...args) => logger.msg(args.length === 1 ? args[0] : args.join(", "), Msg.Info);
+    console.warn = (...args) => logger.msg(args.length === 1 ? args[0] : args.join(", "), Msg.Err);
+    console.error = (...args) => logger.msg(args.length === 1 ? args[0] : args.join(", "), Msg.Err);
 }
