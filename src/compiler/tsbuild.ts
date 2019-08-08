@@ -116,6 +116,7 @@ namespace ts {
         export interface UpstreamBlocked {
             type: UpToDateStatusType.UpstreamBlocked;
             upstreamProjectName: string;
+            upstreamProjectBlocked: boolean;
         }
 
         /**
@@ -1338,7 +1339,16 @@ namespace ts {
             if (status.type === UpToDateStatusType.UpstreamBlocked) {
                 reportAndStoreErrors(state, projectPath, config.errors);
                 projectPendingBuild.delete(projectPath);
-                if (options.verbose) reportStatus(state, Diagnostics.Skipping_build_of_project_0_because_its_dependency_1_has_errors, project, status.upstreamProjectName);
+                if (options.verbose) {
+                    reportStatus(
+                        state,
+                        status.upstreamProjectBlocked ?
+                            Diagnostics.Skipping_build_of_project_0_because_its_dependency_1_was_not_built :
+                            Diagnostics.Skipping_build_of_project_0_because_its_dependency_1_has_errors,
+                        project,
+                        status.upstreamProjectName
+                    );
+                }
                 continue;
             }
 
@@ -1540,10 +1550,12 @@ namespace ts {
                 }
 
                 // An upstream project is blocked
-                if (refStatus.type === UpToDateStatusType.Unbuildable) {
+                if (refStatus.type === UpToDateStatusType.Unbuildable ||
+                    refStatus.type === UpToDateStatusType.UpstreamBlocked) {
                     return {
                         type: UpToDateStatusType.UpstreamBlocked,
-                        upstreamProjectName: ref.path
+                        upstreamProjectName: ref.path,
+                        upstreamProjectBlocked: refStatus.type === UpToDateStatusType.UpstreamBlocked
                     };
                 }
 
@@ -2167,7 +2179,9 @@ namespace ts {
             case UpToDateStatusType.UpstreamBlocked:
                 return reportStatus(
                     state,
-                    Diagnostics.Project_0_can_t_be_built_because_its_dependency_1_has_errors,
+                    status.upstreamProjectBlocked ?
+                        Diagnostics.Project_0_can_t_be_built_because_its_dependency_1_was_not_built :
+                        Diagnostics.Project_0_can_t_be_built_because_its_dependency_1_has_errors,
                     relName(state, configFileName),
                     relName(state, status.upstreamProjectName)
                 );
