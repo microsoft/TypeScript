@@ -1,7 +1,7 @@
 Exit Code: 1
 Standard output:
 node_modules/@typescript-eslint/typescript-estree/dist/parser.d.ts(1,8): error TS1259: Module '"/prettier/prettier/node_modules/typescript/lib/typescript"' can only be default-imported using the 'esModuleInterop' flag
-src/cli/util.js(60,44): error TS2345: Argument of type 'null' is not assignable to parameter of type 'number | undefined'.
+src/cli/util.js(60,44): error TS2345: Argument of type 'null' is not assignable to parameter of type 'number'.
 src/cli/util.js(119,38): error TS2339: Property 'sync' does not exist on type '(...args: any[]) => any'.
 src/cli/util.js(372,29): error TS2532: Object is possibly 'undefined'.
 src/cli/util.js(372,64): error TS2339: Property 'length' does not exist on type 'Ignore'.
@@ -9,7 +9,7 @@ src/cli/util.js(413,36): error TS2345: Argument of type '{ dot: true; nodir: boo
   Object literal may only specify known properties, and 'nodir' does not exist in type 'GlobbyOptions'.
 src/cli/util.js(452,25): error TS2532: Object is possibly 'undefined'.
 src/cli/util.js(452,52): error TS2339: Property 'length' does not exist on type 'Ignore'.
-src/cli/util.js(510,44): error TS2345: Argument of type 'null' is not assignable to parameter of type 'number | undefined'.
+src/cli/util.js(510,44): error TS2345: Argument of type 'null' is not assignable to parameter of type 'number'.
 src/cli/util.js(531,37): error TS2339: Property 'grey' does not exist on type 'typeof import("../../../node_modules/chalk/types/index")'.
 src/cli/util.js(594,16): error TS2339: Property 'type' does not exist on type 'never'.
 src/cli/util.js(595,16): error TS2339: Property 'oppositeDescription' does not exist on type 'never'.

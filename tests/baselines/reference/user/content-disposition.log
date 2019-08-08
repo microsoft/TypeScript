@@ -1,0 +1,30 @@
+Exit Code: 1
+Standard output:
+node_modules/content-disposition/index.js(11,5): error TS1212: Identifier expected. 'public' is a reserved word in strict mode.
+node_modules/content-disposition/index.js(19,5): error TS1212: Identifier expected. 'private' is a reserved word in strict mode.
+node_modules/content-disposition/index.js(27,5): error TS1212: Identifier expected. 'private' is a reserved word in strict mode.
+node_modules/content-disposition/index.js(34,5): error TS1212: Identifier expected. 'private' is a reserved word in strict mode.
+node_modules/content-disposition/index.js(42,5): error TS1212: Identifier expected. 'private' is a reserved word in strict mode.
+node_modules/content-disposition/index.js(50,19): error TS1127: Invalid character.
+node_modules/content-disposition/index.js(52,5): error TS1212: Identifier expected. 'private' is a reserved word in strict mode.
+node_modules/content-disposition/index.js(59,5): error TS1212: Identifier expected. 'private' is a reserved word in strict mode.
+node_modules/content-disposition/index.js(70,39): error TS1127: Invalid character.
+node_modules/content-disposition/index.js(75,21): error TS1127: Invalid character.
+node_modules/content-disposition/index.js(86,5): error TS1212: Identifier expected. 'private' is a reserved word in strict mode.
+node_modules/content-disposition/index.js(112,5): error TS1212: Identifier expected. 'private' is a reserved word in strict mode.
+node_modules/content-disposition/index.js(128,5): error TS1212: Identifier expected. 'private' is a reserved word in strict mode.
+node_modules/content-disposition/index.js(141,5): error TS1212: Identifier expected. 'public' is a reserved word in strict mode.
+node_modules/content-disposition/index.js(163,5): error TS1212: Identifier expected. 'private' is a reserved word in strict mode.
+node_modules/content-disposition/index.js(224,5): error TS1212: Identifier expected. 'private' is a reserved word in strict mode.
+node_modules/content-disposition/index.js(262,5): error TS1212: Identifier expected. 'private' is a reserved word in strict mode.
+node_modules/content-disposition/index.js(298,5): error TS1212: Identifier expected. 'private' is a reserved word in strict mode.
+node_modules/content-disposition/index.js(311,5): error TS1212: Identifier expected. 'public' is a reserved word in strict mode.
+node_modules/content-disposition/index.js(392,5): error TS1212: Identifier expected. 'private' is a reserved word in strict mode.
+node_modules/content-disposition/index.js(404,5): error TS1212: Identifier expected. 'private' is a reserved word in strict mode.
+node_modules/content-disposition/index.js(419,5): error TS1212: Identifier expected. 'private' is a reserved word in strict mode.
+node_modules/content-disposition/index.js(433,5): error TS1212: Identifier expected. 'private' is a reserved word in strict mode.
+node_modules/content-disposition/index.js(449,5): error TS1212: Identifier expected. 'public' is a reserved word in strict mode.
+
+
+
+Standard error:
