@@ -1,8 +1,10 @@
 tests/cases/compiler/discriminantPropertyCheck.ts(29,9): error TS2532: Object is possibly 'undefined'.
 tests/cases/compiler/discriminantPropertyCheck.ts(65,9): error TS2532: Object is possibly 'undefined'.
+tests/cases/compiler/discriminantPropertyCheck.ts(173,23): error TS2345: Argument of type 'any' is not assignable to parameter of type 'never'.
+tests/cases/compiler/discriminantPropertyCheck.ts(173,29): error TS2339: Property 'type' does not exist on type 'never'.
 
 
-==== tests/cases/compiler/discriminantPropertyCheck.ts (2 errors) ====
+==== tests/cases/compiler/discriminantPropertyCheck.ts (4 errors) ====
     type Item = Item1 | Item2;
     
     interface Base {
@@ -178,7 +180,12 @@ tests/cases/compiler/discriminantPropertyCheck.ts(65,9): error TS2532: Object is
                 case BarEnum.bar2:
                     break;
                 default:
-                    never(value.type);
+                    never(value);
+                    never(value.type); // Error becasuse `value` type is never, so `value.type` becomes `any`.
+                          ~~~~~~~~~~
+!!! error TS2345: Argument of type 'any' is not assignable to parameter of type 'never'.
+                                ~~~~
+!!! error TS2339: Property 'type' does not exist on type 'never'.
             }
         }
     }

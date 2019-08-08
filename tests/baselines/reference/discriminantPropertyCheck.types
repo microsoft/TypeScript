@@ -491,12 +491,17 @@ function func3(value: Partial<UnionOfBar>) {
 
                 break;
             default:
-                never(value.type);
+                never(value);
+>never(value) : never
+>never : (value: never) => never
+>value : never
+
+                never(value.type); // Error becasuse `value` type is never, so `value.type` becomes `any`.
 >never(value.type) : never
 >never : (value: never) => never
->value.type : never
->value : Partial<TypeBar1> | Partial<TypeBar2>
->type : never
+>value.type : any
+>value : never
+>type : any
         }
     }
 }

@@ -1,0 +1,167 @@
+=== tests/cases/compiler/discriminatedUnionOfNestedObject.ts ===
+// Repro from #18758
+
+type A = { type2: "a", a: number }
+>A : Symbol(A, Decl(discriminatedUnionOfNestedObject.ts, 0, 0))
+>type2 : Symbol(type2, Decl(discriminatedUnionOfNestedObject.ts, 2, 10))
+>a : Symbol(a, Decl(discriminatedUnionOfNestedObject.ts, 2, 22))
+
+type B = { type2: "b", b: number }
+>B : Symbol(B, Decl(discriminatedUnionOfNestedObject.ts, 2, 34))
+>type2 : Symbol(type2, Decl(discriminatedUnionOfNestedObject.ts, 3, 10))
+>b : Symbol(b, Decl(discriminatedUnionOfNestedObject.ts, 3, 22))
+
+type C = { type2: "c", b: number | string }
+>C : Symbol(C, Decl(discriminatedUnionOfNestedObject.ts, 3, 34))
+>type2 : Symbol(type2, Decl(discriminatedUnionOfNestedObject.ts, 4, 10))
+>b : Symbol(b, Decl(discriminatedUnionOfNestedObject.ts, 4, 22))
+
+type X = { type1: A, x: string }
+>X : Symbol(X, Decl(discriminatedUnionOfNestedObject.ts, 4, 43))
+>type1 : Symbol(type1, Decl(discriminatedUnionOfNestedObject.ts, 6, 10))
+>A : Symbol(A, Decl(discriminatedUnionOfNestedObject.ts, 0, 0))
+>x : Symbol(x, Decl(discriminatedUnionOfNestedObject.ts, 6, 20))
+
+type Y = { type1: B, y: string }
+>Y : Symbol(Y, Decl(discriminatedUnionOfNestedObject.ts, 6, 32))
+>type1 : Symbol(type1, Decl(discriminatedUnionOfNestedObject.ts, 7, 10))
+>B : Symbol(B, Decl(discriminatedUnionOfNestedObject.ts, 2, 34))
+>y : Symbol(y, Decl(discriminatedUnionOfNestedObject.ts, 7, 20))
+
+type Z = { type1: C, z: string }
+>Z : Symbol(Z, Decl(discriminatedUnionOfNestedObject.ts, 7, 32))
+>type1 : Symbol(type1, Decl(discriminatedUnionOfNestedObject.ts, 8, 10))
+>C : Symbol(C, Decl(discriminatedUnionOfNestedObject.ts, 3, 34))
+>z : Symbol(z, Decl(discriminatedUnionOfNestedObject.ts, 8, 20))
+
+let x!: X | Y
+>x : Symbol(x, Decl(discriminatedUnionOfNestedObject.ts, 10, 3))
+>X : Symbol(X, Decl(discriminatedUnionOfNestedObject.ts, 4, 43))
+>Y : Symbol(Y, Decl(discriminatedUnionOfNestedObject.ts, 6, 32))
+
+if (x.type1.type2 === "a") {
+>x.type1.type2 : Symbol(type2, Decl(discriminatedUnionOfNestedObject.ts, 2, 10), Decl(discriminatedUnionOfNestedObject.ts, 3, 10))
+>x.type1 : Symbol(type1, Decl(discriminatedUnionOfNestedObject.ts, 6, 10), Decl(discriminatedUnionOfNestedObject.ts, 7, 10))
+>x : Symbol(x, Decl(discriminatedUnionOfNestedObject.ts, 10, 3))
+>type1 : Symbol(type1, Decl(discriminatedUnionOfNestedObject.ts, 6, 10), Decl(discriminatedUnionOfNestedObject.ts, 7, 10))
+>type2 : Symbol(type2, Decl(discriminatedUnionOfNestedObject.ts, 2, 10), Decl(discriminatedUnionOfNestedObject.ts, 3, 10))
+
+	x.x // typeof x is X
+>x.x : Symbol(x, Decl(discriminatedUnionOfNestedObject.ts, 6, 20))
+>x : Symbol(x, Decl(discriminatedUnionOfNestedObject.ts, 10, 3))
+>x : Symbol(x, Decl(discriminatedUnionOfNestedObject.ts, 6, 20))
+
+} else if(x.type1.type2 === "b") {
+>x.type1.type2 : Symbol(type2, Decl(discriminatedUnionOfNestedObject.ts, 3, 10))
+>x.type1 : Symbol(type1, Decl(discriminatedUnionOfNestedObject.ts, 7, 10))
+>x : Symbol(x, Decl(discriminatedUnionOfNestedObject.ts, 10, 3))
+>type1 : Symbol(type1, Decl(discriminatedUnionOfNestedObject.ts, 7, 10))
+>type2 : Symbol(type2, Decl(discriminatedUnionOfNestedObject.ts, 3, 10))
+
+  x.y // typeof x is Y
+>x.y : Symbol(y, Decl(discriminatedUnionOfNestedObject.ts, 7, 20))
+>x : Symbol(x, Decl(discriminatedUnionOfNestedObject.ts, 10, 3))
+>y : Symbol(y, Decl(discriminatedUnionOfNestedObject.ts, 7, 20))
+} 
+
+
+switch(x.type1.type2) {
+>x.type1.type2 : Symbol(type2, Decl(discriminatedUnionOfNestedObject.ts, 2, 10), Decl(discriminatedUnionOfNestedObject.ts, 3, 10))
+>x.type1 : Symbol(type1, Decl(discriminatedUnionOfNestedObject.ts, 6, 10), Decl(discriminatedUnionOfNestedObject.ts, 7, 10))
+>x : Symbol(x, Decl(discriminatedUnionOfNestedObject.ts, 10, 3))
+>type1 : Symbol(type1, Decl(discriminatedUnionOfNestedObject.ts, 6, 10), Decl(discriminatedUnionOfNestedObject.ts, 7, 10))
+>type2 : Symbol(type2, Decl(discriminatedUnionOfNestedObject.ts, 2, 10), Decl(discriminatedUnionOfNestedObject.ts, 3, 10))
+
+  case "a":
+    x.x // typeof x is X
+>x.x : Symbol(x, Decl(discriminatedUnionOfNestedObject.ts, 6, 20))
+>x : Symbol(x, Decl(discriminatedUnionOfNestedObject.ts, 10, 3))
+>x : Symbol(x, Decl(discriminatedUnionOfNestedObject.ts, 6, 20))
+
+    break;
+  case "b":
+    x.y // typeof x is Y
+>x.y : Symbol(y, Decl(discriminatedUnionOfNestedObject.ts, 7, 20))
+>x : Symbol(x, Decl(discriminatedUnionOfNestedObject.ts, 10, 3))
+>y : Symbol(y, Decl(discriminatedUnionOfNestedObject.ts, 7, 20))
+
+    break;
+}
+
+let z!: Y | Z
+>z : Symbol(z, Decl(discriminatedUnionOfNestedObject.ts, 28, 3))
+>Y : Symbol(Y, Decl(discriminatedUnionOfNestedObject.ts, 6, 32))
+>Z : Symbol(Z, Decl(discriminatedUnionOfNestedObject.ts, 7, 32))
+
+if(z.type1.b == "") {
+>z.type1.b : Symbol(b, Decl(discriminatedUnionOfNestedObject.ts, 3, 22), Decl(discriminatedUnionOfNestedObject.ts, 4, 22))
+>z.type1 : Symbol(type1, Decl(discriminatedUnionOfNestedObject.ts, 7, 10), Decl(discriminatedUnionOfNestedObject.ts, 8, 10))
+>z : Symbol(z, Decl(discriminatedUnionOfNestedObject.ts, 28, 3))
+>type1 : Symbol(type1, Decl(discriminatedUnionOfNestedObject.ts, 7, 10), Decl(discriminatedUnionOfNestedObject.ts, 8, 10))
+>b : Symbol(b, Decl(discriminatedUnionOfNestedObject.ts, 3, 22), Decl(discriminatedUnionOfNestedObject.ts, 4, 22))
+
+  z.z // typeof z is x
+>z.z : Symbol(z, Decl(discriminatedUnionOfNestedObject.ts, 8, 20))
+>z : Symbol(z, Decl(discriminatedUnionOfNestedObject.ts, 28, 3))
+>z : Symbol(z, Decl(discriminatedUnionOfNestedObject.ts, 8, 20))
+}
+
+type S = {sub: {type0: X}, s: string }
+>S : Symbol(S, Decl(discriminatedUnionOfNestedObject.ts, 32, 1))
+>sub : Symbol(sub, Decl(discriminatedUnionOfNestedObject.ts, 34, 10))
+>type0 : Symbol(type0, Decl(discriminatedUnionOfNestedObject.ts, 34, 16))
+>X : Symbol(X, Decl(discriminatedUnionOfNestedObject.ts, 4, 43))
+>s : Symbol(s, Decl(discriminatedUnionOfNestedObject.ts, 34, 26))
+
+type T = {sub: {type0: Y}, t: string } 
+>T : Symbol(T, Decl(discriminatedUnionOfNestedObject.ts, 34, 38))
+>sub : Symbol(sub, Decl(discriminatedUnionOfNestedObject.ts, 35, 10))
+>type0 : Symbol(type0, Decl(discriminatedUnionOfNestedObject.ts, 35, 16))
+>Y : Symbol(Y, Decl(discriminatedUnionOfNestedObject.ts, 6, 32))
+>t : Symbol(t, Decl(discriminatedUnionOfNestedObject.ts, 35, 26))
+
+let s!: S | T
+>s : Symbol(s, Decl(discriminatedUnionOfNestedObject.ts, 37, 3))
+>S : Symbol(S, Decl(discriminatedUnionOfNestedObject.ts, 32, 1))
+>T : Symbol(T, Decl(discriminatedUnionOfNestedObject.ts, 34, 38))
+
+if(s.sub.type0.type1.type2 === "a") {
+>s.sub.type0.type1.type2 : Symbol(type2, Decl(discriminatedUnionOfNestedObject.ts, 2, 10), Decl(discriminatedUnionOfNestedObject.ts, 3, 10))
+>s.sub.type0.type1 : Symbol(type1, Decl(discriminatedUnionOfNestedObject.ts, 6, 10), Decl(discriminatedUnionOfNestedObject.ts, 7, 10))
+>s.sub.type0 : Symbol(type0, Decl(discriminatedUnionOfNestedObject.ts, 34, 16), Decl(discriminatedUnionOfNestedObject.ts, 35, 16))
+>s.sub : Symbol(sub, Decl(discriminatedUnionOfNestedObject.ts, 34, 10), Decl(discriminatedUnionOfNestedObject.ts, 35, 10))
+>s : Symbol(s, Decl(discriminatedUnionOfNestedObject.ts, 37, 3))
+>sub : Symbol(sub, Decl(discriminatedUnionOfNestedObject.ts, 34, 10), Decl(discriminatedUnionOfNestedObject.ts, 35, 10))
+>type0 : Symbol(type0, Decl(discriminatedUnionOfNestedObject.ts, 34, 16), Decl(discriminatedUnionOfNestedObject.ts, 35, 16))
+>type1 : Symbol(type1, Decl(discriminatedUnionOfNestedObject.ts, 6, 10), Decl(discriminatedUnionOfNestedObject.ts, 7, 10))
+>type2 : Symbol(type2, Decl(discriminatedUnionOfNestedObject.ts, 2, 10), Decl(discriminatedUnionOfNestedObject.ts, 3, 10))
+
+  s.s // typeof s is S
+>s.s : Symbol(s, Decl(discriminatedUnionOfNestedObject.ts, 34, 26))
+>s : Symbol(s, Decl(discriminatedUnionOfNestedObject.ts, 37, 3))
+>s : Symbol(s, Decl(discriminatedUnionOfNestedObject.ts, 34, 26))
+
+  s.sub.type0.x // type of s.sub.type is X
+>s.sub.type0.x : Symbol(x, Decl(discriminatedUnionOfNestedObject.ts, 6, 20))
+>s.sub.type0 : Symbol(type0, Decl(discriminatedUnionOfNestedObject.ts, 34, 16))
+>s.sub : Symbol(sub, Decl(discriminatedUnionOfNestedObject.ts, 34, 10))
+>s : Symbol(s, Decl(discriminatedUnionOfNestedObject.ts, 37, 3))
+>sub : Symbol(sub, Decl(discriminatedUnionOfNestedObject.ts, 34, 10))
+>type0 : Symbol(type0, Decl(discriminatedUnionOfNestedObject.ts, 34, 16))
+>x : Symbol(x, Decl(discriminatedUnionOfNestedObject.ts, 6, 20))
+
+  s.sub.type0.type1.a // type of s.sub.type.type is A
+>s.sub.type0.type1.a : Symbol(a, Decl(discriminatedUnionOfNestedObject.ts, 2, 22))
+>s.sub.type0.type1 : Symbol(type1, Decl(discriminatedUnionOfNestedObject.ts, 6, 10))
+>s.sub.type0 : Symbol(type0, Decl(discriminatedUnionOfNestedObject.ts, 34, 16))
+>s.sub : Symbol(sub, Decl(discriminatedUnionOfNestedObject.ts, 34, 10))
+>s : Symbol(s, Decl(discriminatedUnionOfNestedObject.ts, 37, 3))
+>sub : Symbol(sub, Decl(discriminatedUnionOfNestedObject.ts, 34, 10))
+>type0 : Symbol(type0, Decl(discriminatedUnionOfNestedObject.ts, 34, 16))
+>type1 : Symbol(type1, Decl(discriminatedUnionOfNestedObject.ts, 6, 10))
+>a : Symbol(a, Decl(discriminatedUnionOfNestedObject.ts, 2, 22))
+
+} else {
+  s.s // type error!
+>s : Symbol(s, Decl(discriminatedUnionOfNestedObject.ts, 37, 3))
+}

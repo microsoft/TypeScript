@@ -17265,21 +17265,57 @@ namespace ts {
                 if (!(computedType.flags & TypeFlags.Union) || !isAccessExpression(expr)) {
                     return false;
                 }
-                const name = getAccessedPropertyName(expr);
-                if (name === undefined) {
+                let stepExpr: Expression = expr;
+                let name = getAccessedPropertyName(expr);
+                for (; isAccessExpression(stepExpr) && !!name && !isMatchingReference(reference, stepExpr); stepExpr = stepExpr.expression) {
+                    name = getAccessedPropertyName(stepExpr);
+                }
+                if (!name || !isMatchingReference(reference, stepExpr)) {
                     return false;
                 }
-                return isMatchingReference(reference, expr.expression) && isDiscriminantProperty(computedType, name);
+                if (isDiscriminantProperty(computedType, name)) {
+                    return true;
+                }
+                const prop = getUnionOrIntersectionProperty(<UnionType>computedType, name);
+                if (!prop) {
+                    return false;
+                }
+                const propType = getTypeOfSymbol(prop);
+                if (!(propType.flags & TypeFlags.Union)) {
+                    return false;
+                }
+                // When union Type has some non constraints type, we can't narrow Type.
+                // Now we consider instantiable type as non constraints type.
+                return !((<UnionType>propType).types.some(t => !!(t.flags & (TypeFlags.Instantiable | TypeFlags.Any))));
+            }
+
+            function narrowTypeByPropType(access: Expression, propName: __String, propType: Type): Type | undefined {
+                const candidatePropType = getTypeOfExpression(access);
+                const nextPropType = filterType(candidatePropType, t => isTypeComparableTo(getTypeOfPropertyOrIndexSignature(t, propName), propType));
+                if (isAccessExpression(access) && !isMatchingReference(reference, access)) {
+                    const nextPropName = getAccessedPropertyName(access);
+                    if (nextPropName === undefined) return undefined;
+                    return narrowTypeByPropType(access.expression, nextPropName, nextPropType);
+                }
+                return nextPropType;
             }
 
             function narrowTypeByDiscriminant(type: Type, access: AccessExpression, narrowType: (t: Type) => Type): Type {
                 const propName = getAccessedPropertyName(access);
-                if (propName === undefined) {
+                if (propName === undefined) return type;
+                const propType = getTypeOfExpression(access);
+                const narrowedPropType = propType && narrowType(propType);
+                if (propType === narrowedPropType) {
                     return type;
                 }
-                const propType = getTypeOfPropertyOfType(type, propName);
-                const narrowedPropType = propType && narrowType(propType);
-                return propType === narrowedPropType ? type : filterType(type, t => isTypeComparableTo(getTypeOfPropertyOrIndexSignature(t, propName), narrowedPropType!));
+                if (isAccessExpression(access.expression) && !isMatchingReference(reference, access)) {
+                    const narrowedType = narrowTypeByPropType(access.expression, propName, narrowedPropType);
+                    if (narrowedType === undefined) {
+                        return type;
+                    }
+                    return narrowedType;
+                }
+                return filterType(type, t => isTypeComparableTo(getTypeOfPropertyOrIndexSignature(t, propName), narrowedPropType));
             }
 
             function narrowTypeByTruthiness(type: Type, expr: Expression, assumeTrue: boolean): Type {

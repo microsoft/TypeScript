@@ -499,11 +499,13 @@ function func3(value: Partial<UnionOfBar>) {
 
                 break;
             default:
-                never(value.type);
+                never(value);
 >never : Symbol(never, Decl(discriminantPropertyCheck.ts, 148, 1))
->value.type : Symbol(type, Decl(discriminantPropertyCheck.ts, 160, 17), Decl(discriminantPropertyCheck.ts, 161, 17))
 >value : Symbol(value, Decl(discriminantPropertyCheck.ts, 163, 15))
->type : Symbol(type, Decl(discriminantPropertyCheck.ts, 160, 17), Decl(discriminantPropertyCheck.ts, 161, 17))
+
+                never(value.type); // Error becasuse `value` type is never, so `value.type` becomes `any`.
+>never : Symbol(never, Decl(discriminantPropertyCheck.ts, 148, 1))
+>value : Symbol(value, Decl(discriminantPropertyCheck.ts, 163, 15))
         }
     }
 }

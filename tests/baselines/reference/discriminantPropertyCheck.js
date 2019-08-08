@@ -170,7 +170,8 @@ function func3(value: Partial<UnionOfBar>) {
             case BarEnum.bar2:
                 break;
             default:
-                never(value.type);
+                never(value);
+                never(value.type); // Error becasuse `value` type is never, so `value.type` becomes `any`.
         }
     }
 }
@@ -264,7 +265,8 @@ function func3(value) {
             case 2 /* bar2 */:
                 break;
             default:
-                never(value.type);
+                never(value);
+                never(value.type); // Error becasuse `value` type is never, so `value.type` becomes `any`.
         }
     }
 }
