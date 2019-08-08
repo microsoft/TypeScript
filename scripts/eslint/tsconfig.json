@@ -16,7 +16,7 @@
         "strict": true,
         "module": "commonjs",
         "target": "es6",
-        "outDir": "../../built/eslint",
+        "outDir": "./built",
         "lib": ["es2015", "es2016"]
     },
 

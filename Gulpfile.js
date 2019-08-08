@@ -327,7 +327,7 @@ cleanTasks.push(cleanEslintRules);
 task("clean-eslint-rules", cleanEslintRules);
 task("clean-eslint-rules").description = "Cleans the outputs for the eslint rules";
 
-const runEslintRulesTests = () => runConsoleTests("built/eslint/tests", "mocha-fivemat-progress-reporter", /*runInParallel*/ false, /*watchMode*/ false);
+const runEslintRulesTests = () => runConsoleTests("scripts/eslint/built/tests", "mocha-fivemat-progress-reporter", /*runInParallel*/ false, /*watchMode*/ false);
 task("run-eslint-rules-tests", series(buildEslintRules, runEslintRulesTests));
 task("run-eslint-rules-tests").description = "Runs the eslint rule tests";
 
@@ -337,7 +337,7 @@ const eslint = (path) => async () => {
     const args = [
         "node_modules/eslint/bin/eslint",
         "--format", "autolinkable-stylish",
-        "--rulesdir", "built/eslint/rules/",
+        "--rulesdir", "scripts/eslint/built/rules",
         "--ext", ".ts",
         `"${ path }"`,
     ];
