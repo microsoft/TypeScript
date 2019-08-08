@@ -5,7 +5,7 @@ namespace ts.JsTyping {
         directoryExists(path: string): boolean;
         fileExists(fileName: string): boolean;
         readFile(path: string, encoding?: string): string | undefined;
-        readDirectory(rootDir: string, extensions: ReadonlyArray<string>, excludes: ReadonlyArray<string> | undefined, includes: ReadonlyArray<string> | undefined, depth?: number): string[];
+        readDirectory(rootDir: string, extensions: readonly string[], excludes: readonly string[] | undefined, includes: readonly string[] | undefined, depth?: number): string[];
     }
 
     interface PackageJson {
@@ -29,7 +29,7 @@ namespace ts.JsTyping {
         return availableVersion.compareTo(cachedTyping.version) <= 0;
     }
 
-    export const nodeCoreModuleList: ReadonlyArray<string> = [
+    export const nodeCoreModuleList: readonly string[] = [
         "assert",
         "async_hooks",
         "buffer",
@@ -109,7 +109,7 @@ namespace ts.JsTyping {
         safeList: SafeList,
         packageNameToTypingLocation: ReadonlyMap<CachedTyping>,
         typeAcquisition: TypeAcquisition,
-        unresolvedImports: ReadonlyArray<string>,
+        unresolvedImports: readonly string[],
         typesRegistry: ReadonlyMap<MapLike<string>>):
         { cachedTypingPaths: string[], newTypingNames: string[], filesToWatch: string[] } {
 
@@ -192,7 +192,7 @@ namespace ts.JsTyping {
                 inferredTypings.set(typingName, undefined!); // TODO: GH#18217
             }
         }
-        function addInferredTypings(typingNames: ReadonlyArray<string>, message: string) {
+        function addInferredTypings(typingNames: readonly string[], message: string) {
             if (log) log(`${message}: ${JSON.stringify(typingNames)}`);
             forEach(typingNames, addInferredTyping);
         }

@@ -267,7 +267,7 @@ namespace ts.server.typingsInstaller {
             this.knownCachesSet.set(cacheLocation, true);
         }
 
-        private filterTypings(typingsToInstall: ReadonlyArray<string>): ReadonlyArray<string> {
+        private filterTypings(typingsToInstall: readonly string[]): readonly string[] {
             return mapDefined(typingsToInstall, typing => {
                 const typingKey = mangleScopedPackageName(typing);
                 if (this.missingTypingsSet.get(typingKey)) {

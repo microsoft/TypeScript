@@ -588,7 +588,7 @@ namespace ts.server {
             return notImplemented();
         }
 
-        getCodeFixesAtPosition(file: string, start: number, end: number, errorCodes: ReadonlyArray<number>): ReadonlyArray<CodeFixAction> {
+        getCodeFixesAtPosition(file: string, start: number, end: number, errorCodes: readonly number[]): readonly CodeFixAction[] {
             const args: protocol.CodeFixRequestArgs = { ...this.createFileRangeRequestArgs(file, start, end), errorCodes };
 
             const request = this.processRequest<protocol.CodeFixRequest>(CommandNames.GetCodeFixes, args);
@@ -666,7 +666,7 @@ namespace ts.server {
             };
         }
 
-        organizeImports(_scope: OrganizeImportsScope, _formatOptions: FormatCodeSettings): ReadonlyArray<FileTextChanges> {
+        organizeImports(_scope: OrganizeImportsScope, _formatOptions: FormatCodeSettings): readonly FileTextChanges[] {
             return notImplemented();
         }
 

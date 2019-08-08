@@ -1160,7 +1160,7 @@ namespace vfs {
 
     export interface FileSystemCreateOptions extends FileSystemOptions {
         // Sets the documents to add to the file system.
-        documents?: ReadonlyArray<documents.TextDocument>;
+        documents?: readonly documents.TextDocument[];
     }
 
     export type Axis = "ancestors" | "ancestors-or-self" | "self" | "descendants-or-self" | "descendants";

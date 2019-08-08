@@ -62,11 +62,11 @@ interface IoLog {
     }[];
     directoriesRead: {
         path: string,
-        extensions: ReadonlyArray<string> | undefined,
-        exclude: ReadonlyArray<string> | undefined,
-        include: ReadonlyArray<string> | undefined,
+        extensions: readonly string[] | undefined,
+        exclude: readonly string[] | undefined,
+        include: readonly string[] | undefined,
         depth: number | undefined,
-        result: ReadonlyArray<string>,
+        result: readonly string[],
     }[];
     useCaseSensitiveFileNames?: boolean;
 }

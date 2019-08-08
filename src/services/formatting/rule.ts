@@ -3,13 +3,13 @@ namespace ts.formatting {
     export interface Rule {
         // Used for debugging to identify each rule based on the property name it's assigned to.
         readonly debugName: string;
-        readonly context: ReadonlyArray<ContextPredicate>;
+        readonly context: readonly ContextPredicate[];
         readonly action: RuleAction;
         readonly flags: RuleFlags;
     }
 
     export type ContextPredicate = (context: FormattingContext) => boolean;
-    export const anyContext: ReadonlyArray<ContextPredicate> = emptyArray;
+    export const anyContext: readonly ContextPredicate[] = emptyArray;
 
     export const enum RuleAction {
         Ignore = 1 << 0,
@@ -24,7 +24,7 @@ namespace ts.formatting {
     }
 
     export interface TokenRange {
-        readonly tokens: ReadonlyArray<SyntaxKind>;
+        readonly tokens: readonly SyntaxKind[];
         readonly isSpecific: boolean;
     }
 }

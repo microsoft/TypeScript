@@ -16,7 +16,7 @@ const assert: typeof _chai.assert = _chai.assert;
         }
         assertDeepImpl(a, b, msg);
 
-        function arrayExtraKeysObject(a: ReadonlyArray<{} | null | undefined>): object {
+        function arrayExtraKeysObject(a: readonly ({} | null | undefined)[]): object {
             const obj: { [key: string]: {} | null | undefined } = {};
             for (const key in a) {
                 if (Number.isNaN(Number(key))) {
@@ -177,7 +177,7 @@ namespace Utils {
         return a !== undefined && typeof a.pos === "number";
     }
 
-    export function convertDiagnostics(diagnostics: ReadonlyArray<ts.Diagnostic>) {
+    export function convertDiagnostics(diagnostics: readonly ts.Diagnostic[]) {
         return diagnostics.map(convertDiagnostic);
     }
 
@@ -248,7 +248,7 @@ namespace Utils {
                 o.containsParseError = true;
             }
 
-            for (const propertyName of Object.getOwnPropertyNames(n) as ReadonlyArray<keyof ts.SourceFile | keyof ts.Identifier>) {
+            for (const propertyName of Object.getOwnPropertyNames(n) as readonly (keyof ts.SourceFile | keyof ts.Identifier)[]) {
                 switch (propertyName) {
                     case "parent":
                     case "symbol":
@@ -303,7 +303,7 @@ namespace Utils {
         }
     }
 
-    export function assertDiagnosticsEquals(array1: ReadonlyArray<ts.Diagnostic>, array2: ReadonlyArray<ts.Diagnostic>) {
+    export function assertDiagnosticsEquals(array1: readonly ts.Diagnostic[], array2: readonly ts.Diagnostic[]) {
         if (array1 === array2) {
             return;
         }
@@ -462,7 +462,7 @@ namespace Harness {
         getExecutingFilePath(): string;
         getWorkspaceRoot(): string;
         exit(exitCode?: number): void;
-        readDirectory(path: string, extension?: ReadonlyArray<string>, exclude?: ReadonlyArray<string>, include?: ReadonlyArray<string>, depth?: number): ReadonlyArray<string>;
+        readDirectory(path: string, extension?: readonly string[], exclude?: readonly string[], include?: readonly string[], depth?: number): readonly string[];
         getAccessibleFileSystemEntries(dirname: string): ts.FileSystemEntries;
         tryEnableSourceMapsForHost?(): void;
         getEnvironmentVariable?(name: string): string;
@@ -875,8 +875,8 @@ namespace Harness {
             currentDirectory: string;
         }
 
-        export function prepareDeclarationCompilationContext(inputFiles: ReadonlyArray<TestFile>,
-            otherFiles: ReadonlyArray<TestFile>,
+        export function prepareDeclarationCompilationContext(inputFiles: readonly TestFile[],
+            otherFiles: readonly TestFile[],
             result: compiler.CompilationResult,
             harnessSettings: TestCaseParser.CompilerSettings & HarnessOptions,
             options: ts.CompilerOptions,
@@ -955,12 +955,12 @@ namespace Harness {
             return { declInputFiles, declOtherFiles, declResult: output };
         }
 
-        export function minimalDiagnosticsToString(diagnostics: ReadonlyArray<ts.Diagnostic>, pretty?: boolean) {
+        export function minimalDiagnosticsToString(diagnostics: readonly ts.Diagnostic[], pretty?: boolean) {
             const host = { getCanonicalFileName, getCurrentDirectory: () => "", getNewLine: () => IO.newLine() };
             return (pretty ? ts.formatDiagnosticsWithColorAndContext : ts.formatDiagnostics)(diagnostics, host);
         }
 
-        export function getErrorBaseline(inputFiles: ReadonlyArray<TestFile>, diagnostics: ReadonlyArray<ts.Diagnostic>, pretty?: boolean) {
+        export function getErrorBaseline(inputFiles: readonly TestFile[], diagnostics: readonly ts.Diagnostic[], pretty?: boolean) {
             let outputLines = "";
             const gen = iterateErrorBaseline(inputFiles, diagnostics, { pretty });
             for (let {done, value} = gen.next(); !done; { done, value } = gen.next()) {
@@ -975,7 +975,7 @@ namespace Harness {
 
         export const diagnosticSummaryMarker = "__diagnosticSummary";
         export const globalErrorsMarker = "__globalErrors";
-        export function *iterateErrorBaseline(inputFiles: ReadonlyArray<TestFile>, diagnostics: ReadonlyArray<ts.Diagnostic>, options?: { pretty?: boolean, caseSensitive?: boolean, currentDirectory?: string }): IterableIterator<[string, string, number]> {
+        export function *iterateErrorBaseline(inputFiles: readonly TestFile[], diagnostics: readonly ts.Diagnostic[], options?: { pretty?: boolean, caseSensitive?: boolean, currentDirectory?: string }): IterableIterator<[string, string, number]> {
             diagnostics = ts.sort(diagnostics, ts.compareDiagnostics);
             let outputLines = "";
             // Count up all errors that were found in files other than lib.d.ts so we don't miss any
@@ -1127,7 +1127,7 @@ namespace Harness {
             assert.equal(totalErrorsReportedInNonLibraryFiles + numLibraryDiagnostics + numTest262HarnessDiagnostics, diagnostics.length, "total number of errors");
         }
 
-        export function doErrorBaseline(baselinePath: string, inputFiles: ReadonlyArray<TestFile>, errors: ReadonlyArray<ts.Diagnostic>, pretty?: boolean) {
+        export function doErrorBaseline(baselinePath: string, inputFiles: readonly TestFile[], errors: readonly ts.Diagnostic[], pretty?: boolean) {
             Baseline.runBaseline(baselinePath.replace(/\.tsx?$/, ".errors.txt"),
                 !errors || (errors.length === 0) ? null : getErrorBaseline(inputFiles, errors, pretty)); // eslint-disable-line no-null/no-null
         }
@@ -1291,7 +1291,7 @@ namespace Harness {
             }
         }
 
-        export function doJsEmitBaseline(baselinePath: string, header: string, options: ts.CompilerOptions, result: compiler.CompilationResult, tsConfigFiles: ReadonlyArray<TestFile>, toBeCompiled: ReadonlyArray<TestFile>, otherFiles: ReadonlyArray<TestFile>, harnessSettings: TestCaseParser.CompilerSettings) {
+        export function doJsEmitBaseline(baselinePath: string, header: string, options: ts.CompilerOptions, result: compiler.CompilationResult, tsConfigFiles: readonly TestFile[], toBeCompiled: readonly TestFile[], otherFiles: readonly TestFile[], harnessSettings: TestCaseParser.CompilerSettings) {
             if (!options.noEmit && !options.emitDeclarationOnly && result.js.size === 0 && result.diagnostics.length === 0) {
                 throw new Error("Expected at least one js file to be emitted or at least one error to be created.");
             }
@@ -1349,7 +1349,7 @@ namespace Harness {
             return "//// [" + fileName + "]\r\n" + utils.removeTestPathPrefixes(file.text);
         }
 
-        export function collateOutputs(outputFiles: ReadonlyArray<documents.TextDocument>): string {
+        export function collateOutputs(outputFiles: readonly documents.TextDocument[]): string {
             const gen = iterateOutputs(outputFiles);
             // Emit them
             let result = "";

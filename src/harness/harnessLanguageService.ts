@@ -252,7 +252,7 @@ namespace Harness.LanguageService {
             return this.sys.fileExists(fileName);
         }
 
-        readDirectory(path: string, extensions?: ReadonlyArray<string>, exclude?: ReadonlyArray<string>, include?: ReadonlyArray<string>, depth?: number): string[] {
+        readDirectory(path: string, extensions?: readonly string[], exclude?: readonly string[], include?: readonly string[], depth?: number): string[] {
             return this.sys.readDirectory(path, extensions, exclude, include, depth);
         }
 
@@ -558,10 +558,10 @@ namespace Harness.LanguageService {
         getApplicableRefactors(): ts.ApplicableRefactorInfo[] {
             throw new Error("Not supported on the shim.");
         }
-        organizeImports(_scope: ts.OrganizeImportsScope, _formatOptions: ts.FormatCodeSettings): ReadonlyArray<ts.FileTextChanges> {
+        organizeImports(_scope: ts.OrganizeImportsScope, _formatOptions: ts.FormatCodeSettings): readonly ts.FileTextChanges[] {
             throw new Error("Not supported on the shim.");
         }
-        getEditsForFileRename(): ReadonlyArray<ts.FileTextChanges> {
+        getEditsForFileRename(): readonly ts.FileTextChanges[] {
             throw new Error("Not supported on the shim.");
         }
         getEmitOutput(fileName: string): ts.EmitOutput {
@@ -724,7 +724,7 @@ namespace Harness.LanguageService {
             return ts.sys.getEnvironmentVariable(name);
         }
 
-        readDirectory(path: string, extensions?: ReadonlyArray<string>, exclude?: ReadonlyArray<string>, include?: ReadonlyArray<string>, depth?: number): string[] {
+        readDirectory(path: string, extensions?: readonly string[], exclude?: readonly string[], include?: readonly string[], depth?: number): string[] {
             return this.host.readDirectory(path, extensions, exclude, include, depth);
         }
 

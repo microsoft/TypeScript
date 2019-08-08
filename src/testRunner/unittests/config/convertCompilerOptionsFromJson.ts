@@ -8,7 +8,7 @@ namespace ts {
 
         interface ExpectedResultWithParsingSuccess {
             compilerOptions: CompilerOptions;
-            errors: ReadonlyArray<Diagnostic>;
+            errors: readonly Diagnostic[];
         }
 
         interface ExpectedResultWithParsingFailure {
@@ -59,7 +59,7 @@ namespace ts {
             }
         }
 
-        function verifyErrors(actualErrors: Diagnostic[], expectedErrors: ReadonlyArray<Diagnostic>, ignoreLocation?: boolean) {
+        function verifyErrors(actualErrors: Diagnostic[], expectedErrors: readonly Diagnostic[], ignoreLocation?: boolean) {
             assert.isTrue(expectedErrors.length === actualErrors.length, `Expected error: ${JSON.stringify(expectedErrors.map(getDiagnosticString), undefined, " ")}. Actual error: ${JSON.stringify(actualErrors.map(getDiagnosticString), undefined, " ")}.`);
             for (let i = 0; i < actualErrors.length; i++) {
                 const actualError = actualErrors[i];

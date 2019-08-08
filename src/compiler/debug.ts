@@ -59,7 +59,7 @@ namespace ts {
             return value;
         }
 
-        export function assertEachDefined<T, A extends ReadonlyArray<T>>(value: A, message?: string): A {
+        export function assertEachDefined<T, A extends readonly T[]>(value: A, message?: string): A {
             for (const v of value) {
                 assertDefined(v, message);
             }

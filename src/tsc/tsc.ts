@@ -235,7 +235,7 @@ namespace ts {
             undefined;
     }
 
-    function performCompilation(rootNames: string[], projectReferences: ReadonlyArray<ProjectReference> | undefined, options: CompilerOptions, configFileParsingDiagnostics?: ReadonlyArray<Diagnostic>) {
+    function performCompilation(rootNames: string[], projectReferences: readonly ProjectReference[] | undefined, options: CompilerOptions, configFileParsingDiagnostics?: readonly Diagnostic[]) {
         const host = createCompilerHost(options);
         const currentDirectory = host.getCurrentDirectory();
         const getCanonicalFileName = createGetCanonicalFileName(host.useCaseSensitiveFileNames());

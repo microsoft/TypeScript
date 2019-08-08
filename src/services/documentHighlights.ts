@@ -1,6 +1,6 @@
 /* @internal */
 namespace ts.DocumentHighlights {
-    export function getDocumentHighlights(program: Program, cancellationToken: CancellationToken, sourceFile: SourceFile, position: number, sourceFilesToSearch: ReadonlyArray<SourceFile>): DocumentHighlights[] | undefined {
+    export function getDocumentHighlights(program: Program, cancellationToken: CancellationToken, sourceFile: SourceFile, position: number, sourceFilesToSearch: readonly SourceFile[]): DocumentHighlights[] | undefined {
         const node = getTouchingPropertyName(sourceFile, position);
 
         if (node.parent && (isJsxOpeningElement(node.parent) && node.parent.tagName === node || isJsxClosingElement(node.parent))) {
@@ -21,7 +21,7 @@ namespace ts.DocumentHighlights {
         };
     }
 
-    function getSemanticDocumentHighlights(position: number, node: Node, program: Program, cancellationToken: CancellationToken, sourceFilesToSearch: ReadonlyArray<SourceFile>): DocumentHighlights[] | undefined {
+    function getSemanticDocumentHighlights(position: number, node: Node, program: Program, cancellationToken: CancellationToken, sourceFilesToSearch: readonly SourceFile[]): DocumentHighlights[] | undefined {
         const sourceFilesSet = arrayToSet(sourceFilesToSearch, f => f.fileName);
         const referenceEntries = FindAllReferences.getReferenceEntriesForNode(position, node, program, sourceFilesToSearch, cancellationToken, /*options*/ undefined, sourceFilesSet);
         if (!referenceEntries) return undefined;
@@ -86,16 +86,16 @@ namespace ts.DocumentHighlights {
                     : undefined;
         }
 
-        function getFromAllDeclarations<T extends Node>(nodeTest: (node: Node) => node is T, keywords: ReadonlyArray<SyntaxKind>): HighlightSpan[] | undefined {
+        function getFromAllDeclarations<T extends Node>(nodeTest: (node: Node) => node is T, keywords: readonly SyntaxKind[]): HighlightSpan[] | undefined {
             return useParent(node.parent, nodeTest, decl => mapDefined(decl.symbol.declarations, d =>
                 nodeTest(d) ? find(d.getChildren(sourceFile), c => contains(keywords, c.kind)) : undefined));
         }
 
-        function useParent<T extends Node>(node: Node, nodeTest: (node: Node) => node is T, getNodes: (node: T, sourceFile: SourceFile) => ReadonlyArray<Node> | undefined): HighlightSpan[] | undefined {
+        function useParent<T extends Node>(node: Node, nodeTest: (node: Node) => node is T, getNodes: (node: T, sourceFile: SourceFile) => readonly Node[] | undefined): HighlightSpan[] | undefined {
             return nodeTest(node) ? highlightSpans(getNodes(node, sourceFile)) : undefined;
         }
 
-        function highlightSpans(nodes: ReadonlyArray<Node> | undefined): HighlightSpan[] | undefined {
+        function highlightSpans(nodes: readonly Node[] | undefined): HighlightSpan[] | undefined {
             return nodes && nodes.map(node => getHighlightSpanForNode(node, sourceFile));
         }
     }
@@ -104,7 +104,7 @@ namespace ts.DocumentHighlights {
      * Aggregates all throw-statements within this node *without* crossing
      * into function boundaries and try-blocks with catch-clauses.
      */
-    function aggregateOwnedThrowStatements(node: Node): ReadonlyArray<ThrowStatement> | undefined {
+    function aggregateOwnedThrowStatements(node: Node): readonly ThrowStatement[] | undefined {
         if (isThrowStatement(node)) {
             return [node];
         }
@@ -145,11 +145,11 @@ namespace ts.DocumentHighlights {
         return undefined;
     }
 
-    function aggregateAllBreakAndContinueStatements(node: Node): ReadonlyArray<BreakOrContinueStatement> | undefined {
+    function aggregateAllBreakAndContinueStatements(node: Node): readonly BreakOrContinueStatement[] | undefined {
         return isBreakOrContinueStatement(node) ? [node] : isFunctionLike(node) ? undefined : flatMapChildren(node, aggregateAllBreakAndContinueStatements);
     }
 
-    function flatMapChildren<T>(node: Node, cb: (child: Node) => ReadonlyArray<T> | T | undefined): ReadonlyArray<T> {
+    function flatMapChildren<T>(node: Node, cb: (child: Node) => readonly T[] | T | undefined): readonly T[] {
         const result: T[] = [];
         node.forEachChild(child => {
             const value = cb(child);
@@ -192,7 +192,7 @@ namespace ts.DocumentHighlights {
         return mapDefined(getNodesToSearchForModifier(declaration, modifierToFlag(modifier)), node => findModifier(node, modifier));
     }
 
-    function getNodesToSearchForModifier(declaration: Node, modifierFlag: ModifierFlags): ReadonlyArray<Node> | undefined {
+    function getNodesToSearchForModifier(declaration: Node, modifierFlag: ModifierFlags): readonly Node[] | undefined {
         // Types of node whose children might have modifiers.
         const container = declaration.parent as ModuleBlock | SourceFile | Block | CaseClause | DefaultClause | ConstructorDeclaration | MethodDeclaration | FunctionDeclaration | ObjectTypeDeclaration;
         switch (container.kind) {

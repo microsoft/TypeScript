@@ -71,7 +71,7 @@ namespace ts {
         });
     });
 
-    function makeAssertChanges(getProgram: () => Program): (fileNames: ReadonlyArray<string>) => void {
+    function makeAssertChanges(getProgram: () => Program): (fileNames: readonly string[]) => void {
         const host: BuilderProgramHost = { useCaseSensitiveFileNames: returnTrue };
         let builderProgram: EmitAndSemanticDiagnosticsBuilderProgram | undefined;
         return fileNames => {
@@ -85,7 +85,7 @@ namespace ts {
         };
     }
 
-    function makeAssertChangesWithCancellationToken(getProgram: () => Program): (fileNames: ReadonlyArray<string>, cancelAfterEmitLength?: number) => void {
+    function makeAssertChangesWithCancellationToken(getProgram: () => Program): (fileNames: readonly string[], cancelAfterEmitLength?: number) => void {
         const host: BuilderProgramHost = { useCaseSensitiveFileNames: returnTrue };
         let builderProgram: EmitAndSemanticDiagnosticsBuilderProgram | undefined;
         let cancel = false;

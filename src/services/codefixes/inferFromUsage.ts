@@ -292,7 +292,7 @@ namespace ts.codefix {
         }
     }
 
-    function annotateJSDocParameters(changes: textChanges.ChangeTracker, sourceFile: SourceFile, parameterInferences: ReadonlyArray<ParameterInference>, program: Program, host: LanguageServiceHost): void {
+    function annotateJSDocParameters(changes: textChanges.ChangeTracker, sourceFile: SourceFile, parameterInferences: readonly ParameterInference[], program: Program, host: LanguageServiceHost): void {
         const signature = parameterInferences.length && parameterInferences[0].declaration.parent;
         if (!signature) {
             return;
@@ -310,7 +310,7 @@ namespace ts.codefix {
         addJSDocTags(changes, sourceFile, signature, paramTags);
     }
 
-    function addJSDocTags(changes: textChanges.ChangeTracker, sourceFile: SourceFile, parent: HasJSDoc, newTags: ReadonlyArray<JSDocTag>): void {
+    function addJSDocTags(changes: textChanges.ChangeTracker, sourceFile: SourceFile, parent: HasJSDoc, newTags: readonly JSDocTag[]): void {
         const comments = mapDefined(parent.jsDoc, j => j.comment);
         const oldTags = flatMapToMutable(parent.jsDoc, j => j.tags);
         const unmergedNewTags = newTags.filter(newTag => !oldTags || !oldTags.some((tag, i) => {
@@ -349,7 +349,7 @@ namespace ts.codefix {
         }
     }
 
-    function getReferences(token: PropertyName | Token<SyntaxKind.ConstructorKeyword>, program: Program, cancellationToken: CancellationToken): ReadonlyArray<Identifier> {
+    function getReferences(token: PropertyName | Token<SyntaxKind.ConstructorKeyword>, program: Program, cancellationToken: CancellationToken): readonly Identifier[] {
         // Position shouldn't matter since token is not a SourceFile.
         return mapDefined(FindAllReferences.getReferenceEntriesForNode(-1, token, program, program.getSourceFiles(), cancellationToken), entry =>
             entry.kind !== FindAllReferences.EntryKind.Span ? tryCast(entry.node, isIdentifier) : undefined);
@@ -362,7 +362,7 @@ namespace ts.codefix {
         return InferFromReference.unifyFromContext(types, checker);
     }
 
-    function inferFunctionReferencesFromUsage(containingFunction: FunctionLike, sourceFile: SourceFile, program: Program, cancellationToken: CancellationToken): ReadonlyArray<Identifier> | undefined {
+    function inferFunctionReferencesFromUsage(containingFunction: FunctionLike, sourceFile: SourceFile, program: Program, cancellationToken: CancellationToken): readonly Identifier[] | undefined {
         let searchToken;
         switch (containingFunction.kind) {
             case SyntaxKind.Constructor:
@@ -415,7 +415,7 @@ namespace ts.codefix {
             candidateThisTypes?: Type[];
         }
 
-        export function inferTypesFromReferences(references: ReadonlyArray<Identifier>, checker: TypeChecker, cancellationToken: CancellationToken): Type[] {
+        export function inferTypesFromReferences(references: readonly Identifier[], checker: TypeChecker, cancellationToken: CancellationToken): Type[] {
             const usageContext: UsageContext = {};
             for (const reference of references) {
                 cancellationToken.throwIfCancellationRequested();
@@ -424,7 +424,7 @@ namespace ts.codefix {
             return inferFromContext(usageContext, checker);
         }
 
-        export function inferTypeForParametersFromReferences(references: ReadonlyArray<Identifier> | undefined, declaration: FunctionLike, program: Program, cancellationToken: CancellationToken): ParameterInference[] | undefined {
+        export function inferTypeForParametersFromReferences(references: readonly Identifier[] | undefined, declaration: FunctionLike, program: Program, cancellationToken: CancellationToken): ParameterInference[] | undefined {
             if (references === undefined || references.length === 0 || !declaration.parameters) {
                 return undefined;
             }
@@ -467,7 +467,7 @@ namespace ts.codefix {
             });
         }
 
-        export function inferTypeForThisFromReferences(references: ReadonlyArray<Identifier>, program: Program, cancellationToken: CancellationToken) {
+        export function inferTypeForThisFromReferences(references: readonly Identifier[], program: Program, cancellationToken: CancellationToken) {
             if (references.length === 0) {
                 return undefined;
             }
@@ -742,7 +742,7 @@ namespace ts.codefix {
             low: (t: Type) => boolean;
         }
 
-        function removeLowPriorityInferences(inferences: ReadonlyArray<Type>, priorities: Priority[]): Type[] {
+        function removeLowPriorityInferences(inferences: readonly Type[], priorities: Priority[]): Type[] {
             const toRemove: ((t: Type) => boolean)[] = [];
             for (const i of inferences) {
                 for (const { high, low } of priorities) {
@@ -755,7 +755,7 @@ namespace ts.codefix {
             return inferences.filter(i => toRemove.every(f => !f(i)));
         }
 
-        export function unifyFromContext(inferences: ReadonlyArray<Type>, checker: TypeChecker, fallback = checker.getAnyType()): Type {
+        export function unifyFromContext(inferences: readonly Type[], checker: TypeChecker, fallback = checker.getAnyType()): Type {
             if (!inferences.length) return fallback;
 
             // 1. string or number individually override string | number

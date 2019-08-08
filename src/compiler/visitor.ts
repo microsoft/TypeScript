@@ -928,7 +928,7 @@ namespace ts {
      *
      * @param nodes The NodeArray.
      */
-    function extractSingleNode(nodes: ReadonlyArray<Node>): Node | undefined {
+    function extractSingleNode(nodes: readonly Node[]): Node | undefined {
         Debug.assert(nodes.length <= 1, "Too many nodes written to output.");
         return singleOrUndefined(nodes);
     }
@@ -1456,13 +1456,13 @@ namespace ts {
     /**
      * Merges generated lexical declarations into a new statement list.
      */
-    export function mergeLexicalEnvironment(statements: NodeArray<Statement>, declarations: ReadonlyArray<Statement> | undefined): NodeArray<Statement>;
+    export function mergeLexicalEnvironment(statements: NodeArray<Statement>, declarations: readonly Statement[] | undefined): NodeArray<Statement>;
 
     /**
      * Appends generated lexical declarations to an array of statements.
      */
-    export function mergeLexicalEnvironment(statements: Statement[], declarations: ReadonlyArray<Statement> | undefined): Statement[];
-    export function mergeLexicalEnvironment(statements: Statement[] | NodeArray<Statement>, declarations: ReadonlyArray<Statement> | undefined) {
+    export function mergeLexicalEnvironment(statements: Statement[], declarations: readonly Statement[] | undefined): Statement[];
+    export function mergeLexicalEnvironment(statements: Statement[] | NodeArray<Statement>, declarations: readonly Statement[] | undefined) {
         if (!some(declarations)) {
             return statements;
         }
@@ -1477,7 +1477,7 @@ namespace ts {
      *
      * @param nodes The NodeArray.
      */
-    export function liftToBlock(nodes: ReadonlyArray<Node>): Statement {
+    export function liftToBlock(nodes: readonly Node[]): Statement {
         Debug.assert(every(nodes, isStatement), "Cannot lift nodes to a Block.");
         return <Statement>singleOrUndefined(nodes) || createBlock(<NodeArray<Statement>>nodes);
     }

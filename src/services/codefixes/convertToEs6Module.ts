@@ -163,7 +163,7 @@ namespace ts.codefix {
     }
 
     /** Converts `const name = require("moduleSpecifier").propertyName` */
-    function convertPropertyAccessImport(name: BindingName, propertyName: string, moduleSpecifier: StringLiteralLike, identifiers: Identifiers, quotePreference: QuotePreference): ReadonlyArray<Node> {
+    function convertPropertyAccessImport(name: BindingName, propertyName: string, moduleSpecifier: StringLiteralLike, identifiers: Identifiers, quotePreference: QuotePreference): readonly Node[] {
         switch (name.kind) {
             case SyntaxKind.ObjectBindingPattern:
             case SyntaxKind.ArrayBindingPattern: {
@@ -224,7 +224,7 @@ namespace ts.codefix {
      * Convert `module.exports = { ... }` to individual exports..
      * We can't always do this if the module has interesting members -- then it will be a default export instead.
      */
-    function tryChangeModuleExportsObject(object: ObjectLiteralExpression): [ReadonlyArray<Statement>, ModuleExportsChanged] | undefined {
+    function tryChangeModuleExportsObject(object: ObjectLiteralExpression): [readonly Statement[], ModuleExportsChanged] | undefined {
         const statements = mapAllOrFail(object.properties, prop => {
             switch (prop.kind) {
                 case SyntaxKind.GetAccessor:
@@ -270,7 +270,7 @@ namespace ts.codefix {
         }
     }
 
-    function convertReExportAll(reExported: StringLiteralLike, checker: TypeChecker): [ReadonlyArray<Statement>, ModuleExportsChanged] {
+    function convertReExportAll(reExported: StringLiteralLike, checker: TypeChecker): [readonly Statement[], ModuleExportsChanged] {
         // `module.exports = require("x");` ==> `export * from "x"; export { default } from "x";`
         const moduleSpecifier = reExported.text;
         const moduleSymbol = checker.getSymbolAtLocation(reExported);
@@ -349,7 +349,7 @@ namespace ts.codefix {
         identifiers: Identifiers,
         target: ScriptTarget,
         quotePreference: QuotePreference,
-    ): ReadonlyArray<Node> {
+    ): readonly Node[] {
         switch (name.kind) {
             case SyntaxKind.ObjectBindingPattern: {
                 const importSpecifiers = mapAllOrFail(name.elements, e =>
@@ -385,7 +385,7 @@ namespace ts.codefix {
      * Convert `import x = require("x").`
      * Also converts uses like `x.y()` to `y()` and uses a named import.
      */
-    function convertSingleIdentifierImport(file: SourceFile, name: Identifier, moduleSpecifier: StringLiteralLike, changes: textChanges.ChangeTracker, checker: TypeChecker, identifiers: Identifiers, quotePreference: QuotePreference): ReadonlyArray<Node> {
+    function convertSingleIdentifierImport(file: SourceFile, name: Identifier, moduleSpecifier: StringLiteralLike, changes: textChanges.ChangeTracker, checker: TypeChecker, identifiers: Identifiers, quotePreference: QuotePreference): readonly Node[] {
         const nameSymbol = checker.getSymbolAtLocation(name);
         // Maps from module property name to name actually used. (The same if there isn't shadowing.)
         const namedBindingsNames = createMap<string>();
@@ -444,7 +444,7 @@ namespace ts.codefix {
         readonly additional: Map<true>;
     }
 
-    type FreeIdentifiers = ReadonlyMap<ReadonlyArray<Identifier>>;
+    type FreeIdentifiers = ReadonlyMap<readonly Identifier[]>;
     function collectFreeIdentifiers(file: SourceFile): FreeIdentifiers {
         const map = createMultiMap<Identifier>();
         forEachFreeIdentifier(file, id => map.add(id.text, id));
@@ -476,7 +476,7 @@ namespace ts.codefix {
 
     // Node helpers
 
-    function functionExpressionToDeclaration(name: string | undefined, additionalModifiers: ReadonlyArray<Modifier>, fn: FunctionExpression | ArrowFunction | MethodDeclaration): FunctionDeclaration {
+    function functionExpressionToDeclaration(name: string | undefined, additionalModifiers: readonly Modifier[], fn: FunctionExpression | ArrowFunction | MethodDeclaration): FunctionDeclaration {
         return createFunctionDeclaration(
             getSynthesizedDeepClones(fn.decorators), // TODO: GH#19915 Don't think this is even legal.
             concatenate(additionalModifiers, getSynthesizedDeepClones(fn.modifiers)),
@@ -488,7 +488,7 @@ namespace ts.codefix {
             convertToFunctionBody(getSynthesizedDeepClone(fn.body!)));
     }
 
-    function classExpressionToDeclaration(name: string | undefined, additionalModifiers: ReadonlyArray<Modifier>, cls: ClassExpression): ClassDeclaration {
+    function classExpressionToDeclaration(name: string | undefined, additionalModifiers: readonly Modifier[], cls: ClassExpression): ClassDeclaration {
         return createClassDeclaration(
             getSynthesizedDeepClones(cls.decorators), // TODO: GH#19915 Don't think this is even legal.
             concatenate(additionalModifiers, getSynthesizedDeepClones(cls.modifiers)),
@@ -508,7 +508,7 @@ namespace ts.codefix {
         return createImportSpecifier(propertyName !== undefined && propertyName !== name ? createIdentifier(propertyName) : undefined, createIdentifier(name));
     }
 
-    function makeConst(modifiers: ReadonlyArray<Modifier> | undefined, name: string | BindingName, init: Expression): VariableStatement {
+    function makeConst(modifiers: readonly Modifier[] | undefined, name: string | BindingName, init: Expression): VariableStatement {
         return createVariableStatement(
             modifiers,
             createVariableDeclarationList(

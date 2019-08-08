@@ -6,7 +6,7 @@ namespace ts.codefix {
      * @param possiblyMissingSymbols The collection of symbols to filter and then get insertions for.
      * @returns Empty string iff there are no member insertions.
      */
-    export function createMissingMemberNodes(classDeclaration: ClassLikeDeclaration, possiblyMissingSymbols: ReadonlyArray<Symbol>, context: TypeConstructionContext, preferences: UserPreferences, out: (node: ClassElement) => void): void {
+    export function createMissingMemberNodes(classDeclaration: ClassLikeDeclaration, possiblyMissingSymbols: readonly Symbol[], context: TypeConstructionContext, preferences: UserPreferences, out: (node: ClassElement) => void): void {
         const classMembers = classDeclaration.symbol.members!;
         for (const symbol of possiblyMissingSymbols) {
             if (!classMembers.has(symbol.escapedName)) {
@@ -186,10 +186,10 @@ namespace ts.codefix {
     }
 
     function createMethodImplementingSignatures(
-        signatures: ReadonlyArray<Signature>,
+        signatures: readonly Signature[],
         name: PropertyName,
         optional: boolean,
-        modifiers: ReadonlyArray<Modifier> | undefined,
+        modifiers: readonly Modifier[] | undefined,
         preferences: UserPreferences,
     ): MethodDeclaration {
         /** This is *a* signature with the maximal number of arguments,
@@ -237,11 +237,11 @@ namespace ts.codefix {
     }
 
     function createStubbedMethod(
-        modifiers: ReadonlyArray<Modifier> | undefined,
+        modifiers: readonly Modifier[] | undefined,
         name: PropertyName,
         optional: boolean,
-        typeParameters: ReadonlyArray<TypeParameterDeclaration> | undefined,
-        parameters: ReadonlyArray<ParameterDeclaration>,
+        typeParameters: readonly TypeParameterDeclaration[] | undefined,
+        parameters: readonly ParameterDeclaration[],
         returnType: TypeNode | undefined,
         preferences: UserPreferences
     ): MethodDeclaration {

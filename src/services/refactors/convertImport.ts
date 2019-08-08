@@ -4,7 +4,7 @@ namespace ts.refactor {
     const actionNameNamespaceToNamed = "Convert namespace import to named imports";
     const actionNameNamedToNamespace = "Convert named imports to namespace import";
     registerRefactor(refactorName, {
-        getAvailableActions(context): ReadonlyArray<ApplicableRefactorInfo> {
+        getAvailableActions(context): readonly ApplicableRefactorInfo[] {
             const i = getImportToConvert(context);
             if (!i) return emptyArray;
             const description = i.kind === SyntaxKind.NamespaceImport ? Diagnostics.Convert_namespace_import_to_named_imports.message : Diagnostics.Convert_named_imports_to_namespace_import.message;
@@ -123,7 +123,7 @@ namespace ts.refactor {
         }
     }
 
-    function updateImport(old: ImportDeclaration, defaultImportName: Identifier | undefined, elements: ReadonlyArray<ImportSpecifier> | undefined): ImportDeclaration {
+    function updateImport(old: ImportDeclaration, defaultImportName: Identifier | undefined, elements: readonly ImportSpecifier[] | undefined): ImportDeclaration {
         return createImportDeclaration(/*decorators*/ undefined, /*modifiers*/ undefined,
             createImportClause(defaultImportName, elements && elements.length ? createNamedImports(elements) : undefined), old.moduleSpecifier);
     }

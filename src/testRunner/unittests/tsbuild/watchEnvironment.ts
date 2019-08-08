@@ -70,7 +70,7 @@ namespace ts.tscWatch {
                 system.writeFile(typing.path, `${typing.content}export const typing1 = 10;`);
                 system.checkTimeoutQueueLength(0);
 
-                function flatArray<T>(arr: T[][]): ReadonlyArray<T> {
+                function flatArray<T>(arr: T[][]): readonly T[] {
                     return flatMap(arr, identity);
                 }
                 function pkgs<T>(cb: (index: number) => T): T[] {

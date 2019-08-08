@@ -28,7 +28,7 @@ namespace ts {
         packageNameToTypingLocation: Map<JsTyping.CachedTyping>;       // The map of package names to their cached typing locations and installed versions
         typeAcquisition: TypeAcquisition;               // Used to customize the type acquisition process
         compilerOptions: CompilerOptions;               // Used as a source for typing inference
-        unresolvedImports: ReadonlyArray<string>;       // List of unresolved module ids from imports
+        unresolvedImports: readonly string[];       // List of unresolved module ids from imports
         typesRegistry: ReadonlyMap<MapLike<string>>;    // The map of available typings in npm to maps of TS versions to their latest supported versions
     }
 
@@ -465,7 +465,7 @@ namespace ts {
             return this.shimHost.getDefaultLibFileName(JSON.stringify(options));
         }
 
-        public readDirectory(path: string, extensions?: ReadonlyArray<string>, exclude?: string[], include?: string[], depth?: number): string[] {
+        public readDirectory(path: string, extensions?: readonly string[], exclude?: string[], include?: string[], depth?: number): string[] {
             const pattern = getFileMatcherPatterns(path, exclude, include,
                 this.shimHost.useCaseSensitiveFileNames!(), this.shimHost.getCurrentDirectory()); // TODO: GH#18217
             return JSON.parse(this.shimHost.readDirectory(
@@ -510,7 +510,7 @@ namespace ts {
             }
         }
 
-        public readDirectory(rootDir: string, extensions: ReadonlyArray<string>, exclude: ReadonlyArray<string>, include: ReadonlyArray<string>, depth?: number): string[] {
+        public readDirectory(rootDir: string, extensions: readonly string[], exclude: readonly string[], include: readonly string[], depth?: number): string[] {
             const pattern = getFileMatcherPatterns(rootDir, exclude, include,
                 this.shimHost.useCaseSensitiveFileNames!(), this.shimHost.getCurrentDirectory()); // TODO: GH#18217
             return JSON.parse(this.shimHost.readDirectory(
@@ -598,7 +598,7 @@ namespace ts {
         code: number;
         reportsUnnecessary?: {};
     }
-    export function realizeDiagnostics(diagnostics: ReadonlyArray<Diagnostic>, newLine: string): RealizedDiagnostic[] {
+    export function realizeDiagnostics(diagnostics: readonly Diagnostic[], newLine: string): RealizedDiagnostic[] {
         return diagnostics.map(d => realizeDiagnostic(d, newLine));
     }
 
@@ -671,7 +671,7 @@ namespace ts {
                 });
         }
 
-        private realizeDiagnostics(diagnostics: ReadonlyArray<Diagnostic>): { message: string; start: number; length: number; category: string; }[] {
+        private realizeDiagnostics(diagnostics: readonly Diagnostic[]): { message: string; start: number; length: number; category: string; }[] {
             const newLine = getNewLineOrDefaultFromHost(this.host);
             return realizeDiagnostics(diagnostics, newLine);
         }

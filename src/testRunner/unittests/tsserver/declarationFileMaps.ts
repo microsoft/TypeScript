@@ -24,7 +24,7 @@ namespace ts.projectSystem {
         };
     }
 
-    function checkDeclarationFiles(file: File, session: TestSession, expectedFiles: ReadonlyArray<File>): void {
+    function checkDeclarationFiles(file: File, session: TestSession, expectedFiles: readonly File[]): void {
         openFilesForSession([file], session);
         const project = Debug.assertDefined(session.getProjectService().getDefaultProjectForFile(file.path as server.NormalizedPath, /*ensureProject*/ false));
         const program = project.getCurrentProgram()!;
@@ -282,7 +282,7 @@ namespace ts.projectSystem {
         it("navigateTo", () => {
             const session = makeSampleProjects();
             const response = executeSessionRequest<protocol.NavtoRequest, protocol.NavtoResponse>(session, CommandNames.Navto, { file: userTs.path, searchValue: "fn" });
-            assert.deepEqual<ReadonlyArray<protocol.NavtoItem> | undefined>(response, [
+            assert.deepEqual<readonly protocol.NavtoItem[] | undefined>(response, [
                 {
                     ...protocolFileSpanFromSubstring({
                         file: bDts,
@@ -328,7 +328,7 @@ namespace ts.projectSystem {
             contextText: "export function fnA() {}",
             lineText: "export function fnA() {}"
         });
-        const referencesUserTs = (userTs: File): ReadonlyArray<protocol.ReferencesResponseItem> => [
+        const referencesUserTs = (userTs: File): readonly protocol.ReferencesResponseItem[] => [
             makeReferenceItem({
                 file: userTs,
                 isDefinition: false,
@@ -365,14 +365,14 @@ namespace ts.projectSystem {
         });
 
         interface ReferencesFullRequest extends protocol.FileLocationRequest { readonly command: protocol.CommandTypes.ReferencesFull; }
-        interface ReferencesFullResponse extends protocol.Response { readonly body: ReadonlyArray<ReferencedSymbol>; }
+        interface ReferencesFullResponse extends protocol.Response { readonly body: readonly ReferencedSymbol[]; }
 
         it("findAllReferencesFull", () => {
             const session = makeSampleProjects();
 
             const responseFull = executeSessionRequest<ReferencesFullRequest, ReferencesFullResponse>(session, protocol.CommandTypes.ReferencesFull, protocolFileLocationFromSubstring(userTs, "fnA()"));
 
-            assert.deepEqual<ReadonlyArray<ReferencedSymbol>>(responseFull, [
+            assert.deepEqual<readonly ReferencedSymbol[]>(responseFull, [
                 {
                     definition: {
                         ...documentSpanFromSubstring({
@@ -425,7 +425,7 @@ namespace ts.projectSystem {
 
             const responseFull = executeSessionRequest<ReferencesFullRequest, ReferencesFullResponse>(session, protocol.CommandTypes.ReferencesFull, protocolFileLocationFromSubstring(bTs, "f()"));
 
-            assert.deepEqual<ReadonlyArray<ReferencedSymbol>>(responseFull, [
+            assert.deepEqual<readonly ReferencedSymbol[]>(responseFull, [
                 {
                     definition: {
                         ...documentSpanFromSubstring({
@@ -556,7 +556,7 @@ namespace ts.projectSystem {
         it("renameLocationsFull", () => {
             const session = makeSampleProjects();
             const response = executeSessionRequest<protocol.RenameFullRequest, protocol.RenameFullResponse>(session, protocol.CommandTypes.RenameLocationsFull, protocolFileLocationFromSubstring(userTs, "fnA()"));
-            assert.deepEqual<ReadonlyArray<RenameLocation>>(response, [
+            assert.deepEqual<readonly RenameLocation[]>(response, [
                 renameLocation({ file: userTs, text: "fnA" }),
                 renameLocation({ file: aTs, text: "fnA", contextText: "export function fnA() {}" }),
             ]);
@@ -607,7 +607,7 @@ namespace ts.projectSystem {
                 oldFilePath: aTs.path,
                 newFilePath: "/a/aNew.ts",
             });
-            assert.deepEqual<ReadonlyArray<protocol.FileCodeEdits>>(response, [
+            assert.deepEqual<readonly protocol.FileCodeEdits[]>(response, [
                 {
                     fileName: userTs.path,
                     textChanges: [
@@ -651,7 +651,7 @@ namespace ts.projectSystem {
                 oldFilePath: aTs.path,
                 newFilePath: "/a/src/a1.ts",
             });
-            assert.deepEqual<ReadonlyArray<protocol.FileCodeEdits>>(response, []); // Should not change anything
+            assert.deepEqual<readonly protocol.FileCodeEdits[]>(response, []); // Should not change anything
         });
     });
 }

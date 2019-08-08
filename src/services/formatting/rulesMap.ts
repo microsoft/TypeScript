@@ -14,7 +14,7 @@ namespace ts.formatting {
     }
 
     export type RulesMap = (context: FormattingContext) => Rule | undefined;
-    function createRulesMap(rules: ReadonlyArray<RuleSpec>): RulesMap {
+    function createRulesMap(rules: readonly RuleSpec[]): RulesMap {
         const map = buildMap(rules);
         return context => {
             const bucket = map[getRuleBucketIndex(context.currentTokenSpan.kind, context.nextTokenSpan.kind)];
@@ -22,7 +22,7 @@ namespace ts.formatting {
         };
     }
 
-    function buildMap(rules: ReadonlyArray<RuleSpec>): ReadonlyArray<ReadonlyArray<Rule>> {
+    function buildMap(rules: readonly RuleSpec[]): readonly (readonly Rule[])[] {
         // Map from bucket index to array of rules
         const map: Rule[][] = new Array(mapRowLength * mapRowLength);
         // This array is used only during construction of the rulesbucket in the map

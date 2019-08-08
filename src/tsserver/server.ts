@@ -939,7 +939,7 @@ namespace ts.server {
     const npmLocation = findArgument(Arguments.NpmLocation);
     const validateDefaultNpmLocation = hasArgument(Arguments.ValidateDefaultNpmLocation);
 
-    function parseStringArray(argName: string): ReadonlyArray<string> {
+    function parseStringArray(argName: string): readonly string[] {
         const arg = findArgument(argName);
         if (arg === undefined) {
             return emptyArray;

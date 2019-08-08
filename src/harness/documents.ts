@@ -7,7 +7,7 @@ namespace documents {
         public readonly file: string;
         public readonly text: string;
 
-        private _lineStarts: ReadonlyArray<number> | undefined;
+        private _lineStarts: readonly number[] | undefined;
         private _testFile: Harness.Compiler.TestFile | undefined;
 
         constructor(file: string, text: string, meta?: Map<string, string>) {
@@ -16,7 +16,7 @@ namespace documents {
             this.meta = meta || new Map<string, string>();
         }
 
-        public get lineStarts(): ReadonlyArray<number> {
+        public get lineStarts(): readonly number[] {
             return this._lineStarts || (this._lineStarts = ts.computeLineStarts(this.text));
         }
 
@@ -64,10 +64,10 @@ namespace documents {
         public readonly version: number;
         public readonly file: string;
         public readonly sourceRoot: string | undefined;
-        public readonly sources: ReadonlyArray<string> = [];
-        public readonly sourcesContent: ReadonlyArray<string> | undefined;
-        public readonly mappings: ReadonlyArray<Mapping> = [];
-        public readonly names: ReadonlyArray<string> | undefined;
+        public readonly sources: readonly string[] = [];
+        public readonly sourcesContent: readonly string[] | undefined;
+        public readonly mappings: readonly Mapping[] = [];
+        public readonly names: readonly string[] | undefined;
 
         private static readonly _mappingRegExp = /([A-Za-z0-9+/]+),?|(;)|./g;
         private static readonly _sourceMappingURLRegExp = /^\/\/[#@]\s*sourceMappingURL\s*=\s*(.*?)\s*$/mig;
@@ -156,11 +156,11 @@ namespace documents {
             return url === undefined ? undefined : this.fromUrl(url);
         }
 
-        public getMappingsForEmittedLine(emittedLine: number): ReadonlyArray<Mapping> | undefined {
+        public getMappingsForEmittedLine(emittedLine: number): readonly Mapping[] | undefined {
             return this._emittedLineMappings[emittedLine];
         }
 
-        public getMappingsForSourceLine(sourceIndex: number, sourceLine: number): ReadonlyArray<Mapping> | undefined {
+        public getMappingsForSourceLine(sourceIndex: number, sourceLine: number): readonly Mapping[] | undefined {
             const mappingsForSource = this._sourceLineMappings[sourceIndex];
             return mappingsForSource && mappingsForSource[sourceLine];
         }

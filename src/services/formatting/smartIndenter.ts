@@ -430,7 +430,7 @@ namespace ts.formatting {
             return Value.Unknown;
         }
 
-        function deriveActualIndentationFromList(list: ReadonlyArray<Node>, index: number, sourceFile: SourceFile, options: EditorSettings): number {
+        function deriveActualIndentationFromList(list: readonly Node[], index: number, sourceFile: SourceFile, options: EditorSettings): number {
             Debug.assert(index >= 0 && index < list.length);
             const node = list[index];
 

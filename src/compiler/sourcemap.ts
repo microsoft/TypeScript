@@ -286,7 +286,7 @@ namespace ts {
         getLineText(line: number): string;
     }
 
-    export function getLineInfo(text: string, lineStarts: ReadonlyArray<number>): LineInfo {
+    export function getLineInfo(text: string, lineStarts: readonly number[]): LineInfo {
         return {
             getLineCount: () => lineStarts.length,
             getLineText: line => text.substring(lineStarts[line], lineStarts[line + 1])
@@ -623,9 +623,9 @@ namespace ts {
         const generatedFile = host.getSourceFileLike(generatedAbsoluteFilePath);
         const sourceFileAbsolutePaths = map.sources.map(source => getNormalizedAbsolutePath(source, sourceRoot));
         const sourceToSourceIndexMap = createMapFromEntries(sourceFileAbsolutePaths.map((source, i) => [host.getCanonicalFileName(source), i] as [string, number]));
-        let decodedMappings: ReadonlyArray<MappedPosition> | undefined;
+        let decodedMappings: readonly MappedPosition[] | undefined;
         let generatedMappings: SortedReadonlyArray<MappedPosition> | undefined;
-        let sourceMappings: ReadonlyArray<SortedReadonlyArray<SourceMappedPosition>> | undefined;
+        let sourceMappings: readonly SortedReadonlyArray<SourceMappedPosition>[] | undefined;
 
         return {
             getSourcePosition,

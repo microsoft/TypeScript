@@ -228,7 +228,7 @@ namespace ts.formatting {
      * This function will return a predicate that for a given text range will tell
      * if there are any parse errors that overlap with the range.
      */
-    function prepareRangeContainsErrorFunction(errors: ReadonlyArray<Diagnostic>, originalRange: TextRange): (r: TextRange) => boolean {
+    function prepareRangeContainsErrorFunction(errors: readonly Diagnostic[], originalRange: TextRange): (r: TextRange) => boolean {
         if (!errors.length) {
             return rangeHasNoErrors;
         }
@@ -1222,7 +1222,7 @@ namespace ts.formatting {
             position === range.end && (range.kind === SyntaxKind.SingleLineCommentTrivia || position === sourceFile.getFullWidth()));
     }
 
-    function getOpenTokenForList(node: Node, list: ReadonlyArray<Node>) {
+    function getOpenTokenForList(node: Node, list: readonly Node[]) {
         switch (node.kind) {
             case SyntaxKind.Constructor:
             case SyntaxKind.FunctionDeclaration:

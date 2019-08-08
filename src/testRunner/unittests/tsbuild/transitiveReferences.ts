@@ -25,7 +25,7 @@ namespace ts {
             projFs = undefined!; // Release the contents
         });
 
-        function verifyBuild(modifyDiskLayout: (fs: vfs.FileSystem) => void, allExpectedOutputs: ReadonlyArray<string>, expectedFileTraces: ReadonlyArray<string>, ...expectedDiagnostics: fakes.ExpectedDiagnostic[]) {
+        function verifyBuild(modifyDiskLayout: (fs: vfs.FileSystem) => void, allExpectedOutputs: readonly string[], expectedFileTraces: readonly string[], ...expectedDiagnostics: fakes.ExpectedDiagnostic[]) {
             const fs = projFs.shadow();
             const host = new fakes.SolutionBuilderHost(fs);
             modifyDiskLayout(fs);

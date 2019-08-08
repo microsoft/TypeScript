@@ -44,7 +44,7 @@ namespace Harness.SourceMapRecorder {
         let sourceMapNames: string[] | null | undefined;
 
         let jsFile: documents.TextDocument;
-        let jsLineMap: ReadonlyArray<number>;
+        let jsLineMap: readonly number[];
         let tsCode: string;
         let tsLineMap: number[];
 
@@ -153,7 +153,7 @@ namespace Harness.SourceMapRecorder {
             writeJsFileLines(jsLineMap.length);
         }
 
-        function getTextOfLine(line: number, lineMap: ReadonlyArray<number>, code: string) {
+        function getTextOfLine(line: number, lineMap: readonly number[], code: string) {
             const startPos = lineMap[line];
             const endPos = lineMap[line + 1];
             const text = code.substring(startPos, endPos);
@@ -275,7 +275,7 @@ namespace Harness.SourceMapRecorder {
         }
     }
 
-    export function getSourceMapRecord(sourceMapDataList: ReadonlyArray<ts.SourceMapEmitResult>, program: ts.Program, jsFiles: ReadonlyArray<documents.TextDocument>, declarationFiles: ReadonlyArray<documents.TextDocument>) {
+    export function getSourceMapRecord(sourceMapDataList: readonly ts.SourceMapEmitResult[], program: ts.Program, jsFiles: readonly documents.TextDocument[], declarationFiles: readonly documents.TextDocument[]) {
         const sourceMapRecorder = new Compiler.WriterAggregator();
 
         for (let i = 0; i < sourceMapDataList.length; i++) {

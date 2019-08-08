@@ -204,7 +204,7 @@ namespace ts {
             return visitEachChild(node, visitor, context);
         }
 
-        function chunkObjectLiteralElements(elements: ReadonlyArray<ObjectLiteralElementLike>): Expression[] {
+        function chunkObjectLiteralElements(elements: readonly ObjectLiteralElementLike[]): Expression[] {
             let chunkObject: ObjectLiteralElementLike[] | undefined;
             const objects: Expression[] = [];
             for (const e of elements) {

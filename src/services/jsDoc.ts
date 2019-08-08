@@ -82,7 +82,7 @@ namespace ts.JsDoc {
     let jsDocTagNameCompletionEntries: CompletionEntry[];
     let jsDocTagCompletionEntries: CompletionEntry[];
 
-    export function getJsDocCommentsFromDeclarations(declarations: ReadonlyArray<Declaration>): SymbolDisplayPart[] {
+    export function getJsDocCommentsFromDeclarations(declarations: readonly Declaration[]): SymbolDisplayPart[] {
         // Only collect doc comments from duplicate declarations once:
         // In case of a union property there might be same declaration multiple times
         // which only varies in type parameter
@@ -102,7 +102,7 @@ namespace ts.JsDoc {
         return documentationComment;
     }
 
-    function getCommentHavingNodes(declaration: Declaration): ReadonlyArray<JSDoc | JSDocTag> {
+    function getCommentHavingNodes(declaration: Declaration): readonly (JSDoc | JSDocTag)[] {
         switch (declaration.kind) {
             case SyntaxKind.JSDocParameterTag:
             case SyntaxKind.JSDocPropertyTag:
@@ -163,7 +163,7 @@ namespace ts.JsDoc {
      * returns a truthy value, then returns that value.
      * If no such value is found, the callback is applied to each element of array and undefined is returned.
      */
-    function forEachUnique<T, U>(array: ReadonlyArray<T> | undefined, callback: (element: T, index: number) => U): U | undefined {
+    function forEachUnique<T, U>(array: readonly T[] | undefined, callback: (element: T, index: number) => U): U | undefined {
         if (array) {
             for (let i = 0; i < array.length; i++) {
                 if (array.indexOf(array[i]) === i) {
@@ -327,7 +327,7 @@ namespace ts.JsDoc {
         return text.slice(lineStart, pos);
     }
 
-    function parameterDocComments(parameters: ReadonlyArray<ParameterDeclaration>, isJavaScriptFile: boolean, indentationStr: string, newLine: string): string {
+    function parameterDocComments(parameters: readonly ParameterDeclaration[], isJavaScriptFile: boolean, indentationStr: string, newLine: string): string {
         return parameters.map(({ name, dotDotDotToken }, i) => {
             const paramName = name.kind === SyntaxKind.Identifier ? name.text : "param" + i;
             const type = isJavaScriptFile ? (dotDotDotToken ? "{...any} " : "{any} ") : "";
@@ -337,7 +337,7 @@ namespace ts.JsDoc {
 
     interface CommentOwnerInfo {
         readonly commentOwner: Node;
-        readonly parameters?: ReadonlyArray<ParameterDeclaration>;
+        readonly parameters?: readonly ParameterDeclaration[];
     }
     function getCommentOwnerInfo(tokenAtPos: Node): CommentOwnerInfo | undefined {
         return forEachAncestor(tokenAtPos, getCommentOwnerInfoWorker);
@@ -400,7 +400,7 @@ namespace ts.JsDoc {
      * @param rightHandSide the expression which may contain an appropriate set of parameters
      * @returns the parameters of a signature found on the RHS if one exists; otherwise 'emptyArray'.
      */
-    function getParametersFromRightHandSideOfAssignment(rightHandSide: Expression): ReadonlyArray<ParameterDeclaration> {
+    function getParametersFromRightHandSideOfAssignment(rightHandSide: Expression): readonly ParameterDeclaration[] {
         while (rightHandSide.kind === SyntaxKind.ParenthesizedExpression) {
             rightHandSide = (<ParenthesizedExpression>rightHandSide).expression;
         }

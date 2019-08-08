@@ -26,7 +26,7 @@ namespace ts.codefix {
         return extendsToken.kind === SyntaxKind.ExtendsKeyword ? { extendsToken, heritageClauses } : undefined;
     }
 
-    function doChanges(changes: textChanges.ChangeTracker, sourceFile: SourceFile, extendsToken: Node, heritageClauses: ReadonlyArray<HeritageClause>): void {
+    function doChanges(changes: textChanges.ChangeTracker, sourceFile: SourceFile, extendsToken: Node, heritageClauses: readonly HeritageClause[]): void {
         changes.replaceNode(sourceFile, extendsToken, createToken(SyntaxKind.ImplementsKeyword));
 
         // If there is already an implements clause, replace the implements keyword with a comma.

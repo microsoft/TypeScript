@@ -48,7 +48,7 @@ namespace ts.codefix {
         }
     }
 
-    function lastWhere<T>(a: ReadonlyArray<T>, pred: (value: T) => boolean): T | undefined {
+    function lastWhere<T>(a: readonly T[], pred: (value: T) => boolean): T | undefined {
         let last: T | undefined;
         for (const value of a) {
             if (!pred(value)) break;

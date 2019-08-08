@@ -580,7 +580,7 @@ namespace ts {
             return parameter.decorators !== undefined && parameter.decorators.length > 0;
         }
 
-        function getClassFacts(node: ClassDeclaration, staticProperties: ReadonlyArray<PropertyDeclaration>) {
+        function getClassFacts(node: ClassDeclaration, staticProperties: readonly PropertyDeclaration[]) {
             let facts = ClassFacts.None;
             if (some(staticProperties)) facts |= ClassFacts.HasStaticInitializedProperties;
             const extendsClauseElement = getEffectiveBaseTypeNode(node);
@@ -924,7 +924,7 @@ namespace ts {
          * @param isStatic A value indicating whether to retrieve static or instance members of
          *                 the class.
          */
-        function getDecoratedClassElements(node: ClassExpression | ClassDeclaration, isStatic: boolean): ReadonlyArray<ClassElement> {
+        function getDecoratedClassElements(node: ClassExpression | ClassDeclaration, isStatic: boolean): readonly ClassElement[] {
             return filter(node.members, isStatic ? m => isStaticDecoratedClassElement(m, node) : m => isInstanceDecoratedClassElement(m, node));
         }
 
@@ -963,8 +963,8 @@ namespace ts {
          * A structure describing the decorators for a class element.
          */
         interface AllDecorators {
-            decorators: ReadonlyArray<Decorator> | undefined;
-            parameters?: ReadonlyArray<ReadonlyArray<Decorator> | undefined>;
+            decorators: readonly Decorator[] | undefined;
+            parameters?: readonly (readonly Decorator[] | undefined)[];
         }
 
         /**
@@ -974,7 +974,7 @@ namespace ts {
          * @param node The function-like node.
          */
         function getDecoratorsOfParameters(node: FunctionLikeDeclaration | undefined) {
-            let decorators: (ReadonlyArray<Decorator> | undefined)[] | undefined;
+            let decorators: (readonly Decorator[] | undefined)[] | undefined;
             if (node) {
                 const parameters = node.parameters;
                 const firstParameterIsThis = parameters.length > 0 && parameterIsThisKeyword(parameters[0]);
@@ -1588,7 +1588,7 @@ namespace ts {
             return createIdentifier("Object");
         }
 
-        function serializeTypeList(types: ReadonlyArray<TypeNode>): SerializedTypeNode {
+        function serializeTypeList(types: readonly TypeNode[]): SerializedTypeNode {
             // Note when updating logic here also update getEntityNameForDecoratorMetadata
             // so that aliases can be marked as referenced
             let serializedUnion: SerializedTypeNode | undefined;

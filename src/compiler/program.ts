@@ -316,9 +316,9 @@ namespace ts {
         };
     }
 
-    export function getPreEmitDiagnostics(program: Program, sourceFile?: SourceFile, cancellationToken?: CancellationToken): ReadonlyArray<Diagnostic>;
-    /*@internal*/ export function getPreEmitDiagnostics(program: BuilderProgram, sourceFile?: SourceFile, cancellationToken?: CancellationToken): ReadonlyArray<Diagnostic>;
-    export function getPreEmitDiagnostics(program: Program | BuilderProgram, sourceFile?: SourceFile, cancellationToken?: CancellationToken): ReadonlyArray<Diagnostic> {
+    export function getPreEmitDiagnostics(program: Program, sourceFile?: SourceFile, cancellationToken?: CancellationToken): readonly Diagnostic[];
+    /*@internal*/ export function getPreEmitDiagnostics(program: BuilderProgram, sourceFile?: SourceFile, cancellationToken?: CancellationToken): readonly Diagnostic[];
+    export function getPreEmitDiagnostics(program: Program | BuilderProgram, sourceFile?: SourceFile, cancellationToken?: CancellationToken): readonly Diagnostic[] {
         const diagnostics = [
             ...program.getConfigFileParsingDiagnostics(),
             ...program.getOptionsDiagnostics(cancellationToken),
@@ -340,7 +340,7 @@ namespace ts {
         getNewLine(): string;
     }
 
-    export function formatDiagnostics(diagnostics: ReadonlyArray<Diagnostic>, host: FormatDiagnosticsHost): string {
+    export function formatDiagnostics(diagnostics: readonly Diagnostic[], host: FormatDiagnosticsHost): string {
         let output = "";
 
         for (const diagnostic of diagnostics) {
@@ -465,7 +465,7 @@ namespace ts {
         return output;
     }
 
-    export function formatDiagnosticsWithColorAndContext(diagnostics: ReadonlyArray<Diagnostic>, host: FormatDiagnosticsHost): string {
+    export function formatDiagnosticsWithColorAndContext(diagnostics: readonly Diagnostic[], host: FormatDiagnosticsHost): string {
         let output = "";
         for (const diagnostic of diagnostics) {
             if (diagnostic.file) {
@@ -562,7 +562,7 @@ namespace ts {
         fileExists: (fileName: string) => boolean,
         hasInvalidatedResolution: HasInvalidatedResolution,
         hasChangedAutomaticTypeDirectiveNames: boolean,
-        projectReferences: ReadonlyArray<ProjectReference> | undefined
+        projectReferences: readonly ProjectReference[] | undefined
     ): boolean {
         // If we haven't created a program yet or have changed automatic type directives, then it is not up-to-date
         if (!program || hasChangedAutomaticTypeDirectiveNames) {
@@ -647,7 +647,7 @@ namespace ts {
         }
     }
 
-    export function getConfigFileParsingDiagnostics(configFileParseResult: ParsedCommandLine): ReadonlyArray<Diagnostic> {
+    export function getConfigFileParsingDiagnostics(configFileParseResult: ParsedCommandLine): readonly Diagnostic[] {
         return configFileParseResult.options.configFile ?
             [...configFileParseResult.options.configFile.parseDiagnostics, ...configFileParseResult.errors] :
             configFileParseResult.errors;
@@ -665,7 +665,7 @@ namespace ts {
             !isJsonEqual(getCompilerOptionValue(oldOptions, option), getCompilerOptionValue(newOptions, option)));
     }
 
-    function createCreateProgramOptions(rootNames: ReadonlyArray<string>, options: CompilerOptions, host?: CompilerHost, oldProgram?: Program, configFileParsingDiagnostics?: ReadonlyArray<Diagnostic>): CreateProgramOptions {
+    function createCreateProgramOptions(rootNames: readonly string[], options: CompilerOptions, host?: CompilerHost, oldProgram?: Program, configFileParsingDiagnostics?: readonly Diagnostic[]): CreateProgramOptions {
         return {
             rootNames,
             options,
@@ -700,8 +700,8 @@ namespace ts {
      * @param configFileParsingDiagnostics - error during config file parsing
      * @returns A 'Program' object.
      */
-    export function createProgram(rootNames: ReadonlyArray<string>, options: CompilerOptions, host?: CompilerHost, oldProgram?: Program, configFileParsingDiagnostics?: ReadonlyArray<Diagnostic>): Program;
-    export function createProgram(rootNamesOrOptions: ReadonlyArray<string> | CreateProgramOptions, _options?: CompilerOptions, _host?: CompilerHost, _oldProgram?: Program, _configFileParsingDiagnostics?: ReadonlyArray<Diagnostic>): Program {
+    export function createProgram(rootNames: readonly string[], options: CompilerOptions, host?: CompilerHost, oldProgram?: Program, configFileParsingDiagnostics?: readonly Diagnostic[]): Program;
+    export function createProgram(rootNamesOrOptions: readonly string[] | CreateProgramOptions, _options?: CompilerOptions, _host?: CompilerHost, _oldProgram?: Program, _configFileParsingDiagnostics?: readonly Diagnostic[]): Program {
         const createProgramOptions = isArray(rootNamesOrOptions) ? createCreateProgramOptions(rootNamesOrOptions, _options!, _host, _oldProgram, _configFileParsingDiagnostics) : rootNamesOrOptions; // TODO: GH#18217
         const { rootNames, options, configFileParsingDiagnostics, projectReferences } = createProgramOptions;
         let { oldProgram } = createProgramOptions;
@@ -800,13 +800,13 @@ namespace ts {
          * - undefined otherwise
          */
         const filesByName = createMap<SourceFile | false | undefined>();
-        let missingFilePaths: ReadonlyArray<Path> | undefined;
+        let missingFilePaths: readonly Path[] | undefined;
         // stores 'filename -> file association' ignoring case
         // used to track cases when two file names differ only in casing
         const filesByNameIgnoreCase = host.useCaseSensitiveFileNames() ? createMap<SourceFile>() : undefined;
 
         // A parallel array to projectReferences storing the results of reading in the referenced tsconfig files
-        let resolvedProjectReferences: ReadonlyArray<ResolvedProjectReference | undefined> | undefined;
+        let resolvedProjectReferences: readonly (ResolvedProjectReference | undefined)[] | undefined;
         let projectReferenceRedirects: Map<ResolvedProjectReference | false> | undefined;
         let mapFromFileToProjectReferenceRedirects: Map<Path> | undefined;
 
@@ -1528,7 +1528,7 @@ namespace ts {
         }
 
         function emitWorker(program: Program, sourceFile: SourceFile | undefined, writeFileCallback: WriteFileCallback | undefined, cancellationToken: CancellationToken | undefined, emitOnlyDtsFiles?: boolean, customTransformers?: CustomTransformers): EmitResult {
-            let declarationDiagnostics: ReadonlyArray<Diagnostic> = [];
+            let declarationDiagnostics: readonly Diagnostic[] = [];
 
             if (!emitOnlyDtsFiles) {
                 if (options.noEmit) {
@@ -1596,8 +1596,8 @@ namespace ts {
 
         function getDiagnosticsHelper<T extends Diagnostic>(
             sourceFile: SourceFile,
-            getDiagnostics: (sourceFile: SourceFile, cancellationToken: CancellationToken) => ReadonlyArray<T>,
-            cancellationToken: CancellationToken): ReadonlyArray<T> {
+            getDiagnostics: (sourceFile: SourceFile, cancellationToken: CancellationToken) => readonly T[],
+            cancellationToken: CancellationToken): readonly T[] {
             if (sourceFile) {
                 return getDiagnostics(sourceFile, cancellationToken);
             }
@@ -1609,15 +1609,15 @@ namespace ts {
             }));
         }
 
-        function getSyntacticDiagnostics(sourceFile: SourceFile, cancellationToken: CancellationToken): ReadonlyArray<DiagnosticWithLocation> {
+        function getSyntacticDiagnostics(sourceFile: SourceFile, cancellationToken: CancellationToken): readonly DiagnosticWithLocation[] {
             return getDiagnosticsHelper(sourceFile, getSyntacticDiagnosticsForFile, cancellationToken);
         }
 
-        function getSemanticDiagnostics(sourceFile: SourceFile, cancellationToken: CancellationToken): ReadonlyArray<Diagnostic> {
+        function getSemanticDiagnostics(sourceFile: SourceFile, cancellationToken: CancellationToken): readonly Diagnostic[] {
             return getDiagnosticsHelper(sourceFile, getSemanticDiagnosticsForFile, cancellationToken);
         }
 
-        function getDeclarationDiagnostics(sourceFile: SourceFile, cancellationToken: CancellationToken): ReadonlyArray<DiagnosticWithLocation> {
+        function getDeclarationDiagnostics(sourceFile: SourceFile, cancellationToken: CancellationToken): readonly DiagnosticWithLocation[] {
             const options = program.getCompilerOptions();
             // collect diagnostics from the program only once if either no source file was specified or out/outFile is set (bundled emit)
             if (!sourceFile || options.out || options.outFile) {
@@ -1628,7 +1628,7 @@ namespace ts {
             }
         }
 
-        function getSyntacticDiagnosticsForFile(sourceFile: SourceFile): ReadonlyArray<DiagnosticWithLocation> {
+        function getSyntacticDiagnosticsForFile(sourceFile: SourceFile): readonly DiagnosticWithLocation[] {
             // For JavaScript files, we report semantic errors for using TypeScript-only
             // constructs from within a JavaScript file as syntactic errors.
             if (isSourceFileJS(sourceFile)) {
@@ -1663,7 +1663,7 @@ namespace ts {
             }
         }
 
-        function getSemanticDiagnosticsForFile(sourceFile: SourceFile, cancellationToken: CancellationToken): ReadonlyArray<Diagnostic> {
+        function getSemanticDiagnosticsForFile(sourceFile: SourceFile, cancellationToken: CancellationToken): readonly Diagnostic[] {
             return getAndCacheDiagnostics(sourceFile, cancellationToken, cachedSemanticDiagnosticsForFile, getSemanticDiagnosticsForFileNoCache);
         }
 
@@ -1681,7 +1681,7 @@ namespace ts {
                 // By default, only type-check .ts, .tsx, 'Deferred' and 'External' files (external files are added by plugins)
                 const includeBindAndCheckDiagnostics = sourceFile.scriptKind === ScriptKind.TS || sourceFile.scriptKind === ScriptKind.TSX ||
                     sourceFile.scriptKind === ScriptKind.External || isCheckJs || sourceFile.scriptKind === ScriptKind.Deferred;
-                const bindDiagnostics: ReadonlyArray<Diagnostic> = includeBindAndCheckDiagnostics ? sourceFile.bindDiagnostics : emptyArray;
+                const bindDiagnostics: readonly Diagnostic[] = includeBindAndCheckDiagnostics ? sourceFile.bindDiagnostics : emptyArray;
                 const checkDiagnostics = includeBindAndCheckDiagnostics ? typeChecker.getDiagnostics(sourceFile, cancellationToken) : emptyArray;
                 const fileProcessingDiagnosticsInFile = fileProcessingDiagnostics.getDiagnostics(sourceFile.fileName);
                 const programDiagnosticsInFile = programDiagnostics.getDiagnostics(sourceFile.fileName);
@@ -1700,7 +1700,7 @@ namespace ts {
             });
         }
 
-        function getSuggestionDiagnostics(sourceFile: SourceFile, cancellationToken: CancellationToken): ReadonlyArray<DiagnosticWithLocation> {
+        function getSuggestionDiagnostics(sourceFile: SourceFile, cancellationToken: CancellationToken): readonly DiagnosticWithLocation[] {
             return runWithCancellationToken(() => {
                 return getDiagnosticsProducingTypeChecker().getSuggestionDiagnostics(sourceFile, cancellationToken);
             });
@@ -1916,7 +1916,7 @@ namespace ts {
             });
         }
 
-        function getDeclarationDiagnosticsWorker(sourceFile: SourceFile, cancellationToken: CancellationToken): ReadonlyArray<DiagnosticWithLocation> {
+        function getDeclarationDiagnosticsWorker(sourceFile: SourceFile, cancellationToken: CancellationToken): readonly DiagnosticWithLocation[] {
             return getAndCacheDiagnostics(sourceFile, cancellationToken, cachedDeclarationDiagnosticsForFile, getDeclarationDiagnosticsForFileNoCache);
         }
 
@@ -1933,7 +1933,7 @@ namespace ts {
             cancellationToken: CancellationToken,
             cache: DiagnosticCache<T>,
             getDiagnostics: (sourceFile: SourceFile, cancellationToken: CancellationToken) => T[] | undefined,
-        ): ReadonlyArray<T> {
+        ): readonly T[] {
 
             const cachedResult = sourceFile
                 ? cache.perFile && cache.perFile.get(sourceFile.path)
@@ -1955,7 +1955,7 @@ namespace ts {
             return result;
         }
 
-        function getDeclarationDiagnosticsForFile(sourceFile: SourceFile, cancellationToken: CancellationToken): ReadonlyArray<DiagnosticWithLocation> {
+        function getDeclarationDiagnosticsForFile(sourceFile: SourceFile, cancellationToken: CancellationToken): readonly DiagnosticWithLocation[] {
             return sourceFile.isDeclarationFile ? [] : getDeclarationDiagnosticsWorker(sourceFile, cancellationToken);
         }
 
@@ -1984,7 +1984,7 @@ namespace ts {
             return rootNames.length ? sortAndDeduplicateDiagnostics(getDiagnosticsProducingTypeChecker().getGlobalDiagnostics().slice()) : emptyArray as any as SortedReadonlyArray<Diagnostic>;
         }
 
-        function getConfigFileParsingDiagnostics(): ReadonlyArray<Diagnostic> {
+        function getConfigFileParsingDiagnostics(): readonly Diagnostic[] {
             return configFileParsingDiagnostics || emptyArray;
         }
 
@@ -2427,21 +2427,21 @@ namespace ts {
         }
 
         function forEachProjectReference<T>(
-            projectReferences: ReadonlyArray<ProjectReference> | undefined,
-            resolvedProjectReferences: ReadonlyArray<ResolvedProjectReference | undefined> | undefined,
+            projectReferences: readonly ProjectReference[] | undefined,
+            resolvedProjectReferences: readonly (ResolvedProjectReference | undefined)[] | undefined,
             cbResolvedRef: (resolvedRef: ResolvedProjectReference | undefined, index: number, parent: ResolvedProjectReference | undefined) => T | undefined,
-            cbRef?: (projectReferences: ReadonlyArray<ProjectReference> | undefined, parent: ResolvedProjectReference | undefined) => T | undefined
+            cbRef?: (projectReferences: readonly ProjectReference[] | undefined, parent: ResolvedProjectReference | undefined) => T | undefined
         ): T | undefined {
             let seenResolvedRefs: ResolvedProjectReference[] | undefined;
 
             return worker(projectReferences, resolvedProjectReferences, /*parent*/ undefined, cbResolvedRef, cbRef);
 
             function worker(
-                projectReferences: ReadonlyArray<ProjectReference> | undefined,
-                resolvedProjectReferences: ReadonlyArray<ResolvedProjectReference | undefined> | undefined,
+                projectReferences: readonly ProjectReference[] | undefined,
+                resolvedProjectReferences: readonly (ResolvedProjectReference | undefined)[] | undefined,
                 parent: ResolvedProjectReference | undefined,
                 cbResolvedRef: (resolvedRef: ResolvedProjectReference | undefined, index: number, parent: ResolvedProjectReference | undefined) => T | undefined,
-                cbRef?: (projectReferences: ReadonlyArray<ProjectReference> | undefined, parent: ResolvedProjectReference | undefined) => T | undefined,
+                cbRef?: (projectReferences: readonly ProjectReference[] | undefined, parent: ResolvedProjectReference | undefined) => T | undefined,
             ): T | undefined {
 
                 // Visit project references first
@@ -2650,7 +2650,7 @@ namespace ts {
             return computeCommonSourceDirectoryOfFilenames(fileNames, currentDirectory, getCanonicalFileName);
         }
 
-        function checkSourceFilesBelongToPath(sourceFiles: ReadonlyArray<SourceFile>, rootDirectory: string): boolean {
+        function checkSourceFilesBelongToPath(sourceFiles: readonly SourceFile[], rootDirectory: string): boolean {
             let allFilesBelongToPath = true;
             const absoluteRootDirectoryPath = host.getCanonicalFileName(getNormalizedAbsolutePath(rootDirectory, currentDirectory));
 
@@ -3171,7 +3171,7 @@ namespace ts {
         getCurrentDirectory(): string;
         fileExists(fileName: string): boolean;
         readFile(fileName: string): string | undefined;
-        readDirectory?(rootDir: string, extensions: ReadonlyArray<string>, excludes: ReadonlyArray<string> | undefined, includes: ReadonlyArray<string>, depth?: number): string[];
+        readDirectory?(rootDir: string, extensions: readonly string[], excludes: readonly string[] | undefined, includes: readonly string[], depth?: number): string[];
         trace?(s: string): void;
         onUnRecoverableConfigFileDiagnostic?: DiagnosticReporter;
     }
@@ -3198,7 +3198,7 @@ namespace ts {
     }
 
     /* @internal */
-    export function createPrependNodes(projectReferences: ReadonlyArray<ProjectReference> | undefined, getCommandLine: (ref: ProjectReference, index: number) => ParsedCommandLine | undefined, readFile: (path: string) => string | undefined) {
+    export function createPrependNodes(projectReferences: readonly ProjectReference[] | undefined, getCommandLine: (ref: ProjectReference, index: number) => ParsedCommandLine | undefined, readFile: (path: string) => string | undefined) {
         if (!projectReferences) return emptyArray;
         let nodes: InputFiles[] | undefined;
         for (let i = 0; i < projectReferences.length; i++) {

@@ -6,7 +6,7 @@ namespace ts {
         return pathIsRelative(moduleName) || isRootedDiskPath(moduleName);
     }
 
-    export function sortAndDeduplicateDiagnostics<T extends Diagnostic>(diagnostics: ReadonlyArray<T>): SortedReadonlyArray<T> {
+    export function sortAndDeduplicateDiagnostics<T extends Diagnostic>(diagnostics: readonly T[]): SortedReadonlyArray<T> {
         return sortAndDeduplicate<T>(diagnostics, compareDiagnostics);
     }
 }
@@ -44,7 +44,7 @@ namespace ts {
         return !!map && !!map.size;
     }
 
-    export function createSymbolTable(symbols?: ReadonlyArray<Symbol>): SymbolTable {
+    export function createSymbolTable(symbols?: readonly Symbol[]): SymbolTable {
         const result = createMap<Symbol>() as SymbolTable;
         if (symbols) {
             for (const symbol of symbols) {
@@ -189,10 +189,10 @@ namespace ts {
      *
      * @param array the array of input elements.
      */
-    export function arrayToSet(array: ReadonlyArray<string>): Map<true>;
-    export function arrayToSet<T>(array: ReadonlyArray<T>, makeKey: (value: T) => string | undefined): Map<true>;
-    export function arrayToSet<T>(array: ReadonlyArray<T>, makeKey: (value: T) => __String | undefined): UnderscoreEscapedMap<true>;
-    export function arrayToSet(array: ReadonlyArray<any>, makeKey?: (value: any) => string | __String | undefined): Map<true> | UnderscoreEscapedMap<true> {
+    export function arrayToSet(array: readonly string[]): Map<true>;
+    export function arrayToSet<T>(array: readonly T[], makeKey: (value: T) => string | undefined): Map<true>;
+    export function arrayToSet<T>(array: readonly T[], makeKey: (value: T) => __String | undefined): UnderscoreEscapedMap<true>;
+    export function arrayToSet(array: readonly any[], makeKey?: (value: any) => string | __String | undefined): Map<true> | UnderscoreEscapedMap<true> {
         return arrayToMap<any, true>(array, makeKey || (s => s), () => true);
     }
 
@@ -269,8 +269,8 @@ namespace ts {
     }
 
     export function hasChangesInResolutions<T>(
-        names: ReadonlyArray<string>,
-        newResolutions: ReadonlyArray<T>,
+        names: readonly string[],
+        newResolutions: readonly T[],
         oldResolutions: ReadonlyMap<T> | undefined,
         comparer: (oldResolution: T, newResolution: T) => boolean): boolean {
         Debug.assert(names.length === newResolutions.length);
@@ -407,7 +407,7 @@ namespace ts {
         return !nodeIsMissing(node);
     }
 
-    function insertStatementsAfterPrologue<T extends Statement>(to: T[], from: ReadonlyArray<T> | undefined, isPrologueDirective: (node: Node) => boolean): T[] {
+    function insertStatementsAfterPrologue<T extends Statement>(to: T[], from: readonly T[] | undefined, isPrologueDirective: (node: Node) => boolean): T[] {
         if (from === undefined || from.length === 0) return to;
         let statementIndex = 0;
         // skip all prologue directives to insert at the correct position
@@ -441,11 +441,11 @@ namespace ts {
     /**
      * Prepends statements to an array while taking care of prologue directives.
      */
-    export function insertStatementsAfterStandardPrologue<T extends Statement>(to: T[], from: ReadonlyArray<T> | undefined): T[] {
+    export function insertStatementsAfterStandardPrologue<T extends Statement>(to: T[], from: readonly T[] | undefined): T[] {
         return insertStatementsAfterPrologue(to, from, isPrologueDirective);
     }
 
-    export function insertStatementsAfterCustomPrologue<T extends Statement>(to: T[], from: ReadonlyArray<T> | undefined): T[] {
+    export function insertStatementsAfterCustomPrologue<T extends Statement>(to: T[], from: readonly T[] | undefined): T[] {
         return insertStatementsAfterPrologue(to, from, isAnyPrologueDirective);
     }
 
@@ -555,7 +555,7 @@ namespace ts {
      * Note: it is expected that the `nodeArray` and the `node` are within the same file.
      * For example, searching for a `SourceFile` in a `SourceFile[]` wouldn't work.
      */
-    export function indexOfNode(nodeArray: ReadonlyArray<Node>, node: Node) {
+    export function indexOfNode(nodeArray: readonly Node[], node: Node) {
         return binarySearch(nodeArray, node, getPos, compareValues);
     }
 
@@ -1308,7 +1308,7 @@ namespace ts {
         return predicate && predicate.kind === TypePredicateKind.This;
     }
 
-    export function getPropertyAssignment(objectLiteral: ObjectLiteralExpression, key: string, key2?: string): ReadonlyArray<PropertyAssignment> {
+    export function getPropertyAssignment(objectLiteral: ObjectLiteralExpression, key: string, key2?: string): readonly PropertyAssignment[] {
         return objectLiteral.properties.filter((property): property is PropertyAssignment => {
             if (property.kind === SyntaxKind.PropertyAssignment) {
                 const propName = getTextOfPropertyName(property.name);
@@ -1332,7 +1332,7 @@ namespace ts {
                 undefined);
     }
 
-    export function getTsConfigPropArray(tsConfigSourceFile: TsConfigSourceFile | undefined, propKey: string): ReadonlyArray<PropertyAssignment> {
+    export function getTsConfigPropArray(tsConfigSourceFile: TsConfigSourceFile | undefined, propKey: string): readonly PropertyAssignment[] {
         const jsonObjectLiteral = getTsConfigObjectLiteralExpression(tsConfigSourceFile);
         return jsonObjectLiteral ? getPropertyAssignment(jsonObjectLiteral, propKey) : emptyArray;
     }
@@ -2206,7 +2206,7 @@ namespace ts {
             : undefined;
     }
 
-    export function getJSDocCommentsAndTags(hostNode: Node): ReadonlyArray<JSDoc | JSDocTag> {
+    export function getJSDocCommentsAndTags(hostNode: Node): readonly (JSDoc | JSDocTag)[] {
         let result: (JSDoc | JSDocTag)[] | undefined;
         // Pull parameter comments from declaring function as well
         if (isVariableLike(hostNode) && hasInitializer(hostNode) && hasJSDocNodes(hostNode.initializer!)) {
@@ -2597,7 +2597,7 @@ namespace ts {
     }
 
     /** Returns the node in an `extends` or `implements` clause of a class or interface. */
-    export function getAllSuperTypeNodes(node: Node): ReadonlyArray<TypeNode> {
+    export function getAllSuperTypeNodes(node: Node): readonly TypeNode[] {
         return isInterfaceDeclaration(node) ? getInterfaceBaseTypeNodes(node) || emptyArray :
             isClassLike(node) ? concatenate(singleElementArray(getEffectiveBaseTypeNode(node)), getClassImplementsHeritageClauseElements(node)) || emptyArray :
             emptyArray;
@@ -3464,7 +3464,7 @@ namespace ts {
      * @param host An EmitHost.
      * @param targetSourceFile An optional target source file to emit.
      */
-    export function getSourceFilesToEmit(host: EmitHost, targetSourceFile?: SourceFile): ReadonlyArray<SourceFile> {
+    export function getSourceFilesToEmit(host: EmitHost, targetSourceFile?: SourceFile): readonly SourceFile[] {
         const options = host.getCompilerOptions();
         const isSourceFileFromExternalLibrary = (file: SourceFile) => host.isSourceFileFromExternalLibrary(file);
         const getResolvedProjectReferenceToRedirect = (fileName: string) => host.getResolvedProjectReferenceToRedirect(fileName);
@@ -3505,7 +3505,7 @@ namespace ts {
         return combinePaths(newDirPath, sourceFilePath);
     }
 
-    export function writeFile(host: { writeFile: WriteFileCallback; }, diagnostics: DiagnosticCollection, fileName: string, data: string, writeByteOrderMark: boolean, sourceFiles?: ReadonlyArray<SourceFile>) {
+    export function writeFile(host: { writeFile: WriteFileCallback; }, diagnostics: DiagnosticCollection, fileName: string, data: string, writeByteOrderMark: boolean, sourceFiles?: readonly SourceFile[]) {
         host.writeFile(fileName, data, writeByteOrderMark, hostErrorMessage => {
             diagnostics.add(createCompilerDiagnostic(Diagnostics.Could_not_write_file_0_Colon_1, fileName, hostErrorMessage));
         }, sourceFiles);
@@ -3515,7 +3515,7 @@ namespace ts {
         return getLineAndCharacterOfPosition(currentSourceFile, pos).line;
     }
 
-    export function getLineOfLocalPositionFromLineMap(lineMap: ReadonlyArray<number>, pos: number) {
+    export function getLineOfLocalPositionFromLineMap(lineMap: readonly number[], pos: number) {
         return computeLineAndCharacterOfPosition(lineMap, pos).line;
     }
 
@@ -3633,7 +3633,7 @@ namespace ts {
             node.type || (isInJSFile(node) ? getJSDocReturnType(node) : undefined);
     }
 
-    export function getJSDocTypeParameterDeclarations(node: DeclarationWithTypeParameters): ReadonlyArray<TypeParameterDeclaration> {
+    export function getJSDocTypeParameterDeclarations(node: DeclarationWithTypeParameters): readonly TypeParameterDeclaration[] {
         return flatMap(getJSDocTags(node), tag => isNonTypeAliasTemplate(tag) ? tag.typeParameters : undefined);
     }
 
@@ -3651,11 +3651,11 @@ namespace ts {
         return parameter && getEffectiveTypeAnnotationNode(parameter);
     }
 
-    export function emitNewLineBeforeLeadingComments(lineMap: ReadonlyArray<number>, writer: EmitTextWriter, node: TextRange, leadingComments: ReadonlyArray<CommentRange> | undefined) {
+    export function emitNewLineBeforeLeadingComments(lineMap: readonly number[], writer: EmitTextWriter, node: TextRange, leadingComments: readonly CommentRange[] | undefined) {
         emitNewLineBeforeLeadingCommentsOfPosition(lineMap, writer, node.pos, leadingComments);
     }
 
-    export function emitNewLineBeforeLeadingCommentsOfPosition(lineMap: ReadonlyArray<number>, writer: EmitTextWriter, pos: number, leadingComments: ReadonlyArray<CommentRange> | undefined) {
+    export function emitNewLineBeforeLeadingCommentsOfPosition(lineMap: readonly number[], writer: EmitTextWriter, pos: number, leadingComments: readonly CommentRange[] | undefined) {
         // If the leading comments start on different line than the start of node, write new line
         if (leadingComments && leadingComments.length && pos !== leadingComments[0].pos &&
             getLineOfLocalPositionFromLineMap(lineMap, pos) !== getLineOfLocalPositionFromLineMap(lineMap, leadingComments[0].pos)) {
@@ -3663,7 +3663,7 @@ namespace ts {
         }
     }
 
-    export function emitNewLineBeforeLeadingCommentOfPosition(lineMap: ReadonlyArray<number>, writer: EmitTextWriter, pos: number, commentPos: number) {
+    export function emitNewLineBeforeLeadingCommentOfPosition(lineMap: readonly number[], writer: EmitTextWriter, pos: number, commentPos: number) {
         // If the leading comments start on different line than the start of node, write new line
         if (pos !== commentPos &&
             getLineOfLocalPositionFromLineMap(lineMap, pos) !== getLineOfLocalPositionFromLineMap(lineMap, commentPos)) {
@@ -3673,13 +3673,13 @@ namespace ts {
 
     export function emitComments(
         text: string,
-        lineMap: ReadonlyArray<number>,
+        lineMap: readonly number[],
         writer: EmitTextWriter,
-        comments: ReadonlyArray<CommentRange> | undefined,
+        comments: readonly CommentRange[] | undefined,
         leadingSeparator: boolean,
         trailingSeparator: boolean,
         newLine: string,
-        writeComment: (text: string, lineMap: ReadonlyArray<number>, writer: EmitTextWriter, commentPos: number, commentEnd: number, newLine: string) => void) {
+        writeComment: (text: string, lineMap: readonly number[], writer: EmitTextWriter, commentPos: number, commentEnd: number, newLine: string) => void) {
         if (comments && comments.length > 0) {
             if (leadingSeparator) {
                 writer.writeSpace(" ");
@@ -3711,8 +3711,8 @@ namespace ts {
      * Detached comment is a comment at the top of file or function body that is separated from
      * the next statement by space.
      */
-    export function emitDetachedComments(text: string, lineMap: ReadonlyArray<number>, writer: EmitTextWriter,
-        writeComment: (text: string, lineMap: ReadonlyArray<number>, writer: EmitTextWriter, commentPos: number, commentEnd: number, newLine: string) => void,
+    export function emitDetachedComments(text: string, lineMap: readonly number[], writer: EmitTextWriter,
+        writeComment: (text: string, lineMap: readonly number[], writer: EmitTextWriter, commentPos: number, commentEnd: number, newLine: string) => void,
         node: TextRange, newLine: string, removeComments: boolean) {
         let leadingComments: CommentRange[] | undefined;
         let currentDetachedCommentInfo: { nodePos: number, detachedCommentEndPos: number } | undefined;
@@ -3775,7 +3775,7 @@ namespace ts {
 
     }
 
-    export function writeCommentRange(text: string, lineMap: ReadonlyArray<number>, writer: EmitTextWriter, commentPos: number, commentEnd: number, newLine: string) {
+    export function writeCommentRange(text: string, lineMap: readonly number[], writer: EmitTextWriter, commentPos: number, commentEnd: number, newLine: string) {
         if (text.charCodeAt(commentPos + 1) === CharacterCodes.asterisk) {
             const firstCommentLineAndCharacter = computeLineAndCharacterOfPosition(lineMap, commentPos);
             const lineCount = lineMap.length;
@@ -4786,7 +4786,7 @@ namespace ts {
      * This function will then merge those changes into a single change range valid between V1 and
      * Vn.
      */
-    export function collapseTextChangeRangesAcrossMultipleVersions(changes: ReadonlyArray<TextChangeRange>): TextChangeRange {
+    export function collapseTextChangeRangesAcrossMultipleVersions(changes: readonly TextChangeRange[]): TextChangeRange {
         if (changes.length === 0) {
             return unchangedTextChangeRange;
         }
@@ -5262,7 +5262,7 @@ namespace ts {
      *
      * For binding patterns, parameter tags are matched by position.
      */
-    export function getJSDocParameterTags(param: ParameterDeclaration): ReadonlyArray<JSDocParameterTag> {
+    export function getJSDocParameterTags(param: ParameterDeclaration): readonly JSDocParameterTag[] {
         if (param.name) {
             if (isIdentifier(param.name)) {
                 const name = param.name.escapedText;
@@ -5291,7 +5291,7 @@ namespace ts {
      * node are returned first, so in the previous example, the template
      * tag on the containing function expression would be first.
      */
-    export function getJSDocTypeParameterTags(param: TypeParameterDeclaration): ReadonlyArray<JSDocTemplateTag> {
+    export function getJSDocTypeParameterTags(param: TypeParameterDeclaration): readonly JSDocTemplateTag[] {
         const name = param.name.escapedText;
         return getJSDocTags(param.parent).filter((tag): tag is JSDocTemplateTag =>
             isJSDocTemplateTag(tag) && tag.typeParameters.some(tp => tp.name.escapedText === name));
@@ -5392,7 +5392,7 @@ namespace ts {
     }
 
     /** Get all JSDoc tags related to a node, including those on parent nodes. */
-    export function getJSDocTags(node: Node): ReadonlyArray<JSDocTag> {
+    export function getJSDocTags(node: Node): readonly JSDocTag[] {
         let tags = (node as JSDocContainer).jsDocCache;
         // If cache is 'null', that means we did the work of searching for JSDoc tags and came up with nothing.
         if (tags === undefined) {
@@ -5409,7 +5409,7 @@ namespace ts {
     }
 
     /** Gets all JSDoc tags of a specified kind, or undefined if not present. */
-    export function getAllJSDocTagsOfKind(node: Node, kind: SyntaxKind): ReadonlyArray<JSDocTag> {
+    export function getAllJSDocTagsOfKind(node: Node, kind: SyntaxKind): readonly JSDocTag[] {
         return getJSDocTags(node).filter(doc => doc.kind === kind);
     }
 
@@ -5417,7 +5417,7 @@ namespace ts {
      * Gets the effective type parameters. If the node was parsed in a
      * JavaScript file, gets the type parameters from the `@template` tag from JSDoc.
      */
-    export function getEffectiveTypeParameterDeclarations(node: DeclarationWithTypeParameters): ReadonlyArray<TypeParameterDeclaration> {
+    export function getEffectiveTypeParameterDeclarations(node: DeclarationWithTypeParameters): readonly TypeParameterDeclaration[] {
         if (isJSDocSignature(node)) {
             return emptyArray;
         }
@@ -6221,7 +6221,7 @@ namespace ts {
     // Node Arrays
 
     /* @internal */
-    export function isNodeArray<T extends Node>(array: ReadonlyArray<T>): array is NodeArray<T> {
+    export function isNodeArray<T extends Node>(array: readonly T[]): array is NodeArray<T> {
         return array.hasOwnProperty("pos") && array.hasOwnProperty("end");
     }
 
@@ -7607,7 +7607,7 @@ namespace ts {
      * Reduce an array of path components to a more simplified path by navigating any
      * `"."` or `".."` entries in the path.
      */
-    export function reducePathComponents(components: ReadonlyArray<string>) {
+    export function reducePathComponents(components: readonly string[]) {
         if (!some(components)) return [];
         const reduced = [components[0]];
         for (let i = 1; i < components.length; i++) {
@@ -7646,7 +7646,7 @@ namespace ts {
      * Formats a parsed path consisting of a root component (at index 0) and zero or more path
      * segments (at indices > 0).
      */
-    export function getPathFromPathComponents(pathComponents: ReadonlyArray<string>) {
+    export function getPathFromPathComponents(pathComponents: readonly string[]) {
         if (pathComponents.length === 0) return "";
 
         const root = pathComponents[0] && ensureTrailingDirectorySeparator(pathComponents[0]);
@@ -7657,7 +7657,7 @@ namespace ts {
         return getPathWithoutRoot(getNormalizedPathComponents(fileName, currentDirectory));
     }
 
-    function getPathWithoutRoot(pathComponents: ReadonlyArray<string>) {
+    function getPathWithoutRoot(pathComponents: readonly string[]) {
         if (pathComponents.length === 0) return "";
         return pathComponents.slice(1).join(directorySeparator);
     }
@@ -7756,8 +7756,8 @@ namespace ts {
      * getBaseFileName("/path/to/file.js", ".ext", true) === "file.js"
      * ```
      */
-    export function getBaseFileName(path: string, extensions: string | ReadonlyArray<string>, ignoreCase: boolean): string;
-    export function getBaseFileName(path: string, extensions?: string | ReadonlyArray<string>, ignoreCase?: boolean) {
+    export function getBaseFileName(path: string, extensions: string | readonly string[], ignoreCase: boolean): string;
+    export function getBaseFileName(path: string, extensions?: string | readonly string[], ignoreCase?: boolean) {
         path = normalizeSlashes(path);
 
         // if the path provided is itself the root, then it has not file name.
@@ -7964,7 +7964,7 @@ namespace ts {
         return stringContains(getBaseFileName(fileName), ".");
     }
 
-    export const commonPackageFolders: ReadonlyArray<string> = ["node_modules", "bower_components", "jspm_packages"];
+    export const commonPackageFolders: readonly string[] = ["node_modules", "bower_components", "jspm_packages"];
 
     const implicitExcludePathRegexPattern = `(?!(${commonPackageFolders.join("|")})(/|$))`;
 
@@ -8012,7 +8012,7 @@ namespace ts {
         exclude: excludeMatcher
     };
 
-    export function getRegularExpressionForWildcard(specs: ReadonlyArray<string> | undefined, basePath: string, usage: "files" | "directories" | "exclude"): string | undefined {
+    export function getRegularExpressionForWildcard(specs: readonly string[] | undefined, basePath: string, usage: "files" | "directories" | "exclude"): string | undefined {
         const patterns = getRegularExpressionsForWildcards(specs, basePath, usage);
         if (!patterns || !patterns.length) {
             return undefined;
@@ -8024,7 +8024,7 @@ namespace ts {
         return `^(${pattern})${terminator}`;
     }
 
-    export function getRegularExpressionsForWildcards(specs: ReadonlyArray<string> | undefined, basePath: string, usage: "files" | "directories" | "exclude"): ReadonlyArray<string> | undefined {
+    export function getRegularExpressionsForWildcards(specs: readonly string[] | undefined, basePath: string, usage: "files" | "directories" | "exclude"): readonly string[] | undefined {
         if (specs === undefined || specs.length === 0) {
             return undefined;
         }
@@ -8122,22 +8122,22 @@ namespace ts {
     }
 
     export interface FileSystemEntries {
-        readonly files: ReadonlyArray<string>;
-        readonly directories: ReadonlyArray<string>;
+        readonly files: readonly string[];
+        readonly directories: readonly string[];
     }
 
     export interface FileMatcherPatterns {
         /** One pattern for each "include" spec. */
-        includeFilePatterns: ReadonlyArray<string> | undefined;
+        includeFilePatterns: readonly string[] | undefined;
         /** One pattern matching one of any of the "include" specs. */
         includeFilePattern: string | undefined;
         includeDirectoryPattern: string | undefined;
         excludePattern: string | undefined;
-        basePaths: ReadonlyArray<string>;
+        basePaths: readonly string[];
     }
 
     /** @param path directory of the tsconfig.json */
-    export function getFileMatcherPatterns(path: string, excludes: ReadonlyArray<string> | undefined, includes: ReadonlyArray<string> | undefined, useCaseSensitiveFileNames: boolean, currentDirectory: string): FileMatcherPatterns {
+    export function getFileMatcherPatterns(path: string, excludes: readonly string[] | undefined, includes: readonly string[] | undefined, useCaseSensitiveFileNames: boolean, currentDirectory: string): FileMatcherPatterns {
         path = normalizePath(path);
         currentDirectory = normalizePath(currentDirectory);
         const absolutePath = combinePaths(currentDirectory, path);
@@ -8156,7 +8156,7 @@ namespace ts {
     }
 
     /** @param path directory of the tsconfig.json */
-    export function matchFiles(path: string, extensions: ReadonlyArray<string> | undefined, excludes: ReadonlyArray<string> | undefined, includes: ReadonlyArray<string> | undefined, useCaseSensitiveFileNames: boolean, currentDirectory: string, depth: number | undefined, getFileSystemEntries: (path: string) => FileSystemEntries, realpath: (path: string) => string): string[] {
+    export function matchFiles(path: string, extensions: readonly string[] | undefined, excludes: readonly string[] | undefined, includes: readonly string[] | undefined, useCaseSensitiveFileNames: boolean, currentDirectory: string, depth: number | undefined, getFileSystemEntries: (path: string) => FileSystemEntries, realpath: (path: string) => string): string[] {
         path = normalizePath(path);
         currentDirectory = normalizePath(currentDirectory);
 
@@ -8220,7 +8220,7 @@ namespace ts {
     /**
      * Computes the unique non-wildcard base paths amongst the provided include patterns.
      */
-    function getBasePaths(path: string, includes: ReadonlyArray<string> | undefined, useCaseSensitiveFileNames: boolean): string[] {
+    function getBasePaths(path: string, includes: readonly string[] | undefined, useCaseSensitiveFileNames: boolean): string[] {
         // Storage for our results in the form of literal paths (e.g. the paths as written by the user).
         const basePaths: string[] = [path];
 
@@ -8292,18 +8292,18 @@ namespace ts {
     /**
      *  List of supported extensions in order of file resolution precedence.
      */
-    export const supportedTSExtensions: ReadonlyArray<Extension> = [Extension.Ts, Extension.Tsx, Extension.Dts];
-    export const supportedTSExtensionsWithJson: ReadonlyArray<Extension> = [Extension.Ts, Extension.Tsx, Extension.Dts, Extension.Json];
+    export const supportedTSExtensions: readonly Extension[] = [Extension.Ts, Extension.Tsx, Extension.Dts];
+    export const supportedTSExtensionsWithJson: readonly Extension[] = [Extension.Ts, Extension.Tsx, Extension.Dts, Extension.Json];
     /** Must have ".d.ts" first because if ".ts" goes first, that will be detected as the extension instead of ".d.ts". */
-    export const supportedTSExtensionsForExtractExtension: ReadonlyArray<Extension> = [Extension.Dts, Extension.Ts, Extension.Tsx];
-    export const supportedJSExtensions: ReadonlyArray<Extension> = [Extension.Js, Extension.Jsx];
-    export const supportedJSAndJsonExtensions: ReadonlyArray<Extension> = [Extension.Js, Extension.Jsx, Extension.Json];
-    const allSupportedExtensions: ReadonlyArray<Extension> = [...supportedTSExtensions, ...supportedJSExtensions];
-    const allSupportedExtensionsWithJson: ReadonlyArray<Extension> = [...supportedTSExtensions, ...supportedJSExtensions, Extension.Json];
+    export const supportedTSExtensionsForExtractExtension: readonly Extension[] = [Extension.Dts, Extension.Ts, Extension.Tsx];
+    export const supportedJSExtensions: readonly Extension[] = [Extension.Js, Extension.Jsx];
+    export const supportedJSAndJsonExtensions: readonly Extension[] = [Extension.Js, Extension.Jsx, Extension.Json];
+    const allSupportedExtensions: readonly Extension[] = [...supportedTSExtensions, ...supportedJSExtensions];
+    const allSupportedExtensionsWithJson: readonly Extension[] = [...supportedTSExtensions, ...supportedJSExtensions, Extension.Json];
 
-    export function getSupportedExtensions(options?: CompilerOptions): ReadonlyArray<Extension>;
-    export function getSupportedExtensions(options?: CompilerOptions, extraFileExtensions?: ReadonlyArray<FileExtensionInfo>): ReadonlyArray<string>;
-    export function getSupportedExtensions(options?: CompilerOptions, extraFileExtensions?: ReadonlyArray<FileExtensionInfo>): ReadonlyArray<string> {
+    export function getSupportedExtensions(options?: CompilerOptions): readonly Extension[];
+    export function getSupportedExtensions(options?: CompilerOptions, extraFileExtensions?: readonly FileExtensionInfo[]): readonly string[];
+    export function getSupportedExtensions(options?: CompilerOptions, extraFileExtensions?: readonly FileExtensionInfo[]): readonly string[] {
         const needJsExtensions = options && options.allowJs;
 
         if (!extraFileExtensions || extraFileExtensions.length === 0) {
@@ -8318,7 +8318,7 @@ namespace ts {
         return deduplicate<string>(extensions, equateStringsCaseSensitive, compareStringsCaseSensitive);
     }
 
-    export function getSuppoertedExtensionsWithJsonIfResolveJsonModule(options: CompilerOptions | undefined, supportedExtensions: ReadonlyArray<string>): ReadonlyArray<string> {
+    export function getSuppoertedExtensionsWithJsonIfResolveJsonModule(options: CompilerOptions | undefined, supportedExtensions: readonly string[]): readonly string[] {
         if (!options || !options.resolveJsonModule) { return supportedExtensions; }
         if (supportedExtensions === allSupportedExtensions) { return allSupportedExtensionsWithJson; }
         if (supportedExtensions === supportedTSExtensions) { return supportedTSExtensionsWithJson; }
@@ -8341,7 +8341,7 @@ namespace ts {
         return some(supportedTSExtensions, extension => fileExtensionIs(fileName, extension));
     }
 
-    export function isSupportedSourceFileName(fileName: string, compilerOptions?: CompilerOptions, extraFileExtensions?: ReadonlyArray<FileExtensionInfo>) {
+    export function isSupportedSourceFileName(fileName: string, compilerOptions?: CompilerOptions, extraFileExtensions?: readonly FileExtensionInfo[]) {
         if (!fileName) { return false; }
 
         const supportedExtensions = getSupportedExtensions(compilerOptions, extraFileExtensions);
@@ -8366,7 +8366,7 @@ namespace ts {
         Lowest = DeclarationAndJavaScriptFiles,
     }
 
-    export function getExtensionPriority(path: string, supportedExtensions: ReadonlyArray<string>): ExtensionPriority {
+    export function getExtensionPriority(path: string, supportedExtensions: readonly string[]): ExtensionPriority {
         for (let i = supportedExtensions.length - 1; i >= 0; i--) {
             if (fileExtensionIs(path, supportedExtensions[i])) {
                 return adjustExtensionPriority(<ExtensionPriority>i, supportedExtensions);
@@ -8381,7 +8381,7 @@ namespace ts {
     /**
      * Adjusts an extension priority to be the highest priority within the same range.
      */
-    export function adjustExtensionPriority(extensionPriority: ExtensionPriority, supportedExtensions: ReadonlyArray<string>): ExtensionPriority {
+    export function adjustExtensionPriority(extensionPriority: ExtensionPriority, supportedExtensions: readonly string[]): ExtensionPriority {
         if (extensionPriority < ExtensionPriority.DeclarationAndJavaScriptFiles) {
             return ExtensionPriority.TypeScriptFiles;
         }
@@ -8396,7 +8396,7 @@ namespace ts {
     /**
      * Gets the next lowest extension priority for a given priority.
      */
-    export function getNextLowestExtensionPriority(extensionPriority: ExtensionPriority, supportedExtensions: ReadonlyArray<string>): ExtensionPriority {
+    export function getNextLowestExtensionPriority(extensionPriority: ExtensionPriority, supportedExtensions: readonly string[]): ExtensionPriority {
         if (extensionPriority < ExtensionPriority.DeclarationAndJavaScriptFiles) {
             return ExtensionPriority.DeclarationAndJavaScriptFiles;
         }
@@ -8429,8 +8429,8 @@ namespace ts {
     }
 
     export function changeAnyExtension(path: string, ext: string): string;
-    export function changeAnyExtension(path: string, ext: string, extensions: string | ReadonlyArray<string>, ignoreCase: boolean): string;
-    export function changeAnyExtension(path: string, ext: string, extensions?: string | ReadonlyArray<string>, ignoreCase?: boolean) {
+    export function changeAnyExtension(path: string, ext: string, extensions: string | readonly string[], ignoreCase: boolean): string;
+    export function changeAnyExtension(path: string, ext: string, extensions?: string | readonly string[], ignoreCase?: boolean) {
         const pathext = extensions !== undefined && ignoreCase !== undefined ? getAnyExtensionFromPath(path, extensions, ignoreCase) : getAnyExtensionFromPath(path);
         return pathext ? path.slice(0, path.length - pathext.length) + (startsWith(ext, ".") ? ext : "." + ext) : path;
     }
@@ -8477,7 +8477,7 @@ namespace ts {
         return find<Extension>(extensionsToRemove, e => fileExtensionIs(path, e));
     }
 
-    function getAnyExtensionFromPathWorker(path: string, extensions: string | ReadonlyArray<string>, stringEqualityComparer: (a: string, b: string) => boolean) {
+    function getAnyExtensionFromPathWorker(path: string, extensions: string | readonly string[], stringEqualityComparer: (a: string, b: string) => boolean) {
         if (typeof extensions === "string") extensions = [extensions];
         for (let extension of extensions) {
             if (!startsWith(extension, ".")) extension = "." + extension;
@@ -8498,8 +8498,8 @@ namespace ts {
     /**
      * Gets the file extension for a path, provided it is one of the provided extensions.
      */
-    export function getAnyExtensionFromPath(path: string, extensions: string | ReadonlyArray<string>, ignoreCase: boolean): string;
-    export function getAnyExtensionFromPath(path: string, extensions?: string | ReadonlyArray<string>, ignoreCase?: boolean): string {
+    export function getAnyExtensionFromPath(path: string, extensions: string | readonly string[], ignoreCase: boolean): string;
+    export function getAnyExtensionFromPath(path: string, extensions?: string | readonly string[], ignoreCase?: boolean): string {
         // Retrieves any string from the final "." onwards from a base file name.
         // Unlike extensionFromPath, which throws an exception on unrecognized extensions.
         if (extensions) {
@@ -8528,7 +8528,7 @@ namespace ts {
      * Return an exact match if possible, or a pattern match, or undefined.
      * (These are verified by verifyCompilerOptions to have 0 or 1 "*" characters.)
      */
-    export function matchPatternOrExact(patternStrings: ReadonlyArray<string>, candidate: string): string | Pattern | undefined {
+    export function matchPatternOrExact(patternStrings: readonly string[], candidate: string): string | Pattern | undefined {
         const patterns: Pattern[] = [];
         for (const patternString of patternStrings) {
             const pattern = tryParsePattern(patternString);
@@ -8546,7 +8546,7 @@ namespace ts {
 
     export type Mutable<T extends object> = { -readonly [K in keyof T]: T[K] };
 
-    export function sliceAfter<T>(arr: ReadonlyArray<T>, value: T): ReadonlyArray<T> {
+    export function sliceAfter<T>(arr: readonly T[], value: T): readonly T[] {
         const index = arr.indexOf(value);
         Debug.assert(index !== -1);
         return arr.slice(index);
@@ -8560,7 +8560,7 @@ namespace ts {
         return diagnostic;
     }
 
-    export function minAndMax<T>(arr: ReadonlyArray<T>, getValue: (value: T) => number): { readonly min: number, readonly max: number } {
+    export function minAndMax<T>(arr: readonly T[], getValue: (value: T) => number): { readonly min: number, readonly max: number } {
         Debug.assert(arr.length !== 0);
         let min = getValue(arr[0]);
         let max = min;

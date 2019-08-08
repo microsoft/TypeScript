@@ -144,7 +144,7 @@ namespace ts.textChanges {
 
     interface ReplaceWithMultipleNodes extends BaseChange {
         readonly kind: ChangeKind.ReplaceWithMultipleNodes;
-        readonly nodes: ReadonlyArray<Node>;
+        readonly nodes: readonly Node[];
         readonly options?: ReplaceWithMultipleNodesOptions;
     }
 
@@ -230,7 +230,7 @@ namespace ts.textChanges {
 
     export class ChangeTracker {
         private readonly changes: Change[] = [];
-        private readonly newFiles: { readonly oldFile: SourceFile | undefined, readonly fileName: string, readonly statements: ReadonlyArray<Statement> }[] = [];
+        private readonly newFiles: { readonly oldFile: SourceFile | undefined, readonly fileName: string, readonly statements: readonly Statement[] }[] = [];
         private readonly classesWithNodesInsertedAtStart = createMap<{ readonly node: ClassDeclaration | InterfaceDeclaration | ObjectLiteralExpression, readonly sourceFile: SourceFile }>(); // Set<ClassDeclaration> implemented as Map<node id, ClassDeclaration>
         private readonly deletedNodes: { readonly sourceFile: SourceFile, readonly node: Node | NodeArray<TypeParameterDeclaration> }[] = [];
 
@@ -283,11 +283,11 @@ namespace ts.textChanges {
             this.replaceRange(sourceFile, getAdjustedRange(sourceFile, startNode, endNode, options), newNode, options);
         }
 
-        private replaceRangeWithNodes(sourceFile: SourceFile, range: TextRange, newNodes: ReadonlyArray<Node>, options: ReplaceWithMultipleNodesOptions & ConfigurableStartEnd = {}): void {
+        private replaceRangeWithNodes(sourceFile: SourceFile, range: TextRange, newNodes: readonly Node[], options: ReplaceWithMultipleNodesOptions & ConfigurableStartEnd = {}): void {
             this.changes.push({ kind: ChangeKind.ReplaceWithMultipleNodes, sourceFile, range, options, nodes: newNodes });
         }
 
-        public replaceNodeWithNodes(sourceFile: SourceFile, oldNode: Node, newNodes: ReadonlyArray<Node>, options: ChangeNodeOptions = useNonAdjustedPositions): void {
+        public replaceNodeWithNodes(sourceFile: SourceFile, oldNode: Node, newNodes: readonly Node[], options: ChangeNodeOptions = useNonAdjustedPositions): void {
             this.replaceRangeWithNodes(sourceFile, getAdjustedRange(sourceFile, oldNode, oldNode, options), newNodes, options);
         }
 
@@ -295,7 +295,7 @@ namespace ts.textChanges {
             this.replaceRangeWithText(sourceFile, getAdjustedRange(sourceFile, oldNode, oldNode, useNonAdjustedPositions), text);
         }
 
-        public replaceNodeRangeWithNodes(sourceFile: SourceFile, startNode: Node, endNode: Node, newNodes: ReadonlyArray<Node>, options: ReplaceWithMultipleNodesOptions & ConfigurableStartEnd = useNonAdjustedPositions): void {
+        public replaceNodeRangeWithNodes(sourceFile: SourceFile, startNode: Node, endNode: Node, newNodes: readonly Node[], options: ReplaceWithMultipleNodesOptions & ConfigurableStartEnd = useNonAdjustedPositions): void {
             this.replaceRangeWithNodes(sourceFile, getAdjustedRange(sourceFile, startNode, endNode, options), newNodes, options);
         }
 
@@ -313,7 +313,7 @@ namespace ts.textChanges {
             this.replaceRange(sourceFile, createRange(pos), newNode, options);
         }
 
-        private insertNodesAt(sourceFile: SourceFile, pos: number, newNodes: ReadonlyArray<Node>, options: ReplaceWithMultipleNodesOptions = {}): void {
+        private insertNodesAt(sourceFile: SourceFile, pos: number, newNodes: readonly Node[], options: ReplaceWithMultipleNodesOptions = {}): void {
             this.replaceRangeWithNodes(sourceFile, createRange(pos), newNodes, options);
         }
 
@@ -406,7 +406,7 @@ namespace ts.textChanges {
             this.insertNodeAt(sourceFile, start, type, { prefix: "this: ", suffix });
         }
 
-        public insertTypeParameters(sourceFile: SourceFile, node: SignatureDeclaration, typeParameters: ReadonlyArray<TypeParameterDeclaration>): void {
+        public insertTypeParameters(sourceFile: SourceFile, node: SignatureDeclaration, typeParameters: readonly TypeParameterDeclaration[]): void {
             // If no `(`, is an arrow function `x => x`, so use the pos of the first parameter
             const start = (findChildOfKind(node, SyntaxKind.OpenParenToken, sourceFile) || first(node.parameters)).getStart(sourceFile);
             this.insertNodesAt(sourceFile, start, typeParameters, { prefix: "<", suffix: ">" });
@@ -448,7 +448,7 @@ namespace ts.textChanges {
             }
         }
 
-        private replaceConstructorBody(sourceFile: SourceFile, ctr: ConstructorDeclaration, statements: ReadonlyArray<Statement>): void {
+        private replaceConstructorBody(sourceFile: SourceFile, ctr: ConstructorDeclaration, statements: readonly Statement[]): void {
             this.replaceNode(sourceFile, ctr.body!, createBlock(statements, /*multiLine*/ true));
         }
 
@@ -505,7 +505,7 @@ namespace ts.textChanges {
             this.insertNodeAt(sourceFile, list.end, newNode, { prefix: ", " });
         }
 
-        public insertNodesAfter(sourceFile: SourceFile, after: Node, newNodes: ReadonlyArray<Node>): void {
+        public insertNodesAfter(sourceFile: SourceFile, after: Node, newNodes: readonly Node[]): void {
             const endPosition = this.insertNodeAfterWorker(sourceFile, after, first(newNodes));
             this.insertNodesAt(sourceFile, endPosition, newNodes, this.getInsertNodeAfterOptions(sourceFile, after));
         }
@@ -759,7 +759,7 @@ namespace ts.textChanges {
             return changes;
         }
 
-        public createNewFile(oldFile: SourceFile | undefined, fileName: string, statements: ReadonlyArray<Statement>): void {
+        public createNewFile(oldFile: SourceFile | undefined, fileName: string, statements: readonly Statement[]): void {
             this.newFiles.push({ oldFile, fileName, statements });
         }
     }
@@ -778,12 +778,12 @@ namespace ts.textChanges {
 
     export type ValidateNonFormattedText = (node: Node, text: string) => void;
 
-    export function getNewFileText(statements: ReadonlyArray<Statement>, scriptKind: ScriptKind, newLineCharacter: string, formatContext: formatting.FormatContext): string {
+    export function getNewFileText(statements: readonly Statement[], scriptKind: ScriptKind, newLineCharacter: string, formatContext: formatting.FormatContext): string {
         return changesToText.newFileChangesWorker(/*oldFile*/ undefined, scriptKind, statements, newLineCharacter, formatContext);
     }
 
     namespace changesToText {
-        export function getTextChangesFromChanges(changes: ReadonlyArray<Change>, newLineCharacter: string, formatContext: formatting.FormatContext, validate: ValidateNonFormattedText | undefined): FileTextChanges[] {
+        export function getTextChangesFromChanges(changes: readonly Change[], newLineCharacter: string, formatContext: formatting.FormatContext, validate: ValidateNonFormattedText | undefined): FileTextChanges[] {
             return group(changes, c => c.sourceFile.path).map(changesInFile => {
                 const sourceFile = changesInFile[0].sourceFile;
                 // order changes by start position
@@ -800,12 +800,12 @@ namespace ts.textChanges {
             });
         }
 
-        export function newFileChanges(oldFile: SourceFile | undefined, fileName: string, statements: ReadonlyArray<Statement>, newLineCharacter: string, formatContext: formatting.FormatContext): FileTextChanges {
+        export function newFileChanges(oldFile: SourceFile | undefined, fileName: string, statements: readonly Statement[], newLineCharacter: string, formatContext: formatting.FormatContext): FileTextChanges {
             const text = newFileChangesWorker(oldFile, getScriptKindFromFileName(fileName), statements, newLineCharacter, formatContext);
             return { fileName, textChanges: [createTextChange(createTextSpan(0, 0), text)], isNewFile: true };
         }
 
-        export function newFileChangesWorker(oldFile: SourceFile | undefined, scriptKind: ScriptKind, statements: ReadonlyArray<Statement>, newLineCharacter: string, formatContext: formatting.FormatContext): string {
+        export function newFileChangesWorker(oldFile: SourceFile | undefined, scriptKind: ScriptKind, statements: readonly Statement[], newLineCharacter: string, formatContext: formatting.FormatContext): string {
             // TODO: this emits the file, parses it back, then formats it that -- may be a less roundabout way to do this
             const nonFormattedText = statements.map(s => getNonformattedText(s, oldFile, newLineCharacter).text).join(newLineCharacter);
             const sourceFile = createSourceFile("any file name", nonFormattedText, ScriptTarget.ESNext, /*setParentNodes*/ true, scriptKind);
@@ -859,7 +859,7 @@ namespace ts.textChanges {
         }
     }
 
-    export function applyChanges(text: string, changes: ReadonlyArray<TextChange>): string {
+    export function applyChanges(text: string, changes: readonly TextChange[]): string {
         for (let i = changes.length - 1; i >= 0; i--) {
             const { span, newText } = changes[i];
             text = `${text.substring(0, span.start)}${newText}${text.substring(textSpanEnd(span))}`;

@@ -34,7 +34,7 @@ namespace ts.server {
 
     export interface ConfigFileDiagEvent {
         eventName: typeof ConfigFileDiagEvent;
-        data: { triggerFile: string, configFileName: string, diagnostics: ReadonlyArray<Diagnostic> };
+        data: { triggerFile: string, configFileName: string, diagnostics: readonly Diagnostic[] };
     }
 
     export interface ProjectLanguageServiceStateEvent {
@@ -281,7 +281,7 @@ namespace ts.server {
 
     export interface OpenConfiguredProjectResult {
         configFileName?: NormalizedPath;
-        configFileErrors?: ReadonlyArray<Diagnostic>;
+        configFileErrors?: readonly Diagnostic[];
     }
 
     interface AssignProjectResult extends OpenConfiguredProjectResult {
@@ -375,8 +375,8 @@ namespace ts.server {
         eventHandler?: ProjectServiceEventHandler;
         suppressDiagnosticEvents?: boolean;
         throttleWaitMilliseconds?: number;
-        globalPlugins?: ReadonlyArray<string>;
-        pluginProbeLocations?: ReadonlyArray<string>;
+        globalPlugins?: readonly string[];
+        pluginProbeLocations?: readonly string[];
         allowLocalPluginLoads?: boolean;
         typesMapLocation?: string;
         syntaxOnly?: boolean;
@@ -519,8 +519,8 @@ namespace ts.server {
         private readonly eventHandler?: ProjectServiceEventHandler;
         private readonly suppressDiagnosticEvents?: boolean;
 
-        public readonly globalPlugins: ReadonlyArray<string>;
-        public readonly pluginProbeLocations: ReadonlyArray<string>;
+        public readonly globalPlugins: readonly string[];
+        public readonly pluginProbeLocations: readonly string[];
         public readonly allowLocalPluginLoads: boolean;
         private currentPluginConfigOverrides: Map<any> | undefined;
 
@@ -777,7 +777,7 @@ namespace ts.server {
             this.delayEnsureProjectForOpenFiles();
         }
 
-        private delayUpdateProjectGraphs(projects: ReadonlyArray<Project>) {
+        private delayUpdateProjectGraphs(projects: readonly Project[]) {
             if (projects.length) {
                 for (const project of projects) {
                     this.delayUpdateProjectGraph(project);
@@ -2640,7 +2640,7 @@ namespace ts.server {
 
         private assignProjectToOpenedScriptInfo(info: ScriptInfo): AssignProjectResult {
             let configFileName: NormalizedPath | undefined;
-            let configFileErrors: ReadonlyArray<Diagnostic> | undefined;
+            let configFileErrors: readonly Diagnostic[] | undefined;
             let project: ConfiguredProject | ExternalProject | undefined = this.findExternalProjectContainingOpenScriptInfo(info);
             let defaultConfigProject: ConfiguredProject | undefined;
             if (!project && !this.syntaxOnly) { // Checking syntaxOnly is an optimization

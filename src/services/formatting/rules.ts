@@ -364,24 +364,24 @@ namespace ts.formatting {
      */
     function rule(
         debugName: string,
-        left: SyntaxKind | ReadonlyArray<SyntaxKind> | TokenRange,
-        right: SyntaxKind | ReadonlyArray<SyntaxKind> | TokenRange,
-        context: ReadonlyArray<ContextPredicate>,
+        left: SyntaxKind | readonly SyntaxKind[] | TokenRange,
+        right: SyntaxKind | readonly SyntaxKind[] | TokenRange,
+        context: readonly ContextPredicate[],
         action: RuleAction,
         flags: RuleFlags = RuleFlags.None,
     ): RuleSpec {
         return { leftTokenRange: toTokenRange(left), rightTokenRange: toTokenRange(right), rule: { debugName, context, action, flags } };
     }
 
-    function tokenRangeFrom(tokens: ReadonlyArray<SyntaxKind>): TokenRange {
+    function tokenRangeFrom(tokens: readonly SyntaxKind[]): TokenRange {
         return { tokens, isSpecific: true };
     }
 
-    function toTokenRange(arg: SyntaxKind | ReadonlyArray<SyntaxKind> | TokenRange): TokenRange {
+    function toTokenRange(arg: SyntaxKind | readonly SyntaxKind[] | TokenRange): TokenRange {
         return typeof arg === "number" ? tokenRangeFrom([arg]) : isArray(arg) ? tokenRangeFrom(arg) : arg;
     }
 
-    function tokenRangeFromRange(from: SyntaxKind, to: SyntaxKind, except: ReadonlyArray<SyntaxKind> = []): TokenRange {
+    function tokenRangeFromRange(from: SyntaxKind, to: SyntaxKind, except: readonly SyntaxKind[] = []): TokenRange {
         const tokens: SyntaxKind[] = [];
         for (let token = from; token <= to; token++) {
             if (!contains(except, token)) {

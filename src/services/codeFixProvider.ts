@@ -1,9 +1,9 @@
 /* @internal */
 namespace ts {
     export interface CodeFixRegistration {
-        errorCodes: ReadonlyArray<number>;
+        errorCodes: readonly number[];
         getCodeActions(context: CodeFixContext): CodeFixAction[] | undefined;
-        fixIds?: ReadonlyArray<string>;
+        fixIds?: readonly string[];
         getAllCodeActions?(context: CodeFixAllContext): CombinedCodeActions;
     }
 
@@ -30,7 +30,7 @@ namespace ts {
         export type DiagnosticAndArguments = DiagnosticMessage | [DiagnosticMessage, string] | [DiagnosticMessage, string, string];
         function diagnosticToString(diag: DiagnosticAndArguments): string {
             return isArray(diag)
-                ? formatStringFromArgs(getLocaleSpecificMessage(diag[0]), diag.slice(1) as ReadonlyArray<string>)
+                ? formatStringFromArgs(getLocaleSpecificMessage(diag[0]), diag.slice(1) as readonly string[])
                 : getLocaleSpecificMessage(diag);
         }
 
@@ -62,7 +62,7 @@ namespace ts {
             return arrayFrom(errorCodeToFixes.keys());
         }
 
-        export function getFixes(context: CodeFixContext): ReadonlyArray<CodeFixAction> {
+        export function getFixes(context: CodeFixContext): readonly CodeFixAction[] {
             return flatMap(errorCodeToFixes.get(String(context.errorCode)) || emptyArray, f => f.getCodeActions(context));
         }
 
@@ -89,7 +89,7 @@ namespace ts {
             return createCombinedCodeActions(changes, commands.length === 0 ? undefined : commands);
         }
 
-        export function eachDiagnostic({ program, sourceFile, cancellationToken }: CodeFixAllContext, errorCodes: ReadonlyArray<number>, cb: (diag: DiagnosticWithLocation) => void): void {
+        export function eachDiagnostic({ program, sourceFile, cancellationToken }: CodeFixAllContext, errorCodes: readonly number[], cb: (diag: DiagnosticWithLocation) => void): void {
             for (const diag of program.getSemanticDiagnostics(sourceFile, cancellationToken).concat(computeSuggestionDiagnostics(sourceFile, program, cancellationToken))) {
                 if (contains(errorCodes, diag.code)) {
                     cb(diag as DiagnosticWithLocation);

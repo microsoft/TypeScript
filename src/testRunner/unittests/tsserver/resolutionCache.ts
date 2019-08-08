@@ -602,7 +602,7 @@ namespace ts.projectSystem {
             return `Reusing resolution of module '${moduleName}' to file '${file.path}' from old program.`;
         }
 
-        function verifyWatchesWithConfigFile(host: TestServerHost, files: File[], openFile: File, extraExpectedDirectories?: ReadonlyArray<string>) {
+        function verifyWatchesWithConfigFile(host: TestServerHost, files: File[], openFile: File, extraExpectedDirectories?: readonly string[]) {
             const expectedRecursiveDirectories = arrayToSet([projectLocation, `${projectLocation}/${nodeModulesAtTypes}`, ...(extraExpectedDirectories || emptyArray)]);
             checkWatchedFiles(host, mapDefined(files, f => {
                 if (f === openFile) {

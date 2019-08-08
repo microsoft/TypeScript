@@ -83,14 +83,14 @@ namespace ts {
         let currentSourceFile: SourceFile;
         let refs: Map<SourceFile>;
         let libs: Map<boolean>;
-        let emittedImports: ReadonlyArray<AnyImportSyntax> | undefined; // must be declared in container so it can be `undefined` while transformer's first pass
+        let emittedImports: readonly AnyImportSyntax[] | undefined; // must be declared in container so it can be `undefined` while transformer's first pass
         const resolver = context.getEmitResolver();
         const options = context.getCompilerOptions();
         const newLine = getNewLineCharacter(options);
         const { noResolve, stripInternal } = options;
         return transformRoot;
 
-        function recordTypeReferenceDirectivesIfNecessary(typeReferenceDirectives: ReadonlyArray<string> | undefined): void {
+        function recordTypeReferenceDirectivesIfNecessary(typeReferenceDirectives: readonly string[] | undefined): void {
             if (!typeReferenceDirectives) {
                 return;
             }
@@ -1177,7 +1177,7 @@ namespace ts {
                     const modifiers = createNodeArray(ensureModifiers(input));
                     const typeParameters = ensureTypeParams(input, input.typeParameters);
                     const ctor = getFirstConstructorWithBody(input);
-                    let parameterProperties: ReadonlyArray<PropertyDeclaration> | undefined;
+                    let parameterProperties: readonly PropertyDeclaration[] | undefined;
                     if (ctor) {
                         const oldDiag = getSymbolAccessibilityDiagnostic;
                         parameterProperties = compact(flatMap(ctor.parameters, (param) => {
@@ -1350,11 +1350,11 @@ namespace ts {
             return isExportAssignment(node) || isExportDeclaration(node);
         }
 
-        function hasScopeMarker(statements: ReadonlyArray<Statement>) {
+        function hasScopeMarker(statements: readonly Statement[]) {
             return some(statements, isScopeMarker);
         }
 
-        function ensureModifiers(node: Node): ReadonlyArray<Modifier> | undefined {
+        function ensureModifiers(node: Node): readonly Modifier[] | undefined {
             const currentFlags = getModifierFlags(node);
             const newFlags = ensureModifierFlags(node);
             if (currentFlags === newFlags) {

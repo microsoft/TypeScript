@@ -831,14 +831,14 @@ export * from "lib";
             }
         });
 
-        function parseImports(...importStrings: string[]): ReadonlyArray<ImportDeclaration> {
+        function parseImports(...importStrings: string[]): readonly ImportDeclaration[] {
             const sourceFile = createSourceFile("a.ts", importStrings.join("\n"), ScriptTarget.ES2015, /*setParentNodes*/ true, ScriptKind.TS);
             const imports = filter(sourceFile.statements, isImportDeclaration);
             assert.equal(imports.length, importStrings.length);
             return imports;
         }
 
-        function parseExports(...exportStrings: string[]): ReadonlyArray<ExportDeclaration> {
+        function parseExports(...exportStrings: string[]): readonly ExportDeclaration[] {
             const sourceFile = createSourceFile("a.ts", exportStrings.join("\n"), ScriptTarget.ES2015, /*setParentNodes*/ true, ScriptKind.TS);
             const exports = filter(sourceFile.statements, isExportDeclaration);
             assert.equal(exports.length, exportStrings.length);
@@ -920,7 +920,7 @@ export * from "lib";
             }
         }
 
-        function assertListEqual(list1: ReadonlyArray<Node>, list2: ReadonlyArray<Node>) {
+        function assertListEqual(list1: readonly Node[], list2: readonly Node[]) {
             if (list1 === undefined || list2 === undefined) {
                 assert.isUndefined(list1);
                 assert.isUndefined(list2);

@@ -17,7 +17,7 @@ namespace ts.OrganizeImports {
 
         const changeTracker = textChanges.ChangeTracker.fromContext({ host, formatContext });
 
-        const coalesceAndOrganizeImports = (importGroup: ReadonlyArray<ImportDeclaration>) => coalesceImports(removeUnusedImports(importGroup, sourceFile, program));
+        const coalesceAndOrganizeImports = (importGroup: readonly ImportDeclaration[]) => coalesceImports(removeUnusedImports(importGroup, sourceFile, program));
 
         // All of the old ImportDeclarations in the file, in syntactic order.
         const topLevelImportDecls = sourceFile.statements.filter(isImportDeclaration);
@@ -40,8 +40,8 @@ namespace ts.OrganizeImports {
         return changeTracker.getChanges();
 
         function organizeImportsWorker<T extends ImportDeclaration | ExportDeclaration>(
-            oldImportDecls: ReadonlyArray<T>,
-            coalesce: (group: ReadonlyArray<T>) => ReadonlyArray<T>) {
+            oldImportDecls: readonly T[],
+            coalesce: (group: readonly T[]) => readonly T[]) {
 
             if (length(oldImportDecls) === 0) {
                 return;
@@ -81,7 +81,7 @@ namespace ts.OrganizeImports {
         }
     }
 
-    function removeUnusedImports(oldImports: ReadonlyArray<ImportDeclaration>, sourceFile: SourceFile, program: Program) {
+    function removeUnusedImports(oldImports: readonly ImportDeclaration[], sourceFile: SourceFile, program: Program) {
         const typeChecker = program.getTypeChecker();
         const jsxNamespace = typeChecker.getJsxNamespace(sourceFile);
         const jsxElementsPresent = !!(sourceFile.transformFlags & TransformFlags.ContainsJsx);
@@ -169,7 +169,7 @@ namespace ts.OrganizeImports {
     /**
      * @param importGroup a list of ImportDeclarations, all with the same module name.
      */
-    export function coalesceImports(importGroup: ReadonlyArray<ImportDeclaration>) {
+    export function coalesceImports(importGroup: readonly ImportDeclaration[]) {
         if (importGroup.length === 0) {
             return importGroup;
         }
@@ -246,7 +246,7 @@ namespace ts.OrganizeImports {
          *
          * NB: There may be overlap between `defaultImports` and `namespaceImports`/`namedImports`.
          */
-        function getCategorizedImports(importGroup: ReadonlyArray<ImportDeclaration>) {
+        function getCategorizedImports(importGroup: readonly ImportDeclaration[]) {
             let importWithoutClause: ImportDeclaration | undefined;
             const defaultImports: ImportDeclaration[] = [];
             const namespaceImports: ImportDeclaration[] = [];
@@ -289,7 +289,7 @@ namespace ts.OrganizeImports {
     /**
      * @param exportGroup a list of ExportDeclarations, all with the same module name.
      */
-    export function coalesceExports(exportGroup: ReadonlyArray<ExportDeclaration>) {
+    export function coalesceExports(exportGroup: readonly ExportDeclaration[]) {
         if (exportGroup.length === 0) {
             return exportGroup;
         }
@@ -327,7 +327,7 @@ namespace ts.OrganizeImports {
          * may lack parent pointers.  The desired parts can easily be recovered based on the
          * categorization.
          */
-        function getCategorizedExports(exportGroup: ReadonlyArray<ExportDeclaration>) {
+        function getCategorizedExports(exportGroup: readonly ExportDeclaration[]) {
             let exportWithoutClause: ExportDeclaration | undefined;
             const namedExports: ExportDeclaration[] = [];
 
@@ -362,7 +362,7 @@ namespace ts.OrganizeImports {
             importDeclaration.moduleSpecifier);
     }
 
-    function sortSpecifiers<T extends ImportOrExportSpecifier>(specifiers: ReadonlyArray<T>) {
+    function sortSpecifiers<T extends ImportOrExportSpecifier>(specifiers: readonly T[]) {
         return stableSort(specifiers, (s1, s2) =>
             compareIdentifiers(s1.propertyName || s1.name, s2.propertyName || s2.name) ||
             compareIdentifiers(s1.name, s2.name));

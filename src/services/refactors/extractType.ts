@@ -4,7 +4,7 @@ namespace ts.refactor {
     const extractToTypeAlias = "Extract to type alias";
     const extractToTypeDef = "Extract to typedef";
     registerRefactor(refactorName, {
-        getAvailableActions(context): ReadonlyArray<ApplicableRefactorInfo> {
+        getAvailableActions(context): readonly ApplicableRefactorInfo[] {
             const info = getRangeToExtract(context);
             if (!info) return emptyArray;
 
@@ -35,7 +35,7 @@ namespace ts.refactor {
         }
     });
 
-    interface Info { isJS: boolean; selection: TypeNode; firstStatement: Statement; typeParameters: ReadonlyArray<TypeParameterDeclaration>; }
+    interface Info { isJS: boolean; selection: TypeNode; firstStatement: Statement; typeParameters: readonly TypeParameterDeclaration[]; }
 
     function getRangeToExtract(context: RefactorContext): Info | undefined {
         const { file, startPosition } = context;
@@ -107,7 +107,7 @@ namespace ts.refactor {
         }
     }
 
-    function doTypeAliasChange(changes: textChanges.ChangeTracker, file: SourceFile, name: string, firstStatement: Statement, selection: TypeNode, typeParameters: ReadonlyArray<TypeParameterDeclaration>) {
+    function doTypeAliasChange(changes: textChanges.ChangeTracker, file: SourceFile, name: string, firstStatement: Statement, selection: TypeNode, typeParameters: readonly TypeParameterDeclaration[]) {
         const newTypeNode = createTypeAliasDeclaration(
             /* decorators */ undefined,
             /* modifiers */ undefined,
@@ -119,7 +119,7 @@ namespace ts.refactor {
         changes.replaceNode(file, selection, createTypeReferenceNode(name, typeParameters.map(id => createTypeReferenceNode(id.name, /* typeArguments */ undefined))));
     }
 
-    function doTypedefChange(changes: textChanges.ChangeTracker, file: SourceFile, name: string, firstStatement: Statement, selection: TypeNode, typeParameters: ReadonlyArray<TypeParameterDeclaration>) {
+    function doTypedefChange(changes: textChanges.ChangeTracker, file: SourceFile, name: string, firstStatement: Statement, selection: TypeNode, typeParameters: readonly TypeParameterDeclaration[]) {
         const node = <JSDocTypedefTag>createNode(SyntaxKind.JSDocTypedefTag);
         node.tagName = createIdentifier("typedef"); // TODO: jsdoc factory https://github.com/Microsoft/TypeScript/pull/29539
         node.fullName = createIdentifier(name);

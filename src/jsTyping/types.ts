@@ -72,7 +72,7 @@ declare namespace ts.server {
         readonly kind: EventBeginInstallTypes | EventEndInstallTypes;
         readonly eventId: number;
         readonly typingsInstallerVersion: string;
-        readonly packagesToInstall: ReadonlyArray<string>;
+        readonly packagesToInstall: readonly string[];
     }
 
     export interface BeginInstallTypes extends InstallTypes {

@@ -3,7 +3,7 @@ namespace project {
     interface ProjectRunnerTestCase {
         scenario: string;
         projectRoot: string; // project where it lives - this also is the current directory when compiling
-        inputFiles: ReadonlyArray<string>; // list of input files to be given to program
+        inputFiles: readonly string[]; // list of input files to be given to program
         resolveMapRoot?: boolean; // should we resolve this map root and give compiler the absolute disk path as map root?
         resolveSourceRoot?: boolean; // should we resolve this source root and give compiler the absolute disk path as map root?
         baselineCheck?: boolean; // Verify the baselines of output files, if this is false, we will write to output to the disk but there is no verification of baselines
@@ -13,21 +13,21 @@ namespace project {
 
     interface ProjectRunnerTestCaseResolutionInfo extends ProjectRunnerTestCase {
         // Apart from actual test case the results of the resolution
-        resolvedInputFiles: ReadonlyArray<string>; // List of files that were asked to read by compiler
-        emittedFiles: ReadonlyArray<string>; // List of files that were emitted by the compiler
+        resolvedInputFiles: readonly string[]; // List of files that were asked to read by compiler
+        emittedFiles: readonly string[]; // List of files that were emitted by the compiler
     }
 
     interface CompileProjectFilesResult {
-        configFileSourceFiles: ReadonlyArray<ts.SourceFile>;
+        configFileSourceFiles: readonly ts.SourceFile[];
         moduleKind: ts.ModuleKind;
         program?: ts.Program;
         compilerOptions?: ts.CompilerOptions;
-        errors: ReadonlyArray<ts.Diagnostic>;
-        sourceMapData?: ReadonlyArray<ts.SourceMapEmitResult>;
+        errors: readonly ts.Diagnostic[];
+        sourceMapData?: readonly ts.SourceMapEmitResult[];
     }
 
     interface BatchCompileProjectTestCaseResult extends CompileProjectFilesResult {
-        outputFiles?: ReadonlyArray<documents.TextDocument>;
+        outputFiles?: readonly documents.TextDocument[];
     }
 
     export class ProjectRunner extends RunnerBase {
@@ -307,8 +307,8 @@ namespace project {
             return url;
         }
 
-        private compileProjectFiles(moduleKind: ts.ModuleKind, configFileSourceFiles: ReadonlyArray<ts.SourceFile>,
-            getInputFiles: () => ReadonlyArray<string>,
+        private compileProjectFiles(moduleKind: ts.ModuleKind, configFileSourceFiles: readonly ts.SourceFile[],
+            getInputFiles: () => readonly string[],
             compilerHost: ts.CompilerHost,
             compilerOptions: ts.CompilerOptions): CompileProjectFilesResult {
 

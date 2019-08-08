@@ -865,19 +865,19 @@ namespace ts {
     ];
 
     /* @internal */
-    export const semanticDiagnosticsOptionDeclarations: ReadonlyArray<CommandLineOption> =
+    export const semanticDiagnosticsOptionDeclarations: readonly CommandLineOption[] =
         optionDeclarations.filter(option => !!option.affectsSemanticDiagnostics);
 
     /* @internal */
-    export const affectsEmitOptionDeclarations: ReadonlyArray<CommandLineOption> =
+    export const affectsEmitOptionDeclarations: readonly CommandLineOption[] =
         optionDeclarations.filter(option => !!option.affectsEmit);
 
     /* @internal */
-    export const moduleResolutionOptionDeclarations: ReadonlyArray<CommandLineOption> =
+    export const moduleResolutionOptionDeclarations: readonly CommandLineOption[] =
         optionDeclarations.filter(option => !!option.affectsModuleResolution);
 
     /* @internal */
-    export const sourceFileAffectingCompilerOptions: ReadonlyArray<CommandLineOption> = optionDeclarations.filter(option =>
+    export const sourceFileAffectingCompilerOptions: readonly CommandLineOption[] = optionDeclarations.filter(option =>
         !!option.affectsSourceFile || !!option.affectsModuleResolution || !!option.affectsBindDiagnostics);
 
     /* @internal */
@@ -978,7 +978,7 @@ namespace ts {
     }
 
     /*@internal*/
-    export function createOptionNameMap(optionDeclarations: ReadonlyArray<CommandLineOption>): OptionNameMap {
+    export function createOptionNameMap(optionDeclarations: readonly CommandLineOption[]): OptionNameMap {
         const optionNameMap = createMap<CommandLineOption>();
         const shortOptionNames = createMap<string>();
         forEach(optionDeclarations, option => {
@@ -1036,7 +1036,7 @@ namespace ts {
     function parseCommandLineWorker(
         getOptionNameMap: () => OptionNameMap,
         [unknownOptionDiagnostic, optionTypeMismatchDiagnostic]: ParseCommandLineWorkerDiagnostics,
-        commandLine: ReadonlyArray<string>,
+        commandLine: readonly string[],
         readFile?: (path: string) => string | undefined) {
         const options = {} as OptionsBase;
         const fileNames: string[] = [];
@@ -1049,7 +1049,7 @@ namespace ts {
             errors
         };
 
-        function parseStrings(args: ReadonlyArray<string>) {
+        function parseStrings(args: readonly string[]) {
             let i = 0;
             while (i < args.length) {
                 const s = args[i];
@@ -1146,7 +1146,7 @@ namespace ts {
         }
     }
 
-    export function parseCommandLine(commandLine: ReadonlyArray<string>, readFile?: (path: string) => string | undefined): ParsedCommandLine {
+    export function parseCommandLine(commandLine: readonly string[], readFile?: (path: string) => string | undefined): ParsedCommandLine {
         return parseCommandLineWorker(getOptionNameMap, [
             Diagnostics.Unknown_compiler_option_0,
             Diagnostics.Compiler_option_0_expects_an_argument
@@ -1221,7 +1221,7 @@ namespace ts {
     }
 
     /* @internal */
-    export function printHelp(optionsList: ReadonlyArray<CommandLineOption>, syntaxPrefix = "") {
+    export function printHelp(optionsList: readonly CommandLineOption[], syntaxPrefix = "") {
         const output: string[] = [];
 
         // We want to align our "syntax" and "examples" commands to a certain margin.
@@ -1430,7 +1430,7 @@ namespace ts {
         return text === undefined ? createCompilerDiagnostic(Diagnostics.The_specified_path_does_not_exist_Colon_0, fileName) : text;
     }
 
-    function commandLineOptionsToMap(options: ReadonlyArray<CommandLineOption>) {
+    function commandLineOptionsToMap(options: readonly CommandLineOption[]) {
         return arrayToMap(options, option => option.name);
     }
 
@@ -1747,10 +1747,10 @@ namespace ts {
     export interface TSConfig {
         compilerOptions: CompilerOptions;
         compileOnSave: boolean | undefined;
-        exclude?: ReadonlyArray<string>;
-        files: ReadonlyArray<string> | undefined;
-        include?: ReadonlyArray<string>;
-        references: ReadonlyArray<ProjectReference> | undefined;
+        exclude?: readonly string[];
+        files: readonly string[] | undefined;
+        include?: readonly string[];
+        references: readonly ProjectReference[] | undefined;
     }
 
     /**
@@ -1799,14 +1799,14 @@ namespace ts {
         return config;
     }
 
-    function filterSameAsDefaultInclude(specs: ReadonlyArray<string> | undefined) {
+    function filterSameAsDefaultInclude(specs: readonly string[] | undefined) {
         if (!length(specs)) return undefined;
         if (length(specs) !== 1) return specs;
         if (specs![0] === "**/*") return undefined;
         return specs;
     }
 
-    function matchesSpecs(path: string, includeSpecs: ReadonlyArray<string> | undefined, excludeSpecs: ReadonlyArray<string> | undefined): (path: string) => boolean {
+    function matchesSpecs(path: string, includeSpecs: readonly string[] | undefined, excludeSpecs: readonly string[] | undefined): (path: string) => boolean {
         if (!includeSpecs) return _ => true;
         const patterns = getFileMatcherPatterns(path, excludeSpecs, includeSpecs, sys.useCaseSensitiveFileNames, sys.getCurrentDirectory());
         const excludeRe = patterns.excludePattern && getRegexFromPattern(patterns.excludePattern, sys.useCaseSensitiveFileNames);
@@ -1873,7 +1873,7 @@ namespace ts {
                     }
                     else {
                         if (optionDefinition.type === "list") {
-                            result.set(name, (value as ReadonlyArray<string | number>).map(element => getNameOfCompilerOptionValue(element, customTypeMap)!)); // TODO: GH#18217
+                            result.set(name, (value as readonly (string | number)[]).map(element => getNameOfCompilerOptionValue(element, customTypeMap)!)); // TODO: GH#18217
                         }
                         else {
                             // There is a typeMap associated with this command-line option so use it to map value back to its name
@@ -1892,7 +1892,7 @@ namespace ts {
      * @param fileNames array of filenames to be generated into tsconfig.json
      */
     /* @internal */
-    export function generateTSConfig(options: CompilerOptions, fileNames: ReadonlyArray<string>, newLine: string): string {
+    export function generateTSConfig(options: CompilerOptions, fileNames: readonly string[], newLine: string): string {
         const compilerOptions = extend(options, defaultInitCompilerOptions);
         const compilerOptionsMap = serializeCompilerOptions(compilerOptions);
         return writeConfigurations();
@@ -2000,7 +2000,7 @@ namespace ts {
      * @param basePath A root directory to resolve relative path entries in the config
      *    file to. e.g. outDir
      */
-    export function parseJsonConfigFileContent(json: any, host: ParseConfigHost, basePath: string, existingOptions?: CompilerOptions, configFileName?: string, resolutionStack?: Path[], extraFileExtensions?: ReadonlyArray<FileExtensionInfo>, extendedConfigCache?: Map<ExtendedConfigCacheEntry>): ParsedCommandLine {
+    export function parseJsonConfigFileContent(json: any, host: ParseConfigHost, basePath: string, existingOptions?: CompilerOptions, configFileName?: string, resolutionStack?: Path[], extraFileExtensions?: readonly FileExtensionInfo[], extendedConfigCache?: Map<ExtendedConfigCacheEntry>): ParsedCommandLine {
         return parseJsonConfigFileContentWorker(json, /*sourceFile*/ undefined, host, basePath, existingOptions, configFileName, resolutionStack, extraFileExtensions, extendedConfigCache);
     }
 
@@ -2011,7 +2011,7 @@ namespace ts {
      * @param basePath A root directory to resolve relative path entries in the config
      *    file to. e.g. outDir
      */
-    export function parseJsonSourceFileConfigFileContent(sourceFile: TsConfigSourceFile, host: ParseConfigHost, basePath: string, existingOptions?: CompilerOptions, configFileName?: string, resolutionStack?: Path[], extraFileExtensions?: ReadonlyArray<FileExtensionInfo>, extendedConfigCache?: Map<ExtendedConfigCacheEntry>): ParsedCommandLine {
+    export function parseJsonSourceFileConfigFileContent(sourceFile: TsConfigSourceFile, host: ParseConfigHost, basePath: string, existingOptions?: CompilerOptions, configFileName?: string, resolutionStack?: Path[], extraFileExtensions?: readonly FileExtensionInfo[], extendedConfigCache?: Map<ExtendedConfigCacheEntry>): ParsedCommandLine {
         return parseJsonConfigFileContentWorker(/*json*/ undefined, sourceFile, host, basePath, existingOptions, configFileName, resolutionStack, extraFileExtensions, extendedConfigCache);
     }
 
@@ -2049,7 +2049,7 @@ namespace ts {
         existingOptions: CompilerOptions = {},
         configFileName?: string,
         resolutionStack: Path[] = [],
-        extraFileExtensions: ReadonlyArray<FileExtensionInfo> = [],
+        extraFileExtensions: readonly FileExtensionInfo[] = [],
         extendedConfigCache?: Map<ExtendedConfigCacheEntry>
     ): ParsedCommandLine {
         Debug.assert((json === undefined && sourceFile !== undefined) || (json !== undefined && sourceFile === undefined));
@@ -2075,10 +2075,10 @@ namespace ts {
         };
 
         function getFileNames(): ExpandResult {
-            let filesSpecs: ReadonlyArray<string> | undefined;
+            let filesSpecs: readonly string[] | undefined;
             if (hasProperty(raw, "files") && !isNullOrUndefined(raw.files)) {
                 if (isArray(raw.files)) {
-                    filesSpecs = <ReadonlyArray<string>>raw.files;
+                    filesSpecs = <readonly string[]>raw.files;
                     const hasReferences = hasProperty(raw, "references") && !isNullOrUndefined(raw.references);
                     const hasZeroOrNoReferences = !hasReferences || raw.references.length === 0;
                     const hasExtends = hasProperty(raw, "extends");
@@ -2102,20 +2102,20 @@ namespace ts {
                 }
             }
 
-            let includeSpecs: ReadonlyArray<string> | undefined;
+            let includeSpecs: readonly string[] | undefined;
             if (hasProperty(raw, "include") && !isNullOrUndefined(raw.include)) {
                 if (isArray(raw.include)) {
-                    includeSpecs = <ReadonlyArray<string>>raw.include;
+                    includeSpecs = <readonly string[]>raw.include;
                 }
                 else {
                     createCompilerDiagnosticOnlyIfJson(Diagnostics.Compiler_option_0_requires_a_value_of_type_1, "include", "Array");
                 }
             }
 
-            let excludeSpecs: ReadonlyArray<string> | undefined;
+            let excludeSpecs: readonly string[] | undefined;
             if (hasProperty(raw, "exclude") && !isNullOrUndefined(raw.exclude)) {
                 if (isArray(raw.exclude)) {
-                    excludeSpecs = <ReadonlyArray<string>>raw.exclude;
+                    excludeSpecs = <readonly string[]>raw.exclude;
                 }
                 else {
                     createCompilerDiagnosticOnlyIfJson(Diagnostics.Compiler_option_0_requires_a_value_of_type_1, "exclude", "Array");
@@ -2503,7 +2503,7 @@ namespace ts {
         return options;
     }
 
-    function convertOptionsFromJson(optionDeclarations: ReadonlyArray<CommandLineOption>, jsonOptions: any, basePath: string,
+    function convertOptionsFromJson(optionDeclarations: readonly CommandLineOption[], jsonOptions: any, basePath: string,
         defaultOptions: CompilerOptions | TypeAcquisition, diagnosticMessage: DiagnosticMessage, errors: Push<Diagnostic>) {
 
         if (!jsonOptions) {
@@ -2576,7 +2576,7 @@ namespace ts {
         }
     }
 
-    function convertJsonOptionOfListType(option: CommandLineOptionOfListType, values: ReadonlyArray<any>, basePath: string, errors: Push<Diagnostic>): any[] {
+    function convertJsonOptionOfListType(option: CommandLineOptionOfListType, values: readonly any[], basePath: string, errors: Push<Diagnostic>): any[] {
         return filter(map(values, v => convertJsonOption(option.element, v, basePath, errors)), v => !!v);
     }
 
@@ -2653,18 +2653,18 @@ namespace ts {
      * @param errors An array for diagnostic reporting.
      */
     function matchFileNames(
-        filesSpecs: ReadonlyArray<string> | undefined,
-        includeSpecs: ReadonlyArray<string> | undefined,
-        excludeSpecs: ReadonlyArray<string> | undefined,
+        filesSpecs: readonly string[] | undefined,
+        includeSpecs: readonly string[] | undefined,
+        excludeSpecs: readonly string[] | undefined,
         basePath: string,
         options: CompilerOptions,
         host: ParseConfigHost,
         errors: Push<Diagnostic>,
-        extraFileExtensions: ReadonlyArray<FileExtensionInfo>,
+        extraFileExtensions: readonly FileExtensionInfo[],
         jsonSourceFile: TsConfigSourceFile | undefined
     ): ExpandResult {
         basePath = normalizePath(basePath);
-        let validatedIncludeSpecs: ReadonlyArray<string> | undefined, validatedExcludeSpecs: ReadonlyArray<string> | undefined;
+        let validatedIncludeSpecs: readonly string[] | undefined, validatedExcludeSpecs: readonly string[] | undefined;
 
         // The exclude spec list is converted into a regular expression, which allows us to quickly
         // test whether a file or directory should be excluded before recursively traversing the
@@ -2698,7 +2698,7 @@ namespace ts {
      * @param extraFileExtensions optionaly file extra file extension information from host
      */
     /* @internal */
-    export function getFileNamesFromConfigSpecs(spec: ConfigFileSpecs, basePath: string, options: CompilerOptions, host: ParseConfigHost, extraFileExtensions: ReadonlyArray<FileExtensionInfo> = []): ExpandResult {
+    export function getFileNamesFromConfigSpecs(spec: ConfigFileSpecs, basePath: string, options: CompilerOptions, host: ParseConfigHost, extraFileExtensions: readonly FileExtensionInfo[] = []): ExpandResult {
         basePath = normalizePath(basePath);
 
         const keyMapper = host.useCaseSensitiveFileNames ? identity : toLowerCase;
@@ -2733,7 +2733,7 @@ namespace ts {
             }
         }
 
-        let jsonOnlyIncludeRegexes: ReadonlyArray<RegExp> | undefined;
+        let jsonOnlyIncludeRegexes: readonly RegExp[] | undefined;
         if (validatedIncludeSpecs && validatedIncludeSpecs.length > 0) {
             for (const file of host.readDirectory(basePath, supportedExtensionsWithJsonIfResolveJsonModule, validatedExcludeSpecs, validatedIncludeSpecs, /*depth*/ undefined)) {
                 if (fileExtensionIs(file, Extension.Json)) {
@@ -2785,7 +2785,7 @@ namespace ts {
         };
     }
 
-    function validateSpecs(specs: ReadonlyArray<string>, errors: Push<Diagnostic>, allowTrailingRecursion: boolean, jsonSourceFile: TsConfigSourceFile | undefined, specKey: string): ReadonlyArray<string> {
+    function validateSpecs(specs: readonly string[], errors: Push<Diagnostic>, allowTrailingRecursion: boolean, jsonSourceFile: TsConfigSourceFile | undefined, specKey: string): readonly string[] {
         return specs.filter(spec => {
             const diag = specToDiagnostic(spec, allowTrailingRecursion);
             if (diag !== undefined) {
@@ -2814,7 +2814,7 @@ namespace ts {
     /**
      * Gets directories in a set of include patterns that should be watched for changes.
      */
-    function getWildcardDirectories(include: ReadonlyArray<string> | undefined, exclude: ReadonlyArray<string> | undefined, path: string, useCaseSensitiveFileNames: boolean): MapLike<WatchDirectoryFlags> {
+    function getWildcardDirectories(include: readonly string[] | undefined, exclude: readonly string[] | undefined, path: string, useCaseSensitiveFileNames: boolean): MapLike<WatchDirectoryFlags> {
         // We watch a directory recursively if it contains a wildcard anywhere in a directory segment
         // of the pattern:
         //
@@ -2888,7 +2888,7 @@ namespace ts {
      * @param extensionPriority The priority of the extension.
      * @param context The expansion context.
      */
-    function hasFileWithHigherPriorityExtension(file: string, literalFiles: Map<string>, wildcardFiles: Map<string>, extensions: ReadonlyArray<string>, keyMapper: (value: string) => string) {
+    function hasFileWithHigherPriorityExtension(file: string, literalFiles: Map<string>, wildcardFiles: Map<string>, extensions: readonly string[], keyMapper: (value: string) => string) {
         const extensionPriority = getExtensionPriority(file, extensions);
         const adjustedExtensionPriority = adjustExtensionPriority(extensionPriority, extensions);
         for (let i = ExtensionPriority.Highest; i < adjustedExtensionPriority; i++) {
@@ -2910,7 +2910,7 @@ namespace ts {
      * @param extensionPriority The priority of the extension.
      * @param context The expansion context.
      */
-    function removeWildcardFilesWithLowerPriorityExtension(file: string, wildcardFiles: Map<string>, extensions: ReadonlyArray<string>, keyMapper: (value: string) => string) {
+    function removeWildcardFilesWithLowerPriorityExtension(file: string, wildcardFiles: Map<string>, extensions: readonly string[], keyMapper: (value: string) => string) {
         const extensionPriority = getExtensionPriority(file, extensions);
         const nextExtensionPriority = getNextLowestExtensionPriority(extensionPriority, extensions);
         for (let i = nextExtensionPriority; i < extensions.length; i++) {

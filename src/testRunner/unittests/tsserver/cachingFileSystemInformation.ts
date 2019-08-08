@@ -15,7 +15,7 @@ namespace ts.projectSystem {
         }
         type CalledMaps = CalledMapsWithSingleArg | CalledMapsWithFiveArgs;
         function createCallsTrackingHost(host: TestServerHost) {
-            const calledMaps: Record<CalledMapsWithSingleArg, MultiMap<true>> & Record<CalledMapsWithFiveArgs, MultiMap<[ReadonlyArray<string>, ReadonlyArray<string>, ReadonlyArray<string>, number]>> = {
+            const calledMaps: Record<CalledMapsWithSingleArg, MultiMap<true>> & Record<CalledMapsWithFiveArgs, MultiMap<[readonly string[], readonly string[], readonly string[], number]>> = {
                 fileExists: setCallsTrackingWithSingleArgFn(CalledMapsWithSingleArg.fileExists),
                 directoryExists: setCallsTrackingWithSingleArgFn(CalledMapsWithSingleArg.directoryExists),
                 getDirectories: setCallsTrackingWithSingleArgFn(CalledMapsWithSingleArg.getDirectories),
@@ -68,7 +68,7 @@ namespace ts.projectSystem {
                 TestFSWithWatch.checkMultiMapKeyCount(callback, calledMaps[callback], expectedKeys);
             }
 
-            function verifyCalledOnEachEntryNTimes(callback: CalledMaps, expectedKeys: ReadonlyArray<string>, nTimes: number) {
+            function verifyCalledOnEachEntryNTimes(callback: CalledMaps, expectedKeys: readonly string[], nTimes: number) {
                 TestFSWithWatch.checkMultiMapKeyCount(callback, calledMaps[callback], expectedKeys, nTimes);
             }
 
@@ -76,7 +76,7 @@ namespace ts.projectSystem {
                 iterateOnCalledMaps(key => verifyNoCall(key));
             }
 
-            function verifyNoHostCallsExceptFileExistsOnce(expectedKeys: ReadonlyArray<string>) {
+            function verifyNoHostCallsExceptFileExistsOnce(expectedKeys: readonly string[]) {
                 verifyCalledOnEachEntryNTimes(CalledMapsWithSingleArg.fileExists, expectedKeys, 1);
                 verifyNoCall(CalledMapsWithSingleArg.directoryExists);
                 verifyNoCall(CalledMapsWithSingleArg.getDirectories);

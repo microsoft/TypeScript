@@ -19,7 +19,7 @@ namespace ts.projectSystem {
             clearEvents: () => void;
             verifyProjectLoadEvents: (expected: [server.ProjectLoadingStartEvent, server.ProjectLoadingFinishEvent]) => void;
         }) {
-            function createSessionToVerifyEvent(files: ReadonlyArray<File>) {
+            function createSessionToVerifyEvent(files: readonly File[]) {
                 const host = createServerHost(files);
                 const originalReadFile = host.readFile;
                 const { session, getNumberOfEvents, clearEvents, verifyProjectLoadEvents } = createSession(host);

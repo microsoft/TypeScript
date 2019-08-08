@@ -12,7 +12,7 @@ namespace ts {
         invalidateResolutionOfFile(filePath: Path): void;
         removeResolutionsOfFile(filePath: Path): void;
         removeResolutionsFromProjectReferenceRedirects(filePath: Path): void;
-        setFilesWithInvalidatedNonRelativeUnresolvedImports(filesWithUnresolvedImports: Map<ReadonlyArray<string>>): void;
+        setFilesWithInvalidatedNonRelativeUnresolvedImports(filesWithUnresolvedImports: Map<readonly string[]>): void;
         createHasInvalidatedResolution(forceAllFilesAsInvalidated?: boolean): HasInvalidatedResolution;
 
         startCachingPerDirectoryResolution(): void;
@@ -25,7 +25,7 @@ namespace ts {
     }
 
     interface ResolutionWithFailedLookupLocations {
-        readonly failedLookupLocations: ReadonlyArray<string>;
+        readonly failedLookupLocations: readonly string[];
         isInvalidated?: boolean;
         refCount?: number;
     }
@@ -120,7 +120,7 @@ namespace ts {
     export function createResolutionCache(resolutionHost: ResolutionCacheHost, rootDirForResolution: string | undefined, logChangesWhenResolvingModule: boolean): ResolutionCache {
         let filesWithChangedSetOfUnresolvedImports: Path[] | undefined;
         let filesWithInvalidatedResolutions: Map<true> | undefined;
-        let filesWithInvalidatedNonRelativeUnresolvedImports: ReadonlyMap<ReadonlyArray<string>> | undefined;
+        let filesWithInvalidatedNonRelativeUnresolvedImports: ReadonlyMap<readonly string[]> | undefined;
         let allFilesHaveInvalidatedResolution = false;
         const nonRelativeExternalModuleResolutions = createMultiMap<ResolutionWithFailedLookupLocations>();
 
@@ -287,7 +287,7 @@ namespace ts {
         }
 
         function resolveNamesWithLocalCache<T extends ResolutionWithFailedLookupLocations, R extends ResolutionWithResolvedFileName>(
-            names: ReadonlyArray<string>,
+            names: readonly string[],
             containingFile: string,
             redirectedReference: ResolvedProjectReference | undefined,
             cache: Map<Map<T>>,
@@ -295,7 +295,7 @@ namespace ts {
             loader: (name: string, containingFile: string, options: CompilerOptions, host: ModuleResolutionHost, redirectedReference?: ResolvedProjectReference) => T,
             getResolutionWithResolvedFileName: GetResolutionWithResolvedFileName<T, R>,
             shouldRetryResolution: (t: T) => boolean,
-            reusedNames: ReadonlyArray<string> | undefined,
+            reusedNames: readonly string[] | undefined,
             logChanges: boolean): (R | undefined)[] {
 
             const path = resolutionHost.toPath(containingFile);
@@ -689,7 +689,7 @@ namespace ts {
             );
         }
 
-        function setFilesWithInvalidatedNonRelativeUnresolvedImports(filesMap: ReadonlyMap<ReadonlyArray<string>>) {
+        function setFilesWithInvalidatedNonRelativeUnresolvedImports(filesMap: ReadonlyMap<readonly string[]>) {
             Debug.assert(filesWithInvalidatedNonRelativeUnresolvedImports === filesMap || filesWithInvalidatedNonRelativeUnresolvedImports === undefined);
             filesWithInvalidatedNonRelativeUnresolvedImports = filesMap;
         }
