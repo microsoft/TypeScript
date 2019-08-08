@@ -15,8 +15,8 @@ namespace ts.NavigationBar {
      */
     const whiteSpaceRegex = /\s+/g;
 
-    /** 
-     * Maximum amount of characters to return 
+    /**
+     * Maximum amount of characters to return
      * The amount was choosen arbitrarily.
      */
     const maxLength = 150;
@@ -713,6 +713,6 @@ namespace ts.NavigationBar {
         // \r - Carriage Return
         // \u2028 - Line separator
         // \u2029 - Paragraph separator
-        return text.replace(/\\?(\r?\n|\u2028|\u2029)/g, '');
+        return text.replace(/\\?(\r?\n|\u2028|\u2029)/g, "");
     }
 }
