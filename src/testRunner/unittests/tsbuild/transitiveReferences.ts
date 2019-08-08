@@ -69,7 +69,14 @@ export const b = new A();`);
             verifyBuild(fs => modifyFsBTsToNonRelativeImport(fs, "node"),
                 allExpectedOutputs,
                 expectedFileTraces,
-                [Diagnostics.Cannot_find_module_0, "a"],
+                {
+                    message: [Diagnostics.Cannot_find_module_0, "a"],
+                    location: {
+                        file: "/src/b.ts",
+                        start: `import {A} from 'a';`.indexOf(`'a'`),
+                        length: `'a'`.length
+                    }
+                },
             );
         });
     });

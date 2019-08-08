@@ -93,7 +93,7 @@ namespace ts {
                 expectedExitStatus: ExitStatus.ProjectReferenceCycle_OutputsSkupped,
                 expectedDiagnostics: [
                     getExpectedDiagnosticForProjectsInBuild("src/animals/tsconfig.json", "src/zoo/tsconfig.json", "src/core/tsconfig.json", "src/tsconfig.json"),
-                    [
+                    errorDiagnostic([
                         Diagnostics.Project_references_may_not_form_a_circular_graph_Cycle_detected_Colon_0,
                         [
                             "/src/tsconfig.json",
@@ -101,7 +101,7 @@ namespace ts {
                             "/src/zoo/tsconfig.json",
                             "/src/animals/tsconfig.json"
                         ].join("\r\n")
-                    ]
+                    ])
                 ],
                 expectedOutputs: emptyArray,
                 notExpectedOutputs: [...coreOutputs(), ...animalOutputs(), ...zooOutputs()]
@@ -121,12 +121,12 @@ namespace ts {
                     getExpectedDiagnosticForProjectsInBuild("src/core/tsconfig.json", "src/animals/tsconfig.json", "src/zoo/tsconfig.json", "src/tsconfig.json"),
                     [Diagnostics.Project_0_is_out_of_date_because_output_file_1_does_not_exist, "src/core/tsconfig.json", "src/lib/core/utilities.js"],
                     [Diagnostics.Building_project_0, "/src/core/tsconfig.json"],
-                    [Diagnostics.File_0_is_not_under_rootDir_1_rootDir_is_expected_to_contain_all_source_files, "/src/animals/animal.ts", "/src/core"],
-                    [Diagnostics.File_0_is_not_under_rootDir_1_rootDir_is_expected_to_contain_all_source_files, "/src/animals/dog.ts", "/src/core"],
-                    [Diagnostics.File_0_is_not_under_rootDir_1_rootDir_is_expected_to_contain_all_source_files, "/src/animals/index.ts", "/src/core"],
-                    [Diagnostics.File_0_is_not_listed_within_the_file_list_of_project_1_Projects_must_list_all_files_or_use_an_include_pattern, "/src/animals/animal.ts", "/src/core/tsconfig.json"],
-                    [Diagnostics.File_0_is_not_listed_within_the_file_list_of_project_1_Projects_must_list_all_files_or_use_an_include_pattern, "/src/animals/dog.ts", "/src/core/tsconfig.json"],
-                    [Diagnostics.File_0_is_not_listed_within_the_file_list_of_project_1_Projects_must_list_all_files_or_use_an_include_pattern, "/src/animals/index.ts", "/src/core/tsconfig.json"],
+                    errorDiagnostic([Diagnostics.File_0_is_not_under_rootDir_1_rootDir_is_expected_to_contain_all_source_files, "/src/animals/animal.ts", "/src/core"]),
+                    errorDiagnostic([Diagnostics.File_0_is_not_under_rootDir_1_rootDir_is_expected_to_contain_all_source_files, "/src/animals/dog.ts", "/src/core"]),
+                    errorDiagnostic([Diagnostics.File_0_is_not_under_rootDir_1_rootDir_is_expected_to_contain_all_source_files, "/src/animals/index.ts", "/src/core"]),
+                    errorDiagnostic([Diagnostics.File_0_is_not_listed_within_the_file_list_of_project_1_Projects_must_list_all_files_or_use_an_include_pattern, "/src/animals/animal.ts", "/src/core/tsconfig.json"]),
+                    errorDiagnostic([Diagnostics.File_0_is_not_listed_within_the_file_list_of_project_1_Projects_must_list_all_files_or_use_an_include_pattern, "/src/animals/dog.ts", "/src/core/tsconfig.json"]),
+                    errorDiagnostic([Diagnostics.File_0_is_not_listed_within_the_file_list_of_project_1_Projects_must_list_all_files_or_use_an_include_pattern, "/src/animals/index.ts", "/src/core/tsconfig.json"]),
                     [Diagnostics.Project_0_can_t_be_built_because_its_dependency_1_has_errors, "src/animals/tsconfig.json", "src/core"],
                     [Diagnostics.Skipping_build_of_project_0_because_its_dependency_1_has_errors, "/src/animals/tsconfig.json", "/src/core"],
                     [Diagnostics.Project_0_can_t_be_built_because_its_dependency_1_was_not_built, "src/zoo/tsconfig.json", "src/animals"],
