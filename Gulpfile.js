@@ -339,7 +339,7 @@ const eslint = (path) => async () => {
         "--format", "autolinkable-stylish",
         "--rulesdir", "scripts/eslint/built/rules",
         "--ext", ".ts",
-        `"${ path }"`,
+        `${ path }`,
     ];
 
     if (cmdLineOptions.fix) {
@@ -350,12 +350,12 @@ const eslint = (path) => async () => {
     return exec(process.execPath, args);
 }
 
-const lintScripts = eslint("scripts/**/*.ts");
+const lintScripts = eslint("scripts");
 lintScripts.displayName = "lint-scripts";
 task("lint-scripts", series([buildEslintRules, lintFoldStart, lintScripts, lintFoldEnd]));
 task("lint-scripts").description = "Runs eslint on the scripts sources.";
 
-const lintCompiler = eslint("src/**/*.ts");
+const lintCompiler = eslint("src");
 lintCompiler.displayName = "lint-compiler";
 task("lint-compiler", series([buildEslintRules, lintFoldStart, lintCompiler, lintFoldEnd]));
 task("lint-compiler").description = "Runs eslint on the compiler sources.";
