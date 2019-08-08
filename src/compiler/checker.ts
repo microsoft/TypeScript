@@ -24033,7 +24033,11 @@ namespace ts {
             }
 
             const operandType = checkExpression(node.expression);
-            return checkAwaitedType(operandType, node, Diagnostics.Type_of_await_operand_must_either_be_a_valid_promise_or_must_not_contain_a_callable_then_member);
+            const awaitedType = checkAwaitedType(operandType, node, Diagnostics.Type_of_await_operand_must_either_be_a_valid_promise_or_must_not_contain_a_callable_then_member);
+            if (awaitedType === operandType && awaitedType !== errorType && !(operandType.flags & TypeFlags.AnyOrUnknown)) {
+                addErrorOrSuggestion(/*isError*/ false, createDiagnosticForNode(node, Diagnostics.await_has_no_effect_on_the_type_of_this_expression));
+            }
+            return awaitedType;
         }
 
         function checkPrefixUnaryExpression(node: PrefixUnaryExpression): Type {
@@ -26537,9 +26541,6 @@ namespace ts {
          */
         function checkAwaitedType(type: Type, errorNode: Node, diagnosticMessage: DiagnosticMessage, arg0?: string | number): Type {
             const awaitedType = getAwaitedType(type, errorNode, diagnosticMessage, arg0);
-            if (awaitedType === type && !(type.flags & TypeFlags.AnyOrUnknown)) {
-                addErrorOrSuggestion(/*isError*/ false, createDiagnosticForNode(errorNode, Diagnostics.await_has_no_effect_on_the_type_of_this_expression));
-            }
             return awaitedType || errorType;
         }
 
