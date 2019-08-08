@@ -6434,7 +6434,7 @@ namespace ts {
             export function parseIsolatedJSDocComment(content: string, start: number | undefined, length: number | undefined): { jsDoc: JSDoc, diagnostics: Diagnostic[] } | undefined {
                 initializeState(content, ScriptTarget.Latest, /*_syntaxCursor:*/ undefined, ScriptKind.JS);
                 sourceFile = <SourceFile>{ languageVariant: LanguageVariant.Standard, text: content }; // tslint:disable-line no-object-literal-type-assertion
-                const jsDoc = parseJSDocCommentWorker(start, length);
+                const jsDoc = doInsideOfContext(NodeFlags.JSDoc, () => parseJSDocCommentWorker(start, length));
                 const diagnostics = parseDiagnostics;
                 clearState();
 
@@ -6446,7 +6446,7 @@ namespace ts {
                 const saveParseDiagnosticsLength = parseDiagnostics.length;
                 const saveParseErrorBeforeNextFinishedNode = parseErrorBeforeNextFinishedNode;
 
-                const comment = parseJSDocCommentWorker(start, length);
+                const comment = doInsideOfContext(NodeFlags.JSDoc, () => parseJSDocCommentWorker(start, length));
                 if (comment) {
                     comment.parent = parent;
                 }
@@ -6477,7 +6477,7 @@ namespace ts {
                 CallbackParameter = 1 << 2,
             }
 
-            export function parseJSDocCommentWorker(start = 0, length: number | undefined): JSDoc | undefined {
+            function parseJSDocCommentWorker(start = 0, length: number | undefined): JSDoc | undefined {
                 const content = sourceText;
                 const end = length === undefined ? content.length : start + length;
                 length = end - start;

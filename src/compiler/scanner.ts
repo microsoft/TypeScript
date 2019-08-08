@@ -2159,7 +2159,6 @@ namespace ts {
                         tokenValue = String.fromCharCode(cookedChar) + scanIdentifierParts();
                         return token = getIdentifierToken();
                     }
-                    error(Diagnostics.Invalid_character);
                     pos++;
                     return token = SyntaxKind.Unknown;
             }
