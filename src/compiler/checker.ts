@@ -14285,7 +14285,7 @@ namespace ts {
                     i++;
                 }
             }
-            const match = discriminable.indexOf(/*searchElement*/ true);;
+            const match = discriminable.indexOf(/*searchElement*/ true);
             // make sure exactly 1 matches before returning it
             return match === -1 || discriminable.indexOf(/*searchElement*/ true, match + 1) !== -1 ? defaultValue : target.types[match];
         }
