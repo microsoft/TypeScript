@@ -1295,7 +1295,7 @@ namespace ts {
             // is potentially an assertion and is therefore included in the control flow.
             if (node.expression.kind === SyntaxKind.CallExpression) {
                 const call = <CallExpression>node.expression;
-                if (isDottedName(call.expression) && call.arguments.length >= 1) {
+                if (isDottedName(call.expression)) {
                     currentFlow = createFlowCall(currentFlow, call);
                 }
             }

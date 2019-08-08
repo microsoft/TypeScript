@@ -16853,31 +16853,23 @@ namespace ts {
             }
         }
 
-        function getTypePredicateForCall(node: CallExpression) {
+        function isCallWithEffects(node: CallExpression) {
             const links = getNodeLinks(node);
-            if (links.resolvedTypePredicate === undefined) {
-                links.resolvedTypePredicate = computeTypePredicateForCall(node) || noTypePredicate;
+            if (links.isCallWithEffects === undefined) {
+                // A call expression parented by an expression statement is a potential assertion. Other call
+                // expressions are potential type predicate function calls.
+                const funcType = node.parent.kind === SyntaxKind.ExpressionStatement ? getTypeOfDottedName(node.expression) :
+                    node.expression.kind !== SyntaxKind.SuperKeyword ? checkNonNullExpression(node.expression) :
+                    undefined;
+                const apparentType = funcType && getApparentType(funcType) || unknownType;
+                links.isCallWithEffects = some(getSignaturesOfType(apparentType, SignatureKind.Call), hasTypePredicateOrNeverReturnType);
             }
-            return links.resolvedTypePredicate === noTypePredicate ? undefined : links.resolvedTypePredicate;
+            return links.isCallWithEffects;
         }
 
-        function computeTypePredicateForCall(node: CallExpression) {
-            // A call expression parented by an expression statement is a potential assertion. Other call
-            // expressions are potential type predicate function calls.
-            const funcType = node.parent.kind === SyntaxKind.ExpressionStatement ? getTypeOfDottedName(node.expression) :
-                node.expression.kind !== SyntaxKind.SuperKeyword ? checkNonNullExpression(node.expression) :
-                undefined;
-            if (funcType && funcType !== silentNeverType) {
-                const apparentType = getApparentType(funcType);
-                if (some(getSignaturesOfType(apparentType, SignatureKind.Call), hasTypePredicate)) {
-                    return getTypePredicateOfSignature(getResolvedSignature(node));
-                }
-            }
-            return undefined;
-        }
-
-        function hasTypePredicate(signature: Signature) {
-            return !!getTypePredicateOfSignature(signature);
+        function hasTypePredicateOrNeverReturnType(signature: Signature) {
+            return !!(getTypePredicateOfSignature(signature) ||
+                signature.declaration && (getReturnTypeFromAnnotation(signature.declaration) || unknownType).flags & TypeFlags.Never);
         }
 
         function reportFlowControlError(node: Node) {
@@ -17094,14 +17086,20 @@ namespace ts {
             }
 
             function getTypeAtFlowCall(flow: FlowCall): FlowType | undefined {
-                const predicate = getTypePredicateForCall(flow.node);
-                if (predicate && predicate.kind === TypePredicateKind.Assertion) {
-                    const flowType = getTypeAtFlowNode(flow.antecedent);
-                    const type = getTypeFromFlowType(flowType);
-                    const narrowedType = predicate.type ?
-                        narrowTypeByTypePredicate(type, predicate, flow.node, /*assumeTrue*/ true) :
-                        narrowTypeByAssertion(type, flow.node.arguments[predicate.parameterIndex]);
-                    return narrowedType === type ? flowType : createFlowType(narrowedType, isIncomplete(flowType));
+                if (isCallWithEffects(flow.node)) {
+                    const signature = getResolvedSignature(flow.node);
+                    const predicate = getTypePredicateOfSignature(signature);
+                    if (predicate && predicate.kind === TypePredicateKind.Assertion) {
+                        const flowType = getTypeAtFlowNode(flow.antecedent);
+                        const type = getTypeFromFlowType(flowType);
+                        const narrowedType = predicate.type ?
+                            narrowTypeByTypePredicate(type, predicate, flow.node, /*assumeTrue*/ true) :
+                            narrowTypeByAssertion(type, flow.node.arguments[predicate.parameterIndex]);
+                        return narrowedType === type ? flowType : createFlowType(narrowedType, isIncomplete(flowType));
+                    }
+                    if (getReturnTypeOfSignature(signature).flags & TypeFlags.Never) {
+                        return neverType;
+                    }
                 }
                 return undefined;
             }
@@ -17690,8 +17688,9 @@ namespace ts {
             }
 
             function narrowTypeByCallExpression(type: Type, callExpression: CallExpression, assumeTrue: boolean): Type {
-                if (hasMatchingArgument(callExpression, reference)) {
-                    const predicate = getTypePredicateForCall(callExpression);
+                if (hasMatchingArgument(callExpression, reference) && isCallWithEffects(callExpression)) {
+                    const signature = getResolvedSignature(callExpression);
+                    const predicate = getTypePredicateOfSignature(signature);
                     if (predicate && predicate.kind !== TypePredicateKind.Assertion) {
                         return narrowTypeByTypePredicate(type, predicate, callExpression, assumeTrue);
                     }
@@ -23652,15 +23651,14 @@ namespace ts {
             return eachTypeContainedIn(mapType(type, getRegularTypeOfLiteralType), switchTypes);
         }
 
-        function functionHasImplicitReturn(func: FunctionLikeDeclaration) {
-            if (!(func.flags & NodeFlags.HasImplicitReturn)) {
-                return false;
-            }
+        function isNeverFunctionCall(expr: Expression) {
+            return expr.kind === SyntaxKind.CallExpression && isCallWithEffects(<CallExpression>expr) && !!(getTypeOfExpression(expr).flags & TypeFlags.Never);
+        }
 
-            if (some((<Block>func.body).statements, statement => statement.kind === SyntaxKind.SwitchStatement && isExhaustiveSwitchStatement(<SwitchStatement>statement))) {
-                return false;
-            }
-            return true;
+        function functionHasImplicitReturn(func: FunctionLikeDeclaration) {
+            return !!(func.flags & NodeFlags.HasImplicitReturn) && !some((<Block>func.body).statements, statement =>
+                statement.kind === SyntaxKind.SwitchStatement && isExhaustiveSwitchStatement(<SwitchStatement>statement) ||
+                statement.kind === SyntaxKind.ExpressionStatement && isNeverFunctionCall((<ExpressionStatement>statement).expression));
         }
 
         /** NOTE: Return value of `[]` means a different thing than `undefined`. `[]` means func returns `void`, `undefined` means it returns `never`. */

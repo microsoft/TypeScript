@@ -3918,7 +3918,7 @@ namespace ts {
         resolvedSignature?: Signature;    // Cached signature of signature node or call expression
         resolvedSymbol?: Symbol;          // Cached name resolution result
         resolvedIndexInfo?: IndexInfo;    // Cached indexing info resolution result
-        resolvedTypePredicate?: TypePredicate; // Cached type predicate for call expression
+        isCallWithEffects?: boolean;      // Is call expression with possible control flow effects?
         enumMemberValue?: string | number;  // Constant value of enum member
         isVisible?: boolean;              // Is this node visible
         containsArgumentsReference?: boolean; // Whether a function-like declaration contains an 'arguments' reference
