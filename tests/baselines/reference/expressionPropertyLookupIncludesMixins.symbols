@@ -1,0 +1,105 @@
+=== tests/cases/compiler/expressionPropertyLookupIncludesMixins.ts ===
+// https://github.com/microsoft/TypeScript/issues/31426
+
+export type AnyFunction<A = any>        = (...input : any[]) => A
+>AnyFunction : Symbol(AnyFunction, Decl(expressionPropertyLookupIncludesMixins.ts, 0, 0))
+>A : Symbol(A, Decl(expressionPropertyLookupIncludesMixins.ts, 2, 24))
+>input : Symbol(input, Decl(expressionPropertyLookupIncludesMixins.ts, 2, 43))
+>A : Symbol(A, Decl(expressionPropertyLookupIncludesMixins.ts, 2, 24))
+
+export type AnyConstructor<A = object>  = new (...input : any[]) => A
+>AnyConstructor : Symbol(AnyConstructor, Decl(expressionPropertyLookupIncludesMixins.ts, 2, 65))
+>A : Symbol(A, Decl(expressionPropertyLookupIncludesMixins.ts, 3, 27))
+>input : Symbol(input, Decl(expressionPropertyLookupIncludesMixins.ts, 3, 47))
+>A : Symbol(A, Decl(expressionPropertyLookupIncludesMixins.ts, 3, 27))
+
+export type Mixin<T extends AnyFunction> = InstanceType<ReturnType<T>>
+>Mixin : Symbol(Mixin, Decl(expressionPropertyLookupIncludesMixins.ts, 3, 69))
+>T : Symbol(T, Decl(expressionPropertyLookupIncludesMixins.ts, 4, 18))
+>AnyFunction : Symbol(AnyFunction, Decl(expressionPropertyLookupIncludesMixins.ts, 0, 0))
+>InstanceType : Symbol(InstanceType, Decl(lib.es5.d.ts, --, --))
+>ReturnType : Symbol(ReturnType, Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(expressionPropertyLookupIncludesMixins.ts, 4, 18))
+
+export const Box = <T extends AnyConstructor<object>>(base : T) =>
+>Box : Symbol(Box, Decl(expressionPropertyLookupIncludesMixins.ts, 6, 12), Decl(expressionPropertyLookupIncludesMixins.ts, 9, 1))
+>T : Symbol(T, Decl(expressionPropertyLookupIncludesMixins.ts, 6, 20))
+>AnyConstructor : Symbol(AnyConstructor, Decl(expressionPropertyLookupIncludesMixins.ts, 2, 65))
+>base : Symbol(base, Decl(expressionPropertyLookupIncludesMixins.ts, 6, 54))
+>T : Symbol(T, Decl(expressionPropertyLookupIncludesMixins.ts, 6, 20))
+
+class Box extends base {
+>Box : Symbol(Box, Decl(expressionPropertyLookupIncludesMixins.ts, 6, 66))
+>base : Symbol(base, Decl(expressionPropertyLookupIncludesMixins.ts, 6, 54))
+
+    value       : any
+>value : Symbol(Box.value, Decl(expressionPropertyLookupIncludesMixins.ts, 7, 24))
+}
+export interface Box extends Mixin<typeof Box> {}
+>Box : Symbol(Box, Decl(expressionPropertyLookupIncludesMixins.ts, 6, 12), Decl(expressionPropertyLookupIncludesMixins.ts, 9, 1))
+>Mixin : Symbol(Mixin, Decl(expressionPropertyLookupIncludesMixins.ts, 3, 69))
+>Box : Symbol(Box, Decl(expressionPropertyLookupIncludesMixins.ts, 6, 12), Decl(expressionPropertyLookupIncludesMixins.ts, 9, 1))
+
+export const Observable = <T extends AnyConstructor<object>>(base : T) =>
+>Observable : Symbol(Observable, Decl(expressionPropertyLookupIncludesMixins.ts, 12, 12), Decl(expressionPropertyLookupIncludesMixins.ts, 17, 1))
+>T : Symbol(T, Decl(expressionPropertyLookupIncludesMixins.ts, 12, 27))
+>AnyConstructor : Symbol(AnyConstructor, Decl(expressionPropertyLookupIncludesMixins.ts, 2, 65))
+>base : Symbol(base, Decl(expressionPropertyLookupIncludesMixins.ts, 12, 61))
+>T : Symbol(T, Decl(expressionPropertyLookupIncludesMixins.ts, 12, 27))
+
+class Observable extends base {
+>Observable : Symbol(Observable, Decl(expressionPropertyLookupIncludesMixins.ts, 12, 73))
+>base : Symbol(base, Decl(expressionPropertyLookupIncludesMixins.ts, 12, 61))
+
+    observe () : IQuark {
+>observe : Symbol(Observable.observe, Decl(expressionPropertyLookupIncludesMixins.ts, 13, 31))
+>IQuark : Symbol(IQuark, Decl(expressionPropertyLookupIncludesMixins.ts, 30, 1))
+
+        return
+    }
+}
+export interface Observable extends Mixin<typeof Observable> {}
+>Observable : Symbol(Observable, Decl(expressionPropertyLookupIncludesMixins.ts, 12, 12), Decl(expressionPropertyLookupIncludesMixins.ts, 17, 1))
+>Mixin : Symbol(Mixin, Decl(expressionPropertyLookupIncludesMixins.ts, 3, 69))
+>Observable : Symbol(Observable, Decl(expressionPropertyLookupIncludesMixins.ts, 12, 12), Decl(expressionPropertyLookupIncludesMixins.ts, 17, 1))
+
+export const CQuark = <T extends AnyConstructor<Box & Observable>>(base : T) =>
+>CQuark : Symbol(CQuark, Decl(expressionPropertyLookupIncludesMixins.ts, 20, 12))
+>T : Symbol(T, Decl(expressionPropertyLookupIncludesMixins.ts, 20, 23))
+>AnyConstructor : Symbol(AnyConstructor, Decl(expressionPropertyLookupIncludesMixins.ts, 2, 65))
+>Box : Symbol(Box, Decl(expressionPropertyLookupIncludesMixins.ts, 6, 12), Decl(expressionPropertyLookupIncludesMixins.ts, 9, 1))
+>Observable : Symbol(Observable, Decl(expressionPropertyLookupIncludesMixins.ts, 12, 12), Decl(expressionPropertyLookupIncludesMixins.ts, 17, 1))
+>base : Symbol(base, Decl(expressionPropertyLookupIncludesMixins.ts, 20, 67))
+>T : Symbol(T, Decl(expressionPropertyLookupIncludesMixins.ts, 20, 23))
+
+class Quark extends base {
+>Quark : Symbol(Quark, Decl(expressionPropertyLookupIncludesMixins.ts, 20, 79))
+>base : Symbol(base, Decl(expressionPropertyLookupIncludesMixins.ts, 20, 67))
+
+    observe () : Quark {
+>observe : Symbol(Quark.observe, Decl(expressionPropertyLookupIncludesMixins.ts, 21, 26))
+>Quark : Symbol(Quark, Decl(expressionPropertyLookupIncludesMixins.ts, 20, 79))
+
+        // No error here!
+        this.value
+>this.value : Symbol(Box.value, Decl(expressionPropertyLookupIncludesMixins.ts, 7, 24))
+>this : Symbol(Quark, Decl(expressionPropertyLookupIncludesMixins.ts, 20, 79))
+>value : Symbol(Box.value, Decl(expressionPropertyLookupIncludesMixins.ts, 7, 24))
+        
+        
+        return
+    }
+}
+export interface IQuark extends Mixin<typeof CQuark> {}
+>IQuark : Symbol(IQuark, Decl(expressionPropertyLookupIncludesMixins.ts, 30, 1))
+>Mixin : Symbol(Mixin, Decl(expressionPropertyLookupIncludesMixins.ts, 3, 69))
+>CQuark : Symbol(CQuark, Decl(expressionPropertyLookupIncludesMixins.ts, 20, 12))
+
+const test = (a : IQuark) => a.value // <-- Should not error
+>test : Symbol(test, Decl(expressionPropertyLookupIncludesMixins.ts, 33, 5))
+>a : Symbol(a, Decl(expressionPropertyLookupIncludesMixins.ts, 33, 14))
+>IQuark : Symbol(IQuark, Decl(expressionPropertyLookupIncludesMixins.ts, 30, 1))
+>a.value : Symbol(Box.value, Decl(expressionPropertyLookupIncludesMixins.ts, 7, 24))
+>a : Symbol(a, Decl(expressionPropertyLookupIncludesMixins.ts, 33, 14))
+>value : Symbol(Box.value, Decl(expressionPropertyLookupIncludesMixins.ts, 7, 24))
+

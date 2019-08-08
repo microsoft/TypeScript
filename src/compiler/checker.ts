@@ -20645,10 +20645,20 @@ namespace ts {
                 }
                 return apparentType;
             }
-            const prop = getPropertyOfType(apparentType, right.escapedText);
+            let prop = getPropertyOfType(apparentType, right.escapedText);
             if (isIdentifier(left) && parentSymbol && !(prop && isConstEnumOrConstEnumOnlyModule(prop))) {
                 markAliasReferenced(parentSymbol, node);
             }
+
+            // Check for properties added via mixer-style base types also
+            if (!prop && typeIsInterfaceType(apparentType)) {
+                for (const base of apparentType.resolvedBaseTypes) {
+                    if (!prop) {
+                        prop = getPropertyOfType(base, right.escapedText);
+                    }
+                }
+            }
+
             if (!prop) {
                 const indexInfo = assignmentKind === AssignmentKind.None || !isGenericObjectType(leftType) || isThisTypeParameter(leftType) ? getIndexInfoOfType(apparentType, IndexKind.String) : undefined;
                 if (!(indexInfo && indexInfo.type)) {

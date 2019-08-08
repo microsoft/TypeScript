@@ -3381,6 +3381,7 @@ declare namespace ts {
      */
     function getEffectiveTypeParameterDeclarations(node: DeclarationWithTypeParameters): ReadonlyArray<TypeParameterDeclaration>;
     function getEffectiveConstraintOfTypeParameter(node: TypeParameterDeclaration): TypeNode | undefined;
+    function typeIsInterfaceType(type: Type): type is InterfaceType;
 }
 declare namespace ts {
     function isNumericLiteral(node: Node): node is NumericLiteral;

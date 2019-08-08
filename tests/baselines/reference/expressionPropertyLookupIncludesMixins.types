@@ -1,0 +1,83 @@
+=== tests/cases/compiler/expressionPropertyLookupIncludesMixins.ts ===
+// https://github.com/microsoft/TypeScript/issues/31426
+
+export type AnyFunction<A = any>        = (...input : any[]) => A
+>AnyFunction : AnyFunction<A>
+>input : any[]
+
+export type AnyConstructor<A = object>  = new (...input : any[]) => A
+>AnyConstructor : AnyConstructor<A>
+>input : any[]
+
+export type Mixin<T extends AnyFunction> = InstanceType<ReturnType<T>>
+>Mixin : InstanceType<ReturnType<T>>
+
+export const Box = <T extends AnyConstructor<object>>(base : T) =>
+>Box : <T extends AnyConstructor<object>>(base: T) => { new (...input: any[]): Box; prototype: Box<any>.Box; } & T
+><T extends AnyConstructor<object>>(base : T) =>class Box extends base {    value       : any} : <T extends AnyConstructor<object>>(base: T) => { new (...input: any[]): Box; prototype: Box<any>.Box; } & T
+>base : T
+
+class Box extends base {
+>class Box extends base {    value       : any} : { new (...input: any[]): Box; prototype: Box<any>.Box; } & T
+>Box : { new (...input: any[]): Box; prototype: Box<any>.Box; } & T
+>base : object
+
+    value       : any
+>value : any
+}
+export interface Box extends Mixin<typeof Box> {}
+>Box : <T extends AnyConstructor<object>>(base: T) => { new (...input: any[]): Box; prototype: Box<any>.Box; } & T
+
+export const Observable = <T extends AnyConstructor<object>>(base : T) =>
+>Observable : <T extends AnyConstructor<object>>(base: T) => { new (...input: any[]): Observable; prototype: Observable<any>.Observable; } & T
+><T extends AnyConstructor<object>>(base : T) =>class Observable extends base {    observe () : IQuark {        return    }} : <T extends AnyConstructor<object>>(base: T) => { new (...input: any[]): Observable; prototype: Observable<any>.Observable; } & T
+>base : T
+
+class Observable extends base {
+>class Observable extends base {    observe () : IQuark {        return    }} : { new (...input: any[]): Observable; prototype: Observable<any>.Observable; } & T
+>Observable : { new (...input: any[]): Observable; prototype: Observable<any>.Observable; } & T
+>base : object
+
+    observe () : IQuark {
+>observe : () => IQuark
+
+        return
+    }
+}
+export interface Observable extends Mixin<typeof Observable> {}
+>Observable : <T extends AnyConstructor<object>>(base: T) => { new (...input: any[]): Observable; prototype: Observable<any>.Observable; } & T
+
+export const CQuark = <T extends AnyConstructor<Box & Observable>>(base : T) =>
+>CQuark : <T extends AnyConstructor<Box & Observable>>(base: T) => { new (...input: any[]): Quark; prototype: CQuark<any>.Quark; } & T
+><T extends AnyConstructor<Box & Observable>>(base : T) =>class Quark extends base {    observe () : Quark {        // No error here!        this.value                        return    }} : <T extends AnyConstructor<Box & Observable>>(base: T) => { new (...input: any[]): Quark; prototype: CQuark<any>.Quark; } & T
+>base : T
+
+class Quark extends base {
+>class Quark extends base {    observe () : Quark {        // No error here!        this.value                        return    }} : { new (...input: any[]): Quark; prototype: CQuark<any>.Quark; } & T
+>Quark : { new (...input: any[]): Quark; prototype: CQuark<any>.Quark; } & T
+>base : Box & Observable
+
+    observe () : Quark {
+>observe : () => Quark
+
+        // No error here!
+        this.value
+>this.value : any
+>this : this
+>value : any
+        
+        
+        return
+    }
+}
+export interface IQuark extends Mixin<typeof CQuark> {}
+>CQuark : <T extends AnyConstructor<Box & Observable>>(base: T) => { new (...input: any[]): Quark; prototype: CQuark<any>.Quark; } & T
+
+const test = (a : IQuark) => a.value // <-- Should not error
+>test : (a: IQuark) => any
+>(a : IQuark) => a.value : (a: IQuark) => any
+>a : IQuark
+>a.value : any
+>a : IQuark
+>value : any
+

@@ -420,7 +420,6 @@ namespace ts {
         getDefault(): Type | undefined {
             return this.checker.getDefaultFromTypeParameter(this);
         }
-
         isUnion(): this is UnionType {
             return !!(this.flags & TypeFlags.Union);
         }

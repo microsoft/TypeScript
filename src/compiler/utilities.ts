@@ -5440,6 +5440,10 @@ namespace ts {
             ? node.parent.constraint
             : undefined;
     }
+
+    export function typeIsInterfaceType(type: Type): type is InterfaceType {
+        return !!type && hasProperty(type as InterfaceType, "typeParameters") && hasProperty(type as InterfaceType, "resolvedBaseTypes");
+    }
 }
 
 // Simple node tests of the form `node.kind === SyntaxKind.Foo`.
