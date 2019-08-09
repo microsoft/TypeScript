@@ -1,3 +1,4 @@
+tests/cases/compiler/a.js(3,5): error TS2300: Duplicate identifier 'a'.
 tests/cases/compiler/a.js(5,5): error TS1117: An object literal cannot have multiple properties with the same name in strict mode.
 tests/cases/compiler/a.js(5,5): error TS2300: Duplicate identifier 'a'.
 tests/cases/compiler/a.js(7,5): error TS1212: Identifier expected. 'let' is a reserved word in strict mode.
@@ -15,10 +16,12 @@ tests/cases/compiler/d.js(2,9): error TS1121: Octal literals are not allowed in 
 tests/cases/compiler/d.js(2,11): error TS1005: ',' expected.
 
 
-==== tests/cases/compiler/a.js (9 errors) ====
+==== tests/cases/compiler/a.js (10 errors) ====
     "use strict";
     var a = {
         a: "hello", // error
+        ~
+!!! error TS2300: Duplicate identifier 'a'.
         b: 10,
         a: 10 // error
         ~

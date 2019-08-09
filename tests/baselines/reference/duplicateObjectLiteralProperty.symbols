@@ -30,14 +30,14 @@ var y = {
 >y : Symbol(y, Decl(duplicateObjectLiteralProperty.ts, 12, 3))
 
     get a() { return 0; },
->a : Symbol(a, Decl(duplicateObjectLiteralProperty.ts, 12, 9), Decl(duplicateObjectLiteralProperty.ts, 13, 26))
+>a : Symbol(a, Decl(duplicateObjectLiteralProperty.ts, 12, 9), Decl(duplicateObjectLiteralProperty.ts, 13, 26), Decl(duplicateObjectLiteralProperty.ts, 14, 25))
 
     set a(v: number) { },
->a : Symbol(a, Decl(duplicateObjectLiteralProperty.ts, 12, 9), Decl(duplicateObjectLiteralProperty.ts, 13, 26))
+>a : Symbol(a, Decl(duplicateObjectLiteralProperty.ts, 12, 9), Decl(duplicateObjectLiteralProperty.ts, 13, 26), Decl(duplicateObjectLiteralProperty.ts, 14, 25))
 >v : Symbol(v, Decl(duplicateObjectLiteralProperty.ts, 14, 10))
 
     get a() { return 0; }
->a : Symbol(a, Decl(duplicateObjectLiteralProperty.ts, 14, 25))
+>a : Symbol(a, Decl(duplicateObjectLiteralProperty.ts, 12, 9), Decl(duplicateObjectLiteralProperty.ts, 13, 26), Decl(duplicateObjectLiteralProperty.ts, 14, 25))
 
 };
 

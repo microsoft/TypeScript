@@ -1,0 +1,87 @@
+tests/cases/conformance/interfaces/declarationMerging/mergeClassAndInterfaceWithConflictingAccessors.ts(9,9): error TS2380: 'get' and 'set' accessor must have the same type.
+tests/cases/conformance/interfaces/declarationMerging/mergeClassAndInterfaceWithConflictingAccessors.ts(12,9): error TS2380: 'get' and 'set' accessor must have the same type.
+tests/cases/conformance/interfaces/declarationMerging/mergeClassAndInterfaceWithConflictingAccessors.ts(16,9): error TS2300: Duplicate identifier 'x'.
+tests/cases/conformance/interfaces/declarationMerging/mergeClassAndInterfaceWithConflictingAccessors.ts(17,9): error TS2300: Duplicate identifier 'x'.
+tests/cases/conformance/interfaces/declarationMerging/mergeClassAndInterfaceWithConflictingAccessors.ts(20,5): error TS2300: Duplicate identifier 'x'.
+tests/cases/conformance/interfaces/declarationMerging/mergeClassAndInterfaceWithConflictingAccessors.ts(24,5): error TS2300: Duplicate identifier 'x'.
+tests/cases/conformance/interfaces/declarationMerging/mergeClassAndInterfaceWithConflictingAccessors.ts(27,9): error TS2300: Duplicate identifier 'x'.
+tests/cases/conformance/interfaces/declarationMerging/mergeClassAndInterfaceWithConflictingAccessors.ts(28,9): error TS2300: Duplicate identifier 'x'.
+
+
+==== tests/cases/conformance/interfaces/declarationMerging/mergeClassAndInterfaceWithConflictingAccessors.ts (8 errors) ====
+    declare class A {
+        get x(): number;
+    }
+    interface A {
+        get x(): string;
+    }
+    
+    declare class B {
+        get x(): number;
+            ~
+!!! error TS2380: 'get' and 'set' accessor must have the same type.
+    }
+    interface B {
+        set x(value: string);
+            ~
+!!! error TS2380: 'get' and 'set' accessor must have the same type.
+    }
+    
+    declare class C {
+        get x(): number;
+            ~
+!!! error TS2300: Duplicate identifier 'x'.
+        set x(value: number);
+            ~
+!!! error TS2300: Duplicate identifier 'x'.
+    }
+    interface C {
+        x: number;
+        ~
+!!! error TS2300: Duplicate identifier 'x'.
+    }
+    
+    declare class D {
+        x: number;
+        ~
+!!! error TS2300: Duplicate identifier 'x'.
+    }
+    interface D {
+        get x(): number;
+            ~
+!!! error TS2300: Duplicate identifier 'x'.
+        set x(value: number);
+            ~
+!!! error TS2300: Duplicate identifier 'x'.
+    }
+    
+    declare class E {
+        get x(): number;
+    }
+    interface E {
+        get x(): number; // ok
+    }
+    
+    declare class F {
+        set x(value: string);
+    }
+    interface F {
+        get x(): string; // ok
+    }
+    
+    declare class G {
+        get x(): number;
+        set x(value: number);
+    }
+    interface G {
+        get x(): number;
+        set x(value: number);
+    }
+    
+    declare class H {
+        x: number;
+    }
+    interface H {
+        x: number;
+    }
+    

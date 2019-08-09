@@ -85,6 +85,8 @@ namespace ts.BreakpointResolver {
                     case SyntaxKind.MethodSignature:
                     case SyntaxKind.GetAccessor:
                     case SyntaxKind.SetAccessor:
+                    case SyntaxKind.GetAccessorSignature:
+                    case SyntaxKind.SetAccessorSignature:
                     case SyntaxKind.Constructor:
                     case SyntaxKind.FunctionExpression:
                     case SyntaxKind.ArrowFunction:
@@ -664,6 +666,8 @@ namespace ts.BreakpointResolver {
                     case SyntaxKind.MethodSignature:
                     case SyntaxKind.GetAccessor:
                     case SyntaxKind.SetAccessor:
+                    case SyntaxKind.GetAccessorSignature:
+                    case SyntaxKind.SetAccessorSignature:
                     case SyntaxKind.Constructor:
                     case SyntaxKind.WhileStatement:
                     case SyntaxKind.DoStatement:

@@ -171,6 +171,8 @@ namespace ts.NavigationBar {
             case SyntaxKind.GetAccessor:
             case SyntaxKind.SetAccessor:
             case SyntaxKind.MethodSignature:
+            case SyntaxKind.GetAccessorSignature:
+            case SyntaxKind.SetAccessorSignature:
                 if (!hasDynamicName((<ClassElement | TypeElement>node))) {
                     addNodeWithRecursiveChild(node, (<FunctionLikeDeclaration>node).body);
                 }

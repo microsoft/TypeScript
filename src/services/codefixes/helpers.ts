@@ -55,12 +55,11 @@ namespace ts.codefix {
         const modifiers = visibilityModifier ? createNodeArray([visibilityModifier]) : undefined;
         const type = checker.getWidenedType(checker.getTypeOfSymbolAtLocation(symbol, enclosingDeclaration));
         const optional = !!(symbol.flags & SymbolFlags.Optional);
+        const ambient = !!(enclosingDeclaration.flags & NodeFlags.Ambient);
 
         switch (declaration.kind) {
-            case SyntaxKind.GetAccessor:
-            case SyntaxKind.SetAccessor:
             case SyntaxKind.PropertySignature:
-            case SyntaxKind.PropertyDeclaration:
+            case SyntaxKind.PropertyDeclaration: {
                 const typeNode = checker.typeToTypeNode(type, enclosingDeclaration, /*flags*/ undefined, getNoopSymbolTrackerWithResolver(context));
                 out(createProperty(
                     /*decorators*/undefined,
@@ -70,6 +69,37 @@ namespace ts.codefix {
                     typeNode,
                     /*initializer*/ undefined));
                 break;
+            }
+            case SyntaxKind.GetAccessor:
+            case SyntaxKind.SetAccessor:
+            case SyntaxKind.GetAccessorSignature:
+            case SyntaxKind.SetAccessorSignature: {
+                const allAccessors = getAllAccessors(declarations, declaration as AccessorLike);
+                const typeNode = checker.typeToTypeNode(type, enclosingDeclaration, /*flags*/ undefined, getNoopSymbolTrackerWithResolver(context));
+                for (const accessor of allAccessors.orderedAccessors) {
+                    if (isGetAccessorLike(accessor)) {
+                        out(createGetAccessor(
+                            /*decorators*/ undefined,
+                            modifiers,
+                            name,
+                            emptyArray,
+                            typeNode,
+                            ambient ? undefined : createStubbedMethodBody(preferences)));
+                    }
+                    else {
+                        Debug.assertNode(accessor, isSetAccessorLike);
+                        const parameter = getSetAccessorValueParameter(accessor);
+                        const parameterName = parameter && isIdentifier(parameter.name) ? idText(parameter.name) : undefined;
+                        out(createSetAccessor(
+                            /*decorators*/ undefined,
+                            modifiers,
+                            name,
+                            createDummyParameters(1, [parameterName], [typeNode], 1, /*inJs*/ false),
+                            ambient ? undefined : createStubbedMethodBody(preferences)));
+                    }
+                }
+                break;
+            }
             case SyntaxKind.MethodSignature:
             case SyntaxKind.MethodDeclaration:
                 // The signature for the implementation appears as an entry in `signatures` iff
@@ -87,7 +117,7 @@ namespace ts.codefix {
                 if (declarations.length === 1) {
                     Debug.assert(signatures.length === 1);
                     const signature = signatures[0];
-                    outputMethod(signature, modifiers, name, createStubbedMethodBody(preferences));
+                    outputMethod(signature, modifiers, name, ambient ? undefined : createStubbedMethodBody(preferences));
                     break;
                 }
 
@@ -98,11 +128,11 @@ namespace ts.codefix {
 
                 if (declarations.length > signatures.length) {
                     const signature = checker.getSignatureFromDeclaration(declarations[declarations.length - 1] as SignatureDeclaration)!;
-                    outputMethod(signature, modifiers, name, createStubbedMethodBody(preferences));
+                    outputMethod(signature, modifiers, name, ambient ? undefined : createStubbedMethodBody(preferences));
                 }
                 else {
                     Debug.assert(declarations.length === signatures.length);
-                    out(createMethodImplementingSignatures(signatures, name, optional, modifiers, preferences));
+                    out(createMethodImplementingSignatures(signatures, name, optional, ambient, modifiers, preferences));
                 }
                 break;
         }
@@ -190,6 +220,7 @@ namespace ts.codefix {
         signatures: ReadonlyArray<Signature>,
         name: PropertyName,
         optional: boolean,
+        ambient: boolean,
         modifiers: ReadonlyArray<Modifier> | undefined,
         preferences: UserPreferences,
     ): MethodDeclaration {
@@ -231,6 +262,7 @@ namespace ts.codefix {
             modifiers,
             name,
             optional,
+            ambient,
             /*typeParameters*/ undefined,
             parameters,
             /*returnType*/ undefined,
@@ -241,10 +273,11 @@ namespace ts.codefix {
         modifiers: ReadonlyArray<Modifier> | undefined,
         name: PropertyName,
         optional: boolean,
+        ambient: boolean,
         typeParameters: ReadonlyArray<TypeParameterDeclaration> | undefined,
         parameters: ReadonlyArray<ParameterDeclaration>,
         returnType: TypeNode | undefined,
-        preferences: UserPreferences
+        preferences: UserPreferences,
     ): MethodDeclaration {
         return createMethod(
             /*decorators*/ undefined,
@@ -255,7 +288,7 @@ namespace ts.codefix {
             typeParameters,
             parameters,
             returnType,
-            createStubbedMethodBody(preferences));
+            ambient ? undefined : createStubbedMethodBody(preferences));
     }
 
     function createStubbedMethodBody(preferences: UserPreferences): Block {

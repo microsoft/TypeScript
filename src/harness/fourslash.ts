@@ -4737,6 +4737,9 @@ namespace FourSlashInterface {
             });
         }
 
+        export const interfaceElementKeywords: ReadonlyArray<ExpectedCompletionEntryObject> =
+            ["get", "readonly", "set"].map(keywordEntry);
+
         export const classElementKeywords: ReadonlyArray<ExpectedCompletionEntryObject> =
             ["private", "protected", "public", "static", "abstract", "async", "constructor", "get", "readonly", "set"].map(keywordEntry);
 

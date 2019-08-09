@@ -1,0 +1,22 @@
+=== tests/cases/conformance/interfaces/interfaceDeclarations/interfaceWithAccessors.ts ===
+interface I0 {
+    get x(): number;
+>x : number
+
+    set x(value);
+>x : number
+>value : number
+}
+
+interface I1 {
+    get x(): number;
+>x : number
+}
+
+interface I1 {
+    set x(value);
+>x : number
+>value : number
+}
+
+

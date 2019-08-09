@@ -9,6 +9,6 @@
 
 verify.completions({
     marker: "1",
-    exact: { name: "readonly", sortText: completion.SortText.GlobalsOrKeywords } ,
+    exact: completion.interfaceElementKeywords,
     isNewIdentifierLocation: true
 });

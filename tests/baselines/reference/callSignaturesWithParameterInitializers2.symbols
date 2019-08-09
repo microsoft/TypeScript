@@ -46,21 +46,21 @@ var b = {
 >b : Symbol(b, Decl(callSignaturesWithParameterInitializers2.ts, 18, 3))
 
     foo(x = 1), // error
->foo : Symbol(foo, Decl(callSignaturesWithParameterInitializers2.ts, 18, 9), Decl(callSignaturesWithParameterInitializers2.ts, 19, 15))
+>foo : Symbol(foo, Decl(callSignaturesWithParameterInitializers2.ts, 18, 9))
 >x : Symbol(x, Decl(callSignaturesWithParameterInitializers2.ts, 19, 8))
 
     foo(x = 1) { }, // error
->foo : Symbol(foo, Decl(callSignaturesWithParameterInitializers2.ts, 18, 9), Decl(callSignaturesWithParameterInitializers2.ts, 19, 15))
+>foo : Symbol(foo, Decl(callSignaturesWithParameterInitializers2.ts, 19, 15))
 >x : Symbol(x, Decl(callSignaturesWithParameterInitializers2.ts, 20, 8))
 }
 
 b.foo();
->b.foo : Symbol(foo, Decl(callSignaturesWithParameterInitializers2.ts, 18, 9), Decl(callSignaturesWithParameterInitializers2.ts, 19, 15))
+>b.foo : Symbol(foo, Decl(callSignaturesWithParameterInitializers2.ts, 19, 15))
 >b : Symbol(b, Decl(callSignaturesWithParameterInitializers2.ts, 18, 3))
->foo : Symbol(foo, Decl(callSignaturesWithParameterInitializers2.ts, 18, 9), Decl(callSignaturesWithParameterInitializers2.ts, 19, 15))
+>foo : Symbol(foo, Decl(callSignaturesWithParameterInitializers2.ts, 19, 15))
 
 b.foo(1);
->b.foo : Symbol(foo, Decl(callSignaturesWithParameterInitializers2.ts, 18, 9), Decl(callSignaturesWithParameterInitializers2.ts, 19, 15))
+>b.foo : Symbol(foo, Decl(callSignaturesWithParameterInitializers2.ts, 19, 15))
 >b : Symbol(b, Decl(callSignaturesWithParameterInitializers2.ts, 18, 3))
->foo : Symbol(foo, Decl(callSignaturesWithParameterInitializers2.ts, 18, 9), Decl(callSignaturesWithParameterInitializers2.ts, 19, 15))
+>foo : Symbol(foo, Decl(callSignaturesWithParameterInitializers2.ts, 19, 15))
 

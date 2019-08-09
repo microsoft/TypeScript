@@ -7,7 +7,7 @@ class C {
 >0 : 0
 
     a: number;
->a : () => number
+>a : number
 }
 class K {
 >K : K

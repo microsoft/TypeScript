@@ -1,0 +1,123 @@
+=== tests/cases/conformance/interfaces/declarationMerging/mergeClassAndInterfaceWithConflictingAccessors.ts ===
+declare class A {
+>A : Symbol(A, Decl(mergeClassAndInterfaceWithConflictingAccessors.ts, 0, 0), Decl(mergeClassAndInterfaceWithConflictingAccessors.ts, 2, 1))
+
+    get x(): number;
+>x : Symbol(A.x, Decl(mergeClassAndInterfaceWithConflictingAccessors.ts, 0, 17), Decl(mergeClassAndInterfaceWithConflictingAccessors.ts, 3, 13))
+}
+interface A {
+>A : Symbol(A, Decl(mergeClassAndInterfaceWithConflictingAccessors.ts, 0, 0), Decl(mergeClassAndInterfaceWithConflictingAccessors.ts, 2, 1))
+
+    get x(): string;
+>x : Symbol(A.x, Decl(mergeClassAndInterfaceWithConflictingAccessors.ts, 0, 17), Decl(mergeClassAndInterfaceWithConflictingAccessors.ts, 3, 13))
+}
+
+declare class B {
+>B : Symbol(B, Decl(mergeClassAndInterfaceWithConflictingAccessors.ts, 5, 1), Decl(mergeClassAndInterfaceWithConflictingAccessors.ts, 9, 1))
+
+    get x(): number;
+>x : Symbol(B.x, Decl(mergeClassAndInterfaceWithConflictingAccessors.ts, 7, 17), Decl(mergeClassAndInterfaceWithConflictingAccessors.ts, 10, 13))
+}
+interface B {
+>B : Symbol(B, Decl(mergeClassAndInterfaceWithConflictingAccessors.ts, 5, 1), Decl(mergeClassAndInterfaceWithConflictingAccessors.ts, 9, 1))
+
+    set x(value: string);
+>x : Symbol(B.x, Decl(mergeClassAndInterfaceWithConflictingAccessors.ts, 7, 17), Decl(mergeClassAndInterfaceWithConflictingAccessors.ts, 10, 13))
+>value : Symbol(value, Decl(mergeClassAndInterfaceWithConflictingAccessors.ts, 11, 10))
+}
+
+declare class C {
+>C : Symbol(C, Decl(mergeClassAndInterfaceWithConflictingAccessors.ts, 12, 1), Decl(mergeClassAndInterfaceWithConflictingAccessors.ts, 17, 1))
+
+    get x(): number;
+>x : Symbol(C.x, Decl(mergeClassAndInterfaceWithConflictingAccessors.ts, 14, 17), Decl(mergeClassAndInterfaceWithConflictingAccessors.ts, 15, 20))
+
+    set x(value: number);
+>x : Symbol(C.x, Decl(mergeClassAndInterfaceWithConflictingAccessors.ts, 14, 17), Decl(mergeClassAndInterfaceWithConflictingAccessors.ts, 15, 20))
+>value : Symbol(value, Decl(mergeClassAndInterfaceWithConflictingAccessors.ts, 16, 10))
+}
+interface C {
+>C : Symbol(C, Decl(mergeClassAndInterfaceWithConflictingAccessors.ts, 12, 1), Decl(mergeClassAndInterfaceWithConflictingAccessors.ts, 17, 1))
+
+    x: number;
+>x : Symbol(C.x, Decl(mergeClassAndInterfaceWithConflictingAccessors.ts, 18, 13))
+}
+
+declare class D {
+>D : Symbol(D, Decl(mergeClassAndInterfaceWithConflictingAccessors.ts, 20, 1), Decl(mergeClassAndInterfaceWithConflictingAccessors.ts, 24, 1))
+
+    x: number;
+>x : Symbol(D.x, Decl(mergeClassAndInterfaceWithConflictingAccessors.ts, 22, 17))
+}
+interface D {
+>D : Symbol(D, Decl(mergeClassAndInterfaceWithConflictingAccessors.ts, 20, 1), Decl(mergeClassAndInterfaceWithConflictingAccessors.ts, 24, 1))
+
+    get x(): number;
+>x : Symbol(D.x, Decl(mergeClassAndInterfaceWithConflictingAccessors.ts, 25, 13))
+
+    set x(value: number);
+>x : Symbol(D.x, Decl(mergeClassAndInterfaceWithConflictingAccessors.ts, 26, 20))
+>value : Symbol(value, Decl(mergeClassAndInterfaceWithConflictingAccessors.ts, 27, 10))
+}
+
+declare class E {
+>E : Symbol(E, Decl(mergeClassAndInterfaceWithConflictingAccessors.ts, 28, 1), Decl(mergeClassAndInterfaceWithConflictingAccessors.ts, 32, 1))
+
+    get x(): number;
+>x : Symbol(E.x, Decl(mergeClassAndInterfaceWithConflictingAccessors.ts, 30, 17), Decl(mergeClassAndInterfaceWithConflictingAccessors.ts, 33, 13))
+}
+interface E {
+>E : Symbol(E, Decl(mergeClassAndInterfaceWithConflictingAccessors.ts, 28, 1), Decl(mergeClassAndInterfaceWithConflictingAccessors.ts, 32, 1))
+
+    get x(): number; // ok
+>x : Symbol(E.x, Decl(mergeClassAndInterfaceWithConflictingAccessors.ts, 30, 17), Decl(mergeClassAndInterfaceWithConflictingAccessors.ts, 33, 13))
+}
+
+declare class F {
+>F : Symbol(F, Decl(mergeClassAndInterfaceWithConflictingAccessors.ts, 35, 1), Decl(mergeClassAndInterfaceWithConflictingAccessors.ts, 39, 1))
+
+    set x(value: string);
+>x : Symbol(F.x, Decl(mergeClassAndInterfaceWithConflictingAccessors.ts, 37, 17), Decl(mergeClassAndInterfaceWithConflictingAccessors.ts, 40, 13))
+>value : Symbol(value, Decl(mergeClassAndInterfaceWithConflictingAccessors.ts, 38, 10))
+}
+interface F {
+>F : Symbol(F, Decl(mergeClassAndInterfaceWithConflictingAccessors.ts, 35, 1), Decl(mergeClassAndInterfaceWithConflictingAccessors.ts, 39, 1))
+
+    get x(): string; // ok
+>x : Symbol(F.x, Decl(mergeClassAndInterfaceWithConflictingAccessors.ts, 37, 17), Decl(mergeClassAndInterfaceWithConflictingAccessors.ts, 40, 13))
+}
+
+declare class G {
+>G : Symbol(G, Decl(mergeClassAndInterfaceWithConflictingAccessors.ts, 42, 1), Decl(mergeClassAndInterfaceWithConflictingAccessors.ts, 47, 1))
+
+    get x(): number;
+>x : Symbol(G.x, Decl(mergeClassAndInterfaceWithConflictingAccessors.ts, 44, 17), Decl(mergeClassAndInterfaceWithConflictingAccessors.ts, 45, 20), Decl(mergeClassAndInterfaceWithConflictingAccessors.ts, 48, 13), Decl(mergeClassAndInterfaceWithConflictingAccessors.ts, 49, 20))
+
+    set x(value: number);
+>x : Symbol(G.x, Decl(mergeClassAndInterfaceWithConflictingAccessors.ts, 44, 17), Decl(mergeClassAndInterfaceWithConflictingAccessors.ts, 45, 20), Decl(mergeClassAndInterfaceWithConflictingAccessors.ts, 48, 13), Decl(mergeClassAndInterfaceWithConflictingAccessors.ts, 49, 20))
+>value : Symbol(value, Decl(mergeClassAndInterfaceWithConflictingAccessors.ts, 46, 10))
+}
+interface G {
+>G : Symbol(G, Decl(mergeClassAndInterfaceWithConflictingAccessors.ts, 42, 1), Decl(mergeClassAndInterfaceWithConflictingAccessors.ts, 47, 1))
+
+    get x(): number;
+>x : Symbol(G.x, Decl(mergeClassAndInterfaceWithConflictingAccessors.ts, 44, 17), Decl(mergeClassAndInterfaceWithConflictingAccessors.ts, 45, 20), Decl(mergeClassAndInterfaceWithConflictingAccessors.ts, 48, 13), Decl(mergeClassAndInterfaceWithConflictingAccessors.ts, 49, 20))
+
+    set x(value: number);
+>x : Symbol(G.x, Decl(mergeClassAndInterfaceWithConflictingAccessors.ts, 44, 17), Decl(mergeClassAndInterfaceWithConflictingAccessors.ts, 45, 20), Decl(mergeClassAndInterfaceWithConflictingAccessors.ts, 48, 13), Decl(mergeClassAndInterfaceWithConflictingAccessors.ts, 49, 20))
+>value : Symbol(value, Decl(mergeClassAndInterfaceWithConflictingAccessors.ts, 50, 10))
+}
+
+declare class H {
+>H : Symbol(H, Decl(mergeClassAndInterfaceWithConflictingAccessors.ts, 51, 1), Decl(mergeClassAndInterfaceWithConflictingAccessors.ts, 55, 1))
+
+    x: number;
+>x : Symbol(H.x, Decl(mergeClassAndInterfaceWithConflictingAccessors.ts, 53, 17), Decl(mergeClassAndInterfaceWithConflictingAccessors.ts, 56, 13))
+}
+interface H {
+>H : Symbol(H, Decl(mergeClassAndInterfaceWithConflictingAccessors.ts, 51, 1), Decl(mergeClassAndInterfaceWithConflictingAccessors.ts, 55, 1))
+
+    x: number;
+>x : Symbol(H.x, Decl(mergeClassAndInterfaceWithConflictingAccessors.ts, 53, 17), Decl(mergeClassAndInterfaceWithConflictingAccessors.ts, 56, 13))
+}
+

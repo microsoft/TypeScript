@@ -58,15 +58,15 @@ var a: {
 }
 
 var b = {
->b : { foo(x: "hi"): void; foo(x: "a"): void; }
->{    foo(x: 'hi') { },    foo(x: 'a') { },} : { foo(x: "hi"): void; foo(x: "a"): void; }
+>b : { foo(x: "a"): void; }
+>{    foo(x: 'hi') { },    foo(x: 'a') { },} : { foo(x: "a"): void; }
 
     foo(x: 'hi') { },
->foo : { (x: "hi"): void; (x: "a"): void; }
+>foo : (x: "hi") => void
 >x : "hi"
 
     foo(x: 'a') { },
->foo : { (x: "hi"): void; (x: "a"): void; }
+>foo : (x: "a") => void
 >x : "a"
 }
 

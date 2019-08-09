@@ -328,7 +328,7 @@ verifyGeneral('class', {
 // from interface in mod1
 verify.completions({
     marker: "interface",
-    exact: { name: "readonly", sortText: completion.SortText.GlobalsOrKeywords },
+    exact: completion.interfaceElementKeywords,
     isNewIdentifierLocation: true,
 });
 
@@ -378,10 +378,7 @@ verifyGeneral('exportedClass', {
 // from exported interface in mod1
 verify.completions({
     marker: "exportedInterface",
-    exact: [{
-        name: "readonly",
-        sortText: completion.SortText.GlobalsOrKeywords
-    }],
+    exact: completion.interfaceElementKeywords,
     isNewIdentifierLocation: true
 });
 

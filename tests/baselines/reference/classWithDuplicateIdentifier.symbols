@@ -3,10 +3,10 @@ class C {
 >C : Symbol(C, Decl(classWithDuplicateIdentifier.ts, 0, 0))
 
     a(): number { return 0; } // error: duplicate identifier
->a : Symbol(C.a, Decl(classWithDuplicateIdentifier.ts, 0, 9), Decl(classWithDuplicateIdentifier.ts, 1, 29))
+>a : Symbol(C.a, Decl(classWithDuplicateIdentifier.ts, 0, 9))
 
     a: number;
->a : Symbol(C.a, Decl(classWithDuplicateIdentifier.ts, 0, 9), Decl(classWithDuplicateIdentifier.ts, 1, 29))
+>a : Symbol(C.a, Decl(classWithDuplicateIdentifier.ts, 1, 29))
 }
 class K {
 >K : Symbol(K, Decl(classWithDuplicateIdentifier.ts, 3, 1))

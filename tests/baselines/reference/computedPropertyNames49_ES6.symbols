@@ -22,14 +22,14 @@ var x = {
         throw 10;
     },
     get foo() {
->foo : Symbol(foo, Decl(computedPropertyNames49_ES6.ts, 11, 6))
+>foo : Symbol(foo, Decl(computedPropertyNames49_ES6.ts, 11, 6), Decl(computedPropertyNames49_ES6.ts, 16, 6))
 
         if (1 == 1) {
             return 10;
         }
     },
     get foo() {
->foo : Symbol(foo, Decl(computedPropertyNames49_ES6.ts, 16, 6))
+>foo : Symbol(foo, Decl(computedPropertyNames49_ES6.ts, 11, 6), Decl(computedPropertyNames49_ES6.ts, 16, 6))
 
         if (2 == 2) {
             return 20;

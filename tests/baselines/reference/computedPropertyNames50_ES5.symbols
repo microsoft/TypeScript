@@ -6,7 +6,7 @@ var x = {
 >p1 : Symbol(p1, Decl(computedPropertyNames50_ES5.ts, 0, 9))
 
     get foo() {
->foo : Symbol(foo, Decl(computedPropertyNames50_ES5.ts, 1, 11))
+>foo : Symbol(foo, Decl(computedPropertyNames50_ES5.ts, 1, 11), Decl(computedPropertyNames50_ES5.ts, 16, 6))
 
         if (1 == 1) {
             return 10;
@@ -29,7 +29,7 @@ var x = {
         return 10;
     },
     get foo() {
->foo : Symbol(foo, Decl(computedPropertyNames50_ES5.ts, 16, 6))
+>foo : Symbol(foo, Decl(computedPropertyNames50_ES5.ts, 1, 11), Decl(computedPropertyNames50_ES5.ts, 16, 6))
 
         if (2 == 2) {
             return 20;

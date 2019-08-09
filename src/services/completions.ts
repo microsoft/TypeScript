@@ -2119,7 +2119,14 @@ namespace ts.Completions {
     }
 
     function isInterfaceOrTypeLiteralCompletionKeyword(kind: SyntaxKind): boolean {
-        return kind === SyntaxKind.ReadonlyKeyword;
+        switch (kind) {
+            case SyntaxKind.ReadonlyKeyword:
+            case SyntaxKind.GetKeyword:
+            case SyntaxKind.SetKeyword:
+                return true;
+            default:
+                return false;
+        }
     }
 
     function isClassMemberCompletionKeyword(kind: SyntaxKind) {

@@ -1,0 +1,33 @@
+=== tests/cases/conformance/interfaces/declarationMerging/mergedInterfacesWithConflictingAccessors.ts ===
+interface A {
+    get x(): number;
+>x : number
+}
+interface A {
+    get x(): string;
+>x : number
+}
+
+interface B {
+    get x(): number;
+>x : number
+}
+interface B {
+    set x(value: string);
+>x : number
+>value : string
+}
+
+interface C {
+    x: number;
+>x : number
+}
+interface C {
+    get x(): number;
+>x : number
+
+    set x(value: number);
+>x : number
+>value : number
+}
+

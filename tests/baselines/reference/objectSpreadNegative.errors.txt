@@ -3,6 +3,7 @@ tests/cases/conformance/types/spread/objectSpreadNegative.ts(16,5): error TS2322
   Property 'sn' is optional in type '{ sn?: string | number; }' but required in type '{ sn: string | number; }'.
 tests/cases/conformance/types/spread/objectSpreadNegative.ts(23,1): error TS2741: Property 'b' is missing in type '{ s: string; }' but required in type '{ s: string; b: boolean; }'.
 tests/cases/conformance/types/spread/objectSpreadNegative.ts(25,1): error TS2741: Property 's' is missing in type '{ b: boolean; }' but required in type '{ s: string; b: boolean; }'.
+tests/cases/conformance/types/spread/objectSpreadNegative.ts(28,20): error TS2300: Duplicate identifier 'b'.
 tests/cases/conformance/types/spread/objectSpreadNegative.ts(28,36): error TS2300: Duplicate identifier 'b'.
 tests/cases/conformance/types/spread/objectSpreadNegative.ts(28,53): error TS2300: Duplicate identifier 'b'.
 tests/cases/conformance/types/spread/objectSpreadNegative.ts(32,19): error TS2698: Spread types may only be created from object types.
@@ -17,7 +18,7 @@ tests/cases/conformance/types/spread/objectSpreadNegative.ts(53,9): error TS2339
 tests/cases/conformance/types/spread/objectSpreadNegative.ts(58,11): error TS2339: Property 'a' does not exist on type '{}'.
 
 
-==== tests/cases/conformance/types/spread/objectSpreadNegative.ts (15 errors) ====
+==== tests/cases/conformance/types/spread/objectSpreadNegative.ts (16 errors) ====
     let o = { a: 1, b: 'no' }
     
     /// private propagates
@@ -57,6 +58,8 @@ tests/cases/conformance/types/spread/objectSpreadNegative.ts(58,11): error TS233
     
     // literal repeats are not allowed, but spread repeats are fine
     let duplicated = { b: 'bad', ...o, b: 'bad', ...o2, b: 'bad' }
+                       ~
+!!! error TS2300: Duplicate identifier 'b'.
                                        ~
 !!! error TS2300: Duplicate identifier 'b'.
                                                         ~

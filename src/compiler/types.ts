@@ -3589,6 +3589,13 @@ namespace ts {
         setAccessor: SetAccessorSignature | undefined;
     }
 
+    /* @internal */
+    export interface AllAccessors {
+        orderedAccessors: [AccessorLike] | [AccessorLike, AccessorLike];
+        getAccessor: GetAccessorLike | undefined;
+        setAccessor: SetAccessorLike | undefined;
+    }
+
     /** Indicates how to serialize the name for a TypeReferenceNode when emitting decorator metadata */
     /* @internal */
     export enum TypeReferenceSerializationKind {
@@ -3706,7 +3713,7 @@ namespace ts {
         BlockScopedVariableExcludes = Value,
 
         ParameterExcludes = Value,
-        PropertyExcludes = None,
+        PropertyExcludes = Value & ~(Property | Variable), // Merge with variables to allow expandos to merge
         EnumMemberExcludes = Value | Type,
         FunctionExcludes = Value & ~(Function | ValueModule),
         ClassExcludes = (Value | Type) & ~(ValueModule | Interface), // class-interface mergability done in checker.ts
@@ -3716,8 +3723,8 @@ namespace ts {
         ValueModuleExcludes = Value & ~(Function | Class | RegularEnum | ValueModule),
         NamespaceModuleExcludes = 0,
         MethodExcludes = Value & ~Method,
-        GetAccessorExcludes = Value & ~SetAccessor,
-        SetAccessorExcludes = Value & ~GetAccessor,
+        GetAccessorExcludes = Value & ~Accessor,
+        SetAccessorExcludes = Value & ~Accessor,
         TypeParameterExcludes = Type & ~TypeParameter,
         TypeAliasExcludes = Type,
         AliasExcludes = Alias,

@@ -1273,6 +1273,8 @@ namespace ts {
             case SyntaxKind.Constructor:
             case SyntaxKind.GetAccessor:
             case SyntaxKind.SetAccessor:
+            case SyntaxKind.GetAccessorSignature:
+            case SyntaxKind.SetAccessorSignature:
             case SyntaxKind.FunctionDeclaration:
             case SyntaxKind.FunctionExpression:
                 return true;
@@ -3530,7 +3532,7 @@ namespace ts {
         return find(node.members, (member): member is ConstructorDeclaration & { body: FunctionBody } => isConstructorDeclaration(member) && nodeIsPresent(member.body));
     }
 
-    function getSetAccessorValueParameter(accessor: SetAccessorLike): ParameterDeclaration | undefined {
+    export function getSetAccessorValueParameter(accessor: SetAccessorLike): ParameterDeclaration | undefined {
         if (accessor && accessor.parameters.length > 0) {
             const hasThis = accessor.parameters.length === 2 && parameterIsThisKeyword(accessor.parameters[0]);
             return accessor.parameters[hasThis ? 1 : 0];
@@ -3582,7 +3584,7 @@ namespace ts {
             SyntaxKind.GetAccessorSignature;
     }
 
-    export function getAllAccessorDeclarations(declarations: NodeArray<Declaration>, accessor: AccessorDeclaration): AllAccessorDeclarations {
+    export function getAllAccessorDeclarations(declarations: readonly Declaration[], accessor: AccessorDeclaration): AllAccessorDeclarations {
         // TODO: GH#18217
         let firstAccessor!: AccessorDeclaration;
         let secondAccessor!: AccessorDeclaration;
@@ -3631,6 +3633,66 @@ namespace ts {
             getAccessor,
             setAccessor
         };
+    }
+
+    export function getAllAccessors(declarations: readonly Declaration[], accessor: AccessorLike): AllAccessors {
+        // TODO: GH#18217
+        let firstAccessorIsGetter = false;
+        let firstAccessor: AccessorLike | undefined;
+        let secondAccessor: AccessorLike | undefined;
+        let getAccessor: GetAccessorLike | undefined;
+        let setAccessor: SetAccessorLike | undefined;
+        if (hasDynamicName(accessor)) {
+            firstAccessor = accessor;
+            if (isGetAccessorLike(accessor)) {
+                getAccessor = accessor;
+            }
+            else if (isSetAccessorLike(accessor)) {
+                setAccessor = accessor;
+            }
+            else {
+                return Debug.assertNever(accessor);
+            }
+        }
+        else {
+            const isStatic = isStaticAccessor(accessor);
+            const accessorName = getPropertyNameForPropertyNameNode(accessor.name);
+            for (const member of declarations) {
+                if (isAccessorLike(member) && isStaticAccessor(member) === isStatic) {
+                    const memberName = getPropertyNameForPropertyNameNode(member.name);
+                    if (memberName === accessorName) {
+                        if (isGetAccessorLike(member) && !getAccessor) {
+                            getAccessor = member;
+                        }
+
+                        if (isSetAccessorLike(member) && !setAccessor) {
+                            setAccessor = member;
+                        }
+
+                        if (!firstAccessor) {
+                            firstAccessor = member;
+                            firstAccessorIsGetter = isGetAccessorLike(member);
+                        }
+                        else if (!secondAccessor && firstAccessorIsGetter !== isGetAccessorLike(member)) {
+                            secondAccessor = member;
+                            break;
+                        }
+                    }
+                }
+            }
+            if (!firstAccessor) {
+                return Debug.fail("Accessors not found.");
+            }
+        }
+        return {
+            orderedAccessors: secondAccessor ? [firstAccessor, secondAccessor] : [firstAccessor],
+            getAccessor,
+            setAccessor,
+        };
+    }
+
+    function isStaticAccessor(node: Declaration) {
+        return isAccessorDeclaration(node) && hasModifier(node, ModifierFlags.Static);
     }
 
     /**
@@ -6850,6 +6912,7 @@ namespace ts {
             || kind === SyntaxKind.FunctionDeclaration
             || kind === SyntaxKind.FunctionExpression
             || kind === SyntaxKind.GetAccessor
+            || kind === SyntaxKind.GetAccessorSignature
             || kind === SyntaxKind.ImportClause
             || kind === SyntaxKind.ImportEqualsDeclaration
             || kind === SyntaxKind.ImportSpecifier
@@ -6865,6 +6928,7 @@ namespace ts {
             || kind === SyntaxKind.PropertyDeclaration
             || kind === SyntaxKind.PropertySignature
             || kind === SyntaxKind.SetAccessor
+            || kind === SyntaxKind.SetAccessorSignature
             || kind === SyntaxKind.ShorthandPropertyAssignment
             || kind === SyntaxKind.TypeAliasDeclaration
             || kind === SyntaxKind.TypeParameter

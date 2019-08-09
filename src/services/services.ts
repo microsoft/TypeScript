@@ -705,6 +705,8 @@ namespace ts {
                     case SyntaxKind.NamespaceImport:
                     case SyntaxKind.GetAccessor:
                     case SyntaxKind.SetAccessor:
+                    case SyntaxKind.GetAccessorSignature:
+                    case SyntaxKind.SetAccessorSignature:
                     case SyntaxKind.TypeLiteral:
                         addDeclaration(<Declaration>node);
                         forEachChild(node, visit);

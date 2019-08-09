@@ -1827,6 +1827,8 @@ namespace ts {
                         case SyntaxKind.Constructor:
                         case SyntaxKind.GetAccessor:
                         case SyntaxKind.SetAccessor:
+                        case SyntaxKind.GetAccessorSignature:
+                        case SyntaxKind.SetAccessorSignature:
                         case SyntaxKind.FunctionExpression:
                         case SyntaxKind.FunctionDeclaration:
                         case SyntaxKind.ArrowFunction:

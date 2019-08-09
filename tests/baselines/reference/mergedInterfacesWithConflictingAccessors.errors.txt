@@ -1,0 +1,40 @@
+tests/cases/conformance/interfaces/declarationMerging/mergedInterfacesWithConflictingAccessors.ts(9,9): error TS2380: 'get' and 'set' accessor must have the same type.
+tests/cases/conformance/interfaces/declarationMerging/mergedInterfacesWithConflictingAccessors.ts(12,9): error TS2380: 'get' and 'set' accessor must have the same type.
+tests/cases/conformance/interfaces/declarationMerging/mergedInterfacesWithConflictingAccessors.ts(16,5): error TS2300: Duplicate identifier 'x'.
+tests/cases/conformance/interfaces/declarationMerging/mergedInterfacesWithConflictingAccessors.ts(19,9): error TS2300: Duplicate identifier 'x'.
+tests/cases/conformance/interfaces/declarationMerging/mergedInterfacesWithConflictingAccessors.ts(20,9): error TS2300: Duplicate identifier 'x'.
+
+
+==== tests/cases/conformance/interfaces/declarationMerging/mergedInterfacesWithConflictingAccessors.ts (5 errors) ====
+    interface A {
+        get x(): number;
+    }
+    interface A {
+        get x(): string;
+    }
+    
+    interface B {
+        get x(): number;
+            ~
+!!! error TS2380: 'get' and 'set' accessor must have the same type.
+    }
+    interface B {
+        set x(value: string);
+            ~
+!!! error TS2380: 'get' and 'set' accessor must have the same type.
+    }
+    
+    interface C {
+        x: number;
+        ~
+!!! error TS2300: Duplicate identifier 'x'.
+    }
+    interface C {
+        get x(): number;
+            ~
+!!! error TS2300: Duplicate identifier 'x'.
+        set x(value: number);
+            ~
+!!! error TS2300: Duplicate identifier 'x'.
+    }
+    

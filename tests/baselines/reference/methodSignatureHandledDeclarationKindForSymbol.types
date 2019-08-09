@@ -6,7 +6,7 @@ interface Foo {
 
 interface Foo {
     bold: string;
->bold : () => string
+>bold : string
 }
 
 

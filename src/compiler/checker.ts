@@ -223,12 +223,14 @@ namespace ts {
     const isNotOverloadAndNotAccessor = and(isNotOverload, isNotAccessor);
 
     const enum DeclarationMeaning {
-        GetAccessor = 1,
-        SetAccessor = 2,
-        PropertyAssignment = 4,
-        Method = 8,
-        GetOrSetAccessor = GetAccessor | SetAccessor,
-        PropertyAssignmentOrMethod = PropertyAssignment | Method,
+        GetAccessor = 1 << 0,
+        SetAccessor = 1 << 1,
+        Property = 1 << 2,
+        Method = 1 << 3,
+        Accessor = GetAccessor | SetAccessor,
+        All = GetAccessor | SetAccessor | Property | Method,
+
+        DuplicateIdErrorReported = 1 << 4,
     }
 
     const enum DeclarationSpaces {
@@ -25614,6 +25616,82 @@ namespace ts {
             }
         }
 
+        /**
+         * Checks whether a member has a conflicting or duplicate declaration. If a conflict is found, we report an error both against `location` as well as
+         * the value declaration of the symbol.
+         * @param errorReporter The error reporting function to use.
+         * @param initial Indicates whether to also report an error at the initial declaration of the name (defaults to `true`).
+         * @param names A map of names to their recorded meanings.
+         * @param name The node on which to report diagnostics.
+         * @param memberName The underscore-escaped name for the member.
+         * @param symbol The symbol for the member.
+         * @param meaning The meaning represented by the member.
+         * @param exclude Meanings that conflict with the member.
+         * @param message The diagnostic message to use when the name already has the meaning defined in `exclude` (defaults to `Duplicate identifier '{0}'`).
+         * @param altExclude An alternative meaning to exclude.
+         * @param altMessage The diagnostic message to use when the name already has the meaning defined in `altExclude` (defaults to `Duplicate identifier '{0}'`).
+         */
+        function checkMemberForDuplicateDeclaration(
+            errorReporter: (node: Node | undefined, message: DiagnosticMessage, arg0: string | number) => void,
+            initial: boolean,
+            names: UnderscoreEscapedMap<DeclarationMeaning>,
+            name: PropertyName,
+            symbol: Symbol,
+            meaning: DeclarationMeaning,
+            exclude: DeclarationMeaning,
+            message?: DiagnosticMessage,
+            altExclude: DeclarationMeaning = 0,
+            altMessage?: DiagnosticMessage
+        ) {
+            const memberName = getPropertyNameForPropertyNameNode(name);
+            if (memberName) {
+                const prev = names.get(memberName);
+                if (prev) {
+                    if (prev & (exclude | altExclude)) {
+                        let nameText: string;
+                        switch (name.kind) {
+                            case SyntaxKind.StringLiteral:
+                            case SyntaxKind.NumericLiteral:
+                            case SyntaxKind.Identifier:
+                                nameText = unescapeLeadingUnderscores(memberName);
+                                break;
+                            default:
+                                nameText = getTextOfNode(name);
+                                break;
+                        }
+
+                        if (!(prev & DeclarationMeaning.DuplicateIdErrorReported)) {
+                            for (const decl of symbol.declarations) {
+                                const declarationName = getNameOfDeclaration(decl);
+                                if (declarationName) {
+                                    errorReporter(declarationName, Diagnostics.Duplicate_identifier_0, nameText);
+                                }
+                            }
+                            names.set(memberName, prev | DeclarationMeaning.DuplicateIdErrorReported);
+                        }
+
+                        const customMessage =
+                            prev & exclude ? message :
+                            altExclude && prev & altExclude ? altMessage :
+                            undefined;
+                        if (customMessage && customMessage !== Diagnostics.Duplicate_identifier_0) {
+                            const declarationName = getNameOfDeclaration(symbol.valueDeclaration);
+                            if (declarationName && initial) {
+                                errorReporter(declarationName, customMessage, nameText);
+                            }
+                            errorReporter(name, customMessage, nameText);
+                        }
+                    }
+                    else {
+                        names.set(memberName, prev | meaning);
+                    }
+                }
+                else {
+                    names.set(memberName, meaning);
+                }
+            }
+        }
+
         function checkClassForDuplicateDeclarations(node: ClassLikeDeclaration) {
             const instanceNames = createUnderscoreEscapedMap<DeclarationMeaning>();
             const staticNames = createUnderscoreEscapedMap<DeclarationMeaning>();
@@ -25621,55 +25699,30 @@ namespace ts {
                 if (member.kind === SyntaxKind.Constructor) {
                     for (const param of (member as ConstructorDeclaration).parameters) {
                         if (isParameterPropertyDeclaration(param) && !isBindingPattern(param.name)) {
-                            addName(instanceNames, param.name, param.name.escapedText, DeclarationMeaning.GetOrSetAccessor);
+                            const propertySymbol = Debug.assertDefined(getSymbol(getMembersOfSymbol(node.symbol), param.name.escapedText, SymbolFlags.Value));
+                            checkMemberForDuplicateDeclaration(error, /*initial*/ false, instanceNames, param.name, propertySymbol, DeclarationMeaning.Property, DeclarationMeaning.All);
                         }
                     }
                 }
                 else {
                     const isStatic = hasModifier(member, ModifierFlags.Static);
                     const names = isStatic ? staticNames : instanceNames;
-
-                    const name = member.name;
-                    const memberName = name && getPropertyNameForPropertyNameNode(name);
-                    if (name && memberName) {
+                    if (member.name) {
                         switch (member.kind) {
                             case SyntaxKind.GetAccessor:
-                                addName(names, name, memberName, DeclarationMeaning.GetAccessor);
+                                checkMemberForDuplicateDeclaration(error, /*initial*/ false, names, member.name, member.symbol, DeclarationMeaning.GetAccessor, ~DeclarationMeaning.SetAccessor);
                                 break;
-
                             case SyntaxKind.SetAccessor:
-                                addName(names, name, memberName, DeclarationMeaning.SetAccessor);
+                                checkMemberForDuplicateDeclaration(error, /*initial*/ false, names, member.name, member.symbol, DeclarationMeaning.SetAccessor, ~DeclarationMeaning.GetAccessor);
                                 break;
-
                             case SyntaxKind.PropertyDeclaration:
-                                addName(names, name, memberName, DeclarationMeaning.GetOrSetAccessor);
+                                checkMemberForDuplicateDeclaration(error, /*initial*/ false, names, member.name, member.symbol, DeclarationMeaning.Property, DeclarationMeaning.All);
                                 break;
-
                             case SyntaxKind.MethodDeclaration:
-                                addName(names, name, memberName, DeclarationMeaning.Method);
+                                checkMemberForDuplicateDeclaration(error, /*initial*/ false, names, member.name, member.symbol, DeclarationMeaning.Method, ~DeclarationMeaning.Method);
                                 break;
                         }
                     }
-                }
-            }
-
-            function addName(names: UnderscoreEscapedMap<DeclarationMeaning>, location: Node, name: __String, meaning: DeclarationMeaning) {
-                const prev = names.get(name);
-                if (prev) {
-                    if (prev & DeclarationMeaning.Method) {
-                        if (meaning !== DeclarationMeaning.Method) {
-                            error(location, Diagnostics.Duplicate_identifier_0, getTextOfNode(location));
-                        }
-                    }
-                    else if (prev & meaning) {
-                        error(location, Diagnostics.Duplicate_identifier_0, getTextOfNode(location));
-                    }
-                    else {
-                        names.set(name, prev | meaning);
-                    }
-                }
-                else {
-                    names.set(name, meaning);
                 }
             }
         }
@@ -25707,29 +25760,22 @@ namespace ts {
         }
 
         function checkObjectTypeForDuplicateDeclarations(node: TypeLiteralNode | InterfaceDeclaration) {
-            const names = createMap<boolean>();
+            const names = createUnderscoreEscapedMap<DeclarationMeaning>();
             for (const member of node.members) {
-                if (member.kind === SyntaxKind.PropertySignature) {
-                    let memberName: string;
-                    const name = member.name!;
-                    switch (name.kind) {
-                        case SyntaxKind.StringLiteral:
-                        case SyntaxKind.NumericLiteral:
-                            memberName = name.text;
+                if (member.name) {
+                    switch (member.kind) {
+                        case SyntaxKind.GetAccessorSignature:
+                            checkMemberForDuplicateDeclaration(error, /*initial*/ true, names, member.name, member.symbol, DeclarationMeaning.GetAccessor, ~DeclarationMeaning.SetAccessor);
                             break;
-                        case SyntaxKind.Identifier:
-                            memberName = idText(name);
+                        case SyntaxKind.SetAccessorSignature:
+                            checkMemberForDuplicateDeclaration(error, /*initial*/ true, names, member.name, member.symbol, DeclarationMeaning.SetAccessor, ~DeclarationMeaning.GetAccessor);
                             break;
-                        default:
-                            continue;
-                    }
-
-                    if (names.get(memberName)) {
-                        error(getNameOfDeclaration(member.symbol.valueDeclaration), Diagnostics.Duplicate_identifier_0, memberName);
-                        error(member.name, Diagnostics.Duplicate_identifier_0, memberName);
-                    }
-                    else {
-                        names.set(memberName, true);
+                        case SyntaxKind.PropertySignature:
+                            checkMemberForDuplicateDeclaration(error, /*initial*/ true, names, member.name, member.symbol, DeclarationMeaning.Property, DeclarationMeaning.All);
+                            break;
+                        case SyntaxKind.MethodSignature:
+                            checkMemberForDuplicateDeclaration(error, /*initial*/ true, names, member.name, member.symbol, DeclarationMeaning.Method, ~DeclarationMeaning.Method);
+                            break;
                     }
                 }
             }
@@ -32931,7 +32977,6 @@ namespace ts {
                 //    c.IsAccessorDescriptor(previous) is true and IsDataDescriptor(propId.descriptor) is true.
                 //    d.IsAccessorDescriptor(previous) is true and IsAccessorDescriptor(propId.descriptor) is true
                 // and either both previous and propId.descriptor have[[Get]] fields or both previous and propId.descriptor have[[Set]] fields
-                let currentKind: DeclarationMeaning;
                 switch (prop.kind) {
                     case SyntaxKind.ShorthandPropertyAssignment:
                         checkGrammarForInvalidExclamationToken(prop.exclamationToken, Diagnostics.A_definite_assignment_assertion_is_not_permitted_in_this_context);
@@ -32942,45 +32987,24 @@ namespace ts {
                         if (name.kind === SyntaxKind.NumericLiteral) {
                             checkGrammarNumericLiteral(name);
                         }
-                        currentKind = DeclarationMeaning.PropertyAssignment;
-                        break;
+                        // falls through
                     case SyntaxKind.MethodDeclaration:
-                        currentKind = DeclarationMeaning.Method;
+                        checkMemberForDuplicateDeclaration(grammarErrorOnNode, /*initial*/ false, seen, name, prop.symbol, DeclarationMeaning.Property,
+                            DeclarationMeaning.Accessor, Diagnostics.An_object_literal_cannot_have_property_and_accessor_with_the_same_name,
+                            DeclarationMeaning.All);
                         break;
                     case SyntaxKind.GetAccessor:
-                        currentKind = DeclarationMeaning.GetAccessor;
+                        checkMemberForDuplicateDeclaration(grammarErrorOnNode, /*initial*/ false, seen, name, prop.symbol, DeclarationMeaning.GetAccessor,
+                            DeclarationMeaning.Property, Diagnostics.An_object_literal_cannot_have_property_and_accessor_with_the_same_name,
+                            ~DeclarationMeaning.SetAccessor, Diagnostics.An_object_literal_cannot_have_multiple_get_Slashset_accessors_with_the_same_name);
                         break;
                     case SyntaxKind.SetAccessor:
-                        currentKind = DeclarationMeaning.SetAccessor;
+                        checkMemberForDuplicateDeclaration(grammarErrorOnNode, /*initial*/ false, seen, name, prop.symbol, DeclarationMeaning.SetAccessor,
+                            DeclarationMeaning.Property, Diagnostics.An_object_literal_cannot_have_property_and_accessor_with_the_same_name,
+                            ~DeclarationMeaning.GetAccessor, Diagnostics.An_object_literal_cannot_have_multiple_get_Slashset_accessors_with_the_same_name);
                         break;
                     default:
-                        throw Debug.assertNever(prop, "Unexpected syntax kind:" + (<Node>prop).kind);
-                }
-
-                const effectiveName = getPropertyNameForPropertyNameNode(name);
-                if (effectiveName === undefined) {
-                    continue;
-                }
-
-                const existingKind = seen.get(effectiveName);
-                if (!existingKind) {
-                    seen.set(effectiveName, currentKind);
-                }
-                else {
-                    if ((currentKind & DeclarationMeaning.PropertyAssignmentOrMethod) && (existingKind & DeclarationMeaning.PropertyAssignmentOrMethod)) {
-                        grammarErrorOnNode(name, Diagnostics.Duplicate_identifier_0, getTextOfNode(name));
-                    }
-                    else if ((currentKind & DeclarationMeaning.GetOrSetAccessor) && (existingKind & DeclarationMeaning.GetOrSetAccessor)) {
-                        if (existingKind !== DeclarationMeaning.GetOrSetAccessor && currentKind !== existingKind) {
-                            seen.set(effectiveName, currentKind | existingKind);
-                        }
-                        else {
-                            return grammarErrorOnNode(name, Diagnostics.An_object_literal_cannot_have_multiple_get_Slashset_accessors_with_the_same_name);
-                        }
-                    }
-                    else {
-                        return grammarErrorOnNode(name, Diagnostics.An_object_literal_cannot_have_property_and_accessor_with_the_same_name);
-                    }
+                        return Debug.assertNever(prop);
                 }
             }
         }

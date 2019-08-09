@@ -51,10 +51,24 @@ namespace ts.codefix {
 
     // TODO: GH#19856 Node & { type: TypeNode }
     type TypeContainer =
-        | AsExpression | CallSignatureDeclaration | ConstructSignatureDeclaration | FunctionDeclaration
-        | GetAccessorDeclaration | IndexSignatureDeclaration | MappedTypeNode | MethodDeclaration
-        | MethodSignature | ParameterDeclaration | PropertyDeclaration | PropertySignature | SetAccessorDeclaration
-        | TypeAliasDeclaration | TypeAssertion | VariableDeclaration;
+        | AsExpression
+        | CallSignatureDeclaration
+        | ConstructSignatureDeclaration
+        | FunctionDeclaration
+        | GetAccessorDeclaration
+        | SetAccessorDeclaration
+        | GetAccessorSignature
+        | SetAccessorSignature
+        | IndexSignatureDeclaration
+        | MappedTypeNode
+        | MethodDeclaration
+        | MethodSignature
+        | ParameterDeclaration
+        | PropertyDeclaration
+        | PropertySignature
+        | TypeAliasDeclaration
+        | TypeAssertion
+        | VariableDeclaration;
     function isTypeContainer(node: Node): node is TypeContainer {
         // NOTE: Some locations are not handled yet:
         // MappedTypeNode.typeParameters and SignatureDeclaration.typeParameters, as well as CallExpression.typeArguments
@@ -64,6 +78,9 @@ namespace ts.codefix {
             case SyntaxKind.ConstructSignature:
             case SyntaxKind.FunctionDeclaration:
             case SyntaxKind.GetAccessor:
+            case SyntaxKind.SetAccessor:
+            case SyntaxKind.GetAccessorSignature:
+            case SyntaxKind.SetAccessorSignature:
             case SyntaxKind.IndexSignature:
             case SyntaxKind.MappedType:
             case SyntaxKind.MethodDeclaration:
@@ -71,7 +88,6 @@ namespace ts.codefix {
             case SyntaxKind.Parameter:
             case SyntaxKind.PropertyDeclaration:
             case SyntaxKind.PropertySignature:
-            case SyntaxKind.SetAccessor:
             case SyntaxKind.TypeAliasDeclaration:
             case SyntaxKind.TypeAssertionExpression:
             case SyntaxKind.VariableDeclaration:

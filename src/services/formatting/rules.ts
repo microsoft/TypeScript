@@ -539,10 +539,10 @@ namespace ts.formatting {
             case SyntaxKind.FunctionDeclaration:
             case SyntaxKind.MethodDeclaration:
             case SyntaxKind.MethodSignature:
-            // case SyntaxKind.MemberFunctionDeclaration:
             case SyntaxKind.GetAccessor:
             case SyntaxKind.SetAccessor:
-            // case SyntaxKind.MethodSignature:
+            case SyntaxKind.GetAccessorSignature:
+            case SyntaxKind.SetAccessorSignature:
             case SyntaxKind.CallSignature:
             case SyntaxKind.FunctionExpression:
             case SyntaxKind.Constructor:

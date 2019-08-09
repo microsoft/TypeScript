@@ -517,6 +517,8 @@ namespace ts.FindAllReferences {
                 return !!(decl as VariableDeclaration | PropertyDeclaration).initializer || isCatchClause(decl.parent);
 
             case SyntaxKind.MethodSignature:
+            case SyntaxKind.GetAccessorSignature:
+            case SyntaxKind.SetAccessorSignature:
             case SyntaxKind.PropertySignature:
             case SyntaxKind.JSDocPropertyTag:
             case SyntaxKind.JSDocParameterTag:
@@ -1716,6 +1718,8 @@ namespace ts.FindAllReferences.Core {
             case SyntaxKind.Constructor:
             case SyntaxKind.GetAccessor:
             case SyntaxKind.SetAccessor:
+            case SyntaxKind.GetAccessorSignature:
+            case SyntaxKind.SetAccessorSignature:
                 staticFlag &= getModifierFlags(searchSpaceNode);
                 searchSpaceNode = searchSpaceNode.parent; // re-assign to be the owning class
                 break;
@@ -1762,6 +1766,8 @@ namespace ts.FindAllReferences.Core {
             case SyntaxKind.Constructor:
             case SyntaxKind.GetAccessor:
             case SyntaxKind.SetAccessor:
+            case SyntaxKind.GetAccessorSignature:
+            case SyntaxKind.SetAccessorSignature:
                 staticFlag &= getModifierFlags(searchSpaceNode);
                 searchSpaceNode = searchSpaceNode.parent; // re-assign to be the owning class
                 break;

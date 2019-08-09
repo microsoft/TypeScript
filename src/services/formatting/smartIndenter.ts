@@ -523,6 +523,8 @@ namespace ts.formatting {
                 case SyntaxKind.JsxSelfClosingElement:
                 case SyntaxKind.JsxExpression:
                 case SyntaxKind.MethodSignature:
+                case SyntaxKind.GetAccessorSignature:
+                case SyntaxKind.SetAccessorSignature:
                 case SyntaxKind.CallSignature:
                 case SyntaxKind.ConstructSignature:
                 case SyntaxKind.Parameter:

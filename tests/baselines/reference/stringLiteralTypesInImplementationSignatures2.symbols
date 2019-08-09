@@ -63,11 +63,11 @@ var b = {
 >b : Symbol(b, Decl(stringLiteralTypesInImplementationSignatures2.ts, 24, 3))
 
     foo(x: 'hi') { },
->foo : Symbol(foo, Decl(stringLiteralTypesInImplementationSignatures2.ts, 24, 9), Decl(stringLiteralTypesInImplementationSignatures2.ts, 25, 21))
+>foo : Symbol(foo, Decl(stringLiteralTypesInImplementationSignatures2.ts, 24, 9))
 >x : Symbol(x, Decl(stringLiteralTypesInImplementationSignatures2.ts, 25, 8))
 
     foo(x: 'a') { },
->foo : Symbol(foo, Decl(stringLiteralTypesInImplementationSignatures2.ts, 24, 9), Decl(stringLiteralTypesInImplementationSignatures2.ts, 25, 21))
+>foo : Symbol(foo, Decl(stringLiteralTypesInImplementationSignatures2.ts, 25, 21))
 >x : Symbol(x, Decl(stringLiteralTypesInImplementationSignatures2.ts, 26, 8))
 }
 

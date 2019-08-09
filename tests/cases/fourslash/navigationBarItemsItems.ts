@@ -2,6 +2,8 @@
 
 ////// Interface
 ////interface IPoint {
+////    get a(): number;
+////    set b(value: string);
 ////    getDist(): number;
 ////    new(): IPoint;
 ////    (): any;
@@ -62,6 +64,14 @@ verify.navigationTree({
                 {
                     "text": "[]",
                     "kind": "index"
+                },
+                {
+                    "text": "a",
+                    "kind": "getter"
+                },
+                {
+                    "text": "b",
+                    "kind": "setter"
                 },
                 {
                     "text": "getDist",
@@ -185,6 +195,14 @@ verify.navigationBar([
             {
                 "text": "[]",
                 "kind": "index"
+            },
+            {
+                "text": "a",
+                "kind": "getter"
+            },
+            {
+                "text": "b",
+                "kind": "setter"
             },
             {
                 "text": "getDist",

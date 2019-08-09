@@ -51,16 +51,16 @@ class a {
     }
 
     get x2() {
->x2 : Symbol(a.x2, Decl(duplicateClassElements.ts, 26, 5), Decl(duplicateClassElements.ts, 30, 5), Decl(duplicateClassElements.ts, 32, 5))
+>x2 : Symbol(a.x2, Decl(duplicateClassElements.ts, 26, 5), Decl(duplicateClassElements.ts, 30, 5))
 
         return 10;
     }
     set x2(_x: number) {
->x2 : Symbol(a.x2, Decl(duplicateClassElements.ts, 26, 5), Decl(duplicateClassElements.ts, 30, 5), Decl(duplicateClassElements.ts, 32, 5))
+>x2 : Symbol(a.x2, Decl(duplicateClassElements.ts, 26, 5), Decl(duplicateClassElements.ts, 30, 5))
 >_x : Symbol(_x, Decl(duplicateClassElements.ts, 31, 11))
     }
     public x2;
->x2 : Symbol(a.x2, Decl(duplicateClassElements.ts, 26, 5), Decl(duplicateClassElements.ts, 30, 5), Decl(duplicateClassElements.ts, 32, 5))
+>x2 : Symbol(a.x2, Decl(duplicateClassElements.ts, 32, 5))
 
     get z2() {
 >z2 : Symbol(a.z2, Decl(duplicateClassElements.ts, 33, 14), Decl(duplicateClassElements.ts, 37, 5))

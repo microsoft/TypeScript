@@ -256,7 +256,7 @@ verify.completions(
     // from interface scope
     {
         marker: "interface",
-        exact: [{ name: "readonly", sortText: completion.SortText.GlobalsOrKeywords }],
+        exact: completion.interfaceElementKeywords,
         isNewIdentifierLocation: true,
     }
 );

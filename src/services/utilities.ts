@@ -37,6 +37,8 @@ namespace ts {
             case SyntaxKind.Constructor:
             case SyntaxKind.GetAccessor:
             case SyntaxKind.SetAccessor:
+            case SyntaxKind.GetAccessorSignature:
+            case SyntaxKind.SetAccessorSignature:
             case SyntaxKind.FunctionDeclaration:
             case SyntaxKind.FunctionExpression:
             case SyntaxKind.ArrowFunction:
@@ -277,6 +279,8 @@ namespace ts {
             case SyntaxKind.MethodSignature:
             case SyntaxKind.GetAccessor:
             case SyntaxKind.SetAccessor:
+            case SyntaxKind.GetAccessorSignature:
+            case SyntaxKind.SetAccessorSignature:
             case SyntaxKind.ModuleDeclaration:
                 return getNameOfDeclaration(<Declaration>node.parent) === node;
             case SyntaxKind.ElementAccessExpression:
@@ -316,6 +320,8 @@ namespace ts {
                 case SyntaxKind.FunctionExpression:
                 case SyntaxKind.GetAccessor:
                 case SyntaxKind.SetAccessor:
+                case SyntaxKind.GetAccessorSignature:
+                case SyntaxKind.SetAccessorSignature:
                 case SyntaxKind.ClassDeclaration:
                 case SyntaxKind.InterfaceDeclaration:
                 case SyntaxKind.EnumDeclaration:
@@ -348,8 +354,12 @@ namespace ts {
             case SyntaxKind.FunctionDeclaration:
             case SyntaxKind.FunctionExpression:
                 return ScriptElementKind.functionElement;
-            case SyntaxKind.GetAccessor: return ScriptElementKind.memberGetAccessorElement;
-            case SyntaxKind.SetAccessor: return ScriptElementKind.memberSetAccessorElement;
+            case SyntaxKind.GetAccessor:
+            case SyntaxKind.GetAccessorSignature:
+                return ScriptElementKind.memberGetAccessorElement;
+            case SyntaxKind.SetAccessor:
+            case SyntaxKind.SetAccessorSignature:
+                return ScriptElementKind.memberSetAccessorElement;
             case SyntaxKind.MethodDeclaration:
             case SyntaxKind.MethodSignature:
                 return ScriptElementKind.memberFunctionElement;
@@ -520,6 +530,8 @@ namespace ts {
             case SyntaxKind.Constructor:
             case SyntaxKind.GetAccessor:
             case SyntaxKind.SetAccessor:
+            case SyntaxKind.GetAccessorSignature:
+            case SyntaxKind.SetAccessorSignature:
             case SyntaxKind.FunctionDeclaration:
             case SyntaxKind.FunctionExpression:
             case SyntaxKind.MethodDeclaration:

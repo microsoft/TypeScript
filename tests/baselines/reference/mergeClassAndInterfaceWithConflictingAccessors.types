@@ -1,0 +1,107 @@
+=== tests/cases/conformance/interfaces/declarationMerging/mergeClassAndInterfaceWithConflictingAccessors.ts ===
+declare class A {
+>A : A
+
+    get x(): number;
+>x : number
+}
+interface A {
+    get x(): string;
+>x : number
+}
+
+declare class B {
+>B : B
+
+    get x(): number;
+>x : number
+}
+interface B {
+    set x(value: string);
+>x : number
+>value : string
+}
+
+declare class C {
+>C : C
+
+    get x(): number;
+>x : number
+
+    set x(value: number);
+>x : number
+>value : number
+}
+interface C {
+    x: number;
+>x : number
+}
+
+declare class D {
+>D : D
+
+    x: number;
+>x : number
+}
+interface D {
+    get x(): number;
+>x : number
+
+    set x(value: number);
+>x : number
+>value : number
+}
+
+declare class E {
+>E : E
+
+    get x(): number;
+>x : number
+}
+interface E {
+    get x(): number; // ok
+>x : number
+}
+
+declare class F {
+>F : F
+
+    set x(value: string);
+>x : string
+>value : string
+}
+interface F {
+    get x(): string; // ok
+>x : string
+}
+
+declare class G {
+>G : G
+
+    get x(): number;
+>x : number
+
+    set x(value: number);
+>x : number
+>value : number
+}
+interface G {
+    get x(): number;
+>x : number
+
+    set x(value: number);
+>x : number
+>value : number
+}
+
+declare class H {
+>H : H
+
+    x: number;
+>x : number
+}
+interface H {
+    x: number;
+>x : number
+}
+
