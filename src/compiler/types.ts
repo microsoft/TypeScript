@@ -1862,6 +1862,12 @@ namespace ts {
         name: Identifier;
     }
 
+    /* @internal */
+    export interface ImportMetaProperty extends MetaProperty {
+        keywordToken: SyntaxKind.ImportKeyword;
+        name: Identifier & { escapedText: __String & "meta" };
+    }
+
     /// A JSX expression of the form <TagName attrs>...</TagName>
     export interface JsxElement extends PrimaryExpression {
         kind: SyntaxKind.JsxElement;
