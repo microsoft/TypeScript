@@ -27,7 +27,7 @@ namespace ts.NavigationBar {
     let parentsStack: NavigationBarNode[] = [];
     let parent: NavigationBarNode;
 
-    let trackedEs5ClassesStack: (Map<boolean> | undefined)[] = [];
+    const trackedEs5ClassesStack: (Map<boolean> | undefined)[] = [];
     let trackedEs5Classes: Map<boolean> | undefined;
 
     // NavigationBarItem requires an array, but will not mutate it, so just give it this for performance.
@@ -244,6 +244,7 @@ namespace ts.NavigationBar {
 
             case SyntaxKind.FunctionDeclaration:
                 const nameNode = (<FunctionLikeDeclaration>node).name;
+                // If we see a function declaration track as a possible ES5 class
                 if (nameNode && isIdentifier(nameNode)) {
                     addTrackedEs5Class(nameNode.text);
                 }
@@ -300,6 +301,10 @@ namespace ts.NavigationBar {
                         const binaryExpression = (node as BinaryExpression);
                         const assignmentTarget = binaryExpression.left as PropertyAccessExpression;
                         const prototypeAccess = assignmentTarget.expression as PropertyAccessExpression;
+                        // If we see a prototype assignment, start tracking the target as a class
+                        if (isIdentifier(prototypeAccess.expression)) {
+                            addTrackedEs5Class(prototypeAccess.expression.text);
+                        }
                         if (isFunctionExpression(binaryExpression.right) || isArrowFunction(binaryExpression.right)) {
                             addNodeWithRecursiveChild(node,
                                 binaryExpression.right,
@@ -340,8 +345,9 @@ namespace ts.NavigationBar {
                                     addNodeWithRecursiveChild(binaryExpression.left, binaryExpression.right, assignmentTarget.name);
                                 endNode();
                             }
+                            return;
                         }
-                        return;
+                        break;
                     }
                     case AssignmentDeclarationKind.ThisProperty:
                     case AssignmentDeclarationKind.None:
@@ -418,6 +424,9 @@ namespace ts.NavigationBar {
     };
     function tryMergeEs5Class(a: NavigationBarNode, b: NavigationBarNode): boolean | undefined {
 
+        function isPossibleConstructor(node: Node) {
+            return isFunctionDeclaration(node) || isVariableDeclaration(node);
+        }
         const bAssignmentDeclarationKind = isBinaryExpression(b.node) || isCallExpression(b.node) ?
             getAssignmentDeclarationKind(b.node) :
             AssignmentDeclarationKind.None;
@@ -426,15 +435,24 @@ namespace ts.NavigationBar {
             getAssignmentDeclarationKind(a.node) :
             AssignmentDeclarationKind.None;
 
-        if ((isEs5ClassMember[bAssignmentDeclarationKind] && isEs5ClassMember[aAssignmentDeclarationKind])
-            || ((isFunctionDeclaration(a.node) || isClassDeclaration(a.node)) && isEs5ClassMember[bAssignmentDeclarationKind])
-            || ((isFunctionDeclaration(b.node) || isClassDeclaration(a.node)) && isEs5ClassMember[aAssignmentDeclarationKind])) {
+        // We treat this as an es5 class and merge the nodes in in one of several casses
+        if ((isEs5ClassMember[bAssignmentDeclarationKind] && isEs5ClassMember[aAssignmentDeclarationKind]) // merge two class elements
+            || (isPossibleConstructor(a.node) && isEs5ClassMember[bAssignmentDeclarationKind]) // ctor function & member
+            || (isPossibleConstructor(b.node) && isEs5ClassMember[aAssignmentDeclarationKind]) // member & ctor function
+            || (isClassDeclaration(a.node) && isEs5ClassMember[bAssignmentDeclarationKind]) // class (generated) & member
+            || (isClassDeclaration(b.node) && isEs5ClassMember[aAssignmentDeclarationKind]) // member & class (generated)
+            || (isClassDeclaration(a.node) && isPossibleConstructor(b.node)) // class (generated) & ctor
+            || (isClassDeclaration(b.node) && isPossibleConstructor(a.node)) // ctor & class (generated)
+            || (isPossibleConstructor(b.node) && isPossibleConstructor(a.node)) // ctor & ctor, aberant case, but best keep it
+            ) {
             const pos = Math.min(a.node.pos, b.node.pos);
             const end = Math.max(a.node.end, b.node.end);
 
-            if (a.node.kind !== SyntaxKind.ClassDeclaration) {
-                const ctorFunction = isFunctionDeclaration(a.node) ? a.node :
-                    isFunctionDeclaration(b.node) ? b.node :
+            if ((!isClassDeclaration(a.node) && !isClassDeclaration(b.node)) // If neither outline node is a class
+                || isPossibleConstructor(a.node) || isPossibleConstructor(b.node) // If either function is a constructor function
+                ) {
+                const ctorFunction = isPossibleConstructor(a.node) ? a.node :
+                    isPossibleConstructor(b.node) ? b.node :
                     undefined;
 
                 if (ctorFunction !== undefined) {

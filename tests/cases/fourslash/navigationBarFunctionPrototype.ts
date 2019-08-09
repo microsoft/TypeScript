@@ -3,6 +3,7 @@
 // @Filename: foo.js
 ////function f() {}
 ////f.prototype.x = 0;
+////f.y = 0;
 ////f.prototype.method = function () {};
 ////Object.defineProperty(f, 'staticProp', { 
 ////    set: function() {}, 
@@ -60,6 +61,9 @@ verify.navigationTree({
                 {
                     "text": "x",
                     "kind": "property"
+                },
+                {
+                    "text": "y"
                 }
             ]
         }
@@ -98,6 +102,9 @@ verify.navigationBar([
             {
                 "text": "x",
                 "kind": "property"
+            },
+            {
+                "text": "y"
             }
         ],
         "indent": 1
