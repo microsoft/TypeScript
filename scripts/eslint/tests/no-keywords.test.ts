@@ -52,6 +52,31 @@ const obj = {
 };
             `,
         },
+        {
+            code: `() => undefined`,
+        },
+        {
+            code: `let a = 2;`,
+        },
+        {
+            code: `let b: any;`,
+        },
+        {
+            code: `function foo(a: any) { }`,
+        },
+        {
+            code: `let [a] = [5];`,
+        },
+        {
+            code: `const { a } = { a: 5 };`,
+        },
+        {
+            code: `
+interface Foo {
+    number: string;
+}
+            `,
+        }
     ],
 
     invalid: [
@@ -93,6 +118,40 @@ interface A {
             errors: [
                 { messageId: "noKeywordsError" },
                 { messageId: "noKeywordsError" },
+            ],
+        },
+        {
+            code: `let undefined = 8;`,
+            errors: [{ messageId: "noKeywordsError" }],
+        },
+        {
+            code: `let boolean: boolean;`,
+            errors: [{ messageId: "noKeywordsError" }],
+        },
+        {
+            code: `function foo(any: any) { }`,
+            errors: [{ messageId: "noKeywordsError" }],
+        },
+        {
+            code: `let [number] = [3];`,
+            errors: [{ messageId: "noKeywordsError" }],
+        },
+        {
+            code: `let { String } = { String: 1 };`,
+            errors: [{ messageId: "noKeywordsError" }],
+        },
+        {
+            code: `let [number, string] = [3, ''];`,
+            errors: [
+                { messageId: "noKeywordsError" },
+                { messageId: "noKeywordsError" }
+            ],
+        },
+        {
+            code: `let { String, Boolean } = { String: 1, Boolean: false };`,
+            errors: [
+                { messageId: "noKeywordsError" },
+                { messageId: "noKeywordsError" }
             ],
         },
     ],
