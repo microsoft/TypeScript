@@ -45,11 +45,7 @@ namespace ts {
                 [Diagnostics.Building_project_0, "/src/src/main/tsconfig.json"],
                 {
                     message: [Diagnostics.Cannot_write_file_0_because_it_will_overwrite_tsbuildinfo_file_generated_by_referenced_project_1, "/src/dist/tsconfig.tsbuildinfo", "/src/src/other"],
-                    location: {
-                        file: "/src/src/main/tsconfig.json",
-                        start: indexOf(fs, "/src/src/main/tsconfig.json", `{ "path": "../other" }`),
-                        length: `{ "path": "../other" }`.length
-                    }
+                    location: expectedLocationIndexOf(fs, "/src/src/main/tsconfig.json", `{ "path": "../other" }`),
                 }
             );
             verifyOutputsPresent(fs, allExpectedOutputs);
@@ -84,11 +80,7 @@ namespace ts {
                 [Diagnostics.Building_project_0, "/src/src/main/tsconfig.json"],
                 {
                     message: [Diagnostics.Cannot_write_file_0_because_it_will_overwrite_tsbuildinfo_file_generated_by_referenced_project_1, "/src/dist/tsconfig.tsbuildinfo", "/src/src/other"],
-                    location: {
-                        file: "/src/src/main/tsconfig.json",
-                        start: indexOf(fs, "/src/src/main/tsconfig.json", `{"path":"../other"}`),
-                        length: `{"path":"../other"}`.length
-                    }
+                    location: expectedLocationIndexOf(fs, "/src/src/main/tsconfig.json", `{"path":"../other"}`),
                 }
             );
             verifyOutputsPresent(fs, allExpectedOutputs);

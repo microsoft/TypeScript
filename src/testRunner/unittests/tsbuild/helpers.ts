@@ -62,6 +62,22 @@ namespace ts {
         return content.lastIndexOf(searchStr);
     }
 
+    export function expectedLocationIndexOf(fs: vfs.FileSystem, file: string, searchStr: string): fakes.ExpectedDiagnosticLocation {
+        return {
+            file,
+            start: indexOf(fs, file, searchStr),
+            length: searchStr.length
+        };
+    }
+
+    export function expectedLocationLastIndexOf(fs: vfs.FileSystem, file: string, searchStr: string): fakes.ExpectedDiagnosticLocation {
+        return {
+            file,
+            start: lastIndexOf(fs, file, searchStr),
+            length: searchStr.length
+        };
+    }
+
     export function getTime() {
         let currentTime = 100;
         return { tick, time, touch };

@@ -42,7 +42,7 @@ namespace ts {
         interface VerifyBuild {
             modifyDiskLayout: (fs: vfs.FileSystem) => void;
             expectedExitStatus: ExitStatus;
-            expectedDiagnostics: fakes.ExpectedDiagnostic[];
+            expectedDiagnostics: (fs: vfs.FileSystem) => fakes.ExpectedDiagnostic[];
             expectedOutputs: readonly string[];
             notExpectedOutputs: readonly string[];
         }
@@ -54,7 +54,7 @@ namespace ts {
             const builder = createSolutionBuilder(host, ["/src/tsconfig.json"], { verbose: true });
             const exitStatus = builder.build();
             assert.equal(exitStatus, expectedExitStatus);
-            host.assertDiagnosticMessages(...expectedDiagnostics);
+            host.assertDiagnosticMessages(...expectedDiagnostics(fs));
             verifyOutputsPresent(fs, expectedOutputs);
             verifyOutputsAbsent(fs, notExpectedOutputs);
         }
@@ -63,7 +63,7 @@ namespace ts {
             verifyBuild({
                 modifyDiskLayout: noop,
                 expectedExitStatus: ExitStatus.Success,
-                expectedDiagnostics: [
+                expectedDiagnostics: () => [
                     getExpectedDiagnosticForProjectsInBuild("src/core/tsconfig.json", "src/animals/tsconfig.json", "src/zoo/tsconfig.json", "src/tsconfig.json"),
                     [Diagnostics.Project_0_is_out_of_date_because_output_file_1_does_not_exist, "src/core/tsconfig.json", "src/lib/core/utilities.js"],
                     [Diagnostics.Building_project_0, "/src/core/tsconfig.json"],
@@ -91,7 +91,7 @@ namespace ts {
   ]`
                 ),
                 expectedExitStatus: ExitStatus.ProjectReferenceCycle_OutputsSkupped,
-                expectedDiagnostics: [
+                expectedDiagnostics: () => [
                     getExpectedDiagnosticForProjectsInBuild("src/animals/tsconfig.json", "src/zoo/tsconfig.json", "src/core/tsconfig.json", "src/tsconfig.json"),
                     errorDiagnostic([
                         Diagnostics.Project_references_may_not_form_a_circular_graph_Cycle_detected_Colon_0,
@@ -117,16 +117,38 @@ namespace ts {
 `
                 ),
                 expectedExitStatus: ExitStatus.DiagnosticsPresent_OutputsSkipped,
-                expectedDiagnostics: [
+                expectedDiagnostics: fs => [
                     getExpectedDiagnosticForProjectsInBuild("src/core/tsconfig.json", "src/animals/tsconfig.json", "src/zoo/tsconfig.json", "src/tsconfig.json"),
                     [Diagnostics.Project_0_is_out_of_date_because_output_file_1_does_not_exist, "src/core/tsconfig.json", "src/lib/core/utilities.js"],
                     [Diagnostics.Building_project_0, "/src/core/tsconfig.json"],
-                    errorDiagnostic([Diagnostics.File_0_is_not_under_rootDir_1_rootDir_is_expected_to_contain_all_source_files, "/src/animals/animal.ts", "/src/core"]),
-                    errorDiagnostic([Diagnostics.File_0_is_not_under_rootDir_1_rootDir_is_expected_to_contain_all_source_files, "/src/animals/dog.ts", "/src/core"]),
-                    errorDiagnostic([Diagnostics.File_0_is_not_under_rootDir_1_rootDir_is_expected_to_contain_all_source_files, "/src/animals/index.ts", "/src/core"]),
-                    errorDiagnostic([Diagnostics.File_0_is_not_listed_within_the_file_list_of_project_1_Projects_must_list_all_files_or_use_an_include_pattern, "/src/animals/animal.ts", "/src/core/tsconfig.json"]),
-                    errorDiagnostic([Diagnostics.File_0_is_not_listed_within_the_file_list_of_project_1_Projects_must_list_all_files_or_use_an_include_pattern, "/src/animals/dog.ts", "/src/core/tsconfig.json"]),
-                    errorDiagnostic([Diagnostics.File_0_is_not_listed_within_the_file_list_of_project_1_Projects_must_list_all_files_or_use_an_include_pattern, "/src/animals/index.ts", "/src/core/tsconfig.json"]),
+                    {
+                        message: [Diagnostics.File_0_is_not_under_rootDir_1_rootDir_is_expected_to_contain_all_source_files, "/src/animals/animal.ts", "/src/core"],
+                        location: expectedLocationIndexOf(fs, "/src/animals/index.ts", `'./animal'`),
+                    },
+                    {
+                        message: [Diagnostics.File_0_is_not_listed_within_the_file_list_of_project_1_Projects_must_list_all_files_or_use_an_include_pattern, "/src/animals/animal.ts", "/src/core/tsconfig.json"],
+                        location: expectedLocationIndexOf(fs, "/src/animals/index.ts", `'./animal'`),
+                    },
+                    {
+                        message: [Diagnostics.File_0_is_not_under_rootDir_1_rootDir_is_expected_to_contain_all_source_files, "/src/animals/dog.ts", "/src/core"],
+                        location: expectedLocationIndexOf(fs, "/src/animals/index.ts", `'./dog'`),
+                    },
+                    {
+                        message: [Diagnostics.File_0_is_not_listed_within_the_file_list_of_project_1_Projects_must_list_all_files_or_use_an_include_pattern, "/src/animals/dog.ts", "/src/core/tsconfig.json"],
+                        location: expectedLocationIndexOf(fs, "/src/animals/index.ts", `'./dog'`),
+                    },
+                    {
+                        message: [Diagnostics._0_is_declared_but_its_value_is_never_read, "A"],
+                        location: expectedLocationIndexOf(fs, "/src/core/utilities.ts", `import * as A from '../animals';`),
+                    },
+                    {
+                        message: [Diagnostics.File_0_is_not_under_rootDir_1_rootDir_is_expected_to_contain_all_source_files, "/src/animals/index.ts", "/src/core"],
+                        location: expectedLocationIndexOf(fs, "/src/core/utilities.ts", `'../animals'`),
+                    },
+                    {
+                        message: [Diagnostics.File_0_is_not_listed_within_the_file_list_of_project_1_Projects_must_list_all_files_or_use_an_include_pattern, "/src/animals/index.ts", "/src/core/tsconfig.json"],
+                        location: expectedLocationIndexOf(fs, "/src/core/utilities.ts", `'../animals'`),
+                    },
                     [Diagnostics.Project_0_can_t_be_built_because_its_dependency_1_has_errors, "src/animals/tsconfig.json", "src/core"],
                     [Diagnostics.Skipping_build_of_project_0_because_its_dependency_1_has_errors, "/src/animals/tsconfig.json", "/src/core"],
                     [Diagnostics.Project_0_can_t_be_built_because_its_dependency_1_was_not_built, "src/zoo/tsconfig.json", "src/animals"],

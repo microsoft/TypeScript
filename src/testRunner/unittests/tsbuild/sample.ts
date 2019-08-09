@@ -452,11 +452,7 @@ namespace ts {
                     [Diagnostics.Building_project_0, "/src/logic/tsconfig.json"],
                     {
                         message: [Diagnostics.Property_0_does_not_exist_on_type_1, "muitply", `typeof import("/src/core/index")`],
-                        location: {
-                            file: "/src/logic/index.ts",
-                            start: indexOf(fs, "/src/logic/index.ts", "muitply"),
-                            length: "muitply".length
-                        }
+                        location: expectedLocationIndexOf(fs, "/src/logic/index.ts", "muitply"),
                     },
                     [Diagnostics.Project_0_can_t_be_built_because_its_dependency_1_has_errors, "src/tests/tsconfig.json", "src/logic"],
                     [Diagnostics.Skipping_build_of_project_0_because_its_dependency_1_has_errors, "/src/tests/tsconfig.json", "/src/logic"]

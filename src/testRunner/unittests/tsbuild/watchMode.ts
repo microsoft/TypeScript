@@ -1295,6 +1295,62 @@ export function someFn() { }`);
             ]);
         });
 
+        it("updates with bad reference", () => {
+            const host = createTsBuildWatchSystem([
+                ...allFilesExceptBase,
+                baseConfig,
+                { path: libFile.path, content: libContent }
+            ], { currentDirectory: projectLocation });
+            host.writeFile(coreFiles[1].path, `import * as A from '../animals';
+${coreFiles[1].content}`);
+            createSolutionBuilderWithWatch(host, ["tsconfig.json"], { verbose: true, watch: true });
+            const errors = [
+                `animals/index.ts(1,20): error TS6059: File '/user/username/projects/demo/animals/animal.ts' is not under 'rootDir' '/user/username/projects/demo/core'. 'rootDir' is expected to contain all source files.\n`,
+                `animals/index.ts(1,20): error TS6307: File '/user/username/projects/demo/animals/animal.ts' is not listed within the file list of project '/user/username/projects/demo/core/tsconfig.json'. Projects must list all files or use an 'include' pattern.\n`,
+                `animals/index.ts(4,32): error TS6059: File '/user/username/projects/demo/animals/dog.ts' is not under 'rootDir' '/user/username/projects/demo/core'. 'rootDir' is expected to contain all source files.\n`,
+                `animals/index.ts(4,32): error TS6307: File '/user/username/projects/demo/animals/dog.ts' is not listed within the file list of project '/user/username/projects/demo/core/tsconfig.json'. Projects must list all files or use an 'include' pattern.\n`,
+                `core/utilities.ts(1,1): error TS6133: 'A' is declared but its value is never read.\n`,
+                `core/utilities.ts(1,20): error TS6059: File '/user/username/projects/demo/animals/index.ts' is not under 'rootDir' '/user/username/projects/demo/core'. 'rootDir' is expected to contain all source files.\n`,
+                `core/utilities.ts(1,20): error TS6307: File '/user/username/projects/demo/animals/index.ts' is not listed within the file list of project '/user/username/projects/demo/core/tsconfig.json'. Projects must list all files or use an 'include' pattern.\n`
+            ].map(hostOutputDiagnostic);
+            checkOutputErrors(host, [
+                startingCompilationInWatchMode(),
+                hostOutputLog(`Projects in this build: \r\n    * core/tsconfig.json\r\n    * animals/tsconfig.json\r\n    * zoo/tsconfig.json\r\n    * tsconfig.json\n\n`),
+                hostOutputLog(`Project 'core/tsconfig.json' is out of date because output file 'lib/core/utilities.js' does not exist\n\n`),
+                hostOutputLog(`Building project '/user/username/projects/demo/core/tsconfig.json'...\n\n`),
+                ...errors,
+                hostOutputLog(`Project 'animals/tsconfig.json' can't be built because its dependency 'core' has errors\n\n`),
+                hostOutputLog(`Skipping build of project '/user/username/projects/demo/animals/tsconfig.json' because its dependency '/user/username/projects/demo/core' has errors\n\n`),
+                hostOutputLog(`Project 'zoo/tsconfig.json' can't be built because its dependency 'animals' was not built\n\n`),
+                hostOutputLog(`Skipping build of project '/user/username/projects/demo/zoo/tsconfig.json' because its dependency '/user/username/projects/demo/animals' was not built\n\n`),
+                foundErrorsWatching(errors)
+            ]);
+            verifyWatches(host);
+
+            // Make changes
+            host.writeFile(coreFiles[1].path, `
+import * as A from '../animals';
+${coreFiles[1].content}`);
+            const newErrors = [
+                `animals/index.ts(1,20): error TS6059: File '/user/username/projects/demo/animals/animal.ts' is not under 'rootDir' '/user/username/projects/demo/core'. 'rootDir' is expected to contain all source files.\n`,
+                `animals/index.ts(1,20): error TS6307: File '/user/username/projects/demo/animals/animal.ts' is not listed within the file list of project '/user/username/projects/demo/core/tsconfig.json'. Projects must list all files or use an 'include' pattern.\n`,
+                `animals/index.ts(4,32): error TS6059: File '/user/username/projects/demo/animals/dog.ts' is not under 'rootDir' '/user/username/projects/demo/core'. 'rootDir' is expected to contain all source files.\n`,
+                `animals/index.ts(4,32): error TS6307: File '/user/username/projects/demo/animals/dog.ts' is not listed within the file list of project '/user/username/projects/demo/core/tsconfig.json'. Projects must list all files or use an 'include' pattern.\n`,
+                `core/utilities.ts(2,1): error TS6133: 'A' is declared but its value is never read.\n`,
+                `core/utilities.ts(2,20): error TS6059: File '/user/username/projects/demo/animals/index.ts' is not under 'rootDir' '/user/username/projects/demo/core'. 'rootDir' is expected to contain all source files.\n`,
+                `core/utilities.ts(2,20): error TS6307: File '/user/username/projects/demo/animals/index.ts' is not listed within the file list of project '/user/username/projects/demo/core/tsconfig.json'. Projects must list all files or use an 'include' pattern.\n`
+            ].map(hostOutputDiagnostic);
+            host.checkTimeoutQueueLengthAndRun(1); // build core
+            host.checkTimeoutQueueLength(0);
+            checkOutputErrors(host, [
+                fileChangeDetected(),
+                hostOutputLog(`Project 'core/tsconfig.json' is out of date because output file 'lib/core/utilities.js' does not exist\n\n`),
+                hostOutputLog(`Building project '/user/username/projects/demo/core/tsconfig.json'...\n\n`),
+                ...newErrors,
+                foundErrorsWatching(newErrors)
+            ]);
+        });
+
         function subProjectFiles(subProject: string, fileNames: readonly string[]): File[] {
             return fileNames.map(file => projectFile(`${subProject}/${file}`));
         }
