@@ -1109,7 +1109,7 @@ namespace ts {
 
                 function callbackChangingToMissingFileSystemEntry(event: "rename" | "change", relativeName: string | undefined) {
                     // because relativeName is not guaranteed to be correct we need to check on each rename with few combinations
-                    // Eg on ubuntoo while watchin app/node_modules the relativeName is "node_modules" which is neither relative nor full path
+                    // Eg on ubuntu while watching app/node_modules the relativeName is "node_modules" which is neither relative nor full path
                     return event === "rename" &&
                         (!relativeName ||
                             relativeName === lastDirectoryPart ||
