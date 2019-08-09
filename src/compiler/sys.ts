@@ -380,6 +380,9 @@ namespace ts {
     export const ignoredPaths = ["/node_modules/.", "/.git", "/.#"];
 
     /*@internal*/
+    export let sysLog: (s: string) => void = noop;
+
+    /*@internal*/
     export interface RecursiveDirectoryWatcherHost {
         watchDirectory: HostWatchDirectory;
         useCaseSensitiveFileNames: boolean;
@@ -730,6 +733,7 @@ namespace ts {
 
             const nodeVersion = getNodeMajorVersion();
             const isNode4OrLater = nodeVersion! >= 4;
+            const isLinuxOrMacOs = process.platform === "linux" || process.platform === "darwin";
 
             const platform: string = _os.platform();
             const useCaseSensitiveFileNames = isFileSystemCaseSensitive();
@@ -1029,6 +1033,12 @@ namespace ts {
 
             function fsWatch(fileOrDirectory: string, entryKind: FileSystemEntryKind.File | FileSystemEntryKind.Directory, callback: FsWatchCallback, recursive: boolean, fallbackPollingWatchFile: HostWatchFile, pollingInterval?: number): FileWatcher {
                 let options: any;
+                let lastDirectoryPartWithDirectorySeparator: string | undefined;
+                let lastDirectoryPart: string | undefined;
+                if (isLinuxOrMacOs) {
+                    lastDirectoryPartWithDirectorySeparator = fileOrDirectory.substr(fileOrDirectory.lastIndexOf(directorySeparator));
+                    lastDirectoryPart = lastDirectoryPartWithDirectorySeparator.slice(directorySeparator.length);
+                }
                 /** Watcher for the file system entry depending on whether it is missing or present */
                 let watcher = !fileSystemEntryExists(fileOrDirectory, entryKind) ?
                     watchMissingFileSystemEntry() :
@@ -1046,6 +1056,7 @@ namespace ts {
                  * @param createWatcher
                  */
                 function invokeCallbackAndUpdateWatcher(createWatcher: () => FileWatcher) {
+                    sysLog(`sysLog:: ${fileOrDirectory}:: Changing watcher to ${createWatcher === watchPresentFileSystemEntry ? "Present" : "Missing"}FileSystemEntryWatcher`);
                     // Call the callback for current directory
                     callback("rename", "");
 
@@ -1072,11 +1083,12 @@ namespace ts {
                         }
                     }
                     try {
-
                         const presentWatcher = _fs.watch(
                             fileOrDirectory,
                             options,
-                            callback
+                            isLinuxOrMacOs ?
+                                callbackChangingToMissingFileSystemEntry :
+                                callback
                         );
                         // Watch the missing file or directory or error
                         presentWatcher.on("error", () => invokeCallbackAndUpdateWatcher(watchMissingFileSystemEntry));
@@ -1090,11 +1102,24 @@ namespace ts {
                     }
                 }
 
+                function callbackChangingToMissingFileSystemEntry(event: "rename" | "change", relativeName: string | undefined) {
+                    // because relativeName is not guaranteed to be correct we need to check on each rename with few combinations
+                    // Eg on ubuntu while watching app/node_modules the relativeName is "node_modules" which is neither relative nor full path
+                    return event === "rename" &&
+                        (!relativeName ||
+                            relativeName === lastDirectoryPart ||
+                            relativeName.lastIndexOf(lastDirectoryPartWithDirectorySeparator!) === relativeName.length - lastDirectoryPartWithDirectorySeparator!.length) &&
+                        !fileSystemEntryExists(fileOrDirectory, entryKind) ?
+                        invokeCallbackAndUpdateWatcher(watchMissingFileSystemEntry) :
+                        callback(event, relativeName);
+                }
+
                 /**
                  * Watch the file or directory using fs.watchFile since fs.watch threw exception
                  * Eg. on linux the number of watches are limited and one could easily exhaust watches and the exception ENOSPC is thrown when creating watcher at that point
                  */
                 function watchPresentFileSystemEntryWithFsWatchFile(): FileWatcher {
+                    sysLog(`sysLog:: ${fileOrDirectory}:: Changing to fsWatchFile`);
                     return fallbackPollingWatchFile(fileOrDirectory, createFileWatcherCallback(callback), pollingInterval);
                 }
 
