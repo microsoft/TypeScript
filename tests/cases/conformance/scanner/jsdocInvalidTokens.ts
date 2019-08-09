@@ -6,7 +6,7 @@
 
 /**
  *
- * unicode-escape = \u{abcdefghi} -- should not have error for invalid unicode escape
+ * unicode-escape = "\u{abcdefghi}" -- should not have error for invalid unicode escape
  * quoted-pair = "\" -- should not have error for invalid quote sequence
  * or for the tag below:
  * @private
