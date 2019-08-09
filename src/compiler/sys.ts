@@ -1039,11 +1039,6 @@ namespace ts {
                     lastDirectoryPartWithDirectorySeparator = fileOrDirectory.substr(fileOrDirectory.lastIndexOf(directorySeparator));
                     lastDirectoryPart = lastDirectoryPartWithDirectorySeparator.slice(directorySeparator.length);
                 }   
-                    fileOrDirectory.substr(fileOrDirectory.lastIndexOf(directorySeparator)) :
-                    undefined;
-                const lastDirectoryPart = isLinuxOrMacOs ?
-                    lastDirectoryPartWithDirectorySeparator!.slice(directorySeparator.length) :
-                    undefined;
                 /** Watcher for the file system entry depending on whether it is missing or present */
                 let watcher = !fileSystemEntryExists(fileOrDirectory, entryKind) ?
                     watchMissingFileSystemEntry() :
