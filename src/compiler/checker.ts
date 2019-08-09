@@ -17335,6 +17335,12 @@ namespace ts {
                         if (right.kind === SyntaxKind.TypeOfExpression && isStringLiteralLike(left)) {
                             return narrowTypeByTypeof(type, <TypeOfExpression>right, operator, left, assumeTrue);
                         }
+                        if (isConstructorAccessExpression(left) && right.kind === SyntaxKind.Identifier) {
+                            return narrowTypeByConstructor(type, left, operator, right, assumeTrue);
+                        }
+                        if (isConstructorAccessExpression(right) && left.kind === SyntaxKind.Identifier) {
+                            return narrowTypeByConstructor(type, right, operator, left, assumeTrue);
+                        }
                         if (isMatchingReference(reference, left)) {
                             return narrowTypeByEquality(type, operator, right, assumeTrue);
                         }
@@ -17591,6 +17597,59 @@ namespace ts {
                     impliedType = getAssignmentReducedType(impliedType as UnionType, getBaseConstraintOrType(type));
                 }
                 return getTypeWithFacts(mapType(type, narrowTypeForTypeofSwitch(impliedType)), switchFacts);
+            }
+
+            function narrowTypeByConstructor(type: Type, constructorAccessExpr: AccessExpression, operator: SyntaxKind, identifier: Expression, assumeTrue: boolean): Type {
+                // Do not narrow when checking inequality.
+                if (!assumeTrue || operator !== SyntaxKind.EqualsEqualsToken && operator !== SyntaxKind.EqualsEqualsEqualsToken) {
+                    return type;
+                }
+
+                // In the case of `x.y`, a `x.constructor === T` type guard resets the narrowed type of `y` to its declared type.
+                if (!isMatchingReference(reference, constructorAccessExpr.expression)) {
+                    return declaredType;
+                }
+
+                // Get the type of the constructor identifier expression, if it is not a function then do not narrow.
+                const identifierType = getTypeOfExpression(identifier);
+                if (!isTypeSubtypeOf(identifierType, globalFunctionType)) {
+                    return type;
+                }
+
+                // Get the prototype property of the type identifier so we can find out it's type.
+                const prototypeProperty = getPropertyOfType(identifierType, "prototype" as __String);
+                if (!prototypeProperty) {
+                    return type;
+                }
+
+                // Get the type of the prototype, if it is undefined, or the global `Object` or `Function` types then do not narrow.
+                const prototypeType = getTypeOfSymbol(prototypeProperty);
+                const candidate = !isTypeAny(prototypeType) ? prototypeType : undefined;
+                if (!candidate || candidate === globalObjectType || candidate === globalFunctionType) {
+                    return type;
+                }
+
+                // If the type that is being narrowed is `any` then just return the `candidate` type since every type is a subtype of `any`.
+                if (isTypeAny(type)) {
+                    return candidate;
+                }
+
+                // Filter out types that are not considered to be "constructed by" the `candidate` type.
+                return filterType(type, t => isConstructedBy(t, candidate));
+
+                function isConstructedBy(source: Type, target: Type) {
+                    // If either the source or target type are a class type then we need to check that they are the same exact type.
+                    // This is because you may have a class `A` that defines some set ofproperties, and another class `B`
+                    // that defines the same set of properties as class `A`, in that case they are structurally the same
+                    // type, but when you do something like `instanceOfA.constructor === B` it will return false.
+                    if (source.flags & TypeFlags.Object && getObjectFlags(source) & ObjectFlags.Class ||
+                        target.flags & TypeFlags.Object && getObjectFlags(target) & ObjectFlags.Class) {
+                        return source.symbol === target.symbol;
+                    }
+
+                    // For all other types just check that the `source` type is a subtype of the `target` type.
+                    return isTypeSubtypeOf(source, target);
+                }
             }
 
             function narrowTypeByInstanceof(type: Type, expr: BinaryExpression, assumeTrue: boolean): Type {
