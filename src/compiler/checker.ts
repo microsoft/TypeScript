@@ -5935,7 +5935,9 @@ namespace ts {
                     // Otherwise, fall back to 'any'.
                     else {
                         if (setter) {
-                            errorOrSuggestion(noImplicitAny, setter, Diagnostics.Property_0_implicitly_has_type_any_because_its_set_accessor_lacks_a_parameter_type_annotation, symbolToString(symbol));
+                            if (!isPrivateWithinAmbient(setter)) {
+                                errorOrSuggestion(noImplicitAny, setter, Diagnostics.Property_0_implicitly_has_type_any_because_its_set_accessor_lacks_a_parameter_type_annotation, symbolToString(symbol));
+                            }
                         }
                         else {
                             Debug.assert(!!getter, "there must existed getter as we are current checking either setter or getter in this function");
@@ -33035,43 +33037,39 @@ namespace ts {
         }
 
         function checkGrammarAccessor(accessor: AccessorDeclaration): boolean {
-            const kind = accessor.kind;
-            if (languageVersion < ScriptTarget.ES5) {
-                return grammarErrorOnNode(accessor.name, Diagnostics.Accessors_are_only_available_when_targeting_ECMAScript_5_and_higher);
+            if (!(accessor.flags & NodeFlags.Ambient)) {
+                if (languageVersion < ScriptTarget.ES5) {
+                    return grammarErrorOnNode(accessor.name, Diagnostics.Accessors_are_only_available_when_targeting_ECMAScript_5_and_higher);
+                }
+                if (accessor.body === undefined && !hasModifier(accessor, ModifierFlags.Abstract)) {
+                    return grammarErrorAtPos(accessor, accessor.end - 1, ";".length, Diagnostics._0_expected, "{");
+                }
             }
-            else if (accessor.flags & NodeFlags.Ambient) {
-                return grammarErrorOnNode(accessor.name, Diagnostics.An_accessor_cannot_be_declared_in_an_ambient_context);
-            }
-            else if (accessor.body === undefined && !hasModifier(accessor, ModifierFlags.Abstract)) {
-                return grammarErrorAtPos(accessor, accessor.end - 1, ";".length, Diagnostics._0_expected, "{");
-            }
-            else if (accessor.body && hasModifier(accessor, ModifierFlags.Abstract)) {
+            if (accessor.body && hasModifier(accessor, ModifierFlags.Abstract)) {
                 return grammarErrorOnNode(accessor, Diagnostics.An_abstract_accessor_cannot_have_an_implementation);
             }
-            else if (accessor.typeParameters) {
+            if (accessor.typeParameters) {
                 return grammarErrorOnNode(accessor.name, Diagnostics.An_accessor_cannot_have_type_parameters);
             }
-            else if (!doesAccessorHaveCorrectParameterCount(accessor)) {
+            if (!doesAccessorHaveCorrectParameterCount(accessor)) {
                 return grammarErrorOnNode(accessor.name,
-                                          kind === SyntaxKind.GetAccessor ?
+                                          accessor.kind === SyntaxKind.GetAccessor ?
                                           Diagnostics.A_get_accessor_cannot_have_parameters :
                                           Diagnostics.A_set_accessor_must_have_exactly_one_parameter);
             }
-            else if (kind === SyntaxKind.SetAccessor) {
+            if (accessor.kind === SyntaxKind.SetAccessor) {
                 if (accessor.type) {
                     return grammarErrorOnNode(accessor.name, Diagnostics.A_set_accessor_cannot_have_a_return_type_annotation);
                 }
-                else {
-                    const parameter = accessor.parameters[0];
-                    if (parameter.dotDotDotToken) {
-                        return grammarErrorOnNode(parameter.dotDotDotToken, Diagnostics.A_set_accessor_cannot_have_rest_parameter);
-                    }
-                    else if (parameter.questionToken) {
-                        return grammarErrorOnNode(parameter.questionToken, Diagnostics.A_set_accessor_cannot_have_an_optional_parameter);
-                    }
-                    else if (parameter.initializer) {
-                        return grammarErrorOnNode(accessor.name, Diagnostics.A_set_accessor_parameter_cannot_have_an_initializer);
-                    }
+                const parameter = Debug.assertDefined(getSetAccessorValueParameter(accessor), "Return value does not match parameter count assertion.");
+                if (parameter.dotDotDotToken) {
+                    return grammarErrorOnNode(parameter.dotDotDotToken, Diagnostics.A_set_accessor_cannot_have_rest_parameter);
+                }
+                if (parameter.questionToken) {
+                    return grammarErrorOnNode(parameter.questionToken, Diagnostics.A_set_accessor_cannot_have_an_optional_parameter);
+                }
+                if (parameter.initializer) {
+                    return grammarErrorOnNode(accessor.name, Diagnostics.A_set_accessor_parameter_cannot_have_an_initializer);
                 }
             }
             return false;
@@ -33559,14 +33557,9 @@ namespace ts {
 
         function checkGrammarStatementInAmbientContext(node: Node): boolean {
             if (node.flags & NodeFlags.Ambient) {
-                // An accessors is already reported about the ambient context
-                if (isAccessor(node.parent)) {
-                    return getNodeLinks(node).hasReportedStatementInAmbientContext = true;
-                }
-
                 // Find containing block which is either Block, ModuleBlock, SourceFile
                 const links = getNodeLinks(node);
-                if (!links.hasReportedStatementInAmbientContext && isFunctionLike(node.parent)) {
+                if (!links.hasReportedStatementInAmbientContext && (isFunctionLike(node.parent) || isAccessor(node.parent))) {
                     return getNodeLinks(node).hasReportedStatementInAmbientContext = grammarErrorOnFirstToken(node, Diagnostics.An_implementation_cannot_be_declared_in_ambient_contexts);
                 }
 

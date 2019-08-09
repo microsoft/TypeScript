@@ -9,7 +9,7 @@
 ////    abstract set c(arg: number | string);
 ////}
 ////
-////class C implements A {}
+////declare class C implements A {}
 
 verify.codeFix({
     description: "Implement interface 'A'",
@@ -23,18 +23,10 @@ verify.codeFix({
     abstract set c(arg: number | string);
 }
 
-class C implements A {
-    get a(): string {
-        throw new Error("Method not implemented.");
-    }
-    set a(newName: string) {
-        throw new Error("Method not implemented.");
-    }
-    get b(): number {
-        throw new Error("Method not implemented.");
-    }
-    set c(arg: string | number) {
-        throw new Error("Method not implemented.");
-    }
+declare class C implements A {
+    get a(): string;
+    set a(newName: string);
+    get b(): number;
+    set c(arg: string | number);
 }`,
 });

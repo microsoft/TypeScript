@@ -3518,7 +3518,7 @@ namespace ts {
         return find(node.members, (member): member is ConstructorDeclaration & { body: FunctionBody } => isConstructorDeclaration(member) && nodeIsPresent(member.body));
     }
 
-    function getSetAccessorValueParameter(accessor: SetAccessorDeclaration): ParameterDeclaration | undefined {
+    export function getSetAccessorValueParameter(accessor: SetAccessorDeclaration): ParameterDeclaration | undefined {
         if (accessor && accessor.parameters.length > 0) {
             const hasThis = accessor.parameters.length === 2 && parameterIsThisKeyword(accessor.parameters[0]);
             return accessor.parameters[hasThis ? 1 : 0];
@@ -3553,7 +3553,7 @@ namespace ts {
         return id.originalKeywordKind === SyntaxKind.ThisKeyword;
     }
 
-    export function getAllAccessorDeclarations(declarations: NodeArray<Declaration>, accessor: AccessorDeclaration): AllAccessorDeclarations {
+    export function getAllAccessorDeclarations(declarations: readonly Declaration[], accessor: AccessorDeclaration): AllAccessorDeclarations {
         // TODO: GH#18217
         let firstAccessor!: AccessorDeclaration;
         let secondAccessor!: AccessorDeclaration;

@@ -75,28 +75,22 @@ tests/cases/compiler/giant.ts(242,21): error TS1183: An implementation cannot be
 tests/cases/compiler/giant.ts(243,22): error TS1183: An implementation cannot be declared in ambient contexts.
 tests/cases/compiler/giant.ts(244,16): error TS2300: Duplicate identifier 'pgF'.
 tests/cases/compiler/giant.ts(244,22): error TS1183: An implementation cannot be declared in ambient contexts.
-tests/cases/compiler/giant.ts(245,20): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
 tests/cases/compiler/giant.ts(245,20): error TS2300: Duplicate identifier 'pgF'.
 tests/cases/compiler/giant.ts(246,16): error TS2300: Duplicate identifier 'psF'.
 tests/cases/compiler/giant.ts(246,31): error TS1183: An implementation cannot be declared in ambient contexts.
-tests/cases/compiler/giant.ts(247,20): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
 tests/cases/compiler/giant.ts(247,20): error TS2300: Duplicate identifier 'psF'.
 tests/cases/compiler/giant.ts(248,17): error TS2300: Duplicate identifier 'rgF'.
 tests/cases/compiler/giant.ts(248,23): error TS1183: An implementation cannot be declared in ambient contexts.
-tests/cases/compiler/giant.ts(249,21): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
 tests/cases/compiler/giant.ts(249,21): error TS2300: Duplicate identifier 'rgF'.
 tests/cases/compiler/giant.ts(250,17): error TS2300: Duplicate identifier 'rsF'.
 tests/cases/compiler/giant.ts(250,32): error TS1183: An implementation cannot be declared in ambient contexts.
-tests/cases/compiler/giant.ts(251,21): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
 tests/cases/compiler/giant.ts(251,21): error TS2300: Duplicate identifier 'rsF'.
 tests/cases/compiler/giant.ts(253,21): error TS1183: An implementation cannot be declared in ambient contexts.
 tests/cases/compiler/giant.ts(254,16): error TS2300: Duplicate identifier 'tsF'.
 tests/cases/compiler/giant.ts(254,31): error TS1183: An implementation cannot be declared in ambient contexts.
-tests/cases/compiler/giant.ts(255,20): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
 tests/cases/compiler/giant.ts(255,20): error TS2300: Duplicate identifier 'tsF'.
 tests/cases/compiler/giant.ts(256,16): error TS2300: Duplicate identifier 'tgF'.
 tests/cases/compiler/giant.ts(256,22): error TS1183: An implementation cannot be declared in ambient contexts.
-tests/cases/compiler/giant.ts(257,20): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
 tests/cases/compiler/giant.ts(257,20): error TS2300: Duplicate identifier 'tgF'.
 tests/cases/compiler/giant.ts(261,22): error TS1183: An implementation cannot be declared in ambient contexts.
 tests/cases/compiler/giant.ts(261,25): error TS1036: Statements are not allowed in ambient contexts.
@@ -178,28 +172,22 @@ tests/cases/compiler/giant.ts(500,21): error TS1183: An implementation cannot be
 tests/cases/compiler/giant.ts(501,22): error TS1183: An implementation cannot be declared in ambient contexts.
 tests/cases/compiler/giant.ts(502,16): error TS2300: Duplicate identifier 'pgF'.
 tests/cases/compiler/giant.ts(502,22): error TS1183: An implementation cannot be declared in ambient contexts.
-tests/cases/compiler/giant.ts(503,20): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
 tests/cases/compiler/giant.ts(503,20): error TS2300: Duplicate identifier 'pgF'.
 tests/cases/compiler/giant.ts(504,16): error TS2300: Duplicate identifier 'psF'.
 tests/cases/compiler/giant.ts(504,31): error TS1183: An implementation cannot be declared in ambient contexts.
-tests/cases/compiler/giant.ts(505,20): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
 tests/cases/compiler/giant.ts(505,20): error TS2300: Duplicate identifier 'psF'.
 tests/cases/compiler/giant.ts(506,17): error TS2300: Duplicate identifier 'rgF'.
 tests/cases/compiler/giant.ts(506,23): error TS1183: An implementation cannot be declared in ambient contexts.
-tests/cases/compiler/giant.ts(507,21): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
 tests/cases/compiler/giant.ts(507,21): error TS2300: Duplicate identifier 'rgF'.
 tests/cases/compiler/giant.ts(508,17): error TS2300: Duplicate identifier 'rsF'.
 tests/cases/compiler/giant.ts(508,32): error TS1183: An implementation cannot be declared in ambient contexts.
-tests/cases/compiler/giant.ts(509,21): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
 tests/cases/compiler/giant.ts(509,21): error TS2300: Duplicate identifier 'rsF'.
 tests/cases/compiler/giant.ts(511,21): error TS1183: An implementation cannot be declared in ambient contexts.
 tests/cases/compiler/giant.ts(512,16): error TS2300: Duplicate identifier 'tsF'.
 tests/cases/compiler/giant.ts(512,31): error TS1183: An implementation cannot be declared in ambient contexts.
-tests/cases/compiler/giant.ts(513,20): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
 tests/cases/compiler/giant.ts(513,20): error TS2300: Duplicate identifier 'tsF'.
 tests/cases/compiler/giant.ts(514,16): error TS2300: Duplicate identifier 'tgF'.
 tests/cases/compiler/giant.ts(514,22): error TS1183: An implementation cannot be declared in ambient contexts.
-tests/cases/compiler/giant.ts(515,20): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
 tests/cases/compiler/giant.ts(515,20): error TS2300: Duplicate identifier 'tgF'.
 tests/cases/compiler/giant.ts(519,22): error TS1183: An implementation cannot be declared in ambient contexts.
 tests/cases/compiler/giant.ts(519,25): error TS1036: Statements are not allowed in ambient contexts.
@@ -210,28 +198,22 @@ tests/cases/compiler/giant.ts(536,17): error TS1183: An implementation cannot be
 tests/cases/compiler/giant.ts(537,18): error TS1183: An implementation cannot be declared in ambient contexts.
 tests/cases/compiler/giant.ts(538,12): error TS2300: Duplicate identifier 'pgF'.
 tests/cases/compiler/giant.ts(538,18): error TS1183: An implementation cannot be declared in ambient contexts.
-tests/cases/compiler/giant.ts(539,16): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
 tests/cases/compiler/giant.ts(539,16): error TS2300: Duplicate identifier 'pgF'.
 tests/cases/compiler/giant.ts(540,12): error TS2300: Duplicate identifier 'psF'.
 tests/cases/compiler/giant.ts(540,27): error TS1183: An implementation cannot be declared in ambient contexts.
-tests/cases/compiler/giant.ts(541,16): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
 tests/cases/compiler/giant.ts(541,16): error TS2300: Duplicate identifier 'psF'.
 tests/cases/compiler/giant.ts(542,13): error TS2300: Duplicate identifier 'rgF'.
 tests/cases/compiler/giant.ts(542,19): error TS1183: An implementation cannot be declared in ambient contexts.
-tests/cases/compiler/giant.ts(543,17): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
 tests/cases/compiler/giant.ts(543,17): error TS2300: Duplicate identifier 'rgF'.
 tests/cases/compiler/giant.ts(544,13): error TS2300: Duplicate identifier 'rsF'.
 tests/cases/compiler/giant.ts(544,28): error TS1183: An implementation cannot be declared in ambient contexts.
-tests/cases/compiler/giant.ts(545,17): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
 tests/cases/compiler/giant.ts(545,17): error TS2300: Duplicate identifier 'rsF'.
 tests/cases/compiler/giant.ts(547,17): error TS1183: An implementation cannot be declared in ambient contexts.
 tests/cases/compiler/giant.ts(548,12): error TS2300: Duplicate identifier 'tsF'.
 tests/cases/compiler/giant.ts(548,27): error TS1183: An implementation cannot be declared in ambient contexts.
-tests/cases/compiler/giant.ts(549,16): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
 tests/cases/compiler/giant.ts(549,16): error TS2300: Duplicate identifier 'tsF'.
 tests/cases/compiler/giant.ts(550,12): error TS2300: Duplicate identifier 'tgF'.
 tests/cases/compiler/giant.ts(550,18): error TS1183: An implementation cannot be declared in ambient contexts.
-tests/cases/compiler/giant.ts(551,16): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
 tests/cases/compiler/giant.ts(551,16): error TS2300: Duplicate identifier 'tgF'.
 tests/cases/compiler/giant.ts(555,18): error TS1183: An implementation cannot be declared in ambient contexts.
 tests/cases/compiler/giant.ts(555,21): error TS1036: Statements are not allowed in ambient contexts.
@@ -265,7 +247,7 @@ tests/cases/compiler/giant.ts(671,25): error TS1036: Statements are not allowed 
 tests/cases/compiler/giant.ts(675,30): error TS1183: An implementation cannot be declared in ambient contexts.
 
 
-==== tests/cases/compiler/giant.ts (265 errors) ====
+==== tests/cases/compiler/giant.ts (247 errors) ====
     /*
         Prefixes
         p -> public
@@ -666,8 +648,6 @@ tests/cases/compiler/giant.ts(675,30): error TS1183: An implementation cannot be
 !!! error TS1183: An implementation cannot be declared in ambient contexts.
             public get pgF()
                        ~~~
-!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
-                       ~~~
 !!! error TS2300: Duplicate identifier 'pgF'.
             public psF(param:any) { }
                    ~~~
@@ -675,8 +655,6 @@ tests/cases/compiler/giant.ts(675,30): error TS1183: An implementation cannot be
                                   ~
 !!! error TS1183: An implementation cannot be declared in ambient contexts.
             public set psF(param:any)
-                       ~~~
-!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
                        ~~~
 !!! error TS2300: Duplicate identifier 'psF'.
             private rgF() { }
@@ -686,8 +664,6 @@ tests/cases/compiler/giant.ts(675,30): error TS1183: An implementation cannot be
 !!! error TS1183: An implementation cannot be declared in ambient contexts.
             private get rgF()
                         ~~~
-!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
-                        ~~~
 !!! error TS2300: Duplicate identifier 'rgF'.
             private rsF(param:any) { }
                     ~~~
@@ -695,8 +671,6 @@ tests/cases/compiler/giant.ts(675,30): error TS1183: An implementation cannot be
                                    ~
 !!! error TS1183: An implementation cannot be declared in ambient contexts.
             private set rsF(param:any)
-                        ~~~
-!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
                         ~~~
 !!! error TS2300: Duplicate identifier 'rsF'.
             static tV;
@@ -710,8 +684,6 @@ tests/cases/compiler/giant.ts(675,30): error TS1183: An implementation cannot be
 !!! error TS1183: An implementation cannot be declared in ambient contexts.
             static set tsF(param:any)
                        ~~~
-!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
-                       ~~~
 !!! error TS2300: Duplicate identifier 'tsF'.
             static tgF() { }
                    ~~~
@@ -719,8 +691,6 @@ tests/cases/compiler/giant.ts(675,30): error TS1183: An implementation cannot be
                          ~
 !!! error TS1183: An implementation cannot be declared in ambient contexts.
             static get tgF()
-                       ~~~
-!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
                        ~~~
 !!! error TS2300: Duplicate identifier 'tgF'.
         }
@@ -1130,8 +1100,6 @@ tests/cases/compiler/giant.ts(675,30): error TS1183: An implementation cannot be
 !!! error TS1183: An implementation cannot be declared in ambient contexts.
             public get pgF()
                        ~~~
-!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
-                       ~~~
 !!! error TS2300: Duplicate identifier 'pgF'.
             public psF(param:any) { }
                    ~~~
@@ -1139,8 +1107,6 @@ tests/cases/compiler/giant.ts(675,30): error TS1183: An implementation cannot be
                                   ~
 !!! error TS1183: An implementation cannot be declared in ambient contexts.
             public set psF(param:any)
-                       ~~~
-!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
                        ~~~
 !!! error TS2300: Duplicate identifier 'psF'.
             private rgF() { }
@@ -1150,8 +1116,6 @@ tests/cases/compiler/giant.ts(675,30): error TS1183: An implementation cannot be
 !!! error TS1183: An implementation cannot be declared in ambient contexts.
             private get rgF()
                         ~~~
-!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
-                        ~~~
 !!! error TS2300: Duplicate identifier 'rgF'.
             private rsF(param:any) { }
                     ~~~
@@ -1159,8 +1123,6 @@ tests/cases/compiler/giant.ts(675,30): error TS1183: An implementation cannot be
                                    ~
 !!! error TS1183: An implementation cannot be declared in ambient contexts.
             private set rsF(param:any)
-                        ~~~
-!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
                         ~~~
 !!! error TS2300: Duplicate identifier 'rsF'.
             static tV;
@@ -1174,8 +1136,6 @@ tests/cases/compiler/giant.ts(675,30): error TS1183: An implementation cannot be
 !!! error TS1183: An implementation cannot be declared in ambient contexts.
             static set tsF(param:any)
                        ~~~
-!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
-                       ~~~
 !!! error TS2300: Duplicate identifier 'tsF'.
             static tgF() { }
                    ~~~
@@ -1183,8 +1143,6 @@ tests/cases/compiler/giant.ts(675,30): error TS1183: An implementation cannot be
                          ~
 !!! error TS1183: An implementation cannot be declared in ambient contexts.
             static get tgF()
-                       ~~~
-!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
                        ~~~
 !!! error TS2300: Duplicate identifier 'tgF'.
         }
@@ -1230,8 +1188,6 @@ tests/cases/compiler/giant.ts(675,30): error TS1183: An implementation cannot be
 !!! error TS1183: An implementation cannot be declared in ambient contexts.
         public get pgF()
                    ~~~
-!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
-                   ~~~
 !!! error TS2300: Duplicate identifier 'pgF'.
         public psF(param:any) { }
                ~~~
@@ -1239,8 +1195,6 @@ tests/cases/compiler/giant.ts(675,30): error TS1183: An implementation cannot be
                               ~
 !!! error TS1183: An implementation cannot be declared in ambient contexts.
         public set psF(param:any)
-                   ~~~
-!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
                    ~~~
 !!! error TS2300: Duplicate identifier 'psF'.
         private rgF() { }
@@ -1250,8 +1204,6 @@ tests/cases/compiler/giant.ts(675,30): error TS1183: An implementation cannot be
 !!! error TS1183: An implementation cannot be declared in ambient contexts.
         private get rgF()
                     ~~~
-!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
-                    ~~~
 !!! error TS2300: Duplicate identifier 'rgF'.
         private rsF(param:any) { }
                 ~~~
@@ -1259,8 +1211,6 @@ tests/cases/compiler/giant.ts(675,30): error TS1183: An implementation cannot be
                                ~
 !!! error TS1183: An implementation cannot be declared in ambient contexts.
         private set rsF(param:any)
-                    ~~~
-!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
                     ~~~
 !!! error TS2300: Duplicate identifier 'rsF'.
         static tV;
@@ -1274,8 +1224,6 @@ tests/cases/compiler/giant.ts(675,30): error TS1183: An implementation cannot be
 !!! error TS1183: An implementation cannot be declared in ambient contexts.
         static set tsF(param:any)
                    ~~~
-!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
-                   ~~~
 !!! error TS2300: Duplicate identifier 'tsF'.
         static tgF() { }
                ~~~
@@ -1283,8 +1231,6 @@ tests/cases/compiler/giant.ts(675,30): error TS1183: An implementation cannot be
                      ~
 !!! error TS1183: An implementation cannot be declared in ambient contexts.
         static get tgF()
-                   ~~~
-!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
                    ~~~
 !!! error TS2300: Duplicate identifier 'tgF'.
     }
