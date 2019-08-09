@@ -1609,7 +1609,7 @@ namespace ts {
             for (let i = 0; i < numNodes; i++) {
                 const currentNode = bundle ? i < numPrepends ? bundle.prepends[i] : bundle.sourceFiles[i - numPrepends] : node;
                 const sourceFile = isSourceFile(currentNode) ? currentNode : isUnparsedSource(currentNode) ? undefined : currentSourceFile!;
-                const shouldSkip = printerOptions.noEmitHelpers || (!!sourceFile && getExternalHelpersModuleName(sourceFile) !== undefined);
+                const shouldSkip = printerOptions.noEmitHelpers || (!!sourceFile && hasRecordedExternalHelpers(sourceFile));
                 const shouldBundle = (isSourceFile(currentNode) || isUnparsedSource(currentNode)) && !isOwnFileEmit;
                 const helpers = isUnparsedSource(currentNode) ? currentNode.helpers : getSortedEmitHelpers(currentNode);
                 if (helpers) {

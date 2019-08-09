@@ -3628,12 +3628,16 @@ namespace ts {
 
     // Helpers
 
-    export function getHelperName(name: string) {
+    /**
+     * Gets an identifier for the name of an *unscoped* emit helper.
+     */
+    export function getUnscopedHelperName(name: string) {
         return setEmitFlags(createIdentifier(name), EmitFlags.HelperName | EmitFlags.AdviseOnEmitNode);
     }
 
     export const valuesHelper: UnscopedEmitHelper = {
         name: "typescript:values",
+        importName: "__values",
         scoped: false,
         text: `
             var __values = (this && this.__values) || function(o) {
@@ -3653,7 +3657,7 @@ namespace ts {
         context.requestEmitHelper(valuesHelper);
         return setTextRange(
             createCall(
-                getHelperName("__values"),
+                getUnscopedHelperName("__values"),
                 /*typeArguments*/ undefined,
                 [expression]
             ),
@@ -3663,6 +3667,7 @@ namespace ts {
 
     export const readHelper: UnscopedEmitHelper = {
         name: "typescript:read",
+        importName: "__read",
         scoped: false,
         text: `
             var __read = (this && this.__read) || function (o, n) {
@@ -3687,7 +3692,7 @@ namespace ts {
         context.requestEmitHelper(readHelper);
         return setTextRange(
             createCall(
-                getHelperName("__read"),
+                getUnscopedHelperName("__read"),
                 /*typeArguments*/ undefined,
                 count !== undefined
                     ? [iteratorRecord, createLiteral(count)]
@@ -3699,6 +3704,7 @@ namespace ts {
 
     export const spreadHelper: UnscopedEmitHelper = {
         name: "typescript:spread",
+        importName: "__spread",
         scoped: false,
         text: `
             var __spread = (this && this.__spread) || function () {
@@ -3712,7 +3718,7 @@ namespace ts {
         context.requestEmitHelper(spreadHelper);
         return setTextRange(
             createCall(
-                getHelperName("__spread"),
+                getUnscopedHelperName("__spread"),
                 /*typeArguments*/ undefined,
                 argumentList
             ),
@@ -3722,6 +3728,7 @@ namespace ts {
 
     export const spreadArraysHelper: UnscopedEmitHelper = {
         name: "typescript:spreadArrays",
+        importName: "__spreadArrays",
         scoped: false,
         text: `
             var __spreadArrays = (this && this.__spreadArrays) || function () {
@@ -3737,7 +3744,7 @@ namespace ts {
         context.requestEmitHelper(spreadArraysHelper);
         return setTextRange(
             createCall(
-                getHelperName("__spreadArrays"),
+                getUnscopedHelperName("__spreadArrays"),
                 /*typeArguments*/ undefined,
                 argumentList
             ),
@@ -4861,6 +4868,65 @@ namespace ts {
         const parseNode = getOriginalNode(node, isSourceFile);
         const emitNode = parseNode && parseNode.emitNode;
         return emitNode && emitNode.externalHelpersModuleName;
+    }
+
+    export function hasRecordedExternalHelpers(sourceFile: SourceFile) {
+        const parseNode = getOriginalNode(sourceFile, isSourceFile);
+        const emitNode = parseNode && parseNode.emitNode;
+        return !!emitNode && (!!emitNode.externalHelpersModuleName || !!emitNode.externalHelpers);
+    }
+
+    export function createExternalHelpersImportDeclarationIfNeeded(sourceFile: SourceFile, compilerOptions: CompilerOptions, hasExportStarsToExportValues?: boolean, hasImportStar?: boolean, hasImportDefault?: boolean) {
+        if (compilerOptions.importHelpers && isEffectiveExternalModule(sourceFile, compilerOptions)) {
+            let namedBindings: NamedImportBindings | undefined;
+            const moduleKind = getEmitModuleKind(compilerOptions);
+            if (moduleKind >= ModuleKind.ES2015 && moduleKind <= ModuleKind.ESNext) {
+                // use named imports
+                const helpers = getEmitHelpers(sourceFile);
+                if (helpers) {
+                    const helperNames: string[] = [];
+                    for (const helper of helpers) {
+                        if (!helper.scoped) {
+                            const importName = (helper as UnscopedEmitHelper).importName;
+                            if (importName) {
+                                pushIfUnique(helperNames, importName);
+                            }
+                        }
+                    }
+                    if (some(helperNames)) {
+                        helperNames.sort(compareStringsCaseSensitive);
+                        // Alias the imports if the names are used somewhere in the file.
+                        // NOTE: We don't need to care about global import collisions as this is a module.
+                        namedBindings = createNamedImports(
+                            map(helperNames, name => isFileLevelUniqueName(sourceFile, name)
+                                ? createImportSpecifier(/*propertyName*/ undefined, createIdentifier(name))
+                                : createImportSpecifier(createIdentifier(name), getUnscopedHelperName(name))
+                            )
+                        );
+                        const parseNode = getOriginalNode(sourceFile, isSourceFile);
+                        const emitNode = getOrCreateEmitNode(parseNode);
+                        emitNode.externalHelpers = true;
+                    }
+                }
+            }
+            else {
+                // use a namespace import
+                const externalHelpersModuleName = getOrCreateExternalHelpersModuleNameIfNeeded(sourceFile, compilerOptions, hasExportStarsToExportValues, hasImportStar || hasImportDefault);
+                if (externalHelpersModuleName) {
+                    namedBindings = createNamespaceImport(externalHelpersModuleName);
+                }
+            }
+            if (namedBindings) {
+                const externalHelpersImportDeclaration = createImportDeclaration(
+                    /*decorators*/ undefined,
+                    /*modifiers*/ undefined,
+                    createImportClause(/*name*/ undefined, namedBindings),
+                    createLiteral(externalHelpersModuleNameText)
+                );
+                addEmitFlags(externalHelpersImportDeclaration, EmitFlags.NeverApplyImportHelper);
+                return externalHelpersImportDeclaration;
+            }
+        }
     }
 
     export function getOrCreateExternalHelpersModuleNameIfNeeded(node: SourceFile, compilerOptions: CompilerOptions, hasExportStarsToExportValues?: boolean, hasImportStarOrImportDefault?: boolean) {

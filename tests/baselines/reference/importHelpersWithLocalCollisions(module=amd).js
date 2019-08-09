@@ -1,7 +1,7 @@
-//// [tests/cases/compiler/importHelpersES6.ts] ////
+//// [tests/cases/compiler/importHelpersWithLocalCollisions.ts] ////
 
 //// [a.ts]
-declare var dec: any;
+declare var dec: any, __decorate: any;
 @dec export class A {
 
 }
@@ -18,12 +18,15 @@ export declare function __awaiter(thisArg: any, _arguments: any, P: Function, ge
 
 
 //// [a.js]
-import { __decorate } from "tslib";
-let A = class A {
-};
-A = __decorate([
-    dec
-], A);
-export { A };
-const o = { a: 1 };
-const y = Object.assign({}, o);
+define(["require", "exports", "tslib"], function (require, exports, tslib_1) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    let A = class A {
+    };
+    A = tslib_1.__decorate([
+        dec
+    ], A);
+    exports.A = A;
+    const o = { a: 1 };
+    const y = Object.assign({}, o);
+});

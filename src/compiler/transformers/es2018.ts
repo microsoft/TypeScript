@@ -995,6 +995,7 @@ namespace ts {
 
     export const assignHelper: UnscopedEmitHelper = {
         name: "typescript:assign",
+        importName: "__assign",
         scoped: false,
         priority: 1,
         text: `
@@ -1019,7 +1020,7 @@ namespace ts {
         }
         context.requestEmitHelper(assignHelper);
         return createCall(
-            getHelperName("__assign"),
+            getUnscopedHelperName("__assign"),
             /*typeArguments*/ undefined,
             attributesSegments
         );
@@ -1027,6 +1028,7 @@ namespace ts {
 
     export const awaitHelper: UnscopedEmitHelper = {
         name: "typescript:await",
+        importName: "__await",
         scoped: false,
         text: `
             var __await = (this && this.__await) || function (v) { return this instanceof __await ? (this.v = v, this) : new __await(v); }`
@@ -1034,11 +1036,12 @@ namespace ts {
 
     function createAwaitHelper(context: TransformationContext, expression: Expression) {
         context.requestEmitHelper(awaitHelper);
-        return createCall(getHelperName("__await"), /*typeArguments*/ undefined, [expression]);
+        return createCall(getUnscopedHelperName("__await"), /*typeArguments*/ undefined, [expression]);
     }
 
     export const asyncGeneratorHelper: UnscopedEmitHelper = {
         name: "typescript:asyncGenerator",
+        importName: "__asyncGenerator",
         scoped: false,
         text: `
             var __asyncGenerator = (this && this.__asyncGenerator) || function (thisArg, _arguments, generator) {
@@ -1062,7 +1065,7 @@ namespace ts {
         (generatorFunc.emitNode || (generatorFunc.emitNode = {} as EmitNode)).flags |= EmitFlags.AsyncFunctionBody;
 
         return createCall(
-            getHelperName("__asyncGenerator"),
+            getUnscopedHelperName("__asyncGenerator"),
             /*typeArguments*/ undefined,
             [
                 createThis(),
@@ -1074,6 +1077,7 @@ namespace ts {
 
     export const asyncDelegator: UnscopedEmitHelper = {
         name: "typescript:asyncDelegator",
+        importName: "__asyncDelegator",
         scoped: false,
         text: `
             var __asyncDelegator = (this && this.__asyncDelegator) || function (o) {
@@ -1088,7 +1092,7 @@ namespace ts {
         context.requestEmitHelper(asyncDelegator);
         return setTextRange(
             createCall(
-                getHelperName("__asyncDelegator"),
+                getUnscopedHelperName("__asyncDelegator"),
                 /*typeArguments*/ undefined,
                 [expression]
             ),
@@ -1098,6 +1102,7 @@ namespace ts {
 
     export const asyncValues: UnscopedEmitHelper = {
         name: "typescript:asyncValues",
+        importName: "__asyncValues",
         scoped: false,
         text: `
             var __asyncValues = (this && this.__asyncValues) || function (o) {
@@ -1113,7 +1118,7 @@ namespace ts {
         context.requestEmitHelper(asyncValues);
         return setTextRange(
             createCall(
-                getHelperName("__asyncValues"),
+                getUnscopedHelperName("__asyncValues"),
                 /*typeArguments*/ undefined,
                 [expression]
             ),
