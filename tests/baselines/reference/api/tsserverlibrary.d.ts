@@ -1675,7 +1675,7 @@ declare namespace ts {
     export type FlowNode = AfterFinallyFlow | PreFinallyFlow | FlowStart | FlowLabel | FlowAssignment | FlowCall | FlowCondition | FlowSwitchClause | FlowArrayMutation;
     export interface FlowNodeBase {
         flags: FlowFlags;
-        id: number | undefined;
+        id?: number;
     }
     export interface FlowLock {
         locked?: boolean;
