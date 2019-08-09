@@ -1033,7 +1033,12 @@ namespace ts {
 
             function fsWatch(fileOrDirectory: string, entryKind: FileSystemEntryKind.File | FileSystemEntryKind.Directory, callback: FsWatchCallback, recursive: boolean, fallbackPollingWatchFile: HostWatchFile, pollingInterval?: number): FileWatcher {
                 let options: any;
-                const lastDirectoryPartWithDirectorySeparator = isLinuxOrMacOs ?
+                let lastDirectoryPartWithDirectorySeparator: string | undefined;
+                let lastDirectoryPart: string | undefined;
+                if (isLinuxOrMacOs) {
+                    lastDirectoryPartWithDirectorySeparator = fileOrDirectory.substr(fileOrDirectory.lastIndexOf(directorySeparator));
+                    lastDirectoryPart = lastDirectoryPartWithDirectorySeparator.slice(directorySeparator.length);
+                }   
                     fileOrDirectory.substr(fileOrDirectory.lastIndexOf(directorySeparator)) :
                     undefined;
                 const lastDirectoryPart = isLinuxOrMacOs ?
