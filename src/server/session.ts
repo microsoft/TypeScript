@@ -713,7 +713,7 @@ namespace ts.server {
 
 
                 if (err.ProgramFiles) {
-                    msg += `\n\nProgram files: {JSON.stringify(error.ProgramFiles}}\n`;
+                    msg += `\n\nProgram files: ${JSON.stringify(err.ProgramFiles)}\n`;
                     msg += `\n\nProjects::\n`;
                     let counter = 0;
                     const addProjectInfo = (project: Project) => {
