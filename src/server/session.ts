@@ -711,7 +711,8 @@ namespace ts.server {
                     catch { } // tslint:disable-line no-empty
                 }
 
-                if (err.message && err.message.indexOf(`Could not find sourceFile:`) !== -1) {
+                if (err.hasOwnProperty("ProgramFiles")) {
+                    msg += `\n\nProgram files: {(err as any)["ProgramFiles"]}\n`;
                     msg += `\n\nProjects::\n`;
                     let counter = 0;
                     const addProjectInfo = (project: Project) => {

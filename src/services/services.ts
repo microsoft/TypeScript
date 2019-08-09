@@ -1158,7 +1158,12 @@ namespace ts {
         function getValidSourceFile(fileName: string): SourceFile {
             const sourceFile = program.getSourceFile(fileName);
             if (!sourceFile) {
-                throw new Error(`Could not find sourceFile: '${fileName}'.`);
+                let error = new Error(`Could not find sourceFile: '${fileName}'.`);
+
+                // Attach sidecar data for the server log
+                (error as any)["ProgramFiles"] = program && JSON.stringify(program.getSourceFiles().map(f => f.fileName));
+
+                throw error;
             }
             return sourceFile;
         }
