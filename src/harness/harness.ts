@@ -53,7 +53,7 @@ namespace Utils {
 
     export function byteLength(s: string, encoding?: string): number {
         // stub implementation if Buffer is not available (in-browser case)
-        return Buffer.byteLength(s, encoding);
+        return Buffer.byteLength(s, encoding as ts.BufferEncoding | undefined);
     }
 
     export function evalFile(fileContents: string, fileName: string, nodeContext?: any) {
@@ -726,6 +726,7 @@ namespace Harness {
             includeBuiltFile?: string;
             baselineFile?: string;
             libFiles?: string;
+            noTypesAndSymbols?: boolean;
         }
 
         // Additional options not already in ts.optionDeclarations
@@ -742,6 +743,7 @@ namespace Harness {
             { name: "currentDirectory", type: "string" },
             { name: "symlink", type: "string" },
             { name: "link", type: "string" },
+            { name: "noTypesAndSymbols", type: "boolean" },
             // Emitted js baseline will print full paths for every output file
             { name: "fullEmitPaths", type: "boolean" }
         ];

@@ -566,6 +566,8 @@ namespace ts {
         return emitNode && emitNode.flags || 0;
     }
 
+    const escapeNoSubstitutionTemplateLiteralText = compose(escapeString, escapeTemplateSubstitution);
+    const escapeNonAsciiNoSubstitutionTemplateLiteralText = compose(escapeNonAsciiString, escapeTemplateSubstitution);
     export function getLiteralText(node: LiteralLikeNode, sourceFile: SourceFile, neverAsciiEscape: boolean | undefined) {
         // If we don't need to downlevel and we can reach the original source text using
         // the node's parent reference, then simply get the text as it was originally written.
@@ -576,7 +578,11 @@ namespace ts {
             return getSourceTextOfNodeFromSourceFile(sourceFile, node);
         }
 
-        const escapeText = neverAsciiEscape || (getEmitFlags(node) & EmitFlags.NoAsciiEscaping) ? escapeString : escapeNonAsciiString;
+        // If a NoSubstitutionTemplateLiteral appears to have a substitution in it, the original text
+        // had to include a backslash: `not \${a} substitution`.
+        const escapeText = neverAsciiEscape || (getEmitFlags(node) & EmitFlags.NoAsciiEscaping) ?
+            node.kind === SyntaxKind.NoSubstitutionTemplateLiteral ? escapeNoSubstitutionTemplateLiteralText : escapeString :
+            node.kind === SyntaxKind.NoSubstitutionTemplateLiteral ? escapeNonAsciiNoSubstitutionTemplateLiteralText : escapeNonAsciiString;
 
         // If we can't reach the original source text, use the canonical form if it's a number,
         // or a (possibly escaped) quoted form of the original text if it's string-like.
@@ -3113,6 +3119,11 @@ namespace ts {
         }
     }
 
+    const templateSubstitutionRegExp = /\$\{/g;
+    function escapeTemplateSubstitution(str: string): string {
+        return str.replace(templateSubstitutionRegExp, "\\${");
+    }
+
     // This consists of the first 19 unprintable ASCII characters, canonical escapes, lineSeparator,
     // paragraphSeparator, and nextLine. The latter three are just desirable to suppress new lines in
     // the language service. These characters should be escaped when printing, and if any characters are added,
@@ -4466,8 +4477,7 @@ namespace ts {
         map.clear();
     }
 
-    export interface MutateMapOptions<T, U> {
-        createNewValue(key: string, valueInNewMap: U): T;
+    export interface MutateMapSkippingNewValuesOptions<T, U> {
         onDeleteValue(existingValue: T, key: string): void;
 
         /**
@@ -4482,8 +4492,12 @@ namespace ts {
     /**
      * Mutates the map with newMap such that keys in map will be same as newMap.
      */
-    export function mutateMap<T, U>(map: Map<T>, newMap: ReadonlyMap<U>, options: MutateMapOptions<T, U>) {
-        const { createNewValue, onDeleteValue, onExistingValue } = options;
+    export function mutateMapSkippingNewValues<T, U>(
+        map: Map<T>,
+        newMap: ReadonlyMap<U>,
+        options: MutateMapSkippingNewValuesOptions<T, U>
+    ) {
+        const { onDeleteValue, onExistingValue } = options;
         // Needs update
         map.forEach((existingValue, key) => {
             const valueInNewMap = newMap.get(key);
@@ -4497,7 +4511,20 @@ namespace ts {
                 onExistingValue(existingValue, valueInNewMap, key);
             }
         });
+    }
 
+    export interface MutateMapOptions<T, U> extends MutateMapSkippingNewValuesOptions<T, U> {
+        createNewValue(key: string, valueInNewMap: U): T;
+    }
+
+    /**
+     * Mutates the map with newMap such that keys in map will be same as newMap.
+     */
+    export function mutateMap<T, U>(map: Map<T>, newMap: ReadonlyMap<U>, options: MutateMapOptions<T, U>) {
+        // Needs update
+        mutateMapSkippingNewValues(map, newMap, options);
+
+        const { createNewValue } = options;
         // Add new values that are not already present
         newMap.forEach((valueInNewMap, key) => {
             if (!map.has(key)) {
@@ -5108,7 +5135,10 @@ namespace ts {
                 }
                 break;
             case SyntaxKind.ExpressionStatement:
-                const expr = hostNode.expression;
+                let expr = hostNode.expression;
+                if (expr.kind === SyntaxKind.BinaryExpression && (expr as BinaryExpression).operatorToken.kind === SyntaxKind.EqualsToken) {
+                    expr = (expr as BinaryExpression).left;
+                }
                 switch (expr.kind) {
                     case SyntaxKind.PropertyAccessExpression:
                         return (expr as PropertyAccessExpression).name;

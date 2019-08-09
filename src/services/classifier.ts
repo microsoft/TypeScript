@@ -683,6 +683,11 @@ namespace ts {
                     return;
                 }
             }
+            else if (kind === SyntaxKind.SingleLineCommentTrivia) {
+                if (tryClassifyTripleSlashComment(start, width)) {
+                    return;
+                }
+            }
 
             // Simple comment.  Just add as is.
             pushCommentRange(start, width);
@@ -753,6 +758,84 @@ namespace ts {
                     pos = tag.name.end;
                 }
             }
+        }
+
+        function tryClassifyTripleSlashComment(start: number, width: number): boolean {
+            const tripleSlashXMLCommentRegEx = /^(\/\/\/\s*)(<)(?:(\S+)((?:[^/]|\/[^>])*)(\/>)?)?/im;
+            const attributeRegex = /(\S+)(\s*)(=)(\s*)('[^']+'|"[^"]+")/img;
+
+            const text = sourceFile.text.substr(start, width);
+            const match = tripleSlashXMLCommentRegEx.exec(text);
+            if (!match) {
+                return false;
+            }
+
+            let pos = start;
+
+            pushCommentRange(pos, match[1].length); // ///
+            pos += match[1].length;
+
+            pushClassification(pos, match[2].length, ClassificationType.punctuation); // <
+            pos += match[2].length;
+
+            if (!match[3]) {
+                return true;
+            }
+
+            pushClassification(pos, match[3].length, ClassificationType.jsxSelfClosingTagName); // element name
+            pos += match[3].length;
+
+            const attrText = match[4];
+            let attrPos = pos;
+            while (true) {
+                const attrMatch = attributeRegex.exec(attrText);
+                if (!attrMatch) {
+                    break;
+                }
+
+                const newAttrPos = pos + attrMatch.index;
+                if (newAttrPos > attrPos) {
+                    pushCommentRange(attrPos, newAttrPos - attrPos);
+                    attrPos = newAttrPos;
+                }
+
+                pushClassification(attrPos, attrMatch[1].length, ClassificationType.jsxAttribute); // attribute name
+                attrPos += attrMatch[1].length;
+
+                if (attrMatch[2].length) {
+                    pushCommentRange(attrPos, attrMatch[2].length); // whitespace
+                    attrPos += attrMatch[2].length;
+                }
+
+                pushClassification(attrPos, attrMatch[3].length, ClassificationType.operator); // =
+                attrPos += attrMatch[3].length;
+
+                if (attrMatch[4].length) {
+                    pushCommentRange(attrPos, attrMatch[4].length); // whitespace
+                    attrPos += attrMatch[4].length;
+                }
+
+                pushClassification(attrPos, attrMatch[5].length, ClassificationType.jsxAttributeStringLiteralValue); // attribute value
+                attrPos += attrMatch[5].length;
+            }
+
+            pos += match[4].length;
+
+            if (pos > attrPos) {
+                pushCommentRange(attrPos, pos - attrPos);
+            }
+
+            if (match[5]) {
+                pushClassification(pos, match[5].length, ClassificationType.punctuation); // />
+                pos += match[5].length;
+            }
+
+            const end = start + width;
+            if (pos < end) {
+                pushCommentRange(pos, end - pos);
+            }
+
+            return true;
         }
 
         function processJSDocTemplateTag(tag: JSDocTemplateTag) {

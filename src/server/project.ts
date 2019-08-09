@@ -851,6 +851,7 @@ namespace ts.server {
          * @returns: true if set of files in the project stays the same and false - otherwise.
          */
         updateGraph(): boolean {
+            perfLogger.logStartUpdateGraph();
             this.resolutionCache.startRecordingFilesWithChangedResolutions();
 
             const hasNewProgram = this.updateGraphWorker();
@@ -886,6 +887,7 @@ namespace ts.server {
             if (hasNewProgram) {
                 this.projectProgramVersion++;
             }
+            perfLogger.logStopUpdateGraph();
             return !hasNewProgram;
         }
 
@@ -1275,7 +1277,7 @@ namespace ts.server {
         private enableProxy(pluginModuleFactory: PluginModuleFactory, configEntry: PluginImport) {
             try {
                 if (typeof pluginModuleFactory !== "function") {
-                    this.projectService.logger.info(`Skipped loading plugin ${configEntry.name} because it did expose a proper factory function`);
+                    this.projectService.logger.info(`Skipped loading plugin ${configEntry.name} because it did not expose a proper factory function`);
                     return;
                 }
 

@@ -278,3 +278,37 @@ const abac: AB = {
     }
 }
 
+// Excess property checks must match all discriminable properties
+type Button = { tag: 'button'; type?: 'submit'; };
+>Button : Button
+>tag : "button"
+>type : "submit" | undefined
+
+type Anchor = { tag: 'a'; type?: string; href: string };
+>Anchor : Anchor
+>tag : "a"
+>type : string | undefined
+>href : string
+
+type Union = Button | Anchor;
+>Union : Union
+
+const obj: Union = {
+>obj : Union
+>{    tag: 'button',    type: 'submit',    // should have error here    href: 'foo',} : { tag: "button"; type: "submit"; href: string; }
+
+    tag: 'button',
+>tag : "button"
+>'button' : "button"
+
+    type: 'submit',
+>type : "submit"
+>'submit' : "submit"
+
+    // should have error here
+    href: 'foo',
+>href : string
+>'foo' : "foo"
+
+};
+

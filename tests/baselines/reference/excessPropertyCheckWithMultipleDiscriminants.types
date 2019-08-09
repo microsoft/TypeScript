@@ -1,0 +1,141 @@
+=== tests/cases/compiler/excessPropertyCheckWithMultipleDiscriminants.ts ===
+// Repro from #32657
+
+interface Base<T> {
+    value: T;
+>value : T
+}
+
+interface Int extends Base<number> {
+    type: "integer";
+>type : "integer"
+
+    multipleOf?: number;
+>multipleOf : number
+}
+
+interface Float extends Base<number> {
+    type: "number";
+>type : "number"
+}
+
+interface Str extends Base<string> {
+    type: "string";
+>type : "string"
+
+    format?: string;
+>format : string
+}
+
+interface Bool extends Base<boolean> {
+    type: "boolean";
+>type : "boolean"
+}
+
+type Primitive = Int | Float | Str | Bool;
+>Primitive : Primitive
+
+const foo: Primitive = {
+>foo : Primitive
+>{    type: "number",    value: 10,    multipleOf: 5, // excess property    format: "what?"} : { type: "number"; value: number; multipleOf: number; format: string; }
+
+    type: "number",
+>type : "number"
+>"number" : "number"
+
+    value: 10,
+>value : number
+>10 : 10
+
+    multipleOf: 5, // excess property
+>multipleOf : number
+>5 : 5
+
+    format: "what?"
+>format : string
+>"what?" : "what?"
+}
+
+
+type DisjointDiscriminants = { p1: 'left'; p2: true; p3: number } | { p1: 'right'; p2: false; p4: string } | { p1: 'left'; p2: boolean };
+>DisjointDiscriminants : DisjointDiscriminants
+>p1 : "left"
+>p2 : true
+>true : true
+>p3 : number
+>p1 : "right"
+>p2 : false
+>false : false
+>p4 : string
+>p1 : "left"
+>p2 : boolean
+
+// This has excess error because variant three is the only applicable case.
+const a: DisjointDiscriminants = {
+>a : DisjointDiscriminants
+>{    p1: 'left',    p2: false,    p3: 42,    p4: "hello"} : { p1: "left"; p2: false; p3: number; p4: string; }
+
+    p1: 'left',
+>p1 : "left"
+>'left' : "left"
+
+    p2: false,
+>p2 : false
+>false : false
+
+    p3: 42,
+>p3 : number
+>42 : 42
+
+    p4: "hello"
+>p4 : string
+>"hello" : "hello"
+
+};
+
+// This has no excess error because variant one and three are both applicable.
+const b: DisjointDiscriminants = {
+>b : DisjointDiscriminants
+>{    p1: 'left',    p2: true,    p3: 42,    p4: "hello"} : { p1: "left"; p2: true; p3: number; p4: string; }
+
+    p1: 'left',
+>p1 : "left"
+>'left' : "left"
+
+    p2: true,
+>p2 : true
+>true : true
+
+    p3: 42,
+>p3 : number
+>42 : 42
+
+    p4: "hello"
+>p4 : string
+>"hello" : "hello"
+
+};
+
+// This has excess error because variant two is the only applicable case
+const c: DisjointDiscriminants = {
+>c : DisjointDiscriminants
+>{    p1: 'right',    p2: false,    p3: 42,    p4: "hello"} : { p1: "right"; p2: false; p3: number; p4: string; }
+
+    p1: 'right',
+>p1 : "right"
+>'right' : "right"
+
+    p2: false,
+>p2 : false
+>false : false
+
+    p3: 42,
+>p3 : number
+>42 : 42
+
+    p4: "hello"
+>p4 : string
+>"hello" : "hello"
+
+};
+
