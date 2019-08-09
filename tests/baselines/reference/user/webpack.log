@@ -1,7 +1,31 @@
 Exit Code: 1
 Standard output:
 ../../../../../built/local/lib.dom.d.ts(19046,19): error TS2451: Cannot redeclare block-scoped variable 'WebAssembly'.
+bin/webpack.js(50,23): error TS1212: Identifier expected. 'package' is a reserved word in strict mode.
 declarations.d.ts(258,15): error TS2451: Cannot redeclare block-scoped variable 'WebAssembly'.
+lib/Chunk.js(123,8): error TS1213: Identifier expected. 'private' is a reserved word in strict mode. Class definitions are automatically in strict mode.
+lib/Chunk.js(127,8): error TS1213: Identifier expected. 'private' is a reserved word in strict mode. Class definitions are automatically in strict mode.
+lib/ChunkGroup.js(74,8): error TS1213: Identifier expected. 'private' is a reserved word in strict mode. Class definitions are automatically in strict mode.
+lib/ChunkGroup.js(77,8): error TS1213: Identifier expected. 'private' is a reserved word in strict mode. Class definitions are automatically in strict mode.
+lib/Compilation.js(445,8): error TS1213: Identifier expected. 'private' is a reserved word in strict mode. Class definitions are automatically in strict mode.
+lib/Compilation.js(458,8): error TS1213: Identifier expected. 'private' is a reserved word in strict mode. Class definitions are automatically in strict mode.
+lib/Compilation.js(490,8): error TS1213: Identifier expected. 'private' is a reserved word in strict mode. Class definitions are automatically in strict mode.
+lib/Compilation.js(492,8): error TS1213: Identifier expected. 'private' is a reserved word in strict mode. Class definitions are automatically in strict mode.
+lib/Compilation.js(1510,6): error TS1213: Identifier expected. 'private' is a reserved word in strict mode. Class definitions are automatically in strict mode.
+lib/Compiler.js(193,8): error TS1213: Identifier expected. 'private' is a reserved word in strict mode. Class definitions are automatically in strict mode.
+lib/Compiler.js(195,8): error TS1213: Identifier expected. 'private' is a reserved word in strict mode. Class definitions are automatically in strict mode.
+lib/IgnorePlugin.js(29,8): error TS1213: Identifier expected. 'private' is a reserved word in strict mode. Class definitions are automatically in strict mode.
+lib/NormalModule.js(92,8): error TS1213: Identifier expected. 'private' is a reserved word in strict mode. Class definitions are automatically in strict mode.
+lib/util/Queue.js(11,8): error TS1213: Identifier expected. 'private' is a reserved word in strict mode. Class definitions are automatically in strict mode.
+lib/util/Queue.js(13,8): error TS1213: Identifier expected. 'private' is a reserved word in strict mode. Class definitions are automatically in strict mode.
+lib/util/Semaphore.js(18,8): error TS1213: Identifier expected. 'private' is a reserved word in strict mode. Class definitions are automatically in strict mode.
+lib/util/SortableSet.js(17,8): error TS1213: Identifier expected. 'private' is a reserved word in strict mode. Class definitions are automatically in strict mode.
+lib/util/SortableSet.js(19,8): error TS1213: Identifier expected. 'private' is a reserved word in strict mode. Class definitions are automatically in strict mode.
+lib/util/SortableSet.js(21,8): error TS1213: Identifier expected. 'private' is a reserved word in strict mode. Class definitions are automatically in strict mode.
+lib/util/SortableSet.js(23,8): error TS1213: Identifier expected. 'private' is a reserved word in strict mode. Class definitions are automatically in strict mode.
+lib/util/SortableSet.js(120,6): error TS1213: Identifier expected. 'private' is a reserved word in strict mode. Class definitions are automatically in strict mode.
+lib/util/SortableSet.js(130,6): error TS1213: Identifier expected. 'private' is a reserved word in strict mode. Class definitions are automatically in strict mode.
+lib/util/createHash.js(17,5): error TS1213: Identifier expected. 'implements' is a reserved word in strict mode. Class definitions are automatically in strict mode.
 
 
 

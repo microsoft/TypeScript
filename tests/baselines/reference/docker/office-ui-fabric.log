@@ -426,7 +426,7 @@ lerna info Executing command in 40 packages: "yarn run build --production --lint
 @uifabric/foundation: [XX:XX:XX XM] x Error: Command failed: /usr/local/bin/node /office-ui-fabric-react/node_modules/jest/bin/jest.js --config /office-ui-fabric-react/packages/foundation/jest.config.js --passWithNoTests --colors
 @uifabric/foundation:     at ChildProcess.<anonymous> (/office-ui-fabric-react/node_modules/just-scripts-utils/lib/exec.js:70:31)
 @uifabric/foundation:     at ChildProcess.emit (events.js:203:13)
-@uifabric/foundation:     at ChildProcess.EventEmitter.emit (domain.js:494:23)
+@uifabric/foundation:     at ChildProcess.EventEmitter.emit (domain.js:499:23)
 @uifabric/foundation:     at Process.ChildProcess._handle.onexit (internal/child_process.js:272:12)
 @uifabric/foundation: [XX:XX:XX XM] x ------------------------------------
 @uifabric/foundation: [XX:XX:XX XM] x Error previously detected. See above for error messages.
