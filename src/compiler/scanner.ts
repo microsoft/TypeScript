@@ -2025,7 +2025,7 @@ namespace ts {
             // First non-whitespace character on this line.
             let firstNonWhitespace = 0;
             // These initial values are special because the first line is:
-            // firstNonWhitespace = 0 to indicate that we want leading whitspace,
+            // firstNonWhitespace = 0 to indicate that we want leading whitespace,
 
             while (pos < end) {
                 char = text.charCodeAt(pos);
