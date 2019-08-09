@@ -1038,7 +1038,7 @@ namespace ts {
                 if (isLinuxOrMacOs) {
                     lastDirectoryPartWithDirectorySeparator = fileOrDirectory.substr(fileOrDirectory.lastIndexOf(directorySeparator));
                     lastDirectoryPart = lastDirectoryPartWithDirectorySeparator.slice(directorySeparator.length);
-                }   
+                }
                 /** Watcher for the file system entry depending on whether it is missing or present */
                 let watcher = !fileSystemEntryExists(fileOrDirectory, entryKind) ?
                     watchMissingFileSystemEntry() :
