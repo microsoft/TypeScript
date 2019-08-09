@@ -10,7 +10,7 @@
  * @param {string} unrelated - not actually related because it's not notSpecial.unrelated
  */
 function normal(notSpecial) {
-    notSpecial; // should just be 'any'
+    notSpecial; // should just be 'Object'
 }
 normal(12);
 

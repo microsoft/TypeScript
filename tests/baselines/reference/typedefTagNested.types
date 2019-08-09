@@ -68,9 +68,9 @@ sala.name
 >name : string
 
 sala.not
->sala.not : any
+>sala.not : Object
 >sala : Upp
->not : any
+>not : Object
 
 sala.nested
 >sala.nested : string

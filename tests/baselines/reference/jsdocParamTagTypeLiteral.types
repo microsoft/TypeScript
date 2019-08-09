@@ -4,15 +4,15 @@
  * @param {string} unrelated - not actually related because it's not notSpecial.unrelated
  */
 function normal(notSpecial) {
->normal : (notSpecial: any) => void
->notSpecial : any
+>normal : (notSpecial: Object) => void
+>notSpecial : Object
 
-    notSpecial; // should just be 'any'
->notSpecial : any
+    notSpecial; // should just be 'Object'
+>notSpecial : Object
 }
 normal(12);
 >normal(12) : void
->normal : (notSpecial: any) => void
+>normal : (notSpecial: Object) => void
 >12 : 12
 
 /**

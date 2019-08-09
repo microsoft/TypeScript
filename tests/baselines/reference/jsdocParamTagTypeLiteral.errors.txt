@@ -9,7 +9,7 @@ tests/cases/conformance/jsdoc/0.js(3,20): error TS8024: JSDoc '@param' tag has n
 !!! error TS8024: JSDoc '@param' tag has name 'unrelated', but there is no parameter with that name.
      */
     function normal(notSpecial) {
-        notSpecial; // should just be 'any'
+        notSpecial; // should just be 'Object'
     }
     normal(12);
     
