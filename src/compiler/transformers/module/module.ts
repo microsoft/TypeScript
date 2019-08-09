@@ -698,7 +698,7 @@ namespace ts {
             const promise = createNew(createIdentifier("Promise"), /*typeArguments*/ undefined, [func]);
             if (compilerOptions.esModuleInterop) {
                 context.requestEmitHelper(importStarHelper);
-                return createCall(createPropertyAccess(promise, createIdentifier("then")), /*typeArguments*/ undefined, [getHelperName("__importStar")]);
+                return createCall(createPropertyAccess(promise, createIdentifier("then")), /*typeArguments*/ undefined, [getUnscopedHelperName("__importStar")]);
             }
             return promise;
         }
@@ -713,7 +713,7 @@ namespace ts {
             let requireCall = createCall(createIdentifier("require"), /*typeArguments*/ undefined, arg ? [arg] : []);
             if (compilerOptions.esModuleInterop) {
                 context.requestEmitHelper(importStarHelper);
-                requireCall = createCall(getHelperName("__importStar"), /*typeArguments*/ undefined, [requireCall]);
+                requireCall = createCall(getUnscopedHelperName("__importStar"), /*typeArguments*/ undefined, [requireCall]);
             }
 
             let func: FunctionExpression | ArrowFunction;
@@ -753,11 +753,11 @@ namespace ts {
             }
             if (getImportNeedsImportStarHelper(node)) {
                 context.requestEmitHelper(importStarHelper);
-                return createCall(getHelperName("__importStar"), /*typeArguments*/ undefined, [innerExpr]);
+                return createCall(getUnscopedHelperName("__importStar"), /*typeArguments*/ undefined, [innerExpr]);
             }
             if (getImportNeedsImportDefaultHelper(node)) {
                 context.requestEmitHelper(importDefaultHelper);
-                return createCall(getHelperName("__importDefault"), /*typeArguments*/ undefined, [innerExpr]);
+                return createCall(getUnscopedHelperName("__importDefault"), /*typeArguments*/ undefined, [innerExpr]);
             }
             return innerExpr;
         }
@@ -1793,7 +1793,7 @@ namespace ts {
     function createExportStarHelper(context: TransformationContext, module: Expression) {
         const compilerOptions = context.getCompilerOptions();
         return compilerOptions.importHelpers
-            ? createCall(getHelperName("__exportStar"), /*typeArguments*/ undefined, [module, createIdentifier("exports")])
+            ? createCall(getUnscopedHelperName("__exportStar"), /*typeArguments*/ undefined, [module, createIdentifier("exports")])
             : createCall(createIdentifier("__export"), /*typeArguments*/ undefined, [module]);
     }
 

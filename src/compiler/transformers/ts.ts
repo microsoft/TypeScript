@@ -3282,7 +3282,7 @@ namespace ts {
         context.requestEmitHelper(decorateHelper);
         return setTextRange(
             createCall(
-                getHelperName("__decorate"),
+                getUnscopedHelperName("__decorate"),
                 /*typeArguments*/ undefined,
                 argumentsArray
             ),
@@ -3307,7 +3307,7 @@ namespace ts {
     function createMetadataHelper(context: TransformationContext, metadataKey: string, metadataValue: Expression) {
         context.requestEmitHelper(metadataHelper);
         return createCall(
-            getHelperName("__metadata"),
+            getUnscopedHelperName("__metadata"),
             /*typeArguments*/ undefined,
             [
                 createLiteral(metadataKey),
@@ -3331,7 +3331,7 @@ namespace ts {
         context.requestEmitHelper(paramHelper);
         return setTextRange(
             createCall(
-                getHelperName("__param"),
+                getUnscopedHelperName("__param"),
                 /*typeArguments*/ undefined,
                 [
                     createLiteral(parameterOffset),

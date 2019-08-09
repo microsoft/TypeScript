@@ -1020,7 +1020,7 @@ namespace ts {
         }
         context.requestEmitHelper(assignHelper);
         return createCall(
-            getHelperName("__assign"),
+            getUnscopedHelperName("__assign"),
             /*typeArguments*/ undefined,
             attributesSegments
         );
@@ -1036,7 +1036,7 @@ namespace ts {
 
     function createAwaitHelper(context: TransformationContext, expression: Expression) {
         context.requestEmitHelper(awaitHelper);
-        return createCall(getHelperName("__await"), /*typeArguments*/ undefined, [expression]);
+        return createCall(getUnscopedHelperName("__await"), /*typeArguments*/ undefined, [expression]);
     }
 
     export const asyncGeneratorHelper: UnscopedEmitHelper = {
@@ -1065,7 +1065,7 @@ namespace ts {
         (generatorFunc.emitNode || (generatorFunc.emitNode = {} as EmitNode)).flags |= EmitFlags.AsyncFunctionBody;
 
         return createCall(
-            getHelperName("__asyncGenerator"),
+            getUnscopedHelperName("__asyncGenerator"),
             /*typeArguments*/ undefined,
             [
                 createThis(),
@@ -1092,7 +1092,7 @@ namespace ts {
         context.requestEmitHelper(asyncDelegator);
         return setTextRange(
             createCall(
-                getHelperName("__asyncDelegator"),
+                getUnscopedHelperName("__asyncDelegator"),
                 /*typeArguments*/ undefined,
                 [expression]
             ),
@@ -1118,7 +1118,7 @@ namespace ts {
         context.requestEmitHelper(asyncValues);
         return setTextRange(
             createCall(
-                getHelperName("__asyncValues"),
+                getUnscopedHelperName("__asyncValues"),
                 /*typeArguments*/ undefined,
                 [expression]
             ),

@@ -3176,7 +3176,7 @@ namespace ts {
     function createGeneratorHelper(context: TransformationContext, body: FunctionExpression) {
         context.requestEmitHelper(generatorHelper);
         return createCall(
-            getHelperName("__generator"),
+            getUnscopedHelperName("__generator"),
             /*typeArguments*/ undefined,
             [createThis(), body]);
     }

@@ -4339,7 +4339,7 @@ namespace ts {
     function createExtendsHelper(context: TransformationContext, name: Identifier) {
         context.requestEmitHelper(extendsHelper);
         return createCall(
-            getHelperName("__extends"),
+            getUnscopedHelperName("__extends"),
             /*typeArguments*/ undefined,
             [
                 name,
@@ -4351,7 +4351,7 @@ namespace ts {
     function createTemplateObjectHelper(context: TransformationContext, cooked: ArrayLiteralExpression, raw: ArrayLiteralExpression) {
         context.requestEmitHelper(templateObjectHelper);
         return createCall(
-            getHelperName("__makeTemplateObject"),
+            getUnscopedHelperName("__makeTemplateObject"),
             /*typeArguments*/ undefined,
             [
                 cooked,

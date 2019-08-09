@@ -3628,7 +3628,10 @@ namespace ts {
 
     // Helpers
 
-    export function getHelperName(name: string) {
+    /**
+     * Gets an identifier for the name of an *unscoped* emit helper.
+     */
+    export function getUnscopedHelperName(name: string) {
         return setEmitFlags(createIdentifier(name), EmitFlags.HelperName | EmitFlags.AdviseOnEmitNode);
     }
 
@@ -3654,7 +3657,7 @@ namespace ts {
         context.requestEmitHelper(valuesHelper);
         return setTextRange(
             createCall(
-                getHelperName("__values"),
+                getUnscopedHelperName("__values"),
                 /*typeArguments*/ undefined,
                 [expression]
             ),
@@ -3689,7 +3692,7 @@ namespace ts {
         context.requestEmitHelper(readHelper);
         return setTextRange(
             createCall(
-                getHelperName("__read"),
+                getUnscopedHelperName("__read"),
                 /*typeArguments*/ undefined,
                 count !== undefined
                     ? [iteratorRecord, createLiteral(count)]
@@ -3715,7 +3718,7 @@ namespace ts {
         context.requestEmitHelper(spreadHelper);
         return setTextRange(
             createCall(
-                getHelperName("__spread"),
+                getUnscopedHelperName("__spread"),
                 /*typeArguments*/ undefined,
                 argumentList
             ),
@@ -3741,7 +3744,7 @@ namespace ts {
         context.requestEmitHelper(spreadArraysHelper);
         return setTextRange(
             createCall(
-                getHelperName("__spreadArrays"),
+                getUnscopedHelperName("__spreadArrays"),
                 /*typeArguments*/ undefined,
                 argumentList
             ),
@@ -4892,8 +4895,13 @@ namespace ts {
                     }
                     if (some(helperNames)) {
                         helperNames.sort(compareStringsCaseSensitive);
+                        // Alias the imports if the names are used somewhere in the file.
+                        // NOTE: We don't need to care about global import collisions as this is a module.
                         namedBindings = createNamedImports(
-                            map(helperNames, name => createImportSpecifier(/*propertyName*/ undefined, createIdentifier(name)))
+                            map(helperNames, name => isFileLevelUniqueName(sourceFile, name)
+                                ? createImportSpecifier(/*propertyName*/ undefined, createIdentifier(name))
+                                : createImportSpecifier(createIdentifier(name), getUnscopedHelperName(name))
+                            )
                         );
                         const parseNode = getOriginalNode(sourceFile, isSourceFile);
                         const emitNode = getOrCreateEmitNode(parseNode);

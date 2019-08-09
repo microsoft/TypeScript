@@ -803,7 +803,7 @@ namespace ts {
         (generatorFunc.emitNode || (generatorFunc.emitNode = {} as EmitNode)).flags |= EmitFlags.AsyncFunctionBody | EmitFlags.ReuseTempVariableScope;
 
         return createCall(
-            getHelperName("__awaiter"),
+            getUnscopedHelperName("__awaiter"),
             /*typeArguments*/ undefined,
             [
                 createThis(),

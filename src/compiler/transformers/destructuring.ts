@@ -558,7 +558,7 @@ namespace ts {
             }
         }
         return createCall(
-            getHelperName("__rest"),
+            getUnscopedHelperName("__rest"),
             /*typeArguments*/ undefined,
             [
                 value,

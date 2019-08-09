@@ -5315,7 +5315,7 @@ namespace ts {
         NoTrailingComments = 1 << 10,           // Do not emit trailing comments for this node.
         NoComments = NoLeadingComments | NoTrailingComments, // Do not emit comments for this node.
         NoNestedComments = 1 << 11,
-        HelperName = 1 << 12,
+        HelperName = 1 << 12,                   // The Identifier refers to an *unscoped* emit helper (one that is emitted at the top of the file)
         ExportName = 1 << 13,                   // Ensure an export prefix is added for an identifier that points to an exported declaration with a local name (see SymbolFlags.ExportHasLocal).
         LocalName = 1 << 14,                    // Ensure an export prefix is not added for an identifier that points to an exported declaration.
         InternalName = 1 << 15,                 // The name is internal to an ES5 class body function.
