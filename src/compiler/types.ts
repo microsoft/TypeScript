@@ -2565,6 +2565,22 @@ namespace ts {
         Condition = TrueCondition | FalseCondition
     }
 
+    export type FlowNode =
+        | AfterFinallyFlow
+        | PreFinallyFlow
+        | FlowStart
+        | FlowLabel
+        | FlowAssignment
+        | FlowCall
+        | FlowCondition
+        | FlowSwitchClause
+        | FlowArrayMutation;
+
+    export interface FlowNodeBase {
+        flags: FlowFlags;
+        id: number | undefined;     // Node id used by flow type cache in checker
+    }
+
     export interface FlowLock {
         locked?: boolean;
     }
@@ -2578,18 +2594,11 @@ namespace ts {
         lock: FlowLock;
     }
 
-    export type FlowNode =
-        | AfterFinallyFlow | PreFinallyFlow | FlowStart | FlowLabel | FlowAssignment | FlowCall | FlowCondition | FlowSwitchClause | FlowArrayMutation;
-    export interface FlowNodeBase {
-        flags: FlowFlags;
-        id?: number;     // Node id used by flow type cache in checker
-    }
-
     // FlowStart represents the start of a control flow. For a function expression or arrow
-    // function, the container property references the function (which in turn has a flowNode
+    // function, the node property references the function (which in turn has a flowNode
     // property for the containing control flow).
     export interface FlowStart extends FlowNodeBase {
-        container?: FunctionExpression | ArrowFunction | MethodDeclaration;
+        node?: FunctionExpression | ArrowFunction | MethodDeclaration;
     }
 
     // FlowLabel represents a junction with multiple possible preceding control flows.
@@ -2612,7 +2621,7 @@ namespace ts {
     // FlowCondition represents a condition that is known to be true or false at the
     // node's location in the control flow.
     export interface FlowCondition extends FlowNodeBase {
-        expression: Expression;
+        node: Expression;
         antecedent: FlowNode;
     }
 

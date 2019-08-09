@@ -148,8 +148,8 @@ namespace ts {
         let Symbol: new (flags: SymbolFlags, name: __String) => Symbol; // tslint:disable-line variable-name
         let classifiableNames: UnderscoreEscapedMap<true>;
 
-        const unreachableFlow: FlowNode = { flags: FlowFlags.Unreachable };
-        const reportedUnreachableFlow: FlowNode = { flags: FlowFlags.Unreachable };
+        const unreachableFlow = createFlowNode(FlowFlags.Unreachable, /*antecedent*/ undefined, /*node*/ undefined);
+        const reportedUnreachableFlow: FlowNode = createFlowNode(FlowFlags.Unreachable, /*antecedent*/ undefined, /*node*/ undefined);
 
         // state used to aggregate transform flags during bind.
         let subtreeTransformFlags: TransformFlags = TransformFlags.None;
@@ -560,9 +560,9 @@ namespace ts {
                 // A non-async, non-generator IIFE is considered part of the containing control flow. Return statements behave
                 // similarly to break statements that exit to a label just past the statement body.
                 if (!isIIFE) {
-                    currentFlow = { flags: FlowFlags.Start };
+                    currentFlow = createFlowNode(FlowFlags.Start, /*antecedent*/ undefined, /*node*/ undefined) as FlowStart;
                     if (containerFlags & (ContainerFlags.IsFunctionExpression | ContainerFlags.IsObjectLiteralOrClassExpressionMethod)) {
-                        currentFlow.container = <FunctionExpression | ArrowFunction | MethodDeclaration>node;
+                        currentFlow.node = <FunctionExpression | ArrowFunction | MethodDeclaration>node;
                     }
                 }
                 // We create a return control flow graph for IIFEs and constructors. For constructors
@@ -842,18 +842,22 @@ namespace ts {
             return isNarrowableReference(expr);
         }
 
-        function createBranchLabel(): FlowLabel {
+        function createFlowNode(flags: FlowFlags, antecedent: FlowNode | undefined, node: Node | undefined) {
             return {
-                flags: FlowFlags.BranchLabel,
-                antecedents: undefined
-            };
+                flags,
+                antecedent,
+                node,
+                id: undefined,
+                antecedents: undefined,
+            } as FlowNode;
+        }
+
+        function createBranchLabel(): FlowLabel {
+            return createFlowNode(FlowFlags.BranchLabel, /*antecedent*/ undefined, /*node*/ undefined) as FlowLabel;
         }
 
         function createLoopLabel(): FlowLabel {
-            return {
-                flags: FlowFlags.LoopLabel,
-                antecedents: undefined
-            };
+            return createFlowNode(FlowFlags.LoopLabel, /*antecedent*/ undefined, /*node*/ undefined) as FlowLabel;
         }
 
         function setFlowNodeReferenced(flow: FlowNode) {
@@ -883,7 +887,7 @@ namespace ts {
                 return antecedent;
             }
             setFlowNodeReferenced(antecedent);
-            return flowNodeCreated({ flags, expression, antecedent });
+            return flowNodeCreated(createFlowNode(flags, antecedent, expression));
         }
 
         function createFlowSwitchClause(antecedent: FlowNode, switchStatement: SwitchStatement, clauseStart: number, clauseEnd: number): FlowNode {
@@ -891,23 +895,26 @@ namespace ts {
                 return antecedent;
             }
             setFlowNodeReferenced(antecedent);
-            return flowNodeCreated({ flags: FlowFlags.SwitchClause, switchStatement, clauseStart, clauseEnd, antecedent });
+            const result = createFlowNode(FlowFlags.SwitchClause, antecedent, /*node*/ undefined) as FlowSwitchClause;
+            result.switchStatement = switchStatement;
+            result.clauseStart = clauseStart;
+            result.clauseEnd = clauseEnd;
+            return flowNodeCreated(result);
         }
 
         function createFlowAssignment(antecedent: FlowNode, node: Expression | VariableDeclaration | BindingElement): FlowNode {
             setFlowNodeReferenced(antecedent);
-            return flowNodeCreated({ flags: FlowFlags.Assignment, antecedent, node });
+            return flowNodeCreated(createFlowNode(FlowFlags.Assignment, antecedent, node));
         }
 
         function createFlowCall(antecedent: FlowNode, node: CallExpression): FlowNode {
             setFlowNodeReferenced(antecedent);
-            return flowNodeCreated({ flags: FlowFlags.Call, antecedent, node });
+            return flowNodeCreated(createFlowNode(FlowFlags.Call, antecedent, node));
         }
 
         function createFlowArrayMutation(antecedent: FlowNode, node: CallExpression | BinaryExpression): FlowNode {
             setFlowNodeReferenced(antecedent);
-            const res: FlowArrayMutation = flowNodeCreated({ flags: FlowFlags.ArrayMutation, antecedent, node });
-            return res;
+            return flowNodeCreated(createFlowNode(FlowFlags.ArrayMutation, antecedent, node));
         }
 
         function finishFlowLabel(flow: FlowLabel): FlowNode {
@@ -1185,7 +1192,8 @@ namespace ts {
                 //
                 // extra edges that we inject allows to control this behavior
                 // if when walking the flow we step on post-finally edge - we can mark matching pre-finally edge as locked so it will be skipped.
-                const preFinallyFlow: PreFinallyFlow = { flags: FlowFlags.PreFinally, antecedent: preFinallyPrior, lock: {} };
+                const preFinallyFlow = createFlowNode(FlowFlags.PreFinally, preFinallyPrior, /*node*/ undefined) as PreFinallyFlow;
+                preFinallyFlow.lock = {};
                 addAntecedent(preFinallyLabel, preFinallyFlow);
 
                 currentFlow = finishFlowLabel(preFinallyLabel);
@@ -1204,7 +1212,7 @@ namespace ts {
                     }
                 }
                 if (!(currentFlow.flags & FlowFlags.Unreachable)) {
-                    const afterFinallyFlow: AfterFinallyFlow = flowNodeCreated({ flags: FlowFlags.AfterFinally, antecedent: currentFlow });
+                    const afterFinallyFlow = flowNodeCreated(createFlowNode(FlowFlags.AfterFinally, currentFlow, /*node*/ undefined) as AfterFinallyFlow);
                     preFinallyFlow.lock = afterFinallyFlow;
                     currentFlow = afterFinallyFlow;
                 }
@@ -1828,7 +1836,7 @@ namespace ts {
                 const host = getJSDocHost(typeAlias);
                 container = findAncestor(host.parent, n => !!(getContainerFlags(n) & ContainerFlags.IsContainer)) || file;
                 blockScopeContainer = getEnclosingBlockScopeContainer(host) || file;
-                currentFlow = { flags: FlowFlags.Start };
+                currentFlow = createFlowNode(FlowFlags.Start, /*antecedent*/ undefined, /*node*/ undefined);
                 parent = typeAlias;
                 bind(typeAlias.typeExpression);
                 if (isJSDocEnumTag(typeAlias) || !typeAlias.fullName || typeAlias.fullName.kind === SyntaxKind.Identifier) {

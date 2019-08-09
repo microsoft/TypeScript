@@ -17001,7 +17001,7 @@ namespace ts {
                     }
                     else if (flags & FlowFlags.Start) {
                         // Check if we should continue with the control flow of the containing function.
-                        const container = (<FlowStart>flow).container;
+                        const container = (<FlowStart>flow).node;
                         if (container && container !== flowContainer &&
                             reference.kind !== SyntaxKind.PropertyAccessExpression &&
                             reference.kind !== SyntaxKind.ElementAccessExpression &&
@@ -17150,7 +17150,7 @@ namespace ts {
                 // *only* place a silent never type is ever generated.
                 const assumeTrue = (flow.flags & FlowFlags.TrueCondition) !== 0;
                 const nonEvolvingType = finalizeEvolvingArrayType(type);
-                const narrowedType = narrowType(nonEvolvingType, flow.expression, assumeTrue);
+                const narrowedType = narrowType(nonEvolvingType, flow.node, assumeTrue);
                 if (narrowedType === nonEvolvingType) {
                     return flowType;
                 }
