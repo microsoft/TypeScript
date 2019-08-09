@@ -1158,7 +1158,13 @@ namespace ts {
         function getValidSourceFile(fileName: string): SourceFile {
             const sourceFile = program.getSourceFile(fileName);
             if (!sourceFile) {
-                throw new Error(`Could not find sourceFile: '${fileName}' in ${program && JSON.stringify(program.getSourceFiles().map(f => f.fileName))}.`);
+                const error: Error & PossibleProgramFileInfo = new Error(`Could not find sourceFile: '${fileName}'.`);
+
+                // We've been having trouble debugging this, so attach sidecar data for the tsserver log.
+                // See https://github.com/microsoft/TypeScript/issues/30180.
+                error.ProgramFiles = program.getSourceFiles().map(f => f.fileName);
+
+                throw error;
             }
             return sourceFile;
         }
