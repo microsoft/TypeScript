@@ -1672,6 +1672,11 @@ declare namespace ts {
         Label = 12,
         Condition = 96
     }
+    export type FlowNode = AfterFinallyFlow | PreFinallyFlow | FlowStart | FlowLabel | FlowAssignment | FlowCall | FlowCondition | FlowSwitchClause | FlowArrayMutation;
+    export interface FlowNodeBase {
+        flags: FlowFlags;
+        id: number | undefined;
+    }
     export interface FlowLock {
         locked?: boolean;
     }
@@ -1682,13 +1687,8 @@ declare namespace ts {
         antecedent: FlowNode;
         lock: FlowLock;
     }
-    export type FlowNode = AfterFinallyFlow | PreFinallyFlow | FlowStart | FlowLabel | FlowAssignment | FlowCall | FlowCondition | FlowSwitchClause | FlowArrayMutation;
-    export interface FlowNodeBase {
-        flags: FlowFlags;
-        id?: number;
-    }
     export interface FlowStart extends FlowNodeBase {
-        container?: FunctionExpression | ArrowFunction | MethodDeclaration;
+        node?: FunctionExpression | ArrowFunction | MethodDeclaration;
     }
     export interface FlowLabel extends FlowNodeBase {
         antecedents: FlowNode[] | undefined;
@@ -1702,7 +1702,7 @@ declare namespace ts {
         antecedent: FlowNode;
     }
     export interface FlowCondition extends FlowNodeBase {
-        expression: Expression;
+        node: Expression;
         antecedent: FlowNode;
     }
     export interface FlowSwitchClause extends FlowNodeBase {
