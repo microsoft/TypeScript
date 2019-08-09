@@ -16,9 +16,17 @@ namespace ts.tscWatch {
         return host;
     }
 
+
     export function createSolutionBuilder(system: WatchedSystem, rootNames: ReadonlyArray<string>, defaultOptions?: BuildOptions) {
         const host = createSolutionBuilderHost(system);
+        host.now = system.now.bind(system);
         return ts.createSolutionBuilder(host, rootNames, defaultOptions || {});
+    }
+
+    export function createSolutionBuilderWithWatchHost(system: WatchedSystem) {
+        const host = ts.createSolutionBuilderWithWatchHost(system);
+        host.now = system.now.bind(system);
+        return host;
     }
 
     function createSolutionBuilderWithWatch(system: TsBuildWatchSystem, rootNames: ReadonlyArray<string>, defaultOptions?: BuildOptions) {
@@ -33,7 +41,7 @@ namespace ts.tscWatch {
         return [f, host.getModifiedTime(f), host.writtenFiles.has(host.toFullPath(f))] as OutputFileStamp;
     }
 
-    describe("unittests:: tsbuild-watch program updates", () => {
+    describe("unittests:: tsbuild:: watchMode:: program updates", () => {
         const project = "sample1";
         const enum SubProject {
             core = "core",
@@ -113,13 +121,33 @@ namespace ts.tscWatch {
             }
         }
 
-        const core = subProjectFiles(SubProject.core, /*anotherModuleAndSomeDecl*/ true);
-        const logic = subProjectFiles(SubProject.logic);
-        const tests = subProjectFiles(SubProject.tests);
-        const ui = subProjectFiles(SubProject.ui);
-        const allFiles: ReadonlyArray<File> = [libFile, ...core, ...logic, ...tests, ...ui];
-        const testProjectExpectedWatchedFiles = [core[0], core[1], core[2]!, ...logic, ...tests].map(f => f.path.toLowerCase()); // tslint:disable-line no-unnecessary-type-assertion (TODO: type assertion should be necessary)
-        const testProjectExpectedWatchedDirectoriesRecursive = [projectPath(SubProject.core), projectPath(SubProject.logic)];
+        let core: SubProjectFiles;
+        let logic: SubProjectFiles;
+        let tests: SubProjectFiles;
+        let ui: SubProjectFiles;
+        let allFiles: ReadonlyArray<File>;
+        let testProjectExpectedWatchedFiles: string[];
+        let testProjectExpectedWatchedDirectoriesRecursive: string[];
+
+        before(() => {
+            core = subProjectFiles(SubProject.core, /*anotherModuleAndSomeDecl*/ true);
+            logic = subProjectFiles(SubProject.logic);
+            tests = subProjectFiles(SubProject.tests);
+            ui = subProjectFiles(SubProject.ui);
+            allFiles = [libFile, ...core, ...logic, ...tests, ...ui];
+            testProjectExpectedWatchedFiles = [core[0], core[1], core[2]!, ...logic, ...tests].map(f => f.path.toLowerCase()); // tslint:disable-line no-unnecessary-type-assertion (TODO: type assertion should be necessary)
+            testProjectExpectedWatchedDirectoriesRecursive = [projectPath(SubProject.core), projectPath(SubProject.logic)];
+        });
+
+        after(() => {
+            core = undefined!;
+            logic = undefined!;
+            tests = undefined!;
+            ui = undefined!;
+            allFiles = undefined!;
+            testProjectExpectedWatchedFiles = undefined!;
+            testProjectExpectedWatchedDirectoriesRecursive = undefined!;
+        });
 
         function createSolutionInWatchMode(allFiles: ReadonlyArray<File>, defaultOptions?: BuildOptions, disableConsoleClears?: boolean) {
             const host = createTsBuildWatchSystem(allFiles, { currentDirectory: projectsLocation });
@@ -172,9 +200,9 @@ namespace ts.tscWatch {
                 content: `export const newFileConst = 30;`
             };
 
-            function verifyProjectChanges(allFiles: ReadonlyArray<File>) {
+            function verifyProjectChanges(allFilesGetter: () => ReadonlyArray<File>) {
                 function createSolutionInWatchModeToVerifyChanges(additionalFiles?: ReadonlyArray<[SubProject, string]>) {
-                    const host = createSolutionInWatchMode(allFiles);
+                    const host = createSolutionInWatchMode(allFilesGetter());
                     return { host, verifyChangeWithFile, verifyChangeAfterTimeout, verifyWatches };
 
                     function verifyChangeWithFile(fileName: string, content: string, local?: boolean) {
@@ -277,19 +305,21 @@ export class someClass2 { }`);
             }
 
             describe("with simple project reference graph", () => {
-                verifyProjectChanges(allFiles);
+                verifyProjectChanges(() => allFiles);
             });
 
             describe("with circular project reference", () => {
-                const [coreTsconfig, ...otherCoreFiles] = core;
-                const circularCoreConfig: File = {
-                    path: coreTsconfig.path,
-                    content: JSON.stringify({
-                        compilerOptions: { composite: true, declaration: true },
-                        references: [{ path: "../tests", circular: true }]
-                    })
-                };
-                verifyProjectChanges([libFile, circularCoreConfig, ...otherCoreFiles, ...logic, ...tests]);
+                verifyProjectChanges(() => {
+                    const [coreTsconfig, ...otherCoreFiles] = core;
+                    const circularCoreConfig: File = {
+                        path: coreTsconfig.path,
+                        content: JSON.stringify({
+                            compilerOptions: { composite: true, declaration: true },
+                            references: [{ path: "../tests", circular: true }]
+                        })
+                    };
+                    return [libFile, circularCoreConfig, ...otherCoreFiles, ...logic, ...tests];
+                });
             });
         });
 
@@ -681,9 +711,9 @@ let x: string = 10;`);
                     const coreIndexDts = projectFileName(SubProject.core, "index.d.ts");
                     const coreAnotherModuleDts = projectFileName(SubProject.core, "anotherModule.d.ts");
                     const logicIndexDts = projectFileName(SubProject.logic, "index.d.ts");
-                    const expectedWatchedFiles = [core[0], logic[0], ...tests, libFile].map(f => f.path).concat([coreIndexDts, coreAnotherModuleDts, logicIndexDts].map(f => f.toLowerCase()));
+                    const expectedWatchedFiles = () => [core[0], logic[0], ...tests, libFile].map(f => f.path).concat([coreIndexDts, coreAnotherModuleDts, logicIndexDts].map(f => f.toLowerCase()));
                     const expectedWatchedDirectoriesRecursive = projectSystem.getTypeRootsFromLocation(projectPath(SubProject.tests));
-                    const expectedProgramFiles = [tests[1].path, libFile.path, coreIndexDts, coreAnotherModuleDts, logicIndexDts];
+                    const expectedProgramFiles = () => [tests[1].path, libFile.path, coreIndexDts, coreAnotherModuleDts, logicIndexDts];
 
                     function createSolutionAndWatchMode() {
                         return createSolutionAndWatchModeOfProject(allFiles, projectsLocation, `${project}/${SubProject.tests}`, tests[0].path, getOutputFileStamps);
@@ -694,12 +724,12 @@ let x: string = 10;`);
                     }
 
                     function verifyWatches(host: TsBuildWatchSystem, withTsserver?: boolean) {
-                        verifyWatchesOfProject(host, withTsserver ? expectedWatchedFiles.filter(f => f !== tests[1].path.toLowerCase()) : expectedWatchedFiles, expectedWatchedDirectoriesRecursive);
+                        verifyWatchesOfProject(host, withTsserver ? expectedWatchedFiles().filter(f => f !== tests[1].path.toLowerCase()) : expectedWatchedFiles(), expectedWatchedDirectoriesRecursive);
                     }
 
                     function verifyScenario(
                         edit: (host: TsBuildWatchSystem, solutionBuilder: SolutionBuilder<EmitAndSemanticDiagnosticsBuilderProgram>) => void,
-                        expectedFilesAfterEdit: ReadonlyArray<string>
+                        expectedFilesAfterEdit: () => ReadonlyArray<string>
                     ) {
                         it("with tsc-watch", () => {
                             const { host, solutionBuilder, watch } = createSolutionAndWatchMode();
@@ -708,7 +738,7 @@ let x: string = 10;`);
 
                             host.checkTimeoutQueueLengthAndRun(1);
                             checkOutputErrorsIncremental(host, emptyArray);
-                            checkProgramActualFiles(watch(), expectedFilesAfterEdit);
+                            checkProgramActualFiles(watch(), expectedFilesAfterEdit());
 
                         });
 
@@ -718,7 +748,7 @@ let x: string = 10;`);
                             edit(host, solutionBuilder);
 
                             host.checkTimeoutQueueLengthAndRun(2);
-                            checkProjectActualFiles(service, tests[0].path, [tests[0].path, ...expectedFilesAfterEdit]);
+                            checkProjectActualFiles(service, tests[0].path, [tests[0].path, ...expectedFilesAfterEdit()]);
                         });
                     }
 
@@ -729,7 +759,7 @@ let x: string = 10;`);
                             verifyDependencies(watch, coreIndexDts, [coreIndexDts]);
                             verifyDependencies(watch, coreAnotherModuleDts, [coreAnotherModuleDts]);
                             verifyDependencies(watch, logicIndexDts, [logicIndexDts, coreAnotherModuleDts]);
-                            verifyDependencies(watch, tests[1].path, expectedProgramFiles.filter(f => f !== libFile.path));
+                            verifyDependencies(watch, tests[1].path, expectedProgramFiles().filter(f => f !== libFile.path));
                         });
 
                         it("with tsserver", () => {
@@ -769,7 +799,7 @@ export function gfoo() {
                             }));
                             solutionBuilder.invalidateProject(logic[0].path.toLowerCase() as ResolvedConfigFilePath, ConfigFileProgramReloadLevel.Full);
                             solutionBuilder.buildNextInvalidatedProject();
-                        }, [tests[1].path, libFile.path, coreIndexDts, coreAnotherModuleDts, projectFilePath(SubProject.logic, "decls/index.d.ts")]);
+                        }, () => [tests[1].path, libFile.path, coreIndexDts, coreAnotherModuleDts, projectFilePath(SubProject.logic, "decls/index.d.ts")]);
                     });
                 });
 

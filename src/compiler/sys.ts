@@ -304,6 +304,53 @@ namespace ts {
         }
     }
 
+    /* @internal */
+    export function createSingleFileWatcherPerName(
+        watchFile: HostWatchFile,
+        useCaseSensitiveFileNames: boolean
+    ): HostWatchFile {
+        interface SingleFileWatcher {
+            watcher: FileWatcher;
+            refCount: number;
+        }
+        const cache = createMap<SingleFileWatcher>();
+        const callbacksCache = createMultiMap<FileWatcherCallback>();
+        const toCanonicalFileName = createGetCanonicalFileName(useCaseSensitiveFileNames);
+
+        return (fileName, callback, pollingInterval) => {
+            const path = toCanonicalFileName(fileName);
+            const existing = cache.get(path);
+            if (existing) {
+                existing.refCount++;
+            }
+            else {
+                cache.set(path, {
+                    watcher: watchFile(
+                        fileName,
+                        (fileName, eventKind) => forEach(
+                            callbacksCache.get(path),
+                            cb => cb(fileName, eventKind)
+                        ),
+                        pollingInterval
+                    ),
+                    refCount: 1
+                });
+            }
+            callbacksCache.add(path, callback);
+
+            return {
+                close: () => {
+                    const watcher = Debug.assertDefined(cache.get(path));
+                    callbacksCache.remove(path, callback);
+                    watcher.refCount--;
+                    if (watcher.refCount) return;
+                    cache.delete(path);
+                    closeFileWatcherOf(watcher);
+                }
+            };
+        };
+    }
+
     /**
      * Returns true if file status changed
      */
@@ -695,6 +742,7 @@ namespace ts {
             const useNonPollingWatchers = process.env.TSC_NONPOLLING_WATCHER;
             const tscWatchFile = process.env.TSC_WATCHFILE;
             const tscWatchDirectory = process.env.TSC_WATCHDIRECTORY;
+            const fsWatchFile = createSingleFileWatcherPerName(fsWatchFileWorker, useCaseSensitiveFileNames);
             let dynamicPollingWatchFile: HostWatchFile | undefined;
             const nodeSystem: System = {
                 args: process.argv.slice(2),
@@ -835,7 +883,7 @@ namespace ts {
                 return useNonPollingWatchers ?
                     createNonPollingWatchFile() :
                     // Default to do not use polling interval as it is before this experiment branch
-                    (fileName, callback) => fsWatchFile(fileName, callback);
+                    (fileName, callback) => fsWatchFile(fileName, callback, /*pollingInterval*/ undefined);
             }
 
             function getWatchDirectory(): HostWatchDirectory {
@@ -916,7 +964,7 @@ namespace ts {
                 }
             }
 
-            function fsWatchFile(fileName: string, callback: FileWatcherCallback, pollingInterval?: number): FileWatcher {
+            function fsWatchFileWorker(fileName: string, callback: FileWatcherCallback, pollingInterval?: number): FileWatcher {
                 _fs.watchFile(fileName, { persistent: true, interval: pollingInterval || 250 }, fileChanged);
                 let eventKind: FileWatcherEventKind;
                 return {
@@ -1086,7 +1134,7 @@ namespace ts {
                 return (directoryName, callback) => fsWatchFile(directoryName, () => callback(directoryName), PollingInterval.Medium);
             }
 
-            function readFile(fileName: string, _encoding?: string): string | undefined {
+            function readFileWorker(fileName: string, _encoding?: string): string | undefined {
                 if (!fileExists(fileName)) {
                     return undefined;
                 }
@@ -1115,7 +1163,15 @@ namespace ts {
                 return buffer.toString("utf8");
             }
 
+            function readFile(fileName: string, _encoding?: string): string | undefined {
+                perfLogger.logStartReadFile(fileName);
+                const file = readFileWorker(fileName, _encoding);
+                perfLogger.logStopReadFile();
+                return file;
+            }
+
             function writeFile(fileName: string, data: string, writeByteOrderMark?: boolean): void {
+                perfLogger.logEvent("WriteFile: " + fileName);
                 // If a BOM is required, emit one
                 if (writeByteOrderMark) {
                     data = byteOrderMarkIndicator + data;
@@ -1135,6 +1191,7 @@ namespace ts {
             }
 
             function getAccessibleFileSystemEntries(path: string): FileSystemEntries {
+                perfLogger.logEvent("ReadDir: " + (path || "."));
                 try {
                     const entries = _fs.readdirSync(path || ".").sort();
                     const files: string[] = [];
@@ -1196,6 +1253,7 @@ namespace ts {
             }
 
             function getDirectories(path: string): string[] {
+                perfLogger.logEvent("ReadDir: " + path);
                 return filter<string>(_fs.readdirSync(path), dir => fileSystemEntryExists(combinePaths(path, dir), FileSystemEntryKind.Directory));
             }
 

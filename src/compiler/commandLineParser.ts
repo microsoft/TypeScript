@@ -1743,6 +1743,16 @@ namespace ts {
         return false;
     }
 
+    /** @internal */
+    export interface TSConfig {
+        compilerOptions: CompilerOptions;
+        compileOnSave: boolean | undefined;
+        exclude?: ReadonlyArray<string>;
+        files: ReadonlyArray<string> | undefined;
+        include?: ReadonlyArray<string>;
+        references: ReadonlyArray<ProjectReference> | undefined;
+    }
+
     /**
      * Generate an uncommented, complete tsconfig for use with "--showConfig"
      * @param configParseResult options to be generated into tsconfig.json
@@ -1750,7 +1760,7 @@ namespace ts {
      * @param host provides current directory and case sensitivity services
      */
     /** @internal */
-    export function convertToTSConfig(configParseResult: ParsedCommandLine, configFileName: string, host: { getCurrentDirectory(): string, useCaseSensitiveFileNames: boolean }): object {
+    export function convertToTSConfig(configParseResult: ParsedCommandLine, configFileName: string, host: { getCurrentDirectory(): string, useCaseSensitiveFileNames: boolean }): TSConfig {
         const getCanonicalFileName = createGetCanonicalFileName(host.useCaseSensitiveFileNames);
         const files = map(
             filter(
@@ -1778,13 +1788,13 @@ namespace ts {
                 build: undefined,
                 version: undefined,
             },
-            references: map(configParseResult.projectReferences, r => ({ ...r, path: r.originalPath, originalPath: undefined })),
+            references: map(configParseResult.projectReferences, r => ({ ...r, path: r.originalPath ? r.originalPath : "", originalPath: undefined })),
             files: length(files) ? files : undefined,
             ...(configParseResult.configFileSpecs ? {
                 include: filterSameAsDefaultInclude(configParseResult.configFileSpecs.validatedIncludeSpecs),
                 exclude: configParseResult.configFileSpecs.validatedExcludeSpecs
             } : {}),
-            compilerOnSave: !!configParseResult.compileOnSave ? true : undefined
+            compileOnSave: !!configParseResult.compileOnSave ? true : undefined
         };
         return config;
     }

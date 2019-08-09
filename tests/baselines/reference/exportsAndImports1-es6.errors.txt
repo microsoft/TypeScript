@@ -1,0 +1,40 @@
+tests/cases/conformance/es6/modules/t1.ts(23,25): error TS2475: 'const' enums can only be used in property or index access expressions or the right hand side of an import declaration or export assignment or type query.
+tests/cases/conformance/es6/modules/t3.ts(2,25): error TS2475: 'const' enums can only be used in property or index access expressions or the right hand side of an import declaration or export assignment or type query.
+
+
+==== tests/cases/conformance/es6/modules/t1.ts (1 errors) ====
+    var v = 1;
+    function f() { }
+    class C {
+    }
+    interface I {
+    }
+    enum E {
+        A, B, C
+    }
+    const enum D {
+        A, B, C
+    }
+    module M {
+        export var x;
+    }
+    module N {
+        export interface I {
+        }
+    }
+    type T = number;
+    import a = M.x;
+    
+    export { v, f, C, I, E, D, M, N, T, a };
+                            ~
+!!! error TS2475: 'const' enums can only be used in property or index access expressions or the right hand side of an import declaration or export assignment or type query.
+    
+==== tests/cases/conformance/es6/modules/t2.ts (0 errors) ====
+    export { v, f, C, I, E, D, M, N, T, a } from "./t1";
+    
+==== tests/cases/conformance/es6/modules/t3.ts (1 errors) ====
+    import { v, f, C, I, E, D, M, N, T, a } from "./t1";
+    export { v, f, C, I, E, D, M, N, T, a };
+                            ~
+!!! error TS2475: 'const' enums can only be used in property or index access expressions or the right hand side of an import declaration or export assignment or type query.
+    

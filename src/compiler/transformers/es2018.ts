@@ -22,6 +22,7 @@ namespace ts {
         const previousOnSubstituteNode = context.onSubstituteNode;
         context.onSubstituteNode = onSubstituteNode;
 
+        let exportedVariableStatement = false;
         let enabledSubstitutions: ESNextSubstitutionFlags;
         let enclosingFunctionFlags: FunctionFlags;
         let enclosingSuperContainerFlags: NodeCheckFlags = 0;
@@ -40,6 +41,7 @@ namespace ts {
                 return node;
             }
 
+            exportedVariableStatement = false;
             const visited = visitEachChild(node, visitor, context);
             addEmitHelpers(visited, context.readEmitHelpers());
             return visited;
@@ -79,6 +81,8 @@ namespace ts {
                     return visitBinaryExpression(node as BinaryExpression, noDestructuringValue);
                 case SyntaxKind.CatchClause:
                     return visitCatchClause(node as CatchClause);
+                case SyntaxKind.VariableStatement:
+                    return visitVariableStatement(node as VariableStatement);
                 case SyntaxKind.VariableDeclaration:
                     return visitVariableDeclaration(node as VariableDeclaration);
                 case SyntaxKind.ForOfStatement:
@@ -321,19 +325,43 @@ namespace ts {
             return visitEachChild(node, visitor, context);
         }
 
+        function visitVariableStatement(node: VariableStatement): VisitResult<VariableStatement> {
+            if (hasModifier(node, ModifierFlags.Export)) {
+                const savedExportedVariableStatement = exportedVariableStatement;
+                exportedVariableStatement = true;
+                const visited = visitEachChild(node, visitor, context);
+                exportedVariableStatement = savedExportedVariableStatement;
+                return visited;
+            }
+            return visitEachChild(node, visitor, context);
+        }
+
         /**
          * Visits a VariableDeclaration node with a binding pattern.
          *
          * @param node A VariableDeclaration node.
          */
         function visitVariableDeclaration(node: VariableDeclaration): VisitResult<VariableDeclaration> {
+            if (exportedVariableStatement) {
+                const savedExportedVariableStatement = exportedVariableStatement;
+                exportedVariableStatement = false;
+                const visited = visitVariableDeclarationWorker(node, /*exportedVariableStatement*/ true);
+                exportedVariableStatement = savedExportedVariableStatement;
+                return visited;
+            }
+            return visitVariableDeclarationWorker(node, /*exportedVariableStatement*/ false);
+        }
+
+        function visitVariableDeclarationWorker(node: VariableDeclaration, exportedVariableStatement: boolean): VisitResult<VariableDeclaration> {
             // If we are here it is because the name contains a binding pattern with a rest somewhere in it.
             if (isBindingPattern(node.name) && node.name.transformFlags & TransformFlags.ContainsObjectRestOrSpread) {
                 return flattenDestructuringBinding(
                     node,
                     visitor,
                     context,
-                    FlattenLevel.ObjectRest
+                    FlattenLevel.ObjectRest,
+                    /*rval*/ undefined,
+                    exportedVariableStatement
                 );
             }
             return visitEachChild(node, visitor, context);

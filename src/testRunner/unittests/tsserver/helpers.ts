@@ -519,6 +519,8 @@ namespace ts.projectSystem {
         file: File;
         text: string;
         options?: SpanFromSubstringOptions;
+        contextText?: string;
+        contextOptions?: SpanFromSubstringOptions;
     }
     export function protocolFileSpanFromSubstring({ file, text, options }: DocumentSpanFromSubstring): protocol.FileSpan {
         return { file: file.path, ...protocolTextSpanFromSubstring(file.content, text, options) };
@@ -726,5 +728,19 @@ namespace ts.projectSystem {
             assert.strictEqual(events.length, index + 1, JSON.stringify(events));
             assert.strictEqual(outputs.length, index + 1, JSON.stringify(outputs));
         }
+    }
+
+    export interface MakeReferenceItem extends DocumentSpanFromSubstring {
+        isDefinition: boolean;
+        lineText: string;
+    }
+
+    export function makeReferenceItem({ isDefinition, lineText, ...rest }: MakeReferenceItem): protocol.ReferencesResponseItem {
+        return {
+            ...protocolFileSpanWithContextFromSubstring(rest),
+            isDefinition,
+            isWriteAccess: isDefinition,
+            lineText,
+        };
     }
 }
