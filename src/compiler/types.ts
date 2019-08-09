@@ -2578,7 +2578,7 @@ namespace ts {
 
     export interface FlowNodeBase {
         flags: FlowFlags;
-        id: number | undefined;     // Node id used by flow type cache in checker
+        id?: number;     // Node id used by flow type cache in checker
     }
 
     export interface FlowLock {
