@@ -935,7 +935,6 @@ namespace ts {
 }
 
 /* @internal */
-// eslint-disable-next-line no-redeclare
 namespace ts {
     function reduceNode<T>(node: Node | undefined, f: (memo: T, node: Node) => T, initial: T) {
         return node ? f(initial, node) : initial;

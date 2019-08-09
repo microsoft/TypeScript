@@ -438,7 +438,6 @@ namespace ts {
     }
 }
 
-// eslint-disable-next-line no-redeclare
 namespace ts {
     export interface ReadBuildProgramHost {
         useCaseSensitiveFileNames(): boolean;

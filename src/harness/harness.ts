@@ -608,7 +608,6 @@ if (Harness.IO.tryEnableSourceMapsForHost && /^development$/i.test(Harness.IO.ge
     Harness.IO.tryEnableSourceMapsForHost();
 }
 
-// eslint-disable-next-line no-redeclare
 namespace Harness {
     export const libFolder = "built/local/";
     const tcServicesFileName = ts.combinePaths(libFolder, "typescriptServices.js");

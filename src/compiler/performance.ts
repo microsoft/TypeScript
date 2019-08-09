@@ -7,7 +7,6 @@ namespace ts {
 
 /*@internal*/
 /** Performance measurements for the compiler. */
-// eslint-disable-next-line no-redeclare
 namespace ts.performance {
     declare const onProfilerEvent: { (markName: string): void; profiler: boolean; };
 

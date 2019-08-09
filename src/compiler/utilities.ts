@@ -12,7 +12,6 @@ namespace ts {
 }
 
 /* @internal */
-// eslint-disable-next-line no-redeclare
 namespace ts {
     export const resolvingEmptyArray: never[] = [] as never[];
     export const emptyMap = createMap<never>() as ReadonlyMap<never> & ReadonlyPragmaMap;
@@ -4667,7 +4666,6 @@ namespace ts {
     }
 }
 
-// eslint-disable-next-line no-redeclare
 namespace ts {
     export function getDefaultLibFileName(options: CompilerOptions): string {
         switch (options.target) {
@@ -5449,7 +5447,6 @@ namespace ts {
 }
 
 // Simple node tests of the form `node.kind === SyntaxKind.Foo`.
-// eslint-disable-next-line no-redeclare
 namespace ts {
     // Literals
     export function isNumericLiteral(node: Node): node is NumericLiteral {
@@ -6192,7 +6189,6 @@ namespace ts {
 //
 // All node tests in the following list should *not* reference parent pointers so that
 // they may be used with transformations.
-// eslint-disable-next-line no-redeclare
 namespace ts {
     /* @internal */
     export function isSyntaxList(n: Node): n is SyntaxList {
@@ -7036,7 +7032,6 @@ namespace ts {
 }
 
 /* @internal */
-// eslint-disable-next-line no-redeclare
 namespace ts {
     export function isNamedImportsOrExports(node: Node): node is NamedImportsOrExports {
         return node.kind === SyntaxKind.NamedImports || node.kind === SyntaxKind.NamedExports;
@@ -7664,7 +7659,6 @@ namespace ts {
 }
 
 /* @internal */
-// eslint-disable-next-line no-redeclare
 namespace ts {
     export function getPathComponentsRelativeTo(from: string, to: string, stringEqualityComparer: (a: string, b: string) => boolean, getCanonicalFileName: GetCanonicalFileName) {
         const fromComponents = reducePathComponents(getPathComponents(from));

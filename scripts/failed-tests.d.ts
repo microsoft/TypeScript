@@ -12,7 +12,6 @@ declare class FailedTestsReporter extends Mocha.reporters.Base {
     done(failures: number, fn?: (failures: number) => void): void;
 }
 
-// eslint-disable-next-line no-redeclare
 declare namespace FailedTestsReporter {
     interface ReporterOptions {
         file?: string;

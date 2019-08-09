@@ -1439,7 +1439,6 @@ namespace ts {
 
 // Display-part writer helpers
 /* @internal */
-// eslint-disable-next-line no-redeclare
 namespace ts {
     export function isFirstDeclarationOfSymbolParameter(symbol: Symbol) {
         return symbol.declarations && symbol.declarations.length > 0 && symbol.declarations[0].kind === SyntaxKind.Parameter;

@@ -122,7 +122,6 @@ namespace ts.server {
 }
 
 /* @internal */
-// eslint-disable-next-line no-redeclare
 namespace ts.server {
     export class ThrottledOperations {
         private readonly pendingTimeouts: Map<any> = createMap<any>();
@@ -224,7 +223,6 @@ namespace ts.server {
 }
 
 /* @internal */
-// eslint-disable-next-line no-redeclare
 namespace ts {
     // Additional tsserver specific watch information
     export const enum WatchType {

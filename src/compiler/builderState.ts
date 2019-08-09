@@ -13,7 +13,6 @@ namespace ts {
 }
 
 /* @internal */
-// eslint-disable-next-line no-redeclare
 namespace ts {
     export function getFileEmitOutput(program: Program, sourceFile: SourceFile, emitOnlyDtsFiles: boolean,
         cancellationToken?: CancellationToken, customTransformers?: CustomTransformers): EmitOutput {
@@ -82,7 +81,6 @@ namespace ts {
 }
 
 /* @internal */
-// eslint-disable-next-line no-redeclare
 namespace ts.BuilderState {
     /**
      * Information about the source file: Its version and optional signature from last emit
