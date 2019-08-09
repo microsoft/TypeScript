@@ -6,16 +6,16 @@ interface Author {
     displayNames: string[];
     preferredName?: string;
     emails: string[];
-};
+}
 
 interface AuthorMap {
     [s: string]: Author
-};
+}
 
 interface Command {
     (...arg: string[]): void;
     description?: string;
-};
+}
 
 const mailMapPath = path.resolve(__dirname, "../.mailmap");
 const authorsPath = path.resolve(__dirname, "../AUTHORS.md");
