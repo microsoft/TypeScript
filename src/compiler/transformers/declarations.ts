@@ -406,7 +406,7 @@ namespace ts {
                 p.dotDotDotToken,
                 filterBindingPatternInitializers(p.name),
                 resolver.isOptionalParameter(p) ? (p.questionToken || createToken(SyntaxKind.QuestionToken)) : undefined,
-                type || ensureType(p, p.type, /*ignorePrivate*/ true), // Ignore private param props, since this type is going straight back into a param
+                ensureType(p, type || p.type, /*ignorePrivate*/ true), // Ignore private param props, since this type is going straight back into a param
                 ensureNoInitializer(p)
             );
             if (!suppressNewDiagnosticContexts) {
