@@ -3678,8 +3678,8 @@ namespace ts {
         ParameterExcludes = Value,
         PropertyExcludes = None,
         EnumMemberExcludes = Value | Type,
-        FunctionExcludes = Value & ~(Function | ValueModule),
-        ClassExcludes = (Value | Type) & ~(ValueModule | Interface), // class-interface mergability done in checker.ts
+        FunctionExcludes = Value & ~(Function | ValueModule | Class),
+        ClassExcludes = (Value | Type) & ~(ValueModule | Interface | Function), // class-interface mergability done in checker.ts
         InterfaceExcludes = Type & ~(Interface | Class),
         RegularEnumExcludes = (Value | Type) & ~(RegularEnum | ValueModule), // regular enums merge only with regular enums and modules
         ConstEnumExcludes = (Value | Type) & ~ConstEnum, // const enums merge only with const enums

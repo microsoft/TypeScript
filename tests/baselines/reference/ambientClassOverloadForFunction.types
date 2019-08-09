@@ -3,6 +3,6 @@ declare class foo{};
 >foo : foo
 
 function foo() { return null; }
->foo : () => any
+>foo : typeof foo
 >null : null
 

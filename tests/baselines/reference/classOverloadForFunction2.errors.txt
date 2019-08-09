@@ -7,8 +7,10 @@ tests/cases/compiler/classOverloadForFunction2.ts(2,7): error TS2300: Duplicate 
     function bar(): string;
              ~~~
 !!! error TS2300: Duplicate identifier 'bar'.
+!!! related TS6203 tests/cases/compiler/classOverloadForFunction2.ts:2:7: 'bar' was also declared here.
              ~~~
 !!! error TS2391: Function implementation is missing or not immediately following the declaration.
     class bar {}
           ~~~
 !!! error TS2300: Duplicate identifier 'bar'.
+!!! related TS6203 tests/cases/compiler/classOverloadForFunction2.ts:1:10: 'bar' was also declared here.

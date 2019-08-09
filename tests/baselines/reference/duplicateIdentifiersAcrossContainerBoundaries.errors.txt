@@ -16,11 +16,13 @@ tests/cases/compiler/duplicateIdentifiersAcrossContainerBoundaries.ts(41,16): er
         export function f() { }
                         ~
 !!! error TS2300: Duplicate identifier 'f'.
+!!! related TS6203 tests/cases/compiler/duplicateIdentifiersAcrossContainerBoundaries.ts:12:18: 'f' was also declared here.
     }
     module M {
         export class f { } // error
                      ~
 !!! error TS2300: Duplicate identifier 'f'.
+!!! related TS6203 tests/cases/compiler/duplicateIdentifiersAcrossContainerBoundaries.ts:9:21: 'f' was also declared here.
     }
     
     module M {
