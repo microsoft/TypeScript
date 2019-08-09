@@ -2434,9 +2434,16 @@ namespace ts {
             const moduleSpecifier = parseOptionalToken(SyntaxKind.ModuleKeyword);
             if (moduleSpecifier) {
                 const moduleTag = createNode(SyntaxKind.JSDocNamepathType, moduleSpecifier.pos) as JSDocNamepathType;
-                const terminators = [SyntaxKind.CloseBraceToken, SyntaxKind.EndOfFileToken, SyntaxKind.CommaToken, SyntaxKind.CloseParenToken, SyntaxKind.WhitespaceTrivia];
-                while (terminators.indexOf(token()) < 0) {
-                    nextTokenJSDoc();
+                terminate: while (true) {
+                    switch (token()) {
+                        case SyntaxKind.CloseBraceToken:
+                        case SyntaxKind.EndOfFileToken:
+                        case SyntaxKind.CommaToken:
+                        case SyntaxKind.WhitespaceTrivia:
+                            break terminate;
+                        default:
+                            nextTokenJSDoc();
+                    }
                 }
 
                 scanner.setInJSDocType(false);
