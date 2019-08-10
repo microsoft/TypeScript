@@ -1,5 +1,7 @@
-const runners: RunnerBase[] = [];
-const iterations = 1;
+/* eslint-disable prefer-const */
+let runners: RunnerBase[] = [];
+let iterations = 1;
+/* eslint-enable prefer-const */
 
 function runTests(runners: RunnerBase[]) {
     for (let i = iterations; i > 0; i--) {
