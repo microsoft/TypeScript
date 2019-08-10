@@ -3176,7 +3176,7 @@ namespace ts {
     function createGeneratorHelper(context: TransformationContext, body: FunctionExpression) {
         context.requestEmitHelper(generatorHelper);
         return createCall(
-            getHelperName("__generator"),
+            getUnscopedHelperName("__generator"),
             /*typeArguments*/ undefined,
             [createThis(), body]);
     }
@@ -3242,6 +3242,7 @@ namespace ts {
     // For examples of how these are used, see the comments in ./transformers/generators.ts
     export const generatorHelper: UnscopedEmitHelper = {
         name: "typescript:generator",
+        importName: "__generator",
         scoped: false,
         priority: 6,
         text: `

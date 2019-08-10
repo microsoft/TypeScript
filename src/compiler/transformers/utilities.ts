@@ -70,7 +70,8 @@ namespace ts {
         let hasExportDefault = false;
         let exportEquals: ExportAssignment | undefined;
         let hasExportStarsToExportValues = false;
-        let hasImportStarOrImportDefault = false;
+        let hasImportStar = false;
+        let hasImportDefault = false;
 
         for (const node of sourceFile.statements) {
             switch (node.kind) {
@@ -80,7 +81,12 @@ namespace ts {
                     // import * as x from "mod"
                     // import { x, y } from "mod"
                     externalImports.push(<ImportDeclaration>node);
-                    hasImportStarOrImportDefault = hasImportStarOrImportDefault || getImportNeedsImportStarHelper(<ImportDeclaration>node) || getImportNeedsImportDefaultHelper(<ImportDeclaration>node);
+                    if (!hasImportStar && getImportNeedsImportStarHelper(<ImportDeclaration>node)) {
+                        hasImportStar = true;
+                    }
+                    if (!hasImportDefault && getImportNeedsImportDefaultHelper(<ImportDeclaration>node)) {
+                        hasImportDefault = true;
+                    }
                     break;
 
                 case SyntaxKind.ImportEqualsDeclaration:
@@ -183,15 +189,8 @@ namespace ts {
             }
         }
 
-        const externalHelpersModuleName = getOrCreateExternalHelpersModuleNameIfNeeded(sourceFile, compilerOptions, hasExportStarsToExportValues, hasImportStarOrImportDefault);
-        const externalHelpersImportDeclaration = externalHelpersModuleName && createImportDeclaration(
-            /*decorators*/ undefined,
-            /*modifiers*/ undefined,
-            createImportClause(/*name*/ undefined, createNamespaceImport(externalHelpersModuleName)),
-            createLiteral(externalHelpersModuleNameText));
-
+        const externalHelpersImportDeclaration = createExternalHelpersImportDeclarationIfNeeded(sourceFile, compilerOptions, hasExportStarsToExportValues, hasImportStar, hasImportDefault);
         if (externalHelpersImportDeclaration) {
-            addEmitFlags(externalHelpersImportDeclaration, EmitFlags.NeverApplyImportHelper);
             externalImports.unshift(externalHelpersImportDeclaration);
         }
 

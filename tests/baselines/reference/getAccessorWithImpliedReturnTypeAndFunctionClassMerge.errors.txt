@@ -1,27 +1,11 @@
-tests/cases/compiler/getAccessorWithImpliedReturnTypeAndFunctionClassMerge.ts(1,18): error TS2300: Duplicate identifier '_'.
-tests/cases/compiler/getAccessorWithImpliedReturnTypeAndFunctionClassMerge.ts(1,41): error TS2709: Cannot use namespace '_' as a type.
-tests/cases/compiler/getAccessorWithImpliedReturnTypeAndFunctionClassMerge.ts(2,18): error TS2300: Duplicate identifier '_'.
-tests/cases/compiler/getAccessorWithImpliedReturnTypeAndFunctionClassMerge.ts(2,34): error TS2709: Cannot use namespace '_' as a type.
-tests/cases/compiler/getAccessorWithImpliedReturnTypeAndFunctionClassMerge.ts(4,16): error TS2300: Duplicate identifier '_'.
-tests/cases/compiler/getAccessorWithImpliedReturnTypeAndFunctionClassMerge.ts(15,15): error TS2300: Duplicate identifier '_'.
 tests/cases/compiler/getAccessorWithImpliedReturnTypeAndFunctionClassMerge.ts(21,20): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
 
 
-==== tests/cases/compiler/getAccessorWithImpliedReturnTypeAndFunctionClassMerge.ts (7 errors) ====
+==== tests/cases/compiler/getAccessorWithImpliedReturnTypeAndFunctionClassMerge.ts (1 errors) ====
     declare function _<T>(value: Array<T>): _<T>;
-                     ~
-!!! error TS2300: Duplicate identifier '_'.
-                                            ~
-!!! error TS2709: Cannot use namespace '_' as a type.
     declare function _<T>(value: T): _<T>;
-                     ~
-!!! error TS2300: Duplicate identifier '_'.
-                                     ~
-!!! error TS2709: Cannot use namespace '_' as a type.
     
     declare module _ {
-                   ~
-!!! error TS2300: Duplicate identifier '_'.
         export function each<T>(
             //list: List<T>,
             //iterator: ListIterator<T, void>,
@@ -33,8 +17,6 @@ tests/cases/compiler/getAccessorWithImpliedReturnTypeAndFunctionClassMerge.ts(21
     }
     
     declare class _<T> {
-                  ~
-!!! error TS2300: Duplicate identifier '_'.
         each(iterator: _.ListIterator<T, void>, context?: any): void;
     }
     

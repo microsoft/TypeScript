@@ -3,5 +3,5 @@ class foo { };
 >foo : foo
 
 function foo() {}
->foo : () => void
+>foo : typeof foo
 

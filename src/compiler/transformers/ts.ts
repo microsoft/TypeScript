@@ -3282,7 +3282,7 @@ namespace ts {
         context.requestEmitHelper(decorateHelper);
         return setTextRange(
             createCall(
-                getHelperName("__decorate"),
+                getUnscopedHelperName("__decorate"),
                 /*typeArguments*/ undefined,
                 argumentsArray
             ),
@@ -3292,6 +3292,7 @@ namespace ts {
 
     export const decorateHelper: UnscopedEmitHelper = {
         name: "typescript:decorate",
+        importName: "__decorate",
         scoped: false,
         priority: 2,
         text: `
@@ -3306,7 +3307,7 @@ namespace ts {
     function createMetadataHelper(context: TransformationContext, metadataKey: string, metadataValue: Expression) {
         context.requestEmitHelper(metadataHelper);
         return createCall(
-            getHelperName("__metadata"),
+            getUnscopedHelperName("__metadata"),
             /*typeArguments*/ undefined,
             [
                 createLiteral(metadataKey),
@@ -3317,6 +3318,7 @@ namespace ts {
 
     export const metadataHelper: UnscopedEmitHelper = {
         name: "typescript:metadata",
+        importName: "__metadata",
         scoped: false,
         priority: 3,
         text: `
@@ -3329,7 +3331,7 @@ namespace ts {
         context.requestEmitHelper(paramHelper);
         return setTextRange(
             createCall(
-                getHelperName("__param"),
+                getUnscopedHelperName("__param"),
                 /*typeArguments*/ undefined,
                 [
                     createLiteral(parameterOffset),
@@ -3342,6 +3344,7 @@ namespace ts {
 
     export const paramHelper: UnscopedEmitHelper = {
         name: "typescript:param",
+        importName: "__param",
         scoped: false,
         priority: 4,
         text: `

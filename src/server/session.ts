@@ -689,7 +689,7 @@ namespace ts.server {
             this.logErrorWorker(err, cmd);
         }
 
-        private logErrorWorker(err: Error, cmd: string, fileRequest?: protocol.FileRequestArgs): void {
+        private logErrorWorker(err: Error & PossibleProgramFileInfo, cmd: string, fileRequest?: protocol.FileRequestArgs): void {
             let msg = "Exception on executing command " + cmd;
             if (err.message) {
                 msg += ":\n" + indent(err.message);
@@ -711,7 +711,9 @@ namespace ts.server {
                     catch { } // tslint:disable-line no-empty
                 }
 
-                if (err.message && err.message.indexOf(`Could not find sourceFile:`) !== -1) {
+
+                if (err.ProgramFiles) {
+                    msg += `\n\nProgram files: ${JSON.stringify(err.ProgramFiles)}\n`;
                     msg += `\n\nProjects::\n`;
                     let counter = 0;
                     const addProjectInfo = (project: Project) => {

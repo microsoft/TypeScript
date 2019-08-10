@@ -6,7 +6,9 @@ tests/cases/compiler/classOverloadForFunction.ts(2,10): error TS2300: Duplicate 
     class foo { };
           ~~~
 !!! error TS2300: Duplicate identifier 'foo'.
+!!! related TS6203 tests/cases/compiler/classOverloadForFunction.ts:2:10: 'foo' was also declared here.
     function foo() {}
              ~~~
 !!! error TS2300: Duplicate identifier 'foo'.
+!!! related TS6203 tests/cases/compiler/classOverloadForFunction.ts:1:7: 'foo' was also declared here.
     

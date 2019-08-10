@@ -1,11 +1,11 @@
 === tests/cases/conformance/es6/modules/m1.ts ===
 export default class foo {
->foo : import("tests/cases/conformance/es6/modules/m1").default
+>foo : bar
 
 }
 
 export default function bar() {
->bar : () => void
+>bar : typeof bar
 
 }
 
@@ -18,9 +18,9 @@ export default x;
 
 === tests/cases/conformance/es6/modules/m2.ts ===
 import Entity from "./m1"
->Entity : () => void
+>Entity : typeof Entity
 
 Entity();
 >Entity() : void
->Entity : () => void
+>Entity : typeof Entity
 

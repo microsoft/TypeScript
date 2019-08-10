@@ -375,29 +375,30 @@ declare namespace ts {
         JSDocOptionalType = 295,
         JSDocFunctionType = 296,
         JSDocVariadicType = 297,
-        JSDocComment = 298,
-        JSDocTypeLiteral = 299,
-        JSDocSignature = 300,
-        JSDocTag = 301,
-        JSDocAugmentsTag = 302,
-        JSDocAuthorTag = 303,
-        JSDocClassTag = 304,
-        JSDocCallbackTag = 305,
-        JSDocEnumTag = 306,
-        JSDocParameterTag = 307,
-        JSDocReturnTag = 308,
-        JSDocThisTag = 309,
-        JSDocTypeTag = 310,
-        JSDocTemplateTag = 311,
-        JSDocTypedefTag = 312,
-        JSDocPropertyTag = 313,
-        SyntaxList = 314,
-        NotEmittedStatement = 315,
-        PartiallyEmittedExpression = 316,
-        CommaListExpression = 317,
-        MergeDeclarationMarker = 318,
-        EndOfDeclarationMarker = 319,
-        Count = 320,
+        JSDocNamepathType = 298,
+        JSDocComment = 299,
+        JSDocTypeLiteral = 300,
+        JSDocSignature = 301,
+        JSDocTag = 302,
+        JSDocAugmentsTag = 303,
+        JSDocAuthorTag = 304,
+        JSDocClassTag = 305,
+        JSDocCallbackTag = 306,
+        JSDocEnumTag = 307,
+        JSDocParameterTag = 308,
+        JSDocReturnTag = 309,
+        JSDocThisTag = 310,
+        JSDocTypeTag = 311,
+        JSDocTemplateTag = 312,
+        JSDocTypedefTag = 313,
+        JSDocPropertyTag = 314,
+        SyntaxList = 315,
+        NotEmittedStatement = 316,
+        PartiallyEmittedExpression = 317,
+        CommaListExpression = 318,
+        MergeDeclarationMarker = 319,
+        EndOfDeclarationMarker = 320,
+        Count = 321,
         FirstAssignment = 60,
         LastAssignment = 72,
         FirstCompoundAssignment = 61,
@@ -424,9 +425,9 @@ declare namespace ts {
         LastBinaryOperator = 72,
         FirstNode = 150,
         FirstJSDocNode = 290,
-        LastJSDocNode = 313,
-        FirstJSDocTagNode = 301,
-        LastJSDocTagNode = 313,
+        LastJSDocNode = 314,
+        FirstJSDocTagNode = 302,
+        LastJSDocTagNode = 314,
     }
     export enum NodeFlags {
         None = 0,
@@ -1561,6 +1562,10 @@ declare namespace ts {
         kind: SyntaxKind.JSDocVariadicType;
         type: TypeNode;
     }
+    export interface JSDocNamepathType extends JSDocType {
+        kind: SyntaxKind.JSDocNamepathType;
+        type: TypeNode;
+    }
     export type JSDocTypeReferencingNode = JSDocVariadicType | JSDocOptionalType | JSDocNullableType | JSDocNonNullableType;
     export interface JSDoc extends Node {
         kind: SyntaxKind.JSDocComment;
@@ -2152,8 +2157,8 @@ declare namespace ts {
         ParameterExcludes = 111551,
         PropertyExcludes = 0,
         EnumMemberExcludes = 900095,
-        FunctionExcludes = 111023,
-        ClassExcludes = 899519,
+        FunctionExcludes = 110991,
+        ClassExcludes = 899503,
         InterfaceExcludes = 788872,
         RegularEnumExcludes = 899327,
         ConstEnumExcludes = 899967,
@@ -5686,6 +5691,7 @@ declare namespace ts {
     }
 }
 declare namespace ts {
+    /** The classifier is used for syntactic highlighting in editors via the TSServer */
     function createClassifier(): Classifier;
 }
 declare namespace ts {

@@ -26,7 +26,15 @@ namespace ts {
     export function transpileModule(input: string, transpileOptions: TranspileOptions): TranspileOutput {
         const diagnostics: Diagnostic[] = [];
 
-        const options: CompilerOptions = transpileOptions.compilerOptions ? fixupCompilerOptions(transpileOptions.compilerOptions, diagnostics) : getDefaultCompilerOptions();
+        const options: CompilerOptions = transpileOptions.compilerOptions ? fixupCompilerOptions(transpileOptions.compilerOptions, diagnostics) : {};
+
+        // mix in default options
+        const defaultOptions = getDefaultCompilerOptions();
+        for (const key in defaultOptions) {
+            if (hasProperty(defaultOptions, key) && options[key] === undefined) {
+                options[key] = defaultOptions[key];
+            }
+        }
 
         options.isolatedModules = true;
 
