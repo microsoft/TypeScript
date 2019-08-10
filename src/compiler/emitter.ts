@@ -2693,7 +2693,7 @@ namespace ts {
             writeKeyword("function");
             emit(node.asteriskToken);
             writeSpace();
-            emitIdentifierName(node.name); // TODO: GH#18217
+            emitIdentifierName(node.name);
             emitSignatureAndBody(node, emitSignatureHead);
         }
 

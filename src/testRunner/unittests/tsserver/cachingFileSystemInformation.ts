@@ -388,7 +388,7 @@ namespace ts.projectSystem {
                 const projectService = createProjectService(host);
                 const canonicalConfigPath = toCanonical(tsconfigFile.path);
                 const { configFileName } = projectService.openClientFile(file1.path);
-                assert.equal(configFileName, tsconfigFile.path as server.NormalizedPath, `should find config`); // TODO: GH#18217
+                assert.equal(configFileName, tsconfigFile.path as server.NormalizedPath, `should find config`);
                 checkNumberOfConfiguredProjects(projectService, 1);
                 const watchingRecursiveDirectories = [`${canonicalFrontendDir}/src`, `${canonicalFrontendDir}/types`, `${canonicalFrontendDir}/node_modules`].concat(getNodeModuleDirectories(getDirectoryPath(canonicalFrontendDir)));
 
