@@ -1,0 +1,97 @@
+=== tests/cases/compiler/truthinessCallExpressionCoercion.ts ===
+function func() { return Math.random() > 0.5; }
+>func : Symbol(func, Decl(truthinessCallExpressionCoercion.ts, 0, 0))
+>Math.random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
+>Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
+
+if (func) { // error
+>func : Symbol(func, Decl(truthinessCallExpressionCoercion.ts, 0, 0))
+}
+
+function onlyErrorsWhenNonNullable(required: () => boolean, optional?: () => boolean) {
+>onlyErrorsWhenNonNullable : Symbol(onlyErrorsWhenNonNullable, Decl(truthinessCallExpressionCoercion.ts, 3, 1))
+>required : Symbol(required, Decl(truthinessCallExpressionCoercion.ts, 5, 35))
+>optional : Symbol(optional, Decl(truthinessCallExpressionCoercion.ts, 5, 59))
+
+    if (required) { // error
+>required : Symbol(required, Decl(truthinessCallExpressionCoercion.ts, 5, 35))
+    }
+
+    if (required()) { // ok
+>required : Symbol(required, Decl(truthinessCallExpressionCoercion.ts, 5, 35))
+    }
+
+    if (optional) { // ok
+>optional : Symbol(optional, Decl(truthinessCallExpressionCoercion.ts, 5, 59))
+    }
+}
+
+function checksPropertyAndElementAccess() {
+>checksPropertyAndElementAccess : Symbol(checksPropertyAndElementAccess, Decl(truthinessCallExpressionCoercion.ts, 14, 1))
+
+    const x = {
+>x : Symbol(x, Decl(truthinessCallExpressionCoercion.ts, 17, 9))
+
+        foo: {
+>foo : Symbol(foo, Decl(truthinessCallExpressionCoercion.ts, 17, 15))
+
+            bar() { }
+>bar : Symbol(bar, Decl(truthinessCallExpressionCoercion.ts, 18, 14))
+        }
+    }
+
+    if (x.foo.bar) { // error
+>x.foo.bar : Symbol(bar, Decl(truthinessCallExpressionCoercion.ts, 18, 14))
+>x.foo : Symbol(foo, Decl(truthinessCallExpressionCoercion.ts, 17, 15))
+>x : Symbol(x, Decl(truthinessCallExpressionCoercion.ts, 17, 9))
+>foo : Symbol(foo, Decl(truthinessCallExpressionCoercion.ts, 17, 15))
+>bar : Symbol(bar, Decl(truthinessCallExpressionCoercion.ts, 18, 14))
+    }
+    
+    if (x.foo['bar']) { // error
+>x.foo : Symbol(foo, Decl(truthinessCallExpressionCoercion.ts, 17, 15))
+>x : Symbol(x, Decl(truthinessCallExpressionCoercion.ts, 17, 9))
+>foo : Symbol(foo, Decl(truthinessCallExpressionCoercion.ts, 17, 15))
+>'bar' : Symbol(bar, Decl(truthinessCallExpressionCoercion.ts, 18, 14))
+    }
+}
+
+function maybeBoolean(param: boolean | (() => boolean)) {
+>maybeBoolean : Symbol(maybeBoolean, Decl(truthinessCallExpressionCoercion.ts, 28, 1))
+>param : Symbol(param, Decl(truthinessCallExpressionCoercion.ts, 30, 22))
+
+    if (param) { // ok
+>param : Symbol(param, Decl(truthinessCallExpressionCoercion.ts, 30, 22))
+    }
+}
+
+class Foo {
+>Foo : Symbol(Foo, Decl(truthinessCallExpressionCoercion.ts, 33, 1))
+
+    maybeIsUser?: () => boolean;
+>maybeIsUser : Symbol(Foo.maybeIsUser, Decl(truthinessCallExpressionCoercion.ts, 35, 11))
+
+    isUser() {
+>isUser : Symbol(Foo.isUser, Decl(truthinessCallExpressionCoercion.ts, 36, 32))
+
+        return true;
+    }
+
+    test() {
+>test : Symbol(Foo.test, Decl(truthinessCallExpressionCoercion.ts, 40, 5))
+
+        if (this.isUser) { // error
+>this.isUser : Symbol(Foo.isUser, Decl(truthinessCallExpressionCoercion.ts, 36, 32))
+>this : Symbol(Foo, Decl(truthinessCallExpressionCoercion.ts, 33, 1))
+>isUser : Symbol(Foo.isUser, Decl(truthinessCallExpressionCoercion.ts, 36, 32))
+        }
+
+        if (this.maybeIsUser) { // ok
+>this.maybeIsUser : Symbol(Foo.maybeIsUser, Decl(truthinessCallExpressionCoercion.ts, 35, 11))
+>this : Symbol(Foo, Decl(truthinessCallExpressionCoercion.ts, 33, 1))
+>maybeIsUser : Symbol(Foo.maybeIsUser, Decl(truthinessCallExpressionCoercion.ts, 35, 11))
+        }
+    }
+}
+
