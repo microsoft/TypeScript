@@ -1269,6 +1269,10 @@ namespace FourSlash {
 
         private verifySignatureHelpWorker(options: FourSlashInterface.VerifySignatureHelpOptions) {
             const help = this.getSignatureHelp({ triggerReason: options.triggerReason })!;
+            if (!help) {
+                this.raiseError("Could not get a help signature");
+            }
+
             const selectedItem = help.items[help.selectedItemIndex];
             // Argument index may exceed number of parameters
             const currentParameter = selectedItem.parameters[help.argumentIndex] as ts.SignatureHelpParameter | undefined;

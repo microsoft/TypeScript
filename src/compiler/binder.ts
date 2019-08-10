@@ -1842,7 +1842,8 @@ namespace ts {
                 node.originalKeywordKind! >= SyntaxKind.FirstFutureReservedWord &&
                 node.originalKeywordKind! <= SyntaxKind.LastFutureReservedWord &&
                 !isIdentifierName(node) &&
-                !(node.flags & NodeFlags.Ambient)) {
+                !(node.flags & NodeFlags.Ambient) &&
+                !(node.flags & NodeFlags.JSDoc)) {
 
                 // Report error only if there are no parse errors in file
                 if (!file.parseDiagnostics.length) {

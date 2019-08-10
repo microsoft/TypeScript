@@ -1,6 +1,6 @@
 /// <reference path="fourslash.ts" />
 
-//// declare class foo { };
+//// class foo { };
 //// function foo() { /**/ }
 
 goTo.marker();

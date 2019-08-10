@@ -1,27 +1,20 @@
-tests/cases/compiler/constructorOverloads4.ts(2,18): error TS2300: Duplicate identifier 'Function'.
-tests/cases/compiler/constructorOverloads4.ts(5,21): error TS2300: Duplicate identifier 'Function'.
-tests/cases/compiler/constructorOverloads4.ts(6,21): error TS2300: Duplicate identifier 'Function'.
-tests/cases/compiler/constructorOverloads4.ts(10,2): error TS2350: Only a void function can be called with the 'new' keyword.
+tests/cases/compiler/constructorOverloads4.ts(10,1): error TS2349: This expression is not callable.
+  Type 'Function' has no call signatures.
 
 
-==== tests/cases/compiler/constructorOverloads4.ts (4 errors) ====
+==== tests/cases/compiler/constructorOverloads4.ts (1 errors) ====
     declare module M {    
         export class Function {
-                     ~~~~~~~~
-!!! error TS2300: Duplicate identifier 'Function'.
             constructor(...args: string[]);
         }
         export function Function(...args: any[]): any;
-                        ~~~~~~~~
-!!! error TS2300: Duplicate identifier 'Function'.
         export function Function(...args: string[]): Function;
-                        ~~~~~~~~
-!!! error TS2300: Duplicate identifier 'Function'.
     }
     
     
     (new M.Function("return 5"))();
-     ~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2350: Only a void function can be called with the 'new' keyword.
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2349: This expression is not callable.
+!!! error TS2349:   Type 'Function' has no call signatures.
     M.Function("yo");
     

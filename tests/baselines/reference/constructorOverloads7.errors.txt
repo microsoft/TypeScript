@@ -1,25 +1,15 @@
-tests/cases/compiler/constructorOverloads7.ts(1,15): error TS2300: Duplicate identifier 'Point'.
-tests/cases/compiler/constructorOverloads7.ts(7,35): error TS2749: 'Point' refers to a value, but is being used as a type here.
-tests/cases/compiler/constructorOverloads7.ts(8,14): error TS2749: 'Point' refers to a value, but is being used as a type here.
-tests/cases/compiler/constructorOverloads7.ts(15,10): error TS2300: Duplicate identifier 'Point'.
 tests/cases/compiler/constructorOverloads7.ts(22,18): error TS2384: Overload signatures must all be ambient or non-ambient.
 
 
-==== tests/cases/compiler/constructorOverloads7.ts (5 errors) ====
+==== tests/cases/compiler/constructorOverloads7.ts (1 errors) ====
     declare class Point
-                  ~~~~~
-!!! error TS2300: Duplicate identifier 'Point'.
     {
         x: number;
         y: number;
         constructor(x: number, y: number);
     
          add(dx: number, dy: number): Point;
-                                      ~~~~~
-!!! error TS2749: 'Point' refers to a value, but is being used as a type here.
          origin: Point;
-                 ~~~~~
-!!! error TS2749: 'Point' refers to a value, but is being used as a type here.
     
     }
     
@@ -27,8 +17,6 @@ tests/cases/compiler/constructorOverloads7.ts(22,18): error TS2384: Overload sig
     // Because Point is a constructor function, this is inferred
     // to be Point and return type is inferred to be void
     function Point(x, y) {
-             ~~~~~
-!!! error TS2300: Duplicate identifier 'Point'.
         this.x = x;
         this.y = y;
     

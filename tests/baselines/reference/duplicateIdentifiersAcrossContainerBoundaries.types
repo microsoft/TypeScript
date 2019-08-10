@@ -13,7 +13,7 @@ module M {
 >M : typeof M
 
     export function f() { }
->f : () => void
+>f : typeof f
 }
 module M {
 >M : typeof M

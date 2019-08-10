@@ -40,16 +40,20 @@ tests/cases/compiler/augmentedTypesFunction.ts(21,6): error TS2567: Enum declara
     function y3() { } // error
              ~~
 !!! error TS2300: Duplicate identifier 'y3'.
+!!! related TS6203 tests/cases/compiler/augmentedTypesFunction.ts:14:7: 'y3' was also declared here.
     class y3 { } // error
           ~~
 !!! error TS2300: Duplicate identifier 'y3'.
+!!! related TS6203 tests/cases/compiler/augmentedTypesFunction.ts:13:10: 'y3' was also declared here.
     
     function y3a() { } // error
              ~~~
 !!! error TS2300: Duplicate identifier 'y3a'.
+!!! related TS6203 tests/cases/compiler/augmentedTypesFunction.ts:17:7: 'y3a' was also declared here.
     class y3a { public foo() { } } // error
           ~~~
 !!! error TS2300: Duplicate identifier 'y3a'.
+!!! related TS6203 tests/cases/compiler/augmentedTypesFunction.ts:16:10: 'y3a' was also declared here.
     
     // function then enum
     function y4() { } // error

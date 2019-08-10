@@ -393,7 +393,7 @@ namespace ts {
             }
         }
 
-        function ensureParameter(p: ParameterDeclaration, modifierMask?: ModifierFlags): ParameterDeclaration {
+        function ensureParameter(p: ParameterDeclaration, modifierMask?: ModifierFlags, type?: TypeNode): ParameterDeclaration {
             let oldDiag: typeof getSymbolAccessibilityDiagnostic | undefined;
             if (!suppressNewDiagnosticContexts) {
                 oldDiag = getSymbolAccessibilityDiagnostic;
@@ -406,7 +406,7 @@ namespace ts {
                 p.dotDotDotToken,
                 filterBindingPatternInitializers(p.name),
                 resolver.isOptionalParameter(p) ? (p.questionToken || createToken(SyntaxKind.QuestionToken)) : undefined,
-                ensureType(p, p.type, /*ignorePrivate*/ true), // Ignore private param props, since this type is going straight back into a param
+                ensureType(p, type || p.type, /*ignorePrivate*/ true), // Ignore private param props, since this type is going straight back into a param
                 ensureNoInitializer(p)
             );
             if (!suppressNewDiagnosticContexts) {
@@ -533,6 +533,36 @@ namespace ts {
                 return undefined!; // TODO: GH#18217
             }
             return createNodeArray(newParams, params.hasTrailingComma);
+        }
+
+        function updateAccessorParamsList(input: AccessorDeclaration, isPrivate: boolean) {
+            let newParams: ParameterDeclaration[] | undefined;
+            if (!isPrivate) {
+                const thisParameter = getThisParameter(input);
+                if (thisParameter) {
+                    newParams = [ensureParameter(thisParameter)];
+                }
+            }
+            if (isSetAccessorDeclaration(input)) {
+                let newValueParameter: ParameterDeclaration | undefined;
+                if (!isPrivate) {
+                    const valueParameter = getSetAccessorValueParameter(input);
+                    if (valueParameter) {
+                        const accessorType = getTypeAnnotationFromAllAccessorDeclarations(input, resolver.getAllAccessorDeclarations(input));
+                        newValueParameter = ensureParameter(valueParameter, /*modifierMask*/ undefined, accessorType);
+                    }
+                }
+                if (!newValueParameter) {
+                    newValueParameter = createParameter(
+                        /*decorators*/ undefined,
+                        /*modifiers*/ undefined,
+                        /*dotDotDotToken*/ undefined,
+                        "value"
+                    );
+                }
+                newParams = append(newParams, newValueParameter);
+            }
+            return createNodeArray(newParams || emptyArray) as NodeArray<ParameterDeclaration>;
         }
 
         function ensureTypeParams(node: Node, params: NodeArray<TypeParameterDeclaration> | undefined) {
@@ -811,10 +841,33 @@ namespace ts {
                         return cleanup(sig);
                     }
                     case SyntaxKind.GetAccessor: {
+                        // For now, only emit class accessors as accessors if they were already declared in an ambient context.
+                        if (input.flags & NodeFlags.Ambient) {
+                            const isPrivate = hasModifier(input, ModifierFlags.Private);
+                            const accessorType = getTypeAnnotationFromAllAccessorDeclarations(input, resolver.getAllAccessorDeclarations(input));
+                            return cleanup(updateGetAccessor(
+                                input,
+                                /*decorators*/ undefined,
+                                ensureModifiers(input),
+                                input.name,
+                                updateAccessorParamsList(input, isPrivate),
+                                !isPrivate ? ensureType(input, accessorType) : undefined,
+                                /*body*/ undefined));
+                        }
                         const newNode = ensureAccessor(input);
                         return cleanup(newNode);
                     }
                     case SyntaxKind.SetAccessor: {
+                        // For now, only emit class accessors as accessors if they were already declared in an ambient context.
+                        if (input.flags & NodeFlags.Ambient) {
+                            return cleanup(updateSetAccessor(
+                                input,
+                                /*decorators*/ undefined,
+                                ensureModifiers(input),
+                                input.name,
+                                updateAccessorParamsList(input, hasModifier(input, ModifierFlags.Private)),
+                                /*body*/ undefined));
+                        }
                         const newNode = ensureAccessor(input);
                         return cleanup(newNode);
                     }
@@ -1374,17 +1427,27 @@ namespace ts {
             return maskModifierFlags(node, mask, additions);
         }
 
+        function getTypeAnnotationFromAllAccessorDeclarations(node: AccessorDeclaration, accessors: AllAccessorDeclarations) {
+            let accessorType = getTypeAnnotationFromAccessor(node);
+            if (!accessorType && node !== accessors.firstAccessor) {
+                accessorType = getTypeAnnotationFromAccessor(accessors.firstAccessor);
+                // If we end up pulling the type from the second accessor, we also need to change the diagnostic context to get the expected error message
+                getSymbolAccessibilityDiagnostic = createGetSymbolAccessibilityDiagnosticForNode(accessors.firstAccessor);
+            }
+            if (!accessorType && accessors.secondAccessor && node !== accessors.secondAccessor) {
+                accessorType = getTypeAnnotationFromAccessor(accessors.secondAccessor);
+                // If we end up pulling the type from the second accessor, we also need to change the diagnostic context to get the expected error message
+                getSymbolAccessibilityDiagnostic = createGetSymbolAccessibilityDiagnosticForNode(accessors.secondAccessor);
+            }
+            return accessorType;
+        }
+
         function ensureAccessor(node: AccessorDeclaration): PropertyDeclaration | undefined {
             const accessors = resolver.getAllAccessorDeclarations(node);
             if (node.kind !== accessors.firstAccessor.kind) {
                 return;
             }
-            let accessorType = getTypeAnnotationFromAccessor(node);
-            if (!accessorType && accessors.secondAccessor) {
-                accessorType = getTypeAnnotationFromAccessor(accessors.secondAccessor);
-                // If we end up pulling the type from the second accessor, we also need to change the diagnostic context to get the expected error message
-                getSymbolAccessibilityDiagnostic = createGetSymbolAccessibilityDiagnosticForNode(accessors.secondAccessor);
-            }
+            const accessorType = getTypeAnnotationFromAllAccessorDeclarations(node, accessors);
             const prop = createProperty(/*decorators*/ undefined, maskModifiers(node, /*mask*/ undefined, (!accessors.setAccessor) ? ModifierFlags.Readonly : ModifierFlags.None), node.name, node.questionToken, ensureType(node, accessorType), /*initializer*/ undefined);
             const leadingsSyntheticCommentRanges = accessors.secondAccessor && getLeadingCommentRangesOfNode(accessors.secondAccessor, currentSourceFile);
             if (leadingsSyntheticCommentRanges) {

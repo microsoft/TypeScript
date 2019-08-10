@@ -1,7 +1,7 @@
 === tests/cases/conformance/externalModules/multipleExportDefault5.ts ===
 export default function bar() { }
->bar : () => void
+>bar : typeof bar
 
 export default class C {}
->C : import("tests/cases/conformance/externalModules/multipleExportDefault5").default
+>C : bar
 
