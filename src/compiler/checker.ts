@@ -16877,18 +16877,22 @@ namespace ts {
             }
         }
 
-        function isCallWithEffects(node: CallExpression) {
+        function getEffectsSignature(node: CallExpression) {
             const links = getNodeLinks(node);
-            if (links.isCallWithEffects === undefined) {
+            let signature = links.effectsSignature;
+            if (signature === undefined) {
                 // A call expression parented by an expression statement is a potential assertion. Other call
                 // expressions are potential type predicate function calls.
                 const funcType = node.parent.kind === SyntaxKind.ExpressionStatement ? getTypeOfDottedName(node.expression) :
                     node.expression.kind !== SyntaxKind.SuperKeyword ? checkNonNullExpression(node.expression) :
                     undefined;
-                const apparentType = funcType && getApparentType(funcType) || unknownType;
-                links.isCallWithEffects = some(getSignaturesOfType(apparentType, SignatureKind.Call), hasTypePredicateOrNeverReturnType);
+                const signatures = getSignaturesOfType(funcType && getApparentType(funcType) || unknownType, SignatureKind.Call);
+                const candidate = signatures.length === 1 && !signatures[0].typeParameters ? signatures[0] :
+                    some(signatures, hasTypePredicateOrNeverReturnType) ? getResolvedSignature(node) :
+                    undefined;
+                signature = links.effectsSignature = candidate && hasTypePredicateOrNeverReturnType(candidate) ? candidate : unknownSignature;
             }
-            return links.isCallWithEffects;
+            return signature === unknownSignature ? undefined : signature;
         }
 
         function hasTypePredicateOrNeverReturnType(signature: Signature) {
@@ -17110,8 +17114,8 @@ namespace ts {
             }
 
             function getTypeAtFlowCall(flow: FlowCall): FlowType | undefined {
-                if (isCallWithEffects(flow.node)) {
-                    const signature = getResolvedSignature(flow.node);
+                const signature = getEffectsSignature(flow.node);
+                if (signature) {
                     const predicate = getTypePredicateOfSignature(signature);
                     if (predicate && predicate.kind === TypePredicateKind.Assertion) {
                         const flowType = getTypeAtFlowNode(flow.antecedent);
@@ -17712,9 +17716,9 @@ namespace ts {
             }
 
             function narrowTypeByCallExpression(type: Type, callExpression: CallExpression, assumeTrue: boolean): Type {
-                if (hasMatchingArgument(callExpression, reference) && isCallWithEffects(callExpression)) {
-                    const signature = getResolvedSignature(callExpression);
-                    const predicate = getTypePredicateOfSignature(signature);
+                if (hasMatchingArgument(callExpression, reference)) {
+                    const signature = getEffectsSignature(callExpression);
+                    const predicate = signature && getTypePredicateOfSignature(signature);
                     if (predicate && predicate.kind !== TypePredicateKind.Assertion) {
                         return narrowTypeByTypePredicate(type, predicate, callExpression, assumeTrue);
                     }
@@ -23695,7 +23699,8 @@ namespace ts {
         }
 
         function isNeverFunctionCall(expr: Expression) {
-            return expr.kind === SyntaxKind.CallExpression && isCallWithEffects(<CallExpression>expr) && !!(getTypeOfExpression(expr).flags & TypeFlags.Never);
+            const signature = expr.kind === SyntaxKind.CallExpression && getEffectsSignature(<CallExpression>expr);
+            return !!(signature && getReturnTypeOfSignature(signature).flags & TypeFlags.Never);
         }
 
         function functionHasImplicitReturn(func: FunctionLikeDeclaration) {
