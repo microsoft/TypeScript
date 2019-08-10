@@ -27930,7 +27930,25 @@ namespace ts {
             // Grammar checking
             checkGrammarStatementInAmbientContext(node);
 
-            checkTruthinessExpression(node.expression);
+            const type = checkTruthinessExpression(node.expression);
+
+            if (strictNullChecks &&
+                (node.expression.kind === SyntaxKind.Identifier ||
+                node.expression.kind === SyntaxKind.PropertyAccessExpression ||
+                node.expression.kind === SyntaxKind.ElementAccessExpression)) {
+                const possiblyFalsy = !!getFalsyFlags(type);
+                if (!possiblyFalsy) {
+                    // While it technically should be invalid for any known-truthy value
+                    // to be tested, we de-scope to functions as a heuristic to identify
+                    // the most common bugs. There are too many false positives for values
+                    // sourced from type definitions without strictNullChecks otherwise.
+                    const callSignatures = getSignaturesOfType(type, SignatureKind.Call);
+                    if (callSignatures.length > 0) {
+                        error(node.expression, Diagnostics.This_condition_will_always_return_true_since_the_function_is_always_defined_Did_you_mean_to_call_it_instead);
+                    }
+                }
+            }
+
             checkSourceElement(node.thenStatement);
 
             if (node.thenStatement.kind === SyntaxKind.EmptyStatement) {
