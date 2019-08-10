@@ -116,5 +116,10 @@
             // eslint
             "no-var": "off"
         }
+    }, {
+        "files": ["src/lib/es2019.array.d.ts"],
+        "rules": {
+            "@typescript-eslint/array-type": "off"
+        }
     }]
 }
