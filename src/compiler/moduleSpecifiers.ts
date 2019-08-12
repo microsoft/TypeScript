@@ -11,7 +11,7 @@ namespace ts.moduleSpecifiers {
         readonly ending: Ending;
     }
 
-    interface ModulePath {
+    export interface ModulePath {
         path: string;
         symlinkDirectory?: string;
     }
@@ -68,14 +68,26 @@ namespace ts.moduleSpecifiers {
         return getModuleSpecifierWorker(compilerOptions, importingSourceFileName, toFileName, host, files, redirectTargetsMap, getPreferences(preferences, compilerOptions, importingSourceFile));
     }
 
-    export function getPossibleModulePathsForNodeModule(
-        nodeModuleFileName: string,
+    export function getPossibleModulePathsForFileName(
+        fileName: string,
         host: ModuleSpecifierResolutionHost,
         files: ReadonlyArray<SourceFile>,
         redirectTargetsMap: RedirectTargetsMap,
     ) {
         const getCanonicalFileName = createGetCanonicalFileName(host.useCaseSensitiveFileNames ? host.useCaseSensitiveFileNames() : true);
-        return getAllModulePaths(files, nodeModuleFileName, getCanonicalFileName, host, redirectTargetsMap);
+        return getAllModulePaths(files, fileName, getCanonicalFileName, host, redirectTargetsMap);
+    }
+
+    export function getNodeModulesPackageName(
+        compilerOptions: CompilerOptions,
+        modulePaths: readonly ModulePath[],
+        importingSourceFileName: Path,
+        host: ModuleSpecifierResolutionHost,
+    ): string | undefined {
+        const info = getInfo(importingSourceFileName, host);
+        return firstDefined(
+            filterSymlinks(modulePaths, importingSourceFileName, info.getCanonicalFileName),
+            moduleFileName => tryGetModuleNameAsNodeModule(moduleFileName, info, host, compilerOptions, /*packageNameOnly*/ true));
     }
 
     function getModuleSpecifierWorker(
@@ -113,7 +125,7 @@ namespace ts.moduleSpecifiers {
             getLocalModuleSpecifier(Debug.assertDefined(last(modulePaths)).path, info, compilerOptions, preferences);
     }
 
-    // Returns an import for each symlink and for the realpath.
+    /** Returns an import for each symlink and for the realpath. */
     export function getModuleSpecifiers(
         moduleSymbol: Symbol,
         compilerOptions: CompilerOptions,
@@ -304,7 +316,7 @@ namespace ts.moduleSpecifiers {
         return removeFileExtension(relativePath);
     }
 
-    function tryGetModuleNameAsNodeModule(moduleFileName: string, { getCanonicalFileName, sourceDirectory }: Info, host: ModuleSpecifierResolutionHost, options: CompilerOptions): string | undefined {
+    function tryGetModuleNameAsNodeModule(moduleFileName: string, { getCanonicalFileName, sourceDirectory }: Info, host: ModuleSpecifierResolutionHost, options: CompilerOptions, packageNameOnly?: boolean): string | undefined {
         if (!host.fileExists || !host.readFile) {
             return undefined;
         }
@@ -313,30 +325,33 @@ namespace ts.moduleSpecifiers {
             return undefined;
         }
 
+        let packageJsonContent: any | undefined;
         const packageRootPath = moduleFileName.substring(0, parts.packageRootIndex);
-        const packageJsonPath = combinePaths(packageRootPath, "package.json");
-        const packageJsonContent = host.fileExists(packageJsonPath)
-            ? JSON.parse(host.readFile(packageJsonPath)!)
-            : undefined;
-        const versionPaths = packageJsonContent && packageJsonContent.typesVersions
-            ? getPackageJsonTypesVersionsPaths(packageJsonContent.typesVersions)
-            : undefined;
-        if (versionPaths) {
-            const subModuleName = moduleFileName.slice(parts.packageRootIndex + 1);
-            const fromPaths = tryGetModuleNameFromPaths(
-                removeFileExtension(subModuleName),
-                removeExtensionAndIndexPostFix(subModuleName, Ending.Minimal, options),
-                versionPaths.paths
-            );
-            if (fromPaths !== undefined) {
-                moduleFileName = combinePaths(moduleFileName.slice(0, parts.packageRootIndex), fromPaths);
+        if (!packageNameOnly) {
+            const packageJsonPath = combinePaths(packageRootPath, "package.json");
+            packageJsonContent = host.fileExists(packageJsonPath)
+                ? JSON.parse(host.readFile(packageJsonPath)!)
+                : undefined;
+            const versionPaths = packageJsonContent && packageJsonContent.typesVersions
+                ? getPackageJsonTypesVersionsPaths(packageJsonContent.typesVersions)
+                : undefined;
+            if (versionPaths) {
+                const subModuleName = moduleFileName.slice(parts.packageRootIndex + 1);
+                const fromPaths = tryGetModuleNameFromPaths(
+                    removeFileExtension(subModuleName),
+                    removeExtensionAndIndexPostFix(subModuleName, Ending.Minimal, options),
+                    versionPaths.paths
+                );
+                if (fromPaths !== undefined) {
+                    moduleFileName = combinePaths(moduleFileName.slice(0, parts.packageRootIndex), fromPaths);
+                }
             }
         }
 
         // Simplify the full file path to something that can be resolved by Node.
 
         // If the module could be imported by a directory name, use that directory's name
-        const moduleSpecifier = getDirectoryOrExtensionlessFileName(moduleFileName);
+        const moduleSpecifier = packageNameOnly ? moduleFileName : getDirectoryOrExtensionlessFileName(moduleFileName);
         // Get a path that's relative to node_modules or the importing file's path
         // if node_modules folder is in this folder or any of its parent folders, no need to keep it.
         if (!startsWith(sourceDirectory, getCanonicalFileName(moduleSpecifier.substring(0, parts.topLevelNodeModulesIndex)))) return undefined;

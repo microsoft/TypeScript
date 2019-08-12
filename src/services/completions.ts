@@ -45,6 +45,14 @@ namespace ts.Completions {
 
     const enum GlobalsSearch { Continue, Success, Fail }
 
+    export interface ImportableModuleWithImportSuggestions extends codefix.ImportableModule {
+        moduleExportsInfo: Map<{ isExportStarFromReExport?: boolean, nearestExportSymbol?: Symbol, symbolName?: string }>;
+        symbolName?: string;
+        resolvedModuleSymbol?: Symbol;
+        isExportEqualsOfGlobal?: boolean;
+        invalidatingFileNames: Map<true>;
+        exportedSymbols?: readonly Symbol[];
+    }
     export interface AutoImportSuggestion {
         symbol: Symbol;
         symbolName: string;
@@ -52,45 +60,65 @@ namespace ts.Completions {
         origin: SymbolOriginInfoExport;
     }
     export interface AutoImportSuggestionsCache {
-        clear(): void;
-        isEmpty(): boolean;
-        clearOthers(fileName: string): void;
-        get(fileName: string, checker: TypeChecker): AutoImportSuggestion[] | undefined;
-        set(fileName: string, suggestions: AutoImportSuggestion[]): void;
-        delete(fileName: string): boolean;
+        byFile: {
+            clear(): void;
+            isEmpty(): boolean;
+            clearOthers(fileName: string): void;
+            get(fileName: string, checker: TypeChecker): AutoImportSuggestion[] | undefined;
+            set(fileName: string, suggestions: AutoImportSuggestion[]): void;
+            delete(fileName: string): boolean;
+        };
+        byModule: {
+            get(moduleSymbol: Symbol): ImportableModuleWithImportSuggestions | undefined;
+            set(moduleSymbol: Symbol, cacheEntry: ImportableModuleWithImportSuggestions): void;
+        };
     }
     export function createImportSuggestionsCache(): AutoImportSuggestionsCache {
-        const cache = createMap<AutoImportSuggestion[]>();
+        const byFileCache = createMap<AutoImportSuggestion[]>();
+        const byModuleCache = createMap<ImportableModuleWithImportSuggestions>();
         return {
-            clear: cache.clear.bind(cache),
-            set: cache.set.bind(cache),
-            delete: cache.delete.bind(cache),
-            get: (fileName, checker) => {
-                const suggestions = cache.get(fileName);
-                forEach(suggestions, suggestion => {
-                    // If the symbol/moduleSymbol was a merged symbol, it will have a new identity
-                    // in the checker, even though the symbols to merge are the same (guaranteed by
-                    // cache invalidation in synchronizeHostData).
-                    if (suggestion.symbol.declarations) {
-                        suggestion.symbol = checker.getMergedSymbol(suggestion.origin.isDefaultExport
-                            ? suggestion.symbol.declarations[0].localSymbol || suggestion.symbol.declarations[0].symbol
-                            : suggestion.symbol.declarations[0].symbol);
+            byFile: {
+                clear: byFileCache.clear.bind(byFileCache),
+                set: byFileCache.set.bind(byFileCache),
+                delete: byFileCache.delete.bind(byFileCache),
+                get: (fileName, checker) => {
+                    const suggestions = byFileCache.get(fileName);
+                    forEach(suggestions, suggestion => {
+                        // If the symbol/moduleSymbol was a merged symbol, it will have a new identity
+                        // in the checker, even though the symbols to merge are the same (guaranteed by
+                        // cache invalidation in synchronizeHostData).
+                        if (suggestion.symbol.declarations) {
+                            suggestion.symbol = checker.getMergedSymbol(suggestion.origin.isDefaultExport
+                                ? suggestion.symbol.declarations[0].localSymbol || suggestion.symbol.declarations[0].symbol
+                                : suggestion.symbol.declarations[0].symbol);
+                        }
+                        if (suggestion.origin.moduleSymbol.declarations) {
+                            suggestion.origin.moduleSymbol = checker.getMergedSymbol(suggestion.origin.moduleSymbol.declarations[0].symbol);
+                        }
+                    });
+                    return suggestions;
+                },
+                clearOthers: fileName => {
+                    const entry = byFileCache.get(fileName);
+                    byFileCache.clear();
+                    if (entry) {
+                        byFileCache.set(fileName, entry);
                     }
-                    if (suggestion.origin.moduleSymbol.declarations) {
-                        suggestion.origin.moduleSymbol = checker.getMergedSymbol(suggestion.origin.moduleSymbol.declarations[0].symbol);
-                    }
-                });
-                return suggestions;
+                },
+                isEmpty: () => byFileCache.size === 0,
             },
-            clearOthers: fileName => {
-                const entry = cache.get(fileName);
-                cache.clear();
-                if (entry) {
-                    cache.set(fileName, entry);
-                }
+            byModule: {
+                get: moduleSymbol => {
+                    return byModuleCache.get(getModuleSymbolKey(moduleSymbol));
+                },
+                set: (moduleSymbol, cacheEntry) => {
+                    byModuleCache.set(getModuleSymbolKey(moduleSymbol), cacheEntry);
+                },
             },
-            isEmpty: () => cache.size === 0,
         };
+        function getModuleSymbolKey(moduleSymbol: Symbol) {
+            return map(moduleSymbol.declarations, decl => getSymbolId(decl.symbol)).join();
+        }
     }
 
     export function getCompletionsAtPosition(
@@ -945,6 +973,7 @@ namespace ts.Completions {
         let symbols: Symbol[] = [];
         const symbolToOriginInfoMap: SymbolOriginInfoMap = [];
         const symbolToSortTextMap: SymbolSortTextMap = [];
+        const importSuggestionsCache = host.getImportSuggestionsCache && host.getImportSuggestionsCache();
 
         if (isRightOfDot) {
             getTypeScriptMemberSymbols();
@@ -975,8 +1004,6 @@ namespace ts.Completions {
         }
 
         log("getCompletionData: Semantic work: " + (timestamp() - semanticStart));
-
-        const importSuggestionsCache = host.getImportSuggestionsCache && host.getImportSuggestionsCache();
         const contextualType = previousToken && getContextualType(previousToken, position, sourceFile, typeChecker);
         const literals = mapDefined(contextualType && (contextualType.isUnion() ? contextualType.types : [contextualType]), t => t.isLiteral() ? t.value : undefined);
 
@@ -1225,7 +1252,7 @@ namespace ts.Completions {
                 const lowerCaseTokenText = previousToken && isIdentifier(previousToken) ? previousToken.text.toLowerCase() : "";
                 const autoImportSuggestions = getSymbolsFromOtherSourceFileExports(program.getCompilerOptions().target!, host);
                 if (!detailsEntryId && importSuggestionsCache) {
-                    importSuggestionsCache.set(sourceFile.fileName, autoImportSuggestions);
+                    importSuggestionsCache.byFile.set(sourceFile.fileName, autoImportSuggestions);
                 }
                 autoImportSuggestions.forEach(({ symbol, symbolName, skipFilter, origin }) => {
                     if (detailsEntryId) {
@@ -1407,11 +1434,11 @@ namespace ts.Completions {
          *    everything from Bucket C to Bucket A.
          */
         function getSymbolsFromOtherSourceFileExports(target: ScriptTarget, host: LanguageServiceHost): AutoImportSuggestion[] {
-            const cached = importSuggestionsCache && importSuggestionsCache.get(sourceFile.fileName, typeChecker);
-            if (cached) {
-                log("getSymbolsFromOtherSourceFileExports: Using cached list");
-                return cached;
-            }
+            // const cached = importSuggestionsCache && importSuggestionsCache.byFile.get(sourceFile.fileName, typeChecker);
+            // if (cached) {
+            //     log("getSymbolsFromOtherSourceFileExports: Using cached list");
+            //     return cached;
+            // }
 
             const startTime = timestamp();
             log("getSymbolsFromOtherSourceFileExports: Recomputing list");
@@ -1421,81 +1448,134 @@ namespace ts.Completions {
             /** Bucket C */
             const aliasesToReturnIfOriginalsAreMissing = createMap<{ alias: Symbol, moduleSymbol: Symbol }>();
             /** Bucket A */
-            const results: { symbol: Symbol, symbolName: string, skipFilter: boolean, origin: SymbolOriginInfoExport }[] = [];
+            const results: AutoImportSuggestion[] = [];
             /** Ids present in `results` for faster lookup */
             const resultSymbolIds = createMap<true>();
 
-            codefix.forEachExternalModuleToImportFrom(typeChecker, host, preferences, program.redirectTargetsMap, sourceFile, program.getSourceFiles(), moduleSymbol => {
+            codefix.forEachExternalModuleToImportFrom(typeChecker, host, program.redirectTargetsMap, sourceFile, program.getSourceFiles(), moduleSymbol => {
                 // Perf -- ignore other modules if this is a request for details
                 if (detailsEntryId && detailsEntryId.source && stripQuotes(moduleSymbol.name) !== detailsEntryId.source) {
                     return;
                 }
 
-                const resolvedModuleSymbol = typeChecker.resolveExternalModuleSymbol(moduleSymbol);
+                const cached = initializeCacheEntry(moduleSymbol);
+                const resolvedModuleSymbol = cached.resolvedModuleSymbol || typeChecker.resolveExternalModuleSymbol(moduleSymbol);
+                if (!cached.resolvedModuleSymbol) {
+                    cached.resolvedModuleSymbol = resolvedModuleSymbol;
+                    addInvalidatingFiles(cached, resolvedModuleSymbol);
+                }
                 // resolvedModuleSymbol may be a namespace. A namespace may be `export =` by multiple module declarations, but only keep the first one.
                 if (!addToSeen(seenResolvedModules, getSymbolId(resolvedModuleSymbol))) {
                     return;
                 }
 
-                if (resolvedModuleSymbol !== moduleSymbol &&
-                    // Don't add another completion for `export =` of a symbol that's already global.
-                    // So in `declare namespace foo {} declare module "foo" { export = foo; }`, there will just be the global completion for `foo`.
-                    some(resolvedModuleSymbol.declarations, d => !!d.getSourceFile().externalModuleIndicator)) {
-                    pushSymbol(resolvedModuleSymbol, moduleSymbol, /*skipFilter*/ true);
+                const isExportEqualsOfNonGlobal = cached.isExportEqualsOfGlobal !== undefined ? cached.isExportEqualsOfGlobal :
+                    (cached.isExportEqualsOfGlobal = (resolvedModuleSymbol !== moduleSymbol &&
+                    some(resolvedModuleSymbol.declarations, d => !!d.getSourceFile().externalModuleIndicator)));
+
+                // Don't add another completion for `export =` of a symbol that's already global.
+                // So in `declare namespace foo {} declare module "foo" { export = foo; }`, there will just be the global completion for `foo`.
+                if (isExportEqualsOfNonGlobal) {
+                    pushSymbol(cached, resolvedModuleSymbol, moduleSymbol, /*skipFilter*/ true);
                 }
 
-                for (const symbol of typeChecker.getExportsOfModule(moduleSymbol)) {
+                const exportedSymbols = cached.exportedSymbols || (cached.exportedSymbols = typeChecker.getExportsOfModule(moduleSymbol));
+                for (const symbol of exportedSymbols) {
+                    addInvalidatingFiles(cached, symbol);
                     // If this is `export { _break as break };` (a keyword) -- skip this and prefer the keyword completion.
                     if (some(symbol.declarations, d => isExportSpecifier(d) && !!d.propertyName && isIdentifierANonContextualKeyword(d.name))) {
                         continue;
                     }
+
+                    const symbolId = getSymbolId(symbol).toString();
+                    let symbolInfo = cached.moduleExportsInfo.get(symbolId);
+                    if (!symbolInfo) {
+                        symbolInfo = {};
+                        cached.moduleExportsInfo.set(symbolId, symbolInfo);
+                    }
+
                     // If `symbol.parent !== moduleSymbol`, this is an `export * from "foo"` re-export. Those don't create new symbols.
                     const isExportStarFromReExport = typeChecker.getMergedSymbol(symbol.parent!) !== resolvedModuleSymbol;
                     // If `!!d.parent.parent.moduleSpecifier`, this is `export { foo } from "foo"` re-export, which creates a new symbol (thus isn't caught by the first check).
                     if (isExportStarFromReExport || some(symbol.declarations, d => isExportSpecifier(d) && !d.propertyName && !!d.parent.parent.moduleSpecifier)) {
                         // Walk the export chain back one module (step 1 or 2 in diagrammed example).
                         // Or, in the case of `export * from "foo"`, `symbol` already points to the original export, so just use that.
-                        const nearestExportSymbol = isExportStarFromReExport ? symbol : getNearestExportSymbol(symbol);
+                        const nearestExportSymbol = symbolInfo.nearestExportSymbol || (symbolInfo.nearestExportSymbol = isExportStarFromReExport ? symbol : getNearestExportSymbol(symbol));
                         if (!nearestExportSymbol) continue;
+                        addInvalidatingFiles(cached, nearestExportSymbol);
                         const nearestExportSymbolId = getSymbolId(nearestExportSymbol).toString();
                         const symbolHasBeenSeen = resultSymbolIds.has(nearestExportSymbolId) || aliasesToAlreadyIncludedSymbols.has(nearestExportSymbolId);
                         if (!symbolHasBeenSeen) {
                             aliasesToReturnIfOriginalsAreMissing.set(nearestExportSymbolId, { alias: symbol, moduleSymbol });
-                            aliasesToAlreadyIncludedSymbols.set(getSymbolId(symbol).toString(), true);
+                            aliasesToAlreadyIncludedSymbols.set(symbolId, true);
                         }
                         else {
                             // Perf - we know this symbol is an alias to one that’s already covered in `symbols`, so store it here
                             // in case another symbol re-exports this one; that way we can short-circuit as soon as we see this symbol id.
-                            addToSeen(aliasesToAlreadyIncludedSymbols, getSymbolId(symbol));
+                            addToSeen(aliasesToAlreadyIncludedSymbols, symbolId);
                         }
                     }
                     else {
                         // This is not a re-export, so see if we have any aliases pending and remove them (step 3 in diagrammed example)
-                        aliasesToReturnIfOriginalsAreMissing.delete(getSymbolId(symbol).toString());
-                        pushSymbol(symbol, moduleSymbol);
+                        aliasesToReturnIfOriginalsAreMissing.delete(symbolId);
+                        pushSymbol(symbolInfo, symbol, moduleSymbol);
                     }
                 }
             });
 
             // By this point, any potential duplicates that were actually duplicates have been
             // removed, so the rest need to be added. (Step 4 in diagrammed example)
-            aliasesToReturnIfOriginalsAreMissing.forEach(({ alias, moduleSymbol }) => pushSymbol(alias, moduleSymbol));
+            aliasesToReturnIfOriginalsAreMissing.forEach(({ alias, moduleSymbol }) => {
+                const cached = initializeCacheEntry(moduleSymbol);
+                const aliasId = getSymbolId(alias).toString();
+                let aliasInfo = cached.moduleExportsInfo.get(aliasId);
+                if (!aliasInfo) {
+                    aliasInfo = {};
+                    cached.moduleExportsInfo.set(aliasId, aliasInfo);
+                }
+                pushSymbol(aliasInfo, alias, moduleSymbol);
+            });
+
             log(`getSymbolsFromOtherSourceFileExports: ${timestamp() - startTime}`);
             return results;
 
-            function pushSymbol(symbol: Symbol, moduleSymbol: Symbol, skipFilter = false) {
+            function pushSymbol(cachedInfo: { symbolName?: string }, symbol: Symbol, moduleSymbol: Symbol, skipFilter = false) {
                 const isDefaultExport = symbol.escapedName === InternalSymbolName.Default;
                 if (isDefaultExport) {
                     symbol = getLocalSymbolForExportDefault(symbol) || symbol;
                 }
                 addToSeen(resultSymbolIds, getSymbolId(symbol));
                 const origin: SymbolOriginInfoExport = { kind: SymbolOriginInfoKind.Export, moduleSymbol, isDefaultExport };
-                results.push({
+                const result: AutoImportSuggestion = {
                     symbol,
-                    symbolName: getSymbolName(symbol, origin, target),
+                    symbolName: cachedInfo.symbolName || (cachedInfo.symbolName = getSymbolName(symbol, origin, target)),
                     origin,
                     skipFilter,
-                });
+                };
+                results.push(result);
+            }
+
+            function initializeCacheEntry(moduleSymbol: Symbol): ImportableModuleWithImportSuggestions {
+                let cached = importSuggestionsCache && importSuggestionsCache.byModule.get(moduleSymbol);
+                if (!cached) {
+                    const declaringFileNames = map(moduleSymbol.declarations, decl => decl.getSourceFile().fileName);
+                    cached = {
+                        moduleSymbol,
+                        declaringFileNames,
+                        invalidatingFileNames: arrayToSet(declaringFileNames),
+                        moduleExportsInfo: createMap(),
+                    };
+                    if (importSuggestionsCache) {
+                        importSuggestionsCache.byModule.set(moduleSymbol, cached);
+                    }
+                }
+                return cached;
+            }
+        }
+
+        function addInvalidatingFiles(cached: ImportableModuleWithImportSuggestions, symbol: Symbol) {
+            for (const decl of (symbol.declarations || emptyArray)) {
+                cached.invalidatingFileNames.set(decl.getSourceFile().fileName, true);
             }
         }
 
