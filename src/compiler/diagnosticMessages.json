@@ -851,7 +851,7 @@
         "category": "Error",
         "code": 1259
     },
-    "This keyword must not contain an escaped character.": {
+    "Keywords cannot contain escape characters.": {
         "category": "Error",
         "code": 1260
     },
