@@ -5130,7 +5130,7 @@ namespace ts {
                         decl.name = createIdentifier(localName);
                         addResult(setTextRange(decl, sig.declaration), modifierFlags);
                     }
-                    const props = getPropertiesOfType(type);
+                    const props = filter(getPropertiesOfType(type), p => !(p.flags & SymbolFlags.Prototype) && p.escapedName !== "prototype");
                     if (length(props)) {
                         // Add a namespace
                         const fakespace = createModuleDeclaration(/*decorators*/ undefined, /*modifiers*/ undefined, createIdentifier(localName), createModuleBlock([]), NodeFlags.Namespace);
@@ -5173,7 +5173,7 @@ namespace ts {
                     const staticBaseType = getBaseConstructorTypeOfClass(staticType as InterfaceType);
                     const heritageClauses = !length(baseTypes) ? undefined : [createHeritageClause(SyntaxKind.ExtendsKeyword, map(baseTypes, b => serializeBaseType(b, staticBaseType, localName)))];
                     const members = flatMap<Symbol, ClassElement>(getPropertiesOfType(classType), p => serializePropertySymbolForClass(p, /*isStatic*/ false, baseTypes[0]));
-                    const staticMembers = flatMap<Symbol, ClassElement>(getPropertiesOfType(staticType), p => serializePropertySymbolForClass(p, /*isStatic*/ true, staticBaseType));
+                    const staticMembers = flatMap<Symbol, ClassElement>(filter(getPropertiesOfType(staticType), p => !(p.flags & SymbolFlags.Prototype) && p.escapedName !== "prototype"), p => serializePropertySymbolForClass(p, /*isStatic*/ true, staticBaseType));
                     const constructors = serializeSignatures(SignatureKind.Construct, staticType, baseTypes[0], SyntaxKind.Constructor) as ConstructorDeclaration[];
                     for (const c of constructors) {
                         // A constructor's return type and type parameters are supposed to be controlled by the enclosing class declaration
