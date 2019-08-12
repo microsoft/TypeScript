@@ -114,7 +114,7 @@ namespace ts.moduleSpecifiers {
     function getLocalModuleSpecifier(moduleFileName: string, { getCanonicalFileName, sourceDirectory }: Info, compilerOptions: CompilerOptions, { ending, relativePreference }: Preferences): string {
         const { baseUrl, paths, rootDirs } = compilerOptions;
 
-        const relativePath = rootDirs && tryGetModuleNameFromRootDirs(rootDirs, moduleFileName, sourceDirectory, getCanonicalFileName) ||
+        const relativePath = rootDirs && tryGetModuleNameFromRootDirs(rootDirs, moduleFileName, sourceDirectory, getCanonicalFileName, ending, compilerOptions) ||
             removeExtensionAndIndexPostFix(ensurePathIsNonModuleName(getRelativePathFromDirectory(sourceDirectory, moduleFileName, getCanonicalFileName)), ending, compilerOptions);
         if (!baseUrl || relativePreference === RelativePreference.Relative) {
             return relativePath;
@@ -248,7 +248,7 @@ namespace ts.moduleSpecifiers {
         }
     }
 
-    function tryGetModuleNameFromRootDirs(rootDirs: ReadonlyArray<string>, moduleFileName: string, sourceDirectory: string, getCanonicalFileName: (file: string) => string): string | undefined {
+    function tryGetModuleNameFromRootDirs(rootDirs: ReadonlyArray<string>, moduleFileName: string, sourceDirectory: string, getCanonicalFileName: (file: string) => string, ending: Ending, compilerOptions: CompilerOptions): string | undefined {
         const normalizedTargetPath = getPathRelativeToRootDirs(moduleFileName, rootDirs, getCanonicalFileName);
         if (normalizedTargetPath === undefined) {
             return undefined;
@@ -256,7 +256,9 @@ namespace ts.moduleSpecifiers {
 
         const normalizedSourcePath = getPathRelativeToRootDirs(sourceDirectory, rootDirs, getCanonicalFileName);
         const relativePath = normalizedSourcePath !== undefined ? ensurePathIsNonModuleName(getRelativePathFromDirectory(normalizedSourcePath, normalizedTargetPath, getCanonicalFileName)) : normalizedTargetPath;
-        return removeFileExtension(relativePath);
+        return getEmitModuleResolutionKind(compilerOptions) === ModuleResolutionKind.NodeJs
+            ? removeExtensionAndIndexPostFix(relativePath, ending, compilerOptions)
+            : removeFileExtension(relativePath);
     }
 
     function tryGetModuleNameAsNodeModule(moduleFileName: string, { getCanonicalFileName, sourceDirectory }: Info, host: ModuleSpecifierResolutionHost, options: CompilerOptions): string | undefined {
