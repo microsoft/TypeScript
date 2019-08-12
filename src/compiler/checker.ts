@@ -5164,8 +5164,11 @@ namespace ts {
                 function serializeAsClass(symbol: Symbol, localName: string, modifierFlags: ModifierFlags) {
                     const localParams = getLocalTypeParametersOfClassOrInterfaceOrTypeAlias(symbol);
                     const typeParamDecls = map(localParams, p => typeParameterToDeclaration(p, context));
-                    const classType = getDeclaredTypeOfClassOrInterface(symbol);
-                    const baseTypes = getBaseTypes(classType); // classes should only have one base type
+                    const classType = symbol.flags & SymbolFlags.Class ? getDeclaredTypeOfClassOrInterface(symbol) : getJSClassType(symbol);
+                    if (!classType) {
+                        return Debug.fail("Class type not found"); // Should have been checked by the caller
+                    }
+                    const baseTypes = symbol.flags & SymbolFlags.Class ? getBaseTypes(classType as InterfaceType) : []; // classes should only have one base type, js classish functions have "no" base types - their base may appear as an intersection in their type instead!
                     const staticType = getTypeOfSymbol(symbol);
                     const staticBaseType = getBaseConstructorTypeOfClass(staticType as InterfaceType);
                     const heritageClauses = !length(baseTypes) ? undefined : [createHeritageClause(SyntaxKind.ExtendsKeyword, map(baseTypes, b => serializeBaseType(b, staticBaseType, localName)))];
@@ -5219,6 +5222,9 @@ namespace ts {
                     if (symbol.flags & SymbolFlags.Function) {
                         const type = getTypeOfSymbol(symbol);
                         serializeAsFunctionNamespaceMerge(type, localName, modifierFlags);
+                        if (isJSConstructorType(type) && getJSClassType(symbol)) {
+                            serializeAsClass(symbol, localName, modifierFlags); // A JS constructorish type isn't bound with any flags indicating it is such
+                        }
                     }
                     if (symbol.flags & SymbolFlags.TypeAlias) {
                         const aliasType = getDeclaredTypeOfTypeAlias(symbol);
