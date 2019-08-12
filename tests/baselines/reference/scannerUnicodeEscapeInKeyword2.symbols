@@ -53,3 +53,10 @@ typ\u{0065} notok = 0; // not ok
 >notok : Symbol(notok, Decl(file2.ts, 12, 22))
 
 export {};
+
+const a = {def\u0061ult: 12}; // OK, `default` not in keyword position
+>a : Symbol(a, Decl(file2.ts, 18, 5))
+>def\u0061ult : Symbol(def\u0061ult, Decl(file2.ts, 18, 11))
+
+// chrome and jsc may still error on this, ref https://bugs.chromium.org/p/chromium/issues/detail?id=993000 and https://bugs.webkit.org/show_bug.cgi?id=200638
+

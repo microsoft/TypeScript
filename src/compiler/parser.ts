@@ -1089,9 +1089,7 @@ namespace ts {
         function nextToken(tokenReparsedAsIdentifier?: boolean): SyntaxKind {
             if (isKeyword(currentToken)) {
                 // if the keyword had an escape
-                if ((scanner.hasExtendedUnicodeEscape() || (scanner.getTokenValue() && scanner.getTokenText() !== scanner.getTokenValue()))
-                // and the keyword is non-contextual or is in its recognized-as-keyword context
-                && (!tokenReparsedAsIdentifier || (!isContextualKeyword(currentToken) && !isFutureReservedKeyword(currentToken)))) {
+                if (!tokenReparsedAsIdentifier && (scanner.hasExtendedUnicodeEscape() || (scanner.getTokenValue() && scanner.getTokenText() !== scanner.getTokenValue()))) {
                     // issue a parse error for the escape
                     parseErrorAt(scanner.getTokenPos(), scanner.getTextPos(), Diagnostics.This_keyword_must_not_contain_an_escaped_character);
                 }
