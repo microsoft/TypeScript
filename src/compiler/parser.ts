@@ -1086,8 +1086,17 @@ namespace ts {
             return currentToken;
         }
 
-        function nextToken(): SyntaxKind {
+        function nextTokenWithoutCheck() {
             return currentToken = scanner.scan();
+        }
+
+        function nextToken(): SyntaxKind {
+            // if the keyword had an escape
+            if (isKeyword(currentToken) && (scanner.hasUnicodeEscape() || scanner.hasExtendedUnicodeEscape())) {
+                // issue a parse error for the escape
+                parseErrorAt(scanner.getTokenPos(), scanner.getTextPos(), Diagnostics.Keywords_cannot_contain_escape_characters);
+            }
+            return nextTokenWithoutCheck();
         }
 
         function nextTokenJSDoc(): JSDocSyntaxKind {
@@ -1380,7 +1389,7 @@ namespace ts {
                     node.originalKeywordKind = token();
                 }
                 node.escapedText = escapeLeadingUnderscores(internIdentifier(scanner.getTokenValue()));
-                nextToken();
+                nextTokenWithoutCheck();
                 return finishNode(node);
             }
 

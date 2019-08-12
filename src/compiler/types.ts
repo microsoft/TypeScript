@@ -1679,6 +1679,8 @@ namespace ts {
         /* @internal */
         ContainsSeparator = 1 << 9, // e.g. `0b1100_0101`
         /* @internal */
+        UnicodeEscape = 1 << 10,
+        /* @internal */
         BinaryOrOctalSpecifier = BinarySpecifier | OctalSpecifier,
         /* @internal */
         NumericLiteralFlags = Scientific | Octal | HexSpecifier | BinaryOrOctalSpecifier | ContainsSeparator
