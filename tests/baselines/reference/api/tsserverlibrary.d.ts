@@ -3174,6 +3174,7 @@ declare namespace ts {
         getTokenPos(): number;
         getTokenText(): string;
         getTokenValue(): string;
+        hasUnicodeEscape(): boolean;
         hasExtendedUnicodeEscape(): boolean;
         hasPrecedingLineBreak(): boolean;
         isIdentifier(): boolean;

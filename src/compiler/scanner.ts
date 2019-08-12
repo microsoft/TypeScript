@@ -18,6 +18,7 @@ namespace ts {
         getTokenPos(): number;
         getTokenText(): string;
         getTokenValue(): string;
+        hasUnicodeEscape(): boolean;
         hasExtendedUnicodeEscape(): boolean;
         hasPrecedingLineBreak(): boolean;
         isIdentifier(): boolean;
@@ -884,6 +885,7 @@ namespace ts {
             getTokenPos: () => tokenPos,
             getTokenText: () => text.substring(tokenPos, pos),
             getTokenValue: () => tokenValue,
+            hasUnicodeEscape: () => (tokenFlags & TokenFlags.UnicodeEscape) !== 0,
             hasExtendedUnicodeEscape: () => (tokenFlags & TokenFlags.ExtendedUnicodeEscape) !== 0,
             hasPrecedingLineBreak: () => (tokenFlags & TokenFlags.PrecedingLineBreak) !== 0,
             isIdentifier: () => token === SyntaxKind.Identifier || token > SyntaxKind.LastReservedWord,
@@ -1245,6 +1247,7 @@ namespace ts {
                         return scanExtendedUnicodeEscape();
                     }
 
+                    tokenFlags |= TokenFlags.UnicodeEscape;
                     // '\uDDDD'
                     return scanHexadecimalEscape(/*numDigits*/ 4);
 
@@ -1376,6 +1379,7 @@ namespace ts {
                     if (!(ch >= 0 && isIdentifierPart(ch, languageVersion))) {
                         break;
                     }
+                    tokenFlags |= TokenFlags.UnicodeEscape;
                     result += text.substring(start, pos);
                     result += utf16EncodeAsString(ch);
                     // Valid Unicode escape is always six characters
@@ -1868,6 +1872,7 @@ namespace ts {
                         const cookedChar = peekUnicodeEscape();
                         if (cookedChar >= 0 && isIdentifierStart(cookedChar, languageVersion)) {
                             pos += 6;
+                            tokenFlags |= TokenFlags.UnicodeEscape;
                             tokenValue = String.fromCharCode(cookedChar) + scanIdentifierParts();
                             return token = getIdentifierToken();
                         }
@@ -2156,6 +2161,7 @@ namespace ts {
                     const cookedChar = peekUnicodeEscape();
                     if (cookedChar >= 0 && isIdentifierStart(cookedChar, languageVersion)) {
                         pos += 6;
+                        tokenFlags |= TokenFlags.UnicodeEscape;
                         tokenValue = String.fromCharCode(cookedChar) + scanIdentifierParts();
                         return token = getIdentifierToken();
                     }

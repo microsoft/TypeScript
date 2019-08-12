@@ -1092,7 +1092,7 @@ namespace ts {
 
         function nextToken(): SyntaxKind {
             // if the keyword had an escape
-            if (isKeyword(currentToken) && (scanner.hasExtendedUnicodeEscape() || (scanner.getTokenValue() && scanner.getTokenText() !== scanner.getTokenValue()))) {
+            if (isKeyword(currentToken) && (scanner.hasUnicodeEscape() || scanner.hasExtendedUnicodeEscape())) {
                 // issue a parse error for the escape
                 parseErrorAt(scanner.getTokenPos(), scanner.getTextPos(), Diagnostics.This_keyword_must_not_contain_an_escaped_character);
             }
