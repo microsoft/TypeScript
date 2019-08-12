@@ -60,7 +60,7 @@ System.register([], function (exports_1, context_1) {
             };
             exports_1("cl1", cl1);
             exports_1("obj", obj = {
-                m: () => __awaiter(this, void 0, void 0, function* () {
+                m: () => __awaiter(void 0, void 0, void 0, function* () {
                     const req = yield context_1.import('./test'); // THREE
                 })
             });
@@ -74,7 +74,7 @@ System.register([], function (exports_1, context_1) {
                 }
             };
             exports_1("cl2", cl2);
-            exports_1("l", l = () => __awaiter(this, void 0, void 0, function* () {
+            exports_1("l", l = () => __awaiter(void 0, void 0, void 0, function* () {
                 const req = yield context_1.import('./test'); // FIVE
             }));
         }

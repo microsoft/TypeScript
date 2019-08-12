@@ -26,6 +26,7 @@ namespace ts {
         let enabledSubstitutions: ESNextSubstitutionFlags;
         let enclosingFunctionFlags: FunctionFlags;
         let enclosingSuperContainerFlags: NodeCheckFlags = 0;
+        let topLevel: boolean;
 
         /** Keeps track of property names accessed on super (`super.x`) within async functions. */
         let capturedSuperProperties: UnderscoreEscapedMap<true>;
@@ -42,6 +43,7 @@ namespace ts {
             }
 
             exportedVariableStatement = false;
+            topLevel = isEffectiveStrictModeSourceFile(node, compilerOptions);
             const visited = visitEachChild(node, visitor, context);
             addEmitHelpers(visited, context.readEmitHelpers());
             return visited;
@@ -60,6 +62,20 @@ namespace ts {
                 return undefined;
             }
             return node;
+        }
+
+        function doOutsideOfTopLevel<T, U>(cb: (value: T) => U, value: T) {
+            if (topLevel) {
+                topLevel = false;
+                const result = cb(value);
+                topLevel = true;
+                return result;
+            }
+            return cb(value);
+        }
+
+        function visitDefault(node: Node): VisitResult<Node> {
+            return visitEachChild(node, visitor, context);
         }
 
         function visitorWorker(node: Node, noDestructuringValue: boolean): VisitResult<Node> {
@@ -92,17 +108,17 @@ namespace ts {
                 case SyntaxKind.VoidExpression:
                     return visitVoidExpression(node as VoidExpression);
                 case SyntaxKind.Constructor:
-                    return visitConstructorDeclaration(node as ConstructorDeclaration);
+                    return doOutsideOfTopLevel(visitConstructorDeclaration, node as ConstructorDeclaration);
                 case SyntaxKind.MethodDeclaration:
-                    return visitMethodDeclaration(node as MethodDeclaration);
+                    return doOutsideOfTopLevel(visitMethodDeclaration, node as MethodDeclaration);
                 case SyntaxKind.GetAccessor:
-                    return visitGetAccessorDeclaration(node as GetAccessorDeclaration);
+                    return doOutsideOfTopLevel(visitGetAccessorDeclaration, node as GetAccessorDeclaration);
                 case SyntaxKind.SetAccessor:
-                    return visitSetAccessorDeclaration(node as SetAccessorDeclaration);
+                    return doOutsideOfTopLevel(visitSetAccessorDeclaration, node as SetAccessorDeclaration);
                 case SyntaxKind.FunctionDeclaration:
-                    return visitFunctionDeclaration(node as FunctionDeclaration);
+                    return doOutsideOfTopLevel(visitFunctionDeclaration, node as FunctionDeclaration);
                 case SyntaxKind.FunctionExpression:
-                    return visitFunctionExpression(node as FunctionExpression);
+                    return doOutsideOfTopLevel(visitFunctionExpression, node as FunctionExpression);
                 case SyntaxKind.ArrowFunction:
                     return visitArrowFunction(node as ArrowFunction);
                 case SyntaxKind.Parameter:
@@ -121,6 +137,9 @@ namespace ts {
                         hasSuperElementAccess = true;
                     }
                     return visitEachChild(node, visitor, context);
+                case SyntaxKind.ClassDeclaration:
+                case SyntaxKind.ClassExpression:
+                    return doOutsideOfTopLevel(visitDefault, node);
                 default:
                     return visitEachChild(node, visitor, context);
             }
@@ -754,7 +773,8 @@ namespace ts {
                             node.body!,
                             visitLexicalEnvironment(node.body!.statements, visitor, context, statementOffset)
                         )
-                    )
+                    ),
+                    !topLevel
                 )
             );
 
@@ -1057,7 +1077,7 @@ namespace ts {
             };`
     };
 
-    function createAsyncGeneratorHelper(context: TransformationContext, generatorFunc: FunctionExpression) {
+    function createAsyncGeneratorHelper(context: TransformationContext, generatorFunc: FunctionExpression, hasLexicalThis: boolean) {
         context.requestEmitHelper(awaitHelper);
         context.requestEmitHelper(asyncGeneratorHelper);
 
@@ -1068,7 +1088,7 @@ namespace ts {
             getUnscopedHelperName("__asyncGenerator"),
             /*typeArguments*/ undefined,
             [
-                createThis(),
+                hasLexicalThis ? createThis() : createVoidZero(),
                 createIdentifier("arguments"),
                 generatorFunc
             ]

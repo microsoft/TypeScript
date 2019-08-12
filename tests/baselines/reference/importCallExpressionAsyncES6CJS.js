@@ -55,7 +55,7 @@ class cl1 {
 }
 exports.cl1 = cl1;
 exports.obj = {
-    m: () => __awaiter(this, void 0, void 0, function* () {
+    m: () => __awaiter(void 0, void 0, void 0, function* () {
         const req = yield Promise.resolve().then(() => require('./test')); // THREE
     })
 };
@@ -69,6 +69,6 @@ class cl2 {
     }
 }
 exports.cl2 = cl2;
-exports.l = () => __awaiter(this, void 0, void 0, function* () {
+exports.l = () => __awaiter(void 0, void 0, void 0, function* () {
     const req = yield Promise.resolve().then(() => require('./test')); // FIVE
 });

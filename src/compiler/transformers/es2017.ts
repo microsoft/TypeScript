@@ -41,6 +41,8 @@ namespace ts {
         /** A set of node IDs for generated super accessors (variable statements). */
         const substitutedSuperAccessors: boolean[] = [];
 
+        let topLevel: boolean;
+
         // Save the previous transformation hooks.
         const previousOnEmitNode = context.onEmitNode;
         const previousOnSubstituteNode = context.onSubstituteNode;
@@ -56,9 +58,24 @@ namespace ts {
                 return node;
             }
 
+            topLevel = isEffectiveStrictModeSourceFile(node, compilerOptions);
             const visited = visitEachChild(node, visitor, context);
             addEmitHelpers(visited, context.readEmitHelpers());
             return visited;
+        }
+
+        function doOutsideOfTopLevel<T, U>(cb: (value: T) => U, value: T) {
+            if (topLevel) {
+                topLevel = false;
+                const result = cb(value);
+                topLevel = true;
+                return result;
+            }
+            return cb(value);
+        }
+
+        function visitDefault(node: Node): VisitResult<Node> {
+            return visitEachChild(node, visitor, context);
         }
 
         function visitor(node: Node): VisitResult<Node> {
@@ -74,13 +91,13 @@ namespace ts {
                     return visitAwaitExpression(<AwaitExpression>node);
 
                 case SyntaxKind.MethodDeclaration:
-                    return visitMethodDeclaration(<MethodDeclaration>node);
+                    return doOutsideOfTopLevel(visitMethodDeclaration, <MethodDeclaration>node);
 
                 case SyntaxKind.FunctionDeclaration:
-                    return visitFunctionDeclaration(<FunctionDeclaration>node);
+                    return doOutsideOfTopLevel(visitFunctionDeclaration, <FunctionDeclaration>node);
 
                 case SyntaxKind.FunctionExpression:
-                    return visitFunctionExpression(<FunctionExpression>node);
+                    return doOutsideOfTopLevel(visitFunctionExpression, <FunctionExpression>node);
 
                 case SyntaxKind.ArrowFunction:
                     return visitArrowFunction(<ArrowFunction>node);
@@ -96,6 +113,13 @@ namespace ts {
                         hasSuperElementAccess = true;
                     }
                     return visitEachChild(node, visitor, context);
+
+                case SyntaxKind.GetAccessor:
+                case SyntaxKind.SetAccessor:
+                case SyntaxKind.Constructor:
+                case SyntaxKind.ClassDeclaration:
+                case SyntaxKind.ClassExpression:
+                    return doOutsideOfTopLevel(visitDefault, node);
 
                 default:
                     return visitEachChild(node, visitor, context);
@@ -433,6 +457,7 @@ namespace ts {
                     createReturn(
                         createAwaiterHelper(
                             context,
+                            !topLevel,
                             hasLexicalArguments,
                             promiseConstructor,
                             transformAsyncFunctionBodyWorker(<Block>node.body, statementOffset)
@@ -473,6 +498,7 @@ namespace ts {
             else {
                 const expression = createAwaiterHelper(
                     context,
+                    !topLevel,
                     hasLexicalArguments,
                     promiseConstructor,
                     transformAsyncFunctionBodyWorker(node.body!)
@@ -786,7 +812,7 @@ namespace ts {
             };`
     };
 
-    function createAwaiterHelper(context: TransformationContext, hasLexicalArguments: boolean, promiseConstructor: EntityName | Expression | undefined, body: Block) {
+    function createAwaiterHelper(context: TransformationContext, hasLexicalThis: boolean, hasLexicalArguments: boolean, promiseConstructor: EntityName | Expression | undefined, body: Block) {
         context.requestEmitHelper(awaiterHelper);
 
         const generatorFunc = createFunctionExpression(
@@ -806,7 +832,7 @@ namespace ts {
             getUnscopedHelperName("__awaiter"),
             /*typeArguments*/ undefined,
             [
-                createThis(),
+                hasLexicalThis ? createThis() : createVoidZero(),
                 hasLexicalArguments ? createIdentifier("arguments") : createVoidZero(),
                 promiseConstructor ? createExpressionFromEntityName(promiseConstructor) : createVoidZero(),
                 generatorFunc

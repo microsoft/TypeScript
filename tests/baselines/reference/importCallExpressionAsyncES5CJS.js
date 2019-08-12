@@ -66,7 +66,6 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
-var _this = this;
 Object.defineProperty(exports, "__esModule", { value: true });
 function fn() {
     return __awaiter(this, void 0, void 0, function () {
@@ -104,7 +103,7 @@ var cl1 = /** @class */ (function () {
 }());
 exports.cl1 = cl1;
 exports.obj = {
-    m: function () { return __awaiter(_this, void 0, void 0, function () {
+    m: function () { return __awaiter(void 0, void 0, void 0, function () {
         var req;
         return __generator(this, function (_a) {
             switch (_a.label) {
@@ -138,7 +137,7 @@ var cl2 = /** @class */ (function () {
     return cl2;
 }());
 exports.cl2 = cl2;
-exports.l = function () { return __awaiter(_this, void 0, void 0, function () {
+exports.l = function () { return __awaiter(void 0, void 0, void 0, function () {
     var req;
     return __generator(this, function (_a) {
         switch (_a.label) {
