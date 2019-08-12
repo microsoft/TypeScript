@@ -1086,13 +1086,17 @@ namespace ts {
             return currentToken;
         }
 
-        function nextToken(tokenReparsedAsIdentifier?: boolean): SyntaxKind {
+        function nextTokenWithoutCheck() {
+            return currentToken = scanner.scan();
+        }
+
+        function nextToken(): SyntaxKind {
             // if the keyword had an escape
-            if (!tokenReparsedAsIdentifier && isKeyword(currentToken) && (scanner.hasExtendedUnicodeEscape() || (scanner.getTokenValue() && scanner.getTokenText() !== scanner.getTokenValue()))) {
+            if (isKeyword(currentToken) && (scanner.hasExtendedUnicodeEscape() || (scanner.getTokenValue() && scanner.getTokenText() !== scanner.getTokenValue()))) {
                 // issue a parse error for the escape
                 parseErrorAt(scanner.getTokenPos(), scanner.getTextPos(), Diagnostics.This_keyword_must_not_contain_an_escaped_character);
             }
-            return currentToken = scanner.scan();
+            return nextTokenWithoutCheck();
         }
 
         function nextTokenJSDoc(): JSDocSyntaxKind {
@@ -1385,7 +1389,7 @@ namespace ts {
                     node.originalKeywordKind = token();
                 }
                 node.escapedText = escapeLeadingUnderscores(internIdentifier(scanner.getTokenValue()));
-                nextToken(/*tokenReparsedAsIdentifier*/ true);
+                nextTokenWithoutCheck();
                 return finishNode(node);
             }
 
