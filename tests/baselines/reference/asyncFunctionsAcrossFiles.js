@@ -27,7 +27,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 import { a } from './a';
 export const b = {
-    f: () => __awaiter(this, void 0, void 0, function* () {
+    f: () => __awaiter(void 0, void 0, void 0, function* () {
         yield a.f();
     })
 };
@@ -43,7 +43,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 import { b } from './b';
 export const a = {
-    f: () => __awaiter(this, void 0, void 0, function* () {
+    f: () => __awaiter(void 0, void 0, void 0, function* () {
         yield b.f();
     })
 };

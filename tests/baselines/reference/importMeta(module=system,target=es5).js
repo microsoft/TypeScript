@@ -77,14 +77,12 @@ System.register([], function (exports_1, context_1) {
             if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
         }
     };
-    var _this;
-    _this = this;
     var __moduleName = context_1 && context_1.id;
     return {
         setters: [],
         execute: function () {
             // Adapted from https://github.com/tc39/proposal-import-meta/tree/c3902a9ffe2e69a7ac42c19d7ea74cbdcea9b7fb#example
-            (function () { return __awaiter(_this, void 0, void 0, function () {
+            (function () { return __awaiter(void 0, void 0, void 0, function () {
                 var response, blob, size, image;
                 return __generator(this, function (_a) {
                     switch (_a.label) {

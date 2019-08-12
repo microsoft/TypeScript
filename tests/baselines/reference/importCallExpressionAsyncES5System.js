@@ -67,8 +67,7 @@ System.register([], function (exports_1, context_1) {
             if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
         }
     };
-    var _this, cl1, obj, cl2, l;
-    _this = this;
+    var cl1, obj, cl2, l;
     var __moduleName = context_1 && context_1.id;
     function fn() {
         return __awaiter(this, void 0, void 0, function () {
@@ -109,7 +108,7 @@ System.register([], function (exports_1, context_1) {
             }());
             exports_1("cl1", cl1);
             exports_1("obj", obj = {
-                m: function () { return __awaiter(_this, void 0, void 0, function () {
+                m: function () { return __awaiter(void 0, void 0, void 0, function () {
                     var req;
                     return __generator(this, function (_a) {
                         switch (_a.label) {
@@ -143,7 +142,7 @@ System.register([], function (exports_1, context_1) {
                 return cl2;
             }());
             exports_1("cl2", cl2);
-            exports_1("l", l = function () { return __awaiter(_this, void 0, void 0, function () {
+            exports_1("l", l = function () { return __awaiter(void 0, void 0, void 0, function () {
                 var req;
                 return __generator(this, function (_a) {
                     switch (_a.label) {
