@@ -1,0 +1,30 @@
+=== tests/cases/compiler/classFunctionMerging.ts ===
+// We allow ambient classes and functions to merge, this way callable classes
+// which are also namespaces can be represented in declaration files
+declare function Foo (x: number): Foo.Inst;
+>Foo : Symbol(Foo, Decl(classFunctionMerging.ts, 0, 0), Decl(classFunctionMerging.ts, 2, 43), Decl(classFunctionMerging.ts, 5, 1))
+>x : Symbol(x, Decl(classFunctionMerging.ts, 2, 22))
+>Foo : Symbol(Foo, Decl(classFunctionMerging.ts, 0, 0), Decl(classFunctionMerging.ts, 2, 43), Decl(classFunctionMerging.ts, 5, 1))
+>Inst : Symbol(Foo.Inst, Decl(classFunctionMerging.ts, 6, 23))
+
+declare class Foo {
+>Foo : Symbol(Foo, Decl(classFunctionMerging.ts, 0, 0), Decl(classFunctionMerging.ts, 2, 43), Decl(classFunctionMerging.ts, 5, 1))
+
+    constructor(x: string);
+>x : Symbol(x, Decl(classFunctionMerging.ts, 4, 16))
+}
+declare namespace Foo {
+>Foo : Symbol(Foo, Decl(classFunctionMerging.ts, 0, 0), Decl(classFunctionMerging.ts, 2, 43), Decl(classFunctionMerging.ts, 5, 1))
+
+    export type Inst = number;
+>Inst : Symbol(Inst, Decl(classFunctionMerging.ts, 6, 23))
+}
+
+const a = new Foo("");
+>a : Symbol(a, Decl(classFunctionMerging.ts, 10, 5))
+>Foo : Symbol(Foo, Decl(classFunctionMerging.ts, 0, 0), Decl(classFunctionMerging.ts, 2, 43), Decl(classFunctionMerging.ts, 5, 1))
+
+const b = Foo(12);
+>b : Symbol(b, Decl(classFunctionMerging.ts, 11, 5))
+>Foo : Symbol(Foo, Decl(classFunctionMerging.ts, 0, 0), Decl(classFunctionMerging.ts, 2, 43), Decl(classFunctionMerging.ts, 5, 1))
+

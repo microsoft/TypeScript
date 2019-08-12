@@ -1,4 +1,5 @@
 namespace ts {
+    /** The classifier is used for syntactic highlighting in editors via the TSServer */
     export function createClassifier(): Classifier {
         const scanner = createScanner(ScriptTarget.Latest, /*skipTrivia*/ false);
 

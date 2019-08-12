@@ -243,10 +243,6 @@
         "category": "Error",
         "code": 1085
     },
-    "An accessor cannot be declared in an ambient context.": {
-        "category": "Error",
-        "code": 1086
-    },
     "'{0}' modifier cannot appear on a constructor declaration.": {
         "category": "Error",
         "code": 1089

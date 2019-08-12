@@ -771,6 +771,7 @@ namespace ts {
 
     export const awaiterHelper: UnscopedEmitHelper = {
         name: "typescript:awaiter",
+        importName: "__awaiter",
         scoped: false,
         priority: 5,
         text: `
@@ -802,7 +803,7 @@ namespace ts {
         (generatorFunc.emitNode || (generatorFunc.emitNode = {} as EmitNode)).flags |= EmitFlags.AsyncFunctionBody | EmitFlags.ReuseTempVariableScope;
 
         return createCall(
-            getHelperName("__awaiter"),
+            getUnscopedHelperName("__awaiter"),
             /*typeArguments*/ undefined,
             [
                 createThis(),

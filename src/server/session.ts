@@ -42,6 +42,11 @@ namespace ts.server {
         return false;
     }
 
+
+    function dtsChangeCanAffectEmit(compilationSettings: CompilerOptions) {
+        return getEmitDeclarations(compilationSettings) || !!compilationSettings.emitDecoratorMetadata;
+    }
+
     function formatDiag(fileName: NormalizedPath, project: Project, diag: Diagnostic): protocol.Diagnostic {
         const scriptInfo = project.getScriptInfoForNormalizedPath(fileName)!; // TODO: GH#18217
         return {
@@ -684,7 +689,7 @@ namespace ts.server {
             this.logErrorWorker(err, cmd);
         }
 
-        private logErrorWorker(err: Error, cmd: string, fileRequest?: protocol.FileRequestArgs): void {
+        private logErrorWorker(err: Error & PossibleProgramFileInfo, cmd: string, fileRequest?: protocol.FileRequestArgs): void {
             let msg = "Exception on executing command " + cmd;
             if (err.message) {
                 msg += ":\n" + indent(err.message);
@@ -706,7 +711,9 @@ namespace ts.server {
                     catch { } // tslint:disable-line no-empty
                 }
 
-                if (err.message && err.message.indexOf(`Could not find sourceFile:`) !== -1) {
+
+                if (err.ProgramFiles) {
+                    msg += `\n\nProgram files: ${JSON.stringify(err.ProgramFiles)}\n`;
                     msg += `\n\nProjects::\n`;
                     let counter = 0;
                     const addProjectInfo = (project: Project) => {
@@ -1606,15 +1613,22 @@ namespace ts.server {
                 path => this.projectService.getScriptInfoForPath(path)!,
                 projects,
                 (project, info) => {
-                    let result: protocol.CompileOnSaveAffectedFileListSingleProject | undefined;
-                    if (project.compileOnSaveEnabled && project.languageServiceEnabled && !project.isOrphan() && !project.getCompilationSettings().noEmit) {
-                        result = {
-                            projectFileName: project.getProjectName(),
-                            fileNames: project.getCompileOnSaveAffectedFileList(info),
-                            projectUsesOutFile: !!project.getCompilationSettings().outFile || !!project.getCompilationSettings().out
-                        };
+                    if (!project.compileOnSaveEnabled || !project.languageServiceEnabled || project.isOrphan()) {
+                        return undefined;
                     }
-                    return result;
+
+                    const compilationSettings = project.getCompilationSettings();
+
+                    if (!!compilationSettings.noEmit || fileExtensionIs(info.fileName, Extension.Dts) && !dtsChangeCanAffectEmit(compilationSettings)) {
+                        // avoid triggering emit when a change is made in a .d.ts when declaration emit and decorator metadata emit are disabled
+                        return undefined;
+                    }
+
+                    return {
+                        projectFileName: project.getProjectName(),
+                        fileNames: project.getCompileOnSaveAffectedFileList(info),
+                        projectUsesOutFile: !!compilationSettings.outFile || !!compilationSettings.out
+                    };
                 }
             );
         }

@@ -1,21 +1,31 @@
+tests/cases/conformance/es6/modules/m1.ts(1,22): error TS2300: Duplicate identifier 'default'.
+tests/cases/conformance/es6/modules/m1.ts(1,22): error TS2323: Cannot redeclare exported variable 'default'.
 tests/cases/conformance/es6/modules/m1.ts(1,22): error TS2528: A module cannot have multiple default exports.
-tests/cases/conformance/es6/modules/m1.ts(5,25): error TS2528: A module cannot have multiple default exports.
+tests/cases/conformance/es6/modules/m1.ts(5,25): error TS2300: Duplicate identifier 'default'.
+tests/cases/conformance/es6/modules/m1.ts(5,25): error TS2323: Cannot redeclare exported variable 'default'.
 tests/cases/conformance/es6/modules/m1.ts(5,25): error TS2528: A module cannot have multiple default exports.
 tests/cases/conformance/es6/modules/m1.ts(10,16): error TS2528: A module cannot have multiple default exports.
 
 
-==== tests/cases/conformance/es6/modules/m1.ts (4 errors) ====
+==== tests/cases/conformance/es6/modules/m1.ts (7 errors) ====
     export default class foo {
                          ~~~
+!!! error TS2300: Duplicate identifier 'default'.
+!!! related TS6203 tests/cases/conformance/es6/modules/m1.ts:5:25: 'default' was also declared here.
+                         ~~~
+!!! error TS2323: Cannot redeclare exported variable 'default'.
+                         ~~~
 !!! error TS2528: A module cannot have multiple default exports.
-!!! related TS2752 tests/cases/conformance/es6/modules/m1.ts:5:25: The first export default is here.
+!!! related TS6204 tests/cases/conformance/es6/modules/m1.ts:10:16: and here.
     
     }
     
     export default function bar() {
                             ~~~
-!!! error TS2528: A module cannot have multiple default exports.
-!!! related TS2753 tests/cases/conformance/es6/modules/m1.ts:1:22: Another export default is here.
+!!! error TS2300: Duplicate identifier 'default'.
+!!! related TS6203 tests/cases/conformance/es6/modules/m1.ts:1:22: 'default' was also declared here.
+                            ~~~
+!!! error TS2323: Cannot redeclare exported variable 'default'.
                             ~~~
 !!! error TS2528: A module cannot have multiple default exports.
 !!! related TS2753 tests/cases/conformance/es6/modules/m1.ts:10:16: Another export default is here.
@@ -27,6 +37,7 @@ tests/cases/conformance/es6/modules/m1.ts(10,16): error TS2528: A module cannot 
                    ~
 !!! error TS2528: A module cannot have multiple default exports.
 !!! related TS2752 tests/cases/conformance/es6/modules/m1.ts:5:25: The first export default is here.
+!!! related TS2752 tests/cases/conformance/es6/modules/m1.ts:1:22: The first export default is here.
     
 ==== tests/cases/conformance/es6/modules/m2.ts (0 errors) ====
     import Entity from "./m1"
