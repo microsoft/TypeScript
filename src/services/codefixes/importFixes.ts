@@ -786,8 +786,4 @@ namespace ts.codefix {
             return components[0];
         }
     }
-
-    function consumesNodeCoreModules(sourceFile: SourceFile): boolean {
-        return some(sourceFile.imports, ({ text }) => JsTyping.nodeCoreModules.has(text));
-    }
 }

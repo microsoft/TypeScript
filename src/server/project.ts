@@ -118,6 +118,10 @@ namespace ts.server {
         return (watch as GeneratedFileWatcher).generatedFilePath !== undefined;
     }
 
+    interface AutoImportSuggestionFileInfo {
+        consumesNodeCoreModules: boolean;
+    }
+
     export abstract class Project implements LanguageServiceHost, ModuleResolutionHost {
         private rootFiles: ScriptInfo[] = [];
         private rootFilesMap: Map<ProjectRoot> = createMap<ProjectRoot>();
@@ -234,6 +238,7 @@ namespace ts.server {
         private readonly packageJsonCache: PackageJsonCache;
 
         private importSuggestionsCache = Completions.createImportSuggestionsCache();
+        private dirtyFilesForSuggestions: Map<AutoImportSuggestionFileInfo> | undefined;
 
         /*@internal*/
         constructor(
@@ -845,10 +850,15 @@ namespace ts.server {
             (this.updatedFileNames || (this.updatedFileNames = createMap<true>())).set(fileName, true);
         }
 
-        markAsDirty() {
+        markAsDirty(/*@internal*/ changedFile?: ScriptInfo) {
             if (!this.dirty) {
                 this.projectStateVersion++;
                 this.dirty = true;
+            }
+            if (changedFile && !this.importSuggestionsCache.isEmpty && changedFile.cacheSourceFile) {
+                (this.dirtyFilesForSuggestions || (this.dirtyFilesForSuggestions = createMap())).set(changedFile.fileName, {
+                    consumesNodeCoreModules: consumesNodeCoreModules(changedFile.cacheSourceFile.sourceFile)
+                });
             }
         }
 
@@ -897,6 +907,8 @@ namespace ts.server {
             if (hasNewProgram) {
                 this.projectProgramVersion++;
             }
+
+            this.cleanImportSuggestionsCache(hasNewProgram);
             return !hasNewProgram;
         }
 
@@ -1022,6 +1034,26 @@ namespace ts.server {
                 this.print();
             }
             return hasNewProgram;
+        }
+
+        private cleanImportSuggestionsCache(hasNewProgram: boolean) {
+            if (!this.importSuggestionsCache.isEmpty) {
+                if (hasNewProgram) {
+                    this.importSuggestionsCache.clear();
+                }
+                else if (this.dirtyFilesForSuggestions && this.program) {
+                    forEachEntry(this.dirtyFilesForSuggestions, (info, fileName) => {
+                        const sourceFile = this.program!.getSourceFile(fileName);
+                        if (sourceFile && info.consumesNodeCoreModules !== consumesNodeCoreModules(sourceFile)) {
+                            this.importSuggestionsCache.clear();
+                            return true;
+                        }
+                    });
+                }
+            }
+            if (this.dirtyFilesForSuggestions) {
+                this.dirtyFilesForSuggestions.clear();
+            }
         }
 
         private detachScriptInfoFromProject(uncheckedFileName: string, noRemoveResolution?: boolean) {
