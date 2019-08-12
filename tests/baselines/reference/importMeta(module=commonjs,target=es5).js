@@ -1,4 +1,4 @@
-//// [tests/cases/conformance/es2019/importMeta/importMetaES5.ts] ////
+//// [tests/cases/conformance/es2019/importMeta/importMeta.ts] ////
 
 //// [example.ts]
 // Adapted from https://github.com/tc39/proposal-import-meta/tree/c3902a9ffe2e69a7ac42c19d7ea74cbdcea9b7fb#example
