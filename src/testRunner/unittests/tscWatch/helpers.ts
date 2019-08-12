@@ -218,12 +218,9 @@ namespace ts.tscWatch {
             host,
             [
                 ...map(errors, hostOutputDiagnostic),
-                ...map(
-                    reportErrorSummary ?
-                        [getErrorSummaryText(errors.length, host.newLine)] :
-                        emptyArray,
-                    hostOutputWatchDiagnostic
-                )
+                ...reportErrorSummary ?
+                    [hostOutputWatchDiagnostic(getErrorSummaryText(errors.length, host.newLine))] :
+                    emptyArray
             ]
         );
     }
