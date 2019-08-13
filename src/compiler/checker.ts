@@ -4654,9 +4654,6 @@ namespace ts {
                 function createExpressionFromSymbolChain(chain: Symbol[], index: number): Expression {
                     const typeParameterNodes = lookupTypeParameterNodes(chain, index, context);
                     const symbol = chain[index];
-                    if (some(symbol.declarations, hasNonGlobalAugmentationExternalModuleSymbol)) {
-                        return createLiteral(getSpecifierForModuleSymbol(symbol, context));
-                    }
 
                     if (index === 0) {
                         context.flags |= NodeBuilderFlags.InInitialEntityName;
@@ -4666,6 +4663,9 @@ namespace ts {
                         context.flags ^= NodeBuilderFlags.InInitialEntityName;
                     }
                     let firstChar = symbolName.charCodeAt(0);
+                    if (isSingleOrDoubleQuote(firstChar) && some(symbol.declarations, hasNonGlobalAugmentationExternalModuleSymbol)) {
+                        return createLiteral(getSpecifierForModuleSymbol(symbol, context));
+                    }
                     const canUsePropertyAccess = isIdentifierStart(firstChar, languageVersion);
                     if (index === 0 || canUsePropertyAccess) {
                         const identifier = setEmitFlags(createIdentifier(symbolName, typeParameterNodes), EmitFlags.NoAsciiEscaping);
@@ -4821,9 +4821,9 @@ namespace ts {
                 return "default";
             }
             if (symbol.declarations && symbol.declarations.length) {
-                const declaration = symbol.declarations[0];
-                const name = getNameOfDeclaration(declaration);
-                if (name) {
+                let declaration = firstDefined(symbol.declarations, d => getNameOfDeclaration(d) ? d : undefined); // Try using a declaration with a name, first
+                const name = declaration && getNameOfDeclaration(declaration);
+                if (declaration && name) {
                     if (isCallExpression(declaration) && isBindableObjectDefinePropertyCall(declaration)) {
                         return symbolName(symbol);
                     }
@@ -4835,6 +4835,9 @@ namespace ts {
                         }
                     }
                     return declarationNameToString(name);
+                }
+                if (!declaration) {
+                    declaration = symbol.declarations[0]; // Declaration may be nameless, but we'll try anyway
                 }
                 if (declaration.parent && declaration.parent.kind === SyntaxKind.VariableDeclaration) {
                     return declarationNameToString((<VariableDeclaration>declaration.parent).name);
