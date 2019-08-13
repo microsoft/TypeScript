@@ -1,0 +1,85 @@
+=== tests/cases/conformance/salsa/propertiesOfGenericConstructorFunctions.js ===
+/**
+ * @template {string} K
+ * @template V
+ * @param {string} ik
+ * @param {V} iv
+ */
+function Multimap(ik, iv) {
+>Multimap : typeof Multimap
+>ik : string
+>iv : V
+
+    /** @type {{ [s: string]: V }} */
+    this._map = {};
+>this._map = {} : {}
+>this._map : any
+>this : any
+>_map : any
+>{} : {}
+
+    // without type annotation
+    this._map2 = { [ik]: iv };
+>this._map2 = { [ik]: iv } : { [x: string]: V; }
+>this._map2 : any
+>this : any
+>_map2 : any
+>{ [ik]: iv } : { [x: string]: V; }
+>[ik] : V
+>ik : string
+>iv : V
+
+};
+
+/** @type {Multimap<"a" | "b", number>} with type annotation */
+const map = new Multimap("a", 1);
+>map : Multimap<"a" | "b", number>
+>new Multimap("a", 1) : Multimap<"a" | "b", number>
+>Multimap : typeof Multimap
+>"a" : "a"
+>1 : 1
+
+// without type annotation
+const map2 = new Multimap("m", 2);
+>map2 : Multimap<string, number>
+>new Multimap("m", 2) : Multimap<string, number>
+>Multimap : typeof Multimap
+>"m" : "m"
+>2 : 2
+
+/** @type {number} */
+var n = map._map['hi']
+>n : number
+>map._map['hi'] : number
+>map._map : { [s: string]: number; }
+>map : Multimap<"a" | "b", number>
+>_map : { [s: string]: number; }
+>'hi' : "hi"
+
+/** @type {number} */
+var n = map._map2['hi']
+>n : number
+>map._map2['hi'] : number
+>map._map2 : { [x: string]: number; }
+>map : Multimap<"a" | "b", number>
+>_map2 : { [x: string]: number; }
+>'hi' : "hi"
+
+/** @type {number} */
+var n = map2._map['hi']
+>n : number
+>map2._map['hi'] : number
+>map2._map : { [s: string]: number; }
+>map2 : Multimap<string, number>
+>_map : { [s: string]: number; }
+>'hi' : "hi"
+
+/** @type {number} */
+var n = map._map2['hi']
+>n : number
+>map._map2['hi'] : number
+>map._map2 : { [x: string]: number; }
+>map : Multimap<"a" | "b", number>
+>_map2 : { [x: string]: number; }
+>'hi' : "hi"
+

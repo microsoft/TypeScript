@@ -1,0 +1,63 @@
+=== tests/cases/conformance/salsa/propertiesOfGenericConstructorFunctions.js ===
+/**
+ * @template {string} K
+ * @template V
+ * @param {string} ik
+ * @param {V} iv
+ */
+function Multimap(ik, iv) {
+>Multimap : Symbol(Multimap, Decl(propertiesOfGenericConstructorFunctions.js, 0, 0))
+>ik : Symbol(ik, Decl(propertiesOfGenericConstructorFunctions.js, 6, 18))
+>iv : Symbol(iv, Decl(propertiesOfGenericConstructorFunctions.js, 6, 21))
+
+    /** @type {{ [s: string]: V }} */
+    this._map = {};
+>_map : Symbol(Multimap._map, Decl(propertiesOfGenericConstructorFunctions.js, 6, 27))
+
+    // without type annotation
+    this._map2 = { [ik]: iv };
+>_map2 : Symbol(Multimap._map2, Decl(propertiesOfGenericConstructorFunctions.js, 8, 19))
+>[ik] : Symbol([ik], Decl(propertiesOfGenericConstructorFunctions.js, 10, 18))
+>ik : Symbol(ik, Decl(propertiesOfGenericConstructorFunctions.js, 6, 18))
+>iv : Symbol(iv, Decl(propertiesOfGenericConstructorFunctions.js, 6, 21))
+
+};
+
+/** @type {Multimap<"a" | "b", number>} with type annotation */
+const map = new Multimap("a", 1);
+>map : Symbol(map, Decl(propertiesOfGenericConstructorFunctions.js, 14, 5))
+>Multimap : Symbol(Multimap, Decl(propertiesOfGenericConstructorFunctions.js, 0, 0))
+
+// without type annotation
+const map2 = new Multimap("m", 2);
+>map2 : Symbol(map2, Decl(propertiesOfGenericConstructorFunctions.js, 16, 5))
+>Multimap : Symbol(Multimap, Decl(propertiesOfGenericConstructorFunctions.js, 0, 0))
+
+/** @type {number} */
+var n = map._map['hi']
+>n : Symbol(n, Decl(propertiesOfGenericConstructorFunctions.js, 19, 3), Decl(propertiesOfGenericConstructorFunctions.js, 21, 3), Decl(propertiesOfGenericConstructorFunctions.js, 23, 3), Decl(propertiesOfGenericConstructorFunctions.js, 25, 3))
+>map._map : Symbol(Multimap._map, Decl(propertiesOfGenericConstructorFunctions.js, 6, 27))
+>map : Symbol(map, Decl(propertiesOfGenericConstructorFunctions.js, 14, 5))
+>_map : Symbol(Multimap._map, Decl(propertiesOfGenericConstructorFunctions.js, 6, 27))
+
+/** @type {number} */
+var n = map._map2['hi']
+>n : Symbol(n, Decl(propertiesOfGenericConstructorFunctions.js, 19, 3), Decl(propertiesOfGenericConstructorFunctions.js, 21, 3), Decl(propertiesOfGenericConstructorFunctions.js, 23, 3), Decl(propertiesOfGenericConstructorFunctions.js, 25, 3))
+>map._map2 : Symbol(Multimap._map2, Decl(propertiesOfGenericConstructorFunctions.js, 8, 19))
+>map : Symbol(map, Decl(propertiesOfGenericConstructorFunctions.js, 14, 5))
+>_map2 : Symbol(Multimap._map2, Decl(propertiesOfGenericConstructorFunctions.js, 8, 19))
+
+/** @type {number} */
+var n = map2._map['hi']
+>n : Symbol(n, Decl(propertiesOfGenericConstructorFunctions.js, 19, 3), Decl(propertiesOfGenericConstructorFunctions.js, 21, 3), Decl(propertiesOfGenericConstructorFunctions.js, 23, 3), Decl(propertiesOfGenericConstructorFunctions.js, 25, 3))
+>map2._map : Symbol(Multimap._map, Decl(propertiesOfGenericConstructorFunctions.js, 6, 27))
+>map2 : Symbol(map2, Decl(propertiesOfGenericConstructorFunctions.js, 16, 5))
+>_map : Symbol(Multimap._map, Decl(propertiesOfGenericConstructorFunctions.js, 6, 27))
+
+/** @type {number} */
+var n = map._map2['hi']
+>n : Symbol(n, Decl(propertiesOfGenericConstructorFunctions.js, 19, 3), Decl(propertiesOfGenericConstructorFunctions.js, 21, 3), Decl(propertiesOfGenericConstructorFunctions.js, 23, 3), Decl(propertiesOfGenericConstructorFunctions.js, 25, 3))
+>map._map2 : Symbol(Multimap._map2, Decl(propertiesOfGenericConstructorFunctions.js, 8, 19))
+>map : Symbol(map, Decl(propertiesOfGenericConstructorFunctions.js, 14, 5))
+>_map2 : Symbol(Multimap._map2, Decl(propertiesOfGenericConstructorFunctions.js, 8, 19))
+

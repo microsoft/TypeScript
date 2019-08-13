@@ -2046,7 +2046,15 @@ namespace ts {
                 result.declarations,
                 d => isBlockOrCatchScoped(d) || isClassLike(d) || (d.kind === SyntaxKind.EnumDeclaration));
 
-            if (declaration === undefined) return Debug.fail("Declaration to checkResolvedBlockScopedVariable is undefined");
+            if (declaration === undefined) {
+                if (result.declarations.some(isJSConstructor)) {
+                    // constructor functions aren't block scoped
+                    return;
+                }
+                else {
+                    return Debug.fail("checkResolvedBlockScopedVariable could not find block-scoped declaration");
+                }
+            }
 
             if (!(declaration.flags & NodeFlags.Ambient) && !isBlockScopedNameDeclaredBeforeUse(declaration, errorLocation)) {
                 let diagnosticMessage;
@@ -6212,6 +6220,8 @@ namespace ts {
                 if (node.kind === SyntaxKind.InterfaceDeclaration ||
                     node.kind === SyntaxKind.ClassDeclaration ||
                     node.kind === SyntaxKind.ClassExpression ||
+                    node.kind === SyntaxKind.FunctionDeclaration ||
+                    node.kind === SyntaxKind.FunctionExpression ||
                     isTypeAlias(node)) {
                     const declaration = <InterfaceDeclaration | TypeAliasDeclaration | JSDocTypedefTag | JSDocCallbackTag>node;
                     result = appendTypeParameters(result, getEffectiveTypeParameterDeclarations(declaration));
@@ -7486,8 +7496,8 @@ namespace ts {
                 }
                 setStructuredTypeMembers(type, members, emptyArray, emptyArray, undefined, undefined);
                 if (symbol.flags & SymbolFlags.Class) {
-                    const classType = getDeclaredTypeOfClassOrInterface(symbol);
-                    const baseConstructorType = getBaseConstructorTypeOfClass(classType);
+                    const instanceType = getDeclaredTypeOfClassOrInterface(symbol);
+                    const baseConstructorType = getBaseConstructorTypeOfClass(instanceType);
                     if (baseConstructorType.flags & (TypeFlags.Object | TypeFlags.Intersection | TypeFlags.TypeVariable)) {
                         members = createSymbolTable(getNamedMembers(members));
                         addInheritedMembers(members, getPropertiesOfType(baseConstructorType));
@@ -7505,15 +7515,22 @@ namespace ts {
                 // will never be observed because a qualified name can't reference signatures.
                 if (symbol.flags & (SymbolFlags.Function | SymbolFlags.Method)) {
                     type.callSignatures = getSignaturesOfSymbol(symbol);
-                    type.constructSignatures = filter(type.callSignatures, sig => isJSConstructor(sig.declaration));
                 }
                 // And likewise for construct signatures for classes
                 if (symbol.flags & SymbolFlags.Class) {
-                    const classType = getDeclaredTypeOfClassOrInterface(symbol);
+                    const instanceType = getDeclaredTypeOfClassOrInterface(symbol);
                     let constructSignatures = getSignaturesOfSymbol(symbol.members!.get(InternalSymbolName.Constructor));
-                    if (!constructSignatures.length) {
-                        constructSignatures = getDefaultConstructSignatures(classType);
+                    if (symbol.flags & SymbolFlags.Function) {
+                        constructSignatures = mapDefined(
+                            type.callSignatures,
+                            sig => isJSConstructor(sig.declaration) ?
+                                createSignature(sig.declaration, sig.typeParameters, sig.thisParameter, sig.parameters, instanceType, /*resolvedTypePredicate*/ undefined, sig.minArgumentCount, sig.hasRestParameter, sig.hasLiteralTypes) :
+                                undefined);
                     }
+                    if (!constructSignatures.length) {
+                        constructSignatures = getDefaultConstructSignatures(instanceType);
+                    }
+
                     type.constructSignatures = constructSignatures;
                 }
             }

@@ -227,7 +227,8 @@ namespace ts {
             symbol.flags |= symbolFlags;
 
             node.symbol = symbol;
-            symbol.declarations = append(symbol.declarations, node);
+            // TODO: This is probably too slow to run on every call
+            symbol.declarations = appendIfUnique(symbol.declarations, node);
 
             if (symbolFlags & (SymbolFlags.Class | SymbolFlags.Enum | SymbolFlags.Module | SymbolFlags.Variable) && !symbol.exports) {
                 symbol.exports = createSymbolTable();
@@ -2510,6 +2511,8 @@ namespace ts {
                         constructorSymbol.members = constructorSymbol.members || createSymbolTable();
                         // It's acceptable for multiple 'this' assignments of the same identifier to occur
                         declareSymbol(constructorSymbol.members, constructorSymbol, node, SymbolFlags.Property, SymbolFlags.PropertyExcludes & ~SymbolFlags.Property);
+                        // TODO: Also do this for prototype assignments, Object.defineProperty assignments and functions annotated with @constructor
+                        addDeclarationToSymbol(constructorSymbol, thisContainer as FunctionDeclaration | FunctionExpression, SymbolFlags.Class);
                     }
                     break;
 
