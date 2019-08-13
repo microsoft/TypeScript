@@ -35,7 +35,7 @@ interface Array<T> { length: number; [n: number]: T; }`
         executingFilePath?: string;
         currentDirectory?: string;
         newLine?: string;
-        useWindowsStylePaths?: boolean;
+        windowsStyleRoot?: string;
         environmentVariables?: Map<string>;
     }
 
@@ -332,7 +332,7 @@ interface Array<T> { length: number; [n: number]: T; }`
         readonly watchedFiles = createMultiMap<TestFileWatcher>();
         public readonly useCaseSensitiveFileNames: boolean;
         public readonly newLine: string;
-        public readonly useWindowsStylePaths?: boolean;
+        public readonly windowsStyleRoot?: string;
         private readonly environmentVariables?: Map<string>;
         private readonly executingFilePath: string;
         private readonly currentDirectory: string;
@@ -345,11 +345,11 @@ interface Array<T> { length: number; [n: number]: T; }`
             fileOrFolderorSymLinkList: ReadonlyArray<FileOrFolderOrSymLink>,
             {
                 useCaseSensitiveFileNames, executingFilePath, currentDirectory,
-                newLine, useWindowsStylePaths, environmentVariables
+                newLine, windowsStyleRoot, environmentVariables
             }: TestServerHostCreationParameters = {}) {
             this.useCaseSensitiveFileNames = !!useCaseSensitiveFileNames;
             this.newLine = newLine || "\n";
-            this.useWindowsStylePaths = useWindowsStylePaths;
+            this.windowsStyleRoot = windowsStyleRoot;
             this.environmentVariables = environmentVariables;
             currentDirectory = currentDirectory || "/";
             this.getCanonicalFileName = createGetCanonicalFileName(!!useCaseSensitiveFileNames);
@@ -421,8 +421,8 @@ interface Array<T> { length: number; [n: number]: T; }`
         }
 
         getHostSpecificPath(s: string) {
-            if (this.useWindowsStylePaths && s.startsWith(directorySeparator)) {
-                return "c:/" + s.substring(1);
+            if (this.windowsStyleRoot && s.startsWith(directorySeparator)) {
+                return this.windowsStyleRoot + s.substring(1);
             }
             return s;
         }
@@ -436,7 +436,7 @@ interface Array<T> { length: number; [n: number]: T; }`
             const mapNewLeaves = createMap<true>();
             const isNewFs = this.fs.size === 0;
             fileOrFolderOrSymLinkList = fileOrFolderOrSymLinkList.concat(this.withSafeList ? safeList : []);
-            const filesOrFoldersToLoad: ReadonlyArray<FileOrFolderOrSymLink> = !this.useWindowsStylePaths ? fileOrFolderOrSymLinkList :
+            const filesOrFoldersToLoad: ReadonlyArray<FileOrFolderOrSymLink> = !this.windowsStyleRoot ? fileOrFolderOrSymLinkList :
                 fileOrFolderOrSymLinkList.map<FileOrFolderOrSymLink>(f => {
                     const result = clone(f);
                     result.path = this.getHostSpecificPath(f.path);

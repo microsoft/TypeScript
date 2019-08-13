@@ -99,7 +99,7 @@ namespace ts.projectSystem {
                 content: "let y = 10;"
             };
             const files = [configFile, file1, file2, libFile];
-            const host = createServerHost(files, { useWindowsStylePaths: true });
+            const host = createServerHost(files, { windowsStyleRoot: "c:/" });
             const projectService = createProjectService(host);
             projectService.openClientFile(file1.path);
             const project = projectService.configuredProjects.get(configFile.path)!;
