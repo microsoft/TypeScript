@@ -374,29 +374,30 @@ declare namespace ts {
         JSDocOptionalType = 294,
         JSDocFunctionType = 295,
         JSDocVariadicType = 296,
-        JSDocComment = 297,
-        JSDocTypeLiteral = 298,
-        JSDocSignature = 299,
-        JSDocTag = 300,
-        JSDocAugmentsTag = 301,
-        JSDocAuthorTag = 302,
-        JSDocClassTag = 303,
-        JSDocCallbackTag = 304,
-        JSDocEnumTag = 305,
-        JSDocParameterTag = 306,
-        JSDocReturnTag = 307,
-        JSDocThisTag = 308,
-        JSDocTypeTag = 309,
-        JSDocTemplateTag = 310,
-        JSDocTypedefTag = 311,
-        JSDocPropertyTag = 312,
-        SyntaxList = 313,
-        NotEmittedStatement = 314,
-        PartiallyEmittedExpression = 315,
-        CommaListExpression = 316,
-        MergeDeclarationMarker = 317,
-        EndOfDeclarationMarker = 318,
-        Count = 319,
+        JSDocNamepathType = 297,
+        JSDocComment = 298,
+        JSDocTypeLiteral = 299,
+        JSDocSignature = 300,
+        JSDocTag = 301,
+        JSDocAugmentsTag = 302,
+        JSDocAuthorTag = 303,
+        JSDocClassTag = 304,
+        JSDocCallbackTag = 305,
+        JSDocEnumTag = 306,
+        JSDocParameterTag = 307,
+        JSDocReturnTag = 308,
+        JSDocThisTag = 309,
+        JSDocTypeTag = 310,
+        JSDocTemplateTag = 311,
+        JSDocTypedefTag = 312,
+        JSDocPropertyTag = 313,
+        SyntaxList = 314,
+        NotEmittedStatement = 315,
+        PartiallyEmittedExpression = 316,
+        CommaListExpression = 317,
+        MergeDeclarationMarker = 318,
+        EndOfDeclarationMarker = 319,
+        Count = 320,
         FirstAssignment = 60,
         LastAssignment = 72,
         FirstCompoundAssignment = 61,
@@ -423,9 +424,9 @@ declare namespace ts {
         LastBinaryOperator = 72,
         FirstNode = 149,
         FirstJSDocNode = 289,
-        LastJSDocNode = 312,
-        FirstJSDocTagNode = 300,
-        LastJSDocTagNode = 312,
+        LastJSDocNode = 313,
+        FirstJSDocTagNode = 301,
+        LastJSDocTagNode = 313,
     }
     export enum NodeFlags {
         None = 0,
@@ -1558,6 +1559,10 @@ declare namespace ts {
         kind: SyntaxKind.JSDocVariadicType;
         type: TypeNode;
     }
+    export interface JSDocNamepathType extends JSDocType {
+        kind: SyntaxKind.JSDocNamepathType;
+        type: TypeNode;
+    }
     export type JSDocTypeReferencingNode = JSDocVariadicType | JSDocOptionalType | JSDocNullableType | JSDocNonNullableType;
     export interface JSDoc extends Node {
         kind: SyntaxKind.JSDocComment;
@@ -1589,7 +1594,8 @@ declare namespace ts {
     export interface JSDocClassTag extends JSDocTag {
         kind: SyntaxKind.JSDocClassTag;
     }
-    export interface JSDocEnumTag extends JSDocTag {
+    export interface JSDocEnumTag extends JSDocTag, Declaration {
+        parent: JSDoc;
         kind: SyntaxKind.JSDocEnumTag;
         typeExpression?: JSDocTypeExpression;
     }
@@ -2126,28 +2132,28 @@ declare namespace ts {
         ModuleExports = 134217728,
         Enum = 384,
         Variable = 3,
-        Value = 67220415,
-        Type = 67897832,
+        Value = 111551,
+        Type = 788968,
         Namespace = 1920,
         Module = 1536,
         Accessor = 98304,
-        FunctionScopedVariableExcludes = 67220414,
-        BlockScopedVariableExcludes = 67220415,
-        ParameterExcludes = 67220415,
+        FunctionScopedVariableExcludes = 111550,
+        BlockScopedVariableExcludes = 111551,
+        ParameterExcludes = 111551,
         PropertyExcludes = 0,
-        EnumMemberExcludes = 68008959,
-        FunctionExcludes = 67219887,
-        ClassExcludes = 68008383,
-        InterfaceExcludes = 67897736,
-        RegularEnumExcludes = 68008191,
-        ConstEnumExcludes = 68008831,
+        EnumMemberExcludes = 900095,
+        FunctionExcludes = 110991,
+        ClassExcludes = 899503,
+        InterfaceExcludes = 788872,
+        RegularEnumExcludes = 899327,
+        ConstEnumExcludes = 899967,
         ValueModuleExcludes = 110735,
         NamespaceModuleExcludes = 0,
-        MethodExcludes = 67212223,
-        GetAccessorExcludes = 67154879,
-        SetAccessorExcludes = 67187647,
-        TypeParameterExcludes = 67635688,
-        TypeAliasExcludes = 67897832,
+        MethodExcludes = 103359,
+        GetAccessorExcludes = 46015,
+        SetAccessorExcludes = 78783,
+        TypeParameterExcludes = 526824,
+        TypeAliasExcludes = 788968,
         AliasExcludes = 2097152,
         ModuleMember = 2623475,
         ExportHasLocal = 944,
@@ -2600,7 +2606,7 @@ declare namespace ts {
         UMD = 3,
         System = 4,
         ES2015 = 5,
-        ESNext = 6
+        ESNext = 99
     }
     export enum JsxEmit {
         None = 0,
@@ -2640,9 +2646,9 @@ declare namespace ts {
         ES2018 = 5,
         ES2019 = 6,
         ES2020 = 7,
-        ESNext = 8,
+        ESNext = 99,
         JSON = 100,
-        Latest = 8
+        Latest = 99
     }
     export enum LanguageVariant {
         Standard = 0,
@@ -2768,11 +2774,11 @@ declare namespace ts {
         useCaseSensitiveFileNames(): boolean;
         getNewLine(): string;
         readDirectory?(rootDir: string, extensions: ReadonlyArray<string>, excludes: ReadonlyArray<string> | undefined, includes: ReadonlyArray<string>, depth?: number): string[];
-        resolveModuleNames?(moduleNames: string[], containingFile: string, reusedNames?: string[], redirectedReference?: ResolvedProjectReference): (ResolvedModule | undefined)[];
+        resolveModuleNames?(moduleNames: string[], containingFile: string, reusedNames: string[] | undefined, redirectedReference: ResolvedProjectReference | undefined, options: CompilerOptions): (ResolvedModule | undefined)[];
         /**
          * This method is a companion for 'resolveModuleNames' and is used to resolve 'types' references to actual type declaration files
          */
-        resolveTypeReferenceDirectives?(typeReferenceDirectiveNames: string[], containingFile: string, redirectedReference?: ResolvedProjectReference): (ResolvedTypeReferenceDirective | undefined)[];
+        resolveTypeReferenceDirectives?(typeReferenceDirectiveNames: string[], containingFile: string, redirectedReference: ResolvedProjectReference | undefined, options: CompilerOptions): (ResolvedTypeReferenceDirective | undefined)[];
         getEnvironmentVariable?(name: string): string | undefined;
         createHash?(data: string): string;
         getParsedCommandLine?(fileName: string): ParsedCommandLine | undefined;
@@ -3168,6 +3174,7 @@ declare namespace ts {
         getTokenPos(): number;
         getTokenText(): string;
         getTokenValue(): string;
+        hasUnicodeEscape(): boolean;
         hasExtendedUnicodeEscape(): boolean;
         hasPrecedingLineBreak(): boolean;
         isIdentifier(): boolean;
@@ -4528,9 +4535,9 @@ declare namespace ts {
         /** If provided is used to get the environment variable */
         getEnvironmentVariable?(name: string): string | undefined;
         /** If provided, used to resolve the module names, otherwise typescript's default module resolution */
-        resolveModuleNames?(moduleNames: string[], containingFile: string, reusedNames?: string[], redirectedReference?: ResolvedProjectReference): (ResolvedModule | undefined)[];
+        resolveModuleNames?(moduleNames: string[], containingFile: string, reusedNames: string[] | undefined, redirectedReference: ResolvedProjectReference | undefined, options: CompilerOptions): (ResolvedModule | undefined)[];
         /** If provided, used to resolve type reference directives, otherwise typescript's default resolution */
-        resolveTypeReferenceDirectives?(typeReferenceDirectiveNames: string[], containingFile: string, redirectedReference?: ResolvedProjectReference): (ResolvedTypeReferenceDirective | undefined)[];
+        resolveTypeReferenceDirectives?(typeReferenceDirectiveNames: string[], containingFile: string, redirectedReference: ResolvedProjectReference | undefined, options: CompilerOptions): (ResolvedTypeReferenceDirective | undefined)[];
     }
     interface WatchCompilerHost<T extends BuilderProgram> extends ProgramHost<T>, WatchHost {
         /** If provided, callback to invoke after every new program creation */
@@ -4885,9 +4892,9 @@ declare namespace ts {
         realpath?(path: string): string;
         fileExists?(path: string): boolean;
         getTypeRootsVersion?(): number;
-        resolveModuleNames?(moduleNames: string[], containingFile: string, reusedNames?: string[], redirectedReference?: ResolvedProjectReference): (ResolvedModule | undefined)[];
+        resolveModuleNames?(moduleNames: string[], containingFile: string, reusedNames: string[] | undefined, redirectedReference: ResolvedProjectReference | undefined, options: CompilerOptions): (ResolvedModule | undefined)[];
         getResolvedModuleWithFailedLookupLocationsFromCache?(modulename: string, containingFile: string): ResolvedModuleWithFailedLookupLocations | undefined;
-        resolveTypeReferenceDirectives?(typeDirectiveNames: string[], containingFile: string, redirectedReference?: ResolvedProjectReference): (ResolvedTypeReferenceDirective | undefined)[];
+        resolveTypeReferenceDirectives?(typeDirectiveNames: string[], containingFile: string, redirectedReference: ResolvedProjectReference | undefined, options: CompilerOptions): (ResolvedTypeReferenceDirective | undefined)[];
         getDirectories?(directoryName: string): string[];
         /**
          * Gets a set of custom transformers to use during emit.
@@ -5670,6 +5677,7 @@ declare namespace ts {
     }
 }
 declare namespace ts {
+    /** The classifier is used for syntactic highlighting in editors via the TSServer */
     function createClassifier(): Classifier;
 }
 declare namespace ts {
