@@ -2,94 +2,153 @@ Exit Code: 1
 Standard output:
 
 Rush Multi-Project Build Tool 5.X.X - https://rushjs.io
-Node.js version is 12.7.0 (pre-LTS)
+Node.js version is 12.8.0 (pre-LTS)
 Starting "rush rebuild"
 Executing a maximum of ?simultaneous processes...
+XX of XX: [@azure/identity] completed successfully in ? seconds
+XX of XX: [@azure/event-processor-host] completed successfully in ? seconds
+XX of XX: [@azure/abort-controller] completed successfully in ? seconds
+XX of XX: [@azure/core-arm] completed successfully in ? seconds
+XX of XX: [@azure/core-asynciterator-polyfill] completed successfully in ? seconds
+XX of XX: [@azure/core-auth] completed successfully in ? seconds
 npm ERR! code ELIFECYCLE
 npm ERR! errno 2
-npm ERR! @azure/core-http@X.X.X-preview.2 build:tsc: `tsc -p tsconfig.es.json`
+npm ERR! @azure/core-http@X.X.X-preview.3 build:tsc: `tsc -p tsconfig.es.json`
 npm ERR! Exit status 2
 npm ERR! 
-npm ERR! Failed at the @azure/core-http@X.X.X-preview.2 build:tsc script.
+npm ERR! Failed at the @azure/core-http@X.X.X-preview.3 build:tsc script.
 npm ERR! This is probably not a problem with npm. There is likely additional logging output above.
 npm ERR! A complete log of this run can be found in:
 npm ERR!     /root/.npm/_logs/XXXX-XX-XXXXXXXXX-debug.log
 ERROR: "build:tsc" exited with 2.
 npm ERR! code ELIFECYCLE
 npm ERR! errno 1
-npm ERR! @azure/core-http@X.X.X-preview.2 build:lib: `run-s build:tsc build:rollup build:minify-browser`
+npm ERR! @azure/core-http@X.X.X-preview.3 build:lib: `run-s build:tsc build:rollup build:minify-browser`
 npm ERR! Exit status 1
 npm ERR! 
-npm ERR! Failed at the @azure/core-http@X.X.X-preview.2 build:lib script.
+npm ERR! Failed at the @azure/core-http@X.X.X-preview.3 build:lib script.
 npm ERR! This is probably not a problem with npm. There is likely additional logging output above.
 npm ERR! A complete log of this run can be found in:
 npm ERR!     /root/.npm/_logs/XXXX-XX-XXXXXXXXX-debug.log
 ERROR: "build:lib" exited with 1.
-XX of XX: [@azure/core-tracing] completed successfully in ? seconds
-XX of XX: [@azure/event-processor-host] completed successfully in ? seconds
-XX of XX: [@azure/abort-controller] completed successfully in ? seconds
-XX of XX: [@azure/core-asynciterator-polyfill] completed successfully in ? seconds
-XX of XX: [@azure/core-auth] completed successfully in ? seconds
 XX of XX: [@azure/core-paging] completed successfully in ? seconds
+XX of XX: [@azure/core-tracing] completed successfully in ? seconds
 XX of XX: [@azure/cosmos] completed successfully in ? seconds
-Warning: You have changed the public API signature for this project. Updating review/service-bus.api.md
+npm ERR! code ELIFECYCLE
+npm ERR! errno 2
+npm ERR! @azure/keyvault-certificates@X.X.X extract-api: `tsc -p . && api-extractor run --local`
+npm ERR! Exit status 2
+npm ERR! 
+npm ERR! Failed at the @azure/keyvault-certificates@X.X.X extract-api script.
+npm ERR! This is probably not a problem with npm. There is likely additional logging output above.
+npm ERR! A complete log of this run can be found in:
+npm ERR!     /root/.npm/_logs/XXXX-XX-XXXXXXXXX-debug.log
+npm ERR! code ELIFECYCLE
+npm ERR! errno 2
+npm ERR! @azure/keyvault-keys@X.X.X-preview.3 extract-api: `tsc -p . && api-extractor run --local`
+npm ERR! Exit status 2
+npm ERR! 
+npm ERR! Failed at the @azure/keyvault-keys@X.X.X-preview.3 extract-api script.
+npm ERR! This is probably not a problem with npm. There is likely additional logging output above.
+npm ERR! A complete log of this run can be found in:
+npm ERR!     /root/.npm/_logs/XXXX-XX-XXXXXXXXX-debug.log
+npm ERR! code ELIFECYCLE
+npm ERR! errno 2
+npm ERR! @azure/keyvault-secrets@X.X.X-preview.4 extract-api: `tsc -p . && api-extractor run --local`
+npm ERR! Exit status 2
+npm ERR! 
+npm ERR! Failed at the @azure/keyvault-secrets@X.X.X-preview.4 extract-api script.
+npm ERR! This is probably not a problem with npm. There is likely additional logging output above.
+npm ERR! A complete log of this run can be found in:
+npm ERR!     /root/.npm/_logs/XXXX-XX-XXXXXXXXX-debug.log
+XX of XX: [@azure/service-bus] completed successfully in ? seconds
 XX of XX: [@azure/storage-blob] completed successfully in ? seconds
 XX of XX: [@azure/storage-file] completed successfully in ? seconds
 XX of XX: [@azure/storage-queue] completed successfully in ? seconds
+XX of XX: [@azure/template] completed successfully in ? seconds
 XX of XX: [testhub] completed successfully in ? seconds
-SUCCESS (11)
+SUCCESS (15)
 ================================
 @azure/abort-controller (? seconds)
+@azure/core-arm (? seconds)
 @azure/core-asynciterator-polyfill (? seconds)
 @azure/core-auth (? seconds)
 @azure/core-paging (? seconds)
 @azure/core-tracing (? seconds)
 @azure/cosmos (? seconds)
 @azure/event-processor-host (? seconds)
+@azure/identity (? seconds)
+@azure/service-bus (? seconds)
 @azure/storage-blob (? seconds)
 @azure/storage-file (? seconds)
 @azure/storage-queue (? seconds)
+@azure/template (? seconds)
 testhub (? seconds)
 ================================
-SUCCESS WITH WARNINGS (1)
+BLOCKED (1)
 ================================
-@azure/service-bus (? seconds)
-Warning: You have changed the public API signature for this project. Updating review/service-bus.api.md
-================================
-BLOCKED (8)
-================================
-@azure/core-amqp
-@azure/core-arm
 @azure/event-hubs
-@azure/identity
-@azure/keyvault-certificates
-@azure/keyvault-keys
-@azure/keyvault-secrets
-@azure/template
 ================================
-FAILURE (1)
+FAILURE (5)
 ================================
+@azure/core-amqp ( ? seconds)
+>>> @azure/core-amqp
+tsc -p . && rollup -c 2>&1
+src/errors.ts(580,20): error TS7053: Element implicitly has an 'any' type because expression of type 'any' can't be used to index type 'typeof ConditionErrorNameMapper'.
+src/errors.ts(604,34): error TS7053: Element implicitly has an 'any' type because expression of type 'any' can't be used to index type 'typeof SystemErrorConditionMapper'.
+src/errors.ts(605,20): error TS7053: Element implicitly has an 'any' type because expression of type 'any' can't be used to index type 'typeof ConditionErrorNameMapper'.
+src/shims.d.ts(14,13): error TS2403: Subsequent variable declarations must have the same type.  Variable 'window' must be of type 'Window & typeof globalThis', but here has type 'Window'.
 @azure/core-http ( ? seconds)
 npm ERR! code ELIFECYCLE
 npm ERR! errno 2
-npm ERR! @azure/core-http@X.X.X-preview.2 build:tsc: `tsc -p tsconfig.es.json`
+npm ERR! @azure/core-http@X.X.X-preview.3 build:tsc: `tsc -p tsconfig.es.json`
 npm ERR! Exit status 2
 npm ERR!
-npm ERR! Failed at the @azure/core-http@X.X.X-preview.2 build:tsc script.
+npm ERR! Failed at the @azure/core-http@X.X.X-preview.3 build:tsc script.
 npm ERR! This is probably not a problem with npm. There is likely additional logging output above.
 npm ERR! A complete log of this run can be found in:
 npm ERR!     /root/.npm/_logs/XXXX-XX-XXXXXXXXX-debug.log
 ERROR: "build:tsc" exited with 2.
 npm ERR! code ELIFECYCLE
 npm ERR! errno 1
-npm ERR! @azure/core-http@X.X.X-preview.2 build:lib: `run-s build:tsc build:rollup build:minify-browser`
+npm ERR! @azure/core-http@X.X.X-preview.3 build:lib: `run-s build:tsc build:rollup build:minify-browser`
 npm ERR! Exit status 1
 npm ERR!
-npm ERR! Failed at the @azure/core-http@X.X.X-preview.2 build:lib script.
+npm ERR! Failed at the @azure/core-http@X.X.X-preview.3 build:lib script.
 npm ERR! This is probably not a problem with npm. There is likely additional logging output above.
 npm ERR! A complete log of this run can be found in:
 npm ERR!     /root/.npm/_logs/XXXX-XX-XXXXXXXXX-debug.log
 ERROR: "build:lib" exited with 1.
+@azure/keyvault-certificates ( ? seconds)
+npm ERR! code ELIFECYCLE
+npm ERR! errno 2
+npm ERR! @azure/keyvault-certificates@X.X.X extract-api: `tsc -p . && api-extractor run --local`
+npm ERR! Exit status 2
+npm ERR!
+npm ERR! Failed at the @azure/keyvault-certificates@X.X.X extract-api script.
+npm ERR! This is probably not a problem with npm. There is likely additional logging output above.
+npm ERR! A complete log of this run can be found in:
+npm ERR!     /root/.npm/_logs/XXXX-XX-XXXXXXXXX-debug.log
+@azure/keyvault-keys ( ? seconds)
+npm ERR! code ELIFECYCLE
+npm ERR! errno 2
+npm ERR! @azure/keyvault-keys@X.X.X-preview.3 extract-api: `tsc -p . && api-extractor run --local`
+npm ERR! Exit status 2
+npm ERR!
+npm ERR! Failed at the @azure/keyvault-keys@X.X.X-preview.3 extract-api script.
+npm ERR! This is probably not a problem with npm. There is likely additional logging output above.
+npm ERR! A complete log of this run can be found in:
+npm ERR!     /root/.npm/_logs/XXXX-XX-XXXXXXXXX-debug.log
+@azure/keyvault-secrets ( ? seconds)
+npm ERR! code ELIFECYCLE
+npm ERR! errno 2
+npm ERR! @azure/keyvault-secrets@X.X.X-preview.4 extract-api: `tsc -p . && api-extractor run --local`
+npm ERR! Exit status 2
+npm ERR!
+npm ERR! Failed at the @azure/keyvault-secrets@X.X.X-preview.4 extract-api script.
+npm ERR! This is probably not a problem with npm. There is likely additional logging output above.
+npm ERR! A complete log of this run can be found in:
+npm ERR!     /root/.npm/_logs/XXXX-XX-XXXXXXXXX-debug.log
 ================================
 Error: Project(s) failed to build
 rush rebuild - Errors! ( ? seconds)
@@ -98,14 +157,14 @@ rush rebuild - Errors! ( ? seconds)
 
 Standard error:
 
+XX of XX: [@azure/core-amqp] failed to build!
+XX of XX: [@azure/event-hubs] blocked by [@azure/core-amqp]!
 XX of XX: [@azure/core-http] failed to build!
-XX of XX: [@azure/core-arm] blocked by [@azure/core-http]!
-XX of XX: [@azure/keyvault-certificates] blocked by [@azure/core-http]!
-XX of XX: [@azure/keyvault-keys] blocked by [@azure/core-http]!
-XX of XX: [@azure/keyvault-secrets] blocked by [@azure/core-http]!
-XX of XX: [@azure/identity] blocked by [@azure/core-http]!
-XX of XX: [@azure/core-amqp] blocked by [@azure/core-http]!
-XX of XX: [@azure/event-hubs] blocked by [@azure/core-http]!
-XX of XX: [@azure/template] blocked by [@azure/core-http]!
-XX of XX: [@azure/service-bus] completed with warnings in ? seconds
+XX of XX: [@azure/keyvault-certificates] failed to build!
+XX of XX: [@azure/keyvault-keys] failed to build!
+XX of XX: [@azure/keyvault-secrets] failed to build!
+[@azure/core-amqp] Returned error code: 2
 [@azure/core-http] Returned error code: 1
+[@azure/keyvault-certificates] Returned error code: 2
+[@azure/keyvault-keys] Returned error code: 2
+[@azure/keyvault-secrets] Returned error code: 2
