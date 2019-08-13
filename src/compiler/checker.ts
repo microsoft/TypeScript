@@ -25271,7 +25271,18 @@ namespace ts {
         }
 
         function checkExpressionWorker(node: Expression | QualifiedName, checkMode: CheckMode | undefined, forceTuple?: boolean): Type {
-            switch (node.kind) {
+            const kind = node.kind;
+            if (cancellationToken) {
+                // Only bother checking on a few construct kinds.  We don't want to be excessively
+                // hitting the cancellation token on every node we check.
+                switch (kind) {
+                    case SyntaxKind.ClassExpression:
+                    case SyntaxKind.FunctionExpression:
+                    case SyntaxKind.ArrowFunction:
+                        cancellationToken.throwIfCancellationRequested();
+                }
+            }
+            switch (kind) {
                 case SyntaxKind.Identifier:
                     return checkIdentifier(<Identifier>node);
                 case SyntaxKind.ThisKeyword:
