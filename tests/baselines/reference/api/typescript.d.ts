@@ -997,13 +997,16 @@ declare namespace ts {
         isUnterminated?: boolean;
         hasExtendedUnicodeEscape?: boolean;
     }
+    export interface TemplateLiteralLikeNode extends LiteralLikeNode {
+        rawText?: string;
+    }
     export interface LiteralExpression extends LiteralLikeNode, PrimaryExpression {
         _literalExpressionBrand: any;
     }
     export interface RegularExpressionLiteral extends LiteralExpression {
         kind: SyntaxKind.RegularExpressionLiteral;
     }
-    export interface NoSubstitutionTemplateLiteral extends LiteralExpression {
+    export interface NoSubstitutionTemplateLiteral extends LiteralExpression, TemplateLiteralLikeNode {
         kind: SyntaxKind.NoSubstitutionTemplateLiteral;
     }
     export enum TokenFlags {
@@ -1020,15 +1023,15 @@ declare namespace ts {
     export interface BigIntLiteral extends LiteralExpression {
         kind: SyntaxKind.BigIntLiteral;
     }
-    export interface TemplateHead extends LiteralLikeNode {
+    export interface TemplateHead extends TemplateLiteralLikeNode {
         kind: SyntaxKind.TemplateHead;
         parent: TemplateExpression;
     }
-    export interface TemplateMiddle extends LiteralLikeNode {
+    export interface TemplateMiddle extends TemplateLiteralLikeNode {
         kind: SyntaxKind.TemplateMiddle;
         parent: TemplateSpan;
     }
-    export interface TemplateTail extends LiteralLikeNode {
+    export interface TemplateTail extends TemplateLiteralLikeNode {
         kind: SyntaxKind.TemplateTail;
         parent: TemplateSpan;
     }
@@ -3920,10 +3923,10 @@ declare namespace ts {
     function updateConditional(node: ConditionalExpression, condition: Expression, questionToken: Token<SyntaxKind.QuestionToken>, whenTrue: Expression, colonToken: Token<SyntaxKind.ColonToken>, whenFalse: Expression): ConditionalExpression;
     function createTemplateExpression(head: TemplateHead, templateSpans: ReadonlyArray<TemplateSpan>): TemplateExpression;
     function updateTemplateExpression(node: TemplateExpression, head: TemplateHead, templateSpans: ReadonlyArray<TemplateSpan>): TemplateExpression;
-    function createTemplateHead(text: string): TemplateHead;
-    function createTemplateMiddle(text: string): TemplateMiddle;
-    function createTemplateTail(text: string): TemplateTail;
-    function createNoSubstitutionTemplateLiteral(text: string): NoSubstitutionTemplateLiteral;
+    function createTemplateHead(text: string, rawText?: string): TemplateHead;
+    function createTemplateMiddle(text: string, rawText?: string): TemplateMiddle;
+    function createTemplateTail(text: string, rawText?: string): TemplateTail;
+    function createNoSubstitutionTemplateLiteral(text: string, rawText?: string): NoSubstitutionTemplateLiteral;
     function createYield(expression?: Expression): YieldExpression;
     function createYield(asteriskToken: AsteriskToken | undefined, expression: Expression): YieldExpression;
     function updateYield(node: YieldExpression, asteriskToken: AsteriskToken | undefined, expression: Expression): YieldExpression;

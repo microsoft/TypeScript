@@ -1646,6 +1646,10 @@ namespace ts {
         hasExtendedUnicodeEscape?: boolean;
     }
 
+    export interface TemplateLiteralLikeNode extends LiteralLikeNode {
+        rawText?: string;
+    }
+
     // The text property of a LiteralExpression stores the interpreted value of the literal in text form. For a StringLiteral,
     // or any literal of a template, this means quotes have been removed and escapes have been converted to actual characters.
     // For a NumericLiteral, the stored value is the toString() representation of the number. For example 1, 1.00, and 1e0 are all stored as just "1".
@@ -1657,7 +1661,7 @@ namespace ts {
         kind: SyntaxKind.RegularExpressionLiteral;
     }
 
-    export interface NoSubstitutionTemplateLiteral extends LiteralExpression {
+    export interface NoSubstitutionTemplateLiteral extends LiteralExpression, TemplateLiteralLikeNode {
         kind: SyntaxKind.NoSubstitutionTemplateLiteral;
     }
 
@@ -1694,17 +1698,17 @@ namespace ts {
         kind: SyntaxKind.BigIntLiteral;
     }
 
-    export interface TemplateHead extends LiteralLikeNode {
+    export interface TemplateHead extends TemplateLiteralLikeNode {
         kind: SyntaxKind.TemplateHead;
         parent: TemplateExpression;
     }
 
-    export interface TemplateMiddle extends LiteralLikeNode {
+    export interface TemplateMiddle extends TemplateLiteralLikeNode {
         kind: SyntaxKind.TemplateMiddle;
         parent: TemplateSpan;
     }
 
-    export interface TemplateTail extends LiteralLikeNode {
+    export interface TemplateTail extends TemplateLiteralLikeNode {
         kind: SyntaxKind.TemplateTail;
         parent: TemplateSpan;
     }
