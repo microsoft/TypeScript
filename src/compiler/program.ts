@@ -1446,6 +1446,7 @@ namespace ts {
                 useCaseSensitiveFileNames: () => host.useCaseSensitiveFileNames(),
                 getProgramBuildInfo: () => program.getProgramBuildInfo && program.getProgramBuildInfo(),
                 getSourceFileFromReference: (file, ref) => program.getSourceFileFromReference(file, ref),
+                redirectTargetsMap,
             };
         }
 
