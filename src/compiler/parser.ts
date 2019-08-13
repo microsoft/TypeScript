@@ -1827,10 +1827,12 @@ namespace ts {
             return node;
         }
 
-        function consumeNode(node: Node) {
-            // Move the scanner so it is after the node we just consumed.
-            scanner.setTextPos(node.end);
-            nextToken();
+        function consumeNode<T extends TextRange | undefined>(node: T): T {
+            if (node) {
+                // Move the scanner so it is after the node we just consumed.
+                scanner.setTextPos(node.end);
+                nextToken();
+            }
             return node;
         }
 
@@ -5482,10 +5484,26 @@ namespace ts {
         }
 
         function parseDeclaration(): Statement {
+            const [decorators, modifiers] = lookAhead(() => [
+                parseDecorators(),
+                parseModifiers(),
+            ]);
+
+            // `parseListElement` attempted to get the reused node at this position,
+            // but the ambient context flag was not yet set, so the node appeared
+            // not reusable in that context.
+            const isAmbient = some(modifiers, isDeclareModifier);
+            if (isAmbient) {
+                const node = tryReuseAmbientDeclaration();
+                if (node) {
+                    return node;
+                }
+            }
+
             const node = <Statement>createNodeWithJSDoc(SyntaxKind.Unknown);
-            node.decorators = parseDecorators();
-            node.modifiers = parseModifiers();
-            if (some(node.modifiers, isDeclareModifier)) {
+            node.decorators = consumeNode(decorators);
+            node.modifiers = consumeNode(modifiers);
+            if (isAmbient) {
                 for (const m of node.modifiers!) {
                     m.flags |= NodeFlags.Ambient;
                 }
@@ -5494,6 +5512,15 @@ namespace ts {
             else {
                 return parseDeclarationWorker(node);
             }
+        }
+
+        function tryReuseAmbientDeclaration(): Statement | undefined {
+            return doInsideOfContext(NodeFlags.Ambient, () => {
+                const node = currentNode(parsingContext);
+                if (node) {
+                    return consumeNode(node) as Statement;
+                }
+            });
         }
 
         function parseDeclarationWorker(node: Statement): Statement {
