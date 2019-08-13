@@ -1419,7 +1419,7 @@ namespace ts.Completions {
          *    everything from Bucket C to Bucket A.
          */
         function getSymbolsFromOtherSourceFileExports(target: ScriptTarget, host: LanguageServiceHost): readonly AutoImportSuggestion[] {
-            const cached = importSuggestionsCache && importSuggestionsCache.get(sourceFile.fileName, typeChecker);
+            const cached = !detailsEntryId && importSuggestionsCache && importSuggestionsCache.get(sourceFile.fileName, typeChecker);
             if (cached) {
                 log("getSymbolsFromOtherSourceFileExports: Using cached list");
                 return cached;

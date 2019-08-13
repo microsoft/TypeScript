@@ -4745,7 +4745,8 @@ namespace ts {
     }
 
     export interface TypeAcquisition {
-        /* @deprecated typingOptions.enableAutoDiscovery
+        /**
+         * @deprecated typingOptions.enableAutoDiscovery
          * Use typeAcquisition.enable instead.
          */
         enableAutoDiscovery?: boolean;

@@ -118,10 +118,6 @@ namespace ts.server {
         return (watch as GeneratedFileWatcher).generatedFilePath !== undefined;
     }
 
-    interface AutoImportSuggestionFileInfo {
-        consumesNodeCoreModules: boolean;
-    }
-
     export abstract class Project implements LanguageServiceHost, ModuleResolutionHost {
         private rootFiles: ScriptInfo[] = [];
         private rootFilesMap: Map<ProjectRoot> = createMap<ProjectRoot>();
@@ -238,7 +234,7 @@ namespace ts.server {
         private readonly packageJsonCache: PackageJsonCache;
 
         private importSuggestionsCache = Completions.createImportSuggestionsCache();
-        private dirtyFilesForSuggestions: Map<AutoImportSuggestionFileInfo> | undefined;
+        private dirtyFilesForSuggestions: Map<true> | undefined;
 
         /*@internal*/
         constructor(
@@ -856,9 +852,7 @@ namespace ts.server {
                 this.dirty = true;
             }
             if (changedFile && !this.importSuggestionsCache.isEmpty && changedFile.cacheSourceFile) {
-                (this.dirtyFilesForSuggestions || (this.dirtyFilesForSuggestions = createMap())).set(changedFile.fileName, {
-                    consumesNodeCoreModules: consumesNodeCoreModules(changedFile.cacheSourceFile.sourceFile)
-                });
+                (this.dirtyFilesForSuggestions || (this.dirtyFilesForSuggestions = createMap())).set(changedFile.fileName, true);
             }
         }
 
@@ -908,7 +902,6 @@ namespace ts.server {
                 this.projectProgramVersion++;
             }
 
-            this.cleanImportSuggestionsCache(hasNewProgram);
             return !hasNewProgram;
         }
 
@@ -1016,6 +1009,25 @@ namespace ts.server {
                 }
             }
 
+            if (!this.importSuggestionsCache.isEmpty) {
+                if (this.hasAddedorRemovedFiles || oldProgram && oldProgram.structureIsReused! & StructureIsReused.Not) {
+                    this.importSuggestionsCache.clear();
+                }
+                else if (this.dirtyFilesForSuggestions && oldProgram && this.program) {
+                    forEachKey(this.dirtyFilesForSuggestions, fileName => {
+                        const oldSourceFile = oldProgram.getSourceFile(fileName);
+                        const sourceFile = this.program!.getSourceFile(fileName);
+                        if (this.sourceFileHasChangedOwnImportSuggestions(oldSourceFile, sourceFile)) {
+                            this.importSuggestionsCache.clear();
+                            return true;
+                        }
+                    });
+                }
+            }
+            if (this.dirtyFilesForSuggestions) {
+                this.dirtyFilesForSuggestions.clear();
+            }
+
             const oldExternalFiles = this.externalFiles || emptyArray as SortedReadonlyArray<string>;
             this.externalFiles = this.getExternalFiles();
             enumerateInsertsAndDeletes<string, string>(this.externalFiles, oldExternalFiles, getStringComparer(!this.useCaseSensitiveFileNames()),
@@ -1036,24 +1048,34 @@ namespace ts.server {
             return hasNewProgram;
         }
 
-        private cleanImportSuggestionsCache(hasNewProgram: boolean) {
-            if (!this.importSuggestionsCache.isEmpty) {
-                if (hasNewProgram) {
-                    this.importSuggestionsCache.clear();
-                }
-                else if (this.dirtyFilesForSuggestions && this.program) {
-                    forEachEntry(this.dirtyFilesForSuggestions, (info, fileName) => {
-                        const sourceFile = this.program!.getSourceFile(fileName);
-                        if (sourceFile && info.consumesNodeCoreModules !== consumesNodeCoreModules(sourceFile)) {
-                            this.importSuggestionsCache.clear();
-                            return true;
-                        }
-                    });
-                }
+        private sourceFileHasChangedOwnImportSuggestions(oldSourceFile: SourceFile | undefined, newSourceFile: SourceFile | undefined) {
+            if (!oldSourceFile && !newSourceFile) {
+                return false;
             }
-            if (this.dirtyFilesForSuggestions) {
-                this.dirtyFilesForSuggestions.clear();
+            // Probably shouldn’t get this far, but on the off chance the file was added or removed,
+            // we can’t reliably tell anything about it.
+            if (!oldSourceFile || !newSourceFile) {
+                return true;
             }
+
+            Debug.assertEqual(oldSourceFile.fileName, newSourceFile.fileName);
+            // If ATA is enabled, auto-imports uses existing imports to guess whether you want auto-imports from node.
+            // Adding or removing imports from node could change the outcome of that guess, so could change the suggestions list.
+            if (this.getTypeAcquisition().enable && consumesNodeCoreModules(oldSourceFile) !== consumesNodeCoreModules(newSourceFile)) {
+                return true;
+            }
+
+            // Module agumentation changes can add or remove exports available to be auto-imported.
+            // Changes elsewhere in the file can change the *type* of an export in a module augmentation,
+            // but type info is gathered in getCompletionEntryDetails, which doesn’t use the cache.
+            if (!arrayIsEqualTo(oldSourceFile.moduleAugmentations, newSourceFile.moduleAugmentations)) {
+                return true;
+            }
+
+            if (!arrayIsEqualTo(oldSourceFile.ambientModuleNames, newSourceFile.ambientModuleNames)) {
+                return true;
+            }
+            return false;
         }
 
         private detachScriptInfoFromProject(uncheckedFileName: string, noRemoveResolution?: boolean) {

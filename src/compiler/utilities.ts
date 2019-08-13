@@ -267,6 +267,12 @@ namespace ts {
         return oldResolution.resolvedFileName === newResolution.resolvedFileName && oldResolution.primary === newResolution.primary;
     }
 
+    export function moduleNameIsEqualTo(a: StringLiteralLike | Identifier, b: StringLiteralLike | Identifier): boolean {
+        return a.kind === SyntaxKind.Identifier
+            ? b.kind === SyntaxKind.Identifier && a.escapedText === b.escapedText
+            : b.kind === SyntaxKind.StringLiteral && a.text === b.text;
+    }
+
     export function hasChangesInResolutions<T>(
         names: ReadonlyArray<string>,
         newResolutions: ReadonlyArray<T>,

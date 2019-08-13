@@ -1991,12 +1991,6 @@ namespace ts {
             return a.fileName === b.fileName;
         }
 
-        function moduleNameIsEqualTo(a: StringLiteralLike | Identifier, b: StringLiteralLike | Identifier): boolean {
-            return a.kind === SyntaxKind.Identifier
-                ? b.kind === SyntaxKind.Identifier && a.escapedText === b.escapedText
-                : b.kind === SyntaxKind.StringLiteral && a.text === b.text;
-        }
-
         function collectExternalModuleReferences(file: SourceFile): void {
             if (file.imports) {
                 return;
