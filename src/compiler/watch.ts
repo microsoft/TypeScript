@@ -88,8 +88,6 @@ namespace ts {
         return result;
     }
 
-    export type ReportEmitErrorSummary = (errorCount: number) => void;
-
     export function getErrorCountForSummary(diagnostics: ReadonlyArray<Diagnostic>) {
         return countWhere(diagnostics, diagnostic => diagnostic.category === DiagnosticCategory.Error);
     }
@@ -113,36 +111,54 @@ namespace ts {
         getCurrentDirectory(): string;
         getCompilerOptions(): CompilerOptions;
         getSourceFiles(): ReadonlyArray<SourceFile>;
-        getSyntacticDiagnostics(): ReadonlyArray<Diagnostic>;
-        getOptionsDiagnostics(): ReadonlyArray<Diagnostic>;
-        getGlobalDiagnostics(): ReadonlyArray<Diagnostic>;
-        getSemanticDiagnostics(): ReadonlyArray<Diagnostic>;
+        getSyntacticDiagnostics(sourceFile?: SourceFile, cancellationToken?: CancellationToken): ReadonlyArray<Diagnostic>;
+        getOptionsDiagnostics(cancellationToken?: CancellationToken): ReadonlyArray<Diagnostic>;
+        getGlobalDiagnostics(cancellationToken?: CancellationToken): ReadonlyArray<Diagnostic>;
+        getSemanticDiagnostics(sourceFile?: SourceFile, cancellationToken?: CancellationToken): ReadonlyArray<Diagnostic>;
         getConfigFileParsingDiagnostics(): ReadonlyArray<Diagnostic>;
-        emit(targetSourceFile?: SourceFile, writeFile?: WriteFileCallback): EmitResult;
+        emit(targetSourceFile?: SourceFile, writeFile?: WriteFileCallback, cancellationToken?: CancellationToken, emitOnlyDtsFiles?: boolean, customTransformers?: CustomTransformers): EmitResult;
+    }
+
+    export function listFiles(program: ProgramToEmitFilesAndReportErrors, writeFileName: (s: string) => void) {
+        if (program.getCompilerOptions().listFiles) {
+            forEach(program.getSourceFiles(), file => {
+                writeFileName(file.fileName);
+            });
+        }
     }
 
     /**
      * Helper that emit files, report diagnostics and lists emitted and/or source files depending on compiler options
      */
-    export function emitFilesAndReportErrors(program: ProgramToEmitFilesAndReportErrors, reportDiagnostic: DiagnosticReporter, writeFileName?: (s: string) => void, reportSummary?: ReportEmitErrorSummary, writeFile?: WriteFileCallback) {
+    export function emitFilesAndReportErrors(
+        program: ProgramToEmitFilesAndReportErrors,
+        reportDiagnostic: DiagnosticReporter,
+        writeFileName?: (s: string) => void,
+        reportSummary?: ReportEmitErrorSummary,
+        writeFile?: WriteFileCallback,
+        cancellationToken?: CancellationToken,
+        emitOnlyDtsFiles?: boolean,
+        customTransformers?: CustomTransformers
+    ) {
         // First get and report any syntactic errors.
         const diagnostics = program.getConfigFileParsingDiagnostics().slice();
         const configFileParsingDiagnosticsLength = diagnostics.length;
-        addRange(diagnostics, program.getSyntacticDiagnostics());
+        addRange(diagnostics, program.getSyntacticDiagnostics(/*sourceFile*/ undefined, cancellationToken));
 
         // If we didn't have any syntactic errors, then also try getting the global and
         // semantic errors.
         if (diagnostics.length === configFileParsingDiagnosticsLength) {
-            addRange(diagnostics, program.getOptionsDiagnostics());
-            addRange(diagnostics, program.getGlobalDiagnostics());
+            addRange(diagnostics, program.getOptionsDiagnostics(cancellationToken));
+            addRange(diagnostics, program.getGlobalDiagnostics(cancellationToken));
 
             if (diagnostics.length === configFileParsingDiagnosticsLength) {
-                addRange(diagnostics, program.getSemanticDiagnostics());
+                addRange(diagnostics, program.getSemanticDiagnostics(/*sourceFile*/ undefined, cancellationToken));
             }
         }
 
         // Emit and report any errors we ran into.
-        const { emittedFiles, emitSkipped, diagnostics: emitDiagnostics } = program.emit(/*targetSourceFile*/ undefined, writeFile);
+        const emitResult = program.emit(/*targetSourceFile*/ undefined, writeFile, cancellationToken, emitOnlyDtsFiles, customTransformers);
+        const { emittedFiles, diagnostics: emitDiagnostics } = emitResult;
         addRange(diagnostics, emitDiagnostics);
 
         sortAndDeduplicateDiagnostics(diagnostics).forEach(reportDiagnostic);
@@ -152,19 +168,41 @@ namespace ts {
                 const filepath = getNormalizedAbsolutePath(file, currentDir);
                 writeFileName(`TSFILE: ${filepath}`);
             });
-
-            if (program.getCompilerOptions().listFiles) {
-                forEach(program.getSourceFiles(), file => {
-                    writeFileName(file.fileName);
-                });
-            }
+            listFiles(program, writeFileName);
         }
 
         if (reportSummary) {
             reportSummary(getErrorCountForSummary(diagnostics));
         }
 
-        if (emitSkipped && diagnostics.length > 0) {
+        return {
+            emitResult,
+            diagnostics,
+        };
+    }
+
+    export function emitFilesAndReportErrorsAndGetExitStatus(
+        program: ProgramToEmitFilesAndReportErrors,
+        reportDiagnostic: DiagnosticReporter,
+        writeFileName?: (s: string) => void,
+        reportSummary?: ReportEmitErrorSummary,
+        writeFile?: WriteFileCallback,
+        cancellationToken?: CancellationToken,
+        emitOnlyDtsFiles?: boolean,
+        customTransformers?: CustomTransformers
+    ) {
+        const { emitResult, diagnostics } = emitFilesAndReportErrors(
+            program,
+            reportDiagnostic,
+            writeFileName,
+            reportSummary,
+            writeFile,
+            cancellationToken,
+            emitOnlyDtsFiles,
+            customTransformers
+        );
+
+        if (emitResult.emitSkipped && diagnostics.length > 0) {
             // If the emitter didn't emit anything, then pass that value along.
             return ExitStatus.DiagnosticsPresent_OutputsSkipped;
         }
@@ -176,7 +214,7 @@ namespace ts {
         return ExitStatus.Success;
     }
 
-    const noopFileWatcher: FileWatcher = { close: noop };
+    export const noopFileWatcher: FileWatcher = { close: noop };
 
     export function createWatchHost(system = sys, reportWatchStatus?: WatchStatusReporter): WatchHost {
         const onWatchStatusChange = reportWatchStatus || createWatchStatusReporter(system);
@@ -372,43 +410,6 @@ namespace ts {
         return host;
     }
 
-    export function readBuilderProgram(compilerOptions: CompilerOptions, readFile: (path: string) => string | undefined) {
-        if (compilerOptions.out || compilerOptions.outFile) return undefined;
-        const buildInfoPath = getOutputPathForBuildInfo(compilerOptions);
-        if (!buildInfoPath) return undefined;
-        const content = readFile(buildInfoPath);
-        if (!content) return undefined;
-        const buildInfo = getBuildInfo(content);
-        if (buildInfo.version !== version) return undefined;
-        if (!buildInfo.program) return undefined;
-        return createBuildProgramUsingProgramBuildInfo(buildInfo.program);
-    }
-
-    export function createIncrementalCompilerHost(options: CompilerOptions, system = sys): CompilerHost {
-        const host = createCompilerHostWorker(options, /*setParentNodes*/ undefined, system);
-        host.createHash = maybeBind(system, system.createHash);
-        setGetSourceFileAsHashVersioned(host, system);
-        changeCompilerHostLikeToUseCache(host, fileName => toPath(fileName, host.getCurrentDirectory(), host.getCanonicalFileName));
-        return host;
-    }
-
-    interface IncrementalProgramOptions<T extends BuilderProgram> {
-        rootNames: ReadonlyArray<string>;
-        options: CompilerOptions;
-        configFileParsingDiagnostics?: ReadonlyArray<Diagnostic>;
-        projectReferences?: ReadonlyArray<ProjectReference>;
-        host?: CompilerHost;
-        createProgram?: CreateProgram<T>;
-    }
-    function createIncrementalProgram<T extends BuilderProgram = EmitAndSemanticDiagnosticsBuilderProgram>({
-        rootNames, options, configFileParsingDiagnostics, projectReferences, host, createProgram
-    }: IncrementalProgramOptions<T>): T {
-        host = host || createIncrementalCompilerHost(options);
-        createProgram = createProgram || createEmitAndSemanticDiagnosticsBuilderProgram as any as CreateProgram<T>;
-        const oldProgram = readBuilderProgram(options, path => host!.readFile(path)) as any as T;
-        return createProgram(rootNames, options, host, oldProgram, configFileParsingDiagnostics, projectReferences);
-    }
-
     export interface IncrementalCompilationOptions {
         rootNames: ReadonlyArray<string>;
         options: CompilerOptions;
@@ -424,7 +425,7 @@ namespace ts {
         const system = input.system || sys;
         const host = input.host || (input.host = createIncrementalCompilerHost(input.options, system));
         const builderProgram = createIncrementalProgram(input);
-        const exitStatus = emitFilesAndReportErrors(
+        const exitStatus = emitFilesAndReportErrorsAndGetExitStatus(
             builderProgram,
             input.reportDiagnostic || createDiagnosticReporter(system),
             s => host.trace && host.trace(s),
@@ -436,6 +437,49 @@ namespace ts {
 }
 
 namespace ts {
+    export interface ReadBuildProgramHost {
+        useCaseSensitiveFileNames(): boolean;
+        getCurrentDirectory(): string;
+        readFile(fileName: string): string | undefined;
+    }
+    export function readBuilderProgram(compilerOptions: CompilerOptions, host: ReadBuildProgramHost) {
+        if (compilerOptions.out || compilerOptions.outFile) return undefined;
+        const buildInfoPath = getOutputPathForBuildInfo(compilerOptions);
+        if (!buildInfoPath) return undefined;
+        const content = host.readFile(buildInfoPath);
+        if (!content) return undefined;
+        const buildInfo = getBuildInfo(content);
+        if (buildInfo.version !== version) return undefined;
+        if (!buildInfo.program) return undefined;
+        return createBuildProgramUsingProgramBuildInfo(buildInfo.program, buildInfoPath, host);
+    }
+
+    export function createIncrementalCompilerHost(options: CompilerOptions, system = sys): CompilerHost {
+        const host = createCompilerHostWorker(options, /*setParentNodes*/ undefined, system);
+        host.createHash = maybeBind(system, system.createHash);
+        setGetSourceFileAsHashVersioned(host, system);
+        changeCompilerHostLikeToUseCache(host, fileName => toPath(fileName, host.getCurrentDirectory(), host.getCanonicalFileName));
+        return host;
+    }
+
+    export interface IncrementalProgramOptions<T extends BuilderProgram> {
+        rootNames: ReadonlyArray<string>;
+        options: CompilerOptions;
+        configFileParsingDiagnostics?: ReadonlyArray<Diagnostic>;
+        projectReferences?: ReadonlyArray<ProjectReference>;
+        host?: CompilerHost;
+        createProgram?: CreateProgram<T>;
+    }
+
+    export function createIncrementalProgram<T extends BuilderProgram = EmitAndSemanticDiagnosticsBuilderProgram>({
+        rootNames, options, configFileParsingDiagnostics, projectReferences, host, createProgram
+    }: IncrementalProgramOptions<T>): T {
+        host = host || createIncrementalCompilerHost(options);
+        createProgram = createProgram || createEmitAndSemanticDiagnosticsBuilderProgram as any as CreateProgram<T>;
+        const oldProgram = readBuilderProgram(options, host) as any as T;
+        return createProgram(rootNames, options, host, oldProgram, configFileParsingDiagnostics, projectReferences);
+    }
+
     export type WatchStatusReporter = (diagnostic: Diagnostic, newLine: string, options: CompilerOptions) => void;
     /** Create the program with rootNames and options, if they are undefined, oldProgram and new configFile diagnostics create new program */
     export type CreateProgram<T extends BuilderProgram> = (rootNames: ReadonlyArray<string> | undefined, options: CompilerOptions | undefined, host?: CompilerHost, oldProgram?: T, configFileParsingDiagnostics?: ReadonlyArray<Diagnostic>, projectReferences?: ReadonlyArray<ProjectReference> | undefined) => T;
@@ -494,9 +538,9 @@ namespace ts {
         getEnvironmentVariable?(name: string): string | undefined;
 
         /** If provided, used to resolve the module names, otherwise typescript's default module resolution */
-        resolveModuleNames?(moduleNames: string[], containingFile: string, reusedNames?: string[], redirectedReference?: ResolvedProjectReference): (ResolvedModule | undefined)[];
+        resolveModuleNames?(moduleNames: string[], containingFile: string, reusedNames: string[] | undefined, redirectedReference: ResolvedProjectReference | undefined, options: CompilerOptions): (ResolvedModule | undefined)[];
         /** If provided, used to resolve type reference directives, otherwise typescript's default resolution */
-        resolveTypeReferenceDirectives?(typeReferenceDirectiveNames: string[], containingFile: string, redirectedReference?: ResolvedProjectReference): (ResolvedTypeReferenceDirective | undefined)[];
+        resolveTypeReferenceDirectives?(typeReferenceDirectiveNames: string[], containingFile: string, redirectedReference: ResolvedProjectReference | undefined, options: CompilerOptions): (ResolvedTypeReferenceDirective | undefined)[];
     }
     /** Internal interface used to wire emit through same host */
 
@@ -564,7 +608,6 @@ namespace ts {
         /*@internal*/
         getCurrentProgram(): T;
         /** Closes the watch */
-        /*@internal*/
         close(): void;
     }
 
@@ -688,6 +731,7 @@ namespace ts {
             hasChangedAutomaticTypeDirectiveNames = true;
             scheduleProgramUpdate();
         };
+        compilerHost.fileIsOpen = returnFalse;
         compilerHost.maxNumberOfFilesToIterateForInvalidation = host.maxNumberOfFilesToIterateForInvalidation;
         compilerHost.getCurrentProgram = getCurrentProgram;
         compilerHost.writeLog = writeLog;
@@ -700,14 +744,14 @@ namespace ts {
         );
         // Resolve module using host module resolution strategy if provided otherwise use resolution cache to resolve module names
         compilerHost.resolveModuleNames = host.resolveModuleNames ?
-            ((moduleNames, containingFile, reusedNames, redirectedReference) => host.resolveModuleNames!(moduleNames, containingFile, reusedNames, redirectedReference)) :
+            ((...args) => host.resolveModuleNames!(...args)) :
             ((moduleNames, containingFile, reusedNames, redirectedReference) => resolutionCache.resolveModuleNames(moduleNames, containingFile, reusedNames, redirectedReference));
         compilerHost.resolveTypeReferenceDirectives = host.resolveTypeReferenceDirectives ?
-            ((typeDirectiveNames, containingFile, redirectedReference) => host.resolveTypeReferenceDirectives!(typeDirectiveNames, containingFile, redirectedReference)) :
+            ((...args) => host.resolveTypeReferenceDirectives!(...args)) :
             ((typeDirectiveNames, containingFile, redirectedReference) => resolutionCache.resolveTypeReferenceDirectives(typeDirectiveNames, containingFile, redirectedReference));
         const userProvidedResolution = !!host.resolveModuleNames || !!host.resolveTypeReferenceDirectives;
 
-        builderProgram = readBuilderProgram(compilerOptions, path => compilerHost.readFile(path)) as any as T;
+        builderProgram = readBuilderProgram(compilerOptions, compilerHost) as any as T;
         synchronizeProgram();
 
         // Update the wild card directory watch
@@ -961,13 +1005,19 @@ namespace ts {
 
             switch (reloadLevel) {
                 case ConfigFileProgramReloadLevel.Partial:
-                    return reloadFileNamesFromConfigFile();
+                    perfLogger.logStartUpdateProgram("PartialConfigReload");
+                    reloadFileNamesFromConfigFile();
+                    break;
                 case ConfigFileProgramReloadLevel.Full:
-                    return reloadConfigFile();
+                    perfLogger.logStartUpdateProgram("FullConfigReload");
+                    reloadConfigFile();
+                    break;
                 default:
+                    perfLogger.logStartUpdateProgram("SynchronizeProgram");
                     synchronizeProgram();
-                    return;
+                    break;
             }
+            perfLogger.logStopUpdateProgram("Done");
         }
 
         function reloadFileNamesFromConfigFile() {

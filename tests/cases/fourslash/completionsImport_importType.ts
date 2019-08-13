@@ -21,6 +21,7 @@ verify.completions({
             sourceDisplay: "./a",
             text: "class C",
             hasAction: true,
+            sortText: completion.SortText.AutoImportSuggestions
         },
         {
             name: "T",
@@ -28,6 +29,7 @@ verify.completions({
             sourceDisplay: "./a",
             text: "type T = number",
             hasAction: true,
+            sortText: completion.SortText.AutoImportSuggestions
         },
     ],
     excludes: "x",

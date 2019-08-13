@@ -42,6 +42,8 @@
 //
 // TODO: figure out a better solution to the API exposure problem.
 
+/// <reference path="../../../src/compiler/diagnosticInformationMap.generated.ts" />
+
 declare module ts {
     export type MapKey = string | number;
     export interface Map<T> {
@@ -68,6 +70,21 @@ declare module ts {
         name: string;
         writeByteOrderMark: boolean;
         text: string;
+    }
+
+    enum DiagnosticCategory {
+        Warning,
+        Error,
+        Suggestion,
+        Message
+    }
+
+    interface DiagnosticMessage {
+        key: string;
+        category: DiagnosticCategory;
+        code: number;
+        message: string;
+        reportsUnnecessary?: {};
     }
 
     function flatMap<T, U>(array: ReadonlyArray<T>, mapfn: (x: T, i: number) => U | ReadonlyArray<U> | undefined): U[];
@@ -168,7 +185,7 @@ declare namespace FourSlashInterface {
             applyChanges?: boolean,
             commands?: {}[],
         });
-        codeFixAvailable(options?: ReadonlyArray<VerifyCodeFixAvailableOptions>): void;
+        codeFixAvailable(options?: ReadonlyArray<VerifyCodeFixAvailableOptions> | string): void;
         applicableRefactorAvailableAtMarker(markerName: string): void;
         codeFixDiagnosticsAvailableAtMarkers(markerNames: string[], diagnosticCode?: number): void;
         applicableRefactorAvailableForRange(): void;
@@ -227,25 +244,28 @@ declare namespace FourSlashInterface {
          * This uses the 'findReferences' command instead of 'getReferencesAtPosition', so references are grouped by their definition.
          */
         referenceGroups(starts: ArrayOrSingle<string> | ArrayOrSingle<Range>, parts: ReadonlyArray<ReferenceGroup>): void;
-        singleReferenceGroup(definition: ReferencesDefinition, ranges?: Range[]): void;
-        rangesAreOccurrences(isWriteAccess?: boolean): void;
-        rangesWithSameTextAreRenameLocations(): void;
+        singleReferenceGroup(definition: ReferencesDefinition, ranges?: Range[] | string): void;
+        rangesAreOccurrences(isWriteAccess?: boolean, ranges?: Range[]): void;
+        rangesWithSameTextAreRenameLocations(...texts: string[]): void;
         rangesAreRenameLocations(options?: Range[] | { findInStrings?: boolean, findInComments?: boolean, ranges?: Range[] });
         findReferencesDefinitionDisplayPartsAtCaretAre(expected: ts.SymbolDisplayPart[]): void;
-        noSignatureHelp(...markers: string[]): void;
-        noSignatureHelpForTriggerReason(triggerReason: SignatureHelpTriggerReason, ...markers: string[]): void
-        signatureHelpPresentForTriggerReason(triggerReason: SignatureHelpTriggerReason, ...markers: string[]): void
+        noSignatureHelp(...markers: (string | Marker)[]): void;
+        noSignatureHelpForTriggerReason(triggerReason: SignatureHelpTriggerReason, ...markers: (string | Marker)[]): void
+        signatureHelpPresentForTriggerReason(triggerReason: SignatureHelpTriggerReason, ...markers: (string | Marker)[]): void
         signatureHelp(...options: VerifySignatureHelpOptions[], ): void;
         // Checks that there are no compile errors.
         noErrors(): void;
+        errorExistsAtRange(range: Range, code: number, message?: string): void;
         numberOfErrorsInCurrentFile(expected: number): void;
         baselineCurrentFileBreakpointLocations(): void;
         baselineCurrentFileNameOrDottedNameSpans(): void;
         baselineGetEmitOutput(insertResultsIntoVfs?: boolean): void;
         getEmitOutput(expectedOutputFiles: ReadonlyArray<string>): void;
         baselineQuickInfo(): void;
+        baselineSmartSelection(): void;
         nameOrDottedNameSpanTextIs(text: string): void;
         outliningSpansInCurrentFile(spans: Range[]): void;
+        outliningHintSpansInCurrentFile(spans: Range[]): void;
         todoCommentsInCurrentFile(descriptors: string[]): void;
         matchingBracePositionInCurrentFile(bracePosition: number, expectedMatchPosition: number): void;
         noMatchingBracePositionInCurrentFile(bracePosition: number): void;
@@ -508,7 +528,7 @@ declare namespace FourSlashInterface {
         readonly importModuleSpecifierEnding?: "minimal" | "index" | "js";
     }
     interface CompletionsOptions {
-        readonly marker?: ArrayOrSingle<string | Marker>,
+        readonly marker?: ArrayOrSingle<string | Marker>;
         readonly isNewIdentifierLocation?: boolean;
         readonly isGlobalCompletion?: boolean;
         readonly exact?: ArrayOrSingle<ExpectedCompletionEntry>;
@@ -527,6 +547,7 @@ declare namespace FourSlashInterface {
         readonly isRecommended?: boolean;
         readonly kind?: string;
         readonly kindModifiers?: string;
+        readonly sortText?: completion.SortText;
 
         // details
         readonly text?: string;
@@ -536,7 +557,7 @@ declare namespace FourSlashInterface {
     }
 
     interface VerifySignatureHelpOptions {
-        marker?: ArrayOrSingle<string>;
+        marker?: ArrayOrSingle<string | Marker>;
         /** @default 1 */
         overloadsCount?: number;
         docComment?: string;
@@ -649,13 +670,21 @@ declare var cancellation: FourSlashInterface.cancellation;
 declare var classification: typeof FourSlashInterface.classification;
 declare namespace completion {
     type Entry = FourSlashInterface.ExpectedCompletionEntryObject;
+    export const enum SortText {
+        LocationPriority = "0",
+        SuggestedClassMembers = "1",
+        GlobalsOrKeywords = "2",
+        AutoImportSuggestions = "3",
+        JavascriptIdentifiers = "4"
+    }
+    export const globalThisEntry: Entry;
+    export const undefinedVarEntry: Entry;
     export const globals: ReadonlyArray<Entry>;
     export const globalsInJs: ReadonlyArray<Entry>;
     export const globalKeywords: ReadonlyArray<Entry>;
     export const globalInJsKeywords: ReadonlyArray<Entry>;
     export const insideMethodKeywords: ReadonlyArray<Entry>;
     export const insideMethodInJsKeywords: ReadonlyArray<Entry>;
-    export const globalKeywordsPlusUndefined: ReadonlyArray<Entry>;
     export const globalsVars: ReadonlyArray<Entry>;
     export function globalsInsideFunction(plus: ReadonlyArray<Entry>): ReadonlyArray<Entry>;
     export function globalsInJsInsideFunction(plus: ReadonlyArray<Entry>): ReadonlyArray<Entry>;
@@ -666,6 +695,7 @@ declare namespace completion {
     export const typeKeywords: ReadonlyArray<Entry>;
     export const globalTypes: ReadonlyArray<Entry>;
     export function globalTypesPlus(plus: ReadonlyArray<FourSlashInterface.ExpectedCompletionEntry>): ReadonlyArray<Entry>;
+    export const typeAssertionKeywords: ReadonlyArray<Entry>;
     export const classElementKeywords: ReadonlyArray<Entry>;
     export const classElementInJsKeywords: ReadonlyArray<Entry>;
     export const constructorParameterKeywords: ReadonlyArray<Entry>;

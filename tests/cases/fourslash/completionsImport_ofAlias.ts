@@ -22,8 +22,16 @@
 verify.completions({
     marker: "",
     includes: [
-        "undefined",
-        { name: "foo", source: "/a", sourceDisplay: "./a", text: "(alias) const foo: 0\nexport foo", kind: "alias", hasAction: true },
+        completion.undefinedVarEntry,
+        {
+            name: "foo",
+            source: "/a",
+            sourceDisplay: "./a",
+            text: "(alias) const foo: 0\nexport foo",
+            kind: "alias",
+            hasAction: true,
+            sortText: completion.SortText.AutoImportSuggestions
+        },
         ...completion.statementKeywordsWithTypes,
     ],
     preferences: { includeCompletionsForModuleExports: true },

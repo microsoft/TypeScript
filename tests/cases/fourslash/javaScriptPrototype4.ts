@@ -16,4 +16,7 @@ goTo.marker('1');
 edit.insert('.');
 
 // Check members of the function
-verify.completions({ includes: ["foo", "bar", "qua"].map(name => ({ name, kind: "warning" })) });
+verify.completions({
+    includes: ["foo", "bar", "qua"].map(
+        name => ({ name, kind: "warning", sortText: completion.SortText.JavascriptIdentifiers }))
+});

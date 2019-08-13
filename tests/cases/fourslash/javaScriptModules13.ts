@@ -19,7 +19,11 @@
 goTo.file('consumer.js');
 goTo.marker();
 
-verify.completions({ marker: "", includes: "y", excludes: "invisible" });
+verify.completions({
+    marker: "",
+    includes: { name: "y", sortText: completion.SortText.GlobalsOrKeywords },
+    excludes: "invisible"
+});
 
 edit.insert('x.');
 verify.completions({ includes: { name: "a", kind: "property" } });

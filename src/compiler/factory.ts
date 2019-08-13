@@ -845,7 +845,7 @@ namespace ts {
         const node = <ImportTypeNode>createSynthesizedNode(SyntaxKind.ImportType);
         node.argument = argument;
         node.qualifier = qualifier;
-        node.typeArguments = asNodeArray(typeArguments);
+        node.typeArguments = parenthesizeTypeParameters(typeArguments);
         node.isTypeOf = isTypeOf;
         return node;
     }
@@ -1004,10 +1004,10 @@ namespace ts {
             : node;
     }
 
-    export function createPropertyAccess(expression: Expression, name: string | Identifier | undefined) {
+    export function createPropertyAccess(expression: Expression, name: string | Identifier) {
         const node = <PropertyAccessExpression>createSynthesizedNode(SyntaxKind.PropertyAccessExpression);
         node.expression = parenthesizeForAccess(expression);
-        node.name = asName(name)!; // TODO: GH#18217
+        node.name = asName(name);
         setEmitFlags(node, EmitFlags.NoIndentation);
         return node;
     }
@@ -1544,8 +1544,8 @@ namespace ts {
     export function createIf(expression: Expression, thenStatement: Statement, elseStatement?: Statement) {
         const node = <IfStatement>createSynthesizedNode(SyntaxKind.IfStatement);
         node.expression = expression;
-        node.thenStatement = thenStatement;
-        node.elseStatement = elseStatement;
+        node.thenStatement = asEmbeddedStatement(thenStatement);
+        node.elseStatement = asEmbeddedStatement(elseStatement);
         return node;
     }
 
@@ -1559,7 +1559,7 @@ namespace ts {
 
     export function createDo(statement: Statement, expression: Expression) {
         const node = <DoStatement>createSynthesizedNode(SyntaxKind.DoStatement);
-        node.statement = statement;
+        node.statement = asEmbeddedStatement(statement);
         node.expression = expression;
         return node;
     }
@@ -1574,7 +1574,7 @@ namespace ts {
     export function createWhile(expression: Expression, statement: Statement) {
         const node = <WhileStatement>createSynthesizedNode(SyntaxKind.WhileStatement);
         node.expression = expression;
-        node.statement = statement;
+        node.statement = asEmbeddedStatement(statement);
         return node;
     }
 
@@ -1590,7 +1590,7 @@ namespace ts {
         node.initializer = initializer;
         node.condition = condition;
         node.incrementor = incrementor;
-        node.statement = statement;
+        node.statement = asEmbeddedStatement(statement);
         return node;
     }
 
@@ -1607,7 +1607,7 @@ namespace ts {
         const node = <ForInStatement>createSynthesizedNode(SyntaxKind.ForInStatement);
         node.initializer = initializer;
         node.expression = expression;
-        node.statement = statement;
+        node.statement = asEmbeddedStatement(statement);
         return node;
     }
 
@@ -1624,7 +1624,7 @@ namespace ts {
         node.awaitModifier = awaitModifier;
         node.initializer = initializer;
         node.expression = expression;
-        node.statement = statement;
+        node.statement = asEmbeddedStatement(statement);
         return node;
     }
 
@@ -1676,7 +1676,7 @@ namespace ts {
     export function createWith(expression: Expression, statement: Statement) {
         const node = <WithStatement>createSynthesizedNode(SyntaxKind.WithStatement);
         node.expression = expression;
-        node.statement = statement;
+        node.statement = asEmbeddedStatement(statement);
         return node;
     }
 
@@ -1704,7 +1704,7 @@ namespace ts {
     export function createLabel(label: string | Identifier, statement: Statement) {
         const node = <LabeledStatement>createSynthesizedNode(SyntaxKind.LabeledStatement);
         node.label = asName(label);
-        node.statement = statement;
+        node.statement = asEmbeddedStatement(statement);
         return node;
     }
 
@@ -2189,7 +2189,7 @@ namespace ts {
     }
 
     /* @internal */
-    export function createJSDocTypeTag(typeExpression?: JSDocTypeExpression, comment?: string): JSDocTypeTag {
+    export function createJSDocTypeTag(typeExpression: JSDocTypeExpression, comment?: string): JSDocTypeTag {
         const tag = createJSDocTag<JSDocTypeTag>(SyntaxKind.JSDocTypeTag, "type");
         tag.typeExpression = typeExpression;
         tag.comment = comment;
@@ -2201,6 +2201,13 @@ namespace ts {
         const tag = createJSDocTag<JSDocReturnTag>(SyntaxKind.JSDocReturnTag, "returns");
         tag.typeExpression = typeExpression;
         tag.comment = comment;
+        return tag;
+    }
+
+    /** @internal */
+    export function createJSDocThisTag(typeExpression?: JSDocTypeExpression): JSDocThisTag {
+        const tag = createJSDocTag<JSDocThisTag>(SyntaxKind.JSDocThisTag, "this");
+        tag.typeExpression = typeExpression;
         return tag;
     }
 
@@ -2468,7 +2475,7 @@ namespace ts {
 
     export function createSpreadAssignment(expression: Expression) {
         const node = <SpreadAssignment>createSynthesizedNode(SyntaxKind.SpreadAssignment);
-        node.expression = expression !== undefined ? parenthesizeExpressionForList(expression) : undefined!; // TODO: GH#18217
+        node.expression = parenthesizeExpressionForList(expression);
         return node;
     }
 
@@ -2657,6 +2664,7 @@ namespace ts {
             valuesHelper,
             readHelper,
             spreadHelper,
+            spreadArraysHelper,
             restHelper,
             decorateHelper,
             metadataHelper,
@@ -2949,7 +2957,7 @@ namespace ts {
         return node;
     }
 
-    export function updateBundle(node: Bundle, sourceFiles: ReadonlyArray<SourceFile>, prepends: ReadonlyArray<UnparsedSource> = emptyArray) {
+    export function updateBundle(node: Bundle, sourceFiles: ReadonlyArray<SourceFile>, prepends: ReadonlyArray<UnparsedSource | InputFiles> = emptyArray) {
         if (node.sourceFiles !== sourceFiles || node.prepends !== prepends) {
             return createBundle(sourceFiles, prepends);
         }
@@ -3072,6 +3080,12 @@ namespace ts {
         return typeof value === "number" ? createToken(value) : value;
     }
 
+    function asEmbeddedStatement<T extends Node>(statement: T): T | EmptyStatement;
+    function asEmbeddedStatement<T extends Node>(statement: T | undefined): T | EmptyStatement | undefined;
+    function asEmbeddedStatement<T extends Node>(statement: T | undefined): T | EmptyStatement | undefined {
+        return statement && isNotEmittedStatement(statement) ? setTextRange(setOriginalNode(createEmptyStatement(), statement), statement) : statement;
+    }
+
     /**
      * Clears any EmitNode entries from parse-tree nodes.
      * @param sourceFile A source file.
@@ -3116,6 +3130,18 @@ namespace ts {
         }
 
         return node.emitNode;
+    }
+
+    /**
+     * Sets `EmitFlags.NoComments` on a node and removes any leading and trailing synthetic comments.
+     * @internal
+     */
+    export function removeAllComments<T extends Node>(node: T): T {
+        const emitNode = getOrCreateEmitNode(node);
+        emitNode.flags |= EmitFlags.NoComments;
+        emitNode.leadingComments = undefined;
+        emitNode.trailingComments = undefined;
+        return node;
     }
 
     export function setTextRange<T extends TextRange>(range: T, location: TextRange | undefined): T {
@@ -3602,23 +3628,28 @@ namespace ts {
 
     // Helpers
 
-    export function getHelperName(name: string) {
+    /**
+     * Gets an identifier for the name of an *unscoped* emit helper.
+     */
+    export function getUnscopedHelperName(name: string) {
         return setEmitFlags(createIdentifier(name), EmitFlags.HelperName | EmitFlags.AdviseOnEmitNode);
     }
 
     export const valuesHelper: UnscopedEmitHelper = {
         name: "typescript:values",
+        importName: "__values",
         scoped: false,
         text: `
-            var __values = (this && this.__values) || function (o) {
-                var m = typeof Symbol === "function" && o[Symbol.iterator], i = 0;
+            var __values = (this && this.__values) || function(o) {
+                var s = typeof Symbol === "function" && Symbol.iterator, m = s && o[s], i = 0;
                 if (m) return m.call(o);
-                return {
+                if (o && typeof o.length === "number") return {
                     next: function () {
                         if (o && i >= o.length) o = void 0;
                         return { value: o && o[i++], done: !o };
                     }
                 };
+                throw new TypeError(s ? "Object is not iterable." : "Symbol.iterator is not defined.");
             };`
     };
 
@@ -3626,7 +3657,7 @@ namespace ts {
         context.requestEmitHelper(valuesHelper);
         return setTextRange(
             createCall(
-                getHelperName("__values"),
+                getUnscopedHelperName("__values"),
                 /*typeArguments*/ undefined,
                 [expression]
             ),
@@ -3636,6 +3667,7 @@ namespace ts {
 
     export const readHelper: UnscopedEmitHelper = {
         name: "typescript:read",
+        importName: "__read",
         scoped: false,
         text: `
             var __read = (this && this.__read) || function (o, n) {
@@ -3660,7 +3692,7 @@ namespace ts {
         context.requestEmitHelper(readHelper);
         return setTextRange(
             createCall(
-                getHelperName("__read"),
+                getUnscopedHelperName("__read"),
                 /*typeArguments*/ undefined,
                 count !== undefined
                     ? [iteratorRecord, createLiteral(count)]
@@ -3672,6 +3704,7 @@ namespace ts {
 
     export const spreadHelper: UnscopedEmitHelper = {
         name: "typescript:spread",
+        importName: "__spread",
         scoped: false,
         text: `
             var __spread = (this && this.__spread) || function () {
@@ -3685,7 +3718,33 @@ namespace ts {
         context.requestEmitHelper(spreadHelper);
         return setTextRange(
             createCall(
-                getHelperName("__spread"),
+                getUnscopedHelperName("__spread"),
+                /*typeArguments*/ undefined,
+                argumentList
+            ),
+            location
+        );
+    }
+
+    export const spreadArraysHelper: UnscopedEmitHelper = {
+        name: "typescript:spreadArrays",
+        importName: "__spreadArrays",
+        scoped: false,
+        text: `
+            var __spreadArrays = (this && this.__spreadArrays) || function () {
+                for (var s = 0, i = 0, il = arguments.length; i < il; i++) s += arguments[i].length;
+                for (var r = Array(s), k = 0, i = 0; i < il; i++)
+                    for (var a = arguments[i], j = 0, jl = a.length; j < jl; j++, k++)
+                        r[k] = a[j];
+                return r;
+            };`
+    };
+
+    export function createSpreadArraysHelper(context: TransformationContext, argumentList: ReadonlyArray<Expression>, location?: TextRange) {
+        context.requestEmitHelper(spreadArraysHelper);
+        return setTextRange(
+            createCall(
+                getUnscopedHelperName("__spreadArrays"),
                 /*typeArguments*/ undefined,
                 argumentList
             ),
@@ -4650,7 +4709,7 @@ namespace ts {
         }
     }
 
-    function getLeftmostExpression(node: Expression, stopAtCallExpressions: boolean) {
+    export function getLeftmostExpression(node: Expression, stopAtCallExpressions: boolean) {
         while (true) {
             switch (node.kind) {
                 case SyntaxKind.PostfixUnaryExpression:
@@ -4809,6 +4868,65 @@ namespace ts {
         const parseNode = getOriginalNode(node, isSourceFile);
         const emitNode = parseNode && parseNode.emitNode;
         return emitNode && emitNode.externalHelpersModuleName;
+    }
+
+    export function hasRecordedExternalHelpers(sourceFile: SourceFile) {
+        const parseNode = getOriginalNode(sourceFile, isSourceFile);
+        const emitNode = parseNode && parseNode.emitNode;
+        return !!emitNode && (!!emitNode.externalHelpersModuleName || !!emitNode.externalHelpers);
+    }
+
+    export function createExternalHelpersImportDeclarationIfNeeded(sourceFile: SourceFile, compilerOptions: CompilerOptions, hasExportStarsToExportValues?: boolean, hasImportStar?: boolean, hasImportDefault?: boolean) {
+        if (compilerOptions.importHelpers && isEffectiveExternalModule(sourceFile, compilerOptions)) {
+            let namedBindings: NamedImportBindings | undefined;
+            const moduleKind = getEmitModuleKind(compilerOptions);
+            if (moduleKind >= ModuleKind.ES2015 && moduleKind <= ModuleKind.ESNext) {
+                // use named imports
+                const helpers = getEmitHelpers(sourceFile);
+                if (helpers) {
+                    const helperNames: string[] = [];
+                    for (const helper of helpers) {
+                        if (!helper.scoped) {
+                            const importName = (helper as UnscopedEmitHelper).importName;
+                            if (importName) {
+                                pushIfUnique(helperNames, importName);
+                            }
+                        }
+                    }
+                    if (some(helperNames)) {
+                        helperNames.sort(compareStringsCaseSensitive);
+                        // Alias the imports if the names are used somewhere in the file.
+                        // NOTE: We don't need to care about global import collisions as this is a module.
+                        namedBindings = createNamedImports(
+                            map(helperNames, name => isFileLevelUniqueName(sourceFile, name)
+                                ? createImportSpecifier(/*propertyName*/ undefined, createIdentifier(name))
+                                : createImportSpecifier(createIdentifier(name), getUnscopedHelperName(name))
+                            )
+                        );
+                        const parseNode = getOriginalNode(sourceFile, isSourceFile);
+                        const emitNode = getOrCreateEmitNode(parseNode);
+                        emitNode.externalHelpers = true;
+                    }
+                }
+            }
+            else {
+                // use a namespace import
+                const externalHelpersModuleName = getOrCreateExternalHelpersModuleNameIfNeeded(sourceFile, compilerOptions, hasExportStarsToExportValues, hasImportStar || hasImportDefault);
+                if (externalHelpersModuleName) {
+                    namedBindings = createNamespaceImport(externalHelpersModuleName);
+                }
+            }
+            if (namedBindings) {
+                const externalHelpersImportDeclaration = createImportDeclaration(
+                    /*decorators*/ undefined,
+                    /*modifiers*/ undefined,
+                    createImportClause(/*name*/ undefined, namedBindings),
+                    createLiteral(externalHelpersModuleNameText)
+                );
+                addEmitFlags(externalHelpersImportDeclaration, EmitFlags.NeverApplyImportHelper);
+                return externalHelpersImportDeclaration;
+            }
+        }
     }
 
     export function getOrCreateExternalHelpersModuleNameIfNeeded(node: SourceFile, compilerOptions: CompilerOptions, hasExportStarsToExportValues?: boolean, hasImportStarOrImportDefault?: boolean) {

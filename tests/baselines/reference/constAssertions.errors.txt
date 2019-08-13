@@ -1,7 +1,7 @@
 tests/cases/conformance/expressions/typeAssertions/constAssertions.ts(44,32): error TS2540: Cannot assign to 'x' because it is a read-only property.
-tests/cases/conformance/expressions/typeAssertions/constAssertions.ts(61,10): error TS1355: A 'const' assertion can only be applied to a string, number, boolean, array, or object literal.
-tests/cases/conformance/expressions/typeAssertions/constAssertions.ts(62,10): error TS1355: A 'const' assertion can only be applied to a string, number, boolean, array, or object literal.
-tests/cases/conformance/expressions/typeAssertions/constAssertions.ts(63,10): error TS1355: A 'const' assertion can only be applied to a string, number, boolean, array, or object literal.
+tests/cases/conformance/expressions/typeAssertions/constAssertions.ts(61,10): error TS1355: A 'const' assertions can only be applied to references to enum members, or string, number, boolean, array, or object literals.
+tests/cases/conformance/expressions/typeAssertions/constAssertions.ts(62,10): error TS1355: A 'const' assertions can only be applied to references to enum members, or string, number, boolean, array, or object literals.
+tests/cases/conformance/expressions/typeAssertions/constAssertions.ts(63,10): error TS1355: A 'const' assertions can only be applied to references to enum members, or string, number, boolean, array, or object literals.
 
 
 ==== tests/cases/conformance/expressions/typeAssertions/constAssertions.ts (4 errors) ====
@@ -69,11 +69,11 @@ tests/cases/conformance/expressions/typeAssertions/constAssertions.ts(63,10): er
     
     let e1 = v1 as const;  // Error
              ~~
-!!! error TS1355: A 'const' assertion can only be applied to a string, number, boolean, array, or object literal.
+!!! error TS1355: A 'const' assertions can only be applied to references to enum members, or string, number, boolean, array, or object literals.
     let e2 = (true ? 1 : 0) as const;  // Error
              ~~~~~~~~~~~~~~
-!!! error TS1355: A 'const' assertion can only be applied to a string, number, boolean, array, or object literal.
+!!! error TS1355: A 'const' assertions can only be applied to references to enum members, or string, number, boolean, array, or object literals.
     let e3 = id(1) as const;  // Error
              ~~~~~
-!!! error TS1355: A 'const' assertion can only be applied to a string, number, boolean, array, or object literal.
+!!! error TS1355: A 'const' assertions can only be applied to references to enum members, or string, number, boolean, array, or object literals.
     

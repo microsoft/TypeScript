@@ -198,6 +198,58 @@ ${internal} export enum internalEnum { a, b, c }`);
                     modifyAgainFs: fs => replaceText(fs, sources[project.lib][source.ts][1], `export const`, `/*@internal*/ export const`),
                 });
             });
+
+            describe("when the module resolution finds original source file", () => {
+                function modifyFs(fs: vfs.FileSystem) {
+                    // Make lib to output to parent dir
+                    replaceText(fs, sources[project.lib][source.config], `"outFile": "module.js"`, `"outFile": "../module.js", "rootDir": "../"`);
+                    // Change reference to file1 module to resolve to lib/file1
+                    replaceText(fs, sources[project.app][source.ts][0], "file1", "lib/file1");
+                }
+
+                const libOutputFile: OutputFile = [
+                    "/src/lib/module.js",
+                    "/src/lib/module.js.map",
+                    "/src/lib/module.d.ts",
+                    "/src/lib/module.d.ts.map",
+                    "/src/lib/module.tsbuildinfo"
+                ];
+                verifyTsbuildOutput({
+                    scenario: "when the module resolution finds original source file",
+                    projFs: () => outFileFs,
+                    time,
+                    tick,
+                    proj: "amdModulesWithOut",
+                    rootNames: ["/src/app"],
+                    expectedMapFileNames: [
+                        libOutputFile[ext.jsmap],
+                        libOutputFile[ext.dtsmap],
+                        outputFiles[project.app][ext.jsmap],
+                        outputFiles[project.app][ext.dtsmap],
+                    ],
+                    expectedBuildInfoFilesForSectionBaselines: [
+                        [libOutputFile[ext.buildinfo], libOutputFile[ext.js], libOutputFile[ext.dts]],
+                        [outputFiles[project.app][ext.buildinfo], outputFiles[project.app][ext.js], outputFiles[project.app][ext.dts]]
+                    ],
+                    lastProjectOutputJs: outputFiles[project.app][ext.js],
+                    initialBuild: {
+                        modifyFs,
+                        expectedDiagnostics: [
+                            getExpectedDiagnosticForProjectsInBuild("src/lib/tsconfig.json", "src/app/tsconfig.json"),
+                            [Diagnostics.Project_0_is_out_of_date_because_output_file_1_does_not_exist, "src/lib/tsconfig.json", "src/module.js"],
+                            [Diagnostics.Building_project_0, sources[project.lib][source.config]],
+                            [Diagnostics.Project_0_is_out_of_date_because_output_file_1_does_not_exist, "src/app/tsconfig.json", "src/app/module.js"],
+                            [Diagnostics.Building_project_0, sources[project.app][source.config]],
+                        ]
+                    },
+                    outputFiles: [
+                        ...libOutputFile,
+                        ...outputFiles[project.app]
+                    ],
+                    baselineOnly: true,
+                    verifyDiagnostics: true
+                });
+            });
         });
     });
 }

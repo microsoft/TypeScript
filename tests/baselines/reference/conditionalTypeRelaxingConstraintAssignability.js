@@ -23,6 +23,20 @@ new Elem('' as ElChildren.Text);
 new Elem('' as ElChildren.Void | ElChildren.Text); // error
 new Elem('' as ElChildren); // error
 
+// Repro from #31766
+
+interface I { a: string }
+
+type DeepPartial<T> =
+    T extends object ? {[K in keyof T]?: DeepPartial<T[K]>} : T;
+
+declare function f<T>(t: T, partial: DeepPartial<T>): T;
+
+function g(p1: I, p2: Partial<I>): I {
+  return f(p1, p2);
+}
+
+
 //// [conditionalTypeRelaxingConstraintAssignability.js]
 "use strict";
 exports.__esModule = true;
@@ -37,3 +51,6 @@ new Elem(undefined);
 new Elem('');
 new Elem(''); // error
 new Elem(''); // error
+function g(p1, p2) {
+    return f(p1, p2);
+}

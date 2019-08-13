@@ -2,13 +2,14 @@
     "kind": "JSDocComment",
     "pos": 0,
     "end": 34,
+    "flags": "JSDoc",
     "modifierFlagsCache": 0,
     "transformFlags": 0,
     "tags": {
         "0": {
             "kind": "JSDocParameterTag",
             "pos": 8,
-            "end": 29,
+            "end": 32,
             "modifierFlagsCache": 0,
             "transformFlags": 0,
             "tagName": {
@@ -46,6 +47,6 @@
         },
         "length": 1,
         "pos": 8,
-        "end": 29
+        "end": 32
     }
 }

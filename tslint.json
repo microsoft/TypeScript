@@ -1,6 +1,11 @@
 {
     "extends": "tslint:latest",
     "rulesDirectory": "built/local/tslint/rules",
+    "linterOptions": {
+        "exclude": [
+            "tests/**/*"
+        ]
+    },
     "rules": {
         "no-unnecessary-type-assertion": true,
 

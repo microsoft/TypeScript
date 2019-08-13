@@ -300,15 +300,15 @@ function someGenerics7<A, B extends string, C>(a: (a: A) => A, b: (b: B) => B, c
 someGenerics7(n => n, n => n, n => n); // Valid, types of n are <any, string, any> respectively
 >someGenerics7(n => n, n => n, n => n) : void
 >someGenerics7 : <A, B extends string, C>(a: (a: A) => A, b: (b: B) => B, c: (c: C) => C) => void
->n => n : (n: {}) => {}
->n : {}
->n : {}
+>n => n : (n: unknown) => unknown
+>n : unknown
+>n : unknown
 >n => n : (n: string) => string
 >n : string
 >n : string
->n => n : (n: {}) => {}
->n : {}
->n : {}
+>n => n : (n: unknown) => unknown
+>n : unknown
+>n : unknown
 
 someGenerics7<number, string, number>(n => n, n => n, n => n);
 >someGenerics7<number, string, number>(n => n, n => n, n => n) : void
@@ -411,15 +411,15 @@ interface A92 {
 >z : Window
 }
 var a9e = someGenerics9(undefined, { x: 6, z: window }, { x: 6, y: '' });
->a9e : { x: number; z: Window; y?: undefined; } | { x: number; y: string; z?: undefined; }
->someGenerics9(undefined, { x: 6, z: window }, { x: 6, y: '' }) : { x: number; z: Window; y?: undefined; } | { x: number; y: string; z?: undefined; }
+>a9e : { x: number; z: Window & typeof globalThis; y?: undefined; } | { x: number; y: string; z?: undefined; }
+>someGenerics9(undefined, { x: 6, z: window }, { x: 6, y: '' }) : { x: number; z: Window & typeof globalThis; y?: undefined; } | { x: number; y: string; z?: undefined; }
 >someGenerics9 : <T extends any>(a: T, b: T, c: T) => T
 >undefined : undefined
->{ x: 6, z: window } : { x: number; z: Window; }
+>{ x: 6, z: window } : { x: number; z: Window & typeof globalThis; }
 >x : number
 >6 : 6
->z : Window
->window : Window
+>z : Window & typeof globalThis
+>window : Window & typeof globalThis
 >{ x: 6, y: '' } : { x: number; y: string; }
 >x : number
 >6 : 6
@@ -427,18 +427,18 @@ var a9e = someGenerics9(undefined, { x: 6, z: window }, { x: 6, y: '' });
 >'' : ""
 
 var a9e: {};
->a9e : { x: number; z: Window; y?: undefined; } | { x: number; y: string; z?: undefined; }
+>a9e : { x: number; z: Window & typeof globalThis; y?: undefined; } | { x: number; y: string; z?: undefined; }
 
 var a9f = someGenerics9<A92>(undefined, { x: 6, z: window }, { x: 6, y: '' });
 >a9f : any
 >someGenerics9<A92>(undefined, { x: 6, z: window }, { x: 6, y: '' }) : any
 >someGenerics9 : <T extends any>(a: T, b: T, c: T) => T
 >undefined : undefined
->{ x: 6, z: window } : { x: number; z: Window; }
+>{ x: 6, z: window } : { x: number; z: Window & typeof globalThis; }
 >x : number
 >6 : 6
->z : Window
->window : Window
+>z : Window & typeof globalThis
+>window : Window & typeof globalThis
 >{ x: 6, y: '' } : { x: number; y: string; }
 >x : number
 >6 : 6

@@ -23,8 +23,8 @@ function f0() {
     var [x, y, z] = [1, "hello"];
 >x : number
 >y : string
->z : any
->[1, "hello"] : [number, string, undefined?]
+>z : undefined
+>[1, "hello"] : [number, string]
 >1 : 1
 >"hello" : "hello"
 
@@ -255,16 +255,16 @@ function f8() {
 >f8 : () => void
 
     var [a, b, c] = [];   // Error, [] is an empty tuple
->a : any
->b : any
->c : any
->[] : [undefined?, undefined?, undefined?]
+>a : undefined
+>b : undefined
+>c : undefined
+>[] : []
 
     var [d, e, f] = [1];  // Error, [1] is a tuple
 >d : number
->e : any
->f : any
->[1] : [number, undefined?, undefined?]
+>e : undefined
+>f : undefined
+>[1] : [number]
 >1 : 1
 }
 

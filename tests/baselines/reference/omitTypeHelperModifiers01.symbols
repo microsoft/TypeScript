@@ -1,0 +1,69 @@
+=== tests/cases/compiler/omitTypeHelperModifiers01.ts ===
+type A = {
+>A : Symbol(A, Decl(omitTypeHelperModifiers01.ts, 0, 0))
+
+    a: number;
+>a : Symbol(a, Decl(omitTypeHelperModifiers01.ts, 0, 10))
+
+    b?: string;
+>b : Symbol(b, Decl(omitTypeHelperModifiers01.ts, 1, 14))
+
+    readonly c: boolean;
+>c : Symbol(c, Decl(omitTypeHelperModifiers01.ts, 2, 15))
+
+    d: unknown;
+>d : Symbol(d, Decl(omitTypeHelperModifiers01.ts, 3, 24))
+
+};
+
+type B = Omit<A, 'a'>;
+>B : Symbol(B, Decl(omitTypeHelperModifiers01.ts, 5, 2))
+>Omit : Symbol(Omit, Decl(lib.es5.d.ts, --, --))
+>A : Symbol(A, Decl(omitTypeHelperModifiers01.ts, 0, 0))
+
+function f(x: B) {
+>f : Symbol(f, Decl(omitTypeHelperModifiers01.ts, 7, 22))
+>x : Symbol(x, Decl(omitTypeHelperModifiers01.ts, 9, 11))
+>B : Symbol(B, Decl(omitTypeHelperModifiers01.ts, 5, 2))
+
+    const b = x.b;
+>b : Symbol(b, Decl(omitTypeHelperModifiers01.ts, 10, 9))
+>x.b : Symbol(b, Decl(omitTypeHelperModifiers01.ts, 1, 14))
+>x : Symbol(x, Decl(omitTypeHelperModifiers01.ts, 9, 11))
+>b : Symbol(b, Decl(omitTypeHelperModifiers01.ts, 1, 14))
+
+    x.b = "hello";
+>x.b : Symbol(b, Decl(omitTypeHelperModifiers01.ts, 1, 14))
+>x : Symbol(x, Decl(omitTypeHelperModifiers01.ts, 9, 11))
+>b : Symbol(b, Decl(omitTypeHelperModifiers01.ts, 1, 14))
+
+    x.b = undefined;
+>x.b : Symbol(b, Decl(omitTypeHelperModifiers01.ts, 1, 14))
+>x : Symbol(x, Decl(omitTypeHelperModifiers01.ts, 9, 11))
+>b : Symbol(b, Decl(omitTypeHelperModifiers01.ts, 1, 14))
+>undefined : Symbol(undefined)
+
+    const c = x.c;
+>c : Symbol(c, Decl(omitTypeHelperModifiers01.ts, 14, 9))
+>x.c : Symbol(c, Decl(omitTypeHelperModifiers01.ts, 2, 15))
+>x : Symbol(x, Decl(omitTypeHelperModifiers01.ts, 9, 11))
+>c : Symbol(c, Decl(omitTypeHelperModifiers01.ts, 2, 15))
+
+    x.c = true;
+>x.c : Symbol(c, Decl(omitTypeHelperModifiers01.ts, 2, 15))
+>x : Symbol(x, Decl(omitTypeHelperModifiers01.ts, 9, 11))
+>c : Symbol(c, Decl(omitTypeHelperModifiers01.ts, 2, 15))
+
+    const d = x.d;
+>d : Symbol(d, Decl(omitTypeHelperModifiers01.ts, 17, 9))
+>x.d : Symbol(d, Decl(omitTypeHelperModifiers01.ts, 3, 24))
+>x : Symbol(x, Decl(omitTypeHelperModifiers01.ts, 9, 11))
+>d : Symbol(d, Decl(omitTypeHelperModifiers01.ts, 3, 24))
+
+    x.d = d;
+>x.d : Symbol(d, Decl(omitTypeHelperModifiers01.ts, 3, 24))
+>x : Symbol(x, Decl(omitTypeHelperModifiers01.ts, 9, 11))
+>d : Symbol(d, Decl(omitTypeHelperModifiers01.ts, 3, 24))
+>d : Symbol(d, Decl(omitTypeHelperModifiers01.ts, 17, 9))
+}
+

@@ -14,7 +14,7 @@ class StringIterator {
 >v : Symbol(v, Decl(for-of35.ts, 13, 8))
         }
     }
-    
+
     [Symbol.iterator]() {
 >[Symbol.iterator] : Symbol(StringIterator[Symbol.iterator], Decl(for-of35.ts, 6, 5))
 >Symbol.iterator : Symbol(SymbolConstructor.iterator, Decl(lib.es2015.iterable.d.ts, --, --))

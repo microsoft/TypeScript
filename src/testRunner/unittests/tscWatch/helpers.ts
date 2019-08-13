@@ -35,8 +35,8 @@ namespace ts.tscWatch {
         close(): void;
     }
 
-    export function createWatchOfConfigFile(configFileName: string, host: WatchedSystem, maxNumberOfFilesToIterateForInvalidation?: number) {
-        const compilerHost = createWatchCompilerHostOfConfigFile(configFileName, {}, host);
+    export function createWatchOfConfigFile(configFileName: string, host: WatchedSystem, optionsToExtend?: CompilerOptions, maxNumberOfFilesToIterateForInvalidation?: number) {
+        const compilerHost = createWatchCompilerHostOfConfigFile(configFileName, optionsToExtend || {}, host);
         compilerHost.maxNumberOfFilesToIterateForInvalidation = maxNumberOfFilesToIterateForInvalidation;
         const watch = createWatchProgram(compilerHost);
         const result = (() => watch.getCurrentProgram().getProgram()) as Watch;

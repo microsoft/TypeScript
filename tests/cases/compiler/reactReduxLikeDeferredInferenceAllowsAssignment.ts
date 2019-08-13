@@ -143,3 +143,5 @@ const Test1 = connect(
   null,
   mapDispatchToProps
 )(TestComponent);
+
+export {};

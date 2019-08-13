@@ -26,8 +26,8 @@ module ImmediatelyFix {
 >C : typeof C
 
     var r = c.foo(<U>(x: U) => ''); // {}
->r : {}
->c.foo(<U>(x: U) => '') : {}
+>r : unknown
+>c.foo(<U>(x: U) => '') : unknown
 >c.foo : <T>(x: (a: T) => T) => T
 >c : C<number>
 >foo : <T>(x: (a: T) => T) => T
@@ -46,13 +46,13 @@ module ImmediatelyFix {
 >'' : ""
 
     var r3 = c.foo(x => ''); // {}
->r3 : {}
->c.foo(x => '') : {}
+>r3 : unknown
+>c.foo(x => '') : unknown
 >c.foo : <T>(x: (a: T) => T) => T
 >c : C<number>
 >foo : <T>(x: (a: T) => T) => T
->x => '' : (x: {}) => string
->x : {}
+>x => '' : (x: unknown) => string
+>x : unknown
 >'' : ""
 
     class C2<T> {

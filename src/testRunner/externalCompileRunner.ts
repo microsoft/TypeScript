@@ -5,11 +5,12 @@ const del: typeof import("del") = require("del");
 interface ExecResult {
     stdout: Buffer;
     stderr: Buffer;
-    status: number;
+    status: number | null;
 }
 
 interface UserConfig {
     types: string[];
+    path?: string;
 }
 
 abstract class ExternalCompileRunnerBase extends RunnerBase {
@@ -23,7 +24,7 @@ abstract class ExternalCompileRunnerBase extends RunnerBase {
      */
     initializeTests(): void {
         // Read in and evaluate the test list
-        const testList = this.tests && this.tests.length ? this.tests : this.enumerateTestFiles();
+        const testList = this.tests && this.tests.length ? this.tests : this.getTestFiles();
 
         // tslint:disable-next-line:no-this-assignment
         const cls = this;
@@ -57,7 +58,7 @@ abstract class ExternalCompileRunnerBase extends RunnerBase {
                     ts.Debug.assert(!!config.types, "Bad format from test.json: Types field must be present.");
                     types = config.types;
 
-                    cwd = submoduleDir;
+                    cwd = config.path ? path.join(cwd, config.path) : submoduleDir;
                 }
                 if (fs.existsSync(path.join(cwd, "package.json"))) {
                     if (fs.existsSync(path.join(cwd, "package-lock.json"))) {
@@ -103,6 +104,108 @@ ${sortErrors(stripAbsoluteImportPaths(result.stdout.toString().replace(/\r\n/g, 
 Standard error:
 ${stripAbsoluteImportPaths(result.stderr.toString().replace(/\r\n/g, "\n"))}`;
     }
+}
+
+class DockerfileRunner extends ExternalCompileRunnerBase {
+    readonly testDir = "tests/cases/docker/";
+    kind(): TestRunnerKind {
+        return "docker";
+    }
+    initializeTests(): void {
+        // Read in and evaluate the test list
+        const testList = this.tests && this.tests.length ? this.tests : this.getTestFiles();
+
+        // tslint:disable-next-line:no-this-assignment
+        const cls = this;
+        describe(`${this.kind()} code samples`, function(this: Mocha.ISuiteCallbackContext) {
+            this.timeout(cls.timeout); // 20 minutes
+            before(() => {
+                cls.exec("docker", ["build", ".", "-t", "typescript/typescript"], { cwd: Harness.IO.getWorkspaceRoot() }); // cached because workspace is hashed to determine cacheability
+            });
+            for (const test of testList) {
+                const directory = typeof test === "string" ? test : test.file;
+                const cwd = path.join(Harness.IO.getWorkspaceRoot(), cls.testDir, directory);
+                it(`should build ${directory} successfully`, () => {
+                    const imageName = `tstest/${directory}`;
+                    cls.exec("docker", ["build", "--no-cache", ".", "-t", imageName], { cwd }); // --no-cache so the latest version of the repos referenced is always fetched
+                    const cp: typeof import("child_process") = require("child_process");
+                    Harness.Baseline.runBaseline(`${cls.kind()}/${directory}.log`, cls.report(cp.spawnSync(`docker`, ["run", imageName], { cwd, timeout: cls.timeout, shell: true })));
+                });
+            }
+        });
+    }
+
+    private timeout = 1_200_000; // 20 minutes;
+    private exec(command: string, args: string[], options: { cwd: string, timeout?: number }): void {
+        const cp: typeof import("child_process") = require("child_process");
+        const stdio = isWorker ? "pipe" : "inherit";
+        const res = cp.spawnSync(command, args, { timeout: this.timeout, shell: true, stdio, ...options });
+        if (res.status !== 0) {
+            throw new Error(`${command} ${args.join(" ")} for ${options.cwd} failed: ${res.stderr && res.stderr.toString()}`);
+        }
+    }
+    report(result: ExecResult) {
+        // tslint:disable-next-line:no-null-keyword
+        return result.status === 0 && !result.stdout.length && !result.stderr.length ? null : `Exit Code: ${result.status}
+Standard output:
+${sanitizeDockerfileOutput(result.stdout.toString())}
+
+
+Standard error:
+${sanitizeDockerfileOutput(result.stderr.toString())}`;
+    }
+}
+
+function sanitizeDockerfileOutput(result: string): string {
+    return [
+        normalizeNewlines,
+        stripANSIEscapes,
+        stripRushStageNumbers,
+        sanitizeVersionSpecifiers,
+        sanitizeTimestamps,
+        sanitizeUnimportantGulpOutput,
+        stripAbsoluteImportPaths,
+    ].reduce((result, f) => f(result), result);
+}
+
+function normalizeNewlines(result: string): string {
+    return result.replace(/\r\n/g, "\n");
+}
+
+function stripANSIEscapes(result: string): string {
+    return result.replace(/\x1b\[[0-9;]*[a-zA-Z]/g, "");
+}
+
+function stripRushStageNumbers(result: string): string {
+    return result.replace(/\d+ of \d+:/g, "XX of XX:");
+}
+
+/**
+ * Gulp's output order within a `parallel` block is nondeterministic (and there's no way to configure it to execute in series),
+ * so we purge as much of the gulp output as we can
+ */
+function sanitizeUnimportantGulpOutput(result: string): string {
+    return result.replace(/^.*(\] (Starting)|(Finished)).*$/gm, "") // "gulp" task start/end messages (nondeterministic order)
+        .replace(/^.*(\] . (finished)|(started)).*$/gm, "") // "just" task start/end messages (nondeterministic order)
+        .replace(/^.*\] Respawned to PID: \d+.*$/gm, "") // PID of child is OS and system-load dependent (likely stableish in a container but still dangerous)
+        .replace(/\n+/g, "\n");
+}
+
+function sanitizeTimestamps(result: string): string {
+    return result.replace(/\[\d?\d:\d\d:\d\d (A|P)M\]/g, "[XX:XX:XX XM]")
+        .replace(/\[\d?\d:\d\d:\d\d\]/g, "[XX:XX:XX]")
+        .replace(/\/\d+-\d+-[\d_TZ]+-debug.log/g, "\/XXXX-XX-XXXXXXXXX-debug.log")
+        .replace(/\d+(\.\d+)? sec(onds?)?/g, "? seconds")
+        .replace(/\d+(\.\d+)? min(utes?)?/g, "")
+        .replace(/\d+(\.\d+)? ?m?s/g, "?s")
+        .replace(/ \(\?s\)/g, "");
+}
+
+function sanitizeVersionSpecifiers(result: string): string {
+    return result
+        .replace(/\d+.\d+.\d+-insiders.\d\d\d\d\d\d\d\d/g, "X.X.X-insiders.xxxxxxxx")
+        .replace(/Rush Multi-Project Build Tool (\d+)\.\d+\.\d+/g, "Rush Multi-Project Build Tool $1.X.X")
+        .replace(/([@v\()])\d+\.\d+\.\d+/g, "$1X.X.X");
 }
 
 /**

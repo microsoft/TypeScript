@@ -1,7 +1,7 @@
 namespace ts {
     // WARNING: The script `configureNightly.ts` uses a regexp to parse out these values.
     // If changing the text in this section, be sure to test `configureNightly` too.
-    export const versionMajorMinor = "3.4";
+    export const versionMajorMinor = "3.6";
     /** The version of the TypeScript compiler release */
     export const version = `${versionMajorMinor}.0-dev`;
 }
@@ -24,7 +24,6 @@ namespace ts {
         " __sortedArrayBrand": any;
     }
 
-
     /** ES6 Map interface, only read methods included. */
     export interface ReadonlyMap<T> {
         get(key: string): T | undefined;
@@ -45,7 +44,7 @@ namespace ts {
 
     /** ES6 Iterator type. */
     export interface Iterator<T> {
-        next(): { value: T, done: false } | { value: never, done: true };
+        next(): { value: T, done?: false } | { value: never, done: true };
     }
 
     /** Array that is only intended to be pushed to, never read. */
@@ -239,7 +238,7 @@ namespace ts {
                     }
 
                     // When the deleted entry was the last one, we need to
-                    // adust the lastEntry reference.
+                    // adjust the lastEntry reference.
                     if (this.lastEntry === entry) {
                         this.lastEntry = previousEntry;
                     }
@@ -297,12 +296,13 @@ namespace ts {
             forEach(action: (value: T, key: string) => void): void {
                 const iterator = this.entries();
                 while (true) {
-                    const { value: entry, done } = iterator.next();
-                    if (done) {
+                    const iterResult = iterator.next();
+                    if (iterResult.done) {
                         break;
                     }
 
-                    action(entry[1], entry[0]);
+                    const [key, value] = iterResult.value;
+                    action(value, key);
                 }
             }
         };
@@ -346,11 +346,11 @@ namespace ts {
 
     export function firstDefinedIterator<T, U>(iter: Iterator<T>, callback: (element: T) => U | undefined): U | undefined {
         while (true) {
-            const { value, done } = iter.next();
-            if (done) {
+            const iterResult = iter.next();
+            if (iterResult.done) {
                 return undefined;
             }
-            const result = callback(value);
+            const result = callback(iterResult.value);
             if (result !== undefined) {
                 return result;
             }
@@ -375,7 +375,7 @@ namespace ts {
                     return { value: undefined as never, done: true };
                 }
                 i++;
-                return { value: [arrayA[i - 1], arrayB[i - 1]], done: false };
+                return { value: [arrayA[i - 1], arrayB[i - 1]] as [T, U], done: false };
             }
         };
     }
@@ -567,7 +567,7 @@ namespace ts {
         return {
             next() {
                 const iterRes = iter.next();
-                return iterRes.done ? iterRes : { value: mapFn(iterRes.value), done: false };
+                return iterRes.done ? iterRes as { done: true, value: never } : { value: mapFn(iterRes.value), done: false };
             }
         };
     }
@@ -600,24 +600,18 @@ namespace ts {
      *
      * @param array The array to flatten.
      */
-    export function flatten<T>(array: ReadonlyArray<T | ReadonlyArray<T> | undefined>): T[];
-    export function flatten<T>(array: ReadonlyArray<T | ReadonlyArray<T> | undefined> | undefined): T[] | undefined;
-    export function flatten<T>(array: ReadonlyArray<T | ReadonlyArray<T> | undefined> | undefined): T[] | undefined {
-        let result: T[] | undefined;
-        if (array) {
-            result = [];
-            for (const v of array) {
-                if (v) {
-                    if (isArray(v)) {
-                        addRange(result, v);
-                    }
-                    else {
-                        result.push(v);
-                    }
+    export function flatten<T>(array: T[][] | ReadonlyArray<T | ReadonlyArray<T> | undefined>): T[] {
+        const result = [];
+        for (const v of array) {
+            if (v) {
+                if (isArray(v)) {
+                    addRange(result, v);
+                }
+                else {
+                    result.push(v);
                 }
             }
         }
-
         return result;
     }
 
@@ -678,7 +672,7 @@ namespace ts {
                     }
                     const iterRes = iter.next();
                     if (iterRes.done) {
-                        return iterRes;
+                        return iterRes as { done: true, value: never };
                     }
                     currentIter = getIterator(iterRes.value);
                 }
@@ -753,7 +747,7 @@ namespace ts {
                 while (true) {
                     const res = iter.next();
                     if (res.done) {
-                        return res;
+                        return res as { done: true, value: never };
                     }
                     const value = mapFn(res.value);
                     if (value !== undefined) {
@@ -1078,6 +1072,7 @@ namespace ts {
      * @param value The value to append to the array. If `value` is `undefined`, nothing is
      * appended.
      */
+    export function append<TArray extends any[] | undefined, TValue extends NonNullable<TArray>[number] | undefined>(to: TArray, value: TValue): [undefined, undefined] extends [TArray, TValue] ? TArray : NonNullable<TArray>[number][];
     export function append<T>(to: T[], value: T | undefined): T[];
     export function append<T>(to: T[] | undefined, value: T): T[];
     export function append<T>(to: T[] | undefined, value: T | undefined): T[] | undefined;
@@ -1255,7 +1250,7 @@ namespace ts {
     }
 
     /**
-     * Returns the only element of an array if it contains only one element; otheriwse, returns the
+     * Returns the only element of an array if it contains only one element; otherwise, returns the
      * array.
      */
     export function singleOrMany<T>(array: T[]): T | T[];
@@ -1386,6 +1381,17 @@ namespace ts {
         return keys;
     }
 
+    export function getAllKeys(obj: object): string[] {
+        const result: string[] = [];
+        do {
+            const names = Object.getOwnPropertyNames(obj);
+            for (const name of names) {
+                pushIfUnique(result, name);
+            }
+        } while (obj = Object.getPrototypeOf(obj));
+        return result;
+    }
+
     export function getOwnValues<T>(sparseArray: T[]): T[] {
         const values: T[] = [];
         for (const key in sparseArray) {
@@ -1400,10 +1406,10 @@ namespace ts {
     /** Shims `Array.from`. */
     export function arrayFrom<T, U>(iterator: Iterator<T> | IterableIterator<T>, map: (t: T) => U): U[];
     export function arrayFrom<T>(iterator: Iterator<T> | IterableIterator<T>): T[];
-    export function arrayFrom(iterator: Iterator<any> | IterableIterator<any>, map?: (t: any) => any): any[] {
-        const result: any[] = [];
-        for (let { value, done } = iterator.next(); !done; { value, done } = iterator.next()) {
-            result.push(map ? map(value) : value);
+    export function arrayFrom<T, U>(iterator: Iterator<T> | IterableIterator<T>, map?: (t: T) => U): (T | U)[] {
+        const result: (T | U)[] = [];
+        for (let iterResult = iterator.next(); !iterResult.done; iterResult = iterator.next()) {
+            result.push(map ? map(iterResult.value) : iterResult.value);
         }
         return result;
     }
@@ -1640,39 +1646,6 @@ namespace ts {
     }
 
     /**
-     * High-order function, creates a function that executes a function composition.
-     * For example, `chain(a, b)` is the equivalent of `x => ((a', b') => y => b'(a'(y)))(a(x), b(x))`
-     *
-     * @param args The functions to chain.
-     */
-    export function chain<T, U>(...args: ((t: T) => (u: U) => U)[]): (t: T) => (u: U) => U;
-    export function chain<T, U>(a: (t: T) => (u: U) => U, b: (t: T) => (u: U) => U, c: (t: T) => (u: U) => U, d: (t: T) => (u: U) => U, e: (t: T) => (u: U) => U): (t: T) => (u: U) => U {
-        if (e) {
-            const args: ((t: T) => (u: U) => U)[] = [];
-            for (let i = 0; i < arguments.length; i++) {
-                args[i] = arguments[i];
-            }
-
-            return t => compose(...map(args, f => f(t)));
-        }
-        else if (d) {
-            return t => compose(a(t), b(t), c(t), d(t));
-        }
-        else if (c) {
-            return t => compose(a(t), b(t), c(t));
-        }
-        else if (b) {
-            return t => compose(a(t), b(t));
-        }
-        else if (a) {
-            return t => compose(a(t));
-        }
-        else {
-            return _ => u => u;
-        }
-    }
-
-    /**
      * High-order function, composes functions. Note that functions are composed inside-out;
      * for example, `compose(a, b)` is the equivalent of `x => b(a(x))`.
      *
@@ -1718,89 +1691,6 @@ namespace ts {
      */
     export type AnyFunction = (...args: never[]) => void;
     export type AnyConstructor = new (...args: unknown[]) => unknown;
-
-    export namespace Debug {
-        export let currentAssertionLevel = AssertionLevel.None;
-        export let isDebugging = false;
-
-        export function shouldAssert(level: AssertionLevel): boolean {
-            return currentAssertionLevel >= level;
-        }
-
-        export function assert(expression: boolean, message?: string, verboseDebugInfo?: string | (() => string), stackCrawlMark?: AnyFunction): void {
-            if (!expression) {
-                if (verboseDebugInfo) {
-                    message += "\r\nVerbose Debug Information: " + (typeof verboseDebugInfo === "string" ? verboseDebugInfo : verboseDebugInfo());
-                }
-                fail(message ? "False expression: " + message : "False expression.", stackCrawlMark || assert);
-            }
-        }
-
-        export function assertEqual<T>(a: T, b: T, msg?: string, msg2?: string): void {
-            if (a !== b) {
-                const message = msg ? msg2 ? `${msg} ${msg2}` : msg : "";
-                fail(`Expected ${a} === ${b}. ${message}`);
-            }
-        }
-
-        export function assertLessThan(a: number, b: number, msg?: string): void {
-            if (a >= b) {
-                fail(`Expected ${a} < ${b}. ${msg || ""}`);
-            }
-        }
-
-        export function assertLessThanOrEqual(a: number, b: number): void {
-            if (a > b) {
-                fail(`Expected ${a} <= ${b}`);
-            }
-        }
-
-        export function assertGreaterThanOrEqual(a: number, b: number): void {
-            if (a < b) {
-                fail(`Expected ${a} >= ${b}`);
-            }
-        }
-
-        export function fail(message?: string, stackCrawlMark?: AnyFunction): never {
-            debugger;
-            const e = new Error(message ? `Debug Failure. ${message}` : "Debug Failure.");
-            if ((<any>Error).captureStackTrace) {
-                (<any>Error).captureStackTrace(e, stackCrawlMark || fail);
-            }
-            throw e;
-        }
-
-        export function assertDefined<T>(value: T | null | undefined, message?: string): T {
-            if (value === undefined || value === null) return fail(message);
-            return value;
-        }
-
-        export function assertEachDefined<T, A extends ReadonlyArray<T>>(value: A, message?: string): A {
-            for (const v of value) {
-                assertDefined(v, message);
-            }
-            return value;
-        }
-
-        export function assertNever(member: never, message = "Illegal value:", stackCrawlMark?: AnyFunction): never {
-            const detail = typeof member === "object" && "kind" in member && "pos" in member ? "SyntaxKind: " + showSyntaxKind(member as Node) : JSON.stringify(member);
-            return fail(`${message} ${detail}`, stackCrawlMark || assertNever);
-        }
-
-        export function getFunctionName(func: AnyFunction) {
-            if (typeof func !== "function") {
-                return "";
-            }
-            else if (func.hasOwnProperty("name")) {
-                return (<any>func).name;
-            }
-            else {
-                const text = Function.prototype.toString.call(func);
-                const match = /^function\s+([\w\$]+)\s*\(/.exec(text);
-                return match ? match[1] : "";
-            }
-        }
-    }
 
     export function equateValues<T>(a: T, b: T) {
         return a === b;
@@ -2316,5 +2206,30 @@ namespace ts {
             result[i] = cb(i);
         }
         return result;
+    }
+
+    export function cartesianProduct<T>(arrays: readonly T[][]) {
+        const result: T[][] = [];
+        cartesianProductWorker(arrays, result, /*outer*/ undefined, 0);
+        return result;
+    }
+
+    function cartesianProductWorker<T>(arrays: readonly (readonly T[])[], result: (readonly T[])[], outer: readonly T[] | undefined, index: number) {
+        for (const element of arrays[index]) {
+            let inner: T[];
+            if (outer) {
+                inner = outer.slice();
+                inner.push(element);
+            }
+            else {
+                inner = [element];
+            }
+            if (index === arrays.length - 1) {
+                result.push(inner);
+            }
+            else {
+                cartesianProductWorker(arrays, result, inner, index + 1);
+            }
+        }
     }
 }

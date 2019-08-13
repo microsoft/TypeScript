@@ -17,7 +17,10 @@ namespace ts {
 
                 transpileOptions = testSettings.options || {};
                 if (!transpileOptions.compilerOptions) {
-                    transpileOptions.compilerOptions = {};
+                    transpileOptions.compilerOptions = { };
+                }
+                if (transpileOptions.compilerOptions.target === undefined) {
+                    transpileOptions.compilerOptions.target = ScriptTarget.ES3;
                 }
 
                 if (transpileOptions.compilerOptions.newLine === undefined) {
@@ -444,6 +447,14 @@ var x = 0;`, {
                     isolatedModules: true,
                 }
             }
+        });
+
+        transpilesCorrectly("Supports readonly keyword for arrays", "let x: readonly string[];", {
+            options: { compilerOptions: { module: ModuleKind.CommonJS } }
+        });
+
+        transpilesCorrectly("Supports 'as const' arrays", `([] as const).forEach(k => console.log(k));`, {
+            options: { compilerOptions: { module: ModuleKind.CommonJS } }
         });
     });
 }

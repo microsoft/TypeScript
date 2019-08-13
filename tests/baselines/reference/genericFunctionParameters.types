@@ -15,8 +15,8 @@ declare function f3<T>(cb: <S extends Array<S>>(x: S) => T): T;
 >x : S
 
 let x1 = f1(x => x);  // {}
->x1 : {}
->f1(x => x) : {}
+>x1 : unknown
+>f1(x => x) : unknown
 >f1 : <T>(cb: <S>(x: S) => T) => T
 >x => x : <S>(x: S) => S
 >x : S
@@ -47,8 +47,8 @@ declare const s: <R>(go: <S>(ops: { init(): S; }) => R) => R;
 >init : () => S
 
 const x = s(a => a.init());  // x is any, should have been {}
->x : {}
->s(a => a.init()) : {}
+>x : unknown
+>s(a => a.init()) : unknown
 >s : <R>(go: <S>(ops: { init(): S; }) => R) => R
 >a => a.init() : <S>(a: { init(): S; }) => S
 >a : { init(): S; }

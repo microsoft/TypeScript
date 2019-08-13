@@ -151,9 +151,9 @@ var {f: [f1, f2, { f3: f4, f5 }, , ]} = { f: [1, 2, { f3: 4, f5: 0 }] };
 >f4 : number
 >f5 : number
 > : undefined
->{ f: [1, 2, { f3: 4, f5: 0 }] } : { f: [number, number, { f3: number; f5: number; }, undefined?]; }
->f : [number, number, { f3: number; f5: number; }, undefined?]
->[1, 2, { f3: 4, f5: 0 }] : [number, number, { f3: number; f5: number; }, undefined?]
+>{ f: [1, 2, { f3: 4, f5: 0 }] } : { f: [number, number, { f3: number; f5: number; }]; }
+>f : [number, number, { f3: number; f5: number; }]
+>[1, 2, { f3: 4, f5: 0 }] : [number, number, { f3: number; f5: number; }]
 >1 : 1
 >2 : 2
 >{ f3: 4, f5: 0 } : { f3: number; f5: number; }

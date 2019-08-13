@@ -1,0 +1,119 @@
+=== tests/cases/conformance/expressions/arrayLiterals/arrayLiteralInference.ts ===
+// Repro from #31204
+
+export enum AppType {
+>AppType : Symbol(AppType, Decl(arrayLiteralInference.ts, 0, 0))
+
+    HeaderDetail = 'HeaderDetail',
+>HeaderDetail : Symbol(AppType.HeaderDetail, Decl(arrayLiteralInference.ts, 2, 21))
+
+    HeaderMultiDetail = 'HeaderMultiDetail',
+>HeaderMultiDetail : Symbol(AppType.HeaderMultiDetail, Decl(arrayLiteralInference.ts, 3, 34))
+
+    AdvancedList = 'AdvancedList',
+>AdvancedList : Symbol(AppType.AdvancedList, Decl(arrayLiteralInference.ts, 4, 44))
+
+    Standard = 'Standard',
+>Standard : Symbol(AppType.Standard, Decl(arrayLiteralInference.ts, 5, 34))
+
+    Relationship = 'Relationship',
+>Relationship : Symbol(AppType.Relationship, Decl(arrayLiteralInference.ts, 6, 26))
+
+    Report = 'Report',
+>Report : Symbol(AppType.Report, Decl(arrayLiteralInference.ts, 7, 34))
+
+    Composite = 'Composite',
+>Composite : Symbol(AppType.Composite, Decl(arrayLiteralInference.ts, 8, 22))
+
+    ListOnly = 'ListOnly',
+>ListOnly : Symbol(AppType.ListOnly, Decl(arrayLiteralInference.ts, 9, 28))
+
+    ModuleSettings = 'ModuleSettings'
+>ModuleSettings : Symbol(AppType.ModuleSettings, Decl(arrayLiteralInference.ts, 10, 26))
+}
+
+export enum AppStyle {
+>AppStyle : Symbol(AppStyle, Decl(arrayLiteralInference.ts, 12, 1))
+
+    Tree,
+>Tree : Symbol(AppStyle.Tree, Decl(arrayLiteralInference.ts, 14, 22))
+
+    TreeEntity,
+>TreeEntity : Symbol(AppStyle.TreeEntity, Decl(arrayLiteralInference.ts, 15, 9))
+
+    Standard,
+>Standard : Symbol(AppStyle.Standard, Decl(arrayLiteralInference.ts, 16, 15))
+
+    MiniApp,
+>MiniApp : Symbol(AppStyle.MiniApp, Decl(arrayLiteralInference.ts, 17, 13))
+
+    PivotTable
+>PivotTable : Symbol(AppStyle.PivotTable, Decl(arrayLiteralInference.ts, 18, 12))
+}
+
+const appTypeStylesWithError: Map<AppType, Array<AppStyle>> = new Map([
+>appTypeStylesWithError : Symbol(appTypeStylesWithError, Decl(arrayLiteralInference.ts, 22, 5))
+>Map : Symbol(Map, Decl(lib.es2015.collection.d.ts, --, --), Decl(lib.es2015.collection.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>AppType : Symbol(AppType, Decl(arrayLiteralInference.ts, 0, 0))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>AppStyle : Symbol(AppStyle, Decl(arrayLiteralInference.ts, 12, 1))
+>Map : Symbol(Map, Decl(lib.es2015.collection.d.ts, --, --), Decl(lib.es2015.collection.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+
+    [AppType.Standard, [AppStyle.Standard, AppStyle.MiniApp]],
+>AppType.Standard : Symbol(AppType.Standard, Decl(arrayLiteralInference.ts, 5, 34))
+>AppType : Symbol(AppType, Decl(arrayLiteralInference.ts, 0, 0))
+>Standard : Symbol(AppType.Standard, Decl(arrayLiteralInference.ts, 5, 34))
+>AppStyle.Standard : Symbol(AppStyle.Standard, Decl(arrayLiteralInference.ts, 16, 15))
+>AppStyle : Symbol(AppStyle, Decl(arrayLiteralInference.ts, 12, 1))
+>Standard : Symbol(AppStyle.Standard, Decl(arrayLiteralInference.ts, 16, 15))
+>AppStyle.MiniApp : Symbol(AppStyle.MiniApp, Decl(arrayLiteralInference.ts, 17, 13))
+>AppStyle : Symbol(AppStyle, Decl(arrayLiteralInference.ts, 12, 1))
+>MiniApp : Symbol(AppStyle.MiniApp, Decl(arrayLiteralInference.ts, 17, 13))
+
+    [AppType.Relationship, [AppStyle.Standard, AppStyle.Tree, AppStyle.TreeEntity]],
+>AppType.Relationship : Symbol(AppType.Relationship, Decl(arrayLiteralInference.ts, 6, 26))
+>AppType : Symbol(AppType, Decl(arrayLiteralInference.ts, 0, 0))
+>Relationship : Symbol(AppType.Relationship, Decl(arrayLiteralInference.ts, 6, 26))
+>AppStyle.Standard : Symbol(AppStyle.Standard, Decl(arrayLiteralInference.ts, 16, 15))
+>AppStyle : Symbol(AppStyle, Decl(arrayLiteralInference.ts, 12, 1))
+>Standard : Symbol(AppStyle.Standard, Decl(arrayLiteralInference.ts, 16, 15))
+>AppStyle.Tree : Symbol(AppStyle.Tree, Decl(arrayLiteralInference.ts, 14, 22))
+>AppStyle : Symbol(AppStyle, Decl(arrayLiteralInference.ts, 12, 1))
+>Tree : Symbol(AppStyle.Tree, Decl(arrayLiteralInference.ts, 14, 22))
+>AppStyle.TreeEntity : Symbol(AppStyle.TreeEntity, Decl(arrayLiteralInference.ts, 15, 9))
+>AppStyle : Symbol(AppStyle, Decl(arrayLiteralInference.ts, 12, 1))
+>TreeEntity : Symbol(AppStyle.TreeEntity, Decl(arrayLiteralInference.ts, 15, 9))
+
+    [AppType.AdvancedList, [AppStyle.Standard, AppStyle.MiniApp]]
+>AppType.AdvancedList : Symbol(AppType.AdvancedList, Decl(arrayLiteralInference.ts, 4, 44))
+>AppType : Symbol(AppType, Decl(arrayLiteralInference.ts, 0, 0))
+>AdvancedList : Symbol(AppType.AdvancedList, Decl(arrayLiteralInference.ts, 4, 44))
+>AppStyle.Standard : Symbol(AppStyle.Standard, Decl(arrayLiteralInference.ts, 16, 15))
+>AppStyle : Symbol(AppStyle, Decl(arrayLiteralInference.ts, 12, 1))
+>Standard : Symbol(AppStyle.Standard, Decl(arrayLiteralInference.ts, 16, 15))
+>AppStyle.MiniApp : Symbol(AppStyle.MiniApp, Decl(arrayLiteralInference.ts, 17, 13))
+>AppStyle : Symbol(AppStyle, Decl(arrayLiteralInference.ts, 12, 1))
+>MiniApp : Symbol(AppStyle.MiniApp, Decl(arrayLiteralInference.ts, 17, 13))
+
+]);
+
+// Repro from #31204
+
+declare function foo<T>(...args: T[]): T[];
+>foo : Symbol(foo, Decl(arrayLiteralInference.ts, 26, 3))
+>T : Symbol(T, Decl(arrayLiteralInference.ts, 30, 21))
+>args : Symbol(args, Decl(arrayLiteralInference.ts, 30, 24))
+>T : Symbol(T, Decl(arrayLiteralInference.ts, 30, 21))
+>T : Symbol(T, Decl(arrayLiteralInference.ts, 30, 21))
+
+let b1: { x: boolean }[] = foo({ x: true }, { x: false });
+>b1 : Symbol(b1, Decl(arrayLiteralInference.ts, 31, 3))
+>x : Symbol(x, Decl(arrayLiteralInference.ts, 31, 9))
+>foo : Symbol(foo, Decl(arrayLiteralInference.ts, 26, 3))
+>x : Symbol(x, Decl(arrayLiteralInference.ts, 31, 32))
+>x : Symbol(x, Decl(arrayLiteralInference.ts, 31, 45))
+
+let b2: boolean[][] = foo([true], [false]);
+>b2 : Symbol(b2, Decl(arrayLiteralInference.ts, 32, 3))
+>foo : Symbol(foo, Decl(arrayLiteralInference.ts, 26, 3))
+

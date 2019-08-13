@@ -194,7 +194,7 @@ namespace ts {
 
             testProjectReferences(spec, "/primary/tsconfig.json", program => {
                 const errs = program.getOptionsDiagnostics();
-                assertHasError("Reports an error about b.ts not being in the list", errs, Diagnostics.File_0_is_not_in_project_file_list_Projects_must_list_all_files_or_use_an_include_pattern);
+                assertHasError("Reports an error about b.ts not being in the list", errs, Diagnostics.File_0_is_not_listed_within_the_file_list_of_project_1_Projects_must_list_all_files_or_use_an_include_pattern);
             });
         });
 
@@ -325,7 +325,7 @@ namespace ts {
             };
             testProjectReferences(spec, "/alpha/tsconfig.json", (program, host) => {
                 program.emit();
-                assert.deepEqual(host.outputs.map(e => e.file).sort(), ["/alpha/bin/src/a.d.ts", "/alpha/bin/src/a.js"]);
+                assert.deepEqual(host.outputs.map(e => e.file).sort(), ["/alpha/bin/src/a.d.ts", "/alpha/bin/src/a.js", "/alpha/bin/tsconfig.tsbuildinfo"]);
             });
         });
     });
@@ -344,9 +344,8 @@ namespace ts {
             };
             testProjectReferences(spec, "/alpha/tsconfig.json", (program) => {
                 assertHasError("Issues an error about the rootDir", program.getOptionsDiagnostics(), Diagnostics.File_0_is_not_under_rootDir_1_rootDir_is_expected_to_contain_all_source_files);
-                assertHasError("Issues an error about the fileList", program.getOptionsDiagnostics(), Diagnostics.File_0_is_not_in_project_file_list_Projects_must_list_all_files_or_use_an_include_pattern);
+                assertHasError("Issues an error about the fileList", program.getOptionsDiagnostics(), Diagnostics.File_0_is_not_listed_within_the_file_list_of_project_1_Projects_must_list_all_files_or_use_an_include_pattern);
             });
         });
     });
-
 }

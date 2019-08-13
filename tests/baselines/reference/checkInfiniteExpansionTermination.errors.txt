@@ -1,0 +1,32 @@
+tests/cases/compiler/checkInfiniteExpansionTermination.ts(16,1): error TS2322: Type 'ISubject<Bar>' is not assignable to type 'IObservable<Foo>'.
+  Types of property 'n' are incompatible.
+    Type 'IObservable<Bar[]>' is not assignable to type 'IObservable<Foo[]>'.
+      Type 'Bar[]' is not assignable to type 'Foo[]'.
+        Property 'x' is missing in type 'Bar' but required in type 'Foo'.
+
+
+==== tests/cases/compiler/checkInfiniteExpansionTermination.ts (1 errors) ====
+    // Regression test for #1002
+    // Before fix this code would cause infinite loop
+    
+    interface IObservable<T> {
+        n: IObservable<T[]>; // Needed, must be T[]
+    }
+    
+    // Needed
+    interface ISubject<T> extends IObservable<T> { }
+    
+    interface Foo { x }
+    interface Bar { y }
+    
+    var values: IObservable<Foo>;
+    var values2: ISubject<Bar>;
+    values = values2;
+    ~~~~~~
+!!! error TS2322: Type 'ISubject<Bar>' is not assignable to type 'IObservable<Foo>'.
+!!! error TS2322:   Types of property 'n' are incompatible.
+!!! error TS2322:     Type 'IObservable<Bar[]>' is not assignable to type 'IObservable<Foo[]>'.
+!!! error TS2322:       Type 'Bar[]' is not assignable to type 'Foo[]'.
+!!! error TS2322:         Property 'x' is missing in type 'Bar' but required in type 'Foo'.
+!!! related TS2728 tests/cases/compiler/checkInfiniteExpansionTermination.ts:11:17: 'x' is declared here.
+    

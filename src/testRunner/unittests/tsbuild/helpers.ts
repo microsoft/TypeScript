@@ -62,29 +62,36 @@ namespace ts {
         }
     }
 
+    export const libContent = `${TestFSWithWatch.libFile.content}
+interface ReadonlyArray<T> {}
+declare const console: { log(msg: any): void; };`;
+
     export function loadProjectFromDisk(root: string, time?: vfs.FileSystemOptions["time"]): vfs.FileSystem {
         const resolver = vfs.createResolver(Harness.IO);
         const fs = new vfs.FileSystem(/*ignoreCase*/ true, {
             files: {
-                ["/lib"]: new vfs.Mount(vpath.resolve(Harness.IO.getWorkspaceRoot(), "built/local"), resolver),
                 ["/src"]: new vfs.Mount(vpath.resolve(Harness.IO.getWorkspaceRoot(), root), resolver)
             },
             cwd: "/",
             meta: { defaultLibLocation: "/lib" },
             time
         });
+        fs.mkdirSync("/lib");
+        fs.writeFileSync("/lib/lib.d.ts", libContent);
         fs.makeReadonly();
         return fs;
     }
 
-    export function getLibs() {
-        return [
-            "/lib/lib.d.ts",
-            "/lib/lib.es5.d.ts",
-            "/lib/lib.dom.d.ts",
-            "/lib/lib.webworker.importscripts.d.ts",
-            "/lib/lib.scripthost.d.ts"
-        ];
+    export function verifyOutputsPresent(fs: vfs.FileSystem, outputs: readonly string[]) {
+        for (const output of outputs) {
+            assert(fs.existsSync(output), `Expect file ${output} to exist`);
+        }
+    }
+
+    export function verifyOutputsAbsent(fs: vfs.FileSystem, outputs: readonly string[]) {
+        for (const output of outputs) {
+            assert.isFalse(fs.existsSync(output), `Expect file ${output} to not exist`);
+        }
     }
 
     function generateSourceMapBaselineFiles(fs: vfs.FileSystem, mapFileNames: ReadonlyArray<string>) {
@@ -177,7 +184,7 @@ namespace ts {
             }
             return originalReadFile.call(host, path);
         };
-        builder.buildAllProjects();
+        builder.build();
         generateSourceMapBaselineFiles(fs, expectedMapFileNames);
         generateBuildInfoSectionBaselineFiles(fs, expectedBuildInfoFilesForSectionBaselines || emptyArray);
         fs.makeReadonly();
@@ -234,10 +241,11 @@ Mismatch Actual(path, actual, expected): ${JSON.stringify(arrayFrom(mapDefinedIt
         incrementalDtsUnchangedBuild?: BuildState;
         incrementalHeaderChangedBuild?: BuildState;
         baselineOnly?: true;
+        verifyDiagnostics?: true;
     }
 
     export function verifyTsbuildOutput({
-        scenario, projFs, time, tick, proj, rootNames, outputFiles, baselineOnly,
+        scenario, projFs, time, tick, proj, rootNames, outputFiles, baselineOnly, verifyDiagnostics,
         expectedMapFileNames, expectedBuildInfoFilesForSectionBaselines, lastProjectOutputJs,
         initialBuild, incrementalDtsChangedBuild, incrementalDtsUnchangedBuild, incrementalHeaderChangedBuild
     }: VerifyTsBuildInput) {
@@ -264,7 +272,7 @@ Mismatch Actual(path, actual, expected): ${JSON.stringify(arrayFrom(mapDefinedIt
                 host = undefined!;
             });
             describe("initialBuild", () => {
-                if (!baselineOnly) {
+                if (!baselineOnly || verifyDiagnostics) {
                     it(`verify diagnostics`, () => {
                         host.assertDiagnosticMessages(...(initialBuild.expectedDiagnostics || emptyArray));
                     });
@@ -284,8 +292,10 @@ Mismatch Actual(path, actual, expected): ${JSON.stringify(arrayFrom(mapDefinedIt
                     let newFs: vfs.FileSystem;
                     let actualReadFileMap: Map<number>;
                     let host: fakes.SolutionBuilderHost;
+                    let beforeBuildTime: number;
+                    let afterBuildTime: number;
                     before(() => {
-                        assert.equal(fs.statSync(lastProjectOutputJs).mtimeMs, firstBuildTime, "First build timestamp is correct");
+                        beforeBuildTime = fs.statSync(lastProjectOutputJs).mtimeMs;
                         tick();
                         newFs = fs.shadow();
                         tick();
@@ -297,14 +307,18 @@ Mismatch Actual(path, actual, expected): ${JSON.stringify(arrayFrom(mapDefinedIt
                             expectedBuildInfoFilesForSectionBaselines,
                             modifyFs: incrementalModifyFs,
                         }));
-                        assert.equal(newFs.statSync(lastProjectOutputJs).mtimeMs, time(), "Second build timestamp is correct");
+                        afterBuildTime = newFs.statSync(lastProjectOutputJs).mtimeMs;
                     });
                     after(() => {
                         newFs = undefined!;
                         actualReadFileMap = undefined!;
                         host = undefined!;
                     });
-                    if (!baselineOnly) {
+                    it("verify build output times", () => {
+                        assert.equal(beforeBuildTime, firstBuildTime, "First build timestamp is correct");
+                        assert.equal(afterBuildTime, time(), "Second build timestamp is correct");
+                    });
+                    if (!baselineOnly || verifyDiagnostics) {
                         it(`verify diagnostics`, () => {
                             host.assertDiagnosticMessages(...(incrementalExpectedDiagnostics || emptyArray));
                         });

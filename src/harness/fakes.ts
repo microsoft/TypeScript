@@ -388,28 +388,47 @@ namespace fakes {
         return ts.compareStringsCaseSensitive(ts.isString(a) ? a : a[0], ts.isString(b) ? b : b[0]);
     }
 
+    export function sanitizeBuildInfoProgram(buildInfo: ts.BuildInfo) {
+        if (buildInfo.program) {
+            // reference Map
+            if (buildInfo.program.referencedMap) {
+                const referencedMap: ts.MapLike<string[]> = {};
+                for (const path of ts.getOwnKeys(buildInfo.program.referencedMap).sort()) {
+                    referencedMap[path] = buildInfo.program.referencedMap[path].sort();
+                }
+                buildInfo.program.referencedMap = referencedMap;
+            }
+
+            // exportedModulesMap
+            if (buildInfo.program.exportedModulesMap) {
+                const exportedModulesMap: ts.MapLike<string[]> = {};
+                for (const path of ts.getOwnKeys(buildInfo.program.exportedModulesMap).sort()) {
+                    exportedModulesMap[path] = buildInfo.program.exportedModulesMap[path].sort();
+                }
+                buildInfo.program.exportedModulesMap = exportedModulesMap;
+            }
+
+            // semanticDiagnosticsPerFile
+            if (buildInfo.program.semanticDiagnosticsPerFile) {
+                buildInfo.program.semanticDiagnosticsPerFile.sort(compareProgramBuildInfoDiagnostic);
+            }
+        }
+    }
+
     export const version = "FakeTSVersion";
 
     export class SolutionBuilderHost extends CompilerHost implements ts.SolutionBuilderHost<ts.BuilderProgram> {
-        createProgram = ts.createEmitAndSemanticDiagnosticsBuilderProgram;
+        createProgram: ts.CreateProgram<ts.BuilderProgram>;
+
+        constructor(sys: System | vfs.FileSystem, options?: ts.CompilerOptions, setParentNodes?: boolean, createProgram?: ts.CreateProgram<ts.BuilderProgram>) {
+            super(sys, options, setParentNodes);
+            this.createProgram = createProgram || ts.createEmitAndSemanticDiagnosticsBuilderProgram;
+        }
 
         readFile(path: string) {
             const value = super.readFile(path);
             if (!value || !ts.isBuildInfoFile(path)) return value;
             const buildInfo = ts.getBuildInfo(value);
-            if (buildInfo.program) {
-                // Fix lib signatures
-                for (const path of ts.getOwnKeys(buildInfo.program.fileInfos)) {
-                    if (ts.startsWith(path, "/lib/")) {
-                        const currentValue = buildInfo.program.fileInfos[path];
-                        ts.Debug.assert(currentValue.signature === path);
-                        ts.Debug.assert(currentValue.signature === currentValue.version);
-                        const text = super.readFile(path)!;
-                        const signature = ts.generateDjb2Hash(text);
-                        buildInfo.program.fileInfos[path] = { version: signature, signature };
-                    }
-                }
-            }
             ts.Debug.assert(buildInfo.version === version);
             buildInfo.version = ts.version;
             return ts.getBuildInfoText(buildInfo);
@@ -418,39 +437,7 @@ namespace fakes {
         public writeFile(fileName: string, content: string, writeByteOrderMark: boolean) {
             if (!ts.isBuildInfoFile(fileName)) return super.writeFile(fileName, content, writeByteOrderMark);
             const buildInfo = ts.getBuildInfo(content);
-            if (buildInfo.program) {
-                // Fix lib signatures
-                for (const path of ts.getOwnKeys(buildInfo.program.fileInfos)) {
-                    if (ts.startsWith(path, "/lib/")) {
-                        const currentValue = buildInfo.program.fileInfos[path];
-                        ts.Debug.assert(currentValue.signature === currentValue.version);
-                        buildInfo.program.fileInfos[path] = { version: path, signature: path };
-                    }
-                }
-
-                // reference Map
-                if (buildInfo.program.referencedMap) {
-                    const referencedMap: ts.MapLike<string[]> = {};
-                    for (const path of ts.getOwnKeys(buildInfo.program.referencedMap).sort()) {
-                        referencedMap[path] = buildInfo.program.referencedMap[path].sort();
-                    }
-                    buildInfo.program.referencedMap = referencedMap;
-                }
-
-                // exportedModulesMap
-                if (buildInfo.program.exportedModulesMap) {
-                    const exportedModulesMap: ts.MapLike<string[]> = {};
-                    for (const path of ts.getOwnKeys(buildInfo.program.exportedModulesMap).sort()) {
-                        exportedModulesMap[path] = buildInfo.program.exportedModulesMap[path].sort();
-                    }
-                    buildInfo.program.exportedModulesMap = exportedModulesMap;
-                }
-
-                // semanticDiagnosticsPerFile
-                if (buildInfo.program.semanticDiagnosticsPerFile) {
-                    buildInfo.program.semanticDiagnosticsPerFile.sort(compareProgramBuildInfoDiagnostic);
-                }
-            }
+            sanitizeBuildInfoProgram(buildInfo);
             buildInfo.version = version;
             super.writeFile(fileName, ts.getBuildInfoText(buildInfo), writeByteOrderMark);
         }

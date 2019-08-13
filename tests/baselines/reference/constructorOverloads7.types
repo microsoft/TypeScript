@@ -13,12 +13,12 @@ declare class Point
 >y : number
 
      add(dx: number, dy: number): Point;
->add : (dx: number, dy: number) => any
+>add : (dx: number, dy: number) => Point
 >dx : number
 >dy : number
 
      origin: Point;
->origin : any
+>origin : Point
 
 }
 
@@ -26,7 +26,7 @@ declare class Point
 // Because Point is a constructor function, this is inferred
 // to be Point and return type is inferred to be void
 function Point(x, y) {
->Point : (x: any, y: any) => any
+>Point : typeof Point
 >x : any
 >y : any
 

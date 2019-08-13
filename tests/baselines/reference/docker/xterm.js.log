@@ -1,0 +1,9 @@
+Exit Code: 0
+Standard output:
+
+> xterm@X.X.X build /xtermjs
+> tsc -b ./tsconfig.all.json
+
+
+
+Standard error:

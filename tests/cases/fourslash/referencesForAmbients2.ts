@@ -2,7 +2,7 @@
 
 // @Filename: /defA.ts
 ////declare module "a" {
-////    export type [|{| "isWriteAccess": true, "isDefinition": true |}T|] = number;
+////    [|export type [|{| "isWriteAccess": true, "isDefinition": true, "contextRangeIndex": 0 |}T|] = number;|]
 ////}
 
 // @Filename: /defB.ts
@@ -18,4 +18,4 @@
 ////}
 
 verify.noErrors();
-verify.singleReferenceGroup("type T = number");
+verify.singleReferenceGroup("type T = number", "T");

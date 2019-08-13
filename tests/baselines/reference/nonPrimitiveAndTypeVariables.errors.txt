@@ -1,6 +1,7 @@
 tests/cases/conformance/types/nonPrimitive/nonPrimitiveAndTypeVariables.ts(10,9): error TS2322: Type 'T' is not assignable to type 'object'.
 tests/cases/conformance/types/nonPrimitive/nonPrimitiveAndTypeVariables.ts(11,9): error TS2322: Type 'T' is not assignable to type 'object | U'.
   Type 'T' is not assignable to type 'U'.
+    'T' is assignable to the constraint of type 'U', but 'U' could be instantiated with a different subtype of constraint '{}'.
 
 
 ==== tests/cases/conformance/types/nonPrimitive/nonPrimitiveAndTypeVariables.ts (2 errors) ====
@@ -20,5 +21,6 @@ tests/cases/conformance/types/nonPrimitive/nonPrimitiveAndTypeVariables.ts(11,9)
             ~
 !!! error TS2322: Type 'T' is not assignable to type 'object | U'.
 !!! error TS2322:   Type 'T' is not assignable to type 'U'.
+!!! error TS2322:     'T' is assignable to the constraint of type 'U', but 'U' could be instantiated with a different subtype of constraint '{}'.
     }
     

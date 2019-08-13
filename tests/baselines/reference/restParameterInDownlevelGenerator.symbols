@@ -1,0 +1,10 @@
+=== tests/cases/conformance/generators/restParameterInDownlevelGenerator.ts ===
+// https://github.com/Microsoft/TypeScript/issues/30653
+function * mergeStringLists(...strings: string[]) {
+>mergeStringLists : Symbol(mergeStringLists, Decl(restParameterInDownlevelGenerator.ts, 0, 0))
+>strings : Symbol(strings, Decl(restParameterInDownlevelGenerator.ts, 1, 28))
+
+    for (var str of strings);
+>str : Symbol(str, Decl(restParameterInDownlevelGenerator.ts, 2, 12))
+>strings : Symbol(strings, Decl(restParameterInDownlevelGenerator.ts, 1, 28))
+}
