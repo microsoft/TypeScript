@@ -5484,11 +5484,7 @@ namespace ts {
         }
 
         function parseDeclaration(): Statement {
-            const [decorators, modifiers] = lookAhead(() => [
-                parseDecorators(),
-                parseModifiers(),
-            ]);
-
+            const modifiers = lookAhead(() => (parseDecorators(), parseModifiers()));
             // `parseListElement` attempted to get the reused node at this position,
             // but the ambient context flag was not yet set, so the node appeared
             // not reusable in that context.
@@ -5501,8 +5497,8 @@ namespace ts {
             }
 
             const node = <Statement>createNodeWithJSDoc(SyntaxKind.Unknown);
-            node.decorators = consumeNode(decorators);
-            node.modifiers = consumeNode(modifiers);
+            node.decorators = parseDecorators();
+            node.modifiers = parseModifiers();
             if (isAmbient) {
                 for (const m of node.modifiers!) {
                     m.flags |= NodeFlags.Ambient;
