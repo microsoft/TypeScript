@@ -9,7 +9,7 @@
 ////     }
 ////     return 5;
 //// }
-//// 
+////
 //// hello/**/
 
-verify.completionListContains('helloWorld');
+verify.completions({ includes: { name: "helloWorld", sortText: completion.SortText.JavascriptIdentifiers } });

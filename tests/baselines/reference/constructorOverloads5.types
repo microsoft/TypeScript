@@ -5,16 +5,16 @@
 >M : typeof M
 
     export function RegExp(pattern: string): RegExp;
->RegExp : { (pattern: string): RegExp; (pattern: string, flags: string): RegExp; }
+>RegExp : typeof RegExp
 >pattern : string
 
     export function RegExp(pattern: string, flags: string): RegExp;
->RegExp : { (pattern: string): RegExp; (pattern: string, flags: string): RegExp; }
+>RegExp : typeof RegExp
 >pattern : string
 >flags : string
 
     export class RegExp {
->RegExp : M.RegExp
+>RegExp : RegExp
 
         constructor(pattern: string);
 >pattern : string

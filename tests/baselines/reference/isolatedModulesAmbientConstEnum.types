@@ -4,6 +4,9 @@ declare const enum E { X = 1}
 >X : E.X
 >1 : 1
 
-export var y;
->y : any
+export var y = E.X;
+>y : E
+>E.X : E
+>E : typeof E
+>X : E
 

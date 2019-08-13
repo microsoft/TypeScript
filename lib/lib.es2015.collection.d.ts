@@ -29,7 +29,8 @@ interface Map<K, V> {
 }
 
 interface MapConstructor {
-    new <K = any, V = any>(entries?: ReadonlyArray<[K, V]> | null): Map<K, V>;
+    new(): Map<any, any>;
+    new<K, V>(entries?: ReadonlyArray<readonly [K, V]> | null): Map<K, V>;
     readonly prototype: Map<any, any>;
 }
 declare var Map: MapConstructor;

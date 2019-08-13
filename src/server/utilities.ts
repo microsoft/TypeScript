@@ -56,30 +56,6 @@ namespace ts.server {
         }
     }
 
-    export function getDefaultFormatCodeSettings(host: ServerHost): FormatCodeSettings {
-        return {
-            indentSize: 4,
-            tabSize: 4,
-            newLineCharacter: host.newLine || "\n",
-            convertTabsToSpaces: true,
-            indentStyle: IndentStyle.Smart,
-            insertSpaceAfterConstructor: false,
-            insertSpaceAfterCommaDelimiter: true,
-            insertSpaceAfterSemicolonInForStatements: true,
-            insertSpaceBeforeAndAfterBinaryOperators: true,
-            insertSpaceAfterKeywordsInControlFlowStatements: true,
-            insertSpaceAfterFunctionKeywordForAnonymousFunctions: false,
-            insertSpaceAfterOpeningAndBeforeClosingNonemptyParenthesis: false,
-            insertSpaceAfterOpeningAndBeforeClosingNonemptyBrackets: false,
-            insertSpaceAfterOpeningAndBeforeClosingNonemptyBraces: true,
-            insertSpaceAfterOpeningAndBeforeClosingTemplateStringBraces: false,
-            insertSpaceAfterOpeningAndBeforeClosingJsxExpressionBraces: false,
-            insertSpaceBeforeFunctionParenthesis: false,
-            placeOpenBraceOnNewLineForFunctions: false,
-            placeOpenBraceOnNewLineForControlBlocks: false,
-        };
-    }
-
     export type NormalizedPath = string & { __normalizedPathTag: any };
 
     export function toNormalizedPath(fileName: string): NormalizedPath {
@@ -174,11 +150,13 @@ namespace ts.server {
         }
 
         private static run(self: ThrottledOperations, operationId: string, cb: () => void) {
+            perfLogger.logStartScheduledOperation(operationId);
             self.pendingTimeouts.delete(operationId);
             if (self.logger) {
                 self.logger.info(`Running: ${operationId}`);
             }
             cb();
+            perfLogger.logStopScheduledOperation();
         }
     }
 
@@ -198,6 +176,7 @@ namespace ts.server {
         private static run(self: GcTimer) {
             self.timerId = undefined;
 
+            perfLogger.logStartScheduledOperation("GC collect");
             const log = self.logger.hasLevel(LogLevel.requestTime);
             const before = log && self.host.getMemoryUsage!(); // TODO: GH#18217
 
@@ -206,6 +185,7 @@ namespace ts.server {
                 const after = self.host.getMemoryUsage!(); // TODO: GH#18217
                 self.logger.perftrc(`GC::before ${before}, after ${after}`);
             }
+            perfLogger.logStopScheduledOperation();
         }
     }
 
@@ -230,32 +210,27 @@ namespace ts.server {
         }
     }
 
-    export function toSortedArray(arr: string[]): SortedArray<string>;
-    export function toSortedArray<T>(arr: T[], comparer: Comparer<T>): SortedArray<T>;
-    export function toSortedArray<T>(arr: T[], comparer?: Comparer<T>): SortedArray<T> {
-        arr.sort(comparer);
-        return arr as SortedArray<T>;
-    }
-
-    export function toDeduplicatedSortedArray(arr: string[]): SortedArray<string> {
-        arr.sort();
-        filterMutate(arr, isNonDuplicateInSortedArray);
-        return arr as SortedArray<string>;
-    }
-    function isNonDuplicateInSortedArray<T>(value: T, index: number, array: T[]) {
-        return index === 0 || value !== array[index - 1];
-    }
-
     const indentStr = "\n    ";
 
-    /* @internal */
     export function indent(str: string): string {
         return indentStr + str.replace(/\n/g, indentStr);
     }
 
     /** Put stringified JSON on the next line, indented. */
-    /* @internal */
     export function stringifyIndented(json: {}): string {
         return indentStr + JSON.stringify(json);
+    }
+}
+
+/* @internal */
+namespace ts {
+    // Additional tsserver specific watch information
+    export const enum WatchType {
+        ClosedScriptInfo = "Closed Script info",
+        ConfigFileForInferredRoot = "Config file for the inferred project root",
+        NodeModulesForClosedScriptInfo = "node_modules for closed script infos in them",
+        MissingSourceMapFile = "Missing source map file",
+        NoopConfigFileForInferredRoot = "Noop Config file for the inferred project root",
+        MissingGeneratedFile = "Missing generated file"
     }
 }

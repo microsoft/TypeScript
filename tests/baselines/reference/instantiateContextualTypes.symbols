@@ -1,0 +1,509 @@
+=== tests/cases/compiler/instantiateContextualTypes.ts ===
+// #6611
+
+export interface A<a> {
+>A : Symbol(A, Decl(instantiateContextualTypes.ts, 0, 0))
+>a : Symbol(a, Decl(instantiateContextualTypes.ts, 2, 19))
+
+    value: a;
+>value : Symbol(A.value, Decl(instantiateContextualTypes.ts, 2, 23))
+>a : Symbol(a, Decl(instantiateContextualTypes.ts, 2, 19))
+}
+
+function fn<a>(values: A<a>, value: a) : void {
+>fn : Symbol(fn, Decl(instantiateContextualTypes.ts, 4, 1))
+>a : Symbol(a, Decl(instantiateContextualTypes.ts, 6, 12))
+>values : Symbol(values, Decl(instantiateContextualTypes.ts, 6, 15))
+>A : Symbol(A, Decl(instantiateContextualTypes.ts, 0, 0))
+>a : Symbol(a, Decl(instantiateContextualTypes.ts, 6, 12))
+>value : Symbol(value, Decl(instantiateContextualTypes.ts, 6, 28))
+>a : Symbol(a, Decl(instantiateContextualTypes.ts, 6, 12))
+}
+
+declare let handlers: A<(value: number) => void>;
+>handlers : Symbol(handlers, Decl(instantiateContextualTypes.ts, 9, 11))
+>A : Symbol(A, Decl(instantiateContextualTypes.ts, 0, 0))
+>value : Symbol(value, Decl(instantiateContextualTypes.ts, 9, 25))
+
+fn(handlers, value => alert(value));
+>fn : Symbol(fn, Decl(instantiateContextualTypes.ts, 4, 1))
+>handlers : Symbol(handlers, Decl(instantiateContextualTypes.ts, 9, 11))
+>value : Symbol(value, Decl(instantiateContextualTypes.ts, 10, 12))
+>alert : Symbol(alert, Decl(lib.dom.d.ts, --, --))
+>value : Symbol(value, Decl(instantiateContextualTypes.ts, 10, 12))
+
+// #21382
+
+interface BaseProps<T> {
+>BaseProps : Symbol(BaseProps, Decl(instantiateContextualTypes.ts, 10, 36))
+>T : Symbol(T, Decl(instantiateContextualTypes.ts, 14, 20))
+
+  initialValues: T;
+>initialValues : Symbol(BaseProps.initialValues, Decl(instantiateContextualTypes.ts, 14, 24))
+>T : Symbol(T, Decl(instantiateContextualTypes.ts, 14, 20))
+
+  nextValues: (cur: T) => T;
+>nextValues : Symbol(BaseProps.nextValues, Decl(instantiateContextualTypes.ts, 15, 19))
+>cur : Symbol(cur, Decl(instantiateContextualTypes.ts, 16, 15))
+>T : Symbol(T, Decl(instantiateContextualTypes.ts, 14, 20))
+>T : Symbol(T, Decl(instantiateContextualTypes.ts, 14, 20))
+}
+declare class Component<P> { constructor(props: P); props: P; }
+>Component : Symbol(Component, Decl(instantiateContextualTypes.ts, 17, 1))
+>P : Symbol(P, Decl(instantiateContextualTypes.ts, 18, 24))
+>props : Symbol(props, Decl(instantiateContextualTypes.ts, 18, 41))
+>P : Symbol(P, Decl(instantiateContextualTypes.ts, 18, 24))
+>props : Symbol(Component.props, Decl(instantiateContextualTypes.ts, 18, 51))
+>P : Symbol(P, Decl(instantiateContextualTypes.ts, 18, 24))
+
+declare class GenericComponent<Props = {}, Values = object>
+>GenericComponent : Symbol(GenericComponent, Decl(instantiateContextualTypes.ts, 18, 63))
+>Props : Symbol(Props, Decl(instantiateContextualTypes.ts, 19, 31))
+>Values : Symbol(Values, Decl(instantiateContextualTypes.ts, 19, 42))
+
+    extends Component<Props & BaseProps<Values>> {
+>Component : Symbol(Component, Decl(instantiateContextualTypes.ts, 17, 1))
+>Props : Symbol(Props, Decl(instantiateContextualTypes.ts, 19, 31))
+>BaseProps : Symbol(BaseProps, Decl(instantiateContextualTypes.ts, 10, 36))
+>Values : Symbol(Values, Decl(instantiateContextualTypes.ts, 19, 42))
+
+  iv: Values;
+>iv : Symbol(GenericComponent.iv, Decl(instantiateContextualTypes.ts, 20, 50))
+>Values : Symbol(Values, Decl(instantiateContextualTypes.ts, 19, 42))
+}
+
+new GenericComponent({ initialValues: 12, nextValues: val => 12 });
+>GenericComponent : Symbol(GenericComponent, Decl(instantiateContextualTypes.ts, 18, 63))
+>initialValues : Symbol(initialValues, Decl(instantiateContextualTypes.ts, 24, 22))
+>nextValues : Symbol(nextValues, Decl(instantiateContextualTypes.ts, 24, 41))
+>val : Symbol(val, Decl(instantiateContextualTypes.ts, 24, 53))
+
+// #22149
+
+declare function useStringOrNumber<T extends string | number>(t: T, useIt: T extends string ? ((s: string) => void) : ((n: number) => void)): void;
+>useStringOrNumber : Symbol(useStringOrNumber, Decl(instantiateContextualTypes.ts, 24, 67))
+>T : Symbol(T, Decl(instantiateContextualTypes.ts, 28, 35))
+>t : Symbol(t, Decl(instantiateContextualTypes.ts, 28, 62))
+>T : Symbol(T, Decl(instantiateContextualTypes.ts, 28, 35))
+>useIt : Symbol(useIt, Decl(instantiateContextualTypes.ts, 28, 67))
+>T : Symbol(T, Decl(instantiateContextualTypes.ts, 28, 35))
+>s : Symbol(s, Decl(instantiateContextualTypes.ts, 28, 96))
+>n : Symbol(n, Decl(instantiateContextualTypes.ts, 28, 120))
+
+useStringOrNumber("", foo => {});
+>useStringOrNumber : Symbol(useStringOrNumber, Decl(instantiateContextualTypes.ts, 24, 67))
+>foo : Symbol(foo, Decl(instantiateContextualTypes.ts, 29, 21))
+
+// #25299
+
+type ActionType<P> = string & { attachPayloadTypeHack?: P & never }
+>ActionType : Symbol(ActionType, Decl(instantiateContextualTypes.ts, 29, 33))
+>P : Symbol(P, Decl(instantiateContextualTypes.ts, 33, 16))
+>attachPayloadTypeHack : Symbol(attachPayloadTypeHack, Decl(instantiateContextualTypes.ts, 33, 31))
+>P : Symbol(P, Decl(instantiateContextualTypes.ts, 33, 16))
+
+type Handler<S, P> = P extends void
+>Handler : Symbol(Handler, Decl(instantiateContextualTypes.ts, 33, 67))
+>S : Symbol(S, Decl(instantiateContextualTypes.ts, 35, 13))
+>P : Symbol(P, Decl(instantiateContextualTypes.ts, 35, 15))
+>P : Symbol(P, Decl(instantiateContextualTypes.ts, 35, 15))
+
+    ? (state: S) => S
+>state : Symbol(state, Decl(instantiateContextualTypes.ts, 36, 7))
+>S : Symbol(S, Decl(instantiateContextualTypes.ts, 35, 13))
+>S : Symbol(S, Decl(instantiateContextualTypes.ts, 35, 13))
+
+    : (state: S, payload: P) => S
+>state : Symbol(state, Decl(instantiateContextualTypes.ts, 37, 7))
+>S : Symbol(S, Decl(instantiateContextualTypes.ts, 35, 13))
+>payload : Symbol(payload, Decl(instantiateContextualTypes.ts, 37, 16))
+>P : Symbol(P, Decl(instantiateContextualTypes.ts, 35, 15))
+>S : Symbol(S, Decl(instantiateContextualTypes.ts, 35, 13))
+
+interface ActionHandler<S, P> {
+>ActionHandler : Symbol(ActionHandler, Decl(instantiateContextualTypes.ts, 37, 33))
+>S : Symbol(S, Decl(instantiateContextualTypes.ts, 39, 24))
+>P : Symbol(P, Decl(instantiateContextualTypes.ts, 39, 26))
+
+    actionType: ActionType<P>
+>actionType : Symbol(ActionHandler.actionType, Decl(instantiateContextualTypes.ts, 39, 31))
+>ActionType : Symbol(ActionType, Decl(instantiateContextualTypes.ts, 29, 33))
+>P : Symbol(P, Decl(instantiateContextualTypes.ts, 39, 26))
+
+    handler: Handler<S, P>
+>handler : Symbol(ActionHandler.handler, Decl(instantiateContextualTypes.ts, 40, 29))
+>Handler : Symbol(Handler, Decl(instantiateContextualTypes.ts, 33, 67))
+>S : Symbol(S, Decl(instantiateContextualTypes.ts, 39, 24))
+>P : Symbol(P, Decl(instantiateContextualTypes.ts, 39, 26))
+}
+
+declare function handler<S, P>(actionType: ActionType<P>, handler: Handler<S, P>): ActionHandler<S, P>
+>handler : Symbol(handler, Decl(instantiateContextualTypes.ts, 42, 1))
+>S : Symbol(S, Decl(instantiateContextualTypes.ts, 44, 25))
+>P : Symbol(P, Decl(instantiateContextualTypes.ts, 44, 27))
+>actionType : Symbol(actionType, Decl(instantiateContextualTypes.ts, 44, 31))
+>ActionType : Symbol(ActionType, Decl(instantiateContextualTypes.ts, 29, 33))
+>P : Symbol(P, Decl(instantiateContextualTypes.ts, 44, 27))
+>handler : Symbol(handler, Decl(instantiateContextualTypes.ts, 44, 57))
+>Handler : Symbol(Handler, Decl(instantiateContextualTypes.ts, 33, 67))
+>S : Symbol(S, Decl(instantiateContextualTypes.ts, 44, 25))
+>P : Symbol(P, Decl(instantiateContextualTypes.ts, 44, 27))
+>ActionHandler : Symbol(ActionHandler, Decl(instantiateContextualTypes.ts, 37, 33))
+>S : Symbol(S, Decl(instantiateContextualTypes.ts, 44, 25))
+>P : Symbol(P, Decl(instantiateContextualTypes.ts, 44, 27))
+
+declare function createReducer<S>(
+>createReducer : Symbol(createReducer, Decl(instantiateContextualTypes.ts, 44, 102))
+>S : Symbol(S, Decl(instantiateContextualTypes.ts, 46, 31))
+
+        defaultState: S,
+>defaultState : Symbol(defaultState, Decl(instantiateContextualTypes.ts, 46, 34))
+>S : Symbol(S, Decl(instantiateContextualTypes.ts, 46, 31))
+
+        ...actionHandlers: ActionHandler<S, any>[]
+>actionHandlers : Symbol(actionHandlers, Decl(instantiateContextualTypes.ts, 47, 24))
+>ActionHandler : Symbol(ActionHandler, Decl(instantiateContextualTypes.ts, 37, 33))
+>S : Symbol(S, Decl(instantiateContextualTypes.ts, 46, 31))
+
+    ): any
+
+interface AppState {
+>AppState : Symbol(AppState, Decl(instantiateContextualTypes.ts, 49, 10))
+
+    dummy: string
+>dummy : Symbol(AppState.dummy, Decl(instantiateContextualTypes.ts, 51, 20))
+}
+
+const defaultState: AppState = {
+>defaultState : Symbol(defaultState, Decl(instantiateContextualTypes.ts, 55, 5))
+>AppState : Symbol(AppState, Decl(instantiateContextualTypes.ts, 49, 10))
+
+    dummy: ''
+>dummy : Symbol(dummy, Decl(instantiateContextualTypes.ts, 55, 32))
+}
+
+const NON_VOID_ACTION: ActionType<number> = 'NON_VOID_ACTION'
+>NON_VOID_ACTION : Symbol(NON_VOID_ACTION, Decl(instantiateContextualTypes.ts, 59, 5))
+>ActionType : Symbol(ActionType, Decl(instantiateContextualTypes.ts, 29, 33))
+
+    , VOID_ACTION: ActionType<void> = 'VOID_ACTION'
+>VOID_ACTION : Symbol(VOID_ACTION, Decl(instantiateContextualTypes.ts, 60, 5))
+>ActionType : Symbol(ActionType, Decl(instantiateContextualTypes.ts, 29, 33))
+
+createReducer(
+>createReducer : Symbol(createReducer, Decl(instantiateContextualTypes.ts, 44, 102))
+
+    defaultState,
+>defaultState : Symbol(defaultState, Decl(instantiateContextualTypes.ts, 55, 5))
+
+    handler(NON_VOID_ACTION, (state, _payload) => state),
+>handler : Symbol(handler, Decl(instantiateContextualTypes.ts, 42, 1))
+>NON_VOID_ACTION : Symbol(NON_VOID_ACTION, Decl(instantiateContextualTypes.ts, 59, 5))
+>state : Symbol(state, Decl(instantiateContextualTypes.ts, 64, 30))
+>_payload : Symbol(_payload, Decl(instantiateContextualTypes.ts, 64, 36))
+>state : Symbol(state, Decl(instantiateContextualTypes.ts, 64, 30))
+
+    handler(VOID_ACTION, state => state)
+>handler : Symbol(handler, Decl(instantiateContextualTypes.ts, 42, 1))
+>VOID_ACTION : Symbol(VOID_ACTION, Decl(instantiateContextualTypes.ts, 60, 5))
+>state : Symbol(state, Decl(instantiateContextualTypes.ts, 65, 24))
+>state : Symbol(state, Decl(instantiateContextualTypes.ts, 65, 24))
+
+)
+
+// #25814
+
+type R = {
+>R : Symbol(R, Decl(instantiateContextualTypes.ts, 66, 1))
+
+  a: (x: number) => void;
+>a : Symbol(a, Decl(instantiateContextualTypes.ts, 70, 10))
+>x : Symbol(x, Decl(instantiateContextualTypes.ts, 71, 6))
+
+  b: (x: string) => void;
+>b : Symbol(b, Decl(instantiateContextualTypes.ts, 71, 25))
+>x : Symbol(x, Decl(instantiateContextualTypes.ts, 72, 6))
+
+};
+
+type O = {
+>O : Symbol(O, Decl(instantiateContextualTypes.ts, 73, 2))
+
+  on<P extends keyof R>(x: P, callback: R[P]): void;
+>on : Symbol(on, Decl(instantiateContextualTypes.ts, 75, 10))
+>P : Symbol(P, Decl(instantiateContextualTypes.ts, 76, 5))
+>R : Symbol(R, Decl(instantiateContextualTypes.ts, 66, 1))
+>x : Symbol(x, Decl(instantiateContextualTypes.ts, 76, 24))
+>P : Symbol(P, Decl(instantiateContextualTypes.ts, 76, 5))
+>callback : Symbol(callback, Decl(instantiateContextualTypes.ts, 76, 29))
+>R : Symbol(R, Decl(instantiateContextualTypes.ts, 66, 1))
+>P : Symbol(P, Decl(instantiateContextualTypes.ts, 76, 5))
+
+};
+
+declare var x: O;
+>x : Symbol(x, Decl(instantiateContextualTypes.ts, 79, 11))
+>O : Symbol(O, Decl(instantiateContextualTypes.ts, 73, 2))
+
+x.on('a', a => {});
+>x.on : Symbol(on, Decl(instantiateContextualTypes.ts, 75, 10))
+>x : Symbol(x, Decl(instantiateContextualTypes.ts, 79, 11))
+>on : Symbol(on, Decl(instantiateContextualTypes.ts, 75, 10))
+>a : Symbol(a, Decl(instantiateContextualTypes.ts, 80, 9))
+
+// #29775
+
+namespace N1 {
+>N1 : Symbol(N1, Decl(instantiateContextualTypes.ts, 80, 19))
+
+declare class Component<P> { 
+>Component : Symbol(Component, Decl(instantiateContextualTypes.ts, 84, 14))
+>P : Symbol(P, Decl(instantiateContextualTypes.ts, 86, 24))
+
+  constructor(props: P);
+>props : Symbol(props, Decl(instantiateContextualTypes.ts, 87, 14))
+>P : Symbol(P, Decl(instantiateContextualTypes.ts, 86, 24))
+}
+    
+interface ComponentClass<P = {}> {
+>ComponentClass : Symbol(ComponentClass, Decl(instantiateContextualTypes.ts, 88, 1))
+>P : Symbol(P, Decl(instantiateContextualTypes.ts, 90, 25))
+
+  new (props: P): Component<P>;
+>props : Symbol(props, Decl(instantiateContextualTypes.ts, 91, 7))
+>P : Symbol(P, Decl(instantiateContextualTypes.ts, 90, 25))
+>Component : Symbol(Component, Decl(instantiateContextualTypes.ts, 84, 14))
+>P : Symbol(P, Decl(instantiateContextualTypes.ts, 90, 25))
+}
+
+type CreateElementChildren<P> =
+>CreateElementChildren : Symbol(CreateElementChildren, Decl(instantiateContextualTypes.ts, 92, 1))
+>P : Symbol(P, Decl(instantiateContextualTypes.ts, 94, 27))
+
+  P extends { children?: infer C }
+>P : Symbol(P, Decl(instantiateContextualTypes.ts, 94, 27))
+>children : Symbol(children, Decl(instantiateContextualTypes.ts, 95, 13))
+>C : Symbol(C, Decl(instantiateContextualTypes.ts, 95, 30))
+
+  ? C extends any[]
+>C : Symbol(C, Decl(instantiateContextualTypes.ts, 95, 30))
+
+    ? C
+>C : Symbol(C, Decl(instantiateContextualTypes.ts, 95, 30))
+
+    : C[]
+>C : Symbol(C, Decl(instantiateContextualTypes.ts, 95, 30))
+
+  : unknown;
+
+declare function createElement<P extends {}>(
+>createElement : Symbol(createElement, Decl(instantiateContextualTypes.ts, 99, 12))
+>P : Symbol(P, Decl(instantiateContextualTypes.ts, 101, 31))
+
+  type: ComponentClass<P>,
+>type : Symbol(type, Decl(instantiateContextualTypes.ts, 101, 45))
+>ComponentClass : Symbol(ComponentClass, Decl(instantiateContextualTypes.ts, 88, 1))
+>P : Symbol(P, Decl(instantiateContextualTypes.ts, 101, 31))
+
+  ...children: CreateElementChildren<P>
+>children : Symbol(children, Decl(instantiateContextualTypes.ts, 102, 26))
+>CreateElementChildren : Symbol(CreateElementChildren, Decl(instantiateContextualTypes.ts, 92, 1))
+>P : Symbol(P, Decl(instantiateContextualTypes.ts, 101, 31))
+
+): any;
+
+declare function createElement2<P extends {}>(
+>createElement2 : Symbol(createElement2, Decl(instantiateContextualTypes.ts, 104, 7))
+>P : Symbol(P, Decl(instantiateContextualTypes.ts, 106, 32))
+
+  type: ComponentClass<P>,
+>type : Symbol(type, Decl(instantiateContextualTypes.ts, 106, 46))
+>ComponentClass : Symbol(ComponentClass, Decl(instantiateContextualTypes.ts, 88, 1))
+>P : Symbol(P, Decl(instantiateContextualTypes.ts, 106, 32))
+
+  child: CreateElementChildren<P>
+>child : Symbol(child, Decl(instantiateContextualTypes.ts, 107, 26))
+>CreateElementChildren : Symbol(CreateElementChildren, Decl(instantiateContextualTypes.ts, 92, 1))
+>P : Symbol(P, Decl(instantiateContextualTypes.ts, 106, 32))
+
+): any;
+
+class InferFunctionTypes extends Component<{children: (foo: number) => string}> {}
+>InferFunctionTypes : Symbol(InferFunctionTypes, Decl(instantiateContextualTypes.ts, 109, 7))
+>Component : Symbol(Component, Decl(instantiateContextualTypes.ts, 84, 14))
+>children : Symbol(children, Decl(instantiateContextualTypes.ts, 111, 44))
+>foo : Symbol(foo, Decl(instantiateContextualTypes.ts, 111, 55))
+
+createElement(InferFunctionTypes, (foo) => "" + foo);
+>createElement : Symbol(createElement, Decl(instantiateContextualTypes.ts, 99, 12))
+>InferFunctionTypes : Symbol(InferFunctionTypes, Decl(instantiateContextualTypes.ts, 109, 7))
+>foo : Symbol(foo, Decl(instantiateContextualTypes.ts, 113, 35))
+>foo : Symbol(foo, Decl(instantiateContextualTypes.ts, 113, 35))
+
+createElement2(InferFunctionTypes, [(foo) => "" + foo]);
+>createElement2 : Symbol(createElement2, Decl(instantiateContextualTypes.ts, 104, 7))
+>InferFunctionTypes : Symbol(InferFunctionTypes, Decl(instantiateContextualTypes.ts, 109, 7))
+>foo : Symbol(foo, Decl(instantiateContextualTypes.ts, 115, 37))
+>foo : Symbol(foo, Decl(instantiateContextualTypes.ts, 115, 37))
+
+}
+
+// #30341
+
+type InnerBox<T> = {
+>InnerBox : Symbol(InnerBox, Decl(instantiateContextualTypes.ts, 117, 1))
+>T : Symbol(T, Decl(instantiateContextualTypes.ts, 121, 14))
+
+  value: T;
+>value : Symbol(value, Decl(instantiateContextualTypes.ts, 121, 20))
+>T : Symbol(T, Decl(instantiateContextualTypes.ts, 121, 14))
+}
+
+type OuterBox<T> = {
+>OuterBox : Symbol(OuterBox, Decl(instantiateContextualTypes.ts, 123, 1))
+>T : Symbol(T, Decl(instantiateContextualTypes.ts, 125, 14))
+
+  inner: InnerBox<T>
+>inner : Symbol(inner, Decl(instantiateContextualTypes.ts, 125, 20))
+>InnerBox : Symbol(InnerBox, Decl(instantiateContextualTypes.ts, 117, 1))
+>T : Symbol(T, Decl(instantiateContextualTypes.ts, 125, 14))
+
+};
+
+type BoxConsumerFromOuterBox<T> =
+>BoxConsumerFromOuterBox : Symbol(BoxConsumerFromOuterBox, Decl(instantiateContextualTypes.ts, 127, 2))
+>T : Symbol(T, Decl(instantiateContextualTypes.ts, 129, 29))
+
+  T extends OuterBox<infer U> ?
+>T : Symbol(T, Decl(instantiateContextualTypes.ts, 129, 29))
+>OuterBox : Symbol(OuterBox, Decl(instantiateContextualTypes.ts, 123, 1))
+>U : Symbol(U, Decl(instantiateContextualTypes.ts, 130, 26))
+
+      (box: InnerBox<U>) => void :
+>box : Symbol(box, Decl(instantiateContextualTypes.ts, 131, 7))
+>InnerBox : Symbol(InnerBox, Decl(instantiateContextualTypes.ts, 117, 1))
+>U : Symbol(U, Decl(instantiateContextualTypes.ts, 130, 26))
+
+      never;
+
+declare function passContentsToFunc<T>(outerBox: T, consumer: BoxConsumerFromOuterBox<T>): void;
+>passContentsToFunc : Symbol(passContentsToFunc, Decl(instantiateContextualTypes.ts, 132, 12))
+>T : Symbol(T, Decl(instantiateContextualTypes.ts, 134, 36))
+>outerBox : Symbol(outerBox, Decl(instantiateContextualTypes.ts, 134, 39))
+>T : Symbol(T, Decl(instantiateContextualTypes.ts, 134, 36))
+>consumer : Symbol(consumer, Decl(instantiateContextualTypes.ts, 134, 51))
+>BoxConsumerFromOuterBox : Symbol(BoxConsumerFromOuterBox, Decl(instantiateContextualTypes.ts, 127, 2))
+>T : Symbol(T, Decl(instantiateContextualTypes.ts, 134, 36))
+
+declare const outerBoxOfString: OuterBox<string>;
+>outerBoxOfString : Symbol(outerBoxOfString, Decl(instantiateContextualTypes.ts, 136, 13))
+>OuterBox : Symbol(OuterBox, Decl(instantiateContextualTypes.ts, 123, 1))
+
+passContentsToFunc(outerBoxOfString, box => box.value);
+>passContentsToFunc : Symbol(passContentsToFunc, Decl(instantiateContextualTypes.ts, 132, 12))
+>outerBoxOfString : Symbol(outerBoxOfString, Decl(instantiateContextualTypes.ts, 136, 13))
+>box : Symbol(box, Decl(instantiateContextualTypes.ts, 138, 36))
+>box.value : Symbol(value, Decl(instantiateContextualTypes.ts, 121, 20))
+>box : Symbol(box, Decl(instantiateContextualTypes.ts, 138, 36))
+>value : Symbol(value, Decl(instantiateContextualTypes.ts, 121, 20))
+
+// Repro from #32349
+
+type DooDad = 'SOMETHING' | 'ELSE' ;
+>DooDad : Symbol(DooDad, Decl(instantiateContextualTypes.ts, 138, 55))
+
+class Interesting {
+>Interesting : Symbol(Interesting, Decl(instantiateContextualTypes.ts, 142, 36))
+
+	public compiles = () : Promise<DooDad> => {
+>compiles : Symbol(Interesting.compiles, Decl(instantiateContextualTypes.ts, 144, 19))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>DooDad : Symbol(DooDad, Decl(instantiateContextualTypes.ts, 138, 55))
+
+		return Promise.resolve().then(() => {
+>Promise.resolve().then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --))
+>Promise.resolve : Symbol(PromiseConstructor.resolve, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>resolve : Symbol(PromiseConstructor.resolve, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
+>then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --))
+
+			if (1 < 2) {
+				return 'SOMETHING';
+			}
+			return 'ELSE';
+		});
+	};
+	public doesnt = () : Promise<DooDad> => {
+>doesnt : Symbol(Interesting.doesnt, Decl(instantiateContextualTypes.ts, 152, 3))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>DooDad : Symbol(DooDad, Decl(instantiateContextualTypes.ts, 138, 55))
+
+		return Promise.resolve().then(() => {
+>Promise.resolve().then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --))
+>Promise.resolve : Symbol(PromiseConstructor.resolve, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>resolve : Symbol(PromiseConstructor.resolve, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
+>then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --))
+
+			return 'ELSE';
+		});
+	};
+	public slightlyDifferentErrorMessage = () : Promise<DooDad> => {
+>slightlyDifferentErrorMessage : Symbol(Interesting.slightlyDifferentErrorMessage, Decl(instantiateContextualTypes.ts, 157, 3))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>DooDad : Symbol(DooDad, Decl(instantiateContextualTypes.ts, 138, 55))
+
+		return Promise.resolve().then(() => {
+>Promise.resolve().then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --))
+>Promise.resolve : Symbol(PromiseConstructor.resolve, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>resolve : Symbol(PromiseConstructor.resolve, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
+>then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --))
+
+			if (1 < 2) {
+				return 'SOMETHING';
+			}
+			return 'SOMETHING';
+		});
+	};
+}
+
+// Repro from #32349
+
+declare function invoke<T>(f: () => T): T;
+>invoke : Symbol(invoke, Decl(instantiateContextualTypes.ts, 166, 1))
+>T : Symbol(T, Decl(instantiateContextualTypes.ts, 170, 24))
+>f : Symbol(f, Decl(instantiateContextualTypes.ts, 170, 27))
+>T : Symbol(T, Decl(instantiateContextualTypes.ts, 170, 24))
+>T : Symbol(T, Decl(instantiateContextualTypes.ts, 170, 24))
+
+let xx: 0 | 1 | 2 = invoke(() => 1);
+>xx : Symbol(xx, Decl(instantiateContextualTypes.ts, 172, 3))
+>invoke : Symbol(invoke, Decl(instantiateContextualTypes.ts, 166, 1))
+
+// Repro from #32416
+
+declare function assignPartial<T>(target: T, partial: Partial<T>): T;
+>assignPartial : Symbol(assignPartial, Decl(instantiateContextualTypes.ts, 172, 36))
+>T : Symbol(T, Decl(instantiateContextualTypes.ts, 176, 31))
+>target : Symbol(target, Decl(instantiateContextualTypes.ts, 176, 34))
+>T : Symbol(T, Decl(instantiateContextualTypes.ts, 176, 31))
+>partial : Symbol(partial, Decl(instantiateContextualTypes.ts, 176, 44))
+>Partial : Symbol(Partial, Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(instantiateContextualTypes.ts, 176, 31))
+>T : Symbol(T, Decl(instantiateContextualTypes.ts, 176, 31))
+
+let obj = {
+>obj : Symbol(obj, Decl(instantiateContextualTypes.ts, 178, 3))
+
+  foo(bar: string) {}
+>foo : Symbol(foo, Decl(instantiateContextualTypes.ts, 178, 11))
+>bar : Symbol(bar, Decl(instantiateContextualTypes.ts, 179, 6))
+}
+
+assignPartial(obj, { foo(...args) {} });  // args has type [string]
+>assignPartial : Symbol(assignPartial, Decl(instantiateContextualTypes.ts, 172, 36))
+>obj : Symbol(obj, Decl(instantiateContextualTypes.ts, 178, 3))
+>foo : Symbol(foo, Decl(instantiateContextualTypes.ts, 182, 20))
+>args : Symbol(args, Decl(instantiateContextualTypes.ts, 182, 25))
+

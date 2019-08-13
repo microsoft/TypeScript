@@ -12,10 +12,19 @@
 ////     this.name = name;
 ////     this.age = age;
 //// }
-//// 
-//// 
+////
+////
 //// Person.getName = 10;
 //// Person.getNa/**/ = 10;
 
-goTo.marker();
-verify.completionListContains('getName');
+verify.completions({
+    marker: "",
+    exact: [
+        "getName",
+        "getNa",
+        ...completion.functionMembersWithPrototype,
+        { name: "Person", sortText: completion.SortText.JavascriptIdentifiers },
+        { name: "name", sortText: completion.SortText.JavascriptIdentifiers },
+        { name: "age", sortText: completion.SortText.JavascriptIdentifiers }
+    ],
+});

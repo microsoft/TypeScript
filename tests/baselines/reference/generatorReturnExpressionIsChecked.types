@@ -1,6 +1,6 @@
 === tests/cases/compiler/generatorReturnExpressionIsChecked.ts ===
 function* f(): Iterator<number> {
->f : () => Iterator<number>
+>f : () => Iterator<number, any, undefined>
 
     return invalid;
 >invalid : any

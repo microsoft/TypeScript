@@ -13,6 +13,11 @@
 
 ////interface EndOfFile { f; /*e*/
 
-for (const marker of test.markerNames()) {
-    verify.completionsAt(marker, ["readonly"], { isNewIdentifierLocation: true });
-}
+verify.completions({
+    marker: test.markers(),
+    exact: {
+        name: "readonly",
+        sortText: completion.SortText.GlobalsOrKeywords
+    },
+    isNewIdentifierLocation: true
+});

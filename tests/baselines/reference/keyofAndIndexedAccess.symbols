@@ -79,124 +79,122 @@ type K05 = keyof undefined;  // never
 type K06 = keyof null;  // never
 >K06 : Symbol(K06, Decl(keyofAndIndexedAccess.ts, 30, 27))
 
-type K07 = keyof never;  // never
+type K07 = keyof never;  // string | number | symbol
 >K07 : Symbol(K07, Decl(keyofAndIndexedAccess.ts, 31, 22))
 
+type K08 = keyof unknown; // never
+>K08 : Symbol(K08, Decl(keyofAndIndexedAccess.ts, 32, 23))
+
 type K10 = keyof Shape;  // "name" | "width" | "height" | "visible"
->K10 : Symbol(K10, Decl(keyofAndIndexedAccess.ts, 32, 23))
+>K10 : Symbol(K10, Decl(keyofAndIndexedAccess.ts, 33, 25))
 >Shape : Symbol(Shape, Decl(keyofAndIndexedAccess.ts, 0, 0))
 
 type K11 = keyof Shape[];  // "length" | "toString" | ...
->K11 : Symbol(K11, Decl(keyofAndIndexedAccess.ts, 34, 23))
+>K11 : Symbol(K11, Decl(keyofAndIndexedAccess.ts, 35, 23))
 >Shape : Symbol(Shape, Decl(keyofAndIndexedAccess.ts, 0, 0))
 
 type K12 = keyof Dictionary<Shape>;  // string
->K12 : Symbol(K12, Decl(keyofAndIndexedAccess.ts, 35, 25))
+>K12 : Symbol(K12, Decl(keyofAndIndexedAccess.ts, 36, 25))
 >Dictionary : Symbol(Dictionary, Decl(keyofAndIndexedAccess.ts, 18, 1))
 >Shape : Symbol(Shape, Decl(keyofAndIndexedAccess.ts, 0, 0))
 
 type K13 = keyof {};  // never
->K13 : Symbol(K13, Decl(keyofAndIndexedAccess.ts, 36, 35))
+>K13 : Symbol(K13, Decl(keyofAndIndexedAccess.ts, 37, 35))
 
 type K14 = keyof Object;  // "constructor" | "toString" | ...
->K14 : Symbol(K14, Decl(keyofAndIndexedAccess.ts, 37, 20))
+>K14 : Symbol(K14, Decl(keyofAndIndexedAccess.ts, 38, 20))
 >Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 
 type K15 = keyof E;  // "toString" | "toFixed" | "toExponential" | ...
->K15 : Symbol(K15, Decl(keyofAndIndexedAccess.ts, 38, 24))
+>K15 : Symbol(K15, Decl(keyofAndIndexedAccess.ts, 39, 24))
 >E : Symbol(E, Decl(keyofAndIndexedAccess.ts, 21, 48))
 
 type K16 = keyof [string, number];  // "0" | "1" | "length" | "toString" | ...
->K16 : Symbol(K16, Decl(keyofAndIndexedAccess.ts, 39, 19))
+>K16 : Symbol(K16, Decl(keyofAndIndexedAccess.ts, 40, 19))
 
 type K17 = keyof (Shape | Item);  // "name"
->K17 : Symbol(K17, Decl(keyofAndIndexedAccess.ts, 40, 34))
+>K17 : Symbol(K17, Decl(keyofAndIndexedAccess.ts, 41, 34))
 >Shape : Symbol(Shape, Decl(keyofAndIndexedAccess.ts, 0, 0))
 >Item : Symbol(Item, Decl(keyofAndIndexedAccess.ts, 9, 1))
 
 type K18 = keyof (Shape & Item);  // "name" | "width" | "height" | "visible" | "price"
->K18 : Symbol(K18, Decl(keyofAndIndexedAccess.ts, 41, 32))
+>K18 : Symbol(K18, Decl(keyofAndIndexedAccess.ts, 42, 32))
 >Shape : Symbol(Shape, Decl(keyofAndIndexedAccess.ts, 0, 0))
 >Item : Symbol(Item, Decl(keyofAndIndexedAccess.ts, 9, 1))
 
 type K19 = keyof NumericallyIndexed<Shape> // never
->K19 : Symbol(K19, Decl(keyofAndIndexedAccess.ts, 42, 32))
+>K19 : Symbol(K19, Decl(keyofAndIndexedAccess.ts, 43, 32))
 >NumericallyIndexed : Symbol(NumericallyIndexed, Decl(keyofAndIndexedAccess.ts, 20, 40))
 >Shape : Symbol(Shape, Decl(keyofAndIndexedAccess.ts, 0, 0))
 
 type KeyOf<T> = keyof T;
->KeyOf : Symbol(KeyOf, Decl(keyofAndIndexedAccess.ts, 43, 42))
->T : Symbol(T, Decl(keyofAndIndexedAccess.ts, 45, 11))
->T : Symbol(T, Decl(keyofAndIndexedAccess.ts, 45, 11))
+>KeyOf : Symbol(KeyOf, Decl(keyofAndIndexedAccess.ts, 44, 42))
+>T : Symbol(T, Decl(keyofAndIndexedAccess.ts, 46, 11))
+>T : Symbol(T, Decl(keyofAndIndexedAccess.ts, 46, 11))
 
 type K20 = KeyOf<Shape>;  // "name" | "width" | "height" | "visible"
->K20 : Symbol(K20, Decl(keyofAndIndexedAccess.ts, 45, 24))
->KeyOf : Symbol(KeyOf, Decl(keyofAndIndexedAccess.ts, 43, 42))
+>K20 : Symbol(K20, Decl(keyofAndIndexedAccess.ts, 46, 24))
+>KeyOf : Symbol(KeyOf, Decl(keyofAndIndexedAccess.ts, 44, 42))
 >Shape : Symbol(Shape, Decl(keyofAndIndexedAccess.ts, 0, 0))
 
 type K21 = KeyOf<Dictionary<Shape>>;  // string
->K21 : Symbol(K21, Decl(keyofAndIndexedAccess.ts, 47, 24))
->KeyOf : Symbol(KeyOf, Decl(keyofAndIndexedAccess.ts, 43, 42))
+>K21 : Symbol(K21, Decl(keyofAndIndexedAccess.ts, 48, 24))
+>KeyOf : Symbol(KeyOf, Decl(keyofAndIndexedAccess.ts, 44, 42))
 >Dictionary : Symbol(Dictionary, Decl(keyofAndIndexedAccess.ts, 18, 1))
 >Shape : Symbol(Shape, Decl(keyofAndIndexedAccess.ts, 0, 0))
 
 type NAME = "name";
->NAME : Symbol(NAME, Decl(keyofAndIndexedAccess.ts, 48, 36))
+>NAME : Symbol(NAME, Decl(keyofAndIndexedAccess.ts, 49, 36))
 
 type WIDTH_OR_HEIGHT = "width" | "height";
->WIDTH_OR_HEIGHT : Symbol(WIDTH_OR_HEIGHT, Decl(keyofAndIndexedAccess.ts, 50, 19))
+>WIDTH_OR_HEIGHT : Symbol(WIDTH_OR_HEIGHT, Decl(keyofAndIndexedAccess.ts, 51, 19))
 
 type Q10 = Shape["name"];  // string
->Q10 : Symbol(Q10, Decl(keyofAndIndexedAccess.ts, 51, 42))
+>Q10 : Symbol(Q10, Decl(keyofAndIndexedAccess.ts, 52, 42))
 >Shape : Symbol(Shape, Decl(keyofAndIndexedAccess.ts, 0, 0))
 
 type Q11 = Shape["width" | "height"];  // number
->Q11 : Symbol(Q11, Decl(keyofAndIndexedAccess.ts, 53, 25))
+>Q11 : Symbol(Q11, Decl(keyofAndIndexedAccess.ts, 54, 25))
 >Shape : Symbol(Shape, Decl(keyofAndIndexedAccess.ts, 0, 0))
 
 type Q12 = Shape["name" | "visible"];  // string | boolean
->Q12 : Symbol(Q12, Decl(keyofAndIndexedAccess.ts, 54, 37))
+>Q12 : Symbol(Q12, Decl(keyofAndIndexedAccess.ts, 55, 37))
 >Shape : Symbol(Shape, Decl(keyofAndIndexedAccess.ts, 0, 0))
 
 type Q20 = Shape[NAME];  // string
->Q20 : Symbol(Q20, Decl(keyofAndIndexedAccess.ts, 55, 37))
+>Q20 : Symbol(Q20, Decl(keyofAndIndexedAccess.ts, 56, 37))
 >Shape : Symbol(Shape, Decl(keyofAndIndexedAccess.ts, 0, 0))
->NAME : Symbol(NAME, Decl(keyofAndIndexedAccess.ts, 48, 36))
+>NAME : Symbol(NAME, Decl(keyofAndIndexedAccess.ts, 49, 36))
 
 type Q21 = Shape[WIDTH_OR_HEIGHT];  // number
->Q21 : Symbol(Q21, Decl(keyofAndIndexedAccess.ts, 57, 23))
+>Q21 : Symbol(Q21, Decl(keyofAndIndexedAccess.ts, 58, 23))
 >Shape : Symbol(Shape, Decl(keyofAndIndexedAccess.ts, 0, 0))
->WIDTH_OR_HEIGHT : Symbol(WIDTH_OR_HEIGHT, Decl(keyofAndIndexedAccess.ts, 50, 19))
+>WIDTH_OR_HEIGHT : Symbol(WIDTH_OR_HEIGHT, Decl(keyofAndIndexedAccess.ts, 51, 19))
 
 type Q30 = [string, number][0];  // string
->Q30 : Symbol(Q30, Decl(keyofAndIndexedAccess.ts, 58, 34))
+>Q30 : Symbol(Q30, Decl(keyofAndIndexedAccess.ts, 59, 34))
 
 type Q31 = [string, number][1];  // number
->Q31 : Symbol(Q31, Decl(keyofAndIndexedAccess.ts, 60, 31))
+>Q31 : Symbol(Q31, Decl(keyofAndIndexedAccess.ts, 61, 31))
 
-type Q32 = [string, number][2];  // string | number
->Q32 : Symbol(Q32, Decl(keyofAndIndexedAccess.ts, 61, 31))
+type Q32 = [string, number][number];  // string | number
+>Q32 : Symbol(Q32, Decl(keyofAndIndexedAccess.ts, 62, 31))
 
 type Q33 = [string, number][E.A];  // string
->Q33 : Symbol(Q33, Decl(keyofAndIndexedAccess.ts, 62, 31))
+>Q33 : Symbol(Q33, Decl(keyofAndIndexedAccess.ts, 63, 36))
 >E : Symbol(E, Decl(keyofAndIndexedAccess.ts, 21, 48))
 >A : Symbol(E.A, Decl(keyofAndIndexedAccess.ts, 23, 14))
 
 type Q34 = [string, number][E.B];  // number
->Q34 : Symbol(Q34, Decl(keyofAndIndexedAccess.ts, 63, 33))
+>Q34 : Symbol(Q34, Decl(keyofAndIndexedAccess.ts, 64, 33))
 >E : Symbol(E, Decl(keyofAndIndexedAccess.ts, 21, 48))
 >B : Symbol(E.B, Decl(keyofAndIndexedAccess.ts, 23, 17))
 
-type Q35 = [string, number][E.C];  // string | number
->Q35 : Symbol(Q35, Decl(keyofAndIndexedAccess.ts, 64, 33))
->E : Symbol(E, Decl(keyofAndIndexedAccess.ts, 21, 48))
->C : Symbol(E.C, Decl(keyofAndIndexedAccess.ts, 23, 20))
+type Q35 = [string, number]["0"];  // string
+>Q35 : Symbol(Q35, Decl(keyofAndIndexedAccess.ts, 65, 33))
 
-type Q36 = [string, number]["0"];  // string
->Q36 : Symbol(Q36, Decl(keyofAndIndexedAccess.ts, 65, 33))
-
-type Q37 = [string, number]["1"];  // string
->Q37 : Symbol(Q37, Decl(keyofAndIndexedAccess.ts, 66, 33))
+type Q36 = [string, number]["1"];  // string
+>Q36 : Symbol(Q36, Decl(keyofAndIndexedAccess.ts, 66, 33))
 
 type Q40 = (Shape | Options)["visible"];  // boolean | "yes" | "no"
 >Q40 : Symbol(Q40, Decl(keyofAndIndexedAccess.ts, 67, 33))
@@ -1772,9 +1770,14 @@ function updateIds<T extends Record<K, string>, K extends string>(
 >idFields : Symbol(idFields, Decl(keyofAndIndexedAccess.ts, 484, 11))
 >K : Symbol(K, Decl(keyofAndIndexedAccess.ts, 483, 47))
 
-    idMapping: { [oldId: string]: string }
+    idMapping: Partial<Record<T[K], T[K]>>
 >idMapping : Symbol(idMapping, Decl(keyofAndIndexedAccess.ts, 485, 18))
->oldId : Symbol(oldId, Decl(keyofAndIndexedAccess.ts, 486, 18))
+>Partial : Symbol(Partial, Decl(lib.es5.d.ts, --, --))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(keyofAndIndexedAccess.ts, 483, 19))
+>K : Symbol(K, Decl(keyofAndIndexedAccess.ts, 483, 47))
+>T : Symbol(T, Decl(keyofAndIndexedAccess.ts, 483, 19))
+>K : Symbol(K, Decl(keyofAndIndexedAccess.ts, 483, 47))
 
 ): Record<K, string> {
 >Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
@@ -1784,8 +1787,10 @@ function updateIds<T extends Record<K, string>, K extends string>(
 >idField : Symbol(idField, Decl(keyofAndIndexedAccess.ts, 488, 14))
 >idFields : Symbol(idFields, Decl(keyofAndIndexedAccess.ts, 484, 11))
 
-        const newId = idMapping[obj[idField]];
+        const newId: T[K] | undefined = idMapping[obj[idField]];
 >newId : Symbol(newId, Decl(keyofAndIndexedAccess.ts, 489, 13))
+>T : Symbol(T, Decl(keyofAndIndexedAccess.ts, 483, 19))
+>K : Symbol(K, Decl(keyofAndIndexedAccess.ts, 483, 47))
 >idMapping : Symbol(idMapping, Decl(keyofAndIndexedAccess.ts, 485, 18))
 >obj : Symbol(obj, Decl(keyofAndIndexedAccess.ts, 483, 66))
 >idField : Symbol(idField, Decl(keyofAndIndexedAccess.ts, 488, 14))

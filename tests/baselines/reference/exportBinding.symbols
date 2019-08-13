@@ -3,7 +3,7 @@ export { x }
 >x : Symbol(x, Decl(exportConsts.ts, 0, 8))
 
 export { x as xx }
->x : Symbol(xx, Decl(exportConsts.ts, 1, 8))
+>x : Symbol(x, Decl(exportConsts.ts, 4, 5))
 >xx : Symbol(xx, Decl(exportConsts.ts, 1, 8))
 
 export default x;
@@ -13,7 +13,7 @@ const x = 'x'
 >x : Symbol(x, Decl(exportConsts.ts, 4, 5))
 
 export { Y as Z }
->Y : Symbol(Z, Decl(exportConsts.ts, 6, 8))
+>Y : Symbol(Y, Decl(exportConsts.ts, 6, 17))
 >Z : Symbol(Z, Decl(exportConsts.ts, 6, 8))
 
 class Y {}
@@ -24,7 +24,7 @@ export { y }
 >y : Symbol(y, Decl(exportVars.ts, 0, 8))
 
 export { y as yy }
->y : Symbol(yy, Decl(exportVars.ts, 1, 8))
+>y : Symbol(y, Decl(exportVars.ts, 3, 3))
 >yy : Symbol(yy, Decl(exportVars.ts, 1, 8))
 
 export default y;

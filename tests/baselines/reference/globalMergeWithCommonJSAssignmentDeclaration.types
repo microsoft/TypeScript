@@ -2,13 +2,13 @@
 window.name = 1;
 >window.name = 1 : 1
 >window.name : string
->window : Window
+>window : Window & typeof globalThis
 >name : string
 >1 : 1
 
 window.console; // should not have error: Property 'console' does not exist on type 'typeof window'.
 >window.console : Console
->window : Window
+>window : Window & typeof globalThis
 >console : Console
 
 module.exports = 'anything';

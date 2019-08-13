@@ -75,11 +75,11 @@ f2(b2); // string[]
 >f2 : Symbol(f2, Decl(unionAndIntersectionInference2.ts, 11, 7))
 >b2 : Symbol(b2, Decl(unionAndIntersectionInference2.ts, 16, 3))
 
-f2(c2); // string & number
+f2(c2); // never
 >f2 : Symbol(f2, Decl(unionAndIntersectionInference2.ts, 11, 7))
 >c2 : Symbol(c2, Decl(unionAndIntersectionInference2.ts, 17, 3))
 
-f2(d2); // string & number
+f2(d2); // never
 >f2 : Symbol(f2, Decl(unionAndIntersectionInference2.ts, 11, 7))
 >d2 : Symbol(d2, Decl(unionAndIntersectionInference2.ts, 18, 3))
 

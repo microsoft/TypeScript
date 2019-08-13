@@ -180,6 +180,18 @@ namespace ts.server {
         }
 
         msg(s: string, type: Msg = Msg.Err) {
+            switch (type) {
+                case Msg.Info:
+                    perfLogger.logInfoEvent(s);
+                break;
+                case Msg.Perf:
+                    perfLogger.logPerfEvent(s);
+                break;
+                default: // Msg.Err
+                    perfLogger.logErrEvent(s);
+                break;
+            }
+
             if (!this.canWrite) return;
 
             s = `[${nowString()}] ${s}\n`;
@@ -215,13 +227,13 @@ namespace ts.server {
     }
 
     class NodeTypingsInstaller implements ITypingsInstaller {
-        private installer: NodeChildProcess;
-        private projectService: ProjectService;
+        private installer!: NodeChildProcess;
+        private projectService!: ProjectService;
         private activeRequestCount = 0;
         private requestQueue: QueuedOperation[] = [];
         private requestMap = createMap<QueuedOperation>(); // Maps operation ID to newest requestQueue entry with that ID
         /** We will lazily request the types registry on the first call to `isKnownTypesPackageName` and store it in `typesRegistryCache`. */
-        private requestedRegistry: boolean;
+        private requestedRegistry = false;
         private typesRegistryCache: Map<MapLike<string>> | undefined;
 
         // This number is essentially arbitrary.  Processing more than one typings request
@@ -232,7 +244,6 @@ namespace ts.server {
         private static readonly maxActiveRequestCount = 10;
         private static readonly requestDelayMillis = 100;
         private packageInstalledPromise: { resolve(value: ApplyCodeActionCommandResult): void, reject(reason: unknown): void } | undefined;
-        private inspectValuePromise: { resolve(value: ValueInfo): void } | undefined;
 
         constructor(
             private readonly telemetryEnabled: boolean,
@@ -242,13 +253,14 @@ namespace ts.server {
             readonly typingSafeListLocation: string,
             readonly typesMapLocation: string,
             private readonly npmLocation: string | undefined,
+            private readonly validateDefaultNpmLocation: boolean,
             private event: Event) {
         }
 
         isKnownTypesPackageName(name: string): boolean {
             // We want to avoid looking this up in the registry as that is expensive. So first check that it's actually an NPM package.
             const validationResult = JsTyping.validatePackageName(name);
-            if (validationResult !== JsTyping.PackageNameValidationResult.Ok) {
+            if (validationResult !== JsTyping.NameValidationResult.Ok) {
                 return false;
             }
 
@@ -267,12 +279,6 @@ namespace ts.server {
             return new Promise<ApplyCodeActionCommandResult>((resolve, reject) => {
                 this.packageInstalledPromise = { resolve, reject };
             });
-        }
-
-        inspectValue(options: InspectValueOptions): Promise<ValueInfo> {
-            this.send<InspectValueRequest>({ kind: "inspectValue", options });
-            Debug.assert(this.inspectValuePromise === undefined);
-            return new Promise<ValueInfo>(resolve => { this.inspectValuePromise = { resolve }; });
         }
 
         attach(projectService: ProjectService) {
@@ -296,6 +302,9 @@ namespace ts.server {
             }
             if (this.npmLocation) {
                 args.push(Arguments.NpmLocation, this.npmLocation);
+            }
+            if (this.validateDefaultNpmLocation) {
+                args.push(Arguments.ValidateDefaultNpmLocation);
             }
 
             const execArgv: string[] = [];
@@ -359,7 +368,7 @@ namespace ts.server {
             }
         }
 
-        private handleMessage(response: TypesRegistryResponse | PackageInstalledResponse | InspectValueResponse | SetTypings | InvalidateCachedTypings | BeginInstallTypes | EndInstallTypes | InitializationFailedResponse) {
+        private handleMessage(response: TypesRegistryResponse | PackageInstalledResponse | SetTypings | InvalidateCachedTypings | BeginInstallTypes | EndInstallTypes | InitializationFailedResponse) {
             if (this.logger.hasLevel(LogLevel.verbose)) {
                 this.logger.info(`Received response:${stringifyIndented(response)}`);
             }
@@ -384,12 +393,7 @@ namespace ts.server {
                     this.event(response, "setTypings");
                     break;
                 }
-                case ActionValueInspected:
-                    this.inspectValuePromise!.resolve(response.result);
-                    this.inspectValuePromise = undefined;
-                    break;
-                case EventInitializationFailed:
-                    {
+                case EventInitializationFailed: {
                         const body: protocol.TypesInstallerInitializationFailedEventBody = {
                             message: response.message
                         };
@@ -397,8 +401,7 @@ namespace ts.server {
                         this.event(body, eventName);
                         break;
                     }
-                case EventBeginInstallTypes:
-                    {
+                case EventBeginInstallTypes: {
                         const body: protocol.BeginInstallTypesEventBody = {
                             eventId: response.eventId,
                             packages: response.packagesToInstall,
@@ -407,8 +410,7 @@ namespace ts.server {
                         this.event(body, eventName);
                         break;
                     }
-                case EventEndInstallTypes:
-                    {
+                case EventEndInstallTypes: {
                         if (this.telemetryEnabled) {
                             const body: protocol.TypingsInstalledTelemetryEventBody = {
                                 telemetryEventName: "typingsInstalled",
@@ -431,13 +433,11 @@ namespace ts.server {
                         this.event(body, eventName);
                         break;
                     }
-                case ActionInvalidate:
-                    {
+                case ActionInvalidate: {
                         this.projectService.updateTypingsForProject(response);
                         break;
                     }
-                case ActionSet:
-                    {
+                case ActionSet: {
                         if (this.activeRequestCount > 0) {
                             this.activeRequestCount--;
                         }
@@ -502,7 +502,7 @@ namespace ts.server {
 
             const typingsInstaller = disableAutomaticTypingAcquisition
                 ? undefined
-                : new NodeTypingsInstaller(telemetryEnabled, logger, host, getGlobalTypingsCacheLocation(), typingSafeListLocation, typesMapLocation, npmLocation, event);
+                : new NodeTypingsInstaller(telemetryEnabled, logger, host, getGlobalTypingsCacheLocation(), typingSafeListLocation, typesMapLocation, npmLocation, validateDefaultNpmLocation, event);
 
             super({
                 host,
@@ -710,6 +710,7 @@ namespace ts.server {
         // stat due to inconsistencies of fs.watch
         // and efficiency of stat on modern filesystems
         function startWatchTimer() {
+            // tslint:disable-next-line:ban
             setInterval(() => {
                 let count = 0;
                 let nextToCheck = nextFileToCheck;
@@ -937,6 +938,7 @@ namespace ts.server {
     const typingSafeListLocation = findArgument(Arguments.TypingSafeListLocation)!; // TODO: GH#18217
     const typesMapLocation = findArgument(Arguments.TypesMapLocation) || combinePaths(getDirectoryPath(sys.getExecutingFilePath()), "typesMap.json");
     const npmLocation = findArgument(Arguments.NpmLocation);
+    const validateDefaultNpmLocation = hasArgument(Arguments.ValidateDefaultNpmLocation);
 
     function parseStringArray(argName: string): ReadonlyArray<string> {
         const arg = findArgument(argName);
@@ -972,4 +974,20 @@ namespace ts.server {
     (process as any).noAsar = true;
     // Start listening
     ioSession.listen();
+
+    if (Debug.isDebugging) {
+        Debug.enableDebugInfo();
+    }
+
+    if (ts.sys.tryEnableSourceMapsForHost && /^development$/i.test(ts.sys.getEnvironmentVariable("NODE_ENV"))) {
+        ts.sys.tryEnableSourceMapsForHost();
+    }
+
+    // Overwrites the current console messages to instead write to
+    // the log. This is so that language service plugins which use
+    // console.log don't break the message passing between tsserver
+    // and the client
+    console.log = (...args) => logger.msg(args.length === 1 ? args[0] : args.join(", "), Msg.Info);
+    console.warn = (...args) => logger.msg(args.length === 1 ? args[0] : args.join(", "), Msg.Err);
+    console.error = (...args) => logger.msg(args.length === 1 ? args[0] : args.join(", "), Msg.Err);
 }

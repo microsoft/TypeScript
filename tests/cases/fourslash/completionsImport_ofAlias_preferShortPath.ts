@@ -5,6 +5,7 @@
 
 // @moduleResolution: node
 // @module: commonJs
+// @noLib: true
 
 // @Filename: /foo/index.ts
 ////export { foo } from "./lib/foo";
@@ -17,8 +18,21 @@
 
 verify.completions({
     marker: "",
-    includes: { name: "foo", source: "/foo/lib/foo", sourceDisplay: "./foo", text: "const foo: 0", kind: "const", hasAction: true },
-    excludes: { name: "foo", source: "/foo/index" },
+    exact: [
+        completion.globalThisEntry,
+        completion.undefinedVarEntry,
+        {
+            name: "foo",
+            source: "/foo/lib/foo",
+            sourceDisplay: "./foo",
+            text: "const foo: 0",
+            kind: "const",
+            kindModifiers: "export",
+            hasAction: true,
+            sortText: completion.SortText.AutoImportSuggestions
+        },
+        ...completion.statementKeywordsWithTypes,
+    ],
     preferences: { includeCompletionsForModuleExports: true },
 });
 verify.applyCodeActionFromCompletion("", {

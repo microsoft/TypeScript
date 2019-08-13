@@ -1,4 +1,5 @@
 namespace ts {
+    /** The classifier is used for syntactic highlighting in editors via the TSServer */
     export function createClassifier(): Classifier {
         const scanner = createScanner(ScriptTarget.Latest, /*skipTrivia*/ false);
 
@@ -182,6 +183,7 @@ namespace ts {
         SyntaxKind.Identifier,
         SyntaxKind.StringLiteral,
         SyntaxKind.NumericLiteral,
+        SyntaxKind.BigIntLiteral,
         SyntaxKind.RegularExpressionLiteral,
         SyntaxKind.ThisKeyword,
         SyntaxKind.PlusPlusToken,
@@ -286,6 +288,7 @@ namespace ts {
             case ClassificationType.comment: return TokenClass.Comment;
             case ClassificationType.keyword: return TokenClass.Keyword;
             case ClassificationType.numericLiteral: return TokenClass.NumberLiteral;
+            case ClassificationType.bigintLiteral: return TokenClass.BigIntLiteral;
             case ClassificationType.operator: return TokenClass.Operator;
             case ClassificationType.stringLiteral: return TokenClass.StringLiteral;
             case ClassificationType.whiteSpace: return TokenClass.Whitespace;
@@ -422,6 +425,8 @@ namespace ts {
         switch (token) {
             case SyntaxKind.NumericLiteral:
                 return ClassificationType.numericLiteral;
+            case SyntaxKind.BigIntLiteral:
+                return ClassificationType.bigintLiteral;
             case SyntaxKind.StringLiteral:
                 return ClassificationType.stringLiteral;
             case SyntaxKind.RegularExpressionLiteral:
@@ -542,6 +547,7 @@ namespace ts {
             case ClassificationType.identifier: return ClassificationTypeNames.identifier;
             case ClassificationType.keyword: return ClassificationTypeNames.keyword;
             case ClassificationType.numericLiteral: return ClassificationTypeNames.numericLiteral;
+            case ClassificationType.bigintLiteral: return ClassificationTypeNames.bigintLiteral;
             case ClassificationType.operator: return ClassificationTypeNames.operator;
             case ClassificationType.stringLiteral: return ClassificationTypeNames.stringLiteral;
             case ClassificationType.whiteSpace: return ClassificationTypeNames.whiteSpace;
@@ -678,6 +684,11 @@ namespace ts {
                     return;
                 }
             }
+            else if (kind === SyntaxKind.SingleLineCommentTrivia) {
+                if (tryClassifyTripleSlashComment(start, width)) {
+                    return;
+                }
+            }
 
             // Simple comment.  Just add as is.
             pushCommentRange(start, width);
@@ -698,7 +709,7 @@ namespace ts {
                         pushCommentRange(pos, tag.pos - pos);
                     }
 
-                    pushClassification(tag.atToken.pos, tag.atToken.end - tag.atToken.pos, ClassificationType.punctuation); // "@"
+                    pushClassification(tag.pos, 1, ClassificationType.punctuation); // "@"
                     pushClassification(tag.tagName.pos, tag.tagName.end - tag.tagName.pos, ClassificationType.docCommentTagName); // e.g. "param"
 
                     pos = tag.tagName.end;
@@ -748,6 +759,84 @@ namespace ts {
                     pos = tag.name.end;
                 }
             }
+        }
+
+        function tryClassifyTripleSlashComment(start: number, width: number): boolean {
+            const tripleSlashXMLCommentRegEx = /^(\/\/\/\s*)(<)(?:(\S+)((?:[^/]|\/[^>])*)(\/>)?)?/im;
+            const attributeRegex = /(\S+)(\s*)(=)(\s*)('[^']+'|"[^"]+")/img;
+
+            const text = sourceFile.text.substr(start, width);
+            const match = tripleSlashXMLCommentRegEx.exec(text);
+            if (!match) {
+                return false;
+            }
+
+            let pos = start;
+
+            pushCommentRange(pos, match[1].length); // ///
+            pos += match[1].length;
+
+            pushClassification(pos, match[2].length, ClassificationType.punctuation); // <
+            pos += match[2].length;
+
+            if (!match[3]) {
+                return true;
+            }
+
+            pushClassification(pos, match[3].length, ClassificationType.jsxSelfClosingTagName); // element name
+            pos += match[3].length;
+
+            const attrText = match[4];
+            let attrPos = pos;
+            while (true) {
+                const attrMatch = attributeRegex.exec(attrText);
+                if (!attrMatch) {
+                    break;
+                }
+
+                const newAttrPos = pos + attrMatch.index;
+                if (newAttrPos > attrPos) {
+                    pushCommentRange(attrPos, newAttrPos - attrPos);
+                    attrPos = newAttrPos;
+                }
+
+                pushClassification(attrPos, attrMatch[1].length, ClassificationType.jsxAttribute); // attribute name
+                attrPos += attrMatch[1].length;
+
+                if (attrMatch[2].length) {
+                    pushCommentRange(attrPos, attrMatch[2].length); // whitespace
+                    attrPos += attrMatch[2].length;
+                }
+
+                pushClassification(attrPos, attrMatch[3].length, ClassificationType.operator); // =
+                attrPos += attrMatch[3].length;
+
+                if (attrMatch[4].length) {
+                    pushCommentRange(attrPos, attrMatch[4].length); // whitespace
+                    attrPos += attrMatch[4].length;
+                }
+
+                pushClassification(attrPos, attrMatch[5].length, ClassificationType.jsxAttributeStringLiteralValue); // attribute value
+                attrPos += attrMatch[5].length;
+            }
+
+            pos += match[4].length;
+
+            if (pos > attrPos) {
+                pushCommentRange(attrPos, pos - attrPos);
+            }
+
+            if (match[5]) {
+                pushClassification(pos, match[5].length, ClassificationType.punctuation); // />
+                pos += match[5].length;
+            }
+
+            const end = start + width;
+            if (pos < end) {
+                pushCommentRange(pos, end - pos);
+            }
+
+            return true;
         }
 
         function processJSDocTemplateTag(tag: JSDocTemplateTag) {
@@ -885,6 +974,9 @@ namespace ts {
             }
             else if (tokenKind === SyntaxKind.NumericLiteral) {
                 return ClassificationType.numericLiteral;
+            }
+            else if (tokenKind === SyntaxKind.BigIntLiteral) {
+                return ClassificationType.bigintLiteral;
             }
             else if (tokenKind === SyntaxKind.StringLiteral) {
                 // TODO: GH#18217

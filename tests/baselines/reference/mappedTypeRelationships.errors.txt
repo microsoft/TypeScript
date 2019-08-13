@@ -1,14 +1,12 @@
 tests/cases/conformance/types/mapped/mappedTypeRelationships.ts(11,5): error TS2322: Type 'T[keyof T]' is not assignable to type 'U[keyof T]'.
   Type 'T' is not assignable to type 'U'.
+    'T' is assignable to the constraint of type 'U', but 'U' could be instantiated with a different subtype of constraint '{}'.
 tests/cases/conformance/types/mapped/mappedTypeRelationships.ts(16,5): error TS2322: Type 'T[K]' is not assignable to type 'U[K]'.
   Type 'T' is not assignable to type 'U'.
+    'T' is assignable to the constraint of type 'U', but 'U' could be instantiated with a different subtype of constraint '{}'.
 tests/cases/conformance/types/mapped/mappedTypeRelationships.ts(20,5): error TS2536: Type 'keyof U' cannot be used to index type 'T'.
-tests/cases/conformance/types/mapped/mappedTypeRelationships.ts(21,5): error TS2322: Type 'T[keyof U]' is not assignable to type 'U[keyof U]'.
-  Type 'T' is not assignable to type 'U'.
 tests/cases/conformance/types/mapped/mappedTypeRelationships.ts(21,12): error TS2536: Type 'keyof U' cannot be used to index type 'T'.
 tests/cases/conformance/types/mapped/mappedTypeRelationships.ts(25,5): error TS2536: Type 'K' cannot be used to index type 'T'.
-tests/cases/conformance/types/mapped/mappedTypeRelationships.ts(26,5): error TS2322: Type 'T[K]' is not assignable to type 'U[K]'.
-  Type 'T' is not assignable to type 'U'.
 tests/cases/conformance/types/mapped/mappedTypeRelationships.ts(26,12): error TS2536: Type 'K' cannot be used to index type 'T'.
 tests/cases/conformance/types/mapped/mappedTypeRelationships.ts(30,5): error TS2322: Type 'T[keyof T] | undefined' is not assignable to type 'T[keyof T]'.
   Type 'undefined' is not assignable to type 'T[keyof T]'.
@@ -17,50 +15,80 @@ tests/cases/conformance/types/mapped/mappedTypeRelationships.ts(35,5): error TS2
 tests/cases/conformance/types/mapped/mappedTypeRelationships.ts(40,5): error TS2322: Type 'U[keyof T] | undefined' is not assignable to type 'T[keyof T]'.
   Type 'undefined' is not assignable to type 'T[keyof T]'.
 tests/cases/conformance/types/mapped/mappedTypeRelationships.ts(41,5): error TS2322: Type 'T[keyof T]' is not assignable to type 'U[keyof T] | undefined'.
-  Type 'T[keyof T]' is not assignable to type 'U[keyof T]'.
-    Type 'T' is not assignable to type 'U'.
+  Type 'T[string] | T[number] | T[symbol]' is not assignable to type 'U[keyof T] | undefined'.
+    Type 'T[string]' is not assignable to type 'U[keyof T] | undefined'.
+      Type 'T[string]' is not assignable to type 'U[keyof T]'.
+        Type 'T' is not assignable to type 'U'.
+          'T' is assignable to the constraint of type 'U', but 'U' could be instantiated with a different subtype of constraint '{}'.
+            Type 'T[keyof T]' is not assignable to type 'U[keyof T]'.
+              Type 'T' is not assignable to type 'U'.
+                'T' is assignable to the constraint of type 'U', but 'U' could be instantiated with a different subtype of constraint '{}'.
 tests/cases/conformance/types/mapped/mappedTypeRelationships.ts(45,5): error TS2322: Type 'U[K] | undefined' is not assignable to type 'T[K]'.
   Type 'undefined' is not assignable to type 'T[K]'.
 tests/cases/conformance/types/mapped/mappedTypeRelationships.ts(46,5): error TS2322: Type 'T[K]' is not assignable to type 'U[K] | undefined'.
-  Type 'T[K]' is not assignable to type 'U[K]'.
-    Type 'T' is not assignable to type 'U'.
+  Type 'T[keyof T]' is not assignable to type 'U[K] | undefined'.
+    Type 'T[string] | T[number] | T[symbol]' is not assignable to type 'U[K] | undefined'.
+      Type 'T[string]' is not assignable to type 'U[K] | undefined'.
+        Type 'T[string]' is not assignable to type 'U[K]'.
+          Type 'T' is not assignable to type 'U'.
+            'T' is assignable to the constraint of type 'U', but 'U' could be instantiated with a different subtype of constraint '{}'.
+              Type 'T[keyof T]' is not assignable to type 'U[K]'.
+                Type 'T' is not assignable to type 'U'.
+                  'T' is assignable to the constraint of type 'U', but 'U' could be instantiated with a different subtype of constraint '{}'.
+                    Type 'T[K]' is not assignable to type 'U[K]'.
+                      Type 'T' is not assignable to type 'U'.
+                        'T' is assignable to the constraint of type 'U', but 'U' could be instantiated with a different subtype of constraint '{}'.
 tests/cases/conformance/types/mapped/mappedTypeRelationships.ts(51,5): error TS2542: Index signature in type 'Readonly<T>' only permits reading.
 tests/cases/conformance/types/mapped/mappedTypeRelationships.ts(56,5): error TS2542: Index signature in type 'Readonly<T>' only permits reading.
 tests/cases/conformance/types/mapped/mappedTypeRelationships.ts(61,5): error TS2322: Type 'T[keyof T]' is not assignable to type 'U[keyof T]'.
   Type 'T' is not assignable to type 'U'.
+    'T' is assignable to the constraint of type 'U', but 'U' could be instantiated with a different subtype of constraint '{}'.
 tests/cases/conformance/types/mapped/mappedTypeRelationships.ts(61,5): error TS2542: Index signature in type 'Readonly<U>' only permits reading.
 tests/cases/conformance/types/mapped/mappedTypeRelationships.ts(66,5): error TS2322: Type 'T[K]' is not assignable to type 'U[K]'.
   Type 'T' is not assignable to type 'U'.
+    'T' is assignable to the constraint of type 'U', but 'U' could be instantiated with a different subtype of constraint '{}'.
 tests/cases/conformance/types/mapped/mappedTypeRelationships.ts(66,5): error TS2542: Index signature in type 'Readonly<U>' only permits reading.
 tests/cases/conformance/types/mapped/mappedTypeRelationships.ts(72,5): error TS2322: Type 'Partial<T>' is not assignable to type 'T'.
+  'Partial<T>' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint '{}'.
 tests/cases/conformance/types/mapped/mappedTypeRelationships.ts(78,5): error TS2322: Type 'Partial<Thing>' is not assignable to type 'Partial<T>'.
 tests/cases/conformance/types/mapped/mappedTypeRelationships.ts(88,5): error TS2322: Type 'Readonly<Thing>' is not assignable to type 'Readonly<T>'.
 tests/cases/conformance/types/mapped/mappedTypeRelationships.ts(127,5): error TS2322: Type 'Partial<U>' is not assignable to type 'Identity<U>'.
 tests/cases/conformance/types/mapped/mappedTypeRelationships.ts(143,5): error TS2322: Type '{ [P in keyof T]: T[P]; }' is not assignable to type '{ [P in keyof T]: U[P]; }'.
   Type 'T[P]' is not assignable to type 'U[P]'.
     Type 'T' is not assignable to type 'U'.
+      'T' is assignable to the constraint of type 'U', but 'U' could be instantiated with a different subtype of constraint '{}'.
 tests/cases/conformance/types/mapped/mappedTypeRelationships.ts(148,5): error TS2322: Type '{ [P in keyof T]: T[P]; }' is not assignable to type '{ [P in keyof U]: U[P]; }'.
   Type 'keyof U' is not assignable to type 'keyof T'.
     Type 'string | number | symbol' is not assignable to type 'keyof T'.
       Type 'string' is not assignable to type 'keyof T'.
 tests/cases/conformance/types/mapped/mappedTypeRelationships.ts(153,5): error TS2322: Type '{ [P in K]: T[P]; }' is not assignable to type '{ [P in keyof T]: T[P]; }'.
   Type 'keyof T' is not assignable to type 'K'.
-    Type 'string | number | symbol' is not assignable to type 'K'.
-      Type 'string' is not assignable to type 'K'.
+    'keyof T' is assignable to the constraint of type 'K', but 'K' could be instantiated with a different subtype of constraint 'string | number | symbol'.
+      Type 'string | number | symbol' is not assignable to type 'K'.
+        'string | number | symbol' is assignable to the constraint of type 'K', but 'K' could be instantiated with a different subtype of constraint 'string | number | symbol'.
+          Type 'string' is not assignable to type 'K'.
+            'string' is assignable to the constraint of type 'K', but 'K' could be instantiated with a different subtype of constraint 'string | number | symbol'.
 tests/cases/conformance/types/mapped/mappedTypeRelationships.ts(158,5): error TS2322: Type '{ [P in K]: T[P]; }' is not assignable to type '{ [P in keyof U]: U[P]; }'.
   Type 'keyof U' is not assignable to type 'K'.
-    Type 'string | number | symbol' is not assignable to type 'K'.
-      Type 'string' is not assignable to type 'K'.
+    'keyof U' is assignable to the constraint of type 'K', but 'K' could be instantiated with a different subtype of constraint 'string | number | symbol'.
+      Type 'string | number | symbol' is not assignable to type 'K'.
+        'string | number | symbol' is assignable to the constraint of type 'K', but 'K' could be instantiated with a different subtype of constraint 'string | number | symbol'.
+          Type 'string' is not assignable to type 'K'.
+            'string' is assignable to the constraint of type 'K', but 'K' could be instantiated with a different subtype of constraint 'string | number | symbol'.
 tests/cases/conformance/types/mapped/mappedTypeRelationships.ts(163,5): error TS2322: Type '{ [P in K]: T[P]; }' is not assignable to type '{ [P in keyof T]: U[P]; }'.
   Type 'keyof T' is not assignable to type 'K'.
-    Type 'string | number | symbol' is not assignable to type 'K'.
-      Type 'string' is not assignable to type 'K'.
+    'keyof T' is assignable to the constraint of type 'K', but 'K' could be instantiated with a different subtype of constraint 'string | number | symbol'.
+      Type 'string | number | symbol' is not assignable to type 'K'.
+        'string | number | symbol' is assignable to the constraint of type 'K', but 'K' could be instantiated with a different subtype of constraint 'string | number | symbol'.
+          Type 'string' is not assignable to type 'K'.
+            'string' is assignable to the constraint of type 'K', but 'K' could be instantiated with a different subtype of constraint 'string | number | symbol'.
 tests/cases/conformance/types/mapped/mappedTypeRelationships.ts(168,5): error TS2322: Type '{ [P in K]: T[P]; }' is not assignable to type '{ [P in K]: U[P]; }'.
   Type 'T[P]' is not assignable to type 'U[P]'.
     Type 'T' is not assignable to type 'U'.
+      'T' is assignable to the constraint of type 'U', but 'U' could be instantiated with a different subtype of constraint '{}'.
 
 
-==== tests/cases/conformance/types/mapped/mappedTypeRelationships.ts (30 errors) ====
+==== tests/cases/conformance/types/mapped/mappedTypeRelationships.ts (28 errors) ====
     function f1<T>(x: T, k: keyof T) {
         return x[k];
     }
@@ -75,6 +103,7 @@ tests/cases/conformance/types/mapped/mappedTypeRelationships.ts(168,5): error TS
         ~~~~
 !!! error TS2322: Type 'T[keyof T]' is not assignable to type 'U[keyof T]'.
 !!! error TS2322:   Type 'T' is not assignable to type 'U'.
+!!! error TS2322:     'T' is assignable to the constraint of type 'U', but 'U' could be instantiated with a different subtype of constraint '{}'.
     }
     
     function f4<T, U extends T, K extends keyof T>(x: T, y: U, k: K) {
@@ -83,6 +112,7 @@ tests/cases/conformance/types/mapped/mappedTypeRelationships.ts(168,5): error TS
         ~~~~
 !!! error TS2322: Type 'T[K]' is not assignable to type 'U[K]'.
 !!! error TS2322:   Type 'T' is not assignable to type 'U'.
+!!! error TS2322:     'T' is assignable to the constraint of type 'U', but 'U' could be instantiated with a different subtype of constraint '{}'.
     }
     
     function f5<T, U extends T>(x: T, y: U, k: keyof U) {
@@ -90,9 +120,6 @@ tests/cases/conformance/types/mapped/mappedTypeRelationships.ts(168,5): error TS
         ~~~~
 !!! error TS2536: Type 'keyof U' cannot be used to index type 'T'.
         y[k] = x[k];  // Error
-        ~~~~
-!!! error TS2322: Type 'T[keyof U]' is not assignable to type 'U[keyof U]'.
-!!! error TS2322:   Type 'T' is not assignable to type 'U'.
                ~~~~
 !!! error TS2536: Type 'keyof U' cannot be used to index type 'T'.
     }
@@ -102,9 +129,6 @@ tests/cases/conformance/types/mapped/mappedTypeRelationships.ts(168,5): error TS
         ~~~~
 !!! error TS2536: Type 'K' cannot be used to index type 'T'.
         y[k] = x[k];  // Error
-        ~~~~
-!!! error TS2322: Type 'T[K]' is not assignable to type 'U[K]'.
-!!! error TS2322:   Type 'T' is not assignable to type 'U'.
                ~~~~
 !!! error TS2536: Type 'K' cannot be used to index type 'T'.
     }
@@ -133,8 +157,14 @@ tests/cases/conformance/types/mapped/mappedTypeRelationships.ts(168,5): error TS
         y[k] = x[k];  // Error
         ~~~~
 !!! error TS2322: Type 'T[keyof T]' is not assignable to type 'U[keyof T] | undefined'.
-!!! error TS2322:   Type 'T[keyof T]' is not assignable to type 'U[keyof T]'.
-!!! error TS2322:     Type 'T' is not assignable to type 'U'.
+!!! error TS2322:   Type 'T[string] | T[number] | T[symbol]' is not assignable to type 'U[keyof T] | undefined'.
+!!! error TS2322:     Type 'T[string]' is not assignable to type 'U[keyof T] | undefined'.
+!!! error TS2322:       Type 'T[string]' is not assignable to type 'U[keyof T]'.
+!!! error TS2322:         Type 'T' is not assignable to type 'U'.
+!!! error TS2322:           'T' is assignable to the constraint of type 'U', but 'U' could be instantiated with a different subtype of constraint '{}'.
+!!! error TS2322:             Type 'T[keyof T]' is not assignable to type 'U[keyof T]'.
+!!! error TS2322:               Type 'T' is not assignable to type 'U'.
+!!! error TS2322:                 'T' is assignable to the constraint of type 'U', but 'U' could be instantiated with a different subtype of constraint '{}'.
     }
     
     function f13<T, U extends T, K extends keyof T>(x: T, y: Partial<U>, k: K) {
@@ -145,8 +175,18 @@ tests/cases/conformance/types/mapped/mappedTypeRelationships.ts(168,5): error TS
         y[k] = x[k];  // Error
         ~~~~
 !!! error TS2322: Type 'T[K]' is not assignable to type 'U[K] | undefined'.
-!!! error TS2322:   Type 'T[K]' is not assignable to type 'U[K]'.
-!!! error TS2322:     Type 'T' is not assignable to type 'U'.
+!!! error TS2322:   Type 'T[keyof T]' is not assignable to type 'U[K] | undefined'.
+!!! error TS2322:     Type 'T[string] | T[number] | T[symbol]' is not assignable to type 'U[K] | undefined'.
+!!! error TS2322:       Type 'T[string]' is not assignable to type 'U[K] | undefined'.
+!!! error TS2322:         Type 'T[string]' is not assignable to type 'U[K]'.
+!!! error TS2322:           Type 'T' is not assignable to type 'U'.
+!!! error TS2322:             'T' is assignable to the constraint of type 'U', but 'U' could be instantiated with a different subtype of constraint '{}'.
+!!! error TS2322:               Type 'T[keyof T]' is not assignable to type 'U[K]'.
+!!! error TS2322:                 Type 'T' is not assignable to type 'U'.
+!!! error TS2322:                   'T' is assignable to the constraint of type 'U', but 'U' could be instantiated with a different subtype of constraint '{}'.
+!!! error TS2322:                     Type 'T[K]' is not assignable to type 'U[K]'.
+!!! error TS2322:                       Type 'T' is not assignable to type 'U'.
+!!! error TS2322:                         'T' is assignable to the constraint of type 'U', but 'U' could be instantiated with a different subtype of constraint '{}'.
     }
     
     function f20<T>(x: T, y: Readonly<T>, k: keyof T) {
@@ -169,6 +209,7 @@ tests/cases/conformance/types/mapped/mappedTypeRelationships.ts(168,5): error TS
         ~~~~
 !!! error TS2322: Type 'T[keyof T]' is not assignable to type 'U[keyof T]'.
 !!! error TS2322:   Type 'T' is not assignable to type 'U'.
+!!! error TS2322:     'T' is assignable to the constraint of type 'U', but 'U' could be instantiated with a different subtype of constraint '{}'.
         ~~~~
 !!! error TS2542: Index signature in type 'Readonly<U>' only permits reading.
     }
@@ -179,6 +220,7 @@ tests/cases/conformance/types/mapped/mappedTypeRelationships.ts(168,5): error TS
         ~~~~
 !!! error TS2322: Type 'T[K]' is not assignable to type 'U[K]'.
 !!! error TS2322:   Type 'T' is not assignable to type 'U'.
+!!! error TS2322:     'T' is assignable to the constraint of type 'U', but 'U' could be instantiated with a different subtype of constraint '{}'.
         ~~~~
 !!! error TS2542: Index signature in type 'Readonly<U>' only permits reading.
     }
@@ -189,6 +231,7 @@ tests/cases/conformance/types/mapped/mappedTypeRelationships.ts(168,5): error TS
         x = y;  // Error
         ~
 !!! error TS2322: Type 'Partial<T>' is not assignable to type 'T'.
+!!! error TS2322:   'Partial<T>' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint '{}'.
         y = x;
     }
     
@@ -270,6 +313,7 @@ tests/cases/conformance/types/mapped/mappedTypeRelationships.ts(168,5): error TS
 !!! error TS2322: Type '{ [P in keyof T]: T[P]; }' is not assignable to type '{ [P in keyof T]: U[P]; }'.
 !!! error TS2322:   Type 'T[P]' is not assignable to type 'U[P]'.
 !!! error TS2322:     Type 'T' is not assignable to type 'U'.
+!!! error TS2322:       'T' is assignable to the constraint of type 'U', but 'U' could be instantiated with a different subtype of constraint '{}'.
     }
     
     function f72<T, U extends T>(x: { [P in keyof T]: T[P] }, y: { [P in keyof U]: U[P] }) {
@@ -288,8 +332,11 @@ tests/cases/conformance/types/mapped/mappedTypeRelationships.ts(168,5): error TS
         ~
 !!! error TS2322: Type '{ [P in K]: T[P]; }' is not assignable to type '{ [P in keyof T]: T[P]; }'.
 !!! error TS2322:   Type 'keyof T' is not assignable to type 'K'.
-!!! error TS2322:     Type 'string | number | symbol' is not assignable to type 'K'.
-!!! error TS2322:       Type 'string' is not assignable to type 'K'.
+!!! error TS2322:     'keyof T' is assignable to the constraint of type 'K', but 'K' could be instantiated with a different subtype of constraint 'string | number | symbol'.
+!!! error TS2322:       Type 'string | number | symbol' is not assignable to type 'K'.
+!!! error TS2322:         'string | number | symbol' is assignable to the constraint of type 'K', but 'K' could be instantiated with a different subtype of constraint 'string | number | symbol'.
+!!! error TS2322:           Type 'string' is not assignable to type 'K'.
+!!! error TS2322:             'string' is assignable to the constraint of type 'K', but 'K' could be instantiated with a different subtype of constraint 'string | number | symbol'.
     }
     
     function f74<T, U extends T, K extends keyof T>(x: { [P in K]: T[P] }, y: { [P in keyof U]: U[P] }) {
@@ -298,8 +345,11 @@ tests/cases/conformance/types/mapped/mappedTypeRelationships.ts(168,5): error TS
         ~
 !!! error TS2322: Type '{ [P in K]: T[P]; }' is not assignable to type '{ [P in keyof U]: U[P]; }'.
 !!! error TS2322:   Type 'keyof U' is not assignable to type 'K'.
-!!! error TS2322:     Type 'string | number | symbol' is not assignable to type 'K'.
-!!! error TS2322:       Type 'string' is not assignable to type 'K'.
+!!! error TS2322:     'keyof U' is assignable to the constraint of type 'K', but 'K' could be instantiated with a different subtype of constraint 'string | number | symbol'.
+!!! error TS2322:       Type 'string | number | symbol' is not assignable to type 'K'.
+!!! error TS2322:         'string | number | symbol' is assignable to the constraint of type 'K', but 'K' could be instantiated with a different subtype of constraint 'string | number | symbol'.
+!!! error TS2322:           Type 'string' is not assignable to type 'K'.
+!!! error TS2322:             'string' is assignable to the constraint of type 'K', but 'K' could be instantiated with a different subtype of constraint 'string | number | symbol'.
     }
     
     function f75<T, U extends T, K extends keyof T>(x: { [P in K]: T[P] }, y: { [P in keyof T]: U[P] }) {
@@ -308,8 +358,11 @@ tests/cases/conformance/types/mapped/mappedTypeRelationships.ts(168,5): error TS
         ~
 !!! error TS2322: Type '{ [P in K]: T[P]; }' is not assignable to type '{ [P in keyof T]: U[P]; }'.
 !!! error TS2322:   Type 'keyof T' is not assignable to type 'K'.
-!!! error TS2322:     Type 'string | number | symbol' is not assignable to type 'K'.
-!!! error TS2322:       Type 'string' is not assignable to type 'K'.
+!!! error TS2322:     'keyof T' is assignable to the constraint of type 'K', but 'K' could be instantiated with a different subtype of constraint 'string | number | symbol'.
+!!! error TS2322:       Type 'string | number | symbol' is not assignable to type 'K'.
+!!! error TS2322:         'string | number | symbol' is assignable to the constraint of type 'K', but 'K' could be instantiated with a different subtype of constraint 'string | number | symbol'.
+!!! error TS2322:           Type 'string' is not assignable to type 'K'.
+!!! error TS2322:             'string' is assignable to the constraint of type 'K', but 'K' could be instantiated with a different subtype of constraint 'string | number | symbol'.
     }
     
     function f76<T, U extends T, K extends keyof T>(x: { [P in K]: T[P] }, y: { [P in K]: U[P] }) {
@@ -319,6 +372,7 @@ tests/cases/conformance/types/mapped/mappedTypeRelationships.ts(168,5): error TS
 !!! error TS2322: Type '{ [P in K]: T[P]; }' is not assignable to type '{ [P in K]: U[P]; }'.
 !!! error TS2322:   Type 'T[P]' is not assignable to type 'U[P]'.
 !!! error TS2322:     Type 'T' is not assignable to type 'U'.
+!!! error TS2322:       'T' is assignable to the constraint of type 'U', but 'U' could be instantiated with a different subtype of constraint '{}'.
     }
     
     function f80<T>(t: T): Partial<T> {
@@ -331,5 +385,15 @@ tests/cases/conformance/types/mapped/mappedTypeRelationships.ts(168,5): error TS
     
     function f82<T, K1 extends keyof T, K2 extends keyof T[K1]>(t: T, k1: K1, k2: K2): Partial<T[K1][K2]> {
         return t[k1][k2];
+    }
+    
+    // #31070
+    type Numeric<T> = { [K in keyof T]?: number };
+    function f90<T extends { x: number }>() {
+        const n: Numeric<T> = { x: 1 };
+    }
+    
+    function f<T extends { x: {} }>(): Partial<T> {
+        return undefined! as T;
     }
     

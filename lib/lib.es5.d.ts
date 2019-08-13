@@ -22,8 +22,8 @@ and limitations under the License.
 /// ECMAScript APIs
 /////////////////////////////
 
-declare const NaN: number;
-declare const Infinity: number;
+declare var NaN: number;
+declare var Infinity: number;
 
 /**
   * Evaluates JavaScript code and executes it.
@@ -32,7 +32,7 @@ declare const Infinity: number;
 declare function eval(x: string): any;
 
 /**
-  * Converts A string to an integer.
+  * Converts a string to an integer.
   * @param s A string to convert into a number.
   * @param radix A value between 2 and 36 that specifies the base of the number in numString.
   * If this argument is not supplied, strings with a prefix of '0x' are considered hexadecimal.
@@ -80,7 +80,7 @@ declare function encodeURI(uri: string): string;
   * Encodes a text string as a valid component of a Uniform Resource Identifier (URI).
   * @param uriComponent A value representing an encoded URI component.
   */
-declare function encodeURIComponent(uriComponent: string): string;
+declare function encodeURIComponent(uriComponent: string | number | boolean): string;
 
 /**
   * Computes a new string in which certain characters have been replaced by a hexadecimal escape sequence.
@@ -255,16 +255,16 @@ interface ObjectConstructor {
     isExtensible(o: any): boolean;
 
     /**
-      * Returns the names of the enumerable properties and methods of an object.
+      * Returns the names of the enumerable string properties and methods of an object.
       * @param o Object that contains the properties and methods. This can be an object that you created or an existing Document Object Model (DOM) object.
       */
-    keys(o: {}): string[];
+     keys(o: object): string[];
 }
 
 /**
   * Provides functionality common to all JavaScript objects.
   */
-declare const Object: ObjectConstructor;
+declare var Object: ObjectConstructor;
 
 /**
   * Creates a new function.
@@ -313,7 +313,77 @@ interface FunctionConstructor {
     readonly prototype: Function;
 }
 
-declare const Function: FunctionConstructor;
+declare var Function: FunctionConstructor;
+
+/**
+ * Extracts the type of the 'this' parameter of a function type, or 'unknown' if the function type has no 'this' parameter.
+ */
+type ThisParameterType<T> = T extends (this: unknown, ...args: any[]) => any ? unknown : T extends (this: infer U, ...args: any[]) => any ? U : unknown;
+
+/**
+ * Removes the 'this' parameter from a function type.
+ */
+type OmitThisParameter<T> = unknown extends ThisParameterType<T> ? T : T extends (...args: infer A) => infer R ? (...args: A) => R : T;
+
+interface CallableFunction extends Function {
+    /**
+      * Calls the function with the specified object as the this value and the elements of specified array as the arguments.
+      * @param thisArg The object to be used as the this object.
+      * @param args An array of argument values to be passed to the function.
+      */
+    apply<T, R>(this: (this: T) => R, thisArg: T): R;
+    apply<T, A extends any[], R>(this: (this: T, ...args: A) => R, thisArg: T, args: A): R;
+
+    /**
+      * Calls the function with the specified object as the this value and the specified rest arguments as the arguments.
+      * @param thisArg The object to be used as the this object.
+      * @param args Argument values to be passed to the function.
+      */
+    call<T, A extends any[], R>(this: (this: T, ...args: A) => R, thisArg: T, ...args: A): R;
+
+    /**
+      * For a given function, creates a bound function that has the same body as the original function.
+      * The this object of the bound function is associated with the specified object, and has the specified initial parameters.
+      * @param thisArg The object to be used as the this object.
+      * @param args Arguments to bind to the parameters of the function.
+      */
+    bind<T>(this: T, thisArg: ThisParameterType<T>): OmitThisParameter<T>;
+    bind<T, A0, A extends any[], R>(this: (this: T, arg0: A0, ...args: A) => R, thisArg: T, arg0: A0): (...args: A) => R;
+    bind<T, A0, A1, A extends any[], R>(this: (this: T, arg0: A0, arg1: A1, ...args: A) => R, thisArg: T, arg0: A0, arg1: A1): (...args: A) => R;
+    bind<T, A0, A1, A2, A extends any[], R>(this: (this: T, arg0: A0, arg1: A1, arg2: A2, ...args: A) => R, thisArg: T, arg0: A0, arg1: A1, arg2: A2): (...args: A) => R;
+    bind<T, A0, A1, A2, A3, A extends any[], R>(this: (this: T, arg0: A0, arg1: A1, arg2: A2, arg3: A3, ...args: A) => R, thisArg: T, arg0: A0, arg1: A1, arg2: A2, arg3: A3): (...args: A) => R;
+    bind<T, AX, R>(this: (this: T, ...args: AX[]) => R, thisArg: T, ...args: AX[]): (...args: AX[]) => R;
+}
+
+interface NewableFunction extends Function {
+    /**
+      * Calls the function with the specified object as the this value and the elements of specified array as the arguments.
+      * @param thisArg The object to be used as the this object.
+      * @param args An array of argument values to be passed to the function.
+      */
+    apply<T>(this: new () => T, thisArg: T): void;
+    apply<T, A extends any[]>(this: new (...args: A) => T, thisArg: T, args: A): void;
+
+    /**
+      * Calls the function with the specified object as the this value and the specified rest arguments as the arguments.
+      * @param thisArg The object to be used as the this object.
+      * @param args Argument values to be passed to the function.
+      */
+    call<T, A extends any[]>(this: new (...args: A) => T, thisArg: T, ...args: A): void;
+
+    /**
+      * For a given function, creates a bound function that has the same body as the original function.
+      * The this object of the bound function is associated with the specified object, and has the specified initial parameters.
+      * @param thisArg The object to be used as the this object.
+      * @param args Arguments to bind to the parameters of the function.
+      */
+    bind<T>(this: T, thisArg: any): T;
+    bind<A0, A extends any[], R>(this: new (arg0: A0, ...args: A) => R, thisArg: any, arg0: A0): new (...args: A) => R;
+    bind<A0, A1, A extends any[], R>(this: new (arg0: A0, arg1: A1, ...args: A) => R, thisArg: any, arg0: A0, arg1: A1): new (...args: A) => R;
+    bind<A0, A1, A2, A extends any[], R>(this: new (arg0: A0, arg1: A1, arg2: A2, ...args: A) => R, thisArg: any, arg0: A0, arg1: A1, arg2: A2): new (...args: A) => R;
+    bind<A0, A1, A2, A3, A extends any[], R>(this: new (arg0: A0, arg1: A1, arg2: A2, arg3: A3, ...args: A) => R, thisArg: any, arg0: A0, arg1: A1, arg2: A2, arg3: A3): new (...args: A) => R;
+    bind<AX, R>(this: new (...args: AX[]) => R, thisArg: any, ...args: AX[]): new (...args: AX[]) => R;
+}
 
 interface IArguments {
     [index: number]: any;
@@ -454,7 +524,7 @@ interface StringConstructor {
 /**
   * Allows manipulation and formatting of text strings and determination and location of substrings within strings.
   */
-declare const String: StringConstructor;
+declare var String: StringConstructor;
 
 interface Boolean {
     /** Returns the primitive value of the specified object. */
@@ -463,11 +533,11 @@ interface Boolean {
 
 interface BooleanConstructor {
     new(value?: any): Boolean;
-    (value?: any): boolean;
+    <T>(value?: T): boolean;
     readonly prototype: Boolean;
 }
 
-declare const Boolean: BooleanConstructor;
+declare var Boolean: BooleanConstructor;
 
 interface Number {
     /**
@@ -529,7 +599,7 @@ interface NumberConstructor {
 }
 
 /** An object that represents a number of any kind. All JavaScript numbers are 64-bit floating-point numbers. */
-declare const Number: NumberConstructor;
+declare var Number: NumberConstructor;
 
 interface TemplateStringsArray extends ReadonlyArray<string> {
     readonly raw: ReadonlyArray<string>;
@@ -537,7 +607,7 @@ interface TemplateStringsArray extends ReadonlyArray<string> {
 
 /**
  * The type of `import.meta`.
- * 
+ *
  * If you need to declare that a given property exists on `import.meta`,
  * this type may be augmented via interface merging.
  */
@@ -653,7 +723,7 @@ interface Math {
     tan(x: number): number;
 }
 /** An intrinsic object that provides basic mathematics functionality and constants. */
-declare const Math: Math;
+declare var Math: Math;
 
 /** Enables basic storage and retrieval of dates and times. */
 interface Date {
@@ -834,7 +904,7 @@ interface DateConstructor {
     now(): number;
 }
 
-declare const Date: DateConstructor;
+declare var Date: DateConstructor;
 
 interface RegExpMatchArray extends Array<string> {
     index?: number;
@@ -897,7 +967,7 @@ interface RegExpConstructor {
     lastMatch: string;
 }
 
-declare const RegExp: RegExpConstructor;
+declare var RegExp: RegExpConstructor;
 
 interface Error {
     name: string;
@@ -911,7 +981,7 @@ interface ErrorConstructor {
     readonly prototype: Error;
 }
 
-declare const Error: ErrorConstructor;
+declare var Error: ErrorConstructor;
 
 interface EvalError extends Error {
 }
@@ -922,7 +992,7 @@ interface EvalErrorConstructor {
     readonly prototype: EvalError;
 }
 
-declare const EvalError: EvalErrorConstructor;
+declare var EvalError: EvalErrorConstructor;
 
 interface RangeError extends Error {
 }
@@ -933,7 +1003,7 @@ interface RangeErrorConstructor {
     readonly prototype: RangeError;
 }
 
-declare const RangeError: RangeErrorConstructor;
+declare var RangeError: RangeErrorConstructor;
 
 interface ReferenceError extends Error {
 }
@@ -944,7 +1014,7 @@ interface ReferenceErrorConstructor {
     readonly prototype: ReferenceError;
 }
 
-declare const ReferenceError: ReferenceErrorConstructor;
+declare var ReferenceError: ReferenceErrorConstructor;
 
 interface SyntaxError extends Error {
 }
@@ -955,7 +1025,7 @@ interface SyntaxErrorConstructor {
     readonly prototype: SyntaxError;
 }
 
-declare const SyntaxError: SyntaxErrorConstructor;
+declare var SyntaxError: SyntaxErrorConstructor;
 
 interface TypeError extends Error {
 }
@@ -966,7 +1036,7 @@ interface TypeErrorConstructor {
     readonly prototype: TypeError;
 }
 
-declare const TypeError: TypeErrorConstructor;
+declare var TypeError: TypeErrorConstructor;
 
 interface URIError extends Error {
 }
@@ -977,7 +1047,7 @@ interface URIErrorConstructor {
     readonly prototype: URIError;
 }
 
-declare const URIError: URIErrorConstructor;
+declare var URIError: URIErrorConstructor;
 
 interface JSON {
     /**
@@ -986,14 +1056,14 @@ interface JSON {
       * @param reviver A function that transforms the results. This function is called for each member of the object.
       * If a member contains nested objects, the nested objects are transformed before the parent object is.
       */
-    parse(text: string, reviver?: (key: any, value: any) => any): any;
+    parse(text: string, reviver?: (this: any, key: string, value: any) => any): any;
     /**
       * Converts a JavaScript value to a JavaScript Object Notation (JSON) string.
       * @param value A JavaScript value, usually an object or array, to be converted.
       * @param replacer A function that transforms the results.
       * @param space Adds indentation, white space, and line break characters to the return-value JSON text to make it easier to read.
       */
-    stringify(value: any, replacer?: (key: string, value: any) => any, space?: string | number): string;
+    stringify(value: any, replacer?: (this: any, key: string, value: any) => any, space?: string | number): string;
     /**
       * Converts a JavaScript value to a JavaScript Object Notation (JSON) string.
       * @param value A JavaScript value, usually an object or array, to be converted.
@@ -1006,7 +1076,7 @@ interface JSON {
 /**
   * An intrinsic object that provides functions to convert JavaScript values to and from the JavaScript Object Notation (JSON) format.
   */
-declare const JSON: JSON;
+declare var JSON: JSON;
 
 
 /////////////////////////////
@@ -1064,13 +1134,13 @@ interface ReadonlyArray<T> {
       * @param callbackfn A function that accepts up to three arguments. The every method calls the callbackfn function for each element in array1 until the callbackfn returns false, or until the end of the array.
       * @param thisArg An object to which the this keyword can refer in the callbackfn function. If thisArg is omitted, undefined is used as the this value.
       */
-    every(callbackfn: (value: T, index: number, array: ReadonlyArray<T>) => boolean, thisArg?: any): boolean;
+    every(callbackfn: (value: T, index: number, array: ReadonlyArray<T>) => unknown, thisArg?: any): boolean;
     /**
       * Determines whether the specified callback function returns true for any element of an array.
       * @param callbackfn A function that accepts up to three arguments. The some method calls the callbackfn function for each element in array1 until the callbackfn returns true, or until the end of the array.
       * @param thisArg An object to which the this keyword can refer in the callbackfn function. If thisArg is omitted, undefined is used as the this value.
       */
-    some(callbackfn: (value: T, index: number, array: ReadonlyArray<T>) => boolean, thisArg?: any): boolean;
+    some(callbackfn: (value: T, index: number, array: ReadonlyArray<T>) => unknown, thisArg?: any): boolean;
     /**
       * Performs the specified action for each element in an array.
       * @param callbackfn  A function that accepts up to three arguments. forEach calls the callbackfn function one time for each element in the array.
@@ -1094,7 +1164,7 @@ interface ReadonlyArray<T> {
       * @param callbackfn A function that accepts up to three arguments. The filter method calls the callbackfn function one time for each element in the array.
       * @param thisArg An object to which the this keyword can refer in the callbackfn function. If thisArg is omitted, undefined is used as the this value.
       */
-    filter(callbackfn: (value: T, index: number, array: ReadonlyArray<T>) => any, thisArg?: any): T[];
+    filter(callbackfn: (value: T, index: number, array: ReadonlyArray<T>) => unknown, thisArg?: any): T[];
     /**
       * Calls the specified callback function for all the elements in an array. The return value of the callback function is the accumulated result, and is provided as an argument in the next call to the callback function.
       * @param callbackfn A function that accepts up to four arguments. The reduce method calls the callbackfn function one time for each element in the array.
@@ -1223,13 +1293,13 @@ interface Array<T> {
       * @param callbackfn A function that accepts up to three arguments. The every method calls the callbackfn function for each element in array1 until the callbackfn returns false, or until the end of the array.
       * @param thisArg An object to which the this keyword can refer in the callbackfn function. If thisArg is omitted, undefined is used as the this value.
       */
-    every(callbackfn: (value: T, index: number, array: T[]) => boolean, thisArg?: any): boolean;
+    every(callbackfn: (value: T, index: number, array: T[]) => unknown, thisArg?: any): boolean;
     /**
       * Determines whether the specified callback function returns true for any element of an array.
       * @param callbackfn A function that accepts up to three arguments. The some method calls the callbackfn function for each element in array1 until the callbackfn returns true, or until the end of the array.
       * @param thisArg An object to which the this keyword can refer in the callbackfn function. If thisArg is omitted, undefined is used as the this value.
       */
-    some(callbackfn: (value: T, index: number, array: T[]) => boolean, thisArg?: any): boolean;
+    some(callbackfn: (value: T, index: number, array: T[]) => unknown, thisArg?: any): boolean;
     /**
       * Performs the specified action for each element in an array.
       * @param callbackfn  A function that accepts up to three arguments. forEach calls the callbackfn function one time for each element in the array.
@@ -1253,7 +1323,7 @@ interface Array<T> {
       * @param callbackfn A function that accepts up to three arguments. The filter method calls the callbackfn function one time for each element in the array.
       * @param thisArg An object to which the this keyword can refer in the callbackfn function. If thisArg is omitted, undefined is used as the this value.
       */
-    filter(callbackfn: (value: T, index: number, array: T[]) => any, thisArg?: any): T[];
+    filter(callbackfn: (value: T, index: number, array: T[]) => unknown, thisArg?: any): T[];
     /**
       * Calls the specified callback function for all the elements in an array. The return value of the callback function is the accumulated result, and is provided as an argument in the next call to the callback function.
       * @param callbackfn A function that accepts up to four arguments. The reduce method calls the callbackfn function one time for each element in the array.
@@ -1295,7 +1365,7 @@ interface ArrayConstructor {
     readonly prototype: Array<any>;
 }
 
-declare const Array: ArrayConstructor;
+declare var Array: ArrayConstructor;
 
 interface TypedPropertyDescriptor<T> {
     enumerable?: boolean;
@@ -1370,7 +1440,7 @@ type Readonly<T> = {
 };
 
 /**
- * From T pick a set of properties K
+ * From T, pick a set of properties whose keys are in the union K
  */
 type Pick<T, K extends keyof T> = {
     [P in K]: T[P];
@@ -1394,19 +1464,34 @@ type Exclude<T, U> = T extends U ? never : T;
 type Extract<T, U> = T extends U ? T : never;
 
 /**
+ * Construct a type with the properties of T except for those in type K.
+ */
+type Omit<T, K extends keyof any> = Pick<T, Exclude<keyof T, K>>;
+
+/**
  * Exclude null and undefined from T
  */
 type NonNullable<T> = T extends null | undefined ? never : T;
 
 /**
+ * Obtain the parameters of a function type in a tuple
+ */
+type Parameters<T extends (...args: any) => any> = T extends (...args: infer P) => any ? P : never;
+
+/**
+ * Obtain the parameters of a constructor function type in a tuple
+ */
+type ConstructorParameters<T extends new (...args: any) => any> = T extends new (...args: infer P) => any ? P : never;
+
+/**
  * Obtain the return type of a function type
  */
-type ReturnType<T extends (...args: any[]) => any> = T extends (...args: any[]) => infer R ? R : any;
+type ReturnType<T extends (...args: any) => any> = T extends (...args: any) => infer R ? R : any;
 
 /**
  * Obtain the return type of a constructor function type
  */
-type InstanceType<T extends new (...args: any[]) => any> = T extends new (...args: any[]) => infer R ? R : any;
+type InstanceType<T extends new (...args: any) => any> = T extends new (...args: any) => infer R ? R : any;
 
 /**
  * Marker for contextual 'this' type
@@ -1444,7 +1529,7 @@ interface ArrayBufferConstructor {
     new(byteLength: number): ArrayBuffer;
     isView(arg: any): arg is ArrayBufferView;
 }
-declare const ArrayBuffer: ArrayBufferConstructor;
+declare var ArrayBuffer: ArrayBufferConstructor;
 
 interface ArrayBufferView {
     /**
@@ -1594,7 +1679,7 @@ interface DataView {
 interface DataViewConstructor {
     new(buffer: ArrayBufferLike, byteOffset?: number, byteLength?: number): DataView;
 }
-declare const DataView: DataViewConstructor;
+declare var DataView: DataViewConstructor;
 
 /**
   * A typed array of 8-bit integer values. The contents are initialized to 0. If the requested
@@ -1856,14 +1941,20 @@ interface Int8ArrayConstructor {
     /**
       * Creates an array from an array-like or iterable object.
       * @param arrayLike An array-like or iterable object to convert to an array.
+      */
+    from(arrayLike: ArrayLike<number>): Int8Array;
+
+    /**
+      * Creates an array from an array-like or iterable object.
+      * @param arrayLike An array-like or iterable object to convert to an array.
       * @param mapfn A mapping function to call on every element of the array.
       * @param thisArg Value of 'this' used to invoke the mapfn.
       */
-    from(arrayLike: ArrayLike<number>, mapfn?: (v: number, k: number) => number, thisArg?: any): Int8Array;
+    from<T>(arrayLike: ArrayLike<T>, mapfn: (v: T, k: number) => number, thisArg?: any): Int8Array;
 
 
 }
-declare const Int8Array: Int8ArrayConstructor;
+declare var Int8Array: Int8ArrayConstructor;
 
 /**
   * A typed array of 8-bit unsigned integer values. The contents are initialized to 0. If the
@@ -2126,13 +2217,19 @@ interface Uint8ArrayConstructor {
     /**
       * Creates an array from an array-like or iterable object.
       * @param arrayLike An array-like or iterable object to convert to an array.
+      */
+    from(arrayLike: ArrayLike<number>): Uint8Array;
+
+    /**
+      * Creates an array from an array-like or iterable object.
+      * @param arrayLike An array-like or iterable object to convert to an array.
       * @param mapfn A mapping function to call on every element of the array.
       * @param thisArg Value of 'this' used to invoke the mapfn.
       */
-    from(arrayLike: ArrayLike<number>, mapfn?: (v: number, k: number) => number, thisArg?: any): Uint8Array;
+    from<T>(arrayLike: ArrayLike<T>, mapfn: (v: T, k: number) => number, thisArg?: any): Uint8Array;
 
 }
-declare const Uint8Array: Uint8ArrayConstructor;
+declare var Uint8Array: Uint8ArrayConstructor;
 
 /**
   * A typed array of 8-bit unsigned integer (clamped) values. The contents are initialized to 0.
@@ -2395,12 +2492,18 @@ interface Uint8ClampedArrayConstructor {
     /**
       * Creates an array from an array-like or iterable object.
       * @param arrayLike An array-like or iterable object to convert to an array.
+      */
+    from(arrayLike: ArrayLike<number>): Uint8ClampedArray;
+
+    /**
+      * Creates an array from an array-like or iterable object.
+      * @param arrayLike An array-like or iterable object to convert to an array.
       * @param mapfn A mapping function to call on every element of the array.
       * @param thisArg Value of 'this' used to invoke the mapfn.
       */
-    from(arrayLike: ArrayLike<number>, mapfn?: (v: number, k: number) => number, thisArg?: any): Uint8ClampedArray;
+    from<T>(arrayLike: ArrayLike<T>, mapfn: (v: T, k: number) => number, thisArg?: any): Uint8ClampedArray;
 }
-declare const Uint8ClampedArray: Uint8ClampedArrayConstructor;
+declare var Uint8ClampedArray: Uint8ClampedArrayConstructor;
 
 /**
   * A typed array of 16-bit signed integer values. The contents are initialized to 0. If the
@@ -2662,14 +2765,20 @@ interface Int16ArrayConstructor {
     /**
       * Creates an array from an array-like or iterable object.
       * @param arrayLike An array-like or iterable object to convert to an array.
+      */
+    from(arrayLike: ArrayLike<number>): Int16Array;
+
+    /**
+      * Creates an array from an array-like or iterable object.
+      * @param arrayLike An array-like or iterable object to convert to an array.
       * @param mapfn A mapping function to call on every element of the array.
       * @param thisArg Value of 'this' used to invoke the mapfn.
       */
-    from(arrayLike: ArrayLike<number>, mapfn?: (v: number, k: number) => number, thisArg?: any): Int16Array;
+    from<T>(arrayLike: ArrayLike<T>, mapfn: (v: T, k: number) => number, thisArg?: any): Int16Array;
 
 
 }
-declare const Int16Array: Int16ArrayConstructor;
+declare var Int16Array: Int16ArrayConstructor;
 
 /**
   * A typed array of 16-bit unsigned integer values. The contents are initialized to 0. If the
@@ -2932,14 +3041,20 @@ interface Uint16ArrayConstructor {
     /**
       * Creates an array from an array-like or iterable object.
       * @param arrayLike An array-like or iterable object to convert to an array.
+      */
+    from(arrayLike: ArrayLike<number>): Uint16Array;
+
+    /**
+      * Creates an array from an array-like or iterable object.
+      * @param arrayLike An array-like or iterable object to convert to an array.
       * @param mapfn A mapping function to call on every element of the array.
       * @param thisArg Value of 'this' used to invoke the mapfn.
       */
-    from(arrayLike: ArrayLike<number>, mapfn?: (v: number, k: number) => number, thisArg?: any): Uint16Array;
+    from<T>(arrayLike: ArrayLike<T>, mapfn: (v: T, k: number) => number, thisArg?: any): Uint16Array;
 
 
 }
-declare const Uint16Array: Uint16ArrayConstructor;
+declare var Uint16Array: Uint16ArrayConstructor;
 /**
   * A typed array of 32-bit signed integer values. The contents are initialized to 0. If the
   * requested number of bytes could not be allocated an exception is raised.
@@ -3201,13 +3316,19 @@ interface Int32ArrayConstructor {
     /**
       * Creates an array from an array-like or iterable object.
       * @param arrayLike An array-like or iterable object to convert to an array.
+      */
+    from(arrayLike: ArrayLike<number>): Int32Array;
+
+    /**
+      * Creates an array from an array-like or iterable object.
+      * @param arrayLike An array-like or iterable object to convert to an array.
       * @param mapfn A mapping function to call on every element of the array.
       * @param thisArg Value of 'this' used to invoke the mapfn.
       */
-    from(arrayLike: ArrayLike<number>, mapfn?: (v: number, k: number) => number, thisArg?: any): Int32Array;
+    from<T>(arrayLike: ArrayLike<T>, mapfn: (v: T, k: number) => number, thisArg?: any): Int32Array;
 
 }
-declare const Int32Array: Int32ArrayConstructor;
+declare var Int32Array: Int32ArrayConstructor;
 
 /**
   * A typed array of 32-bit unsigned integer values. The contents are initialized to 0. If the
@@ -3469,13 +3590,19 @@ interface Uint32ArrayConstructor {
     /**
       * Creates an array from an array-like or iterable object.
       * @param arrayLike An array-like or iterable object to convert to an array.
+      */
+    from(arrayLike: ArrayLike<number>): Uint32Array;
+
+    /**
+      * Creates an array from an array-like or iterable object.
+      * @param arrayLike An array-like or iterable object to convert to an array.
       * @param mapfn A mapping function to call on every element of the array.
       * @param thisArg Value of 'this' used to invoke the mapfn.
       */
-    from(arrayLike: ArrayLike<number>, mapfn?: (v: number, k: number) => number, thisArg?: any): Uint32Array;
+    from<T>(arrayLike: ArrayLike<T>, mapfn: (v: T, k: number) => number, thisArg?: any): Uint32Array;
 
 }
-declare const Uint32Array: Uint32ArrayConstructor;
+declare var Uint32Array: Uint32ArrayConstructor;
 
 /**
   * A typed array of 32-bit float values. The contents are initialized to 0. If the requested number
@@ -3738,14 +3865,20 @@ interface Float32ArrayConstructor {
     /**
       * Creates an array from an array-like or iterable object.
       * @param arrayLike An array-like or iterable object to convert to an array.
+      */
+    from(arrayLike: ArrayLike<number>): Float32Array;
+
+    /**
+      * Creates an array from an array-like or iterable object.
+      * @param arrayLike An array-like or iterable object to convert to an array.
       * @param mapfn A mapping function to call on every element of the array.
       * @param thisArg Value of 'this' used to invoke the mapfn.
       */
-    from(arrayLike: ArrayLike<number>, mapfn?: (v: number, k: number) => number, thisArg?: any): Float32Array;
+    from<T>(arrayLike: ArrayLike<T>, mapfn: (v: T, k: number) => number, thisArg?: any): Float32Array;
 
 
 }
-declare const Float32Array: Float32ArrayConstructor;
+declare var Float32Array: Float32ArrayConstructor;
 
 /**
   * A typed array of 64-bit float values. The contents are initialized to 0. If the requested
@@ -4008,13 +4141,19 @@ interface Float64ArrayConstructor {
     /**
       * Creates an array from an array-like or iterable object.
       * @param arrayLike An array-like or iterable object to convert to an array.
+      */
+    from(arrayLike: ArrayLike<number>): Float64Array;
+
+    /**
+      * Creates an array from an array-like or iterable object.
+      * @param arrayLike An array-like or iterable object to convert to an array.
       * @param mapfn A mapping function to call on every element of the array.
       * @param thisArg Value of 'this' used to invoke the mapfn.
       */
-    from(arrayLike: ArrayLike<number>, mapfn?: (v: number, k: number) => number, thisArg?: any): Float64Array;
+    from<T>(arrayLike: ArrayLike<T>, mapfn: (v: T, k: number) => number, thisArg?: any): Float64Array;
 
 }
-declare const Float64Array: Float64ArrayConstructor;
+declare var Float64Array: Float64ArrayConstructor;
 
 /////////////////////////////
 /// ECMAScript Internationalization API

@@ -1,9 +1,6 @@
-tests/cases/compiler/interfaceExtendsClassWithPrivate1.ts(21,1): error TS2322: Type 'C' is not assignable to type 'I'.
-  Property 'other' is missing in type 'C'.
-tests/cases/compiler/interfaceExtendsClassWithPrivate1.ts(24,1): error TS2322: Type 'I' is not assignable to type 'D'.
-  Property 'bar' is missing in type 'I'.
-tests/cases/compiler/interfaceExtendsClassWithPrivate1.ts(27,1): error TS2322: Type 'C' is not assignable to type 'D'.
-  Property 'other' is missing in type 'C'.
+tests/cases/compiler/interfaceExtendsClassWithPrivate1.ts(21,1): error TS2741: Property 'other' is missing in type 'C' but required in type 'I'.
+tests/cases/compiler/interfaceExtendsClassWithPrivate1.ts(24,1): error TS2741: Property 'bar' is missing in type 'I' but required in type 'D'.
+tests/cases/compiler/interfaceExtendsClassWithPrivate1.ts(27,1): error TS2739: Type 'C' is missing the following properties from type 'D': other, bar
 
 
 ==== tests/cases/compiler/interfaceExtendsClassWithPrivate1.ts (3 errors) ====
@@ -29,17 +26,16 @@ tests/cases/compiler/interfaceExtendsClassWithPrivate1.ts(27,1): error TS2322: T
     c = i;
     i = c; // error
     ~
-!!! error TS2322: Type 'C' is not assignable to type 'I'.
-!!! error TS2322:   Property 'other' is missing in type 'C'.
+!!! error TS2741: Property 'other' is missing in type 'C' but required in type 'I'.
+!!! related TS2728 tests/cases/compiler/interfaceExtendsClassWithPrivate1.ts:7:5: 'other' is declared here.
     
     i = d;
     d = i; // error
     ~
-!!! error TS2322: Type 'I' is not assignable to type 'D'.
-!!! error TS2322:   Property 'bar' is missing in type 'I'.
+!!! error TS2741: Property 'bar' is missing in type 'I' but required in type 'D'.
+!!! related TS2728 tests/cases/compiler/interfaceExtendsClassWithPrivate1.ts:13:5: 'bar' is declared here.
     
     c = d;
     d = c; // error
     ~
-!!! error TS2322: Type 'C' is not assignable to type 'D'.
-!!! error TS2322:   Property 'other' is missing in type 'C'.
+!!! error TS2739: Type 'C' is missing the following properties from type 'D': other, bar

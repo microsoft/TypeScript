@@ -1,15 +1,20 @@
 /// <reference path='fourslash.ts' />
 
+// @jsx: preserve
+
 //@Filename: file.tsx
 ////declare module JSX {
 ////    interface Element {}
-////    interface IntrinsicElements {}
+////    interface IntrinsicElements {
+////        div: {};
+////    }
 ////}
-////class [|MyClass|] {}
+////[|class [|{| "contextRangeIndex": 0 |}MyClass|] {}|]
 ////
-////<[|MyClass|]></[|MyClass|]>;
-////<[|MyClass|]/>;
+////[|<[|{| "contextRangeIndex": 2 |}MyClass|]></[|{| "contextRangeIndex": 2 |}MyClass|]>|];
+////[|<[|{| "contextRangeIndex": 5 |}MyClass|]/>|];
+////
+////[|<[|{| "contextRangeIndex": 7 |}div|]> </[|{| "contextRangeIndex": 7 |}div|]>|]
 
-const [r0, r1, r2, r3] = test.ranges();
-verify.renameLocations([r0, r3], [r0, r1, r2, r3]);
-verify.renameLocations([r1, r2], [r1, r2]);
+verify.noErrors();
+verify.rangesWithSameTextAreRenameLocations("MyClass", "div");

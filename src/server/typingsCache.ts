@@ -8,8 +8,6 @@ namespace ts.server {
     export interface ITypingsInstaller {
         isKnownTypesPackageName(name: string): boolean;
         installPackage(options: InstallPackageOptionsWithProject): Promise<ApplyCodeActionCommandResult>;
-        /* @internal */
-        inspectValue(options: InspectValueOptions): Promise<ValueInfo>;
         enqueueInstallTypingsRequest(p: Project, typeAcquisition: TypeAcquisition, unresolvedImports: SortedReadonlyArray<string> | undefined): void;
         attach(projectService: ProjectService): void;
         onProjectClosed(p: Project): void;
@@ -20,7 +18,6 @@ namespace ts.server {
         isKnownTypesPackageName: returnFalse,
         // Should never be called because we never provide a types registry.
         installPackage: notImplemented,
-        inspectValue: notImplemented,
         enqueueInstallTypingsRequest: noop,
         attach: noop,
         onProjectClosed: noop,
@@ -98,10 +95,6 @@ namespace ts.server {
             return this.installer.installPackage(options);
         }
 
-        inspectValue(options: InspectValueOptions): Promise<ValueInfo> {
-            return this.installer.inspectValue(options);
-        }
-
         enqueueInstallTypingsForProject(project: Project, unresolvedImports: SortedReadonlyArray<string> | undefined, forceRefresh: boolean) {
             const typeAcquisition = project.getTypeAcquisition();
 
@@ -130,7 +123,7 @@ namespace ts.server {
         }
 
         updateTypingsForProject(projectName: string, compilerOptions: CompilerOptions, typeAcquisition: TypeAcquisition, unresolvedImports: SortedReadonlyArray<string>, newTypings: string[]) {
-            const typings = toSortedArray(newTypings);
+            const typings = sort(newTypings);
             this.perProjectCache.set(projectName, {
                 compilerOptions,
                 typeAcquisition,

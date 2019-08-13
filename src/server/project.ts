@@ -10,26 +10,43 @@ namespace ts.server {
     export type Mutable<T> = { -readonly [K in keyof T]: T[K]; };
 
     /* @internal */
-    export function countEachFileTypes(infos: ScriptInfo[]): FileStats {
-        const result: Mutable<FileStats> = { js: 0, jsx: 0, ts: 0, tsx: 0, dts: 0, deferred: 0 };
+    export function countEachFileTypes(infos: ScriptInfo[], includeSizes = false): FileStats {
+        const result: Mutable<FileStats> = {
+            js: 0, jsSize: 0,
+            jsx: 0, jsxSize: 0,
+            ts: 0, tsSize: 0,
+            tsx: 0, tsxSize: 0,
+            dts: 0, dtsSize: 0,
+            deferred: 0, deferredSize: 0,
+        };
         for (const info of infos) {
+            const fileSize = includeSizes ? info.getTelemetryFileSize() : 0;
             switch (info.scriptKind) {
                 case ScriptKind.JS:
                     result.js += 1;
+                    result.jsSize! += fileSize;
                     break;
                 case ScriptKind.JSX:
                     result.jsx += 1;
+                    result.jsxSize! += fileSize;
                     break;
                 case ScriptKind.TS:
-                    fileExtensionIs(info.fileName, Extension.Dts)
-                        ? result.dts += 1
-                        : result.ts += 1;
+                    if (fileExtensionIs(info.fileName, Extension.Dts)) {
+                        result.dts += 1;
+                        result.dtsSize! += fileSize;
+                    }
+                    else {
+                        result.ts += 1;
+                        result.tsSize! += fileSize;
+                    }
                     break;
                 case ScriptKind.TSX:
                     result.tsx += 1;
+                    result.tsxSize! += fileSize;
                     break;
                 case ScriptKind.Deferred:
                     result.deferred += 1;
+                    result.deferredSize! += fileSize;
                     break;
             }
         }
@@ -72,6 +89,12 @@ namespace ts.server {
     export interface PluginModule {
         create(createInfo: PluginCreateInfo): LanguageService;
         getExternalFiles?(proj: Project): string[];
+        onConfigurationChanged?(config: any): void;
+    }
+
+    export interface PluginModuleWithName {
+        name: string;
+        module: PluginModule;
     }
 
     export type PluginModuleFactory = (mod: { typescript: typeof ts }) => PluginModule;
@@ -86,13 +109,23 @@ namespace ts.server {
         return value instanceof ScriptInfo;
     }
 
+    interface GeneratedFileWatcher {
+        generatedFilePath: Path;
+        watcher: FileWatcher;
+    }
+    type GeneratedFileWatcherMap = GeneratedFileWatcher | Map<GeneratedFileWatcher>;
+    function isGeneratedFileWatcher(watch: GeneratedFileWatcherMap): watch is GeneratedFileWatcher {
+        return (watch as GeneratedFileWatcher).generatedFilePath !== undefined;
+    }
+
     export abstract class Project implements LanguageServiceHost, ModuleResolutionHost {
         private rootFiles: ScriptInfo[] = [];
         private rootFilesMap: Map<ProjectRoot> = createMap<ProjectRoot>();
-        private program: Program;
-        private externalFiles: SortedReadonlyArray<string>;
-        private missingFilesMap: Map<FileWatcher>;
-        private plugins: PluginModule[] = [];
+        private program: Program | undefined;
+        private externalFiles: SortedReadonlyArray<string> | undefined;
+        private missingFilesMap: Map<FileWatcher> | undefined;
+        private generatedFilesMap: GeneratedFileWatcherMap | undefined;
+        private plugins: PluginModuleWithName[] = [];
 
         /*@internal*/
         /**
@@ -118,7 +151,7 @@ namespace ts.server {
         readonly realpath?: (path: string) => string;
 
         /*@internal*/
-        hasInvalidatedResolution: HasInvalidatedResolution;
+        hasInvalidatedResolution: HasInvalidatedResolution | undefined;
 
         /*@internal*/
         resolutionCache: ResolutionCache;
@@ -131,7 +164,7 @@ namespace ts.server {
         /**
          * Set of files that was returned from the last call to getChangesSinceVersion.
          */
-        private lastReportedFileNames: Map<true>;
+        private lastReportedFileNames: Map<true> | undefined;
         /**
          * Last version that was reported.
          */
@@ -175,13 +208,13 @@ namespace ts.server {
             return hasOneOrMoreJsAndNoTsFiles(this);
         }
 
-        public static resolveModule(moduleName: string, initialDir: string, host: ServerHost, log: (message: string) => void): {} | undefined {
+        public static resolveModule(moduleName: string, initialDir: string, host: ServerHost, log: (message: string) => void, logErrors?: (message: string) => void): {} | undefined {
             const resolvedPath = normalizeSlashes(host.resolvePath(combinePaths(initialDir, "node_modules")));
             log(`Loading ${moduleName} from ${initialDir} (resolved to ${resolvedPath})`);
             const result = host.require!(resolvedPath, moduleName); // TODO: GH#18217
             if (result.error) {
                 const err = result.error.stack || result.error.message || JSON.stringify(result.error);
-                log(`Failed to load module '${moduleName}': ${err}`);
+                (logErrors || log)(`Failed to load module '${moduleName}' from ${resolvedPath}: ${err}`);
                 return undefined;
             }
             return result.module;
@@ -198,7 +231,7 @@ namespace ts.server {
 
         /*@internal*/
         constructor(
-            /*@internal*/readonly projectName: string,
+            /*@internal*/ readonly projectName: string,
             readonly projectKind: ProjectKind,
             readonly projectService: ProjectService,
             private documentRegistry: DocumentRegistry,
@@ -254,10 +287,6 @@ namespace ts.server {
         installPackage(options: InstallPackageOptions): Promise<ApplyCodeActionCommandResult> {
             return this.typingsCache.installPackage({ ...options, projectName: this.projectName, projectRootPath: this.toPath(this.currentDirectory) });
         }
-        /* @internal */
-        inspectValue(options: InspectValueOptions): Promise<ValueInfo> {
-            return this.typingsCache.inspectValue(options);
-        }
 
         private get typingsCache(): TypingsCache {
             return this.projectService.typingsCache;
@@ -281,8 +310,8 @@ namespace ts.server {
             return this.projectStateVersion.toString();
         }
 
-        getProjectReferences(): ReadonlyArray<ProjectReference> {
-            return emptyArray;
+        getProjectReferences(): ReadonlyArray<ProjectReference> | undefined {
+            return undefined;
         }
 
         getScriptFileNames() {
@@ -368,16 +397,16 @@ namespace ts.server {
             return !this.isWatchedMissingFile(path) && this.directoryStructureHost.fileExists(file);
         }
 
-        resolveModuleNames(moduleNames: string[], containingFile: string, reusedNames?: string[]): ResolvedModuleFull[] {
-            return this.resolutionCache.resolveModuleNames(moduleNames, containingFile, reusedNames);
+        resolveModuleNames(moduleNames: string[], containingFile: string, reusedNames?: string[], redirectedReference?: ResolvedProjectReference): (ResolvedModuleFull | undefined)[] {
+            return this.resolutionCache.resolveModuleNames(moduleNames, containingFile, reusedNames, redirectedReference);
         }
 
         getResolvedModuleWithFailedLookupLocationsFromCache(moduleName: string, containingFile: string): ResolvedModuleWithFailedLookupLocations | undefined {
             return this.resolutionCache.getResolvedModuleWithFailedLookupLocationsFromCache(moduleName, containingFile);
         }
 
-        resolveTypeReferenceDirectives(typeDirectiveNames: string[], containingFile: string): ResolvedTypeReferenceDirective[] {
-            return this.resolutionCache.resolveTypeReferenceDirectives(typeDirectiveNames, containingFile);
+        resolveTypeReferenceDirectives(typeDirectiveNames: string[], containingFile: string, redirectedReference?: ResolvedProjectReference): (ResolvedTypeReferenceDirective | undefined)[] {
+            return this.resolutionCache.resolveTypeReferenceDirectives(typeDirectiveNames, containingFile, redirectedReference);
         }
 
         directoryExists(path: string): boolean {
@@ -405,7 +434,7 @@ namespace ts.server {
                 directory,
                 cb,
                 flags,
-                WatchType.FailedLookupLocation,
+                WatchType.FailedLookupLocations,
                 this
             );
         }
@@ -436,6 +465,14 @@ namespace ts.server {
         /*@internal*/
         getGlobalCache() {
             return this.getTypeAcquisition().enable ? this.projectService.typingsInstaller.globalTypingsCacheLocation : undefined;
+        }
+
+        /*@internal*/
+        globalCacheResolutionModuleName = JsTyping.nonRelativeModuleNameForTypingCache;
+
+        /*@internal*/
+        fileIsOpen(filePath: Path) {
+            return this.projectService.openFiles.has(filePath);
         }
 
         /*@internal*/
@@ -480,6 +517,16 @@ namespace ts.server {
             return this.getLanguageService().getSourceMapper();
         }
 
+        /*@internal*/
+        getDocumentPositionMapper(generatedFileName: string, sourceFileName?: string): DocumentPositionMapper | undefined {
+            return this.projectService.getDocumentPositionMapper(this, generatedFileName, sourceFileName);
+        }
+
+        /*@internal*/
+        getSourceFileLike(fileName: string) {
+            return this.projectService.getSourceFileLike(fileName, this);
+        }
+
         private shouldEmitFile(scriptInfo: ScriptInfo) {
             return scriptInfo && !scriptInfo.isDynamicOrHasMixedContent();
         }
@@ -489,8 +536,8 @@ namespace ts.server {
                 return [];
             }
             updateProjectIfDirty(this);
-            this.builderState = BuilderState.create(this.program, this.projectService.toCanonicalFileName, this.builderState);
-            return mapDefined(BuilderState.getFilesAffectedBy(this.builderState, this.program, scriptInfo.path, this.cancellationToken, data => this.projectService.host.createHash!(data)), // TODO: GH#18217
+            this.builderState = BuilderState.create(this.program!, this.projectService.toCanonicalFileName, this.builderState);
+            return mapDefined(BuilderState.getFilesAffectedBy(this.builderState, this.program!, scriptInfo.path, this.cancellationToken, data => this.projectService.host.createHash!(data)), // TODO: GH#18217
                 sourceFile => this.shouldEmitFile(this.projectService.getScriptInfoForPath(sourceFile.path)!) ? sourceFile.fileName : undefined);
         }
 
@@ -531,6 +578,7 @@ namespace ts.server {
             this.lastFileExceededProgramSize = lastFileExceededProgramSize;
             this.builderState = undefined;
             this.resolutionCache.closeTypeRootsWatch();
+            this.clearGeneratedFileWatch();
             this.projectService.onUpdateLanguageServiceStateForProject(this, /*languageServiceEnabled*/ false);
         }
 
@@ -548,10 +596,10 @@ namespace ts.server {
         }
 
         getExternalFiles(): SortedReadonlyArray<string> {
-            return toSortedArray(flatMap(this.plugins, plugin => {
-                if (typeof plugin.getExternalFiles !== "function") return;
+            return sort(flatMap(this.plugins, plugin => {
+                if (typeof plugin.module.getExternalFiles !== "function") return;
                 try {
-                    return plugin.getExternalFiles(this);
+                    return plugin.module.getExternalFiles(this);
                 }
                 catch (e) {
                     this.projectService.logger.info(`A plugin threw an exception in getExternalFiles: ${e}`);
@@ -571,7 +619,7 @@ namespace ts.server {
 
         /* @internal */
         getSourceFileOrConfigFile(path: Path): SourceFile | undefined {
-            const options = this.program.getCompilerOptions();
+            const options = this.program!.getCompilerOptions();
             return path === options.configFilePath ? options.configFile : this.getSourceFile(path);
         }
 
@@ -583,14 +631,11 @@ namespace ts.server {
                 for (const f of this.program.getSourceFiles()) {
                     this.detachScriptInfoIfNotRoot(f.fileName);
                 }
-                const projectReferences = this.program.getResolvedProjectReferences();
-                if (projectReferences) {
-                    for (const ref of projectReferences) {
-                        if (ref) {
-                            this.detachScriptInfoFromProject(ref.sourceFile.fileName);
-                        }
+                this.program.forEachResolvedProjectReference(ref => {
+                    if (ref) {
+                        this.detachScriptInfoFromProject(ref.sourceFile.fileName);
                     }
-                }
+                });
             }
             // Release external files
             forEach(this.externalFiles, externalFile => this.detachScriptInfoIfNotRoot(externalFile));
@@ -615,6 +660,7 @@ namespace ts.server {
                 clearMap(this.missingFilesMap, closeFileWatcher);
                 this.missingFilesMap = undefined!;
             }
+            this.clearGeneratedFileWatch();
 
             // signal language service to release source files acquired from document registry
             this.languageService.dispose();
@@ -661,7 +707,7 @@ namespace ts.server {
                 // if language service is not enabled - return just root files
                 return this.rootFiles;
             }
-            return map(this.program.getSourceFiles(), sourceFile => {
+            return map(this.program!.getSourceFiles(), sourceFile => {
                 const scriptInfo = this.projectService.getScriptInfoForPath(sourceFile.resolvedPath);
                 Debug.assert(!!scriptInfo, "getScriptInfo", () => `scriptInfo for a file '${sourceFile.fileName}' Path: '${sourceFile.path}' / '${sourceFile.resolvedPath}' is missing.`);
                 return scriptInfo!;
@@ -729,7 +775,10 @@ namespace ts.server {
         }
 
         containsScriptInfo(info: ScriptInfo): boolean {
-            return this.isRoot(info) || (this.program && this.program.getSourceFileByPath(info.path) !== undefined);
+            if (this.isRoot(info)) return true;
+            if (!this.program) return false;
+            const file = this.program.getSourceFileByPath(info.path);
+            return !!file && file.resolvedPath === info.path;
         }
 
         containsFile(filename: NormalizedPath, requireOpen?: boolean): boolean {
@@ -793,41 +842,6 @@ namespace ts.server {
         }
 
         /* @internal */
-        private extractUnresolvedImportsFromSourceFile(file: SourceFile, ambientModules: string[]): ReadonlyArray<string> {
-            const cached = this.cachedUnresolvedImportsPerFile.get(file.path);
-            if (cached) {
-                // found cached result, return
-                return cached;
-            }
-            let unresolvedImports: string[] | undefined;
-            if (file.resolvedModules) {
-                file.resolvedModules.forEach((resolvedModule, name) => {
-                    // pick unresolved non-relative names
-                    if (!resolvedModule && !isExternalModuleNameRelative(name) && !isAmbientlyDeclaredModule(name)) {
-                        // for non-scoped names extract part up-to the first slash
-                        // for scoped names - extract up to the second slash
-                        let trimmed = name.trim();
-                        let i = trimmed.indexOf("/");
-                        if (i !== -1 && trimmed.charCodeAt(0) === CharacterCodes.at) {
-                            i = trimmed.indexOf("/", i + 1);
-                        }
-                        if (i !== -1) {
-                            trimmed = trimmed.substr(0, i);
-                        }
-                        (unresolvedImports || (unresolvedImports = [])).push(trimmed);
-                    }
-                });
-            }
-
-            this.cachedUnresolvedImportsPerFile.set(file.path, unresolvedImports || emptyArray);
-            return unresolvedImports || emptyArray;
-
-            function isAmbientlyDeclaredModule(name: string) {
-                return ambientModules.some(m => m === name);
-            }
-        }
-
-        /* @internal */
         onFileAddedOrRemoved() {
             this.hasAddedorRemovedFiles = true;
         }
@@ -837,6 +851,7 @@ namespace ts.server {
          * @returns: true if set of files in the project stays the same and false - otherwise.
          */
         updateGraph(): boolean {
+            perfLogger.logStartUpdateGraph();
             this.resolutionCache.startRecordingFilesWithChangedResolutions();
 
             const hasNewProgram = this.updateGraphWorker();
@@ -860,15 +875,7 @@ namespace ts.server {
                 // (can reuse cached imports for files that were not changed)
                 // 4. compilation settings were changed in the way that might affect module resolution - drop all caches and collect all data from the scratch
                 if (hasNewProgram || changedFiles.length) {
-                    let result: string[] | undefined;
-                    const ambientModules = this.program.getTypeChecker().getAmbientModules().map(mod => stripQuotes(mod.getName()));
-                    for (const sourceFile of this.program.getSourceFiles()) {
-                        const unResolved = this.extractUnresolvedImportsFromSourceFile(sourceFile, ambientModules);
-                        if (unResolved !== emptyArray) {
-                            (result || (result = [])).push(...unResolved);
-                        }
-                    }
-                    this.lastCachedUnresolvedImportsList = result ? toDeduplicatedSortedArray(result) : emptyArray;
+                    this.lastCachedUnresolvedImportsList = getUnresolvedImports(this.program!, this.cachedUnresolvedImportsPerFile);
                 }
 
                 this.projectService.typingsCache.enqueueInstallTypingsForProject(this, this.lastCachedUnresolvedImportsList, hasAddedorRemovedFiles);
@@ -880,12 +887,13 @@ namespace ts.server {
             if (hasNewProgram) {
                 this.projectProgramVersion++;
             }
+            perfLogger.logStopUpdateGraph();
             return !hasNewProgram;
         }
 
         /*@internal*/
         updateTypingFiles(typingFiles: SortedReadonlyArray<string>) {
-            enumerateInsertsAndDeletes(typingFiles, this.typingFiles, getStringComparer(!this.useCaseSensitiveFileNames()),
+            enumerateInsertsAndDeletes<string, string>(typingFiles, this.typingFiles, getStringComparer(!this.useCaseSensitiveFileNames()),
                 /*inserted*/ noop,
                 removed => this.detachScriptInfoFromProject(removed)
             );
@@ -895,7 +903,7 @@ namespace ts.server {
         }
 
         /* @internal */
-        getCurrentProgram() {
+        getCurrentProgram(): Program | undefined {
             return this.program;
         }
 
@@ -925,12 +933,19 @@ namespace ts.server {
             if (hasNewProgram) {
                 if (oldProgram) {
                     for (const f of oldProgram.getSourceFiles()) {
-                        if (this.program.getSourceFileByPath(f.path)) {
-                            continue;
+                        const newFile = this.program.getSourceFileByPath(f.resolvedPath);
+                        if (!newFile || (f.resolvedPath === f.path && newFile.resolvedPath !== f.path)) {
+                            // new program does not contain this file - detach it from the project
+                            // - remove resolutions only if the new program doesnt contain source file by the path (not resolvedPath since path is used for resolution)
+                            this.detachScriptInfoFromProject(f.fileName, !!this.program.getSourceFileByPath(f.path));
                         }
-                        // new program does not contain this file - detach it from the project
-                        this.detachScriptInfoFromProject(f.fileName);
                     }
+
+                    oldProgram.forEachResolvedProjectReference((resolvedProjectReference, resolvedProjectReferencePath) => {
+                        if (resolvedProjectReference && !this.program!.getResolvedProjectReferenceByPath(resolvedProjectReferencePath)) {
+                            this.detachScriptInfoFromProject(resolvedProjectReference.sourceFile.fileName);
+                        }
+                    });
                 }
 
                 // Update the missing file paths watcher
@@ -941,6 +956,39 @@ namespace ts.server {
                     missingFilePath => this.addMissingFileWatcher(missingFilePath)
                 );
 
+                if (this.generatedFilesMap) {
+                    const outPath = this.compilerOptions.outFile && this.compilerOptions.out;
+                    if (isGeneratedFileWatcher(this.generatedFilesMap)) {
+                        // --out
+                        if (!outPath || !this.isValidGeneratedFileWatcher(
+                            removeFileExtension(outPath) + Extension.Dts,
+                            this.generatedFilesMap,
+                        )) {
+                            this.clearGeneratedFileWatch();
+                        }
+                    }
+                    else {
+                        // MultiFile
+                        if (outPath) {
+                            this.clearGeneratedFileWatch();
+                        }
+                        else {
+                            this.generatedFilesMap.forEach((watcher, source) => {
+                                const sourceFile = this.program!.getSourceFileByPath(source as Path);
+                                if (!sourceFile ||
+                                    sourceFile.resolvedPath !== source ||
+                                    !this.isValidGeneratedFileWatcher(
+                                        getDeclarationEmitOutputFilePathWorker(sourceFile.fileName, this.compilerOptions, this.currentDirectory, this.program!.getCommonSourceDirectory(), this.getCanonicalFileName),
+                                        watcher
+                                    )) {
+                                    closeFileWatcherOf(watcher);
+                                    (this.generatedFilesMap as Map<GeneratedFileWatcher>).delete(source);
+                                }
+                            });
+                        }
+                    }
+                }
+
                 // Watch the type locations that would be added to program as part of automatic type resolutions
                 if (this.languageServiceEnabled) {
                     this.resolutionCache.updateTypeRootsWatch();
@@ -949,9 +997,9 @@ namespace ts.server {
 
             const oldExternalFiles = this.externalFiles || emptyArray as SortedReadonlyArray<string>;
             this.externalFiles = this.getExternalFiles();
-            enumerateInsertsAndDeletes(this.externalFiles, oldExternalFiles, getStringComparer(!this.useCaseSensitiveFileNames()),
+            enumerateInsertsAndDeletes<string, string>(this.externalFiles, oldExternalFiles, getStringComparer(!this.useCaseSensitiveFileNames()),
                 // Ensure a ScriptInfo is created for new external files. This is performed indirectly
-                // by the LSHost for files in the program when the program is retrieved above but
+                // by the host for files in the program when the program is retrieved above but
                 // the program doesn't contain external files so this must be done explicitly.
                 inserted => {
                     const scriptInfo = this.projectService.getOrCreateScriptInfoNotOpenedByClient(inserted, this.currentDirectory, this.directoryStructureHost)!;
@@ -961,14 +1009,22 @@ namespace ts.server {
             );
             const elapsed = timestamp() - start;
             this.writeLog(`Finishing updateGraphWorker: Project: ${this.getProjectName()} Version: ${this.getProjectVersion()} structureChanged: ${hasNewProgram} Elapsed: ${elapsed}ms`);
+            if (this.hasAddedorRemovedFiles) {
+                this.print();
+            }
+            else if (this.program !== oldProgram) {
+                this.writeLog(`Different program with same set of files:: oldProgram.structureIsReused:: ${oldProgram && oldProgram.structureIsReused}`);
+            }
             return hasNewProgram;
         }
 
-        private detachScriptInfoFromProject(uncheckedFileName: string) {
+        private detachScriptInfoFromProject(uncheckedFileName: string, noRemoveResolution?: boolean) {
             const scriptInfoToDetach = this.projectService.getScriptInfo(uncheckedFileName);
             if (scriptInfoToDetach) {
                 scriptInfoToDetach.detachFromProject(this);
-                this.resolutionCache.removeResolutionsOfFile(scriptInfoToDetach.path);
+                if (!noRemoveResolution) {
+                    this.resolutionCache.removeResolutionsOfFile(scriptInfoToDetach.path);
+                }
             }
         }
 
@@ -981,8 +1037,8 @@ namespace ts.server {
                         this.getCachedDirectoryStructureHost().addOrDeleteFile(fileName, missingFilePath, eventKind);
                     }
 
-                    if (eventKind === FileWatcherEventKind.Created && this.missingFilesMap.has(missingFilePath)) {
-                        this.missingFilesMap.delete(missingFilePath);
+                    if (eventKind === FileWatcherEventKind.Created && this.missingFilesMap!.has(missingFilePath)) {
+                        this.missingFilesMap!.delete(missingFilePath);
                         fileWatcher.close();
 
                         // When a missing file is created, we should update the graph.
@@ -990,14 +1046,69 @@ namespace ts.server {
                     }
                 },
                 PollingInterval.Medium,
-                WatchType.MissingFilePath,
+                WatchType.MissingFile,
                 this
             );
             return fileWatcher;
         }
 
         private isWatchedMissingFile(path: Path) {
-            return this.missingFilesMap && this.missingFilesMap.has(path);
+            return !!this.missingFilesMap && this.missingFilesMap.has(path);
+        }
+
+        /* @internal */
+        addGeneratedFileWatch(generatedFile: string, sourceFile: string) {
+            if (this.compilerOptions.outFile || this.compilerOptions.out) {
+                // Single watcher
+                if (!this.generatedFilesMap) {
+                    this.generatedFilesMap = this.createGeneratedFileWatcher(generatedFile);
+                }
+            }
+            else {
+                // Map
+                const path = this.toPath(sourceFile);
+                if (this.generatedFilesMap) {
+                    if (isGeneratedFileWatcher(this.generatedFilesMap)) {
+                        Debug.fail(`${this.projectName} Expected to not have --out watcher for generated file with options: ${JSON.stringify(this.compilerOptions)}`);
+                        return;
+                    }
+                    if (this.generatedFilesMap.has(path)) return;
+                }
+                else {
+                    this.generatedFilesMap = createMap();
+                }
+                this.generatedFilesMap.set(path, this.createGeneratedFileWatcher(generatedFile));
+            }
+        }
+
+        private createGeneratedFileWatcher(generatedFile: string): GeneratedFileWatcher {
+            return {
+                generatedFilePath: this.toPath(generatedFile),
+                watcher: this.projectService.watchFactory.watchFile(
+                    this.projectService.host,
+                    generatedFile,
+                    () => this.projectService.delayUpdateProjectGraphAndEnsureProjectStructureForOpenFiles(this),
+                    PollingInterval.High,
+                    WatchType.MissingGeneratedFile,
+                    this
+                )
+            };
+        }
+
+        private isValidGeneratedFileWatcher(generateFile: string, watcher: GeneratedFileWatcher) {
+            return this.toPath(generateFile) === watcher.generatedFilePath;
+        }
+
+        private clearGeneratedFileWatch() {
+            if (this.generatedFilesMap) {
+                if (isGeneratedFileWatcher(this.generatedFilesMap)) {
+                    closeFileWatcherOf(this.generatedFilesMap);
+                }
+                else {
+                    clearMap(this.generatedFilesMap, closeFileWatcherOf);
+                }
+                this.generatedFilesMap = undefined;
+            }
         }
 
         getScriptInfoForNormalizedPath(fileName: NormalizedPath): ScriptInfo | undefined {
@@ -1024,6 +1135,13 @@ namespace ts.server {
                 }
             }
             return strBuilder;
+        }
+
+        /*@internal*/
+        print(counter?: number) {
+            this.writeLog(`Project '${this.projectName}' (${ProjectKind[this.projectKind]}) ${counter === undefined ? "" : counter}`);
+            this.writeLog(this.filesToString(this.projectService.logger.hasLevel(LogLevel.verbose)));
+            this.writeLog("-----------------------------------------------");
         }
 
         setCompilerOptions(compilerOptions: CompilerOptions) {
@@ -1105,7 +1223,7 @@ namespace ts.server {
             this.rootFilesMap.delete(info.path);
         }
 
-        protected enableGlobalPlugins(options: CompilerOptions) {
+        protected enableGlobalPlugins(options: CompilerOptions, pluginConfigOverrides: Map<any> | undefined) {
             const host = this.projectService.host;
 
             if (!host.require) {
@@ -1128,37 +1246,41 @@ namespace ts.server {
 
                     // Provide global: true so plugins can detect why they can't find their config
                     this.projectService.logger.info(`Loading global plugin ${globalPluginName}`);
-                    this.enablePlugin({ name: globalPluginName, global: true } as PluginImport, searchPaths);
+
+                    this.enablePlugin({ name: globalPluginName, global: true } as PluginImport, searchPaths, pluginConfigOverrides);
                 }
             }
         }
 
-        protected enablePlugin(pluginConfigEntry: PluginImport, searchPaths: string[]) {
+        protected enablePlugin(pluginConfigEntry: PluginImport, searchPaths: string[], pluginConfigOverrides: Map<any> | undefined) {
             this.projectService.logger.info(`Enabling plugin ${pluginConfigEntry.name} from candidate paths: ${searchPaths.join(",")}`);
 
-            const log = (message: string) => {
-                this.projectService.logger.info(message);
-            };
-
+            const log = (message: string) => this.projectService.logger.info(message);
+            let errorLogs: string[] | undefined;
+            const logError = (message: string) => { (errorLogs || (errorLogs = [])).push(message); };
             const resolvedModule = firstDefined(searchPaths, searchPath =>
-                <PluginModuleFactory | undefined>Project.resolveModule(pluginConfigEntry.name, searchPath, this.projectService.host, log));
+                <PluginModuleFactory | undefined>Project.resolveModule(pluginConfigEntry.name, searchPath, this.projectService.host, log, logError));
             if (resolvedModule) {
+                const configurationOverride = pluginConfigOverrides && pluginConfigOverrides.get(pluginConfigEntry.name);
+                if (configurationOverride) {
+                    // Preserve the name property since it's immutable
+                    const pluginName = pluginConfigEntry.name;
+                    pluginConfigEntry = configurationOverride;
+                    pluginConfigEntry.name = pluginName;
+                }
+
                 this.enableProxy(resolvedModule, pluginConfigEntry);
             }
             else {
+                forEach(errorLogs, log);
                 this.projectService.logger.info(`Couldn't find ${pluginConfigEntry.name}`);
             }
-        }
-
-        /** Starts a new check for diagnostics. Call this if some file has updated that would cause diagnostics to be changed. */
-        refreshDiagnostics() {
-            this.projectService.sendProjectsUpdatedInBackgroundEvent();
         }
 
         private enableProxy(pluginModuleFactory: PluginModuleFactory, configEntry: PluginImport) {
             try {
                 if (typeof pluginModuleFactory !== "function") {
-                    this.projectService.logger.info(`Skipped loading plugin ${configEntry.name} because it did expose a proper factory function`);
+                    this.projectService.logger.info(`Skipped loading plugin ${configEntry.name} because it did not expose a proper factory function`);
                     return;
                 }
 
@@ -1180,12 +1302,47 @@ namespace ts.server {
                 }
                 this.projectService.logger.info(`Plugin validation succeded`);
                 this.languageService = newLS;
-                this.plugins.push(pluginModule);
+                this.plugins.push({ name: configEntry.name, module: pluginModule });
             }
             catch (e) {
                 this.projectService.logger.info(`Plugin activation failed: ${e}`);
             }
         }
+
+        /*@internal*/
+        onPluginConfigurationChanged(pluginName: string, configuration: any) {
+            this.plugins.filter(plugin => plugin.name === pluginName).forEach(plugin => {
+                if (plugin.module.onConfigurationChanged) {
+                    plugin.module.onConfigurationChanged(configuration);
+                }
+            });
+        }
+
+        /** Starts a new check for diagnostics. Call this if some file has updated that would cause diagnostics to be changed. */
+        refreshDiagnostics() {
+            this.projectService.sendProjectsUpdatedInBackgroundEvent();
+        }
+    }
+
+    function getUnresolvedImports(program: Program, cachedUnresolvedImportsPerFile: Map<ReadonlyArray<string>>): SortedReadonlyArray<string> {
+        const ambientModules = program.getTypeChecker().getAmbientModules().map(mod => stripQuotes(mod.getName()));
+        return sortAndDeduplicate(flatMap(program.getSourceFiles(), sourceFile =>
+            extractUnresolvedImportsFromSourceFile(sourceFile, ambientModules, cachedUnresolvedImportsPerFile)));
+    }
+    function extractUnresolvedImportsFromSourceFile(file: SourceFile, ambientModules: ReadonlyArray<string>, cachedUnresolvedImportsPerFile: Map<ReadonlyArray<string>>): ReadonlyArray<string> {
+        return getOrUpdate(cachedUnresolvedImportsPerFile, file.path, () => {
+            if (!file.resolvedModules) return emptyArray;
+            let unresolvedImports: string[] | undefined;
+            file.resolvedModules.forEach((resolvedModule, name) => {
+                // pick unresolved non-relative names
+                if ((!resolvedModule || !resolutionExtensionIsTSOrJson(resolvedModule.extension)) &&
+                    !isExternalModuleNameRelative(name) &&
+                    !ambientModules.some(m => m === name)) {
+                    unresolvedImports = append(unresolvedImports, parsePackageName(name).packageName);
+                }
+            });
+            return unresolvedImports || emptyArray;
+        });
     }
 
     /**
@@ -1213,11 +1370,10 @@ namespace ts.server {
 
         setCompilerOptions(options?: CompilerOptions) {
             // Avoid manipulating the given options directly
-            const newOptions = options ? cloneCompilerOptions(options) : this.getCompilationSettings();
-            if (!newOptions) {
+            if (!options && !this.getCompilationSettings()) {
                 return;
             }
-
+            const newOptions = cloneCompilerOptions(options || this.getCompilationSettings());
             if (this._isJsInferredProject && typeof newOptions.maxNodeModuleJsDepth !== "number") {
                 newOptions.maxNodeModuleJsDepth = 2;
             }
@@ -1241,7 +1397,8 @@ namespace ts.server {
             documentRegistry: DocumentRegistry,
             compilerOptions: CompilerOptions,
             projectRootPath: NormalizedPath | undefined,
-            currentDirectory: string | undefined) {
+            currentDirectory: string | undefined,
+            pluginConfigOverrides: Map<any> | undefined) {
             super(InferredProject.newName(),
                 ProjectKind.Inferred,
                 projectService,
@@ -1257,7 +1414,7 @@ namespace ts.server {
             if (!projectRootPath && !projectService.useSingleInferredProject) {
                 this.canonicalCurrentDirectory = projectService.toCanonicalFileName(this.currentDirectory);
             }
-            this.enableGlobalPlugins(this.getCompilerOptions());
+            this.enableGlobalPlugins(this.getCompilerOptions(), pluginConfigOverrides);
         }
 
         addRoot(info: ScriptInfo) {
@@ -1312,14 +1469,14 @@ namespace ts.server {
      * Otherwise it will create an InferredProject.
      */
     export class ConfiguredProject extends Project {
-        private typeAcquisition: TypeAcquisition;
+        private typeAcquisition!: TypeAcquisition; // TODO: GH#18217
         /* @internal */
         configFileWatcher: FileWatcher | undefined;
         private directoriesWatchedForWildcards: Map<WildcardDirectoryWatcher> | undefined;
         readonly canonicalConfigFilePath: NormalizedPath;
 
         /* @internal */
-        pendingReload: ConfigFileProgramReloadLevel;
+        pendingReload: ConfigFileProgramReloadLevel | undefined;
         /* @internal */
         pendingReloadReason: string | undefined;
 
@@ -1327,7 +1484,7 @@ namespace ts.server {
         configFileSpecs: ConfigFileSpecs | undefined;
 
         /*@internal*/
-        canConfigFileJsonReportNoInputFiles: boolean;
+        canConfigFileJsonReportNoInputFiles = false;
 
         /** Ref count to the project when opened from external project */
         private externalProjectRefCount = 0;
@@ -1386,7 +1543,6 @@ namespace ts.server {
             }
             this.projectService.sendProjectLoadingFinishEvent(this);
             this.projectService.sendProjectTelemetry(this);
-            this.projectService.sendSurveyReady(this);
             return result;
         }
 
@@ -1399,8 +1555,8 @@ namespace ts.server {
             return asNormalizedPath(this.getProjectName());
         }
 
-        getProjectReferences(): ReadonlyArray<ProjectReference> {
-            return this.projectReferences || emptyArray;
+        getProjectReferences(): ReadonlyArray<ProjectReference> | undefined {
+            return this.projectReferences;
         }
 
         updateReferences(refs: ReadonlyArray<ProjectReference> | undefined) {
@@ -1408,17 +1564,13 @@ namespace ts.server {
         }
 
         /*@internal*/
-        getResolvedProjectReferences() {
+        forEachResolvedProjectReference<T>(cb: (resolvedProjectReference: ResolvedProjectReference | undefined, resolvedProjectReferencePath: Path) => T | undefined): T | undefined {
             const program = this.getCurrentProgram();
-            return program && program.getResolvedProjectReferences();
-        }
-
-        enablePlugins() {
-            this.enablePluginsWithOptions(this.getCompilerOptions());
+            return program && program.forEachResolvedProjectReference(cb);
         }
 
         /*@internal*/
-        enablePluginsWithOptions(options: CompilerOptions) {
+        enablePluginsWithOptions(options: CompilerOptions, pluginConfigOverrides: Map<any> | undefined) {
             const host = this.projectService.host;
 
             if (!host.require) {
@@ -1439,11 +1591,11 @@ namespace ts.server {
             // Enable tsconfig-specified plugins
             if (options.plugins) {
                 for (const pluginConfigEntry of options.plugins) {
-                    this.enablePlugin(pluginConfigEntry, searchPaths);
+                    this.enablePlugin(pluginConfigEntry, searchPaths, pluginConfigOverrides);
                 }
             }
 
-            this.enableGlobalPlugins(options);
+            this.enableGlobalPlugins(options, pluginConfigOverrides);
         }
 
         /**
@@ -1562,7 +1714,7 @@ namespace ts.server {
      */
     export class ExternalProject extends Project {
         excludedFiles: ReadonlyArray<NormalizedPath> = [];
-        private typeAcquisition: TypeAcquisition;
+        private typeAcquisition!: TypeAcquisition; // TODO: GH#18217
         /*@internal*/
         constructor(public externalProjectName: string,
             projectService: ProjectService,
@@ -1570,7 +1722,8 @@ namespace ts.server {
             compilerOptions: CompilerOptions,
             lastFileExceededProgramSize: string | undefined,
             public compileOnSaveEnabled: boolean,
-            projectFilePath?: string) {
+            projectFilePath?: string,
+            pluginConfigOverrides?: Map<any>) {
             super(externalProjectName,
                 ProjectKind.External,
                 projectService,
@@ -1581,12 +1734,12 @@ namespace ts.server {
                 compileOnSaveEnabled,
                 projectService.host,
                 getDirectoryPath(projectFilePath || normalizeSlashes(externalProjectName)));
+            this.enableGlobalPlugins(this.getCompilerOptions(), pluginConfigOverrides);
         }
 
         updateGraph() {
             const result = super.updateGraph();
             this.projectService.sendProjectTelemetry(this);
-            this.projectService.sendSurveyReady(this);
             return result;
         }
 

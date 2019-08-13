@@ -1,5 +1,5 @@
 tests/cases/conformance/types/nonPrimitive/nonPrimitiveAccessProperty.ts(3,3): error TS2339: Property 'nonExist' does not exist on type 'object'.
-tests/cases/conformance/types/nonPrimitive/nonPrimitiveAccessProperty.ts(5,7): error TS2459: Type 'object' has no property 'destructuring' and no string index signature.
+tests/cases/conformance/types/nonPrimitive/nonPrimitiveAccessProperty.ts(5,7): error TS2339: Property 'destructuring' does not exist on type '{}'.
 
 
 ==== tests/cases/conformance/types/nonPrimitive/nonPrimitiveAccessProperty.ts (2 errors) ====
@@ -11,6 +11,6 @@ tests/cases/conformance/types/nonPrimitive/nonPrimitiveAccessProperty.ts(5,7): e
     
     var { destructuring } = a; // error
           ~~~~~~~~~~~~~
-!!! error TS2459: Type 'object' has no property 'destructuring' and no string index signature.
+!!! error TS2339: Property 'destructuring' does not exist on type '{}'.
     var { ...rest } = a; // ok
     

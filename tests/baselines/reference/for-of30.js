@@ -6,9 +6,9 @@ class StringIterator {
             value: ""
         }
     }
-    
+
     return = 0;
-    
+
     [Symbol.iterator]() {
         return this;
     }

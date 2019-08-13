@@ -6,5 +6,4 @@
 ////function foo(a,b) { }
 ////foo(1,2)./**/
 
-goTo.marker();
-verify.completionListContains("toExponential", /*displayText:*/ undefined, /*documentation*/ undefined, "method");
+verify.completions({ marker: "", includes: { name: "toExponential", kind: "method", kindModifiers: "declare" } });

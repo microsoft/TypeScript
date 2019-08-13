@@ -23,13 +23,13 @@ var y2a = () => { } // error
 
 // function then class
 function y3() { } // error
->y3 : () => void
+>y3 : typeof y3
 
 class y3 { } // error
 >y3 : y3
 
 function y3a() { } // error
->y3a : () => void
+>y3a : typeof y3a
 
 class y3a { public foo() { } } // error
 >y3a : y3a

@@ -1,0 +1,78 @@
+tests/cases/compiler/excessPropertyCheckWithMultipleDiscriminants.ts(30,5): error TS2322: Type '{ type: "number"; value: number; multipleOf: number; format: string; }' is not assignable to type 'Primitive'.
+  Object literal may only specify known properties, and 'multipleOf' does not exist in type 'Float'.
+tests/cases/compiler/excessPropertyCheckWithMultipleDiscriminants.ts(41,5): error TS2322: Type '{ p1: "left"; p2: false; p3: number; p4: string; }' is not assignable to type 'DisjointDiscriminants'.
+  Object literal may only specify known properties, and 'p3' does not exist in type '{ p1: "left"; p2: boolean; }'.
+tests/cases/compiler/excessPropertyCheckWithMultipleDiscriminants.ts(57,5): error TS2322: Type '{ p1: "right"; p2: false; p3: number; p4: string; }' is not assignable to type 'DisjointDiscriminants'.
+  Object literal may only specify known properties, and 'p3' does not exist in type '{ p1: "right"; p2: false; p4: string; }'.
+
+
+==== tests/cases/compiler/excessPropertyCheckWithMultipleDiscriminants.ts (3 errors) ====
+    // Repro from #32657
+    
+    interface Base<T> {
+        value: T;
+    }
+    
+    interface Int extends Base<number> {
+        type: "integer";
+        multipleOf?: number;
+    }
+    
+    interface Float extends Base<number> {
+        type: "number";
+    }
+    
+    interface Str extends Base<string> {
+        type: "string";
+        format?: string;
+    }
+    
+    interface Bool extends Base<boolean> {
+        type: "boolean";
+    }
+    
+    type Primitive = Int | Float | Str | Bool;
+    
+    const foo: Primitive = {
+        type: "number",
+        value: 10,
+        multipleOf: 5, // excess property
+        ~~~~~~~~~~~~~
+!!! error TS2322: Type '{ type: "number"; value: number; multipleOf: number; format: string; }' is not assignable to type 'Primitive'.
+!!! error TS2322:   Object literal may only specify known properties, and 'multipleOf' does not exist in type 'Float'.
+        format: "what?"
+    }
+    
+    
+    type DisjointDiscriminants = { p1: 'left'; p2: true; p3: number } | { p1: 'right'; p2: false; p4: string } | { p1: 'left'; p2: boolean };
+    
+    // This has excess error because variant three is the only applicable case.
+    const a: DisjointDiscriminants = {
+        p1: 'left',
+        p2: false,
+        p3: 42,
+        ~~~~~~
+!!! error TS2322: Type '{ p1: "left"; p2: false; p3: number; p4: string; }' is not assignable to type 'DisjointDiscriminants'.
+!!! error TS2322:   Object literal may only specify known properties, and 'p3' does not exist in type '{ p1: "left"; p2: boolean; }'.
+        p4: "hello"
+    };
+    
+    // This has no excess error because variant one and three are both applicable.
+    const b: DisjointDiscriminants = {
+        p1: 'left',
+        p2: true,
+        p3: 42,
+        p4: "hello"
+    };
+    
+    // This has excess error because variant two is the only applicable case
+    const c: DisjointDiscriminants = {
+        p1: 'right',
+        p2: false,
+        p3: 42,
+        ~~~~~~
+!!! error TS2322: Type '{ p1: "right"; p2: false; p3: number; p4: string; }' is not assignable to type 'DisjointDiscriminants'.
+!!! error TS2322:   Object literal may only specify known properties, and 'p3' does not exist in type '{ p1: "right"; p2: false; p4: string; }'.
+        p4: "hello"
+    };
+    

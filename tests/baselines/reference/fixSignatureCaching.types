@@ -2730,26 +2730,26 @@ define(function () {
 >window.screen.width < window.screen.height : boolean
 >window.screen.width : number
 >window.screen : Screen
->window : Window
+>window : Window & typeof globalThis
 >screen : Screen
 >width : number
 >window.screen.height : number
 >window.screen : Screen
->window : Window
+>window : Window & typeof globalThis
 >screen : Screen
 >height : number
 
             window.screen.width :
 >window.screen.width : number
 >window.screen : Screen
->window : Window
+>window : Window & typeof globalThis
 >screen : Screen
 >width : number
 
             window.screen.height;
 >window.screen.height : number
 >window.screen : Screen
->window : Window
+>window : Window & typeof globalThis
 >screen : Screen
 >height : number
 
@@ -3422,11 +3422,11 @@ define(function () {
     if (typeof window !== 'undefined' && window.screen) {
 >typeof window !== 'undefined' && window.screen : Screen
 >typeof window !== 'undefined' : boolean
->typeof window : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
->window : Window
+>typeof window : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>window : Window & typeof globalThis
 >'undefined' : "undefined"
 >window.screen : Screen
->window : Window
+>window : Window & typeof globalThis
 >screen : Screen
 
         MobileDetect.isPhoneSized = function (maxPhoneWidth) {
@@ -3488,7 +3488,7 @@ define(function () {
     if (typeof module !== 'undefined' && module.exports) {
 >typeof module !== 'undefined' && module.exports : any
 >typeof module !== 'undefined' : boolean
->typeof module : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof module : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >module : any
 >'undefined' : "undefined"
 >module.exports : any
@@ -3508,7 +3508,7 @@ define(function () {
     } else if (typeof define === 'function' && define.amd) {
 >typeof define === 'function' && define.amd : any
 >typeof define === 'function' : boolean
->typeof define : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof define : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >define : any
 >'function' : "function"
 >define.amd : any
@@ -3520,8 +3520,8 @@ define(function () {
 
     } else if (typeof window !== 'undefined') {
 >typeof window !== 'undefined' : boolean
->typeof window : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
->window : Window
+>typeof window : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>window : Window & typeof globalThis
 >'undefined' : "undefined"
 
         return function (factory) { window.MobileDetect = factory(); };
@@ -3529,7 +3529,7 @@ define(function () {
 >factory : any
 >window.MobileDetect = factory() : any
 >window.MobileDetect : any
->window : Window
+>window : Window & typeof globalThis
 >MobileDetect : any
 >factory() : any
 >factory : any

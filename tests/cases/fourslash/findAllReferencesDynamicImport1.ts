@@ -3,7 +3,7 @@
 // @Filename: foo.ts
 //// export function foo() { return "foo"; }
 
-//// import("[|./foo|]")
-//// var x = import("[|./foo|]")
+//// [|import("[|{| "contextRangeIndex": 0 |}./foo|]")|]
+//// [|var x = import("[|{| "contextRangeIndex": 2 |}./foo|]")|]
 
-verify.singleReferenceGroup('module "/tests/cases/fourslash/foo"');
+verify.singleReferenceGroup('module "/tests/cases/fourslash/foo"', "./foo");

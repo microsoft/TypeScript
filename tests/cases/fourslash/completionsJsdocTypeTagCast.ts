@@ -4,4 +4,10 @@
 // @Filename: /a.js
 ////const x = /** @type {{ s: string }} */ ({ /**/ });
 
-verify.completionsAt("", ["s", "x"]);
+verify.completions({
+    marker: "",
+    exact: [
+        "s",
+        { name: "x", sortText: completion.SortText.JavascriptIdentifiers }
+    ]
+});

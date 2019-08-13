@@ -1,5 +1,7 @@
 /// <reference path="fourslash.ts" />
 
+// @noLib: true
+
 // @Filename: /a.ts
 ////export const foo = 0;
 
@@ -9,7 +11,14 @@
 
 verify.completions({
     marker: "",
-    includes: "foo",
-    excludes: { name: "foo", source: "/a" },
+    exact: [
+        completion.globalThisEntry,
+        {
+            name: "foo",
+            text: "const foo: 1",
+        },
+        completion.undefinedVarEntry,
+        ...completion.statementKeywordsWithTypes
+    ],
     preferences: { includeCompletionsForModuleExports: true },
-})
+});

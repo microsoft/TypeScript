@@ -93,7 +93,7 @@ namespace ts.moduleSpecifiers {
 
         const info = getInfo(importingSourceFile.path, host);
         const moduleSourceFile = getSourceFileOfNode(moduleSymbol.valueDeclaration || getNonAugmentationDeclaration(moduleSymbol));
-        const modulePaths = getAllModulePaths(files, importingSourceFile.path, moduleSourceFile.fileName, info.getCanonicalFileName, host, redirectTargetsMap);
+        const modulePaths = getAllModulePaths(files, importingSourceFile.path, moduleSourceFile.originalFileName, info.getCanonicalFileName, host, redirectTargetsMap);
 
         const preferences = getPreferences(userPreferences, compilerOptions, importingSourceFile);
         const global = mapDefined(modulePaths, moduleFileName => tryGetModuleNameAsNodeModule(moduleFileName, info, host, compilerOptions));
@@ -114,7 +114,7 @@ namespace ts.moduleSpecifiers {
     function getLocalModuleSpecifier(moduleFileName: string, { getCanonicalFileName, sourceDirectory }: Info, compilerOptions: CompilerOptions, { ending, relativePreference }: Preferences): string {
         const { baseUrl, paths, rootDirs } = compilerOptions;
 
-        const relativePath = rootDirs && tryGetModuleNameFromRootDirs(rootDirs, moduleFileName, sourceDirectory, getCanonicalFileName) ||
+        const relativePath = rootDirs && tryGetModuleNameFromRootDirs(rootDirs, moduleFileName, sourceDirectory, getCanonicalFileName, ending, compilerOptions) ||
             removeExtensionAndIndexPostFix(ensurePathIsNonModuleName(getRelativePathFromDirectory(sourceDirectory, moduleFileName, getCanonicalFileName)), ending, compilerOptions);
         if (!baseUrl || relativePreference === RelativePreference.Relative) {
             return relativePath;
@@ -139,7 +139,7 @@ namespace ts.moduleSpecifiers {
         return isPathRelativeToParent(nonRelative) || countPathComponents(relativePath) < countPathComponents(nonRelative) ? relativePath : nonRelative;
     }
 
-    function countPathComponents(path: string): number {
+    export function countPathComponents(path: string): number {
         let count = 0;
         for (let i = startsWith(path, "./") ? 2 : 0; i < path.length; i++) {
             if (path.charCodeAt(i) === CharacterCodes.slash) count++;
@@ -175,9 +175,9 @@ namespace ts.moduleSpecifiers {
 
     function discoverProbableSymlinks(files: ReadonlyArray<SourceFile>, getCanonicalFileName: GetCanonicalFileName, cwd: string): ReadonlyMap<string> {
         const result = createMap<string>();
-        const symlinks = mapDefined(files, sf =>
-            sf.resolvedModules && firstDefinedIterator(sf.resolvedModules.values(), res =>
-                res && res.originalPath && res.resolvedFileName !== res.originalPath ? [res.resolvedFileName, res.originalPath] : undefined));
+        const symlinks = flatten<readonly [string, string]>(mapDefined(files, sf =>
+            sf.resolvedModules && compact(arrayFrom(mapIterator(sf.resolvedModules.values(), res =>
+                res && res.originalPath && res.resolvedFileName !== res.originalPath ? [res.resolvedFileName, res.originalPath] as const : undefined)))));
         for (const [resolvedPath, originalPath] of symlinks) {
             const [commonResolved, commonOriginal] = guessDirectorySymlink(resolvedPath, originalPath, cwd, getCanonicalFileName);
             result.set(commonOriginal, commonResolved);
@@ -203,7 +203,7 @@ namespace ts.moduleSpecifiers {
                 return; // Don't want to a package to globally import from itself
             }
 
-            const target = targets.find(t => compareStrings(t.slice(0, resolved.length + 1), resolved + "/") === Comparison.EqualTo);
+            const target = find(targets, t => compareStrings(t.slice(0, resolved.length + 1), resolved + "/") === Comparison.EqualTo);
             if (target === undefined) return;
 
             const relative = getRelativePathFromDirectory(resolved, target, getCanonicalFileName);
@@ -248,7 +248,7 @@ namespace ts.moduleSpecifiers {
         }
     }
 
-    function tryGetModuleNameFromRootDirs(rootDirs: ReadonlyArray<string>, moduleFileName: string, sourceDirectory: string, getCanonicalFileName: (file: string) => string): string | undefined {
+    function tryGetModuleNameFromRootDirs(rootDirs: ReadonlyArray<string>, moduleFileName: string, sourceDirectory: string, getCanonicalFileName: (file: string) => string, ending: Ending, compilerOptions: CompilerOptions): string | undefined {
         const normalizedTargetPath = getPathRelativeToRootDirs(moduleFileName, rootDirs, getCanonicalFileName);
         if (normalizedTargetPath === undefined) {
             return undefined;
@@ -256,7 +256,9 @@ namespace ts.moduleSpecifiers {
 
         const normalizedSourcePath = getPathRelativeToRootDirs(sourceDirectory, rootDirs, getCanonicalFileName);
         const relativePath = normalizedSourcePath !== undefined ? ensurePathIsNonModuleName(getRelativePathFromDirectory(normalizedSourcePath, normalizedTargetPath, getCanonicalFileName)) : normalizedTargetPath;
-        return removeFileExtension(relativePath);
+        return getEmitModuleResolutionKind(compilerOptions) === ModuleResolutionKind.NodeJs
+            ? removeExtensionAndIndexPostFix(relativePath, ending, compilerOptions)
+            : removeFileExtension(relativePath);
     }
 
     function tryGetModuleNameAsNodeModule(moduleFileName: string, { getCanonicalFileName, sourceDirectory }: Info, host: ModuleSpecifierResolutionHost, options: CompilerOptions): string | undefined {
@@ -437,6 +439,8 @@ namespace ts.moduleSpecifiers {
             case Extension.Jsx:
             case Extension.Json:
                 return ext;
+            case Extension.TsBuildInfo:
+                return Debug.fail(`Extension ${Extension.TsBuildInfo} is unsupported:: FileName:: ${fileName}`);
             default:
                 return Debug.assertNever(ext);
         }

@@ -43,10 +43,11 @@ async function* f6() {
 
 //// [file1.js]
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
         function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
         function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : new P(function (resolve) { resolve(result.value); }).then(fulfilled, rejected); }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
@@ -58,8 +59,8 @@ var __asyncValues = (this && this.__asyncValues) || function (o) {
     function settle(resolve, reject, d, v) { Promise.resolve(v).then(function(v) { resolve({ value: v, done: d }); }, reject); }
 };
 function f1() {
+    var e_1, _a;
     return __awaiter(this, void 0, void 0, function* () {
-        var e_1, _a;
         let y;
         try {
             for (var y_1 = __asyncValues(y), y_1_1; y_1_1 = yield y_1.next(), !y_1_1.done;) {
@@ -77,10 +78,11 @@ function f1() {
 }
 //// [file2.js]
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
         function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
         function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : new P(function (resolve) { resolve(result.value); }).then(fulfilled, rejected); }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
@@ -92,8 +94,8 @@ var __asyncValues = (this && this.__asyncValues) || function (o) {
     function settle(resolve, reject, d, v) { Promise.resolve(v).then(function(v) { resolve({ value: v, done: d }); }, reject); }
 };
 function f2() {
+    var e_1, _a;
     return __awaiter(this, void 0, void 0, function* () {
-        var e_1, _a;
         let x, y;
         try {
             for (var y_1 = __asyncValues(y), y_1_1; y_1_1 = yield y_1.next(), !y_1_1.done;) {
@@ -187,10 +189,11 @@ function f4() {
 }
 //// [file5.js]
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
         function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
         function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : new P(function (resolve) { resolve(result.value); }).then(fulfilled, rejected); }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
@@ -203,8 +206,8 @@ var __asyncValues = (this && this.__asyncValues) || function (o) {
 };
 // https://github.com/Microsoft/TypeScript/issues/21363
 function f5() {
+    var e_1, _a;
     return __awaiter(this, void 0, void 0, function* () {
-        var e_1, _a;
         let y;
         try {
             outer: for (var y_1 = __asyncValues(y), y_1_1; y_1_1 = yield y_1.next(), !y_1_1.done;) {

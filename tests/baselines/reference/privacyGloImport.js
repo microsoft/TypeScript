@@ -265,7 +265,7 @@ var m2;
 
 //// [privacyGloImport.d.ts]
 declare module m1 {
-    module m1_M1_public {
+    export module m1_M1_public {
         class c1 {
         }
         function f1(): c1;
@@ -280,17 +280,18 @@ declare module m1 {
         var v2: c1;
     }
     import m1_im1_private = m1_M1_public;
-    var m1_im1_private_v1_public: typeof m1_im1_private.c1;
-    var m1_im1_private_v2_public: m1_im1_private.c1;
-    var m1_im1_private_v3_public: typeof m1_im1_private.f1;
-    var m1_im1_private_v4_public: m1_im1_private.c1;
+    export var m1_im1_private_v1_public: typeof m1_im1_private.c1;
+    export var m1_im1_private_v2_public: m1_im1_private.c1;
+    export var m1_im1_private_v3_public: typeof m1_im1_private.f1;
+    export var m1_im1_private_v4_public: m1_im1_private.c1;
     import m1_im2_private = m1_M2_private;
-    var m1_im2_private_v1_public: typeof m1_im2_private.c1;
-    var m1_im2_private_v2_public: m1_im2_private.c1;
-    var m1_im2_private_v3_public: typeof m1_im2_private.f1;
-    var m1_im2_private_v4_public: m1_im2_private.c1;
+    export var m1_im2_private_v1_public: typeof m1_im2_private.c1;
+    export var m1_im2_private_v2_public: m1_im2_private.c1;
+    export var m1_im2_private_v3_public: typeof m1_im2_private.f1;
+    export var m1_im2_private_v4_public: m1_im2_private.c1;
     export import m1_im1_public = m1_M1_public;
     export import m1_im2_public = m1_M2_private;
+    export {};
 }
 declare module glo_M1_public {
     class c1 {

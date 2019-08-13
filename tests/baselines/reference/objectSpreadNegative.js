@@ -58,22 +58,6 @@ let obj: object = { a: 123 };
 let spreadObj = { ...obj };
 spreadObj.a; // error 'a' is not in {}
 
-// generics
-function f<T, U>(t: T, u: U) {
-    return { ...t, ...u, id: 'id' };
-}
-function override<U>(initial: U, override: U): U {
-    return { ...initial, ...override };
-}
-let exclusive: { id: string, a: number, b: string, c: string, d: boolean } =
-    f({ a: 1, b: 'yes' }, { c: 'no', d: false })
-let overlap: { id: string, a: number, b: string } =
-    f({ a: 1 }, { a: 2, b: 'extra' })
-let overlapConflict: { id:string, a: string } =
-    f({ a: 1 }, { a: 'mismatch' })
-let overwriteId: { id: string, a: number, c: number, d: string } =
-    f({ a: 1, id: true }, { c: 1, d: 'no' })
-
 
 //// [objectSpreadNegative.js]
 var __assign = (this && this.__assign) || function () {
@@ -101,11 +85,11 @@ var PublicX = /** @class */ (function () {
 }());
 var publicX;
 var privateOptionalX;
-var o2 = __assign({}, publicX, privateOptionalX);
+var o2 = __assign(__assign({}, publicX), privateOptionalX);
 var sn = o2.x; // error, x is private
 var optionalString;
 var optionalNumber;
-var allOptional = __assign({}, optionalString, optionalNumber);
+var allOptional = __assign(__assign({}, optionalString), optionalNumber);
 ;
 ;
 var spread = __assign({ b: true }, { s: "foo" });
@@ -113,8 +97,8 @@ spread = { s: "foo" }; // error, missing 'b'
 var b = { b: false };
 spread = b; // error, missing 's'
 // literal repeats are not allowed, but spread repeats are fine
-var duplicated = __assign({ b: 'bad' }, o, { b: 'bad' }, o2, { b: 'bad' });
-var duplicatedSpread = __assign({}, o, o);
+var duplicated = __assign(__assign(__assign(__assign({ b: 'bad' }, o), { b: 'bad' }), o2), { b: 'bad' });
+var duplicatedSpread = __assign(__assign({}, o), o);
 // primitives are not allowed, except for falsy ones
 var spreadNum = __assign({}, 12);
 var spreadSum = __assign({}, 1 + 1);
@@ -146,14 +130,3 @@ spreadC.m(); // error 'm' is not in '{ ... c }'
 var obj = { a: 123 };
 var spreadObj = __assign({}, obj);
 spreadObj.a; // error 'a' is not in {}
-// generics
-function f(t, u) {
-    return __assign({}, t, u, { id: 'id' });
-}
-function override(initial, override) {
-    return __assign({}, initial, override);
-}
-var exclusive = f({ a: 1, b: 'yes' }, { c: 'no', d: false });
-var overlap = f({ a: 1 }, { a: 2, b: 'extra' });
-var overlapConflict = f({ a: 1 }, { a: 'mismatch' });
-var overwriteId = f({ a: 1, id: true }, { c: 1, d: 'no' });

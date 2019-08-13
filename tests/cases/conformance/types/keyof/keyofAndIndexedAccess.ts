@@ -33,7 +33,8 @@ type K03 = keyof boolean;  // "valueOf"
 type K04 = keyof void;  // never
 type K05 = keyof undefined;  // never
 type K06 = keyof null;  // never
-type K07 = keyof never;  // never
+type K07 = keyof never;  // string | number | symbol
+type K08 = keyof unknown; // never
 
 type K10 = keyof Shape;  // "name" | "width" | "height" | "visible"
 type K11 = keyof Shape[];  // "length" | "toString" | ...
@@ -63,12 +64,11 @@ type Q21 = Shape[WIDTH_OR_HEIGHT];  // number
 
 type Q30 = [string, number][0];  // string
 type Q31 = [string, number][1];  // number
-type Q32 = [string, number][2];  // string | number
+type Q32 = [string, number][number];  // string | number
 type Q33 = [string, number][E.A];  // string
 type Q34 = [string, number][E.B];  // number
-type Q35 = [string, number][E.C];  // string | number
-type Q36 = [string, number]["0"];  // string
-type Q37 = [string, number]["1"];  // string
+type Q35 = [string, number]["0"];  // string
+type Q36 = [string, number]["1"];  // string
 
 type Q40 = (Shape | Options)["visible"];  // boolean | "yes" | "no"
 type Q41 = (Shape & Options)["visible"];  // true & "yes" | true & "no" | false & "yes" | false & "no"
@@ -487,10 +487,10 @@ function onChangeGenericFunction<T>(handler: Handler<T & {preset: number}>) {
 function updateIds<T extends Record<K, string>, K extends string>(
     obj: T,
     idFields: K[],
-    idMapping: { [oldId: string]: string }
+    idMapping: Partial<Record<T[K], T[K]>>
 ): Record<K, string> {
     for (const idField of idFields) {
-        const newId = idMapping[obj[idField]];
+        const newId: T[K] | undefined = idMapping[obj[idField]];
         if (newId) {
             obj[idField] = newId;
         }

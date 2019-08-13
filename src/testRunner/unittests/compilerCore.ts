@@ -1,5 +1,5 @@
 namespace ts {
-    describe("compilerCore", () => {
+    describe("unittests:: compilerCore", () => {
         describe("equalOwnProperties", () => {
             it("correctly equates objects", () => {
                 assert.isTrue(equalOwnProperties({}, {}));

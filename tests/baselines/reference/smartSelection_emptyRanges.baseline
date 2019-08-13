@@ -1,0 +1,143 @@
+class HomePage {
+  componentDidMount(/**/) {
+    if (this.props.username) {
+      return '';
+    }
+  }
+}
+
+
+                    )  
+
+
+  componentDidMount() {
+    if (this.props.username) {
+      return '';
+    }
+  }
+
+
+                ↲
+••componentDidMount() {
+    if (this.props.username) {
+      return '';
+    }
+  }↲
+
+
+class HomePage {
+  componentDidMount() {
+    if (this.props.username) {
+      return '';
+    }
+  }
+}
+
+================================================================================
+
+class HomePage {
+  componentDidMount() {
+    if (this.props.username/**/) {
+      return '';
+    }
+  }
+}
+
+
+                   username   
+
+
+        this.props.username   
+
+
+    if (this.props.username) {
+      return '';
+    }
+
+
+                       ↲
+••••if (this.props.username) {
+      return '';
+    }↲
+•• 
+
+
+  componentDidMount() {
+    if (this.props.username) {
+      return '';
+    }
+  }
+
+
+                ↲
+••componentDidMount() {
+    if (this.props.username) {
+      return '';
+    }
+  }↲
+
+
+class HomePage {
+  componentDidMount() {
+    if (this.props.username) {
+      return '';
+    }
+  }
+}
+
+================================================================================
+
+class HomePage {
+  componentDidMount() {
+    if (this.props.username) {
+      return '/**/';
+    }
+  }
+}
+
+
+             '' 
+
+
+      return '';
+
+
+                              ↲
+••••••return '';↲
+•••• 
+
+
+    if (this.props.username) {
+      return '';
+    }
+
+
+                       ↲
+••••if (this.props.username) {
+      return '';
+    }↲
+•• 
+
+
+  componentDidMount() {
+    if (this.props.username) {
+      return '';
+    }
+  }
+
+
+                ↲
+••componentDidMount() {
+    if (this.props.username) {
+      return '';
+    }
+  }↲
+
+
+class HomePage {
+  componentDidMount() {
+    if (this.props.username) {
+      return '';
+    }
+  }
+}

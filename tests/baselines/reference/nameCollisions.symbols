@@ -60,16 +60,16 @@ module T {
 >i : Symbol(i, Decl(nameCollisions.ts, 29, 7), Decl(nameCollisions.ts, 29, 10))
 
     class C { }
->C : Symbol(C, Decl(nameCollisions.ts, 30, 19))
+>C : Symbol(C, Decl(nameCollisions.ts, 32, 15), Decl(nameCollisions.ts, 30, 19))
 
     function C() { } // error
->C : Symbol(C, Decl(nameCollisions.ts, 32, 15))
+>C : Symbol(C, Decl(nameCollisions.ts, 32, 15), Decl(nameCollisions.ts, 30, 19))
 
     function C2() { }
->C2 : Symbol(C2, Decl(nameCollisions.ts, 33, 20))
+>C2 : Symbol(C2, Decl(nameCollisions.ts, 33, 20), Decl(nameCollisions.ts, 35, 21))
 
     class C2 { } // error
->C2 : Symbol(C2, Decl(nameCollisions.ts, 35, 21))
+>C2 : Symbol(C2, Decl(nameCollisions.ts, 33, 20), Decl(nameCollisions.ts, 35, 21))
 
     function fi() { }
 >fi : Symbol(fi, Decl(nameCollisions.ts, 36, 16), Decl(nameCollisions.ts, 38, 21))

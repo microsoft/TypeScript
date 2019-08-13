@@ -5,6 +5,10 @@
 ////    var n: num/**/
 ////}
 
-goTo.marker();
-
-verify.completionListContains('number');
+verify.completions({
+    marker: "",
+    includes: {
+        name: "number",
+        sortText: completion.SortText.GlobalsOrKeywords
+    }
+});

@@ -1,0 +1,350 @@
+=== tests/cases/compiler/numberVsBigIntOperations.ts ===
+// Cannot mix bigints and numbers
+let bigInt = 1n, num = 2;
+>bigInt : Symbol(bigInt, Decl(numberVsBigIntOperations.ts, 1, 3))
+>num : Symbol(num, Decl(numberVsBigIntOperations.ts, 1, 16))
+
+bigInt = 1n; bigInt = 2; num = 1n; num = 2;
+>bigInt : Symbol(bigInt, Decl(numberVsBigIntOperations.ts, 1, 3))
+>bigInt : Symbol(bigInt, Decl(numberVsBigIntOperations.ts, 1, 3))
+>num : Symbol(num, Decl(numberVsBigIntOperations.ts, 1, 16))
+>num : Symbol(num, Decl(numberVsBigIntOperations.ts, 1, 16))
+
+bigInt += 1n; bigInt += 2; num += 1n; num += 2;
+>bigInt : Symbol(bigInt, Decl(numberVsBigIntOperations.ts, 1, 3))
+>bigInt : Symbol(bigInt, Decl(numberVsBigIntOperations.ts, 1, 3))
+>num : Symbol(num, Decl(numberVsBigIntOperations.ts, 1, 16))
+>num : Symbol(num, Decl(numberVsBigIntOperations.ts, 1, 16))
+
+bigInt -= 1n; bigInt -= 2; num -= 1n; num -= 2;
+>bigInt : Symbol(bigInt, Decl(numberVsBigIntOperations.ts, 1, 3))
+>bigInt : Symbol(bigInt, Decl(numberVsBigIntOperations.ts, 1, 3))
+>num : Symbol(num, Decl(numberVsBigIntOperations.ts, 1, 16))
+>num : Symbol(num, Decl(numberVsBigIntOperations.ts, 1, 16))
+
+bigInt *= 1n; bigInt *= 2; num *= 1n; num *= 2;
+>bigInt : Symbol(bigInt, Decl(numberVsBigIntOperations.ts, 1, 3))
+>bigInt : Symbol(bigInt, Decl(numberVsBigIntOperations.ts, 1, 3))
+>num : Symbol(num, Decl(numberVsBigIntOperations.ts, 1, 16))
+>num : Symbol(num, Decl(numberVsBigIntOperations.ts, 1, 16))
+
+bigInt /= 1n; bigInt /= 2; num /= 1n; num /= 2;
+>bigInt : Symbol(bigInt, Decl(numberVsBigIntOperations.ts, 1, 3))
+>bigInt : Symbol(bigInt, Decl(numberVsBigIntOperations.ts, 1, 3))
+>num : Symbol(num, Decl(numberVsBigIntOperations.ts, 1, 16))
+>num : Symbol(num, Decl(numberVsBigIntOperations.ts, 1, 16))
+
+bigInt %= 1n; bigInt %= 2; num %= 1n; num %= 2;
+>bigInt : Symbol(bigInt, Decl(numberVsBigIntOperations.ts, 1, 3))
+>bigInt : Symbol(bigInt, Decl(numberVsBigIntOperations.ts, 1, 3))
+>num : Symbol(num, Decl(numberVsBigIntOperations.ts, 1, 16))
+>num : Symbol(num, Decl(numberVsBigIntOperations.ts, 1, 16))
+
+bigInt **= 1n; bigInt **= 2; num **= 1n; num **= 2;
+>bigInt : Symbol(bigInt, Decl(numberVsBigIntOperations.ts, 1, 3))
+>bigInt : Symbol(bigInt, Decl(numberVsBigIntOperations.ts, 1, 3))
+>num : Symbol(num, Decl(numberVsBigIntOperations.ts, 1, 16))
+>num : Symbol(num, Decl(numberVsBigIntOperations.ts, 1, 16))
+
+bigInt <<= 1n; bigInt <<= 2; num <<= 1n; num <<= 2;
+>bigInt : Symbol(bigInt, Decl(numberVsBigIntOperations.ts, 1, 3))
+>bigInt : Symbol(bigInt, Decl(numberVsBigIntOperations.ts, 1, 3))
+>num : Symbol(num, Decl(numberVsBigIntOperations.ts, 1, 16))
+>num : Symbol(num, Decl(numberVsBigIntOperations.ts, 1, 16))
+
+bigInt >>= 1n; bigInt >>= 2; num >>= 1n; num >>= 2;
+>bigInt : Symbol(bigInt, Decl(numberVsBigIntOperations.ts, 1, 3))
+>bigInt : Symbol(bigInt, Decl(numberVsBigIntOperations.ts, 1, 3))
+>num : Symbol(num, Decl(numberVsBigIntOperations.ts, 1, 16))
+>num : Symbol(num, Decl(numberVsBigIntOperations.ts, 1, 16))
+
+bigInt &= 1n; bigInt &= 2; num &= 1n; num &= 2;
+>bigInt : Symbol(bigInt, Decl(numberVsBigIntOperations.ts, 1, 3))
+>bigInt : Symbol(bigInt, Decl(numberVsBigIntOperations.ts, 1, 3))
+>num : Symbol(num, Decl(numberVsBigIntOperations.ts, 1, 16))
+>num : Symbol(num, Decl(numberVsBigIntOperations.ts, 1, 16))
+
+bigInt ^= 1n; bigInt ^= 2; num ^= 1n; num ^= 2;
+>bigInt : Symbol(bigInt, Decl(numberVsBigIntOperations.ts, 1, 3))
+>bigInt : Symbol(bigInt, Decl(numberVsBigIntOperations.ts, 1, 3))
+>num : Symbol(num, Decl(numberVsBigIntOperations.ts, 1, 16))
+>num : Symbol(num, Decl(numberVsBigIntOperations.ts, 1, 16))
+
+bigInt |= 1n; bigInt |= 2; num |= 1n; num |= 2;
+>bigInt : Symbol(bigInt, Decl(numberVsBigIntOperations.ts, 1, 3))
+>bigInt : Symbol(bigInt, Decl(numberVsBigIntOperations.ts, 1, 3))
+>num : Symbol(num, Decl(numberVsBigIntOperations.ts, 1, 16))
+>num : Symbol(num, Decl(numberVsBigIntOperations.ts, 1, 16))
+
+bigInt = 1n + 2n; num = 1 + 2; 1 + 2n; 1n + 2;
+>bigInt : Symbol(bigInt, Decl(numberVsBigIntOperations.ts, 1, 3))
+>num : Symbol(num, Decl(numberVsBigIntOperations.ts, 1, 16))
+
+bigInt = 1n - 2n; num = 1 - 2; 1 - 2n; 1n - 2;
+>bigInt : Symbol(bigInt, Decl(numberVsBigIntOperations.ts, 1, 3))
+>num : Symbol(num, Decl(numberVsBigIntOperations.ts, 1, 16))
+
+bigInt = 1n * 2n; num = 1 * 2; 1 * 2n; 1n * 2;
+>bigInt : Symbol(bigInt, Decl(numberVsBigIntOperations.ts, 1, 3))
+>num : Symbol(num, Decl(numberVsBigIntOperations.ts, 1, 16))
+
+bigInt = 1n / 2n; num = 1 / 2; 1 / 2n; 1n / 2;
+>bigInt : Symbol(bigInt, Decl(numberVsBigIntOperations.ts, 1, 3))
+>num : Symbol(num, Decl(numberVsBigIntOperations.ts, 1, 16))
+
+bigInt = 1n % 2n; num = 1 % 2; 1 % 2n; 1n % 2;
+>bigInt : Symbol(bigInt, Decl(numberVsBigIntOperations.ts, 1, 3))
+>num : Symbol(num, Decl(numberVsBigIntOperations.ts, 1, 16))
+
+bigInt = 1n ** 2n; num = 1 ** 2; 1 ** 2n; 1n ** 2;
+>bigInt : Symbol(bigInt, Decl(numberVsBigIntOperations.ts, 1, 3))
+>num : Symbol(num, Decl(numberVsBigIntOperations.ts, 1, 16))
+
+bigInt = 1n & 2n; num = 1 & 2; 1 & 2n; 1n & 2;
+>bigInt : Symbol(bigInt, Decl(numberVsBigIntOperations.ts, 1, 3))
+>num : Symbol(num, Decl(numberVsBigIntOperations.ts, 1, 16))
+
+bigInt = 1n | 2n; num = 1 | 2; 1 | 2n; 1n | 2;
+>bigInt : Symbol(bigInt, Decl(numberVsBigIntOperations.ts, 1, 3))
+>num : Symbol(num, Decl(numberVsBigIntOperations.ts, 1, 16))
+
+bigInt = 1n ^ 2n; num = 1 ^ 2; 1 ^ 2n; 1n ^ 2;
+>bigInt : Symbol(bigInt, Decl(numberVsBigIntOperations.ts, 1, 3))
+>num : Symbol(num, Decl(numberVsBigIntOperations.ts, 1, 16))
+
+bigInt = 1n << 2n; num = 1 << 2; 1 << 2n; 1n << 2;
+>bigInt : Symbol(bigInt, Decl(numberVsBigIntOperations.ts, 1, 3))
+>num : Symbol(num, Decl(numberVsBigIntOperations.ts, 1, 16))
+
+bigInt = 1n >> 2n; num = 1 >> 2; 1 >> 2n; 1n >> 2;
+>bigInt : Symbol(bigInt, Decl(numberVsBigIntOperations.ts, 1, 3))
+>num : Symbol(num, Decl(numberVsBigIntOperations.ts, 1, 16))
+
+// Plus should still coerce to strings
+let str: string;
+>str : Symbol(str, Decl(numberVsBigIntOperations.ts, 27, 3))
+
+str = "abc" + 123; str = "abc" + 123n; str = 123 + "abc"; str = 123n + "abc";
+>str : Symbol(str, Decl(numberVsBigIntOperations.ts, 27, 3))
+>str : Symbol(str, Decl(numberVsBigIntOperations.ts, 27, 3))
+>str : Symbol(str, Decl(numberVsBigIntOperations.ts, 27, 3))
+>str : Symbol(str, Decl(numberVsBigIntOperations.ts, 27, 3))
+
+// Unary operations allowed on bigints and numbers
+bigInt = bigInt++; bigInt = ++bigInt; num = num++; num = ++num;
+>bigInt : Symbol(bigInt, Decl(numberVsBigIntOperations.ts, 1, 3))
+>bigInt : Symbol(bigInt, Decl(numberVsBigIntOperations.ts, 1, 3))
+>bigInt : Symbol(bigInt, Decl(numberVsBigIntOperations.ts, 1, 3))
+>bigInt : Symbol(bigInt, Decl(numberVsBigIntOperations.ts, 1, 3))
+>num : Symbol(num, Decl(numberVsBigIntOperations.ts, 1, 16))
+>num : Symbol(num, Decl(numberVsBigIntOperations.ts, 1, 16))
+>num : Symbol(num, Decl(numberVsBigIntOperations.ts, 1, 16))
+>num : Symbol(num, Decl(numberVsBigIntOperations.ts, 1, 16))
+
+bigInt = bigInt--; bigInt = --bigInt; num = num--; num = --num;
+>bigInt : Symbol(bigInt, Decl(numberVsBigIntOperations.ts, 1, 3))
+>bigInt : Symbol(bigInt, Decl(numberVsBigIntOperations.ts, 1, 3))
+>bigInt : Symbol(bigInt, Decl(numberVsBigIntOperations.ts, 1, 3))
+>bigInt : Symbol(bigInt, Decl(numberVsBigIntOperations.ts, 1, 3))
+>num : Symbol(num, Decl(numberVsBigIntOperations.ts, 1, 16))
+>num : Symbol(num, Decl(numberVsBigIntOperations.ts, 1, 16))
+>num : Symbol(num, Decl(numberVsBigIntOperations.ts, 1, 16))
+>num : Symbol(num, Decl(numberVsBigIntOperations.ts, 1, 16))
+
+bigInt = -bigInt; num = -num;
+>bigInt : Symbol(bigInt, Decl(numberVsBigIntOperations.ts, 1, 3))
+>bigInt : Symbol(bigInt, Decl(numberVsBigIntOperations.ts, 1, 3))
+>num : Symbol(num, Decl(numberVsBigIntOperations.ts, 1, 16))
+>num : Symbol(num, Decl(numberVsBigIntOperations.ts, 1, 16))
+
+bigInt = ~bigInt; num = ~num;
+>bigInt : Symbol(bigInt, Decl(numberVsBigIntOperations.ts, 1, 3))
+>bigInt : Symbol(bigInt, Decl(numberVsBigIntOperations.ts, 1, 3))
+>num : Symbol(num, Decl(numberVsBigIntOperations.ts, 1, 16))
+>num : Symbol(num, Decl(numberVsBigIntOperations.ts, 1, 16))
+
+// Number-only operations
+bigInt >>>= 1n; num >>>= 2;
+>bigInt : Symbol(bigInt, Decl(numberVsBigIntOperations.ts, 1, 3))
+>num : Symbol(num, Decl(numberVsBigIntOperations.ts, 1, 16))
+
+bigInt = bigInt >>> 1n; num = num >>> 2;
+>bigInt : Symbol(bigInt, Decl(numberVsBigIntOperations.ts, 1, 3))
+>bigInt : Symbol(bigInt, Decl(numberVsBigIntOperations.ts, 1, 3))
+>num : Symbol(num, Decl(numberVsBigIntOperations.ts, 1, 16))
+>num : Symbol(num, Decl(numberVsBigIntOperations.ts, 1, 16))
+
+num = +bigInt; num = +num; num = +"3";
+>num : Symbol(num, Decl(numberVsBigIntOperations.ts, 1, 16))
+>bigInt : Symbol(bigInt, Decl(numberVsBigIntOperations.ts, 1, 3))
+>num : Symbol(num, Decl(numberVsBigIntOperations.ts, 1, 16))
+>num : Symbol(num, Decl(numberVsBigIntOperations.ts, 1, 16))
+>num : Symbol(num, Decl(numberVsBigIntOperations.ts, 1, 16))
+
+// Comparisons can be mixed
+let result: boolean;
+>result : Symbol(result, Decl(numberVsBigIntOperations.ts, 42, 3))
+
+result = bigInt > num;
+>result : Symbol(result, Decl(numberVsBigIntOperations.ts, 42, 3))
+>bigInt : Symbol(bigInt, Decl(numberVsBigIntOperations.ts, 1, 3))
+>num : Symbol(num, Decl(numberVsBigIntOperations.ts, 1, 16))
+
+result = bigInt >= num;
+>result : Symbol(result, Decl(numberVsBigIntOperations.ts, 42, 3))
+>bigInt : Symbol(bigInt, Decl(numberVsBigIntOperations.ts, 1, 3))
+>num : Symbol(num, Decl(numberVsBigIntOperations.ts, 1, 16))
+
+result = bigInt < num;
+>result : Symbol(result, Decl(numberVsBigIntOperations.ts, 42, 3))
+>bigInt : Symbol(bigInt, Decl(numberVsBigIntOperations.ts, 1, 3))
+>num : Symbol(num, Decl(numberVsBigIntOperations.ts, 1, 16))
+
+result = bigInt <= num;
+>result : Symbol(result, Decl(numberVsBigIntOperations.ts, 42, 3))
+>bigInt : Symbol(bigInt, Decl(numberVsBigIntOperations.ts, 1, 3))
+>num : Symbol(num, Decl(numberVsBigIntOperations.ts, 1, 16))
+
+// Trying to compare for equality is likely an error (since 1 == "1" is disallowed)
+result = bigInt == num;
+>result : Symbol(result, Decl(numberVsBigIntOperations.ts, 42, 3))
+>bigInt : Symbol(bigInt, Decl(numberVsBigIntOperations.ts, 1, 3))
+>num : Symbol(num, Decl(numberVsBigIntOperations.ts, 1, 16))
+
+result = bigInt != num;
+>result : Symbol(result, Decl(numberVsBigIntOperations.ts, 42, 3))
+>bigInt : Symbol(bigInt, Decl(numberVsBigIntOperations.ts, 1, 3))
+>num : Symbol(num, Decl(numberVsBigIntOperations.ts, 1, 16))
+
+result = bigInt === num;
+>result : Symbol(result, Decl(numberVsBigIntOperations.ts, 42, 3))
+>bigInt : Symbol(bigInt, Decl(numberVsBigIntOperations.ts, 1, 3))
+>num : Symbol(num, Decl(numberVsBigIntOperations.ts, 1, 16))
+
+result = bigInt !== num;
+>result : Symbol(result, Decl(numberVsBigIntOperations.ts, 42, 3))
+>bigInt : Symbol(bigInt, Decl(numberVsBigIntOperations.ts, 1, 3))
+>num : Symbol(num, Decl(numberVsBigIntOperations.ts, 1, 16))
+
+// Types of arithmetic operations on other types
+num = "3" & 5; num = 2 ** false; // should error, but infer number
+>num : Symbol(num, Decl(numberVsBigIntOperations.ts, 1, 16))
+>num : Symbol(num, Decl(numberVsBigIntOperations.ts, 1, 16))
+
+"3" & 5n; 2n ** false; // should error, result in any
+num = ~"3"; num = -false; // should infer number
+>num : Symbol(num, Decl(numberVsBigIntOperations.ts, 1, 16))
+>num : Symbol(num, Decl(numberVsBigIntOperations.ts, 1, 16))
+
+let bigIntOrNumber: bigint | number;
+>bigIntOrNumber : Symbol(bigIntOrNumber, Decl(numberVsBigIntOperations.ts, 58, 3))
+
+bigIntOrNumber + bigIntOrNumber; // should error, result in any
+>bigIntOrNumber : Symbol(bigIntOrNumber, Decl(numberVsBigIntOperations.ts, 58, 3))
+>bigIntOrNumber : Symbol(bigIntOrNumber, Decl(numberVsBigIntOperations.ts, 58, 3))
+
+bigIntOrNumber << bigIntOrNumber; // should error, result in any
+>bigIntOrNumber : Symbol(bigIntOrNumber, Decl(numberVsBigIntOperations.ts, 58, 3))
+>bigIntOrNumber : Symbol(bigIntOrNumber, Decl(numberVsBigIntOperations.ts, 58, 3))
+
+if (typeof bigIntOrNumber === "bigint") {
+>bigIntOrNumber : Symbol(bigIntOrNumber, Decl(numberVsBigIntOperations.ts, 58, 3))
+
+    // Allowed, as type is narrowed to bigint
+    bigIntOrNumber = bigIntOrNumber << bigIntOrNumber;
+>bigIntOrNumber : Symbol(bigIntOrNumber, Decl(numberVsBigIntOperations.ts, 58, 3))
+>bigIntOrNumber : Symbol(bigIntOrNumber, Decl(numberVsBigIntOperations.ts, 58, 3))
+>bigIntOrNumber : Symbol(bigIntOrNumber, Decl(numberVsBigIntOperations.ts, 58, 3))
+}
+if (typeof bigIntOrNumber === "number") {
+>bigIntOrNumber : Symbol(bigIntOrNumber, Decl(numberVsBigIntOperations.ts, 58, 3))
+
+    // Allowed, as type is narrowed to number
+    bigIntOrNumber = bigIntOrNumber << bigIntOrNumber;
+>bigIntOrNumber : Symbol(bigIntOrNumber, Decl(numberVsBigIntOperations.ts, 58, 3))
+>bigIntOrNumber : Symbol(bigIntOrNumber, Decl(numberVsBigIntOperations.ts, 58, 3))
+>bigIntOrNumber : Symbol(bigIntOrNumber, Decl(numberVsBigIntOperations.ts, 58, 3))
+}
++bigIntOrNumber; // should error, result in number
+>bigIntOrNumber : Symbol(bigIntOrNumber, Decl(numberVsBigIntOperations.ts, 58, 3))
+
+~bigIntOrNumber; // should infer number | bigint
+>bigIntOrNumber : Symbol(bigIntOrNumber, Decl(numberVsBigIntOperations.ts, 58, 3))
+
+bigIntOrNumber++; // should infer number | bigint
+>bigIntOrNumber : Symbol(bigIntOrNumber, Decl(numberVsBigIntOperations.ts, 58, 3))
+
+++bigIntOrNumber; // should infer number | bigint
+>bigIntOrNumber : Symbol(bigIntOrNumber, Decl(numberVsBigIntOperations.ts, 58, 3))
+
+let anyValue: any;
+>anyValue : Symbol(anyValue, Decl(numberVsBigIntOperations.ts, 73, 3))
+
+anyValue + anyValue; // should infer any
+>anyValue : Symbol(anyValue, Decl(numberVsBigIntOperations.ts, 73, 3))
+>anyValue : Symbol(anyValue, Decl(numberVsBigIntOperations.ts, 73, 3))
+
+anyValue >>> anyValue; // should infer number
+>anyValue : Symbol(anyValue, Decl(numberVsBigIntOperations.ts, 73, 3))
+>anyValue : Symbol(anyValue, Decl(numberVsBigIntOperations.ts, 73, 3))
+
+anyValue ^ anyValue; // should infer number
+>anyValue : Symbol(anyValue, Decl(numberVsBigIntOperations.ts, 73, 3))
+>anyValue : Symbol(anyValue, Decl(numberVsBigIntOperations.ts, 73, 3))
+
++anyValue; // should infer number
+>anyValue : Symbol(anyValue, Decl(numberVsBigIntOperations.ts, 73, 3))
+
+-anyValue; // should infer number
+>anyValue : Symbol(anyValue, Decl(numberVsBigIntOperations.ts, 73, 3))
+
+anyValue--; // should infer number
+>anyValue : Symbol(anyValue, Decl(numberVsBigIntOperations.ts, 73, 3))
+
+--anyValue; // should infer number
+>anyValue : Symbol(anyValue, Decl(numberVsBigIntOperations.ts, 73, 3))
+
+// Distinguishing numbers from bigints with typeof
+const isBigInt: (x: 0n | 1n) => bigint = (x: 0n | 1n) => x;
+>isBigInt : Symbol(isBigInt, Decl(numberVsBigIntOperations.ts, 83, 5))
+>x : Symbol(x, Decl(numberVsBigIntOperations.ts, 83, 17))
+>x : Symbol(x, Decl(numberVsBigIntOperations.ts, 83, 42))
+>x : Symbol(x, Decl(numberVsBigIntOperations.ts, 83, 42))
+
+const isNumber: (x: 0 | 1) => number = (x: 0 | 1) => x;
+>isNumber : Symbol(isNumber, Decl(numberVsBigIntOperations.ts, 84, 5))
+>x : Symbol(x, Decl(numberVsBigIntOperations.ts, 84, 17))
+>x : Symbol(x, Decl(numberVsBigIntOperations.ts, 84, 40))
+>x : Symbol(x, Decl(numberVsBigIntOperations.ts, 84, 40))
+
+const zeroOrBigOne: 0 | 1n;
+>zeroOrBigOne : Symbol(zeroOrBigOne, Decl(numberVsBigIntOperations.ts, 85, 5))
+
+if (typeof zeroOrBigOne === "bigint") isBigInt(zeroOrBigOne);
+>zeroOrBigOne : Symbol(zeroOrBigOne, Decl(numberVsBigIntOperations.ts, 85, 5))
+>isBigInt : Symbol(isBigInt, Decl(numberVsBigIntOperations.ts, 83, 5))
+>zeroOrBigOne : Symbol(zeroOrBigOne, Decl(numberVsBigIntOperations.ts, 85, 5))
+
+else isNumber(zeroOrBigOne);
+>isNumber : Symbol(isNumber, Decl(numberVsBigIntOperations.ts, 84, 5))
+>zeroOrBigOne : Symbol(zeroOrBigOne, Decl(numberVsBigIntOperations.ts, 85, 5))
+
+// Distinguishing truthy from falsy
+const isOne = (x: 1 | 1n) => x;
+>isOne : Symbol(isOne, Decl(numberVsBigIntOperations.ts, 90, 5))
+>x : Symbol(x, Decl(numberVsBigIntOperations.ts, 90, 15))
+>x : Symbol(x, Decl(numberVsBigIntOperations.ts, 90, 15))
+
+if (zeroOrBigOne) isOne(zeroOrBigOne);
+>zeroOrBigOne : Symbol(zeroOrBigOne, Decl(numberVsBigIntOperations.ts, 85, 5))
+>isOne : Symbol(isOne, Decl(numberVsBigIntOperations.ts, 90, 5))
+>zeroOrBigOne : Symbol(zeroOrBigOne, Decl(numberVsBigIntOperations.ts, 85, 5))
+
+const bigZeroOrOne: 0n | 1;
+>bigZeroOrOne : Symbol(bigZeroOrOne, Decl(numberVsBigIntOperations.ts, 92, 5))
+
+if (bigZeroOrOne) isOne(bigZeroOrOne);
+>bigZeroOrOne : Symbol(bigZeroOrOne, Decl(numberVsBigIntOperations.ts, 92, 5))
+>isOne : Symbol(isOne, Decl(numberVsBigIntOperations.ts, 90, 5))
+>bigZeroOrOne : Symbol(bigZeroOrOne, Decl(numberVsBigIntOperations.ts, 92, 5))
+

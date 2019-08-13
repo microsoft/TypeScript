@@ -31,7 +31,8 @@ type K03 = keyof boolean;  // "valueOf"
 type K04 = keyof void;  // never
 type K05 = keyof undefined;  // never
 type K06 = keyof null;  // never
-type K07 = keyof never;  // never
+type K07 = keyof never;  // string | number | symbol
+type K08 = keyof unknown; // never
 
 type K10 = keyof Shape;  // "name" | "width" | "height" | "visible"
 type K11 = keyof Shape[];  // "length" | "toString" | ...
@@ -61,12 +62,11 @@ type Q21 = Shape[WIDTH_OR_HEIGHT];  // number
 
 type Q30 = [string, number][0];  // string
 type Q31 = [string, number][1];  // number
-type Q32 = [string, number][2];  // string | number
+type Q32 = [string, number][number];  // string | number
 type Q33 = [string, number][E.A];  // string
 type Q34 = [string, number][E.B];  // number
-type Q35 = [string, number][E.C];  // string | number
-type Q36 = [string, number]["0"];  // string
-type Q37 = [string, number]["1"];  // string
+type Q35 = [string, number]["0"];  // string
+type Q36 = [string, number]["1"];  // string
 
 type Q40 = (Shape | Options)["visible"];  // boolean | "yes" | "no"
 type Q41 = (Shape & Options)["visible"];  // true & "yes" | true & "no" | false & "yes" | false & "no"
@@ -485,10 +485,10 @@ function onChangeGenericFunction<T>(handler: Handler<T & {preset: number}>) {
 function updateIds<T extends Record<K, string>, K extends string>(
     obj: T,
     idFields: K[],
-    idMapping: { [oldId: string]: string }
+    idMapping: Partial<Record<T[K], T[K]>>
 ): Record<K, string> {
     for (const idField of idFields) {
-        const newId = idMapping[obj[idField]];
+        const newId: T[K] | undefined = idMapping[obj[idField]];
         if (newId) {
             obj[idField] = newId;
         }
@@ -672,6 +672,13 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
+var __spreadArrays = (this && this.__spreadArrays) || function () {
+    for (var s = 0, i = 0, il = arguments.length; i < il; i++) s += arguments[i].length;
+    for (var r = Array(s), k = 0, i = 0; i < il; i++)
+        for (var a = arguments[i], j = 0, jl = a.length; j < jl; j++, k++)
+            r[k] = a[j];
+    return r;
+};
 var Shape = /** @class */ (function () {
     function Shape() {
     }
@@ -951,7 +958,7 @@ function f1(thing) {
     var x1 = path(thing, 'a'); // { x: number, y: string }
     var x2 = path(thing, 'a', 'y'); // string
     var x3 = path(thing, 'b'); // boolean
-    var x4 = path.apply(void 0, [thing].concat(['a', 'x'])); // any
+    var x4 = path.apply(void 0, __spreadArrays([thing], ['a', 'x'])); // any
 }
 // Repro from comment in #12114
 var assignTo2 = function (object, key1, key2) {
@@ -1125,6 +1132,7 @@ declare type K04 = keyof void;
 declare type K05 = keyof undefined;
 declare type K06 = keyof null;
 declare type K07 = keyof never;
+declare type K08 = keyof unknown;
 declare type K10 = keyof Shape;
 declare type K11 = keyof Shape[];
 declare type K12 = keyof Dictionary<Shape>;
@@ -1147,12 +1155,11 @@ declare type Q20 = Shape[NAME];
 declare type Q21 = Shape[WIDTH_OR_HEIGHT];
 declare type Q30 = [string, number][0];
 declare type Q31 = [string, number][1];
-declare type Q32 = [string, number][2];
+declare type Q32 = [string, number][number];
 declare type Q33 = [string, number][E.A];
 declare type Q34 = [string, number][E.B];
-declare type Q35 = [string, number][E.C];
-declare type Q36 = [string, number]["0"];
-declare type Q37 = [string, number]["1"];
+declare type Q35 = [string, number]["0"];
+declare type Q36 = [string, number]["1"];
 declare type Q40 = (Shape | Options)["visible"];
 declare type Q41 = (Shape & Options)["visible"];
 declare type Q50 = Dictionary<Shape>["howdy"];
@@ -1257,13 +1264,13 @@ declare type Thing = {
 declare function f1(thing: Thing): void;
 declare const assignTo2: <T, K1 extends keyof T, K2 extends keyof T[K1]>(object: T, key1: K1, key2: K2) => (value: T[K1][K2]) => T[K1][K2];
 declare function one<T>(handler: (t: T) => void): T;
-declare var empty: {};
+declare var empty: unknown;
 declare type Handlers<T> = {
     [K in keyof T]: (t: T[K]) => void;
 };
 declare function on<T>(handlerHash: Handlers<T>): T;
 declare var hashOfEmpty1: {
-    test: {};
+    test: unknown;
 };
 declare var hashOfEmpty2: {
     test: boolean;
@@ -1278,7 +1285,7 @@ declare class Component1<Data, Computed> {
 }
 declare let c1: Component1<{
     hello: string;
-}, {}>;
+}, unknown>;
 interface Options2<Data, Computed> {
     data?: Data;
     computed?: Computed;
@@ -1314,9 +1321,7 @@ declare type Handler<T> = {
 declare function onChangeGenericFunction<T>(handler: Handler<T & {
     preset: number;
 }>): void;
-declare function updateIds<T extends Record<K, string>, K extends string>(obj: T, idFields: K[], idMapping: {
-    [oldId: string]: string;
-}): Record<K, string>;
+declare function updateIds<T extends Record<K, string>, K extends string>(obj: T, idFields: K[], idMapping: Partial<Record<T[K], T[K]>>): Record<K, string>;
 declare function updateIds2<T extends {
     [x: string]: string;
 }, K extends keyof T>(obj: T, key: K, stringMap: {

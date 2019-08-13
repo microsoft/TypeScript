@@ -28,15 +28,23 @@ interface SymbolConstructor {
     readonly iterator: symbol;
 }
 
-interface IteratorResult<T> {
-    done: boolean;
-    value: T;
+interface IteratorYieldResult<TYield> {
+    done?: false;
+    value: TYield;
 }
 
-interface Iterator<T> {
-    next(value?: any): IteratorResult<T>;
-    return?(value?: any): IteratorResult<T>;
-    throw?(e?: any): IteratorResult<T>;
+interface IteratorReturnResult<TReturn> {
+    done: true;
+    value: TReturn;
+}
+
+type IteratorResult<T, TReturn = any> = IteratorYieldResult<T> | IteratorReturnResult<TReturn>;
+
+interface Iterator<T, TReturn = any, TNext = undefined> {
+    // NOTE: 'next' is defined using a tuple to ensure we report the correct assignability errors in all places.
+    next(...args: [] | [TNext]): IteratorResult<T, TReturn>;
+    return?(value?: TReturn): IteratorResult<T, TReturn>;
+    throw?(e?: any): IteratorResult<T, TReturn>;
 }
 
 interface Iterable<T> {
@@ -149,13 +157,13 @@ interface ReadonlyMap<K, V> {
 }
 
 interface MapConstructor {
-    new <K, V>(iterable: Iterable<[K, V]>): Map<K, V>;
+    new <K, V>(iterable: Iterable<readonly [K, V]>): Map<K, V>;
 }
 
 interface WeakMap<K extends object, V> { }
 
 interface WeakMapConstructor {
-    new <K extends object = object, V = any>(iterable: Iterable<[K, V]>): WeakMap<K, V>;
+    new <K extends object, V>(iterable: Iterable<[K, V]>): WeakMap<K, V>;
 }
 
 interface Set<T> {
@@ -197,7 +205,7 @@ interface ReadonlySet<T> {
 }
 
 interface SetConstructor {
-    new <T>(iterable: Iterable<T>): Set<T>;
+    new <T>(iterable?: Iterable<T> | null): Set<T>;
 }
 
 interface WeakSet<T extends object> { }

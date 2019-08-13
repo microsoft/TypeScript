@@ -242,30 +242,32 @@ var publicClassImplementingPublicInterfaceInGlobal = /** @class */ (function () 
 
 //// [privacyClassImplementsClauseDeclFile_externalModule.d.ts]
 export declare module publicModule {
-    interface publicInterfaceInPublicModule {
+    export interface publicInterfaceInPublicModule {
     }
     interface privateInterfaceInPublicModule {
     }
-    class publicClassImplementingPublicInterfaceInModule implements publicInterfaceInPublicModule {
+    export class publicClassImplementingPublicInterfaceInModule implements publicInterfaceInPublicModule {
     }
-    class publicClassImplementingPrivateInterfaceInModule implements privateInterfaceInPublicModule {
+    export class publicClassImplementingPrivateInterfaceInModule implements privateInterfaceInPublicModule {
     }
-    class publicClassImplementingFromPrivateModuleInterface implements privateModule.publicInterfaceInPrivateModule {
+    export class publicClassImplementingFromPrivateModuleInterface implements privateModule.publicInterfaceInPrivateModule {
     }
-    class publicClassImplementingPrivateAndPublicInterface implements privateInterfaceInPublicModule, publicInterfaceInPublicModule {
+    export class publicClassImplementingPrivateAndPublicInterface implements privateInterfaceInPublicModule, publicInterfaceInPublicModule {
     }
+    export {};
 }
 declare module privateModule {
-    interface publicInterfaceInPrivateModule {
+    export interface publicInterfaceInPrivateModule {
     }
     interface privateInterfaceInPrivateModule {
     }
-    class publicClassImplementingPublicInterfaceInModule implements publicInterfaceInPrivateModule {
+    export class publicClassImplementingPublicInterfaceInModule implements publicInterfaceInPrivateModule {
     }
-    class publicClassImplementingPrivateInterfaceInModule implements privateInterfaceInPrivateModule {
+    export class publicClassImplementingPrivateInterfaceInModule implements privateInterfaceInPrivateModule {
     }
-    class publicClassImplementingFromPrivateModuleInterface implements privateModule.publicInterfaceInPrivateModule {
+    export class publicClassImplementingFromPrivateModuleInterface implements privateModule.publicInterfaceInPrivateModule {
     }
+    export {};
 }
 export interface publicInterface {
 }
@@ -280,14 +282,15 @@ export declare class publicClassImplementingFromPrivateModuleInterface implement
 export {};
 //// [privacyClassImplementsClauseDeclFile_GlobalFile.d.ts]
 declare module publicModuleInGlobal {
-    interface publicInterfaceInPublicModule {
+    export interface publicInterfaceInPublicModule {
     }
     interface privateInterfaceInPublicModule {
     }
-    class publicClassImplementingPublicInterfaceInModule implements publicInterfaceInPublicModule {
+    export class publicClassImplementingPublicInterfaceInModule implements publicInterfaceInPublicModule {
     }
-    class publicClassImplementingPrivateInterfaceInModule implements privateInterfaceInPublicModule {
+    export class publicClassImplementingPrivateInterfaceInModule implements privateInterfaceInPublicModule {
     }
+    export {};
 }
 interface publicInterfaceInGlobal {
 }

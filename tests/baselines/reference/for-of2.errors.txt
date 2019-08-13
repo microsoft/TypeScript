@@ -1,5 +1,5 @@
 tests/cases/conformance/es6/for-ofStatements/for-of2.ts(1,7): error TS1155: 'const' declarations must be initialized.
-tests/cases/conformance/es6/for-ofStatements/for-of2.ts(2,6): error TS2540: Cannot assign to 'v' because it is a constant or a read-only property.
+tests/cases/conformance/es6/for-ofStatements/for-of2.ts(2,6): error TS2588: Cannot assign to 'v' because it is a constant.
 
 
 ==== tests/cases/conformance/es6/for-ofStatements/for-of2.ts (2 errors) ====
@@ -8,4 +8,4 @@ tests/cases/conformance/es6/for-ofStatements/for-of2.ts(2,6): error TS2540: Cann
 !!! error TS1155: 'const' declarations must be initialized.
     for (v of []) { }
          ~
-!!! error TS2540: Cannot assign to 'v' because it is a constant or a read-only property.
+!!! error TS2588: Cannot assign to 'v' because it is a constant.

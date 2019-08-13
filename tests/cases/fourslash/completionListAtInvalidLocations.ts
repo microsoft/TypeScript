@@ -21,4 +21,7 @@
 //// foo;
 //// var v10 = /reg/*inRegExp1*/ex/;
 
-goTo.eachMarker(() => verify.completionListIsEmpty());
+verify.completions(
+    { marker: ["openString1", "openString2", "openString3"], exact: [] },
+    { marker: ["inComment1", "inComment2", "inComment3", "inComment4", "inTypeAlias", "inComment5", "inRegExp1"], exact: undefined },
+);

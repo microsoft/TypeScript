@@ -36,11 +36,11 @@ class SymbolIterator {
     }
 }
 
-class StringIterator {
->StringIterator : Symbol(StringIterator, Decl(iteratorSpreadInCall12.ts, 15, 1))
+class _StringIterator {
+>_StringIterator : Symbol(_StringIterator, Decl(iteratorSpreadInCall12.ts, 15, 1))
 
     next() {
->next : Symbol(StringIterator.next, Decl(iteratorSpreadInCall12.ts, 17, 22))
+>next : Symbol(_StringIterator.next, Decl(iteratorSpreadInCall12.ts, 17, 23))
 
         return {
             value: "",
@@ -53,18 +53,18 @@ class StringIterator {
     }
 
     [Symbol.iterator]() {
->[Symbol.iterator] : Symbol(StringIterator[Symbol.iterator], Decl(iteratorSpreadInCall12.ts, 23, 5))
+>[Symbol.iterator] : Symbol(_StringIterator[Symbol.iterator], Decl(iteratorSpreadInCall12.ts, 23, 5))
 >Symbol.iterator : Symbol(SymbolConstructor.iterator, Decl(lib.es2015.iterable.d.ts, --, --))
 >Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >iterator : Symbol(SymbolConstructor.iterator, Decl(lib.es2015.iterable.d.ts, --, --))
 
         return this;
->this : Symbol(StringIterator, Decl(iteratorSpreadInCall12.ts, 15, 1))
+>this : Symbol(_StringIterator, Decl(iteratorSpreadInCall12.ts, 15, 1))
     }
 }
 
-new Foo(...[...new SymbolIterator, ...[...new StringIterator]]);
+new Foo(...[...new SymbolIterator, ...[...new _StringIterator]]);
 >Foo : Symbol(Foo, Decl(iteratorSpreadInCall12.ts, 0, 0))
 >SymbolIterator : Symbol(SymbolIterator, Decl(iteratorSpreadInCall12.ts, 2, 1))
->StringIterator : Symbol(StringIterator, Decl(iteratorSpreadInCall12.ts, 15, 1))
+>_StringIterator : Symbol(_StringIterator, Decl(iteratorSpreadInCall12.ts, 15, 1))
 

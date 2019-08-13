@@ -316,7 +316,7 @@ namespace ts {
             else if (inGeneratorFunctionBody) {
                 return visitJavaScriptInGeneratorFunctionBody(node);
             }
-            else if (transformFlags & TransformFlags.Generator) {
+            else if (isFunctionLikeDeclaration(node) && node.asteriskToken) {
                 return visitGenerator(node);
             }
             else if (transformFlags & TransformFlags.ContainsGenerator) {
@@ -587,7 +587,7 @@ namespace ts {
             transformAndEmitStatements(body.statements, statementOffset);
 
             const buildResult = build();
-            addStatementsAfterPrologue(statements, endLexicalEnvironment());
+            insertStatementsAfterStandardPrologue(statements, endLexicalEnvironment());
             statements.push(createReturn(buildResult));
 
             // Restore previous generator state
@@ -3176,7 +3176,7 @@ namespace ts {
     function createGeneratorHelper(context: TransformationContext, body: FunctionExpression) {
         context.requestEmitHelper(generatorHelper);
         return createCall(
-            getHelperName("__generator"),
+            getUnscopedHelperName("__generator"),
             /*typeArguments*/ undefined,
             [createThis(), body]);
     }
@@ -3240,8 +3240,9 @@ namespace ts {
     //                        entering a finally block.
     //
     // For examples of how these are used, see the comments in ./transformers/generators.ts
-    const generatorHelper: EmitHelper = {
+    export const generatorHelper: UnscopedEmitHelper = {
         name: "typescript:generator",
+        importName: "__generator",
         scoped: false,
         priority: 6,
         text: `

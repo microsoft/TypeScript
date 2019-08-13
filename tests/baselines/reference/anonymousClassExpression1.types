@@ -4,7 +4,7 @@ function f() {
 
     return typeof class {} === "function";
 >typeof class {} === "function" : boolean
->typeof class {} : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof class {} : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >class {} : typeof (Anonymous class)
 >"function" : "function"
 }

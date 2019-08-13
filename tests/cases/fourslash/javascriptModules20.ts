@@ -9,5 +9,8 @@
 //// import * as mod from "./mod"
 //// mod./**/
 
-goTo.marker();
-verify.completionListContains('a');
+verify.completions({
+    marker: "", exact: [
+        { name: "a", kind: "property" },
+        { name: "mod", kind: "warning", sortText: completion.SortText.JavascriptIdentifiers }]
+});

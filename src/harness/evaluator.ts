@@ -56,6 +56,7 @@ namespace evaluator {
         }
 
         const evaluateText = `(function (module, exports, require, __dirname, __filename, ${globalNames.join(", ")}) { ${output.text} })`;
+        // tslint:disable-next-line:no-eval
         const evaluateThunk = eval(evaluateText) as (module: any, exports: any, require: (id: string) => any, dirname: string, filename: string, ...globalArgs: any[]) => void;
         const module: { exports: any; } = { exports: {} };
         evaluateThunk.call(globals, module, module.exports, noRequire, vpath.dirname(output.file), output.file, FakeSymbol, ...globalArgs);
