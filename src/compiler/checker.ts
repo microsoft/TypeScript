@@ -7496,8 +7496,8 @@ namespace ts {
                 }
                 setStructuredTypeMembers(type, members, emptyArray, emptyArray, undefined, undefined);
                 if (symbol.flags & SymbolFlags.Class) {
-                    const instanceType = getDeclaredTypeOfClassOrInterface(symbol);
-                    const baseConstructorType = getBaseConstructorTypeOfClass(instanceType);
+                    const classType = getDeclaredTypeOfClassOrInterface(symbol);
+                    const baseConstructorType = getBaseConstructorTypeOfClass(classType);
                     if (baseConstructorType.flags & (TypeFlags.Object | TypeFlags.Intersection | TypeFlags.TypeVariable)) {
                         members = createSymbolTable(getNamedMembers(members));
                         addInheritedMembers(members, getPropertiesOfType(baseConstructorType));
@@ -7518,17 +7518,17 @@ namespace ts {
                 }
                 // And likewise for construct signatures for classes
                 if (symbol.flags & SymbolFlags.Class) {
-                    const instanceType = getDeclaredTypeOfClassOrInterface(symbol);
+                    const classType = getDeclaredTypeOfClassOrInterface(symbol);
                     let constructSignatures = getSignaturesOfSymbol(symbol.members!.get(InternalSymbolName.Constructor));
                     if (symbol.flags & SymbolFlags.Function) {
-                        constructSignatures = mapDefined(
+                        constructSignatures = addRange(constructSignatures, mapDefined(
                             type.callSignatures,
                             sig => isJSConstructor(sig.declaration) ?
-                                createSignature(sig.declaration, sig.typeParameters, sig.thisParameter, sig.parameters, instanceType, /*resolvedTypePredicate*/ undefined, sig.minArgumentCount, sig.hasRestParameter, sig.hasLiteralTypes) :
-                                undefined);
+                                createSignature(sig.declaration, sig.typeParameters, sig.thisParameter, sig.parameters, classType, /*resolvedTypePredicate*/ undefined, sig.minArgumentCount, sig.hasRestParameter, sig.hasLiteralTypes) :
+                                undefined));
                     }
                     if (!constructSignatures.length) {
-                        constructSignatures = getDefaultConstructSignatures(instanceType);
+                        constructSignatures = getDefaultConstructSignatures(classType);
                     }
 
                     type.constructSignatures = constructSignatures;
