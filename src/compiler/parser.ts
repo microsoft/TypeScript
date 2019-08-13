@@ -1827,12 +1827,10 @@ namespace ts {
             return node;
         }
 
-        function consumeNode<T extends TextRange | undefined>(node: T): T {
-            if (node) {
-                // Move the scanner so it is after the node we just consumed.
-                scanner.setTextPos(node.end);
-                nextToken();
-            }
+        function consumeNode(node: Node) {
+            // Move the scanner so it is after the node we just consumed.
+            scanner.setTextPos(node.end);
+            nextToken();
             return node;
         }
 
