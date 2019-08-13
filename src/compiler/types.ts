@@ -5444,6 +5444,7 @@ namespace ts {
         writeFile: WriteFileCallback;
         getProgramBuildInfo(): ProgramBuildInfo | undefined;
         getSourceFileFromReference: Program["getSourceFileFromReference"];
+        readonly redirectTargetsMap: RedirectTargetsMap;
     }
 
     export interface TransformationContext {
