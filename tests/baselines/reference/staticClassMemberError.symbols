@@ -14,10 +14,10 @@ class C {
 
 // just want to make sure this one doesn't crash the compiler
 function Foo();
->Foo : Symbol(Foo, Decl(staticClassMemberError.ts, 5, 1))
+>Foo : Symbol(Foo, Decl(staticClassMemberError.ts, 5, 1), Decl(staticClassMemberError.ts, 8, 15))
 
 class Foo {
->Foo : Symbol(Foo, Decl(staticClassMemberError.ts, 8, 15))
+>Foo : Symbol(Foo, Decl(staticClassMemberError.ts, 5, 1), Decl(staticClassMemberError.ts, 8, 15))
 
  static bar;
 >bar : Symbol(Foo.bar, Decl(staticClassMemberError.ts, 9, 11))

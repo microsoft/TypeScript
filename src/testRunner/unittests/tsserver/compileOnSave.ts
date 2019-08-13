@@ -503,6 +503,112 @@ namespace ts.projectSystem {
             });
         });
 
+        describe("for changes in declaration files", () => {
+            function testDTS(dtsFileContents: string, tsFileContents: string, opts: CompilerOptions, expectDTSEmit: boolean) {
+                const dtsFile = {
+                    path: "/a/runtime/a.d.ts",
+                    content: dtsFileContents
+                };
+                const f2 = {
+                    path: "/a/b.ts",
+                    content: tsFileContents
+                };
+                const config = {
+                    path: "/a/tsconfig.json",
+                    content: JSON.stringify({
+                        compilerOptions: opts,
+                        compileOnSave: true
+                    })
+                };
+                const host = createServerHost([dtsFile, f2, config]);
+                const session = projectSystem.createSession(host);
+                session.executeCommand(<protocol.OpenRequest>{
+                    seq: 1,
+                    type: "request",
+                    command: "open",
+                    arguments: { file: dtsFile.path }
+                });
+                const projectService = session.getProjectService();
+                checkNumberOfProjects(projectService, { configuredProjects: 1 });
+                const project = projectService.configuredProjects.get(config.path)!;
+                checkProjectRootFiles(project, [dtsFile.path, f2.path]);
+                session.executeCommand(<protocol.OpenRequest>{
+                    seq: 2,
+                    type: "request",
+                    command: "open",
+                    arguments: { file: f2.path }
+                });
+                checkNumberOfProjects(session.getProjectService(), { configuredProjects: 1 });
+                const { response } = session.executeCommand(<protocol.CompileOnSaveAffectedFileListRequest>{
+                    seq: 3,
+                    type: "request",
+                    command: "compileOnSaveAffectedFileList",
+                    arguments: { file: dtsFile.path }
+                });
+                if (expectDTSEmit) {
+                    assert.equal((response as protocol.CompileOnSaveAffectedFileListSingleProject[]).length, 1, "expected output from 1 project");
+                    assert.equal((response as protocol.CompileOnSaveAffectedFileListSingleProject[])[0].fileNames.length, 2, "expected to affect 2 files");
+                }
+                else {
+                    assert.equal((response as protocol.CompileOnSaveAffectedFileListSingleProject[]).length, 0, "expected no output");
+                }
+
+
+                const { response: response2 } = session.executeCommand(<protocol.CompileOnSaveAffectedFileListRequest>{
+                    seq: 4,
+                    type: "request",
+                    command: "compileOnSaveAffectedFileList",
+                    arguments: { file: f2.path }
+                });
+                assert.equal((response2 as protocol.CompileOnSaveAffectedFileListSingleProject[]).length, 1, "expected output from 1 project");
+            }
+
+            it("should return empty array if change is made in a global declaration file", () => {
+                testDTS(
+                /*dtsFileContents*/ "declare const x: string;",
+                /*tsFileContents*/ "var y = 1;",
+                /*opts*/ {},
+                /*expectDTSEmit*/ false
+                );
+            });
+
+            it("should return empty array if change is made in a module declaration file", () => {
+                testDTS(
+                /*dtsFileContents*/ "export const x: string;",
+                /*tsFileContents*/  "import { x } from './runtime/a;",
+                /*opts*/ {},
+                /*expectDTSEmit*/ false
+                );
+            });
+
+            it("should return results if change is made in a global declaration file with declaration emit", () => {
+                testDTS(
+                /*dtsFileContents*/ "declare const x: string;",
+                /*tsFileContents*/ "var y = 1;",
+                /*opts*/ { declaration: true },
+                /*expectDTSEmit*/ true
+                );
+            });
+
+            it("should return results if change is made in a global declaration file with composite enabled", () => {
+                testDTS(
+                /*dtsFileContents*/ "declare const x: string;",
+                /*tsFileContents*/ "var y = 1;",
+                /*opts*/ { composite: true },
+                /*expectDTSEmit*/ true
+                );
+            });
+
+            it("should return results if change is made in a global declaration file with decorator emit enabled", () => {
+                testDTS(
+                /*dtsFileContents*/ "declare const x: string;",
+                /*tsFileContents*/ "var y = 1;",
+                /*opts*/ { experimentalDecorators: true, emitDecoratorMetadata: true },
+                /*expectDTSEmit*/ true
+                );
+            });
+        });
+
         describe("tsserverProjectSystem emit with outFile or out setting", () => {
             function test(opts: CompilerOptions, expectedUsesOutFile: boolean) {
                 const f1 = {

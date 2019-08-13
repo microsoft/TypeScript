@@ -326,3 +326,123 @@ passContentsToFunc(outerBoxOfString, box => box.value);
 >box : InnerBox<string>
 >value : string
 
+// Repro from #32349
+
+type DooDad = 'SOMETHING' | 'ELSE' ;
+>DooDad : DooDad
+
+class Interesting {
+>Interesting : Interesting
+
+	public compiles = () : Promise<DooDad> => {
+>compiles : () => Promise<DooDad>
+>() : Promise<DooDad> => {		return Promise.resolve().then(() => {			if (1 < 2) {				return 'SOMETHING';			}			return 'ELSE';		});	} : () => Promise<DooDad>
+
+		return Promise.resolve().then(() => {
+>Promise.resolve().then(() => {			if (1 < 2) {				return 'SOMETHING';			}			return 'ELSE';		}) : Promise<DooDad>
+>Promise.resolve().then : <TResult1 = void, TResult2 = never>(onfulfilled?: ((value: void) => TResult1 | PromiseLike<TResult1>) | null | undefined, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | null | undefined) => Promise<TResult1 | TResult2>
+>Promise.resolve() : Promise<void>
+>Promise.resolve : { <T>(value: T | PromiseLike<T>): Promise<T>; (): Promise<void>; }
+>Promise : PromiseConstructor
+>resolve : { <T>(value: T | PromiseLike<T>): Promise<T>; (): Promise<void>; }
+>then : <TResult1 = void, TResult2 = never>(onfulfilled?: ((value: void) => TResult1 | PromiseLike<TResult1>) | null | undefined, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | null | undefined) => Promise<TResult1 | TResult2>
+>() => {			if (1 < 2) {				return 'SOMETHING';			}			return 'ELSE';		} : () => "SOMETHING" | "ELSE"
+
+			if (1 < 2) {
+>1 < 2 : boolean
+>1 : 1
+>2 : 2
+
+				return 'SOMETHING';
+>'SOMETHING' : "SOMETHING"
+			}
+			return 'ELSE';
+>'ELSE' : "ELSE"
+
+		});
+	};
+	public doesnt = () : Promise<DooDad> => {
+>doesnt : () => Promise<DooDad>
+>() : Promise<DooDad> => {		return Promise.resolve().then(() => {			return 'ELSE';		});	} : () => Promise<DooDad>
+
+		return Promise.resolve().then(() => {
+>Promise.resolve().then(() => {			return 'ELSE';		}) : Promise<DooDad>
+>Promise.resolve().then : <TResult1 = void, TResult2 = never>(onfulfilled?: ((value: void) => TResult1 | PromiseLike<TResult1>) | null | undefined, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | null | undefined) => Promise<TResult1 | TResult2>
+>Promise.resolve() : Promise<void>
+>Promise.resolve : { <T>(value: T | PromiseLike<T>): Promise<T>; (): Promise<void>; }
+>Promise : PromiseConstructor
+>resolve : { <T>(value: T | PromiseLike<T>): Promise<T>; (): Promise<void>; }
+>then : <TResult1 = void, TResult2 = never>(onfulfilled?: ((value: void) => TResult1 | PromiseLike<TResult1>) | null | undefined, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | null | undefined) => Promise<TResult1 | TResult2>
+>() => {			return 'ELSE';		} : () => "ELSE"
+
+			return 'ELSE';
+>'ELSE' : "ELSE"
+
+		});
+	};
+	public slightlyDifferentErrorMessage = () : Promise<DooDad> => {
+>slightlyDifferentErrorMessage : () => Promise<DooDad>
+>() : Promise<DooDad> => {		return Promise.resolve().then(() => {			if (1 < 2) {				return 'SOMETHING';			}			return 'SOMETHING';		});	} : () => Promise<DooDad>
+
+		return Promise.resolve().then(() => {
+>Promise.resolve().then(() => {			if (1 < 2) {				return 'SOMETHING';			}			return 'SOMETHING';		}) : Promise<DooDad>
+>Promise.resolve().then : <TResult1 = void, TResult2 = never>(onfulfilled?: ((value: void) => TResult1 | PromiseLike<TResult1>) | null | undefined, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | null | undefined) => Promise<TResult1 | TResult2>
+>Promise.resolve() : Promise<void>
+>Promise.resolve : { <T>(value: T | PromiseLike<T>): Promise<T>; (): Promise<void>; }
+>Promise : PromiseConstructor
+>resolve : { <T>(value: T | PromiseLike<T>): Promise<T>; (): Promise<void>; }
+>then : <TResult1 = void, TResult2 = never>(onfulfilled?: ((value: void) => TResult1 | PromiseLike<TResult1>) | null | undefined, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | null | undefined) => Promise<TResult1 | TResult2>
+>() => {			if (1 < 2) {				return 'SOMETHING';			}			return 'SOMETHING';		} : () => "SOMETHING"
+
+			if (1 < 2) {
+>1 < 2 : boolean
+>1 : 1
+>2 : 2
+
+				return 'SOMETHING';
+>'SOMETHING' : "SOMETHING"
+			}
+			return 'SOMETHING';
+>'SOMETHING' : "SOMETHING"
+
+		});
+	};
+}
+
+// Repro from #32349
+
+declare function invoke<T>(f: () => T): T;
+>invoke : <T>(f: () => T) => T
+>f : () => T
+
+let xx: 0 | 1 | 2 = invoke(() => 1);
+>xx : 0 | 1 | 2
+>invoke(() => 1) : 1
+>invoke : <T>(f: () => T) => T
+>() => 1 : () => 1
+>1 : 1
+
+// Repro from #32416
+
+declare function assignPartial<T>(target: T, partial: Partial<T>): T;
+>assignPartial : <T>(target: T, partial: Partial<T>) => T
+>target : T
+>partial : Partial<T>
+
+let obj = {
+>obj : { foo(bar: string): void; }
+>{  foo(bar: string) {}} : { foo(bar: string): void; }
+
+  foo(bar: string) {}
+>foo : (bar: string) => void
+>bar : string
+}
+
+assignPartial(obj, { foo(...args) {} });  // args has type [string]
+>assignPartial(obj, { foo(...args) {} }) : { foo(bar: string): void; }
+>assignPartial : <T>(target: T, partial: Partial<T>) => T
+>obj : { foo(bar: string): void; }
+>{ foo(...args) {} } : { foo(bar: string): void; }
+>foo : (bar: string) => void
+>args : [string]
+

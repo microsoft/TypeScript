@@ -1,7 +1,5 @@
 Exit Code: 1
 Standard output:
-../../../../../built/local/lib.es2015.iterable.d.ts(41,6): error TS2300: Duplicate identifier 'IteratorResult'.
-../../../../../node_modules/@types/node/index.d.ts(77,11): error TS2300: Duplicate identifier 'IteratorResult'.
 lib/adapters/http.js(12,19): error TS2732: Cannot find module './../../package.json'. Consider using '--resolveJsonModule' to import module with '.json' extension
 lib/adapters/http.js(85,22): error TS2345: Argument of type 'string | undefined' is not assignable to parameter of type 'string'.
   Type 'undefined' is not assignable to type 'string'.

@@ -1,0 +1,62 @@
+=== tests/cases/conformance/scanner/ecmascript5/file1.ts ===
+var \u0061wait = 12; // ok
+>\u0061wait : Symbol(\u0061wait, Decl(file1.ts, 0, 3))
+
+async function main() {
+>main : Symbol(main, Decl(file1.ts, 0, 20))
+
+    \u0061wait 12; // not ok
+}
+
+var \u0079ield = 12; // ok
+>\u0079ield : Symbol(\u0079ield, Decl(file1.ts, 5, 3))
+
+function *gen() {
+>gen : Symbol(gen, Decl(file1.ts, 5, 20))
+
+    \u0079ield 12; //not ok
+}
+
+type typ\u0065 = 12; // ok
+>typ\u0065 : Symbol(typ\u0065, Decl(file1.ts, 8, 1))
+
+typ\u0065 notok = 0; // not ok
+>notok : Symbol(notok, Decl(file1.ts, 10, 20))
+
+export {};
+=== tests/cases/conformance/scanner/ecmascript5/file2.ts ===
+\u{0076}ar x = "hello"; // not ok
+>x : Symbol(x, Decl(file2.ts, 0, 10))
+
+var \u{0061}wait = 12; // ok
+>\u{0061}wait : Symbol(\u{0061}wait, Decl(file2.ts, 2, 3))
+
+async function main() {
+>main : Symbol(main, Decl(file2.ts, 2, 22))
+
+    \u{0061}wait 12; // not ok
+}
+
+var \u{0079}ield = 12; // ok
+>\u{0079}ield : Symbol(\u{0079}ield, Decl(file2.ts, 7, 3))
+
+function *gen() {
+>gen : Symbol(gen, Decl(file2.ts, 7, 22))
+
+    \u{0079}ield 12; //not ok
+}
+
+type typ\u{0065} = 12; // ok
+>typ\u{0065} : Symbol(typ\u{0065}, Decl(file2.ts, 10, 1))
+
+typ\u{0065} notok = 0; // not ok
+>notok : Symbol(notok, Decl(file2.ts, 12, 22))
+
+export {};
+
+const a = {def\u0061ult: 12}; // OK, `default` not in keyword position
+>a : Symbol(a, Decl(file2.ts, 18, 5))
+>def\u0061ult : Symbol(def\u0061ult, Decl(file2.ts, 18, 11))
+
+// chrome and jsc may still error on this, ref https://bugs.chromium.org/p/chromium/issues/detail?id=993000 and https://bugs.webkit.org/show_bug.cgi?id=200638
+

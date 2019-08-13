@@ -1,0 +1,35 @@
+=== tests/cases/compiler/file.js ===
+/**
+ * @param {number} \u0061
+ * @param {number} a\u0061
+ */
+function foo(a, aa) {
+>foo : Symbol(foo, Decl(file.js, 0, 0))
+>a : Symbol(a, Decl(file.js, 4, 13))
+>aa : Symbol(aa, Decl(file.js, 4, 15))
+
+    console.log(a + aa);
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>a : Symbol(a, Decl(file.js, 4, 13))
+>aa : Symbol(aa, Decl(file.js, 4, 15))
+}
+
+/**
+ * @param {number} \u{0061}
+ * @param {number} a\u{0061}
+ */
+function bar(a, aa) {
+>bar : Symbol(bar, Decl(file.js, 6, 1))
+>a : Symbol(a, Decl(file.js, 12, 13))
+>aa : Symbol(aa, Decl(file.js, 12, 15))
+
+    console.log(a + aa);
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>a : Symbol(a, Decl(file.js, 12, 13))
+>aa : Symbol(aa, Decl(file.js, 12, 15))
+}
+
