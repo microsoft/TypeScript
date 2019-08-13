@@ -2705,8 +2705,6 @@ namespace ts.server {
             // It was then postponed to cleanup these script infos so that they can be reused if
             // the file from that old project is reopened because of opening file from here.
             this.removeOrphanScriptInfos();
-
-            this.printProjects();
         }
 
         openClientFileWithNormalizedPath(fileName: NormalizedPath, fileContent?: string, scriptKind?: ScriptKind, hasMixedContent?: boolean, projectRootPath?: NormalizedPath): OpenConfiguredProjectResult {
@@ -2714,6 +2712,7 @@ namespace ts.server {
             const { defaultConfigProject, ...result } = this.assignProjectToOpenedScriptInfo(info);
             this.cleanupAfterOpeningFile(defaultConfigProject);
             this.telemetryOnOpenFile(info);
+            this.printProjects();
             return result;
         }
 
@@ -2914,12 +2913,16 @@ namespace ts.server {
                 this.assignOrphanScriptInfosToInferredProject();
             }
 
-            // Cleanup projects
-            this.cleanupAfterOpeningFile(defaultConfigProjects);
-
-            // Telemetry
-            forEach(openScriptInfos, info => this.telemetryOnOpenFile(info));
-            this.printProjects();
+            if (openScriptInfos) {
+                // Cleanup projects
+                this.cleanupAfterOpeningFile(defaultConfigProjects);
+                // Telemetry
+                openScriptInfos.forEach(info => this.telemetryOnOpenFile(info));
+                this.printProjects();
+            }
+            else if (length(closedFiles)) {
+                this.printProjects();
+            }
         }
 
         /* @internal */
