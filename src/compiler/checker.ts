@@ -13495,9 +13495,9 @@ namespace ts {
 
                     // TODO: Find a nice way to include potential conditional type breakdowns in error output, if those seems good (they usually don't)
                     let localResult: Ternary | undefined;
-                    if (skipTrue || (localResult = isRelatedTo(source, instantiateType(c.trueType, distributionMapper), /*reportErrors*/ false))) {
+                    if (skipTrue || (localResult = isRelatedTo(source, instantiateType(getTrueTypeFromConditionalType(c), distributionMapper), /*reportErrors*/ false))) {
                         if (!skipFalse) {
-                            localResult = (localResult || Ternary.Maybe) & isRelatedTo(source, instantiateType(c.falseType, distributionMapper), /*reportErrors*/ false);
+                            localResult = (localResult || Ternary.Maybe) & isRelatedTo(source, instantiateType(getFalseTypeFromConditionalType(c), distributionMapper), /*reportErrors*/ false);
                         }
                     }
                     if (localResult) {
