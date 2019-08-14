@@ -5,7 +5,7 @@
         "project": [
             "./importDefinitelyTypedTests/tsconfig.json",
             "./eslint/tsconfig.json",
-            "./tsconfig.json"
+            "./tsconfig.eslint.json"
         ]
     }
 }

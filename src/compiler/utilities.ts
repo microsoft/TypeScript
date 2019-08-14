@@ -599,10 +599,8 @@ namespace ts {
                     case SyntaxKind.NoSubstitutionTemplateLiteral:
                         return "`" + rawText + "`";
                     case SyntaxKind.TemplateHead:
-                        // tslint:disable-next-line no-invalid-template-strings
                         return "`" + rawText + "${";
                     case SyntaxKind.TemplateMiddle:
-                        // tslint:disable-next-line no-invalid-template-strings
                         return "}" + rawText + "${";
                     case SyntaxKind.TemplateTail:
                         return "}" + rawText + "`";

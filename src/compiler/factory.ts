@@ -1342,11 +1342,9 @@ namespace ts {
                 rawTextScanner.setText("`" + rawText + "`");
                 break;
             case SyntaxKind.TemplateHead:
-                // tslint:disable-next-line no-invalid-template-strings
                 rawTextScanner.setText("`" + rawText + "${");
                 break;
             case SyntaxKind.TemplateMiddle:
-                // tslint:disable-next-line no-invalid-template-strings
                 rawTextScanner.setText("}" + rawText + "${");
                 break;
             case SyntaxKind.TemplateTail:

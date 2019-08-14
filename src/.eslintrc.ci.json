@@ -1,0 +1,7 @@
+{
+    "extends": "./.eslintrc.json",
+    "rules": {
+        "@typescript-eslint/no-unnecessary-qualifier": "error",
+        "@typescript-eslint/no-unnecessary-type-assertion": "error"
+    }
+}

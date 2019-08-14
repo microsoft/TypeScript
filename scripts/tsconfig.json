@@ -11,17 +11,12 @@
         "lib": ["es6", "scripthost"],
     },
 
-    "includes": [
+    "include": [
         "generateLocalizedDiagnosticMessages.ts",
         "processDiagnosticMessages.ts",
         "configurePrerelease.ts",
-        "failed-tests.d.ts",
         "buildProtocol.ts",
         "produceLKG.ts",
         "word2md.ts"
-    ],
-
-    "exclude": [
-        "ambient.d.ts"
     ]
 }
