@@ -33,7 +33,6 @@ npm ERR!     /root/.npm/_logs/XXXX-XX-XXXXXXXXX-debug.log
 ERROR: "build:lib" exited with 1.
 XX of XX: [@azure/core-paging] completed successfully in ? seconds
 XX of XX: [@azure/core-tracing] completed successfully in ? seconds
-XX of XX: [@azure/cosmos] completed successfully in ? seconds
 npm ERR! code ELIFECYCLE
 npm ERR! errno 2
 npm ERR! @azure/keyvault-certificates@X.X.X extract-api: `tsc -p . && api-extractor run --local`
@@ -45,19 +44,19 @@ npm ERR! A complete log of this run can be found in:
 npm ERR!     /root/.npm/_logs/XXXX-XX-XXXXXXXXX-debug.log
 npm ERR! code ELIFECYCLE
 npm ERR! errno 2
-npm ERR! @azure/keyvault-keys@X.X.X-preview.3 extract-api: `tsc -p . && api-extractor run --local`
+npm ERR! @azure/keyvault-keys@X.X.X-preview.4 extract-api: `tsc -p . && api-extractor run --local`
 npm ERR! Exit status 2
 npm ERR! 
-npm ERR! Failed at the @azure/keyvault-keys@X.X.X-preview.3 extract-api script.
+npm ERR! Failed at the @azure/keyvault-keys@X.X.X-preview.4 extract-api script.
 npm ERR! This is probably not a problem with npm. There is likely additional logging output above.
 npm ERR! A complete log of this run can be found in:
 npm ERR!     /root/.npm/_logs/XXXX-XX-XXXXXXXXX-debug.log
 npm ERR! code ELIFECYCLE
 npm ERR! errno 2
-npm ERR! @azure/keyvault-secrets@X.X.X-preview.4 extract-api: `tsc -p . && api-extractor run --local`
+npm ERR! @azure/keyvault-secrets@X.X.X-preview.5 extract-api: `tsc -p . && api-extractor run --local`
 npm ERR! Exit status 2
 npm ERR! 
-npm ERR! Failed at the @azure/keyvault-secrets@X.X.X-preview.4 extract-api script.
+npm ERR! Failed at the @azure/keyvault-secrets@X.X.X-preview.5 extract-api script.
 npm ERR! This is probably not a problem with npm. There is likely additional logging output above.
 npm ERR! A complete log of this run can be found in:
 npm ERR!     /root/.npm/_logs/XXXX-XX-XXXXXXXXX-debug.log
@@ -67,7 +66,7 @@ XX of XX: [@azure/storage-file] completed successfully in ? seconds
 XX of XX: [@azure/storage-queue] completed successfully in ? seconds
 XX of XX: [@azure/template] completed successfully in ? seconds
 XX of XX: [testhub] completed successfully in ? seconds
-SUCCESS (15)
+SUCCESS (14)
 ================================
 @azure/abort-controller (? seconds)
 @azure/core-arm (? seconds)
@@ -75,7 +74,6 @@ SUCCESS (15)
 @azure/core-auth (? seconds)
 @azure/core-paging (? seconds)
 @azure/core-tracing (? seconds)
-@azure/cosmos (? seconds)
 @azure/event-processor-host (? seconds)
 @azure/identity (? seconds)
 @azure/service-bus (? seconds)
@@ -132,20 +130,20 @@ npm ERR!     /root/.npm/_logs/XXXX-XX-XXXXXXXXX-debug.log
 @azure/keyvault-keys ( ? seconds)
 npm ERR! code ELIFECYCLE
 npm ERR! errno 2
-npm ERR! @azure/keyvault-keys@X.X.X-preview.3 extract-api: `tsc -p . && api-extractor run --local`
+npm ERR! @azure/keyvault-keys@X.X.X-preview.4 extract-api: `tsc -p . && api-extractor run --local`
 npm ERR! Exit status 2
 npm ERR!
-npm ERR! Failed at the @azure/keyvault-keys@X.X.X-preview.3 extract-api script.
+npm ERR! Failed at the @azure/keyvault-keys@X.X.X-preview.4 extract-api script.
 npm ERR! This is probably not a problem with npm. There is likely additional logging output above.
 npm ERR! A complete log of this run can be found in:
 npm ERR!     /root/.npm/_logs/XXXX-XX-XXXXXXXXX-debug.log
 @azure/keyvault-secrets ( ? seconds)
 npm ERR! code ELIFECYCLE
 npm ERR! errno 2
-npm ERR! @azure/keyvault-secrets@X.X.X-preview.4 extract-api: `tsc -p . && api-extractor run --local`
+npm ERR! @azure/keyvault-secrets@X.X.X-preview.5 extract-api: `tsc -p . && api-extractor run --local`
 npm ERR! Exit status 2
 npm ERR!
-npm ERR! Failed at the @azure/keyvault-secrets@X.X.X-preview.4 extract-api script.
+npm ERR! Failed at the @azure/keyvault-secrets@X.X.X-preview.5 extract-api script.
 npm ERR! This is probably not a problem with npm. There is likely additional logging output above.
 npm ERR! A complete log of this run can be found in:
 npm ERR!     /root/.npm/_logs/XXXX-XX-XXXXXXXXX-debug.log
