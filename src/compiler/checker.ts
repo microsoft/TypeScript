@@ -5979,19 +5979,11 @@ namespace ts {
             if (!links.type) {
                 const jsDeclaration = getDeclarationOfExpando(symbol.valueDeclaration);
                 if (jsDeclaration) {
-                    const jsSymbol = getSymbolOfNode(jsDeclaration);
-                    if (jsSymbol && (hasEntries(jsSymbol.exports) || hasEntries(jsSymbol.members))) {
-                        symbol = cloneSymbol(symbol);
+                    const merged = jsMerge(symbol, getSymbolOfNode(jsDeclaration));
+                    if (merged) {
                         // note:we overwrite links because we just cloned the symbol
-                        links = symbol as TransientSymbol;
-                        if (hasEntries(jsSymbol.exports)) {
-                            symbol.exports = symbol.exports || createSymbolTable();
-                            mergeSymbolTable(symbol.exports, jsSymbol.exports);
-                        }
-                        if (hasEntries(jsSymbol.members)) {
-                            symbol.members = symbol.members || createSymbolTable();
-                            mergeSymbolTable(symbol.members, jsSymbol.members);
-                        }
+                        symbol = merged;
+                        links = merged;
                     }
                 }
                 originalLinks.type = links.type = getTypeOfFuncClassEnumModuleWorker(symbol);
@@ -6483,11 +6475,35 @@ namespace ts {
             return true;
         }
 
+        function jsMerge(target: Symbol, source: Symbol | undefined) {
+            if (source && (hasEntries(source.exports) || hasEntries(source.members))) {
+                target = cloneSymbol(target);
+                if (hasEntries(source.exports)) {
+                    target.exports = target.exports || createSymbolTable();
+                    mergeSymbolTable(target.exports, source.exports);
+                }
+                if (hasEntries(source.members)) {
+                    target.members = target.members || createSymbolTable();
+                    mergeSymbolTable(target.members, source.members);
+                }
+                target.flags |= source.flags & SymbolFlags.Class;
+                return target as TransientSymbol;
+            }
+        }
+
         function getDeclaredTypeOfClassOrInterface(symbol: Symbol): InterfaceType {
-            const links = getSymbolLinks(symbol);
+            let links = getSymbolLinks(symbol);
+            const originalLinks = links;
             if (!links.declaredType) {
                 const kind = symbol.flags & SymbolFlags.Class ? ObjectFlags.Class : ObjectFlags.Interface;
-                const type = links.declaredType = <InterfaceType>createObjectType(kind, symbol);
+                const merged = jsMerge(symbol, getAssignedClassSymbol(symbol.valueDeclaration));
+                if (merged) {
+                    // note:we overwrite links because we just cloned the symbol
+                    symbol = merged;
+                    links = merged;
+                }
+
+                const type = originalLinks.declaredType = links.declaredType = <InterfaceType>createObjectType(kind, symbol);
                 const outerTypeParameters = getOuterTypeParametersOfClassOrInterface(symbol);
                 const localTypeParameters = getLocalTypeParametersOfClassOrInterfaceOrTypeAlias(symbol);
                 // A class or interface is generic if it has type parameters or a "this" type. We always give classes a "this" type
@@ -7458,7 +7474,7 @@ namespace ts {
          * Converts an AnonymousType to a ResolvedType.
          */
         function resolveAnonymousTypeMembers(type: AnonymousType) {
-            const symbol = type.symbol;
+            const symbol = getMergedSymbol(type.symbol);
             if (type.target) {
                 setStructuredTypeMembers(type, emptySymbols, emptyArray, emptyArray, undefined, undefined);
                 const members = createInstantiatedSymbolTable(getPropertiesOfObjectType(type.target), type.mapper!, /*mappingThisOnly*/ false);
@@ -22886,6 +22902,16 @@ namespace ts {
             const prototype = assignmentSymbol && assignmentSymbol.exports && assignmentSymbol.exports.get("prototype" as __String);
             const init = prototype && prototype.valueDeclaration && getAssignedJSPrototype(prototype.valueDeclaration);
             return init ? getWidenedType(checkExpressionCached(init)) : undefined;
+        }
+
+        function getAssignedClassSymbol(decl: Declaration): Symbol | undefined {
+            const assignmentSymbol = decl && decl.parent &&
+                (isFunctionDeclaration(decl) && getSymbolOfNode(decl) ||
+                 isBinaryExpression(decl.parent) && getSymbolOfNode(decl.parent.left) ||
+                 isVariableDeclaration(decl.parent) && getSymbolOfNode(decl.parent));
+            const prototype = assignmentSymbol && assignmentSymbol.exports && assignmentSymbol.exports.get("prototype" as __String);
+            const init = prototype && prototype.valueDeclaration && getAssignedJSPrototype(prototype.valueDeclaration);
+            return init ? getSymbolOfNode(init) : undefined;
         }
 
         function getAssignedJSPrototype(node: Node) {

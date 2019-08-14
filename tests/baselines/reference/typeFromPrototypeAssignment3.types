@@ -39,15 +39,15 @@ Multimap3.prototype = {
 
 /** @type {Multimap3} */
 const map = new Multimap3();
->map : Multimap3 & { get(key: string): number; }
->new Multimap3() : Multimap3 & { get(key: string): number; }
+>map : Multimap3
+>new Multimap3() : Multimap3
 >Multimap3 : typeof Multimap3
 
 const n = map.get('hi')
 >n : number
 >map.get('hi') : number
 >map.get : (key: string) => number
->map : Multimap3 & { get(key: string): number; }
+>map : Multimap3
 >get : (key: string) => number
 >'hi' : "hi"
 

@@ -44,10 +44,6 @@ Cp.prototype = {
     m2() { this.z = this.x + 1; return this.y }
 }
 var cp = new Cp(1)
-cp.x
-cp.y
-cp.m1()
-cp.m2()
 
 /** @type {number} */
 var n = cp.x

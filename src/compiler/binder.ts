@@ -2521,7 +2521,7 @@ namespace ts {
                         constructorSymbol.members = constructorSymbol.members || createSymbolTable();
                         // It's acceptable for multiple 'this' assignments of the same identifier to occur
                         declareSymbol(constructorSymbol.members, constructorSymbol, node, SymbolFlags.Property, SymbolFlags.PropertyExcludes & ~SymbolFlags.Property);
-                        // TODO: Also do this for prototype assignments and Object.defineProperty assignments
+                        // TODO: Also do this for Object.defineProperty assignments
                         addDeclarationToSymbol(constructorSymbol, constructorSymbol.valueDeclaration, SymbolFlags.Class);
                     }
                     break;
@@ -2571,6 +2571,10 @@ namespace ts {
             node.left.parent = node;
             node.right.parent = node;
             const lhs = node.left as PropertyAccessEntityNameExpression;
+            const constructorSymbol = lookupSymbolForPropertyAccess(lhs.expression, thisParentContainer);
+            if (constructorSymbol) {
+                addDeclarationToSymbol(constructorSymbol, constructorSymbol.valueDeclaration, SymbolFlags.Class);
+            } // TODO: addDeclarationToSymbol and bindPropertyAssignment overlap about 50%
             bindPropertyAssignment(lhs.expression, lhs, /*isPrototypeProperty*/ false);
         }
 
