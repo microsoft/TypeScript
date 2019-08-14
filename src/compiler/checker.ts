@@ -24518,7 +24518,7 @@ namespace ts {
                             resultType = numberType;
                         }
                         // At least one is assignable to bigint, so check that both are
-                        else if (isTypeAssignableToKind(leftType, TypeFlags.BigIntLike) && isTypeAssignableToKind(rightType, TypeFlags.BigIntLike)) {
+                        else if (bothAreBigIntLike(leftType, rightType)) {
                             switch (operator) {
                                 case SyntaxKind.GreaterThanGreaterThanGreaterThanToken:
                                 case SyntaxKind.GreaterThanGreaterThanGreaterThanEqualsToken:
@@ -24528,7 +24528,7 @@ namespace ts {
                         }
                         // Exactly one of leftType/rightType is assignable to bigint
                         else {
-                            reportOperatorError((awaitedLeft, awaitedRight) => isTypeAssignableToKind(awaitedLeft, TypeFlags.BigIntLike) && isTypeAssignableToKind(awaitedRight, TypeFlags.BigIntLike));
+                            reportOperatorError(bothAreBigIntLike);
                             resultType = errorType;
                         }
                         if (leftOk && rightOk) {
@@ -24578,9 +24578,9 @@ namespace ts {
                         // might be missing an await without doing an exhaustive check that inserting
                         // await(s) will actually be a completely valid binary expression.
                         const closeEnoughKind = TypeFlags.NumberLike | TypeFlags.BigIntLike | TypeFlags.StringLike | TypeFlags.AnyOrUnknown;
-                        reportOperatorError((awaitedLeft, awaitedRight) =>
-                            isTypeAssignableToKind(awaitedLeft, closeEnoughKind) &&
-                            isTypeAssignableToKind(awaitedRight, closeEnoughKind));
+                        reportOperatorError((left, right) =>
+                            isTypeAssignableToKind(left, closeEnoughKind) &&
+                            isTypeAssignableToKind(right, closeEnoughKind));
                         return anyType;
                     }
 
@@ -24646,6 +24646,10 @@ namespace ts {
 
                 default:
                     return Debug.fail();
+            }
+
+            function bothAreBigIntLike(left: Type, right: Type): boolean {
+                return isTypeAssignableToKind(left, TypeFlags.BigIntLike) && isTypeAssignableToKind(right, TypeFlags.BigIntLike);
             }
 
             function checkAssignmentDeclaration(kind: AssignmentDeclarationKind, rightType: Type) {
@@ -24760,7 +24764,7 @@ namespace ts {
                 if (!wouldWorkWithAwait && isRelated) {
                     [effectiveLeft, effectiveRight] = getBaseTypesIfUnrelated(leftType, rightType, isRelated);
                 }
-                let [leftStr, rightStr] = getTypeNamesForErrorDisplay(effectiveLeft, effectiveRight);
+                const [leftStr, rightStr] = getTypeNamesForErrorDisplay(effectiveLeft, effectiveRight);
                 if (!tryGiveBetterPrimaryError(errNode, wouldWorkWithAwait, leftStr, rightStr)) {
                     errorAndMaybeSuggestAwait(
                         errNode,
