@@ -1,4 +1,4 @@
-declare function setTimeout(handler: (...args: any[]) => void, timeout: number): any;
+declare function setTimeout<A extends any[]>(handler: (...args: A) => void, timeout: number, ...args: A): any;
 declare function clearTimeout(handle: any): void;
 
 namespace ts {

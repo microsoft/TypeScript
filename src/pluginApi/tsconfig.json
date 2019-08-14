@@ -1,0 +1,14 @@
+{
+    "extends": "../tsconfig-library-base",
+    "compilerOptions": {
+        "removeComments": false,
+        "emitDeclarationOnly": true,
+        "outFile": "../../built/local/api.out.js"
+    },
+    "files": [
+        "pluginApi.ts"
+    ],
+    "references": [
+        { "path": "../compiler", "prepend": true }
+    ]
+}

@@ -108,18 +108,7 @@ task("watch-tsc", series(lkgPreBuild, parallel(watchLib, watchDiagnostics, watch
 task("watch-tsc").description = "Watch for changes and rebuild the command-line compiler only.";
 
 const buildApi = (() => {
-    const flattenCompiler = async () => flatten("src/compiler/tsconfig.json", "built/local/api.tsconfig.json", {
-        compilerOptions: {
-            removeComments: false,
-            stripInternal: true,
-            emitDeclarationOnly: true,
-            declaration: true,
-            declarationMap: false,
-            outFile: "api.out.js"
-        }
-    });
-
-    const buildApiOut = () => buildProject("built/local/api.tsconfig.json");
+    const buildApiOut = () => buildProject("src/pluginApi/tsconfig.json", cmdLineOptions);
 
     const generateApiDts = () => src("built/local/api.out.d.ts", { base: "built/local" })
         .pipe(newer("built/local/api.d.ts"))
@@ -136,7 +125,7 @@ const buildApi = (() => {
         .pipe(rename("api.js"))
         .pipe(dest("built/local"));
 
-    return series(flattenCompiler, buildApiOut, generateApiDts, generateApiJs);
+    return series(buildApiOut, generateApiDts, generateApiJs);
 })();
 task("api", series(lkgPreBuild, buildApi));
 task("api").description = "Build the compiler plugin API";

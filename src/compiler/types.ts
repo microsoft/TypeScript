@@ -2947,27 +2947,6 @@ namespace ts {
         file: Path;
     }
 
-    /* @internal */
-    export interface CompilerPluginDeactivationResult {
-        diagnostics?: ReadonlyArray<Diagnostic>;
-    }
-
-    /**
-     * The CompilerPluginHost provides an interface for interacting with the compiler plugin model.
-     */
-    /*@internal*/
-    export interface CompilerPluginHost {
-        /**
-         * Trigger the `preEmit` hooks for plugins.
-         */
-        preEmit(host: CompilerHost, program: Program, targetSourceFile?: SourceFile, cancellationToken?: CancellationToken): CompilerPluginPreEmitResult;
-
-        /**
-         * Deactivate any active plugins.
-         */
-        deactivate(host: CompilerHost): CompilerPluginDeactivationResult;
-    }
-
     // TODO: This should implement TypeCheckerHost but that's an internal type.
     export interface Program extends ScriptReferenceHost {
 
@@ -3063,6 +3042,14 @@ namespace ts {
          * Dispose of any resources held by the program and deactivate any active plugins.
          */
         /*@internal*/ dispose(): void;
+
+        /** A view of the Program that is provided to plugins. */
+        /*@internal*/ pluginProgram?: PluginProgram;
+    }
+
+    /* @internal */
+    export interface PluginProgram extends Program {
+        pluginDispose(): void;
     }
 
     /* @internal */
@@ -4927,65 +4914,6 @@ namespace ts {
         /* @internal */ spec: ConfigFileSpecs;
     }
 
-    /**
-     * A context object passed to a plugin during activation.
-     */
-    export interface CompilerPluginContext {
-        /**
-         * The running instance of the TypeScript compiler.
-         */
-        readonly ts: typeof ts;
-
-        /**
-         * The current CompilerHost.
-         */
-        readonly compilerHost: CompilerHost;
-
-        /**
-         * Configuration options for the plugin.
-         */
-        readonly options: MapLike<any>;
-    }
-
-    /**
-     * An optional result that can be returned from the `CompilerPluginModule.activate` hook.
-     */
-    export interface CompilerPluginActivationResult {
-        diagnostics?: ReadonlyArray<Diagnostic>;
-    }
-
-    /**
-     * An optional result that can be returned from the `CompilerPluginModule.preEmit` hook.
-     */
-    export interface CompilerPluginPreEmitResult {
-        diagnostics?: ReadonlyArray<Diagnostic>;
-        customTransformers?: CustomTransformers;
-    }
-
-    /**
-     * Describes the supported shape of the main module for a compiler plugin.
-     */
-    export interface CompilerPluginModule {
-        /**
-         * The `activate` hook is invoked when a plugin is activated for the first time within a `Program`.
-         * @param context The current plugin context.
-         */
-        activate?(context: CompilerPluginContext): CompilerPluginActivationResult | void;
-        /**
-         * The `preEmit` hook is invoked after type check has completed and immediately before emit.
-         * @param context The current plugin context.
-         * @param program The current `Program`.
-         * @param targetSourceFile The `SourceFile` that is about to be emitted, or `undefined` when emitting all outputs.
-         * @param cancellationToken A `CancellationToken` that can be used to abort an operation when running in the language service.
-         */
-        preEmit?(context: CompilerPluginContext, program: Program, targetSourceFile?: SourceFile, cancellationToken?: CancellationToken): CompilerPluginPreEmitResult | void;
-        /**
-         * The `deactivate` hook is invoked when a plugin should be deactivated so that it can free up any shared resources.
-         * @param context The current plugin context.
-         */
-        deactivate?(context: CompilerPluginContext): void;
-    }
-
     export interface CompilerPlugin {
         /** The rsolved package name for the plugin. */
         name: string;
@@ -5001,6 +4929,103 @@ namespace ts {
         pluginDependencies?: string[];
         /** The resolved module object for the plugin. */
         plugin: CompilerPluginModule;
+    }
+
+    /**
+     * A context object passed to a plugin during activation.
+     */
+    export interface CompilerPluginContext {
+        /** The running instance of the TypeScript compiler. */
+        readonly ts: typeof ts;
+        /** The current CompilerHost. */
+        readonly compilerHost: CompilerHost;
+        /** The current CompilerOptions. */
+        readonly compilerOptions: CompilerOptions;
+        /** Configuration options for the plugin. */
+        readonly options: MapLike<any>;
+    }
+
+    /**
+     * The CompilerPluginHost provides an interface for interacting with the compiler plugin model.
+     */
+    /*@internal*/
+    export interface CompilerPluginHost {
+        preParse(host: CompilerHost, args: CompilerPluginPreParseArgs): CompilerPluginPreParseResult | void;
+        preEmit(host: CompilerHost, args: CompilerPluginPreEmitArgs): CompilerPluginPreEmitResult | void;
+        deactivate(host: CompilerHost): CompilerPluginDeactivationResult;
+    }
+
+    /**
+     * Describes the supported shape of the main module for a compiler plugin.
+     */
+    export interface CompilerPluginModule {
+        /**
+         * The `activate` hook is invoked when a plugin is activated for the first time within a `Program`.
+         */
+        activate?(context: CompilerPluginContext, args: CompilerPluginActivationArgs): CompilerPluginActivationResult | void;
+        /**
+         * The `preParse` hook is invoked when a new `Program` is about to be created before any files are parsed.
+         */
+        preParse?(context: CompilerPluginContext, args: CompilerPluginPreParseArgs): CompilerPluginPreParseResult | void;
+        /**
+         * The `preEmit` hook is invoked after type check has completed and immediately before emit.
+         */
+        preEmit?(context: CompilerPluginContext, args: CompilerPluginPreEmitArgs): CompilerPluginPreEmitResult | void;
+        /**
+         * The `deactivate` hook is invoked when a plugin should be deactivated so that it can free up any shared resources.
+         */
+        deactivate?(context: CompilerPluginContext): void;
+    }
+
+    export interface CompilerPluginResult {
+        diagnostics?: ReadonlyArray<Diagnostic>;
+    }
+
+    export interface CompilerPluginActivationArgs {
+    }
+
+    /**
+     * An optional result that can be returned from the `CompilerPluginModule.activate` hook.
+     */
+    export interface CompilerPluginActivationResult extends CompilerPluginResult {
+    }
+
+    export interface CompilerPluginPreParseArgs {
+        readonly rootNames: ReadonlyArray<string>;
+        readonly projectReferences: ReadonlyArray<ProjectReference> | undefined;
+    }
+
+    export interface CompilerPluginPreParseResult extends CompilerPluginResult {
+        compilerHost?: CompilerHost;
+        rootNames?: ReadonlyArray<string>;
+        projectReferences?: ReadonlyArray<ProjectReference>;
+    }
+
+    export interface CompilerPluginPostCreateProgramArgs {
+        readonly program: Program;
+    }
+
+    export interface CompilerPluginPostCreateProgramResult extends CompilerPluginResult {
+    }
+
+    export interface CompilerPluginPreEmitArgs {
+        /** The current `Program`. */
+        readonly program: Program;
+        /** The `SourceFile` that is about to be emitted, or `undefined` when emitting all outputs. */
+        readonly targetSourceFile: SourceFile | undefined;
+        /** A `CancellationToken` that can be used to abort an operation when running in the language service. */
+        readonly cancellationToken: CancellationToken | undefined;
+    }
+
+    /**
+     * An optional result that can be returned from the `CompilerPluginModule.preEmit` hook.
+     */
+    export interface CompilerPluginPreEmitResult extends CompilerPluginResult {
+        customTransformers?: CustomTransformers;
+    }
+
+    /* @internal */
+    export interface CompilerPluginDeactivationResult extends CompilerPluginResult {
     }
 
     /* @internal */

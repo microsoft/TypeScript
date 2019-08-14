@@ -711,8 +711,8 @@ namespace ts {
     export function createProgram(rootNames: ReadonlyArray<string>, options: CompilerOptions, host?: CompilerHost, oldProgram?: Program, configFileParsingDiagnostics?: ReadonlyArray<Diagnostic>): Program;
     export function createProgram(rootNamesOrOptions: ReadonlyArray<string> | CreateProgramOptions, _options?: CompilerOptions, _host?: CompilerHost, _oldProgram?: Program, _configFileParsingDiagnostics?: ReadonlyArray<Diagnostic>): Program {
         const createProgramOptions = isArray(rootNamesOrOptions) ? createCreateProgramOptions(rootNamesOrOptions, _options!, _host, _oldProgram, _configFileParsingDiagnostics) : rootNamesOrOptions; // TODO: GH#18217
-        const { rootNames, options, configFileParsingDiagnostics, projectReferences } = createProgramOptions;
-        let { oldProgram } = createProgramOptions;
+        const { options, configFileParsingDiagnostics } = createProgramOptions;
+        let { rootNames, projectReferences, oldProgram } = createProgramOptions;
 
         let program: Program;
         let processingDefaultLibFiles: SourceFile[] | undefined;
@@ -725,13 +725,28 @@ namespace ts {
         const ambientModuleNameToUnmodifiedFileName = createMap<string>();
         // Todo:: Use this to report why file was included in --extendedDiagnostics
         let refFileMap: MultiMap<ts.RefFile> | undefined;
-        const pluginHost = createProgramOptions.plugins && createPluginHost(createProgramOptions.plugins);
+        const pluginHost = createProgramOptions.plugins && createPluginHost(createProgramOptions.plugins, options);
 
         const cachedSemanticDiagnosticsForFile: DiagnosticCache<Diagnostic> = {};
         const cachedDeclarationDiagnosticsForFile: DiagnosticCache<DiagnosticWithLocation> = {};
 
         let resolvedTypeReferenceDirectives = createMap<ResolvedTypeReferenceDirective | undefined>();
         let fileProcessingDiagnostics = createDiagnosticCollection();
+
+        performance.mark("beforeProgram");
+
+        let host = createProgramOptions.host || createCompilerHost(options);
+        const preParseResult = pluginHost && pluginHost.preParse(host, { rootNames, projectReferences });
+        if (preParseResult) {
+            if (preParseResult.diagnostics) {
+                for (const diagnostic of preParseResult.diagnostics) {
+                    fileProcessingDiagnostics.add(diagnostic);
+                }
+            }
+            if (preParseResult.compilerHost) host = preParseResult.compilerHost;
+            if (preParseResult.rootNames) rootNames = preParseResult.rootNames;
+            if (preParseResult.projectReferences) projectReferences = preParseResult.projectReferences;
+        }
 
         // The below settings are to track if a .js file should be add to the program if loaded via searching under node_modules.
         // This works as imported modules are discovered recursively in a depth first manner, specifically:
@@ -750,9 +765,6 @@ namespace ts {
         // Track source files that are source files found by searching under node_modules, as these shouldn't be compiled.
         const sourceFilesFoundSearchingNodeModules = createMap<boolean>();
 
-        performance.mark("beforeProgram");
-
-        const host = createProgramOptions.host || createCompilerHost(options);
         const configParsingHost = parseConfigHostFromCompilerHostLike(host);
 
         let skipDefaultLib = options.noLib;
@@ -974,6 +986,9 @@ namespace ts {
         function dispose() {
             if (pluginHost) {
                 pluginHost.deactivate(host);
+            }
+            if (program.pluginProgram) {
+                program.pluginProgram.pluginDispose();
             }
         }
 
@@ -1560,9 +1575,11 @@ namespace ts {
 
             let pluginDiagnostics: ReadonlyArray<Diagnostic> | undefined;
             if (pluginHost) {
-                const result = pluginHost.preEmit(host, program, sourceFile, cancellationToken);
-                pluginDiagnostics = result.diagnostics;
-                customTransformers = combineCustomTransformers(customTransformers, result.customTransformers);
+                const result = pluginHost.preEmit(host, { program, targetSourceFile: sourceFile, cancellationToken });
+                if (result) {
+                    pluginDiagnostics = result.diagnostics;
+                    customTransformers = combineCustomTransformers(customTransformers, result.customTransformers);
+                }
             }
 
             if (!emitOnlyDtsFiles) {
