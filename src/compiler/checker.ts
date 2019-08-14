@@ -24744,18 +24744,23 @@ namespace ts {
                 return false;
             }
 
-            function reportOperatorError(awaitedTypesAreCompatible?: (left: Type, right: Type) => boolean) {
+            function reportOperatorError(isRelated?: (left: Type, right: Type) => boolean) {
                 let wouldWorkWithAwait = false;
                 const errNode = errorNode || operatorToken;
-                const [leftStr, rightStr] = getTypeNamesForErrorDisplay(leftType, rightType);
-                if (awaitedTypesAreCompatible) {
+                if (isRelated) {
                     const awaitedLeftType = getAwaitedType(leftType);
                     const awaitedRightType = getAwaitedType(rightType);
                     wouldWorkWithAwait = !(awaitedLeftType === leftType && awaitedRightType === rightType)
                         && !!(awaitedLeftType && awaitedRightType)
-                        && awaitedTypesAreCompatible(awaitedLeftType, awaitedRightType);
+                        && isRelated(awaitedLeftType, awaitedRightType);
                 }
 
+                let effectiveLeft = leftType;
+                let effectiveRight = rightType;
+                if (!wouldWorkWithAwait && isRelated) {
+                    [effectiveLeft, effectiveRight] = getBaseTypesIfUnrelated(leftType, rightType, isRelated);
+                }
+                let [leftStr, rightStr] = getTypeNamesForErrorDisplay(effectiveLeft, effectiveRight);
                 if (!tryGiveBetterPrimaryError(errNode, wouldWorkWithAwait, leftStr, rightStr)) {
                     errorAndMaybeSuggestAwait(
                         errNode,
@@ -24790,6 +24795,18 @@ namespace ts {
 
                 return undefined;
             }
+        }
+
+        function getBaseTypesIfUnrelated(leftType: Type, rightType: Type, isRelated: (left: Type, right: Type) => boolean): [Type, Type] {
+            let effectiveLeft = leftType;
+            let effectiveRight = rightType;
+            const leftBase = getBaseTypeOfLiteralType(leftType);
+            const rightBase = getBaseTypeOfLiteralType(rightType);
+            if (!isRelated(leftBase, rightBase)) {
+                effectiveLeft = leftBase;
+                effectiveRight = rightBase;
+            }
+            return [ effectiveLeft, effectiveRight ];
         }
 
         function isYieldExpressionInClass(node: YieldExpression): boolean {
