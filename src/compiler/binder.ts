@@ -1366,6 +1366,7 @@ namespace ts {
             }
         }
 
+        // TODO(rbuckton): Determine how to hook ?? into flow typing
         function bindBinaryExpressionFlow(node: BinaryExpression) {
             const operator = node.operatorToken.kind;
             if (operator === SyntaxKind.AmpersandAmpersandToken || operator === SyntaxKind.BarBarToken || operator === SyntaxKind.QuestionQuestionToken) {
