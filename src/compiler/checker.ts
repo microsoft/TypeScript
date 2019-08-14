@@ -32406,7 +32406,7 @@ namespace ts {
                         else if (flags & ModifierFlags.Async) {
                             return grammarErrorOnNode(modifier, Diagnostics._0_modifier_must_precede_1_modifier, "export", "async");
                         }
-                        else if (node.parent.kind === SyntaxKind.ClassDeclaration) {
+                        else if (isClassLike(node.parent)) {
                             return grammarErrorOnNode(modifier, Diagnostics._0_modifier_cannot_appear_on_a_class_element, "export");
                         }
                         else if (node.kind === SyntaxKind.Parameter) {
@@ -32429,7 +32429,7 @@ namespace ts {
                         else if (flags & ModifierFlags.Async) {
                             return grammarErrorOnNode(modifier, Diagnostics._0_modifier_cannot_be_used_in_an_ambient_context, "async");
                         }
-                        else if (node.parent.kind === SyntaxKind.ClassDeclaration) {
+                        else if (isClassLike(node.parent)) {
                             return grammarErrorOnNode(modifier, Diagnostics._0_modifier_cannot_appear_on_a_class_element, "declare");
                         }
                         else if (node.kind === SyntaxKind.Parameter) {
