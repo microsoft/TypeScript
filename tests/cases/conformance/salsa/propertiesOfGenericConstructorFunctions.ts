@@ -29,3 +29,32 @@ var n = map._map2['hi']
 var n = map2._map['hi']
 /** @type {number} */
 var n = map._map2['hi']
+
+/**
+ * @class
+ * @template T
+ * @param {T} t
+ */
+function Cp(t) {
+    this.x = 1
+    this.y = t
+}
+Cp.prototype = {
+    m1() { return this.x },
+    m2() { this.z = this.x + 1; return this.y }
+}
+var cp = new Cp(1)
+cp.x
+cp.y
+cp.m1()
+cp.m2()
+
+/** @type {number} */
+var n = cp.x
+/** @type {number} */
+var n = cp.y
+/** @type {number} */
+var n = cp.m1()
+/** @type {number} */
+var n = cp.m2()
+

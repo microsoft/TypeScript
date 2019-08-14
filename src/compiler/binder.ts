@@ -738,6 +738,9 @@ namespace ts {
                 case SyntaxKind.JSDocEnumTag:
                     bindJSDocTypeAlias(node as JSDocTypedefTag | JSDocCallbackTag | JSDocEnumTag);
                     break;
+                case SyntaxKind.JSDocClassTag:
+                    bindJSDocClassTag(node as JSDocClassTag);
+                    break;
                 // In source files and blocks, bind functions first to match hoisting that occurs at runtime
                 case SyntaxKind.SourceFile: {
                     bindEachFunctionsFirst((node as SourceFile).statements);
@@ -1444,6 +1447,13 @@ namespace ts {
             node.tagName.parent = node;
             if (node.kind !== SyntaxKind.JSDocEnumTag && node.fullName) {
                 setParentPointers(node, node.fullName);
+            }
+        }
+
+        function bindJSDocClassTag(node: JSDocClassTag) {
+            const host = getHostSignatureFromJSDoc(node);
+            if (host && host.kind !== SyntaxKind.MethodDeclaration) {
+                addDeclarationToSymbol(host.symbol, host, SymbolFlags.Class);
             }
         }
 
@@ -2511,8 +2521,8 @@ namespace ts {
                         constructorSymbol.members = constructorSymbol.members || createSymbolTable();
                         // It's acceptable for multiple 'this' assignments of the same identifier to occur
                         declareSymbol(constructorSymbol.members, constructorSymbol, node, SymbolFlags.Property, SymbolFlags.PropertyExcludes & ~SymbolFlags.Property);
-                        // TODO: Also do this for prototype assignments, Object.defineProperty assignments and functions annotated with @constructor
-                        addDeclarationToSymbol(constructorSymbol, thisContainer as FunctionDeclaration | FunctionExpression, SymbolFlags.Class);
+                        // TODO: Also do this for prototype assignments and Object.defineProperty assignments
+                        addDeclarationToSymbol(constructorSymbol, constructorSymbol.valueDeclaration, SymbolFlags.Class);
                     }
                     break;
 

@@ -39,7 +39,7 @@ Zet.prototype.add = function(v, o) {
     this.u = v || o.nested
 >this.u = v || o.nested : T
 >this.u : T
->this : Zet
+>this : Zet<T>
 >u : T
 >v || o.nested : T
 >v : T
@@ -49,26 +49,26 @@ Zet.prototype.add = function(v, o) {
 
     return this.u
 >this.u : T
->this : Zet
+>this : Zet<T>
 >u : T
 }
 var z = new Zet(1)
->z : typeof Zet
->new Zet(1) : typeof Zet
+>z : Zet<number>
+>new Zet(1) : Zet<number>
 >Zet : typeof Zet
 >1 : 1
 
 z.t = 2
 >z.t = 2 : 2
 >z.t : number
->z : typeof Zet
+>z : Zet<number>
 >t : number
 >2 : 2
 
 z.u = false
 >z.u = false : false
 >z.u : number
->z : typeof Zet
+>z : Zet<number>
 >u : number
 >false : false
 

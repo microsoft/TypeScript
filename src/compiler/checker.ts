@@ -6220,8 +6220,7 @@ namespace ts {
                 if (node.kind === SyntaxKind.InterfaceDeclaration ||
                     node.kind === SyntaxKind.ClassDeclaration ||
                     node.kind === SyntaxKind.ClassExpression ||
-                    node.kind === SyntaxKind.FunctionDeclaration ||
-                    node.kind === SyntaxKind.FunctionExpression ||
+                    isJSConstructor(node) ||
                     isTypeAlias(node)) {
                     const declaration = <InterfaceDeclaration | TypeAliasDeclaration | JSDocTypedefTag | JSDocCallbackTag>node;
                     result = appendTypeParameters(result, getEffectiveTypeParameterDeclarations(declaration));
@@ -7521,7 +7520,7 @@ namespace ts {
                     const classType = getDeclaredTypeOfClassOrInterface(symbol);
                     let constructSignatures = getSignaturesOfSymbol(symbol.members!.get(InternalSymbolName.Constructor));
                     if (symbol.flags & SymbolFlags.Function) {
-                        constructSignatures = addRange(constructSignatures, mapDefined(
+                        constructSignatures = addRange(constructSignatures.slice(), mapDefined(
                             type.callSignatures,
                             sig => isJSConstructor(sig.declaration) ?
                                 createSignature(sig.declaration, sig.typeParameters, sig.thisParameter, sig.parameters, classType, /*resolvedTypePredicate*/ undefined, sig.minArgumentCount, sig.hasRestParameter, sig.hasLiteralTypes) :
@@ -8762,7 +8761,6 @@ namespace ts {
                 let type = signature.target ? instantiateType(getReturnTypeOfSignature(signature.target), signature.mapper!) :
                     signature.unionSignatures ? getUnionType(map(signature.unionSignatures, getReturnTypeOfSignature), UnionReduction.Subtype) :
                     getReturnTypeFromAnnotation(signature.declaration!) ||
-                    isJSConstructor(signature.declaration) && getJSClassType(getSymbolOfNode(signature.declaration!)) ||
                     (nodeIsMissing((<FunctionLikeDeclaration>signature.declaration).body) ? anyType : getReturnTypeFromBody(<FunctionLikeDeclaration>signature.declaration));
                 if (!popTypeResolution()) {
                     if (signature.declaration) {
@@ -22871,7 +22869,7 @@ namespace ts {
         function getJSClassType(symbol: Symbol): Type | undefined {
             let inferred: Type | undefined;
             if (isJSConstructor(symbol.valueDeclaration)) {
-                inferred = getInferredClassType(symbol);
+                inferred = getDeclaredTypeOfClassOrInterface(symbol); // getInferredClassType(symbol);
             }
             const assigned = getAssignedClassType(symbol);
             return assigned && inferred ?
