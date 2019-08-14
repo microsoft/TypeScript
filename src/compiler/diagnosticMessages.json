@@ -4172,6 +4172,14 @@
         "category": "Message",
         "code": 6381
     },
+    "Skipping build of project '{0}' because its dependency '{1}' was not built": {
+        "category": "Message",
+        "code": 6382
+    },
+    "Project '{0}' can't be built because its dependency '{1}' was not built": {
+        "category": "Message",
+        "code": 6383
+    },
 
     "The expected type comes from property '{0}' which is declared here on type '{1}'": {
         "category": "Message",

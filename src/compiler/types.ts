@@ -1646,6 +1646,10 @@ namespace ts {
         hasExtendedUnicodeEscape?: boolean;
     }
 
+    export interface TemplateLiteralLikeNode extends LiteralLikeNode {
+        rawText?: string;
+    }
+
     // The text property of a LiteralExpression stores the interpreted value of the literal in text form. For a StringLiteral,
     // or any literal of a template, this means quotes have been removed and escapes have been converted to actual characters.
     // For a NumericLiteral, the stored value is the toString() representation of the number. For example 1, 1.00, and 1e0 are all stored as just "1".
@@ -1657,7 +1661,7 @@ namespace ts {
         kind: SyntaxKind.RegularExpressionLiteral;
     }
 
-    export interface NoSubstitutionTemplateLiteral extends LiteralExpression {
+    export interface NoSubstitutionTemplateLiteral extends LiteralExpression, TemplateLiteralLikeNode {
         kind: SyntaxKind.NoSubstitutionTemplateLiteral;
     }
 
@@ -1696,17 +1700,17 @@ namespace ts {
         kind: SyntaxKind.BigIntLiteral;
     }
 
-    export interface TemplateHead extends LiteralLikeNode {
+    export interface TemplateHead extends TemplateLiteralLikeNode {
         kind: SyntaxKind.TemplateHead;
         parent: TemplateExpression;
     }
 
-    export interface TemplateMiddle extends LiteralLikeNode {
+    export interface TemplateMiddle extends TemplateLiteralLikeNode {
         kind: SyntaxKind.TemplateMiddle;
         parent: TemplateSpan;
     }
 
-    export interface TemplateTail extends LiteralLikeNode {
+    export interface TemplateTail extends TemplateLiteralLikeNode {
         kind: SyntaxKind.TemplateTail;
         parent: TemplateSpan;
     }
@@ -2929,6 +2933,20 @@ namespace ts {
         throwIfCancellationRequested(): void;
     }
 
+    /*@internal*/
+    export enum RefFileKind {
+        Import,
+        ReferenceFile,
+        TypeReferenceDirective
+    }
+
+    /*@internal*/
+    export interface RefFile {
+        kind: RefFileKind;
+        index: number;
+        file: Path;
+    }
+
     // TODO: This should implement TypeCheckerHost but that's an internal type.
     export interface Program extends ScriptReferenceHost {
 
@@ -2948,6 +2966,8 @@ namespace ts {
          */
         /* @internal */
         getMissingFilePaths(): ReadonlyArray<Path>;
+        /* @internal */
+        getRefFileMap(): MultiMap<RefFile> | undefined;
 
         /**
          * Emits the JavaScript and declaration files.  If targetSourceFile is not specified, then
@@ -3094,6 +3114,9 @@ namespace ts {
 
         // When build skipped because passed in project is invalid
         InvalidProject_OutputsSkipped = 3,
+
+        // When build is skipped because project references form cycle
+        ProjectReferenceCycle_OutputsSkupped = 4,
     }
 
     export interface EmitResult {
@@ -5440,6 +5463,7 @@ namespace ts {
         writeFile: WriteFileCallback;
         getProgramBuildInfo(): ProgramBuildInfo | undefined;
         getSourceFileFromReference: Program["getSourceFileFromReference"];
+        readonly redirectTargetsMap: RedirectTargetsMap;
     }
 
     export interface TransformationContext {

@@ -1329,27 +1329,97 @@ namespace ts {
             : node;
     }
 
-    export function createTemplateHead(text: string) {
-        const node = <TemplateHead>createSynthesizedNode(SyntaxKind.TemplateHead);
+    let rawTextScanner: Scanner | undefined;
+    const invalidValueSentinel: object = {};
+
+    function getCookedText(kind: TemplateLiteralToken["kind"], rawText: string) {
+        if (!rawTextScanner) {
+            rawTextScanner = createScanner(ScriptTarget.Latest, /*skipTrivia*/ false, LanguageVariant.Standard);
+        }
+        switch (kind) {
+            case SyntaxKind.NoSubstitutionTemplateLiteral:
+                rawTextScanner.setText("`" + rawText + "`");
+                break;
+            case SyntaxKind.TemplateHead:
+                // tslint:disable-next-line no-invalid-template-strings
+                rawTextScanner.setText("`" + rawText + "${");
+                break;
+            case SyntaxKind.TemplateMiddle:
+                // tslint:disable-next-line no-invalid-template-strings
+                rawTextScanner.setText("}" + rawText + "${");
+                break;
+            case SyntaxKind.TemplateTail:
+                rawTextScanner.setText("}" + rawText + "`");
+                break;
+        }
+
+        let token = rawTextScanner.scan();
+        if (token === SyntaxKind.CloseBracketToken) {
+            token = rawTextScanner.reScanTemplateToken();
+        }
+
+        if (rawTextScanner.isUnterminated()) {
+            rawTextScanner.setText(undefined);
+            return invalidValueSentinel;
+        }
+
+        let tokenValue: string | undefined;
+        switch (token) {
+            case SyntaxKind.NoSubstitutionTemplateLiteral:
+            case SyntaxKind.TemplateHead:
+            case SyntaxKind.TemplateMiddle:
+            case SyntaxKind.TemplateTail:
+                tokenValue = rawTextScanner.getTokenValue();
+                break;
+        }
+
+        if (rawTextScanner.scan() !== SyntaxKind.EndOfFileToken) {
+            rawTextScanner.setText(undefined);
+            return invalidValueSentinel;
+        }
+
+        rawTextScanner.setText(undefined);
+        return tokenValue;
+    }
+
+    function createTemplateLiteralLikeNode(kind: TemplateLiteralToken["kind"], text: string, rawText: string | undefined) {
+        const node = <TemplateLiteralLikeNode>createSynthesizedNode(kind);
+        node.text = text;
+        if (rawText === undefined || text === rawText) {
+            node.rawText = rawText;
+        }
+        else {
+            const cooked = getCookedText(kind, rawText);
+            if (typeof cooked === "object") {
+                return Debug.fail("Invalid raw text");
+            }
+
+            Debug.assert(text === cooked, "Expected argument 'text' to be the normalized (i.e. 'cooked') version of argument 'rawText'.");
+            node.rawText = rawText;
+        }
+        return node;
+    }
+
+    export function createTemplateHead(text: string, rawText?: string) {
+        const node = <TemplateHead>createTemplateLiteralLikeNode(SyntaxKind.TemplateHead, text, rawText);
         node.text = text;
         return node;
     }
 
-    export function createTemplateMiddle(text: string) {
-        const node = <TemplateMiddle>createSynthesizedNode(SyntaxKind.TemplateMiddle);
+    export function createTemplateMiddle(text: string, rawText?: string) {
+        const node = <TemplateMiddle>createTemplateLiteralLikeNode(SyntaxKind.TemplateMiddle, text, rawText);
         node.text = text;
         return node;
     }
 
-    export function createTemplateTail(text: string) {
-        const node = <TemplateTail>createSynthesizedNode(SyntaxKind.TemplateTail);
+    export function createTemplateTail(text: string, rawText?: string) {
+        const node = <TemplateTail>createTemplateLiteralLikeNode(SyntaxKind.TemplateTail, text, rawText);
         node.text = text;
         return node;
     }
 
-    export function createNoSubstitutionTemplateLiteral(text: string) {
-        const node = <NoSubstitutionTemplateLiteral>createSynthesizedNode(SyntaxKind.NoSubstitutionTemplateLiteral);
-        node.text = text;
+    export function createNoSubstitutionTemplateLiteral(text: string, rawText?: string) {
+        const node = <NoSubstitutionTemplateLiteral>createTemplateLiteralLikeNode(SyntaxKind.NoSubstitutionTemplateLiteral, text, rawText);
         return node;
     }
 

@@ -11,7 +11,7 @@ interface Number { toExponential: any; }
 interface Object {}
 interface RegExp {}
 interface String { charAt: any; }
-interface Array<T> {}`
+interface Array<T> { length: number; [n: number]: T; }`
     };
 
     export const safeList = {
