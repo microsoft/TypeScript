@@ -67,6 +67,24 @@ namespace ts {
             });
         }
 
+        function testBaselineAndEvaluate(testName: string, test: () => string, onEvaluate: (exports: any) => void) {
+            describe(testName, () => {
+                let sourceText!: string;
+                before(() => {
+                    sourceText = test();
+                });
+                after(() => {
+                    sourceText = undefined!;
+                });
+                it("compare baselines", () => {
+                    Harness.Baseline.runBaseline(`transformApi/transformsCorrectly.${testName}.js`, sourceText);
+                });
+                it("evaluate", () => {
+                    onEvaluate(evaluator.evaluateJavaScript(sourceText));
+                });
+            });
+        }
+
         testBaseline("substitution", () => {
             return transformSourceFile(`var a = undefined;`, [replaceUndefinedWithVoid0]);
         });
@@ -440,6 +458,31 @@ namespace Foo {
 
         });
 
+        testBaselineAndEvaluate("templateSpans", () => {
+            return transpileModule("const x = String.raw`\n\nhello`; exports.stringLength = x.trim().length;", {
+                compilerOptions: {
+                    target: ScriptTarget.ESNext,
+                    newLine: NewLineKind.CarriageReturnLineFeed,
+                },
+                transformers: {
+                    before: [transformSourceFile]
+                }
+            }).outputText;
+
+            function transformSourceFile(context: TransformationContext): Transformer<SourceFile> {
+                function visitor(node: Node): VisitResult<Node> {
+                    if (isNoSubstitutionTemplateLiteral(node)) {
+                        return createNoSubstitutionTemplateLiteral(node.text, node.rawText);
+                    }
+                    else {
+                        return visitEachChild(node, visitor, context);
+                    }
+                }
+                return sourceFile => visitNode(sourceFile, visitor, isSourceFile);
+            }
+        }, exports => {
+            assert.equal(exports.stringLength, 5);
+        });
     });
 }
 

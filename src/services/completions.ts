@@ -1566,7 +1566,7 @@ namespace ts.Completions {
             // If you're in an interface you don't want to repeat things from super-interface. So just stop here.
             if (!isClassLike(decl)) return GlobalsSearch.Success;
 
-            const classElement = contextToken.parent;
+            const classElement = contextToken.kind === SyntaxKind.SemicolonToken ? contextToken.parent.parent : contextToken.parent;
             let classElementModifierFlags = isClassElement(classElement) ? getModifierFlags(classElement) : ModifierFlags.None;
             // If this is context token is not something we are editing now, consider if this would lead to be modifier
             if (contextToken.kind === SyntaxKind.Identifier && !isCurrentlyEditingNode(contextToken)) {

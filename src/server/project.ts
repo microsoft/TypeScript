@@ -1009,8 +1009,11 @@ namespace ts.server {
             );
             const elapsed = timestamp() - start;
             this.writeLog(`Finishing updateGraphWorker: Project: ${this.getProjectName()} Version: ${this.getProjectVersion()} structureChanged: ${hasNewProgram} Elapsed: ${elapsed}ms`);
-            if (this.program !== oldProgram) {
+            if (this.hasAddedorRemovedFiles) {
                 this.print();
+            }
+            else if (this.program !== oldProgram) {
+                this.writeLog(`Different program with same set of files:: oldProgram.structureIsReused:: ${oldProgram && oldProgram.structureIsReused}`);
             }
             return hasNewProgram;
         }

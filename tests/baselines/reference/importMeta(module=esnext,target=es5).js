@@ -1,4 +1,4 @@
-//// [tests/cases/conformance/es2019/importMeta/importMetaES5.ts] ////
+//// [tests/cases/conformance/es2019/importMeta/importMeta.ts] ////
 
 //// [example.ts]
 // Adapted from https://github.com/tc39/proposal-import-meta/tree/c3902a9ffe2e69a7ac42c19d7ea74cbdcea9b7fb#example
@@ -39,7 +39,6 @@ declare global {
 const { a, b, c } = import.meta.wellKnownProperty;
 
 //// [example.js]
-"use strict";
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -76,10 +75,8 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
-var _this = this;
-Object.defineProperty(exports, "__esModule", { value: true });
 // Adapted from https://github.com/tc39/proposal-import-meta/tree/c3902a9ffe2e69a7ac42c19d7ea74cbdcea9b7fb#example
-(function () { return __awaiter(_this, void 0, void 0, function () {
+(function () { return __awaiter(void 0, void 0, void 0, function () {
     var response, blob, size, image;
     return __generator(this, function (_a) {
         switch (_a.label) {
@@ -99,20 +96,14 @@ Object.defineProperty(exports, "__esModule", { value: true });
     });
 }); })();
 //// [moduleLookingFile01.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.x = (import.meta);
-exports.y = (import.metal);
-exports.z = import.import.import.malkovich;
+export var x = import.meta;
+export var y = import.metal;
+export var z = import.import.import.malkovich;
 //// [scriptLookingFile01.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
 var globalA = import.meta;
 var globalB = import.metal;
 var globalC = import.import.import.malkovich;
 //// [assignmentTargets.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.foo = import.meta.blah = import.meta.blue = import.meta;
-import.meta = exports.foo;
+export var foo = import.meta.blah = import.meta.blue = import.meta;
+import.meta = foo;
 var _a = import.meta.wellKnownProperty, a = _a.a, b = _a.b, c = _a.c;

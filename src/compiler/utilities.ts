@@ -566,8 +566,6 @@ namespace ts {
         return emitNode && emitNode.flags || 0;
     }
 
-    const escapeNoSubstitutionTemplateLiteralText = compose(escapeString, escapeTemplateSubstitution);
-    const escapeNonAsciiNoSubstitutionTemplateLiteralText = compose(escapeNonAsciiString, escapeTemplateSubstitution);
     export function getLiteralText(node: LiteralLikeNode, sourceFile: SourceFile, neverAsciiEscape: boolean | undefined) {
         // If we don't need to downlevel and we can reach the original source text using
         // the node's parent reference, then simply get the text as it was originally written.
@@ -580,9 +578,7 @@ namespace ts {
 
         // If a NoSubstitutionTemplateLiteral appears to have a substitution in it, the original text
         // had to include a backslash: `not \${a} substitution`.
-        const escapeText = neverAsciiEscape || (getEmitFlags(node) & EmitFlags.NoAsciiEscaping) ?
-            node.kind === SyntaxKind.NoSubstitutionTemplateLiteral ? escapeNoSubstitutionTemplateLiteralText : escapeString :
-            node.kind === SyntaxKind.NoSubstitutionTemplateLiteral ? escapeNonAsciiNoSubstitutionTemplateLiteralText : escapeNonAsciiString;
+        const escapeText = neverAsciiEscape || (getEmitFlags(node) & EmitFlags.NoAsciiEscaping) ? escapeString : escapeNonAsciiString;
 
         // If we can't reach the original source text, use the canonical form if it's a number,
         // or a (possibly escaped) quoted form of the original text if it's string-like.
@@ -595,13 +591,23 @@ namespace ts {
                     return '"' + escapeText(node.text, CharacterCodes.doubleQuote) + '"';
                 }
             case SyntaxKind.NoSubstitutionTemplateLiteral:
-                return "`" + escapeText(node.text, CharacterCodes.backtick) + "`";
             case SyntaxKind.TemplateHead:
-                return "`" + escapeText(node.text, CharacterCodes.backtick) + "${";
             case SyntaxKind.TemplateMiddle:
-                return "}" + escapeText(node.text, CharacterCodes.backtick) + "${";
             case SyntaxKind.TemplateTail:
-                return "}" + escapeText(node.text, CharacterCodes.backtick) + "`";
+                const rawText = (<TemplateLiteralLikeNode>node).rawText || escapeTemplateSubstitution(escapeText(node.text, CharacterCodes.backtick));
+                switch (node.kind) {
+                    case SyntaxKind.NoSubstitutionTemplateLiteral:
+                        return "`" + rawText + "`";
+                    case SyntaxKind.TemplateHead:
+                        // tslint:disable-next-line no-invalid-template-strings
+                        return "`" + rawText + "${";
+                    case SyntaxKind.TemplateMiddle:
+                        // tslint:disable-next-line no-invalid-template-strings
+                        return "}" + rawText + "${";
+                    case SyntaxKind.TemplateTail:
+                        return "}" + rawText + "`";
+                }
+                break;
             case SyntaxKind.NumericLiteral:
             case SyntaxKind.BigIntLiteral:
             case SyntaxKind.RegularExpressionLiteral:
@@ -696,6 +702,43 @@ namespace ts {
 
     export function isEffectiveExternalModule(node: SourceFile, compilerOptions: CompilerOptions) {
         return isExternalModule(node) || compilerOptions.isolatedModules || ((getEmitModuleKind(compilerOptions) === ModuleKind.CommonJS) && !!node.commonJsModuleIndicator);
+    }
+
+    /**
+     * Returns whether the source file will be treated as if it were in strict mode at runtime.
+     */
+    export function isEffectiveStrictModeSourceFile(node: SourceFile, compilerOptions: CompilerOptions) {
+        // We can only verify strict mode for JS/TS files
+        switch (node.scriptKind) {
+            case ScriptKind.JS:
+            case ScriptKind.TS:
+            case ScriptKind.JSX:
+            case ScriptKind.TSX:
+                break;
+            default:
+                return false;
+        }
+        // Strict mode does not matter for declaration files.
+        if (node.isDeclarationFile) {
+            return false;
+        }
+        // If `alwaysStrict` is set, then treat the file as strict.
+        if (getStrictOptionValue(compilerOptions, "alwaysStrict")) {
+            return true;
+        }
+        // Starting with a "use strict" directive indicates the file is strict.
+        if (startsWithUseStrict(node.statements)) {
+            return true;
+        }
+        if (isExternalModule(node) || compilerOptions.isolatedModules) {
+            // ECMAScript Modules are always strict.
+            if (getEmitModuleKind(compilerOptions) >= ModuleKind.ES2015) {
+                return true;
+            }
+            // Other modules are strict unless otherwise specified.
+            return !compilerOptions.noImplicitUseStrict;
+        }
+        return false;
     }
 
     export function isBlockScope(node: Node, parentNode: Node): boolean {
@@ -983,6 +1026,12 @@ namespace ts {
 
     export function isImportCall(n: Node): n is ImportCall {
         return n.kind === SyntaxKind.CallExpression && (<CallExpression>n).expression.kind === SyntaxKind.ImportKeyword;
+    }
+
+    export function isImportMeta(n: Node): n is ImportMetaProperty {
+        return isMetaProperty(n)
+            && n.keywordToken === SyntaxKind.ImportKeyword
+            && n.name.escapedText === "meta";
     }
 
     export function isLiteralImportTypeNode(n: Node): n is LiteralImportTypeNode {
@@ -2641,6 +2690,10 @@ namespace ts {
         return isKeyword(token) && !isContextualKeyword(token);
     }
 
+    export function isFutureReservedKeyword(token: SyntaxKind): boolean {
+        return SyntaxKind.FirstFutureReservedWord <= token && token <= SyntaxKind.LastFutureReservedWord;
+    }
+
     export function isStringANonContextualKeyword(name: string) {
         const token = stringToToken(name);
         return token !== undefined && isNonContextualKeyword(token);
@@ -3135,7 +3188,8 @@ namespace ts {
     // There is no reason for this other than that JSON.stringify does not handle it either.
     const doubleQuoteEscapedCharsRegExp = /[\\\"\u0000-\u001f\t\v\f\b\r\n\u2028\u2029\u0085]/g;
     const singleQuoteEscapedCharsRegExp = /[\\\'\u0000-\u001f\t\v\f\b\r\n\u2028\u2029\u0085]/g;
-    const backtickQuoteEscapedCharsRegExp = /[\\\`\u0000-\u001f\t\v\f\b\r\n\u2028\u2029\u0085]/g;
+    // Template strings should be preserved as much as possible
+    const backtickQuoteEscapedCharsRegExp = /[\\\`]/g;
     const escapedCharsMap = createMapFromTemplate({
         "\t": "\\t",
         "\v": "\\v",

@@ -327,6 +327,26 @@ namespace ts {
                     }
 
                     if (declFileName) {
+                        const specifier = moduleSpecifiers.getModuleSpecifier(
+                            // We pathify the baseUrl since we pathify the other paths here, so we can still easily check if the other paths are within the baseUrl
+                            // TODO: Should we _always_ be pathifying the baseUrl as we read it in?
+                            { ...options, baseUrl: options.baseUrl && toPath(options.baseUrl, host.getCurrentDirectory(), host.getCanonicalFileName) },
+                            currentSourceFile,
+                            toPath(outputFilePath, host.getCurrentDirectory(), host.getCanonicalFileName),
+                            toPath(declFileName, host.getCurrentDirectory(), host.getCanonicalFileName),
+                            host,
+                            host.getSourceFiles(),
+                            /*preferences*/ undefined,
+                            host.redirectTargetsMap
+                        );
+                        if (!pathIsRelative(specifier)) {
+                            // If some compiler option/symlink/whatever allows access to the file containing the ambient module declaration
+                            // via a non-relative name, emit a type reference directive to that non-relative name, rather than
+                            // a relative path to the declaration file
+                            recordTypeReferenceDirectivesIfNecessary([specifier]);
+                            return;
+                        }
+
                         let fileName = getRelativePathToDirectoryOrUrl(
                             outputFilePath,
                             declFileName,

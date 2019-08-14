@@ -23157,8 +23157,8 @@ namespace ts {
         }
 
         function checkImportMetaProperty(node: MetaProperty) {
-            if (languageVersion < ScriptTarget.ESNext || moduleKind < ModuleKind.ESNext) {
-                error(node, Diagnostics.The_import_meta_meta_property_is_only_allowed_using_ESNext_for_the_target_and_module_compiler_options);
+            if (moduleKind !== ModuleKind.ESNext && moduleKind !== ModuleKind.System) {
+                error(node, Diagnostics.The_import_meta_meta_property_is_only_allowed_when_the_module_option_is_esnext_or_system);
             }
             const file = getSourceFileOfNode(node);
             Debug.assert(!!(file.flags & NodeFlags.PossiblyContainsImportMeta), "Containing file is missing import meta node flag.");
@@ -25268,7 +25268,18 @@ namespace ts {
         }
 
         function checkExpressionWorker(node: Expression | QualifiedName, checkMode: CheckMode | undefined, forceTuple?: boolean): Type {
-            switch (node.kind) {
+            const kind = node.kind;
+            if (cancellationToken) {
+                // Only bother checking on a few construct kinds.  We don't want to be excessively
+                // hitting the cancellation token on every node we check.
+                switch (kind) {
+                    case SyntaxKind.ClassExpression:
+                    case SyntaxKind.FunctionExpression:
+                    case SyntaxKind.ArrowFunction:
+                        cancellationToken.throwIfCancellationRequested();
+                }
+            }
+            switch (kind) {
                 case SyntaxKind.Identifier:
                     return checkIdentifier(<Identifier>node);
                 case SyntaxKind.ThisKeyword:

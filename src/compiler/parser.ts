@@ -1082,8 +1082,17 @@ namespace ts {
             return currentToken;
         }
 
-        function nextToken(): SyntaxKind {
+        function nextTokenWithoutCheck() {
             return currentToken = scanner.scan();
+        }
+
+        function nextToken(): SyntaxKind {
+            // if the keyword had an escape
+            if (isKeyword(currentToken) && (scanner.hasUnicodeEscape() || scanner.hasExtendedUnicodeEscape())) {
+                // issue a parse error for the escape
+                parseErrorAt(scanner.getTokenPos(), scanner.getTextPos(), Diagnostics.Keywords_cannot_contain_escape_characters);
+            }
+            return nextTokenWithoutCheck();
         }
 
         function nextTokenJSDoc(): JSDocSyntaxKind {
@@ -1376,7 +1385,7 @@ namespace ts {
                     node.originalKeywordKind = token();
                 }
                 node.escapedText = escapeLeadingUnderscores(internIdentifier(scanner.getTokenValue()));
-                nextToken();
+                nextTokenWithoutCheck();
                 return finishNode(node);
             }
 
@@ -2287,9 +2296,19 @@ namespace ts {
             return <TemplateMiddle | TemplateTail>fragment;
         }
 
-        function parseLiteralLikeNode(kind: SyntaxKind): LiteralExpression | LiteralLikeNode {
-            const node = <LiteralExpression>createNode(kind);
+        function parseLiteralLikeNode(kind: SyntaxKind): LiteralLikeNode {
+            const node = <LiteralLikeNode>createNode(kind);
             node.text = scanner.getTokenValue();
+            switch (kind) {
+                case SyntaxKind.NoSubstitutionTemplateLiteral:
+                case SyntaxKind.TemplateHead:
+                case SyntaxKind.TemplateMiddle:
+                case SyntaxKind.TemplateTail:
+                    const isLast = kind === SyntaxKind.NoSubstitutionTemplateLiteral || kind === SyntaxKind.TemplateTail;
+                    const tokenText = scanner.getTokenText();
+                    (<TemplateLiteralLikeNode>node).rawText = tokenText.substring(1, tokenText.length - (scanner.isUnterminated() ? 0 : isLast ? 1 : 2));
+                    break;
+            }
 
             if (scanner.hasExtendedUnicodeEscape()) {
                 node.hasExtendedUnicodeEscape = true;

@@ -851,6 +851,10 @@
         "category": "Error",
         "code": 1259
     },
+    "Keywords cannot contain escape characters.": {
+        "category": "Error",
+        "code": 1260
+    },
     "'with' statements are not allowed in an async function block.": {
         "category": "Error",
         "code": 1300
@@ -979,7 +983,7 @@
         "category": "Error",
         "code": 1342
     },
-    "The 'import.meta' meta-property is only allowed using 'ESNext' for the 'target' and 'module' compiler options.": {
+    "The 'import.meta' meta-property is only allowed when the '--module' option is 'esnext' or 'system'.": {
         "category": "Error",
         "code": 1343
     },
