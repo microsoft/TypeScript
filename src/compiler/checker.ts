@@ -24083,7 +24083,7 @@ namespace ts {
                     }
                     if (node.operator === SyntaxKind.PlusToken) {
                         if (maybeTypeOfKind(operandType, TypeFlags.BigIntLike)) {
-                            error(node.operand, Diagnostics.Operator_0_cannot_be_applied_to_type_1, tokenToString(node.operator), typeToString(operandType));
+                            error(node.operand, Diagnostics.Operator_0_cannot_be_applied_to_type_1, tokenToString(node.operator), typeToString(getBaseTypeOfLiteralType(operandType)));
                         }
                         return numberType;
                     }
