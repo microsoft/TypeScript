@@ -2571,7 +2571,7 @@ namespace ts {
             node.left.parent = node;
             node.right.parent = node;
             const lhs = node.left as PropertyAccessEntityNameExpression;
-            const constructorSymbol = lookupSymbolForPropertyAccess(lhs.expression, thisParentContainer);
+            const constructorSymbol = lookupSymbolForPropertyAccess(lhs.expression);
             if (constructorSymbol) {
                 addDeclarationToSymbol(constructorSymbol, constructorSymbol.valueDeclaration, SymbolFlags.Class);
             } // TODO: addDeclarationToSymbol and bindPropertyAssignment overlap about 50%
@@ -2598,6 +2598,10 @@ namespace ts {
             constructorFunction.parent = classPrototype;
             classPrototype.parent = lhs;
 
+            const constructorSymbol = lookupSymbolForPropertyAccess(constructorFunction);
+            if (constructorSymbol) {
+                addDeclarationToSymbol(constructorSymbol, constructorSymbol.valueDeclaration, SymbolFlags.Class);
+            } // TODO: addDeclarationToSymbol and bindPrototypePropertyAssignment overlap about 50%
             bindPropertyAssignment(constructorFunction, lhs, /*isPrototypeProperty*/ true);
         }
 
