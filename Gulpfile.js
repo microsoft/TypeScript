@@ -333,13 +333,14 @@ task("run-eslint-rules-tests").description = "Runs the eslint rule tests";
 
 const lintFoldStart = async () => { if (fold.isTravis()) console.log(fold.start("lint")); };
 const lintFoldEnd = async () => { if (fold.isTravis()) console.log(fold.end("lint")); };
-const eslint = (path) => async () => {
+const eslint = (folder) => async () => {
     const args = [
         "node_modules/eslint/bin/eslint",
+        "--config", `${ folder }/.eslintrc.json`,
         "--format", "autolinkable-stylish",
         "--rulesdir", "scripts/eslint/built/rules",
         "--ext", ".ts",
-        `${ path }`,
+        `${ folder }`,
     ];
 
     if (cmdLineOptions.fix) {

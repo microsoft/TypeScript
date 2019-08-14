@@ -22,11 +22,10 @@
 
     "include": [
         "rules",
-        "tests",
-        "tests/support/*.json"
+        "tests"
     ],
 
     "exclude": [
-        "tests/fixtures"
+        "fixtures"
     ]
 }

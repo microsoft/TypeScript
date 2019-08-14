@@ -3,8 +3,7 @@
     "parserOptions": {
         "warnOnUnsupportedTypeScriptVersion": false,
         "ecmaVersion": 6,
-        "sourceType": "module",
-        "project": "./tsconfig.eslint.json"
+        "sourceType": "module"
     },
     "env": {
         "browser": false,
@@ -25,8 +24,6 @@
         "@typescript-eslint/no-inferrable-types": "error",
         "@typescript-eslint/no-misused-new": "error",
         "@typescript-eslint/no-this-alias": "error",
-        "@typescript-eslint/no-unnecessary-qualifier": "error",
-        "@typescript-eslint/no-unnecessary-type-assertion": "error",
         "@typescript-eslint/prefer-for-of": "error",
         "@typescript-eslint/prefer-function-type": "error",
         "@typescript-eslint/prefer-namespace-keyword": "error",
@@ -80,8 +77,9 @@
         "no-return-await": "error",
         "no-restricted-globals": ["error",
             { "name": "setTimeout" },
-            { "name": "setInterval" },
             { "name": "clearTimeout" },
+            { "name": "setInterval" },
+            { "name": "clearInterval" },
             { "name": "setImmediate" },
             { "name": "clearImmediate" }
         ],
@@ -102,24 +100,5 @@
         "space-in-parens": "error",
         "unicode-bom": ["error", "never"],
         "use-isnan": "error"
-    },
-    "overrides": [{
-        "files": ["src/lib/*.d.ts"],
-        "rules": {
-            "@typescript-eslint/interface-name-prefix": "off",
-            "@typescript-eslint/prefer-function-type": "off",
-            "@typescript-eslint/unified-signatures": "off",
-
-            // scripts/eslint/rules
-            "no-keywords": "off",
-
-            // eslint
-            "no-var": "off"
-        }
-    }, {
-        "files": ["src/lib/es2019.array.d.ts"],
-        "rules": {
-            "@typescript-eslint/array-type": "off"
-        }
-    }]
+    }
 }
