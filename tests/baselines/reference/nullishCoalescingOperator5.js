@@ -43,7 +43,7 @@ a && (b ?? c);
 //// [nullishCoalescingOperator5.js]
 "use strict";
 // should be a syntax error
-(typeof a !== "undefined" && a !== null ? a : b) || c;
+typeof a !== "undefined" && a !== null ? a : b || c;
 // should be a syntax error
 _a = a || b, _a !== void 0 && _a !== null ? _a : c;
 // should be a syntax error
