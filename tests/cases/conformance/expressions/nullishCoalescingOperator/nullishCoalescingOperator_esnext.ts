@@ -1,5 +1,5 @@
 // @strict: true
-// target: esnext
+// @target: esnext
 
 declare const a1: 'literal' | undefined | null
 declare const a2: '' | undefined | null

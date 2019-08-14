@@ -1,6 +1,4 @@
 === tests/cases/conformance/expressions/nullishCoalescingOperator/nullishCoalescingOperator_esnext.ts ===
-// target: esnext
-
 declare const a1: 'literal' | undefined | null
 >a1 : "literal" | null | undefined
 >null : null
