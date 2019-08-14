@@ -174,11 +174,6 @@ namespace ts {
         IsForSignatureHelp = 1 << 4,    // Call resolution for purposes of signature help
     }
 
-    const enum ContextFlags {
-        None = 0,
-        Signature = 1 << 0,  // Obtaining contextual signature
-    }
-
     const enum AccessFlags {
         None = 0,
         NoIndexSignatures = 1 << 0,
