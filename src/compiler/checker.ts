@@ -16197,7 +16197,7 @@ namespace ts {
                 if (constraint) {
                     const instantiatedConstraint = instantiateType(constraint, context.nonFixingMapper);
                     const isCompletionContext = contextFlags && (contextFlags & ContextFlags.Completion);
-                    if (!inferredType || !context.compareTypes(inferredType, getTypeWithThisArgument(instantiatedConstraint, inferredType)) || isCompletionContext) {
+                    if (!inferredType || isCompletionContext || !context.compareTypes(inferredType, getTypeWithThisArgument(instantiatedConstraint, inferredType))) {
                         inference.inferredType = inferredType = instantiatedConstraint;
                     }
                 }
