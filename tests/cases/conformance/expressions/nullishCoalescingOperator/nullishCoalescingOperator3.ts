@@ -9,4 +9,3 @@ declare const a6: false | undefined | null
 
 
 const aa1 = a1 ?? a2 ?? a3 ?? a4 ?? a5 ?? a6 ?? 'whatever'
-const aa2 = a1 ?? a1.toString()
