@@ -1925,7 +1925,8 @@ declare namespace ts {
         Success = 0,
         DiagnosticsPresent_OutputsSkipped = 1,
         DiagnosticsPresent_OutputsGenerated = 2,
-        InvalidProject_OutputsSkipped = 3
+        InvalidProject_OutputsSkipped = 3,
+        ProjectReferenceCycle_OutputsSkupped = 4
     }
     export interface EmitResult {
         emitSkipped: boolean;
