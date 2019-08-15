@@ -704,6 +704,10 @@ namespace ts.textChanges {
             }
         }
 
+        public parenthesizeExpression(sourceFile: SourceFile, expression: Expression) {
+            this.replaceRange(sourceFile, rangeOfNode(expression), createParen(expression));
+        }
+
         private finishClassesWithNodesInsertedAtStart(): void {
             this.classesWithNodesInsertedAtStart.forEach(({ node, sourceFile }) => {
                 const [openBraceEnd, closeBraceEnd] = getClassOrObjectBraceEnds(node, sourceFile);

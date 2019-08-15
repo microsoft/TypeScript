@@ -52,15 +52,15 @@ function stringify3(anything: unknown | undefined): string { // should simplify 
 }
 
 function stringify4(anything: { toString?(): string } | undefined): string {
->stringify4 : (anything: {} | undefined) => string
->anything : {} | undefined
+>stringify4 : (anything: { toString?(): string; } | undefined) => string
+>anything : { toString?(): string; } | undefined
 >toString : (() => string) | undefined
 
     return typeof anything === "string" ? anything.toUpperCase() : "";
 >typeof anything === "string" ? anything.toUpperCase() : "" : string
 >typeof anything === "string" : boolean
 >typeof anything : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
->anything : {} | undefined
+>anything : { toString?(): string; } | undefined
 >"string" : "string"
 >anything.toUpperCase() : string
 >anything.toUpperCase : () => string

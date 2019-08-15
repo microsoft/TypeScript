@@ -1,8 +1,8 @@
-error TS2318: Cannot find global type 'Generator'.
+error TS2318: Cannot find global type 'IterableIterator'.
 tests/cases/compiler/spreadOfParamsFromGeneratorMakesRequiredParams.ts(6,1): error TS2554: Expected 2 arguments, but got 1.
 
 
-!!! error TS2318: Cannot find global type 'Generator'.
+!!! error TS2318: Cannot find global type 'IterableIterator'.
 ==== tests/cases/compiler/spreadOfParamsFromGeneratorMakesRequiredParams.ts (1 errors) ====
     declare function call<Fn extends (...args: any[]) => any>(
         fn: Fn,

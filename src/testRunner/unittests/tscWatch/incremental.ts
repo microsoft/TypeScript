@@ -9,6 +9,7 @@ namespace ts.tscWatch {
 
         interface VerifyIncrementalWatchEmitInput {
             files: ReadonlyArray<File>;
+            optionsToExtend?: CompilerOptions;
             expectedInitialEmit: ReadonlyArray<File>;
             expectedInitialErrors: ReadonlyArray<string>;
             modifyFs?: (host: WatchedSystem) => void;
@@ -32,9 +33,9 @@ namespace ts.tscWatch {
             });
         }
 
-        function incrementalBuild(configFile: string, host: WatchedSystem) {
+        function incrementalBuild(configFile: string, host: WatchedSystem, optionsToExtend?: CompilerOptions) {
             const reportDiagnostic = createDiagnosticReporter(host);
-            const config = parseConfigFileWithSystem(configFile, {}, host, reportDiagnostic);
+            const config = parseConfigFileWithSystem(configFile, optionsToExtend || {}, host, reportDiagnostic);
             if (config) {
                 performIncrementalCompilation({
                     rootNames: config.fileNames,
@@ -50,12 +51,14 @@ namespace ts.tscWatch {
 
         interface VerifyIncrementalWatchEmitWorkerInput {
             input: VerifyIncrementalWatchEmitInput;
-            emitAndReportErrors: (configFile: string, host: WatchedSystem) => { close(): void; };
+            emitAndReportErrors: (configFile: string, host: WatchedSystem, optionsToExtend?: CompilerOptions) => { close(): void; };
             verifyErrors: (host: WatchedSystem, errors: ReadonlyArray<string>) => void;
         }
         function verifyIncrementalWatchEmitWorker({
             input: {
-                files, expectedInitialEmit, expectedInitialErrors, modifyFs, expectedIncrementalEmit, expectedIncrementalErrors
+                files, optionsToExtend,
+                expectedInitialEmit, expectedInitialErrors,
+                modifyFs, expectedIncrementalEmit, expectedIncrementalErrors
             },
             emitAndReportErrors,
             verifyErrors
@@ -70,6 +73,7 @@ namespace ts.tscWatch {
             };
             verifyBuild({
                 host,
+                optionsToExtend,
                 writtenFiles,
                 emitAndReportErrors,
                 verifyErrors,
@@ -80,6 +84,7 @@ namespace ts.tscWatch {
                 modifyFs(host);
                 verifyBuild({
                     host,
+                    optionsToExtend,
                     writtenFiles,
                     emitAndReportErrors,
                     verifyErrors,
@@ -91,15 +96,19 @@ namespace ts.tscWatch {
 
         interface VerifyBuildWorker {
             host: WatchedSystem;
+            optionsToExtend?: CompilerOptions;
             writtenFiles: Map<string>;
             emitAndReportErrors: VerifyIncrementalWatchEmitWorkerInput["emitAndReportErrors"];
             verifyErrors: VerifyIncrementalWatchEmitWorkerInput["verifyErrors"];
             expectedEmit: ReadonlyArray<File>;
             expectedErrors: ReadonlyArray<string>;
         }
-        function verifyBuild({ host, writtenFiles, emitAndReportErrors, verifyErrors, expectedEmit, expectedErrors }: VerifyBuildWorker) {
+        function verifyBuild({
+            host, optionsToExtend, writtenFiles, emitAndReportErrors,
+            verifyErrors, expectedEmit, expectedErrors
+        }: VerifyBuildWorker) {
             writtenFiles.clear();
-            const result = emitAndReportErrors("tsconfig.json", host);
+            const result = emitAndReportErrors("tsconfig.json", host, optionsToExtend);
             checkFileEmit(writtenFiles, expectedEmit);
             verifyErrors(host, expectedErrors);
             result.close();
@@ -159,60 +168,69 @@ namespace ts.tscWatch {
                 content: "var y = 20;\n"
             };
             describe("own file emit without errors", () => {
-                const modifiedFile2Content = file2.content.replace("y", "z").replace("20", "10");
-                verifyIncrementalWatchEmit({
-                    files: [libFile, file1, file2, configFile],
-                    expectedInitialEmit: [
-                        file1Js,
-                        file2Js,
-                        {
-                            path: `${project}/tsconfig.tsbuildinfo`,
-                            content: getBuildInfoText({
-                                program: {
-                                    fileInfos: {
-                                        [libFilePath]: libFileInfo,
-                                        [file1Path]: getFileInfo(file1.content),
-                                        [file2Path]: getFileInfo(file2.content)
+                function verify(optionsToExtend?: CompilerOptions, expectedBuildinfoOptions?: CompilerOptions) {
+                    const modifiedFile2Content = file2.content.replace("y", "z").replace("20", "10");
+                    verifyIncrementalWatchEmit({
+                        files: [libFile, file1, file2, configFile],
+                        optionsToExtend,
+                        expectedInitialEmit: [
+                            file1Js,
+                            file2Js,
+                            {
+                                path: `${project}/tsconfig.tsbuildinfo`,
+                                content: getBuildInfoText({
+                                    program: {
+                                        fileInfos: {
+                                            [libFilePath]: libFileInfo,
+                                            [file1Path]: getFileInfo(file1.content),
+                                            [file2Path]: getFileInfo(file2.content)
+                                        },
+                                        options: {
+                                            incremental: true,
+                                            ...expectedBuildinfoOptions,
+                                            configFilePath: "./tsconfig.json"
+                                        },
+                                        referencedMap: {},
+                                        exportedModulesMap: {},
+                                        semanticDiagnosticsPerFile: [libFilePath, file1Path, file2Path]
                                     },
-                                    options: {
-                                        incremental: true,
-                                        configFilePath: "./tsconfig.json"
+                                    version
+                                })
+                            }
+                        ],
+                        expectedInitialErrors: emptyArray,
+                        modifyFs: host => host.writeFile(file2.path, modifiedFile2Content),
+                        expectedIncrementalEmit: [
+                            file1Js,
+                            { path: file2Js.path, content: file2Js.content.replace("y", "z").replace("20", "10") },
+                            {
+                                path: `${project}/tsconfig.tsbuildinfo`,
+                                content: getBuildInfoText({
+                                    program: {
+                                        fileInfos: {
+                                            [libFilePath]: libFileInfo,
+                                            [file1Path]: getFileInfo(file1.content),
+                                            [file2Path]: getFileInfo(modifiedFile2Content)
+                                        },
+                                        options: {
+                                            incremental: true,
+                                            ...expectedBuildinfoOptions,
+                                            configFilePath: "./tsconfig.json"
+                                        },
+                                        referencedMap: {},
+                                        exportedModulesMap: {},
+                                        semanticDiagnosticsPerFile: [libFilePath, file1Path, file2Path]
                                     },
-                                    referencedMap: {},
-                                    exportedModulesMap: {},
-                                    semanticDiagnosticsPerFile: [libFilePath, file1Path, file2Path]
-                                },
-                                version
-                            })
-                        }
-                    ],
-                    expectedInitialErrors: emptyArray,
-                    modifyFs: host => host.writeFile(file2.path, modifiedFile2Content),
-                    expectedIncrementalEmit: [
-                        file1Js,
-                        { path: file2Js.path, content: file2Js.content.replace("y", "z").replace("20", "10") },
-                        {
-                            path: `${project}/tsconfig.tsbuildinfo`,
-                            content: getBuildInfoText({
-                                program: {
-                                    fileInfos: {
-                                        [libFilePath]: libFileInfo,
-                                        [file1Path]: getFileInfo(file1.content),
-                                        [file2Path]: getFileInfo(modifiedFile2Content)
-                                    },
-                                    options: {
-                                        incremental: true,
-                                        configFilePath: "./tsconfig.json"
-                                    },
-                                    referencedMap: {},
-                                    exportedModulesMap: {},
-                                    semanticDiagnosticsPerFile: [libFilePath, file1Path, file2Path]
-                                },
-                                version
-                            })
-                        }
-                    ],
-                    expectedIncrementalErrors: emptyArray,
+                                    version
+                                })
+                            }
+                        ],
+                        expectedIncrementalErrors: emptyArray,
+                    });
+                }
+                verify();
+                describe("with commandline parameters that are not relative", () => {
+                    verify({ project: "tsconfig.json" }, { project: "./tsconfig.json" });
                 });
             });
 
@@ -337,6 +355,7 @@ namespace ts.tscWatch {
                     expectedInitialErrors: emptyArray
                 });
             });
+
         });
 
         describe("module compilation", () => {

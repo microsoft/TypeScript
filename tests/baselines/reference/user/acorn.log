@@ -1,10 +1,22 @@
 Exit Code: 1
 Standard output:
 node_modules/acorn/bin/_acorn.js(51,30): error TS2339: Property 'getToken' does not exist on type 'Parser'.
-node_modules/acorn/bin/_acorn.js(59,59): error TS2345: Argument of type '2 | null' is not assignable to parameter of type 'string | number | undefined'.
-  Type 'null' is not assignable to type 'string | number | undefined'.
-node_modules/acorn/bin/_acorn.js(63,23): error TS2345: Argument of type 'string | undefined' is not assignable to parameter of type 'string | number | Buffer | URL'.
-  Type 'undefined' is not assignable to type 'string | number | Buffer | URL'.
+node_modules/acorn/bin/_acorn.js(59,30): error TS2769: No overload matches this call.
+  Overload 1 of 2, '(value: any, replacer?: ((this: any, key: string, value: any) => any) | undefined, space?: string | number | undefined): string', gave the following error.
+    Argument of type 'null' is not assignable to parameter of type '((this: any, key: string, value: any) => any) | undefined'.
+  Overload 2 of 2, '(value: any, replacer?: (string | number)[] | null | undefined, space?: string | number | undefined): string', gave the following error.
+    Argument of type '2 | null' is not assignable to parameter of type 'string | number | undefined'.
+      Type 'null' is not assignable to type 'string | number | undefined'.
+node_modules/acorn/bin/_acorn.js(63,23): error TS2769: No overload matches this call.
+  Overload 1 of 3, '(path: string | number | Buffer | URL, options?: { encoding?: null | undefined; flag?: string | undefined; } | null | undefined): Buffer', gave the following error.
+    Argument of type 'string | undefined' is not assignable to parameter of type 'string | number | Buffer | URL'.
+      Type 'undefined' is not assignable to type 'string | number | Buffer | URL'.
+  Overload 2 of 3, '(path: string | number | Buffer | URL, options: string | { encoding: string; flag?: string | undefined; }): string', gave the following error.
+    Argument of type 'string | undefined' is not assignable to parameter of type 'string | number | Buffer | URL'.
+      Type 'undefined' is not assignable to type 'string | number | Buffer | URL'.
+  Overload 3 of 3, '(path: string | number | Buffer | URL, options?: string | { encoding?: string | null | undefined; flag?: string | undefined; } | null | undefined): string | Buffer', gave the following error.
+    Argument of type 'string | undefined' is not assignable to parameter of type 'string | number | Buffer | URL'.
+      Type 'undefined' is not assignable to type 'string | number | Buffer | URL'.
 node_modules/acorn/bin/run_test262.js(3,21): error TS2307: Cannot find module 'test262-parser-runner'.
 node_modules/acorn/dist/acorn.es.js(36,1): error TS2322: Type 'null' is not assignable to type 'string'.
 node_modules/acorn/dist/acorn.es.js(36,32): error TS2322: Type 'null' is not assignable to type 'string'.
@@ -102,7 +114,6 @@ node_modules/acorn/dist/acorn.js(3032,40): error TS2339: Property 'inGeneratorCo
 node_modules/acorn/dist/acorn.js(3035,8): error TS2339: Property 'exprAllowed' does not exist on type 'TokenType'.
 node_modules/acorn/dist/acorn.js(5297,5): error TS2339: Property 'nextToken' does not exist on type 'Parser'.
 node_modules/acorn/dist/acorn.js(5298,12): error TS2339: Property 'parseExpression' does not exist on type 'Parser'.
-node_modules/acorn/dist/acorn_loose.es.js(1,56): error TS2440: Import declaration conflicts with local declaration of 'defaultOptions'.
 node_modules/acorn/dist/acorn_loose.es.js(73,9): error TS2339: Property 'name' does not exist on type 'Node'.
 node_modules/acorn/dist/acorn_loose.es.js(79,9): error TS2339: Property 'value' does not exist on type 'Node'.
 node_modules/acorn/dist/acorn_loose.es.js(79,23): error TS2339: Property 'raw' does not exist on type 'Node'.

@@ -555,8 +555,8 @@ for (const action of actions) {
 
 	window[action] = (x, y) => {
 >window[action] = (x, y) => {		window[action](x, y);	} : (x: number, y: number) => void
->window[action] : ((x: number, y: number) => void) & ((x: number, y: number) => void)
->window : Window
+>window[action] : ((x: number, y: number) => void) & ((x: number, y: number) => void) & ((x: number, y: number) => void) & ((x: number, y: number) => void)
+>window : Window & typeof globalThis
 >action : "resizeTo" | "resizeBy"
 >(x, y) => {		window[action](x, y);	} : (x: number, y: number) => void
 >x : number
@@ -564,8 +564,8 @@ for (const action of actions) {
 
 		window[action](x, y);
 >window[action](x, y) : void
->window[action] : ((x: number, y: number) => void) | ((x: number, y: number) => void)
->window : Window
+>window[action] : (((x: number, y: number) => void) & ((x: number, y: number) => void)) | (((x: number, y: number) => void) & ((x: number, y: number) => void))
+>window : Window & typeof globalThis
 >action : "resizeTo" | "resizeBy"
 >x : number
 >y : number

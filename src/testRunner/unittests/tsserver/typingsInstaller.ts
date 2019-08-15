@@ -1,6 +1,6 @@
 namespace ts.projectSystem {
     import validatePackageName = JsTyping.validatePackageName;
-    import PackageNameValidationResult = JsTyping.PackageNameValidationResult;
+    import NameValidationResult = JsTyping.NameValidationResult;
 
     interface InstallerParams {
         globalTypingsCacheLocation?: string;
@@ -948,7 +948,8 @@ namespace ts.projectSystem {
                 path: "/a/b/app.js",
                 content: `
                 import * as fs from "fs";
-                import * as commander from "commander";`
+                import * as commander from "commander";
+                import * as component from "@ember/component";`
             };
             const cachePath = "/a/cache";
             const node = {
@@ -959,14 +960,19 @@ namespace ts.projectSystem {
                 path: cachePath + "/node_modules/@types/commander/index.d.ts",
                 content: "export let y: string"
             };
+            const emberComponentDirectory = "ember__component";
+            const emberComponent = {
+                path: `${cachePath}/node_modules/@types/${emberComponentDirectory}/index.d.ts`,
+                content: "export let x: number"
+            };
             const host = createServerHost([file]);
             const installer = new (class extends Installer {
                 constructor() {
                     super(host, { globalTypingsCacheLocation: cachePath, typesRegistry: createTypesRegistry("node", "commander") });
                 }
                 installWorker(_requestId: number, _args: string[], _cwd: string, cb: TI.RequestCompletedAction) {
-                    const installedTypings = ["@types/node", "@types/commander"];
-                    const typingFiles = [node, commander];
+                    const installedTypings = ["@types/node", "@types/commander", `@types/${emberComponentDirectory}`];
+                    const typingFiles = [node, commander, emberComponent];
                     executeCommand(this, host, installedTypings, typingFiles, cb);
                 }
             })();
@@ -980,9 +986,10 @@ namespace ts.projectSystem {
 
             assert.isTrue(host.fileExists(node.path), "typings for 'node' should be created");
             assert.isTrue(host.fileExists(commander.path), "typings for 'commander' should be created");
+            assert.isTrue(host.fileExists(emberComponent.path), "typings for 'commander' should be created");
 
             host.checkTimeoutQueueLengthAndRun(2);
-            checkProjectActualFiles(service.inferredProjects[0], [file.path, node.path, commander.path]);
+            checkProjectActualFiles(service.inferredProjects[0], [file.path, node.path, commander.path, emberComponent.path]);
         });
 
         it("should redo resolution that resolved to '.js' file after typings are installed", () => {
@@ -1263,21 +1270,44 @@ namespace ts.projectSystem {
             for (let i = 0; i < 8; i++) {
                 packageName += packageName;
             }
-            assert.equal(validatePackageName(packageName), PackageNameValidationResult.NameTooLong);
+            assert.equal(validatePackageName(packageName), NameValidationResult.NameTooLong);
         });
-        it("name cannot start with dot", () => {
-            assert.equal(validatePackageName(".foo"), PackageNameValidationResult.NameStartsWithDot);
+        it("package name cannot start with dot", () => {
+            assert.equal(validatePackageName(".foo"), NameValidationResult.NameStartsWithDot);
         });
-        it("name cannot start with underscore", () => {
-            assert.equal(validatePackageName("_foo"), PackageNameValidationResult.NameStartsWithUnderscore);
+        it("package name cannot start with underscore", () => {
+            assert.equal(validatePackageName("_foo"), NameValidationResult.NameStartsWithUnderscore);
         });
-        it("scoped packages not supported", () => {
-            assert.equal(validatePackageName("@scope/bar"), PackageNameValidationResult.ScopedPackagesNotSupported);
+        it("package non URI safe characters are not supported", () => {
+            assert.equal(validatePackageName("  scope  "), NameValidationResult.NameContainsNonURISafeCharacters);
+            assert.equal(validatePackageName("; say ‘Hello from TypeScript!’ #"), NameValidationResult.NameContainsNonURISafeCharacters);
+            assert.equal(validatePackageName("a/b/c"), NameValidationResult.NameContainsNonURISafeCharacters);
         });
-        it("non URI safe characters are not supported", () => {
-            assert.equal(validatePackageName("  scope  "), PackageNameValidationResult.NameContainsNonURISafeCharacters);
-            assert.equal(validatePackageName("; say ‘Hello from TypeScript!’ #"), PackageNameValidationResult.NameContainsNonURISafeCharacters);
-            assert.equal(validatePackageName("a/b/c"), PackageNameValidationResult.NameContainsNonURISafeCharacters);
+        it("scoped package name is supported", () => {
+            assert.equal(validatePackageName("@scope/bar"), NameValidationResult.Ok);
+        });
+        it("scoped name in scoped package name cannot start with dot", () => {
+            assert.deepEqual(validatePackageName("@.scope/bar"), { name: ".scope", isScopeName: true, result: NameValidationResult.NameStartsWithDot });
+            assert.deepEqual(validatePackageName("@.scope/.bar"), { name: ".scope", isScopeName: true, result: NameValidationResult.NameStartsWithDot });
+        });
+        it("scope name in scoped package name cannot start with underscore", () => {
+            assert.deepEqual(validatePackageName("@_scope/bar"), { name: "_scope", isScopeName: true, result: NameValidationResult.NameStartsWithUnderscore });
+            assert.deepEqual(validatePackageName("@_scope/_bar"), { name: "_scope", isScopeName: true, result: NameValidationResult.NameStartsWithUnderscore });
+        });
+        it("scope name in scoped package name with non URI safe characters are not supported", () => {
+            assert.deepEqual(validatePackageName("@  scope  /bar"), { name: "  scope  ", isScopeName: true, result: NameValidationResult.NameContainsNonURISafeCharacters });
+            assert.deepEqual(validatePackageName("@; say ‘Hello from TypeScript!’ #/bar"), { name: "; say ‘Hello from TypeScript!’ #", isScopeName: true, result: NameValidationResult.NameContainsNonURISafeCharacters });
+            assert.deepEqual(validatePackageName("@  scope  /  bar  "), { name: "  scope  ", isScopeName: true, result: NameValidationResult.NameContainsNonURISafeCharacters });
+        });
+        it("package name in scoped package name cannot start with dot", () => {
+            assert.deepEqual(validatePackageName("@scope/.bar"), { name: ".bar", isScopeName: false, result: NameValidationResult.NameStartsWithDot });
+        });
+        it("package name in scoped package name cannot start with underscore", () => {
+            assert.deepEqual(validatePackageName("@scope/_bar"), { name: "_bar", isScopeName: false, result: NameValidationResult.NameStartsWithUnderscore });
+        });
+        it("package name in scoped package name with non URI safe characters are not supported", () => {
+            assert.deepEqual(validatePackageName("@scope/  bar  "), { name: "  bar  ", isScopeName: false, result: NameValidationResult.NameContainsNonURISafeCharacters });
+            assert.deepEqual(validatePackageName("@scope/; say ‘Hello from TypeScript!’ #"), { name: "; say ‘Hello from TypeScript!’ #", isScopeName: false, result: NameValidationResult.NameContainsNonURISafeCharacters });
         });
     });
 
@@ -1309,7 +1339,7 @@ namespace ts.projectSystem {
             projectService.openClientFile(f1.path);
 
             installer.checkPendingCommands(/*expectedCount*/ 0);
-            assert.isTrue(messages.indexOf("Package name '; say ‘Hello from TypeScript!’ #' contains non URI safe characters") > 0, "should find package with invalid name");
+            assert.isTrue(messages.indexOf("'; say ‘Hello from TypeScript!’ #':: Package name '; say ‘Hello from TypeScript!’ #' contains non URI safe characters") > 0, "should find package with invalid name");
         });
     });
 

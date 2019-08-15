@@ -58,16 +58,18 @@ class CompilerBaselineRunner extends RunnerBase {
     }
 
     public checkTestCodeOutput(fileName: string, test?: CompilerFileBasedTest) {
-        if (test && test.configurations) {
+        if (test && ts.some(test.configurations)) {
             test.configurations.forEach(configuration => {
                 describe(`${this.testSuiteName} tests for ${fileName}${configuration ? ` (${Harness.getFileBasedTestConfigurationDescription(configuration)})` : ``}`, () => {
                     this.runSuite(fileName, test, configuration);
                 });
             });
         }
-        describe(`${this.testSuiteName} tests for ${fileName}`, () => {
-            this.runSuite(fileName, test);
-        });
+        else {
+            describe(`${this.testSuiteName} tests for ${fileName}`, () => {
+                this.runSuite(fileName, test);
+            });
+        }
     }
 
     private runSuite(fileName: string, test?: CompilerFileBasedTest, configuration?: Harness.FileBasedTestConfiguration) {
@@ -112,6 +114,7 @@ class CompilerBaselineRunner extends RunnerBase {
 class CompilerTest {
     private fileName: string;
     private justName: string;
+    private configuredName: string;
     private lastUnit: Harness.TestCaseParser.TestUnitData;
     private harnessSettings: Harness.TestCaseParser.CompilerSettings;
     private hasNonDtsFiles: boolean;
@@ -126,6 +129,25 @@ class CompilerTest {
     constructor(fileName: string, testCaseContent?: Harness.TestCaseParser.TestCaseContent, configurationOverrides?: Harness.TestCaseParser.CompilerSettings) {
         this.fileName = fileName;
         this.justName = vpath.basename(fileName);
+        this.configuredName = this.justName;
+        if (configurationOverrides) {
+            let configuredName = "";
+            const keys = Object
+                .keys(configurationOverrides)
+                .map(k => k.toLowerCase())
+                .sort();
+            for (const key of keys) {
+                if (configuredName) {
+                    configuredName += ",";
+                }
+                configuredName += `${key}=${configurationOverrides[key].toLowerCase()}`;
+            }
+            if (configuredName) {
+                const extname = vpath.extname(this.justName);
+                const basename = vpath.basename(this.justName, extname, /*ignoreCase*/ true);
+                this.configuredName = `${basename}(${configuredName})${extname}`;
+            }
+        }
 
         const rootDir = fileName.indexOf("conformance") === -1 ? "tests/cases/compiler/" : ts.getDirectoryPath(fileName) + "/";
 
@@ -205,7 +227,7 @@ class CompilerTest {
     public verifyDiagnostics() {
         // check errors
         Harness.Compiler.doErrorBaseline(
-            this.justName,
+            this.configuredName,
             this.tsConfigFiles.concat(this.toBeCompiled, this.otherFiles),
             this.result.diagnostics,
             !!this.options.pretty);
@@ -213,7 +235,7 @@ class CompilerTest {
 
     public verifyModuleResolution() {
         if (this.options.traceResolution) {
-            Harness.Baseline.runBaseline(this.justName.replace(/\.tsx?$/, ".trace.json"),
+            Harness.Baseline.runBaseline(this.configuredName.replace(/\.tsx?$/, ".trace.json"),
                 JSON.stringify(this.result.traces.map(utils.sanitizeTraceResolutionLogEntry), undefined, 4));
         }
     }
@@ -225,14 +247,14 @@ class CompilerTest {
                 // Because of the noEmitOnError option no files are created. We need to return null because baselining isn't required.
                 ? null // tslint:disable-line no-null-keyword
                 : record;
-            Harness.Baseline.runBaseline(this.justName.replace(/\.tsx?$/, ".sourcemap.txt"), baseline);
+            Harness.Baseline.runBaseline(this.configuredName.replace(/\.tsx?$/, ".sourcemap.txt"), baseline);
         }
     }
 
     public verifyJavaScriptOutput() {
         if (this.hasNonDtsFiles) {
             Harness.Compiler.doJsEmitBaseline(
-                this.justName,
+                this.configuredName,
                 this.fileName,
                 this.options,
                 this.result,
@@ -245,7 +267,7 @@ class CompilerTest {
 
     public verifySourceMapOutput() {
         Harness.Compiler.doSourcemapBaseline(
-            this.justName,
+            this.configuredName,
             this.options,
             this.result,
             this.harnessSettings);
@@ -256,8 +278,15 @@ class CompilerTest {
             return;
         }
 
+        const noTypesAndSymbols =
+            this.harnessSettings.noTypesAndSymbols &&
+            this.harnessSettings.noTypesAndSymbols.toLowerCase() === "true";
+        if (noTypesAndSymbols) {
+            return;
+        }
+
         Harness.Compiler.doTypeAndSymbolBaseline(
-            this.justName,
+            this.configuredName,
             this.result.program!,
             this.toBeCompiled.concat(this.otherFiles).filter(file => !!this.result.program!.getSourceFile(file.unitName)),
             /*opts*/ undefined,

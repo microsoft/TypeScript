@@ -1,0 +1,33 @@
+=== tests/cases/conformance/classes/propertyMemberDeclarations/memberAccessorDeclarations/ambientAccessors.ts ===
+// ok to use accessors in ambient class in ES3
+declare class C {
+>C : Symbol(C, Decl(ambientAccessors.ts, 0, 0))
+
+    static get a(): string;
+>a : Symbol(C.a, Decl(ambientAccessors.ts, 1, 17), Decl(ambientAccessors.ts, 2, 27))
+
+    static set a(value: string);
+>a : Symbol(C.a, Decl(ambientAccessors.ts, 1, 17), Decl(ambientAccessors.ts, 2, 27))
+>value : Symbol(value, Decl(ambientAccessors.ts, 3, 17))
+
+    private static get b(): string;
+>b : Symbol(C.b, Decl(ambientAccessors.ts, 3, 32), Decl(ambientAccessors.ts, 5, 35))
+
+    private static set b(foo: string);
+>b : Symbol(C.b, Decl(ambientAccessors.ts, 3, 32), Decl(ambientAccessors.ts, 5, 35))
+>foo : Symbol(foo, Decl(ambientAccessors.ts, 6, 25))
+
+    get x(): string;
+>x : Symbol(C.x, Decl(ambientAccessors.ts, 6, 38), Decl(ambientAccessors.ts, 8, 20))
+
+    set x(value: string);
+>x : Symbol(C.x, Decl(ambientAccessors.ts, 6, 38), Decl(ambientAccessors.ts, 8, 20))
+>value : Symbol(value, Decl(ambientAccessors.ts, 9, 10))
+
+    private get y(): string;
+>y : Symbol(C.y, Decl(ambientAccessors.ts, 9, 25), Decl(ambientAccessors.ts, 11, 28))
+
+    private set y(foo: string);
+>y : Symbol(C.y, Decl(ambientAccessors.ts, 9, 25), Decl(ambientAccessors.ts, 11, 28))
+>foo : Symbol(foo, Decl(ambientAccessors.ts, 12, 18))
+}

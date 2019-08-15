@@ -75,19 +75,19 @@ async function * inferReturnType8() {
 }
 const assignability1: () => AsyncIterableIterator<number> = async function * () {
 >assignability1 : () => AsyncIterableIterator<number>
->async function * () {    yield 1;} : () => AsyncGenerator<number, void, unknown>
+>async function * () {    yield 1;} : () => AsyncGenerator<number, void, undefined>
 
     yield 1;
->yield 1 : any
+>yield 1 : undefined
 >1 : 1
 
 };
 const assignability2: () => AsyncIterableIterator<number> = async function * () {
 >assignability2 : () => AsyncIterableIterator<number>
->async function * () {    yield Promise.resolve(1);} : () => AsyncGenerator<number, void, unknown>
+>async function * () {    yield Promise.resolve(1);} : () => AsyncGenerator<number, void, undefined>
 
     yield Promise.resolve(1);
->yield Promise.resolve(1) : any
+>yield Promise.resolve(1) : undefined
 >Promise.resolve(1) : Promise<number>
 >Promise.resolve : { <T>(value: T | PromiseLike<T>): Promise<T>; (): Promise<void>; }
 >Promise : PromiseConstructor
@@ -135,19 +135,19 @@ const assignability5: () => AsyncIterableIterator<number> = async function * () 
 };
 const assignability6: () => AsyncIterable<number> = async function * () {
 >assignability6 : () => AsyncIterable<number>
->async function * () {    yield 1;} : () => AsyncGenerator<number, void, unknown>
+>async function * () {    yield 1;} : () => AsyncGenerator<number, void, undefined>
 
     yield 1;
->yield 1 : any
+>yield 1 : undefined
 >1 : 1
 
 };
 const assignability7: () => AsyncIterable<number> = async function * () {
 >assignability7 : () => AsyncIterable<number>
->async function * () {    yield Promise.resolve(1);} : () => AsyncGenerator<number, void, unknown>
+>async function * () {    yield Promise.resolve(1);} : () => AsyncGenerator<number, void, undefined>
 
     yield Promise.resolve(1);
->yield Promise.resolve(1) : any
+>yield Promise.resolve(1) : undefined
 >Promise.resolve(1) : Promise<number>
 >Promise.resolve : { <T>(value: T | PromiseLike<T>): Promise<T>; (): Promise<void>; }
 >Promise : PromiseConstructor
@@ -195,19 +195,19 @@ const assignability10: () => AsyncIterable<number> = async function * () {
 };
 const assignability11: () => AsyncIterator<number> = async function * () {
 >assignability11 : () => AsyncIterator<number, any, undefined>
->async function * () {    yield 1;} : () => AsyncGenerator<number, void, unknown>
+>async function * () {    yield 1;} : () => AsyncGenerator<number, void, undefined>
 
     yield 1;
->yield 1 : any
+>yield 1 : undefined
 >1 : 1
 
 };
 const assignability12: () => AsyncIterator<number> = async function * () {
 >assignability12 : () => AsyncIterator<number, any, undefined>
->async function * () {    yield Promise.resolve(1);} : () => AsyncGenerator<number, void, unknown>
+>async function * () {    yield Promise.resolve(1);} : () => AsyncGenerator<number, void, undefined>
 
     yield Promise.resolve(1);
->yield Promise.resolve(1) : any
+>yield Promise.resolve(1) : undefined
 >Promise.resolve(1) : Promise<number>
 >Promise.resolve : { <T>(value: T | PromiseLike<T>): Promise<T>; (): Promise<void>; }
 >Promise : PromiseConstructor

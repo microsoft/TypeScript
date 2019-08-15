@@ -279,8 +279,8 @@ function f25() {
 // Spread of unknown causes result to be unknown
 function f26(x, y, z) {
     var o1 = __assign({ a: 42 }, x); // { a: number }
-    var o2 = __assign({ a: 42 }, x, y); // unknown
-    var o3 = __assign({ a: 42 }, x, y, z); // any
+    var o2 = __assign(__assign({ a: 42 }, x), y); // unknown
+    var o3 = __assign(__assign(__assign({ a: 42 }, x), y), z); // any
 }
 // Functions with unknown return type don't need return expressions
 function f27() {

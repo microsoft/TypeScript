@@ -172,8 +172,8 @@ export class someClass { }
   "program": {
     "fileInfos": {
       "../../lib/lib.d.ts": {
-        "version": "-15964756381",
-        "signature": "-15964756381"
+        "version": "3858781397",
+        "signature": "3858781397"
       },
       "./anothermodule.ts": {
         "version": "-2676574883",
@@ -212,8 +212,8 @@ export class someClass { }
   "program": {
     "fileInfos": {
       "../../lib/lib.d.ts": {
-        "version": "-15964756381",
-        "signature": "-15964756381"
+        "version": "3858781397",
+        "signature": "3858781397"
       },
       "../core/index.ts": {
         "version": "-2069755619",
@@ -262,8 +262,8 @@ export class someClass { }
   "program": {
     "fileInfos": {
       "../../lib/lib.d.ts": {
-        "version": "-15964756381",
-        "signature": "-15964756381"
+        "version": "3858781397",
+        "signature": "3858781397"
       },
       "../core/index.ts": {
         "version": "-2069755619",
