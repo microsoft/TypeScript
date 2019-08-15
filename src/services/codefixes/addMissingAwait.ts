@@ -45,23 +45,24 @@ namespace ts.codefix {
         getAllCodeActions: context => {
             const { sourceFile, program, cancellationToken } = context;
             const checker = context.program.getTypeChecker();
+            const fixedDeclarations = createMap<true>();
             return codeFixAll(context, errorCodes, (t, diagnostic) => {
                 const expression = getAwaitableExpression(sourceFile, diagnostic.code, diagnostic, cancellationToken, program);
                 if (!expression) {
                     return;
                 }
                 const trackChanges: ContextualTrackChangesFunction = cb => (cb(t), []);
-                return getDeclarationSiteFix(context, expression, diagnostic.code, checker, trackChanges)
-                    || getUseSiteFix(context, expression, diagnostic.code, checker, trackChanges);
+                return getDeclarationSiteFix(context, expression, diagnostic.code, checker, trackChanges, fixedDeclarations)
+                    || getUseSiteFix(context, expression, diagnostic.code, checker, trackChanges, fixedDeclarations);
             });
         },
     });
 
-    function getDeclarationSiteFix(context: CodeFixContext | CodeFixAllContext, expression: Expression, errorCode: number, checker: TypeChecker, trackChanges: ContextualTrackChangesFunction) {
-        const { sourceFile } = context;
-        const awaitableInitializer = findAwaitableInitializer(expression, sourceFile, checker);
-        if (awaitableInitializer) {
-            const initializerChanges = trackChanges(t => makeChange(t, errorCode, sourceFile, checker, awaitableInitializer));
+    function getDeclarationSiteFix(context: CodeFixContext | CodeFixAllContext, expression: Expression, errorCode: number, checker: TypeChecker, trackChanges: ContextualTrackChangesFunction, fixedDeclarations?: Map<true>) {
+        const { sourceFile, program, cancellationToken } = context;
+        const awaitableInitializers = findAwaitableInitializers(expression, sourceFile, cancellationToken, program, checker);
+        if (awaitableInitializers) {
+            const initializerChanges = trackChanges(t => forEach(awaitableInitializers, ({ expression }) => makeChange(t, errorCode, sourceFile, checker, expression, fixedDeclarations)));
             return createCodeFixActionNoFixId(
                 "addMissingAwaitToInitializer",
                 initializerChanges,
@@ -69,8 +70,8 @@ namespace ts.codefix {
         }
     }
 
-    function getUseSiteFix(context: CodeFixContext | CodeFixAllContext, expression: Expression, errorCode: number, checker: TypeChecker, trackChanges: ContextualTrackChangesFunction) {
-        const changes = trackChanges(t => makeChange(t, errorCode, context.sourceFile, checker, expression));
+    function getUseSiteFix(context: CodeFixContext | CodeFixAllContext, expression: Expression, errorCode: number, checker: TypeChecker, trackChanges: ContextualTrackChangesFunction, fixedDeclarations?: Map<true>) {
+        const changes = trackChanges(t => makeChange(t, errorCode, context.sourceFile, checker, expression, fixedDeclarations));
         return createCodeFixAction(fixId, changes, Diagnostics.Add_await, fixId, Diagnostics.Fix_all_expressions_possibly_missing_await);
     }
 
@@ -103,38 +104,89 @@ namespace ts.codefix {
                 : undefined;
     }
 
-    function findAwaitableInitializer(expression: Node, sourceFile: SourceFile, checker: TypeChecker): Expression | undefined {
-        if (!isIdentifier(expression)) {
+    interface AwaitableInitializer {
+        expression: Expression;
+        declarationSymbol: Symbol;
+    }
+
+    function findAwaitableInitializers(
+        expression: Node,
+        sourceFile: SourceFile,
+        cancellationToken: CancellationToken,
+        program: Program,
+        checker: TypeChecker,
+    ): readonly AwaitableInitializer[] | undefined {
+        const identifiers = getIdentifiersFromErrorSpanExpression(expression, checker);
+        if (!identifiers) {
             return;
         }
 
-        const symbol = checker.getSymbolAtLocation(expression);
-        if (!symbol) {
-            return;
+        let initializers: AwaitableInitializer[] | undefined;
+        for (const identifier of identifiers) {
+            const symbol = checker.getSymbolAtLocation(identifier);
+            if (!symbol) {
+                continue;
+            }
+
+            const declaration = tryCast(symbol.valueDeclaration, isVariableDeclaration);
+            const variableName = tryCast(declaration && declaration.name, isIdentifier);
+            const variableStatement = getAncestor(declaration, SyntaxKind.VariableStatement);
+            if (!declaration || !variableStatement ||
+                declaration.type ||
+                !declaration.initializer ||
+                variableStatement.getSourceFile() !== sourceFile ||
+                hasModifier(variableStatement, ModifierFlags.Export) ||
+                !variableName ||
+                !isInsideAwaitableBody(declaration.initializer)) {
+                continue;
+            }
+
+            const diagnostics = program.getSemanticDiagnostics(sourceFile, cancellationToken);
+            const isUsedElsewhere = FindAllReferences.Core.eachSymbolReferenceInFile(variableName, checker, sourceFile, reference => {
+                return identifier !== reference && !symbolReferenceIsAlsoMissingAwait(reference, diagnostics, sourceFile);
+            });
+
+            if (isUsedElsewhere) {
+                continue;
+            }
+
+            (initializers || (initializers = [])).push({
+                expression: declaration.initializer,
+                declarationSymbol: symbol,
+            });
         }
+        return initializers;
+    }
 
-        const declaration = tryCast(symbol.valueDeclaration, isVariableDeclaration);
-        const variableName = tryCast(declaration && declaration.name, isIdentifier);
-        const variableStatement = getAncestor(declaration, SyntaxKind.VariableStatement);
-        if (!declaration || !variableStatement ||
-            declaration.type ||
-            !declaration.initializer ||
-            variableStatement.getSourceFile() !== sourceFile ||
-            hasModifier(variableStatement, ModifierFlags.Export) ||
-            !variableName ||
-            !isInsideAwaitableBody(declaration.initializer)) {
-            return;
+    function getIdentifiersFromErrorSpanExpression(expression: Node, checker: TypeChecker): readonly Identifier[] | undefined {
+        if (isIdentifier(expression)) {
+            return [expression];
         }
-
-        const isUsedElsewhere = FindAllReferences.Core.eachSymbolReferenceInFile(variableName, checker, sourceFile, identifier => {
-            return identifier !== expression;
-        });
-
-        if (isUsedElsewhere) {
-            return;
+        if (isPropertyAccessExpression(expression.parent) && isIdentifier(expression.parent.expression)) {
+            return [expression.parent.expression];
         }
+        if (isBinaryExpression(expression.parent)) {
+            let sides: Identifier[] | undefined;
+            for (const side of [expression.parent.left, expression.parent.right]) {
+                if (!isIdentifier(side)) continue;
+                const type = checker.getTypeAtLocation(side);
+                if (checker.getPromisedTypeOfPromise(type)) {
+                    (sides || (sides = [])).push(side);
+                }
+            }
+            return sides;
+        }
+    }
 
-        return declaration.initializer;
+    function symbolReferenceIsAlsoMissingAwait(reference: Identifier, diagnostics: readonly Diagnostic[], sourceFile: SourceFile) {
+        const errorNode = isPropertyAccessExpression(reference.parent) ? reference.parent.name :
+            isBinaryExpression(reference.parent) ? reference.parent :
+            reference;
+        const diagnostic = find(diagnostics, diagnostic =>
+            diagnostic.start === errorNode.getStart(sourceFile) &&
+            diagnostic.start + diagnostic.length! === errorNode.getEnd());
+
+        return diagnostic && contains(errorCodes, diagnostic.code);
     }
 
     function isInsideAwaitableBody(node: Node) {
@@ -147,27 +199,49 @@ namespace ts.codefix {
                 ancestor.parent.kind === SyntaxKind.MethodDeclaration));
     }
 
-    function makeChange(changeTracker: textChanges.ChangeTracker, errorCode: number, sourceFile: SourceFile, checker: TypeChecker, insertionSite: Expression) {
+    function makeChange(changeTracker: textChanges.ChangeTracker, errorCode: number, sourceFile: SourceFile, checker: TypeChecker, insertionSite: Expression, fixedDeclarations?: Map<true>) {
         if (isBinaryExpression(insertionSite)) {
-            const { left, right } = insertionSite;
-            const leftType = checker.getTypeAtLocation(left);
-            const rightType = checker.getTypeAtLocation(right);
-            const newLeft = checker.getPromisedTypeOfPromise(leftType) ? createAwait(left) : left;
-            const newRight = checker.getPromisedTypeOfPromise(rightType) ? createAwait(right) : right;
-            changeTracker.replaceNode(sourceFile, left, newLeft);
-            changeTracker.replaceNode(sourceFile, right, newRight);
+            for (const side of [insertionSite.left, insertionSite.right]) {
+                if (fixedDeclarations && isIdentifier(side)) {
+                    const symbol = checker.getSymbolAtLocation(side);
+                    if (symbol && fixedDeclarations.has(getSymbolId(symbol).toString())) {
+                        continue;
+                    }
+                }
+                const type = checker.getTypeAtLocation(side);
+                const newNode = checker.getPromisedTypeOfPromise(type) ? createAwait(side) : side;
+                changeTracker.replaceNode(sourceFile, side, newNode);
+            }
         }
         else if (errorCode === propertyAccessCode && isPropertyAccessExpression(insertionSite.parent)) {
+            if (fixedDeclarations && isIdentifier(insertionSite.parent.expression)) {
+                const symbol = checker.getSymbolAtLocation(insertionSite.parent.expression);
+                if (symbol && fixedDeclarations.has(getSymbolId(symbol).toString())) {
+                    return;
+                }
+            }
             changeTracker.replaceNode(
                 sourceFile,
                 insertionSite.parent.expression,
                 createParen(createAwait(insertionSite.parent.expression)));
         }
         else if (contains(callableConstructableErrorCodes, errorCode) && isCallOrNewExpression(insertionSite.parent)) {
+            if (fixedDeclarations && isIdentifier(insertionSite)) {
+                const symbol = checker.getSymbolAtLocation(insertionSite);
+                if (symbol && fixedDeclarations.has(getSymbolId(symbol).toString())) {
+                    return;
+                }
+            }
             changeTracker.replaceNode(sourceFile, insertionSite, createParen(createAwait(insertionSite)));
         }
         else {
             changeTracker.replaceNode(sourceFile, insertionSite, createAwait(insertionSite));
+            if (fixedDeclarations && isVariableDeclaration(insertionSite.parent) && isIdentifier(insertionSite.parent.name)) {
+                const symbol = checker.getSymbolAtLocation(insertionSite.parent.name);
+                if (symbol) {
+                    addToSeen(fixedDeclarations, getSymbolId(symbol));
+                }
+            }
         }
     }
 }
