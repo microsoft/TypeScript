@@ -6,6 +6,10 @@
 ////  fn(y, b);
 ////  x.toLowerCase();
 ////  y.then;
+////
+////  b + b;
+////  x + b;
+////  x + x.toLowerCase();
 ////}
 
 verify.codeFixAll({
@@ -19,5 +23,9 @@ verify.codeFixAll({
   fn(await y, b);
   x.toLowerCase();
   y.then;
+
+  await b + await b;
+  x + await b;
+  x + x.toLowerCase();
 }`
 });

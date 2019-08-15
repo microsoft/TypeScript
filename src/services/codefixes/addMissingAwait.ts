@@ -66,7 +66,9 @@ namespace ts.codefix {
             return createCodeFixActionNoFixId(
                 "addMissingAwaitToInitializer",
                 initializerChanges,
-                [Diagnostics.Add_await_to_initializer_for_0, expression.getText(sourceFile)]);
+                awaitableInitializers.length === 1
+                    ? [Diagnostics.Add_await_to_initializer_for_0, awaitableInitializers[0].declarationSymbol.name]
+                    : Diagnostics.Add_await_to_initializers);
         }
     }
 
@@ -129,7 +131,7 @@ namespace ts.codefix {
             }
 
             const declaration = tryCast(symbol.valueDeclaration, isVariableDeclaration);
-            const variableName = tryCast(declaration && declaration.name, isIdentifier);
+            const variableName = declaration && tryCast(declaration.name, isIdentifier);
             const variableStatement = getAncestor(declaration, SyntaxKind.VariableStatement);
             if (!declaration || !variableStatement ||
                 declaration.type ||
@@ -143,7 +145,7 @@ namespace ts.codefix {
 
             const diagnostics = program.getSemanticDiagnostics(sourceFile, cancellationToken);
             const isUsedElsewhere = FindAllReferences.Core.eachSymbolReferenceInFile(variableName, checker, sourceFile, reference => {
-                return identifier !== reference && !symbolReferenceIsAlsoMissingAwait(reference, diagnostics, sourceFile);
+                return identifier !== reference && !symbolReferenceIsAlsoMissingAwait(reference, diagnostics, sourceFile, checker);
             });
 
             if (isUsedElsewhere) {
@@ -159,11 +161,11 @@ namespace ts.codefix {
     }
 
     function getIdentifiersFromErrorSpanExpression(expression: Node, checker: TypeChecker): readonly Identifier[] | undefined {
-        if (isIdentifier(expression)) {
-            return [expression];
-        }
         if (isPropertyAccessExpression(expression.parent) && isIdentifier(expression.parent.expression)) {
             return [expression.parent.expression];
+        }
+        if (isIdentifier(expression)) {
+            return [expression];
         }
         if (isBinaryExpression(expression.parent)) {
             let sides: Identifier[] | undefined;
@@ -178,7 +180,7 @@ namespace ts.codefix {
         }
     }
 
-    function symbolReferenceIsAlsoMissingAwait(reference: Identifier, diagnostics: readonly Diagnostic[], sourceFile: SourceFile) {
+    function symbolReferenceIsAlsoMissingAwait(reference: Identifier, diagnostics: readonly Diagnostic[], sourceFile: SourceFile, checker: TypeChecker) {
         const errorNode = isPropertyAccessExpression(reference.parent) ? reference.parent.name :
             isBinaryExpression(reference.parent) ? reference.parent :
             reference;
@@ -186,7 +188,15 @@ namespace ts.codefix {
             diagnostic.start === errorNode.getStart(sourceFile) &&
             diagnostic.start + diagnostic.length! === errorNode.getEnd());
 
-        return diagnostic && contains(errorCodes, diagnostic.code);
+        return diagnostic && contains(errorCodes, diagnostic.code) ||
+            // A Promise is usually not correct in a binary expression (it’s not valid
+            // in an arithmetic expression and an equality comparison seems unusual),
+            // but if the other side of the binary expression has an error, the side
+            // is typed `any` which will squash the error that would identify this
+            // Promise as an invalid operand. So if the whole binary expression is
+            // typed `any` as a result, there is a strong likelihood that this Promise
+            // is accidentally missing `await`.
+            checker.getTypeAtLocation(errorNode).flags & TypeFlags.Any;
     }
 
     function isInsideAwaitableBody(node: Node) {
@@ -235,13 +245,13 @@ namespace ts.codefix {
             changeTracker.replaceNode(sourceFile, insertionSite, createParen(createAwait(insertionSite)));
         }
         else {
-            changeTracker.replaceNode(sourceFile, insertionSite, createAwait(insertionSite));
             if (fixedDeclarations && isVariableDeclaration(insertionSite.parent) && isIdentifier(insertionSite.parent.name)) {
                 const symbol = checker.getSymbolAtLocation(insertionSite.parent.name);
-                if (symbol) {
-                    addToSeen(fixedDeclarations, getSymbolId(symbol));
+                if (symbol && !addToSeen(fixedDeclarations, getSymbolId(symbol))) {
+                    return;
                 }
             }
+            changeTracker.replaceNode(sourceFile, insertionSite, createAwait(insertionSite));
         }
     }
 }
