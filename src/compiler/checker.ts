@@ -6158,6 +6158,15 @@ namespace ts {
         function getOuterTypeParameters(node: Node, includeThisTypes?: boolean): TypeParameter[] | undefined {
             while (true) {
                 node = node.parent; // TODO: GH#18217 Use SourceFile kind check instead
+                if (node && isBinaryExpression(node)) {
+                    const assignmentKind = getAssignmentDeclarationKind(node);
+                    if (assignmentKind === AssignmentDeclarationKind.Prototype || assignmentKind === AssignmentDeclarationKind.PrototypeProperty) {
+                        const symbol = getSymbolOfNode(node.left);
+                        if (symbol && symbol.parent) {
+                            node = symbol.parent.valueDeclaration;
+                        }
+                    }
+                }
                 if (!node) {
                     return undefined;
                 }
@@ -6190,6 +6199,7 @@ namespace ts {
                             return concatenate(outerTypeParameters, getInferTypeParameters(<ConditionalTypeNode>node));
                         }
                         const outerAndOwnTypeParameters = appendTypeParameters(outerTypeParameters, getEffectiveTypeParameterDeclarations(<DeclarationWithTypeParameters>node));
+                        // this should probably include isJSConstructor now too
                         const thisType = includeThisTypes &&
                             (node.kind === SyntaxKind.ClassDeclaration || node.kind === SyntaxKind.ClassExpression || node.kind === SyntaxKind.InterfaceDeclaration) &&
                             getDeclaredTypeOfClassOrInterface(getSymbolOfNode(node as ClassLikeDeclaration | InterfaceDeclaration)).thisType;
