@@ -63,3 +63,81 @@ const aa9 = a9 ?? 'whatever'
 >aa9 : Symbol(aa9, Decl(nullishCoalescingOperator_esnext.ts, 19, 5))
 >a9 : Symbol(a9, Decl(nullishCoalescingOperator_esnext.ts, 8, 13))
 
+
+declare let a: any, b: any, c: any;
+>a : Symbol(a, Decl(nullishCoalescingOperator_esnext.ts, 22, 11))
+>b : Symbol(b, Decl(nullishCoalescingOperator_esnext.ts, 22, 19))
+>c : Symbol(c, Decl(nullishCoalescingOperator_esnext.ts, 22, 27))
+
+let x1 = (a ?? b as any) || c;
+>x1 : Symbol(x1, Decl(nullishCoalescingOperator_esnext.ts, 24, 3))
+>a : Symbol(a, Decl(nullishCoalescingOperator_esnext.ts, 22, 11))
+>b : Symbol(b, Decl(nullishCoalescingOperator_esnext.ts, 22, 19))
+>c : Symbol(c, Decl(nullishCoalescingOperator_esnext.ts, 22, 27))
+
+let x2 = c || (a ?? b as any);
+>x2 : Symbol(x2, Decl(nullishCoalescingOperator_esnext.ts, 25, 3))
+>c : Symbol(c, Decl(nullishCoalescingOperator_esnext.ts, 22, 27))
+>a : Symbol(a, Decl(nullishCoalescingOperator_esnext.ts, 22, 11))
+>b : Symbol(b, Decl(nullishCoalescingOperator_esnext.ts, 22, 19))
+
+let x3 = ((a ?? b) as any) || c;
+>x3 : Symbol(x3, Decl(nullishCoalescingOperator_esnext.ts, 26, 3))
+>a : Symbol(a, Decl(nullishCoalescingOperator_esnext.ts, 22, 11))
+>b : Symbol(b, Decl(nullishCoalescingOperator_esnext.ts, 22, 19))
+>c : Symbol(c, Decl(nullishCoalescingOperator_esnext.ts, 22, 27))
+
+let x4 = c || ((a ?? b) as any);
+>x4 : Symbol(x4, Decl(nullishCoalescingOperator_esnext.ts, 27, 3))
+>c : Symbol(c, Decl(nullishCoalescingOperator_esnext.ts, 22, 27))
+>a : Symbol(a, Decl(nullishCoalescingOperator_esnext.ts, 22, 11))
+>b : Symbol(b, Decl(nullishCoalescingOperator_esnext.ts, 22, 19))
+
+let x5 = (a ?? b) as any || c;
+>x5 : Symbol(x5, Decl(nullishCoalescingOperator_esnext.ts, 28, 3))
+>a : Symbol(a, Decl(nullishCoalescingOperator_esnext.ts, 22, 11))
+>b : Symbol(b, Decl(nullishCoalescingOperator_esnext.ts, 22, 19))
+>c : Symbol(c, Decl(nullishCoalescingOperator_esnext.ts, 22, 27))
+
+let x6 = c || (a ?? b) as any;
+>x6 : Symbol(x6, Decl(nullishCoalescingOperator_esnext.ts, 29, 3))
+>c : Symbol(c, Decl(nullishCoalescingOperator_esnext.ts, 22, 27))
+>a : Symbol(a, Decl(nullishCoalescingOperator_esnext.ts, 22, 11))
+>b : Symbol(b, Decl(nullishCoalescingOperator_esnext.ts, 22, 19))
+
+let y1 = (a ?? b as any) && c;
+>y1 : Symbol(y1, Decl(nullishCoalescingOperator_esnext.ts, 31, 3))
+>a : Symbol(a, Decl(nullishCoalescingOperator_esnext.ts, 22, 11))
+>b : Symbol(b, Decl(nullishCoalescingOperator_esnext.ts, 22, 19))
+>c : Symbol(c, Decl(nullishCoalescingOperator_esnext.ts, 22, 27))
+
+let y2 = c && (a ?? b as any);
+>y2 : Symbol(y2, Decl(nullishCoalescingOperator_esnext.ts, 32, 3))
+>c : Symbol(c, Decl(nullishCoalescingOperator_esnext.ts, 22, 27))
+>a : Symbol(a, Decl(nullishCoalescingOperator_esnext.ts, 22, 11))
+>b : Symbol(b, Decl(nullishCoalescingOperator_esnext.ts, 22, 19))
+
+let y3 = ((a ?? b) as any) && c;
+>y3 : Symbol(y3, Decl(nullishCoalescingOperator_esnext.ts, 33, 3))
+>a : Symbol(a, Decl(nullishCoalescingOperator_esnext.ts, 22, 11))
+>b : Symbol(b, Decl(nullishCoalescingOperator_esnext.ts, 22, 19))
+>c : Symbol(c, Decl(nullishCoalescingOperator_esnext.ts, 22, 27))
+
+let y4 = c && ((a ?? b) as any);
+>y4 : Symbol(y4, Decl(nullishCoalescingOperator_esnext.ts, 34, 3))
+>c : Symbol(c, Decl(nullishCoalescingOperator_esnext.ts, 22, 27))
+>a : Symbol(a, Decl(nullishCoalescingOperator_esnext.ts, 22, 11))
+>b : Symbol(b, Decl(nullishCoalescingOperator_esnext.ts, 22, 19))
+
+let y5 = (a ?? b) as any && c;
+>y5 : Symbol(y5, Decl(nullishCoalescingOperator_esnext.ts, 35, 3))
+>a : Symbol(a, Decl(nullishCoalescingOperator_esnext.ts, 22, 11))
+>b : Symbol(b, Decl(nullishCoalescingOperator_esnext.ts, 22, 19))
+>c : Symbol(c, Decl(nullishCoalescingOperator_esnext.ts, 22, 27))
+
+let y6 = c && (a ?? b) as any;
+>y6 : Symbol(y6, Decl(nullishCoalescingOperator_esnext.ts, 36, 3))
+>c : Symbol(c, Decl(nullishCoalescingOperator_esnext.ts, 22, 27))
+>a : Symbol(a, Decl(nullishCoalescingOperator_esnext.ts, 22, 11))
+>b : Symbol(b, Decl(nullishCoalescingOperator_esnext.ts, 22, 19))
+
