@@ -2438,6 +2438,7 @@ declare namespace ts {
         LiteralKeyof = 32,
         NoConstraints = 64,
         AlwaysStrict = 128,
+        MaxValue = 256,
         PriorityImpliesCombination = 56
     }
     /** @deprecated Use FileExtensionInfo instead. */
