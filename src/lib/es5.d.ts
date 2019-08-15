@@ -1094,7 +1094,7 @@ interface ReadonlyArray<T> {
     /**
       * Returns a section of an array.
       * @param start The beginning of the specified portion of the array.
-      * @param end The end of the specified portion of the array.
+      * @param end The end of the specified portion of the array. This is exclusive of the element at the index 'end'.
       */
     slice(start?: number, end?: number): T[];
     /**
@@ -1230,7 +1230,7 @@ interface Array<T> {
     /**
       * Returns a section of an array.
       * @param start The beginning of the specified portion of the array.
-      * @param end The end of the specified portion of the array.
+      * @param end The end of the specified portion of the array. This is exclusive of the element at the index 'end'.
       */
     slice(start?: number, end?: number): T[];
     /**
@@ -1860,7 +1860,7 @@ interface Int8Array {
     /**
       * Returns a section of an array.
       * @param start The beginning of the specified portion of the array.
-      * @param end The end of the specified portion of the array.
+      * @param end The end of the specified portion of the array. This is exclusive of the element at the index 'end'.
       */
     slice(start?: number, end?: number): Int8Array;
 
@@ -2135,7 +2135,7 @@ interface Uint8Array {
     /**
       * Returns a section of an array.
       * @param start The beginning of the specified portion of the array.
-      * @param end The end of the specified portion of the array.
+      * @param end The end of the specified portion of the array. This is exclusive of the element at the index 'end'.
       */
     slice(start?: number, end?: number): Uint8Array;
 
@@ -2410,7 +2410,7 @@ interface Uint8ClampedArray {
     /**
       * Returns a section of an array.
       * @param start The beginning of the specified portion of the array.
-      * @param end The end of the specified portion of the array.
+      * @param end The end of the specified portion of the array. This is exclusive of the element at the index 'end'.
       */
     slice(start?: number, end?: number): Uint8ClampedArray;
 
@@ -2683,7 +2683,7 @@ interface Int16Array {
     /**
       * Returns a section of an array.
       * @param start The beginning of the specified portion of the array.
-      * @param end The end of the specified portion of the array.
+      * @param end The end of the specified portion of the array. This is exclusive of the element at the index 'end'.
       */
     slice(start?: number, end?: number): Int16Array;
 
@@ -2959,7 +2959,7 @@ interface Uint16Array {
     /**
       * Returns a section of an array.
       * @param start The beginning of the specified portion of the array.
-      * @param end The end of the specified portion of the array.
+      * @param end The end of the specified portion of the array. This is exclusive of the element at the index 'end'.
       */
     slice(start?: number, end?: number): Uint16Array;
 
@@ -3234,7 +3234,7 @@ interface Int32Array {
     /**
       * Returns a section of an array.
       * @param start The beginning of the specified portion of the array.
-      * @param end The end of the specified portion of the array.
+      * @param end The end of the specified portion of the array. This is exclusive of the element at the index 'end'.
       */
     slice(start?: number, end?: number): Int32Array;
 
@@ -3508,7 +3508,7 @@ interface Uint32Array {
     /**
       * Returns a section of an array.
       * @param start The beginning of the specified portion of the array.
-      * @param end The end of the specified portion of the array.
+      * @param end The end of the specified portion of the array. This is exclusive of the element at the index 'end'.
       */
     slice(start?: number, end?: number): Uint32Array;
 
@@ -3783,7 +3783,7 @@ interface Float32Array {
     /**
       * Returns a section of an array.
       * @param start The beginning of the specified portion of the array.
-      * @param end The end of the specified portion of the array.
+      * @param end The end of the specified portion of the array. This is exclusive of the element at the index 'end'.
       */
     slice(start?: number, end?: number): Float32Array;
 
@@ -4059,7 +4059,7 @@ interface Float64Array {
     /**
       * Returns a section of an array.
       * @param start The beginning of the specified portion of the array.
-      * @param end The end of the specified portion of the array.
+      * @param end The end of the specified portion of the array. This is exclusive of the element at the index 'end'.
       */
     slice(start?: number, end?: number): Float64Array;
 
