@@ -31,7 +31,7 @@ namespace ts.codefix {
         errorCodes,
         getCodeActions: context => {
             const { sourceFile, errorCode, span, cancellationToken, program } = context;
-            const expression = getAwaitableExpression(sourceFile, errorCode, span, cancellationToken, program);
+            const expression = getFixableErrorSpanExpression(sourceFile, errorCode, span, cancellationToken, program);
             if (!expression) {
                 return;
             }
@@ -47,7 +47,7 @@ namespace ts.codefix {
             const checker = context.program.getTypeChecker();
             const fixedDeclarations = createMap<true>();
             return codeFixAll(context, errorCodes, (t, diagnostic) => {
-                const expression = getAwaitableExpression(sourceFile, diagnostic.code, diagnostic, cancellationToken, program);
+                const expression = getFixableErrorSpanExpression(sourceFile, diagnostic.code, diagnostic, cancellationToken, program);
                 if (!expression) {
                     return;
                 }
@@ -62,12 +62,17 @@ namespace ts.codefix {
         const { sourceFile, program, cancellationToken } = context;
         const awaitableInitializers = findAwaitableInitializers(expression, sourceFile, cancellationToken, program, checker);
         if (awaitableInitializers) {
-            const initializerChanges = trackChanges(t => forEach(awaitableInitializers, ({ expression }) => makeChange(t, errorCode, sourceFile, checker, expression, fixedDeclarations)));
+            const initializerChanges = trackChanges(t => {
+                forEach(awaitableInitializers.initializers, ({ expression }) => makeChange(t, errorCode, sourceFile, checker, expression, fixedDeclarations));
+                if (fixedDeclarations && awaitableInitializers.needsSecondPassForFixAll) {
+                    makeChange(t, errorCode, sourceFile, checker, expression, fixedDeclarations);
+                }
+            });
             return createCodeFixActionNoFixId(
                 "addMissingAwaitToInitializer",
                 initializerChanges,
-                awaitableInitializers.length === 1
-                    ? [Diagnostics.Add_await_to_initializer_for_0, awaitableInitializers[0].declarationSymbol.name]
+                awaitableInitializers.initializers.length === 1
+                    ? [Diagnostics.Add_await_to_initializer_for_0, awaitableInitializers.initializers[0].declarationSymbol.name]
                     : Diagnostics.Add_await_to_initializers);
         }
     }
@@ -87,7 +92,7 @@ namespace ts.codefix {
             some(relatedInformation, related => related.code === Diagnostics.Did_you_forget_to_use_await.code));
     }
 
-    function getAwaitableExpression(sourceFile: SourceFile, errorCode: number, span: TextSpan, cancellationToken: CancellationToken, program: Program): Expression | undefined {
+    function getFixableErrorSpanExpression(sourceFile: SourceFile, errorCode: number, span: TextSpan, cancellationToken: CancellationToken, program: Program): Expression | undefined {
         const token = getTokenAtPosition(sourceFile, span.start);
         // Checker has already done work to determine that await might be possible, and has attached
         // related info to the node, so start by finding the expression that exactly matches up
@@ -111,20 +116,26 @@ namespace ts.codefix {
         declarationSymbol: Symbol;
     }
 
+    interface AwaitableInitializers {
+        initializers: readonly AwaitableInitializer[];
+        needsSecondPassForFixAll: boolean;
+    }
+
     function findAwaitableInitializers(
         expression: Node,
         sourceFile: SourceFile,
         cancellationToken: CancellationToken,
         program: Program,
         checker: TypeChecker,
-    ): readonly AwaitableInitializer[] | undefined {
+    ): AwaitableInitializers | undefined {
         const identifiers = getIdentifiersFromErrorSpanExpression(expression, checker);
         if (!identifiers) {
             return;
         }
 
+        let isCompleteFix = identifiers.isCompleteFix;
         let initializers: AwaitableInitializer[] | undefined;
-        for (const identifier of identifiers) {
+        for (const identifier of identifiers.identifiers) {
             const symbol = checker.getSymbolAtLocation(identifier);
             if (!symbol) {
                 continue;
@@ -140,6 +151,7 @@ namespace ts.codefix {
                 hasModifier(variableStatement, ModifierFlags.Export) ||
                 !variableName ||
                 !isInsideAwaitableBody(declaration.initializer)) {
+                isCompleteFix = false;
                 continue;
             }
 
@@ -149,6 +161,7 @@ namespace ts.codefix {
             });
 
             if (isUsedElsewhere) {
+                isCompleteFix = false;
                 continue;
             }
 
@@ -157,26 +170,38 @@ namespace ts.codefix {
                 declarationSymbol: symbol,
             });
         }
-        return initializers;
+        return initializers && {
+            initializers,
+            needsSecondPassForFixAll: !isCompleteFix,
+        };
     }
 
-    function getIdentifiersFromErrorSpanExpression(expression: Node, checker: TypeChecker): readonly Identifier[] | undefined {
+    interface Identifiers {
+        identifiers: readonly Identifier[];
+        isCompleteFix: boolean;
+    }
+
+    function getIdentifiersFromErrorSpanExpression(expression: Node, checker: TypeChecker): Identifiers | undefined {
         if (isPropertyAccessExpression(expression.parent) && isIdentifier(expression.parent.expression)) {
-            return [expression.parent.expression];
+            return { identifiers: [expression.parent.expression], isCompleteFix: true };
         }
         if (isIdentifier(expression)) {
-            return [expression];
+            return { identifiers: [expression], isCompleteFix: true };
         }
-        if (isBinaryExpression(expression.parent)) {
+        if (isBinaryExpression(expression)) {
             let sides: Identifier[] | undefined;
-            for (const side of [expression.parent.left, expression.parent.right]) {
-                if (!isIdentifier(side)) continue;
+            let isCompleteFix = true;
+            for (const side of [expression.left, expression.right]) {
                 const type = checker.getTypeAtLocation(side);
                 if (checker.getPromisedTypeOfPromise(type)) {
+                    if (!isIdentifier(side)) {
+                        isCompleteFix = false;
+                        continue;
+                    }
                     (sides || (sides = [])).push(side);
                 }
             }
-            return sides;
+            return sides && { identifiers: sides, isCompleteFix };
         }
     }
 
