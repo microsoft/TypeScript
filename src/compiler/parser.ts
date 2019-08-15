@@ -2953,6 +2953,10 @@ namespace ts {
                     return parseJSDocAllType(/*postfixEquals*/ false);
                 case SyntaxKind.AsteriskEqualsToken:
                     return parseJSDocAllType(/*postfixEquals*/ true);
+                case SyntaxKind.QuestionQuestionToken:
+                    // If there is '??', consider that is prefix '?' in JSDoc type.
+                    scanner.reScanQuestionQuestionToken();
+                    // falls through
                 case SyntaxKind.QuestionToken:
                     return parseJSDocUnknownOrNullableType();
                 case SyntaxKind.FunctionKeyword:
