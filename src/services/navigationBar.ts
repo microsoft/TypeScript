@@ -377,7 +377,7 @@ namespace ts.NavigationBar {
     /** Merge declarations of the same kind. */
     function mergeChildren(children: NavigationBarNode[], node: NavigationBarNode): void {
         const nameToItems = createMap<NavigationBarNode | NavigationBarNode[]>();
-        filterMutate(children, child => {
+        filterMutate(children, (child, index) => {
             const declName = child.name || getNameOfDeclaration(<Declaration>child.node);
             const name = declName && nodeText(declName);
             if (!name) {
@@ -393,7 +393,7 @@ namespace ts.NavigationBar {
 
             if (itemsWithSameName instanceof Array) {
                 for (const itemWithSameName of itemsWithSameName) {
-                    if (tryMerge(itemWithSameName, child, node)) {
+                    if (tryMerge(itemWithSameName, child, index, node)) {
                         return false;
                     }
                 }
@@ -402,7 +402,7 @@ namespace ts.NavigationBar {
             }
             else {
                 const itemWithSameName = itemsWithSameName;
-                if (tryMerge(itemWithSameName, child, node)) {
+                if (tryMerge(itemWithSameName, child, index, node)) {
                     return false;
                 }
                 nameToItems.set(name, [itemWithSameName, child]);
@@ -422,7 +422,7 @@ namespace ts.NavigationBar {
         [AssignmentDeclarationKind.Prototype]: false,
         [AssignmentDeclarationKind.ThisProperty]: false,
     };
-    function tryMergeEs5Class(a: NavigationBarNode, b: NavigationBarNode): boolean | undefined {
+    function tryMergeEs5Class(a: NavigationBarNode, b: NavigationBarNode, bIndex: number, parent: NavigationBarNode): boolean | undefined {
 
         function isPossibleConstructor(node: Node) {
             return isFunctionDeclaration(node) || isVariableDeclaration(node);
@@ -435,7 +435,7 @@ namespace ts.NavigationBar {
             getAssignmentDeclarationKind(a.node) :
             AssignmentDeclarationKind.None;
 
-        // We treat this as an es5 class and merge the nodes in in one of several casses
+        // We treat this as an es5 class and merge the nodes in in one of several cases
         if ((isEs5ClassMember[bAssignmentDeclarationKind] && isEs5ClassMember[aAssignmentDeclarationKind]) // merge two class elements
             || (isPossibleConstructor(a.node) && isEs5ClassMember[bAssignmentDeclarationKind]) // ctor function & member
             || (isPossibleConstructor(b.node) && isEs5ClassMember[aAssignmentDeclarationKind]) // member & ctor function
@@ -443,10 +443,9 @@ namespace ts.NavigationBar {
             || (isClassDeclaration(b.node) && isEs5ClassMember[aAssignmentDeclarationKind]) // member & class (generated)
             || (isClassDeclaration(a.node) && isPossibleConstructor(b.node)) // class (generated) & ctor
             || (isClassDeclaration(b.node) && isPossibleConstructor(a.node)) // ctor & class (generated)
-            || (isPossibleConstructor(b.node) && isPossibleConstructor(a.node)) // ctor & ctor, aberant case, but best keep it
             ) {
-            const pos = Math.min(a.node.pos, b.node.pos);
-            const end = Math.max(a.node.end, b.node.end);
+
+            let lastANode = a.additionalNodes && lastOrUndefined(a.additionalNodes) || a.node;
 
             if ((!isClassDeclaration(a.node) && !isClassDeclaration(b.node)) // If neither outline node is a class
                 || isPossibleConstructor(a.node) || isPossibleConstructor(b.node) // If either function is a constructor function
@@ -474,14 +473,14 @@ namespace ts.NavigationBar {
                     }
                 }
 
-                a.node = createClassDeclaration(
+                lastANode = a.node = setTextRange(createClassDeclaration(
                     /* decorators */ undefined,
                     /* modifiers */ undefined,
                     a.name as Identifier || createIdentifier("__class__"),
                     /* typeParameters */ undefined,
                     /* heritageClauses */ undefined,
                     []
-                );
+                ), a.node);
             }
             else {
                 a.children = concatenate(a.children, b.children);
@@ -490,15 +489,36 @@ namespace ts.NavigationBar {
                     sortChildren(a.children);
                 }
             }
-            setTextRange(a.node, { pos, end });
+
+            const bNode = b.node;
+            // We merge if the outline node previous to b (bIndex - 1) is already part of the current class
+            // We do this so that statements between class members that do not generate outline nodes do not split up the class outline:
+            // Ex This should produce one outline node C:
+            //    function C() {}; a = 1; C.prototype.m = function () {}
+            // Ex This will produce 3 outline nodes: C, a, C
+            //    function C() {}; let a = 1; C.prototype.m = function () {}
+            if (parent.children![bIndex - 1].node.end === lastANode.end) {
+                setTextRange(lastANode, { pos: lastANode.pos, end: bNode.end });
+            }
+            else {
+                if (!a.additionalNodes) a.additionalNodes = [];
+                a.additionalNodes.push(setTextRange(createClassDeclaration(
+                    /* decorators */ undefined,
+                    /* modifiers */ undefined,
+                    a.name as Identifier || createIdentifier("__class__"),
+                    /* typeParameters */ undefined,
+                    /* heritageClauses */ undefined,
+                    []
+                ), b.node));
+            }
             return true;
         }
         return bAssignmentDeclarationKind === AssignmentDeclarationKind.None ? false : true;
     }
 
-    function tryMerge(a: NavigationBarNode, b: NavigationBarNode, parent: NavigationBarNode): boolean {
+    function tryMerge(a: NavigationBarNode, b: NavigationBarNode, bIndex: number, parent: NavigationBarNode): boolean {
 
-        if (tryMergeEs5Class(a, b)) {
+        if (tryMergeEs5Class(a, b, bIndex, parent)) {
             return true;
         }
         if (shouldReallyMerge(a.node, b.node, parent)) {
