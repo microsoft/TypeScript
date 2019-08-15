@@ -1145,7 +1145,7 @@ namespace ts {
             // If we change our policy of rechecking failed lookups on each program create,
             // we should adjust the value returned here.
             function moduleNameResolvesToAmbientModuleInNonModifiedFile(moduleName: string): boolean {
-                const resolutionToFile = getResolvedModule(oldSourceFile!, moduleName);
+                const resolutionToFile = getResolvedModule(oldSourceFile, moduleName);
                 const resolvedFile = resolutionToFile && oldProgram!.getSourceFile(resolutionToFile.resolvedFileName);
                 if (resolutionToFile && resolvedFile) {
                     // In the old program, we resolved to an ambient module that was in the same
