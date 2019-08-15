@@ -32101,7 +32101,7 @@ namespace ts {
             amalgamatedDuplicates = createMap();
 
             // Initialize global symbol table
-            let augmentations: (StringLiteral | Identifier)[][] | undefined;
+            let augmentations: (readonly (StringLiteral | Identifier)[])[] | undefined;
             for (const file of host.getSourceFiles()) {
                 if (file.redirectInfo) {
                     continue;

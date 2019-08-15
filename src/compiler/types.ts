@@ -2773,7 +2773,7 @@ namespace ts {
         /* @internal */ resolvedTypeReferenceDirectiveNames: Map<ResolvedTypeReferenceDirective | undefined>;
         /* @internal */ imports: readonly StringLiteralLike[];
         // Identifier only if `declare global`
-        /* @internal */ moduleAugmentations: (StringLiteral | Identifier)[];
+        /* @internal */ moduleAugmentations: readonly (StringLiteral | Identifier)[];
         /* @internal */ patternAmbientModules?: PatternAmbientModule[];
         /* @internal */ ambientModuleNames: readonly string[];
         /* @internal */ checkJsDirective?: CheckJsDirective;
