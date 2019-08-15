@@ -29,7 +29,7 @@ Multimap3.prototype = {
         return this._map[key + ''];
 >this._map[key + ''] : any
 >this._map : {}
->this : Multimap3 & { get(key: string): number; }
+>this : Multimap3
 >_map : {}
 >key + '' : string
 >key : string
