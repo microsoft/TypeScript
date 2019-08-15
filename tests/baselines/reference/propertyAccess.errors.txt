@@ -170,4 +170,5 @@ tests/cases/conformance/expressions/propertyAccess/propertyAccess.ts(149,5): err
     var x3: A;
         ~~
 !!! error TS2403: Subsequent variable declarations must have the same type.  Variable 'x3' must be of type 'A | B', but here has type 'A'.
+!!! related TS6203 tests/cases/conformance/expressions/propertyAccess/propertyAccess.ts:148:5: 'x3' was also declared here.
     

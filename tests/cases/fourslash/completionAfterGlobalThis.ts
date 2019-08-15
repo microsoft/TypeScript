@@ -5,8 +5,8 @@
 verify.completions({
     marker: "",
     exact: [
-        { name: "globalThis", kind: "module" },
+        completion.globalThisEntry,
         ...completion.globalsVars,
-        { name: "undefined", kind: "var" }
-    ]
+        completion.undefinedVarEntry
+    ].map(e => ({ ...e, sortText: completion.SortText.LocationPriority }))
 });

@@ -1,0 +1,17 @@
+tests/cases/compiler/promiseIdentityWithConstraints.ts(10,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'x' must be of type 'IPromise<string, number>', but here has type 'Promise<string, boolean>'.
+
+
+==== tests/cases/compiler/promiseIdentityWithConstraints.ts (1 errors) ====
+    export interface IPromise<T, V> {
+        then<U extends T, W extends V>(callback: (x: T) => IPromise<U, W>): IPromise<U, W>;
+    }
+    export interface Promise<T, V> {
+        then<U extends T, W extends V>(callback: (x: T) => Promise<U, W>): Promise<U, W>;
+    }
+    
+    // Error because constraint V doesn't match
+    var x: IPromise<string, number>;
+    var x: Promise<string, boolean>;
+        ~
+!!! error TS2403: Subsequent variable declarations must have the same type.  Variable 'x' must be of type 'IPromise<string, number>', but here has type 'Promise<string, boolean>'.
+!!! related TS6203 tests/cases/compiler/promiseIdentityWithConstraints.ts:9:5: 'x' was also declared here.

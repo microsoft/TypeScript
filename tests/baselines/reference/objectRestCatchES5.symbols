@@ -1,0 +1,9 @@
+=== tests/cases/conformance/types/rest/objectRestCatchES5.ts ===
+let a = 1, b = 2;
+>a : Symbol(a, Decl(objectRestCatchES5.ts, 0, 3))
+>b : Symbol(b, Decl(objectRestCatchES5.ts, 0, 10))
+
+try {} catch ({ a, ...b }) {}
+>a : Symbol(a, Decl(objectRestCatchES5.ts, 1, 15))
+>b : Symbol(b, Decl(objectRestCatchES5.ts, 1, 18))
+

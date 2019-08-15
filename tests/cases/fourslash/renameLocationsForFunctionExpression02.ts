@@ -3,11 +3,11 @@
 ////function f() {
 ////
 ////}
-////var x = function [|f|](g: any, h: any) {
+////var x = [|function [|{| "contextRangeIndex": 0 |}f|](g: any, h: any) {
 ////
 ////    let helper = function f(): any { f(); }
 ////
 ////    let foo = () => [|f|]([|f|], g);
-////}
+////}|]
 
-verify.rangesAreRenameLocations();
+verify.rangesWithSameTextAreRenameLocations("f");

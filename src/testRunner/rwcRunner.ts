@@ -225,7 +225,7 @@ class RWCRunner extends RunnerBase {
      */
     public initializeTests(): void {
         // Read in and evaluate the test list
-        for (const test of this.tests && this.tests.length ? this.tests : this.enumerateTestFiles()) {
+        for (const test of this.tests && this.tests.length ? this.tests : this.getTestFiles()) {
             this.runTest(typeof test === "string" ? test : test.file);
         }
     }

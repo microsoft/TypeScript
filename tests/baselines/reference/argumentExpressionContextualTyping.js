@@ -19,6 +19,13 @@ baz(["string", 1, true, ...array]);  // Error
 foo(o);                              // Error because x has an array type namely (string|number)[]
 
 //// [argumentExpressionContextualTyping.js]
+var __spreadArrays = (this && this.__spreadArrays) || function () {
+    for (var s = 0, i = 0, il = arguments.length; i < il; i++) s += arguments[i].length;
+    for (var r = Array(s), k = 0, i = 0; i < il; i++)
+        for (var a = arguments[i], j = 0, jl = a.length; j < jl; j++, k++)
+            r[k] = a[j];
+    return r;
+};
 // In a typed function call, argument expressions are contextually typed by their corresponding parameter types.
 function foo(_a) {
     var _b = _a.x, a = _b[0], b = _b[1], _c = _a.y, c = _c.c, d = _c.d, e = _c.e;
@@ -36,5 +43,5 @@ var tuple = ["string", 1, true];
 baz(tuple);
 baz(["string", 1, true]);
 baz(array); // Error
-baz(["string", 1, true].concat(array)); // Error
+baz(__spreadArrays(["string", 1, true], array)); // Error
 foo(o); // Error because x has an array type namely (string|number)[]

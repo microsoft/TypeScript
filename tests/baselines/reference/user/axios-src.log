@@ -19,7 +19,7 @@ lib/adapters/xhr.js(81,51): error TS2345: Argument of type 'null' is not assigna
 lib/adapters/xhr.js(84,7): error TS2322: Type 'null' is not assignable to type 'XMLHttpRequest'.
 lib/adapters/xhr.js(93,7): error TS2322: Type 'null' is not assignable to type 'XMLHttpRequest'.
 lib/adapters/xhr.js(163,9): error TS2322: Type 'null' is not assignable to type 'XMLHttpRequest'.
-lib/axios.js(23,3): error TS2554: Expected 3 arguments, but got 2.
+lib/axios.js(23,9): error TS2554: Expected 3 arguments, but got 2.
 lib/axios.js(25,3): error TS2739: Type '(...args: any[]) => any' is missing the following properties from type 'Axios': defaults, interceptors, request, getUri
 lib/axios.js(32,7): error TS2339: Property 'Axios' does not exist on type 'Axios'.
 lib/axios.js(35,7): error TS2339: Property 'create' does not exist on type 'Axios'.

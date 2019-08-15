@@ -12,7 +12,7 @@ declare var Infinity: number;
 declare function eval(x: string): any;
 
 /**
-  * Converts A string to an integer.
+  * Converts a string to an integer.
   * @param s A string to convert into a number.
   * @param radix A value between 2 and 36 that specifies the base of the number in numString.
   * If this argument is not supplied, strings with a prefix of '0x' are considered hexadecimal.
@@ -513,7 +513,7 @@ interface Boolean {
 
 interface BooleanConstructor {
     new(value?: any): Boolean;
-    <T>(value?: T): value is Exclude<T, false | null | undefined | '' | 0>;
+    <T>(value?: T): boolean;
     readonly prototype: Boolean;
 }
 
@@ -1446,9 +1446,7 @@ type Extract<T, U> = T extends U ? T : never;
 /**
  * Construct a type with the properties of T except for those in type K.
  */
-type Omit<T, K extends keyof any> = {
-    [P in Exclude<keyof T, K>]: T[P]
-};
+type Omit<T, K extends keyof any> = Pick<T, Exclude<keyof T, K>>;
 
 /**
  * Exclude null and undefined from T

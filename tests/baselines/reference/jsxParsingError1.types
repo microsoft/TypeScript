@@ -18,10 +18,10 @@ const class2 = "bar";
 
 const elem = <div className={class1, class2}/>;
 >elem : JSX.Element
-><div className={class1, class2 : JSX.Element
+><div className={class1, class2}/> : JSX.Element
 >div : any
 >className : string
+>class1, class2 : "bar"
 >class1 : "foo"
->class2 : true
->/>; : RegExp
+>class2 : "bar"
 

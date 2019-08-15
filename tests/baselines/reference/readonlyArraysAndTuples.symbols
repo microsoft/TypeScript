@@ -90,3 +90,29 @@ function f1(ma: string[], ra: readonly string[], mt: [string, string], rt: reado
 >mt : Symbol(mt, Decl(readonlyArraysAndTuples.ts, 13, 48))
 }
 
+declare var v: readonly[number, number, ...number[]];
+>v : Symbol(v, Decl(readonlyArraysAndTuples.ts, 28, 11))
+
+v[0] = 1;        // Error
+>v : Symbol(v, Decl(readonlyArraysAndTuples.ts, 28, 11))
+>0 : Symbol(0)
+
+v[1] = 1;        // Error
+>v : Symbol(v, Decl(readonlyArraysAndTuples.ts, 28, 11))
+>1 : Symbol(1)
+
+v[2] = 1;        // Error
+>v : Symbol(v, Decl(readonlyArraysAndTuples.ts, 28, 11))
+
+delete v[2];     // Error
+>v : Symbol(v, Decl(readonlyArraysAndTuples.ts, 28, 11))
+
+v[0 + 1] = 1;    // Error
+>v : Symbol(v, Decl(readonlyArraysAndTuples.ts, 28, 11))
+
+v[0 + 2] = 1;    // Error
+>v : Symbol(v, Decl(readonlyArraysAndTuples.ts, 28, 11))
+
+delete v[0 + 1]; // Error
+>v : Symbol(v, Decl(readonlyArraysAndTuples.ts, 28, 11))
+

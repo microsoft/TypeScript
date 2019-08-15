@@ -1,12 +1,12 @@
 /// <reference path='fourslash.ts'/>
 
 ////abstract class Base {
-////    abstract [|{| "isDefinition": true |}a|]: number;
-////    abstract [|{| "isDefinition": true |}method|](): void;
+////    [|abstract [|{| "isDefinition": true, "contextRangeIndex": 0 |}a|]: number;|]
+////    [|abstract [|{| "isDefinition": true, "contextRangeIndex": 2 |}method|](): void;|]
 ////}
 ////class MyClass extends Base {
-////    [|{| "isDefinition": true |}a|];
-////    [|{| "isWriteAccess": true, "isDefinition": true |}method|]() { }
+////    [|[|{| "isDefinition": true, "contextRangeIndex": 4 |}a|];|]
+////    [|[|{| "isWriteAccess": true, "isDefinition": true, "contextRangeIndex": 6 |}method|]() { }|]
 ////}
 ////
 ////var c: MyClass;

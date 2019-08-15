@@ -19,7 +19,15 @@
 
 goTo.marker();
 edit.insert('.');
-verify.completions({ exact: ["bar", "thing", "union", "Foo", "x"] });
+verify.completions({
+    exact: [
+        "bar",
+        "thing",
+        "union",
+        { name: "Foo", sortText: completion.SortText.JavascriptIdentifiers },
+        { name: "x", sortText: completion.SortText.JavascriptIdentifiers }
+    ]
+});
 
 edit.insert('bar.');
 verify.completions({ includes: ["substr"] });

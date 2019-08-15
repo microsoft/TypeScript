@@ -1,0 +1,45 @@
+=== tests/cases/compiler/file.d.ts ===
+declare namespace dojox {
+>dojox : Symbol(dojox, Decl(file.d.ts, 0, 0))
+
+    namespace charting {
+>charting : Symbol(charting, Decl(file.d.ts, 0, 25))
+
+        namespace axis2d {
+>axis2d : Symbol(axis2d, Decl(file.d.ts, 1, 24))
+
+            export class Val { }
+>Val : Symbol(Val, Decl(file.d.ts, 2, 26))
+
+            interface common {
+>common : Symbol(common, Decl(file.d.ts, 3, 32), Decl(file.d.ts, 6, 13))
+
+                createText: object;
+>createText : Symbol(common.createText, Decl(file.d.ts, 4, 30))
+            }
+            namespace common {
+>common : Symbol(common, Decl(file.d.ts, 3, 32), Decl(file.d.ts, 6, 13))
+
+                interface createText {
+>createText : Symbol(createText, Decl(file.d.ts, 7, 30))
+
+                    gfx(): string
+>gfx : Symbol(createText.gfx, Decl(file.d.ts, 8, 38))
+                }
+            }
+        }
+    }
+}
+declare module "dojox/charting/axis2d/common.createText" {
+>"dojox/charting/axis2d/common.createText" : Symbol("dojox/charting/axis2d/common.createText", Decl(file.d.ts, 14, 1))
+
+    import exp = dojox.charting.axis2d.common
+>exp : Symbol(exp, Decl(file.d.ts, 15, 58))
+>dojox : Symbol(dojox, Decl(file.d.ts, 0, 0))
+>charting : Symbol(dojox.charting, Decl(file.d.ts, 0, 25))
+>axis2d : Symbol(dojox.charting.axis2d, Decl(file.d.ts, 1, 24))
+>common : Symbol(exp, Decl(file.d.ts, 3, 32), Decl(file.d.ts, 6, 13))
+
+    export = exp;
+>exp : Symbol(exp, Decl(file.d.ts, 15, 58))
+}

@@ -145,7 +145,7 @@ function newExpression4() {
     return __awaiter(this, void 0, void 0, function () {
         return __generator(this, function (_a) {
             switch (_a.label) {
-                case 0: return [4 /*yield*/, new (x.bind.apply(x, [void 0].concat(y, [z])))()];
+                case 0: return [4 /*yield*/, new (x.bind.apply(x, __spreadArrays([void 0], y, [z])))()];
                 case 1:
                     _a.sent();
                     return [2 /*return*/];
@@ -160,7 +160,7 @@ function newExpression5() {
             switch (_b.label) {
                 case 0: return [4 /*yield*/, x];
                 case 1:
-                    new ((_a = (_b.sent())).bind.apply(_a, [void 0].concat(y, [z])))();
+                    new ((_a = (_b.sent())).bind.apply(_a, __spreadArrays([void 0], y, [z])))();
                     return [2 /*return*/];
             }
         });
@@ -168,16 +168,16 @@ function newExpression5() {
 }
 function newExpression6() {
     return __awaiter(this, void 0, void 0, function () {
-        var _a, _b, _c, _d, _e;
-        return __generator(this, function (_f) {
-            switch (_f.label) {
+        var _a, _b, _c, _d;
+        return __generator(this, function (_e) {
+            switch (_e.label) {
                 case 0:
                     _b = (_a = x.bind).apply;
                     _c = [x];
-                    _e = (_d = [void 0]).concat;
+                    _d = [[void 0]];
                     return [4 /*yield*/, y];
                 case 1:
-                    new (_b.apply(_a, _c.concat([_e.apply(_d, [(_f.sent()), [z]])])))();
+                    new (_b.apply(_a, _c.concat([__spreadArrays.apply(void 0, _d.concat([(_e.sent()), [z]]))])))();
                     return [2 /*return*/];
             }
         });
@@ -185,17 +185,16 @@ function newExpression6() {
 }
 function newExpression7() {
     return __awaiter(this, void 0, void 0, function () {
-        var _a, _b, _c, _d, _e, _f;
-        return __generator(this, function (_g) {
-            switch (_g.label) {
+        var _a, _b, _c, _d;
+        return __generator(this, function (_e) {
+            switch (_e.label) {
                 case 0:
                     _b = (_a = x.bind).apply;
                     _c = [x];
-                    _e = (_d = [void 0]).concat;
-                    _f = [y];
+                    _d = [[void 0], y];
                     return [4 /*yield*/, z];
                 case 1:
-                    new (_b.apply(_a, _c.concat([_e.apply(_d, _f.concat([[_g.sent()]]))])))();
+                    new (_b.apply(_a, _c.concat([__spreadArrays.apply(void 0, _d.concat([[_e.sent()]]))])))();
                     return [2 /*return*/];
             }
         });
@@ -212,7 +211,7 @@ function newExpression8() {
                     _d = [void 0];
                     return [4 /*yield*/, y];
                 case 1:
-                    new (_b.apply(_a, _c.concat([_d.concat([_e.sent()]).concat(z)])))();
+                    new (_b.apply(_a, _c.concat([__spreadArrays.apply(void 0, [_d.concat([_e.sent()]), z])])))();
                     return [2 /*return*/];
             }
         });
@@ -220,16 +219,16 @@ function newExpression8() {
 }
 function newExpression9() {
     return __awaiter(this, void 0, void 0, function () {
-        var _a, _b, _c, _d, _e;
-        return __generator(this, function (_f) {
-            switch (_f.label) {
+        var _a, _b, _c, _d;
+        return __generator(this, function (_e) {
+            switch (_e.label) {
                 case 0:
                     _b = (_a = x.bind).apply;
                     _c = [x];
-                    _e = (_d = [void 0, y]).concat;
+                    _d = [[void 0, y]];
                     return [4 /*yield*/, z];
                 case 1:
-                    new (_b.apply(_a, _c.concat([_e.apply(_d, [(_f.sent())])])))();
+                    new (_b.apply(_a, _c.concat([__spreadArrays.apply(void 0, _d.concat([(_e.sent())]))])))();
                     return [2 /*return*/];
             }
         });

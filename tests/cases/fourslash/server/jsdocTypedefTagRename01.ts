@@ -4,11 +4,12 @@
 // @Filename: jsDocTypedef_form1.js
 ////
 //// /** @typedef {(string | number)} */
-//// var [|NumberLike|];
+//// [|var [|{| "contextRangeIndex": 0 |}NumberLike|];|]
 ////
 //// [|NumberLike|] = 10;
 ////
 //// /** @type {[|NumberLike|]} */
 //// var numberLike;
 
-verify.rangesAreRenameLocations({ findInComments: true });
+const [rDef, ...ranges] = test.ranges();
+verify.rangesAreRenameLocations({ findInComments: true, ranges });

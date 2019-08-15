@@ -28,9 +28,9 @@ export function getBarA(bar: Bar) {
 >Bar : Symbol(Bar, Decl(omitTypeTests01.ts, 4, 1))
 
     return bar.a;
->bar.a : Symbol(a)
+>bar.a : Symbol(a, Decl(omitTypeTests01.ts, 0, 15))
 >bar : Symbol(bar, Decl(omitTypeTests01.ts, 9, 24))
->a : Symbol(a)
+>a : Symbol(a, Decl(omitTypeTests01.ts, 0, 15))
 }
 
 export function getBazA(baz: Baz) {
@@ -39,9 +39,9 @@ export function getBazA(baz: Baz) {
 >Baz : Symbol(Baz, Decl(omitTypeTests01.ts, 6, 33))
 
     return baz.a;
->baz.a : Symbol(a)
+>baz.a : Symbol(a, Decl(omitTypeTests01.ts, 0, 15))
 >baz : Symbol(baz, Decl(omitTypeTests01.ts, 13, 24))
->a : Symbol(a)
+>a : Symbol(a, Decl(omitTypeTests01.ts, 0, 15))
 }
 
 

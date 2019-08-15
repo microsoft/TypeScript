@@ -1,5 +1,6 @@
 tests/cases/compiler/recursiveBaseConstructorCreation3.ts(6,27): error TS2314: Generic type 'abc<T>' requires 1 type argument(s).
-tests/cases/compiler/recursiveBaseConstructorCreation3.ts(9,11): error TS2351: Cannot use 'new' with an expression whose type lacks a call or construct signature.
+tests/cases/compiler/recursiveBaseConstructorCreation3.ts(9,15): error TS2351: This expression is not constructable.
+  Type 'typeof xyz' has no construct signatures.
 
 
 ==== tests/cases/compiler/recursiveBaseConstructorCreation3.ts (2 errors) ====
@@ -14,6 +15,7 @@ tests/cases/compiler/recursiveBaseConstructorCreation3.ts(9,11): error TS2351: C
     }
     
     var bar = new xyz(); // Error: Invalid 'new' expression.
-              ~~~~~~~~~
-!!! error TS2351: Cannot use 'new' with an expression whose type lacks a call or construct signature.
+                  ~~~
+!!! error TS2351: This expression is not constructable.
+!!! error TS2351:   Type 'typeof xyz' has no construct signatures.
     var r: xyz = bar.foo;

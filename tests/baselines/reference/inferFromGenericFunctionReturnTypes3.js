@@ -180,6 +180,25 @@ type Foo = { state: State }
 declare function bar<T>(f: () => T[]): T[];
 let x: Foo[] = bar(() => !!true ? [{ state: State.A }] : [{ state: State.B }]);  // Error
 
+// Repros from #31443
+
+enum Enum { A, B }
+
+class ClassWithConvert<T> {
+  constructor(val: T) { }
+  convert(converter: { to: (v: T) => T; }) { }
+}
+
+function fn<T>(arg: ClassWithConvert<T>, f: () => ClassWithConvert<T>) { }
+fn(new ClassWithConvert(Enum.A), () => new ClassWithConvert(Enum.A));
+
+type Func<T> = (x: T) => T;
+
+declare function makeFoo<T>(x: T): Func<T>;
+declare function baz<U>(x: Func<U>, y: Func<U>): void;
+
+baz(makeFoo(Enum.A), makeFoo(Enum.A));
+
 
 //// [inferFromGenericFunctionReturnTypes3.js]
 // Repros from #5487
@@ -278,6 +297,19 @@ var State;
     State[State["B"] = 1] = "B";
 })(State || (State = {}));
 let x = bar(() => !!true ? [{ state: State.A }] : [{ state: State.B }]); // Error
+// Repros from #31443
+var Enum;
+(function (Enum) {
+    Enum[Enum["A"] = 0] = "A";
+    Enum[Enum["B"] = 1] = "B";
+})(Enum || (Enum = {}));
+class ClassWithConvert {
+    constructor(val) { }
+    convert(converter) { }
+}
+function fn(arg, f) { }
+fn(new ClassWithConvert(Enum.A), () => new ClassWithConvert(Enum.A));
+baz(makeFoo(Enum.A), makeFoo(Enum.A));
 
 
 //// [inferFromGenericFunctionReturnTypes3.d.ts]

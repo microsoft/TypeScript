@@ -3,17 +3,17 @@
 // @noLib: true
 
 // @Filename: /a.ts
-////var [|{| "isDefinition": true |}x|];
-////export { [|{| "isWriteAccess": true, "isDefinition": true |}x|] };
-////export { [|x|] as [|{| "isWriteAccess": true, "isDefinition": true |}y|] };
+////[|var [|{| "isDefinition": true, "contextRangeIndex": 0 |}x|];|]
+////[|export { [|{| "isWriteAccess": true, "isDefinition": true, "contextRangeIndex": 2 |}x|] };|]
+////[|export { [|{| "contextRangeIndex": 4 |}x|] as [|{| "isWriteAccess": true, "isDefinition": true, "contextRangeIndex": 4 |}y|] };|]
 
 // @Filename: /b.ts
-////import { [|{| "isWriteAccess": true, "isDefinition": true |}x|], [|{| "isWriteAccess": true, "isDefinition": true |}y|] } from "./a";
+////[|import { [|{| "isWriteAccess": true, "isDefinition": true, "contextRangeIndex": 7 |}x|], [|{| "isWriteAccess": true, "isDefinition": true, "contextRangeIndex": 7 |}y|] } from "./a";|]
 ////[|x|]; [|y|];
 
 verify.noErrors();
 
-const [ax0, ax1, ax2, ay, bx0, by0, bx1, by1] = test.ranges();
+const [ax0Def, ax0, ax1Def, ax1, ax2Def, ax2, ay, bx0Def, bx0, by0, bx1, by1] = test.ranges();
 const axRanges = [ax0, ax1, ax2];
 const bxRanges = [bx0, bx1];
 const byRanges = [by0, by1];

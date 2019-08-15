@@ -132,9 +132,9 @@ const modifier = <T extends TargetProps>(targetProps: T) => {
 >targetProps : Symbol(targetProps, Decl(mappedTypeConstraints.ts, 30, 41))
 
     rest.foo;
->rest.foo : Symbol(foo)
+>rest.foo : Symbol(foo, Decl(mappedTypeConstraints.ts, 25, 20))
 >rest : Symbol(rest, Decl(mappedTypeConstraints.ts, 31, 13))
->foo : Symbol(foo)
+>foo : Symbol(foo, Decl(mappedTypeConstraints.ts, 25, 20))
 
 };
 
