@@ -2507,7 +2507,7 @@ namespace ts {
         return node && node.kind === SyntaxKind.DeleteExpression;
     }
 
-    export function isNodeDescendantOf(node: Node, ancestor: Node): boolean {
+    export function isNodeDescendantOf(node: Node, ancestor: Node | undefined): boolean {
         while (node) {
             if (node === ancestor) return true;
             node = node.parent;

@@ -42,19 +42,19 @@ Zet.prototype.add = function(v, id) {
     this.u = v || this.t
 >this.u = v || this.t : T
 >this.u : T
->this : Zet<T>
+>this : this
 >u : T
 >v || this.t : T
 >v : T
 >this.t : T
->this : Zet<T>
+>this : this
 >t : T
 
     return id(this.u)
 >id(this.u) : T
 >id : (u: T) => T
 >this.u : T
->this : Zet<T>
+>this : this
 >u : T
 }
 var z = new Zet(1)

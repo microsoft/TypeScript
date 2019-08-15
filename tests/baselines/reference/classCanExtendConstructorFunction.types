@@ -10,7 +10,7 @@ function Wagon(numberOxen) {
     this.numberOxen = numberOxen
 >this.numberOxen = numberOxen : number
 >this.numberOxen : number
->this : Wagon
+>this : this
 >numberOxen : number
 >numberOxen : number
 }
@@ -72,11 +72,11 @@ Wagon.prototype.speed = function () {
     return this.numberOxen / this.weight()
 >this.numberOxen / this.weight() : number
 >this.numberOxen : number
->this : Wagon
+>this : this
 >numberOxen : number
 >this.weight() : number
 >this.weight : (supplies?: any[]) => number
->this : Wagon
+>this : this
 >weight : (supplies?: any[]) => number
 }
 // ok

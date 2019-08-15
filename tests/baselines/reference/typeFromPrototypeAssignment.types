@@ -9,28 +9,28 @@ var Multimap = function() {
     this._map = {};
 >this._map = {} : {}
 >this._map : {}
->this : Multimap
+>this : this
 >_map : {}
 >{} : {}
 
     this._map
 >this._map : {}
->this : Multimap
+>this : this
 >_map : {}
 
     this.set
 >this.set : () => void
->this : Multimap
+>this : this
 >set : () => void
 
     this.get
 >this.get : () => void
->this : Multimap
+>this : this
 >get : () => void
 
     this.addon
 >this.addon : () => void
->this : Multimap
+>this : this
 >addon : () => void
 
 };
@@ -48,22 +48,22 @@ Multimap.prototype = {
 
         this._map
 >this._map : {}
->this : Multimap
+>this : this
 >_map : {}
 
         this.set
 >this.set : () => void
->this : Multimap
+>this : this
 >set : () => void
 
         this.get
 >this.get : () => void
->this : Multimap
+>this : this
 >get : () => void
 
         this.addon
 >this.addon : () => void
->this : Multimap
+>this : this
 >addon : () => void
 
     },
@@ -72,22 +72,22 @@ Multimap.prototype = {
 
         this._map
 >this._map : {}
->this : Multimap
+>this : this
 >_map : {}
 
         this.set
 >this.set : () => void
->this : Multimap
+>this : this
 >set : () => void
 
         this.get
 >this.get : () => void
->this : Multimap
+>this : this
 >get : () => void
 
         this.addon
 >this.addon : () => void
->this : Multimap
+>this : this
 >addon : () => void
     }
 }
@@ -103,22 +103,22 @@ Multimap.prototype.addon = function () {
 
     this._map
 >this._map : {}
->this : Multimap
+>this : this
 >_map : {}
 
     this.set
 >this.set : () => void
->this : Multimap
+>this : this
 >set : () => void
 
     this.get
 >this.get : () => void
->this : Multimap
+>this : this
 >get : () => void
 
     this.addon
 >this.addon : () => void
->this : Multimap
+>this : this
 >addon : () => void
 }
 
