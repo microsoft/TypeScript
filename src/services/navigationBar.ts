@@ -300,22 +300,25 @@ namespace ts.NavigationBar {
                     case AssignmentDeclarationKind.Prototype: {
                         const binaryExpression = (node as BinaryExpression);
                         const assignmentTarget = binaryExpression.left as PropertyAccessExpression;
-                        const prototypeAccess = assignmentTarget.expression as PropertyAccessExpression;
-                        // If we see a prototype assignment, start tracking the target as a class
-                        if (isIdentifier(prototypeAccess.expression)) {
-                            addTrackedEs5Class(prototypeAccess.expression.text);
+                        if (isPropertyAccessExpression(assignmentTarget.expression)) {
+                            const prototypeAccess = assignmentTarget.expression;
+                            // If we see a prototype assignment, start tracking the target as a class
+                            if (isIdentifier(prototypeAccess.expression)) {
+                                addTrackedEs5Class(prototypeAccess.expression.text);
+                            }
+                            if (isFunctionExpression(binaryExpression.right) || isArrowFunction(binaryExpression.right)) {
+                                addNodeWithRecursiveChild(node,
+                                    binaryExpression.right,
+                                    prototypeAccess.expression as Identifier);
+                            }
+                            else {
+                                startNode(binaryExpression, prototypeAccess.expression as Identifier);
+                                    addNodeWithRecursiveChild(node, binaryExpression.right, assignmentTarget.name);
+                                endNode();
+                            }
+                            return;
                         }
-                        if (isFunctionExpression(binaryExpression.right) || isArrowFunction(binaryExpression.right)) {
-                            addNodeWithRecursiveChild(node,
-                                binaryExpression.right,
-                                prototypeAccess.expression as Identifier);
-                        }
-                        else {
-                            startNode(binaryExpression, prototypeAccess.expression as Identifier);
-                                addNodeWithRecursiveChild(node, binaryExpression.right, assignmentTarget.name);
-                            endNode();
-                        }
-                        return;
+                        break;
                     }
                     case AssignmentDeclarationKind.ObjectDefinePropertyValue:
                     case AssignmentDeclarationKind.ObjectDefinePrototypeProperty: {

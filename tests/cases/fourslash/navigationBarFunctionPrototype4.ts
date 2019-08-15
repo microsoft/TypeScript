@@ -3,6 +3,7 @@
 // @Filename: foo.js
 
 ////var A; 
+////A.prototype = { };
 ////A.prototype.a = function() { };
 ////A.b = function() { };
 
