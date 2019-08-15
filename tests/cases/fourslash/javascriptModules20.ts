@@ -9,4 +9,8 @@
 //// import * as mod from "./mod"
 //// mod./**/
 
-verify.completions({ marker: "", exact: [{ name: "a", kind: "property" }, { name: "mod", kind: "warning" }] });
+verify.completions({
+    marker: "", exact: [
+        { name: "a", kind: "property" },
+        { name: "mod", kind: "warning", sortText: completion.SortText.JavascriptIdentifiers }]
+});

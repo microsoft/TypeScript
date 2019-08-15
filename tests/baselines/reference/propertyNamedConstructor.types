@@ -1,0 +1,18 @@
+=== tests/cases/conformance/classes/propertyMemberDeclarations/propertyNamedConstructor.ts ===
+class X1 {
+>X1 : X1
+
+  "constructor" = 3; // Error
+>"constructor" : number
+>3 : 3
+}
+
+class X2 {
+>X2 : X2
+
+  ["constructor"] = 3;
+>["constructor"] : number
+>"constructor" : "constructor"
+>3 : 3
+}
+

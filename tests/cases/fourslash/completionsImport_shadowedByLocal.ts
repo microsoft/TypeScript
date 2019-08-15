@@ -11,6 +11,14 @@
 
 verify.completions({
     marker: "",
-    exact: ["globalThis", { name: "foo", text: "const foo: 1" }, "undefined", ...completion.statementKeywordsWithTypes],
+    exact: [
+        completion.globalThisEntry,
+        {
+            name: "foo",
+            text: "const foo: 1",
+        },
+        completion.undefinedVarEntry,
+        ...completion.statementKeywordsWithTypes
+    ],
     preferences: { includeCompletionsForModuleExports: true },
 });

@@ -26,5 +26,5 @@
 verify.completions(
     { marker: "1", includes: { name: "charCodeAt", kind: "method", kindModifiers: "declare" } },
     { marker: ["2", "3", "4"], includes: { name: "toExponential", kind: "method", kindModifiers: "declare" } },
-    { marker: "5", includes: { name: "test1", kind: "warning" } },
+    { marker: "5", includes: { name: "test1", kind: "warning", sortText: completion.SortText.JavascriptIdentifiers } },
 );

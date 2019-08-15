@@ -116,6 +116,56 @@ type StrictExclude<T, U> = T extends StrictExtract<T, U> ? never : T;
 type A<T> = { [Q in { [P in keyof T]: P; }[keyof T]]: T[Q]; };
 type B<T, V> = A<{ [Q in keyof T]: StrictExclude<B<T[Q], V>, {}>; }>;
 
+// Repros from #30938
+
+function fn<T extends {elements: Array<string>} | {elements: Array<number>}>(param: T, cb: (element: T['elements'][number]) => void) {
+    cb(param.elements[0]);
+}
+
+function fn2<T extends Array<string>>(param: T, cb: (element: T[number]) => void) {
+    cb(param[0]);
+}
+
+// Repro from #31149
+
+function fn3<T extends ReadonlyArray<string>>(param: T, cb: (element: T[number]) => void) {
+    cb(param[0]);
+}
+
+function fn4<K extends number>() {
+    let x: Array<string>[K] = 'abc';
+    let y: ReadonlyArray<string>[K] = 'abc';
+}
+
+// Repro from #31439 and #31691
+
+export class c {
+  [x: string]: string;
+  constructor() {
+    this.a = "b";
+    this["a"] = "b";
+  }
+}
+
+// Repro from #31385
+
+type Foo<T> = { [key: string]: { [K in keyof T]: K }[keyof T] };
+
+type Bar<T> = { [key: string]: { [K in keyof T]: [K] }[keyof T] };
+
+type Baz<T, Q extends Foo<T>> = { [K in keyof Q]: T[Q[K]] };
+
+type Qux<T, Q extends Bar<T>> = { [K in keyof Q]: T[Q[K]["0"]] };
+
+// Repro from #32038
+
+const actions = ['resizeTo', 'resizeBy'] as const;
+for (const action of actions) {
+	window[action] = (x, y) => {
+		window[action](x, y);
+	}
+}
+
 
 //// [keyofAndIndexedAccess2.js]
 function f1(obj, k0, k1, k2) {
@@ -189,4 +239,33 @@ export function getEntity(id, state) {
 }
 function get123() {
     return 123; // Error
+}
+// Repros from #30938
+function fn(param, cb) {
+    cb(param.elements[0]);
+}
+function fn2(param, cb) {
+    cb(param[0]);
+}
+// Repro from #31149
+function fn3(param, cb) {
+    cb(param[0]);
+}
+function fn4() {
+    let x = 'abc';
+    let y = 'abc';
+}
+// Repro from #31439 and #31691
+export class c {
+    constructor() {
+        this.a = "b";
+        this["a"] = "b";
+    }
+}
+// Repro from #32038
+const actions = ['resizeTo', 'resizeBy'];
+for (const action of actions) {
+    window[action] = (x, y) => {
+        window[action](x, y);
+    };
 }

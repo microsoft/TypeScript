@@ -3,7 +3,7 @@ class StringIterator {
     next() {
         return v;
     }
-    
+
     [Symbol.iterator]() {
         return this;
     }

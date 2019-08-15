@@ -4,8 +4,8 @@ declare function f<T>(x: { prop: T }): T;
 declare const a: { prop: string } & { prop: number };
 declare const b: { prop: string & number };
 
-f(a);  // string & number
-f(b);  // string & number
+f(a);  // never
+f(b);  // never
 
 // Repro from #18354
 
@@ -17,7 +17,7 @@ f2(obj, 'b');
 
 
 //// [intersectionTypeInference2.js]
-f(a); // string & number
-f(b); // string & number
+f(a); // never
+f(b); // never
 f2(obj, 'a');
 f2(obj, 'b');

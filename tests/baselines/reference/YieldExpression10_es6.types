@@ -1,8 +1,8 @@
 === tests/cases/conformance/es6/yieldExpressions/YieldExpression10_es6.ts ===
 var v = { * foo() {
->v : { foo(): IterableIterator<any>; }
->{ * foo() {    yield(foo);  }} : { foo(): IterableIterator<any>; }
->foo : () => IterableIterator<any>
+>v : { foo(): Generator<any, void, unknown>; }
+>{ * foo() {    yield(foo);  }} : { foo(): Generator<any, void, unknown>; }
+>foo : () => Generator<any, void, unknown>
 
     yield(foo);
 >yield(foo) : any

@@ -11,7 +11,7 @@ function* g(): IterableIterator<Foo> {
 >g : () => IterableIterator<Foo>
 
     yield;
->yield : any
+>yield : undefined
 
     yield * [new Baz];
 >yield * [new Baz] : any

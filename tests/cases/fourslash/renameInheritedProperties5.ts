@@ -4,10 +4,10 @@
 ////     propC: number;
 //// }
 //// interface D extends C {
-////     [|propD|]: string;
+////     [|[|{| "contextRangeIndex": 0 |}propD|]: string;|]
 //// }
 //// var d: D;
 //// d.[|propD|];
 
-verify.rangesAreRenameLocations();
+verify.rangesWithSameTextAreRenameLocations("propD");
 

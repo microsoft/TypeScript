@@ -2,6 +2,7 @@ tests/cases/compiler/index.tsx(14,9): error TS2322: Type 'number' is not assigna
 tests/cases/compiler/index.tsx(18,15): error TS2747: 'Blah' components don't accept text as child elements. Text in JSX has the type 'string', but the expected type of 'children' is '(x: number) => string'.
 tests/cases/compiler/index.tsx(23,10): error TS2746: This JSX tag's 'children' prop expects a single child of type '(x: number) => string', but multiple children were provided.
 tests/cases/compiler/index.tsx(37,10): error TS2745: This JSX tag's 'children' prop expects type '((x: number) => string)[]' which requires multiple children, but only a single child was provided.
+tests/cases/compiler/index.tsx(38,4): error TS7006: Parameter 'x' implicitly has an 'any' type.
 tests/cases/compiler/index.tsx(42,10): error TS2745: This JSX tag's 'children' prop expects type '((x: number) => string)[]' which requires multiple children, but only a single child was provided.
 tests/cases/compiler/index.tsx(48,9): error TS2322: Type 'number' is not assignable to type 'string'.
 tests/cases/compiler/index.tsx(49,9): error TS2322: Type 'number' is not assignable to type 'string'.
@@ -13,7 +14,7 @@ tests/cases/compiler/index.tsx(73,9): error TS2322: Type 'number' is not assigna
 tests/cases/compiler/index.tsx(74,9): error TS2322: Type 'number' is not assignable to type 'string'.
 
 
-==== tests/cases/compiler/index.tsx (11 errors) ====
+==== tests/cases/compiler/index.tsx (12 errors) ====
     /// <reference path="/.lib/react16.d.ts" />
     import * as React from "react";
     
@@ -64,6 +65,8 @@ tests/cases/compiler/index.tsx(74,9): error TS2322: Type 'number' is not assigna
              ~~~~~
 !!! error TS2745: This JSX tag's 'children' prop expects type '((x: number) => string)[]' which requires multiple children, but only a single child was provided.
       {x => x}
+       ~
+!!! error TS7006: Parameter 'x' implicitly has an 'any' type.
     </Blah2>
     
     // Blah2 components don't accept text as child elements

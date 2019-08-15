@@ -5,11 +5,17 @@ tests/cases/conformance/types/typeRelationships/recursiveTypes/objectTypeWithRec
   Types of property 'data' are incompatible.
     Type 'number' is not assignable to type 'string'.
 tests/cases/conformance/types/typeRelationships/recursiveTypes/objectTypeWithRecursiveWrappedPropertyCheckedNominally.ts(30,5): error TS2322: Type 'U' is not assignable to type 'T'.
-  Type 'MyList<number>' is not assignable to type 'T'.
+  'U' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint 'List<number>'.
+    Type 'MyList<number>' is not assignable to type 'T'.
+      'MyList<number>' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint 'List<number>'.
 tests/cases/conformance/types/typeRelationships/recursiveTypes/objectTypeWithRecursiveWrappedPropertyCheckedNominally.ts(31,5): error TS2322: Type 'T' is not assignable to type 'U'.
-  Type 'List<number>' is not assignable to type 'U'.
+  'T' is assignable to the constraint of type 'U', but 'U' could be instantiated with a different subtype of constraint 'MyList<number>'.
+    Type 'List<number>' is not assignable to type 'U'.
+      'List<number>' is assignable to the constraint of type 'U', but 'U' could be instantiated with a different subtype of constraint 'MyList<number>'.
 tests/cases/conformance/types/typeRelationships/recursiveTypes/objectTypeWithRecursiveWrappedPropertyCheckedNominally.ts(42,5): error TS2322: Type 'U' is not assignable to type 'T'.
-  Type 'MyList<number>' is not assignable to type 'T'.
+  'U' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint 'MyList<number>'.
+    Type 'MyList<number>' is not assignable to type 'T'.
+      'MyList<number>' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint 'MyList<number>'.
 
 
 ==== tests/cases/conformance/types/typeRelationships/recursiveTypes/objectTypeWithRecursiveWrappedPropertyCheckedNominally.ts (5 errors) ====
@@ -53,11 +59,15 @@ tests/cases/conformance/types/typeRelationships/recursiveTypes/objectTypeWithRec
         t = u; // error
         ~
 !!! error TS2322: Type 'U' is not assignable to type 'T'.
-!!! error TS2322:   Type 'MyList<number>' is not assignable to type 'T'.
+!!! error TS2322:   'U' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint 'List<number>'.
+!!! error TS2322:     Type 'MyList<number>' is not assignable to type 'T'.
+!!! error TS2322:       'MyList<number>' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint 'List<number>'.
         u = t; // error
         ~
 !!! error TS2322: Type 'T' is not assignable to type 'U'.
-!!! error TS2322:   Type 'List<number>' is not assignable to type 'U'.
+!!! error TS2322:   'T' is assignable to the constraint of type 'U', but 'U' could be instantiated with a different subtype of constraint 'MyList<number>'.
+!!! error TS2322:     Type 'List<number>' is not assignable to type 'U'.
+!!! error TS2322:       'List<number>' is assignable to the constraint of type 'U', but 'U' could be instantiated with a different subtype of constraint 'MyList<number>'.
     
         var a: List<number>;
         var b: MyList<number>;
@@ -71,7 +81,9 @@ tests/cases/conformance/types/typeRelationships/recursiveTypes/objectTypeWithRec
         t = u; // error
         ~
 !!! error TS2322: Type 'U' is not assignable to type 'T'.
-!!! error TS2322:   Type 'MyList<number>' is not assignable to type 'T'.
+!!! error TS2322:   'U' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint 'MyList<number>'.
+!!! error TS2322:     Type 'MyList<number>' is not assignable to type 'T'.
+!!! error TS2322:       'MyList<number>' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint 'MyList<number>'.
         u = t; // was error, ok after constraint made illegal, doesn't matter
     
         var a: List<number>;

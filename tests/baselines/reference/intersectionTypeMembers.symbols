@@ -146,3 +146,58 @@ const de: D & E = {
     }
 }
 
+// Additional test case with >2 doubly nested members so fix for #31441 is tested w/ excess props
+interface F {
+>F : Symbol(F, Decl(intersectionTypeMembers.ts, 43, 1))
+
+    nested: { doublyNested: { g: string; } }
+>nested : Symbol(F.nested, Decl(intersectionTypeMembers.ts, 46, 13))
+>doublyNested : Symbol(doublyNested, Decl(intersectionTypeMembers.ts, 47, 13))
+>g : Symbol(g, Decl(intersectionTypeMembers.ts, 47, 29))
+}
+
+interface G {
+>G : Symbol(G, Decl(intersectionTypeMembers.ts, 48, 1))
+
+    nested: { doublyNested: { h: string; } }
+>nested : Symbol(G.nested, Decl(intersectionTypeMembers.ts, 50, 13))
+>doublyNested : Symbol(doublyNested, Decl(intersectionTypeMembers.ts, 51, 13))
+>h : Symbol(h, Decl(intersectionTypeMembers.ts, 51, 29))
+}
+
+const defg: D & E & F & G = {
+>defg : Symbol(defg, Decl(intersectionTypeMembers.ts, 54, 5))
+>D : Symbol(D, Decl(intersectionTypeMembers.ts, 26, 14))
+>E : Symbol(E, Decl(intersectionTypeMembers.ts, 30, 1))
+>F : Symbol(F, Decl(intersectionTypeMembers.ts, 43, 1))
+>G : Symbol(G, Decl(intersectionTypeMembers.ts, 48, 1))
+
+    nested: {
+>nested : Symbol(nested, Decl(intersectionTypeMembers.ts, 54, 29))
+
+        doublyNested: {
+>doublyNested : Symbol(doublyNested, Decl(intersectionTypeMembers.ts, 55, 13))
+
+            d: 'yes',
+>d : Symbol(d, Decl(intersectionTypeMembers.ts, 56, 23))
+
+            f: 'no',
+>f : Symbol(f, Decl(intersectionTypeMembers.ts, 57, 21))
+
+            g: 'ok',
+>g : Symbol(g, Decl(intersectionTypeMembers.ts, 58, 20))
+
+            h: 'affirmative'
+>h : Symbol(h, Decl(intersectionTypeMembers.ts, 59, 20))
+
+        },
+        different: { e: 12 },
+>different : Symbol(different, Decl(intersectionTypeMembers.ts, 61, 10))
+>e : Symbol(e, Decl(intersectionTypeMembers.ts, 62, 20))
+
+        other: { g: 101 }
+>other : Symbol(other, Decl(intersectionTypeMembers.ts, 62, 29))
+>g : Symbol(g, Decl(intersectionTypeMembers.ts, 63, 16))
+    }
+}
+

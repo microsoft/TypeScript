@@ -1,0 +1,7 @@
+tests/cases/conformance/es2019/globalThisCollision.js(1,5): error TS2397: Declaration name conflicts with built-in global identifier 'globalThis'.
+
+
+==== tests/cases/conformance/es2019/globalThisCollision.js (1 errors) ====
+    var globalThis;
+        ~~~~~~~~~~
+!!! error TS2397: Declaration name conflicts with built-in global identifier 'globalThis'.

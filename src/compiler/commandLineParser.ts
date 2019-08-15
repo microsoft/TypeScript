@@ -16,6 +16,7 @@ namespace ts {
         ["es2017", "lib.es2017.d.ts"],
         ["es2018", "lib.es2018.d.ts"],
         ["es2019", "lib.es2019.d.ts"],
+        ["es2020", "lib.es2020.d.ts"],
         ["esnext", "lib.esnext.d.ts"],
         // Host only
         ["dom", "lib.dom.d.ts"],
@@ -39,13 +40,17 @@ namespace ts {
         ["es2017.string", "lib.es2017.string.d.ts"],
         ["es2017.intl", "lib.es2017.intl.d.ts"],
         ["es2017.typedarrays", "lib.es2017.typedarrays.d.ts"],
+        ["es2018.asyncgenerator", "lib.es2018.asyncgenerator.d.ts"],
         ["es2018.asynciterable", "lib.es2018.asynciterable.d.ts"],
         ["es2018.intl", "lib.es2018.intl.d.ts"],
         ["es2018.promise", "lib.es2018.promise.d.ts"],
         ["es2018.regexp", "lib.es2018.regexp.d.ts"],
         ["es2019.array", "lib.es2019.array.d.ts"],
+        ["es2019.object", "lib.es2019.object.d.ts"],
         ["es2019.string", "lib.es2019.string.d.ts"],
         ["es2019.symbol", "lib.es2019.symbol.d.ts"],
+        ["es2020.string", "lib.es2020.string.d.ts"],
+        ["es2020.symbol.wellknown", "lib.es2020.symbol.wellknown.d.ts"],
         ["esnext.array", "lib.es2019.array.d.ts"],
         ["esnext.symbol", "lib.es2019.symbol.d.ts"],
         ["esnext.asynciterable", "lib.es2018.asynciterable.d.ts"],
@@ -143,6 +148,12 @@ namespace ts {
             category: Diagnostics.Basic_Options,
             description: Diagnostics.Enable_incremental_compilation,
         },
+        {
+            name: "locale",
+            type: "string",
+            category: Diagnostics.Advanced_Options,
+            description: Diagnostics.The_locale_used_when_displaying_messages_to_the_user_e_g_en_us
+        },
     ];
 
     /* @internal */
@@ -210,10 +221,12 @@ namespace ts {
                 es2017: ScriptTarget.ES2017,
                 es2018: ScriptTarget.ES2018,
                 es2019: ScriptTarget.ES2019,
+                es2020: ScriptTarget.ES2020,
                 esnext: ScriptTarget.ESNext,
             }),
             affectsSourceFile: true,
             affectsModuleResolution: true,
+            affectsEmit: true,
             paramType: Diagnostics.VERSION,
             showInSimplifiedHelpView: true,
             category: Diagnostics.Basic_Options,
@@ -233,6 +246,7 @@ namespace ts {
                 esnext: ModuleKind.ESNext
             }),
             affectsModuleResolution: true,
+            affectsEmit: true,
             paramType: Diagnostics.KIND,
             showInSimplifiedHelpView: true,
             category: Diagnostics.Basic_Options,
@@ -578,6 +592,7 @@ namespace ts {
             name: "esModuleInterop",
             type: "boolean",
             affectsSemanticDiagnostics: true,
+            affectsEmit: true,
             showInSimplifiedHelpView: true,
             category: Diagnostics.Module_Resolution_Options,
             description: Diagnostics.Enables_emit_interoperability_between_CommonJS_and_ES_Modules_via_creation_of_namespace_objects_for_all_imports_Implies_allowSyntheticDefaultImports
@@ -691,12 +706,6 @@ namespace ts {
             affectsEmit: true,
             category: Diagnostics.Advanced_Options,
             description: Diagnostics.Emit_a_UTF_8_Byte_Order_Mark_BOM_in_the_beginning_of_output_files
-        },
-        {
-            name: "locale",
-            type: "string",
-            category: Diagnostics.Advanced_Options,
-            description: Diagnostics.The_locale_used_when_displaying_messages_to_the_user_e_g_en_us
         },
         {
             name: "newLine",
@@ -963,7 +972,8 @@ namespace ts {
         return typeAcquisition;
     }
 
-    function getOptionNameMap(): OptionNameMap {
+    /* @internal */
+    export function getOptionNameMap(): OptionNameMap {
         return optionNameMapCache || (optionNameMapCache = createOptionNameMap(optionDeclarations));
     }
 
@@ -1016,8 +1026,7 @@ namespace ts {
         }
     }
 
-    /* @internal */
-    export interface OptionsBase {
+    interface OptionsBase {
         [option: string]: CompilerOptionsValue | undefined;
     }
 
@@ -1166,7 +1175,7 @@ namespace ts {
     export interface ParsedBuildCommand {
         buildOptions: BuildOptions;
         projects: string[];
-        errors: ReadonlyArray<Diagnostic>;
+        errors: Diagnostic[];
     }
 
     /*@internal*/
@@ -1341,7 +1350,12 @@ namespace ts {
     /**
      * Reads the config file, reports errors if any and exits if the config file cannot be found
      */
-    export function getParsedCommandLineOfConfigFile(configFileName: string, optionsToExtend: CompilerOptions, host: ParseConfigFileHost): ParsedCommandLine | undefined {
+    export function getParsedCommandLineOfConfigFile(
+        configFileName: string,
+        optionsToExtend: CompilerOptions,
+        host: ParseConfigFileHost,
+        extendedConfigCache?: Map<ExtendedConfigCacheEntry>
+    ): ParsedCommandLine | undefined {
         let configFileText: string | undefined;
         try {
             configFileText = host.readFile(configFileName);
@@ -1362,7 +1376,16 @@ namespace ts {
         result.path = toPath(configFileName, cwd, createGetCanonicalFileName(host.useCaseSensitiveFileNames));
         result.resolvedPath = result.path;
         result.originalFileName = result.fileName;
-        return parseJsonSourceFileConfigFileContent(result, host, getNormalizedAbsolutePath(getDirectoryPath(configFileName), cwd), optionsToExtend, getNormalizedAbsolutePath(configFileName, cwd));
+        return parseJsonSourceFileConfigFileContent(
+            result,
+            host,
+            getNormalizedAbsolutePath(getDirectoryPath(configFileName), cwd),
+            optionsToExtend,
+            getNormalizedAbsolutePath(configFileName, cwd),
+            /*resolutionStack*/ undefined,
+            /*extraFileExtension*/ undefined,
+            extendedConfigCache
+        );
     }
 
     /**
@@ -1720,6 +1743,16 @@ namespace ts {
         return false;
     }
 
+    /** @internal */
+    export interface TSConfig {
+        compilerOptions: CompilerOptions;
+        compileOnSave: boolean | undefined;
+        exclude?: ReadonlyArray<string>;
+        files: ReadonlyArray<string> | undefined;
+        include?: ReadonlyArray<string>;
+        references: ReadonlyArray<ProjectReference> | undefined;
+    }
+
     /**
      * Generate an uncommented, complete tsconfig for use with "--showConfig"
      * @param configParseResult options to be generated into tsconfig.json
@@ -1727,7 +1760,7 @@ namespace ts {
      * @param host provides current directory and case sensitivity services
      */
     /** @internal */
-    export function convertToTSConfig(configParseResult: ParsedCommandLine, configFileName: string, host: { getCurrentDirectory(): string, useCaseSensitiveFileNames: boolean }): object {
+    export function convertToTSConfig(configParseResult: ParsedCommandLine, configFileName: string, host: { getCurrentDirectory(): string, useCaseSensitiveFileNames: boolean }): TSConfig {
         const getCanonicalFileName = createGetCanonicalFileName(host.useCaseSensitiveFileNames);
         const files = map(
             filter(
@@ -1755,13 +1788,13 @@ namespace ts {
                 build: undefined,
                 version: undefined,
             },
-            references: map(configParseResult.projectReferences, r => ({ ...r, path: r.originalPath, originalPath: undefined })),
+            references: map(configParseResult.projectReferences, r => ({ ...r, path: r.originalPath ? r.originalPath : "", originalPath: undefined })),
             files: length(files) ? files : undefined,
             ...(configParseResult.configFileSpecs ? {
                 include: filterSameAsDefaultInclude(configParseResult.configFileSpecs.validatedIncludeSpecs),
                 exclude: configParseResult.configFileSpecs.validatedExcludeSpecs
             } : {}),
-            compilerOnSave: !!configParseResult.compileOnSave ? true : undefined
+            compileOnSave: !!configParseResult.compileOnSave ? true : undefined
         };
         return config;
     }
@@ -1877,7 +1910,9 @@ namespace ts {
                 case "object":
                     return {};
                 default:
-                    return option.type.keys().next().value;
+                    const iterResult = option.type.keys().next();
+                    if (!iterResult.done) return iterResult.value;
+                    return Debug.fail("Expected 'option.type' to have entries.");
             }
         }
 
@@ -1965,8 +2000,8 @@ namespace ts {
      * @param basePath A root directory to resolve relative path entries in the config
      *    file to. e.g. outDir
      */
-    export function parseJsonConfigFileContent(json: any, host: ParseConfigHost, basePath: string, existingOptions?: CompilerOptions, configFileName?: string, resolutionStack?: Path[], extraFileExtensions?: ReadonlyArray<FileExtensionInfo>): ParsedCommandLine {
-        return parseJsonConfigFileContentWorker(json, /*sourceFile*/ undefined, host, basePath, existingOptions, configFileName, resolutionStack, extraFileExtensions);
+    export function parseJsonConfigFileContent(json: any, host: ParseConfigHost, basePath: string, existingOptions?: CompilerOptions, configFileName?: string, resolutionStack?: Path[], extraFileExtensions?: ReadonlyArray<FileExtensionInfo>, extendedConfigCache?: Map<ExtendedConfigCacheEntry>): ParsedCommandLine {
+        return parseJsonConfigFileContentWorker(json, /*sourceFile*/ undefined, host, basePath, existingOptions, configFileName, resolutionStack, extraFileExtensions, extendedConfigCache);
     }
 
     /**
@@ -1976,8 +2011,8 @@ namespace ts {
      * @param basePath A root directory to resolve relative path entries in the config
      *    file to. e.g. outDir
      */
-    export function parseJsonSourceFileConfigFileContent(sourceFile: TsConfigSourceFile, host: ParseConfigHost, basePath: string, existingOptions?: CompilerOptions, configFileName?: string, resolutionStack?: Path[], extraFileExtensions?: ReadonlyArray<FileExtensionInfo>): ParsedCommandLine {
-        return parseJsonConfigFileContentWorker(/*json*/ undefined, sourceFile, host, basePath, existingOptions, configFileName, resolutionStack, extraFileExtensions);
+    export function parseJsonSourceFileConfigFileContent(sourceFile: TsConfigSourceFile, host: ParseConfigHost, basePath: string, existingOptions?: CompilerOptions, configFileName?: string, resolutionStack?: Path[], extraFileExtensions?: ReadonlyArray<FileExtensionInfo>, extendedConfigCache?: Map<ExtendedConfigCacheEntry>): ParsedCommandLine {
+        return parseJsonConfigFileContentWorker(/*json*/ undefined, sourceFile, host, basePath, existingOptions, configFileName, resolutionStack, extraFileExtensions, extendedConfigCache);
     }
 
     /*@internal*/
@@ -2016,11 +2051,12 @@ namespace ts {
         configFileName?: string,
         resolutionStack: Path[] = [],
         extraFileExtensions: ReadonlyArray<FileExtensionInfo> = [],
+        extendedConfigCache?: Map<ExtendedConfigCacheEntry>
     ): ParsedCommandLine {
         Debug.assert((json === undefined && sourceFile !== undefined) || (json !== undefined && sourceFile === undefined));
         const errors: Diagnostic[] = [];
 
-        const parsedConfig = parseConfig(json, sourceFile, host, basePath, configFileName, resolutionStack, errors);
+        const parsedConfig = parseConfig(json, sourceFile, host, basePath, configFileName, resolutionStack, errors, extendedConfigCache);
         const { raw } = parsedConfig;
         const options = extend(existingOptions, parsedConfig.options || {});
         options.configFilePath = configFileName && normalizeSlashes(configFileName);
@@ -2168,7 +2204,7 @@ namespace ts {
         return existingErrors !== configParseDiagnostics.length;
     }
 
-    interface ParsedTsconfig {
+    export interface ParsedTsconfig {
         raw: any;
         options?: CompilerOptions;
         typeAcquisition?: TypeAcquisition;
@@ -2187,13 +2223,14 @@ namespace ts {
      * It does *not* resolve the included files.
      */
     function parseConfig(
-            json: any,
-            sourceFile: TsConfigSourceFile | undefined,
-            host: ParseConfigHost,
-            basePath: string,
-            configFileName: string | undefined,
-            resolutionStack: string[],
-            errors: Push<Diagnostic>,
+        json: any,
+        sourceFile: TsConfigSourceFile | undefined,
+        host: ParseConfigHost,
+        basePath: string,
+        configFileName: string | undefined,
+        resolutionStack: string[],
+        errors: Push<Diagnostic>,
+        extendedConfigCache?: Map<ExtendedConfigCacheEntry>
     ): ParsedTsconfig {
         basePath = normalizeSlashes(basePath);
         const resolvedPath = getNormalizedAbsolutePath(configFileName || "", basePath);
@@ -2210,7 +2247,7 @@ namespace ts {
         if (ownConfig.extendedConfigPath) {
             // copy the resolution stack so it is never reused between branches in potential diamond-problem scenarios.
             resolutionStack = resolutionStack.concat([resolvedPath]);
-            const extendedConfig = getExtendedConfig(sourceFile, ownConfig.extendedConfigPath, host, basePath, resolutionStack, errors);
+            const extendedConfig = getExtendedConfig(sourceFile, ownConfig.extendedConfigPath, host, basePath, resolutionStack, errors, extendedConfigCache);
             if (extendedConfig && isSuccessfulParsedTsconfig(extendedConfig)) {
                 const baseRaw = extendedConfig.raw;
                 const raw = ownConfig.raw;
@@ -2339,7 +2376,7 @@ namespace ts {
             if (!host.fileExists(extendedConfigPath) && !endsWith(extendedConfigPath, Extension.Json)) {
                 extendedConfigPath = `${extendedConfigPath}.json`;
                 if (!host.fileExists(extendedConfigPath)) {
-                    errors.push(createDiagnostic(Diagnostics.File_0_does_not_exist, extendedConfig));
+                    errors.push(createDiagnostic(Diagnostics.File_0_not_found, extendedConfig));
                     return undefined;
                 }
             }
@@ -2350,8 +2387,13 @@ namespace ts {
         if (resolved.resolvedModule) {
             return resolved.resolvedModule.resolvedFileName;
         }
-        errors.push(createDiagnostic(Diagnostics.File_0_does_not_exist, extendedConfig));
+        errors.push(createDiagnostic(Diagnostics.File_0_not_found, extendedConfig));
         return undefined;
+    }
+
+    export interface ExtendedConfigCacheEntry {
+        extendedResult: TsConfigSourceFile;
+        extendedConfig: ParsedTsconfig | undefined;
     }
 
     function getExtendedConfig(
@@ -2361,40 +2403,53 @@ namespace ts {
         basePath: string,
         resolutionStack: string[],
         errors: Push<Diagnostic>,
+        extendedConfigCache?: Map<ExtendedConfigCacheEntry>
     ): ParsedTsconfig | undefined {
-        const extendedResult = readJsonConfigFile(extendedConfigPath, path => host.readFile(path));
+        const path = host.useCaseSensitiveFileNames ? extendedConfigPath : toLowerCase(extendedConfigPath);
+        let value: ExtendedConfigCacheEntry | undefined;
+        let extendedResult: TsConfigSourceFile;
+        let extendedConfig: ParsedTsconfig | undefined;
+        if (extendedConfigCache && (value = extendedConfigCache.get(path))) {
+            ({ extendedResult, extendedConfig } = value);
+        }
+        else {
+            extendedResult = readJsonConfigFile(extendedConfigPath, path => host.readFile(path));
+            if (!extendedResult.parseDiagnostics.length) {
+                const extendedDirname = getDirectoryPath(extendedConfigPath);
+                extendedConfig = parseConfig(/*json*/ undefined, extendedResult, host, extendedDirname,
+                    getBaseFileName(extendedConfigPath), resolutionStack, errors, extendedConfigCache);
+
+                if (isSuccessfulParsedTsconfig(extendedConfig)) {
+                    // Update the paths to reflect base path
+                    const relativeDifference = convertToRelativePath(extendedDirname, basePath, identity);
+                    const updatePath = (path: string) => isRootedDiskPath(path) ? path : combinePaths(relativeDifference, path);
+                    const mapPropertiesInRawIfNotUndefined = (propertyName: string) => {
+                        if (raw[propertyName]) {
+                            raw[propertyName] = map(raw[propertyName], updatePath);
+                        }
+                    };
+
+                    const { raw } = extendedConfig;
+                    mapPropertiesInRawIfNotUndefined("include");
+                    mapPropertiesInRawIfNotUndefined("exclude");
+                    mapPropertiesInRawIfNotUndefined("files");
+                }
+            }
+            if (extendedConfigCache) {
+                extendedConfigCache.set(path, { extendedResult, extendedConfig });
+            }
+        }
         if (sourceFile) {
             sourceFile.extendedSourceFiles = [extendedResult.fileName];
+            if (extendedResult.extendedSourceFiles) {
+                sourceFile.extendedSourceFiles.push(...extendedResult.extendedSourceFiles);
+            }
         }
         if (extendedResult.parseDiagnostics.length) {
             errors.push(...extendedResult.parseDiagnostics);
             return undefined;
         }
-
-        const extendedDirname = getDirectoryPath(extendedConfigPath);
-        const extendedConfig = parseConfig(/*json*/ undefined, extendedResult, host, extendedDirname,
-            getBaseFileName(extendedConfigPath), resolutionStack, errors);
-        if (sourceFile && extendedResult.extendedSourceFiles) {
-            sourceFile.extendedSourceFiles!.push(...extendedResult.extendedSourceFiles);
-        }
-
-        if (isSuccessfulParsedTsconfig(extendedConfig)) {
-            // Update the paths to reflect base path
-            const relativeDifference = convertToRelativePath(extendedDirname, basePath, identity);
-            const updatePath = (path: string) => isRootedDiskPath(path) ? path : combinePaths(relativeDifference, path);
-            const mapPropertiesInRawIfNotUndefined = (propertyName: string) => {
-                if (raw[propertyName]) {
-                    raw[propertyName] = map(raw[propertyName], updatePath);
-                }
-            };
-
-            const { raw } = extendedConfig;
-            mapPropertiesInRawIfNotUndefined("include");
-            mapPropertiesInRawIfNotUndefined("exclude");
-            mapPropertiesInRawIfNotUndefined("files");
-        }
-
-        return extendedConfig;
+        return extendedConfig!;
     }
 
     function convertCompileOnSaveOptionFromJson(jsonOption: any, basePath: string, errors: Push<Diagnostic>): boolean {

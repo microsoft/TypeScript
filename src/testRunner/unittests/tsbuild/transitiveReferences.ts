@@ -30,11 +30,9 @@ namespace ts {
             const host = new fakes.SolutionBuilderHost(fs);
             modifyDiskLayout(fs);
             const builder = createSolutionBuilder(host, ["/src/tsconfig.c.json"], { listFiles: true });
-            builder.buildAllProjects();
+            builder.build();
             host.assertDiagnosticMessages(...expectedDiagnostics);
-            for (const output of allExpectedOutputs) {
-                assert(fs.existsSync(output), `Expect file ${output} to exist`);
-            }
+            verifyOutputsPresent(fs, allExpectedOutputs);
             assert.deepEqual(host.traces, expectedFileTraces);
         }
 
@@ -71,7 +69,14 @@ export const b = new A();`);
             verifyBuild(fs => modifyFsBTsToNonRelativeImport(fs, "node"),
                 allExpectedOutputs,
                 expectedFileTraces,
-                [Diagnostics.Cannot_find_module_0, "a"],
+                {
+                    message: [Diagnostics.Cannot_find_module_0, "a"],
+                    location: {
+                        file: "/src/b.ts",
+                        start: `import {A} from 'a';`.indexOf(`'a'`),
+                        length: `'a'`.length
+                    }
+                },
             );
         });
     });

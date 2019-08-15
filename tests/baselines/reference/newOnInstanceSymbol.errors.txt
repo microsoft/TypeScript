@@ -1,9 +1,11 @@
-tests/cases/compiler/newOnInstanceSymbol.ts(3,1): error TS2351: Cannot use 'new' with an expression whose type lacks a call or construct signature.
+tests/cases/compiler/newOnInstanceSymbol.ts(3,5): error TS2351: This expression is not constructable.
+  Type 'C' has no construct signatures.
 
 
 ==== tests/cases/compiler/newOnInstanceSymbol.ts (1 errors) ====
     class C {}
     var x = new C(); // should be ok
     new x(); // should error
-    ~~~~~~~
-!!! error TS2351: Cannot use 'new' with an expression whose type lacks a call or construct signature.
+        ~
+!!! error TS2351: This expression is not constructable.
+!!! error TS2351:   Type 'C' has no construct signatures.

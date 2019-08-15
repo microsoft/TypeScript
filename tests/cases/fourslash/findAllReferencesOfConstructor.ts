@@ -2,9 +2,9 @@
 
 // @Filename: a.ts
 ////export class C {
-////    [|constructor|](n: number);
-////    [|constructor|]();
-////    [|constructor|](n?: number){}
+////    [|[|{| "contextRangeIndex": 0 |}constructor|](n: number);|]
+////    [|[|{| "contextRangeIndex": 2 |}constructor|]();|]
+////    [|[|{| "contextRangeIndex": 4 |}constructor|](n?: number){}|]
 ////    static f() {
 ////        this.f();
 ////        new [|this|]();
@@ -40,8 +40,7 @@
 ////new a.[|C|]();
 ////class d extends a.C { constructor() { [|super|](); }
 
-const ranges = test.ranges();
-const [a0, a1, a2, a3, a4, b0, c0, d0, d1] = ranges;
+const [a0Def, a0, a1Def, a1, a2Def, a2, a3, a4, b0, c0, d0, d1] = test.ranges();
 verify.referenceGroups([a0, a2], defs("class C"));
 verify.referenceGroups(a1, defs("class C"));
 

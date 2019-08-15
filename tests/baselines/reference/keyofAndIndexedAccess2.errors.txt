@@ -8,14 +8,16 @@ tests/cases/conformance/types/keyof/keyofAndIndexedAccess2.ts(14,5): error TS273
 tests/cases/conformance/types/keyof/keyofAndIndexedAccess2.ts(15,5): error TS2322: Type 'T' is not assignable to type '{ x: number; y: number; }'.
   Type '{ [key: string]: number; }' is missing the following properties from type '{ x: number; y: number; }': x, y
 tests/cases/conformance/types/keyof/keyofAndIndexedAccess2.ts(18,5): error TS2322: Type '{ x: number; y: number; }' is not assignable to type 'T'.
+  '{ x: number; y: number; }' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint '{ [key: string]: number; }'.
 tests/cases/conformance/types/keyof/keyofAndIndexedAccess2.ts(19,5): error TS2322: Type '{ [key: string]: number; }' is not assignable to type 'T'.
+  '{ [key: string]: number; }' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint '{ [key: string]: number; }'.
 tests/cases/conformance/types/keyof/keyofAndIndexedAccess2.ts(26,7): error TS2339: Property 'x' does not exist on type 'T'.
 tests/cases/conformance/types/keyof/keyofAndIndexedAccess2.ts(27,5): error TS2322: Type '1' is not assignable to type 'T[keyof T]'.
 tests/cases/conformance/types/keyof/keyofAndIndexedAccess2.ts(31,5): error TS2322: Type '{ [key: string]: number; }' is not assignable to type '{ [P in K]: number; }'.
 tests/cases/conformance/types/keyof/keyofAndIndexedAccess2.ts(38,5): error TS2322: Type '{ [x: string]: number; }' is not assignable to type '{ [P in K]: number; }'.
-tests/cases/conformance/types/keyof/keyofAndIndexedAccess2.ts(50,3): error TS7017: Element implicitly has an 'any' type because type 'Item' has no index signature.
-tests/cases/conformance/types/keyof/keyofAndIndexedAccess2.ts(51,3): error TS2322: Type '123' is not assignable to type 'string & number'.
-  Type '123' is not assignable to type 'string'.
+tests/cases/conformance/types/keyof/keyofAndIndexedAccess2.ts(50,3): error TS7053: Element implicitly has an 'any' type because expression of type 'string' can't be used to index type 'Item'.
+  No index signature with a parameter of type 'string' was found on type 'Item'.
+tests/cases/conformance/types/keyof/keyofAndIndexedAccess2.ts(51,3): error TS2322: Type '123' is not assignable to type 'never'.
 tests/cases/conformance/types/keyof/keyofAndIndexedAccess2.ts(52,3): error TS2322: Type '123' is not assignable to type 'T[keyof T]'.
 tests/cases/conformance/types/keyof/keyofAndIndexedAccess2.ts(53,3): error TS2322: Type '123' is not assignable to type 'T[K]'.
 tests/cases/conformance/types/keyof/keyofAndIndexedAccess2.ts(65,7): error TS2339: Property 'foo' does not exist on type 'T'.
@@ -23,8 +25,7 @@ tests/cases/conformance/types/keyof/keyofAndIndexedAccess2.ts(66,3): error TS253
 tests/cases/conformance/types/keyof/keyofAndIndexedAccess2.ts(67,3): error TS2322: Type '123' is not assignable to type 'T[keyof T]'.
 tests/cases/conformance/types/keyof/keyofAndIndexedAccess2.ts(68,3): error TS2322: Type '123' is not assignable to type 'T[K]'.
 tests/cases/conformance/types/keyof/keyofAndIndexedAccess2.ts(108,5): error TS2322: Type '123' is not assignable to type 'Type[K]'.
-  Type '123' is not assignable to type '123 & "some string"'.
-    Type '123' is not assignable to type '"some string"'.
+  Type '123' is not assignable to type 'never'.
 
 
 ==== tests/cases/conformance/types/keyof/keyofAndIndexedAccess2.ts (23 errors) ====
@@ -65,9 +66,11 @@ tests/cases/conformance/types/keyof/keyofAndIndexedAccess2.ts(108,5): error TS23
         c = a;  // Error, constraint on target doesn't imply any properties or signatures
         ~
 !!! error TS2322: Type '{ x: number; y: number; }' is not assignable to type 'T'.
+!!! error TS2322:   '{ x: number; y: number; }' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint '{ [key: string]: number; }'.
         c = b;  // Error, constraint on target doesn't imply any properties or signatures
         ~
 !!! error TS2322: Type '{ [key: string]: number; }' is not assignable to type 'T'.
+!!! error TS2322:   '{ [key: string]: number; }' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint '{ [key: string]: number; }'.
         a.x;
         b.x;
         c.x;
@@ -108,11 +111,11 @@ tests/cases/conformance/types/keyof/keyofAndIndexedAccess2.ts(108,5): error TS23
     function f10<T extends Item, K extends keyof T>(obj: T, k1: string, k2: keyof Item, k3: keyof T, k4: K) {
       obj[k1] = 123;  // Error
       ~~~~~~~
-!!! error TS7017: Element implicitly has an 'any' type because type 'Item' has no index signature.
+!!! error TS7053: Element implicitly has an 'any' type because expression of type 'string' can't be used to index type 'Item'.
+!!! error TS7053:   No index signature with a parameter of type 'string' was found on type 'Item'.
       obj[k2] = 123;  // Error
       ~~~~~~~
-!!! error TS2322: Type '123' is not assignable to type 'string & number'.
-!!! error TS2322:   Type '123' is not assignable to type 'string'.
+!!! error TS2322: Type '123' is not assignable to type 'never'.
       obj[k3] = 123;  // Error
       ~~~~~~~
 !!! error TS2322: Type '123' is not assignable to type 'T[keyof T]'.
@@ -184,8 +187,7 @@ tests/cases/conformance/types/keyof/keyofAndIndexedAccess2.ts(108,5): error TS23
         return 123;  // Error
         ~~~~~~~~~~~
 !!! error TS2322: Type '123' is not assignable to type 'Type[K]'.
-!!! error TS2322:   Type '123' is not assignable to type '123 & "some string"'.
-!!! error TS2322:     Type '123' is not assignable to type '"some string"'.
+!!! error TS2322:   Type '123' is not assignable to type 'never'.
     }
     
     // Repro from #30920
@@ -194,4 +196,54 @@ tests/cases/conformance/types/keyof/keyofAndIndexedAccess2.ts(108,5): error TS23
     type StrictExclude<T, U> = T extends StrictExtract<T, U> ? never : T;
     type A<T> = { [Q in { [P in keyof T]: P; }[keyof T]]: T[Q]; };
     type B<T, V> = A<{ [Q in keyof T]: StrictExclude<B<T[Q], V>, {}>; }>;
+    
+    // Repros from #30938
+    
+    function fn<T extends {elements: Array<string>} | {elements: Array<number>}>(param: T, cb: (element: T['elements'][number]) => void) {
+        cb(param.elements[0]);
+    }
+    
+    function fn2<T extends Array<string>>(param: T, cb: (element: T[number]) => void) {
+        cb(param[0]);
+    }
+    
+    // Repro from #31149
+    
+    function fn3<T extends ReadonlyArray<string>>(param: T, cb: (element: T[number]) => void) {
+        cb(param[0]);
+    }
+    
+    function fn4<K extends number>() {
+        let x: Array<string>[K] = 'abc';
+        let y: ReadonlyArray<string>[K] = 'abc';
+    }
+    
+    // Repro from #31439 and #31691
+    
+    export class c {
+      [x: string]: string;
+      constructor() {
+        this.a = "b";
+        this["a"] = "b";
+      }
+    }
+    
+    // Repro from #31385
+    
+    type Foo<T> = { [key: string]: { [K in keyof T]: K }[keyof T] };
+    
+    type Bar<T> = { [key: string]: { [K in keyof T]: [K] }[keyof T] };
+    
+    type Baz<T, Q extends Foo<T>> = { [K in keyof Q]: T[Q[K]] };
+    
+    type Qux<T, Q extends Bar<T>> = { [K in keyof Q]: T[Q[K]["0"]] };
+    
+    // Repro from #32038
+    
+    const actions = ['resizeTo', 'resizeBy'] as const;
+    for (const action of actions) {
+    	window[action] = (x, y) => {
+    		window[action](x, y);
+    	}
+    }
     

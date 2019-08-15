@@ -1,0 +1,57 @@
+=== tests/cases/compiler/controlFlowForCompoundAssignmentToThisMember.ts ===
+class DatasourceCommandWidgetElement {
+>DatasourceCommandWidgetElement : Symbol(DatasourceCommandWidgetElement, Decl(controlFlowForCompoundAssignmentToThisMember.ts, 0, 0))
+
+    _commandBased: boolean;
+>_commandBased : Symbol(DatasourceCommandWidgetElement._commandBased, Decl(controlFlowForCompoundAssignmentToThisMember.ts, 0, 38))
+
+    _commandElement: unknown;
+>_commandElement : Symbol(DatasourceCommandWidgetElement._commandElement, Decl(controlFlowForCompoundAssignmentToThisMember.ts, 1, 27))
+
+    commandElement: unknown;
+>commandElement : Symbol(DatasourceCommandWidgetElement.commandElement, Decl(controlFlowForCompoundAssignmentToThisMember.ts, 2, 29))
+
+    constructor(target: unknown) {
+>target : Symbol(target, Decl(controlFlowForCompoundAssignmentToThisMember.ts, 5, 16))
+
+        if (target instanceof DatasourceCommandWidgetElement) {
+>target : Symbol(target, Decl(controlFlowForCompoundAssignmentToThisMember.ts, 5, 16))
+>DatasourceCommandWidgetElement : Symbol(DatasourceCommandWidgetElement, Decl(controlFlowForCompoundAssignmentToThisMember.ts, 0, 0))
+
+            this._commandBased = true;
+>this._commandBased : Symbol(DatasourceCommandWidgetElement._commandBased, Decl(controlFlowForCompoundAssignmentToThisMember.ts, 0, 38))
+>this : Symbol(DatasourceCommandWidgetElement, Decl(controlFlowForCompoundAssignmentToThisMember.ts, 0, 0))
+>_commandBased : Symbol(DatasourceCommandWidgetElement._commandBased, Decl(controlFlowForCompoundAssignmentToThisMember.ts, 0, 38))
+
+            this._commandElement = target.commandElement;
+>this._commandElement : Symbol(DatasourceCommandWidgetElement._commandElement, Decl(controlFlowForCompoundAssignmentToThisMember.ts, 1, 27))
+>this : Symbol(DatasourceCommandWidgetElement, Decl(controlFlowForCompoundAssignmentToThisMember.ts, 0, 0))
+>_commandElement : Symbol(DatasourceCommandWidgetElement._commandElement, Decl(controlFlowForCompoundAssignmentToThisMember.ts, 1, 27))
+>target.commandElement : Symbol(DatasourceCommandWidgetElement.commandElement, Decl(controlFlowForCompoundAssignmentToThisMember.ts, 2, 29))
+>target : Symbol(target, Decl(controlFlowForCompoundAssignmentToThisMember.ts, 5, 16))
+>commandElement : Symbol(DatasourceCommandWidgetElement.commandElement, Decl(controlFlowForCompoundAssignmentToThisMember.ts, 2, 29))
+
+        } else {
+            this._commandBased = false;
+>this._commandBased : Symbol(DatasourceCommandWidgetElement._commandBased, Decl(controlFlowForCompoundAssignmentToThisMember.ts, 0, 38))
+>this : Symbol(DatasourceCommandWidgetElement, Decl(controlFlowForCompoundAssignmentToThisMember.ts, 0, 0))
+>_commandBased : Symbol(DatasourceCommandWidgetElement._commandBased, Decl(controlFlowForCompoundAssignmentToThisMember.ts, 0, 38))
+        }
+
+        if (this._commandBased = (target instanceof DatasourceCommandWidgetElement)) {
+>this._commandBased : Symbol(DatasourceCommandWidgetElement._commandBased, Decl(controlFlowForCompoundAssignmentToThisMember.ts, 0, 38))
+>this : Symbol(DatasourceCommandWidgetElement, Decl(controlFlowForCompoundAssignmentToThisMember.ts, 0, 0))
+>_commandBased : Symbol(DatasourceCommandWidgetElement._commandBased, Decl(controlFlowForCompoundAssignmentToThisMember.ts, 0, 38))
+>target : Symbol(target, Decl(controlFlowForCompoundAssignmentToThisMember.ts, 5, 16))
+>DatasourceCommandWidgetElement : Symbol(DatasourceCommandWidgetElement, Decl(controlFlowForCompoundAssignmentToThisMember.ts, 0, 0))
+
+            this._commandElement = target.commandElement;
+>this._commandElement : Symbol(DatasourceCommandWidgetElement._commandElement, Decl(controlFlowForCompoundAssignmentToThisMember.ts, 1, 27))
+>this : Symbol(DatasourceCommandWidgetElement, Decl(controlFlowForCompoundAssignmentToThisMember.ts, 0, 0))
+>_commandElement : Symbol(DatasourceCommandWidgetElement._commandElement, Decl(controlFlowForCompoundAssignmentToThisMember.ts, 1, 27))
+>target.commandElement : Symbol(DatasourceCommandWidgetElement.commandElement, Decl(controlFlowForCompoundAssignmentToThisMember.ts, 2, 29))
+>target : Symbol(target, Decl(controlFlowForCompoundAssignmentToThisMember.ts, 5, 16))
+>commandElement : Symbol(DatasourceCommandWidgetElement.commandElement, Decl(controlFlowForCompoundAssignmentToThisMember.ts, 2, 29))
+        }
+    }
+}

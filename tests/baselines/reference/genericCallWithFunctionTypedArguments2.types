@@ -78,15 +78,15 @@ var r4 = foo2(1, i2); // error
 >i2 : I2<string>
 
 var r4b = foo2(1, a); // any
->r4b : unknown
->foo2(1, a) : unknown
+>r4b : number
+>foo2(1, a) : number
 >foo2 : <T, U>(x: T, cb: new (a: T) => U) => U
 >1 : 1
 >a : new <T>(x: T) => T
 
 var r5 = foo2(1, i); // any
->r5 : unknown
->foo2(1, i) : unknown
+>r5 : number
+>foo2(1, i) : number
 >foo2 : <T, U>(x: T, cb: new (a: T) => U) => U
 >1 : 1
 >i : I
@@ -112,16 +112,16 @@ function foo3<T, U>(x: T, cb: new(a: T) => U, y: U) {
 }
 
 var r7 = foo3(null, i, ''); // any
->r7 : unknown
->foo3(null, i, '') : unknown
+>r7 : any
+>foo3(null, i, '') : any
 >foo3 : <T, U>(x: T, cb: new (a: T) => U, y: U) => U
 >null : null
 >i : I
 >'' : ""
 
 var r7b = foo3(null, a, ''); // any
->r7b : unknown
->foo3(null, a, '') : unknown
+>r7b : any
+>foo3(null, a, '') : any
 >foo3 : <T, U>(x: T, cb: new (a: T) => U, y: U) => U
 >null : null
 >a : new <T>(x: T) => T

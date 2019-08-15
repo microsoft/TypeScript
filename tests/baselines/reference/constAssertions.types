@@ -281,7 +281,7 @@ let p4 = [[[[10]]]] as const;
 >10 : 10
 
 let x1 = { x: 10, y: [20, 30], z: { a: { b: 42 } } } as const;
->x1 : { readonly x: 10; readonly y: readonly [20, 30]; z: { a: { readonly b: 42; }; }; }
+>x1 : { readonly x: 10; readonly y: readonly [20, 30]; readonly z: { readonly a: { readonly b: 42; }; }; }
 >{ x: 10, y: [20, 30], z: { a: { b: 42 } } } as const : { readonly x: 10; readonly y: readonly [20, 30]; readonly z: { readonly a: { readonly b: 42; }; }; }
 >{ x: 10, y: [20, 30], z: { a: { b: 42 } } } : { readonly x: 10; readonly y: readonly [20, 30]; readonly z: { readonly a: { readonly b: 42; }; }; }
 >x : 10

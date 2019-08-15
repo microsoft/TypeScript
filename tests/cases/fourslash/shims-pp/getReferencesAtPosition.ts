@@ -7,9 +7,9 @@
 ////
 ////    }
 ////
-////    public [|{| "isWriteAccess": true, "isDefinition": true |}start|](){
+////    [|public [|{| "isWriteAccess": true, "isDefinition": true, "contextRangeIndex": 0 |}start|](){
 ////        return this;
-////    }
+////    }|]
 ////
 ////    public stop(){
 ////        return this;
@@ -23,4 +23,4 @@
 ////second.[|start|]();
 ////second.stop();
 
-verify.singleReferenceGroup("(method) Test.start(): this");
+verify.singleReferenceGroup("(method) Test.start(): this", "start");

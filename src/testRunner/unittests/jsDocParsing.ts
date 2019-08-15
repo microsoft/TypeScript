@@ -37,6 +37,8 @@ namespace ts {
                 parsesCorrectly("callSignatureInRecordType", "{{(): number}}");
                 parsesCorrectly("methodInRecordType", "{{foo(): number}}");
                 parsesCorrectly("unionType", "{(number|string)}");
+                parsesCorrectly("unionTypeWithLeadingOperator", "{( | number | string )}");
+                parsesCorrectly("unionTypeWithOneElementAndLeadingOperator", "{( | number )}");
                 parsesCorrectly("topLevelNoParenUnionType", "{number|string}");
                 parsesCorrectly("functionType1", "{function()}");
                 parsesCorrectly("functionType2", "{function(string, boolean)}");
@@ -313,6 +315,11 @@ namespace ts {
  * {@link first link}
  * Inside {@link link text} thing
  * @see {@link second link text} and {@link Foo|a foo} as well.
+ */`);
+                parsesCorrectly("authorTag",
+`/**
+ * @author John Doe <john.doe@example.com>
+ * @author John Doe <john.doe@example.com> unexpected comment
  */`);
             });
         });

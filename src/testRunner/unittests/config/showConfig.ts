@@ -53,6 +53,26 @@ namespace ts {
 
         showTSConfigCorrectly("Show TSConfig with advanced options", ["--showConfig", "--declaration", "--declarationDir", "lib", "--skipLibCheck", "--noErrorTruncation"]);
 
+        showTSConfigCorrectly("Show TSConfig with compileOnSave and more", ["-p", "tsconfig.json"], {
+            compilerOptions: {
+                esModuleInterop: true,
+                target: "es5",
+                module: "commonjs",
+                strict: true,
+            },
+            compileOnSave: true,
+            exclude: [
+                "dist"
+            ],
+            files: [],
+            include: [
+                "src/*"
+            ],
+            references: [
+                { path: "./test" }
+            ],
+        });
+
         // Regression test for https://github.com/Microsoft/TypeScript/issues/28836
         showTSConfigCorrectly("Show TSConfig with paths and more", ["-p", "tsconfig.json"], {
     compilerOptions: {
@@ -134,7 +154,9 @@ namespace ts {
                     break;
                 }
                 default: {
-                    const val = option.type.keys().next().value;
+                    const iterResult = option.type.keys().next();
+                    if (iterResult.done) return Debug.fail("Expected 'option.type' to have entries");
+                    const val = iterResult.value;
                     if (option.isTSConfigOnly) {
                         args = ["-p", "tsconfig.json"];
                         configObject = { compilerOptions: { [option.name]: val } };

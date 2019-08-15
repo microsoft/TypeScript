@@ -1,0 +1,26 @@
+=== tests/cases/conformance/ambient/types.ts ===
+declare module "*.foo" {
+>"*.foo" : typeof import("*.foo")
+
+  export interface OhNo { star: string }
+>star : string
+}
+
+=== tests/cases/conformance/ambient/test.ts ===
+declare module "a.foo" {
+>"a.foo" : typeof import("a.foo")
+
+  export interface OhNo { a: string }
+>a : string
+}
+import { OhNo } from "b.foo"
+>OhNo : any
+
+declare let ohno: OhNo;
+>ohno : OhNo
+
+ohno.a // oh no
+>ohno.a : any
+>ohno : OhNo
+>a : any
+

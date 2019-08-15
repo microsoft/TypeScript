@@ -443,6 +443,150 @@ let f60 = wrap3(baz);
 >wrap3 : <A, B, C>(f: (a: A, b1: B, b2: B) => C) => (a: A, b1: B, b2: B) => C
 >baz : <T, U extends T>(t1: T, t2: T, u: U) => [T, U]
 
+declare const list2: {
+>list2 : { <T>(a: T): T[]; foo: string; bar(): number; }
+
+    <T>(a: T): T[];
+>a : T
+
+    foo: string;
+>foo : string
+
+    bar(): number;
+>bar : () => number
+}
+
+let f70 = pipe(list2, box);
+>f70 : <T>(a: T) => { value: T[]; }
+>pipe(list2, box) : <T>(a: T) => { value: T[]; }
+>pipe : { <A extends any[], B>(ab: (...args: A) => B): (...args: A) => B; <A extends any[], B, C>(ab: (...args: A) => B, bc: (b: B) => C): (...args: A) => C; <A extends any[], B, C, D>(ab: (...args: A) => B, bc: (b: B) => C, cd: (c: C) => D): (...args: A) => D; }
+>list2 : { <T>(a: T): T[]; foo: string; bar(): number; }
+>box : <V>(x: V) => { value: V; }
+
+let f71 = pipe(box, list2);
+>f71 : <V>(x: V) => { value: V; }[]
+>pipe(box, list2) : <V>(x: V) => { value: V; }[]
+>pipe : { <A extends any[], B>(ab: (...args: A) => B): (...args: A) => B; <A extends any[], B, C>(ab: (...args: A) => B, bc: (b: B) => C): (...args: A) => C; <A extends any[], B, C, D>(ab: (...args: A) => B, bc: (b: B) => C, cd: (c: C) => D): (...args: A) => D; }
+>box : <V>(x: V) => { value: V; }
+>list2 : { <T>(a: T): T[]; foo: string; bar(): number; }
+
+declare class Point {
+>Point : Point
+
+    constructor(x: number, y: number);
+>x : number
+>y : number
+
+    readonly x: number;
+>x : number
+
+    readonly y: number;
+>y : number
+}
+
+declare class Bag<T> {
+>Bag : Bag<T>
+
+    constructor(...args: T[]);
+>args : T[]
+
+    contains(value: T): boolean;
+>contains : (value: T) => boolean
+>value : T
+
+    static foo: string;
+>foo : string
+}
+
+function asFunction<A extends any[], B>(cf: new (...args: A) => B) {
+>asFunction : <A extends any[], B>(cf: new (...args: A) => B) => (...args: A) => B
+>cf : new (...args: A) => B
+>args : A
+
+    return (...args: A) => new cf(...args);
+>(...args: A) => new cf(...args) : (...args: A) => B
+>args : A
+>new cf(...args) : B
+>cf : new (...args: A) => B
+>...args : any
+>args : A
+}
+
+const newPoint = asFunction(Point);
+>newPoint : (x: number, y: number) => Point
+>asFunction(Point) : (x: number, y: number) => Point
+>asFunction : <A extends any[], B>(cf: new (...args: A) => B) => (...args: A) => B
+>Point : typeof Point
+
+const newBag = asFunction(Bag);
+>newBag : <T>(...args: T[]) => Bag<T>
+>asFunction(Bag) : <T>(...args: T[]) => Bag<T>
+>asFunction : <A extends any[], B>(cf: new (...args: A) => B) => (...args: A) => B
+>Bag : typeof Bag
+
+const p1 = new Point(10, 20);
+>p1 : Point
+>new Point(10, 20) : Point
+>Point : typeof Point
+>10 : 10
+>20 : 20
+
+const p2 = newPoint(10, 20);
+>p2 : Point
+>newPoint(10, 20) : Point
+>newPoint : (x: number, y: number) => Point
+>10 : 10
+>20 : 20
+
+const bag1 = new Bag(1, 2, 3);
+>bag1 : Bag<number>
+>new Bag(1, 2, 3) : Bag<number>
+>Bag : typeof Bag
+>1 : 1
+>2 : 2
+>3 : 3
+
+const bag2 = newBag('a', 'b', 'c');
+>bag2 : Bag<string>
+>newBag('a', 'b', 'c') : Bag<string>
+>newBag : <T>(...args: T[]) => Bag<T>
+>'a' : "a"
+>'b' : "b"
+>'c' : "c"
+
+declare class Comp<P> {
+>Comp : Comp<P>
+
+    props: P;
+>props : P
+
+    constructor(props: P);
+>props : P
+}
+
+type CompClass<P> = new (props: P) => Comp<P>;
+>CompClass : CompClass<P>
+>props : P
+
+declare function myHoc<P>(C: CompClass<P>): CompClass<P>;
+>myHoc : <P>(C: CompClass<P>) => CompClass<P>
+>C : CompClass<P>
+
+type GenericProps<T> = { foo: number, stuff: T };
+>GenericProps : GenericProps<T>
+>foo : number
+>stuff : T
+
+declare class GenericComp<T> extends Comp<GenericProps<T>> {}
+>GenericComp : GenericComp<T>
+>Comp : Comp<GenericProps<T>>
+
+const GenericComp2 = myHoc(GenericComp);
+>GenericComp2 : new <T>(props: GenericProps<T>) => Comp<GenericProps<T>>
+>myHoc(GenericComp) : new <T>(props: GenericProps<T>) => Comp<GenericProps<T>>
+>myHoc : <P>(C: CompClass<P>) => CompClass<P>
+>GenericComp : typeof GenericComp
+
 // #417
 
 function mirror<A, B>(f: (a: A) => B): (a: A) => B { return f; }
@@ -835,7 +979,7 @@ foo2(() => {});
 >() => {} : () => void
 
 foo2(identity);
->foo2(identity) : [<T>(value: T) => T, unknown]
+>foo2(identity) : [<T>(value: T) => T, <T>(value: T) => T]
 >foo2 : <T, U = T>(fn: T, a?: U | undefined, b?: U | undefined) => [T, U]
 >identity : <T>(value: T) => T
 

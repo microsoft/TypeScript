@@ -31,11 +31,12 @@ var M;
 declare module M {
     interface I {
     }
-    class C {
+    export class C {
         [Symbol.iterator]: I;
         [Symbol.toPrimitive](x: I): void;
         [Symbol.isConcatSpreadable](): I;
         readonly [Symbol.toPrimitive]: any;
         [Symbol.toPrimitive]: I;
     }
+    export {};
 }
