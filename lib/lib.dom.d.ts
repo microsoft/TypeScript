@@ -32,7 +32,6 @@ interface Account {
 
 interface AddEventListenerOptions extends EventListenerOptions {
     once?: boolean;
-    passive?: boolean;
 }
 
 interface AesCbcParams extends Algorithm {
@@ -480,6 +479,7 @@ interface EventInit {
 
 interface EventListenerOptions {
     capture?: boolean;
+    passive?: boolean;
 }
 
 interface EventModifierInit extends UIEventInit {
