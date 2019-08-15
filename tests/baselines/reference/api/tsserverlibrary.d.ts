@@ -14,7 +14,7 @@ and limitations under the License.
 ***************************************************************************** */
 
 declare namespace ts {
-    const versionMajorMinor = "3.6";
+    const versionMajorMinor = "3.7";
     /** The version of the TypeScript compiler release */
     const version: string;
 }
@@ -1925,7 +1925,8 @@ declare namespace ts {
         Success = 0,
         DiagnosticsPresent_OutputsSkipped = 1,
         DiagnosticsPresent_OutputsGenerated = 2,
-        InvalidProject_OutputsSkipped = 3
+        InvalidProject_OutputsSkipped = 3,
+        ProjectReferenceCycle_OutputsSkupped = 4
     }
     export interface EmitResult {
         emitSkipped: boolean;

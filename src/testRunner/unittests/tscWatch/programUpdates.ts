@@ -1335,5 +1335,42 @@ exports.a = 1;
                 checkProgramActualFiles(watch(), [aFile.path, bFile.path, libFile.path]);
             }
         });
+
+        it("reports errors correctly with file not in rootDir", () => {
+            const currentDirectory = "/user/username/projects/myproject";
+            const aFile: File = {
+                path: `${currentDirectory}/a.ts`,
+                content: `import { x } from "../b";`
+            };
+            const bFile: File = {
+                path: `/user/username/projects/b.ts`,
+                content: `export const x = 10;`
+            };
+            const configFile: File = {
+                path: `${currentDirectory}/tsconfig.json`,
+                content: JSON.stringify({
+                    compilerOptions: {
+                        rootDir: ".",
+                        outDir: "lib"
+                    }
+                })
+            };
+
+            const files = [aFile, bFile, libFile, configFile];
+
+            const host = createWatchedSystem(files, { currentDirectory });
+            const watch = createWatchOfConfigFile("tsconfig.json", host);
+            checkOutputErrorsInitial(host, [
+                getDiagnosticOfFileFromProgram(watch(), aFile.path, aFile.content.indexOf(`"../b"`), `"../b"`.length, Diagnostics.File_0_is_not_under_rootDir_1_rootDir_is_expected_to_contain_all_source_files, bFile.path, currentDirectory)
+            ]);
+            const aContent = `
+
+${aFile.content}`;
+            host.writeFile(aFile.path, aContent);
+            host.runQueuedTimeoutCallbacks();
+            checkOutputErrorsIncremental(host, [
+                getDiagnosticOfFileFromProgram(watch(), aFile.path, aContent.indexOf(`"../b"`), `"../b"`.length, Diagnostics.File_0_is_not_under_rootDir_1_rootDir_is_expected_to_contain_all_source_files, bFile.path, currentDirectory)
+            ]);
+        });
     });
 }

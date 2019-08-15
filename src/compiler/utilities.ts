@@ -192,7 +192,7 @@ namespace ts {
     export function arrayToSet<T>(array: readonly T[], makeKey: (value: T) => string | undefined): Map<true>;
     export function arrayToSet<T>(array: readonly T[], makeKey: (value: T) => __String | undefined): UnderscoreEscapedMap<true>;
     export function arrayToSet(array: readonly any[], makeKey?: (value: any) => string | __String | undefined): Map<true> | UnderscoreEscapedMap<true> {
-        return arrayToMap<any, true>(array, makeKey || (s => s), () => true);
+        return arrayToMap<any, true>(array, makeKey || (s => s), returnTrue);
     }
 
     export function cloneMap(map: SymbolTable): SymbolTable;

@@ -4651,9 +4651,6 @@ namespace ts {
                 function createExpressionFromSymbolChain(chain: Symbol[], index: number): Expression {
                     const typeParameterNodes = lookupTypeParameterNodes(chain, index, context);
                     const symbol = chain[index];
-                    if (some(symbol.declarations, hasNonGlobalAugmentationExternalModuleSymbol)) {
-                        return createLiteral(getSpecifierForModuleSymbol(symbol, context));
-                    }
 
                     if (index === 0) {
                         context.flags |= NodeBuilderFlags.InInitialEntityName;
@@ -4663,6 +4660,9 @@ namespace ts {
                         context.flags ^= NodeBuilderFlags.InInitialEntityName;
                     }
                     let firstChar = symbolName.charCodeAt(0);
+                    if (isSingleOrDoubleQuote(firstChar) && some(symbol.declarations, hasNonGlobalAugmentationExternalModuleSymbol)) {
+                        return createLiteral(getSpecifierForModuleSymbol(symbol, context));
+                    }
                     const canUsePropertyAccess = isIdentifierStart(firstChar, languageVersion);
                     if (index === 0 || canUsePropertyAccess) {
                         const identifier = setEmitFlags(createIdentifier(symbolName, typeParameterNodes), EmitFlags.NoAsciiEscaping);
@@ -4818,9 +4818,9 @@ namespace ts {
                 return "default";
             }
             if (symbol.declarations && symbol.declarations.length) {
-                const declaration = symbol.declarations[0];
-                const name = getNameOfDeclaration(declaration);
-                if (name) {
+                let declaration = firstDefined(symbol.declarations, d => getNameOfDeclaration(d) ? d : undefined); // Try using a declaration with a name, first
+                const name = declaration && getNameOfDeclaration(declaration);
+                if (declaration && name) {
                     if (isCallExpression(declaration) && isBindableObjectDefinePropertyCall(declaration)) {
                         return symbolName(symbol);
                     }
@@ -4832,6 +4832,9 @@ namespace ts {
                         }
                     }
                     return declarationNameToString(name);
+                }
+                if (!declaration) {
+                    declaration = symbol.declarations[0]; // Declaration may be nameless, but we'll try anyway
                 }
                 if (declaration.parent && declaration.parent.kind === SyntaxKind.VariableDeclaration) {
                     return declarationNameToString((<VariableDeclaration>declaration.parent).name);
@@ -24079,7 +24082,7 @@ namespace ts {
                     }
                     if (node.operator === SyntaxKind.PlusToken) {
                         if (maybeTypeOfKind(operandType, TypeFlags.BigIntLike)) {
-                            error(node.operand, Diagnostics.Operator_0_cannot_be_applied_to_type_1, tokenToString(node.operator), typeToString(operandType));
+                            error(node.operand, Diagnostics.Operator_0_cannot_be_applied_to_type_1, tokenToString(node.operator), typeToString(getBaseTypeOfLiteralType(operandType)));
                         }
                         return numberType;
                     }
@@ -24514,7 +24517,7 @@ namespace ts {
                             resultType = numberType;
                         }
                         // At least one is assignable to bigint, so check that both are
-                        else if (isTypeAssignableToKind(leftType, TypeFlags.BigIntLike) && isTypeAssignableToKind(rightType, TypeFlags.BigIntLike)) {
+                        else if (bothAreBigIntLike(leftType, rightType)) {
                             switch (operator) {
                                 case SyntaxKind.GreaterThanGreaterThanGreaterThanToken:
                                 case SyntaxKind.GreaterThanGreaterThanGreaterThanEqualsToken:
@@ -24524,7 +24527,7 @@ namespace ts {
                         }
                         // Exactly one of leftType/rightType is assignable to bigint
                         else {
-                            reportOperatorError((awaitedLeft, awaitedRight) => isTypeAssignableToKind(awaitedLeft, TypeFlags.BigIntLike) && isTypeAssignableToKind(awaitedRight, TypeFlags.BigIntLike));
+                            reportOperatorError(bothAreBigIntLike);
                             resultType = errorType;
                         }
                         if (leftOk && rightOk) {
@@ -24574,9 +24577,9 @@ namespace ts {
                         // might be missing an await without doing an exhaustive check that inserting
                         // await(s) will actually be a completely valid binary expression.
                         const closeEnoughKind = TypeFlags.NumberLike | TypeFlags.BigIntLike | TypeFlags.StringLike | TypeFlags.AnyOrUnknown;
-                        reportOperatorError((awaitedLeft, awaitedRight) =>
-                            isTypeAssignableToKind(awaitedLeft, closeEnoughKind) &&
-                            isTypeAssignableToKind(awaitedRight, closeEnoughKind));
+                        reportOperatorError((left, right) =>
+                            isTypeAssignableToKind(left, closeEnoughKind) &&
+                            isTypeAssignableToKind(right, closeEnoughKind));
                         return anyType;
                     }
 
@@ -24642,6 +24645,10 @@ namespace ts {
 
                 default:
                     return Debug.fail();
+            }
+
+            function bothAreBigIntLike(left: Type, right: Type): boolean {
+                return isTypeAssignableToKind(left, TypeFlags.BigIntLike) && isTypeAssignableToKind(right, TypeFlags.BigIntLike);
             }
 
             function checkAssignmentDeclaration(kind: AssignmentDeclarationKind, rightType: Type) {
@@ -24741,18 +24748,23 @@ namespace ts {
                 return false;
             }
 
-            function reportOperatorError(awaitedTypesAreCompatible?: (left: Type, right: Type) => boolean) {
+            function reportOperatorError(isRelated?: (left: Type, right: Type) => boolean) {
                 let wouldWorkWithAwait = false;
                 const errNode = errorNode || operatorToken;
-                const [leftStr, rightStr] = getTypeNamesForErrorDisplay(leftType, rightType);
-                if (awaitedTypesAreCompatible) {
+                if (isRelated) {
                     const awaitedLeftType = getAwaitedType(leftType);
                     const awaitedRightType = getAwaitedType(rightType);
                     wouldWorkWithAwait = !(awaitedLeftType === leftType && awaitedRightType === rightType)
                         && !!(awaitedLeftType && awaitedRightType)
-                        && awaitedTypesAreCompatible(awaitedLeftType, awaitedRightType);
+                        && isRelated(awaitedLeftType, awaitedRightType);
                 }
 
+                let effectiveLeft = leftType;
+                let effectiveRight = rightType;
+                if (!wouldWorkWithAwait && isRelated) {
+                    [effectiveLeft, effectiveRight] = getBaseTypesIfUnrelated(leftType, rightType, isRelated);
+                }
+                const [leftStr, rightStr] = getTypeNamesForErrorDisplay(effectiveLeft, effectiveRight);
                 if (!tryGiveBetterPrimaryError(errNode, wouldWorkWithAwait, leftStr, rightStr)) {
                     errorAndMaybeSuggestAwait(
                         errNode,
@@ -24787,6 +24799,18 @@ namespace ts {
 
                 return undefined;
             }
+        }
+
+        function getBaseTypesIfUnrelated(leftType: Type, rightType: Type, isRelated: (left: Type, right: Type) => boolean): [Type, Type] {
+            let effectiveLeft = leftType;
+            let effectiveRight = rightType;
+            const leftBase = getBaseTypeOfLiteralType(leftType);
+            const rightBase = getBaseTypeOfLiteralType(rightType);
+            if (!isRelated(leftBase, rightBase)) {
+                effectiveLeft = leftBase;
+                effectiveRight = rightBase;
+            }
+            return [ effectiveLeft, effectiveRight ];
         }
 
         function isYieldExpressionInClass(node: YieldExpression): boolean {
@@ -32405,7 +32429,7 @@ namespace ts {
                         else if (flags & ModifierFlags.Async) {
                             return grammarErrorOnNode(modifier, Diagnostics._0_modifier_must_precede_1_modifier, "export", "async");
                         }
-                        else if (node.parent.kind === SyntaxKind.ClassDeclaration) {
+                        else if (isClassLike(node.parent)) {
                             return grammarErrorOnNode(modifier, Diagnostics._0_modifier_cannot_appear_on_a_class_element, "export");
                         }
                         else if (node.kind === SyntaxKind.Parameter) {
@@ -32428,7 +32452,7 @@ namespace ts {
                         else if (flags & ModifierFlags.Async) {
                             return grammarErrorOnNode(modifier, Diagnostics._0_modifier_cannot_be_used_in_an_ambient_context, "async");
                         }
-                        else if (node.parent.kind === SyntaxKind.ClassDeclaration) {
+                        else if (isClassLike(node.parent)) {
                             return grammarErrorOnNode(modifier, Diagnostics._0_modifier_cannot_appear_on_a_class_element, "declare");
                         }
                         else if (node.kind === SyntaxKind.Parameter) {

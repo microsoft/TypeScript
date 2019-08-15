@@ -2934,6 +2934,20 @@ namespace ts {
         throwIfCancellationRequested(): void;
     }
 
+    /*@internal*/
+    export enum RefFileKind {
+        Import,
+        ReferenceFile,
+        TypeReferenceDirective
+    }
+
+    /*@internal*/
+    export interface RefFile {
+        kind: RefFileKind;
+        index: number;
+        file: Path;
+    }
+
     // TODO: This should implement TypeCheckerHost but that's an internal type.
     export interface Program extends ScriptReferenceHost {
 
@@ -2953,6 +2967,8 @@ namespace ts {
          */
         /* @internal */
         getMissingFilePaths(): readonly Path[];
+        /* @internal */
+        getRefFileMap(): MultiMap<RefFile> | undefined;
 
         /**
          * Emits the JavaScript and declaration files.  If targetSourceFile is not specified, then
@@ -3099,6 +3115,9 @@ namespace ts {
 
         // When build skipped because passed in project is invalid
         InvalidProject_OutputsSkipped = 3,
+
+        // When build is skipped because project references form cycle
+        ProjectReferenceCycle_OutputsSkupped = 4,
     }
 
     export interface EmitResult {
