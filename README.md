@@ -73,17 +73,25 @@ npm install
 Use one of the following to build and test:
 
 ```
-gulp local            # Build the compiler into built/local
-gulp clean            # Delete the built compiler
-gulp LKG              # Replace the last known good with the built one.
-                      # Bootstrapping step to be executed when the built compiler reaches a stable state.
-gulp tests            # Build the test infrastructure using the built compiler.
-gulp runtests         # Run tests using the built compiler and test infrastructure.
-                      # You can override the host or specify a test for this command.
-                      # Use --host=<hostName> or --tests=<testPath>.
-gulp baseline-accept  # This replaces the baseline test results with the results obtained from gulp runtests.
-gulp lint             # Runs tslint on the TypeScript source.
-gulp help             # List the above commands.
+gulp local             # Build the compiler into built/local.
+gulp clean             # Delete the built compiler.
+gulp LKG               # Replace the last known good with the built one.
+                       # Bootstrapping step to be executed when the built compiler reaches a stable state.
+gulp tests             # Build the test infrastructure using the built compiler.
+gulp runtests          # Run tests using the built compiler and test infrastructure.
+                       # Some low-value tests are skipped when not on a CI machine - you can use the
+                       # --skipPercent=0 command to override this behavior and run all tests locally.
+                       # You can override the specific suite runner used or specify a test for this command.
+                       # Use --tests=<testPath> for a specific test and/or --runner=<runnerName> for a specific suite.
+                       # Valid runners include conformance, compiler, fourslash, project, user, and docker
+                       # The user and docker runners are extended test suite runners - the user runner
+                       # works on disk in the tests/cases/user directory, while the docker runner works in containers.
+                       # You'll need to have the docker executable in your system path for the docker runner to work.
+gulp runtests-parallel # Like runtests, but split across multiple threads. Uses a number of threads equal to the system
+                       # core count by default. Use --workers=<number> to adjust this.
+gulp baseline-accept   # This replaces the baseline test results with the results obtained from gulp runtests.
+gulp lint              # Runs tslint on the TypeScript source.
+gulp help              # List the above commands.
 ```
 
 
