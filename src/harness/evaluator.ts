@@ -2,6 +2,7 @@ namespace evaluator {
     declare var Symbol: SymbolConstructor;
 
     const sourceFile = vpath.combine(vfs.srcFolder, "source.ts");
+    const sourceFileJs = vpath.combine(vfs.srcFolder, "source.js");
 
     function compile(sourceText: string, options?: ts.CompilerOptions) {
         const fs = vfs.createFromFileSystem(Harness.IO, /*ignoreCase*/ false);
@@ -32,9 +33,8 @@ namespace evaluator {
     // Add "asyncIterator" if missing
     if (!ts.hasProperty(FakeSymbol, "asyncIterator")) Object.defineProperty(FakeSymbol, "asyncIterator", { value: Symbol.for("Symbol.asyncIterator"), configurable: true });
 
-    function evaluate(result: compiler.CompilationResult, globals?: Record<string, any>) {
-        globals = { Symbol: FakeSymbol, ...globals };
-
+    export function evaluateTypeScript(sourceText: string, options?: ts.CompilerOptions, globals?: Record<string, any>) {
+        const result = compile(sourceText, options);
         if (ts.some(result.diagnostics)) {
             assert.ok(/*value*/ false, "Syntax error in evaluation source text:\n" + ts.formatDiagnostics(result.diagnostics, {
                 getCanonicalFileName: file => file,
@@ -46,6 +46,12 @@ namespace evaluator {
         const output = result.getOutput(sourceFile, "js")!;
         assert.isDefined(output);
 
+        return evaluateJavaScript(output.text, globals, output.file);
+    }
+
+    export function evaluateJavaScript(sourceText: string, globals?: Record<string, any>, sourceFile = sourceFileJs) {
+        globals = { Symbol: FakeSymbol, ...globals };
+
         const globalNames: string[] = [];
         const globalArgs: any[] = [];
         for (const name in globals) {
@@ -55,15 +61,11 @@ namespace evaluator {
             }
         }
 
-        const evaluateText = `(function (module, exports, require, __dirname, __filename, ${globalNames.join(", ")}) { ${output.text} })`;
-        // tslint:disable-next-line:no-eval
-        const evaluateThunk = eval(evaluateText) as (module: any, exports: any, require: (id: string) => any, dirname: string, filename: string, ...globalArgs: any[]) => void;
+        const evaluateText = `(function (module, exports, require, __dirname, __filename, ${globalNames.join(", ")}) { ${sourceText} })`;
+        // tslint:disable-next-line:no-eval no-unused-expression
+        const evaluateThunk = (void 0, eval)(evaluateText) as (module: any, exports: any, require: (id: string) => any, dirname: string, filename: string, ...globalArgs: any[]) => void;
         const module: { exports: any; } = { exports: {} };
-        evaluateThunk.call(globals, module, module.exports, noRequire, vpath.dirname(output.file), output.file, FakeSymbol, ...globalArgs);
+        evaluateThunk.call(globals, module, module.exports, noRequire, vpath.dirname(sourceFile), sourceFile, FakeSymbol, ...globalArgs);
         return module.exports;
-    }
-
-    export function evaluateTypeScript(sourceText: string, options?: ts.CompilerOptions, globals?: Record<string, any>) {
-        return evaluate(compile(sourceText, options), globals);
     }
 }

@@ -20,7 +20,7 @@ var e1: number | string | boolean;
 >e1 : string | number | boolean
 
 f1(a1); // string
->f1(a1) : string
+>f1(a1) : unknown
 >f1 : <T>(x: string | T) => T
 >a1 : string
 

@@ -28,4 +28,4 @@ var __assign = (this && this.__assign) || function () {
     };
     return __assign.apply(this, arguments);
 };
-ab = __assign({}, a, { y: null }); // Should be allowed, since `y` is missing on `A`
+ab = __assign(__assign({}, a), { y: null }); // Should be allowed, since `y` is missing on `A`
