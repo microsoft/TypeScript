@@ -247,3 +247,32 @@ async function fun<T>(deepPromised: DeepPromised<T>) {
     }
 }
 
+// Repro from #32752
+
+type Deep<T> = { [K in keyof T]: T[K] | Deep<T[K]> };
+>Deep : Symbol(Deep, Decl(unionTypeInference.ts, 67, 1))
+>T : Symbol(T, Decl(unionTypeInference.ts, 71, 10))
+>K : Symbol(K, Decl(unionTypeInference.ts, 71, 18))
+>T : Symbol(T, Decl(unionTypeInference.ts, 71, 10))
+>T : Symbol(T, Decl(unionTypeInference.ts, 71, 10))
+>K : Symbol(K, Decl(unionTypeInference.ts, 71, 18))
+>Deep : Symbol(Deep, Decl(unionTypeInference.ts, 67, 1))
+>T : Symbol(T, Decl(unionTypeInference.ts, 71, 10))
+>K : Symbol(K, Decl(unionTypeInference.ts, 71, 18))
+
+declare function baz<T>(dp: Deep<T>): T;
+>baz : Symbol(baz, Decl(unionTypeInference.ts, 71, 53))
+>T : Symbol(T, Decl(unionTypeInference.ts, 73, 21))
+>dp : Symbol(dp, Decl(unionTypeInference.ts, 73, 24))
+>Deep : Symbol(Deep, Decl(unionTypeInference.ts, 67, 1))
+>T : Symbol(T, Decl(unionTypeInference.ts, 73, 21))
+>T : Symbol(T, Decl(unionTypeInference.ts, 73, 21))
+
+declare let xx: { a: string | undefined };
+>xx : Symbol(xx, Decl(unionTypeInference.ts, 74, 11))
+>a : Symbol(a, Decl(unionTypeInference.ts, 74, 17))
+
+baz(xx);
+>baz : Symbol(baz, Decl(unionTypeInference.ts, 71, 53))
+>xx : Symbol(xx, Decl(unionTypeInference.ts, 74, 11))
+
