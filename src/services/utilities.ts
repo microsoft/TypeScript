@@ -2080,15 +2080,14 @@ namespace ts {
     }
 
     export function getPackageJsonsVisibleToFile(fileName: string, host: LanguageServiceHost): readonly PackageJsonInfo[] {
-        const fileExists = host.fileExists;
-        if (!fileExists) {
+        if (!host.fileExists) {
             return [];
         }
 
         const packageJsons: PackageJsonInfo[] = [];
         forEachAncestorDirectory(getDirectoryPath(fileName), ancestor => {
             const packageJsonFileName = combinePaths(ancestor, "package.json");
-            if (fileExists(packageJsonFileName)) {
+            if (host.fileExists!(packageJsonFileName)) {
                 const info = createPackageJsonInfo(packageJsonFileName, host);
                 if (info) {
                     packageJsons.push(info);

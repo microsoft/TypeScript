@@ -732,7 +732,7 @@ namespace ts.codefix {
         function moduleSpecifierIsCoveredByPackageJson(specifier: string) {
             const packageName = getNodeModuleRootSpecifier(specifier);
             for (const packageJson of packageJsons) {
-                if (packageJson.has(packageName, dependencyGroups) || packageJson.has(getTypesPackageName(packageName)), dependencyGroups) {
+                if (packageJson.has(packageName, dependencyGroups) || packageJson.has(getTypesPackageName(packageName), dependencyGroups)) {
                     return true;
                 }
             }
