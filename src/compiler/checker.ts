@@ -274,6 +274,11 @@ namespace ts {
             return set;
         });
 
+        let maybeKeys: string[];
+        let sourceStack: Type[];
+        let targetStack: Type[];
+        let maybeCount = 0;
+        let depth = 0;
         // Cancellation that controls whether or not we can cancel in the middle of type checking.
         // In general cancelling is *not* safe for the type checker.  We might be in the middle of
         // computing something, and we will leave our internals in an inconsistent state.  Callers
@@ -12610,11 +12615,6 @@ namespace ts {
         ): boolean {
             let errorInfo: DiagnosticMessageChain | undefined;
             let relatedInfo: [DiagnosticRelatedInformation, ...DiagnosticRelatedInformation[]] | undefined;
-            let maybeKeys: string[];
-            let sourceStack: Type[];
-            let targetStack: Type[];
-            let maybeCount = 0;
-            let depth = 0;
             let expandingFlags = ExpandingFlags.None;
             let overflow = false;
             let overrideNextErrorInfo: DiagnosticMessageChain | undefined;
