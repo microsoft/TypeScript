@@ -1499,6 +1499,10 @@ namespace ts {
                         }
 
                         if (useResult) {
+                            if (result.exportSymbol && (meaning & (SymbolFlags.Value | SymbolFlags.Type)) === (SymbolFlags.Value | SymbolFlags.Type)) {
+                                result = result.exportSymbol; // If we're searching for all meanings and encounter a local exported symbol, return the exportSymbol, rather than the local one
+                                // TODO: If we ever remove the js-specific add-value-to-the-searched-meanings-of-type-references, remove this branch
+                            }
                             break loop;
                         }
                         else {
