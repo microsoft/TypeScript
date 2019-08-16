@@ -1069,17 +1069,33 @@ namespace ts.server {
                 return true;
             }
 
-            // Module agumentation changes can add or remove exports available to be auto-imported.
+            // Module agumentation and ambient module changes can add or remove exports available to be auto-imported.
             // Changes elsewhere in the file can change the *type* of an export in a module augmentation,
             // but type info is gathered in getCompletionEntryDetails, which doesn’t use the cache.
-            if (!arrayIsEqualTo(oldSourceFile.moduleAugmentations, newSourceFile.moduleAugmentations)) {
-                return true;
-            }
-
-            if (!arrayIsEqualTo(oldSourceFile.ambientModuleNames, newSourceFile.ambientModuleNames)) {
+            if (
+                !arrayIsEqualTo(oldSourceFile.moduleAugmentations, newSourceFile.moduleAugmentations) ||
+                !this.ambientModuleDeclarationsAreEqual(oldSourceFile, newSourceFile)
+            ) {
                 return true;
             }
             return false;
+        }
+
+        private ambientModuleDeclarationsAreEqual(oldSourceFile: SourceFile, newSourceFile: SourceFile) {
+            if (!arrayIsEqualTo(oldSourceFile.ambientModuleNames, newSourceFile.ambientModuleNames)) {
+                return false;
+            }
+            let oldFileStatementIndex = -1;
+            let newFileStatementIndex = -1;
+            for (const ambientModuleName of newSourceFile.ambientModuleNames) {
+                const isMatchingModuleDeclaration = (node: Statement) => isNonGlobalAmbientModule(node) && node.name.text === ambientModuleName;
+                oldFileStatementIndex = findIndex(oldSourceFile.statements, isMatchingModuleDeclaration, oldFileStatementIndex + 1);
+                newFileStatementIndex = findIndex(newSourceFile.statements, isMatchingModuleDeclaration, newFileStatementIndex + 1);
+                if (oldSourceFile.statements[oldFileStatementIndex] !== newSourceFile.statements[newFileStatementIndex]) {
+                    return false;
+                }
+            }
+            return true;
         }
 
         private detachScriptInfoFromProject(uncheckedFileName: string, noRemoveResolution?: boolean) {
