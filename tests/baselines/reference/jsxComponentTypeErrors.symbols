@@ -16,63 +16,82 @@ namespace JSX {
   }
 }
 
-const FunctionComponent = () => ({
->FunctionComponent : Symbol(FunctionComponent, Decl(jsxComponentTypeErrors.tsx, 9, 5))
+function FunctionComponent<T extends string>({type}: {type?: T}) {
+>FunctionComponent : Symbol(FunctionComponent, Decl(jsxComponentTypeErrors.tsx, 7, 1), Decl(jsxComponentTypeErrors.tsx, 13, 1))
+>T : Symbol(T, Decl(jsxComponentTypeErrors.tsx, 9, 27))
+>type : Symbol(type, Decl(jsxComponentTypeErrors.tsx, 9, 46))
+>type : Symbol(type, Decl(jsxComponentTypeErrors.tsx, 9, 54))
+>T : Symbol(T, Decl(jsxComponentTypeErrors.tsx, 9, 27))
 
-  type: 'string',
->type : Symbol(type, Decl(jsxComponentTypeErrors.tsx, 9, 34))
+  return {
+    type
+>type : Symbol(type, Decl(jsxComponentTypeErrors.tsx, 10, 10))
+  }
+}
+FunctionComponent.useThis = function() {
+>FunctionComponent.useThis : Symbol(FunctionComponent.useThis, Decl(jsxComponentTypeErrors.tsx, 13, 1))
+>FunctionComponent : Symbol(FunctionComponent, Decl(jsxComponentTypeErrors.tsx, 7, 1), Decl(jsxComponentTypeErrors.tsx, 13, 1))
+>useThis : Symbol(FunctionComponent.useThis, Decl(jsxComponentTypeErrors.tsx, 13, 1))
 
-});
+  return <this type="foo" />;
+>this : Symbol(FunctionComponent, Decl(jsxComponentTypeErrors.tsx, 7, 1), Decl(jsxComponentTypeErrors.tsx, 13, 1))
+>type : Symbol(type, Decl(jsxComponentTypeErrors.tsx, 15, 14))
+}
 
 class ClassComponent {
->ClassComponent : Symbol(ClassComponent, Decl(jsxComponentTypeErrors.tsx, 11, 3))
+>ClassComponent : Symbol(ClassComponent, Decl(jsxComponentTypeErrors.tsx, 16, 1))
 
   type = 'string';
->type : Symbol(ClassComponent.type, Decl(jsxComponentTypeErrors.tsx, 13, 22))
+>type : Symbol(ClassComponent.type, Decl(jsxComponentTypeErrors.tsx, 18, 22))
 }
 
 const MixedComponent = Math.random() ? FunctionComponent : ClassComponent;
->MixedComponent : Symbol(MixedComponent, Decl(jsxComponentTypeErrors.tsx, 17, 5))
+>MixedComponent : Symbol(MixedComponent, Decl(jsxComponentTypeErrors.tsx, 22, 5))
 >Math.random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
 >Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
->FunctionComponent : Symbol(FunctionComponent, Decl(jsxComponentTypeErrors.tsx, 9, 5))
->ClassComponent : Symbol(ClassComponent, Decl(jsxComponentTypeErrors.tsx, 11, 3))
+>FunctionComponent : Symbol(FunctionComponent, Decl(jsxComponentTypeErrors.tsx, 7, 1), Decl(jsxComponentTypeErrors.tsx, 13, 1))
+>ClassComponent : Symbol(ClassComponent, Decl(jsxComponentTypeErrors.tsx, 16, 1))
 
-const elem1 = <FunctionComponent />;
->elem1 : Symbol(elem1, Decl(jsxComponentTypeErrors.tsx, 19, 5))
->FunctionComponent : Symbol(FunctionComponent, Decl(jsxComponentTypeErrors.tsx, 9, 5))
+const elem1 = <FunctionComponent type="abc" />;
+>elem1 : Symbol(elem1, Decl(jsxComponentTypeErrors.tsx, 24, 5))
+>FunctionComponent : Symbol(FunctionComponent, Decl(jsxComponentTypeErrors.tsx, 7, 1), Decl(jsxComponentTypeErrors.tsx, 13, 1))
+>type : Symbol(type, Decl(jsxComponentTypeErrors.tsx, 24, 32))
 
-const elem2 = <ClassComponent />;
->elem2 : Symbol(elem2, Decl(jsxComponentTypeErrors.tsx, 20, 5))
->ClassComponent : Symbol(ClassComponent, Decl(jsxComponentTypeErrors.tsx, 11, 3))
+const elem2 = <FunctionComponent<"abc"> />;
+>elem2 : Symbol(elem2, Decl(jsxComponentTypeErrors.tsx, 25, 5))
+>FunctionComponent : Symbol(FunctionComponent, Decl(jsxComponentTypeErrors.tsx, 7, 1), Decl(jsxComponentTypeErrors.tsx, 13, 1))
 
-const elem3 = <MixedComponent />;
->elem3 : Symbol(elem3, Decl(jsxComponentTypeErrors.tsx, 21, 5))
->MixedComponent : Symbol(MixedComponent, Decl(jsxComponentTypeErrors.tsx, 17, 5))
+const elem3 = <ClassComponent />;
+>elem3 : Symbol(elem3, Decl(jsxComponentTypeErrors.tsx, 26, 5))
+>ClassComponent : Symbol(ClassComponent, Decl(jsxComponentTypeErrors.tsx, 16, 1))
+
+const elem4 = <MixedComponent />;
+>elem4 : Symbol(elem4, Decl(jsxComponentTypeErrors.tsx, 27, 5))
+>MixedComponent : Symbol(MixedComponent, Decl(jsxComponentTypeErrors.tsx, 22, 5))
 
 const obj = {
->obj : Symbol(obj, Decl(jsxComponentTypeErrors.tsx, 23, 5))
+>obj : Symbol(obj, Decl(jsxComponentTypeErrors.tsx, 29, 5))
 
   MemberFunctionComponent() {
->MemberFunctionComponent : Symbol(MemberFunctionComponent, Decl(jsxComponentTypeErrors.tsx, 23, 13))
+>MemberFunctionComponent : Symbol(MemberFunctionComponent, Decl(jsxComponentTypeErrors.tsx, 29, 13))
 
     return {};
   },
   MemberClassComponent: class {},
->MemberClassComponent : Symbol(MemberClassComponent, Decl(jsxComponentTypeErrors.tsx, 26, 4))
+>MemberClassComponent : Symbol(MemberClassComponent, Decl(jsxComponentTypeErrors.tsx, 32, 4))
 
 };
 
-const elem4 = <obj.MemberFunctionComponent />;
->elem4 : Symbol(elem4, Decl(jsxComponentTypeErrors.tsx, 30, 5))
->obj.MemberFunctionComponent : Symbol(MemberFunctionComponent, Decl(jsxComponentTypeErrors.tsx, 23, 13))
->obj : Symbol(obj, Decl(jsxComponentTypeErrors.tsx, 23, 5))
->MemberFunctionComponent : Symbol(MemberFunctionComponent, Decl(jsxComponentTypeErrors.tsx, 23, 13))
+const elem5 = <obj.MemberFunctionComponent />;
+>elem5 : Symbol(elem5, Decl(jsxComponentTypeErrors.tsx, 36, 5))
+>obj.MemberFunctionComponent : Symbol(MemberFunctionComponent, Decl(jsxComponentTypeErrors.tsx, 29, 13))
+>obj : Symbol(obj, Decl(jsxComponentTypeErrors.tsx, 29, 5))
+>MemberFunctionComponent : Symbol(MemberFunctionComponent, Decl(jsxComponentTypeErrors.tsx, 29, 13))
 
-const elem5 = <obj.MemberClassComponent />;
->elem5 : Symbol(elem5, Decl(jsxComponentTypeErrors.tsx, 31, 5))
->obj.MemberClassComponent : Symbol(MemberClassComponent, Decl(jsxComponentTypeErrors.tsx, 26, 4))
->obj : Symbol(obj, Decl(jsxComponentTypeErrors.tsx, 23, 5))
->MemberClassComponent : Symbol(MemberClassComponent, Decl(jsxComponentTypeErrors.tsx, 26, 4))
+const elem6 = <obj. MemberClassComponent />;
+>elem6 : Symbol(elem6, Decl(jsxComponentTypeErrors.tsx, 37, 5))
+>obj. MemberClassComponent : Symbol(MemberClassComponent, Decl(jsxComponentTypeErrors.tsx, 32, 4))
+>obj : Symbol(obj, Decl(jsxComponentTypeErrors.tsx, 29, 5))
+>MemberClassComponent : Symbol(MemberClassComponent, Decl(jsxComponentTypeErrors.tsx, 32, 4))
 

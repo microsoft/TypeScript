@@ -8,9 +8,14 @@ namespace JSX {
   }
 }
 
-const FunctionComponent = () => ({
-  type: 'string',
-});
+function FunctionComponent<T extends string>({type}: {type?: T}) {
+  return {
+    type
+  }
+}
+FunctionComponent.useThis = function() {
+  return <this type="foo" />;
+}
 
 class ClassComponent {
   type = 'string';
@@ -18,9 +23,10 @@ class ClassComponent {
 
 const MixedComponent = Math.random() ? FunctionComponent : ClassComponent;
 
-const elem1 = <FunctionComponent />;
-const elem2 = <ClassComponent />;
-const elem3 = <MixedComponent />;
+const elem1 = <FunctionComponent type="abc" />;
+const elem2 = <FunctionComponent<"abc"> />;
+const elem3 = <ClassComponent />;
+const elem4 = <MixedComponent />;
 
 const obj = {
   MemberFunctionComponent() {
@@ -29,15 +35,21 @@ const obj = {
   MemberClassComponent: class {},
 };
 
-const elem4 = <obj.MemberFunctionComponent />;
-const elem5 = <obj.MemberClassComponent />;
+const elem5 = <obj.MemberFunctionComponent />;
+const elem6 = <obj. MemberClassComponent />;
 
 
 //// [jsxComponentTypeErrors.jsx]
 "use strict";
-var FunctionComponent = function () { return ({
-    type: 'string'
-}); };
+function FunctionComponent(_a) {
+    var type = _a.type;
+    return {
+        type: type
+    };
+}
+FunctionComponent.useThis = function () {
+    return <this type="foo"/>;
+};
 var ClassComponent = /** @class */ (function () {
     function ClassComponent() {
         this.type = 'string';
@@ -45,9 +57,10 @@ var ClassComponent = /** @class */ (function () {
     return ClassComponent;
 }());
 var MixedComponent = Math.random() ? FunctionComponent : ClassComponent;
-var elem1 = <FunctionComponent />;
-var elem2 = <ClassComponent />;
-var elem3 = <MixedComponent />;
+var elem1 = <FunctionComponent type="abc"/>;
+var elem2 = <FunctionComponent />;
+var elem3 = <ClassComponent />;
+var elem4 = <MixedComponent />;
 var obj = {
     MemberFunctionComponent: function () {
         return {};
@@ -58,5 +71,5 @@ var obj = {
         return MemberClassComponent;
     }())
 };
-var elem4 = <obj.MemberFunctionComponent />;
-var elem5 = <obj.MemberClassComponent />;
+var elem5 = <obj.MemberFunctionComponent />;
+var elem6 = <obj.MemberClassComponent />;

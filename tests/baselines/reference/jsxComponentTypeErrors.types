@@ -10,17 +10,30 @@ namespace JSX {
   }
 }
 
-const FunctionComponent = () => ({
->FunctionComponent : () => { type: string; }
->() => ({  type: 'string',}) : () => { type: string; }
->({  type: 'string',}) : { type: string; }
->{  type: 'string',} : { type: string; }
+function FunctionComponent<T extends string>({type}: {type?: T}) {
+>FunctionComponent : typeof FunctionComponent
+>type : T | undefined
+>type : T | undefined
 
-  type: 'string',
->type : string
->'string' : "string"
+  return {
+>{    type  } : { type: T | undefined; }
 
-});
+    type
+>type : T | undefined
+  }
+}
+FunctionComponent.useThis = function() {
+>FunctionComponent.useThis = function() {  return <this type="foo" />;} : () => JSX.Element
+>FunctionComponent.useThis : () => JSX.Element
+>FunctionComponent : typeof FunctionComponent
+>useThis : () => JSX.Element
+>function() {  return <this type="foo" />;} : () => JSX.Element
+
+  return <this type="foo" />;
+><this type="foo" /> : JSX.Element
+>this : typeof FunctionComponent
+>type : "foo"
+}
 
 class ClassComponent {
 >ClassComponent : ClassComponent
@@ -31,29 +44,35 @@ class ClassComponent {
 }
 
 const MixedComponent = Math.random() ? FunctionComponent : ClassComponent;
->MixedComponent : (() => { type: string; }) | typeof ClassComponent
->Math.random() ? FunctionComponent : ClassComponent : (() => { type: string; }) | typeof ClassComponent
+>MixedComponent : typeof FunctionComponent | typeof ClassComponent
+>Math.random() ? FunctionComponent : ClassComponent : typeof FunctionComponent | typeof ClassComponent
 >Math.random() : number
 >Math.random : () => number
 >Math : Math
 >random : () => number
->FunctionComponent : () => { type: string; }
+>FunctionComponent : typeof FunctionComponent
 >ClassComponent : typeof ClassComponent
 
-const elem1 = <FunctionComponent />;
+const elem1 = <FunctionComponent type="abc" />;
 >elem1 : JSX.Element
-><FunctionComponent /> : JSX.Element
->FunctionComponent : () => { type: string; }
+><FunctionComponent type="abc" /> : JSX.Element
+>FunctionComponent : typeof FunctionComponent
+>type : "abc"
 
-const elem2 = <ClassComponent />;
+const elem2 = <FunctionComponent<"abc"> />;
 >elem2 : JSX.Element
+><FunctionComponent<"abc"> /> : JSX.Element
+>FunctionComponent : typeof FunctionComponent
+
+const elem3 = <ClassComponent />;
+>elem3 : JSX.Element
 ><ClassComponent /> : JSX.Element
 >ClassComponent : typeof ClassComponent
 
-const elem3 = <MixedComponent />;
->elem3 : JSX.Element
+const elem4 = <MixedComponent />;
+>elem4 : JSX.Element
 ><MixedComponent /> : JSX.Element
->MixedComponent : (() => { type: string; }) | typeof ClassComponent
+>MixedComponent : typeof FunctionComponent | typeof ClassComponent
 
 const obj = {
 >obj : { MemberFunctionComponent(): {}; MemberClassComponent: typeof MemberClassComponent; }
@@ -72,17 +91,17 @@ const obj = {
 
 };
 
-const elem4 = <obj.MemberFunctionComponent />;
->elem4 : JSX.Element
+const elem5 = <obj.MemberFunctionComponent />;
+>elem5 : JSX.Element
 ><obj.MemberFunctionComponent /> : JSX.Element
 >obj.MemberFunctionComponent : () => {}
 >obj : { MemberFunctionComponent(): {}; MemberClassComponent: typeof MemberClassComponent; }
 >MemberFunctionComponent : () => {}
 
-const elem5 = <obj.MemberClassComponent />;
->elem5 : JSX.Element
-><obj.MemberClassComponent /> : JSX.Element
->obj.MemberClassComponent : typeof MemberClassComponent
+const elem6 = <obj. MemberClassComponent />;
+>elem6 : JSX.Element
+><obj. MemberClassComponent /> : JSX.Element
+>obj. MemberClassComponent : typeof MemberClassComponent
 >obj : { MemberFunctionComponent(): {}; MemberClassComponent: typeof MemberClassComponent; }
 >MemberClassComponent : typeof MemberClassComponent
 

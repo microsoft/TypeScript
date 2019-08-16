@@ -9,9 +9,14 @@ namespace JSX {
   }
 }
 
-const FunctionComponent = () => ({
-  type: 'string',
-});
+function FunctionComponent<T extends string>({type}: {type?: T}) {
+  return {
+    type
+  }
+}
+FunctionComponent.useThis = function() {
+  return <this type="foo" />;
+}
 
 class ClassComponent {
   type = 'string';
@@ -19,9 +24,10 @@ class ClassComponent {
 
 const MixedComponent = Math.random() ? FunctionComponent : ClassComponent;
 
-const elem1 = <FunctionComponent />;
-const elem2 = <ClassComponent />;
-const elem3 = <MixedComponent />;
+const elem1 = <FunctionComponent type="abc" />;
+const elem2 = <FunctionComponent<"abc"> />;
+const elem3 = <ClassComponent />;
+const elem4 = <MixedComponent />;
 
 const obj = {
   MemberFunctionComponent() {
@@ -30,5 +36,5 @@ const obj = {
   MemberClassComponent: class {},
 };
 
-const elem4 = <obj.MemberFunctionComponent />;
-const elem5 = <obj.MemberClassComponent />;
+const elem5 = <obj.MemberFunctionComponent />;
+const elem6 = <obj. MemberClassComponent />;
