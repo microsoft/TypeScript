@@ -23753,7 +23753,20 @@ namespace ts {
             if (isInJSFile(node) && getAssignedExpandoInitializer(node)) {
                 return checkExpression(node.right, checkMode);
             }
+            checkGrammarNullishCoalesceWithLogicalExpression(node);
             return checkBinaryLikeExpression(node.left, node.operatorToken, node.right, checkMode, node);
+        }
+
+        function checkGrammarNullishCoalesceWithLogicalExpression (node: BinaryExpression) {
+            const { left, operatorToken, right } = node;
+            if (operatorToken.kind === SyntaxKind.QuestionQuestionToken) {
+                if (isBinaryExpression(left) && (left.operatorToken.kind === SyntaxKind.BarBarToken || left.operatorToken.kind === SyntaxKind.AmpersandAmpersandToken)) {
+                    error(left, Diagnostics.Operator_0_cannot_immediately_contain_or_be_contained_within_an_1_operation, tokenToString(left.operatorToken.kind), tokenToString(operatorToken.kind));
+                }
+                if (isBinaryExpression(right) && (right.operatorToken.kind === SyntaxKind.BarBarToken || right.operatorToken.kind === SyntaxKind.AmpersandAmpersandToken)) {
+                    error(right, Diagnostics.Operator_0_cannot_immediately_contain_or_be_contained_within_an_1_operation, tokenToString(right.operatorToken.kind), tokenToString(operatorToken.kind));
+                }
+            }
         }
 
         function checkBinaryLikeExpression(left: Expression, operatorToken: Node, right: Expression, checkMode?: CheckMode, errorNode?: Node): Type {

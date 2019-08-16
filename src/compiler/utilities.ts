@@ -3905,7 +3905,8 @@ namespace ts {
     export function isLogicalOperator(token: SyntaxKind): boolean {
         return token === SyntaxKind.BarBarToken
             || token === SyntaxKind.AmpersandAmpersandToken
-            || token === SyntaxKind.ExclamationToken;
+            || token === SyntaxKind.ExclamationToken
+            || token === SyntaxKind.QuestionQuestionToken;
     }
 
     export function isAssignmentOperator(token: SyntaxKind): boolean {

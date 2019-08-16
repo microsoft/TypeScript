@@ -3104,6 +3104,10 @@
         "category": "Error",
         "code": 5075
     },
+    "Operator '{0}' cannot immediately contain, or be contained within an '{1}' operation.": {
+        "category": "Error",
+        "code": 5076
+    },
 
     "Generates a sourcemap for each corresponding '.d.ts' file.": {
         "category": "Message",
