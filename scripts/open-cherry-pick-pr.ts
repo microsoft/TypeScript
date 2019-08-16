@@ -11,7 +11,7 @@ const userName = process.env.GH_USERNAME;
 const reviewers = process.env.REQUESTING_USER ? [process.env.REQUESTING_USER] : ["weswigham", "RyanCavanaugh"];
 const branchName = `pick/${process.env.SOURCE_ISSUE}/${process.env.TARGET_BRANCH}`;
 const remoteUrl = `https://${process.argv[2]}@github.com/${userName}/TypeScript.git`;
-const produceLKG = !!process.env.produceLKG;
+const produceLKG = !!process.env.PRODUCE_LKG;
 
 async function main() {
     if (!process.env.TARGET_BRANCH) {
