@@ -1,0 +1,31 @@
+=== tests/cases/compiler/classFunctionMerging.ts ===
+// We allow ambient classes and functions to merge, this way callable classes
+// which are also namespaces can be represented in declaration files
+declare function Foo (x: number): Foo.Inst;
+>Foo : typeof Foo
+>x : number
+>Foo : any
+
+declare class Foo {
+>Foo : Foo
+
+    constructor(x: string);
+>x : string
+}
+declare namespace Foo {
+    export type Inst = number;
+>Inst : number
+}
+
+const a = new Foo("");
+>a : Foo
+>new Foo("") : Foo
+>Foo : typeof Foo
+>"" : ""
+
+const b = Foo(12);
+>b : number
+>Foo(12) : number
+>Foo : typeof Foo
+>12 : 12
+

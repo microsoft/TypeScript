@@ -45,14 +45,6 @@ namespace ts.Completions {
 
     const enum GlobalsSearch { Continue, Success, Fail }
 
-    export interface ImportableModuleWithImportSuggestions extends codefix.ImportableModule {
-        moduleExportsInfo: Map<{ isExportStarFromReExport?: boolean, nearestExportSymbol?: Symbol, symbolName?: string }>;
-        symbolName?: string;
-        resolvedModuleSymbol?: Symbol;
-        isExportEqualsOfGlobal?: boolean;
-        invalidatingFileNames: Map<true>;
-        exportedSymbols?: readonly Symbol[];
-    }
     export interface AutoImportSuggestion {
         symbol: Symbol;
         symbolName: string;
@@ -1452,7 +1444,7 @@ namespace ts.Completions {
                 // Don't add another completion for `export =` of a symbol that's already global.
                 // So in `declare namespace foo {} declare module "foo" { export = foo; }`, there will just be the global completion for `foo`.
                 if (resolvedModuleSymbol !== moduleSymbol &&
-                    some(resolvedModuleSymbol.declarations, d => !!d.getSourceFile().externalModuleIndicator)) {
+                    every(resolvedModuleSymbol.declarations, d => !!d.getSourceFile().externalModuleIndicator)) {
                     pushSymbol(resolvedModuleSymbol, moduleSymbol, /*skipFilter*/ true);
                 }
 
@@ -1494,7 +1486,6 @@ namespace ts.Completions {
             // By this point, any potential duplicates that were actually duplicates have been
             // removed, so the rest need to be added. (Step 4 in diagrammed example)
             aliasesToReturnIfOriginalsAreMissing.forEach(({ alias, moduleSymbol }) => pushSymbol(alias, moduleSymbol));
-
             log(`getSymbolsFromOtherSourceFileExports: ${timestamp() - startTime}`);
             return results;
 
@@ -1505,13 +1496,12 @@ namespace ts.Completions {
                 }
                 addToSeen(resultSymbolIds, getSymbolId(symbol));
                 const origin: SymbolOriginInfoExport = { kind: SymbolOriginInfoKind.Export, moduleSymbol, isDefaultExport };
-                const result: AutoImportSuggestion = {
+                results.push({
                     symbol,
                     symbolName: getSymbolName(symbol, origin, target),
                     origin,
                     skipFilter,
-                };
-                results.push(result);
+                });
             }
         }
 
@@ -1763,7 +1753,7 @@ namespace ts.Completions {
             // If you're in an interface you don't want to repeat things from super-interface. So just stop here.
             if (!isClassLike(decl)) return GlobalsSearch.Success;
 
-            const classElement = contextToken.parent;
+            const classElement = contextToken.kind === SyntaxKind.SemicolonToken ? contextToken.parent.parent : contextToken.parent;
             let classElementModifierFlags = isClassElement(classElement) ? getModifierFlags(classElement) : ModifierFlags.None;
             // If this is context token is not something we are editing now, consider if this would lead to be modifier
             if (contextToken.kind === SyntaxKind.Identifier && !isCurrentlyEditingNode(contextToken)) {
