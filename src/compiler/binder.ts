@@ -778,7 +778,7 @@ namespace ts {
         function isNarrowableReference(expr: Expression): boolean {
             return expr.kind === SyntaxKind.Identifier || expr.kind === SyntaxKind.ThisKeyword || expr.kind === SyntaxKind.SuperKeyword ||
                 (isPropertyAccessExpression(expr) || isNonNullExpression(expr) || isParenthesizedExpression(expr)) && isNarrowableReference(expr.expression) ||
-                isElementAccessExpression(expr) && expr.argumentExpression &&
+                isElementAccessExpression(expr) &&
                 (isStringLiteral(expr.argumentExpression) || isNumericLiteral(expr.argumentExpression)) &&
                 isNarrowableReference(expr.expression);
         }

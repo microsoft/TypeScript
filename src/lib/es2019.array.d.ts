@@ -110,7 +110,7 @@ interface ReadonlyArray<T> {
      * @param depth The maximum recursion depth
      */
     flat<U>(depth?: number): any[];
-  }
+}
 
 interface Array<T> {
 

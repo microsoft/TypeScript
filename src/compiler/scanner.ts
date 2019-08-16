@@ -879,7 +879,7 @@ namespace ts {
 
         setText(text, start, length);
 
-        return {
+        const scanner: Scanner = {
             getStartPos: () => startPos,
             getTextPos: () => pos,
             getToken: () => token,
@@ -914,6 +914,17 @@ namespace ts {
             lookAhead,
             scanRange,
         };
+
+        if (Debug.isDebugging) {
+            Object.defineProperty(scanner, "__debugShowCurrentPositionInText", {
+                get: () => {
+                    const text = scanner.getText();
+                    return text.slice(0, scanner.getStartPos()) + "║" + text.slice(scanner.getStartPos());
+                },
+            });
+        }
+
+        return scanner;
 
         function error(message: DiagnosticMessage): void;
         function error(message: DiagnosticMessage, errPos: number, length: number): void;
