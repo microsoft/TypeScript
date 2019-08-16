@@ -3044,7 +3044,7 @@ namespace ts {
         return createBinary(left, SyntaxKind.BarBarToken, right);
     }
 
-    export function createNullishCoalescing(left: Expression, right: Expression) {
+    export function createNullishCoalesce(left: Expression, right: Expression) {
         return createBinary(left, SyntaxKind.QuestionQuestionToken, right);
     }
 
