@@ -336,7 +336,7 @@ const lintFoldEnd = async () => { if (fold.isTravis()) console.log(fold.end("lin
 const eslint = (folder) => async () => {
     const ESLINTRC_CI = ".eslintrc.ci.json";
     const ESLINTRC = ".eslintrc.json";
-    const isCIEnv = process.env.CI === "true";
+    const isCIEnv = cmdLineOptions.ci || process.env.CI === "true";
     const config = isCIEnv && fs.existsSync(path.resolve(folder, ESLINTRC_CI)) ? ESLINTRC_CI : ESLINTRC;
 
     const args = [
@@ -364,11 +364,17 @@ const lintCompiler = eslint("src");
 lintCompiler.displayName = "lint-compiler";
 task("lint-compiler", series([buildEslintRules, lintFoldStart, lintCompiler, lintFoldEnd]));
 task("lint-compiler").description = "Runs eslint on the compiler sources.";
+task("lint-compiler").flags = {
+    "   --ci": "Runs eslint additional rules",
+};
 
 const lint = series([buildEslintRules, lintFoldStart, lintScripts, lintCompiler, lintFoldEnd]);
 lint.displayName = "lint";
 task("lint", series([buildEslintRules, lintFoldStart, lint, lintFoldEnd]));
 task("lint").description = "Runs eslint on the compiler and scripts sources.";
+task("lint").flags = {
+    "   --ci": "Runs eslint additional rules",
+};
 
 const buildCancellationToken = () => buildProject("src/cancellationToken");
 const cleanCancellationToken = () => cleanProject("src/cancellationToken");
