@@ -1,9 +1,5 @@
 {
     "extends": "../.eslintrc.json",
-    "parserOptions": {
-        "tsconfigRootDir": "src",
-        "project": "./tsconfig-base.json"
-    },
     "overrides": [
         {
             "files": ["lib/*.d.ts"],

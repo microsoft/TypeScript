@@ -1,11 +1,3 @@
 {
-    "extends": "../.eslintrc.json",
-    "parserOptions": {
-        "tsconfigRootDir": "scripts",
-        "project": [
-            "./importDefinitelyTypedTests/tsconfig.json",
-            "./eslint/tsconfig.json",
-            "./tsconfig.eslint.json"
-        ]
-    }
+    "extends": "../.eslintrc.json"
 }
