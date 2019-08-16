@@ -20266,7 +20266,7 @@ namespace ts {
             }
 
             function generateInitialErrorChain(): DiagnosticMessageChain {
-                const componentName = getTextOfNode(openingLikeElement.tagName)
+                const componentName = getTextOfNode(openingLikeElement.tagName);
                 return chainDiagnosticMessages(/* details */ undefined, Diagnostics._0_cannot_be_used_as_a_JSX_component, componentName);
             }
         }
