@@ -2522,7 +2522,6 @@ namespace ts {
                         constructorSymbol.members = constructorSymbol.members || createSymbolTable();
                         // It's acceptable for multiple 'this' assignments of the same identifier to occur
                         declareSymbol(constructorSymbol.members, constructorSymbol, node, SymbolFlags.Property, SymbolFlags.PropertyExcludes & ~SymbolFlags.Property);
-                        // TODO: Also do this for Object.defineProperty assignments
                         addDeclarationToSymbol(constructorSymbol, constructorSymbol.valueDeclaration, SymbolFlags.Class);
                     }
                     break;

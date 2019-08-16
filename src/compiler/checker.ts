@@ -18319,7 +18319,7 @@ namespace ts {
                     // (should be able to use the symbol.parent trick instead)
                     const classSymbol = checkExpression(className).symbol;
                     if (classSymbol && classSymbol.members && (classSymbol.flags & SymbolFlags.Function)) {
-                        const classType = (getDeclaredTypeOfSymbol(classSymbol) as InterfaceType).thisType!
+                        const classType = (getDeclaredTypeOfSymbol(classSymbol) as InterfaceType).thisType!;
                         return getFlowTypeOfReference(node, classType);
                     }
                 }
