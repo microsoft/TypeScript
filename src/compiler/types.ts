@@ -3345,7 +3345,7 @@ namespace ts {
          * This should be called in a loop climbing parents of the symbol, so we'll get `N`.
          */
         /* @internal */ getAccessibleSymbolChain(symbol: Symbol, enclosingDeclaration: Node | undefined, meaning: SymbolFlags, useOnlyExternalAliasing: boolean): Symbol[] | undefined;
-        /* @internal */ getTypePredicateOfSignature(signature: Signature): TypePredicate;
+        /* @internal */ getTypePredicateOfSignature(signature: Signature): TypePredicate | undefined;
         /**
          * An external module with an 'export =' declaration resolves to the target of the 'export =' declaration,
          * and an external module with no 'export =' declaration resolves to the module itself.
@@ -4502,8 +4502,10 @@ namespace ts {
         LiteralKeyof                 = 1 << 5,  // Inference made from a string literal to a keyof T
         NoConstraints                = 1 << 6,  // Don't infer from constraints of instantiable types
         AlwaysStrict                 = 1 << 7,  // Always use strict rules for contravariant inferences
+        MaxValue                     = 1 << 8,  // Seed for inference priority tracking
 
         PriorityImpliesCombination = ReturnType | MappedTypeConstraint | LiteralKeyof,  // These priorities imply that the resulting type should be a combination of all candidates
+        Circularity = -1,  // Inference circularity (value less than all other priorities)
     }
 
     /* @internal */
