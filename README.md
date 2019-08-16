@@ -88,7 +88,7 @@ gulp runtests          # Run tests using the built compiler and test infrastruct
                        # works on disk in the tests/cases/user directory, while the docker runner works in containers.
                        # You'll need to have the docker executable in your system path for the docker runner to work.
 gulp runtests-parallel # Like runtests, but split across multiple threads. Uses a number of threads equal to the system
-                       # core count by default. Use --workerCount=<number> to adjust this.
+                       # core count by default. Use --workers=<number> to adjust this.
 gulp baseline-accept   # This replaces the baseline test results with the results obtained from gulp runtests.
 gulp lint              # Runs tslint on the TypeScript source.
 gulp help              # List the above commands.
