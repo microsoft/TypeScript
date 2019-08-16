@@ -4502,8 +4502,10 @@ namespace ts {
         LiteralKeyof                 = 1 << 5,  // Inference made from a string literal to a keyof T
         NoConstraints                = 1 << 6,  // Don't infer from constraints of instantiable types
         AlwaysStrict                 = 1 << 7,  // Always use strict rules for contravariant inferences
+        MaxValue                     = 1 << 8,  // Seed for inference priority tracking
 
         PriorityImpliesCombination = ReturnType | MappedTypeConstraint | LiteralKeyof,  // These priorities imply that the resulting type should be a combination of all candidates
+        Circularity = -1,  // Inference circularity (value less than all other priorities)
     }
 
     /* @internal */
