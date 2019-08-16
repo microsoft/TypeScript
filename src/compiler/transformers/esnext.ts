@@ -1,6 +1,10 @@
 /*@internal*/
 namespace ts {
     export function transformESNext(context: TransformationContext) {
+        const {
+            hoistVariableDeclaration,
+        } = context;
+
         return chainBundle(transformSourceFile);
 
         function transformSourceFile(node: SourceFile) {
@@ -40,7 +44,7 @@ namespace ts {
             const expressions: Expression[] = [];
             let left = visitNode(node.left, visitor, isExpression);
             if (!isIdentifier(left)) {
-                const temp = createTempVariable(/*recordTempVariable*/ undefined);
+                const temp = createTempVariable(hoistVariableDeclaration);
                 expressions.push(createAssignment(temp, left));
                 left = temp;
             }

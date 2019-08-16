@@ -20,6 +20,23 @@ const aa7 = a7 ?? 'whatever'
 const aa8 = a8 ?? 'whatever'
 const aa9 = a9 ?? 'whatever'
 
+
+declare let a: any, b: any, c: any;
+
+let x1 = (a ?? b as any) || c;
+let x2 = c || (a ?? b as any);
+let x3 = ((a ?? b) as any) || c;
+let x4 = c || ((a ?? b) as any);
+let x5 = (a ?? b) as any || c;
+let x6 = c || (a ?? b) as any;
+
+let y1 = (a ?? b as any) && c;
+let y2 = c && (a ?? b as any);
+let y3 = ((a ?? b) as any) && c;
+let y4 = c && ((a ?? b) as any);
+let y5 = (a ?? b) as any && c;
+let y6 = c && (a ?? b) as any;
+
 //// [nullishCoalescingOperator_esnext.js]
 "use strict";
 const aa1 = a1 ?? 'whatever';
@@ -31,3 +48,15 @@ const aa6 = a6 ?? 'whatever';
 const aa7 = a7 ?? 'whatever';
 const aa8 = a8 ?? 'whatever';
 const aa9 = a9 ?? 'whatever';
+let x1 = (a ?? b) || c;
+let x2 = c || (a ?? b);
+let x3 = (a ?? b) || c;
+let x4 = c || (a ?? b);
+let x5 = (a ?? b) || c;
+let x6 = c || (a ?? b);
+let y1 = (a ?? b) && c;
+let y2 = c && (a ?? b);
+let y3 = (a ?? b) && c;
+let y4 = c && (a ?? b);
+let y5 = (a ?? b) && c;
+let y6 = c && (a ?? b);

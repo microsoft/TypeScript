@@ -41,6 +41,7 @@ a && (b ?? c);
 
 
 //// [nullishCoalescingOperator5.js]
+var _a, _b, _c, _d;
 "use strict";
 // should be a syntax error
 typeof a !== "undefined" && a !== null ? a : b || c;

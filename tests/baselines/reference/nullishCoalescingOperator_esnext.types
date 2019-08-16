@@ -92,3 +92,133 @@ const aa9 = a9 ?? 'whatever'
 >a9 : any
 >'whatever' : "whatever"
 
+
+declare let a: any, b: any, c: any;
+>a : any
+>b : any
+>c : any
+
+let x1 = (a ?? b as any) || c;
+>x1 : any
+>(a ?? b as any) || c : any
+>(a ?? b as any) : any
+>a ?? b as any : any
+>a : any
+>b as any : any
+>b : any
+>c : any
+
+let x2 = c || (a ?? b as any);
+>x2 : any
+>c || (a ?? b as any) : any
+>c : any
+>(a ?? b as any) : any
+>a ?? b as any : any
+>a : any
+>b as any : any
+>b : any
+
+let x3 = ((a ?? b) as any) || c;
+>x3 : any
+>((a ?? b) as any) || c : any
+>((a ?? b) as any) : any
+>(a ?? b) as any : any
+>(a ?? b) : any
+>a ?? b : any
+>a : any
+>b : any
+>c : any
+
+let x4 = c || ((a ?? b) as any);
+>x4 : any
+>c || ((a ?? b) as any) : any
+>c : any
+>((a ?? b) as any) : any
+>(a ?? b) as any : any
+>(a ?? b) : any
+>a ?? b : any
+>a : any
+>b : any
+
+let x5 = (a ?? b) as any || c;
+>x5 : any
+>(a ?? b) as any || c : any
+>(a ?? b) as any : any
+>(a ?? b) : any
+>a ?? b : any
+>a : any
+>b : any
+>c : any
+
+let x6 = c || (a ?? b) as any;
+>x6 : any
+>c || (a ?? b) as any : any
+>c : any
+>(a ?? b) as any : any
+>(a ?? b) : any
+>a ?? b : any
+>a : any
+>b : any
+
+let y1 = (a ?? b as any) && c;
+>y1 : any
+>(a ?? b as any) && c : any
+>(a ?? b as any) : any
+>a ?? b as any : any
+>a : any
+>b as any : any
+>b : any
+>c : any
+
+let y2 = c && (a ?? b as any);
+>y2 : any
+>c && (a ?? b as any) : any
+>c : any
+>(a ?? b as any) : any
+>a ?? b as any : any
+>a : any
+>b as any : any
+>b : any
+
+let y3 = ((a ?? b) as any) && c;
+>y3 : any
+>((a ?? b) as any) && c : any
+>((a ?? b) as any) : any
+>(a ?? b) as any : any
+>(a ?? b) : any
+>a ?? b : any
+>a : any
+>b : any
+>c : any
+
+let y4 = c && ((a ?? b) as any);
+>y4 : any
+>c && ((a ?? b) as any) : any
+>c : any
+>((a ?? b) as any) : any
+>(a ?? b) as any : any
+>(a ?? b) : any
+>a ?? b : any
+>a : any
+>b : any
+
+let y5 = (a ?? b) as any && c;
+>y5 : any
+>(a ?? b) as any && c : any
+>(a ?? b) as any : any
+>(a ?? b) : any
+>a ?? b : any
+>a : any
+>b : any
+>c : any
+
+let y6 = c && (a ?? b) as any;
+>y6 : any
+>c && (a ?? b) as any : any
+>c : any
+>(a ?? b) as any : any
+>(a ?? b) : any
+>a ?? b : any
+>a : any
+>b : any
+
