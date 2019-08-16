@@ -3527,8 +3527,8 @@ namespace ts {
         }
 
         function getTypeNamesForErrorDisplay(left: Type, right: Type): [string, string] {
-            let leftStr = hasNoContextSymbolvalueDeclaration(left) ? typeToString(left, left.symbol.valueDeclaration) : typeToString(left);
-            let rightStr = hasNoContextSymbolvalueDeclaration(right) ? typeToString(right, right.symbol.valueDeclaration) : typeToString(right);
+            let leftStr = symbolValueDeclarationIsContextSensitive(left.symbol) ? typeToString(left, left.symbol.valueDeclaration) : typeToString(left);
+            let rightStr = symbolValueDeclarationIsContextSensitive(right.symbol) ? typeToString(right, right.symbol.valueDeclaration) : typeToString(right);
             if (leftStr === rightStr) {
                 leftStr = typeToString(left, /*enclosingDeclaration*/ undefined, TypeFormatFlags.UseFullyQualifiedType);
                 rightStr = typeToString(right, /*enclosingDeclaration*/ undefined, TypeFormatFlags.UseFullyQualifiedType);
@@ -3536,9 +3536,8 @@ namespace ts {
             return [leftStr, rightStr];
         }
 
-        function hasNoContextSymbolvalueDeclaration(type: Type): boolean {
-            if (type.symbol === undefined || type.symbol.valueDeclaration === undefined) return false;
-            return isExpression(type.symbol.valueDeclaration) ? !isContextSensitive(type.symbol.valueDeclaration) : false;
+        function symbolValueDeclarationIsContextSensitive(symbol: Symbol): boolean {
+            return symbol && symbol.valueDeclaration && isExpression(symbol.valueDeclaration) && !isContextSensitive(symbol.valueDeclaration);
         }
 
         function toNodeBuilderFlags(flags = TypeFormatFlags.None): NodeBuilderFlags {
@@ -12709,8 +12708,8 @@ namespace ts {
             }
 
             function tryElaborateErrorsForPrimitivesAndObjects(source: Type, target: Type) {
-                const sourceType = hasNoContextSymbolvalueDeclaration(source) ? typeToString(source, source.symbol.valueDeclaration) : typeToString(source);
-                const targetType = hasNoContextSymbolvalueDeclaration(target) ? typeToString(target, target.symbol.valueDeclaration) : typeToString(target);
+                const sourceType = symbolValueDeclarationIsContextSensitive(source.symbol) ? typeToString(source, source.symbol.valueDeclaration) : typeToString(source);
+                const targetType = symbolValueDeclarationIsContextSensitive(target.symbol) ? typeToString(target, target.symbol.valueDeclaration) : typeToString(target);
 
                 if ((globalStringType === source && stringType === target) ||
                     (globalNumberType === source && numberType === target) ||
