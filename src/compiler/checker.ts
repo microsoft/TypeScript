@@ -15696,7 +15696,7 @@ namespace ts {
                     inferencePriority = Math.min(inferencePriority, status);
                     return;
                 }
-                (visited || (visited = createMap<number>())).set(key, -1);
+                (visited || (visited = createMap<number>())).set(key, InferencePriority.Circularity);
                 const saveInferencePriority = inferencePriority;
                 inferencePriority = InferencePriority.MaxValue;
                 action(source, target);
@@ -15789,7 +15789,7 @@ namespace ts {
                                 inferencePriority = InferencePriority.MaxValue;
                                 inferFromTypes(sources[i], t);
                                 if (inferencePriority === priority) matched[i] = true;
-                                inferenceCircularity = inferenceCircularity || inferencePriority < 0;
+                                inferenceCircularity = inferenceCircularity || inferencePriority === InferencePriority.Circularity;
                                 inferencePriority = Math.min(inferencePriority, saveInferencePriority);
                             }
                         }
@@ -15901,7 +15901,7 @@ namespace ts {
                 const symbol = isNonConstructorObject ? target.symbol : undefined;
                 if (symbol) {
                     if (contains(symbolStack, symbol)) {
-                        inferencePriority = -1;
+                        inferencePriority = InferencePriority.Circularity;
                         return;
                     }
                     (symbolStack || (symbolStack = [])).push(symbol);
