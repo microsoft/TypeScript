@@ -1,10 +1,147 @@
 Exit Code: 1
 Standard output:
-test/fixtures/issue-5176-flow-class-properties/src/App.js(5,8): error TS8010: 'types' can only be used in a .ts file.
-test/fixtures/issue-5176-flow-class-properties/src/App.js(5,13): error TS1005: ';' expected.
-test/fixtures/webpack-message-formatting/src/AppBabel.js(6,8): error TS17008: JSX element 'div' has no corresponding closing tag.
-test/fixtures/webpack-message-formatting/src/AppBabel.js(8,7): error TS17002: Expected corresponding JSX closing tag for 'span'.
-test/fixtures/webpack-message-formatting/src/AppBabel.js(14,1): error TS1005: '</' expected.
+node_modules/commander/typings/index.d.ts(26,25): error TS2304: Cannot find name 'NodeJS'.
+packages/babel-preset-react-app/create.js(24,5): error TS2591: Cannot find name 'require'. Do you need to install type definitions for node? Try `npm i @types/node` and then add `node` to the types field in your tsconfig.
+packages/babel-preset-react-app/create.js(26,5): error TS2591: Cannot find name 'require'. Do you need to install type definitions for node? Try `npm i @types/node` and then add `node` to the types field in your tsconfig.
+packages/babel-preset-react-app/create.js(31,7): error TS2591: Cannot find name 'require'. Do you need to install type definitions for node? Try `npm i @types/node` and then add `node` to the types field in your tsconfig.
+packages/babel-preset-react-app/create.js(38,7): error TS2591: Cannot find name 'require'. Do you need to install type definitions for node? Try `npm i @types/node` and then add `node` to the types field in your tsconfig.
+packages/babel-preset-react-app/create.js(45,7): error TS2591: Cannot find name 'require'. Do you need to install type definitions for node? Try `npm i @types/node` and then add `node` to the types field in your tsconfig.
+packages/babel-preset-react-app/create.js(63,7): error TS2591: Cannot find name 'require'. Do you need to install type definitions for node? Try `npm i @types/node` and then add `node` to the types field in your tsconfig.
+packages/babel-preset-react-app/create.js(65,7): error TS2591: Cannot find name 'require'. Do you need to install type definitions for node? Try `npm i @types/node` and then add `node` to the types field in your tsconfig.
+packages/babel-preset-react-app/create.js(74,19): error TS2307: Cannot find module 'babel-preset-env'.
+packages/babel-preset-react-app/create.js(82,9): error TS2591: Cannot find name 'require'. Do you need to install type definitions for node? Try `npm i @types/node` and then add `node` to the types field in your tsconfig.
+packages/babel-preset-react-app/create.js(86,9): error TS2591: Cannot find name 'require'. Do you need to install type definitions for node? Try `npm i @types/node` and then add `node` to the types field in your tsconfig.
+packages/babel-preset-react-app/create.js(94,11): error TS2591: Cannot find name 'require'. Do you need to install type definitions for node? Try `npm i @types/node` and then add `node` to the types field in your tsconfig.
+packages/babel-preset-react-app/create.js(110,9): error TS2591: Cannot find name 'require'. Do you need to install type definitions for node? Try `npm i @types/node` and then add `node` to the types field in your tsconfig.
+packages/babel-preset-react-app/create.js(115,11): error TS2591: Cannot find name 'require'. Do you need to install type definitions for node? Try `npm i @types/node` and then add `node` to the types field in your tsconfig.
+packages/babel-preset-react-app/create.js(122,9): error TS2591: Cannot find name 'require'. Do you need to install type definitions for node? Try `npm i @types/node` and then add `node` to the types field in your tsconfig.
+packages/babel-preset-react-app/index.js(17,11): error TS2591: Cannot find name 'process'. Do you need to install type definitions for node? Try `npm i @types/node` and then add `node` to the types field in your tsconfig.
+packages/babel-preset-react-app/index.js(17,36): error TS2591: Cannot find name 'process'. Do you need to install type definitions for node? Try `npm i @types/node` and then add `node` to the types field in your tsconfig.
+packages/create-react-app/createReactApp.js(37,37): error TS2307: Cannot find module 'validate-npm-package-name'.
+packages/create-react-app/createReactApp.js(41,22): error TS2307: Cannot find module 'path'.
+packages/create-react-app/createReactApp.js(42,26): error TS2307: Cannot find module 'child_process'.
+packages/create-react-app/createReactApp.js(45,21): error TS2307: Cannot find module 'dns'.
+packages/create-react-app/createReactApp.js(47,24): error TS2307: Cannot find module 'tar-pack'.
+packages/create-react-app/createReactApp.js(49,28): error TS2307: Cannot find module 'hyperquest'.
+packages/create-react-app/createReactApp.js(50,25): error TS2307: Cannot find module 'envinfo'.
+packages/create-react-app/createReactApp.js(52,29): error TS2732: Cannot find module './package.json'. Consider using '--resolveJsonModule' to import module with '.json' extension
+packages/create-react-app/createReactApp.js(107,10): error TS2591: Cannot find name 'process'. Do you need to install type definitions for node? Try `npm i @types/node` and then add `node` to the types field in your tsconfig.
+packages/create-react-app/createReactApp.js(116,5): error TS2591: Cannot find name 'process'. Do you need to install type definitions for node? Try `npm i @types/node` and then add `node` to the types field in your tsconfig.
+packages/create-react-app/createReactApp.js(129,3): error TS2591: Cannot find name 'process'. Do you need to install type definitions for node? Try `npm i @types/node` and then add `node` to the types field in your tsconfig.
+packages/create-react-app/createReactApp.js(146,10): error TS2591: Cannot find name 'process'. Do you need to install type definitions for node? Try `npm i @types/node` and then add `node` to the types field in your tsconfig.
+packages/create-react-app/createReactApp.js(163,5): error TS2591: Cannot find name 'process'. Do you need to install type definitions for node? Try `npm i @types/node` and then add `node` to the types field in your tsconfig.
+packages/create-react-app/createReactApp.js(180,29): error TS2591: Cannot find name 'process'. Do you need to install type definitions for node? Try `npm i @types/node` and then add `node` to the types field in your tsconfig.
+packages/create-react-app/createReactApp.js(181,3): error TS2591: Cannot find name 'process'. Do you need to install type definitions for node? Try `npm i @types/node` and then add `node` to the types field in your tsconfig.
+packages/create-react-app/createReactApp.js(183,5): error TS2591: Cannot find name 'process'. Do you need to install type definitions for node? Try `npm i @types/node` and then add `node` to the types field in your tsconfig.
+packages/create-react-app/createReactApp.js(186,25): error TS2591: Cannot find name 'process'. Do you need to install type definitions for node? Try `npm i @types/node` and then add `node` to the types field in your tsconfig.
+packages/create-react-app/createReactApp.js(189,31): error TS2591: Cannot find name 'process'. Do you need to install type definitions for node? Try `npm i @types/node` and then add `node` to the types field in your tsconfig.
+packages/create-react-app/createReactApp.js(316,9): error TS2591: Cannot find name 'process'. Do you need to install type definitions for node? Try `npm i @types/node` and then add `node` to the types field in your tsconfig.
+packages/create-react-app/createReactApp.js(375,9): error TS2591: Cannot find name 'process'. Do you need to install type definitions for node? Try `npm i @types/node` and then add `node` to the types field in your tsconfig.
+packages/create-react-app/createReactApp.js(379,7): error TS2591: Cannot find name 'process'. Do you need to install type definitions for node? Try `npm i @types/node` and then add `node` to the types field in your tsconfig.
+packages/create-react-app/createReactApp.js(509,5): error TS2591: Cannot find name 'process'. Do you need to install type definitions for node? Try `npm i @types/node` and then add `node` to the types field in your tsconfig.
+packages/create-react-app/createReactApp.js(519,25): error TS2591: Cannot find name 'process'. Do you need to install type definitions for node? Try `npm i @types/node` and then add `node` to the types field in your tsconfig.
+packages/create-react-app/createReactApp.js(526,7): error TS2591: Cannot find name 'process'. Do you need to install type definitions for node? Try `npm i @types/node` and then add `node` to the types field in your tsconfig.
+packages/create-react-app/createReactApp.js(529,5): error TS2591: Cannot find name 'process'. Do you need to install type definitions for node? Try `npm i @types/node` and then add `node` to the types field in your tsconfig.
+packages/create-react-app/createReactApp.js(543,5): error TS2591: Cannot find name 'process'. Do you need to install type definitions for node? Try `npm i @types/node` and then add `node` to the types field in your tsconfig.
+packages/create-react-app/createReactApp.js(559,5): error TS2591: Cannot find name 'process'. Do you need to install type definitions for node? Try `npm i @types/node` and then add `node` to the types field in your tsconfig.
+packages/create-react-app/createReactApp.js(568,5): error TS2591: Cannot find name 'process'. Do you need to install type definitions for node? Try `npm i @types/node` and then add `node` to the types field in your tsconfig.
+packages/create-react-app/createReactApp.js(586,33): error TS2591: Cannot find name 'process'. Do you need to install type definitions for node? Try `npm i @types/node` and then add `node` to the types field in your tsconfig.
+packages/create-react-app/createReactApp.js(591,5): error TS2591: Cannot find name 'process'. Do you need to install type definitions for node? Try `npm i @types/node` and then add `node` to the types field in your tsconfig.
+packages/create-react-app/createReactApp.js(597,5): error TS2591: Cannot find name 'process'. Do you need to install type definitions for node? Try `npm i @types/node` and then add `node` to the types field in your tsconfig.
+packages/create-react-app/createReactApp.js(654,7): error TS2591: Cannot find name 'process'. Do you need to install type definitions for node? Try `npm i @types/node` and then add `node` to the types field in your tsconfig.
+packages/create-react-app/createReactApp.js(655,12): error TS2591: Cannot find name 'process'. Do you need to install type definitions for node? Try `npm i @types/node` and then add `node` to the types field in your tsconfig.
+packages/create-react-app/createReactApp.js(669,15): error TS2591: Cannot find name 'process'. Do you need to install type definitions for node? Try `npm i @types/node` and then add `node` to the types field in your tsconfig.
+packages/create-react-app/createReactApp.js(711,7): error TS2591: Cannot find name 'process'. Do you need to install type definitions for node? Try `npm i @types/node` and then add `node` to the types field in your tsconfig.
+packages/create-react-app/index.js(41,26): error TS2591: Cannot find name 'process'. Do you need to install type definitions for node? Try `npm i @types/node` and then add `node` to the types field in your tsconfig.
+packages/create-react-app/index.js(55,3): error TS2591: Cannot find name 'process'. Do you need to install type definitions for node? Try `npm i @types/node` and then add `node` to the types field in your tsconfig.
+packages/react-dev-utils/FileSizeReporter.js(10,18): error TS2307: Cannot find module 'fs'.
+packages/react-dev-utils/FileSizeReporter.js(11,20): error TS2307: Cannot find module 'path'.
+packages/react-dev-utils/FileSizeReporter.js(13,24): error TS2307: Cannot find module 'filesize'.
+packages/react-dev-utils/FileSizeReporter.js(14,25): error TS2307: Cannot find module 'recursive-readdir'.
+packages/react-dev-utils/FileSizeReporter.js(16,24): error TS2307: Cannot find module 'gzip-size'.
+packages/react-dev-utils/ModuleScopePlugin.js(11,22): error TS2307: Cannot find module 'path'.
+packages/react-dev-utils/WebpackDevServerUtils.js(9,25): error TS2307: Cannot find module 'address'.
+packages/react-dev-utils/WebpackDevServerUtils.js(10,20): error TS2307: Cannot find module 'fs'.
+packages/react-dev-utils/WebpackDevServerUtils.js(11,22): error TS2307: Cannot find module 'path'.
+packages/react-dev-utils/WebpackDevServerUtils.js(14,24): error TS2307: Cannot find module 'detect-port-alt'.
+packages/react-dev-utils/WebpackDevServerUtils.js(15,24): error TS2307: Cannot find module 'is-root'.
+packages/react-dev-utils/WebpackDevServerUtils.js(21,23): error TS2591: Cannot find name 'process'. Do you need to install type definitions for node? Try `npm i @types/node` and then add `node` to the types field in your tsconfig.
+packages/react-dev-utils/WebpackDevServerUtils.js(26,21): error TS2591: Cannot find name 'process'. Do you need to install type definitions for node? Try `npm i @types/node` and then add `node` to the types field in your tsconfig.
+packages/react-dev-utils/WebpackDevServerUtils.js(30,7): error TS2591: Cannot find name 'process'. Do you need to install type definitions for node? Try `npm i @types/node` and then add `node` to the types field in your tsconfig.
+packages/react-dev-utils/WebpackDevServerUtils.js(32,7): error TS2591: Cannot find name 'process'. Do you need to install type definitions for node? Try `npm i @types/node` and then add `node` to the types field in your tsconfig.
+packages/react-dev-utils/WebpackDevServerUtils.js(127,5): error TS2591: Cannot find name 'process'. Do you need to install type definitions for node? Try `npm i @types/node` and then add `node` to the types field in your tsconfig.
+packages/react-dev-utils/WebpackDevServerUtils.js(287,5): error TS2591: Cannot find name 'process'. Do you need to install type definitions for node? Try `npm i @types/node` and then add `node` to the types field in your tsconfig.
+packages/react-dev-utils/WebpackDevServerUtils.js(304,7): error TS2591: Cannot find name 'process'. Do you need to install type definitions for node? Try `npm i @types/node` and then add `node` to the types field in your tsconfig.
+packages/react-dev-utils/WebpackDevServerUtils.js(308,9): error TS2591: Cannot find name 'process'. Do you need to install type definitions for node? Try `npm i @types/node` and then add `node` to the types field in your tsconfig.
+packages/react-dev-utils/WebpackDevServerUtils.js(361,7): error TS2591: Cannot find name 'process'. Do you need to install type definitions for node? Try `npm i @types/node` and then add `node` to the types field in your tsconfig.
+packages/react-dev-utils/WebpackDevServerUtils.js(364,9): error TS2591: Cannot find name 'process'. Do you need to install type definitions for node? Try `npm i @types/node` and then add `node` to the types field in your tsconfig.
+packages/react-dev-utils/WebpackDevServerUtils.js(395,11): error TS2591: Cannot find name 'process'. Do you need to install type definitions for node? Try `npm i @types/node` and then add `node` to the types field in your tsconfig.
+packages/react-dev-utils/__tests__/ignoredFiles.test.js(12,1): error TS2593: Cannot find name 'describe'. Do you need to install type definitions for a test runner? Try `npm i @types/jest` or `npm i @types/mocha` and then add `jest` or `mocha` to the types field in your tsconfig.
+packages/react-dev-utils/__tests__/ignoredFiles.test.js(13,3): error TS2593: Cannot find name 'it'. Do you need to install type definitions for a test runner? Try `npm i @types/jest` or `npm i @types/mocha` and then add `jest` or `mocha` to the types field in your tsconfig.
+packages/react-dev-utils/__tests__/ignoredFiles.test.js(18,5): error TS2304: Cannot find name 'expect'.
+packages/react-dev-utils/__tests__/ignoredFiles.test.js(19,5): error TS2304: Cannot find name 'expect'.
+packages/react-dev-utils/__tests__/ignoredFiles.test.js(22,3): error TS2593: Cannot find name 'it'. Do you need to install type definitions for a test runner? Try `npm i @types/jest` or `npm i @types/mocha` and then add `jest` or `mocha` to the types field in your tsconfig.
+packages/react-dev-utils/__tests__/ignoredFiles.test.js(26,5): error TS2304: Cannot find name 'expect'.
+packages/react-dev-utils/__tests__/ignoredFiles.test.js(29,3): error TS2593: Cannot find name 'it'. Do you need to install type definitions for a test runner? Try `npm i @types/jest` or `npm i @types/mocha` and then add `jest` or `mocha` to the types field in your tsconfig.
+packages/react-dev-utils/__tests__/ignoredFiles.test.js(36,5): error TS2304: Cannot find name 'expect'.
+packages/react-dev-utils/__tests__/ignoredFiles.test.js(37,5): error TS2304: Cannot find name 'expect'.
+packages/react-dev-utils/__tests__/ignoredFiles.test.js(40,3): error TS2593: Cannot find name 'it'. Do you need to install type definitions for a test runner? Try `npm i @types/jest` or `npm i @types/mocha` and then add `jest` or `mocha` to the types field in your tsconfig.
+packages/react-dev-utils/__tests__/ignoredFiles.test.js(46,5): error TS2304: Cannot find name 'expect'.
+packages/react-dev-utils/__tests__/ignoredFiles.test.js(49,3): error TS2593: Cannot find name 'it'. Do you need to install type definitions for a test runner? Try `npm i @types/jest` or `npm i @types/mocha` and then add `jest` or `mocha` to the types field in your tsconfig.
+packages/react-dev-utils/__tests__/ignoredFiles.test.js(53,5): error TS2304: Cannot find name 'expect'.
+packages/react-dev-utils/checkRequiredFiles.js(10,18): error TS2307: Cannot find module 'fs'.
+packages/react-dev-utils/checkRequiredFiles.js(11,20): error TS2307: Cannot find module 'path'.
+packages/react-dev-utils/clearConsole.js(11,3): error TS2591: Cannot find name 'process'. Do you need to install type definitions for node? Try `npm i @types/node` and then add `node` to the types field in your tsconfig.
+packages/react-dev-utils/clearConsole.js(11,24): error TS2591: Cannot find name 'process'. Do you need to install type definitions for node? Try `npm i @types/node` and then add `node` to the types field in your tsconfig.
+packages/react-dev-utils/getProcessForPort.js(11,24): error TS2307: Cannot find module 'child_process'.
+packages/react-dev-utils/getProcessForPort.js(12,20): error TS2307: Cannot find module 'path'.
+packages/react-dev-utils/ignoredFiles.js(10,22): error TS2307: Cannot find module 'path'.
+packages/react-dev-utils/launchEditor.js(9,20): error TS2307: Cannot find module 'fs'.
+packages/react-dev-utils/launchEditor.js(10,22): error TS2307: Cannot find module 'path'.
+packages/react-dev-utils/launchEditor.js(11,31): error TS2307: Cannot find module 'child_process'.
+packages/react-dev-utils/launchEditor.js(12,20): error TS2307: Cannot find module 'os'.
+packages/react-dev-utils/launchEditor.js(178,7): error TS2591: Cannot find name 'process'. Do you need to install type definitions for node? Try `npm i @types/node` and then add `node` to the types field in your tsconfig.
+packages/react-dev-utils/launchEditor.js(179,29): error TS2591: Cannot find name 'process'. Do you need to install type definitions for node? Try `npm i @types/node` and then add `node` to the types field in your tsconfig.
+packages/react-dev-utils/launchEditor.js(186,9): error TS2591: Cannot find name 'process'. Do you need to install type definitions for node? Try `npm i @types/node` and then add `node` to the types field in your tsconfig.
+packages/react-dev-utils/launchEditor.js(195,16): error TS2591: Cannot find name 'process'. Do you need to install type definitions for node? Try `npm i @types/node` and then add `node` to the types field in your tsconfig.
+packages/react-dev-utils/launchEditor.js(215,16): error TS2591: Cannot find name 'process'. Do you need to install type definitions for node? Try `npm i @types/node` and then add `node` to the types field in your tsconfig.
+packages/react-dev-utils/launchEditor.js(235,7): error TS2591: Cannot find name 'process'. Do you need to install type definitions for node? Try `npm i @types/node` and then add `node` to the types field in your tsconfig.
+packages/react-dev-utils/launchEditor.js(236,13): error TS2591: Cannot find name 'process'. Do you need to install type definitions for node? Try `npm i @types/node` and then add `node` to the types field in your tsconfig.
+packages/react-dev-utils/launchEditor.js(237,14): error TS2591: Cannot find name 'process'. Do you need to install type definitions for node? Try `npm i @types/node` and then add `node` to the types field in your tsconfig.
+packages/react-dev-utils/launchEditor.js(238,13): error TS2591: Cannot find name 'process'. Do you need to install type definitions for node? Try `npm i @types/node` and then add `node` to the types field in your tsconfig.
+packages/react-dev-utils/launchEditor.js(301,5): error TS2591: Cannot find name 'process'. Do you need to install type definitions for node? Try `npm i @types/node` and then add `node` to the types field in your tsconfig.
+packages/react-dev-utils/launchEditor.js(319,5): error TS2591: Cannot find name 'process'. Do you need to install type definitions for node? Try `npm i @types/node` and then add `node` to the types field in your tsconfig.
+packages/react-dev-utils/launchEditor.js(359,7): error TS2591: Cannot find name 'process'. Do you need to install type definitions for node? Try `npm i @types/node` and then add `node` to the types field in your tsconfig.
+packages/react-dev-utils/openBrowser.js(11,24): error TS2307: Cannot find module 'child_process'.
+packages/react-dev-utils/openBrowser.js(13,19): error TS2307: Cannot find module 'opn'.
+packages/react-dev-utils/openBrowser.js(28,17): error TS2591: Cannot find name 'process'. Do you need to install type definitions for node? Try `npm i @types/node` and then add `node` to the types field in your tsconfig.
+packages/react-dev-utils/openBrowser.js(44,21): error TS2591: Cannot find name 'process'. Do you need to install type definitions for node? Try `npm i @types/node` and then add `node` to the types field in your tsconfig.
+packages/react-dev-utils/openBrowser.js(70,5): error TS2591: Cannot find name 'process'. Do you need to install type definitions for node? Try `npm i @types/node` and then add `node` to the types field in your tsconfig.
+packages/react-dev-utils/openBrowser.js(79,14): error TS2304: Cannot find name '__dirname'.
+packages/react-dev-utils/openBrowser.js(92,7): error TS2591: Cannot find name 'process'. Do you need to install type definitions for node? Try `npm i @types/node` and then add `node` to the types field in your tsconfig.
+packages/react-dev-utils/printHostingInstructions.js(13,20): error TS2307: Cannot find module 'fs'.
+packages/react-dev-utils/webpackHotDevClient.js(19,22): error TS2307: Cannot find module 'sockjs-client'.
+packages/react-dev-utils/webpackHotDevClient.js(24,28): error TS2307: Cannot find module 'react-error-overlay'.
+packages/react-dev-utils/webpackHotDevClient.js(53,5): error TS2591: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i @types/node` and then add `node` to the types field in your tsconfig.
+packages/react-dev-utils/webpackHotDevClient.js(53,26): error TS2591: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i @types/node` and then add `node` to the types field in your tsconfig.
+packages/react-dev-utils/webpackHotDevClient.js(54,3): error TS2591: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i @types/node` and then add `node` to the types field in your tsconfig.
+packages/react-dev-utils/webpackHotDevClient.js(223,40): error TS2304: Cannot find name '__webpack_hash__'.
+packages/react-dev-utils/webpackHotDevClient.js(228,10): error TS2591: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i @types/node` and then add `node` to the types field in your tsconfig.
+packages/react-dev-utils/webpackHotDevClient.js(233,8): error TS2591: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i @types/node` and then add `node` to the types field in your tsconfig.
+packages/react-dev-utils/webpackHotDevClient.js(261,16): error TS2591: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i @types/node` and then add `node` to the types field in your tsconfig.
+tasks/cra.js(11,20): error TS2307: Cannot find module 'fs'.
+tasks/cra.js(12,22): error TS2307: Cannot find module 'path'.
+tasks/cra.js(13,20): error TS2307: Cannot find module 'child_process'.
+tasks/cra.js(24,3): error TS2591: Cannot find name 'process'. Do you need to install type definitions for node? Try `npm i @types/node` and then add `node` to the types field in your tsconfig.
+tasks/cra.js(31,3): error TS2591: Cannot find name 'process'. Do you need to install type definitions for node? Try `npm i @types/node` and then add `node` to the types field in your tsconfig.
+tasks/cra.js(34,1): error TS2591: Cannot find name 'process'. Do you need to install type definitions for node? Try `npm i @types/node` and then add `node` to the types field in your tsconfig.
+tasks/cra.js(35,1): error TS2591: Cannot find name 'process'. Do you need to install type definitions for node? Try `npm i @types/node` and then add `node` to the types field in your tsconfig.
+tasks/cra.js(41,27): error TS2304: Cannot find name '__dirname'.
+tasks/cra.js(58,38): error TS2304: Cannot find name '__dirname'.
+tasks/cra.js(91,14): error TS2591: Cannot find name 'process'. Do you need to install type definitions for node? Try `npm i @types/node` and then add `node` to the types field in your tsconfig.
+tasks/replace-own-deps.js(12,20): error TS2307: Cannot find module 'fs'.
+tasks/replace-own-deps.js(13,22): error TS2307: Cannot find module 'path'.
+tasks/replace-own-deps.js(15,31): error TS2304: Cannot find name '__dirname'.
 
 
 

@@ -4783,9 +4783,9 @@ node_modules/chrome-devtools-frontend/front_end/diff/diff_match_patch.js(42,20):
 node_modules/chrome-devtools-frontend/front_end/diff/diff_match_patch.js(42,125): error TS2339: Property 'length1' does not exist on type 'number'.
 node_modules/chrome-devtools-frontend/front_end/diff/diff_match_patch.js(42,138): error TS2339: Property 'length2' does not exist on type 'number'.
 node_modules/chrome-devtools-frontend/front_end/diff/diff_match_patch.js(43,411): error TS2403: Subsequent variable declarations must have the same type.  Variable 'g' must be of type 'string', but here has type 'any'.
-node_modules/chrome-devtools-frontend/front_end/diff/diff_match_patch.js(43,443): error TS2367: This condition will always return 'false' since the types '1' and 'string' have no overlap.
-node_modules/chrome-devtools-frontend/front_end/diff/diff_match_patch.js(44,7): error TS2367: This condition will always return 'false' since the types '-1' and 'string' have no overlap.
-node_modules/chrome-devtools-frontend/front_end/diff/diff_match_patch.js(44,220): error TS2367: This condition will always return 'false' since the types '0' and 'string' have no overlap.
+node_modules/chrome-devtools-frontend/front_end/diff/diff_match_patch.js(43,443): error TS2367: This condition will always return 'false' since the types 'number' and 'string' have no overlap.
+node_modules/chrome-devtools-frontend/front_end/diff/diff_match_patch.js(44,7): error TS2367: This condition will always return 'false' since the types 'number' and 'string' have no overlap.
+node_modules/chrome-devtools-frontend/front_end/diff/diff_match_patch.js(44,220): error TS2367: This condition will always return 'false' since the types 'number' and 'string' have no overlap.
 node_modules/chrome-devtools-frontend/front_end/diff/diff_match_patch.js(47,403): error TS2339: Property 'diffs' does not exist on type 'typeof diff_match_patch'.
 node_modules/chrome-devtools-frontend/front_end/diff/diff_match_patch.js(47,417): error TS2339: Property 'start2' does not exist on type 'typeof diff_match_patch'.
 node_modules/chrome-devtools-frontend/front_end/diff/diff_match_patch.js(47,429): error TS2339: Property 'start1' does not exist on type 'typeof diff_match_patch'.
@@ -10101,7 +10101,7 @@ node_modules/chrome-devtools-frontend/front_end/source_frame/SourcesTextEditor.j
 node_modules/chrome-devtools-frontend/front_end/source_frame/SourcesTextEditor.js(822,79): error TS2339: Property 'charAt' does not exist on type 'void'.
 node_modules/chrome-devtools-frontend/front_end/source_frame/SourcesTextEditor.js(823,41): error TS2339: Property 'length' does not exist on type 'void'.
 node_modules/chrome-devtools-frontend/front_end/source_frame/SourcesTextEditor.js(823,88): error TS2339: Property 'charAt' does not exist on type 'void'.
-node_modules/chrome-devtools-frontend/front_end/source_frame/SourcesTextEditor.js(839,9): error TS2367: This condition will always return 'false' since the types 'void' and '0' have no overlap.
+node_modules/chrome-devtools-frontend/front_end/source_frame/SourcesTextEditor.js(839,9): error TS2367: This condition will always return 'false' since the types 'void' and 'number' have no overlap.
 node_modules/chrome-devtools-frontend/front_end/source_frame/SourcesTextEditor.js(854,9): error TS1345: An expression of type 'void' cannot be tested for truthiness
 node_modules/chrome-devtools-frontend/front_end/source_frame/SourcesTextEditor.js(862,12): error TS1345: An expression of type 'void' cannot be tested for truthiness
 node_modules/chrome-devtools-frontend/front_end/source_frame/SourcesTextEditor.js(862,13): error TS1345: An expression of type 'void' cannot be tested for truthiness
@@ -10893,7 +10893,7 @@ node_modules/chrome-devtools-frontend/front_end/text_editor/CodeMirrorTextEditor
 node_modules/chrome-devtools-frontend/front_end/text_editor/CodeMirrorTextEditor.js(968,62): error TS2339: Property 'offsetTop' does not exist on type 'Element'.
 node_modules/chrome-devtools-frontend/front_end/text_editor/CodeMirrorTextEditor.js(1003,20): error TS2345: Argument of type 'void' is not assignable to parameter of type 'Pos'.
 node_modules/chrome-devtools-frontend/front_end/text_editor/CodeMirrorTextEditor.js(1003,50): error TS2365: Operator '+' cannot be applied to types 'void' and 'number'.
-node_modules/chrome-devtools-frontend/front_end/text_editor/CodeMirrorTextEditor.js(1047,22): error TS2367: This condition will always return 'false' since the types 'void' and '1' have no overlap.
+node_modules/chrome-devtools-frontend/front_end/text_editor/CodeMirrorTextEditor.js(1047,22): error TS2367: This condition will always return 'false' since the types 'void' and 'number' have no overlap.
 node_modules/chrome-devtools-frontend/front_end/text_editor/CodeMirrorTextEditor.js(1052,104): error TS2339: Property 'widget' does not exist on type 'V'.
 node_modules/chrome-devtools-frontend/front_end/text_editor/CodeMirrorTextEditor.js(1089,41): error TS2339: Property 'top' does not exist on type 'void'.
 node_modules/chrome-devtools-frontend/front_end/text_editor/CodeMirrorTextEditor.js(1096,5): error TS2322: Type 'void' is not assignable to type 'number'.

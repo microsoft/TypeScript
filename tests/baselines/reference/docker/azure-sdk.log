@@ -2,12 +2,12 @@ Exit Code: 1
 Standard output:
 
 Rush Multi-Project Build Tool 5.X.X - https://rushjs.io
-Node.js version is 12.8.0 (pre-LTS)
+Node.js version is 12.8.1 (pre-LTS)
 Starting "rush rebuild"
 Executing a maximum of ?simultaneous processes...
+XX of XX: [@azure/abort-controller] completed successfully in ? seconds
 XX of XX: [@azure/identity] completed successfully in ? seconds
 XX of XX: [@azure/event-processor-host] completed successfully in ? seconds
-XX of XX: [@azure/abort-controller] completed successfully in ? seconds
 XX of XX: [@azure/core-arm] completed successfully in ? seconds
 XX of XX: [@azure/core-asynciterator-polyfill] completed successfully in ? seconds
 XX of XX: [@azure/core-auth] completed successfully in ? seconds
