@@ -2693,7 +2693,7 @@
         "category": "Error",
         "code": 2773
     },
-    "This expression cannot be used as a JSX component.": {
+    "'{0}' cannot be used as a JSX component.": {
         "category": "Error",
         "code": 2774
     },
