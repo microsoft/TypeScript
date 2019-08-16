@@ -7,4 +7,4 @@
 
 
 goTo.marker('');
-verify.quickInfoIs("K", "a golden opportunity");
+verify.quickInfoIs("any");
