@@ -17272,8 +17272,8 @@ namespace ts {
                 return result;
             }
 
-            function isFlowToRootDiscriminant(type: Type, candidate: Type) {
-                return (type.flags & TypeFlags.Unknown | TypeFlags.Any) && (candidate.flags & TypeFlags.Union) !== 0;
+            function isFlowToRootDiscriminant(type: Type, candidate: Type): candidate is UnionType {
+                return (type.flags & (TypeFlags.Unknown | TypeFlags.Any | TypeFlags.NonPrimitive)) !== 0 && (candidate.flags & TypeFlags.Union) !== 0;
             }
 
             function isMatchingReferenceDiscriminant(expr: Expression, computedType: Type) {
@@ -17653,12 +17653,7 @@ namespace ts {
 
             function getNarrowedType(type: Type, candidate: Type, assumeTrue: boolean, isRelated: (source: Type, target: Type) => boolean) {
                 if (isFlowToRootDiscriminant(type, candidate)) {
-                    if (assumeTrue) {
-                        rootDiscriminable = candidate as UnionType;
-                    }
-                    else {
-                        rootDiscriminable = undefined;
-                    }
+                        rootDiscriminable = assumeTrue ? candidate : undefined;
                 }
                 if (!assumeTrue) {
                     return filterType(type, t => !isRelated(t, candidate));
