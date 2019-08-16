@@ -207,36 +207,6 @@ namespace Harness.LanguageService {
         useCaseSensitiveFileNames() {
             return !this.vfs.ignoreCase;
         }
-
-        public getPackageJsonDependencyInfo(dependencyName: string, startingPath: string, inGroup: ts.PackageJsonDependencyGroup = ts.PackageJsonDependencyGroup.All): ts.PackageJsonDependencyInfo {
-            const packageJsons = ts.findPackageJsons(ts.getDirectoryPath(startingPath), this.sys);
-            const foundPackageJsonFileNames: string[] = [];
-            const result: ts.PackageJsonDependencyInfo = { foundPackageJsonFileNames };
-            for (const packageJsonFileName of packageJsons) {
-                const packageJsonContent = JSON.parse(this.sys.readFile(packageJsonFileName)!);
-                const dependencyGroups = [
-                    [ts.PackageJsonDependencyGroup.Dependencies, packageJsonContent.dependencies],
-                    [ts.PackageJsonDependencyGroup.DevDependencies, packageJsonContent.devDependencies],
-                    [ts.PackageJsonDependencyGroup.OptionalDependencies, packageJsonContent.optionalDependencies],
-                    [ts.PackageJsonDependencyGroup.PeerDependencies, packageJsonContent.peerDependencies],
-                ] as const;
-                foundPackageJsonFileNames.push(packageJsonFileName);
-                for (const [group, deps] of dependencyGroups) {
-                    if (deps && (inGroup & group)) {
-                        const dep = deps[dependencyName];
-                        if (dep) {
-                            result.foundDependency = {
-                                dependencyGroup: group,
-                                packageJsonFileName,
-                                versionString: dep,
-                            };
-                            return result;
-                        }
-                    }
-                }
-            }
-            return result;
-        }
     }
 
     /// Native adapter

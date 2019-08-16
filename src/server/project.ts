@@ -1404,15 +1404,15 @@ namespace ts.server {
         }
 
         /*@internal*/
-        getPackageJsonDependencyInfo(dependencyName: string, startingPath: string, inGroup: PackageJsonDependencyGroup = PackageJsonDependencyGroup.All): PackageJsonDependencyInfo {
+        getPackageJsonsVisibleToFile(fileName: string, rootDir?: string): readonly PackageJsonInfo[] {
             const packageJsonCache = this.packageJsonCache;
             const watchPackageJsonFile = this.watchPackageJsonFile.bind(this);
-            const foundPackageJsonFileNames: string[] = [];
-            const result: PackageJsonDependencyInfo = { foundPackageJsonFileNames };
-            forEachAncestorDirectory(getDirectoryPath(startingPath), function processDirectory(directory): boolean | undefined {
+            const currentDirectory = this.currentDirectory;
+            const getCanonicalFileName = this.getCanonicalFileName;
+            const result: PackageJsonInfo[] = [];
+            const rootPath = rootDir && toPath(rootDir, currentDirectory, this.getCanonicalFileName);
+            forEachAncestorDirectory(getDirectoryPath(fileName), function processDirectory(directory): boolean | undefined {
                 switch (packageJsonCache.directoryHasPackageJson(directory)) {
-                    // Continue
-                    case Ternary.False: return;
                     // Sync and check same directory again
                     case Ternary.Maybe:
                         packageJsonCache.searchDirectoryAndAncestors(directory);
@@ -1421,28 +1421,10 @@ namespace ts.server {
                     case Ternary.True:
                         const packageJsonFileName = combinePaths(directory, "package.json");
                         watchPackageJsonFile(packageJsonFileName);
-                        const info = Debug.assertDefined(packageJsonCache.get(packageJsonFileName));
-                        foundPackageJsonFileNames.push(packageJsonFileName);
-                        const dependencyGroups = [
-                            [PackageJsonDependencyGroup.Dependencies, info.dependencies],
-                            [PackageJsonDependencyGroup.DevDependencies, info.devDependencies],
-                            [PackageJsonDependencyGroup.OptionalDependencies, info.optionalDependencies],
-                            [PackageJsonDependencyGroup.PeerDependencies, info.peerDependencies],
-                        ] as const;
-
-                        for (const [group, deps] of dependencyGroups) {
-                            if (deps && (inGroup & group)) {
-                                const dep = deps.get(dependencyName);
-                                if (dep) {
-                                    result.foundDependency = {
-                                        dependencyGroup: group,
-                                        packageJsonFileName,
-                                        versionString: dep,
-                                    };
-                                    return true;
-                                }
-                            }
-                        }
+                        result.push(Debug.assertDefined(packageJsonCache.get(packageJsonFileName)));
+                }
+                if (rootPath && rootPath === toPath(directory, currentDirectory, getCanonicalFileName)) {
+                    return true;
                 }
             });
 

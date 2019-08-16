@@ -177,13 +177,14 @@ namespace ts {
         All = Dependencies | DevDependencies | PeerDependencies | OptionalDependencies,
     }
 
-    export interface PackageJsonDependencyInfo {
-        foundPackageJsonFileNames: readonly string[];
-        foundDependency?: {
-            packageJsonFileName: string;
-            dependencyGroup: PackageJsonDependencyGroup;
-            versionString: string;
-        };
+    export interface PackageJsonInfo {
+        fileName: string;
+        dependencies?: Map<string>;
+        devDependencies?: Map<string>;
+        peerDependencies?: Map<string>;
+        optionalDependencies?: Map<string>;
+        get(dependencyName: string, inGroups?: PackageJsonDependencyGroup): string | undefined;
+        has(dependencyName: string, inGroups?: PackageJsonDependencyGroup): boolean;
     }
 
     //
@@ -254,7 +255,7 @@ namespace ts {
         /* @internal */
         getSourceFileLike?(fileName: string): SourceFileLike | undefined;
         /* @internal */
-        getPackageJsonDependencyInfo?(dependencyName: string, startingPath: string, inGroup?: PackageJsonDependencyGroup): PackageJsonDependencyInfo;
+        getPackageJsonsVisibleToFile?(fileName: string, rootDir?: string): readonly PackageJsonInfo[];
         /* @internal */
         getImportSuggestionsCache?(): Completions.AutoImportSuggestionsCache;
     }

@@ -2079,6 +2079,89 @@ namespace ts {
         return packageJson;
     }
 
+    export function getPackageJsonsVisibleToFile(fileName: string, host: LanguageServiceHost): readonly PackageJsonInfo[] {
+        const fileExists = host.fileExists;
+        if (!fileExists) {
+            return [];
+        }
+
+        const packageJsons: PackageJsonInfo[] = [];
+        forEachAncestorDirectory(getDirectoryPath(fileName), ancestor => {
+            const packageJsonFileName = combinePaths(ancestor, "package.json");
+            if (fileExists(packageJsonFileName)) {
+                const info = createPackageJsonInfo(packageJsonFileName, host);
+                if (info) {
+                    packageJsons.push(info);
+                }
+            }
+        });
+
+        return packageJsons;
+    }
+
+    export function createPackageJsonInfo(fileName: string, host: LanguageServiceHost): PackageJsonInfo | undefined {
+        if (!host.readFile) {
+            return undefined;
+        }
+
+        type PackageJsonRaw = Record<typeof dependencyKeys[number], Record<string, string> | undefined>;
+        const dependencyKeys = ["dependencies", "devDependencies", "optionalDependencies", "peerDependencies"] as const;
+        const stringContent = host.readFile(fileName);
+        const content = stringContent && tryParseJson(stringContent) as PackageJsonRaw;
+        if (!content) {
+            return undefined;
+        }
+
+        const info: Pick<PackageJsonInfo, typeof dependencyKeys[number]> = {};
+        for (const key of dependencyKeys) {
+            const dependencies = content[key];
+            if (!dependencies) {
+                continue;
+            }
+            const dependencyMap = createMap<string>();
+            for (const packageName in dependencies) {
+                dependencyMap.set(packageName, dependencies[packageName]);
+            }
+            info[key] = dependencyMap;
+        }
+
+        const dependencyGroups = [
+            [PackageJsonDependencyGroup.Dependencies, info.dependencies],
+            [PackageJsonDependencyGroup.DevDependencies, info.devDependencies],
+            [PackageJsonDependencyGroup.OptionalDependencies, info.optionalDependencies],
+            [PackageJsonDependencyGroup.PeerDependencies, info.peerDependencies],
+        ] as const;
+
+        return {
+            ...info,
+            fileName,
+            get,
+            has(dependencyName, inGroups) {
+                return !!get(dependencyName, inGroups);
+            },
+        };
+
+        function get(dependencyName: string, inGroups = PackageJsonDependencyGroup.All) {
+            for (const [group, deps] of dependencyGroups) {
+                if (deps && (inGroups & group)) {
+                    const dep = deps.get(dependencyName);
+                    if (dep !== undefined) {
+                        return dep;
+                    }
+                }
+            }
+        }
+    }
+
+    function tryParseJson(text: string) {
+        try {
+            return JSON.parse(text);
+        }
+        catch {
+            return undefined;
+        }
+    }
+
     export function consumesNodeCoreModules(sourceFile: SourceFile): boolean {
         return some(sourceFile.imports, ({ text }) => JsTyping.nodeCoreModules.has(text));
     }

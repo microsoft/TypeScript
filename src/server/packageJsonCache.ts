@@ -1,12 +1,5 @@
 /*@internal*/
 namespace ts.server {
-    export interface PackageJsonInfo {
-        dependencies?: Map<string>;
-        devDependencies?: Map<string>;
-        peerDependencies?: Map<string>;
-        optionalDependencies?: Map<string>;
-    }
-
     export interface PackageJsonCache {
         addOrUpdate(fileName: string): void;
         delete(fileName: string): void;
@@ -51,7 +44,7 @@ namespace ts.server {
         };
 
         function addOrUpdate(fileName: string) {
-            const packageJsonInfo = tryReadPackageJson(project, fileName);
+            const packageJsonInfo = createPackageJsonInfo(fileName, project);
             if (packageJsonInfo) {
                 packageJsons.set(fileName, packageJsonInfo);
                 directoriesWithoutPackageJson.delete(getDirectoryPath(fileName));
@@ -62,31 +55,6 @@ namespace ts.server {
             return packageJsons.has(combinePaths(directory, "package.json")) ? Ternary.True :
                 directoriesWithoutPackageJson.has(directory) ? Ternary.False :
                 Ternary.Maybe;
-        }
-    }
-
-    function tryReadPackageJson(host: LanguageServiceHost, fileName: string): PackageJsonInfo | undefined {
-        const readFile = host.readFile ? host.readFile.bind(host) : sys.readFile;
-        type PackageJson = Record<typeof dependencyKeys[number], Record<string, string> | undefined>;
-        const dependencyKeys = ["dependencies", "devDependencies", "optionalDependencies", "peerDependencies"] as const;
-        try {
-            const content = JSON.parse(readFile(fileName)) as PackageJson;
-            const info: PackageJsonInfo = {};
-            for (const key of dependencyKeys) {
-                const dependencies = content[key];
-                if (!dependencies) {
-                    continue;
-                }
-                const dependencyMap = createMap<string>();
-                for (const packageName in dependencies) {
-                    dependencyMap.set(packageName, dependencies[packageName]);
-                }
-                info[key] = dependencyMap;
-            }
-            return info;
-        }
-        catch {
-            return undefined;
         }
     }
 }

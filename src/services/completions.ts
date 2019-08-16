@@ -53,13 +53,14 @@ namespace ts.Completions {
     }
     export interface AutoImportSuggestionsCache {
         clear(): void;
-        get(fileName: string, checker: TypeChecker): readonly AutoImportSuggestion[] | undefined;
-        set(fileName: string, suggestions: readonly AutoImportSuggestion[]): void;
+        get(fileName: string, checker: TypeChecker, projectVersion?: string): readonly AutoImportSuggestion[] | undefined;
+        set(fileName: string, suggestions: readonly AutoImportSuggestion[], projectVersion?: string): void;
         isEmpty: boolean;
         key: string | undefined;
     }
     export function createImportSuggestionsCache(): AutoImportSuggestionsCache {
         let cache: readonly AutoImportSuggestion[] | undefined;
+        let projectVersion: string | undefined;
         let fileName: string | undefined;
         return {
             get key() {
@@ -71,14 +72,21 @@ namespace ts.Completions {
             clear: () => {
                 cache = undefined;
                 fileName = undefined;
+                projectVersion = undefined;
             },
-            set: (file, suggestions) => {
+            set: (file, suggestions, version) => {
                 cache = suggestions;
                 fileName = file;
+                if (version) {
+                    projectVersion = version;
+                }
             },
-            get: (file, checker) => {
+            get: (file, checker, version) => {
                 if (file !== fileName) {
                     return undefined;
+                }
+                if (version) {
+                    return projectVersion === version ? cache : undefined;
                 }
                 forEach(cache, suggestion => {
                     // If the symbol/moduleSymbol was a merged symbol, it will have a new identity
@@ -1229,7 +1237,7 @@ namespace ts.Completions {
                 const lowerCaseTokenText = previousToken && isIdentifier(previousToken) ? previousToken.text.toLowerCase() : "";
                 const autoImportSuggestions = getSymbolsFromOtherSourceFileExports(program.getCompilerOptions().target!, host);
                 if (!detailsEntryId && importSuggestionsCache) {
-                    importSuggestionsCache.set(sourceFile.fileName, autoImportSuggestions);
+                    importSuggestionsCache.set(sourceFile.fileName, autoImportSuggestions, host.getProjectVersion && host.getProjectVersion());
                 }
                 autoImportSuggestions.forEach(({ symbol, symbolName, skipFilter, origin }) => {
                     if (detailsEntryId) {
@@ -1411,7 +1419,11 @@ namespace ts.Completions {
          *    everything from Bucket C to Bucket A.
          */
         function getSymbolsFromOtherSourceFileExports(target: ScriptTarget, host: LanguageServiceHost): readonly AutoImportSuggestion[] {
-            const cached = !detailsEntryId && importSuggestionsCache && importSuggestionsCache.get(sourceFile.fileName, typeChecker);
+            const cached = importSuggestionsCache && importSuggestionsCache.get(
+                sourceFile.fileName,
+                typeChecker,
+                detailsEntryId && host.getProjectVersion ? host.getProjectVersion() : undefined);
+
             if (cached) {
                 log("getSymbolsFromOtherSourceFileExports: Using cached list");
                 return cached;
@@ -1429,7 +1441,7 @@ namespace ts.Completions {
             /** Ids present in `results` for faster lookup */
             const resultSymbolIds = createMap<true>();
 
-            codefix.forEachExternalModuleToImportFrom(typeChecker, host, program.redirectTargetsMap, sourceFile, program.getSourceFiles(), moduleSymbol => {
+            codefix.forEachExternalModuleToImportFrom(typeChecker, host, program.redirectTargetsMap, sourceFile, program.getSourceFiles(), !detailsEntryId, moduleSymbol => {
                 // Perf -- ignore other modules if this is a request for details
                 if (detailsEntryId && detailsEntryId.source && stripQuotes(moduleSymbol.name) !== detailsEntryId.source) {
                     return;
