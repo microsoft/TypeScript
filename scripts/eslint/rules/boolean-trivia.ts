@@ -1,6 +1,5 @@
-import { SyntaxKind } from "typescript";
 import { AST_NODE_TYPES, TSESTree } from "@typescript-eslint/experimental-utils";
-import { getEsTreeNodeToTSNodeMap, createRule } from "./utils";
+import { createRule } from "./utils";
 
 export = createRule({
     name: "boolean-trivia",
@@ -20,19 +19,21 @@ export = createRule({
     defaultOptions: [],
 
     create(context) {
-        const esTreeNodeToTSNodeMap = getEsTreeNodeToTSNodeMap(context.parserServices);
         const sourceCode = context.getSourceCode();
         const sourceCodeText = sourceCode.getText();
 
         const isSetOrAssert = (name: string): boolean => name.startsWith("set") || name.startsWith("assert");
         const isTrivia = (node: TSESTree.Expression): boolean => {
-            const tsNode = esTreeNodeToTSNodeMap.get(node);
-
-            if (tsNode.kind === SyntaxKind.Identifier) {
-                return tsNode.originalKeywordKind === SyntaxKind.UndefinedKeyword;
+            if (node.type === AST_NODE_TYPES.Identifier) {
+                return node.name === "undefined";
             }
 
-            return [SyntaxKind.TrueKeyword, SyntaxKind.FalseKeyword, SyntaxKind.NullKeyword].indexOf(tsNode.kind) >= 0;
+            if (node.type === AST_NODE_TYPES.Literal) {
+                // eslint-disable-next-line no-null/no-null
+                return node.value === null || node.value === true || node.value === false;
+            }
+
+            return false;
         };
 
         const shouldIgnoreCalledExpression = (node: TSESTree.CallExpression): boolean => {

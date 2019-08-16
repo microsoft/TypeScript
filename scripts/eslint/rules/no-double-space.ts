@@ -1,6 +1,5 @@
-import { TSESTree } from "@typescript-eslint/experimental-utils";
-import { SyntaxKind } from "typescript";
-import { getEsTreeNodeToTSNodeMap, createRule } from "./utils";
+import { TSESTree, AST_NODE_TYPES } from "@typescript-eslint/experimental-utils";
+import { createRule } from "./utils";
 
 export = createRule({
     name: "no-double-space",
@@ -19,28 +18,19 @@ export = createRule({
     defaultOptions: [],
 
     create(context) {
-        const esTreeNodeToTSNodeMap = getEsTreeNodeToTSNodeMap(context.parserServices);
         const sourceCode = context.getSourceCode();
         const lines = sourceCode.getLines();
 
-        const isLiteral = (node: TSESTree.Node | null) => {
-            if (!node) {
-                return false;
-            }
+        const isStringLiteral = (node: TSESTree.Node | null): boolean => {
+            return !!(node && (
+                (node.type === AST_NODE_TYPES.TemplateElement) ||
+                (node.type === AST_NODE_TYPES.TemplateLiteral && node.quasis) ||
+                (node.type === AST_NODE_TYPES.Literal && typeof node.value === "string")
+            ));
+        };
 
-            const tsNode = esTreeNodeToTSNodeMap.get(node);
-            if (!tsNode) {
-                return false;
-            }
-
-            return [
-                SyntaxKind.NoSubstitutionTemplateLiteral,
-                SyntaxKind.RegularExpressionLiteral,
-                SyntaxKind.TemplateMiddle,
-                SyntaxKind.StringLiteral,
-                SyntaxKind.TemplateHead,
-                SyntaxKind.TemplateTail,
-            ].indexOf(tsNode.kind) >= 0;
+        const isRegexLiteral = (node: TSESTree.Node | null): boolean => {
+            return !!(node && node.type === AST_NODE_TYPES.Literal && node.regex);
         };
 
         const checkDoubleSpace = (node: TSESTree.Node) => {
@@ -66,7 +56,7 @@ export = createRule({
 
                 const locIndex = sourceCode.getIndexFromLoc({ column: doubleSpace.index, line: index + 1 });
                 const sourceNode = sourceCode.getNodeByRangeIndex(locIndex);
-                if (isLiteral(sourceNode)) {
+                if (isStringLiteral(sourceNode) || isRegexLiteral(sourceNode)) {
                     return;
                 }
 

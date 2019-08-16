@@ -23,9 +23,5 @@
     "include": [
         "rules",
         "tests"
-    ],
-
-    "exclude": [
-        "fixtures"
     ]
 }
