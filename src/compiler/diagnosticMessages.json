@@ -5112,6 +5112,10 @@
         "category": "Message",
         "code": 95087
     },
+    "Enable the '--jsx' flag in your configuration file": {
+        "category": "Message",
+        "code": 95088
+    },
 
     "No value exists in scope for the shorthand property '{0}'. Either declare one or provide an initializer.": {
         "category": "Error",
