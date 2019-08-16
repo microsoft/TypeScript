@@ -411,11 +411,7 @@ namespace ts {
                     }
                 );
                 if (emitOnlyDtsFiles && declarationTransform.transformed[0].kind === SyntaxKind.SourceFile) {
-                    // Improved narrowing in master/3.6 makes this cast unnecessary, triggering a lint rule.
-                    // But at the same time, the LKG (3.5) necessitates it because it doesn’t narrow.
-                    // Once the LKG is updated to 3.6, this comment, the cast to `SourceFile`, and the eslint directive can be all be removed.
-                    // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
-                    const sourceFile = declarationTransform.transformed[0] as SourceFile;
+                    const sourceFile = declarationTransform.transformed[0];
                     exportedModulesFromDeclarationEmit = sourceFile.exportedModulesFromDeclarationEmit;
                 }
             }
