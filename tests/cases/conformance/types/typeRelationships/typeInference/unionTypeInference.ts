@@ -69,3 +69,12 @@ async function fun<T>(deepPromised: DeepPromised<T>) {
             await fun(awaitedValue);
     }
 }
+
+// Repro from #32752
+
+type Deep<T> = { [K in keyof T]: T[K] | Deep<T[K]> };
+
+declare function baz<T>(dp: Deep<T>): T;
+declare let xx: { a: string | undefined };
+
+baz(xx);
