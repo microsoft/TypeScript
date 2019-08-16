@@ -2041,20 +2041,15 @@ namespace ts {
 
         function checkResolvedBlockScopedVariable(result: Symbol, errorLocation: Node): void {
             Debug.assert(!!(result.flags & SymbolFlags.BlockScopedVariable || result.flags & SymbolFlags.Class || result.flags & SymbolFlags.Enum));
+            if (result.flags & (SymbolFlags.Function | SymbolFlags.FunctionScopedVariable) && result.flags & SymbolFlags.Class) {
+                // constructor functions aren't block scoped
+                return;
+            }
             // Block-scoped variables cannot be used before their definition
             const declaration = find(
                 result.declarations,
                 d => isBlockOrCatchScoped(d) || isClassLike(d) || (d.kind === SyntaxKind.EnumDeclaration));
-
-            if (declaration === undefined) {
-                if (result.declarations.some(isJSConstructor)) {
-                    // constructor functions aren't block scoped
-                    return;
-                }
-                else {
-                    return Debug.fail("checkResolvedBlockScopedVariable could not find block-scoped declaration");
-                }
-            }
+            if (declaration === undefined) return Debug.fail("checkResolvedBlockScopedVariable could not find block-scoped declaration");
 
             if (!(declaration.flags & NodeFlags.Ambient) && !isBlockScopedNameDeclaredBeforeUse(declaration, errorLocation)) {
                 let diagnosticMessage;

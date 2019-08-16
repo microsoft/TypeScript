@@ -1451,6 +1451,7 @@ namespace ts {
         }
 
         function bindJSDocClassTag(node: JSDocClassTag) {
+            bindEachChild(node);
             const host = getHostSignatureFromJSDoc(node);
             if (host && host.kind !== SyntaxKind.MethodDeclaration) {
                 addDeclarationToSymbol(host.symbol, host, SymbolFlags.Class);
@@ -2580,6 +2581,9 @@ namespace ts {
 
         function bindObjectDefinePrototypeProperty(node: BindableObjectDefinePropertyCall) {
             const namespaceSymbol = lookupSymbolForPropertyAccess((node.arguments[0] as PropertyAccessExpression).expression as EntityNameExpression);
+            if (namespaceSymbol) {
+                addDeclarationToSymbol(namespaceSymbol, namespaceSymbol.valueDeclaration, SymbolFlags.Class);
+            } // TODO: addDeclarationToSymbol and bindPropertyAssignment overlap about 50%
             bindPotentiallyNewExpandoMemberToNamespace(node, namespaceSymbol, /*isPrototypeProperty*/ true);
         }
 
