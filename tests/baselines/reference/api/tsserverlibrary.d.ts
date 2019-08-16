@@ -2439,7 +2439,8 @@ declare namespace ts {
         NoConstraints = 64,
         AlwaysStrict = 128,
         MaxValue = 256,
-        PriorityImpliesCombination = 56
+        PriorityImpliesCombination = 56,
+        Circularity = -1
     }
     /** @deprecated Use FileExtensionInfo instead. */
     export type JsFileExtensionInfo = FileExtensionInfo;
