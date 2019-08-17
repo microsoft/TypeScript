@@ -9332,10 +9332,10 @@ namespace ts {
                         return globalFunctionType;
                     case "Array":
                     case "array":
-                        return !typeArgs || !typeArgs.length ? anyArrayType : undefined;
+                        return (!typeArgs || !typeArgs.length) && !noImplicitAny ? anyArrayType : undefined;
                     case "Promise":
                     case "promise":
-                        return !typeArgs || !typeArgs.length ? createPromiseType(anyType) : undefined;
+                        return (!typeArgs || !typeArgs.length) && !noImplicitAny ? createPromiseType(anyType) : undefined;
                     case "Object":
                         if (typeArgs && typeArgs.length === 2) {
                             if (isJSDocIndexSignature(node)) {
@@ -9347,7 +9347,7 @@ namespace ts {
                             return anyType;
                         }
                         checkNoTypeArguments(node);
-                        return anyType;
+                        return !noImplicitAny ? anyType : undefined;
                 }
             }
         }
@@ -15484,8 +15484,7 @@ namespace ts {
             let visited: Map<number>;
             let bivariant = false;
             let propagationType: Type;
-            let inferenceMatch = false;
-            let inferenceIncomplete = false;
+            let inferencePriority = InferencePriority.MaxValue;
             let allowComplexConstraintInference = true;
             inferFromTypes(originalSource, originalTarget);
 
@@ -15598,7 +15597,7 @@ namespace ts {
                                 clearCachedInferences(inferences);
                             }
                         }
-                        inferenceMatch = true;
+                        inferencePriority = Math.min(inferencePriority, priority);
                         return;
                     }
                     else {
@@ -15692,19 +15691,15 @@ namespace ts {
                 const key = source.id + "," + target.id;
                 const status = visited && visited.get(key);
                 if (status !== undefined) {
-                    if (status & 1) inferenceMatch = true;
-                    if (status & 2) inferenceIncomplete = true;
+                    inferencePriority = Math.min(inferencePriority, status);
                     return;
                 }
-                (visited || (visited = createMap<number>())).set(key, 0);
-                const saveInferenceMatch = inferenceMatch;
-                const saveInferenceIncomplete = inferenceIncomplete;
-                inferenceMatch = false;
-                inferenceIncomplete = false;
+                (visited || (visited = createMap<number>())).set(key, InferencePriority.Circularity);
+                const saveInferencePriority = inferencePriority;
+                inferencePriority = InferencePriority.MaxValue;
                 action(source, target);
-                visited.set(key, (inferenceMatch ? 1 : 0) | (inferenceIncomplete ? 2 : 0));
-                inferenceMatch = inferenceMatch || saveInferenceMatch;
-                inferenceIncomplete = inferenceIncomplete || saveInferenceIncomplete;
+                visited.set(key, inferencePriority);
+                inferencePriority = Math.min(inferencePriority, saveInferencePriority);
             }
 
             function inferFromMatchingType(source: Type, targets: Type[], matches: (s: Type, t: Type) => boolean) {
@@ -15776,10 +15771,11 @@ namespace ts {
                     let nakedTypeVariable: Type | undefined;
                     const sources = source.flags & TypeFlags.Union ? (<UnionType>source).types : [source];
                     const matched = new Array<boolean>(sources.length);
-                    const saveInferenceIncomplete = inferenceIncomplete;
-                    inferenceIncomplete = false;
+                    let inferenceCircularity = false;
                     // First infer to types that are not naked type variables. For each source type we
-                    // track whether inferences were made from that particular type to some target.
+                    // track whether inferences were made from that particular type to some target with
+                    // equal priority (i.e. of equal quality) to what we would infer for a naked type
+                    // parameter.
                     for (const t of targets) {
                         if (getInferenceInfoForType(t)) {
                             nakedTypeVariable = t;
@@ -15787,20 +15783,20 @@ namespace ts {
                         }
                         else {
                             for (let i = 0; i < sources.length; i++) {
-                                const saveInferenceMatch = inferenceMatch;
-                                inferenceMatch = false;
+                                const saveInferencePriority = inferencePriority;
+                                inferencePriority = InferencePriority.MaxValue;
                                 inferFromTypes(sources[i], t);
-                                if (inferenceMatch) matched[i] = true;
-                                inferenceMatch = inferenceMatch || saveInferenceMatch;
+                                if (inferencePriority === priority) matched[i] = true;
+                                inferenceCircularity = inferenceCircularity || inferencePriority === InferencePriority.Circularity;
+                                inferencePriority = Math.min(inferencePriority, saveInferencePriority);
                             }
                         }
                     }
-                    const inferenceComplete = !inferenceIncomplete;
-                    inferenceIncomplete = inferenceIncomplete || saveInferenceIncomplete;
-                    // If the target has a single naked type variable and inference completed (meaning we
-                    // explored the types fully), create a union of the source types from which no inferences
-                    // have been made so far and infer from that union to the naked type variable.
-                    if (typeVariableCount === 1 && inferenceComplete) {
+                    // If the target has a single naked type variable and no inference circularities were
+                    // encountered above (meaning we explored the types fully), create a union of the source
+                    // types from which no inferences have been made so far and infer from that union to the
+                    // naked type variable.
+                    if (typeVariableCount === 1 && !inferenceCircularity) {
                         const unmatched = flatMap(sources, (s, i) => matched[i] ? undefined : s);
                         if (unmatched.length) {
                             inferFromTypes(getUnionType(unmatched), nakedTypeVariable!);
@@ -15903,7 +15899,7 @@ namespace ts {
                 const symbol = isNonConstructorObject ? target.symbol : undefined;
                 if (symbol) {
                     if (contains(symbolStack, symbol)) {
-                        inferenceIncomplete = true;
+                        inferencePriority = InferencePriority.Circularity;
                         return;
                     }
                     (symbolStack || (symbolStack = [])).push(symbol);

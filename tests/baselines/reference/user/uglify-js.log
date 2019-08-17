@@ -54,7 +54,7 @@ node_modules/uglify-js/lib/compress.js(5101,25): error TS2403: Subsequent variab
 node_modules/uglify-js/lib/compress.js(5105,36): error TS2532: Object is possibly 'undefined'.
 node_modules/uglify-js/lib/compress.js(5110,41): error TS2339: Property 'get' does not exist on type 'string'.
 node_modules/uglify-js/lib/compress.js(5623,18): error TS2454: Variable 'is_strict_comparison' is used before being assigned.
-node_modules/uglify-js/lib/compress.js(6134,25): error TS2367: This condition will always return 'false' since the types 'boolean' and '"f"' have no overlap.
+node_modules/uglify-js/lib/compress.js(6134,25): error TS2367: This condition will always return 'false' since the types 'boolean' and 'string' have no overlap.
 node_modules/uglify-js/lib/compress.js(6161,47): error TS2554: Expected 0 arguments, but got 1.
 node_modules/uglify-js/lib/compress.js(6234,39): error TS2554: Expected 0 arguments, but got 1.
 node_modules/uglify-js/lib/compress.js(6306,39): error TS2554: Expected 0 arguments, but got 1.

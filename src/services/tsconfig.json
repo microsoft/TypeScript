@@ -65,6 +65,7 @@
         "codefixes/fixClassSuperMustPrecedeThisAccess.ts",
         "codefixes/fixConstructorForDerivedNeedSuperCall.ts",
         "codefixes/fixEnableExperimentalDecorators.ts",
+        "codefixes/fixEnableJsxFlag.ts",
         "codefixes/fixExtendsInterfaceBecomesImplements.ts",
         "codefixes/fixForgottenThisPropertyAccess.ts",
         "codefixes/fixUnusedIdentifier.ts",

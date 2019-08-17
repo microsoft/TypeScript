@@ -2442,7 +2442,9 @@ declare namespace ts {
         LiteralKeyof = 32,
         NoConstraints = 64,
         AlwaysStrict = 128,
-        PriorityImpliesCombination = 56
+        MaxValue = 256,
+        PriorityImpliesCombination = 56,
+        Circularity = -1
     }
     /** @deprecated Use FileExtensionInfo instead. */
     export type JsFileExtensionInfo = FileExtensionInfo;
