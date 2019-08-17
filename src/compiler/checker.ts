@@ -4235,7 +4235,7 @@ namespace ts {
                         setEmitFlags(createIdentifier(typePredicate.parameterName), EmitFlags.NoAsciiEscaping) :
                         createThisTypeNode();
                     const typeNode = typePredicate.type && typeToTypeNodeHelper(typePredicate.type, context);
-                    returnTypeNode = createTypePredicateNode(assertsModifier, parameterName, typeNode);
+                    returnTypeNode = createTypePredicateNodeWithModifier(assertsModifier, parameterName, typeNode);
                 }
                 else {
                     const returnType = getReturnTypeOfSignature(signature);
@@ -4703,7 +4703,7 @@ namespace ts {
             return writer ? typePredicateToStringWorker(writer).getText() : usingSingleLineStringWriter(typePredicateToStringWorker);
 
             function typePredicateToStringWorker(writer: EmitTextWriter) {
-                const predicate = createTypePredicateNode(
+                const predicate = createTypePredicateNodeWithModifier(
                     typePredicate.kind === TypePredicateKind.AssertsThis || typePredicate.kind === TypePredicateKind.AssertsIdentifier ? createToken(SyntaxKind.AssertsKeyword) : undefined,
                     typePredicate.kind === TypePredicateKind.Identifier || typePredicate.kind === TypePredicateKind.AssertsIdentifier ? createIdentifier(typePredicate.parameterName) : createThisTypeNode(),
                     typePredicate.type && nodeBuilder.typeToTypeNode(typePredicate.type, enclosingDeclaration, toNodeBuilderFlags(flags) | NodeBuilderFlags.IgnoreErrors | NodeBuilderFlags.WriteTypeParametersInQualifiedName)! // TODO: GH#18217
