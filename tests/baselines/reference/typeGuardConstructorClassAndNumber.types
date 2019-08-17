@@ -25,6 +25,10 @@ if (var1.constructor == C1) {
 >var1 : C1
 >property1 : string
 }
+else {
+    var1; // number | C1
+>var1 : number | C1
+}
 if (var1["constructor"] == C1) {
 >var1["constructor"] == C1 : boolean
 >var1["constructor"] : Function
@@ -39,6 +43,10 @@ if (var1["constructor"] == C1) {
 >var1.property1 : string
 >var1 : C1
 >property1 : string
+}
+else {
+    var1; // number | C1
+>var1 : number | C1
 }
 if (var1.constructor === C1) {
 >var1.constructor === C1 : boolean
@@ -55,6 +63,10 @@ if (var1.constructor === C1) {
 >var1 : C1
 >property1 : string
 }
+else {
+    var1; // number | C1
+>var1 : number | C1
+}
 if (var1["constructor"] === C1) {
 >var1["constructor"] === C1 : boolean
 >var1["constructor"] : Function
@@ -69,6 +81,10 @@ if (var1["constructor"] === C1) {
 >var1.property1 : string
 >var1 : C1
 >property1 : string
+}
+else {
+    var1; // number | C1
+>var1 : number | C1
 }
 if (C1 == var1.constructor) {
 >C1 == var1.constructor : boolean
@@ -85,6 +101,10 @@ if (C1 == var1.constructor) {
 >var1 : C1
 >property1 : string
 }
+else {
+    var1; // number | C1
+>var1 : number | C1
+}
 if (C1 == var1["constructor"]) {
 >C1 == var1["constructor"] : boolean
 >C1 : typeof C1
@@ -99,6 +119,10 @@ if (C1 == var1["constructor"]) {
 >var1.property1 : string
 >var1 : C1
 >property1 : string
+}
+else {
+    var1; // number | C1
+>var1 : number | C1
 }
 if (C1 === var1.constructor) {
 >C1 === var1.constructor : boolean
@@ -115,6 +139,10 @@ if (C1 === var1.constructor) {
 >var1 : C1
 >property1 : string
 }
+else {
+    var1; // number | C1
+>var1 : number | C1
+}
 if (C1 === var1["constructor"]) {
 >C1 === var1["constructor"] : boolean
 >C1 : typeof C1
@@ -129,6 +157,10 @@ if (C1 === var1["constructor"]) {
 >var1.property1 : string
 >var1 : C1
 >property1 : string
+}
+else {
+    var1; // number | C1
+>var1 : number | C1
 }
 
 if (var1.constructor != C1) {
@@ -146,6 +178,10 @@ if (var1.constructor != C1) {
 >var1 : number | C1
 >property1 : any
 }
+else {
+    var1; // C1
+>var1 : C1
+}
 if (var1["constructor"] != C1) {
 >var1["constructor"] != C1 : boolean
 >var1["constructor"] : Function
@@ -160,6 +196,10 @@ if (var1["constructor"] != C1) {
 >var1.property1 : any
 >var1 : number | C1
 >property1 : any
+}
+else {
+    var1; // C1
+>var1 : C1
 }
 if (var1.constructor !== C1) {
 >var1.constructor !== C1 : boolean
@@ -176,6 +216,10 @@ if (var1.constructor !== C1) {
 >var1 : number | C1
 >property1 : any
 }
+else {
+    var1; // C1
+>var1 : C1
+}
 if (var1["constructor"] !== C1) {
 >var1["constructor"] !== C1 : boolean
 >var1["constructor"] : Function
@@ -190,6 +234,10 @@ if (var1["constructor"] !== C1) {
 >var1.property1 : any
 >var1 : number | C1
 >property1 : any
+}
+else {
+    var1; // C1
+>var1 : C1
 }
 if (C1 != var1.constructor) {
 >C1 != var1.constructor : boolean
@@ -206,6 +254,10 @@ if (C1 != var1.constructor) {
 >var1 : number | C1
 >property1 : any
 }
+else {
+    var1; // C1
+>var1 : C1
+}
 if (C1 != var1["constructor"]) {
 >C1 != var1["constructor"] : boolean
 >C1 : typeof C1
@@ -220,6 +272,10 @@ if (C1 != var1["constructor"]) {
 >var1.property1 : any
 >var1 : number | C1
 >property1 : any
+}
+else {
+    var1; // C1
+>var1 : C1
 }
 if (C1 !== var1.constructor) {
 >C1 !== var1.constructor : boolean
@@ -236,6 +292,10 @@ if (C1 !== var1.constructor) {
 >var1 : number | C1
 >property1 : any
 }
+else {
+    var1; // C1
+>var1 : C1
+}
 if (C1 !== var1["constructor"]) {
 >C1 !== var1["constructor"] : boolean
 >C1 : typeof C1
@@ -250,5 +310,9 @@ if (C1 !== var1["constructor"]) {
 >var1.property1 : any
 >var1 : number | C1
 >property1 : any
+}
+else {
+    var1; // C1
+>var1 : C1
 }
 

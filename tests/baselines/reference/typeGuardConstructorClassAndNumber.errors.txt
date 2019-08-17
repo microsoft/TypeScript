@@ -1,18 +1,18 @@
-tests/cases/compiler/typeGuardConstructorClassAndNumber.ts(42,10): error TS2339: Property 'property1' does not exist on type 'number | C1'.
-  Property 'property1' does not exist on type 'number'.
-tests/cases/compiler/typeGuardConstructorClassAndNumber.ts(46,10): error TS2339: Property 'property1' does not exist on type 'number | C1'.
-  Property 'property1' does not exist on type 'number'.
-tests/cases/compiler/typeGuardConstructorClassAndNumber.ts(50,10): error TS2339: Property 'property1' does not exist on type 'number | C1'.
-  Property 'property1' does not exist on type 'number'.
-tests/cases/compiler/typeGuardConstructorClassAndNumber.ts(54,10): error TS2339: Property 'property1' does not exist on type 'number | C1'.
-  Property 'property1' does not exist on type 'number'.
-tests/cases/compiler/typeGuardConstructorClassAndNumber.ts(58,10): error TS2339: Property 'property1' does not exist on type 'number | C1'.
-  Property 'property1' does not exist on type 'number'.
-tests/cases/compiler/typeGuardConstructorClassAndNumber.ts(62,10): error TS2339: Property 'property1' does not exist on type 'number | C1'.
-  Property 'property1' does not exist on type 'number'.
 tests/cases/compiler/typeGuardConstructorClassAndNumber.ts(66,10): error TS2339: Property 'property1' does not exist on type 'number | C1'.
   Property 'property1' does not exist on type 'number'.
-tests/cases/compiler/typeGuardConstructorClassAndNumber.ts(70,10): error TS2339: Property 'property1' does not exist on type 'number | C1'.
+tests/cases/compiler/typeGuardConstructorClassAndNumber.ts(73,10): error TS2339: Property 'property1' does not exist on type 'number | C1'.
+  Property 'property1' does not exist on type 'number'.
+tests/cases/compiler/typeGuardConstructorClassAndNumber.ts(80,10): error TS2339: Property 'property1' does not exist on type 'number | C1'.
+  Property 'property1' does not exist on type 'number'.
+tests/cases/compiler/typeGuardConstructorClassAndNumber.ts(87,10): error TS2339: Property 'property1' does not exist on type 'number | C1'.
+  Property 'property1' does not exist on type 'number'.
+tests/cases/compiler/typeGuardConstructorClassAndNumber.ts(94,10): error TS2339: Property 'property1' does not exist on type 'number | C1'.
+  Property 'property1' does not exist on type 'number'.
+tests/cases/compiler/typeGuardConstructorClassAndNumber.ts(101,10): error TS2339: Property 'property1' does not exist on type 'number | C1'.
+  Property 'property1' does not exist on type 'number'.
+tests/cases/compiler/typeGuardConstructorClassAndNumber.ts(108,10): error TS2339: Property 'property1' does not exist on type 'number | C1'.
+  Property 'property1' does not exist on type 'number'.
+tests/cases/compiler/typeGuardConstructorClassAndNumber.ts(115,10): error TS2339: Property 'property1' does not exist on type 'number | C1'.
   Property 'property1' does not exist on type 'number'.
 
 
@@ -27,33 +27,57 @@ tests/cases/compiler/typeGuardConstructorClassAndNumber.ts(70,10): error TS2339:
         var1; // C1
         var1.property1; // string
     }
+    else {
+        var1; // number | C1
+    }
     if (var1["constructor"] == C1) {
         var1; // C1
         var1.property1; // string
+    }
+    else {
+        var1; // number | C1
     }
     if (var1.constructor === C1) {
         var1; // C1
         var1.property1; // string
     }
+    else {
+        var1; // number | C1
+    }
     if (var1["constructor"] === C1) {
         var1; // C1
         var1.property1; // string
+    }
+    else {
+        var1; // number | C1
     }
     if (C1 == var1.constructor) {
         var1; // C1
         var1.property1; // string
     }
+    else {
+        var1; // number | C1
+    }
     if (C1 == var1["constructor"]) {
         var1; // C1
         var1.property1; // string
+    }
+    else {
+        var1; // number | C1
     }
     if (C1 === var1.constructor) {
         var1; // C1
         var1.property1; // string
     }
+    else {
+        var1; // number | C1
+    }
     if (C1 === var1["constructor"]) {
         var1; // C1
         var1.property1; // string
+    }
+    else {
+        var1; // number | C1
     }
     
     if (var1.constructor != C1) {
@@ -63,12 +87,18 @@ tests/cases/compiler/typeGuardConstructorClassAndNumber.ts(70,10): error TS2339:
 !!! error TS2339: Property 'property1' does not exist on type 'number | C1'.
 !!! error TS2339:   Property 'property1' does not exist on type 'number'.
     }
+    else {
+        var1; // C1
+    }
     if (var1["constructor"] != C1) {
         var1; // C1 | number
         var1.property1; // error
              ~~~~~~~~~
 !!! error TS2339: Property 'property1' does not exist on type 'number | C1'.
 !!! error TS2339:   Property 'property1' does not exist on type 'number'.
+    }
+    else {
+        var1; // C1
     }
     if (var1.constructor !== C1) {
         var1; // C1 | number
@@ -77,12 +107,18 @@ tests/cases/compiler/typeGuardConstructorClassAndNumber.ts(70,10): error TS2339:
 !!! error TS2339: Property 'property1' does not exist on type 'number | C1'.
 !!! error TS2339:   Property 'property1' does not exist on type 'number'.
     }
+    else {
+        var1; // C1
+    }
     if (var1["constructor"] !== C1) {
         var1; // C1 | number
         var1.property1; // error
              ~~~~~~~~~
 !!! error TS2339: Property 'property1' does not exist on type 'number | C1'.
 !!! error TS2339:   Property 'property1' does not exist on type 'number'.
+    }
+    else {
+        var1; // C1
     }
     if (C1 != var1.constructor) {
         var1; // C1 | number
@@ -91,12 +127,18 @@ tests/cases/compiler/typeGuardConstructorClassAndNumber.ts(70,10): error TS2339:
 !!! error TS2339: Property 'property1' does not exist on type 'number | C1'.
 !!! error TS2339:   Property 'property1' does not exist on type 'number'.
     }
+    else {
+        var1; // C1
+    }
     if (C1 != var1["constructor"]) {
         var1; // C1 | number
         var1.property1; // error
              ~~~~~~~~~
 !!! error TS2339: Property 'property1' does not exist on type 'number | C1'.
 !!! error TS2339:   Property 'property1' does not exist on type 'number'.
+    }
+    else {
+        var1; // C1
     }
     if (C1 !== var1.constructor) {
         var1; // C1 | number
@@ -105,11 +147,17 @@ tests/cases/compiler/typeGuardConstructorClassAndNumber.ts(70,10): error TS2339:
 !!! error TS2339: Property 'property1' does not exist on type 'number | C1'.
 !!! error TS2339:   Property 'property1' does not exist on type 'number'.
     }
+    else {
+        var1; // C1
+    }
     if (C1 !== var1["constructor"]) {
         var1; // C1 | number
         var1.property1; // error
              ~~~~~~~~~
 !!! error TS2339: Property 'property1' does not exist on type 'number | C1'.
 !!! error TS2339:   Property 'property1' does not exist on type 'number'.
+    }
+    else {
+        var1; // C1
     }
     

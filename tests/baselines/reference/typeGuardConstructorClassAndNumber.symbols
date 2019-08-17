@@ -25,6 +25,10 @@ if (var1.constructor == C1) {
 >var1 : Symbol(var1, Decl(typeGuardConstructorClassAndNumber.ts, 5, 3))
 >property1 : Symbol(C1.property1, Decl(typeGuardConstructorClassAndNumber.ts, 1, 10))
 }
+else {
+    var1; // number | C1
+>var1 : Symbol(var1, Decl(typeGuardConstructorClassAndNumber.ts, 5, 3))
+}
 if (var1["constructor"] == C1) {
 >var1 : Symbol(var1, Decl(typeGuardConstructorClassAndNumber.ts, 5, 3))
 >"constructor" : Symbol(Object.constructor, Decl(lib.es5.d.ts, --, --))
@@ -37,6 +41,10 @@ if (var1["constructor"] == C1) {
 >var1.property1 : Symbol(C1.property1, Decl(typeGuardConstructorClassAndNumber.ts, 1, 10))
 >var1 : Symbol(var1, Decl(typeGuardConstructorClassAndNumber.ts, 5, 3))
 >property1 : Symbol(C1.property1, Decl(typeGuardConstructorClassAndNumber.ts, 1, 10))
+}
+else {
+    var1; // number | C1
+>var1 : Symbol(var1, Decl(typeGuardConstructorClassAndNumber.ts, 5, 3))
 }
 if (var1.constructor === C1) {
 >var1.constructor : Symbol(Object.constructor, Decl(lib.es5.d.ts, --, --))
@@ -52,6 +60,10 @@ if (var1.constructor === C1) {
 >var1 : Symbol(var1, Decl(typeGuardConstructorClassAndNumber.ts, 5, 3))
 >property1 : Symbol(C1.property1, Decl(typeGuardConstructorClassAndNumber.ts, 1, 10))
 }
+else {
+    var1; // number | C1
+>var1 : Symbol(var1, Decl(typeGuardConstructorClassAndNumber.ts, 5, 3))
+}
 if (var1["constructor"] === C1) {
 >var1 : Symbol(var1, Decl(typeGuardConstructorClassAndNumber.ts, 5, 3))
 >"constructor" : Symbol(Object.constructor, Decl(lib.es5.d.ts, --, --))
@@ -64,6 +76,10 @@ if (var1["constructor"] === C1) {
 >var1.property1 : Symbol(C1.property1, Decl(typeGuardConstructorClassAndNumber.ts, 1, 10))
 >var1 : Symbol(var1, Decl(typeGuardConstructorClassAndNumber.ts, 5, 3))
 >property1 : Symbol(C1.property1, Decl(typeGuardConstructorClassAndNumber.ts, 1, 10))
+}
+else {
+    var1; // number | C1
+>var1 : Symbol(var1, Decl(typeGuardConstructorClassAndNumber.ts, 5, 3))
 }
 if (C1 == var1.constructor) {
 >C1 : Symbol(C1, Decl(typeGuardConstructorClassAndNumber.ts, 0, 0))
@@ -79,6 +95,10 @@ if (C1 == var1.constructor) {
 >var1 : Symbol(var1, Decl(typeGuardConstructorClassAndNumber.ts, 5, 3))
 >property1 : Symbol(C1.property1, Decl(typeGuardConstructorClassAndNumber.ts, 1, 10))
 }
+else {
+    var1; // number | C1
+>var1 : Symbol(var1, Decl(typeGuardConstructorClassAndNumber.ts, 5, 3))
+}
 if (C1 == var1["constructor"]) {
 >C1 : Symbol(C1, Decl(typeGuardConstructorClassAndNumber.ts, 0, 0))
 >var1 : Symbol(var1, Decl(typeGuardConstructorClassAndNumber.ts, 5, 3))
@@ -91,6 +111,10 @@ if (C1 == var1["constructor"]) {
 >var1.property1 : Symbol(C1.property1, Decl(typeGuardConstructorClassAndNumber.ts, 1, 10))
 >var1 : Symbol(var1, Decl(typeGuardConstructorClassAndNumber.ts, 5, 3))
 >property1 : Symbol(C1.property1, Decl(typeGuardConstructorClassAndNumber.ts, 1, 10))
+}
+else {
+    var1; // number | C1
+>var1 : Symbol(var1, Decl(typeGuardConstructorClassAndNumber.ts, 5, 3))
 }
 if (C1 === var1.constructor) {
 >C1 : Symbol(C1, Decl(typeGuardConstructorClassAndNumber.ts, 0, 0))
@@ -106,6 +130,10 @@ if (C1 === var1.constructor) {
 >var1 : Symbol(var1, Decl(typeGuardConstructorClassAndNumber.ts, 5, 3))
 >property1 : Symbol(C1.property1, Decl(typeGuardConstructorClassAndNumber.ts, 1, 10))
 }
+else {
+    var1; // number | C1
+>var1 : Symbol(var1, Decl(typeGuardConstructorClassAndNumber.ts, 5, 3))
+}
 if (C1 === var1["constructor"]) {
 >C1 : Symbol(C1, Decl(typeGuardConstructorClassAndNumber.ts, 0, 0))
 >var1 : Symbol(var1, Decl(typeGuardConstructorClassAndNumber.ts, 5, 3))
@@ -118,6 +146,10 @@ if (C1 === var1["constructor"]) {
 >var1.property1 : Symbol(C1.property1, Decl(typeGuardConstructorClassAndNumber.ts, 1, 10))
 >var1 : Symbol(var1, Decl(typeGuardConstructorClassAndNumber.ts, 5, 3))
 >property1 : Symbol(C1.property1, Decl(typeGuardConstructorClassAndNumber.ts, 1, 10))
+}
+else {
+    var1; // number | C1
+>var1 : Symbol(var1, Decl(typeGuardConstructorClassAndNumber.ts, 5, 3))
 }
 
 if (var1.constructor != C1) {
@@ -132,6 +164,10 @@ if (var1.constructor != C1) {
     var1.property1; // error
 >var1 : Symbol(var1, Decl(typeGuardConstructorClassAndNumber.ts, 5, 3))
 }
+else {
+    var1; // C1
+>var1 : Symbol(var1, Decl(typeGuardConstructorClassAndNumber.ts, 5, 3))
+}
 if (var1["constructor"] != C1) {
 >var1 : Symbol(var1, Decl(typeGuardConstructorClassAndNumber.ts, 5, 3))
 >"constructor" : Symbol(Object.constructor, Decl(lib.es5.d.ts, --, --))
@@ -141,6 +177,10 @@ if (var1["constructor"] != C1) {
 >var1 : Symbol(var1, Decl(typeGuardConstructorClassAndNumber.ts, 5, 3))
 
     var1.property1; // error
+>var1 : Symbol(var1, Decl(typeGuardConstructorClassAndNumber.ts, 5, 3))
+}
+else {
+    var1; // C1
 >var1 : Symbol(var1, Decl(typeGuardConstructorClassAndNumber.ts, 5, 3))
 }
 if (var1.constructor !== C1) {
@@ -155,6 +195,10 @@ if (var1.constructor !== C1) {
     var1.property1; // error
 >var1 : Symbol(var1, Decl(typeGuardConstructorClassAndNumber.ts, 5, 3))
 }
+else {
+    var1; // C1
+>var1 : Symbol(var1, Decl(typeGuardConstructorClassAndNumber.ts, 5, 3))
+}
 if (var1["constructor"] !== C1) {
 >var1 : Symbol(var1, Decl(typeGuardConstructorClassAndNumber.ts, 5, 3))
 >"constructor" : Symbol(Object.constructor, Decl(lib.es5.d.ts, --, --))
@@ -164,6 +208,10 @@ if (var1["constructor"] !== C1) {
 >var1 : Symbol(var1, Decl(typeGuardConstructorClassAndNumber.ts, 5, 3))
 
     var1.property1; // error
+>var1 : Symbol(var1, Decl(typeGuardConstructorClassAndNumber.ts, 5, 3))
+}
+else {
+    var1; // C1
 >var1 : Symbol(var1, Decl(typeGuardConstructorClassAndNumber.ts, 5, 3))
 }
 if (C1 != var1.constructor) {
@@ -178,6 +226,10 @@ if (C1 != var1.constructor) {
     var1.property1; // error
 >var1 : Symbol(var1, Decl(typeGuardConstructorClassAndNumber.ts, 5, 3))
 }
+else {
+    var1; // C1
+>var1 : Symbol(var1, Decl(typeGuardConstructorClassAndNumber.ts, 5, 3))
+}
 if (C1 != var1["constructor"]) {
 >C1 : Symbol(C1, Decl(typeGuardConstructorClassAndNumber.ts, 0, 0))
 >var1 : Symbol(var1, Decl(typeGuardConstructorClassAndNumber.ts, 5, 3))
@@ -187,6 +239,10 @@ if (C1 != var1["constructor"]) {
 >var1 : Symbol(var1, Decl(typeGuardConstructorClassAndNumber.ts, 5, 3))
 
     var1.property1; // error
+>var1 : Symbol(var1, Decl(typeGuardConstructorClassAndNumber.ts, 5, 3))
+}
+else {
+    var1; // C1
 >var1 : Symbol(var1, Decl(typeGuardConstructorClassAndNumber.ts, 5, 3))
 }
 if (C1 !== var1.constructor) {
@@ -201,6 +257,10 @@ if (C1 !== var1.constructor) {
     var1.property1; // error
 >var1 : Symbol(var1, Decl(typeGuardConstructorClassAndNumber.ts, 5, 3))
 }
+else {
+    var1; // C1
+>var1 : Symbol(var1, Decl(typeGuardConstructorClassAndNumber.ts, 5, 3))
+}
 if (C1 !== var1["constructor"]) {
 >C1 : Symbol(C1, Decl(typeGuardConstructorClassAndNumber.ts, 0, 0))
 >var1 : Symbol(var1, Decl(typeGuardConstructorClassAndNumber.ts, 5, 3))
@@ -210,6 +270,10 @@ if (C1 !== var1["constructor"]) {
 >var1 : Symbol(var1, Decl(typeGuardConstructorClassAndNumber.ts, 5, 3))
 
     var1.property1; // error
+>var1 : Symbol(var1, Decl(typeGuardConstructorClassAndNumber.ts, 5, 3))
+}
+else {
+    var1; // C1
 >var1 : Symbol(var1, Decl(typeGuardConstructorClassAndNumber.ts, 5, 3))
 }
 

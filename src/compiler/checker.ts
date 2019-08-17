@@ -17335,10 +17335,10 @@ namespace ts {
                         if (right.kind === SyntaxKind.TypeOfExpression && isStringLiteralLike(left)) {
                             return narrowTypeByTypeof(type, <TypeOfExpression>right, operator, left, assumeTrue);
                         }
-                        if (isConstructorAccessExpression(left) && right.kind === SyntaxKind.Identifier) {
+                        if (isConstructorAccessExpression(left)) {
                             return narrowTypeByConstructor(type, left, operator, right, assumeTrue);
                         }
-                        if (isConstructorAccessExpression(right) && left.kind === SyntaxKind.Identifier) {
+                        if (isConstructorAccessExpression(right)) {
                             return narrowTypeByConstructor(type, right, operator, left, assumeTrue);
                         }
                         if (isMatchingReference(reference, left)) {
@@ -17601,7 +17601,7 @@ namespace ts {
 
             function narrowTypeByConstructor(type: Type, constructorAccessExpr: AccessExpression, operator: SyntaxKind, identifier: Expression, assumeTrue: boolean): Type {
                 // Do not narrow when checking inequality.
-                if (!assumeTrue || operator !== SyntaxKind.EqualsEqualsToken && operator !== SyntaxKind.EqualsEqualsEqualsToken) {
+                if (assumeTrue ? (operator !== SyntaxKind.EqualsEqualsToken && operator !== SyntaxKind.EqualsEqualsEqualsToken) : (operator !== SyntaxKind.ExclamationEqualsToken && operator !== SyntaxKind.ExclamationEqualsEqualsToken)) {
                     return type;
                 }
 
@@ -17612,7 +17612,7 @@ namespace ts {
 
                 // Get the type of the constructor identifier expression, if it is not a function then do not narrow.
                 const identifierType = getTypeOfExpression(identifier);
-                if (!isTypeSubtypeOf(identifierType, globalFunctionType)) {
+                if (!isFunctionType(identifierType) && !isConstructorType(identifierType)) {
                     return type;
                 }
 

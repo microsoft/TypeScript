@@ -4044,7 +4044,7 @@ namespace ts {
 
     export function isConstructorAccessExpression(expr: Expression): expr is AccessExpression {
         return (
-            isPropertyAccessEntityNameExpression(expr) && idText(expr.name) === "constructor" ||
+            isPropertyAccessExpression(expr) && idText(expr.name) === "constructor" ||
             isElementAccessExpression(expr) && isStringLiteralLike(expr.argumentExpression) && expr.argumentExpression.text === "constructor"
         );
     }
