@@ -3258,7 +3258,7 @@ namespace ts {
         function parseAssertsTypePredicate(): TypeNode {
             const node = <TypePredicateNode>createNode(SyntaxKind.TypePredicate);
             node.assertsModifier = parseExpectedToken(SyntaxKind.AssertsKeyword);
-            node.parameterName = parseIdentifier();
+            node.parameterName = token() === SyntaxKind.ThisKeyword ? parseThisTypeNode() : parseIdentifier();
             node.type = parseOptional(SyntaxKind.IsKeyword) ? parseType() : undefined;
             return finishNode(node);
         }

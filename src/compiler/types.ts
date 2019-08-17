@@ -3514,7 +3514,8 @@ namespace ts {
     export const enum TypePredicateKind {
         This,
         Identifier,
-        Assertion
+        AssertsThis,
+        AssertsIdentifier
     }
 
     export interface ThisTypePredicate {
@@ -3531,14 +3532,21 @@ namespace ts {
         type: Type;
     }
 
-    export interface AssertionTypePredicate {
-        kind: TypePredicateKind.Assertion;
+    export interface AssertsThisTypePredicate {
+        kind: TypePredicateKind.AssertsThis;
+        parameterName: undefined;
+        parameterIndex: undefined;
+        type: Type | undefined;
+    }
+
+    export interface AssertsIdentifierTypePredicate {
+        kind: TypePredicateKind.AssertsIdentifier;
         parameterName: string;
         parameterIndex: number;
         type: Type | undefined;
     }
 
-    export type TypePredicate = ThisTypePredicate | IdentifierTypePredicate | AssertionTypePredicate;
+    export type TypePredicate = ThisTypePredicate | IdentifierTypePredicate | AssertsThisTypePredicate | AssertsIdentifierTypePredicate;
 
     /* @internal */
     export type AnyImportSyntax = ImportDeclaration | ImportEqualsDeclaration;

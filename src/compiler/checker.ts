@@ -4228,8 +4228,10 @@ namespace ts {
                 let returnTypeNode: TypeNode | undefined;
                 const typePredicate = getTypePredicateOfSignature(signature);
                 if (typePredicate) {
-                    const assertsModifier = typePredicate.kind === TypePredicateKind.Assertion ? createToken(SyntaxKind.AssertsKeyword) : undefined;
-                    const parameterName = typePredicate.kind !== TypePredicateKind.This ?
+                    const assertsModifier = typePredicate.kind === TypePredicateKind.AssertsThis || typePredicate.kind === TypePredicateKind.AssertsIdentifier ?
+                        createToken(SyntaxKind.AssertsKeyword) :
+                        undefined;
+                    const parameterName = typePredicate.kind === TypePredicateKind.Identifier || typePredicate.kind === TypePredicateKind.AssertsIdentifier ?
                         setEmitFlags(createIdentifier(typePredicate.parameterName), EmitFlags.NoAsciiEscaping) :
                         createThisTypeNode();
                     const typeNode = typePredicate.type && typeToTypeNodeHelper(typePredicate.type, context);
@@ -4702,8 +4704,8 @@ namespace ts {
 
             function typePredicateToStringWorker(writer: EmitTextWriter) {
                 const predicate = createTypePredicateNode(
-                    typePredicate.kind === TypePredicateKind.Assertion ? createToken(SyntaxKind.AssertsKeyword) : undefined,
-                    typePredicate.kind !== TypePredicateKind.This ? createIdentifier(typePredicate.parameterName) : createThisTypeNode(),
+                    typePredicate.kind === TypePredicateKind.AssertsThis || typePredicate.kind === TypePredicateKind.AssertsIdentifier ? createToken(SyntaxKind.AssertsKeyword) : undefined,
+                    typePredicate.kind === TypePredicateKind.Identifier || typePredicate.kind === TypePredicateKind.AssertsIdentifier ? createIdentifier(typePredicate.parameterName) : createThisTypeNode(),
                     typePredicate.type && nodeBuilder.typeToTypeNode(typePredicate.type, enclosingDeclaration, toNodeBuilderFlags(flags) | NodeBuilderFlags.IgnoreErrors | NodeBuilderFlags.WriteTypeParametersInQualifiedName)! // TODO: GH#18217
                 );
                 const printer = createPrinter({ removeComments: true });
@@ -8721,8 +8723,8 @@ namespace ts {
             const parameterName = node.parameterName;
             const type = node.type && getTypeFromTypeNode(node.type);
             return parameterName.kind === SyntaxKind.ThisType ?
-                createTypePredicate(TypePredicateKind.This, /*parameterName*/ undefined, /*parameterIndex*/ undefined, type) :
-                createTypePredicate(node.assertsModifier ? TypePredicateKind.Assertion : TypePredicateKind.Identifier, parameterName.escapedText as string,
+                createTypePredicate(node.assertsModifier ? TypePredicateKind.AssertsThis : TypePredicateKind.This, /*parameterName*/ undefined, /*parameterIndex*/ undefined, type) :
+                createTypePredicate(node.assertsModifier ? TypePredicateKind.AssertsIdentifier : TypePredicateKind.Identifier, parameterName.escapedText as string,
                     findIndex(signature.parameters, p => p.escapedName === parameterName.escapedText), type);
         }
 
@@ -9829,7 +9831,7 @@ namespace ts {
             const types: Type[] = [];
             for (const sig of signatures) {
                 const pred = getTypePredicateOfSignature(sig);
-                if (!pred || pred.kind === TypePredicateKind.Assertion) {
+                if (!pred || pred.kind === TypePredicateKind.AssertsThis || pred.kind === TypePredicateKind.AssertsIdentifier) {
                     continue;
                 }
 
@@ -12400,7 +12402,7 @@ namespace ts {
                 return Ternary.False;
             }
 
-            if (source.kind !== TypePredicateKind.This) {
+            if (source.kind === TypePredicateKind.Identifier || source.kind === TypePredicateKind.AssertsIdentifier) {
                 if (source.parameterIndex !== (target as IdentifierTypePredicate).parameterIndex) {
                     if (reportErrors) {
                         errorReporter!(Diagnostics.Parameter_0_is_not_in_the_same_position_as_parameter_1, source.parameterName, (target as IdentifierTypePredicate).parameterName);
@@ -17119,12 +17121,12 @@ namespace ts {
                 const signature = getEffectsSignature(flow.node);
                 if (signature) {
                     const predicate = getTypePredicateOfSignature(signature);
-                    if (predicate && predicate.kind === TypePredicateKind.Assertion) {
+                    if (predicate && (predicate.kind === TypePredicateKind.AssertsThis || predicate.kind === TypePredicateKind.AssertsIdentifier)) {
                         const flowType = getTypeAtFlowNode(flow.antecedent);
                         const type = getTypeFromFlowType(flowType);
-                        const narrowedType = predicate.type ?
-                            narrowTypeByTypePredicate(type, predicate, flow.node, /*assumeTrue*/ true) :
-                            narrowTypeByAssertion(type, flow.node.arguments[predicate.parameterIndex]);
+                        const narrowedType = predicate.type ? narrowTypeByTypePredicate(type, predicate, flow.node, /*assumeTrue*/ true) :
+                            predicate.kind === TypePredicateKind.AssertsIdentifier ? narrowTypeByAssertion(type, flow.node.arguments[predicate.parameterIndex]) :
+                            type;
                         return narrowedType === type ? flowType : createFlowType(narrowedType, isIncomplete(flowType));
                     }
                     if (getReturnTypeOfSignature(signature).flags & TypeFlags.Never) {
@@ -17721,7 +17723,7 @@ namespace ts {
                 if (hasMatchingArgument(callExpression, reference)) {
                     const signature = getEffectsSignature(callExpression);
                     const predicate = signature && getTypePredicateOfSignature(signature);
-                    if (predicate && predicate.kind !== TypePredicateKind.Assertion) {
+                    if (predicate && (predicate.kind === TypePredicateKind.This || predicate.kind === TypePredicateKind.Identifier)) {
                         return narrowTypeByTypePredicate(type, predicate, callExpression, assumeTrue);
                     }
                 }
@@ -17733,7 +17735,7 @@ namespace ts {
                 if (isTypeAny(type) && (predicate.type === globalObjectType || predicate.type === globalFunctionType)) {
                     return type;
                 }
-                if (predicate.kind !== TypePredicateKind.This) {
+                if (predicate.kind === TypePredicateKind.Identifier || predicate.kind === TypePredicateKind.AssertsIdentifier) {
                     const predicateArgument = callExpression.arguments[predicate.parameterIndex];
                     if (predicateArgument && predicate.type) {
                         if (isMatchingReference(reference, predicateArgument)) {
@@ -17746,7 +17748,7 @@ namespace ts {
                 }
                 else {
                     const invokedExpression = skipParentheses(callExpression.expression);
-                    if (isAccessExpression(invokedExpression)) {
+                    if (isAccessExpression(invokedExpression) && predicate.type) {
                         const possibleReference = skipParentheses(invokedExpression.expression);
                         if (isMatchingReference(reference, possibleReference)) {
                             return getNarrowedType(type, predicate.type, assumeTrue, isTypeSubtypeOf);
@@ -25501,7 +25503,7 @@ namespace ts {
             checkSourceElement(node.type);
 
             const { parameterName } = node;
-            if (isThisTypePredicate(typePredicate)) {
+            if (typePredicate.kind === TypePredicateKind.This || typePredicate.kind === TypePredicateKind.AssertsThis) {
                 getTypeFromThisTypeNode(parameterName as ThisTypeNode);
             }
             else {
