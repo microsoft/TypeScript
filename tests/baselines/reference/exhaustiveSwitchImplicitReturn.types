@@ -85,3 +85,172 @@ function foo5(bar: "a" | "b"): number {
     }
 }
 
+// Repro from #32905.
+
+enum Foo {
+>Foo : Foo
+
+    One,
+>One : Foo.One
+
+    Two,
+>Two : Foo.Two
+
+    Three
+>Three : Foo.Three
+}
+
+function test2(type: Foo): number {
+>test2 : (type: Foo) => number
+>type : Foo
+
+    try {
+        switch (type) {
+>type : Foo
+
+            case Foo.One:
+>Foo.One : Foo.One
+>Foo : typeof Foo
+>One : Foo.One
+
+                return 0;
+>0 : 0
+
+            case Foo.Two:
+>Foo.Two : Foo.Two
+>Foo : typeof Foo
+>Two : Foo.Two
+
+                return 0;
+>0 : 0
+
+            case Foo.Three:
+>Foo.Three : Foo.Three
+>Foo : typeof Foo
+>Three : Foo.Three
+
+                return 0;
+>0 : 0
+        }
+    } catch (e) {
+>e : any
+
+        throw new Error('some error')
+>new Error('some error') : Error
+>Error : ErrorConstructor
+>'some error' : "some error"
+    }
+}
+
+function test3(type: Foo): number {
+>test3 : (type: Foo) => number
+>type : Foo
+
+    try {
+        console.log('some switch')
+>console.log('some switch') : void
+>console.log : (message?: any, ...optionalParams: any[]) => void
+>console : Console
+>log : (message?: any, ...optionalParams: any[]) => void
+>'some switch' : "some switch"
+
+        switch (type) {
+>type : Foo
+
+            case Foo.One:
+>Foo.One : Foo.One
+>Foo : typeof Foo
+>One : Foo.One
+
+                return 0;
+>0 : 0
+
+            case Foo.Two:
+>Foo.Two : Foo.Two
+>Foo : typeof Foo
+>Two : Foo.Two
+
+                return 0;
+>0 : 0
+
+            case Foo.Three:
+>Foo.Three : Foo.Three
+>Foo : typeof Foo
+>Three : Foo.Three
+
+                return 0;
+>0 : 0
+        }
+    } catch (e) {
+>e : any
+
+        console.log('some error')
+>console.log('some error') : void
+>console.log : (message?: any, ...optionalParams: any[]) => void
+>console : Console
+>log : (message?: any, ...optionalParams: any[]) => void
+>'some error' : "some error"
+
+        throw new Error('some error')
+>new Error('some error') : Error
+>Error : ErrorConstructor
+>'some error' : "some error"
+    }
+}
+
+function test4(type: Foo): number {
+>test4 : (type: Foo) => number
+>type : Foo
+
+    try {
+        console.log('some switch')
+>console.log('some switch') : void
+>console.log : (message?: any, ...optionalParams: any[]) => void
+>console : Console
+>log : (message?: any, ...optionalParams: any[]) => void
+>'some switch' : "some switch"
+
+        switch (type) {
+>type : Foo
+
+            case Foo.One:
+>Foo.One : Foo.One
+>Foo : typeof Foo
+>One : Foo.One
+
+                return 0;
+>0 : 0
+
+            case Foo.Two:
+>Foo.Two : Foo.Two
+>Foo : typeof Foo
+>Two : Foo.Two
+
+                return 0;
+>0 : 0
+
+            case Foo.Three:
+>Foo.Three : Foo.Three
+>Foo : typeof Foo
+>Three : Foo.Three
+
+                0;
+>0 : 0
+        }
+    } catch (e) {
+>e : any
+
+        console.log('some error')
+>console.log('some error') : void
+>console.log : (message?: any, ...optionalParams: any[]) => void
+>console : Console
+>log : (message?: any, ...optionalParams: any[]) => void
+>'some error' : "some error"
+
+        throw new Error('some error')
+>new Error('some error') : Error
+>Error : ErrorConstructor
+>'some error' : "some error"
+    }
+}
+

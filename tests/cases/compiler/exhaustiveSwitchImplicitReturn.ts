@@ -40,3 +40,60 @@ function foo5(bar: "a" | "b"): number {
             return 1;
     }
 }
+
+// Repro from #32905.
+
+enum Foo {
+    One,
+    Two,
+    Three
+}
+
+function test2(type: Foo): number {
+    try {
+        switch (type) {
+            case Foo.One:
+                return 0;
+            case Foo.Two:
+                return 0;
+            case Foo.Three:
+                return 0;
+        }
+    } catch (e) {
+        throw new Error('some error')
+    }
+}
+
+function test3(type: Foo): number {
+    try {
+        console.log('some switch')
+        switch (type) {
+            case Foo.One:
+                return 0;
+            case Foo.Two:
+                return 0;
+            case Foo.Three:
+                return 0;
+        }
+    } catch (e) {
+        console.log('some error')
+        throw new Error('some error')
+    }
+}
+
+function test4(type: Foo): number {
+    try {
+        console.log('some switch')
+        switch (type) {
+            case Foo.One:
+                return 0;
+            case Foo.Two:
+                return 0;
+            case Foo.Three:
+                0;
+        }
+    } catch (e) {
+        console.log('some error')
+        throw new Error('some error')
+    }
+}

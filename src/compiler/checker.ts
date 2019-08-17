@@ -23648,15 +23648,21 @@ namespace ts {
             return eachTypeContainedIn(mapType(type, getRegularTypeOfLiteralType), switchTypes);
         }
 
-        function functionHasImplicitReturn(func: FunctionLikeDeclaration) {
-            if (!(func.flags & NodeFlags.HasImplicitReturn)) {
-                return false;
-            }
+        function isTotalStatement(statement: Statement): boolean {
+            return statement.kind === SyntaxKind.SwitchStatement && isExhaustiveSwitchStatement(<SwitchStatement>statement) ||
+                statement.kind === SyntaxKind.TryStatement &&
+                ((<TryStatement>statement).catchClause !== undefined) &&
+                some((<TryStatement>statement).catchClause!.block.statements, statement => statement.kind === SyntaxKind.ThrowStatement) &&
+                some((<TryStatement>statement).tryBlock.statements, isTotalStatement);
+        }
 
-            if (some((<Block>func.body).statements, statement => statement.kind === SyntaxKind.SwitchStatement && isExhaustiveSwitchStatement(<SwitchStatement>statement))) {
-                return false;
-            }
-            return true;
+        function functionHasImplicitReturn(func: FunctionLikeDeclaration) {
+            // A function has an implicit return if its body contains no total statements.
+            // A total statement explicitly returns or diverges, with the following cases recognized:
+            // (1) an exhaustive switch statement.
+            // (2) a try-catch statement where the catch clause always
+            //     throws and the try block contains a total statement.
+            return !!(func.flags & NodeFlags.HasImplicitReturn) && !some((<Block>func.body).statements, isTotalStatement);
         }
 
         /** NOTE: Return value of `[]` means a different thing than `undefined`. `[]` means func returns `void`, `undefined` means it returns `never`. */

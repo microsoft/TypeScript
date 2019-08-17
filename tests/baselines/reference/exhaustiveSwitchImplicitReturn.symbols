@@ -69,3 +69,146 @@ function foo5(bar: "a" | "b"): number {
     }
 }
 
+// Repro from #32905.
+
+enum Foo {
+>Foo : Symbol(Foo, Decl(exhaustiveSwitchImplicitReturn.ts, 39, 1))
+
+    One,
+>One : Symbol(Foo.One, Decl(exhaustiveSwitchImplicitReturn.ts, 43, 10))
+
+    Two,
+>Two : Symbol(Foo.Two, Decl(exhaustiveSwitchImplicitReturn.ts, 44, 8))
+
+    Three
+>Three : Symbol(Foo.Three, Decl(exhaustiveSwitchImplicitReturn.ts, 45, 8))
+}
+
+function test2(type: Foo): number {
+>test2 : Symbol(test2, Decl(exhaustiveSwitchImplicitReturn.ts, 47, 1))
+>type : Symbol(type, Decl(exhaustiveSwitchImplicitReturn.ts, 49, 15))
+>Foo : Symbol(Foo, Decl(exhaustiveSwitchImplicitReturn.ts, 39, 1))
+
+    try {
+        switch (type) {
+>type : Symbol(type, Decl(exhaustiveSwitchImplicitReturn.ts, 49, 15))
+
+            case Foo.One:
+>Foo.One : Symbol(Foo.One, Decl(exhaustiveSwitchImplicitReturn.ts, 43, 10))
+>Foo : Symbol(Foo, Decl(exhaustiveSwitchImplicitReturn.ts, 39, 1))
+>One : Symbol(Foo.One, Decl(exhaustiveSwitchImplicitReturn.ts, 43, 10))
+
+                return 0;
+            case Foo.Two:
+>Foo.Two : Symbol(Foo.Two, Decl(exhaustiveSwitchImplicitReturn.ts, 44, 8))
+>Foo : Symbol(Foo, Decl(exhaustiveSwitchImplicitReturn.ts, 39, 1))
+>Two : Symbol(Foo.Two, Decl(exhaustiveSwitchImplicitReturn.ts, 44, 8))
+
+                return 0;
+            case Foo.Three:
+>Foo.Three : Symbol(Foo.Three, Decl(exhaustiveSwitchImplicitReturn.ts, 45, 8))
+>Foo : Symbol(Foo, Decl(exhaustiveSwitchImplicitReturn.ts, 39, 1))
+>Three : Symbol(Foo.Three, Decl(exhaustiveSwitchImplicitReturn.ts, 45, 8))
+
+                return 0;
+        }
+    } catch (e) {
+>e : Symbol(e, Decl(exhaustiveSwitchImplicitReturn.ts, 59, 13))
+
+        throw new Error('some error')
+>Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+    }
+}
+
+function test3(type: Foo): number {
+>test3 : Symbol(test3, Decl(exhaustiveSwitchImplicitReturn.ts, 62, 1))
+>type : Symbol(type, Decl(exhaustiveSwitchImplicitReturn.ts, 64, 15))
+>Foo : Symbol(Foo, Decl(exhaustiveSwitchImplicitReturn.ts, 39, 1))
+
+    try {
+        console.log('some switch')
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+
+        switch (type) {
+>type : Symbol(type, Decl(exhaustiveSwitchImplicitReturn.ts, 64, 15))
+
+            case Foo.One:
+>Foo.One : Symbol(Foo.One, Decl(exhaustiveSwitchImplicitReturn.ts, 43, 10))
+>Foo : Symbol(Foo, Decl(exhaustiveSwitchImplicitReturn.ts, 39, 1))
+>One : Symbol(Foo.One, Decl(exhaustiveSwitchImplicitReturn.ts, 43, 10))
+
+                return 0;
+            case Foo.Two:
+>Foo.Two : Symbol(Foo.Two, Decl(exhaustiveSwitchImplicitReturn.ts, 44, 8))
+>Foo : Symbol(Foo, Decl(exhaustiveSwitchImplicitReturn.ts, 39, 1))
+>Two : Symbol(Foo.Two, Decl(exhaustiveSwitchImplicitReturn.ts, 44, 8))
+
+                return 0;
+            case Foo.Three:
+>Foo.Three : Symbol(Foo.Three, Decl(exhaustiveSwitchImplicitReturn.ts, 45, 8))
+>Foo : Symbol(Foo, Decl(exhaustiveSwitchImplicitReturn.ts, 39, 1))
+>Three : Symbol(Foo.Three, Decl(exhaustiveSwitchImplicitReturn.ts, 45, 8))
+
+                return 0;
+        }
+    } catch (e) {
+>e : Symbol(e, Decl(exhaustiveSwitchImplicitReturn.ts, 75, 13))
+
+        console.log('some error')
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+
+        throw new Error('some error')
+>Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+    }
+}
+
+function test4(type: Foo): number {
+>test4 : Symbol(test4, Decl(exhaustiveSwitchImplicitReturn.ts, 79, 1))
+>type : Symbol(type, Decl(exhaustiveSwitchImplicitReturn.ts, 81, 15))
+>Foo : Symbol(Foo, Decl(exhaustiveSwitchImplicitReturn.ts, 39, 1))
+
+    try {
+        console.log('some switch')
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+
+        switch (type) {
+>type : Symbol(type, Decl(exhaustiveSwitchImplicitReturn.ts, 81, 15))
+
+            case Foo.One:
+>Foo.One : Symbol(Foo.One, Decl(exhaustiveSwitchImplicitReturn.ts, 43, 10))
+>Foo : Symbol(Foo, Decl(exhaustiveSwitchImplicitReturn.ts, 39, 1))
+>One : Symbol(Foo.One, Decl(exhaustiveSwitchImplicitReturn.ts, 43, 10))
+
+                return 0;
+            case Foo.Two:
+>Foo.Two : Symbol(Foo.Two, Decl(exhaustiveSwitchImplicitReturn.ts, 44, 8))
+>Foo : Symbol(Foo, Decl(exhaustiveSwitchImplicitReturn.ts, 39, 1))
+>Two : Symbol(Foo.Two, Decl(exhaustiveSwitchImplicitReturn.ts, 44, 8))
+
+                return 0;
+            case Foo.Three:
+>Foo.Three : Symbol(Foo.Three, Decl(exhaustiveSwitchImplicitReturn.ts, 45, 8))
+>Foo : Symbol(Foo, Decl(exhaustiveSwitchImplicitReturn.ts, 39, 1))
+>Three : Symbol(Foo.Three, Decl(exhaustiveSwitchImplicitReturn.ts, 45, 8))
+
+                0;
+        }
+    } catch (e) {
+>e : Symbol(e, Decl(exhaustiveSwitchImplicitReturn.ts, 92, 13))
+
+        console.log('some error')
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+
+        throw new Error('some error')
+>Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+    }
+}
+

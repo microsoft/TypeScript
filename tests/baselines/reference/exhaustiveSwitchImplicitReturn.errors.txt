@@ -1,7 +1,8 @@
 tests/cases/compiler/exhaustiveSwitchImplicitReturn.ts(35,32): error TS7030: Not all code paths return a value.
+tests/cases/compiler/exhaustiveSwitchImplicitReturn.ts(82,28): error TS7030: Not all code paths return a value.
 
 
-==== tests/cases/compiler/exhaustiveSwitchImplicitReturn.ts (1 errors) ====
+==== tests/cases/compiler/exhaustiveSwitchImplicitReturn.ts (2 errors) ====
     function foo1(bar: "a"): number {
         switch(bar) {
             case "a":
@@ -42,6 +43,65 @@ tests/cases/compiler/exhaustiveSwitchImplicitReturn.ts(35,32): error TS7030: Not
         switch(bar) {
             case "a":
                 return 1;
+        }
+    }
+    
+    // Repro from #32905.
+    
+    enum Foo {
+        One,
+        Two,
+        Three
+    }
+    
+    function test2(type: Foo): number {
+        try {
+            switch (type) {
+                case Foo.One:
+                    return 0;
+                case Foo.Two:
+                    return 0;
+                case Foo.Three:
+                    return 0;
+            }
+        } catch (e) {
+            throw new Error('some error')
+        }
+    }
+    
+    function test3(type: Foo): number {
+        try {
+            console.log('some switch')
+            switch (type) {
+                case Foo.One:
+                    return 0;
+                case Foo.Two:
+                    return 0;
+                case Foo.Three:
+                    return 0;
+            }
+        } catch (e) {
+            console.log('some error')
+            throw new Error('some error')
+        }
+    }
+    
+    function test4(type: Foo): number {
+                               ~~~~~~
+!!! error TS7030: Not all code paths return a value.
+        try {
+            console.log('some switch')
+            switch (type) {
+                case Foo.One:
+                    return 0;
+                case Foo.Two:
+                    return 0;
+                case Foo.Three:
+                    0;
+            }
+        } catch (e) {
+            console.log('some error')
+            throw new Error('some error')
         }
     }
     
