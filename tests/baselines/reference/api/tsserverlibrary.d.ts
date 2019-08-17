@@ -2094,7 +2094,8 @@ declare namespace ts {
     export enum TypePredicateKind {
         This = 0,
         Identifier = 1,
-        Assertion = 2
+        AssertsThis = 2,
+        AssertsIdentifier = 3
     }
     export interface ThisTypePredicate {
         kind: TypePredicateKind.This;
@@ -2108,13 +2109,19 @@ declare namespace ts {
         parameterIndex: number;
         type: Type;
     }
-    export interface AssertionTypePredicate {
-        kind: TypePredicateKind.Assertion;
+    export interface AssertsThisTypePredicate {
+        kind: TypePredicateKind.AssertsThis;
+        parameterName: undefined;
+        parameterIndex: undefined;
+        type: Type | undefined;
+    }
+    export interface AssertsIdentifierTypePredicate {
+        kind: TypePredicateKind.AssertsIdentifier;
         parameterName: string;
         parameterIndex: number;
         type: Type | undefined;
     }
-    export type TypePredicate = ThisTypePredicate | IdentifierTypePredicate | AssertionTypePredicate;
+    export type TypePredicate = ThisTypePredicate | IdentifierTypePredicate | AssertsThisTypePredicate | AssertsIdentifierTypePredicate;
     export enum SymbolFlags {
         None = 0,
         FunctionScopedVariable = 1,
@@ -3843,8 +3850,10 @@ declare namespace ts {
     function createIndexSignature(decorators: ReadonlyArray<Decorator> | undefined, modifiers: ReadonlyArray<Modifier> | undefined, parameters: ReadonlyArray<ParameterDeclaration>, type: TypeNode): IndexSignatureDeclaration;
     function updateIndexSignature(node: IndexSignatureDeclaration, decorators: ReadonlyArray<Decorator> | undefined, modifiers: ReadonlyArray<Modifier> | undefined, parameters: ReadonlyArray<ParameterDeclaration>, type: TypeNode): IndexSignatureDeclaration;
     function createKeywordTypeNode(kind: KeywordTypeNode["kind"]): KeywordTypeNode;
-    function createTypePredicateNode(assertsModifier: AssertsToken | undefined, parameterName: Identifier | ThisTypeNode | string, type: TypeNode | undefined): TypePredicateNode;
-    function updateTypePredicateNode(node: TypePredicateNode, assertsModifier: AssertsToken | undefined, parameterName: Identifier | ThisTypeNode, type: TypeNode | undefined): TypePredicateNode;
+    function createTypePredicateNode(parameterName: Identifier | ThisTypeNode | string, type: TypeNode | undefined): TypePredicateNode;
+    function createTypePredicateNodeWithModifier(assertsModifier: AssertsToken | undefined, parameterName: Identifier | ThisTypeNode | string, type: TypeNode | undefined): TypePredicateNode;
+    function updateTypePredicateNode(node: TypePredicateNode, parameterName: Identifier | ThisTypeNode, type: TypeNode | undefined): TypePredicateNode;
+    function updateTypePredicateNodeWithModifier(node: TypePredicateNode, assertsModifier: AssertsToken | undefined, parameterName: Identifier | ThisTypeNode, type: TypeNode | undefined): TypePredicateNode;
     function createTypeReferenceNode(typeName: string | EntityName, typeArguments: ReadonlyArray<TypeNode> | undefined): TypeReferenceNode;
     function updateTypeReferenceNode(node: TypeReferenceNode, typeName: EntityName, typeArguments: NodeArray<TypeNode> | undefined): TypeReferenceNode;
     function createFunctionTypeNode(typeParameters: ReadonlyArray<TypeParameterDeclaration> | undefined, parameters: ReadonlyArray<ParameterDeclaration>, type: TypeNode | undefined): FunctionTypeNode;
