@@ -17616,7 +17616,7 @@ namespace ts {
                     return type;
                 }
 
-                // Get the prototype property of the type identifier so we can find out it's type.
+                // Get the prototype property of the type identifier so we can find out its type.
                 const prototypeProperty = getPropertyOfType(identifierType, "prototype" as __String);
                 if (!prototypeProperty) {
                     return type;
@@ -17639,7 +17639,7 @@ namespace ts {
 
                 function isConstructedBy(source: Type, target: Type) {
                     // If either the source or target type are a class type then we need to check that they are the same exact type.
-                    // This is because you may have a class `A` that defines some set ofproperties, and another class `B`
+                    // This is because you may have a class `A` that defines some set of properties, and another class `B`
                     // that defines the same set of properties as class `A`, in that case they are structurally the same
                     // type, but when you do something like `instanceOfA.constructor === B` it will return false.
                     if (source.flags & TypeFlags.Object && getObjectFlags(source) & ObjectFlags.Class ||
