@@ -20,16 +20,16 @@ function f1(s: Set<string> | Set<number>) {
 >Set : SetConstructor
 
         s;  // Set<number>
->s : Set<number> & Set<any>
+>s : Set<number>
     }
     s;  // Set<number>
->s : Set<number> & Set<any>
+>s : Set<number>
 
     s.add(42);
->s.add(42) : Set<number> & Set<any>
->s.add : ((value: number) => Set<number> & Set<any>) & ((value: any) => Set<number> & Set<any>)
->s : Set<number> & Set<any>
->add : ((value: number) => Set<number> & Set<any>) & ((value: any) => Set<number> & Set<any>)
+>s.add(42) : Set<number>
+>s.add : (value: number) => Set<number>
+>s : Set<number>
+>add : (value: number) => Set<number>
 >42 : 42
 }
 
@@ -105,7 +105,7 @@ function f4(s: Set<string> | Set<number>) {
 >Set : SetConstructor
 
         s;  // Set<number>
->s : Set<number> & Set<any>
+>s : Set<number>
     }
     else {
         s;  // never

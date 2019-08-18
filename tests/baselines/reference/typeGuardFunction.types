@@ -65,7 +65,7 @@ if(isA(subType)) {
 
     subType.propC;
 >subType.propC : number
->subType : C & A
+>subType : C
 >propC : number
 }
 

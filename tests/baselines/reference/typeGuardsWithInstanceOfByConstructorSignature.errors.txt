@@ -15,6 +15,10 @@ tests/cases/conformance/expressions/typeGuards/typeGuardsWithInstanceOfByConstru
   Property 'bar1' does not exist on type 'E2'.
 tests/cases/conformance/expressions/typeGuards/typeGuardsWithInstanceOfByConstructorSignature.ts(119,11): error TS2339: Property 'bar2' does not exist on type 'E1 | E2'.
   Property 'bar2' does not exist on type 'E1'.
+tests/cases/conformance/expressions/typeGuards/typeGuardsWithInstanceOfByConstructorSignature.ts(134,11): error TS2339: Property 'foo' does not exist on type 'string | F'.
+  Property 'foo' does not exist on type 'string'.
+tests/cases/conformance/expressions/typeGuards/typeGuardsWithInstanceOfByConstructorSignature.ts(135,11): error TS2339: Property 'bar' does not exist on type 'string | F'.
+  Property 'bar' does not exist on type 'string'.
 tests/cases/conformance/expressions/typeGuards/typeGuardsWithInstanceOfByConstructorSignature.ts(160,11): error TS2339: Property 'foo2' does not exist on type 'G1'.
 tests/cases/conformance/expressions/typeGuards/typeGuardsWithInstanceOfByConstructorSignature.ts(166,11): error TS2339: Property 'foo2' does not exist on type 'G1'.
 tests/cases/conformance/expressions/typeGuards/typeGuardsWithInstanceOfByConstructorSignature.ts(182,11): error TS2339: Property 'bar' does not exist on type 'H'.
@@ -22,7 +26,7 @@ tests/cases/conformance/expressions/typeGuards/typeGuardsWithInstanceOfByConstru
 tests/cases/conformance/expressions/typeGuards/typeGuardsWithInstanceOfByConstructorSignature.ts(188,11): error TS2551: Property 'foo2' does not exist on type 'H'. Did you mean 'foo'?
 
 
-==== tests/cases/conformance/expressions/typeGuards/typeGuardsWithInstanceOfByConstructorSignature.ts (18 errors) ====
+==== tests/cases/conformance/expressions/typeGuards/typeGuardsWithInstanceOfByConstructorSignature.ts (20 errors) ====
     interface AConstructor {
         new (): A;
     }
@@ -187,7 +191,13 @@ tests/cases/conformance/expressions/typeGuards/typeGuardsWithInstanceOfByConstru
     var obj11: F | string;
     if (obj11 instanceof F) { // can't type narrowing, construct signature returns any.
         obj11.foo;
+              ~~~
+!!! error TS2339: Property 'foo' does not exist on type 'string | F'.
+!!! error TS2339:   Property 'foo' does not exist on type 'string'.
         obj11.bar;
+              ~~~
+!!! error TS2339: Property 'bar' does not exist on type 'string | F'.
+!!! error TS2339:   Property 'bar' does not exist on type 'string'.
     }
     
     var obj12: any;

@@ -341,12 +341,12 @@ if (obj11 instanceof F) { // can't type narrowing, construct signature returns a
 
     obj11.foo;
 >obj11.foo : any
->obj11 : any
+>obj11 : string | F
 >foo : any
 
     obj11.bar;
 >obj11.bar : any
->obj11 : any
+>obj11 : string | F
 >bar : any
 }
 

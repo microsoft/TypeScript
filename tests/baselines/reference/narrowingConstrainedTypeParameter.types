@@ -39,5 +39,5 @@ export function speak<TPet extends Pet>(pet: TPet, voice: (pet: TPet) => string)
     return voice(pet);
 >voice(pet) : string
 >voice : (pet: TPet) => string
->pet : TPet & Pet
+>pet : TPet
 }
