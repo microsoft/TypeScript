@@ -4,27 +4,61 @@ function func() { return Math.random() > 0.5; }
 if (func) { // error
 }
 
-function onlyErrorsWhenNonNullable(required: () => boolean, optional?: () => boolean) {
+function onlyErrorsWhenTestingNonNullableFunctionType(required: () => boolean, optional?: () => boolean) {
     if (required) { // error
+    }
+
+    if (optional) { // ok
+    }
+
+    if (!!required) { // ok
     }
 
     if (required()) { // ok
     }
+}
 
-    if (optional) { // ok
+function onlyErrorsWhenReturnsBoolean(
+    bool: () => boolean,
+    nullableBool: () => boolean | undefined,
+    nullableTrue: () => true | undefined,
+    nullable: () => undefined | null,
+    notABool: () => string,
+    unionWithBool: () => boolean | string,
+    nullableString: () => string | undefined
+) {
+    if (bool) { // error
+    }
+
+    if (nullableBool) { // error
+    }
+
+    if (nullableTrue) { // error
+    }
+
+    if (nullable) { // ok
+    }
+
+    if (notABool) { // ok
+    }
+
+    if (unionWithBool) { // ok
+    }
+
+    if (nullableString) { // ok
     }
 }
 
 function checksPropertyAndElementAccess() {
     const x = {
         foo: {
-            bar() { }
+            bar() { return true; }
         }
     }
 
     if (x.foo.bar) { // error
     }
-    
+
     if (x.foo['bar']) { // error
     }
 }
@@ -55,18 +89,36 @@ class Foo {
 function func() { return Math.random() > 0.5; }
 if (func) { // error
 }
-function onlyErrorsWhenNonNullable(required, optional) {
+function onlyErrorsWhenTestingNonNullableFunctionType(required, optional) {
     if (required) { // error
+    }
+    if (optional) { // ok
+    }
+    if (!!required) { // ok
     }
     if (required()) { // ok
     }
-    if (optional) { // ok
+}
+function onlyErrorsWhenReturnsBoolean(bool, nullableBool, nullableTrue, nullable, notABool, unionWithBool, nullableString) {
+    if (bool) { // error
+    }
+    if (nullableBool) { // error
+    }
+    if (nullableTrue) { // error
+    }
+    if (nullable) { // ok
+    }
+    if (notABool) { // ok
+    }
+    if (unionWithBool) { // ok
+    }
+    if (nullableString) { // ok
     }
 }
 function checksPropertyAndElementAccess() {
     var x = {
         foo: {
-            bar: function () { }
+            bar: function () { return true; }
         }
     };
     if (x.foo.bar) { // error

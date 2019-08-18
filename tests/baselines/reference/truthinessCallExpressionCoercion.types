@@ -12,8 +12,8 @@ if (func) { // error
 >func : () => boolean
 }
 
-function onlyErrorsWhenNonNullable(required: () => boolean, optional?: () => boolean) {
->onlyErrorsWhenNonNullable : (required: () => boolean, optional?: (() => boolean) | undefined) => void
+function onlyErrorsWhenTestingNonNullableFunctionType(required: () => boolean, optional?: () => boolean) {
+>onlyErrorsWhenTestingNonNullableFunctionType : (required: () => boolean, optional?: (() => boolean) | undefined) => void
 >required : () => boolean
 >optional : (() => boolean) | undefined
 
@@ -21,13 +21,75 @@ function onlyErrorsWhenNonNullable(required: () => boolean, optional?: () => boo
 >required : () => boolean
     }
 
+    if (optional) { // ok
+>optional : (() => boolean) | undefined
+    }
+
+    if (!!required) { // ok
+>!!required : true
+>!required : false
+>required : () => boolean
+    }
+
     if (required()) { // ok
 >required() : boolean
 >required : () => boolean
     }
+}
 
-    if (optional) { // ok
->optional : (() => boolean) | undefined
+function onlyErrorsWhenReturnsBoolean(
+>onlyErrorsWhenReturnsBoolean : (bool: () => boolean, nullableBool: () => boolean | undefined, nullableTrue: () => true | undefined, nullable: () => null | undefined, notABool: () => string, unionWithBool: () => string | boolean, nullableString: () => string | undefined) => void
+
+    bool: () => boolean,
+>bool : () => boolean
+
+    nullableBool: () => boolean | undefined,
+>nullableBool : () => boolean | undefined
+
+    nullableTrue: () => true | undefined,
+>nullableTrue : () => true | undefined
+>true : true
+
+    nullable: () => undefined | null,
+>nullable : () => null | undefined
+>null : null
+
+    notABool: () => string,
+>notABool : () => string
+
+    unionWithBool: () => boolean | string,
+>unionWithBool : () => string | boolean
+
+    nullableString: () => string | undefined
+>nullableString : () => string | undefined
+
+) {
+    if (bool) { // error
+>bool : () => boolean
+    }
+
+    if (nullableBool) { // error
+>nullableBool : () => boolean | undefined
+    }
+
+    if (nullableTrue) { // error
+>nullableTrue : () => true | undefined
+    }
+
+    if (nullable) { // ok
+>nullable : () => null | undefined
+    }
+
+    if (notABool) { // ok
+>notABool : () => string
+    }
+
+    if (unionWithBool) { // ok
+>unionWithBool : () => string | boolean
+    }
+
+    if (nullableString) { // ok
+>nullableString : () => string | undefined
     }
 }
 
@@ -35,31 +97,32 @@ function checksPropertyAndElementAccess() {
 >checksPropertyAndElementAccess : () => void
 
     const x = {
->x : { foo: { bar(): void; }; }
->{        foo: {            bar() { }        }    } : { foo: { bar(): void; }; }
+>x : { foo: { bar(): boolean; }; }
+>{        foo: {            bar() { return true; }        }    } : { foo: { bar(): boolean; }; }
 
         foo: {
->foo : { bar(): void; }
->{            bar() { }        } : { bar(): void; }
+>foo : { bar(): boolean; }
+>{            bar() { return true; }        } : { bar(): boolean; }
 
-            bar() { }
->bar : () => void
+            bar() { return true; }
+>bar : () => boolean
+>true : true
         }
     }
 
     if (x.foo.bar) { // error
->x.foo.bar : () => void
->x.foo : { bar(): void; }
->x : { foo: { bar(): void; }; }
->foo : { bar(): void; }
->bar : () => void
+>x.foo.bar : () => boolean
+>x.foo : { bar(): boolean; }
+>x : { foo: { bar(): boolean; }; }
+>foo : { bar(): boolean; }
+>bar : () => boolean
     }
-    
+
     if (x.foo['bar']) { // error
->x.foo['bar'] : () => void
->x.foo : { bar(): void; }
->x : { foo: { bar(): void; }; }
->foo : { bar(): void; }
+>x.foo['bar'] : () => boolean
+>x.foo : { bar(): boolean; }
+>x : { foo: { bar(): boolean; }; }
+>foo : { bar(): boolean; }
 >'bar' : "bar"
     }
 }

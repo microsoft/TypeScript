@@ -9,88 +9,146 @@ if (func) { // error
 >func : Symbol(func, Decl(truthinessCallExpressionCoercion.ts, 0, 0))
 }
 
-function onlyErrorsWhenNonNullable(required: () => boolean, optional?: () => boolean) {
->onlyErrorsWhenNonNullable : Symbol(onlyErrorsWhenNonNullable, Decl(truthinessCallExpressionCoercion.ts, 3, 1))
->required : Symbol(required, Decl(truthinessCallExpressionCoercion.ts, 5, 35))
->optional : Symbol(optional, Decl(truthinessCallExpressionCoercion.ts, 5, 59))
+function onlyErrorsWhenTestingNonNullableFunctionType(required: () => boolean, optional?: () => boolean) {
+>onlyErrorsWhenTestingNonNullableFunctionType : Symbol(onlyErrorsWhenTestingNonNullableFunctionType, Decl(truthinessCallExpressionCoercion.ts, 3, 1))
+>required : Symbol(required, Decl(truthinessCallExpressionCoercion.ts, 5, 54))
+>optional : Symbol(optional, Decl(truthinessCallExpressionCoercion.ts, 5, 78))
 
     if (required) { // error
->required : Symbol(required, Decl(truthinessCallExpressionCoercion.ts, 5, 35))
-    }
-
-    if (required()) { // ok
->required : Symbol(required, Decl(truthinessCallExpressionCoercion.ts, 5, 35))
+>required : Symbol(required, Decl(truthinessCallExpressionCoercion.ts, 5, 54))
     }
 
     if (optional) { // ok
->optional : Symbol(optional, Decl(truthinessCallExpressionCoercion.ts, 5, 59))
+>optional : Symbol(optional, Decl(truthinessCallExpressionCoercion.ts, 5, 78))
+    }
+
+    if (!!required) { // ok
+>required : Symbol(required, Decl(truthinessCallExpressionCoercion.ts, 5, 54))
+    }
+
+    if (required()) { // ok
+>required : Symbol(required, Decl(truthinessCallExpressionCoercion.ts, 5, 54))
+    }
+}
+
+function onlyErrorsWhenReturnsBoolean(
+>onlyErrorsWhenReturnsBoolean : Symbol(onlyErrorsWhenReturnsBoolean, Decl(truthinessCallExpressionCoercion.ts, 17, 1))
+
+    bool: () => boolean,
+>bool : Symbol(bool, Decl(truthinessCallExpressionCoercion.ts, 19, 38))
+
+    nullableBool: () => boolean | undefined,
+>nullableBool : Symbol(nullableBool, Decl(truthinessCallExpressionCoercion.ts, 20, 24))
+
+    nullableTrue: () => true | undefined,
+>nullableTrue : Symbol(nullableTrue, Decl(truthinessCallExpressionCoercion.ts, 21, 44))
+
+    nullable: () => undefined | null,
+>nullable : Symbol(nullable, Decl(truthinessCallExpressionCoercion.ts, 22, 41))
+
+    notABool: () => string,
+>notABool : Symbol(notABool, Decl(truthinessCallExpressionCoercion.ts, 23, 37))
+
+    unionWithBool: () => boolean | string,
+>unionWithBool : Symbol(unionWithBool, Decl(truthinessCallExpressionCoercion.ts, 24, 27))
+
+    nullableString: () => string | undefined
+>nullableString : Symbol(nullableString, Decl(truthinessCallExpressionCoercion.ts, 25, 42))
+
+) {
+    if (bool) { // error
+>bool : Symbol(bool, Decl(truthinessCallExpressionCoercion.ts, 19, 38))
+    }
+
+    if (nullableBool) { // error
+>nullableBool : Symbol(nullableBool, Decl(truthinessCallExpressionCoercion.ts, 20, 24))
+    }
+
+    if (nullableTrue) { // error
+>nullableTrue : Symbol(nullableTrue, Decl(truthinessCallExpressionCoercion.ts, 21, 44))
+    }
+
+    if (nullable) { // ok
+>nullable : Symbol(nullable, Decl(truthinessCallExpressionCoercion.ts, 22, 41))
+    }
+
+    if (notABool) { // ok
+>notABool : Symbol(notABool, Decl(truthinessCallExpressionCoercion.ts, 23, 37))
+    }
+
+    if (unionWithBool) { // ok
+>unionWithBool : Symbol(unionWithBool, Decl(truthinessCallExpressionCoercion.ts, 24, 27))
+    }
+
+    if (nullableString) { // ok
+>nullableString : Symbol(nullableString, Decl(truthinessCallExpressionCoercion.ts, 25, 42))
     }
 }
 
 function checksPropertyAndElementAccess() {
->checksPropertyAndElementAccess : Symbol(checksPropertyAndElementAccess, Decl(truthinessCallExpressionCoercion.ts, 14, 1))
+>checksPropertyAndElementAccess : Symbol(checksPropertyAndElementAccess, Decl(truthinessCallExpressionCoercion.ts, 48, 1))
 
     const x = {
->x : Symbol(x, Decl(truthinessCallExpressionCoercion.ts, 17, 9))
+>x : Symbol(x, Decl(truthinessCallExpressionCoercion.ts, 51, 9))
 
         foo: {
->foo : Symbol(foo, Decl(truthinessCallExpressionCoercion.ts, 17, 15))
+>foo : Symbol(foo, Decl(truthinessCallExpressionCoercion.ts, 51, 15))
 
-            bar() { }
->bar : Symbol(bar, Decl(truthinessCallExpressionCoercion.ts, 18, 14))
+            bar() { return true; }
+>bar : Symbol(bar, Decl(truthinessCallExpressionCoercion.ts, 52, 14))
         }
     }
 
     if (x.foo.bar) { // error
->x.foo.bar : Symbol(bar, Decl(truthinessCallExpressionCoercion.ts, 18, 14))
->x.foo : Symbol(foo, Decl(truthinessCallExpressionCoercion.ts, 17, 15))
->x : Symbol(x, Decl(truthinessCallExpressionCoercion.ts, 17, 9))
->foo : Symbol(foo, Decl(truthinessCallExpressionCoercion.ts, 17, 15))
->bar : Symbol(bar, Decl(truthinessCallExpressionCoercion.ts, 18, 14))
+>x.foo.bar : Symbol(bar, Decl(truthinessCallExpressionCoercion.ts, 52, 14))
+>x.foo : Symbol(foo, Decl(truthinessCallExpressionCoercion.ts, 51, 15))
+>x : Symbol(x, Decl(truthinessCallExpressionCoercion.ts, 51, 9))
+>foo : Symbol(foo, Decl(truthinessCallExpressionCoercion.ts, 51, 15))
+>bar : Symbol(bar, Decl(truthinessCallExpressionCoercion.ts, 52, 14))
     }
-    
+
     if (x.foo['bar']) { // error
->x.foo : Symbol(foo, Decl(truthinessCallExpressionCoercion.ts, 17, 15))
->x : Symbol(x, Decl(truthinessCallExpressionCoercion.ts, 17, 9))
->foo : Symbol(foo, Decl(truthinessCallExpressionCoercion.ts, 17, 15))
->'bar' : Symbol(bar, Decl(truthinessCallExpressionCoercion.ts, 18, 14))
+>x.foo : Symbol(foo, Decl(truthinessCallExpressionCoercion.ts, 51, 15))
+>x : Symbol(x, Decl(truthinessCallExpressionCoercion.ts, 51, 9))
+>foo : Symbol(foo, Decl(truthinessCallExpressionCoercion.ts, 51, 15))
+>'bar' : Symbol(bar, Decl(truthinessCallExpressionCoercion.ts, 52, 14))
     }
 }
 
 function maybeBoolean(param: boolean | (() => boolean)) {
->maybeBoolean : Symbol(maybeBoolean, Decl(truthinessCallExpressionCoercion.ts, 28, 1))
->param : Symbol(param, Decl(truthinessCallExpressionCoercion.ts, 30, 22))
+>maybeBoolean : Symbol(maybeBoolean, Decl(truthinessCallExpressionCoercion.ts, 62, 1))
+>param : Symbol(param, Decl(truthinessCallExpressionCoercion.ts, 64, 22))
 
     if (param) { // ok
->param : Symbol(param, Decl(truthinessCallExpressionCoercion.ts, 30, 22))
+>param : Symbol(param, Decl(truthinessCallExpressionCoercion.ts, 64, 22))
     }
 }
 
 class Foo {
->Foo : Symbol(Foo, Decl(truthinessCallExpressionCoercion.ts, 33, 1))
+>Foo : Symbol(Foo, Decl(truthinessCallExpressionCoercion.ts, 67, 1))
 
     maybeIsUser?: () => boolean;
->maybeIsUser : Symbol(Foo.maybeIsUser, Decl(truthinessCallExpressionCoercion.ts, 35, 11))
+>maybeIsUser : Symbol(Foo.maybeIsUser, Decl(truthinessCallExpressionCoercion.ts, 69, 11))
 
     isUser() {
->isUser : Symbol(Foo.isUser, Decl(truthinessCallExpressionCoercion.ts, 36, 32))
+>isUser : Symbol(Foo.isUser, Decl(truthinessCallExpressionCoercion.ts, 70, 32))
 
         return true;
     }
 
     test() {
->test : Symbol(Foo.test, Decl(truthinessCallExpressionCoercion.ts, 40, 5))
+>test : Symbol(Foo.test, Decl(truthinessCallExpressionCoercion.ts, 74, 5))
 
         if (this.isUser) { // error
->this.isUser : Symbol(Foo.isUser, Decl(truthinessCallExpressionCoercion.ts, 36, 32))
->this : Symbol(Foo, Decl(truthinessCallExpressionCoercion.ts, 33, 1))
->isUser : Symbol(Foo.isUser, Decl(truthinessCallExpressionCoercion.ts, 36, 32))
+>this.isUser : Symbol(Foo.isUser, Decl(truthinessCallExpressionCoercion.ts, 70, 32))
+>this : Symbol(Foo, Decl(truthinessCallExpressionCoercion.ts, 67, 1))
+>isUser : Symbol(Foo.isUser, Decl(truthinessCallExpressionCoercion.ts, 70, 32))
         }
 
         if (this.maybeIsUser) { // ok
->this.maybeIsUser : Symbol(Foo.maybeIsUser, Decl(truthinessCallExpressionCoercion.ts, 35, 11))
->this : Symbol(Foo, Decl(truthinessCallExpressionCoercion.ts, 33, 1))
->maybeIsUser : Symbol(Foo.maybeIsUser, Decl(truthinessCallExpressionCoercion.ts, 35, 11))
+>this.maybeIsUser : Symbol(Foo.maybeIsUser, Decl(truthinessCallExpressionCoercion.ts, 69, 11))
+>this : Symbol(Foo, Decl(truthinessCallExpressionCoercion.ts, 67, 1))
+>maybeIsUser : Symbol(Foo.maybeIsUser, Decl(truthinessCallExpressionCoercion.ts, 69, 11))
         }
     }
 }

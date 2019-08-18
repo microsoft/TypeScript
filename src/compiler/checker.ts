@@ -27875,24 +27875,7 @@ namespace ts {
             checkGrammarStatementInAmbientContext(node);
 
             const type = checkTruthinessExpression(node.expression);
-
-            if (strictNullChecks &&
-                (node.expression.kind === SyntaxKind.Identifier ||
-                node.expression.kind === SyntaxKind.PropertyAccessExpression ||
-                node.expression.kind === SyntaxKind.ElementAccessExpression)) {
-                const possiblyFalsy = !!getFalsyFlags(type);
-                if (!possiblyFalsy) {
-                    // While it technically should be invalid for any known-truthy value
-                    // to be tested, we de-scope to functions as a heuristic to identify
-                    // the most common bugs. There are too many false positives for values
-                    // sourced from type definitions without strictNullChecks otherwise.
-                    const callSignatures = getSignaturesOfType(type, SignatureKind.Call);
-                    if (callSignatures.length > 0) {
-                        error(node.expression, Diagnostics.This_condition_will_always_return_true_since_the_function_is_always_defined_Did_you_mean_to_call_it_instead);
-                    }
-                }
-            }
-
+            checkTestingKnownTruthyCallableType(node.expression, type);
             checkSourceElement(node.thenStatement);
 
             if (node.thenStatement.kind === SyntaxKind.EmptyStatement) {
@@ -27900,6 +27883,59 @@ namespace ts {
             }
 
             checkSourceElement(node.elseStatement);
+        }
+
+        function checkTestingKnownTruthyCallableType(testedNode: Expression, type: Type) {
+            if (!strictNullChecks) {
+                return;
+            }
+
+            if (testedNode.kind === SyntaxKind.Identifier ||
+                testedNode.kind === SyntaxKind.PropertyAccessExpression ||
+                testedNode.kind === SyntaxKind.ElementAccessExpression) {
+                const possiblyFalsy = getFalsyFlags(type);
+                if (possiblyFalsy) {
+                    return;
+                }
+
+                // While it technically should be invalid for any known-truthy value
+                // to be tested, we de-scope to functions that return a boolean as a
+                // heuristic to identify the most common bugs. There are too many
+                // false positives for values sourced from type definitions without
+                // strictNullChecks otherwise.
+                const callSignatures = getSignaturesOfType(type, SignatureKind.Call);
+                if (callSignatures.length === 0) {
+                    return;
+                }
+
+                const alwaysReturnsBoolean = every(callSignatures, signature => {
+                    const returnType = getReturnTypeOfSignature(signature);
+                    const exactlyBoolean = TypeFlags.Boolean | TypeFlags.Union;
+                    if (returnType.flags === exactlyBoolean) {
+                        return true;
+                    }
+
+                    if (returnType.flags & TypeFlags.Union) {
+                        const allowedInUnion = TypeFlags.BooleanLike | TypeFlags.Nullable;
+                        let unionContainsBoolean = false;
+                        const unionContainsOnlyAllowedTypes = every((returnType as UnionType).types, innerType => {
+                            if (innerType.flags & TypeFlags.BooleanLike) {
+                                unionContainsBoolean = true;
+                            }
+
+                            return (innerType.flags | allowedInUnion) === allowedInUnion;
+                        });
+
+                        return unionContainsBoolean && unionContainsOnlyAllowedTypes;
+                    }
+
+                    return false;
+                });
+
+                if (alwaysReturnsBoolean) {
+                    error(testedNode, Diagnostics.This_condition_will_always_return_true_since_the_function_is_always_defined_Did_you_mean_to_call_it_instead);
+                }
+            }
         }
 
         function checkDoStatement(node: DoStatement) {
