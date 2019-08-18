@@ -1,36 +1,58 @@
 //// [truthinessCallExpressionCoercion.ts]
-function func() { return Math.random() > 0.5; }
-
-if (func) { // error
-}
-
-function onlyErrorsWhenNonNullable(required: () => boolean, optional?: () => boolean) {
+function onlyErrorsWhenTestingNonNullableFunctionType(required: () => boolean, optional?: () => boolean) {
     if (required) { // error
-    }
-
-    if (required()) { // ok
     }
 
     if (optional) { // ok
     }
+
+    if (!!required) { // ok
+    }
+
+    if (required()) { // ok
+    }
 }
 
-function checksPropertyAndElementAccess() {
+function onlyErrorsWhenUnusedInBody() {
+    function test() { return Math.random() > 0.5; }
+
+    if (test) { // error
+        console.log('test');
+    }
+    
+    if (test) { // ok
+        console.log(test);
+    }
+
+    if (test) { // ok
+        test();
+    }
+    
+    if (test) { // ok
+        [() => null].forEach(() => {
+            test();
+        });
+    }
+    
+    if (test) { // error
+        [() => null].forEach(test => {
+            test();
+        });
+    }
+}
+
+function checksPropertyAccess() {
     const x = {
         foo: {
-            bar() { }
+            bar() { return true; }
         }
     }
 
     if (x.foo.bar) { // error
     }
-    
-    if (x.foo['bar']) { // error
-    }
-}
 
-function maybeBoolean(param: boolean | (() => boolean)) {
-    if (param) { // ok
+    if (x.foo.bar) { // ok
+        x.foo.bar;
     }
 }
 
@@ -52,30 +74,48 @@ class Foo {
 
 
 //// [truthinessCallExpressionCoercion.js]
-function func() { return Math.random() > 0.5; }
-if (func) { // error
-}
-function onlyErrorsWhenNonNullable(required, optional) {
+function onlyErrorsWhenTestingNonNullableFunctionType(required, optional) {
     if (required) { // error
-    }
-    if (required()) { // ok
     }
     if (optional) { // ok
     }
+    if (!!required) { // ok
+    }
+    if (required()) { // ok
+    }
 }
-function checksPropertyAndElementAccess() {
+function onlyErrorsWhenUnusedInBody() {
+    function test() { return Math.random() > 0.5; }
+    if (test) { // error
+        console.log('test');
+    }
+    if (test) { // ok
+        console.log(test);
+    }
+    if (test) { // ok
+        test();
+    }
+    if (test) { // ok
+        [function () { return null; }].forEach(function () {
+            test();
+        });
+    }
+    if (test) { // error
+        [function () { return null; }].forEach(function (test) {
+            test();
+        });
+    }
+}
+function checksPropertyAccess() {
     var x = {
         foo: {
-            bar: function () { }
+            bar: function () { return true; }
         }
     };
     if (x.foo.bar) { // error
     }
-    if (x.foo['bar']) { // error
-    }
-}
-function maybeBoolean(param) {
-    if (param) { // ok
+    if (x.foo.bar) { // ok
+        x.foo.bar;
     }
 }
 var Foo = /** @class */ (function () {

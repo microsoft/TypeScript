@@ -27931,24 +27931,7 @@ namespace ts {
             checkGrammarStatementInAmbientContext(node);
 
             const type = checkTruthinessExpression(node.expression);
-
-            if (strictNullChecks &&
-                (node.expression.kind === SyntaxKind.Identifier ||
-                node.expression.kind === SyntaxKind.PropertyAccessExpression ||
-                node.expression.kind === SyntaxKind.ElementAccessExpression)) {
-                const possiblyFalsy = !!getFalsyFlags(type);
-                if (!possiblyFalsy) {
-                    // While it technically should be invalid for any known-truthy value
-                    // to be tested, we de-scope to functions as a heuristic to identify
-                    // the most common bugs. There are too many false positives for values
-                    // sourced from type definitions without strictNullChecks otherwise.
-                    const callSignatures = getSignaturesOfType(type, SignatureKind.Call);
-                    if (callSignatures.length > 0) {
-                        error(node.expression, Diagnostics.This_condition_will_always_return_true_since_the_function_is_always_defined_Did_you_mean_to_call_it_instead);
-                    }
-                }
-            }
-
+            checkTestingKnownTruthyCallableType(node, type);
             checkSourceElement(node.thenStatement);
 
             if (node.thenStatement.kind === SyntaxKind.EmptyStatement) {
@@ -27956,6 +27939,57 @@ namespace ts {
             }
 
             checkSourceElement(node.elseStatement);
+        }
+
+        function checkTestingKnownTruthyCallableType(ifStatement: IfStatement, type: Type) {
+            if (!strictNullChecks) {
+                return;
+            }
+
+            const testedNode = isIdentifier(ifStatement.expression)
+                ? ifStatement.expression
+                : isPropertyAccessExpression(ifStatement.expression)
+                    ? ifStatement.expression.name
+                    : undefined;
+
+            if (!testedNode) {
+                return;
+            }
+
+            const possiblyFalsy = getFalsyFlags(type);
+            if (possiblyFalsy) {
+                return;
+            }
+
+            // While it technically should be invalid for any known-truthy value
+            // to be tested, we de-scope to functions unrefenced in the block as a
+            // heuristic to identify the most common bugs. There are too many
+            // false positives for values sourced from type definitions without
+            // strictNullChecks otherwise.
+            const callSignatures = getSignaturesOfType(type, SignatureKind.Call);
+            if (callSignatures.length === 0) {
+                return;
+            }
+
+            const testedFunctionSymbol = getSymbolAtLocation(testedNode);
+            if (!testedFunctionSymbol) {
+                return;
+            }
+
+            const functionIsUsedInBody = forEachChild(ifStatement.thenStatement, function check(childNode): boolean | undefined {
+                if (isIdentifier(childNode)) {
+                    const childSymbol = getSymbolAtLocation(childNode);
+                    if (childSymbol && childSymbol.id === testedFunctionSymbol.id) {
+                        return true;
+                    }
+                }
+
+                return forEachChild(childNode, check);
+            });
+
+            if (!functionIsUsedInBody) {
+                error(ifStatement.expression, Diagnostics.This_condition_will_always_return_true_since_the_function_is_always_defined_Did_you_mean_to_call_it_instead);
+            }
         }
 
         function checkDoStatement(node: DoStatement) {

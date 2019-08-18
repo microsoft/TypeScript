@@ -1,35 +1,63 @@
-tests/cases/compiler/truthinessCallExpressionCoercion.ts(3,5): error TS2774: This condition will always return true since the function is always defined. Did you mean to call it instead?
-tests/cases/compiler/truthinessCallExpressionCoercion.ts(7,9): error TS2774: This condition will always return true since the function is always defined. Did you mean to call it instead?
-tests/cases/compiler/truthinessCallExpressionCoercion.ts(24,9): error TS2774: This condition will always return true since the function is always defined. Did you mean to call it instead?
-tests/cases/compiler/truthinessCallExpressionCoercion.ts(27,9): error TS2774: This condition will always return true since the function is always defined. Did you mean to call it instead?
-tests/cases/compiler/truthinessCallExpressionCoercion.ts(44,13): error TS2774: This condition will always return true since the function is always defined. Did you mean to call it instead?
+tests/cases/compiler/truthinessCallExpressionCoercion.ts(2,9): error TS2774: This condition will always return true since the function is always defined. Did you mean to call it instead?
+tests/cases/compiler/truthinessCallExpressionCoercion.ts(18,9): error TS2774: This condition will always return true since the function is always defined. Did you mean to call it instead?
+tests/cases/compiler/truthinessCallExpressionCoercion.ts(36,9): error TS2774: This condition will always return true since the function is always defined. Did you mean to call it instead?
+tests/cases/compiler/truthinessCallExpressionCoercion.ts(50,9): error TS2774: This condition will always return true since the function is always defined. Did you mean to call it instead?
+tests/cases/compiler/truthinessCallExpressionCoercion.ts(66,13): error TS2774: This condition will always return true since the function is always defined. Did you mean to call it instead?
 
 
 ==== tests/cases/compiler/truthinessCallExpressionCoercion.ts (5 errors) ====
-    function func() { return Math.random() > 0.5; }
-    
-    if (func) { // error
-        ~~~~
-!!! error TS2774: This condition will always return true since the function is always defined. Did you mean to call it instead?
-    }
-    
-    function onlyErrorsWhenNonNullable(required: () => boolean, optional?: () => boolean) {
+    function onlyErrorsWhenTestingNonNullableFunctionType(required: () => boolean, optional?: () => boolean) {
         if (required) { // error
             ~~~~~~~~
 !!! error TS2774: This condition will always return true since the function is always defined. Did you mean to call it instead?
         }
     
-        if (required()) { // ok
+        if (optional) { // ok
         }
     
-        if (optional) { // ok
+        if (!!required) { // ok
+        }
+    
+        if (required()) { // ok
         }
     }
     
-    function checksPropertyAndElementAccess() {
+    function onlyErrorsWhenUnusedInBody() {
+        function test() { return Math.random() > 0.5; }
+    
+        if (test) { // error
+            ~~~~
+!!! error TS2774: This condition will always return true since the function is always defined. Did you mean to call it instead?
+            console.log('test');
+        }
+        
+        if (test) { // ok
+            console.log(test);
+        }
+    
+        if (test) { // ok
+            test();
+        }
+        
+        if (test) { // ok
+            [() => null].forEach(() => {
+                test();
+            });
+        }
+        
+        if (test) { // error
+            ~~~~
+!!! error TS2774: This condition will always return true since the function is always defined. Did you mean to call it instead?
+            [() => null].forEach(test => {
+                test();
+            });
+        }
+    }
+    
+    function checksPropertyAccess() {
         const x = {
             foo: {
-                bar() { }
+                bar() { return true; }
             }
         }
     
@@ -37,15 +65,9 @@ tests/cases/compiler/truthinessCallExpressionCoercion.ts(44,13): error TS2774: T
             ~~~~~~~~~
 !!! error TS2774: This condition will always return true since the function is always defined. Did you mean to call it instead?
         }
-        
-        if (x.foo['bar']) { // error
-            ~~~~~~~~~~~~
-!!! error TS2774: This condition will always return true since the function is always defined. Did you mean to call it instead?
-        }
-    }
     
-    function maybeBoolean(param: boolean | (() => boolean)) {
-        if (param) { // ok
+        if (x.foo.bar) { // ok
+            x.foo.bar;
         }
     }
     
