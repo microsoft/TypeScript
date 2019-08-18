@@ -48,5 +48,5 @@ verify.completions(
     { marker: "13", exact: globals, isGlobalCompletion: false },
     { marker: "15", exact: globals, isGlobalCompletion: true, isNewIdentifierLocation: true },
     { marker: "16", exact: [...x, completion.globalThisEntry, ...completion.globalsVars, completion.undefinedVarEntry], isGlobalCompletion: false },
-    { marker: "17", exact: completion.globalKeywordsPlusUndefined, isGlobalCompletion: false },
+    { marker: "17", exact: completion.globalKeywords, isGlobalCompletion: false },
 );

@@ -3,7 +3,7 @@
 //// [|f1/*0*/('');|]
 
 // @Filename: package.json
-//// { "dependencies": { "@scope/package-name": "latest" } }
+//// { "dependencies": { "package-name": "latest" } }
 
 // @Filename: node_modules/@scope/package-name/bin/lib/index.d.ts
 //// export function f1(text: string): string;

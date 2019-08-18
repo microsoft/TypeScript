@@ -1,8 +1,0 @@
-Exit Code: 1
-Standard output:
-../../../../built/local/lib.es2015.iterable.d.ts(41,6): error TS2300: Duplicate identifier 'IteratorResult'.
-../../../../node_modules/@types/node/index.d.ts(77,11): error TS2300: Duplicate identifier 'IteratorResult'.
-
-
-
-Standard error:

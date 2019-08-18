@@ -665,6 +665,7 @@ namespace ts {
                 }
             }
 
+            perfLogger.logStartResolveModule(moduleName /* , containingFile, ModuleResolutionKind[moduleResolution]*/);
             switch (moduleResolution) {
                 case ModuleResolutionKind.NodeJs:
                     result = nodeModuleNameResolver(moduleName, containingFile, compilerOptions, host, cache, redirectedReference);
@@ -675,6 +676,8 @@ namespace ts {
                 default:
                     return Debug.fail(`Unexpected moduleResolution: ${moduleResolution}`);
             }
+            if (result && result.resolvedModule) perfLogger.logInfoEvent(`Module "${moduleName}" resolved to "${result.resolvedModule.resolvedFileName}"`);
+            perfLogger.logStopResolveModule((result && result.resolvedModule) ? "" + result.resolvedModule.resolvedFileName : "null");
 
             if (perFolderCache) {
                 perFolderCache.set(moduleName, result);

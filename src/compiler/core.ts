@@ -1,7 +1,7 @@
 namespace ts {
     // WARNING: The script `configureNightly.ts` uses a regexp to parse out these values.
     // If changing the text in this section, be sure to test `configureNightly` too.
-    export const versionMajorMinor = "3.6";
+    export const versionMajorMinor = "3.7";
     /** The version of the TypeScript compiler release */
     export const version = `${versionMajorMinor}.0-dev`;
 }
@@ -1379,6 +1379,17 @@ namespace ts {
         }
 
         return keys;
+    }
+
+    export function getAllKeys(obj: object): string[] {
+        const result: string[] = [];
+        do {
+            const names = Object.getOwnPropertyNames(obj);
+            for (const name of names) {
+                pushIfUnique(result, name);
+            }
+        } while (obj = Object.getPrototypeOf(obj));
+        return result;
     }
 
     export function getOwnValues<T>(sparseArray: T[]): T[] {

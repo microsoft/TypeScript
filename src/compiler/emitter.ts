@@ -411,7 +411,11 @@ namespace ts {
                     }
                 );
                 if (emitOnlyDtsFiles && declarationTransform.transformed[0].kind === SyntaxKind.SourceFile) {
-                    const sourceFile = declarationTransform.transformed[0];
+                    // Improved narrowing in master/3.6 makes this cast unnecessary, triggering a lint rule.
+                    // But at the same time, the LKG (3.5) necessitates it because it doesn’t narrow.
+                    // Once the LKG is updated to 3.6, this comment, the cast to `SourceFile`, and the
+                    // tslint directive can be all be removed.
+                    const sourceFile = declarationTransform.transformed[0] as SourceFile; // tslint:disable-line
                     exportedModulesFromDeclarationEmit = sourceFile.exportedModulesFromDeclarationEmit;
                 }
             }
@@ -748,6 +752,7 @@ namespace ts {
             useCaseSensitiveFileNames: () => host.useCaseSensitiveFileNames(),
             getProgramBuildInfo: returnUndefined,
             getSourceFileFromReference: returnUndefined,
+            redirectTargetsMap: createMultiMap()
         };
         emitFiles(
             notImplementedResolver,
@@ -1605,7 +1610,7 @@ namespace ts {
             for (let i = 0; i < numNodes; i++) {
                 const currentNode = bundle ? i < numPrepends ? bundle.prepends[i] : bundle.sourceFiles[i - numPrepends] : node;
                 const sourceFile = isSourceFile(currentNode) ? currentNode : isUnparsedSource(currentNode) ? undefined : currentSourceFile!;
-                const shouldSkip = printerOptions.noEmitHelpers || (!!sourceFile && getExternalHelpersModuleName(sourceFile) !== undefined);
+                const shouldSkip = printerOptions.noEmitHelpers || (!!sourceFile && hasRecordedExternalHelpers(sourceFile));
                 const shouldBundle = (isSourceFile(currentNode) || isUnparsedSource(currentNode)) && !isOwnFileEmit;
                 const helpers = isUnparsedSource(currentNode) ? currentNode.helpers : getSortedEmitHelpers(currentNode);
                 if (helpers) {
