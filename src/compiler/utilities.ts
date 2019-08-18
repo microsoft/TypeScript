@@ -1803,22 +1803,26 @@ namespace ts {
             name = node.parent.name;
             decl = node.parent;
         }
-        else if (isBinaryExpression(node.parent) && node.parent.operatorToken.kind === SyntaxKind.EqualsToken && node.parent.right === node) {
-            name = node.parent.left;
-            decl = name;
-        }
-        else if (isBinaryExpression(node.parent) && node.parent.operatorToken.kind === SyntaxKind.BarBarToken) {
-            if (isVariableDeclaration(node.parent.parent) && node.parent.parent.initializer === node.parent) {
-                name = node.parent.parent.name;
-                decl = node.parent.parent;
-            }
-            else if (isBinaryExpression(node.parent.parent) && node.parent.parent.operatorToken.kind === SyntaxKind.EqualsToken && node.parent.parent.right === node.parent) {
-                name = node.parent.parent.left;
+        else if (isBinaryExpression(node.parent)) {
+            const parentNode = node.parent;
+            const parentNodeOperator = node.parent.operatorToken.kind;
+            if (parentNodeOperator === SyntaxKind.EqualsToken && parentNode.right === node) {
+                name = parentNode.left;
                 decl = name;
             }
+            else if (parentNodeOperator === SyntaxKind.BarBarToken || parentNodeOperator === SyntaxKind.QuestionQuestionToken) {
+                if (isVariableDeclaration(parentNode.parent) && parentNode.parent.initializer === parentNode) {
+                    name = parentNode.parent.name;
+                    decl = parentNode.parent;
+                }
+                else if (isBinaryExpression(parentNode.parent) && parentNode.parent.operatorToken.kind === SyntaxKind.EqualsToken && parentNode.parent.right === parentNode) {
+                    name = parentNode.parent.left;
+                    decl = name;
+                }
 
-            if (!name || !isEntityNameExpression(name) || !isSameEntityName(name, node.parent.left)) {
-                return undefined;
+                if (!name || !isEntityNameExpression(name) || !isSameEntityName(name, parentNode.left)) {
+                    return undefined;
+                }
             }
         }
 
@@ -1835,7 +1839,8 @@ namespace ts {
     /** Get the initializer, taking into account defaulted Javascript initializers */
     export function getEffectiveInitializer(node: HasExpressionInitializer) {
         if (isInJSFile(node) && node.initializer &&
-            isBinaryExpression(node.initializer) && node.initializer.operatorToken.kind === SyntaxKind.BarBarToken &&
+            isBinaryExpression(node.initializer) &&
+                (node.initializer.operatorToken.kind === SyntaxKind.BarBarToken || node.initializer.operatorToken.kind === SyntaxKind.QuestionQuestionToken) &&
             node.name && isEntityNameExpression(node.name) && isSameEntityName(node.name, node.initializer.left)) {
             return node.initializer.right;
         }
@@ -1904,7 +1909,9 @@ namespace ts {
      * 'window.', 'global.' or 'self.' The second Lhs is otherwise ignored by the binder and checker.
      */
     function getDefaultedExpandoInitializer(name: EntityNameExpression, initializer: Expression, isPrototypeAssignment: boolean) {
-        const e = isBinaryExpression(initializer) && initializer.operatorToken.kind === SyntaxKind.BarBarToken && getExpandoInitializer(initializer.right, isPrototypeAssignment);
+        const e = isBinaryExpression(initializer)
+            && (initializer.operatorToken.kind === SyntaxKind.BarBarToken || initializer.operatorToken.kind === SyntaxKind.QuestionQuestionToken)
+            && getExpandoInitializer(initializer.right, isPrototypeAssignment);
         if (e && isSameEntityName(name, (initializer as BinaryExpression).left as EntityNameExpression)) {
             return e;
         }
@@ -2168,7 +2175,7 @@ namespace ts {
             isBinaryExpression(node.expression) &&
             getAssignmentDeclarationKind(node.expression) !== AssignmentDeclarationKind.None &&
             isBinaryExpression(node.expression.right) &&
-            node.expression.right.operatorToken.kind === SyntaxKind.BarBarToken
+            (node.expression.right.operatorToken.kind === SyntaxKind.BarBarToken || node.expression.right.operatorToken.kind === SyntaxKind.QuestionQuestionToken)
             ? node.expression.right.right
             : undefined;
     }
