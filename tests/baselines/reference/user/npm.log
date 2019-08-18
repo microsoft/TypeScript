@@ -171,9 +171,11 @@ node_modules/npm/lib/config/core.js(307,8): error TS2339: Property 'sources' doe
 node_modules/npm/lib/config/core.js(308,8): error TS2339: Property 'push' does not exist on type 'Conf'.
 node_modules/npm/lib/config/core.js(309,8): error TS2339: Property '_await' does not exist on type 'Conf'.
 node_modules/npm/lib/config/core.js(333,10): error TS2339: Property 'emit' does not exist on type 'Conf'.
-node_modules/npm/lib/config/core.js(409,29): error TS2345: Argument of type '(orig: string, esc: any, name: any) => string | undefined' is not assignable to parameter of type '(substring: string, ...args: any[]) => string'.
-  Type 'string | undefined' is not assignable to type 'string'.
-    Type 'undefined' is not assignable to type 'string'.
+node_modules/npm/lib/config/core.js(409,29): error TS2769: No overload matches this call.
+  The last overload gave the following error.
+    Argument of type '(orig: string, esc: any, name: any) => string | undefined' is not assignable to parameter of type '(substring: string, ...args: any[]) => string'.
+      Type 'string | undefined' is not assignable to type 'string'.
+        Type 'undefined' is not assignable to type 'string'.
 node_modules/npm/lib/config/defaults.js(20,52): error TS2345: Argument of type 'never[]' is not assignable to parameter of type '[any, ...any[]]'.
   Property '0' is missing in type 'never[]' but required in type '[any, ...any[]]'.
 node_modules/npm/lib/config/gentle-fs.js(16,11): error TS2339: Property 'prefix' does not exist on type 'typeof EventEmitter'.
@@ -282,7 +284,11 @@ node_modules/npm/lib/doctor.js(90,24): error TS2339: Property 'config' does not 
 node_modules/npm/lib/doctor.js(108,92): error TS2339: Property 'config' does not exist on type 'typeof EventEmitter'.
 node_modules/npm/lib/doctor/check-files-permission.js(11,14): error TS2339: Property 'config' does not exist on type 'typeof EventEmitter'.
 node_modules/npm/lib/doctor/check-files-permission.js(11,38): error TS2339: Property 'config' does not exist on type 'typeof EventEmitter'.
-node_modules/npm/lib/doctor/verify-cached-files.js(10,90): error TS2345: Argument of type '2' is not assignable to parameter of type '(string | number)[] | null | undefined'.
+node_modules/npm/lib/doctor/verify-cached-files.js(10,90): error TS2769: No overload matches this call.
+  Overload 1 of 2, '(value: any, replacer?: ((this: any, key: string, value: any) => any) | undefined, space?: string | number | undefined): string', gave the following error.
+    Argument of type '2' is not assignable to parameter of type '((this: any, key: string, value: any) => any) | undefined'.
+  Overload 2 of 2, '(value: any, replacer?: (string | number)[] | null | undefined, space?: string | number | undefined): string', gave the following error.
+    Argument of type '2' is not assignable to parameter of type '(string | number)[] | null | undefined'.
 node_modules/npm/lib/edit.js(18,15): error TS2339: Property 'config' does not exist on type 'typeof EventEmitter'.
 node_modules/npm/lib/edit.js(27,28): error TS2339: Property 'dir' does not exist on type 'typeof EventEmitter'.
 node_modules/npm/lib/edit.js(32,11): error TS2339: Property 'commands' does not exist on type 'typeof EventEmitter'.
@@ -353,8 +359,12 @@ node_modules/npm/lib/install.js(273,7): error TS2532: Object is possibly 'undefi
 node_modules/npm/lib/install.js(273,7): error TS2684: The 'this' context of type '((err: any, ...args: any[]) => any) | undefined' is not assignable to method's 'this' of type '(this: null, err?: any, ...args: any[]) => any'.
   Type 'undefined' is not assignable to type '(this: null, err?: any, ...args: any[]) => any'.
 node_modules/npm/lib/install.js(340,25): error TS2339: Property 'failing' does not exist on type 'Installer'.
-node_modules/npm/lib/install.js(369,18): error TS2345: Argument of type '"time"' is not assignable to parameter of type 'Signals'.
-node_modules/npm/lib/install.js(376,16): error TS2345: Argument of type '"timeEnd"' is not assignable to parameter of type 'Signals'.
+node_modules/npm/lib/install.js(369,18): error TS2769: No overload matches this call.
+  The last overload gave the following error.
+    Argument of type '"time"' is not assignable to parameter of type 'Signals'.
+node_modules/npm/lib/install.js(376,16): error TS2769: No overload matches this call.
+  The last overload gave the following error.
+    Argument of type '"timeEnd"' is not assignable to parameter of type 'Signals'.
 node_modules/npm/lib/install.js(519,40): error TS2339: Property 'globalPrefix' does not exist on type 'typeof EventEmitter'.
 node_modules/npm/lib/install.js(597,12): error TS2339: Property 'failing' does not exist on type 'Installer'.
 node_modules/npm/lib/install.js(614,12): error TS2339: Property 'failing' does not exist on type 'Installer'.
@@ -388,8 +398,12 @@ node_modules/npm/lib/install/action/refresh-package-json.js(31,43): error TS2339
 node_modules/npm/lib/install/action/remove.js(25,37): error TS2339: Property 'prefix' does not exist on type 'typeof EventEmitter'.
 node_modules/npm/lib/install/action/remove.js(25,51): error TS2339: Property 'prefix' does not exist on type 'typeof EventEmitter'.
 node_modules/npm/lib/install/actions.js(126,24): error TS2339: Property 'limit' does not exist on type 'typeof EventEmitter'.
-node_modules/npm/lib/install/actions.js(168,16): error TS2345: Argument of type '"time"' is not assignable to parameter of type 'Signals'.
-node_modules/npm/lib/install/actions.js(171,16): error TS2345: Argument of type '"timeEnd"' is not assignable to parameter of type 'Signals'.
+node_modules/npm/lib/install/actions.js(168,16): error TS2769: No overload matches this call.
+  The last overload gave the following error.
+    Argument of type '"time"' is not assignable to parameter of type 'Signals'.
+node_modules/npm/lib/install/actions.js(171,16): error TS2769: No overload matches this call.
+  The last overload gave the following error.
+    Argument of type '"timeEnd"' is not assignable to parameter of type 'Signals'.
 node_modules/npm/lib/install/and-add-parent-to-errors.js(9,10): error TS2339: Property 'parent' does not exist on type 'Error'.
 node_modules/npm/lib/install/audit.js(32,19): error TS2339: Property 'config' does not exist on type 'typeof EventEmitter'.
 node_modules/npm/lib/install/audit.js(89,17): error TS2339: Property 'config' does not exist on type 'typeof EventEmitter'.
@@ -521,7 +535,9 @@ node_modules/npm/lib/ls.js(538,12): error TS2339: Property 'config' does not exi
 node_modules/npm/lib/ls.js(544,56): error TS2339: Property 'globalDir' does not exist on type 'typeof EventEmitter'.
 node_modules/npm/lib/npm.js(5,13): error TS2551: Property 'echo' does not exist on type '{ Echo(s: any): void; StdErr: TextStreamWriter; StdOut: TextStreamWriter; Arguments: { length: number; Item(n: number): string; }; ScriptFullName: string; Quit(exitCode?: number | undefined): number; ... 12 more ...; Sleep(intTime: number): void; }'. Did you mean 'Echo'?
 node_modules/npm/lib/npm.js(12,13): error TS2551: Property 'quit' does not exist on type '{ Echo(s: any): void; StdErr: TextStreamWriter; StdOut: TextStreamWriter; Arguments: { length: number; Item(n: number): string; }; ScriptFullName: string; Quit(exitCode?: number | undefined): number; ... 12 more ...; Sleep(intTime: number): void; }'. Did you mean 'Quit'?
-node_modules/npm/lib/npm.js(30,14): error TS2345: Argument of type '"log"' is not assignable to parameter of type 'Signals'.
+node_modules/npm/lib/npm.js(30,14): error TS2769: No overload matches this call.
+  The last overload gave the following error.
+    Argument of type '"log"' is not assignable to parameter of type 'Signals'.
 node_modules/npm/lib/npm.js(58,7): error TS2339: Property 'config' does not exist on type 'typeof EventEmitter'.
 node_modules/npm/lib/npm.js(68,7): error TS2339: Property 'commands' does not exist on type 'typeof EventEmitter'.
 node_modules/npm/lib/npm.js(71,7): error TS2339: Property 'limit' does not exist on type 'typeof EventEmitter'.
@@ -677,9 +693,13 @@ node_modules/npm/lib/run-script.js(35,22): error TS2339: Property 'localPrefix' 
 node_modules/npm/lib/run-script.js(46,26): error TS2339: Property 'localPrefix' does not exist on type 'typeof EventEmitter'.
 node_modules/npm/lib/run-script.js(56,20): error TS2339: Property 'localPrefix' does not exist on type 'typeof EventEmitter'.
 node_modules/npm/lib/run-script.js(66,28): error TS2339: Property 'localPrefix' does not exist on type 'typeof EventEmitter'.
-node_modules/npm/lib/run-script.js(77,22): error TS2322: Type 'string' is not assignable to type 'never'.
-node_modules/npm/lib/run-script.js(77,33): error TS2322: Type 'string' is not assignable to type 'never'.
-node_modules/npm/lib/run-script.js(77,36): error TS2322: Type 'string' is not assignable to type 'never'.
+node_modules/npm/lib/run-script.js(77,12): error TS2769: No overload matches this call.
+  Overload 2 of 2, '(...items: ConcatArray<never>[]): never[]', gave the following error.
+    Type 'string' is not assignable to type 'never'.
+  Overload 2 of 2, '(...items: ConcatArray<never>[]): never[]', gave the following error.
+    Type 'string' is not assignable to type 'never'.
+  Overload 2 of 2, '(...items: ConcatArray<never>[]): never[]', gave the following error.
+    Type 'string' is not assignable to type 'never'.
 node_modules/npm/lib/run-script.js(94,13): error TS2339: Property 'config' does not exist on type 'typeof EventEmitter'.
 node_modules/npm/lib/run-script.js(99,13): error TS2339: Property 'config' does not exist on type 'typeof EventEmitter'.
 node_modules/npm/lib/run-script.js(148,22): error TS2339: Property 'config' does not exist on type 'typeof EventEmitter'.
@@ -783,8 +803,12 @@ node_modules/npm/lib/utils/completion/installed-shallow.js(79,14): error TS2339:
 node_modules/npm/lib/utils/error-handler.js(12,21): error TS2339: Property 'rollbacks' does not exist on type 'typeof EventEmitter'.
 node_modules/npm/lib/utils/error-handler.js(23,36): error TS2339: Property 'config' does not exist on type 'typeof EventEmitter'.
 node_modules/npm/lib/utils/error-handler.js(29,16): error TS2339: Property 'version' does not exist on type 'typeof EventEmitter'.
-node_modules/npm/lib/utils/error-handler.js(33,12): error TS2345: Argument of type '"timing"' is not assignable to parameter of type 'Signals'.
-node_modules/npm/lib/utils/error-handler.js(38,16): error TS2345: Argument of type '"timeEnd"' is not assignable to parameter of type 'Signals'.
+node_modules/npm/lib/utils/error-handler.js(33,12): error TS2769: No overload matches this call.
+  The last overload gave the following error.
+    Argument of type '"timing"' is not assignable to parameter of type 'Signals'.
+node_modules/npm/lib/utils/error-handler.js(38,16): error TS2769: No overload matches this call.
+  The last overload gave the following error.
+    Argument of type '"timeEnd"' is not assignable to parameter of type 'Signals'.
 node_modules/npm/lib/utils/error-handler.js(40,11): error TS2339: Property 'config' does not exist on type 'typeof EventEmitter'.
 node_modules/npm/lib/utils/error-handler.js(40,32): error TS2339: Property 'config' does not exist on type 'typeof EventEmitter'.
 node_modules/npm/lib/utils/error-handler.js(43,39): error TS2339: Property 'config' does not exist on type 'typeof EventEmitter'.
@@ -838,8 +862,12 @@ node_modules/npm/lib/utils/metrics.js(62,7): error TS2339: Property 'load' does 
 node_modules/npm/lib/utils/metrics.js(64,9): error TS2339: Property 'registry' does not exist on type 'typeof EventEmitter'.
 node_modules/npm/lib/utils/metrics.js(65,9): error TS2339: Property 'registry' does not exist on type 'typeof EventEmitter'.
 node_modules/npm/lib/utils/output.js(6,30): error TS2345: Argument of type 'IArguments' is not assignable to parameter of type '[any?, ...any[]]'.
-node_modules/npm/lib/utils/perf.js(9,12): error TS2345: Argument of type '"time"' is not assignable to parameter of type 'Signals'.
-node_modules/npm/lib/utils/perf.js(10,12): error TS2345: Argument of type '"timeEnd"' is not assignable to parameter of type 'Signals'.
+node_modules/npm/lib/utils/perf.js(9,12): error TS2769: No overload matches this call.
+  The last overload gave the following error.
+    Argument of type '"time"' is not assignable to parameter of type 'Signals'.
+node_modules/npm/lib/utils/perf.js(10,12): error TS2769: No overload matches this call.
+  The last overload gave the following error.
+    Argument of type '"timeEnd"' is not assignable to parameter of type 'Signals'.
 node_modules/npm/lib/utils/read-local-package.js(7,11): error TS2339: Property 'config' does not exist on type 'typeof EventEmitter'.
 node_modules/npm/lib/utils/read-local-package.js(9,29): error TS2339: Property 'prefix' does not exist on type 'typeof EventEmitter'.
 node_modules/npm/lib/utils/spawn.js(26,8): error TS2339: Property 'file' does not exist on type 'Error'.
@@ -852,7 +880,11 @@ node_modules/npm/lib/utils/spawn.js(45,10): error TS2339: Property 'stdout' does
 node_modules/npm/lib/utils/spawn.js(46,10): error TS2339: Property 'stderr' does not exist on type 'EventEmitter'.
 node_modules/npm/lib/utils/spawn.js(47,10): error TS2339: Property 'kill' does not exist on type 'EventEmitter'.
 node_modules/npm/lib/utils/temp-filename.js(6,29): error TS2339: Property 'tmp' does not exist on type 'typeof EventEmitter'.
-node_modules/npm/lib/utils/usage.js(8,21): error TS2345: Argument of type 'string' is not assignable to parameter of type 'ConcatArray<never>'.
+node_modules/npm/lib/utils/usage.js(8,21): error TS2769: No overload matches this call.
+  Overload 1 of 2, '(...items: ConcatArray<never>[]): never[]', gave the following error.
+    Argument of type 'string' is not assignable to parameter of type 'ConcatArray<never>'.
+  Overload 2 of 2, '(...items: ConcatArray<never>[]): never[]', gave the following error.
+    Argument of type 'string' is not assignable to parameter of type 'ConcatArray<never>'.
 node_modules/npm/lib/version.js(24,27): error TS2339: Property 'version' does not exist on type 'typeof EventEmitter'.
 node_modules/npm/lib/version.js(82,22): error TS2339: Property 'config' does not exist on type 'typeof EventEmitter'.
 node_modules/npm/lib/version.js(97,12): error TS2339: Property 'config' does not exist on type 'typeof EventEmitter'.
@@ -951,7 +983,11 @@ node_modules/npm/test/need-npm5-update/need-outdated/update-symlink.js(6,20): er
 node_modules/npm/test/need-npm5-update/need-outdated/update-symlink.js(8,22): error TS2307: Cannot find module '../common-tap.js'.
 node_modules/npm/test/need-npm5-update/outdated-depth-deep.js(3,20): error TS2307: Cannot find module 'tap'.
 node_modules/npm/test/need-npm5-update/outdated-depth-deep.js(5,18): error TS2307: Cannot find module 'npm-registry-mock'.
-node_modules/npm/test/need-npm5-update/outdated-depth-deep.js(69,52): error TS2322: Type 'number' is not assignable to type 'string'.
+node_modules/npm/test/need-npm5-update/outdated-depth-deep.js(69,52): error TS2769: No overload matches this call.
+  Overload 1 of 2, '(...items: ConcatArray<string>[]): string[]', gave the following error.
+    Type 'number' is not assignable to type 'string'.
+  Overload 2 of 2, '(...items: (string | ConcatArray<string>)[]): string[]', gave the following error.
+    Type 'number' is not assignable to type 'string'.
 node_modules/npm/test/need-npm5-update/outdated-depth-integer.js(2,20): error TS2307: Cannot find module 'tap'.
 node_modules/npm/test/need-npm5-update/outdated-depth-integer.js(5,18): error TS2307: Cannot find module 'npm-registry-mock'.
 node_modules/npm/test/need-npm5-update/outdated-depth-integer.js(55,9): error TS2339: Property 'load' does not exist on type 'typeof EventEmitter'.
@@ -1483,9 +1519,15 @@ node_modules/npm/test/tap/prepublish-only.js(6,21): error TS2307: Cannot find mo
 node_modules/npm/test/tap/prepublish.js(3,20): error TS2307: Cannot find module 'tap'.
 node_modules/npm/test/tap/process-logger.js(2,22): error TS2307: Cannot find module 'tap'.
 node_modules/npm/test/tap/process-logger.js(7,61): error TS2554: Expected 1-3 arguments, but got 4.
-node_modules/npm/test/tap/process-logger.js(8,37): error TS2345: Argument of type '"log"' is not assignable to parameter of type 'Signals'.
-node_modules/npm/test/tap/process-logger.js(9,37): error TS2345: Argument of type '"log"' is not assignable to parameter of type 'Signals'.
-node_modules/npm/test/tap/process-logger.js(10,37): error TS2345: Argument of type '"log"' is not assignable to parameter of type 'Signals'.
+node_modules/npm/test/tap/process-logger.js(8,37): error TS2769: No overload matches this call.
+  The last overload gave the following error.
+    Argument of type '"log"' is not assignable to parameter of type 'Signals'.
+node_modules/npm/test/tap/process-logger.js(9,37): error TS2769: No overload matches this call.
+  The last overload gave the following error.
+    Argument of type '"log"' is not assignable to parameter of type 'Signals'.
+node_modules/npm/test/tap/process-logger.js(10,37): error TS2769: No overload matches this call.
+  The last overload gave the following error.
+    Argument of type '"log"' is not assignable to parameter of type 'Signals'.
 node_modules/npm/test/tap/progress-config.js(3,20): error TS2307: Cannot find module 'tap'.
 node_modules/npm/test/tap/progress-config.js(12,29): error TS2307: Cannot find module 'require-inject'.
 node_modules/npm/test/tap/prune-dev-dep-cycle.js(4,20): error TS2307: Cannot find module 'tap'.
@@ -1515,8 +1557,12 @@ node_modules/npm/test/tap/publish-scoped.js(4,20): error TS2307: Cannot find mod
 node_modules/npm/test/tap/publish-scoped.js(8,18): error TS2307: Cannot find module 'npm-registry-mock'.
 node_modules/npm/test/tap/publish.js(8,33): error TS2307: Cannot find module 'npm-registry-mock'.
 node_modules/npm/test/tap/publish.js(11,22): error TS2307: Cannot find module 'tap'.
-node_modules/npm/test/tap/publish.js(56,47): error TS2345: Argument of type 'number' is not assignable to parameter of type 'string | RegExp'.
-node_modules/npm/test/tap/publish.js(117,45): error TS2345: Argument of type 'number' is not assignable to parameter of type 'string | RegExp'.
+node_modules/npm/test/tap/publish.js(56,47): error TS2769: No overload matches this call.
+  The last overload gave the following error.
+    Argument of type 'number' is not assignable to parameter of type 'string | RegExp'.
+node_modules/npm/test/tap/publish.js(117,45): error TS2769: No overload matches this call.
+  The last overload gave the following error.
+    Argument of type 'number' is not assignable to parameter of type 'string | RegExp'.
 node_modules/npm/test/tap/pwd-prefix.js(5,20): error TS2307: Cannot find module 'tap'.
 node_modules/npm/test/tap/referer.js(2,20): error TS2307: Cannot find module 'tap'.
 node_modules/npm/test/tap/repo.js(2,18): error TS2307: Cannot find module 'npm-registry-mock'.
@@ -1527,10 +1573,26 @@ node_modules/npm/test/tap/retry-on-stale-cache.js(6,47): error TS2339: Property 
 node_modules/npm/test/tap/retry-on-stale-cache.js(7,21): error TS2307: Cannot find module 'tacks'.
 node_modules/npm/test/tap/run-script-filter-private.js(6,20): error TS2307: Cannot find module 'tap'.
 node_modules/npm/test/tap/run-script.js(5,20): error TS2307: Cannot find module 'tap'.
-node_modules/npm/test/tap/run-script.js(213,18): error TS2345: Argument of type 'string | undefined' is not assignable to parameter of type 'string'.
-  Type 'undefined' is not assignable to type 'string'.
-node_modules/npm/test/tap/run-script.js(256,18): error TS2345: Argument of type 'string | undefined' is not assignable to parameter of type 'string'.
-  Type 'undefined' is not assignable to type 'string'.
+node_modules/npm/test/tap/run-script.js(213,18): error TS2769: No overload matches this call.
+  Overload 1 of 3, '(pattern: string | RegExp, flags?: string | undefined): RegExp', gave the following error.
+    Argument of type 'string | undefined' is not assignable to parameter of type 'string | RegExp'.
+      Type 'undefined' is not assignable to type 'string | RegExp'.
+  Overload 2 of 3, '(pattern: string | RegExp): RegExp', gave the following error.
+    Argument of type 'string | undefined' is not assignable to parameter of type 'string | RegExp'.
+      Type 'undefined' is not assignable to type 'string | RegExp'.
+  Overload 3 of 3, '(pattern: string, flags?: string | undefined): RegExp', gave the following error.
+    Argument of type 'string | undefined' is not assignable to parameter of type 'string'.
+      Type 'undefined' is not assignable to type 'string'.
+node_modules/npm/test/tap/run-script.js(256,18): error TS2769: No overload matches this call.
+  Overload 1 of 3, '(pattern: string | RegExp, flags?: string | undefined): RegExp', gave the following error.
+    Argument of type 'string | undefined' is not assignable to parameter of type 'string | RegExp'.
+      Type 'undefined' is not assignable to type 'string | RegExp'.
+  Overload 2 of 3, '(pattern: string | RegExp): RegExp', gave the following error.
+    Argument of type 'string | undefined' is not assignable to parameter of type 'string | RegExp'.
+      Type 'undefined' is not assignable to type 'string | RegExp'.
+  Overload 3 of 3, '(pattern: string, flags?: string | undefined): RegExp', gave the following error.
+    Argument of type 'string | undefined' is not assignable to parameter of type 'string'.
+      Type 'undefined' is not assignable to type 'string'.
 node_modules/npm/test/tap/save-optional.js(3,22): error TS2307: Cannot find module 'tap'.
 node_modules/npm/test/tap/save-optional.js(4,20): error TS2307: Cannot find module 'npm-registry-mock'.
 node_modules/npm/test/tap/save-optional.js(5,23): error TS2307: Cannot find module 'tacks'.

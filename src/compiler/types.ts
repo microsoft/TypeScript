@@ -17,6 +17,7 @@ namespace ts {
         | SyntaxKind.OpenBraceToken
         | SyntaxKind.CloseBraceToken
         | SyntaxKind.LessThanToken
+        | SyntaxKind.GreaterThanToken
         | SyntaxKind.OpenBracketToken
         | SyntaxKind.CloseBracketToken
         | SyntaxKind.EqualsToken
@@ -454,11 +455,14 @@ namespace ts {
         JSDocOptionalType,
         JSDocFunctionType,
         JSDocVariadicType,
+        // https://jsdoc.app/about-namepaths.html
+        JSDocNamepathType,
         JSDocComment,
         JSDocTypeLiteral,
         JSDocSignature,
         JSDocTag,
         JSDocAugmentsTag,
+        JSDocAuthorTag,
         JSDocClassTag,
         JSDocCallbackTag,
         JSDocEnumTag,
@@ -1642,6 +1646,10 @@ namespace ts {
         hasExtendedUnicodeEscape?: boolean;
     }
 
+    export interface TemplateLiteralLikeNode extends LiteralLikeNode {
+        rawText?: string;
+    }
+
     // The text property of a LiteralExpression stores the interpreted value of the literal in text form. For a StringLiteral,
     // or any literal of a template, this means quotes have been removed and escapes have been converted to actual characters.
     // For a NumericLiteral, the stored value is the toString() representation of the number. For example 1, 1.00, and 1e0 are all stored as just "1".
@@ -1653,7 +1661,7 @@ namespace ts {
         kind: SyntaxKind.RegularExpressionLiteral;
     }
 
-    export interface NoSubstitutionTemplateLiteral extends LiteralExpression {
+    export interface NoSubstitutionTemplateLiteral extends LiteralExpression, TemplateLiteralLikeNode {
         kind: SyntaxKind.NoSubstitutionTemplateLiteral;
     }
 
@@ -1675,6 +1683,8 @@ namespace ts {
         /* @internal */
         ContainsSeparator = 1 << 9, // e.g. `0b1100_0101`
         /* @internal */
+        UnicodeEscape = 1 << 10,
+        /* @internal */
         BinaryOrOctalSpecifier = BinarySpecifier | OctalSpecifier,
         /* @internal */
         NumericLiteralFlags = Scientific | Octal | HexSpecifier | BinaryOrOctalSpecifier | ContainsSeparator
@@ -1690,17 +1700,17 @@ namespace ts {
         kind: SyntaxKind.BigIntLiteral;
     }
 
-    export interface TemplateHead extends LiteralLikeNode {
+    export interface TemplateHead extends TemplateLiteralLikeNode {
         kind: SyntaxKind.TemplateHead;
         parent: TemplateExpression;
     }
 
-    export interface TemplateMiddle extends LiteralLikeNode {
+    export interface TemplateMiddle extends TemplateLiteralLikeNode {
         kind: SyntaxKind.TemplateMiddle;
         parent: TemplateSpan;
     }
 
-    export interface TemplateTail extends LiteralLikeNode {
+    export interface TemplateTail extends TemplateLiteralLikeNode {
         kind: SyntaxKind.TemplateTail;
         parent: TemplateSpan;
     }
@@ -1860,6 +1870,12 @@ namespace ts {
         name: Identifier;
     }
 
+    /* @internal */
+    export interface ImportMetaProperty extends MetaProperty {
+        keywordToken: SyntaxKind.ImportKeyword;
+        name: Identifier & { escapedText: __String & "meta" };
+    }
+
     /// A JSX expression of the form <TagName attrs>...</TagName>
     export interface JsxElement extends PrimaryExpression {
         kind: SyntaxKind.JsxElement;
@@ -1880,6 +1896,7 @@ namespace ts {
     }
 
     export interface JsxAttributes extends ObjectLiteralExpressionBase<JsxAttributeLike> {
+        kind: SyntaxKind.JsxAttributes;
         parent: JsxOpeningLikeElement;
     }
 
@@ -2427,6 +2444,11 @@ namespace ts {
         type: TypeNode;
     }
 
+    export interface JSDocNamepathType extends JSDocType {
+        kind: SyntaxKind.JSDocNamepathType;
+        type: TypeNode;
+    }
+
     export type JSDocTypeReferencingNode = JSDocVariadicType | JSDocOptionalType | JSDocNullableType | JSDocNonNullableType;
 
     export interface JSDoc extends Node {
@@ -2455,11 +2477,16 @@ namespace ts {
         class: ExpressionWithTypeArguments & { expression: Identifier | PropertyAccessEntityNameExpression };
     }
 
+    export interface JSDocAuthorTag extends JSDocTag {
+        kind: SyntaxKind.JSDocAuthorTag;
+    }
+
     export interface JSDocClassTag extends JSDocTag {
         kind: SyntaxKind.JSDocClassTag;
     }
 
-    export interface JSDocEnumTag extends JSDocTag {
+    export interface JSDocEnumTag extends JSDocTag, Declaration {
+        parent: JSDoc;
         kind: SyntaxKind.JSDocEnumTag;
         typeExpression?: JSDocTypeExpression;
     }
@@ -2906,6 +2933,20 @@ namespace ts {
         throwIfCancellationRequested(): void;
     }
 
+    /*@internal*/
+    export enum RefFileKind {
+        Import,
+        ReferenceFile,
+        TypeReferenceDirective
+    }
+
+    /*@internal*/
+    export interface RefFile {
+        kind: RefFileKind;
+        index: number;
+        file: Path;
+    }
+
     // TODO: This should implement TypeCheckerHost but that's an internal type.
     export interface Program extends ScriptReferenceHost {
 
@@ -2925,6 +2966,8 @@ namespace ts {
          */
         /* @internal */
         getMissingFilePaths(): ReadonlyArray<Path>;
+        /* @internal */
+        getRefFileMap(): MultiMap<RefFile> | undefined;
 
         /**
          * Emits the JavaScript and declaration files.  If targetSourceFile is not specified, then
@@ -2975,7 +3018,7 @@ namespace ts {
         // For testing purposes only.
         /* @internal */ structureIsReused?: StructureIsReused;
 
-        /* @internal */ getSourceFileFromReference(referencingFile: SourceFile, ref: FileReference): SourceFile | undefined;
+        /* @internal */ getSourceFileFromReference(referencingFile: SourceFile | UnparsedSource, ref: FileReference): SourceFile | undefined;
         /* @internal */ getLibFileFromReference(ref: FileReference): SourceFile | undefined;
 
         /** Given a source file, get the name of the package it was imported from. */
@@ -3071,6 +3114,9 @@ namespace ts {
 
         // When build skipped because passed in project is invalid
         InvalidProject_OutputsSkipped = 3,
+
+        // When build is skipped because project references form cycle
+        ProjectReferenceCycle_OutputsSkupped = 4,
     }
 
     export interface EmitResult {
@@ -3299,7 +3345,7 @@ namespace ts {
          * This should be called in a loop climbing parents of the symbol, so we'll get `N`.
          */
         /* @internal */ getAccessibleSymbolChain(symbol: Symbol, enclosingDeclaration: Node | undefined, meaning: SymbolFlags, useOnlyExternalAliasing: boolean): Symbol[] | undefined;
-        /* @internal */ getTypePredicateOfSignature(signature: Signature): TypePredicate;
+        /* @internal */ getTypePredicateOfSignature(signature: Signature): TypePredicate | undefined;
         /**
          * An external module with an 'export =' declaration resolves to the target of the 'export =' declaration,
          * and an external module with no 'export =' declaration resolves to the module itself.
@@ -3653,8 +3699,8 @@ namespace ts {
 
         Enum = RegularEnum | ConstEnum,
         Variable = FunctionScopedVariable | BlockScopedVariable,
-        Value = Variable | Property | EnumMember | ObjectLiteral | Function | Class | Enum | ValueModule | Method | GetAccessor | SetAccessor | Assignment,
-        Type = Class | Interface | Enum | EnumMember | TypeLiteral | TypeParameter | TypeAlias | Assignment,
+        Value = Variable | Property | EnumMember | ObjectLiteral | Function | Class | Enum | ValueModule | Method | GetAccessor | SetAccessor,
+        Type = Class | Interface | Enum | EnumMember | TypeLiteral | TypeParameter | TypeAlias,
         Namespace = ValueModule | NamespaceModule | Enum,
         Module = ValueModule | NamespaceModule,
         Accessor = GetAccessor | SetAccessor,
@@ -3670,12 +3716,12 @@ namespace ts {
         ParameterExcludes = Value,
         PropertyExcludes = None,
         EnumMemberExcludes = Value | Type,
-        FunctionExcludes = Value & ~(Function | ValueModule),
-        ClassExcludes = (Value | Type) & ~(ValueModule | Interface), // class-interface mergability done in checker.ts
+        FunctionExcludes = Value & ~(Function | ValueModule | Class),
+        ClassExcludes = (Value | Type) & ~(ValueModule | Interface | Function), // class-interface mergability done in checker.ts
         InterfaceExcludes = Type & ~(Interface | Class),
         RegularEnumExcludes = (Value | Type) & ~(RegularEnum | ValueModule), // regular enums merge only with regular enums and modules
         ConstEnumExcludes = (Value | Type) & ~ConstEnum, // const enums merge only with const enums
-        ValueModuleExcludes = Value & ~(Function | Class | RegularEnum | ValueModule | Assignment),
+        ValueModuleExcludes = Value & ~(Function | Class | RegularEnum | ValueModule),
         NamespaceModuleExcludes = 0,
         MethodExcludes = Value & ~Method,
         GetAccessorExcludes = Value & ~SetAccessor,
@@ -4089,19 +4135,20 @@ namespace ts {
         MarkerType       = 1 << 13, // Marker type used for variance probing
         JSLiteral        = 1 << 14, // Object type declared in JS - disables errors on read/write of nonexisting members
         FreshLiteral     = 1 << 15, // Fresh object literal
+        ArrayLiteral     = 1 << 16, // Originates in an array literal
         /* @internal */
-        PrimitiveUnion   = 1 << 16, // Union of only primitive types
+        PrimitiveUnion   = 1 << 17, // Union of only primitive types
         /* @internal */
-        ContainsWideningType = 1 << 17, // Type is or contains undefined or null widening type
+        ContainsWideningType = 1 << 18, // Type is or contains undefined or null widening type
         /* @internal */
-        ContainsObjectLiteral = 1 << 18, // Type is or contains object literal type
+        ContainsObjectOrArrayLiteral = 1 << 19, // Type is or contains object literal type
         /* @internal */
-        NonInferrableType = 1 << 19, // Type is or contains anyFunctionType or silentNeverType
+        NonInferrableType = 1 << 20, // Type is or contains anyFunctionType or silentNeverType
         ClassOrInterface = Class | Interface,
         /* @internal */
-        RequiresWidening = ContainsWideningType | ContainsObjectLiteral,
+        RequiresWidening = ContainsWideningType | ContainsObjectOrArrayLiteral,
         /* @internal */
-        PropagatingFlags = ContainsWideningType | ContainsObjectLiteral | NonInferrableType
+        PropagatingFlags = ContainsWideningType | ContainsObjectOrArrayLiteral | NonInferrableType
     }
 
     /* @internal */
@@ -4154,6 +4201,8 @@ namespace ts {
     export interface TypeReference extends ObjectType {
         target: GenericType;    // Type reference target
         typeArguments?: ReadonlyArray<Type>;  // Type reference type arguments (undefined if none)
+        /* @internal */
+        literalType?: TypeReference;  // Clone of type with ObjectFlags.ArrayLiteral set
     }
 
     /* @internal */
@@ -4264,13 +4313,23 @@ namespace ts {
         regularType: ResolvedType;  // Regular version of fresh type
     }
 
+    /* @internal */
+    export interface IterationTypes {
+        readonly yieldType: Type;
+        readonly returnType: Type;
+        readonly nextType: Type;
+    }
+
     // Just a place to cache element types of iterables and iterators
     /* @internal */
     export interface IterableOrIteratorType extends ObjectType, UnionType {
-        iteratedTypeOfIterable?: Type;
-        iteratedTypeOfIterator?: Type;
-        iteratedTypeOfAsyncIterable?: Type;
-        iteratedTypeOfAsyncIterator?: Type;
+        iterationTypesOfGeneratorReturnType?: IterationTypes;
+        iterationTypesOfAsyncGeneratorReturnType?: IterationTypes;
+        iterationTypesOfIterable?: IterationTypes;
+        iterationTypesOfIterator?: IterationTypes;
+        iterationTypesOfAsyncIterable?: IterationTypes;
+        iterationTypesOfAsyncIterator?: IterationTypes;
+        iterationTypesOfIteratorResult?: IterationTypes;
     }
 
     /* @internal */
@@ -4443,8 +4502,10 @@ namespace ts {
         LiteralKeyof                 = 1 << 5,  // Inference made from a string literal to a keyof T
         NoConstraints                = 1 << 6,  // Don't infer from constraints of instantiable types
         AlwaysStrict                 = 1 << 7,  // Always use strict rules for contravariant inferences
+        MaxValue                     = 1 << 8,  // Seed for inference priority tracking
 
         PriorityImpliesCombination = ReturnType | MappedTypeConstraint | LiteralKeyof,  // These priorities imply that the resulting type should be a combination of all candidates
+        Circularity = -1,  // Inference circularity (value less than all other priorities)
     }
 
     /* @internal */
@@ -4558,7 +4619,7 @@ namespace ts {
         messageText: string;
         category: DiagnosticCategory;
         code: number;
-        next?: DiagnosticMessageChain;
+        next?: DiagnosticMessageChain[];
     }
 
     export interface Diagnostic extends DiagnosticRelatedInformation {
@@ -4739,8 +4800,12 @@ namespace ts {
         AMD = 2,
         UMD = 3,
         System = 4,
+
+        // NOTE: ES module kinds should be contiguous to more easily check whether a module kind is *any* ES module kind.
+        //       Non-ES module kinds should not come between ES2015 (the earliest ES module kind) and ESNext (the last ES
+        //       module kind).
         ES2015 = 5,
-        ESNext = 6
+        ESNext = 99
     }
 
     export const enum JsxEmit {
@@ -4788,7 +4853,7 @@ namespace ts {
         ES2018 = 5,
         ES2019 = 6,
         ES2020 = 7,
-        ESNext = 8,
+        ESNext = 99,
         JSON = 100,
         Latest = ESNext,
     }
@@ -5152,11 +5217,11 @@ namespace ts {
          * If resolveModuleNames is implemented then implementation for members from ModuleResolutionHost can be just
          * 'throw new Error("NotImplemented")'
          */
-        resolveModuleNames?(moduleNames: string[], containingFile: string, reusedNames?: string[], redirectedReference?: ResolvedProjectReference): (ResolvedModule | undefined)[];
+        resolveModuleNames?(moduleNames: string[], containingFile: string, reusedNames: string[] | undefined, redirectedReference: ResolvedProjectReference | undefined, options: CompilerOptions): (ResolvedModule | undefined)[];
         /**
          * This method is a companion for 'resolveModuleNames' and is used to resolve 'types' references to actual type declaration files
          */
-        resolveTypeReferenceDirectives?(typeReferenceDirectiveNames: string[], containingFile: string, redirectedReference?: ResolvedProjectReference): (ResolvedTypeReferenceDirective | undefined)[];
+        resolveTypeReferenceDirectives?(typeReferenceDirectiveNames: string[], containingFile: string, redirectedReference: ResolvedProjectReference | undefined, options: CompilerOptions): (ResolvedTypeReferenceDirective | undefined)[];
         getEnvironmentVariable?(name: string): string | undefined;
         /* @internal */ onReleaseOldSourceFile?(oldSourceFile: SourceFile, oldOptions: CompilerOptions, hasSourceFileByPath: boolean): void;
         /* @internal */ hasInvalidatedResolution?: HasInvalidatedResolution;
@@ -5197,6 +5262,7 @@ namespace ts {
         ContainsYield = 1 << 17,
         ContainsHoistedDeclarationOrCompletion = 1 << 18,
         ContainsDynamicImport = 1 << 19,
+        ContainsClassFields = 1 << 20,
 
         // Please leave this as 1 << 29.
         // It is the maximum bit we can set before we outgrow the size of a v8 small integer (SMI) on an x86 system.
@@ -5267,6 +5333,7 @@ namespace ts {
         tokenSourceMapRanges?: (SourceMapRange | undefined)[]; // The text range to use when emitting source mappings for tokens
         constantValue?: string | number;         // The constant value of an expression
         externalHelpersModuleName?: Identifier;  // The local name for an imported helpers module
+        externalHelpers?: boolean;
         helpers?: EmitHelper[];                  // Emit helpers for the node
         startsOnNewLine?: boolean;               // If the node should begin on a new line
     }
@@ -5288,7 +5355,7 @@ namespace ts {
         NoTrailingComments = 1 << 10,           // Do not emit trailing comments for this node.
         NoComments = NoLeadingComments | NoTrailingComments, // Do not emit comments for this node.
         NoNestedComments = 1 << 11,
-        HelperName = 1 << 12,
+        HelperName = 1 << 12,                   // The Identifier refers to an *unscoped* emit helper (one that is emitted at the top of the file)
         ExportName = 1 << 13,                   // Ensure an export prefix is added for an identifier that points to an exported declaration with a local name (see SymbolFlags.ExportHasLocal).
         LocalName = 1 << 14,                    // Ensure an export prefix is not added for an identifier that points to an exported declaration.
         InternalName = 1 << 15,                 // The name is internal to an ES5 class body function.
@@ -5314,6 +5381,8 @@ namespace ts {
 
     export interface UnscopedEmitHelper extends EmitHelper {
         readonly scoped: false;                                         // Indicates whether the helper MUST be emitted in the current scope.
+        /* @internal */
+        readonly importName?: string;                                   // The name of the helper to use when importing via `--importHelpers`.
         readonly text: string;                                          // ES3-compatible raw script text, or a function yielding such a string
     }
 
@@ -5395,6 +5464,8 @@ namespace ts {
 
         writeFile: WriteFileCallback;
         getProgramBuildInfo(): ProgramBuildInfo | undefined;
+        getSourceFileFromReference: Program["getSourceFileFromReference"];
+        readonly redirectTargetsMap: RedirectTargetsMap;
     }
 
     export interface TransformationContext {
@@ -5725,6 +5796,7 @@ namespace ts {
         /*@internal*/ writeBundleFileInfo?: boolean;
         /*@internal*/ recordInternalSection?: boolean;
         /*@internal*/ stripInternal?: boolean;
+        /*@internal*/ relativeToBuildInfo?: (path: string) => string;
     }
 
     /* @internal */

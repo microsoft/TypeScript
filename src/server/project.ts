@@ -109,12 +109,22 @@ namespace ts.server {
         return value instanceof ScriptInfo;
     }
 
+    interface GeneratedFileWatcher {
+        generatedFilePath: Path;
+        watcher: FileWatcher;
+    }
+    type GeneratedFileWatcherMap = GeneratedFileWatcher | Map<GeneratedFileWatcher>;
+    function isGeneratedFileWatcher(watch: GeneratedFileWatcherMap): watch is GeneratedFileWatcher {
+        return (watch as GeneratedFileWatcher).generatedFilePath !== undefined;
+    }
+
     export abstract class Project implements LanguageServiceHost, ModuleResolutionHost {
         private rootFiles: ScriptInfo[] = [];
         private rootFilesMap: Map<ProjectRoot> = createMap<ProjectRoot>();
         private program: Program | undefined;
         private externalFiles: SortedReadonlyArray<string> | undefined;
         private missingFilesMap: Map<FileWatcher> | undefined;
+        private generatedFilesMap: GeneratedFileWatcherMap | undefined;
         private plugins: PluginModuleWithName[] = [];
 
         /*@internal*/
@@ -458,6 +468,9 @@ namespace ts.server {
         }
 
         /*@internal*/
+        globalCacheResolutionModuleName = JsTyping.nonRelativeModuleNameForTypingCache;
+
+        /*@internal*/
         fileIsOpen(filePath: Path) {
             return this.projectService.openFiles.has(filePath);
         }
@@ -565,6 +578,7 @@ namespace ts.server {
             this.lastFileExceededProgramSize = lastFileExceededProgramSize;
             this.builderState = undefined;
             this.resolutionCache.closeTypeRootsWatch();
+            this.clearGeneratedFileWatch();
             this.projectService.onUpdateLanguageServiceStateForProject(this, /*languageServiceEnabled*/ false);
         }
 
@@ -646,6 +660,7 @@ namespace ts.server {
                 clearMap(this.missingFilesMap, closeFileWatcher);
                 this.missingFilesMap = undefined!;
             }
+            this.clearGeneratedFileWatch();
 
             // signal language service to release source files acquired from document registry
             this.languageService.dispose();
@@ -836,6 +851,7 @@ namespace ts.server {
          * @returns: true if set of files in the project stays the same and false - otherwise.
          */
         updateGraph(): boolean {
+            perfLogger.logStartUpdateGraph();
             this.resolutionCache.startRecordingFilesWithChangedResolutions();
 
             const hasNewProgram = this.updateGraphWorker();
@@ -871,6 +887,7 @@ namespace ts.server {
             if (hasNewProgram) {
                 this.projectProgramVersion++;
             }
+            perfLogger.logStopUpdateGraph();
             return !hasNewProgram;
         }
 
@@ -939,6 +956,39 @@ namespace ts.server {
                     missingFilePath => this.addMissingFileWatcher(missingFilePath)
                 );
 
+                if (this.generatedFilesMap) {
+                    const outPath = this.compilerOptions.outFile && this.compilerOptions.out;
+                    if (isGeneratedFileWatcher(this.generatedFilesMap)) {
+                        // --out
+                        if (!outPath || !this.isValidGeneratedFileWatcher(
+                            removeFileExtension(outPath) + Extension.Dts,
+                            this.generatedFilesMap,
+                        )) {
+                            this.clearGeneratedFileWatch();
+                        }
+                    }
+                    else {
+                        // MultiFile
+                        if (outPath) {
+                            this.clearGeneratedFileWatch();
+                        }
+                        else {
+                            this.generatedFilesMap.forEach((watcher, source) => {
+                                const sourceFile = this.program!.getSourceFileByPath(source as Path);
+                                if (!sourceFile ||
+                                    sourceFile.resolvedPath !== source ||
+                                    !this.isValidGeneratedFileWatcher(
+                                        getDeclarationEmitOutputFilePathWorker(sourceFile.fileName, this.compilerOptions, this.currentDirectory, this.program!.getCommonSourceDirectory(), this.getCanonicalFileName),
+                                        watcher
+                                    )) {
+                                    closeFileWatcherOf(watcher);
+                                    (this.generatedFilesMap as Map<GeneratedFileWatcher>).delete(source);
+                                }
+                            });
+                        }
+                    }
+                }
+
                 // Watch the type locations that would be added to program as part of automatic type resolutions
                 if (this.languageServiceEnabled) {
                     this.resolutionCache.updateTypeRootsWatch();
@@ -949,7 +999,7 @@ namespace ts.server {
             this.externalFiles = this.getExternalFiles();
             enumerateInsertsAndDeletes<string, string>(this.externalFiles, oldExternalFiles, getStringComparer(!this.useCaseSensitiveFileNames()),
                 // Ensure a ScriptInfo is created for new external files. This is performed indirectly
-                // by the LSHost for files in the program when the program is retrieved above but
+                // by the host for files in the program when the program is retrieved above but
                 // the program doesn't contain external files so this must be done explicitly.
                 inserted => {
                     const scriptInfo = this.projectService.getOrCreateScriptInfoNotOpenedByClient(inserted, this.currentDirectory, this.directoryStructureHost)!;
@@ -959,8 +1009,11 @@ namespace ts.server {
             );
             const elapsed = timestamp() - start;
             this.writeLog(`Finishing updateGraphWorker: Project: ${this.getProjectName()} Version: ${this.getProjectVersion()} structureChanged: ${hasNewProgram} Elapsed: ${elapsed}ms`);
-            if (this.program !== oldProgram) {
+            if (this.hasAddedorRemovedFiles) {
                 this.print();
+            }
+            else if (this.program !== oldProgram) {
+                this.writeLog(`Different program with same set of files:: oldProgram.structureIsReused:: ${oldProgram && oldProgram.structureIsReused}`);
             }
             return hasNewProgram;
         }
@@ -1001,6 +1054,61 @@ namespace ts.server {
 
         private isWatchedMissingFile(path: Path) {
             return !!this.missingFilesMap && this.missingFilesMap.has(path);
+        }
+
+        /* @internal */
+        addGeneratedFileWatch(generatedFile: string, sourceFile: string) {
+            if (this.compilerOptions.outFile || this.compilerOptions.out) {
+                // Single watcher
+                if (!this.generatedFilesMap) {
+                    this.generatedFilesMap = this.createGeneratedFileWatcher(generatedFile);
+                }
+            }
+            else {
+                // Map
+                const path = this.toPath(sourceFile);
+                if (this.generatedFilesMap) {
+                    if (isGeneratedFileWatcher(this.generatedFilesMap)) {
+                        Debug.fail(`${this.projectName} Expected to not have --out watcher for generated file with options: ${JSON.stringify(this.compilerOptions)}`);
+                        return;
+                    }
+                    if (this.generatedFilesMap.has(path)) return;
+                }
+                else {
+                    this.generatedFilesMap = createMap();
+                }
+                this.generatedFilesMap.set(path, this.createGeneratedFileWatcher(generatedFile));
+            }
+        }
+
+        private createGeneratedFileWatcher(generatedFile: string): GeneratedFileWatcher {
+            return {
+                generatedFilePath: this.toPath(generatedFile),
+                watcher: this.projectService.watchFactory.watchFile(
+                    this.projectService.host,
+                    generatedFile,
+                    () => this.projectService.delayUpdateProjectGraphAndEnsureProjectStructureForOpenFiles(this),
+                    PollingInterval.High,
+                    WatchType.MissingGeneratedFile,
+                    this
+                )
+            };
+        }
+
+        private isValidGeneratedFileWatcher(generateFile: string, watcher: GeneratedFileWatcher) {
+            return this.toPath(generateFile) === watcher.generatedFilePath;
+        }
+
+        private clearGeneratedFileWatch() {
+            if (this.generatedFilesMap) {
+                if (isGeneratedFileWatcher(this.generatedFilesMap)) {
+                    closeFileWatcherOf(this.generatedFilesMap);
+                }
+                else {
+                    clearMap(this.generatedFilesMap, closeFileWatcherOf);
+                }
+                this.generatedFilesMap = undefined;
+            }
         }
 
         getScriptInfoForNormalizedPath(fileName: NormalizedPath): ScriptInfo | undefined {
@@ -1172,7 +1280,7 @@ namespace ts.server {
         private enableProxy(pluginModuleFactory: PluginModuleFactory, configEntry: PluginImport) {
             try {
                 if (typeof pluginModuleFactory !== "function") {
-                    this.projectService.logger.info(`Skipped loading plugin ${configEntry.name} because it did expose a proper factory function`);
+                    this.projectService.logger.info(`Skipped loading plugin ${configEntry.name} because it did not expose a proper factory function`);
                     return;
                 }
 

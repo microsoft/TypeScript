@@ -75,6 +75,19 @@ const abac: AB = {
     }
 }
 
+// Excess property checks must match all discriminable properties
+type Button = { tag: 'button'; type?: 'submit'; };
+type Anchor = { tag: 'a'; type?: string; href: string };
+
+type Union = Button | Anchor;
+const obj: Union = {
+    tag: 'button',
+    type: 'submit',
+
+    // should have error here
+    href: 'foo',
+};
+
 
 //// [excessPropertyCheckWithUnions.js]
 "use strict";
@@ -124,4 +137,10 @@ var abac = {
         a: "a",
         c: "c"
     }
+};
+var obj = {
+    tag: 'button',
+    type: 'submit',
+    // should have error here
+    href: 'foo'
 };

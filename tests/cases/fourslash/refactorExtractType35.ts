@@ -1,6 +1,6 @@
 /// <reference path='fourslash.ts' />
 
-//// type Union<T, U> = /*a*/U | T/*b*/
+//// type Union<T, U> = /*a*/U | T/*b*/;
 
 goTo.select("a", "b");
 edit.applyRefactor({
@@ -9,5 +9,5 @@ edit.applyRefactor({
     actionDescription: "Extract to type alias",
     newContent: `type /*RENAME*/NewType<U, T> = U | T;
 
-type Union<T, U> = NewType<U, T>`,
+type Union<T, U> = NewType<U, T>;`,
 });

@@ -47,11 +47,11 @@ var __extends = (this && this.__extends) || (function () {
 })();
 exports.__esModule = true;
 exports.simpleExample = /** @class */ (function () {
-    function class_1() {
+    function simpleExample() {
     }
-    class_1.getTags = function () { };
-    class_1.prototype.tags = function () { };
-    return class_1;
+    simpleExample.getTags = function () { };
+    simpleExample.prototype.tags = function () { };
+    return simpleExample;
 }());
 exports.circularReference = /** @class */ (function () {
     function C() {
@@ -70,13 +70,13 @@ var FooItem = /** @class */ (function () {
 exports.FooItem = FooItem;
 function WithTags(Base) {
     return /** @class */ (function (_super) {
-        __extends(class_2, _super);
-        function class_2() {
+        __extends(class_1, _super);
+        function class_1() {
             return _super !== null && _super.apply(this, arguments) || this;
         }
-        class_2.getTags = function () { };
-        class_2.prototype.tags = function () { };
-        return class_2;
+        class_1.getTags = function () { };
+        class_1.prototype.tags = function () { };
+        return class_1;
     }(Base));
 }
 exports.WithTags = WithTags;
