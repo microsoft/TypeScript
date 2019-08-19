@@ -2041,12 +2041,16 @@ namespace ts {
 
         function checkResolvedBlockScopedVariable(result: Symbol, errorLocation: Node): void {
             Debug.assert(!!(result.flags & SymbolFlags.BlockScopedVariable || result.flags & SymbolFlags.Class || result.flags & SymbolFlags.Enum));
+            if (result.flags & (SymbolFlags.Function | SymbolFlags.FunctionScopedVariable | SymbolFlags.Assignment) && result.flags & SymbolFlags.Class) {
+                // constructor functions aren't block scoped
+                return;
+            }
             // Block-scoped variables cannot be used before their definition
             const declaration = find(
                 result.declarations,
                 d => isBlockOrCatchScoped(d) || isClassLike(d) || (d.kind === SyntaxKind.EnumDeclaration));
 
-            if (declaration === undefined) return Debug.fail("Declaration to checkResolvedBlockScopedVariable is undefined");
+            if (declaration === undefined) return Debug.fail("checkResolvedBlockScopedVariable could not find block-scoped declaration");
 
             if (!(declaration.flags & NodeFlags.Ambient) && !isBlockScopedNameDeclaredBeforeUse(declaration, errorLocation)) {
                 let diagnosticMessage;
@@ -3811,7 +3815,7 @@ namespace ts {
                         id = (isConstructorObject ? "+" : "") + getSymbolId(symbol);
                         if (isJSConstructor(symbol.valueDeclaration)) {
                             // Instance and static types share the same symbol; only add 'typeof' for the static side.
-                            const isInstanceType = type === getInferredClassType(symbol) ? SymbolFlags.Type : SymbolFlags.Value;
+                            const isInstanceType = type === getDeclaredTypeOfClassOrInterface(symbol) ? SymbolFlags.Type : SymbolFlags.Value;
                             return symbolToTypeNode(symbol, context, isInstanceType);
                         }
                         // Always use 'typeof T' for type of class, enum, and module objects
@@ -5974,19 +5978,10 @@ namespace ts {
             if (!links.type) {
                 const jsDeclaration = getDeclarationOfExpando(symbol.valueDeclaration);
                 if (jsDeclaration) {
-                    const jsSymbol = getSymbolOfNode(jsDeclaration);
-                    if (jsSymbol && (hasEntries(jsSymbol.exports) || hasEntries(jsSymbol.members))) {
-                        symbol = cloneSymbol(symbol);
+                    const merged = mergeJSSymbols(symbol, getSymbolOfNode(jsDeclaration));
+                    if (merged) {
                         // note:we overwrite links because we just cloned the symbol
-                        links = symbol as TransientSymbol;
-                        if (hasEntries(jsSymbol.exports)) {
-                            symbol.exports = symbol.exports || createSymbolTable();
-                            mergeSymbolTable(symbol.exports, jsSymbol.exports);
-                        }
-                        if (hasEntries(jsSymbol.members)) {
-                            symbol.members = symbol.members || createSymbolTable();
-                            mergeSymbolTable(symbol.members, jsSymbol.members);
-                        }
+                        symbol = links = merged;
                     }
                 }
                 originalLinks.type = links.type = getTypeOfFuncClassEnumModuleWorker(symbol);
@@ -6161,6 +6156,16 @@ namespace ts {
         function getOuterTypeParameters(node: Node, includeThisTypes?: boolean): TypeParameter[] | undefined {
             while (true) {
                 node = node.parent; // TODO: GH#18217 Use SourceFile kind check instead
+                if (node && isBinaryExpression(node)) {
+                    // prototype assignments get the outer type parameters of their constructor function
+                    const assignmentKind = getAssignmentDeclarationKind(node);
+                    if (assignmentKind === AssignmentDeclarationKind.Prototype || assignmentKind === AssignmentDeclarationKind.PrototypeProperty) {
+                        const symbol = getSymbolOfNode(node.left);
+                        if (symbol && symbol.parent && !findAncestor(symbol.parent.valueDeclaration, d => node === d)) {
+                            node = symbol.parent.valueDeclaration;
+                        }
+                    }
+                }
                 if (!node) {
                     return undefined;
                 }
@@ -6194,7 +6199,7 @@ namespace ts {
                         }
                         const outerAndOwnTypeParameters = appendTypeParameters(outerTypeParameters, getEffectiveTypeParameterDeclarations(<DeclarationWithTypeParameters>node));
                         const thisType = includeThisTypes &&
-                            (node.kind === SyntaxKind.ClassDeclaration || node.kind === SyntaxKind.ClassExpression || node.kind === SyntaxKind.InterfaceDeclaration) &&
+                            (node.kind === SyntaxKind.ClassDeclaration || node.kind === SyntaxKind.ClassExpression || node.kind === SyntaxKind.InterfaceDeclaration || isJSConstructor(node)) &&
                             getDeclaredTypeOfClassOrInterface(getSymbolOfNode(node as ClassLikeDeclaration | InterfaceDeclaration)).thisType;
                         return thisType ? append(outerAndOwnTypeParameters, thisType) : outerAndOwnTypeParameters;
                 }
@@ -6215,6 +6220,7 @@ namespace ts {
                 if (node.kind === SyntaxKind.InterfaceDeclaration ||
                     node.kind === SyntaxKind.ClassDeclaration ||
                     node.kind === SyntaxKind.ClassExpression ||
+                    isJSConstructor(node) ||
                     isTypeAlias(node)) {
                     const declaration = <InterfaceDeclaration | TypeAliasDeclaration | JSDocTypedefTag | JSDocCallbackTag>node;
                     result = appendTypeParameters(result, getEffectiveTypeParameterDeclarations(declaration));
@@ -6248,7 +6254,7 @@ namespace ts {
                 const constraint = getBaseConstraintOfType(type);
                 return !!constraint && isValidBaseType(constraint) && isMixinConstructorType(constraint);
             }
-            return isJSConstructorType(type);
+            return false;
         }
 
         function getBaseTypeNodeOfClass(type: InterfaceType): ExpressionWithTypeArguments | undefined {
@@ -6350,9 +6356,7 @@ namespace ts {
             const baseTypeNode = getBaseTypeNodeOfClass(type)!;
             const typeArgs = typeArgumentsFromTypeReferenceNode(baseTypeNode);
             let baseType: Type;
-            const originalBaseType = isJSConstructorType(baseConstructorType) ? baseConstructorType :
-                baseConstructorType.symbol ? getDeclaredTypeOfSymbol(baseConstructorType.symbol) :
-                undefined;
+            const originalBaseType = baseConstructorType.symbol ? getDeclaredTypeOfSymbol(baseConstructorType.symbol) : undefined;
             if (baseConstructorType.symbol && baseConstructorType.symbol.flags & SymbolFlags.Class &&
                 areAllOuterTypeParametersApplied(originalBaseType!)) {
                 // When base constructor type is a class with no captured type arguments we know that the constructors all have the same type parameters as the
@@ -6362,9 +6366,6 @@ namespace ts {
             }
             else if (baseConstructorType.flags & TypeFlags.Any) {
                 baseType = baseConstructorType;
-            }
-            else if (isJSConstructorType(baseConstructorType)) {
-                baseType = !baseTypeNode.typeArguments && getJSClassType(baseConstructorType.symbol) || anyType;
             }
             else {
                 // The class derives from a "class-like" constructor function, check that we have at least one construct signature
@@ -6478,10 +6479,17 @@ namespace ts {
         }
 
         function getDeclaredTypeOfClassOrInterface(symbol: Symbol): InterfaceType {
-            const links = getSymbolLinks(symbol);
+            let links = getSymbolLinks(symbol);
+            const originalLinks = links;
             if (!links.declaredType) {
                 const kind = symbol.flags & SymbolFlags.Class ? ObjectFlags.Class : ObjectFlags.Interface;
-                const type = links.declaredType = <InterfaceType>createObjectType(kind, symbol);
+                const merged = mergeJSSymbols(symbol, getAssignedClassSymbol(symbol.valueDeclaration));
+                if (merged) {
+                    // note:we overwrite links because we just cloned the symbol
+                    symbol = links = merged;
+                }
+
+                const type = originalLinks.declaredType = links.declaredType = <InterfaceType>createObjectType(kind, symbol);
                 const outerTypeParameters = getOuterTypeParametersOfClassOrInterface(symbol);
                 const localTypeParameters = getLocalTypeParametersOfClassOrInterfaceOrTypeAlias(symbol);
                 // A class or interface is generic if it has type parameters or a "this" type. We always give classes a "this" type
@@ -7452,7 +7460,7 @@ namespace ts {
          * Converts an AnonymousType to a ResolvedType.
          */
         function resolveAnonymousTypeMembers(type: AnonymousType) {
-            const symbol = type.symbol;
+            const symbol = getMergedSymbol(type.symbol);
             if (type.target) {
                 setStructuredTypeMembers(type, emptySymbols, emptyArray, emptyArray, undefined, undefined);
                 const members = createInstantiatedSymbolTable(getPropertiesOfObjectType(type.target), type.mapper!, /*mappingThisOnly*/ false);
@@ -7508,12 +7516,18 @@ namespace ts {
                 // will never be observed because a qualified name can't reference signatures.
                 if (symbol.flags & (SymbolFlags.Function | SymbolFlags.Method)) {
                     type.callSignatures = getSignaturesOfSymbol(symbol);
-                    type.constructSignatures = filter(type.callSignatures, sig => isJSConstructor(sig.declaration));
                 }
                 // And likewise for construct signatures for classes
                 if (symbol.flags & SymbolFlags.Class) {
                     const classType = getDeclaredTypeOfClassOrInterface(symbol);
-                    let constructSignatures = getSignaturesOfSymbol(symbol.members!.get(InternalSymbolName.Constructor));
+                    let constructSignatures = symbol.members ? getSignaturesOfSymbol(symbol.members.get(InternalSymbolName.Constructor)) : emptyArray;
+                    if (symbol.flags & SymbolFlags.Function) {
+                        constructSignatures = addRange(constructSignatures.slice(), mapDefined(
+                            type.callSignatures,
+                            sig => isJSConstructor(sig.declaration) ?
+                                createSignature(sig.declaration, sig.typeParameters, sig.thisParameter, sig.parameters, classType, /*resolvedTypePredicate*/ undefined, sig.minArgumentCount, sig.hasRestParameter, sig.hasLiteralTypes) :
+                                undefined));
+                    }
                     if (!constructSignatures.length) {
                         constructSignatures = getDefaultConstructSignatures(classType);
                     }
@@ -8748,7 +8762,6 @@ namespace ts {
                 let type = signature.target ? instantiateType(getReturnTypeOfSignature(signature.target), signature.mapper!) :
                     signature.unionSignatures ? getUnionType(map(signature.unionSignatures, getReturnTypeOfSignature), UnionReduction.Subtype) :
                     getReturnTypeFromAnnotation(signature.declaration!) ||
-                    isJSConstructor(signature.declaration) && getJSClassType(getSymbolOfNode(signature.declaration!)) ||
                     (nodeIsMissing((<FunctionLikeDeclaration>signature.declaration).body) ? anyType : getReturnTypeFromBody(<FunctionLikeDeclaration>signature.declaration));
                 if (!popTypeResolution()) {
                     if (signature.declaration) {
@@ -11096,9 +11109,24 @@ namespace ts {
             const parent = container && container.parent;
             if (parent && (isClassLike(parent) || parent.kind === SyntaxKind.InterfaceDeclaration)) {
                 if (!hasModifier(container, ModifierFlags.Static) &&
-                    (container.kind !== SyntaxKind.Constructor || isNodeDescendantOf(node, (<ConstructorDeclaration>container).body!))) {
+                    (!isConstructorDeclaration(container) || isNodeDescendantOf(node, container.body))) {
                     return getDeclaredTypeOfClassOrInterface(getSymbolOfNode(parent as ClassLikeDeclaration | InterfaceDeclaration)).thisType!;
                 }
+            }
+
+            // inside x.prototype = { ... }
+            if (parent && isObjectLiteralExpression(parent) && isBinaryExpression(parent.parent) && getAssignmentDeclarationKind(parent.parent) === AssignmentDeclarationKind.Prototype) {
+                return getDeclaredTypeOfClassOrInterface(getSymbolOfNode(parent.parent.left)!.parent!).thisType!;
+            }
+            // /** @return {this} */
+            // x.prototype.m = function() { ... }
+            const host = node.flags & NodeFlags.JSDoc ? getHostSignatureFromJSDoc(node) : undefined;
+            if (host && isFunctionExpression(host) && isBinaryExpression(host.parent) && getAssignmentDeclarationKind(host.parent) === AssignmentDeclarationKind.PrototypeProperty) {
+                return getDeclaredTypeOfClassOrInterface(getSymbolOfNode(host.parent.left)!.parent!).thisType!;
+            }
+            // inside constructor function C() { ... }
+            if (isJSConstructor(container) && isNodeDescendantOf(node, container.body)) {
+                return getDeclaredTypeOfClassOrInterface(getSymbolOfNode(container)).thisType!;
             }
             error(node, Diagnostics.A_this_type_is_available_only_in_a_non_static_member_of_a_class_or_interface);
             return errorType;
@@ -12391,15 +12419,17 @@ namespace ts {
             }
 
             if (!ignoreReturnTypes) {
-                // If a signature reolution is already in-flight, skip issuing a circularity error
+                // If a signature resolution is already in-flight, skip issuing a circularity error
                 // here and just use the `any` type directly
-                const targetReturnType = isResolvingReturnTypeOfSignature(target) ? anyType : (target.declaration && isJSConstructor(target.declaration)) ?
-                    getJSClassType(target.declaration.symbol)! : getReturnTypeOfSignature(target);
+                const targetReturnType = isResolvingReturnTypeOfSignature(target) ? anyType
+                    : target.declaration && isJSConstructor(target.declaration) ? getDeclaredTypeOfClassOrInterface(target.declaration.symbol)
+                    : getReturnTypeOfSignature(target);
                 if (targetReturnType === voidType) {
                     return result;
                 }
-                const sourceReturnType = isResolvingReturnTypeOfSignature(source) ? anyType : (source.declaration && isJSConstructor(source.declaration)) ?
-                    getJSClassType(source.declaration.symbol)! : getReturnTypeOfSignature(source);
+                const sourceReturnType = isResolvingReturnTypeOfSignature(source) ? anyType
+                    : source.declaration && isJSConstructor(source.declaration) ? getDeclaredTypeOfClassOrInterface(source.declaration.symbol)
+                    : getReturnTypeOfSignature(source);
 
                 // The following block preserves behavior forbidding boolean returning functions from being assignable to type guard returning functions
                 const targetTypePredicate = getTypePredicateOfSignature(target);
@@ -18289,10 +18319,8 @@ namespace ts {
                 if (isInJS && className) {
                     const classSymbol = checkExpression(className).symbol;
                     if (classSymbol && classSymbol.members && (classSymbol.flags & SymbolFlags.Function)) {
-                        const classType = getJSClassType(classSymbol);
-                        if (classType) {
-                            return getFlowTypeOfReference(node, classType);
-                        }
+                        const classType = (getDeclaredTypeOfSymbol(classSymbol) as InterfaceType).thisType!;
+                        return getFlowTypeOfReference(node, classType);
                     }
                 }
                 // Check if it's a constructor definition, can be either a variable decl or function decl
@@ -18302,10 +18330,8 @@ namespace ts {
                 else if (isInJS &&
                          (container.kind === SyntaxKind.FunctionExpression || container.kind === SyntaxKind.FunctionDeclaration) &&
                          getJSDocClassTag(container)) {
-                    const classType = getJSClassType(getMergedSymbol(container.symbol));
-                    if (classType) {
-                        return getFlowTypeOfReference(node, classType);
-                    }
+                    const classType = (getDeclaredTypeOfSymbol(getMergedSymbol(container.symbol)) as InterfaceType).thisType!;
+                    return getFlowTypeOfReference(node, classType);
                 }
 
                 const thisType = getThisTypeOfDeclaration(container) || getContextualThisParameterType(container);
@@ -18316,7 +18342,7 @@ namespace ts {
 
             if (isClassLike(container.parent)) {
                 const symbol = getSymbolOfNode(container.parent);
-                const type = hasModifier(container, ModifierFlags.Static) ? getTypeOfSymbol(symbol) : (<InterfaceType>getDeclaredTypeOfSymbol(symbol)).thisType!;
+                const type = hasModifier(container, ModifierFlags.Static) ? getTypeOfSymbol(symbol) : (getDeclaredTypeOfSymbol(symbol) as InterfaceType).thisType!;
                 return getFlowTypeOfReference(node, type);
             }
 
@@ -22836,7 +22862,7 @@ namespace ts {
          * Indicates whether a declaration can be treated as a constructor in a JavaScript
          * file.
          */
-        function isJSConstructor(node: Declaration | undefined): boolean {
+        function isJSConstructor(node: Node | undefined): node is FunctionDeclaration | FunctionExpression {
             if (!node || !isInJSFile(node)) {
                 return false;
             }
@@ -22849,39 +22875,35 @@ namespace ts {
 
                 // If the symbol of the node has members, treat it like a constructor.
                 const symbol = getSymbolOfNode(func);
-                return !!symbol && (symbol.members !== undefined || symbol.exports !== undefined && symbol.exports.get("prototype" as __String) !== undefined);
+                return !!symbol && symbol.members !== undefined;
             }
             return false;
         }
 
-        function isJSConstructorType(type: Type) {
-            if (type.flags & TypeFlags.Object) {
-                const resolved = resolveStructuredTypeMembers(<ObjectType>type);
-                return resolved.callSignatures.length === 1 && isJSConstructor(resolved.callSignatures[0].declaration);
+        function mergeJSSymbols(target: Symbol, source: Symbol | undefined) {
+            if (source && (hasEntries(source.exports) || hasEntries(source.members))) {
+                target = cloneSymbol(target);
+                if (hasEntries(source.exports)) {
+                    target.exports = target.exports || createSymbolTable();
+                    mergeSymbolTable(target.exports, source.exports);
+                }
+                if (hasEntries(source.members)) {
+                    target.members = target.members || createSymbolTable();
+                    mergeSymbolTable(target.members, source.members);
+                }
+                target.flags |= source.flags & SymbolFlags.Class;
+                return target as TransientSymbol;
             }
-            return false;
         }
 
-        function getJSClassType(symbol: Symbol): Type | undefined {
-            let inferred: Type | undefined;
-            if (isJSConstructor(symbol.valueDeclaration)) {
-                inferred = getInferredClassType(symbol);
-            }
-            const assigned = getAssignedClassType(symbol);
-            return assigned && inferred ?
-                getIntersectionType([inferred, assigned]) :
-                assigned || inferred;
-        }
-
-        function getAssignedClassType(symbol: Symbol): Type | undefined {
-            const decl = symbol.valueDeclaration;
+        function getAssignedClassSymbol(decl: Declaration): Symbol | undefined {
             const assignmentSymbol = decl && decl.parent &&
                 (isFunctionDeclaration(decl) && getSymbolOfNode(decl) ||
                  isBinaryExpression(decl.parent) && getSymbolOfNode(decl.parent.left) ||
                  isVariableDeclaration(decl.parent) && getSymbolOfNode(decl.parent));
             const prototype = assignmentSymbol && assignmentSymbol.exports && assignmentSymbol.exports.get("prototype" as __String);
             const init = prototype && prototype.valueDeclaration && getAssignedJSPrototype(prototype.valueDeclaration);
-            return init ? getWidenedType(checkExpressionCached(init)) : undefined;
+            return init ? getSymbolOfNode(init) : undefined;
         }
 
         function getAssignedJSPrototype(node: Node) {
@@ -22896,15 +22918,6 @@ namespace ts {
                 const right = getInitializerOfBinaryExpression(parent);
                 return isObjectLiteralExpression(right) && right;
             }
-        }
-
-
-        function getInferredClassType(symbol: Symbol) {
-            const links = getSymbolLinks(symbol);
-            if (!links.inferredClassType) {
-                links.inferredClassType = createAnonymousType(symbol, getMembersOfSymbol(symbol) || emptySymbols, emptyArray, emptyArray, /*stringIndexType*/ undefined, /*numberIndexType*/ undefined);
-            }
-            return links.inferredClassType;
         }
 
         /**
