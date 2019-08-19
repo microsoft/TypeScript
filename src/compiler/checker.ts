@@ -10693,13 +10693,15 @@ namespace ts {
                 //    * The original `mapper` used to create this conditional
                 //    * The mapper that maps the old root type parameter to the clone (`freshMapper`)
                 //    * The mapper that maps the clone to its inference result (`context.mapper`)
-                const freshParams = map(root.inferTypeParameters, maybeCloneTypeParameter);
-                const freshMapper = createTypeMapper(root.inferTypeParameters, freshParams);
+                const freshParams = sameMap(root.inferTypeParameters, maybeCloneTypeParameter);
+                const freshMapper = freshParams !== root.inferTypeParameters ? createTypeMapper(root.inferTypeParameters, freshParams) : undefined;
                 const context = createInferenceContext(freshParams, /*signature*/ undefined, InferenceFlags.None);
-                const freshCombinedMapper = combineTypeMappers(mapper, freshMapper);
-                for (const p of freshParams) {
-                    if (root.inferTypeParameters.indexOf(p) === -1) {
-                        p.mapper = freshCombinedMapper;
+                if (freshMapper) {
+                    const freshCombinedMapper = combineTypeMappers(mapper, freshMapper);
+                    for (const p of freshParams) {
+                        if (root.inferTypeParameters.indexOf(p) === -1) {
+                            p.mapper = freshCombinedMapper;
+                        }
                     }
                 }
                 if (!checkTypeInstantiable) {
