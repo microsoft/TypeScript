@@ -150,8 +150,8 @@ namespace ts {
     export function forEachEntry<T, U>(map: ReadonlyMap<T>, callback: (value: T, key: string) => U | undefined): U | undefined;
     export function forEachEntry<T, U>(map: ReadonlyUnderscoreEscapedMap<T> | ReadonlyMap<T>, callback: (value: T, key: (string & __String)) => U | undefined): U | undefined {
         const iterator = map.entries();
-        for (let { value: pair, done } = iterator.next(); !done; { value: pair, done } = iterator.next()) {
-            const [key, value] = pair;
+        for (let iterResult = iterator.next(); !iterResult.done; iterResult = iterator.next()) {
+            const [key, value] = iterResult.value;
             const result = callback(value, key as (string & __String));
             if (result) {
                 return result;
@@ -165,8 +165,8 @@ namespace ts {
     export function forEachKey<T>(map: ReadonlyMap<{}>, callback: (key: string) => T | undefined): T | undefined;
     export function forEachKey<T>(map: ReadonlyUnderscoreEscapedMap<{}> | ReadonlyMap<{}>, callback: (key: string & __String) => T | undefined): T | undefined {
         const iterator = map.keys();
-        for (let { value: key, done } = iterator.next(); !done; { value: key, done } = iterator.next()) {
-            const result = callback(key as string & __String);
+        for (let iterResult = iterator.next(); !iterResult.done; iterResult = iterator.next()) {
+            const result = callback(iterResult.value as string & __String);
             if (result) {
                 return result;
             }
@@ -192,7 +192,7 @@ namespace ts {
     export function arrayToSet<T>(array: ReadonlyArray<T>, makeKey: (value: T) => string | undefined): Map<true>;
     export function arrayToSet<T>(array: ReadonlyArray<T>, makeKey: (value: T) => __String | undefined): UnderscoreEscapedMap<true>;
     export function arrayToSet(array: ReadonlyArray<any>, makeKey?: (value: any) => string | __String | undefined): Map<true> | UnderscoreEscapedMap<true> {
-        return arrayToMap<any, true>(array, makeKey || (s => s), () => true);
+        return arrayToMap<any, true>(array, makeKey || (s => s), returnTrue);
     }
 
     export function cloneMap(map: SymbolTable): SymbolTable;
@@ -220,7 +220,7 @@ namespace ts {
         return node.end - node.pos;
     }
 
-    export function getResolvedModule(sourceFile: SourceFile, moduleNameText: string): ResolvedModuleFull | undefined {
+    export function getResolvedModule(sourceFile: SourceFile | undefined, moduleNameText: string): ResolvedModuleFull | undefined {
         return sourceFile && sourceFile.resolvedModules && sourceFile.resolvedModules.get(moduleNameText);
     }
 
@@ -576,6 +576,8 @@ namespace ts {
             return getSourceTextOfNodeFromSourceFile(sourceFile, node);
         }
 
+        // If a NoSubstitutionTemplateLiteral appears to have a substitution in it, the original text
+        // had to include a backslash: `not \${a} substitution`.
         const escapeText = neverAsciiEscape || (getEmitFlags(node) & EmitFlags.NoAsciiEscaping) ? escapeString : escapeNonAsciiString;
 
         // If we can't reach the original source text, use the canonical form if it's a number,
@@ -589,15 +591,23 @@ namespace ts {
                     return '"' + escapeText(node.text, CharacterCodes.doubleQuote) + '"';
                 }
             case SyntaxKind.NoSubstitutionTemplateLiteral:
-                return "`" + escapeText(node.text, CharacterCodes.backtick) + "`";
             case SyntaxKind.TemplateHead:
-                // tslint:disable-next-line no-invalid-template-strings
-                return "`" + escapeText(node.text, CharacterCodes.backtick) + "${";
             case SyntaxKind.TemplateMiddle:
-                // tslint:disable-next-line no-invalid-template-strings
-                return "}" + escapeText(node.text, CharacterCodes.backtick) + "${";
             case SyntaxKind.TemplateTail:
-                return "}" + escapeText(node.text, CharacterCodes.backtick) + "`";
+                const rawText = (<TemplateLiteralLikeNode>node).rawText || escapeTemplateSubstitution(escapeText(node.text, CharacterCodes.backtick));
+                switch (node.kind) {
+                    case SyntaxKind.NoSubstitutionTemplateLiteral:
+                        return "`" + rawText + "`";
+                    case SyntaxKind.TemplateHead:
+                        // tslint:disable-next-line no-invalid-template-strings
+                        return "`" + rawText + "${";
+                    case SyntaxKind.TemplateMiddle:
+                        // tslint:disable-next-line no-invalid-template-strings
+                        return "}" + rawText + "${";
+                    case SyntaxKind.TemplateTail:
+                        return "}" + rawText + "`";
+                }
+                break;
             case SyntaxKind.NumericLiteral:
             case SyntaxKind.BigIntLiteral:
             case SyntaxKind.RegularExpressionLiteral:
@@ -692,6 +702,43 @@ namespace ts {
 
     export function isEffectiveExternalModule(node: SourceFile, compilerOptions: CompilerOptions) {
         return isExternalModule(node) || compilerOptions.isolatedModules || ((getEmitModuleKind(compilerOptions) === ModuleKind.CommonJS) && !!node.commonJsModuleIndicator);
+    }
+
+    /**
+     * Returns whether the source file will be treated as if it were in strict mode at runtime.
+     */
+    export function isEffectiveStrictModeSourceFile(node: SourceFile, compilerOptions: CompilerOptions) {
+        // We can only verify strict mode for JS/TS files
+        switch (node.scriptKind) {
+            case ScriptKind.JS:
+            case ScriptKind.TS:
+            case ScriptKind.JSX:
+            case ScriptKind.TSX:
+                break;
+            default:
+                return false;
+        }
+        // Strict mode does not matter for declaration files.
+        if (node.isDeclarationFile) {
+            return false;
+        }
+        // If `alwaysStrict` is set, then treat the file as strict.
+        if (getStrictOptionValue(compilerOptions, "alwaysStrict")) {
+            return true;
+        }
+        // Starting with a "use strict" directive indicates the file is strict.
+        if (startsWithUseStrict(node.statements)) {
+            return true;
+        }
+        if (isExternalModule(node) || compilerOptions.isolatedModules) {
+            // ECMAScript Modules are always strict.
+            if (getEmitModuleKind(compilerOptions) >= ModuleKind.ES2015) {
+                return true;
+            }
+            // Other modules are strict unless otherwise specified.
+            return !compilerOptions.noImplicitUseStrict;
+        }
+        return false;
     }
 
     export function isBlockScope(node: Node, parentNode: Node): boolean {
@@ -979,6 +1026,12 @@ namespace ts {
 
     export function isImportCall(n: Node): n is ImportCall {
         return n.kind === SyntaxKind.CallExpression && (<CallExpression>n).expression.kind === SyntaxKind.ImportKeyword;
+    }
+
+    export function isImportMeta(n: Node): n is ImportMetaProperty {
+        return isMetaProperty(n)
+            && n.keywordToken === SyntaxKind.ImportKeyword
+            && n.name.escapedText === "meta";
     }
 
     export function isLiteralImportTypeNode(n: Node): n is LiteralImportTypeNode {
@@ -2073,7 +2126,7 @@ namespace ts {
     }
 
     export function importFromModuleSpecifier(node: StringLiteralLike): AnyValidImportOrReExport {
-        return tryGetImportFromModuleSpecifier(node) || Debug.fail(Debug.showSyntaxKind(node.parent));
+        return tryGetImportFromModuleSpecifier(node) || Debug.failBadSyntaxKind(node.parent);
     }
 
     export function tryGetImportFromModuleSpecifier(node: StringLiteralLike): AnyValidImportOrReExport | undefined {
@@ -2147,11 +2200,11 @@ namespace ts {
         return !!name && name.escapedText === "new";
     }
 
-    export function isJSDocTypeAlias(node: Node): node is JSDocTypedefTag | JSDocCallbackTag {
-        return node.kind === SyntaxKind.JSDocTypedefTag || node.kind === SyntaxKind.JSDocCallbackTag;
+    export function isJSDocTypeAlias(node: Node): node is JSDocTypedefTag | JSDocCallbackTag | JSDocEnumTag {
+        return node.kind === SyntaxKind.JSDocTypedefTag || node.kind === SyntaxKind.JSDocCallbackTag || node.kind === SyntaxKind.JSDocEnumTag;
     }
 
-    export function isTypeAlias(node: Node): node is JSDocTypedefTag | JSDocCallbackTag | TypeAliasDeclaration {
+    export function isTypeAlias(node: Node): node is JSDocTypedefTag | JSDocCallbackTag | JSDocEnumTag | TypeAliasDeclaration {
         return isJSDocTypeAlias(node) || isTypeAliasDeclaration(node);
     }
 
@@ -2201,13 +2254,13 @@ namespace ts {
         let result: (JSDoc | JSDocTag)[] | undefined;
         // Pull parameter comments from declaring function as well
         if (isVariableLike(hostNode) && hasInitializer(hostNode) && hasJSDocNodes(hostNode.initializer!)) {
-            result = addRange(result, (hostNode.initializer as HasJSDoc).jsDoc!);
+            result = append(result, last((hostNode.initializer as HasJSDoc).jsDoc!));
         }
 
         let node: Node | undefined = hostNode;
         while (node && node.parent) {
             if (hasJSDocNodes(node)) {
-                result = addRange(result, node.jsDoc!);
+                result = append(result, last(node.jsDoc!));
             }
 
             if (node.kind === SyntaxKind.Parameter) {
@@ -2290,7 +2343,7 @@ namespace ts {
     export function getTypeParameterFromJsDoc(node: TypeParameterDeclaration & { parent: JSDocTemplateTag }): TypeParameterDeclaration | undefined {
         const name = node.name.escapedText;
         const { typeParameters } = (node.parent.parent.parent as SignatureDeclaration | InterfaceDeclaration | ClassDeclaration);
-        return find(typeParameters!, p => p.name.escapedText === name);
+        return typeParameters && find(typeParameters, p => p.name.escapedText === name);
     }
 
     export function hasRestParameter(s: SignatureDeclaration | JSDocSignature): boolean {
@@ -2611,13 +2664,6 @@ namespace ts {
         return undefined;
     }
 
-    export function tryResolveScriptReference(host: ScriptReferenceHost, sourceFile: SourceFile | UnparsedSource, reference: FileReference) {
-        if (!host.getCompilerOptions().noResolve) {
-            const referenceFileName = isRootedDiskPath(reference.fileName) ? reference.fileName : combinePaths(getDirectoryPath(sourceFile.fileName), reference.fileName);
-            return host.getSourceFile(referenceFileName);
-        }
-    }
-
     export function getAncestor(node: Node | undefined, kind: SyntaxKind): Node | undefined {
         while (node) {
             if (node.kind === kind) {
@@ -2638,6 +2684,10 @@ namespace ts {
 
     export function isNonContextualKeyword(token: SyntaxKind): boolean {
         return isKeyword(token) && !isContextualKeyword(token);
+    }
+
+    export function isFutureReservedKeyword(token: SyntaxKind): boolean {
+        return SyntaxKind.FirstFutureReservedWord <= token && token <= SyntaxKind.LastFutureReservedWord;
     }
 
     export function isStringANonContextualKeyword(name: string) {
@@ -2712,11 +2762,19 @@ namespace ts {
         return isStringLiteralLike(node) || isNumericLiteral(node);
     }
 
+    export function isSignedNumericLiteral(node: Node): node is PrefixUnaryExpression & { operand: NumericLiteral } {
+        return isPrefixUnaryExpression(node) && (node.operator === SyntaxKind.PlusToken || node.operator === SyntaxKind.MinusToken) && isNumericLiteral(node.operand);
+    }
+
     /**
-     * A declaration has a dynamic name if both of the following are true:
-     *   1. The declaration has a computed property name
-     *   2. The computed name is *not* expressed as Symbol.<name>, where name
-     *      is a property of the Symbol constructor that denotes a built in
+     * A declaration has a dynamic name if all of the following are true:
+     *   1. The declaration has a computed property name.
+     *   2. The computed name is *not* expressed as a StringLiteral.
+     *   3. The computed name is *not* expressed as a NumericLiteral.
+     *   4. The computed name is *not* expressed as a PlusToken or MinusToken
+     *      immediately followed by a NumericLiteral.
+     *   5. The computed name is *not* expressed as `Symbol.<name>`, where `<name>`
+     *      is a property of the Symbol constructor that denotes a built-in
      *      Symbol.
      */
     export function hasDynamicName(declaration: Declaration): declaration is DynamicNamedDeclaration {
@@ -2727,6 +2785,7 @@ namespace ts {
     export function isDynamicName(name: DeclarationName): boolean {
         return name.kind === SyntaxKind.ComputedPropertyName &&
             !isStringOrNumericLiteralLike(name.expression) &&
+            !isSignedNumericLiteral(name.expression) &&
             !isWellKnownSymbolSyntactically(name.expression);
     }
 
@@ -3111,6 +3170,11 @@ namespace ts {
         }
     }
 
+    const templateSubstitutionRegExp = /\$\{/g;
+    function escapeTemplateSubstitution(str: string): string {
+        return str.replace(templateSubstitutionRegExp, "\\${");
+    }
+
     // This consists of the first 19 unprintable ASCII characters, canonical escapes, lineSeparator,
     // paragraphSeparator, and nextLine. The latter three are just desirable to suppress new lines in
     // the language service. These characters should be escaped when printing, and if any characters are added,
@@ -3118,7 +3182,8 @@ namespace ts {
     // There is no reason for this other than that JSON.stringify does not handle it either.
     const doubleQuoteEscapedCharsRegExp = /[\\\"\u0000-\u001f\t\v\f\b\r\n\u2028\u2029\u0085]/g;
     const singleQuoteEscapedCharsRegExp = /[\\\'\u0000-\u001f\t\v\f\b\r\n\u2028\u2029\u0085]/g;
-    const backtickQuoteEscapedCharsRegExp = /[\\\`\u0000-\u001f\t\v\f\b\r\n\u2028\u2029\u0085]/g;
+    // Template strings should be preserved as much as possible
+    const backtickQuoteEscapedCharsRegExp = /[\\\`]/g;
     const escapedCharsMap = createMapFromTemplate({
         "\t": "\\t",
         "\v": "\\v",
@@ -3146,6 +3211,23 @@ namespace ts {
                 quoteChar === CharacterCodes.singleQuote ? singleQuoteEscapedCharsRegExp :
                     doubleQuoteEscapedCharsRegExp;
         return s.replace(escapedCharsRegExp, getReplacement);
+    }
+
+    /**
+     * Strip off existed single quotes or double quotes from a given string
+     *
+     * @return non-quoted string
+     */
+    export function stripQuotes(name: string) {
+        const length = name.length;
+        if (length >= 2 && name.charCodeAt(0) === name.charCodeAt(length - 1) && startsWithQuote(name)) {
+            return name.substring(1, length - 1);
+        }
+        return name;
+    }
+
+    export function startsWithQuote(name: string): boolean {
+        return isSingleOrDoubleQuote(name.charCodeAt(0));
     }
 
     function getReplacement(c: string, offset: number, input: string) {
@@ -3488,7 +3570,7 @@ namespace ts {
         return find(node.members, (member): member is ConstructorDeclaration & { body: FunctionBody } => isConstructorDeclaration(member) && nodeIsPresent(member.body));
     }
 
-    function getSetAccessorValueParameter(accessor: SetAccessorDeclaration): ParameterDeclaration | undefined {
+    export function getSetAccessorValueParameter(accessor: SetAccessorDeclaration): ParameterDeclaration | undefined {
         if (accessor && accessor.parameters.length > 0) {
             const hasThis = accessor.parameters.length === 2 && parameterIsThisKeyword(accessor.parameters[0]);
             return accessor.parameters[hasThis ? 1 : 0];
@@ -3523,7 +3605,7 @@ namespace ts {
         return id.originalKeywordKind === SyntaxKind.ThisKeyword;
     }
 
-    export function getAllAccessorDeclarations(declarations: NodeArray<Declaration>, accessor: AccessorDeclaration): AllAccessorDeclarations {
+    export function getAllAccessorDeclarations(declarations: readonly Declaration[], accessor: AccessorDeclaration): AllAccessorDeclarations {
         // TODO: GH#18217
         let firstAccessor!: AccessorDeclaration;
         let secondAccessor!: AccessorDeclaration;
@@ -4187,78 +4269,6 @@ namespace ts {
     }
 
     /**
-     * Formats an enum value as a string for debugging and debug assertions.
-     */
-    function formatEnum(value = 0, enumObject: any, isFlags?: boolean) {
-        const members = getEnumMembers(enumObject);
-        if (value === 0) {
-            return members.length > 0 && members[0][0] === 0 ? members[0][1] : "0";
-        }
-        if (isFlags) {
-            let result = "";
-            let remainingFlags = value;
-            for (let i = members.length - 1; i >= 0 && remainingFlags !== 0; i--) {
-                const [enumValue, enumName] = members[i];
-                if (enumValue !== 0 && (remainingFlags & enumValue) === enumValue) {
-                    remainingFlags &= ~enumValue;
-                    result = `${enumName}${result ? ", " : ""}${result}`;
-                }
-            }
-            if (remainingFlags === 0) {
-                return result;
-            }
-        }
-        else {
-            for (const [enumValue, enumName] of members) {
-                if (enumValue === value) {
-                    return enumName;
-                }
-            }
-        }
-        return value.toString();
-    }
-
-    function getEnumMembers(enumObject: any) {
-        const result: [number, string][] = [];
-        for (const name in enumObject) {
-            const value = enumObject[name];
-            if (typeof value === "number") {
-                result.push([value, name]);
-            }
-        }
-
-        return stableSort<[number, string]>(result, (x, y) => compareValues(x[0], y[0]));
-    }
-
-    export function formatSyntaxKind(kind: SyntaxKind | undefined): string {
-        return formatEnum(kind, (<any>ts).SyntaxKind, /*isFlags*/ false);
-    }
-
-    export function formatModifierFlags(flags: ModifierFlags | undefined): string {
-        return formatEnum(flags, (<any>ts).ModifierFlags, /*isFlags*/ true);
-    }
-
-    export function formatTransformFlags(flags: TransformFlags | undefined): string {
-        return formatEnum(flags, (<any>ts).TransformFlags, /*isFlags*/ true);
-    }
-
-    export function formatEmitFlags(flags: EmitFlags | undefined): string {
-        return formatEnum(flags, (<any>ts).EmitFlags, /*isFlags*/ true);
-    }
-
-    export function formatSymbolFlags(flags: SymbolFlags | undefined): string {
-        return formatEnum(flags, (<any>ts).SymbolFlags, /*isFlags*/ true);
-    }
-
-    export function formatTypeFlags(flags: TypeFlags | undefined): string {
-        return formatEnum(flags, (<any>ts).TypeFlags, /*isFlags*/ true);
-    }
-
-    export function formatObjectFlags(flags: ObjectFlags | undefined): string {
-        return formatEnum(flags, (<any>ts).ObjectFlags, /*isFlags*/ true);
-    }
-
-    /**
      * Creates a new TextRange from the provided pos and end.
      *
      * @param pos The start position.
@@ -4519,8 +4529,7 @@ namespace ts {
         map.clear();
     }
 
-    export interface MutateMapOptions<T, U> {
-        createNewValue(key: string, valueInNewMap: U): T;
+    export interface MutateMapSkippingNewValuesOptions<T, U> {
         onDeleteValue(existingValue: T, key: string): void;
 
         /**
@@ -4535,8 +4544,12 @@ namespace ts {
     /**
      * Mutates the map with newMap such that keys in map will be same as newMap.
      */
-    export function mutateMap<T, U>(map: Map<T>, newMap: ReadonlyMap<U>, options: MutateMapOptions<T, U>) {
-        const { createNewValue, onDeleteValue, onExistingValue } = options;
+    export function mutateMapSkippingNewValues<T, U>(
+        map: Map<T>,
+        newMap: ReadonlyMap<U>,
+        options: MutateMapSkippingNewValuesOptions<T, U>
+    ) {
+        const { onDeleteValue, onExistingValue } = options;
         // Needs update
         map.forEach((existingValue, key) => {
             const valueInNewMap = newMap.get(key);
@@ -4550,7 +4563,20 @@ namespace ts {
                 onExistingValue(existingValue, valueInNewMap, key);
             }
         });
+    }
 
+    export interface MutateMapOptions<T, U> extends MutateMapSkippingNewValuesOptions<T, U> {
+        createNewValue(key: string, valueInNewMap: U): T;
+    }
+
+    /**
+     * Mutates the map with newMap such that keys in map will be same as newMap.
+     */
+    export function mutateMap<T, U>(map: Map<T>, newMap: ReadonlyMap<U>, options: MutateMapOptions<T, U>) {
+        // Needs update
+        mutateMapSkippingNewValues(map, newMap, options);
+
+        const { createNewValue } = options;
         // Add new values that are not already present
         newMap.forEach((valueInNewMap, key) => {
             if (!map.has(key)) {
@@ -5144,7 +5170,7 @@ namespace ts {
      * attempt to draw the name from the node the declaration is on (as that declaration is what its' symbol
      * will be merged with)
      */
-    function nameForNamelessJSDocTypedef(declaration: JSDocTypedefTag): Identifier | undefined {
+    function nameForNamelessJSDocTypedef(declaration: JSDocTypedefTag | JSDocEnumTag): Identifier | undefined {
         const hostNode = declaration.parent.parent;
         if (!hostNode) {
             return undefined;
@@ -5161,7 +5187,10 @@ namespace ts {
                 }
                 break;
             case SyntaxKind.ExpressionStatement:
-                const expr = hostNode.expression;
+                let expr = hostNode.expression;
+                if (expr.kind === SyntaxKind.BinaryExpression && (expr as BinaryExpression).operatorToken.kind === SyntaxKind.EqualsToken) {
+                    expr = (expr as BinaryExpression).left;
+                }
                 switch (expr.kind) {
                     case SyntaxKind.PropertyAccessExpression:
                         return (expr as PropertyAccessExpression).name;
@@ -5230,6 +5259,8 @@ namespace ts {
             }
             case SyntaxKind.JSDocTypedefTag:
                 return getNameOfJSDocTypedef(declaration as JSDocTypedefTag);
+            case SyntaxKind.JSDocEnumTag:
+                return nameForNamelessJSDocTypedef(declaration as JSDocEnumTag);
             case SyntaxKind.ExportAssignment: {
                 const { expression } = declaration as ExportAssignment;
                 return isIdentifier(expression) ? expression : undefined;
@@ -5258,6 +5289,9 @@ namespace ts {
             else if (isPropertyAccessExpression(node.parent.left)) {
                 return node.parent.left.name;
             }
+        }
+        else if (isVariableDeclaration(node.parent) && isIdentifier(node.parent.name)) {
+            return node.parent.name;
         }
     }
 
@@ -6136,6 +6170,10 @@ namespace ts {
 
     export function isJSDoc(node: Node): node is JSDoc {
         return node.kind === SyntaxKind.JSDocComment;
+    }
+
+    export function isJSDocAuthorTag(node: Node): node is JSDocAuthorTag {
+        return node.kind === SyntaxKind.JSDocAuthorTag;
     }
 
     export function isJSDocAugmentsTag(node: Node): node is JSDocAugmentsTag {
@@ -7188,8 +7226,8 @@ namespace ts {
         };
     }
 
-    export function chainDiagnosticMessages(details: DiagnosticMessageChain | undefined, message: DiagnosticMessage, ...args: (string | number | undefined)[]): DiagnosticMessageChain;
-    export function chainDiagnosticMessages(details: DiagnosticMessageChain | undefined, message: DiagnosticMessage): DiagnosticMessageChain {
+    export function chainDiagnosticMessages(details: DiagnosticMessageChain | DiagnosticMessageChain[] | undefined, message: DiagnosticMessage, ...args: (string | number | undefined)[]): DiagnosticMessageChain;
+    export function chainDiagnosticMessages(details: DiagnosticMessageChain | DiagnosticMessageChain[] | undefined, message: DiagnosticMessage): DiagnosticMessageChain {
         let text = getLocaleSpecificMessage(message);
 
         if (arguments.length > 2) {
@@ -7201,18 +7239,17 @@ namespace ts {
             category: message.category,
             code: message.code,
 
-            next: details
+            next: details === undefined || Array.isArray(details) ? details : [details]
         };
     }
 
-    export function concatenateDiagnosticMessageChains(headChain: DiagnosticMessageChain, tailChain: DiagnosticMessageChain): DiagnosticMessageChain {
+    export function concatenateDiagnosticMessageChains(headChain: DiagnosticMessageChain, tailChain: DiagnosticMessageChain): void {
         let lastChain = headChain;
         while (lastChain.next) {
-            lastChain = lastChain.next;
+            lastChain = lastChain.next[0];
         }
 
-        lastChain.next = tailChain;
-        return headChain;
+        lastChain.next = [tailChain];
     }
 
     function getDiagnosticFilePath(diagnostic: Diagnostic): string | undefined {
@@ -7248,29 +7285,42 @@ namespace ts {
     }
 
     function compareMessageText(t1: string | DiagnosticMessageChain, t2: string | DiagnosticMessageChain): Comparison {
-        let text1: string | DiagnosticMessageChain | undefined = t1;
-        let text2: string | DiagnosticMessageChain | undefined = t2;
-        while (text1 && text2) {
-            // We still have both chains.
-            const string1 = isString(text1) ? text1 : text1.messageText;
-            const string2 = isString(text2) ? text2 : text2.messageText;
-
-            const res = compareStringsCaseSensitive(string1, string2);
+        if (typeof t1 === "string" && typeof t2 === "string") {
+            return compareStringsCaseSensitive(t1, t2);
+        }
+        else if (typeof t1 === "string") {
+            return Comparison.LessThan;
+        }
+        else if (typeof t2 === "string") {
+            return Comparison.GreaterThan;
+        }
+        let res = compareStringsCaseSensitive(t1.messageText, t2.messageText);
+        if (res) {
+            return res;
+        }
+        if (!t1.next && !t2.next) {
+            return Comparison.EqualTo;
+        }
+        if (!t1.next) {
+            return Comparison.LessThan;
+        }
+        if (!t2.next) {
+            return Comparison.GreaterThan;
+        }
+        const len = Math.min(t1.next.length, t2.next.length);
+        for (let i = 0; i < len; i++) {
+            res = compareMessageText(t1.next[i], t2.next[i]);
             if (res) {
                 return res;
             }
-
-            text1 = isString(text1) ? undefined : text1.next;
-            text2 = isString(text2) ? undefined : text2.next;
         }
-
-        if (!text1 && !text2) {
-            // if the chains are done, then these messages are the same.
-            return Comparison.EqualTo;
+        if (t1.next.length < t2.next.length) {
+            return Comparison.LessThan;
         }
-
-        // We still have one chain remaining.  The shorter chain should come first.
-        return text1 ? Comparison.GreaterThan : Comparison.LessThan;
+        else if (t1.next.length > t2.next.length) {
+            return Comparison.GreaterThan;
+        }
+        return Comparison.EqualTo;
     }
 
     export function getEmitScriptTarget(compilerOptions: CompilerOptions) {
@@ -7646,6 +7696,14 @@ namespace ts {
         return root + pathComponents.slice(1).join(directorySeparator);
     }
 
+    export function getNormalizedAbsolutePathWithoutRoot(fileName: string, currentDirectory: string | undefined) {
+        return getPathWithoutRoot(getNormalizedPathComponents(fileName, currentDirectory));
+    }
+
+    function getPathWithoutRoot(pathComponents: ReadonlyArray<string>) {
+        if (pathComponents.length === 0) return "";
+        return pathComponents.slice(1).join(directorySeparator);
+    }
 }
 
 /* @internal */
@@ -8160,7 +8218,7 @@ namespace ts {
             visitDirectory(basePath, combinePaths(currentDirectory, basePath), depth);
         }
 
-        return flatten<string>(results);
+        return flatten(results);
 
         function visitDirectory(path: string, absolutePath: string, depth: number | undefined) {
             const canonicalPath = toCanonical(realpath(absolutePath));
@@ -8418,29 +8476,6 @@ namespace ts {
     export function changeAnyExtension(path: string, ext: string, extensions?: string | ReadonlyArray<string>, ignoreCase?: boolean) {
         const pathext = extensions !== undefined && ignoreCase !== undefined ? getAnyExtensionFromPath(path, extensions, ignoreCase) : getAnyExtensionFromPath(path);
         return pathext ? path.slice(0, path.length - pathext.length) + (startsWith(ext, ".") ? ext : "." + ext) : path;
-    }
-
-    export namespace Debug {
-        export function showSymbol(symbol: Symbol): string {
-            const symbolFlags = (ts as any).SymbolFlags;
-            return `{ flags: ${symbolFlags ? showFlags(symbol.flags, symbolFlags) : symbol.flags}; declarations: ${map(symbol.declarations, showSyntaxKind)} }`;
-        }
-
-        function showFlags(flags: number, flagsEnum: { [flag: number]: string }): string {
-            const out: string[] = [];
-            for (let pow = 0; pow <= 30; pow++) {
-                const n = 1 << pow;
-                if (flags & n) {
-                    out.push(flagsEnum[n]);
-                }
-            }
-            return out.join("|");
-        }
-
-        export function showSyntaxKind(node: Node): string {
-            const syntaxKind = (ts as any).SyntaxKind;
-            return syntaxKind ? syntaxKind[node.kind] : node.kind.toString();
-        }
     }
 
     export function tryParsePattern(pattern: string): Pattern | undefined {

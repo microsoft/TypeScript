@@ -1,6 +1,6 @@
 /// <reference path='fourslash.ts' />
 
-//// type A = /*a*/B.C.D/*b*/
+//// type A = /*a*/B.C.D/*b*/;
 
 goTo.select("a", "b");
 edit.applyRefactor({
@@ -9,5 +9,5 @@ edit.applyRefactor({
     actionDescription: "Extract to type alias",
     newContent: `type /*RENAME*/NewType = B.C.D;
 
-type A = NewType`,
+type A = NewType;`,
 });

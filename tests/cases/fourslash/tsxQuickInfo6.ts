@@ -15,5 +15,5 @@
 
 verify.quickInfos({
     1: "function ComponentSpecific<number>(l: {\n    prop: number;\n}): any",
-    2: "function ComponentSpecific<number & string>(l: {\n    prop: number & string;\n}): any"
+    2: "function ComponentSpecific<never>(l: {\n    prop: never;\n}): any"
 });

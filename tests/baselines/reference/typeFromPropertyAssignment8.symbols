@@ -37,7 +37,9 @@ my.app.Application()
 === tests/cases/conformance/salsa/b.js ===
 var min = window.min || {};
 >min : Symbol(min, Decl(b.js, 0, 3), Decl(b.js, 0, 27), Decl(b.js, 1, 24))
+>window.min : Symbol(min, Decl(b.js, 0, 3), Decl(b.js, 0, 27), Decl(b.js, 1, 24))
 >window : Symbol(window, Decl(lib.dom.d.ts, --, --))
+>min : Symbol(min, Decl(b.js, 0, 3), Decl(b.js, 0, 27), Decl(b.js, 1, 24))
 
 min.app = min.app || {};
 >min.app : Symbol(min.app, Decl(b.js, 0, 27), Decl(b.js, 3, 4))

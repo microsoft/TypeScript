@@ -1,7 +1,7 @@
 /// <reference path='fourslash.ts' />
 
 //// function foo(a: /*a*/number/*b*/, b?: number, ...c: number[]): boolean {
-////     return false as boolean
+////     return false as boolean;
 //// }
 
 goTo.select("a", "b");
@@ -12,6 +12,6 @@ edit.applyRefactor({
     newContent: `type /*RENAME*/NewType = number;
 
 function foo(a: NewType, b?: number, ...c: number[]): boolean {
-    return false as boolean
+    return false as boolean;
 }`,
 });

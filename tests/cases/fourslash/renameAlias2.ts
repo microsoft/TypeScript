@@ -1,7 +1,7 @@
 /// <reference path='fourslash.ts'/>
 
-////module [|SomeModule|] { export class SomeClass { } }
+////[|module [|{| "contextRangeIndex": 0 |}SomeModule|] { export class SomeClass { } }|]
 ////import M = [|SomeModule|];
 ////import C = M.SomeClass;
 
-verify.rangesAreRenameLocations();
+verify.rangesWithSameTextAreRenameLocations("SomeModule");

@@ -1,5 +1,7 @@
-tests/cases/compiler/noImplicitAnyForIn.ts(7,18): error TS7017: Element implicitly has an 'any' type because type '{}' has no index signature.
-tests/cases/compiler/noImplicitAnyForIn.ts(14,18): error TS7017: Element implicitly has an 'any' type because type '{}' has no index signature.
+tests/cases/compiler/noImplicitAnyForIn.ts(7,18): error TS7053: Element implicitly has an 'any' type because expression of type 'string' can't be used to index type '{}'.
+  No index signature with a parameter of type 'string' was found on type '{}'.
+tests/cases/compiler/noImplicitAnyForIn.ts(14,18): error TS7053: Element implicitly has an 'any' type because expression of type 'string' can't be used to index type '{}'.
+  No index signature with a parameter of type 'string' was found on type '{}'.
 tests/cases/compiler/noImplicitAnyForIn.ts(28,5): error TS7005: Variable 'n' implicitly has an 'any[][]' type.
 tests/cases/compiler/noImplicitAnyForIn.ts(30,6): error TS2405: The left-hand side of a 'for...in' statement must be of type 'string' or 'any'.
 
@@ -13,7 +15,8 @@ tests/cases/compiler/noImplicitAnyForIn.ts(30,6): error TS2405: The left-hand si
             //Should yield an implicit 'any' error
             var _j = x[i][j];
                      ~~~~~~~
-!!! error TS7017: Element implicitly has an 'any' type because type '{}' has no index signature.
+!!! error TS7053: Element implicitly has an 'any' type because expression of type 'string' can't be used to index type '{}'.
+!!! error TS7053:   No index signature with a parameter of type 'string' was found on type '{}'.
         }
     
         for (var k in x[0]) {
@@ -22,7 +25,8 @@ tests/cases/compiler/noImplicitAnyForIn.ts(30,6): error TS2405: The left-hand si
             //Should yield an implicit 'any' error
             var k2 = k1[k];
                      ~~~~~
-!!! error TS7017: Element implicitly has an 'any' type because type '{}' has no index signature.
+!!! error TS7053: Element implicitly has an 'any' type because expression of type 'string' can't be used to index type '{}'.
+!!! error TS7053:   No index signature with a parameter of type 'string' was found on type '{}'.
         }
     }
     

@@ -1844,10 +1844,10 @@ sourceFile:file4.ts
 //// [/src/app/module.tsbuildinfo]
 {
   "bundle": {
-    "commonSourceDirectory": "/src/app/",
+    "commonSourceDirectory": "./",
     "sourceFiles": [
-      "/src/app/file3.ts",
-      "/src/app/file4.ts"
+      "./file3.ts",
+      "./file4.ts"
     ],
     "js": {
       "sections": [
@@ -1855,7 +1855,7 @@ sourceFile:file4.ts
           "pos": 0,
           "end": 4143,
           "kind": "prepend",
-          "data": "/src/lib/module.js",
+          "data": "../lib/module.js",
           "texts": [
             {
               "pos": 0,
@@ -1877,7 +1877,7 @@ sourceFile:file4.ts
           "pos": 0,
           "end": 191,
           "kind": "prepend",
-          "data": "/src/lib/module.d.ts",
+          "data": "../lib/module.d.ts",
           "texts": [
             {
               "pos": 0,
@@ -1901,7 +1901,7 @@ sourceFile:file4.ts
 ======================================================================
 File:: /src/app/module.js
 ----------------------------------------------------------------------
-prepend: (0-4143):: /src/lib/module.js texts:: 1
+prepend: (0-4143):: ../lib/module.js texts:: 1
 >>--------------------------------------------------------------------
 text: (0-4143)
 /*@internal*/ var myGlob = 20;
@@ -2020,7 +2020,7 @@ var myVar = 30;
 ======================================================================
 File:: /src/app/module.d.ts
 ----------------------------------------------------------------------
-prepend: (0-191):: /src/lib/module.d.ts texts:: 1
+prepend: (0-191):: ../lib/module.d.ts texts:: 1
 >>--------------------------------------------------------------------
 text: (0-191)
 declare module "file1" {
@@ -4365,12 +4365,12 @@ sourceFile:global.ts
 //// [/src/lib/module.tsbuildinfo]
 {
   "bundle": {
-    "commonSourceDirectory": "/src/lib/",
+    "commonSourceDirectory": "./",
     "sourceFiles": [
-      "/src/lib/file0.ts",
-      "/src/lib/file1.ts",
-      "/src/lib/file2.ts",
-      "/src/lib/global.ts"
+      "./file0.ts",
+      "./file1.ts",
+      "./file2.ts",
+      "./global.ts"
     ],
     "js": {
       "sections": [

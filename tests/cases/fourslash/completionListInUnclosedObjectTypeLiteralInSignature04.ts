@@ -7,4 +7,8 @@
 ////
 ////declare function foo<TString, TNumber>(obj: I<TString, TNumber>): { /*1*/
 
-verify.completions({ marker: "1", exact: "readonly", isNewIdentifierLocation: true });
+verify.completions({
+    marker: "1",
+    exact: { name: "readonly", sortText: completion.SortText.GlobalsOrKeywords } ,
+    isNewIdentifierLocation: true
+});

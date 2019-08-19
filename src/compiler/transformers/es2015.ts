@@ -145,7 +145,7 @@ namespace ts {
         loopOutParameters: LoopOutParameter[];
     }
 
-    type LoopConverter = (node: IterationStatement, outermostLabeledStatement: LabeledStatement | undefined, convertedLoopBodyStatements: Statement[] | undefined) => Statement;
+    type LoopConverter = (node: IterationStatement, outermostLabeledStatement: LabeledStatement | undefined, convertedLoopBodyStatements: Statement[] | undefined, ancestorFacts: HierarchyFacts) => Statement;
 
     // Facts we track as we traverse the tree
     const enum HierarchyFacts {
@@ -163,11 +163,12 @@ namespace ts {
         ExportedVariableStatement = 1 << 5,     // Enclosed in an exported variable statement in the current scope
         TopLevel = 1 << 6,                      // Enclosing block-scoped container is a top-level container
         Block = 1 << 7,                         // Enclosing block-scoped container is a Block
-        IterationStatement = 1 << 8,            // Enclosed in an IterationStatement
+        IterationStatement = 1 << 8,            // Immediately enclosed in an IterationStatement
         IterationStatementBlock = 1 << 9,       // Enclosing Block is enclosed in an IterationStatement
-        ForStatement = 1 << 10,                 // Enclosing block-scoped container is a ForStatement
-        ForInOrForOfStatement = 1 << 11,        // Enclosing block-scoped container is a ForInStatement or ForOfStatement
-        ConstructorWithCapturedSuper = 1 << 12, // Enclosed in a constructor that captures 'this' for use with 'super'
+        IterationContainer = 1 << 10,           // Enclosed in an outer IterationStatement
+        ForStatement = 1 << 11,                 // Enclosing block-scoped container is a ForStatement
+        ForInOrForOfStatement = 1 << 12,        // Enclosing block-scoped container is a ForInStatement or ForOfStatement
+        ConstructorWithCapturedSuper = 1 << 13, // Enclosed in a constructor that captures 'this' for use with 'super'
         // NOTE: do not add more ancestor flags without also updating AncestorFactsMask below.
         // NOTE: when adding a new ancestor flag, be sure to update the subtree flags below.
 
@@ -184,11 +185,11 @@ namespace ts {
 
         // A source file is a top-level block scope.
         SourceFileIncludes = TopLevel,
-        SourceFileExcludes = BlockScopeExcludes & ~TopLevel,
+        SourceFileExcludes = BlockScopeExcludes & ~TopLevel | IterationContainer,
 
         // Functions, methods, and accessors are both new lexical scopes and new block scopes.
         FunctionIncludes = Function | TopLevel,
-        FunctionExcludes = BlockScopeExcludes & ~TopLevel | ArrowFunction | AsyncFunctionBody | CapturesThis | NonStaticClassElement | ConstructorWithCapturedSuper,
+        FunctionExcludes = BlockScopeExcludes & ~TopLevel | ArrowFunction | AsyncFunctionBody | CapturesThis | NonStaticClassElement | ConstructorWithCapturedSuper | IterationContainer,
 
         AsyncFunctionBodyIncludes = FunctionIncludes | AsyncFunctionBody,
         AsyncFunctionBodyExcludes = FunctionExcludes & ~NonStaticClassElement,
@@ -205,16 +206,16 @@ namespace ts {
         // 'do' and 'while' statements are not block scopes. We track that the subtree is contained
         // within an IterationStatement to indicate whether the embedded statement is an
         // IterationStatementBlock.
-        DoOrWhileStatementIncludes = IterationStatement,
+        DoOrWhileStatementIncludes = IterationStatement | IterationContainer,
         DoOrWhileStatementExcludes = None,
 
         // 'for' statements are new block scopes and have special handling for 'let' declarations.
-        ForStatementIncludes = IterationStatement | ForStatement,
+        ForStatementIncludes = IterationStatement | ForStatement | IterationContainer,
         ForStatementExcludes = BlockScopeExcludes & ~ForStatement,
 
         // 'for-in' and 'for-of' statements are new block scopes and have special handling for
         // 'let' declarations.
-        ForInOrForOfStatementIncludes = IterationStatement | ForInOrForOfStatement,
+        ForInOrForOfStatementIncludes = IterationStatement | ForInOrForOfStatement | IterationContainer,
         ForInOrForOfStatementExcludes = BlockScopeExcludes & ~ForInOrForOfStatement,
 
         // Blocks (other than function bodies) are new block scopes.
@@ -228,8 +229,8 @@ namespace ts {
         // Subtree facts
         //
 
-        NewTarget = 1 << 13,                            // Contains a 'new.target' meta-property
-        CapturedLexicalThis = 1 << 14,                  // Contains a lexical `this` reference captured by an arrow function.
+        NewTarget = 1 << 14,                            // Contains a 'new.target' meta-property
+        CapturedLexicalThis = 1 << 15,                  // Contains a lexical `this` reference captured by an arrow function.
 
         //
         // Subtree masks
@@ -1566,7 +1567,7 @@ namespace ts {
                         break;
 
                     default:
-                        Debug.failBadSyntaxKind(node);
+                        Debug.failBadSyntaxKind(member, currentSourceFile && currentSourceFile.fileName);
                         break;
                 }
             }
@@ -2227,7 +2228,7 @@ namespace ts {
 
         function visitIterationStatementWithFacts(excludeFacts: HierarchyFacts, includeFacts: HierarchyFacts, node: IterationStatement, outermostLabeledStatement: LabeledStatement | undefined, convert?: LoopConverter) {
             const ancestorFacts = enterSubtree(excludeFacts, includeFacts);
-            const updated = convertIterationStatementBodyIfNecessary(node, outermostLabeledStatement, convert);
+            const updated = convertIterationStatementBodyIfNecessary(node, outermostLabeledStatement, ancestorFacts, convert);
             exitSubtree(ancestorFacts, HierarchyFacts.None, HierarchyFacts.None);
             return updated;
         }
@@ -2434,7 +2435,7 @@ namespace ts {
             return restoreEnclosingLabel(forStatement, outermostLabeledStatement, convertedLoopState && resetLabel);
         }
 
-        function convertForOfStatementForIterable(node: ForOfStatement, outermostLabeledStatement: LabeledStatement, convertedLoopBodyStatements: Statement[]): Statement {
+        function convertForOfStatementForIterable(node: ForOfStatement, outermostLabeledStatement: LabeledStatement, convertedLoopBodyStatements: Statement[], ancestorFacts: HierarchyFacts): Statement {
             const expression = visitNode(node.expression, visitor, isExpression);
             const iterator = isIdentifier(expression) ? getGeneratedNameForNode(expression) : createTempVariable(/*recordTempVariable*/ undefined);
             const result = isIdentifier(expression) ? getGeneratedNameForNode(iterator) : createTempVariable(/*recordTempVariable*/ undefined);
@@ -2447,13 +2448,18 @@ namespace ts {
             hoistVariableDeclaration(errorRecord);
             hoistVariableDeclaration(returnMethod);
 
+            // if we are enclosed in an outer loop ensure we reset 'errorRecord' per each iteration
+            const initializer = ancestorFacts & HierarchyFacts.IterationContainer
+                ? inlineExpressions([createAssignment(errorRecord, createVoidZero()), values])
+                : values;
+
             const forStatement = setEmitFlags(
                 setTextRange(
                     createFor(
                         /*initializer*/ setEmitFlags(
                             setTextRange(
                                 createVariableDeclarationList([
-                                    setTextRange(createVariableDeclaration(iterator, /*type*/ undefined, values), node.expression),
+                                    setTextRange(createVariableDeclaration(iterator, /*type*/ undefined, initializer), node.expression),
                                     createVariableDeclaration(result, /*type*/ undefined, next)
                                 ]),
                                 node.expression
@@ -2665,7 +2671,7 @@ namespace ts {
             }
         }
 
-        function convertIterationStatementBodyIfNecessary(node: IterationStatement, outermostLabeledStatement: LabeledStatement | undefined, convert?: LoopConverter): VisitResult<Statement> {
+        function convertIterationStatementBodyIfNecessary(node: IterationStatement, outermostLabeledStatement: LabeledStatement | undefined, ancestorFacts: HierarchyFacts, convert?: LoopConverter): VisitResult<Statement> {
             if (!shouldConvertIterationStatement(node)) {
                 let saveAllowedNonLabeledJumps: Jump | undefined;
                 if (convertedLoopState) {
@@ -2676,7 +2682,7 @@ namespace ts {
                 }
 
                 const result = convert
-                    ? convert(node, outermostLabeledStatement, /*convertedLoopBodyStatements*/ undefined)
+                    ? convert(node, outermostLabeledStatement, /*convertedLoopBodyStatements*/ undefined, ancestorFacts)
                     : restoreEnclosingLabel(visitEachChild(node, visitor, context), outermostLabeledStatement, convertedLoopState && resetLabel);
 
                 if (convertedLoopState) {
@@ -2708,7 +2714,7 @@ namespace ts {
             let loop: Statement;
             if (bodyFunction) {
                 if (convert) {
-                    loop = convert(node, outermostLabeledStatement, bodyFunction.part);
+                    loop = convert(node, outermostLabeledStatement, bodyFunction.part, ancestorFacts);
                 }
                 else {
                     const clone = convertIterationStatementCore(node, initializerFunction, createBlock(bodyFunction.part, /*multiLine*/ true));
@@ -3813,8 +3819,11 @@ namespace ts {
             // [source]
             //      [a, ...b, c]
             //
+            // [output (downlevelIteration)]
+            //      __spread([a], b, [c])
+            //
             // [output]
-            //      [a].concat(b, [c])
+            //      __spreadArrays([a], b, [c])
 
             // Map spans of spread expressions into their expressions and spans of other
             // expressions into an array literal.
@@ -3828,10 +3837,7 @@ namespace ts {
             if (compilerOptions.downlevelIteration) {
                 if (segments.length === 1) {
                     const firstSegment = segments[0];
-                    if (isCallExpression(firstSegment)
-                        && isIdentifier(firstSegment.expression)
-                        && (getEmitFlags(firstSegment.expression) & EmitFlags.HelperName)
-                        && firstSegment.expression.escapedText === "___spread") {
+                    if (isCallToHelper(firstSegment, "___spread" as __String)) {
                         return segments[0];
                     }
                 }
@@ -3840,15 +3846,31 @@ namespace ts {
             }
             else {
                 if (segments.length === 1) {
-                    const firstElement = elements[0];
-                    return needsUniqueCopy && isSpreadElement(firstElement) && firstElement.expression.kind !== SyntaxKind.ArrayLiteralExpression
-                        ? createArraySlice(segments[0])
-                        : segments[0];
+                    const firstSegment = segments[0];
+                    if (!needsUniqueCopy
+                        || isPackedArrayLiteral(firstSegment)
+                        || isCallToHelper(firstSegment, "___spreadArrays" as __String)) {
+                        return segments[0];
+                    }
                 }
 
-                // Rewrite using the pattern <segment0>.concat(<segment1>, <segment2>, ...)
-                return createArrayConcat(segments.shift()!, segments);
+                return createSpreadArraysHelper(context, segments);
             }
+        }
+
+        function isPackedElement(node: Expression) {
+            return !isOmittedExpression(node);
+        }
+
+        function isPackedArrayLiteral(node: Expression) {
+            return isArrayLiteralExpression(node) && every(node.elements, isPackedElement);
+        }
+
+        function isCallToHelper(firstSegment: Expression, helperName: __String) {
+            return isCallExpression(firstSegment)
+                && isIdentifier(firstSegment.expression)
+                && (getEmitFlags(firstSegment.expression) & EmitFlags.HelperName)
+                && firstSegment.expression.escapedText === helperName;
         }
 
         function partitionSpread(node: Expression) {
@@ -3971,18 +3993,21 @@ namespace ts {
          *
          * @param node The ES6 template literal.
          */
-        function getRawLiteral(node: LiteralLikeNode) {
+        function getRawLiteral(node: TemplateLiteralLikeNode) {
             // Find original source text, since we need to emit the raw strings of the tagged template.
             // The raw strings contain the (escaped) strings of what the user wrote.
             // Examples: `\n` is converted to "\\n", a template string with a newline to "\n".
-            let text = getSourceTextOfNodeFromSourceFile(currentSourceFile, node);
+            let text = node.rawText;
+            if (text === undefined) {
+                text = getSourceTextOfNodeFromSourceFile(currentSourceFile, node);
 
-            // text contains the original source, it will also contain quotes ("`"), dolar signs and braces ("${" and "}"),
-            // thus we need to remove those characters.
-            // First template piece starts with "`", others with "}"
-            // Last template piece ends with "`", others with "${"
-            const isLast = node.kind === SyntaxKind.NoSubstitutionTemplateLiteral || node.kind === SyntaxKind.TemplateTail;
-            text = text.substring(1, text.length - (isLast ? 1 : 2));
+                // text contains the original source, it will also contain quotes ("`"), dolar signs and braces ("${" and "}"),
+                // thus we need to remove those characters.
+                // First template piece starts with "`", others with "}"
+                // Last template piece ends with "`", others with "${"
+                const isLast = node.kind === SyntaxKind.NoSubstitutionTemplateLiteral || node.kind === SyntaxKind.TemplateTail;
+                text = text.substring(1, text.length - (isLast ? 1 : 2));
+            }
 
             // Newline normalization:
             // ES6 Spec 11.8.6.1 - Static Semantics of TV's and TRV's
@@ -4317,7 +4342,7 @@ namespace ts {
     function createExtendsHelper(context: TransformationContext, name: Identifier) {
         context.requestEmitHelper(extendsHelper);
         return createCall(
-            getHelperName("__extends"),
+            getUnscopedHelperName("__extends"),
             /*typeArguments*/ undefined,
             [
                 name,
@@ -4329,7 +4354,7 @@ namespace ts {
     function createTemplateObjectHelper(context: TransformationContext, cooked: ArrayLiteralExpression, raw: ArrayLiteralExpression) {
         context.requestEmitHelper(templateObjectHelper);
         return createCall(
-            getHelperName("__makeTemplateObject"),
+            getUnscopedHelperName("__makeTemplateObject"),
             /*typeArguments*/ undefined,
             [
                 cooked,
@@ -4340,6 +4365,7 @@ namespace ts {
 
     export const extendsHelper: UnscopedEmitHelper = {
         name: "typescript:extends",
+        importName: "__extends",
         scoped: false,
         priority: 0,
         text: `
@@ -4361,6 +4387,7 @@ namespace ts {
 
     export const templateObjectHelper: UnscopedEmitHelper = {
         name: "typescript:makeTemplateObject",
+        importName: "__makeTemplateObject",
         scoped: false,
         priority: 0,
         text: `

@@ -121,16 +121,16 @@ enum E { A, B }
 >B : E.B
 
 var entries5 = Object.entries(E);                   // [string, any][]
->entries5 : [string, any][]
->Object.entries(E) : [string, any][]
+>entries5 : [string, string | E][]
+>Object.entries(E) : [string, string | E][]
 >Object.entries : { <T>(o: { [s: string]: T; } | ArrayLike<T>): [string, T][]; (o: {}): [string, any][]; }
 >Object : ObjectConstructor
 >entries : { <T>(o: { [s: string]: T; } | ArrayLike<T>): [string, T][]; (o: {}): [string, any][]; }
 >E : typeof E
 
 var values5 = Object.values(E);                     // any[]
->values5 : any[]
->Object.values(E) : any[]
+>values5 : (string | E)[]
+>Object.values(E) : (string | E)[]
 >Object.values : { <T>(o: { [s: string]: T; } | ArrayLike<T>): T[]; (o: {}): any[]; }
 >Object : ObjectConstructor
 >values : { <T>(o: { [s: string]: T; } | ArrayLike<T>): T[]; (o: {}): any[]; }

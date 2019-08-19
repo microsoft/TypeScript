@@ -1,4 +1,8 @@
 namespace ts {
+    export function errorDiagnostic(message: fakes.ExpectedDiagnosticMessage): fakes.ExpectedErrorDiagnostic {
+        return { message };
+    }
+
     export function getExpectedDiagnosticForProjectsInBuild(...projects: string[]): fakes.ExpectedDiagnostic {
         return [Diagnostics.Projects_in_this_build_Colon_0, projects.map(p => "\r\n    * " + p).join("")];
     }
@@ -42,6 +46,38 @@ namespace ts {
         fs.writeFileSync(path, `${old}${additionalContent}`);
     }
 
+    export function indexOf(fs: vfs.FileSystem, path: string, searchStr: string) {
+        if (!fs.statSync(path).isFile()) {
+            throw new Error(`File ${path} does not exist`);
+        }
+        const content = fs.readFileSync(path, "utf-8");
+        return content.indexOf(searchStr);
+    }
+
+    export function lastIndexOf(fs: vfs.FileSystem, path: string, searchStr: string) {
+        if (!fs.statSync(path).isFile()) {
+            throw new Error(`File ${path} does not exist`);
+        }
+        const content = fs.readFileSync(path, "utf-8");
+        return content.lastIndexOf(searchStr);
+    }
+
+    export function expectedLocationIndexOf(fs: vfs.FileSystem, file: string, searchStr: string): fakes.ExpectedDiagnosticLocation {
+        return {
+            file,
+            start: indexOf(fs, file, searchStr),
+            length: searchStr.length
+        };
+    }
+
+    export function expectedLocationLastIndexOf(fs: vfs.FileSystem, file: string, searchStr: string): fakes.ExpectedDiagnosticLocation {
+        return {
+            file,
+            start: lastIndexOf(fs, file, searchStr),
+            length: searchStr.length
+        };
+    }
+
     export function getTime() {
         let currentTime = 100;
         return { tick, time, touch };
@@ -80,6 +116,18 @@ declare const console: { log(msg: any): void; };`;
         fs.writeFileSync("/lib/lib.d.ts", libContent);
         fs.makeReadonly();
         return fs;
+    }
+
+    export function verifyOutputsPresent(fs: vfs.FileSystem, outputs: readonly string[]) {
+        for (const output of outputs) {
+            assert(fs.existsSync(output), `Expect file ${output} to exist`);
+        }
+    }
+
+    export function verifyOutputsAbsent(fs: vfs.FileSystem, outputs: readonly string[]) {
+        for (const output of outputs) {
+            assert.isFalse(fs.existsSync(output), `Expect file ${output} to not exist`);
+        }
     }
 
     function generateSourceMapBaselineFiles(fs: vfs.FileSystem, mapFileNames: ReadonlyArray<string>) {
@@ -172,7 +220,7 @@ declare const console: { log(msg: any): void; };`;
             }
             return originalReadFile.call(host, path);
         };
-        builder.buildAllProjects();
+        builder.build();
         generateSourceMapBaselineFiles(fs, expectedMapFileNames);
         generateBuildInfoSectionBaselineFiles(fs, expectedBuildInfoFilesForSectionBaselines || emptyArray);
         fs.makeReadonly();

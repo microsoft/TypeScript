@@ -148,7 +148,8 @@ namespace ts {
             const sourceIndexToNewSourceIndexMap: number[] = [];
             let nameIndexToNewNameIndexMap: number[] | undefined;
             const mappingIterator = decodeMappings(map.mappings);
-            for (let { value: raw, done } = mappingIterator.next(); !done; { value: raw, done } = mappingIterator.next()) {
+            for (let iterResult = mappingIterator.next(); !iterResult.done; iterResult = mappingIterator.next()) {
+                const raw = iterResult.value;
                 if (end && (
                     raw.generatedLine > end.line ||
                     (raw.generatedLine === end.line && raw.generatedCharacter > end.character))) {

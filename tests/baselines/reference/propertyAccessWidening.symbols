@@ -1,0 +1,65 @@
+=== tests/cases/conformance/expressions/propertyAccess/propertyAccessWidening.ts ===
+// Repro from #31762
+
+function g1(headerNames: any) {
+>g1 : Symbol(g1, Decl(propertyAccessWidening.ts, 0, 0))
+>headerNames : Symbol(headerNames, Decl(propertyAccessWidening.ts, 2, 12))
+
+    let t = [{ hasLineBreak: false, cells: [] }];
+>t : Symbol(t, Decl(propertyAccessWidening.ts, 3, 7))
+>hasLineBreak : Symbol(hasLineBreak, Decl(propertyAccessWidening.ts, 3, 14))
+>cells : Symbol(cells, Decl(propertyAccessWidening.ts, 3, 35))
+
+    const table = [{cells: headerNames }].concat(t);
+>table : Symbol(table, Decl(propertyAccessWidening.ts, 4, 9))
+>[{cells: headerNames }].concat : Symbol(Array.concat, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>cells : Symbol(cells, Decl(propertyAccessWidening.ts, 4, 20))
+>headerNames : Symbol(headerNames, Decl(propertyAccessWidening.ts, 2, 12))
+>concat : Symbol(Array.concat, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>t : Symbol(t, Decl(propertyAccessWidening.ts, 3, 7))
+}
+
+function g2(headerNames: any) {
+>g2 : Symbol(g2, Decl(propertyAccessWidening.ts, 5, 1))
+>headerNames : Symbol(headerNames, Decl(propertyAccessWidening.ts, 7, 12))
+
+    let t = [{ hasLineBreak: false, cells: [] }];
+>t : Symbol(t, Decl(propertyAccessWidening.ts, 8, 7))
+>hasLineBreak : Symbol(hasLineBreak, Decl(propertyAccessWidening.ts, 8, 14))
+>cells : Symbol(cells, Decl(propertyAccessWidening.ts, 8, 35))
+
+    const table = [{cells: headerNames }]["concat"](t);
+>table : Symbol(table, Decl(propertyAccessWidening.ts, 9, 9))
+>cells : Symbol(cells, Decl(propertyAccessWidening.ts, 9, 20))
+>headerNames : Symbol(headerNames, Decl(propertyAccessWidening.ts, 7, 12))
+>"concat" : Symbol(Array.concat, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>t : Symbol(t, Decl(propertyAccessWidening.ts, 8, 7))
+}
+
+// Object in property or element access is widened when target of assignment
+
+function foo(options?: { a: string, b: number }) {
+>foo : Symbol(foo, Decl(propertyAccessWidening.ts, 10, 1))
+>options : Symbol(options, Decl(propertyAccessWidening.ts, 14, 13))
+>a : Symbol(a, Decl(propertyAccessWidening.ts, 14, 24))
+>b : Symbol(b, Decl(propertyAccessWidening.ts, 14, 35))
+
+    let x1 = (options || {}).a;     // Object type not widened
+>x1 : Symbol(x1, Decl(propertyAccessWidening.ts, 15, 7))
+>(options || {}).a : Symbol(a, Decl(propertyAccessWidening.ts, 14, 24))
+>options : Symbol(options, Decl(propertyAccessWidening.ts, 14, 13))
+>a : Symbol(a, Decl(propertyAccessWidening.ts, 14, 24))
+
+    let x2 = (options || {})["a"];  // Object type not widened
+>x2 : Symbol(x2, Decl(propertyAccessWidening.ts, 16, 7))
+>options : Symbol(options, Decl(propertyAccessWidening.ts, 14, 13))
+>"a" : Symbol(a, Decl(propertyAccessWidening.ts, 14, 24))
+
+    (options || {}).a = 1;          // Object type widened, error
+>options : Symbol(options, Decl(propertyAccessWidening.ts, 14, 13))
+
+    (options || {})["a"] = 1;       // Object type widened, error
+>options : Symbol(options, Decl(propertyAccessWidening.ts, 14, 13))
+>"a" : Symbol(a, Decl(propertyAccessWidening.ts, 14, 24))
+}
+

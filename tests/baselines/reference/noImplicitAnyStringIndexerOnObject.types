@@ -89,4 +89,63 @@ e['hello'] ++;
 >e : { set: (key: string) => string; get: (key: string) => string; }
 >'hello' : "hello"
 
+const o = { a: 0 };
+>o : { a: number; }
+>{ a: 0 } : { a: number; }
+>a : number
+>0 : 0
+
+declare const k: "a" | "b" | "c";
+>k : "a" | "b" | "c"
+
+o[k];
+>o[k] : any
+>o : { a: number; }
+>k : "a" | "b" | "c"
+
+
+declare const k2: "c";
+>k2 : "c"
+
+o[k2];
+>o[k2] : any
+>o : { a: number; }
+>k2 : "c"
+
+declare const sym : unique symbol;
+>sym : unique symbol
+
+o[sym];
+>o[sym] : any
+>o : { a: number; }
+>sym : unique symbol
+
+enum NumEnum { a, b }
+>NumEnum : NumEnum
+>a : NumEnum.a
+>b : NumEnum.b
+
+let numEnumKey: NumEnum;
+>numEnumKey : NumEnum
+
+o[numEnumKey];
+>o[numEnumKey] : any
+>o : { a: number; }
+>numEnumKey : NumEnum
+
+
+enum StrEnum { a = "a", b = "b" }
+>StrEnum : StrEnum
+>a : StrEnum.a
+>"a" : "a"
+>b : StrEnum.b
+>"b" : "b"
+
+let strEnumKey: StrEnum;
+>strEnumKey : StrEnum
+
+o[strEnumKey];
+>o[strEnumKey] : any
+>o : { a: number; }
+>strEnumKey : StrEnum
 

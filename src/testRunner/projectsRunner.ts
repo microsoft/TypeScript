@@ -32,7 +32,11 @@ namespace project {
 
     export class ProjectRunner extends RunnerBase {
         public enumerateTestFiles() {
-            return this.enumerateFiles("tests/cases/project", /\.json$/, { recursive: true });
+            const all = this.enumerateFiles("tests/cases/project", /\.json$/, { recursive: true });
+            if (shards === 1) {
+                return all;
+            }
+            return all.filter((_val, idx) => idx % shards === (shardId - 1));
         }
 
         public kind(): TestRunnerKind {
