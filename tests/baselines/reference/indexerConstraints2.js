@@ -75,6 +75,12 @@ interface S {
     [u: "foo" | "bar"]: A;
 }
 
+type Key = string;
+interface T {
+    [key: Key]
+}
+
+
 //// [indexerConstraints2.js]
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {

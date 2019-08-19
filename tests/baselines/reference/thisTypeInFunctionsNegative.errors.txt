@@ -10,7 +10,7 @@ tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts(62,97): er
   Object literal may only specify known properties, and 'explicitStructural' does not exist in type '{ y: string; f: (this: { y: number; }, x: number) => number; }'.
 tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts(63,110): error TS2322: Type '{ wrongName: number; explicitStructural: (this: { y: number; }, x: number) => number; }' is not assignable to type '{ wrongName: number; f: (this: { y: number; }, x: number) => number; }'.
   Object literal may only specify known properties, and 'explicitStructural' does not exist in type '{ wrongName: number; f: (this: { y: number; }, x: number) => number; }'.
-tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts(65,1): error TS2554: Expected 1 arguments, but got 0.
+tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts(65,4): error TS2554: Expected 1 arguments, but got 0.
 tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts(66,6): error TS2345: Argument of type '"wrong type"' is not assignable to parameter of type 'number'.
 tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts(67,10): error TS2554: Expected 1 arguments, but got 2.
 tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts(68,1): error TS2684: The 'this' context of type '{ y: string; f: (this: { y: number; }, x: number) => number; }' is not assignable to method's 'this' of type '{ y: number; }'.
@@ -18,16 +18,16 @@ tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts(68,1): err
     Type 'string' is not assignable to type 'number'.
 tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts(69,1): error TS2684: The 'this' context of type '{ wrongName: number; f: (this: { y: number; }, x: number) => number; }' is not assignable to method's 'this' of type '{ y: number; }'.
   Property 'y' is missing in type '{ wrongName: number; f: (this: { y: number; }, x: number) => number; }' but required in type '{ y: number; }'.
-tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts(72,1): error TS2554: Expected 1 arguments, but got 0.
+tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts(72,3): error TS2554: Expected 1 arguments, but got 0.
 tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts(73,13): error TS2345: Argument of type '"wrong type"' is not assignable to parameter of type 'number'.
 tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts(74,17): error TS2554: Expected 1 arguments, but got 2.
-tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts(75,1): error TS2554: Expected 1 arguments, but got 0.
+tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts(75,3): error TS2554: Expected 1 arguments, but got 0.
 tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts(76,16): error TS2345: Argument of type '"wrong type 2"' is not assignable to parameter of type 'number'.
 tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts(77,20): error TS2554: Expected 1 arguments, but got 2.
-tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts(78,1): error TS2554: Expected 1 arguments, but got 0.
+tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts(78,3): error TS2554: Expected 1 arguments, but got 0.
 tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts(79,16): error TS2345: Argument of type '"wrong type 2"' is not assignable to parameter of type 'number'.
 tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts(80,20): error TS2554: Expected 1 arguments, but got 2.
-tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts(81,1): error TS2554: Expected 1 arguments, but got 0.
+tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts(81,3): error TS2554: Expected 1 arguments, but got 0.
 tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts(82,20): error TS2345: Argument of type '"wrong type 3"' is not assignable to parameter of type 'number'.
 tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts(83,24): error TS2554: Expected 1 arguments, but got 2.
 tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts(86,5): error TS2322: Type '(this: { y: number; }, x: number) => number' is not assignable to type '(this: void, x: number) => number'.
@@ -182,7 +182,7 @@ tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts(178,22): e
 !!! error TS2322:   Object literal may only specify known properties, and 'explicitStructural' does not exist in type '{ wrongName: number; f: (this: { y: number; }, x: number) => number; }'.
     
     ok.f(); // not enough arguments
-    ~~~~~~
+       ~~~
 !!! error TS2554: Expected 1 arguments, but got 0.
 !!! related TS6210 tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts:61:46: An argument for 'x' was not provided.
     ok.f('wrong type');
@@ -204,7 +204,7 @@ tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts(178,22): e
     
     let c = new C();
     c.explicitC(); // not enough arguments
-    ~~~~~~~~~~~~~
+      ~~~~~~~~~~~
 !!! error TS2554: Expected 1 arguments, but got 0.
 !!! related TS6210 tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts:9:24: An argument for 'm' was not provided.
     c.explicitC('wrong type');
@@ -214,7 +214,7 @@ tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts(178,22): e
                     ~~~~~~~~~~~~~~~~~~~~
 !!! error TS2554: Expected 1 arguments, but got 2.
     c.explicitThis(); // not enough arguments
-    ~~~~~~~~~~~~~~~~
+      ~~~~~~~~~~~~~~
 !!! error TS2554: Expected 1 arguments, but got 0.
 !!! related TS6210 tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts:3:30: An argument for 'm' was not provided.
     c.explicitThis('wrong type 2');
@@ -224,7 +224,7 @@ tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts(178,22): e
                        ~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS2554: Expected 1 arguments, but got 2.
     c.implicitThis(); // not enough arguments
-    ~~~~~~~~~~~~~~~~
+      ~~~~~~~~~~~~~~
 !!! error TS2554: Expected 1 arguments, but got 0.
 !!! related TS6210 tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts:6:18: An argument for 'm' was not provided.
     c.implicitThis('wrong type 2');
@@ -234,7 +234,7 @@ tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts(178,22): e
                        ~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS2554: Expected 1 arguments, but got 2.
     c.explicitProperty(); // not enough arguments
-    ~~~~~~~~~~~~~~~~~~~~
+      ~~~~~~~~~~~~~~~~~~
 !!! error TS2554: Expected 1 arguments, but got 0.
 !!! related TS6210 tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts:12:41: An argument for 'm' was not provided.
     c.explicitProperty('wrong type 3');

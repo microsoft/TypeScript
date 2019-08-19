@@ -140,22 +140,28 @@ namespace ts {
             ],
             {
                 before: [
-                    context => node => visitNode(node, function visitor(node: Node): Node {
-                        if (isIdentifier(node) && node.text === "original") {
-                            const newNode = createIdentifier("changed");
-                            setSourceMapRange(newNode, {
-                              pos: 0,
-                              end: 7,
-                              // Do not provide a custom skipTrivia function for `source`.
-                              source: createSourceMapSource("another.html", "changed;")
-                            });
-                            return newNode;
-                        }
-                        return visitEachChild(node, visitor, context);
-                    })
+                    context => {
+                        const transformSourceFile: Transformer<SourceFile> = node => visitNode(node, function visitor(node: Node): Node {
+                            if (isIdentifier(node) && node.text === "original") {
+                                const newNode = createIdentifier("changed");
+                                setSourceMapRange(newNode, {
+                                    pos: 0,
+                                    end: 7,
+                                    // Do not provide a custom skipTrivia function for `source`.
+                                    source: createSourceMapSource("another.html", "changed;")
+                                });
+                                return newNode;
+                            }
+                            return visitEachChild(node, visitor, context);
+                        });
+                        return {
+                            transformSourceFile,
+                            transformBundle: node => createBundle(map(node.sourceFiles, transformSourceFile), node.prepends),
+                        };
+                    }
                 ]
             },
-            { sourceMap: true }
+            { sourceMap: true, outFile: "source.js" }
         );
 
     });

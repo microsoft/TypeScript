@@ -20,14 +20,14 @@ tests/cases/compiler/excessPropertyCheckWithUnions.ts(49,35): error TS2322: Type
   Object literal may only specify known properties, and 'second' does not exist in type '{ a: 1; b: 1; first: string; }'.
 tests/cases/compiler/excessPropertyCheckWithUnions.ts(50,35): error TS2322: Type '{ a: 1; b: 1; first: string; third: string; }' is not assignable to type 'Overlapping'.
   Object literal may only specify known properties, and 'third' does not exist in type '{ a: 1; b: 1; first: string; }'.
-tests/cases/compiler/excessPropertyCheckWithUnions.ts(66,9): error TS2322: Type '{ kind: "A"; n: { a: string; b: string; }; }' is not assignable to type 'AB'.
-  Type '{ kind: "A"; n: { a: string; b: string; }; }' is not assignable to type '{ kind: "A"; n: AN; }'.
-    Types of property 'n' are incompatible.
-      Type '{ a: string; b: string; }' is not assignable to type 'AN'.
-        Object literal may only specify known properties, and 'b' does not exist in type 'AN'.
+tests/cases/compiler/excessPropertyCheckWithUnions.ts(66,9): error TS2326: Types of property 'n' are incompatible.
+  Type '{ a: string; b: string; }' is not assignable to type 'AN'.
+    Object literal may only specify known properties, and 'b' does not exist in type 'AN'.
+tests/cases/compiler/excessPropertyCheckWithUnions.ts(87,5): error TS2322: Type '{ tag: "button"; type: "submit"; href: string; }' is not assignable to type 'Union'.
+  Object literal may only specify known properties, and 'href' does not exist in type 'Button'.
 
 
-==== tests/cases/compiler/excessPropertyCheckWithUnions.ts (10 errors) ====
+==== tests/cases/compiler/excessPropertyCheckWithUnions.ts (11 errors) ====
     type ADT = {
         tag: "A",
         a1: string
@@ -127,11 +127,9 @@ tests/cases/compiler/excessPropertyCheckWithUnions.ts(66,9): error TS2322: Type 
             a: "a",
             b: "b", // excess -- kind: "A"
             ~~~~~~
-!!! error TS2322: Type '{ kind: "A"; n: { a: string; b: string; }; }' is not assignable to type 'AB'.
-!!! error TS2322:   Type '{ kind: "A"; n: { a: string; b: string; }; }' is not assignable to type '{ kind: "A"; n: AN; }'.
-!!! error TS2322:     Types of property 'n' are incompatible.
-!!! error TS2322:       Type '{ a: string; b: string; }' is not assignable to type 'AN'.
-!!! error TS2322:         Object literal may only specify known properties, and 'b' does not exist in type 'AN'.
+!!! error TS2326: Types of property 'n' are incompatible.
+!!! error TS2326:   Type '{ a: string; b: string; }' is not assignable to type 'AN'.
+!!! error TS2326:     Object literal may only specify known properties, and 'b' does not exist in type 'AN'.
         }
     }
     const abac: AB = {
@@ -141,4 +139,20 @@ tests/cases/compiler/excessPropertyCheckWithUnions.ts(66,9): error TS2322: Type 
             c: "c", // ok -- kind: "A", an: { a: string } | { c: string }
         }
     }
+    
+    // Excess property checks must match all discriminable properties
+    type Button = { tag: 'button'; type?: 'submit'; };
+    type Anchor = { tag: 'a'; type?: string; href: string };
+    
+    type Union = Button | Anchor;
+    const obj: Union = {
+        tag: 'button',
+        type: 'submit',
+    
+        // should have error here
+        href: 'foo',
+        ~~~~~~~~~~~
+!!! error TS2322: Type '{ tag: "button"; type: "submit"; href: string; }' is not assignable to type 'Union'.
+!!! error TS2322:   Object literal may only specify known properties, and 'href' does not exist in type 'Button'.
+    };
     

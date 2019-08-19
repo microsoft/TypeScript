@@ -72,16 +72,17 @@ var m;
 declare module m {
     class private1 {
     }
-    class public1 {
+    export class public1 {
     }
-    var k: private1;
-    var l: private1;
-    var k2: public1;
-    var l2: public1;
+    export var k: private1;
+    export var l: private1;
+    export var k2: public1;
+    export var l2: public1;
     module m2 {
         class public2 {
         }
     }
-    var k3: m2.public2;
-    var l3: m2.public2;
+    export var k3: m2.public2;
+    export var l3: m2.public2;
+    export {};
 }

@@ -189,6 +189,12 @@ type ProductComplementComplement = {
 type PCCA = ProductComplementComplement['a'];
 type PCCB = ProductComplementComplement['b'];
 
+// Repro from #31326
+
+type Hmm<T, U extends T> = U extends T ? { [K in keyof U]: number } : never;
+type What = Hmm<{}, { a: string }>
+const w: What = { a: 4 };
+
 
 //// [conditionalTypes2.js]
 "use strict";
@@ -265,6 +271,7 @@ function foo(value) {
         toString2(value);
     }
 }
+var w = { a: 4 };
 
 
 //// [conditionalTypes2.d.ts]
@@ -392,3 +399,10 @@ declare type ProductComplementComplement = {
 };
 declare type PCCA = ProductComplementComplement['a'];
 declare type PCCB = ProductComplementComplement['b'];
+declare type Hmm<T, U extends T> = U extends T ? {
+    [K in keyof U]: number;
+} : never;
+declare type What = Hmm<{}, {
+    a: string;
+}>;
+declare const w: What;

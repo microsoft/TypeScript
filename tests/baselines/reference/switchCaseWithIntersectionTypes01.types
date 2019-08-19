@@ -1,6 +1,6 @@
 === tests/cases/conformance/types/typeRelationships/comparable/switchCaseWithIntersectionTypes01.ts ===
 var strAndNum: string & number;
->strAndNum : string & number
+>strAndNum : never
 
 var numAndBool: number & boolean;
 >numAndBool : never
@@ -15,11 +15,11 @@ var bool: boolean;
 >bool : boolean
 
 switch (strAndNum) {
->strAndNum : string & number
+>strAndNum : never
 
     // Identical
     case strAndNum:
->strAndNum : string & number
+>strAndNum : never
 
         break;
 

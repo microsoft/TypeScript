@@ -375,11 +375,114 @@ namespace fakes {
         }
     }
 
-    export type ExpectedDiagnostic = [ts.DiagnosticMessage, ...(string | number)[]];
-    function expectedDiagnosticToText([message, ...args]: ExpectedDiagnostic) {
+    export type ExpectedDiagnosticMessage = [ts.DiagnosticMessage, ...(string | number)[]];
+    export interface ExpectedDiagnosticMessageChain {
+        message: ExpectedDiagnosticMessage;
+        next?: ExpectedDiagnosticMessageChain[];
+    }
+
+    export interface ExpectedDiagnosticLocation {
+        file: string;
+        start: number;
+        length: number;
+    }
+    export interface ExpectedDiagnosticRelatedInformation extends ExpectedDiagnosticMessageChain {
+        location?: ExpectedDiagnosticLocation;
+    }
+
+    export enum DiagnosticKind {
+        Error = "Error",
+        Status = "Status"
+    }
+    export interface ExpectedErrorDiagnostic extends ExpectedDiagnosticRelatedInformation {
+        relatedInformation?: ExpectedDiagnosticRelatedInformation[];
+    }
+
+    export type ExpectedDiagnostic = ExpectedDiagnosticMessage | ExpectedErrorDiagnostic;
+
+    interface SolutionBuilderDiagnostic {
+        kind: DiagnosticKind;
+        diagnostic: ts.Diagnostic;
+    }
+
+    function indentedText(indent: number, text: string) {
+        if (!indent) return text;
+        let indentText = "";
+        for (let i = 0; i < indent; i++) {
+            indentText += "  ";
+        }
+        return `
+${indentText}${text}`;
+    }
+
+    function expectedDiagnosticMessageToText([message, ...args]: ExpectedDiagnosticMessage) {
         let text = ts.getLocaleSpecificMessage(message);
         if (args.length) {
             text = ts.formatStringFromArgs(text, args);
+        }
+        return text;
+    }
+
+    function expectedDiagnosticMessageChainToText({ message, next }: ExpectedDiagnosticMessageChain, indent = 0) {
+        let text = indentedText(indent, expectedDiagnosticMessageToText(message));
+        if (next) {
+            indent++;
+            next.forEach(kid => text += expectedDiagnosticMessageChainToText(kid, indent));
+        }
+        return text;
+    }
+
+    function expectedDiagnosticRelatedInformationToText({ location, ...diagnosticMessage }: ExpectedDiagnosticRelatedInformation) {
+        const text = expectedDiagnosticMessageChainToText(diagnosticMessage);
+        if (location) {
+            const { file, start, length } = location;
+            return `${file}(${start}:${length}):: ${text}`;
+        }
+        return text;
+    }
+
+    function expectedErrorDiagnosticToText({ relatedInformation, ...diagnosticRelatedInformation }: ExpectedErrorDiagnostic) {
+        let text = `${DiagnosticKind.Error}!: ${expectedDiagnosticRelatedInformationToText(diagnosticRelatedInformation)}`;
+        if (relatedInformation) {
+            for (const kid of relatedInformation) {
+                text += `
+  related:: ${expectedDiagnosticRelatedInformationToText(kid)}`;
+            }
+        }
+        return text;
+    }
+
+    function expectedDiagnosticToText(errorOrStatus: ExpectedDiagnostic) {
+        return ts.isArray(errorOrStatus) ?
+            `${DiagnosticKind.Status}!: ${expectedDiagnosticMessageToText(errorOrStatus)}` :
+            expectedErrorDiagnosticToText(errorOrStatus);
+    }
+
+    function diagnosticMessageChainToText({ messageText, next}: ts.DiagnosticMessageChain, indent = 0) {
+        let text = indentedText(indent, messageText);
+        if (next) {
+            indent++;
+            next.forEach(kid => text += diagnosticMessageChainToText(kid, indent));
+        }
+        return text;
+    }
+
+    function diagnosticRelatedInformationToText({ file, start, length, messageText }: ts.DiagnosticRelatedInformation) {
+        const text = typeof messageText === "string" ?
+            messageText :
+            diagnosticMessageChainToText(messageText);
+        return file ?
+            `${file.fileName}(${start}:${length}):: ${text}` :
+            text;
+    }
+
+    function diagnosticToText({ kind, diagnostic: { relatedInformation, ...diagnosticRelatedInformation } }: SolutionBuilderDiagnostic) {
+        let text = `${kind}!: ${diagnosticRelatedInformationToText(diagnosticRelatedInformation)}`;
+        if (relatedInformation) {
+            for (const kid of relatedInformation) {
+                text += `
+  related:: ${diagnosticRelatedInformationToText(kid)}`;
+            }
         }
         return text;
     }
@@ -388,28 +491,47 @@ namespace fakes {
         return ts.compareStringsCaseSensitive(ts.isString(a) ? a : a[0], ts.isString(b) ? b : b[0]);
     }
 
+    export function sanitizeBuildInfoProgram(buildInfo: ts.BuildInfo) {
+        if (buildInfo.program) {
+            // reference Map
+            if (buildInfo.program.referencedMap) {
+                const referencedMap: ts.MapLike<string[]> = {};
+                for (const path of ts.getOwnKeys(buildInfo.program.referencedMap).sort()) {
+                    referencedMap[path] = buildInfo.program.referencedMap[path].sort();
+                }
+                buildInfo.program.referencedMap = referencedMap;
+            }
+
+            // exportedModulesMap
+            if (buildInfo.program.exportedModulesMap) {
+                const exportedModulesMap: ts.MapLike<string[]> = {};
+                for (const path of ts.getOwnKeys(buildInfo.program.exportedModulesMap).sort()) {
+                    exportedModulesMap[path] = buildInfo.program.exportedModulesMap[path].sort();
+                }
+                buildInfo.program.exportedModulesMap = exportedModulesMap;
+            }
+
+            // semanticDiagnosticsPerFile
+            if (buildInfo.program.semanticDiagnosticsPerFile) {
+                buildInfo.program.semanticDiagnosticsPerFile.sort(compareProgramBuildInfoDiagnostic);
+            }
+        }
+    }
+
     export const version = "FakeTSVersion";
 
     export class SolutionBuilderHost extends CompilerHost implements ts.SolutionBuilderHost<ts.BuilderProgram> {
-        createProgram = ts.createEmitAndSemanticDiagnosticsBuilderProgram;
+        createProgram: ts.CreateProgram<ts.BuilderProgram>;
+
+        constructor(sys: System | vfs.FileSystem, options?: ts.CompilerOptions, setParentNodes?: boolean, createProgram?: ts.CreateProgram<ts.BuilderProgram>) {
+            super(sys, options, setParentNodes);
+            this.createProgram = createProgram || ts.createEmitAndSemanticDiagnosticsBuilderProgram;
+        }
 
         readFile(path: string) {
             const value = super.readFile(path);
             if (!value || !ts.isBuildInfoFile(path)) return value;
             const buildInfo = ts.getBuildInfo(value);
-            if (buildInfo.program) {
-                // Fix lib signatures
-                for (const path of ts.getOwnKeys(buildInfo.program.fileInfos)) {
-                    if (ts.startsWith(path, "/lib/")) {
-                        const currentValue = buildInfo.program.fileInfos[path];
-                        ts.Debug.assert(currentValue.signature === path);
-                        ts.Debug.assert(currentValue.signature === currentValue.version);
-                        const text = super.readFile(path)!;
-                        const signature = ts.generateDjb2Hash(text);
-                        buildInfo.program.fileInfos[path] = { version: signature, signature };
-                    }
-                }
-            }
             ts.Debug.assert(buildInfo.version === version);
             buildInfo.version = ts.version;
             return ts.getBuildInfoText(buildInfo);
@@ -418,39 +540,7 @@ namespace fakes {
         public writeFile(fileName: string, content: string, writeByteOrderMark: boolean) {
             if (!ts.isBuildInfoFile(fileName)) return super.writeFile(fileName, content, writeByteOrderMark);
             const buildInfo = ts.getBuildInfo(content);
-            if (buildInfo.program) {
-                // Fix lib signatures
-                for (const path of ts.getOwnKeys(buildInfo.program.fileInfos)) {
-                    if (ts.startsWith(path, "/lib/")) {
-                        const currentValue = buildInfo.program.fileInfos[path];
-                        ts.Debug.assert(currentValue.signature === currentValue.version);
-                        buildInfo.program.fileInfos[path] = { version: path, signature: path };
-                    }
-                }
-
-                // reference Map
-                if (buildInfo.program.referencedMap) {
-                    const referencedMap: ts.MapLike<string[]> = {};
-                    for (const path of ts.getOwnKeys(buildInfo.program.referencedMap).sort()) {
-                        referencedMap[path] = buildInfo.program.referencedMap[path].sort();
-                    }
-                    buildInfo.program.referencedMap = referencedMap;
-                }
-
-                // exportedModulesMap
-                if (buildInfo.program.exportedModulesMap) {
-                    const exportedModulesMap: ts.MapLike<string[]> = {};
-                    for (const path of ts.getOwnKeys(buildInfo.program.exportedModulesMap).sort()) {
-                        exportedModulesMap[path] = buildInfo.program.exportedModulesMap[path].sort();
-                    }
-                    buildInfo.program.exportedModulesMap = exportedModulesMap;
-                }
-
-                // semanticDiagnosticsPerFile
-                if (buildInfo.program.semanticDiagnosticsPerFile) {
-                    buildInfo.program.semanticDiagnosticsPerFile.sort(compareProgramBuildInfoDiagnostic);
-                }
-            }
+            sanitizeBuildInfoProgram(buildInfo);
             buildInfo.version = version;
             super.writeFile(fileName, ts.getBuildInfoText(buildInfo), writeByteOrderMark);
         }
@@ -459,14 +549,14 @@ namespace fakes {
             return new Date(this.sys.vfs.time());
         }
 
-        diagnostics: ts.Diagnostic[] = [];
+        diagnostics: SolutionBuilderDiagnostic[] = [];
 
         reportDiagnostic(diagnostic: ts.Diagnostic) {
-            this.diagnostics.push(diagnostic);
+            this.diagnostics.push({ kind: DiagnosticKind.Error, diagnostic });
         }
 
         reportSolutionBuilderStatus(diagnostic: ts.Diagnostic) {
-            this.diagnostics.push(diagnostic);
+            this.diagnostics.push({ kind: DiagnosticKind.Status, diagnostic });
         }
 
         clearDiagnostics() {
@@ -474,7 +564,7 @@ namespace fakes {
         }
 
         assertDiagnosticMessages(...expectedDiagnostics: ExpectedDiagnostic[]) {
-            const actual = this.diagnostics.slice().map(d => d.messageText as string);
+            const actual = this.diagnostics.slice().map(diagnosticToText);
             const expected = expectedDiagnostics.map(expectedDiagnosticToText);
             assert.deepEqual(actual, expected, `Diagnostic arrays did not match:
 Actual: ${JSON.stringify(actual, /*replacer*/ undefined, " ")}
@@ -484,8 +574,8 @@ Expected: ${JSON.stringify(expected, /*replacer*/ undefined, " ")}`);
         printDiagnostics(header = "== Diagnostics ==") {
             const out = ts.createDiagnosticReporter(ts.sys);
             ts.sys.write(header + "\r\n");
-            for (const d of this.diagnostics) {
-                out(d);
+            for (const { diagnostic } of this.diagnostics) {
+                out(diagnostic);
             }
         }
     }

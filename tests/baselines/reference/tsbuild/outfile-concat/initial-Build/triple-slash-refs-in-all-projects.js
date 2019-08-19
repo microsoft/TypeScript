@@ -440,10 +440,10 @@ sourceFile:../second/second_part2.ts
 //// [/src/2/second-output.tsbuildinfo]
 {
   "bundle": {
-    "commonSourceDirectory": "/src/second/",
+    "commonSourceDirectory": "../second",
     "sourceFiles": [
-      "/src/second/second_part1.ts",
-      "/src/second/second_part2.ts"
+      "../second/second_part1.ts",
+      "../second/second_part2.ts"
     ],
     "js": {
       "sections": [
@@ -874,11 +874,11 @@ sourceFile:../first_part3.ts
 //// [/src/first/bin/first-output.tsbuildinfo]
 {
   "bundle": {
-    "commonSourceDirectory": "/src/first/",
+    "commonSourceDirectory": "..",
     "sourceFiles": [
-      "/src/first/first_PART1.ts",
-      "/src/first/first_part2.ts",
-      "/src/first/first_part3.ts"
+      "../first_PART1.ts",
+      "../first_part2.ts",
+      "../first_part3.ts"
     ],
     "js": {
       "sections": [
@@ -1873,9 +1873,9 @@ sourceFile:../../third_part1.ts
 //// [/src/third/thirdjs/output/third-output.tsbuildinfo]
 {
   "bundle": {
-    "commonSourceDirectory": "/src/third/",
+    "commonSourceDirectory": "../..",
     "sourceFiles": [
-      "/src/third/third_part1.ts"
+      "../../third_part1.ts"
     ],
     "js": {
       "sections": [
@@ -1883,7 +1883,7 @@ sourceFile:../../third_part1.ts
           "pos": 0,
           "end": 158,
           "kind": "prepend",
-          "data": "/src/first/bin/first-output.js",
+          "data": "../../../first/bin/first-output.js",
           "texts": [
             {
               "pos": 0,
@@ -1896,7 +1896,7 @@ sourceFile:../../third_part1.ts
           "pos": 158,
           "end": 494,
           "kind": "prepend",
-          "data": "/src/2/second-output.js",
+          "data": "../../../2/second-output.js",
           "texts": [
             {
               "pos": 158,
@@ -1936,7 +1936,7 @@ sourceFile:../../third_part1.ts
           "pos": 160,
           "end": 368,
           "kind": "prepend",
-          "data": "/src/first/bin/first-output.d.ts",
+          "data": "../../../first/bin/first-output.d.ts",
           "texts": [
             {
               "pos": 160,
@@ -1949,7 +1949,7 @@ sourceFile:../../third_part1.ts
           "pos": 368,
           "end": 522,
           "kind": "prepend",
-          "data": "/src/2/second-output.d.ts",
+          "data": "../../../2/second-output.d.ts",
           "texts": [
             {
               "pos": 368,
@@ -1973,7 +1973,7 @@ sourceFile:../../third_part1.ts
 ======================================================================
 File:: /src/third/thirdjs/output/third-output.js
 ----------------------------------------------------------------------
-prepend: (0-158):: /src/first/bin/first-output.js texts:: 1
+prepend: (0-158):: ../../../first/bin/first-output.js texts:: 1
 >>--------------------------------------------------------------------
 text: (0-158)
 var s = "Hello, world";
@@ -1985,7 +1985,7 @@ function f() {
 }
 
 ----------------------------------------------------------------------
-prepend: (158-494):: /src/2/second-output.js texts:: 1
+prepend: (158-494):: ../../../2/second-output.js texts:: 1
 >>--------------------------------------------------------------------
 text: (158-494)
 var second_part1Const = new secondsecond_part1();
@@ -2024,7 +2024,7 @@ reference: (47-101):: ../../../first/tripleRef.d.ts
 reference: (103-158):: ../../../second/tripleRef.d.ts
 /// <reference path="../../../second/tripleRef.d.ts" />
 ----------------------------------------------------------------------
-prepend: (160-368):: /src/first/bin/first-output.d.ts texts:: 1
+prepend: (160-368):: ../../../first/bin/first-output.d.ts texts:: 1
 >>--------------------------------------------------------------------
 text: (160-368)
 interface TheFirst {
@@ -2038,7 +2038,7 @@ declare const first_part2Const: firstfirst_part2;
 declare function f(): string;
 
 ----------------------------------------------------------------------
-prepend: (368-522):: /src/2/second-output.d.ts texts:: 1
+prepend: (368-522):: ../../../2/second-output.d.ts texts:: 1
 >>--------------------------------------------------------------------
 text: (368-522)
 declare const second_part1Const: secondsecond_part1;

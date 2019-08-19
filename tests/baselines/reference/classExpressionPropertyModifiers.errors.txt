@@ -1,0 +1,14 @@
+tests/cases/compiler/classExpressionPropertyModifiers.ts(2,5): error TS1031: 'declare' modifier cannot appear on a class element.
+tests/cases/compiler/classExpressionPropertyModifiers.ts(3,5): error TS1031: 'export' modifier cannot appear on a class element.
+
+
+==== tests/cases/compiler/classExpressionPropertyModifiers.ts (2 errors) ====
+    const a = class Cat {
+        declare [Symbol.toStringTag] = "uh";
+        ~~~~~~~
+!!! error TS1031: 'declare' modifier cannot appear on a class element.
+        export foo = 1;
+        ~~~~~~
+!!! error TS1031: 'export' modifier cannot appear on a class element.
+    }
+    

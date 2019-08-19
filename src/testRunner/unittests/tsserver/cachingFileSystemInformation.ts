@@ -131,15 +131,15 @@ namespace ts.projectSystem {
             verifyImportedDiagnostics();
             callsTrackingHost.verifyNoHostCalls();
 
-            // trigger synchronization to make sure that LSHost will try to find 'f2' module on disk
+            // trigger synchronization to make sure that the host will try to find 'f2' module on disk
             editContent(`import {x} from "f2"`);
             try {
-                // trigger synchronization to make sure that LSHost will try to find 'f2' module on disk
+                // trigger synchronization to make sure that the host will try to find 'f2' module on disk
                 verifyImportedDiagnostics();
                 assert.isTrue(false, `should not find file '${imported.path}'`);
             }
             catch (e) {
-                assert.isTrue(e.message.indexOf(`Could not find sourceFile: '${imported.path}' in ["${root.path}"].`) === 0, `Actual: ${e.message}`);
+                assert.isTrue(e.message.indexOf(`Could not find source file: '${imported.path}'.`) === 0, `Actual: ${e.message}`);
             }
             const f2Lookups = getLocationsForModuleLookup("f2");
             callsTrackingHost.verifyCalledOnEachEntryNTimes(CalledMapsWithSingleArg.fileExists, f2Lookups, 1);

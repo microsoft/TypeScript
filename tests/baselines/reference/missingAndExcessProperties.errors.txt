@@ -31,6 +31,7 @@ tests/cases/conformance/es6/destructuring/missingAndExcessProperties.ts(31,16): 
         var { x = 1, y } = {};
               ~
 !!! error TS2403: Subsequent variable declarations must have the same type.  Variable 'x' must be of type 'any', but here has type 'number'.
+!!! related TS6203 tests/cases/conformance/es6/destructuring/missingAndExcessProperties.ts:3:11: 'x' was also declared here.
                      ~
 !!! error TS2525: Initializer provides no value for this binding element and the binding element has no default value.
         var { x, y = 1 } = {};
@@ -38,11 +39,14 @@ tests/cases/conformance/es6/destructuring/missingAndExcessProperties.ts(31,16): 
 !!! error TS2525: Initializer provides no value for this binding element and the binding element has no default value.
                  ~
 !!! error TS2403: Subsequent variable declarations must have the same type.  Variable 'y' must be of type 'any', but here has type 'number'.
+!!! related TS6203 tests/cases/conformance/es6/destructuring/missingAndExcessProperties.ts:3:14: 'y' was also declared here.
         var { x = 1, y = 1 } = {};
               ~
 !!! error TS2403: Subsequent variable declarations must have the same type.  Variable 'x' must be of type 'any', but here has type 'number'.
+!!! related TS6203 tests/cases/conformance/es6/destructuring/missingAndExcessProperties.ts:3:11: 'x' was also declared here.
                      ~
 !!! error TS2403: Subsequent variable declarations must have the same type.  Variable 'y' must be of type 'any', but here has type 'number'.
+!!! related TS6203 tests/cases/conformance/es6/destructuring/missingAndExcessProperties.ts:3:14: 'y' was also declared here.
     }
     
     // Missing properties

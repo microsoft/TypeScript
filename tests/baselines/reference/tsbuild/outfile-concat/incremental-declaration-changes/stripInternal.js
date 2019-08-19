@@ -301,11 +301,11 @@ sourceFile:../first_part3.ts
 //// [/src/first/bin/first-output.tsbuildinfo]
 {
   "bundle": {
-    "commonSourceDirectory": "/src/first/",
+    "commonSourceDirectory": "..",
     "sourceFiles": [
-      "/src/first/first_PART1.ts",
-      "/src/first/first_part2.ts",
-      "/src/first/first_part3.ts"
+      "../first_PART1.ts",
+      "../first_part2.ts",
+      "../first_part3.ts"
     ],
     "js": {
       "sections": [
@@ -2417,9 +2417,9 @@ sourceFile:../../third_part1.ts
 //// [/src/third/thirdjs/output/third-output.tsbuildinfo]
 {
   "bundle": {
-    "commonSourceDirectory": "/src/third/",
+    "commonSourceDirectory": "../..",
     "sourceFiles": [
-      "/src/third/third_part1.ts"
+      "../../third_part1.ts"
     ],
     "js": {
       "sections": [
@@ -2427,7 +2427,7 @@ sourceFile:../../third_part1.ts
           "pos": 0,
           "end": 109,
           "kind": "prepend",
-          "data": "/src/first/bin/first-output.js",
+          "data": "../../../first/bin/first-output.js",
           "texts": [
             {
               "pos": 0,
@@ -2440,7 +2440,7 @@ sourceFile:../../third_part1.ts
           "pos": 109,
           "end": 3161,
           "kind": "prepend",
-          "data": "/src/2/second-output.js",
+          "data": "../../../2/second-output.js",
           "texts": [
             {
               "pos": 109,
@@ -2462,7 +2462,7 @@ sourceFile:../../third_part1.ts
           "pos": 0,
           "end": 115,
           "kind": "prepend",
-          "data": "/src/first/bin/first-output.d.ts",
+          "data": "../../../first/bin/first-output.d.ts",
           "texts": [
             {
               "pos": 0,
@@ -2475,7 +2475,7 @@ sourceFile:../../third_part1.ts
           "pos": 115,
           "end": 275,
           "kind": "prepend",
-          "data": "/src/2/second-output.d.ts",
+          "data": "../../../2/second-output.d.ts",
           "texts": [
             {
               "pos": 115,
@@ -2499,7 +2499,7 @@ sourceFile:../../third_part1.ts
 ======================================================================
 File:: /src/third/thirdjs/output/third-output.js
 ----------------------------------------------------------------------
-prepend: (0-109):: /src/first/bin/first-output.js texts:: 1
+prepend: (0-109):: ../../../first/bin/first-output.js texts:: 1
 >>--------------------------------------------------------------------
 text: (0-109)
 var s = "Hola, world";
@@ -2510,7 +2510,7 @@ function f() {
 }
 
 ----------------------------------------------------------------------
-prepend: (109-3161):: /src/2/second-output.js texts:: 1
+prepend: (109-3161):: ../../../2/second-output.js texts:: 1
 >>--------------------------------------------------------------------
 text: (109-3161)
 var N;
@@ -2625,7 +2625,7 @@ c.doSomething();
 ======================================================================
 File:: /src/third/thirdjs/output/third-output.d.ts
 ----------------------------------------------------------------------
-prepend: (0-115):: /src/first/bin/first-output.d.ts texts:: 1
+prepend: (0-115):: ../../../first/bin/first-output.d.ts texts:: 1
 >>--------------------------------------------------------------------
 text: (0-115)
 declare const s = "Hola, world";
@@ -2635,7 +2635,7 @@ interface NoJsForHereEither {
 declare function f(): string;
 
 ----------------------------------------------------------------------
-prepend: (115-275):: /src/2/second-output.d.ts texts:: 1
+prepend: (115-275):: ../../../2/second-output.d.ts texts:: 1
 >>--------------------------------------------------------------------
 text: (115-275)
 declare namespace N {

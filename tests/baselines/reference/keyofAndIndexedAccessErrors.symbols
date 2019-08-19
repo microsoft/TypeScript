@@ -93,7 +93,7 @@ type T20 = Shape[string | number];  // Error
 >T20 : Symbol(T20, Decl(keyofAndIndexedAccessErrors.ts, 27, 32))
 >Shape : Symbol(Shape, Decl(keyofAndIndexedAccessErrors.ts, 0, 0))
 
-type T21 = Shape[string & number];  // Error
+type T21 = Shape[string & number];
 >T21 : Symbol(T21, Decl(keyofAndIndexedAccessErrors.ts, 28, 34))
 >Shape : Symbol(Shape, Decl(keyofAndIndexedAccessErrors.ts, 0, 0))
 

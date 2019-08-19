@@ -1,0 +1,39 @@
+=== tests/cases/compiler/objectLiteralThisWidenedOnUse.ts ===
+interface Foo { bar: boolean; }
+>Foo : Symbol(Foo, Decl(objectLiteralThisWidenedOnUse.ts, 0, 0))
+>bar : Symbol(Foo.bar, Decl(objectLiteralThisWidenedOnUse.ts, 0, 15))
+
+var GlobalIns = {
+>GlobalIns : Symbol(GlobalIns, Decl(objectLiteralThisWidenedOnUse.ts, 2, 3))
+
+  prop1: 1,
+>prop1 : Symbol(prop1, Decl(objectLiteralThisWidenedOnUse.ts, 2, 17))
+
+  prop2: 2,
+>prop2 : Symbol(prop2, Decl(objectLiteralThisWidenedOnUse.ts, 3, 11))
+
+  prop3: 3,
+>prop3 : Symbol(prop3, Decl(objectLiteralThisWidenedOnUse.ts, 4, 11))
+
+  test () {
+>test : Symbol(test, Decl(objectLiteralThisWidenedOnUse.ts, 5, 11))
+
+    this.accept_foo(this);
+>this.accept_foo : Symbol(accept_foo, Decl(objectLiteralThisWidenedOnUse.ts, 8, 4))
+>this : Symbol(GlobalIns, Decl(objectLiteralThisWidenedOnUse.ts, 2, 15))
+>accept_foo : Symbol(accept_foo, Decl(objectLiteralThisWidenedOnUse.ts, 8, 4))
+>this : Symbol(GlobalIns, Decl(objectLiteralThisWidenedOnUse.ts, 2, 15))
+
+  },
+  accept_foo (foo: Foo): boolean {
+>accept_foo : Symbol(accept_foo, Decl(objectLiteralThisWidenedOnUse.ts, 8, 4))
+>foo : Symbol(foo, Decl(objectLiteralThisWidenedOnUse.ts, 9, 14))
+>Foo : Symbol(Foo, Decl(objectLiteralThisWidenedOnUse.ts, 0, 0))
+
+    return !!foo && !!foo.bar;
+>foo : Symbol(foo, Decl(objectLiteralThisWidenedOnUse.ts, 9, 14))
+>foo.bar : Symbol(Foo.bar, Decl(objectLiteralThisWidenedOnUse.ts, 0, 15))
+>foo : Symbol(foo, Decl(objectLiteralThisWidenedOnUse.ts, 9, 14))
+>bar : Symbol(Foo.bar, Decl(objectLiteralThisWidenedOnUse.ts, 0, 15))
+  }
+};

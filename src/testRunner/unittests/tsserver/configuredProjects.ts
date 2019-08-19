@@ -82,12 +82,22 @@ namespace ts.projectSystem {
         });
 
         it("add and then remove a config file in a folder with loose files", () => {
+            const projectRoot = "/user/username/projects/project";
             const configFile: File = {
-                path: "/a/b/tsconfig.json",
+                path: `${projectRoot}/tsconfig.json`,
                 content: `{
                     "files": ["commonFile1.ts"]
                 }`
             };
+            const commonFile1: File = {
+                path: `${projectRoot}/commonFile1.ts`,
+                content: "let x = 1"
+            };
+            const commonFile2: File = {
+                path: `${projectRoot}/commonFile2.ts`,
+                content: "let y = 1"
+            };
+
             const filesWithoutConfig = [libFile, commonFile1, commonFile2];
             const host = createServerHost(filesWithoutConfig);
 
@@ -100,8 +110,7 @@ namespace ts.projectSystem {
             checkProjectActualFiles(projectService.inferredProjects[0], [commonFile1.path, libFile.path]);
             checkProjectActualFiles(projectService.inferredProjects[1], [commonFile2.path, libFile.path]);
 
-            const configFileLocations = ["/", "/a/", "/a/b/"];
-            const watchedFiles = flatMap(configFileLocations, location => [location + "tsconfig.json", location + "jsconfig.json"]).concat(libFile.path);
+            const watchedFiles = getConfigFilesToWatch(projectRoot).concat(libFile.path);
             checkWatchedFiles(host, watchedFiles);
 
             // Add a tsconfig file
@@ -431,20 +440,21 @@ namespace ts.projectSystem {
         });
 
         it("open file become a part of configured project if it is referenced from root file", () => {
+            const projectRoot = "/user/username/projects/project";
             const file1 = {
-                path: "/a/b/f1.ts",
+                path: `${projectRoot}/a/b/f1.ts`,
                 content: "export let x = 5"
             };
             const file2 = {
-                path: "/a/c/f2.ts",
+                path: `${projectRoot}/a/c/f2.ts`,
                 content: `import {x} from "../b/f1"`
             };
             const file3 = {
-                path: "/a/c/f3.ts",
+                path: `${projectRoot}/a/c/f3.ts`,
                 content: "export let y = 1"
             };
             const configFile = {
-                path: "/a/c/tsconfig.json",
+                path: `${projectRoot}/a/c/tsconfig.json`,
                 content: JSON.stringify({ compilerOptions: {}, files: ["f2.ts", "f3.ts"] })
             };
 
@@ -856,12 +866,12 @@ namespace ts.projectSystem {
             const projectService = createProjectService(host);
             projectService.openClientFile(file1.path);
             host.runQueuedTimeoutCallbacks();
-            // Since there is no file open from configFile it would be closed
-            checkNumberOfConfiguredProjects(projectService, 0);
-            checkNumberOfInferredProjects(projectService, 1);
 
+            // Since file1 refers to config file as the default project, it needs to be kept alive
+            checkNumberOfProjects(projectService, { inferredProjects: 1, configuredProjects: 1 });
             const inferredProject = projectService.inferredProjects[0];
             assert.isTrue(inferredProject.containsFile(<server.NormalizedPath>file1.path));
+            assert.isFalse(projectService.configuredProjects.get(configFile.path)!.containsFile(<server.NormalizedPath>file1.path));
         });
 
         it("should be able to handle @types if input file list is empty", () => {
@@ -888,8 +898,8 @@ namespace ts.projectSystem {
             const projectService = createProjectService(host);
 
             projectService.openClientFile(f.path);
-            // Since no file from the configured project is open, it would be closed immediately
-            projectService.checkNumberOfProjects({ configuredProjects: 0, inferredProjects: 1 });
+            // Since f refers to config file as the default project, it needs to be kept alive
+            projectService.checkNumberOfProjects({ configuredProjects: 1, inferredProjects: 1 });
         });
 
         it("should tolerate invalid include files that start in subDirectory", () => {
@@ -914,8 +924,8 @@ namespace ts.projectSystem {
             const projectService = createProjectService(host);
 
             projectService.openClientFile(f.path);
-            // Since no file from the configured project is open, it would be closed immediately
-            projectService.checkNumberOfProjects({ configuredProjects: 0, inferredProjects: 1 });
+            // Since f refers to config file as the default project, it needs to be kept alive
+            projectService.checkNumberOfProjects({ configuredProjects: 1, inferredProjects: 1 });
         });
 
         it("Changed module resolution reflected when specifying files list", () => {

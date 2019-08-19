@@ -14,18 +14,18 @@ class Baz { z: number }
 
 var g3: () => Iterable<Foo> = function* () {
 >g3 : () => Iterable<Foo>
->function* () {    yield;    yield new Bar;    yield new Baz;    yield *[new Bar];    yield *[new Baz];} : () => IterableIterator<Bar | Baz>
+>function* () {    yield;    yield new Bar;    yield new Baz;    yield *[new Bar];    yield *[new Baz];} : () => Generator<Bar | Baz, void, undefined>
 
     yield;
->yield : any
+>yield : undefined
 
     yield new Bar;
->yield new Bar : any
+>yield new Bar : undefined
 >new Bar : Bar
 >Bar : typeof Bar
 
     yield new Baz;
->yield new Baz : any
+>yield new Baz : undefined
 >new Baz : Baz
 >Baz : typeof Baz
 

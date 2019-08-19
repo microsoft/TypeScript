@@ -15,9 +15,9 @@
 verify.completions({
     marker: "",
     exact: [
-        "globalThis",
+        completion.globalThisEntry,
         ...completion.globalsVars,
-        "undefined",
+        completion.undefinedVarEntry,
         {
             name: "foo",
             source: "/a/b/impl",
@@ -26,6 +26,7 @@ verify.completions({
             kind: "function",
             kindModifiers: "export",
             hasAction: true,
+            sortText: completion.SortText.AutoImportSuggestions
         },
         {
             name: "foo",
@@ -34,6 +35,7 @@ verify.completions({
             text: "(alias) function foo(): void\nexport foo",
             kind: "alias",
             hasAction: true,
+            sortText: completion.SortText.AutoImportSuggestions
         },
         ...completion.globalKeywords,
     ],

@@ -61,7 +61,7 @@ if (Ca.test(c.href) || Ba.test(c.href) && /(\\?|&)adurl=/.test(c.href) && !/(\\?
 >"&q=" + encodeURIComponent(W("q") || W("as_q") || A) : string
 >"&q=" : "&q="
 >encodeURIComponent(W("q") || W("as_q") || A) : string
->encodeURIComponent : (uriComponent: string) => string
+>encodeURIComponent : (uriComponent: string | number | boolean) => string
 >W("q") || W("as_q") || A : any
 >W("q") || W("as_q") : any
 >W("q") : any

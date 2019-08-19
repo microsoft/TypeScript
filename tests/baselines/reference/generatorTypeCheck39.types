@@ -8,7 +8,7 @@ function decorator(x: any) {
 >y : any
 }
 function* g() {
->g : () => IterableIterator<any>
+>g : () => Generator<never, void, unknown>
 
     @decorator(yield 0)
 >decorator(yield 0) : (y: any) => void

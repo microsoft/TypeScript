@@ -57,7 +57,7 @@
 verify.completions(
     { marker: ["1", "2"], includes: ["constructor", "param", "type", "method", "template"] },
     { marker: ["3", "15", "16"], exact: [] },
-    { marker: ["4", "5", "8"], includes: "number" },
+    { marker: ["4", "5", "8"], includes: { name: "number", sortText: completion.SortText.GlobalsOrKeywords } },
     { marker: ["6", "7", "14"], exact: undefined },
     { marker: ["9", "10", "11", "12", "13"], includes: ["@argument", "@returns"] },
 );

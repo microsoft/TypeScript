@@ -1,6 +1,18 @@
-tests/cases/conformance/jsx/file.tsx(11,2): error TS2322: Type '{}' is not assignable to type 'number'.
-tests/cases/conformance/jsx/file.tsx(18,2): error TS2322: Type '{}' is not assignable to type 'number'.
-tests/cases/conformance/jsx/file.tsx(25,2): error TS2322: Type '{ x: number; }' is not assignable to type 'number'.
+tests/cases/conformance/jsx/file.tsx(11,2): error TS2769: No overload matches this call.
+  Overload 1 of 2, '(n: string): { x: number; }', gave the following error.
+    Type '{}' is not assignable to type 'string'.
+  Overload 2 of 2, '(n: number): { y: string; }', gave the following error.
+    Type '{}' is not assignable to type 'number'.
+tests/cases/conformance/jsx/file.tsx(18,2): error TS2769: No overload matches this call.
+  Overload 1 of 2, '(n: string): { x: number; }', gave the following error.
+    Type '{}' is not assignable to type 'string'.
+  Overload 2 of 2, '(n: number): { y: string; }', gave the following error.
+    Type '{}' is not assignable to type 'number'.
+tests/cases/conformance/jsx/file.tsx(25,2): error TS2769: No overload matches this call.
+  Overload 1 of 2, '(n: string): { x: number; }', gave the following error.
+    Type '{ x: number; }' is not assignable to type 'string'.
+  Overload 2 of 2, '(n: number): { x: number; y: string; }', gave the following error.
+    Type '{ x: number; }' is not assignable to type 'number'.
 
 
 ==== tests/cases/conformance/jsx/file.tsx (3 errors) ====
@@ -16,7 +28,11 @@ tests/cases/conformance/jsx/file.tsx(25,2): error TS2322: Type '{ x: number; }' 
     var Obj1: Obj1;
     <Obj1 />; // Error, return type is not an object type
      ~~~~
-!!! error TS2322: Type '{}' is not assignable to type 'number'.
+!!! error TS2769: No overload matches this call.
+!!! error TS2769:   Overload 1 of 2, '(n: string): { x: number; }', gave the following error.
+!!! error TS2769:     Type '{}' is not assignable to type 'string'.
+!!! error TS2769:   Overload 2 of 2, '(n: number): { y: string; }', gave the following error.
+!!! error TS2769:     Type '{}' is not assignable to type 'number'.
     
     interface Obj2 {
     	(n: string): { x: number };
@@ -25,7 +41,11 @@ tests/cases/conformance/jsx/file.tsx(25,2): error TS2322: Type '{ x: number; }' 
     var Obj2: Obj2;
     <Obj2 />; // Error, return type is not an object type
      ~~~~
-!!! error TS2322: Type '{}' is not assignable to type 'number'.
+!!! error TS2769: No overload matches this call.
+!!! error TS2769:   Overload 1 of 2, '(n: string): { x: number; }', gave the following error.
+!!! error TS2769:     Type '{}' is not assignable to type 'string'.
+!!! error TS2769:   Overload 2 of 2, '(n: number): { y: string; }', gave the following error.
+!!! error TS2769:     Type '{}' is not assignable to type 'number'.
     
     interface Obj3 {
     	(n: string): { x: number };
@@ -34,5 +54,9 @@ tests/cases/conformance/jsx/file.tsx(25,2): error TS2322: Type '{ x: number; }' 
     var Obj3: Obj3;
     <Obj3 x={42} />; // OK
      ~~~~
-!!! error TS2322: Type '{ x: number; }' is not assignable to type 'number'.
+!!! error TS2769: No overload matches this call.
+!!! error TS2769:   Overload 1 of 2, '(n: string): { x: number; }', gave the following error.
+!!! error TS2769:     Type '{ x: number; }' is not assignable to type 'string'.
+!!! error TS2769:   Overload 2 of 2, '(n: number): { x: number; y: string; }', gave the following error.
+!!! error TS2769:     Type '{ x: number; }' is not assignable to type 'number'.
     

@@ -31,7 +31,8 @@ type K03 = keyof boolean;  // "valueOf"
 type K04 = keyof void;  // never
 type K05 = keyof undefined;  // never
 type K06 = keyof null;  // never
-type K07 = keyof never;  // never
+type K07 = keyof never;  // string | number | symbol
+type K08 = keyof unknown; // never
 
 type K10 = keyof Shape;  // "name" | "width" | "height" | "visible"
 type K11 = keyof Shape[];  // "length" | "toString" | ...
@@ -671,6 +672,13 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
+var __spreadArrays = (this && this.__spreadArrays) || function () {
+    for (var s = 0, i = 0, il = arguments.length; i < il; i++) s += arguments[i].length;
+    for (var r = Array(s), k = 0, i = 0; i < il; i++)
+        for (var a = arguments[i], j = 0, jl = a.length; j < jl; j++, k++)
+            r[k] = a[j];
+    return r;
+};
 var Shape = /** @class */ (function () {
     function Shape() {
     }
@@ -950,7 +958,7 @@ function f1(thing) {
     var x1 = path(thing, 'a'); // { x: number, y: string }
     var x2 = path(thing, 'a', 'y'); // string
     var x3 = path(thing, 'b'); // boolean
-    var x4 = path.apply(void 0, [thing].concat(['a', 'x'])); // any
+    var x4 = path.apply(void 0, __spreadArrays([thing], ['a', 'x'])); // any
 }
 // Repro from comment in #12114
 var assignTo2 = function (object, key1, key2) {
@@ -1124,6 +1132,7 @@ declare type K04 = keyof void;
 declare type K05 = keyof undefined;
 declare type K06 = keyof null;
 declare type K07 = keyof never;
+declare type K08 = keyof unknown;
 declare type K10 = keyof Shape;
 declare type K11 = keyof Shape[];
 declare type K12 = keyof Dictionary<Shape>;

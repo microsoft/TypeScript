@@ -6,7 +6,7 @@ class StringIterator {
             value: v
         }
     }
-    
+
     [Symbol.iterator]() {
         return this;
     }

@@ -22,7 +22,7 @@ function main(): void {
     }
 
     const tag = args[0];
-    if (tag !== "dev" && tag !== "insiders") {
+    if (tag !== "dev" && tag !== "insiders" && tag !== "experimental") {
         throw new Error(`Unexpected tag name '${tag}'.`);
     }
 

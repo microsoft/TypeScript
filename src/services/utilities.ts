@@ -967,6 +967,11 @@ namespace ts {
         readonly called: Identifier;
         readonly nTypeArguments: number;
     }
+
+    export interface PossibleProgramFileInfo {
+        ProgramFiles?: string[];
+    }
+
     // Get info for an expression like `f <` that may be the start of type arguments.
     export function getPossibleTypeArgumentsInfo(tokenIn: Node, sourceFile: SourceFile): PossibleTypeArgumentInfo | undefined {
         let token: Node | undefined = tokenIn;
@@ -1190,8 +1195,8 @@ namespace ts {
         return !!range && shouldBeReference === tripleSlashDirectivePrefixRegex.test(sourceFile.text.substring(range.pos, range.end));
     }
 
-    export function createTextSpanFromNode(node: Node, sourceFile?: SourceFile): TextSpan {
-        return createTextSpanFromBounds(node.getStart(sourceFile), node.getEnd());
+    export function createTextSpanFromNode(node: Node, sourceFile?: SourceFile, endNode?: Node): TextSpan {
+        return createTextSpanFromBounds(node.getStart(sourceFile), (endNode || node).getEnd());
     }
 
     export function createTextRangeFromNode(node: Node, sourceFile: SourceFile): TextRange {
@@ -1224,6 +1229,7 @@ namespace ts {
         SyntaxKind.NullKeyword,
         SyntaxKind.NumberKeyword,
         SyntaxKind.ObjectKeyword,
+        SyntaxKind.ReadonlyKeyword,
         SyntaxKind.StringKeyword,
         SyntaxKind.SymbolKeyword,
         SyntaxKind.TrueKeyword,
@@ -1636,23 +1642,6 @@ namespace ts {
         return !!location.parent && isImportOrExportSpecifier(location.parent) && location.parent.propertyName === location;
     }
 
-    /**
-     * Strip off existed single quotes or double quotes from a given string
-     *
-     * @return non-quoted string
-     */
-    export function stripQuotes(name: string) {
-        const length = name.length;
-        if (length >= 2 && name.charCodeAt(0) === name.charCodeAt(length - 1) && startsWithQuote(name)) {
-            return name.substring(1, length - 1);
-        }
-        return name;
-    }
-
-    export function startsWithQuote(name: string): boolean {
-        return isSingleOrDoubleQuote(name.charCodeAt(0));
-    }
-
     export function scriptKindIs(fileName: string, host: LanguageServiceHost, ...scriptKinds: ScriptKind[]): boolean {
         const scriptKind = getScriptKind(fileName, host);
         return some(scriptKinds, k => k === scriptKind);
@@ -1717,7 +1706,19 @@ namespace ts {
 
     export function getSynthesizedDeepCloneWithRenames<T extends Node>(node: T, includeTrivia = true, renameMap?: Map<Identifier>, checker?: TypeChecker, callback?: (originalNode: Node, clone: Node) => any): T {
         let clone;
-        if (isIdentifier(node) && renameMap && checker) {
+        if (renameMap && checker && isBindingElement(node) && isIdentifier(node.name) && isObjectBindingPattern(node.parent)) {
+            const symbol = checker.getSymbolAtLocation(node.name);
+            const renameInfo = symbol && renameMap.get(String(getSymbolId(symbol)));
+
+            if (renameInfo && renameInfo.text !== (node.name || node.propertyName).getText()) {
+                clone = createBindingElement(
+                    node.dotDotDotToken,
+                    node.propertyName || node.name,
+                    renameInfo,
+                    node.initializer);
+            }
+        }
+        else if (renameMap && checker && isIdentifier(node)) {
             const symbol = checker.getSymbolAtLocation(node);
             const renameInfo = symbol && renameMap.get(String(getSymbolId(symbol)));
 
@@ -1739,8 +1740,8 @@ namespace ts {
 
     function getSynthesizedDeepCloneWorker<T extends Node>(node: T, renameMap?: Map<Identifier>, checker?: TypeChecker, callback?: (originalNode: Node, clone: Node) => any): T {
         const visited = (renameMap || checker || callback) ?
-        visitEachChild(node, wrapper, nullTransformationContext) :
-        visitEachChild(node, getSynthesizedDeepClone, nullTransformationContext);
+            visitEachChild(node, wrapper, nullTransformationContext) :
+            visitEachChild(node, getSynthesizedDeepClone, nullTransformationContext);
 
         if (visited === node) {
             // This only happens for leaf nodes - internal nodes always see their children change.
@@ -1978,5 +1979,52 @@ namespace ts {
             }
         });
         return typeIsAccessible ? res : undefined;
+    }
+
+    export function syntaxUsuallyHasTrailingSemicolon(kind: SyntaxKind) {
+        return kind === SyntaxKind.VariableStatement
+            || kind === SyntaxKind.ExpressionStatement
+            || kind === SyntaxKind.DoStatement
+            || kind === SyntaxKind.ContinueStatement
+            || kind === SyntaxKind.BreakStatement
+            || kind === SyntaxKind.ReturnStatement
+            || kind === SyntaxKind.ThrowStatement
+            || kind === SyntaxKind.DebuggerStatement
+            || kind === SyntaxKind.PropertyDeclaration
+            || kind === SyntaxKind.TypeAliasDeclaration
+            || kind === SyntaxKind.ImportDeclaration
+            || kind === SyntaxKind.ImportEqualsDeclaration
+            || kind === SyntaxKind.ExportDeclaration;
+    }
+
+    export function probablyUsesSemicolons(sourceFile: SourceFile): boolean {
+        let withSemicolon = 0;
+        let withoutSemicolon = 0;
+        const nStatementsToObserve = 5;
+        forEachChild(sourceFile, function visit(node): boolean | undefined {
+            if (syntaxUsuallyHasTrailingSemicolon(node.kind)) {
+                const lastToken = node.getLastToken(sourceFile);
+                if (lastToken && lastToken.kind === SyntaxKind.SemicolonToken) {
+                    withSemicolon++;
+                }
+                else {
+                    withoutSemicolon++;
+                }
+            }
+            if (withSemicolon + withoutSemicolon >= nStatementsToObserve) {
+                return true;
+            }
+
+            return forEachChild(node, visit);
+        });
+
+        // One statement missing a semicolon isn’t sufficient evidence to say the user
+        // doesn’t want semicolons, because they may not even be done writing that statement.
+        if (withSemicolon === 0 && withoutSemicolon <= 1) {
+            return true;
+        }
+
+        // If even 2/5 places have a semicolon, the user probably wants semicolons
+        return withSemicolon / withoutSemicolon > 1 / nStatementsToObserve;
     }
 }

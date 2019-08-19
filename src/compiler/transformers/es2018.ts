@@ -22,9 +22,11 @@ namespace ts {
         const previousOnSubstituteNode = context.onSubstituteNode;
         context.onSubstituteNode = onSubstituteNode;
 
+        let exportedVariableStatement = false;
         let enabledSubstitutions: ESNextSubstitutionFlags;
         let enclosingFunctionFlags: FunctionFlags;
         let enclosingSuperContainerFlags: NodeCheckFlags = 0;
+        let topLevel: boolean;
 
         let currentSourceFile: SourceFile;
         let taggedTemplateStringDeclarations: VariableDeclaration[];
@@ -73,6 +75,20 @@ namespace ts {
             return node;
         }
 
+        function doOutsideOfTopLevel<T, U>(cb: (value: T) => U, value: T) {
+            if (topLevel) {
+                topLevel = false;
+                const result = cb(value);
+                topLevel = true;
+                return result;
+            }
+            return cb(value);
+        }
+
+        function visitDefault(node: Node): VisitResult<Node> {
+            return visitEachChild(node, visitor, context);
+        }
+
         function visitorWorker(node: Node, noDestructuringValue: boolean): VisitResult<Node> {
             if ((node.transformFlags & TransformFlags.ContainsES2018) === 0) {
                 return node;
@@ -90,6 +106,10 @@ namespace ts {
                     return visitObjectLiteralExpression(node as ObjectLiteralExpression);
                 case SyntaxKind.BinaryExpression:
                     return visitBinaryExpression(node as BinaryExpression, noDestructuringValue);
+                case SyntaxKind.CatchClause:
+                    return visitCatchClause(node as CatchClause);
+                case SyntaxKind.VariableStatement:
+                    return visitVariableStatement(node as VariableStatement);
                 case SyntaxKind.VariableDeclaration:
                     return visitVariableDeclaration(node as VariableDeclaration);
                 case SyntaxKind.ForOfStatement:
@@ -99,17 +119,17 @@ namespace ts {
                 case SyntaxKind.VoidExpression:
                     return visitVoidExpression(node as VoidExpression);
                 case SyntaxKind.Constructor:
-                    return visitConstructorDeclaration(node as ConstructorDeclaration);
+                    return doOutsideOfTopLevel(visitConstructorDeclaration, node as ConstructorDeclaration);
                 case SyntaxKind.MethodDeclaration:
-                    return visitMethodDeclaration(node as MethodDeclaration);
+                    return doOutsideOfTopLevel(visitMethodDeclaration, node as MethodDeclaration);
                 case SyntaxKind.GetAccessor:
-                    return visitGetAccessorDeclaration(node as GetAccessorDeclaration);
+                    return doOutsideOfTopLevel(visitGetAccessorDeclaration, node as GetAccessorDeclaration);
                 case SyntaxKind.SetAccessor:
-                    return visitSetAccessorDeclaration(node as SetAccessorDeclaration);
+                    return doOutsideOfTopLevel(visitSetAccessorDeclaration, node as SetAccessorDeclaration);
                 case SyntaxKind.FunctionDeclaration:
-                    return visitFunctionDeclaration(node as FunctionDeclaration);
+                    return doOutsideOfTopLevel(visitFunctionDeclaration, node as FunctionDeclaration);
                 case SyntaxKind.FunctionExpression:
-                    return visitFunctionExpression(node as FunctionExpression);
+                    return doOutsideOfTopLevel(visitFunctionExpression, node as FunctionExpression);
                 case SyntaxKind.ArrowFunction:
                     return visitArrowFunction(node as ArrowFunction);
                 case SyntaxKind.Parameter:
@@ -130,6 +150,9 @@ namespace ts {
                         hasSuperElementAccess = true;
                     }
                     return visitEachChild(node, visitor, context);
+                case SyntaxKind.ClassDeclaration:
+                case SyntaxKind.ClassExpression:
+                    return doOutsideOfTopLevel(visitDefault, node);
                 default:
                     return visitEachChild(node, visitor, context);
             }
@@ -242,14 +265,39 @@ namespace ts {
             if (node.transformFlags & TransformFlags.ContainsObjectRestOrSpread) {
                 // spread elements emit like so:
                 // non-spread elements are chunked together into object literals, and then all are passed to __assign:
-                //     { a, ...o, b } => __assign({a}, o, {b});
+                //     { a, ...o, b } => __assign(__assign({a}, o), {b});
                 // If the first element is a spread element, then the first argument to __assign is {}:
-                //     { ...o, a, b, ...o2 } => __assign({}, o, {a, b}, o2)
+                //     { ...o, a, b, ...o2 } => __assign(__assign(__assign({}, o), {a, b}), o2)
+                //
+                // We cannot call __assign with more than two elements, since any element could cause side effects. For
+                // example:
+                //      var k = { a: 1, b: 2 };
+                //      var o = { a: 3, ...k, b: k.a++ };
+                //      // expected: { a: 1, b: 1 }
+                // If we translate the above to `__assign({ a: 3 }, k, { b: k.a++ })`, the `k.a++` will evaluate before
+                // `k` is spread and we end up with `{ a: 2, b: 1 }`.
+                //
+                // This also occurs for spread elements, not just property assignments:
+                //      var k = { a: 1, get b() { l = { z: 9 }; return 2; } };
+                //      var l = { c: 3 };
+                //      var o = { ...k, ...l };
+                //      // expected: { a: 1, b: 2, z: 9 }
+                // If we translate the above to `__assign({}, k, l)`, the `l` will evaluate before `k` is spread and we
+                // end up with `{ a: 1, b: 2, c: 3 }`
                 const objects = chunkObjectLiteralElements(node.properties);
                 if (objects.length && objects[0].kind !== SyntaxKind.ObjectLiteralExpression) {
                     objects.unshift(createObjectLiteral());
                 }
-                return createAssignHelper(context, objects);
+                let expression: Expression = objects[0];
+                if (objects.length > 1) {
+                    for (let i = 1; i < objects.length; i++) {
+                        expression = createAssignHelper(context, [expression, objects[i]]);
+                    }
+                    return expression;
+                }
+                else {
+                    return createAssignHelper(context, objects);
+                }
             }
             return visitEachChild(node, visitor, context);
         }
@@ -263,6 +311,8 @@ namespace ts {
         }
 
         function visitSourceFile(node: SourceFile): SourceFile {
+            exportedVariableStatement = false;
+            topLevel = isEffectiveStrictModeSourceFile(node, compilerOptions);
             const visited = visitEachChild(node, visitor, context);
             const statement = concatenate(visited.statements, taggedTemplateStringDeclarations && [
                 createVariableStatement(/*modifiers*/ undefined,
@@ -307,19 +357,65 @@ namespace ts {
             return visitEachChild(node, visitor, context);
         }
 
+        function visitCatchClause(node: CatchClause) {
+            if (node.variableDeclaration &&
+                isBindingPattern(node.variableDeclaration.name) &&
+                node.variableDeclaration.name.transformFlags & TransformFlags.ContainsObjectRestOrSpread) {
+                const name = getGeneratedNameForNode(node.variableDeclaration.name);
+                const updatedDecl = updateVariableDeclaration(node.variableDeclaration, node.variableDeclaration.name, /*type*/ undefined, name);
+                const visitedBindings = flattenDestructuringBinding(updatedDecl, visitor, context, FlattenLevel.ObjectRest);
+                let block = visitNode(node.block, visitor, isBlock);
+                if (some(visitedBindings)) {
+                    block = updateBlock(block, [
+                        createVariableStatement(/*modifiers*/ undefined, visitedBindings),
+                        ...block.statements,
+                    ]);
+                }
+                return updateCatchClause(
+                    node,
+                    updateVariableDeclaration(node.variableDeclaration, name, /*type*/ undefined, /*initializer*/ undefined),
+                    block);
+            }
+            return visitEachChild(node, visitor, context);
+        }
+
+        function visitVariableStatement(node: VariableStatement): VisitResult<VariableStatement> {
+            if (hasModifier(node, ModifierFlags.Export)) {
+                const savedExportedVariableStatement = exportedVariableStatement;
+                exportedVariableStatement = true;
+                const visited = visitEachChild(node, visitor, context);
+                exportedVariableStatement = savedExportedVariableStatement;
+                return visited;
+            }
+            return visitEachChild(node, visitor, context);
+        }
+
         /**
          * Visits a VariableDeclaration node with a binding pattern.
          *
          * @param node A VariableDeclaration node.
          */
         function visitVariableDeclaration(node: VariableDeclaration): VisitResult<VariableDeclaration> {
+            if (exportedVariableStatement) {
+                const savedExportedVariableStatement = exportedVariableStatement;
+                exportedVariableStatement = false;
+                const visited = visitVariableDeclarationWorker(node, /*exportedVariableStatement*/ true);
+                exportedVariableStatement = savedExportedVariableStatement;
+                return visited;
+            }
+            return visitVariableDeclarationWorker(node, /*exportedVariableStatement*/ false);
+        }
+
+        function visitVariableDeclarationWorker(node: VariableDeclaration, exportedVariableStatement: boolean): VisitResult<VariableDeclaration> {
             // If we are here it is because the name contains a binding pattern with a rest somewhere in it.
             if (isBindingPattern(node.name) && node.name.transformFlags & TransformFlags.ContainsObjectRestOrSpread) {
                 return flattenDestructuringBinding(
                     node,
                     visitor,
                     context,
-                    FlattenLevel.ObjectRest
+                    FlattenLevel.ObjectRest,
+                    /*rval*/ undefined,
+                    exportedVariableStatement
                 );
             }
             return visitEachChild(node, visitor, context);
@@ -712,7 +808,8 @@ namespace ts {
                             node.body!,
                             visitLexicalEnvironment(node.body!.statements, visitor, context, statementOffset)
                         )
-                    )
+                    ),
+                    !topLevel
                 )
             );
 
@@ -953,6 +1050,7 @@ namespace ts {
 
     export const assignHelper: UnscopedEmitHelper = {
         name: "typescript:assign",
+        importName: "__assign",
         scoped: false,
         priority: 1,
         text: `
@@ -977,7 +1075,7 @@ namespace ts {
         }
         context.requestEmitHelper(assignHelper);
         return createCall(
-            getHelperName("__assign"),
+            getUnscopedHelperName("__assign"),
             /*typeArguments*/ undefined,
             attributesSegments
         );
@@ -985,6 +1083,7 @@ namespace ts {
 
     export const awaitHelper: UnscopedEmitHelper = {
         name: "typescript:await",
+        importName: "__await",
         scoped: false,
         text: `
             var __await = (this && this.__await) || function (v) { return this instanceof __await ? (this.v = v, this) : new __await(v); }`
@@ -992,11 +1091,12 @@ namespace ts {
 
     function createAwaitHelper(context: TransformationContext, expression: Expression) {
         context.requestEmitHelper(awaitHelper);
-        return createCall(getHelperName("__await"), /*typeArguments*/ undefined, [expression]);
+        return createCall(getUnscopedHelperName("__await"), /*typeArguments*/ undefined, [expression]);
     }
 
     export const asyncGeneratorHelper: UnscopedEmitHelper = {
         name: "typescript:asyncGenerator",
+        importName: "__asyncGenerator",
         scoped: false,
         text: `
             var __asyncGenerator = (this && this.__asyncGenerator) || function (thisArg, _arguments, generator) {
@@ -1012,7 +1112,7 @@ namespace ts {
             };`
     };
 
-    function createAsyncGeneratorHelper(context: TransformationContext, generatorFunc: FunctionExpression) {
+    function createAsyncGeneratorHelper(context: TransformationContext, generatorFunc: FunctionExpression, hasLexicalThis: boolean) {
         context.requestEmitHelper(awaitHelper);
         context.requestEmitHelper(asyncGeneratorHelper);
 
@@ -1020,10 +1120,10 @@ namespace ts {
         (generatorFunc.emitNode || (generatorFunc.emitNode = {} as EmitNode)).flags |= EmitFlags.AsyncFunctionBody;
 
         return createCall(
-            getHelperName("__asyncGenerator"),
+            getUnscopedHelperName("__asyncGenerator"),
             /*typeArguments*/ undefined,
             [
-                createThis(),
+                hasLexicalThis ? createThis() : createVoidZero(),
                 createIdentifier("arguments"),
                 generatorFunc
             ]
@@ -1032,6 +1132,7 @@ namespace ts {
 
     export const asyncDelegator: UnscopedEmitHelper = {
         name: "typescript:asyncDelegator",
+        importName: "__asyncDelegator",
         scoped: false,
         text: `
             var __asyncDelegator = (this && this.__asyncDelegator) || function (o) {
@@ -1046,7 +1147,7 @@ namespace ts {
         context.requestEmitHelper(asyncDelegator);
         return setTextRange(
             createCall(
-                getHelperName("__asyncDelegator"),
+                getUnscopedHelperName("__asyncDelegator"),
                 /*typeArguments*/ undefined,
                 [expression]
             ),
@@ -1056,6 +1157,7 @@ namespace ts {
 
     export const asyncValues: UnscopedEmitHelper = {
         name: "typescript:asyncValues",
+        importName: "__asyncValues",
         scoped: false,
         text: `
             var __asyncValues = (this && this.__asyncValues) || function (o) {
@@ -1071,7 +1173,7 @@ namespace ts {
         context.requestEmitHelper(asyncValues);
         return setTextRange(
             createCall(
-                getHelperName("__asyncValues"),
+                getUnscopedHelperName("__asyncValues"),
                 /*typeArguments*/ undefined,
                 [expression]
             ),

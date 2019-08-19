@@ -10,3 +10,4 @@ tests/cases/compiler/duplicateLocalVariable4.ts(6,5): error TS2403: Subsequent v
     var x = E.a;
         ~
 !!! error TS2403: Subsequent variable declarations must have the same type.  Variable 'x' must be of type 'typeof E', but here has type 'E'.
+!!! related TS6203 tests/cases/compiler/duplicateLocalVariable4.ts:5:5: 'x' was also declared here.

@@ -1,18 +1,14 @@
-tests/cases/compiler/infiniteConstraints.ts(3,37): error TS2589: Type instantiation is excessively deep and possibly infinite.
 tests/cases/compiler/infiniteConstraints.ts(4,37): error TS2536: Type '"val"' cannot be used to index type 'B[Exclude<keyof B, K>]'.
-tests/cases/compiler/infiniteConstraints.ts(21,21): error TS2536: Type '"val"' cannot be used to index type 'Extract<T[K], Record<"val", string>>'.
-tests/cases/compiler/infiniteConstraints.ts(21,57): error TS2536: Type '"val"' cannot be used to index type 'Extract<T[Exclude<keyof T, K>], Record<"val", string>>'.
 tests/cases/compiler/infiniteConstraints.ts(31,43): error TS2322: Type 'Record<"val", "dup">' is not assignable to type 'never'.
 tests/cases/compiler/infiniteConstraints.ts(31,63): error TS2322: Type 'Record<"val", "dup">' is not assignable to type 'never'.
 tests/cases/compiler/infiniteConstraints.ts(36,71): error TS2536: Type '"foo"' cannot be used to index type 'T[keyof T]'.
+tests/cases/compiler/infiniteConstraints.ts(48,16): error TS2589: Type instantiation is excessively deep and possibly infinite.
 
 
-==== tests/cases/compiler/infiniteConstraints.ts (7 errors) ====
+==== tests/cases/compiler/infiniteConstraints.ts (5 errors) ====
     // Both of the following types trigger the recursion limiter in getImmediateBaseConstraint
     
     type T1<B extends { [K in keyof B]: Extract<B[Exclude<keyof B, K>], { val: string }>["val"] }> = B;
-                                        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2589: Type instantiation is excessively deep and possibly infinite.
     type T2<B extends { [K in keyof B]: B[Exclude<keyof B, K>]["val"] }> = B;
                                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS2536: Type '"val"' cannot be used to index type 'B[Exclude<keyof B, K>]'.
@@ -33,10 +29,6 @@ tests/cases/compiler/infiniteConstraints.ts(36,71): error TS2536: Type '"foo"' c
     declare function ensureNoDuplicates<
       T extends {
         [K in keyof T]: Extract<T[K], Value>["val"] extends Extract<T[Exclude<keyof T, K>], Value>["val"]
-                        ~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2536: Type '"val"' cannot be used to index type 'Extract<T[K], Record<"val", string>>'.
-                                                            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2536: Type '"val"' cannot be used to index type 'Extract<T[Exclude<keyof T, K>], Record<"val", string>>'.
           ? never
           : any
       }
@@ -60,4 +52,18 @@ tests/cases/compiler/infiniteConstraints.ts(36,71): error TS2536: Type '"foo"' c
     declare function function1<T extends {[K in keyof T]: Cond<T[K]>}>(): T[keyof T]["foo"];
                                                                           ~~~~~~~~~~~~~~~~~
 !!! error TS2536: Type '"foo"' cannot be used to index type 'T[keyof T]'.
+    
+    // Repro from #31823
+    
+    export type Prepend<Elm, T extends unknown[]> =
+      T extends unknown ?
+      ((arg: Elm, ...rest: T) => void) extends ((...args: infer T2) => void) ? T2 :
+      never :
+      never;
+    export type ExactExtract<T, U> = T extends U ? U extends T ? T : never : never;
+    
+    type Conv<T, U = T> =
+      { 0: [T]; 1: Prepend<T, Conv<ExactExtract<U, T>>>;}[U extends T ? 0 : 1];
+                   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2589: Type instantiation is excessively deep and possibly infinite.
     

@@ -348,6 +348,24 @@ interface Array<T> {}`
 function [#|f|](): Promise<void>{
     return fetch('https://typescriptlang.org').then(result => { console.log(result) });
 }`);
+        _testConvertToAsyncFunction("convertToAsyncFunction_arrayBindingPattern", `
+function [#|f|](): Promise<void>{
+    return fetch('https://typescriptlang.org').then(([result]) => { console.log(result) });
+}`);
+        _testConvertToAsyncFunction("convertToAsyncFunction_objectBindingPattern", `
+function [#|f|](): Promise<void>{
+    return fetch('https://typescriptlang.org').then(({ result }) => { console.log(result) });
+}`);
+        _testConvertToAsyncFunction("convertToAsyncFunction_arrayBindingPatternRename", `
+function [#|f|](): Promise<void>{
+    const result = getResult();
+    return fetch('https://typescriptlang.org').then(([result]) => { console.log(result) });
+}`);
+        _testConvertToAsyncFunction("convertToAsyncFunction_objectBindingPatternRename", `
+function [#|f|](): Promise<void>{
+    const result = getResult();
+    return fetch('https://typescriptlang.org').then(({ result }) => { console.log(result) });
+}`);
     _testConvertToAsyncFunction("convertToAsyncFunction_basicNoReturnTypeAnnotation", `
 function [#|f|]() {
     return fetch('https://typescriptlang.org').then(result => { console.log(result) });
@@ -599,6 +617,50 @@ function [#|innerPromise|](): Promise<string> {
         return resp.blob().then(blob => blob.byteOffset).catch(err => 'Error');
     }).then(blob => {
         return blob.toString();
+    });
+}
+`
+        );
+
+        _testConvertToAsyncFunction("convertToAsyncFunction_InnerPromiseRetBinding1", `
+function [#|innerPromise|](): Promise<string> {
+    return fetch("https://typescriptlang.org").then(resp => {
+        return resp.blob().then(({ blob }) => blob.byteOffset).catch(({ message }) => 'Error ' + message);
+    }).then(blob => {
+        return blob.toString();
+    });
+}
+`
+        );
+
+        _testConvertToAsyncFunction("convertToAsyncFunction_InnerPromiseRetBinding2", `
+function [#|innerPromise|](): Promise<string> {
+    return fetch("https://typescriptlang.org").then(resp => {
+        return resp.blob().then(blob => blob.byteOffset).catch(err => 'Error');
+    }).then(({ x }) => {
+        return x.toString();
+    });
+}
+`
+        );
+
+        _testConvertToAsyncFunction("convertToAsyncFunction_InnerPromiseRetBinding3", `
+function [#|innerPromise|](): Promise<string> {
+    return fetch("https://typescriptlang.org").then(resp => {
+        return resp.blob().then(({ blob }) => blob.byteOffset).catch(({ message }) => 'Error ' + message);
+    }).then(([x, y]) => {
+        return (x || y).toString();
+    });
+}
+`
+        );
+
+        _testConvertToAsyncFunction("convertToAsyncFunction_InnerPromiseRetBinding4", `
+function [#|innerPromise|](): Promise<string> {
+    return fetch("https://typescriptlang.org").then(resp => {
+        return resp.blob().then(({ blob }: { blob: { byteOffset: number } }) => [0, blob.byteOffset]).catch(({ message }: Error) => ['Error ', message]);
+    }).then(([x, y]) => {
+        return (x || y).toString();
     });
 }
 `
@@ -1168,7 +1230,13 @@ const { length } = [#|function|] () {
 
     _testConvertToAsyncFunction("convertToAsyncFunction_catchBlockUniqueParams", `
 function [#|f|]() {
-	return Promise.resolve().then(x => 1).catch(x => "a").then(x => !!x);
+    return Promise.resolve().then(x => 1).catch(x => "a").then(x => !!x);
+}
+`);
+
+    _testConvertToAsyncFunction("convertToAsyncFunction_catchBlockUniqueParamsBindingPattern", `
+function [#|f|]() {
+    return Promise.resolve().then(() => ({ x: 3 })).catch(() => ({ x: "a" })).then(({ x }) => !!x);
 }
 `);
 

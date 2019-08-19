@@ -108,7 +108,7 @@ namespace ts.GoToDefinition {
     export function getReferenceAtPosition(sourceFile: SourceFile, position: number, program: Program): { fileName: string, file: SourceFile } | undefined {
         const referencePath = findReferenceInPosition(sourceFile.referencedFiles, position);
         if (referencePath) {
-            const file = tryResolveScriptReference(program, sourceFile, referencePath);
+            const file = program.getSourceFileFromReference(sourceFile, referencePath);
             return file && { fileName: referencePath.fileName, file };
         }
 
@@ -233,20 +233,23 @@ namespace ts.GoToDefinition {
     }
 
     function getDefinitionFromSymbol(typeChecker: TypeChecker, symbol: Symbol, node: Node): DefinitionInfo[] | undefined {
-        return getConstructSignatureDefinition() || getCallSignatureDefinition() || map(symbol.declarations, declaration => createDefinitionInfo(declaration, typeChecker, symbol, node));
+        // There are cases when you extend a function by adding properties to it afterwards,
+        // we want to strip those extra properties
+        const filteredDeclarations = filter(symbol.declarations, d =>  !isAssignmentDeclaration(d) || d === symbol.valueDeclaration) || undefined;
+        return getConstructSignatureDefinition() || getCallSignatureDefinition() || map(filteredDeclarations, declaration => createDefinitionInfo(declaration, typeChecker, symbol, node));
 
         function getConstructSignatureDefinition(): DefinitionInfo[] | undefined {
             // Applicable only if we are in a new expression, or we are on a constructor declaration
             // and in either case the symbol has a construct signature definition, i.e. class
             if (symbol.flags & SymbolFlags.Class && (isNewExpressionTarget(node) || node.kind === SyntaxKind.ConstructorKeyword)) {
-                const cls = find(symbol.declarations, isClassLike) || Debug.fail("Expected declaration to have at least one class-like declaration");
+                const cls = find(filteredDeclarations, isClassLike) || Debug.fail("Expected declaration to have at least one class-like declaration");
                 return getSignatureDefinition(cls.members, /*selectConstructors*/ true);
             }
         }
 
         function getCallSignatureDefinition(): DefinitionInfo[] | undefined {
             return isCallOrNewExpressionTarget(node) || isNameOfFunctionDeclaration(node)
-                ? getSignatureDefinition(symbol.declarations, /*selectConstructors*/ false)
+                ? getSignatureDefinition(filteredDeclarations, /*selectConstructors*/ false)
                 : undefined;
         }
 
@@ -273,13 +276,19 @@ namespace ts.GoToDefinition {
     function createDefinitionInfoFromName(declaration: Declaration, symbolKind: ScriptElementKind, symbolName: string, containerName: string): DefinitionInfo {
         const name = getNameOfDeclaration(declaration) || declaration;
         const sourceFile = name.getSourceFile();
+        const textSpan = createTextSpanFromNode(name, sourceFile);
         return {
             fileName: sourceFile.fileName,
-            textSpan: createTextSpanFromNode(name, sourceFile),
+            textSpan,
             kind: symbolKind,
             name: symbolName,
             containerKind: undefined!, // TODO: GH#18217
-            containerName
+            containerName,
+            ...FindAllReferences.toContextSpan(
+                textSpan,
+                sourceFile,
+                FindAllReferences.getContextNode(declaration)
+            )
         };
     }
 
