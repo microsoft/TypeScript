@@ -1288,8 +1288,7 @@ namespace ts {
                             return text.substring(start, pos);
                         }
 
-                        const escapedValueString = scanMinimumNumberOfHexDigits(1, /*canHaveSeparators*/ false);
-                        const escapedValue = escapedValueString ? parseInt(escapedValueString, 16) : -1;
+                        const escapedValue = peekExtendedUnicodeEscape();
                         if (isTaggedTemplate) {
                             // '\u{Not Code Point' or '\u{CodePoint'
                             if (!isCodePoint(escapedValue) || text.charCodeAt(pos) !== CharacterCodes.closeBrace) {
@@ -1298,7 +1297,7 @@ namespace ts {
                             }
                         }
                         tokenFlags |= TokenFlags.ExtendedUnicodeEscape;
-                        return scanExtendedUnicodeEscape(escapedValue);
+                        return scanExtendedUnicodeEscape();
                     }
 
                     tokenFlags |= TokenFlags.UnicodeEscape;
@@ -1348,7 +1347,9 @@ namespace ts {
             }
         }
 
-        function scanExtendedUnicodeEscape(escapedValue: number): string {
+        function scanExtendedUnicodeEscape(): string {
+            const escapedValueString = scanMinimumNumberOfHexDigits(1, /*canHaveSeparators*/ false);
+            const escapedValue = escapedValueString ? parseInt(escapedValueString, 16) : -1;
             let isInvalidExtendedEscape = false;
 
             // Validate the value of the digit
