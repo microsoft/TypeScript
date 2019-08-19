@@ -57,7 +57,7 @@ describe("unittests:: services:: Colorization", () => {
 
     describe("test getClassifications", () => {
         it("Returns correct token classes", () => {
-            testLexicalClassification("var x: string = \"foo\"; //Hello",
+            testLexicalClassification("var x: string = \"foo\" ?? \"bar\"; //Hello",
                 ts.EndOfLineState.None,
                 keyword("var"),
                 whitespace(" "),
@@ -65,6 +65,9 @@ describe("unittests:: services:: Colorization", () => {
                 punctuation(":"),
                 keyword("string"),
                 operator("="),
+                stringLiteral("\"foo\""),
+                whitespace(" "),
+                operator("??"),
                 stringLiteral("\"foo\""),
                 comment("//Hello"),
                 punctuation(";"));
