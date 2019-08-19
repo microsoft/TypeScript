@@ -10,7 +10,6 @@ namespace ts {
         });
 
         it("verify that it builds correctly", () => {
-            const projFs = loadProjectFromDisk("tests/projects/projectReferenceWithRootDirInParent");
             const allExpectedOutputs = [
                 "/src/dist/other/other.js", "/src/dist/other/other.d.ts",
                 "/src/dist/main/a.js", "/src/dist/main/a.d.ts",
@@ -44,7 +43,10 @@ namespace ts {
                 [Diagnostics.Building_project_0, "/src/src/other/tsconfig.json"],
                 [Diagnostics.Project_0_is_out_of_date_because_output_file_1_does_not_exist, "src/src/main/tsconfig.json", "src/dist/a.js"],
                 [Diagnostics.Building_project_0, "/src/src/main/tsconfig.json"],
-                [Diagnostics.Cannot_write_file_0_because_it_will_overwrite_tsbuildinfo_file_generated_by_referenced_project_1, "/src/dist/tsconfig.tsbuildinfo", "/src/src/other"]
+                {
+                    message: [Diagnostics.Cannot_write_file_0_because_it_will_overwrite_tsbuildinfo_file_generated_by_referenced_project_1, "/src/dist/tsconfig.tsbuildinfo", "/src/src/other"],
+                    location: expectedLocationIndexOf(fs, "/src/src/main/tsconfig.json", `{ "path": "../other" }`),
+                }
             );
             verifyOutputsPresent(fs, allExpectedOutputs);
             verifyOutputsAbsent(fs, missingOutputs);
@@ -76,7 +78,10 @@ namespace ts {
                 [Diagnostics.Building_project_0, "/src/src/other/tsconfig.json"],
                 [Diagnostics.Project_0_is_out_of_date_because_output_file_1_does_not_exist, "src/src/main/tsconfig.json", "src/dist/a.js"],
                 [Diagnostics.Building_project_0, "/src/src/main/tsconfig.json"],
-                [Diagnostics.Cannot_write_file_0_because_it_will_overwrite_tsbuildinfo_file_generated_by_referenced_project_1, "/src/dist/tsconfig.tsbuildinfo", "/src/src/other"]
+                {
+                    message: [Diagnostics.Cannot_write_file_0_because_it_will_overwrite_tsbuildinfo_file_generated_by_referenced_project_1, "/src/dist/tsconfig.tsbuildinfo", "/src/src/other"],
+                    location: expectedLocationIndexOf(fs, "/src/src/main/tsconfig.json", `{"path":"../other"}`),
+                }
             );
             verifyOutputsPresent(fs, allExpectedOutputs);
             verifyOutputsAbsent(fs, missingOutputs);

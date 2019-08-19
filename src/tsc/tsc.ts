@@ -186,6 +186,10 @@ namespace ts {
         // Update to pretty if host supports it
         updateReportDiagnostic(buildOptions);
 
+        if (buildOptions.locale) {
+            validateLocaleAndSetLanguage(buildOptions.locale, sys, errors);
+        }
+
         if (errors.length > 0) {
             errors.forEach(reportDiagnostic);
             return sys.exit(ExitStatus.DiagnosticsPresent_OutputsSkipped);

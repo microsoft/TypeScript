@@ -5,7 +5,7 @@ const os = require("os");
 /** @type {CommandLineOptions} */
 module.exports = minimist(process.argv.slice(2), {
     boolean: ["debug", "dirty", "inspect", "light", "colors", "lint", "lkg", "soft", "fix", "failed", "keepFailed", "force", "built"],
-    string: ["browser", "tests", "host", "reporter", "stackTraceLimit", "timeout"],
+    string: ["browser", "tests", "host", "reporter", "stackTraceLimit", "timeout", "shards", "shardId"],
     alias: {
         "b": "browser",
         "d": "debug", "debug-brk": "debug",
@@ -14,6 +14,8 @@ module.exports = minimist(process.argv.slice(2), {
         "ru": "runners", "runner": "runners",
         "r": "reporter",
         "c": "colors", "color": "colors",
+        "skip-percent": "skipPercent",
+        "skippercent": "skipPercent",
         "w": "workers",
         "f": "fix"
     },

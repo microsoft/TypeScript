@@ -34,6 +34,7 @@ tests/webTestServer.js.map
 tests/webhost/*.d.ts
 tests/webhost/webtsc.js
 tests/cases/**/*.js
+!tests/cases/docker/*.js/
 tests/cases/**/*.js.map
 *.config
 scripts/debug.bat

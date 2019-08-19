@@ -866,12 +866,12 @@ namespace ts.projectSystem {
             const projectService = createProjectService(host);
             projectService.openClientFile(file1.path);
             host.runQueuedTimeoutCallbacks();
-            // Since there is no file open from configFile it would be closed
-            checkNumberOfConfiguredProjects(projectService, 0);
-            checkNumberOfInferredProjects(projectService, 1);
 
+            // Since file1 refers to config file as the default project, it needs to be kept alive
+            checkNumberOfProjects(projectService, { inferredProjects: 1, configuredProjects: 1 });
             const inferredProject = projectService.inferredProjects[0];
             assert.isTrue(inferredProject.containsFile(<server.NormalizedPath>file1.path));
+            assert.isFalse(projectService.configuredProjects.get(configFile.path)!.containsFile(<server.NormalizedPath>file1.path));
         });
 
         it("should be able to handle @types if input file list is empty", () => {
@@ -898,8 +898,8 @@ namespace ts.projectSystem {
             const projectService = createProjectService(host);
 
             projectService.openClientFile(f.path);
-            // Since no file from the configured project is open, it would be closed immediately
-            projectService.checkNumberOfProjects({ configuredProjects: 0, inferredProjects: 1 });
+            // Since f refers to config file as the default project, it needs to be kept alive
+            projectService.checkNumberOfProjects({ configuredProjects: 1, inferredProjects: 1 });
         });
 
         it("should tolerate invalid include files that start in subDirectory", () => {
@@ -924,8 +924,8 @@ namespace ts.projectSystem {
             const projectService = createProjectService(host);
 
             projectService.openClientFile(f.path);
-            // Since no file from the configured project is open, it would be closed immediately
-            projectService.checkNumberOfProjects({ configuredProjects: 0, inferredProjects: 1 });
+            // Since f refers to config file as the default project, it needs to be kept alive
+            projectService.checkNumberOfProjects({ configuredProjects: 1, inferredProjects: 1 });
         });
 
         it("Changed module resolution reflected when specifying files list", () => {

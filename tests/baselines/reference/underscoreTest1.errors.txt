@@ -1,5 +1,11 @@
-tests/cases/compiler/underscoreTest1_underscoreTests.ts(26,7): error TS2345: Argument of type '(string | number | boolean)[]' is not assignable to parameter of type 'Dictionary<unknown>'.
-  Index signature is missing in type '(string | number | boolean)[]'.
+tests/cases/compiler/underscoreTest1_underscoreTests.ts(26,1): error TS2769: No overload matches this call.
+  Overload 1 of 2, '(list: (string | number | boolean)[], iterator?: Iterator_<string | number | boolean, boolean>, context?: any): boolean', gave the following error.
+    Argument of type '<T>(value: T) => T' is not assignable to parameter of type 'Iterator_<string | number | boolean, boolean>'.
+      Type 'string | number | boolean' is not assignable to type 'boolean'.
+        Type 'string' is not assignable to type 'boolean'.
+  Overload 2 of 2, '(list: Dictionary<unknown>, iterator?: Iterator_<unknown, boolean>, context?: any): boolean', gave the following error.
+    Argument of type '(string | number | boolean)[]' is not assignable to parameter of type 'Dictionary<unknown>'.
+      Index signature is missing in type '(string | number | boolean)[]'.
 
 
 ==== tests/cases/compiler/underscoreTest1_underscoreTests.ts (1 errors) ====
@@ -29,9 +35,15 @@ tests/cases/compiler/underscoreTest1_underscoreTests.ts(26,7): error TS2345: Arg
     var odds = _.reject([1, 2, 3, 4, 5, 6], (num) => num % 2 == 0);
     
     _.all([true, 1, null, 'yes'], _.identity);
-          ~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2345: Argument of type '(string | number | boolean)[]' is not assignable to parameter of type 'Dictionary<unknown>'.
-!!! error TS2345:   Index signature is missing in type '(string | number | boolean)[]'.
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2769: No overload matches this call.
+!!! error TS2769:   Overload 1 of 2, '(list: (string | number | boolean)[], iterator?: Iterator_<string | number | boolean, boolean>, context?: any): boolean', gave the following error.
+!!! error TS2769:     Argument of type '<T>(value: T) => T' is not assignable to parameter of type 'Iterator_<string | number | boolean, boolean>'.
+!!! error TS2769:       Type 'string | number | boolean' is not assignable to type 'boolean'.
+!!! error TS2769:         Type 'string' is not assignable to type 'boolean'.
+!!! error TS2769:   Overload 2 of 2, '(list: Dictionary<unknown>, iterator?: Iterator_<unknown, boolean>, context?: any): boolean', gave the following error.
+!!! error TS2769:     Argument of type '(string | number | boolean)[]' is not assignable to parameter of type 'Dictionary<unknown>'.
+!!! error TS2769:       Index signature is missing in type '(string | number | boolean)[]'.
     
     _.any([null, 0, 'yes', false]);
     

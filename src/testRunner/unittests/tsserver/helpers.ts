@@ -438,10 +438,13 @@ namespace ts.projectSystem {
     export function configuredProjectAt(projectService: server.ProjectService, index: number) {
         const values = projectService.configuredProjects.values();
         while (index > 0) {
-            values.next();
+            const iterResult = values.next();
+            if (iterResult.done) return Debug.fail("Expected a result.");
             index--;
         }
-        return values.next().value;
+        const iterResult = values.next();
+        if (iterResult.done) return Debug.fail("Expected a result.");
+        return iterResult.value;
     }
 
     export function checkProjectActualFiles(project: server.Project, expectedFiles: ReadonlyArray<string>) {
@@ -516,6 +519,8 @@ namespace ts.projectSystem {
         file: File;
         text: string;
         options?: SpanFromSubstringOptions;
+        contextText?: string;
+        contextOptions?: SpanFromSubstringOptions;
     }
     export function protocolFileSpanFromSubstring({ file, text, options }: DocumentSpanFromSubstring): protocol.FileSpan {
         return { file: file.path, ...protocolTextSpanFromSubstring(file.content, text, options) };
@@ -723,5 +728,19 @@ namespace ts.projectSystem {
             assert.strictEqual(events.length, index + 1, JSON.stringify(events));
             assert.strictEqual(outputs.length, index + 1, JSON.stringify(outputs));
         }
+    }
+
+    export interface MakeReferenceItem extends DocumentSpanFromSubstring {
+        isDefinition: boolean;
+        lineText: string;
+    }
+
+    export function makeReferenceItem({ isDefinition, lineText, ...rest }: MakeReferenceItem): protocol.ReferencesResponseItem {
+        return {
+            ...protocolFileSpanWithContextFromSubstring(rest),
+            isDefinition,
+            isWriteAccess: isDefinition,
+            lineText,
+        };
     }
 }

@@ -437,16 +437,21 @@ namespace ts {
 }
 
 namespace ts {
-    export function readBuilderProgram(compilerOptions: CompilerOptions, readFile: (path: string) => string | undefined) {
+    export interface ReadBuildProgramHost {
+        useCaseSensitiveFileNames(): boolean;
+        getCurrentDirectory(): string;
+        readFile(fileName: string): string | undefined;
+    }
+    export function readBuilderProgram(compilerOptions: CompilerOptions, host: ReadBuildProgramHost) {
         if (compilerOptions.out || compilerOptions.outFile) return undefined;
         const buildInfoPath = getOutputPathForBuildInfo(compilerOptions);
         if (!buildInfoPath) return undefined;
-        const content = readFile(buildInfoPath);
+        const content = host.readFile(buildInfoPath);
         if (!content) return undefined;
         const buildInfo = getBuildInfo(content);
         if (buildInfo.version !== version) return undefined;
         if (!buildInfo.program) return undefined;
-        return createBuildProgramUsingProgramBuildInfo(buildInfo.program);
+        return createBuildProgramUsingProgramBuildInfo(buildInfo.program, buildInfoPath, host);
     }
 
     export function createIncrementalCompilerHost(options: CompilerOptions, system = sys): CompilerHost {
@@ -471,7 +476,7 @@ namespace ts {
     }: IncrementalProgramOptions<T>): T {
         host = host || createIncrementalCompilerHost(options);
         createProgram = createProgram || createEmitAndSemanticDiagnosticsBuilderProgram as any as CreateProgram<T>;
-        const oldProgram = readBuilderProgram(options, path => host!.readFile(path)) as any as T;
+        const oldProgram = readBuilderProgram(options, host) as any as T;
         return createProgram(rootNames, options, host, oldProgram, configFileParsingDiagnostics, projectReferences);
     }
 
@@ -533,9 +538,9 @@ namespace ts {
         getEnvironmentVariable?(name: string): string | undefined;
 
         /** If provided, used to resolve the module names, otherwise typescript's default module resolution */
-        resolveModuleNames?(moduleNames: string[], containingFile: string, reusedNames?: string[], redirectedReference?: ResolvedProjectReference): (ResolvedModule | undefined)[];
+        resolveModuleNames?(moduleNames: string[], containingFile: string, reusedNames: string[] | undefined, redirectedReference: ResolvedProjectReference | undefined, options: CompilerOptions): (ResolvedModule | undefined)[];
         /** If provided, used to resolve type reference directives, otherwise typescript's default resolution */
-        resolveTypeReferenceDirectives?(typeReferenceDirectiveNames: string[], containingFile: string, redirectedReference?: ResolvedProjectReference): (ResolvedTypeReferenceDirective | undefined)[];
+        resolveTypeReferenceDirectives?(typeReferenceDirectiveNames: string[], containingFile: string, redirectedReference: ResolvedProjectReference | undefined, options: CompilerOptions): (ResolvedTypeReferenceDirective | undefined)[];
     }
     /** Internal interface used to wire emit through same host */
 
@@ -603,7 +608,6 @@ namespace ts {
         /*@internal*/
         getCurrentProgram(): T;
         /** Closes the watch */
-        /*@internal*/
         close(): void;
     }
 
@@ -740,14 +744,14 @@ namespace ts {
         );
         // Resolve module using host module resolution strategy if provided otherwise use resolution cache to resolve module names
         compilerHost.resolveModuleNames = host.resolveModuleNames ?
-            ((moduleNames, containingFile, reusedNames, redirectedReference) => host.resolveModuleNames!(moduleNames, containingFile, reusedNames, redirectedReference)) :
+            ((...args) => host.resolveModuleNames!(...args)) :
             ((moduleNames, containingFile, reusedNames, redirectedReference) => resolutionCache.resolveModuleNames(moduleNames, containingFile, reusedNames, redirectedReference));
         compilerHost.resolveTypeReferenceDirectives = host.resolveTypeReferenceDirectives ?
-            ((typeDirectiveNames, containingFile, redirectedReference) => host.resolveTypeReferenceDirectives!(typeDirectiveNames, containingFile, redirectedReference)) :
+            ((...args) => host.resolveTypeReferenceDirectives!(...args)) :
             ((typeDirectiveNames, containingFile, redirectedReference) => resolutionCache.resolveTypeReferenceDirectives(typeDirectiveNames, containingFile, redirectedReference));
         const userProvidedResolution = !!host.resolveModuleNames || !!host.resolveTypeReferenceDirectives;
 
-        builderProgram = readBuilderProgram(compilerOptions, path => compilerHost.readFile(path)) as any as T;
+        builderProgram = readBuilderProgram(compilerOptions, compilerHost) as any as T;
         synchronizeProgram();
 
         // Update the wild card directory watch
@@ -1001,13 +1005,19 @@ namespace ts {
 
             switch (reloadLevel) {
                 case ConfigFileProgramReloadLevel.Partial:
-                    return reloadFileNamesFromConfigFile();
+                    perfLogger.logStartUpdateProgram("PartialConfigReload");
+                    reloadFileNamesFromConfigFile();
+                    break;
                 case ConfigFileProgramReloadLevel.Full:
-                    return reloadConfigFile();
+                    perfLogger.logStartUpdateProgram("FullConfigReload");
+                    reloadConfigFile();
+                    break;
                 default:
+                    perfLogger.logStartUpdateProgram("SynchronizeProgram");
                     synchronizeProgram();
-                    return;
+                    break;
             }
+            perfLogger.logStopUpdateProgram("Done");
         }
 
         function reloadFileNamesFromConfigFile() {

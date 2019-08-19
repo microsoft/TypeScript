@@ -344,7 +344,8 @@ namespace FourSlash {
                     "getDocumentHighlights",
                 ];
                 const proxy = {} as ts.LanguageService;
-                for (const k in ls) {
+                const keys = ts.getAllKeys(ls);
+                for (const k of keys) {
                     const key = k as keyof typeof ls;
                     if (cacheableMembers.indexOf(key) === -1) {
                         proxy[key] = (...args: any[]) => (ls[key] as Function)(...args);
@@ -583,6 +584,21 @@ namespace FourSlash {
             });
         }
 
+        public verifyErrorExistsAtRange(range: Range, code: number, expectedMessage?: string) {
+            const span = ts.createTextSpanFromRange(range);
+            const hasMatchingError = ts.some(
+                this.getDiagnostics(range.fileName),
+                ({ code, messageText, start, length }) =>
+                    code === code &&
+                    (!expectedMessage || expectedMessage === messageText) &&
+                    ts.isNumber(start) && ts.isNumber(length) &&
+                    ts.textSpansEqual(span, { start, length }));
+
+            if (!hasMatchingError) {
+                this.raiseError(`No error with code ${code} found at provided range.`);
+            }
+        }
+
         public verifyNumberOfErrorsInCurrentFile(expected: number) {
             const errors = this.getDiagnostics(this.activeFile.fileName);
             const actual = errors.length;
@@ -782,7 +798,7 @@ namespace FourSlash {
                     for (const include of toArray(options.includes)) {
                         const name = typeof include === "string" ? include : include.name;
                         const found = nameToEntries.get(name);
-                        if (!found) throw this.raiseError(`No completion ${name} found`);
+                        if (!found) throw this.raiseError(`Includes: completion '${name}' not found.`);
                         assert(found.length === 1); // Must use 'exact' for multiple completions with same name
                         this.verifyCompletionEntry(ts.first(found), include);
                     }
@@ -791,7 +807,7 @@ namespace FourSlash {
                     for (const exclude of toArray(options.excludes)) {
                         assert(typeof exclude === "string");
                         if (nameToEntries.has(exclude)) {
-                            this.raiseError(`Did not expect to get a completion named ${exclude}`);
+                            this.raiseError(`Excludes: unexpected completion '${exclude}' found.`);
                         }
                     }
                 }
@@ -850,7 +866,7 @@ namespace FourSlash {
             ts.zipWith(actual, expected, (completion, expectedCompletion, index) => {
                 const name = typeof expectedCompletion === "string" ? expectedCompletion : expectedCompletion.name;
                 if (completion.name !== name) {
-                    this.raiseError(`${marker ? JSON.stringify(marker) : "" } Expected completion at index ${index} to be ${name}, got ${completion.name}`);
+                    this.raiseError(`${marker ? JSON.stringify(marker) : ""} Expected completion at index ${index} to be ${name}, got ${completion.name}`);
                 }
                 this.verifyCompletionEntry(completion, expectedCompletion);
             });
@@ -933,7 +949,7 @@ namespace FourSlash {
 
             const actual = checker.typeToString(type);
             if (actual !== expected) {
-                this.raiseError(`Expected: '${expected}', actual: '${actual}'`);
+                this.raiseError(displayExpectedAndActualString(expected, actual));
             }
         }
 
@@ -1009,9 +1025,7 @@ namespace FourSlash {
         private assertObjectsEqual<T>(fullActual: T, fullExpected: T, msgPrefix = ""): void {
             const recur = <U>(actual: U, expected: U, path: string) => {
                 const fail = (msg: string) => {
-                    this.raiseError(`${msgPrefix} At ${path}: ${msg}
-Expected: ${stringify(fullExpected)}
-Actual: ${stringify(fullActual)}`);
+                    this.raiseError(`${msgPrefix} At ${path}: ${msg} ${displayExpectedAndActualString(stringify(fullExpected), stringify(fullActual))}`);
                 };
 
                 if ((actual === undefined) !== (expected === undefined)) {
@@ -1043,9 +1057,7 @@ Actual: ${stringify(fullActual)}`);
                 if (fullActual === fullExpected) {
                     return;
                 }
-                this.raiseError(`${msgPrefix}
-Expected: ${stringify(fullExpected)}
-Actual: ${stringify(fullActual)}`);
+                this.raiseError(`${msgPrefix} ${displayExpectedAndActualString(stringify(fullExpected), stringify(fullActual))}`);
             }
             recur(fullActual, fullExpected, "");
 
@@ -1177,7 +1189,9 @@ Actual: ${stringify(fullActual)}`);
         public verifyRenameLocations(startRanges: ArrayOrSingle<Range>, options: FourSlashInterface.RenameLocationsOptions) {
             const { findInStrings = false, findInComments = false, ranges = this.getRanges(), providePrefixAndSuffixTextForRename = true } = ts.isArray(options) ? { findInStrings: false, findInComments: false, ranges: options, providePrefixAndSuffixTextForRename: true } : options;
 
-            for (const startRange of toArray(startRanges)) {
+            const _startRanges = toArray(startRanges);
+            assert(_startRanges.length);
+            for (const startRange of _startRanges) {
                 this.goToRangeStart(startRange);
 
                 const renameInfo = this.languageService.getRenameInfo(this.activeFile.fileName, this.currentCaretPosition);
@@ -1255,6 +1269,10 @@ Actual: ${stringify(fullActual)}`);
 
         private verifySignatureHelpWorker(options: FourSlashInterface.VerifySignatureHelpOptions) {
             const help = this.getSignatureHelp({ triggerReason: options.triggerReason })!;
+            if (!help) {
+                this.raiseError("Could not get a help signature");
+            }
+
             const selectedItem = help.items[help.selectedItemIndex];
             // Argument index may exceed number of parameters
             const currentParameter = selectedItem.parameters[help.argumentIndex] as ts.SignatureHelpParameter | undefined;
@@ -1480,13 +1498,7 @@ Actual: ${stringify(fullActual)}`);
                     const diagnostics = ts.getPreEmitDiagnostics(this.languageService.getProgram()!); // TODO: GH#18217
                     for (const diagnostic of diagnostics) {
                         if (!ts.isString(diagnostic.messageText)) {
-                            let chainedMessage: ts.DiagnosticMessageChain | undefined = diagnostic.messageText;
-                            let indentation = " ";
-                            while (chainedMessage) {
-                                resultString += indentation + chainedMessage.messageText + Harness.IO.newLine();
-                                chainedMessage = chainedMessage.next;
-                                indentation = indentation + " ";
-                            }
+                            resultString += this.flattenChainedMessage(diagnostic.messageText);
                         }
                         else {
                             resultString += "  " + diagnostic.messageText + Harness.IO.newLine();
@@ -1502,6 +1514,17 @@ Actual: ${stringify(fullActual)}`);
             }
 
             Harness.Baseline.runBaseline(ts.Debug.assertDefined(this.testData.globalOptions[MetadataOptionNames.baselineFile]), resultString);
+        }
+
+        private flattenChainedMessage(diag: ts.DiagnosticMessageChain, indent = " ") {
+            let result = "";
+            result += indent + diag.messageText + Harness.IO.newLine();
+            if (diag.next) {
+                for (const kid of diag.next) {
+                    result += this.flattenChainedMessage(kid, indent + " ");
+                }
+            }
+            return result;
         }
 
         public baselineQuickInfo() {
@@ -2089,9 +2112,7 @@ Actual: ${stringify(fullActual)}`);
         public verifyCurrentLineContent(text: string) {
             const actual = this.getCurrentLineContent();
             if (actual !== text) {
-                throw new Error("verifyCurrentLineContent\n" +
-                    "\tExpected: \"" + text + "\"\n" +
-                    "\t  Actual: \"" + actual + "\"");
+                throw new Error("verifyCurrentLineContent\n" + displayExpectedAndActualString(text, actual, /* quoted */ true));
             }
         }
 
@@ -2117,25 +2138,19 @@ Actual: ${stringify(fullActual)}`);
         public verifyTextAtCaretIs(text: string) {
             const actual = this.getFileContent(this.activeFile.fileName).substring(this.currentCaretPosition, this.currentCaretPosition + text.length);
             if (actual !== text) {
-                throw new Error("verifyTextAtCaretIs\n" +
-                    "\tExpected: \"" + text + "\"\n" +
-                    "\t  Actual: \"" + actual + "\"");
+                throw new Error("verifyTextAtCaretIs\n" + displayExpectedAndActualString(text, actual, /* quoted */ true));
             }
         }
 
         public verifyCurrentNameOrDottedNameSpanText(text: string) {
             const span = this.languageService.getNameOrDottedNameSpan(this.activeFile.fileName, this.currentCaretPosition, this.currentCaretPosition);
             if (!span) {
-                return this.raiseError("verifyCurrentNameOrDottedNameSpanText\n" +
-                    "\tExpected: \"" + text + "\"\n" +
-                    "\t  Actual: undefined");
+                return this.raiseError("verifyCurrentNameOrDottedNameSpanText\n" + displayExpectedAndActualString("\"" + text + "\"", "undefined"));
             }
 
             const actual = this.getFileContent(this.activeFile.fileName).substring(span.start, ts.textSpanEnd(span));
             if (actual !== text) {
-                this.raiseError("verifyCurrentNameOrDottedNameSpanText\n" +
-                    "\tExpected: \"" + text + "\"\n" +
-                    "\t  Actual: \"" + actual + "\"");
+                this.raiseError("verifyCurrentNameOrDottedNameSpanText\n" + displayExpectedAndActualString(text, actual, /* quoted */ true));
             }
         }
 
@@ -2311,7 +2326,10 @@ Actual: ${stringify(fullActual)}`);
         public applyCodeActionFromCompletion(markerName: string, options: FourSlashInterface.VerifyCompletionActionOptions) {
             this.goToMarker(markerName);
 
-            const details = this.getCompletionEntryDetails(options.name, options.source, options.preferences)!;
+            const details = this.getCompletionEntryDetails(options.name, options.source, options.preferences);
+            if (!details) {
+                return this.raiseError(`No completions were found for the given name, source, and preferences.`);
+            }
             const codeActions = details.codeActions!;
             if (codeActions.length !== 1) {
                 this.raiseError(`Expected one code action, got ${codeActions.length}`);
@@ -2420,7 +2438,7 @@ Actual: ${stringify(fullActual)}`);
                     const oldText = this.tryGetFileContent(change.fileName);
                     ts.Debug.assert(!!change.isNewFile === (oldText === undefined));
                     const newContent = change.isNewFile ? ts.first(change.textChanges).newText : ts.textChanges.applyChanges(oldText!, change.textChanges);
-                    assert.equal(newContent, expectedNewContent);
+                    assert.equal(newContent, expectedNewContent, `String mis-matched in file ${change.fileName}`);
                 }
                 for (const newFileName in newFileContent) {
                     ts.Debug.assert(changes.some(c => c.fileName === newFileName), "No change in file", () => newFileName);
@@ -2731,6 +2749,7 @@ Actual: ${stringify(fullActual)}`);
 
         public verifyRangesAreOccurrences(isWriteAccess?: boolean, ranges?: Range[]) {
             ranges = ranges || this.getRanges();
+            assert(ranges.length);
             for (const r of ranges) {
                 this.goToRangeStart(r);
                 this.verifyOccurrencesAtPositionListCount(ranges.length);
@@ -2761,6 +2780,7 @@ Actual: ${stringify(fullActual)}`);
 
         public verifyRangesAreDocumentHighlights(ranges: Range[] | undefined, options: FourSlashInterface.VerifyDocumentHighlightsOptions | undefined) {
             ranges = ranges || this.getRanges();
+            assert(ranges.length);
             const fileNames = options && options.filesToSearch || unique(ranges, range => range.fileName);
             for (const range of ranges) {
                 this.goToRangeStart(range);
@@ -2804,11 +2824,28 @@ Actual: ${stringify(fullActual)}`);
             }
         }
 
-        public verifyCodeFixAvailable(negative: boolean, expected: FourSlashInterface.VerifyCodeFixAvailableOptions[] | undefined): void {
-            assert(!negative || !expected);
+        public verifyCodeFixAvailable(negative: boolean, expected: FourSlashInterface.VerifyCodeFixAvailableOptions[] | string | undefined): void {
             const codeFixes = this.getCodeFixes(this.activeFile.fileName);
-            const actuals = codeFixes.map((fix): FourSlashInterface.VerifyCodeFixAvailableOptions => ({ description: fix.description, commands: fix.commands }));
-            this.assertObjectsEqual(actuals, negative ? ts.emptyArray : expected);
+            if (negative) {
+                if (typeof expected === "undefined") {
+                    this.assertObjectsEqual(codeFixes, ts.emptyArray);
+                }
+                else if (typeof expected === "string") {
+                    if (codeFixes.some(fix => fix.fixName === expected)) {
+                        this.raiseError(`Expected not to find a fix with the name '${expected}', but one exists.`);
+                    }
+                }
+                else {
+                    assert(typeof expected === "undefined" || typeof expected === "string", "With a negated assertion, 'expected' must be undefined or a string value of a codefix name.");
+                }
+            }
+            else if (typeof expected === "string") {
+                this.assertObjectsEqual(codeFixes.map(fix => fix.fixName), [expected]);
+            }
+            else {
+                const actuals = codeFixes.map((fix): FourSlashInterface.VerifyCodeFixAvailableOptions => ({ description: fix.description, commands: fix.commands }));
+                this.assertObjectsEqual(actuals, negative ? ts.emptyArray : expected);
+            }
         }
 
         public verifyApplicableRefactorAvailableAtMarker(negative: boolean, markerName: string) {
@@ -2930,7 +2967,9 @@ Actual: ${stringify(fullActual)}`);
         }
 
         public noMoveToNewFile() {
-            for (const range of this.getRanges()) {
+            const ranges = this.getRanges();
+            assert(ranges.length);
+            for (const range of ranges) {
                 for (const refactor of this.getApplicableRefactors(range, { allowTextChangesInNewFiles: true })) {
                     if (refactor.name === "Move to a new file") {
                         ts.Debug.fail("Did not expect to get 'move to a new file' refactor");
@@ -3647,7 +3686,7 @@ ${code}
             expected = makeWhitespaceVisible(expected);
             actual = makeWhitespaceVisible(actual);
         }
-        return `Expected:\n${expected}\nActual:\n${actual}`;
+        return displayExpectedAndActualString(expected, actual);
     }
 
     function differOnlyByWhitespace(a: string, b: string) {
@@ -3666,6 +3705,14 @@ ${code}
                 }
             }
         }
+    }
+
+    function displayExpectedAndActualString(expected: string, actual: string, quoted = false) {
+        const expectMsg = "\x1b[1mExpected\x1b[0m\x1b[31m";
+        const actualMsg = "\x1b[1mActual\x1b[0m\x1b[31m";
+        const expectedString = quoted ? "\"" + expected + "\"" : expected;
+        const actualString = quoted ? "\"" + actual + "\"" : actual;
+        return `\n${expectMsg}:\n${expectedString}\n\n${actualMsg}:\n${actualString}`;
     }
 }
 
@@ -3716,7 +3763,7 @@ namespace FourSlashInterface {
     }
 
     export class Plugins {
-        constructor (private state: FourSlash.TestState) {
+        constructor(private state: FourSlash.TestState) {
         }
 
         public configurePlugin(pluginName: string, configuration: any): void {
@@ -4001,6 +4048,10 @@ namespace FourSlashInterface {
 
         public noErrors() {
             this.state.verifyNoErrors();
+        }
+
+        public errorExistsAtRange(range: FourSlash.Range, code: number, message?: string) {
+            this.state.verifyErrorExistsAtRange(range, code, message);
         }
 
         public numberOfErrorsInCurrentFile(expected: number) {
@@ -4535,7 +4586,7 @@ namespace FourSlashInterface {
         export const keywords: ReadonlyArray<ExpectedCompletionEntryObject> = keywordsWithUndefined.filter(k => k.name !== "undefined");
 
         export const typeKeywords: ReadonlyArray<ExpectedCompletionEntryObject> =
-            ["false", "null", "true", "void", "any", "boolean", "keyof", "never", "number", "object", "string", "symbol", "undefined", "unique", "unknown", "bigint"].map(keywordEntry);
+            ["false", "null", "true", "void", "any", "boolean", "keyof", "never", "readonly", "number", "object", "string", "symbol", "undefined", "unique", "unknown", "bigint"].map(keywordEntry);
 
         const globalTypeDecls: ReadonlyArray<ExpectedCompletionEntryObject> = [
             interfaceEntry("Symbol"),
@@ -4650,6 +4701,9 @@ namespace FourSlashInterface {
                 ...typeKeywords,
             ];
         }
+
+        export const typeAssertionKeywords: ReadonlyArray<ExpectedCompletionEntry> =
+            globalTypesPlus([keywordEntry("const")]);
 
         function getInJsKeywords(keywords: ReadonlyArray<ExpectedCompletionEntryObject>): ReadonlyArray<ExpectedCompletionEntryObject> {
             return keywords.filter(keyword => {
@@ -4781,40 +4835,23 @@ namespace FourSlashInterface {
             "interface",
             "let",
             "package",
-            "private",
-            "protected",
-            "public",
-            "static",
             "yield",
-            "abstract",
-            "as",
             "any",
             "async",
             "await",
             "boolean",
-            "constructor",
             "declare",
-            "get",
-            "infer",
-            "is",
             "keyof",
             "module",
-            "namespace",
             "never",
             "readonly",
-            "require",
             "number",
             "object",
-            "set",
             "string",
             "symbol",
-            "type",
             "unique",
             "unknown",
-            "from",
-            "global",
             "bigint",
-            "of",
         ].map(keywordEntry);
 
         export const statementKeywords: ReadonlyArray<ExpectedCompletionEntryObject> = statementKeywordsWithTypes.filter(k => {
@@ -4995,40 +5032,23 @@ namespace FourSlashInterface {
             "interface",
             "let",
             "package",
-            "private",
-            "protected",
-            "public",
-            "static",
             "yield",
-            "abstract",
-            "as",
             "any",
             "async",
             "await",
             "boolean",
-            "constructor",
             "declare",
-            "get",
-            "infer",
-            "is",
             "keyof",
             "module",
-            "namespace",
             "never",
             "readonly",
-            "require",
             "number",
             "object",
-            "set",
             "string",
             "symbol",
-            "type",
             "unique",
             "unknown",
-            "from",
-            "global",
             "bigint",
-            "of",
         ].map(keywordEntry);
 
         export const globalInJsKeywords = getInJsKeywords(globalKeywords);
@@ -5080,11 +5100,6 @@ namespace FourSlashInterface {
         ].map(keywordEntry);
 
         export const insideMethodInJsKeywords = getInJsKeywords(insideMethodKeywords);
-
-        export const globalKeywordsPlusUndefined: ReadonlyArray<ExpectedCompletionEntryObject> = (() => {
-            const i = ts.findIndex(globalKeywords, x => x.name === "unique");
-            return [...globalKeywords.slice(0, i), keywordEntry("undefined"), ...globalKeywords.slice(i)];
-        })();
 
         export const globals: ReadonlyArray<ExpectedCompletionEntryObject> = [
             globalThisEntry,

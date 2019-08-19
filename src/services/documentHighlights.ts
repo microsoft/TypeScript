@@ -193,7 +193,7 @@ namespace ts.DocumentHighlights {
 
     function getNodesToSearchForModifier(declaration: Node, modifierFlag: ModifierFlags): ReadonlyArray<Node> | undefined {
         // Types of node whose children might have modifiers.
-        const container = declaration.parent as ModuleBlock | SourceFile | Block | CaseClause | DefaultClause | ConstructorDeclaration | MethodDeclaration | FunctionDeclaration | ClassLikeDeclaration;
+        const container = declaration.parent as ModuleBlock | SourceFile | Block | CaseClause | DefaultClause | ConstructorDeclaration | MethodDeclaration | FunctionDeclaration | ObjectTypeDeclaration;
         switch (container.kind) {
             case SyntaxKind.ModuleBlock:
             case SyntaxKind.SourceFile:
@@ -213,11 +213,13 @@ namespace ts.DocumentHighlights {
                 return [...container.parameters, ...(isClassLike(container.parent) ? container.parent.members : [])];
             case SyntaxKind.ClassDeclaration:
             case SyntaxKind.ClassExpression:
+            case SyntaxKind.InterfaceDeclaration:
+            case SyntaxKind.TypeLiteral:
                 const nodes = container.members;
 
                 // If we're an accessibility modifier, we're in an instance member and should search
                 // the constructor's parameter list for instance members as well.
-                if (modifierFlag & ModifierFlags.AccessibilityModifier) {
+                if (modifierFlag & (ModifierFlags.AccessibilityModifier | ModifierFlags.Readonly)) {
                     const constructor = find(container.members, isConstructorDeclaration);
                     if (constructor) {
                         return [...nodes, ...constructor.parameters];

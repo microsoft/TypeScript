@@ -1329,27 +1329,97 @@ namespace ts {
             : node;
     }
 
-    export function createTemplateHead(text: string) {
-        const node = <TemplateHead>createSynthesizedNode(SyntaxKind.TemplateHead);
+    let rawTextScanner: Scanner | undefined;
+    const invalidValueSentinel: object = {};
+
+    function getCookedText(kind: TemplateLiteralToken["kind"], rawText: string) {
+        if (!rawTextScanner) {
+            rawTextScanner = createScanner(ScriptTarget.Latest, /*skipTrivia*/ false, LanguageVariant.Standard);
+        }
+        switch (kind) {
+            case SyntaxKind.NoSubstitutionTemplateLiteral:
+                rawTextScanner.setText("`" + rawText + "`");
+                break;
+            case SyntaxKind.TemplateHead:
+                // tslint:disable-next-line no-invalid-template-strings
+                rawTextScanner.setText("`" + rawText + "${");
+                break;
+            case SyntaxKind.TemplateMiddle:
+                // tslint:disable-next-line no-invalid-template-strings
+                rawTextScanner.setText("}" + rawText + "${");
+                break;
+            case SyntaxKind.TemplateTail:
+                rawTextScanner.setText("}" + rawText + "`");
+                break;
+        }
+
+        let token = rawTextScanner.scan();
+        if (token === SyntaxKind.CloseBracketToken) {
+            token = rawTextScanner.reScanTemplateToken();
+        }
+
+        if (rawTextScanner.isUnterminated()) {
+            rawTextScanner.setText(undefined);
+            return invalidValueSentinel;
+        }
+
+        let tokenValue: string | undefined;
+        switch (token) {
+            case SyntaxKind.NoSubstitutionTemplateLiteral:
+            case SyntaxKind.TemplateHead:
+            case SyntaxKind.TemplateMiddle:
+            case SyntaxKind.TemplateTail:
+                tokenValue = rawTextScanner.getTokenValue();
+                break;
+        }
+
+        if (rawTextScanner.scan() !== SyntaxKind.EndOfFileToken) {
+            rawTextScanner.setText(undefined);
+            return invalidValueSentinel;
+        }
+
+        rawTextScanner.setText(undefined);
+        return tokenValue;
+    }
+
+    function createTemplateLiteralLikeNode(kind: TemplateLiteralToken["kind"], text: string, rawText: string | undefined) {
+        const node = <TemplateLiteralLikeNode>createSynthesizedNode(kind);
+        node.text = text;
+        if (rawText === undefined || text === rawText) {
+            node.rawText = rawText;
+        }
+        else {
+            const cooked = getCookedText(kind, rawText);
+            if (typeof cooked === "object") {
+                return Debug.fail("Invalid raw text");
+            }
+
+            Debug.assert(text === cooked, "Expected argument 'text' to be the normalized (i.e. 'cooked') version of argument 'rawText'.");
+            node.rawText = rawText;
+        }
+        return node;
+    }
+
+    export function createTemplateHead(text: string, rawText?: string) {
+        const node = <TemplateHead>createTemplateLiteralLikeNode(SyntaxKind.TemplateHead, text, rawText);
         node.text = text;
         return node;
     }
 
-    export function createTemplateMiddle(text: string) {
-        const node = <TemplateMiddle>createSynthesizedNode(SyntaxKind.TemplateMiddle);
+    export function createTemplateMiddle(text: string, rawText?: string) {
+        const node = <TemplateMiddle>createTemplateLiteralLikeNode(SyntaxKind.TemplateMiddle, text, rawText);
         node.text = text;
         return node;
     }
 
-    export function createTemplateTail(text: string) {
-        const node = <TemplateTail>createSynthesizedNode(SyntaxKind.TemplateTail);
+    export function createTemplateTail(text: string, rawText?: string) {
+        const node = <TemplateTail>createTemplateLiteralLikeNode(SyntaxKind.TemplateTail, text, rawText);
         node.text = text;
         return node;
     }
 
-    export function createNoSubstitutionTemplateLiteral(text: string) {
-        const node = <NoSubstitutionTemplateLiteral>createSynthesizedNode(SyntaxKind.NoSubstitutionTemplateLiteral);
-        node.text = text;
+    export function createNoSubstitutionTemplateLiteral(text: string, rawText?: string) {
+        const node = <NoSubstitutionTemplateLiteral>createTemplateLiteralLikeNode(SyntaxKind.NoSubstitutionTemplateLiteral, text, rawText);
         return node;
     }
 
@@ -1544,8 +1614,8 @@ namespace ts {
     export function createIf(expression: Expression, thenStatement: Statement, elseStatement?: Statement) {
         const node = <IfStatement>createSynthesizedNode(SyntaxKind.IfStatement);
         node.expression = expression;
-        node.thenStatement = thenStatement;
-        node.elseStatement = elseStatement;
+        node.thenStatement = asEmbeddedStatement(thenStatement);
+        node.elseStatement = asEmbeddedStatement(elseStatement);
         return node;
     }
 
@@ -1559,7 +1629,7 @@ namespace ts {
 
     export function createDo(statement: Statement, expression: Expression) {
         const node = <DoStatement>createSynthesizedNode(SyntaxKind.DoStatement);
-        node.statement = statement;
+        node.statement = asEmbeddedStatement(statement);
         node.expression = expression;
         return node;
     }
@@ -1574,7 +1644,7 @@ namespace ts {
     export function createWhile(expression: Expression, statement: Statement) {
         const node = <WhileStatement>createSynthesizedNode(SyntaxKind.WhileStatement);
         node.expression = expression;
-        node.statement = statement;
+        node.statement = asEmbeddedStatement(statement);
         return node;
     }
 
@@ -1590,7 +1660,7 @@ namespace ts {
         node.initializer = initializer;
         node.condition = condition;
         node.incrementor = incrementor;
-        node.statement = statement;
+        node.statement = asEmbeddedStatement(statement);
         return node;
     }
 
@@ -1607,7 +1677,7 @@ namespace ts {
         const node = <ForInStatement>createSynthesizedNode(SyntaxKind.ForInStatement);
         node.initializer = initializer;
         node.expression = expression;
-        node.statement = statement;
+        node.statement = asEmbeddedStatement(statement);
         return node;
     }
 
@@ -1624,7 +1694,7 @@ namespace ts {
         node.awaitModifier = awaitModifier;
         node.initializer = initializer;
         node.expression = expression;
-        node.statement = statement;
+        node.statement = asEmbeddedStatement(statement);
         return node;
     }
 
@@ -1676,7 +1746,7 @@ namespace ts {
     export function createWith(expression: Expression, statement: Statement) {
         const node = <WithStatement>createSynthesizedNode(SyntaxKind.WithStatement);
         node.expression = expression;
-        node.statement = statement;
+        node.statement = asEmbeddedStatement(statement);
         return node;
     }
 
@@ -1704,7 +1774,7 @@ namespace ts {
     export function createLabel(label: string | Identifier, statement: Statement) {
         const node = <LabeledStatement>createSynthesizedNode(SyntaxKind.LabeledStatement);
         node.label = asName(label);
-        node.statement = statement;
+        node.statement = asEmbeddedStatement(statement);
         return node;
     }
 
@@ -3084,6 +3154,12 @@ namespace ts {
         return typeof value === "number" ? createToken(value) : value;
     }
 
+    function asEmbeddedStatement<T extends Node>(statement: T): T | EmptyStatement;
+    function asEmbeddedStatement<T extends Node>(statement: T | undefined): T | EmptyStatement | undefined;
+    function asEmbeddedStatement<T extends Node>(statement: T | undefined): T | EmptyStatement | undefined {
+        return statement && isNotEmittedStatement(statement) ? setTextRange(setOriginalNode(createEmptyStatement(), statement), statement) : statement;
+    }
+
     /**
      * Clears any EmitNode entries from parse-tree nodes.
      * @param sourceFile A source file.
@@ -3626,23 +3702,28 @@ namespace ts {
 
     // Helpers
 
-    export function getHelperName(name: string) {
+    /**
+     * Gets an identifier for the name of an *unscoped* emit helper.
+     */
+    export function getUnscopedHelperName(name: string) {
         return setEmitFlags(createIdentifier(name), EmitFlags.HelperName | EmitFlags.AdviseOnEmitNode);
     }
 
     export const valuesHelper: UnscopedEmitHelper = {
         name: "typescript:values",
+        importName: "__values",
         scoped: false,
         text: `
-            var __values = (this && this.__values) || function (o) {
-                var m = typeof Symbol === "function" && o[Symbol.iterator], i = 0;
+            var __values = (this && this.__values) || function(o) {
+                var s = typeof Symbol === "function" && Symbol.iterator, m = s && o[s], i = 0;
                 if (m) return m.call(o);
-                return {
+                if (o && typeof o.length === "number") return {
                     next: function () {
                         if (o && i >= o.length) o = void 0;
                         return { value: o && o[i++], done: !o };
                     }
                 };
+                throw new TypeError(s ? "Object is not iterable." : "Symbol.iterator is not defined.");
             };`
     };
 
@@ -3650,7 +3731,7 @@ namespace ts {
         context.requestEmitHelper(valuesHelper);
         return setTextRange(
             createCall(
-                getHelperName("__values"),
+                getUnscopedHelperName("__values"),
                 /*typeArguments*/ undefined,
                 [expression]
             ),
@@ -3660,6 +3741,7 @@ namespace ts {
 
     export const readHelper: UnscopedEmitHelper = {
         name: "typescript:read",
+        importName: "__read",
         scoped: false,
         text: `
             var __read = (this && this.__read) || function (o, n) {
@@ -3684,7 +3766,7 @@ namespace ts {
         context.requestEmitHelper(readHelper);
         return setTextRange(
             createCall(
-                getHelperName("__read"),
+                getUnscopedHelperName("__read"),
                 /*typeArguments*/ undefined,
                 count !== undefined
                     ? [iteratorRecord, createLiteral(count)]
@@ -3696,6 +3778,7 @@ namespace ts {
 
     export const spreadHelper: UnscopedEmitHelper = {
         name: "typescript:spread",
+        importName: "__spread",
         scoped: false,
         text: `
             var __spread = (this && this.__spread) || function () {
@@ -3709,7 +3792,7 @@ namespace ts {
         context.requestEmitHelper(spreadHelper);
         return setTextRange(
             createCall(
-                getHelperName("__spread"),
+                getUnscopedHelperName("__spread"),
                 /*typeArguments*/ undefined,
                 argumentList
             ),
@@ -3719,6 +3802,7 @@ namespace ts {
 
     export const spreadArraysHelper: UnscopedEmitHelper = {
         name: "typescript:spreadArrays",
+        importName: "__spreadArrays",
         scoped: false,
         text: `
             var __spreadArrays = (this && this.__spreadArrays) || function () {
@@ -3734,7 +3818,7 @@ namespace ts {
         context.requestEmitHelper(spreadArraysHelper);
         return setTextRange(
             createCall(
-                getHelperName("__spreadArrays"),
+                getUnscopedHelperName("__spreadArrays"),
                 /*typeArguments*/ undefined,
                 argumentList
             ),
@@ -4699,7 +4783,7 @@ namespace ts {
         }
     }
 
-    function getLeftmostExpression(node: Expression, stopAtCallExpressions: boolean) {
+    export function getLeftmostExpression(node: Expression, stopAtCallExpressions: boolean) {
         while (true) {
             switch (node.kind) {
                 case SyntaxKind.PostfixUnaryExpression:
@@ -4858,6 +4942,65 @@ namespace ts {
         const parseNode = getOriginalNode(node, isSourceFile);
         const emitNode = parseNode && parseNode.emitNode;
         return emitNode && emitNode.externalHelpersModuleName;
+    }
+
+    export function hasRecordedExternalHelpers(sourceFile: SourceFile) {
+        const parseNode = getOriginalNode(sourceFile, isSourceFile);
+        const emitNode = parseNode && parseNode.emitNode;
+        return !!emitNode && (!!emitNode.externalHelpersModuleName || !!emitNode.externalHelpers);
+    }
+
+    export function createExternalHelpersImportDeclarationIfNeeded(sourceFile: SourceFile, compilerOptions: CompilerOptions, hasExportStarsToExportValues?: boolean, hasImportStar?: boolean, hasImportDefault?: boolean) {
+        if (compilerOptions.importHelpers && isEffectiveExternalModule(sourceFile, compilerOptions)) {
+            let namedBindings: NamedImportBindings | undefined;
+            const moduleKind = getEmitModuleKind(compilerOptions);
+            if (moduleKind >= ModuleKind.ES2015 && moduleKind <= ModuleKind.ESNext) {
+                // use named imports
+                const helpers = getEmitHelpers(sourceFile);
+                if (helpers) {
+                    const helperNames: string[] = [];
+                    for (const helper of helpers) {
+                        if (!helper.scoped) {
+                            const importName = (helper as UnscopedEmitHelper).importName;
+                            if (importName) {
+                                pushIfUnique(helperNames, importName);
+                            }
+                        }
+                    }
+                    if (some(helperNames)) {
+                        helperNames.sort(compareStringsCaseSensitive);
+                        // Alias the imports if the names are used somewhere in the file.
+                        // NOTE: We don't need to care about global import collisions as this is a module.
+                        namedBindings = createNamedImports(
+                            map(helperNames, name => isFileLevelUniqueName(sourceFile, name)
+                                ? createImportSpecifier(/*propertyName*/ undefined, createIdentifier(name))
+                                : createImportSpecifier(createIdentifier(name), getUnscopedHelperName(name))
+                            )
+                        );
+                        const parseNode = getOriginalNode(sourceFile, isSourceFile);
+                        const emitNode = getOrCreateEmitNode(parseNode);
+                        emitNode.externalHelpers = true;
+                    }
+                }
+            }
+            else {
+                // use a namespace import
+                const externalHelpersModuleName = getOrCreateExternalHelpersModuleNameIfNeeded(sourceFile, compilerOptions, hasExportStarsToExportValues, hasImportStar || hasImportDefault);
+                if (externalHelpersModuleName) {
+                    namedBindings = createNamespaceImport(externalHelpersModuleName);
+                }
+            }
+            if (namedBindings) {
+                const externalHelpersImportDeclaration = createImportDeclaration(
+                    /*decorators*/ undefined,
+                    /*modifiers*/ undefined,
+                    createImportClause(/*name*/ undefined, namedBindings),
+                    createLiteral(externalHelpersModuleNameText)
+                );
+                addEmitFlags(externalHelpersImportDeclaration, EmitFlags.NeverApplyImportHelper);
+                return externalHelpersImportDeclaration;
+            }
+        }
     }
 
     export function getOrCreateExternalHelpersModuleNameIfNeeded(node: SourceFile, compilerOptions: CompilerOptions, hasExportStarsToExportValues?: boolean, hasImportStarOrImportDefault?: boolean) {

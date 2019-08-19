@@ -41,7 +41,7 @@ verify.applyCodeActionFromCompletion("1", {
     name: "fooBar",
     source: "/src/foo-bar",
     description: `Import default 'fooBar' from module "./foo-bar"`,
-    newFileContent: `import fooBar from "./foo-bar";
+    newFileContent: `import fooBar from "./foo-bar"
 
 def
 fooB`,

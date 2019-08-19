@@ -2,7 +2,7 @@
     "name": "typescript",
     "author": "Microsoft Corp.",
     "homepage": "https://www.typescriptlang.org/",
-    "version": "3.6.0",
+    "version": "3.7.0",
     "license": "Apache-2.0",
     "description": "TypeScript is a language for application scale JavaScript development",
     "keywords": [
@@ -42,12 +42,13 @@
         "@types/gulp-sourcemaps": "0.0.32",
         "@types/jake": "latest",
         "@types/merge2": "latest",
+        "@types/microsoft__typescript-etw": "latest",
         "@types/minimatch": "latest",
         "@types/minimist": "latest",
         "@types/mkdirp": "latest",
         "@types/mocha": "latest",
         "@types/ms": "latest",
-        "@types/node": "8.5.5",
+        "@types/node": "latest",
         "@types/node-fetch": "^2.3.4",
         "@types/q": "latest",
         "@types/source-map-support": "latest",
@@ -82,6 +83,7 @@
         "prex": "^0.4.3",
         "q": "latest",
         "remove-internal": "^2.9.2",
+        "simple-git": "^1.113.0",
         "source-map-support": "latest",
         "through2": "latest",
         "travis-fold": "latest",
@@ -102,12 +104,14 @@
         "gulp": "gulp",
         "jake": "gulp",
         "lint": "gulp lint",
-        "setup-hooks": "node scripts/link-hooks.js"
+        "setup-hooks": "node scripts/link-hooks.js",
+        "update-costly-tests": "node scripts/costly-tests.js"
     },
     "browser": {
         "fs": false,
         "os": false,
-        "path": false
+        "path": false,
+        "@microsoft/typescript-etw": false
     },
     "dependencies": {}
 }

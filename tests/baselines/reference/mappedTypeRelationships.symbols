@@ -805,3 +805,34 @@ function f82<T, K1 extends keyof T, K2 extends keyof T[K1]>(t: T, k1: K1, k2: K2
 >k2 : Symbol(k2, Decl(mappedTypeRelationships.ts, 178, 73))
 }
 
+// #31070
+type Numeric<T> = { [K in keyof T]?: number };
+>Numeric : Symbol(Numeric, Decl(mappedTypeRelationships.ts, 180, 1))
+>T : Symbol(T, Decl(mappedTypeRelationships.ts, 183, 13))
+>K : Symbol(K, Decl(mappedTypeRelationships.ts, 183, 21))
+>T : Symbol(T, Decl(mappedTypeRelationships.ts, 183, 13))
+
+function f90<T extends { x: number }>() {
+>f90 : Symbol(f90, Decl(mappedTypeRelationships.ts, 183, 46))
+>T : Symbol(T, Decl(mappedTypeRelationships.ts, 184, 13))
+>x : Symbol(x, Decl(mappedTypeRelationships.ts, 184, 24))
+
+    const n: Numeric<T> = { x: 1 };
+>n : Symbol(n, Decl(mappedTypeRelationships.ts, 185, 9))
+>Numeric : Symbol(Numeric, Decl(mappedTypeRelationships.ts, 180, 1))
+>T : Symbol(T, Decl(mappedTypeRelationships.ts, 184, 13))
+>x : Symbol(x, Decl(mappedTypeRelationships.ts, 185, 27))
+}
+
+function f<T extends { x: {} }>(): Partial<T> {
+>f : Symbol(f, Decl(mappedTypeRelationships.ts, 186, 1))
+>T : Symbol(T, Decl(mappedTypeRelationships.ts, 188, 11))
+>x : Symbol(x, Decl(mappedTypeRelationships.ts, 188, 22))
+>Partial : Symbol(Partial, Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(mappedTypeRelationships.ts, 188, 11))
+
+    return undefined! as T;
+>undefined : Symbol(undefined)
+>T : Symbol(T, Decl(mappedTypeRelationships.ts, 188, 11))
+}
+
