@@ -3525,13 +3525,17 @@ namespace ts {
         }
 
         function getTypeNamesForErrorDisplay(left: Type, right: Type): [string, string] {
-            let leftStr = typeToString(left);
-            let rightStr = typeToString(right);
+            let leftStr = symbolValueDeclarationIsContextSensitive(left.symbol) ? typeToString(left, left.symbol.valueDeclaration) : typeToString(left);
+            let rightStr = symbolValueDeclarationIsContextSensitive(right.symbol) ? typeToString(right, right.symbol.valueDeclaration) : typeToString(right);
             if (leftStr === rightStr) {
                 leftStr = typeToString(left, /*enclosingDeclaration*/ undefined, TypeFormatFlags.UseFullyQualifiedType);
                 rightStr = typeToString(right, /*enclosingDeclaration*/ undefined, TypeFormatFlags.UseFullyQualifiedType);
             }
             return [leftStr, rightStr];
+        }
+
+        function symbolValueDeclarationIsContextSensitive(symbol: Symbol): boolean {
+            return symbol && symbol.valueDeclaration && isExpression(symbol.valueDeclaration) && !isContextSensitive(symbol.valueDeclaration);
         }
 
         function toNodeBuilderFlags(flags = TypeFormatFlags.None): NodeBuilderFlags {
@@ -12718,8 +12722,8 @@ namespace ts {
             }
 
             function tryElaborateErrorsForPrimitivesAndObjects(source: Type, target: Type) {
-                const sourceType = typeToString(source);
-                const targetType = typeToString(target);
+                const sourceType = symbolValueDeclarationIsContextSensitive(source.symbol) ? typeToString(source, source.symbol.valueDeclaration) : typeToString(source);
+                const targetType = symbolValueDeclarationIsContextSensitive(target.symbol) ? typeToString(target, target.symbol.valueDeclaration) : typeToString(target);
 
                 if ((globalStringType === source && stringType === target) ||
                     (globalNumberType === source && numberType === target) ||
