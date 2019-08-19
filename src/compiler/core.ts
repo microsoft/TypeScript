@@ -993,9 +993,9 @@ namespace ts {
      */
     export function compact<T>(array: (T | undefined | null | false | 0 | "")[]): T[];
     export function compact<T>(array: readonly (T | undefined | null | false | 0 | "")[]): readonly T[];
-    // TSLint thinks these can be combined with the above - they cannot; they'd produce higher-priority inferences and prevent the falsey types from being stripped
-    export function compact<T>(array: T[]): T[];
-    export function compact<T>(array: readonly T[]): readonly T[];
+    // ESLint thinks these can be combined with the above - they cannot; they'd produce higher-priority inferences and prevent the falsey types from being stripped
+    export function compact<T>(array: T[]): T[]; // eslint-disable-line @typescript-eslint/unified-signatures
+    export function compact<T>(array: readonly T[]): readonly T[]; // eslint-disable-line @typescript-eslint/unified-signatures
     export function compact<T>(array: T[]): T[] {
         let result: T[] | undefined;
         if (array) {

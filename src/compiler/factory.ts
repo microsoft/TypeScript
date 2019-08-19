@@ -65,7 +65,7 @@ namespace ts {
 
     // Literals
 
-    /* @internal */ export function createLiteral(value: string | StringLiteral | NoSubstitutionTemplateLiteral | NumericLiteral | Identifier, isSingleQuote: boolean): StringLiteral;
+    /* @internal */ export function createLiteral(value: string | StringLiteral | NoSubstitutionTemplateLiteral | NumericLiteral | Identifier, isSingleQuote: boolean): StringLiteral; // eslint-disable-line @typescript-eslint/unified-signatures
     /** If a node is passed, creates a string literal whose source text is read from a source node during emit. */
     export function createLiteral(value: string | StringLiteral | NoSubstitutionTemplateLiteral | NumericLiteral | Identifier): StringLiteral;
     export function createLiteral(value: number | PseudoBigInt): NumericLiteral;
@@ -126,7 +126,7 @@ namespace ts {
 
     export function createIdentifier(text: string): Identifier;
     /* @internal */
-    export function createIdentifier(text: string, typeArguments: readonly (TypeNode | TypeParameterDeclaration)[] | undefined): Identifier;
+    export function createIdentifier(text: string, typeArguments: readonly (TypeNode | TypeParameterDeclaration)[] | undefined): Identifier; // eslint-disable-line @typescript-eslint/unified-signatures
     export function createIdentifier(text: string, typeArguments?: readonly (TypeNode | TypeParameterDeclaration)[]): Identifier {
         const node = <Identifier>createSynthesizedNode(SyntaxKind.Identifier);
         node.escapedText = escapeLeadingUnderscores(text);
@@ -141,7 +141,7 @@ namespace ts {
 
     export function updateIdentifier(node: Identifier): Identifier;
     /* @internal */
-    export function updateIdentifier(node: Identifier, typeArguments: NodeArray<TypeNode | TypeParameterDeclaration> | undefined): Identifier;
+    export function updateIdentifier(node: Identifier, typeArguments: NodeArray<TypeNode | TypeParameterDeclaration> | undefined): Identifier; // eslint-disable-line @typescript-eslint/unified-signatures
     export function updateIdentifier(node: Identifier, typeArguments?: NodeArray<TypeNode | TypeParameterDeclaration> | undefined): Identifier {
         return node.typeArguments !== typeArguments
             ? updateNode(createIdentifier(idText(node), typeArguments), node)
@@ -205,7 +205,7 @@ namespace ts {
 
     /** Create a unique name generated for a node. */
     export function getGeneratedNameForNode(node: Node | undefined): Identifier;
-    /* @internal */ export function getGeneratedNameForNode(node: Node | undefined, flags: GeneratedIdentifierFlags): Identifier;
+    /* @internal */ export function getGeneratedNameForNode(node: Node | undefined, flags: GeneratedIdentifierFlags): Identifier; // eslint-disable-line @typescript-eslint/unified-signatures
     export function getGeneratedNameForNode(node: Node | undefined, flags?: GeneratedIdentifierFlags): Identifier {
         const name = createIdentifier(node && isIdentifier(node) ? idText(node) : "");
         name.autoGenerateFlags = GeneratedIdentifierFlags.Node | flags!;
@@ -3151,7 +3151,7 @@ namespace ts {
     }
 
     function asEmbeddedStatement<T extends Node>(statement: T): T | EmptyStatement;
-    function asEmbeddedStatement<T extends Node>(statement: T | undefined): T | EmptyStatement | undefined; // eslint-disable-line @typescript-eslint/unified-signatures
+    function asEmbeddedStatement<T extends Node>(statement: T | undefined): T | EmptyStatement | undefined;
     function asEmbeddedStatement<T extends Node>(statement: T | undefined): T | EmptyStatement | undefined {
         return statement && isNotEmittedStatement(statement) ? setTextRange(setOriginalNode(createEmptyStatement(), statement), statement) : statement;
     }

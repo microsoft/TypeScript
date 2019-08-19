@@ -352,7 +352,7 @@ namespace ts {
 
     export function getPositionOfLineAndCharacter(sourceFile: SourceFileLike, line: number, character: number): number;
     /* @internal */
-    export function getPositionOfLineAndCharacter(sourceFile: SourceFileLike, line: number, character: number, allowEdits?: true): number;
+    export function getPositionOfLineAndCharacter(sourceFile: SourceFileLike, line: number, character: number, allowEdits?: true): number; // eslint-disable-line @typescript-eslint/unified-signatures
     export function getPositionOfLineAndCharacter(sourceFile: SourceFileLike, line: number, character: number, allowEdits?: true): number {
         return sourceFile.getPositionOfLineAndCharacter ?
             sourceFile.getPositionOfLineAndCharacter(line, character, allowEdits) :
