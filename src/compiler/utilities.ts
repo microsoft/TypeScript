@@ -267,6 +267,12 @@ namespace ts {
         return oldResolution.resolvedFileName === newResolution.resolvedFileName && oldResolution.primary === newResolution.primary;
     }
 
+    export function moduleNameIsEqualTo(a: StringLiteralLike | Identifier, b: StringLiteralLike | Identifier): boolean {
+        return a.kind === SyntaxKind.Identifier
+            ? b.kind === SyntaxKind.Identifier && a.escapedText === b.escapedText
+            : b.kind === SyntaxKind.StringLiteral && a.text === b.text;
+    }
+
     export function hasChangesInResolutions<T>(
         names: ReadonlyArray<string>,
         newResolutions: ReadonlyArray<T>,
@@ -7558,7 +7564,7 @@ namespace ts {
 
     /**
      * Returns the path except for its basename. Semantics align with NodeJS's `path.dirname`
-     * except that we support URL's as well.
+     * except that we support URLs as well.
      *
      * ```ts
      * getDirectoryPath("/path/to/file.ext") === "/path/to"

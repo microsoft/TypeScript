@@ -1016,6 +1016,11 @@ namespace ts.server {
                     if (isPathIgnored(fileOrDirectoryPath)) return;
                     const configFilename = project.getConfigFilePath();
 
+                    if (getBaseFileName(fileOrDirectoryPath) === "package.json" && this.host.fileExists(fileOrDirectoryPath)) {
+                        this.logger.info(`Project: ${configFilename} Detected new package.json: ${fileOrDirectory}`);
+                        project.onDiscoveredNewPackageJson(fileOrDirectoryPath);
+                    }
+
                     // If the the added or created file or directory is not supported file name, ignore the file
                     // But when watched directory is added/removed, we need to reload the file list
                     if (fileOrDirectoryPath !== directory && hasExtension(fileOrDirectoryPath) && !isSupportedSourceFileName(fileOrDirectory, project.getCompilationSettings(), this.hostConfiguration.extraFileExtensions)) {

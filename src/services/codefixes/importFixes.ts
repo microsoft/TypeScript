@@ -284,7 +284,7 @@ namespace ts.codefix {
         preferences: UserPreferences,
     ): ReadonlyArray<FixAddNewImport | FixUseImportType> {
         const isJs = isSourceFileJS(sourceFile);
-        const { allowsImportingSpecifier } = createLazyPackageJsonDependencyReader(sourceFile, host, preferences, program.redirectTargetsMap);
+        const { allowsImportingSpecifier } = createLazyPackageJsonDependencyReader(sourceFile, host, program.redirectTargetsMap);
         const choicesForEachExportingModule = flatMap(moduleSymbols, ({ moduleSymbol, importKind, exportedSymbolIsTypeOnly }) =>
             moduleSpecifiers.getModuleSpecifiers(moduleSymbol, program.getCompilerOptions(), sourceFile, host, program.getSourceFiles(), preferences, program.redirectTargetsMap)
             .map((moduleSpecifier): FixAddNewImport | FixUseImportType =>
@@ -396,7 +396,7 @@ namespace ts.codefix {
         // "default" is a keyword and not a legal identifier for the import, so we don't expect it here
         Debug.assert(symbolName !== InternalSymbolName.Default);
 
-        const exportInfos = getExportInfos(symbolName, getMeaningFromLocation(symbolToken), cancellationToken, sourceFile, checker, program, preferences, host);
+        const exportInfos = getExportInfos(symbolName, getMeaningFromLocation(symbolToken), cancellationToken, sourceFile, checker, program, host);
         const fixes = arrayFrom(flatMapIterator(exportInfos.entries(), ([_, exportInfos]) =>
             getFixForImport(exportInfos, symbolName, symbolToken.getStart(sourceFile), program, sourceFile, host, preferences)));
         return { fixes, symbolName };
@@ -410,7 +410,6 @@ namespace ts.codefix {
         sourceFile: SourceFile,
         checker: TypeChecker,
         program: Program,
-        preferences: UserPreferences,
         host: LanguageServiceHost
     ): ReadonlyMap<ReadonlyArray<SymbolExportInfo>> {
         // For each original symbol, keep all re-exports of that symbol together so we can call `getCodeActionsForImport` on the whole group at once.
@@ -419,7 +418,7 @@ namespace ts.codefix {
         function addSymbol(moduleSymbol: Symbol, exportedSymbol: Symbol, importKind: ImportKind): void {
             originalSymbolToExportInfos.add(getUniqueSymbolId(exportedSymbol, checker).toString(), { moduleSymbol, importKind, exportedSymbolIsTypeOnly: isTypeOnlySymbol(exportedSymbol, checker) });
         }
-        forEachExternalModuleToImportFrom(checker, host, preferences, program.redirectTargetsMap, sourceFile, program.getSourceFiles(), moduleSymbol => {
+        forEachExternalModuleToImportFrom(checker, host, program.redirectTargetsMap, sourceFile, program.getSourceFiles(), /*filterByPackageJson*/ true, moduleSymbol => {
             cancellationToken.throwIfCancellationRequested();
 
             const defaultInfo = getDefaultLikeExportInfo(sourceFile, moduleSymbol, checker, program.getCompilerOptions());
@@ -620,17 +619,53 @@ namespace ts.codefix {
         return some(declarations, decl => !!(getMeaningFromDeclaration(decl) & meaning));
     }
 
-    export function forEachExternalModuleToImportFrom(checker: TypeChecker, host: LanguageServiceHost, preferences: UserPreferences, redirectTargetsMap: RedirectTargetsMap, from: SourceFile, allSourceFiles: ReadonlyArray<SourceFile>, cb: (module: Symbol) => void) {
-        const { allowsImportingAmbientModule, allowsImportingSourceFile } = createLazyPackageJsonDependencyReader(from, host, preferences, redirectTargetsMap);
+    export function forEachExternalModuleToImportFrom(
+        checker: TypeChecker,
+        host: LanguageServiceHost,
+        redirectTargetsMap: RedirectTargetsMap,
+        from: SourceFile,
+        allSourceFiles: ReadonlyArray<SourceFile>,
+        filterByPackageJson: boolean,
+        cb: (module: Symbol) => void,
+    ) {
+        const packageJson = filterByPackageJson && createLazyPackageJsonDependencyReader(from, host, redirectTargetsMap);
         forEachExternalModule(checker, allSourceFiles, (module, sourceFile) => {
-            if (sourceFile === undefined && allowsImportingAmbientModule(module, allSourceFiles)) {
+            if (sourceFile === undefined && (!packageJson || packageJson.allowsImportingAmbientModule(module, allSourceFiles))) {
                 cb(module);
             }
             else if (sourceFile && sourceFile !== from && isImportablePath(from.fileName, sourceFile.fileName)) {
-                if (allowsImportingSourceFile(sourceFile, allSourceFiles)) {
+                if (!packageJson || packageJson.allowsImportingSourceFile(sourceFile, allSourceFiles)) {
                     cb(module);
                 }
             }
+        });
+        moduleSpecifiers.clearSymlinksCache();
+    }
+
+    export interface ImportableModule {
+        declaringFileNames: readonly string[];
+        moduleSymbol: Symbol;
+        modulePaths?: readonly moduleSpecifiers.ModulePath[];
+    }
+
+    export function forEachImportableModule(
+        checker: TypeChecker,
+        host: LanguageServiceHost,
+        redirectTargetsMap: RedirectTargetsMap,
+        allSourceFiles: readonly SourceFile[],
+        callback: (importableModule: ImportableModule) => void,
+    ) {
+        forEachExternalModule(checker, allSourceFiles, (moduleSymbol, sourceFile) => {
+            const declaringFileNames = sourceFile ? [sourceFile.fileName] : map(moduleSymbol.declarations, s => s.getSourceFile().fileName);
+            callback({
+                declaringFileNames,
+                moduleSymbol,
+                modulePaths: flatMap(declaringFileNames, fileName => moduleSpecifiers.getPossibleModulePathsForFileName(
+                    fileName,
+                    host,
+                    allSourceFiles,
+                    redirectTargetsMap)),
+            });
         });
         moduleSpecifiers.clearSymlinksCache();
     }
@@ -687,40 +722,30 @@ namespace ts.codefix {
         return !isStringANonContextualKeyword(res) ? res || "_" : `_${res}`;
     }
 
-    function createLazyPackageJsonDependencyReader(fromFile: SourceFile, host: LanguageServiceHost, preferences: UserPreferences, redirectTargetsMap: RedirectTargetsMap) {
-        const packageJsonPaths = findPackageJsons(getDirectoryPath(fromFile.fileName), host);
-        const dependencyIterator = readPackageJsonDependencies(host, packageJsonPaths);
+    function createLazyPackageJsonDependencyReader(fromFile: SourceFile, host: LanguageServiceHost, redirectTargetsMap: RedirectTargetsMap) {
         const getCanonicalFileName = hostGetCanonicalFileName(host);
-        let seenDeps: Map<true> | undefined;
+        const packageJsons = host.getPackageJsonsVisibleToFile && host.getPackageJsonsVisibleToFile(fromFile.fileName) || getPackageJsonsVisibleToFile(fromFile.fileName, host);
+        const dependencyGroups = PackageJsonDependencyGroup.Dependencies | PackageJsonDependencyGroup.DevDependencies | PackageJsonDependencyGroup.OptionalDependencies;
         let usesNodeCoreModules: boolean | undefined;
         return { allowsImportingAmbientModule, allowsImportingSourceFile, allowsImportingSpecifier };
 
-        function containsDependency(dependency: string) {
-            if ((seenDeps || (seenDeps = createMap())).has(dependency)) {
-                return true;
-            }
-            let packageName: string | void;
-            while (packageName = dependencyIterator.next().value) {
-                seenDeps.set(packageName, true);
-                if (packageName === dependency) {
+        function moduleSpecifierIsCoveredByPackageJson(specifier: string) {
+            const packageName = getNodeModuleRootSpecifier(specifier);
+            for (const packageJson of packageJsons) {
+                if (packageJson.has(packageName, dependencyGroups) || packageJson.has(getTypesPackageName(packageName), dependencyGroups)) {
                     return true;
                 }
             }
             return false;
         }
 
-        function moduleSpecifierIsCoveredByPackageJson(specifier: string) {
-            const root = getPathComponents(specifier)[1];
-            return containsDependency(root) || containsDependency(getTypesPackageName(root));
-        }
-
         function allowsImportingAmbientModule(moduleSymbol: Symbol, allSourceFiles: readonly SourceFile[]): boolean {
-            if (!packageJsonPaths.length) {
+            if (!packageJsons.length) {
                 return true;
             }
 
             const declaringSourceFile = moduleSymbol.valueDeclaration.getSourceFile();
-            const declaringNodeModuleName = getNodeModulesPackageNameFromFileName(declaringSourceFile.fileName, fromFile, allSourceFiles);
+            const declaringNodeModuleName = getNodeModulesPackageNameFromFileName(declaringSourceFile.fileName, allSourceFiles);
             if (typeof declaringNodeModuleName === "undefined") {
                 return true;
             }
@@ -735,17 +760,16 @@ namespace ts.codefix {
         }
 
         function allowsImportingSourceFile(sourceFile: SourceFile, allSourceFiles: readonly SourceFile[]): boolean {
-            if (!packageJsonPaths.length) {
+            if (!packageJsons.length) {
                 return true;
             }
 
-            const moduleSpecifier = getNodeModulesPackageNameFromFileName(sourceFile.fileName, fromFile, allSourceFiles);
+            const moduleSpecifier = getNodeModulesPackageNameFromFileName(sourceFile.fileName, allSourceFiles);
             if (!moduleSpecifier) {
                 return true;
             }
 
-            return containsDependency(moduleSpecifier)
-                || containsDependency(getTypesPackageName(moduleSpecifier));
+            return moduleSpecifierIsCoveredByPackageJson(moduleSpecifier);
         }
 
         /**
@@ -753,7 +777,7 @@ namespace ts.codefix {
          * for better accuracy when possible.
          */
         function allowsImportingSpecifier(moduleSpecifier: string) {
-            if (!packageJsonPaths.length || isAllowedCoreNodeModulesImport(moduleSpecifier)) {
+            if (!packageJsons.length || isAllowedCoreNodeModulesImport(moduleSpecifier)) {
                 return true;
             }
             if (pathIsRelative(moduleSpecifier) || isRootedDiskPath(moduleSpecifier)) {
@@ -778,51 +802,33 @@ namespace ts.codefix {
             return false;
         }
 
-        function getNodeModulesPackageNameFromFileName(importedFileName: string, importingFile: SourceFile, allSourceFiles: readonly SourceFile[]): string | undefined {
+        function getNodeModulesPackageNameFromFileName(importedFileName: string, allSourceFiles: readonly SourceFile[]): string | undefined {
             if (!stringContains(importedFileName, "node_modules")) {
                 return undefined;
             }
-            const specifier = moduleSpecifiers.getModuleSpecifier(
+            const specifier = moduleSpecifiers.getNodeModulesPackageName(
                 host.getCompilationSettings(),
-                importingFile,
-                toPath(importingFile.fileName, /*basePath*/ undefined, getCanonicalFileName),
-                importedFileName,
-                host,
-                allSourceFiles,
-                preferences,
-                redirectTargetsMap);
+                moduleSpecifiers.getPossibleModulePathsForFileName(importedFileName, host, allSourceFiles, redirectTargetsMap),
+                toPath(fromFile.fileName, /*basePath*/ undefined, getCanonicalFileName),
+                host);
 
+            if (!specifier) {
+                return undefined;
+            }
             // Paths here are not node_modules, so we don’t care about them;
             // returning anything will trigger a lookup in package.json.
             if (!pathIsRelative(specifier) && !isRootedDiskPath(specifier)) {
-                const components = getPathComponents(getPackageNameFromTypesPackageName(specifier)).slice(1);
-                // Scoped packages
-                if (startsWith(components[0], "@")) {
-                    return `${components[0]}/${components[1]}`;
-                }
-                return components[0];
+                return getNodeModuleRootSpecifier(specifier);
             }
         }
-    }
 
-    function *readPackageJsonDependencies(host: LanguageServiceHost, packageJsonPaths: string[]) {
-        type PackageJson = Record<typeof dependencyKeys[number], Record<string, string> | undefined>;
-        const dependencyKeys = ["dependencies", "devDependencies", "optionalDependencies"] as const;
-        for (const fileName of packageJsonPaths) {
-            const content = readJson(fileName, { readFile: host.readFile ? host.readFile.bind(host) : sys.readFile }) as PackageJson;
-            for (const key of dependencyKeys) {
-                const dependencies = content[key];
-                if (!dependencies) {
-                    continue;
-                }
-                for (const packageName in dependencies) {
-                    yield packageName;
-                }
+        function getNodeModuleRootSpecifier(fullSpecifier: string): string {
+            const components = getPathComponents(getPackageNameFromTypesPackageName(fullSpecifier)).slice(1);
+            // Scoped packages
+            if (startsWith(components[0], "@")) {
+                return `${components[0]}/${components[1]}`;
             }
+            return components[0];
         }
-    }
-
-    function consumesNodeCoreModules(sourceFile: SourceFile): boolean {
-        return some(sourceFile.imports, ({ text }) => JsTyping.nodeCoreModules.has(text));
     }
 }

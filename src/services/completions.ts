@@ -53,21 +53,42 @@ namespace ts.Completions {
     }
     export interface AutoImportSuggestionsCache {
         clear(): void;
-        isEmpty(): boolean;
-        clearOthers(fileName: string): void;
-        get(fileName: string, checker: TypeChecker): AutoImportSuggestion[] | undefined;
-        set(fileName: string, suggestions: AutoImportSuggestion[]): void;
-        delete(fileName: string): boolean;
+        get(fileName: string, checker: TypeChecker, projectVersion?: string): readonly AutoImportSuggestion[] | undefined;
+        set(fileName: string, suggestions: readonly AutoImportSuggestion[], projectVersion?: string): void;
+        isEmpty: boolean;
+        key: string | undefined;
     }
     export function createImportSuggestionsCache(): AutoImportSuggestionsCache {
-        const cache = createMap<AutoImportSuggestion[]>();
+        let cache: readonly AutoImportSuggestion[] | undefined;
+        let projectVersion: string | undefined;
+        let fileName: string | undefined;
         return {
-            clear: cache.clear.bind(cache),
-            set: cache.set.bind(cache),
-            delete: cache.delete.bind(cache),
-            get: (fileName, checker) => {
-                const suggestions = cache.get(fileName);
-                forEach(suggestions, suggestion => {
+            get key() {
+                return fileName;
+            },
+            get isEmpty() {
+                return !cache || !cache.length;
+            },
+            clear: () => {
+                cache = undefined;
+                fileName = undefined;
+                projectVersion = undefined;
+            },
+            set: (file, suggestions, version) => {
+                cache = suggestions;
+                fileName = file;
+                if (version) {
+                    projectVersion = version;
+                }
+            },
+            get: (file, checker, version) => {
+                if (file !== fileName) {
+                    return undefined;
+                }
+                if (version) {
+                    return projectVersion === version ? cache : undefined;
+                }
+                forEach(cache, suggestion => {
                     // If the symbol/moduleSymbol was a merged symbol, it will have a new identity
                     // in the checker, even though the symbols to merge are the same (guaranteed by
                     // cache invalidation in synchronizeHostData).
@@ -80,16 +101,8 @@ namespace ts.Completions {
                         suggestion.origin.moduleSymbol = checker.getMergedSymbol(suggestion.origin.moduleSymbol.declarations[0].symbol);
                     }
                 });
-                return suggestions;
+                return cache;
             },
-            clearOthers: fileName => {
-                const entry = cache.get(fileName);
-                cache.clear();
-                if (entry) {
-                    cache.set(fileName, entry);
-                }
-            },
-            isEmpty: () => cache.size === 0,
         };
     }
 
@@ -101,7 +114,6 @@ namespace ts.Completions {
         position: number,
         preferences: UserPreferences,
         triggerCharacter: CompletionsTriggerCharacter | undefined,
-        importSuggestionsCache: AutoImportSuggestionsCache,
     ): CompletionInfo | undefined {
         const typeChecker = program.getTypeChecker();
         const compilerOptions = program.getCompilerOptions();
@@ -121,7 +133,7 @@ namespace ts.Completions {
             return getLabelCompletionAtPosition(contextToken.parent);
         }
 
-        const completionData = getCompletionData(program, log, sourceFile, isUncheckedFile(sourceFile, compilerOptions), position, preferences, /*detailsEntryId*/ undefined, host, importSuggestionsCache);
+        const completionData = getCompletionData(program, log, sourceFile, isUncheckedFile(sourceFile, compilerOptions), position, preferences, /*detailsEntryId*/ undefined, host);
         if (!completionData) {
             return undefined;
         }
@@ -471,10 +483,9 @@ namespace ts.Completions {
         position: number,
         entryId: CompletionEntryIdentifier,
         host: LanguageServiceHost,
-        importSuggestionsCache: AutoImportSuggestionsCache,
     ): SymbolCompletion | { type: "request", request: Request } | { type: "literal", literal: string | number | PseudoBigInt } | { type: "none" } {
         const compilerOptions = program.getCompilerOptions();
-        const completionData = getCompletionData(program, log, sourceFile, isUncheckedFile(sourceFile, compilerOptions), position, { includeCompletionsForModuleExports: true, includeCompletionsWithInsertText: true }, entryId, host, importSuggestionsCache);
+        const completionData = getCompletionData(program, log, sourceFile, isUncheckedFile(sourceFile, compilerOptions), position, { includeCompletionsForModuleExports: true, includeCompletionsWithInsertText: true }, entryId, host);
         if (!completionData) {
             return { type: "none" };
         }
@@ -525,7 +536,6 @@ namespace ts.Completions {
         formatContext: formatting.FormatContext,
         preferences: UserPreferences,
         cancellationToken: CancellationToken,
-        importSuggestionsCache: AutoImportSuggestionsCache,
     ): CompletionEntryDetails | undefined {
         const typeChecker = program.getTypeChecker();
         const compilerOptions = program.getCompilerOptions();
@@ -537,7 +547,7 @@ namespace ts.Completions {
         }
 
         // Compute all the completion symbols again.
-        const symbolCompletion = getSymbolCompletionFromEntryId(program, log, sourceFile, position, entryId, host, importSuggestionsCache);
+        const symbolCompletion = getSymbolCompletionFromEntryId(program, log, sourceFile, position, entryId, host);
         switch (symbolCompletion.type) {
             case "request": {
                 const { request } = symbolCompletion;
@@ -629,9 +639,8 @@ namespace ts.Completions {
         position: number,
         entryId: CompletionEntryIdentifier,
         host: LanguageServiceHost,
-        importSuggestionsCache: AutoImportSuggestionsCache,
     ): Symbol | undefined {
-        const completion = getSymbolCompletionFromEntryId(program, log, sourceFile, position, entryId, host, importSuggestionsCache);
+        const completion = getSymbolCompletionFromEntryId(program, log, sourceFile, position, entryId, host);
         return completion.type === "symbol" ? completion.symbol : undefined;
     }
 
@@ -731,7 +740,6 @@ namespace ts.Completions {
         preferences: Pick<UserPreferences, "includeCompletionsForModuleExports" | "includeCompletionsWithInsertText">,
         detailsEntryId: CompletionEntryIdentifier | undefined,
         host: LanguageServiceHost,
-        importSuggestionsCache: AutoImportSuggestionsCache,
     ): CompletionData | Request | undefined {
         const typeChecker = program.getTypeChecker();
 
@@ -950,6 +958,7 @@ namespace ts.Completions {
         let symbols: Symbol[] = [];
         const symbolToOriginInfoMap: SymbolOriginInfoMap = [];
         const symbolToSortTextMap: SymbolSortTextMap = [];
+        const importSuggestionsCache = host.getImportSuggestionsCache && host.getImportSuggestionsCache();
 
         if (isRightOfDot) {
             getTypeScriptMemberSymbols();
@@ -980,7 +989,6 @@ namespace ts.Completions {
         }
 
         log("getCompletionData: Semantic work: " + (timestamp() - semanticStart));
-
         const contextualType = previousToken && getContextualType(previousToken, position, sourceFile, typeChecker);
         const literals = mapDefined(contextualType && (contextualType.isUnion() ? contextualType.types : [contextualType]), t => t.isLiteral() ? t.value : undefined);
 
@@ -1228,8 +1236,8 @@ namespace ts.Completions {
             if (shouldOfferImportCompletions()) {
                 const lowerCaseTokenText = previousToken && isIdentifier(previousToken) ? previousToken.text.toLowerCase() : "";
                 const autoImportSuggestions = getSymbolsFromOtherSourceFileExports(program.getCompilerOptions().target!, host);
-                if (!detailsEntryId) {
-                    importSuggestionsCache.set(sourceFile.fileName, autoImportSuggestions);
+                if (!detailsEntryId && importSuggestionsCache) {
+                    importSuggestionsCache.set(sourceFile.fileName, autoImportSuggestions, host.getProjectVersion && host.getProjectVersion());
                 }
                 autoImportSuggestions.forEach(({ symbol, symbolName, skipFilter, origin }) => {
                     if (detailsEntryId) {
@@ -1410,8 +1418,12 @@ namespace ts.Completions {
          *    occur for that symbol---that is, the original symbol is not in Bucket A, so we should include the alias. Move
          *    everything from Bucket C to Bucket A.
          */
-        function getSymbolsFromOtherSourceFileExports(target: ScriptTarget, host: LanguageServiceHost): AutoImportSuggestion[] {
-            const cached = importSuggestionsCache.get(sourceFile.fileName, typeChecker);
+        function getSymbolsFromOtherSourceFileExports(target: ScriptTarget, host: LanguageServiceHost): readonly AutoImportSuggestion[] {
+            const cached = importSuggestionsCache && importSuggestionsCache.get(
+                sourceFile.fileName,
+                typeChecker,
+                detailsEntryId && host.getProjectVersion ? host.getProjectVersion() : undefined);
+
             if (cached) {
                 log("getSymbolsFromOtherSourceFileExports: Using cached list");
                 return cached;
@@ -1425,11 +1437,11 @@ namespace ts.Completions {
             /** Bucket C */
             const aliasesToReturnIfOriginalsAreMissing = createMap<{ alias: Symbol, moduleSymbol: Symbol }>();
             /** Bucket A */
-            const results: { symbol: Symbol, symbolName: string, skipFilter: boolean, origin: SymbolOriginInfoExport }[] = [];
+            const results: AutoImportSuggestion[] = [];
             /** Ids present in `results` for faster lookup */
             const resultSymbolIds = createMap<true>();
 
-            codefix.forEachExternalModuleToImportFrom(typeChecker, host, preferences, program.redirectTargetsMap, sourceFile, program.getSourceFiles(), moduleSymbol => {
+            codefix.forEachExternalModuleToImportFrom(typeChecker, host, program.redirectTargetsMap, sourceFile, program.getSourceFiles(), !detailsEntryId, moduleSymbol => {
                 // Perf -- ignore other modules if this is a request for details
                 if (detailsEntryId && detailsEntryId.source && stripQuotes(moduleSymbol.name) !== detailsEntryId.source) {
                     return;
@@ -1441,9 +1453,9 @@ namespace ts.Completions {
                     return;
                 }
 
+                // Don't add another completion for `export =` of a symbol that's already global.
+                // So in `declare namespace foo {} declare module "foo" { export = foo; }`, there will just be the global completion for `foo`.
                 if (resolvedModuleSymbol !== moduleSymbol &&
-                    // Don't add another completion for `export =` of a symbol that's already global.
-                    // So in `declare namespace foo {} declare module "foo" { export = foo; }`, there will just be the global completion for `foo`.
                     every(resolvedModuleSymbol.declarations, d => !!d.getSourceFile().externalModuleIndicator)) {
                     pushSymbol(resolvedModuleSymbol, moduleSymbol, /*skipFilter*/ true);
                 }
@@ -1453,6 +1465,8 @@ namespace ts.Completions {
                     if (some(symbol.declarations, d => isExportSpecifier(d) && !!d.propertyName && isIdentifierANonContextualKeyword(d.name))) {
                         continue;
                     }
+
+                    const symbolId = getSymbolId(symbol).toString();
                     // If `symbol.parent !== moduleSymbol`, this is an `export * from "foo"` re-export. Those don't create new symbols.
                     const isExportStarFromReExport = typeChecker.getMergedSymbol(symbol.parent!) !== resolvedModuleSymbol;
                     // If `!!d.parent.parent.moduleSpecifier`, this is `export { foo } from "foo"` re-export, which creates a new symbol (thus isn't caught by the first check).
@@ -1465,17 +1479,17 @@ namespace ts.Completions {
                         const symbolHasBeenSeen = resultSymbolIds.has(nearestExportSymbolId) || aliasesToAlreadyIncludedSymbols.has(nearestExportSymbolId);
                         if (!symbolHasBeenSeen) {
                             aliasesToReturnIfOriginalsAreMissing.set(nearestExportSymbolId, { alias: symbol, moduleSymbol });
-                            aliasesToAlreadyIncludedSymbols.set(getSymbolId(symbol).toString(), true);
+                            aliasesToAlreadyIncludedSymbols.set(symbolId, true);
                         }
                         else {
                             // Perf - we know this symbol is an alias to one that’s already covered in `symbols`, so store it here
                             // in case another symbol re-exports this one; that way we can short-circuit as soon as we see this symbol id.
-                            addToSeen(aliasesToAlreadyIncludedSymbols, getSymbolId(symbol));
+                            addToSeen(aliasesToAlreadyIncludedSymbols, symbolId);
                         }
                     }
                     else {
                         // This is not a re-export, so see if we have any aliases pending and remove them (step 3 in diagrammed example)
-                        aliasesToReturnIfOriginalsAreMissing.delete(getSymbolId(symbol).toString());
+                        aliasesToReturnIfOriginalsAreMissing.delete(symbolId);
                         pushSymbol(symbol, moduleSymbol);
                     }
                 }

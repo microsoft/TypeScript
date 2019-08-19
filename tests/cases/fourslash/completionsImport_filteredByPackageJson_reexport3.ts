@@ -5,7 +5,7 @@
 //@Filename: /package.json
 ////{
 ////  "dependencies": {
-////    "b": "*",
+////    "b": "*"
 ////  }
 ////}
 
