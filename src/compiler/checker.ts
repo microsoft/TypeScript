@@ -2041,7 +2041,7 @@ namespace ts {
 
         function checkResolvedBlockScopedVariable(result: Symbol, errorLocation: Node): void {
             Debug.assert(!!(result.flags & SymbolFlags.BlockScopedVariable || result.flags & SymbolFlags.Class || result.flags & SymbolFlags.Enum));
-            if (result.flags & (SymbolFlags.Function | SymbolFlags.FunctionScopedVariable) && result.flags & SymbolFlags.Class) {
+            if (result.flags & (SymbolFlags.Function | SymbolFlags.FunctionScopedVariable | SymbolFlags.Assignment) && result.flags & SymbolFlags.Class) {
                 // constructor functions aren't block scoped
                 return;
             }
@@ -6157,7 +6157,7 @@ namespace ts {
                     const assignmentKind = getAssignmentDeclarationKind(node);
                     if (assignmentKind === AssignmentDeclarationKind.Prototype || assignmentKind === AssignmentDeclarationKind.PrototypeProperty) {
                         const symbol = getSymbolOfNode(node.left);
-                        if (symbol && symbol.parent) {
+                        if (symbol && symbol.parent && !findAncestor(symbol.parent.valueDeclaration, d => node === d)) {
                             node = symbol.parent.valueDeclaration;
                         }
                     }
@@ -7516,7 +7516,7 @@ namespace ts {
                 // And likewise for construct signatures for classes
                 if (symbol.flags & SymbolFlags.Class) {
                     const classType = getDeclaredTypeOfClassOrInterface(symbol);
-                    let constructSignatures = getSignaturesOfSymbol(symbol.members!.get(InternalSymbolName.Constructor));
+                    let constructSignatures = symbol.members ? getSignaturesOfSymbol(symbol.members.get(InternalSymbolName.Constructor)) : emptyArray;
                     if (symbol.flags & SymbolFlags.Function) {
                         constructSignatures = addRange(constructSignatures.slice(), mapDefined(
                             type.callSignatures,

@@ -3778,7 +3778,6 @@ namespace ts {
         resolvedJSDocType?: Type;           // Resolved type of a JSDoc type reference
         typeParameters?: TypeParameter[];   // Type parameters of type alias (undefined if non-generic)
         outerTypeParameters?: TypeParameter[];  // Outer type parameters of anonymous object type
-        inferredClassType?: Type;           // Type of an inferred ES5 class
         instantiations?: Map<Type>;         // Instantiations of generic type alias (undefined if non-generic)
         mapper?: TypeMapper;                // Type mapper for instantiation alias
         referenced?: boolean;               // True if alias symbol has been referenced as a value
