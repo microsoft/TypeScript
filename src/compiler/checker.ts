@@ -19878,7 +19878,7 @@ namespace ts {
                     return isValidSpreadType(constraint);
                 }
             }
-            return !!(type.flags & (TypeFlags.AnyOrUnknown | TypeFlags.NonPrimitive | TypeFlags.Object | TypeFlags.InstantiableNonPrimitive) ||
+            return !!(type.flags & (TypeFlags.Any | TypeFlags.NonPrimitive | TypeFlags.Object | TypeFlags.InstantiableNonPrimitive) ||
                 getFalsyFlags(type) & TypeFlags.DefinitelyFalsy && isValidSpreadType(removeDefinitelyFalsyTypes(type)) ||
                 type.flags & TypeFlags.UnionOrIntersection && every((<UnionOrIntersectionType>type).types, isValidSpreadType));
         }
