@@ -12495,12 +12495,11 @@ namespace ts {
             }
             const id = getSymbolId(sourceSymbol) + "," + getSymbolId(targetSymbol);
             const entry = enumRelation.get(id);
-            const relation = entry! & RelationComparisonResult.ResultMask;
-            if (entry !== undefined && !(relation === RelationComparisonResult.Failed && errorReporter)) {
-                return relation === RelationComparisonResult.Succeeded;
+            if (entry !== undefined && !(!(entry & RelationComparisonResult.Reported) && entry & RelationComparisonResult.Failed && errorReporter)) {
+                return !!(entry & RelationComparisonResult.Succeeded);
             }
             if (sourceSymbol.escapedName !== targetSymbol.escapedName || !(sourceSymbol.flags & SymbolFlags.RegularEnum) || !(targetSymbol.flags & SymbolFlags.RegularEnum)) {
-                enumRelation.set(id, RelationComparisonResult.FailedAndReported);
+                enumRelation.set(id, RelationComparisonResult.Failed | RelationComparisonResult.Reported);
                 return false;
             }
             const targetEnumType = getTypeOfSymbol(targetSymbol);
@@ -12511,7 +12510,7 @@ namespace ts {
                         if (errorReporter) {
                             errorReporter(Diagnostics.Property_0_is_missing_in_type_1, symbolName(property),
                                 typeToString(getDeclaredTypeOfSymbol(targetSymbol), /*enclosingDeclaration*/ undefined, TypeFormatFlags.UseFullyQualifiedType));
-                            enumRelation.set(id, RelationComparisonResult.FailedAndReported);
+                            enumRelation.set(id, RelationComparisonResult.Failed | RelationComparisonResult.Reported);
                         }
                         else {
                             enumRelation.set(id, RelationComparisonResult.Failed);
@@ -12576,7 +12575,7 @@ namespace ts {
             if (source.flags & TypeFlags.Object && target.flags & TypeFlags.Object) {
                 const related = relation.get(getRelationKey(source, target, relation));
                 if (related !== undefined) {
-                    return (related & RelationComparisonResult.ResultMask) === RelationComparisonResult.Succeeded;
+                    return !!(related & RelationComparisonResult.Succeeded);
                 }
             }
             if (source.flags & TypeFlags.StructuredOrInstantiable || target.flags & TypeFlags.StructuredOrInstantiable) {
@@ -13261,9 +13260,8 @@ namespace ts {
                 }
                 const id = getRelationKey(source, target, relation);
                 const entry = relation.get(id);
-                const related = entry! & RelationComparisonResult.ResultMask;
                 if (entry !== undefined) {
-                    if (reportErrors && related === RelationComparisonResult.Failed) {
+                    if (reportErrors && entry & RelationComparisonResult.Failed && !(entry & RelationComparisonResult.Reported)) {
                         // We are elaborating errors and the cached result is an unreported failure. The result will be reported
                         // as a failure, and should be updated as a reported failure by the bottom of this function.
                     }
@@ -13278,7 +13276,7 @@ namespace ts {
                                 instantiateType(source, reportUnreliableMarkers);
                             }
                         }
-                        return related === RelationComparisonResult.Succeeded ? Ternary.True : Ternary.False;
+                        return entry & RelationComparisonResult.Succeeded ? Ternary.True : Ternary.False;
                     }
                 }
                 if (!maybeKeys) {
@@ -13334,7 +13332,7 @@ namespace ts {
                 else {
                     // A false result goes straight into global cache (when something is false under
                     // assumptions it will also be false without assumptions)
-                    relation.set(id, (reportErrors ? RelationComparisonResult.FailedAndReported : RelationComparisonResult.Failed) | propagatingVarianceFlags);
+                    relation.set(id, (reportErrors ? RelationComparisonResult.Reported : 0) | RelationComparisonResult.Failed | propagatingVarianceFlags);
                     maybeCount = maybeStart;
                 }
                 return result;
