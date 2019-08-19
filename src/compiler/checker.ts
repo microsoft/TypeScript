@@ -12776,26 +12776,17 @@ namespace ts {
                 if (isFreshLiteralType(target)) {
                     target = (<FreshableType>target).regularType;
                 }
-                if (source.flags & TypeFlags.Substitution) {
-                    source = (<SubstitutionType>source).substitute;
+                while (true) {
+                    const s = source.flags & TypeFlags.Substitution ? source = (<SubstitutionType>source).substitute :
+                        source.flags & TypeFlags.Simplifiable ? getSimplifiedType(source, /*writing*/ false) :
+                        source;
+                    const t = target.flags & TypeFlags.Substitution ? (<SubstitutionType>target).typeVariable :
+                        target.flags & TypeFlags.Simplifiable ? getSimplifiedType(target, /*writing*/ true) :
+                        target;
+                    if (s === source && t === target) break;
+                    source = s;
+                    target = t;
                 }
-                if (target.flags & TypeFlags.Substitution) {
-                    target = (<SubstitutionType>target).typeVariable;
-                }
-                if (source.flags & TypeFlags.Simplifiable) {
-                    source = getSimplifiedType(source, /*writing*/ false);
-                }
-                if (target.flags & TypeFlags.Simplifiable) {
-                    target = getSimplifiedType(target, /*writing*/ true);
-                }
-                if (source.flags & TypeFlags.Substitution) {
-                    source = (<SubstitutionType>source).substitute;
-                }
-                if (target.flags & TypeFlags.Substitution) {
-                    target = (<SubstitutionType>target).typeVariable;
-                }
-                Debug.assert(!(source.flags & TypeFlags.Substitution), "Source type was a substitution - substitutes are unhandled in relationship checking");
-                Debug.assert(!(target.flags & TypeFlags.Substitution), "Target type was a substitution - substitutes are unhandled in relationship checking");
 
                 // Try to see if we're relating something like `Foo` -> `Bar | null | undefined`.
                 // If so, reporting the `null` and `undefined` in the type is hardly useful.
