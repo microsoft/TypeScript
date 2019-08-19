@@ -4,4 +4,11 @@
 
 /////**/
 
-verify.completions({ marker: "", exact: ["globalThis", "undefined", ...completion.statementKeywordsWithTypes] });
+verify.completions({
+    marker: "",
+    exact: [
+        completion.globalThisEntry,
+        completion.undefinedVarEntry,
+        ...completion.statementKeywordsWithTypes
+    ]
+});

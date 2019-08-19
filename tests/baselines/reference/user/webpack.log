@@ -1,10 +1,7 @@
 Exit Code: 1
 Standard output:
-../../../../../built/local/lib.dom.d.ts(17676,19): error TS2451: Cannot redeclare block-scoped variable 'WebAssembly'.
-declarations.d.ts(258,15): error TS2451: Cannot redeclare block-scoped variable 'WebAssembly'.
-lib/ContextModuleFactory.js(253,50): error TS2339: Property 'concat' does not exist on type 'unknown'.
-lib/web/JsonpChunkTemplatePlugin.js(13,6): error TS2339: Property 'id' does not exist on type 'unknown'.
-lib/web/JsonpMainTemplatePlugin.js(501,11): error TS2339: Property 'id' does not exist on type 'unknown'.
+lib/Compilation.js(538,5): error TS2322: Type 'Readonly<{ error: string; warn: string; info: string; log: string; debug: string; trace: string; group: string; groupCollapsed: string; groupEnd: string; profile: string; profileEnd: string; time: string; clear: string; status: string; }>' is not assignable to type 'string'.
+lib/Compiler.js(228,48): error TS2345: Argument of type 'Readonly<{ error: string; warn: string; info: string; log: string; debug: string; trace: string; group: string; groupCollapsed: string; groupEnd: string; profile: string; profileEnd: string; time: string; clear: string; status: string; }>' is not assignable to parameter of type 'string'.
 
 
 

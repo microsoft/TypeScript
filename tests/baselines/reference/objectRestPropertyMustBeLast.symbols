@@ -1,0 +1,23 @@
+=== tests/cases/conformance/types/rest/objectRestPropertyMustBeLast.ts ===
+var {...a, x } = { x: 1 };    // Error, rest must be last property
+>a : Symbol(a, Decl(objectRestPropertyMustBeLast.ts, 0, 5), Decl(objectRestPropertyMustBeLast.ts, 3, 5))
+>x : Symbol(x, Decl(objectRestPropertyMustBeLast.ts, 0, 10), Decl(objectRestPropertyMustBeLast.ts, 3, 10))
+>x : Symbol(x, Decl(objectRestPropertyMustBeLast.ts, 0, 18))
+
+({...a, x } = { x: 1 });      // Error, rest must be last property
+>a : Symbol(a, Decl(objectRestPropertyMustBeLast.ts, 0, 5), Decl(objectRestPropertyMustBeLast.ts, 3, 5))
+>x : Symbol(x, Decl(objectRestPropertyMustBeLast.ts, 1, 7))
+>x : Symbol(x, Decl(objectRestPropertyMustBeLast.ts, 1, 15))
+
+var {...a, x, ...b } = { x: 1 };    // Error, rest must be last property
+>a : Symbol(a, Decl(objectRestPropertyMustBeLast.ts, 0, 5), Decl(objectRestPropertyMustBeLast.ts, 3, 5))
+>x : Symbol(x, Decl(objectRestPropertyMustBeLast.ts, 0, 10), Decl(objectRestPropertyMustBeLast.ts, 3, 10))
+>b : Symbol(b, Decl(objectRestPropertyMustBeLast.ts, 3, 13))
+>x : Symbol(x, Decl(objectRestPropertyMustBeLast.ts, 3, 24))
+
+({...a, x, ...b } = { x: 1 });      // Error, rest must be last property
+>a : Symbol(a, Decl(objectRestPropertyMustBeLast.ts, 0, 5), Decl(objectRestPropertyMustBeLast.ts, 3, 5))
+>x : Symbol(x, Decl(objectRestPropertyMustBeLast.ts, 4, 7))
+>b : Symbol(b, Decl(objectRestPropertyMustBeLast.ts, 3, 13))
+>x : Symbol(x, Decl(objectRestPropertyMustBeLast.ts, 4, 21))
+

@@ -200,8 +200,8 @@ declare let p4: readonly [readonly [readonly [readonly [10]]]];
 declare let x1: {
     readonly x: 10;
     readonly y: readonly [20, 30];
-    z: {
-        a: {
+    readonly z: {
+        readonly a: {
             readonly b: 42;
         };
     };

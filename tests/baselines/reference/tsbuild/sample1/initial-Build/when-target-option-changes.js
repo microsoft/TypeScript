@@ -13,7 +13,7 @@ interface Number { toExponential: any; }
 interface Object {}
 interface RegExp {}
 interface String { charAt: any; }
-interface Array<T> {}
+interface Array<T> { length: number; [n: number]: T; }
 interface ReadonlyArray<T> {}
 declare const console: { log(msg: any): void; };
 
@@ -45,23 +45,23 @@ export function multiply(a, b) { return a * b; }
 {
   "program": {
     "fileInfos": {
-      "/lib/lib.esnext.d.ts": {
-        "version": "-15964756381",
-        "signature": "-15964756381"
+      "../../lib/lib.esnext.d.ts": {
+        "version": "3858781397",
+        "signature": "3858781397"
       },
-      "/lib/lib.esnext.full.d.ts": {
+      "../../lib/lib.esnext.full.d.ts": {
         "version": "8926001564",
         "signature": "8926001564"
       },
-      "/src/core/anothermodule.ts": {
+      "./anothermodule.ts": {
         "version": "-2676574883",
         "signature": "-8396256275"
       },
-      "/src/core/index.ts": {
+      "./index.ts": {
         "version": "-18749805970",
         "signature": "1874987148"
       },
-      "/src/core/some_decl.d.ts": {
+      "./some_decl.d.ts": {
         "version": "-9253692965",
         "signature": "-9253692965"
       }
@@ -70,17 +70,17 @@ export function multiply(a, b) { return a * b; }
       "incremental": true,
       "listFiles": true,
       "listEmittedFiles": true,
-      "target": 8,
-      "configFilePath": "/src/core/tsconfig.json"
+      "target": 99,
+      "configFilePath": "./tsconfig.json"
     },
     "referencedMap": {},
     "exportedModulesMap": {},
     "semanticDiagnosticsPerFile": [
-      "/lib/lib.esnext.d.ts",
-      "/lib/lib.esnext.full.d.ts",
-      "/src/core/anothermodule.ts",
-      "/src/core/index.ts",
-      "/src/core/some_decl.d.ts"
+      "../../lib/lib.esnext.d.ts",
+      "../../lib/lib.esnext.full.d.ts",
+      "./anothermodule.ts",
+      "./index.ts",
+      "./some_decl.d.ts"
     ]
   },
   "version": "FakeTSVersion"

@@ -10,7 +10,7 @@ const o2 = Object.fromEntries(new URLSearchParams());
 >Object.fromEntries : Symbol(ObjectConstructor.fromEntries, Decl(lib.es2019.object.d.ts, --, --), Decl(lib.es2019.object.d.ts, --, --))
 >Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >fromEntries : Symbol(ObjectConstructor.fromEntries, Decl(lib.es2019.object.d.ts, --, --), Decl(lib.es2019.object.d.ts, --, --))
->URLSearchParams : Symbol(URLSearchParams, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --), Decl(lib.dom.iterable.d.ts, --, --))
+>URLSearchParams : Symbol(URLSearchParams, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --), Decl(lib.dom.iterable.d.ts, --, --))
 
 const o3 = Object.fromEntries(new Map([[Symbol("key"), "value"]]));
 >o3 : Symbol(o3, Decl(objectFromEntries.ts, 2, 5))

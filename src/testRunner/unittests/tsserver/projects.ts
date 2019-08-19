@@ -634,13 +634,17 @@ namespace ts.projectSystem {
                 path: "/a/main.js",
                 content: "var y = 1"
             };
+            const f3 = {
+                path: "/main.js",
+                content: "var y = 1"
+            };
             const config = {
                 path: "/a/tsconfig.json",
                 content: JSON.stringify({
                     compilerOptions: { allowJs: true }
                 })
             };
-            const host = createServerHost([f1, f2, config]);
+            const host = createServerHost([f1, f2, f3, config]);
             const projectService = createProjectService(host);
             projectService.setHostConfiguration({
                 extraFileExtensions: [
@@ -652,13 +656,19 @@ namespace ts.projectSystem {
             projectService.checkNumberOfProjects({ configuredProjects: 1 });
             checkProjectActualFiles(configuredProjectAt(projectService, 0), [f1.path, config.path]);
 
-            // Should close configured project with next file open
+            // Since f2 refers to config file as the default project, it needs to be kept alive
             projectService.closeClientFile(f1.path);
-
             projectService.openClientFile(f2.path);
+            projectService.checkNumberOfProjects({ inferredProjects: 1, configuredProjects: 1 });
+            assert.isDefined(projectService.configuredProjects.get(config.path));
+            checkProjectActualFiles(projectService.inferredProjects[0], [f2.path]);
+
+            // Should close configured project with next file open
+            projectService.closeClientFile(f2.path);
+            projectService.openClientFile(f3.path);
             projectService.checkNumberOfProjects({ inferredProjects: 1 });
             assert.isUndefined(projectService.configuredProjects.get(config.path));
-            checkProjectActualFiles(projectService.inferredProjects[0], [f2.path]);
+            checkProjectActualFiles(projectService.inferredProjects[0], [f3.path]);
         });
 
         it("tsconfig script block support", () => {
@@ -1341,6 +1351,26 @@ var x = 10;`
             }
         });
 
+        it("no project structure update on directory watch invoke on open file save", () => {
+            const projectRootPath = "/users/username/projects/project";
+            const file1: File = {
+                path: `${projectRootPath}/a.ts`,
+                content: "export const a = 10;"
+            };
+            const config: File = {
+                path: `${projectRootPath}/tsconfig.json`,
+                content: "{}"
+            };
+            const files = [file1, config];
+            const host = createServerHost(files);
+            const service = createProjectService(host);
+            service.openClientFile(file1.path);
+            checkNumberOfProjects(service, { configuredProjects: 1 });
+
+            host.modifyFile(file1.path, file1.content, { invokeFileDeleteCreateAsPartInsteadOfChange: true });
+            host.checkTimeoutQueueLength(0);
+        });
+
         it("handles delayed directory watch invoke on file creation", () => {
             const projectRootPath = "/users/username/projects/project";
             const fileB: File = {
@@ -1445,6 +1475,23 @@ var x = 10;`
 
             function openFile(file: File) {
                 openFilesForSession([{ file, projectRootPath }], session);
+            }
+        });
+
+        it("assert when removing project", () => {
+            const host = createServerHost([commonFile1, commonFile2, libFile]);
+            const service = createProjectService(host);
+            service.openClientFile(commonFile1.path);
+            const project = service.inferredProjects[0];
+            checkProjectActualFiles(project, [commonFile1.path, libFile.path]);
+            // Intentionally create scriptinfo and attach it to project
+            const info = service.getOrCreateScriptInfoForNormalizedPath(commonFile2.path as server.NormalizedPath, /*openedByClient*/ false)!;
+            info.attachToProject(project);
+            try {
+                service.applyChangesInOpenFiles(/*openFiles*/ undefined, /*changedFiles*/ undefined, [commonFile1.path]);
+            }
+            catch (e) {
+                assert.isTrue(e.message.indexOf("Debug Failure. False expression: Found script Info still attached to project") === 0);
             }
         });
     });

@@ -9,15 +9,12 @@
 ////        div: {};
 ////    }
 ////}
-////class [|MyClass|] {}
+////[|class [|{| "contextRangeIndex": 0 |}MyClass|] {}|]
 ////
-////<[|MyClass|]></[|MyClass|]>;
-////<[|MyClass|]/>;
+////[|<[|{| "contextRangeIndex": 2 |}MyClass|]></[|{| "contextRangeIndex": 2 |}MyClass|]>|];
+////[|<[|{| "contextRangeIndex": 5 |}MyClass|]/>|];
 ////
-////<[|div|]> </[|div|]>
+////[|<[|{| "contextRangeIndex": 7 |}div|]> </[|{| "contextRangeIndex": 7 |}div|]>|]
 
 verify.noErrors();
-
-const [r0, r1, r2, r3, d0, d1] = test.ranges();
-verify.rangesAreRenameLocations([r0, r1, r2, r3]);
-verify.rangesAreRenameLocations([d0, d1]);
+verify.rangesWithSameTextAreRenameLocations("MyClass", "div");

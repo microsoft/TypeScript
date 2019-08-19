@@ -43,3 +43,15 @@ function f4() {
     const v3 = getNumberIndexValue(o1);
     const v4 = getNumberIndexValue(o2);
 }
+
+function f5() {
+    enum E1 { A, B }
+    enum E2 { A = "A", B = "B" }
+    enum E3 { A = 0, B = "B" }
+    const v1 = getStringIndexValue(E1);
+    const v2 = getStringIndexValue(E2);
+    const v3 = getStringIndexValue(E3);
+    const v4 = getNumberIndexValue(E1);
+    const v5 = getNumberIndexValue(E2);
+    const v6 = getNumberIndexValue(E3);
+}

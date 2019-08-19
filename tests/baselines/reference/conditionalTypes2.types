@@ -431,3 +431,18 @@ type PCCA = ProductComplementComplement['a'];
 type PCCB = ProductComplementComplement['b'];
 >PCCB : Product<"b", 1>
 
+// Repro from #31326
+
+type Hmm<T, U extends T> = U extends T ? { [K in keyof U]: number } : never;
+>Hmm : Hmm<T, U>
+
+type What = Hmm<{}, { a: string }>
+>What : { a: number; }
+>a : string
+
+const w: What = { a: 4 };
+>w : { a: number; }
+>{ a: 4 } : { a: number; }
+>a : number
+>4 : 4
+

@@ -12,7 +12,7 @@ declare var Infinity: number;
 declare function eval(x: string): any;
 
 /**
-  * Converts A string to an integer.
+  * Converts a string to an integer.
   * @param s A string to convert into a number.
   * @param radix A value between 2 and 36 that specifies the base of the number in numString.
   * If this argument is not supplied, strings with a prefix of '0x' are considered hexadecimal.
@@ -466,13 +466,13 @@ interface String {
     toLowerCase(): string;
 
     /** Converts all alphabetic characters to lowercase, taking into account the host environment's current locale. */
-    toLocaleLowerCase(): string;
+    toLocaleLowerCase(locales?: string | string[]): string;
 
     /** Converts all the alphabetic characters in a string to uppercase. */
     toUpperCase(): string;
 
     /** Returns a string where all alphabetic characters have been converted to uppercase, taking into account the host environment's current locale. */
-    toLocaleUpperCase(): string;
+    toLocaleUpperCase(locales?: string | string[]): string;
 
     /** Removes the leading and trailing white space and line terminator characters from a string. */
     trim(): string;
@@ -513,7 +513,7 @@ interface Boolean {
 
 interface BooleanConstructor {
     new(value?: any): Boolean;
-    <T>(value?: T): value is Exclude<T, false | null | undefined | '' | 0>;
+    <T>(value?: T): boolean;
     readonly prototype: Boolean;
 }
 
@@ -1094,7 +1094,7 @@ interface ReadonlyArray<T> {
     /**
       * Returns a section of an array.
       * @param start The beginning of the specified portion of the array.
-      * @param end The end of the specified portion of the array.
+      * @param end The end of the specified portion of the array. This is exclusive of the element at the index 'end'.
       */
     slice(start?: number, end?: number): T[];
     /**
@@ -1230,7 +1230,7 @@ interface Array<T> {
     /**
       * Returns a section of an array.
       * @param start The beginning of the specified portion of the array.
-      * @param end The end of the specified portion of the array.
+      * @param end The end of the specified portion of the array. This is exclusive of the element at the index 'end'.
       */
     slice(start?: number, end?: number): T[];
     /**
@@ -1860,7 +1860,7 @@ interface Int8Array {
     /**
       * Returns a section of an array.
       * @param start The beginning of the specified portion of the array.
-      * @param end The end of the specified portion of the array.
+      * @param end The end of the specified portion of the array. This is exclusive of the element at the index 'end'.
       */
     slice(start?: number, end?: number): Int8Array;
 
@@ -1887,7 +1887,7 @@ interface Int8Array {
       * @param begin The index of the beginning of the array.
       * @param end The index of the end of the array.
       */
-    subarray(begin: number, end?: number): Int8Array;
+    subarray(begin?: number, end?: number): Int8Array;
 
     /**
       * Converts a number to a string by using the current locale.
@@ -2135,7 +2135,7 @@ interface Uint8Array {
     /**
       * Returns a section of an array.
       * @param start The beginning of the specified portion of the array.
-      * @param end The end of the specified portion of the array.
+      * @param end The end of the specified portion of the array. This is exclusive of the element at the index 'end'.
       */
     slice(start?: number, end?: number): Uint8Array;
 
@@ -2162,7 +2162,7 @@ interface Uint8Array {
       * @param begin The index of the beginning of the array.
       * @param end The index of the end of the array.
       */
-    subarray(begin: number, end?: number): Uint8Array;
+    subarray(begin?: number, end?: number): Uint8Array;
 
     /**
       * Converts a number to a string by using the current locale.
@@ -2410,7 +2410,7 @@ interface Uint8ClampedArray {
     /**
       * Returns a section of an array.
       * @param start The beginning of the specified portion of the array.
-      * @param end The end of the specified portion of the array.
+      * @param end The end of the specified portion of the array. This is exclusive of the element at the index 'end'.
       */
     slice(start?: number, end?: number): Uint8ClampedArray;
 
@@ -2437,7 +2437,7 @@ interface Uint8ClampedArray {
       * @param begin The index of the beginning of the array.
       * @param end The index of the end of the array.
       */
-    subarray(begin: number, end?: number): Uint8ClampedArray;
+    subarray(begin?: number, end?: number): Uint8ClampedArray;
 
     /**
       * Converts a number to a string by using the current locale.
@@ -2683,7 +2683,7 @@ interface Int16Array {
     /**
       * Returns a section of an array.
       * @param start The beginning of the specified portion of the array.
-      * @param end The end of the specified portion of the array.
+      * @param end The end of the specified portion of the array. This is exclusive of the element at the index 'end'.
       */
     slice(start?: number, end?: number): Int16Array;
 
@@ -2710,7 +2710,7 @@ interface Int16Array {
       * @param begin The index of the beginning of the array.
       * @param end The index of the end of the array.
       */
-    subarray(begin: number, end?: number): Int16Array;
+    subarray(begin?: number, end?: number): Int16Array;
 
     /**
       * Converts a number to a string by using the current locale.
@@ -2959,7 +2959,7 @@ interface Uint16Array {
     /**
       * Returns a section of an array.
       * @param start The beginning of the specified portion of the array.
-      * @param end The end of the specified portion of the array.
+      * @param end The end of the specified portion of the array. This is exclusive of the element at the index 'end'.
       */
     slice(start?: number, end?: number): Uint16Array;
 
@@ -2986,7 +2986,7 @@ interface Uint16Array {
       * @param begin The index of the beginning of the array.
       * @param end The index of the end of the array.
       */
-    subarray(begin: number, end?: number): Uint16Array;
+    subarray(begin?: number, end?: number): Uint16Array;
 
     /**
       * Converts a number to a string by using the current locale.
@@ -3234,7 +3234,7 @@ interface Int32Array {
     /**
       * Returns a section of an array.
       * @param start The beginning of the specified portion of the array.
-      * @param end The end of the specified portion of the array.
+      * @param end The end of the specified portion of the array. This is exclusive of the element at the index 'end'.
       */
     slice(start?: number, end?: number): Int32Array;
 
@@ -3261,7 +3261,7 @@ interface Int32Array {
       * @param begin The index of the beginning of the array.
       * @param end The index of the end of the array.
       */
-    subarray(begin: number, end?: number): Int32Array;
+    subarray(begin?: number, end?: number): Int32Array;
 
     /**
       * Converts a number to a string by using the current locale.
@@ -3508,7 +3508,7 @@ interface Uint32Array {
     /**
       * Returns a section of an array.
       * @param start The beginning of the specified portion of the array.
-      * @param end The end of the specified portion of the array.
+      * @param end The end of the specified portion of the array. This is exclusive of the element at the index 'end'.
       */
     slice(start?: number, end?: number): Uint32Array;
 
@@ -3535,7 +3535,7 @@ interface Uint32Array {
       * @param begin The index of the beginning of the array.
       * @param end The index of the end of the array.
       */
-    subarray(begin: number, end?: number): Uint32Array;
+    subarray(begin?: number, end?: number): Uint32Array;
 
     /**
       * Converts a number to a string by using the current locale.
@@ -3783,7 +3783,7 @@ interface Float32Array {
     /**
       * Returns a section of an array.
       * @param start The beginning of the specified portion of the array.
-      * @param end The end of the specified portion of the array.
+      * @param end The end of the specified portion of the array. This is exclusive of the element at the index 'end'.
       */
     slice(start?: number, end?: number): Float32Array;
 
@@ -3810,7 +3810,7 @@ interface Float32Array {
       * @param begin The index of the beginning of the array.
       * @param end The index of the end of the array.
       */
-    subarray(begin: number, end?: number): Float32Array;
+    subarray(begin?: number, end?: number): Float32Array;
 
     /**
       * Converts a number to a string by using the current locale.
@@ -4059,7 +4059,7 @@ interface Float64Array {
     /**
       * Returns a section of an array.
       * @param start The beginning of the specified portion of the array.
-      * @param end The end of the specified portion of the array.
+      * @param end The end of the specified portion of the array. This is exclusive of the element at the index 'end'.
       */
     slice(start?: number, end?: number): Float64Array;
 
@@ -4086,7 +4086,7 @@ interface Float64Array {
       * @param begin The index of the beginning of the array.
       * @param end The index of the end of the array.
       */
-    subarray(begin: number, end?: number): Float64Array;
+    subarray(begin?: number, end?: number): Float64Array;
 
     /**
       * Converts a number to a string by using the current locale.

@@ -20,10 +20,10 @@ var [x11 = 0, y11 = ""] = [1, "hello"];
 >"hello" : "hello"
 
 var [a11, b11, c11] = [];
->a11 : any
->b11 : any
->c11 : any
->[] : [undefined?, undefined?, undefined?]
+>a11 : undefined
+>b11 : undefined
+>c11 : undefined
+>[] : []
 
 var [a2, [b2, { x12, y12: c2 }]=["abc", { x12: 10, y12: false }]] = [1, ["hello", { x12: 5, y12: true }]];
 >a2 : number

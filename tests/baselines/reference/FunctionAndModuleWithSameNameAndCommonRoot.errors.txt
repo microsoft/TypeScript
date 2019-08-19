@@ -24,6 +24,7 @@ tests/cases/conformance/internalModules/DeclarationMerging/test.ts(2,5): error T
     var fn = A.Point;
         ~~
 !!! error TS2403: Subsequent variable declarations must have the same type.  Variable 'fn' must be of type '() => { x: number; y: number; }', but here has type 'typeof Point'.
+!!! related TS6203 tests/cases/conformance/internalModules/DeclarationMerging/test.ts:1:5: 'fn' was also declared here.
     
     var cl: { x: number; y: number; }
     var cl = A.Point();
@@ -46,6 +47,7 @@ tests/cases/conformance/internalModules/DeclarationMerging/test.ts(2,5): error T
     var fn = B.Point;  // not expected to be an error. bug 840000: [corelang] Function of fundule not assignalbe as expected
         ~~
 !!! error TS2403: Subsequent variable declarations must have the same type.  Variable 'fn' must be of type '() => { x: number; y: number; }', but here has type 'typeof Point'.
+!!! related TS6203 tests/cases/conformance/internalModules/DeclarationMerging/test.ts:1:5: 'fn' was also declared here.
     
     var cl: { x: number; y: number; }
     var cl = B.Point();

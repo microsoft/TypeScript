@@ -21,7 +21,17 @@ namespace ts.Completions.StringCompletions {
                 return convertPathCompletions(completion.paths);
             case StringLiteralCompletionKind.Properties: {
                 const entries: CompletionEntry[] = [];
-                getCompletionEntriesFromSymbols(completion.symbols, entries, sourceFile, sourceFile, checker, ScriptTarget.ESNext, log, CompletionKind.String, preferences); // Target will not be used, so arbitrary
+                getCompletionEntriesFromSymbols(
+                    completion.symbols,
+                    entries,
+                    sourceFile,
+                    sourceFile,
+                    checker,
+                    ScriptTarget.ESNext,
+                    log,
+                    CompletionKind.String,
+                    preferences
+                ); // Target will not be used, so arbitrary
                 return { isGlobalCompletion: false, isMemberCompletion: true, isNewIdentifierLocation: completion.hasIndexSignature, entries };
             }
             case StringLiteralCompletionKind.Types: {
@@ -60,7 +70,7 @@ namespace ts.Completions.StringCompletions {
         const isGlobalCompletion = false; // We don't want the editor to offer any other completions, such as snippets, inside a comment.
         const isNewIdentifierLocation = true; // The user may type in a path that doesn't yet exist, creating a "new identifier" with respect to the collection of identifiers the server is aware of.
         const entries = pathCompletions.map(({ name, kind, span, extension }): CompletionEntry =>
-            ({ name, kind, kindModifiers: kindModifiersFromExtension(extension), sortText: "0", replacementSpan: span }));
+            ({ name, kind, kindModifiers: kindModifiersFromExtension(extension), sortText: SortText.LocationPriority, replacementSpan: span }));
         return { isGlobalCompletion, isMemberCompletion: false, isNewIdentifierLocation, entries };
     }
     function kindModifiersFromExtension(extension: Extension | undefined): ScriptElementKindModifier {

@@ -22,3 +22,23 @@ e['hello'] = 'modified';
 e['hello'] += 1;
 e['hello'] ++;
 
+const o = { a: 0 };
+
+declare const k: "a" | "b" | "c";
+o[k];
+
+
+declare const k2: "c";
+o[k2];
+
+declare const sym : unique symbol;
+o[sym];
+
+enum NumEnum { a, b }
+let numEnumKey: NumEnum;
+o[numEnumKey];
+
+
+enum StrEnum { a = "a", b = "b" }
+let strEnumKey: StrEnum;
+o[strEnumKey];
