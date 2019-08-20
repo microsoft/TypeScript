@@ -16,8 +16,10 @@
     "rules": {
         "@typescript-eslint/adjacent-overload-signatures": "error",
         "@typescript-eslint/array-type": "error",
+
         "camelcase": "off",
         "@typescript-eslint/camelcase": ["error", { "properties": "never", "allow": ["^[A-Za-z][a-zA-Za-z]+_[A-Za-z]+$"] }],
+
         "@typescript-eslint/class-name-casing": "error",
         "@typescript-eslint/consistent-type-definitions": ["error", "interface"],
         "@typescript-eslint/interface-name-prefix": "error",
@@ -27,8 +29,13 @@
         "@typescript-eslint/prefer-for-of": "error",
         "@typescript-eslint/prefer-function-type": "error",
         "@typescript-eslint/prefer-namespace-keyword": "error",
+
+        "quotes": "off",
+        "@typescript-eslint/quotes": ["error", "double", { "avoidEscape": true, "allowTemplateLiterals": true }],
+
         "semi": "off",
         "@typescript-eslint/semi": "error",
+
         "@typescript-eslint/triple-slash-reference": "error",
         "@typescript-eslint/type-annotation-spacing": "error",
         "@typescript-eslint/unified-signatures": "error",
@@ -96,7 +103,6 @@
         "prefer-const": "error",
         "prefer-object-spread": "error",
         "quote-props": ["error", "consistent-as-needed"],
-        "quotes": ["error", "double", { "avoidEscape": true, "allowTemplateLiterals": true }],
         "space-in-parens": "error",
         "unicode-bom": ["error", "never"],
         "use-isnan": "error"
