@@ -1432,7 +1432,7 @@ namespace ts.server {
         }
 
         /*@internal*/
-        onDiscoveredNewPackageJson(fileName: string) {
+        onAddPackageJson(fileName: string) {
             this.packageJsonCache.addOrUpdate(fileName);
             this.watchPackageJsonFile(fileName);
         }
