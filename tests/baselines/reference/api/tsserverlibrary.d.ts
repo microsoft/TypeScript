@@ -2599,6 +2599,10 @@ declare namespace ts {
         [option: string]: CompilerOptionsValue | TsConfigSourceFile | undefined;
     }
     export interface TypeAcquisition {
+        /**
+         * @deprecated typingOptions.enableAutoDiscovery
+         * Use typeAcquisition.enable instead.
+         */
         enableAutoDiscovery?: boolean;
         enable?: boolean;
         include?: string[];
@@ -8416,6 +8420,7 @@ declare namespace ts.server {
         private program;
         private externalFiles;
         private missingFilesMap;
+        private packageJsonFilesMap;
         private generatedFilesMap;
         private plugins;
         private lastFileExceededProgramSize;
@@ -8453,6 +8458,8 @@ declare namespace ts.server {
         isNonTsProject(): boolean;
         isJsOnlyProject(): boolean;
         static resolveModule(moduleName: string, initialDir: string, host: ServerHost, log: (message: string) => void, logErrors?: (message: string) => void): {} | undefined;
+        private importSuggestionsCache;
+        private dirtyFilesForSuggestions;
         isKnownTypesPackageName(name: string): boolean;
         installPackage(options: InstallPackageOptions): Promise<ApplyCodeActionCommandResult>;
         private readonly typingsCache;
@@ -8526,6 +8533,8 @@ declare namespace ts.server {
         updateGraph(): boolean;
         protected removeExistingTypings(include: string[]): string[];
         private updateGraphWorker;
+        private sourceFileHasChangedOwnImportSuggestions;
+        private ambientModuleDeclarationsAreEqual;
         private detachScriptInfoFromProject;
         private addMissingFileWatcher;
         private isWatchedMissingFile;
@@ -8542,6 +8551,7 @@ declare namespace ts.server {
         private enableProxy;
         /** Starts a new check for diagnostics. Call this if some file has updated that would cause diagnostics to be changed. */
         refreshDiagnostics(): void;
+        private watchPackageJsonFile;
     }
     /**
      * If a file is opened and no tsconfig (or jsconfig) is found,

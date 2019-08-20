@@ -169,6 +169,7 @@ namespace ts {
         packageName: string;
     }
 
+    /* @internal */
     export const enum PackageJsonDependencyGroup {
         Dependencies         = 1 << 0,
         DevDependencies      = 1 << 1,
@@ -177,6 +178,7 @@ namespace ts {
         All = Dependencies | DevDependencies | PeerDependencies | OptionalDependencies,
     }
 
+    /* @internal */
     export interface PackageJsonInfo {
         fileName: string;
         dependencies?: Map<string>;

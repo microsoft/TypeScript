@@ -846,13 +846,18 @@ namespace ts.server {
             (this.updatedFileNames || (this.updatedFileNames = createMap<true>())).set(fileName, true);
         }
 
-        markAsDirty(/*@internal*/ changedFile?: ScriptInfo) {
+        /*@internal*/
+        markFileAsDirty(changedFile: ScriptInfo) {
+            this.markAsDirty();
+            if (!this.importSuggestionsCache.isEmpty && changedFile.cacheSourceFile) {
+                (this.dirtyFilesForSuggestions || (this.dirtyFilesForSuggestions = createMap())).set(changedFile.fileName, true);
+            }
+        }
+
+        markAsDirty() {
             if (!this.dirty) {
                 this.projectStateVersion++;
                 this.dirty = true;
-            }
-            if (changedFile && !this.importSuggestionsCache.isEmpty && changedFile.cacheSourceFile) {
-                (this.dirtyFilesForSuggestions || (this.dirtyFilesForSuggestions = createMap())).set(changedFile.fileName, true);
             }
         }
 
