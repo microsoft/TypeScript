@@ -459,10 +459,6 @@
         "category": "Error",
         "code": 1149
     },
-    "'new T[]' cannot be used to create an array. Use 'new Array<T>()' instead.": {
-        "category": "Error",
-        "code": 1150
-    },
     "'const' declarations must be initialized.": {
         "category": "Error",
         "code": 1155
@@ -5115,6 +5111,10 @@
     "Remove all unnecessary uses of 'await'": {
         "category": "Message",
         "code": 95087
+    },
+    "Enable the '--jsx' flag in your configuration file": {
+        "category": "Message",
+        "code": 95088
     },
 
     "No value exists in scope for the shorthand property '{0}'. Either declare one or provide an initializer.": {

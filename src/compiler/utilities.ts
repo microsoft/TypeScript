@@ -220,7 +220,7 @@ namespace ts {
         return node.end - node.pos;
     }
 
-    export function getResolvedModule(sourceFile: SourceFile, moduleNameText: string): ResolvedModuleFull | undefined {
+    export function getResolvedModule(sourceFile: SourceFile | undefined, moduleNameText: string): ResolvedModuleFull | undefined {
         return sourceFile && sourceFile.resolvedModules && sourceFile.resolvedModules.get(moduleNameText);
     }
 
@@ -2343,7 +2343,7 @@ namespace ts {
     export function getTypeParameterFromJsDoc(node: TypeParameterDeclaration & { parent: JSDocTemplateTag }): TypeParameterDeclaration | undefined {
         const name = node.name.escapedText;
         const { typeParameters } = (node.parent.parent.parent as SignatureDeclaration | InterfaceDeclaration | ClassDeclaration);
-        return find(typeParameters!, p => p.name.escapedText === name);
+        return typeParameters && find(typeParameters, p => p.name.escapedText === name);
     }
 
     export function hasRestParameter(s: SignatureDeclaration | JSDocSignature): boolean {
@@ -2507,7 +2507,7 @@ namespace ts {
         return node && node.kind === SyntaxKind.DeleteExpression;
     }
 
-    export function isNodeDescendantOf(node: Node, ancestor: Node): boolean {
+    export function isNodeDescendantOf(node: Node, ancestor: Node | undefined): boolean {
         while (node) {
             if (node === ancestor) return true;
             node = node.parent;

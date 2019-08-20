@@ -185,3 +185,72 @@ const y = bar(1, 2);
 >1 : 1
 >2 : 2
 
+// Repro from #32752
+
+const containsPromises: unique symbol = Symbol();
+>containsPromises : unique symbol
+>Symbol() : unique symbol
+>Symbol : SymbolConstructor
+
+type DeepPromised<T> =
+>DeepPromised : DeepPromised<T>
+
+    { [containsPromises]?: true } &
+>[containsPromises] : true | undefined
+>containsPromises : unique symbol
+>true : true
+
+    { [TKey in keyof T]: T[TKey] | DeepPromised<T[TKey]> | Promise<DeepPromised<T[TKey]>> };
+
+async function fun<T>(deepPromised: DeepPromised<T>) {
+>fun : <T>(deepPromised: DeepPromised<T>) => Promise<void>
+>deepPromised : DeepPromised<T>
+
+    const deepPromisedWithIndexer: DeepPromised<{ [name: string]: {} | null | undefined }> = deepPromised;
+>deepPromisedWithIndexer : DeepPromised<{ [name: string]: {} | null | undefined; }>
+>name : string
+>null : null
+>deepPromised : DeepPromised<T>
+
+    for (const value of Object.values(deepPromisedWithIndexer)) {
+>value : {} | ({ [containsPromises]?: true | undefined; } & {}) | Promise<{ [containsPromises]?: true | undefined; } & {}> | null | undefined
+>Object.values(deepPromisedWithIndexer) : ({} | ({ [containsPromises]?: true | undefined; } & {}) | Promise<{ [containsPromises]?: true | undefined; } & {}> | null | undefined)[]
+>Object.values : { <T>(o: { [s: string]: T; } | ArrayLike<T>): T[]; (o: {}): any[]; }
+>Object : ObjectConstructor
+>values : { <T>(o: { [s: string]: T; } | ArrayLike<T>): T[]; (o: {}): any[]; }
+>deepPromisedWithIndexer : DeepPromised<{ [name: string]: {} | null | undefined; }>
+
+        const awaitedValue = await value;
+>awaitedValue : {} | ({ [containsPromises]?: true | undefined; } & {}) | null | undefined
+>await value : {} | ({ [containsPromises]?: true | undefined; } & {}) | null | undefined
+>value : {} | ({ [containsPromises]?: true | undefined; } & {}) | Promise<{ [containsPromises]?: true | undefined; } & {}> | null | undefined
+
+        if (awaitedValue)
+>awaitedValue : {} | ({ [containsPromises]?: true | undefined; } & {}) | null | undefined
+
+            await fun(awaitedValue);
+>await fun(awaitedValue) : void
+>fun(awaitedValue) : Promise<void>
+>fun : <T>(deepPromised: DeepPromised<T>) => Promise<void>
+>awaitedValue : {} | ({ [containsPromises]?: true | undefined; } & {})
+    }
+}
+
+// Repro from #32752
+
+type Deep<T> = { [K in keyof T]: T[K] | Deep<T[K]> };
+>Deep : Deep<T>
+
+declare function baz<T>(dp: Deep<T>): T;
+>baz : <T>(dp: Deep<T>) => T
+>dp : Deep<T>
+
+declare let xx: { a: string | undefined };
+>xx : { a: string | undefined; }
+>a : string | undefined
+
+baz(xx);
+>baz(xx) : { a: string | undefined; }
+>baz : <T>(dp: Deep<T>) => T
+>xx : { a: string | undefined; }
+

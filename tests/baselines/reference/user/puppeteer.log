@@ -1,17 +1,17 @@
 Exit Code: 1
 Standard output:
-lib/Accessibility.js(118,15): error TS2503: Cannot find namespace 'Protocol'.
-lib/Accessibility.js(310,7): error TS2322: Type 'string | number | boolean' is not assignable to type 'never'.
+lib/Accessibility.js(134,15): error TS2503: Cannot find namespace 'Protocol'.
+lib/Accessibility.js(341,7): error TS2322: Type 'string | number | boolean' is not assignable to type 'never'.
   Type 'string' is not assignable to type 'never'.
-lib/Accessibility.js(333,7): error TS2322: Type 'string | number | true' is not assignable to type 'never'.
+lib/Accessibility.js(364,7): error TS2322: Type 'string | number | true' is not assignable to type 'never'.
   Type 'string' is not assignable to type 'never'.
-lib/Accessibility.js(345,7): error TS2322: Type 'boolean | "mixed"' is not assignable to type 'never'.
+lib/Accessibility.js(376,7): error TS2322: Type 'boolean | "mixed"' is not assignable to type 'never'.
   Type 'false' is not assignable to type 'never'.
-lib/Accessibility.js(356,7): error TS2322: Type 'string | number | boolean' is not assignable to type 'never'.
+lib/Accessibility.js(387,7): error TS2322: Type 'string | number | boolean' is not assignable to type 'never'.
   Type 'string' is not assignable to type 'never'.
-lib/Accessibility.js(369,7): error TS2322: Type 'string | number | true' is not assignable to type 'never'.
+lib/Accessibility.js(400,7): error TS2322: Type 'string | number | true' is not assignable to type 'never'.
   Type 'string' is not assignable to type 'never'.
-lib/Accessibility.js(375,22): error TS2503: Cannot find namespace 'Protocol'.
+lib/Accessibility.js(406,22): error TS2503: Cannot find namespace 'Protocol'.
 lib/Browser.js(109,15): error TS2503: Cannot find namespace 'Protocol'.
 lib/Browser.js(116,58): error TS2322: Type 'Promise<CDPSession>' is not assignable to type 'Promise<Puppeteer.CDPSession>'.
   Type 'CDPSession' is not assignable to type 'Puppeteer.CDPSession'.
@@ -21,30 +21,28 @@ lib/Coverage.js(115,15): error TS2503: Cannot find namespace 'Protocol'.
 lib/Coverage.js(208,15): error TS2503: Cannot find namespace 'Protocol'.
 lib/EmulationManager.js(36,16): error TS2503: Cannot find namespace 'Protocol'.
 lib/ExecutionContext.js(26,15): error TS2503: Cannot find namespace 'Protocol'.
-lib/ExecutionContext.js(157,18): error TS2503: Cannot find namespace 'Protocol'.
-lib/FrameManager.js(29,15): error TS2503: Cannot find namespace 'Protocol'.
-lib/FrameManager.js(132,15): error TS2503: Cannot find namespace 'Protocol'.
-lib/FrameManager.js(154,15): error TS2503: Cannot find namespace 'Protocol'.
-lib/FrameManager.js(211,15): error TS2503: Cannot find namespace 'Protocol'.
-lib/FrameManager.js(649,15): error TS2503: Cannot find namespace 'Protocol'.
+lib/ExecutionContext.js(158,18): error TS2503: Cannot find namespace 'Protocol'.
+lib/FrameManager.js(152,15): error TS2503: Cannot find namespace 'Protocol'.
+lib/FrameManager.js(174,15): error TS2503: Cannot find namespace 'Protocol'.
+lib/FrameManager.js(231,15): error TS2503: Cannot find namespace 'Protocol'.
+lib/FrameManager.js(669,15): error TS2503: Cannot find namespace 'Protocol'.
 lib/JSHandle.js(33,15): error TS2503: Cannot find namespace 'Protocol'.
 lib/JSHandle.js(129,15): error TS2503: Cannot find namespace 'Protocol'.
-lib/JSHandle.js(216,29): error TS2503: Cannot find namespace 'Protocol'.
+lib/JSHandle.js(220,29): error TS2503: Cannot find namespace 'Protocol'.
 lib/NetworkManager.js(31,30): error TS2503: Cannot find namespace 'Protocol'.
-lib/NetworkManager.js(136,15): error TS2503: Cannot find namespace 'Protocol'.
-lib/NetworkManager.js(156,15): error TS2503: Cannot find namespace 'Protocol'.
-lib/NetworkManager.js(194,15): error TS2503: Cannot find namespace 'Protocol'.
-lib/NetworkManager.js(215,15): error TS2503: Cannot find namespace 'Protocol'.
-lib/NetworkManager.js(225,15): error TS2503: Cannot find namespace 'Protocol'.
-lib/NetworkManager.js(239,15): error TS2503: Cannot find namespace 'Protocol'.
-lib/NetworkManager.js(252,15): error TS2503: Cannot find namespace 'Protocol'.
-lib/NetworkManager.js(271,15): error TS2503: Cannot find namespace 'Protocol'.
-lib/NetworkManager.js(295,15): error TS2503: Cannot find namespace 'Protocol'.
-lib/NetworkManager.js(514,15): error TS2503: Cannot find namespace 'Protocol'.
-lib/NetworkManager.js(654,13): error TS2503: Cannot find namespace 'Protocol'.
-lib/NetworkManager.js(689,15): error TS2503: Cannot find namespace 'Protocol'.
-lib/Page.js(71,15): error TS2503: Cannot find namespace 'Protocol'.
-lib/Page.js(112,33): error TS2345: Argument of type 'CDPSession' is not assignable to parameter of type 'Puppeteer.CDPSession'.
+lib/NetworkManager.js(165,15): error TS2503: Cannot find namespace 'Protocol'.
+lib/NetworkManager.js(184,15): error TS2503: Cannot find namespace 'Protocol'.
+lib/NetworkManager.js(203,15): error TS2503: Cannot find namespace 'Protocol'.
+lib/NetworkManager.js(224,15): error TS2503: Cannot find namespace 'Protocol'.
+lib/NetworkManager.js(245,15): error TS2503: Cannot find namespace 'Protocol'.
+lib/NetworkManager.js(255,15): error TS2503: Cannot find namespace 'Protocol'.
+lib/NetworkManager.js(269,15): error TS2503: Cannot find namespace 'Protocol'.
+lib/NetworkManager.js(282,15): error TS2503: Cannot find namespace 'Protocol'.
+lib/NetworkManager.js(301,15): error TS2503: Cannot find namespace 'Protocol'.
+lib/NetworkManager.js(325,15): error TS2503: Cannot find namespace 'Protocol'.
+lib/NetworkManager.js(535,15): error TS2503: Cannot find namespace 'Protocol'.
+lib/NetworkManager.js(674,15): error TS2503: Cannot find namespace 'Protocol'.
+lib/Page.js(93,33): error TS2345: Argument of type 'CDPSession' is not assignable to parameter of type 'Puppeteer.CDPSession'.
   Types of property 'on' are incompatible.
     Type '(event: string | symbol, listener: (...args: any[]) => void) => CDPSession' is not assignable to type '<T extends string | number | symbol>(event: T, listener: (arg: any) => void) => CDPSession'.
       Types of parameters 'event' and 'event' are incompatible.
@@ -54,21 +52,22 @@ lib/Page.js(112,33): error TS2345: Argument of type 'CDPSession' is not assignab
               Type 'T' is not assignable to type 'symbol'.
                 Type 'string | number | symbol' is not assignable to type 'symbol'.
                   Type 'string' is not assignable to type 'symbol'.
-lib/Page.js(189,15): error TS2503: Cannot find namespace 'Protocol'.
-lib/Page.js(284,15): error TS2503: Cannot find namespace 'Protocol'.
-lib/Page.js(369,20): error TS2503: Cannot find namespace 'Protocol'.
-lib/Page.js(432,7): error TS2740: Type '(...args: any[]) => Promise<any>' is missing the following properties from type 'Window': applicationCache, caches, clientInformation, closed, and 227 more.
-lib/Page.js(442,9): error TS2349: This expression is not callable.
+lib/Page.js(146,15): error TS2503: Cannot find namespace 'Protocol'.
+lib/Page.js(219,15): error TS2503: Cannot find namespace 'Protocol'.
+lib/Page.js(387,20): error TS2503: Cannot find namespace 'Protocol'.
+lib/Page.js(450,7): error TS2740: Type '(...args: any[]) => Promise<any>' is missing the following properties from type 'Window': applicationCache, caches, clientInformation, closed, and 227 more.
+lib/Page.js(460,9): error TS2349: This expression is not callable.
   Type 'Window' has no call signatures.
-lib/Page.js(478,15): error TS2503: Cannot find namespace 'Protocol'.
-lib/Page.js(488,22): error TS2503: Cannot find namespace 'Protocol'.
-lib/Page.js(501,15): error TS2503: Cannot find namespace 'Protocol'.
-lib/Page.js(511,15): error TS2503: Cannot find namespace 'Protocol'.
-lib/Page.js(536,15): error TS2503: Cannot find namespace 'Protocol'.
-lib/Page.js(589,14): error TS2503: Cannot find namespace 'Protocol'.
-lib/Page.js(890,19): error TS2503: Cannot find namespace 'Protocol'.
-lib/Target.js(22,15): error TS2503: Cannot find namespace 'Protocol'.
-lib/Target.js(118,15): error TS2503: Cannot find namespace 'Protocol'.
+lib/Page.js(496,15): error TS2503: Cannot find namespace 'Protocol'.
+lib/Page.js(506,22): error TS2503: Cannot find namespace 'Protocol'.
+lib/Page.js(519,15): error TS2503: Cannot find namespace 'Protocol'.
+lib/Page.js(529,15): error TS2503: Cannot find namespace 'Protocol'.
+lib/Page.js(554,15): error TS2503: Cannot find namespace 'Protocol'.
+lib/Page.js(607,14): error TS2503: Cannot find namespace 'Protocol'.
+lib/Page.js(908,19): error TS2503: Cannot find namespace 'Protocol'.
+lib/Page.js(1309,15): error TS2503: Cannot find namespace 'Protocol'.
+lib/Target.js(23,15): error TS2503: Cannot find namespace 'Protocol'.
+lib/Target.js(135,15): error TS2503: Cannot find namespace 'Protocol'.
 lib/Worker.js(25,50): error TS2503: Cannot find namespace 'Protocol'.
 lib/Worker.js(26,24): error TS2503: Cannot find namespace 'Protocol'.
 lib/Worker.js(33,26): error TS2503: Cannot find namespace 'Protocol'.

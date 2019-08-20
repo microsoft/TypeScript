@@ -8,11 +8,11 @@ lib/adapters/http.js(121,40): error TS2532: Object is possibly 'undefined'.
 lib/adapters/http.js(122,17): error TS2531: Object is possibly 'null'.
 lib/adapters/http.js(122,54): error TS2531: Object is possibly 'null'.
 lib/adapters/http.js(122,54): error TS2532: Object is possibly 'undefined'.
-lib/adapters/http.js(220,23): error TS2345: Argument of type 'null' is not assignable to parameter of type 'string | undefined'.
-lib/adapters/http.js(226,44): error TS2345: Argument of type 'null' is not assignable to parameter of type 'string | undefined'.
-lib/adapters/http.js(232,13): error TS2322: Type 'string' is not assignable to type 'Buffer'.
-lib/adapters/http.js(244,40): error TS2345: Argument of type 'null' is not assignable to parameter of type 'string | undefined'.
-lib/adapters/http.js(268,42): error TS2345: Argument of type 'null' is not assignable to parameter of type 'string | undefined'.
+lib/adapters/http.js(221,23): error TS2345: Argument of type 'null' is not assignable to parameter of type 'string | undefined'.
+lib/adapters/http.js(227,44): error TS2345: Argument of type 'null' is not assignable to parameter of type 'string | undefined'.
+lib/adapters/http.js(233,13): error TS2322: Type 'string' is not assignable to type 'Buffer'.
+lib/adapters/http.js(245,40): error TS2345: Argument of type 'null' is not assignable to parameter of type 'string | undefined'.
+lib/adapters/http.js(269,42): error TS2345: Argument of type 'null' is not assignable to parameter of type 'string | undefined'.
 lib/adapters/xhr.js(62,7): error TS2322: Type 'null' is not assignable to type 'XMLHttpRequest'.
 lib/adapters/xhr.js(74,7): error TS2322: Type 'null' is not assignable to type 'XMLHttpRequest'.
 lib/adapters/xhr.js(81,51): error TS2345: Argument of type 'null' is not assignable to parameter of type 'string | undefined'.
