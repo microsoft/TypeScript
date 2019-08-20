@@ -7,15 +7,15 @@ var mod = require('./mod');
 >'./mod' : "./mod"
 
 var a = new mod.A()
->a : A & { m(n: number): number; }
->new mod.A() : A & { m(n: number): number; }
+>a : A
+>new mod.A() : A
 >mod.A : typeof A
 >mod : typeof import("tests/cases/conformance/salsa/mod")
 >A : typeof A
 
 var b = new mod.B()
->b : B & { m(n: number): number; }
->new mod.B() : B & { m(n: number): number; }
+>b : B
+>new mod.B() : B
 >mod.B : typeof B
 >mod : typeof import("tests/cases/conformance/salsa/mod")
 >B : typeof B
@@ -23,14 +23,14 @@ var b = new mod.B()
 a.m('nope')
 >a.m('nope') : number
 >a.m : (n: number) => number
->a : A & { m(n: number): number; }
+>a : A
 >m : (n: number) => number
 >'nope' : "nope"
 
 b.m('not really')
 >b.m('not really') : number
 >b.m : (n: number) => number
->b : B & { m(n: number): number; }
+>b : B
 >m : (n: number) => number
 >'not really' : "not really"
 

@@ -40,7 +40,7 @@ B.prototype.m = function() { this.x = 2; }
 >function() { this.x = 2; } : () => void
 >this.x = 2 : 2
 >this.x : number
->this : B
+>this : this
 >x : number
 >2 : 2
 
