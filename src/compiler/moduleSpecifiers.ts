@@ -11,11 +11,6 @@ namespace ts.moduleSpecifiers {
         readonly ending: Ending;
     }
 
-    export interface ModulePath {
-        path: string;
-        symlinkDirectory?: string;
-    }
-
     function getPreferences({ importModuleSpecifierPreference, importModuleSpecifierEnding }: UserPreferences, compilerOptions: CompilerOptions, importingSourceFile: SourceFile): Preferences {
         return {
             relativePreference: importModuleSpecifierPreference === "relative" ? RelativePreference.Relative : importModuleSpecifierPreference === "non-relative" ? RelativePreference.NonRelative : RelativePreference.Auto,
