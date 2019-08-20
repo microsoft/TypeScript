@@ -1205,7 +1205,7 @@ namespace ts {
                 return oldProgram.structureIsReused = StructureIsReused.Not;
             }
 
-            Debug.assert(!oldProgram.structureIsReused);
+            Debug.assert(!(oldProgram.structureIsReused! & (StructureIsReused.Completely | StructureIsReused.SafeModules)));
 
             // there is an old program, check if we can reuse its structure
             const oldRootNames = oldProgram.getRootFileNames();
@@ -1314,19 +1314,22 @@ namespace ts {
 
                     // check imports and module augmentations
                     collectExternalModuleReferences(newSourceFile);
+                    if (!arrayIsEqualTo(oldSourceFile.imports, newSourceFile.imports, moduleNameIsEqualTo)) {
+                        // imports has changed
+                        oldProgram.structureIsReused = StructureIsReused.SafeModules;
+                    }
                     if (!arrayIsEqualTo(oldSourceFile.moduleAugmentations, newSourceFile.moduleAugmentations, moduleNameIsEqualTo)) {
                         // moduleAugmentations has changed
                         oldProgram.structureIsReused = StructureIsReused.SafeModules;
                     }
-                    else if (
+                    if ((oldSourceFile.flags & NodeFlags.PermanentlySetIncrementalFlags) !== (newSourceFile.flags & NodeFlags.PermanentlySetIncrementalFlags)) {
                         // dynamicImport has changed
-                        (oldSourceFile.flags & NodeFlags.PermanentlySetIncrementalFlags) !== (newSourceFile.flags & NodeFlags.PermanentlySetIncrementalFlags) ||
-                        // imports has changed
-                        !arrayIsEqualTo(oldSourceFile.imports, newSourceFile.imports, moduleNameIsEqualTo) ||
+                        oldProgram.structureIsReused = StructureIsReused.SafeModules;
+                    }
+
+                    if (!arrayIsEqualTo(oldSourceFile.typeReferenceDirectives, newSourceFile.typeReferenceDirectives, fileReferenceIsEqualTo)) {
                         // 'types' references has changed
-                        !arrayIsEqualTo(oldSourceFile.typeReferenceDirectives, newSourceFile.typeReferenceDirectives, fileReferenceIsEqualTo)
-                     ) {
-                        oldProgram.structureIsReused = StructureIsReused.ModuleReferencesChanged;
+                        oldProgram.structureIsReused = StructureIsReused.SafeModules;
                     }
 
                     // tentatively approve the file
@@ -2003,6 +2006,12 @@ namespace ts {
 
         function fileReferenceIsEqualTo(a: FileReference, b: FileReference): boolean {
             return a.fileName === b.fileName;
+        }
+
+        function moduleNameIsEqualTo(a: StringLiteralLike | Identifier, b: StringLiteralLike | Identifier): boolean {
+            return a.kind === SyntaxKind.Identifier
+                ? b.kind === SyntaxKind.Identifier && a.escapedText === b.escapedText
+                : b.kind === SyntaxKind.StringLiteral && a.text === b.text;
         }
 
         function collectExternalModuleReferences(file: SourceFile): void {

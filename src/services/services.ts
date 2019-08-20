@@ -1259,6 +1259,7 @@ namespace ts {
                 projectReferences
             };
             program = createProgram(options);
+
             // hostCache is captured in the closure for 'getOrCreateSourceFile' but it should not be used past this point.
             // It needs to be cleared to allow all collected snapshots to be released
             hostCache = undefined;
@@ -1436,8 +1437,7 @@ namespace ts {
                 getValidSourceFile(fileName),
                 position,
                 fullPreferences,
-                options.triggerCharacter,
-            );
+                options.triggerCharacter);
         }
 
         function getCompletionEntryDetails(fileName: string, position: number, name: string, formattingOptions: FormatCodeSettings | undefined, source: string | undefined, preferences: UserPreferences = emptyOptions): CompletionEntryDetails | undefined {

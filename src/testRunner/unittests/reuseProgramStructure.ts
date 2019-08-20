@@ -256,7 +256,7 @@ namespace ts {
                 `;
                 files[0].text = files[0].text.updateReferences(newReferences);
             });
-            assert.equal(program1.structureIsReused, StructureIsReused.ModuleReferencesChanged);
+            assert.equal(program1.structureIsReused, StructureIsReused.SafeModules);
         });
 
         it("fails if change affects type references", () => {
@@ -276,7 +276,7 @@ namespace ts {
             updateProgram(program1, ["a.ts"], { target }, files => {
                 files[2].text = files[2].text.updateImportsAndExports("import x from 'b'");
             });
-            assert.equal(program1.structureIsReused, StructureIsReused.ModuleReferencesChanged);
+            assert.equal(program1.structureIsReused, StructureIsReused.SafeModules);
         });
 
         it("fails if change affects type directives", () => {
@@ -288,7 +288,7 @@ namespace ts {
 /// <reference types="typerefs1" />`;
                 files[0].text = files[0].text.updateReferences(newReferences);
             });
-            assert.equal(program1.structureIsReused, StructureIsReused.ModuleReferencesChanged);
+            assert.equal(program1.structureIsReused, StructureIsReused.SafeModules);
         });
 
         it("fails if module kind changes", () => {
@@ -360,7 +360,7 @@ namespace ts {
             const program3 = updateProgram(program2, ["a.ts"], options, files => {
                 files[0].text = files[0].text.updateImportsAndExports("");
             });
-            assert.equal(program2.structureIsReused, StructureIsReused.ModuleReferencesChanged);
+            assert.equal(program2.structureIsReused, StructureIsReused.SafeModules);
             checkResolvedModulesCache(program3, "a.ts", /*expectedContent*/ undefined);
 
             const program4 = updateProgram(program3, ["a.ts"], options, files => {
@@ -369,7 +369,7 @@ namespace ts {
                 `;
                 files[0].text = files[0].text.updateImportsAndExports(newImports);
             });
-            assert.equal(program3.structureIsReused, StructureIsReused.ModuleReferencesChanged);
+            assert.equal(program3.structureIsReused, StructureIsReused.SafeModules);
             checkResolvedModulesCache(program4, "a.ts", createMapFromTemplate({ b: createResolvedModule("b.ts"), c: undefined }));
         });
 
@@ -435,7 +435,7 @@ namespace ts {
                 files[0].text = files[0].text.updateReferences("");
             });
 
-            assert.equal(program2.structureIsReused, StructureIsReused.ModuleReferencesChanged);
+            assert.equal(program2.structureIsReused, StructureIsReused.SafeModules);
             checkResolvedTypeDirectivesCache(program3, "/a.ts", /*expectedContent*/ undefined);
 
             updateProgram(program3, ["/a.ts"], options, files => {
@@ -444,7 +444,7 @@ namespace ts {
                 `;
                 files[0].text = files[0].text.updateReferences(newReferences);
             });
-            assert.equal(program3.structureIsReused, StructureIsReused.ModuleReferencesChanged);
+            assert.equal(program3.structureIsReused, StructureIsReused.SafeModules);
             checkResolvedTypeDirectivesCache(program1, "/a.ts", createMapFromTemplate({ typedefs: { resolvedFileName: "/types/typedefs/index.d.ts", primary: true } }));
         });
 
