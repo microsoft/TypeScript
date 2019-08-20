@@ -1,0 +1,15 @@
+name: "Update Labels and Assignability"
+  on: [pull_request]
+  
+  jobs:
+    update-labels:
+      name: Danger JS
+      runs-on: ubuntu-latest
+
+      steps:
+      - uses: actions/checkout@v1
+      - name: Danger JS
+        uses: danger/danger-js@9.1.8
+        args: "--dangerfile .github/workflows/js/pullRequest.ts"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
