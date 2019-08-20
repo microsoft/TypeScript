@@ -642,34 +642,6 @@ namespace ts.codefix {
         moduleSpecifiers.clearSymlinksCache();
     }
 
-    export interface ImportableModule {
-        declaringFileNames: readonly string[];
-        moduleSymbol: Symbol;
-        modulePaths?: readonly moduleSpecifiers.ModulePath[];
-    }
-
-    export function forEachImportableModule(
-        checker: TypeChecker,
-        host: LanguageServiceHost,
-        redirectTargetsMap: RedirectTargetsMap,
-        allSourceFiles: readonly SourceFile[],
-        callback: (importableModule: ImportableModule) => void,
-    ) {
-        forEachExternalModule(checker, allSourceFiles, (moduleSymbol, sourceFile) => {
-            const declaringFileNames = sourceFile ? [sourceFile.fileName] : map(moduleSymbol.declarations, s => s.getSourceFile().fileName);
-            callback({
-                declaringFileNames,
-                moduleSymbol,
-                modulePaths: flatMap(declaringFileNames, fileName => moduleSpecifiers.getPossibleModulePathsForFileName(
-                    fileName,
-                    host,
-                    allSourceFiles,
-                    redirectTargetsMap)),
-            });
-        });
-        moduleSpecifiers.clearSymlinksCache();
-    }
-
     function forEachExternalModule(checker: TypeChecker, allSourceFiles: ReadonlyArray<SourceFile>, cb: (module: Symbol, sourceFile: SourceFile | undefined) => void) {
         for (const ambient of checker.getAmbientModules()) {
             cb(ambient, /*sourceFile*/ undefined);
@@ -723,7 +695,6 @@ namespace ts.codefix {
     }
 
     function createLazyPackageJsonDependencyReader(fromFile: SourceFile, host: LanguageServiceHost, redirectTargetsMap: RedirectTargetsMap) {
-        const getCanonicalFileName = hostGetCanonicalFileName(host);
         const packageJsons = host.getPackageJsonsVisibleToFile && host.getPackageJsonsVisibleToFile(fromFile.fileName) || getPackageJsonsVisibleToFile(fromFile.fileName, host);
         const dependencyGroups = PackageJsonDependencyGroup.Dependencies | PackageJsonDependencyGroup.DevDependencies | PackageJsonDependencyGroup.OptionalDependencies;
         let usesNodeCoreModules: boolean | undefined;
@@ -808,9 +779,11 @@ namespace ts.codefix {
             }
             const specifier = moduleSpecifiers.getNodeModulesPackageName(
                 host.getCompilationSettings(),
-                moduleSpecifiers.getPossibleModulePathsForFileName(importedFileName, host, allSourceFiles, redirectTargetsMap),
-                toPath(fromFile.fileName, /*basePath*/ undefined, getCanonicalFileName),
-                host);
+                fromFile.path,
+                importedFileName,
+                host,
+                allSourceFiles,
+                redirectTargetsMap);
 
             if (!specifier) {
                 return undefined;
