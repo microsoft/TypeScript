@@ -1016,7 +1016,7 @@ namespace ts.server {
                     if (isPathIgnored(fileOrDirectoryPath)) return;
                     const configFilename = project.getConfigFilePath();
 
-                    if (getBaseFileName(fileOrDirectoryPath) === "package.json" &&
+                    if (getBaseFileName(fileOrDirectoryPath) === "package.json" && !isInsideNodeModules(fileOrDirectoryPath) &&
                         (fsResult && fsResult.fileExists || !fsResult && this.host.fileExists(fileOrDirectoryPath))
                     ) {
                         this.logger.info(`Project: ${configFilename} Detected new package.json: ${fileOrDirectory}`);

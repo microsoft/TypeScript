@@ -2164,4 +2164,8 @@ namespace ts {
     export function consumesNodeCoreModules(sourceFile: SourceFile): boolean {
         return some(sourceFile.imports, ({ text }) => JsTyping.nodeCoreModules.has(text));
     }
+
+    export function isInsideNodeModules(fileOrDirectory: string): boolean {
+        return contains(getPathComponents(fileOrDirectory), "node_modules");
+    }
 }
