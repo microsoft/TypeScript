@@ -130,6 +130,8 @@ namespace ts {
         }
 
         const commandLineOptions = commandLine.options;
+        makeFilesReferencesAbsolute(commandLine.options);
+
         if (configFileName) {
             const configParseResult = parseConfigFileWithSystem(configFileName, commandLineOptions, sys, reportDiagnostic)!; // TODO: GH#18217
             if (commandLineOptions.showConfig) {
@@ -392,6 +394,17 @@ namespace ts {
         function reportTimeStatistic(name: string, time: number) {
             reportStatisticalValue(name, (time / 1000).toFixed(2) + "s");
         }
+    }
+
+    function makeFilesReferencesAbsolute(optionsFromCLI: CompilerOptions) {
+        Object.keys(optionsFromCLI).forEach(key => {
+            const optionForKey = getOptionFromName(key, /*allowShort*/ true);
+            const value = optionsFromCLI[key];
+            const relative = isString(value) && !isRootedDiskPath(value);
+            if (relative && optionForKey && optionForKey.isFilePath) {
+                optionsFromCLI[key] = getNormalizedAbsolutePath(value as string, sys.getCurrentDirectory());
+            }
+        });
     }
 
     function writeConfigFile(options: CompilerOptions, fileNames: string[]) {
