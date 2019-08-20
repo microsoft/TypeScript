@@ -10894,7 +10894,11 @@ namespace ts {
         }
 
         function getAliasSymbolForTypeNode(node: TypeNode) {
-            return isTypeAlias(node.parent) ? getSymbolOfNode(node.parent) : undefined;
+            let host = node.parent;
+            while (isParenthesizedTypeNode(host)) {
+                host = host.parent;
+            }
+            return isTypeAlias(host) ? getSymbolOfNode(host) : undefined;
         }
 
         function getTypeArgumentsForAliasSymbol(symbol: Symbol | undefined) {
