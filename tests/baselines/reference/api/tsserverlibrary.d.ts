@@ -375,28 +375,30 @@ declare namespace ts {
         JSDocOptionalType = 295,
         JSDocFunctionType = 296,
         JSDocVariadicType = 297,
-        JSDocComment = 298,
-        JSDocTypeLiteral = 299,
-        JSDocSignature = 300,
-        JSDocTag = 301,
-        JSDocAugmentsTag = 302,
-        JSDocClassTag = 303,
-        JSDocCallbackTag = 304,
-        JSDocEnumTag = 305,
-        JSDocParameterTag = 306,
-        JSDocReturnTag = 307,
-        JSDocThisTag = 308,
-        JSDocTypeTag = 309,
-        JSDocTemplateTag = 310,
-        JSDocTypedefTag = 311,
-        JSDocPropertyTag = 312,
-        SyntaxList = 313,
-        NotEmittedStatement = 314,
-        PartiallyEmittedExpression = 315,
-        CommaListExpression = 316,
-        MergeDeclarationMarker = 317,
-        EndOfDeclarationMarker = 318,
-        Count = 319,
+        JSDocNamepathType = 298,
+        JSDocComment = 299,
+        JSDocTypeLiteral = 300,
+        JSDocSignature = 301,
+        JSDocTag = 302,
+        JSDocAugmentsTag = 303,
+        JSDocAuthorTag = 304,
+        JSDocClassTag = 305,
+        JSDocCallbackTag = 306,
+        JSDocEnumTag = 307,
+        JSDocParameterTag = 308,
+        JSDocReturnTag = 309,
+        JSDocThisTag = 310,
+        JSDocTypeTag = 311,
+        JSDocTemplateTag = 312,
+        JSDocTypedefTag = 313,
+        JSDocPropertyTag = 314,
+        SyntaxList = 315,
+        NotEmittedStatement = 316,
+        PartiallyEmittedExpression = 317,
+        CommaListExpression = 318,
+        MergeDeclarationMarker = 319,
+        EndOfDeclarationMarker = 320,
+        Count = 321,
         FirstAssignment = 61,
         LastAssignment = 73,
         FirstCompoundAssignment = 62,
@@ -423,9 +425,9 @@ declare namespace ts {
         LastBinaryOperator = 73,
         FirstNode = 150,
         FirstJSDocNode = 290,
-        LastJSDocNode = 312,
-        FirstJSDocTagNode = 301,
-        LastJSDocTagNode = 312,
+        LastJSDocNode = 314,
+        FirstJSDocTagNode = 302,
+        LastJSDocTagNode = 314,
     }
     export enum NodeFlags {
         None = 0,
@@ -925,27 +927,27 @@ declare namespace ts {
         isSpread: boolean;
         type: Type;
     }
-    type ExponentiationOperator = SyntaxKind.AsteriskAsteriskToken;
-    type MultiplicativeOperator = SyntaxKind.AsteriskToken | SyntaxKind.SlashToken | SyntaxKind.PercentToken;
-    type MultiplicativeOperatorOrHigher = ExponentiationOperator | MultiplicativeOperator;
-    type AdditiveOperator = SyntaxKind.PlusToken | SyntaxKind.MinusToken;
-    type AdditiveOperatorOrHigher = MultiplicativeOperatorOrHigher | AdditiveOperator;
-    type ShiftOperator = SyntaxKind.LessThanLessThanToken | SyntaxKind.GreaterThanGreaterThanToken | SyntaxKind.GreaterThanGreaterThanGreaterThanToken;
-    type ShiftOperatorOrHigher = AdditiveOperatorOrHigher | ShiftOperator;
-    type RelationalOperator = SyntaxKind.LessThanToken | SyntaxKind.LessThanEqualsToken | SyntaxKind.GreaterThanToken | SyntaxKind.GreaterThanEqualsToken | SyntaxKind.InstanceOfKeyword | SyntaxKind.InKeyword;
-    type RelationalOperatorOrHigher = ShiftOperatorOrHigher | RelationalOperator;
-    type EqualityOperator = SyntaxKind.EqualsEqualsToken | SyntaxKind.EqualsEqualsEqualsToken | SyntaxKind.ExclamationEqualsEqualsToken | SyntaxKind.ExclamationEqualsToken;
-    type EqualityOperatorOrHigher = RelationalOperatorOrHigher | EqualityOperator;
-    type BitwiseOperator = SyntaxKind.AmpersandToken | SyntaxKind.BarToken | SyntaxKind.CaretToken;
-    type BitwiseOperatorOrHigher = EqualityOperatorOrHigher | BitwiseOperator;
-    type LogicalOperator = SyntaxKind.AmpersandAmpersandToken | SyntaxKind.BarBarToken | SyntaxKind.QuestionQuestionToken;
-    type LogicalOperatorOrHigher = BitwiseOperatorOrHigher | LogicalOperator;
-    type CompoundAssignmentOperator = SyntaxKind.PlusEqualsToken | SyntaxKind.MinusEqualsToken | SyntaxKind.AsteriskAsteriskEqualsToken | SyntaxKind.AsteriskEqualsToken | SyntaxKind.SlashEqualsToken | SyntaxKind.PercentEqualsToken | SyntaxKind.AmpersandEqualsToken | SyntaxKind.BarEqualsToken | SyntaxKind.CaretEqualsToken | SyntaxKind.LessThanLessThanEqualsToken | SyntaxKind.GreaterThanGreaterThanGreaterThanEqualsToken | SyntaxKind.GreaterThanGreaterThanEqualsToken;
-    type AssignmentOperator = SyntaxKind.EqualsToken | CompoundAssignmentOperator;
-    type AssignmentOperatorOrHigher = LogicalOperatorOrHigher | AssignmentOperator;
-    type BinaryOperator = AssignmentOperatorOrHigher | SyntaxKind.CommaToken;
-    type BinaryOperatorToken = Token<BinaryOperator>;
-    interface BinaryExpression extends Expression, Declaration {
+    export type ExponentiationOperator = SyntaxKind.AsteriskAsteriskToken;
+    export type MultiplicativeOperator = SyntaxKind.AsteriskToken | SyntaxKind.SlashToken | SyntaxKind.PercentToken;
+    export type MultiplicativeOperatorOrHigher = ExponentiationOperator | MultiplicativeOperator;
+    export type AdditiveOperator = SyntaxKind.PlusToken | SyntaxKind.MinusToken;
+    export type AdditiveOperatorOrHigher = MultiplicativeOperatorOrHigher | AdditiveOperator;
+    export type ShiftOperator = SyntaxKind.LessThanLessThanToken | SyntaxKind.GreaterThanGreaterThanToken | SyntaxKind.GreaterThanGreaterThanGreaterThanToken;
+    export type ShiftOperatorOrHigher = AdditiveOperatorOrHigher | ShiftOperator;
+    export type RelationalOperator = SyntaxKind.LessThanToken | SyntaxKind.LessThanEqualsToken | SyntaxKind.GreaterThanToken | SyntaxKind.GreaterThanEqualsToken | SyntaxKind.InstanceOfKeyword | SyntaxKind.InKeyword;
+    export type RelationalOperatorOrHigher = ShiftOperatorOrHigher | RelationalOperator;
+    export type EqualityOperator = SyntaxKind.EqualsEqualsToken | SyntaxKind.EqualsEqualsEqualsToken | SyntaxKind.ExclamationEqualsEqualsToken | SyntaxKind.ExclamationEqualsToken;
+    export type EqualityOperatorOrHigher = RelationalOperatorOrHigher | EqualityOperator;
+    export type BitwiseOperator = SyntaxKind.AmpersandToken | SyntaxKind.BarToken | SyntaxKind.CaretToken;
+    export type BitwiseOperatorOrHigher = EqualityOperatorOrHigher | BitwiseOperator;
+    export type LogicalOperator = SyntaxKind.AmpersandAmpersandToken | SyntaxKind.BarBarToken | SyntaxKind.QuestionQuestionToken;
+    export type LogicalOperatorOrHigher = BitwiseOperatorOrHigher | LogicalOperator;
+    export type CompoundAssignmentOperator = SyntaxKind.PlusEqualsToken | SyntaxKind.MinusEqualsToken | SyntaxKind.AsteriskAsteriskEqualsToken | SyntaxKind.AsteriskEqualsToken | SyntaxKind.SlashEqualsToken | SyntaxKind.PercentEqualsToken | SyntaxKind.AmpersandEqualsToken | SyntaxKind.BarEqualsToken | SyntaxKind.CaretEqualsToken | SyntaxKind.LessThanLessThanEqualsToken | SyntaxKind.GreaterThanGreaterThanGreaterThanEqualsToken | SyntaxKind.GreaterThanGreaterThanEqualsToken;
+    export type AssignmentOperator = SyntaxKind.EqualsToken | CompoundAssignmentOperator;
+    export type AssignmentOperatorOrHigher = LogicalOperatorOrHigher | AssignmentOperator;
+    export type BinaryOperator = AssignmentOperatorOrHigher | SyntaxKind.CommaToken;
+    export type BinaryOperatorToken = Token<BinaryOperator>;
+    export interface BinaryExpression extends Expression, Declaration {
         kind: SyntaxKind.BinaryExpression;
         left: Expression;
         operatorToken: BinaryOperatorToken;
