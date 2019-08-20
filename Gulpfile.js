@@ -335,21 +335,27 @@ const lintFoldStart = async () => { if (fold.isTravis()) console.log(fold.start(
 const lintFoldEnd = async () => { if (fold.isTravis()) console.log(fold.end("lint")); };
 const eslint = (folder) => async () => {
     const ESLINTRC_CI = ".eslintrc.ci.json";
-    const ESLINTRC = ".eslintrc.json";
     const isCIEnv = cmdLineOptions.ci || process.env.CI === "true";
-    const config = isCIEnv && fs.existsSync(path.resolve(folder, ESLINTRC_CI)) ? ESLINTRC_CI : ESLINTRC;
 
     const args = [
         "node_modules/eslint/bin/eslint",
-        "--config", `${ folder }/${ config }`,
         "--format", "autolinkable-stylish",
         "--rulesdir", "scripts/eslint/built/rules",
-        "--ext", ".ts", folder,
+        "--ext", ".ts",
     ];
+
+    if (
+        isCIEnv &&
+        fs.existsSync(path.resolve(folder, ESLINTRC_CI))
+    ) {
+        args.push("--config", path.resolve(folder, ESLINTRC_CI));
+    }
 
     if (cmdLineOptions.fix) {
         args.push("--fix");
     }
+
+    args.push(folder);
 
     log(`Linting: ${args.join(" ")}`);
     return exec(process.execPath, args);
