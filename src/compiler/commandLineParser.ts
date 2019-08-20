@@ -675,7 +675,7 @@ namespace ts {
             name: "out",
             type: "string",
             affectsEmit: true,
-            isFilePath: false, // This is intentionally broken to support compatability with existing tsconfig files
+            isFilePath: false, // This is intentionally broken to support compatibility with existing tsconfig files
             // for correct behaviour, please use outFile
             category: Diagnostics.Advanced_Options,
             paramType: Diagnostics.FILE,
@@ -2058,6 +2058,7 @@ namespace ts {
 
         const parsedConfig = parseConfig(json, sourceFile, host, basePath, configFileName, resolutionStack, errors, extendedConfigCache);
         const { raw } = parsedConfig;
+        makeFilesReferencesAbsolute(existingOptions);
         const options = extend(existingOptions, parsedConfig.options || {});
         options.configFilePath = configFileName && normalizeSlashes(configFileName);
         setConfigFileInOptions(options, sourceFile);
@@ -2168,6 +2169,17 @@ namespace ts {
             if (!sourceFile) {
                 errors.push(createCompilerDiagnostic(message, arg0, arg1));
             }
+        }
+
+        function makeFilesReferencesAbsolute(optionsFromCLI: CompilerOptions) {
+            Object.keys(optionsFromCLI).forEach(key => {
+                const optionForKey = getOptionDeclarationFromName(getOptionNameMap, key, /*allowShort*/ true);
+                const value = optionsFromCLI[key];
+                const relative = isString(value) && !isRootedDiskPath(value);
+                if (relative && optionForKey && optionForKey.isFilePath && configFileName) {
+                    optionsFromCLI[key] = getNormalizedAbsolutePath(value as string, getDirectoryPath(configFileName));
+                }
+            });
         }
     }
 
