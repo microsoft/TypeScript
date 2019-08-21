@@ -22875,7 +22875,7 @@ namespace ts {
 
                 // If the symbol of the node has members, treat it like a constructor.
                 const symbol = getSymbolOfNode(func);
-                return !!symbol && symbol.members !== undefined;
+                return !!symbol && hasEntries(symbol.members);
             }
             return false;
         }

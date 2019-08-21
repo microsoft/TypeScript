@@ -14,8 +14,8 @@ var a = new mod.A()
 >A : typeof A
 
 var b = new mod.B()
->b : B
->new mod.B() : B
+>b : A
+>new mod.B() : A
 >mod.B : typeof B
 >mod : typeof import("tests/cases/conformance/salsa/mod")
 >B : typeof B
@@ -30,7 +30,7 @@ a.m('nope')
 b.m('not really')
 >b.m('not really') : number
 >b.m : (n: number) => number
->b : B
+>b : A
 >m : (n: number) => number
 >'not really' : "not really"
 
