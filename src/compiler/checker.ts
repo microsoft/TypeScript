@@ -1022,9 +1022,7 @@ namespace ts {
         function mergeSymbol(target: Symbol, source: Symbol, unidirectional = false): Symbol {
             if (!(target.flags & getExcludedSymbolFlags(source.flags)) ||
                 (source.flags | target.flags) & SymbolFlags.Assignment) {
-                if (source === target) {
-                    Debug.assert(source !== target, source.id + " " + source.valueDeclaration.pos);
-                }
+                Debug.assert(source !== target);
                 if (!(target.flags & SymbolFlags.Transient)) {
                     const resolvedTarget = resolveSymbol(target);
                     if (resolvedTarget === unknownSymbol) {
