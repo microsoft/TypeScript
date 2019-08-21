@@ -3233,6 +3233,46 @@ declare namespace ts {
     function sortAndDeduplicateDiagnostics<T extends Diagnostic>(diagnostics: ReadonlyArray<T>): SortedReadonlyArray<T>;
 }
 declare namespace ts {
+    interface FileSystemEntries {
+        /**
+         * The file names discovered within a parent directory. Each entry includes the base name and extension of the file, but does
+         * not include the parent path.
+         */
+        readonly files: readonly string[];
+        /**
+         * The directory names discovered within a parent directory. Each entry includes the base name and extension of the file, but
+         * does not include the parent path.
+         */
+        readonly directories: readonly string[];
+    }
+    interface FileMatcherHost {
+        useCaseSensitiveFileNames: boolean;
+        getCurrentDirectory(): string;
+        /**
+         * Gets the accessible file and directory names within a path, grouped by their kind.
+         * @param path The directory from which to retrieve entries.
+         */
+        getAccessibleFileSystemEntries(path: string): FileSystemEntries;
+        realpath?(path: string): string;
+    }
+    interface FileMatcherOptions {
+        /** The set of extensions used to match files. */
+        extensions?: readonly string[];
+        /** A set of glob paths that should be excluded from the result. */
+        exclude?: readonly string[];
+        /** A set of glob paths that should be included in the result. */
+        include?: readonly string[];
+        /** The maximum depth at which to stop traversing the file system. */
+        depth?: number;
+    }
+    /**
+     * Finds matching files based on the provided options.
+     * @param path The directory in which to start matching.
+     * @param options The options used to control matching.
+     * @param host The host used to traverse the file system.
+     * @returns The fully qualified paths of the matching files.
+     */
+    function getMatchingFiles(path: string, options: FileMatcherOptions, host: FileMatcherHost): string[];
     function getDefaultLibFileName(options: CompilerOptions): string;
     function textSpanEnd(span: TextSpan): number;
     function textSpanIsEmpty(span: TextSpan): boolean;
