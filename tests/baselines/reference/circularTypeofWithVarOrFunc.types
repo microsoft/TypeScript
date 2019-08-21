@@ -7,24 +7,24 @@ var varOfAliasedType1: typeAlias1;
 >varOfAliasedType1 : any
 
 var varOfAliasedType2: typeAlias2;
->varOfAliasedType2 : any
+>varOfAliasedType2 : typeAlias2
 
 type typeAlias2 = typeof varOfAliasedType2;
 >typeAlias2 : any
->varOfAliasedType2 : any
+>varOfAliasedType2 : typeAlias2
 
 function func(): typeAlias3 { return null; }
->func : () => any
+>func : () => typeAlias3
 >null : null
 
 var varOfAliasedType3 = func();
->varOfAliasedType3 : any
->func() : any
->func : () => any
+>varOfAliasedType3 : typeAlias3
+>func() : typeAlias3
+>func : () => typeAlias3
 
 type typeAlias3 = typeof varOfAliasedType3;
 >typeAlias3 : any
->varOfAliasedType3 : any
+>varOfAliasedType3 : typeAlias3
 
 // Repro from #26104
 

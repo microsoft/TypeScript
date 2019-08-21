@@ -1,0 +1,144 @@
+=== tests/cases/conformance/types/typeAliases/selfReferentialTypeAliases.ts ===
+type HypertextNode = string | [string, { [key: string]: any }, ...HypertextNode[]];
+>HypertextNode : HypertextNode
+>key : string
+
+const hypertextNode: HypertextNode =
+>hypertextNode : HypertextNode
+
+    ["div", { id: "parent" },
+>["div", { id: "parent" },        ["div", { id: "first-child" }, "I'm the first child"],        ["div", { id: "second-child" }, "I'm the second child"]    ] : [string, { id: string; }, [string, { id: string; }, "I'm the first child"], [string, { id: string; }, "I'm the second child"]]
+>"div" : "div"
+>{ id: "parent" } : { id: string; }
+>id : string
+>"parent" : "parent"
+
+        ["div", { id: "first-child" }, "I'm the first child"],
+>["div", { id: "first-child" }, "I'm the first child"] : [string, { id: string; }, "I'm the first child"]
+>"div" : "div"
+>{ id: "first-child" } : { id: string; }
+>id : string
+>"first-child" : "first-child"
+>"I'm the first child" : "I'm the first child"
+
+        ["div", { id: "second-child" }, "I'm the second child"]
+>["div", { id: "second-child" }, "I'm the second child"] : [string, { id: string; }, "I'm the second child"]
+>"div" : "div"
+>{ id: "second-child" } : { id: string; }
+>id : string
+>"second-child" : "second-child"
+>"I'm the second child" : "I'm the second child"
+
+    ];
+
+type Alternating<T> = [T, Alternating<T extends string ? number : string>?];
+>Alternating : [T, Alternating<T extends string ? number : string>?]
+
+declare function reparam<T>(x: Alternating<T>): T;
+>reparam : <T>(x: [T, Alternating<T extends string ? number : string>?]) => T
+>x : [T, Alternating<T extends string ? number : string>?]
+
+// inference for this alternating reference pattern is.... interesting.
+const re1 = reparam([12]);
+>re1 : number
+>reparam([12]) : number
+>reparam : <T>(x: [T, Alternating<T extends string ? number : string>?]) => T
+>[12] : [number]
+>12 : 12
+
+const re2 = reparam(["ok"]);
+>re2 : string
+>reparam(["ok"]) : string
+>reparam : <T>(x: [T, Alternating<T extends string ? number : string>?]) => T
+>["ok"] : [string]
+>"ok" : "ok"
+
+const re3 = reparam([12, ["ok"]]);
+>re3 : number | ["ok"]
+>reparam([12, ["ok"]]) : number | ["ok"]
+>reparam : <T>(x: [T, Alternating<T extends string ? number : string>?]) => T
+>[12, ["ok"]] : [number, [string]]
+>12 : 12
+>["ok"] : [string]
+>"ok" : "ok"
+
+const re4 = reparam(["ok", [12]]);
+>re4 : string | [12]
+>reparam(["ok", [12]]) : string | [12]
+>reparam : <T>(x: [T, Alternating<T extends string ? number : string>?]) => T
+>["ok", [12]] : [string, [number]]
+>"ok" : "ok"
+>[12] : [number]
+>12 : 12
+
+const re5 = reparam([12, ["ok", [0]]]);
+>re5 : number | ["ok", [0]]
+>reparam([12, ["ok", [0]]]) : number | ["ok", [0]]
+>reparam : <T>(x: [T, Alternating<T extends string ? number : string>?]) => T
+>[12, ["ok", [0]]] : [number, [string, [number]]]
+>12 : 12
+>["ok", [0]] : [string, [number]]
+>"ok" : "ok"
+>[0] : [number]
+>0 : 0
+
+const re6 = reparam(["ok", [12, ["k"]]]);
+>re6 : string | [12, ["k"]]
+>reparam(["ok", [12, ["k"]]]) : string | [12, ["k"]]
+>reparam : <T>(x: [T, Alternating<T extends string ? number : string>?]) => T
+>["ok", [12, ["k"]]] : [string, [number, [string]]]
+>"ok" : "ok"
+>[12, ["k"]] : [number, [string]]
+>12 : 12
+>["k"] : [string]
+>"k" : "k"
+
+const re7 = reparam([12, "not ok"]); // arity error
+>re7 : any
+>reparam([12, "not ok"]) : any
+>reparam : <T>(x: [T, Alternating<T extends string ? number : string>?]) => T
+>[12, "not ok"] : (string | number)[]
+>12 : 12
+>"not ok" : "not ok"
+
+const re8 = reparam(["ok", [12, ["ok", [12, "not ok"]]]]); // deep arity error
+>re8 : any
+>reparam(["ok", [12, ["ok", [12, "not ok"]]]]) : any
+>reparam : <T>(x: [T, Alternating<T extends string ? number : string>?]) => T
+>["ok", [12, ["ok", [12, "not ok"]]]] : (string | (number | (string | (string | number)[])[])[])[]
+>"ok" : "ok"
+>[12, ["ok", [12, "not ok"]]] : (number | (string | (string | number)[])[])[]
+>12 : 12
+>["ok", [12, "not ok"]] : (string | (string | number)[])[]
+>"ok" : "ok"
+>[12, "not ok"] : (string | number)[]
+>12 : 12
+>"not ok" : "not ok"
+
+const re9 = reparam([12, [12]]); // non-alternating
+>re9 : any
+>reparam([12, [12]]) : any
+>reparam : <T>(x: [T, Alternating<T extends string ? number : string>?]) => T
+>[12, [12]] : (number | number[])[]
+>12 : 12
+>[12] : number[]
+>12 : 12
+
+const re10 = reparam(["ok", [12, ["ok", [12, ["ok", ["not ok"]]]]]]); // deep non-alternating - we should strive to issue an error here, I think, but we infer `string | number` for T and do not
+>re10 : string | [12, ["ok", [12, ["ok", ["not ok"]]]]]
+>reparam(["ok", [12, ["ok", [12, ["ok", ["not ok"]]]]]]) : string | [12, ["ok", [12, ["ok", ["not ok"]]]]]
+>reparam : <T>(x: [T, Alternating<T extends string ? number : string>?]) => T
+>["ok", [12, ["ok", [12, ["ok", ["not ok"]]]]]] : [string, [number, [string, [number, [string, [string]]]]]]
+>"ok" : "ok"
+>[12, ["ok", [12, ["ok", ["not ok"]]]]] : [number, [string, [number, [string, [string]]]]]
+>12 : 12
+>["ok", [12, ["ok", ["not ok"]]]] : [string, [number, [string, [string]]]]
+>"ok" : "ok"
+>[12, ["ok", ["not ok"]]] : [number, [string, [string]]]
+>12 : 12
+>["ok", ["not ok"]] : [string, [string]]
+>"ok" : "ok"
+>["not ok"] : [string]
+>"not ok" : "not ok"
+
+

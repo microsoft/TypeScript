@@ -1,8 +1,6 @@
 tests/cases/conformance/types/specifyingTypes/typeQueries/circularTypeofWithVarOrFunc.ts(1,6): error TS2456: Type alias 'typeAlias1' circularly references itself.
 tests/cases/conformance/types/specifyingTypes/typeQueries/circularTypeofWithVarOrFunc.ts(2,5): error TS2502: 'varOfAliasedType1' is referenced directly or indirectly in its own type annotation.
-tests/cases/conformance/types/specifyingTypes/typeQueries/circularTypeofWithVarOrFunc.ts(4,5): error TS2502: 'varOfAliasedType2' is referenced directly or indirectly in its own type annotation.
 tests/cases/conformance/types/specifyingTypes/typeQueries/circularTypeofWithVarOrFunc.ts(5,6): error TS2456: Type alias 'typeAlias2' circularly references itself.
-tests/cases/conformance/types/specifyingTypes/typeQueries/circularTypeofWithVarOrFunc.ts(7,18): error TS2577: Return type annotation circularly references itself.
 tests/cases/conformance/types/specifyingTypes/typeQueries/circularTypeofWithVarOrFunc.ts(9,6): error TS2456: Type alias 'typeAlias3' circularly references itself.
 tests/cases/conformance/types/specifyingTypes/typeQueries/circularTypeofWithVarOrFunc.ts(18,6): error TS2456: Type alias 'R' circularly references itself.
 tests/cases/conformance/types/specifyingTypes/typeQueries/circularTypeofWithVarOrFunc.ts(19,29): error TS2577: Return type annotation circularly references itself.
@@ -10,7 +8,7 @@ tests/cases/conformance/types/specifyingTypes/typeQueries/circularTypeofWithVarO
 tests/cases/conformance/types/specifyingTypes/typeQueries/circularTypeofWithVarOrFunc.ts(26,15): error TS2577: Return type annotation circularly references itself.
 
 
-==== tests/cases/conformance/types/specifyingTypes/typeQueries/circularTypeofWithVarOrFunc.ts (10 errors) ====
+==== tests/cases/conformance/types/specifyingTypes/typeQueries/circularTypeofWithVarOrFunc.ts (8 errors) ====
     type typeAlias1 = typeof varOfAliasedType1;
          ~~~~~~~~~~
 !!! error TS2456: Type alias 'typeAlias1' circularly references itself.
@@ -19,15 +17,11 @@ tests/cases/conformance/types/specifyingTypes/typeQueries/circularTypeofWithVarO
 !!! error TS2502: 'varOfAliasedType1' is referenced directly or indirectly in its own type annotation.
     
     var varOfAliasedType2: typeAlias2;
-        ~~~~~~~~~~~~~~~~~
-!!! error TS2502: 'varOfAliasedType2' is referenced directly or indirectly in its own type annotation.
     type typeAlias2 = typeof varOfAliasedType2;
          ~~~~~~~~~~
 !!! error TS2456: Type alias 'typeAlias2' circularly references itself.
     
     function func(): typeAlias3 { return null; }
-                     ~~~~~~~~~~
-!!! error TS2577: Return type annotation circularly references itself.
     var varOfAliasedType3 = func();
     type typeAlias3 = typeof varOfAliasedType3;
          ~~~~~~~~~~

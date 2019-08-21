@@ -1,0 +1,78 @@
+=== tests/cases/conformance/types/typeAliases/selfReferentialTypeAliases.ts ===
+type HypertextNode = string | [string, { [key: string]: any }, ...HypertextNode[]];
+>HypertextNode : Symbol(HypertextNode, Decl(selfReferentialTypeAliases.ts, 0, 0))
+>key : Symbol(key, Decl(selfReferentialTypeAliases.ts, 0, 42))
+>HypertextNode : Symbol(HypertextNode, Decl(selfReferentialTypeAliases.ts, 0, 0))
+
+const hypertextNode: HypertextNode =
+>hypertextNode : Symbol(hypertextNode, Decl(selfReferentialTypeAliases.ts, 2, 5))
+>HypertextNode : Symbol(HypertextNode, Decl(selfReferentialTypeAliases.ts, 0, 0))
+
+    ["div", { id: "parent" },
+>id : Symbol(id, Decl(selfReferentialTypeAliases.ts, 3, 13))
+
+        ["div", { id: "first-child" }, "I'm the first child"],
+>id : Symbol(id, Decl(selfReferentialTypeAliases.ts, 4, 17))
+
+        ["div", { id: "second-child" }, "I'm the second child"]
+>id : Symbol(id, Decl(selfReferentialTypeAliases.ts, 5, 17))
+
+    ];
+
+type Alternating<T> = [T, Alternating<T extends string ? number : string>?];
+>Alternating : Symbol(Alternating, Decl(selfReferentialTypeAliases.ts, 6, 6))
+>T : Symbol(T, Decl(selfReferentialTypeAliases.ts, 8, 17))
+>T : Symbol(T, Decl(selfReferentialTypeAliases.ts, 8, 17))
+>Alternating : Symbol(Alternating, Decl(selfReferentialTypeAliases.ts, 6, 6))
+>T : Symbol(T, Decl(selfReferentialTypeAliases.ts, 8, 17))
+
+declare function reparam<T>(x: Alternating<T>): T;
+>reparam : Symbol(reparam, Decl(selfReferentialTypeAliases.ts, 8, 76))
+>T : Symbol(T, Decl(selfReferentialTypeAliases.ts, 10, 25))
+>x : Symbol(x, Decl(selfReferentialTypeAliases.ts, 10, 28))
+>Alternating : Symbol(Alternating, Decl(selfReferentialTypeAliases.ts, 6, 6))
+>T : Symbol(T, Decl(selfReferentialTypeAliases.ts, 10, 25))
+>T : Symbol(T, Decl(selfReferentialTypeAliases.ts, 10, 25))
+
+// inference for this alternating reference pattern is.... interesting.
+const re1 = reparam([12]);
+>re1 : Symbol(re1, Decl(selfReferentialTypeAliases.ts, 13, 5))
+>reparam : Symbol(reparam, Decl(selfReferentialTypeAliases.ts, 8, 76))
+
+const re2 = reparam(["ok"]);
+>re2 : Symbol(re2, Decl(selfReferentialTypeAliases.ts, 14, 5))
+>reparam : Symbol(reparam, Decl(selfReferentialTypeAliases.ts, 8, 76))
+
+const re3 = reparam([12, ["ok"]]);
+>re3 : Symbol(re3, Decl(selfReferentialTypeAliases.ts, 15, 5))
+>reparam : Symbol(reparam, Decl(selfReferentialTypeAliases.ts, 8, 76))
+
+const re4 = reparam(["ok", [12]]);
+>re4 : Symbol(re4, Decl(selfReferentialTypeAliases.ts, 16, 5))
+>reparam : Symbol(reparam, Decl(selfReferentialTypeAliases.ts, 8, 76))
+
+const re5 = reparam([12, ["ok", [0]]]);
+>re5 : Symbol(re5, Decl(selfReferentialTypeAliases.ts, 17, 5))
+>reparam : Symbol(reparam, Decl(selfReferentialTypeAliases.ts, 8, 76))
+
+const re6 = reparam(["ok", [12, ["k"]]]);
+>re6 : Symbol(re6, Decl(selfReferentialTypeAliases.ts, 18, 5))
+>reparam : Symbol(reparam, Decl(selfReferentialTypeAliases.ts, 8, 76))
+
+const re7 = reparam([12, "not ok"]); // arity error
+>re7 : Symbol(re7, Decl(selfReferentialTypeAliases.ts, 19, 5))
+>reparam : Symbol(reparam, Decl(selfReferentialTypeAliases.ts, 8, 76))
+
+const re8 = reparam(["ok", [12, ["ok", [12, "not ok"]]]]); // deep arity error
+>re8 : Symbol(re8, Decl(selfReferentialTypeAliases.ts, 20, 5))
+>reparam : Symbol(reparam, Decl(selfReferentialTypeAliases.ts, 8, 76))
+
+const re9 = reparam([12, [12]]); // non-alternating
+>re9 : Symbol(re9, Decl(selfReferentialTypeAliases.ts, 21, 5))
+>reparam : Symbol(reparam, Decl(selfReferentialTypeAliases.ts, 8, 76))
+
+const re10 = reparam(["ok", [12, ["ok", [12, ["ok", ["not ok"]]]]]]); // deep non-alternating - we should strive to issue an error here, I think, but we infer `string | number` for T and do not
+>re10 : Symbol(re10, Decl(selfReferentialTypeAliases.ts, 22, 5))
+>reparam : Symbol(reparam, Decl(selfReferentialTypeAliases.ts, 8, 76))
+
+

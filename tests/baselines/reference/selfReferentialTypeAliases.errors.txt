@@ -1,0 +1,37 @@
+tests/cases/conformance/types/typeAliases/selfReferentialTypeAliases.ts(20,26): error TS2322: Type 'string' is not assignable to type '[string | number, Alternating<string | number>?]'.
+tests/cases/conformance/types/typeAliases/selfReferentialTypeAliases.ts(21,28): error TS2741: Property '0' is missing in type '(number | (string | (string | number)[])[])[]' but required in type '[string | number, Alternating<string | number>?]'.
+tests/cases/conformance/types/typeAliases/selfReferentialTypeAliases.ts(22,26): error TS2741: Property '0' is missing in type 'number[]' but required in type '[string, Alternating<number>?]'.
+
+
+==== tests/cases/conformance/types/typeAliases/selfReferentialTypeAliases.ts (3 errors) ====
+    type HypertextNode = string | [string, { [key: string]: any }, ...HypertextNode[]];
+    
+    const hypertextNode: HypertextNode =
+        ["div", { id: "parent" },
+            ["div", { id: "first-child" }, "I'm the first child"],
+            ["div", { id: "second-child" }, "I'm the second child"]
+        ];
+    
+    type Alternating<T> = [T, Alternating<T extends string ? number : string>?];
+    
+    declare function reparam<T>(x: Alternating<T>): T;
+    
+    // inference for this alternating reference pattern is.... interesting.
+    const re1 = reparam([12]);
+    const re2 = reparam(["ok"]);
+    const re3 = reparam([12, ["ok"]]);
+    const re4 = reparam(["ok", [12]]);
+    const re5 = reparam([12, ["ok", [0]]]);
+    const re6 = reparam(["ok", [12, ["k"]]]);
+    const re7 = reparam([12, "not ok"]); // arity error
+                             ~~~~~~~~
+!!! error TS2322: Type 'string' is not assignable to type '[string | number, Alternating<string | number>?]'.
+    const re8 = reparam(["ok", [12, ["ok", [12, "not ok"]]]]); // deep arity error
+                               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2741: Property '0' is missing in type '(number | (string | (string | number)[])[])[]' but required in type '[string | number, Alternating<string | number>?]'.
+    const re9 = reparam([12, [12]]); // non-alternating
+                             ~~~~
+!!! error TS2741: Property '0' is missing in type 'number[]' but required in type '[string, Alternating<number>?]'.
+    const re10 = reparam(["ok", [12, ["ok", [12, ["ok", ["not ok"]]]]]]); // deep non-alternating - we should strive to issue an error here, I think, but we infer `string | number` for T and do not
+    
+    

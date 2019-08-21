@@ -3953,6 +3953,13 @@ namespace ts {
         contextFreeType?: Type;          // Cached context-free type used by the first pass of inference; used when a function's return is partially contextually sensitive
         deferredNodes?: Map<Node>; // Set of nodes whose checking has been deferred
         capturedBlockScopeBindings?: Symbol[]; // Block-scoped bindings captured beneath this part of an IterationStatement
+        substituteCallback?: DeferredSubsCallback; // For a type alias reference, the callback manufactured to create the reference to the alias in a deferred way
+    }
+
+    /* @internal */
+    export interface DeferredSubsCallback {
+        (): Type;
+        deferredSubsId?: string;
     }
 
     export const enum TypeFlags {
@@ -4428,6 +4435,8 @@ namespace ts {
     export interface SubstitutionType extends InstantiableType {
         typeVariable: TypeVariable;  // Target type variable
         substitute: Type;            // Type to substitute for type parameter
+        /* @internal */
+        deferredInstantiationCallbacks?: Map<DeferredSubsCallback>; // list of callbacks used to instantiate in a deferred way - stored to cache
     }
 
     /* @internal */
@@ -4490,7 +4499,10 @@ namespace ts {
     }
 
     /* @internal */
-    export type TypeMapper = (t: TypeParameter) => Type;
+    export interface TypeMapper {
+        (t: TypeParameter): Type;
+        id?: number; // lazily assigned
+    }
 
     export const enum InferencePriority {
         NakedTypeVariable            = 1 << 0,  // Naked type variable in union or intersection type

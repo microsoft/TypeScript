@@ -5028,6 +5028,17 @@ namespace ts {
             return true;
         }
 
+        /**
+         * Checks the circularity stack like `pushTypeResolution` without making any edits
+         */
+        function peekTypeResolution(target: TypeSystemEntity, propertyName: TypeSystemPropertyName) {
+            const resolutionCycleStartIndex = findResolutionCycleStartIndex(target, propertyName);
+            if (resolutionCycleStartIndex >= 0) {
+                return false;
+            }
+            return true;
+        }
+
         function findResolutionCycleStartIndex(target: TypeSystemEntity, propertyName: TypeSystemPropertyName): number {
             for (let i = resolutionTargets.length - 1; i >= 0; i--) {
                 if (hasType(resolutionTargets[i], resolutionPropertyNames[i])) {
@@ -6530,6 +6541,12 @@ namespace ts {
                 const typeNode = isJSDocTypeAlias(declaration) ? declaration.typeExpression : declaration.type;
                 // If typeNode is missing, we will error in checkJSDocTypedefTag.
                 let type = typeNode ? getTypeFromTypeNode(typeNode) : errorType;
+
+                if (type.flags & TypeFlags.Substitution) {
+                    // Trigger resolution of any deferred substiutes that are directly assigned to the alias so they
+                    // are marked as circular and the alias becomes `any`
+                    void (type as SubstitutionType).substitute;
+                }
 
                 if (popTypeResolution()) {
                     const typeParameters = getLocalTypeParametersOfClassOrInterfaceOrTypeAlias(symbol);
@@ -9145,6 +9162,18 @@ namespace ts {
          * declared type. Instantiations are cached using the type identities of the type arguments as the key.
          */
         function getTypeFromTypeAliasReference(node: NodeWithTypeArguments, symbol: Symbol, typeArguments: Type[] | undefined): Type {
+            if (!peekTypeResolution(symbol, TypeSystemPropertyName.DeclaredType)) {
+                const links = getNodeLinks(node);
+                let cb = links.substituteCallback;
+                if (!cb) {
+                    cb = links.substituteCallback = () => getTypeFromTypeAliasReferenceWorker(node, symbol, typeArguments); 
+                }
+                return getDeferredSubstitutionType(cb, symbol, typeArguments);
+            }
+            return getTypeFromTypeAliasReferenceWorker(node, symbol, typeArguments);
+        }
+
+        function getTypeFromTypeAliasReferenceWorker(node: NodeWithTypeArguments, symbol: Symbol, typeArguments: Type[] | undefined) {
             const type = getDeclaredTypeOfSymbol(symbol);
             const typeParameters = getSymbolLinks(symbol).typeParameters;
             if (typeParameters) {
@@ -9281,6 +9310,33 @@ namespace ts {
             result.typeVariable = typeVariable;
             result.substitute = substitute;
             substitutionTypes.set(id, result);
+            return result;
+        }
+
+        /**
+         * Manufactures a substitute whose typeVariable/substitute are the same type,
+         * and whose values are not generated until accessed.
+         */
+        function getDeferredSubstitutionType(cb: DeferredSubsCallback, aliasSymbol: Symbol, aliasTypeArguments: readonly Type[] | undefined) {
+            const id = cb.deferredSubsId;
+            if (id) {
+                return substitutionTypes.get(id)!;
+            }
+            const result = <SubstitutionType>createType(TypeFlags.Substitution);
+            result.aliasSymbol = aliasSymbol; // Yep - a substitute with a type alias. Without this, a bunch of anonymous self referential types would probably blow up in printback
+            result.aliasTypeArguments = aliasTypeArguments;
+            let cached: Type;
+            Object.defineProperty(result, "typeVariable", {
+                get() {
+                    return cached || (cached = cb());
+                }
+            });
+            Object.defineProperty(result, "substitute", {
+                get() {
+                    return cached || (cached = cb());
+                }
+            });
+            substitutionTypes.set(cb.deferredSubsId = "" + getTypeId(result), result);
             return result;
         }
 
@@ -11643,6 +11699,11 @@ namespace ts {
             return result;
         }
 
+        var mapperIdCount: number;
+        function getTypeMapperId(mapper: TypeMapper) {
+            return mapper.id || (mapper.id = (mapperIdCount = (mapperIdCount || 0) + 1));
+        }
+
         function instantiateTypeWorker(type: Type, mapper: TypeMapper): Type {
             const flags = type.flags;
             if (flags & TypeFlags.TypeParameter) {
@@ -11687,16 +11748,28 @@ namespace ts {
                 return getConditionalTypeInstantiation(<ConditionalType>type, combineTypeMappers((<ConditionalType>type).mapper, mapper));
             }
             if (flags & TypeFlags.Substitution) {
-                const maybeVariable = instantiateType((<SubstitutionType>type).typeVariable, mapper);
+                const sub = (type as SubstitutionType);
+                if (substitutionTypes.has("" + getTypeId(sub))) {
+                    // substitution is deferred - wrap it
+                    const mapperId = "" + getTypeMapperId(mapper);
+                    let cb = sub.deferredInstantiationCallbacks && sub.deferredInstantiationCallbacks.get(mapperId);
+                    if (!cb) {
+                        cb = () => instantiateType(sub.substitute, mapper);
+                        (sub.deferredInstantiationCallbacks || (sub.deferredInstantiationCallbacks = createMap())).set(mapperId, cb);
+                    }
+
+                    return getDeferredSubstitutionType(cb, sub.aliasSymbol!, instantiateTypes(sub.aliasTypeArguments, mapper));
+                }
+                const maybeVariable = instantiateType(sub.typeVariable, mapper);
                 if (maybeVariable.flags & TypeFlags.TypeVariable) {
-                    return getSubstitutionType(maybeVariable as TypeVariable, instantiateType((<SubstitutionType>type).substitute, mapper));
+                    return getSubstitutionType(maybeVariable as TypeVariable, instantiateType(sub.substitute, mapper));
                 }
                 else {
-                    const sub = instantiateType((<SubstitutionType>type).substitute, mapper);
-                    if (sub.flags & TypeFlags.AnyOrUnknown || isTypeAssignableTo(getRestrictiveInstantiation(maybeVariable), getRestrictiveInstantiation(sub))) {
+                    const newSub = instantiateType(sub.substitute, mapper);
+                    if (newSub.flags & TypeFlags.AnyOrUnknown || isTypeAssignableTo(getRestrictiveInstantiation(maybeVariable), getRestrictiveInstantiation(newSub))) {
                         return maybeVariable;
                     }
-                    return sub;
+                    return newSub;
                 }
             }
             return type;

@@ -2,19 +2,19 @@
 // Recursive mapped types simply appear empty
 
 type Recurse = {
->Recurse : any
+>Recurse : Recurse
 
     [K in keyof Recurse]: Recurse[K]
 }
 
 type Recurse1 = {
->Recurse1 : any
+>Recurse1 : Recurse1
 
     [K in keyof Recurse2]: Recurse2[K]
 }
 
 type Recurse2 = {
->Recurse2 : any
+>Recurse2 : Recurse2
 
     [K in keyof Recurse1]: Recurse1[K]
 }
