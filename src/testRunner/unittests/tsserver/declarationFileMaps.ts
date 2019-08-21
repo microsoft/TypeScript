@@ -1,11 +1,4 @@
 namespace ts.projectSystem {
-    interface DocumentSpanFromSubstring {
-        file: File;
-        text: string;
-        options?: SpanFromSubstringOptions;
-        contextText?: string;
-        contextOptions?: SpanFromSubstringOptions;
-    }
     function documentSpanFromSubstring({ file, text, contextText, options, contextOptions }: DocumentSpanFromSubstring): DocumentSpan {
         const contextSpan = contextText !== undefined ? documentSpanFromSubstring({ file, text: contextText, options: contextOptions }) : undefined;
         return {
@@ -17,19 +10,6 @@ namespace ts.projectSystem {
 
     function renameLocation(input: DocumentSpanFromSubstring): RenameLocation {
         return documentSpanFromSubstring(input);
-    }
-
-    interface MakeReferenceItem extends DocumentSpanFromSubstring {
-        isDefinition: boolean;
-        lineText: string;
-    }
-    function makeReferenceItem({ isDefinition, lineText, ...rest }: MakeReferenceItem): protocol.ReferencesResponseItem {
-        return {
-            ...protocolFileSpanWithContextFromSubstring(rest),
-            isDefinition,
-            isWriteAccess: isDefinition,
-            lineText,
-        };
     }
 
     interface MakeReferenceEntry extends DocumentSpanFromSubstring {

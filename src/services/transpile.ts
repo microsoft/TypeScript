@@ -26,7 +26,15 @@ namespace ts {
     export function transpileModule(input: string, transpileOptions: TranspileOptions): TranspileOutput {
         const diagnostics: Diagnostic[] = [];
 
-        const options: CompilerOptions = transpileOptions.compilerOptions ? fixupCompilerOptions(transpileOptions.compilerOptions, diagnostics) : getDefaultCompilerOptions();
+        const options: CompilerOptions = transpileOptions.compilerOptions ? fixupCompilerOptions(transpileOptions.compilerOptions, diagnostics) : {};
+
+        // mix in default options
+        const defaultOptions = getDefaultCompilerOptions();
+        for (const key in defaultOptions) {
+            if (hasProperty(defaultOptions, key) && options[key] === undefined) {
+                options[key] = defaultOptions[key];
+            }
+        }
 
         options.isolatedModules = true;
 
@@ -58,7 +66,7 @@ namespace ts {
         options.noResolve = true;
 
         // if jsx is specified then treat file as .tsx
-        const inputFileName = transpileOptions.fileName || (options.jsx ? "module.tsx" : "module.ts");
+        const inputFileName = transpileOptions.fileName || (transpileOptions.compilerOptions && transpileOptions.compilerOptions.jsx ? "module.tsx" : "module.ts");
         const sourceFile = createSourceFile(inputFileName, input, options.target!); // TODO: GH#18217
         if (transpileOptions.moduleName) {
             sourceFile.moduleName = transpileOptions.moduleName;

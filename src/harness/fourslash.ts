@@ -344,7 +344,8 @@ namespace FourSlash {
                     "getDocumentHighlights",
                 ];
                 const proxy = {} as ts.LanguageService;
-                for (const k in ls) {
+                const keys = ts.getAllKeys(ls);
+                for (const k of keys) {
                     const key = k as keyof typeof ls;
                     if (cacheableMembers.indexOf(key) === -1) {
                         proxy[key] = (...args: any[]) => (ls[key] as Function)(...args);
@@ -1268,6 +1269,10 @@ namespace FourSlash {
 
         private verifySignatureHelpWorker(options: FourSlashInterface.VerifySignatureHelpOptions) {
             const help = this.getSignatureHelp({ triggerReason: options.triggerReason })!;
+            if (!help) {
+                this.raiseError("Could not get a help signature");
+            }
+
             const selectedItem = help.items[help.selectedItemIndex];
             // Argument index may exceed number of parameters
             const currentParameter = selectedItem.parameters[help.argumentIndex] as ts.SignatureHelpParameter | undefined;
@@ -2321,7 +2326,10 @@ namespace FourSlash {
         public applyCodeActionFromCompletion(markerName: string, options: FourSlashInterface.VerifyCompletionActionOptions) {
             this.goToMarker(markerName);
 
-            const details = this.getCompletionEntryDetails(options.name, options.source, options.preferences)!;
+            const details = this.getCompletionEntryDetails(options.name, options.source, options.preferences);
+            if (!details) {
+                return this.raiseError(`No completions were found for the given name, source, and preferences.`);
+            }
             const codeActions = details.codeActions!;
             if (codeActions.length !== 1) {
                 this.raiseError(`Expected one code action, got ${codeActions.length}`);
@@ -2430,7 +2438,7 @@ namespace FourSlash {
                     const oldText = this.tryGetFileContent(change.fileName);
                     ts.Debug.assert(!!change.isNewFile === (oldText === undefined));
                     const newContent = change.isNewFile ? ts.first(change.textChanges).newText : ts.textChanges.applyChanges(oldText!, change.textChanges);
-                    assert.equal(newContent, expectedNewContent);
+                    assert.equal(newContent, expectedNewContent, `String mis-matched in file ${change.fileName}`);
                 }
                 for (const newFileName in newFileContent) {
                     ts.Debug.assert(changes.some(c => c.fileName === newFileName), "No change in file", () => newFileName);

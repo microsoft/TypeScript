@@ -967,6 +967,11 @@ namespace ts {
         readonly called: Identifier;
         readonly nTypeArguments: number;
     }
+
+    export interface PossibleProgramFileInfo {
+        ProgramFiles?: string[];
+    }
+
     // Get info for an expression like `f <` that may be the start of type arguments.
     export function getPossibleTypeArgumentsInfo(tokenIn: Node, sourceFile: SourceFile): PossibleTypeArgumentInfo | undefined {
         let token: Node | undefined = tokenIn;

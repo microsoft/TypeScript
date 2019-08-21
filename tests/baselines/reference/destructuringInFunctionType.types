@@ -18,7 +18,7 @@ type F1 = ([a, b, c]) => void;
 >c : any
 
 type T2 = ({ a });
->T2 : { a: any; }
+>T2 : T2
 >a : any
 
 type F2 = ({ a }) => void;

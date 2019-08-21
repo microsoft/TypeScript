@@ -43,7 +43,7 @@ A.prototype.y = A.prototype.z = function f(n) {
 >n + this.x : number
 >n : number
 >this.x : number
->this : A
+>this : this
 >x : number
 }
 /** @param {number} m */

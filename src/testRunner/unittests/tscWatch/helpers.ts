@@ -54,30 +54,51 @@ namespace ts.tscWatch {
 
     const elapsedRegex = /^Elapsed:: [0-9]+ms/;
     const buildVerboseLogRegEx = /^.+ \- /;
-    function checkOutputErrors(
+    export enum HostOutputKind {
+        Log,
+        Diagnostic,
+        WatchDiagnostic
+    }
+
+    export interface HostOutputLog {
+        kind: HostOutputKind.Log;
+        expected: string;
+        caption?: string;
+    }
+
+    export interface HostOutputDiagnostic {
+        kind: HostOutputKind.Diagnostic;
+        diagnostic: Diagnostic | string;
+    }
+
+    export interface HostOutputWatchDiagnostic {
+        kind: HostOutputKind.WatchDiagnostic;
+        diagnostic: Diagnostic | string;
+    }
+
+    export type HostOutput = HostOutputLog | HostOutputDiagnostic | HostOutputWatchDiagnostic;
+
+    export function checkOutputErrors(
         host: WatchedSystem,
-        logsBeforeWatchDiagnostic: string[] | undefined,
-        preErrorsWatchDiagnostic: Diagnostic | undefined,
-        logsBeforeErrors: string[] | undefined,
-        errors: ReadonlyArray<Diagnostic> | ReadonlyArray<string>,
-        disableConsoleClears?: boolean | undefined,
-        ...postErrorsWatchDiagnostics: Diagnostic[] | string[]
+        expected: readonly HostOutput[],
+        disableConsoleClears?: boolean | undefined
     ) {
         let screenClears = 0;
         const outputs = host.getOutput();
-        const expectedOutputCount = (preErrorsWatchDiagnostic ? 1 : 0) +
-            errors.length +
-            postErrorsWatchDiagnostics.length +
-            (logsBeforeWatchDiagnostic ? logsBeforeWatchDiagnostic.length : 0) +
-            (logsBeforeErrors ? logsBeforeErrors.length : 0);
-        assert.equal(outputs.length, expectedOutputCount, JSON.stringify(outputs));
+        assert.equal(outputs.length, expected.length, JSON.stringify(outputs));
         let index = 0;
-        forEach(logsBeforeWatchDiagnostic, log => assertLog("logsBeforeWatchDiagnostic", log));
-        if (preErrorsWatchDiagnostic) assertWatchDiagnostic(preErrorsWatchDiagnostic);
-        forEach(logsBeforeErrors, log => assertLog("logBeforeError", log));
-        // Verify errors
-        forEach(errors, assertDiagnostic);
-        forEach(postErrorsWatchDiagnostics, assertWatchDiagnostic);
+        forEach(expected, expected => {
+            switch (expected.kind) {
+                case HostOutputKind.Log:
+                    return assertLog(expected);
+                case HostOutputKind.Diagnostic:
+                    return assertDiagnostic(expected);
+                case HostOutputKind.WatchDiagnostic:
+                    return assertWatchDiagnostic(expected);
+                default:
+                    return Debug.assertNever(expected);
+            }
+        });
         assert.equal(host.screenClears.length, screenClears, "Expected number of screen clears");
         host.clearOutput();
 
@@ -85,7 +106,7 @@ namespace ts.tscWatch {
             return !!(diagnostic as Diagnostic).messageText;
         }
 
-        function assertDiagnostic(diagnostic: Diagnostic | string) {
+        function assertDiagnostic({ diagnostic }: HostOutputDiagnostic) {
             const expected = isDiagnostic(diagnostic) ? formatDiagnostic(diagnostic, host) : diagnostic;
             assert.equal(outputs[index], expected, getOutputAtFailedMessage("Diagnostic", expected));
             index++;
@@ -95,13 +116,13 @@ namespace ts.tscWatch {
             return log.replace(elapsedRegex, "").replace(buildVerboseLogRegEx, "");
         }
 
-        function assertLog(caption: string, expected: string) {
+        function assertLog({ caption, expected }: HostOutputLog) {
             const actual = outputs[index];
-            assert.equal(getCleanLogString(actual), getCleanLogString(expected), getOutputAtFailedMessage(caption, expected));
+            assert.equal(getCleanLogString(actual), getCleanLogString(expected), getOutputAtFailedMessage(caption || "Log", expected));
             index++;
         }
 
-        function assertWatchDiagnostic(diagnostic: Diagnostic | string) {
+        function assertWatchDiagnostic({ diagnostic }: HostOutputWatchDiagnostic) {
             if (isString(diagnostic)) {
                 assert.equal(outputs[index], diagnostic, getOutputAtFailedMessage("Diagnostic", diagnostic));
             }
@@ -128,54 +149,79 @@ namespace ts.tscWatch {
         }
     }
 
-    function createErrorsFoundCompilerDiagnostic(errors: ReadonlyArray<Diagnostic> | ReadonlyArray<string>) {
-        return errors.length === 1
-            ? createCompilerDiagnostic(Diagnostics.Found_1_error_Watching_for_file_changes)
-            : createCompilerDiagnostic(Diagnostics.Found_0_errors_Watching_for_file_changes, errors.length);
+    export function hostOutputLog(expected: string, caption?: string): HostOutputLog {
+        return { kind: HostOutputKind.Log, expected, caption };
+    }
+    export function hostOutputDiagnostic(diagnostic: Diagnostic | string): HostOutputDiagnostic {
+        return { kind: HostOutputKind.Diagnostic, diagnostic };
+    }
+    export function hostOutputWatchDiagnostic(diagnostic: Diagnostic | string): HostOutputWatchDiagnostic {
+        return { kind: HostOutputKind.WatchDiagnostic, diagnostic };
+    }
+
+    export function startingCompilationInWatchMode() {
+        return hostOutputWatchDiagnostic(createCompilerDiagnostic(Diagnostics.Starting_compilation_in_watch_mode));
+    }
+    export function foundErrorsWatching(errors: readonly any[]) {
+        return hostOutputWatchDiagnostic(errors.length === 1 ?
+            createCompilerDiagnostic(Diagnostics.Found_1_error_Watching_for_file_changes) :
+            createCompilerDiagnostic(Diagnostics.Found_0_errors_Watching_for_file_changes, errors.length)
+        );
+    }
+    export function fileChangeDetected() {
+        return hostOutputWatchDiagnostic(createCompilerDiagnostic(Diagnostics.File_change_detected_Starting_incremental_compilation));
     }
 
     export function checkOutputErrorsInitial(host: WatchedSystem, errors: ReadonlyArray<Diagnostic> | ReadonlyArray<string>, disableConsoleClears?: boolean, logsBeforeErrors?: string[]) {
         checkOutputErrors(
             host,
-            /*logsBeforeWatchDiagnostic*/ undefined,
-            createCompilerDiagnostic(Diagnostics.Starting_compilation_in_watch_mode),
-            logsBeforeErrors,
-            errors,
-            disableConsoleClears,
-            createErrorsFoundCompilerDiagnostic(errors));
+            [
+                startingCompilationInWatchMode(),
+                ...map(logsBeforeErrors || emptyArray, expected => hostOutputLog(expected, "logBeforeError")),
+                ...map(errors, hostOutputDiagnostic),
+                foundErrorsWatching(errors)
+            ],
+            disableConsoleClears
+        );
     }
 
     export function checkOutputErrorsIncremental(host: WatchedSystem, errors: ReadonlyArray<Diagnostic> | ReadonlyArray<string>, disableConsoleClears?: boolean, logsBeforeWatchDiagnostic?: string[], logsBeforeErrors?: string[]) {
         checkOutputErrors(
             host,
-            logsBeforeWatchDiagnostic,
-            createCompilerDiagnostic(Diagnostics.File_change_detected_Starting_incremental_compilation),
-            logsBeforeErrors,
-            errors,
-            disableConsoleClears,
-            createErrorsFoundCompilerDiagnostic(errors));
+            [
+                ...map(logsBeforeWatchDiagnostic || emptyArray, expected => hostOutputLog(expected, "logsBeforeWatchDiagnostic")),
+                fileChangeDetected(),
+                ...map(logsBeforeErrors || emptyArray, expected => hostOutputLog(expected, "logBeforeError")),
+                ...map(errors, hostOutputDiagnostic),
+                foundErrorsWatching(errors)
+            ],
+            disableConsoleClears
+        );
     }
 
     export function checkOutputErrorsIncrementalWithExit(host: WatchedSystem, errors: ReadonlyArray<Diagnostic> | ReadonlyArray<string>, expectedExitCode: ExitStatus, disableConsoleClears?: boolean, logsBeforeWatchDiagnostic?: string[], logsBeforeErrors?: string[]) {
         checkOutputErrors(
             host,
-            logsBeforeWatchDiagnostic,
-            createCompilerDiagnostic(Diagnostics.File_change_detected_Starting_incremental_compilation),
-            logsBeforeErrors,
-            errors,
-            disableConsoleClears);
+            [
+                ...map(logsBeforeWatchDiagnostic || emptyArray, expected => hostOutputLog(expected, "logsBeforeWatchDiagnostic")),
+                fileChangeDetected(),
+                ...map(logsBeforeErrors || emptyArray, expected => hostOutputLog(expected, "logBeforeError")),
+                ...map(errors, hostOutputDiagnostic),
+            ],
+            disableConsoleClears
+        );
         assert.equal(host.exitCode, expectedExitCode);
     }
 
     export function checkNormalBuildErrors(host: WatchedSystem, errors: ReadonlyArray<Diagnostic> | ReadonlyArray<string>, reportErrorSummary?: boolean) {
         checkOutputErrors(
             host,
-            /*logsBeforeWatchDiagnostic*/ undefined,
-            /*preErrorsWatchDiagnostic*/ undefined,
-            /*logsBeforeErrors*/ undefined,
-            errors,
-            /*disableConsoleClears*/ undefined,
-            ...(reportErrorSummary ? [getErrorSummaryText(errors.length, host.newLine)] : emptyArray)
+            [
+                ...map(errors, hostOutputDiagnostic),
+                ...reportErrorSummary ?
+                    [hostOutputWatchDiagnostic(getErrorSummaryText(errors.length, host.newLine))] :
+                    emptyArray
+            ]
         );
     }
 

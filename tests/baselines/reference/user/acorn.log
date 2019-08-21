@@ -114,7 +114,6 @@ node_modules/acorn/dist/acorn.js(3032,40): error TS2339: Property 'inGeneratorCo
 node_modules/acorn/dist/acorn.js(3035,8): error TS2339: Property 'exprAllowed' does not exist on type 'TokenType'.
 node_modules/acorn/dist/acorn.js(5297,5): error TS2339: Property 'nextToken' does not exist on type 'Parser'.
 node_modules/acorn/dist/acorn.js(5298,12): error TS2339: Property 'parseExpression' does not exist on type 'Parser'.
-node_modules/acorn/dist/acorn_loose.es.js(1,56): error TS2440: Import declaration conflicts with local declaration of 'defaultOptions'.
 node_modules/acorn/dist/acorn_loose.es.js(73,9): error TS2339: Property 'name' does not exist on type 'Node'.
 node_modules/acorn/dist/acorn_loose.es.js(79,9): error TS2339: Property 'value' does not exist on type 'Node'.
 node_modules/acorn/dist/acorn_loose.es.js(79,23): error TS2339: Property 'raw' does not exist on type 'Node'.

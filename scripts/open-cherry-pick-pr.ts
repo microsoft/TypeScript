@@ -11,6 +11,7 @@ const userName = process.env.GH_USERNAME;
 const reviewers = process.env.REQUESTING_USER ? [process.env.REQUESTING_USER] : ["weswigham", "RyanCavanaugh"];
 const branchName = `pick/${process.env.SOURCE_ISSUE}/${process.env.TARGET_BRANCH}`;
 const remoteUrl = `https://${process.argv[2]}@github.com/${userName}/TypeScript.git`;
+const produceLKG = !!process.env.PRODUCE_LKG;
 
 async function main() {
     if (!process.env.TARGET_BRANCH) {
@@ -52,7 +53,16 @@ ${logText.trim()}`
     runSequence([
         ["git", ["checkout", process.env.TARGET_BRANCH]], // checkout the target branch
         ["git", ["checkout", "-b", branchName]], // create a new branch
-        ["git", ["cherry-pick", squashSha.trim()]], // 
+        ["git", ["cherry-pick", squashSha.trim()]],
+    ]);
+    if (produceLKG) {
+        runSequence([
+            ["gulp", ["LKG"]],
+            ["git", ["add", "lib"]],
+            ["git", ["commit", "-m", `"Update LKG"`]]
+        ]);
+    }
+    runSequence([
         ["git", ["remote", "add", "fork", remoteUrl]], // Add the remote fork
         ["git", ["push", "--set-upstream", "fork", branchName, "-f"]] // push the branch
     ]);
@@ -71,7 +81,7 @@ ${logText.trim()}`
         base: process.env.TARGET_BRANCH,
         body:
     `This cherry-pick was triggerd by a request on https://github.com/Microsoft/TypeScript/pull/${process.env.SOURCE_ISSUE}
-Please review the diff and merge if no changes are unexpected.
+Please review the diff and merge if no changes are unexpected.${produceLKG ? ` An LKG update commit is included seperately from the base change.` : ""}
 You can view the cherry-pick log [here](https://typescript.visualstudio.com/TypeScript/_build/index?buildId=${process.env.BUILD_BUILDID}&_a=summary).
 
 cc ${reviewers.map(r => "@" + r).join(" ")}`,

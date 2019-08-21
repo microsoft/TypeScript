@@ -1,4 +1,5 @@
 // @strict: true
+// @target: esnext
 
 declare const b: boolean;
 declare const s: string;
@@ -51,3 +52,29 @@ foo(x);
 
 declare function bar<T>(x: T, y: string | T): T;
 const y = bar(1, 2);
+
+// Repro from #32752
+
+const containsPromises: unique symbol = Symbol();
+
+type DeepPromised<T> =
+    { [containsPromises]?: true } &
+    { [TKey in keyof T]: T[TKey] | DeepPromised<T[TKey]> | Promise<DeepPromised<T[TKey]>> };
+
+async function fun<T>(deepPromised: DeepPromised<T>) {
+    const deepPromisedWithIndexer: DeepPromised<{ [name: string]: {} | null | undefined }> = deepPromised;
+    for (const value of Object.values(deepPromisedWithIndexer)) {
+        const awaitedValue = await value;
+        if (awaitedValue)
+            await fun(awaitedValue);
+    }
+}
+
+// Repro from #32752
+
+type Deep<T> = { [K in keyof T]: T[K] | Deep<T[K]> };
+
+declare function baz<T>(dp: Deep<T>): T;
+declare let xx: { a: string | undefined };
+
+baz(xx);

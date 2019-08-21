@@ -5,7 +5,7 @@ const del: typeof import("del") = require("del");
 interface ExecResult {
     stdout: Buffer;
     stderr: Buffer;
-    status: number;
+    status: number | null;
 }
 
 interface UserConfig {
@@ -52,7 +52,7 @@ abstract class ExternalCompileRunnerBase extends RunnerBase {
                     const submoduleDir = path.join(cwd, directoryName);
                     exec("git", ["reset", "HEAD", "--hard"], { cwd: submoduleDir });
                     exec("git", ["clean", "-f"], { cwd: submoduleDir });
-                    exec("git", ["submodule", "update", "--init", "--remote", "."], { cwd: submoduleDir });
+                    exec("git", ["submodule", "update", "--init", "--remote", "."], { cwd: originalCwd });
 
                     const config = JSON.parse(fs.readFileSync(path.join(cwd, "test.json"), { encoding: "utf8" })) as UserConfig;
                     ts.Debug.assert(!!config.types, "Bad format from test.json: Types field must be present.");
