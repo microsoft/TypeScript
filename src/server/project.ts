@@ -231,7 +231,7 @@ namespace ts.server {
         public readonly getCanonicalFileName: GetCanonicalFileName;
 
         /*@internal*/
-        private readonly packageJsonCache: PackageJsonCache;
+        readonly packageJsonCache: PackageJsonCache;
 
         private importSuggestionsCache = Completions.createImportSuggestionsCache();
         private dirtyFilesForSuggestions: Map<true> | undefined;
@@ -847,10 +847,10 @@ namespace ts.server {
         }
 
         /*@internal*/
-        markFileAsDirty(changedFile: ScriptInfo) {
+        markFileAsDirty(changedFile: string) {
             this.markAsDirty();
-            if (!this.importSuggestionsCache.isEmpty && changedFile.cacheSourceFile) {
-                (this.dirtyFilesForSuggestions || (this.dirtyFilesForSuggestions = createMap())).set(changedFile.fileName, true);
+            if (!this.importSuggestionsCache.isEmpty) {
+                (this.dirtyFilesForSuggestions || (this.dirtyFilesForSuggestions = createMap())).set(changedFile, true);
             }
         }
 
@@ -1016,7 +1016,7 @@ namespace ts.server {
             }
 
             if (!this.importSuggestionsCache.isEmpty) {
-                if (this.hasAddedorRemovedFiles || oldProgram && oldProgram.structureIsReused! & StructureIsReused.Not) {
+                if (this.hasAddedorRemovedFiles || oldProgram && !oldProgram.structureIsReused) {
                     this.importSuggestionsCache.clear();
                 }
                 else if (this.dirtyFilesForSuggestions && oldProgram && this.program) {

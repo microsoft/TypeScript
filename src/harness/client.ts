@@ -124,6 +124,13 @@ namespace ts.server {
             return response;
         }
 
+        /*@internal*/
+        configure(preferences: UserPreferences) {
+            const args: protocol.ConfigureRequestArguments = { preferences };
+            const request = this.processRequest(CommandNames.Configure, args);
+            this.processResponse(request, /*expectEmptyBody*/ true);
+        }
+
         openFile(file: string, fileContent?: string, scriptKindName?: "TS" | "JS" | "TSX" | "JSX"): void {
             const args: protocol.OpenRequestArgs = { file, fileContent, scriptKindName };
             this.processRequest(CommandNames.Open, args);

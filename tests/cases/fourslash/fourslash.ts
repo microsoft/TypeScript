@@ -346,6 +346,13 @@ declare namespace FourSlashInterface {
         insert(text: string): void;
         insertLine(text: string): void;
         insertLines(...lines: string[]): void;
+        /** @param index 0-based */
+        deleteLine(index: number): void;
+        /**
+         * @param startIndex 0-based
+         * @param endIndexInclusive 0-based
+         */
+        deleteLineRange(startIndex: number, endIndexInclusive: number): void;
         moveRight(count?: number): void;
         moveLeft(count?: number): void;
         enableFormatting(): void;

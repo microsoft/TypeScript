@@ -1077,11 +1077,23 @@ namespace FourSlash {
                 TestState.getDisplayPartsJson(expected), this.messageAtLastKnownMarker("referenced symbol definition display parts"));
         }
 
+        private configure(preferences: ts.UserPreferences) {
+            if (this.testType === FourSlashTestType.Server) {
+                (this.languageService as ts.server.SessionClient).configure(preferences);
+            }
+        }
+
         private getCompletionListAtCaret(options?: ts.GetCompletionsAtPositionOptions): ts.CompletionInfo | undefined {
+            if (options) {
+                this.configure(options);
+            }
             return this.languageService.getCompletionsAtPosition(this.activeFile.fileName, this.currentCaretPosition, options);
         }
 
         private getCompletionEntryDetails(entryName: string, source?: string, preferences?: ts.UserPreferences): ts.CompletionEntryDetails | undefined {
+            if (preferences) {
+                this.configure(preferences);
+            }
             return this.languageService.getCompletionEntryDetails(this.activeFile.fileName, this.currentCaretPosition, entryName, this.formatCodeSettings, source, preferences);
         }
 
@@ -1690,6 +1702,12 @@ namespace FourSlash {
         public replace(start: number, length: number, text: string) {
             this.editScriptAndUpdateMarkers(this.activeFile.fileName, start, start + length, text);
             this.checkPostEditInvariants();
+        }
+
+        public deleteLineRange(startIndex: number, endIndexInclusive: number) {
+            const startPos = this.languageServiceAdapterHost.lineAndCharacterToPosition(this.activeFile.fileName, { line: startIndex, character: 0 });
+            const endPos = this.languageServiceAdapterHost.lineAndCharacterToPosition(this.activeFile.fileName, { line: endIndexInclusive + 1, character: 0 });
+            this.replace(startPos, endPos - startPos, "");
         }
 
         public deleteCharBehindMarker(count = 1) {
@@ -4284,6 +4302,14 @@ namespace FourSlashInterface {
 
         public insertLines(...lines: string[]) {
             this.state.type(lines.join("\n"));
+        }
+
+        public deleteLine(index: number) {
+            this.deleteLineRange(index, index);
+        }
+
+        public deleteLineRange(startIndex: number, endIndexInclusive: number) {
+            this.state.deleteLineRange(startIndex, endIndexInclusive);
         }
 
         public moveRight(count?: number) {

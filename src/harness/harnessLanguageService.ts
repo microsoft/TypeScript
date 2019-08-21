@@ -204,6 +204,12 @@ namespace Harness.LanguageService {
             return ts.computeLineAndCharacterOfPosition(script.getLineMap(), position);
         }
 
+        public lineAndCharacterToPosition(fileName: string, lineAndCharacter: ts.LineAndCharacter): number {
+            const script: ScriptInfo = this.getScriptInfo(fileName)!;
+            assert.isOk(script);
+            return ts.computePositionOfLineAndCharacter(script.getLineMap(), lineAndCharacter.line, lineAndCharacter.character);
+        }
+
         useCaseSensitiveFileNames() {
             return !this.vfs.ignoreCase;
         }
