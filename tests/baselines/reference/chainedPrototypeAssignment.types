@@ -14,8 +14,8 @@ var a = new mod.A()
 >A : typeof A
 
 var b = new mod.B()
->b : A
->new mod.B() : A
+>b : B
+>new mod.B() : B
 >mod.B : typeof B
 >mod : typeof import("tests/cases/conformance/salsa/mod")
 >B : typeof B
@@ -30,7 +30,7 @@ a.m('nope')
 b.m('not really')
 >b.m('not really') : number
 >b.m : (n: number) => number
->b : A
+>b : B
 >m : (n: number) => number
 >'not really' : "not really"
 
@@ -44,9 +44,10 @@ declare var exports: any;
 
 === tests/cases/conformance/salsa/mod.js ===
 /// <reference path='./types.d.ts'/>
-var A = function() {
+var A = function A() {
 >A : typeof A
->function() {    this.a = 1} : typeof A
+>function A() {    this.a = 1} : typeof A
+>A : typeof A
 
     this.a = 1
 >this.a = 1 : 1
@@ -55,9 +56,10 @@ var A = function() {
 >a : any
 >1 : 1
 }
-var B = function() {
+var B = function B() {
 >B : typeof B
->function() {    this.b = 2} : typeof B
+>function B() {    this.b = 2} : typeof B
+>B : typeof B
 
     this.b = 2
 >this.b = 2 : 2

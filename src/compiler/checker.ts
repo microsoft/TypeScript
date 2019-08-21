@@ -22883,8 +22883,8 @@ namespace ts {
         function mergeJSSymbols(target: Symbol, source: Symbol | undefined) {
             if (source && (hasEntries(source.exports) || hasEntries(source.members))) {
                 const links = getSymbolLinks(source);
-                if (!links.inferredClassSymbol) {
-                    const inferred = cloneSymbol(target) as TransientSymbol;
+                if (!links.inferredClassSymbol || !links.inferredClassSymbol.has("" + getSymbolId(target))) {
+                    const inferred = isTransientSymbol(target) ? target : cloneSymbol(target) as TransientSymbol;
                     inferred.exports = inferred.exports || createSymbolTable();
                     inferred.members = inferred.members || createSymbolTable();
                     inferred.flags |= source.flags & SymbolFlags.Class;
@@ -22894,9 +22894,10 @@ namespace ts {
                     if (hasEntries(source.members)) {
                         mergeSymbolTable(inferred.members, source.members);
                     }
-                    links.inferredClassSymbol = inferred;
+                    (links.inferredClassSymbol || (links.inferredClassSymbol = createMap<TransientSymbol>())).set("" + getSymbolId(inferred), inferred);
+                    return inferred;
                 }
-                return links.inferredClassSymbol;
+                return links.inferredClassSymbol.get("" + getSymbolId(target));
             }
         }
 
