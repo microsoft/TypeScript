@@ -14,8 +14,8 @@ exports.__esModule = true;
   "program": {
     "fileInfos": {
       "../../../.ts/lib.es5.d.ts": {
-        "version": "406734842058",
-        "signature": "406734842058"
+        "version": "776794059135",
+        "signature": "776794059135"
       },
       "../../../.ts/lib.es2015.d.ts": {
         "version": "57263133672",
@@ -26,12 +26,12 @@ exports.__esModule = true;
         "signature": "-1041975536091"
       },
       "../../../.ts/lib.es2015.core.d.ts": {
-        "version": "370321249768",
-        "signature": "370321249768"
+        "version": "250160071717",
+        "signature": "250160071717"
       },
       "../../../.ts/lib.es2015.collection.d.ts": {
-        "version": "-95997535017",
-        "signature": "-95997535017"
+        "version": "-105748826588",
+        "signature": "-105748826588"
       },
       "../../../.ts/lib.es2015.generator.d.ts": {
         "version": "10837180865",
@@ -114,8 +114,8 @@ exports.__esModule = true;
   "program": {
     "fileInfos": {
       "../../../.ts/lib.es5.d.ts": {
-        "version": "406734842058",
-        "signature": "406734842058"
+        "version": "776794059135",
+        "signature": "776794059135"
       },
       "../../../.ts/lib.es2015.d.ts": {
         "version": "57263133672",
@@ -126,12 +126,12 @@ exports.__esModule = true;
         "signature": "-1041975536091"
       },
       "../../../.ts/lib.es2015.core.d.ts": {
-        "version": "370321249768",
-        "signature": "370321249768"
+        "version": "250160071717",
+        "signature": "250160071717"
       },
       "../../../.ts/lib.es2015.collection.d.ts": {
-        "version": "-95997535017",
-        "signature": "-95997535017"
+        "version": "-105748826588",
+        "signature": "-105748826588"
       },
       "../../../.ts/lib.es2015.generator.d.ts": {
         "version": "10837180865",
@@ -237,8 +237,8 @@ exports.getVar = getVar;
   "program": {
     "fileInfos": {
       "../../../.ts/lib.es5.d.ts": {
-        "version": "406734842058",
-        "signature": "406734842058"
+        "version": "776794059135",
+        "signature": "776794059135"
       },
       "../../../.ts/lib.es2015.d.ts": {
         "version": "57263133672",
@@ -249,12 +249,12 @@ exports.getVar = getVar;
         "signature": "-1041975536091"
       },
       "../../../.ts/lib.es2015.core.d.ts": {
-        "version": "370321249768",
-        "signature": "370321249768"
+        "version": "250160071717",
+        "signature": "250160071717"
       },
       "../../../.ts/lib.es2015.collection.d.ts": {
-        "version": "-95997535017",
-        "signature": "-95997535017"
+        "version": "-105748826588",
+        "signature": "-105748826588"
       },
       "../../../.ts/lib.es2015.generator.d.ts": {
         "version": "10837180865",
