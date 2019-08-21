@@ -299,6 +299,7 @@ namespace ts {
         let instantiationCount = 0;
         let instantiationDepth = 0;
         let constraintDepth = 0;
+        let mapperIdCount = 0;
         let currentNode: Node | undefined;
 
         const emptySymbols = createSymbolTable();
@@ -6545,7 +6546,7 @@ namespace ts {
                 if (type.flags & TypeFlags.Substitution) {
                     // Trigger resolution of any deferred substiutes that are directly assigned to the alias so they
                     // are marked as circular and the alias becomes `any`
-                    void (type as SubstitutionType).substitute;
+                    void (type as SubstitutionType).substitute;  // tslint:disable-line:no-unused-expression
                 }
 
                 if (popTypeResolution()) {
@@ -9166,7 +9167,7 @@ namespace ts {
                 const links = getNodeLinks(node);
                 let cb = links.substituteCallback;
                 if (!cb) {
-                    cb = links.substituteCallback = () => getTypeFromTypeAliasReferenceWorker(node, symbol, typeArguments); 
+                    cb = links.substituteCallback = () => getTypeFromTypeAliasReferenceWorker(node, symbol, typeArguments);
                 }
                 return getDeferredSubstitutionType(cb, symbol, typeArguments);
             }
@@ -11699,9 +11700,8 @@ namespace ts {
             return result;
         }
 
-        var mapperIdCount: number;
         function getTypeMapperId(mapper: TypeMapper) {
-            return mapper.id || (mapper.id = (mapperIdCount = (mapperIdCount || 0) + 1));
+            return mapper.id || (mapper.id = ++mapperIdCount);
         }
 
         function instantiateTypeWorker(type: Type, mapper: TypeMapper): Type {
