@@ -654,7 +654,7 @@ namespace ts.refactor {
     }
 
     function isTopLevelDeclarationStatement(node: Node): node is TopLevelDeclarationStatement {
-        Debug.assert(isSourceFile(node.parent), `Node parent should be a SourceFile`);
+        Debug.assert(isSourceFile(node.parent), "Node parent should be a SourceFile");
         return isNonVariableTopLevelDeclaration(node) || isVariableStatement(node);
     }
 

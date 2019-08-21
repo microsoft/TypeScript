@@ -837,8 +837,8 @@ namespace ts.refactor.extractSymbol {
             // No need to mix declarations and writes.
 
             // How could any variables be exposed if there's a return statement?
-            Debug.assert(!returnValueProperty, `Expected no returnValueProperty`);
-            Debug.assert(!(range.facts & RangeFacts.HasReturn), `Expected RangeFacts.HasReturn flag to be unset`);
+            Debug.assert(!returnValueProperty, "Expected no returnValueProperty");
+            Debug.assert(!(range.facts & RangeFacts.HasReturn), "Expected RangeFacts.HasReturn flag to be unset");
 
             if (exposedVariableDeclarations.length === 1) {
                 // Declaring exactly one variable: let x = newFunction();
