@@ -1022,7 +1022,9 @@ namespace ts {
         function mergeSymbol(target: Symbol, source: Symbol, unidirectional = false): Symbol {
             if (!(target.flags & getExcludedSymbolFlags(source.flags)) ||
                 (source.flags | target.flags) & SymbolFlags.Assignment) {
-                Debug.assert(source !== target);
+                if (source === target) {
+                    Debug.assert(source !== target, source.id + " " + source.valueDeclaration.pos);
+                }
                 if (!(target.flags & SymbolFlags.Transient)) {
                     const resolvedTarget = resolveSymbol(target);
                     if (resolvedTarget === unknownSymbol) {
@@ -22882,17 +22884,21 @@ namespace ts {
 
         function mergeJSSymbols(target: Symbol, source: Symbol | undefined) {
             if (source && (hasEntries(source.exports) || hasEntries(source.members))) {
-                target = cloneSymbol(target);
-                if (hasEntries(source.exports)) {
-                    target.exports = target.exports || createSymbolTable();
-                    mergeSymbolTable(target.exports, source.exports);
+                const links = getSymbolLinks(source);
+                if (!links.inferredClassSymbol) {
+                    const inferred = cloneSymbol(target) as TransientSymbol;
+                    inferred.exports = inferred.exports || createSymbolTable();
+                    inferred.members = inferred.members || createSymbolTable();
+                    inferred.flags |= source.flags & SymbolFlags.Class;
+                    if (hasEntries(source.exports)) {
+                        mergeSymbolTable(inferred.exports, source.exports);
+                    }
+                    if (hasEntries(source.members)) {
+                        mergeSymbolTable(inferred.members, source.members);
+                    }
+                    links.inferredClassSymbol = inferred;
                 }
-                if (hasEntries(source.members)) {
-                    target.members = target.members || createSymbolTable();
-                    mergeSymbolTable(target.members, source.members);
-                }
-                target.flags |= source.flags & SymbolFlags.Class;
-                return target as TransientSymbol;
+                return links.inferredClassSymbol;
             }
         }
 
