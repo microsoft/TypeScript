@@ -335,10 +335,10 @@ namespace ts.refactor.extractSymbol {
             }
 
             // We believe it's true because the node is from the (unmodified) tree.
-            Debug.assert(nodeToCheck.pos <= nodeToCheck.end, "This failure could trigger https://github.com/Microsoft/TypeScript/issues/20809");
+            Debug.assert(nodeToCheck.pos <= nodeToCheck.end, "This failure could trigger https://github.com/Microsoft/TypeScript/issues/20809 (1)");
 
             // For understanding how skipTrivia functioned:
-            Debug.assert(!positionIsSynthesized(nodeToCheck.pos), "This failure could trigger https://github.com/Microsoft/TypeScript/issues/20809");
+            Debug.assert(!positionIsSynthesized(nodeToCheck.pos), "This failure could trigger https://github.com/Microsoft/TypeScript/issues/20809 (2)");
 
             if (!isStatement(nodeToCheck) && !(isExpressionNode(nodeToCheck) && isExtractableExpression(nodeToCheck))) {
                 return [createDiagnosticForNode(nodeToCheck, Messages.statementOrExpressionExpected)];
@@ -681,7 +681,7 @@ namespace ts.refactor.extractSymbol {
             case SyntaxKind.SetAccessor:
                 return `'set ${scope.name.getText()}'`;
             default:
-                throw Debug.assertNever(scope);
+                throw Debug.assertNever(scope, `Unexpected scope kind ${(scope as FunctionLikeDeclaration).kind}`);
         }
     }
     function getDescriptionForClassLikeDeclaration(scope: ClassLikeDeclaration): string {
@@ -837,8 +837,8 @@ namespace ts.refactor.extractSymbol {
             // No need to mix declarations and writes.
 
             // How could any variables be exposed if there's a return statement?
-            Debug.assert(!returnValueProperty);
-            Debug.assert(!(range.facts & RangeFacts.HasReturn));
+            Debug.assert(!returnValueProperty, "Expected no returnValueProperty");
+            Debug.assert(!(range.facts & RangeFacts.HasReturn), "Expected RangeFacts.HasReturn flag to be unset");
 
             if (exposedVariableDeclarations.length === 1) {
                 // Declaring exactly one variable: let x = newFunction();
@@ -928,7 +928,7 @@ namespace ts.refactor.extractSymbol {
             if (assignments.length === 1) {
                 // We would only have introduced a return value property if there had been
                 // other assignments to make.
-                Debug.assert(!returnValueProperty);
+                Debug.assert(!returnValueProperty, "Shouldn't have returnValueProperty here");
 
                 newNodes.push(createStatement(createAssignment(assignments[0].name, call)));
 
@@ -1016,7 +1016,7 @@ namespace ts.refactor.extractSymbol {
         const changeTracker = textChanges.ChangeTracker.fromContext(context);
 
         if (isClassLike(scope)) {
-            Debug.assert(!isJS); // See CannotExtractToJSClass
+            Debug.assert(!isJS, "Cannot extract to a JS class"); // See CannotExtractToJSClass
             const modifiers: Modifier[] = [];
             modifiers.push(createToken(SyntaxKind.PrivateKeyword));
             if (rangeFacts & RangeFacts.InStaticRegion) {
@@ -1255,7 +1255,7 @@ namespace ts.refactor.extractSymbol {
 
     function getNodeToInsertPropertyBefore(maxPos: number, scope: ClassLikeDeclaration): ClassElement {
         const members = scope.members;
-        Debug.assert(members.length > 0); // There must be at least one child, since we extracted from one.
+        Debug.assert(members.length > 0, "Found no members"); // There must be at least one child, since we extracted from one.
 
         let prevMember: ClassElement | undefined;
         let allProperties = true;
@@ -1301,12 +1301,12 @@ namespace ts.refactor.extractSymbol {
 
                 if (!prevStatement && isCaseClause(curr)) {
                     // We must have been in the expression of the case clause.
-                    Debug.assert(isSwitchStatement(curr.parent.parent));
+                    Debug.assert(isSwitchStatement(curr.parent.parent), "Grandparent isn't a switch statement");
                     return curr.parent.parent;
                 }
 
                 // There must be at least one statement since we started in one.
-                return Debug.assertDefined(prevStatement);
+                return Debug.assertDefined(prevStatement, "prevStatement failed to get set");
             }
 
             Debug.assert(curr !== scope, "Didn't encounter a block-like before encountering scope");
@@ -1476,7 +1476,7 @@ namespace ts.refactor.extractSymbol {
             // If we didn't get through all the scopes, then there were some that weren't in our
             // parent chain (impossible at time of writing).  A conservative solution would be to
             // copy allTypeParameterUsages into all remaining scopes.
-            Debug.assert(i === scopes.length);
+            Debug.assert(i === scopes.length, "Should have iterated all scopes");
         }
 
         // If there are any declarations in the extracted block that are used in the same enclosing
@@ -1512,7 +1512,7 @@ namespace ts.refactor.extractSymbol {
             });
 
             // If an expression was extracted, then there shouldn't have been any variable declarations.
-            Debug.assert(isReadonlyArray(targetRange.range) || exposedVariableDeclarations.length === 0);
+            Debug.assert(isReadonlyArray(targetRange.range) || exposedVariableDeclarations.length === 0, "No variable declarations expected if something was extracted");
 
             if (hasWrite && !isReadonlyArray(targetRange.range)) {
                 const diag = createDiagnosticForNode(targetRange.range, Messages.cannotWriteInExpression);

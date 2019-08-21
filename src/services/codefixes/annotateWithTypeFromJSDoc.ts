@@ -60,8 +60,8 @@ namespace ts.codefix {
             }
         }
         else {
-            const jsdocType = Debug.assertDefined(getJSDocType(decl)); // If not defined, shouldn't have been an error to fix
-            Debug.assert(!decl.type); // If defined, shouldn't have been an error to fix.
+            const jsdocType = Debug.assertDefined(getJSDocType(decl), "A JSDocType for this declaration should exist"); // If not defined, shouldn't have been an error to fix
+            Debug.assert(!decl.type, "The JSDocType decl should have a type"); // If defined, shouldn't have been an error to fix.
             changes.tryInsertTypeAnnotation(sourceFile, decl, transformJSDocType(jsdocType));
         }
     }
