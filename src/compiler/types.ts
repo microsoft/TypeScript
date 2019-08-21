@@ -3770,30 +3770,31 @@ namespace ts {
 
     /* @internal */
     export interface SymbolLinks {
-        immediateTarget?: Symbol;           // Immediate target of an alias. May be another alias. Do not access directly, use `checker.getImmediateAliasedSymbol` instead.
-        target?: Symbol;                    // Resolved (non-alias) target of an alias
-        type?: Type;                        // Type of value symbol
-        uniqueESSymbolType?: Type;          // UniqueESSymbol type for a symbol
-        declaredType?: Type;                // Type of class, interface, enum, type alias, or type parameter
-        resolvedJSDocType?: Type;           // Resolved type of a JSDoc type reference
-        typeParameters?: TypeParameter[];   // Type parameters of type alias (undefined if non-generic)
-        outerTypeParameters?: TypeParameter[];  // Outer type parameters of anonymous object type
-        instantiations?: Map<Type>;         // Instantiations of generic type alias (undefined if non-generic)
-        mapper?: TypeMapper;                // Type mapper for instantiation alias
-        referenced?: boolean;               // True if alias symbol has been referenced as a value
-        containingType?: UnionOrIntersectionType; // Containing union or intersection type for synthetic property
-        leftSpread?: Symbol;                // Left source for synthetic spread property
-        rightSpread?: Symbol;               // Right source for synthetic spread property
-        syntheticOrigin?: Symbol;           // For a property on a mapped or spread type, points back to the original property
-        isDiscriminantProperty?: boolean;   // True if discriminant synthetic property
-        resolvedExports?: SymbolTable;      // Resolved exports of module or combined early- and late-bound static members of a class.
-        resolvedMembers?: SymbolTable;      // Combined early- and late-bound members of a symbol
-        exportsChecked?: boolean;           // True if exports of external module have been checked
-        typeParametersChecked?: boolean;    // True if type parameters of merged class and interface declarations have been checked.
+        immediateTarget?: Symbol;                   // Immediate target of an alias. May be another alias. Do not access directly, use `checker.getImmediateAliasedSymbol` instead.
+        target?: Symbol;                            // Resolved (non-alias) target of an alias
+        type?: Type;                                // Type of value symbol
+        uniqueESSymbolType?: Type;                  // UniqueESSymbol type for a symbol
+        declaredType?: Type;                        // Type of class, interface, enum, type alias, or type parameter
+        resolvedJSDocType?: Type;                   // Resolved type of a JSDoc type reference
+        typeParameters?: TypeParameter[];           // Type parameters of type alias (undefined if non-generic)
+        outerTypeParameters?: TypeParameter[];      // Outer type parameters of anonymous object type
+        instantiations?: Map<Type>;                 // Instantiations of generic type alias (undefined if non-generic)
+        inferredClassSymbol?: Map<TransientSymbol>; // Symbol of an inferred ES5 constructor function
+        mapper?: TypeMapper;                        // Type mapper for instantiation alias
+        referenced?: boolean;                       // True if alias symbol has been referenced as a value
+        containingType?: UnionOrIntersectionType;   // Containing union or intersection type for synthetic property
+        leftSpread?: Symbol;                        // Left source for synthetic spread property
+        rightSpread?: Symbol;                       // Right source for synthetic spread property
+        syntheticOrigin?: Symbol;                   // For a property on a mapped or spread type, points back to the original property
+        isDiscriminantProperty?: boolean;           // True if discriminant synthetic property
+        resolvedExports?: SymbolTable;              // Resolved exports of module or combined early- and late-bound static members of a class.
+        resolvedMembers?: SymbolTable;              // Combined early- and late-bound members of a symbol
+        exportsChecked?: boolean;                   // True if exports of external module have been checked
+        typeParametersChecked?: boolean;            // True if type parameters of merged class and interface declarations have been checked.
         isDeclarationWithCollidingName?: boolean;   // True if symbol is block scoped redeclaration
-        bindingElement?: BindingElement;    // Binding element associated with property symbol
-        exportsSomeValue?: boolean;         // True if module exports some value (not just types)
-        enumKind?: EnumKind;                // Enum declaration classification
+        bindingElement?: BindingElement;            // Binding element associated with property symbol
+        exportsSomeValue?: boolean;                 // True if module exports some value (not just types)
+        enumKind?: EnumKind;                        // Enum declaration classification
         originatingImport?: ImportDeclaration | ImportCall; // Import declaration which produced the symbol, present if the symbol is marked as uncallable but had call signatures in `resolveESModuleSymbol`
         lateSymbol?: Symbol;                // Late-bound symbol for a computed property
         specifierCache?: Map<string>;     // For symbols corresponding to external modules, a cache of incoming path -> module specifier name mappings

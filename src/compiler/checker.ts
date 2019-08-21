@@ -22879,24 +22879,29 @@ namespace ts {
 
                 // If the symbol of the node has members, treat it like a constructor.
                 const symbol = getSymbolOfNode(func);
-                return !!symbol && symbol.members !== undefined;
+                return !!symbol && hasEntries(symbol.members);
             }
             return false;
         }
 
         function mergeJSSymbols(target: Symbol, source: Symbol | undefined) {
             if (source && (hasEntries(source.exports) || hasEntries(source.members))) {
-                target = cloneSymbol(target);
-                if (hasEntries(source.exports)) {
-                    target.exports = target.exports || createSymbolTable();
-                    mergeSymbolTable(target.exports, source.exports);
+                const links = getSymbolLinks(source);
+                if (!links.inferredClassSymbol || !links.inferredClassSymbol.has("" + getSymbolId(target))) {
+                    const inferred = isTransientSymbol(target) ? target : cloneSymbol(target) as TransientSymbol;
+                    inferred.exports = inferred.exports || createSymbolTable();
+                    inferred.members = inferred.members || createSymbolTable();
+                    inferred.flags |= source.flags & SymbolFlags.Class;
+                    if (hasEntries(source.exports)) {
+                        mergeSymbolTable(inferred.exports, source.exports);
+                    }
+                    if (hasEntries(source.members)) {
+                        mergeSymbolTable(inferred.members, source.members);
+                    }
+                    (links.inferredClassSymbol || (links.inferredClassSymbol = createMap<TransientSymbol>())).set("" + getSymbolId(inferred), inferred);
+                    return inferred;
                 }
-                if (hasEntries(source.members)) {
-                    target.members = target.members || createSymbolTable();
-                    mergeSymbolTable(target.members, source.members);
-                }
-                target.flags |= source.flags & SymbolFlags.Class;
-                return target as TransientSymbol;
+                return links.inferredClassSymbol.get("" + getSymbolId(target));
             }
         }
 
