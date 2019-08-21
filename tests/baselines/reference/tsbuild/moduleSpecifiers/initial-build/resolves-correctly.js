@@ -14,8 +14,8 @@ exports.__esModule = true;
   "program": {
     "fileInfos": {
       "../../../.ts/lib.es5.d.ts": {
-        "version": "146944634190",
-        "signature": "146944634190"
+        "version": "406734842058",
+        "signature": "406734842058"
       },
       "../../../.ts/lib.es2015.d.ts": {
         "version": "57263133672",
@@ -114,8 +114,8 @@ exports.__esModule = true;
   "program": {
     "fileInfos": {
       "../../../.ts/lib.es5.d.ts": {
-        "version": "146944634190",
-        "signature": "146944634190"
+        "version": "406734842058",
+        "signature": "406734842058"
       },
       "../../../.ts/lib.es2015.d.ts": {
         "version": "57263133672",
@@ -237,8 +237,8 @@ exports.getVar = getVar;
   "program": {
     "fileInfos": {
       "../../../.ts/lib.es5.d.ts": {
-        "version": "146944634190",
-        "signature": "146944634190"
+        "version": "406734842058",
+        "signature": "406734842058"
       },
       "../../../.ts/lib.es2015.d.ts": {
         "version": "57263133672",
