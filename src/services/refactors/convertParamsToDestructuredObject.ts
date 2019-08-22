@@ -24,7 +24,7 @@ namespace ts.refactor.convertParamsToDestructuredObject {
     }
 
     function getEditsForAction(context: RefactorContext, actionName: string): RefactorEditInfo | undefined {
-        Debug.assert(actionName === refactorName);
+        Debug.assert(actionName === refactorName, "Unexpected action name");
         const { file, startPosition, program, cancellationToken, host } = context;
         const functionDeclaration = getFunctionDeclarationAtPosition(file, startPosition, program.getTypeChecker());
         if (!functionDeclaration || !cancellationToken) return undefined;
@@ -563,7 +563,7 @@ namespace ts.refactor.convertParamsToDestructuredObject {
                 if (functionDeclaration.name) return [functionDeclaration.name, functionDeclaration.parent.name];
                 return [functionDeclaration.parent.name];
             default:
-                return Debug.assertNever(functionDeclaration);
+                return Debug.assertNever(functionDeclaration, `Unexpected function declaration kind ${(functionDeclaration as ValidFunctionDeclaration).kind}`);
         }
     }
 

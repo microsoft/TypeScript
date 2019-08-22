@@ -19,8 +19,8 @@ namespace ts.codefix {
 
     function getImportTypeNode(sourceFile: SourceFile, pos: number): ImportTypeNode {
         const token = getTokenAtPosition(sourceFile, pos);
-        Debug.assert(token.kind === SyntaxKind.ImportKeyword);
-        Debug.assert(token.parent.kind === SyntaxKind.ImportType);
+        Debug.assert(token.kind === SyntaxKind.ImportKeyword, "This token should be an ImportKeyword");
+        Debug.assert(token.parent.kind === SyntaxKind.ImportType, "Token parent should be an ImportType");
         return <ImportTypeNode>token.parent;
     }
 

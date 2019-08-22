@@ -19,10 +19,10 @@ namespace ts.refactor {
             }];
         },
         getEditsForAction(context, actionName): RefactorEditInfo {
-            Debug.assert(actionName === extractToTypeAlias || actionName === extractToTypeDef);
+            Debug.assert(actionName === extractToTypeAlias || actionName === extractToTypeDef, "Unexpected action name");
             const { file } = context;
-            const info = Debug.assertDefined(getRangeToExtract(context));
-            Debug.assert(actionName === extractToTypeAlias && !info.isJS || actionName === extractToTypeDef && info.isJS);
+            const info = Debug.assertDefined(getRangeToExtract(context), "Expected to find a range to extract");
+            Debug.assert(actionName === extractToTypeAlias && !info.isJS || actionName === extractToTypeDef && info.isJS, "Invalid actionName/JS combo");
 
             const name = getUniqueName("NewType", file);
             const edits = textChanges.ChangeTracker.with(context, changes => info.isJS ?
@@ -47,7 +47,7 @@ namespace ts.refactor {
         if (!selection || !isTypeNode(selection)) return undefined;
 
         const checker = context.program.getTypeChecker();
-        const firstStatement = Debug.assertDefined(isJS ? findAncestor(selection, isStatementAndHasJSDoc) : findAncestor(selection, isStatement));
+        const firstStatement = Debug.assertDefined(isJS ? findAncestor(selection, isStatementAndHasJSDoc) : findAncestor(selection, isStatement), "Should find a statement");
         const typeParameters = collectTypeParameters(checker, selection, firstStatement, file);
         if (!typeParameters) return undefined;
 

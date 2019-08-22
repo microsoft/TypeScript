@@ -12,8 +12,8 @@ namespace ts.refactor {
             return [{ name: refactorName, description, actions: [{ name: actionName, description }] }];
         },
         getEditsForAction(context, actionName): RefactorEditInfo {
-            Debug.assert(actionName === actionNameNamespaceToNamed || actionName === actionNameNamedToNamespace);
-            const edits = textChanges.ChangeTracker.with(context, t => doChange(context.file, context.program, t, Debug.assertDefined(getImportToConvert(context))));
+            Debug.assert(actionName === actionNameNamespaceToNamed || actionName === actionNameNamedToNamespace, "Unexpected action name");
+            const edits = textChanges.ChangeTracker.with(context, t => doChange(context.file, context.program, t, Debug.assertDefined(getImportToConvert(context), "Context must provide an import to convert")));
             return { edits, renameFilename: undefined, renameLocation: undefined };
         }
     });
@@ -55,7 +55,7 @@ namespace ts.refactor {
                 if (checker.resolveName(exportName, id, SymbolFlags.All, /*excludeGlobals*/ true)) {
                     conflictingNames.set(exportName, true);
                 }
-                Debug.assert(parent.expression === id);
+                Debug.assert(parent.expression === id, "Parent expression should match id");
                 nodesToReplace.push(parent);
             }
         });
