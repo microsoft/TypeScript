@@ -2560,6 +2560,21 @@ namespace ts {
             return initializer || decl;
         }
 
+        /**
+         * Get the real symbol of a declaration with an expando initializer.
+         *
+         * Normally, declarations have an associated symbol, but when a declaration has an expando
+         * initializer, the expando's symbol is the one that has all the members merged into it.
+         */
+        function getExpandoSymbol(node: Node | undefined): Symbol | undefined {
+            if (!node || !isInJSFile(node)) {
+                return undefined;
+            }
+            const init = isVariableDeclaration(node) ? getDeclaredExpandoInitializer(node) : getAssignedExpandoInitializer(node);
+            return init && getSymbolOfNode(init) || undefined;
+        }
+
+
         function resolveExternalModuleName(location: Node, moduleReferenceExpression: Expression, ignoreErrors?: boolean): Symbol | undefined {
             return resolveExternalModuleNameWorker(location, moduleReferenceExpression, ignoreErrors ? undefined : Diagnostics.Cannot_find_module_0);
         }
@@ -9195,7 +9210,7 @@ namespace ts {
             if (symbol === unknownSymbol) {
                 return errorType;
             }
-
+            symbol = !(symbol.flags & SymbolFlags.TypeAlias) && getExpandoSymbol(symbol.valueDeclaration) || symbol;
             const type = getTypeReferenceTypeWorker(node, symbol, typeArguments);
             if (type) {
                 return type;
@@ -9213,7 +9228,7 @@ namespace ts {
                 return errorType;
             }
 
-            const jsdocType = getJSDocTypeReference(node, symbol, typeArguments);
+            const jsdocType = getTypeFromJSTypeAliasReference(node, symbol, typeArguments);
             if (jsdocType) {
                 return jsdocType;
             }
@@ -9228,7 +9243,7 @@ namespace ts {
          * the symbol is a constructor function, return the inferred class type; otherwise,
          * the type of this reference is just the type of the value we resolved to.
          */
-        function getJSDocTypeReference(node: NodeWithTypeArguments, symbol: Symbol, typeArguments: Type[] | undefined): Type | undefined {
+        function getTypeFromJSTypeAliasReference(node: NodeWithTypeArguments, symbol: Symbol, typeArguments: Type[] | undefined): Type | undefined {
             // In the case of an assignment of a function expression (binary expressions, variable declarations, etc.), we will get the
             // correct instance type for the symbol on the LHS by finding the type for RHS. For example if we want to get the type of the symbol `foo`:
             //   var foo = function() {}
@@ -9245,26 +9260,10 @@ namespace ts {
 
         function getTypeReferenceTypeWorker(node: NodeWithTypeArguments, symbol: Symbol, typeArguments: Type[] | undefined): Type | undefined {
             if (symbol.flags & (SymbolFlags.Class | SymbolFlags.Interface)) {
-                if (symbol.valueDeclaration && symbol.valueDeclaration.parent && isBinaryExpression(symbol.valueDeclaration.parent)) {
-                    const jsdocType = getJSDocTypeReference(node, symbol, typeArguments);
-                    if (jsdocType) {
-                        return jsdocType;
-                    }
-                }
                 return getTypeFromClassOrInterfaceReference(node, symbol, typeArguments);
             }
-
             if (symbol.flags & SymbolFlags.TypeAlias) {
                 return getTypeFromTypeAliasReference(node, symbol, typeArguments);
-            }
-
-            if (symbol.flags & SymbolFlags.Function &&
-                isJSDocTypeReference(node) &&
-                isJSConstructor(symbol.valueDeclaration)) {
-                const resolved = resolveStructuredTypeMembers(<ObjectType>getTypeOfSymbol(symbol));
-                if (resolved.callSignatures.length === 1) {
-                    return getReturnTypeOfSignature(resolved.callSignatures[0]);
-                }
             }
         }
 
