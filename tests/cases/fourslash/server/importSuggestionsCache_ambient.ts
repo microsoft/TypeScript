@@ -1,7 +1,7 @@
 /// <reference path="../fourslash.ts" />
 
 // @Filename: /tsconfig.json
-////{ compilerOptions: { "module": "esnext" } }
+////{ "compilerOptions": { "module": "esnext" } }
 
 // @Filename: /ambient.d.ts
 ////declare module 'ambient' {
@@ -48,6 +48,7 @@ function verifyIncludes(name: string) {
 }
 
 function verifyExcludes(name: string) {
+    goTo.marker("");
     verify.completions({
         excludes: name,
         preferences: {

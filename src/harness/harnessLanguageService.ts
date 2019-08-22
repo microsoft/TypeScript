@@ -725,8 +725,8 @@ namespace Harness.LanguageService {
             return this.host.getCurrentDirectory();
         }
 
-        getDirectories(): string[] {
-            return [];
+        getDirectories(path: string): string[] {
+            return this.host.getDirectories(path);
         }
 
         getEnvironmentVariable(name: string): string {
