@@ -3752,7 +3752,28 @@ namespace ts {
                     return symbolToTypeNode(type.aliasSymbol, context, SymbolFlags.Type, typeArgumentNodes);
                 }
                 if (type.flags & (TypeFlags.Union | TypeFlags.Intersection)) {
-                    const types = type.flags & TypeFlags.Union ? formatUnionTypes((<UnionType>type).types) : (<IntersectionType>type).types;
+                    const types = type.flags & TypeFlags.Union ? formatUnionTypes((<UnionType>type).types) : filter((<IntersectionType>type).types, t => !(context.flags & NodeBuilderFlags.UseAliasDefinedOutsideCurrentScope) || !(t.flags & TypeFlags.NominalBrand && !t.aliasSymbol));
+                    if (context.flags & NodeBuilderFlags.UseAliasDefinedOutsideCurrentScope && type.flags & TypeFlags.Intersection && length(types) !== length((<IntersectionType>type).types)) {
+                        // If an intersection had brands and no alias, add a `unique` to the front to indicate this
+                        // the brands aren't _precisely_ recoverable by this printback, but it's a good indicator in the LS that there's an unutterable nominal tag on the type
+                        // Ideally, we could hyperlink the `unique` we manufacture here to each of the brand locations it refers to
+                        context.approximateLength += 7;
+                        if (length(types) === 0) {
+                            context.approximateLength += 7;
+                            return createTypeOperatorNode(SyntaxKind.UniqueKeyword, createKeywordTypeNode(SyntaxKind.UnknownKeyword));
+                        }
+                        if (length(types) === 1) {
+                            return createTypeOperatorNode(SyntaxKind.UniqueKeyword, typeToTypeNodeHelper(types[0], context));
+                        }
+                        const nodes = mapToTypeNodes(types, context, /*isBareList*/ true);
+                        if (!length(nodes)) {
+                            if (!context.encounteredError && !(context.flags & NodeBuilderFlags.AllowEmptyUnionOrIntersection)) {
+                                context.encounteredError = true;
+                            }
+                            return undefined!; // TODO: GH#18217
+                        }
+                        return createTypeOperatorNode(SyntaxKind.UniqueKeyword, createUnionOrIntersectionTypeNode(SyntaxKind.IntersectionType, nodes!));
+                    }
                     if (length(types) === 1) {
                         return typeToTypeNodeHelper(types[0], context);
                     }
@@ -3798,6 +3819,17 @@ namespace ts {
                 }
                 if (type.flags & TypeFlags.Substitution) {
                     return typeToTypeNodeHelper((<SubstitutionType>type).typeVariable, context);
+                }
+                if (type.flags & TypeFlags.NominalBrand) {
+                    if (!context.encounteredError && !(context.flags & NodeBuilderFlags.UseAliasDefinedOutsideCurrentScope) && !(context.flags & NodeBuilderFlags.AllowEmptyUnionOrIntersection)) {
+                        context.encounteredError = true;
+                        if (context.tracker && context.tracker.trackSymbol) {
+                            // TODO: issue a custom error message about brand name not being directly accessible
+                            context.tracker.trackSymbol(type.symbol, context.enclosingDeclaration, SymbolFlags.Type);
+                        }
+                    }
+                    context.approximateLength += 14;
+                    return createTypeOperatorNode(SyntaxKind.UniqueKeyword, createKeywordTypeNode(SyntaxKind.UnknownKeyword));
                 }
 
                 return Debug.fail("Should be unreachable.");
@@ -10206,7 +10238,7 @@ namespace ts {
                 maybeTypeOfKind(type, TypeFlags.InstantiableNonPrimitive) ? getIndexTypeForGenericType(<InstantiableType | UnionOrIntersectionType>type, stringsOnly) :
                 getObjectFlags(type) & ObjectFlags.Mapped ? filterType(getConstraintTypeFromMappedType(<MappedType>type), t => !(noIndexSignatures && t.flags & (TypeFlags.Any | TypeFlags.String))) :
                 type === wildcardType ? wildcardType :
-                type.flags & TypeFlags.Unknown ? neverType :
+                type.flags & (TypeFlags.Unknown | TypeFlags.NominalBrand) ? neverType :
                 type.flags & (TypeFlags.Any | TypeFlags.Never) ? keyofConstraintType :
                 stringsOnly ? !noIndexSignatures && getIndexInfoOfType(type, IndexKind.String) ? stringType : getLiteralTypeFromProperties(type, TypeFlags.StringLiteral) :
                 !noIndexSignatures && getIndexInfoOfType(type, IndexKind.String) ? getUnionType([stringType, numberType, getLiteralTypeFromProperties(type, TypeFlags.UniqueESSymbol)]) :
@@ -10235,9 +10267,12 @@ namespace ts {
                         links.resolvedType = getIndexType(getTypeFromTypeNode(node.type));
                         break;
                     case SyntaxKind.UniqueKeyword:
+                        // Note, the first case does _not_ unwrap parenthesis - this is intentional
+                        // This means if you _actually want_ a _class_ of nominally branded symbols, you can
+                        // accomplish as much by writing `unique (symbol)` to avoid getting a symbol-tied-to-a-value
                         links.resolvedType = node.type.kind === SyntaxKind.SymbolKeyword
                             ? getESSymbolLikeTypeForNode(walkUpParenthesizedTypes(node.parent))
-                            : errorType;
+                            : getUniqueBrandOfType(getTypeFromTypeNode(node.type), node.symbol, getAliasSymbolForTypeNode(node));
                         break;
                     case SyntaxKind.ReadonlyKeyword:
                         links.resolvedType = getTypeFromTypeNode(node.type);
@@ -10247,6 +10282,37 @@ namespace ts {
                 }
             }
             return links.resolvedType;
+        }
+
+        /**
+         * Note that this construction of brands precludes the possibility of a branded `never` - a `unique never` will always just be `never`
+         * Meanwhile, a `unique unknown` will produce _just_ the brand. A brand is printed as it's alias, or may be hinted at by `unique <type>`
+         * (though that does not specify _which_ instance of `unique` is relevant, just that a brand has been applied!)
+         */
+        function getUniqueBrandOfType(type: Type, brand: Symbol, aliasSymbol: Symbol | undefined, aliasTypeArguments: readonly Type[] | undefined = getTypeArgumentsForAliasSymbol(aliasSymbol)) {
+            const brandType = getOrCreateBrandFromSymbol(brand);
+            if (type.flags & TypeFlags.AnyOrUnknown) {
+                // A `unique any` or a `unique unknown` both become just the brand type, which needs an alias symbol to be printable
+                // If a type like `type MyObj = { x: unique unknown }` is made, the type of `x` is _just_ the brand from the object literal
+                // in such scenarios, all printback will simply be `unique unknown` and (if possible), a related span/link back to the `unique` keyword
+                // where the type originated
+                // Do note that this means `unique any` actually becomes a very restrictive type, because the `unique` brand removes the any-ness - this
+                // is intentional. If you're opting in to nominal types, you _probably_ didn't want an `any` flowing in to destroy your brands.
+                brandType.aliasSymbol = aliasSymbol;
+                brandType.aliasTypeArguments = aliasTypeArguments;
+                return brandType;
+            }
+            return getIntersectionType([type, brandType], aliasSymbol, aliasTypeArguments);
+        }
+
+        function getOrCreateBrandFromSymbol(symbol: Symbol) {
+            const links = getSymbolLinks(symbol);
+            if (!links.brandType) {
+                const brandType = <NominalBrandType>createType(TypeFlags.NominalBrand);
+                brandType.symbol = symbol;
+                links.brandType = brandType;
+            }
+            return links.brandType;
         }
 
         function createIndexedAccessType(objectType: Type, indexType: Type) {
@@ -10297,6 +10363,9 @@ namespace ts {
         }
 
         function getPropertyTypeForIndexType(originalObjectType: Type, objectType: Type, indexType: Type, fullIndexType: Type, suppressNoImplicitAnyError: boolean, accessNode: ElementAccessExpression | IndexedAccessTypeNode | PropertyName | BindingName | SyntheticExpression | undefined, accessFlags: AccessFlags) {
+            if (originalObjectType.flags & TypeFlags.NominalBrand) {
+                return accessFlags & AccessFlags.Writing ? unknownType : neverType;
+            }
             const accessExpression = accessNode && accessNode.kind === SyntaxKind.ElementAccessExpression ? accessNode : undefined;
             const propName = getPropertyNameFromIndex(indexType, accessNode);
             if (propName !== undefined) {
@@ -33169,40 +33238,39 @@ namespace ts {
 
         function checkGrammarTypeOperatorNode(node: TypeOperatorNode) {
             if (node.operator === SyntaxKind.UniqueKeyword) {
-                if (node.type.kind !== SyntaxKind.SymbolKeyword) {
-                    return grammarErrorOnNode(node.type, Diagnostics._0_expected, tokenToString(SyntaxKind.SymbolKeyword));
-                }
+                if (node.type.kind === SyntaxKind.SymbolKeyword) {
+                    // Continue to recognize `unique symbol` as a special kind of type with certain restrictions to permit analysis
+                    const parent = walkUpParenthesizedTypes(node.parent);
+                    switch (parent.kind) {
+                        case SyntaxKind.VariableDeclaration:
+                            const decl = parent as VariableDeclaration;
+                            if (decl.name.kind !== SyntaxKind.Identifier) {
+                                return grammarErrorOnNode(node, Diagnostics.unique_symbol_types_may_not_be_used_on_a_variable_declaration_with_a_binding_name);
+                            }
+                            if (!isVariableDeclarationInVariableStatement(decl)) {
+                                return grammarErrorOnNode(node, Diagnostics.unique_symbol_types_are_only_allowed_on_variables_in_a_variable_statement);
+                            }
+                            if (!(decl.parent.flags & NodeFlags.Const)) {
+                                return grammarErrorOnNode((<VariableDeclaration>parent).name, Diagnostics.A_variable_whose_type_is_a_unique_symbol_type_must_be_const);
+                            }
+                            break;
 
-                const parent = walkUpParenthesizedTypes(node.parent);
-                switch (parent.kind) {
-                    case SyntaxKind.VariableDeclaration:
-                        const decl = parent as VariableDeclaration;
-                        if (decl.name.kind !== SyntaxKind.Identifier) {
-                            return grammarErrorOnNode(node, Diagnostics.unique_symbol_types_may_not_be_used_on_a_variable_declaration_with_a_binding_name);
-                        }
-                        if (!isVariableDeclarationInVariableStatement(decl)) {
-                            return grammarErrorOnNode(node, Diagnostics.unique_symbol_types_are_only_allowed_on_variables_in_a_variable_statement);
-                        }
-                        if (!(decl.parent.flags & NodeFlags.Const)) {
-                            return grammarErrorOnNode((<VariableDeclaration>parent).name, Diagnostics.A_variable_whose_type_is_a_unique_symbol_type_must_be_const);
-                        }
-                        break;
+                        case SyntaxKind.PropertyDeclaration:
+                            if (!hasModifier(parent, ModifierFlags.Static) ||
+                                !hasModifier(parent, ModifierFlags.Readonly)) {
+                                return grammarErrorOnNode((<PropertyDeclaration>parent).name, Diagnostics.A_property_of_a_class_whose_type_is_a_unique_symbol_type_must_be_both_static_and_readonly);
+                            }
+                            break;
 
-                    case SyntaxKind.PropertyDeclaration:
-                        if (!hasModifier(parent, ModifierFlags.Static) ||
-                            !hasModifier(parent, ModifierFlags.Readonly)) {
-                            return grammarErrorOnNode((<PropertyDeclaration>parent).name, Diagnostics.A_property_of_a_class_whose_type_is_a_unique_symbol_type_must_be_both_static_and_readonly);
-                        }
-                        break;
+                        case SyntaxKind.PropertySignature:
+                            if (!hasModifier(parent, ModifierFlags.Readonly)) {
+                                return grammarErrorOnNode((<PropertySignature>parent).name, Diagnostics.A_property_of_an_interface_or_type_literal_whose_type_is_a_unique_symbol_type_must_be_readonly);
+                            }
+                            break;
 
-                    case SyntaxKind.PropertySignature:
-                        if (!hasModifier(parent, ModifierFlags.Readonly)) {
-                            return grammarErrorOnNode((<PropertySignature>parent).name, Diagnostics.A_property_of_an_interface_or_type_literal_whose_type_is_a_unique_symbol_type_must_be_readonly);
-                        }
-                        break;
-
-                    default:
-                        return grammarErrorOnNode(node, Diagnostics.unique_symbol_types_are_not_allowed_here);
+                        default:
+                            return grammarErrorOnNode(node, Diagnostics.unique_symbol_types_are_not_allowed_here);
+                    }
                 }
             }
             else if (node.operator === SyntaxKind.ReadonlyKeyword) {

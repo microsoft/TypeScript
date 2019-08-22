@@ -1,0 +1,27 @@
+=== tests/cases/conformance/types/nominalBrands/uniqueNominalBrandsDeclarations2.ts ===
+export type Downcased = unique string;
+>Downcased : Symbol(Downcased, Decl(uniqueNominalBrandsDeclarations2.ts, 0, 0))
+
+export function downcaseLit<T extends string>(x: T): T & Downcased {
+>downcaseLit : Symbol(downcaseLit, Decl(uniqueNominalBrandsDeclarations2.ts, 0, 38))
+>T : Symbol(T, Decl(uniqueNominalBrandsDeclarations2.ts, 2, 28))
+>x : Symbol(x, Decl(uniqueNominalBrandsDeclarations2.ts, 2, 46))
+>T : Symbol(T, Decl(uniqueNominalBrandsDeclarations2.ts, 2, 28))
+>T : Symbol(T, Decl(uniqueNominalBrandsDeclarations2.ts, 2, 28))
+>Downcased : Symbol(Downcased, Decl(uniqueNominalBrandsDeclarations2.ts, 0, 0))
+
+    return x.toLocaleLowerCase() as T & Downcased;
+>x.toLocaleLowerCase : Symbol(String.toLocaleLowerCase, Decl(lib.es5.d.ts, --, --))
+>x : Symbol(x, Decl(uniqueNominalBrandsDeclarations2.ts, 2, 46))
+>toLocaleLowerCase : Symbol(String.toLocaleLowerCase, Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(uniqueNominalBrandsDeclarations2.ts, 2, 28))
+>Downcased : Symbol(Downcased, Decl(uniqueNominalBrandsDeclarations2.ts, 0, 0))
+}
+const a = "ok";
+>a : Symbol(a, Decl(uniqueNominalBrandsDeclarations2.ts, 5, 5))
+
+export const c = downcaseLit(a); // visibility error
+>c : Symbol(c, Decl(uniqueNominalBrandsDeclarations2.ts, 6, 12))
+>downcaseLit : Symbol(downcaseLit, Decl(uniqueNominalBrandsDeclarations2.ts, 0, 38))
+>a : Symbol(a, Decl(uniqueNominalBrandsDeclarations2.ts, 5, 5))
+

@@ -821,7 +821,7 @@ declare namespace ts {
         kind: SyntaxKind.ParenthesizedType;
         type: TypeNode;
     }
-    export interface TypeOperatorNode extends TypeNode {
+    export interface TypeOperatorNode extends TypeNode, Declaration {
         kind: SyntaxKind.TypeOperator;
         operator: SyntaxKind.KeyOfKeyword | SyntaxKind.UniqueKeyword | SyntaxKind.ReadonlyKeyword;
         type: TypeNode;
@@ -2134,10 +2134,11 @@ declare namespace ts {
         Transient = 33554432,
         Assignment = 67108864,
         ModuleExports = 134217728,
+        NominalBrand = 268435456,
         Enum = 384,
         Variable = 3,
         Value = 111551,
-        Type = 788968,
+        Type = 269224424,
         Namespace = 1920,
         Module = 1536,
         Accessor = 98304,
@@ -2145,19 +2146,19 @@ declare namespace ts {
         BlockScopedVariableExcludes = 111551,
         ParameterExcludes = 111551,
         PropertyExcludes = 0,
-        EnumMemberExcludes = 900095,
+        EnumMemberExcludes = 269335551,
         FunctionExcludes = 110991,
-        ClassExcludes = 899503,
-        InterfaceExcludes = 788872,
-        RegularEnumExcludes = 899327,
-        ConstEnumExcludes = 899967,
+        ClassExcludes = 269334959,
+        InterfaceExcludes = 269224328,
+        RegularEnumExcludes = 269334783,
+        ConstEnumExcludes = 269335423,
         ValueModuleExcludes = 110735,
         NamespaceModuleExcludes = 0,
         MethodExcludes = 103359,
         GetAccessorExcludes = 46015,
         SetAccessorExcludes = 78783,
-        TypeParameterExcludes = 526824,
-        TypeAliasExcludes = 788968,
+        TypeParameterExcludes = 268962280,
+        TypeAliasExcludes = 269224424,
         AliasExcludes = 2097152,
         ModuleMember = 2623475,
         ExportHasLocal = 944,
@@ -2191,7 +2192,8 @@ declare namespace ts {
         Resolving = "__resolving__",
         ExportEquals = "export=",
         Default = "default",
-        This = "this"
+        This = "this",
+        NominalBrand = "__brand"
     }
     /**
      * This represents a string whose leading underscore have been escaped by adding extra leading underscores.
@@ -2252,6 +2254,7 @@ declare namespace ts {
         Conditional = 16777216,
         Substitution = 33554432,
         NonPrimitive = 67108864,
+        NominalBrand = 134217728,
         Literal = 2944,
         Unit = 109440,
         StringOrNumberLiteral = 384,
@@ -2414,6 +2417,9 @@ declare namespace ts {
     export interface SubstitutionType extends InstantiableType {
         typeVariable: TypeVariable;
         substitute: Type;
+    }
+    export interface NominalBrandType extends Type {
+        symbol: Symbol;
     }
     export enum SignatureKind {
         Call = 0,

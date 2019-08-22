@@ -1,0 +1,14 @@
+tests/cases/conformance/types/nominalBrands/uniqueNominalBrandsDeclarations2.ts(7,14): error TS4025: Exported variable 'c' has or is using private name '__brand'.
+
+
+==== tests/cases/conformance/types/nominalBrands/uniqueNominalBrandsDeclarations2.ts (1 errors) ====
+    export type Downcased = unique string;
+    
+    export function downcaseLit<T extends string>(x: T): T & Downcased {
+        return x.toLocaleLowerCase() as T & Downcased;
+    }
+    const a = "ok";
+    export const c = downcaseLit(a); // visibility error
+                 ~
+!!! error TS4025: Exported variable 'c' has or is using private name '__brand'.
+    

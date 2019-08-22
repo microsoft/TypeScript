@@ -1,0 +1,256 @@
+=== tests/cases/conformance/types/nominalBrands/uniqueNominalBrandsControlFlow.ts ===
+type BrandA = unique unknown;
+>BrandA : Symbol(BrandA, Decl(uniqueNominalBrandsControlFlow.ts, 0, 0))
+
+type BrandB = unique unknown;
+>BrandB : Symbol(BrandB, Decl(uniqueNominalBrandsControlFlow.ts, 0, 29))
+
+declare function isBrandA(x: any): x is BrandA;
+>isBrandA : Symbol(isBrandA, Decl(uniqueNominalBrandsControlFlow.ts, 1, 29))
+>x : Symbol(x, Decl(uniqueNominalBrandsControlFlow.ts, 3, 26))
+>x : Symbol(x, Decl(uniqueNominalBrandsControlFlow.ts, 3, 26))
+>BrandA : Symbol(BrandA, Decl(uniqueNominalBrandsControlFlow.ts, 0, 0))
+
+declare function isBrandB(x: any): x is BrandB;
+>isBrandB : Symbol(isBrandB, Decl(uniqueNominalBrandsControlFlow.ts, 3, 47))
+>x : Symbol(x, Decl(uniqueNominalBrandsControlFlow.ts, 4, 26))
+>x : Symbol(x, Decl(uniqueNominalBrandsControlFlow.ts, 4, 26))
+>BrandB : Symbol(BrandB, Decl(uniqueNominalBrandsControlFlow.ts, 0, 29))
+
+declare function consumeBrandA(x: BrandA): void;
+>consumeBrandA : Symbol(consumeBrandA, Decl(uniqueNominalBrandsControlFlow.ts, 4, 47))
+>x : Symbol(x, Decl(uniqueNominalBrandsControlFlow.ts, 6, 31))
+>BrandA : Symbol(BrandA, Decl(uniqueNominalBrandsControlFlow.ts, 0, 0))
+
+declare function consumeBrandB(x: BrandB): void;
+>consumeBrandB : Symbol(consumeBrandB, Decl(uniqueNominalBrandsControlFlow.ts, 6, 48))
+>x : Symbol(x, Decl(uniqueNominalBrandsControlFlow.ts, 7, 31))
+>BrandB : Symbol(BrandB, Decl(uniqueNominalBrandsControlFlow.ts, 0, 29))
+
+declare function consumeBrandAOrB(x: BrandA | BrandB): void;
+>consumeBrandAOrB : Symbol(consumeBrandAOrB, Decl(uniqueNominalBrandsControlFlow.ts, 7, 48))
+>x : Symbol(x, Decl(uniqueNominalBrandsControlFlow.ts, 8, 34))
+>BrandA : Symbol(BrandA, Decl(uniqueNominalBrandsControlFlow.ts, 0, 0))
+>BrandB : Symbol(BrandB, Decl(uniqueNominalBrandsControlFlow.ts, 0, 29))
+
+declare function consumeBrandAAndB(x: BrandA & BrandB): void;
+>consumeBrandAAndB : Symbol(consumeBrandAAndB, Decl(uniqueNominalBrandsControlFlow.ts, 8, 60))
+>x : Symbol(x, Decl(uniqueNominalBrandsControlFlow.ts, 9, 35))
+>BrandA : Symbol(BrandA, Decl(uniqueNominalBrandsControlFlow.ts, 0, 0))
+>BrandB : Symbol(BrandB, Decl(uniqueNominalBrandsControlFlow.ts, 0, 29))
+
+const x = {x: 12};
+>x : Symbol(x, Decl(uniqueNominalBrandsControlFlow.ts, 11, 5))
+>x : Symbol(x, Decl(uniqueNominalBrandsControlFlow.ts, 11, 11))
+
+if (isBrandA(x)) {
+>isBrandA : Symbol(isBrandA, Decl(uniqueNominalBrandsControlFlow.ts, 1, 29))
+>x : Symbol(x, Decl(uniqueNominalBrandsControlFlow.ts, 11, 5))
+
+    if (isBrandB(x)) {
+>isBrandB : Symbol(isBrandB, Decl(uniqueNominalBrandsControlFlow.ts, 3, 47))
+>x : Symbol(x, Decl(uniqueNominalBrandsControlFlow.ts, 11, 5))
+
+        consumeBrandA(x);
+>consumeBrandA : Symbol(consumeBrandA, Decl(uniqueNominalBrandsControlFlow.ts, 4, 47))
+>x : Symbol(x, Decl(uniqueNominalBrandsControlFlow.ts, 11, 5))
+
+        consumeBrandB(x);
+>consumeBrandB : Symbol(consumeBrandB, Decl(uniqueNominalBrandsControlFlow.ts, 6, 48))
+>x : Symbol(x, Decl(uniqueNominalBrandsControlFlow.ts, 11, 5))
+
+        consumeBrandAOrB(x);
+>consumeBrandAOrB : Symbol(consumeBrandAOrB, Decl(uniqueNominalBrandsControlFlow.ts, 7, 48))
+>x : Symbol(x, Decl(uniqueNominalBrandsControlFlow.ts, 11, 5))
+
+        consumeBrandAAndB(x);
+>consumeBrandAAndB : Symbol(consumeBrandAAndB, Decl(uniqueNominalBrandsControlFlow.ts, 8, 60))
+>x : Symbol(x, Decl(uniqueNominalBrandsControlFlow.ts, 11, 5))
+    }
+    else {
+        consumeBrandA(x);
+>consumeBrandA : Symbol(consumeBrandA, Decl(uniqueNominalBrandsControlFlow.ts, 4, 47))
+>x : Symbol(x, Decl(uniqueNominalBrandsControlFlow.ts, 11, 5))
+
+        consumeBrandB(x); // err
+>consumeBrandB : Symbol(consumeBrandB, Decl(uniqueNominalBrandsControlFlow.ts, 6, 48))
+>x : Symbol(x, Decl(uniqueNominalBrandsControlFlow.ts, 11, 5))
+
+        consumeBrandAOrB(x);
+>consumeBrandAOrB : Symbol(consumeBrandAOrB, Decl(uniqueNominalBrandsControlFlow.ts, 7, 48))
+>x : Symbol(x, Decl(uniqueNominalBrandsControlFlow.ts, 11, 5))
+
+        consumeBrandAAndB(x); // err
+>consumeBrandAAndB : Symbol(consumeBrandAAndB, Decl(uniqueNominalBrandsControlFlow.ts, 8, 60))
+>x : Symbol(x, Decl(uniqueNominalBrandsControlFlow.ts, 11, 5))
+    }
+}
+else {
+    if (isBrandB(x)) {
+>isBrandB : Symbol(isBrandB, Decl(uniqueNominalBrandsControlFlow.ts, 3, 47))
+>x : Symbol(x, Decl(uniqueNominalBrandsControlFlow.ts, 11, 5))
+
+        consumeBrandA(x); // err
+>consumeBrandA : Symbol(consumeBrandA, Decl(uniqueNominalBrandsControlFlow.ts, 4, 47))
+>x : Symbol(x, Decl(uniqueNominalBrandsControlFlow.ts, 11, 5))
+
+        consumeBrandB(x);
+>consumeBrandB : Symbol(consumeBrandB, Decl(uniqueNominalBrandsControlFlow.ts, 6, 48))
+>x : Symbol(x, Decl(uniqueNominalBrandsControlFlow.ts, 11, 5))
+
+        consumeBrandAOrB(x);
+>consumeBrandAOrB : Symbol(consumeBrandAOrB, Decl(uniqueNominalBrandsControlFlow.ts, 7, 48))
+>x : Symbol(x, Decl(uniqueNominalBrandsControlFlow.ts, 11, 5))
+
+        consumeBrandAAndB(x); // err
+>consumeBrandAAndB : Symbol(consumeBrandAAndB, Decl(uniqueNominalBrandsControlFlow.ts, 8, 60))
+>x : Symbol(x, Decl(uniqueNominalBrandsControlFlow.ts, 11, 5))
+    }
+    else {
+        consumeBrandA(x); // err
+>consumeBrandA : Symbol(consumeBrandA, Decl(uniqueNominalBrandsControlFlow.ts, 4, 47))
+>x : Symbol(x, Decl(uniqueNominalBrandsControlFlow.ts, 11, 5))
+
+        consumeBrandB(x); // err
+>consumeBrandB : Symbol(consumeBrandB, Decl(uniqueNominalBrandsControlFlow.ts, 6, 48))
+>x : Symbol(x, Decl(uniqueNominalBrandsControlFlow.ts, 11, 5))
+
+        consumeBrandAOrB(x); // err
+>consumeBrandAOrB : Symbol(consumeBrandAOrB, Decl(uniqueNominalBrandsControlFlow.ts, 7, 48))
+>x : Symbol(x, Decl(uniqueNominalBrandsControlFlow.ts, 11, 5))
+
+        consumeBrandAAndB(x); // err
+>consumeBrandAAndB : Symbol(consumeBrandAAndB, Decl(uniqueNominalBrandsControlFlow.ts, 8, 60))
+>x : Symbol(x, Decl(uniqueNominalBrandsControlFlow.ts, 11, 5))
+    }
+}
+
+type NormalizedPath = unique string;
+>NormalizedPath : Symbol(NormalizedPath, Decl(uniqueNominalBrandsControlFlow.ts, 39, 1))
+
+type AbsolutePath = unique string;
+>AbsolutePath : Symbol(AbsolutePath, Decl(uniqueNominalBrandsControlFlow.ts, 41, 36))
+
+type NormalizedAbsolutePath = NormalizedPath & AbsolutePath;
+>NormalizedAbsolutePath : Symbol(NormalizedAbsolutePath, Decl(uniqueNominalBrandsControlFlow.ts, 42, 34))
+>NormalizedPath : Symbol(NormalizedPath, Decl(uniqueNominalBrandsControlFlow.ts, 39, 1))
+>AbsolutePath : Symbol(AbsolutePath, Decl(uniqueNominalBrandsControlFlow.ts, 41, 36))
+
+declare function isNormalizedPath(x: string): x is NormalizedPath;
+>isNormalizedPath : Symbol(isNormalizedPath, Decl(uniqueNominalBrandsControlFlow.ts, 43, 60))
+>x : Symbol(x, Decl(uniqueNominalBrandsControlFlow.ts, 45, 34))
+>x : Symbol(x, Decl(uniqueNominalBrandsControlFlow.ts, 45, 34))
+>NormalizedPath : Symbol(NormalizedPath, Decl(uniqueNominalBrandsControlFlow.ts, 39, 1))
+
+declare function isAbsolutePath(x: string): x is AbsolutePath;
+>isAbsolutePath : Symbol(isAbsolutePath, Decl(uniqueNominalBrandsControlFlow.ts, 45, 66))
+>x : Symbol(x, Decl(uniqueNominalBrandsControlFlow.ts, 46, 32))
+>x : Symbol(x, Decl(uniqueNominalBrandsControlFlow.ts, 46, 32))
+>AbsolutePath : Symbol(AbsolutePath, Decl(uniqueNominalBrandsControlFlow.ts, 41, 36))
+
+declare function consumeNormalizedPath(x: NormalizedPath): void;
+>consumeNormalizedPath : Symbol(consumeNormalizedPath, Decl(uniqueNominalBrandsControlFlow.ts, 46, 62))
+>x : Symbol(x, Decl(uniqueNominalBrandsControlFlow.ts, 48, 39))
+>NormalizedPath : Symbol(NormalizedPath, Decl(uniqueNominalBrandsControlFlow.ts, 39, 1))
+
+declare function consumeAbsolutePath(x: AbsolutePath): void;
+>consumeAbsolutePath : Symbol(consumeAbsolutePath, Decl(uniqueNominalBrandsControlFlow.ts, 48, 64))
+>x : Symbol(x, Decl(uniqueNominalBrandsControlFlow.ts, 49, 37))
+>AbsolutePath : Symbol(AbsolutePath, Decl(uniqueNominalBrandsControlFlow.ts, 41, 36))
+
+declare function consumeNormalizedOrAbsolutePath(x: NormalizedPath | AbsolutePath): void;
+>consumeNormalizedOrAbsolutePath : Symbol(consumeNormalizedOrAbsolutePath, Decl(uniqueNominalBrandsControlFlow.ts, 49, 60))
+>x : Symbol(x, Decl(uniqueNominalBrandsControlFlow.ts, 50, 49))
+>NormalizedPath : Symbol(NormalizedPath, Decl(uniqueNominalBrandsControlFlow.ts, 39, 1))
+>AbsolutePath : Symbol(AbsolutePath, Decl(uniqueNominalBrandsControlFlow.ts, 41, 36))
+
+declare function consumeNormalizedAbsolutePath(x: NormalizedAbsolutePath): void;
+>consumeNormalizedAbsolutePath : Symbol(consumeNormalizedAbsolutePath, Decl(uniqueNominalBrandsControlFlow.ts, 50, 89))
+>x : Symbol(x, Decl(uniqueNominalBrandsControlFlow.ts, 51, 47))
+>NormalizedAbsolutePath : Symbol(NormalizedAbsolutePath, Decl(uniqueNominalBrandsControlFlow.ts, 42, 34))
+
+const p = "/a/b/c";
+>p : Symbol(p, Decl(uniqueNominalBrandsControlFlow.ts, 53, 5))
+
+if (isNormalizedPath(p)) {
+>isNormalizedPath : Symbol(isNormalizedPath, Decl(uniqueNominalBrandsControlFlow.ts, 43, 60))
+>p : Symbol(p, Decl(uniqueNominalBrandsControlFlow.ts, 53, 5))
+
+    if (isAbsolutePath(p)) {
+>isAbsolutePath : Symbol(isAbsolutePath, Decl(uniqueNominalBrandsControlFlow.ts, 45, 66))
+>p : Symbol(p, Decl(uniqueNominalBrandsControlFlow.ts, 53, 5))
+
+        consumeNormalizedPath(p);
+>consumeNormalizedPath : Symbol(consumeNormalizedPath, Decl(uniqueNominalBrandsControlFlow.ts, 46, 62))
+>p : Symbol(p, Decl(uniqueNominalBrandsControlFlow.ts, 53, 5))
+
+        consumeAbsolutePath(p);
+>consumeAbsolutePath : Symbol(consumeAbsolutePath, Decl(uniqueNominalBrandsControlFlow.ts, 48, 64))
+>p : Symbol(p, Decl(uniqueNominalBrandsControlFlow.ts, 53, 5))
+
+        consumeNormalizedOrAbsolutePath(p);
+>consumeNormalizedOrAbsolutePath : Symbol(consumeNormalizedOrAbsolutePath, Decl(uniqueNominalBrandsControlFlow.ts, 49, 60))
+>p : Symbol(p, Decl(uniqueNominalBrandsControlFlow.ts, 53, 5))
+
+        consumeNormalizedAbsolutePath(p);
+>consumeNormalizedAbsolutePath : Symbol(consumeNormalizedAbsolutePath, Decl(uniqueNominalBrandsControlFlow.ts, 50, 89))
+>p : Symbol(p, Decl(uniqueNominalBrandsControlFlow.ts, 53, 5))
+    }
+    else {
+        consumeNormalizedPath(p);
+>consumeNormalizedPath : Symbol(consumeNormalizedPath, Decl(uniqueNominalBrandsControlFlow.ts, 46, 62))
+>p : Symbol(p, Decl(uniqueNominalBrandsControlFlow.ts, 53, 5))
+
+        consumeAbsolutePath(p); // err
+>consumeAbsolutePath : Symbol(consumeAbsolutePath, Decl(uniqueNominalBrandsControlFlow.ts, 48, 64))
+>p : Symbol(p, Decl(uniqueNominalBrandsControlFlow.ts, 53, 5))
+
+        consumeNormalizedOrAbsolutePath(p);
+>consumeNormalizedOrAbsolutePath : Symbol(consumeNormalizedOrAbsolutePath, Decl(uniqueNominalBrandsControlFlow.ts, 49, 60))
+>p : Symbol(p, Decl(uniqueNominalBrandsControlFlow.ts, 53, 5))
+
+        consumeNormalizedAbsolutePath(p); // err
+>consumeNormalizedAbsolutePath : Symbol(consumeNormalizedAbsolutePath, Decl(uniqueNominalBrandsControlFlow.ts, 50, 89))
+>p : Symbol(p, Decl(uniqueNominalBrandsControlFlow.ts, 53, 5))
+    }
+}
+else {
+    if (isAbsolutePath(p)) {
+>isAbsolutePath : Symbol(isAbsolutePath, Decl(uniqueNominalBrandsControlFlow.ts, 45, 66))
+>p : Symbol(p, Decl(uniqueNominalBrandsControlFlow.ts, 53, 5))
+
+        consumeNormalizedPath(p); // err
+>consumeNormalizedPath : Symbol(consumeNormalizedPath, Decl(uniqueNominalBrandsControlFlow.ts, 46, 62))
+>p : Symbol(p, Decl(uniqueNominalBrandsControlFlow.ts, 53, 5))
+
+        consumeAbsolutePath(p);
+>consumeAbsolutePath : Symbol(consumeAbsolutePath, Decl(uniqueNominalBrandsControlFlow.ts, 48, 64))
+>p : Symbol(p, Decl(uniqueNominalBrandsControlFlow.ts, 53, 5))
+
+        consumeNormalizedOrAbsolutePath(p);
+>consumeNormalizedOrAbsolutePath : Symbol(consumeNormalizedOrAbsolutePath, Decl(uniqueNominalBrandsControlFlow.ts, 49, 60))
+>p : Symbol(p, Decl(uniqueNominalBrandsControlFlow.ts, 53, 5))
+
+        consumeNormalizedAbsolutePath(p); // err
+>consumeNormalizedAbsolutePath : Symbol(consumeNormalizedAbsolutePath, Decl(uniqueNominalBrandsControlFlow.ts, 50, 89))
+>p : Symbol(p, Decl(uniqueNominalBrandsControlFlow.ts, 53, 5))
+    }
+    else {
+        consumeNormalizedPath(p); // err
+>consumeNormalizedPath : Symbol(consumeNormalizedPath, Decl(uniqueNominalBrandsControlFlow.ts, 46, 62))
+>p : Symbol(p, Decl(uniqueNominalBrandsControlFlow.ts, 53, 5))
+
+        consumeAbsolutePath(p); // err
+>consumeAbsolutePath : Symbol(consumeAbsolutePath, Decl(uniqueNominalBrandsControlFlow.ts, 48, 64))
+>p : Symbol(p, Decl(uniqueNominalBrandsControlFlow.ts, 53, 5))
+
+        consumeNormalizedOrAbsolutePath(p); // err
+>consumeNormalizedOrAbsolutePath : Symbol(consumeNormalizedOrAbsolutePath, Decl(uniqueNominalBrandsControlFlow.ts, 49, 60))
+>p : Symbol(p, Decl(uniqueNominalBrandsControlFlow.ts, 53, 5))
+
+        consumeNormalizedAbsolutePath(p); // err
+>consumeNormalizedAbsolutePath : Symbol(consumeNormalizedAbsolutePath, Decl(uniqueNominalBrandsControlFlow.ts, 50, 89))
+>p : Symbol(p, Decl(uniqueNominalBrandsControlFlow.ts, 53, 5))
+    }
+}
+

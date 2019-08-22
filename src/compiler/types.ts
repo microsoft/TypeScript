@@ -1244,7 +1244,7 @@ namespace ts {
         type: TypeNode;
     }
 
-    export interface TypeOperatorNode extends TypeNode {
+    export interface TypeOperatorNode extends TypeNode, Declaration {
         kind: SyntaxKind.TypeOperator;
         operator: SyntaxKind.KeyOfKeyword | SyntaxKind.UniqueKeyword | SyntaxKind.ReadonlyKeyword;
         type: TypeNode;
@@ -3692,6 +3692,7 @@ namespace ts {
         Transient               = 1 << 25,  // Transient symbol (created during type check)
         Assignment              = 1 << 26,  // Assignment treated as declaration (eg `this.prop = 1`)
         ModuleExports           = 1 << 27,  // Symbol for CommonJS `module` of `module.exports`
+        NominalBrand            = 1 << 28,  // Symbol associated with a nominal brand location, eg `unique string`
 
         /* @internal */
         All = FunctionScopedVariable | BlockScopedVariable | Property | EnumMember | Function | Class | Interface | ConstEnum | RegularEnum | ValueModule | NamespaceModule | TypeLiteral
@@ -3700,7 +3701,7 @@ namespace ts {
         Enum = RegularEnum | ConstEnum,
         Variable = FunctionScopedVariable | BlockScopedVariable,
         Value = Variable | Property | EnumMember | ObjectLiteral | Function | Class | Enum | ValueModule | Method | GetAccessor | SetAccessor,
-        Type = Class | Interface | Enum | EnumMember | TypeLiteral | TypeParameter | TypeAlias,
+        Type = Class | Interface | Enum | EnumMember | TypeLiteral | TypeParameter | TypeAlias | NominalBrand,
         Namespace = ValueModule | NamespaceModule | Enum,
         Module = ValueModule | NamespaceModule,
         Accessor = GetAccessor | SetAccessor,
@@ -3803,6 +3804,7 @@ namespace ts {
         variances?: VarianceFlags[];             // Alias symbol type argument variance cache
         deferralConstituents?: Type[];      // Calculated list of constituents for a deferred type
         deferralParent?: Type;              // Source union/intersection of a deferred type
+        brandType?: NominalBrandType;               // The nominal brand type associated with this symbol
     }
 
     /* @internal */
@@ -3865,6 +3867,7 @@ namespace ts {
         ExportEquals = "export=", // Export assignment symbol
         Default = "default", // Default export symbol (technically not wholly internal, but included here for usability)
         This = "this",
+        NominalBrand = "__brand", // non-brinting name of a nominal brand symbol
     }
 
     /**
@@ -3984,6 +3987,7 @@ namespace ts {
         Conditional     = 1 << 24,  // T extends U ? X : Y
         Substitution    = 1 << 25,  // Type parameter substitution
         NonPrimitive    = 1 << 26,  // intrinsic object type
+        NominalBrand    = 1 << 27,  // unique <whatever> === <whatever> & NominalBrand[node]
 
         /* @internal */
         AnyOrUnknown = Any | Unknown,
@@ -4429,6 +4433,38 @@ namespace ts {
     export interface SubstitutionType extends InstantiableType {
         typeVariable: TypeVariable;  // Target type variable
         substitute: Type;            // Type to substitute for type parameter
+    }
+
+    // Nominal brand types (TypeFlags.NominalBrand)
+    // Nominal brand types are structureless singleton types which have no assignability relationships other than
+    // to `unknown` and themselves, and from `never` - all other rules fall out from how they're used
+    // (which is to say, as an intersection member). This actually means that within `isRelatedTo`, there
+    // is _zero_ mention of the NominalBrandType. Pretty neat.
+    // keyof a brand is never - which is to say that if you say `keyof unique {x}`, you just get `"x"` out.
+    // The nominal branded-ness of a type tells you nothing about the branded-ness or anything else about its keys.
+    // This is potentially up for debate - it's entirely possible to produce a usecase for wanting a viable
+    // `extends keyof BrandedType` constraint that requires that they keys be intersected with a `keyof brand`. Given
+    // the impossibility of implementing such a type safely, combined with the fact that all keys are only strings
+    // at runtime, make the value of such a thing unclear.
+    // Indexing into a brand produces `unknown` when an intersection is made (ie, for writing), or
+    // `never` when a union is (ie, for reading), which is to say it functions as a kind of blank
+    // (a brand says nothing about the branded-ness of their members)
+    // Nominal brands do not reduce with one another in intersections or unions - this is so that a
+    // type NormalizedPath = unique string;
+    // and
+    // type AbsolutePath = unique string;
+    // can be naturally combined into
+    // type NormalizedAbsolutePath = NormalizedPath & AbsolutePath;
+    // You might be wondering "why have a symbol, why not just patch on a declaration directly, it's not like the symbol
+    // is able to be named" - and you'd be reasonable in wondering as much. The reason we still work with
+    // a symbol is so that services knows how to look up the declaration of the type "for free"
+    // It is probably also worth noting at this point that theere is no _safe_ way to narrow to a nominal brand
+    // - a brand type must arise from a type system operation, which likely means from a declaration or cast
+    // at some origin point. This is because there is no way for the compiler to know what assumptions need to
+    // be upheld for your nominal brand ot be safely implemented, so the assumption is simply that it _cannot_
+    // be safely implemented (and so must be cast to in some way).
+    export interface NominalBrandType extends Type {
+        symbol: Symbol;
     }
 
     /* @internal */

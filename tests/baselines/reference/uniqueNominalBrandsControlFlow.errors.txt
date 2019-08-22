@@ -1,0 +1,156 @@
+tests/cases/conformance/types/nominalBrands/uniqueNominalBrandsControlFlow.ts(22,23): error TS2345: Argument of type '{ x: number; } & BrandA' is not assignable to parameter of type 'BrandB'.
+tests/cases/conformance/types/nominalBrands/uniqueNominalBrandsControlFlow.ts(24,27): error TS2345: Argument of type '{ x: number; } & BrandA' is not assignable to parameter of type 'BrandA & BrandB'.
+  Type '{ x: number; } & BrandA' is not assignable to type 'BrandB'.
+tests/cases/conformance/types/nominalBrands/uniqueNominalBrandsControlFlow.ts(29,23): error TS2345: Argument of type '{ x: number; } & BrandB' is not assignable to parameter of type 'BrandA'.
+tests/cases/conformance/types/nominalBrands/uniqueNominalBrandsControlFlow.ts(32,27): error TS2345: Argument of type '{ x: number; } & BrandB' is not assignable to parameter of type 'BrandA & BrandB'.
+  Type '{ x: number; } & BrandB' is not assignable to type 'BrandA'.
+tests/cases/conformance/types/nominalBrands/uniqueNominalBrandsControlFlow.ts(35,23): error TS2345: Argument of type '{ x: number; }' is not assignable to parameter of type 'BrandA'.
+tests/cases/conformance/types/nominalBrands/uniqueNominalBrandsControlFlow.ts(36,23): error TS2345: Argument of type '{ x: number; }' is not assignable to parameter of type 'BrandB'.
+tests/cases/conformance/types/nominalBrands/uniqueNominalBrandsControlFlow.ts(37,26): error TS2345: Argument of type '{ x: number; }' is not assignable to parameter of type 'BrandA | BrandB'.
+  Type '{ x: number; }' is not assignable to type 'BrandB'.
+tests/cases/conformance/types/nominalBrands/uniqueNominalBrandsControlFlow.ts(38,27): error TS2345: Argument of type '{ x: number; }' is not assignable to parameter of type 'BrandA & BrandB'.
+  Type '{ x: number; }' is not assignable to type 'BrandA'.
+tests/cases/conformance/types/nominalBrands/uniqueNominalBrandsControlFlow.ts(64,29): error TS2345: Argument of type 'unique "/a/b/c"' is not assignable to parameter of type 'AbsolutePath'.
+  Type 'unique "/a/b/c"' is not assignable to type 'unique unknown'.
+tests/cases/conformance/types/nominalBrands/uniqueNominalBrandsControlFlow.ts(66,39): error TS2345: Argument of type 'unique "/a/b/c"' is not assignable to parameter of type 'NormalizedAbsolutePath'.
+  Type 'unique "/a/b/c"' is not assignable to type 'unique unknown'.
+tests/cases/conformance/types/nominalBrands/uniqueNominalBrandsControlFlow.ts(71,31): error TS2345: Argument of type 'unique "/a/b/c"' is not assignable to parameter of type 'NormalizedPath'.
+  Type 'unique "/a/b/c"' is not assignable to type 'unique unknown'.
+tests/cases/conformance/types/nominalBrands/uniqueNominalBrandsControlFlow.ts(74,39): error TS2345: Argument of type 'unique "/a/b/c"' is not assignable to parameter of type 'NormalizedAbsolutePath'.
+  Type 'unique "/a/b/c"' is not assignable to type 'unique unknown'.
+tests/cases/conformance/types/nominalBrands/uniqueNominalBrandsControlFlow.ts(77,31): error TS2345: Argument of type '"/a/b/c"' is not assignable to parameter of type 'NormalizedPath'.
+  Type '"/a/b/c"' is not assignable to type 'unique unknown'.
+tests/cases/conformance/types/nominalBrands/uniqueNominalBrandsControlFlow.ts(78,29): error TS2345: Argument of type '"/a/b/c"' is not assignable to parameter of type 'AbsolutePath'.
+  Type '"/a/b/c"' is not assignable to type 'unique unknown'.
+tests/cases/conformance/types/nominalBrands/uniqueNominalBrandsControlFlow.ts(79,41): error TS2345: Argument of type '"/a/b/c"' is not assignable to parameter of type 'NormalizedPath | AbsolutePath'.
+tests/cases/conformance/types/nominalBrands/uniqueNominalBrandsControlFlow.ts(80,39): error TS2345: Argument of type '"/a/b/c"' is not assignable to parameter of type 'NormalizedAbsolutePath'.
+  Type '"/a/b/c"' is not assignable to type 'unique unknown'.
+
+
+==== tests/cases/conformance/types/nominalBrands/uniqueNominalBrandsControlFlow.ts (16 errors) ====
+    type BrandA = unique unknown;
+    type BrandB = unique unknown;
+    
+    declare function isBrandA(x: any): x is BrandA;
+    declare function isBrandB(x: any): x is BrandB;
+    
+    declare function consumeBrandA(x: BrandA): void;
+    declare function consumeBrandB(x: BrandB): void;
+    declare function consumeBrandAOrB(x: BrandA | BrandB): void;
+    declare function consumeBrandAAndB(x: BrandA & BrandB): void;
+    
+    const x = {x: 12};
+    if (isBrandA(x)) {
+        if (isBrandB(x)) {
+            consumeBrandA(x);
+            consumeBrandB(x);
+            consumeBrandAOrB(x);
+            consumeBrandAAndB(x);
+        }
+        else {
+            consumeBrandA(x);
+            consumeBrandB(x); // err
+                          ~
+!!! error TS2345: Argument of type '{ x: number; } & BrandA' is not assignable to parameter of type 'BrandB'.
+            consumeBrandAOrB(x);
+            consumeBrandAAndB(x); // err
+                              ~
+!!! error TS2345: Argument of type '{ x: number; } & BrandA' is not assignable to parameter of type 'BrandA & BrandB'.
+!!! error TS2345:   Type '{ x: number; } & BrandA' is not assignable to type 'BrandB'.
+        }
+    }
+    else {
+        if (isBrandB(x)) {
+            consumeBrandA(x); // err
+                          ~
+!!! error TS2345: Argument of type '{ x: number; } & BrandB' is not assignable to parameter of type 'BrandA'.
+            consumeBrandB(x);
+            consumeBrandAOrB(x);
+            consumeBrandAAndB(x); // err
+                              ~
+!!! error TS2345: Argument of type '{ x: number; } & BrandB' is not assignable to parameter of type 'BrandA & BrandB'.
+!!! error TS2345:   Type '{ x: number; } & BrandB' is not assignable to type 'BrandA'.
+        }
+        else {
+            consumeBrandA(x); // err
+                          ~
+!!! error TS2345: Argument of type '{ x: number; }' is not assignable to parameter of type 'BrandA'.
+            consumeBrandB(x); // err
+                          ~
+!!! error TS2345: Argument of type '{ x: number; }' is not assignable to parameter of type 'BrandB'.
+            consumeBrandAOrB(x); // err
+                             ~
+!!! error TS2345: Argument of type '{ x: number; }' is not assignable to parameter of type 'BrandA | BrandB'.
+!!! error TS2345:   Type '{ x: number; }' is not assignable to type 'BrandB'.
+            consumeBrandAAndB(x); // err
+                              ~
+!!! error TS2345: Argument of type '{ x: number; }' is not assignable to parameter of type 'BrandA & BrandB'.
+!!! error TS2345:   Type '{ x: number; }' is not assignable to type 'BrandA'.
+        }
+    }
+    
+    type NormalizedPath = unique string;
+    type AbsolutePath = unique string;
+    type NormalizedAbsolutePath = NormalizedPath & AbsolutePath;
+    
+    declare function isNormalizedPath(x: string): x is NormalizedPath;
+    declare function isAbsolutePath(x: string): x is AbsolutePath;
+    
+    declare function consumeNormalizedPath(x: NormalizedPath): void;
+    declare function consumeAbsolutePath(x: AbsolutePath): void;
+    declare function consumeNormalizedOrAbsolutePath(x: NormalizedPath | AbsolutePath): void;
+    declare function consumeNormalizedAbsolutePath(x: NormalizedAbsolutePath): void;
+    
+    const p = "/a/b/c";
+    if (isNormalizedPath(p)) {
+        if (isAbsolutePath(p)) {
+            consumeNormalizedPath(p);
+            consumeAbsolutePath(p);
+            consumeNormalizedOrAbsolutePath(p);
+            consumeNormalizedAbsolutePath(p);
+        }
+        else {
+            consumeNormalizedPath(p);
+            consumeAbsolutePath(p); // err
+                                ~
+!!! error TS2345: Argument of type 'unique "/a/b/c"' is not assignable to parameter of type 'AbsolutePath'.
+!!! error TS2345:   Type 'unique "/a/b/c"' is not assignable to type 'unique unknown'.
+            consumeNormalizedOrAbsolutePath(p);
+            consumeNormalizedAbsolutePath(p); // err
+                                          ~
+!!! error TS2345: Argument of type 'unique "/a/b/c"' is not assignable to parameter of type 'NormalizedAbsolutePath'.
+!!! error TS2345:   Type 'unique "/a/b/c"' is not assignable to type 'unique unknown'.
+        }
+    }
+    else {
+        if (isAbsolutePath(p)) {
+            consumeNormalizedPath(p); // err
+                                  ~
+!!! error TS2345: Argument of type 'unique "/a/b/c"' is not assignable to parameter of type 'NormalizedPath'.
+!!! error TS2345:   Type 'unique "/a/b/c"' is not assignable to type 'unique unknown'.
+            consumeAbsolutePath(p);
+            consumeNormalizedOrAbsolutePath(p);
+            consumeNormalizedAbsolutePath(p); // err
+                                          ~
+!!! error TS2345: Argument of type 'unique "/a/b/c"' is not assignable to parameter of type 'NormalizedAbsolutePath'.
+!!! error TS2345:   Type 'unique "/a/b/c"' is not assignable to type 'unique unknown'.
+        }
+        else {
+            consumeNormalizedPath(p); // err
+                                  ~
+!!! error TS2345: Argument of type '"/a/b/c"' is not assignable to parameter of type 'NormalizedPath'.
+!!! error TS2345:   Type '"/a/b/c"' is not assignable to type 'unique unknown'.
+            consumeAbsolutePath(p); // err
+                                ~
+!!! error TS2345: Argument of type '"/a/b/c"' is not assignable to parameter of type 'AbsolutePath'.
+!!! error TS2345:   Type '"/a/b/c"' is not assignable to type 'unique unknown'.
+            consumeNormalizedOrAbsolutePath(p); // err
+                                            ~
+!!! error TS2345: Argument of type '"/a/b/c"' is not assignable to parameter of type 'NormalizedPath | AbsolutePath'.
+            consumeNormalizedAbsolutePath(p); // err
+                                          ~
+!!! error TS2345: Argument of type '"/a/b/c"' is not assignable to parameter of type 'NormalizedAbsolutePath'.
+!!! error TS2345:   Type '"/a/b/c"' is not assignable to type 'unique unknown'.
+        }
+    }
+    

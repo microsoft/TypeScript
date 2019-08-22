@@ -1,0 +1,93 @@
+=== tests/cases/conformance/types/nominalBrands/uniqueNominalBrands2.ts ===
+export type Paired = {
+>Paired : Symbol(Paired, Decl(uniqueNominalBrands2.ts, 0, 0))
+
+    x: unique number;
+>x : Symbol(x, Decl(uniqueNominalBrands2.ts, 0, 22))
+
+    y: unique number;
+>y : Symbol(y, Decl(uniqueNominalBrands2.ts, 1, 21))
+
+};
+
+
+export function isPaired(x: {x: number, y: number}): x is Paired {
+>isPaired : Symbol(isPaired, Decl(uniqueNominalBrands2.ts, 3, 2))
+>x : Symbol(x, Decl(uniqueNominalBrands2.ts, 6, 25))
+>x : Symbol(x, Decl(uniqueNominalBrands2.ts, 6, 29))
+>y : Symbol(y, Decl(uniqueNominalBrands2.ts, 6, 39))
+>x : Symbol(x, Decl(uniqueNominalBrands2.ts, 6, 25))
+>Paired : Symbol(Paired, Decl(uniqueNominalBrands2.ts, 0, 0))
+
+    return true;
+}
+
+export function makePair(x: number, y: number): Paired {
+>makePair : Symbol(makePair, Decl(uniqueNominalBrands2.ts, 8, 1))
+>x : Symbol(x, Decl(uniqueNominalBrands2.ts, 10, 25))
+>y : Symbol(y, Decl(uniqueNominalBrands2.ts, 10, 35))
+>Paired : Symbol(Paired, Decl(uniqueNominalBrands2.ts, 0, 0))
+
+    return {x, y} as Paired;
+>x : Symbol(x, Decl(uniqueNominalBrands2.ts, 11, 12))
+>y : Symbol(y, Decl(uniqueNominalBrands2.ts, 11, 14))
+>Paired : Symbol(Paired, Decl(uniqueNominalBrands2.ts, 0, 0))
+}
+
+const a = makePair(0, 0);
+>a : Symbol(a, Decl(uniqueNominalBrands2.ts, 14, 5))
+>makePair : Symbol(makePair, Decl(uniqueNominalBrands2.ts, 8, 1))
+
+const b = {x: 0, y: 0};
+>b : Symbol(b, Decl(uniqueNominalBrands2.ts, 15, 5))
+>x : Symbol(x, Decl(uniqueNominalBrands2.ts, 15, 11))
+>y : Symbol(y, Decl(uniqueNominalBrands2.ts, 15, 16))
+
+a.x = a.y; // err
+>a.x : Symbol(x, Decl(uniqueNominalBrands2.ts, 0, 22))
+>a : Symbol(a, Decl(uniqueNominalBrands2.ts, 14, 5))
+>x : Symbol(x, Decl(uniqueNominalBrands2.ts, 0, 22))
+>a.y : Symbol(y, Decl(uniqueNominalBrands2.ts, 1, 21))
+>a : Symbol(a, Decl(uniqueNominalBrands2.ts, 14, 5))
+>y : Symbol(y, Decl(uniqueNominalBrands2.ts, 1, 21))
+
+a.y = a.x; // err
+>a.y : Symbol(y, Decl(uniqueNominalBrands2.ts, 1, 21))
+>a : Symbol(a, Decl(uniqueNominalBrands2.ts, 14, 5))
+>y : Symbol(y, Decl(uniqueNominalBrands2.ts, 1, 21))
+>a.x : Symbol(x, Decl(uniqueNominalBrands2.ts, 0, 22))
+>a : Symbol(a, Decl(uniqueNominalBrands2.ts, 14, 5))
+>x : Symbol(x, Decl(uniqueNominalBrands2.ts, 0, 22))
+
+a.x = b.y; // err
+>a.x : Symbol(x, Decl(uniqueNominalBrands2.ts, 0, 22))
+>a : Symbol(a, Decl(uniqueNominalBrands2.ts, 14, 5))
+>x : Symbol(x, Decl(uniqueNominalBrands2.ts, 0, 22))
+>b.y : Symbol(y, Decl(uniqueNominalBrands2.ts, 15, 16))
+>b : Symbol(b, Decl(uniqueNominalBrands2.ts, 15, 5))
+>y : Symbol(y, Decl(uniqueNominalBrands2.ts, 15, 16))
+
+a.y = b.y; // err
+>a.y : Symbol(y, Decl(uniqueNominalBrands2.ts, 1, 21))
+>a : Symbol(a, Decl(uniqueNominalBrands2.ts, 14, 5))
+>y : Symbol(y, Decl(uniqueNominalBrands2.ts, 1, 21))
+>b.y : Symbol(y, Decl(uniqueNominalBrands2.ts, 15, 16))
+>b : Symbol(b, Decl(uniqueNominalBrands2.ts, 15, 5))
+>y : Symbol(y, Decl(uniqueNominalBrands2.ts, 15, 16))
+
+a.x = b.x; // err
+>a.x : Symbol(x, Decl(uniqueNominalBrands2.ts, 0, 22))
+>a : Symbol(a, Decl(uniqueNominalBrands2.ts, 14, 5))
+>x : Symbol(x, Decl(uniqueNominalBrands2.ts, 0, 22))
+>b.x : Symbol(x, Decl(uniqueNominalBrands2.ts, 15, 11))
+>b : Symbol(b, Decl(uniqueNominalBrands2.ts, 15, 5))
+>x : Symbol(x, Decl(uniqueNominalBrands2.ts, 15, 11))
+
+a.y = b.x; // err
+>a.y : Symbol(y, Decl(uniqueNominalBrands2.ts, 1, 21))
+>a : Symbol(a, Decl(uniqueNominalBrands2.ts, 14, 5))
+>y : Symbol(y, Decl(uniqueNominalBrands2.ts, 1, 21))
+>b.x : Symbol(x, Decl(uniqueNominalBrands2.ts, 15, 11))
+>b : Symbol(b, Decl(uniqueNominalBrands2.ts, 15, 5))
+>x : Symbol(x, Decl(uniqueNominalBrands2.ts, 15, 11))
+

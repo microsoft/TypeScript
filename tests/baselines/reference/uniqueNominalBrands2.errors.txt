@@ -1,0 +1,58 @@
+tests/cases/conformance/types/nominalBrands/uniqueNominalBrands2.ts(18,1): error TS2719: Type 'number & unique unknown' is not assignable to type 'number & unique unknown'. Two different types with this name exist, but they are unrelated.
+  Type 'unique number' is not assignable to type 'unique unknown'.
+tests/cases/conformance/types/nominalBrands/uniqueNominalBrands2.ts(19,1): error TS2719: Type 'number & unique unknown' is not assignable to type 'number & unique unknown'. Two different types with this name exist, but they are unrelated.
+  Type 'unique number' is not assignable to type 'unique unknown'.
+tests/cases/conformance/types/nominalBrands/uniqueNominalBrands2.ts(21,1): error TS2322: Type 'number' is not assignable to type 'unique number'.
+  Type 'number' is not assignable to type 'unique unknown'.
+tests/cases/conformance/types/nominalBrands/uniqueNominalBrands2.ts(22,1): error TS2322: Type 'number' is not assignable to type 'unique number'.
+  Type 'number' is not assignable to type 'unique unknown'.
+tests/cases/conformance/types/nominalBrands/uniqueNominalBrands2.ts(24,1): error TS2322: Type 'number' is not assignable to type 'unique number'.
+  Type 'number' is not assignable to type 'unique unknown'.
+tests/cases/conformance/types/nominalBrands/uniqueNominalBrands2.ts(25,1): error TS2322: Type 'number' is not assignable to type 'unique number'.
+  Type 'number' is not assignable to type 'unique unknown'.
+
+
+==== tests/cases/conformance/types/nominalBrands/uniqueNominalBrands2.ts (6 errors) ====
+    export type Paired = {
+        x: unique number;
+        y: unique number;
+    };
+    
+    
+    export function isPaired(x: {x: number, y: number}): x is Paired {
+        return true;
+    }
+    
+    export function makePair(x: number, y: number): Paired {
+        return {x, y} as Paired;
+    }
+    
+    const a = makePair(0, 0);
+    const b = {x: 0, y: 0};
+    
+    a.x = a.y; // err
+    ~~~
+!!! error TS2719: Type 'number & unique unknown' is not assignable to type 'number & unique unknown'. Two different types with this name exist, but they are unrelated.
+!!! error TS2719:   Type 'unique number' is not assignable to type 'unique unknown'.
+    a.y = a.x; // err
+    ~~~
+!!! error TS2719: Type 'number & unique unknown' is not assignable to type 'number & unique unknown'. Two different types with this name exist, but they are unrelated.
+!!! error TS2719:   Type 'unique number' is not assignable to type 'unique unknown'.
+    
+    a.x = b.y; // err
+    ~~~
+!!! error TS2322: Type 'number' is not assignable to type 'unique number'.
+!!! error TS2322:   Type 'number' is not assignable to type 'unique unknown'.
+    a.y = b.y; // err
+    ~~~
+!!! error TS2322: Type 'number' is not assignable to type 'unique number'.
+!!! error TS2322:   Type 'number' is not assignable to type 'unique unknown'.
+    
+    a.x = b.x; // err
+    ~~~
+!!! error TS2322: Type 'number' is not assignable to type 'unique number'.
+!!! error TS2322:   Type 'number' is not assignable to type 'unique unknown'.
+    a.y = b.x; // err
+    ~~~
+!!! error TS2322: Type 'number' is not assignable to type 'unique number'.
+!!! error TS2322:   Type 'number' is not assignable to type 'unique unknown'.

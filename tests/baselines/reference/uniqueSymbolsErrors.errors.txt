@@ -1,4 +1,3 @@
-tests/cases/conformance/types/uniqueSymbol/uniqueSymbolsErrors.ts(2,41): error TS1005: 'symbol' expected.
 tests/cases/conformance/types/uniqueSymbol/uniqueSymbolsErrors.ts(3,19): error TS1333: 'unique symbol' types may not be used on a variable declaration with a binding name.
 tests/cases/conformance/types/uniqueSymbol/uniqueSymbolsErrors.ts(4,13): error TS1332: A variable whose type is a 'unique symbol' type must be 'const'.
 tests/cases/conformance/types/uniqueSymbol/uniqueSymbolsErrors.ts(5,13): error TS1332: A variable whose type is a 'unique symbol' type must be 'const'.
@@ -61,11 +60,9 @@ tests/cases/conformance/types/uniqueSymbol/uniqueSymbolsErrors.ts(83,52): error 
 tests/cases/conformance/types/uniqueSymbol/uniqueSymbolsErrors.ts(87,7): error TS2322: Type 'unique symbol' is not assignable to type 'string'.
 
 
-==== tests/cases/conformance/types/uniqueSymbol/uniqueSymbolsErrors.ts (61 errors) ====
+==== tests/cases/conformance/types/uniqueSymbol/uniqueSymbolsErrors.ts (60 errors) ====
     // declarations
     declare const invalidUniqueType: unique number;
-                                            ~~~~~~
-!!! error TS1005: 'symbol' expected.
     declare const {}: unique symbol;
                       ~~~~~~~~~~~~~
 !!! error TS1333: 'unique symbol' types may not be used on a variable declaration with a binding name.

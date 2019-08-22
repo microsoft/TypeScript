@@ -1,0 +1,25 @@
+=== tests/cases/conformance/types/nominalBrands/uniqueNominalBrandsDeclarations2.ts ===
+export type Downcased = unique string;
+>Downcased : Downcased
+
+export function downcaseLit<T extends string>(x: T): T & Downcased {
+>downcaseLit : <T extends string>(x: T) => T & string & unique unknown
+>x : T
+
+    return x.toLocaleLowerCase() as T & Downcased;
+>x.toLocaleLowerCase() as T & Downcased : T & string & unique unknown
+>x.toLocaleLowerCase() : string
+>x.toLocaleLowerCase : (locales?: string | string[]) => string
+>x : T
+>toLocaleLowerCase : (locales?: string | string[]) => string
+}
+const a = "ok";
+>a : "ok"
+>"ok" : "ok"
+
+export const c = downcaseLit(a); // visibility error
+>c : "ok" & unique unknown
+>downcaseLit(a) : "ok" & unique unknown
+>downcaseLit : <T extends string>(x: T) => T & string & unique unknown
+>a : "ok"
+

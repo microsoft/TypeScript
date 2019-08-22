@@ -2216,6 +2216,11 @@ namespace ts {
                     break; // Binding the children will handle everything
                 case SyntaxKind.TypeParameter:
                     return bindTypeParameter(node as TypeParameterDeclaration);
+                case SyntaxKind.TypeOperator:
+                    if ((node as TypeOperatorNode).operator === SyntaxKind.UniqueKeyword) {
+                        return bindUniqueKeyword(node as TypeOperatorNode);
+                    }
+                    break;
                 case SyntaxKind.Parameter:
                     return bindParameter(<ParameterDeclaration>node);
                 case SyntaxKind.VariableDeclaration:
@@ -2927,6 +2932,10 @@ namespace ts {
             else {
                 declareSymbolAndAddToSymbolTable(node, SymbolFlags.TypeParameter, SymbolFlags.TypeParameterExcludes);
             }
+        }
+
+        function bindUniqueKeyword(node: TypeOperatorNode) {
+            addDeclarationToSymbol(createSymbol(SymbolFlags.NominalBrand, InternalSymbolName.NominalBrand), node, SymbolFlags.NominalBrand);
         }
 
         // reachability checks
