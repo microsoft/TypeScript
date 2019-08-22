@@ -313,6 +313,7 @@ fnErr();
             const usageConfig: File = {
                 path: `${usageLocation}/tsconfig.json`,
                 content: JSON.stringify({
+                    compilerOptions: { composite: true },
                     references: [{ path: "../dependency" }]
                 })
             };
@@ -381,7 +382,7 @@ fnErr();
             const usageConfig: File = {
                 path: `${usageLocation}/tsconfig.json`,
                 content: JSON.stringify({
-                    compilerOptions: { outFile: "../usage.js" },
+                    compilerOptions: { composite: true, outFile: "../usage.js" },
                     references: [{ path: "../dependency" }]
                 })
             };
