@@ -3,7 +3,6 @@ namespace ts.server {
     export interface PackageJsonCache {
         addOrUpdate(fileName: string): void;
         delete(fileName: string): void;
-        get(fileName: string): PackageJsonInfo | undefined;
         getInDirectory(directory: string): PackageJsonInfo | undefined;
         entries(): Iterator<[string, PackageJsonInfo]>;
         directoryHasPackageJson(directory: string): Ternary;
@@ -18,9 +17,6 @@ namespace ts.server {
             delete: fileName => {
                 packageJsons.delete(fileName);
                 directoriesWithoutPackageJson.set(getDirectoryPath(fileName), true);
-            },
-            get: fileName => {
-                return packageJsons.get(fileName);
             },
             getInDirectory: directory => {
                 return packageJsons.get(combinePaths(directory, "package.json"));
