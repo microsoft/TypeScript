@@ -417,7 +417,10 @@ namespace FourSlash {
             })!;
         }
 
-        public goToPosition(pos: number) {
+        public goToPosition(positionOrLineAndCharacter: number | ts.LineAndCharacter) {
+            const pos = typeof positionOrLineAndCharacter === "number"
+                ? positionOrLineAndCharacter
+                : this.languageServiceAdapterHost.lineAndCharacterToPosition(this.activeFile.fileName, positionOrLineAndCharacter);
             this.currentCaretPosition = pos;
             this.selectionEnd = -1;
         }
@@ -441,6 +444,12 @@ namespace FourSlash {
         public selectRange(range: Range): void {
             this.goToRangeStart(range);
             this.selectionEnd = range.end;
+        }
+
+        public selectLine(index: number) {
+            const lineStart = this.languageServiceAdapterHost.lineAndCharacterToPosition(this.activeFile.fileName, { line: index, character: 0 });
+            const lineEnd = lineStart + this.getLineContent(index).length;
+            this.selectRange({ fileName: this.activeFile.fileName, pos: lineStart, end: lineEnd });
         }
 
         public moveCaretRight(count = 1) {
@@ -1735,6 +1744,8 @@ namespace FourSlash {
             let offset = this.currentCaretPosition;
             const prevChar = " ";
             const checkCadence = (text.length >> 2) + 1;
+            const selection = this.getSelection();
+            this.replace(selection.pos, selection.end - selection.pos, "");
 
             for (let i = 0; i < text.length; i++) {
                 const ch = text.charAt(i);
@@ -3070,11 +3081,9 @@ namespace FourSlash {
             Harness.IO.log(stringify(codeFixes));
         }
 
-        // Get the text of the entire line the caret is currently at
-        private getCurrentLineContent() {
+        private getLineContent(index: number) {
             const text = this.getFileContent(this.activeFile.fileName);
-
-            const pos = this.currentCaretPosition;
+            const pos = this.languageServiceAdapterHost.lineAndCharacterToPosition(this.activeFile.fileName, { line: index, character: 0 });
             let startPos = pos, endPos = pos;
 
             while (startPos > 0) {
@@ -3097,6 +3106,14 @@ namespace FourSlash {
             }
 
             return text.substring(startPos, endPos);
+        }
+
+        // Get the text of the entire line the caret is currently at
+        private getCurrentLineContent() {
+            return this.getLineContent(this.languageServiceAdapterHost.positionToLineAndCharacter(
+                this.activeFile.fileName,
+                this.currentCaretPosition,
+            ).line);
         }
 
         private findFile(indexOrName: string | number): FourSlashFile {
@@ -3827,11 +3844,11 @@ namespace FourSlashInterface {
             this.state.goToImplementation();
         }
 
-        public position(position: number, fileNameOrIndex?: string | number): void {
+        public position(positionOrLineAndCharacter: number | ts.LineAndCharacter, fileNameOrIndex?: string | number): void {
             if (fileNameOrIndex !== undefined) {
                 this.file(fileNameOrIndex);
             }
-            this.state.goToPosition(position);
+            this.state.goToPosition(positionOrLineAndCharacter);
         }
 
         // Opens a file, given either its index as it
@@ -4310,6 +4327,11 @@ namespace FourSlashInterface {
 
         public deleteLineRange(startIndex: number, endIndexInclusive: number) {
             this.state.deleteLineRange(startIndex, endIndexInclusive);
+        }
+
+        public replaceLine(index: number, text: string) {
+            this.state.selectLine(index);
+            this.state.type(text);
         }
 
         public moveRight(count?: number) {

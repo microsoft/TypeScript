@@ -667,8 +667,8 @@ namespace Harness.LanguageService {
         }
 
         editScript(fileName: string, start: number, end: number, newText: string) {
-            super.editScript(fileName, start, end, newText);
             this.client.changeFile(fileName, start, end, newText);
+            super.editScript(fileName, start, end, newText);
         }
     }
 

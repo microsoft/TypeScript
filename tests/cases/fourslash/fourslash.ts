@@ -87,6 +87,11 @@ declare module ts {
         reportsUnnecessary?: {};
     }
 
+    interface LineAndCharacter {
+        line: number;
+        character: number;
+    }
+
     function flatMap<T, U>(array: ReadonlyArray<T>, mapfn: (x: T, i: number) => U | ReadonlyArray<U> | undefined): U[];
 }
 
@@ -155,10 +160,16 @@ declare namespace FourSlashInterface {
         implementation(): void;
         position(position: number, fileIndex?: number): any;
         position(position: number, fileName?: string): any;
+        position(lineAndCharacter: ts.LineAndCharacter, fileName?: string): void;
         file(index: number, content?: string, scriptKindName?: string): any;
         file(name: string, content?: string, scriptKindName?: string): any;
         select(startMarker: string, endMarker: string): void;
         selectRange(range: Range): void;
+        /**
+         * Selects a line at a given index, not including any newline characters.
+         * @param index 0-based
+         */
+        selectLine(index: number): void;
     }
     class verifyNegatable {
         private negative;
@@ -353,6 +364,8 @@ declare namespace FourSlashInterface {
          * @param endIndexInclusive 0-based
          */
         deleteLineRange(startIndex: number, endIndexInclusive: number): void;
+        /** @param index 0-based */
+        replaceLine(index: number, text: string): void;
         moveRight(count?: number): void;
         moveLeft(count?: number): void;
         enableFormatting(): void;

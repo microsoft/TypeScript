@@ -9,25 +9,50 @@
 ////}
 ////a/**/
 
-goTo.marker("");
-verify.completions({
-  includes: {
-    name: "ambient",
-    source: "ambient",
-    hasAction: true,
-    sortText: completion.SortText.AutoImportSuggestions,
-  },
-  preferences: {
-    includeCompletionsForModuleExports: true,
-    includeInsertTextCompletions: true,
-  },
-});
+edit.disableFormatting();
 
+// Ensure 'ambient' shows up
+verifyIncludes("ambient");
+
+// Delete it, ensure it doesn’t show up
 edit.deleteLineRange(0, 2);
-verify.completions({
-  excludes: "ambient",
-  preferences: {
-    includeCompletionsForModuleExports: true,
-    includeInsertTextCompletions: true,
-  },
-});
+verifyExcludes("ambient");
+
+// Add it back with changes, ensure it shows up
+goTo.marker("");
+edit.insertLines(`
+declare module 'ambient' {
+  export const ambient2 = 0;
+}`);
+verifyIncludes("ambient2");
+
+// Replace 'ambient2' with 'ambient3'
+edit.replaceLine(2, "  export const ambient3 = 0");
+verifyExcludes("ambient2");
+verifyIncludes("ambient3");
+
+function verifyIncludes(name: string) {
+    goTo.marker("");
+    verify.completions({
+        includes: {
+            name,
+            source: "ambient",
+            hasAction: true,
+            sortText: completion.SortText.AutoImportSuggestions,
+        },
+        preferences: {
+            includeCompletionsForModuleExports: true,
+            includeInsertTextCompletions: true,
+        },
+    });
+}
+
+function verifyExcludes(name: string) {
+    verify.completions({
+        excludes: name,
+        preferences: {
+            includeCompletionsForModuleExports: true,
+            includeInsertTextCompletions: true,
+        },
+    });
+}

@@ -67,7 +67,7 @@ namespace ts.Completions {
                 return fileName;
             },
             get isEmpty() {
-                return !cache || !cache.length;
+                return !cache;
             },
             clear: () => {
                 cache = undefined;
