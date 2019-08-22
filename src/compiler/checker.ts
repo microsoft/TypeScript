@@ -2560,6 +2560,22 @@ namespace ts {
             return initializer || decl;
         }
 
+        /**
+         * Get the real symbol of a declaration with an expando initializer.
+         *
+         * Normally, declarations have an associated symbol, but when a declaration has an expando
+         * initializer, the expando's symbol is the one that has all the members merged into it.
+         */
+        function getExpandoSymbol(symbol: Symbol): Symbol | undefined {
+            const decl = symbol.valueDeclaration;
+            if (!decl || !isInJSFile(decl) || symbol.flags & SymbolFlags.TypeAlias) {
+                return undefined;
+            }
+            const init = isVariableDeclaration(decl) ? getDeclaredExpandoInitializer(decl) : getAssignedExpandoInitializer(decl);
+            return init && getSymbolOfNode(init) || undefined;
+        }
+
+
         function resolveExternalModuleName(location: Node, moduleReferenceExpression: Expression, ignoreErrors?: boolean): Symbol | undefined {
             return resolveExternalModuleNameWorker(location, moduleReferenceExpression, ignoreErrors ? undefined : Diagnostics.Cannot_find_module_0);
         }
@@ -9195,10 +9211,13 @@ namespace ts {
             if (symbol === unknownSymbol) {
                 return errorType;
             }
+            symbol = getExpandoSymbol(symbol) || symbol;
 
-            const type = getTypeReferenceTypeWorker(node, symbol, typeArguments);
-            if (type) {
-                return type;
+            if (symbol.flags & (SymbolFlags.Class | SymbolFlags.Interface)) {
+                return getTypeFromClassOrInterfaceReference(node, symbol, typeArguments);
+            }
+            if (symbol.flags & SymbolFlags.TypeAlias) {
+                return getTypeFromTypeAliasReference(node, symbol, typeArguments);
             }
 
             // Get type from reference to named type that cannot be generic (enum or type parameter)
@@ -9209,62 +9228,34 @@ namespace ts {
                     errorType;
             }
 
-            if (!(symbol.flags & SymbolFlags.Value && isJSDocTypeReference(node))) {
-                return errorType;
+            if (symbol.flags & SymbolFlags.Value && isJSDocTypeReference(node)) {
+                const jsdocType = getTypeFromJSAlias(node, symbol);
+                if (jsdocType) {
+                    return jsdocType;
+                }
+                else {
+                    // Resolve the type reference as a Type for the purpose of reporting errors.
+                    resolveTypeReferenceName(getTypeReferenceName(node), SymbolFlags.Type);
+                    return getTypeOfSymbol(symbol);
+                }
             }
 
-            const jsdocType = getJSDocTypeReference(node, symbol, typeArguments);
-            if (jsdocType) {
-                return jsdocType;
-            }
-
-            // Resolve the type reference as a Type for the purpose of reporting errors.
-            resolveTypeReferenceName(getTypeReferenceName(node), SymbolFlags.Type);
-            return getTypeOfSymbol(symbol);
+            return errorType;
         }
 
         /**
-         * A jsdoc TypeReference may have resolved to a value (as opposed to a type). If
-         * the symbol is a constructor function, return the inferred class type; otherwise,
-         * the type of this reference is just the type of the value we resolved to.
+         * A JSdoc TypeReference may be to a value imported from commonjs.
+         * These should really be aliases, but this special-case code fakes alias resolution
+         * by producing a type from a value.
          */
-        function getJSDocTypeReference(node: NodeWithTypeArguments, symbol: Symbol, typeArguments: Type[] | undefined): Type | undefined {
-            // In the case of an assignment of a function expression (binary expressions, variable declarations, etc.), we will get the
-            // correct instance type for the symbol on the LHS by finding the type for RHS. For example if we want to get the type of the symbol `foo`:
-            //   var foo = function() {}
-            // We will find the static type of the assigned anonymous function.
-            const staticType = getTypeOfSymbol(symbol);
-            const instanceType =
-                staticType.symbol &&
-                staticType.symbol !== symbol && // Make sure this is an assignment like expression by checking that symbol -> type -> symbol doesn't roundtrips.
-                getTypeReferenceTypeWorker(node, staticType.symbol, typeArguments); // Get the instance type of the RHS symbol.
-            if (instanceType) {
-                return getSymbolLinks(symbol).resolvedJSDocType = instanceType;
-            }
-        }
-
-        function getTypeReferenceTypeWorker(node: NodeWithTypeArguments, symbol: Symbol, typeArguments: Type[] | undefined): Type | undefined {
-            if (symbol.flags & (SymbolFlags.Class | SymbolFlags.Interface)) {
-                if (symbol.valueDeclaration && symbol.valueDeclaration.parent && isBinaryExpression(symbol.valueDeclaration.parent)) {
-                    const jsdocType = getJSDocTypeReference(node, symbol, typeArguments);
-                    if (jsdocType) {
-                        return jsdocType;
-                    }
-                }
-                return getTypeFromClassOrInterfaceReference(node, symbol, typeArguments);
-            }
-
-            if (symbol.flags & SymbolFlags.TypeAlias) {
-                return getTypeFromTypeAliasReference(node, symbol, typeArguments);
-            }
-
-            if (symbol.flags & SymbolFlags.Function &&
-                isJSDocTypeReference(node) &&
-                isJSConstructor(symbol.valueDeclaration)) {
-                const resolved = resolveStructuredTypeMembers(<ObjectType>getTypeOfSymbol(symbol));
-                if (resolved.callSignatures.length === 1) {
-                    return getReturnTypeOfSignature(resolved.callSignatures[0]);
-                }
+        function getTypeFromJSAlias(node: NodeWithTypeArguments, symbol: Symbol): Type | undefined {
+            const valueType = getTypeOfSymbol(symbol);
+            const typeType =
+                valueType.symbol &&
+                valueType.symbol !== symbol && // Make sure this is a commonjs export by checking that symbol -> type -> symbol doesn't roundtrip.
+                getTypeReferenceType(node, valueType.symbol);
+            if (typeType) {
+                return getSymbolLinks(symbol).resolvedJSDocType = typeType;
             }
         }
 
