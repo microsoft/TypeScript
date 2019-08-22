@@ -152,6 +152,25 @@ fnErr();
             });
         }
 
+        function verifyConfigFileErrors({ openFiles, expectedConfigFileDiagEvents }: VerifyScenario) {
+            it("verify config file errors", () => {
+                const host = createServerHost([dependencyTs, dependencyConfig, usageTs, usageConfig, libFile]);
+                const { session, events } = createSessionWithEventTracking<server.ConfigFileDiagEvent>(host, server.ConfigFileDiagEvent);
+
+                for (const file of openFiles()) {
+                    session.executeCommandSeq<protocol.OpenRequest>({
+                        command: protocol.CommandTypes.Open,
+                        arguments: { file: file.path }
+                    });
+                }
+
+                assert.deepEqual(events, expectedConfigFileDiagEvents().map(data => ({
+                    eventName: server.ConfigFileDiagEvent,
+                    data
+                })));
+            });
+        }
+
         interface GetErrDiagnostics {
             file: File;
             syntax: protocol.Diagnostic[];
@@ -170,11 +189,13 @@ fnErr();
             expectedGetErr: () => readonly GetErrDiagnostics[];
             expectedGetErrForProject: () => readonly GetErrForProjectDiagnostics[];
             expectedSyncDiagnostics: () => readonly SyncDiagnostics[];
+            expectedConfigFileDiagEvents: () => readonly server.ConfigFileDiagEvent["data"][];
         }
         function verifyScenario(scenario: VerifyScenario) {
             verifyErrorsUsingGeterr(scenario);
             verifyErrorsUsingGeterrForProject(scenario);
             verifyErrorsUsingSyncMethods(scenario);
+            verifyConfigFileErrors(scenario);
         }
 
         function emptyDiagnostics(file: File): GetErrDiagnostics {
@@ -243,6 +264,22 @@ fnErr();
             return { project, ...diagnostics };
         }
 
+        function usageConfigDiag(): server.ConfigFileDiagEvent["data"] {
+            return {
+                triggerFile: usageTs.path,
+                configFileName: usageConfig.path,
+                diagnostics: emptyArray
+            };
+        }
+
+        function dependencyConfigDiag(): server.ConfigFileDiagEvent["data"] {
+            return {
+                triggerFile: dependencyTs.path,
+                configFileName: dependencyConfig.path,
+                diagnostics: emptyArray
+            };
+        }
+
         describe("when dependency project is not open", () => {
             verifyScenario({
                 openFiles: () => [usageTs],
@@ -267,6 +304,9 @@ fnErr();
                     syncDiagnostics(usageDiagnostics(), usageConfig.path),
                     syncDiagnostics(emptyDiagnostics(dependencyTs), usageConfig.path),
                 ],
+                expectedConfigFileDiagEvents: () => [
+                    usageConfigDiag()
+                ],
             });
         });
 
@@ -289,6 +329,10 @@ fnErr();
                     syncDiagnostics(usageDiagnostics(), usageConfig.path),
                     syncDiagnostics(emptyDiagnostics(dependencyTs), usageConfig.path),
                     syncDiagnostics(dependencyDiagnostics(), dependencyConfig.path),
+                ],
+                expectedConfigFileDiagEvents: () => [
+                    usageConfigDiag(),
+                    dependencyConfigDiag()
                 ],
             });
         });
