@@ -1430,7 +1430,7 @@ namespace ts.Completions {
             }
 
             const startTime = timestamp();
-            log("getSymbolsFromOtherSourceFileExports: Recomputing list");
+            log(`getSymbolsFromOtherSourceFileExports: Recomputing list${detailsEntryId ? " for details entry" : ""}`);
             const seenResolvedModules = createMap<true>();
             /** Bucket B */
             const aliasesToAlreadyIncludedSymbols = createMap<true>();

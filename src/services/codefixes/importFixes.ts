@@ -628,19 +628,31 @@ namespace ts.codefix {
         filterByPackageJson: boolean,
         cb: (module: Symbol) => void,
     ) {
+        let filteredCount = 0;
         const packageJson = filterByPackageJson && createLazyPackageJsonDependencyReader(from, host, redirectTargetsMap);
         moduleSpecifiers.withCachedSymlinks(allSourceFiles, hostGetCanonicalFileName(host), host.getCurrentDirectory(), () => {
             forEachExternalModule(checker, allSourceFiles, (module, sourceFile) => {
-                if (sourceFile === undefined && (!packageJson || packageJson.allowsImportingAmbientModule(module, allSourceFiles))) {
-                    cb(module);
+                if (sourceFile === undefined) {
+                    if (!packageJson || packageJson.allowsImportingAmbientModule(module, allSourceFiles)) {
+                        cb(module);
+                    }
+                    else if (packageJson) {
+                        filteredCount++;
+                    }
                 }
                 else if (sourceFile && sourceFile !== from && isImportablePath(from.fileName, sourceFile.fileName)) {
                     if (!packageJson || packageJson.allowsImportingSourceFile(sourceFile, allSourceFiles)) {
                         cb(module);
                     }
+                    else if (packageJson) {
+                        filteredCount++;
+                    }
                 }
             });
         });
+        if (host.log) {
+            host.log(`forEachExternalModuleToImportFrom: filtered out ${filteredCount} modules by package.json contents`);
+        }
     }
 
     function forEachExternalModule(checker: TypeChecker, allSourceFiles: ReadonlyArray<SourceFile>, cb: (module: Symbol, sourceFile: SourceFile | undefined) => void) {
