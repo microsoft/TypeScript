@@ -4202,6 +4202,7 @@ namespace ts {
         target: GenericType;    // Type reference target
         resolvedTypeArguments?: ReadonlyArray<Type>;  // Type reference type arguments (undefined if none)
         typeArgumentNodes?: ReadonlyArray<TypeNode>;
+        typeNodeDecoder?: (node: TypeNode, i: number, len: number) => Type;
         mapper?: TypeMapper;
         /* @internal */
         literalType?: TypeReference;  // Clone of type with ObjectFlags.ArrayLiteral set

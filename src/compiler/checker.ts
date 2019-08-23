@@ -3540,7 +3540,6 @@ namespace ts {
         }
 
         function createNodeBuilder() {
-            let depth = 0;
             return {
                 typeToTypeNode: (type: Type, enclosingDeclaration?: Node, flags?: NodeBuilderFlags, tracker?: SymbolTracker) =>
                     withContext(enclosingDeclaration, flags, tracker, context => typeToTypeNodeHelper(type, context)),
@@ -3804,10 +3803,7 @@ namespace ts {
                 function createAnonymousTypeNode(type: ObjectType): TypeNode {
                     const typeId = "" + type.id;
                     const symbol = type.symbol;
-                    let id: string;
                     if (symbol) {
-                        const isConstructorObject = getObjectFlags(type) & ObjectFlags.Anonymous && type.symbol && type.symbol.flags & SymbolFlags.Class;
-                        id = (isConstructorObject ? "+" : "") + getSymbolId(symbol);
                         if (isJSConstructor(symbol.valueDeclaration)) {
                             // Instance and static types share the same symbol; only add 'typeof' for the static side.
                             const isInstanceType = type === getInferredClassType(symbol) ? SymbolFlags.Type : SymbolFlags.Value;
@@ -3831,25 +3827,7 @@ namespace ts {
                             }
                         }
                         else {
-                            // Since instantiations of the same anonymous type have the same symbol, tracking symbols instead
-                            // of types allows us to catch circular references to instantiations of the same anonymous type
-                            if (!context.visitedTypes) {
-                                context.visitedTypes = createMap<true>();
-                            }
-                            if (!context.symbolDepth) {
-                                context.symbolDepth = createMap<number>();
-                            }
-
-                            const depth = context.symbolDepth.get(id) || 0;
-                            if (depth > 10) {
-                                return createElidedInformationPlaceholder(context);
-                            }
-                            context.symbolDepth.set(id, depth + 1);
-                            context.visitedTypes.set(typeId, true);
-                            const result = createTypeNodeFromObjectType(type);
-                            context.visitedTypes.delete(typeId);
-                            context.symbolDepth.set(id, depth);
-                            return result;
+                            return visitAndTransformType(type, createTypeNodeFromObjectType);
                         }
                     }
                     else {
@@ -3869,6 +3847,37 @@ namespace ts {
                                 (!(context.flags & NodeBuilderFlags.UseStructuralFallback) || isValueSymbolAccessible(symbol, context.enclosingDeclaration)); // And the build is going to succeed without visibility error or there is no structural fallback allowed
                         }
                     }
+                }
+
+                function visitAndTransformType<T>(type: Type, transform: (type: Type) => T) {
+                    const typeId = "" + type.id;
+                    const symbol = type.symbol;
+                    const isConstructorObject = getObjectFlags(type) & ObjectFlags.Anonymous && type.symbol && type.symbol.flags & SymbolFlags.Class;
+                    const id = symbol && ((isConstructorObject ? "+" : "") + getSymbolId(symbol));
+                    // Since instantiations of the same anonymous type have the same symbol, tracking symbols instead
+                    // of types allows us to catch circular references to instantiations of the same anonymous type
+                    if (!context.visitedTypes) {
+                        context.visitedTypes = createMap<true>();
+                    }
+                    if (id && !context.symbolDepth) {
+                        context.symbolDepth = createMap<number>();
+                    }
+
+                    let depth: number | undefined;
+                    if (id) {
+                        depth = context.symbolDepth!.get(id) || 0;
+                        if (depth > 10) {
+                            return createElidedInformationPlaceholder(context);
+                        }
+                        context.symbolDepth!.set(id, depth + 1);
+                    }
+                    context.visitedTypes.set(typeId, true);
+                    const result = transform(type);
+                    context.visitedTypes.delete(typeId);
+                    if (id) {
+                        context.symbolDepth!.set(id, depth!);
+                    }
+                    return result;
                 }
 
                 function createTypeNodeFromObjectType(type: ObjectType): TypeNode {
@@ -3909,17 +3918,14 @@ namespace ts {
                 function typeReferenceToTypeNode(type: TypeReference) {
                     const typeArguments: ReadonlyArray<Type> = getTypeArguments(type);
                     if (type.target === globalArrayType || type.target === globalReadonlyArrayType) {
+                        const typeArgumentNode = context.visitedTypes && context.visitedTypes.has("" + getTypeId(typeArguments[0]))
+                            ? createElidedInformationPlaceholder(context)
+                            : visitAndTransformType(typeArguments[0], t => typeToTypeNodeHelper(t, context));
                         if (context.flags & NodeBuilderFlags.WriteArrayAsGenericType) {
-                            depth++;
-                            const typeArgumentNode = typeToTypeNodeHelper(depth >= 5 ? anyType : typeArguments[0], context);
-                            depth--;
-                            createTypeReferenceNode(type.target === globalArrayType ? "Array" : "ReadonlyArray", [typeArgumentNode]);
+                            return createTypeReferenceNode(type.target === globalArrayType ? "Array" : "ReadonlyArray", [typeArgumentNode]);
                         }
 
-                        depth++;
-                        const elementType = typeToTypeNodeHelper(depth >= 5 ? anyType : typeArguments[0], context);
-                        depth--;
-                        const arrayType = createArrayTypeNode(elementType);
+                        const arrayType = createArrayTypeNode(typeArgumentNode);
                         return type.target === globalArrayType ? arrayType : createTypeOperatorNode(SyntaxKind.ReadonlyKeyword, arrayType);
                     }
                     else if (type.target.objectFlags & ObjectFlags.Tuple) {
@@ -9077,19 +9083,29 @@ namespace ts {
             return type;
         }
 
-        function createDeferredTypeReference(target: GenericType, typeArgumentNodes: ReadonlyArray<TypeNode>, mapper?: TypeMapper, aliasSymbol?: Symbol, aliasTypeArguments?: ReadonlyArray<Type>): TypeReference {
+        function createDeferredTypeReference(target: GenericType, typeArgumentNodes: ReadonlyArray<TypeNode>, typeNodeDecoder: (node: TypeNode, i: number, len: number) => Type, mapper?: TypeMapper, aliasSymbol?: Symbol, aliasTypeArguments?: ReadonlyArray<Type>): TypeReference {
             const type = <TypeReference>createObjectType(ObjectFlags.Reference, target.symbol);
             type.target = target;
             type.typeArgumentNodes = typeArgumentNodes;
+            type.typeNodeDecoder = typeNodeDecoder;
             type.mapper = mapper;
             type.aliasSymbol = aliasSymbol;
             type.aliasTypeArguments = aliasTypeArguments;
             return type;
         }
 
+        function mapWithLength<T, U>(array: ReadonlyArray<T>, f: (x: T, i: number, length: number) => U): U[] {
+            const len = array.length;
+            const result: U[] = new Array(len);
+            for (let i = 0; i < len; i++) {
+                result[i] = f(array[i], i, len);
+            }
+            return result;
+        }
+
         function getTypeArguments(type: TypeReference): ReadonlyArray<Type> {
             if (!type.resolvedTypeArguments) {
-                const typeArguments = type.typeArgumentNodes ? map(type.typeArgumentNodes, getTypeFromTypeNode) : emptyArray;
+                const typeArguments = type.typeArgumentNodes ? mapWithLength(type.typeArgumentNodes, type.typeNodeDecoder!) : emptyArray;
                 type.resolvedTypeArguments = type.mapper ? instantiateTypes(typeArguments, type.mapper) : typeArguments;
             }
             return type.resolvedTypeArguments;
@@ -9587,7 +9603,7 @@ namespace ts {
                 const target = isReadonlyTypeOperator(node.parent) ? globalReadonlyArrayType : globalArrayType;
                 const aliasSymbol = getAliasSymbolForTypeNode(node);
                 const aliasTypeArguments = getTypeArgumentsForAliasSymbol(aliasSymbol);
-                links.resolvedType = createDeferredTypeReference(target, [node.elementType], /*mapper*/ undefined, aliasSymbol, aliasTypeArguments);
+                links.resolvedType = createDeferredTypeReference(target, [node.elementType], getTypeFromTypeNode, /*mapper*/ undefined, aliasSymbol, aliasTypeArguments);
             }
             return links.resolvedType;
         }
@@ -9665,17 +9681,29 @@ namespace ts {
             return elementTypes.length ? createTypeReference(tupleType, elementTypes) : tupleType;
         }
 
+        function createDeferredTupleType(typeNodes: readonly TypeNode[], aliasSymbol: Symbol | undefined, aliasTypeArguments: readonly Type[] | undefined, minLength = typeNodes.length, hasRestElement = false, readonly = false, associatedNames?: __String[]) {
+            const arity = typeNodes.length;
+            if (arity === 1 && hasRestElement) {
+                return createArrayType(getTypeFromTypeNode(typeNodes[0]), readonly);
+            }
+            const tupleType = getTupleTypeOfArity(arity, minLength, arity > 0 && hasRestElement, readonly, associatedNames);
+            return typeNodes.length ? createDeferredTypeReference(tupleType, typeNodes, getTypeFromTupleTypeArgumentNode, /*mapper*/ undefined, aliasSymbol, aliasTypeArguments) : tupleType;
+        }
+
+        function getTypeFromTupleTypeArgumentNode(node: TypeNode, idx: number, len: number) {
+            const type = getTypeFromTypeNode(node);
+            return node.kind === SyntaxKind.RestType && idx === (len - 1) && getIndexTypeOfType(type, IndexKind.Number) || type;
+        }
+
         function getTypeFromTupleTypeNode(node: TupleTypeNode): Type {
             const links = getNodeLinks(node);
             if (!links.resolvedType) {
                 const lastElement = lastOrUndefined(node.elementTypes);
                 const restElement = lastElement && lastElement.kind === SyntaxKind.RestType ? lastElement : undefined;
                 const minLength = findLastIndex(node.elementTypes, n => n.kind !== SyntaxKind.OptionalType && n !== restElement) + 1;
-                const elementTypes = map(node.elementTypes, n => {
-                    const type = getTypeFromTypeNode(n);
-                    return n === restElement && getIndexTypeOfType(type, IndexKind.Number) || type;
-                });
-                links.resolvedType = createTupleType(elementTypes, minLength, !!restElement, isReadonlyTypeOperator(node.parent));
+                const aliasSymbol = getAliasSymbolForTypeNode(node);
+                const aliasArgs = getTypeArgumentsForAliasSymbol(aliasSymbol);
+                links.resolvedType = createDeferredTupleType(node.elementTypes, aliasSymbol, aliasArgs, minLength, !!restElement, isReadonlyTypeOperator(node.parent));
             }
             return links.resolvedType;
         }
@@ -11653,7 +11681,7 @@ namespace ts {
                         const typeArgumentNodes = (<TypeReference>type).typeArgumentNodes;
                         if (typeArgumentNodes) {
                             const combinedMapper = combineTypeMappers((<TypeReference>type).mapper, mapper);
-                            return createDeferredTypeReference((<TypeReference>type).target, typeArgumentNodes, combinedMapper,
+                            return createDeferredTypeReference((<TypeReference>type).target, typeArgumentNodes, (<TypeReference>type).typeNodeDecoder!, combinedMapper,
                                 (<TypeReference>type).aliasSymbol, instantiateTypes((<TypeReference>type).aliasTypeArguments, combinedMapper));
                         }
                     }
