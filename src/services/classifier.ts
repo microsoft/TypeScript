@@ -775,7 +775,7 @@ namespace ts {
             // defined in `ts.commentPragmas` would be excessive, but we can avoid
             // some obvious false positives (e.g. in XML-like doc comments) by
             // checking the element name.
-            if (!match[3] || !(commentPragmas as any)[match[3]]) {
+            if (!match[3] || !(match[3] in commentPragmas)) {
                 return false;
             }
 
