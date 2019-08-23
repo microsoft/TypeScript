@@ -244,8 +244,9 @@ namespace ts.NavigationBar {
                 break;
 
             case SyntaxKind.BindingElement:
+            case SyntaxKind.PropertyAssignment:
             case SyntaxKind.VariableDeclaration:
-                const { name, initializer } = <VariableDeclaration | BindingElement>node;
+                const { name, initializer } = <VariableDeclaration | PropertyAssignment | BindingElement>node;
                 if (isBindingPattern(name)) {
                     addChildrenRecursively(name);
                 }
@@ -728,20 +729,13 @@ namespace ts.NavigationBar {
                 case SyntaxKind.JSDocCallbackTag:
                     return true;
 
-                case SyntaxKind.Constructor:
-                case SyntaxKind.MethodDeclaration:
-                case SyntaxKind.GetAccessor:
-                case SyntaxKind.SetAccessor:
-                case SyntaxKind.VariableDeclaration:
-                    return hasSomeImportantChild(item);
-
                 case SyntaxKind.ArrowFunction:
                 case SyntaxKind.FunctionDeclaration:
                 case SyntaxKind.FunctionExpression:
                     return isTopLevelFunctionDeclaration(item);
 
                 default:
-                    return false;
+                    return hasSomeImportantChild(item);
             }
             function isTopLevelFunctionDeclaration(item: NavigationBarNode): boolean {
                 if (!(<FunctionDeclaration>item.node).body) {
@@ -759,10 +753,7 @@ namespace ts.NavigationBar {
                 }
             }
             function hasSomeImportantChild(item: NavigationBarNode): boolean {
-                return some(item.children, child => {
-                    const childKind = navigationBarNodeKind(child);
-                    return childKind !== SyntaxKind.VariableDeclaration && childKind !== SyntaxKind.BindingElement;
-                });
+                return item.children ? true : false;
             }
         }
     }
