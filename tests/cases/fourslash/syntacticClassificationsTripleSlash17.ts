@@ -1,7 +1,7 @@
 /// <reference path="fourslash.ts"/>
 
-//// /// <
+//// /// <summary>Text</summary>
 
 var c = classification;
 verify.syntacticClassificationsAre(
-    c.comment("/// <")); // Don't classify until we recognize the element name
+    c.comment("/// <summary>Text</summary>"));
