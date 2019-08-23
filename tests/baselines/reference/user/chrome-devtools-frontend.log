@@ -8326,6 +8326,11 @@ node_modules/chrome-devtools-frontend/front_end/profiler/HeapSnapshotProxy.js(85
 node_modules/chrome-devtools-frontend/front_end/profiler/HeapSnapshotProxy.js(129,14): error TS7014: Function type, which lacks return-type annotation, implicitly has an 'any' return type.
 node_modules/chrome-devtools-frontend/front_end/profiler/HeapSnapshotProxy.js(161,40): error TS2339: Property 'keysArray' does not exist on type 'Map<number, (arg0: any) => any>'.
 node_modules/chrome-devtools-frontend/front_end/profiler/HeapSnapshotProxy.js(231,15): error TS7014: Function type, which lacks return-type annotation, implicitly has an 'any' return type.
+node_modules/chrome-devtools-frontend/front_end/profiler/HeapSnapshotProxy.js(250,5): error TS2322: Type 'Promise<T extends PromiseLike<infer U> ? U : T>' is not assignable to type 'Promise<T>'.
+  Type 'T extends PromiseLike<infer U> ? U : T' is not assignable to type 'T'.
+    'T extends PromiseLike<infer U> ? U : T' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint '{}'.
+      Type 'unknown' is not assignable to type 'T'.
+        'unknown' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint '{}'.
 node_modules/chrome-devtools-frontend/front_end/profiler/HeapSnapshotProxy.js(263,14): error TS7014: Function type, which lacks return-type annotation, implicitly has an 'any' return type.
 node_modules/chrome-devtools-frontend/front_end/profiler/HeapSnapshotProxy.js(284,16): error TS2555: Expected at least 2 arguments, but got 1.
 node_modules/chrome-devtools-frontend/front_end/profiler/HeapSnapshotProxy.js(286,43): error TS2555: Expected at least 4 arguments, but got 3.
@@ -9617,6 +9622,11 @@ node_modules/chrome-devtools-frontend/front_end/sdk/RemoteObject.js(370,31): err
 node_modules/chrome-devtools-frontend/front_end/sdk/RemoteObject.js(371,14): error TS7014: Function type, which lacks return-type annotation, implicitly has an 'any' return type.
 node_modules/chrome-devtools-frontend/front_end/sdk/RemoteObject.js(378,39): error TS1110: Type expected.
 node_modules/chrome-devtools-frontend/front_end/sdk/RemoteObject.js(379,31): error TS2694: Namespace 'Protocol' has no exported member 'Runtime'.
+node_modules/chrome-devtools-frontend/front_end/sdk/RemoteObject.js(384,5): error TS2322: Type 'Promise<T extends PromiseLike<infer U> ? U : T>' is not assignable to type 'Promise<T>'.
+  Type 'T extends PromiseLike<infer U> ? U : T' is not assignable to type 'T'.
+    'T extends PromiseLike<infer U> ? U : T' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint '{}'.
+      Type 'unknown' is not assignable to type 'T'.
+        'unknown' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint '{}'.
 node_modules/chrome-devtools-frontend/front_end/sdk/RemoteObject.js(420,24): error TS2694: Namespace 'Protocol' has no exported member 'Runtime'.
 node_modules/chrome-devtools-frontend/front_end/sdk/RemoteObject.js(422,24): error TS2694: Namespace 'Protocol' has no exported member 'Runtime'.
 node_modules/chrome-devtools-frontend/front_end/sdk/RemoteObject.js(423,24): error TS2694: Namespace 'Protocol' has no exported member 'Runtime'.
@@ -10930,6 +10940,8 @@ node_modules/chrome-devtools-frontend/front_end/test_runner/TestRunner.js(12,64)
 node_modules/chrome-devtools-frontend/front_end/test_runner/TestRunner.js(12,94): error TS7014: Function type, which lacks return-type annotation, implicitly has an 'any' return type.
 node_modules/chrome-devtools-frontend/front_end/test_runner/TestRunner.js(13,6): error TS2551: Property 'testRunner' does not exist on type 'Window & typeof globalThis'. Did you mean 'TestRunner'?
 node_modules/chrome-devtools-frontend/front_end/test_runner/TestRunner.js(24,8): error TS2551: Property 'testRunner' does not exist on type 'Window & typeof globalThis'. Did you mean 'TestRunner'?
+node_modules/chrome-devtools-frontend/front_end/test_runner/TestRunner.js(25,3): error TS2322: Type 'Promise<unknown>' is not assignable to type 'Promise<undefined>'.
+  Type 'unknown' is not assignable to type 'undefined'.
 node_modules/chrome-devtools-frontend/front_end/test_runner/TestRunner.js(42,21): error TS2551: Property 'testRunner' does not exist on type 'Window & typeof globalThis'. Did you mean 'TestRunner'?
 node_modules/chrome-devtools-frontend/front_end/test_runner/TestRunner.js(76,8): error TS2551: Property 'testRunner' does not exist on type 'Window & typeof globalThis'. Did you mean 'TestRunner'?
 node_modules/chrome-devtools-frontend/front_end/test_runner/TestRunner.js(117,19): error TS7014: Function type, which lacks return-type annotation, implicitly has an 'any' return type.
@@ -12649,8 +12661,8 @@ node_modules/chrome-devtools-frontend/front_end/ui/UIUtils.js(1910,22): error TS
 node_modules/chrome-devtools-frontend/front_end/ui/UIUtils.js(1911,22): error TS2339: Property 'constrain' does not exist on type 'NumberConstructor'.
 node_modules/chrome-devtools-frontend/front_end/ui/UIUtils.js(1912,22): error TS2339: Property 'constrain' does not exist on type 'NumberConstructor'.
 node_modules/chrome-devtools-frontend/front_end/ui/UIUtils.js(1913,22): error TS2339: Property 'constrain' does not exist on type 'NumberConstructor'.
-node_modules/chrome-devtools-frontend/front_end/ui/UIUtils.js(1943,50): error TS2345: Argument of type 'HTMLImageElement' is not assignable to parameter of type '(new (width?: number, height?: number) => HTMLImageElement) | PromiseLike<new (width?: number, height?: number) => HTMLImageElement>'.
-  Property 'then' is missing in type 'HTMLImageElement' but required in type 'PromiseLike<new (width?: number, height?: number) => HTMLImageElement>'.
+node_modules/chrome-devtools-frontend/front_end/ui/UIUtils.js(1943,50): error TS2345: Argument of type 'HTMLImageElement' is not assignable to parameter of type 'new (width?: number, height?: number) => HTMLImageElement'.
+  Type 'HTMLImageElement' provides no match for the signature 'new (width?: number, height?: number): HTMLImageElement'.
 node_modules/chrome-devtools-frontend/front_end/ui/UIUtils.js(1961,12): error TS7014: Function type, which lacks return-type annotation, implicitly has an 'any' return type.
 node_modules/chrome-devtools-frontend/front_end/ui/UIUtils.js(1966,23): error TS2339: Property 'type' does not exist on type 'Element'.
 node_modules/chrome-devtools-frontend/front_end/ui/UIUtils.js(1967,23): error TS2339: Property 'style' does not exist on type 'Element'.

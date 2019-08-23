@@ -4,7 +4,7 @@ namespace X {
 
     export class MyPromise<T> extends Promise<T> {
 >MyPromise : MyPromise<T>
->Promise : Promise<T>
+>Promise : Promise<T extends PromiseLike<infer U> ? U : T>
     }
 }
 

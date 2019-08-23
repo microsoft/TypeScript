@@ -1,7 +1,7 @@
 === tests/cases/conformance/async/es5/task.ts ===
 export class Task<T> extends Promise<T> { }
 >Task : Task<T>
->Promise : Promise<T>
+>Promise : Promise<T extends PromiseLike<infer U> ? U : T>
 
 === tests/cases/conformance/async/es5/test.ts ===
 import { Task } from "./task";
