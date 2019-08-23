@@ -129,8 +129,8 @@ function curry1<A, B, C>(f: (a: A, b: B) => C): (ax: A) => (bx: B) => C {
 }
 
 var cfilter = curry1(filter);
->cfilter : (ax: {}) => (bx: {}) => {}[]
->curry1(filter) : (ax: {}) => (bx: {}) => {}[]
+>cfilter : <A>(ax: (a: A) => boolean) => (bx: A[]) => A[]
+>curry1(filter) : <A>(ax: (a: A) => boolean) => (bx: A[]) => A[]
 >curry1 : <A, B, C>(f: (a: A, b: B) => C) => (ax: A) => (bx: B) => C
 >filter : <A>(f: (a: A) => boolean, ar: A[]) => A[]
 
@@ -149,11 +149,11 @@ function countWhere_1<A>(pred: (a: A) => boolean): (a: A[]) => number {
 >a : A[]
 
     return compose(length2, cfilter(pred));
->compose(length2, cfilter(pred)) : (a: {}) => number
+>compose(length2, cfilter(pred)) : (a: A[]) => number
 >compose : <A, B, C>(f: (b: B) => C, g: (a: A) => B) => (a: A) => C
 >length2 : <A>(ar: A[]) => number
->cfilter(pred) : (bx: {}) => {}[]
->cfilter : (ax: {}) => (bx: {}) => {}[]
+>cfilter(pred) : (bx: A[]) => A[]
+>cfilter : <A>(ax: (a: A) => boolean) => (bx: A[]) => A[]
 >pred : (a: A) => boolean
 }
 
@@ -164,14 +164,14 @@ function countWhere_2<A>(pred: (a: A) => boolean): (a: A[]) => number {
 >a : A[]
 
     var where = cfilter(pred);
->where : (bx: {}) => {}[]
->cfilter(pred) : (bx: {}) => {}[]
->cfilter : (ax: {}) => (bx: {}) => {}[]
+>where : (bx: A[]) => A[]
+>cfilter(pred) : (bx: A[]) => A[]
+>cfilter : <A>(ax: (a: A) => boolean) => (bx: A[]) => A[]
 >pred : (a: A) => boolean
 
     return compose(length2, where);
->compose(length2, where) : (a: {}) => number
+>compose(length2, where) : (a: A[]) => number
 >compose : <A, B, C>(f: (b: B) => C, g: (a: A) => B) => (a: A) => C
 >length2 : <A>(ar: A[]) => number
->where : (bx: {}) => {}[]
+>where : (bx: A[]) => A[]
 }

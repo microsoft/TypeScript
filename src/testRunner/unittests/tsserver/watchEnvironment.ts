@@ -99,7 +99,7 @@ namespace ts.projectSystem {
                 content: "let y = 10;"
             };
             const files = [configFile, file1, file2, libFile];
-            const host = createServerHost(files, { useWindowsStylePaths: true });
+            const host = createServerHost(files, { windowsStyleRoot: "c:/" });
             const projectService = createProjectService(host);
             projectService.openClientFile(file1.path);
             const project = projectService.configuredProjects.get(configFile.path)!;
@@ -130,6 +130,120 @@ namespace ts.projectSystem {
 
         describe("for rootFolder of style c:/users/username", () => {
             verifyRootedDirectoryWatch("c:/users/username/");
+        });
+    });
+
+    it(`unittests:: tsserver:: watchEnvironment:: tsserverProjectSystem recursive watch directory implementation does not watch files/directories in node_modules starting with "."`, () => {
+        const projectFolder = "/a/username/project";
+        const projectSrcFolder = `${projectFolder}/src`;
+        const configFile: File = {
+            path: `${projectFolder}/tsconfig.json`,
+            content: "{}"
+        };
+        const index: File = {
+            path: `${projectSrcFolder}/index.ts`,
+            content: `import {} from "file"`
+        };
+        const file1: File = {
+            path: `${projectSrcFolder}/file1.ts`,
+            content: ""
+        };
+        const nodeModulesExistingUnusedFile: File = {
+            path: `${projectFolder}/node_modules/someFile.d.ts`,
+            content: ""
+        };
+
+        const fileNames = [index, file1, configFile, libFile].map(file => file.path);
+        // All closed files(files other than index), project folder, project/src folder and project/node_modules/@types folder
+        const expectedWatchedFiles = arrayToMap(fileNames.slice(1), identity, () => 1);
+        const expectedWatchedDirectories = arrayToMap([projectFolder, projectSrcFolder, `${projectFolder}/${nodeModules}`, `${projectFolder}/${nodeModulesAtTypes}`], identity, () => 1);
+
+        const environmentVariables = createMap<string>();
+        environmentVariables.set("TSC_WATCHDIRECTORY", Tsc_WatchDirectory.NonRecursiveWatchDirectory);
+        const host = createServerHost([index, file1, configFile, libFile, nodeModulesExistingUnusedFile], { environmentVariables });
+        const projectService = createProjectService(host);
+        projectService.openClientFile(index.path);
+
+        const project = Debug.assertDefined(projectService.configuredProjects.get(configFile.path));
+        verifyProject();
+
+        const nodeModulesIgnoredFileFromIgnoreDirectory: File = {
+            path: `${projectFolder}/node_modules/.cache/someFile.d.ts`,
+            content: ""
+        };
+
+        const nodeModulesIgnoredFile: File = {
+            path: `${projectFolder}/node_modules/.cacheFile.ts`,
+            content: ""
+        };
+
+        const gitIgnoredFileFromIgnoreDirectory: File = {
+            path: `${projectFolder}/.git/someFile.d.ts`,
+            content: ""
+        };
+
+        const gitIgnoredFile: File = {
+            path: `${projectFolder}/.gitCache.d.ts`,
+            content: ""
+        };
+        const emacsIgnoredFileFromIgnoreDirectory: File = {
+            path: `${projectFolder}/src/.#field.ts`,
+            content: ""
+        };
+
+        [
+            nodeModulesIgnoredFileFromIgnoreDirectory,
+            nodeModulesIgnoredFile,
+            gitIgnoredFileFromIgnoreDirectory,
+            gitIgnoredFile,
+            emacsIgnoredFileFromIgnoreDirectory
+        ].forEach(ignoredEntity => {
+            host.ensureFileOrFolder(ignoredEntity);
+            host.checkTimeoutQueueLength(0);
+            verifyProject();
+        });
+
+        function verifyProject() {
+            checkWatchedDirectories(host, emptyArray, /*recursive*/ true);
+            checkWatchedFilesDetailed(host, expectedWatchedFiles);
+            checkWatchedDirectoriesDetailed(host, expectedWatchedDirectories, /*recursive*/ false);
+            checkProjectActualFiles(project, fileNames);
+        }
+    });
+
+    describe("unittests:: tsserver:: watchEnvironment:: tsserverProjectSystem watching files with network style paths", () => {
+        function verifyFilePathStyle(path: string) {
+            const windowsStyleRoot = path.substr(0, getRootLength(path));
+            const host = createServerHost(
+                [libFile, { path, content: "const x = 10" }],
+                { windowsStyleRoot }
+            );
+            const service = createProjectService(host);
+            service.openClientFile(path);
+            checkNumberOfProjects(service, { inferredProjects: 1 });
+            const libPath = `${windowsStyleRoot}${libFile.path.substring(1)}`;
+            checkProjectActualFiles(service.inferredProjects[0], [path, libPath]);
+            checkWatchedFiles(host, [libPath, `${getDirectoryPath(path)}/tsconfig.json`, `${getDirectoryPath(path)}/jsconfig.json`]);
+        }
+
+        it("for file of style c:/myprojects/project/x.js", () => {
+            verifyFilePathStyle("c:/myprojects/project/x.js");
+        });
+
+        it("for file of style //vda1cs4850/myprojects/project/x.js", () => {
+            verifyFilePathStyle("//vda1cs4850/myprojects/project/x.js");
+        });
+
+        it("for file of style //vda1cs4850/c$/myprojects/project/x.js", () => {
+            verifyFilePathStyle("//vda1cs4850/c$/myprojects/project/x.js");
+        });
+
+        it("for file of style c:/users/username/myprojects/project/x.js", () => {
+            verifyFilePathStyle("c:/users/username/myprojects/project/x.js");
+        });
+
+        it("for file of style //vda1cs4850/c$/users/username/myprojects/project/x.js", () => {
+            verifyFilePathStyle("//vda1cs4850/c$/users/username/myprojects/project/x.js");
         });
     });
 }

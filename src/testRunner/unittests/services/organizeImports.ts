@@ -1,5 +1,5 @@
 namespace ts {
-    describe("unittests:: services:: Organize imports", () => {
+    describe("unittests:: services:: organizeImports", () => {
         describe("Sort imports", () => {
             it("Sort - non-relative vs non-relative", () => {
                 assertSortsBefore(
@@ -343,6 +343,36 @@ import { } from "lib";
                 },
                 libFile);
 
+            testOrganizeImports("Unused_false_positive_module_augmentation",
+            {
+                path: "/test.d.ts",
+                content: `
+import foo from 'foo';
+import { Caseless } from 'caseless';
+
+declare module 'foo' {}
+declare module 'caseless' {
+    interface Caseless {
+        test(name: KeyType): boolean;
+    }
+}`
+            });
+
+            testOrganizeImports("Unused_preserve_imports_for_module_augmentation_in_non_declaration_file",
+            {
+                path: "/test.ts",
+                content: `
+import foo from 'foo';
+import { Caseless } from 'caseless';
+
+declare module 'foo' {}
+declare module 'caseless' {
+    interface Caseless {
+        test(name: KeyType): boolean;
+    }
+}`
+            });
+
             testOrganizeImports("Unused_false_positive_shorthand_assignment",
             {
                     path: "/test.ts",
@@ -595,6 +625,34 @@ import { React, Other } from "react";
 `,
                 },
                 reactLibFile);
+
+            testOrganizeImports("JsxPragmaTsx",
+                {
+                    path: "/test.tsx",
+                    content: `/** @jsx jsx */
+
+import { Global, jsx } from '@emotion/core';
+import * as React from 'react';
+
+export const App: React.FunctionComponent = _ => <Global><h1>Hello!</h1></Global>
+`,
+                },
+                {
+                    path: "/@emotion/core/index.d.ts",
+                    content: `import {  createElement } from 'react'
+export const jsx: typeof createElement;
+export function Global(props: any): ReactElement<any>;`
+                },
+                {
+                    path: reactLibFile.path,
+                    content: `${reactLibFile.content}
+export namespace React {
+    interface FunctionComponent {
+    }
+}
+`
+                }
+            );
 
             describe("Exports", () => {
 

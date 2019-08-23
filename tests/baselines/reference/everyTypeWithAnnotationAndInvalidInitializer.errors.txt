@@ -2,8 +2,8 @@ tests/cases/conformance/statements/VariableStatements/everyTypeWithAnnotationAnd
 tests/cases/conformance/statements/VariableStatements/everyTypeWithAnnotationAndInvalidInitializer.ts(35,5): error TS2322: Type '9.9' is not assignable to type 'string'.
 tests/cases/conformance/statements/VariableStatements/everyTypeWithAnnotationAndInvalidInitializer.ts(36,5): error TS2322: Type '9.9' is not assignable to type 'Date'.
 tests/cases/conformance/statements/VariableStatements/everyTypeWithAnnotationAndInvalidInitializer.ts(38,5): error TS2322: Type '9.9' is not assignable to type 'void'.
-tests/cases/conformance/statements/VariableStatements/everyTypeWithAnnotationAndInvalidInitializer.ts(40,5): error TS2741: Property 'id' is missing in type 'D<{}>' but required in type 'I'.
-tests/cases/conformance/statements/VariableStatements/everyTypeWithAnnotationAndInvalidInitializer.ts(41,5): error TS2741: Property 'id' is missing in type 'D<{}>' but required in type 'C'.
+tests/cases/conformance/statements/VariableStatements/everyTypeWithAnnotationAndInvalidInitializer.ts(40,5): error TS2741: Property 'id' is missing in type 'D<unknown>' but required in type 'I'.
+tests/cases/conformance/statements/VariableStatements/everyTypeWithAnnotationAndInvalidInitializer.ts(41,5): error TS2741: Property 'id' is missing in type 'D<unknown>' but required in type 'C'.
 tests/cases/conformance/statements/VariableStatements/everyTypeWithAnnotationAndInvalidInitializer.ts(42,5): error TS2739: Type 'C' is missing the following properties from type 'D<string>': source, recurse, wrapped
 tests/cases/conformance/statements/VariableStatements/everyTypeWithAnnotationAndInvalidInitializer.ts(43,28): error TS2322: Type 'string' is not assignable to type 'number'.
 tests/cases/conformance/statements/VariableStatements/everyTypeWithAnnotationAndInvalidInitializer.ts(44,5): error TS2322: Type 'C' is not assignable to type '{ id: string; }'.
@@ -19,7 +19,7 @@ tests/cases/conformance/statements/VariableStatements/everyTypeWithAnnotationAnd
 tests/cases/conformance/statements/VariableStatements/everyTypeWithAnnotationAndInvalidInitializer.ts(50,5): error TS2322: Type 'typeof N' is not assignable to type 'typeof M'.
   Types of property 'A' are incompatible.
     Type 'typeof N.A' is not assignable to type 'typeof M.A'.
-      Property 'name' is missing in type 'A' but required in type 'A'.
+      Property 'name' is missing in type 'N.A' but required in type 'M.A'.
 tests/cases/conformance/statements/VariableStatements/everyTypeWithAnnotationAndInvalidInitializer.ts(51,5): error TS2322: Type 'N.A' is not assignable to type 'M.A'.
 tests/cases/conformance/statements/VariableStatements/everyTypeWithAnnotationAndInvalidInitializer.ts(52,5): error TS2322: Type '(x: number) => boolean' is not assignable to type '(x: number) => string'.
   Type 'boolean' is not assignable to type 'string'.
@@ -75,11 +75,11 @@ tests/cases/conformance/statements/VariableStatements/everyTypeWithAnnotationAnd
     
     var anInterface: I = new D();
         ~~~~~~~~~~~
-!!! error TS2741: Property 'id' is missing in type 'D<{}>' but required in type 'I'.
+!!! error TS2741: Property 'id' is missing in type 'D<unknown>' but required in type 'I'.
 !!! related TS2728 tests/cases/conformance/statements/VariableStatements/everyTypeWithAnnotationAndInvalidInitializer.ts:2:5: 'id' is declared here.
     var aClass: C = new D();
         ~~~~~~
-!!! error TS2741: Property 'id' is missing in type 'D<{}>' but required in type 'C'.
+!!! error TS2741: Property 'id' is missing in type 'D<unknown>' but required in type 'C'.
 !!! related TS2728 tests/cases/conformance/statements/VariableStatements/everyTypeWithAnnotationAndInvalidInitializer.ts:6:5: 'id' is declared here.
     var aGenericClass: D<string> = new C();
         ~~~~~~~~~~~~~
@@ -114,7 +114,7 @@ tests/cases/conformance/statements/VariableStatements/everyTypeWithAnnotationAnd
 !!! error TS2322: Type 'typeof N' is not assignable to type 'typeof M'.
 !!! error TS2322:   Types of property 'A' are incompatible.
 !!! error TS2322:     Type 'typeof N.A' is not assignable to type 'typeof M.A'.
-!!! error TS2322:       Property 'name' is missing in type 'A' but required in type 'A'.
+!!! error TS2322:       Property 'name' is missing in type 'N.A' but required in type 'M.A'.
 !!! related TS2728 tests/cases/conformance/statements/VariableStatements/everyTypeWithAnnotationAndInvalidInitializer.ts:20:9: 'name' is declared here.
     var aClassInModule: M.A = new N.A();
         ~~~~~~~~~~~~~~

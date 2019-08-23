@@ -4,8 +4,8 @@ const os = require("os");
 
 /** @type {CommandLineOptions} */
 module.exports = minimist(process.argv.slice(2), {
-    boolean: ["debug", "dirty", "inspect", "light", "colors", "lint", "lkg", "soft", "fix", "failed", "keepFailed"],
-    string: ["browser", "tests", "host", "reporter", "stackTraceLimit", "timeout"],
+    boolean: ["debug", "dirty", "inspect", "light", "colors", "lint", "lkg", "soft", "fix", "failed", "keepFailed", "force", "built"],
+    string: ["browser", "tests", "host", "reporter", "stackTraceLimit", "timeout", "shards", "shardId"],
     alias: {
         "b": "browser",
         "d": "debug", "debug-brk": "debug",
@@ -14,8 +14,10 @@ module.exports = minimist(process.argv.slice(2), {
         "ru": "runners", "runner": "runners",
         "r": "reporter",
         "c": "colors", "color": "colors",
+        "skip-percent": "skipPercent",
+        "skippercent": "skipPercent",
         "w": "workers",
-        "f": "fix",
+        "f": "fix"
     },
     default: {
         soft: false,
@@ -34,10 +36,15 @@ module.exports = minimist(process.argv.slice(2), {
         workers: process.env.workerCount || os.cpus().length,
         failed: false,
         keepFailed: false,
-        lkg: false,
-        dirty: false
+        lkg: true,
+        dirty: false,
+        built: false
     }
 });
+
+if (module.exports.built) {
+    module.exports.lkg = false;
+}
 
 /**
  * @typedef TypedOptions
@@ -48,6 +55,7 @@ module.exports = minimist(process.argv.slice(2), {
  * @property {boolean} colors
  * @property {boolean} lint
  * @property {boolean} lkg
+ * @property {boolean} built
  * @property {boolean} soft
  * @property {boolean} fix
  * @property {string} browser

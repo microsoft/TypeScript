@@ -1,8 +1,9 @@
 namespace ts.projectSystem {
     describe("unittests:: tsserver:: Inferred projects", () => {
         it("create inferred project", () => {
+            const projectRoot = "/user/username/projects/project";
             const appFile: File = {
-                path: "/a/b/c/app.ts",
+                path: `${projectRoot}/app.ts`,
                 content: `
                 import {f} from "./module"
                 console.log(f)
@@ -10,7 +11,7 @@ namespace ts.projectSystem {
             };
 
             const moduleFile: File = {
-                path: "/a/b/c/module.d.ts",
+                path: `${projectRoot}/module.d.ts`,
                 content: `export let x: number`
             };
             const host = createServerHost([appFile, moduleFile, libFile]);
@@ -24,20 +25,19 @@ namespace ts.projectSystem {
             const project = projectService.inferredProjects[0];
 
             checkArray("inferred project", project.getFileNames(), [appFile.path, libFile.path, moduleFile.path]);
-            const configFileLocations = ["/a/b/c/", "/a/b/", "/a/", "/"];
-            const configFiles = flatMap(configFileLocations, location => [location + "tsconfig.json", location + "jsconfig.json"]);
-            checkWatchedFiles(host, configFiles.concat(libFile.path, moduleFile.path));
-            checkWatchedDirectories(host, ["/a/b/c"], /*recursive*/ false);
-            checkWatchedDirectories(host, [combinePaths(getDirectoryPath(appFile.path), nodeModulesAtTypes)], /*recursive*/ true);
+            checkWatchedFiles(host, getConfigFilesToWatch(projectRoot).concat(libFile.path, moduleFile.path));
+            checkWatchedDirectories(host, [projectRoot], /*recursive*/ false);
+            checkWatchedDirectories(host, [combinePaths(projectRoot, nodeModulesAtTypes)], /*recursive*/ true);
         });
 
         it("should use only one inferred project if 'useOneInferredProject' is set", () => {
+            const projectRoot = "/user/username/projects/project";
             const file1 = {
-                path: "/a/b/main.ts",
+                path: `${projectRoot}/a/b/main.ts`,
                 content: "let x =1;"
             };
             const configFile: File = {
-                path: "/a/b/tsconfig.json",
+                path: `${projectRoot}/a/b/tsconfig.json`,
                 content: `{
                     "compilerOptions": {
                         "target": "es6"
@@ -46,12 +46,12 @@ namespace ts.projectSystem {
                 }`
             };
             const file2 = {
-                path: "/a/c/main.ts",
+                path: `${projectRoot}/a/c/main.ts`,
                 content: "let x =1;"
             };
 
             const file3 = {
-                path: "/a/d/main.ts",
+                path: `${projectRoot}/a/d/main.ts`,
                 content: "let x =1;"
             };
 
@@ -344,6 +344,93 @@ namespace ts.projectSystem {
 
         it("inferred projects per project root with case insensitive system", () => {
             verifyProjectRootWithCaseSensitivity(/*useCaseSensitiveFileNames*/ false);
+        });
+
+        it("should still retain configured project created while opening the file", () => {
+            const projectRoot = "/user/username/projects/project";
+            const appFile: File = {
+                path: `${projectRoot}/app.ts`,
+                content: `const app = 20;`
+            };
+            const config: File = {
+                path: `${projectRoot}/tsconfig.json`,
+                content: "{}"
+            };
+            const jsFile1: File = {
+                path: `${projectRoot}/jsFile1.js`,
+                content: `const jsFile1 = 10;`
+            };
+            const jsFile2: File = {
+                path: `${projectRoot}/jsFile2.js`,
+                content: `const jsFile2 = 10;`
+            };
+            const host = createServerHost([appFile, libFile, config, jsFile1, jsFile2]);
+            const projectService = createProjectService(host);
+            const originalSet = projectService.configuredProjects.set;
+            const originalDelete = projectService.configuredProjects.delete;
+            const configuredCreated = createMap<true>();
+            const configuredRemoved = createMap<true>();
+            projectService.configuredProjects.set = (key, value) => {
+                assert.isFalse(configuredCreated.has(key));
+                configuredCreated.set(key, true);
+                return originalSet.call(projectService.configuredProjects, key, value);
+            };
+            projectService.configuredProjects.delete = key => {
+                assert.isFalse(configuredRemoved.has(key));
+                configuredRemoved.set(key, true);
+                return originalDelete.call(projectService.configuredProjects, key);
+            };
+
+            // Do not remove config project when opening jsFile that is not present as part of config project
+            projectService.openClientFile(jsFile1.path);
+            checkNumberOfProjects(projectService, { inferredProjects: 1, configuredProjects: 1 });
+            checkProjectActualFiles(projectService.inferredProjects[0], [jsFile1.path, libFile.path]);
+            const project = projectService.configuredProjects.get(config.path)!;
+            checkProjectActualFiles(project, [appFile.path, config.path, libFile.path]);
+            checkConfiguredProjectCreatedAndNotDeleted();
+
+            // Do not remove config project when opening jsFile that is not present as part of config project
+            projectService.closeClientFile(jsFile1.path);
+            checkNumberOfProjects(projectService, { inferredProjects: 1, configuredProjects: 1 });
+            projectService.openClientFile(jsFile2.path);
+            checkNumberOfProjects(projectService, { inferredProjects: 1, configuredProjects: 1 });
+            checkProjectActualFiles(projectService.inferredProjects[0], [jsFile2.path, libFile.path]);
+            checkProjectActualFiles(project, [appFile.path, config.path, libFile.path]);
+            checkConfiguredProjectNotCreatedAndNotDeleted();
+
+            // Do not remove config project when opening jsFile that is not present as part of config project
+            projectService.openClientFile(jsFile1.path);
+            checkNumberOfProjects(projectService, { inferredProjects: 2, configuredProjects: 1 });
+            checkProjectActualFiles(projectService.inferredProjects[0], [jsFile2.path, libFile.path]);
+            checkProjectActualFiles(projectService.inferredProjects[1], [jsFile1.path, libFile.path]);
+            checkProjectActualFiles(project, [appFile.path, config.path, libFile.path]);
+            checkConfiguredProjectNotCreatedAndNotDeleted();
+
+            // When opening file that doesnt fall back to the config file, we remove the config project
+            projectService.openClientFile(libFile.path);
+            checkNumberOfProjects(projectService, { inferredProjects: 2 });
+            checkProjectActualFiles(projectService.inferredProjects[0], [jsFile2.path, libFile.path]);
+            checkProjectActualFiles(projectService.inferredProjects[1], [jsFile1.path, libFile.path]);
+            checkConfiguredProjectNotCreatedButDeleted();
+
+            function checkConfiguredProjectCreatedAndNotDeleted() {
+                assert.equal(configuredCreated.size, 1);
+                assert.isTrue(configuredCreated.has(config.path));
+                assert.equal(configuredRemoved.size, 0);
+                configuredCreated.clear();
+            }
+
+            function checkConfiguredProjectNotCreatedAndNotDeleted() {
+                assert.equal(configuredCreated.size, 0);
+                assert.equal(configuredRemoved.size, 0);
+            }
+
+            function checkConfiguredProjectNotCreatedButDeleted() {
+                assert.equal(configuredCreated.size, 0);
+                assert.equal(configuredRemoved.size, 1);
+                assert.isTrue(configuredRemoved.has(config.path));
+                configuredRemoved.clear();
+            }
         });
     });
 }

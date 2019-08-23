@@ -12,6 +12,7 @@
 		"module": "commonjs",
 		"outDir": "../../built/local/tslint",
 		"baseUrl": "../..",
+        "types": ["node"],
 		"paths": {
 			"typescript": ["lib/typescript.d.ts"]
 		}

@@ -6,6 +6,7 @@ tests/cases/conformance/types/typeRelationships/assignmentCompatibility/construc
   Types of property 'a2' are incompatible.
     Type 'new <T>(x: T) => string' is not assignable to type 'new <T>(x: T) => T'.
       Type 'string' is not assignable to type 'T'.
+        'string' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint '{}'.
 
 
 ==== tests/cases/conformance/types/typeRelationships/assignmentCompatibility/constructSignatureAssignabilityInInheritance.ts (2 errors) ====
@@ -86,6 +87,7 @@ tests/cases/conformance/types/typeRelationships/assignmentCompatibility/construc
 !!! error TS2430:   Types of property 'a2' are incompatible.
 !!! error TS2430:     Type 'new <T>(x: T) => string' is not assignable to type 'new <T>(x: T) => T'.
 !!! error TS2430:       Type 'string' is not assignable to type 'T'.
+!!! error TS2430:         'string' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint '{}'.
             // N's
             a2: new <T>(x: T) => string; // error because base returns non-void;
         }

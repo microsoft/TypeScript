@@ -8,8 +8,10 @@ type Omit1<U, K extends keyof U> = Pick<U, Diff<keyof U, K>>;
 type Omit2<T, K extends keyof T> = {[P in Diff<keyof T, K>]: T[P]};
 
 type O = Omit<{ a: number, b: string }, 'a'>
-const o: O = { b: '' }
+export const o: O = { b: '' }
 
 
 //// [indexedAccessRetainsIndexSignature.js]
-var o = { b: '' };
+"use strict";
+exports.__esModule = true;
+exports.o = { b: '' };

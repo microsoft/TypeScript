@@ -34,26 +34,44 @@ var C = /** @class */ (function () {
         this.f = function () { return _newTarget; };
     }
     C.prototype[_newTarget] = function () { };
-    C.prototype.c = function () { var _newTarget = void 0; return _newTarget; };
+    C.prototype.c = function () {
+        var _newTarget = void 0;
+        return _newTarget;
+    };
     Object.defineProperty(C.prototype, "d", {
-        get: function () { var _newTarget = void 0; return _newTarget; },
+        get: function () {
+            var _newTarget = void 0;
+            return _newTarget;
+        },
         enumerable: true,
         configurable: true
     });
     Object.defineProperty(C.prototype, "e", {
-        set: function (_) { var _newTarget = void 0; _ = _newTarget; },
+        set: function (_) {
+            var _newTarget = void 0;
+            _ = _newTarget;
+        },
         enumerable: true,
         configurable: true
     });
     C[_newTarget] = function () { };
-    C.g = function () { var _newTarget = void 0; return _newTarget; };
+    C.g = function () {
+        var _newTarget = void 0;
+        return _newTarget;
+    };
     Object.defineProperty(C, "h", {
-        get: function () { var _newTarget = void 0; return _newTarget; },
+        get: function () {
+            var _newTarget = void 0;
+            return _newTarget;
+        },
         enumerable: true,
         configurable: true
     });
     Object.defineProperty(C, "i", {
-        set: function (_) { var _newTarget = void 0; _ = _newTarget; },
+        set: function (_) {
+            var _newTarget = void 0;
+            _ = _newTarget;
+        },
         enumerable: true,
         configurable: true
     });
@@ -62,14 +80,23 @@ var C = /** @class */ (function () {
 }());
 var O = (_a = {},
     _a[_newTarget] = undefined,
-    _a.k = function () { var _newTarget = void 0; return _newTarget; },
+    _a.k = function () {
+        var _newTarget = void 0;
+        return _newTarget;
+    },
     Object.defineProperty(_a, "l", {
-        get: function () { var _newTarget = void 0; return _newTarget; },
+        get: function () {
+            var _newTarget = void 0;
+            return _newTarget;
+        },
         enumerable: true,
         configurable: true
     }),
     Object.defineProperty(_a, "m", {
-        set: function (_) { var _newTarget = void 0; _ = _newTarget; },
+        set: function (_) {
+            var _newTarget = void 0;
+            _ = _newTarget;
+        },
         enumerable: true,
         configurable: true
     }),

@@ -1,0 +1,31 @@
+=== tests/cases/compiler/noSuperInJSDocExtends.js ===
+class Based { }
+>Based : Symbol(Based, Decl(noSuperInJSDocExtends.js, 0, 0))
+
+/** @extends {Based} */
+class Derived {
+>Derived : Symbol(Derived, Decl(noSuperInJSDocExtends.js, 0, 15))
+
+    constructor() {
+        this;
+>this : Symbol(Derived, Decl(noSuperInJSDocExtends.js, 0, 15))
+
+        this.x = 10;
+>this.x : Symbol(Derived.x, Decl(noSuperInJSDocExtends.js, 4, 13))
+>this : Symbol(Derived, Decl(noSuperInJSDocExtends.js, 0, 15))
+>x : Symbol(Derived.x, Decl(noSuperInJSDocExtends.js, 4, 13))
+
+        var that = this;
+>that : Symbol(that, Decl(noSuperInJSDocExtends.js, 6, 11))
+>this : Symbol(Derived, Decl(noSuperInJSDocExtends.js, 0, 15))
+    }
+}
+
+/** @extends {Based} */
+class Derived2 {
+>Derived2 : Symbol(Derived2, Decl(noSuperInJSDocExtends.js, 8, 1))
+
+    constructor() {
+        super();
+    }
+}

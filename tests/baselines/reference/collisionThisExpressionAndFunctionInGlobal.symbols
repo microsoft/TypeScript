@@ -6,4 +6,5 @@ function _this() { //Error
 }
 var f = () => this;
 >f : Symbol(f, Decl(collisionThisExpressionAndFunctionInGlobal.ts, 3, 3))
+>this : Symbol(globalThis)
 

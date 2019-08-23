@@ -1,0 +1,36 @@
+=== tests/cases/compiler/substitutionTypesCompareCorrectlyInRestrictiveInstances.ts ===
+type UnionKeys<T> = T extends any ? keyof T : never;
+>UnionKeys : Symbol(UnionKeys, Decl(substitutionTypesCompareCorrectlyInRestrictiveInstances.ts, 0, 0))
+>T : Symbol(T, Decl(substitutionTypesCompareCorrectlyInRestrictiveInstances.ts, 0, 15))
+>T : Symbol(T, Decl(substitutionTypesCompareCorrectlyInRestrictiveInstances.ts, 0, 15))
+>T : Symbol(T, Decl(substitutionTypesCompareCorrectlyInRestrictiveInstances.ts, 0, 15))
+
+type BugHelper<T, TAll> = T extends any ? Exclude<UnionKeys<TAll>, keyof T> : never
+>BugHelper : Symbol(BugHelper, Decl(substitutionTypesCompareCorrectlyInRestrictiveInstances.ts, 0, 52))
+>T : Symbol(T, Decl(substitutionTypesCompareCorrectlyInRestrictiveInstances.ts, 1, 15))
+>TAll : Symbol(TAll, Decl(substitutionTypesCompareCorrectlyInRestrictiveInstances.ts, 1, 17))
+>T : Symbol(T, Decl(substitutionTypesCompareCorrectlyInRestrictiveInstances.ts, 1, 15))
+>Exclude : Symbol(Exclude, Decl(lib.es5.d.ts, --, --))
+>UnionKeys : Symbol(UnionKeys, Decl(substitutionTypesCompareCorrectlyInRestrictiveInstances.ts, 0, 0))
+>TAll : Symbol(TAll, Decl(substitutionTypesCompareCorrectlyInRestrictiveInstances.ts, 1, 17))
+>T : Symbol(T, Decl(substitutionTypesCompareCorrectlyInRestrictiveInstances.ts, 1, 15))
+
+type Bug<TAll> =  BugHelper<TAll, TAll>
+>Bug : Symbol(Bug, Decl(substitutionTypesCompareCorrectlyInRestrictiveInstances.ts, 1, 83))
+>TAll : Symbol(TAll, Decl(substitutionTypesCompareCorrectlyInRestrictiveInstances.ts, 2, 9))
+>BugHelper : Symbol(BugHelper, Decl(substitutionTypesCompareCorrectlyInRestrictiveInstances.ts, 0, 52))
+>TAll : Symbol(TAll, Decl(substitutionTypesCompareCorrectlyInRestrictiveInstances.ts, 2, 9))
+>TAll : Symbol(TAll, Decl(substitutionTypesCompareCorrectlyInRestrictiveInstances.ts, 2, 9))
+
+type Q = UnionKeys<{ a : any } | { b: any }>    // should be "a" | "b"
+>Q : Symbol(Q, Decl(substitutionTypesCompareCorrectlyInRestrictiveInstances.ts, 2, 39))
+>UnionKeys : Symbol(UnionKeys, Decl(substitutionTypesCompareCorrectlyInRestrictiveInstances.ts, 0, 0))
+>a : Symbol(a, Decl(substitutionTypesCompareCorrectlyInRestrictiveInstances.ts, 3, 20))
+>b : Symbol(b, Decl(substitutionTypesCompareCorrectlyInRestrictiveInstances.ts, 3, 34))
+
+type R = Bug<{ a : any } | { b: any }>          // should be "a" | "b"
+>R : Symbol(R, Decl(substitutionTypesCompareCorrectlyInRestrictiveInstances.ts, 3, 44))
+>Bug : Symbol(Bug, Decl(substitutionTypesCompareCorrectlyInRestrictiveInstances.ts, 1, 83))
+>a : Symbol(a, Decl(substitutionTypesCompareCorrectlyInRestrictiveInstances.ts, 4, 14))
+>b : Symbol(b, Decl(substitutionTypesCompareCorrectlyInRestrictiveInstances.ts, 4, 28))
+

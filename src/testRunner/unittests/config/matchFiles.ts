@@ -1512,5 +1512,30 @@ namespace ts {
             validateMatches(getExpected(caseSensitiveBasePath), json, caseSensitiveOrderingDiffersWithCaseHost, caseSensitiveBasePath);
             validateMatches(getExpected(caseInsensitiveBasePath), json, caseInsensitiveOrderingDiffersWithCaseHost, caseInsensitiveBasePath);
         });
+
+        it("when recursive symlinked directories are present", () => {
+            const fs = new vfs.FileSystem(/*ignoreCase*/ true, {
+                cwd: caseInsensitiveBasePath, files: {
+                    "c:/dev/index.ts": ""
+                }
+            });
+            fs.mkdirpSync("c:/dev/a/b/c");
+            fs.symlinkSync("c:/dev/A", "c:/dev/a/self");
+            fs.symlinkSync("c:/dev/a", "c:/dev/a/b/parent");
+            fs.symlinkSync("c:/dev/a", "c:/dev/a/b/c/grandparent");
+            const host = new fakes.ParseConfigHost(fs);
+            const json = {};
+            const expected: ParsedCommandLine = {
+                options: {},
+                errors: [],
+                fileNames: [
+                    "c:/dev/index.ts"
+                ],
+                wildcardDirectories: {
+                    "c:/dev": WatchDirectoryFlags.Recursive
+                },
+            };
+            validateMatches(expected, json, host, caseInsensitiveBasePath);
+        });
     });
 }

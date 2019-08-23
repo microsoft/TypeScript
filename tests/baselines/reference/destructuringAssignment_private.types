@@ -42,3 +42,40 @@ let x: number;
 >new C() : C
 >C : typeof C
 
+const nameX = "x";
+>nameX : "x"
+>"x" : "x"
+
+([{ a: { [nameX]: x } }] = [{ a: new C() }]);
+>([{ a: { [nameX]: x } }] = [{ a: new C() }]) : [{ a: C; }]
+>[{ a: { [nameX]: x } }] = [{ a: new C() }] : [{ a: C; }]
+>[{ a: { [nameX]: x } }] : [{ a: { [nameX]: number; }; }]
+>{ a: { [nameX]: x } } : { a: { [nameX]: number; }; }
+>a : { [nameX]: number; }
+>{ [nameX]: x } : { [nameX]: number; }
+>[nameX] : number
+>nameX : "x"
+>x : number
+>[{ a: new C() }] : [{ a: C; }]
+>{ a: new C() } : { a: C; }
+>a : C
+>new C() : C
+>C : typeof C
+
+const nameO = "o";
+>nameO : "o"
+>"o" : "o"
+
+({ [nameO]: [{ a: x }]} = new C());
+>({ [nameO]: [{ a: x }]} = new C()) : C
+>{ [nameO]: [{ a: x }]} = new C() : C
+>{ [nameO]: [{ a: x }]} : { [nameO]: [{ a: number; }]; }
+>[nameO] : [{ a: number; }]
+>nameO : "o"
+>[{ a: x }] : [{ a: number; }]
+>{ a: x } : { a: number; }
+>a : number
+>x : number
+>new C() : C
+>C : typeof C
+

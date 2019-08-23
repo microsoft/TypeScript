@@ -1,0 +1,64 @@
+=== tests/cases/conformance/declarationEmit/declarationEmitWorkWithInlineComments.ts ===
+export class Foo {
+>Foo : Foo
+
+  constructor(
+    /** @internal */
+    public isInternal1: string,
+>isInternal1 : string
+
+    /** @internal */ public isInternal2: string, /** @internal */
+>isInternal2 : string
+
+    public isInternal3: string,
+>isInternal3 : string
+
+    // @internal
+    public isInternal4: string,
+>isInternal4 : string
+
+    // nothing
+    /** @internal */
+    public isInternal5: string,
+>isInternal5 : string
+
+    /* @internal */ public isInternal6: string /* trailing */,
+>isInternal6 : string
+
+    /* @internal */ public isInternal7: string, /** @internal */
+>isInternal7 : string
+
+    // not work
+    public notInternal1: string,
+>notInternal1 : string
+
+    // @internal
+    /* not work */
+    public notInternal2: string,
+>notInternal2 : string
+
+    /* not work */
+    // @internal
+    /* not work */
+    public notInternal3: string,
+>notInternal3 : string
+
+  ) { }
+}
+
+export class Bar {
+>Bar : Bar
+
+  constructor(/* @internal */ public isInternal1: string) {}
+>isInternal1 : string
+}
+
+export class Baz {
+>Baz : Baz
+
+  constructor(/* @internal */
+    public isInternal: string
+>isInternal : string
+
+  ) {}
+}

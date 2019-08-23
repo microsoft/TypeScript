@@ -322,6 +322,25 @@ namespace ts.formatting {
             return false;
         }
 
+        export function argumentStartsOnSameLineAsPreviousArgument(parent: Node, child: TextRangeWithKind, childStartLine: number, sourceFile: SourceFileLike): boolean {
+            if (isCallOrNewExpression(parent)) {
+                if (!parent.arguments) return false;
+
+                const currentNode = Debug.assertDefined(find(parent.arguments, arg => arg.pos === child.pos));
+                const currentIndex = parent.arguments.indexOf(currentNode);
+                if (currentIndex === 0) return false; // Can't look at previous node if first
+
+                const previousNode = parent.arguments[currentIndex - 1];
+                const lineOfPreviousNode = getLineAndCharacterOfPosition(sourceFile, previousNode.getEnd()).line;
+
+                if (childStartLine === lineOfPreviousNode) {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
         export function getContainingList(node: Node, sourceFile: SourceFile): NodeArray<Node> | undefined {
             return node.parent && getListByRange(node.getStart(sourceFile), node.getEnd(), node.parent, sourceFile);
         }

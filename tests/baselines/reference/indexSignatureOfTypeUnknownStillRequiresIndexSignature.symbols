@@ -1,0 +1,30 @@
+=== tests/cases/compiler/indexSignatureOfTypeUnknownStillRequiresIndexSignature.ts ===
+declare function f<T extends unknown = unknown>(x: { [x: string]: T }): T;
+>f : Symbol(f, Decl(indexSignatureOfTypeUnknownStillRequiresIndexSignature.ts, 0, 0))
+>T : Symbol(T, Decl(indexSignatureOfTypeUnknownStillRequiresIndexSignature.ts, 0, 19))
+>x : Symbol(x, Decl(indexSignatureOfTypeUnknownStillRequiresIndexSignature.ts, 0, 48))
+>x : Symbol(x, Decl(indexSignatureOfTypeUnknownStillRequiresIndexSignature.ts, 0, 54))
+>T : Symbol(T, Decl(indexSignatureOfTypeUnknownStillRequiresIndexSignature.ts, 0, 19))
+>T : Symbol(T, Decl(indexSignatureOfTypeUnknownStillRequiresIndexSignature.ts, 0, 19))
+
+var stooges = [
+>stooges : Symbol(stooges, Decl(indexSignatureOfTypeUnknownStillRequiresIndexSignature.ts, 2, 3))
+
+  { name: "moe", age: 40 },
+>name : Symbol(name, Decl(indexSignatureOfTypeUnknownStillRequiresIndexSignature.ts, 3, 3))
+>age : Symbol(age, Decl(indexSignatureOfTypeUnknownStillRequiresIndexSignature.ts, 3, 16))
+
+  { name: "larry", age: 50 },
+>name : Symbol(name, Decl(indexSignatureOfTypeUnknownStillRequiresIndexSignature.ts, 4, 3))
+>age : Symbol(age, Decl(indexSignatureOfTypeUnknownStillRequiresIndexSignature.ts, 4, 18))
+
+  { name: "curly", age: 60 }
+>name : Symbol(name, Decl(indexSignatureOfTypeUnknownStillRequiresIndexSignature.ts, 5, 3))
+>age : Symbol(age, Decl(indexSignatureOfTypeUnknownStillRequiresIndexSignature.ts, 5, 18))
+
+];
+
+f(stooges); // Should throw
+>f : Symbol(f, Decl(indexSignatureOfTypeUnknownStillRequiresIndexSignature.ts, 0, 0))
+>stooges : Symbol(stooges, Decl(indexSignatureOfTypeUnknownStillRequiresIndexSignature.ts, 2, 3))
+

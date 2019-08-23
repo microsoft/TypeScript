@@ -7,5 +7,5 @@
 
 verify.completions(
     { marker: "a", exact: undefined },
-    { marker: ["b", "c"], includes: "extends" },
+    { marker: ["b", "c"], includes: { name: "extends", sortText: completion.SortText.GlobalsOrKeywords } },
 );

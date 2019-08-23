@@ -1,0 +1,140 @@
+=== tests/cases/compiler/contextuallyTypedParametersWithInitializers.ts ===
+declare function id1<T>(input: T): T;
+>id1 : <T>(input: T) => T
+>input : T
+
+declare function id2<T extends (x: any) => any>(input: T): T;
+>id2 : <T extends (x: any) => any>(input: T) => T
+>x : any
+>input : T
+
+declare function id3<T extends (x: { foo: any }) => any>(input: T): T;
+>id3 : <T extends (x: { foo: any; }) => any>(input: T) => T
+>x : { foo: any; }
+>foo : any
+>input : T
+
+declare function id4<T extends (x: { foo?: number }) => any>(input: T): T;
+>id4 : <T extends (x: { foo?: number | undefined; }) => any>(input: T) => T
+>x : { foo?: number | undefined; }
+>foo : number | undefined
+>input : T
+
+declare function id5<T extends (x?: number) => any>(input: T): T;
+>id5 : <T extends (x?: number | undefined) => any>(input: T) => T
+>x : number | undefined
+>input : T
+
+const f10 = function ({ foo = 42 }) { return foo };
+>f10 : ({ foo }: { foo?: number | undefined; }) => number
+>function ({ foo = 42 }) { return foo } : ({ foo }: { foo?: number | undefined; }) => number
+>foo : number
+>42 : 42
+>foo : number
+
+const f11 = id1(function ({ foo = 42 }) { return foo });  // Implicit any error
+>f11 : ({ foo }: any) => any
+>id1(function ({ foo = 42 }) { return foo }) : ({ foo }: any) => any
+>id1 : <T>(input: T) => T
+>function ({ foo = 42 }) { return foo } : ({ foo }: any) => any
+>foo : any
+>42 : 42
+>foo : any
+
+const f12 = id2(function ({ foo = 42 }) { return foo });
+>f12 : ({ foo }: any) => any
+>id2(function ({ foo = 42 }) { return foo }) : ({ foo }: any) => any
+>id2 : <T extends (x: any) => any>(input: T) => T
+>function ({ foo = 42 }) { return foo } : ({ foo }: any) => any
+>foo : any
+>42 : 42
+>foo : any
+
+const f13 = id3(function ({ foo = 42 }) { return foo });
+>f13 : ({ foo }: { foo: any; }) => any
+>id3(function ({ foo = 42 }) { return foo }) : ({ foo }: { foo: any; }) => any
+>id3 : <T extends (x: { foo: any; }) => any>(input: T) => T
+>function ({ foo = 42 }) { return foo } : ({ foo }: { foo: any; }) => any
+>foo : any
+>42 : 42
+>foo : any
+
+const f14 = id4(function ({ foo = 42 }) { return foo });
+>f14 : ({ foo }: { foo?: number | undefined; }) => number
+>id4(function ({ foo = 42 }) { return foo }) : ({ foo }: { foo?: number | undefined; }) => number
+>id4 : <T extends (x: { foo?: number | undefined; }) => any>(input: T) => T
+>function ({ foo = 42 }) { return foo } : ({ foo }: { foo?: number | undefined; }) => number
+>foo : number
+>42 : 42
+>foo : number
+
+const f20 = function (foo = 42) { return foo };
+>f20 : (foo?: number) => number
+>function (foo = 42) { return foo } : (foo?: number) => number
+>foo : number
+>42 : 42
+>foo : number
+
+const f21 = id1(function (foo = 42) { return foo });  // Implicit any error
+>f21 : (foo?: any) => any
+>id1(function (foo = 42) { return foo }) : (foo?: any) => any
+>id1 : <T>(input: T) => T
+>function (foo = 42) { return foo } : (foo?: any) => any
+>foo : any
+>42 : 42
+>foo : any
+
+const f22 = id2(function (foo = 42) { return foo });
+>f22 : (foo?: any) => any
+>id2(function (foo = 42) { return foo }) : (foo?: any) => any
+>id2 : <T extends (x: any) => any>(input: T) => T
+>function (foo = 42) { return foo } : (foo?: any) => any
+>foo : any
+>42 : 42
+>foo : any
+
+const f25 = id5(function (foo = 42) { return foo });
+>f25 : (foo?: number | undefined) => number
+>id5(function (foo = 42) { return foo }) : (foo?: number | undefined) => number
+>id5 : <T extends (x?: number | undefined) => any>(input: T) => T
+>function (foo = 42) { return foo } : (foo?: number | undefined) => number
+>foo : number | undefined
+>42 : 42
+>foo : number
+
+// Repro from #28816
+
+function id<T>(input: T): T { return input }
+>id : <T>(input: T) => T
+>input : T
+>input : T
+
+function getFoo ({ foo = 42 }) {
+>getFoo : ({ foo }: { foo?: number | undefined; }) => number
+>foo : number
+>42 : 42
+
+  return foo;
+>foo : number
+}
+
+const newGetFoo = id(getFoo);
+>newGetFoo : ({ foo }: { foo?: number | undefined; }) => number
+>id(getFoo) : ({ foo }: { foo?: number | undefined; }) => number
+>id : <T>(input: T) => T
+>getFoo : ({ foo }: { foo?: number | undefined; }) => number
+
+const newGetFoo2 = id(function getFoo ({ foo = 42 }) {
+>newGetFoo2 : ({ foo }: any) => any
+>id(function getFoo ({ foo = 42 }) {  return foo;}) : ({ foo }: any) => any
+>id : <T>(input: T) => T
+>function getFoo ({ foo = 42 }) {  return foo;} : ({ foo }: any) => any
+>getFoo : ({ foo }: any) => any
+>foo : any
+>42 : 42
+
+  return foo;
+>foo : any
+
+});
+

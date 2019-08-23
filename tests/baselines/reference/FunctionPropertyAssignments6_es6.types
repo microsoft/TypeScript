@@ -1,6 +1,6 @@
 === tests/cases/conformance/es6/functionPropertyAssignments/FunctionPropertyAssignments6_es6.ts ===
 var v = { *<T>() { } }
->v : { (Missing)<T>(): IterableIterator<any>; }
->{ *<T>() { } } : { (Missing)<T>(): IterableIterator<any>; }
-> : <T>() => IterableIterator<any>
+>v : { (Missing)<T>(): Generator<never, void, unknown>; }
+>{ *<T>() { } } : { (Missing)<T>(): Generator<never, void, unknown>; }
+> : <T>() => Generator<never, void, unknown>
 

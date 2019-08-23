@@ -6,22 +6,21 @@
 ////namespace JSX {
 ////    export interface Element { }
 ////    export interface IntrinsicElements {
-////        [|{| "isDefinition": true |}div|]: any;
+////        [|[|{| "isDefinition": true, "contextRangeIndex": 0 |}div|]: any;|]
 ////    }
 ////}
 ////
-////const [|{| "isWriteAccess": true, "isDefinition": true |}Comp|] = () =>
-////    <[|div|]>
+////[|const [|{| "isWriteAccess": true, "isDefinition": true, "contextRangeIndex": 2 |}Comp|] = () =>
+////    [|<[|{| "contextRangeIndex": 4 |}div|]>
 ////        Some content
-////        <[|div|]>More content</[|div|]>
-////    </[|div|]>;
+////        [|<[|{| "contextRangeIndex": 6 |}div|]>More content</[|{| "contextRangeIndex": 6 |}div|]>|]
+////    </[|{| "contextRangeIndex": 4 |}div|]>|];|]
 ////
-////const x = <[|Comp|]>
+////const x = [|<[|{| "contextRangeIndex": 10 |}Comp|]>
 ////    Content
-////</[|Comp|]>;
+////</[|{| "contextRangeIndex": 10 |}Comp|]>|];
 
-const ranges = test.ranges();
-const [d0, c0, d1, d2, d3, d4, c1, c2] = test.ranges();
+const [d0Def, d0, c0Def, c0, d1Def, d1, d2Def, d2, d3, d4, c1Def, c1, c2] = test.ranges();
 
 const allD = [d0, d1, d2, d3, d4];
 const allC = [c0, c1, c2];

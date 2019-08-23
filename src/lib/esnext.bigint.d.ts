@@ -34,7 +34,7 @@ interface BigIntConstructor {
     asUintN(bits: number, int: bigint): bigint;
 }
 
-declare const BigInt: BigIntConstructor;
+declare var BigInt: BigIntConstructor;
 
 /**
   * A typed array of 64-bit signed integer values. The contents are initialized to 0. If the
@@ -260,7 +260,7 @@ interface BigInt64Array {
       * @param begin The index of the beginning of the array.
       * @param end The index of the end of the array.
       */
-    subarray(begin: number, end?: number): BigInt64Array;
+    subarray(begin?: number, end?: number): BigInt64Array;
 
     /** Converts the array to a string by using the current locale. */
     toLocaleString(): string;
@@ -303,7 +303,7 @@ interface BigInt64ArrayConstructor {
     from<U>(arrayLike: ArrayLike<U>, mapfn: (v: U, k: number) => bigint, thisArg?: any): BigInt64Array;
 }
 
-declare const BigInt64Array: BigInt64ArrayConstructor;
+declare var BigInt64Array: BigInt64ArrayConstructor;
 
 /**
   * A typed array of 64-bit unsigned integer values. The contents are initialized to 0. If the
@@ -529,7 +529,7 @@ interface BigUint64Array {
       * @param begin The index of the beginning of the array.
       * @param end The index of the end of the array.
       */
-    subarray(begin: number, end?: number): BigUint64Array;
+    subarray(begin?: number, end?: number): BigUint64Array;
 
     /** Converts the array to a string by using the current locale. */
     toLocaleString(): string;
@@ -572,7 +572,7 @@ interface BigUint64ArrayConstructor {
     from<U>(arrayLike: ArrayLike<U>, mapfn: (v: U, k: number) => bigint, thisArg?: any): BigUint64Array;
 }
 
-declare const BigUint64Array: BigUint64ArrayConstructor;
+declare var BigUint64Array: BigUint64ArrayConstructor;
 
 interface DataView {
     /**

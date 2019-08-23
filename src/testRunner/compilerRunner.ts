@@ -5,7 +5,7 @@ const enum CompilerTestType {
 }
 
 interface CompilerFileBasedTest extends Harness.FileBasedTest {
-    payload?: Harness.TestCaseParser.TestCaseContent;
+    readonly content?: string;
 }
 
 class CompilerBaselineRunner extends RunnerBase {
@@ -58,23 +58,32 @@ class CompilerBaselineRunner extends RunnerBase {
     }
 
     public checkTestCodeOutput(fileName: string, test?: CompilerFileBasedTest) {
-        if (test && test.configurations) {
+        if (test && ts.some(test.configurations)) {
             test.configurations.forEach(configuration => {
                 describe(`${this.testSuiteName} tests for ${fileName}${configuration ? ` (${Harness.getFileBasedTestConfigurationDescription(configuration)})` : ``}`, () => {
                     this.runSuite(fileName, test, configuration);
                 });
             });
         }
-        describe(`${this.testSuiteName} tests for ${fileName}`, () => {
-            this.runSuite(fileName, test);
-        });
+        else {
+            describe(`${this.testSuiteName} tests for ${fileName}`, () => {
+                this.runSuite(fileName, test);
+            });
+        }
     }
 
     private runSuite(fileName: string, test?: CompilerFileBasedTest, configuration?: Harness.FileBasedTestConfiguration) {
         // Mocha holds onto the closure environment of the describe callback even after the test is done.
         // Everything declared here should be cleared out in the "after" callback.
         let compilerTest!: CompilerTest;
-        before(() => { compilerTest = new CompilerTest(fileName, test && test.payload, configuration); });
+        before(() => {
+            let payload;
+            if (test && test.content) {
+                const rootDir = test.file.indexOf("conformance") === -1 ? "tests/cases/compiler/" : ts.getDirectoryPath(test.file) + "/";
+                payload = Harness.TestCaseParser.makeUnitsFromTest(test.content, test.file, rootDir);
+            }
+            compilerTest = new CompilerTest(fileName, payload, configuration);
+        });
         it(`Correct errors for ${fileName}`, () => { compilerTest.verifyDiagnostics(); });
         it(`Correct module resolution tracing for ${fileName}`, () => { compilerTest.verifyModuleResolution(); });
         it(`Correct sourcemap content for ${fileName}`, () => { compilerTest.verifySourceMapRecord(); });
@@ -105,6 +114,7 @@ class CompilerBaselineRunner extends RunnerBase {
 class CompilerTest {
     private fileName: string;
     private justName: string;
+    private configuredName: string;
     private lastUnit: Harness.TestCaseParser.TestUnitData;
     private harnessSettings: Harness.TestCaseParser.CompilerSettings;
     private hasNonDtsFiles: boolean;
@@ -119,6 +129,25 @@ class CompilerTest {
     constructor(fileName: string, testCaseContent?: Harness.TestCaseParser.TestCaseContent, configurationOverrides?: Harness.TestCaseParser.CompilerSettings) {
         this.fileName = fileName;
         this.justName = vpath.basename(fileName);
+        this.configuredName = this.justName;
+        if (configurationOverrides) {
+            let configuredName = "";
+            const keys = Object
+                .keys(configurationOverrides)
+                .map(k => k.toLowerCase())
+                .sort();
+            for (const key of keys) {
+                if (configuredName) {
+                    configuredName += ",";
+                }
+                configuredName += `${key}=${configurationOverrides[key].toLowerCase()}`;
+            }
+            if (configuredName) {
+                const extname = vpath.extname(this.justName);
+                const basename = vpath.basename(this.justName, extname, /*ignoreCase*/ true);
+                this.configuredName = `${basename}(${configuredName})${extname}`;
+            }
+        }
 
         const rootDir = fileName.indexOf("conformance") === -1 ? "tests/cases/compiler/" : ts.getDirectoryPath(fileName) + "/";
 
@@ -136,6 +165,7 @@ class CompilerTest {
         this.tsConfigFiles = [];
         if (testCaseContent.tsConfig) {
             assert.equal(testCaseContent.tsConfig.fileNames.length, 0, `list of files in tsconfig is not currently supported`);
+            assert.equal(testCaseContent.tsConfig.raw.exclude, undefined, `exclude in tsconfig is not currently supported`);
 
             tsConfigOptions = ts.cloneCompilerOptions(testCaseContent.tsConfig.options);
             this.tsConfigFiles.push(this.createHarnessTestFile(testCaseContent.tsConfigFileUnitData!, rootDir, ts.combinePaths(rootDir, tsConfigOptions.configFilePath!)));
@@ -189,17 +219,15 @@ class CompilerTest {
     public static getConfigurations(file: string): CompilerFileBasedTest {
         // also see `parseCompilerTestConfigurations` in tests/webTestServer.ts
         const content = Harness.IO.readFile(file)!;
-        const rootDir = file.indexOf("conformance") === -1 ? "tests/cases/compiler/" : ts.getDirectoryPath(file) + "/";
-        const payload = Harness.TestCaseParser.makeUnitsFromTest(content, file, rootDir);
         const settings = Harness.TestCaseParser.extractCompilerSettings(content);
         const configurations = Harness.getFileBasedTestConfigurations(settings, /*varyBy*/ ["module", "target"]);
-        return { file, payload, configurations };
+        return { file, configurations, content };
     }
 
     public verifyDiagnostics() {
         // check errors
         Harness.Compiler.doErrorBaseline(
-            this.justName,
+            this.configuredName,
             this.tsConfigFiles.concat(this.toBeCompiled, this.otherFiles),
             this.result.diagnostics,
             !!this.options.pretty);
@@ -207,7 +235,7 @@ class CompilerTest {
 
     public verifyModuleResolution() {
         if (this.options.traceResolution) {
-            Harness.Baseline.runBaseline(this.justName.replace(/\.tsx?$/, ".trace.json"),
+            Harness.Baseline.runBaseline(this.configuredName.replace(/\.tsx?$/, ".trace.json"),
                 JSON.stringify(this.result.traces.map(utils.sanitizeTraceResolutionLogEntry), undefined, 4));
         }
     }
@@ -219,14 +247,14 @@ class CompilerTest {
                 // Because of the noEmitOnError option no files are created. We need to return null because baselining isn't required.
                 ? null // tslint:disable-line no-null-keyword
                 : record;
-            Harness.Baseline.runBaseline(this.justName.replace(/\.tsx?$/, ".sourcemap.txt"), baseline);
+            Harness.Baseline.runBaseline(this.configuredName.replace(/\.tsx?$/, ".sourcemap.txt"), baseline);
         }
     }
 
     public verifyJavaScriptOutput() {
         if (this.hasNonDtsFiles) {
             Harness.Compiler.doJsEmitBaseline(
-                this.justName,
+                this.configuredName,
                 this.fileName,
                 this.options,
                 this.result,
@@ -239,7 +267,7 @@ class CompilerTest {
 
     public verifySourceMapOutput() {
         Harness.Compiler.doSourcemapBaseline(
-            this.justName,
+            this.configuredName,
             this.options,
             this.result,
             this.harnessSettings);
@@ -250,8 +278,15 @@ class CompilerTest {
             return;
         }
 
+        const noTypesAndSymbols =
+            this.harnessSettings.noTypesAndSymbols &&
+            this.harnessSettings.noTypesAndSymbols.toLowerCase() === "true";
+        if (noTypesAndSymbols) {
+            return;
+        }
+
         Harness.Compiler.doTypeAndSymbolBaseline(
-            this.justName,
+            this.configuredName,
             this.result.program!,
             this.toBeCompiled.concat(this.otherFiles).filter(file => !!this.result.program!.getSourceFile(file.unitName)),
             /*opts*/ undefined,

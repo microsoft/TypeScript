@@ -74,3 +74,16 @@ const abac: AB = {
         c: "c", // ok -- kind: "A", an: { a: string } | { c: string }
     }
 }
+
+// Excess property checks must match all discriminable properties
+type Button = { tag: 'button'; type?: 'submit'; };
+type Anchor = { tag: 'a'; type?: string; href: string };
+
+type Union = Button | Anchor;
+const obj: Union = {
+    tag: 'button',
+    type: 'submit',
+
+    // should have error here
+    href: 'foo',
+};

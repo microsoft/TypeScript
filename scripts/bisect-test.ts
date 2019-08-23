@@ -5,7 +5,7 @@
 import cp = require('child_process');
 import fs = require('fs');
 
-// Slice off 'node bisect-test.js' from the commandline args
+// Slice off 'node bisect-test.js' from the command line args
 var args = process.argv.slice(2);
 
 function tsc(tscArgs: string, onExit: (exitCode: number) => void) {
@@ -15,6 +15,7 @@ function tsc(tscArgs: string, onExit: (exitCode: number) => void) {
     });
 }
 
+// TODO: Rewrite bisect script to handle the post-jake/gulp swap period
 var jake = cp.exec('jake clean local', () => void 0);
 jake.on('close', jakeExitCode => {
     if (jakeExitCode === 0) {

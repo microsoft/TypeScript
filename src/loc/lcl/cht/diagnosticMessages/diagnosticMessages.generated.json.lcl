@@ -2083,7 +2083,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Cannot find the common subdirectory path for the input files.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[找不到輸入檔案的一般子目錄路徑。]]></Val>
+            <Val><![CDATA[找不到輸入檔的一般子目錄路徑。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -7567,7 +7567,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Specify the root directory of input files. Use to control the output directory structure with --outDir.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[指定輸入檔案的根目錄。用以控制具有 --outDir 的輸出目錄結構。]]></Val>
+            <Val><![CDATA[指定輸入檔的根目錄。用以控制具有 --outDir 的輸出目錄結構。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -9172,7 +9172,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Watch input files.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[監看輸入檔案。]]></Val>
+            <Val><![CDATA[監看輸入檔。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />

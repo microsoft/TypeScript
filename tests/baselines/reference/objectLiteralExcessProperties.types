@@ -124,10 +124,10 @@ function test<T extends IFoo>() {
     const obj3: T | { prop: boolean } = { name: "test", prop: true };
 >obj3 : T | { prop: boolean; }
 >prop : boolean
->{ name: "test", prop: true } : { name: string; prop: boolean; }
+>{ name: "test", prop: true } : { name: string; prop: true; }
 >name : string
 >"test" : "test"
->prop : boolean
+>prop : true
 >true : true
 
     // Excess property checks only on non-generic parts of unions

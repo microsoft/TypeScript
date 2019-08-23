@@ -18,12 +18,12 @@ declare function mixBar<T>(obj: T): T & Bar;
 
 let fooBar: FooBar = mixBar({
 >fooBar : FooBar
->mixBar({    fooProp: "frizzlebizzle"}) : { fooProp: string; } & Bar
+>mixBar({    fooProp: "frizzlebizzle"}) : { fooProp: "frizzlebizzle"; } & Bar
 >mixBar : <T>(obj: T) => T & Bar
->{    fooProp: "frizzlebizzle"} : { fooProp: string; }
+>{    fooProp: "frizzlebizzle"} : { fooProp: "frizzlebizzle"; }
 
     fooProp: "frizzlebizzle"
->fooProp : string
+>fooProp : "frizzlebizzle"
 >"frizzlebizzle" : "frizzlebizzle"
 
 });

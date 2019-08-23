@@ -35,7 +35,7 @@ namespace ts.codefix {
                 precedingNode = ctorDeclaration.parent.parent;
                 newClassDeclaration = createClassFromVariableDeclaration(ctorDeclaration as VariableDeclaration);
                 if ((<VariableDeclarationList>ctorDeclaration.parent).declarations.length === 1) {
-                    copyComments(precedingNode, newClassDeclaration!, sourceFile); // TODO: GH#18217
+                    copyLeadingComments(precedingNode, newClassDeclaration!, sourceFile); // TODO: GH#18217
                     changes.delete(sourceFile, precedingNode);
                 }
                 else {
@@ -48,7 +48,7 @@ namespace ts.codefix {
             return undefined;
         }
 
-        copyComments(ctorDeclaration, newClassDeclaration, sourceFile);
+        copyLeadingComments(ctorDeclaration, newClassDeclaration, sourceFile);
 
         // Because the preceding node could be touched, we need to insert nodes before delete nodes.
         changes.insertNodeAfter(sourceFile, precedingNode!, newClassDeclaration);
@@ -112,7 +112,7 @@ namespace ts.codefix {
                         const fullModifiers = concatenate(modifiers, getModifierKindFromSource(functionExpression, SyntaxKind.AsyncKeyword));
                         const method = createMethod(/*decorators*/ undefined, fullModifiers, /*asteriskToken*/ undefined, memberDeclaration.name, /*questionToken*/ undefined,
                             /*typeParameters*/ undefined, functionExpression.parameters, /*type*/ undefined, functionExpression.body);
-                        copyComments(assignmentBinaryExpression, method, sourceFile);
+                        copyLeadingComments(assignmentBinaryExpression, method, sourceFile);
                         return method;
                     }
 
@@ -132,7 +132,7 @@ namespace ts.codefix {
                         const fullModifiers = concatenate(modifiers, getModifierKindFromSource(arrowFunction, SyntaxKind.AsyncKeyword));
                         const method = createMethod(/*decorators*/ undefined, fullModifiers, /*asteriskToken*/ undefined, memberDeclaration.name, /*questionToken*/ undefined,
                             /*typeParameters*/ undefined, arrowFunction.parameters, /*type*/ undefined, bodyBlock);
-                        copyComments(assignmentBinaryExpression, method, sourceFile);
+                        copyLeadingComments(assignmentBinaryExpression, method, sourceFile);
                         return method;
                     }
 
@@ -143,7 +143,7 @@ namespace ts.codefix {
                         }
                         const prop = createProperty(/*decorators*/ undefined, modifiers, memberDeclaration.name, /*questionToken*/ undefined,
                             /*type*/ undefined, assignmentBinaryExpression.right);
-                        copyComments(assignmentBinaryExpression.parent, prop, sourceFile);
+                        copyLeadingComments(assignmentBinaryExpression.parent, prop, sourceFile);
                         return prop;
                     }
                 }

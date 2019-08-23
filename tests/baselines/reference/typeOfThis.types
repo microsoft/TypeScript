@@ -430,51 +430,54 @@ var q1 = function (s = this) {
 >4 : 4
 }
 
-//type of 'this' in a fat arrow expression param list is Any
+//type of 'this' in a fat arrow expression param list is typeof globalThis
 var q2 = (s = this) => {
->q2 : (s?: any) => void
->(s = this) => {    var s: any;    s.spaaaaaaace = 4;    //type of 'this' in a fat arrow expression body is Any    var t: any;    var t = this;    this.spaaaaace = 4;} : (s?: any) => void
->s : any
->this : any
+>q2 : (s?: typeof globalThis) => void
+>(s = this) => {    var s: typeof globalThis;    s.spaaaaaaace = 4;    //type of 'this' in a fat arrow expression body is typeof globalThis    var t: typeof globalThis;    var t = this;    this.spaaaaace = 4;} : (s?: typeof globalThis) => void
+>s : typeof globalThis
+>this : typeof globalThis
 
-    var s: any;
->s : any
+    var s: typeof globalThis;
+>s : typeof globalThis
+>globalThis : typeof globalThis
 
     s.spaaaaaaace = 4;
 >s.spaaaaaaace = 4 : 4
 >s.spaaaaaaace : any
->s : any
+>s : typeof globalThis
 >spaaaaaaace : any
 >4 : 4
 
-    //type of 'this' in a fat arrow expression body is Any
-    var t: any;
->t : any
+    //type of 'this' in a fat arrow expression body is typeof globalThis
+    var t: typeof globalThis;
+>t : typeof globalThis
+>globalThis : typeof globalThis
 
     var t = this;
->t : any
->this : any
+>t : typeof globalThis
+>this : typeof globalThis
 
     this.spaaaaace = 4;
 >this.spaaaaace = 4 : 4
 >this.spaaaaace : any
->this : any
+>this : typeof globalThis
 >spaaaaace : any
 >4 : 4
 }
 
-//type of 'this' in global module is Any
-var t: any;
->t : any
+//type of 'this' in global module is GlobalThis
+var t: typeof globalThis;
+>t : typeof globalThis
+>globalThis : typeof globalThis
 
 var t = this;
->t : any
->this : any
+>t : typeof globalThis
+>this : typeof globalThis
 
 this.spaaaaace = 4;
 >this.spaaaaace = 4 : 4
 >this.spaaaaace : any
->this : any
+>this : typeof globalThis
 >spaaaaace : any
 >4 : 4
 

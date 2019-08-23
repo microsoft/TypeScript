@@ -6,7 +6,7 @@ var f1 = () => {
     this.age = 10
 >this.age = 10 : 10
 >this.age : any
->this : any
+>this : typeof globalThis
 >age : any
 >10 : 10
 
@@ -20,7 +20,7 @@ var f2 = (x: string) => {
     this.name = x
 >this.name = x : string
 >this.name : any
->this : any
+>this : typeof globalThis
 >name : any
 >x : string
 }
@@ -37,7 +37,7 @@ foo(() => {
     this.age = 100;
 >this.age = 100 : 100
 >this.age : any
->this : any
+>this : typeof globalThis
 >age : any
 >100 : 100
 

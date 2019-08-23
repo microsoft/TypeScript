@@ -1,4 +1,4 @@
-tests/cases/conformance/types/typeRelationships/typeInference/indexSignatureTypeInference.ts(18,27): error TS2345: Argument of type 'NumberMap<Function>' is not assignable to parameter of type 'StringMap<{}>'.
+tests/cases/conformance/types/typeRelationships/typeInference/indexSignatureTypeInference.ts(18,27): error TS2345: Argument of type 'NumberMap<Function>' is not assignable to parameter of type 'StringMap<unknown>'.
   Index signature is missing in type 'NumberMap<Function>'.
 
 
@@ -22,7 +22,7 @@ tests/cases/conformance/types/typeRelationships/typeInference/indexSignatureType
     var v1 = numberMapToArray(stringMap);  // Ok
     var v1 = stringMapToArray(numberMap);  // Error expected here
                               ~~~~~~~~~
-!!! error TS2345: Argument of type 'NumberMap<Function>' is not assignable to parameter of type 'StringMap<{}>'.
+!!! error TS2345: Argument of type 'NumberMap<Function>' is not assignable to parameter of type 'StringMap<unknown>'.
 !!! error TS2345:   Index signature is missing in type 'NumberMap<Function>'.
     var v1 = stringMapToArray(stringMap);  // Ok
     

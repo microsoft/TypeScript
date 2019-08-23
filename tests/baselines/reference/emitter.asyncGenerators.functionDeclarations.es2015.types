@@ -1,10 +1,10 @@
 === tests/cases/conformance/emitter/es2015/asyncGenerators/F1.ts ===
 async function * f1() {
->f1 : () => AsyncIterableIterator<any>
+>f1 : () => AsyncGenerator<never, void, unknown>
 }
 === tests/cases/conformance/emitter/es2015/asyncGenerators/F2.ts ===
 async function * f2() {
->f2 : () => AsyncIterableIterator<any>
+>f2 : () => AsyncGenerator<any, void, unknown>
 
     const x = yield;
 >x : any
@@ -12,7 +12,7 @@ async function * f2() {
 }
 === tests/cases/conformance/emitter/es2015/asyncGenerators/F3.ts ===
 async function * f3() {
->f3 : () => AsyncIterableIterator<number>
+>f3 : () => AsyncGenerator<number, void, unknown>
 
     const x = yield 1;
 >x : any
@@ -21,7 +21,7 @@ async function * f3() {
 }
 === tests/cases/conformance/emitter/es2015/asyncGenerators/F4.ts ===
 async function * f4() {
->f4 : () => AsyncIterableIterator<number>
+>f4 : () => AsyncGenerator<number, void, undefined>
 
     const x = yield* [1];
 >x : any
@@ -31,20 +31,20 @@ async function * f4() {
 }
 === tests/cases/conformance/emitter/es2015/asyncGenerators/F5.ts ===
 async function * f5() {
->f5 : () => AsyncIterableIterator<number>
+>f5 : () => AsyncGenerator<number, void, unknown>
 
     const x = yield* (async function*() { yield 1; })();
->x : any
->yield* (async function*() { yield 1; })() : any
->(async function*() { yield 1; })() : AsyncIterableIterator<number>
->(async function*() { yield 1; }) : () => AsyncIterableIterator<number>
->async function*() { yield 1; } : () => AsyncIterableIterator<number>
+>x : void
+>yield* (async function*() { yield 1; })() : void
+>(async function*() { yield 1; })() : AsyncGenerator<number, void, unknown>
+>(async function*() { yield 1; }) : () => AsyncGenerator<number, void, unknown>
+>async function*() { yield 1; } : () => AsyncGenerator<number, void, unknown>
 >yield 1 : any
 >1 : 1
 }
 === tests/cases/conformance/emitter/es2015/asyncGenerators/F6.ts ===
 async function * f6() {
->f6 : () => AsyncIterableIterator<any>
+>f6 : () => AsyncGenerator<never, void, unknown>
 
     const x = await 1;
 >x : 1
@@ -53,7 +53,7 @@ async function * f6() {
 }
 === tests/cases/conformance/emitter/es2015/asyncGenerators/F7.ts ===
 async function * f7() {
->f7 : () => AsyncIterableIterator<number>
+>f7 : () => AsyncGenerator<never, number, unknown>
 
     return 1;
 >1 : 1

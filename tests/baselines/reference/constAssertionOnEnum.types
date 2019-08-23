@@ -1,0 +1,38 @@
+=== tests/cases/conformance/expressions/typeAssertions/enum.ts ===
+export enum Foo {
+>Foo : Foo
+
+    A,
+>A : Foo.A
+
+    B,
+>B : Foo.B
+}
+
+=== tests/cases/conformance/expressions/typeAssertions/test.ts ===
+import {Foo} from './enum';
+>Foo : typeof Foo
+
+enum Bar {
+>Bar : Bar
+
+    A,
+>A : Bar.A
+
+    B,
+>B : Bar.B
+}
+let foo = Foo.A as const;
+>foo : Foo.A
+>Foo.A as const : Foo.A
+>Foo.A : Foo.A
+>Foo : typeof Foo
+>A : Foo.A
+
+let bar = Bar.A as const;
+>bar : Bar.A
+>Bar.A as const : Bar.A
+>Bar.A : Bar.A
+>Bar : typeof Bar
+>A : Bar.A
+

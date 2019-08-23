@@ -18,5 +18,5 @@ verify.completions(
     { marker: ["a", "b"], exact: undefined, isNewIdentifierLocation: true },
     { marker: ["c", "d"], exact: ["baseMethod"], isNewIdentifierLocation: true },
     { marker: "e", exact: ["baseMethod"] },
-    { marker: "f", includes: ["Number"] },
+    { marker: "f", includes: [{ name: "Number", sortText: completion.SortText.GlobalsOrKeywords }] },
 );

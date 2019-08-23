@@ -1,77 +1,10 @@
 Exit Code: 1
 Standard output:
-packages/babel-preset-react-app/dependencies.js(38,17): error TS2307: Cannot find module '@babel/preset-env'.
-packages/babel-preset-react-app/dependencies.js(49,17): error TS2307: Cannot find module '@babel/preset-env'.
-packages/babel-preset-react-app/index.js(52,17): error TS2307: Cannot find module '@babel/preset-env'.
-packages/babel-preset-react-app/index.js(61,17): error TS2307: Cannot find module '@babel/preset-env'.
-packages/babel-preset-react-app/index.js(74,17): error TS2307: Cannot find module '@babel/preset-react'.
-packages/babel-preset-react-app/index.js(84,33): error TS2307: Cannot find module '@babel/preset-flow'.
-packages/babel-preset-react-app/index.js(89,15): error TS2307: Cannot find module 'babel-plugin-macros'.
-packages/babel-preset-react-app/index.js(93,15): error TS2307: Cannot find module '@babel/plugin-transform-destructuring'.
-packages/babel-preset-react-app/index.js(98,17): error TS2307: Cannot find module '@babel/plugin-proposal-class-properties'.
-packages/babel-preset-react-app/index.js(107,17): error TS2307: Cannot find module '@babel/plugin-proposal-object-rest-spread'.
-packages/babel-preset-react-app/index.js(114,17): error TS2307: Cannot find module '@babel/plugin-transform-runtime'.
-packages/babel-preset-react-app/index.js(123,17): error TS2307: Cannot find module 'babel-plugin-transform-react-remove-prop-types'.
-packages/babel-preset-react-app/index.js(130,17): error TS2307: Cannot find module '@babel/plugin-transform-regenerator'.
-packages/babel-preset-react-app/index.js(137,15): error TS2307: Cannot find module '@babel/plugin-syntax-dynamic-import'.
-packages/babel-preset-react-app/index.js(140,17): error TS2307: Cannot find module 'babel-plugin-transform-dynamic-import'.
-packages/confusing-browser-globals/test.js(14,1): error TS2582: Cannot find name 'it'. Do you need to install type definitions for a test runner? Try `npm i @types/jest` or `npm i @types/mocha`  and then add `jest` or `mocha` to the types field in your tsconfig.
-packages/confusing-browser-globals/test.js(15,3): error TS2304: Cannot find name 'expect'.
-packages/confusing-browser-globals/test.js(18,1): error TS2582: Cannot find name 'it'. Do you need to install type definitions for a test runner? Try `npm i @types/jest` or `npm i @types/mocha`  and then add `jest` or `mocha` to the types field in your tsconfig.
-packages/confusing-browser-globals/test.js(19,3): error TS2304: Cannot find name 'expect'.
-packages/create-react-app/createReactApp.js(37,37): error TS2307: Cannot find module 'validate-npm-package-name'.
-packages/create-react-app/createReactApp.js(47,24): error TS2307: Cannot find module 'tar-pack'.
-packages/create-react-app/createReactApp.js(49,28): error TS2307: Cannot find module 'hyperquest'.
-packages/create-react-app/createReactApp.js(50,25): error TS2307: Cannot find module 'envinfo'.
-packages/create-react-app/createReactApp.js(52,30): error TS2307: Cannot find module 'react-dev-utils/workspaceUtils'.
-packages/create-react-app/createReactApp.js(53,29): error TS2732: Cannot find module './package.json'. Consider using '--resolveJsonModule' to import module with '.json' extension
-packages/create-react-app/createReactApp.js(771,20): error TS2345: Argument of type 'string | undefined' is not assignable to parameter of type 'string'.
-  Type 'undefined' is not assignable to type 'string'.
-packages/create-react-app/index.js(45,5): error TS2365: Operator '<' cannot be applied to types 'string' and 'number'.
-packages/eslint-config-react-app/index.js(24,33): error TS2307: Cannot find module 'confusing-browser-globals'.
-packages/react-dev-utils/FileSizeReporter.js(13,24): error TS2307: Cannot find module 'filesize'.
-packages/react-dev-utils/FileSizeReporter.js(14,25): error TS2307: Cannot find module 'recursive-readdir'.
-packages/react-dev-utils/FileSizeReporter.js(16,24): error TS2307: Cannot find module 'gzip-size'.
-packages/react-dev-utils/WebpackDevServerUtils.js(9,25): error TS2307: Cannot find module 'address'.
-packages/react-dev-utils/WebpackDevServerUtils.js(14,24): error TS2307: Cannot find module 'detect-port-alt'.
-packages/react-dev-utils/WebpackDevServerUtils.js(15,24): error TS2307: Cannot find module 'is-root'.
-packages/react-dev-utils/__tests__/ignoredFiles.test.js(12,1): error TS2582: Cannot find name 'describe'. Do you need to install type definitions for a test runner? Try `npm i @types/jest` or `npm i @types/mocha`  and then add `jest` or `mocha` to the types field in your tsconfig.
-packages/react-dev-utils/__tests__/ignoredFiles.test.js(13,3): error TS2582: Cannot find name 'it'. Do you need to install type definitions for a test runner? Try `npm i @types/jest` or `npm i @types/mocha`  and then add `jest` or `mocha` to the types field in your tsconfig.
-packages/react-dev-utils/__tests__/ignoredFiles.test.js(18,5): error TS2304: Cannot find name 'expect'.
-packages/react-dev-utils/__tests__/ignoredFiles.test.js(19,5): error TS2304: Cannot find name 'expect'.
-packages/react-dev-utils/__tests__/ignoredFiles.test.js(22,3): error TS2582: Cannot find name 'it'. Do you need to install type definitions for a test runner? Try `npm i @types/jest` or `npm i @types/mocha`  and then add `jest` or `mocha` to the types field in your tsconfig.
-packages/react-dev-utils/__tests__/ignoredFiles.test.js(26,5): error TS2304: Cannot find name 'expect'.
-packages/react-dev-utils/__tests__/ignoredFiles.test.js(29,3): error TS2582: Cannot find name 'it'. Do you need to install type definitions for a test runner? Try `npm i @types/jest` or `npm i @types/mocha`  and then add `jest` or `mocha` to the types field in your tsconfig.
-packages/react-dev-utils/__tests__/ignoredFiles.test.js(36,5): error TS2304: Cannot find name 'expect'.
-packages/react-dev-utils/__tests__/ignoredFiles.test.js(37,5): error TS2304: Cannot find name 'expect'.
-packages/react-dev-utils/__tests__/ignoredFiles.test.js(40,3): error TS2582: Cannot find name 'it'. Do you need to install type definitions for a test runner? Try `npm i @types/jest` or `npm i @types/mocha`  and then add `jest` or `mocha` to the types field in your tsconfig.
-packages/react-dev-utils/__tests__/ignoredFiles.test.js(46,5): error TS2304: Cannot find name 'expect'.
-packages/react-dev-utils/__tests__/ignoredFiles.test.js(49,3): error TS2582: Cannot find name 'it'. Do you need to install type definitions for a test runner? Try `npm i @types/jest` or `npm i @types/mocha`  and then add `jest` or `mocha` to the types field in your tsconfig.
-packages/react-dev-utils/__tests__/ignoredFiles.test.js(53,5): error TS2304: Cannot find name 'expect'.
-packages/react-dev-utils/browsersHelper.js(9,30): error TS2307: Cannot find module 'browserslist'.
-packages/react-dev-utils/browsersHelper.js(13,23): error TS2307: Cannot find module 'pkg-up'.
-packages/react-dev-utils/browsersHelper.js(61,36): error TS2345: Argument of type 'Buffer' is not assignable to parameter of type 'string'.
-packages/react-dev-utils/browsersHelper.js(97,25): error TS2538: Type 'undefined' cannot be used as an index type.
-packages/react-dev-utils/checkRequiredFiles.js(19,34): error TS2339: Property 'F_OK' does not exist on type 'typeof import("fs")'.
-packages/react-dev-utils/checkRequiredFiles.js(23,32): error TS2345: Argument of type 'undefined' is not assignable to parameter of type 'string'.
-packages/react-dev-utils/checkRequiredFiles.js(24,34): error TS2345: Argument of type 'undefined' is not assignable to parameter of type 'string'.
-packages/react-dev-utils/getProcessForPort.js(29,6): error TS2339: Property 'split' does not exist on type 'Buffer'.
-packages/react-dev-utils/getProcessForPort.js(49,21): error TS2339: Property 'replace' does not exist on type 'Buffer'.
-packages/react-dev-utils/getProcessForPort.js(63,5): error TS2339: Property 'trim' does not exist on type 'Buffer'.
-packages/react-dev-utils/openBrowser.js(13,19): error TS2307: Cannot find module 'opn'.
-packages/react-dev-utils/webpackHotDevClient.js(19,22): error TS2307: Cannot find module 'sockjs-client'.
-packages/react-dev-utils/webpackHotDevClient.js(24,28): error TS2307: Cannot find module 'react-error-overlay'.
-packages/react-dev-utils/webpackHotDevClient.js(31,14): error TS2339: Property 'encodeURIComponent' does not exist on type 'Window'.
-packages/react-dev-utils/webpackHotDevClient.js(33,14): error TS2339: Property 'encodeURIComponent' does not exist on type 'Window'.
-packages/react-dev-utils/webpackHotDevClient.js(35,14): error TS2339: Property 'encodeURIComponent' does not exist on type 'Window'.
-packages/react-dev-utils/webpackHotDevClient.js(53,12): error TS2339: Property 'hot' does not exist on type 'NodeModule'.
-packages/react-dev-utils/webpackHotDevClient.js(53,33): error TS2339: Property 'hot' does not exist on type 'NodeModule'.
-packages/react-dev-utils/webpackHotDevClient.js(54,10): error TS2339: Property 'hot' does not exist on type 'NodeModule'.
-packages/react-dev-utils/webpackHotDevClient.js(223,40): error TS2304: Cannot find name '__webpack_hash__'.
-packages/react-dev-utils/webpackHotDevClient.js(228,17): error TS2339: Property 'hot' does not exist on type 'NodeModule'.
-packages/react-dev-utils/webpackHotDevClient.js(233,15): error TS2339: Property 'hot' does not exist on type 'NodeModule'.
-packages/react-dev-utils/webpackHotDevClient.js(261,23): error TS2339: Property 'hot' does not exist on type 'NodeModule'.
-packages/react-dev-utils/workspaceUtils.js(11,25): error TS2307: Cannot find module 'find-pkg'.
+test/fixtures/issue-5176-flow-class-properties/src/App.js(5,8): error TS8010: 'types' can only be used in a .ts file.
+test/fixtures/issue-5176-flow-class-properties/src/App.js(5,13): error TS1005: ';' expected.
+test/fixtures/webpack-message-formatting/src/AppBabel.js(6,8): error TS17008: JSX element 'div' has no corresponding closing tag.
+test/fixtures/webpack-message-formatting/src/AppBabel.js(8,7): error TS17002: Expected corresponding JSX closing tag for 'span'.
+test/fixtures/webpack-message-formatting/src/AppBabel.js(14,1): error TS1005: '</' expected.
 
 
 

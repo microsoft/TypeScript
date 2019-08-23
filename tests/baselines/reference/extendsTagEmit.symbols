@@ -1,0 +1,14 @@
+=== tests/cases/conformance/jsdoc/super.js ===
+export class B { }
+>B : Symbol(B, Decl(super.js, 0, 0))
+
+=== tests/cases/conformance/jsdoc/main.js ===
+import { B } from './super'
+>B : Symbol(B, Decl(main.js, 0, 8))
+
+/** @extends {Mismatch} */
+class C extends B { }
+>C : Symbol(C, Decl(main.js, 0, 27))
+>B : Symbol(B, Decl(main.js, 0, 8))
+
+

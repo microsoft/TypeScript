@@ -1,0 +1,13 @@
+=== tests/cases/compiler/QSpinner.js ===
+import DefaultSpinner from './QSpinner'
+>DefaultSpinner : Symbol(DefaultSpinner, Decl(QSpinner.js, 0, 6))
+
+export default {
+  mixins: [DefaultSpinner],
+>mixins : Symbol(mixins, Decl(QSpinner.js, 2, 16))
+>DefaultSpinner : Symbol(DefaultSpinner, Decl(QSpinner.js, 0, 6))
+
+  name: 'QSpinner'
+>name : Symbol(name, Decl(QSpinner.js, 3, 27))
+}
+

@@ -1,0 +1,103 @@
+tests/cases/compiler/awaitInNonAsyncFunction.ts(4,7): error TS1103: A 'for-await-of' statement is only allowed within an async function or async generator.
+tests/cases/compiler/awaitInNonAsyncFunction.ts(5,10): error TS1308: 'await' expression is only allowed within an async function.
+tests/cases/compiler/awaitInNonAsyncFunction.ts(9,7): error TS1103: A 'for-await-of' statement is only allowed within an async function or async generator.
+tests/cases/compiler/awaitInNonAsyncFunction.ts(10,10): error TS1308: 'await' expression is only allowed within an async function.
+tests/cases/compiler/awaitInNonAsyncFunction.ts(14,7): error TS1103: A 'for-await-of' statement is only allowed within an async function or async generator.
+tests/cases/compiler/awaitInNonAsyncFunction.ts(15,3): error TS1308: 'await' expression is only allowed within an async function.
+tests/cases/compiler/awaitInNonAsyncFunction.ts(19,7): error TS1103: A 'for-await-of' statement is only allowed within an async function or async generator.
+tests/cases/compiler/awaitInNonAsyncFunction.ts(20,10): error TS1308: 'await' expression is only allowed within an async function.
+tests/cases/compiler/awaitInNonAsyncFunction.ts(24,7): error TS1103: A 'for-await-of' statement is only allowed within an async function or async generator.
+tests/cases/compiler/awaitInNonAsyncFunction.ts(25,9): error TS1308: 'await' expression is only allowed within an async function.
+tests/cases/compiler/awaitInNonAsyncFunction.ts(30,9): error TS1103: A 'for-await-of' statement is only allowed within an async function or async generator.
+tests/cases/compiler/awaitInNonAsyncFunction.ts(31,5): error TS1308: 'await' expression is only allowed within an async function.
+tests/cases/compiler/awaitInNonAsyncFunction.ts(34,7): error TS1103: A 'for-await-of' statement is only allowed within an async function or async generator.
+tests/cases/compiler/awaitInNonAsyncFunction.ts(35,5): error TS1308: 'await' expression is only allowed within an async function.
+tests/cases/compiler/awaitInNonAsyncFunction.ts(39,5): error TS1103: A 'for-await-of' statement is only allowed within an async function or async generator.
+tests/cases/compiler/awaitInNonAsyncFunction.ts(40,1): error TS1308: 'await' expression is only allowed within an async function.
+
+
+==== tests/cases/compiler/awaitInNonAsyncFunction.ts (16 errors) ====
+    // https://github.com/Microsoft/TypeScript/issues/26586
+    
+    function normalFunc(p: Promise<number>) {
+      for await (const _ of []);
+          ~~~~~
+!!! error TS1103: A 'for-await-of' statement is only allowed within an async function or async generator.
+!!! related TS1356 tests/cases/compiler/awaitInNonAsyncFunction.ts:3:10: Did you mean to mark this function as 'async'?
+      return await p;
+             ~~~~~
+!!! error TS1308: 'await' expression is only allowed within an async function.
+!!! related TS1356 tests/cases/compiler/awaitInNonAsyncFunction.ts:3:10: Did you mean to mark this function as 'async'?
+    }
+    
+    export function exportedFunc(p: Promise<number>) {
+      for await (const _ of []);
+          ~~~~~
+!!! error TS1103: A 'for-await-of' statement is only allowed within an async function or async generator.
+!!! related TS1356 tests/cases/compiler/awaitInNonAsyncFunction.ts:8:17: Did you mean to mark this function as 'async'?
+      return await p;
+             ~~~~~
+!!! error TS1308: 'await' expression is only allowed within an async function.
+!!! related TS1356 tests/cases/compiler/awaitInNonAsyncFunction.ts:8:17: Did you mean to mark this function as 'async'?
+    }
+    
+    const functionExpression = function(p: Promise<number>) {
+      for await (const _ of []);
+          ~~~~~
+!!! error TS1103: A 'for-await-of' statement is only allowed within an async function or async generator.
+!!! related TS1356 tests/cases/compiler/awaitInNonAsyncFunction.ts:13:28: Did you mean to mark this function as 'async'?
+      await p;
+      ~~~~~
+!!! error TS1308: 'await' expression is only allowed within an async function.
+!!! related TS1356 tests/cases/compiler/awaitInNonAsyncFunction.ts:13:28: Did you mean to mark this function as 'async'?
+    }
+    
+    const arrowFunc = (p: Promise<number>) => {
+      for await (const _ of []);
+          ~~~~~
+!!! error TS1103: A 'for-await-of' statement is only allowed within an async function or async generator.
+!!! related TS1356 tests/cases/compiler/awaitInNonAsyncFunction.ts:18:19: Did you mean to mark this function as 'async'?
+      return await p;
+             ~~~~~
+!!! error TS1308: 'await' expression is only allowed within an async function.
+!!! related TS1356 tests/cases/compiler/awaitInNonAsyncFunction.ts:18:19: Did you mean to mark this function as 'async'?
+    };
+    
+    function* generatorFunc(p: Promise<number>) {
+      for await (const _ of []);
+          ~~~~~
+!!! error TS1103: A 'for-await-of' statement is only allowed within an async function or async generator.
+!!! related TS1356 tests/cases/compiler/awaitInNonAsyncFunction.ts:23:11: Did you mean to mark this function as 'async'?
+      yield await p;
+            ~~~~~
+!!! error TS1308: 'await' expression is only allowed within an async function.
+!!! related TS1356 tests/cases/compiler/awaitInNonAsyncFunction.ts:23:11: Did you mean to mark this function as 'async'?
+    }
+    
+    class clazz {
+      constructor(p: Promise<number>) {
+        for await (const _ of []);
+            ~~~~~
+!!! error TS1103: A 'for-await-of' statement is only allowed within an async function or async generator.
+        await p;
+        ~~~~~
+!!! error TS1308: 'await' expression is only allowed within an async function.
+      }
+      method(p: Promise<number>) {
+      for await (const _ of []);
+          ~~~~~
+!!! error TS1103: A 'for-await-of' statement is only allowed within an async function or async generator.
+!!! related TS1356 tests/cases/compiler/awaitInNonAsyncFunction.ts:33:3: Did you mean to mark this function as 'async'?
+        await p;
+        ~~~~~
+!!! error TS1308: 'await' expression is only allowed within an async function.
+!!! related TS1356 tests/cases/compiler/awaitInNonAsyncFunction.ts:33:3: Did you mean to mark this function as 'async'?
+      }
+    }
+    
+    for await (const _ of []);
+        ~~~~~
+!!! error TS1103: A 'for-await-of' statement is only allowed within an async function or async generator.
+    await null;
+    ~~~~~
+!!! error TS1308: 'await' expression is only allowed within an async function.

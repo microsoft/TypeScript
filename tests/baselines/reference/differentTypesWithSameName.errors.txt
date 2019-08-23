@@ -1,5 +1,5 @@
 tests/cases/compiler/differentTypesWithSameName.ts(16,15): error TS2345: Argument of type 'variable' is not assignable to parameter of type 'm.variable'.
-  Property 's' is missing in type 'variable' but required in type 'variable'.
+  Property 's' is missing in type 'variable' but required in type 'm.variable'.
 
 
 ==== tests/cases/compiler/differentTypesWithSameName.ts (1 errors) ====
@@ -21,5 +21,5 @@ tests/cases/compiler/differentTypesWithSameName.ts(16,15): error TS2345: Argumen
     m.doSomething(v);
                   ~
 !!! error TS2345: Argument of type 'variable' is not assignable to parameter of type 'm.variable'.
-!!! error TS2345:   Property 's' is missing in type 'variable' but required in type 'variable'.
+!!! error TS2345:   Property 's' is missing in type 'variable' but required in type 'm.variable'.
 !!! related TS2728 tests/cases/compiler/differentTypesWithSameName.ts:3:5: 's' is declared here.

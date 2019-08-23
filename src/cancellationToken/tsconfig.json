@@ -1,5 +1,5 @@
 {
-    "extends": "../tsconfig-base",
+    "extends": "../tsconfig-noncomposite-base",
     "compilerOptions": {
         "outDir": "../../built/local/",
         "rootDir": ".",
@@ -7,6 +7,7 @@
         "declaration": false,
         "declarationMap": false,
         "removeComments": true,
+        "incremental": false,
         "module": "commonjs",
         "types": [
             "node"

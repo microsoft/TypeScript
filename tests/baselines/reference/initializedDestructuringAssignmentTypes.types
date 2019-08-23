@@ -9,7 +9,7 @@ const [, a = ''] = ''.match('') || [];
 >'' : ""
 >match : (regexp: string | RegExp) => RegExpMatchArray
 >'' : ""
->[] : [undefined?, ""?]
+>[] : undefined[]
 
 a.toFixed()
 >a.toFixed() : any

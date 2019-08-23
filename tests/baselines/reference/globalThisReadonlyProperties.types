@@ -1,0 +1,31 @@
+=== tests/cases/conformance/es2019/globalThisReadonlyProperties.ts ===
+globalThis.globalThis = 1 as any // should error
+>globalThis.globalThis = 1 as any : any
+>globalThis.globalThis : any
+>globalThis : typeof globalThis
+>globalThis : any
+>1 as any : any
+>1 : 1
+
+var x = 1
+>x : number
+>1 : 1
+
+const y = 2
+>y : 2
+>2 : 2
+
+globalThis.x = 3
+>globalThis.x = 3 : 3
+>globalThis.x : number
+>globalThis : typeof globalThis
+>x : number
+>3 : 3
+
+globalThis.y = 4 // should error
+>globalThis.y = 4 : 4
+>globalThis.y : any
+>globalThis : typeof globalThis
+>y : any
+>4 : 4
+

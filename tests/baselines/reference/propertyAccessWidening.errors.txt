@@ -1,0 +1,34 @@
+tests/cases/conformance/expressions/propertyAccess/propertyAccessWidening.ts(18,21): error TS2339: Property 'a' does not exist on type '{ a: string; b: number; } | {}'.
+  Property 'a' does not exist on type '{}'.
+tests/cases/conformance/expressions/propertyAccess/propertyAccessWidening.ts(19,5): error TS7053: Element implicitly has an 'any' type because expression of type '"a"' can't be used to index type '{}'.
+  Property 'a' does not exist on type '{}'.
+
+
+==== tests/cases/conformance/expressions/propertyAccess/propertyAccessWidening.ts (2 errors) ====
+    // Repro from #31762
+    
+    function g1(headerNames: any) {
+        let t = [{ hasLineBreak: false, cells: [] }];
+        const table = [{cells: headerNames }].concat(t);
+    }
+    
+    function g2(headerNames: any) {
+        let t = [{ hasLineBreak: false, cells: [] }];
+        const table = [{cells: headerNames }]["concat"](t);
+    }
+    
+    // Object in property or element access is widened when target of assignment
+    
+    function foo(options?: { a: string, b: number }) {
+        let x1 = (options || {}).a;     // Object type not widened
+        let x2 = (options || {})["a"];  // Object type not widened
+        (options || {}).a = 1;          // Object type widened, error
+                        ~
+!!! error TS2339: Property 'a' does not exist on type '{ a: string; b: number; } | {}'.
+!!! error TS2339:   Property 'a' does not exist on type '{}'.
+        (options || {})["a"] = 1;       // Object type widened, error
+        ~~~~~~~~~~~~~~~~~~~~
+!!! error TS7053: Element implicitly has an 'any' type because expression of type '"a"' can't be used to index type '{}'.
+!!! error TS7053:   Property 'a' does not exist on type '{}'.
+    }
+    

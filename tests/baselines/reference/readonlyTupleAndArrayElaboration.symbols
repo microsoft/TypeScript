@@ -1,0 +1,64 @@
+=== tests/cases/compiler/readonlyTupleAndArrayElaboration.ts ===
+// @strict
+// #Repro from #30839
+
+let point = [3, 4] as const;
+>point : Symbol(point, Decl(readonlyTupleAndArrayElaboration.ts, 3, 3))
+
+function distanceFromOrigin([x, y]: [number, number]) {
+>distanceFromOrigin : Symbol(distanceFromOrigin, Decl(readonlyTupleAndArrayElaboration.ts, 3, 28))
+>x : Symbol(x, Decl(readonlyTupleAndArrayElaboration.ts, 5, 29))
+>y : Symbol(y, Decl(readonlyTupleAndArrayElaboration.ts, 5, 31))
+
+    return Math.sqrt(x ** 2 + y ** 2);
+>Math.sqrt : Symbol(Math.sqrt, Decl(lib.es5.d.ts, --, --))
+>Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>sqrt : Symbol(Math.sqrt, Decl(lib.es5.d.ts, --, --))
+>x : Symbol(x, Decl(readonlyTupleAndArrayElaboration.ts, 5, 29))
+>y : Symbol(y, Decl(readonlyTupleAndArrayElaboration.ts, 5, 31))
+}
+
+distanceFromOrigin(point);
+>distanceFromOrigin : Symbol(distanceFromOrigin, Decl(readonlyTupleAndArrayElaboration.ts, 3, 28))
+>point : Symbol(point, Decl(readonlyTupleAndArrayElaboration.ts, 3, 3))
+
+declare function arryFn(x: number[]): void;
+>arryFn : Symbol(arryFn, Decl(readonlyTupleAndArrayElaboration.ts, 9, 26))
+>x : Symbol(x, Decl(readonlyTupleAndArrayElaboration.ts, 11, 24))
+
+arryFn(point);
+>arryFn : Symbol(arryFn, Decl(readonlyTupleAndArrayElaboration.ts, 9, 26))
+>point : Symbol(point, Decl(readonlyTupleAndArrayElaboration.ts, 3, 3))
+
+declare function arryFn2(x: Array<number>): void;
+>arryFn2 : Symbol(arryFn2, Decl(readonlyTupleAndArrayElaboration.ts, 12, 14))
+>x : Symbol(x, Decl(readonlyTupleAndArrayElaboration.ts, 14, 25))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+arryFn2(point);
+>arryFn2 : Symbol(arryFn2, Decl(readonlyTupleAndArrayElaboration.ts, 12, 14))
+>point : Symbol(point, Decl(readonlyTupleAndArrayElaboration.ts, 3, 3))
+
+declare const a: readonly number[];
+>a : Symbol(a, Decl(readonlyTupleAndArrayElaboration.ts, 17, 13))
+
+declare const b: Readonly<number[]>;
+>b : Symbol(b, Decl(readonlyTupleAndArrayElaboration.ts, 18, 13))
+>Readonly : Symbol(Readonly, Decl(lib.es5.d.ts, --, --))
+
+declare const c: ReadonlyArray<number>;
+>c : Symbol(c, Decl(readonlyTupleAndArrayElaboration.ts, 19, 13))
+>ReadonlyArray : Symbol(ReadonlyArray, Decl(lib.es5.d.ts, --, --))
+
+arryFn2(a);
+>arryFn2 : Symbol(arryFn2, Decl(readonlyTupleAndArrayElaboration.ts, 12, 14))
+>a : Symbol(a, Decl(readonlyTupleAndArrayElaboration.ts, 17, 13))
+
+arryFn2(b);
+>arryFn2 : Symbol(arryFn2, Decl(readonlyTupleAndArrayElaboration.ts, 12, 14))
+>b : Symbol(b, Decl(readonlyTupleAndArrayElaboration.ts, 18, 13))
+
+arryFn2(c);
+>arryFn2 : Symbol(arryFn2, Decl(readonlyTupleAndArrayElaboration.ts, 12, 14))
+>c : Symbol(c, Decl(readonlyTupleAndArrayElaboration.ts, 19, 13))
+

@@ -22,8 +22,8 @@ tests/cases/conformance/types/tuple/restTupleElements1.ts(34,31): error TS2344: 
 tests/cases/conformance/types/tuple/restTupleElements1.ts(35,31): error TS2344: Type '[number, number, number, string]' does not satisfy the constraint '[number, ...number[]]'.
   Property '3' is incompatible with rest element type.
     Type 'string' is not assignable to type 'number'.
-tests/cases/conformance/types/tuple/restTupleElements1.ts(59,4): error TS2345: Argument of type '[]' is not assignable to parameter of type '[{}, ...{}[]]'.
-  Property '0' is missing in type '[]' but required in type '[{}, ...{}[]]'.
+tests/cases/conformance/types/tuple/restTupleElements1.ts(59,4): error TS2345: Argument of type '[]' is not assignable to parameter of type '[unknown, ...unknown[]]'.
+  Property '0' is missing in type '[]' but required in type '[unknown, ...unknown[]]'.
 
 
 ==== tests/cases/conformance/types/tuple/restTupleElements1.ts (14 errors) ====
@@ -124,8 +124,8 @@ tests/cases/conformance/types/tuple/restTupleElements1.ts(59,4): error TS2345: A
     
     f0([]);  // Error
        ~~
-!!! error TS2345: Argument of type '[]' is not assignable to parameter of type '[{}, ...{}[]]'.
-!!! error TS2345:   Property '0' is missing in type '[]' but required in type '[{}, ...{}[]]'.
+!!! error TS2345: Argument of type '[]' is not assignable to parameter of type '[unknown, ...unknown[]]'.
+!!! error TS2345:   Property '0' is missing in type '[]' but required in type '[unknown, ...unknown[]]'.
     f0([1]);
     f0([1, 2, 3]);
     f0([1, "hello", true]);

@@ -92,7 +92,7 @@ class SomeDerived<T> extends SomeBase<number, string, T> {
     constructor() {
         super<number, string, T> `hello world`;
 >super<number, string, T> `hello world` : any
->super : any
+>super<number, string, T> : any
 >super : SomeBase<number, string, T>
 > : any
 >`hello world` : "hello world"

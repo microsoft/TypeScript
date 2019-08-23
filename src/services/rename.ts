@@ -1,14 +1,14 @@
 /* @internal */
 namespace ts.Rename {
-    export function getRenameInfo(program: Program, sourceFile: SourceFile, position: number): RenameInfo {
+    export function getRenameInfo(program: Program, sourceFile: SourceFile, position: number, options?: RenameInfoOptions): RenameInfo {
         const node = getTouchingPropertyName(sourceFile, position);
         const renameInfo = node && nodeIsEligibleForRename(node)
-            ? getRenameInfoForNode(node, program.getTypeChecker(), sourceFile, declaration => program.isSourceFileDefaultLibrary(declaration.getSourceFile()))
+            ? getRenameInfoForNode(node, program.getTypeChecker(), sourceFile, declaration => program.isSourceFileDefaultLibrary(declaration.getSourceFile()), options)
             : undefined;
         return renameInfo || getRenameInfoError(Diagnostics.You_cannot_rename_this_element);
     }
 
-    function getRenameInfoForNode(node: Node, typeChecker: TypeChecker, sourceFile: SourceFile, isDefinedInLibraryFile: (declaration: Node) => boolean): RenameInfo | undefined {
+    function getRenameInfoForNode(node: Node, typeChecker: TypeChecker, sourceFile: SourceFile, isDefinedInLibraryFile: (declaration: Node) => boolean, options?: RenameInfoOptions): RenameInfo | undefined {
         const symbol = typeChecker.getSymbolAtLocation(node);
         if (!symbol) return;
         // Only allow a symbol to be renamed if it actually has at least one declaration.
@@ -26,7 +26,7 @@ namespace ts.Rename {
         }
 
         if (isStringLiteralLike(node) && tryGetImportFromModuleSpecifier(node)) {
-            return getRenameInfoForModule(node, sourceFile, symbol);
+            return options && options.allowRenameOfImportPath ? getRenameInfoForModule(node, sourceFile, symbol) : undefined;
         }
 
         const kind = SymbolDisplay.getSymbolKind(typeChecker, symbol, node);

@@ -1,0 +1,36 @@
+=== tests/cases/conformance/es2019/globalThisUnknownNoImplicitAny.ts ===
+declare let win: Window & typeof globalThis;
+>win : Window & typeof globalThis
+>globalThis : typeof globalThis
+
+// all accesses should be errors
+win.hi
+>win.hi : any
+>win : Window & typeof globalThis
+>hi : any
+
+this.hi
+>this.hi : any
+>this : typeof globalThis
+>hi : any
+
+globalThis.hi
+>globalThis.hi : any
+>globalThis : typeof globalThis
+>hi : any
+
+win['hi']
+>win['hi'] : any
+>win : Window & typeof globalThis
+>'hi' : "hi"
+
+this['hi']
+>this['hi'] : any
+>this : typeof globalThis
+>'hi' : "hi"
+
+globalThis['hi']
+>globalThis['hi'] : any
+>globalThis : typeof globalThis
+>'hi' : "hi"
+

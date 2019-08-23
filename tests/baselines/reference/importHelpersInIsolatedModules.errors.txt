@@ -1,4 +1,4 @@
-tests/cases/compiler/script.ts(1,1): error TS1208: Cannot compile namespaces when the '--isolatedModules' flag is provided.
+tests/cases/compiler/script.ts(1,1): error TS1208: All files must be modules when the '--isolatedModules' flag is provided.
 
 
 ==== tests/cases/compiler/external.ts (0 errors) ====
@@ -16,7 +16,7 @@ tests/cases/compiler/script.ts(1,1): error TS1208: Cannot compile namespaces whe
 ==== tests/cases/compiler/script.ts (1 errors) ====
     class A { }
     ~~~~~
-!!! error TS1208: Cannot compile namespaces when the '--isolatedModules' flag is provided.
+!!! error TS1208: All files must be modules when the '--isolatedModules' flag is provided.
     class B extends A { }
     
     declare var dec: any;

@@ -24,3 +24,24 @@ let x: number;
 >x : Symbol(x, Decl(destructuringAssignment_private.ts, 4, 3))
 >C : Symbol(C, Decl(destructuringAssignment_private.ts, 0, 0))
 
+const nameX = "x";
+>nameX : Symbol(nameX, Decl(destructuringAssignment_private.ts, 8, 5))
+
+([{ a: { [nameX]: x } }] = [{ a: new C() }]);
+>a : Symbol(a, Decl(destructuringAssignment_private.ts, 9, 3))
+>[nameX] : Symbol([nameX], Decl(destructuringAssignment_private.ts, 9, 8))
+>nameX : Symbol(nameX, Decl(destructuringAssignment_private.ts, 8, 5))
+>x : Symbol(x, Decl(destructuringAssignment_private.ts, 4, 3))
+>a : Symbol(a, Decl(destructuringAssignment_private.ts, 9, 29))
+>C : Symbol(C, Decl(destructuringAssignment_private.ts, 0, 0))
+
+const nameO = "o";
+>nameO : Symbol(nameO, Decl(destructuringAssignment_private.ts, 11, 5))
+
+({ [nameO]: [{ a: x }]} = new C());
+>[nameO] : Symbol([nameO], Decl(destructuringAssignment_private.ts, 12, 2))
+>nameO : Symbol(nameO, Decl(destructuringAssignment_private.ts, 11, 5))
+>a : Symbol(a, Decl(destructuringAssignment_private.ts, 12, 14))
+>x : Symbol(x, Decl(destructuringAssignment_private.ts, 4, 3))
+>C : Symbol(C, Decl(destructuringAssignment_private.ts, 0, 0))
+

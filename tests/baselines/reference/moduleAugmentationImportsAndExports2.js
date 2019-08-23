@@ -77,7 +77,7 @@ export declare class B {
     n: number;
 }
 //// [f3.d.ts]
-namespace N {
+declare namespace N {
     interface Ifc {
         a: any;
     }

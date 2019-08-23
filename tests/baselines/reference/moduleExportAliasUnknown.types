@@ -5,7 +5,7 @@ module.exports = window.nonprop;
 >module : { "tests/cases/conformance/salsa/bug27025": any; }
 >exports : any
 >window.nonprop : any
->window : Window
+>window : Window & typeof globalThis
 >nonprop : any
 
 exports.foo = bar;

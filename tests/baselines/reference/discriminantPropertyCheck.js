@@ -121,8 +121,64 @@ u.a && u.b && f(u.a, u.b);
 
 u.b && u.a && f(u.a, u.b);
 
+// Repro from #29012
+
+type Additive = '+' | '-';
+type Multiplicative = '*' | '/';
+
+interface AdditiveObj {
+    key: Additive
+}
+
+interface MultiplicativeObj {
+    key: Multiplicative
+}
+
+type Obj = AdditiveObj | MultiplicativeObj
+
+export function foo(obj: Obj) {
+    switch (obj.key) {
+        case '+': {
+            onlyPlus(obj.key);
+            return;
+        }
+    }
+}
+
+function onlyPlus(arg: '+') {
+  return arg;
+}
+
+// Repro from #29496
+
+declare function never(value: never): never;
+
+const enum BarEnum {
+    bar1 = 1,
+    bar2 = 2,
+}
+
+type UnionOfBar = TypeBar1 | TypeBar2;
+type TypeBar1 = { type: BarEnum.bar1 };
+type TypeBar2 = { type: BarEnum.bar2 };
+
+function func3(value: Partial<UnionOfBar>) {
+    if (value.type !== undefined) {
+        switch (value.type) {
+            case BarEnum.bar1:
+                break;
+            case BarEnum.bar2:
+                break;
+            default:
+                never(value.type);
+        }
+    }
+}
+
 
 //// [discriminantPropertyCheck.js]
+"use strict";
+exports.__esModule = true;
 function goo1(x) {
     if (x.kind === "A" && x.foo !== undefined) {
         x.foo.length;
@@ -188,3 +244,27 @@ var f = function (_a, _b) { };
 var u = {};
 u.a && u.b && f(u.a, u.b);
 u.b && u.a && f(u.a, u.b);
+function foo(obj) {
+    switch (obj.key) {
+        case '+': {
+            onlyPlus(obj.key);
+            return;
+        }
+    }
+}
+exports.foo = foo;
+function onlyPlus(arg) {
+    return arg;
+}
+function func3(value) {
+    if (value.type !== undefined) {
+        switch (value.type) {
+            case 1 /* bar1 */:
+                break;
+            case 2 /* bar2 */:
+                break;
+            default:
+                never(value.type);
+        }
+    }
+}

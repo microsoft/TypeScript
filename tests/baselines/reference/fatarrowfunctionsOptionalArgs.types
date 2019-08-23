@@ -653,8 +653,8 @@ foo(
 >116 : 116
 
     (a = 0) => 117, 
->(a = 0) => 117 : (a?: number) => number
->a : number
+>(a = 0) => 117 : (a?: any) => number
+>a : any
 >0 : 0
 >117 : 117
 
@@ -670,9 +670,9 @@ foo(
 >119 : 119
 
     (a, b? = 0, ...c: number[]) => 120,
->(a, b? = 0, ...c: number[]) => 120 : (a: any, b?: number, ...c: number[]) => number
+>(a, b? = 0, ...c: number[]) => 120 : (a: any, b?: any, ...c: number[]) => number
 >a : any
->b : number
+>b : any
 >0 : 0
 >c : number[]
 >120 : 120

@@ -1,0 +1,49 @@
+enum E1 {
+    a,
+    b
+}
+
+enum E2 {
+    a = 'a',
+    b = 'b'
+}
+
+enum E3 {
+    a = 1,
+    b = a << 1,
+    c = a << 2,
+}
+
+const enum E4 {
+    a,
+    b
+}
+
+const E5 = {
+    a: 'a',
+    b: 'b'
+}
+
+const foo1 = { a: E1.a }
+
+const foo2 = { a: E2.a }
+
+const foo3 = { a: E1.a } as const
+
+const foo4 = { a: E2.a } as const
+
+const foo5 = { a: E3.a } as const
+
+const foo6 = { a: E4.a } as const
+
+const foo7 = { a: E5.a } as const
+
+const foo8 = { a: E1.a as const }
+
+const foo9 = { a: E2.a as const }
+
+const foo10 = { a: E3.a as const }
+
+const foo11 = { a: E4.a as const }
+
+const foo12 = { a: E5.a as const }

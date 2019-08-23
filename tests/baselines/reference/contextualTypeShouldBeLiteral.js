@@ -95,6 +95,33 @@ let xyz: LikeA | LikeB = {
 
 xyz;
 
+// Repro from #29168
+
+interface TestObject {
+  type?: 'object';
+  items: {
+    [k: string]: TestGeneric;
+  };
+}
+
+interface TestString {
+  type: 'string';
+}
+
+type TestGeneric = (TestString | TestObject) & { [k: string]: any; };
+
+const test: TestGeneric = {
+  items: {
+    hello: { type: 'string' },
+    world: {
+      items: {
+        nested: { type: 'string' }
+      }
+    }
+  }
+};
+
+
 //// [contextualTypeShouldBeLiteral.js]
 "use strict";
 function foo(bar) { }
@@ -134,3 +161,13 @@ var xyz = {
     }
 };
 xyz;
+var test = {
+    items: {
+        hello: { type: 'string' },
+        world: {
+            items: {
+                nested: { type: 'string' }
+            }
+        }
+    }
+};

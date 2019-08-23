@@ -8,7 +8,7 @@ namespace ts.refactor {
             return [{ name: refactorName, description, actions: [{ name: refactorName, description }] }];
         },
         getEditsForAction(context, actionName): RefactorEditInfo {
-            Debug.assert(actionName === refactorName);
+            Debug.assert(actionName === refactorName, "Wrong refactor invoked");
             const statements = Debug.assertDefined(getStatementsToMove(context));
             const edits = textChanges.ChangeTracker.with(context, t => doChange(context.file, context.program, statements, t, context.host, context.preferences));
             return { edits, renameFilename: undefined, renameLocation: undefined };
@@ -184,7 +184,7 @@ namespace ts.refactor {
             case SyntaxKind.VariableDeclaration:
                 return tryCast(node.name, isIdentifier);
             default:
-                return Debug.assertNever(node);
+                return Debug.assertNever(node, `Unexpected node kind ${(node as SupportedImport).kind}`);
         }
     }
 
@@ -232,7 +232,7 @@ namespace ts.refactor {
             case SyntaxKind.VariableDeclaration:
                 return createVariableDeclaration(newNamespaceId, /*type*/ undefined, createRequireCall(newModuleString));
             default:
-                return Debug.assertNever(node);
+                return Debug.assertNever(node, `Unexpected node kind ${(node as SupportedImport).kind}`);
         }
     }
 
@@ -290,7 +290,7 @@ namespace ts.refactor {
             return makeImportIfNecessary(defaultImport, specifiers, path, quotePreference);
         }
         else {
-            Debug.assert(!defaultImport); // If there's a default export, it should have been an es6 module.
+            Debug.assert(!defaultImport, "No default import should exist"); // If there's a default export, it should have been an es6 module.
             const bindingElements = imports.map(i => createBindingElement(/*dotDotDotToken*/ undefined, /*propertyName*/ undefined, i));
             return bindingElements.length
                 ? makeVariableStatement(createObjectBindingPattern(bindingElements), /*type*/ undefined, createRequireCall(createLiteral(path)))
@@ -332,7 +332,7 @@ namespace ts.refactor {
                 deleteUnusedImportsInVariableDeclaration(sourceFile, importDecl, changes, isUnused);
                 break;
             default:
-                Debug.assertNever(importDecl);
+                Debug.assertNever(importDecl, `Unexpected import decl kind ${(importDecl as SupportedImport).kind}`);
         }
     }
     function deleteUnusedImportsInDeclaration(sourceFile: SourceFile, importDecl: ImportDeclaration, changes: textChanges.ChangeTracker, isUnused: (name: Identifier) => boolean): void {
@@ -350,7 +350,11 @@ namespace ts.refactor {
             }
             if (namedBindings) {
                 if (namedBindingsUnused) {
-                    changes.delete(sourceFile, namedBindings);
+                    changes.replaceNode(
+                        sourceFile,
+                        importDecl.importClause,
+                        updateImportClause(importDecl.importClause, name, /*namedBindings*/ undefined)
+                    );
                 }
                 else if (namedBindings.kind === SyntaxKind.NamedImports) {
                     for (const element of namedBindings.elements) {
@@ -460,9 +464,15 @@ namespace ts.refactor {
         const oldImportsNeededByNewFile = new SymbolSet();
         const newFileImportsFromOldFile = new SymbolSet();
 
+        const containsJsx = find(toMove, statement => !!(statement.transformFlags & TransformFlags.ContainsJsx));
+        const jsxNamespaceSymbol = getJsxNamespaceSymbol(containsJsx);
+        if (jsxNamespaceSymbol) { // Might not exist (e.g. in non-compiling code)
+            oldImportsNeededByNewFile.add(jsxNamespaceSymbol);
+        }
+
         for (const statement of toMove) {
             forEachTopLevelDeclaration(statement, decl => {
-                movedSymbols.add(Debug.assertDefined(isExpressionStatement(decl) ? checker.getSymbolAtLocation(decl.expression.left) : decl.symbol));
+                movedSymbols.add(Debug.assertDefined(isExpressionStatement(decl) ? checker.getSymbolAtLocation(decl.expression.left) : decl.symbol, "Need a symbol here"));
             });
         }
         for (const statement of toMove) {
@@ -485,6 +495,11 @@ namespace ts.refactor {
         for (const statement of oldFile.statements) {
             if (contains(toMove, statement)) continue;
 
+            // jsxNamespaceSymbol will only be set iff it is in oldImportsNeededByNewFile.
+            if (jsxNamespaceSymbol && !!(statement.transformFlags & TransformFlags.ContainsJsx)) {
+                unusedImportsFromOldFile.delete(jsxNamespaceSymbol);
+            }
+
             forEachReference(statement, checker, symbol => {
                 if (movedSymbols.has(symbol)) oldFileImportsFromNewFile.add(symbol);
                 unusedImportsFromOldFile.delete(symbol);
@@ -492,6 +507,23 @@ namespace ts.refactor {
         }
 
         return { movedSymbols, newFileImportsFromOldFile, oldFileImportsFromNewFile, oldImportsNeededByNewFile, unusedImportsFromOldFile };
+
+        function getJsxNamespaceSymbol(containsJsx: Node | undefined) {
+            if (containsJsx === undefined) {
+                return undefined;
+            }
+
+            const jsxNamespace = checker.getJsxNamespace(containsJsx);
+
+            // Strictly speaking, this could resolve to a symbol other than the JSX namespace.
+            // This will produce erroneous output (probably, an incorrectly copied import) but
+            // is expected to be very rare and easily reversible.
+            const jsxNamespaceSymbol = checker.resolveName(jsxNamespace, containsJsx, SymbolFlags.Namespace, /*excludeGlobals*/ true);
+
+            return !!jsxNamespaceSymbol && some(jsxNamespaceSymbol.declarations, isInImport)
+                ? jsxNamespaceSymbol
+                : undefined;
+        }
     }
 
     // Below should all be utilities
@@ -512,7 +544,7 @@ namespace ts.refactor {
     }
     function isVariableDeclarationInImport(decl: VariableDeclaration) {
         return isSourceFile(decl.parent.parent.parent) &&
-            decl.initializer && isRequireCall(decl.initializer, /*checkArgumentIsStringLiteralLike*/ true);
+            !!decl.initializer && isRequireCall(decl.initializer, /*checkArgumentIsStringLiteralLike*/ true);
     }
 
     function filterImport(i: SupportedImport, moduleSpecifier: StringLiteralLike, keep: (name: Identifier) => boolean): SupportedImportStatement | undefined {
@@ -533,7 +565,7 @@ namespace ts.refactor {
                 return name ? makeVariableStatement(name, i.type, createRequireCall(moduleSpecifier), i.parent.flags) : undefined;
             }
             default:
-                return Debug.assertNever(i);
+                return Debug.assertNever(i, `Unexpected import kind ${(i as SupportedImport).kind}`);
         }
     }
     function filterNamedBindings(namedBindings: NamedImportBindings, keep: (name: Identifier) => boolean): NamedImportBindings | undefined {
@@ -622,7 +654,7 @@ namespace ts.refactor {
     }
 
     function isTopLevelDeclarationStatement(node: Node): node is TopLevelDeclarationStatement {
-        Debug.assert(isSourceFile(node.parent));
+        Debug.assert(isSourceFile(node.parent), "Node parent should be a SourceFile");
         return isNonVariableTopLevelDeclaration(node) || isVariableStatement(node);
     }
 
@@ -671,7 +703,7 @@ namespace ts.refactor {
             case SyntaxKind.ObjectBindingPattern:
                 return firstDefined(name.elements, em => isOmittedExpression(em) ? undefined : forEachTopLevelDeclarationInBindingName(em.name, cb));
             default:
-                return Debug.assertNever(name);
+                return Debug.assertNever(name, `Unexpected name kind ${(name as BindingName).kind}`);
         }
     }
 
@@ -736,7 +768,7 @@ namespace ts.refactor {
             case SyntaxKind.ExpressionStatement:
                 return Debug.fail(); // Shouldn't try to add 'export' keyword to `exports.x = ...`
             default:
-                return Debug.assertNever(d);
+                return Debug.assertNever(d, `Unexpected declaration kind ${(d as DeclarationStatement).kind}`);
         }
     }
     function addCommonjsExport(decl: TopLevelDeclarationStatement): ReadonlyArray<Statement> | undefined {
@@ -756,9 +788,9 @@ namespace ts.refactor {
             case SyntaxKind.ImportEqualsDeclaration:
                 return emptyArray;
             case SyntaxKind.ExpressionStatement:
-                return Debug.fail(); // Shouldn't try to add 'export' keyword to `exports.x = ...`
+                return Debug.fail("Can't export an ExpressionStatement"); // Shouldn't try to add 'export' keyword to `exports.x = ...`
             default:
-                return Debug.assertNever(decl);
+                return Debug.assertNever(decl, `Unexpected decl kind ${(decl as TopLevelDeclarationStatement).kind}`);
         }
     }
 

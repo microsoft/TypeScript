@@ -3,6 +3,19 @@ declare function clearTimeout(handle: any): void;
 
 namespace ts {
     /**
+     * djb2 hashing algorithm
+     * http://www.cse.yorku.ca/~oz/hash.html
+     */
+    /* @internal */
+    export function generateDjb2Hash(data: string): string {
+        let acc = 5381;
+        for (let i = 0; i < data.length; i++) {
+            acc = ((acc << 5) + acc) + data.charCodeAt(i);
+        }
+        return acc.toString();
+    }
+
+    /**
      * Set a high stack trace limit to provide more information in case of an error.
      * Called for command-line and server use cases.
      * Not called if TypeScript is used as a library.
@@ -291,6 +304,53 @@ namespace ts {
         }
     }
 
+    /* @internal */
+    export function createSingleFileWatcherPerName(
+        watchFile: HostWatchFile,
+        useCaseSensitiveFileNames: boolean
+    ): HostWatchFile {
+        interface SingleFileWatcher {
+            watcher: FileWatcher;
+            refCount: number;
+        }
+        const cache = createMap<SingleFileWatcher>();
+        const callbacksCache = createMultiMap<FileWatcherCallback>();
+        const toCanonicalFileName = createGetCanonicalFileName(useCaseSensitiveFileNames);
+
+        return (fileName, callback, pollingInterval) => {
+            const path = toCanonicalFileName(fileName);
+            const existing = cache.get(path);
+            if (existing) {
+                existing.refCount++;
+            }
+            else {
+                cache.set(path, {
+                    watcher: watchFile(
+                        fileName,
+                        (fileName, eventKind) => forEach(
+                            callbacksCache.get(path),
+                            cb => cb(fileName, eventKind)
+                        ),
+                        pollingInterval
+                    ),
+                    refCount: 1
+                });
+            }
+            callbacksCache.add(path, callback);
+
+            return {
+                close: () => {
+                    const watcher = Debug.assertDefined(cache.get(path));
+                    callbacksCache.remove(path, callback);
+                    watcher.refCount--;
+                    if (watcher.refCount) return;
+                    cache.delete(path);
+                    closeFileWatcherOf(watcher);
+                }
+            };
+        };
+    }
+
     /**
      * Returns true if file status changed
      */
@@ -315,6 +375,12 @@ namespace ts {
                 ? FileWatcherEventKind.Deleted
                 : FileWatcherEventKind.Changed;
     }
+
+    /*@internal*/
+    export const ignoredPaths = ["/node_modules/.", "/.git", "/.#"];
+
+    /*@internal*/
+    export let sysLog: (s: string) => void = noop;
 
     /*@internal*/
     export interface RecursiveDirectoryWatcherHost {
@@ -361,6 +427,8 @@ namespace ts {
             else {
                 directoryWatcher = {
                     watcher: host.watchDirectory(dirName, fileName => {
+                        if (isIgnoredPath(fileName)) return;
+
                         // Call the actual callback
                         callbackCache.forEach((callbacks, rootDirName) => {
                             if (rootDirName === dirPath || (startsWith(dirPath, rootDirName) && dirPath[rootDirName.length] === directorySeparator)) {
@@ -416,7 +484,7 @@ namespace ts {
                     const childFullName = getNormalizedAbsolutePath(child, parentDir);
                     // Filter our the symbolic link directories since those arent included in recursive watch
                     // which is same behaviour when recursive: true is passed to fs.watch
-                    return filePathComparer(childFullName, normalizePath(host.realpath(childFullName))) === Comparison.EqualTo ? childFullName : undefined;
+                    return !isIgnoredPath(childFullName) && filePathComparer(childFullName, normalizePath(host.realpath(childFullName))) === Comparison.EqualTo ? childFullName : undefined;
                 }) : emptyArray,
                 existingChildWatches,
                 (child, childWatcher) => filePathComparer(child, childWatcher.dirName),
@@ -442,7 +510,99 @@ namespace ts {
                 (newChildWatches || (newChildWatches = [])).push(childWatcher);
             }
         }
+
+        function isIgnoredPath(path: string) {
+            return some(ignoredPaths, searchPath => isInPath(path, searchPath));
+        }
+
+        function isInPath(path: string, searchPath: string) {
+            if (stringContains(path, searchPath)) return true;
+            if (host.useCaseSensitiveFileNames) return false;
+            return stringContains(toCanonicalFilePath(path), searchPath);
+        }
     }
+
+    /*@internal*/
+    export type BufferEncoding = "ascii" | "utf8" | "utf-8" | "utf16le" | "ucs2" | "ucs-2" | "base64" | "latin1" | "binary" | "hex";
+
+    /*@internal*/
+    interface NodeBuffer extends Uint8Array {
+        constructor: any;
+        write(str: string, encoding?: BufferEncoding): number;
+        write(str: string, offset: number, encoding?: BufferEncoding): number;
+        write(str: string, offset: number, length: number, encoding?: BufferEncoding): number;
+        toString(encoding?: string, start?: number, end?: number): string;
+        toJSON(): { type: "Buffer"; data: number[] };
+        equals(otherBuffer: Uint8Array): boolean;
+        compare(
+            otherBuffer: Uint8Array,
+            targetStart?: number,
+            targetEnd?: number,
+            sourceStart?: number,
+            sourceEnd?: number
+        ): number;
+        copy(targetBuffer: Uint8Array, targetStart?: number, sourceStart?: number, sourceEnd?: number): number;
+        slice(begin?: number, end?: number): Buffer;
+        subarray(begin?: number, end?: number): Buffer;
+        writeUIntLE(value: number, offset: number, byteLength: number): number;
+        writeUIntBE(value: number, offset: number, byteLength: number): number;
+        writeIntLE(value: number, offset: number, byteLength: number): number;
+        writeIntBE(value: number, offset: number, byteLength: number): number;
+        readUIntLE(offset: number, byteLength: number): number;
+        readUIntBE(offset: number, byteLength: number): number;
+        readIntLE(offset: number, byteLength: number): number;
+        readIntBE(offset: number, byteLength: number): number;
+        readUInt8(offset: number): number;
+        readUInt16LE(offset: number): number;
+        readUInt16BE(offset: number): number;
+        readUInt32LE(offset: number): number;
+        readUInt32BE(offset: number): number;
+        readInt8(offset: number): number;
+        readInt16LE(offset: number): number;
+        readInt16BE(offset: number): number;
+        readInt32LE(offset: number): number;
+        readInt32BE(offset: number): number;
+        readFloatLE(offset: number): number;
+        readFloatBE(offset: number): number;
+        readDoubleLE(offset: number): number;
+        readDoubleBE(offset: number): number;
+        reverse(): this;
+        swap16(): Buffer;
+        swap32(): Buffer;
+        swap64(): Buffer;
+        writeUInt8(value: number, offset: number): number;
+        writeUInt16LE(value: number, offset: number): number;
+        writeUInt16BE(value: number, offset: number): number;
+        writeUInt32LE(value: number, offset: number): number;
+        writeUInt32BE(value: number, offset: number): number;
+        writeInt8(value: number, offset: number): number;
+        writeInt16LE(value: number, offset: number): number;
+        writeInt16BE(value: number, offset: number): number;
+        writeInt32LE(value: number, offset: number): number;
+        writeInt32BE(value: number, offset: number): number;
+        writeFloatLE(value: number, offset: number): number;
+        writeFloatBE(value: number, offset: number): number;
+        writeDoubleLE(value: number, offset: number): number;
+        writeDoubleBE(value: number, offset: number): number;
+        readBigUInt64BE(offset?: number): bigint;
+        readBigUInt64LE(offset?: number): bigint;
+        readBigInt64BE(offset?: number): bigint;
+        readBigInt64LE(offset?: number): bigint;
+        writeBigInt64BE(value: bigint, offset?: number): number;
+        writeBigInt64LE(value: bigint, offset?: number): number;
+        writeBigUInt64BE(value: bigint, offset?: number): number;
+        writeBigUInt64LE(value: bigint, offset?: number): number;
+        fill(value: string | Uint8Array | number, offset?: number, end?: number, encoding?: BufferEncoding): this;
+        indexOf(value: string | number | Uint8Array, byteOffset?: number, encoding?: BufferEncoding): number;
+        lastIndexOf(value: string | number | Uint8Array, byteOffset?: number, encoding?: BufferEncoding): number;
+        entries(): IterableIterator<[number, number]>;
+        includes(value: string | number | Buffer, byteOffset?: number, encoding?: BufferEncoding): boolean;
+        keys(): IterableIterator<number>;
+        values(): IterableIterator<number>;
+    }
+
+    /*@internal*/
+    interface Buffer extends NodeBuffer { }
 
     // TODO: GH#18217 Methods on System are often used as if they are certainly defined
     export interface System {
@@ -573,6 +733,7 @@ namespace ts {
 
             const nodeVersion = getNodeMajorVersion();
             const isNode4OrLater = nodeVersion! >= 4;
+            const isLinuxOrMacOs = process.platform === "linux" || process.platform === "darwin";
 
             const platform: string = _os.platform();
             const useCaseSensitiveFileNames = isFileSystemCaseSensitive();
@@ -585,6 +746,7 @@ namespace ts {
             const useNonPollingWatchers = process.env.TSC_NONPOLLING_WATCHER;
             const tscWatchFile = process.env.TSC_WATCHFILE;
             const tscWatchDirectory = process.env.TSC_WATCHDIRECTORY;
+            const fsWatchFile = createSingleFileWatcherPerName(fsWatchFileWorker, useCaseSensitiveFileNames);
             let dynamicPollingWatchFile: HostWatchFile | undefined;
             const nodeSystem: System = {
                 args: process.argv.slice(2),
@@ -605,7 +767,17 @@ namespace ts {
                 directoryExists,
                 createDirectory(directoryName: string) {
                     if (!nodeSystem.directoryExists(directoryName)) {
-                        _fs.mkdirSync(directoryName);
+                        // Wrapped in a try-catch to prevent crashing if we are in a race
+                        // with another copy of ourselves to create the same directory
+                        try {
+                            _fs.mkdirSync(directoryName);
+                        }
+                        catch (e) {
+                            if (e.code !== "EEXIST") {
+                                // Failed for some other reason (access denied?); still throw
+                                throw e;
+                            }
+                        }
                     }
                 },
                 getExecutingFilePath() {
@@ -622,7 +794,7 @@ namespace ts {
                 getModifiedTime,
                 setModifiedTime,
                 deleteFile,
-                createHash: _crypto ? createMD5HashUsingNativeCrypto : generateDjb2Hash,
+                createHash: _crypto ? createSHA256Hash : generateDjb2Hash,
                 createSHA256Hash: _crypto ? createSHA256Hash : undefined,
                 getMemoryUsage() {
                     if (global.gc) {
@@ -715,7 +887,7 @@ namespace ts {
                 return useNonPollingWatchers ?
                     createNonPollingWatchFile() :
                     // Default to do not use polling interval as it is before this experiment branch
-                    (fileName, callback) => fsWatchFile(fileName, callback);
+                    (fileName, callback) => fsWatchFile(fileName, callback, /*pollingInterval*/ undefined);
             }
 
             function getWatchDirectory(): HostWatchDirectory {
@@ -796,7 +968,7 @@ namespace ts {
                 }
             }
 
-            function fsWatchFile(fileName: string, callback: FileWatcherCallback, pollingInterval?: number): FileWatcher {
+            function fsWatchFileWorker(fileName: string, callback: FileWatcherCallback, pollingInterval?: number): FileWatcher {
                 _fs.watchFile(fileName, { persistent: true, interval: pollingInterval || 250 }, fileChanged);
                 let eventKind: FileWatcherEventKind;
                 return {
@@ -861,6 +1033,12 @@ namespace ts {
 
             function fsWatch(fileOrDirectory: string, entryKind: FileSystemEntryKind.File | FileSystemEntryKind.Directory, callback: FsWatchCallback, recursive: boolean, fallbackPollingWatchFile: HostWatchFile, pollingInterval?: number): FileWatcher {
                 let options: any;
+                let lastDirectoryPartWithDirectorySeparator: string | undefined;
+                let lastDirectoryPart: string | undefined;
+                if (isLinuxOrMacOs) {
+                    lastDirectoryPartWithDirectorySeparator = fileOrDirectory.substr(fileOrDirectory.lastIndexOf(directorySeparator));
+                    lastDirectoryPart = lastDirectoryPartWithDirectorySeparator.slice(directorySeparator.length);
+                }
                 /** Watcher for the file system entry depending on whether it is missing or present */
                 let watcher = !fileSystemEntryExists(fileOrDirectory, entryKind) ?
                     watchMissingFileSystemEntry() :
@@ -878,6 +1056,7 @@ namespace ts {
                  * @param createWatcher
                  */
                 function invokeCallbackAndUpdateWatcher(createWatcher: () => FileWatcher) {
+                    sysLog(`sysLog:: ${fileOrDirectory}:: Changing watcher to ${createWatcher === watchPresentFileSystemEntry ? "Present" : "Missing"}FileSystemEntryWatcher`);
                     // Call the callback for current directory
                     callback("rename", "");
 
@@ -904,11 +1083,12 @@ namespace ts {
                         }
                     }
                     try {
-
                         const presentWatcher = _fs.watch(
                             fileOrDirectory,
                             options,
-                            callback
+                            isLinuxOrMacOs ?
+                                callbackChangingToMissingFileSystemEntry :
+                                callback
                         );
                         // Watch the missing file or directory or error
                         presentWatcher.on("error", () => invokeCallbackAndUpdateWatcher(watchMissingFileSystemEntry));
@@ -922,11 +1102,24 @@ namespace ts {
                     }
                 }
 
+                function callbackChangingToMissingFileSystemEntry(event: "rename" | "change", relativeName: string | undefined) {
+                    // because relativeName is not guaranteed to be correct we need to check on each rename with few combinations
+                    // Eg on ubuntu while watching app/node_modules the relativeName is "node_modules" which is neither relative nor full path
+                    return event === "rename" &&
+                        (!relativeName ||
+                            relativeName === lastDirectoryPart ||
+                            relativeName.lastIndexOf(lastDirectoryPartWithDirectorySeparator!) === relativeName.length - lastDirectoryPartWithDirectorySeparator!.length) &&
+                        !fileSystemEntryExists(fileOrDirectory, entryKind) ?
+                        invokeCallbackAndUpdateWatcher(watchMissingFileSystemEntry) :
+                        callback(event, relativeName);
+                }
+
                 /**
                  * Watch the file or directory using fs.watchFile since fs.watch threw exception
                  * Eg. on linux the number of watches are limited and one could easily exhaust watches and the exception ENOSPC is thrown when creating watcher at that point
                  */
                 function watchPresentFileSystemEntryWithFsWatchFile(): FileWatcher {
+                    sysLog(`sysLog:: ${fileOrDirectory}:: Changing to fsWatchFile`);
                     return fallbackPollingWatchFile(fileOrDirectory, createFileWatcherCallback(callback), pollingInterval);
                 }
 
@@ -966,7 +1159,7 @@ namespace ts {
                 return (directoryName, callback) => fsWatchFile(directoryName, () => callback(directoryName), PollingInterval.Medium);
             }
 
-            function readFile(fileName: string, _encoding?: string): string | undefined {
+            function readFileWorker(fileName: string, _encoding?: string): string | undefined {
                 if (!fileExists(fileName)) {
                     return undefined;
                 }
@@ -995,7 +1188,15 @@ namespace ts {
                 return buffer.toString("utf8");
             }
 
+            function readFile(fileName: string, _encoding?: string): string | undefined {
+                perfLogger.logStartReadFile(fileName);
+                const file = readFileWorker(fileName, _encoding);
+                perfLogger.logStopReadFile();
+                return file;
+            }
+
             function writeFile(fileName: string, data: string, writeByteOrderMark?: boolean): void {
+                perfLogger.logEvent("WriteFile: " + fileName);
                 // If a BOM is required, emit one
                 if (writeByteOrderMark) {
                     data = byteOrderMarkIndicator + data;
@@ -1015,6 +1216,7 @@ namespace ts {
             }
 
             function getAccessibleFileSystemEntries(path: string): FileSystemEntries {
+                perfLogger.logEvent("ReadDir: " + (path || "."));
                 try {
                     const entries = _fs.readdirSync(path || ".").sort();
                     const files: string[] = [];
@@ -1050,7 +1252,7 @@ namespace ts {
             }
 
             function readDirectory(path: string, extensions?: ReadonlyArray<string>, excludes?: ReadonlyArray<string>, includes?: ReadonlyArray<string>, depth?: number): string[] {
-                return matchFiles(path, extensions, excludes, includes, useCaseSensitiveFileNames, process.cwd(), depth, getAccessibleFileSystemEntries);
+                return matchFiles(path, extensions, excludes, includes, useCaseSensitiveFileNames, process.cwd(), depth, getAccessibleFileSystemEntries, realpath);
             }
 
             function fileSystemEntryExists(path: string, entryKind: FileSystemEntryKind): boolean {
@@ -1076,6 +1278,7 @@ namespace ts {
             }
 
             function getDirectories(path: string): string[] {
+                perfLogger.logEvent("ReadDir: " + path);
                 return filter<string>(_fs.readdirSync(path), dir => fileSystemEntryExists(combinePaths(path, dir), FileSystemEntryKind.Directory));
             }
 
@@ -1113,21 +1316,6 @@ namespace ts {
                 catch (e) {
                     return;
                 }
-            }
-
-            /**
-             * djb2 hashing algorithm
-             * http://www.cse.yorku.ca/~oz/hash.html
-             */
-            function generateDjb2Hash(data: string): string {
-                const chars = data.split("").map(str => str.charCodeAt(0));
-                return `${chars.reduce((prev, curr) => ((prev << 5) + prev) + curr, 5381)}`;
-            }
-
-            function createMD5HashUsingNativeCrypto(data: string): string {
-                const hash = _crypto!.createHash("md5");
-                hash.update(data);
-                return hash.digest("hex");
             }
 
             function createSHA256Hash(data: string): string {

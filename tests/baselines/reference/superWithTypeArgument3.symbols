@@ -23,7 +23,6 @@ class D<T> extends C<T> {
     constructor() {
         super<T>();
 >super : Symbol(C, Decl(superWithTypeArgument3.ts, 0, 0))
->T : Symbol(T, Decl(superWithTypeArgument3.ts, 5, 8))
     }
     bar() {
 >bar : Symbol(D.bar, Decl(superWithTypeArgument3.ts, 8, 5))

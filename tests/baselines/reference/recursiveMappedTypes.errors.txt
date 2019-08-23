@@ -4,9 +4,11 @@ tests/cases/conformance/types/mapped/recursiveMappedTypes.ts(7,6): error TS2456:
 tests/cases/conformance/types/mapped/recursiveMappedTypes.ts(8,11): error TS2313: Type parameter 'K' has a circular constraint.
 tests/cases/conformance/types/mapped/recursiveMappedTypes.ts(11,6): error TS2456: Type alias 'Recurse2' circularly references itself.
 tests/cases/conformance/types/mapped/recursiveMappedTypes.ts(12,11): error TS2313: Type parameter 'K' has a circular constraint.
+tests/cases/conformance/types/mapped/recursiveMappedTypes.ts(20,19): error TS2589: Type instantiation is excessively deep and possibly infinite.
+tests/cases/conformance/types/mapped/recursiveMappedTypes.ts(66,25): error TS2313: Type parameter 'P' has a circular constraint.
 
 
-==== tests/cases/conformance/types/mapped/recursiveMappedTypes.ts (6 errors) ====
+==== tests/cases/conformance/types/mapped/recursiveMappedTypes.ts (8 errors) ====
     // Recursive mapped types simply appear empty
     
     type Recurse = {
@@ -31,6 +33,7 @@ tests/cases/conformance/types/mapped/recursiveMappedTypes.ts(12,11): error TS231
         [K in keyof Recurse1]: Recurse1[K]
               ~~~~~~~~~~~~~~
 !!! error TS2313: Type parameter 'K' has a circular constraint.
+!!! related TS2751 tests/cases/conformance/types/mapped/recursiveMappedTypes.ts:8:17: Circularity originates in type at this location.
     }
     
     // Repro from #27881
@@ -39,6 +42,68 @@ tests/cases/conformance/types/mapped/recursiveMappedTypes.ts(12,11): error TS231
     type tup = [number, number, number, number];
     
     function foo(arg: Circular<tup>): tup {
+                      ~~~~~~~~~~~~~
+!!! error TS2589: Type instantiation is excessively deep and possibly infinite.
       return arg;
     }
+    
+    // Repro from #29442
+    
+    type DeepMap<T extends unknown[], R> = {
+      [K in keyof T]: T[K] extends unknown[] ? DeepMap<T[K], R> : R;
+    };
+    
+    type tpl = [string, [string, [string]]];
+    type arr = string[][];
+    
+    type t1 = DeepMap<tpl, number>;  // [number, [number, [number]]]
+    type t2 = DeepMap<arr, number>;  // number[][]
+    
+    // Repro from #29577
+    
+    type Transform<T> = { [K in keyof T]: Transform<T[K]> };
+    
+    interface User {
+        avatar: string;
+    }
+    
+    interface Guest {
+        displayName: string;
+    }
+    
+    interface Product {
+        users: (User | Guest)[];
+    }
+    
+    declare var product: Transform<Product>;
+    product.users;  // (Transform<User> | Transform<Guest>)[]
+    
+    // Repro from #29702
+    
+    type Remap1<T> = { [P in keyof T]: Remap1<T[P]>; };
+    type Remap2<T> = T extends object ? { [P in keyof T]: Remap2<T[P]>; } : T;
+      
+    type a = Remap1<string[]>;  // string[]
+    type b = Remap2<string[]>;  // string[]
+    
+    // Repro from #29992
+    
+    type NonOptionalKeys<T> = { [P in keyof T]: undefined extends T[P] ? never : P }[keyof T];
+    type Child<T> = { [P in NonOptionalKeys<T>]: T[P] }
+                            ~~~~~~~~~~~~~~~~~~
+!!! error TS2313: Type parameter 'P' has a circular constraint.
+!!! related TS2751 tests/cases/conformance/types/mapped/recursiveMappedTypes.ts:79:1: Circularity originates in type at this location.
+    
+    export interface ListWidget {
+        "type": "list",
+        "minimum_count": number,
+        "maximum_count": number,
+        "collapsable"?: boolean, //default to false, means all expanded
+        "each": Child<ListWidget>;
+    }
+    
+    type ListChild = Child<ListWidget>
+    
+    declare let x: ListChild;
+    x.type;
     

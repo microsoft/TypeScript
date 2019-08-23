@@ -1,0 +1,27 @@
+=== tests/cases/conformance/ambient/types.ts ===
+declare module "*.foo" {
+>"*.foo" : Symbol("*.foo", Decl(types.ts, 0, 0))
+
+  export interface OhNo { star: string }
+>OhNo : Symbol(OhNo, Decl(types.ts, 0, 24))
+>star : Symbol(OhNo.star, Decl(types.ts, 1, 25))
+}
+
+=== tests/cases/conformance/ambient/test.ts ===
+declare module "a.foo" {
+>"a.foo" : Symbol("a.foo", Decl(test.ts, 0, 0), Decl(types.ts, 0, 0))
+
+  export interface OhNo { a: string }
+>OhNo : Symbol(OhNo, Decl(test.ts, 0, 24), Decl(types.ts, 0, 24))
+>a : Symbol(OhNo.a, Decl(test.ts, 1, 25))
+}
+import { OhNo } from "b.foo"
+>OhNo : Symbol(OhNo, Decl(test.ts, 3, 8))
+
+declare let ohno: OhNo;
+>ohno : Symbol(ohno, Decl(test.ts, 4, 11))
+>OhNo : Symbol(OhNo, Decl(test.ts, 3, 8))
+
+ohno.a // oh no
+>ohno : Symbol(ohno, Decl(test.ts, 4, 11))
+

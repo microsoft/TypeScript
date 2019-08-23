@@ -1,0 +1,43 @@
+=== tests/cases/compiler/nongenericPartialInstantiationsRelatedInBothDirections.ts ===
+interface Foo {
+>Foo : Symbol(Foo, Decl(nongenericPartialInstantiationsRelatedInBothDirections.ts, 0, 0))
+
+    a: number;
+>a : Symbol(Foo.a, Decl(nongenericPartialInstantiationsRelatedInBothDirections.ts, 0, 15))
+
+    b: number;
+>b : Symbol(Foo.b, Decl(nongenericPartialInstantiationsRelatedInBothDirections.ts, 1, 14))
+
+    bar: string;
+>bar : Symbol(Foo.bar, Decl(nongenericPartialInstantiationsRelatedInBothDirections.ts, 2, 14))
+}
+interface ObjectContaining<T> {
+>ObjectContaining : Symbol(ObjectContaining, Decl(nongenericPartialInstantiationsRelatedInBothDirections.ts, 4, 1))
+>T : Symbol(T, Decl(nongenericPartialInstantiationsRelatedInBothDirections.ts, 5, 27))
+
+  new (sample: Partial<T>): Partial<T>
+>sample : Symbol(sample, Decl(nongenericPartialInstantiationsRelatedInBothDirections.ts, 6, 7))
+>Partial : Symbol(Partial, Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(nongenericPartialInstantiationsRelatedInBothDirections.ts, 5, 27))
+>Partial : Symbol(Partial, Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(nongenericPartialInstantiationsRelatedInBothDirections.ts, 5, 27))
+}
+declare let cafoo: ObjectContaining<{ a: number, foo: number }>;
+>cafoo : Symbol(cafoo, Decl(nongenericPartialInstantiationsRelatedInBothDirections.ts, 8, 11))
+>ObjectContaining : Symbol(ObjectContaining, Decl(nongenericPartialInstantiationsRelatedInBothDirections.ts, 4, 1))
+>a : Symbol(a, Decl(nongenericPartialInstantiationsRelatedInBothDirections.ts, 8, 37))
+>foo : Symbol(foo, Decl(nongenericPartialInstantiationsRelatedInBothDirections.ts, 8, 48))
+
+declare let cfoo: ObjectContaining<Foo>;
+>cfoo : Symbol(cfoo, Decl(nongenericPartialInstantiationsRelatedInBothDirections.ts, 9, 11))
+>ObjectContaining : Symbol(ObjectContaining, Decl(nongenericPartialInstantiationsRelatedInBothDirections.ts, 4, 1))
+>Foo : Symbol(Foo, Decl(nongenericPartialInstantiationsRelatedInBothDirections.ts, 0, 0))
+
+cfoo = cafoo;
+>cfoo : Symbol(cfoo, Decl(nongenericPartialInstantiationsRelatedInBothDirections.ts, 9, 11))
+>cafoo : Symbol(cafoo, Decl(nongenericPartialInstantiationsRelatedInBothDirections.ts, 8, 11))
+
+cafoo = cfoo;
+>cafoo : Symbol(cafoo, Decl(nongenericPartialInstantiationsRelatedInBothDirections.ts, 8, 11))
+>cfoo : Symbol(cfoo, Decl(nongenericPartialInstantiationsRelatedInBothDirections.ts, 9, 11))
+

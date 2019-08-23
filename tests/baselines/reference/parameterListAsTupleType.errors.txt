@@ -1,6 +1,6 @@
 tests/cases/compiler/parameterListAsTupleType.ts(8,17): error TS2322: Type 'string' is not assignable to type 'number'.
-tests/cases/compiler/parameterListAsTupleType.ts(16,23): error TS2344: Type 'typeof C' does not satisfy the constraint '(...args: any[]) => any'.
-  Type 'typeof C' provides no match for the signature '(...args: any[]): any'.
+tests/cases/compiler/parameterListAsTupleType.ts(16,23): error TS2344: Type 'typeof C' does not satisfy the constraint '(...args: any) => any'.
+  Type 'typeof C' provides no match for the signature '(...args: any): any'.
 
 
 ==== tests/cases/compiler/parameterListAsTupleType.ts (2 errors) ====
@@ -23,8 +23,8 @@ tests/cases/compiler/parameterListAsTupleType.ts(16,23): error TS2344: Type 'typ
     
     type Cps = Parameters<typeof C>; // should not work
                           ~~~~~~~~
-!!! error TS2344: Type 'typeof C' does not satisfy the constraint '(...args: any[]) => any'.
-!!! error TS2344:   Type 'typeof C' provides no match for the signature '(...args: any[]): any'.
+!!! error TS2344: Type 'typeof C' does not satisfy the constraint '(...args: any) => any'.
+!!! error TS2344:   Type 'typeof C' provides no match for the signature '(...args: any): any'.
     type Ccps = ConstructorParameters<typeof C>; // should be [number, string]
     
     class D {

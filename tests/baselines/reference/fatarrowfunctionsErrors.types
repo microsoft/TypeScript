@@ -25,10 +25,10 @@ foo((x?)=>{return x;})
 foo((x=0)=>{return x;})
 >foo((x=0)=>{return x;}) : any
 >foo : any
->(x=0)=>{return x;} : (x?: number) => number
->x : number
+>(x=0)=>{return x;} : (x?: any) => any
+>x : any
 >0 : 0
->x : number
+>x : any
 
 var y = x:number => x*x;
 >y : any

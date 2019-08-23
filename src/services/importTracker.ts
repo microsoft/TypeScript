@@ -133,7 +133,7 @@ namespace ts.FindAllReferences {
                             break;
 
                         default:
-                            Debug.assertNever(direct, `Unexpected import kind: ${Debug.showSyntaxKind(direct)}`);
+                            Debug.failBadSyntaxKind(direct, "Unexpected import kind.");
                     }
                 }
             }
@@ -269,7 +269,7 @@ namespace ts.FindAllReferences {
         }
 
         /**
-         * `import x = require("./x") or `import * as x from "./x"`.
+         * `import x = require("./x")` or `import * as x from "./x"`.
          * An `export =` may be imported by this syntax, so it may be a direct import.
          * If it's not a direct import, it will be in `indirectUsers`, so we don't have to do anything here.
          */
@@ -434,7 +434,7 @@ namespace ts.FindAllReferences {
     /**
      * Given a local reference, we might notice that it's an import/export and recursively search for references of that.
      * If at an import, look locally for the symbol it imports.
-     * If an an export, look for all imports of it.
+     * If at an export, look for all imports of it.
      * This doesn't handle export specifiers; that is done in `getReferencesAtExportSpecifier`.
      * @param comingFromExport If we are doing a search for all exports, don't bother looking backwards for the imported symbol, since that's the reason we're here.
      */
@@ -515,7 +515,7 @@ namespace ts.FindAllReferences {
                 const sym = useLhsSymbol ? checker.getSymbolAtLocation(cast(node.left, isPropertyAccessExpression).name) : symbol;
                 // Better detection for GH#20803
                 if (sym && !(checker.getMergedSymbol(sym.parent!).flags & SymbolFlags.Module)) {
-                    Debug.fail(`Special property assignment kind does not have a module as its parent. Assignment is ${Debug.showSymbol(sym)}, parent is ${Debug.showSymbol(sym.parent!)}`);
+                    Debug.fail(`Special property assignment kind does not have a module as its parent. Assignment is ${Debug.formatSymbol(sym)}, parent is ${Debug.formatSymbol(sym.parent!)}`);
                 }
                 return sym && exportInfo(sym, kind);
             }
@@ -577,10 +577,10 @@ namespace ts.FindAllReferences {
     // If a reference is a class expression, the exported node would be its parent.
     // If a reference is a variable declaration, the exported node would be the variable statement.
     function getExportNode(parent: Node, node: Node): Node | undefined {
-        if (parent.kind === SyntaxKind.VariableDeclaration) {
-            const p = parent as VariableDeclaration;
-            return p.name !== node ? undefined :
-                p.parent.kind === SyntaxKind.CatchClause ? undefined : p.parent.parent.kind === SyntaxKind.VariableStatement ? p.parent.parent : undefined;
+        const declaration = isVariableDeclaration(parent) ? parent : isBindingElement(parent) ? walkUpBindingElementsAndPatterns(parent) : undefined;
+        if (declaration) {
+            return (parent as VariableDeclaration | BindingElement).name !== node ? undefined :
+                isCatchClause(declaration.parent) ? undefined : isVariableStatement(declaration.parent.parent) ? declaration.parent.parent : undefined;
         }
         else {
             return parent;

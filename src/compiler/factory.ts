@@ -89,10 +89,10 @@ namespace ts {
         return createLiteralFromNode(value);
     }
 
-    export function createNumericLiteral(value: string): NumericLiteral {
+    export function createNumericLiteral(value: string, numericLiteralFlags: TokenFlags = TokenFlags.None): NumericLiteral {
         const node = <NumericLiteral>createSynthesizedNode(SyntaxKind.NumericLiteral);
         node.text = value;
-        node.numericLiteralFlags = 0;
+        node.numericLiteralFlags = numericLiteralFlags;
         return node;
     }
 
@@ -143,8 +143,8 @@ namespace ts {
     export function updateIdentifier(node: Identifier, typeArguments: NodeArray<TypeNode | TypeParameterDeclaration> | undefined): Identifier; // tslint:disable-line unified-signatures
     export function updateIdentifier(node: Identifier, typeArguments?: NodeArray<TypeNode | TypeParameterDeclaration> | undefined): Identifier {
         return node.typeArguments !== typeArguments
-        ? updateNode(createIdentifier(idText(node), typeArguments), node)
-        : node;
+            ? updateNode(createIdentifier(idText(node), typeArguments), node)
+            : node;
     }
 
     let nextAutoGenerateId = 0;
@@ -845,7 +845,7 @@ namespace ts {
         const node = <ImportTypeNode>createSynthesizedNode(SyntaxKind.ImportType);
         node.argument = argument;
         node.qualifier = qualifier;
-        node.typeArguments = asNodeArray(typeArguments);
+        node.typeArguments = parenthesizeTypeParameters(typeArguments);
         node.isTypeOf = isTypeOf;
         return node;
     }
@@ -876,8 +876,8 @@ namespace ts {
     }
 
     export function createTypeOperatorNode(type: TypeNode): TypeOperatorNode;
-    export function createTypeOperatorNode(operator: SyntaxKind.KeyOfKeyword | SyntaxKind.UniqueKeyword, type: TypeNode): TypeOperatorNode;
-    export function createTypeOperatorNode(operatorOrType: SyntaxKind.KeyOfKeyword | SyntaxKind.UniqueKeyword | TypeNode, type?: TypeNode) {
+    export function createTypeOperatorNode(operator: SyntaxKind.KeyOfKeyword | SyntaxKind.UniqueKeyword | SyntaxKind.ReadonlyKeyword, type: TypeNode): TypeOperatorNode;
+    export function createTypeOperatorNode(operatorOrType: SyntaxKind.KeyOfKeyword | SyntaxKind.UniqueKeyword | SyntaxKind.ReadonlyKeyword | TypeNode, type?: TypeNode) {
         const node = createSynthesizedNode(SyntaxKind.TypeOperator) as TypeOperatorNode;
         node.operator = typeof operatorOrType === "number" ? operatorOrType : SyntaxKind.KeyOfKeyword;
         node.type = parenthesizeElementTypeMember(typeof operatorOrType === "number" ? type! : operatorOrType);
@@ -1004,10 +1004,10 @@ namespace ts {
             : node;
     }
 
-    export function createPropertyAccess(expression: Expression, name: string | Identifier | undefined) {
+    export function createPropertyAccess(expression: Expression, name: string | Identifier) {
         const node = <PropertyAccessExpression>createSynthesizedNode(SyntaxKind.PropertyAccessExpression);
         node.expression = parenthesizeForAccess(expression);
-        node.name = asName(name)!; // TODO: GH#18217
+        node.name = asName(name);
         setEmitFlags(node, EmitFlags.NoIndentation);
         return node;
     }
@@ -1329,27 +1329,97 @@ namespace ts {
             : node;
     }
 
-    export function createTemplateHead(text: string) {
-        const node = <TemplateHead>createSynthesizedNode(SyntaxKind.TemplateHead);
+    let rawTextScanner: Scanner | undefined;
+    const invalidValueSentinel: object = {};
+
+    function getCookedText(kind: TemplateLiteralToken["kind"], rawText: string) {
+        if (!rawTextScanner) {
+            rawTextScanner = createScanner(ScriptTarget.Latest, /*skipTrivia*/ false, LanguageVariant.Standard);
+        }
+        switch (kind) {
+            case SyntaxKind.NoSubstitutionTemplateLiteral:
+                rawTextScanner.setText("`" + rawText + "`");
+                break;
+            case SyntaxKind.TemplateHead:
+                // tslint:disable-next-line no-invalid-template-strings
+                rawTextScanner.setText("`" + rawText + "${");
+                break;
+            case SyntaxKind.TemplateMiddle:
+                // tslint:disable-next-line no-invalid-template-strings
+                rawTextScanner.setText("}" + rawText + "${");
+                break;
+            case SyntaxKind.TemplateTail:
+                rawTextScanner.setText("}" + rawText + "`");
+                break;
+        }
+
+        let token = rawTextScanner.scan();
+        if (token === SyntaxKind.CloseBracketToken) {
+            token = rawTextScanner.reScanTemplateToken();
+        }
+
+        if (rawTextScanner.isUnterminated()) {
+            rawTextScanner.setText(undefined);
+            return invalidValueSentinel;
+        }
+
+        let tokenValue: string | undefined;
+        switch (token) {
+            case SyntaxKind.NoSubstitutionTemplateLiteral:
+            case SyntaxKind.TemplateHead:
+            case SyntaxKind.TemplateMiddle:
+            case SyntaxKind.TemplateTail:
+                tokenValue = rawTextScanner.getTokenValue();
+                break;
+        }
+
+        if (rawTextScanner.scan() !== SyntaxKind.EndOfFileToken) {
+            rawTextScanner.setText(undefined);
+            return invalidValueSentinel;
+        }
+
+        rawTextScanner.setText(undefined);
+        return tokenValue;
+    }
+
+    function createTemplateLiteralLikeNode(kind: TemplateLiteralToken["kind"], text: string, rawText: string | undefined) {
+        const node = <TemplateLiteralLikeNode>createSynthesizedNode(kind);
+        node.text = text;
+        if (rawText === undefined || text === rawText) {
+            node.rawText = rawText;
+        }
+        else {
+            const cooked = getCookedText(kind, rawText);
+            if (typeof cooked === "object") {
+                return Debug.fail("Invalid raw text");
+            }
+
+            Debug.assert(text === cooked, "Expected argument 'text' to be the normalized (i.e. 'cooked') version of argument 'rawText'.");
+            node.rawText = rawText;
+        }
+        return node;
+    }
+
+    export function createTemplateHead(text: string, rawText?: string) {
+        const node = <TemplateHead>createTemplateLiteralLikeNode(SyntaxKind.TemplateHead, text, rawText);
         node.text = text;
         return node;
     }
 
-    export function createTemplateMiddle(text: string) {
-        const node = <TemplateMiddle>createSynthesizedNode(SyntaxKind.TemplateMiddle);
+    export function createTemplateMiddle(text: string, rawText?: string) {
+        const node = <TemplateMiddle>createTemplateLiteralLikeNode(SyntaxKind.TemplateMiddle, text, rawText);
         node.text = text;
         return node;
     }
 
-    export function createTemplateTail(text: string) {
-        const node = <TemplateTail>createSynthesizedNode(SyntaxKind.TemplateTail);
+    export function createTemplateTail(text: string, rawText?: string) {
+        const node = <TemplateTail>createTemplateLiteralLikeNode(SyntaxKind.TemplateTail, text, rawText);
         node.text = text;
         return node;
     }
 
-    export function createNoSubstitutionTemplateLiteral(text: string) {
-        const node = <NoSubstitutionTemplateLiteral>createSynthesizedNode(SyntaxKind.NoSubstitutionTemplateLiteral);
-        node.text = text;
+    export function createNoSubstitutionTemplateLiteral(text: string, rawText?: string) {
+        const node = <NoSubstitutionTemplateLiteral>createTemplateLiteralLikeNode(SyntaxKind.NoSubstitutionTemplateLiteral, text, rawText);
         return node;
     }
 
@@ -1544,8 +1614,8 @@ namespace ts {
     export function createIf(expression: Expression, thenStatement: Statement, elseStatement?: Statement) {
         const node = <IfStatement>createSynthesizedNode(SyntaxKind.IfStatement);
         node.expression = expression;
-        node.thenStatement = thenStatement;
-        node.elseStatement = elseStatement;
+        node.thenStatement = asEmbeddedStatement(thenStatement);
+        node.elseStatement = asEmbeddedStatement(elseStatement);
         return node;
     }
 
@@ -1559,7 +1629,7 @@ namespace ts {
 
     export function createDo(statement: Statement, expression: Expression) {
         const node = <DoStatement>createSynthesizedNode(SyntaxKind.DoStatement);
-        node.statement = statement;
+        node.statement = asEmbeddedStatement(statement);
         node.expression = expression;
         return node;
     }
@@ -1574,7 +1644,7 @@ namespace ts {
     export function createWhile(expression: Expression, statement: Statement) {
         const node = <WhileStatement>createSynthesizedNode(SyntaxKind.WhileStatement);
         node.expression = expression;
-        node.statement = statement;
+        node.statement = asEmbeddedStatement(statement);
         return node;
     }
 
@@ -1590,7 +1660,7 @@ namespace ts {
         node.initializer = initializer;
         node.condition = condition;
         node.incrementor = incrementor;
-        node.statement = statement;
+        node.statement = asEmbeddedStatement(statement);
         return node;
     }
 
@@ -1607,7 +1677,7 @@ namespace ts {
         const node = <ForInStatement>createSynthesizedNode(SyntaxKind.ForInStatement);
         node.initializer = initializer;
         node.expression = expression;
-        node.statement = statement;
+        node.statement = asEmbeddedStatement(statement);
         return node;
     }
 
@@ -1624,7 +1694,7 @@ namespace ts {
         node.awaitModifier = awaitModifier;
         node.initializer = initializer;
         node.expression = expression;
-        node.statement = statement;
+        node.statement = asEmbeddedStatement(statement);
         return node;
     }
 
@@ -1676,7 +1746,7 @@ namespace ts {
     export function createWith(expression: Expression, statement: Statement) {
         const node = <WithStatement>createSynthesizedNode(SyntaxKind.WithStatement);
         node.expression = expression;
-        node.statement = statement;
+        node.statement = asEmbeddedStatement(statement);
         return node;
     }
 
@@ -1704,7 +1774,7 @@ namespace ts {
     export function createLabel(label: string | Identifier, statement: Statement) {
         const node = <LabeledStatement>createSynthesizedNode(SyntaxKind.LabeledStatement);
         node.label = asName(label);
-        node.statement = statement;
+        node.statement = asEmbeddedStatement(statement);
         return node;
     }
 
@@ -2189,7 +2259,7 @@ namespace ts {
     }
 
     /* @internal */
-    export function createJSDocTypeTag(typeExpression?: JSDocTypeExpression, comment?: string): JSDocTypeTag {
+    export function createJSDocTypeTag(typeExpression: JSDocTypeExpression, comment?: string): JSDocTypeTag {
         const tag = createJSDocTag<JSDocTypeTag>(SyntaxKind.JSDocTypeTag, "type");
         tag.typeExpression = typeExpression;
         tag.comment = comment;
@@ -2201,6 +2271,13 @@ namespace ts {
         const tag = createJSDocTag<JSDocReturnTag>(SyntaxKind.JSDocReturnTag, "returns");
         tag.typeExpression = typeExpression;
         tag.comment = comment;
+        return tag;
+    }
+
+    /** @internal */
+    export function createJSDocThisTag(typeExpression?: JSDocTypeExpression): JSDocThisTag {
+        const tag = createJSDocTag<JSDocThisTag>(SyntaxKind.JSDocThisTag, "this");
+        tag.typeExpression = typeExpression;
         return tag;
     }
 
@@ -2297,6 +2374,28 @@ namespace ts {
         node.children = createNodeArray(children);
         node.closingFragment = closingFragment;
         return node;
+    }
+
+    export function createJsxText(text: string, containsOnlyTriviaWhiteSpaces?: boolean) {
+        const node = <JsxText>createSynthesizedNode(SyntaxKind.JsxText);
+        node.text = text;
+        node.containsOnlyTriviaWhiteSpaces = !!containsOnlyTriviaWhiteSpaces;
+        return node;
+    }
+
+    export function updateJsxText(node: JsxText, text: string, containsOnlyTriviaWhiteSpaces?: boolean) {
+        return node.text !== text
+            || node.containsOnlyTriviaWhiteSpaces !== containsOnlyTriviaWhiteSpaces
+            ? updateNode(createJsxText(text, containsOnlyTriviaWhiteSpaces), node)
+            : node;
+    }
+
+    export function createJsxOpeningFragment() {
+        return <JsxOpeningFragment>createSynthesizedNode(SyntaxKind.JsxOpeningFragment);
+    }
+
+    export function createJsxJsxClosingFragment() {
+        return <JsxClosingFragment>createSynthesizedNode(SyntaxKind.JsxClosingFragment);
     }
 
     export function updateJsxFragment(node: JsxFragment, openingFragment: JsxOpeningFragment, children: ReadonlyArray<JsxChild>, closingFragment: JsxClosingFragment) {
@@ -2446,7 +2545,7 @@ namespace ts {
 
     export function createSpreadAssignment(expression: Expression) {
         const node = <SpreadAssignment>createSynthesizedNode(SyntaxKind.SpreadAssignment);
-        node.expression = expression !== undefined ? parenthesizeExpressionForList(expression) : undefined!; // TODO: GH#18217
+        node.expression = parenthesizeExpressionForList(expression);
         return node;
     }
 
@@ -2629,46 +2728,306 @@ namespace ts {
         return node;
     }
 
-    export function createUnparsedSourceFile(text: string): UnparsedSource;
-    export function createUnparsedSourceFile(text: string, mapPath: string | undefined, map: string | undefined): UnparsedSource;
-    export function createUnparsedSourceFile(text: string, mapPath?: string, map?: string): UnparsedSource {
+    let allUnscopedEmitHelpers: ReadonlyMap<UnscopedEmitHelper> | undefined;
+    function getAllUnscopedEmitHelpers() {
+        return allUnscopedEmitHelpers || (allUnscopedEmitHelpers = arrayToMap([
+            valuesHelper,
+            readHelper,
+            spreadHelper,
+            spreadArraysHelper,
+            restHelper,
+            decorateHelper,
+            metadataHelper,
+            paramHelper,
+            awaiterHelper,
+            assignHelper,
+            awaitHelper,
+            asyncGeneratorHelper,
+            asyncDelegator,
+            asyncValues,
+            extendsHelper,
+            templateObjectHelper,
+            generatorHelper,
+            importStarHelper,
+            importDefaultHelper
+        ], helper => helper.name));
+    }
+
+    function createUnparsedSource() {
         const node = <UnparsedSource>createNode(SyntaxKind.UnparsedSource);
-        node.text = text;
-        node.sourceMapPath = mapPath;
-        node.sourceMapText = map;
+        node.prologues = emptyArray;
+        node.referencedFiles = emptyArray;
+        node.libReferenceDirectives = emptyArray;
+        node.getLineAndCharacterOfPosition = pos => getLineAndCharacterOfPosition(node, pos);
         return node;
     }
+
+    export function createUnparsedSourceFile(text: string): UnparsedSource;
+    export function createUnparsedSourceFile(inputFile: InputFiles, type: "js" | "dts", stripInternal?: boolean): UnparsedSource;
+    export function createUnparsedSourceFile(text: string, mapPath: string | undefined, map: string | undefined): UnparsedSource;
+    export function createUnparsedSourceFile(textOrInputFiles: string | InputFiles, mapPathOrType?: string, mapTextOrStripInternal?: string | boolean): UnparsedSource {
+        const node = createUnparsedSource();
+        let stripInternal: boolean | undefined;
+        let bundleFileInfo: BundleFileInfo | undefined;
+        if (!isString(textOrInputFiles)) {
+            Debug.assert(mapPathOrType === "js" || mapPathOrType === "dts");
+            node.fileName = (mapPathOrType === "js" ? textOrInputFiles.javascriptPath : textOrInputFiles.declarationPath) || "";
+            node.sourceMapPath = mapPathOrType === "js" ? textOrInputFiles.javascriptMapPath : textOrInputFiles.declarationMapPath;
+            Object.defineProperties(node, {
+                text: { get() { return mapPathOrType === "js" ? textOrInputFiles.javascriptText : textOrInputFiles.declarationText; } },
+                sourceMapText: { get() { return mapPathOrType === "js" ? textOrInputFiles.javascriptMapText : textOrInputFiles.declarationMapText; } },
+            });
+
+
+            if (textOrInputFiles.buildInfo && textOrInputFiles.buildInfo.bundle) {
+                node.oldFileOfCurrentEmit = textOrInputFiles.oldFileOfCurrentEmit;
+                Debug.assert(mapTextOrStripInternal === undefined || typeof mapTextOrStripInternal === "boolean");
+                stripInternal = mapTextOrStripInternal as boolean | undefined;
+                bundleFileInfo = mapPathOrType === "js" ? textOrInputFiles.buildInfo.bundle.js : textOrInputFiles.buildInfo.bundle.dts;
+                if (node.oldFileOfCurrentEmit) {
+                    parseOldFileOfCurrentEmit(node, Debug.assertDefined(bundleFileInfo));
+                    return node;
+                }
+            }
+        }
+        else {
+            node.fileName = "";
+            node.text = textOrInputFiles;
+            node.sourceMapPath = mapPathOrType;
+            node.sourceMapText = mapTextOrStripInternal as string;
+        }
+        Debug.assert(!node.oldFileOfCurrentEmit);
+        parseUnparsedSourceFile(node, bundleFileInfo, stripInternal);
+        return node;
+    }
+
+    function parseUnparsedSourceFile(node: UnparsedSource, bundleFileInfo: BundleFileInfo | undefined, stripInternal: boolean | undefined) {
+        let prologues: UnparsedPrologue[] | undefined;
+        let helpers: UnscopedEmitHelper[] | undefined;
+        let referencedFiles: FileReference[] | undefined;
+        let typeReferenceDirectives: string[] | undefined;
+        let libReferenceDirectives: FileReference[] | undefined;
+        let texts: UnparsedSourceText[] | undefined;
+
+        for (const section of bundleFileInfo ? bundleFileInfo.sections : emptyArray) {
+            switch (section.kind) {
+                case BundleFileSectionKind.Prologue:
+                    (prologues || (prologues = [])).push(createUnparsedNode(section, node) as UnparsedPrologue);
+                    break;
+                case BundleFileSectionKind.EmitHelpers:
+                    (helpers || (helpers = [])).push(getAllUnscopedEmitHelpers().get(section.data)!);
+                    break;
+                case BundleFileSectionKind.NoDefaultLib:
+                    node.hasNoDefaultLib = true;
+                    break;
+                case BundleFileSectionKind.Reference:
+                    (referencedFiles || (referencedFiles = [])).push({ pos: -1, end: -1, fileName: section.data });
+                    break;
+                case BundleFileSectionKind.Type:
+                    (typeReferenceDirectives || (typeReferenceDirectives = [])).push(section.data);
+                    break;
+                case BundleFileSectionKind.Lib:
+                    (libReferenceDirectives || (libReferenceDirectives = [])).push({ pos: -1, end: -1, fileName: section.data });
+                    break;
+                case BundleFileSectionKind.Prepend:
+                    const prependNode = createUnparsedNode(section, node) as UnparsedPrepend;
+                    let prependTexts: UnparsedTextLike[] | undefined;
+                    for (const text of section.texts) {
+                        if (!stripInternal || text.kind !== BundleFileSectionKind.Internal) {
+                            (prependTexts || (prependTexts = [])).push(createUnparsedNode(text, node) as UnparsedTextLike);
+                        }
+                    }
+                    prependNode.texts = prependTexts || emptyArray;
+                    (texts || (texts = [])).push(prependNode);
+                    break;
+                case BundleFileSectionKind.Internal:
+                    if (stripInternal) break;
+                // falls through
+                case BundleFileSectionKind.Text:
+                    (texts || (texts = [])).push(createUnparsedNode(section, node) as UnparsedTextLike);
+                    break;
+                default:
+                    Debug.assertNever(section);
+            }
+        }
+
+        node.prologues = prologues || emptyArray;
+        node.helpers = helpers;
+        node.referencedFiles = referencedFiles || emptyArray;
+        node.typeReferenceDirectives = typeReferenceDirectives;
+        node.libReferenceDirectives = libReferenceDirectives || emptyArray;
+        node.texts = texts || [<UnparsedTextLike>createUnparsedNode({ kind: BundleFileSectionKind.Text, pos: 0, end: node.text.length }, node)];
+    }
+
+    function parseOldFileOfCurrentEmit(node: UnparsedSource, bundleFileInfo: BundleFileInfo) {
+        Debug.assert(!!node.oldFileOfCurrentEmit);
+        let texts: UnparsedTextLike[] | undefined;
+        let syntheticReferences: UnparsedSyntheticReference[] | undefined;
+        for (const section of bundleFileInfo.sections) {
+            switch (section.kind) {
+                case BundleFileSectionKind.Internal:
+                case BundleFileSectionKind.Text:
+                    (texts || (texts = [])).push(createUnparsedNode(section, node) as UnparsedTextLike);
+                    break;
+
+                case BundleFileSectionKind.NoDefaultLib:
+                case BundleFileSectionKind.Reference:
+                case BundleFileSectionKind.Type:
+                case BundleFileSectionKind.Lib:
+                    (syntheticReferences || (syntheticReferences = [])).push(createUnparsedSyntheticReference(section, node));
+                    break;
+
+                // Ignore
+                case BundleFileSectionKind.Prologue:
+                case BundleFileSectionKind.EmitHelpers:
+                case BundleFileSectionKind.Prepend:
+                    break;
+
+                default:
+                    Debug.assertNever(section);
+            }
+        }
+        node.texts = texts || emptyArray;
+        node.helpers = map(bundleFileInfo.sources && bundleFileInfo.sources.helpers, name => getAllUnscopedEmitHelpers().get(name)!);
+        node.syntheticReferences = syntheticReferences;
+        return node;
+    }
+
+    function mapBundleFileSectionKindToSyntaxKind(kind: BundleFileSectionKind): SyntaxKind {
+        switch (kind) {
+            case BundleFileSectionKind.Prologue: return SyntaxKind.UnparsedPrologue;
+            case BundleFileSectionKind.Prepend: return SyntaxKind.UnparsedPrepend;
+            case BundleFileSectionKind.Internal: return SyntaxKind.UnparsedInternalText;
+            case BundleFileSectionKind.Text: return SyntaxKind.UnparsedText;
+
+            case BundleFileSectionKind.EmitHelpers:
+            case BundleFileSectionKind.NoDefaultLib:
+            case BundleFileSectionKind.Reference:
+            case BundleFileSectionKind.Type:
+            case BundleFileSectionKind.Lib:
+                return Debug.fail(`BundleFileSectionKind: ${kind} not yet mapped to SyntaxKind`);
+
+            default:
+                return Debug.assertNever(kind);
+        }
+    }
+
+    function createUnparsedNode(section: BundleFileSection, parent: UnparsedSource): UnparsedNode {
+        const node = createNode(mapBundleFileSectionKindToSyntaxKind(section.kind), section.pos, section.end) as UnparsedNode;
+        node.parent = parent;
+        node.data = section.data;
+        return node;
+    }
+
+    function createUnparsedSyntheticReference(section: BundleFileHasNoDefaultLib | BundleFileReference, parent: UnparsedSource) {
+        const node = createNode(SyntaxKind.UnparsedSyntheticReference, section.pos, section.end) as UnparsedSyntheticReference;
+        node.parent = parent;
+        node.data = section.data;
+        node.section = section;
+        return node;
+    }
+
     export function createInputFiles(
-        javascript: string,
-        declaration: string
+        javascriptText: string,
+        declarationText: string
     ): InputFiles;
     export function createInputFiles(
-        javascript: string,
-        declaration: string,
+        readFileText: (path: string) => string | undefined,
+        javascriptPath: string,
+        javascriptMapPath: string | undefined,
+        declarationPath: string,
+        declarationMapPath: string | undefined,
+        buildInfoPath: string | undefined
+    ): InputFiles;
+    export function createInputFiles(
+        javascriptText: string,
+        declarationText: string,
         javascriptMapPath: string | undefined,
         javascriptMapText: string | undefined,
         declarationMapPath: string | undefined,
         declarationMapText: string | undefined
     ): InputFiles;
+    /*@internal*/
     export function createInputFiles(
-        javascript: string,
-        declaration: string,
+        javascriptText: string,
+        declarationText: string,
+        javascriptMapPath: string | undefined,
+        javascriptMapText: string | undefined,
+        declarationMapPath: string | undefined,
+        declarationMapText: string | undefined,
+        javascriptPath: string | undefined,
+        declarationPath: string | undefined,
+        buildInfoPath?: string | undefined,
+        buildInfo?: BuildInfo,
+        oldFileOfCurrentEmit?: boolean
+    ): InputFiles;
+    export function createInputFiles(
+        javascriptTextOrReadFileText: string | ((path: string) => string | undefined),
+        declarationTextOrJavascriptPath: string,
         javascriptMapPath?: string,
-        javascriptMapText?: string,
+        javascriptMapTextOrDeclarationPath?: string,
         declarationMapPath?: string,
-        declarationMapText?: string
+        declarationMapTextOrBuildInfoPath?: string,
+        javascriptPath?: string | undefined,
+        declarationPath?: string | undefined,
+        buildInfoPath?: string | undefined,
+        buildInfo?: BuildInfo,
+        oldFileOfCurrentEmit?: boolean
     ): InputFiles {
         const node = <InputFiles>createNode(SyntaxKind.InputFiles);
-        node.javascriptText = javascript;
-        node.javascriptMapPath = javascriptMapPath;
-        node.javascriptMapText = javascriptMapText;
-        node.declarationText = declaration;
-        node.declarationMapPath = declarationMapPath;
-        node.declarationMapText = declarationMapText;
+        if (!isString(javascriptTextOrReadFileText)) {
+            const cache = createMap<string | false>();
+            const textGetter = (path: string | undefined) => {
+                if (path === undefined) return undefined;
+                let value = cache.get(path);
+                if (value === undefined) {
+                    value = javascriptTextOrReadFileText(path);
+                    cache.set(path, value !== undefined ? value : false);
+                }
+                return value !== false ? value as string : undefined;
+            };
+            const definedTextGetter = (path: string) => {
+                const result = textGetter(path);
+                return result !== undefined ? result : `/* Input file ${path} was missing */\r\n`;
+            };
+            let buildInfo: BuildInfo | false;
+            const getAndCacheBuildInfo = (getText: () => string | undefined) => {
+                if (buildInfo === undefined) {
+                    const result = getText();
+                    buildInfo = result !== undefined ? getBuildInfo(result) : false;
+                }
+                return buildInfo || undefined;
+            };
+            node.javascriptPath = declarationTextOrJavascriptPath;
+            node.javascriptMapPath = javascriptMapPath;
+            node.declarationPath = Debug.assertDefined(javascriptMapTextOrDeclarationPath);
+            node.declarationMapPath = declarationMapPath;
+            node.buildInfoPath = declarationMapTextOrBuildInfoPath;
+            Object.defineProperties(node, {
+                javascriptText: { get() { return definedTextGetter(declarationTextOrJavascriptPath); } },
+                javascriptMapText: { get() { return textGetter(javascriptMapPath); } }, // TODO:: if there is inline sourceMap in jsFile, use that
+                declarationText: { get() { return definedTextGetter(Debug.assertDefined(javascriptMapTextOrDeclarationPath)); } },
+                declarationMapText: { get() { return textGetter(declarationMapPath); } }, // TODO:: if there is inline sourceMap in dtsFile, use that
+                buildInfo: { get() { return getAndCacheBuildInfo(() => textGetter(declarationMapTextOrBuildInfoPath)); } }
+            });
+        }
+        else {
+            node.javascriptText = javascriptTextOrReadFileText;
+            node.javascriptMapPath = javascriptMapPath;
+            node.javascriptMapText = javascriptMapTextOrDeclarationPath;
+            node.declarationText = declarationTextOrJavascriptPath;
+            node.declarationMapPath = declarationMapPath;
+            node.declarationMapText = declarationMapTextOrBuildInfoPath;
+            node.javascriptPath = javascriptPath;
+            node.declarationPath = declarationPath,
+            node.buildInfoPath = buildInfoPath;
+            node.buildInfo = buildInfo;
+            node.oldFileOfCurrentEmit = oldFileOfCurrentEmit;
+        }
         return node;
     }
 
-    export function updateBundle(node: Bundle, sourceFiles: ReadonlyArray<SourceFile>, prepends: ReadonlyArray<UnparsedSource> = emptyArray) {
+    export function updateBundle(node: Bundle, sourceFiles: ReadonlyArray<SourceFile>, prepends: ReadonlyArray<UnparsedSource | InputFiles> = emptyArray) {
         if (node.sourceFiles !== sourceFiles || node.prepends !== prepends) {
             return createBundle(sourceFiles, prepends);
         }
@@ -2791,6 +3150,12 @@ namespace ts {
         return typeof value === "number" ? createToken(value) : value;
     }
 
+    function asEmbeddedStatement<T extends Node>(statement: T): T | EmptyStatement;
+    function asEmbeddedStatement<T extends Node>(statement: T | undefined): T | EmptyStatement | undefined;
+    function asEmbeddedStatement<T extends Node>(statement: T | undefined): T | EmptyStatement | undefined {
+        return statement && isNotEmittedStatement(statement) ? setTextRange(setOriginalNode(createEmptyStatement(), statement), statement) : statement;
+    }
+
     /**
      * Clears any EmitNode entries from parse-tree nodes.
      * @param sourceFile A source file.
@@ -2827,7 +3192,7 @@ namespace ts {
                     return node.emitNode = { annotatedNodes: [node] } as EmitNode;
                 }
 
-                const sourceFile = getSourceFileOfNode(node);
+                const sourceFile = getSourceFileOfNode(getParseTreeNode(getSourceFileOfNode(node)));
                 getOrCreateEmitNode(sourceFile).annotatedNodes!.push(node);
             }
 
@@ -2835,6 +3200,18 @@ namespace ts {
         }
 
         return node.emitNode;
+    }
+
+    /**
+     * Sets `EmitFlags.NoComments` on a node and removes any leading and trailing synthetic comments.
+     * @internal
+     */
+    export function removeAllComments<T extends Node>(node: T): T {
+        const emitNode = getOrCreateEmitNode(node);
+        emitNode.flags |= EmitFlags.NoComments;
+        emitNode.leadingComments = undefined;
+        emitNode.trailingComments = undefined;
+        return node;
     }
 
     export function setTextRange<T extends TextRange>(range: T, location: TextRange | undefined): T {
@@ -3124,7 +3501,7 @@ namespace ts {
     export const nullTransformationContext: TransformationContext = {
         enableEmitNotification: noop,
         enableSubstitution: noop,
-        endLexicalEnvironment: () => undefined,
+        endLexicalEnvironment: returnUndefined,
         getCompilerOptions: notImplemented,
         getEmitHost: notImplemented,
         getEmitResolver: notImplemented,
@@ -3321,23 +3698,28 @@ namespace ts {
 
     // Helpers
 
-    export function getHelperName(name: string) {
+    /**
+     * Gets an identifier for the name of an *unscoped* emit helper.
+     */
+    export function getUnscopedHelperName(name: string) {
         return setEmitFlags(createIdentifier(name), EmitFlags.HelperName | EmitFlags.AdviseOnEmitNode);
     }
 
-    const valuesHelper: EmitHelper = {
+    export const valuesHelper: UnscopedEmitHelper = {
         name: "typescript:values",
+        importName: "__values",
         scoped: false,
         text: `
-            var __values = (this && this.__values) || function (o) {
-                var m = typeof Symbol === "function" && o[Symbol.iterator], i = 0;
+            var __values = (this && this.__values) || function(o) {
+                var s = typeof Symbol === "function" && Symbol.iterator, m = s && o[s], i = 0;
                 if (m) return m.call(o);
-                return {
+                if (o && typeof o.length === "number") return {
                     next: function () {
                         if (o && i >= o.length) o = void 0;
                         return { value: o && o[i++], done: !o };
                     }
                 };
+                throw new TypeError(s ? "Object is not iterable." : "Symbol.iterator is not defined.");
             };`
     };
 
@@ -3345,7 +3727,7 @@ namespace ts {
         context.requestEmitHelper(valuesHelper);
         return setTextRange(
             createCall(
-                getHelperName("__values"),
+                getUnscopedHelperName("__values"),
                 /*typeArguments*/ undefined,
                 [expression]
             ),
@@ -3353,8 +3735,9 @@ namespace ts {
         );
     }
 
-    const readHelper: EmitHelper = {
+    export const readHelper: UnscopedEmitHelper = {
         name: "typescript:read",
+        importName: "__read",
         scoped: false,
         text: `
             var __read = (this && this.__read) || function (o, n) {
@@ -3379,7 +3762,7 @@ namespace ts {
         context.requestEmitHelper(readHelper);
         return setTextRange(
             createCall(
-                getHelperName("__read"),
+                getUnscopedHelperName("__read"),
                 /*typeArguments*/ undefined,
                 count !== undefined
                     ? [iteratorRecord, createLiteral(count)]
@@ -3389,8 +3772,9 @@ namespace ts {
         );
     }
 
-    const spreadHelper: EmitHelper = {
+    export const spreadHelper: UnscopedEmitHelper = {
         name: "typescript:spread",
+        importName: "__spread",
         scoped: false,
         text: `
             var __spread = (this && this.__spread) || function () {
@@ -3404,7 +3788,33 @@ namespace ts {
         context.requestEmitHelper(spreadHelper);
         return setTextRange(
             createCall(
-                getHelperName("__spread"),
+                getUnscopedHelperName("__spread"),
+                /*typeArguments*/ undefined,
+                argumentList
+            ),
+            location
+        );
+    }
+
+    export const spreadArraysHelper: UnscopedEmitHelper = {
+        name: "typescript:spreadArrays",
+        importName: "__spreadArrays",
+        scoped: false,
+        text: `
+            var __spreadArrays = (this && this.__spreadArrays) || function () {
+                for (var s = 0, i = 0, il = arguments.length; i < il; i++) s += arguments[i].length;
+                for (var r = Array(s), k = 0, i = 0; i < il; i++)
+                    for (var a = arguments[i], j = 0, jl = a.length; j < jl; j++, k++)
+                        r[k] = a[j];
+                return r;
+            };`
+    };
+
+    export function createSpreadArraysHelper(context: TransformationContext, argumentList: ReadonlyArray<Expression>, location?: TextRange) {
+        context.requestEmitHelper(spreadArraysHelper);
+        return setTextRange(
+            createCall(
+                getUnscopedHelperName("__spreadArrays"),
                 /*typeArguments*/ undefined,
                 argumentList
             ),
@@ -4369,7 +4779,7 @@ namespace ts {
         }
     }
 
-    function getLeftmostExpression(node: Expression, stopAtCallExpressions: boolean) {
+    export function getLeftmostExpression(node: Expression, stopAtCallExpressions: boolean) {
         while (true) {
             switch (node.kind) {
                 case SyntaxKind.PostfixUnaryExpression:
@@ -4528,6 +4938,65 @@ namespace ts {
         const parseNode = getOriginalNode(node, isSourceFile);
         const emitNode = parseNode && parseNode.emitNode;
         return emitNode && emitNode.externalHelpersModuleName;
+    }
+
+    export function hasRecordedExternalHelpers(sourceFile: SourceFile) {
+        const parseNode = getOriginalNode(sourceFile, isSourceFile);
+        const emitNode = parseNode && parseNode.emitNode;
+        return !!emitNode && (!!emitNode.externalHelpersModuleName || !!emitNode.externalHelpers);
+    }
+
+    export function createExternalHelpersImportDeclarationIfNeeded(sourceFile: SourceFile, compilerOptions: CompilerOptions, hasExportStarsToExportValues?: boolean, hasImportStar?: boolean, hasImportDefault?: boolean) {
+        if (compilerOptions.importHelpers && isEffectiveExternalModule(sourceFile, compilerOptions)) {
+            let namedBindings: NamedImportBindings | undefined;
+            const moduleKind = getEmitModuleKind(compilerOptions);
+            if (moduleKind >= ModuleKind.ES2015 && moduleKind <= ModuleKind.ESNext) {
+                // use named imports
+                const helpers = getEmitHelpers(sourceFile);
+                if (helpers) {
+                    const helperNames: string[] = [];
+                    for (const helper of helpers) {
+                        if (!helper.scoped) {
+                            const importName = (helper as UnscopedEmitHelper).importName;
+                            if (importName) {
+                                pushIfUnique(helperNames, importName);
+                            }
+                        }
+                    }
+                    if (some(helperNames)) {
+                        helperNames.sort(compareStringsCaseSensitive);
+                        // Alias the imports if the names are used somewhere in the file.
+                        // NOTE: We don't need to care about global import collisions as this is a module.
+                        namedBindings = createNamedImports(
+                            map(helperNames, name => isFileLevelUniqueName(sourceFile, name)
+                                ? createImportSpecifier(/*propertyName*/ undefined, createIdentifier(name))
+                                : createImportSpecifier(createIdentifier(name), getUnscopedHelperName(name))
+                            )
+                        );
+                        const parseNode = getOriginalNode(sourceFile, isSourceFile);
+                        const emitNode = getOrCreateEmitNode(parseNode);
+                        emitNode.externalHelpers = true;
+                    }
+                }
+            }
+            else {
+                // use a namespace import
+                const externalHelpersModuleName = getOrCreateExternalHelpersModuleNameIfNeeded(sourceFile, compilerOptions, hasExportStarsToExportValues, hasImportStar || hasImportDefault);
+                if (externalHelpersModuleName) {
+                    namedBindings = createNamespaceImport(externalHelpersModuleName);
+                }
+            }
+            if (namedBindings) {
+                const externalHelpersImportDeclaration = createImportDeclaration(
+                    /*decorators*/ undefined,
+                    /*modifiers*/ undefined,
+                    createImportClause(/*name*/ undefined, namedBindings),
+                    createLiteral(externalHelpersModuleNameText)
+                );
+                addEmitFlags(externalHelpersImportDeclaration, EmitFlags.NeverApplyImportHelper);
+                return externalHelpersImportDeclaration;
+            }
+        }
     }
 
     export function getOrCreateExternalHelpersModuleNameIfNeeded(node: SourceFile, compilerOptions: CompilerOptions, hasExportStarsToExportValues?: boolean, hasImportStarOrImportDefault?: boolean) {

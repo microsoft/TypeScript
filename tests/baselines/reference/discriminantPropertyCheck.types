@@ -378,3 +378,126 @@ u.b && u.a && f(u.a, u.b);
 >u : U
 >b : string
 
+// Repro from #29012
+
+type Additive = '+' | '-';
+>Additive : Additive
+
+type Multiplicative = '*' | '/';
+>Multiplicative : Multiplicative
+
+interface AdditiveObj {
+    key: Additive
+>key : Additive
+}
+
+interface MultiplicativeObj {
+    key: Multiplicative
+>key : Multiplicative
+}
+
+type Obj = AdditiveObj | MultiplicativeObj
+>Obj : Obj
+
+export function foo(obj: Obj) {
+>foo : (obj: Obj) => void
+>obj : Obj
+
+    switch (obj.key) {
+>obj.key : "+" | "-" | "*" | "/"
+>obj : Obj
+>key : "+" | "-" | "*" | "/"
+
+        case '+': {
+>'+' : "+"
+
+            onlyPlus(obj.key);
+>onlyPlus(obj.key) : "+"
+>onlyPlus : (arg: "+") => "+"
+>obj.key : "+"
+>obj : AdditiveObj
+>key : "+"
+
+            return;
+        }
+    }
+}
+
+function onlyPlus(arg: '+') {
+>onlyPlus : (arg: "+") => "+"
+>arg : "+"
+
+  return arg;
+>arg : "+"
+}
+
+// Repro from #29496
+
+declare function never(value: never): never;
+>never : (value: never) => never
+>value : never
+
+const enum BarEnum {
+>BarEnum : BarEnum
+
+    bar1 = 1,
+>bar1 : BarEnum.bar1
+>1 : 1
+
+    bar2 = 2,
+>bar2 : BarEnum.bar2
+>2 : 2
+}
+
+type UnionOfBar = TypeBar1 | TypeBar2;
+>UnionOfBar : UnionOfBar
+
+type TypeBar1 = { type: BarEnum.bar1 };
+>TypeBar1 : TypeBar1
+>type : BarEnum.bar1
+>BarEnum : any
+
+type TypeBar2 = { type: BarEnum.bar2 };
+>TypeBar2 : TypeBar2
+>type : BarEnum.bar2
+>BarEnum : any
+
+function func3(value: Partial<UnionOfBar>) {
+>func3 : (value: Partial<TypeBar1> | Partial<TypeBar2>) => void
+>value : Partial<TypeBar1> | Partial<TypeBar2>
+
+    if (value.type !== undefined) {
+>value.type !== undefined : boolean
+>value.type : BarEnum | undefined
+>value : Partial<TypeBar1> | Partial<TypeBar2>
+>type : BarEnum | undefined
+>undefined : undefined
+
+        switch (value.type) {
+>value.type : BarEnum
+>value : Partial<TypeBar1> | Partial<TypeBar2>
+>type : BarEnum
+
+            case BarEnum.bar1:
+>BarEnum.bar1 : BarEnum.bar1
+>BarEnum : typeof BarEnum
+>bar1 : BarEnum.bar1
+
+                break;
+            case BarEnum.bar2:
+>BarEnum.bar2 : BarEnum.bar2
+>BarEnum : typeof BarEnum
+>bar2 : BarEnum.bar2
+
+                break;
+            default:
+                never(value.type);
+>never(value.type) : never
+>never : (value: never) => never
+>value.type : never
+>value : Partial<TypeBar1> | Partial<TypeBar2>
+>type : never
+        }
+    }
+}
+

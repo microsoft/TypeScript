@@ -11,7 +11,7 @@ var s = $.extend< { workItem: any }, { workItem: any, width: string }>({ workIte
 >{ workItem: this._workItem } : { workItem: any; }
 >workItem : any
 >this._workItem : any
->this : any
+>this : typeof globalThis
 >_workItem : any
 >{} : {}
 

@@ -23,15 +23,15 @@ verify.getAndApplyCodeFix(/*errorCode*/undefined, 0);
 verify.getAndApplyCodeFix(/*errorCode*/undefined, 0);
 
 verify.rangeIs(`
-    m2(c: C): any {
+    m2(c: C) {
         throw new Error("Method not implemented.");
     }
     y: {};
-    m1(): any {
+    m1() {
         throw new Error("Method not implemented.");
     }
     static x: any;
-    static m0(arg0: number, arg1: string, arg2: undefined[]): any {
+    static m0(arg0: number, arg1: string, arg2: undefined[]) {
         throw new Error("Method not implemented.");
     }
 `);
