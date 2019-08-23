@@ -101,14 +101,6 @@ interface PromiseConstructor {
     race<T>(values: readonly T[]): Promise<T extends PromiseLike<infer U> ? U : T>;
 
     /**
-     * Creates a Promise that is resolved or rejected when any of the provided Promises are resolved
-     * or rejected.
-     * @param values An iterable of Promises.
-     * @returns A new Promise.
-     */
-    race<T>(values: Iterable<T>): Promise<T extends PromiseLike<infer U> ? U : T>;
-
-    /**
      * Creates a new rejected promise for the provided reason.
      * @param reason The reason the promise was rejected.
      * @returns A new rejected Promise.
