@@ -407,8 +407,8 @@ namespace ts.server {
     }
 
     function setProjectOptionsUsed(project: ConfiguredProject | ExternalProject) {
-        if (project.projectKind === ProjectKind.Configured) {
-            (project as ConfiguredProject).projectOptions = true;
+        if (isConfiguredProject(project)) {
+            project.projectOptions = true;
         }
     }
 
@@ -1208,16 +1208,16 @@ namespace ts.server {
             // collect all projects that should be removed
             let ensureProjectsForOpenFiles = false;
             for (const p of info.containingProjects) {
-                if (p.projectKind === ProjectKind.Configured) {
+                if (isConfiguredProject(p)) {
                     if (info.hasMixedContent) {
                         info.registerFileUpdate();
                     }
                     // Do not remove the project so that we can reuse this project
                     // if it would need to be re-created with next file open
                 }
-                else if (p.projectKind === ProjectKind.Inferred && p.isRoot(info)) {
+                else if (isInferredProject(p) && p.isRoot(info)) {
                     // If this was the last open root file of inferred project
-                    if ((p as InferredProject).isProjectWithSingleRoot()) {
+                    if (p.isProjectWithSingleRoot()) {
                         ensureProjectsForOpenFiles = true;
                     }
 
@@ -1677,7 +1677,7 @@ namespace ts.server {
                 return;
             }
 
-            const projectOptions = project.projectKind === ProjectKind.Configured ? (project as ConfiguredProject).projectOptions as ProjectOptions : undefined;
+            const projectOptions = isConfiguredProject(project) ? project.projectOptions as ProjectOptions : undefined;
             setProjectOptionsUsed(project);
             const data: ProjectInfoTelemetryEventData = {
                 projectId: this.host.createSHA256Hash(project.projectName),
@@ -1697,7 +1697,7 @@ namespace ts.server {
             this.eventHandler({ eventName: ProjectInfoTelemetryEvent, data });
 
             function configFileName(): ProjectInfoTelemetryEventData["configFileName"] {
-                if (!(project instanceof ConfiguredProject)) {
+                if (!isConfiguredProject(project)) {
                     return "other";
                 }
 
@@ -2558,7 +2558,7 @@ namespace ts.server {
             const firstProject = info.containingProjects[0];
 
             if (!firstProject.isOrphan() &&
-                firstProject.projectKind === ProjectKind.Inferred &&
+                isInferredProject(firstProject) &&
                 firstProject.isRoot(info) &&
                 forEach(info.containingProjects, p => p !== firstProject && !p.isOrphan())) {
                 firstProject.removeFile(info, /*fileExists*/ true, /*detachFromProject*/ true);
@@ -2629,8 +2629,8 @@ namespace ts.server {
 
             // Add configured projects as referenced
             originalScriptInfo.containingProjects.forEach(project => {
-                if (project.projectKind === ProjectKind.Configured) {
-                    addOriginalConfiguredProject(project as ConfiguredProject);
+                if (isConfiguredProject(project)) {
+                    addOriginalConfiguredProject(project);
                 }
             });
             return originalLocation;

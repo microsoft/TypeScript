@@ -469,7 +469,7 @@ namespace ts.server {
 
         detachAllProjects() {
             for (const p of this.containingProjects) {
-                if (p.projectKind === ProjectKind.Configured) {
+                if (isConfiguredProject(p)) {
                     p.getCachedDirectoryStructureHost().addOrDeleteFile(this.fileName, this.path, FileWatcherEventKind.Deleted);
                 }
                 const isInfoRoot = p.isRoot(this);
@@ -477,7 +477,7 @@ namespace ts.server {
                 p.removeFile(this, /*fileExists*/ false, /*detachFromProjects*/ false);
                 // If the info was for the external or configured project's root,
                 // add missing file as the root
-                if (isInfoRoot && p.projectKind !== ProjectKind.Inferred) {
+                if (isInfoRoot && !isInferredProject(p)) {
                     p.addMissingFileRoot(this.fileName);
                 }
             }
@@ -503,7 +503,7 @@ namespace ts.server {
                     let defaultConfiguredProject: ConfiguredProject | false | undefined;
                     for (let index = 0; index < this.containingProjects.length; index++) {
                         const project = this.containingProjects[index];
-                        if (project.projectKind === ProjectKind.Configured) {
+                        if (isConfiguredProject(project)) {
                             if (!project.isSourceOfProjectReferenceRedirect(this.fileName)) {
                                 // If we havent found default configuredProject and
                                 // its not the last one, find it and use that one if there
@@ -516,7 +516,7 @@ namespace ts.server {
                             }
                             if (!firstConfiguredProject) firstConfiguredProject = project;
                         }
-                        else if (project.projectKind === ProjectKind.External && !firstExternalProject) {
+                        else if (!firstExternalProject && isExternalProject(project)) {
                             firstExternalProject = project;
                         }
                     }
