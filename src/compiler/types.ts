@@ -4200,7 +4200,9 @@ namespace ts {
      */
     export interface TypeReference extends ObjectType {
         target: GenericType;    // Type reference target
-        typeArguments?: ReadonlyArray<Type>;  // Type reference type arguments (undefined if none)
+        resolvedTypeArguments?: ReadonlyArray<Type>;  // Type reference type arguments (undefined if none)
+        typeArgumentNodes?: ReadonlyArray<TypeNode>;
+        mapper?: TypeMapper;
         /* @internal */
         literalType?: TypeReference;  // Clone of type with ObjectFlags.ArrayLiteral set
     }
