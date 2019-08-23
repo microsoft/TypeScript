@@ -1137,9 +1137,8 @@ namespace ts.server {
         }
 
         filesToString(writeProjectFileNames: boolean) {
-            if (!this.program) {
-                return "\tFiles (0)\n";
-            }
+            if (this.isInitialLoadPending()) return "\tFiles (0) InitialLoadPending\n";
+            if (!this.program) return "\tFiles (0) NoProgram\n";
             const sourceFiles = this.program.getSourceFiles();
             let strBuilder = `\tFiles (${sourceFiles.length})\n`;
             if (writeProjectFileNames) {
@@ -1517,7 +1516,8 @@ namespace ts.server {
         /*@internal*/
         projectOptions?: ProjectOptions | true;
 
-        protected isInitialLoadPending: () => boolean = returnTrue;
+        /*@internal*/
+        isInitialLoadPending: () => boolean = returnTrue;
 
         /*@internal*/
         sendLoadingProjectFinish = false;

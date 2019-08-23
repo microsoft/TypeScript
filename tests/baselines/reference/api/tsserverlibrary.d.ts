@@ -8616,7 +8616,6 @@ declare namespace ts.server {
         private externalProjectRefCount;
         private projectErrors;
         private projectReferences;
-        protected isInitialLoadPending: () => boolean;
         /**
          * This implementation of fileExists checks if the file being requested is
          * .d.ts file for the referenced Project.
