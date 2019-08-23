@@ -178,7 +178,7 @@ namespace ts.codefix {
                 // `const a = require("b").c` --> `import { c as a } from "./b";
                 return [makeSingleImport(name.text, propertyName, moduleSpecifier, quotePreference)];
             default:
-                return Debug.assertNever(name);
+                return Debug.assertNever(name, `Convert to ES6 module got invalid syntax form ${(name as BindingName).kind}`);
         }
     }
 
@@ -238,7 +238,7 @@ namespace ts.codefix {
                 case SyntaxKind.MethodDeclaration:
                     return !isIdentifier(prop.name) ? undefined : functionExpressionToDeclaration(prop.name.text, [createToken(SyntaxKind.ExportKeyword)], prop);
                 default:
-                    Debug.assertNever(prop);
+                    Debug.assertNever(prop, `Convert to ES6 got invalid prop kind ${(prop as ObjectLiteralElementLike).kind}`);
             }
         });
         return statements && [statements, false];
@@ -375,7 +375,7 @@ namespace ts.codefix {
             case SyntaxKind.Identifier:
                 return convertSingleIdentifierImport(file, name, moduleSpecifier, changes, checker, identifiers, quotePreference);
             default:
-                return Debug.assertNever(name);
+                return Debug.assertNever(name, `Convert to ES6 module got invalid name kind ${(name as BindingName).kind}`);
         }
     }
 
@@ -399,7 +399,7 @@ namespace ts.codefix {
             const { parent } = use;
             if (isPropertyAccessExpression(parent)) {
                 const { expression, name: { text: propertyName } } = parent;
-                Debug.assert(expression === use); // Else shouldn't have been in `collectIdentifiers`
+                Debug.assert(expression === use, "Didn't expect expression === use"); // Else shouldn't have been in `collectIdentifiers`
                 let idName = namedBindingsNames.get(propertyName);
                 if (idName === undefined) {
                     idName = makeUniqueName(propertyName, identifiers);

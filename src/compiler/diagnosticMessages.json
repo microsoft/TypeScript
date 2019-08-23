@@ -5116,6 +5116,10 @@
         "category": "Message",
         "code": 95088
     },
+    "Add 'await' to initializers": {
+        "category": "Message",
+        "code": 95089
+    },
 
     "No value exists in scope for the shorthand property '{0}'. Either declare one or provide an initializer.": {
         "category": "Error",
