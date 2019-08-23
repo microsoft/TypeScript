@@ -469,7 +469,7 @@ namespace ts.server {
 
         detachAllProjects() {
             for (const p of this.containingProjects) {
-                if (p.projectKind === ProjectKind.Configured) {
+                if (isConfiguredProject(p)) {
                     p.getCachedDirectoryStructureHost().addOrDeleteFile(this.fileName, this.path, FileWatcherEventKind.Deleted);
                 }
                 const isInfoRoot = p.isRoot(this);
@@ -477,7 +477,7 @@ namespace ts.server {
                 p.removeFile(this, /*fileExists*/ false, /*detachFromProjects*/ false);
                 // If the info was for the external or configured project's root,
                 // add missing file as the root
-                if (isInfoRoot && p.projectKind !== ProjectKind.Inferred) {
+                if (isInfoRoot && !isInferredProject(p)) {
                     p.addMissingFileRoot(this.fileName);
                 }
             }
@@ -494,14 +494,14 @@ namespace ts.server {
                     // if this file belongs to multiple projects, the first configured project should be
                     // the default project; if no configured projects, the first external project should
                     // be the default project; otherwise the first inferred project should be the default.
-                    let firstExternalProject;
-                    let firstConfiguredProject;
+                    let firstExternalProject: ExternalProject | undefined;
+                    let firstConfiguredProject: ConfiguredProject | undefined;
                     for (const project of this.containingProjects) {
-                        if (project.projectKind === ProjectKind.Configured) {
+                        if (isConfiguredProject(project)) {
                             if (!project.isSourceOfProjectReferenceRedirect(this.fileName)) return project;
                             if (!firstConfiguredProject) firstConfiguredProject = project;
                         }
-                        else if (project.projectKind === ProjectKind.External && !firstExternalProject) {
+                        else if (!firstExternalProject && isExternalProject(project)) {
                             firstExternalProject = project;
                         }
                     }
