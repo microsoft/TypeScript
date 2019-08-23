@@ -284,6 +284,7 @@ namespace ts.server {
 
     function combineProjectOutputFromEveryProject<T>(projectService: ProjectService, action: (project: Project) => readonly T[], areEqual: (a: T, b: T) => boolean) {
         const outputs: T[] = [];
+        projectService.loadAncestorProjectTree();
         projectService.forEachEnabledProject(project => {
             const theseOutputs = action(project);
             outputs.push(...theseOutputs.filter(output => !outputs.some(o => areEqual(o, output))));
@@ -432,8 +433,9 @@ namespace ts.server {
         // After initial references are collected, go over every other project and see if it has a reference for the symbol definition.
         if (getDefinition) {
             const memGetDefinition = memoize(getDefinition);
+            projectService.loadAncestorProjectTree(seenProjects);
             projectService.forEachEnabledProject(project => {
-                if (!addToSeen(seenProjects, project.projectName)) return;
+                if (!addToSeen(seenProjects, project)) return;
                 const definition = getDefinitionInProject(memGetDefinition(), defaultProject, project);
                 if (definition) {
                     toDo = callbackProjectAndLocation<TLocation>({ project, location: definition as TLocation }, projectService, toDo, seenProjects, cb);
@@ -485,7 +487,15 @@ namespace ts.server {
     }
 
     function addToTodo<TLocation extends DocumentPosition | undefined>(projectAndLocation: ProjectAndLocation<TLocation>, toDo: Push<ProjectAndLocation<TLocation>>, seenProjects: Map<true>): void {
-        if (addToSeen(seenProjects, projectAndLocation.project.projectName)) toDo.push(projectAndLocation);
+        if (addToSeen(seenProjects, projectAndLocation.project)) toDo.push(projectAndLocation);
+    }
+
+    function addToSeen(seenProjects: Map<true>, project: Project) {
+        return ts.addToSeen(seenProjects, getProjectKey(project));
+    }
+
+    function getProjectKey(project: Project) {
+        return isConfiguredProject(project) ? project.canonicalConfigFilePath : project.getProjectName();
     }
 
     function documentSpanLocation({ fileName, textSpan }: DocumentSpan): DocumentPosition {

@@ -9053,6 +9053,8 @@ declare namespace ts.server {
         private findExternalProjectContainingOpenScriptInfo;
         private getOrCreateOpenScriptInfo;
         private assignProjectToOpenedScriptInfo;
+        private createAncestorProjects;
+        private ensureProjectChildren;
         private cleanupAfterOpeningFile;
         openClientFileWithNormalizedPath(fileName: NormalizedPath, fileContent?: string, scriptKind?: ScriptKind, hasMixedContent?: boolean, projectRootPath?: NormalizedPath): OpenConfiguredProjectResult;
         private removeOrphanConfiguredProjects;

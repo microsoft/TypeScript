@@ -68,7 +68,9 @@ namespace ts.projectSystem {
                 const session = createSession(host);
                 openFilesForSession([containerCompositeExec[1]], session);
                 const service = session.getProjectService();
-                checkNumberOfProjects(service, { configuredProjects: 1 });
+                checkNumberOfProjects(service, { configuredProjects: 2 }); // compositeExec and solution
+                const solutionProject = service.configuredProjects.get(containerConfig.path)!;
+                assert.isTrue(solutionProject.isInitialLoadPending());
                 const { file: myConstFile, start: myConstStart, end: myConstEnd } = protocolFileSpanFromSubstring({
                     file: containerCompositeExec[1],
                     text: "myConst",
@@ -84,10 +86,61 @@ namespace ts.projectSystem {
                     contextText: "export const myConst = 30;"
                 });
                 const { file: _, ...renameTextOfMyConstInLib } = locationOfMyConstInLib;
+                const locationOfMyConstInExec = protocolFileSpanWithContextFromSubstring({
+                    file: containerExec[1],
+                    text: "myConst"
+                });
+                const { file: myConstInExecFile, ...renameTextOfMyConstInExec } = locationOfMyConstInExec;
                 assert.deepEqual(response.locs, [
                     { file: locationOfMyConstInLib.file, locs: [renameTextOfMyConstInLib] },
-                    { file: myConstFile, locs: [{ start: myConstStart, end: myConstEnd }] }
+                    { file: myConstFile, locs: [{ start: myConstStart, end: myConstEnd }] },
+                    { file: myConstInExecFile, locs: [renameTextOfMyConstInExec] },
                 ]);
+                checkNumberOfProjects(service, { configuredProjects: 4 });
+                assert.isFalse(solutionProject.isInitialLoadPending());
+            });
+
+            it("ancestor and project ref management", () => {
+                const tempFile: File = {
+                    path: `/user/username/projects/temp/temp.ts`,
+                    content: "let x = 10"
+                };
+                const host = createHost(files.concat([tempFile]), [containerConfig.path]);
+                const session = createSession(host);
+                openFilesForSession([containerCompositeExec[1]], session);
+                const service = session.getProjectService();
+                checkNumberOfProjects(service, { configuredProjects: 2 }); // compositeExec and solution
+                const solutionProject = service.configuredProjects.get(containerConfig.path)!;
+                assert.isTrue(solutionProject.isInitialLoadPending());
+
+                // Open temp file and verify all projects alive
+                openFilesForSession([tempFile], session);
+                checkNumberOfProjects(service, { configuredProjects: 2, inferredProjects: 1 });
+                assert.isTrue(solutionProject.isInitialLoadPending());
+
+                const locationOfMyConst = protocolLocationFromSubstring(containerCompositeExec[1].content, "myConst");
+                session.executeCommandSeq<protocol.RenameRequest>({
+                    command: protocol.CommandTypes.Rename,
+                    arguments: {
+                        file: containerCompositeExec[1].path,
+                        ...locationOfMyConst
+                    }
+                });
+
+                // Ref projects are loaded
+                checkNumberOfProjects(service, { configuredProjects: 4, inferredProjects: 1 });
+                assert.isFalse(solutionProject.isInitialLoadPending());
+
+                // Open temp file and verify all projects alive
+                service.closeClientFile(tempFile.path);
+                openFilesForSession([tempFile], session);
+                checkNumberOfProjects(service, { configuredProjects: 4, inferredProjects: 1 });
+
+                // Close all files and open temp file, only inferred project should be alive
+                service.closeClientFile(containerCompositeExec[1].path);
+                service.closeClientFile(tempFile.path);
+                openFilesForSession([tempFile], session);
+                checkNumberOfProjects(service, { inferredProjects: 1 });
             });
         });
 
