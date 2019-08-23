@@ -200,10 +200,10 @@ interface PromiseConstructor {
     /**
      * Creates a Promise that is resolved with an array of results when all of the provided Promises
      * resolve, or rejected when any Promise is rejected.
-     * @param values An array of Promises.
+     * @param values An iterable of Promises.
      * @returns A new Promise.
      */
-    all<TAll>(values: Iterable<TAll | PromiseLike<TAll>>): Promise<TAll[]>;
+    all<TAll>(values: Iterable<TAll>): Promise<(TAll extends PromiseLike<infer UAll> ? UAll : TAll)[]>;
 
     /**
      * Creates a Promise that is resolved or rejected when any of the provided Promises are resolved
