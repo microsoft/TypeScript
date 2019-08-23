@@ -997,7 +997,21 @@ namespace ts {
     }
 
     function addToAffectedFilesPendingEmit(state: BuilderProgramState, affectedFilesPendingEmit: readonly Path[]) {
-        state.affectedFilesPendingEmit = concatenate(state.affectedFilesPendingEmit, affectedFilesPendingEmit);
+        const actualAffectedFilesPendingEmit = affectedFilesPendingEmit.filter((f) => {
+            // No point in concatenating if its already in there
+            if (state.affectedFilesPendingEmit && state.affectedFilesPendingEmit.some((v) => v === f)) {
+                return false;
+            }
+
+            return true;
+        });
+
+        if (actualAffectedFilesPendingEmit.length === 0) {
+            // We filtered everything out, abort.
+            return;
+        }
+
+        state.affectedFilesPendingEmit = concatenate(state.affectedFilesPendingEmit, actualAffectedFilesPendingEmit);
         // affectedFilesPendingEmitIndex === undefined
         // - means the emit state.affectedFilesPendingEmit was undefined before adding current affected files
         //   so start from 0 as array would be affectedFilesPendingEmit
