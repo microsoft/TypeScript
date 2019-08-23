@@ -629,17 +629,18 @@ namespace ts.codefix {
         cb: (module: Symbol) => void,
     ) {
         const packageJson = filterByPackageJson && createLazyPackageJsonDependencyReader(from, host, redirectTargetsMap);
-        forEachExternalModule(checker, allSourceFiles, (module, sourceFile) => {
-            if (sourceFile === undefined && (!packageJson || packageJson.allowsImportingAmbientModule(module, allSourceFiles))) {
-                cb(module);
-            }
-            else if (sourceFile && sourceFile !== from && isImportablePath(from.fileName, sourceFile.fileName)) {
-                if (!packageJson || packageJson.allowsImportingSourceFile(sourceFile, allSourceFiles)) {
+        moduleSpecifiers.withCachedSymlinks(allSourceFiles, hostGetCanonicalFileName(host), host.getCurrentDirectory(), () => {
+            forEachExternalModule(checker, allSourceFiles, (module, sourceFile) => {
+                if (sourceFile === undefined && (!packageJson || packageJson.allowsImportingAmbientModule(module, allSourceFiles))) {
                     cb(module);
                 }
-            }
+                else if (sourceFile && sourceFile !== from && isImportablePath(from.fileName, sourceFile.fileName)) {
+                    if (!packageJson || packageJson.allowsImportingSourceFile(sourceFile, allSourceFiles)) {
+                        cb(module);
+                    }
+                }
+            });
         });
-        moduleSpecifiers.clearSymlinksCache();
     }
 
     function forEachExternalModule(checker: TypeChecker, allSourceFiles: ReadonlyArray<SourceFile>, cb: (module: Symbol, sourceFile: SourceFile | undefined) => void) {
@@ -744,8 +745,9 @@ namespace ts.codefix {
         }
 
         /**
-         * Fast approximation from string-only input. Use `allowsImportingSourceFile` and `allowsImportingAmbientModule`
-         * for better accuracy when possible.
+         * Use for a specific module specifier that has already been resolved.
+         * Use `allowsImportingAmbientModule` or `allowsImportingSourceFile` to resolve
+         * the best module specifier for a given module _and_ determine if it’s importable.
          */
         function allowsImportingSpecifier(moduleSpecifier: string) {
             if (!packageJsons.length || isAllowedCoreNodeModulesImport(moduleSpecifier)) {

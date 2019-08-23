@@ -11,6 +11,8 @@ namespace ts.moduleSpecifiers {
         readonly ending: Ending;
     }
 
+    let discoverProbableSymlinksCached: (() => ReadonlyMap<string>) | undefined;
+
     function getPreferences({ importModuleSpecifierPreference, importModuleSpecifierEnding }: UserPreferences, compilerOptions: CompilerOptions, importingSourceFile: SourceFile): Preferences {
         return {
             relativePreference: importModuleSpecifierPreference === "relative" ? RelativePreference.Relative : importModuleSpecifierPreference === "non-relative" ? RelativePreference.NonRelative : RelativePreference.Auto,
@@ -187,7 +189,7 @@ namespace ts.moduleSpecifiers {
         return [getPathFromPathComponents(aParts), getPathFromPathComponents(bParts)];
     }
 
-    const discoverProbableSymlinks = memoizeOne((files: ReadonlyArray<SourceFile>, getCanonicalFileName: GetCanonicalFileName, cwd: string): ReadonlyMap<string> => {
+    function discoverProbableSymlinks(files: ReadonlyArray<SourceFile>, getCanonicalFileName: GetCanonicalFileName, cwd: string): ReadonlyMap<string> {
         const result = createMap<string>();
         const symlinks = flatten<readonly [string, string]>(mapDefined(files, sf =>
             sf.resolvedModules && compact(arrayFrom(mapIterator(sf.resolvedModules.values(), res =>
@@ -197,10 +199,15 @@ namespace ts.moduleSpecifiers {
             result.set(commonOriginal, commonResolved);
         }
         return result;
-    });
+    }
 
-    export function clearSymlinksCache() {
-        discoverProbableSymlinks.clear();
+    export function withCachedSymlinks(files: readonly SourceFile[], getCanonicalFileName: GetCanonicalFileName, cwd: string, cb: () => void) {
+        discoverProbableSymlinksCached = memoize(() => discoverProbableSymlinks(files, getCanonicalFileName, cwd));
+        try {
+            cb();
+        } finally {
+            discoverProbableSymlinksCached = undefined;
+        }
     }
 
     /**
@@ -212,7 +219,9 @@ namespace ts.moduleSpecifiers {
         const importedFileNames = redirects ? [...redirects, importedFileName] : [importedFileName];
         const cwd = host.getCurrentDirectory ? host.getCurrentDirectory() : "";
         const targets = importedFileNames.map(f => getNormalizedAbsolutePath(f, cwd));
-        const links = discoverProbableSymlinks(files, getCanonicalFileName, cwd);
+        const links = discoverProbableSymlinksCached
+            ? discoverProbableSymlinksCached()
+            : discoverProbableSymlinks(files, getCanonicalFileName, cwd);
 
         const result: string[] = [];
         const compareStrings = (!host.useCaseSensitiveFileNames || host.useCaseSensitiveFileNames()) ? compareStringsCaseSensitive : compareStringsCaseInsensitive;
