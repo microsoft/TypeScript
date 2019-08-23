@@ -2,7 +2,7 @@ Exit Code: 1
 Standard output:
 
 Rush Multi-Project Build Tool 5.X.X - https://rushjs.io
-Node.js version is 12.8.1 (pre-LTS)
+Node.js version is 12.9.0 (pre-LTS)
 Starting "rush rebuild"
 Executing a maximum of ?simultaneous processes...
 XX of XX: [@azure/abort-controller] completed successfully in ? seconds
@@ -35,8 +35,9 @@ XX of XX: [@azure/service-bus] completed successfully in ? seconds
 XX of XX: [@azure/storage-blob] completed successfully in ? seconds
 XX of XX: [@azure/storage-file] completed successfully in ? seconds
 XX of XX: [@azure/storage-queue] completed successfully in ? seconds
+XX of XX: [@azure/test-utils-recorder] completed successfully in ? seconds
 XX of XX: [testhub] completed successfully in ? seconds
-SUCCESS (11)
+SUCCESS (12)
 ================================
 @azure/abort-controller (? seconds)
 @azure/core-auth (? seconds)
@@ -48,6 +49,7 @@ SUCCESS (11)
 @azure/storage-blob (? seconds)
 @azure/storage-file (? seconds)
 @azure/storage-queue (? seconds)
+@azure/test-utils-recorder (? seconds)
 testhub (? seconds)
 ================================
 BLOCKED (8)
