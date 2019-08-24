@@ -10,6 +10,19 @@ declare const t2: [string, string];
 declare const t3: [string, string, string];
 >t3 : Symbol(t3, Decl(callWithSpread3.ts, 2, 13))
 
+declare function takeTwoOrMore (a: string, b: string, ...c: string[]): void
+>takeTwoOrMore : Symbol(takeTwoOrMore, Decl(callWithSpread3.ts, 2, 43))
+>a : Symbol(a, Decl(callWithSpread3.ts, 3, 32))
+>b : Symbol(b, Decl(callWithSpread3.ts, 3, 42))
+>c : Symbol(c, Decl(callWithSpread3.ts, 3, 53))
+
+declare const t4: [string, string, ...string[]]
+>t4 : Symbol(t4, Decl(callWithSpread3.ts, 4, 13))
+
+declare const t5: string[]
+>t5 : Symbol(t5, Decl(callWithSpread3.ts, 5, 13))
+
+// error
 takeTwo('a', ...t2); // error on ...t2
 >takeTwo : Symbol(takeTwo, Decl(callWithSpread3.ts, 0, 0))
 >t2 : Symbol(t2, Decl(callWithSpread3.ts, 1, 13))
@@ -33,4 +46,24 @@ takeTwo(...t2, 'a'); // error on 'a'
 takeTwo(...t3); // error on ...t3
 >takeTwo : Symbol(takeTwo, Decl(callWithSpread3.ts, 0, 0))
 >t3 : Symbol(t3, Decl(callWithSpread3.ts, 2, 13))
+
+// ok
+takeTwoOrMore(...t4);
+>takeTwoOrMore : Symbol(takeTwoOrMore, Decl(callWithSpread3.ts, 2, 43))
+>t4 : Symbol(t4, Decl(callWithSpread3.ts, 4, 13))
+
+takeTwoOrMore(...t4, ...t5);
+>takeTwoOrMore : Symbol(takeTwoOrMore, Decl(callWithSpread3.ts, 2, 43))
+>t4 : Symbol(t4, Decl(callWithSpread3.ts, 4, 13))
+>t5 : Symbol(t5, Decl(callWithSpread3.ts, 5, 13))
+
+takeTwoOrMore(...t4, ...t4);
+>takeTwoOrMore : Symbol(takeTwoOrMore, Decl(callWithSpread3.ts, 2, 43))
+>t4 : Symbol(t4, Decl(callWithSpread3.ts, 4, 13))
+>t4 : Symbol(t4, Decl(callWithSpread3.ts, 4, 13))
+
+takeTwoOrMore(...t5, ...t4);
+>takeTwoOrMore : Symbol(takeTwoOrMore, Decl(callWithSpread3.ts, 2, 43))
+>t5 : Symbol(t5, Decl(callWithSpread3.ts, 5, 13))
+>t4 : Symbol(t4, Decl(callWithSpread3.ts, 4, 13))
 
