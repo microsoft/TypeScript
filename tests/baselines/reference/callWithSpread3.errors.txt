@@ -1,16 +1,20 @@
-tests/cases/conformance/expressions/functionCalls/callWithSpread3.ts(5,14): error TS2554: Expected 2 arguments, but got 3.
-tests/cases/conformance/expressions/functionCalls/callWithSpread3.ts(6,19): error TS2554: Expected 2 arguments, but got 5.
-tests/cases/conformance/expressions/functionCalls/callWithSpread3.ts(7,19): error TS2556: Expected 2 arguments, but got 4 or more.
-tests/cases/conformance/expressions/functionCalls/callWithSpread3.ts(8,19): error TS2556: Expected 2 arguments, but got 5 or more.
-tests/cases/conformance/expressions/functionCalls/callWithSpread3.ts(9,16): error TS2556: Expected 2 arguments, but got 1 or more.
-tests/cases/conformance/expressions/functionCalls/callWithSpread3.ts(10,9): error TS2554: Expected 2 arguments, but got 3.
+tests/cases/conformance/expressions/functionCalls/callWithSpread3.ts(9,14): error TS2554: Expected 2 arguments, but got 3.
+tests/cases/conformance/expressions/functionCalls/callWithSpread3.ts(10,19): error TS2554: Expected 2 arguments, but got 5.
+tests/cases/conformance/expressions/functionCalls/callWithSpread3.ts(11,19): error TS2556: Expected 2 arguments, but got 4 or more.
+tests/cases/conformance/expressions/functionCalls/callWithSpread3.ts(12,19): error TS2556: Expected 2 arguments, but got 5 or more.
+tests/cases/conformance/expressions/functionCalls/callWithSpread3.ts(13,16): error TS2556: Expected 2 arguments, but got 1 or more.
+tests/cases/conformance/expressions/functionCalls/callWithSpread3.ts(14,9): error TS2554: Expected 2 arguments, but got 3.
 
 
 ==== tests/cases/conformance/expressions/functionCalls/callWithSpread3.ts (6 errors) ====
     declare function takeTwo(a: string, b: string): void;
     declare const t2: [string, string];
     declare const t3: [string, string, string];
+    declare function takeTwoOrMore (a: string, b: string, ...c: string[]): void
+    declare const t4: [string, string, ...string[]]
+    declare const t5: string[]
     
+    // error
     takeTwo('a', ...t2); // error on ...t2
                  ~~~~~
 !!! error TS2554: Expected 2 arguments, but got 3.
@@ -30,3 +34,10 @@ tests/cases/conformance/expressions/functionCalls/callWithSpread3.ts(10,9): erro
     takeTwo(...t3); // error on ...t3
             ~~~~~
 !!! error TS2554: Expected 2 arguments, but got 3.
+    
+    // ok
+    takeTwoOrMore(...t4);
+    takeTwoOrMore(...t4, ...t5);
+    takeTwoOrMore(...t4, ...t4);
+    takeTwoOrMore(...t5, ...t4);
+    

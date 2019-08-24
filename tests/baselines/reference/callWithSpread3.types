@@ -10,6 +10,19 @@ declare const t2: [string, string];
 declare const t3: [string, string, string];
 >t3 : [string, string, string]
 
+declare function takeTwoOrMore (a: string, b: string, ...c: string[]): void
+>takeTwoOrMore : (a: string, b: string, ...c: string[]) => void
+>a : string
+>b : string
+>c : string[]
+
+declare const t4: [string, string, ...string[]]
+>t4 : [string, string, ...string[]]
+
+declare const t5: string[]
+>t5 : string[]
+
+// error
 takeTwo('a', ...t2); // error on ...t2
 >takeTwo('a', ...t2) : void
 >takeTwo : (a: string, b: string) => void
@@ -57,4 +70,35 @@ takeTwo(...t3); // error on ...t3
 >takeTwo : (a: string, b: string) => void
 >...t3 : string
 >t3 : [string, string, string]
+
+// ok
+takeTwoOrMore(...t4);
+>takeTwoOrMore(...t4) : void
+>takeTwoOrMore : (a: string, b: string, ...c: string[]) => void
+>...t4 : string
+>t4 : [string, string, ...string[]]
+
+takeTwoOrMore(...t4, ...t5);
+>takeTwoOrMore(...t4, ...t5) : void
+>takeTwoOrMore : (a: string, b: string, ...c: string[]) => void
+>...t4 : string
+>t4 : [string, string, ...string[]]
+>...t5 : string
+>t5 : string[]
+
+takeTwoOrMore(...t4, ...t4);
+>takeTwoOrMore(...t4, ...t4) : void
+>takeTwoOrMore : (a: string, b: string, ...c: string[]) => void
+>...t4 : string
+>t4 : [string, string, ...string[]]
+>...t4 : string
+>t4 : [string, string, ...string[]]
+
+takeTwoOrMore(...t5, ...t4);
+>takeTwoOrMore(...t5, ...t4) : void
+>takeTwoOrMore : (a: string, b: string, ...c: string[]) => void
+>...t5 : string
+>t5 : string[]
+>...t4 : string
+>t4 : [string, string, ...string[]]
 
