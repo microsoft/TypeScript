@@ -126,3 +126,72 @@ function f4(x: Foo | Bar | string | number | null) {
         }
     }
 }
+
+// Repro from #31319
+
+const enum EnumTypeNode {
+>EnumTypeNode : EnumTypeNode
+
+    Pattern = "Pattern",
+>Pattern : EnumTypeNode.Pattern
+>"Pattern" : "Pattern"
+
+    Disjunction = "Disjunction",
+>Disjunction : EnumTypeNode.Disjunction
+>"Disjunction" : "Disjunction"
+}
+
+type NodeA = Disjunction | Pattern;
+>NodeA : NodeA
+
+interface NodeBase {
+    type: NodeA["type"]
+>type : EnumTypeNode
+}
+
+interface Disjunction extends NodeBase {
+    type: EnumTypeNode.Disjunction
+>type : EnumTypeNode.Disjunction
+>EnumTypeNode : any
+
+    alternatives: string[]
+>alternatives : string[]
+}
+
+interface Pattern extends NodeBase {
+    type: EnumTypeNode.Pattern
+>type : EnumTypeNode.Pattern
+>EnumTypeNode : any
+
+    elements: string[]
+>elements : string[]
+}
+
+let n!: NodeA
+>n : NodeA
+
+if (n.type === "Disjunction") {
+>n.type === "Disjunction" : boolean
+>n.type : EnumTypeNode
+>n : NodeA
+>type : EnumTypeNode
+>"Disjunction" : "Disjunction"
+
+    n.alternatives.slice()
+>n.alternatives.slice() : string[]
+>n.alternatives.slice : (start?: number | undefined, end?: number | undefined) => string[]
+>n.alternatives : string[]
+>n : Disjunction
+>alternatives : string[]
+>slice : (start?: number | undefined, end?: number | undefined) => string[]
+}
+else {
+    n.elements.slice() // n should be narrowed to Pattern
+>n.elements.slice() : string[]
+>n.elements.slice : (start?: number | undefined, end?: number | undefined) => string[]
+>n.elements : string[]
+>n : Pattern
+>elements : string[]
+>slice : (start?: number | undefined, end?: number | undefined) => string[]
+}
+
