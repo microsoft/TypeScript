@@ -9581,13 +9581,25 @@ namespace ts {
             return createTypeFromGenericGlobalType(readonly ? globalReadonlyArrayType : globalArrayType, [elementType]);
         }
 
-        function getTypeFromArrayTypeNode(node: ArrayTypeNode): Type {
+        function getArrayOrTupleTargetType(node: ArrayTypeNode | TupleTypeNode): GenericType {
+            const readonly = isReadonlyTypeOperator(node.parent);
+            if (node.kind === SyntaxKind.ArrayType || node.elementTypes.length === 1 && node.elementTypes[0].kind === SyntaxKind.RestType) {
+                return readonly ? globalReadonlyArrayType : globalArrayType;
+            }
+            const lastElement = lastOrUndefined(node.elementTypes);
+            const restElement = lastElement && lastElement.kind === SyntaxKind.RestType ? lastElement : undefined;
+            const minLength = findLastIndex(node.elementTypes, n => n.kind !== SyntaxKind.OptionalType && n !== restElement) + 1;
+            return getTupleTypeOfArity(node.elementTypes.length, minLength, !!restElement, readonly, /*associatedNames*/ undefined);
+        }
+
+        function getTypeFromArrayOrTupleTypeNode(node: ArrayTypeNode | TupleTypeNode): Type {
             const links = getNodeLinks(node);
             if (!links.resolvedType) {
-                const target = isReadonlyTypeOperator(node.parent) ? globalReadonlyArrayType : globalArrayType;
+                const target = getArrayOrTupleTargetType(node);
                 const aliasSymbol = getAliasSymbolForTypeNode(node);
                 const aliasTypeArguments = getTypeArgumentsForAliasSymbol(aliasSymbol);
-                links.resolvedType = createDeferredTypeReference(target, [node.elementType], /*mapper*/ undefined, aliasSymbol, aliasTypeArguments);
+                const elementTypes = node.kind === SyntaxKind.ArrayType ? [node.elementType] : node.elementTypes;
+                links.resolvedType = elementTypes.length ? createDeferredTypeReference(target, elementTypes, /*mapper*/ undefined, aliasSymbol, aliasTypeArguments) : target;
             }
             return links.resolvedType;
         }
@@ -9663,21 +9675,6 @@ namespace ts {
             }
             const tupleType = getTupleTypeOfArity(arity, minLength, arity > 0 && hasRestElement, readonly, associatedNames);
             return elementTypes.length ? createTypeReference(tupleType, elementTypes) : tupleType;
-        }
-
-        function getTypeFromTupleTypeNode(node: TupleTypeNode): Type {
-            const links = getNodeLinks(node);
-            if (!links.resolvedType) {
-                const lastElement = lastOrUndefined(node.elementTypes);
-                const restElement = lastElement && lastElement.kind === SyntaxKind.RestType ? lastElement : undefined;
-                const minLength = findLastIndex(node.elementTypes, n => n.kind !== SyntaxKind.OptionalType && n !== restElement) + 1;
-                const elementTypes = map(node.elementTypes, n => {
-                    const type = getTypeFromTypeNode(n);
-                    return n === restElement && getIndexTypeOfType(type, IndexKind.Number) || type;
-                });
-                links.resolvedType = createTupleType(elementTypes, minLength, !!restElement, isReadonlyTypeOperator(node.parent));
-            }
-            return links.resolvedType;
         }
 
         function sliceTupleType(type: TupleTypeReference, index: number) {
@@ -11169,9 +11166,8 @@ namespace ts {
                 case SyntaxKind.TypeQuery:
                     return getTypeFromTypeQueryNode(<TypeQueryNode>node);
                 case SyntaxKind.ArrayType:
-                    return getTypeFromArrayTypeNode(<ArrayTypeNode>node);
                 case SyntaxKind.TupleType:
-                    return getTypeFromTupleTypeNode(<TupleTypeNode>node);
+                    return getTypeFromArrayOrTupleTypeNode(<ArrayTypeNode | TupleTypeNode>node);
                 case SyntaxKind.OptionalType:
                     return getTypeFromOptionalTypeNode(<OptionalTypeNode>node);
                 case SyntaxKind.UnionType:
@@ -11183,10 +11179,11 @@ namespace ts {
                 case SyntaxKind.JSDocOptionalType:
                     return addOptionality(getTypeFromTypeNode((node as JSDocOptionalType).type));
                 case SyntaxKind.ParenthesizedType:
-                case SyntaxKind.RestType:
                 case SyntaxKind.JSDocNonNullableType:
                 case SyntaxKind.JSDocTypeExpression:
-                    return getTypeFromTypeNode((<ParenthesizedTypeNode | RestTypeNode | JSDocTypeReferencingNode | JSDocTypeExpression>node).type);
+                    return getTypeFromTypeNode((<ParenthesizedTypeNode | JSDocTypeReferencingNode | JSDocTypeExpression>node).type);
+                case SyntaxKind.RestType:
+                    return getElementTypeOfArrayType(getTypeFromTypeNode((<RestTypeNode>node).type)) || errorType;
                 case SyntaxKind.JSDocVariadicType:
                     return getTypeFromJSDocVariadicType(node as JSDocVariadicType);
                 case SyntaxKind.FunctionType:
@@ -11644,19 +11641,15 @@ namespace ts {
                     return getAnonymousTypeInstantiation(<AnonymousType>type, mapper);
                 }
                 if (objectFlags & ObjectFlags.Reference) {
+                    const typeArgumentNodes = (<TypeReference>type).typeArgumentNodes;
+                    if (typeArgumentNodes) {
+                        const combinedMapper = combineTypeMappers((<TypeReference>type).mapper, mapper);
+                        return createDeferredTypeReference((<TypeReference>type).target, typeArgumentNodes, combinedMapper,
+                            (<TypeReference>type).aliasSymbol, instantiateTypes((<TypeReference>type).aliasTypeArguments, combinedMapper));
+                    }
                     const resolvedTypeArguments = (<TypeReference>type).resolvedTypeArguments;
-                    if (resolvedTypeArguments) {
-                        const newTypeArguments = instantiateTypes(resolvedTypeArguments, mapper);
-                        return newTypeArguments !== resolvedTypeArguments ? createTypeReference((<TypeReference>type).target, newTypeArguments) : type;
-                    }
-                    else {
-                        const typeArgumentNodes = (<TypeReference>type).typeArgumentNodes;
-                        if (typeArgumentNodes) {
-                            const combinedMapper = combineTypeMappers((<TypeReference>type).mapper, mapper);
-                            return createDeferredTypeReference((<TypeReference>type).target, typeArgumentNodes, combinedMapper,
-                                (<TypeReference>type).aliasSymbol, instantiateTypes((<TypeReference>type).aliasTypeArguments, combinedMapper));
-                        }
-                    }
+                    const newTypeArguments = instantiateTypes(resolvedTypeArguments, mapper);
+                    return newTypeArguments !== resolvedTypeArguments ? createTypeReference((<TypeReference>type).target, newTypeArguments) : type;
                 }
                 return type;
             }
@@ -14446,8 +14439,12 @@ namespace ts {
             return type.flags & TypeFlags.TypeParameter && !getConstraintOfTypeParameter(<TypeParameter>type);
         }
 
+        function isNonDeferredTypeReference(type: Type): type is TypeReference {
+            return !!(getObjectFlags(type) & ObjectFlags.Reference) && !(<TypeReference>type).typeArgumentNodes;
+        }
+
         function isTypeReferenceWithGenericArguments(type: Type): boolean {
-            return !!(getObjectFlags(type) & ObjectFlags.Reference) && some(getTypeArguments(<TypeReference>type), t => isUnconstrainedTypeParameter(t) || isTypeReferenceWithGenericArguments(t));
+            return isNonDeferredTypeReference(type) && some(getTypeArguments(type), t => isUnconstrainedTypeParameter(t) || isTypeReferenceWithGenericArguments(t));
         }
 
         /**
@@ -26090,7 +26087,7 @@ namespace ts {
                         grammarErrorOnNode(e, Diagnostics.A_rest_element_must_be_last_in_a_tuple_type);
                         break;
                     }
-                    if (!isArrayType(getTypeFromTypeNode(e))) {
+                    if (!isArrayType(getTypeFromTypeNode((<RestTypeNode>e).type))) {
                         error(e, Diagnostics.A_rest_element_type_must_be_an_array_type);
                     }
                 }
