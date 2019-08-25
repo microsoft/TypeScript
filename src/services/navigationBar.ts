@@ -314,36 +314,47 @@ namespace ts.NavigationBar {
                     case AssignmentDeclarationKind.ModuleExports:
                         addNodeWithRecursiveChild(node, (node as BinaryExpression).right);
                         return;
-                    case AssignmentDeclarationKind.PrototypeProperty:
-                    case AssignmentDeclarationKind.Prototype: {
+                    case AssignmentDeclarationKind.Prototype:
+                    case AssignmentDeclarationKind.PrototypeProperty: {
                         const binaryExpression = (node as BinaryExpression);
                         const assignmentTarget = binaryExpression.left as PropertyAccessExpression;
-                        if (isPropertyAccessExpression(assignmentTarget.expression)) {
-                            const prototypeAccess = assignmentTarget.expression;
-                            // If we see a prototype assignment, start tracking the target as a class
-                            let depth = 0;
-                            let className: Identifier;
-                            if (isIdentifier(prototypeAccess.expression)) {
-                                addTrackedEs5Class(prototypeAccess.expression.text);
-                                className = prototypeAccess.expression;
-                            }
-                            else {
-                                [depth, className] = startNestedNodes(binaryExpression, prototypeAccess.expression as EntityNameExpression);
-                            }
-                            if (isFunctionExpression(binaryExpression.right) || isArrowFunction(binaryExpression.right)) {
-                                addNodeWithRecursiveChild(node,
-                                    binaryExpression.right,
-                                    className);
-                            }
-                            else {
-                                startNode(binaryExpression, className);
-                                    addNodeWithRecursiveChild(node, binaryExpression.right, assignmentTarget.name);
-                                endNode();
-                            }
-                            endNestedNodes(depth);
-                            return;
+
+                        const prototypeAccess = special === AssignmentDeclarationKind.PrototypeProperty ?
+                            assignmentTarget.expression as PropertyAccessExpression :
+                            assignmentTarget;
+
+                        let depth = 0;
+                        let className: Identifier;
+                        // If we see a prototype assignment, start tracking the target as a class
+                        // This is only done for simple classes not nested assignments.
+                        if (isIdentifier(prototypeAccess.expression)) {
+                            addTrackedEs5Class(prototypeAccess.expression.text);
+                            className = prototypeAccess.expression;
                         }
-                        break;
+                        else {
+                            [depth, className] = startNestedNodes(binaryExpression, prototypeAccess.expression as EntityNameExpression);
+                        }
+                        if (special === AssignmentDeclarationKind.Prototype) {
+                            if (isObjectLiteralExpression(binaryExpression.right)) {
+                                if (binaryExpression.right.properties.length > 0) {
+                                    startNode(binaryExpression, className);
+                                        forEachChild(binaryExpression.right, addChildrenRecursively);
+                                    endNode();
+                                }
+                            }
+                        }
+                        else if (isFunctionExpression(binaryExpression.right) || isArrowFunction(binaryExpression.right)) {
+                            addNodeWithRecursiveChild(node,
+                                binaryExpression.right,
+                                className);
+                        }
+                        else {
+                            startNode(binaryExpression, className);
+                                addNodeWithRecursiveChild(node, binaryExpression.right, assignmentTarget.name);
+                            endNode();
+                        }
+                        endNestedNodes(depth);
+                        return;
                     }
                     case AssignmentDeclarationKind.ObjectDefinePropertyValue:
                     case AssignmentDeclarationKind.ObjectDefinePrototypeProperty: {
@@ -366,7 +377,8 @@ namespace ts.NavigationBar {
                         const binaryExpression = (node as BinaryExpression);
                         const assignmentTarget = binaryExpression.left as PropertyAccessExpression;
                         const targetFunction = assignmentTarget.expression;
-                        if (isIdentifier(targetFunction) && trackedEs5Classes && trackedEs5Classes.has(targetFunction.text)) {
+                        if (isIdentifier(targetFunction) && assignmentTarget.name.escapedText !== "prototype" &&
+                            trackedEs5Classes && trackedEs5Classes.has(targetFunction.text)) {
                             if (isFunctionExpression(binaryExpression.right) || isArrowFunction(binaryExpression.right)) {
                                 addNodeWithRecursiveChild(node, binaryExpression.right, targetFunction);
                             }
@@ -449,7 +461,7 @@ namespace ts.NavigationBar {
         [AssignmentDeclarationKind.ExportsProperty]: false,
         [AssignmentDeclarationKind.ModuleExports]: false,
         [AssignmentDeclarationKind.ObjectDefinePropertyExports]: false,
-        [AssignmentDeclarationKind.Prototype]: false,
+        [AssignmentDeclarationKind.Prototype]: true,
         [AssignmentDeclarationKind.ThisProperty]: false,
     };
     function tryMergeEs5Class(a: NavigationBarNode, b: NavigationBarNode, bIndex: number, parent: NavigationBarNode): boolean | undefined {

@@ -4,6 +4,7 @@
 
 ////var A; 
 ////A.prototype = { };
+////A.prototype = { m() {} };
 ////A.prototype.a = function() { };
 ////A.b = function() { };
 
@@ -18,6 +19,10 @@ verify.navigationTree({
         {
           "text": "constructor",
           "kind": "constructor"
+        },
+        {
+          "text": "m",
+          "kind": "method"
         },
         {
           "text": "a",
@@ -50,6 +55,10 @@ verify.navigationBar([
       {
         "text": "constructor",
         "kind": "constructor"
+      },
+      {
+        "text": "m",
+        "kind": "method"
       },
       {
         "text": "a",
