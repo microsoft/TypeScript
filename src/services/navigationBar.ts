@@ -126,6 +126,24 @@ namespace ts.NavigationBar {
         }
         trackedEs5Classes.set(name, true);
     }
+    function endNestedNodes(depth: number): void {
+        for (let i = 0; i < depth; i++) endNode();
+    }
+    function startNestedNodes(targetNode: Node, entityName: EntityNameExpression) {
+        const names: Identifier[] = [];
+        while (!isIdentifier(entityName)) {
+            const name = entityName.name;
+            entityName = entityName.expression;
+            if (name.escapedText === "prototype") continue;
+            names.push(name);
+        }
+        names.push(entityName);
+        for (let i = names.length - 1; i > 0; i--) {
+            const name = names[i];
+            startNode(targetNode, name);
+        }
+        return [names.length - 1, names[0]] as const;
+    }
 
     /**
      * Add a new level of NavigationBarNodes.
@@ -303,19 +321,26 @@ namespace ts.NavigationBar {
                         if (isPropertyAccessExpression(assignmentTarget.expression)) {
                             const prototypeAccess = assignmentTarget.expression;
                             // If we see a prototype assignment, start tracking the target as a class
+                            let depth = 0;
+                            let className: Identifier;
                             if (isIdentifier(prototypeAccess.expression)) {
                                 addTrackedEs5Class(prototypeAccess.expression.text);
+                                className = prototypeAccess.expression;
+                            }
+                            else {
+                                [depth, className] = startNestedNodes(binaryExpression, prototypeAccess.expression as EntityNameExpression);
                             }
                             if (isFunctionExpression(binaryExpression.right) || isArrowFunction(binaryExpression.right)) {
                                 addNodeWithRecursiveChild(node,
                                     binaryExpression.right,
-                                    prototypeAccess.expression as Identifier);
+                                    className);
                             }
                             else {
-                                startNode(binaryExpression, prototypeAccess.expression as Identifier);
+                                startNode(binaryExpression, className);
                                     addNodeWithRecursiveChild(node, binaryExpression.right, assignmentTarget.name);
                                 endNode();
                             }
+                            endNestedNodes(depth);
                             return;
                         }
                         break;
@@ -324,15 +349,17 @@ namespace ts.NavigationBar {
                     case AssignmentDeclarationKind.ObjectDefinePrototypeProperty: {
                         const defineCall = node as BindableObjectDefinePropertyCall;
                         const className = special === AssignmentDeclarationKind.ObjectDefinePropertyValue ?
-                            defineCall.arguments[0] as Identifier :
-                            (defineCall.arguments[0] as PropertyAccessExpression).expression as Identifier;
+                            defineCall.arguments[0] :
+                            (defineCall.arguments[0] as PropertyAccessExpression).expression as EntityNameExpression;
 
                         const memberName = defineCall.arguments[1];
-                        startNode(node as CallExpression, className);
-                            startNode(node, setTextRange(createIdentifier(memberName.text), memberName));
-                                addChildrenRecursively((node as CallExpression).arguments[2]);
+                        const [depth, classNameIdentifier] = startNestedNodes(node, className);
+                            startNode(node, classNameIdentifier);
+                                startNode(node, setTextRange(createIdentifier(memberName.text), memberName));
+                                    addChildrenRecursively((node as CallExpression).arguments[2]);
+                                endNode();
                             endNode();
-                        endNode();
+                        endNestedNodes(depth);
                         return;
                     }
                     case AssignmentDeclarationKind.Property: {
@@ -428,7 +455,7 @@ namespace ts.NavigationBar {
     function tryMergeEs5Class(a: NavigationBarNode, b: NavigationBarNode, bIndex: number, parent: NavigationBarNode): boolean | undefined {
 
         function isPossibleConstructor(node: Node) {
-            return isFunctionDeclaration(node) || isVariableDeclaration(node);
+            return isFunctionExpression(node) || isFunctionDeclaration(node) || isVariableDeclaration(node);
         }
         const bAssignmentDeclarationKind = isBinaryExpression(b.node) || isCallExpression(b.node) ?
             getAssignmentDeclarationKind(b.node) :
@@ -489,7 +516,6 @@ namespace ts.NavigationBar {
                 a.children = concatenate(a.children, b.children);
                 if (a.children) {
                     mergeChildren(a.children, a);
-                    sortChildren(a.children);
                 }
             }
 
@@ -520,7 +546,7 @@ namespace ts.NavigationBar {
     }
 
     function tryMerge(a: NavigationBarNode, b: NavigationBarNode, bIndex: number, parent: NavigationBarNode): boolean {
-
+        // const v = false as boolean;
         if (tryMergeEs5Class(a, b, bIndex, parent)) {
             return true;
         }

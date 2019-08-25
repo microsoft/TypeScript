@@ -10,7 +10,7 @@
 ////    get: function(){
 ////    } 
 ////});
-////Object.defineProperty(f, 'name', { 
+////Object.defineProperty(f.prototype, 'name', { 
 ////    set: function() {}, 
 ////    get: function(){
 ////    } 
@@ -29,21 +29,15 @@ verify.navigationTree({
                     "kind": "constructor"
                 },
                 {
-                    "text": "method",
-                    "kind": "function"
+                    "text": "x",
+                    "kind": "property"
                 },
                 {
-                    "text": "name",
-                    "childItems": [
-                        {
-                            "text": "get",
-                            "kind": "function"
-                        },
-                        {
-                            "text": "set",
-                            "kind": "function"
-                        }
-                    ]
+                    "text": "y"
+                },
+                {
+                    "text": "method",
+                    "kind": "function"
                 },
                 {
                     "text": "staticProp",
@@ -59,11 +53,17 @@ verify.navigationTree({
                     ]
                 },
                 {
-                    "text": "x",
-                    "kind": "property"
-                },
-                {
-                    "text": "y"
+                    "text": "name",
+                    "childItems": [
+                        {
+                            "text": "get",
+                            "kind": "function"
+                        },
+                        {
+                            "text": "set",
+                            "kind": "function"
+                        }
+                    ]
                 }
             ]
         }
@@ -90,21 +90,21 @@ verify.navigationBar([
                 "kind": "constructor"
             },
             {
-                "text": "method",
-                "kind": "function"
-            },
-            {
-                "text": "name"
-            },
-            {
-                "text": "staticProp"
-            },
-            {
                 "text": "x",
                 "kind": "property"
             },
             {
                 "text": "y"
+            },
+            {
+                "text": "method",
+                "kind": "function"
+            },
+            {
+                "text": "staticProp"
+            },
+            {
+                "text": "name"
             }
         ],
         "indent": 1
