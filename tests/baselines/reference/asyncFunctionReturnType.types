@@ -44,9 +44,9 @@ async function fIndexedTypeForPromiseOfStringProp(obj: Obj): Promise<Obj["string
 
     return Promise.resolve(obj.stringProp);
 >Promise.resolve(obj.stringProp) : Promise<string>
->Promise.resolve : { (): Promise<void>; <T>(value: T | PromiseLike<T>): Promise<T>; }
+>Promise.resolve : { (): Promise<void>; <T>(value: T): Promise<T extends PromiseLike<infer U> ? U : T>; }
 >Promise : PromiseConstructor
->resolve : { (): Promise<void>; <T>(value: T | PromiseLike<T>): Promise<T>; }
+>resolve : { (): Promise<void>; <T>(value: T): Promise<T extends PromiseLike<infer U> ? U : T>; }
 >obj.stringProp : string
 >obj : Obj
 >stringProp : string
@@ -58,9 +58,9 @@ async function fIndexedTypeForExplicitPromiseOfStringProp(obj: Obj): Promise<Obj
 
     return Promise.resolve<Obj["stringProp"]>(obj.stringProp);
 >Promise.resolve<Obj["stringProp"]>(obj.stringProp) : Promise<string>
->Promise.resolve : { (): Promise<void>; <T>(value: T | PromiseLike<T>): Promise<T>; }
+>Promise.resolve : { (): Promise<void>; <T>(value: T): Promise<T extends PromiseLike<infer U> ? U : T>; }
 >Promise : PromiseConstructor
->resolve : { (): Promise<void>; <T>(value: T | PromiseLike<T>): Promise<T>; }
+>resolve : { (): Promise<void>; <T>(value: T): Promise<T extends PromiseLike<infer U> ? U : T>; }
 >obj.stringProp : string
 >obj : Obj
 >stringProp : string
@@ -82,9 +82,9 @@ async function fIndexedTypeForPromiseOfAnyProp(obj: Obj): Promise<Obj["anyProp"]
 
     return Promise.resolve(obj.anyProp);
 >Promise.resolve(obj.anyProp) : Promise<any>
->Promise.resolve : { (): Promise<void>; <T>(value: T | PromiseLike<T>): Promise<T>; }
+>Promise.resolve : { (): Promise<void>; <T>(value: T): Promise<T extends PromiseLike<infer U> ? U : T>; }
 >Promise : PromiseConstructor
->resolve : { (): Promise<void>; <T>(value: T | PromiseLike<T>): Promise<T>; }
+>resolve : { (): Promise<void>; <T>(value: T): Promise<T extends PromiseLike<infer U> ? U : T>; }
 >obj.anyProp : any
 >obj : Obj
 >anyProp : any
@@ -96,9 +96,9 @@ async function fIndexedTypeForExplicitPromiseOfAnyProp(obj: Obj): Promise<Obj["a
 
     return Promise.resolve<Obj["anyProp"]>(obj.anyProp);
 >Promise.resolve<Obj["anyProp"]>(obj.anyProp) : Promise<any>
->Promise.resolve : { (): Promise<void>; <T>(value: T | PromiseLike<T>): Promise<T>; }
+>Promise.resolve : { (): Promise<void>; <T>(value: T): Promise<T extends PromiseLike<infer U> ? U : T>; }
 >Promise : PromiseConstructor
->resolve : { (): Promise<void>; <T>(value: T | PromiseLike<T>): Promise<T>; }
+>resolve : { (): Promise<void>; <T>(value: T): Promise<T extends PromiseLike<infer U> ? U : T>; }
 >obj.anyProp : any
 >obj : Obj
 >anyProp : any
@@ -120,9 +120,9 @@ async function fGenericIndexedTypeForPromiseOfStringProp<TObj extends Obj>(obj: 
 
     return Promise.resolve(obj.stringProp);
 >Promise.resolve(obj.stringProp) : Promise<string>
->Promise.resolve : { (): Promise<void>; <T>(value: T | PromiseLike<T>): Promise<T>; }
+>Promise.resolve : { (): Promise<void>; <T>(value: T): Promise<T extends PromiseLike<infer U> ? U : T>; }
 >Promise : PromiseConstructor
->resolve : { (): Promise<void>; <T>(value: T | PromiseLike<T>): Promise<T>; }
+>resolve : { (): Promise<void>; <T>(value: T): Promise<T extends PromiseLike<infer U> ? U : T>; }
 >obj.stringProp : string
 >obj : TObj
 >stringProp : string
@@ -133,10 +133,10 @@ async function fGenericIndexedTypeForExplicitPromiseOfStringProp<TObj extends Ob
 >obj : TObj
 
     return Promise.resolve<TObj["stringProp"]>(obj.stringProp);
->Promise.resolve<TObj["stringProp"]>(obj.stringProp) : Promise<TObj["stringProp"]>
->Promise.resolve : { (): Promise<void>; <T>(value: T | PromiseLike<T>): Promise<T>; }
+>Promise.resolve<TObj["stringProp"]>(obj.stringProp) : Promise<TObj["stringProp"] extends PromiseLike<infer U> ? U : TObj["stringProp"]>
+>Promise.resolve : { (): Promise<void>; <T>(value: T): Promise<T extends PromiseLike<infer U> ? U : T>; }
 >Promise : PromiseConstructor
->resolve : { (): Promise<void>; <T>(value: T | PromiseLike<T>): Promise<T>; }
+>resolve : { (): Promise<void>; <T>(value: T): Promise<T extends PromiseLike<infer U> ? U : T>; }
 >obj.stringProp : string
 >obj : TObj
 >stringProp : string
@@ -158,9 +158,9 @@ async function fGenericIndexedTypeForPromiseOfAnyProp<TObj extends Obj>(obj: TOb
 
     return Promise.resolve(obj.anyProp);
 >Promise.resolve(obj.anyProp) : Promise<any>
->Promise.resolve : { (): Promise<void>; <T>(value: T | PromiseLike<T>): Promise<T>; }
+>Promise.resolve : { (): Promise<void>; <T>(value: T): Promise<T extends PromiseLike<infer U> ? U : T>; }
 >Promise : PromiseConstructor
->resolve : { (): Promise<void>; <T>(value: T | PromiseLike<T>): Promise<T>; }
+>resolve : { (): Promise<void>; <T>(value: T): Promise<T extends PromiseLike<infer U> ? U : T>; }
 >obj.anyProp : any
 >obj : TObj
 >anyProp : any
@@ -171,10 +171,10 @@ async function fGenericIndexedTypeForExplicitPromiseOfAnyProp<TObj extends Obj>(
 >obj : TObj
 
     return Promise.resolve<TObj["anyProp"]>(obj.anyProp);
->Promise.resolve<TObj["anyProp"]>(obj.anyProp) : Promise<TObj["anyProp"]>
->Promise.resolve : { (): Promise<void>; <T>(value: T | PromiseLike<T>): Promise<T>; }
+>Promise.resolve<TObj["anyProp"]>(obj.anyProp) : Promise<TObj["anyProp"] extends PromiseLike<infer U> ? U : TObj["anyProp"]>
+>Promise.resolve : { (): Promise<void>; <T>(value: T): Promise<T extends PromiseLike<infer U> ? U : T>; }
 >Promise : PromiseConstructor
->resolve : { (): Promise<void>; <T>(value: T | PromiseLike<T>): Promise<T>; }
+>resolve : { (): Promise<void>; <T>(value: T): Promise<T extends PromiseLike<infer U> ? U : T>; }
 >obj.anyProp : any
 >obj : TObj
 >anyProp : any
@@ -191,32 +191,33 @@ async function fGenericIndexedTypeForKProp<TObj extends Obj, K extends keyof TOb
 >key : K
 }
 
-async function fGenericIndexedTypeForPromiseOfKProp<TObj extends Obj, K extends keyof TObj>(obj: TObj, key: K): Promise<TObj[K]> {
->fGenericIndexedTypeForPromiseOfKProp : <TObj extends Obj, K extends keyof TObj>(obj: TObj, key: K) => Promise<TObj[K]>
+async function fGenericIndexedTypeForPromiseOfKProp<TObj extends Obj, K extends keyof TObj>(obj: TObj, key: K): Promise<TObj[K] extends PromiseLike<infer U> ? U : TObj[K]> {
+>fGenericIndexedTypeForPromiseOfKProp : <TObj extends Obj, K extends keyof TObj>(obj: TObj, key: K) => Promise<TObj[K] extends PromiseLike<infer U> ? U : TObj[K]>
 >obj : TObj
 >key : K
 
     return Promise.resolve(obj[key]);
->Promise.resolve(obj[key]) : Promise<TObj[K]>
->Promise.resolve : { (): Promise<void>; <T>(value: T | PromiseLike<T>): Promise<T>; }
+>Promise.resolve(obj[key]) : Promise<TObj[K] extends PromiseLike<infer U> ? U : TObj[K]>
+>Promise.resolve : { (): Promise<void>; <T>(value: T): Promise<T extends PromiseLike<infer U> ? U : T>; }
 >Promise : PromiseConstructor
->resolve : { (): Promise<void>; <T>(value: T | PromiseLike<T>): Promise<T>; }
+>resolve : { (): Promise<void>; <T>(value: T): Promise<T extends PromiseLike<infer U> ? U : T>; }
 >obj[key] : TObj[K]
 >obj : TObj
 >key : K
 }
 
-async function fGenericIndexedTypeForExplicitPromiseOfKProp<TObj extends Obj, K extends keyof TObj>(obj: TObj, key: K): Promise<TObj[K]> {
->fGenericIndexedTypeForExplicitPromiseOfKProp : <TObj extends Obj, K extends keyof TObj>(obj: TObj, key: K) => Promise<TObj[K]>
+async function fGenericIndexedTypeForExplicitPromiseOfKProp<TObj extends Obj, K extends keyof TObj>(obj: TObj, key: K): Promise<TObj[K] extends PromiseLike<infer U> ? U : TObj[K]> {
+>fGenericIndexedTypeForExplicitPromiseOfKProp : <TObj extends Obj, K extends keyof TObj>(obj: TObj, key: K) => Promise<TObj[K] extends PromiseLike<infer U> ? U : TObj[K]>
 >obj : TObj
 >key : K
 
     return Promise.resolve<TObj[K]>(obj[key]);
->Promise.resolve<TObj[K]>(obj[key]) : Promise<TObj[K]>
->Promise.resolve : { (): Promise<void>; <T>(value: T | PromiseLike<T>): Promise<T>; }
+>Promise.resolve<TObj[K]>(obj[key]) : Promise<TObj[K] extends PromiseLike<infer U> ? U : TObj[K]>
+>Promise.resolve : { (): Promise<void>; <T>(value: T): Promise<T extends PromiseLike<infer U> ? U : T>; }
 >Promise : PromiseConstructor
->resolve : { (): Promise<void>; <T>(value: T | PromiseLike<T>): Promise<T>; }
+>resolve : { (): Promise<void>; <T>(value: T): Promise<T extends PromiseLike<infer U> ? U : T>; }
 >obj[key] : TObj[K]
 >obj : TObj
 >key : K
 }
+

@@ -67,10 +67,10 @@ async function fGenericIndexedTypeForKProp<TObj extends Obj, K extends keyof TOb
     return obj[key];
 }
 
-async function fGenericIndexedTypeForPromiseOfKProp<TObj extends Obj, K extends keyof TObj>(obj: TObj, key: K): Promise<TObj[K]> {
+async function fGenericIndexedTypeForPromiseOfKProp<TObj extends Obj, K extends keyof TObj>(obj: TObj, key: K): Promise<TObj[K] extends PromiseLike<infer U> ? U : TObj[K]> {
     return Promise.resolve(obj[key]);
 }
 
-async function fGenericIndexedTypeForExplicitPromiseOfKProp<TObj extends Obj, K extends keyof TObj>(obj: TObj, key: K): Promise<TObj[K]> {
+async function fGenericIndexedTypeForExplicitPromiseOfKProp<TObj extends Obj, K extends keyof TObj>(obj: TObj, key: K): Promise<TObj[K] extends PromiseLike<infer U> ? U : TObj[K]> {
     return Promise.resolve<TObj[K]>(obj[key]);
 }
