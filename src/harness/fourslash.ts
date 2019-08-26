@@ -80,11 +80,11 @@ namespace FourSlash {
     // To add additional option, add property into the testOptMetadataNames, refer the property in either globalMetadataNames or fileMetadataNames
     // Add cases into convertGlobalOptionsToCompilationsSettings function for the compiler to acknowledge such option from meta data
     const enum MetadataOptionNames {
-        baselineFile = "BaselineFile",
-        emitThisFile = "emitThisFile",  // This flag is used for testing getEmitOutput feature. It allows test-cases to indicate what file to be output in multiple files project
-        fileName = "Filename",
-        resolveReference = "ResolveReference",  // This flag is used to specify entry file for resolve file references. The flag is only allow once per test file
-        symlink = "Symlink",
+        baselineFile = "baselinefile",
+        emitThisFile = "emitthisfile",  // This flag is used for testing getEmitOutput feature. It allows test-cases to indicate what file to be output in multiple files project
+        fileName = "filename",
+        resolveReference = "resolvereference",  // This flag is used to specify entry file for resolve file references. The flag is only allow once per test file
+        symlink = "symlink",
     }
 
     // List of allowed metadata names
@@ -150,6 +150,7 @@ namespace FourSlash {
         private languageServiceAdapterHost: Harness.LanguageService.LanguageServiceAdapterHost;
         private languageService: ts.LanguageService;
         private cancellationToken: TestCancellationToken;
+        private assertTextConsistent: ((fileName: string) => void) | undefined;
 
         // The current caret position in the active file
         public currentCaretPosition = 0;
@@ -280,6 +281,9 @@ namespace FourSlash {
             const languageServiceAdapter = this.getLanguageServiceAdapter(testType, this.cancellationToken, compilationOptions);
             this.languageServiceAdapterHost = languageServiceAdapter.getHost();
             this.languageService = memoWrap(languageServiceAdapter.getLanguageService(), this); // Wrap the LS to cache some expensive operations certain tests call repeatedly
+            if (this.testType === FourSlashTestType.Server) {
+                this.assertTextConsistent = fileName => (languageServiceAdapter as Harness.LanguageService.ServerLanguageServiceAdapter).assertTextConsistent(fileName);
+            }
 
             if (startResolveFileRef) {
                 // Add the entry-point file itself into the languageServiceShimHost
@@ -1867,6 +1871,9 @@ namespace FourSlash {
 
         private editScriptAndUpdateMarkers(fileName: string, editStart: number, editEnd: number, newText: string) {
             this.languageServiceAdapterHost.editScript(fileName, editStart, editEnd, newText);
+            if (this.assertTextConsistent) {
+                this.assertTextConsistent(fileName);
+            }
             for (const marker of this.testData.markers) {
                 if (marker.fileName === fileName) {
                     marker.position = updatePosition(marker.position, editStart, editEnd, newText);
@@ -3274,7 +3281,7 @@ ${code}
 
     function parseTestData(basePath: string, contents: string, fileName: string): FourSlashData {
         // Regex for parsing options in the format "@Alpha: Value of any sort"
-        const optionRegex = /^\s*@(\w+): (.*)\s*/;
+        const optionRegex = /^\s*@(\w+):\s*(.*)\s*/;
 
         // List of all the subfiles we've parsed out
         const files: FourSlashFile[] = [];
@@ -3286,6 +3293,7 @@ ${code}
         // Note: IE JS engine incorrectly handles consecutive delimiters here when using RegExp split, so
         // we have to string-based splitting instead and try to figure out the delimiting chars
         const lines = contents.split("\n");
+        let i = 0;
 
         const markerPositions = ts.createMap<Marker>();
         const markers: Marker[] = [];
@@ -3314,6 +3322,7 @@ ${code}
         }
 
         for (let line of lines) {
+            i++;
             if (line.length > 0 && line.charAt(line.length - 1) === "\r") {
                 line = line.substr(0, line.length - 1);
             }
@@ -3322,11 +3331,15 @@ ${code}
                 const text = line.substr(4);
                 currentFileContent = currentFileContent === undefined ? text : currentFileContent + "\n" + text;
             }
+            else if (line.substr(0, 3) === "///" && currentFileContent !== undefined) {
+                throw new Error("Three-slash line in the middle of four-slash region at line " + i);
+            }
             else if (line.substr(0, 2) === "//") {
                 // Comment line, check for global/file @options and record them
                 const match = optionRegex.exec(line.substr(2));
                 if (match) {
-                    const [key, value] = match.slice(1);
+                    const key = match[1].toLowerCase();
+                    const value = match[2];
                     if (!ts.contains(fileMetadataNames, key)) {
                         // Check if the match is already existed in the global options
                         if (globalOptions[key] !== undefined) {

@@ -7,6 +7,10 @@
 ////}
 ////declare module "MultilineMadness" {}
 ////
+////declare module "Multiline\
+////Madness2" {
+////}
+////
 ////interface Foo {
 ////    "a1\\\r\nb";
 ////    "a2\
@@ -29,17 +33,17 @@ verify.navigationTree({
     "kind": "script",
     "childItems": [
         {
-            "text": "\"Multiline\\\nMadness\"",
+            "text": "\"MultilineMadness\"",
+            "kind": "module",
+            "kindModifiers": "declare"
+        },
+        {
+            "text": "\"MultilineMadness2\"",
             "kind": "module",
             "kindModifiers": "declare"
         },
         {
             "text": "\"Multiline\\r\\nMadness\"",
-            "kind": "module",
-            "kindModifiers": "declare"
-        },
-        {
-            "text": "\"MultilineMadness\"",
             "kind": "module",
             "kindModifiers": "declare"
         },
@@ -52,7 +56,7 @@ verify.navigationTree({
                     "kind": "property"
                 },
                 {
-                    "text": "'a2\\\n    \\\n    b'",
+                    "text": "'a2        b'",
                     "kind": "method"
                 }
             ]
@@ -66,7 +70,7 @@ verify.navigationTree({
                     "kind": "property"
                 },
                 {
-                    "text": "\"a2\\\n    \\\n    b\"",
+                    "text": "\"a2        b\"",
                     "kind": "method"
                 }
             ]
@@ -80,17 +84,17 @@ verify.navigationBar([
         "kind": "script",
         "childItems": [
             {
-                "text": "\"Multiline\\\nMadness\"",
+                "text": "\"MultilineMadness\"",
+                "kind": "module",
+                "kindModifiers": "declare"
+            },
+            {
+                "text": "\"MultilineMadness2\"",
                 "kind": "module",
                 "kindModifiers": "declare"
             },
             {
                 "text": "\"Multiline\\r\\nMadness\"",
-                "kind": "module",
-                "kindModifiers": "declare"
-            },
-            {
-                "text": "\"MultilineMadness\"",
                 "kind": "module",
                 "kindModifiers": "declare"
             },
@@ -105,19 +109,19 @@ verify.navigationBar([
         ]
     },
     {
-        "text": "\"Multiline\\\nMadness\"",
+        "text": "\"MultilineMadness\"",
+        "kind": "module",
+        "kindModifiers": "declare",
+        "indent": 1
+    },
+    {
+        "text": "\"MultilineMadness2\"",
         "kind": "module",
         "kindModifiers": "declare",
         "indent": 1
     },
     {
         "text": "\"Multiline\\r\\nMadness\"",
-        "kind": "module",
-        "kindModifiers": "declare",
-        "indent": 1
-    },
-    {
-        "text": "\"MultilineMadness\"",
         "kind": "module",
         "kindModifiers": "declare",
         "indent": 1
@@ -131,7 +135,7 @@ verify.navigationBar([
                 "kind": "property"
             },
             {
-                "text": "'a2\\\n    \\\n    b'",
+                "text": "'a2        b'",
                 "kind": "method"
             }
         ],
@@ -146,7 +150,7 @@ verify.navigationBar([
                 "kind": "property"
             },
             {
-                "text": "\"a2\\\n    \\\n    b\"",
+                "text": "\"a2        b\"",
                 "kind": "method"
             }
         ],

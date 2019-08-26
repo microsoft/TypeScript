@@ -211,7 +211,7 @@ namespace ts.codefix {
                 declaration: p,
                 type: isIdentifier(p.name) ? inferTypeForVariableFromUsage(p.name, program, cancellationToken) : program.getTypeChecker().getAnyType()
             }));
-        Debug.assert(containingFunction.parameters.length === parameterInferences.length);
+        Debug.assert(containingFunction.parameters.length === parameterInferences.length, "Parameter count and inference count should match");
 
         if (isInJSFile(containingFunction)) {
             annotateJSDocParameters(changes, sourceFile, parameterInferences, program, host);
@@ -717,13 +717,9 @@ namespace ts.codefix {
         }
 
         function inferTypeFromPropertyAssignment(assignment: PropertyAssignment | ShorthandPropertyAssignment, checker: TypeChecker, usageContext: UsageContext) {
-            const objectLiteral = isShorthandPropertyAssignment(assignment) ?
-                assignment.parent :
-                assignment.parent.parent;
-            const nodeWithRealType = isVariableDeclaration(objectLiteral.parent) ?
-                objectLiteral.parent :
-                objectLiteral;
-
+            const nodeWithRealType = isVariableDeclaration(assignment.parent.parent) ?
+                assignment.parent.parent :
+                assignment.parent;
             addCandidateThisType(usageContext, checker.getTypeAtLocation(nodeWithRealType));
         }
 
@@ -741,7 +737,7 @@ namespace ts.codefix {
             for (const i of inferences) {
                 for (const { high, low } of priorities) {
                     if (high(i)) {
-                        Debug.assert(!low(i));
+                        Debug.assert(!low(i), "Priority can't have both low and high");
                         toRemove.push(low);
                     }
                 }

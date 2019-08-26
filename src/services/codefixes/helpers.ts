@@ -87,7 +87,7 @@ namespace ts.codefix {
                             ambient ? undefined : createStubbedMethodBody(preferences)));
                     }
                     else {
-                        Debug.assertNode(accessor, isSetAccessorDeclaration);
+                        Debug.assertNode(accessor, isSetAccessorDeclaration, "The counterpart to a getter should be a setter");
                         const parameter = getSetAccessorValueParameter(accessor);
                         const parameterName = parameter && isIdentifier(parameter.name) ? idText(parameter.name) : undefined;
                         out(createSetAccessor(
@@ -115,7 +115,7 @@ namespace ts.codefix {
                 }
 
                 if (declarations.length === 1) {
-                    Debug.assert(signatures.length === 1);
+                    Debug.assert(signatures.length === 1, "One declaration implies one signature");
                     const signature = signatures[0];
                     outputMethod(signature, modifiers, name, ambient ? undefined : createStubbedMethodBody(preferences));
                     break;
@@ -132,7 +132,7 @@ namespace ts.codefix {
                         outputMethod(signature, modifiers, name, createStubbedMethodBody(preferences));
                     }
                     else {
-                        Debug.assert(declarations.length === signatures.length);
+                        Debug.assert(declarations.length === signatures.length, "Declarations and signatures should match count");
                         out(createMethodImplementingSignatures(signatures, name, optional, modifiers, preferences));
                     }
                 }

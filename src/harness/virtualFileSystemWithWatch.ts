@@ -35,38 +35,16 @@ interface Array<T> { length: number; [n: number]: T; }`
         executingFilePath?: string;
         currentDirectory?: string;
         newLine?: string;
-        useWindowsStylePaths?: boolean;
+        windowsStyleRoot?: string;
         environmentVariables?: Map<string>;
     }
 
     export function createWatchedSystem(fileOrFolderList: ReadonlyArray<FileOrFolderOrSymLink>, params?: TestServerHostCreationParameters): TestServerHost {
-        if (!params) {
-            params = {};
-        }
-        const host = new TestServerHost(/*withSafelist*/ false,
-            params.useCaseSensitiveFileNames !== undefined ? params.useCaseSensitiveFileNames : false,
-            params.executingFilePath || getExecutingFilePathFromLibFile(),
-            params.currentDirectory || "/",
-            fileOrFolderList,
-            params.newLine,
-            params.useWindowsStylePaths,
-            params.environmentVariables);
-        return host;
+        return new TestServerHost(/*withSafelist*/ false, fileOrFolderList, params);
     }
 
     export function createServerHost(fileOrFolderList: ReadonlyArray<FileOrFolderOrSymLink>, params?: TestServerHostCreationParameters): TestServerHost {
-        if (!params) {
-            params = {};
-        }
-        const host = new TestServerHost(/*withSafelist*/ true,
-            params.useCaseSensitiveFileNames !== undefined ? params.useCaseSensitiveFileNames : false,
-            params.executingFilePath || getExecutingFilePathFromLibFile(),
-            params.currentDirectory || "/",
-            fileOrFolderList,
-            params.newLine,
-            params.useWindowsStylePaths,
-            params.environmentVariables);
-        return host;
+        return new TestServerHost(/*withSafelist*/ true, fileOrFolderList, params);
     }
 
     export interface File {
@@ -326,6 +304,16 @@ interface Array<T> { length: number; [n: number]: T; }`
     }
 
     const timeIncrements = 1000;
+    export interface TestServerHostOptions {
+        useCaseSensitiveFileNames: boolean;
+        executingFilePath: string;
+        currentDirectory: string;
+        fileOrFolderorSymLinkList: ReadonlyArray<FileOrFolderOrSymLink>;
+        newLine?: string;
+        useWindowsStylePaths?: boolean;
+        environmentVariables?: Map<string>;
+    }
+
     export class TestServerHost implements server.ServerHost, FormatDiagnosticsHost, ModuleResolutionHost {
         args: string[] = [];
 
@@ -342,16 +330,31 @@ interface Array<T> { length: number; [n: number]: T; }`
         readonly watchedDirectories = createMultiMap<TestDirectoryWatcher>();
         readonly watchedDirectoriesRecursive = createMultiMap<TestDirectoryWatcher>();
         readonly watchedFiles = createMultiMap<TestFileWatcher>();
+        public readonly useCaseSensitiveFileNames: boolean;
+        public readonly newLine: string;
+        public readonly windowsStyleRoot?: string;
+        private readonly environmentVariables?: Map<string>;
         private readonly executingFilePath: string;
         private readonly currentDirectory: string;
         private readonly customWatchFile: HostWatchFile | undefined;
         private readonly customRecursiveWatchDirectory: HostWatchDirectory | undefined;
         public require: ((initialPath: string, moduleName: string) => server.RequireResult) | undefined;
 
-        constructor(public withSafeList: boolean, public useCaseSensitiveFileNames: boolean, executingFilePath: string, currentDirectory: string, fileOrFolderorSymLinkList: ReadonlyArray<FileOrFolderOrSymLink>, public readonly newLine = "\n", public readonly useWindowsStylePath?: boolean, private readonly environmentVariables?: Map<string>) {
-            this.getCanonicalFileName = createGetCanonicalFileName(useCaseSensitiveFileNames);
+        constructor(
+            public withSafeList: boolean,
+            fileOrFolderorSymLinkList: ReadonlyArray<FileOrFolderOrSymLink>,
+            {
+                useCaseSensitiveFileNames, executingFilePath, currentDirectory,
+                newLine, windowsStyleRoot, environmentVariables
+            }: TestServerHostCreationParameters = {}) {
+            this.useCaseSensitiveFileNames = !!useCaseSensitiveFileNames;
+            this.newLine = newLine || "\n";
+            this.windowsStyleRoot = windowsStyleRoot;
+            this.environmentVariables = environmentVariables;
+            currentDirectory = currentDirectory || "/";
+            this.getCanonicalFileName = createGetCanonicalFileName(!!useCaseSensitiveFileNames);
             this.toPath = s => toPath(s, currentDirectory, this.getCanonicalFileName);
-            this.executingFilePath = this.getHostSpecificPath(executingFilePath);
+            this.executingFilePath = this.getHostSpecificPath(executingFilePath || getExecutingFilePathFromLibFile());
             this.currentDirectory = this.getHostSpecificPath(currentDirectory);
             this.reloadFS(fileOrFolderorSymLinkList);
             const tscWatchFile = this.environmentVariables && this.environmentVariables.get("TSC_WATCHFILE") as Tsc_WatchFile;
@@ -418,8 +421,8 @@ interface Array<T> { length: number; [n: number]: T; }`
         }
 
         getHostSpecificPath(s: string) {
-            if (this.useWindowsStylePath && s.startsWith(directorySeparator)) {
-                return "c:/" + s.substring(1);
+            if (this.windowsStyleRoot && s.startsWith(directorySeparator)) {
+                return this.windowsStyleRoot + s.substring(1);
             }
             return s;
         }
@@ -433,7 +436,7 @@ interface Array<T> { length: number; [n: number]: T; }`
             const mapNewLeaves = createMap<true>();
             const isNewFs = this.fs.size === 0;
             fileOrFolderOrSymLinkList = fileOrFolderOrSymLinkList.concat(this.withSafeList ? safeList : []);
-            const filesOrFoldersToLoad: ReadonlyArray<FileOrFolderOrSymLink> = !this.useWindowsStylePath ? fileOrFolderOrSymLinkList :
+            const filesOrFoldersToLoad: ReadonlyArray<FileOrFolderOrSymLink> = !this.windowsStyleRoot ? fileOrFolderOrSymLinkList :
                 fileOrFolderOrSymLinkList.map<FileOrFolderOrSymLink>(f => {
                     const result = clone(f);
                     result.path = this.getHostSpecificPath(f.path);

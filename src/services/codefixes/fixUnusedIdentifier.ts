@@ -117,7 +117,7 @@ namespace ts.codefix {
     }
 
     function deleteTypeParameters(changes: textChanges.ChangeTracker, sourceFile: SourceFile, token: Node): void {
-        changes.delete(sourceFile, Debug.assertDefined(cast(token.parent, isDeclarationWithTypeParameterChildren).typeParameters));
+        changes.delete(sourceFile, Debug.assertDefined(cast(token.parent, isDeclarationWithTypeParameterChildren).typeParameters, "The type parameter to delete should exist"));
     }
 
     // Sometimes the diagnostic span is an entire ImportDeclaration, so we should remove the whole thing.
@@ -231,7 +231,7 @@ namespace ts.codefix {
                 // Can't remove a non-last parameter in a callback. Can remove a parameter in code-fix-all if future parameters are also unused.
                 const { parameters } = parent;
                 const index = parameters.indexOf(p);
-                Debug.assert(index !== -1);
+                Debug.assert(index !== -1, "The parameter should already be in the list");
                 return isFixAll
                     ? parameters.slice(index + 1).every(p => p.name.kind === SyntaxKind.Identifier && !p.symbol.isReferenced)
                     : index === parameters.length - 1;

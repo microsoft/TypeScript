@@ -49,3 +49,15 @@ function test(): {[A in "foo"]: A} {
 >foo : Symbol(foo, Decl(errorElaboration.ts, 16, 10))
 }
 
+// Repro for #32358
+
+const foo = { bar: 'a' };
+>foo : Symbol(foo, Decl(errorElaboration.ts, 21, 5))
+>bar : Symbol(bar, Decl(errorElaboration.ts, 21, 13))
+
+const x = ({ [foo.bar]: c }) => undefined;
+>x : Symbol(x, Decl(errorElaboration.ts, 22, 5))
+>foo : Symbol(foo, Decl(errorElaboration.ts, 8, 1))
+>c : Symbol(c, Decl(errorElaboration.ts, 22, 12))
+>undefined : Symbol(undefined)
+
