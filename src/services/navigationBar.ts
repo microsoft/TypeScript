@@ -15,6 +15,12 @@ namespace ts.NavigationBar {
      */
     const whiteSpaceRegex = /\s+/g;
 
+    /**
+     * Maximum amount of characters to return
+     * The amount was choosen arbitrarily.
+     */
+    const maxLength = 150;
+
     // Keep sourceFile handy so we don't have to search for it every time we need to call `getText`.
     let curCancellationToken: CancellationToken;
     let curSourceFile: SourceFile;
@@ -74,7 +80,7 @@ namespace ts.NavigationBar {
     }
 
     function nodeText(node: Node): string {
-        return node.getText(curSourceFile);
+        return cleanText(node.getText(curSourceFile));
     }
 
     function navigationBarNodeKind(n: NavigationBarNode): SyntaxKind {
@@ -194,7 +200,7 @@ namespace ts.NavigationBar {
                 // Handle named bindings in imports e.g.:
                 //    import * as NS from "mod";
                 //    import {a, b as B} from "mod";
-                const {namedBindings} = importClause;
+                const { namedBindings } = importClause;
                 if (namedBindings) {
                     if (namedBindings.kind === SyntaxKind.NamespaceImport) {
                         addLeafNode(namedBindings);
@@ -434,13 +440,13 @@ namespace ts.NavigationBar {
 
     function getItemName(node: Node, name: Node | undefined): string {
         if (node.kind === SyntaxKind.ModuleDeclaration) {
-            return getModuleName(<ModuleDeclaration>node);
+            return cleanText(getModuleName(<ModuleDeclaration>node));
         }
 
         if (name) {
             const text = nodeText(name);
             if (text.length > 0) {
-                return text;
+                return cleanText(text);
             }
         }
 
@@ -636,11 +642,11 @@ namespace ts.NavigationBar {
     function getFunctionOrClassName(node: FunctionExpression | FunctionDeclaration | ArrowFunction | ClassLikeDeclaration): string {
         const { parent } = node;
         if (node.name && getFullWidth(node.name) > 0) {
-            return declarationNameToString(node.name);
+            return cleanText(declarationNameToString(node.name));
         }
         // See if it is a var initializer. If so, use the var name.
         else if (isVariableDeclaration(parent)) {
-            return declarationNameToString(parent.name);
+            return cleanText(declarationNameToString(parent.name));
         }
         // See if it is of the form "<expr> = function(){...}". If so, use the text from the left-hand side.
         else if (isBinaryExpression(parent) && parent.operatorToken.kind === SyntaxKind.EqualsToken) {
@@ -658,9 +664,15 @@ namespace ts.NavigationBar {
             return "<class>";
         }
         else if (isCallExpression(parent)) {
-            const name = getCalledExpressionName(parent.expression);
+            let name = getCalledExpressionName(parent.expression);
             if (name !== undefined) {
-                const args = mapDefined(parent.arguments, a => isStringLiteralLike(a) ? a.getText(curSourceFile) : undefined).join(", ");
+                name = cleanText(name);
+
+                if (name.length > maxLength) {
+                    return `${name} callback`;
+                }
+
+                const args = cleanText(mapDefined(parent.arguments, a => isStringLiteralLike(a) ? a.getText(curSourceFile) : undefined).join(", "));
                 return `${name}(${args}) callback`;
             }
         }
@@ -690,5 +702,17 @@ namespace ts.NavigationBar {
             default:
                 return false;
         }
+    }
+
+    function cleanText(text: string): string {
+        // Truncate to maximum amount of characters as we don't want to do a big replace operation.
+        text = text.length > maxLength ? text.substring(0, maxLength) + "..." : text;
+
+        // Replaces ECMAScript line terminators and removes the trailing `\` from each line:
+        // \n - Line Feed
+        // \r - Carriage Return
+        // \u2028 - Line separator
+        // \u2029 - Paragraph separator
+        return text.replace(/\\(\r?\n|\r|\u2028|\u2029)/g, "");
     }
 }

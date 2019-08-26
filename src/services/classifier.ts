@@ -771,6 +771,14 @@ namespace ts {
                 return false;
             }
 
+            // Limiting classification to exactly the elements and attributes
+            // defined in `ts.commentPragmas` would be excessive, but we can avoid
+            // some obvious false positives (e.g. in XML-like doc comments) by
+            // checking the element name.
+            if (!match[3] || !(match[3] in commentPragmas)) {
+                return false;
+            }
+
             let pos = start;
 
             pushCommentRange(pos, match[1].length); // ///
@@ -778,10 +786,6 @@ namespace ts {
 
             pushClassification(pos, match[2].length, ClassificationType.punctuation); // <
             pos += match[2].length;
-
-            if (!match[3]) {
-                return true;
-            }
 
             pushClassification(pos, match[3].length, ClassificationType.jsxSelfClosingTagName); // element name
             pos += match[3].length;

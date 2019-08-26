@@ -150,6 +150,7 @@ namespace FourSlash {
         private languageServiceAdapterHost: Harness.LanguageService.LanguageServiceAdapterHost;
         private languageService: ts.LanguageService;
         private cancellationToken: TestCancellationToken;
+        private assertTextConsistent: ((fileName: string) => void) | undefined;
 
         // The current caret position in the active file
         public currentCaretPosition = 0;
@@ -280,6 +281,9 @@ namespace FourSlash {
             const languageServiceAdapter = this.getLanguageServiceAdapter(testType, this.cancellationToken, compilationOptions);
             this.languageServiceAdapterHost = languageServiceAdapter.getHost();
             this.languageService = memoWrap(languageServiceAdapter.getLanguageService(), this); // Wrap the LS to cache some expensive operations certain tests call repeatedly
+            if (this.testType === FourSlashTestType.Server) {
+                this.assertTextConsistent = fileName => (languageServiceAdapter as Harness.LanguageService.ServerLanguageServiceAdapter).assertTextConsistent(fileName);
+            }
 
             if (startResolveFileRef) {
                 // Add the entry-point file itself into the languageServiceShimHost
@@ -1896,6 +1900,9 @@ namespace FourSlash {
 
         private editScriptAndUpdateMarkers(fileName: string, editStart: number, editEnd: number, newText: string) {
             this.languageServiceAdapterHost.editScript(fileName, editStart, editEnd, newText);
+            if (this.assertTextConsistent) {
+                this.assertTextConsistent(fileName);
+            }
             for (const marker of this.testData.markers) {
                 if (marker.fileName === fileName) {
                     marker.position = updatePosition(marker.position, editStart, editEnd, newText);
