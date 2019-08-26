@@ -177,11 +177,11 @@ export class someClass { }
       },
       "./anothermodule.ts": {
         "version": "-2676574883",
-        "signature": "25219880154"
+        "signature": "7652028357"
       },
       "./index.ts": {
         "version": "-13387000654",
-        "signature": "12514354613"
+        "signature": "-2069755619"
       },
       "./some_decl.d.ts": {
         "version": "-9253692965",

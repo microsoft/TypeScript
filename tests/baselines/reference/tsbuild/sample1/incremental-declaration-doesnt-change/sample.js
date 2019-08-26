@@ -30,11 +30,11 @@ class someClass { }
       },
       "./anothermodule.ts": {
         "version": "-2676574883",
-        "signature": "25219880154"
+        "signature": "7652028357"
       },
       "./index.ts": {
         "version": "-16698397488",
-        "signature": "11051732871"
+        "signature": "-13851440507"
       },
       "./some_decl.d.ts": {
         "version": "-9253692965",

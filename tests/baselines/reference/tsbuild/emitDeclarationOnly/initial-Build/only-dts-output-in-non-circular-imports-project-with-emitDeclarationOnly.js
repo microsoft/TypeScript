@@ -1,12 +1,14 @@
 //// [/src/lib/a.d.ts]
-import { B } from "./b";
+export declare class B {
+    prop: string;
+}
 export interface A {
     b: B;
 }
 //# sourceMappingURL=a.d.ts.map
 
 //// [/src/lib/a.d.ts.map]
-{"version":3,"file":"a.d.ts","sourceRoot":"","sources":["../src/a.ts"],"names":[],"mappings":"AAAA,OAAO,EAAE,CAAC,EAAE,MAAM,KAAK,CAAC;AAExB,MAAM,WAAW,CAAC;IAChB,CAAC,EAAE,CAAC,CAAC;CACN"}
+{"version":3,"file":"a.d.ts","sourceRoot":"","sources":["../src/a.ts"],"names":[],"mappings":"AAAA,qBAAa,CAAC;IAAG,IAAI,SAAW;CAAE;AAElC,MAAM,WAAW,CAAC;IAChB,CAAC,EAAE,CAAC,CAAC;CACN"}
 
 //// [/src/lib/b.d.ts]
 import { C } from "./c";
@@ -28,14 +30,14 @@ export interface C {
 //// [/src/lib/c.d.ts.map]
 {"version":3,"file":"c.d.ts","sourceRoot":"","sources":["../src/c.ts"],"names":[],"mappings":"AAAA,OAAO,EAAE,CAAC,EAAE,MAAM,KAAK,CAAC;AAExB,MAAM,WAAW,CAAC;IAChB,CAAC,EAAE,CAAC,CAAC;CACN"}
 
-//// [/src/lib/index.d.ts]
-export { A } from "./a";
-export { B } from "./b";
-export { C } from "./c";
-//# sourceMappingURL=index.d.ts.map
+//// [/src/src/index.ts] unlink
+//// [/src/src/a.ts]
+export class B { prop = "hello"; }
 
-//// [/src/lib/index.d.ts.map]
-{"version":3,"file":"index.d.ts","sourceRoot":"","sources":["../src/index.ts"],"names":[],"mappings":"AAAA,OAAO,EAAE,CAAC,EAAE,MAAM,KAAK,CAAC;AACxB,OAAO,EAAE,CAAC,EAAE,MAAM,KAAK,CAAC;AACxB,OAAO,EAAE,CAAC,EAAE,MAAM,KAAK,CAAC"}
+export interface A {
+  b: B;
+}
+
 
 //// [/src/tsconfig.tsbuildinfo]
 {
@@ -45,6 +47,10 @@ export { C } from "./c";
         "version": "3858781397",
         "signature": "3858781397"
       },
+      "./src/a.ts": {
+        "version": "11179224639",
+        "signature": "-14608980923"
+      },
       "./src/c.ts": {
         "version": "429593025",
         "signature": "-21569163793"
@@ -52,14 +58,6 @@ export { C } from "./c";
       "./src/b.ts": {
         "version": "-2273488249",
         "signature": "25318058868"
-      },
-      "./src/a.ts": {
-        "version": "-15463561693",
-        "signature": "-4935617457"
-      },
-      "./src/index.ts": {
-        "version": "1286756397",
-        "signature": "14762544269"
       }
     },
     "options": {
@@ -79,43 +77,26 @@ export { C } from "./c";
       "configFilePath": "./tsconfig.json"
     },
     "referencedMap": {
-      "./src/a.ts": [
-        "./src/b.ts"
-      ],
       "./src/b.ts": [
         "./src/c.ts"
       ],
       "./src/c.ts": [
         "./src/a.ts"
-      ],
-      "./src/index.ts": [
-        "./src/a.ts",
-        "./src/b.ts",
-        "./src/c.ts"
       ]
     },
     "exportedModulesMap": {
-      "./src/a.ts": [
-        "./src/b.ts"
-      ],
       "./src/b.ts": [
         "./src/c.ts"
       ],
       "./src/c.ts": [
         "./src/a.ts"
-      ],
-      "./src/index.ts": [
-        "./src/a.ts",
-        "./src/b.ts",
-        "./src/c.ts"
       ]
     },
     "semanticDiagnosticsPerFile": [
       "../lib/lib.d.ts",
       "./src/a.ts",
       "./src/b.ts",
-      "./src/c.ts",
-      "./src/index.ts"
+      "./src/c.ts"
     ]
   },
   "version": "FakeTSVersion"

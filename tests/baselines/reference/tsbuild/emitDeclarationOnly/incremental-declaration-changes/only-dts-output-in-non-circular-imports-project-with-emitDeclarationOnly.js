@@ -1,5 +1,7 @@
 //// [/src/lib/a.d.ts]
-import { B } from "./b";
+export declare class B {
+    prop: string;
+}
 export interface A {
     b: B;
     foo: any;
@@ -7,10 +9,10 @@ export interface A {
 //# sourceMappingURL=a.d.ts.map
 
 //// [/src/lib/a.d.ts.map]
-{"version":3,"file":"a.d.ts","sourceRoot":"","sources":["../src/a.ts"],"names":[],"mappings":"AAAA,OAAO,EAAE,CAAC,EAAE,MAAM,KAAK,CAAC;AAExB,MAAM,WAAW,CAAC;IAChB,CAAC,EAAE,CAAC,CAAC;IAAC,GAAG,EAAE,GAAG,CAAC;CAChB"}
+{"version":3,"file":"a.d.ts","sourceRoot":"","sources":["../src/a.ts"],"names":[],"mappings":"AAAA,qBAAa,CAAC;IAAG,IAAI,SAAW;CAAE;AAElC,MAAM,WAAW,CAAC;IAChB,CAAC,EAAE,CAAC,CAAC;IAAC,GAAG,EAAE,GAAG,CAAC;CAChB"}
 
 //// [/src/src/a.ts]
-import { B } from "./b";
+export class B { prop = "hello"; }
 
 export interface A {
   b: B; foo: any;
@@ -25,6 +27,10 @@ export interface A {
         "version": "3858781397",
         "signature": "3858781397"
       },
+      "./src/a.ts": {
+        "version": "7973388544",
+        "signature": "3224647069"
+      },
       "./src/c.ts": {
         "version": "429593025",
         "signature": "-21569163793"
@@ -32,14 +38,6 @@ export interface A {
       "./src/b.ts": {
         "version": "-2273488249",
         "signature": "25318058868"
-      },
-      "./src/a.ts": {
-        "version": "-14761736732",
-        "signature": "-11119001497"
-      },
-      "./src/index.ts": {
-        "version": "1286756397",
-        "signature": "14762544269"
       }
     },
     "options": {
@@ -59,43 +57,26 @@ export interface A {
       "configFilePath": "./tsconfig.json"
     },
     "referencedMap": {
-      "./src/a.ts": [
-        "./src/b.ts"
-      ],
       "./src/b.ts": [
         "./src/c.ts"
       ],
       "./src/c.ts": [
         "./src/a.ts"
-      ],
-      "./src/index.ts": [
-        "./src/a.ts",
-        "./src/b.ts",
-        "./src/c.ts"
       ]
     },
     "exportedModulesMap": {
-      "./src/a.ts": [
-        "./src/b.ts"
-      ],
       "./src/b.ts": [
         "./src/c.ts"
       ],
       "./src/c.ts": [
         "./src/a.ts"
-      ],
-      "./src/index.ts": [
-        "./src/a.ts",
-        "./src/b.ts",
-        "./src/c.ts"
       ]
     },
     "semanticDiagnosticsPerFile": [
       "../lib/lib.d.ts",
       "./src/a.ts",
       "./src/b.ts",
-      "./src/c.ts",
-      "./src/index.ts"
+      "./src/c.ts"
     ]
   },
   "version": "FakeTSVersion"
