@@ -199,7 +199,7 @@ declare const console: { log(msg: any): void; };`;
         fs: vfs.FileSystem;
         tick: () => void;
         rootNames: ReadonlyArray<string>;
-        expectedMapFileNames: ReadonlyArray<string>;
+        expectedMapFileNames?: ReadonlyArray<string>;
         expectedBuildInfoFilesForSectionBaselines?: ReadonlyArray<BuildInfoSectionBaselineFiles>;
         modifyFs: (fs: vfs.FileSystem) => void;
     }
@@ -221,7 +221,7 @@ declare const console: { log(msg: any): void; };`;
             return originalReadFile.call(host, path);
         };
         builder.build();
-        generateSourceMapBaselineFiles(fs, expectedMapFileNames);
+        if (expectedMapFileNames) generateSourceMapBaselineFiles(fs, expectedMapFileNames);
         generateBuildInfoSectionBaselineFiles(fs, expectedBuildInfoFilesForSectionBaselines || emptyArray);
         fs.makeReadonly();
         return { fs, actualReadFileMap, host, builder };
@@ -268,9 +268,10 @@ Mismatch Actual(path, actual, expected): ${JSON.stringify(arrayFrom(mapDefinedIt
         tick: () => void;
         proj: string;
         rootNames: ReadonlyArray<string>;
-        expectedMapFileNames: ReadonlyArray<string>;
+        /** map file names to generate baseline of */
+        expectedMapFileNames?: ReadonlyArray<string>;
         expectedBuildInfoFilesForSectionBaselines?: ReadonlyArray<BuildInfoSectionBaselineFiles>;
-        lastProjectOutputJs: string;
+        lastProjectOutput: string;
         initialBuild: BuildState;
         outputFiles?: ReadonlyArray<string>;
         incrementalDtsChangedBuild?: BuildState;
@@ -282,7 +283,7 @@ Mismatch Actual(path, actual, expected): ${JSON.stringify(arrayFrom(mapDefinedIt
 
     export function verifyTsbuildOutput({
         scenario, projFs, time, tick, proj, rootNames, outputFiles, baselineOnly, verifyDiagnostics,
-        expectedMapFileNames, expectedBuildInfoFilesForSectionBaselines, lastProjectOutputJs,
+        expectedMapFileNames, expectedBuildInfoFilesForSectionBaselines, lastProjectOutput,
         initialBuild, incrementalDtsChangedBuild, incrementalDtsUnchangedBuild, incrementalHeaderChangedBuild
     }: VerifyTsBuildInput) {
         describe(`tsc --b ${proj}:: ${scenario}`, () => {
@@ -331,7 +332,7 @@ Mismatch Actual(path, actual, expected): ${JSON.stringify(arrayFrom(mapDefinedIt
                     let beforeBuildTime: number;
                     let afterBuildTime: number;
                     before(() => {
-                        beforeBuildTime = fs.statSync(lastProjectOutputJs).mtimeMs;
+                        beforeBuildTime = fs.statSync(lastProjectOutput).mtimeMs;
                         tick();
                         newFs = fs.shadow();
                         tick();
@@ -343,7 +344,7 @@ Mismatch Actual(path, actual, expected): ${JSON.stringify(arrayFrom(mapDefinedIt
                             expectedBuildInfoFilesForSectionBaselines,
                             modifyFs: incrementalModifyFs,
                         }));
-                        afterBuildTime = newFs.statSync(lastProjectOutputJs).mtimeMs;
+                        afterBuildTime = newFs.statSync(lastProjectOutput).mtimeMs;
                     });
                     after(() => {
                         newFs = undefined!;
@@ -373,7 +374,6 @@ Mismatch Actual(path, actual, expected): ${JSON.stringify(arrayFrom(mapDefinedIt
                             fs: newFs.shadow(),
                             tick,
                             rootNames,
-                            expectedMapFileNames: emptyArray,
                             modifyFs: fs => {
                                 // Delete output files
                                 for (const outputFile of expectedOutputFiles) {

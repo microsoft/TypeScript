@@ -16,8 +16,7 @@ namespace ts {
             tick,
             proj: "lateBoundSymbol",
             rootNames: ["/src/tsconfig.json"],
-            expectedMapFileNames: emptyArray,
-            lastProjectOutputJs: "/src/src/main.js",
+            lastProjectOutput: "/src/src/main.js",
             outputFiles: [
                 "/src/src/hkt.js",
                 "/src/src/main.js",
