@@ -284,7 +284,7 @@ namespace ts.codefix {
         preferences: UserPreferences,
     ): ReadonlyArray<FixAddNewImport | FixUseImportType> {
         const isJs = isSourceFileJS(sourceFile);
-        const { allowsImportingSpecifier } = createLazyPackageJsonDependencyReader(sourceFile, host, program.redirectTargetsMap);
+        const { allowsImportingSpecifier } = createAutoImportFilter(sourceFile, host, program.redirectTargetsMap);
         const choicesForEachExportingModule = flatMap(moduleSymbols, ({ moduleSymbol, importKind, exportedSymbolIsTypeOnly }) =>
             moduleSpecifiers.getModuleSpecifiers(moduleSymbol, program.getCompilerOptions(), sourceFile, host, program.getSourceFiles(), preferences, program.redirectTargetsMap)
             .map((moduleSpecifier): FixAddNewImport | FixUseImportType =>
@@ -629,7 +629,7 @@ namespace ts.codefix {
         cb: (module: Symbol) => void,
     ) {
         let filteredCount = 0;
-        const packageJson = filterByPackageJson && createLazyPackageJsonDependencyReader(from, host, redirectTargetsMap);
+        const packageJson = filterByPackageJson && createAutoImportFilter(from, host, redirectTargetsMap);
         moduleSpecifiers.withCachedSymlinks(allSourceFiles, hostGetCanonicalFileName(host), host.getCurrentDirectory(), () => {
             forEachExternalModule(checker, allSourceFiles, (module, sourceFile) => {
                 if (sourceFile === undefined) {
@@ -707,7 +707,7 @@ namespace ts.codefix {
         return !isStringANonContextualKeyword(res) ? res || "_" : `_${res}`;
     }
 
-    function createLazyPackageJsonDependencyReader(fromFile: SourceFile, host: LanguageServiceHost, redirectTargetsMap: RedirectTargetsMap) {
+    function createAutoImportFilter(fromFile: SourceFile, host: LanguageServiceHost, redirectTargetsMap: RedirectTargetsMap) {
         const packageJsons = host.getPackageJsonsVisibleToFile && host.getPackageJsonsVisibleToFile(fromFile.fileName) || getPackageJsonsVisibleToFile(fromFile.fileName, host);
         const dependencyGroups = PackageJsonDependencyGroup.Dependencies | PackageJsonDependencyGroup.DevDependencies | PackageJsonDependencyGroup.OptionalDependencies;
         let usesNodeCoreModules: boolean | undefined;
