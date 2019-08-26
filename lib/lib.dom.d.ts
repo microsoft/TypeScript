@@ -6887,6 +6887,12 @@ interface HTMLFrameElement extends HTMLElement {
     /** @deprecated */
     frameBorder: string;
     /**
+     * Tell the browser if the iframe is a good ("lazy"), bad ("eager") or undetermined ("auto")
+     * candidate for lazy loading. If the iframe is lazy laoded, the browser will wait untill
+     * it actually appears in the user screen to load its content.
+     */
+    loading: "lazy" | "eager" | "auto";
+    /**
      * Sets or retrieves a URI to a long description of the object.
      */
     /** @deprecated */
@@ -7166,6 +7172,12 @@ interface HTMLImageElement extends HTMLElement {
      * Sets or retrieves whether the image is a server-side image map.
      */
     isMap: boolean;
+    /**
+     * Tell the browser if the image is a good ("lazy"), bad ("eager") or undetermined ("auto")
+     * candidate for lazy loading. If the image is lazy laoded, the browser will wait untill
+     * it actually appears in the user screen to load it.
+     */
+    loading: "lazy" | "eager" | "auto";
     /**
      * Sets or retrieves a Uniform Resource Identifier (URI) to a long description of the object.
      */
