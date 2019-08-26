@@ -713,6 +713,6 @@ namespace ts.NavigationBar {
         // \r - Carriage Return
         // \u2028 - Line separator
         // \u2029 - Paragraph separator
-        return text.replace(/\\(\r?\n|\r|\u2028|\u2029)/g, "");
+        return text.replace(/\\?(\r?\n|\r|\u2028|\u2029)/g, "");
     }
 }
