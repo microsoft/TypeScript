@@ -3540,7 +3540,6 @@ namespace ts {
         }
 
         function createNodeBuilder() {
-            let depth = 0;
             return {
                 typeToTypeNode: (type: Type, enclosingDeclaration?: Node, flags?: NodeBuilderFlags, tracker?: SymbolTracker) =>
                     withContext(enclosingDeclaration, flags, tracker, context => typeToTypeNodeHelper(type, context)),
@@ -3712,7 +3711,7 @@ namespace ts {
 
                 if (objectFlags & ObjectFlags.Reference) {
                     Debug.assert(!!(type.flags & TypeFlags.Object));
-                    return typeReferenceToTypeNode(<TypeReference>type);
+                    return (<TypeReference>type).node ? visitAndTransformType(type, typeReferenceToTypeNode) : typeReferenceToTypeNode(<TypeReference>type);
                 }
                 if (type.flags & TypeFlags.TypeParameter || objectFlags & ObjectFlags.ClassOrInterface) {
                     if (type.flags & TypeFlags.TypeParameter && contains(context.inferTypeParameters, type)) {
@@ -3804,10 +3803,7 @@ namespace ts {
                 function createAnonymousTypeNode(type: ObjectType): TypeNode {
                     const typeId = "" + type.id;
                     const symbol = type.symbol;
-                    let id: string;
                     if (symbol) {
-                        const isConstructorObject = getObjectFlags(type) & ObjectFlags.Anonymous && type.symbol && type.symbol.flags & SymbolFlags.Class;
-                        id = (isConstructorObject ? "+" : "") + getSymbolId(symbol);
                         if (isJSConstructor(symbol.valueDeclaration)) {
                             // Instance and static types share the same symbol; only add 'typeof' for the static side.
                             const isInstanceType = type === getInferredClassType(symbol) ? SymbolFlags.Type : SymbolFlags.Value;
@@ -3831,25 +3827,7 @@ namespace ts {
                             }
                         }
                         else {
-                            // Since instantiations of the same anonymous type have the same symbol, tracking symbols instead
-                            // of types allows us to catch circular references to instantiations of the same anonymous type
-                            if (!context.visitedTypes) {
-                                context.visitedTypes = createMap<true>();
-                            }
-                            if (!context.symbolDepth) {
-                                context.symbolDepth = createMap<number>();
-                            }
-
-                            const depth = context.symbolDepth.get(id) || 0;
-                            if (depth > 10) {
-                                return createElidedInformationPlaceholder(context);
-                            }
-                            context.symbolDepth.set(id, depth + 1);
-                            context.visitedTypes.set(typeId, true);
-                            const result = createTypeNodeFromObjectType(type);
-                            context.visitedTypes.delete(typeId);
-                            context.symbolDepth.set(id, depth);
-                            return result;
+                            return visitAndTransformType(type, createTypeNodeFromObjectType);
                         }
                     }
                     else {
@@ -3869,6 +3847,37 @@ namespace ts {
                                 (!(context.flags & NodeBuilderFlags.UseStructuralFallback) || isValueSymbolAccessible(symbol, context.enclosingDeclaration)); // And the build is going to succeed without visibility error or there is no structural fallback allowed
                         }
                     }
+                }
+
+                function visitAndTransformType<T>(type: Type, transform: (type: Type) => T) {
+                    const typeId = "" + type.id;
+                    const isConstructorObject = getObjectFlags(type) & ObjectFlags.Anonymous && type.symbol && type.symbol.flags & SymbolFlags.Class;
+                    const id = getObjectFlags(type) & ObjectFlags.Reference ? "N" + getNodeId((<DeferredTypeReference>type).node) :
+                        (isConstructorObject ? "+" : "") + getSymbolId(type.symbol);
+                    // Since instantiations of the same anonymous type have the same symbol, tracking symbols instead
+                    // of types allows us to catch circular references to instantiations of the same anonymous type
+                    if (!context.visitedTypes) {
+                        context.visitedTypes = createMap<true>();
+                    }
+                    if (id && !context.symbolDepth) {
+                        context.symbolDepth = createMap<number>();
+                    }
+
+                    let depth: number | undefined;
+                    if (id) {
+                        depth = context.symbolDepth!.get(id) || 0;
+                        if (depth > 10) {
+                            return createElidedInformationPlaceholder(context);
+                        }
+                        context.symbolDepth!.set(id, depth + 1);
+                    }
+                    context.visitedTypes.set(typeId, true);
+                    const result = transform(type);
+                    context.visitedTypes.delete(typeId);
+                    if (id) {
+                        context.symbolDepth!.set(id, depth!);
+                    }
+                    return result;
                 }
 
                 function createTypeNodeFromObjectType(type: ObjectType): TypeNode {
@@ -3910,15 +3919,10 @@ namespace ts {
                     const typeArguments: ReadonlyArray<Type> = getTypeArguments(type);
                     if (type.target === globalArrayType || type.target === globalReadonlyArrayType) {
                         if (context.flags & NodeBuilderFlags.WriteArrayAsGenericType) {
-                            depth++;
-                            const typeArgumentNode = typeToTypeNodeHelper(depth >= 5 ? anyType : typeArguments[0], context);
-                            depth--;
-                            createTypeReferenceNode(type.target === globalArrayType ? "Array" : "ReadonlyArray", [typeArgumentNode]);
+                            const typeArgumentNode = typeToTypeNodeHelper(typeArguments[0], context);
+                            return createTypeReferenceNode(type.target === globalArrayType ? "Array" : "ReadonlyArray", [typeArgumentNode]);
                         }
-
-                        depth++;
-                        const elementType = typeToTypeNodeHelper(depth >= 5 ? anyType : typeArguments[0], context);
-                        depth--;
+                        const elementType = typeToTypeNodeHelper(typeArguments[0], context);
                         const arrayType = createArrayTypeNode(elementType);
                         return type.target === globalArrayType ? arrayType : createTypeOperatorNode(SyntaxKind.ReadonlyKeyword, arrayType);
                     }
