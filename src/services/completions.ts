@@ -9,8 +9,8 @@ namespace ts.Completions {
     }
     export type Log = (message: string) => void;
 
-    const enum SymbolOriginInfoKind { ThisType, SymbolMemberNoExport, SymbolMemberExport, Export }
-    type SymbolOriginInfo = { kind: SymbolOriginInfoKind.ThisType } | { kind: SymbolOriginInfoKind.SymbolMemberNoExport } | SymbolOriginInfoExport;
+    const enum SymbolOriginInfoKind { ThisType, SymbolMemberNoExport, SymbolMemberExport, Export, Promise }
+    type SymbolOriginInfo = { kind: SymbolOriginInfoKind.ThisType } | { kind: SymbolOriginInfoKind.Promise } | { kind: SymbolOriginInfoKind.SymbolMemberNoExport } | SymbolOriginInfoExport;
     interface SymbolOriginInfoExport {
         kind: SymbolOriginInfoKind.SymbolMemberExport | SymbolOriginInfoKind.Export;
         moduleSymbol: Symbol;
@@ -21,6 +21,9 @@ namespace ts.Completions {
     }
     function originIsExport(origin: SymbolOriginInfo): origin is SymbolOriginInfoExport {
         return origin.kind === SymbolOriginInfoKind.SymbolMemberExport || origin.kind === SymbolOriginInfoKind.Export;
+    }
+    function originIsPromise(origin: SymbolOriginInfo): boolean {
+        return origin.kind === SymbolOriginInfoKind.Promise;
     }
 
     /**
@@ -264,6 +267,12 @@ namespace ts.Completions {
                 replacementSpan = createTextSpanFromNode(isJsxInitializer, sourceFile);
             }
         }
+        if (origin && originIsPromise(origin) && propertyAccessToConvert) {
+            if (insertText === undefined) insertText = name;
+            const awaitText = `(await ${propertyAccessToConvert.expression.getText()})`;
+            insertText = needsConvertPropertyAccess ? `${awaitText}${insertText}` : `${awaitText}.${insertText}`;
+            replacementSpan = createTextSpanFromBounds(propertyAccessToConvert.getStart(sourceFile), propertyAccessToConvert.end);
+        }
 
         if (insertText !== undefined && !preferences.includeCompletionsWithInsertText) {
             return undefined;
@@ -313,7 +322,7 @@ namespace ts.Completions {
         log: Log,
         kind: CompletionKind,
         preferences: UserPreferences,
-        propertyAccessToConvert?: PropertyAccessExpression | undefined,
+        propertyAccessToConvert?: PropertyAccessExpression,
         isJsxInitializer?: IsJsxInitializer,
         recommendedCompletion?: Symbol,
         symbolToOriginInfoMap?: SymbolOriginInfoMap,
@@ -984,7 +993,7 @@ namespace ts.Completions {
                         if (!isTypeLocation &&
                             symbol.declarations &&
                             symbol.declarations.some(d => d.kind !== SyntaxKind.SourceFile && d.kind !== SyntaxKind.ModuleDeclaration && d.kind !== SyntaxKind.EnumDeclaration)) {
-                            addTypeProperties(typeChecker.getTypeOfSymbolAtLocation(symbol, node));
+                            addTypeProperties(typeChecker.getTypeOfSymbolAtLocation(symbol, node), !!(node.flags & NodeFlags.AwaitContext));
                         }
 
                         return;
@@ -999,13 +1008,14 @@ namespace ts.Completions {
             }
 
             if (!isTypeLocation) {
-                addTypeProperties(typeChecker.getTypeAtLocation(node));
+                addTypeProperties(typeChecker.getTypeAtLocation(node), !!(node.flags & NodeFlags.AwaitContext));
             }
         }
 
-        function addTypeProperties(type: Type): void {
+        function addTypeProperties(type: Type, insertAwait?: boolean): void {
             isNewIdentifierLocation = !!type.getStringIndexType();
 
+            const propertyAccess = node.kind === SyntaxKind.ImportType ? <ImportTypeNode>node : <PropertyAccessExpression | QualifiedName>node.parent;
             if (isUncheckedFile) {
                 // In javascript files, for union types, we don't just get the members that
                 // the individual types have in common, we also include all the members that
@@ -1016,14 +1026,25 @@ namespace ts.Completions {
             }
             else {
                 for (const symbol of type.getApparentProperties()) {
-                    if (typeChecker.isValidPropertyAccessForCompletions(node.kind === SyntaxKind.ImportType ? <ImportTypeNode>node : <PropertyAccessExpression | QualifiedName>node.parent, type, symbol)) {
+                    if (typeChecker.isValidPropertyAccessForCompletions(propertyAccess, type, symbol)) {
                         addPropertySymbol(symbol);
+                    }
+                }
+            }
+
+            if (insertAwait && preferences.includeCompletionsWithInsertText) {
+                const promiseType = typeChecker.getPromisedTypeOfPromise(type);
+                if (promiseType) {
+                    for (const symbol of promiseType.getApparentProperties()) {
+                        if (typeChecker.isValidPropertyAccessForCompletions(propertyAccess, promiseType, symbol)) {
+                            addPropertySymbol(symbol, /* insertAwait */ true);
+                        }
                     }
                 }
             }
         }
 
-        function addPropertySymbol(symbol: Symbol) {
+        function addPropertySymbol(symbol: Symbol, insertAwait?: boolean) {
             // For a computed property with an accessible name like `Symbol.iterator`,
             // we'll add a completion for the *name* `Symbol` instead of for the property.
             // If this is e.g. [Symbol.iterator], add a completion for `Symbol`.
@@ -1040,11 +1061,19 @@ namespace ts.Completions {
                         !moduleSymbol || !isExternalModuleSymbol(moduleSymbol) ? { kind: SymbolOriginInfoKind.SymbolMemberNoExport } : { kind: SymbolOriginInfoKind.SymbolMemberExport, moduleSymbol, isDefaultExport: false };
                 }
                 else if (preferences.includeCompletionsWithInsertText) {
+                    addPromiseSymbolOriginInfo(symbol);
                     symbols.push(symbol);
                 }
             }
             else {
+                addPromiseSymbolOriginInfo(symbol);
                 symbols.push(symbol);
+            }
+
+            function addPromiseSymbolOriginInfo (symbol: Symbol) {
+                if (insertAwait && preferences.includeCompletionsWithInsertText && !symbolToOriginInfoMap[getSymbolId(symbol)]) {
+                    symbolToOriginInfoMap[getSymbolId(symbol)] = { kind: SymbolOriginInfoKind.Promise };
+                }
             }
         }
 
