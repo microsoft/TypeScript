@@ -717,13 +717,9 @@ namespace ts.codefix {
         }
 
         function inferTypeFromPropertyAssignment(assignment: PropertyAssignment | ShorthandPropertyAssignment, checker: TypeChecker, usageContext: UsageContext) {
-            const objectLiteral = isShorthandPropertyAssignment(assignment) ?
-                assignment.parent :
-                assignment.parent.parent;
-            const nodeWithRealType = isVariableDeclaration(objectLiteral.parent) ?
-                objectLiteral.parent :
-                objectLiteral;
-
+            const nodeWithRealType = isVariableDeclaration(assignment.parent.parent) ?
+                assignment.parent.parent :
+                assignment.parent;
             addCandidateThisType(usageContext, checker.getTypeAtLocation(nodeWithRealType));
         }
 

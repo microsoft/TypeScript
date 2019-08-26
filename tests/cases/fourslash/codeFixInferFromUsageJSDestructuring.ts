@@ -1,26 +1,18 @@
 /// <reference path="fourslash.ts"/>
-// @Filename:destruct.js
 // @allowJs: true
 // @checkJs: true
 // @noEmit: true
+// @filename:destruct.js
 //// function [|formatter|](message) {
 ////   const { type } = false ? { type: message } : message;
 //// }
 verify.codeFix({
-    description: "Infer 'this' type of 'returnThisMember' from usage",
+    description: "Infer parameter types from usage",
     index: 0,
     newFileContent: `/**
- * @returns {string}
- * @this {Container}
+ * @param {{ type: any; }} message
  */
-function returnThisMember() {
-    return this.member;
-}
-
-class Container {
-    member = "sample";
-    returnThisMember = returnThisMember;
-};
-
-container.returnThisMember();`
+function formatter(message) {
+  const { type } = false ? { type: message } : message;
+}`
 });

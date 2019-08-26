@@ -80,11 +80,11 @@ namespace FourSlash {
     // To add additional option, add property into the testOptMetadataNames, refer the property in either globalMetadataNames or fileMetadataNames
     // Add cases into convertGlobalOptionsToCompilationsSettings function for the compiler to acknowledge such option from meta data
     const enum MetadataOptionNames {
-        baselineFile = "BaselineFile",
-        emitThisFile = "emitThisFile",  // This flag is used for testing getEmitOutput feature. It allows test-cases to indicate what file to be output in multiple files project
-        fileName = "Filename",
-        resolveReference = "ResolveReference",  // This flag is used to specify entry file for resolve file references. The flag is only allow once per test file
-        symlink = "Symlink",
+        baselineFile = "baselinefile",
+        emitThisFile = "emitthisfile",  // This flag is used for testing getEmitOutput feature. It allows test-cases to indicate what file to be output in multiple files project
+        fileName = "filename",
+        resolveReference = "resolvereference",  // This flag is used to specify entry file for resolve file references. The flag is only allow once per test file
+        symlink = "symlink",
     }
 
     // List of allowed metadata names
@@ -3274,7 +3274,7 @@ ${code}
 
     function parseTestData(basePath: string, contents: string, fileName: string): FourSlashData {
         // Regex for parsing options in the format "@Alpha: Value of any sort"
-        const optionRegex = /^\s*@(\w+): (.*)\s*/;
+        const optionRegex = /^\s*@(\w+):\s*(.*)\s*/;
 
         // List of all the subfiles we've parsed out
         const files: FourSlashFile[] = [];
@@ -3326,7 +3326,8 @@ ${code}
                 // Comment line, check for global/file @options and record them
                 const match = optionRegex.exec(line.substr(2));
                 if (match) {
-                    const [key, value] = match.slice(1);
+                    const key = match[1].toLowerCase();
+                    const value = match[2];
                     if (!ts.contains(fileMetadataNames, key)) {
                         // Check if the match is already existed in the global options
                         if (globalOptions[key] !== undefined) {
