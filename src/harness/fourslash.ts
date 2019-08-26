@@ -3286,6 +3286,7 @@ ${code}
         // Note: IE JS engine incorrectly handles consecutive delimiters here when using RegExp split, so
         // we have to string-based splitting instead and try to figure out the delimiting chars
         const lines = contents.split("\n");
+        let i = 0;
 
         const markerPositions = ts.createMap<Marker>();
         const markers: Marker[] = [];
@@ -3314,6 +3315,7 @@ ${code}
         }
 
         for (let line of lines) {
+            i++;
             if (line.length > 0 && line.charAt(line.length - 1) === "\r") {
                 line = line.substr(0, line.length - 1);
             }
@@ -3321,6 +3323,9 @@ ${code}
             if (line.substr(0, 4) === "////") {
                 const text = line.substr(4);
                 currentFileContent = currentFileContent === undefined ? text : currentFileContent + "\n" + text;
+            }
+            else if (line.substr(0, 3) === "///" && currentFileContent !== undefined) {
+                throw new Error("Three-slash line in the middle of four-slash region at line " + i);
             }
             else if (line.substr(0, 2) === "//") {
                 // Comment line, check for global/file @options and record them
