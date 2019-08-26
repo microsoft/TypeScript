@@ -9077,10 +9077,10 @@ namespace ts {
             return type;
         }
 
-        function createDeferredTypeReference(target: GenericType, typeArgumentNodes: ReadonlyArray<TypeNode>, mapper?: TypeMapper, aliasSymbol?: Symbol, aliasTypeArguments?: ReadonlyArray<Type>): TypeReference {
-            const type = <TypeReference>createObjectType(ObjectFlags.Reference, target.symbol);
+        function createDeferredTypeReference(target: GenericType, node: ArrayTypeNode | TupleTypeNode, mapper?: TypeMapper, aliasSymbol?: Symbol, aliasTypeArguments?: ReadonlyArray<Type>): DeferredTypeReference {
+            const type = <DeferredTypeReference>createObjectType(ObjectFlags.Reference, target.symbol);
             type.target = target;
-            type.typeArgumentNodes = typeArgumentNodes;
+            type.node = node;
             type.mapper = mapper;
             type.aliasSymbol = aliasSymbol;
             type.aliasTypeArguments = aliasTypeArguments;
@@ -9089,7 +9089,7 @@ namespace ts {
 
         function getTypeArguments(type: TypeReference): ReadonlyArray<Type> {
             if (!type.resolvedTypeArguments) {
-                const typeArguments = type.typeArgumentNodes ? map(type.typeArgumentNodes, getTypeFromTypeNode) : emptyArray;
+                const typeArguments = type.node ? map(type.node.kind === SyntaxKind.ArrayType ? [type.node.elementType] : type.node.elementTypes, getTypeFromTypeNode) : emptyArray;
                 type.resolvedTypeArguments = type.mapper ? instantiateTypes(typeArguments, type.mapper) : typeArguments;
             }
             return type.resolvedTypeArguments;
@@ -9598,8 +9598,8 @@ namespace ts {
                 const target = getArrayOrTupleTargetType(node);
                 const aliasSymbol = getAliasSymbolForTypeNode(node);
                 const aliasTypeArguments = getTypeArgumentsForAliasSymbol(aliasSymbol);
-                const elementTypes = node.kind === SyntaxKind.ArrayType ? [node.elementType] : node.elementTypes;
-                links.resolvedType = elementTypes.length ? createDeferredTypeReference(target, elementTypes, /*mapper*/ undefined, aliasSymbol, aliasTypeArguments) : target;
+                links.resolvedType = node.kind === SyntaxKind.TupleType && node.elementTypes.length === 0 ? target :
+                    createDeferredTypeReference(target, node, /*mapper*/ undefined, aliasSymbol, aliasTypeArguments);
             }
             return links.resolvedType;
         }
@@ -11393,17 +11393,17 @@ namespace ts {
             return result;
         }
 
-        function getAnonymousTypeInstantiation(type: AnonymousType, mapper: TypeMapper) {
+        function getObjectTypeInstantiation(type: AnonymousType | DeferredTypeReference, mapper: TypeMapper) {
             const target = type.objectFlags & ObjectFlags.Instantiated ? type.target! : type;
-            const { symbol } = target;
-            const links = getSymbolLinks(symbol);
+            const node = type.objectFlags & ObjectFlags.Reference ? (<TypeReference>type).node! : type.symbol.declarations[0];
+            const links = getNodeLinks(node);
             let typeParameters = links.outerTypeParameters;
             if (!typeParameters) {
                 // The first time an anonymous type is instantiated we compute and store a list of the type
                 // parameters that are in scope (and therefore potentially referenced). For type literals that
                 // aren't the right hand side of a generic type alias declaration we optimize by reducing the
                 // set of type parameters to those that are possibly referenced in the literal.
-                let declaration = symbol.declarations[0];
+                let declaration = node;
                 if (isInJSFile(declaration)) {
                     const paramTag = findAncestor(declaration, isJSDocParameterTag);
                     if (paramTag) {
@@ -11419,7 +11419,7 @@ namespace ts {
                     outerTypeParameters = addRange(outerTypeParameters, templateTagParameters);
                 }
                 typeParameters = outerTypeParameters || emptyArray;
-                typeParameters = symbol.flags & SymbolFlags.TypeLiteral && !target.aliasTypeArguments ?
+                typeParameters = (target.objectFlags & ObjectFlags.Reference || target.symbol.flags & SymbolFlags.TypeLiteral) && !target.aliasTypeArguments ?
                     filter(typeParameters, tp => isTypeParameterPossiblyReferenced(tp, declaration)) :
                     typeParameters;
                 links.outerTypeParameters = typeParameters;
@@ -11432,13 +11432,14 @@ namespace ts {
                 // We are instantiating an anonymous type that has one or more type parameters in scope. Apply the
                 // mapper to the type parameters to produce the effective list of type arguments, and compute the
                 // instantiation cache key from the type IDs of the type arguments.
-                const combinedMapper = type.objectFlags & ObjectFlags.Instantiated ? combineTypeMappers(type.mapper!, mapper) : mapper;
-                const typeArguments: Type[] = map(typeParameters, combinedMapper);
+                const typeArguments: Type[] = map(typeParameters, combineTypeMappers(type.mapper, mapper));
                 const id = getTypeListId(typeArguments);
                 let result = links.instantiations!.get(id);
                 if (!result) {
                     const newMapper = createTypeMapper(typeParameters, typeArguments);
-                    result = target.objectFlags & ObjectFlags.Mapped ? instantiateMappedType(<MappedType>target, newMapper) : instantiateAnonymousType(target, newMapper);
+                    result = target.objectFlags & ObjectFlags.Reference ? instantiateDeferredTypeReference(<DeferredTypeReference>type, newMapper) :
+                        target.objectFlags & ObjectFlags.Mapped ? instantiateMappedType(<MappedType>target, newMapper) :
+                        instantiateAnonymousType(target, newMapper);
                     links.instantiations!.set(id, result);
                 }
                 return result;
@@ -11570,6 +11571,10 @@ namespace ts {
             return result;
         }
 
+        function instantiateDeferredTypeReference(type: DeferredTypeReference, mapper: TypeMapper): TypeReference {
+            return createDeferredTypeReference(type.target, type.node, mapper, type.aliasSymbol, instantiateTypes(type.aliasTypeArguments, mapper));
+        }
+
         function getConditionalTypeInstantiation(type: ConditionalType, mapper: TypeMapper): Type {
             const root = type.root;
             if (root.outerTypeParameters) {
@@ -11635,17 +11640,14 @@ namespace ts {
                     // interface, in an object type literal, or in an object literal expression, we may need
                     // to instantiate the type because it might reference a type parameter.
                     return couldContainTypeVariables(type) ?
-                        getAnonymousTypeInstantiation(<AnonymousType>type, mapper) : type;
+                        getObjectTypeInstantiation(<AnonymousType>type, mapper) : type;
                 }
                 if (objectFlags & ObjectFlags.Mapped) {
-                    return getAnonymousTypeInstantiation(<AnonymousType>type, mapper);
+                    return getObjectTypeInstantiation(<AnonymousType>type, mapper);
                 }
                 if (objectFlags & ObjectFlags.Reference) {
-                    const typeArgumentNodes = (<TypeReference>type).typeArgumentNodes;
-                    if (typeArgumentNodes) {
-                        const combinedMapper = combineTypeMappers((<TypeReference>type).mapper, mapper);
-                        return createDeferredTypeReference((<TypeReference>type).target, typeArgumentNodes, combinedMapper,
-                            (<TypeReference>type).aliasSymbol, instantiateTypes((<TypeReference>type).aliasTypeArguments, combinedMapper));
+                    if ((<TypeReference>type).node) {
+                        return getObjectTypeInstantiation(<TypeReference>type, mapper);
                     }
                     const resolvedTypeArguments = (<TypeReference>type).resolvedTypeArguments;
                     const newTypeArguments = instantiateTypes(resolvedTypeArguments, mapper);
@@ -14440,7 +14442,7 @@ namespace ts {
         }
 
         function isNonDeferredTypeReference(type: Type): type is TypeReference {
-            return !!(getObjectFlags(type) & ObjectFlags.Reference) && !(<TypeReference>type).typeArgumentNodes;
+            return !!(getObjectFlags(type) & ObjectFlags.Reference) && !(<TypeReference>type).node;
         }
 
         function isTypeReferenceWithGenericArguments(type: Type): boolean {
@@ -22849,7 +22851,7 @@ namespace ts {
          * Indicates whether a declaration can be treated as a constructor in a JavaScript
          * file.
          */
-        function isJSConstructor(node: Declaration | undefined): boolean {
+        function isJSConstructor(node: Node | undefined): boolean {
             if (!node || !isInJSFile(node)) {
                 return false;
             }

@@ -3954,6 +3954,8 @@ namespace ts {
         contextFreeType?: Type;          // Cached context-free type used by the first pass of inference; used when a function's return is partially contextually sensitive
         deferredNodes?: Map<Node>; // Set of nodes whose checking has been deferred
         capturedBlockScopeBindings?: Symbol[]; // Block-scoped bindings captured beneath this part of an IterationStatement
+        outerTypeParameters?: TypeParameter[];  // Outer type parameters of anonymous object type
+        instantiations?: Map<Type>;         // Instantiations of generic type alias (undefined if non-generic)
     }
 
     export const enum TypeFlags {
@@ -4200,11 +4202,16 @@ namespace ts {
      */
     export interface TypeReference extends ObjectType {
         target: GenericType;    // Type reference target
-        resolvedTypeArguments?: ReadonlyArray<Type>;  // Type reference type arguments (undefined if none)
-        typeArgumentNodes?: ReadonlyArray<TypeNode>;
+        node?: ArrayTypeNode | TupleTypeNode;
         mapper?: TypeMapper;
+        resolvedTypeArguments?: ReadonlyArray<Type>;  // Resolved ype reference type arguments
         /* @internal */
         literalType?: TypeReference;  // Clone of type with ObjectFlags.ArrayLiteral set
+    }
+
+    export interface DeferredTypeReference extends TypeReference {
+        node: ArrayTypeNode | TupleTypeNode;
+        mapper?: TypeMapper;
     }
 
     /* @internal */
