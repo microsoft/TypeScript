@@ -1,0 +1,248 @@
+=== tests/cases/compiler/relatingToIndexedAccessTypesWithoutMutation.ts ===
+// @strict
+
+// Repro of #32816
+
+type Target<T> = T extends null ? null : T;
+>Target : Symbol(Target, Decl(relatingToIndexedAccessTypesWithoutMutation.ts, 0, 0))
+>T : Symbol(T, Decl(relatingToIndexedAccessTypesWithoutMutation.ts, 4, 12))
+>T : Symbol(T, Decl(relatingToIndexedAccessTypesWithoutMutation.ts, 4, 12))
+>T : Symbol(T, Decl(relatingToIndexedAccessTypesWithoutMutation.ts, 4, 12))
+
+type Target2<T> = { "one": null, "two": T }[T extends null ? "one" : "two"];
+>Target2 : Symbol(Target2, Decl(relatingToIndexedAccessTypesWithoutMutation.ts, 4, 43))
+>T : Symbol(T, Decl(relatingToIndexedAccessTypesWithoutMutation.ts, 5, 13))
+>"one" : Symbol("one", Decl(relatingToIndexedAccessTypesWithoutMutation.ts, 5, 19))
+>"two" : Symbol("two", Decl(relatingToIndexedAccessTypesWithoutMutation.ts, 5, 32))
+>T : Symbol(T, Decl(relatingToIndexedAccessTypesWithoutMutation.ts, 5, 13))
+>T : Symbol(T, Decl(relatingToIndexedAccessTypesWithoutMutation.ts, 5, 13))
+
+type Target3<T> = [null, T][T extends null ? 0 : 1];
+>Target3 : Symbol(Target3, Decl(relatingToIndexedAccessTypesWithoutMutation.ts, 5, 76))
+>T : Symbol(T, Decl(relatingToIndexedAccessTypesWithoutMutation.ts, 6, 13))
+>T : Symbol(T, Decl(relatingToIndexedAccessTypesWithoutMutation.ts, 6, 13))
+>T : Symbol(T, Decl(relatingToIndexedAccessTypesWithoutMutation.ts, 6, 13))
+
+function tst<T extends string>() {
+>tst : Symbol(tst, Decl(relatingToIndexedAccessTypesWithoutMutation.ts, 6, 52))
+>T : Symbol(T, Decl(relatingToIndexedAccessTypesWithoutMutation.ts, 8, 13))
+
+    // These two pass as expected:
+    const case0: Target2<T | null> = 1 as any as Target2<T | null>;
+>case0 : Symbol(case0, Decl(relatingToIndexedAccessTypesWithoutMutation.ts, 10, 9))
+>Target2 : Symbol(Target2, Decl(relatingToIndexedAccessTypesWithoutMutation.ts, 4, 43))
+>T : Symbol(T, Decl(relatingToIndexedAccessTypesWithoutMutation.ts, 8, 13))
+>Target2 : Symbol(Target2, Decl(relatingToIndexedAccessTypesWithoutMutation.ts, 4, 43))
+>T : Symbol(T, Decl(relatingToIndexedAccessTypesWithoutMutation.ts, 8, 13))
+
+    const case1: { prop: Target<T | null> } = 1 as any as { prop: Target<T | null> };
+>case1 : Symbol(case1, Decl(relatingToIndexedAccessTypesWithoutMutation.ts, 11, 9))
+>prop : Symbol(prop, Decl(relatingToIndexedAccessTypesWithoutMutation.ts, 11, 18))
+>Target : Symbol(Target, Decl(relatingToIndexedAccessTypesWithoutMutation.ts, 0, 0))
+>T : Symbol(T, Decl(relatingToIndexedAccessTypesWithoutMutation.ts, 8, 13))
+>prop : Symbol(prop, Decl(relatingToIndexedAccessTypesWithoutMutation.ts, 11, 59))
+>Target : Symbol(Target, Decl(relatingToIndexedAccessTypesWithoutMutation.ts, 0, 0))
+>T : Symbol(T, Decl(relatingToIndexedAccessTypesWithoutMutation.ts, 8, 13))
+
+    const case2: { prop: Target2<T> } = 1 as any as { prop: Target2<T> };
+>case2 : Symbol(case2, Decl(relatingToIndexedAccessTypesWithoutMutation.ts, 12, 9))
+>prop : Symbol(prop, Decl(relatingToIndexedAccessTypesWithoutMutation.ts, 12, 18))
+>Target2 : Symbol(Target2, Decl(relatingToIndexedAccessTypesWithoutMutation.ts, 4, 43))
+>T : Symbol(T, Decl(relatingToIndexedAccessTypesWithoutMutation.ts, 8, 13))
+>prop : Symbol(prop, Decl(relatingToIndexedAccessTypesWithoutMutation.ts, 12, 53))
+>Target2 : Symbol(Target2, Decl(relatingToIndexedAccessTypesWithoutMutation.ts, 4, 43))
+>T : Symbol(T, Decl(relatingToIndexedAccessTypesWithoutMutation.ts, 8, 13))
+
+    const case3: { prop: Target3<T> } = 1 as any as { prop: Target3<T> };
+>case3 : Symbol(case3, Decl(relatingToIndexedAccessTypesWithoutMutation.ts, 13, 9))
+>prop : Symbol(prop, Decl(relatingToIndexedAccessTypesWithoutMutation.ts, 13, 18))
+>Target3 : Symbol(Target3, Decl(relatingToIndexedAccessTypesWithoutMutation.ts, 5, 76))
+>T : Symbol(T, Decl(relatingToIndexedAccessTypesWithoutMutation.ts, 8, 13))
+>prop : Symbol(prop, Decl(relatingToIndexedAccessTypesWithoutMutation.ts, 13, 53))
+>Target3 : Symbol(Target3, Decl(relatingToIndexedAccessTypesWithoutMutation.ts, 5, 76))
+>T : Symbol(T, Decl(relatingToIndexedAccessTypesWithoutMutation.ts, 8, 13))
+
+    // These two fail as expected:
+    const case4: { prop: Target2<T> } = 1 as any as { prop: Target2<T | null> };
+>case4 : Symbol(case4, Decl(relatingToIndexedAccessTypesWithoutMutation.ts, 16, 9))
+>prop : Symbol(prop, Decl(relatingToIndexedAccessTypesWithoutMutation.ts, 16, 18))
+>Target2 : Symbol(Target2, Decl(relatingToIndexedAccessTypesWithoutMutation.ts, 4, 43))
+>T : Symbol(T, Decl(relatingToIndexedAccessTypesWithoutMutation.ts, 8, 13))
+>prop : Symbol(prop, Decl(relatingToIndexedAccessTypesWithoutMutation.ts, 16, 53))
+>Target2 : Symbol(Target2, Decl(relatingToIndexedAccessTypesWithoutMutation.ts, 4, 43))
+>T : Symbol(T, Decl(relatingToIndexedAccessTypesWithoutMutation.ts, 8, 13))
+
+    const case5: { prop: Target3<T> } = 1 as any as { prop: Target3<T | null> };
+>case5 : Symbol(case5, Decl(relatingToIndexedAccessTypesWithoutMutation.ts, 17, 9))
+>prop : Symbol(prop, Decl(relatingToIndexedAccessTypesWithoutMutation.ts, 17, 18))
+>Target3 : Symbol(Target3, Decl(relatingToIndexedAccessTypesWithoutMutation.ts, 5, 76))
+>T : Symbol(T, Decl(relatingToIndexedAccessTypesWithoutMutation.ts, 8, 13))
+>prop : Symbol(prop, Decl(relatingToIndexedAccessTypesWithoutMutation.ts, 17, 53))
+>Target3 : Symbol(Target3, Decl(relatingToIndexedAccessTypesWithoutMutation.ts, 5, 76))
+>T : Symbol(T, Decl(relatingToIndexedAccessTypesWithoutMutation.ts, 8, 13))
+
+    // These two are expected to pass, but fail:
+    const case6: { prop: Target2<T | null> } = 1 as any as { prop: Target2<T | null> };
+>case6 : Symbol(case6, Decl(relatingToIndexedAccessTypesWithoutMutation.ts, 20, 9))
+>prop : Symbol(prop, Decl(relatingToIndexedAccessTypesWithoutMutation.ts, 20, 18))
+>Target2 : Symbol(Target2, Decl(relatingToIndexedAccessTypesWithoutMutation.ts, 4, 43))
+>T : Symbol(T, Decl(relatingToIndexedAccessTypesWithoutMutation.ts, 8, 13))
+>prop : Symbol(prop, Decl(relatingToIndexedAccessTypesWithoutMutation.ts, 20, 60))
+>Target2 : Symbol(Target2, Decl(relatingToIndexedAccessTypesWithoutMutation.ts, 4, 43))
+>T : Symbol(T, Decl(relatingToIndexedAccessTypesWithoutMutation.ts, 8, 13))
+
+    const case7: { prop: Target3<T | null> } = 1 as any as { prop: Target3<T | null> };
+>case7 : Symbol(case7, Decl(relatingToIndexedAccessTypesWithoutMutation.ts, 21, 9))
+>prop : Symbol(prop, Decl(relatingToIndexedAccessTypesWithoutMutation.ts, 21, 18))
+>Target3 : Symbol(Target3, Decl(relatingToIndexedAccessTypesWithoutMutation.ts, 5, 76))
+>T : Symbol(T, Decl(relatingToIndexedAccessTypesWithoutMutation.ts, 8, 13))
+>prop : Symbol(prop, Decl(relatingToIndexedAccessTypesWithoutMutation.ts, 21, 60))
+>Target3 : Symbol(Target3, Decl(relatingToIndexedAccessTypesWithoutMutation.ts, 5, 76))
+>T : Symbol(T, Decl(relatingToIndexedAccessTypesWithoutMutation.ts, 8, 13))
+}
+
+// Repro of #31833
+
+type Foo1 = {
+>Foo1 : Symbol(Foo1, Decl(relatingToIndexedAccessTypesWithoutMutation.ts, 22, 1))
+
+  type: 'foo1';
+>type : Symbol(type, Decl(relatingToIndexedAccessTypesWithoutMutation.ts, 26, 13))
+
+  extra: number;
+>extra : Symbol(extra, Decl(relatingToIndexedAccessTypesWithoutMutation.ts, 27, 15))
+
+};
+
+type Foo2 = {
+>Foo2 : Symbol(Foo2, Decl(relatingToIndexedAccessTypesWithoutMutation.ts, 29, 2))
+
+  type: 'foo2';
+>type : Symbol(type, Decl(relatingToIndexedAccessTypesWithoutMutation.ts, 31, 13))
+
+  extra: string;
+>extra : Symbol(extra, Decl(relatingToIndexedAccessTypesWithoutMutation.ts, 32, 15))
+
+};
+
+type Both = Foo1 | Foo2;
+>Both : Symbol(Both, Decl(relatingToIndexedAccessTypesWithoutMutation.ts, 34, 2))
+>Foo1 : Symbol(Foo1, Decl(relatingToIndexedAccessTypesWithoutMutation.ts, 22, 1))
+>Foo2 : Symbol(Foo2, Decl(relatingToIndexedAccessTypesWithoutMutation.ts, 29, 2))
+
+type FooTypes = Both['type'];
+>FooTypes : Symbol(FooTypes, Decl(relatingToIndexedAccessTypesWithoutMutation.ts, 36, 24))
+>Both : Symbol(Both, Decl(relatingToIndexedAccessTypesWithoutMutation.ts, 34, 2))
+
+export type FooFromType<T extends FooTypes, O extends Both = Both> = O extends { type: T } ? O : never;
+>FooFromType : Symbol(FooFromType, Decl(relatingToIndexedAccessTypesWithoutMutation.ts, 38, 29))
+>T : Symbol(T, Decl(relatingToIndexedAccessTypesWithoutMutation.ts, 40, 24))
+>FooTypes : Symbol(FooTypes, Decl(relatingToIndexedAccessTypesWithoutMutation.ts, 36, 24))
+>O : Symbol(O, Decl(relatingToIndexedAccessTypesWithoutMutation.ts, 40, 43))
+>Both : Symbol(Both, Decl(relatingToIndexedAccessTypesWithoutMutation.ts, 34, 2))
+>Both : Symbol(Both, Decl(relatingToIndexedAccessTypesWithoutMutation.ts, 34, 2))
+>O : Symbol(O, Decl(relatingToIndexedAccessTypesWithoutMutation.ts, 40, 43))
+>type : Symbol(type, Decl(relatingToIndexedAccessTypesWithoutMutation.ts, 40, 80))
+>T : Symbol(T, Decl(relatingToIndexedAccessTypesWithoutMutation.ts, 40, 24))
+>O : Symbol(O, Decl(relatingToIndexedAccessTypesWithoutMutation.ts, 40, 43))
+
+type FooExtraFromType<T extends FooTypes> = FooFromType<T>['extra'];
+>FooExtraFromType : Symbol(FooExtraFromType, Decl(relatingToIndexedAccessTypesWithoutMutation.ts, 40, 103))
+>T : Symbol(T, Decl(relatingToIndexedAccessTypesWithoutMutation.ts, 42, 22))
+>FooTypes : Symbol(FooTypes, Decl(relatingToIndexedAccessTypesWithoutMutation.ts, 36, 24))
+>FooFromType : Symbol(FooFromType, Decl(relatingToIndexedAccessTypesWithoutMutation.ts, 38, 29))
+>T : Symbol(T, Decl(relatingToIndexedAccessTypesWithoutMutation.ts, 42, 22))
+
+function fnWithFooExtra<T extends FooTypes>(type: T, extra: FooExtraFromType<T>) { }
+>fnWithFooExtra : Symbol(fnWithFooExtra, Decl(relatingToIndexedAccessTypesWithoutMutation.ts, 42, 68))
+>T : Symbol(T, Decl(relatingToIndexedAccessTypesWithoutMutation.ts, 44, 24))
+>FooTypes : Symbol(FooTypes, Decl(relatingToIndexedAccessTypesWithoutMutation.ts, 36, 24))
+>type : Symbol(type, Decl(relatingToIndexedAccessTypesWithoutMutation.ts, 44, 44))
+>T : Symbol(T, Decl(relatingToIndexedAccessTypesWithoutMutation.ts, 44, 24))
+>extra : Symbol(extra, Decl(relatingToIndexedAccessTypesWithoutMutation.ts, 44, 52))
+>FooExtraFromType : Symbol(FooExtraFromType, Decl(relatingToIndexedAccessTypesWithoutMutation.ts, 40, 103))
+>T : Symbol(T, Decl(relatingToIndexedAccessTypesWithoutMutation.ts, 44, 24))
+
+type FnType = <T extends FooTypes>(type: T, extra: FooExtraFromType<T>) => void;
+>FnType : Symbol(FnType, Decl(relatingToIndexedAccessTypesWithoutMutation.ts, 44, 84))
+>T : Symbol(T, Decl(relatingToIndexedAccessTypesWithoutMutation.ts, 46, 15))
+>FooTypes : Symbol(FooTypes, Decl(relatingToIndexedAccessTypesWithoutMutation.ts, 36, 24))
+>type : Symbol(type, Decl(relatingToIndexedAccessTypesWithoutMutation.ts, 46, 35))
+>T : Symbol(T, Decl(relatingToIndexedAccessTypesWithoutMutation.ts, 46, 15))
+>extra : Symbol(extra, Decl(relatingToIndexedAccessTypesWithoutMutation.ts, 46, 43))
+>FooExtraFromType : Symbol(FooExtraFromType, Decl(relatingToIndexedAccessTypesWithoutMutation.ts, 40, 103))
+>T : Symbol(T, Decl(relatingToIndexedAccessTypesWithoutMutation.ts, 46, 15))
+
+const fn: FnType = fnWithFooExtra;
+>fn : Symbol(fn, Decl(relatingToIndexedAccessTypesWithoutMutation.ts, 48, 5))
+>FnType : Symbol(FnType, Decl(relatingToIndexedAccessTypesWithoutMutation.ts, 44, 84))
+>fnWithFooExtra : Symbol(fnWithFooExtra, Decl(relatingToIndexedAccessTypesWithoutMutation.ts, 42, 68))
+
+// You need the two aliases to avoid variance measurements.
+
+type A1 = <
+>A1 : Symbol(A1, Decl(relatingToIndexedAccessTypesWithoutMutation.ts, 48, 34))
+
+T extends { x: number, y: string } | { x: boolean, y: number}
+>T : Symbol(T, Decl(relatingToIndexedAccessTypesWithoutMutation.ts, 52, 11))
+>x : Symbol(x, Decl(relatingToIndexedAccessTypesWithoutMutation.ts, 53, 11))
+>y : Symbol(y, Decl(relatingToIndexedAccessTypesWithoutMutation.ts, 53, 22))
+>x : Symbol(x, Decl(relatingToIndexedAccessTypesWithoutMutation.ts, 53, 38))
+>y : Symbol(y, Decl(relatingToIndexedAccessTypesWithoutMutation.ts, 53, 50))
+
+>(
+  x: T["x" | "y"]
+>x : Symbol(x, Decl(relatingToIndexedAccessTypesWithoutMutation.ts, 54, 2))
+>T : Symbol(T, Decl(relatingToIndexedAccessTypesWithoutMutation.ts, 52, 11))
+
+) => void
+
+type A2 = <
+>A2 : Symbol(A2, Decl(relatingToIndexedAccessTypesWithoutMutation.ts, 56, 9))
+
+T extends { x: number, y: string } | { x: boolean, y: number}
+>T : Symbol(T, Decl(relatingToIndexedAccessTypesWithoutMutation.ts, 58, 11))
+>x : Symbol(x, Decl(relatingToIndexedAccessTypesWithoutMutation.ts, 59, 11))
+>y : Symbol(y, Decl(relatingToIndexedAccessTypesWithoutMutation.ts, 59, 22))
+>x : Symbol(x, Decl(relatingToIndexedAccessTypesWithoutMutation.ts, 59, 38))
+>y : Symbol(y, Decl(relatingToIndexedAccessTypesWithoutMutation.ts, 59, 50))
+
+>(
+  x: T["x" | "y"]
+>x : Symbol(x, Decl(relatingToIndexedAccessTypesWithoutMutation.ts, 60, 2))
+>T : Symbol(T, Decl(relatingToIndexedAccessTypesWithoutMutation.ts, 58, 11))
+
+) => void
+
+declare const a: A1;
+>a : Symbol(a, Decl(relatingToIndexedAccessTypesWithoutMutation.ts, 64, 13))
+>A1 : Symbol(A1, Decl(relatingToIndexedAccessTypesWithoutMutation.ts, 48, 34))
+
+let b: A2 = a; // no error
+>b : Symbol(b, Decl(relatingToIndexedAccessTypesWithoutMutation.ts, 65, 3))
+>A2 : Symbol(A2, Decl(relatingToIndexedAccessTypesWithoutMutation.ts, 56, 9))
+>a : Symbol(a, Decl(relatingToIndexedAccessTypesWithoutMutation.ts, 64, 13))
+
+type Obj = { x: number, y: string } | { x: boolean, y: number};
+>Obj : Symbol(Obj, Decl(relatingToIndexedAccessTypesWithoutMutation.ts, 65, 14))
+>x : Symbol(x, Decl(relatingToIndexedAccessTypesWithoutMutation.ts, 67, 12))
+>y : Symbol(y, Decl(relatingToIndexedAccessTypesWithoutMutation.ts, 67, 23))
+>x : Symbol(x, Decl(relatingToIndexedAccessTypesWithoutMutation.ts, 67, 39))
+>y : Symbol(y, Decl(relatingToIndexedAccessTypesWithoutMutation.ts, 67, 51))
+
+function fun<T extends Obj>(l: { x: T["x" | "y"] }, r: { x: T["x" | "y"] }) {
+>fun : Symbol(fun, Decl(relatingToIndexedAccessTypesWithoutMutation.ts, 67, 63))
+>T : Symbol(T, Decl(relatingToIndexedAccessTypesWithoutMutation.ts, 68, 13))
+>Obj : Symbol(Obj, Decl(relatingToIndexedAccessTypesWithoutMutation.ts, 65, 14))
+>l : Symbol(l, Decl(relatingToIndexedAccessTypesWithoutMutation.ts, 68, 28))
+>x : Symbol(x, Decl(relatingToIndexedAccessTypesWithoutMutation.ts, 68, 32))
+>T : Symbol(T, Decl(relatingToIndexedAccessTypesWithoutMutation.ts, 68, 13))
+>r : Symbol(r, Decl(relatingToIndexedAccessTypesWithoutMutation.ts, 68, 51))
+>x : Symbol(x, Decl(relatingToIndexedAccessTypesWithoutMutation.ts, 68, 56))
+>T : Symbol(T, Decl(relatingToIndexedAccessTypesWithoutMutation.ts, 68, 13))
+
+    l = r;
+>l : Symbol(l, Decl(relatingToIndexedAccessTypesWithoutMutation.ts, 68, 28))
+>r : Symbol(r, Decl(relatingToIndexedAccessTypesWithoutMutation.ts, 68, 51))
+}
+

@@ -1,0 +1,211 @@
+=== tests/cases/compiler/relatingToIndexedAccessTypesWithoutMutation.ts ===
+// @strict
+
+// Repro of #32816
+
+type Target<T> = T extends null ? null : T;
+>Target : Target<T>
+>null : null
+>null : null
+
+type Target2<T> = { "one": null, "two": T }[T extends null ? "one" : "two"];
+>Target2 : { "one": null; "two": T; }[T extends null ? "one" : "two"]
+>"one" : null
+>null : null
+>"two" : T
+>null : null
+
+type Target3<T> = [null, T][T extends null ? 0 : 1];
+>Target3 : [null, T][T extends null ? 0 : 1]
+>null : null
+>null : null
+
+function tst<T extends string>() {
+>tst : <T extends string>() => void
+
+    // These two pass as expected:
+    const case0: Target2<T | null> = 1 as any as Target2<T | null>;
+>case0 : { "one": null; "two": T; }[T extends null ? "one" : "two"]
+>null : null
+>1 as any as Target2<T | null> : { "one": null; "two": T; }[T extends null ? "one" : "two"]
+>1 as any : any
+>1 : 1
+>null : null
+
+    const case1: { prop: Target<T | null> } = 1 as any as { prop: Target<T | null> };
+>case1 : { prop: Target<T>; }
+>prop : Target<T>
+>null : null
+>1 as any as { prop: Target<T | null> } : { prop: Target<T>; }
+>1 as any : any
+>1 : 1
+>prop : Target<T>
+>null : null
+
+    const case2: { prop: Target2<T> } = 1 as any as { prop: Target2<T> };
+>case2 : { prop: { "one": null; "two": T; }[T extends null ? "one" : "two"]; }
+>prop : { "one": null; "two": T; }[T extends null ? "one" : "two"]
+>1 as any as { prop: Target2<T> } : { prop: { "one": null; "two": T; }[T extends null ? "one" : "two"]; }
+>1 as any : any
+>1 : 1
+>prop : { "one": null; "two": T; }[T extends null ? "one" : "two"]
+
+    const case3: { prop: Target3<T> } = 1 as any as { prop: Target3<T> };
+>case3 : { prop: [null, T][T extends null ? 0 : 1]; }
+>prop : [null, T][T extends null ? 0 : 1]
+>1 as any as { prop: Target3<T> } : { prop: [null, T][T extends null ? 0 : 1]; }
+>1 as any : any
+>1 : 1
+>prop : [null, T][T extends null ? 0 : 1]
+
+    // These two fail as expected:
+    const case4: { prop: Target2<T> } = 1 as any as { prop: Target2<T | null> };
+>case4 : { prop: { "one": null; "two": T; }[T extends null ? "one" : "two"]; }
+>prop : { "one": null; "two": T; }[T extends null ? "one" : "two"]
+>1 as any as { prop: Target2<T | null> } : { prop: { "one": null; "two": T; }[T extends null ? "one" : "two"]; }
+>1 as any : any
+>1 : 1
+>prop : { "one": null; "two": T; }[T extends null ? "one" : "two"]
+>null : null
+
+    const case5: { prop: Target3<T> } = 1 as any as { prop: Target3<T | null> };
+>case5 : { prop: [null, T][T extends null ? 0 : 1]; }
+>prop : [null, T][T extends null ? 0 : 1]
+>1 as any as { prop: Target3<T | null> } : { prop: [null, T][T extends null ? 0 : 1]; }
+>1 as any : any
+>1 : 1
+>prop : [null, T][T extends null ? 0 : 1]
+>null : null
+
+    // These two are expected to pass, but fail:
+    const case6: { prop: Target2<T | null> } = 1 as any as { prop: Target2<T | null> };
+>case6 : { prop: { "one": null; "two": T; }[T extends null ? "one" : "two"]; }
+>prop : { "one": null; "two": T; }[T extends null ? "one" : "two"]
+>null : null
+>1 as any as { prop: Target2<T | null> } : { prop: { "one": null; "two": T; }[T extends null ? "one" : "two"]; }
+>1 as any : any
+>1 : 1
+>prop : { "one": null; "two": T; }[T extends null ? "one" : "two"]
+>null : null
+
+    const case7: { prop: Target3<T | null> } = 1 as any as { prop: Target3<T | null> };
+>case7 : { prop: [null, T][T extends null ? 0 : 1]; }
+>prop : [null, T][T extends null ? 0 : 1]
+>null : null
+>1 as any as { prop: Target3<T | null> } : { prop: [null, T][T extends null ? 0 : 1]; }
+>1 as any : any
+>1 : 1
+>prop : [null, T][T extends null ? 0 : 1]
+>null : null
+}
+
+// Repro of #31833
+
+type Foo1 = {
+>Foo1 : Foo1
+
+  type: 'foo1';
+>type : "foo1"
+
+  extra: number;
+>extra : number
+
+};
+
+type Foo2 = {
+>Foo2 : Foo2
+
+  type: 'foo2';
+>type : "foo2"
+
+  extra: string;
+>extra : string
+
+};
+
+type Both = Foo1 | Foo2;
+>Both : Both
+
+type FooTypes = Both['type'];
+>FooTypes : "foo1" | "foo2"
+
+export type FooFromType<T extends FooTypes, O extends Both = Both> = O extends { type: T } ? O : never;
+>FooFromType : FooFromType<T, O>
+>type : T
+
+type FooExtraFromType<T extends FooTypes> = FooFromType<T>['extra'];
+>FooExtraFromType : (FooFromType<T, Foo1> | FooFromType<T, Foo2>)["extra"]
+
+function fnWithFooExtra<T extends FooTypes>(type: T, extra: FooExtraFromType<T>) { }
+>fnWithFooExtra : <T extends "foo1" | "foo2">(type: T, extra: (FooFromType<T, Foo1> | FooFromType<T, Foo2>)["extra"]) => void
+>type : T
+>extra : (FooFromType<T, Foo1> | FooFromType<T, Foo2>)["extra"]
+
+type FnType = <T extends FooTypes>(type: T, extra: FooExtraFromType<T>) => void;
+>FnType : FnType
+>type : T
+>extra : (FooFromType<T, Foo1> | FooFromType<T, Foo2>)["extra"]
+
+const fn: FnType = fnWithFooExtra;
+>fn : FnType
+>fnWithFooExtra : <T extends "foo1" | "foo2">(type: T, extra: (FooFromType<T, Foo1> | FooFromType<T, Foo2>)["extra"]) => void
+
+// You need the two aliases to avoid variance measurements.
+
+type A1 = <
+>A1 : A1
+
+T extends { x: number, y: string } | { x: boolean, y: number}
+>x : number
+>y : string
+>x : boolean
+>y : number
+
+>(
+  x: T["x" | "y"]
+>x : T["x" | "y"]
+
+) => void
+
+type A2 = <
+>A2 : A2
+
+T extends { x: number, y: string } | { x: boolean, y: number}
+>x : number
+>y : string
+>x : boolean
+>y : number
+
+>(
+  x: T["x" | "y"]
+>x : T["x" | "y"]
+
+) => void
+
+declare const a: A1;
+>a : A1
+
+let b: A2 = a; // no error
+>b : A2
+>a : A1
+
+type Obj = { x: number, y: string } | { x: boolean, y: number};
+>Obj : Obj
+>x : number
+>y : string
+>x : boolean
+>y : number
+
+function fun<T extends Obj>(l: { x: T["x" | "y"] }, r: { x: T["x" | "y"] }) {
+>fun : <T extends Obj>(l: { x: T["x" | "y"]; }, r: { x: T["x" | "y"]; }) => void
+>l : { x: T["x" | "y"]; }
+>x : T["x" | "y"]
+>r : { x: T["x" | "y"]; }
+>x : T["x" | "y"]
+
+    l = r;
+>l = r : { x: T["x" | "y"]; }
+>l : { x: T["x" | "y"]; }
+>r : { x: T["x" | "y"]; }
+}
+
