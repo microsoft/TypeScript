@@ -524,6 +524,9 @@ namespace ts {
             },
             getApparentType,
             getUnionType,
+            isTypeAssignableTo: (source, target) => {
+                return isTypeAssignableTo(source, target);
+            },
             createAnonymousType,
             createSignature,
             createSymbol,
