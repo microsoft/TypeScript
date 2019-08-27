@@ -1289,6 +1289,7 @@ namespace ts {
                         }
 
                         if (isTaggedTemplate) {
+                            const savePos = pos
                             const escapedValueString = scanMinimumNumberOfHexDigits(1, /*canHaveSeparators*/ false);
                             const escapedValue = escapedValueString ? parseInt(escapedValueString, 16) : -1;
 
@@ -1296,6 +1297,8 @@ namespace ts {
                             if (!isCodePoint(escapedValue) || text.charCodeAt(pos) !== CharacterCodes.closeBrace) {
                                 tokenFlags |= TokenFlags.ContainsInvalidEscape;
                                 return text.substring(start, pos);
+                            } else {
+                                pos = savePos
                             }
                         }
                         tokenFlags |= TokenFlags.ExtendedUnicodeEscape;

@@ -5,11 +5,9 @@ tests/cases/conformance/es2018/invalidTaggedTemplateEscapeSequences_esnext.ts(8,
 tests/cases/conformance/es2018/invalidTaggedTemplateEscapeSequences_esnext.ts(9,18): error TS1125: Hexadecimal digit expected.
 tests/cases/conformance/es2018/invalidTaggedTemplateEscapeSequences_esnext.ts(9,27): error TS1125: Hexadecimal digit expected.
 tests/cases/conformance/es2018/invalidTaggedTemplateEscapeSequences_esnext.ts(9,51): error TS1125: Hexadecimal digit expected.
-tests/cases/conformance/es2018/invalidTaggedTemplateEscapeSequences_esnext.ts(19,33): error TS1125: Hexadecimal digit expected.
-tests/cases/conformance/es2018/invalidTaggedTemplateEscapeSequences_esnext.ts(21,33): error TS1125: Hexadecimal digit expected.
 
 
-==== tests/cases/conformance/es2018/invalidTaggedTemplateEscapeSequences_esnext.ts (9 errors) ====
+==== tests/cases/conformance/es2018/invalidTaggedTemplateEscapeSequences_esnext.ts (7 errors) ====
     function tag (str: any, ...args: any[]): any {
       return str
     }
@@ -43,12 +41,8 @@ tests/cases/conformance/es2018/invalidTaggedTemplateEscapeSequences_esnext.ts(21
     const a7 = tag`${ 100 }\u0000` // \u0000
     const a8 = tag`${ 100 }\u{` // \\u{
     const a9 = tag`${ 100 }\u{10FFFF}` // \\u{10FFFF
-                                    
-!!! error TS1125: Hexadecimal digit expected.
     const a10 = tag`${ 100 }\u{1f622` // \\u{1f622
     const a11 = tag`${ 100 }\u{1f622}` // \u{1f622}
-                                    
-!!! error TS1125: Hexadecimal digit expected.
     const a12 = tag`${ 100 }\x` // \\x
     const a13 = tag`${ 100 }\x0` // \\x0
     const a14 = tag`${ 100 }\x00` // \x00
