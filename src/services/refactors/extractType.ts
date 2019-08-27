@@ -22,25 +22,23 @@ namespace ts.refactor {
             }];
         },
         getEditsForAction(context, actionName): RefactorEditInfo {
-            Debug.assert(actionName === extractToTypeAlias || actionName === extractToTypeDef, "Unexpected action name");
             const { file } = context;
             const info = Debug.assertDefined(getRangeToExtract(context), "Expected to find a range to extract");
-            Debug.assert(actionName === extractToTypeAlias && !info.isJS || actionName === extractToTypeDef && info.isJS, "Invalid actionName/JS combo");
 
             const name = getUniqueName("NewType", file);
             const edits = textChanges.ChangeTracker.with(context, changes => {
                 switch (actionName) {
                     case extractToTypeAlias:
-                        Debug.assert(!info.isJS);
+                        Debug.assert(!info.isJS, "Invalid actionName/JS combo");
                         return doTypeAliasChange(changes, file, name, info);
                     case extractToTypeDef:
-                        Debug.assert(info.isJS);
+                        Debug.assert(info.isJS, "Invalid actionName/JS combo");
                         return doTypedefChange(changes, file, name, info);
                     case extractToInterface:
-                        Debug.assert(!info.isJS && !!info.typeElements);
+                        Debug.assert(!info.isJS && !!info.typeElements, "Invalid actionName/JS combo");
                         return doInterfaceChange(changes, file, name, info as InterfaceInfo);
                     default:
-                        Debug.fail("Unexpected action");
+                        Debug.fail("Unexpected action name");
                 }
             });
 
@@ -74,19 +72,22 @@ namespace ts.refactor {
         const typeParameters = collectTypeParameters(checker, selection, firstStatement, file);
         if (!typeParameters) return undefined;
 
-        const types = flattenTypeLiteralNodeReference(checker, selection);
-        const typeElements = types && flatMap(types, type => type.members);
+        const typeElements = flattenTypeLiteralNodeReference(checker, selection);
         return { isJS, selection, firstStatement, typeParameters, typeElements };
     }
 
-    function flattenTypeLiteralNodeReference(checker: TypeChecker, node: TypeNode | undefined): ReadonlyArray<TypeLiteralNode> | undefined {
+    function flattenTypeLiteralNodeReference(checker: TypeChecker, node: TypeNode | undefined): ReadonlyArray<TypeElement> | undefined {
         if (!node) return undefined;
         if (isIntersectionTypeNode(node)) {
-            const result: TypeLiteralNode[] = [];
+            const result: TypeElement[] = [];
+            const seen = createMap<true>();
             for (const type of node.types) {
-                const flattenedTypes = flattenTypeLiteralNodeReference(checker, type);
-                if (!flattenedTypes) return undefined;
-                addRange(result, flattenedTypes);
+                const flattenedTypeMembers = flattenTypeLiteralNodeReference(checker, type);
+                if (!flattenedTypeMembers || !flattenedTypeMembers.every(type => type.name && addToSeen(seen, getNameFromPropertyName(type.name) as string))) {
+                    return undefined;
+                }
+
+                addRange(result, flattenedTypeMembers);
             }
             return result;
         }
@@ -94,7 +95,7 @@ namespace ts.refactor {
             return flattenTypeLiteralNodeReference(checker, node.type);
         }
         else if (isTypeLiteralNode(node)) {
-            return [node];
+            return node.members;
         }
         return undefined;
     }
