@@ -134,11 +134,13 @@ namespace ts.server {
             this.processRequest(CommandNames.Close, args);
         }
 
-        changeFile(fileName: string, start: number, end: number, insertString: string): void {
+        createChangeFileRequestArgs(fileName: string, start: number, end: number, insertString: string): protocol.ChangeRequestArgs {
+            return { ...this.createFileLocationRequestArgsWithEndLineAndOffset(fileName, start, end), insertString };
+        }
+
+        changeFile(fileName: string, args: protocol.ChangeRequestArgs): void {
             // clear the line map after an edit
             this.lineMaps.set(fileName, undefined!); // TODO: GH#18217
-
-            const args: protocol.ChangeRequestArgs = { ...this.createFileLocationRequestArgsWithEndLineAndOffset(fileName, start, end), insertString };
             this.processRequest(CommandNames.Change, args);
         }
 
