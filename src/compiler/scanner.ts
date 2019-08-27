@@ -1288,8 +1288,10 @@ namespace ts {
                             return text.substring(start, pos);
                         }
 
-                        const escapedValue = peekExtendedUnicodeEscape();
                         if (isTaggedTemplate) {
+                            const escapedValueString = scanMinimumNumberOfHexDigits(1, /*canHaveSeparators*/ false);
+                            const escapedValue = escapedValueString ? parseInt(escapedValueString, 16) : -1;
+
                             // '\u{Not Code Point' or '\u{CodePoint'
                             if (!isCodePoint(escapedValue) || text.charCodeAt(pos) !== CharacterCodes.closeBrace) {
                                 tokenFlags |= TokenFlags.ContainsInvalidEscape;

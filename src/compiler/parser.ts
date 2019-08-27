@@ -1116,10 +1116,6 @@ namespace ts {
         }
 
         function reScanTemplateHeadOrNoSubstitutionTemplate(): SyntaxKind {
-            let lastError: DiagnosticWithLocation | undefined;
-            while ((lastError = lastOrUndefined(parseDiagnostics)) && scanner.getTokenPos() < lastError.start) {
-                parseDiagnostics.pop();
-            }
             return currentToken = scanner.reScanTemplateHeadOrNoSubstitutionTemplate();
         }
 
