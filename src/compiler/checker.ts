@@ -9620,7 +9620,8 @@ namespace ts {
                 const target = getArrayOrTupleTargetType(node);
                 const aliasSymbol = getAliasSymbolForTypeNode(node);
                 const aliasTypeArguments = getTypeArgumentsForAliasSymbol(aliasSymbol);
-                links.resolvedType = node.kind === SyntaxKind.TupleType && node.elementTypes.length === 0 ? target :
+                links.resolvedType = target === emptyGenericType ? emptyObjectType :
+                    node.kind === SyntaxKind.TupleType && node.elementTypes.length === 0 ? target :
                     createDeferredTypeReference(target, node, /*mapper*/ undefined, aliasSymbol, aliasTypeArguments);
             }
             return links.resolvedType;
