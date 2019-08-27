@@ -9614,15 +9614,40 @@ namespace ts {
             return getTupleTypeOfArity(node.elementTypes.length, minLength, !!restElement, readonly, /*associatedNames*/ undefined);
         }
 
+        function isAliasedType(node: Node): boolean {
+            const parent = node.parent;
+            switch (parent.kind) {
+                case SyntaxKind.ParenthesizedType:
+                case SyntaxKind.ArrayType:
+                case SyntaxKind.TupleType:
+                case SyntaxKind.RestType:
+                case SyntaxKind.UnionType:
+                case SyntaxKind.IntersectionType:
+                case SyntaxKind.IndexedAccessType:
+                    return isAliasedType(parent);
+                case SyntaxKind.TypeAliasDeclaration:
+                    return true;
+            }
+            return false;
+        }
+
         function getTypeFromArrayOrTupleTypeNode(node: ArrayTypeNode | TupleTypeNode): Type {
             const links = getNodeLinks(node);
             if (!links.resolvedType) {
                 const target = getArrayOrTupleTargetType(node);
-                const aliasSymbol = getAliasSymbolForTypeNode(node);
-                const aliasTypeArguments = getTypeArgumentsForAliasSymbol(aliasSymbol);
-                links.resolvedType = target === emptyGenericType ? emptyObjectType :
-                    node.kind === SyntaxKind.TupleType && node.elementTypes.length === 0 ? target :
-                    createDeferredTypeReference(target, node, /*mapper*/ undefined, aliasSymbol, aliasTypeArguments);
+                if (target === emptyGenericType) {
+                    links.resolvedType = emptyObjectType;
+                }
+                else if (isAliasedType(node)) {
+                    const aliasSymbol = getAliasSymbolForTypeNode(node);
+                    const aliasTypeArguments = getTypeArgumentsForAliasSymbol(aliasSymbol);
+                    links.resolvedType = node.kind === SyntaxKind.TupleType && node.elementTypes.length === 0 ? target :
+                        createDeferredTypeReference(target, node, /*mapper*/ undefined, aliasSymbol, aliasTypeArguments);
+                }
+                else {
+                    const elementTypes = node.kind === SyntaxKind.ArrayType ? [getTypeFromTypeNode(node.elementType)] : map(node.elementTypes, getTypeFromTypeNode);
+                    links.resolvedType = createTypeReference(target, elementTypes);
+                }
             }
             return links.resolvedType;
         }
