@@ -243,11 +243,8 @@ namespace ts.GoToDefinition {
             // and in either case the symbol has a construct signature definition, i.e. class
             if (symbol.flags & SymbolFlags.Class && (isNewExpressionTarget(node) || node.kind === SyntaxKind.ConstructorKeyword)) {
                 if (symbol.flags & SymbolFlags.Function) {
-                    // constructor functions
-                    const func = find(filteredDeclarations, decl => isFunctionDeclaration(decl) || isFunctionExpression(decl));
-                    if (func) {
-                        return getSignatureDefinition([func], /*selectConstructors*/ false);
-                    }
+                    // constructor functions are just call signatures
+                    return undefined;
                 }
                 const cls = find(filteredDeclarations, isClassLike) || Debug.fail("Expected declaration to have at least one class-like declaration");
                 return getSignatureDefinition(cls.members, /*selectConstructors*/ true);
