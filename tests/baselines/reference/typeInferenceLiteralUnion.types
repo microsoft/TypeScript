@@ -56,11 +56,11 @@ export function extent<T extends Numeric>(array: Array<T | Primitive>): [T | Pri
 
 
 let extentMixed: [Primitive | NumCoercible, Primitive | NumCoercible] | [undefined, undefined];
->extentMixed : [undefined, undefined] | [string | number | boolean | Date | NumCoercible, string | number | boolean | Date | NumCoercible]
+>extentMixed : [string | number | boolean | Date | NumCoercible, string | number | boolean | Date | NumCoercible] | [undefined, undefined]
 
 extentMixed = extent([new NumCoercible(10), 13, '12', true]);
 >extentMixed = extent([new NumCoercible(10), 13, '12', true]) : [undefined, undefined] | [string | number | boolean | Date | NumCoercible, string | number | boolean | Date | NumCoercible]
->extentMixed : [undefined, undefined] | [string | number | boolean | Date | NumCoercible, string | number | boolean | Date | NumCoercible]
+>extentMixed : [string | number | boolean | Date | NumCoercible, string | number | boolean | Date | NumCoercible] | [undefined, undefined]
 >extent([new NumCoercible(10), 13, '12', true]) : [undefined, undefined] | [string | number | boolean | Date | NumCoercible, string | number | boolean | Date | NumCoercible]
 >extent : <T extends Numeric>(array: (string | number | boolean | Date | T)[]) => [string | number | boolean | Date | T, string | number | boolean | Date | T] | [undefined, undefined]
 >[new NumCoercible(10), 13, '12', true] : (string | number | true | NumCoercible)[]

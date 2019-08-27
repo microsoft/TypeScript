@@ -1,6 +1,6 @@
 === tests/cases/conformance/types/tuple/readonlyArraysAndTuples.ts ===
 type T10 = string[];
->T10 : string[]
+>T10 : T10
 
 type T11 = Array<string>;
 >T11 : string[]
@@ -12,7 +12,7 @@ type T13 = ReadonlyArray<string>;
 >T13 : readonly string[]
 
 type T20 = [number, number];
->T20 : [number, number]
+>T20 : T20
 
 type T21 = readonly [number, number];
 >T21 : readonly [number, number]

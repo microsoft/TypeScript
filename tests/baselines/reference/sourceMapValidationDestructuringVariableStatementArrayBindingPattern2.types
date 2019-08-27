@@ -7,10 +7,10 @@ declare var console: {
 >msg : string
 }
 type MultiSkilledRobot = [string, [string, string]];
->MultiSkilledRobot : [string, [string, string]]
+>MultiSkilledRobot : MultiSkilledRobot
 
 var multiRobotA: MultiSkilledRobot = ["mower", ["mowing", ""]];
->multiRobotA : [string, [string, string]]
+>multiRobotA : MultiSkilledRobot
 >["mower", ["mowing", ""]] : [string, [string, string]]
 >"mower" : "mower"
 >["mowing", ""] : [string, string]
@@ -18,7 +18,7 @@ var multiRobotA: MultiSkilledRobot = ["mower", ["mowing", ""]];
 >"" : ""
 
 var multiRobotB: MultiSkilledRobot = ["trimmer", ["trimming", "edging"]];
->multiRobotB : [string, [string, string]]
+>multiRobotB : MultiSkilledRobot
 >["trimmer", ["trimming", "edging"]] : [string, [string, string]]
 >"trimmer" : "trimmer"
 >["trimming", "edging"] : [string, string]
@@ -28,17 +28,17 @@ var multiRobotB: MultiSkilledRobot = ["trimmer", ["trimming", "edging"]];
 let [, skillA] = multiRobotA;
 > : undefined
 >skillA : [string, string]
->multiRobotA : [string, [string, string]]
+>multiRobotA : MultiSkilledRobot
 
 let [nameMB] = multiRobotB;
 >nameMB : string
->multiRobotB : [string, [string, string]]
+>multiRobotB : MultiSkilledRobot
 
 let [nameMA, [primarySkillA, secondarySkillA]] = multiRobotA;
 >nameMA : string
 >primarySkillA : string
 >secondarySkillA : string
->multiRobotA : [string, [string, string]]
+>multiRobotA : MultiSkilledRobot
 
 let [nameMC] = ["roomba", ["vaccum", "mopping"]];
 >nameMC : string
@@ -60,7 +60,7 @@ let [nameMC2, [primarySkillC, secondarySkillC]] = ["roomba", ["vaccum", "mopping
 
 let [...multiRobotAInfo] = multiRobotA;
 >multiRobotAInfo : [string, [string, string]]
->multiRobotA : [string, [string, string]]
+>multiRobotA : MultiSkilledRobot
 
 if (nameMB == nameMA) {
 >nameMB == nameMA : boolean

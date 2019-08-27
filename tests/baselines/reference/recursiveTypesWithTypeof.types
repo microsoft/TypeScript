@@ -37,11 +37,11 @@ var f2: any;
 >f2 : any
 
 var f3: Foo<typeof f3>[];
->f3 : any
->f3 : any
+>f3 : Foo<Foo<Foo<Foo<Foo<Foo<Foo<Foo<Foo<Foo<Foo<any>[]>[]>[]>[]>[]>[]>[]>[]>[]>[]>[]
+>f3 : Foo<Foo<Foo<Foo<Foo<Foo<Foo<Foo<Foo<Foo<Foo<any>[]>[]>[]>[]>[]>[]>[]>[]>[]>[]>[]
 
 var f3: any;
->f3 : any
+>f3 : Foo<Foo<Foo<Foo<Foo<Foo<Foo<Foo<Foo<Foo<Foo<any>[]>[]>[]>[]>[]>[]>[]>[]>[]>[]>[]
 
 // None of these declarations should have any errors!
 // Truly recursive types

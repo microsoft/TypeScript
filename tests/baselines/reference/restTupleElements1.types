@@ -1,42 +1,42 @@
 === tests/cases/conformance/types/tuple/restTupleElements1.ts ===
 type T00 = [string?];
->T00 : [(string | undefined)?]
+>T00 : T00
 
 type T01 = [string, string?];
->T01 : [string, (string | undefined)?]
+>T01 : T01
 
 type T02 = [string?, string];  // Error
->T02 : [string | undefined, string]
+>T02 : T02
 
 type T03 = [...string[]];
->T03 : string[]
+>T03 : T03
 
 type T04 = [...[...string[]]];
->T04 : string[]
+>T04 : T04
 
 type T05 = [...[...[...string[]]]];
->T05 : string[]
+>T05 : T05
 
 type T06 = [string, ...string[]];
->T06 : [string, ...string[]]
+>T06 : T06
 
 type T07 = [...string[], string];  // Error
->T07 : [string[], string]
+>T07 : T07
 
 type T08 = [...string];  // Error
->T08 : string[]
+>T08 : T08
 
 type T09 = [...string?];  // Error
->T09 : (string | null)[]
+>T09 : T09
 
 type T10 = [string, ...[...string[]]];
->T10 : [string, ...string[]]
+>T10 : T10
 
 type T11 = [string, ...[...[...string[]]]];
->T11 : [string, ...string[]]
+>T11 : T11
 
 type T15 = [boolean, number, ...string[]];
->T15 : [boolean, number, ...string[]]
+>T15 : T15
 
 type L15 = T15["length"];  // number
 >L15 : number
@@ -101,7 +101,7 @@ assign<[number, ...number[]], [number, number, number, string]>();  // Error
 >assign : <T, S extends T>() => void
 
 type T20 = [number, string, ...boolean[]];
->T20 : [number, string, ...boolean[]]
+>T20 : T20
 
 type T21 = T20[0];
 >T21 : number
@@ -128,7 +128,7 @@ type T28 = T20[number];
 >T28 : string | number | boolean
 
 declare const t: T20;
->t : [number, string, ...boolean[]]
+>t : T20
 
 declare const x: number;
 >x : number
@@ -136,31 +136,31 @@ declare const x: number;
 let e0 = t[0];  // number
 >e0 : number
 >t[0] : number
->t : [number, string, ...boolean[]]
+>t : T20
 >0 : 0
 
 let e1 = t[1];  // string
 >e1 : string
 >t[1] : string
->t : [number, string, ...boolean[]]
+>t : T20
 >1 : 1
 
 let e2 = t[2];  // boolean
 >e2 : boolean
 >t[2] : boolean
->t : [number, string, ...boolean[]]
+>t : T20
 >2 : 2
 
 let e3 = t[3];  // boolean
 >e3 : boolean
 >t[3] : boolean
->t : [number, string, ...boolean[]]
+>t : T20
 >3 : 3
 
 let ex = t[x];  // number | string | boolean
 >ex : string | number | boolean
 >t[x] : string | number | boolean
->t : [number, string, ...boolean[]]
+>t : T20
 >x : number
 
 declare function f0<T, U>(x: [T, ...U[]]): [T, U];

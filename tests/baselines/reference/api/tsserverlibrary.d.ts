@@ -2351,7 +2351,9 @@ declare namespace ts {
      */
     export interface TypeReference extends ObjectType {
         target: GenericType;
-        typeArguments?: ReadonlyArray<Type>;
+        node?: ArrayTypeNode | TupleTypeNode;
+    }
+    export interface DeferredTypeReference extends TypeReference {
     }
     export interface GenericType extends InterfaceType, TypeReference {
     }

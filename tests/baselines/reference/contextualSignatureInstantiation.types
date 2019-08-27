@@ -108,7 +108,7 @@ var d = bar(1, "one", h);  // Should be number[] | string[]
 
 var d = bar("one", 1, h);  // Should be number[] | string[]
 >d : number[] | string[]
->bar("one", 1, h) : number[] | string[]
+>bar("one", 1, h) : string[] | number[]
 >bar : <T, U, V>(x: T, y: U, cb: (x: T, y: U) => V) => V
 >"one" : "one"
 >1 : 1

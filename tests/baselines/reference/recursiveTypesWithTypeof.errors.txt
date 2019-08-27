@@ -3,7 +3,7 @@ tests/cases/conformance/types/specifyingTypes/typeQueries/recursiveTypesWithType
 tests/cases/conformance/types/specifyingTypes/typeQueries/recursiveTypesWithTypeof.ts(6,5): error TS2502: 'e' is referenced directly or indirectly in its own type annotation.
 tests/cases/conformance/types/specifyingTypes/typeQueries/recursiveTypesWithTypeof.ts(10,5): error TS2502: 'f' is referenced directly or indirectly in its own type annotation.
 tests/cases/conformance/types/specifyingTypes/typeQueries/recursiveTypesWithTypeof.ts(12,5): error TS2502: 'f2' is referenced directly or indirectly in its own type annotation.
-tests/cases/conformance/types/specifyingTypes/typeQueries/recursiveTypesWithTypeof.ts(14,5): error TS2502: 'f3' is referenced directly or indirectly in its own type annotation.
+tests/cases/conformance/types/specifyingTypes/typeQueries/recursiveTypesWithTypeof.ts(15,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'f3' must be of type 'Foo<Foo<Foo<Foo<Foo<Foo<Foo<Foo<Foo<Foo<Foo<any>[]>[]>[]>[]>[]>[]>[]>[]>[]>[]>[]', but here has type 'any'.
 tests/cases/conformance/types/specifyingTypes/typeQueries/recursiveTypesWithTypeof.ts(51,5): error TS2502: 'hy3' is referenced directly or indirectly in its own type annotation.
 
 
@@ -32,9 +32,10 @@ tests/cases/conformance/types/specifyingTypes/typeQueries/recursiveTypesWithType
 !!! error TS2502: 'f2' is referenced directly or indirectly in its own type annotation.
     var f2: any;
     var f3: Foo<typeof f3>[];
-        ~~
-!!! error TS2502: 'f3' is referenced directly or indirectly in its own type annotation.
     var f3: any;
+        ~~
+!!! error TS2403: Subsequent variable declarations must have the same type.  Variable 'f3' must be of type 'Foo<Foo<Foo<Foo<Foo<Foo<Foo<Foo<Foo<Foo<Foo<any>[]>[]>[]>[]>[]>[]>[]>[]>[]>[]>[]', but here has type 'any'.
+!!! related TS6203 tests/cases/conformance/types/specifyingTypes/typeQueries/recursiveTypesWithTypeof.ts:14:5: 'f3' was also declared here.
     
     // None of these declarations should have any errors!
     // Truly recursive types

@@ -37,7 +37,7 @@ function f4<T extends number | { [key: string]: any }>(arg: T) {
 }
 
 function f5<T extends string[] | { [key: string]: any }>(arg: T) {
->f5 : <T extends string[] | { [key: string]: any; }>(arg: T) => T
+>f5 : <T extends { [key: string]: any; } | string[]>(arg: T) => T
 >key : string
 >arg : T
 

@@ -1029,28 +1029,28 @@ declare module Immutable {
 >value : T[K]
 
       merge(...collections: Array<Partial<T> | Iterable<[string, any]>>): this;
->merge : (...collections: (Iterable<[string, any]> | Partial<T>)[]) => this
->collections : (Iterable<[string, any]> | Partial<T>)[]
+>merge : (...collections: (Partial<T> | Iterable<[string, any]>)[]) => this
+>collections : (Partial<T> | Iterable<[string, any]>)[]
 
       mergeDeep(...collections: Array<Partial<T> | Iterable<[string, any]>>): this;
->mergeDeep : (...collections: (Iterable<[string, any]> | Partial<T>)[]) => this
->collections : (Iterable<[string, any]> | Partial<T>)[]
+>mergeDeep : (...collections: (Partial<T> | Iterable<[string, any]>)[]) => this
+>collections : (Partial<T> | Iterable<[string, any]>)[]
 
       mergeWith(merger: (oldVal: any, newVal: any, key: keyof T) => any, ...collections: Array<Partial<T> | Iterable<[string, any]>>): this;
->mergeWith : (merger: (oldVal: any, newVal: any, key: keyof T) => any, ...collections: (Iterable<[string, any]> | Partial<T>)[]) => this
+>mergeWith : (merger: (oldVal: any, newVal: any, key: keyof T) => any, ...collections: (Partial<T> | Iterable<[string, any]>)[]) => this
 >merger : (oldVal: any, newVal: any, key: keyof T) => any
 >oldVal : any
 >newVal : any
 >key : keyof T
->collections : (Iterable<[string, any]> | Partial<T>)[]
+>collections : (Partial<T> | Iterable<[string, any]>)[]
 
       mergeDeepWith(merger: (oldVal: any, newVal: any, key: any) => any, ...collections: Array<Partial<T> | Iterable<[string, any]>>): this;
->mergeDeepWith : (merger: (oldVal: any, newVal: any, key: any) => any, ...collections: (Iterable<[string, any]> | Partial<T>)[]) => this
+>mergeDeepWith : (merger: (oldVal: any, newVal: any, key: any) => any, ...collections: (Partial<T> | Iterable<[string, any]>)[]) => this
 >merger : (oldVal: any, newVal: any, key: any) => any
 >oldVal : any
 >newVal : any
 >key : any
->collections : (Iterable<[string, any]> | Partial<T>)[]
+>collections : (Partial<T> | Iterable<[string, any]>)[]
 
       delete<K extends keyof T>(key: K): this;
 >delete : <K extends keyof T>(key: K) => this
