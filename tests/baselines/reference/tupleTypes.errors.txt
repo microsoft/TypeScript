@@ -9,7 +9,7 @@ tests/cases/compiler/tupleTypes.ts(18,1): error TS2322: Type '[number, string, n
     Type '3' is not assignable to type '2'.
 tests/cases/compiler/tupleTypes.ts(35,14): error TS2493: Tuple type '[number, string]' of length '2' has no element at index '2'.
 tests/cases/compiler/tupleTypes.ts(36,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'tt2' must be of type 'undefined', but here has type 'string | number'.
-tests/cases/compiler/tupleTypes.ts(41,1): error TS2739: Type '[]' is missing the following properties from type '[number, string]': 0, 1
+tests/cases/compiler/tupleTypes.ts(41,1): error TS2322: Type '[]' is not assignable to type '[number, string]'.
 tests/cases/compiler/tupleTypes.ts(47,1): error TS2322: Type '[number, string]' is not assignable to type 'number[]'.
   Type 'string | number' is not assignable to type 'number'.
     Type 'string' is not assignable to type 'number'.
@@ -87,7 +87,7 @@ tests/cases/compiler/tupleTypes.ts(51,1): error TS2322: Type '[number, {}]' is n
     tt = [undefined, undefined];
     tt = [];  // Error
     ~~
-!!! error TS2739: Type '[]' is missing the following properties from type '[number, string]': 0, 1
+!!! error TS2322: Type '[]' is not assignable to type '[number, string]'.
     
     var a: number[];
     var a1: [number, string];
