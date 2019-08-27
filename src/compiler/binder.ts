@@ -227,7 +227,7 @@ namespace ts {
             symbol.flags |= symbolFlags;
 
             node.symbol = symbol;
-            symbol.declarations = append(symbol.declarations, node);
+            symbol.declarations = appendIfUnique(symbol.declarations, node);
 
             if (symbolFlags & (SymbolFlags.Class | SymbolFlags.Enum | SymbolFlags.Module | SymbolFlags.Variable) && !symbol.exports) {
                 symbol.exports = createSymbolTable();
@@ -736,6 +736,9 @@ namespace ts {
                 case SyntaxKind.JSDocCallbackTag:
                 case SyntaxKind.JSDocEnumTag:
                     bindJSDocTypeAlias(node as JSDocTypedefTag | JSDocCallbackTag | JSDocEnumTag);
+                    break;
+                case SyntaxKind.JSDocClassTag:
+                    bindJSDocClassTag(node as JSDocClassTag);
                     break;
                 // In source files and blocks, bind functions first to match hoisting that occurs at runtime
                 case SyntaxKind.SourceFile: {
@@ -1446,6 +1449,14 @@ namespace ts {
             }
         }
 
+        function bindJSDocClassTag(node: JSDocClassTag) {
+            bindEachChild(node);
+            const host = getHostSignatureFromJSDoc(node);
+            if (host && host.kind !== SyntaxKind.MethodDeclaration) {
+                addDeclarationToSymbol(host.symbol, host, SymbolFlags.Class);
+            }
+        }
+
         function bindCallExpressionFlow(node: CallExpression) {
             // If the target of the call expression is a function expression or arrow function we have
             // an immediately invoked function expression (IIFE). Initialize the flowNode property to
@@ -1813,7 +1824,8 @@ namespace ts {
                     // typedef anchored to an A.B.C assignment - we need to bind into B's namespace under name C
                     const isTopLevel = isTopLevelNamespaceAssignment(declName.parent);
                     if (isTopLevel) {
-                        bindPotentiallyMissingNamespaces(file.symbol, declName.parent, isTopLevel, !!findAncestor(declName, d => isPropertyAccessExpression(d) && d.name.escapedText === "prototype"));
+                        bindPotentiallyMissingNamespaces(file.symbol, declName.parent, isTopLevel,
+                            !!findAncestor(declName, d => isPropertyAccessExpression(d) && d.name.escapedText === "prototype"), /*containerIsClass*/ false);
                         const oldContainer = container;
                         container = isPropertyAccessExpression(declName.parent.expression) ? declName.parent.expression.name : declName.parent.expression;
                         declareModuleMember(typeAlias, SymbolFlags.TypeAlias, SymbolFlags.TypeAliasExcludes);
@@ -2510,6 +2522,7 @@ namespace ts {
                         constructorSymbol.members = constructorSymbol.members || createSymbolTable();
                         // It's acceptable for multiple 'this' assignments of the same identifier to occur
                         declareSymbol(constructorSymbol.members, constructorSymbol, node, SymbolFlags.Property, SymbolFlags.PropertyExcludes & ~SymbolFlags.Property);
+                        addDeclarationToSymbol(constructorSymbol, constructorSymbol.valueDeclaration, SymbolFlags.Class);
                     }
                     break;
 
@@ -2558,7 +2571,7 @@ namespace ts {
             node.left.parent = node;
             node.right.parent = node;
             const lhs = node.left as PropertyAccessEntityNameExpression;
-            bindPropertyAssignment(lhs.expression, lhs, /*isPrototypeProperty*/ false);
+            bindPropertyAssignment(lhs.expression, lhs, /*isPrototypeProperty*/ false, /*containerIsClass*/ true);
         }
 
         function bindObjectDefinePrototypeProperty(node: BindableObjectDefinePropertyCall) {
@@ -2581,13 +2594,13 @@ namespace ts {
             constructorFunction.parent = classPrototype;
             classPrototype.parent = lhs;
 
-            bindPropertyAssignment(constructorFunction, lhs, /*isPrototypeProperty*/ true);
+            bindPropertyAssignment(constructorFunction, lhs, /*isPrototypeProperty*/ true, /*containerIsClass*/ true);
         }
 
         function bindObjectDefinePropertyAssignment(node: BindableObjectDefinePropertyCall) {
             let namespaceSymbol = lookupSymbolForPropertyAccess(node.arguments[0]);
             const isToplevel = node.parent.parent.kind === SyntaxKind.SourceFile;
-            namespaceSymbol = bindPotentiallyMissingNamespaces(namespaceSymbol, node.arguments[0], isToplevel, /*isPrototypeProperty*/ false);
+            namespaceSymbol = bindPotentiallyMissingNamespaces(namespaceSymbol, node.arguments[0], isToplevel, /*isPrototypeProperty*/ false, /*containerIsClass*/ false);
             bindPotentiallyNewExpandoMemberToNamespace(node, namespaceSymbol, /*isPrototypeProperty*/ false);
         }
 
@@ -2618,10 +2631,10 @@ namespace ts {
          */
         function bindStaticPropertyAssignment(node: PropertyAccessEntityNameExpression) {
             node.expression.parent = node;
-            bindPropertyAssignment(node.expression, node, /*isPrototypeProperty*/ false);
+            bindPropertyAssignment(node.expression, node, /*isPrototypeProperty*/ false, /*containerIsClass*/ false);
         }
 
-        function bindPotentiallyMissingNamespaces(namespaceSymbol: Symbol | undefined, entityName: EntityNameExpression, isToplevel: boolean, isPrototypeProperty: boolean) {
+        function bindPotentiallyMissingNamespaces(namespaceSymbol: Symbol | undefined, entityName: EntityNameExpression, isToplevel: boolean, isPrototypeProperty: boolean, containerIsClass: boolean) {
             if (isToplevel && !isPrototypeProperty) {
                 // make symbols or add declarations for intermediate containers
                 const flags = SymbolFlags.Module | SymbolFlags.Assignment;
@@ -2637,6 +2650,9 @@ namespace ts {
                         return declareSymbol(table, parent, id, flags, excludeFlags);
                     }
                 });
+            }
+            if (containerIsClass && namespaceSymbol) {
+                addDeclarationToSymbol(namespaceSymbol, namespaceSymbol.valueDeclaration, SymbolFlags.Class);
             }
             return namespaceSymbol;
         }
@@ -2663,10 +2679,10 @@ namespace ts {
                 : propertyAccess.parent.parent.kind === SyntaxKind.SourceFile;
         }
 
-        function bindPropertyAssignment(name: EntityNameExpression, propertyAccess: PropertyAccessEntityNameExpression, isPrototypeProperty: boolean) {
+        function bindPropertyAssignment(name: EntityNameExpression, propertyAccess: PropertyAccessEntityNameExpression, isPrototypeProperty: boolean, containerIsClass: boolean) {
             let namespaceSymbol = lookupSymbolForPropertyAccess(name);
             const isToplevel = isTopLevelNamespaceAssignment(propertyAccess);
-            namespaceSymbol = bindPotentiallyMissingNamespaces(namespaceSymbol, propertyAccess.expression, isToplevel, isPrototypeProperty);
+            namespaceSymbol = bindPotentiallyMissingNamespaces(namespaceSymbol, propertyAccess.expression, isToplevel, isPrototypeProperty, containerIsClass);
             bindPotentiallyNewExpandoMemberToNamespace(propertyAccess, namespaceSymbol, isPrototypeProperty);
         }
 

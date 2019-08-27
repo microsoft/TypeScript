@@ -6,7 +6,11 @@ about: Suggest an idea for this project
 
 <!-- 🚨 STOP 🚨 𝗦𝗧𝗢𝗣 🚨 𝑺𝑻𝑶𝑷 🚨
 
-Half of all issues filed here are duplicates, answered in the FAQ, or not appropriate for the bug tracker. Please read the FAQ first, especially the "Common Feature Requests" section.
+Half of all issues filed here are duplicates, answered in the FAQ, or not appropriate for the bug tracker.
+
+Please help us by doing the following steps before logging an issue:
+  * Search: https://github.com/Microsoft/TypeScript/search?type=Issues
+  * Read the FAQ, especially the "Common Feature Requests" section: https://github.com/Microsoft/TypeScript/wiki/FAQ
 
 -->
 

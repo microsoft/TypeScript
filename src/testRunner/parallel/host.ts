@@ -626,6 +626,7 @@ namespace Harness.Parallel.Host {
 
             const perfData = readSavedPerfData(configOption);
             context.describe = addSuite as Mocha.SuiteFunction;
+            context.it = addSuite as Mocha.TestFunction;
 
             function addSuite(title: string) {
                 // Note, sub-suites are not indexed (we assume such granularity is not required)

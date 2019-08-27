@@ -57,7 +57,7 @@ namespace ts.codefix {
                             pushIfUnique(entry.namedImports, symbolName);
                         }
                         else {
-                            Debug.assert(entry.defaultImport === undefined || entry.defaultImport === symbolName);
+                            Debug.assert(entry.defaultImport === undefined || entry.defaultImport === symbolName, "(Add to Existing) Default import should be missing or match symbolName");
                             entry.defaultImport = symbolName;
                         }
                         break;
@@ -70,7 +70,7 @@ namespace ts.codefix {
                         }
                         switch (importKind) {
                             case ImportKind.Default:
-                                Debug.assert(entry.defaultImport === undefined || entry.defaultImport === symbolName);
+                                Debug.assert(entry.defaultImport === undefined || entry.defaultImport === symbolName, "(Add new) Default import should be missing or match symbolName");
                                 entry.defaultImport = symbolName;
                                 break;
                             case ImportKind.Named:
@@ -78,14 +78,14 @@ namespace ts.codefix {
                                 break;
                             case ImportKind.Equals:
                             case ImportKind.Namespace:
-                                Debug.assert(entry.namespaceLikeImport === undefined || entry.namespaceLikeImport.name === symbolName);
+                                Debug.assert(entry.namespaceLikeImport === undefined || entry.namespaceLikeImport.name === symbolName, "Namespacelike import shoudl be missing or match symbolName");
                                 entry.namespaceLikeImport = { importKind, name: symbolName };
                                 break;
                         }
                         break;
                     }
                     default:
-                        Debug.assertNever(fix);
+                        Debug.assertNever(fix, `fix wasn't never - got kind ${(fix as ImportFix).kind}`);
                 }
             });
 
@@ -165,7 +165,7 @@ namespace ts.codefix {
         preferences: UserPreferences,
     ): { readonly moduleSpecifier: string, readonly codeAction: CodeAction } {
         const exportInfos = getAllReExportingModules(sourceFile, exportedSymbol, moduleSymbol, symbolName, sourceFile, program.getCompilerOptions(), program.getTypeChecker(), program.getSourceFiles());
-        Debug.assert(exportInfos.some(info => info.moduleSymbol === moduleSymbol));
+        Debug.assert(exportInfos.some(info => info.moduleSymbol === moduleSymbol), "Some exportInfo should match the specified moduleSymbol");
         // We sort the best codefixes first, so taking `first` is best for completions.
         const moduleSpecifier = first(getNewImportInfos(program, sourceFile, position, exportInfos, host, preferences)).moduleSpecifier;
         const fix = first(getFixForImport(exportInfos, symbolName, position, program, sourceFile, host, preferences));
@@ -288,7 +288,7 @@ namespace ts.codefix {
             moduleSpecifiers.getModuleSpecifiers(moduleSymbol, program.getCompilerOptions(), sourceFile, host, program.getSourceFiles(), preferences, program.redirectTargetsMap)
             .map((moduleSpecifier): FixAddNewImport | FixUseImportType =>
                 // `position` should only be undefined at a missing jsx namespace, in which case we shouldn't be looking for pure types.
-                exportedSymbolIsTypeOnly && isJs ? { kind: ImportFixKind.ImportType, moduleSpecifier, position: Debug.assertDefined(position) } : { kind: ImportFixKind.AddNew, moduleSpecifier, importKind }));
+                exportedSymbolIsTypeOnly && isJs ? { kind: ImportFixKind.ImportType, moduleSpecifier, position: Debug.assertDefined(position, "position should be defined") } : { kind: ImportFixKind.AddNew, moduleSpecifier, importKind }));
         // Sort to keep the shortest paths first
         return sort(choicesForEachExportingModule, (a, b) => a.moduleSpecifier.length - b.moduleSpecifier.length);
     }
@@ -369,7 +369,7 @@ namespace ts.codefix {
                 // Fall back to the `import * as ns` style import.
                 return ImportKind.Namespace;
             default:
-                return Debug.assertNever(moduleKind);
+                return Debug.assertNever(moduleKind, `Unexpected moduleKind ${moduleKind}`);
         }
     }
 
@@ -382,7 +382,7 @@ namespace ts.codefix {
             ? checker.getJsxNamespace(sourceFile)
             : symbolToken.text;
         // "default" is a keyword and not a legal identifier for the import, so we don't expect it here
-        Debug.assert(symbolName !== InternalSymbolName.Default);
+        Debug.assert(symbolName !== InternalSymbolName.Default, "'default' isn't a legal identifier and couldn't occur here");
 
         const fixes = arrayFrom(flatMapIterator(getExportInfos(symbolName, getMeaningFromLocation(symbolToken), cancellationToken, sourceFile, checker, program).entries(), ([_, exportInfos]) =>
             getFixForImport(exportInfos, symbolName, symbolToken.getStart(sourceFile), program, sourceFile, host, preferences)));
@@ -468,7 +468,7 @@ namespace ts.codefix {
 
         if (defaultExport.flags & SymbolFlags.Alias) {
             const aliased = checker.getImmediateAliasedSymbol(defaultExport);
-            return aliased && getDefaultExportInfoWorker(aliased, Debug.assertDefined(aliased.parent), checker, compilerOptions);
+            return aliased && getDefaultExportInfoWorker(aliased, Debug.assertDefined(aliased.parent, "Alias targets of default exports must have a parent"), checker, compilerOptions);
         }
 
         if (defaultExport.escapedName !== InternalSymbolName.Default &&
@@ -486,7 +486,7 @@ namespace ts.codefix {
                 }
             }
             else if (isExportSpecifier(declaration)) {
-                Debug.assert(declaration.name.text === InternalSymbolName.Default);
+                Debug.assert(declaration.name.text === InternalSymbolName.Default, "Expected the specifier to be a default export");
                 return declaration.propertyName && declaration.propertyName.text;
             }
         });
@@ -521,13 +521,13 @@ namespace ts.codefix {
                 return [importKind === ImportKind.Default ? Diagnostics.Import_default_0_from_module_1 : Diagnostics.Import_0_from_module_1, symbolName, moduleSpecifier];
             }
             default:
-                return Debug.assertNever(fix);
+                return Debug.assertNever(fix, `Unexpected fix kind ${(fix as ImportFix).kind}`);
         }
     }
 
     function doAddExistingFix(changes: textChanges.ChangeTracker, sourceFile: SourceFile, clause: ImportClause, defaultImport: string | undefined, namedImports: ReadonlyArray<string>): void {
         if (defaultImport) {
-            Debug.assert(!clause.name);
+            Debug.assert(!clause.name, "Default imports can't have names");
             changes.insertNodeAt(sourceFile, clause.getStart(sourceFile), createIdentifier(defaultImport), { suffix: ", " });
         }
 
@@ -545,7 +545,7 @@ namespace ts.codefix {
                         changes.replaceNode(sourceFile, clause.namedBindings, namedImports);
                     }
                     else {
-                        changes.insertNodeAfter(sourceFile, Debug.assertDefined(clause.name), namedImports);
+                        changes.insertNodeAfter(sourceFile, Debug.assertDefined(clause.name, "Named import specifiers must have names"), namedImports);
                     }
                 }
             }

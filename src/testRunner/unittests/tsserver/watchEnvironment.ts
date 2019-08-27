@@ -99,7 +99,7 @@ namespace ts.projectSystem {
                 content: "let y = 10;"
             };
             const files = [configFile, file1, file2, libFile];
-            const host = createServerHost(files, { useWindowsStylePaths: true });
+            const host = createServerHost(files, { windowsStyleRoot: "c:/" });
             const projectService = createProjectService(host);
             projectService.openClientFile(file1.path);
             const project = projectService.configuredProjects.get(configFile.path)!;
@@ -211,4 +211,39 @@ namespace ts.projectSystem {
         }
     });
 
+    describe("unittests:: tsserver:: watchEnvironment:: tsserverProjectSystem watching files with network style paths", () => {
+        function verifyFilePathStyle(path: string) {
+            const windowsStyleRoot = path.substr(0, getRootLength(path));
+            const host = createServerHost(
+                [libFile, { path, content: "const x = 10" }],
+                { windowsStyleRoot }
+            );
+            const service = createProjectService(host);
+            service.openClientFile(path);
+            checkNumberOfProjects(service, { inferredProjects: 1 });
+            const libPath = `${windowsStyleRoot}${libFile.path.substring(1)}`;
+            checkProjectActualFiles(service.inferredProjects[0], [path, libPath]);
+            checkWatchedFiles(host, [libPath, `${getDirectoryPath(path)}/tsconfig.json`, `${getDirectoryPath(path)}/jsconfig.json`]);
+        }
+
+        it("for file of style c:/myprojects/project/x.js", () => {
+            verifyFilePathStyle("c:/myprojects/project/x.js");
+        });
+
+        it("for file of style //vda1cs4850/myprojects/project/x.js", () => {
+            verifyFilePathStyle("//vda1cs4850/myprojects/project/x.js");
+        });
+
+        it("for file of style //vda1cs4850/c$/myprojects/project/x.js", () => {
+            verifyFilePathStyle("//vda1cs4850/c$/myprojects/project/x.js");
+        });
+
+        it("for file of style c:/users/username/myprojects/project/x.js", () => {
+            verifyFilePathStyle("c:/users/username/myprojects/project/x.js");
+        });
+
+        it("for file of style //vda1cs4850/c$/users/username/myprojects/project/x.js", () => {
+            verifyFilePathStyle("//vda1cs4850/c$/users/username/myprojects/project/x.js");
+        });
+    });
 }

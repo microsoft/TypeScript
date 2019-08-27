@@ -9,28 +9,28 @@ var Multimap = function() {
     this._map = {};
 >this._map = {} : {}
 >this._map : {}
->this : Multimap & { set: () => void; get(): void; }
+>this : this
 >_map : {}
 >{} : {}
 
     this._map
 >this._map : {}
->this : Multimap & { set: () => void; get(): void; }
+>this : this
 >_map : {}
 
     this.set
 >this.set : () => void
->this : Multimap & { set: () => void; get(): void; }
+>this : this
 >set : () => void
 
     this.get
 >this.get : () => void
->this : Multimap & { set: () => void; get(): void; }
+>this : this
 >get : () => void
 
     this.addon
 >this.addon : () => void
->this : Multimap & { set: () => void; get(): void; }
+>this : this
 >addon : () => void
 
 };
@@ -48,22 +48,22 @@ Multimap.prototype = {
 
         this._map
 >this._map : {}
->this : Multimap & { set: () => void; get(): void; }
+>this : this
 >_map : {}
 
         this.set
 >this.set : () => void
->this : Multimap & { set: () => void; get(): void; }
+>this : this
 >set : () => void
 
         this.get
 >this.get : () => void
->this : Multimap & { set: () => void; get(): void; }
+>this : this
 >get : () => void
 
         this.addon
 >this.addon : () => void
->this : Multimap & { set: () => void; get(): void; }
+>this : this
 >addon : () => void
 
     },
@@ -72,22 +72,22 @@ Multimap.prototype = {
 
         this._map
 >this._map : {}
->this : Multimap & { set: () => void; get(): void; }
+>this : this
 >_map : {}
 
         this.set
 >this.set : () => void
->this : Multimap & { set: () => void; get(): void; }
+>this : this
 >set : () => void
 
         this.get
 >this.get : () => void
->this : Multimap & { set: () => void; get(): void; }
+>this : this
 >get : () => void
 
         this.addon
 >this.addon : () => void
->this : Multimap & { set: () => void; get(): void; }
+>this : this
 >addon : () => void
     }
 }
@@ -103,47 +103,47 @@ Multimap.prototype.addon = function () {
 
     this._map
 >this._map : {}
->this : Multimap & { set: () => void; get(): void; }
+>this : this
 >_map : {}
 
     this.set
 >this.set : () => void
->this : Multimap & { set: () => void; get(): void; }
+>this : this
 >set : () => void
 
     this.get
 >this.get : () => void
->this : Multimap & { set: () => void; get(): void; }
+>this : this
 >get : () => void
 
     this.addon
 >this.addon : () => void
->this : Multimap & { set: () => void; get(): void; }
+>this : this
 >addon : () => void
 }
 
 var mm = new Multimap();
->mm : Multimap & { set: () => void; get(): void; }
->new Multimap() : Multimap & { set: () => void; get(): void; }
+>mm : Multimap
+>new Multimap() : Multimap
 >Multimap : typeof Multimap
 
 mm._map
 >mm._map : {}
->mm : Multimap & { set: () => void; get(): void; }
+>mm : Multimap
 >_map : {}
 
 mm.set
 >mm.set : () => void
->mm : Multimap & { set: () => void; get(): void; }
+>mm : Multimap
 >set : () => void
 
 mm.get
 >mm.get : () => void
->mm : Multimap & { set: () => void; get(): void; }
+>mm : Multimap
 >get : () => void
 
 mm.addon
 >mm.addon : () => void
->mm : Multimap & { set: () => void; get(): void; }
+>mm : Multimap
 >addon : () => void
 

@@ -1061,7 +1061,7 @@ namespace ts.projectSystem {
                 content: "let x = 1;"
             };
 
-            const host = createServerHost([file1, configFile], { useWindowsStylePaths: true });
+            const host = createServerHost([file1, configFile], { windowsStyleRoot: "c:/" });
             const projectService = createProjectService(host);
 
             projectService.openClientFile(file1.path);

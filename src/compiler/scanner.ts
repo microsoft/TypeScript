@@ -2240,7 +2240,7 @@ namespace ts {
 
             if (isIdentifierStart(ch, languageVersion)) {
                 let char = ch;
-                while (pos < end && isIdentifierPart(char = codePointAt(text, pos), languageVersion)) pos += charSize(char);
+                while (pos < end && isIdentifierPart(char = codePointAt(text, pos), languageVersion) || text.charCodeAt(pos) === CharacterCodes.minus) pos += charSize(char);
                 tokenValue = text.substring(tokenPos, pos);
                 if (char === CharacterCodes.backslash) {
                     tokenValue += scanIdentifierParts();
