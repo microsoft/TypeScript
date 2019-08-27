@@ -4203,14 +4203,18 @@ namespace ts {
     export interface TypeReference extends ObjectType {
         target: GenericType;    // Type reference target
         node?: ArrayTypeNode | TupleTypeNode;
+        /* @internal */
         mapper?: TypeMapper;
+        /* @internal */
         resolvedTypeArguments?: ReadonlyArray<Type>;  // Resolved ype reference type arguments
         /* @internal */
         literalType?: TypeReference;  // Clone of type with ObjectFlags.ArrayLiteral set
     }
 
     export interface DeferredTypeReference extends TypeReference {
+        /* @internal */
         node: ArrayTypeNode | TupleTypeNode;
+        /* @internal */
         mapper?: TypeMapper;
     }
 

@@ -3876,8 +3876,9 @@ namespace ts {
                 function visitAndTransformType<T>(type: Type, transform: (type: Type) => T) {
                     const typeId = "" + type.id;
                     const isConstructorObject = getObjectFlags(type) & ObjectFlags.Anonymous && type.symbol && type.symbol.flags & SymbolFlags.Class;
-                    const id = getObjectFlags(type) & ObjectFlags.Reference ? "N" + getNodeId((<DeferredTypeReference>type).node) :
-                        (isConstructorObject ? "+" : "") + getSymbolId(type.symbol);
+                    const id = getObjectFlags(type) & ObjectFlags.Reference && (<TypeReference>type).node ? "N" + getNodeId((<TypeReference>type).node!) :
+                        type.symbol ? (isConstructorObject ? "+" : "") + getSymbolId(type.symbol) :
+                        undefined;
                     // Since instantiations of the same anonymous type have the same symbol, tracking symbols instead
                     // of types allows us to catch circular references to instantiations of the same anonymous type
                     if (!context.visitedTypes) {
@@ -29347,12 +29348,9 @@ namespace ts {
 
                     if (!(staticBaseType.symbol && staticBaseType.symbol.flags & SymbolFlags.Class) && !(baseConstructorType.flags & TypeFlags.TypeVariable)) {
                         // When the static base type is a "class-like" constructor function (but not actually a class), we verify
-                        // that all instantiated base constructor signatures return the same type. We can simply compare the type
-                        // references (as opposed to checking the structure of the types) because elsewhere we have already checked
-                        // that the base type is a class or interface type (and not, for example, an anonymous object type).
-                        // (Javascript constructor functions have this property trivially true since their return type is ignored.)
+                        // that all instantiated base constructor signatures return the same type.
                         const constructors = getInstantiatedConstructorsForTypeArguments(staticBaseType, baseTypeNode.typeArguments, baseTypeNode);
-                        if (forEach(constructors, sig => !isJSConstructor(sig.declaration) && getReturnTypeOfSignature(sig) !== baseType)) {
+                        if (forEach(constructors, sig => !isJSConstructor(sig.declaration) && !isTypeIdenticalTo(getReturnTypeOfSignature(sig), baseType))) {
                             error(baseTypeNode.expression, Diagnostics.Base_constructors_must_all_have_the_same_return_type);
                         }
                     }
