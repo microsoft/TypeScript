@@ -2881,7 +2881,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Default export of the module has or is using private name '{0}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[모듈의 기본 내보내기에서 전용 이름 '{0}'을(를) 가지고 있거나 사용 중입니다.]]></Val>
+            <Val><![CDATA[모듈의 기본 내보내기에서 프라이빗 이름 '{0}'을(를) 가지고 있거나 사용 중입니다.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -3667,7 +3667,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Exported type alias '{0}' has or is using private name '{1}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[내보낸 형식 별칭 '{0}'은(는) '{1}' 전용 이름을 포함하거나 사용 중입니다.]]></Val>
+            <Val><![CDATA[내보낸 형식 별칭 '{0}'은(는) '{1}' 프라이빗 이름을 포함하거나 사용 중입니다.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -3685,7 +3685,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Exported variable '{0}' has or is using name '{1}' from private module '{2}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[내보낸 변수 '{0}'이(가) 전용 모듈 '{2}'의 '{1}' 이름을 가지고 있거나 사용 중입니다.]]></Val>
+            <Val><![CDATA[내보낸 변수 '{0}'이(가) 프라이빗 모듈 '{2}'의 '{1}' 이름을 가지고 있거나 사용 중입니다.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -3694,7 +3694,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Exported variable '{0}' has or is using private name '{1}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[내보낸 변수 '{0}'이(가) 전용 이름 '{1}'을(를) 가지고 있거나 사용 중입니다.]]></Val>
+            <Val><![CDATA[내보낸 변수 '{0}'이(가) 프라이빗 이름 '{1}'을(를) 가지고 있거나 사용 중입니다.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -4369,7 +4369,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Implements clause of exported class '{0}' has or is using private name '{1}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[내보낸 클래스 '{0}'의 Implements 절이 전용 이름 '{1}'을(를) 가지고 있거나 사용 중입니다.]]></Val>
+            <Val><![CDATA[내보낸 클래스 '{0}'의 Implements 절이 프라이빗 이름 '{1}'을(를) 가지고 있거나 사용 중입니다.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -4399,7 +4399,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Import declaration '{0}' is using private name '{1}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[가져오기 선언 '{0}'이(가) 전용 이름 '{1}'을(를) 사용하고 있습니다.]]></Val>
+            <Val><![CDATA[가져오기 선언 '{0}'이(가) 프라이빗 이름 '{1}'을(를) 사용하고 있습니다.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -5242,7 +5242,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Method '{0}' of exported interface has or is using name '{1}' from private module '{2}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[내보낸 인터페이스의 '{0}' 메서드가 전용 모듈 '{2}'의 '{1}' 이름을 가지고 있거나 사용 중입니다.]]></Val>
+            <Val><![CDATA[내보낸 인터페이스의 '{0}' 메서드가 프라이빗 모듈 '{2}'의 '{1}' 이름을 가지고 있거나 사용 중입니다.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -5251,7 +5251,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Method '{0}' of exported interface has or is using private name '{1}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[내보낸 인터페이스의 '{0}' 메서드가 전용 이름 '{1}'을(를) 가지고 있거나 사용 중입니다.]]></Val>
+            <Val><![CDATA[내보낸 인터페이스의 '{0}' 메서드가 프라이빗 이름 '{1}'을(를) 가지고 있거나 사용 중입니다.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -5935,7 +5935,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Overload signatures must all be public, private or protected.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[오버로드 시그니처는 모두 공용, 전용 또는 보호된 상태여야 합니다.]]></Val>
+            <Val><![CDATA[오버로드 시그니처는 모두 퍼블릭, 프라이빗 또는 보호된 상태여야 합니다.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -5971,7 +5971,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Parameter '{0}' of call signature from exported interface has or is using name '{1}' from private module '{2}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[내보낸 인터페이스에 있는 호출 시그니처의 '{0}' 매개 변수가 전용 모듈 '{2}'의 '{1}' 이름을 가지고 있거나 사용 중입니다.]]></Val>
+            <Val><![CDATA[내보낸 인터페이스에 있는 호출 시그니처의 '{0}' 매개 변수가 프라이빗 모듈 '{2}'의 '{1}' 이름을 가지고 있거나 사용 중입니다.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -5980,7 +5980,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Parameter '{0}' of call signature from exported interface has or is using private name '{1}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[내보낸 인터페이스에 있는 호출 시그니처의 '{0}' 매개 변수가 전용 이름 '{1}'을(를) 가지고 있거나 사용 중입니다.]]></Val>
+            <Val><![CDATA[내보낸 인터페이스에 있는 호출 시그니처의 '{0}' 매개 변수가 프라이빗 이름 '{1}'을(를) 가지고 있거나 사용 중입니다.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -5998,7 +5998,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Parameter '{0}' of constructor from exported class has or is using name '{1}' from private module '{2}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[내보낸 클래스에 있는 생성자의 '{0}' 매개 변수가 전용 모듈 '{2}'의 '{1}' 이름을 가지고 있거나 사용 중입니다.]]></Val>
+            <Val><![CDATA[내보낸 클래스에 있는 생성자의 '{0}' 매개 변수가 프라이빗 모듈 '{2}'의 '{1}' 이름을 가지고 있거나 사용 중입니다.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -6007,7 +6007,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Parameter '{0}' of constructor from exported class has or is using private name '{1}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[내보낸 클래스에 있는 생성자의 '{0}' 매개 변수가 전용 이름 '{1}'을(를) 가지고 있거나 사용 중입니다.]]></Val>
+            <Val><![CDATA[내보낸 클래스에 있는 생성자의 '{0}' 매개 변수가 프라이빗 이름 '{1}'을(를) 가지고 있거나 사용 중입니다.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -6016,7 +6016,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Parameter '{0}' of constructor signature from exported interface has or is using name '{1}' from private module '{2}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[내보낸 인터페이스에 있는 생성자 시그니처의 '{0}' 매개 변수가 전용 모듈 '{2}'의 '{1}' 이름을 가지고 있거나 사용 중입니다.]]></Val>
+            <Val><![CDATA[내보낸 인터페이스에 있는 생성자 시그니처의 '{0}' 매개 변수가 프라이빗 모듈 '{2}'의 '{1}' 이름을 가지고 있거나 사용 중입니다.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -6025,7 +6025,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Parameter '{0}' of constructor signature from exported interface has or is using private name '{1}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[내보낸 인터페이스에 있는 생성자 시그니처의 '{0}' 매개 변수가 전용 이름 '{1}'을(를) 가지고 있거나 사용 중입니다.]]></Val>
+            <Val><![CDATA[내보낸 인터페이스에 있는 생성자 시그니처의 '{0}' 매개 변수가 프라이빗 이름 '{1}'을(를) 가지고 있거나 사용 중입니다.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -6043,7 +6043,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Parameter '{0}' of exported function has or is using name '{1}' from private module '{2}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[내보낸 함수의 '{0}' 매개 변수가 전용 모듈 '{2}'의 '{1}' 이름을 가지고 있거나 사용 중입니다.]]></Val>
+            <Val><![CDATA[내보낸 함수의 '{0}' 매개 변수가 프라이빗 모듈 '{2}'의 '{1}' 이름을 가지고 있거나 사용 중입니다.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -6052,7 +6052,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Parameter '{0}' of exported function has or is using private name '{1}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[내보낸 함수의 '{0}' 매개 변수가 전용 이름 '{1}'을(를) 가지고 있거나 사용 중입니다.]]></Val>
+            <Val><![CDATA[내보낸 함수의 '{0}' 매개 변수가 프라이빗 이름 '{1}'을(를) 가지고 있거나 사용 중입니다.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -6061,7 +6061,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Parameter '{0}' of index signature from exported interface has or is using name '{1}' from private module '{2}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[내보낸 인터페이스에 있는 인덱스 시그니처의 '{0}' 매개 변수가 전용 모듈 '{2}'의 '{1}' 이름을 가지고 있거나 사용 중입니다.]]></Val>
+            <Val><![CDATA[내보낸 인터페이스에 있는 인덱스 시그니처의 '{0}' 매개 변수가 프라이빗 모듈 '{2}'의 '{1}' 이름을 가지고 있거나 사용 중입니다.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -6070,7 +6070,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Parameter '{0}' of index signature from exported interface has or is using private name '{1}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[내보낸 인터페이스에 있는 인덱스 시그니처의 '{0}' 매개 변수가 전용 이름 '{1}'을(를) 가지고 있거나 사용 중입니다.]]></Val>
+            <Val><![CDATA[내보낸 인터페이스에 있는 인덱스 시그니처의 '{0}' 매개 변수가 프라이빗 이름 '{1}'을(를) 가지고 있거나 사용 중입니다.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -6079,7 +6079,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Parameter '{0}' of method from exported interface has or is using name '{1}' from private module '{2}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[내보낸 인터페이스에 있는 메서드의 '{0}' 매개 변수가 전용 모듈 '{2}'의 '{1}' 이름을 가지고 있거나 사용 중입니다.]]></Val>
+            <Val><![CDATA[내보낸 인터페이스에 있는 메서드의 '{0}' 매개 변수가 프라이빗 모듈 '{2}'의 '{1}' 이름을 가지고 있거나 사용 중입니다.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -6088,7 +6088,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Parameter '{0}' of method from exported interface has or is using private name '{1}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[내보낸 인터페이스에 있는 메서드의 '{0}' 매개 변수가 전용 이름 '{1}'을(를) 가지고 있거나 사용 중입니다.]]></Val>
+            <Val><![CDATA[내보낸 인터페이스에 있는 메서드의 '{0}' 매개 변수가 프라이빗 이름 '{1}'을(를) 가지고 있거나 사용 중입니다.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -6106,7 +6106,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Parameter '{0}' of public method from exported class has or is using name '{1}' from private module '{2}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[내보낸 클래스에 있는 공용 메서드의 '{0}' 매개 변수가 전용 모듈 '{2}'의 '{1}' 이름을 가지고 있거나 사용 중입니다.]]></Val>
+            <Val><![CDATA[내보낸 클래스에 있는 공용 메서드의 '{0}' 매개 변수가 프라이빗 모듈 '{2}'의 '{1}' 이름을 가지고 있거나 사용 중입니다.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -6115,7 +6115,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Parameter '{0}' of public method from exported class has or is using private name '{1}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[내보낸 클래스에 있는 공용 메서드의 '{0}' 매개 변수가 전용 이름 '{1}'을(를) 가지고 있거나 사용 중입니다.]]></Val>
+            <Val><![CDATA[내보낸 클래스에 있는 공용 메서드의 '{0}' 매개 변수가 프라이빗 이름 '{1}'을(를) 가지고 있거나 사용 중입니다.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -6133,7 +6133,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Parameter '{0}' of public static method from exported class has or is using name '{1}' from private module '{2}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[내보낸 클래스에 있는 공용 정적 메서드의 '{0}' 매개 변수가 전용 모듈 '{2}'의 '{1}' 이름을 가지고 있거나 사용 중입니다.]]></Val>
+            <Val><![CDATA[내보낸 클래스에 있는 공용 정적 메서드의 '{0}' 매개 변수가 프라이빗 모듈 '{2}'의 '{1}' 이름을 가지고 있거나 사용 중입니다.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -6142,7 +6142,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Parameter '{0}' of public static method from exported class has or is using private name '{1}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[내보낸 클래스에 있는 공용 정적 메서드의 '{0}' 매개 변수가 전용 이름 '{1}'을(를) 가지고 있거나 사용 중입니다.]]></Val>
+            <Val><![CDATA[내보낸 클래스에 있는 공용 정적 메서드의 '{0}' 매개 변수가 프라이빗 이름 '{1}'을(를) 가지고 있거나 사용 중입니다.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -6169,7 +6169,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Parameter type of public setter '{0}' from exported class has or is using name '{1}' from private module '{2}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[내보낸 클래스에 있는 공용 setter '{0}'의 매개 변수 형식이 전용 모듈 '{2}'의 이름 '{1}'을(를) 가지고 있거나 사용 중입니다.]]></Val>
+            <Val><![CDATA[내보낸 클래스에 있는 공용 setter '{0}'의 매개 변수 형식이 프라이빗 모듈 '{2}'의 이름 '{1}'을(를) 가지고 있거나 사용 중입니다.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -6178,7 +6178,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Parameter type of public setter '{0}' from exported class has or is using private name '{1}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[내보낸 클래스에 있는 공용 setter '{0}'의 매개 변수 형식이 전용 이름 '{1}'을(를) 가지고 있거나 사용 중입니다.]]></Val>
+            <Val><![CDATA[내보낸 클래스에 있는 공용 setter '{0}'의 매개 변수 형식이 프라이빗 이름 '{1}'을(를) 가지고 있거나 사용 중입니다.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -6187,7 +6187,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Parameter type of public static setter '{0}' from exported class has or is using name '{1}' from private module '{2}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[내보낸 클래스에 있는 공용 정적 setter '{0}'의 매개 변수 형식이 전용 모듈 '{2}'의 이름 '{1}'을(를) 가지고 있거나 사용 중입니다.]]></Val>
+            <Val><![CDATA[내보낸 클래스에 있는 공용 정적 setter '{0}'의 매개 변수 형식이 프라이빗 모듈 '{2}'의 이름 '{1}'을(를) 가지고 있거나 사용 중입니다.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -6196,7 +6196,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Parameter type of public static setter '{0}' from exported class has or is using private name '{1}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[내보낸 클래스에 있는 공용 정적 setter '{0}'의 매개 변수 형식이 전용 이름 '{1}'을(를) 가지고 있거나 사용 중입니다.]]></Val>
+            <Val><![CDATA[내보낸 클래스에 있는 공용 정적 setter '{0}'의 매개 변수 형식이 프라이빗 이름 '{1}'을(를) 가지고 있거나 사용 중입니다.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -6577,7 +6577,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Property '{0}' of exported class expression may not be private or protected.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[내보낸 클래스 식의 속성 '{0}'이(가) 비공개가 아니거나 보호되지 않을 수 있습니다.]]></Val>
+            <Val><![CDATA[내보낸 클래스 식의 속성 '{0}'이(가) 프라이빗이 아니거나 보호되지 않을 수 있습니다.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -6586,7 +6586,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Property '{0}' of exported interface has or is using name '{1}' from private module '{2}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[내보낸 인터페이스의 '{0}' 속성이 전용 모듈 '{2}'의 '{1}' 이름을 가지고 있거나 사용 중입니다.]]></Val>
+            <Val><![CDATA[내보낸 인터페이스의 '{0}' 속성이 프라이빗 모듈 '{2}'의 '{1}' 이름을 가지고 있거나 사용 중입니다.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -6595,7 +6595,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Property '{0}' of exported interface has or is using private name '{1}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[내보낸 인터페이스의 '{0}' 속성이 전용 이름 '{1}'을(를) 가지고 있거나 사용 중입니다.]]></Val>
+            <Val><![CDATA[내보낸 인터페이스의 '{0}' 속성이 프라이빗 이름 '{1}'을(를) 가지고 있거나 사용 중입니다.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -6676,7 +6676,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Public method '{0}' of exported class has or is using name '{1}' from private module '{2}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[내보낸 클래스의 공용 메서드 '{0}'이(가) 전용 모듈 '{2}'의 '{1}' 이름을 가지고 있거나 사용 중입니다.]]></Val>
+            <Val><![CDATA[내보낸 클래스의 공용 메서드 '{0}'이(가) 프라이빗 모듈 '{2}'의 '{1}' 이름을 가지고 있거나 사용 중입니다.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -6685,7 +6685,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Public method '{0}' of exported class has or is using private name '{1}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[내보낸 클래스의 공용 메서드의 '{0}'이(가) 전용 이름 '{1}'을(를) 가지고 있거나 사용 중입니다.]]></Val>
+            <Val><![CDATA[내보낸 클래스의 공용 메서드의 '{0}'이(가) 프라이빗 이름 '{1}'을(를) 가지고 있거나 사용 중입니다.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -6703,7 +6703,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Public property '{0}' of exported class has or is using name '{1}' from private module '{2}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[내보낸 클래스의 공용 속성 '{0}'이(가) 전용 모듈 '{2}'의 '{1}' 이름을 가지고 있거나 사용 중입니다.]]></Val>
+            <Val><![CDATA[내보낸 클래스의 공용 속성 '{0}'이(가) 프라이빗 모듈 '{2}'의 '{1}' 이름을 가지고 있거나 사용 중입니다.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -6712,7 +6712,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Public property '{0}' of exported class has or is using private name '{1}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[내보낸 클래스의 공용 속성 '{0}'이(가) 전용 이름 '{1}'을(를) 가지고 있거나 사용 중입니다.]]></Val>
+            <Val><![CDATA[내보낸 클래스의 공용 속성 '{0}'이(가) 프라이빗 이름 '{1}'을(를) 가지고 있거나 사용 중입니다.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -6730,7 +6730,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Public static method '{0}' of exported class has or is using name '{1}' from private module '{2}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[내보낸 클래스에 있는 공용 정적 메서드 '{0}'이(가) 전용 모듈 '{2}'의 '{1}' 이름을 가지고 있거나 사용 중입니다.]]></Val>
+            <Val><![CDATA[내보낸 클래스에 있는 공용 정적 메서드 '{0}'이(가) 프라이빗 모듈 '{2}'의 '{1}' 이름을 가지고 있거나 사용 중입니다.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -6739,7 +6739,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Public static method '{0}' of exported class has or is using private name '{1}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[내보낸 클래스의 공용 정적 메서드 '{0}'이(가) 전용 이름 '{1}'을(를) 가지고 있거나 사용 중입니다.]]></Val>
+            <Val><![CDATA[내보낸 클래스의 공용 정적 메서드 '{0}'이(가) 프라이빗 이름 '{1}'을(를) 가지고 있거나 사용 중입니다.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -6757,7 +6757,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Public static property '{0}' of exported class has or is using name '{1}' from private module '{2}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[내보낸 클래스의 공용 정적 속성 '{0}'이(가) 전용 모듈 '{2}'의 '{1}' 이름을 가지고 있거나 사용 중입니다.]]></Val>
+            <Val><![CDATA[내보낸 클래스의 공용 정적 속성 '{0}'이(가) 프라이빗 모듈 '{2}'의 '{1}' 이름을 가지고 있거나 사용 중입니다.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -6766,7 +6766,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Public static property '{0}' of exported class has or is using private name '{1}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[내보낸 클래스의 공용 정적 속성 '{0}'이(가) 전용 이름 '{1}'을(를) 가지고 있거나 사용 중입니다.]]></Val>
+            <Val><![CDATA[내보낸 클래스의 공용 정적 속성 '{0}'이(가) 프라이빗 이름 '{1}'을(를) 가지고 있거나 사용 중입니다.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -7090,7 +7090,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Return type of call signature from exported interface has or is using name '{0}' from private module '{1}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[내보낸 인터페이스에 있는 호출 시그니처의 반환 형식이 전용 모듈 '{1}'의 '{0}' 이름을 가지고 있거나 사용 중입니다.]]></Val>
+            <Val><![CDATA[내보낸 인터페이스에 있는 호출 시그니처의 반환 형식이 프라이빗 모듈 '{1}'의 '{0}' 이름을 가지고 있거나 사용 중입니다.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -7099,7 +7099,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Return type of call signature from exported interface has or is using private name '{0}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[내보낸 인터페이스에 있는 호출 시그니처의 반환 형식이 전용 이름 '{0}'을(를) 가지고 있거나 사용 중입니다.]]></Val>
+            <Val><![CDATA[내보낸 인터페이스에 있는 호출 시그니처의 반환 형식이 프라이빗 이름 '{0}'을(를) 가지고 있거나 사용 중입니다.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -7108,7 +7108,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Return type of constructor signature from exported interface has or is using name '{0}' from private module '{1}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[내보낸 인터페이스에 있는 생성자 시그니처의 반환 형식이 전용 모듈 '{1}'의 '{0}' 이름을 가지고 있거나 사용 중입니다.]]></Val>
+            <Val><![CDATA[내보낸 인터페이스에 있는 생성자 시그니처의 반환 형식이 프라이빗 모듈 '{1}'의 '{0}' 이름을 가지고 있거나 사용 중입니다.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -7117,7 +7117,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Return type of constructor signature from exported interface has or is using private name '{0}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[내보낸 인터페이스에 있는 생성자 시그니처의 반환 형식이 전용 이름 '{0}'을(를) 가지고 있거나 사용 중입니다.]]></Val>
+            <Val><![CDATA[내보낸 인터페이스에 있는 생성자 시그니처의 반환 형식이 프라이빗 이름 '{0}'을(를) 가지고 있거나 사용 중입니다.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -7147,7 +7147,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Return type of exported function has or is using name '{0}' from private module '{1}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[내보낸 함수의 반환 형식이 전용 모듈 '{1}'의 '{0}' 이름을 가지고 있거나 사용 중입니다.]]></Val>
+            <Val><![CDATA[내보낸 함수의 반환 형식이 프라이빗 모듈 '{1}'의 '{0}' 이름을 가지고 있거나 사용 중입니다.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -7156,7 +7156,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Return type of exported function has or is using private name '{0}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[내보낸 함수의 반환 형식이 전용 이름 '{0}'을(를) 가지고 있거나 사용 중입니다.]]></Val>
+            <Val><![CDATA[내보낸 함수의 반환 형식이 프라이빗 이름 '{0}'을(를) 가지고 있거나 사용 중입니다.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -7165,7 +7165,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Return type of index signature from exported interface has or is using name '{0}' from private module '{1}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[내보낸 인터페이스에 있는 인덱스 시그니처의 반환 형식이 전용 모듈 '{1}'의 '{0}' 이름을 가지고 있거나 사용 중입니다.]]></Val>
+            <Val><![CDATA[내보낸 인터페이스에 있는 인덱스 시그니처의 반환 형식이 프라이빗 모듈 '{1}'의 '{0}' 이름을 가지고 있거나 사용 중입니다.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -7174,7 +7174,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Return type of index signature from exported interface has or is using private name '{0}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[내보낸 인터페이스에 있는 인덱스 시그니처의 반환 형식이 전용 이름 '{0}'을(를) 가지고 있거나 사용 중입니다.]]></Val>
+            <Val><![CDATA[내보낸 인터페이스에 있는 인덱스 시그니처의 반환 형식이 프라이빗 이름 '{0}'을(를) 가지고 있거나 사용 중입니다.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -7183,7 +7183,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Return type of method from exported interface has or is using name '{0}' from private module '{1}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[내보낸 인터페이스에 있는 메서드의 반환 형식이 전용 모듈 '{1}'의 '{0}' 이름을 가지고 있거나 사용 중입니다.]]></Val>
+            <Val><![CDATA[내보낸 인터페이스에 있는 메서드의 반환 형식이 프라이빗 모듈 '{1}'의 '{0}' 이름을 가지고 있거나 사용 중입니다.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -7192,7 +7192,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Return type of method from exported interface has or is using private name '{0}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[내보낸 인터페이스에 있는 메서드의 반환 형식이 전용 이름 '{0}'을(를) 가지고 있거나 사용 중입니다.]]></Val>
+            <Val><![CDATA[내보낸 인터페이스에 있는 메서드의 반환 형식이 프라이빗 이름 '{0}'을(를) 가지고 있거나 사용 중입니다.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -7210,7 +7210,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Return type of public getter '{0}' from exported class has or is using name '{1}' from private module '{2}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[내보낸 클래스에 있는 공용 getter '{0}'의 반환 형식이 전용 모듈 '{2}'의 이름 '{1}'을(를) 가지고 있거나 사용 중입니다.]]></Val>
+            <Val><![CDATA[내보낸 클래스에 있는 공용 getter '{0}'의 반환 형식이 프라이빗 모듈 '{2}'의 이름 '{1}'을(를) 가지고 있거나 사용 중입니다.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -7219,7 +7219,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Return type of public getter '{0}' from exported class has or is using private name '{1}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[내보낸 클래스에 있는 공용 getter '{0}'의 반환 형식이 전용 이름 '{1}'을(를) 가지고 있거나 사용 중입니다.]]></Val>
+            <Val><![CDATA[내보낸 클래스에 있는 공용 getter '{0}'의 반환 형식이 프라이빗 이름 '{1}'을(를) 가지고 있거나 사용 중입니다.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -7237,7 +7237,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Return type of public method from exported class has or is using name '{0}' from private module '{1}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[내보낸 클래스에 있는 공용 메서드의 반환 형식이 전용 모듈 '{1}'의 '{0}' 이름을 가지고 있거나 사용 중입니다.]]></Val>
+            <Val><![CDATA[내보낸 클래스에 있는 공용 메서드의 반환 형식이 프라이빗 모듈 '{1}'의 '{0}' 이름을 가지고 있거나 사용 중입니다.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -7246,7 +7246,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Return type of public method from exported class has or is using private name '{0}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[내보낸 클래스에 있는 공용 메서드의 반환 형식이 전용 이름 '{0}'을(를) 가지고 있거나 사용 중입니다.]]></Val>
+            <Val><![CDATA[내보낸 클래스에 있는 공용 메서드의 반환 형식이 프라이빗 이름 '{0}'을(를) 가지고 있거나 사용 중입니다.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -7264,7 +7264,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Return type of public static getter '{0}' from exported class has or is using name '{1}' from private module '{2}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[내보낸 클래스에 있는 공용 정적 getter '{0}'의 반환 형식이 전용 모듈 '{2}'의 이름 '{1}'을(를) 가지고 있거나 사용 중입니다.]]></Val>
+            <Val><![CDATA[내보낸 클래스에 있는 공용 정적 getter '{0}'의 반환 형식이 프라이빗 모듈 '{2}'의 이름 '{1}'을(를) 가지고 있거나 사용 중입니다.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -7273,7 +7273,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Return type of public static getter '{0}' from exported class has or is using private name '{1}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[내보낸 클래스에 있는 공용 정적 getter '{0}'의 반환 형식이 전용 이름 '{1}'을(를) 가지고 있거나 사용 중입니다.]]></Val>
+            <Val><![CDATA[내보낸 클래스에 있는 공용 정적 getter '{0}'의 반환 형식이 프라이빗 이름 '{1}'을(를) 가지고 있거나 사용 중입니다.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -7291,7 +7291,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Return type of public static method from exported class has or is using name '{0}' from private module '{1}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[내보낸 클래스에 있는 공용 정적 메서드의 반환 형식이 전용 모듈 '{1}'의 '{0}' 이름을 가지고 있거나 사용 중입니다.]]></Val>
+            <Val><![CDATA[내보낸 클래스에 있는 공용 정적 메서드의 반환 형식이 프라이빗 모듈 '{1}'의 '{0}' 이름을 가지고 있거나 사용 중입니다.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -7300,7 +7300,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Return type of public static method from exported class has or is using private name '{0}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[내보낸 클래스에 있는 공용 정적 메서드의 반환 형식이 전용 이름 '{0}'을(를) 가지고 있거나 사용 중입니다.]]></Val>
+            <Val><![CDATA[내보낸 클래스에 있는 공용 정적 메서드의 반환 형식이 프라이빗 이름 '{0}'을(를) 가지고 있거나 사용 중입니다.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -8692,7 +8692,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Type parameter '{0}' of call signature from exported interface has or is using private name '{1}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[내보낸 인터페이스에 있는 호출 시그니처의 형식 매개 변수 '{0}'이(가) 전용 이름 '{1}'을(를) 가지고 있거나 사용 중입니다.]]></Val>
+            <Val><![CDATA[내보낸 인터페이스에 있는 호출 시그니처의 형식 매개 변수 '{0}'이(가) 프라이빗 이름 '{1}'을(를) 가지고 있거나 사용 중입니다.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -8701,7 +8701,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Type parameter '{0}' of constructor signature from exported interface has or is using private name '{1}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[내보낸 인터페이스에 있는 생성자 시그니처의 형식 매개 변수 '{0}'이(가) 전용 이름 '{1}'을(를) 가지고 있거나 사용 중입니다.]]></Val>
+            <Val><![CDATA[내보낸 인터페이스에 있는 생성자 시그니처의 형식 매개 변수 '{0}'이(가) 프라이빗 이름 '{1}'을(를) 가지고 있거나 사용 중입니다.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -8710,7 +8710,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Type parameter '{0}' of exported class has or is using private name '{1}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[내보낸 클래스의 형식 매개 변수 '{0}'이(가) 전용 이름 '{1}'을(를) 가지고 있거나 사용 중입니다.]]></Val>
+            <Val><![CDATA[내보낸 클래스의 형식 매개 변수 '{0}'이(가) 프라이빗 이름 '{1}'을(를) 가지고 있거나 사용 중입니다.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -8719,7 +8719,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Type parameter '{0}' of exported function has or is using private name '{1}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[내보낸 함수의 형식 매개 변수 '{0}'이(가) 전용 이름 '{1}'을(를) 가지고 있거나 사용 중입니다.]]></Val>
+            <Val><![CDATA[내보낸 함수의 형식 매개 변수 '{0}'이(가) 프라이빗 이름 '{1}'을(를) 가지고 있거나 사용 중입니다.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -8728,7 +8728,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Type parameter '{0}' of exported interface has or is using private name '{1}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[내보낸 인터페이스의 형식 매개 변수 '{0}'이(가) 전용 이름 '{1}'을(를) 가지고 있거나 사용 중입니다.]]></Val>
+            <Val><![CDATA[내보낸 인터페이스의 형식 매개 변수 '{0}'이(가) 프라이빗 이름 '{1}'을(를) 가지고 있거나 사용 중입니다.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -8737,7 +8737,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Type parameter '{0}' of exported type alias has or is using private name '{1}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[내보낸 형식 별칭의 형식 매개 변수 '{0}'이(가) 전용 이름 '{1}'을(를) 가지고 있거나 사용 중입니다.]]></Val>
+            <Val><![CDATA[내보낸 형식 별칭의 형식 매개 변수 '{0}'이(가) 프라이빗 이름 '{1}'을(를) 가지고 있거나 사용 중입니다.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -8746,7 +8746,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Type parameter '{0}' of method from exported interface has or is using private name '{1}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[내보낸 인터페이스에 있는 메서드의 형식 매개 변수 '{0}'이(가) 전용 이름 '{1}'을(를) 가지고 있거나 사용 중입니다.]]></Val>
+            <Val><![CDATA[내보낸 인터페이스에 있는 메서드의 형식 매개 변수 '{0}'이(가) 프라이빗 이름 '{1}'을(를) 가지고 있거나 사용 중입니다.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -8755,7 +8755,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Type parameter '{0}' of public method from exported class has or is using private name '{1}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[내보낸 클래스에 있는 공용 메서드의 형식 매개 변수 '{0}'이(가) 전용 이름 '{1}'을(를) 가지고 있거나 사용 중입니다.]]></Val>
+            <Val><![CDATA[내보낸 클래스에 있는 공용 메서드의 형식 매개 변수 '{0}'이(가) 프라이빗 이름 '{1}'을(를) 가지고 있거나 사용 중입니다.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -8764,7 +8764,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Type parameter '{0}' of public static method from exported class has or is using private name '{1}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[내보낸 클래스에 있는 공용 정적 메서드의 형식 매개 변수 '{0}'이(가) 전용 이름 '{1}'을(를) 가지고 있거나 사용 중입니다.]]></Val>
+            <Val><![CDATA[내보낸 클래스에 있는 공용 정적 메서드의 형식 매개 변수 '{0}'이(가) 프라이빗 이름 '{1}'을(를) 가지고 있거나 사용 중입니다.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -8839,7 +8839,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Types have separate declarations of a private property '{0}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[형식에 별도의 전용 속성 '{0}' 선언이 있습니다.]]></Val>
+            <Val><![CDATA[형식에 별도의 프라이빗 속성 '{0}' 선언이 있습니다.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -9676,7 +9676,7 @@
         <Str Cat="Text">
           <Val><![CDATA['extends' clause of exported class '{0}' has or is using private name '{1}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[내보낸 클래스 '{0}'의 Extends 절이 전용 이름 '{1}'을(를) 가지고 있거나 사용 중입니다.]]></Val>
+            <Val><![CDATA[내보낸 클래스 '{0}'의 Extends 절이 프라이빗 이름 '{1}'을(를) 가지고 있거나 사용 중입니다.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -9685,7 +9685,7 @@
         <Str Cat="Text">
           <Val><![CDATA['extends' clause of exported interface '{0}' has or is using private name '{1}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[내보낸 인터페이스 '{0}'의 Extends 절이 전용 이름 '{1}'을(를) 가지고 있거나 사용 중입니다.]]></Val>
+            <Val><![CDATA[내보낸 인터페이스 '{0}'의 Extends 절이 프라이빗 이름 '{1}'을(를) 가지고 있거나 사용 중입니다.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />

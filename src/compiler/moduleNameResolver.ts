@@ -665,6 +665,7 @@ namespace ts {
                 }
             }
 
+            perfLogger.logStartResolveModule(moduleName /* , containingFile, ModuleResolutionKind[moduleResolution]*/);
             switch (moduleResolution) {
                 case ModuleResolutionKind.NodeJs:
                     result = nodeModuleNameResolver(moduleName, containingFile, compilerOptions, host, cache, redirectedReference);
@@ -675,6 +676,8 @@ namespace ts {
                 default:
                     return Debug.fail(`Unexpected moduleResolution: ${moduleResolution}`);
             }
+            if (result && result.resolvedModule) perfLogger.logInfoEvent(`Module "${moduleName}" resolved to "${result.resolvedModule.resolvedFileName}"`);
+            perfLogger.logStopResolveModule((result && result.resolvedModule) ? "" + result.resolvedModule.resolvedFileName : "null");
 
             if (perFolderCache) {
                 perFolderCache.set(moduleName, result);
@@ -1487,8 +1490,8 @@ namespace ts {
     }
 
     /**
-     * LSHost may load a module from a global cache of typings.
-     * This is the minumum code needed to expose that functionality; the rest is in LSHost.
+     * A host may load a module from a global cache of typings.
+     * This is the minumum code needed to expose that functionality; the rest is in the host.
      */
     /* @internal */
     export function loadModuleFromGlobalCache(moduleName: string, projectName: string | undefined, compilerOptions: CompilerOptions, host: ModuleResolutionHost, globalCache: string): ResolvedModuleWithFailedLookupLocations {

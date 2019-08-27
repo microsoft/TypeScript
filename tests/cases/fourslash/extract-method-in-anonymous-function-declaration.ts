@@ -1,7 +1,7 @@
 /// <reference path='fourslash.ts' />
 
 ////export default function() {
-////    /*start*/0/*end*/
+////    /*start*/0/*end*/;
 ////}
 
 goTo.select('start', 'end')

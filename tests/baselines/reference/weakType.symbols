@@ -144,20 +144,20 @@ type Weak = {
 >b : Symbol(b, Decl(weakType.ts, 52, 18))
     }
 }
-declare let unknown: {
->unknown : Symbol(unknown, Decl(weakType.ts, 56, 11))
+declare let propertiesWrong: {
+>propertiesWrong : Symbol(propertiesWrong, Decl(weakType.ts, 56, 11))
 
     properties: {
->properties : Symbol(properties, Decl(weakType.ts, 56, 22))
+>properties : Symbol(properties, Decl(weakType.ts, 56, 30))
 
         wrong: string
 >wrong : Symbol(wrong, Decl(weakType.ts, 57, 17))
     }
 }
-let weak: Weak & Spoiler = unknown
+let weak: Weak & Spoiler = propertiesWrong
 >weak : Symbol(weak, Decl(weakType.ts, 61, 3))
 >Weak : Symbol(Weak, Decl(weakType.ts, 49, 32))
 >Spoiler : Symbol(Spoiler, Decl(weakType.ts, 47, 18))
->unknown : Symbol(unknown, Decl(weakType.ts, 56, 11))
+>propertiesWrong : Symbol(propertiesWrong, Decl(weakType.ts, 56, 11))
 
 

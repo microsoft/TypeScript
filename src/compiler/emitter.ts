@@ -249,14 +249,16 @@ namespace ts {
         };
 
         function emitSourceFileOrBundle({ jsFilePath, sourceMapFilePath, declarationFilePath, declarationMapPath, buildInfoPath }: EmitFileNames, sourceFileOrBundle: SourceFile | Bundle | undefined) {
+            let buildInfoDirectory: string | undefined;
             if (buildInfoPath && sourceFileOrBundle && isBundle(sourceFileOrBundle)) {
+                buildInfoDirectory = getDirectoryPath(getNormalizedAbsolutePath(buildInfoPath, host.getCurrentDirectory()));
                 bundleBuildInfo = {
-                    commonSourceDirectory: host.getCommonSourceDirectory(),
-                    sourceFiles: sourceFileOrBundle.sourceFiles.map(file => file.fileName)
+                    commonSourceDirectory: relativeToBuildInfo(host.getCommonSourceDirectory()),
+                    sourceFiles: sourceFileOrBundle.sourceFiles.map(file => relativeToBuildInfo(getNormalizedAbsolutePath(file.fileName, host.getCurrentDirectory())))
                 };
             }
-            emitJsFileOrBundle(sourceFileOrBundle, jsFilePath, sourceMapFilePath);
-            emitDeclarationFileOrBundle(sourceFileOrBundle, declarationFilePath, declarationMapPath);
+            emitJsFileOrBundle(sourceFileOrBundle, jsFilePath, sourceMapFilePath, relativeToBuildInfo);
+            emitDeclarationFileOrBundle(sourceFileOrBundle, declarationFilePath, declarationMapPath, relativeToBuildInfo);
             emitBuildInfo(bundleBuildInfo, buildInfoPath);
 
             if (!emitSkipped && emittedFilesList) {
@@ -278,13 +280,16 @@ namespace ts {
                     emittedFilesList.push(declarationMapPath);
                 }
             }
+
+            function relativeToBuildInfo(path: string) {
+                return ensurePathIsNonModuleName(getRelativePathFromDirectory(buildInfoDirectory!, path, host.getCanonicalFileName));
+            }
         }
 
         function emitBuildInfo(bundle: BundleBuildInfo | undefined, buildInfoPath: string | undefined) {
             // Write build information if applicable
             if (!buildInfoPath || targetSourceFile || emitSkipped) return;
             const program = host.getProgramBuildInfo();
-            if (!bundle && !program) return;
             if (host.isEmitBlocked(buildInfoPath) || compilerOptions.noEmit) {
                 emitSkipped = true;
                 return;
@@ -292,7 +297,11 @@ namespace ts {
             writeFile(host, emitterDiagnostics, buildInfoPath, getBuildInfoText({ bundle, program, version }), /*writeByteOrderMark*/ false);
         }
 
-        function emitJsFileOrBundle(sourceFileOrBundle: SourceFile | Bundle | undefined, jsFilePath: string | undefined, sourceMapFilePath: string | undefined) {
+        function emitJsFileOrBundle(
+            sourceFileOrBundle: SourceFile | Bundle | undefined,
+            jsFilePath: string | undefined,
+            sourceMapFilePath: string | undefined,
+            relativeToBuildInfo: (path: string) => string) {
             if (!sourceFileOrBundle || emitOnlyDtsFiles || !jsFilePath) {
                 return;
             }
@@ -315,7 +324,8 @@ namespace ts {
                 inlineSourceMap: compilerOptions.inlineSourceMap,
                 inlineSources: compilerOptions.inlineSources,
                 extendedDiagnostics: compilerOptions.extendedDiagnostics,
-                writeBundleFileInfo: !!bundleBuildInfo
+                writeBundleFileInfo: !!bundleBuildInfo,
+                relativeToBuildInfo
             };
 
             // Create a printer to print the nodes
@@ -336,7 +346,11 @@ namespace ts {
             if (bundleBuildInfo) bundleBuildInfo.js = printer.bundleFileInfo;
         }
 
-        function emitDeclarationFileOrBundle(sourceFileOrBundle: SourceFile | Bundle | undefined, declarationFilePath: string | undefined, declarationMapPath: string | undefined) {
+        function emitDeclarationFileOrBundle(
+            sourceFileOrBundle: SourceFile | Bundle | undefined,
+            declarationFilePath: string | undefined,
+            declarationMapPath: string | undefined,
+            relativeToBuildInfo: (path: string) => string) {
             if (!sourceFileOrBundle || !(declarationFilePath && !isInJSFile(sourceFileOrBundle))) {
                 return;
             }
@@ -367,7 +381,8 @@ namespace ts {
                 extendedDiagnostics: compilerOptions.extendedDiagnostics,
                 onlyPrintJsDocStyle: true,
                 writeBundleFileInfo: !!bundleBuildInfo,
-                recordInternalSection: !!bundleBuildInfo
+                recordInternalSection: !!bundleBuildInfo,
+                relativeToBuildInfo
             };
 
             const declarationPrinter = createPrinter(printerOptions, {
@@ -396,7 +411,7 @@ namespace ts {
                     }
                 );
                 if (emitOnlyDtsFiles && declarationTransform.transformed[0].kind === SyntaxKind.SourceFile) {
-                    const sourceFile = declarationTransform.transformed[0] as SourceFile;
+                    const sourceFile = declarationTransform.transformed[0];
                     exportedModulesFromDeclarationEmit = sourceFile.exportedModulesFromDeclarationEmit;
                 }
             }
@@ -614,10 +629,14 @@ namespace ts {
         getNewLine(): string;
     }
 
-    function createSourceFilesFromBundleBuildInfo(bundle: BundleBuildInfo): ReadonlyArray<SourceFile> {
+    function createSourceFilesFromBundleBuildInfo(bundle: BundleBuildInfo, buildInfoDirectory: string, host: EmitUsingBuildInfoHost): ReadonlyArray<SourceFile> {
         const sourceFiles = bundle.sourceFiles.map(fileName => {
             const sourceFile = createNode(SyntaxKind.SourceFile, 0, 0) as SourceFile;
-            sourceFile.fileName = fileName;
+            sourceFile.fileName = getRelativePathFromDirectory(
+                host.getCurrentDirectory(),
+                getNormalizedAbsolutePath(fileName, buildInfoDirectory),
+                !host.useCaseSensitiveFileNames()
+            );
             sourceFile.text = "";
             sourceFile.statements = createNodeArray();
             return sourceFile;
@@ -638,7 +657,12 @@ namespace ts {
     }
 
     /*@internal*/
-    export function emitUsingBuildInfo(config: ParsedCommandLine, host: EmitUsingBuildInfoHost, getCommandLine: (ref: ProjectReference) => ParsedCommandLine | undefined): EmitUsingBuildInfoResult {
+    export function emitUsingBuildInfo(
+        config: ParsedCommandLine,
+        host: EmitUsingBuildInfoHost,
+        getCommandLine: (ref: ProjectReference) => ParsedCommandLine | undefined,
+        customTransformers?: CustomTransformers
+    ): EmitUsingBuildInfoResult {
         const { buildInfoPath, jsFilePath, sourceMapFilePath, declarationFilePath, declarationMapPath } = getOutputPathsForBundle(config.options, /*forceDtsPaths*/ false);
         const buildInfoText = host.readFile(Debug.assertDefined(buildInfoPath));
         if (!buildInfoText) return buildInfoPath!;
@@ -656,6 +680,7 @@ namespace ts {
 
         const buildInfo = getBuildInfo(buildInfoText);
         if (!buildInfo.bundle || !buildInfo.bundle.js || (declarationText && !buildInfo.bundle.dts)) return buildInfoPath!;
+        const buildInfoDirectory = getDirectoryPath(getNormalizedAbsolutePath(buildInfoPath!, host.getCurrentDirectory()));
         const ownPrependInput = createInputFiles(
             jsFileText,
             declarationText!,
@@ -671,11 +696,11 @@ namespace ts {
         );
         const outputFiles: OutputFile[] = [];
         const prependNodes = createPrependNodes(config.projectReferences, getCommandLine, f => host.readFile(f));
-        const sourceFilesForJsEmit = createSourceFilesFromBundleBuildInfo(buildInfo.bundle);
+        const sourceFilesForJsEmit = createSourceFilesFromBundleBuildInfo(buildInfo.bundle, buildInfoDirectory, host);
         const emitHost: EmitHost = {
             getPrependNodes: memoize(() => [...prependNodes, ownPrependInput]),
             getCanonicalFileName: host.getCanonicalFileName,
-            getCommonSourceDirectory: () => buildInfo.bundle!.commonSourceDirectory,
+            getCommonSourceDirectory: () => getNormalizedAbsolutePath(buildInfo.bundle!.commonSourceDirectory, buildInfoDirectory),
             getCompilerOptions: () => config.options,
             getCurrentDirectory: () => host.getCurrentDirectory(),
             getNewLine: () => host.getNewLine(),
@@ -721,9 +746,16 @@ namespace ts {
             fileExists: f => host.fileExists(f),
             directoryExists: host.directoryExists && (f => host.directoryExists!(f)),
             useCaseSensitiveFileNames: () => host.useCaseSensitiveFileNames(),
-            getProgramBuildInfo: returnUndefined
+            getProgramBuildInfo: returnUndefined,
+            getSourceFileFromReference: returnUndefined,
+            redirectTargetsMap: createMultiMap()
         };
-        emitFiles(notImplementedResolver, emitHost, /*targetSourceFile*/ undefined, getTransformers(config.options), /*emitOnlyDtsFiles*/ false);
+        emitFiles(
+            notImplementedResolver,
+            emitHost,
+            /*targetSourceFile*/ undefined,
+            getTransformers(config.options, customTransformers)
+        );
         return outputFiles;
     }
 
@@ -765,6 +797,7 @@ namespace ts {
         let write = writeBase;
         let isOwnFileEmit: boolean;
         const bundleFileInfo = printerOptions.writeBundleFileInfo ? { sections: [] } as BundleFileInfo : undefined;
+        const relativeToBuildInfo = bundleFileInfo ? Debug.assertDefined(printerOptions.relativeToBuildInfo) : undefined;
         const recordInternalSection = printerOptions.recordInternalSection;
         let sourceFileTextPos = 0;
         let sourceFileTextKind: BundleFileTextLikeKind = BundleFileSectionKind.Text;
@@ -933,7 +966,13 @@ namespace ts {
                     if (prepend.oldFileOfCurrentEmit) bundleFileInfo.sections.push(...newSections);
                     else {
                         newSections.forEach(section => Debug.assert(isBundleFileTextLike(section)));
-                        bundleFileInfo.sections.push({ pos, end: writer.getTextPos(), kind: BundleFileSectionKind.Prepend, data: (prepend as UnparsedSource).fileName, texts: newSections as BundleFileTextLike[] });
+                        bundleFileInfo.sections.push({
+                            pos,
+                            end: writer.getTextPos(),
+                            kind: BundleFileSectionKind.Prepend,
+                            data: relativeToBuildInfo!((prepend as UnparsedSource).fileName),
+                            texts: newSections as BundleFileTextLike[]
+                        });
                     }
                 }
             }
@@ -1567,7 +1606,7 @@ namespace ts {
             for (let i = 0; i < numNodes; i++) {
                 const currentNode = bundle ? i < numPrepends ? bundle.prepends[i] : bundle.sourceFiles[i - numPrepends] : node;
                 const sourceFile = isSourceFile(currentNode) ? currentNode : isUnparsedSource(currentNode) ? undefined : currentSourceFile!;
-                const shouldSkip = printerOptions.noEmitHelpers || (!!sourceFile && getExternalHelpersModuleName(sourceFile) !== undefined);
+                const shouldSkip = printerOptions.noEmitHelpers || (!!sourceFile && hasRecordedExternalHelpers(sourceFile));
                 const shouldBundle = (isSourceFile(currentNode) || isUnparsedSource(currentNode)) && !isOwnFileEmit;
                 const helpers = isUnparsedSource(currentNode) ? currentNode.helpers : getSortedEmitHelpers(currentNode);
                 if (helpers) {

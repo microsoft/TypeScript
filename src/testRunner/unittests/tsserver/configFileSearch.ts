@@ -132,11 +132,7 @@ namespace ts.projectSystem {
                 const project = projectService.inferredProjects[0];
                 assert.isDefined(project);
 
-                const filesToWatch = [libFile.path];
-                forEachAncestorDirectory(dirOfFile, ancestor => {
-                    filesToWatch.push(combinePaths(ancestor, "tsconfig.json"));
-                    filesToWatch.push(combinePaths(ancestor, "jsconfig.json"));
-                });
+                const filesToWatch = [libFile.path, ...getConfigFilesToWatch(dirOfFile)];
 
                 checkProjectActualFiles(project, [file.path, libFile.path]);
                 checkWatchedFiles(host, filesToWatch);
@@ -168,6 +164,26 @@ namespace ts.projectSystem {
                 host.reloadFS(files);
                 host.runQueuedTimeoutCallbacks();
                 verifyInferredProject(host, projectService);
+            });
+        });
+
+        describe("should not search and watch config files from directories that cannot be watched", () => {
+            const root = "/root/teams/VSCode68/Shared Documents/General/jt-ts-test-workspace";
+            function verifyConfigFileWatch(projectRootPath: string | undefined) {
+                const path = `${root}/x.js`;
+                const host = createServerHost([libFile, { path, content: "const x = 10" }], { useCaseSensitiveFileNames: true });
+                const service = createProjectService(host);
+                service.openClientFile(path, /*fileContent*/ undefined, /*scriptKind*/ undefined, projectRootPath);
+                checkNumberOfProjects(service, { inferredProjects: 1 });
+                checkProjectActualFiles(service.inferredProjects[0], [path, libFile.path]);
+                checkWatchedFilesDetailed(host, [libFile.path, ...getConfigFilesToWatch(root)], 1);
+            }
+
+            it("when projectRootPath is not present", () => {
+                verifyConfigFileWatch(/*projectRootPath*/ undefined);
+            });
+            it("when projectRootPath is present but file is not from project root", () => {
+                verifyConfigFileWatch("/a/b");
             });
         });
     });

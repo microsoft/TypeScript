@@ -1,0 +1,8 @@
+tests/cases/compiler/a.js(1,19): error TS8004: 'type parameter declarations' can only be used in a .ts file.
+
+
+==== tests/cases/compiler/a.js (1 errors) ====
+    const Bar = class<T> {};
+                      ~
+!!! error TS8004: 'type parameter declarations' can only be used in a .ts file.
+    

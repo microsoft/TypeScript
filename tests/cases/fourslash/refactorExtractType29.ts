@@ -1,6 +1,6 @@
 /// <reference path='fourslash.ts' />
 
-//// type Item<T> = T extends (infer P)[] ? /*a*/P/*b*/ : never
+//// type Item<T> = T extends (infer P)[] ? /*a*/P/*b*/ : never;
 
 goTo.select("a", "b");
 edit.applyRefactor({
@@ -9,5 +9,5 @@ edit.applyRefactor({
     actionDescription: "Extract to type alias",
     newContent: `type /*RENAME*/NewType<P> = P;
 
-type Item<T> = T extends (infer P)[] ? NewType<P> : never`,
+type Item<T> = T extends (infer P)[] ? NewType<P> : never;`,
 });

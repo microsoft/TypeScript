@@ -661,8 +661,9 @@ namespace Harness.LanguageService {
         }
 
         editScript(fileName: string, start: number, end: number, newText: string) {
+            const changeArgs = this.client.createChangeFileRequestArgs(fileName, start, end, newText);
             super.editScript(fileName, start, end, newText);
-            this.client.changeFile(fileName, start, end, newText);
+            this.client.changeFile(fileName, changeArgs);
         }
     }
 
@@ -719,8 +720,8 @@ namespace Harness.LanguageService {
             return this.host.getCurrentDirectory();
         }
 
-        getDirectories(): string[] {
-            return [];
+        getDirectories(path: string): string[] {
+            return this.host.getDirectories(path);
         }
 
         getEnvironmentVariable(name: string): string {
@@ -890,9 +891,16 @@ namespace Harness.LanguageService {
         }
     }
 
+    class FourslashSession extends ts.server.Session {
+        getText(fileName: string) {
+            return ts.getSnapshotText(this.projectService.getDefaultProjectForFile(ts.server.toNormalizedPath(fileName), /*ensureProject*/ true)!.getScriptSnapshot(fileName)!);
+        }
+    }
+
     export class ServerLanguageServiceAdapter implements LanguageServiceAdapter {
         private host: SessionClientHost;
         private client: ts.server.SessionClient;
+        private server: FourslashSession;
         constructor(cancellationToken?: ts.HostCancellationToken, options?: ts.CompilerOptions) {
             // This is the main host that tests use to direct tests
             const clientHost = new SessionClientHost(cancellationToken, options);
@@ -912,11 +920,12 @@ namespace Harness.LanguageService {
                 logger: serverHost,
                 canUseEvents: true
             };
-            const server = new ts.server.Session(opts);
+            this.server = new FourslashSession(opts);
+
 
             // Fake the connection between the client and the server
             serverHost.writeMessage = client.onMessage.bind(client);
-            clientHost.writeMessage = server.onMessage.bind(server);
+            clientHost.writeMessage = this.server.onMessage.bind(this.server);
 
             // Wire the client to the host to get notifications when a file is open
             // or edited.
@@ -930,5 +939,20 @@ namespace Harness.LanguageService {
         getLanguageService(): ts.LanguageService { return this.client; }
         getClassifier(): ts.Classifier { throw new Error("getClassifier is not available using the server interface."); }
         getPreProcessedFileInfo(): ts.PreProcessedFileInfo { throw new Error("getPreProcessedFileInfo is not available using the server interface."); }
+        assertTextConsistent(fileName: string) {
+            const serverText = this.server.getText(fileName);
+            const clientText = this.host.readFile(fileName);
+            ts.Debug.assert(serverText === clientText, [
+                "Server and client text are inconsistent.",
+                "",
+                "\x1b[1mServer\x1b[0m\x1b[31m:",
+                serverText,
+                "",
+                "\x1b[1mClient\x1b[0m\x1b[31m:",
+                clientText,
+                "",
+                "This probably means something is wrong with the fourslash infrastructure, not with the test."
+            ].join(ts.sys.newLine));
+        }
     }
 }

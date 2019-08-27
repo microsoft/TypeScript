@@ -8,8 +8,8 @@ type T00 = unknown & null;  // null
 type T01 = unknown & undefined;  // undefined
 >T01 : undefined
 
-type T02 = unknown & null & undefined;  // null & undefined (which becomes never in union)
->T02 : T02
+type T02 = unknown & null & undefined;  // never
+>T02 : never
 >null : null
 
 type T03 = unknown & string;  // string
@@ -404,8 +404,8 @@ function f26(x: {}, y: unknown, z: any) {
 >x : {}
 
     let o2 = { a: 42, ...x, ...y };  // unknown
->o2 : unknown
->{ a: 42, ...x, ...y } : unknown
+>o2 : any
+>{ a: 42, ...x, ...y } : any
 >a : number
 >42 : 42
 >x : {}
@@ -418,6 +418,13 @@ function f26(x: {}, y: unknown, z: any) {
 >42 : 42
 >x : {}
 >y : unknown
+>z : any
+
+    let o4 = { a: 42, ...z }; // any
+>o4 : any
+>{ a: 42, ...z } : any
+>a : number
+>42 : 42
 >z : any
 }
 

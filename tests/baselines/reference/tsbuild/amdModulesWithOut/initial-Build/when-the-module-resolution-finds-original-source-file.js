@@ -385,10 +385,10 @@ sourceFile:file4.ts
 //// [/src/app/module.tsbuildinfo]
 {
   "bundle": {
-    "commonSourceDirectory": "/src/app/",
+    "commonSourceDirectory": "./",
     "sourceFiles": [
-      "/src/app/file3.ts",
-      "/src/app/file4.ts"
+      "./file3.ts",
+      "./file4.ts"
     ],
     "js": {
       "sections": [
@@ -396,7 +396,7 @@ sourceFile:file4.ts
           "pos": 0,
           "end": 417,
           "kind": "prepend",
-          "data": "/src/module.js",
+          "data": "../module.js",
           "texts": [
             {
               "pos": 0,
@@ -418,7 +418,7 @@ sourceFile:file4.ts
           "pos": 0,
           "end": 179,
           "kind": "prepend",
-          "data": "/src/module.d.ts",
+          "data": "../module.d.ts",
           "texts": [
             {
               "pos": 0,
@@ -442,7 +442,7 @@ sourceFile:file4.ts
 ======================================================================
 File:: /src/app/module.js
 ----------------------------------------------------------------------
-prepend: (0-417):: /src/module.js texts:: 1
+prepend: (0-417):: ../module.js texts:: 1
 >>--------------------------------------------------------------------
 text: (0-417)
 var myGlob = 20;
@@ -471,7 +471,7 @@ var myVar = 30;
 ======================================================================
 File:: /src/app/module.d.ts
 ----------------------------------------------------------------------
-prepend: (0-179):: /src/module.d.ts texts:: 1
+prepend: (0-179):: ../module.d.ts texts:: 1
 >>--------------------------------------------------------------------
 text: (0-179)
 declare const myGlob = 20;
@@ -542,12 +542,12 @@ var globalConst = 10;
 //// [/src/module.tsbuildinfo]
 {
   "bundle": {
-    "commonSourceDirectory": "/src/",
+    "commonSourceDirectory": "./",
     "sourceFiles": [
-      "/src/lib/file0.ts",
-      "/src/lib/file1.ts",
-      "/src/lib/file2.ts",
-      "/src/lib/global.ts"
+      "./lib/file0.ts",
+      "./lib/file1.ts",
+      "./lib/file2.ts",
+      "./lib/global.ts"
     ],
     "js": {
       "sections": [

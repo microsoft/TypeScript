@@ -1,6 +1,6 @@
 /// <reference path="fourslash.ts" />
 
-////class [|{| "isWriteAccess": true, "isDefinition": true |}C|] {
+////[|class [|{| "isWriteAccess": true, "isDefinition": true, "contextRangeIndex": 0 |}C|] {
 ////    static s() {
 ////        [|this|];
 ////    }
@@ -10,9 +10,9 @@
 ////        function inner() { this; }
 ////        class Inner { x = this; }
 ////    }
-////}
+////}|]
 
-const [r0, r1, r2] = test.ranges();
+const [r0Def, r0, r1, r2] = test.ranges();
 verify.referenceGroups(r0, [{ definition: "class C", ranges: [r0, r1, r2] }]);
 verify.singleReferenceGroup("this: typeof C", [r1, r2]);
 

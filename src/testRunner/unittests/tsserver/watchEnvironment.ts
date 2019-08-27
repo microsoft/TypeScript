@@ -99,7 +99,7 @@ namespace ts.projectSystem {
                 content: "let y = 10;"
             };
             const files = [configFile, file1, file2, libFile];
-            const host = createServerHost(files, { useWindowsStylePaths: true });
+            const host = createServerHost(files, { windowsStyleRoot: "c:/" });
             const projectService = createProjectService(host);
             projectService.openClientFile(file1.path);
             const project = projectService.configuredProjects.get(configFile.path)!;
@@ -171,33 +171,37 @@ namespace ts.projectSystem {
             path: `${projectFolder}/node_modules/.cache/someFile.d.ts`,
             content: ""
         };
-        host.ensureFileOrFolder(nodeModulesIgnoredFileFromIgnoreDirectory);
-        host.checkTimeoutQueueLength(0);
-        verifyProject();
 
         const nodeModulesIgnoredFile: File = {
             path: `${projectFolder}/node_modules/.cacheFile.ts`,
             content: ""
         };
-        host.ensureFileOrFolder(nodeModulesIgnoredFile);
-        host.checkTimeoutQueueLength(0);
-        verifyProject();
 
         const gitIgnoredFileFromIgnoreDirectory: File = {
             path: `${projectFolder}/.git/someFile.d.ts`,
             content: ""
         };
-        host.ensureFileOrFolder(gitIgnoredFileFromIgnoreDirectory);
-        host.checkTimeoutQueueLength(0);
-        verifyProject();
 
         const gitIgnoredFile: File = {
             path: `${projectFolder}/.gitCache.d.ts`,
             content: ""
         };
-        host.ensureFileOrFolder(gitIgnoredFile);
-        host.checkTimeoutQueueLength(0);
-        verifyProject();
+        const emacsIgnoredFileFromIgnoreDirectory: File = {
+            path: `${projectFolder}/src/.#field.ts`,
+            content: ""
+        };
+
+        [
+            nodeModulesIgnoredFileFromIgnoreDirectory,
+            nodeModulesIgnoredFile,
+            gitIgnoredFileFromIgnoreDirectory,
+            gitIgnoredFile,
+            emacsIgnoredFileFromIgnoreDirectory
+        ].forEach(ignoredEntity => {
+            host.ensureFileOrFolder(ignoredEntity);
+            host.checkTimeoutQueueLength(0);
+            verifyProject();
+        });
 
         function verifyProject() {
             checkWatchedDirectories(host, emptyArray, /*recursive*/ true);
@@ -207,4 +211,39 @@ namespace ts.projectSystem {
         }
     });
 
+    describe("unittests:: tsserver:: watchEnvironment:: tsserverProjectSystem watching files with network style paths", () => {
+        function verifyFilePathStyle(path: string) {
+            const windowsStyleRoot = path.substr(0, getRootLength(path));
+            const host = createServerHost(
+                [libFile, { path, content: "const x = 10" }],
+                { windowsStyleRoot }
+            );
+            const service = createProjectService(host);
+            service.openClientFile(path);
+            checkNumberOfProjects(service, { inferredProjects: 1 });
+            const libPath = `${windowsStyleRoot}${libFile.path.substring(1)}`;
+            checkProjectActualFiles(service.inferredProjects[0], [path, libPath]);
+            checkWatchedFiles(host, [libPath, `${getDirectoryPath(path)}/tsconfig.json`, `${getDirectoryPath(path)}/jsconfig.json`]);
+        }
+
+        it("for file of style c:/myprojects/project/x.js", () => {
+            verifyFilePathStyle("c:/myprojects/project/x.js");
+        });
+
+        it("for file of style //vda1cs4850/myprojects/project/x.js", () => {
+            verifyFilePathStyle("//vda1cs4850/myprojects/project/x.js");
+        });
+
+        it("for file of style //vda1cs4850/c$/myprojects/project/x.js", () => {
+            verifyFilePathStyle("//vda1cs4850/c$/myprojects/project/x.js");
+        });
+
+        it("for file of style c:/users/username/myprojects/project/x.js", () => {
+            verifyFilePathStyle("c:/users/username/myprojects/project/x.js");
+        });
+
+        it("for file of style //vda1cs4850/c$/users/username/myprojects/project/x.js", () => {
+            verifyFilePathStyle("//vda1cs4850/c$/users/username/myprojects/project/x.js");
+        });
+    });
 }

@@ -11,7 +11,7 @@ interface Number { toExponential: any; }
 interface Object {}
 interface RegExp {}
 interface String { charAt: any; }
-interface Array<T> {}`
+interface Array<T> { length: number; [n: number]: T; }`
     };
 
     export const safeList = {
@@ -30,43 +30,21 @@ interface Array<T> {}`
         return combinePaths(getDirectoryPath(libFile.path), "tsc.js");
     }
 
-    interface TestServerHostCreationParameters {
+    export interface TestServerHostCreationParameters {
         useCaseSensitiveFileNames?: boolean;
         executingFilePath?: string;
         currentDirectory?: string;
         newLine?: string;
-        useWindowsStylePaths?: boolean;
+        windowsStyleRoot?: string;
         environmentVariables?: Map<string>;
     }
 
     export function createWatchedSystem(fileOrFolderList: ReadonlyArray<FileOrFolderOrSymLink>, params?: TestServerHostCreationParameters): TestServerHost {
-        if (!params) {
-            params = {};
-        }
-        const host = new TestServerHost(/*withSafelist*/ false,
-            params.useCaseSensitiveFileNames !== undefined ? params.useCaseSensitiveFileNames : false,
-            params.executingFilePath || getExecutingFilePathFromLibFile(),
-            params.currentDirectory || "/",
-            fileOrFolderList,
-            params.newLine,
-            params.useWindowsStylePaths,
-            params.environmentVariables);
-        return host;
+        return new TestServerHost(/*withSafelist*/ false, fileOrFolderList, params);
     }
 
     export function createServerHost(fileOrFolderList: ReadonlyArray<FileOrFolderOrSymLink>, params?: TestServerHostCreationParameters): TestServerHost {
-        if (!params) {
-            params = {};
-        }
-        const host = new TestServerHost(/*withSafelist*/ true,
-            params.useCaseSensitiveFileNames !== undefined ? params.useCaseSensitiveFileNames : false,
-            params.executingFilePath || getExecutingFilePathFromLibFile(),
-            params.currentDirectory || "/",
-            fileOrFolderList,
-            params.newLine,
-            params.useWindowsStylePaths,
-            params.environmentVariables);
-        return host;
+        return new TestServerHost(/*withSafelist*/ true, fileOrFolderList, params);
     }
 
     export interface File {
@@ -314,6 +292,11 @@ interface Array<T> {}`
         invokeFileDeleteCreateAsPartInsteadOfChange: boolean;
     }
 
+    export enum Tsc_WatchFile {
+        DynamicPolling = "DynamicPriorityPolling",
+        SingleFileWatcherPerName = "SingleFileWatcherPerName"
+    }
+
     export enum Tsc_WatchDirectory {
         WatchFile = "RecursiveDirectoryUsingFsWatchFile",
         NonRecursiveWatchDirectory = "RecursiveDirectoryUsingNonRecursiveWatchDirectory",
@@ -321,6 +304,16 @@ interface Array<T> {}`
     }
 
     const timeIncrements = 1000;
+    export interface TestServerHostOptions {
+        useCaseSensitiveFileNames: boolean;
+        executingFilePath: string;
+        currentDirectory: string;
+        fileOrFolderorSymLinkList: ReadonlyArray<FileOrFolderOrSymLink>;
+        newLine?: string;
+        useWindowsStylePaths?: boolean;
+        environmentVariables?: Map<string>;
+    }
+
     export class TestServerHost implements server.ServerHost, FormatDiagnosticsHost, ModuleResolutionHost {
         args: string[] = [];
 
@@ -337,21 +330,50 @@ interface Array<T> {}`
         readonly watchedDirectories = createMultiMap<TestDirectoryWatcher>();
         readonly watchedDirectoriesRecursive = createMultiMap<TestDirectoryWatcher>();
         readonly watchedFiles = createMultiMap<TestFileWatcher>();
+        public readonly useCaseSensitiveFileNames: boolean;
+        public readonly newLine: string;
+        public readonly windowsStyleRoot?: string;
+        private readonly environmentVariables?: Map<string>;
         private readonly executingFilePath: string;
         private readonly currentDirectory: string;
-        private readonly dynamicPriorityWatchFile: HostWatchFile | undefined;
+        private readonly customWatchFile: HostWatchFile | undefined;
         private readonly customRecursiveWatchDirectory: HostWatchDirectory | undefined;
         public require: ((initialPath: string, moduleName: string) => server.RequireResult) | undefined;
 
-        constructor(public withSafeList: boolean, public useCaseSensitiveFileNames: boolean, executingFilePath: string, currentDirectory: string, fileOrFolderorSymLinkList: ReadonlyArray<FileOrFolderOrSymLink>, public readonly newLine = "\n", public readonly useWindowsStylePath?: boolean, private readonly environmentVariables?: Map<string>) {
-            this.getCanonicalFileName = createGetCanonicalFileName(useCaseSensitiveFileNames);
+        constructor(
+            public withSafeList: boolean,
+            fileOrFolderorSymLinkList: ReadonlyArray<FileOrFolderOrSymLink>,
+            {
+                useCaseSensitiveFileNames, executingFilePath, currentDirectory,
+                newLine, windowsStyleRoot, environmentVariables
+            }: TestServerHostCreationParameters = {}) {
+            this.useCaseSensitiveFileNames = !!useCaseSensitiveFileNames;
+            this.newLine = newLine || "\n";
+            this.windowsStyleRoot = windowsStyleRoot;
+            this.environmentVariables = environmentVariables;
+            currentDirectory = currentDirectory || "/";
+            this.getCanonicalFileName = createGetCanonicalFileName(!!useCaseSensitiveFileNames);
             this.toPath = s => toPath(s, currentDirectory, this.getCanonicalFileName);
-            this.executingFilePath = this.getHostSpecificPath(executingFilePath);
+            this.executingFilePath = this.getHostSpecificPath(executingFilePath || getExecutingFilePathFromLibFile());
             this.currentDirectory = this.getHostSpecificPath(currentDirectory);
             this.reloadFS(fileOrFolderorSymLinkList);
-            this.dynamicPriorityWatchFile = this.environmentVariables && this.environmentVariables.get("TSC_WATCHFILE") === "DynamicPriorityPolling" ?
-                createDynamicPriorityPollingWatchFile(this) :
-                undefined;
+            const tscWatchFile = this.environmentVariables && this.environmentVariables.get("TSC_WATCHFILE") as Tsc_WatchFile;
+            switch (tscWatchFile) {
+                case Tsc_WatchFile.DynamicPolling:
+                    this.customWatchFile = createDynamicPriorityPollingWatchFile(this);
+                    break;
+                case Tsc_WatchFile.SingleFileWatcherPerName:
+                    this.customWatchFile = createSingleFileWatcherPerName(
+                        this.watchFileWorker.bind(this),
+                        this.useCaseSensitiveFileNames
+                    );
+                    break;
+                case undefined:
+                    break;
+                default:
+                    Debug.assertNever(tscWatchFile);
+            }
+
             const tscWatchDirectory = this.environmentVariables && this.environmentVariables.get("TSC_WATCHDIRECTORY") as Tsc_WatchDirectory;
             if (tscWatchDirectory === Tsc_WatchDirectory.WatchFile) {
                 const watchDirectory: HostWatchDirectory = (directory, cb) => this.watchFile(directory, () => cb(directory), PollingInterval.Medium);
@@ -399,13 +421,13 @@ interface Array<T> {}`
         }
 
         getHostSpecificPath(s: string) {
-            if (this.useWindowsStylePath && s.startsWith(directorySeparator)) {
-                return "c:/" + s.substring(1);
+            if (this.windowsStyleRoot && s.startsWith(directorySeparator)) {
+                return this.windowsStyleRoot + s.substring(1);
             }
             return s;
         }
 
-        private now() {
+        now() {
             this.time += timeIncrements;
             return new Date(this.time);
         }
@@ -414,7 +436,7 @@ interface Array<T> {}`
             const mapNewLeaves = createMap<true>();
             const isNewFs = this.fs.size === 0;
             fileOrFolderOrSymLinkList = fileOrFolderOrSymLinkList.concat(this.withSafeList ? safeList : []);
-            const filesOrFoldersToLoad: ReadonlyArray<FileOrFolderOrSymLink> = !this.useWindowsStylePath ? fileOrFolderOrSymLinkList :
+            const filesOrFoldersToLoad: ReadonlyArray<FileOrFolderOrSymLink> = !this.windowsStyleRoot ? fileOrFolderOrSymLinkList :
                 fileOrFolderOrSymLinkList.map<FileOrFolderOrSymLink>(f => {
                     const result = clone(f);
                     result.path = this.getHostSpecificPath(f.path);
@@ -854,10 +876,14 @@ interface Array<T> {}`
         }
 
         watchFile(fileName: string, cb: FileWatcherCallback, pollingInterval: number) {
-            if (this.dynamicPriorityWatchFile) {
-                return this.dynamicPriorityWatchFile(fileName, cb, pollingInterval);
+            if (this.customWatchFile) {
+                return this.customWatchFile(fileName, cb, pollingInterval);
             }
 
+            return this.watchFileWorker(fileName, cb);
+        }
+
+        private watchFileWorker(fileName: string, cb: FileWatcherCallback) {
             const path = this.toFullPath(fileName);
             const callback: TestFileWatcher = { fileName, cb };
             this.watchedFiles.add(path, callback);

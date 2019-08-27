@@ -427,8 +427,8 @@ namespace ts.BuilderState {
                 const references = state.referencedMap.get(path);
                 if (references) {
                     const iterator = references.keys();
-                    for (let { value, done } = iterator.next(); !done; { value, done } = iterator.next()) {
-                        queue.push(value as Path);
+                    for (let iterResult = iterator.next(); !iterResult.done; iterResult = iterator.next()) {
+                        queue.push(iterResult.value as Path);
                     }
                 }
             }

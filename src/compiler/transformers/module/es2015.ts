@@ -9,7 +9,7 @@ namespace ts {
         context.enableEmitNotification(SyntaxKind.SourceFile);
         context.enableSubstitution(SyntaxKind.Identifier);
 
-        let currentSourceFile: SourceFile | undefined;
+        let helperNameSubstitutions: Map<Identifier> | undefined;
         return chainBundle(transformSourceFile);
 
         function transformSourceFile(node: SourceFile) {
@@ -18,18 +18,11 @@ namespace ts {
             }
 
             if (isExternalModule(node) || compilerOptions.isolatedModules) {
-                const externalHelpersModuleName = getOrCreateExternalHelpersModuleNameIfNeeded(node, compilerOptions);
-                if (externalHelpersModuleName) {
+                const externalHelpersImportDeclaration = createExternalHelpersImportDeclarationIfNeeded(node, compilerOptions);
+                if (externalHelpersImportDeclaration) {
                     const statements: Statement[] = [];
                     const statementOffset = addPrologue(statements, node.statements);
-                    const tslibImport = createImportDeclaration(
-                        /*decorators*/ undefined,
-                        /*modifiers*/ undefined,
-                        createImportClause(/*name*/ undefined, createNamespaceImport(externalHelpersModuleName)),
-                        createLiteral(externalHelpersModuleNameText)
-                    );
-                    addEmitFlags(tslibImport, EmitFlags.NeverApplyImportHelper);
-                    append(statements, tslibImport);
+                    append(statements, externalHelpersImportDeclaration);
 
                     addRange(statements, visitNodes(node.statements, visitor, isStatement, statementOffset));
                     return updateSourceFileNode(
@@ -74,9 +67,9 @@ namespace ts {
          */
         function onEmitNode(hint: EmitHint, node: Node, emitCallback: (hint: EmitHint, node: Node) => void): void {
             if (isSourceFile(node)) {
-                currentSourceFile = node;
+                helperNameSubstitutions = createMap<Identifier>();
                 previousOnEmitNode(hint, node, emitCallback);
-                currentSourceFile = undefined;
+                helperNameSubstitutions = undefined;
             }
             else {
                 previousOnEmitNode(hint, node, emitCallback);
@@ -95,21 +88,20 @@ namespace ts {
          */
         function onSubstituteNode(hint: EmitHint, node: Node) {
             node = previousOnSubstituteNode(hint, node);
-            if (isIdentifier(node) && hint === EmitHint.Expression) {
-                return substituteExpressionIdentifier(node);
+            if (helperNameSubstitutions && isIdentifier(node) && getEmitFlags(node) & EmitFlags.HelperName) {
+                return substituteHelperName(node);
             }
 
             return node;
         }
 
-        function substituteExpressionIdentifier(node: Identifier): Expression {
-            if (getEmitFlags(node) & EmitFlags.HelperName) {
-                const externalHelpersModuleName = getExternalHelpersModuleName(currentSourceFile!);
-                if (externalHelpersModuleName) {
-                    return createPropertyAccess(externalHelpersModuleName, node);
-                }
+        function substituteHelperName(node: Identifier): Expression {
+            const name = idText(node);
+            let substitution = helperNameSubstitutions!.get(name);
+            if (!substitution) {
+                helperNameSubstitutions!.set(name, substitution = createFileLevelUniqueName(name));
             }
-            return node;
+            return substitution;
         }
     }
 }

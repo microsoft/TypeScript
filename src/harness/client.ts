@@ -134,11 +134,13 @@ namespace ts.server {
             this.processRequest(CommandNames.Close, args);
         }
 
-        changeFile(fileName: string, start: number, end: number, insertString: string): void {
+        createChangeFileRequestArgs(fileName: string, start: number, end: number, insertString: string): protocol.ChangeRequestArgs {
+            return { ...this.createFileLocationRequestArgsWithEndLineAndOffset(fileName, start, end), insertString };
+        }
+
+        changeFile(fileName: string, args: protocol.ChangeRequestArgs): void {
             // clear the line map after an edit
             this.lineMaps.set(fileName, undefined!); // TODO: GH#18217
-
-            const args: protocol.ChangeRequestArgs = { ...this.createFileLocationRequestArgsWithEndLineAndOffset(fileName, start, end), insertString };
             this.processRequest(CommandNames.Change, args);
         }
 
@@ -395,8 +397,15 @@ namespace ts.server {
             const locations: RenameLocation[] = [];
             for (const entry of body.locs) {
                 const fileName = entry.file;
-                for (const { start, end, ...prefixSuffixText } of entry.locs) {
-                    locations.push({ textSpan: this.decodeSpan({ start, end }, fileName), fileName, ...prefixSuffixText });
+                for (const { start, end, contextStart, contextEnd, ...prefixSuffixText } of entry.locs) {
+                    locations.push({
+                        textSpan: this.decodeSpan({ start, end }, fileName),
+                        fileName,
+                        ...(contextStart !== undefined ?
+                            { contextSpan: this.decodeSpan({ start: contextStart, end: contextEnd! }, fileName) } :
+                            undefined),
+                        ...prefixSuffixText
+                    });
                 }
             }
 

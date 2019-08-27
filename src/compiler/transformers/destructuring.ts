@@ -514,6 +514,7 @@ namespace ts {
 
     export const restHelper: UnscopedEmitHelper = {
         name: "typescript:rest",
+        importName: "__rest",
         scoped: false,
         text: `
             var __rest = (this && this.__rest) || function (s, e) {
@@ -557,7 +558,7 @@ namespace ts {
             }
         }
         return createCall(
-            getHelperName("__rest"),
+            getUnscopedHelperName("__rest"),
             /*typeArguments*/ undefined,
             [
                 value,

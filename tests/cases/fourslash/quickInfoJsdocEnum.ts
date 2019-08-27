@@ -18,11 +18,10 @@
 verify.noErrors();
 
 verify.quickInfoAt("type",
-`enum E`,
+`type E = number`,
 "Doc");
 verify.quickInfoAt("value",
-`enum E
-const E: {
+`const E: {
     A: number;
 }`,
 "Doc");
