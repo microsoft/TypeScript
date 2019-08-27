@@ -13,6 +13,22 @@ Standard output:
 @uifabric/build: yarn run vX.X.X
 @uifabric/build: $ node ./just-scripts.js no-op --production --lint
 @uifabric/build: Done in ?s.
+@uifabric/example-data: yarn run vX.X.X
+@uifabric/example-data: $ just-scripts build --production --lint
+@uifabric/example-data: [XX:XX:XX XM] ■ Removing [lib, temp, dist, lib-amd, lib-commonjs, lib-es2015, coverage, src/**/*.scss.ts]
+@uifabric/example-data: [XX:XX:XX XM] ■ Running tslint
+@uifabric/example-data: [XX:XX:XX XM] ■ /usr/local/bin/node "/office-ui-fabric-react/node_modules/tslint/lib/tslintCli.js" --project "/office-ui-fabric-react/packages/example-data/tsconfig.json" -t stylish -r /office-ui-fabric-react/node_modules/tslint-microsoft-contrib
+@uifabric/example-data: [XX:XX:XX XM] ■ Running /office-ui-fabric-react/node_modules/typescript/lib/tsc.js with /office-ui-fabric-react/packages/example-data/tsconfig.json
+@uifabric/example-data: [XX:XX:XX XM] ■ Executing: /usr/local/bin/node "/office-ui-fabric-react/node_modules/typescript/lib/tsc.js" --pretty --target es5 --inlineSources --sourceRoot "../src" --outDir lib-commonjs --module commonjs --project "/office-ui-fabric-react/packages/example-data/tsconfig.json"
+@uifabric/example-data: [XX:XX:XX XM] ■ Running /office-ui-fabric-react/node_modules/typescript/lib/tsc.js with /office-ui-fabric-react/packages/example-data/tsconfig.json
+@uifabric/example-data: [XX:XX:XX XM] ■ Executing: /usr/local/bin/node "/office-ui-fabric-react/node_modules/typescript/lib/tsc.js" --pretty --target es5 --inlineSources --sourceRoot "../src" --outDir lib --module esnext --project "/office-ui-fabric-react/packages/example-data/tsconfig.json"
+@uifabric/example-data: [XX:XX:XX XM] ■ Running /office-ui-fabric-react/node_modules/typescript/lib/tsc.js with /office-ui-fabric-react/packages/example-data/tsconfig.json
+@uifabric/example-data: [XX:XX:XX XM] ■ Executing: /usr/local/bin/node "/office-ui-fabric-react/node_modules/typescript/lib/tsc.js" --pretty --target es5 --inlineSources --sourceRoot "../src" --outDir lib-amd --module amd --project "/office-ui-fabric-react/packages/example-data/tsconfig.json"
+@uifabric/example-data: [XX:XX:XX XM] ■ Running Webpack
+@uifabric/example-data: [XX:XX:XX XM] ■ Webpack Config Path: /office-ui-fabric-react/packages/example-data/webpack.config.js
+@uifabric/example-data: Webpack version: 4.29.5
+@uifabric/example-data: [XX:XX:XX XM] ■ Extracting Public API surface from '/office-ui-fabric-react/packages/example-data/lib/index.d.ts'
+@uifabric/example-data: Done in ?s.
 @uifabric/migration: yarn run vX.X.X
 @uifabric/migration: $ just-scripts build --production --lint
 @uifabric/migration: [XX:XX:XX XM] ■ Removing [lib, temp, dist, lib-amd, lib-commonjs, lib-es2015, coverage, src/**/*.scss.ts]
@@ -60,8 +76,8 @@ Standard output:
 @uifabric/merge-styles: Webpack version: 4.29.5
 @uifabric/merge-styles:  PASS  src/styleToClassName.test.ts
 @uifabric/merge-styles:  PASS  src/mergeStyleSets.test.ts
-@uifabric/merge-styles:  PASS  src/concatStyleSets.test.ts
 @uifabric/merge-styles:  PASS  src/mergeStyles.test.ts
+@uifabric/merge-styles:  PASS  src/concatStyleSets.test.ts
 @uifabric/merge-styles:  PASS  src/transforms/rtlifyRules.test.ts
 @uifabric/merge-styles:  PASS  src/transforms/prefixRules.test.ts
 @uifabric/merge-styles:  PASS  src/transforms/provideUnits.test.ts
@@ -211,8 +227,9 @@ Standard output:
 Standard error:
 info cli using local version of lerna
 lerna notice cli vX.X.X
-lerna info Executing command in 40 packages: "yarn run build --production --lint"
+lerna info Executing command in 41 packages: "yarn run build --production --lint"
 @uifabric/codepen-loader: ts-jest[versions] (WARN) Version X.X.X-insiders.xxxxxxxx of typescript installed has not been tested with ts-jest. If you're experiencing issues, consider using a supported version (>=2.7.0 <4.0.0). Please do not report issues in ts-jest if you are using unsupported versions.
+@uifabric/example-data: [XX:XX:XX XM] ▲ One of these [node-sass, postcss, autoprefixer] is not installed, so this task has no effect
 @uifabric/set-version: [XX:XX:XX XM] ▲ One of these [node-sass, postcss, autoprefixer] is not installed, so this task has no effect
 @uifabric/merge-styles: [XX:XX:XX XM] ▲ One of these [node-sass, postcss, autoprefixer] is not installed, so this task has no effect
 @uifabric/merge-styles: ts-jest[versions] (WARN) Version X.X.X-insiders.xxxxxxxx of typescript installed has not been tested with ts-jest. If you're experiencing issues, consider using a supported version (>=2.7.0 <4.0.0). Please do not report issues in ts-jest if you are using unsupported versions.
@@ -425,7 +442,7 @@ lerna info Executing command in 40 packages: "yarn run build --production --lint
 @uifabric/foundation: [XX:XX:XX XM] x ------------------------------------
 @uifabric/foundation: [XX:XX:XX XM] x Error: Command failed: /usr/local/bin/node /office-ui-fabric-react/node_modules/jest/bin/jest.js --config /office-ui-fabric-react/packages/foundation/jest.config.js --passWithNoTests --colors
 @uifabric/foundation:     at ChildProcess.<anonymous> (/office-ui-fabric-react/node_modules/just-scripts-utils/lib/exec.js:70:31)
-@uifabric/foundation:     at ChildProcess.emit (events.js:203:13)
+@uifabric/foundation:     at ChildProcess.emit (events.js:209:13)
 @uifabric/foundation:     at ChildProcess.EventEmitter.emit (domain.js:499:23)
 @uifabric/foundation:     at Process.ChildProcess._handle.onexit (internal/child_process.js:272:12)
 @uifabric/foundation: [XX:XX:XX XM] x ------------------------------------
