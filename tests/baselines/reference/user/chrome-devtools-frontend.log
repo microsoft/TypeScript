@@ -7,9 +7,15 @@ node_modules/chrome-devtools-frontend/front_end/Runtime.js(77,16): error TS7014:
 node_modules/chrome-devtools-frontend/front_end/Runtime.js(78,16): error TS7014: Function type, which lacks return-type annotation, implicitly has an 'any' return type.
 node_modules/chrome-devtools-frontend/front_end/Runtime.js(95,28): error TS2339: Property 'response' does not exist on type 'EventTarget'.
 node_modules/chrome-devtools-frontend/front_end/Runtime.js(147,37): error TS2339: Property '_importScriptPathPrefix' does not exist on type 'Window & typeof globalThis'.
+node_modules/chrome-devtools-frontend/front_end/Runtime.js(158,21): error TS2345: Argument of type 'Promise<unknown>' is not assignable to parameter of type 'Promise<undefined>'.
+  Type 'unknown' is not assignable to type 'undefined'.
+node_modules/chrome-devtools-frontend/front_end/Runtime.js(161,5): error TS2322: Type 'Promise<unknown>' is not assignable to type 'Promise<undefined>'.
+node_modules/chrome-devtools-frontend/front_end/Runtime.js(197,5): error TS2322: Type 'Promise<unknown>' is not assignable to type 'Promise<undefined>'.
+node_modules/chrome-devtools-frontend/front_end/Runtime.js(233,5): error TS2322: Type 'Promise<unknown>' is not assignable to type 'Promise<undefined>'.
+node_modules/chrome-devtools-frontend/front_end/Runtime.js(255,7): error TS2322: Type 'Promise<unknown>' is not assignable to type 'Promise<undefined>'.
 node_modules/chrome-devtools-frontend/front_end/Runtime.js(270,9): error TS2322: Type 'Promise<void>' is not assignable to type 'Promise<undefined>'.
   Type 'void' is not assignable to type 'undefined'.
-node_modules/chrome-devtools-frontend/front_end/Runtime.js(280,5): error TS2322: Type 'Promise<void>' is not assignable to type 'Promise<undefined>'.
+node_modules/chrome-devtools-frontend/front_end/Runtime.js(280,5): error TS2322: Type 'Promise<unknown>' is not assignable to type 'Promise<undefined>'.
 node_modules/chrome-devtools-frontend/front_end/Runtime.js(283,12): error TS2554: Expected 2-3 arguments, but got 1.
 node_modules/chrome-devtools-frontend/front_end/Runtime.js(525,9): error TS2322: Type 'Window' is not assignable to type 'Window & typeof globalThis'.
   Type 'Window' is missing the following properties from type 'typeof globalThis': globalThis, eval, parseInt, parseFloat, and 872 more.
@@ -21,6 +27,7 @@ node_modules/chrome-devtools-frontend/front_end/Runtime.js(693,7): error TS2322:
   Type 'boolean' is not assignable to type 'undefined'.
 node_modules/chrome-devtools-frontend/front_end/Runtime.js(705,5): error TS2322: Type 'Promise<boolean>' is not assignable to type 'Promise<undefined>'.
 node_modules/chrome-devtools-frontend/front_end/Runtime.js(715,7): error TS2322: Type 'Promise<void>' is not assignable to type 'Promise<undefined>'.
+node_modules/chrome-devtools-frontend/front_end/Runtime.js(721,5): error TS2322: Type 'Promise<unknown>' is not assignable to type 'Promise<undefined>'.
 node_modules/chrome-devtools-frontend/front_end/Runtime.js(729,7): error TS2322: Type 'Promise<void>' is not assignable to type 'Promise<undefined>'.
 node_modules/chrome-devtools-frontend/front_end/Runtime.js(746,5): error TS2322: Type 'Window | {}' is not assignable to type 'Window'.
   Type '{}' is missing the following properties from type 'Window': applicationCache, clientInformation, closed, customElements, and 224 more.
@@ -466,7 +473,7 @@ node_modules/chrome-devtools-frontend/front_end/audits2/Audits2Panel.js(229,36):
 node_modules/chrome-devtools-frontend/front_end/audits2/Audits2Panel.js(230,23): error TS2339: Property 'autofocus' does not exist on type 'Element'.
 node_modules/chrome-devtools-frontend/front_end/audits2/Audits2Panel.js(233,53): error TS2555: Expected at least 2 arguments, but got 1.
 node_modules/chrome-devtools-frontend/front_end/audits2/Audits2Panel.js(252,7): error TS2322: Type 'Promise<void>' is not assignable to type 'Promise<undefined>'.
-node_modules/chrome-devtools-frontend/front_end/audits2/Audits2Panel.js(256,5): error TS2322: Type 'Promise<void>' is not assignable to type 'Promise<undefined>'.
+node_modules/chrome-devtools-frontend/front_end/audits2/Audits2Panel.js(256,5): error TS2322: Type 'Promise<unknown>' is not assignable to type 'Promise<undefined>'.
 node_modules/chrome-devtools-frontend/front_end/audits2/Audits2Panel.js(302,37): error TS2555: Expected at least 2 arguments, but got 1.
 node_modules/chrome-devtools-frontend/front_end/audits2/Audits2Panel.js(342,33): error TS2555: Expected at least 2 arguments, but got 1.
 node_modules/chrome-devtools-frontend/front_end/audits2/Audits2Panel.js(356,23): error TS2339: Property 'disabled' does not exist on type 'Element'.
@@ -492,7 +499,7 @@ node_modules/chrome-devtools-frontend/front_end/audits2/Audits2Panel.js(679,53):
 node_modules/chrome-devtools-frontend/front_end/audits2/Audits2Panel.js(690,15): error TS2503: Cannot find namespace 'ReportRenderer'.
 node_modules/chrome-devtools-frontend/front_end/audits2/Audits2Panel.js(701,15): error TS2503: Cannot find namespace 'ReportRenderer'.
 node_modules/chrome-devtools-frontend/front_end/audits2/Audits2Panel.js(764,17): error TS7014: Function type, which lacks return-type annotation, implicitly has an 'any' return type.
-node_modules/chrome-devtools-frontend/front_end/audits2/Audits2Panel.js(772,5): error TS2322: Type 'Promise<void>' is not assignable to type 'Promise<undefined>'.
+node_modules/chrome-devtools-frontend/front_end/audits2/Audits2Panel.js(772,5): error TS2322: Type 'Promise<unknown>' is not assignable to type 'Promise<undefined>'.
 node_modules/chrome-devtools-frontend/front_end/audits2/Audits2Panel.js(780,25): error TS2503: Cannot find namespace 'ReportRenderer'.
 node_modules/chrome-devtools-frontend/front_end/audits2/Audits2Panel.js(832,25): error TS2503: Cannot find namespace 'ReportRenderer'.
 node_modules/chrome-devtools-frontend/front_end/audits2/Audits2Panel.js(901,15): error TS2503: Cannot find namespace 'ReportRenderer'.
@@ -3053,6 +3060,8 @@ node_modules/chrome-devtools-frontend/front_end/bindings/BlackboxManager.js(341,
 node_modules/chrome-devtools-frontend/front_end/bindings/BlackboxManager.js(351,31): error TS2694: Namespace 'Protocol' has no exported member 'Debugger'.
 node_modules/chrome-devtools-frontend/front_end/bindings/BlackboxManager.js(362,31): error TS2694: Namespace 'Protocol' has no exported member 'Debugger'.
 node_modules/chrome-devtools-frontend/front_end/bindings/BlackboxManager.js(375,9): error TS2322: Type 'Promise<void>' is not assignable to type 'Promise<undefined>'.
+node_modules/chrome-devtools-frontend/front_end/bindings/BlackboxManager.js(378,9): error TS2322: Type 'Promise<unknown>' is not assignable to type 'Promise<undefined>'.
+node_modules/chrome-devtools-frontend/front_end/bindings/BlackboxManager.js(381,5): error TS2322: Type 'Promise<unknown>' is not assignable to type 'Promise<undefined>'.
 node_modules/chrome-devtools-frontend/front_end/bindings/BreakpointManager.js(60,52): error TS2345: Argument of type 'this' is not assignable to parameter of type 'SDKModelObserver<DebuggerModel>'.
   Type 'BreakpointManager' is not assignable to type 'SDKModelObserver<DebuggerModel>'.
     Types of property 'modelAdded' are incompatible.
@@ -3647,6 +3656,7 @@ node_modules/chrome-devtools-frontend/front_end/common/ContentProvider.js(60,15)
 node_modules/chrome-devtools-frontend/front_end/common/ModuleExtensionInterfaces.js(13,15): error TS2355: A function whose declared type is neither 'void' nor 'any' must return a value.
 node_modules/chrome-devtools-frontend/front_end/common/ModuleExtensionInterfaces.js(34,36): error TS2345: Argument of type '{ title: string | Element; expanded: boolean; editable: boolean; } | {}' is not assignable to parameter of type '{ title: string | Element; expanded: boolean; editable: boolean; }'.
   Type '{}' is missing the following properties from type '{ title: string | Element; expanded: boolean; editable: boolean; }': title, expanded, editable
+node_modules/chrome-devtools-frontend/front_end/common/ModuleExtensionInterfaces.js(63,3): error TS2322: Type 'Promise<unknown>' is not assignable to type 'Promise<undefined>'.
 node_modules/chrome-devtools-frontend/front_end/common/ModuleExtensionInterfaces.js(81,15): error TS2355: A function whose declared type is neither 'void' nor 'any' must return a value.
 node_modules/chrome-devtools-frontend/front_end/common/ModuleExtensionInterfaces.js(105,15): error TS2355: A function whose declared type is neither 'void' nor 'any' must return a value.
 node_modules/chrome-devtools-frontend/front_end/common/Object.js(39,14): error TS7014: Function type, which lacks return-type annotation, implicitly has an 'any' return type.
@@ -5070,7 +5080,7 @@ node_modules/chrome-devtools-frontend/front_end/elements/ComputedStyleWidget.js(
                 Type 'Promise<CSSMatchedStyles>' is not assignable to type 'ComputedStyle | PromiseLike<ComputedStyle>'.
                   Type 'Promise<CSSMatchedStyles>' is not assignable to type 'PromiseLike<ComputedStyle>'.
                     Types of property 'then' are incompatible.
-                      Type '<TResult1 = CSSMatchedStyles, TResult2 = never>(onfulfilled?: (value: CSSMatchedStyles) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<...>) => Promise<...>' is not assignable to type '<TResult1 = ComputedStyle, TResult2 = never>(onfulfilled?: (value: ComputedStyle) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<...>) => PromiseLike<...>'.
+                      Type '<TResult1 = CSSMatchedStyles, TResult2 = never>(onfulfilled?: (value: CSSMatchedStyles) => TResult1, onrejected?: (reason: any) => TResult2) => Promise<...>' is not assignable to type '<TResult1 = ComputedStyle, TResult2 = never>(onfulfilled?: (value: ComputedStyle) => TResult1, onrejected?: (reason: any) => TResult2) => PromiseLike<(TResult1 extends PromiseLike<...> ? UResult1 : TResult1) | (TResult2 extends PromiseLike<...> ? UResult2 : TResult2)>'.
                         Types of parameters 'onfulfilled' and 'onfulfilled' are incompatible.
                           Types of parameters 'value' and 'value' are incompatible.
                             Property 'computedStyle' is missing in type 'CSSMatchedStyles' but required in type 'ComputedStyle'.
@@ -5374,7 +5384,7 @@ node_modules/chrome-devtools-frontend/front_end/elements/MetricsSidebarPane.js(8
                 Type 'Promise<InlineStyleResult>' is not assignable to type 'Map<string, string> | PromiseLike<Map<string, string>>'.
                   Type 'Promise<InlineStyleResult>' is not assignable to type 'PromiseLike<Map<string, string>>'.
                     Types of property 'then' are incompatible.
-                      Type '<TResult1 = InlineStyleResult, TResult2 = never>(onfulfilled?: (value: InlineStyleResult) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<...>) => Promise<...>' is not assignable to type '<TResult1 = Map<string, string>, TResult2 = never>(onfulfilled?: (value: Map<string, string>) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<...>) => PromiseLike<...>'.
+                      Type '<TResult1 = InlineStyleResult, TResult2 = never>(onfulfilled?: (value: InlineStyleResult) => TResult1, onrejected?: (reason: any) => TResult2) => Promise<...>' is not assignable to type '<TResult1 = Map<string, string>, TResult2 = never>(onfulfilled?: (value: Map<string, string>) => TResult1, onrejected?: (reason: any) => TResult2) => PromiseLike<(TResult1 extends PromiseLike<...> ? UResult1 : TResult1) | (TResult2 extends PromiseLike<...> ? UResult2 : TResult2)>'.
                         Types of parameters 'onfulfilled' and 'onfulfilled' are incompatible.
                           Types of parameters 'value' and 'value' are incompatible.
                             Type 'InlineStyleResult' is missing the following properties from type 'Map<string, string>': clear, delete, forEach, get, and 8 more.
@@ -5629,6 +5639,7 @@ node_modules/chrome-devtools-frontend/front_end/elements/StylesSidebarPane.js(28
 node_modules/chrome-devtools-frontend/front_end/elements/StylesSidebarPane.js(2906,7): error TS2322: Type 'Promise<void>' is not assignable to type 'Promise<undefined>'.
 node_modules/chrome-devtools-frontend/front_end/elements/StylesSidebarPane.js(2910,7): error TS2322: Type 'Promise<void>' is not assignable to type 'Promise<undefined>'.
 node_modules/chrome-devtools-frontend/front_end/elements/StylesSidebarPane.js(2918,7): error TS2322: Type 'Promise<void>' is not assignable to type 'Promise<undefined>'.
+node_modules/chrome-devtools-frontend/front_end/elements/StylesSidebarPane.js(2956,5): error TS2322: Type 'Promise<unknown>' is not assignable to type 'Promise<undefined>'.
 node_modules/chrome-devtools-frontend/front_end/elements/StylesSidebarPane.js(3021,19): error TS2339: Property 'key' does not exist on type 'Event'.
 node_modules/chrome-devtools-frontend/front_end/elements/StylesSidebarPane.js(3049,13): error TS2339: Property 'consume' does not exist on type 'Event'.
 node_modules/chrome-devtools-frontend/front_end/elements/StylesSidebarPane.js(3265,15): error TS2339: Property 'createTextChild' does not exist on type 'DocumentFragment'.
@@ -5891,7 +5902,8 @@ node_modules/chrome-devtools-frontend/front_end/event_listeners/EventListenersUt
 node_modules/chrome-devtools-frontend/front_end/event_listeners/EventListenersView.js(14,14): error TS7014: Function type, which lacks return-type annotation, implicitly has an 'any' return type.
 node_modules/chrome-devtools-frontend/front_end/event_listeners/EventListenersView.js(27,44): error TS2555: Expected at least 2 arguments, but got 1.
 node_modules/chrome-devtools-frontend/front_end/event_listeners/EventListenersView.js(35,15): error TS2355: A function whose declared type is neither 'void' nor 'any' must return a value.
-node_modules/chrome-devtools-frontend/front_end/event_listeners/EventListenersView.js(82,7): error TS2322: Type 'Promise<void>' is not assignable to type 'Promise<undefined>'.
+node_modules/chrome-devtools-frontend/front_end/event_listeners/EventListenersView.js(60,5): error TS2322: Type 'Promise<unknown>' is not assignable to type 'Promise<undefined>'.
+node_modules/chrome-devtools-frontend/front_end/event_listeners/EventListenersView.js(82,7): error TS2322: Type 'Promise<unknown>' is not assignable to type 'Promise<undefined>'.
 node_modules/chrome-devtools-frontend/front_end/event_listeners/EventListenersView.js(88,29): error TS2694: Namespace 'Protocol' has no exported member 'Runtime'.
 node_modules/chrome-devtools-frontend/front_end/event_listeners/EventListenersView.js(150,46): error TS2339: Property 'eventListener' does not exist on type 'TreeElement'.
 node_modules/chrome-devtools-frontend/front_end/event_listeners/EventListenersView.js(156,45): error TS2339: Property 'eventListener' does not exist on type 'TreeElement'.
@@ -7553,6 +7565,7 @@ node_modules/chrome-devtools-frontend/front_end/perf_ui/FilmStripView.js(254,19)
 node_modules/chrome-devtools-frontend/front_end/perf_ui/FilmStripView.js(256,35): error TS2339: Property 'metaKey' does not exist on type 'Event'.
 node_modules/chrome-devtools-frontend/front_end/perf_ui/FilmStripView.js(263,35): error TS2339: Property 'metaKey' does not exist on type 'Event'.
 node_modules/chrome-devtools-frontend/front_end/perf_ui/FilmStripView.js(306,51): error TS2339: Property 'millisToString' does not exist on type 'NumberConstructor'.
+node_modules/chrome-devtools-frontend/front_end/perf_ui/FilmStripView.js(307,5): error TS2322: Type 'Promise<unknown>' is not assignable to type 'Promise<undefined>'.
 node_modules/chrome-devtools-frontend/front_end/perf_ui/FlameChart.js(307,36): error TS2339: Property 'offsetX' does not exist on type 'Event'.
 node_modules/chrome-devtools-frontend/front_end/perf_ui/FlameChart.js(308,36): error TS2339: Property 'offsetY' does not exist on type 'Event'.
 node_modules/chrome-devtools-frontend/front_end/perf_ui/FlameChart.js(313,45): error TS2339: Property 'offsetX' does not exist on type 'Event'.
@@ -10402,6 +10415,7 @@ node_modules/chrome-devtools-frontend/front_end/sources/JavaScriptBreakpointsSid
 node_modules/chrome-devtools-frontend/front_end/sources/JavaScriptBreakpointsSidebarPane.js(80,71): error TS2339: Property 'uiLocation' does not exist on type 'V'.
 node_modules/chrome-devtools-frontend/front_end/sources/JavaScriptBreakpointsSidebarPane.js(81,60): error TS2339: Property 'breakpoint' does not exist on type 'V'.
 node_modules/chrome-devtools-frontend/front_end/sources/JavaScriptBreakpointsSidebarPane.js(82,62): error TS2339: Property 'breakpoint' does not exist on type 'V'.
+node_modules/chrome-devtools-frontend/front_end/sources/JavaScriptBreakpointsSidebarPane.js(119,5): error TS2322: Type 'Promise<unknown>' is not assignable to type 'Promise<undefined>'.
 node_modules/chrome-devtools-frontend/front_end/sources/JavaScriptBreakpointsSidebarPane.js(131,55): error TS2554: Expected 0 arguments, but got 1.
 node_modules/chrome-devtools-frontend/front_end/sources/JavaScriptBreakpointsSidebarPane.js(141,29): error TS2339: Property 'enclosingNodeOrSelfWithClass' does not exist on type 'EventTarget'.
 node_modules/chrome-devtools-frontend/front_end/sources/JavaScriptBreakpointsSidebarPane.js(156,33): error TS2339: Property 'checkboxElement' does not exist on type 'EventTarget'.
@@ -10983,8 +10997,8 @@ node_modules/chrome-devtools-frontend/front_end/test_runner/TestRunner.js(363,62
 node_modules/chrome-devtools-frontend/front_end/test_runner/TestRunner.js(368,34): error TS2694: Namespace 'Protocol' has no exported member 'Runtime'.
 node_modules/chrome-devtools-frontend/front_end/test_runner/TestRunner.js(372,42): error TS2339: Property 'result' does not exist on type '{ response: RemoteObject; exceptionDetails: any; }'.
 node_modules/chrome-devtools-frontend/front_end/test_runner/TestRunner.js(381,35): error TS2694: Namespace 'Protocol' has no exported member 'Runtime'.
-node_modules/chrome-devtools-frontend/front_end/test_runner/TestRunner.js(503,30): error TS2345: Argument of type 'Function' is not assignable to parameter of type '(value: any[]) => any[] | PromiseLike<any[]>'.
-  Type 'Function' provides no match for the signature '(value: any[]): any[] | PromiseLike<any[]>'.
+node_modules/chrome-devtools-frontend/front_end/test_runner/TestRunner.js(503,30): error TS2345: Argument of type 'Function' is not assignable to parameter of type '(value: any[]) => any[]'.
+  Type 'Function' provides no match for the signature '(value: any[]): any[]'.
 node_modules/chrome-devtools-frontend/front_end/test_runner/TestRunner.js(641,59): error TS2551: Property 'testRunner' does not exist on type 'Window & typeof globalThis'. Did you mean 'TestRunner'?
 node_modules/chrome-devtools-frontend/front_end/test_runner/TestRunner.js(641,92): error TS2551: Property 'testRunner' does not exist on type 'Window & typeof globalThis'. Did you mean 'TestRunner'?
 node_modules/chrome-devtools-frontend/front_end/test_runner/TestRunner.js(642,3): error TS2322: Type '1' is not assignable to type 'boolean'.
@@ -11002,7 +11016,7 @@ node_modules/chrome-devtools-frontend/front_end/test_runner/TestRunner.js(1049,3
 node_modules/chrome-devtools-frontend/front_end/test_runner/TestRunner.js(1203,19): error TS2339: Property 'naturalOrderComparator' does not exist on type 'StringConstructor'.
 node_modules/chrome-devtools-frontend/front_end/test_runner/TestRunner.js(1279,81): error TS2345: Argument of type 'Function' is not assignable to parameter of type '(value: any) => any'.
   Type 'Function' provides no match for the signature '(value: any): any'.
-node_modules/chrome-devtools-frontend/front_end/test_runner/TestRunner.js(1304,3): error TS2322: Type 'Promise<void>' is not assignable to type 'Promise<undefined>'.
+node_modules/chrome-devtools-frontend/front_end/test_runner/TestRunner.js(1304,3): error TS2322: Type 'Promise<unknown>' is not assignable to type 'Promise<undefined>'.
 node_modules/chrome-devtools-frontend/front_end/test_runner/TestRunner.js(1310,30): error TS2339: Property 'getAttribute' does not exist on type 'ChildNode'.
 node_modules/chrome-devtools-frontend/front_end/test_runner/TestRunner.js(1311,44): error TS2339: Property 'getAttribute' does not exist on type 'ChildNode'.
 node_modules/chrome-devtools-frontend/front_end/test_runner/TestRunner.js(1388,16): error TS2551: Property 'testRunner' does not exist on type 'Window & typeof globalThis'. Did you mean 'TestRunner'?
@@ -12400,6 +12414,7 @@ node_modules/chrome-devtools-frontend/front_end/ui/SuggestBox.js(227,37): error 
 node_modules/chrome-devtools-frontend/front_end/ui/SuggestBox.js(228,59): error TS2554: Expected 0 arguments, but got 1.
 node_modules/chrome-devtools-frontend/front_end/ui/SuggestBox.js(282,11): error TS2339: Property 'consume' does not exist on type 'Event'.
 node_modules/chrome-devtools-frontend/front_end/ui/SyntaxHighlighter.js(54,10): error TS2339: Property 'createTextChild' does not exist on type 'Element'.
+node_modules/chrome-devtools-frontend/front_end/ui/SyntaxHighlighter.js(67,5): error TS2322: Type 'Promise<unknown>' is not assignable to type 'Promise<undefined>'.
 node_modules/chrome-devtools-frontend/front_end/ui/SyntaxHighlighter.js(74,12): error TS2339: Property 'removeChildren' does not exist on type 'Element'.
 node_modules/chrome-devtools-frontend/front_end/ui/SyntaxHighlighter.js(82,16): error TS2339: Property 'createTextChild' does not exist on type 'Element'.
 node_modules/chrome-devtools-frontend/front_end/ui/SyntaxHighlighter.js(85,16): error TS2339: Property 'createTextChild' does not exist on type 'Element'.
@@ -12723,7 +12738,7 @@ node_modules/chrome-devtools-frontend/front_end/ui/View.js(461,44): error TS2769
                 Type 'Promise<ToolbarItem[]>' is not assignable to type 'void | PromiseLike<void>'.
                   Type 'Promise<ToolbarItem[]>' is not assignable to type 'PromiseLike<void>'.
                     Types of property 'then' are incompatible.
-                      Type '<TResult1 = ToolbarItem[], TResult2 = never>(onfulfilled?: (value: ToolbarItem[]) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<...>) => Promise<...>' is not assignable to type '<TResult1 = void, TResult2 = never>(onfulfilled?: (value: void) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>) => PromiseLike<...>'.
+                      Type '<TResult1 = ToolbarItem[], TResult2 = never>(onfulfilled?: (value: ToolbarItem[]) => TResult1, onrejected?: (reason: any) => TResult2) => Promise<(TResult1 extends PromiseLike<...> ? UResult1 : TResult1) | (TResult2 extends PromiseLike<...> ? UResult2 : TResult2)>' is not assignable to type '<TResult1 = void, TResult2 = never>(onfulfilled?: (value: void) => TResult1, onrejected?: (reason: any) => TResult2) => PromiseLike<(TResult1 extends PromiseLike<infer UResult1> ? UResult1 : TResult1) | (TResult2 extends PromiseLike<...> ? UResult2 : TResult2)>'.
                         Types of parameters 'onfulfilled' and 'onfulfilled' are incompatible.
                           Types of parameters 'value' and 'value' are incompatible.
                             Type 'ToolbarItem[]' is not assignable to type 'void'.

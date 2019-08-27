@@ -1,0 +1,26 @@
+Exit Code: 1
+Standard output:
+src/Task.ts(47,29): error TS2322: Type 'Promise<(A extends PromiseLike<infer UResult1> ? UResult1 : A) | (A extends PromiseLike<infer UResult2> ? UResult2 : A)>' is not assignable to type 'Promise<A>'.
+  Type '(A extends PromiseLike<infer UResult1> ? UResult1 : A) | (A extends PromiseLike<infer UResult2> ? UResult2 : A)' is not assignable to type 'A'.
+    Type 'A extends PromiseLike<infer UResult1> ? UResult1 : A' is not assignable to type 'A'.
+      Type 'unknown' is not assignable to type 'A'.
+src/Task.ts(121,25): error TS2322: Type 'Promise<(B extends PromiseLike<infer UResult1> ? UResult1 : B) | (B extends PromiseLike<infer UResult2> ? UResult2 : B)>' is not assignable to type 'Promise<B>'.
+  Type '(B extends PromiseLike<infer UResult1> ? UResult1 : B) | (B extends PromiseLike<infer UResult2> ? UResult2 : B)' is not assignable to type 'B'.
+    Type 'B extends PromiseLike<infer UResult1> ? UResult1 : B' is not assignable to type 'B'.
+      Type 'unknown' is not assignable to type 'B'.
+src/Task.ts(123,26): error TS2322: Type 'Promise<(B extends PromiseLike<infer UResult1> ? UResult1 : B) | (B extends PromiseLike<infer UResult2> ? UResult2 : B)>' is not assignable to type 'Promise<B>'.
+  Type '(B extends PromiseLike<infer UResult1> ? UResult1 : B) | (B extends PromiseLike<infer UResult2> ? UResult2 : B)' is not assignable to type 'B'.
+    Type 'B extends PromiseLike<infer UResult1> ? UResult1 : B' is not assignable to type 'B'.
+      Type 'unknown' is not assignable to type 'B'.
+src/Task.ts(124,27): error TS2322: Type 'Promise<B | (B extends PromiseLike<infer UResult2> ? UResult2 : B)>' is not assignable to type 'Promise<B>'.
+  Type 'B | (B extends PromiseLike<infer UResult2> ? UResult2 : B)' is not assignable to type 'B'.
+    Type 'B extends PromiseLike<infer UResult2> ? UResult2 : B' is not assignable to type 'B'.
+      Type 'unknown' is not assignable to type 'B'.
+src/Task.ts(136,26): error TS2322: Type 'Promise<(B extends PromiseLike<infer UResult1> ? UResult1 : B) | (B extends PromiseLike<infer UResult2> ? UResult2 : B)>' is not assignable to type 'Promise<B>'.
+  Type '(B extends PromiseLike<infer UResult1> ? UResult1 : B) | (B extends PromiseLike<infer UResult2> ? UResult2 : B)' is not assignable to type 'B'.
+    Type 'B extends PromiseLike<infer UResult1> ? UResult1 : B' is not assignable to type 'B'.
+      Type 'unknown' is not assignable to type 'B'.
+
+
+
+Standard error:
