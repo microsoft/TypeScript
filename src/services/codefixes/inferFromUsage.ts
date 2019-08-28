@@ -405,18 +405,19 @@ namespace ts.codefix {
         }
 
         interface Usage {
-            isNumber?: boolean;
-            isString?: boolean;
+            isNumber: boolean | undefined;
+            isString: boolean | undefined;
             /** Used ambiguously, eg x + ___ or object[___]; results in string | number if no other evidence exists */
-            isNumberOrString?: boolean;
+            isNumberOrString: boolean | undefined;
 
-            candidateTypes?: Type[];
-            properties?: UnderscoreEscapedMap<Usage>;
-            calls?: CallUsage[];
-            constructs?: CallUsage[];
-            numberIndex?: Usage;
-            stringIndex?: Usage;
-            candidateThisTypes?: Type[];
+            candidateTypes: Type[] | undefined;
+            properties: UnderscoreEscapedMap<Usage> | undefined;
+            calls: CallUsage[] | undefined;
+            constructs: CallUsage[] | undefined;
+            numberIndex: Usage | undefined;
+            stringIndex: Usage | undefined;
+            candidateThisTypes: Type[] | undefined;
+            inferredTypes: Type[] | undefined;
         }
 
         function single(): Type {
@@ -428,7 +429,7 @@ namespace ts.codefix {
                 return undefined;
             }
 
-            const usage: Usage = {};
+            const usage = createEmptyUsage();
             for (const reference of references) {
                 cancellationToken.throwIfCancellationRequested();
                 calculateUsageOfNode(reference, usage);
@@ -466,7 +467,7 @@ namespace ts.codefix {
         }
 
         function thisParameter() {
-            const usage: Usage = {};
+            const usage = createEmptyUsage();
             for (const reference of references) {
                 cancellationToken.throwIfCancellationRequested();
                 calculateUsageOfNode(reference, usage);
@@ -476,7 +477,7 @@ namespace ts.codefix {
         }
 
         function inferTypesFromReferencesSingle(references: readonly Identifier[]): Type[] {
-            const usage: Usage = {};
+            const usage: Usage = createEmptyUsage();
             for (const reference of references) {
                 cancellationToken.throwIfCancellationRequested();
                 calculateUsageOfNode(reference, usage);
@@ -671,7 +672,7 @@ namespace ts.codefix {
         function inferTypeFromCallExpression(parent: CallExpression | NewExpression, usage: Usage): void {
             const call: CallUsage = {
                 argumentTypes: [],
-                return_: {}
+                return_: createEmptyUsage()
             };
 
             if (parent.arguments) {
@@ -695,7 +696,7 @@ namespace ts.codefix {
             if (!usage.properties) {
                 usage.properties = createUnderscoreEscapedMap<Usage>();
             }
-            const propertyUsage = usage.properties.get(name) || { };
+            const propertyUsage = usage.properties.get(name) || createEmptyUsage();
             calculateUsageOfNode(parent, propertyUsage);
             usage.properties.set(name, propertyUsage);
         }
@@ -707,7 +708,7 @@ namespace ts.codefix {
             }
             else {
                 const indexType = checker.getTypeAtLocation(parent.argumentExpression);
-                const indexUsage = {};
+                const indexUsage = createEmptyUsage();
                 calculateUsageOfNode(parent, indexUsage);
                 if (indexType.flags & TypeFlags.NumberLike) {
                     usage.numberIndex = indexUsage;
@@ -845,7 +846,10 @@ namespace ts.codefix {
             if (usage.numberIndex) {
                 types.push(checker.createArrayType(recur(usage.numberIndex)));
             }
-            else if (usage.properties || usage.calls || usage.constructs || usage.stringIndex) {
+            else if (usage.properties && usage.properties.size
+                     || usage.calls && usage.calls.length
+                     || usage.constructs && usage.constructs.length
+                     || usage.stringIndex) {
                 const members = createUnderscoreEscapedMap<Symbol>();
                 const callSignatures: Signature[] = [];
                 const constructSignatures: Signature[] = [];
@@ -873,25 +877,57 @@ namespace ts.codefix {
 
                 types.push(checker.createAnonymousType(/*symbol*/ undefined!, members, callSignatures, constructSignatures, stringIndexInfo, /*numberIndexInfo*/ undefined)); // TODO: GH#18217
             }
-            return types;
+            return types; // TODO: Should cache this since I HOPE it doesn't change
 
             function recur(innerUsage: Usage): Type {
                 return unifyFromUsage(inferFromUsage(innerUsage));
             }
         }
 
+        function createEmptyUsage(): Usage {
+            return {
+                isNumber: undefined,
+                isString: undefined,
+                isNumberOrString: undefined,
+                candidateTypes: undefined,
+                properties: undefined,
+                calls: undefined,
+                constructs: undefined,
+                numberIndex: undefined,
+                stringIndex: undefined,
+                candidateThisTypes: undefined,
+                inferredTypes: undefined,
+            }
+        }
+
         function combineUsages(usages: Usage[]): Usage {
+            const combinedProperties = createUnderscoreEscapedMap<Usage[]>()
+            for (const u of usages) {
+                if (u.properties) {
+                    u.properties.forEach((p,name) => {
+                        if (!combinedProperties.has(name)) {
+                            combinedProperties.set(name, []);
+                        }
+                        combinedProperties.get(name)!.push(p);
+                    });
+                }
+            }
+            const properties = createUnderscoreEscapedMap<Usage>()
+            combinedProperties.forEach((ps,name) => {
+                properties.set(name, combineUsages(ps));
+            });
             return {
                 isNumber: usages.some(u => u.isNumber),
                 isString: usages.some(u => u.isString),
                 isNumberOrString: usages.some(u => u.isNumberOrString),
                 candidateTypes: flatMap(usages, u => u.candidateTypes) as Type[],
-                properties: undefined, // TODO
+                properties,
                 calls: flatMap(usages, u => u.calls) as CallUsage[],
                 constructs: flatMap(usages, u => u.constructs) as CallUsage[],
                 numberIndex: forEach(usages, u => u.numberIndex),
                 stringIndex: forEach(usages, u => u.stringIndex),
                 candidateThisTypes: flatMap(usages, u => u.candidateThisTypes) as Type[],
+                inferredTypes: undefined, // clear type cache
             }
         }
 
@@ -901,7 +937,7 @@ namespace ts.codefix {
                 checker.getNumberType(),
                 checker.createArrayType(checker.getAnyType()),
                 checker.createPromiseType(checker.getAnyType()),
-                // checker.getFunctionType() // not sure what this was supposed to be good for.
+                // checker.getFunctionType() // TODO: not sure what this was supposed to be good for.
             ];
             const matches = builtins.filter(t => matchesAllPropertiesOf(t, usage));
             if (false && 0 < matches.length && matches.length < 3) {
