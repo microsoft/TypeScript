@@ -132,19 +132,6 @@ export const taskNameToGroup: {
 };
 //// [index.d.ts]
 export = MainThreadTasks;
-type TaskGroup = {
-    id: "parseHTML" | "styleLayout";
-    label: string;
-    traceEventNames: string[];
-};
-type TaskNode = {
-    children: TaskNode[];
-    parent: TaskNode;
-    group: import("./module.js").TaskGroup;
-};
-type PriorTaskData = {
-    timers: Map<string, TaskNode>;
-};
 /** @typedef {import('./module.js').TaskGroup} TaskGroup */
 /**
  * @typedef TaskNode
@@ -163,3 +150,16 @@ declare class MainThreadTasks {
 declare namespace MainThreadTasks {
     export { TaskGroup, TaskNode, PriorTaskData };
 }
+type TaskNode = {
+    children: TaskNode[];
+    parent: TaskNode;
+    group: import("./module.js").TaskGroup;
+};
+type TaskGroup = {
+    id: "parseHTML" | "styleLayout";
+    label: string;
+    traceEventNames: string[];
+};
+type PriorTaskData = {
+    timers: Map<string, TaskNode>;
+};

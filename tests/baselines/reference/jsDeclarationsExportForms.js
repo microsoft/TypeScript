@@ -162,10 +162,8 @@ export const ns: typeof import("./cls");
 export = ns;
 declare const ns: typeof import("./cls");
 //// [cjs3.d.ts]
-declare var ns_1: typeof import("./cls");
-export { ns_1 as ns };
+export var ns: typeof import("./cls");
 //// [cjs4.d.ts]
-declare var names_1: typeof import("./cls");
-export { names_1 as names };
+export var names: typeof import("./cls");
 //// [includeAll.d.ts]
 export {};

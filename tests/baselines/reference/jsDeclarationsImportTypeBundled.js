@@ -31,9 +31,6 @@ module.exports = items;
 //// [out.d.ts]
 declare module "folder/mod1" {
     export = x;
-    type Item = {
-        x: number;
-    };
     /**
      * @typedef {{x: number}} Item
      */
@@ -44,6 +41,9 @@ declare module "folder/mod1" {
     namespace x {
         export { Item };
     }
+    type Item = {
+        x: number;
+    };
 }
 declare module "index" {
     export = items;

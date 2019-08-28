@@ -35,6 +35,7 @@ Vec.prototype = {
 >length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
 >this.storage.length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
 >this.storage : Symbol(Vec.storage, Decl(source.js, 3, 26))
+>this : Symbol(Vec, Decl(source.js, 0, 0), Decl(source.js, 8, 1))
 >storage : Symbol(Vec.storage, Decl(source.js, 3, 26))
 >length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
 
@@ -49,6 +50,7 @@ Vec.prototype = {
 >i : Symbol(i, Decl(source.js, 19, 16))
 >this.storage.length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
 >this.storage : Symbol(Vec.storage, Decl(source.js, 3, 26))
+>this : Symbol(Vec, Decl(source.js, 0, 0), Decl(source.js, 8, 1))
 >storage : Symbol(Vec.storage, Decl(source.js, 3, 26))
 >length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
 >i : Symbol(i, Decl(source.js, 19, 16))
@@ -56,6 +58,7 @@ Vec.prototype = {
             sum += (this.storage[i] * other.storage[i]);
 >sum : Symbol(sum, Decl(source.js, 18, 11))
 >this.storage : Symbol(Vec.storage, Decl(source.js, 3, 26))
+>this : Symbol(Vec, Decl(source.js, 0, 0), Decl(source.js, 8, 1))
 >storage : Symbol(Vec.storage, Decl(source.js, 3, 26))
 >i : Symbol(i, Decl(source.js, 19, 16))
 >other.storage : Symbol(Vec.storage, Decl(source.js, 3, 26))
@@ -78,6 +81,7 @@ Vec.prototype = {
 >i : Symbol(i, Decl(source.js, 26, 16))
 >this.storage.length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
 >this.storage : Symbol(Vec.storage, Decl(source.js, 3, 26))
+>this : Symbol(Vec, Decl(source.js, 0, 0), Decl(source.js, 8, 1))
 >storage : Symbol(Vec.storage, Decl(source.js, 3, 26))
 >length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
 >i : Symbol(i, Decl(source.js, 26, 16))
@@ -85,6 +89,7 @@ Vec.prototype = {
             sum += (this.storage[i] ** 2);
 >sum : Symbol(sum, Decl(source.js, 25, 11))
 >this.storage : Symbol(Vec.storage, Decl(source.js, 3, 26))
+>this : Symbol(Vec, Decl(source.js, 0, 0), Decl(source.js, 8, 1))
 >storage : Symbol(Vec.storage, Decl(source.js, 3, 26))
 >i : Symbol(i, Decl(source.js, 26, 16))
         }
@@ -119,11 +124,11 @@ export function Point2D(x, y) {
 >call : Symbol(Function.call, Decl(lib.es5.d.ts, --, --))
 
     this.x = x;
->x : Symbol(Point2D.x, Decl(source.js, 41, 22))
+>x : Symbol(Point2D.x, Decl(source.js, 41, 22), Decl(source.js, 47, 19), Decl(source.js, 50, 6))
 >x : Symbol(x, Decl(source.js, 37, 24))
 
     this.y = y;
->y : Symbol(Point2D.y, Decl(source.js, 42, 15))
+>y : Symbol(Point2D.y, Decl(source.js, 42, 15), Decl(source.js, 56, 6), Decl(source.js, 59, 6))
 >y : Symbol(y, Decl(source.js, 37, 26))
 }
 
@@ -137,7 +142,7 @@ Point2D.prototype = {
 >Vec : Symbol(Vec, Decl(source.js, 0, 0), Decl(source.js, 8, 1))
 
     get x() {
->x : Symbol(x, Decl(source.js, 47, 19), Decl(source.js, 50, 6))
+>x : Symbol(Point2D.x, Decl(source.js, 41, 22), Decl(source.js, 47, 19), Decl(source.js, 50, 6))
 
         return this.storage[0];
 >this : Symbol(__object, Decl(source.js, 46, 19))
@@ -147,7 +152,7 @@ Point2D.prototype = {
      * @param {number} x
      */
     set x(x) {
->x : Symbol(x, Decl(source.js, 47, 19), Decl(source.js, 50, 6))
+>x : Symbol(Point2D.x, Decl(source.js, 41, 22), Decl(source.js, 47, 19), Decl(source.js, 50, 6))
 >x : Symbol(x, Decl(source.js, 54, 10))
 
         this.storage[0] = x;
@@ -156,7 +161,7 @@ Point2D.prototype = {
 
     },
     get y() {
->y : Symbol(y, Decl(source.js, 56, 6), Decl(source.js, 59, 6))
+>y : Symbol(Point2D.y, Decl(source.js, 42, 15), Decl(source.js, 56, 6), Decl(source.js, 59, 6))
 
         return this.storage[1];
 >this : Symbol(__object, Decl(source.js, 46, 19))
@@ -166,7 +171,7 @@ Point2D.prototype = {
      * @param {number} y
      */
     set y(y) {
->y : Symbol(y, Decl(source.js, 56, 6), Decl(source.js, 59, 6))
+>y : Symbol(Point2D.y, Decl(source.js, 42, 15), Decl(source.js, 56, 6), Decl(source.js, 59, 6))
 >y : Symbol(y, Decl(source.js, 63, 10))
 
         this.storage[1] = y;
@@ -183,8 +188,5 @@ export const origin = new Point2D(0, 0);
 >origin : Symbol(origin, Decl(referencer.js, 2, 12))
 >Point2D : Symbol(Point2D, Decl(referencer.js, 0, 8))
 
-export const res = Point2D(2, 3).dot(origin);
->res : Symbol(res, Decl(referencer.js, 3, 12))
->Point2D : Symbol(Point2D, Decl(referencer.js, 0, 8))
->origin : Symbol(origin, Decl(referencer.js, 2, 12))
+// export const res = Point2D(2, 3).dot(origin); // TODO: when __proto__ works, validate this
 

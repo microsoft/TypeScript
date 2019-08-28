@@ -74,6 +74,7 @@ function Context(input) {
 >input : Symbol(input, Decl(context.js, 31, 17))
 
     if (!(this instanceof Context)) {
+>this : Symbol(Context, Decl(context.js, 0, 0), Decl(context.js, 36, 1))
 >Context : Symbol(Context, Decl(context.js, 0, 0), Decl(context.js, 36, 1))
 
       return new Context(input)
@@ -83,8 +84,8 @@ function Context(input) {
     this.state = this.construct(input);
 >this.state : Symbol(Context.state, Decl(context.js, 34, 5))
 >state : Symbol(Context.state, Decl(context.js, 34, 5))
->this.construct : Symbol(construct, Decl(context.js, 37, 21))
->construct : Symbol(construct, Decl(context.js, 37, 21))
+>this.construct : Symbol(construct, Decl(context.js, 37, 21), Decl(context.js, 37, 21))
+>construct : Symbol(construct, Decl(context.js, 37, 21), Decl(context.js, 37, 21))
 >input : Symbol(input, Decl(context.js, 31, 17))
 }
 Context.prototype = {

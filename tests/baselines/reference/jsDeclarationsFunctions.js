@@ -130,6 +130,8 @@ export namespace b {
 export function c(): void;
 export namespace c {
     export { Cls };
+    class Cls {
+    }
 }
 /**
  * @param {number} a
@@ -154,8 +156,6 @@ export namespace f {
 }
 export function i(): void;
 export function j(): void;
-declare class Cls {
-}
 /**
  * @param {{x: string}} a
  * @param {{y: typeof b}} b

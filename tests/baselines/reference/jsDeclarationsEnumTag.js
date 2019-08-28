@@ -111,25 +111,20 @@ export function consume(t: string, s: number, f: (arg0: number) => number): void
 /** @param {string} s */
 export function ff(s: string): any;
 export type Target = string;
-/** @enum {string} */
-export const Target: {
-    START: string;
-    MIDDLE: string;
-    END: string;
-    /** @type {number} */
-    OK_I_GUESS: number;
-};
+export namespace Target {
+    export const START: string;
+    export const MIDDLE: string;
+    export const END: string;
+    export const OK_I_GUESS: number;
+}
 export type Second = number;
-/** @enum number */
-export const Second: {
-    OK: number;
-    /** @type {number} */
-    FINE: number;
-};
+export namespace Second {
+    export const OK: number;
+    export const FINE: number;
+}
 export type Fs = (arg0: number) => number;
-/** @enum {function(number): number} */
-export const Fs: {
-    ADD1: (n: any) => any;
-    ID: (n: any) => any;
-    SUB1: (n: any) => number;
-};
+export namespace Fs {
+    export function ADD1(n: any): any;
+    export function ID(n: any): any;
+    export function SUB1(n: any): number;
+}

@@ -3,7 +3,7 @@ export = exports;
 >exports : import("tests/cases/compiler/input")
 
 declare class exports {
->exports : import("tests/cases/compiler/input")
+>exports : exports
 
     constructor(p: number);
 >p : number
@@ -23,7 +23,7 @@ export class Sub {
     };
 }
 declare namespace exports {
->exports : typeof import("tests/cases/compiler/input")
+>exports : typeof exports
 
     export { Sub };
 >Sub : typeof import("tests/cases/compiler/input").Sub

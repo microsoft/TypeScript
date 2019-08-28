@@ -41,9 +41,9 @@ declare class exports {
     constructor(p: number);
     t: number;
 }
-declare class Sub {
-    instance: import(".");
-}
 declare namespace exports {
     export { Sub };
+}
+declare class Sub {
+    instance: import(".");
 }

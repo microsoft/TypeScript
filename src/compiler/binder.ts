@@ -2597,7 +2597,7 @@ namespace ts {
                         // Declare a 'member' if the container is an ES5 class or ES6 constructor
                         constructorSymbol.members = constructorSymbol.members || createSymbolTable();
                         // It's acceptable for multiple 'this' assignments of the same identifier to occur
-                        declareSymbol(constructorSymbol.members, constructorSymbol, node, SymbolFlags.Property, SymbolFlags.PropertyExcludes & ~SymbolFlags.Property);
+                        declareSymbol(constructorSymbol.members, constructorSymbol, node, SymbolFlags.Property | SymbolFlags.Assignment, SymbolFlags.PropertyExcludes & ~SymbolFlags.Property);
                         addDeclarationToSymbol(constructorSymbol, constructorSymbol.valueDeclaration, SymbolFlags.Class);
                     }
                     break;
@@ -2611,7 +2611,7 @@ namespace ts {
                     // Bind this property to the containing class
                     const containingClass = thisContainer.parent;
                     const symbolTable = hasModifier(thisContainer, ModifierFlags.Static) ? containingClass.symbol.exports! : containingClass.symbol.members!;
-                    declareSymbol(symbolTable, containingClass.symbol, node, SymbolFlags.Property, SymbolFlags.None, /*isReplaceableByMethod*/ true);
+                    declareSymbol(symbolTable, containingClass.symbol, node, SymbolFlags.Property | SymbolFlags.Assignment, SymbolFlags.None, /*isReplaceableByMethod*/ true);
                     break;
                 case SyntaxKind.SourceFile:
                     // this.property = assignment in a source file -- declare symbol in exports for a module, in locals for a script

@@ -28,22 +28,22 @@ module.exports = Timer;
  * @param {HookHandler} handle
  */
 function Hook(handle) {
->Hook : typeof import("tests/cases/conformance/jsdoc/declarations/hook")
->handle : (arg: import("tests/cases/conformance/jsdoc/declarations/context") & { construct(input: import("tests/cases/conformance/jsdoc/declarations/context").Input, handle?: any): import("tests/cases/conformance/jsdoc/declarations/context").State; }) => void
+>Hook : typeof Hook
+>handle : (arg: import("tests/cases/conformance/jsdoc/declarations/context")) => void
 
     this.handle = handle;
->this.handle = handle : (arg: import("tests/cases/conformance/jsdoc/declarations/context") & { construct(input: import("tests/cases/conformance/jsdoc/declarations/context").Input, handle?: any): import("tests/cases/conformance/jsdoc/declarations/context").State; }) => void
+>this.handle = handle : (arg: import("tests/cases/conformance/jsdoc/declarations/context")) => void
 >this.handle : any
 >this : any
 >handle : any
->handle : (arg: import("tests/cases/conformance/jsdoc/declarations/context") & { construct(input: import("tests/cases/conformance/jsdoc/declarations/context").Input, handle?: any): import("tests/cases/conformance/jsdoc/declarations/context").State; }) => void
+>handle : (arg: import("tests/cases/conformance/jsdoc/declarations/context")) => void
 }
 module.exports = Hook;
->module.exports = Hook : typeof import("tests/cases/conformance/jsdoc/declarations/hook")
->module.exports : typeof import("tests/cases/conformance/jsdoc/declarations/hook")
->module : { "tests/cases/conformance/jsdoc/declarations/hook": typeof import("tests/cases/conformance/jsdoc/declarations/hook"); }
->exports : typeof import("tests/cases/conformance/jsdoc/declarations/hook")
->Hook : typeof import("tests/cases/conformance/jsdoc/declarations/hook")
+>module.exports = Hook : typeof Hook
+>module.exports : typeof Hook
+>module : { "tests/cases/conformance/jsdoc/declarations/hook": typeof Hook; }
+>exports : typeof Hook
+>Hook : typeof Hook
 
 === tests/cases/conformance/jsdoc/declarations/context.js ===
 /**
@@ -78,38 +78,38 @@ module.exports = Hook;
  */
 
 function Context(input) {
->Context : typeof import("tests/cases/conformance/jsdoc/declarations/context")
+>Context : typeof Context
 >input : Input
 
     if (!(this instanceof Context)) {
 >!(this instanceof Context) : boolean
 >(this instanceof Context) : boolean
 >this instanceof Context : boolean
->this : import("tests/cases/conformance/jsdoc/declarations/context") & { construct(input: Input, handle?: (arg: import("tests/cases/conformance/jsdoc/declarations/context") & { construct(input: Input, handle?: any): State; }) => void): State; }
->Context : typeof import("tests/cases/conformance/jsdoc/declarations/context")
+>this : this
+>Context : typeof Context
 
       return new Context(input)
->new Context(input) : import("tests/cases/conformance/jsdoc/declarations/context") & { construct(input: Input, handle?: (arg: import("tests/cases/conformance/jsdoc/declarations/context") & any) => void): State; }
->Context : typeof import("tests/cases/conformance/jsdoc/declarations/context")
+>new Context(input) : Context
+>Context : typeof Context
 >input : Input
     }
     this.state = this.construct(input);
 >this.state = this.construct(input) : State
->this.state : State
->this : import("tests/cases/conformance/jsdoc/declarations/context") & { construct(input: Input, handle?: (arg: import("tests/cases/conformance/jsdoc/declarations/context") & { construct(input: Input, handle?: any): State; }) => void): State; }
->state : State
+>this.state : any
+>this : this & { construct(input: Input, handle?: (arg: Context) => void): State; }
+>state : any
 >this.construct(input) : State
->this.construct : (input: Input, handle?: (arg: import("tests/cases/conformance/jsdoc/declarations/context") & { construct(input: Input, handle?: any): State; }) => void) => State
->this : import("tests/cases/conformance/jsdoc/declarations/context") & { construct(input: Input, handle?: (arg: import("tests/cases/conformance/jsdoc/declarations/context") & { construct(input: Input, handle?: any): State; }) => void): State; }
->construct : (input: Input, handle?: (arg: import("tests/cases/conformance/jsdoc/declarations/context") & { construct(input: Input, handle?: any): State; }) => void) => State
+>this.construct : (input: Input, handle?: (arg: Context) => void) => State
+>this : this & { construct(input: Input, handle?: (arg: Context) => void): State; }
+>construct : (input: Input, handle?: (arg: Context) => void) => State
 >input : Input
 }
 Context.prototype = {
->Context.prototype = {    /**     * @param {Input} input     * @param {HookHandler=} handle     * @returns {State}     */    construct(input, handle = () => void 0) {        return input;    }} : { construct(input: Input, handle?: (arg: import("tests/cases/conformance/jsdoc/declarations/context") & { construct(input: Input, handle?: any): State; }) => void): State; }
->Context.prototype : { construct(input: Input, handle?: (arg: import("tests/cases/conformance/jsdoc/declarations/context") & { construct(input: Input, handle?: any): State; }) => void): State; }
->Context : typeof import("tests/cases/conformance/jsdoc/declarations/context")
->prototype : { construct(input: Input, handle?: (arg: import("tests/cases/conformance/jsdoc/declarations/context") & { construct(input: Input, handle?: any): State; }) => void): State; }
->{    /**     * @param {Input} input     * @param {HookHandler=} handle     * @returns {State}     */    construct(input, handle = () => void 0) {        return input;    }} : { construct(input: Input, handle?: (arg: import("tests/cases/conformance/jsdoc/declarations/context") & { construct(input: Input, handle?: any): State; }) => void): State; }
+>Context.prototype = {    /**     * @param {Input} input     * @param {HookHandler=} handle     * @returns {State}     */    construct(input, handle = () => void 0) {        return input;    }} : { construct(input: Input, handle?: (arg: Context) => void): State; }
+>Context.prototype : { construct(input: Input, handle?: (arg: Context) => void): State; }
+>Context : typeof Context
+>prototype : { construct(input: Input, handle?: (arg: Context) => void): State; }
+>{    /**     * @param {Input} input     * @param {HookHandler=} handle     * @returns {State}     */    construct(input, handle = () => void 0) {        return input;    }} : { construct(input: Input, handle?: (arg: Context) => void): State; }
 
     /**
      * @param {Input} input
@@ -117,9 +117,9 @@ Context.prototype = {
      * @returns {State}
      */
     construct(input, handle = () => void 0) {
->construct : (input: Input, handle?: (arg: import("tests/cases/conformance/jsdoc/declarations/context") & { construct(input: Input, handle?: any): State; }) => void) => State
+>construct : (input: Input, handle?: (arg: Context) => void) => State
 >input : Input
->handle : (arg: import("tests/cases/conformance/jsdoc/declarations/context") & { construct(input: Input, handle?: any): State; }) => void
+>handle : (arg: Context) => void
 >() => void 0 : () => any
 >void 0 : undefined
 >0 : 0
@@ -129,9 +129,9 @@ Context.prototype = {
     }
 }
 module.exports = Context;
->module.exports = Context : typeof import("tests/cases/conformance/jsdoc/declarations/context")
->module.exports : typeof import("tests/cases/conformance/jsdoc/declarations/context")
->module : { "tests/cases/conformance/jsdoc/declarations/context": typeof import("tests/cases/conformance/jsdoc/declarations/context"); }
->exports : typeof import("tests/cases/conformance/jsdoc/declarations/context")
->Context : typeof import("tests/cases/conformance/jsdoc/declarations/context")
+>module.exports = Context : typeof Context
+>module.exports : typeof Context
+>module : { "tests/cases/conformance/jsdoc/declarations/context": typeof Context; }
+>exports : typeof Context
+>Context : typeof Context
 

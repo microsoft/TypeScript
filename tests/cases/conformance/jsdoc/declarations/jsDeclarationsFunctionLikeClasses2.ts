@@ -78,4 +78,4 @@ Point2D.prototype = {
 import {Point2D} from "./source";
 
 export const origin = new Point2D(0, 0);
-export const res = Point2D(2, 3).dot(origin);
+// export const res = Point2D(2, 3).dot(origin); // TODO: when __proto__ works, validate this

@@ -117,7 +117,7 @@ declare var _default: 12;
 export default _default;
 //// [index2.d.ts]
 export default function foo(): typeof foo;
-export const x: typeof foo;
+export function x(): typeof foo;
 export { foo as bar };
 //// [index3.d.ts]
 export default class Foo {

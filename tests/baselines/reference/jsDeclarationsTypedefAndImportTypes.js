@@ -64,7 +64,6 @@ module.exports = {
 
 //// [conn.d.ts]
 export = Conn;
-type Whatever = string | number;
 /**
  * @typedef {string | number} Whatever
  */
@@ -75,6 +74,7 @@ declare class Conn {
 declare namespace Conn {
     export { Whatever };
 }
+type Whatever = string | number;
 //// [usage.d.ts]
 export type Conn = import("./conn");
 /**

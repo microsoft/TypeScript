@@ -114,34 +114,28 @@ module.exports.j = function j() { };
 
 
 //// [index.d.ts]
-declare var a_1: () => void;
-declare var b_1: {
-    (): void;
-    cat: string;
-};
-declare var c_1: {
-    (): void;
-    Cls: {
-        new (): {};
-    };
-};
-declare var d_1: (a: number, b: number) => string;
-declare var e_1: <T, U>(a: T, b: U) => T & U;
-declare var f_1: {
-    <T>(a: T): T;
-    self: any;
-};
-declare var g_1: typeof g;
-declare var h_1: typeof hh;
-declare var i_1: () => void;
-declare var ii_1: () => void;
-declare var jj_1: () => void;
-declare var j_1: () => void;
+export function a(): void;
+export function b(): void;
+export namespace b {
+    export const cat: string;
+}
+export function c(): void;
+export namespace c {
+    class Cls {
+    }
+}
+export function d(a: number, b: number): string;
+export function e<T, U>(a: T, b: U): T & U;
+export function f<T>(a: T): T;
+export namespace f {
+    import self = f;
+    export { self };
+}
 /**
  * @param {{x: string}} a
  * @param {{y: typeof module.exports.b}} b
  */
-declare function g(a: {
+export function g(a: {
     x: string;
 }, b: {
     y: {
@@ -153,7 +147,7 @@ declare function g(a: {
  * @param {{x: string}} a
  * @param {{y: typeof module.exports.b}} b
  */
-declare function hh(a: {
+export function h(a: {
     x: string;
 }, b: {
     y: {
@@ -161,4 +155,7 @@ declare function hh(a: {
         cat: string;
     };
 }): void;
-export { a_1 as a, b_1 as b, c_1 as c, d_1 as d, e_1 as e, f_1 as f, g_1 as g, h_1 as h, i_1 as i, ii_1 as ii, jj_1 as jj, j_1 as j };
+export function i(): void;
+export function ii(): void;
+export function jj(): void;
+export function j(): void;

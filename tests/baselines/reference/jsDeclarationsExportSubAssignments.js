@@ -23,12 +23,12 @@ module.exports.Strings = Strings;
 
 //// [cls.d.ts]
 export = Foo;
-declare var Strings_1: {
-    a: string;
-    b: string;
-};
 declare class Foo {
 }
 declare namespace Foo {
-    export { Strings_1 as Strings };
+    export { Strings };
+}
+declare namespace Strings {
+    export const a: string;
+    export const b: string;
 }

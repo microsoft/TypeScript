@@ -19,22 +19,22 @@ const Strings = {
 
 };
 class Foo extends Bar {}
->Foo : import("tests/cases/conformance/jsdoc/declarations/cls")
+>Foo : Foo
 >Bar : import("tests/cases/conformance/jsdoc/declarations/bar")
 
 module.exports = Foo;
->module.exports = Foo : typeof import("tests/cases/conformance/jsdoc/declarations/cls")
->module.exports : typeof import("tests/cases/conformance/jsdoc/declarations/cls")
->module : { "tests/cases/conformance/jsdoc/declarations/cls": typeof import("tests/cases/conformance/jsdoc/declarations/cls"); }
->exports : typeof import("tests/cases/conformance/jsdoc/declarations/cls")
->Foo : typeof import("tests/cases/conformance/jsdoc/declarations/cls")
+>module.exports = Foo : typeof Foo
+>module.exports : typeof Foo
+>module : { "tests/cases/conformance/jsdoc/declarations/cls": typeof Foo; }
+>exports : typeof Foo
+>Foo : typeof Foo
 
 module.exports.Strings = Strings;
 >module.exports.Strings = Strings : { a: string; b: string; }
 >module.exports.Strings : { a: string; b: string; }
->module.exports : typeof import("tests/cases/conformance/jsdoc/declarations/cls")
->module : { "tests/cases/conformance/jsdoc/declarations/cls": typeof import("tests/cases/conformance/jsdoc/declarations/cls"); }
->exports : typeof import("tests/cases/conformance/jsdoc/declarations/cls")
+>module.exports : typeof Foo
+>module : { "tests/cases/conformance/jsdoc/declarations/cls": typeof Foo; }
+>exports : typeof Foo
 >Strings : { a: string; b: string; }
 >Strings : { a: string; b: string; }
 

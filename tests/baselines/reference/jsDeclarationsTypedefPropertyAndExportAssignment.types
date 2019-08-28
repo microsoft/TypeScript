@@ -17,7 +17,7 @@ const {taskGroups, taskNameToGroup} = require('./module.js');
 
 /** @typedef {{timers: Map<string, TaskNode>}} PriorTaskData */
 class MainThreadTasks {
->MainThreadTasks : import("tests/cases/conformance/jsdoc/declarations/index")
+>MainThreadTasks : MainThreadTasks
 
     /**
      * @param {TaskGroup} x
@@ -29,11 +29,11 @@ class MainThreadTasks {
 }
 
 module.exports = MainThreadTasks;
->module.exports = MainThreadTasks : typeof import("tests/cases/conformance/jsdoc/declarations/index")
->module.exports : typeof import("tests/cases/conformance/jsdoc/declarations/index")
->module : { "tests/cases/conformance/jsdoc/declarations/index": typeof import("tests/cases/conformance/jsdoc/declarations/index"); }
->exports : typeof import("tests/cases/conformance/jsdoc/declarations/index")
->MainThreadTasks : typeof import("tests/cases/conformance/jsdoc/declarations/index")
+>module.exports = MainThreadTasks : typeof MainThreadTasks
+>module.exports : typeof MainThreadTasks
+>module : { "tests/cases/conformance/jsdoc/declarations/index": typeof MainThreadTasks; }
+>exports : typeof MainThreadTasks
+>MainThreadTasks : typeof MainThreadTasks
 
 === tests/cases/conformance/jsdoc/declarations/module.js ===
 /** @typedef {'parseHTML'|'styleLayout'} TaskGroupIds */
