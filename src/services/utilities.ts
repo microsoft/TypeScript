@@ -353,6 +353,7 @@ namespace ts {
             case SyntaxKind.MethodDeclaration:
             case SyntaxKind.MethodSignature:
                 return ScriptElementKind.memberFunctionElement;
+            case SyntaxKind.PropertyAssignment:
             case SyntaxKind.PropertyDeclaration:
             case SyntaxKind.PropertySignature:
                 return ScriptElementKind.memberVariableElement;

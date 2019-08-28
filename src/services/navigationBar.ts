@@ -251,16 +251,10 @@ namespace ts.NavigationBar {
                     addChildrenRecursively(name);
                 }
                 else if (initializer && isFunctionOrClassExpression(initializer)) {
-                    if (initializer.name) {
-                        // Don't add a node for the VariableDeclaration, just for the initializer.
-                        addChildrenRecursively(initializer);
-                    }
-                    else {
-                        // Add a node for the VariableDeclaration, but not for the initializer.
-                        startNode(node);
-                        forEachChild(initializer, addChildrenRecursively);
-                        endNode();
-                    }
+                    // Add a node for the VariableDeclaration, but not for the initializer.
+                    startNode(node);
+                    forEachChild(initializer, addChildrenRecursively);
+                    endNode();
                 }
                 else {
                     addNodeWithRecursiveChild(node, initializer);
@@ -717,6 +711,9 @@ namespace ts.NavigationBar {
         return topLevel;
 
         function isTopLevel(item: NavigationBarNode): boolean {
+            if (item.children) {
+                return true;
+            }
             switch (navigationBarNodeKind(item)) {
                 case SyntaxKind.ClassDeclaration:
                 case SyntaxKind.ClassExpression:
@@ -735,7 +732,7 @@ namespace ts.NavigationBar {
                     return isTopLevelFunctionDeclaration(item);
 
                 default:
-                    return hasSomeImportantChild(item);
+                    return false;
             }
             function isTopLevelFunctionDeclaration(item: NavigationBarNode): boolean {
                 if (!(<FunctionDeclaration>item.node).body) {
@@ -749,11 +746,8 @@ namespace ts.NavigationBar {
                     case SyntaxKind.Constructor:
                         return true;
                     default:
-                        return hasSomeImportantChild(item);
+                        return false;
                 }
-            }
-            function hasSomeImportantChild(item: NavigationBarNode): boolean {
-                return item.children ? true : false;
             }
         }
     }
