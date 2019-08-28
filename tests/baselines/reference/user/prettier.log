@@ -184,7 +184,7 @@ src/language-js/index.js(66,26): error TS2307: Cannot find module 'linguist-lang
 src/language-js/index.js(76,26): error TS2307: Cannot find module 'linguist-languages/data/json5'.
 src/language-js/index.js(76,60): error TS2345: Argument of type '{ override: { since: string; parsers: string[]; vscodeLanguageIds: string[]; }; }' is not assignable to parameter of type '{ extend: any; override: any; }'.
   Property 'extend' is missing in type '{ override: { since: string; parsers: string[]; vscodeLanguageIds: string[]; }; }' but required in type '{ extend: any; override: any; }'.
-src/language-js/needs-parens.js(890,14): error TS2769: No overload matches this call.
+src/language-js/needs-parens.js(871,14): error TS2769: No overload matches this call.
   Overload 1 of 2, '(...items: ConcatArray<(childPath: any) => any>[]): ((childPath: any) => any)[]', gave the following error.
     Argument of type '(string | number)[]' is not assignable to parameter of type 'ConcatArray<(childPath: any) => any>'.
       Types of property 'slice' are incompatible.
