@@ -1053,7 +1053,7 @@ namespace ts {
 
         function setWriter(_writer: EmitTextWriter | undefined, _sourceMapGenerator: SourceMapGenerator | undefined) {
             if (_writer && printerOptions.omitTrailingSemicolon) {
-                _writer = getTrailingSemicolonOmittingWriter(_writer);
+                _writer = getTrailingSemicolonDeferringWriter(_writer);
             }
 
             writer = _writer!; // TODO: GH#18217
@@ -2511,7 +2511,7 @@ namespace ts {
             }
 
             emitWhileClause(node, node.statement.end);
-            writePunctuation(";");
+            writeTrailingSemicolon();
         }
 
         function emitWhileStatement(node: WhileStatement) {
