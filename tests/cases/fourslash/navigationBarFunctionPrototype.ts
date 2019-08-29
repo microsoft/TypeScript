@@ -44,11 +44,11 @@ verify.navigationTree({
                     "childItems": [
                         {
                             "text": "get",
-                            "kind": "function"
+                            "kind": "property"
                         },
                         {
                             "text": "set",
-                            "kind": "function"
+                            "kind": "property"
                         }
                     ]
                 },
@@ -57,11 +57,11 @@ verify.navigationTree({
                     "childItems": [
                         {
                             "text": "get",
-                            "kind": "function"
+                            "kind": "property"
                         },
                         {
                             "text": "set",
-                            "kind": "function"
+                            "kind": "property"
                         }
                     ]
                 }
@@ -108,5 +108,33 @@ verify.navigationBar([
             }
         ],
         "indent": 1
-    }
+    },
+    {
+        "text": "staticProp",
+        "childItems": [
+          {
+            "text": "get",
+            "kind": "property"
+          },
+          {
+            "text": "set",
+            "kind": "property"
+          }
+        ],
+        "indent": 2
+      },
+      {
+        "text": "name",
+        "childItems": [
+          {
+            "text": "get",
+            "kind": "property"
+          },
+          {
+            "text": "set",
+            "kind": "property"
+          }
+        ],
+        "indent": 2
+      }
 ]);
