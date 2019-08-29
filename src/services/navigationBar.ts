@@ -33,6 +33,9 @@ namespace ts.NavigationBar {
     let parentsStack: NavigationBarNode[] = [];
     let parent: NavigationBarNode;
 
+    const trackedEs5ClassesStack: (Map<boolean> | undefined)[] = [];
+    let trackedEs5Classes: Map<boolean> | undefined;
+
     // NavigationBarItem requires an array, but will not mutate it, so just give it this for performance.
     let emptyChildItemArray: NavigationBarItem[] = [];
 
@@ -112,10 +115,10 @@ namespace ts.NavigationBar {
         pushChild(parent, emptyNavigationBarNode(node));
     }
 
-    function emptyNavigationBarNode(node: Node): NavigationBarNode {
+    function emptyNavigationBarNode(node: Node, name?: DeclarationName): NavigationBarNode {
         return {
             node,
-            name: isDeclaration(node) || isExpression(node) ? getNameOfDeclaration(node) : undefined,
+            name: name || (isDeclaration(node) || isExpression(node) ? getNameOfDeclaration(node) : undefined),
             additionalNodes: undefined,
             parent,
             children: undefined,
@@ -123,16 +126,42 @@ namespace ts.NavigationBar {
         };
     }
 
+    function addTrackedEs5Class(name: string) {
+        if (!trackedEs5Classes) {
+            trackedEs5Classes = createMap();
+        }
+        trackedEs5Classes.set(name, true);
+    }
+    function endNestedNodes(depth: number): void {
+        for (let i = 0; i < depth; i++) endNode();
+    }
+    function startNestedNodes(targetNode: Node, entityName: EntityNameExpression) {
+        const names: Identifier[] = [];
+        while (!isIdentifier(entityName)) {
+            const name = entityName.name;
+            entityName = entityName.expression;
+            if (name.escapedText === "prototype") continue;
+            names.push(name);
+        }
+        names.push(entityName);
+        for (let i = names.length - 1; i > 0; i--) {
+            const name = names[i];
+            startNode(targetNode, name);
+        }
+        return [names.length - 1, names[0]] as const;
+    }
+
     /**
      * Add a new level of NavigationBarNodes.
      * This pushes to the stack, so you must call `endNode` when you are done adding to this node.
      */
-    function startNode(node: Node): void {
-        const navNode: NavigationBarNode = emptyNavigationBarNode(node);
+    function startNode(node: Node, name?: DeclarationName): void {
+        const navNode: NavigationBarNode = emptyNavigationBarNode(node, name);
         pushChild(parent, navNode);
 
         // Save the old parent
         parentsStack.push(parent);
+        trackedEs5ClassesStack.push(trackedEs5Classes);
         parent = navNode;
     }
 
@@ -143,10 +172,11 @@ namespace ts.NavigationBar {
             sortChildren(parent.children);
         }
         parent = parentsStack.pop()!;
+        trackedEs5Classes = trackedEs5ClassesStack.pop();
     }
 
-    function addNodeWithRecursiveChild(node: Node, child: Node | undefined): void {
-        startNode(node);
+    function addNodeWithRecursiveChild(node: Node, child: Node | undefined, name?: DeclarationName): void {
+        startNode(node, name);
         addChildrenRecursively(child);
         endNode();
     }
@@ -236,8 +266,15 @@ namespace ts.NavigationBar {
                 }
                 break;
 
-            case SyntaxKind.ArrowFunction:
             case SyntaxKind.FunctionDeclaration:
+                const nameNode = (<FunctionLikeDeclaration>node).name;
+                // If we see a function declaration track as a possible ES5 class
+                if (nameNode && isIdentifier(nameNode)) {
+                    addTrackedEs5Class(nameNode.text);
+                }
+                addNodeWithRecursiveChild(node, (<FunctionLikeDeclaration>node).body);
+                break;
+            case SyntaxKind.ArrowFunction:
             case SyntaxKind.FunctionExpression:
                 addNodeWithRecursiveChild(node, (<FunctionLikeDeclaration>node).body);
                 break;
@@ -275,21 +312,94 @@ namespace ts.NavigationBar {
                 addLeafNode(node);
                 break;
 
+            case SyntaxKind.CallExpression:
             case SyntaxKind.BinaryExpression: {
                 const special = getAssignmentDeclarationKind(node as BinaryExpression);
                 switch (special) {
                     case AssignmentDeclarationKind.ExportsProperty:
                     case AssignmentDeclarationKind.ModuleExports:
-                    case AssignmentDeclarationKind.PrototypeProperty:
-                    case AssignmentDeclarationKind.Prototype:
                         addNodeWithRecursiveChild(node, (node as BinaryExpression).right);
                         return;
-                    case AssignmentDeclarationKind.ThisProperty:
-                    case AssignmentDeclarationKind.Property:
-                    case AssignmentDeclarationKind.None:
+                    case AssignmentDeclarationKind.Prototype:
+                    case AssignmentDeclarationKind.PrototypeProperty: {
+                        const binaryExpression = (node as BinaryExpression);
+                        const assignmentTarget = binaryExpression.left as PropertyAccessExpression;
+
+                        const prototypeAccess = special === AssignmentDeclarationKind.PrototypeProperty ?
+                            assignmentTarget.expression as PropertyAccessExpression :
+                            assignmentTarget;
+
+                        let depth = 0;
+                        let className: Identifier;
+                        // If we see a prototype assignment, start tracking the target as a class
+                        // This is only done for simple classes not nested assignments.
+                        if (isIdentifier(prototypeAccess.expression)) {
+                            addTrackedEs5Class(prototypeAccess.expression.text);
+                            className = prototypeAccess.expression;
+                        }
+                        else {
+                            [depth, className] = startNestedNodes(binaryExpression, prototypeAccess.expression as EntityNameExpression);
+                        }
+                        if (special === AssignmentDeclarationKind.Prototype) {
+                            if (isObjectLiteralExpression(binaryExpression.right)) {
+                                if (binaryExpression.right.properties.length > 0) {
+                                    startNode(binaryExpression, className);
+                                        forEachChild(binaryExpression.right, addChildrenRecursively);
+                                    endNode();
+                                }
+                            }
+                        }
+                        else if (isFunctionExpression(binaryExpression.right) || isArrowFunction(binaryExpression.right)) {
+                            addNodeWithRecursiveChild(node,
+                                binaryExpression.right,
+                                className);
+                        }
+                        else {
+                            startNode(binaryExpression, className);
+                                addNodeWithRecursiveChild(node, binaryExpression.right, assignmentTarget.name);
+                            endNode();
+                        }
+                        endNestedNodes(depth);
+                        return;
+                    }
                     case AssignmentDeclarationKind.ObjectDefinePropertyValue:
+                    case AssignmentDeclarationKind.ObjectDefinePrototypeProperty: {
+                        const defineCall = node as BindableObjectDefinePropertyCall;
+                        const className = special === AssignmentDeclarationKind.ObjectDefinePropertyValue ?
+                            defineCall.arguments[0] :
+                            (defineCall.arguments[0] as PropertyAccessExpression).expression as EntityNameExpression;
+
+                        const memberName = defineCall.arguments[1];
+                        const [depth, classNameIdentifier] = startNestedNodes(node, className);
+                            startNode(node, classNameIdentifier);
+                                startNode(node, setTextRange(createIdentifier(memberName.text), memberName));
+                                    addChildrenRecursively((node as CallExpression).arguments[2]);
+                                endNode();
+                            endNode();
+                        endNestedNodes(depth);
+                        return;
+                    }
+                    case AssignmentDeclarationKind.Property: {
+                        const binaryExpression = (node as BinaryExpression);
+                        const assignmentTarget = binaryExpression.left as PropertyAccessExpression;
+                        const targetFunction = assignmentTarget.expression;
+                        if (isIdentifier(targetFunction) && assignmentTarget.name.escapedText !== "prototype" &&
+                            trackedEs5Classes && trackedEs5Classes.has(targetFunction.text)) {
+                            if (isFunctionExpression(binaryExpression.right) || isArrowFunction(binaryExpression.right)) {
+                                addNodeWithRecursiveChild(node, binaryExpression.right, targetFunction);
+                            }
+                            else {
+                                startNode(binaryExpression, targetFunction);
+                                    addNodeWithRecursiveChild(binaryExpression.left, binaryExpression.right, assignmentTarget.name);
+                                endNode();
+                            }
+                            return;
+                        }
+                        break;
+                    }
+                    case AssignmentDeclarationKind.ThisProperty:
+                    case AssignmentDeclarationKind.None:
                     case AssignmentDeclarationKind.ObjectDefinePropertyExports:
-                    case AssignmentDeclarationKind.ObjectDefinePrototypeProperty:
                         break;
                     default:
                         Debug.assertNever(special);
@@ -315,8 +425,8 @@ namespace ts.NavigationBar {
     /** Merge declarations of the same kind. */
     function mergeChildren(children: NavigationBarNode[], node: NavigationBarNode): void {
         const nameToItems = createMap<NavigationBarNode | NavigationBarNode[]>();
-        filterMutate(children, child => {
-            const declName = getNameOfDeclaration(<Declaration>child.node);
+        filterMutate(children, (child, index) => {
+            const declName = child.name || getNameOfDeclaration(<Declaration>child.node);
             const name = declName && nodeText(declName);
             if (!name) {
                 // Anonymous items are never merged.
@@ -331,7 +441,7 @@ namespace ts.NavigationBar {
 
             if (itemsWithSameName instanceof Array) {
                 for (const itemWithSameName of itemsWithSameName) {
-                    if (tryMerge(itemWithSameName, child, node)) {
+                    if (tryMerge(itemWithSameName, child, index, node)) {
                         return false;
                     }
                 }
@@ -340,7 +450,7 @@ namespace ts.NavigationBar {
             }
             else {
                 const itemWithSameName = itemsWithSameName;
-                if (tryMerge(itemWithSameName, child, node)) {
+                if (tryMerge(itemWithSameName, child, index, node)) {
                     return false;
                 }
                 nameToItems.set(name, [itemWithSameName, child]);
@@ -348,8 +458,116 @@ namespace ts.NavigationBar {
             }
         });
     }
+    const isEs5ClassMember: Record<AssignmentDeclarationKind, boolean> = {
+        [AssignmentDeclarationKind.Property]: true,
+        [AssignmentDeclarationKind.PrototypeProperty]: true,
+        [AssignmentDeclarationKind.ObjectDefinePropertyValue]: true,
+        [AssignmentDeclarationKind.ObjectDefinePrototypeProperty]: true,
+        [AssignmentDeclarationKind.None]: false,
+        [AssignmentDeclarationKind.ExportsProperty]: false,
+        [AssignmentDeclarationKind.ModuleExports]: false,
+        [AssignmentDeclarationKind.ObjectDefinePropertyExports]: false,
+        [AssignmentDeclarationKind.Prototype]: true,
+        [AssignmentDeclarationKind.ThisProperty]: false,
+    };
+    function tryMergeEs5Class(a: NavigationBarNode, b: NavigationBarNode, bIndex: number, parent: NavigationBarNode): boolean | undefined {
 
-    function tryMerge(a: NavigationBarNode, b: NavigationBarNode, parent: NavigationBarNode): boolean {
+        function isPossibleConstructor(node: Node) {
+            return isFunctionExpression(node) || isFunctionDeclaration(node) || isVariableDeclaration(node);
+        }
+        const bAssignmentDeclarationKind = isBinaryExpression(b.node) || isCallExpression(b.node) ?
+            getAssignmentDeclarationKind(b.node) :
+            AssignmentDeclarationKind.None;
+
+        const aAssignmentDeclarationKind = isBinaryExpression(a.node) || isCallExpression(a.node) ?
+            getAssignmentDeclarationKind(a.node) :
+            AssignmentDeclarationKind.None;
+
+        // We treat this as an es5 class and merge the nodes in in one of several cases
+        if ((isEs5ClassMember[bAssignmentDeclarationKind] && isEs5ClassMember[aAssignmentDeclarationKind]) // merge two class elements
+            || (isPossibleConstructor(a.node) && isEs5ClassMember[bAssignmentDeclarationKind]) // ctor function & member
+            || (isPossibleConstructor(b.node) && isEs5ClassMember[aAssignmentDeclarationKind]) // member & ctor function
+            || (isClassDeclaration(a.node) && isEs5ClassMember[bAssignmentDeclarationKind]) // class (generated) & member
+            || (isClassDeclaration(b.node) && isEs5ClassMember[aAssignmentDeclarationKind]) // member & class (generated)
+            || (isClassDeclaration(a.node) && isPossibleConstructor(b.node)) // class (generated) & ctor
+            || (isClassDeclaration(b.node) && isPossibleConstructor(a.node)) // ctor & class (generated)
+            ) {
+
+            let lastANode = a.additionalNodes && lastOrUndefined(a.additionalNodes) || a.node;
+
+            if ((!isClassDeclaration(a.node) && !isClassDeclaration(b.node)) // If neither outline node is a class
+                || isPossibleConstructor(a.node) || isPossibleConstructor(b.node) // If either function is a constructor function
+                ) {
+                const ctorFunction = isPossibleConstructor(a.node) ? a.node :
+                    isPossibleConstructor(b.node) ? b.node :
+                    undefined;
+
+                if (ctorFunction !== undefined) {
+                    const ctorNode = setTextRange(
+                        createConstructor(/* decorators */ undefined, /* modifiers */ undefined, [], /* body */ undefined),
+                        ctorFunction);
+                    const ctor = emptyNavigationBarNode(ctorNode);
+                    ctor.indent = a.indent + 1;
+                    ctor.children = a.node === ctorFunction ? a.children : b.children;
+                    a.children = a.node === ctorFunction ? concatenate([ctor], b.children || [b]) : concatenate(a.children || [a], [ctor]);
+                }
+                else {
+                    if (a.children || b.children) {
+                        a.children = concatenate(a.children || [a], b.children || [b]);
+                        if (a.children) {
+                            mergeChildren(a.children, a);
+                            sortChildren(a.children);
+                        }
+                    }
+                }
+
+                lastANode = a.node = setTextRange(createClassDeclaration(
+                    /* decorators */ undefined,
+                    /* modifiers */ undefined,
+                    a.name as Identifier || createIdentifier("__class__"),
+                    /* typeParameters */ undefined,
+                    /* heritageClauses */ undefined,
+                    []
+                ), a.node);
+            }
+            else {
+                a.children = concatenate(a.children, b.children);
+                if (a.children) {
+                    mergeChildren(a.children, a);
+                }
+            }
+
+            const bNode = b.node;
+            // We merge if the outline node previous to b (bIndex - 1) is already part of the current class
+            // We do this so that statements between class members that do not generate outline nodes do not split up the class outline:
+            // Ex This should produce one outline node C:
+            //    function C() {}; a = 1; C.prototype.m = function () {}
+            // Ex This will produce 3 outline nodes: C, a, C
+            //    function C() {}; let a = 1; C.prototype.m = function () {}
+            if (parent.children![bIndex - 1].node.end === lastANode.end) {
+                setTextRange(lastANode, { pos: lastANode.pos, end: bNode.end });
+            }
+            else {
+                if (!a.additionalNodes) a.additionalNodes = [];
+                a.additionalNodes.push(setTextRange(createClassDeclaration(
+                    /* decorators */ undefined,
+                    /* modifiers */ undefined,
+                    a.name as Identifier || createIdentifier("__class__"),
+                    /* typeParameters */ undefined,
+                    /* heritageClauses */ undefined,
+                    []
+                ), b.node));
+            }
+            return true;
+        }
+        return bAssignmentDeclarationKind === AssignmentDeclarationKind.None ? false : true;
+    }
+
+    function tryMerge(a: NavigationBarNode, b: NavigationBarNode, bIndex: number, parent: NavigationBarNode): boolean {
+        // const v = false as boolean;
+        if (tryMergeEs5Class(a, b, bIndex, parent)) {
+            return true;
+        }
         if (shouldReallyMerge(a.node, b.node, parent)) {
             merge(a, b);
             return true;
@@ -444,7 +662,7 @@ namespace ts.NavigationBar {
         }
 
         if (name) {
-            const text = nodeText(name);
+            const text = isIdentifier(name) ? name.text : nodeText(name);
             if (text.length > 0) {
                 return cleanText(text);
             }
