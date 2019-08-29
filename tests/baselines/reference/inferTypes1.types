@@ -275,13 +275,13 @@ type Bar<T> = T extends Foo<infer X, infer Y> ? Foo<X, Y> : never;
 >Bar : Bar<T>
 
 type T90 = Bar<[string, string]>;  // [string, string]
->T90 : Foo<X, Y>
+>T90 : Foo<string, string>
 
 type T91 = Bar<[string, "a"]>;  // [string, "a"]
->T91 : Foo<X, Y>
+>T91 : Foo<string, "a">
 
 type T92 = Bar<[string, "a"] & { x: string }>;  // [string, "a"]
->T92 : Foo<X, Y>
+>T92 : Foo<string, "a">
 >x : string
 
 type T93 = Bar<["a", string]>;  // never
