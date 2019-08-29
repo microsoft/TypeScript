@@ -82,6 +82,7 @@ function narrowToNeverUnknown(data: unknown): "Cool stuff!" | 0 {
         }
         return data;
     }
+    throw "error";
 }
 
 type Foo = { kind: "a", a: number } | { kind: "b", b: number };

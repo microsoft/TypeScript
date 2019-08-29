@@ -228,216 +228,217 @@ function narrowToNeverUnknown(data: unknown): "Cool stuff!" | 0 {
         return data;
 >data : Symbol(data, Decl(discriminantsAndTypePredicates.ts, 74, 30))
     }
+    throw "error";
 }
 
 type Foo = { kind: "a", a: number } | { kind: "b", b: number };
->Foo : Symbol(Foo, Decl(discriminantsAndTypePredicates.ts, 84, 1))
->kind : Symbol(kind, Decl(discriminantsAndTypePredicates.ts, 86, 12))
->a : Symbol(a, Decl(discriminantsAndTypePredicates.ts, 86, 23))
->kind : Symbol(kind, Decl(discriminantsAndTypePredicates.ts, 86, 39))
->b : Symbol(b, Decl(discriminantsAndTypePredicates.ts, 86, 50))
+>Foo : Symbol(Foo, Decl(discriminantsAndTypePredicates.ts, 85, 1))
+>kind : Symbol(kind, Decl(discriminantsAndTypePredicates.ts, 87, 12))
+>a : Symbol(a, Decl(discriminantsAndTypePredicates.ts, 87, 23))
+>kind : Symbol(kind, Decl(discriminantsAndTypePredicates.ts, 87, 39))
+>b : Symbol(b, Decl(discriminantsAndTypePredicates.ts, 87, 50))
 
 type Bar = { kind: "c", c: number } | { kind: "d", d: number };
->Bar : Symbol(Bar, Decl(discriminantsAndTypePredicates.ts, 86, 63))
->kind : Symbol(kind, Decl(discriminantsAndTypePredicates.ts, 87, 12))
->c : Symbol(c, Decl(discriminantsAndTypePredicates.ts, 87, 23))
->kind : Symbol(kind, Decl(discriminantsAndTypePredicates.ts, 87, 39))
->d : Symbol(d, Decl(discriminantsAndTypePredicates.ts, 87, 50))
+>Bar : Symbol(Bar, Decl(discriminantsAndTypePredicates.ts, 87, 63))
+>kind : Symbol(kind, Decl(discriminantsAndTypePredicates.ts, 88, 12))
+>c : Symbol(c, Decl(discriminantsAndTypePredicates.ts, 88, 23))
+>kind : Symbol(kind, Decl(discriminantsAndTypePredicates.ts, 88, 39))
+>d : Symbol(d, Decl(discriminantsAndTypePredicates.ts, 88, 50))
 
 declare function isFoo(x: unknown): x is Foo;
->isFoo : Symbol(isFoo, Decl(discriminantsAndTypePredicates.ts, 87, 63))
->x : Symbol(x, Decl(discriminantsAndTypePredicates.ts, 89, 23))
->x : Symbol(x, Decl(discriminantsAndTypePredicates.ts, 89, 23))
->Foo : Symbol(Foo, Decl(discriminantsAndTypePredicates.ts, 84, 1))
+>isFoo : Symbol(isFoo, Decl(discriminantsAndTypePredicates.ts, 88, 63))
+>x : Symbol(x, Decl(discriminantsAndTypePredicates.ts, 90, 23))
+>x : Symbol(x, Decl(discriminantsAndTypePredicates.ts, 90, 23))
+>Foo : Symbol(Foo, Decl(discriminantsAndTypePredicates.ts, 85, 1))
 
 declare function isBar(x: unknown): x is Bar;
->isBar : Symbol(isBar, Decl(discriminantsAndTypePredicates.ts, 89, 45))
->x : Symbol(x, Decl(discriminantsAndTypePredicates.ts, 90, 23))
->x : Symbol(x, Decl(discriminantsAndTypePredicates.ts, 90, 23))
->Bar : Symbol(Bar, Decl(discriminantsAndTypePredicates.ts, 86, 63))
+>isBar : Symbol(isBar, Decl(discriminantsAndTypePredicates.ts, 90, 45))
+>x : Symbol(x, Decl(discriminantsAndTypePredicates.ts, 91, 23))
+>x : Symbol(x, Decl(discriminantsAndTypePredicates.ts, 91, 23))
+>Bar : Symbol(Bar, Decl(discriminantsAndTypePredicates.ts, 87, 63))
 
 function blah(x: unknown) {
->blah : Symbol(blah, Decl(discriminantsAndTypePredicates.ts, 90, 45))
->x : Symbol(x, Decl(discriminantsAndTypePredicates.ts, 92, 14))
+>blah : Symbol(blah, Decl(discriminantsAndTypePredicates.ts, 91, 45))
+>x : Symbol(x, Decl(discriminantsAndTypePredicates.ts, 93, 14))
 
     if (isFoo(x)) {
->isFoo : Symbol(isFoo, Decl(discriminantsAndTypePredicates.ts, 87, 63))
->x : Symbol(x, Decl(discriminantsAndTypePredicates.ts, 92, 14))
+>isFoo : Symbol(isFoo, Decl(discriminantsAndTypePredicates.ts, 88, 63))
+>x : Symbol(x, Decl(discriminantsAndTypePredicates.ts, 93, 14))
 
         if (x.kind === "a") {
->x.kind : Symbol(kind, Decl(discriminantsAndTypePredicates.ts, 86, 12), Decl(discriminantsAndTypePredicates.ts, 86, 39))
->x : Symbol(x, Decl(discriminantsAndTypePredicates.ts, 92, 14))
->kind : Symbol(kind, Decl(discriminantsAndTypePredicates.ts, 86, 12), Decl(discriminantsAndTypePredicates.ts, 86, 39))
+>x.kind : Symbol(kind, Decl(discriminantsAndTypePredicates.ts, 87, 12), Decl(discriminantsAndTypePredicates.ts, 87, 39))
+>x : Symbol(x, Decl(discriminantsAndTypePredicates.ts, 93, 14))
+>kind : Symbol(kind, Decl(discriminantsAndTypePredicates.ts, 87, 12), Decl(discriminantsAndTypePredicates.ts, 87, 39))
 
             let a = x.a;
->a : Symbol(a, Decl(discriminantsAndTypePredicates.ts, 95, 15))
->x.a : Symbol(a, Decl(discriminantsAndTypePredicates.ts, 86, 23))
->x : Symbol(x, Decl(discriminantsAndTypePredicates.ts, 92, 14))
->a : Symbol(a, Decl(discriminantsAndTypePredicates.ts, 86, 23))
+>a : Symbol(a, Decl(discriminantsAndTypePredicates.ts, 96, 15))
+>x.a : Symbol(a, Decl(discriminantsAndTypePredicates.ts, 87, 23))
+>x : Symbol(x, Decl(discriminantsAndTypePredicates.ts, 93, 14))
+>a : Symbol(a, Decl(discriminantsAndTypePredicates.ts, 87, 23))
         }
         else if (x.kind === "b") {
->x.kind : Symbol(kind, Decl(discriminantsAndTypePredicates.ts, 86, 39))
->x : Symbol(x, Decl(discriminantsAndTypePredicates.ts, 92, 14))
->kind : Symbol(kind, Decl(discriminantsAndTypePredicates.ts, 86, 39))
+>x.kind : Symbol(kind, Decl(discriminantsAndTypePredicates.ts, 87, 39))
+>x : Symbol(x, Decl(discriminantsAndTypePredicates.ts, 93, 14))
+>kind : Symbol(kind, Decl(discriminantsAndTypePredicates.ts, 87, 39))
 
             let b = x.b;
->b : Symbol(b, Decl(discriminantsAndTypePredicates.ts, 98, 15))
->x.b : Symbol(b, Decl(discriminantsAndTypePredicates.ts, 86, 50))
->x : Symbol(x, Decl(discriminantsAndTypePredicates.ts, 92, 14))
->b : Symbol(b, Decl(discriminantsAndTypePredicates.ts, 86, 50))
+>b : Symbol(b, Decl(discriminantsAndTypePredicates.ts, 99, 15))
+>x.b : Symbol(b, Decl(discriminantsAndTypePredicates.ts, 87, 50))
+>x : Symbol(x, Decl(discriminantsAndTypePredicates.ts, 93, 14))
+>b : Symbol(b, Decl(discriminantsAndTypePredicates.ts, 87, 50))
         }
     }
     else if (isBar(x)) {
->isBar : Symbol(isBar, Decl(discriminantsAndTypePredicates.ts, 89, 45))
->x : Symbol(x, Decl(discriminantsAndTypePredicates.ts, 92, 14))
+>isBar : Symbol(isBar, Decl(discriminantsAndTypePredicates.ts, 90, 45))
+>x : Symbol(x, Decl(discriminantsAndTypePredicates.ts, 93, 14))
 
         if (x.kind === "c") {
->x.kind : Symbol(kind, Decl(discriminantsAndTypePredicates.ts, 87, 12), Decl(discriminantsAndTypePredicates.ts, 87, 39))
->x : Symbol(x, Decl(discriminantsAndTypePredicates.ts, 92, 14))
->kind : Symbol(kind, Decl(discriminantsAndTypePredicates.ts, 87, 12), Decl(discriminantsAndTypePredicates.ts, 87, 39))
+>x.kind : Symbol(kind, Decl(discriminantsAndTypePredicates.ts, 88, 12), Decl(discriminantsAndTypePredicates.ts, 88, 39))
+>x : Symbol(x, Decl(discriminantsAndTypePredicates.ts, 93, 14))
+>kind : Symbol(kind, Decl(discriminantsAndTypePredicates.ts, 88, 12), Decl(discriminantsAndTypePredicates.ts, 88, 39))
 
             let c = x.c;
->c : Symbol(c, Decl(discriminantsAndTypePredicates.ts, 103, 15))
->x.c : Symbol(c, Decl(discriminantsAndTypePredicates.ts, 87, 23))
->x : Symbol(x, Decl(discriminantsAndTypePredicates.ts, 92, 14))
->c : Symbol(c, Decl(discriminantsAndTypePredicates.ts, 87, 23))
+>c : Symbol(c, Decl(discriminantsAndTypePredicates.ts, 104, 15))
+>x.c : Symbol(c, Decl(discriminantsAndTypePredicates.ts, 88, 23))
+>x : Symbol(x, Decl(discriminantsAndTypePredicates.ts, 93, 14))
+>c : Symbol(c, Decl(discriminantsAndTypePredicates.ts, 88, 23))
         }
         else if (x.kind === "d") {
->x.kind : Symbol(kind, Decl(discriminantsAndTypePredicates.ts, 87, 39))
->x : Symbol(x, Decl(discriminantsAndTypePredicates.ts, 92, 14))
->kind : Symbol(kind, Decl(discriminantsAndTypePredicates.ts, 87, 39))
+>x.kind : Symbol(kind, Decl(discriminantsAndTypePredicates.ts, 88, 39))
+>x : Symbol(x, Decl(discriminantsAndTypePredicates.ts, 93, 14))
+>kind : Symbol(kind, Decl(discriminantsAndTypePredicates.ts, 88, 39))
 
             let d = x.d;
->d : Symbol(d, Decl(discriminantsAndTypePredicates.ts, 106, 15))
->x.d : Symbol(d, Decl(discriminantsAndTypePredicates.ts, 87, 50))
->x : Symbol(x, Decl(discriminantsAndTypePredicates.ts, 92, 14))
->d : Symbol(d, Decl(discriminantsAndTypePredicates.ts, 87, 50))
+>d : Symbol(d, Decl(discriminantsAndTypePredicates.ts, 107, 15))
+>x.d : Symbol(d, Decl(discriminantsAndTypePredicates.ts, 88, 50))
+>x : Symbol(x, Decl(discriminantsAndTypePredicates.ts, 93, 14))
+>d : Symbol(d, Decl(discriminantsAndTypePredicates.ts, 88, 50))
         }
     }
     x  // unknown
->x : Symbol(x, Decl(discriminantsAndTypePredicates.ts, 92, 14))
+>x : Symbol(x, Decl(discriminantsAndTypePredicates.ts, 93, 14))
 }
 
 type PrimitiveUnion = number | string
->PrimitiveUnion : Symbol(PrimitiveUnion, Decl(discriminantsAndTypePredicates.ts, 110, 1))
+>PrimitiveUnion : Symbol(PrimitiveUnion, Decl(discriminantsAndTypePredicates.ts, 111, 1))
 
 type FooComplex = { kind: "a", a: number } | { kind: "b", b: number } | number;
->FooComplex : Symbol(FooComplex, Decl(discriminantsAndTypePredicates.ts, 112, 37))
->kind : Symbol(kind, Decl(discriminantsAndTypePredicates.ts, 113, 19))
->a : Symbol(a, Decl(discriminantsAndTypePredicates.ts, 113, 30))
->kind : Symbol(kind, Decl(discriminantsAndTypePredicates.ts, 113, 46))
->b : Symbol(b, Decl(discriminantsAndTypePredicates.ts, 113, 57))
+>FooComplex : Symbol(FooComplex, Decl(discriminantsAndTypePredicates.ts, 113, 37))
+>kind : Symbol(kind, Decl(discriminantsAndTypePredicates.ts, 114, 19))
+>a : Symbol(a, Decl(discriminantsAndTypePredicates.ts, 114, 30))
+>kind : Symbol(kind, Decl(discriminantsAndTypePredicates.ts, 114, 46))
+>b : Symbol(b, Decl(discriminantsAndTypePredicates.ts, 114, 57))
 
 type BarComplex = { kind: "c", c: number } | { kind: "d", d: number } | string;
->BarComplex : Symbol(BarComplex, Decl(discriminantsAndTypePredicates.ts, 113, 79))
->kind : Symbol(kind, Decl(discriminantsAndTypePredicates.ts, 114, 19))
->c : Symbol(c, Decl(discriminantsAndTypePredicates.ts, 114, 30))
->kind : Symbol(kind, Decl(discriminantsAndTypePredicates.ts, 114, 46))
->d : Symbol(d, Decl(discriminantsAndTypePredicates.ts, 114, 57))
+>BarComplex : Symbol(BarComplex, Decl(discriminantsAndTypePredicates.ts, 114, 79))
+>kind : Symbol(kind, Decl(discriminantsAndTypePredicates.ts, 115, 19))
+>c : Symbol(c, Decl(discriminantsAndTypePredicates.ts, 115, 30))
+>kind : Symbol(kind, Decl(discriminantsAndTypePredicates.ts, 115, 46))
+>d : Symbol(d, Decl(discriminantsAndTypePredicates.ts, 115, 57))
 
 declare function isPrimitiveUnion(x: unknown): x is PrimitiveUnion;
->isPrimitiveUnion : Symbol(isPrimitiveUnion, Decl(discriminantsAndTypePredicates.ts, 114, 79))
->x : Symbol(x, Decl(discriminantsAndTypePredicates.ts, 116, 34))
->x : Symbol(x, Decl(discriminantsAndTypePredicates.ts, 116, 34))
->PrimitiveUnion : Symbol(PrimitiveUnion, Decl(discriminantsAndTypePredicates.ts, 110, 1))
+>isPrimitiveUnion : Symbol(isPrimitiveUnion, Decl(discriminantsAndTypePredicates.ts, 115, 79))
+>x : Symbol(x, Decl(discriminantsAndTypePredicates.ts, 117, 34))
+>x : Symbol(x, Decl(discriminantsAndTypePredicates.ts, 117, 34))
+>PrimitiveUnion : Symbol(PrimitiveUnion, Decl(discriminantsAndTypePredicates.ts, 111, 1))
 
 declare function isFooComplex(x: unknown): x is FooComplex;
->isFooComplex : Symbol(isFooComplex, Decl(discriminantsAndTypePredicates.ts, 116, 67))
->x : Symbol(x, Decl(discriminantsAndTypePredicates.ts, 117, 30))
->x : Symbol(x, Decl(discriminantsAndTypePredicates.ts, 117, 30))
->FooComplex : Symbol(FooComplex, Decl(discriminantsAndTypePredicates.ts, 112, 37))
+>isFooComplex : Symbol(isFooComplex, Decl(discriminantsAndTypePredicates.ts, 117, 67))
+>x : Symbol(x, Decl(discriminantsAndTypePredicates.ts, 118, 30))
+>x : Symbol(x, Decl(discriminantsAndTypePredicates.ts, 118, 30))
+>FooComplex : Symbol(FooComplex, Decl(discriminantsAndTypePredicates.ts, 113, 37))
 
 declare function isBarComplex(x: unknown): x is BarComplex;
->isBarComplex : Symbol(isBarComplex, Decl(discriminantsAndTypePredicates.ts, 117, 59))
->x : Symbol(x, Decl(discriminantsAndTypePredicates.ts, 118, 30))
->x : Symbol(x, Decl(discriminantsAndTypePredicates.ts, 118, 30))
->BarComplex : Symbol(BarComplex, Decl(discriminantsAndTypePredicates.ts, 113, 79))
+>isBarComplex : Symbol(isBarComplex, Decl(discriminantsAndTypePredicates.ts, 118, 59))
+>x : Symbol(x, Decl(discriminantsAndTypePredicates.ts, 119, 30))
+>x : Symbol(x, Decl(discriminantsAndTypePredicates.ts, 119, 30))
+>BarComplex : Symbol(BarComplex, Decl(discriminantsAndTypePredicates.ts, 114, 79))
 
 function bluergh(x: unknown) {
->bluergh : Symbol(bluergh, Decl(discriminantsAndTypePredicates.ts, 118, 59))
->x : Symbol(x, Decl(discriminantsAndTypePredicates.ts, 120, 17))
+>bluergh : Symbol(bluergh, Decl(discriminantsAndTypePredicates.ts, 119, 59))
+>x : Symbol(x, Decl(discriminantsAndTypePredicates.ts, 121, 17))
 
     if (isPrimitiveUnion(x)) {
->isPrimitiveUnion : Symbol(isPrimitiveUnion, Decl(discriminantsAndTypePredicates.ts, 114, 79))
->x : Symbol(x, Decl(discriminantsAndTypePredicates.ts, 120, 17))
+>isPrimitiveUnion : Symbol(isPrimitiveUnion, Decl(discriminantsAndTypePredicates.ts, 115, 79))
+>x : Symbol(x, Decl(discriminantsAndTypePredicates.ts, 121, 17))
 
         let a: number | string = x;
->a : Symbol(a, Decl(discriminantsAndTypePredicates.ts, 122, 11))
->x : Symbol(x, Decl(discriminantsAndTypePredicates.ts, 120, 17))
+>a : Symbol(a, Decl(discriminantsAndTypePredicates.ts, 123, 11))
+>x : Symbol(x, Decl(discriminantsAndTypePredicates.ts, 121, 17))
     }
     if (isFooComplex(x) && typeof x === "object") {
->isFooComplex : Symbol(isFooComplex, Decl(discriminantsAndTypePredicates.ts, 116, 67))
->x : Symbol(x, Decl(discriminantsAndTypePredicates.ts, 120, 17))
->x : Symbol(x, Decl(discriminantsAndTypePredicates.ts, 120, 17))
+>isFooComplex : Symbol(isFooComplex, Decl(discriminantsAndTypePredicates.ts, 117, 67))
+>x : Symbol(x, Decl(discriminantsAndTypePredicates.ts, 121, 17))
+>x : Symbol(x, Decl(discriminantsAndTypePredicates.ts, 121, 17))
 
         if (x.kind === "a") {
->x.kind : Symbol(kind, Decl(discriminantsAndTypePredicates.ts, 113, 19), Decl(discriminantsAndTypePredicates.ts, 113, 46))
->x : Symbol(x, Decl(discriminantsAndTypePredicates.ts, 120, 17))
->kind : Symbol(kind, Decl(discriminantsAndTypePredicates.ts, 113, 19), Decl(discriminantsAndTypePredicates.ts, 113, 46))
-
-            let a = x.a;
->a : Symbol(a, Decl(discriminantsAndTypePredicates.ts, 126, 15))
->x.a : Symbol(a, Decl(discriminantsAndTypePredicates.ts, 113, 30))
->x : Symbol(x, Decl(discriminantsAndTypePredicates.ts, 120, 17))
->a : Symbol(a, Decl(discriminantsAndTypePredicates.ts, 113, 30))
-        }
-        else if (x.kind === "b") {
->x.kind : Symbol(kind, Decl(discriminantsAndTypePredicates.ts, 113, 46))
->x : Symbol(x, Decl(discriminantsAndTypePredicates.ts, 120, 17))
->kind : Symbol(kind, Decl(discriminantsAndTypePredicates.ts, 113, 46))
-
-            let b = x.b;
->b : Symbol(b, Decl(discriminantsAndTypePredicates.ts, 129, 15))
->x.b : Symbol(b, Decl(discriminantsAndTypePredicates.ts, 113, 57))
->x : Symbol(x, Decl(discriminantsAndTypePredicates.ts, 120, 17))
->b : Symbol(b, Decl(discriminantsAndTypePredicates.ts, 113, 57))
-        }
-    }
-    if (isPrimitiveUnion(x)) {
->isPrimitiveUnion : Symbol(isPrimitiveUnion, Decl(discriminantsAndTypePredicates.ts, 114, 79))
->x : Symbol(x, Decl(discriminantsAndTypePredicates.ts, 120, 17))
-
-        let a: number | string = x;
->a : Symbol(a, Decl(discriminantsAndTypePredicates.ts, 133, 11))
->x : Symbol(x, Decl(discriminantsAndTypePredicates.ts, 120, 17))
-    }
-    if (isBarComplex(x) && typeof x === "object") {
->isBarComplex : Symbol(isBarComplex, Decl(discriminantsAndTypePredicates.ts, 117, 59))
->x : Symbol(x, Decl(discriminantsAndTypePredicates.ts, 120, 17))
->x : Symbol(x, Decl(discriminantsAndTypePredicates.ts, 120, 17))
-
-        if (x.kind === "c") {
 >x.kind : Symbol(kind, Decl(discriminantsAndTypePredicates.ts, 114, 19), Decl(discriminantsAndTypePredicates.ts, 114, 46))
->x : Symbol(x, Decl(discriminantsAndTypePredicates.ts, 120, 17))
+>x : Symbol(x, Decl(discriminantsAndTypePredicates.ts, 121, 17))
 >kind : Symbol(kind, Decl(discriminantsAndTypePredicates.ts, 114, 19), Decl(discriminantsAndTypePredicates.ts, 114, 46))
 
-            let c = x.c;
->c : Symbol(c, Decl(discriminantsAndTypePredicates.ts, 137, 15))
->x.c : Symbol(c, Decl(discriminantsAndTypePredicates.ts, 114, 30))
->x : Symbol(x, Decl(discriminantsAndTypePredicates.ts, 120, 17))
->c : Symbol(c, Decl(discriminantsAndTypePredicates.ts, 114, 30))
+            let a = x.a;
+>a : Symbol(a, Decl(discriminantsAndTypePredicates.ts, 127, 15))
+>x.a : Symbol(a, Decl(discriminantsAndTypePredicates.ts, 114, 30))
+>x : Symbol(x, Decl(discriminantsAndTypePredicates.ts, 121, 17))
+>a : Symbol(a, Decl(discriminantsAndTypePredicates.ts, 114, 30))
         }
-        else if (x.kind === "d") {
+        else if (x.kind === "b") {
 >x.kind : Symbol(kind, Decl(discriminantsAndTypePredicates.ts, 114, 46))
->x : Symbol(x, Decl(discriminantsAndTypePredicates.ts, 120, 17))
+>x : Symbol(x, Decl(discriminantsAndTypePredicates.ts, 121, 17))
 >kind : Symbol(kind, Decl(discriminantsAndTypePredicates.ts, 114, 46))
 
-            let d = x.d;
->d : Symbol(d, Decl(discriminantsAndTypePredicates.ts, 140, 15))
->x.d : Symbol(d, Decl(discriminantsAndTypePredicates.ts, 114, 57))
->x : Symbol(x, Decl(discriminantsAndTypePredicates.ts, 120, 17))
->d : Symbol(d, Decl(discriminantsAndTypePredicates.ts, 114, 57))
+            let b = x.b;
+>b : Symbol(b, Decl(discriminantsAndTypePredicates.ts, 130, 15))
+>x.b : Symbol(b, Decl(discriminantsAndTypePredicates.ts, 114, 57))
+>x : Symbol(x, Decl(discriminantsAndTypePredicates.ts, 121, 17))
+>b : Symbol(b, Decl(discriminantsAndTypePredicates.ts, 114, 57))
         }
     }
     if (isPrimitiveUnion(x)) {
->isPrimitiveUnion : Symbol(isPrimitiveUnion, Decl(discriminantsAndTypePredicates.ts, 114, 79))
->x : Symbol(x, Decl(discriminantsAndTypePredicates.ts, 120, 17))
+>isPrimitiveUnion : Symbol(isPrimitiveUnion, Decl(discriminantsAndTypePredicates.ts, 115, 79))
+>x : Symbol(x, Decl(discriminantsAndTypePredicates.ts, 121, 17))
 
         let a: number | string = x;
->a : Symbol(a, Decl(discriminantsAndTypePredicates.ts, 144, 11))
->x : Symbol(x, Decl(discriminantsAndTypePredicates.ts, 120, 17))
+>a : Symbol(a, Decl(discriminantsAndTypePredicates.ts, 134, 11))
+>x : Symbol(x, Decl(discriminantsAndTypePredicates.ts, 121, 17))
+    }
+    if (isBarComplex(x) && typeof x === "object") {
+>isBarComplex : Symbol(isBarComplex, Decl(discriminantsAndTypePredicates.ts, 118, 59))
+>x : Symbol(x, Decl(discriminantsAndTypePredicates.ts, 121, 17))
+>x : Symbol(x, Decl(discriminantsAndTypePredicates.ts, 121, 17))
+
+        if (x.kind === "c") {
+>x.kind : Symbol(kind, Decl(discriminantsAndTypePredicates.ts, 115, 19), Decl(discriminantsAndTypePredicates.ts, 115, 46))
+>x : Symbol(x, Decl(discriminantsAndTypePredicates.ts, 121, 17))
+>kind : Symbol(kind, Decl(discriminantsAndTypePredicates.ts, 115, 19), Decl(discriminantsAndTypePredicates.ts, 115, 46))
+
+            let c = x.c;
+>c : Symbol(c, Decl(discriminantsAndTypePredicates.ts, 138, 15))
+>x.c : Symbol(c, Decl(discriminantsAndTypePredicates.ts, 115, 30))
+>x : Symbol(x, Decl(discriminantsAndTypePredicates.ts, 121, 17))
+>c : Symbol(c, Decl(discriminantsAndTypePredicates.ts, 115, 30))
+        }
+        else if (x.kind === "d") {
+>x.kind : Symbol(kind, Decl(discriminantsAndTypePredicates.ts, 115, 46))
+>x : Symbol(x, Decl(discriminantsAndTypePredicates.ts, 121, 17))
+>kind : Symbol(kind, Decl(discriminantsAndTypePredicates.ts, 115, 46))
+
+            let d = x.d;
+>d : Symbol(d, Decl(discriminantsAndTypePredicates.ts, 141, 15))
+>x.d : Symbol(d, Decl(discriminantsAndTypePredicates.ts, 115, 57))
+>x : Symbol(x, Decl(discriminantsAndTypePredicates.ts, 121, 17))
+>d : Symbol(d, Decl(discriminantsAndTypePredicates.ts, 115, 57))
+        }
+    }
+    if (isPrimitiveUnion(x)) {
+>isPrimitiveUnion : Symbol(isPrimitiveUnion, Decl(discriminantsAndTypePredicates.ts, 115, 79))
+>x : Symbol(x, Decl(discriminantsAndTypePredicates.ts, 121, 17))
+
+        let a: number | string = x;
+>a : Symbol(a, Decl(discriminantsAndTypePredicates.ts, 145, 11))
+>x : Symbol(x, Decl(discriminantsAndTypePredicates.ts, 121, 17))
     }
     x  // unknown
->x : Symbol(x, Decl(discriminantsAndTypePredicates.ts, 120, 17))
+>x : Symbol(x, Decl(discriminantsAndTypePredicates.ts, 121, 17))
 }
 
