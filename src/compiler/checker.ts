@@ -17359,10 +17359,10 @@ namespace ts {
                         if (isMatchingReferenceDiscriminant(right, declaredType)) {
                             return narrowTypeByDiscriminant(type, <AccessExpression>right, t => narrowTypeByEquality(t, operator, left, assumeTrue));
                         }
-                        if (containingUnion && isLiteralType(getContextFreeTypeOfExpression(right)) && isMatchingReferenceDiscriminant(left, containingUnion)) {
+                        if (containingUnion && isMatchingReferenceDiscriminant(left, containingUnion)) {
                             return narrowTypeByDiscriminant(type, <AccessExpression>left, t => narrowTypeByEquality(t, operator, right, assumeTrue));
                         }
-                        if (containingUnion && isLiteralType(getContextFreeTypeOfExpression(left)) && isMatchingReferenceDiscriminant(right, containingUnion)) {
+                        if (containingUnion && isMatchingReferenceDiscriminant(right, containingUnion)) {
                             return narrowTypeByDiscriminant(type, <AccessExpression>right, t => narrowTypeByEquality(t, operator, left, assumeTrue));
                         }
                         if (containsMatchingReferenceDiscriminant(reference, left) || containsMatchingReferenceDiscriminant(reference, right)) {
