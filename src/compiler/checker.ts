@@ -15583,8 +15583,8 @@ namespace ts {
                         target = getUnionType(targets);
                     }
                     else {
-                        if (inferFromMatchingType(source, (<UnionType>target).types, isTypeOrBaseIdenticalTo)) return;
-                        if (inferFromMatchingType(source, (<UnionType>target).types, isTypeCloselyMatchedBy)) return;
+                        if (inferFromMatchingType(source, (<UnionType>target).types, isTypeOrBaseIdenticalTo, /*continueOnNoInference*/ true)) return;
+                        if (inferFromMatchingType(source, (<UnionType>target).types, isTypeCloselyMatchedBy, /*continueOnNoInference*/ true)) return;
                     }
                 }
                 else if (target.flags & TypeFlags.Intersection && some((<IntersectionType>target).types, t => !!getInferenceInfoForType(t))) {
@@ -15753,12 +15753,15 @@ namespace ts {
                 inferencePriority = Math.min(inferencePriority, saveInferencePriority);
             }
 
-            function inferFromMatchingType(source: Type, targets: Type[], matches: (s: Type, t: Type) => boolean) {
+            function inferFromMatchingType(source: Type, targets: Type[], matches: (s: Type, t: Type) => boolean, continueOnNoInference?: boolean) {
                 let matched = false;
                 for (const t of targets) {
                     if (matches(source, t)) {
+                        const currPri = inferencePriority;
                         inferFromTypes(source, t);
-                        matched = true;
+                        if (!continueOnNoInference || inferencePriority < currPri) {
+                            matched = true;
+                        }
                     }
                 }
                 return matched;
