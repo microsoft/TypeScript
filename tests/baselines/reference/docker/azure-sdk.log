@@ -2,7 +2,7 @@ Exit Code: 1
 Standard output:
 
 Rush Multi-Project Build Tool 5.X.X - https://rushjs.io
-Node.js version is 12.8.1 (pre-LTS)
+Node.js version is 12.9.0 (pre-LTS)
 Starting "rush rebuild"
 Executing a maximum of ?simultaneous processes...
 XX of XX: [@azure/abort-controller] completed successfully in ? seconds
@@ -28,10 +28,45 @@ npm ERR! A complete log of this run can be found in:
 npm ERR!     /root/.npm/_logs/XXXX-XX-XXXXXXXXX-debug.log
 ERROR: "build:lib" exited with 1.
 XX of XX: [@azure/event-processor-host] completed successfully in ? seconds
+XX of XX: [@azure/test-utils-recorder] completed successfully in ? seconds
 XX of XX: [@azure/core-asynciterator-polyfill] completed successfully in ? seconds
 XX of XX: [@azure/core-paging] completed successfully in ? seconds
 XX of XX: [@azure/core-tracing] completed successfully in ? seconds
-XX of XX: [@azure/service-bus] completed successfully in ? seconds
+Warning: You have changed the public API signature for this project. Updating review/cosmos.api.md
+dist-esm/index.js → dist/index.js...
+(!) Unresolved dependencies
+https://rollupjs.org/guide/en/#warning-treating-module-as-external-dependency
+tslib (imported by dist-esm/queryIterator.js, dist-esm/auth.js, dist-esm/CosmosClient.js, dist-esm/plugins/Plugin.js, dist-esm/ClientContext.js, dist-esm/globalEndpointManager.js, dist-esm/client/Conflict/Conflict.js, dist-esm/client/Container/Container.js, dist-esm/client/Container/Containers.js, dist-esm/client/Database/Database.js, dist-esm/client/Database/Databases.js, dist-esm/client/Item/Item.js, dist-esm/client/Item/Items.js, dist-esm/client/Offer/Offer.js, dist-esm/client/Permission/Permission.js, dist-esm/client/Permission/Permissions.js, dist-esm/client/StoredProcedure/StoredProcedure.js, dist-esm/client/StoredProcedure/StoredProcedures.js, dist-esm/client/Trigger/Trigger.js, dist-esm/client/Trigger/Triggers.js, dist-esm/client/User/User.js, dist-esm/client/User/Users.js, dist-esm/client/UserDefinedFunction/UserDefinedFunction.js, dist-esm/client/UserDefinedFunction/UserDefinedFunctions.js, dist-esm/queryExecutionContext/defaultQueryExecutionContext.js, dist-esm/queryExecutionContext/documentProducer.js, dist-esm/queryExecutionContext/parallelQueryExecutionContextBase.js, dist-esm/queryExecutionContext/pipelinedQueryExecutionContext.js, dist-esm/request/request.js, dist-esm/request/RequestHandler.js, dist-esm/ChangeFeedIterator.js, dist-esm/routing/smartRoutingMapProvider.js, dist-esm/queryExecutionContext/EndpointComponent/AggregateEndpointComponent.js, dist-esm/queryExecutionContext/EndpointComponent/OffsetLimitEndpointComponent.js, dist-esm/queryExecutionContext/EndpointComponent/OrderByEndpointComponent.js, dist-esm/queryExecutionContext/EndpointComponent/OrderedDistinctEndpointComponent.js, dist-esm/queryExecutionContext/EndpointComponent/UnorderedDistinctEndpointComponent.js, dist-esm/retry/retryUtility.js, dist-esm/routing/partitionKeyRangeCache.js, dist-esm/retry/defaultRetryPolicy.js, dist-esm/retry/endpointDiscoveryRetryPolicy.js, dist-esm/retry/resourceThrottleRetryPolicy.js, dist-esm/retry/sessionRetryPolicy.js)
+@azure/cosmos-sign (imported by dist-esm/auth.js)
+universal-user-agent (imported by dist-esm/common/platform.js)
+uuid/v4 (imported by dist-esm/client/Item/Items.js)
+binary-search-bounds (imported by dist-esm/queryExecutionContext/parallelQueryExecutionContextBase.js, dist-esm/routing/inMemoryCollectionRoutingMap.js)
+priorityqueuejs (imported by dist-esm/queryExecutionContext/parallelQueryExecutionContextBase.js)
+semaphore (imported by dist-esm/queryExecutionContext/parallelQueryExecutionContextBase.js)
+node-abort-controller (imported by dist-esm/request/RequestHandler.js)
+node-fetch (imported by dist-esm/request/RequestHandler.js)
+atob (imported by dist-esm/session/sessionContainer.js)
+crypto-hash (imported by dist-esm/queryExecutionContext/EndpointComponent/OrderedDistinctEndpointComponent.js, dist-esm/queryExecutionContext/EndpointComponent/UnorderedDistinctEndpointComponent.js)
+fast-json-stable-stringify (imported by dist-esm/queryExecutionContext/EndpointComponent/OrderedDistinctEndpointComponent.js, dist-esm/queryExecutionContext/EndpointComponent/UnorderedDistinctEndpointComponent.js)
+(!) Missing global variable names
+Use output.globals to specify browser global variable names corresponding to external modules
+universal-user-agent (guessing 'userAgent')
+tslib (guessing 'tslib')
+@azure/cosmos-sign (guessing 'cosmosSign')
+binary-search-bounds (guessing 'bs')
+priorityqueuejs (guessing 'PriorityQueue')
+semaphore (guessing 'semaphore')
+crypto-hash (guessing 'cryptoHash')
+fast-json-stable-stringify (guessing 'stableStringify')
+uuid/v4 (guessing 'uuid')
+node-abort-controller (guessing 'AbortController')
+node-fetch (guessing 'fetch')
+atob (guessing 'atob')
+(!) Circular dependency: dist-esm/queryExecutionContext/index.js -> dist-esm/queryExecutionContext/headerUtils.js -> dist-esm/queryMetrics/index.js -> dist-esm/queryMetrics/clientSideMetrics.js -> dist-esm/queryExecutionContext/index.js
+(!) Circular dependency: dist-esm/index.js -> dist-esm/CosmosClient.js -> dist-esm/client/Database/index.js -> dist-esm/client/Database/Database.js -> dist-esm/client/Container/index.js -> dist-esm/client/Container/Container.js -> dist-esm/client/Script/Scripts.js -> dist-esm/index.js
+(!) Circular dependency: dist-esm/request/RequestHandler.js -> dist-esm/retry/retryUtility.js -> dist-esm/request/RequestHandler.js
+created dist/index.js in ?s
+Warning: You have changed the public API signature for this project. Updating review/service-bus.api.md
 XX of XX: [@azure/storage-blob] completed successfully in ? seconds
 XX of XX: [@azure/storage-file] completed successfully in ? seconds
 XX of XX: [@azure/storage-queue] completed successfully in ? seconds
@@ -41,14 +76,54 @@ SUCCESS (11)
 @azure/abort-controller (? seconds)
 @azure/core-auth (? seconds)
 @azure/event-processor-host (? seconds)
+@azure/test-utils-recorder (? seconds)
 @azure/core-asynciterator-polyfill (? seconds)
 @azure/core-paging (? seconds)
 @azure/core-tracing (? seconds)
-@azure/service-bus (? seconds)
 @azure/storage-blob (? seconds)
 @azure/storage-file (? seconds)
 @azure/storage-queue (? seconds)
 testhub (? seconds)
+================================
+SUCCESS WITH WARNINGS (2)
+================================
+@azure/cosmos (? seconds)
+Warning: You have changed the public API signature for this project. Updating review/cosmos.api.md
+dist-esm/index.js → dist/index.js...
+(!) Unresolved dependencies
+https://rollupjs.org/guide/en/#warning-treating-module-as-external-dependency
+tslib (imported by dist-esm/queryIterator.js, dist-esm/auth.js, dist-esm/CosmosClient.js, dist-esm/plugins/Plugin.js, dist-esm/ClientContext.js, dist-esm/globalEndpointManager.js, dist-esm/client/Conflict/Conflict.js, dist-esm/client/Container/Container.js, dist-esm/client/Container/Containers.js, dist-esm/client/Database/Database.js, dist-esm/client/Database/Databases.js, dist-esm/client/Item/Item.js, dist-esm/client/Item/Items.js, dist-esm/client/Offer/Offer.js, dist-esm/client/Permission/Permission.js, dist-esm/client/Permission/Permissions.js, dist-esm/client/StoredProcedure/StoredProcedure.js, dist-esm/client/StoredProcedure/StoredProcedures.js, dist-esm/client/Trigger/Trigger.js, dist-esm/client/Trigger/Triggers.js, dist-esm/client/User/User.js, dist-esm/client/User/Users.js, dist-esm/client/UserDefinedFunction/UserDefinedFunction.js, dist-esm/client/UserDefinedFunction/UserDefinedFunctions.js, dist-esm/queryExecutionContext/defaultQueryExecutionContext.js, dist-esm/queryExecutionContext/documentProducer.js, dist-esm/queryExecutionContext/parallelQueryExecutionContextBase.js, dist-esm/queryExecutionContext/pipelinedQueryExecutionContext.js, dist-esm/request/request.js, dist-esm/request/RequestHandler.js, dist-esm/ChangeFeedIterator.js, dist-esm/routing/smartRoutingMapProvider.js, dist-esm/queryExecutionContext/EndpointComponent/AggregateEndpointComponent.js, dist-esm/queryExecutionContext/EndpointComponent/OffsetLimitEndpointComponent.js, dist-esm/queryExecutionContext/EndpointComponent/OrderByEndpointComponent.js, dist-esm/queryExecutionContext/EndpointComponent/OrderedDistinctEndpointComponent.js, dist-esm/queryExecutionContext/EndpointComponent/UnorderedDistinctEndpointComponent.js, dist-esm/retry/retryUtility.js, dist-esm/routing/partitionKeyRangeCache.js, dist-esm/retry/defaultRetryPolicy.js, dist-esm/retry/endpointDiscoveryRetryPolicy.js, dist-esm/retry/resourceThrottleRetryPolicy.js, dist-esm/retry/sessionRetryPolicy.js)
+@azure/cosmos-sign (imported by dist-esm/auth.js)
+universal-user-agent (imported by dist-esm/common/platform.js)
+uuid/v4 (imported by dist-esm/client/Item/Items.js)
+binary-search-bounds (imported by dist-esm/queryExecutionContext/parallelQueryExecutionContextBase.js, dist-esm/routing/inMemoryCollectionRoutingMap.js)
+priorityqueuejs (imported by dist-esm/queryExecutionContext/parallelQueryExecutionContextBase.js)
+semaphore (imported by dist-esm/queryExecutionContext/parallelQueryExecutionContextBase.js)
+node-abort-controller (imported by dist-esm/request/RequestHandler.js)
+node-fetch (imported by dist-esm/request/RequestHandler.js)
+atob (imported by dist-esm/session/sessionContainer.js)
+crypto-hash (imported by dist-esm/queryExecutionContext/EndpointComponent/OrderedDistinctEndpointComponent.js, dist-esm/queryExecutionContext/EndpointComponent/UnorderedDistinctEndpointComponent.js)
+fast-json-stable-stringify (imported by dist-esm/queryExecutionContext/EndpointComponent/OrderedDistinctEndpointComponent.js, dist-esm/queryExecutionContext/EndpointComponent/UnorderedDistinctEndpointComponent.js)
+(!) Missing global variable names
+Use output.globals to specify browser global variable names corresponding to external modules
+universal-user-agent (guessing 'userAgent')
+tslib (guessing 'tslib')
+@azure/cosmos-sign (guessing 'cosmosSign')
+binary-search-bounds (guessing 'bs')
+priorityqueuejs (guessing 'PriorityQueue')
+semaphore (guessing 'semaphore')
+crypto-hash (guessing 'cryptoHash')
+fast-json-stable-stringify (guessing 'stableStringify')
+uuid/v4 (guessing 'uuid')
+node-abort-controller (guessing 'AbortController')
+node-fetch (guessing 'fetch')
+atob (guessing 'atob')
+(!) Circular dependency: dist-esm/queryExecutionContext/index.js -> dist-esm/queryExecutionContext/headerUtils.js -> dist-esm/queryMetrics/index.js -> dist-esm/queryMetrics/clientSideMetrics.js -> dist-esm/queryExecutionContext/index.js
+(!) Circular dependency: dist-esm/index.js -> dist-esm/CosmosClient.js -> dist-esm/client/Database/index.js -> dist-esm/client/Database/Database.js -> dist-esm/client/Container/index.js -> dist-esm/client/Container/Container.js -> dist-esm/client/Script/Scripts.js -> dist-esm/index.js
+(!) Circular dependency: dist-esm/request/RequestHandler.js -> dist-esm/retry/retryUtility.js -> dist-esm/request/RequestHandler.js
+created dist/index.js in ?s
+@azure/service-bus (? seconds)
+Warning: You have changed the public API signature for this project. Updating review/service-bus.api.md
 ================================
 BLOCKED (8)
 ================================
@@ -101,4 +176,6 @@ XX of XX: [@azure/identity] blocked by [@azure/core-http]!
 XX of XX: [@azure/core-amqp] blocked by [@azure/core-http]!
 XX of XX: [@azure/event-hubs] blocked by [@azure/core-http]!
 XX of XX: [@azure/template] blocked by [@azure/core-http]!
+XX of XX: [@azure/cosmos] completed with warnings in ? seconds
+XX of XX: [@azure/service-bus] completed with warnings in ? seconds
 [@azure/core-http] Returned error code: 1

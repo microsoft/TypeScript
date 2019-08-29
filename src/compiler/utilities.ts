@@ -3378,7 +3378,11 @@ namespace ts {
         };
     }
 
-    export function getTrailingSemicolonOmittingWriter(writer: EmitTextWriter): EmitTextWriter {
+    export interface TrailingSemicolonDeferringWriter extends EmitTextWriter {
+        resetPendingTrailingSemicolon(): void;
+    }
+
+    export function getTrailingSemicolonDeferringWriter(writer: EmitTextWriter): TrailingSemicolonDeferringWriter {
         let pendingTrailingSemicolon = false;
 
         function commitPendingTrailingSemicolon() {
@@ -3444,7 +3448,21 @@ namespace ts {
             decreaseIndent() {
                 commitPendingTrailingSemicolon();
                 writer.decreaseIndent();
+            },
+            resetPendingTrailingSemicolon() {
+                pendingTrailingSemicolon = false;
             }
+        };
+    }
+
+    export function getTrailingSemicolonOmittingWriter(writer: EmitTextWriter): EmitTextWriter {
+        const deferringWriter = getTrailingSemicolonDeferringWriter(writer);
+        return {
+            ...deferringWriter,
+            writeLine() {
+                deferringWriter.resetPendingTrailingSemicolon();
+                writer.writeLine();
+            },
         };
     }
 

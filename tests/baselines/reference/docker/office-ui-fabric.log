@@ -60,8 +60,8 @@ Standard output:
 @uifabric/merge-styles: Webpack version: 4.29.5
 @uifabric/merge-styles:  PASS  src/styleToClassName.test.ts
 @uifabric/merge-styles:  PASS  src/mergeStyleSets.test.ts
-@uifabric/merge-styles:  PASS  src/concatStyleSets.test.ts
 @uifabric/merge-styles:  PASS  src/mergeStyles.test.ts
+@uifabric/merge-styles:  PASS  src/concatStyleSets.test.ts
 @uifabric/merge-styles:  PASS  src/transforms/rtlifyRules.test.ts
 @uifabric/merge-styles:  PASS  src/transforms/prefixRules.test.ts
 @uifabric/merge-styles:  PASS  src/transforms/provideUnits.test.ts
@@ -425,12 +425,11 @@ lerna info Executing command in 40 packages: "yarn run build --production --lint
 @uifabric/foundation: [XX:XX:XX XM] x ------------------------------------
 @uifabric/foundation: [XX:XX:XX XM] x Error: Command failed: /usr/local/bin/node /office-ui-fabric-react/node_modules/jest/bin/jest.js --config /office-ui-fabric-react/packages/foundation/jest.config.js --passWithNoTests --colors
 @uifabric/foundation:     at ChildProcess.<anonymous> (/office-ui-fabric-react/node_modules/just-scripts-utils/lib/exec.js:70:31)
-@uifabric/foundation:     at ChildProcess.emit (events.js:203:13)
+@uifabric/foundation:     at ChildProcess.emit (events.js:209:13)
 @uifabric/foundation:     at ChildProcess.EventEmitter.emit (domain.js:499:23)
 @uifabric/foundation:     at Process.ChildProcess._handle.onexit (internal/child_process.js:272:12)
 @uifabric/foundation: [XX:XX:XX XM] x ------------------------------------
 @uifabric/foundation: [XX:XX:XX XM] x Error previously detected. See above for error messages.
-@uifabric/foundation: [XX:XX:XX XM] x Other tasks that did not complete: [webpack]
 @uifabric/foundation: error Command failed with exit code 1.
 lerna ERR! yarn run build --production --lint exited 1 in '@uifabric/foundation'
 lerna WARN complete Waiting for 1 child process to exit. CTRL-C to exit immediately.

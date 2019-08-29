@@ -854,7 +854,7 @@ namespace ts.textChanges {
             const omitTrailingSemicolon = !!sourceFile && !probablyUsesSemicolons(sourceFile);
             const writer = createWriter(newLineCharacter, omitTrailingSemicolon);
             const newLine = newLineCharacter === "\n" ? NewLineKind.LineFeed : NewLineKind.CarriageReturnLineFeed;
-            createPrinter({ newLine, neverAsciiEscape: true, omitTrailingSemicolon }, writer).writeNode(EmitHint.Unspecified, node, sourceFile, writer);
+            createPrinter({ newLine, neverAsciiEscape: true }, writer).writeNode(EmitHint.Unspecified, node, sourceFile, writer);
             return { text: writer.getText(), node: assignPositionsToNode(node) };
         }
     }
