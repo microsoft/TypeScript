@@ -571,6 +571,15 @@ Actual: ${JSON.stringify(actual, /*replacer*/ undefined, " ")}
 Expected: ${JSON.stringify(expected, /*replacer*/ undefined, " ")}`);
         }
 
+        assertErrors(...expectedDiagnostics: ExpectedErrorDiagnostic[]) {
+            const actual = this.diagnostics.filter(d => d.kind === DiagnosticKind.Error).map(diagnosticToText);
+            const expected = expectedDiagnostics.map(expectedDiagnosticToText);
+            assert.deepEqual(actual, expected, `Diagnostics arrays did not match:
+Actual: ${JSON.stringify(actual, /*replacer*/ undefined, " ")}
+Expected: ${JSON.stringify(expected, /*replacer*/ undefined, " ")}
+Actual All:: ${JSON.stringify(this.diagnostics.slice().map(diagnosticToText), /*replacer*/ undefined, " ")}`);
+        }
+
         printDiagnostics(header = "== Diagnostics ==") {
             const out = ts.createDiagnosticReporter(ts.sys);
             ts.sys.write(header + "\r\n");

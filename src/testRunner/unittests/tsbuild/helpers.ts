@@ -102,7 +102,22 @@ namespace ts {
 interface ReadonlyArray<T> {}
 declare const console: { log(msg: any): void; };`;
 
-    export function loadProjectFromDisk(root: string, time?: vfs.FileSystemOptions["time"]): vfs.FileSystem {
+    export const symbolLibContent = `
+interface SymbolConstructor {
+    readonly species: symbol;
+    readonly toStringTag: symbol;
+}
+declare var Symbol: SymbolConstructor;
+interface Symbol {
+    readonly [Symbol.toStringTag]: string;
+}
+`;
+
+    export function loadProjectFromDisk(
+        root: string,
+        time?: vfs.FileSystemOptions["time"],
+        libContentToAppend?: string
+    ): vfs.FileSystem {
         const resolver = vfs.createResolver(Harness.IO);
         const fs = new vfs.FileSystem(/*ignoreCase*/ true, {
             files: {
@@ -112,10 +127,29 @@ declare const console: { log(msg: any): void; };`;
             meta: { defaultLibLocation: "/lib" },
             time
         });
-        fs.mkdirSync("/lib");
-        fs.writeFileSync("/lib/lib.d.ts", libContent);
-        fs.makeReadonly();
+        addLibAndMakeReadonly(fs, libContentToAppend);
         return fs;
+    }
+
+    export function loadProjectFromFiles(
+        files: vfs.FileSet,
+        time?: vfs.FileSystemOptions["time"],
+        libContentToAppend?: string
+    ): vfs.FileSystem {
+        const fs = new vfs.FileSystem(/*ignoreCase*/ true, {
+            files,
+            cwd: "/",
+            meta: { defaultLibLocation: "/lib" },
+            time
+        });
+        addLibAndMakeReadonly(fs, libContentToAppend);
+        return fs;
+    }
+
+    function addLibAndMakeReadonly(fs: vfs.FileSystem, libContentToAppend?: string) {
+        fs.mkdirSync("/lib");
+        fs.writeFileSync("/lib/lib.d.ts", libContentToAppend ? `${libContent}${libContentToAppend}` : libContent);
+        fs.makeReadonly();
     }
 
     export function verifyOutputsPresent(fs: vfs.FileSystem, outputs: readonly string[]) {
@@ -358,6 +392,12 @@ Mismatch Actual(path, actual, expected): ${JSON.stringify(arrayFrom(mapDefinedIt
                     if (!baselineOnly || verifyDiagnostics) {
                         it(`verify diagnostics`, () => {
                             host.assertDiagnosticMessages(...(incrementalExpectedDiagnostics || emptyArray));
+                        });
+                    }
+                    else {
+                        // Build should pass without errors if not verifying diagnostics
+                        it(`verify no errors`, () => {
+                            host.assertErrors(/*empty*/);
                         });
                     }
                     it(`Generates files matching the baseline`, () => {
