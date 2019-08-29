@@ -7,12 +7,28 @@ Standard output:
 @uifabric/codepen-loader: [XX:XX:XX XM] ■ Running /office-ui-fabric-react/node_modules/typescript/lib/tsc.js with /office-ui-fabric-react/packages/codepen-loader/tsconfig.json
 @uifabric/codepen-loader: [XX:XX:XX XM] ■ Executing: /usr/local/bin/node "/office-ui-fabric-react/node_modules/typescript/lib/tsc.js" --module commonjs --outDir "./lib" --project "/office-ui-fabric-react/packages/codepen-loader/tsconfig.json"
 @uifabric/codepen-loader: [XX:XX:XX XM] ■ Running Jest
-@uifabric/codepen-loader: [XX:XX:XX XM] ■ /usr/local/bin/node "/office-ui-fabric-react/node_modules/jest/bin/jest.js" --config "/office-ui-fabric-react/packages/codepen-loader/jest.config.js" --passWithNoTests --colors
+@uifabric/codepen-loader: [XX:XX:XX XM] ■ /usr/local/bin/node "/office-ui-fabric-react/node_modules/jest/bin/jest.js" --config "/office-ui-fabric-react/packages/codepen-loader/jest.config.js" --passWithNoTests --colors --forceExit
 @uifabric/codepen-loader:  PASS  src/__tests__/codepenTransform.test.ts
 @uifabric/codepen-loader: Done in ?s.
 @uifabric/build: yarn run vX.X.X
 @uifabric/build: $ node ./just-scripts.js no-op --production --lint
 @uifabric/build: Done in ?s.
+@uifabric/example-data: yarn run vX.X.X
+@uifabric/example-data: $ just-scripts build --production --lint
+@uifabric/example-data: [XX:XX:XX XM] ■ Removing [lib, temp, dist, lib-amd, lib-commonjs, lib-es2015, coverage, src/**/*.scss.ts]
+@uifabric/example-data: [XX:XX:XX XM] ■ Running tslint
+@uifabric/example-data: [XX:XX:XX XM] ■ /usr/local/bin/node "/office-ui-fabric-react/node_modules/tslint/lib/tslintCli.js" --project "/office-ui-fabric-react/packages/example-data/tsconfig.json" -t stylish -r /office-ui-fabric-react/node_modules/tslint-microsoft-contrib
+@uifabric/example-data: [XX:XX:XX XM] ■ Running /office-ui-fabric-react/node_modules/typescript/lib/tsc.js with /office-ui-fabric-react/packages/example-data/tsconfig.json
+@uifabric/example-data: [XX:XX:XX XM] ■ Executing: /usr/local/bin/node "/office-ui-fabric-react/node_modules/typescript/lib/tsc.js" --pretty --target es5 --inlineSources --sourceRoot "../src" --outDir lib-commonjs --module commonjs --project "/office-ui-fabric-react/packages/example-data/tsconfig.json"
+@uifabric/example-data: [XX:XX:XX XM] ■ Running /office-ui-fabric-react/node_modules/typescript/lib/tsc.js with /office-ui-fabric-react/packages/example-data/tsconfig.json
+@uifabric/example-data: [XX:XX:XX XM] ■ Executing: /usr/local/bin/node "/office-ui-fabric-react/node_modules/typescript/lib/tsc.js" --pretty --target es5 --inlineSources --sourceRoot "../src" --outDir lib --module esnext --project "/office-ui-fabric-react/packages/example-data/tsconfig.json"
+@uifabric/example-data: [XX:XX:XX XM] ■ Running /office-ui-fabric-react/node_modules/typescript/lib/tsc.js with /office-ui-fabric-react/packages/example-data/tsconfig.json
+@uifabric/example-data: [XX:XX:XX XM] ■ Executing: /usr/local/bin/node "/office-ui-fabric-react/node_modules/typescript/lib/tsc.js" --pretty --target es5 --inlineSources --sourceRoot "../src" --outDir lib-amd --module amd --project "/office-ui-fabric-react/packages/example-data/tsconfig.json"
+@uifabric/example-data: [XX:XX:XX XM] ■ Running Webpack
+@uifabric/example-data: [XX:XX:XX XM] ■ Webpack Config Path: /office-ui-fabric-react/packages/example-data/webpack.config.js
+@uifabric/example-data: Webpack version: 4.29.5
+@uifabric/example-data: [XX:XX:XX XM] ■ Extracting Public API surface from '/office-ui-fabric-react/packages/example-data/lib/index.d.ts'
+@uifabric/example-data: Done in ?s.
 @uifabric/migration: yarn run vX.X.X
 @uifabric/migration: $ just-scripts build --production --lint
 @uifabric/migration: [XX:XX:XX XM] ■ Removing [lib, temp, dist, lib-amd, lib-commonjs, lib-es2015, coverage, src/**/*.scss.ts]
@@ -54,7 +70,7 @@ Standard output:
 @uifabric/merge-styles: [XX:XX:XX XM] ■ Running /office-ui-fabric-react/node_modules/typescript/lib/tsc.js with /office-ui-fabric-react/packages/merge-styles/tsconfig.json
 @uifabric/merge-styles: [XX:XX:XX XM] ■ Executing: /usr/local/bin/node "/office-ui-fabric-react/node_modules/typescript/lib/tsc.js" --pretty --target es5 --inlineSources --sourceRoot "../src" --outDir lib-amd --module amd --project "/office-ui-fabric-react/packages/merge-styles/tsconfig.json"
 @uifabric/merge-styles: [XX:XX:XX XM] ■ Running Jest
-@uifabric/merge-styles: [XX:XX:XX XM] ■ /usr/local/bin/node "/office-ui-fabric-react/node_modules/jest/bin/jest.js" --config "/office-ui-fabric-react/packages/merge-styles/jest.config.js" --passWithNoTests --colors
+@uifabric/merge-styles: [XX:XX:XX XM] ■ /usr/local/bin/node "/office-ui-fabric-react/node_modules/jest/bin/jest.js" --config "/office-ui-fabric-react/packages/merge-styles/jest.config.js" --passWithNoTests --colors --forceExit
 @uifabric/merge-styles: [XX:XX:XX XM] ■ Running Webpack
 @uifabric/merge-styles: [XX:XX:XX XM] ■ Webpack Config Path: /office-ui-fabric-react/packages/merge-styles/webpack.config.js
 @uifabric/merge-styles: Webpack version: 4.29.5
@@ -70,7 +86,6 @@ Standard output:
 @uifabric/merge-styles:  PASS  src/extractStyleParts.test.ts
 @uifabric/merge-styles:  PASS  src/server.test.ts
 @uifabric/merge-styles:  PASS  src/fontFace.test.ts
-@uifabric/merge-styles:  PASS  src/transforms/kebabRules.test.ts
 @uifabric/merge-styles: [XX:XX:XX XM] ■ Extracting Public API surface from '/office-ui-fabric-react/packages/merge-styles/lib/index.d.ts'
 @uifabric/merge-styles: Done in ?s.
 @uifabric/jest-serializer-merge-styles: yarn run vX.X.X
@@ -82,7 +97,7 @@ Standard output:
 @uifabric/jest-serializer-merge-styles: [XX:XX:XX XM] ■ Running /office-ui-fabric-react/node_modules/typescript/lib/tsc.js with /office-ui-fabric-react/packages/jest-serializer-merge-styles/tsconfig.json
 @uifabric/jest-serializer-merge-styles: [XX:XX:XX XM] ■ Executing: /usr/local/bin/node "/office-ui-fabric-react/node_modules/typescript/lib/tsc.js" --pretty --target es5 --inlineSources --sourceRoot "../src" --outDir lib-amd --module amd --project "/office-ui-fabric-react/packages/jest-serializer-merge-styles/tsconfig.json"
 @uifabric/jest-serializer-merge-styles: [XX:XX:XX XM] ■ Running Jest
-@uifabric/jest-serializer-merge-styles: [XX:XX:XX XM] ■ /usr/local/bin/node "/office-ui-fabric-react/node_modules/jest/bin/jest.js" --config "/office-ui-fabric-react/packages/jest-serializer-merge-styles/jest.config.js" --passWithNoTests --colors
+@uifabric/jest-serializer-merge-styles: [XX:XX:XX XM] ■ /usr/local/bin/node "/office-ui-fabric-react/node_modules/jest/bin/jest.js" --config "/office-ui-fabric-react/packages/jest-serializer-merge-styles/jest.config.js" --passWithNoTests --colors --forceExit
 @uifabric/jest-serializer-merge-styles:  PASS  src/index.test.tsx
 @uifabric/jest-serializer-merge-styles: Done in ?s.
 @uifabric/test-utilities: yarn run vX.X.X
@@ -107,7 +122,7 @@ Standard output:
 @uifabric/utilities: [XX:XX:XX XM] ■ Running /office-ui-fabric-react/node_modules/typescript/lib/tsc.js with /office-ui-fabric-react/packages/utilities/tsconfig.json
 @uifabric/utilities: [XX:XX:XX XM] ■ Executing: /usr/local/bin/node "/office-ui-fabric-react/node_modules/typescript/lib/tsc.js" --pretty --target es5 --inlineSources --sourceRoot "../src" --outDir lib-amd --module amd --project "/office-ui-fabric-react/packages/utilities/tsconfig.json"
 @uifabric/utilities: [XX:XX:XX XM] ■ Running Jest
-@uifabric/utilities: [XX:XX:XX XM] ■ /usr/local/bin/node "/office-ui-fabric-react/node_modules/jest/bin/jest.js" --config "/office-ui-fabric-react/packages/utilities/jest.config.js" --passWithNoTests --colors
+@uifabric/utilities: [XX:XX:XX XM] ■ /usr/local/bin/node "/office-ui-fabric-react/node_modules/jest/bin/jest.js" --config "/office-ui-fabric-react/packages/utilities/jest.config.js" --passWithNoTests --colors --forceExit
 @uifabric/utilities: [XX:XX:XX XM] ■ Running Webpack
 @uifabric/utilities: [XX:XX:XX XM] ■ Webpack Config Path: null
 @uifabric/utilities: [XX:XX:XX XM] ■ webpack.config.js not found, skipping webpack
@@ -145,7 +160,6 @@ Standard output:
 @uifabric/utilities:  PASS  src/initializeComponentRef.test.tsx
 @uifabric/utilities:  PASS  src/BaseComponent.test.tsx
 @uifabric/utilities:  PASS  src/keyboard.test.ts
-@uifabric/utilities:  PASS  src/css.test.ts
 @uifabric/utilities: [XX:XX:XX XM] ■ Extracting Public API surface from '/office-ui-fabric-react/packages/utilities/lib/index.d.ts'
 @uifabric/utilities: Done in ?s.
 @uifabric/styling: yarn run vX.X.X
@@ -160,15 +174,13 @@ Standard output:
 @uifabric/styling: [XX:XX:XX XM] ■ Running /office-ui-fabric-react/node_modules/typescript/lib/tsc.js with /office-ui-fabric-react/packages/styling/tsconfig.json
 @uifabric/styling: [XX:XX:XX XM] ■ Executing: /usr/local/bin/node "/office-ui-fabric-react/node_modules/typescript/lib/tsc.js" --pretty --target es5 --inlineSources --sourceRoot "../src" --outDir lib-amd --module amd --project "/office-ui-fabric-react/packages/styling/tsconfig.json"
 @uifabric/styling: [XX:XX:XX XM] ■ Running Jest
-@uifabric/styling: [XX:XX:XX XM] ■ /usr/local/bin/node "/office-ui-fabric-react/node_modules/jest/bin/jest.js" --config "/office-ui-fabric-react/packages/styling/jest.config.js" --passWithNoTests --colors
+@uifabric/styling: [XX:XX:XX XM] ■ /usr/local/bin/node "/office-ui-fabric-react/node_modules/jest/bin/jest.js" --config "/office-ui-fabric-react/packages/styling/jest.config.js" --passWithNoTests --colors --forceExit
 @uifabric/styling: [XX:XX:XX XM] ■ Running Webpack
 @uifabric/styling: [XX:XX:XX XM] ■ Webpack Config Path: null
 @uifabric/styling: [XX:XX:XX XM] ■ webpack.config.js not found, skipping webpack
 @uifabric/styling:  PASS  src/styles/theme.test.ts
 @uifabric/styling:  PASS  src/styles/scheme.test.ts
 @uifabric/styling:  PASS  src/styles/getGlobalClassNames.test.ts
-@uifabric/styling:  PASS  src/utilities/icons.test.ts
-@uifabric/styling:  PASS  src/styles/fonts.test.ts
 @uifabric/styling: [XX:XX:XX XM] ■ Extracting Public API surface from '/office-ui-fabric-react/packages/styling/lib/index.d.ts'
 @uifabric/styling: Done in ?s.
 @uifabric/file-type-icons: yarn run vX.X.X
@@ -198,12 +210,11 @@ Standard output:
 @uifabric/foundation: [XX:XX:XX XM] ■ Running /office-ui-fabric-react/node_modules/typescript/lib/tsc.js with /office-ui-fabric-react/packages/foundation/tsconfig.json
 @uifabric/foundation: [XX:XX:XX XM] ■ Executing: /usr/local/bin/node "/office-ui-fabric-react/node_modules/typescript/lib/tsc.js" --pretty --target es5 --inlineSources --sourceRoot "../src" --outDir lib-amd --module amd --project "/office-ui-fabric-react/packages/foundation/tsconfig.json"
 @uifabric/foundation: [XX:XX:XX XM] ■ Running Jest
-@uifabric/foundation: [XX:XX:XX XM] ■ /usr/local/bin/node "/office-ui-fabric-react/node_modules/jest/bin/jest.js" --config "/office-ui-fabric-react/packages/foundation/jest.config.js" --passWithNoTests --colors
+@uifabric/foundation: [XX:XX:XX XM] ■ /usr/local/bin/node "/office-ui-fabric-react/node_modules/jest/bin/jest.js" --config "/office-ui-fabric-react/packages/foundation/jest.config.js" --passWithNoTests --colors --forceExit
 @uifabric/foundation: [XX:XX:XX XM] ■ Running Webpack
 @uifabric/foundation: [XX:XX:XX XM] ■ Webpack Config Path: /office-ui-fabric-react/packages/foundation/webpack.config.js
 @uifabric/foundation: Webpack version: 4.29.5
 @uifabric/foundation:  FAIL  src/slots.test.tsx
-@uifabric/foundation:  PASS  src/hooks/controlled.test.tsx
 @uifabric/foundation: info Visit https://yarnpkg.com/en/docs/cli/run for documentation about this command.
 
 
@@ -211,16 +222,32 @@ Standard output:
 Standard error:
 info cli using local version of lerna
 lerna notice cli vX.X.X
-lerna info Executing command in 40 packages: "yarn run build --production --lint"
+lerna info Executing command in 41 packages: "yarn run build --production --lint"
 @uifabric/codepen-loader: ts-jest[versions] (WARN) Version X.X.X-insiders.xxxxxxxx of typescript installed has not been tested with ts-jest. If you're experiencing issues, consider using a supported version (>=2.7.0 <4.0.0). Please do not report issues in ts-jest if you are using unsupported versions.
+@uifabric/codepen-loader: Force exiting Jest
+@uifabric/codepen-loader: 
+@uifabric/codepen-loader: Have you considered using `--detectOpenHandles` to detect async operations that kept running after all tests finished?
+@uifabric/example-data: [XX:XX:XX XM] ▲ One of these [node-sass, postcss, autoprefixer] is not installed, so this task has no effect
 @uifabric/set-version: [XX:XX:XX XM] ▲ One of these [node-sass, postcss, autoprefixer] is not installed, so this task has no effect
 @uifabric/merge-styles: [XX:XX:XX XM] ▲ One of these [node-sass, postcss, autoprefixer] is not installed, so this task has no effect
 @uifabric/merge-styles: ts-jest[versions] (WARN) Version X.X.X-insiders.xxxxxxxx of typescript installed has not been tested with ts-jest. If you're experiencing issues, consider using a supported version (>=2.7.0 <4.0.0). Please do not report issues in ts-jest if you are using unsupported versions.
+@uifabric/merge-styles: Force exiting Jest
+@uifabric/merge-styles: 
+@uifabric/merge-styles: Have you considered using `--detectOpenHandles` to detect async operations that kept running after all tests finished?
 @uifabric/jest-serializer-merge-styles: ts-jest[versions] (WARN) Version X.X.X-insiders.xxxxxxxx of typescript installed has not been tested with ts-jest. If you're experiencing issues, consider using a supported version (>=2.7.0 <4.0.0). Please do not report issues in ts-jest if you are using unsupported versions.
+@uifabric/jest-serializer-merge-styles: Force exiting Jest
+@uifabric/jest-serializer-merge-styles: 
+@uifabric/jest-serializer-merge-styles: Have you considered using `--detectOpenHandles` to detect async operations that kept running after all tests finished?
 @uifabric/utilities: [XX:XX:XX XM] ▲ One of these [node-sass, postcss, autoprefixer] is not installed, so this task has no effect
 @uifabric/utilities: ts-jest[versions] (WARN) Version X.X.X-insiders.xxxxxxxx of typescript installed has not been tested with ts-jest. If you're experiencing issues, consider using a supported version (>=2.7.0 <4.0.0). Please do not report issues in ts-jest if you are using unsupported versions.
+@uifabric/utilities: Force exiting Jest
+@uifabric/utilities: 
+@uifabric/utilities: Have you considered using `--detectOpenHandles` to detect async operations that kept running after all tests finished?
 @uifabric/styling: [XX:XX:XX XM] ▲ One of these [node-sass, postcss, autoprefixer] is not installed, so this task has no effect
 @uifabric/styling: ts-jest[versions] (WARN) Version X.X.X-insiders.xxxxxxxx of typescript installed has not been tested with ts-jest. If you're experiencing issues, consider using a supported version (>=2.7.0 <4.0.0). Please do not report issues in ts-jest if you are using unsupported versions.
+@uifabric/styling: Force exiting Jest
+@uifabric/styling: 
+@uifabric/styling: Have you considered using `--detectOpenHandles` to detect async operations that kept running after all tests finished?
 @uifabric/file-type-icons: [XX:XX:XX XM] ▲ One of these [node-sass, postcss, autoprefixer] is not installed, so this task has no effect
 @uifabric/foundation: [XX:XX:XX XM] ▲ One of these [node-sass, postcss, autoprefixer] is not installed, so this task has no effect
 @uifabric/foundation: ts-jest[versions] (WARN) Version X.X.X-insiders.xxxxxxxx of typescript installed has not been tested with ts-jest. If you're experiencing issues, consider using a supported version (>=2.7.0 <4.0.0). Please do not report issues in ts-jest if you are using unsupported versions.
@@ -421,15 +448,19 @@ lerna info Executing command in 40 packages: "yarn run build --production --lint
 @uifabric/foundation:       at _renderSlot (src/slots.tsx:221:100)
 @uifabric/foundation:       at Object.slot [as testSlot1] (src/slots.tsx:142:16)
 @uifabric/foundation:       at Object.<anonymous> (src/slots.test.tsx:399:24)
+@uifabric/foundation: Force exiting Jest
+@uifabric/foundation: 
+@uifabric/foundation: Have you considered using `--detectOpenHandles` to detect async operations that kept running after all tests finished?
 @uifabric/foundation: [XX:XX:XX XM] x Error detected while running 'jest'
 @uifabric/foundation: [XX:XX:XX XM] x ------------------------------------
-@uifabric/foundation: [XX:XX:XX XM] x Error: Command failed: /usr/local/bin/node /office-ui-fabric-react/node_modules/jest/bin/jest.js --config /office-ui-fabric-react/packages/foundation/jest.config.js --passWithNoTests --colors
-@uifabric/foundation:     at ChildProcess.<anonymous> (/office-ui-fabric-react/node_modules/just-scripts-utils/lib/exec.js:70:31)
+@uifabric/foundation: [XX:XX:XX XM] x Error: Command failed: /usr/local/bin/node /office-ui-fabric-react/node_modules/jest/bin/jest.js --config /office-ui-fabric-react/packages/foundation/jest.config.js --passWithNoTests --colors --forceExit
+@uifabric/foundation:     at ChildProcess.<anonymous> (/office-ui-fabric-react/node_modules/just-scripts/node_modules/just-scripts-utils/lib/exec.js:70:31)
 @uifabric/foundation:     at ChildProcess.emit (events.js:209:13)
 @uifabric/foundation:     at ChildProcess.EventEmitter.emit (domain.js:499:23)
 @uifabric/foundation:     at Process.ChildProcess._handle.onexit (internal/child_process.js:272:12)
 @uifabric/foundation: [XX:XX:XX XM] x ------------------------------------
 @uifabric/foundation: [XX:XX:XX XM] x Error previously detected. See above for error messages.
+@uifabric/foundation: [XX:XX:XX XM] x Other tasks that did not complete: [webpack]
 @uifabric/foundation: error Command failed with exit code 1.
 lerna ERR! yarn run build --production --lint exited 1 in '@uifabric/foundation'
 lerna WARN complete Waiting for 1 child process to exit. CTRL-C to exit immediately.
