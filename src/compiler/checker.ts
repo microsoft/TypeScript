@@ -16994,7 +16994,9 @@ namespace ts {
                     }
                     else if (flags & FlowFlags.Condition) {
                         type = getTypeAtFlowCondition(<FlowCondition>flow);
-                        if (!isIncomplete(type) && type.flags & TypeFlags.Union) {
+                        if (isIncomplete(type)) {
+                            containingUnion = undefined;
+                        } else if (type.flags & TypeFlags.Union) {
                             containingUnion = type as UnionType;
                         }
                     }
