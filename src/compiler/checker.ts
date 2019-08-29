@@ -14549,6 +14549,9 @@ namespace ts {
         // though highly unlikely, for this test to be true in a situation where a chain of instantiations is not infinitely
         // expanding. Effectively, we will generate a false positive when two types are structurally equal to at least 5
         // levels, but unequal at some level beyond that.
+        // In addition, this will also detect when an indexed access has been chained off of 5 or more times (which is essentially
+        // the dual of the structural comparison), and likewise mark the type as deeply nested, potentially adding false positives
+        // for finite but deeply expanding indexed accesses (eg, for `Q[P1][P2][P3][P4][P5]`).
         function isDeeplyNestedType(type: Type, stack: Type[], depth: number): boolean {
             // We track all object types that have an associated symbol (representing the origin of the type)
             if (depth >= 5 && type.flags & TypeFlags.Object) {
@@ -14564,7 +14567,29 @@ namespace ts {
                     }
                 }
             }
+            if (depth >= 5 && type.flags & TypeFlags.IndexedAccess) {
+                const root = getRootObjectTypeFromIndexedAccessChain(type);
+                let count = 0;
+                for (let i = 0; i < depth; i++) {
+                    const t = stack[i];
+                    if (getRootObjectTypeFromIndexedAccessChain(t) === root) {
+                        count++;
+                        if (count >= 5) return true;
+                    }
+                }
+            }
             return false;
+        }
+
+        /**
+         * Gets the leftmost object type in a chain of indexed accesses, eg, in A[P][Q], returns A
+         */
+        function getRootObjectTypeFromIndexedAccessChain(type: Type) {
+            let t = type;
+            while (t.flags & TypeFlags.IndexedAccess) {
+                t = (t as IndexedAccessType).objectType;
+            }
+            return t;
         }
 
         function isPropertyIdenticalTo(sourceProp: Symbol, targetProp: Symbol): boolean {
