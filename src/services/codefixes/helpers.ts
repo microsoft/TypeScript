@@ -6,13 +6,42 @@ namespace ts.codefix {
      * @param possiblyMissingSymbols The collection of symbols to filter and then get insertions for.
      * @returns Empty string iff there are no member insertions.
      */
-    export function createMissingMemberNodes(classDeclaration: ClassLikeDeclaration, possiblyMissingSymbols: ReadonlyArray<Symbol>, context: TypeConstructionContext, preferences: UserPreferences, out: (node: ClassElement) => void): void {
+    export function createMissingMemberNodes(classDeclaration: ClassLikeDeclaration, possiblyMissingSymbols: ReadonlyArray<Symbol>, context: TypeConstructionContext, preferences: UserPreferences, out: (node: ClassElement) => void, outImportStatements: (statement: Statement) => void): void {
         const classMembers = classDeclaration.symbol.members!;
+        const sourceFile = classDeclaration.getSourceFile();
+        const importStatements: ImportDeclaration[] = [...sourceFile.statements.filter(isImportDeclaration)];
         for (const symbol of possiblyMissingSymbols) {
             if (!classMembers.has(symbol.escapedName)) {
-                addNewNodeForMemberSymbol(symbol, classDeclaration, context, preferences, out);
+                addNewNodeForMemberSymbol(symbol, classDeclaration, context, preferences, getQuotePreference(sourceFile, preferences), out, (newImport) => {
+                    addNonDuplicateImport(importStatements, newImport);
+                });
             }
         }
+        importStatements.forEach(outImportStatements);
+    }
+
+    function addNonDuplicateImport(imports: ImportDeclaration[], newImport: ImportDeclaration) {
+        for (const existingImport of imports) {
+            if (isStringLiteralLike(existingImport.moduleSpecifier) && isStringLiteralLike(newImport.moduleSpecifier) &&
+                existingImport.moduleSpecifier.text === newImport.moduleSpecifier.text &&
+                existingImport.importClause && newImport.importClause) {
+
+                if (newImport.importClause.name) {
+                    existingImport.importClause.name = newImport.importClause.name;
+                    return;
+                }
+                if (newImport.importClause.namedBindings && existingImport.importClause.namedBindings &&
+                        isNamedImportBindings(newImport.importClause.namedBindings) && isNamedImportBindings(existingImport.importClause.namedBindings)) {
+
+                    const existingNamedImports = (existingImport.importClause.namedBindings as NamedImports);
+                    const newNamedImports = (newImport.importClause.namedBindings as NamedImports);
+                    const newElements = newNamedImports.elements.filter(e => !existingNamedImports.elements.some(existing => existing.name.text === e.name.text));
+                    existingImport.importClause.namedBindings = createNamedImports([...existingNamedImports.elements, ...newElements]);
+                    return;
+                }
+            }
+        }
+        imports.push(newImport);
     }
 
     function getModuleSpecifierResolverHost(context: TypeConstructionContext): SymbolTracker["moduleResolverHost"] {
@@ -42,7 +71,7 @@ namespace ts.codefix {
     /**
      * @returns Empty string iff there we can't figure out a representation for `symbol` in `enclosingDeclaration`.
      */
-    function addNewNodeForMemberSymbol(symbol: Symbol, enclosingDeclaration: ClassLikeDeclaration, context: TypeConstructionContext, preferences: UserPreferences, out: (node: Node) => void): void {
+    function addNewNodeForMemberSymbol(symbol: Symbol, enclosingDeclaration: ClassLikeDeclaration, context: TypeConstructionContext, preferences: UserPreferences, quotePreference: QuotePreference, out: (node: Node) => void, outImportStatements: (statement: ImportDeclaration) => void): void {
         const declarations = symbol.getDeclarations();
         if (!(declarations && declarations.length)) {
             return undefined;
@@ -66,7 +95,7 @@ namespace ts.codefix {
                     modifiers,
                     name,
                     optional ? createToken(SyntaxKind.QuestionToken) : undefined,
-                    typeNode,
+                    replaceInlineImportAndEmitImportStatement(typeNode),
                     /*initializer*/ undefined));
                 break;
             case SyntaxKind.GetAccessor:
@@ -83,7 +112,7 @@ namespace ts.codefix {
                             modifiers,
                             name,
                             emptyArray,
-                            typeNode,
+                            replaceInlineImportAndEmitImportStatement(typeNode),
                             ambient ? undefined : createStubbedMethodBody(preferences)));
                     }
                     else {
@@ -94,7 +123,7 @@ namespace ts.codefix {
                             /*decorators*/ undefined,
                             modifiers,
                             name,
-                            createDummyParameters(1, [parameterName], [typeNode], 1, /*inJs*/ false),
+                            createDummyParameters(1, [parameterName], [replaceInlineImportAndEmitImportStatement(typeNode)], 1, /*inJs*/ false),
                             ambient ? undefined : createStubbedMethodBody(preferences)));
                     }
                 }
@@ -141,7 +170,35 @@ namespace ts.codefix {
 
         function outputMethod(signature: Signature, modifiers: NodeArray<Modifier> | undefined, name: PropertyName, body?: Block): void {
             const method = signatureToMethodDeclaration(context, signature, enclosingDeclaration, modifiers, name, optional, body);
-            if (method) out(method);
+            if (method) out(removeFunctionInlineImports(method));
+        }
+
+        function removeFunctionInlineImports(functionNode: FunctionTypeNode | MethodDeclaration) {
+            functionNode.parameters.forEach((parameter) => {
+                    const parameterType = parameter.type;
+                    if (parameterType && parameterType.kind === SyntaxKind.ImportType) {
+                        const importNode = parameterType as ImportTypeNode;
+                        parameter.type = replaceInlineImportAndEmitImportStatement(importNode);
+                    }
+                });
+            functionNode.type = replaceInlineImportAndEmitImportStatement(functionNode.type);
+            return functionNode;
+        }
+
+        function replaceInlineImportAndEmitImportStatement(typeNode?: TypeNode) {
+            if (typeNode && typeNode.kind === SyntaxKind.ImportType) {
+                const imported = typeNode as ImportTypeNode;
+                const importedIdentifier = (imported.qualifier as Identifier).text;
+                const moduleFileName = ((imported.argument as LiteralTypeNode).literal as StringLiteral).text;
+                const importSpecifier = createImportSpecifier(undefined, createIdentifier((importedIdentifier)));
+                const importStatement = makeImportIfNecessary(/* defaultImport */ undefined, [importSpecifier], moduleFileName, quotePreference);
+
+                if (importStatement) {
+                    outImportStatements(importStatement);
+                }
+                return createTypeReferenceNode(importedIdentifier, /* typeArgument */ undefined);
+            }
+            return typeNode;
         }
     }
 

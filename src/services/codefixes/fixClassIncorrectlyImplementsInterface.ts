@@ -60,7 +60,13 @@ namespace ts.codefix {
             createMissingIndexSignatureDeclaration(implementedType, IndexKind.String);
         }
 
-        createMissingMemberNodes(classDeclaration, nonPrivateAndNotExistedInHeritageClauseMembers, context, preferences, member => changeTracker.insertNodeAtClassStart(sourceFile, classDeclaration, member));
+        // Delete existing import statements, since they get overwritten by the fix.
+        const existingImportDeclarations = sourceFile.statements.filter(isImportDeclaration);
+        if (existingImportDeclarations.length > 0) {
+            changeTracker.deleteNodeRange(sourceFile, first(existingImportDeclarations), last(existingImportDeclarations));
+        }
+
+        createMissingMemberNodes(classDeclaration, nonPrivateAndNotExistedInHeritageClauseMembers, context, preferences, member => changeTracker.insertNodeAtClassStart(sourceFile, classDeclaration, member), importStatement => insertImport(changeTracker, sourceFile, importStatement));
 
         function createMissingIndexSignatureDeclaration(type: InterfaceType, kind: IndexKind): void {
             const indexInfoOfKind = checker.getIndexInfoOfType(type, kind);

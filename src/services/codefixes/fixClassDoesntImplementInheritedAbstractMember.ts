@@ -41,7 +41,13 @@ namespace ts.codefix {
         // so duplicates cannot occur.
         const abstractAndNonPrivateExtendsSymbols = checker.getPropertiesOfType(instantiatedExtendsType).filter(symbolPointsToNonPrivateAndAbstractMember);
 
-        createMissingMemberNodes(classDeclaration, abstractAndNonPrivateExtendsSymbols, context, preferences, member => changeTracker.insertNodeAtClassStart(sourceFile, classDeclaration, member));
+        // Delete existing import statements, since they get overwritten by the fix.
+        const existingImportDeclarations = sourceFile.statements.filter(isImportDeclaration);
+        if (existingImportDeclarations.length > 0) {
+            changeTracker.deleteNodeRange(sourceFile, first(existingImportDeclarations), last(existingImportDeclarations));
+        }
+
+        createMissingMemberNodes(classDeclaration, abstractAndNonPrivateExtendsSymbols, context, preferences, member => changeTracker.insertNodeAtClassStart(sourceFile, classDeclaration, member), importStatement => insertImport(changeTracker, sourceFile, importStatement));
     }
 
     function symbolPointsToNonPrivateAndAbstractMember(symbol: Symbol): boolean {
