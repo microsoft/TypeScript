@@ -218,6 +218,7 @@ namespace ts.textChanges {
     export interface TextChangesContext {
         host: LanguageServiceHost;
         formatContext: formatting.FormatContext;
+        preferences: UserPreferences;
     }
 
     export type TypeAnnotatable = SignatureDeclaration | VariableDeclaration | ParameterDeclaration | PropertyDeclaration | PropertySignature;
@@ -235,7 +236,7 @@ namespace ts.textChanges {
         private readonly deletedNodes: { readonly sourceFile: SourceFile, readonly node: Node | NodeArray<TypeParameterDeclaration> }[] = [];
 
         public static fromContext(context: TextChangesContext): ChangeTracker {
-            return new ChangeTracker(getNewLineOrDefaultFromHost(context.host, context.formatContext.options), context.formatContext);
+            return new ChangeTracker(getNewLineOrDefaultFromHost(context.host, context.formatContext.options), context.formatContext, context.preferences);
         }
 
         public static with(context: TextChangesContext, cb: (tracker: ChangeTracker) => void): FileTextChanges[] {
@@ -245,7 +246,7 @@ namespace ts.textChanges {
         }
 
         /** Public for tests only. Other callers should use `ChangeTracker.with`. */
-        constructor(private readonly newLineCharacter: string, private readonly formatContext: formatting.FormatContext) {}
+        constructor(private readonly newLineCharacter: string, private readonly formatContext: formatting.FormatContext, private preferences: UserPreferences) {}
 
         public deleteRange(sourceFile: SourceFile, range: TextRange): void {
             this.changes.push({ kind: ChangeKind.Remove, sourceFile, range });
@@ -752,9 +753,9 @@ namespace ts.textChanges {
         public getChanges(validate?: ValidateNonFormattedText): FileTextChanges[] {
             this.finishDeleteDeclarations();
             this.finishClassesWithNodesInsertedAtStart();
-            const changes = changesToText.getTextChangesFromChanges(this.changes, this.newLineCharacter, this.formatContext, validate);
+            const changes = changesToText.getTextChangesFromChanges(this.changes, this.newLineCharacter, this.formatContext, this.preferences, validate);
             for (const { oldFile, fileName, statements } of this.newFiles) {
-                changes.push(changesToText.newFileChanges(oldFile, fileName, statements, this.newLineCharacter, this.formatContext));
+                changes.push(changesToText.newFileChanges(oldFile, fileName, statements, this.newLineCharacter, this.formatContext, this.preferences));
             }
             return changes;
         }
@@ -778,12 +779,12 @@ namespace ts.textChanges {
 
     export type ValidateNonFormattedText = (node: Node, text: string) => void;
 
-    export function getNewFileText(statements: ReadonlyArray<Statement>, scriptKind: ScriptKind, newLineCharacter: string, formatContext: formatting.FormatContext): string {
-        return changesToText.newFileChangesWorker(/*oldFile*/ undefined, scriptKind, statements, newLineCharacter, formatContext);
+    export function getNewFileText(statements: ReadonlyArray<Statement>, scriptKind: ScriptKind, newLineCharacter: string, formatContext: formatting.FormatContext, preferences: UserPreferences): string {
+        return changesToText.newFileChangesWorker(/*oldFile*/ undefined, scriptKind, statements, newLineCharacter, formatContext, preferences);
     }
 
     namespace changesToText {
-        export function getTextChangesFromChanges(changes: ReadonlyArray<Change>, newLineCharacter: string, formatContext: formatting.FormatContext, validate: ValidateNonFormattedText | undefined): FileTextChanges[] {
+        export function getTextChangesFromChanges(changes: ReadonlyArray<Change>, newLineCharacter: string, formatContext: formatting.FormatContext, preferences: UserPreferences, validate: ValidateNonFormattedText | undefined): FileTextChanges[] {
             return group(changes, c => c.sourceFile.path).map(changesInFile => {
                 const sourceFile = changesInFile[0].sourceFile;
                 // order changes by start position
@@ -795,25 +796,25 @@ namespace ts.textChanges {
                         `${JSON.stringify(normalized[i].range)} and ${JSON.stringify(normalized[i + 1].range)}`);
                 }
                 const textChanges = normalized.map(c =>
-                    createTextChange(createTextSpanFromRange(c.range), computeNewText(c, sourceFile, newLineCharacter, formatContext, validate)));
+                    createTextChange(createTextSpanFromRange(c.range), computeNewText(c, sourceFile, newLineCharacter, formatContext, preferences, validate)));
                 return { fileName: sourceFile.fileName, textChanges };
             });
         }
 
-        export function newFileChanges(oldFile: SourceFile | undefined, fileName: string, statements: ReadonlyArray<Statement>, newLineCharacter: string, formatContext: formatting.FormatContext): FileTextChanges {
-            const text = newFileChangesWorker(oldFile, getScriptKindFromFileName(fileName), statements, newLineCharacter, formatContext);
+        export function newFileChanges(oldFile: SourceFile | undefined, fileName: string, statements: ReadonlyArray<Statement>, newLineCharacter: string, formatContext: formatting.FormatContext, preferences: UserPreferences): FileTextChanges {
+            const text = newFileChangesWorker(oldFile, getScriptKindFromFileName(fileName), statements, newLineCharacter, formatContext, preferences);
             return { fileName, textChanges: [createTextChange(createTextSpan(0, 0), text)], isNewFile: true };
         }
 
-        export function newFileChangesWorker(oldFile: SourceFile | undefined, scriptKind: ScriptKind, statements: ReadonlyArray<Statement>, newLineCharacter: string, formatContext: formatting.FormatContext): string {
+        export function newFileChangesWorker(oldFile: SourceFile | undefined, scriptKind: ScriptKind, statements: ReadonlyArray<Statement>, newLineCharacter: string, formatContext: formatting.FormatContext, preferences: UserPreferences): string {
             // TODO: this emits the file, parses it back, then formats it that -- may be a less roundabout way to do this
-            const nonFormattedText = statements.map(s => getNonformattedText(s, oldFile, newLineCharacter).text).join(newLineCharacter);
+            const nonFormattedText = statements.map(s => getNonformattedText(s, oldFile, newLineCharacter, preferences).text).join(newLineCharacter);
             const sourceFile = createSourceFile("any file name", nonFormattedText, ScriptTarget.ESNext, /*setParentNodes*/ true, scriptKind);
             const changes = formatting.formatDocument(sourceFile, formatContext);
             return applyChanges(nonFormattedText, changes) + newLineCharacter;
         }
 
-        function computeNewText(change: Change, sourceFile: SourceFile, newLineCharacter: string, formatContext: formatting.FormatContext, validate: ValidateNonFormattedText | undefined): string {
+        function computeNewText(change: Change, sourceFile: SourceFile, newLineCharacter: string, formatContext: formatting.FormatContext, preferences: UserPreferences, validate: ValidateNonFormattedText | undefined): string {
             if (change.kind === ChangeKind.Remove) {
                 return "";
             }
@@ -822,7 +823,7 @@ namespace ts.textChanges {
             }
 
             const { options = {}, range: { pos } } = change;
-            const format = (n: Node) => getFormattedTextOfNode(n, sourceFile, pos, options, newLineCharacter, formatContext, validate);
+            const format = (n: Node) => getFormattedTextOfNode(n, sourceFile, pos, options, newLineCharacter, formatContext, preferences, validate);
             const text = change.kind === ChangeKind.ReplaceWithMultipleNodes
                 ? change.nodes.map(n => removeSuffix(format(n), newLineCharacter)).join(change.options!.joiner || newLineCharacter) // TODO: GH#18217
                 : format(change.node);
@@ -832,8 +833,8 @@ namespace ts.textChanges {
         }
 
         /** Note: this may mutate `nodeIn`. */
-        function getFormattedTextOfNode(nodeIn: Node, sourceFile: SourceFile, pos: number, { indentation, prefix, delta }: InsertNodeOptions, newLineCharacter: string, formatContext: formatting.FormatContext, validate: ValidateNonFormattedText | undefined): string {
-            const { node, text } = getNonformattedText(nodeIn, sourceFile, newLineCharacter);
+        function getFormattedTextOfNode(nodeIn: Node, sourceFile: SourceFile, pos: number, { indentation, prefix, delta }: InsertNodeOptions, newLineCharacter: string, formatContext: formatting.FormatContext, preferences: UserPreferences, validate: ValidateNonFormattedText | undefined): string {
+            const { node, text } = getNonformattedText(nodeIn, sourceFile, newLineCharacter, preferences);
             if (validate) validate(node, text);
             const { options: formatOptions } = formatContext;
             const initialIndentation =
@@ -850,8 +851,10 @@ namespace ts.textChanges {
         }
 
         /** Note: output node may be mutated input node. */
-        export function getNonformattedText(node: Node, sourceFile: SourceFile | undefined, newLineCharacter: string): { text: string, node: Node } {
-            const omitTrailingSemicolon = !!sourceFile && !probablyUsesSemicolons(sourceFile);
+        export function getNonformattedText(node: Node, sourceFile: SourceFile | undefined, newLineCharacter: string, { semicolonPreference }: UserPreferences): { text: string, node: Node } {
+            const omitTrailingSemicolon = semicolonPreference === "no semicolons" ? true :
+                semicolonPreference === "semicolons" ? false :
+                !!sourceFile && !probablyUsesSemicolons(sourceFile);
             const writer = createWriter(newLineCharacter, omitTrailingSemicolon);
             const newLine = newLineCharacter === "\n" ? NewLineKind.LineFeed : NewLineKind.CarriageReturnLineFeed;
             createPrinter({ newLine, neverAsciiEscape: true }, writer).writeNode(EmitHint.Unspecified, node, sourceFile, writer);
