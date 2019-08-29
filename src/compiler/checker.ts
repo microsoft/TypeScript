@@ -5985,7 +5985,9 @@ namespace ts {
 
         function getBaseTypeVariableOfClass(symbol: Symbol) {
             const baseConstructorType = getBaseConstructorTypeOfClass(getDeclaredTypeOfClassOrInterface(symbol));
-            return baseConstructorType.flags & TypeFlags.TypeVariable ? baseConstructorType : undefined;
+            return baseConstructorType.flags & TypeFlags.TypeVariable ? baseConstructorType :
+                baseConstructorType.flags & TypeFlags.Intersection ? find((baseConstructorType as IntersectionType).types, t => !!(t.flags & TypeFlags.TypeVariable)) :
+                undefined;
         }
 
         function getTypeOfFuncClassEnumModule(symbol: Symbol): Type {
@@ -6429,11 +6431,11 @@ namespace ts {
             return true;
         }
 
-        // A valid base type is `any`, any non-generic object type or intersection of non-generic
+        // A valid base type is `any`, any non-generic object type or intersection of constructor types and non-generic
         // object types.
         function isValidBaseType(type: Type): type is BaseType {
             return !!(type.flags & (TypeFlags.Object | TypeFlags.NonPrimitive | TypeFlags.Any)) && !isGenericMappedType(type) ||
-                !!(type.flags & TypeFlags.Intersection) && every((<IntersectionType>type).types, isValidBaseType);
+                !!(type.flags & TypeFlags.Intersection) && every(filter((<IntersectionType>type).types, t => !isConstructorType(t)), isValidBaseType);
         }
 
         function resolveBaseTypesOfInterface(type: InterfaceType): void {
