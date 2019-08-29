@@ -421,7 +421,7 @@ namespace ts.codefix {
         }
 
         function single(): Type {
-            return unifyFromUsage(inferTypesFromReferencesSingle(references));
+            return unifyTypes(inferTypesFromReferencesSingle(references));
         }
 
         function parameters(declaration: FunctionLike): ParameterInference[] | undefined {
@@ -457,7 +457,7 @@ namespace ts.codefix {
                     const inferred = inferTypesFromReferencesSingle(getReferences(parameter.name, program, cancellationToken));
                     types.push(...(isRest ? mapDefined(inferred, checker.getElementTypeOfArrayType) : inferred));
                 }
-                const type = unifyFromUsage(types);
+                const type = unifyTypes(types);
                 return {
                     type: isRest ? checker.createArrayType(type) : type,
                     isOptional: isOptional && !isRest,
@@ -473,7 +473,7 @@ namespace ts.codefix {
                 calculateUsageOfNode(reference, usage);
             }
 
-            return unifyFromUsage(usage.candidateThisTypes || emptyArray);
+            return unifyTypes(usage.candidateThisTypes || emptyArray);
         }
 
         function inferTypesFromReferencesSingle(references: readonly Identifier[]): Type[] {
@@ -627,6 +627,9 @@ namespace ts.codefix {
                     else if (otherOperandType.flags & TypeFlags.StringLike) {
                         usage.isString = true;
                     }
+                    else if (otherOperandType.flags & TypeFlags.Any) {
+                        // do nothing, maybe we'll learn something elsewhere
+                    }
                     else {
                         usage.isNumberOrString = true;
                     }
@@ -748,7 +751,7 @@ namespace ts.codefix {
             return inferences.filter(i => toRemove.every(f => !f(i)));
         }
 
-        function unifyFromUsage(inferences: ReadonlyArray<Type>, fallback = checker.getAnyType()): Type {
+        function unifyTypes(inferences: ReadonlyArray<Type>, fallback = checker.getAnyType()): Type {
             if (!inferences.length) return fallback;
 
             // 1. string or number individually override string | number
@@ -774,7 +777,7 @@ namespace ts.codefix {
                 good = good.filter(i => !(checker.getObjectFlags(i) & ObjectFlags.Anonymous));
                 good.push(unifyAnonymousTypes(anons));
             }
-            return checker.getWidenedType(checker.getUnionType(good));
+            return checker.getWidenedType(checker.getUnionType(good, UnionReduction.Subtype));
         }
 
         function unifyAnonymousTypes(anons: AnonymousType[]) {
@@ -832,16 +835,7 @@ namespace ts.codefix {
             }
 
             types.push(...(usage.candidateTypes || []).map(t => checker.getBaseTypeOfLiteralType(t)));
-            types.push(...findBuiltinType(usage));
-
-            if (usage.properties && hasCalls(usage.properties.get("then" as __String))) {
-                const paramType = getParameterTypeFromCalls(0, usage.properties.get("then" as __String)!.calls!, /*isRestParameter*/ false)!; // TODO: GH#18217
-                const types = paramType.getCallSignatures().map(sig => sig.getReturnType());
-                types.push(checker.createPromiseType(types.length ? checker.getUnionType(types, UnionReduction.Subtype) : checker.getAnyType()));
-            }
-            else if (usage.properties && hasCalls(usage.properties.get("push" as __String))) {
-                types.push(checker.createArrayType(getParameterTypeFromCalls(0, usage.properties.get("push" as __String)!.calls!, /*isRestParameter*/ false)!));
-            }
+            types.push(...findBuiltinTypes(usage));
 
             if (usage.numberIndex) {
                 types.push(checker.createArrayType(recur(usage.numberIndex)));
@@ -864,11 +858,12 @@ namespace ts.codefix {
                 }
 
                 if (usage.calls) {
-                    callSignatures.push(getSignatureFromCalls(usage.calls));
+                    callSignatures.push(getSignatureFromCalls(usage.calls, checker.getVoidType()));
                 }
 
                 if (usage.constructs) {
-                    constructSignatures.push(getSignatureFromCalls(usage.constructs));
+                    // TODO: fallback return should maybe be {}?
+                    constructSignatures.push(getSignatureFromCalls(usage.constructs, checker.getVoidType()));
                 }
 
                 if (usage.stringIndex) {
@@ -880,7 +875,7 @@ namespace ts.codefix {
             return types; // TODO: Should cache this since I HOPE it doesn't change
 
             function recur(innerUsage: Usage): Type {
-                return unifyFromUsage(inferFromUsage(innerUsage));
+                return unifyTypes(inferFromUsage(innerUsage));
             }
         }
 
@@ -931,7 +926,8 @@ namespace ts.codefix {
             }
         }
 
-        function findBuiltinType(usage: Usage): Type[] {
+        function findBuiltinTypes(usage: Usage): Type[] {
+            if (!usage.properties || !usage.properties.size) return [];
             const builtins = [
                 checker.getStringType(),
                 checker.getNumberType(),
@@ -939,9 +935,21 @@ namespace ts.codefix {
                 checker.createPromiseType(checker.getAnyType()),
                 // checker.getFunctionType() // TODO: not sure what this was supposed to be good for.
             ];
+            // TODO: Still need to infer type parameters
             const matches = builtins.filter(t => matchesAllPropertiesOf(t, usage));
-            if (false && 0 < matches.length && matches.length < 3) {
-                return matches;
+            if (0 < matches.length && matches.length < 3) {
+                return matches.map(m =>  {
+                    // special-case array and promise for now
+                    if (m === builtins[3] && hasCalls(usage.properties!.get("then" as __String))) {
+                        const paramType = getParameterTypeFromCalls(0, usage.properties!.get("then" as __String)!.calls!, /*isRestParameter*/ false)!; // TODO: GH#18217
+                        const returns = paramType.getCallSignatures().map(sig => sig.getReturnType());
+                        return checker.createPromiseType(returns.length ? checker.getUnionType(returns, UnionReduction.Subtype) : checker.getAnyType());
+                    }
+                    else if (m === builtins[2] && hasCalls(usage.properties!.get("push" as __String))) {
+                        return checker.createArrayType(getParameterTypeFromCalls(0, usage.properties!.get("push" as __String)!.calls!, /*isRestParameter*/ false)!);
+                    }
+                    return m;
+                });
             }
             return [];
         }
@@ -949,18 +957,18 @@ namespace ts.codefix {
         function matchesAllPropertiesOf(type: Type, usage: Usage) {
             if (!usage.properties) return false;
             let result = true;
-            usage.properties.forEach((prop, name) => {
-                const source = checker.getUnionType(inferFromUsage(prop));
-                const target = checker.getTypeOfPropertyOfType(type, name as string);
-                if (target && prop.calls) {
-                    const sigs = checker.getSignaturesOfType(target, ts.SignatureKind.Call);
-                    result = result && !!sigs.length && sigs.some(
-                        sig => checker.isTypeAssignableTo(
-                            getFunctionFromCalls(prop.calls!),
-                            checker.createAnonymousType(undefined!, createSymbolTable(), [sig], emptyArray, undefined, undefined)));
+            usage.properties.forEach((propUsage, name) => {
+                const source = checker.getTypeOfPropertyOfType(type, name as string);
+                if (!source) {
+                    result = false;
+                    return;
+                }
+                if (propUsage.calls) {
+                    const sigs = checker.getSignaturesOfType(source, ts.SignatureKind.Call);
+                    result = result && !!sigs.length && checker.isTypeAssignableTo(source, getFunctionFromCalls(propUsage.calls));
                 }
                 else {
-                    result = result && !!source && !!target && checker.isTypeAssignableTo(source, target);
+                    result = result && checker.isTypeAssignableTo(source, unifyTypes(inferFromUsage(propUsage)));
                 }
             });
             return result;
@@ -968,43 +976,38 @@ namespace ts.codefix {
 
 
         function getFunctionFromCalls(calls: CallUsage[]) {
-            return checker.createAnonymousType(undefined!, createSymbolTable(), [getSignatureFromCalls(calls)], emptyArray, undefined, undefined);
+            return checker.createAnonymousType(undefined!, createSymbolTable(), [getSignatureFromCalls(calls, checker.getAnyType())], emptyArray, undefined, undefined);
         }
 
         function getParameterTypeFromCalls(parameterIndex: number, calls: CallUsage[], isRestParameter: boolean) {
+            // TODO: This is largely redundant with getSignatureFromCalls, I think. (though it handles rest parameters correctly, so that needs to be integrated there)
             let types: Type[] = [];
-            if (calls) {
-                for (const call of calls) {
-                    if (call.argumentTypes.length > parameterIndex) {
-                        if (isRestParameter) {
-                            types = concatenate(types, map(call.argumentTypes.slice(parameterIndex), a => checker.getBaseTypeOfLiteralType(a)));
-                        }
-                        else {
-                            types.push(checker.getBaseTypeOfLiteralType(call.argumentTypes[parameterIndex]));
-                        }
+            for (const call of calls) {
+                if (call.argumentTypes.length > parameterIndex) {
+                    if (isRestParameter) {
+                        types = concatenate(types, map(call.argumentTypes.slice(parameterIndex), a => checker.getBaseTypeOfLiteralType(a)));
+                    }
+                    else {
+                        types.push(checker.getBaseTypeOfLiteralType(call.argumentTypes[parameterIndex]));
                     }
                 }
             }
-
-            if (types.length) {
-                const type = checker.getWidenedType(checker.getUnionType(types, UnionReduction.Subtype));
-                return isRestParameter ? checker.createArrayType(type) : type;
-            }
-            return undefined;
+            const type = unifyTypes(types);
+            return isRestParameter ? checker.createArrayType(type) : type;
         }
 
-        function getSignatureFromCalls(calls: CallUsage[]): Signature {
+        function getSignatureFromCalls(calls: CallUsage[], fallbackReturn: Type): Signature {
             const parameters: Symbol[] = [];
             const length = Math.max(...calls.map(c => c.argumentTypes.length));
             for (let i = 0; i < length; i++) {
                 const symbol = checker.createSymbol(SymbolFlags.FunctionScopedVariable, escapeLeadingUnderscores(`arg${i}`));
-                symbol.type = unifyFromUsage(calls.map(call => call.argumentTypes[i] || checker.getUndefinedType()));
+                symbol.type = unifyTypes(calls.map(call => call.argumentTypes[i] || checker.getUndefinedType()));
                 if (calls.some(call => call.argumentTypes[i] === undefined)) {
                     symbol.flags |= SymbolFlags.Optional;
                 }
                 parameters.push(symbol);
             }
-            const returnType = unifyFromUsage(inferFromUsage(combineUsages(calls.map(call => call.return_))), checker.getVoidType());
+            const returnType = unifyTypes(inferFromUsage(combineUsages(calls.map(call => call.return_))), fallbackReturn);
             // TODO: GH#18217
             return checker.createSignature(/*declaration*/ undefined!, /*typeParameters*/ undefined, /*thisParameter*/ undefined, parameters, returnType, /*typePredicate*/ undefined, length, /*hasRestParameter*/ false, /*hasLiteralTypes*/ false);
         }
