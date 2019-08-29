@@ -38,6 +38,6 @@ namespace ts {
 
     /** Performance logger that will generate ETW events if possible */
     export const perfLogger: PerfLogger = etwModule ? etwModule : nullLogger;
-
-    perfLogger.logInfoEvent(`Starting TypeScript v${versionMajorMinor} with command line: ${JSON.stringify(process.argv)}`);
+    const args = typeof process === "undefined" ? [] : process.argv;
+    perfLogger.logInfoEvent(`Starting TypeScript v${versionMajorMinor} with command line: ${JSON.stringify(args)}`);
 }
