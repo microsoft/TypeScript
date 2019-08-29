@@ -9115,13 +9115,15 @@ namespace ts {
             return type;
         }
 
-        function createDeferredTypeReference(target: GenericType, node: ArrayTypeNode | TupleTypeNode, mapper?: TypeMapper, aliasSymbol?: Symbol, aliasTypeArguments?: ReadonlyArray<Type>): DeferredTypeReference {
+        function createDeferredTypeReference(target: GenericType, node: ArrayTypeNode | TupleTypeNode, mapper?: TypeMapper): DeferredTypeReference {
+            const aliasSymbol = getAliasSymbolForTypeNode(node);
+            const aliasTypeArguments = getTypeArgumentsForAliasSymbol(aliasSymbol);
             const type = <DeferredTypeReference>createObjectType(ObjectFlags.Reference, target.symbol);
             type.target = target;
             type.node = node;
             type.mapper = mapper;
             type.aliasSymbol = aliasSymbol;
-            type.aliasTypeArguments = aliasTypeArguments;
+            type.aliasTypeArguments = mapper ? instantiateTypes(aliasTypeArguments, mapper) : aliasTypeArguments;
             return type;
         }
 
@@ -9639,10 +9641,8 @@ namespace ts {
                     links.resolvedType = emptyObjectType;
                 }
                 else if (isAliasedType(node)) {
-                    const aliasSymbol = getAliasSymbolForTypeNode(node);
-                    const aliasTypeArguments = getTypeArgumentsForAliasSymbol(aliasSymbol);
                     links.resolvedType = node.kind === SyntaxKind.TupleType && node.elementTypes.length === 0 ? target :
-                        createDeferredTypeReference(target, node, /*mapper*/ undefined, aliasSymbol, aliasTypeArguments);
+                        createDeferredTypeReference(target, node, /*mapper*/ undefined);
                 }
                 else {
                     const elementTypes = node.kind === SyntaxKind.ArrayType ? [getTypeFromTypeNode(node.elementType)] : map(node.elementTypes, getTypeFromTypeNode);
@@ -11504,7 +11504,7 @@ namespace ts {
                 let result = links.instantiations!.get(id);
                 if (!result) {
                     const newMapper = createTypeMapper(typeParameters, typeArguments);
-                    result = target.objectFlags & ObjectFlags.Reference ? instantiateDeferredTypeReference(<DeferredTypeReference>type, newMapper) :
+                    result = target.objectFlags & ObjectFlags.Reference ? createDeferredTypeReference((<DeferredTypeReference>type).target, (<DeferredTypeReference>type).node, newMapper) :
                         target.objectFlags & ObjectFlags.Mapped ? instantiateMappedType(<MappedType>target, newMapper) :
                         instantiateAnonymousType(target, newMapper);
                     links.instantiations!.set(id, result);
@@ -11636,10 +11636,6 @@ namespace ts {
             result.aliasSymbol = type.aliasSymbol;
             result.aliasTypeArguments = instantiateTypes(type.aliasTypeArguments, mapper);
             return result;
-        }
-
-        function instantiateDeferredTypeReference(type: DeferredTypeReference, mapper: TypeMapper): TypeReference {
-            return createDeferredTypeReference(type.target, type.node, mapper, type.aliasSymbol, instantiateTypes(type.aliasTypeArguments, mapper));
         }
 
         function getConditionalTypeInstantiation(type: ConditionalType, mapper: TypeMapper): Type {
