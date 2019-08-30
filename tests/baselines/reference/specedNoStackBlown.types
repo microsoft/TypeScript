@@ -29,7 +29,7 @@ export type Spec<INPUT, ROOTINPUT = any> = [Predicate<INPUT, ROOTINPUT>, ErrorMs
 >Spec : Spec<INPUT, ROOTINPUT>
 
 export type SpecArray<INPUT, ROOTINPUT = any> = Array<Spec<INPUT, ROOTINPUT>>;
->SpecArray : Spec<INPUT, ROOTINPUT>[]
+>SpecArray : SpecArray<INPUT, ROOTINPUT>
 
 export type SpecFunction<INPUT, ROOTINPUT = any> = [INPUT] extends [ReadonlyArray<infer U>]
 >SpecFunction : SpecFunction<INPUT, ROOTINPUT>
