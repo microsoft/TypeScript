@@ -28,13 +28,12 @@ async function countEverything(): Promise<number> {
     const [resultA, resultB] = await Promise.all([
 >resultA : A[]
 >resultB : B[]
->await Promise.all([        providerA(),        providerB(),    ] as const) : [A[], B[]]
->Promise.all([        providerA(),        providerB(),    ] as const) : Promise<[A[], B[]]>
+>await Promise.all([        providerA(),        providerB(),    ]) : [A[], B[]]
+>Promise.all([        providerA(),        providerB(),    ]) : Promise<[A[], B[]]>
 >Promise.all : { <TAll>(values: Iterable<TAll>): Promise<(TAll extends undefined ? TAll : TAll extends PromiseLike<infer UAll> ? UAll : TAll)[]>; <T extends readonly any[]>(values: T): Promise<{ -readonly [P in keyof T]: Awaited<T[P]>; }>; }
 >Promise : PromiseConstructor
 >all : { <TAll>(values: Iterable<TAll>): Promise<(TAll extends undefined ? TAll : TAll extends PromiseLike<infer UAll> ? UAll : TAll)[]>; <T extends readonly any[]>(values: T): Promise<{ -readonly [P in keyof T]: Awaited<T[P]>; }>; }
->[        providerA(),        providerB(),    ] as const : readonly [Promise<A[]>, Promise<B[]>]
->[        providerA(),        providerB(),    ] : readonly [Promise<A[]>, Promise<B[]>]
+>[        providerA(),        providerB(),    ] : [Promise<A[]>, Promise<B[]>]
 
         providerA(),
 >providerA() : Promise<A[]>
@@ -44,7 +43,7 @@ async function countEverything(): Promise<number> {
 >providerB() : Promise<B[]>
 >providerB : () => Promise<B[]>
 
-    ] as const);
+    ]);
 
     const dataA: A[] = resultA;
 >dataA : A[]
@@ -71,4 +70,15 @@ async function countEverything(): Promise<number> {
     return 0;
 >0 : 0
 }
+
+// #31179
+
+const expected: Promise<["a", "b", "c"]> = Promise.all(undefined as readonly ["a", "b", "c"]);
+>expected : Promise<["a", "b", "c"]>
+>Promise.all(undefined as readonly ["a", "b", "c"]) : Promise<["a", "b", "c"]>
+>Promise.all : { <TAll>(values: Iterable<TAll>): Promise<(TAll extends undefined ? TAll : TAll extends PromiseLike<infer UAll> ? UAll : TAll)[]>; <T extends readonly any[]>(values: T): Promise<{ -readonly [P in keyof T]: Awaited<T[P]>; }>; }
+>Promise : PromiseConstructor
+>all : { <TAll>(values: Iterable<TAll>): Promise<(TAll extends undefined ? TAll : TAll extends PromiseLike<infer UAll> ? UAll : TAll)[]>; <T extends readonly any[]>(values: T): Promise<{ -readonly [P in keyof T]: Awaited<T[P]>; }>; }
+>undefined as readonly ["a", "b", "c"] : readonly ["a", "b", "c"]
+>undefined : undefined
 
