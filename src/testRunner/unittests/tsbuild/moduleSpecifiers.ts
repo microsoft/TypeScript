@@ -1,8 +1,10 @@
 namespace ts {
     // https://github.com/microsoft/TypeScript/issues/31696
-    it("unittests:: tsbuild:: moduleSpecifiers:: synthesized module specifiers to referenced projects resolve correctly", () => {
-        const baseFs = vfs.createFromFileSystem(Harness.IO, /*ignoreCase*/ false, {
-            files: {
+    describe("unittests:: tsbuild:: moduleSpecifiers:: synthesized module specifiers to referenced projects resolve correctly", () => {
+        let projFs: vfs.FileSystem;
+        const { time, tick } = getTime();
+        before(() => {
+            projFs = loadProjectFromFiles({
                 "/src/common/nominal.ts": utils.dedent`
                     export declare type Nominal<T, Name extends string> = T & {
                         [Symbol.species]: Name;
@@ -71,7 +73,6 @@ namespace ts {
                             "skipLibCheck": true,
                             "rootDir": "./",
                             "outDir": "lib",
-                            "lib": ["dom", "es2015", "es2015.symbol.wellknown"]
                         }
                     }`,
                 "/tsconfig.json": utils.dedent`{
@@ -83,16 +84,23 @@ namespace ts {
                     ],
                     "include": []
                 }`
-            },
-            cwd: "/"
+            }, time, symbolLibContent);
         });
-        const fs = baseFs.makeReadonly().shadow();
-        const sys = new fakes.System(fs, { executingFilePath: "/", newLine: "\n" });
-        const host = new fakes.SolutionBuilderHost(sys);
-        const builder = createSolutionBuilder(host, ["/tsconfig.json"], { dry: false, force: false, verbose: false });
-        builder.build();
-
-        // Prior to fixing GH31696 the import in `/lib/src/sub-project-2/index.d.ts` was `import("../../lib/src/common/nonterminal")`, which was invalid.
-        Harness.Baseline.runBaseline("tsbuild/moduleSpecifiers/initial-build/resolves-correctly.js", vfs.formatPatch(fs.diff(baseFs)));
+        after(() => {
+            projFs = undefined!;
+        });
+        verifyTsbuildOutput({
+            scenario: `synthesized module specifiers resolve correctly`,
+            projFs: () => projFs,
+            time,
+            tick,
+            proj: "moduleSpecifiers",
+            rootNames: ["/"],
+            lastProjectOutput: `/src/lib/index.d.ts`,
+            initialBuild: {
+                modifyFs: noop,
+            },
+            baselineOnly: true
+        });
     });
 }
