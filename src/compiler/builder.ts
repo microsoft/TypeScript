@@ -1036,7 +1036,7 @@ namespace ts {
             compilerOptions: convertFromReusableCompilerOptions(program.options, toAbsolutePath),
             referencedMap: getMapOfReferencedSet(program.referencedMap, toPath),
             exportedModulesMap: getMapOfReferencedSet(program.exportedModulesMap, toPath),
-            semanticDiagnosticsPerFile: program.semanticDiagnosticsPerFile && arrayToMap(program.semanticDiagnosticsPerFile, value => isString(value) ? value : value[0], value => isString(value) ? emptyArray : value[1]),
+            semanticDiagnosticsPerFile: program.semanticDiagnosticsPerFile && arrayToMap(program.semanticDiagnosticsPerFile, value => toPath(isString(value) ? value : value[0]), value => isString(value) ? emptyArray : value[1]),
             hasReusableDiagnostic: true
         };
         return {
