@@ -1583,3 +1583,11 @@ const pc9 = p.then(() => Promise.reject("1"), () => Promise.reject(1));
 >reject : <T = never>(reason?: any) => Promise<T>
 >1 : 1
 
+Promise.resolve(undefined as Promise<string> | number);
+>Promise.resolve(undefined as Promise<string> | number) : Promise<string | number>
+>Promise.resolve : { <T>(value: T): Promise<T extends PromiseLike<infer U> ? U : T>; (): Promise<void>; }
+>Promise : PromiseConstructor
+>resolve : { <T>(value: T): Promise<T extends PromiseLike<infer U> ? U : T>; (): Promise<void>; }
+>undefined as Promise<string> | number : number | Promise<string>
+>undefined : undefined
+
