@@ -56,7 +56,7 @@ namespace ts.NavigationBar {
         curCancellationToken = cancellationToken;
         curSourceFile = sourceFile;
         try {
-            return map(topLevelItems(rootNavigationBarNode(sourceFile)), convertToTopLevelItem);
+            return map(primaryNavBarItems(rootNavigationBarNode(sourceFile)), convertToPrimaryNavBarItem);
         }
         finally {
             reset();
@@ -695,11 +695,11 @@ namespace ts.NavigationBar {
     }
 
     /** Flattens the NavNode tree to a list, keeping only the top-level items. */
-    function topLevelItems(root: NavigationBarNode): NavigationBarNode[] {
-        const topLevel: NavigationBarNode[] = [];
+    function primaryNavBarItems(root: NavigationBarNode): NavigationBarNode[] {
+        const primaryNavBarItems: NavigationBarNode[] = [];
         function recur(item: NavigationBarNode) {
-            if (isTopLevel(item)) {
-                topLevel.push(item);
+            if (shouldAppearInPrimaryNavBarMenu(item)) {
+                primaryNavBarItems.push(item);
                 if (item.children) {
                     for (const child of item.children) {
                         recur(child);
@@ -708,12 +708,17 @@ namespace ts.NavigationBar {
             }
         }
         recur(root);
-        return topLevel;
+        return primaryNavBarItems;
 
-        function isTopLevel(item: NavigationBarNode): boolean {
+        /** Determines if a node should appear in the primary code navigation menu. */
+        function shouldAppearInPrimaryNavBarMenu(item: NavigationBarNode): boolean {
+            // Items with children should always appear in the primary (middle) code navigation menu.
+            // Leaf nodes or children of the currently selected node appear in a secondary (righthand) menu.
             if (item.children) {
                 return true;
             }
+
+            // Some nodes are otherwise important enough to always include in the primary navigation menu.
             switch (navigationBarNodeKind(item)) {
                 case SyntaxKind.ClassDeclaration:
                 case SyntaxKind.ClassExpression:
@@ -763,7 +768,7 @@ namespace ts.NavigationBar {
         };
     }
 
-    function convertToTopLevelItem(n: NavigationBarNode): NavigationBarItem {
+    function convertToPrimaryNavBarItem(n: NavigationBarNode): NavigationBarItem {
         return {
             text: getItemName(n.node, n.name),
             kind: getNodeKind(n.node),
