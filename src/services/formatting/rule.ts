@@ -12,10 +12,14 @@ namespace ts.formatting {
     export const anyContext: ReadonlyArray<ContextPredicate> = emptyArray;
 
     export const enum RuleAction {
-        Ignore = 1 << 0,
-        Space = 1 << 1,
-        NewLine = 1 << 2,
-        Delete = 1 << 3,
+        Ignore       = 1 << 0,
+        Space        = 1 << 1,
+        NewLine      = 1 << 2,
+        DeleteTrivia = 1 << 3,
+        DeleteToken  = 1 << 4,
+
+        TriviaAction = Space | NewLine | DeleteTrivia,
+        TokenAction = DeleteToken
     }
 
     export const enum RuleFlags {

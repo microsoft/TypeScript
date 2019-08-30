@@ -2,21 +2,29 @@
 namespace ts.formatting {
     export interface FormatContext {
         readonly options: FormatCodeSettings;
-        readonly getRule: RulesMap;
+        readonly getRules: RulesMap;
     }
 
-    export interface TextRangeWithKind extends TextRange {
-        kind: SyntaxKind;
+    export interface TextRangeWithKind<T extends SyntaxKind = SyntaxKind> extends TextRange {
+        kind: T;
     }
 
-    export interface TextRangeWithTriviaKind extends TextRange {
-        kind: TriviaKind;
-    }
+    export type TextRangeWithTriviaKind = TextRangeWithKind<TriviaKind>;
 
     export interface TokenInfo {
         leadingTrivia: TextRangeWithTriviaKind[] | undefined;
         token: TextRangeWithKind;
         trailingTrivia: TextRangeWithTriviaKind[] | undefined;
+    }
+
+    export function createTextRangeWithKind<T extends SyntaxKind>(pos: number, end: number, kind: T): TextRangeWithKind<T> {
+        const textRangeWithKind: TextRangeWithKind<T> = { pos, end, kind };
+        if (Debug.isDebugging) {
+            Object.defineProperty(textRangeWithKind, "__debugKind", {
+                get: () => Debug.formatSyntaxKind(kind),
+            });
+        }
+        return textRangeWithKind;
     }
 
     const enum Constants {
@@ -386,7 +394,7 @@ namespace ts.formatting {
         initialIndentation: number,
         delta: number,
         formattingScanner: FormattingScanner,
-        { options, getRule }: FormatContext,
+        { options, getRules }: FormatContext,
         requestKind: FormattingRequestKind,
         rangeContainsError: (r: TextRange) => boolean,
         sourceFile: SourceFileLike): TextChange[] {
@@ -937,34 +945,36 @@ namespace ts.formatting {
 
             formattingContext.updateContext(previousItem, previousParent, currentItem, currentParent, contextNode);
 
-            const rule = getRule(formattingContext);
+            const rules = getRules(formattingContext);
 
-            let trimTrailingWhitespaces: boolean;
+            let trimTrailingWhitespaces = false;
             let lineAction = LineAction.None;
-            if (rule) {
-                lineAction = applyRuleEdits(rule, previousItem, previousStartLine, currentItem, currentStartLine);
-                switch (lineAction) {
-                    case LineAction.LineRemoved:
-                        // Handle the case where the next line is moved to be the end of this line.
-                        // In this case we don't indent the next line in the next pass.
-                        if (currentParent.getStart(sourceFile) === currentItem.pos) {
-                            dynamicIndentation.recomputeIndentation(/*lineAddedByFormatting*/ false);
-                        }
-                        break;
-                    case LineAction.LineAdded:
-                        // Handle the case where token2 is moved to the new line.
-                        // In this case we indent token2 in the next pass but we set
-                        // sameLineIndent flag to notify the indenter that the indentation is within the line.
-                        if (currentParent.getStart(sourceFile) === currentItem.pos) {
-                            dynamicIndentation.recomputeIndentation(/*lineAddedByFormatting*/ true);
-                        }
-                        break;
-                    default:
-                        Debug.assert(lineAction === LineAction.None);
-                }
+            if (rules) {
+                for (const rule of rules) {
+                    lineAction = applyRuleEdits(rule, previousItem, previousStartLine, currentItem, currentStartLine);
+                    switch (lineAction) {
+                        case LineAction.LineRemoved:
+                            // Handle the case where the next line is moved to be the end of this line.
+                            // In this case we don't indent the next line in the next pass.
+                            if (currentParent.getStart(sourceFile) === currentItem.pos) {
+                                dynamicIndentation.recomputeIndentation(/*lineAddedByFormatting*/ false);
+                            }
+                            break;
+                        case LineAction.LineAdded:
+                            // Handle the case where token2 is moved to the new line.
+                            // In this case we indent token2 in the next pass but we set
+                            // sameLineIndent flag to notify the indenter that the indentation is within the line.
+                            if (currentParent.getStart(sourceFile) === currentItem.pos) {
+                                dynamicIndentation.recomputeIndentation(/*lineAddedByFormatting*/ true);
+                            }
+                            break;
+                        default:
+                            Debug.assert(lineAction === LineAction.None);
+                    }
 
-                // We need to trim trailing whitespace between the tokens if they were on different lines, and no rule was applied to put them on the same line
-                trimTrailingWhitespaces = !(rule.action & RuleAction.Delete) && rule.flags !== RuleFlags.CanDeleteNewLines;
+                    // We need to trim trailing whitespace between the tokens if they were on different lines, and no rule was applied to put them on the same line
+                    trimTrailingWhitespaces = !(rule.action & RuleAction.DeleteTrivia) && rule.flags !== RuleFlags.CanDeleteNewLines;
+                }
             }
             else {
                 trimTrailingWhitespaces = true;
@@ -1140,13 +1150,16 @@ namespace ts.formatting {
                 case RuleAction.Ignore:
                     // no action required
                     return LineAction.None;
-                case RuleAction.Delete:
+                case RuleAction.DeleteTrivia:
                     if (previousRange.end !== currentRange.pos) {
                         // delete characters starting from t1.end up to t2.pos exclusive
                         recordDelete(previousRange.end, currentRange.pos - previousRange.end);
                         return onLaterLine ? LineAction.LineRemoved : LineAction.None;
                     }
                     break;
+                case RuleAction.DeleteToken:
+                    recordDelete(previousRange.pos, previousRange.end - previousRange.pos);
+                    return onLaterLine ? LineAction.LineRemoved : LineAction.None;
                 case RuleAction.NewLine:
                     // exit early if we on different lines and rule cannot change number of newlines
                     // if line1 and line2 are on subsequent lines then no edits are required - ok to exit

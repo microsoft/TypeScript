@@ -1,7 +1,7 @@
 /* @internal */
 namespace ts.formatting {
     export function getFormatContext(options: FormatCodeSettings): FormatContext {
-        return { options, getRule: getRulesMap() };
+        return { options, getRules: getRulesMap() };
     }
 
     let rulesMapCache: RulesMap | undefined;
@@ -13,12 +13,42 @@ namespace ts.formatting {
         return rulesMapCache;
     }
 
-    export type RulesMap = (context: FormattingContext) => Rule | undefined;
+    function getRuleActionExclusion(ruleAction: RuleAction): RuleAction {
+        let mask: RuleAction = 0;
+        if (ruleAction & RuleAction.Ignore) {
+            return -1;
+        }
+        if (ruleAction & RuleAction.TriviaAction) {
+            mask |= RuleAction.TriviaAction;
+        }
+        if (ruleAction & RuleAction.TokenAction) {
+            mask |= RuleAction.TokenAction;
+        }
+        return mask;
+    }
+
+    export type RulesMap = (context: FormattingContext) => readonly Rule[] | undefined;
     function createRulesMap(rules: ReadonlyArray<RuleSpec>): RulesMap {
         const map = buildMap(rules);
         return context => {
             const bucket = map[getRuleBucketIndex(context.currentTokenSpan.kind, context.nextTokenSpan.kind)];
-            return bucket && find(bucket, rule => every(rule.context, c => c(context)));
+            if (bucket) {
+                const rules: Rule[] = [];
+                let ruleActionMask: RuleAction = 0;
+                for (const rule of bucket) {
+                    const acceptRuleActions = ~getRuleActionExclusion(ruleActionMask);
+                    if (!(rule.action & acceptRuleActions)) {
+                        continue;
+                    }
+                    if (every(rule.context, c => c(context))) {
+                        rules.push(rule);
+                        ruleActionMask |= rule.action;
+                    }
+                }
+                if (rules.length) {
+                    return rules;
+                }
+            }
         };
     }
 

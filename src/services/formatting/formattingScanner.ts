@@ -170,11 +170,11 @@ namespace ts.formatting {
 
             let currentToken = getNextToken(n, expectedScanAction);
 
-            const token: TextRangeWithKind = {
-                pos: scanner.getStartPos(),
-                end: scanner.getTextPos(),
-                kind: currentToken
-            };
+            const token = createTextRangeWithKind(
+                scanner.getStartPos(),
+                scanner.getTextPos(),
+                currentToken,
+            );
 
             // consume trailing trivia
             if (trailingTrivia) {
@@ -185,11 +185,11 @@ namespace ts.formatting {
                 if (!isTrivia(currentToken)) {
                     break;
                 }
-                const trivia: TextRangeWithTriviaKind = {
-                    pos: scanner.getStartPos(),
-                    end: scanner.getTextPos(),
-                    kind: currentToken
-                };
+                const trivia = createTextRangeWithKind(
+                    scanner.getStartPos(),
+                    scanner.getTextPos(),
+                    currentToken,
+                );
 
                 if (!trailingTrivia) {
                     trailingTrivia = [];
