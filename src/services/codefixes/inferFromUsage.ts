@@ -393,6 +393,19 @@ namespace ts.codefix {
 
     function inferTypeFromReferences(program: Program, references: ReadonlyArray<Identifier>, cancellationToken: CancellationToken) {
         const checker = program.getTypeChecker();
+        const builtinConstructors: { [s: string]: (t: Type) => Type } = {
+            string: () => checker.getStringType(),
+            number: () => checker.getNumberType(),
+            Array: t => checker.createArrayType(t),
+            Promise: t => checker.createPromiseType(t),
+        };
+        const builtins = [
+            checker.getStringType(),
+            checker.getNumberType(),
+            checker.createArrayType(checker.getAnyType()),
+            checker.createPromiseType(checker.getAnyType()),
+        ];
+
         return {
             single,
             parameters,
@@ -777,7 +790,7 @@ namespace ts.codefix {
                 good = good.filter(i => !(checker.getObjectFlags(i) & ObjectFlags.Anonymous));
                 good.push(unifyAnonymousTypes(anons));
             }
-            return checker.getWidenedType(checker.getUnionType(good, UnionReduction.Subtype));
+            return checker.getWidenedType(checker.getUnionType(good.map(checker.getBaseTypeOfLiteralType), UnionReduction.Subtype));
         }
 
         function unifyAnonymousTypes(anons: AnonymousType[]) {
@@ -928,28 +941,9 @@ namespace ts.codefix {
 
         function findBuiltinTypes(usage: Usage): Type[] {
             if (!usage.properties || !usage.properties.size) return [];
-            const builtins = [
-                checker.getStringType(),
-                checker.getNumberType(),
-                checker.createArrayType(checker.getAnyType()),
-                checker.createPromiseType(checker.getAnyType()),
-                // checker.getFunctionType() // TODO: not sure what this was supposed to be good for.
-            ];
-            // TODO: Still need to infer type parameters
             const matches = builtins.filter(t => matchesAllPropertiesOf(t, usage));
             if (0 < matches.length && matches.length < 3) {
-                return matches.map(m =>  {
-                    // special-case array and promise for now
-                    if (m === builtins[3] && hasCalls(usage.properties!.get("then" as __String))) {
-                        const paramType = getParameterTypeFromCalls(0, usage.properties!.get("then" as __String)!.calls!, /*isRestParameter*/ false)!; // TODO: GH#18217
-                        const returns = paramType.getCallSignatures().map(sig => sig.getReturnType());
-                        return checker.createPromiseType(returns.length ? checker.getUnionType(returns, UnionReduction.Subtype) : checker.getAnyType());
-                    }
-                    else if (m === builtins[2] && hasCalls(usage.properties!.get("push" as __String))) {
-                        return checker.createArrayType(getParameterTypeFromCalls(0, usage.properties!.get("push" as __String)!.calls!, /*isRestParameter*/ false)!);
-                    }
-                    return m;
-                });
+                return matches.map(m => inferTypeParameterFromUsage(m, usage));
             }
             return [];
         }
@@ -974,26 +968,84 @@ namespace ts.codefix {
             return result;
         }
 
+        // inference is limited to
+        // 1. generic types with a single parameter
+        // 2. inference to/from calls with a single signature
+        function inferTypeParameterFromUsage(type: Type, usage: Usage) {
+            if (!usage.properties || !(getObjectFlags(type) & ObjectFlags.Reference)) return type;
+            const generic = (type as TypeReference).target;
+            const singleTypeParameter = singleOrUndefined(generic.typeParameters);
+            if (!singleTypeParameter) return type;
+
+            const types: Type[] = [];
+            usage.properties.forEach((propUsage, name) => {
+                const source = checker.getTypeOfPropertyOfType(generic, name as string);
+                if (!source) {
+                    return Debug.fail("generic should have all the properties of its reference.");
+                }
+                if (!propUsage.calls) return;
+
+                types.push(...infer(source, getFunctionFromCalls(propUsage.calls), singleTypeParameter));
+            });
+            return builtinConstructors[type.symbol.escapedName as string](unifyTypes(types));
+        }
+
+        // TODO: Source and target are bad names. Should be builtinType and usageType...or something
+        // and search is a bad name
+        function infer(source: Type, target: Type, search: Type): readonly Type[] {
+            if (source === search) {
+                return [target];
+            }
+            else if (source.flags & TypeFlags.UnionOrIntersection) {
+                return flatMap((source as UnionOrIntersectionType).types, t => infer(t, target, search));
+            }
+            else if (getObjectFlags(source) & ObjectFlags.Reference && getObjectFlags(target) & ObjectFlags.Reference) {
+                // this is wrong because we need a reference to the targetType to, so we can check that it's also a reference
+                const sourceArgs = (source as TypeReference).typeArguments;
+                const targetArgs = (target as TypeReference).typeArguments;
+                const types = [];
+                if (sourceArgs && targetArgs) {
+                    for (let i = 0; i < sourceArgs.length; i++) {
+                        if (targetArgs[i]) {
+                            types.push(...infer(sourceArgs[i], targetArgs[i], search));
+                        }
+                    }
+                }
+                return types;
+            }
+            const sourceSigs = checker.getSignaturesOfType(source, SignatureKind.Call);
+            const targetSigs = checker.getSignaturesOfType(target, SignatureKind.Call);
+            if (sourceSigs.length === 1 && targetSigs.length === 1) {
+                return inferFromSignatures(sourceSigs[0], targetSigs[0], search);
+            }
+            return [];
+        }
+
+        function inferFromSignatures(sourceSig: Signature, targetSig: Signature, search: Type) {
+            const types = [];
+            for (let i = 0; i < sourceSig.parameters.length; i++) {
+                const sourceParam = sourceSig.parameters[i];
+                const targetParam = targetSig.parameters[i];
+                const isRest = sourceSig.declaration && isRestParameter(sourceSig.declaration.parameters[i]);
+                if (!targetParam) {
+                    break;
+                }
+                let sourceType = checker.getTypeOfSymbolAtLocation(sourceParam, sourceParam.valueDeclaration);
+                let elementType = isRest && checker.getElementTypeOfArrayType(sourceType);
+                if (elementType) {
+                    sourceType = elementType;
+                }
+                const targetType = (targetParam as SymbolLinks).type || checker.getTypeOfSymbolAtLocation(targetParam, targetParam.valueDeclaration);
+                types.push(...infer(sourceType, targetType, search));
+            }
+            const sourceReturn = checker.getReturnTypeOfSignature(sourceSig);
+            const targetReturn = checker.getReturnTypeOfSignature(targetSig);
+            types.push(...infer(sourceReturn, targetReturn, search));
+            return types;
+        }
 
         function getFunctionFromCalls(calls: CallUsage[]) {
             return checker.createAnonymousType(undefined!, createSymbolTable(), [getSignatureFromCalls(calls, checker.getAnyType())], emptyArray, undefined, undefined);
-        }
-
-        function getParameterTypeFromCalls(parameterIndex: number, calls: CallUsage[], isRestParameter: boolean) {
-            // TODO: This is largely redundant with getSignatureFromCalls, I think. (though it handles rest parameters correctly, so that needs to be integrated there)
-            let types: Type[] = [];
-            for (const call of calls) {
-                if (call.argumentTypes.length > parameterIndex) {
-                    if (isRestParameter) {
-                        types = concatenate(types, map(call.argumentTypes.slice(parameterIndex), a => checker.getBaseTypeOfLiteralType(a)));
-                    }
-                    else {
-                        types.push(checker.getBaseTypeOfLiteralType(call.argumentTypes[parameterIndex]));
-                    }
-                }
-            }
-            const type = unifyTypes(types);
-            return isRestParameter ? checker.createArrayType(type) : type;
         }
 
         function getSignatureFromCalls(calls: CallUsage[], fallbackReturn: Type): Signature {
@@ -1022,10 +1074,6 @@ namespace ts.codefix {
             if (type && !(type.flags & TypeFlags.Any) && !(type.flags & TypeFlags.Never)) {
                 (usage.candidateThisTypes || (usage.candidateThisTypes = [])).push(type);
             }
-        }
-
-        function hasCalls(usage: Usage | undefined): boolean {
-            return !!usage && !!usage.calls;
         }
     }
 }
