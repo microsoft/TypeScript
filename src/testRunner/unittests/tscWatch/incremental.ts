@@ -542,6 +542,49 @@ namespace ts.tscWatch {
                     ],
                     expectedIncrementalErrors: file2Errors,
                 }));
+
+                it("verify that state is read correctly", () => {
+                    const system = createWatchedSystem([libFile, file1, fileModified, config], { currentDirectory: project });
+                    incrementalBuild("tsconfig.json", system);
+
+                    const command = parseConfigFileWithSystem("tsconfig.json", {}, system, noop)!;
+                    const builderProgram = createIncrementalProgram({
+                        rootNames: command.fileNames,
+                        options: command.options,
+                        projectReferences: command.projectReferences,
+                        configFileParsingDiagnostics: getConfigFileParsingDiagnostics(command),
+                        host: createIncrementalCompilerHost(command.options, system)
+                    });
+
+                    const state = builderProgram.getState();
+                    assert.equal(state.changedFilesSet!.size, 0, "changes");
+
+                    assert.equal(state.fileInfos.size, 3, "FileInfo size");
+                    assert.deepEqual(state.fileInfos.get(libFile.path), libFileInfo);
+                    assert.deepEqual(state.fileInfos.get(file1.path), getFileInfo(file1.content));
+                    assert.deepEqual(state.fileInfos.get(file2.path), file2FileInfo);
+
+                    assert.deepEqual(state.compilerOptions, {
+                        incremental: true,
+                        module: ModuleKind.AMD,
+                        configFilePath: config.path
+                    });
+
+                    assert.equal(state.referencedMap!.size, 0);
+                    assert.equal(state.exportedModulesMap!.size, 0);
+
+                    assert.equal(state.semanticDiagnosticsPerFile!.size, 3);
+                    assert.deepEqual(state.semanticDiagnosticsPerFile!.get(libFile.path), emptyArray);
+                    assert.deepEqual(state.semanticDiagnosticsPerFile!.get(file1.path), emptyArray);
+                    const { file: _, relatedInformation: __, ...rest } = file2ReuasableError[1][0];
+                    assert.deepEqual(state.semanticDiagnosticsPerFile!.get(file2.path), [{
+                        ...rest,
+                        file: state.program!.getSourceFileByPath(file2.path as Path)!,
+                        relatedInformation: undefined,
+                        reportsUnnecessary: undefined,
+                        source: undefined
+                    }]);
+                });
             });
 
             describe("with --out", () => {
