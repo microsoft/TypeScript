@@ -6382,7 +6382,6 @@ namespace ts {
                 return type.resolvedBaseTypes = emptyArray;
             }
             const baseTypeNode = getBaseTypeNodeOfClass(type)!;
-            const typeArgs = typeArgumentsFromTypeReferenceNode(baseTypeNode);
             let baseType: Type;
             const originalBaseType = baseConstructorType.symbol ? getDeclaredTypeOfSymbol(baseConstructorType.symbol) : undefined;
             if (baseConstructorType.symbol && baseConstructorType.symbol.flags & SymbolFlags.Class &&
@@ -6390,7 +6389,7 @@ namespace ts {
                 // When base constructor type is a class with no captured type arguments we know that the constructors all have the same type parameters as the
                 // class and all return the instance type of the class. There is no need for further checks and we can apply the
                 // type arguments in the same manner as a type reference to get the same error reporting experience.
-                baseType = getTypeFromClassOrInterfaceReference(baseTypeNode, baseConstructorType.symbol, typeArgs);
+                baseType = getTypeFromClassOrInterfaceReference(baseTypeNode, baseConstructorType.symbol);
             }
             else if (baseConstructorType.flags & TypeFlags.Any) {
                 baseType = baseConstructorType;
@@ -9115,7 +9114,7 @@ namespace ts {
             return type;
         }
 
-        function createDeferredTypeReference(target: GenericType, node: ArrayTypeNode | TupleTypeNode, mapper?: TypeMapper): DeferredTypeReference {
+        function createDeferredTypeReference(target: GenericType, node: TypeReferenceNode | ArrayTypeNode | TupleTypeNode, mapper?: TypeMapper): DeferredTypeReference {
             const aliasSymbol = getAliasSymbolForTypeNode(node);
             const aliasTypeArguments = getTypeArgumentsForAliasSymbol(aliasSymbol);
             const type = <DeferredTypeReference>createObjectType(ObjectFlags.Reference, target.symbol);
@@ -9129,7 +9128,11 @@ namespace ts {
 
         function getTypeArguments(type: TypeReference): ReadonlyArray<Type> {
             if (!type.resolvedTypeArguments) {
-                const typeArguments = type.node ? map(type.node.kind === SyntaxKind.ArrayType ? [type.node.elementType] : type.node.elementTypes, getTypeFromTypeNode) : emptyArray;
+                const node = type.node;
+                const typeArguments = !node ? emptyArray :
+                    node.kind === SyntaxKind.TypeReference ? concatenate(type.target.outerTypeParameters, getEffectiveTypeArguments(node, type.target.localTypeParameters!)) :
+                    node.kind === SyntaxKind.ArrayType ? [getTypeFromTypeNode(node.elementType)] :
+                    map(node.elementTypes, getTypeFromTypeNode);
                 type.resolvedTypeArguments = type.mapper ? instantiateTypes(typeArguments, type.mapper) : typeArguments;
             }
             return type.resolvedTypeArguments;
@@ -9139,10 +9142,11 @@ namespace ts {
             return length(type.target.typeParameters);
         }
 
+
         /**
          * Get type from type-reference that reference to class or interface
          */
-        function getTypeFromClassOrInterfaceReference(node: NodeWithTypeArguments, symbol: Symbol, typeArgs: Type[] | undefined): Type {
+        function getTypeFromClassOrInterfaceReference(node: NodeWithTypeArguments, symbol: Symbol): Type {
             const type = <InterfaceType>getDeclaredTypeOfSymbol(getMergedSymbol(symbol));
             const typeParameters = type.localTypeParameters;
             if (typeParameters) {
@@ -9166,10 +9170,13 @@ namespace ts {
                         return errorType;
                     }
                 }
+                if (node.kind === SyntaxKind.TypeReference && isAliasedType(node)) {
+                    return createDeferredTypeReference(<GenericType>type, <TypeReferenceNode>node, /*mapper*/ undefined);
+                }
                 // In a type reference, the outer type parameters of the referenced class or interface are automatically
                 // supplied as type arguments and the type reference only specifies arguments for the local type parameters
                 // of the class or interface.
-                const typeArguments = concatenate(type.outerTypeParameters, fillMissingTypeArguments(typeArgs, typeParameters, minTypeArgumentCount, isJs));
+                const typeArguments = concatenate(type.outerTypeParameters, fillMissingTypeArguments(typeArgumentsFromTypeReferenceNode(node), typeParameters, minTypeArgumentCount, isJs));
                 return createTypeReference(<GenericType>type, typeArguments);
             }
             return checkNoTypeArguments(node, symbol) ? type : errorType;
@@ -9192,7 +9199,7 @@ namespace ts {
          * references to the type parameters of the alias. We replace those with the actual type arguments by instantiating the
          * declared type. Instantiations are cached using the type identities of the type arguments as the key.
          */
-        function getTypeFromTypeAliasReference(node: NodeWithTypeArguments, symbol: Symbol, typeArguments: Type[] | undefined): Type {
+        function getTypeFromTypeAliasReference(node: NodeWithTypeArguments, symbol: Symbol): Type {
             const type = getDeclaredTypeOfSymbol(symbol);
             const typeParameters = getSymbolLinks(symbol).typeParameters;
             if (typeParameters) {
@@ -9208,7 +9215,7 @@ namespace ts {
                           typeParameters.length);
                     return errorType;
                 }
-                return getTypeAliasInstantiation(symbol, typeArguments);
+                return getTypeAliasInstantiation(symbol, typeArgumentsFromTypeReferenceNode(node));
             }
             return checkNoTypeArguments(node, symbol) ? type : errorType;
         }
@@ -9239,19 +9246,16 @@ namespace ts {
         }
 
         function getTypeReferenceType(node: NodeWithTypeArguments, symbol: Symbol): Type {
-            const typeArguments = typeArgumentsFromTypeReferenceNode(node); // Do unconditionally so we mark type arguments as referenced.
             if (symbol === unknownSymbol) {
                 return errorType;
             }
             symbol = getExpandoSymbol(symbol) || symbol;
-
             if (symbol.flags & (SymbolFlags.Class | SymbolFlags.Interface)) {
-                return getTypeFromClassOrInterfaceReference(node, symbol, typeArguments);
+                return getTypeFromClassOrInterfaceReference(node, symbol);
             }
             if (symbol.flags & SymbolFlags.TypeAlias) {
-                return getTypeFromTypeAliasReference(node, symbol, typeArguments);
+                return getTypeFromTypeAliasReference(node, symbol);
             }
-
             // Get type from reference to named type that cannot be generic (enum or type parameter)
             const res = tryGetDeclaredTypeOfSymbol(symbol);
             if (res) {
@@ -9259,7 +9263,6 @@ namespace ts {
                     res.flags & TypeFlags.TypeParameter ? getConstrainedTypeVariable(<TypeParameter>res, node) : getRegularTypeOfLiteralType(res) :
                     errorType;
             }
-
             if (symbol.flags & SymbolFlags.Value && isJSDocTypeReference(node)) {
                 const jsdocType = getTypeFromJSAlias(node, symbol);
                 if (jsdocType) {
@@ -9271,7 +9274,6 @@ namespace ts {
                     return getTypeOfSymbol(symbol);
                 }
             }
-
             return errorType;
         }
 
@@ -26100,16 +26102,13 @@ namespace ts {
             if (node.kind === SyntaxKind.TypeReference && node.typeName.jsdocDotPos !== undefined && !isInJSFile(node) && !isInJSDoc(node)) {
                 grammarErrorAtPos(node, node.typeName.jsdocDotPos, 1, Diagnostics.JSDoc_types_can_only_be_used_inside_documentation_comments);
             }
+            forEach(node.typeArguments, checkSourceElement);
             const type = getTypeFromTypeReference(node);
             if (type !== errorType) {
-                if (node.typeArguments) {
-                    // Do type argument local checks only if referenced type is successfully resolved
-                    forEach(node.typeArguments, checkSourceElement);
-                    if (produceDiagnostics) {
-                        const typeParameters = getTypeParametersForTypeReference(node);
-                        if (typeParameters) {
-                            checkTypeArgumentConstraints(node, typeParameters);
-                        }
+                if (node.typeArguments && produceDiagnostics) {
+                    const typeParameters = getTypeParametersForTypeReference(node);
+                    if (typeParameters) {
+                        checkTypeArgumentConstraints(node, typeParameters);
                     }
                 }
                 if (type.flags & TypeFlags.Enum && getNodeLinks(node).resolvedSymbol!.flags & SymbolFlags.EnumMember) {
@@ -29333,6 +29332,7 @@ namespace ts {
 
             const baseTypeNode = getEffectiveBaseTypeNode(node);
             if (baseTypeNode) {
+                forEach(baseTypeNode.typeArguments, checkSourceElement);
                 if (languageVersion < ScriptTarget.ES2015) {
                     checkExternalEmitHelpers(baseTypeNode.parent, ExternalEmitHelpers.Extends);
                 }
