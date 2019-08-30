@@ -218,6 +218,12 @@ const pc7 = p.then(() => Promise.reject("1"), () => {throw 1});
 const pc8 = p.then(() => Promise.reject("1"), () => Promise.resolve(1));
 const pc9 = p.then(() => Promise.reject("1"), () => Promise.reject(1));
 
+// #27711
+
+const expected: Promise<string> = new Promise<Promise<string>>(() => {});
+
+new Promise(undefined as (resolve: (value: Promise<string> | number) => void) => void);
+
 
 //// [promiseType.js]
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
@@ -440,3 +446,6 @@ const pc6 = p.then(() => Promise.reject("1"), () => { });
 const pc7 = p.then(() => Promise.reject("1"), () => { throw 1; });
 const pc8 = p.then(() => Promise.reject("1"), () => Promise.resolve(1));
 const pc9 = p.then(() => Promise.reject("1"), () => Promise.reject(1));
+// #27711
+const expected = new Promise(() => { });
+new Promise(undefined);

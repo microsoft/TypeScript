@@ -1583,3 +1583,19 @@ const pc9 = p.then(() => Promise.reject("1"), () => Promise.reject(1));
 >reject : <T = never>(reason?: any) => Promise<T>
 >1 : 1
 
+// #27711
+
+const expected: Promise<string> = new Promise<Promise<string>>(() => {});
+>expected : Promise<string>
+>new Promise<Promise<string>>(() => {}) : Promise<string>
+>Promise : PromiseConstructor
+>() => {} : () => void
+
+new Promise(undefined as (resolve: (value: Promise<string> | number) => void) => void);
+>new Promise(undefined as (resolve: (value: Promise<string> | number) => void) => void) : Promise<string | number>
+>Promise : PromiseConstructor
+>undefined as (resolve: (value: Promise<string> | number) => void) => void : (resolve: (value: number | Promise<string>) => void) => void
+>undefined : undefined
+>resolve : (value: number | Promise<string>) => void
+>value : number | Promise<string>
+
