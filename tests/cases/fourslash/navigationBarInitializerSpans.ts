@@ -62,7 +62,7 @@ verify.navigationTree({
             childItems:[
                 {
                     text: "z",
-                    kind: "property",
+                    kind: "method",
                     spans: [s2Child],
                     nameSpan: s2ChildName,
                     childItems: [
@@ -135,7 +135,7 @@ verify.navigationBar([
         childItems: [
             {
                 text: "z",
-                kind: "property",
+                kind: "method",
                 spans: [s2Child],
             },
         ],
@@ -143,7 +143,7 @@ verify.navigationBar([
     },
     {
         text: "z",
-        kind: "property",
+        kind: "method",
         spans: [s2Child],
         childItems: [
             {

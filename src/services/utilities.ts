@@ -354,6 +354,8 @@ namespace ts {
             case SyntaxKind.MethodSignature:
                 return ScriptElementKind.memberFunctionElement;
             case SyntaxKind.PropertyAssignment:
+                const {initializer} = node as PropertyAssignment;
+                return isFunctionLike(initializer) ? ScriptElementKind.memberFunctionElement : ScriptElementKind.memberVariableElement;
             case SyntaxKind.PropertyDeclaration:
             case SyntaxKind.PropertySignature:
                 return ScriptElementKind.memberVariableElement;

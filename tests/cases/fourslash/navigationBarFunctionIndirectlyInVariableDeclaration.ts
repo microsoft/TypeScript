@@ -23,7 +23,7 @@ verify.navigationTree({
             "childItems": [
                 {
                     "text": "propA",
-                    "kind": "property",
+                    "kind": "method",
                     "childItems": [
                         {
                             "text": "c",
@@ -39,7 +39,7 @@ verify.navigationTree({
         },
         {
             "text": "propB",
-            "kind": "property",
+            "kind": "method",
             "childItems": [
                 {
                     "text": "d",
@@ -65,7 +65,7 @@ verify.navigationBar([
           },
           {
               "text": "propB",
-              "kind": "property"
+              "kind": "method"
           }
       ]
     },
@@ -75,14 +75,14 @@ verify.navigationBar([
         "childItems": [
             {
                 "text": "propA",
-                "kind": "property"
+                "kind": "method"
             }
         ],
         "indent": 1
     },
     {
         "text": "propA",
-        "kind": "property",
+        "kind": "method",
         "childItems": [
             {
                 "text": "c",
@@ -93,7 +93,7 @@ verify.navigationBar([
     },
     {
         "text": "propB",
-        "kind": "property",
+        "kind": "method",
         "childItems": [
             {
                 "text": "d",

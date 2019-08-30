@@ -44,11 +44,11 @@ verify.navigationTree({
                     "childItems": [
                         {
                             "text": "get",
-                            "kind": "property"
+                            "kind": "method"
                         },
                         {
                             "text": "set",
-                            "kind": "property"
+                            "kind": "method"
                         }
                     ]
                 },
@@ -57,11 +57,11 @@ verify.navigationTree({
                     "childItems": [
                         {
                             "text": "get",
-                            "kind": "property"
+                            "kind": "method"
                         },
                         {
                             "text": "set",
-                            "kind": "property"
+                            "kind": "method"
                         }
                     ]
                 }
@@ -114,11 +114,11 @@ verify.navigationBar([
         "childItems": [
           {
             "text": "get",
-            "kind": "property"
+            "kind": "method"
           },
           {
             "text": "set",
-            "kind": "property"
+            "kind": "method"
           }
         ],
         "indent": 2
@@ -128,11 +128,11 @@ verify.navigationBar([
         "childItems": [
           {
             "text": "get",
-            "kind": "property"
+            "kind": "method"
           },
           {
             "text": "set",
-            "kind": "property"
+            "kind": "method"
           }
         ],
         "indent": 2
