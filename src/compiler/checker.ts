@@ -9618,16 +9618,18 @@ namespace ts {
             return getTupleTypeOfArity(node.elementTypes.length, minLength, !!restElement, readonly, /*associatedNames*/ undefined);
         }
 
+        // Return true when the given node is transitively contained in type constructs that eagerly
+        // resolve their constituent types. We include SyntaxKind.TypeReference because type arguments
+        // of type aliases are eagerly resolved.
         function isAliasedType(node: Node): boolean {
             const parent = node.parent;
             switch (parent.kind) {
                 case SyntaxKind.ParenthesizedType:
-                case SyntaxKind.ArrayType:
-                case SyntaxKind.TupleType:
-                case SyntaxKind.RestType:
+                case SyntaxKind.TypeReference:
                 case SyntaxKind.UnionType:
                 case SyntaxKind.IntersectionType:
                 case SyntaxKind.IndexedAccessType:
+                case SyntaxKind.ConditionalType:
                     return isAliasedType(parent);
                 case SyntaxKind.TypeAliasDeclaration:
                     return true;
