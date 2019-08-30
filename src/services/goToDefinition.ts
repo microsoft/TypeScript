@@ -39,7 +39,7 @@ namespace ts.GoToDefinition {
                 return [sigInfo];
             }
             else {
-                const defs = getDefinitionFromSymbol(typeChecker, symbol, node) || emptyArray;
+                const defs = getDefinitionFromSymbol(typeChecker, symbol, node, calledDeclaration) || emptyArray;
                 // For a 'super()' call, put the signature first, else put the variable first.
                 return node.kind === SyntaxKind.SuperKeyword ? [sigInfo, ...defs] : [...defs, sigInfo];
             }
@@ -232,10 +232,11 @@ namespace ts.GoToDefinition {
         }
     }
 
-    function getDefinitionFromSymbol(typeChecker: TypeChecker, symbol: Symbol, node: Node): DefinitionInfo[] | undefined {
+    function getDefinitionFromSymbol(typeChecker: TypeChecker, symbol: Symbol, node: Node, declarationNode?: Node): DefinitionInfo[] | undefined {
         // There are cases when you extend a function by adding properties to it afterwards,
-        // we want to strip those extra properties
-        const filteredDeclarations = filter(symbol.declarations, d =>  !isAssignmentDeclaration(d) || d === symbol.valueDeclaration) || undefined;
+        // we want to strip those extra properties.
+        // For deduping purposes, we also want to exclude any declarationNodes if provided.
+        const filteredDeclarations = filter(symbol.declarations, d => d !== declarationNode && (!isAssignmentDeclaration(d) || d === symbol.valueDeclaration)) || undefined;
         return getConstructSignatureDefinition() || getCallSignatureDefinition() || map(filteredDeclarations, declaration => createDefinitionInfo(declaration, typeChecker, symbol, node));
 
         function getConstructSignatureDefinition(): DefinitionInfo[] | undefined {
@@ -258,8 +259,13 @@ namespace ts.GoToDefinition {
                 return undefined;
             }
             const declarations = signatureDeclarations.filter(selectConstructors ? isConstructorDeclaration : isFunctionLike);
+            const declarationsWithBody = declarations.filter(d => !!(<FunctionLikeDeclaration>d).body);
+
+            // declarations defined on the global scope can be defined on multiple files. Get all of them.
             return declarations.length
-                ? [createDefinitionInfo(find(declarations, d => !!(<FunctionLikeDeclaration>d).body) || last(declarations), typeChecker, symbol, node)]
+                ? declarationsWithBody.length !== 0
+                    ? declarationsWithBody.map(x => createDefinitionInfo(x, typeChecker, symbol, node))
+                    : [createDefinitionInfo(last(declarations), typeChecker, symbol, node)]
                 : undefined;
         }
     }
