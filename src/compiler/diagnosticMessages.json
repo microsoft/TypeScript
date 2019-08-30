@@ -1636,7 +1636,7 @@
         "category": "Error",
         "code": 2453
     },
-    "Variable '{0}' is used before being assigned.": {
+    "Variable '{0}' is used before being assigned. Did you mean to parenthesize this function type?": {
         "category": "Error",
         "code": 2454
     },
