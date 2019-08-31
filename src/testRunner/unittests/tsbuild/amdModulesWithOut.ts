@@ -77,7 +77,7 @@ namespace ts {
                     [outputFiles[project.lib][ext.buildinfo], outputFiles[project.lib][ext.js], outputFiles[project.lib][ext.dts]],
                     [outputFiles[project.app][ext.buildinfo], outputFiles[project.app][ext.js], outputFiles[project.app][ext.dts]]
                 ],
-                lastProjectOutputJs: outputFiles[project.app][ext.js],
+                lastProjectOutput: outputFiles[project.app][ext.js],
                 initialBuild: {
                     modifyFs
                 },
@@ -231,7 +231,7 @@ ${internal} export enum internalEnum { a, b, c }`);
                         [libOutputFile[ext.buildinfo], libOutputFile[ext.js], libOutputFile[ext.dts]],
                         [outputFiles[project.app][ext.buildinfo], outputFiles[project.app][ext.js], outputFiles[project.app][ext.dts]]
                     ],
-                    lastProjectOutputJs: outputFiles[project.app][ext.js],
+                    lastProjectOutput: outputFiles[project.app][ext.js],
                     initialBuild: {
                         modifyFs,
                         expectedDiagnostics: [

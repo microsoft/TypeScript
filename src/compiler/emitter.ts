@@ -155,6 +155,7 @@ namespace ts {
     }
 
     function getOutputJSFileName(inputFileName: string, configFile: ParsedCommandLine, ignoreCase: boolean) {
+        if (configFile.options.emitDeclarationOnly) return undefined;
         const isJsonFile = fileExtensionIs(inputFileName, Extension.Json);
         const outputFileName = changeExtension(
             getOutputPathWithoutChangingExt(inputFileName, configFile, ignoreCase, configFile.options.outDir),
@@ -187,7 +188,7 @@ namespace ts {
                 const js = getOutputJSFileName(inputFileName, configFile, ignoreCase);
                 addOutput(js);
                 if (fileExtensionIs(inputFileName, Extension.Json)) continue;
-                if (configFile.options.sourceMap) {
+                if (js && configFile.options.sourceMap) {
                     addOutput(`${js}.map`);
                 }
                 if (getEmitDeclarations(configFile.options) && hasTSFileExtension(inputFileName)) {
@@ -214,6 +215,10 @@ namespace ts {
             if (fileExtensionIs(inputFileName, Extension.Dts)) continue;
             const jsFilePath = getOutputJSFileName(inputFileName, configFile, ignoreCase);
             if (jsFilePath) return jsFilePath;
+            if (fileExtensionIs(inputFileName, Extension.Json)) continue;
+            if (getEmitDeclarations(configFile.options) && hasTSFileExtension(inputFileName)) {
+                return getOutputDeclarationFileName(inputFileName, configFile, ignoreCase);
+            }
         }
         const buildInfoPath = getOutputPathForBuildInfo(configFile.options);
         if (buildInfoPath) return buildInfoPath;

@@ -288,7 +288,7 @@ namespace ts {
                 rootNames: ["/src/third"],
                 expectedMapFileNames,
                 expectedBuildInfoFilesForSectionBaselines: expectedBuildInfoFilesForSectionBaselines || expectedTsbuildInfoFileNames,
-                lastProjectOutputJs: outputFiles[project.third][ext.js],
+                lastProjectOutput: outputFiles[project.third][ext.js],
                 initialBuild: {
                     modifyFs,
                     expectedDiagnostics: initialExpectedDiagnostics,
