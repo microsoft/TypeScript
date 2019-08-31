@@ -7,9 +7,10 @@ tests/cases/compiler/functionTypeReturnsUnionWithUndefinedWithStrictNullChecks.t
 tests/cases/compiler/functionTypeReturnsUnionWithUndefinedWithStrictNullChecks.ts(24,1): error TS2454: Variable 'h' is used before being assigned.
 tests/cases/compiler/functionTypeReturnsUnionWithUndefinedWithStrictNullChecks.ts(28,1): error TS2454: Variable 'i' is used before being assigned.
 tests/cases/compiler/functionTypeReturnsUnionWithUndefinedWithStrictNullChecks.ts(32,1): error TS2454: Variable 'j' is used before being assigned.
+tests/cases/compiler/functionTypeReturnsUnionWithUndefinedWithStrictNullChecks.ts(36,1): error TS2454: Variable 'j' is used before being assigned.
 
 
-==== tests/cases/compiler/functionTypeReturnsUnionWithUndefinedWithStrictNullChecks.ts (9 errors) ====
+==== tests/cases/compiler/functionTypeReturnsUnionWithUndefinedWithStrictNullChecks.ts (10 errors) ====
     let a: () => void | undefined;
     a; // Error did you mean to paren this function type
     ~
@@ -60,6 +61,13 @@ tests/cases/compiler/functionTypeReturnsUnionWithUndefinedWithStrictNullChecks.t
     type T4 = () => void | undefined;
     let j: T4;
     j; // Error did you mean to paren...
+    ~
+!!! error TS2454: Variable 'j' is used before being assigned.
+!!! related TS1357 tests/cases/compiler/functionTypeReturnsUnionWithUndefinedWithStrictNullChecks.ts:30:11: Did you mean to parenthesize this function type?
+    
+    type T5 = () => void
+    let k: T5 | undefined
+    j;
     ~
 !!! error TS2454: Variable 'j' is used before being assigned.
 !!! related TS1357 tests/cases/compiler/functionTypeReturnsUnionWithUndefinedWithStrictNullChecks.ts:30:11: Did you mean to parenthesize this function type?

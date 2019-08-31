@@ -77,3 +77,13 @@ let j: T4;
 j; // Error did you mean to paren...
 >j : Symbol(j, Decl(functionTypeReturnsUnionWithUndefinedWithStrictNullChecks.ts, 30, 3))
 
+type T5 = () => void
+>T5 : Symbol(T5, Decl(functionTypeReturnsUnionWithUndefinedWithStrictNullChecks.ts, 31, 2))
+
+let k: T5 | undefined
+>k : Symbol(k, Decl(functionTypeReturnsUnionWithUndefinedWithStrictNullChecks.ts, 34, 3))
+>T5 : Symbol(T5, Decl(functionTypeReturnsUnionWithUndefinedWithStrictNullChecks.ts, 31, 2))
+
+j;
+>j : Symbol(j, Decl(functionTypeReturnsUnionWithUndefinedWithStrictNullChecks.ts, 30, 3))
+

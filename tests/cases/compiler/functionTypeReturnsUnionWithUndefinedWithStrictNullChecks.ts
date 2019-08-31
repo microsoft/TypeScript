@@ -32,3 +32,7 @@ i;
 type T4 = () => void | undefined;
 let j: T4;
 j; // Error did you mean to paren...
+
+type T5 = () => void
+let k: T5 | undefined
+j;

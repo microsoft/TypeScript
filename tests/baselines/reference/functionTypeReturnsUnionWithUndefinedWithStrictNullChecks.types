@@ -72,3 +72,12 @@ let j: T4;
 j; // Error did you mean to paren...
 >j : T4
 
+type T5 = () => void
+>T5 : T5
+
+let k: T5 | undefined
+>k : T5 | undefined
+
+j;
+>j : T4
+
