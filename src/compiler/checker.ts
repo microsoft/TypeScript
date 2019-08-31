@@ -19844,6 +19844,8 @@ namespace ts {
                 }
             }
             else if (!assumeInitialized && !(getFalsyFlags(type) & TypeFlags.Undefined) && getFalsyFlags(flowType) & TypeFlags.Undefined) {
+                const diag = error(node, Diagnostics.Variable_0_is_used_before_being_assigned, symbolToString(symbol));
+
                 // See GH:32846 - if the user is using a variable whose type is () => T1 | ... | undefined
                 // they may have meant to specify the type as (() => T1 | ...) | undefined
                 // This is assumed if: the type is a FunctionType, the return type is a Union, the last constituent of
@@ -19857,12 +19859,11 @@ namespace ts {
                             const parenedFuncType = getMutableClone(funcTypeNode);
                             // Highlight to the end of the second to last constituent of the union
                             parenedFuncType.end = unionTypes[unionTypes.length - 2].end;
-                            error(parenedFuncType, Diagnostics.Did_you_mean_to_parenthesize_this_function_type);
-                            return type;
+                            addRelatedInfo(diag, createDiagnosticForNode(parenedFuncType, Diagnostics.Did_you_mean_to_parenthesize_this_function_type));
                         }
                     }
                 }
-                error(node, Diagnostics.Variable_0_is_used_before_being_assigned, symbolToString(symbol));
+
                 // Return the declared type to reduce follow-on errors
                 return type;
             }
