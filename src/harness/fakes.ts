@@ -442,6 +442,10 @@ namespace fakes {
             super.writeFile(fileName, ts.getBuildInfoText(buildInfo), writeByteOrderMark);
         }
 
+        createHash(data: string) {
+            return `${ts.generateDjb2Hash(data)}-${data}`;
+        }
+
         now() {
             return new Date(this.sys.vfs.time());
         }
