@@ -13515,8 +13515,7 @@ namespace ts {
                         // one of T1 and T2 is related to the other, U1 and U2 are identical types, X1 is related to X2,
                         // and Y1 is related to Y2.
                         const u1 = instantiateType((<ConditionalType>source).extendsType, reportUnmeasurableMarkers);
-                        const u2 = instantiateType((<ConditionalType>target).extendsType, reportUnmeasurableMarkers);
-                        if (isTypeIdenticalTo(u1, u2) &&
+                        if (isTypeIdenticalTo(u1, (<ConditionalType>target).extendsType) &&
                             (isRelatedTo((<ConditionalType>source).checkType, (<ConditionalType>target).checkType)
                              || isRelatedTo((<ConditionalType>target).checkType, (<ConditionalType>source).checkType))) {
                             if (result = isRelatedTo(getTrueTypeFromConditionalType(<ConditionalType>source), getTrueTypeFromConditionalType(<ConditionalType>target), reportErrors)) {
