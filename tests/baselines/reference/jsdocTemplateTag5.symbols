@@ -11,6 +11,7 @@ function Multimap() {
     /** @type {Object<string, V>} TODO: Remove the prototype from the fresh object */
     this._map = {};
 >this._map : Symbol(Multimap._map, Decl(a.js, 6, 21))
+>this : Symbol(Multimap, Decl(a.js, 0, 0), Decl(a.js, 9, 2))
 >_map : Symbol(Multimap._map, Decl(a.js, 6, 21))
 
 };
@@ -30,6 +31,7 @@ Multimap.prototype = {
 
         return this._map[key + ''];
 >this._map : Symbol(Multimap._map, Decl(a.js, 6, 21))
+>this : Symbol(Multimap, Decl(a.js, 0, 0), Decl(a.js, 9, 2))
 >_map : Symbol(Multimap._map, Decl(a.js, 6, 21))
 >key : Symbol(key, Decl(a.js, 16, 8))
     }
@@ -47,6 +49,7 @@ var Multimap2 = function() {
     /** @type {Object<string, V>} TODO: Remove the prototype from the fresh object */
     this._map = {};
 >this._map : Symbol(Multimap2._map, Decl(a.js, 27, 28))
+>this : Symbol(Multimap2, Decl(a.js, 27, 15))
 >_map : Symbol(Multimap2._map, Decl(a.js, 27, 28))
 
 };
@@ -66,6 +69,7 @@ Multimap2.prototype = {
 
         return this._map[key + ''];
 >this._map : Symbol(Multimap2._map, Decl(a.js, 27, 28))
+>this : Symbol(Multimap2, Decl(a.js, 27, 15))
 >_map : Symbol(Multimap2._map, Decl(a.js, 27, 28))
 >key : Symbol(key, Decl(a.js, 37, 18))
     }
@@ -88,6 +92,7 @@ Ns.Multimap3 = function() {
     /** @type {Object<string, V>} TODO: Remove the prototype from the fresh object */
     this._map = {};
 >this._map : Symbol(Multimap3._map, Decl(a.js, 49, 27))
+>this : Symbol(Multimap3, Decl(a.js, 49, 14))
 >_map : Symbol(Multimap3._map, Decl(a.js, 49, 27))
 
 };
@@ -109,6 +114,7 @@ Ns.Multimap3.prototype = {
 
         return this._map[key + ''];
 >this._map : Symbol(Multimap3._map, Decl(a.js, 49, 27))
+>this : Symbol(Multimap3, Decl(a.js, 49, 14))
 >_map : Symbol(Multimap3._map, Decl(a.js, 49, 27))
 >key : Symbol(key, Decl(a.js, 59, 8))
     }

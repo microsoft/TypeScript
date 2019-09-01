@@ -90,14 +90,28 @@ namespace ts {
             return false;
         }
 
-        const nextDirectorySeparator = dirPath.indexOf(directorySeparator, rootLength);
+        let nextDirectorySeparator = dirPath.indexOf(directorySeparator, rootLength);
         if (nextDirectorySeparator === -1) {
             // ignore "/user", "c:/users" or "c:/folderAtRoot"
             return false;
         }
 
-        if (dirPath.charCodeAt(0) !== CharacterCodes.slash &&
-            dirPath.substr(rootLength, nextDirectorySeparator).search(/users/i) === -1) {
+        let pathPartForUserCheck = dirPath.substring(rootLength, nextDirectorySeparator + 1);
+        const isNonDirectorySeparatorRoot = rootLength > 1 || dirPath.charCodeAt(0) !== CharacterCodes.slash;
+        if (isNonDirectorySeparatorRoot &&
+            dirPath.search(/[a-zA-Z]:/) !== 0 && // Non dos style paths
+            pathPartForUserCheck.search(/[a-zA-z]\$\//) === 0) { // Dos style nextPart
+            nextDirectorySeparator = dirPath.indexOf(directorySeparator, nextDirectorySeparator + 1);
+            if (nextDirectorySeparator === -1) {
+                // ignore "//vda1cs4850/c$/folderAtRoot"
+                return false;
+            }
+
+            pathPartForUserCheck = dirPath.substring(rootLength + pathPartForUserCheck.length, nextDirectorySeparator + 1);
+        }
+
+        if (isNonDirectorySeparatorRoot &&
+            pathPartForUserCheck.search(/users\//i) !== 0) {
             // Paths like c:/folderAtRoot/subFolder are allowed
             return true;
         }
@@ -105,7 +119,7 @@ namespace ts {
         for (let searchIndex = nextDirectorySeparator + 1, searchLevels = 2; searchLevels > 0; searchLevels--) {
             searchIndex = dirPath.indexOf(directorySeparator, searchIndex) + 1;
             if (searchIndex === 0) {
-                // Folder isnt at expected minimun levels
+                // Folder isnt at expected minimum levels
                 return false;
             }
         }

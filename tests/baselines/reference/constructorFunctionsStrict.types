@@ -23,7 +23,7 @@ C.prototype.m = function() {
     this.y = 12
 >this.y = 12 : 12
 >this.y : number | undefined
->this : C
+>this : this
 >y : number | undefined
 >12 : 12
 }

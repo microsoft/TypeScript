@@ -1,8 +1,0 @@
-Exit Code: 1
-Standard output:
-lib/Compilation.js(538,5): error TS2322: Type 'Readonly<{ error: string; warn: string; info: string; log: string; debug: string; trace: string; group: string; groupCollapsed: string; groupEnd: string; profile: string; profileEnd: string; time: string; clear: string; status: string; }>' is not assignable to type 'string'.
-lib/Compiler.js(228,48): error TS2345: Argument of type 'Readonly<{ error: string; warn: string; info: string; log: string; debug: string; trace: string; group: string; groupCollapsed: string; groupEnd: string; profile: string; profileEnd: string; time: string; clear: string; status: string; }>' is not assignable to parameter of type 'string'.
-
-
-
-Standard error:
