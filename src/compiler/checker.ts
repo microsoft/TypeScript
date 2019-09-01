@@ -13542,7 +13542,6 @@ namespace ts {
                         return localResult;
                     }
                 }
-                
 
                 if (source.flags & TypeFlags.TypeVariable) {
                     if (source.flags & TypeFlags.IndexedAccess && target.flags & TypeFlags.IndexedAccess) {
