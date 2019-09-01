@@ -13508,6 +13508,41 @@ namespace ts {
                         }
                     }
                 }
+                else if (target.flags & TypeFlags.Conditional) {
+                    const c = target as ConditionalType;
+                    let skipFalse = false;
+                    let skipTrue = false;
+                    // Check if the conditional is always true or always false but still deferred for distribution purposes
+                    if (!isTypeAssignableTo(getPermissiveInstantiation(c.checkType), getPermissiveInstantiation(c.extendsType))) {
+                        skipTrue = true;
+                    }
+                    else if (isTypeAssignableTo(getRestrictiveInstantiation(c.checkType), getRestrictiveInstantiation(c.extendsType))) {
+                        skipFalse = true;
+                    }
+                    // Instantiate with a replacement mapper if the conditional is distributive, replacing the check type with a clone of itself,
+                    // this way {x: string | number, y: string | number} -> (T extends T ? { x: T, y: T } : never) appropriately _fails_ when
+                    // T = string | number (since that will end up distributing and producing `{x: string, y: string} | {x: number, y: number}`,
+                    // to which `{x: string | number, y: string | number}` isn't assignable)
+                    let distributionMapper: TypeMapper | undefined;
+                    const checkVar = getActualTypeVariable(c.root.checkType);
+                    if (c.root.isDistributive && checkVar.flags & TypeFlags.TypeParameter) {
+                        const newParam = cloneTypeParameter(checkVar);
+                        distributionMapper = createReplacementMapper(checkVar, newParam, c.mapper || identityMapper);
+                        newParam.mapper = distributionMapper;
+                    }
+                    // TODO: Find a nice way to include potential conditional type breakdowns in error output, if those seems good (they usually don't)
+                    let localResult: Ternary | undefined;
+                    if (skipTrue || (localResult = isRelatedTo(source, instantiateType(getTrueTypeFromConditionalType(c), distributionMapper), /*reportErrors*/ false))) {
+                        if (!skipFalse) {
+                            localResult = (localResult || Ternary.Maybe) & isRelatedTo(source, instantiateType(getFalseTypeFromConditionalType(c), distributionMapper), /*reportErrors*/ false);
+                        }
+                    }
+                    if (localResult) {
+                        errorInfo = saveErrorInfo;
+                        return localResult;
+                    }
+                }
+                
 
                 if (source.flags & TypeFlags.TypeVariable) {
                     if (source.flags & TypeFlags.IndexedAccess && target.flags & TypeFlags.IndexedAccess) {
@@ -13563,8 +13598,9 @@ namespace ts {
                             sourceExtends = instantiateType(sourceExtends, ctx.mapper);
                             mapper = ctx.mapper;
                         }
-                        if (isTypeIdenticalTo(sourceExtends, (<ConditionalType>target).extendsType) &&
-                            (isRelatedTo((<ConditionalType>source).checkType, (<ConditionalType>target).checkType) || isRelatedTo((<ConditionalType>target).checkType, (<ConditionalType>source).checkType))) {
+                        if (isRelatedTo(sourceExtends, (<ConditionalType>target).extendsType) &&
+                              isRelatedTo((<ConditionalType>target).extendsType, sourceExtends) &&
+                                (isRelatedTo((<ConditionalType>source).checkType, (<ConditionalType>target).checkType) || isRelatedTo((<ConditionalType>target).checkType, (<ConditionalType>source).checkType))) {
                             if (result = isRelatedTo(instantiateType(getTrueTypeFromConditionalType(<ConditionalType>source), mapper), getTrueTypeFromConditionalType(<ConditionalType>target), reportErrors)) {
                                 result &= isRelatedTo(getFalseTypeFromConditionalType(<ConditionalType>source), getFalseTypeFromConditionalType(<ConditionalType>target), reportErrors);
                             }
