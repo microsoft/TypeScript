@@ -25735,7 +25735,7 @@ namespace ts {
                             let superCallStatement: ExpressionStatement | undefined;
 
                             for (const statement of node.body!.statements) {
-                                if (isExpressionStatement(statement) && isOrWrapsSuperCall(statement.expression)) {
+                                if (isExpressionStatement(statement) && isSuperCall(skipOuterExpressions(statement.expression))) {
                                     superCallStatement = statement;
                                     break;
                                 }
@@ -25766,15 +25766,6 @@ namespace ts {
             }
 
             return expressionParent.parent === body;
-        }
-
-        // Todo: use skipOuterExpressions
-        function isOrWrapsSuperCall(expression: Node) {
-            while (isParenthesizedExpression(expression)) {
-                expression = expression.expression;
-            }
-
-            return isSuperCall(expression);
         }
 
         function nodeImmediatelyReferencesSuperOrThis(node: Node): boolean {

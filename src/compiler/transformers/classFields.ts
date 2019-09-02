@@ -353,9 +353,6 @@ namespace ts {
                     if (isParameterPropertyDeclaration(getOriginalNode(statement))) {
                         parameterPropertyDeclarationCount++;
                     }
-                    else {
-                        break;
-                    }
                 }
                 if (parameterPropertyDeclarationCount > 0) {
                     // If there was a super() call found, add parameter properties immediately after it
@@ -408,9 +405,16 @@ namespace ts {
             );
         }
 
+        /**
+         * Finds the statement to insert class properties into a class constructor.
+         * 
+         * @param needsSyntheticConstructor Whether the constructor was synthesized.
+         * @param foundSuperStatement  Whether a super() statement was found in the (non-synthesized) constructor.
+         * @param parameterPropertyDeclarationCount How many parameter properties were created in the (non-synthesized) constructor.
+         */
         function getPropertyStatementInsertionIndex(needsSyntheticConstructor: boolean, foundSuperStatement: boolean, parameterPropertyDeclarationCount: number) {
             if (needsSyntheticConstructor) {
-                return parameterPropertyDeclarationCount + 1;
+                return 1;
             }
 
             if (!foundSuperStatement) {

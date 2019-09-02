@@ -53,8 +53,8 @@ var Q = /** @class */ (function (_super) {
         if (zz === void 0) { zz = _super.prototype.; }
         if (zzz === void 0) { zzz = function () { return _super.prototype.; }; }
         var _this = _super.call(this) || this;
-        _this.xx = _super.prototype.;
         _this.z = z;
+        _this.xx = _super.prototype.;
         return _this;
     }
     Q.prototype.foo = function (zz) {

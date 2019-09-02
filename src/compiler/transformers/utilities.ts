@@ -267,10 +267,12 @@ namespace ts {
             // add prologue directives to the list (if any)
             indexAfterLastPrologueStatement = addPrologue(result, statements, /*ensureUseStrict*/ false, visitor);
 
+            // For each statement after prologue statements, if it's a super() call, visit it
+            // and stop trying to check further statements - this is all we need
             for (indexOfFirstStatementAfterSuper = indexAfterLastPrologueStatement; indexOfFirstStatementAfterSuper < statements.length; indexOfFirstStatementAfterSuper += 1) {
                 const statement = statements[indexOfFirstStatementAfterSuper];
-                // todo: isOrWrapsSuperCall
-                if (statement.kind === SyntaxKind.ExpressionStatement && isSuperCall((<ExpressionStatement>statement).expression)) {
+                
+                if (getWrappedSuperCallExpression(statement)) {
                     result.push(visitNode(statement, visitor, isStatement));
                     indexOfFirstStatementAfterSuper += 1;
                     foundSuperStatement = true;
@@ -282,6 +284,18 @@ namespace ts {
         return { foundSuperStatement, indexOfFirstStatementAfterSuper, indexAfterLastPrologueStatement };
     }
 
+    /**
+     * Gets a super() call by skipping through outer expressions such as parentheses.
+     *
+     * @param expression Statement-level expression that might contain a super() call.
+     */
+    export function getWrappedSuperCallExpression(expression: Node) {
+        expression = skipOuterExpressions(expression);
+
+        return isExpressionStatement(expression) && isSuperCall(expression.expression)
+            ? expression.expression
+            : undefined;
+    }
 
     /**
      * @param input Template string input strings

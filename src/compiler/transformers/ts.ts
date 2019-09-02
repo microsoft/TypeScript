@@ -1916,8 +1916,9 @@ namespace ts {
             const { foundSuperStatement, indexOfFirstStatementAfterSuper, indexAfterLastPrologueStatement } = addPrologueDirectivesAndInitialSuperCall(constructor, statements, visitor);
 
             // Add existing statements before the initial super call
+            let statementOffset = indexOfFirstStatementAfterSuper - 1;
             statements = [
-                ...visitNodes(constructor.body!.statements, visitor, isStatement, indexAfterLastPrologueStatement, indexOfFirstStatementAfterSuper - indexAfterLastPrologueStatement - 1),
+                ...visitNodes(constructor.body!.statements, visitor, isStatement, indexAfterLastPrologueStatement, statementOffset - indexAfterLastPrologueStatement),
                 ...statements,
             ];
 
@@ -1940,6 +1941,7 @@ namespace ts {
 
             // If there is a super() call, the parameter properties go immediately after it
             if (foundSuperStatement) {
+                statementOffset += 1;
                 addRange(statements, parameterPropertyAssignments);
             }
             // Since there was no super() call, parameter properties are the first statements in the constructor
@@ -1948,7 +1950,7 @@ namespace ts {
             }
 
             // Add remaining statements from the body, skipping the super() call if it was found
-            addRange(statements, visitNodes(body.statements, visitor, isStatement, foundSuperStatement ? indexOfFirstStatementAfterSuper : indexAfterLastPrologueStatement));
+            addRange(statements, visitNodes(body.statements, visitor, isStatement, statementOffset));
 
             // End the lexical environment.
             statements = mergeLexicalEnvironment(statements, endLexicalEnvironment());

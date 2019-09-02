@@ -138,14 +138,11 @@ sourceFile:sourceMapValidationClassWithDefaultConstructorAndExtendsClause.ts
 ---
 >>>        return _this;
 >>>    }
-1 >^^^^
-2 >    ^
-3 >     ^^^^^^^^^^^^^^^->
+1 >^^^^^
+2 >     ^^^^^^^^^^^^^^^->
 1 >
-  >
-2 >    }
-1 >Emitted(26, 5) Source(7, 1) + SourceIndex(0)
-2 >Emitted(26, 6) Source(7, 2) + SourceIndex(0)
+  >}
+1 >Emitted(26, 6) Source(7, 2) + SourceIndex(0)
 ---
 >>>    return Greeter;
 1->^^^^
