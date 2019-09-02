@@ -1946,7 +1946,7 @@ namespace ts {
             }
             // Since there was no super() call, parameter properties are the first statements in the constructor
             else {
-                statements = addRange(parameterPropertyAssignments, statements)
+                statements = addRange(parameterPropertyAssignments, statements);
             }
 
             // Add remaining statements from the body, skipping the super() call if it was found

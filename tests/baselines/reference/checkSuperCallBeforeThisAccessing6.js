@@ -36,8 +36,9 @@ var Base = /** @class */ (function () {
 var Super = /** @class */ (function (_super) {
     __extends(Super, _super);
     function Super() {
+        var _this = this;
         (function () { return _this; }); // No Error
-        var _this = _super.call(this) || this;
+        _this = _super.call(this) || this;
         return _this;
     }
     return Super;

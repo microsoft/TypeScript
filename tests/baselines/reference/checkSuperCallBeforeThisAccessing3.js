@@ -37,13 +37,14 @@ var Based = /** @class */ (function () {
 var Derived = /** @class */ (function (_super) {
     __extends(Derived, _super);
     function Derived() {
+        var _this = this;
         var innver = /** @class */ (function () {
             function innver() {
                 this.y = true;
             }
             return innver;
         }());
-        var _this = _super.call(this) || this;
+        _this = _super.call(this) || this;
         _this.x = 10;
         var that = _this;
         return _this;

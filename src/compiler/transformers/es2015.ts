@@ -956,7 +956,7 @@ namespace ts {
             resumeLexicalEnvironment();
 
             // In derived classes, there may be code before the necessary super() call
-            // We'll remove pre-super statements to be tacked on after the rest of the body 
+            // We'll remove pre-super statements to be tacked on after the rest of the body
             const { bodyStatements, originalSuperStatement, preSuperStatements } = splitConstructorBodyStatementTypes(constructor.body.statements);
 
             // If a super call has already been synthesized,
@@ -1037,9 +1037,19 @@ namespace ts {
                     // })(Base);
                     // ```
 
-                    // Since the `super()` call was the first statement, we insert the `this` capturing call to
-                    // `super()` at the top of the list of `statements` (after any pre-existing custom prologues).
-                    insertCaptureThisForNode(statements, constructor, superCallExpression || createActualThis());
+                    // If the super() call is the first statement, we can directly create and assign its result to `_this`
+                    if (preSuperStatements.length === 0) {
+                        insertCaptureThisForNode(statements, constructor, superCallExpression || createActualThis());
+                    }
+                    // Since the `super()` call isn't the first statement, it's split across 1-2 statements:
+                    // * A prologue `var _this = this;`, in case the constructor accesses this before super() 
+                    // * If it exists, a reassignment to that `_this` of the super() call
+                    else {
+                        insertCaptureThisForNode(prologue, constructor, createActualThis());
+                        if (superCallExpression) {
+                            insertSuperThisCaptureThisForNode(statements, superCallExpression);
+                        }
+                    }
 
                     if (!isSufficientlyCoveredByReturnStatements(constructor.body)) {
                         statements.push(createReturn(createFileLevelUniqueName("_this")));
@@ -1105,7 +1115,7 @@ namespace ts {
                 return {
                     bodyStatements: originalBodyStatements,
                     preSuperStatements: [],
-                }
+                };
             }
 
             // With a super() call, split the statements into pre-super() and body (post-super())
@@ -1492,6 +1502,24 @@ namespace ts {
                 return true;
             }
             return false;
+        }
+
+        /**
+         * Assigns the `this` in a constructor to the result of its `super()` call.
+         * 
+         * @param statements Statements in the constructor body.
+         * @param superExpression Existing `super()` call for the constructor.
+         */
+        function insertSuperThisCaptureThisForNode(statements: Statement[], superExpression: Expression): void {
+            enableSubstitutionsForCapturedThis();
+            const assignSuperExpression = createExpressionStatement(
+                createBinary(
+                    createThis(),
+                    SyntaxKind.EqualsToken,
+                    superExpression
+                )
+            )
+            insertStatementAfterCustomPrologue(statements, assignSuperExpression);
         }
 
         function insertCaptureThisForNode(statements: Statement[], node: Node, initializer: Expression | undefined): void {

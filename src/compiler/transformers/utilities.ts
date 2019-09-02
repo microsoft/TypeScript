@@ -271,7 +271,7 @@ namespace ts {
             // and stop trying to check further statements - this is all we need
             for (indexOfFirstStatementAfterSuper = indexAfterLastPrologueStatement; indexOfFirstStatementAfterSuper < statements.length; indexOfFirstStatementAfterSuper += 1) {
                 const statement = statements[indexOfFirstStatementAfterSuper];
-                
+
                 if (getWrappedSuperCallExpression(statement)) {
                     result.push(visitNode(statement, visitor, isStatement));
                     indexOfFirstStatementAfterSuper += 1;

@@ -301,10 +301,10 @@ namespace ts {
 
             resumeLexicalEnvironment();
 
+            const needsSyntheticConstructor = !constructor && isDerivedClass;
             let indexOfFirstStatementAfterSuper = 0;
             let indexAfterLastPrologueStatement = 0;
             let foundSuperStatement = false;
-            let needsSyntheticConstructor = !constructor && isDerivedClass;
             let statements: Statement[] = [];
 
             if (constructor) {
@@ -379,7 +379,7 @@ namespace ts {
                             ]
                         );
                     }
-                    
+
                     indexOfFirstStatementAfterSuper += parameterPropertyDeclarationCount;
                 }
             }
@@ -407,7 +407,7 @@ namespace ts {
 
         /**
          * Finds the statement to insert class properties into a class constructor.
-         * 
+         *
          * @param needsSyntheticConstructor Whether the constructor was synthesized.
          * @param foundSuperStatement  Whether a super() statement was found in the (non-synthesized) constructor.
          * @param parameterPropertyDeclarationCount How many parameter properties were created in the (non-synthesized) constructor.

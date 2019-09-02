@@ -35,10 +35,11 @@ var Base = /** @class */ (function () {
 var D = /** @class */ (function (_super) {
     __extends(D, _super);
     function D() {
+        var _this = this;
         var x = function () { _this._t; };
         x(); // no error; we only check super is called before this when the container is a constructor
         _this._t; // error
-        var _this = _super.call(this, undefined) || this;
+        _this = _super.call(this, undefined) || this;
         return _this;
     }
     return D;
