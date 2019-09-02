@@ -190,7 +190,7 @@ var G = /** @class */ (function (_super) {
 }(D));
 var H = /** @class */ (function () {
     function H() {
-        _this = _super.call(this) || this;
+        return _super.call(this) || this;
     } // ERROR - no super call allowed
     return H;
 }());
@@ -213,10 +213,9 @@ var J = /** @class */ (function (_super) {
 var K = /** @class */ (function (_super) {
     __extends(K, _super);
     function K(p1) {
-        var _this = this;
-        _this.p1 = p1;
         var i = 0;
-        _this = _super.call(this) || this;
+        var _this = _super.call(this) || this;
+        _this.p1 = p1;
         return _this;
     }
     return K;
@@ -233,10 +232,9 @@ var L = /** @class */ (function (_super) {
 var M = /** @class */ (function (_super) {
     __extends(M, _super);
     function M(p1) {
-        var _this = this;
-        _this.p1 = p1;
         var i = 0;
-        _this = _super.call(this) || this;
+        var _this = _super.call(this) || this;
+        _this.p1 = p1;
         return _this;
     }
     return M;

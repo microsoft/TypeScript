@@ -371,10 +371,9 @@ var Base = /** @class */ (function () {
 var Derived1 = /** @class */ (function (_super) {
     __extends(Derived1, _super);
     function Derived1() {
-        var _this = this;
-        _this.prop = true;
         _super.prototype.receivesAnything.call(_this);
-        _this = _super.call(this) || this;
+        var _this = _super.call(this) || this;
+        _this.prop = true;
         return _this;
     }
     return Derived1;
@@ -382,10 +381,9 @@ var Derived1 = /** @class */ (function (_super) {
 var Derived2 = /** @class */ (function (_super) {
     __extends(Derived2, _super);
     function Derived2() {
-        var _this = this;
-        _this.prop = true;
         _super.prototype.receivesAnything.call(_this, _this);
-        _this = _super.call(this) || this;
+        var _this = _super.call(this) || this;
+        _this.prop = true;
         return _this;
     }
     return Derived2;
@@ -393,10 +391,9 @@ var Derived2 = /** @class */ (function (_super) {
 var Derived3 = /** @class */ (function (_super) {
     __extends(Derived3, _super);
     function Derived3() {
-        var _this = this;
-        _this.prop = true;
         _super.prototype.receivesAnything.call(_this);
-        _this = _super.call(this, _this) || this;
+        var _this = _super.call(this, _this) || this;
+        _this.prop = true;
         return _this;
     }
     return Derived3;
@@ -404,10 +401,9 @@ var Derived3 = /** @class */ (function (_super) {
 var Derived4 = /** @class */ (function (_super) {
     __extends(Derived4, _super);
     function Derived4() {
-        var _this = this;
-        _this.prop = true;
         _super.prototype.receivesAnything.call(_this, _this);
-        _this = _super.call(this, _this) || this;
+        var _this = _super.call(this, _this) || this;
+        _this.prop = true;
         return _this;
     }
     return Derived4;
@@ -455,10 +451,9 @@ var Derived8 = /** @class */ (function (_super) {
 var DerivedWithArrowFunction = /** @class */ (function (_super) {
     __extends(DerivedWithArrowFunction, _super);
     function DerivedWithArrowFunction() {
-        var _this = this;
-        _this.prop = true;
         (function () { return _this; })();
-        _this = _super.call(this) || this;
+        var _this = _super.call(this) || this;
+        _this.prop = true;
         return _this;
     }
     return DerivedWithArrowFunction;
@@ -466,12 +461,11 @@ var DerivedWithArrowFunction = /** @class */ (function (_super) {
 var DerivedWithArrowFunctionParameter = /** @class */ (function (_super) {
     __extends(DerivedWithArrowFunctionParameter, _super);
     function DerivedWithArrowFunctionParameter() {
-        var _this = this;
-        _this.prop = true;
         var lambda = function (param) {
             if (param === void 0) { param = _this; }
         };
-        _this = _super.call(this) || this;
+        var _this = _super.call(this) || this;
+        _this.prop = true;
         return _this;
     }
     return DerivedWithArrowFunctionParameter;
@@ -479,8 +473,6 @@ var DerivedWithArrowFunctionParameter = /** @class */ (function (_super) {
 var DerivedWithDecoratorOnClass = /** @class */ (function (_super) {
     __extends(DerivedWithDecoratorOnClass, _super);
     function DerivedWithDecoratorOnClass() {
-        var _this = this;
-        _this.prop = true;
         var InnerClass = /** @class */ (function () {
             function InnerClass() {
             }
@@ -489,7 +481,8 @@ var DerivedWithDecoratorOnClass = /** @class */ (function (_super) {
             ], InnerClass);
             return InnerClass;
         }());
-        _this = _super.call(this) || this;
+        var _this = _super.call(this) || this;
+        _this.prop = true;
         return _this;
     }
     return DerivedWithDecoratorOnClass;
@@ -497,8 +490,6 @@ var DerivedWithDecoratorOnClass = /** @class */ (function (_super) {
 var DerivedWithDecoratorOnClassMethod = /** @class */ (function (_super) {
     __extends(DerivedWithDecoratorOnClassMethod, _super);
     function DerivedWithDecoratorOnClassMethod() {
-        var _this = this;
-        _this.prop = true;
         var InnerClass = /** @class */ (function () {
             function InnerClass() {
             }
@@ -508,7 +499,8 @@ var DerivedWithDecoratorOnClassMethod = /** @class */ (function (_super) {
             ], InnerClass.prototype, "innerMethod", null);
             return InnerClass;
         }());
-        _this = _super.call(this) || this;
+        var _this = _super.call(this) || this;
+        _this.prop = true;
         return _this;
     }
     return DerivedWithDecoratorOnClassMethod;
@@ -516,8 +508,6 @@ var DerivedWithDecoratorOnClassMethod = /** @class */ (function (_super) {
 var DerivedWithDecoratorOnClassProperty = /** @class */ (function (_super) {
     __extends(DerivedWithDecoratorOnClassProperty, _super);
     function DerivedWithDecoratorOnClassProperty() {
-        var _this = this;
-        _this.prop = true;
         var InnerClass = /** @class */ (function () {
             function InnerClass() {
                 this.innerProp = true;
@@ -527,7 +517,8 @@ var DerivedWithDecoratorOnClassProperty = /** @class */ (function (_super) {
             ], InnerClass.prototype, "innerProp", void 0);
             return InnerClass;
         }());
-        _this = _super.call(this) || this;
+        var _this = _super.call(this) || this;
+        _this.prop = true;
         return _this;
     }
     return DerivedWithDecoratorOnClassProperty;
@@ -535,12 +526,11 @@ var DerivedWithDecoratorOnClassProperty = /** @class */ (function (_super) {
 var DerivedWithFunctionDeclaration = /** @class */ (function (_super) {
     __extends(DerivedWithFunctionDeclaration, _super);
     function DerivedWithFunctionDeclaration() {
-        var _this = this;
-        _this.prop = true;
         function declaration() {
             return this;
         }
-        _this = _super.call(this) || this;
+        var _this = _super.call(this) || this;
+        _this.prop = true;
         return _this;
     }
     return DerivedWithFunctionDeclaration;
@@ -548,13 +538,12 @@ var DerivedWithFunctionDeclaration = /** @class */ (function (_super) {
 var DerivedWithFunctionDeclarationAndThisParam = /** @class */ (function (_super) {
     __extends(DerivedWithFunctionDeclarationAndThisParam, _super);
     function DerivedWithFunctionDeclarationAndThisParam() {
-        var _this = this;
-        _this.prop = true;
         function declaration(param) {
             if (param === void 0) { param = this; }
             return param;
         }
-        _this = _super.call(this) || this;
+        var _this = _super.call(this) || this;
+        _this.prop = true;
         return _this;
     }
     return DerivedWithFunctionDeclarationAndThisParam;
@@ -562,12 +551,11 @@ var DerivedWithFunctionDeclarationAndThisParam = /** @class */ (function (_super
 var DerivedWithFunctionExpression = /** @class */ (function (_super) {
     __extends(DerivedWithFunctionExpression, _super);
     function DerivedWithFunctionExpression() {
-        var _this = this;
-        _this.prop = true;
         (function () {
             return this;
         })();
-        _this = _super.call(this) || this;
+        var _this = _super.call(this) || this;
+        _this.prop = true;
         return _this;
     }
     return DerivedWithFunctionExpression;
@@ -607,8 +595,6 @@ var DerivedWithParenthesisBeforeStatement = /** @class */ (function (_super) {
 var DerivedWithClassDeclaration = /** @class */ (function (_super) {
     __extends(DerivedWithClassDeclaration, _super);
     function DerivedWithClassDeclaration() {
-        var _this = this;
-        _this.prop = true;
         var InnerClass = /** @class */ (function () {
             function InnerClass() {
                 this.property = 7;
@@ -620,7 +606,8 @@ var DerivedWithClassDeclaration = /** @class */ (function (_super) {
             };
             return InnerClass;
         }());
-        _this = _super.call(this) || this;
+        var _this = _super.call(this) || this;
+        _this.prop = true;
         return _this;
     }
     return DerivedWithClassDeclaration;
@@ -628,12 +615,6 @@ var DerivedWithClassDeclaration = /** @class */ (function (_super) {
 var DerivedWithClassDeclarationExtendingMember = /** @class */ (function (_super) {
     __extends(DerivedWithClassDeclarationExtendingMember, _super);
     function DerivedWithClassDeclarationExtendingMember() {
-        var _this = this;
-        _this.memberClass = /** @class */ (function () {
-            function class_1() {
-            }
-            return class_1;
-        }());
         var InnerClass = /** @class */ (function (_super) {
             __extends(InnerClass, _super);
             function InnerClass() {
@@ -648,7 +629,12 @@ var DerivedWithClassDeclarationExtendingMember = /** @class */ (function (_super
             };
             return InnerClass;
         }(_this.memberClass));
-        _this = _super.call(this) || this;
+        var _this = _super.call(this) || this;
+        _this.memberClass = /** @class */ (function () {
+            function class_1() {
+            }
+            return class_1;
+        }());
         return _this;
     }
     return DerivedWithClassDeclarationExtendingMember;
@@ -656,8 +642,6 @@ var DerivedWithClassDeclarationExtendingMember = /** @class */ (function (_super
 var DerivedWithClassExpression = /** @class */ (function (_super) {
     __extends(DerivedWithClassExpression, _super);
     function DerivedWithClassExpression() {
-        var _this = this;
-        _this.prop = true;
         console.log(/** @class */ (function () {
             function class_2() {
                 this.property = 7;
@@ -669,7 +653,8 @@ var DerivedWithClassExpression = /** @class */ (function (_super) {
             };
             return class_2;
         }()));
-        _this = _super.call(this) || this;
+        var _this = _super.call(this) || this;
+        _this.prop = true;
         return _this;
     }
     return DerivedWithClassExpression;
@@ -677,20 +662,19 @@ var DerivedWithClassExpression = /** @class */ (function (_super) {
 var DerivedWithClassExpressionExtendingMember = /** @class */ (function (_super) {
     __extends(DerivedWithClassExpressionExtendingMember, _super);
     function DerivedWithClassExpressionExtendingMember() {
-        var _this = this;
-        _this.memberClass = /** @class */ (function () {
-            function class_3() {
-            }
-            return class_3;
-        }());
         console.log(/** @class */ (function (_super) {
-            __extends(class_4, _super);
-            function class_4() {
+            __extends(class_3, _super);
+            function class_3() {
                 return _super !== null && _super.apply(this, arguments) || this;
             }
-            return class_4;
+            return class_3;
         }(_this.memberClass)));
-        _this = _super.call(this) || this;
+        var _this = _super.call(this) || this;
+        _this.memberClass = /** @class */ (function () {
+            function class_4() {
+            }
+            return class_4;
+        }());
         return _this;
     }
     return DerivedWithClassExpressionExtendingMember;
@@ -698,8 +682,6 @@ var DerivedWithClassExpressionExtendingMember = /** @class */ (function (_super)
 var DerivedWithDerivedClassExpression = /** @class */ (function (_super) {
     __extends(DerivedWithDerivedClassExpression, _super);
     function DerivedWithDerivedClassExpression() {
-        var _this = this;
-        _this.prop = true;
         console.log(/** @class */ (function (_super) {
             __extends(class_5, _super);
             function class_5() {
@@ -712,7 +694,8 @@ var DerivedWithDerivedClassExpression = /** @class */ (function (_super) {
             };
             return class_5;
         }(Base)));
-        _this = _super.call(this) || this;
+        var _this = _super.call(this) || this;
+        _this.prop = true;
         return _this;
     }
     return DerivedWithDerivedClassExpression;
@@ -720,8 +703,6 @@ var DerivedWithDerivedClassExpression = /** @class */ (function (_super) {
 var DerivedWithNewDerivedClassExpression = /** @class */ (function (_super) {
     __extends(DerivedWithNewDerivedClassExpression, _super);
     function DerivedWithNewDerivedClassExpression() {
-        var _this = this;
-        _this.prop = true;
         console.log(new /** @class */ (function (_super) {
             __extends(class_6, _super);
             function class_6() {
@@ -729,7 +710,8 @@ var DerivedWithNewDerivedClassExpression = /** @class */ (function (_super) {
             }
             return class_6;
         }(Base))());
-        _this = _super.call(this) || this;
+        var _this = _super.call(this) || this;
+        _this.prop = true;
         return _this;
     }
     return DerivedWithNewDerivedClassExpression;
@@ -737,8 +719,6 @@ var DerivedWithNewDerivedClassExpression = /** @class */ (function (_super) {
 var DerivedWithObjectAccessors = /** @class */ (function (_super) {
     __extends(DerivedWithObjectAccessors, _super);
     function DerivedWithObjectAccessors() {
-        var _this = this;
-        _this.prop = true;
         var obj = {
             get prop() {
                 return true;
@@ -747,17 +727,16 @@ var DerivedWithObjectAccessors = /** @class */ (function (_super) {
                 this._prop = param;
             }
         };
-        _this = _super.call(this) || this;
+        var _this = _super.call(this) || this;
+        _this.prop = true;
         return _this;
     }
     return DerivedWithObjectAccessors;
 }(Base));
 var DerivedWithObjectAccessorsUsingThisInKeys = /** @class */ (function (_super) {
+    var _a;
     __extends(DerivedWithObjectAccessorsUsingThisInKeys, _super);
     function DerivedWithObjectAccessorsUsingThisInKeys() {
-        var _a;
-        var _this = this;
-        _this.propName = "prop";
         var obj = (_a = {
                 _prop: "prop"
             },
@@ -776,7 +755,8 @@ var DerivedWithObjectAccessorsUsingThisInKeys = /** @class */ (function (_super)
                 configurable: true
             }),
             _a);
-        _this = _super.call(this) || this;
+        var _this = _super.call(this) || this;
+        _this.propName = "prop";
         return _this;
     }
     return DerivedWithObjectAccessorsUsingThisInKeys;
@@ -784,8 +764,6 @@ var DerivedWithObjectAccessorsUsingThisInKeys = /** @class */ (function (_super)
 var DerivedWithObjectAccessorsUsingThisInBodies = /** @class */ (function (_super) {
     __extends(DerivedWithObjectAccessorsUsingThisInBodies, _super);
     function DerivedWithObjectAccessorsUsingThisInBodies() {
-        var _this = this;
-        _this.propName = "prop";
         var obj = {
             _prop: "prop",
             get prop() {
@@ -795,7 +773,8 @@ var DerivedWithObjectAccessorsUsingThisInBodies = /** @class */ (function (_supe
                 this._prop = param;
             }
         };
-        _this = _super.call(this) || this;
+        var _this = _super.call(this) || this;
+        _this.propName = "prop";
         return _this;
     }
     return DerivedWithObjectAccessorsUsingThisInBodies;
@@ -803,26 +782,24 @@ var DerivedWithObjectAccessorsUsingThisInBodies = /** @class */ (function (_supe
 var DerivedWithObjectComputedPropertyBody = /** @class */ (function (_super) {
     __extends(DerivedWithObjectComputedPropertyBody, _super);
     function DerivedWithObjectComputedPropertyBody() {
-        var _this = this;
-        _this.propName = "prop";
         var obj = {
             prop: _this.propName,
         };
-        _this = _super.call(this) || this;
+        var _this = _super.call(this) || this;
+        _this.propName = "prop";
         return _this;
     }
     return DerivedWithObjectComputedPropertyBody;
 }(Base));
 var DerivedWithObjectComputedPropertyName = /** @class */ (function (_super) {
+    var _b;
     __extends(DerivedWithObjectComputedPropertyName, _super);
     function DerivedWithObjectComputedPropertyName() {
-        var _a;
-        var _this = this;
+        var obj = (_b = {},
+            _b[_this.propName] = true,
+            _b);
+        var _this = _super.call(this) || this;
         _this.propName = "prop";
-        var obj = (_a = {},
-            _a[_this.propName] = true,
-            _a);
-        _this = _super.call(this) || this;
         return _this;
     }
     return DerivedWithObjectComputedPropertyName;
@@ -830,14 +807,13 @@ var DerivedWithObjectComputedPropertyName = /** @class */ (function (_super) {
 var DerivedWithObjectMethod = /** @class */ (function (_super) {
     __extends(DerivedWithObjectMethod, _super);
     function DerivedWithObjectMethod() {
-        var _this = this;
-        _this.prop = true;
         var obj = {
             getProp: function () {
                 return this;
             },
         };
-        _this = _super.call(this) || this;
+        var _this = _super.call(this) || this;
+        _this.prop = true;
         return _this;
     }
     return DerivedWithObjectMethod;

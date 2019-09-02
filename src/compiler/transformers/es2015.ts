@@ -955,40 +955,40 @@ namespace ts {
             const statements: Statement[] = [];
             resumeLexicalEnvironment();
 
+            // In derived classes, there may be code before the necessary super() call
+            // We'll remove pre-super statements to be tacked on after the rest of the body 
+            const { bodyStatements, originalSuperStatement, preSuperStatements } = splitConstructorBodyStatementTypes(constructor.body.statements);
+
             // If a super call has already been synthesized,
             // we're going to assume that we should just transform everything after that.
             // The assumption is that no prior step in the pipeline has added any prologue directives.
             let statementOffset = 0;
-            if (!hasSynthesizedSuper) statementOffset = addStandardPrologue(prologue, constructor.body.statements, /*ensureUseStrict*/ false);
+            if (!hasSynthesizedSuper) statementOffset = addStandardPrologue(prologue, bodyStatements, /*ensureUseStrict*/ false);
             addDefaultValueAssignmentsIfNeeded(statements, constructor);
             addRestParameterIfNeeded(statements, constructor, hasSynthesizedSuper);
-            if (!hasSynthesizedSuper) statementOffset = addCustomPrologue(statements, constructor.body.statements, statementOffset, visitor);
+            if (!hasSynthesizedSuper) statementOffset = addCustomPrologue(statements, bodyStatements, statementOffset, visitor);
 
-            // If the first statement is a call to `super()`, visit the statement directly
+            // If there already exists a call to `super()`, visit the statement directly
             let superCallExpression: Expression | undefined;
             if (hasSynthesizedSuper) {
                 superCallExpression = createDefaultSuperCallOrThis();
             }
-            else if (isDerivedClass && statementOffset < constructor.body.statements.length) {
-                const firstStatement = constructor.body.statements[statementOffset];
-                if (isExpressionStatement(firstStatement) && isSuperCall(firstStatement.expression)) {
-                    superCallExpression = visitImmediateSuperCallInBody(firstStatement.expression);
-                }
+            else if (originalSuperStatement) {
+                superCallExpression = visitSuperCallInBody(originalSuperStatement);
             }
 
             if (superCallExpression) {
                 hierarchyFacts |= HierarchyFacts.ConstructorWithCapturedSuper;
-                statementOffset++; // skip this statement, we will add it after visiting the rest of the body.
             }
 
-            // visit the remaining statements
-            addRange(statements, visitNodes(constructor.body.statements, visitor, isStatement, /*start*/ statementOffset));
+            // Visit the remaining statements
+            addRange(statements, visitNodes(bodyStatements, visitor, isStatement, /*start*/ statementOffset));
 
             mergeLexicalEnvironment(prologue, endLexicalEnvironment());
             insertCaptureNewTargetIfNeeded(prologue, constructor, /*copyOnWrite*/ false);
 
-            if (isDerivedClass) {
-                if (superCallExpression && statementOffset === constructor.body.statements.length && !(constructor.body.transformFlags & TransformFlags.ContainsLexicalThis)) {
+            if (isDerivedClass || superCallExpression) {
+                if (superCallExpression && bodyStatements.length === 0 && !(constructor.body.transformFlags & TransformFlags.ContainsLexicalThis)) {
                     // If the subclass constructor does *not* contain `this` and *ends* with a `super()` call, we will use the
                     // following representation:
                     //
@@ -1064,19 +1064,67 @@ namespace ts {
                 insertCaptureThisForNodeIfNeeded(prologue, constructor);
             }
 
-            const block = createBlock(
+            const bodyBlock = createBlock(
                 setTextRange(
                     createNodeArray(
-                        concatenate(prologue, statements)
+                        [
+                            ...prologue,
+                            ...visitNodes(createNodeArray(preSuperStatements), visitor, isStatement),
+                            ...statements
+                        ]
                     ),
-                    /*location*/ constructor.body.statements
+                    /*location*/ bodyStatements
                 ),
                 /*multiLine*/ true
             );
 
-            setTextRange(block, constructor.body);
+            setTextRange(bodyBlock, constructor.body);
+            return bodyBlock;
+        }
 
-            return block;
+        function splitConstructorBodyStatementTypes(originalBodyStatements: NodeArray<Statement>) {
+            const preSuperStatements = createNodeArray<Statement>();
+            let originalSuperStatement: SuperCall | undefined;
+            let i: number;
+
+            for (i = 0; i < originalBodyStatements.length; i += 1) {
+                const statement = originalBodyStatements[i];
+                const foundSuperStatement = getWrappedSuperCallExpression(statement);
+
+                if (foundSuperStatement !== undefined) {
+                    originalSuperStatement = foundSuperStatement;
+                    i += 1;
+                    break;
+                }
+
+                preSuperStatements.push(statement);
+            }
+
+            // If there was no super() call found, consider all statements to be in the main 'body'
+            if (!originalSuperStatement) {
+                return {
+                    bodyStatements: originalBodyStatements,
+                    preSuperStatements: [],
+                }
+            }
+
+            // With a super() call, split the statements into pre-super() and body (post-super())
+            const bodyStatements = createNodeArray(originalBodyStatements.slice(i));
+
+            return { bodyStatements, originalSuperStatement, preSuperStatements };
+        }
+
+        // Todo: use skipOuterExpressions
+        function getWrappedSuperCallExpression(expression: Node) {
+            while (isParenthesizedExpression(expression)) {
+                expression = expression.expression;
+            }
+
+            if (isExpressionStatement(expression) && isSuperCall(expression.expression)) {
+                return expression.expression;
+            }
+
+            return undefined;
         }
 
         /**
@@ -3708,7 +3756,7 @@ namespace ts {
             );
         }
 
-        function visitImmediateSuperCallInBody(node: CallExpression) {
+        function visitSuperCallInBody(node: CallExpression) {
             return visitCallExpressionWithPotentialCapturedThisAssignment(node, /*assignToCapturedThis*/ false);
         }
 

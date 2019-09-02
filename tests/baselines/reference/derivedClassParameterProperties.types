@@ -36,7 +36,7 @@ class Derived2 extends Base {
 >a : number
 >1 : 1
 
-        super(); // error
+        super();
 >super() : void
 >super : typeof Base
     }
@@ -74,7 +74,7 @@ class Derived4 extends Base {
 >b : number
 >2 : 2
 
-        super(); // error
+        super();
 >super() : void
 >super : typeof Base
     }
@@ -156,7 +156,7 @@ class Derived7 extends Base {
 >b : number
 >3 : 3
 
-        super(); // error
+        super();
 >super() : void
 >super : typeof Base
     }
@@ -229,7 +229,7 @@ class Derived9<T> extends Base2<T> {
 >b : number
 >3 : 3
 
-        super(); // error
+        super();
 >super() : void
 >super : typeof Base2
     }

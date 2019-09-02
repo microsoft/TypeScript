@@ -1910,13 +1910,18 @@ namespace ts {
             }
 
             let statements: Statement[] = [];
-            let indexOfFirstStatement = 0;
 
             resumeLexicalEnvironment();
 
-            indexOfFirstStatement = addPrologueDirectivesAndInitialSuperCall(constructor, statements, visitor);
+            const { foundSuperStatement, indexOfFirstStatementAfterSuper, indexAfterLastPrologueStatement } = addPrologueDirectivesAndInitialSuperCall(constructor, statements, visitor);
 
-            // Add parameters with property assignments. Transforms this:
+            // Add existing statements before the initial super call
+            statements = [
+                ...visitNodes(constructor.body!.statements, visitor, isStatement, indexAfterLastPrologueStatement, indexOfFirstStatementAfterSuper - indexAfterLastPrologueStatement - 1),
+                ...statements,
+            ];
+
+            // Transform parameters int property assignments. Transforms this:
             //
             //  constructor (public x, public y) {
             //  }
@@ -1928,10 +1933,22 @@ namespace ts {
             //      this.y = y;
             //  }
             //
-            addRange(statements, map(parametersWithPropertyAssignments, transformParameterWithPropertyAssignment));
+            const parameterPropertyAssignments = filter(
+                map(parametersWithPropertyAssignments, transformParameterWithPropertyAssignment),
+                (statement): statement is ExpressionStatement => statement !== undefined,
+            );
 
-            // Add the existing statements, skipping the initial super call.
-            addRange(statements, visitNodes(body.statements, visitor, isStatement, indexOfFirstStatement));
+            // If there is a super() call, the parameter properties go immediately after it
+            if (foundSuperStatement) {
+                addRange(statements, parameterPropertyAssignments);
+            }
+            // Since there was no super() call, parameter properties are the first statements in the constructor
+            else {
+                statements = addRange(parameterPropertyAssignments, statements)
+            }
+
+            // Add remaining statements from the body, skipping the super() call if it was found
+            addRange(statements, visitNodes(body.statements, visitor, isStatement, foundSuperStatement ? indexOfFirstStatementAfterSuper : indexAfterLastPrologueStatement));
 
             // End the lexical environment.
             statements = mergeLexicalEnvironment(statements, endLexicalEnvironment());

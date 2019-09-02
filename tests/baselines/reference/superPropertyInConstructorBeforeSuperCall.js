@@ -38,9 +38,8 @@ var B = /** @class */ (function () {
 var C1 = /** @class */ (function (_super) {
     __extends(C1, _super);
     function C1() {
-        var _this = this;
         _super.prototype.x.call(_this);
-        _this = _super.call(this) || this;
+        var _this = _super.call(this) || this;
         return _this;
     }
     return C1;

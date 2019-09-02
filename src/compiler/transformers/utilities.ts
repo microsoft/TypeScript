@@ -256,28 +256,30 @@ namespace ts {
      * @param ctor The constructor node.
      * @param result The list of statements.
      * @param visitor The visitor to apply to each node added to the result array.
-     * @returns index of the statement that follows super call
      */
-    export function addPrologueDirectivesAndInitialSuperCall(ctor: ConstructorDeclaration, result: Statement[], visitor: Visitor): number {
+    export function addPrologueDirectivesAndInitialSuperCall(ctor: ConstructorDeclaration, result: Statement[], visitor: Visitor) {
+        let indexOfFirstStatementAfterSuper = 0;
+        let indexAfterLastPrologueStatement = 0;
+        let foundSuperStatement = false;
+
         if (ctor.body) {
             const statements = ctor.body.statements;
             // add prologue directives to the list (if any)
-            const index = addPrologue(result, statements, /*ensureUseStrict*/ false, visitor);
-            if (index === statements.length) {
-                // list contains nothing but prologue directives (or empty) - exit
-                return index;
-            }
+            indexAfterLastPrologueStatement = addPrologue(result, statements, /*ensureUseStrict*/ false, visitor);
 
-            const statement = statements[index];
-            if (statement.kind === SyntaxKind.ExpressionStatement && isSuperCall((<ExpressionStatement>statement).expression)) {
-                result.push(visitNode(statement, visitor, isStatement));
-                return index + 1;
+            for (indexOfFirstStatementAfterSuper = indexAfterLastPrologueStatement; indexOfFirstStatementAfterSuper < statements.length; indexOfFirstStatementAfterSuper += 1) {
+                const statement = statements[indexOfFirstStatementAfterSuper];
+                // todo: isOrWrapsSuperCall
+                if (statement.kind === SyntaxKind.ExpressionStatement && isSuperCall((<ExpressionStatement>statement).expression)) {
+                    result.push(visitNode(statement, visitor, isStatement));
+                    indexOfFirstStatementAfterSuper += 1;
+                    foundSuperStatement = true;
+                    break;
+                }
             }
-
-            return index;
         }
 
-        return 0;
+        return { foundSuperStatement, indexOfFirstStatementAfterSuper, indexAfterLastPrologueStatement };
     }
 
 

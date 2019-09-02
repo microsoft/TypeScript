@@ -35,11 +35,10 @@ var Base = /** @class */ (function () {
 var D = /** @class */ (function (_super) {
     __extends(D, _super);
     function D() {
-        var _this = this;
         var x = {
             j: _this._t
         };
-        _this = _super.call(this, undefined) || this;
+        var _this = _super.call(this, undefined) || this;
         return _this;
     }
     return D;

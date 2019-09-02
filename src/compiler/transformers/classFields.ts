@@ -301,10 +301,27 @@ namespace ts {
 
             resumeLexicalEnvironment();
 
-            let indexOfFirstStatement = 0;
+            let indexOfFirstStatementAfterSuper = 0;
+            let indexAfterLastPrologueStatement = 0;
+            let foundSuperStatement = false;
+            let needsSyntheticConstructor = !constructor && isDerivedClass;
             let statements: Statement[] = [];
 
-            if (!constructor && isDerivedClass) {
+            if (constructor) {
+                const initialDirectivesAndSuperCall = addPrologueDirectivesAndInitialSuperCall(constructor, statements, visitor);
+                indexOfFirstStatementAfterSuper = initialDirectivesAndSuperCall.indexOfFirstStatementAfterSuper;
+                indexAfterLastPrologueStatement = initialDirectivesAndSuperCall.indexAfterLastPrologueStatement;
+                foundSuperStatement = initialDirectivesAndSuperCall.foundSuperStatement;
+
+                // Add existing statements before any super call
+                statements.splice(
+                    indexAfterLastPrologueStatement,
+                    0,
+                    ...visitNodes(constructor.body!.statements, visitor, isStatement, indexAfterLastPrologueStatement, indexOfFirstStatementAfterSuper - indexAfterLastPrologueStatement - (foundSuperStatement ? 1 : 0)),
+                );
+            }
+
+            if (needsSyntheticConstructor) {
                 // Add a synthetic `super` call:
                 //
                 //  super(...arguments);
@@ -320,10 +337,6 @@ namespace ts {
                 );
             }
 
-            if (constructor) {
-                indexOfFirstStatement = addPrologueDirectivesAndInitialSuperCall(constructor, statements, visitor);
-            }
-
             // Add the property initializers. Transforms this:
             //
             //  public x = 1;
@@ -334,10 +347,10 @@ namespace ts {
             //      this.x = 1;
             //  }
             //
+            let parameterPropertyDeclarationCount = 0;
             if (constructor && constructor.body) {
-                let parameterPropertyDeclarationCount = 0;
-                for (let i = indexOfFirstStatement; i < constructor.body.statements.length; i++) {
-                    if (isParameterPropertyDeclaration(getOriginalNode(constructor.body.statements[i]))) {
+                for (const statement of constructor.body.statements) {
+                    if (isParameterPropertyDeclaration(getOriginalNode(statement))) {
                         parameterPropertyDeclarationCount++;
                     }
                     else {
@@ -345,15 +358,40 @@ namespace ts {
                     }
                 }
                 if (parameterPropertyDeclarationCount > 0) {
-                    addRange(statements, visitNodes(constructor.body.statements, visitor, isStatement, indexOfFirstStatement, parameterPropertyDeclarationCount));
-                    indexOfFirstStatement += parameterPropertyDeclarationCount;
+                    // If there was a super() call found, add parameter properties immediately after it
+                    if (foundSuperStatement) {
+                        addRange(statements, visitNodes(constructor.body.statements, visitor, isStatement, indexOfFirstStatementAfterSuper, parameterPropertyDeclarationCount));
+                    }
+                    // If a synthetic super() call was added, add them just after it
+                    else if (needsSyntheticConstructor) {
+                        statements = addRange(
+                            [statements[0]],
+                            [
+                                ...visitNodes(constructor.body.statements, visitor, isStatement, indexOfFirstStatementAfterSuper, parameterPropertyDeclarationCount),
+                                ...statements.slice(1),
+                            ]
+                        );
+                    }
+                    // Since there wasn't a super() call, add them to the top of the constructor
+                    else {
+                        statements = addRange(
+                            [],
+                            [
+                                ...visitNodes(constructor.body.statements, visitor, isStatement, indexOfFirstStatementAfterSuper, parameterPropertyDeclarationCount),
+                                ...statements,
+                            ]
+                        );
+                    }
+                    
+                    indexOfFirstStatementAfterSuper += parameterPropertyDeclarationCount;
                 }
             }
-            addInitializedPropertyStatements(statements, properties, createThis());
 
-            // Add existing statements, skipping the initial super call.
+            addInitializedPropertyStatements(statements, properties, createThis(), getPropertyStatementInsertionIndex(needsSyntheticConstructor, foundSuperStatement, parameterPropertyDeclarationCount));
+
+            // Add existing statements after the initial super call
             if (constructor) {
-                addRange(statements, visitNodes(constructor.body!.statements, visitor, isStatement, indexOfFirstStatement));
+                addRange(statements, visitNodes(constructor.body!.statements, visitor, isStatement, indexOfFirstStatementAfterSuper));
             }
 
             statements = mergeLexicalEnvironment(statements, endLexicalEnvironment());
@@ -370,19 +408,38 @@ namespace ts {
             );
         }
 
+        function getPropertyStatementInsertionIndex(needsSyntheticConstructor: boolean, foundSuperStatement: boolean, parameterPropertyDeclarationCount: number) {
+            if (needsSyntheticConstructor) {
+                return parameterPropertyDeclarationCount + 1;
+            }
+
+            if (!foundSuperStatement) {
+                return parameterPropertyDeclarationCount;
+            }
+
+            return undefined;
+        }
+
         /**
          * Generates assignment statements for property initializers.
          *
          * @param properties An array of property declarations to transform.
          * @param receiver The receiver on which each property should be assigned.
          */
-        function addInitializedPropertyStatements(statements: Statement[], properties: ReadonlyArray<PropertyDeclaration>, receiver: LeftHandSideExpression) {
-            for (const property of properties) {
+        function addInitializedPropertyStatements(statements: Statement[], properties: ReadonlyArray<PropertyDeclaration>, receiver: LeftHandSideExpression, insertionIndex?: number) {
+            for (let i = 0; i < properties.length; i += 1) {
+                const property = properties[i];
                 const statement = createExpressionStatement(transformInitializedProperty(property, receiver));
                 setSourceMapRange(statement, moveRangePastModifiers(property));
                 setCommentRange(statement, property);
                 setOriginalNode(statement, property);
-                statements.push(statement);
+
+                if (insertionIndex !== undefined) {
+                    statements.splice(i + insertionIndex, 0, statement);
+                }
+                else {
+                    statements.push(statement);
+                }
             }
         }
 

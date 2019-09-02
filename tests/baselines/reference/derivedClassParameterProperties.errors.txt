@@ -24,7 +24,7 @@ tests/cases/conformance/classes/constructorDeclarations/superCalls/derivedClassP
     class Derived2 extends Base {
         constructor(public y: string) {
             var a = 1;
-            super(); // error
+            super();
         }
     }
     
@@ -39,7 +39,7 @@ tests/cases/conformance/classes/constructorDeclarations/superCalls/derivedClassP
         a = 1;
         constructor(y: string) {
             var b = 2;
-            super(); // error
+            super();
         }
     }
     
@@ -75,8 +75,8 @@ tests/cases/conformance/classes/constructorDeclarations/superCalls/derivedClassP
     ~~~~~~~~~~~~~~~~~~~
             ~~~~
 !!! error TS17009: 'super' must be called before accessing 'this' in the constructor of a derived class.
-            super(); // error
-    ~~~~~~~~~~~~~~~~~~~~~~~~~
+            super();
+    ~~~~~~~~~~~~~~~~
         }
     ~~~~~
 !!! error TS2376: A 'super' call must be the first statement in the constructor to refer to 'super' or 'this' when a derived class contains initialized properties or has parameter properties.
@@ -108,8 +108,8 @@ tests/cases/conformance/classes/constructorDeclarations/superCalls/derivedClassP
     ~~~~~~~~~~~~~~~~~~~
             ~~~~
 !!! error TS17009: 'super' must be called before accessing 'this' in the constructor of a derived class.
-            super(); // error
-    ~~~~~~~~~~~~~~~~~~~~~~~~~
+            super();
+    ~~~~~~~~~~~~~~~~
         }
     ~~~~~
 !!! error TS2376: A 'super' call must be the first statement in the constructor to refer to 'super' or 'this' when a derived class contains initialized properties or has parameter properties.

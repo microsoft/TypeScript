@@ -25768,6 +25768,7 @@ namespace ts {
             return expressionParent.parent === body;
         }
 
+        // Todo: use skipOuterExpressions
         function isOrWrapsSuperCall(expression: Node) {
             while (isParenthesizedExpression(expression)) {
                 expression = expression.expression;

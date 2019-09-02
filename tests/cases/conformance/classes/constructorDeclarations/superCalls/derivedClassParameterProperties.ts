@@ -14,7 +14,7 @@ class Derived extends Base {
 class Derived2 extends Base {
     constructor(public y: string) {
         var a = 1;
-        super(); // error
+        super();
     }
 }
 
@@ -29,7 +29,7 @@ class Derived4 extends Base {
     a = 1;
     constructor(y: string) {
         var b = 2;
-        super(); // error
+        super();
     }
 }
 
@@ -56,7 +56,7 @@ class Derived7 extends Base {
     constructor(y: string) {
         this.a = 3;
         this.b = 3;
-        super(); // error
+        super();
     }
 }
 
@@ -79,7 +79,7 @@ class Derived9<T> extends Base2<T> {
     constructor(y: string) {
         this.a = 3;
         this.b = 3;
-        super(); // error
+        super();
     }
 }
 

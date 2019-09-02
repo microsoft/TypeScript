@@ -33,7 +33,7 @@ class Derived2 extends Base {
         var a = 1;
 >a : Symbol(a, Decl(derivedClassParameterProperties.ts, 15, 11))
 
-        super(); // error
+        super();
 >super : Symbol(Base, Decl(derivedClassParameterProperties.ts, 0, 0))
     }
 }
@@ -66,7 +66,7 @@ class Derived4 extends Base {
         var b = 2;
 >b : Symbol(b, Decl(derivedClassParameterProperties.ts, 30, 11))
 
-        super(); // error
+        super();
 >super : Symbol(Base, Decl(derivedClassParameterProperties.ts, 0, 0))
     }
 }
@@ -135,7 +135,7 @@ class Derived7 extends Base {
 >this : Symbol(Derived7, Decl(derivedClassParameterProperties.ts, 50, 1))
 >b : Symbol(Derived7.b, Decl(derivedClassParameterProperties.ts, 53, 10))
 
-        super(); // error
+        super();
 >super : Symbol(Base, Decl(derivedClassParameterProperties.ts, 0, 0))
     }
 }
@@ -200,7 +200,7 @@ class Derived9<T> extends Base2<T> {
 >this : Symbol(Derived9, Decl(derivedClassParameterProperties.ts, 73, 24))
 >b : Symbol(Derived9.b, Decl(derivedClassParameterProperties.ts, 76, 10))
 
-        super(); // error
+        super();
 >super : Symbol(Base2, Decl(derivedClassParameterProperties.ts, 70, 1))
     }
 }
