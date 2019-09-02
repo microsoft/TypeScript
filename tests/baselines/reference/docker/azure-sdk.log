@@ -8,12 +8,14 @@ Executing a maximum of ?simultaneous processes...
 XX of XX: [@azure/abort-controller] completed successfully in ? seconds
 XX of XX: [@azure/core-auth] completed successfully in ? seconds
 XX of XX: [@azure/core-http] completed successfully in ? seconds
-XX of XX: [@azure/identity] completed successfully in ? seconds
-XX of XX: [@azure/core-amqp] completed successfully in ? seconds
 XX of XX: [@azure/core-arm] completed successfully in ? seconds
 XX of XX: [@azure/core-paging] completed successfully in ? seconds
-XX of XX: [@azure/event-processor-host] completed successfully in ? seconds
+XX of XX: [@azure/identity] completed successfully in ? seconds
 XX of XX: [@azure/test-utils-recorder] completed successfully in ? seconds
+XX of XX: [@azure/core-amqp] completed successfully in ? seconds
+XX of XX: [@azure/event-processor-host] completed successfully in ? seconds
+XX of XX: [@azure/keyvault-keys] completed successfully in ? seconds
+XX of XX: [@azure/keyvault-secrets] completed successfully in ? seconds
 XX of XX: [@azure/app-configuration] completed successfully in ? seconds
 XX of XX: [@azure/core-asynciterator-polyfill] completed successfully in ? seconds
 XX of XX: [@azure/core-tracing] completed successfully in ? seconds
@@ -21,13 +23,14 @@ Warning: You have changed the public API signature for this project. Updating re
 dist-esm/index.js → dist/index.js...
 (!) Unresolved dependencies
 https://rollupjs.org/guide/en/#warning-treating-module-as-external-dependency
-tslib (imported by dist-esm/auth.js, dist-esm/queryIterator.js, dist-esm/CosmosClient.js, dist-esm/plugins/Plugin.js, dist-esm/ClientContext.js, dist-esm/globalEndpointManager.js, dist-esm/client/Conflict/Conflict.js, dist-esm/client/Container/Container.js, dist-esm/client/Container/Containers.js, dist-esm/client/Database/Database.js, dist-esm/client/Database/Databases.js, dist-esm/client/Item/Item.js, dist-esm/client/Item/Items.js, dist-esm/client/Offer/Offer.js, dist-esm/client/Permission/Permission.js, dist-esm/client/Permission/Permissions.js, dist-esm/client/StoredProcedure/StoredProcedure.js, dist-esm/client/Trigger/Trigger.js, dist-esm/client/Trigger/Triggers.js, dist-esm/client/User/User.js, dist-esm/client/User/Users.js, dist-esm/client/UserDefinedFunction/UserDefinedFunction.js, dist-esm/client/UserDefinedFunction/UserDefinedFunctions.js, dist-esm/queryExecutionContext/defaultQueryExecutionContext.js, dist-esm/queryExecutionContext/documentProducer.js, dist-esm/queryExecutionContext/parallelQueryExecutionContextBase.js, dist-esm/queryExecutionContext/pipelinedQueryExecutionContext.js, dist-esm/request/request.js, dist-esm/request/RequestHandler.js, dist-esm/client/StoredProcedure/StoredProcedures.js, dist-esm/ChangeFeedIterator.js, dist-esm/routing/smartRoutingMapProvider.js, dist-esm/queryExecutionContext/EndpointComponent/AggregateEndpointComponent.js, dist-esm/queryExecutionContext/EndpointComponent/OffsetLimitEndpointComponent.js, dist-esm/queryExecutionContext/EndpointComponent/OrderByEndpointComponent.js, dist-esm/queryExecutionContext/EndpointComponent/OrderedDistinctEndpointComponent.js, dist-esm/queryExecutionContext/EndpointComponent/UnorderedDistinctEndpointComponent.js, dist-esm/retry/retryUtility.js, dist-esm/routing/partitionKeyRangeCache.js, dist-esm/retry/resourceThrottleRetryPolicy.js, dist-esm/retry/endpointDiscoveryRetryPolicy.js, dist-esm/retry/sessionRetryPolicy.js, dist-esm/retry/defaultRetryPolicy.js)
+tslib (imported by dist-esm/auth.js, dist-esm/queryIterator.js, dist-esm/CosmosClient.js, dist-esm/plugins/Plugin.js, dist-esm/ClientContext.js, dist-esm/globalEndpointManager.js, dist-esm/client/Conflict/Conflict.js, dist-esm/client/Container/Container.js, dist-esm/client/Container/Containers.js, dist-esm/client/Database/Database.js, dist-esm/client/Database/Databases.js, dist-esm/client/Item/Item.js, dist-esm/client/Item/Items.js, dist-esm/client/Offer/Offer.js, dist-esm/client/Permission/Permission.js, dist-esm/client/Permission/Permissions.js, dist-esm/client/StoredProcedure/StoredProcedure.js, dist-esm/client/StoredProcedure/StoredProcedures.js, dist-esm/client/Trigger/Trigger.js, dist-esm/client/Trigger/Triggers.js, dist-esm/client/User/User.js, dist-esm/client/User/Users.js, dist-esm/client/UserDefinedFunction/UserDefinedFunction.js, dist-esm/client/UserDefinedFunction/UserDefinedFunctions.js, dist-esm/queryExecutionContext/defaultQueryExecutionContext.js, dist-esm/queryExecutionContext/documentProducer.js, dist-esm/queryExecutionContext/parallelQueryExecutionContextBase.js, dist-esm/queryExecutionContext/pipelinedQueryExecutionContext.js, dist-esm/request/request.js, dist-esm/request/RequestHandler.js, dist-esm/ChangeFeedIterator.js, dist-esm/routing/smartRoutingMapProvider.js, dist-esm/queryExecutionContext/EndpointComponent/AggregateEndpointComponent.js, dist-esm/queryExecutionContext/EndpointComponent/OffsetLimitEndpointComponent.js, dist-esm/queryExecutionContext/EndpointComponent/OrderByEndpointComponent.js, dist-esm/queryExecutionContext/EndpointComponent/OrderedDistinctEndpointComponent.js, dist-esm/queryExecutionContext/EndpointComponent/UnorderedDistinctEndpointComponent.js, dist-esm/retry/retryUtility.js, dist-esm/routing/partitionKeyRangeCache.js, dist-esm/retry/defaultRetryPolicy.js, dist-esm/retry/endpointDiscoveryRetryPolicy.js, dist-esm/retry/resourceThrottleRetryPolicy.js, dist-esm/retry/sessionRetryPolicy.js)
 @azure/cosmos-sign (imported by dist-esm/auth.js)
 universal-user-agent (imported by dist-esm/common/platform.js)
-uuid/v4 (imported by dist-esm/client/Item/Items.js)
+uuid/v4 (imported by dist-esm/ClientContext.js, dist-esm/client/Item/Items.js)
 binary-search-bounds (imported by dist-esm/queryExecutionContext/parallelQueryExecutionContextBase.js, dist-esm/routing/inMemoryCollectionRoutingMap.js)
 priorityqueuejs (imported by dist-esm/queryExecutionContext/parallelQueryExecutionContextBase.js)
 semaphore (imported by dist-esm/queryExecutionContext/parallelQueryExecutionContextBase.js)
+debug (imported by dist-esm/common/logger.js)
 node-abort-controller (imported by dist-esm/request/RequestHandler.js)
 node-fetch (imported by dist-esm/request/RequestHandler.js)
 atob (imported by dist-esm/session/sessionContainer.js)
@@ -38,6 +41,7 @@ Use output.globals to specify browser global variable names corresponding to ext
 universal-user-agent (guessing 'userAgent')
 tslib (guessing 'tslib')
 @azure/cosmos-sign (guessing 'cosmosSign')
+debug (guessing 'debugLib')
 binary-search-bounds (guessing 'bs')
 priorityqueuejs (guessing 'PriorityQueue')
 semaphore (guessing 'semaphore')
@@ -53,8 +57,6 @@ atob (guessing 'atob')
 created dist/index.js in ?s
 Warning: You have changed the public API signature for this project. Updating review/event-hubs.api.md
 XX of XX: [@azure/keyvault-certificates] completed successfully in ? seconds
-XX of XX: [@azure/keyvault-keys] completed successfully in ? seconds
-XX of XX: [@azure/keyvault-secrets] completed successfully in ? seconds
 Warning: You have changed the public API signature for this project. Updating review/service-bus.api.md
 XX of XX: [@azure/storage-blob] completed successfully in ? seconds
 XX of XX: [@azure/storage-file] completed successfully in ? seconds
@@ -66,18 +68,18 @@ SUCCESS (20)
 @azure/abort-controller (? seconds)
 @azure/core-auth (? seconds)
 @azure/core-http (? seconds)
-@azure/identity (? seconds)
-@azure/core-amqp (? seconds)
 @azure/core-arm (? seconds)
 @azure/core-paging (? seconds)
-@azure/event-processor-host (? seconds)
+@azure/identity (? seconds)
 @azure/test-utils-recorder (? seconds)
+@azure/core-amqp (? seconds)
+@azure/event-processor-host (? seconds)
+@azure/keyvault-keys (? seconds)
+@azure/keyvault-secrets (? seconds)
 @azure/app-configuration (? seconds)
 @azure/core-asynciterator-polyfill (? seconds)
 @azure/core-tracing (? seconds)
 @azure/keyvault-certificates (? seconds)
-@azure/keyvault-keys (? seconds)
-@azure/keyvault-secrets (? seconds)
 @azure/storage-blob (? seconds)
 @azure/storage-file (? seconds)
 @azure/storage-queue (? seconds)
@@ -91,13 +93,14 @@ Warning: You have changed the public API signature for this project. Updating re
 dist-esm/index.js → dist/index.js...
 (!) Unresolved dependencies
 https://rollupjs.org/guide/en/#warning-treating-module-as-external-dependency
-tslib (imported by dist-esm/auth.js, dist-esm/queryIterator.js, dist-esm/CosmosClient.js, dist-esm/plugins/Plugin.js, dist-esm/ClientContext.js, dist-esm/globalEndpointManager.js, dist-esm/client/Conflict/Conflict.js, dist-esm/client/Container/Container.js, dist-esm/client/Container/Containers.js, dist-esm/client/Database/Database.js, dist-esm/client/Database/Databases.js, dist-esm/client/Item/Item.js, dist-esm/client/Item/Items.js, dist-esm/client/Offer/Offer.js, dist-esm/client/Permission/Permission.js, dist-esm/client/Permission/Permissions.js, dist-esm/client/StoredProcedure/StoredProcedure.js, dist-esm/client/Trigger/Trigger.js, dist-esm/client/Trigger/Triggers.js, dist-esm/client/User/User.js, dist-esm/client/User/Users.js, dist-esm/client/UserDefinedFunction/UserDefinedFunction.js, dist-esm/client/UserDefinedFunction/UserDefinedFunctions.js, dist-esm/queryExecutionContext/defaultQueryExecutionContext.js, dist-esm/queryExecutionContext/documentProducer.js, dist-esm/queryExecutionContext/parallelQueryExecutionContextBase.js, dist-esm/queryExecutionContext/pipelinedQueryExecutionContext.js, dist-esm/request/request.js, dist-esm/request/RequestHandler.js, dist-esm/client/StoredProcedure/StoredProcedures.js, dist-esm/ChangeFeedIterator.js, dist-esm/routing/smartRoutingMapProvider.js, dist-esm/queryExecutionContext/EndpointComponent/AggregateEndpointComponent.js, dist-esm/queryExecutionContext/EndpointComponent/OffsetLimitEndpointComponent.js, dist-esm/queryExecutionContext/EndpointComponent/OrderByEndpointComponent.js, dist-esm/queryExecutionContext/EndpointComponent/OrderedDistinctEndpointComponent.js, dist-esm/queryExecutionContext/EndpointComponent/UnorderedDistinctEndpointComponent.js, dist-esm/retry/retryUtility.js, dist-esm/routing/partitionKeyRangeCache.js, dist-esm/retry/resourceThrottleRetryPolicy.js, dist-esm/retry/endpointDiscoveryRetryPolicy.js, dist-esm/retry/sessionRetryPolicy.js, dist-esm/retry/defaultRetryPolicy.js)
+tslib (imported by dist-esm/auth.js, dist-esm/queryIterator.js, dist-esm/CosmosClient.js, dist-esm/plugins/Plugin.js, dist-esm/ClientContext.js, dist-esm/globalEndpointManager.js, dist-esm/client/Conflict/Conflict.js, dist-esm/client/Container/Container.js, dist-esm/client/Container/Containers.js, dist-esm/client/Database/Database.js, dist-esm/client/Database/Databases.js, dist-esm/client/Item/Item.js, dist-esm/client/Item/Items.js, dist-esm/client/Offer/Offer.js, dist-esm/client/Permission/Permission.js, dist-esm/client/Permission/Permissions.js, dist-esm/client/StoredProcedure/StoredProcedure.js, dist-esm/client/StoredProcedure/StoredProcedures.js, dist-esm/client/Trigger/Trigger.js, dist-esm/client/Trigger/Triggers.js, dist-esm/client/User/User.js, dist-esm/client/User/Users.js, dist-esm/client/UserDefinedFunction/UserDefinedFunction.js, dist-esm/client/UserDefinedFunction/UserDefinedFunctions.js, dist-esm/queryExecutionContext/defaultQueryExecutionContext.js, dist-esm/queryExecutionContext/documentProducer.js, dist-esm/queryExecutionContext/parallelQueryExecutionContextBase.js, dist-esm/queryExecutionContext/pipelinedQueryExecutionContext.js, dist-esm/request/request.js, dist-esm/request/RequestHandler.js, dist-esm/ChangeFeedIterator.js, dist-esm/routing/smartRoutingMapProvider.js, dist-esm/queryExecutionContext/EndpointComponent/AggregateEndpointComponent.js, dist-esm/queryExecutionContext/EndpointComponent/OffsetLimitEndpointComponent.js, dist-esm/queryExecutionContext/EndpointComponent/OrderByEndpointComponent.js, dist-esm/queryExecutionContext/EndpointComponent/OrderedDistinctEndpointComponent.js, dist-esm/queryExecutionContext/EndpointComponent/UnorderedDistinctEndpointComponent.js, dist-esm/retry/retryUtility.js, dist-esm/routing/partitionKeyRangeCache.js, dist-esm/retry/defaultRetryPolicy.js, dist-esm/retry/endpointDiscoveryRetryPolicy.js, dist-esm/retry/resourceThrottleRetryPolicy.js, dist-esm/retry/sessionRetryPolicy.js)
 @azure/cosmos-sign (imported by dist-esm/auth.js)
 universal-user-agent (imported by dist-esm/common/platform.js)
-uuid/v4 (imported by dist-esm/client/Item/Items.js)
+uuid/v4 (imported by dist-esm/ClientContext.js, dist-esm/client/Item/Items.js)
 binary-search-bounds (imported by dist-esm/queryExecutionContext/parallelQueryExecutionContextBase.js, dist-esm/routing/inMemoryCollectionRoutingMap.js)
 priorityqueuejs (imported by dist-esm/queryExecutionContext/parallelQueryExecutionContextBase.js)
 semaphore (imported by dist-esm/queryExecutionContext/parallelQueryExecutionContextBase.js)
+debug (imported by dist-esm/common/logger.js)
 node-abort-controller (imported by dist-esm/request/RequestHandler.js)
 node-fetch (imported by dist-esm/request/RequestHandler.js)
 atob (imported by dist-esm/session/sessionContainer.js)
@@ -108,6 +111,7 @@ Use output.globals to specify browser global variable names corresponding to ext
 universal-user-agent (guessing 'userAgent')
 tslib (guessing 'tslib')
 @azure/cosmos-sign (guessing 'cosmosSign')
+debug (guessing 'debugLib')
 binary-search-bounds (guessing 'bs')
 priorityqueuejs (guessing 'PriorityQueue')
 semaphore (guessing 'semaphore')
