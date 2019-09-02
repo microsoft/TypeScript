@@ -1042,7 +1042,7 @@ namespace ts {
                         insertCaptureThisForNode(statements, constructor, superCallExpression || createActualThis());
                     }
                     // Since the `super()` call isn't the first statement, it's split across 1-2 statements:
-                    // * A prologue `var _this = this;`, in case the constructor accesses this before super() 
+                    // * A prologue `var _this = this;`, in case the constructor accesses this before super()
                     // * If it exists, a reassignment to that `_this` of the super() call
                     else {
                         insertCaptureThisForNode(prologue, constructor, createActualThis());
@@ -1506,7 +1506,7 @@ namespace ts {
 
         /**
          * Assigns the `this` in a constructor to the result of its `super()` call.
-         * 
+         *
          * @param statements Statements in the constructor body.
          * @param superExpression Existing `super()` call for the constructor.
          */
@@ -1518,7 +1518,7 @@ namespace ts {
                     SyntaxKind.EqualsToken,
                     superExpression
                 )
-            )
+            );
             insertStatementAfterCustomPrologue(statements, assignSuperExpression);
         }
 
