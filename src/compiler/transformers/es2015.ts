@@ -1099,7 +1099,7 @@ namespace ts {
 
             for (i = 0; i < originalBodyStatements.length; i += 1) {
                 const statement = originalBodyStatements[i];
-                const foundSuperStatement = getWrappedSuperCallExpression(statement);
+                const foundSuperStatement = getWrappedSuperCallExpression(skipOuterExpressions(statement));
 
                 if (foundSuperStatement !== undefined) {
                     originalSuperStatement = foundSuperStatement;
@@ -1124,17 +1124,10 @@ namespace ts {
             return { bodyStatements, originalSuperStatement, preSuperStatements };
         }
 
-        // Todo: use skipOuterExpressions
         function getWrappedSuperCallExpression(expression: Node) {
-            while (isParenthesizedExpression(expression)) {
-                expression = expression.expression;
-            }
-
-            if (isExpressionStatement(expression) && isSuperCall(expression.expression)) {
-                return expression.expression;
-            }
-
-            return undefined;
+            return isExpressionStatement(expression) && isSuperCall(expression.expression)
+                ? expression.expression
+                : undefined;
         }
 
         /**
