@@ -1137,7 +1137,7 @@ namespace ts {
                         fakespace.symbol = props[0].parent!;
                         const declarations = mapDefined(props, p => {
                             if (!isPropertyAccessExpression(p.valueDeclaration)) {
-                                return undefined;
+                                return undefined; // TODO: Handle element access expressions that created late bound names (rather than silently omitting them)
                             }
                             getSymbolAccessibilityDiagnostic = createGetSymbolAccessibilityDiagnosticForNode(p.valueDeclaration);
                             const type = resolver.createTypeOfDeclaration(p.valueDeclaration, fakespace, declarationEmitNodeBuilderFlags, symbolTracker);
