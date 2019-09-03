@@ -33663,9 +33663,9 @@ namespace ts {
         }
 
         function checkGrammarNumericLiteral(node: NumericLiteral): boolean {
-            // Grammar checking
+            let diagnosticMessage: DiagnosticMessage | undefined;
+
             if (node.numericLiteralFlags & TokenFlags.Octal) {
-                let diagnosticMessage: DiagnosticMessage | undefined;
                 if (languageVersion >= ScriptTarget.ES5) {
                     diagnosticMessage = Diagnostics.Octal_literals_are_not_available_when_targeting_ECMAScript_5_and_higher_Use_the_syntax_0;
                 }
@@ -33675,13 +33675,30 @@ namespace ts {
                 else if (isChildOfNodeWithKind(node, SyntaxKind.EnumMember)) {
                     diagnosticMessage = Diagnostics.Octal_literals_are_not_allowed_in_enums_members_initializer_Use_the_syntax_0;
                 }
-                if (diagnosticMessage) {
-                    const withMinus = isPrefixUnaryExpression(node.parent) && node.parent.operator === SyntaxKind.MinusToken;
-                    const literal = (withMinus ? "-" : "") + "0o" + node.text;
-                    return grammarErrorOnNode(withMinus ? node.parent : node, diagnosticMessage, literal);
-                }
             }
+            
+            if (!diagnosticMessage && numericLiteralValueImpreciselyLarge(node.text)) {
+                diagnosticMessage = Diagnostics.Numeric_literal_values_equal_to_2_53_or_greater_are_too_large_to_be_represented_accurately_as_an_integer;
+            }
+            
+            if (diagnosticMessage) {
+                const withMinus = isPrefixUnaryExpression(node.parent) && node.parent.operator === SyntaxKind.MinusToken;
+                const literal = (withMinus ? "-" : "") + "0o" + node.text;
+                return grammarErrorOnNode(withMinus ? node.parent : node, diagnosticMessage, literal);
+            }
+
             return false;
+        }
+        
+        function numericLiteralValueImpreciselyLarge(text: string) {
+            // We can quickly bail out in two common cases:
+            // * Literals with 15 or fewer characters, as they aren't long enough to reach 2^53 - 1
+            // * Fractional numbers (e.g. 9000000000000000000000000000.000000001) are inherently imprecise anyway
+            if (text.length <= 15 || text.indexOf(".") !== -1) {
+                return false;
+            }
+
+            return Number(text) >= Math.pow(2, 53) - 1;
         }
 
         function checkGrammarBigIntLiteral(node: BigIntLiteral): boolean {

@@ -1,0 +1,103 @@
+tests/cases/compiler/impreciseNumericLiterals.ts(17,1): error TS1357: Numeric literal values equal to 2^53 or greater are too large to be represented accurately as an integer.
+tests/cases/compiler/impreciseNumericLiterals.ts(18,1): error TS1357: Numeric literal values equal to 2^53 or greater are too large to be represented accurately as an integer.
+tests/cases/compiler/impreciseNumericLiterals.ts(19,1): error TS1357: Numeric literal values equal to 2^53 or greater are too large to be represented accurately as an integer.
+tests/cases/compiler/impreciseNumericLiterals.ts(20,1): error TS1357: Numeric literal values equal to 2^53 or greater are too large to be represented accurately as an integer.
+tests/cases/compiler/impreciseNumericLiterals.ts(24,1): error TS1357: Numeric literal values equal to 2^53 or greater are too large to be represented accurately as an integer.
+tests/cases/compiler/impreciseNumericLiterals.ts(25,1): error TS1357: Numeric literal values equal to 2^53 or greater are too large to be represented accurately as an integer.
+tests/cases/compiler/impreciseNumericLiterals.ts(26,1): error TS1357: Numeric literal values equal to 2^53 or greater are too large to be represented accurately as an integer.
+tests/cases/compiler/impreciseNumericLiterals.ts(42,1): error TS1357: Numeric literal values equal to 2^53 or greater are too large to be represented accurately as an integer.
+tests/cases/compiler/impreciseNumericLiterals.ts(43,1): error TS1357: Numeric literal values equal to 2^53 or greater are too large to be represented accurately as an integer.
+tests/cases/compiler/impreciseNumericLiterals.ts(44,1): error TS1357: Numeric literal values equal to 2^53 or greater are too large to be represented accurately as an integer.
+tests/cases/compiler/impreciseNumericLiterals.ts(45,1): error TS1357: Numeric literal values equal to 2^53 or greater are too large to be represented accurately as an integer.
+tests/cases/compiler/impreciseNumericLiterals.ts(56,1): error TS1357: Numeric literal values equal to 2^53 or greater are too large to be represented accurately as an integer.
+tests/cases/compiler/impreciseNumericLiterals.ts(57,1): error TS1357: Numeric literal values equal to 2^53 or greater are too large to be represented accurately as an integer.
+tests/cases/compiler/impreciseNumericLiterals.ts(58,1): error TS1357: Numeric literal values equal to 2^53 or greater are too large to be represented accurately as an integer.
+
+
+==== tests/cases/compiler/impreciseNumericLiterals.ts (14 errors) ====
+    1;
+    12;
+    123;
+    1234;
+    12345;
+    123456;
+    1234567;
+    12345678;
+    123456789;
+    1234567890;
+    12345678901;
+    123456789012;
+    1234567890123;
+    12345678901234;
+    123456789012345;
+    1234567890123456;
+    12345678901234567;
+    ~~~~~~~~~~~~~~~~~
+!!! error TS1357: Numeric literal values equal to 2^53 or greater are too large to be represented accurately as an integer.
+    123456789012345678;
+    ~~~~~~~~~~~~~~~~~~
+!!! error TS1357: Numeric literal values equal to 2^53 or greater are too large to be represented accurately as an integer.
+    1234567890123456789;
+    ~~~~~~~~~~~~~~~~~~~
+!!! error TS1357: Numeric literal values equal to 2^53 or greater are too large to be represented accurately as an integer.
+    12345678901234567890;
+    ~~~~~~~~~~~~~~~~~~~~
+!!! error TS1357: Numeric literal values equal to 2^53 or greater are too large to be represented accurately as an integer.
+    
+    9007199254740989;
+    9007199254740990;
+    9007199254740991;
+    ~~~~~~~~~~~~~~~~
+!!! error TS1357: Numeric literal values equal to 2^53 or greater are too large to be represented accurately as an integer.
+    9007199254740992;
+    ~~~~~~~~~~~~~~~~
+!!! error TS1357: Numeric literal values equal to 2^53 or greater are too large to be represented accurately as an integer.
+    9007199254740993;
+    ~~~~~~~~~~~~~~~~
+!!! error TS1357: Numeric literal values equal to 2^53 or greater are too large to be represented accurately as an integer.
+    
+    0x1;
+    0x12;
+    0x123;
+    0x1234;
+    0x12345;
+    0x123456;
+    0x1234567;
+    0x12345678;
+    0x123456789;
+    0x1234567890;
+    0x12345678901;
+    0x123456789012;
+    0x1234567890123;
+    0x12345678901234;
+    0x123456789012345;
+    ~~~~~~~~~~~~~~~~~
+!!! error TS1357: Numeric literal values equal to 2^53 or greater are too large to be represented accurately as an integer.
+    0x1234567890123456;
+    ~~~~~~~~~~~~~~~~~~
+!!! error TS1357: Numeric literal values equal to 2^53 or greater are too large to be represented accurately as an integer.
+    0x12345678901234567;
+    ~~~~~~~~~~~~~~~~~~~
+!!! error TS1357: Numeric literal values equal to 2^53 or greater are too large to be represented accurately as an integer.
+    0x123456789012345678;
+    ~~~~~~~~~~~~~~~~~~~~
+!!! error TS1357: Numeric literal values equal to 2^53 or greater are too large to be represented accurately as an integer.
+    0x1234567890123456789;
+    0x12345678901234567890;
+    0x123456789012345678901;
+    0x1234567890123456789012;
+    0x12345678901234567890123;
+    0x123456789012345678901234;
+    0x1234567890123456789012345;
+    
+    0x19999999999998;
+    0x19999999999999;
+    0x20000000000000;
+    ~~~~~~~~~~~~~~~~
+!!! error TS1357: Numeric literal values equal to 2^53 or greater are too large to be represented accurately as an integer.
+    0x20000000000001;
+    ~~~~~~~~~~~~~~~~
+!!! error TS1357: Numeric literal values equal to 2^53 or greater are too large to be represented accurately as an integer.
+    0x20000000000002;
+    ~~~~~~~~~~~~~~~~
+!!! error TS1357: Numeric literal values equal to 2^53 or greater are too large to be represented accurately as an integer.
