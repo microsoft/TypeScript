@@ -57,6 +57,8 @@ namespace ts {
         options.rootDirs = undefined;
         options.declaration = undefined;
         options.composite = undefined;
+        options.incremental = undefined;
+        options.tsBuildInfoFile = undefined;
         options.declarationDir = undefined;
         options.out = undefined;
         options.outFile = undefined;
