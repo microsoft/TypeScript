@@ -539,10 +539,14 @@ namespace ts.formatting {
                     return true;
                 case SyntaxKind.VariableDeclaration:
                 case SyntaxKind.PropertyAssignment:
+                case SyntaxKind.BinaryExpression:
                     if (!settings.indentMultiLineObjectLiteralBeginningOnBlankLine && sourceFile && childKind === SyntaxKind.ObjectLiteralExpression) { // TODO: GH#18217
                         return rangeIsOnOneLine(sourceFile, child!);
                     }
-                    return true;
+                    if (parent.kind !== SyntaxKind.BinaryExpression) {
+                        return true;
+                    }
+                    break;
                 case SyntaxKind.DoStatement:
                 case SyntaxKind.WhileStatement:
                 case SyntaxKind.ForInStatement:
