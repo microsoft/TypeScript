@@ -33676,11 +33676,11 @@ namespace ts {
                     diagnosticMessage = Diagnostics.Octal_literals_are_not_allowed_in_enums_members_initializer_Use_the_syntax_0;
                 }
             }
-            
+
             if (!diagnosticMessage && numericLiteralValueImpreciselyLarge(node.text)) {
                 diagnosticMessage = Diagnostics.Numeric_literal_values_equal_to_2_53_or_greater_are_too_large_to_be_represented_accurately_as_an_integer;
             }
-            
+
             if (diagnosticMessage) {
                 const withMinus = isPrefixUnaryExpression(node.parent) && node.parent.operator === SyntaxKind.MinusToken;
                 const literal = (withMinus ? "-" : "") + "0o" + node.text;
@@ -33689,7 +33689,7 @@ namespace ts {
 
             return false;
         }
-        
+
         function numericLiteralValueImpreciselyLarge(text: string) {
             // We can quickly bail out in two common cases:
             // * Literals with 15 or fewer characters, as they aren't long enough to reach 2^53 - 1
