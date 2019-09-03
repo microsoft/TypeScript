@@ -1035,7 +1035,7 @@
         "category": "Error",
         "code": 1356
     },
-    "Numeric literal values equal to 2^53 or greater are too large to be represented accurately as an integer.": {
+    "Numeric literals with absolute values equal to 2^53 or greater are too large to be represented accurately as an integer.": {
         "category": "Error",
         "code": 1357
     },

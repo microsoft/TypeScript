@@ -33678,7 +33678,7 @@ namespace ts {
             }
 
             if (!diagnosticMessage && numericLiteralValueImpreciselyLarge(node.text)) {
-                diagnosticMessage = Diagnostics.Numeric_literal_values_equal_to_2_53_or_greater_are_too_large_to_be_represented_accurately_as_an_integer;
+                diagnosticMessage = Diagnostics.Numeric_literals_with_absolute_values_equal_to_2_53_or_greater_are_too_large_to_be_represented_accurately_as_an_integer;
             }
 
             if (diagnosticMessage) {
