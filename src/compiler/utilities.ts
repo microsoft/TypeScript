@@ -7048,7 +7048,6 @@ namespace ts {
     }
 
     /** True if has initializer node attached to it. */
-    /* @internal */
     export function hasInitializer(node: Node): node is HasInitializer {
         return !!(node as HasInitializer).initializer;
     }
