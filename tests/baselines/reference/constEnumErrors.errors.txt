@@ -8,12 +8,13 @@ tests/cases/compiler/constEnumErrors.ts(24,13): error TS2476: A const enum membe
 tests/cases/compiler/constEnumErrors.ts(26,9): error TS2475: 'const' enums can only be used in property or index access expressions or the right hand side of an import declaration or export assignment or type query.
 tests/cases/compiler/constEnumErrors.ts(27,10): error TS2475: 'const' enums can only be used in property or index access expressions or the right hand side of an import declaration or export assignment or type query.
 tests/cases/compiler/constEnumErrors.ts(32,5): error TS2475: 'const' enums can only be used in property or index access expressions or the right hand side of an import declaration or export assignment or type query.
+tests/cases/compiler/constEnumErrors.ts(35,9): error TS1357: Numeric literal values equal to 2^53 or greater are too large to be represented accurately as an integer.
 tests/cases/compiler/constEnumErrors.ts(40,9): error TS2477: 'const' enum member initializer was evaluated to a non-finite value.
 tests/cases/compiler/constEnumErrors.ts(41,9): error TS2477: 'const' enum member initializer was evaluated to a non-finite value.
 tests/cases/compiler/constEnumErrors.ts(42,9): error TS2478: 'const' enum member initializer was evaluated to disallowed value 'NaN'.
 
 
-==== tests/cases/compiler/constEnumErrors.ts (13 errors) ====
+==== tests/cases/compiler/constEnumErrors.ts (14 errors) ====
     const enum E {
                ~
 !!! error TS2567: Enum declarations can only merge with namespace or other enum declarations.
@@ -69,6 +70,8 @@ tests/cases/compiler/constEnumErrors.ts(42,9): error TS2478: 'const' enum member
     
     const enum NaNOrInfinity {
         A = 9007199254740992,
+            ~~~~~~~~~~~~~~~~
+!!! error TS1357: Numeric literal values equal to 2^53 or greater are too large to be represented accurately as an integer.
         B = A * A,
         C = B * B,
         D = C * C,
