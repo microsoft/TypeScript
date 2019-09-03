@@ -15587,11 +15587,14 @@ namespace ts {
                         if (inferFromMatchingType(source, (<UnionType>target).types, isTypeCloselyMatchedBy)) return;
                     }
                 }
-                else if (target.flags & TypeFlags.Intersection && some((<IntersectionType>target).types, t => !!getInferenceInfoForType(t))) {
+                else if (target.flags & TypeFlags.Intersection && some((<IntersectionType>target).types,
+                    t => !!getInferenceInfoForType(t) || (isGenericMappedType(t) && !!getInferenceInfoForType(getHomomorphicTypeVariable(t) || neverType)))) {
                     // We reduce intersection types only when they contain naked type parameters. For example, when
                     // inferring from 'string[] & { extra: any }' to 'string[] & T' we want to remove string[] and
                     // infer { extra: any } for T. But when inferring to 'string[] & Iterable<T>' we want to keep the
                     // string[] on the source side and infer string for T.
+                    // Likewise, we consider a homomorphic mapped type constrainted to the target type parameter as similar to a "naked type variable"
+                    // in such scenarios.
                     if (source.flags & TypeFlags.Intersection) {
                         // Infer between identically matching source and target constituents and remove the matching types.
                         const [sources, targets] = inferFromMatchingTypes((<IntersectionType>source).types, (<IntersectionType>target).types, isTypeIdenticalTo);
