@@ -4930,6 +4930,7 @@ namespace ts {
         affectsBindDiagnostics?: true;                          // true if this affects binding (currently same effect as `affectsSourceFile`)
         affectsSemanticDiagnostics?: true;                      // true if option affects semantic diagnostics
         affectsEmit?: true;                                     // true if the options affects emit
+        transpileOptionValue?: boolean | undefined;             // If set this means that the option should be set to this value when transpiling
     }
 
     /* @internal */
