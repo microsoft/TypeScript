@@ -46,7 +46,7 @@ namespace compiler {
 
     export class CompilationResult {
         public readonly host: fakes.CompilerHost;
-        public readonly program: ts.Program | undefined;
+        public readonly program: ts.BaseProgram | undefined;
         public readonly result: ts.EmitResult | undefined;
         public readonly options: ts.CompilerOptions;
         public readonly diagnostics: ReadonlyArray<ts.Diagnostic>;
@@ -58,7 +58,7 @@ namespace compiler {
         private _inputs: documents.TextDocument[] = [];
         private _inputsAndOutputs: collections.SortedMap<string, CompilationOutput>;
 
-        constructor(host: fakes.CompilerHost, options: ts.CompilerOptions, program: ts.Program | undefined, result: ts.EmitResult | undefined, diagnostics: ReadonlyArray<ts.Diagnostic>) {
+        constructor(host: fakes.CompilerHost, options: ts.CompilerOptions, program: ts.BaseProgram | undefined, result: ts.EmitResult | undefined, diagnostics: ReadonlyArray<ts.Diagnostic>) {
             this.host = host;
             this.program = program;
             this.result = result;
@@ -230,7 +230,7 @@ namespace compiler {
         }
     }
 
-    export function compileFiles(host: fakes.CompilerHost, rootFiles: string[] | undefined, compilerOptions: ts.CompilerOptions): CompilationResult {
+    export async function compileFiles(host: fakes.CompilerHost, rootFiles: string[] | undefined, compilerOptions: ts.CompilerOptions): Promise<CompilationResult> {
         if (compilerOptions.project || !rootFiles || rootFiles.length === 0) {
             const project = readProject(host.parseConfigHost, compilerOptions.project, compilerOptions);
             if (project) {
@@ -247,10 +247,10 @@ namespace compiler {
         return compileProject(host, { options: compilerOptions, fileNames: rootFiles || [], errors: [], });
     }
 
-    export function compileProject(host: fakes.CompilerHost, project: ts.ParsedCommandLine, configFileName?: string) {
-        const compilerOptions = { ...project.options };
+    export async function compileProject(host: fakes.CompilerHost, project: ts.ParsedCommandLine, configFileName?: string) {
+        const compilerOptions = ts.cloneCompilerOptions(project.options);
 
-        let plugins: ts.CreateProgramOptions["plugins"];
+        let plugins: ts.CreateAsyncProgramOptions["plugins"];
         if (project.plugins) {
             if (!configFileName) throw new Error("Cannot load plugins without a config file.");
             if (!host.sys.require) throw new Error("Plugins cannot be loaded if provided System does not support `require()`.");
@@ -269,13 +269,13 @@ namespace compiler {
         if (compilerOptions.skipDefaultLibCheck === undefined) compilerOptions.skipDefaultLibCheck = true;
         if (compilerOptions.noErrorTruncation === undefined) compilerOptions.noErrorTruncation = true;
 
-        const program = ts.createProgram({
+        const program = await ts.createAsyncProgram({
             rootNames: project.fileNames || [],
             options: compilerOptions,
             host,
             plugins
         });
-        const emitResult = program.emit();
+        const emitResult = await program.emitAsync();
         const errors = ts.getPreEmitDiagnostics(program);
         return new CompilationResult(host, compilerOptions, program, emitResult, errors);
     }

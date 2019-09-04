@@ -18,8 +18,81 @@ namespace Harness.Parallel.Worker {
             }
         }
 
+        let outsideOfTests = true;
         let exceptionsHooked = false;
         hookUncaughtExceptions();
+
+        // let funcId = 0;
+        // let runnerId = 0;
+
+        // function getFuncId(func: Function & { funcId?: number }) {
+        //     return func.funcId || (func.funcId = ++funcId);
+        // }
+
+        // function getRunnerId(runner: Mocha.Runner & { runnerId?: number }) {
+        //     return runner.runnerId || (runner.runnerId = ++runnerId);
+        // }
+
+        // function indented(fn: Function & { runner?: Mocha.Runner }, level: number) {
+        //     let text = fn.toString().trim();
+        //     let lines = text.split(/\r?\n/g);
+        //     let indentation = ts.guessIndentation(lines);
+        //     if (!indentation && lines.length > 1 && (/{$/.test(lines[0].trim()) || /^{/.test(lines[1].trim())) && /}$/.test(lines[lines.length - 1])) {
+        //         indentation = ts.guessIndentation(lines.slice(1));
+        //     }
+        //     if (indentation) {
+        //         lines = [lines[0], ...lines.slice(1).map(line => line.slice(indentation))];
+        //     }
+
+        //     const runnerId = fn.runner && getRunnerId(fn.runner);
+        //     if (runnerId) {
+        //         lines = [`// runner: ${runnerId}`, ...lines];
+        //     }
+
+        //     const id = getFuncId(fn);
+        //     lines = [`// id: ${id}`, ...lines];
+
+        //     return lines
+        //         .map(line => ts.getIndentString(level) + line)
+        //         .join("\n");
+        // }
+
+        // const savedOn = process.on;
+        // const savedOff = process.off;
+        // process.addListener = process.on = (n: string, f: Function, ...args: any[]) => {
+        //     let countBefore = 0;
+        //     if (n === "uncaughtException") {
+        //         countBefore = process.listenerCount(n);
+        //     }
+        //     const result = savedOn.call(process, n, f, ...args);
+        //     if (n === "uncaughtException") {
+        //         const countAfter = process.listenerCount(n);
+        //         const added = countAfter > countBefore;
+        //         console.trace(`${added ? "added" : "failed to add"} ${n} (before: ${countBefore}, after: ${countAfter}):\n${indented(f, 1)}`);
+        //     }
+        //     return result;
+        // };
+        // process.removeListener = process.off = (n: string, f: Function, ...args: any[]) => {
+        //     let countBefore = 0;
+        //     if (n === "uncaughtException") {
+        //         countBefore = process.listenerCount(n);
+        //     }
+        //     const result = savedOff.call(process, n, f, ...args);
+        //     if (n === "uncaughtException") {
+        //         const countAfter = process.listenerCount(n);
+        //         const removed = countAfter < countBefore;
+        //         const funcs = removed ? undefined : process.listeners(n);
+        //         console.trace(`${removed ? "removed" : "failed to remove"} ${n} (before: ${countBefore}, after: ${countAfter}):\n${indented(f, 1)}${removed ? "" : `\n\n    registered listeners:\n${ts.some(funcs) ? funcs.map(f => indented(f, 2)).join('\n') : '    <none>'}`}`);
+        //     }
+        //     return result;
+        // }
+
+        process.on("warning", e => {
+            if (e.name === "DeprecationWarning") return;
+            console.warn(e.stack);
+            process.exit(-1);
+        });
+
 
         // tslint:disable-next-line:variable-name - Capitalization is aligned with the global `Mocha` namespace for typespace/namespace references.
         const Mocha = require("mocha") as typeof import("mocha");
@@ -187,16 +260,38 @@ namespace Harness.Parallel.Worker {
             runSuite(task, suite, fn);
         }
 
+        class Runner extends Mocha.Runner {
+            private _endEmitted = false;
+            uncaught(err: any) {
+                this.abort();
+                super.uncaught(err);
+            }
+            run(fn?: (failures: number) => void) {
+                this._endEmitted = false;
+                return super.run(fn);
+            }
+            emit(name: string, ...args: any[]) {
+                if (name === "end" && this._endEmitted) {
+                    return this.listenerCount("end") > 0;
+                }
+                const result = super.emit(name, ...args);
+                if (name === "end") {
+                    this._endEmitted = true;
+                }
+                return result;
+            }
+        }
+
         function runSuite(task: Task, suite: Mocha.Suite, fn: (result: TaskResult) => void) {
             const errors: ErrorInfo[] = [];
             const passes: TestInfo[] = [];
             const start = +new Date();
-            const runner = new Mocha.Runner(suite, /*delay*/ false);
+            const runner = new Runner(suite, /*delay*/ false);
             const uncaught = (err: any) => runner.uncaught(err);
 
             runner
                 .on("start", () => {
-                    unhookUncaughtExceptions(); // turn off global uncaught handling
+                    outsideOfTests = false;
                     process.on("unhandledRejection", uncaught); // turn on unhandled rejection handling (not currently handled in mocha)
                 })
                 .on("pass", (test: Mocha.Test) => {
@@ -205,10 +300,12 @@ namespace Harness.Parallel.Worker {
                 .on("fail", (test: Mocha.Test | Mocha.Hook, err: any) => {
                     errors.push({ name: test.titlePath(), error: err.message, stack: err.stack });
                 })
-                .on("end", () => {
+                .on("end", ts.memoize(() => {
+                    // Mocha sends the end event twice if there is an unhandled error. We should wait until
+                    // the final end event before we signal completion
                     process.removeListener("unhandledRejection", uncaught);
-                    hookUncaughtExceptions();
-                })
+                    outsideOfTests = true;
+                }))
                 .run(() => {
                     fn({ task, errors, passes, passing: passes.length, duration: +new Date() - start });
                 });
@@ -249,7 +346,9 @@ namespace Harness.Parallel.Worker {
             switch (message.type) {
                 case "test": return processTest(message.payload, /*last*/ true);
                 case "batch": return processBatch(message.payload);
-                case "close": return process.exit(0);
+                case "close":
+                    unhookUncaughtExceptions();
+                    return process.exit(0);
             }
         }
 
@@ -270,8 +369,10 @@ namespace Harness.Parallel.Worker {
         }
 
         function handleUncaughtException(err: any) {
-            const error = err instanceof Error ? err : new Error("" + err);
-            sendMessage({ type: "error", payload: { error: error.message, stack: error.stack! } });
+            if (outsideOfTests) {
+                const error = err instanceof Error ? err : new Error("" + err);
+                sendMessage({ type: "error", payload: { error: error.message, stack: error.stack! } });
+            }
         }
 
         function sendMessage(message: ParallelClientMessage) {

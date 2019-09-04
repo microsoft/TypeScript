@@ -3192,9 +3192,13 @@
         "category": "Error",
         "code": 5078
     },
-    "Plugin '{0}' failed while executing the '{1}' hook: {2}": {
+    "Plugin '{0}' could not be loaded": {
         "category": "Error",
         "code": 5079
+    },
+    "Plugin '{0}' failed while executing the '{1}' hook: {2}": {
+        "category": "Error",
+        "code": 5080
     },
 
     "Generates a sourcemap for each corresponding '.d.ts' file.": {

@@ -1,6 +1,6 @@
 describe("unittests:: evaluation:: forOfEvaluation", () => {
-    it("es5 over a array with no Symbol", () => {
-        const result = evaluator.evaluateTypeScript(`
+    it("es5 over a array with no Symbol", async () => {
+        const result = await evaluator.evaluateTypeScript(`
             Symbol = undefined;
             export var output = [];
             export function main() {
@@ -20,8 +20,8 @@ describe("unittests:: evaluation:: forOfEvaluation", () => {
 
     });
 
-    it("es5 over a string with no Symbol", () => {
-        const result = evaluator.evaluateTypeScript(`
+    it("es5 over a string with no Symbol", async () => {
+        const result = await evaluator.evaluateTypeScript(`
             Symbol = undefined;
             export var output = [];
             export function main() {
@@ -42,8 +42,8 @@ describe("unittests:: evaluation:: forOfEvaluation", () => {
         assert.strictEqual(result.output[4], "o");
     });
 
-    it("es5 over undefined with no Symbol", () => {
-        const result = evaluator.evaluateTypeScript(`
+    it("es5 over undefined with no Symbol", async () => {
+        const result = await evaluator.evaluateTypeScript(`
         Symbol = undefined;
         export function main() {
             let x = undefined;
@@ -56,8 +56,8 @@ describe("unittests:: evaluation:: forOfEvaluation", () => {
         assert.throws(() => result.main(), "Symbol.iterator is not defined");
     });
 
-    it("es5 over undefined with Symbol", () => {
-        const result = evaluator.evaluateTypeScript(`
+    it("es5 over undefined with Symbol", async () => {
+        const result = await evaluator.evaluateTypeScript(`
         export function main() {
             let x = undefined;
 
@@ -69,8 +69,8 @@ describe("unittests:: evaluation:: forOfEvaluation", () => {
         assert.throws(() => result.main(), /cannot read property.*Symbol\(Symbol\.iterator\).*/i);
     });
 
-    it("es5 over object with no Symbol.iterator with no Symbol", () => {
-        const result = evaluator.evaluateTypeScript(`
+    it("es5 over object with no Symbol.iterator with no Symbol", async () => {
+        const result = await evaluator.evaluateTypeScript(`
         Symbol = undefined;
         export function main() {
             let x = {} as any;
@@ -83,8 +83,8 @@ describe("unittests:: evaluation:: forOfEvaluation", () => {
         assert.throws(() => result.main(), "Symbol.iterator is not defined");
     });
 
-    it("es5 over object with no Symbol.iterator with Symbol", () => {
-        const result = evaluator.evaluateTypeScript(`
+    it("es5 over object with no Symbol.iterator with Symbol", async () => {
+        const result = await evaluator.evaluateTypeScript(`
         export function main() {
             let x = {} as any;
 
@@ -96,8 +96,8 @@ describe("unittests:: evaluation:: forOfEvaluation", () => {
         assert.throws(() => result.main(), "Object is not iterable");
     });
 
-    it("es5 over object with Symbol.iterator", () => {
-        const result = evaluator.evaluateTypeScript(`
+    it("es5 over object with Symbol.iterator", async () => {
+        const result = await evaluator.evaluateTypeScript(`
             export var output = [];
             export function main() {
                 let thing : any = {};

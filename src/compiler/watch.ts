@@ -107,7 +107,7 @@ namespace ts {
     /**
      * Program structure needed to emit the files and report diagnostics
      */
-    export interface ProgramToEmitFilesAndReportErrors {
+    export interface BaseProgramToEmitFilesAndReportErrors {
         getCurrentDirectory(): string;
         getCompilerOptions(): CompilerOptions;
         getSourceFiles(): ReadonlyArray<SourceFile>;
@@ -116,10 +116,17 @@ namespace ts {
         getGlobalDiagnostics(cancellationToken?: CancellationToken): ReadonlyArray<Diagnostic>;
         getSemanticDiagnostics(sourceFile?: SourceFile, cancellationToken?: CancellationToken): ReadonlyArray<Diagnostic>;
         getConfigFileParsingDiagnostics(): ReadonlyArray<Diagnostic>;
+    }
+
+    export interface ProgramToEmitFilesAndReportErrors extends BaseProgramToEmitFilesAndReportErrors {
         emit(targetSourceFile?: SourceFile, writeFile?: WriteFileCallback, cancellationToken?: CancellationToken, emitOnlyDtsFiles?: boolean, customTransformers?: CustomTransformers): EmitResult;
     }
 
-    export function listFiles(program: ProgramToEmitFilesAndReportErrors, writeFileName: (s: string) => void) {
+    export interface AsyncProgramToEmitFilesAndReportErrors extends BaseProgramToEmitFilesAndReportErrors {
+        emitAsync(targetSourceFile?: SourceFile, writeFile?: WriteFileCallback, cancellationToken?: CancellationToken, emitOnlyDtsFiles?: boolean, customTransformers?: CustomTransformers): Promise<EmitResult>;
+    }
+
+    export function listFiles(program: BaseProgramToEmitFilesAndReportErrors, writeFileName: (s: string) => void) {
         if (program.getCompilerOptions().listFiles) {
             forEach(program.getSourceFiles(), file => {
                 writeFileName(file.fileName);
@@ -127,19 +134,16 @@ namespace ts {
         }
     }
 
-    /**
-     * Helper that emit files, report diagnostics and lists emitted and/or source files depending on compiler options
-     */
-    export function emitFilesAndReportErrors(
-        program: ProgramToEmitFilesAndReportErrors,
-        reportDiagnostic: DiagnosticReporter,
-        writeFileName?: (s: string) => void,
-        reportSummary?: ReportEmitErrorSummary,
-        writeFile?: WriteFileCallback,
-        cancellationToken?: CancellationToken,
-        emitOnlyDtsFiles?: boolean,
-        customTransformers?: CustomTransformers
-    ) {
+    interface EmitFilesAndReportErrorsResult {
+        emitResult: EmitResult;
+        diagnostics: Diagnostic[];
+    }
+
+    function isAsyncProgramToEmitFilesAndReportErrors(program: ProgramToEmitFilesAndReportErrors | AsyncProgramToEmitFilesAndReportErrors): program is AsyncProgramToEmitFilesAndReportErrors {
+        return typeof (program as AsyncProgramToEmitFilesAndReportErrors).emitAsync === "function";
+    }
+
+    function beforeEmitFilesAndReportErrors(program: BaseProgramToEmitFilesAndReportErrors, cancellationToken?: CancellationToken) {
         // First get and report any syntactic errors.
         const diagnostics = program.getConfigFileParsingDiagnostics().slice();
         const configFileParsingDiagnosticsLength = diagnostics.length;
@@ -155,9 +159,17 @@ namespace ts {
                 addRange(diagnostics, program.getSemanticDiagnostics(/*sourceFile*/ undefined, cancellationToken));
             }
         }
+        return diagnostics;
+    }
 
-        // Emit and report any errors we ran into.
-        const emitResult = program.emit(/*targetSourceFile*/ undefined, writeFile, cancellationToken, emitOnlyDtsFiles, customTransformers);
+    function afterEmitFilesAndReportErrors(
+        program: BaseProgramToEmitFilesAndReportErrors,
+        diagnostics: Diagnostic[],
+        emitResult: EmitResult,
+        reportDiagnostic: DiagnosticReporter,
+        writeFileName: ((s: string) => void) | undefined,
+        reportSummary: ReportEmitErrorSummary | undefined
+    ): EmitFilesAndReportErrorsResult {
         const { emittedFiles, diagnostics: emitDiagnostics } = emitResult;
         addRange(diagnostics, emitDiagnostics);
 
@@ -181,7 +193,12 @@ namespace ts {
         };
     }
 
-    export function emitFilesAndReportErrorsAndGetExitStatus(
+    // TODO(rbuckton): Should we deprecate this in favor of only the Async API?
+    /**
+     * Helper that emit files, report diagnostics and lists emitted and/or source files depending on compiler options
+     * @deprecated use `emitFilesAndReportErrorsAsync` instead.
+     */
+    export function emitFilesAndReportErrors(
         program: ProgramToEmitFilesAndReportErrors,
         reportDiagnostic: DiagnosticReporter,
         writeFileName?: (s: string) => void,
@@ -190,18 +207,36 @@ namespace ts {
         cancellationToken?: CancellationToken,
         emitOnlyDtsFiles?: boolean,
         customTransformers?: CustomTransformers
-    ) {
-        const { emitResult, diagnostics } = emitFilesAndReportErrors(
-            program,
-            reportDiagnostic,
-            writeFileName,
-            reportSummary,
-            writeFile,
-            cancellationToken,
-            emitOnlyDtsFiles,
-            customTransformers
-        );
+    ): EmitFilesAndReportErrorsResult {
+        const diagnostics = beforeEmitFilesAndReportErrors(program, cancellationToken);
+        // Emit and report any errors we ran into.
+        const emitResult = program.emit(/*targetSourceFile*/ undefined, writeFile, cancellationToken, emitOnlyDtsFiles, customTransformers);
+        return afterEmitFilesAndReportErrors(program, diagnostics, emitResult, reportDiagnostic, writeFileName, reportSummary);
+    }
 
+    /**
+     * Helper that emit files, report diagnostics and lists emitted and/or source files depending on compiler options
+     * using an `AsyncProgram`.
+     */
+    export async function emitFilesAndReportErrorsAsync(
+        program: ProgramToEmitFilesAndReportErrors | AsyncProgramToEmitFilesAndReportErrors,
+        reportDiagnostic: DiagnosticReporter,
+        writeFileName?: (s: string) => void,
+        reportSummary?: ReportEmitErrorSummary,
+        writeFile?: WriteFileCallback,
+        cancellationToken?: CancellationToken,
+        emitOnlyDtsFiles?: boolean,
+        customTransformers?: CustomTransformers
+    ): Promise<EmitFilesAndReportErrorsResult> {
+        const diagnostics = beforeEmitFilesAndReportErrors(program, cancellationToken);
+        // Emit and report any errors we ran into.
+        const emitResult = isAsyncProgramToEmitFilesAndReportErrors(program)
+            ? await program.emitAsync(/*targetSourceFile*/ undefined, writeFile, cancellationToken, emitOnlyDtsFiles, customTransformers)
+            : program.emit(/*targetSourceFile*/ undefined, writeFile, cancellationToken, emitOnlyDtsFiles, customTransformers);
+        return afterEmitFilesAndReportErrors(program, diagnostics, emitResult, reportDiagnostic, writeFileName, reportSummary);
+    }
+
+    function getExitStatus({ emitResult, diagnostics }: { emitResult: EmitResult, diagnostics: Diagnostic []}) {
         if (emitResult.emitSkipped && diagnostics.length > 0) {
             // If the emitter didn't emit anything, then pass that value along.
             return ExitStatus.DiagnosticsPresent_OutputsSkipped;
@@ -212,6 +247,51 @@ namespace ts {
             return ExitStatus.DiagnosticsPresent_OutputsGenerated;
         }
         return ExitStatus.Success;
+    }
+
+    /** @deprecated use `emitFilesAndReportErrorsAndGetExitStatusAsync` instead. */
+    export function emitFilesAndReportErrorsAndGetExitStatus(
+        program: ProgramToEmitFilesAndReportErrors,
+        reportDiagnostic: DiagnosticReporter,
+        writeFileName?: (s: string) => void,
+        reportSummary?: ReportEmitErrorSummary,
+        writeFile?: WriteFileCallback,
+        cancellationToken?: CancellationToken,
+        emitOnlyDtsFiles?: boolean,
+        customTransformers?: CustomTransformers
+    ) {
+        return getExitStatus(emitFilesAndReportErrors(
+            program,
+            reportDiagnostic,
+            writeFileName,
+            reportSummary,
+            writeFile,
+            cancellationToken,
+            emitOnlyDtsFiles,
+            customTransformers
+        ));
+    }
+
+    export async function emitFilesAndReportErrorsAndGetExitStatusAsync(
+        program: ProgramToEmitFilesAndReportErrors | AsyncProgramToEmitFilesAndReportErrors,
+        reportDiagnostic: DiagnosticReporter,
+        writeFileName?: (s: string) => void,
+        reportSummary?: ReportEmitErrorSummary,
+        writeFile?: WriteFileCallback,
+        cancellationToken?: CancellationToken,
+        emitOnlyDtsFiles?: boolean,
+        customTransformers?: CustomTransformers
+    ): Promise<ExitStatus> {
+        return getExitStatus(await emitFilesAndReportErrorsAsync(
+            program,
+            reportDiagnostic,
+            writeFileName,
+            reportSummary,
+            writeFile,
+            cancellationToken,
+            emitOnlyDtsFiles,
+            customTransformers
+        ));
     }
 
     export const noopFileWatcher: FileWatcher = { close: noop };

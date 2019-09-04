@@ -22,17 +22,19 @@ namespace ts.performance {
     export interface Timer {
         enter(): void;
         exit(): void;
+        wrap<F extends (...args: any[]) => any>(f: F): F;
     }
 
-    export function createTimerIf(condition: boolean, measureName: string, startMarkName: string, endMarkName: string) {
+    export function createTimerIf(condition: boolean, measureName: string, startMarkName?: string, endMarkName?: string) {
         return condition ? createTimer(measureName, startMarkName, endMarkName) : nullTimer;
     }
 
-    export function createTimer(measureName: string, startMarkName: string, endMarkName: string): Timer {
+    export function createTimer(measureName: string, startMarkName = `${measureName}:start`, endMarkName = `${measureName}:end`): Timer {
         let enterCount = 0;
         return {
             enter,
-            exit
+            exit,
+            wrap
         };
 
         function enter() {
@@ -50,9 +52,34 @@ namespace ts.performance {
                 Debug.fail("enter/exit count does not match.");
             }
         }
+
+        function wrap<F extends (this: any, ...args: any[]) => any>(f: F): F {
+            return function (...args) {
+                enter();
+                let result: any;
+                try {
+                    result = f.apply(this, args);
+                }
+                catch (e) {
+                    exit();
+                    throw e;
+                }
+                return continueWith(result, exitAndReturn, exitAndThrow);
+            } as F;
+        }
+
+        function exitAndReturn<T>(value: T) {
+            exit();
+            return value;
+        }
+
+        function exitAndThrow(value: any) {
+            exit();
+            return value;
+        }
     }
 
-    export const nullTimer: Timer = { enter: noop, exit: noop };
+    export const nullTimer: Timer = { enter: noop, exit: noop, wrap: identity };
 
     /**
      * Marks a performance event.

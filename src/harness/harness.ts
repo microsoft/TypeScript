@@ -809,7 +809,7 @@ namespace Harness {
             fileOptions?: any;
         }
 
-        export function compileFiles(
+        export async function compileFiles(
             inputFiles: TestFile[],
             otherFiles: TestFile[],
             harnessSettings: TestCaseParser.CompilerSettings | undefined,
@@ -819,7 +819,7 @@ namespace Harness {
             symlinks?: vfs.FileSet,
             plugins?: ts.ParsedCommandLine["plugins"],
             configFileName?: string
-        ): compiler.CompilationResult {
+        ): Promise<compiler.CompilationResult> {
             const options: ts.CompilerOptions & HarnessOptions = compilerOptions ? ts.cloneCompilerOptions(compilerOptions) : { noResolve: false };
             options.target = options.target || ts.ScriptTarget.ES3;
             options.newLine = options.newLine || ts.NewLineKind.CarriageReturnLineFeed;
@@ -863,8 +863,8 @@ namespace Harness {
             const sys = new fakes.System(fs, { useFakeLoader: !!(plugins && configFileName) });
             const host = new fakes.CompilerHost(sys, options);
             const result = plugins && configFileName
-                ? compiler.compileProject(host, { options, fileNames: programFileNames, errors: [], plugins }, configFileName)
-                : compiler.compileFiles(host, programFileNames, options);
+                ? await compiler.compileProject(host, { options, fileNames: programFileNames, errors: [], plugins }, configFileName)
+                : await compiler.compileFiles(host, programFileNames, options);
             result.symlinks = symlinks;
             return result;
         }
@@ -948,12 +948,9 @@ namespace Harness {
             }
         }
 
-        export function compileDeclarationFiles(context: DeclarationCompilationContext | undefined, symlinks: vfs.FileSet | undefined) {
-            if (!context) {
-                return;
-            }
+        export async function compileDeclarationFiles(context: DeclarationCompilationContext, symlinks: vfs.FileSet | undefined) {
             const { declInputFiles, declOtherFiles, harnessSettings, options, currentDirectory } = context;
-            const output = compileFiles(declInputFiles, declOtherFiles, harnessSettings, options, currentDirectory, symlinks);
+            const output = await compileFiles(declInputFiles, declOtherFiles, harnessSettings, options, currentDirectory, symlinks);
             return { declInputFiles, declOtherFiles, declResult: output };
         }
 
@@ -1135,7 +1132,7 @@ namespace Harness {
                 !errors || (errors.length === 0) ? null : getErrorBaseline(inputFiles, errors, pretty));
         }
 
-        export function doTypeAndSymbolBaseline(baselinePath: string, program: ts.Program, allFiles: {unitName: string, content: string}[], opts?: Baseline.BaselineOptions, multifile?: boolean, skipTypeBaselines?: boolean, skipSymbolBaselines?: boolean, hasErrorBaseline?: boolean) {
+        export function doTypeAndSymbolBaseline(baselinePath: string, program: ts.BaseProgram, allFiles: {unitName: string, content: string}[], opts?: Baseline.BaselineOptions, multifile?: boolean, skipTypeBaselines?: boolean, skipSymbolBaselines?: boolean, hasErrorBaseline?: boolean) {
             // The full walker simulates the types that you would get from doing a full
             // compile.  The pull walker simulates the types you get when you just do
             // a type query for a random node (like how the LS would do it).  Most of the
@@ -1298,7 +1295,7 @@ namespace Harness {
             }
         }
 
-        export function doJsEmitBaseline(baselinePath: string, header: string, options: ts.CompilerOptions, result: compiler.CompilationResult, tsConfigFiles: ReadonlyArray<TestFile>, toBeCompiled: ReadonlyArray<TestFile>, otherFiles: ReadonlyArray<TestFile>, harnessSettings: TestCaseParser.CompilerSettings) {
+        export async function doJsEmitBaseline(baselinePath: string, header: string, options: ts.CompilerOptions, result: compiler.CompilationResult, tsConfigFiles: ReadonlyArray<TestFile>, toBeCompiled: ReadonlyArray<TestFile>, otherFiles: ReadonlyArray<TestFile>, harnessSettings: TestCaseParser.CompilerSettings) {
             if (!options.noEmit && !options.emitDeclarationOnly && result.js.size === 0 && result.diagnostics.length === 0) {
                 throw new Error("Expected at least one js file to be emitted or at least one error to be created.");
             }
@@ -1339,8 +1336,8 @@ namespace Harness {
             const declFileContext = prepareDeclarationCompilationContext(
                 toBeCompiled, otherFiles, result, harnessSettings, options, /*currentDirectory*/ undefined
             );
-            const declFileCompilationResult = compileDeclarationFiles(declFileContext, result.symlinks);
 
+            const declFileCompilationResult = declFileContext && await compileDeclarationFiles(declFileContext, result.symlinks);
             if (declFileCompilationResult && declFileCompilationResult.declResult.diagnostics.length) {
                 jsCode += "\r\n\r\n//// [DtsFileErrors]\r\n";
                 jsCode += "\r\n\r\n";

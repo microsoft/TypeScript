@@ -4,6 +4,8 @@
         "outFile": "../../built/local/services.js"
     },
     "references": [
+        { "path": "../promiseShim" },
+        { "path": "../mapShim" },
         { "path": "../compiler" },
         { "path": "../jsTyping" }
     ],
@@ -93,5 +95,6 @@
         "breakpoints.ts",
         "transform.ts",
         "shims.ts",
+        "factoryCompat.ts",
     ]
 }

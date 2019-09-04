@@ -107,7 +107,7 @@ namespace ts {
     export function createTestCompilerHost(texts: ReadonlyArray<NamedSourceText>, target: ScriptTarget, oldProgram?: ProgramWithSourceTexts, useGetSourceFileByPath?: boolean) {
         const files = arrayToMap(texts, t => t.name, t => {
             if (oldProgram) {
-                let oldFile = <SourceFileWithText>oldProgram.getSourceFile(t.name);
+                let oldFile = <SourceFileWithText | undefined>oldProgram.getSourceFile(t.name);
                 if (oldFile && oldFile.redirectInfo) {
                     oldFile = oldFile.redirectInfo.unredirected;
                 }

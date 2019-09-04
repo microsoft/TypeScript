@@ -15,6 +15,7 @@ namespace ts {
     const enum TransformationState {
         Uninitialized,
         Initialized,
+        Transforming,
         Completed,
         Disposed
     }
@@ -104,11 +105,11 @@ namespace ts {
     /**
      * Wrap a transformer factory that may return a custom script or declaration transformer object.
      */
-    function wrapCustomTransformerFactory<T extends SourceFile | Bundle>(transformer: TransformerFactory<T> | CustomTransformerFactory, handleDefault: (node: Transformer<T>) => Transformer<Bundle | SourceFile>): TransformerFactory<Bundle | SourceFile> {
+    function wrapCustomTransformerFactory<T extends SourceFile | Bundle>(transformer: TransformerFactory<T> | CustomTransformerFactory, handleDefault: (context: TransformationContext, tx: Transformer<T>) => Transformer<Bundle | SourceFile>): TransformerFactory<Bundle | SourceFile> {
         return context => {
             const customTransformer = transformer(context);
             return typeof customTransformer === "function"
-                ? handleDefault(customTransformer)
+                ? handleDefault(context, customTransformer)
                 : wrapCustomTransformer(customTransformer);
         };
     }
@@ -118,7 +119,7 @@ namespace ts {
     }
 
     function wrapDeclarationTransformerFactory(transformer: TransformerFactory<Bundle | SourceFile> | CustomTransformerFactory): TransformerFactory<Bundle | SourceFile> {
-        return wrapCustomTransformerFactory(transformer, identity);
+        return wrapCustomTransformerFactory(transformer, (_, node) => node);
     }
 
     export function noEmitSubstitution(_hint: EmitHint, node: Node) {
@@ -127,6 +128,35 @@ namespace ts {
 
     export function noEmitNotification(hint: EmitHint, node: Node, callback: (hint: EmitHint, node: Node) => void) {
         callback(hint, node);
+    }
+
+    export interface NodeTransformer<T extends Node> {
+        diagnostics: DiagnosticWithLocation[];
+        transformNodes(nodes: ReadonlyArray<T>): T[];
+        transformNode(node: T): T;
+        markComplete(): void;
+
+        /**
+         * Gets a substitute for a node, if one is available; otherwise, returns the original node.
+         *
+         * @param hint A hint as to the intended usage of the node.
+         * @param node The node to substitute.
+         */
+        substituteNode(hint: EmitHint, node: Node): Node;
+
+        /**
+         * Emits a node with possible notification.
+         *
+         * @param hint A hint as to the intended usage of the node.
+         * @param node The node to emit.
+         * @param emitCallback A callback used to emit the node.
+         */
+        emitNodeWithNotification(hint: EmitHint, node: Node, emitCallback: (hint: EmitHint, node: Node) => void): void;
+
+        /**
+         * Clean up EmitNode entries on any parse-tree nodes.
+         */
+        dispose(): void;
     }
 
     /**
@@ -139,7 +169,7 @@ namespace ts {
      * @param transforms An array of `TransformerFactory` callbacks.
      * @param allowDtsFiles A value indicating whether to allow the transformation of .d.ts files.
      */
-    export function transformNodes<T extends Node>(resolver: EmitResolver | undefined, host: EmitHost | undefined, options: CompilerOptions, nodes: ReadonlyArray<T>, transformers: ReadonlyArray<TransformerFactory<T>>, allowDtsFiles: boolean): TransformationResult<T> {
+    export function createNodeTransformer<T extends Node>(resolver: EmitResolver | undefined, host: EmitHost | undefined, factory: NodeFactory, options: CompilerOptions, transformers: ReadonlyArray<TransformerFactory<T>>, allowDtsFiles: boolean): NodeTransformer<T> {
         const enabledSyntaxKindFeatures = new Array<SyntaxKindFeatureFlags>(SyntaxKind.Count);
         let lexicalEnvironmentVariableDeclarations: VariableDeclaration[];
         let lexicalEnvironmentFunctionDeclarations: FunctionDeclaration[];
@@ -156,9 +186,11 @@ namespace ts {
         // The transformation context is provided to each transformer as part of transformer
         // initialization.
         const context: TransformationContext = {
+            factory,
             getCompilerOptions: () => options,
             getEmitResolver: () => resolver!, // TODO: GH#18217
             getEmitHost: () => host!, // TODO: GH#18217
+            getEmitHelperFactory: memoize(() => createEmitHelperFactory(context)),
             startLexicalEnvironment,
             suspendLexicalEnvironment,
             resumeLexicalEnvironment,
@@ -184,16 +216,11 @@ namespace ts {
                 onEmitNode = value;
             },
             addDiagnostic(diag) {
-                diagnostics.push(diag);
+                if (diagnostics) {
+                    diagnostics.push(diag);
+                }
             }
         };
-
-        // Ensure the parse tree is clean before applying transformations
-        for (const node of nodes) {
-            disposeEmitNodes(getSourceFileOfNode(getParseTreeNode(node)));
-        }
-
-        performance.mark("beforeTransform");
 
         // Chain together and initialize each transformer.
         const transformersWithContext = transformers.map(t => t(context));
@@ -207,22 +234,41 @@ namespace ts {
         // prevent modification of transformation hooks.
         state = TransformationState.Initialized;
 
-        // Transform each node.
-        const transformed = map(nodes, allowDtsFiles ? transformation : transformRoot);
-
-        // prevent modification of the lexical environment.
-        state = TransformationState.Completed;
-
-        performance.mark("afterTransform");
-        performance.measure("transformTime", "beforeTransform", "afterTransform");
-
         return {
-            transformed,
+            diagnostics,
+            transformNode,
+            transformNodes,
+            markComplete: () => { state = TransformationState.Completed; },
             substituteNode,
             emitNodeWithNotification,
-            dispose,
-            diagnostics
+            dispose
         };
+
+        function transformNodes(nodes: ReadonlyArray<T>) {
+            Debug.assert(state !== TransformationState.Transforming, "Cannot reenter 'transformNode' during a transformation.");
+            Debug.assert(state === TransformationState.Initialized, "Cannot transform a node after transformation has complete.");
+            const savedState = state;
+            try {
+                state = TransformationState.Transforming;
+                return map(nodes, allowDtsFiles ? transformation : transformRoot);
+            }
+            finally {
+                state = savedState;
+            }
+        }
+
+        function transformNode(node: T) {
+            Debug.assert(state !== TransformationState.Transforming, "Cannot reenter 'transformNode' during a transformation.");
+            Debug.assert(state === TransformationState.Initialized, "Cannot transform a node after transformation has complete.");
+            const savedState = state;
+            try {
+                state = TransformationState.Transforming;
+                return allowDtsFiles ? transformation(node) : transformRoot(node);
+            }
+            finally {
+                state = savedState;
+            }
+        }
 
         function transformRoot(node: T) {
             return node && (!isSourceFile(node) || !node.isDeclarationFile) ? transformation(node) : node;
@@ -298,7 +344,7 @@ namespace ts {
         function hoistVariableDeclaration(name: Identifier): void {
             Debug.assert(state > TransformationState.Uninitialized, "Cannot modify the lexical environment during initialization.");
             Debug.assert(state < TransformationState.Completed, "Cannot modify the lexical environment after transformation has completed.");
-            const decl = setEmitFlags(createVariableDeclaration(name), EmitFlags.NoNestedSourceMaps);
+            const decl = setEmitFlags(factory.createVariableDeclaration(name), EmitFlags.NoNestedSourceMaps);
             if (!lexicalEnvironmentVariableDeclarations) {
                 lexicalEnvironmentVariableDeclarations = [decl];
             }
@@ -373,9 +419,9 @@ namespace ts {
                 }
 
                 if (lexicalEnvironmentVariableDeclarations) {
-                    const statement = createVariableStatement(
+                    const statement = factory.createVariableStatement(
                         /*modifiers*/ undefined,
-                        createVariableDeclarationList(lexicalEnvironmentVariableDeclarations)
+                        factory.createVariableDeclarationList(lexicalEnvironmentVariableDeclarations)
                     );
 
                     setEmitFlags(statement, EmitFlags.CustomPrologue);
@@ -417,11 +463,6 @@ namespace ts {
 
         function dispose() {
             if (state < TransformationState.Disposed) {
-                // Clean up emit nodes on parse tree
-                for (const node of nodes) {
-                    disposeEmitNodes(getSourceFileOfNode(getParseTreeNode(node)));
-                }
-
                 // Release references to external entries for GC purposes.
                 lexicalEnvironmentVariableDeclarations = undefined!;
                 lexicalEnvironmentVariableDeclarationsStack = undefined!;
@@ -436,4 +477,76 @@ namespace ts {
             }
         }
     }
+
+    /**
+     * Transforms an array of SourceFiles by passing them through each transformer.
+     *
+     * @param resolver The emit resolver provided by the checker.
+     * @param host The emit host object used to interact with the file system.
+     * @param options Compiler options to surface in the `TransformationContext`.
+     * @param nodes An array of nodes to transform.
+     * @param transforms An array of `TransformerFactory` callbacks.
+     * @param allowDtsFiles A value indicating whether to allow the transformation of .d.ts files.
+     */
+    export function transformNodes<T extends Node>(resolver: EmitResolver | undefined, host: EmitHost | undefined, factory: NodeFactory, options: CompilerOptions, nodes: ReadonlyArray<T>, transformers: ReadonlyArray<TransformerFactory<T>>, allowDtsFiles: boolean): TransformationResult<T> {
+        // Ensure the parse tree is clean before applying transformations
+        for (const node of nodes) {
+            disposeEmitNodes(getSourceFileOfNode(getParseTreeNode(node)));
+        }
+
+        let disposed = false;
+
+        performance.mark("beforeTransform");
+
+        const tx = createNodeTransformer(resolver, host, factory, options, transformers, allowDtsFiles);
+        const transformed = tx.transformNodes(nodes);
+        tx.markComplete();
+
+        performance.mark("afterTransform");
+        performance.measure("transformTime", "beforeTransform", "afterTransform");
+
+        return {
+            transformed,
+            substituteNode: tx.substituteNode,
+            emitNodeWithNotification: tx.emitNodeWithNotification,
+            dispose,
+            diagnostics: tx.diagnostics
+        };
+
+        function dispose() {
+            if (!disposed) {
+                // Clean up emit nodes on parse tree
+                for (const node of nodes) {
+                    disposeEmitNodes(getSourceFileOfNode(getParseTreeNode(node)));
+                }
+
+                tx.dispose();
+                disposed = true;
+            }
+        }
+    }
+
+    /* @internal */
+    export const nullTransformationContext: TransformationContext = {
+        factory: syntheticNodeFactory,
+        getEmitHelperFactory: notImplemented,
+        enableEmitNotification: noop,
+        enableSubstitution: noop,
+        endLexicalEnvironment: returnUndefined,
+        getCompilerOptions: notImplemented,
+        getEmitHost: notImplemented,
+        getEmitResolver: notImplemented,
+        hoistFunctionDeclaration: noop,
+        hoistVariableDeclaration: noop,
+        isEmitNotificationEnabled: notImplemented,
+        isSubstitutionEnabled: notImplemented,
+        onEmitNode: noop,
+        onSubstituteNode: notImplemented,
+        readEmitHelpers: notImplemented,
+        requestEmitHelper: noop,
+        resumeLexicalEnvironment: noop,
+        startLexicalEnvironment: noop,
+        suspendLexicalEnvironment: noop,
+        addDiagnostic: noop,
+    };
 }

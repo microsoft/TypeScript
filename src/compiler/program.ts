@@ -317,9 +317,9 @@ namespace ts {
     }
 
     // tslint:disable unified-signatures
-    export function getPreEmitDiagnostics(program: Program, sourceFile?: SourceFile, cancellationToken?: CancellationToken): ReadonlyArray<Diagnostic>;
+    export function getPreEmitDiagnostics(program: BaseProgram, sourceFile?: SourceFile, cancellationToken?: CancellationToken): ReadonlyArray<Diagnostic>;
     /*@internal*/ export function getPreEmitDiagnostics(program: BuilderProgram, sourceFile?: SourceFile, cancellationToken?: CancellationToken): ReadonlyArray<Diagnostic>;
-    export function getPreEmitDiagnostics(program: Program | BuilderProgram, sourceFile?: SourceFile, cancellationToken?: CancellationToken): ReadonlyArray<Diagnostic> {
+    export function getPreEmitDiagnostics(program: BaseProgram | BuilderProgram, sourceFile?: SourceFile, cancellationToken?: CancellationToken): ReadonlyArray<Diagnostic> {
         const diagnostics = [
             ...program.getConfigFileParsingDiagnostics(),
             ...program.getOptionsDiagnostics(cancellationToken),
@@ -664,7 +664,7 @@ namespace ts {
     /**
      * Determine if source file needs to be re-created even if its text hasn't changed
      */
-    function shouldProgramCreateNewSourceFiles(program: Program | undefined, newOptions: CompilerOptions): boolean {
+    function shouldProgramCreateNewSourceFiles(program: BaseProgram | undefined, newOptions: CompilerOptions): boolean {
         if (!program) return false;
         // If any compiler options change, we can't reuse old source file even if version match
         // The change in options like these could result in change in syntax tree or `sourceFile.bindDiagnostics`.
@@ -672,6 +672,7 @@ namespace ts {
         return !!sourceFileAffectingCompilerOptions.some(option =>
             !isJsonEqual(getCompilerOptionValue(oldOptions, option), getCompilerOptionValue(newOptions, option)));
     }
+
 
     function createCreateProgramOptions(rootNames: ReadonlyArray<string>, options: CompilerOptions, host?: CompilerHost, oldProgram?: Program, configFileParsingDiagnostics?: ReadonlyArray<Diagnostic>): CreateProgramOptions {
         return {
@@ -683,38 +684,77 @@ namespace ts {
         };
     }
 
-    /**
-     * Create a new 'Program' instance. A Program is an immutable collection of 'SourceFile's and a 'CompilerOptions'
-     * that represent a compilation unit.
-     *
-     * Creating a program proceeds from a set of root files, expanding the set of inputs by following imports and
-     * triple-slash-reference-path directives transitively. '@types' and triple-slash-reference-types are also pulled in.
-     *
-     * @param createProgramOptions - The options for creating a program.
-     * @returns A 'Program' object.
-     */
-    export function createProgram(createProgramOptions: CreateProgramOptions): Program;
-    /**
-     * Create a new 'Program' instance. A Program is an immutable collection of 'SourceFile's and a 'CompilerOptions'
-     * that represent a compilation unit.
-     *
-     * Creating a program proceeds from a set of root files, expanding the set of inputs by following imports and
-     * triple-slash-reference-path directives transitively. '@types' and triple-slash-reference-types are also pulled in.
-     *
-     * @param rootNames - A set of root files.
-     * @param options - The compiler options which should be used.
-     * @param host - The host interacts with the underlying file system.
-     * @param oldProgram - Reuses an old program structure.
-     * @param configFileParsingDiagnostics - error during config file parsing
-     * @returns A 'Program' object.
-     */
-    export function createProgram(rootNames: ReadonlyArray<string>, options: CompilerOptions, host?: CompilerHost, oldProgram?: Program, configFileParsingDiagnostics?: ReadonlyArray<Diagnostic>): Program;
-    export function createProgram(rootNamesOrOptions: ReadonlyArray<string> | CreateProgramOptions, _options?: CompilerOptions, _host?: CompilerHost, _oldProgram?: Program, _configFileParsingDiagnostics?: ReadonlyArray<Diagnostic>): Program {
-        const createProgramOptions = isArray(rootNamesOrOptions) ? createCreateProgramOptions(rootNamesOrOptions, _options!, _host, _oldProgram, _configFileParsingDiagnostics) : rootNamesOrOptions; // TODO: GH#18217
-        const { options, configFileParsingDiagnostics } = createProgramOptions;
-        let { rootNames, projectReferences, oldProgram } = createProgramOptions;
+    function getDiagnosticsHelper<T extends Diagnostic>(
+        program: BaseProgram,
+        sourceFile: SourceFile | undefined,
+        getDiagnostics: (sourceFile: SourceFile, cancellationToken: CancellationToken | undefined) => ReadonlyArray<T>,
+        cancellationToken?: CancellationToken
+    ): ReadonlyArray<T> {
+        if (sourceFile) {
+            return getDiagnostics(sourceFile, cancellationToken);
+        }
+        return sortAndDeduplicateDiagnostics(flatMap(program.getSourceFiles(), sourceFile => {
+            if (cancellationToken) {
+                cancellationToken.throwIfCancellationRequested();
+            }
+            return getDiagnostics(sourceFile, cancellationToken);
+        }));
+    }
 
-        let program: Program;
+    function getAndCacheDiagnostics<T extends Diagnostic>(
+        sourceFile: SourceFile | undefined,
+        cancellationToken: CancellationToken | undefined,
+        cache: DiagnosticCache<T>,
+        getDiagnostics: (sourceFile: SourceFile, cancellationToken: CancellationToken | undefined) => T[] | undefined,
+    ): ReadonlyArray<T> {
+        const cachedResult = sourceFile
+            ? cache.perFile && cache.perFile.get(sourceFile.path)
+            : cache.allDiagnostics as T[];
+
+        if (cachedResult) {
+            return cachedResult;
+        }
+        const result = getDiagnostics(sourceFile!, cancellationToken) || emptyArray; // TODO: GH#18217
+        if (sourceFile) {
+            if (!cache.perFile) {
+                cache.perFile = createMap<T[]>();
+            }
+            cache.perFile.set(sourceFile.path, result);
+        }
+        else {
+            cache.allDiagnostics = result;
+        }
+        return result;
+    }
+
+    function getPluginPreParseDiagnostics(program: BaseProgram, cancellationToken?: CancellationToken) {
+        return isAsyncProgram(program) ? program.getPluginPreParseDiagnostics(cancellationToken) : emptyArray;
+    }
+
+    function getPluginPreprocessDiagnostics(program: BaseProgram, sourceFile?: SourceFile, cancellationToken?: CancellationToken) {
+        return isAsyncProgram(program) ? program.getPluginPreprocessDiagnostics(sourceFile, cancellationToken) : emptyArray;
+    }
+
+    function getPluginPreEmitGlobalDiagnostics(program: BaseProgram, cancellationToken?: CancellationToken) {
+        return isAsyncProgram(program) ? program.getPluginPreEmitGlobalDiagnostics(cancellationToken) : emptyArray;
+    }
+
+    function getPluginPreEmitDiagnostics(program: BaseProgram, sourceFile?: SourceFile, cancellationToken?: CancellationToken) {
+        return isAsyncProgram(program) ? program.getPluginPreEmitDiagnostics(sourceFile, cancellationToken) : emptyArray;
+    }
+
+    interface CreateBaseProgramResult {
+        baseProgram: BaseProgram;
+        emitWorker: (program: BaseProgram, sourceFile: SourceFile | undefined, writeFileCallback: WriteFileCallback | undefined, cancellationToken: CancellationToken | undefined, emitOnlyDtsFiles?: boolean, customTransformers?: CustomTransformers) => EmitResult;
+        dropTypeCheckers: () => void;
+    }
+
+    function createBaseProgram(createProgramOptions: CreateProgramOptions, preprocess?: Transformer<SourceFile>): CreateBaseProgramResult {
+        const { options, configFileParsingDiagnostics } = createProgramOptions;
+        const { rootNames, projectReferences } = createProgramOptions;
+        let { oldProgram } = createProgramOptions;
+
+        let program: BaseProgram;
         let processingDefaultLibFiles: SourceFile[] | undefined;
         let processingOtherFiles: SourceFile[] | undefined;
         let files: SourceFile[];
@@ -725,28 +765,14 @@ namespace ts {
         const ambientModuleNameToUnmodifiedFileName = createMap<string>();
         // Todo:: Use this to report why file was included in --extendedDiagnostics
         let refFileMap: MultiMap<ts.RefFile> | undefined;
-        const pluginHost = createProgramOptions.plugins && createPluginHost(createProgramOptions.plugins, options);
 
         const cachedSemanticDiagnosticsForFile: DiagnosticCache<Diagnostic> = {};
         const cachedDeclarationDiagnosticsForFile: DiagnosticCache<DiagnosticWithLocation> = {};
-
-        let resolvedTypeReferenceDirectives = createMap<ResolvedTypeReferenceDirective | undefined>();
         let fileProcessingDiagnostics = createDiagnosticCollection();
 
-        performance.mark("beforeProgram");
+        let resolvedTypeReferenceDirectives = createMap<ResolvedTypeReferenceDirective | undefined>();
 
-        let host = createProgramOptions.host || createCompilerHost(options);
-        const preParseResult = pluginHost && pluginHost.preParse(host, { rootNames, projectReferences });
-        if (preParseResult) {
-            if (preParseResult.diagnostics) {
-                for (const diagnostic of preParseResult.diagnostics) {
-                    fileProcessingDiagnostics.add(diagnostic);
-                }
-            }
-            if (preParseResult.compilerHost) host = preParseResult.compilerHost;
-            if (preParseResult.rootNames) rootNames = preParseResult.rootNames;
-            if (preParseResult.projectReferences) projectReferences = preParseResult.projectReferences;
-        }
+        const host = createProgramOptions.host || createCompilerHost(options);
 
         // The below settings are to track if a .js file should be add to the program if loaded via searching under node_modules.
         // This works as imported modules are discovered recursively in a depth first manner, specifically:
@@ -924,7 +950,9 @@ namespace ts {
                 }
             });
 
-            oldProgram.dispose();
+            if (oldProgram.dispose) {
+                oldProgram.dispose();
+            }
         }
 
         // unconditionally set oldProgram to undefined to prevent it from being captured in closure
@@ -948,7 +976,6 @@ namespace ts {
             getClassifiableNames,
             getDiagnosticsProducingTypeChecker,
             getCommonSourceDirectory,
-            emit,
             getCurrentDirectory: () => currentDirectory,
             getNodeCount: () => getDiagnosticsProducingTypeChecker().getNodeCount(),
             getIdentifierCount: () => getDiagnosticsProducingTypeChecker().getIdentifierCount(),
@@ -973,24 +1000,16 @@ namespace ts {
             getResolvedProjectReferenceToRedirect,
             getResolvedProjectReferenceByPath,
             forEachResolvedProjectReference,
-            emitBuildInfo,
-            dispose
+            emitBuildInfo
         };
 
         verifyCompilerOptions();
-        performance.mark("afterProgram");
-        performance.measure("Program", "beforeProgram", "afterProgram");
 
-        return program;
-
-        function dispose() {
-            if (pluginHost) {
-                pluginHost.deactivate(host);
-            }
-            if (program.pluginProgram) {
-                program.pluginProgram.pluginDispose();
-            }
-        }
+        return {
+            baseProgram: program,
+            emitWorker,
+            dropTypeCheckers,
+        };
 
         function compareDefaultLibFiles(a: SourceFile, b: SourceFile) {
             return compareValues(getDefaultLibFilePriority(a), getDefaultLibFilePriority(b));
@@ -1558,28 +1577,15 @@ namespace ts {
             return noDiagnosticsTypeChecker || (noDiagnosticsTypeChecker = createTypeChecker(program, /*produceDiagnostics:*/ false));
         }
 
-        function emit(sourceFile?: SourceFile, writeFileCallback?: WriteFileCallback, cancellationToken?: CancellationToken, emitOnlyDtsFiles?: boolean, transformers?: CustomTransformers): EmitResult {
-            return runWithCancellationToken(() => emitWorker(program, sourceFile, writeFileCallback, cancellationToken, emitOnlyDtsFiles, transformers));
-        }
-
         function isEmitBlocked(emitFileName: string): boolean {
             return hasEmitBlockingDiagnostics.has(toPath(emitFileName));
         }
 
-        function emitWorker(program: Program, sourceFile: SourceFile | undefined, writeFileCallback: WriteFileCallback | undefined, cancellationToken: CancellationToken | undefined, emitOnlyDtsFiles?: boolean, customTransformers?: CustomTransformers): EmitResult {
+        function emitWorker(program: BaseProgram, sourceFile: SourceFile | undefined, writeFileCallback: WriteFileCallback | undefined, cancellationToken: CancellationToken | undefined, emitOnlyDtsFiles?: boolean, customTransformers?: CustomTransformers): EmitResult {
             let declarationDiagnostics: ReadonlyArray<Diagnostic> = [];
 
             if (!emitOnlyDtsFiles && options.noEmit) {
                 return { diagnostics: declarationDiagnostics, sourceMaps: undefined, emittedFiles: undefined, emitSkipped: true };
-            }
-
-            let pluginDiagnostics: ReadonlyArray<Diagnostic> | undefined;
-            if (pluginHost) {
-                const result = pluginHost.preEmit(host, { program, targetSourceFile: sourceFile, cancellationToken });
-                if (result) {
-                    pluginDiagnostics = result.diagnostics;
-                    customTransformers = combineCustomTransformers(customTransformers, result.customTransformers);
-                }
             }
 
             if (!emitOnlyDtsFiles) {
@@ -1587,12 +1593,20 @@ namespace ts {
                 // immediately bail out.  Note that we pass 'undefined' for 'sourceFile' so that we
                 // get any preEmit diagnostics, not just the ones
                 if (options.noEmitOnError) {
+                    if (isAsyncProgram(program)) {
+                        program.getPluginPreParseDiagnostics(cancellationToken);
+                        program.getPluginPreprocessDiagnostics(sourceFile, cancellationToken);
+                        program.getPluginPreEmitDiagnostics(sourceFile, cancellationToken);
+                    }
                     const diagnostics = [
                         ...program.getOptionsDiagnostics(cancellationToken),
+                        ...getPluginPreParseDiagnostics(program, cancellationToken),
+                        ...getPluginPreprocessDiagnostics(program, sourceFile, cancellationToken),
                         ...program.getSyntacticDiagnostics(sourceFile, cancellationToken),
                         ...program.getGlobalDiagnostics(cancellationToken),
+                        ...getPluginPreEmitGlobalDiagnostics(program, cancellationToken),
                         ...program.getSemanticDiagnostics(sourceFile, cancellationToken),
-                        ...(pluginDiagnostics || [])
+                        ...getPluginPreEmitDiagnostics(program, sourceFile, cancellationToken)
                     ];
 
                     if (diagnostics.length === 0 && getEmitDeclarations(program.getCompilerOptions())) {
@@ -1618,7 +1632,7 @@ namespace ts {
             // This is because in the -out scenario all files need to be emitted, and therefore all
             // files need to be type checked. And the way to specify that all files need to be type
             // checked is to not pass the file to getEmitResolver.
-            const emitResolver = getDiagnosticsProducingTypeChecker().getEmitResolver((options.outFile || options.out) ? undefined : sourceFile, cancellationToken);
+            const emitResolver = program.getDiagnosticsProducingTypeChecker().getEmitResolver((options.outFile || options.out) ? undefined : sourceFile, cancellationToken);
 
             performance.mark("beforeEmit");
 
@@ -1643,37 +1657,22 @@ namespace ts {
             return filesByName.get(path) || undefined;
         }
 
-        function getDiagnosticsHelper<T extends Diagnostic>(
-            sourceFile: SourceFile,
-            getDiagnostics: (sourceFile: SourceFile, cancellationToken: CancellationToken) => ReadonlyArray<T>,
-            cancellationToken: CancellationToken): ReadonlyArray<T> {
-            if (sourceFile) {
-                return getDiagnostics(sourceFile, cancellationToken);
-            }
-            return sortAndDeduplicateDiagnostics(flatMap(program.getSourceFiles(), sourceFile => {
-                if (cancellationToken) {
-                    cancellationToken.throwIfCancellationRequested();
-                }
-                return getDiagnostics(sourceFile, cancellationToken);
-            }));
+        function getSyntacticDiagnostics(sourceFile: SourceFile, cancellationToken?: CancellationToken): ReadonlyArray<DiagnosticWithLocation> {
+            return getDiagnosticsHelper(program, sourceFile, getSyntacticDiagnosticsForFile, cancellationToken);
         }
 
-        function getSyntacticDiagnostics(sourceFile: SourceFile, cancellationToken: CancellationToken): ReadonlyArray<DiagnosticWithLocation> {
-            return getDiagnosticsHelper(sourceFile, getSyntacticDiagnosticsForFile, cancellationToken);
+        function getSemanticDiagnostics(sourceFile: SourceFile, cancellationToken?: CancellationToken): ReadonlyArray<Diagnostic> {
+            return getDiagnosticsHelper(program, sourceFile, getSemanticDiagnosticsForFile, cancellationToken);
         }
 
-        function getSemanticDiagnostics(sourceFile: SourceFile, cancellationToken: CancellationToken): ReadonlyArray<Diagnostic> {
-            return getDiagnosticsHelper(sourceFile, getSemanticDiagnosticsForFile, cancellationToken);
-        }
-
-        function getDeclarationDiagnostics(sourceFile: SourceFile, cancellationToken: CancellationToken): ReadonlyArray<DiagnosticWithLocation> {
+        function getDeclarationDiagnostics(sourceFile: SourceFile, cancellationToken?: CancellationToken): ReadonlyArray<DiagnosticWithLocation> {
             const options = program.getCompilerOptions();
             // collect diagnostics from the program only once if either no source file was specified or out/outFile is set (bundled emit)
             if (!sourceFile || options.out || options.outFile) {
                 return getDeclarationDiagnosticsWorker(sourceFile, cancellationToken);
             }
             else {
-                return getDiagnosticsHelper(sourceFile, getDeclarationDiagnosticsForFile, cancellationToken);
+                return getDiagnosticsHelper(program, sourceFile, getDeclarationDiagnosticsForFile, cancellationToken);
             }
         }
 
@@ -1689,34 +1688,22 @@ namespace ts {
             return sourceFile.parseDiagnostics;
         }
 
-        function runWithCancellationToken<T>(func: () => T): T {
-            try {
-                return func();
-            }
-            catch (e) {
-                if (e instanceof OperationCanceledException) {
-                    // We were canceled while performing the operation.  Because our type checker
-                    // might be a bad state, we need to throw it away.
-                    //
-                    // Note: we are overly aggressive here.  We do not actually *have* to throw away
-                    // the "noDiagnosticsTypeChecker".  However, for simplicity, i'd like to keep
-                    // the lifetimes of these two TypeCheckers the same.  Also, we generally only
-                    // cancel when the user has made a change anyways.  And, in that case, we (the
-                    // program instance) will get thrown away anyways.  So trying to keep one of
-                    // these type checkers alive doesn't serve much purpose.
-                    noDiagnosticsTypeChecker = undefined!;
-                    diagnosticsProducingTypeChecker = undefined!;
-                }
-
-                throw e;
-            }
+        function dropTypeCheckers() {
+            // Note: we are overly aggressive here.  We do not actually *have* to throw away
+            // the "noDiagnosticsTypeChecker".  However, for simplicity, i'd like to keep
+            // the lifetimes of these two TypeCheckers the same.  Also, we generally only
+            // cancel when the user has made a change anyways.  And, in that case, we (the
+            // program instance) will get thrown away anyways.  So trying to keep one of
+            // these type checkers alive doesn't serve much purpose.
+            noDiagnosticsTypeChecker = undefined!;
+            diagnosticsProducingTypeChecker = undefined!;
         }
 
-        function getSemanticDiagnosticsForFile(sourceFile: SourceFile, cancellationToken: CancellationToken): ReadonlyArray<Diagnostic> {
+        function getSemanticDiagnosticsForFile(sourceFile: SourceFile, cancellationToken?: CancellationToken): ReadonlyArray<Diagnostic> {
             return getAndCacheDiagnostics(sourceFile, cancellationToken, cachedSemanticDiagnosticsForFile, getSemanticDiagnosticsForFileNoCache);
         }
 
-        function getSemanticDiagnosticsForFileNoCache(sourceFile: SourceFile, cancellationToken: CancellationToken): Diagnostic[] | undefined {
+        function getSemanticDiagnosticsForFileNoCache(sourceFile: SourceFile, cancellationToken?: CancellationToken): Diagnostic[] | undefined {
             return runWithCancellationToken(() => {
                 if (skipTypeChecking(sourceFile, options)) {
                     return emptyArray;
@@ -1746,13 +1733,13 @@ namespace ts {
                     }
                 }
                 return diagnostics;
-            });
+            }, dropTypeCheckers);
         }
 
-        function getSuggestionDiagnostics(sourceFile: SourceFile, cancellationToken: CancellationToken): ReadonlyArray<DiagnosticWithLocation> {
+        function getSuggestionDiagnostics(sourceFile: SourceFile, cancellationToken?: CancellationToken): ReadonlyArray<DiagnosticWithLocation> {
             return runWithCancellationToken(() => {
                 return getDiagnosticsProducingTypeChecker().getSuggestionDiagnostics(sourceFile, cancellationToken);
-            });
+            }, dropTypeCheckers);
         }
 
         /**
@@ -1960,49 +1947,22 @@ namespace ts {
                 function createDiagnosticForNode(node: Node, message: DiagnosticMessage, arg0?: string | number, arg1?: string | number, arg2?: string | number): DiagnosticWithLocation {
                     return createDiagnosticForNodeInSourceFile(sourceFile, node, message, arg0, arg1, arg2);
                 }
-            });
+            }, dropTypeCheckers);
         }
 
-        function getDeclarationDiagnosticsWorker(sourceFile: SourceFile, cancellationToken: CancellationToken): ReadonlyArray<DiagnosticWithLocation> {
+        function getDeclarationDiagnosticsWorker(sourceFile: SourceFile, cancellationToken?: CancellationToken): ReadonlyArray<DiagnosticWithLocation> {
             return getAndCacheDiagnostics(sourceFile, cancellationToken, cachedDeclarationDiagnosticsForFile, getDeclarationDiagnosticsForFileNoCache);
         }
 
-        function getDeclarationDiagnosticsForFileNoCache(sourceFile: SourceFile | undefined, cancellationToken: CancellationToken) {
+        function getDeclarationDiagnosticsForFileNoCache(sourceFile: SourceFile | undefined, cancellationToken?: CancellationToken) {
             return runWithCancellationToken(() => {
                 const resolver = getDiagnosticsProducingTypeChecker().getEmitResolver(sourceFile, cancellationToken);
                 // Don't actually write any files since we're just getting diagnostics.
                 return ts.getDeclarationDiagnostics(getEmitHost(noop), resolver, sourceFile);
-            });
+            }, dropTypeCheckers);
         }
 
-        function getAndCacheDiagnostics<T extends Diagnostic>(
-            sourceFile: SourceFile | undefined,
-            cancellationToken: CancellationToken,
-            cache: DiagnosticCache<T>,
-            getDiagnostics: (sourceFile: SourceFile, cancellationToken: CancellationToken) => T[] | undefined,
-        ): ReadonlyArray<T> {
-
-            const cachedResult = sourceFile
-                ? cache.perFile && cache.perFile.get(sourceFile.path)
-                : cache.allDiagnostics as T[];
-
-            if (cachedResult) {
-                return cachedResult;
-            }
-            const result = getDiagnostics(sourceFile!, cancellationToken) || emptyArray; // TODO: GH#18217
-            if (sourceFile) {
-                if (!cache.perFile) {
-                    cache.perFile = createMap<T[]>();
-                }
-                cache.perFile.set(sourceFile.path, result);
-            }
-            else {
-                cache.allDiagnostics = result;
-            }
-            return result;
-        }
-
-        function getDeclarationDiagnosticsForFile(sourceFile: SourceFile, cancellationToken: CancellationToken): ReadonlyArray<DiagnosticWithLocation> {
+        function getDeclarationDiagnosticsForFile(sourceFile: SourceFile, cancellationToken?: CancellationToken): ReadonlyArray<DiagnosticWithLocation> {
             return sourceFile.isDeclarationFile ? [] : getDeclarationDiagnosticsWorker(sourceFile, cancellationToken);
         }
 
@@ -2068,8 +2028,8 @@ namespace ts {
                 && (options.isolatedModules || isExternalModuleFile)
                 && !file.isDeclarationFile) {
                 // synthesize 'import "tslib"' declaration
-                const externalHelpersModuleReference = createLiteral(externalHelpersModuleNameText);
-                const importDecl = createImportDeclaration(/*decorators*/ undefined, /*modifiers*/ undefined, /*importClause*/ undefined, externalHelpersModuleReference);
+                const externalHelpersModuleReference = syntheticNodeFactory.createStringLiteral(externalHelpersModuleNameText);
+                const importDecl = syntheticNodeFactory.createImportDeclaration(/*decorators*/ undefined, /*modifiers*/ undefined, /*importClause*/ undefined, externalHelpersModuleReference);
                 addEmitFlags(importDecl, EmitFlags.NeverApplyImportHelper);
                 externalHelpersModuleReference.parent = importDecl;
                 importDecl.parent = file;
@@ -2335,7 +2295,7 @@ namespace ts {
             }
 
             // We haven't looked for this file, do so now and cache result
-            const file = host.getSourceFile(
+            let file = host.getSourceFile(
                 fileName,
                 options.target!,
                 hostErrorMessage => fileProcessingDiagnostics.add(createRefFileDiagnostic(
@@ -2346,6 +2306,15 @@ namespace ts {
                 )),
                 shouldCreateNewSourceFile
             );
+
+            // Pass the file through a user-defined preprocessor (provided by plugins)
+            if (file && preprocess) {
+                const processed = preprocess(file);
+                if (processed !== file) {
+                    processed.preprocessInfo = { unprocessed: file };
+                }
+                file = processed;
+            }
 
             if (packageId) {
                 const packageIdKey = packageIdToString(packageId);
@@ -3321,6 +3290,216 @@ namespace ts {
         function isSameFile(file1: string, file2: string) {
             return comparePaths(file1, file2, currentDirectory, !host.useCaseSensitiveFileNames()) === Comparison.EqualTo;
         }
+    }
+
+    /**
+     * Create a new 'Program' instance. A Program is an immutable collection of 'SourceFile's and a 'CompilerOptions'
+     * that represent a compilation unit.
+     *
+     * Creating a program proceeds from a set of root files, expanding the set of inputs by following imports and
+     * triple-slash-reference-path directives transitively. '@types' and triple-slash-reference-types are also pulled in.
+     *
+     * @param createProgramOptions - The options for creating a program.
+     * @returns A 'Program' object.
+     */
+    export function createProgram(createProgramOptions: CreateProgramOptions): Program;
+    /**
+     * Create a new 'Program' instance. A Program is an immutable collection of 'SourceFile's and a 'CompilerOptions'
+     * that represent a compilation unit.
+     *
+     * Creating a program proceeds from a set of root files, expanding the set of inputs by following imports and
+     * triple-slash-reference-path directives transitively. '@types' and triple-slash-reference-types are also pulled in.
+     *
+     * @param rootNames - A set of root files.
+     * @param options - The compiler options which should be used.
+     * @param host - The host interacts with the underlying file system.
+     * @param oldProgram - Reuses an old program structure.
+     * @param configFileParsingDiagnostics - error during config file parsing
+     * @returns A 'Program' object.
+     */
+    export function createProgram(rootNames: ReadonlyArray<string>, options: CompilerOptions, host?: CompilerHost, oldProgram?: Program, configFileParsingDiagnostics?: ReadonlyArray<Diagnostic>): Program;
+    export function createProgram(rootNamesOrOptions: ReadonlyArray<string> | CreateProgramOptions, _options?: CompilerOptions, _host?: CompilerHost, _oldProgram?: Program, _configFileParsingDiagnostics?: ReadonlyArray<Diagnostic>): Program {
+        const createProgramOptions = isArray(rootNamesOrOptions) ? createCreateProgramOptions(rootNamesOrOptions, _options!, _host, _oldProgram, _configFileParsingDiagnostics) : rootNamesOrOptions; // TODO: GH#18217
+
+        Debug.assert(!some((createProgramOptions as CreateAsyncProgramOptions).plugins), "Plugins are only supported by `createProgramAsync`");
+
+        performance.mark("beforeProgram");
+
+        const { baseProgram, emitWorker, dropTypeCheckers } = createBaseProgram(createProgramOptions);
+        const program = baseProgram as Program;
+        program.emit = emit;
+
+        performance.mark("afterProgram");
+        performance.measure("Program", "beforeProgram", "afterProgram");
+
+        return program;
+
+        function emit(sourceFile?: SourceFile, writeFileCallback?: WriteFileCallback, cancellationToken?: CancellationToken, emitOnlyDtsFiles?: boolean, transformers?: CustomTransformers): EmitResult {
+            return runWithCancellationToken(() => emitWorker(program, sourceFile, writeFileCallback, cancellationToken, emitOnlyDtsFiles, transformers), dropTypeCheckers);
+        }
+    }
+
+    /**
+     * Create a new 'AsyncProgram' instance. A Program is an immutable collection of 'SourceFile's and a 'CompilerOptions'
+     * that represent a compilation unit.
+     *
+     * Creating a program proceeds from a set of root files, expanding the set of inputs by following imports and
+     * triple-slash-reference-path directives transitively. '@types' and triple-slash-reference-types are also pulled in.
+     *
+     * @param rootNames - A set of root files.
+     * @param options - The compiler options which should be used.
+     * @param host - The host interacts with the underlying file system.
+     * @param oldProgram - Reuses an old program structure.
+     * @param configFileParsingDiagnostics - error during config file parsing
+     * @returns A 'Program' object.
+     */
+    export async function createAsyncProgram(createProgramOptions: CreateAsyncProgramOptions): Promise<AsyncProgram> {
+        createProgramOptions = { ...createProgramOptions };
+        const { options } = createProgramOptions;
+
+        const host = createProgramOptions.host || (createProgramOptions.host = createCompilerHost(options));
+        const pluginHost = createProgramOptions.plugins && createPluginHost(createProgramOptions.plugins, host, options);
+        const pluginPreParseDiagnostics = pluginHost && createDiagnosticCollection();
+        const pluginPreprocessDiagnostics = pluginHost && createDiagnosticCollection();
+        const pluginPreEmitDiagnostics = pluginHost && createDiagnosticCollection();
+        performance.mark("beforeProgram");
+
+        const preParseResult = pluginHost && await pluginHost.preParse({
+            rootNames: createProgramOptions.rootNames,
+            projectReferences: createProgramOptions.projectReferences
+        });
+
+        let preprocess: Transformer<SourceFile> | undefined;
+        let preprocessDiagnostics: DiagnosticWithLocation[] | undefined;
+        let preprocessTransformer: NodeTransformer<SourceFile> | undefined;
+        let preprocessedNodes: Node[] | undefined;
+        if (preParseResult) {
+            if (preParseResult.diagnostics) {
+                for (const diagnostic of preParseResult.diagnostics) {
+                    pluginPreParseDiagnostics!.add(diagnostic);
+                }
+            }
+            if (preParseResult.rootNames) createProgramOptions.rootNames = preParseResult.rootNames;
+            if (preParseResult.projectReferences) createProgramOptions.projectReferences = preParseResult.projectReferences;
+            if (preParseResult.preprocessors) {
+                preprocessTransformer = createNodeTransformer(
+                    /*resolver*/ undefined,
+                    /*host*/ undefined,
+                    parseNodeFactory,
+                    options,
+                    preParseResult.preprocessors,
+                    /*allowDtsFiles*/ true
+                );
+                preprocessDiagnostics = preprocessTransformer.diagnostics;
+                preprocessedNodes = [];
+                preprocess = node => {
+                    disposeEmitNodes(getSourceFileOfNode(getParseTreeNode(node)));
+                    preprocessedNodes!.push(node);
+                    return preprocessTransformer!.transformNode(node);
+                };
+            }
+        }
+
+        // !!!!
+        // TODO(rbuckton): pass `parseTransform` to `createBaseProgram`
+        const { baseProgram, emitWorker, dropTypeCheckers } = createBaseProgram(createProgramOptions, preprocess);
+
+        if (preprocessDiagnostics) {
+            for (const diagnostic of preprocessDiagnostics) {
+                pluginPreprocessDiagnostics!.add(diagnostic);
+            }
+        }
+
+        const program = baseProgram as AsyncProgram;
+        program.getPluginPreParseDiagnostics = getPluginPreParseDiagnostics;
+        program.getPluginPreprocessDiagnostics = getPluginPreprocessDiagnostics;
+        program.getPluginPreEmitGlobalDiagnostics = getPluginPreEmitGlobalDiagnostics;
+        program.getPluginPreEmitDiagnostics = getPluginPreEmitDiagnostics;
+        program.emitAsync = emitAsync;
+        program.dispose = dispose;
+
+        performance.mark("afterProgram");
+        performance.measure("Program", "beforeProgram", "afterProgram");
+
+        return program;
+
+        function getPluginPreParseDiagnostics() {
+            if (!pluginHost) return emptyArray;
+            return sortAndDeduplicateDiagnostics(concatenate(
+                pluginPreParseDiagnostics!.getGlobalDiagnostics(),
+                getPluginPreParseDiagnosticsOfConfigFile()));
+        }
+
+        function getPluginPreParseDiagnosticsOfConfigFile() {
+            if (!options.configFile) return emptyArray;
+            return pluginPreParseDiagnostics!.getDiagnostics(options.configFile.fileName);
+        }
+
+        function getPluginPreprocessDiagnostics(sourceFile?: SourceFile) {
+            if (!pluginHost) return emptyArray;
+            return getDiagnosticsHelper(program, sourceFile, getPluginPreprocessDiagnosticsForFile);
+        }
+
+        function getPluginPreprocessDiagnosticsForFile(sourceFile: SourceFile) {
+            return runWithCancellationToken(() => {
+                return pluginPreprocessDiagnostics!.getDiagnostics(sourceFile.fileName);
+            }, dropTypeCheckers);
+        }
+
+        function getPluginPreEmitGlobalDiagnostics() {
+            if (!pluginHost) return emptyArray;
+            return pluginPreEmitDiagnostics!.getGlobalDiagnostics();
+        }
+
+        function getPluginPreEmitDiagnostics(sourceFile?: SourceFile) {
+            if (!pluginHost) return emptyArray;
+            return getDiagnosticsHelper(program, sourceFile, getPluginPreEmitDiagnosticsForFile);
+        }
+
+        function getPluginPreEmitDiagnosticsForFile(sourceFile: SourceFile) {
+            return runWithCancellationToken(() => {
+                return pluginPreEmitDiagnostics!.getDiagnostics(sourceFile.fileName);
+            }, dropTypeCheckers);
+        }
+
+        function dispose() {
+            if (preprocessedNodes) {
+                for (const node of preprocessedNodes) {
+                    disposeEmitNodes(getSourceFileOfNode(getParseTreeNode(node)));
+                }
+            }
+            if (pluginHost) {
+                pluginHost.deactivate();
+            }
+        }
+
+        function emitAsync(sourceFile?: SourceFile, writeFileCallback?: WriteFileCallback, cancellationToken?: CancellationToken, emitOnlyDtsFiles?: boolean, transformers?: CustomTransformers): Promise<EmitResult> {
+            return runWithCancellationTokenAsync(() => emitWorkerAsync(program, sourceFile, writeFileCallback, cancellationToken, emitOnlyDtsFiles, transformers), dropTypeCheckers);
+        }
+
+        async function emitWorkerAsync(program: AsyncProgram, sourceFile: SourceFile | undefined, writeFileCallback: WriteFileCallback | undefined, cancellationToken: CancellationToken | undefined, emitOnlyDtsFiles?: boolean, customTransformers?: CustomTransformers): Promise<EmitResult> {
+            if (!emitOnlyDtsFiles && options.noEmit) {
+                return { diagnostics: emptyArray, sourceMaps: undefined, emittedFiles: undefined, emitSkipped: true };
+            }
+
+            if (pluginHost) {
+                const result = await pluginHost.preEmit({ program, targetSourceFile: sourceFile, cancellationToken });
+                if (result) {
+                    if (result.diagnostics) {
+                        for (const diagnostic of result.diagnostics) {
+                            pluginPreEmitDiagnostics!.add(diagnostic);
+                        }
+                    }
+                    customTransformers = combineCustomTransformers(customTransformers, result.customTransformers);
+                }
+            }
+
+            return emitWorker(program, sourceFile, writeFileCallback, cancellationToken, emitOnlyDtsFiles, customTransformers);
+        }
+    }
+
+    export function isAsyncProgram(baseProgram: BaseProgram | Program | AsyncProgram): baseProgram is AsyncProgram {
+        return typeof (baseProgram as AsyncProgram).emitAsync === "function";
     }
 
     /*@internal*/

@@ -93,9 +93,19 @@ const localize = async () => {
 // Pre-build steps when targeting the LKG compiler
 const lkgPreBuild = parallel(generateLibs, series(buildScripts, generateDiagnostics));
 
+const buildPromiseShim = () => buildProject("src/promiseShim");
+const cleanPromiseShim = () => cleanProject("src/promiseShim");
+cleanTasks.push(cleanPromiseShim);
+
+const buildMapShim = () => buildProject("src/mapShim");
+const cleanMapShim = () => cleanProject("src/mapShim");
+cleanTasks.push(cleanMapShim);
+
+const buildShims = parallel(buildPromiseShim, buildMapShim);
+
 const buildTsc = () => buildProject("src/tsc");
 
-task("tsc", series(lkgPreBuild, buildTsc));
+task("tsc", series(lkgPreBuild, buildShims, buildTsc));
 task("tsc").description = "Builds the command-line compiler";
 
 const cleanTsc = () => cleanProject("src/tsc");
@@ -152,7 +162,7 @@ const watchApi = () => watch([
 task("watch-api", series(lkgPreBuild, parallel(watchDiagnostics, watchApi)));
 
 // Pre-build steps when targeting the built/local compiler.
-const localPreBuild = parallel(generateLibs, series(buildScripts, generateDiagnostics, buildTsc));
+const localPreBuild = parallel(generateLibs, series(buildScripts, generateDiagnostics, buildShims, buildTsc));
 
 // Pre-build steps to use based on supplied options.
 const preBuild = cmdLineOptions.lkg ? lkgPreBuild : localPreBuild;

@@ -30,6 +30,9 @@ namespace ts {
         }
     }
 
+    /* @internal */
+    export const parseNodeFactory = createNodeFactory(createNode, createParenthesizerRules, createNodeConverters);
+
     function visitNode<T>(cbNode: (node: Node) => T, node: Node | undefined): T | undefined {
         return node && cbNode(node);
     }

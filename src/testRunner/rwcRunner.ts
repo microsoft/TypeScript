@@ -48,7 +48,7 @@ namespace RWC {
                 caseSensitive = false;
             });
 
-            it("can compile", function(this: Mocha.ITestCallbackContext) {
+            it("can compile", async function() {
                 this.timeout(800_000); // Allow long timeouts for RWC compilations
                 let opts!: ts.ParsedCommandLine;
 
@@ -122,7 +122,7 @@ namespace RWC {
 
                 caseSensitive = ioLog.useCaseSensitiveFileNames || false;
                 // Emit the results
-                compilerResult = Harness.Compiler.compileFiles(
+                compilerResult = await Harness.Compiler.compileFiles(
                     inputFiles,
                     otherFiles,
                     { useCaseSensitiveFileNames: "" + caseSensitive },
@@ -146,7 +146,7 @@ namespace RWC {
             });
 
 
-            it("has the expected emitted code", function(this: Mocha.ITestCallbackContext) {
+            it("has the expected emitted code", function() {
                 this.timeout(100_000); // Allow longer timeouts for RWC js verification
                 Harness.Baseline.runMultifileBaseline(baseName, "", () => {
                     return Harness.Compiler.iterateOutputs(compilerResult.js.values());
@@ -187,23 +187,23 @@ namespace RWC {
 
             // Ideally, a generated declaration file will have no errors. But we allow generated
             // declaration file errors as part of the baseline.
-            it("has the expected errors in generated declaration files", () => {
+            it("has the expected errors in generated declaration files", async () => {
                 if (compilerOptions.declaration && !compilerResult.diagnostics.length) {
-                    Harness.Baseline.runMultifileBaseline(baseName, ".dts.errors.txt", () => {
-                        if (compilerResult.diagnostics.length === 0) {
-                            return null;
-                        }
+                    let generator: () => IterableIterator<[string, string, number]> | null;
+                    if (compilerResult.diagnostics.length === 0) {
+                        generator = () => null;
+                    }
+                    else {
+                        const declContext = Harness.Compiler.prepareDeclarationCompilationContext(inputFiles, otherFiles, compilerResult, { }, compilerOptions, currentDirectory)!;
 
-                        const declContext = Harness.Compiler.prepareDeclarationCompilationContext(
-                            inputFiles, otherFiles, compilerResult, /*harnessSettings*/ undefined!, compilerOptions, currentDirectory // TODO: GH#18217
-                        );
                         // Reset compilerResult before calling into `compileDeclarationFiles` so the memory from the original compilation can be freed
                         const links = compilerResult.symlinks;
                         compilerResult = undefined!;
-                        const declFileCompilationResult = Harness.Compiler.compileDeclarationFiles(declContext, links)!;
+                        const declFileCompilationResult = await Harness.Compiler.compileDeclarationFiles(declContext, links);
 
-                        return Harness.Compiler.iterateErrorBaseline(tsconfigFiles.concat(declFileCompilationResult.declInputFiles, declFileCompilationResult.declOtherFiles), declFileCompilationResult.declResult.diagnostics, { caseSensitive, currentDirectory });
-                    }, baselineOpts);
+                        generator = () => Harness.Compiler.iterateErrorBaseline(tsconfigFiles.concat(declFileCompilationResult.declInputFiles, declFileCompilationResult.declOtherFiles), declFileCompilationResult.declResult.diagnostics, { caseSensitive, currentDirectory });
+                    }
+                    Harness.Baseline.runMultifileBaseline(baseName, ".dts.errors.txt", generator, baselineOpts);
                 }
             });
         });

@@ -76,18 +76,19 @@ class CompilerBaselineRunner extends RunnerBase {
         // Mocha holds onto the closure environment of the describe callback even after the test is done.
         // Everything declared here should be cleared out in the "after" callback.
         let compilerTest!: CompilerTest;
-        before(() => {
+        before(async () => {
             let payload;
             if (test && test.content) {
                 const rootDir = test.file.indexOf("conformance") === -1 ? "tests/cases/compiler/" : ts.getDirectoryPath(test.file) + "/";
                 payload = Harness.TestCaseParser.makeUnitsFromTest(test.content, test.file, rootDir);
             }
             compilerTest = new CompilerTest(fileName, payload, configuration);
+            await compilerTest.compile();
         });
         it(`Correct errors for ${fileName}`, () => { compilerTest.verifyDiagnostics(); });
         it(`Correct module resolution tracing for ${fileName}`, () => { compilerTest.verifyModuleResolution(); });
         it(`Correct sourcemap content for ${fileName}`, () => { compilerTest.verifySourceMapRecord(); });
-        it(`Correct JS output for ${fileName}`, () => { if (this.emit) compilerTest.verifyJavaScriptOutput(); });
+        it(`Correct JS output for ${fileName}`, async () => { if (this.emit) await compilerTest.verifyJavaScriptOutput(); });
         it(`Correct Sourcemap output for ${fileName}`, () => { compilerTest.verifySourceMapOutput(); });
         it(`Correct type/symbol baselines for ${fileName}`, () => { compilerTest.verifyTypesAndSymbols(); });
         after(() => { compilerTest = undefined!; });
@@ -118,9 +119,10 @@ class CompilerTest {
     private lastUnit: Harness.TestCaseParser.TestUnitData;
     private harnessSettings: Harness.TestCaseParser.CompilerSettings;
     private hasNonDtsFiles: boolean;
-    private result: compiler.CompilationResult;
-    private options: ts.CompilerOptions;
+    private result!: compiler.CompilationResult;
+    private options!: ts.CompilerOptions;
     private tsConfigFiles: Harness.Compiler.TestFile[];
+    private compileThunk: () => Promise<void>;
     // equivalent to the files that will be passed on the command line
     private toBeCompiled: Harness.Compiler.TestFile[];
     // equivalent to other files on the file system not directly passed to the compiler (ie things that are referenced by other files)
@@ -208,18 +210,20 @@ class CompilerTest {
             tsConfigOptions.configFile!.fileName = tsConfigOptions.configFilePath;
         }
 
-        this.result = Harness.Compiler.compileFiles(
-            this.toBeCompiled,
-            this.otherFiles,
-            this.harnessSettings,
-            /*options*/ tsConfigOptions,
-            /*currentDirectory*/ this.harnessSettings.currentDirectory,
-            testCaseContent.symlinks,
-            plugins,
-            tsConfigFileName
-        );
+        this.compileThunk = async () => {
+            this.result = await Harness.Compiler.compileFiles(
+                this.toBeCompiled,
+                this.otherFiles,
+                this.harnessSettings,
+                /*options*/ tsConfigOptions,
+                /*currentDirectory*/ this.harnessSettings.currentDirectory,
+                testCaseContent && testCaseContent.symlinks,
+                plugins,
+                tsConfigFileName
+            );
 
-        this.options = this.result.options;
+            this.options = this.result.options;
+        };
     }
 
     public static getConfigurations(file: string): CompilerFileBasedTest {
@@ -228,6 +232,10 @@ class CompilerTest {
         const settings = Harness.TestCaseParser.extractCompilerSettings(content);
         const configurations = Harness.getFileBasedTestConfigurations(settings, /*varyBy*/ ["module", "target"]);
         return { file, configurations, content };
+    }
+
+    public compile() {
+        return this.compileThunk();
     }
 
     public verifyDiagnostics() {
@@ -257,9 +265,9 @@ class CompilerTest {
         }
     }
 
-    public verifyJavaScriptOutput() {
+    public async verifyJavaScriptOutput() {
         if (this.hasNonDtsFiles) {
-            Harness.Compiler.doJsEmitBaseline(
+            await Harness.Compiler.doJsEmitBaseline(
                 this.configuredName,
                 this.fileName,
                 this.options,

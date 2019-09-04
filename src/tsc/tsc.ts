@@ -4,7 +4,7 @@ namespace ts {
         value: string;
     }
 
-    function countLines(program: Program): number {
+    function countLines(program: BaseProgram): number {
         let count = 0;
         forEach(program.getSourceFiles(), file => {
             count += getLineStarts(file).length;
@@ -52,7 +52,7 @@ namespace ts {
             filter(optionDeclarations.slice(), v => !!v.showInSimplifiedHelpView);
     }
 
-    export function executeCommandLine(args: string[]): void {
+    export async function executeCommandLine(args: string[]): Promise<void> {
         if (args.length > 0 && args[0].charCodeAt(0) === CharacterCodes.minus) {
             const firstOption = args[0].slice(args[0].charCodeAt(1) === CharacterCodes.minus ? 2 : 1).toLowerCase();
             if (firstOption === "build" || firstOption === "b") {
@@ -162,6 +162,9 @@ namespace ts {
                 createWatchOfConfigFile(configParseResult, commandLineOptions);
             }
             else if (isIncrementalCompilation(configParseResult.options)) {
+                if (some(plugins)) {
+                    // TODO(rbuckton): plugins not yet supported for incremental compilation.
+                }
                 performIncrementalCompilation(configParseResult);
             }
             else {
@@ -183,7 +186,7 @@ namespace ts {
                 performIncrementalCompilation(commandLine);
             }
             else {
-                performCompilation(commandLine.fileNames, /*references*/ undefined, commandLineOptions, /*plugins*/ undefined);
+                await performCompilation(commandLine.fileNames, /*references*/ undefined, commandLineOptions, /*plugins*/ undefined);
             }
         }
     }
@@ -230,7 +233,7 @@ namespace ts {
             reportWatchModeWithoutSysSupport();
             const buildHost = createSolutionBuilderWithWatchHost(sys, /*createProgram*/ undefined, reportDiagnostic, createBuilderStatusReporter(sys, shouldBePretty(buildOptions)), createWatchStatusReporter(buildOptions));
             updateCreateProgram(buildHost);
-            buildHost.afterProgramEmitAndDiagnostics = program => reportStatistics(program.getProgram());
+            buildHost.afterProgramEmitAndDiagnostics = program => reportStatistics(program.getProgram(), /*plugins*/ undefined);
             const builder = createSolutionBuilderWithWatch(buildHost, projects, buildOptions);
             builder.build();
             return;
@@ -238,7 +241,7 @@ namespace ts {
 
         const buildHost = createSolutionBuilderHost(sys, /*createProgram*/ undefined, reportDiagnostic, createBuilderStatusReporter(sys, shouldBePretty(buildOptions)), createReportErrorSummary(buildOptions));
         updateCreateProgram(buildHost);
-        buildHost.afterProgramEmitAndDiagnostics = program => reportStatistics(program.getProgram());
+        buildHost.afterProgramEmitAndDiagnostics = program => reportStatistics(program.getProgram(), /*plugins*/ undefined);
         const builder = createSolutionBuilder(buildHost, projects, buildOptions);
         return sys.exit(buildOptions.clean ? builder.clean() : builder.build());
     }
@@ -249,14 +252,14 @@ namespace ts {
             undefined;
     }
 
-    function performCompilation(rootNames: string[], projectReferences: ReadonlyArray<ProjectReference> | undefined, options: CompilerOptions, plugins: ReadonlyArray<CompilerPlugin> | undefined, configFileParsingDiagnostics?: ReadonlyArray<Diagnostic>) {
+    async function performCompilation(rootNames: string[], projectReferences: ReadonlyArray<ProjectReference> | undefined, options: CompilerOptions, plugins: ReadonlyArray<CompilerPlugin> | undefined, configFileParsingDiagnostics?: ReadonlyArray<Diagnostic>) {
         const host = createCompilerHost(options);
         const currentDirectory = host.getCurrentDirectory();
         const getCanonicalFileName = createGetCanonicalFileName(host.useCaseSensitiveFileNames());
         changeCompilerHostLikeToUseCache(host, fileName => toPath(fileName, currentDirectory, getCanonicalFileName));
-        enableStatistics(options);
+        enableStatistics(options, plugins);
 
-        const programOptions: CreateProgramOptions = {
+        const programOptions: CreateAsyncProgramOptions = {
             rootNames,
             options,
             projectReferences,
@@ -264,21 +267,25 @@ namespace ts {
             configFileParsingDiagnostics,
             plugins
         };
-        const program = createProgram(programOptions);
-        const exitStatus = emitFilesAndReportErrorsAndGetExitStatus(
+
+        const program = await createAsyncProgram(programOptions);
+        const exitStatus = await emitFilesAndReportErrorsAndGetExitStatusAsync(
             program,
             reportDiagnostic,
             s => sys.write(s + sys.newLine),
             createReportErrorSummary(options)
         );
-        reportStatistics(program);
-        program.dispose();
+
+        reportStatistics(program, plugins);
+        if (program.dispose) {
+            program.dispose();
+        }
         return sys.exit(exitStatus);
     }
 
     function performIncrementalCompilation(config: ParsedCommandLine) {
         const { options, fileNames, projectReferences } = config;
-        enableStatistics(options);
+        enableStatistics(options, /*plugins*/ undefined);
         return sys.exit(ts.performIncrementalCompilation({
             rootNames: fileNames,
             options,
@@ -286,7 +293,7 @@ namespace ts {
             projectReferences,
             reportDiagnostic,
             reportErrorSummary: createReportErrorSummary(options),
-            afterProgramEmitAndDiagnostics: builderProgram => reportStatistics(builderProgram.getProgram())
+            afterProgramEmitAndDiagnostics: builderProgram => reportStatistics(builderProgram.getProgram(), /*plugins*/ undefined)
         }));
     }
 
@@ -295,7 +302,7 @@ namespace ts {
         host.createProgram = (rootNames, options, host, oldProgram, configFileParsingDiagnostics, projectReferences) => {
             Debug.assert(rootNames !== undefined || (options === undefined && !!oldProgram));
             if (options !== undefined) {
-                enableStatistics(options);
+                enableStatistics(options, /*plugins*/ undefined);
             }
             return compileUsingBuilder(rootNames, options, host, oldProgram, configFileParsingDiagnostics, projectReferences);
         };
@@ -306,7 +313,7 @@ namespace ts {
         const emitFilesUsingBuilder = watchCompilerHost.afterProgramCreate!; // TODO: GH#18217
         watchCompilerHost.afterProgramCreate = builderProgram => {
             emitFilesUsingBuilder(builderProgram);
-            reportStatistics(builderProgram.getProgram());
+            reportStatistics(builderProgram.getProgram(), /*plugins*/ undefined);
         };
     }
 
@@ -327,29 +334,30 @@ namespace ts {
         createWatchProgram(watchCompilerHost);
     }
 
-    function enableStatistics(compilerOptions: CompilerOptions) {
-        if (compilerOptions.diagnostics || compilerOptions.extendedDiagnostics) {
+    function enableStatistics(compilerOptions: CompilerOptions, plugins: ReadonlyArray<CompilerPlugin> | undefined) {
+        if (compilerOptions.diagnostics || compilerOptions.extendedDiagnostics || some(plugins)) {
             performance.enable();
         }
     }
 
-    function reportStatistics(program: Program) {
+    function reportStatistics(program: BaseProgram, plugins: ReadonlyArray<CompilerPlugin> | undefined) {
         let statistics: Statistic[];
         const compilerOptions = program.getCompilerOptions();
-        if (compilerOptions.diagnostics || compilerOptions.extendedDiagnostics) {
+        if (compilerOptions.diagnostics || compilerOptions.extendedDiagnostics || some(plugins)) {
             statistics = [];
-            const memoryUsed = sys.getMemoryUsage ? sys.getMemoryUsage() : -1;
-            reportCountStatistic("Files", program.getSourceFiles().length);
-            reportCountStatistic("Lines", countLines(program));
-            reportCountStatistic("Nodes", program.getNodeCount());
-            reportCountStatistic("Identifiers", program.getIdentifierCount());
-            reportCountStatistic("Symbols", program.getSymbolCount());
-            reportCountStatistic("Types", program.getTypeCount());
+            if (compilerOptions.diagnostics || compilerOptions.extendedDiagnostics) {
+                const memoryUsed = sys.getMemoryUsage ? sys.getMemoryUsage() : -1;
+                reportCountStatistic("Files", program.getSourceFiles().length);
+                reportCountStatistic("Lines", countLines(program));
+                reportCountStatistic("Nodes", program.getNodeCount());
+                reportCountStatistic("Identifiers", program.getIdentifierCount());
+                reportCountStatistic("Symbols", program.getSymbolCount());
+                reportCountStatistic("Types", program.getTypeCount());
 
-            if (memoryUsed >= 0) {
-                reportStatisticalValue("Memory used", Math.round(memoryUsed / 1000) + "K");
+                if (memoryUsed >= 0) {
+                    reportStatisticalValue("Memory used", Math.round(memoryUsed / 1000) + "K");
+                }
             }
-
             const programTime = performance.getDuration("Program");
             const bindTime = performance.getDuration("Bind");
             const checkTime = performance.getDuration("Check");
@@ -359,9 +367,13 @@ namespace ts {
                 reportCountStatistic("Assignability cache size", caches.assignable);
                 reportCountStatistic("Identity cache size", caches.identity);
                 reportCountStatistic("Subtype cache size", caches.subtype);
-                performance.forEachMeasure((name, duration) => reportTimeStatistic(`${name} time`, duration));
+                performance.forEachMeasure((name, duration) => {
+                    if (!startsWith(name, "userCode:")) {
+                        reportTimeStatistic(`${name} time`, duration);
+                    }
+                });
             }
-            else {
+            else if (compilerOptions.diagnostics) {
                 // Individual component times.
                 // Note: To match the behavior of previous versions of the compiler, the reported parse time includes
                 // I/O read time and processing time for triple-slash references and module imports, and the reported
@@ -373,9 +385,15 @@ namespace ts {
                 reportTimeStatistic("Check time", checkTime);
                 reportTimeStatistic("Emit time", emitTime);
             }
+            if (some(plugins)) {
+                performance.forEachMeasure((name, duration) => {
+                    if (startsWith(name, "userCode:")) {
+                        reportTimeStatistic(`Plugin ${name.slice("userCode:".length)} time`, duration);
+                    }
+                });
+            }
             reportTimeStatistic("Total time", programTime + bindTime + checkTime + emitTime);
             reportStatistics();
-
             performance.disable();
         }
 

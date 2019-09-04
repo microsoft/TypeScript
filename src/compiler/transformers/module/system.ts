@@ -7,6 +7,7 @@ namespace ts {
         }
 
         const {
+            factory,
             startLexicalEnvironment,
             endLexicalEnvironment,
             hoistVariableDeclaration
@@ -41,7 +42,7 @@ namespace ts {
         let enclosingBlockScopedContainer: Node;
         let noSubstitution: boolean[] | undefined; // Set of nodes for which substitution rules should be ignored.
 
-        return chainBundle(transformSourceFile);
+        return chainBundle(context, transformSourceFile);
 
         /**
          * Transforms the module aspects of a SourceFile.
@@ -71,25 +72,25 @@ namespace ts {
             // see comment to 'substitutePostfixUnaryExpression' for more details
 
             // Collect information about the external module and dependency groups.
-            moduleInfo = moduleInfoMap[id] = collectExternalModuleInfo(node, resolver, compilerOptions);
+            moduleInfo = moduleInfoMap[id] = collectExternalModuleInfo(context, node, resolver, compilerOptions);
 
             // Make sure that the name of the 'exports' function does not conflict with
             // existing identifiers.
-            exportFunction = createUniqueName("exports");
+            exportFunction = factory.createUniqueName("exports");
             exportFunctionsMap[id] = exportFunction;
-            contextObject = contextObjectMap[id] = createUniqueName("context");
+            contextObject = contextObjectMap[id] = factory.createUniqueName("context");
 
             // Add the body of the module.
             const dependencyGroups = collectDependencyGroups(moduleInfo.externalImports);
             const moduleBodyBlock = createSystemModuleBody(node, dependencyGroups);
-            const moduleBodyFunction = createFunctionExpression(
+            const moduleBodyFunction = factory.createFunctionExpression(
                 /*modifiers*/ undefined,
                 /*asteriskToken*/ undefined,
                 /*name*/ undefined,
                 /*typeParameters*/ undefined,
                 [
-                    createParameter(/*decorators*/ undefined, /*modifiers*/ undefined, /*dotDotDotToken*/ undefined, exportFunction),
-                    createParameter(/*decorators*/ undefined, /*modifiers*/ undefined, /*dotDotDotToken*/ undefined, contextObject)
+                    factory.createParameterDeclaration(/*decorators*/ undefined, /*modifiers*/ undefined, /*dotDotDotToken*/ undefined, exportFunction),
+                    factory.createParameterDeclaration(/*decorators*/ undefined, /*modifiers*/ undefined, /*dotDotDotToken*/ undefined, contextObject)
                 ],
                 /*type*/ undefined,
                 moduleBodyBlock
@@ -98,16 +99,16 @@ namespace ts {
             // Write the call to `System.register`
             // Clear the emit-helpers flag for later passes since we'll have already used it in the module body
             // So the helper will be emit at the correct position instead of at the top of the source-file
-            const moduleName = tryGetModuleNameFromFile(node, host, compilerOptions);
-            const dependencies = createArrayLiteral(map(dependencyGroups, dependencyGroup => dependencyGroup.name));
+            const moduleName = tryGetModuleNameFromFile(factory, node, host, compilerOptions);
+            const dependencies = factory.createArrayLiteral(map(dependencyGroups, dependencyGroup => dependencyGroup.name));
             const updated = setEmitFlags(
-                updateSourceFileNode(
+                factory.updateSourceFile(
                     node,
                     setTextRange(
-                        createNodeArray([
-                            createExpressionStatement(
-                                createCall(
-                                    createPropertyAccess(createIdentifier("System"), "register"),
+                        factory.createNodeArray([
+                            factory.createExpressionStatement(
+                                factory.createCall(
+                                    factory.createPropertyAccess(factory.createIdentifier("System"), "register"),
                                 /*typeArguments*/ undefined,
                                     moduleName
                                         ? [moduleName, dependencies, moduleBodyFunction]
@@ -146,7 +147,7 @@ namespace ts {
             const groupIndices = createMap<number>();
             const dependencyGroups: DependencyGroup[] = [];
             for (const externalImport of externalImports) {
-                const externalModuleName = getExternalModuleNameLiteral(externalImport, currentSourceFile, host, resolver, compilerOptions);
+                const externalModuleName = getExternalModuleNameLiteral(factory, externalImport, currentSourceFile, host, resolver, compilerOptions);
                 if (externalModuleName) {
                     const text = externalModuleName.text;
                     const groupIndex = groupIndices.get(text);
@@ -224,19 +225,19 @@ namespace ts {
 
             // Add any prologue directives.
             const ensureUseStrict = getStrictOptionValue(compilerOptions, "alwaysStrict") || (!compilerOptions.noImplicitUseStrict && isExternalModule(currentSourceFile));
-            const statementOffset = addPrologue(statements, node.statements, ensureUseStrict, sourceElementVisitor);
+            const statementOffset = factory.copyPrologue(node.statements, statements, ensureUseStrict, sourceElementVisitor);
 
             // var __moduleName = context_1 && context_1.id;
             statements.push(
-                createVariableStatement(
+                factory.createVariableStatement(
                     /*modifiers*/ undefined,
-                    createVariableDeclarationList([
-                        createVariableDeclaration(
+                    factory.createVariableDeclarationList([
+                        factory.createVariableDeclaration(
                             "__moduleName",
                             /*type*/ undefined,
-                            createLogicalAnd(
+                            factory.createLogicalAnd(
                                 contextObject,
-                                createPropertyAccess(contextObject, "id")
+                                factory.createPropertyAccess(contextObject, "id")
                             )
                         )
                     ])
@@ -262,26 +263,26 @@ namespace ts {
             insertStatementsAfterStandardPrologue(statements, endLexicalEnvironment());
 
             const exportStarFunction = addExportStarIfNeeded(statements)!; // TODO: GH#18217
-            const moduleObject = createObjectLiteral([
-                createPropertyAssignment("setters",
+            const moduleObject = factory.createObjectLiteral([
+                factory.createPropertyAssignment("setters",
                     createSettersArray(exportStarFunction, dependencyGroups)
                 ),
-                createPropertyAssignment("execute",
-                    createFunctionExpression(
+                factory.createPropertyAssignment("execute",
+                    factory.createFunctionExpression(
                         /*modifiers*/ undefined,
                         /*asteriskToken*/ undefined,
                         /*name*/ undefined,
                         /*typeParameters*/ undefined,
                         /*parameters*/ [],
                         /*type*/ undefined,
-                        createBlock(executeStatements, /*multiLine*/ true)
+                        factory.createBlock(executeStatements, /*multiLine*/ true)
                     )
                 )
             ]);
 
             moduleObject.multiLine = true;
-            statements.push(createReturn(moduleObject));
-            return createBlock(statements, /*multiLine*/ true);
+            statements.push(factory.createReturn(moduleObject));
+            return factory.createBlock(statements, /*multiLine*/ true);
         }
 
         /**
@@ -328,9 +329,9 @@ namespace ts {
 
                     // write name of exported declaration, i.e 'export var x...'
                     exportedNames.push(
-                        createPropertyAssignment(
-                            createLiteral(exportedLocalName),
-                            createTrue()
+                        factory.createPropertyAssignment(
+                            factory.createStringLiteralFromNode(exportedLocalName),
+                            factory.createTrue()
                         )
                     );
                 }
@@ -349,23 +350,23 @@ namespace ts {
                 for (const element of externalImport.exportClause.elements) {
                     // write name of indirectly exported entry, i.e. 'export {x} from ...'
                     exportedNames.push(
-                        createPropertyAssignment(
-                            createLiteral(idText(element.name || element.propertyName)),
-                            createTrue()
+                        factory.createPropertyAssignment(
+                            factory.createStringLiteral(idText(element.name || element.propertyName)),
+                            factory.createTrue()
                         )
                     );
                 }
             }
 
-            const exportedNamesStorageRef = createUniqueName("exportedNames");
+            const exportedNamesStorageRef = factory.createUniqueName("exportedNames");
             statements.push(
-                createVariableStatement(
+                factory.createVariableStatement(
                     /*modifiers*/ undefined,
-                    createVariableDeclarationList([
-                        createVariableDeclaration(
+                    factory.createVariableDeclarationList([
+                        factory.createVariableDeclaration(
                             exportedNamesStorageRef,
                             /*type*/ undefined,
-                            createObjectLiteral(exportedNames, /*multiline*/ true)
+                            factory.createObjectLiteral(exportedNames, /*multiline*/ true)
                         )
                     ])
                 )
@@ -384,17 +385,17 @@ namespace ts {
          * names.
          */
         function createExportStarFunction(localNames: Identifier | undefined) {
-            const exportStarFunction = createUniqueName("exportStar");
-            const m = createIdentifier("m");
-            const n = createIdentifier("n");
-            const exports = createIdentifier("exports");
-            let condition: Expression = createStrictInequality(n, createLiteral("default"));
+            const exportStarFunction = factory.createUniqueName("exportStar");
+            const m = factory.createIdentifier("m");
+            const n = factory.createIdentifier("n");
+            const exports = factory.createIdentifier("exports");
+            let condition: Expression = factory.createStrictInequality(n, factory.createStringLiteral("default"));
             if (localNames) {
-                condition = createLogicalAnd(
+                condition = factory.createLogicalAnd(
                     condition,
-                    createLogicalNot(
-                        createCall(
-                            createPropertyAccess(localNames, "hasOwnProperty"),
+                    factory.createLogicalNot(
+                        factory.createCall(
+                            factory.createPropertyAccess(localNames, "hasOwnProperty"),
                             /*typeArguments*/ undefined,
                             [n]
                         )
@@ -402,38 +403,38 @@ namespace ts {
                 );
             }
 
-            return createFunctionDeclaration(
+            return factory.createFunctionDeclaration(
                 /*decorators*/ undefined,
                 /*modifiers*/ undefined,
                 /*asteriskToken*/ undefined,
                 exportStarFunction,
                 /*typeParameters*/ undefined,
-                [createParameter(/*decorators*/ undefined, /*modifiers*/ undefined, /*dotDotDotToken*/ undefined, m)],
+                [factory.createParameterDeclaration(/*decorators*/ undefined, /*modifiers*/ undefined, /*dotDotDotToken*/ undefined, m)],
                 /*type*/ undefined,
-                createBlock([
-                    createVariableStatement(
+                factory.createBlock([
+                    factory.createVariableStatement(
                         /*modifiers*/ undefined,
-                        createVariableDeclarationList([
-                            createVariableDeclaration(
+                        factory.createVariableDeclarationList([
+                            factory.createVariableDeclaration(
                                 exports,
                                 /*type*/ undefined,
-                                createObjectLiteral([])
+                                factory.createObjectLiteral([])
                             )
                         ])
                     ),
-                    createForIn(
-                        createVariableDeclarationList([
-                            createVariableDeclaration(n, /*type*/ undefined)
+                    factory.createForIn(
+                        factory.createVariableDeclarationList([
+                            factory.createVariableDeclaration(n, /*type*/ undefined)
                         ]),
                         m,
-                        createBlock([
+                        factory.createBlock([
                             setEmitFlags(
-                                createIf(
+                                factory.createIf(
                                     condition,
-                                    createExpressionStatement(
-                                        createAssignment(
-                                            createElementAccess(exports, n),
-                                            createElementAccess(m, n)
+                                    factory.createExpressionStatement(
+                                        factory.createAssignment(
+                                            factory.createElementAccess(exports, n),
+                                            factory.createElementAccess(m, n)
                                         )
                                     )
                                 ),
@@ -441,8 +442,8 @@ namespace ts {
                             )
                         ])
                     ),
-                    createExpressionStatement(
-                        createCall(
+                    factory.createExpressionStatement(
+                        factory.createCall(
                             exportFunction,
                             /*typeArguments*/ undefined,
                             [exports]
@@ -462,11 +463,11 @@ namespace ts {
             const setters: Expression[] = [];
             for (const group of dependencyGroups) {
                 // derive a unique name for parameter from the first named entry in the group
-                const localName = forEach(group.externalImports, i => getLocalNameForExternalImport(i, currentSourceFile));
-                const parameterName = localName ? getGeneratedNameForNode(localName) : createUniqueName("");
+                const localName = forEach(group.externalImports, i => getLocalNameForExternalImport(factory, i, currentSourceFile));
+                const parameterName = localName ? factory.getGeneratedNameForNode(localName) : factory.createUniqueName("");
                 const statements: Statement[] = [];
                 for (const entry of group.externalImports) {
-                    const importVariableName = getLocalNameForExternalImport(entry, currentSourceFile)!; // TODO: GH#18217
+                    const importVariableName = getLocalNameForExternalImport(factory, entry, currentSourceFile)!; // TODO: GH#18217
                     switch (entry.kind) {
                         case SyntaxKind.ImportDeclaration:
                             if (!entry.importClause) {
@@ -480,8 +481,8 @@ namespace ts {
                             Debug.assert(importVariableName !== undefined);
                             // save import into the local
                             statements.push(
-                                createExpressionStatement(
-                                    createAssignment(importVariableName, parameterName)
+                                factory.createExpressionStatement(
+                                    factory.createAssignment(importVariableName, parameterName)
                                 )
                             );
                             break;
@@ -500,22 +501,22 @@ namespace ts {
                                 const properties: PropertyAssignment[] = [];
                                 for (const e of entry.exportClause.elements) {
                                     properties.push(
-                                        createPropertyAssignment(
-                                            createLiteral(idText(e.name)),
-                                            createElementAccess(
+                                        factory.createPropertyAssignment(
+                                            factory.createStringLiteral(idText(e.name)),
+                                            factory.createElementAccess(
                                                 parameterName,
-                                                createLiteral(idText(e.propertyName || e.name))
+                                                factory.createStringLiteral(idText(e.propertyName || e.name))
                                             )
                                         )
                                     );
                                 }
 
                                 statements.push(
-                                    createExpressionStatement(
-                                        createCall(
+                                    factory.createExpressionStatement(
+                                        factory.createCall(
                                             exportFunction,
                                             /*typeArguments*/ undefined,
-                                            [createObjectLiteral(properties, /*multiline*/ true)]
+                                            [factory.createObjectLiteral(properties, /*multiline*/ true)]
                                         )
                                     )
                                 );
@@ -527,8 +528,8 @@ namespace ts {
                                 //
                                 //  exportStar(foo_1_1);
                                 statements.push(
-                                    createExpressionStatement(
-                                        createCall(
+                                    factory.createExpressionStatement(
+                                        factory.createCall(
                                             exportStarFunction,
                                             /*typeArguments*/ undefined,
                                             [parameterName]
@@ -541,19 +542,19 @@ namespace ts {
                 }
 
                 setters.push(
-                    createFunctionExpression(
+                    factory.createFunctionExpression(
                         /*modifiers*/ undefined,
                         /*asteriskToken*/ undefined,
                         /*name*/ undefined,
                         /*typeParameters*/ undefined,
-                        [createParameter(/*decorators*/ undefined, /*modifiers*/ undefined, /*dotDotDotToken*/ undefined, parameterName)],
+                        [factory.createParameterDeclaration(/*decorators*/ undefined, /*modifiers*/ undefined, /*dotDotDotToken*/ undefined, parameterName)],
                         /*type*/ undefined,
-                        createBlock(statements, /*multiLine*/ true)
+                        factory.createBlock(statements, /*multiLine*/ true)
                     )
                 );
             }
 
-            return createArrayLiteral(setters, /*multiLine*/ true);
+            return factory.createArrayLiteral(setters, /*multiLine*/ true);
         }
 
         //
@@ -594,7 +595,7 @@ namespace ts {
         function visitImportDeclaration(node: ImportDeclaration): VisitResult<Statement> {
             let statements: Statement[] | undefined;
             if (node.importClause) {
-                hoistVariableDeclaration(getLocalNameForExternalImport(node, currentSourceFile)!); // TODO: GH#18217
+                hoistVariableDeclaration(getLocalNameForExternalImport(factory, node, currentSourceFile)!); // TODO: GH#18217
             }
 
             if (hasAssociatedEndOfDeclarationMarker(node)) {
@@ -618,7 +619,7 @@ namespace ts {
             Debug.assert(isExternalModuleImportEqualsDeclaration(node), "import= for internal module references should be handled in an earlier transformer.");
 
             let statements: Statement[] | undefined;
-            hoistVariableDeclaration(getLocalNameForExternalImport(node, currentSourceFile)!); // TODO: GH#18217
+            hoistVariableDeclaration(getLocalNameForExternalImport(factory, node, currentSourceFile)!); // TODO: GH#18217
 
             if (hasAssociatedEndOfDeclarationMarker(node)) {
                 // Defer exports until we encounter an EndOfDeclarationMarker node
@@ -648,10 +649,10 @@ namespace ts {
             if (original && hasAssociatedEndOfDeclarationMarker(original)) {
                 // Defer exports until we encounter an EndOfDeclarationMarker node
                 const id = getOriginalNodeId(node);
-                deferredExports[id] = appendExportStatement(deferredExports[id], createIdentifier("default"), expression, /*allowComments*/ true);
+                deferredExports[id] = appendExportStatement(deferredExports[id], factory.createIdentifier("default"), expression, /*allowComments*/ true);
             }
             else {
-                return createExportStatement(createIdentifier("default"), expression, /*allowComments*/ true);
+                return createExportStatement(factory.createIdentifier("default"), expression, /*allowComments*/ true);
             }
         }
 
@@ -663,12 +664,12 @@ namespace ts {
         function visitFunctionDeclaration(node: FunctionDeclaration): VisitResult<Statement> {
             if (hasModifier(node, ModifierFlags.Export)) {
                 hoistedStatements = append(hoistedStatements,
-                    updateFunctionDeclaration(
+                    factory.updateFunctionDeclaration(
                         node,
                         node.decorators,
                         visitNodes(node.modifiers, modifierVisitor, isModifier),
                         node.asteriskToken,
-                        getDeclarationName(node, /*allowComments*/ true, /*allowSourceMaps*/ true),
+                        factory.getDeclarationName(node, /*allowComments*/ true, /*allowSourceMaps*/ true),
                         /*typeParameters*/ undefined,
                         visitNodes(node.parameters, destructuringAndImportCallVisitor, isParameterDeclaration),
                         /*type*/ undefined,
@@ -699,17 +700,18 @@ namespace ts {
             let statements: Statement[] | undefined;
 
             // Hoist the name of the class declaration to the outer module body function.
-            const name = getLocalName(node);
+            const name = factory.getLocalName(node);
             hoistVariableDeclaration(name);
 
             // Rewrite the class declaration into an assignment of a class expression.
             statements = append(statements,
                 setTextRange(
-                    createExpressionStatement(
-                        createAssignment(
+                    factory.createExpressionStatement(
+                        factory.createAssignment(
                             name,
                             setTextRange(
-                                createClassExpression(
+                                factory.createClassExpression(
+                                    visitNodes(node.decorators, destructuringAndImportCallVisitor, isDecorator),
                                     /*modifiers*/ undefined,
                                     node.name,
                                     /*typeParameters*/ undefined,
@@ -761,7 +763,7 @@ namespace ts {
 
             let statements: Statement[] | undefined;
             if (expressions) {
-                statements = append(statements, setTextRange(createExpressionStatement(inlineExpressions(expressions)), node));
+                statements = append(statements, setTextRange(factory.createExpressionStatement(factory.inlineExpressions(expressions)), node));
             }
 
             if (isMarkedDeclaration) {
@@ -859,8 +861,8 @@ namespace ts {
         function createVariableAssignment(name: Identifier, value: Expression, location: TextRange | undefined, isExportedDeclaration: boolean) {
             hoistVariableDeclaration(getSynthesizedClone(name));
             return isExportedDeclaration
-                ? createExportExpression(name, preventSubstitution(setTextRange(createAssignment(name, value), location)))
-                : preventSubstitution(setTextRange(createAssignment(name, value), location));
+                ? createExportExpression(name, preventSubstitution(setTextRange(factory.createAssignment(name, value), location)))
+                : preventSubstitution(setTextRange(factory.createAssignment(name, value), location));
         }
 
         /**
@@ -1030,7 +1032,7 @@ namespace ts {
             else if (!isGeneratedIdentifier(decl.name)) {
                 let excludeName: string | undefined;
                 if (exportSelf) {
-                    statements = appendExportStatement(statements, decl.name, getLocalName(decl));
+                    statements = appendExportStatement(statements, decl.name, factory.getLocalName(decl));
                     excludeName = idText(decl.name);
                 }
 
@@ -1056,8 +1058,8 @@ namespace ts {
 
             let excludeName: string | undefined;
             if (hasModifier(decl, ModifierFlags.Export)) {
-                const exportName = hasModifier(decl, ModifierFlags.Default) ? createLiteral("default") : decl.name!;
-                statements = appendExportStatement(statements, exportName, getLocalName(decl));
+                const exportName = hasModifier(decl, ModifierFlags.Default) ? factory.createStringLiteral("default") : decl.name!;
+                statements = appendExportStatement(statements, exportName, factory.getLocalName(decl));
                 excludeName = getTextOfIdentifierOrLiteral(exportName);
             }
 
@@ -1082,7 +1084,7 @@ namespace ts {
                 return statements;
             }
 
-            const name = getDeclarationName(decl);
+            const name = factory.getDeclarationName(decl);
             const exportSpecifiers = moduleInfo.exportSpecifiers.get(idText(name));
             if (exportSpecifiers) {
                 for (const exportSpecifier of exportSpecifiers) {
@@ -1118,7 +1120,7 @@ namespace ts {
          * @param allowComments An optional value indicating whether to emit comments for the statement.
          */
         function createExportStatement(name: Identifier | StringLiteral, value: Expression, allowComments?: boolean) {
-            const statement = createExpressionStatement(createExportExpression(name, value));
+            const statement = factory.createExpressionStatement(createExportExpression(name, value));
             startOnNewLine(statement);
             if (!allowComments) {
                 setEmitFlags(statement, EmitFlags.NoComments);
@@ -1134,9 +1136,9 @@ namespace ts {
          * @param value The exported value.
          */
         function createExportExpression(name: Identifier | StringLiteral, value: Expression) {
-            const exportName = isIdentifier(name) ? createLiteral(name) : name;
+            const exportName = isIdentifier(name) ? factory.createStringLiteralFromNode(name) : name;
             setEmitFlags(value, getEmitFlags(value) | EmitFlags.NoComments);
-            return setCommentRange(createCall(exportFunction, /*typeArguments*/ undefined, [exportName, value]), value);
+            return setCommentRange(factory.createCall(exportFunction, /*typeArguments*/ undefined, [exportName, value]), value);
         }
 
         //
@@ -1221,7 +1223,7 @@ namespace ts {
             const savedEnclosingBlockScopedContainer = enclosingBlockScopedContainer;
             enclosingBlockScopedContainer = node;
 
-            node = updateFor(
+            node = factory.updateFor(
                 node,
                 node.initializer && visitForInitializer(node.initializer),
                 visitNode(node.condition, destructuringAndImportCallVisitor, isExpression),
@@ -1242,11 +1244,11 @@ namespace ts {
             const savedEnclosingBlockScopedContainer = enclosingBlockScopedContainer;
             enclosingBlockScopedContainer = node;
 
-            node = updateForIn(
+            node = factory.updateForIn(
                 node,
                 visitForInitializer(node.initializer),
                 visitNode(node.expression, destructuringAndImportCallVisitor, isExpression),
-                visitNode(node.statement, nestedElementVisitor, isStatement, liftToBlock)
+                visitNode(node.statement, nestedElementVisitor, isStatement, factory.liftToBlock)
             );
 
             enclosingBlockScopedContainer = savedEnclosingBlockScopedContainer;
@@ -1262,12 +1264,12 @@ namespace ts {
             const savedEnclosingBlockScopedContainer = enclosingBlockScopedContainer;
             enclosingBlockScopedContainer = node;
 
-            node = updateForOf(
+            node = factory.updateForOf(
                 node,
                 node.awaitModifier,
                 visitForInitializer(node.initializer),
                 visitNode(node.expression, destructuringAndImportCallVisitor, isExpression),
-                visitNode(node.statement, nestedElementVisitor, isStatement, liftToBlock)
+                visitNode(node.statement, nestedElementVisitor, isStatement, factory.liftToBlock)
             );
 
             enclosingBlockScopedContainer = savedEnclosingBlockScopedContainer;
@@ -1300,7 +1302,7 @@ namespace ts {
                     }
                 }
 
-                return expressions ? inlineExpressions(expressions) : createOmittedExpression();
+                return expressions ? factory.inlineExpressions(expressions) : factory.createOmittedExpression();
             }
             else {
                 return visitEachChild(node, nestedElementVisitor, context);
@@ -1313,9 +1315,9 @@ namespace ts {
          * @param node The node to visit.
          */
         function visitDoStatement(node: DoStatement): VisitResult<Statement> {
-            return updateDo(
+            return factory.updateDo(
                 node,
-                visitNode(node.statement, nestedElementVisitor, isStatement, liftToBlock),
+                visitNode(node.statement, nestedElementVisitor, isStatement, factory.liftToBlock),
                 visitNode(node.expression, destructuringAndImportCallVisitor, isExpression)
             );
         }
@@ -1326,10 +1328,10 @@ namespace ts {
          * @param node The node to visit.
          */
         function visitWhileStatement(node: WhileStatement): VisitResult<Statement> {
-            return updateWhile(
+            return factory.updateWhile(
                 node,
                 visitNode(node.expression, destructuringAndImportCallVisitor, isExpression),
-                visitNode(node.statement, nestedElementVisitor, isStatement, liftToBlock)
+                visitNode(node.statement, nestedElementVisitor, isStatement, factory.liftToBlock)
             );
         }
 
@@ -1339,10 +1341,10 @@ namespace ts {
          * @param node The node to visit.
          */
         function visitLabeledStatement(node: LabeledStatement): VisitResult<Statement> {
-            return updateLabel(
+            return factory.updateLabel(
                 node,
                 node.label,
-                visitNode(node.statement, nestedElementVisitor, isStatement, liftToBlock)
+                visitNode(node.statement, nestedElementVisitor, isStatement, factory.liftToBlock)
             );
         }
 
@@ -1352,10 +1354,10 @@ namespace ts {
          * @param node The node to visit.
          */
         function visitWithStatement(node: WithStatement): VisitResult<Statement> {
-            return updateWith(
+            return factory.updateWith(
                 node,
                 visitNode(node.expression, destructuringAndImportCallVisitor, isExpression),
-                visitNode(node.statement, nestedElementVisitor, isStatement, liftToBlock)
+                visitNode(node.statement, nestedElementVisitor, isStatement, factory.liftToBlock)
             );
         }
 
@@ -1365,7 +1367,7 @@ namespace ts {
          * @param node The node to visit.
          */
         function visitSwitchStatement(node: SwitchStatement): VisitResult<Statement> {
-            return updateSwitch(
+            return factory.updateSwitch(
                 node,
                 visitNode(node.expression, destructuringAndImportCallVisitor, isExpression),
                 visitNode(node.caseBlock, nestedElementVisitor, isCaseBlock)
@@ -1381,7 +1383,7 @@ namespace ts {
             const savedEnclosingBlockScopedContainer = enclosingBlockScopedContainer;
             enclosingBlockScopedContainer = node;
 
-            node = updateCaseBlock(
+            node = factory.updateCaseBlock(
                 node,
                 visitNodes(node.clauses, nestedElementVisitor, isCaseOrDefaultClause)
             );
@@ -1396,7 +1398,7 @@ namespace ts {
          * @param node The node to visit.
          */
         function visitCaseClause(node: CaseClause): VisitResult<CaseOrDefaultClause> {
-            return updateCaseClause(
+            return factory.updateCaseClause(
                 node,
                 visitNode(node.expression, destructuringAndImportCallVisitor, isExpression),
                 visitNodes(node.statements, nestedElementVisitor, isStatement)
@@ -1430,7 +1432,7 @@ namespace ts {
             const savedEnclosingBlockScopedContainer = enclosingBlockScopedContainer;
             enclosingBlockScopedContainer = node;
 
-            node = updateCatchClause(
+            node = factory.updateCatchClause(
                 node,
                 node.variableDeclaration,
                 visitNode(node.block, nestedElementVisitor, isBlock)
@@ -1490,10 +1492,10 @@ namespace ts {
             //         }
             //     };
             // });
-            return createCall(
-                createPropertyAccess(
+            return factory.createCall(
+                factory.createPropertyAccess(
                     contextObject,
-                    createIdentifier("import")
+                    factory.createIdentifier("import")
                 ),
                 /*typeArguments*/ undefined,
                 some(node.arguments) ? [visitNode(node.arguments[0], destructuringAndImportCallVisitor)] : []
@@ -1658,11 +1660,11 @@ namespace ts {
                 if (importDeclaration) {
                     if (isImportClause(importDeclaration)) {
                         return setTextRange(
-                            createPropertyAssignment(
+                            factory.createPropertyAssignment(
                                 getSynthesizedClone(name),
-                                createPropertyAccess(
-                                    getGeneratedNameForNode(importDeclaration.parent),
-                                    createIdentifier("default")
+                                factory.createPropertyAccess(
+                                    factory.getGeneratedNameForNode(importDeclaration.parent),
+                                    factory.createIdentifier("default")
                                 )
                             ),
                             /*location*/ node
@@ -1670,10 +1672,10 @@ namespace ts {
                     }
                     else if (isImportSpecifier(importDeclaration)) {
                         return setTextRange(
-                            createPropertyAssignment(
+                            factory.createPropertyAssignment(
                                 getSynthesizedClone(name),
-                                createPropertyAccess(
-                                    getGeneratedNameForNode(importDeclaration.parent.parent.parent),
+                                factory.createPropertyAccess(
+                                    factory.getGeneratedNameForNode(importDeclaration.parent.parent.parent),
                                     getSynthesizedClone(importDeclaration.propertyName || importDeclaration.name)
                                 ),
                             ),
@@ -1715,7 +1717,7 @@ namespace ts {
             if (getEmitFlags(node) & EmitFlags.HelperName) {
                 const externalHelpersModuleName = getExternalHelpersModuleName(currentSourceFile);
                 if (externalHelpersModuleName) {
-                    return createPropertyAccess(externalHelpersModuleName, node);
+                    return factory.createPropertyAccess(externalHelpersModuleName, node);
                 }
 
                 return node;
@@ -1732,17 +1734,17 @@ namespace ts {
                 if (importDeclaration) {
                     if (isImportClause(importDeclaration)) {
                         return setTextRange(
-                            createPropertyAccess(
-                                getGeneratedNameForNode(importDeclaration.parent),
-                                createIdentifier("default")
+                            factory.createPropertyAccess(
+                                factory.getGeneratedNameForNode(importDeclaration.parent),
+                                factory.createIdentifier("default")
                             ),
                             /*location*/ node
                         );
                     }
                     else if (isImportSpecifier(importDeclaration)) {
                         return setTextRange(
-                            createPropertyAccess(
-                                getGeneratedNameForNode(importDeclaration.parent.parent.parent),
+                            factory.createPropertyAccess(
+                                factory.getGeneratedNameForNode(importDeclaration.parent.parent.parent),
                                 getSynthesizedClone(importDeclaration.propertyName || importDeclaration.name)
                             ),
                             /*location*/ node
@@ -1812,7 +1814,7 @@ namespace ts {
                 if (exportedNames) {
                     let expression: Expression = node.kind === SyntaxKind.PostfixUnaryExpression
                         ? setTextRange(
-                            createPrefix(
+                            factory.createPrefix(
                                 node.operator,
                                 node.operand
                             ),
@@ -1826,8 +1828,8 @@ namespace ts {
 
                     if (node.kind === SyntaxKind.PostfixUnaryExpression) {
                         expression = node.operator === SyntaxKind.PlusPlusToken
-                            ? createSubtract(preventSubstitution(expression), createLiteral(1))
-                            : createAdd(preventSubstitution(expression), createLiteral(1));
+                            ? factory.createSubtract(preventSubstitution(expression), factory.createNumericLiteral(1))
+                            : factory.createAdd(preventSubstitution(expression), factory.createNumericLiteral(1));
                     }
 
                     return expression;
@@ -1839,7 +1841,7 @@ namespace ts {
 
         function substituteMetaProperty(node: MetaProperty) {
             if (isImportMeta(node)) {
-                return createPropertyAccess(contextObject, createIdentifier("meta"));
+                return factory.createPropertyAccess(contextObject, factory.createIdentifier("meta"));
             }
             return node;
         }
@@ -1858,7 +1860,7 @@ namespace ts {
                 if (valueDeclaration) {
                     const exportContainer = resolver.getReferencedExportContainer(name, /*prefixLocals*/ false);
                     if (exportContainer && exportContainer.kind === SyntaxKind.SourceFile) {
-                        exportedNames = append(exportedNames, getDeclarationName(valueDeclaration));
+                        exportedNames = append(exportedNames, factory.getDeclarationName(valueDeclaration));
                     }
 
                     exportedNames = addRange(exportedNames, moduleInfo && moduleInfo.exportedBindings[getOriginalNodeId(valueDeclaration)]);

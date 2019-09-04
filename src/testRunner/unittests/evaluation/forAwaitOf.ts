@@ -1,6 +1,6 @@
 describe("unittests:: evaluation:: forAwaitOfEvaluation", () => {
     it("sync (es5)", async () => {
-        const result = evaluator.evaluateTypeScript(`
+        const result = await evaluator.evaluateTypeScript(`
         let i = 0;
         const iterator: IterableIterator<any> = {
             [Symbol.iterator]() { return this; },
@@ -26,7 +26,7 @@ describe("unittests:: evaluation:: forAwaitOfEvaluation", () => {
     });
 
     it("sync (es2015)", async () => {
-        const result = evaluator.evaluateTypeScript(`
+        const result = await evaluator.evaluateTypeScript(`
         let i = 0;
         const iterator: IterableIterator<any> = {
             [Symbol.iterator]() { return this; },
@@ -52,7 +52,7 @@ describe("unittests:: evaluation:: forAwaitOfEvaluation", () => {
     });
 
     it("async (es5)", async () => {
-        const result = evaluator.evaluateTypeScript(`
+        const result = await evaluator.evaluateTypeScript(`
         let i = 0;
         const iterator = {
             [Symbol.asyncIterator](): AsyncIterableIterator<any> { return this; },
@@ -78,7 +78,7 @@ describe("unittests:: evaluation:: forAwaitOfEvaluation", () => {
     });
 
     it("async (es2015)", async () => {
-        const result = evaluator.evaluateTypeScript(`
+        const result = await evaluator.evaluateTypeScript(`
         let i = 0;
         const iterator = {
             [Symbol.asyncIterator](): AsyncIterableIterator<any> { return this; },

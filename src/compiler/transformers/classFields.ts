@@ -16,6 +16,7 @@ namespace ts {
      */
     export function transformClassFields(context: TransformationContext) {
         const {
+            factory,
             hoistVariableDeclaration,
             endLexicalEnvironment,
             resumeLexicalEnvironment
@@ -41,7 +42,7 @@ namespace ts {
          */
         let pendingStatements: Statement[] | undefined;
 
-        return chainBundle(transformSourceFile);
+        return chainBundle(context, transformSourceFile);
 
         function transformSourceFile(node: SourceFile) {
             if (node.isDeclarationFile) {
@@ -117,9 +118,9 @@ namespace ts {
                 const expressions = pendingExpressions;
                 expressions.push(name.expression);
                 pendingExpressions = [];
-                node = updateComputedPropertyName(
+                node = factory.updateComputedPropertyName(
                     node,
-                    inlineExpressions(expressions)
+                    factory.inlineExpressions(expressions)
                 );
             }
             return node;
@@ -149,7 +150,7 @@ namespace ts {
             const isDerivedClass = !!(extendsClauseElement && skipOuterExpressions(extendsClauseElement.expression).kind !== SyntaxKind.NullKeyword);
 
             const statements: Statement[] = [
-                updateClassDeclaration(
+                factory.updateClassDeclaration(
                     node,
                     /*decorators*/ undefined,
                     node.modifiers,
@@ -162,7 +163,7 @@ namespace ts {
 
             // Write any pending expressions from elided or moved computed property names
             if (some(pendingExpressions)) {
-                statements.push(createExpressionStatement(inlineExpressions(pendingExpressions)));
+                statements.push(factory.createExpressionStatement(factory.inlineExpressions(pendingExpressions)));
             }
 
             pendingExpressions = savedPendingExpressions;
@@ -174,7 +175,7 @@ namespace ts {
             //                                  a lexical declaration such as a LexicalDeclaration or a ClassDeclaration.
             const staticProperties = getInitializedProperties(node, /*isStatic*/ true);
             if (some(staticProperties)) {
-                addInitializedPropertyStatements(statements, staticProperties, getInternalName(node));
+                addInitializedPropertyStatements(statements, staticProperties, factory.getInternalName(node));
             }
 
             return statements;
@@ -200,8 +201,9 @@ namespace ts {
             const extendsClauseElement = getEffectiveBaseTypeNode(node);
             const isDerivedClass = !!(extendsClauseElement && skipOuterExpressions(extendsClauseElement.expression).kind !== SyntaxKind.NullKeyword);
 
-            const classExpression = updateClassExpression(
+            const classExpression = factory.updateClassExpression(
                 node,
+                visitNodes(node.decorators, visitor, isDecorator),
                 node.modifiers,
                 node.name,
                 /*typeParameters*/ undefined,
@@ -215,23 +217,23 @@ namespace ts {
 
                     // Write any pending expressions from elided or moved computed property names
                     if (pendingStatements && pendingExpressions && some(pendingExpressions)) {
-                        pendingStatements.push(createExpressionStatement(inlineExpressions(pendingExpressions)));
+                        pendingStatements.push(factory.createExpressionStatement(factory.inlineExpressions(pendingExpressions)));
                     }
                     pendingExpressions = savedPendingExpressions;
 
                     if (pendingStatements && some(staticProperties)) {
-                        addInitializedPropertyStatements(pendingStatements, staticProperties, getInternalName(node));
+                        addInitializedPropertyStatements(pendingStatements, staticProperties, factory.getInternalName(node));
                     }
                     return classExpression;
                 }
                 else {
                     const expressions: Expression[] = [];
                     const isClassWithConstructorReference = resolver.getNodeCheckFlags(node) & NodeCheckFlags.ClassWithConstructorReference;
-                    const temp = createTempVariable(hoistVariableDeclaration, !!isClassWithConstructorReference);
+                    const temp = factory.createTempVariable(hoistVariableDeclaration, !!isClassWithConstructorReference);
                     if (isClassWithConstructorReference) {
                         // record an alias as the class name is not in scope for statics.
                         enableSubstitutionForClassAliases();
-                        const alias = getSynthesizedClone(temp);
+                        const alias = getSynthesizedClone(temp) as GeneratedIdentifier;
                         alias.autoGenerateFlags &= ~GeneratedIdentifierFlags.ReservedInNestedScopes;
                         classAliases[getOriginalNodeId(node)] = alias;
                     }
@@ -239,14 +241,14 @@ namespace ts {
                     // To preserve the behavior of the old emitter, we explicitly indent
                     // the body of a class with static initializers.
                     setEmitFlags(classExpression, EmitFlags.Indented | getEmitFlags(classExpression));
-                    expressions.push(startOnNewLine(createAssignment(temp, classExpression)));
+                    expressions.push(startOnNewLine(factory.createAssignment(temp, classExpression)));
                     // Add any pending expressions leftover from elided or relocated computed property names
                     addRange(expressions, map(pendingExpressions, startOnNewLine));
                     addRange(expressions, generateInitializedPropertyExpressions(staticProperties, temp));
                     expressions.push(startOnNewLine(temp));
 
                     pendingExpressions = savedPendingExpressions;
-                    return inlineExpressions(expressions);
+                    return factory.inlineExpressions(expressions);
                 }
             }
 
@@ -261,7 +263,7 @@ namespace ts {
                 members.push(constructor);
             }
             addRange(members, visitNodes(node.members, classElementVisitor, isClassElement));
-            return setTextRange(createNodeArray(members), /*location*/ node.members);
+            return setTextRange(factory.createNodeArray(members), /*location*/ node.members);
         }
 
         function transformConstructor(node: ClassDeclaration | ClassExpression, isDerivedClass: boolean) {
@@ -278,7 +280,7 @@ namespace ts {
             return startOnNewLine(
                 setOriginalNode(
                     setTextRange(
-                        createConstructor(
+                        factory.createConstructorDeclaration(
                             /*decorators*/ undefined,
                             /*modifiers*/ undefined,
                             parameters,
@@ -310,18 +312,18 @@ namespace ts {
                 //  super(...arguments);
                 //
                 statements.push(
-                    createExpressionStatement(
-                        createCall(
-                            createSuper(),
+                    factory.createExpressionStatement(
+                        factory.createCall(
+                            factory.createSuper(),
                             /*typeArguments*/ undefined,
-                            [createSpread(createIdentifier("arguments"))]
+                            [factory.createSpread(factory.createIdentifier("arguments"))]
                         )
                     )
                 );
             }
 
             if (constructor) {
-                indexOfFirstStatement = addPrologueDirectivesAndInitialSuperCall(constructor, statements, visitor);
+                indexOfFirstStatement = addPrologueDirectivesAndInitialSuperCall(factory, constructor, statements, visitor);
             }
 
             // Add the property initializers. Transforms this:
@@ -349,7 +351,7 @@ namespace ts {
                     indexOfFirstStatement += parameterPropertyDeclarationCount;
                 }
             }
-            addInitializedPropertyStatements(statements, properties, createThis());
+            addInitializedPropertyStatements(statements, properties, factory.createThis());
 
             // Add existing statements, skipping the initial super call.
             if (constructor) {
@@ -359,9 +361,9 @@ namespace ts {
             statements = mergeLexicalEnvironment(statements, endLexicalEnvironment());
 
             return setTextRange(
-                createBlock(
+                factory.createBlock(
                     setTextRange(
-                        createNodeArray(statements),
+                        factory.createNodeArray(statements),
                         /*location*/ constructor ? constructor.body!.statements : node.members
                     ),
                     /*multiLine*/ true
@@ -378,7 +380,7 @@ namespace ts {
          */
         function addInitializedPropertyStatements(statements: Statement[], properties: ReadonlyArray<PropertyDeclaration>, receiver: LeftHandSideExpression) {
             for (const property of properties) {
-                const statement = createExpressionStatement(transformInitializedProperty(property, receiver));
+                const statement = factory.createExpressionStatement(transformInitializedProperty(property, receiver));
                 setSourceMapRange(statement, moveRangePastModifiers(property));
                 setCommentRange(statement, property);
                 setOriginalNode(statement, property);
@@ -415,12 +417,12 @@ namespace ts {
         function transformInitializedProperty(property: PropertyDeclaration, receiver: LeftHandSideExpression) {
             // We generate a name here in order to reuse the value cached by the relocated computed name expression (which uses the same generated name)
             const propertyName = isComputedPropertyName(property.name) && !isSimpleInlineableExpression(property.name.expression)
-                ? updateComputedPropertyName(property.name, getGeneratedNameForNode(property.name))
+                ? factory.updateComputedPropertyName(property.name, factory.getGeneratedNameForNode(property.name))
                 : property.name;
             const initializer = visitNode(property.initializer!, visitor, isExpression);
-            const memberAccess = createMemberAccessForPropertyName(receiver, propertyName, /*location*/ propertyName);
+            const memberAccess = createMemberAccessForPropertyName(factory, receiver, propertyName, /*location*/ propertyName);
 
-            return createAssignment(memberAccess, initializer);
+            return factory.createAssignment(memberAccess, initializer);
         }
 
         function enableSubstitutionForClassAliases() {
@@ -499,13 +501,12 @@ namespace ts {
                 const inlinable = isSimpleInlineableExpression(innerExpression);
                 const alreadyTransformed = isAssignmentExpression(innerExpression) && isGeneratedIdentifier(innerExpression.left);
                 if (!alreadyTransformed && !inlinable && shouldHoist) {
-                    const generatedName = getGeneratedNameForNode(name);
+                    const generatedName = factory.getGeneratedNameForNode(name);
                     hoistVariableDeclaration(generatedName);
-                    return createAssignment(generatedName, expression);
+                    return factory.createAssignment(generatedName, expression);
                 }
                 return (inlinable || isIdentifier(innerExpression)) ? undefined : expression;
             }
         }
     }
-
 }

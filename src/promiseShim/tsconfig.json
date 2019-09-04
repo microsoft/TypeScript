@@ -1,0 +1,9 @@
+{
+    "extends": "../tsconfig-base",
+    "compilerOptions": {
+        "outFile": "../../built/local/promiseShim.js"
+    },
+    "files": [
+        "promise.ts"
+    ]
+}

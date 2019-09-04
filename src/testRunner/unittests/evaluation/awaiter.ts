@@ -1,7 +1,7 @@
 describe("unittests:: evaluation:: awaiter", () => {
     // NOTE: This could break if the ECMAScript spec ever changes the timing behavior for Promises (again)
     it("await (es5)", async () => {
-        const result = evaluator.evaluateTypeScript(`
+        const result = await evaluator.evaluateTypeScript(`
         async function a(msg: string) {
             await Promise.resolve();
             output.push(msg);

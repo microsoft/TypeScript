@@ -1,6 +1,6 @@
 describe("unittests:: evaluation:: asyncGeneratorEvaluation", () => {
     it("return (es5)", async () => {
-        const result = evaluator.evaluateTypeScript(`
+        const result = await evaluator.evaluateTypeScript(`
         async function * g() {
             return Promise.resolve(0);
         }
@@ -14,7 +14,7 @@ describe("unittests:: evaluation:: asyncGeneratorEvaluation", () => {
         ]);
     });
     it("return (es2015)", async () => {
-        const result = evaluator.evaluateTypeScript(`
+        const result = await evaluator.evaluateTypeScript(`
         async function * g() {
             return Promise.resolve(0);
         }

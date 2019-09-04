@@ -33,7 +33,7 @@ class Test262BaselineRunner extends RunnerBase {
                 inputFiles: Harness.Compiler.TestFile[];
             };
 
-            before(() => {
+            before(async () => {
                 const content = Harness.IO.readFile(filePath)!;
                 const testFilename = ts.removeFileExtension(filePath).replace(/\//g, "_") + ".test";
                 const testCaseContent = Harness.TestCaseParser.makeUnitsFromTest(content, testFilename);
@@ -50,7 +50,7 @@ class Test262BaselineRunner extends RunnerBase {
                     compilerResult: undefined!, // TODO: GH#18217
                 };
 
-                testState.compilerResult = Harness.Compiler.compileFiles(
+                testState.compilerResult = await Harness.Compiler.compileFiles(
                     [Test262BaselineRunner.helperFile].concat(inputFiles),
                     /*otherFiles*/ [],
                     /* harnessOptions */ undefined,

@@ -1,18 +1,25 @@
 /*@internal*/
 namespace ts {
     type MatchingKeys<T, TMatch, K extends keyof T = keyof T> = K extends (T[K] extends TMatch ? K : never) ? K : never;
-    type Hook = MatchingKeys<Required<CompilerPluginModule>, (context: CompilerPluginContext, ...args: any[]) => CompilerPluginResult | void>;
-    type HookFunction<K extends Hook> = NonNullable<CompilerPluginModule[K]>;
-    type HookReturnType<K extends Hook> = Exclude<ReturnType<HookFunction<K>>, void>;
+    type TryExcludeVoid<T> = [T] extends [void] ? void : Exclude<T, void>;
+    type Replace<T, Match, Replace> = T extends Match ? Replace : T;
+    type Promised<T> = T extends PromiseLike<infer U> ? U : T;
+    type Hook = MatchingKeys<Required<CompilerPluginModule>, (context: CompilerPluginContext, ...args: any[]) => PromiseLike<CompilerPluginResult | void> | CompilerPluginResult | void>;
+    type HookFunction<K extends Hook> = Required<CompilerPluginModule>[K];
+    type HookParameters<K extends Hook> = HookFunction<K> extends (context: CompilerPluginContext, ...args: infer P) => any ? Readonly<P> : never;
+    type HookReturnTypes = { [K in Hook]: TryExcludeVoid<Promised<ReturnType<HookFunction<K>>>> };
+    type HookReturnType<K extends Hook> = HookReturnTypes[K];
+    type HostHook = Exclude<Hook, "activate" | "deactivate">;
+    type HostHookReturnType<K extends Hook> = Replace<HookReturnType<K>, void, CompilerPluginResult>;
+    type HostHookAggregate<K extends HostHook> = (state: HostHookReturnType<K>, userCodeResult: HookReturnType<K>, args: ArgumentsHolder<K>) => HostHookReturnType<K>;
+
+    interface ArgumentsHolder<K extends Hook> {
+        arguments: HookParameters<K>;
+    }
 
     type ExecuteUserCodeResult<T> =
         | { error: Diagnostic, result: undefined }
         | { error: undefined, result: T | undefined };
-
-    interface PluginEntry {
-        state: "inactive" | "active" | "failed"; // Tracks whether the plugin has been activated.
-        compilerPlugin: CompilerPlugin;
-    }
 
     /*@internal*/
     export interface GetPluginsResult {
@@ -35,7 +42,7 @@ namespace ts {
     /*@internal*/
     export function getPlugins(host: ModuleLoaderHost, initialDir: string, plugins: ReadonlyArray<string | [string, any?]>) {
         interface ResolvedModule {
-            module: {};
+            getModule(): RequireResult;
             moduleName: string;
             modulePath: string | undefined;
             packageJsonPath?: string;
@@ -76,19 +83,23 @@ namespace ts {
             let resolvedModule: ResolvedModule | undefined;
             let firstError: { stack?: string, message?: string } | undefined;
             for (const candidate of candidates) {
-                const result = host.require(initialDir, candidate);
-                if (result.module) {
+                try {
+                    const modulePath = resolveJSModule(candidate, initialDir, host);
                     resolvedModule = {
-                        module: result.module,
+                        getModule: () => host.require(initialDir, modulePath),
                         moduleName: candidate,
-                        modulePath: result.modulePath,
-                        packageJsonPath: !isExternalModuleNameRelative(candidate) && result.modulePath
-                            ? findPackageJsonPath(host, result.modulePath)
+                        modulePath,
+                        packageJsonPath: !isExternalModuleNameRelative(candidate) && modulePath
+                            ? findPackageJsonPath(host, modulePath)
                             : undefined
                     };
                     break;
                 }
-                if (!firstError) firstError = result.error;
+                catch (e) {
+                    if (!firstError) {
+                        firstError = e;
+                    }
+                }
             }
 
             if (!resolvedModule) {
@@ -148,7 +159,7 @@ namespace ts {
                 originalName,
                 name: resolvedModule.moduleName,
                 path: resolvedModule.modulePath,
-                plugin: resolvedModule.module,
+                loadPlugin: resolvedModule.getModule,
                 pluginDependencies,
                 activationEvents,
                 options
@@ -198,87 +209,70 @@ namespace ts {
     }
 
     /**
-     * Gets a wrapped view of a Program for use with a plugin.
-     */
-    function getOrCreatePluginProgram(program: Program) {
-        if (program.pluginProgram) {
-            return program.pluginProgram;
-        }
-
-        let disposed = false;
-        program.pluginProgram = {
-            getCompilerOptions: () => (checkDisposed(), program.getCompilerOptions()),
-            getSourceFile: fileName => (checkDisposed(), program.getSourceFile(fileName)),
-            getSourceFileByPath: path => (checkDisposed(), program.getSourceFileByPath(path)),
-            getCurrentDirectory: () => (checkDisposed(), program.getCurrentDirectory()),
-            getRootFileNames: () => (checkDisposed(), program.getRootFileNames()),
-            getSourceFiles: () => (checkDisposed(), program.getSourceFiles()),
-            emit: (targetSourceFile, writeFile, cancellationToken, emitOnlyDtsFiles, customTransformers) => (checkDisposed(), program.emit(targetSourceFile, writeFile, cancellationToken, emitOnlyDtsFiles, customTransformers)),
-            getOptionsDiagnostics: cancellationToken => (checkDisposed(), program.getOptionsDiagnostics(cancellationToken)),
-            getGlobalDiagnostics: cancellationToken => (checkDisposed(), program.getGlobalDiagnostics(cancellationToken)),
-            getSyntacticDiagnostics: (sourceFile, cancellationToken) => (checkDisposed(), program.getSyntacticDiagnostics(sourceFile, cancellationToken)),
-            getSemanticDiagnostics: (sourceFile, cancellationToken) => (checkDisposed(), program.getSemanticDiagnostics(sourceFile, cancellationToken)),
-            getDeclarationDiagnostics: (sourceFile, cancellationToken) => (checkDisposed(), program.getDeclarationDiagnostics(sourceFile, cancellationToken)),
-            getConfigFileParsingDiagnostics: () => (checkDisposed(), program.getConfigFileParsingDiagnostics()),
-            getTypeChecker: () => (checkDisposed(), program.getTypeChecker()),
-            isSourceFileFromExternalLibrary: file => (checkDisposed(), program.isSourceFileFromExternalLibrary(file)),
-            isSourceFileDefaultLibrary: file => (checkDisposed(), program.isSourceFileDefaultLibrary(file)),
-            getProjectReferences: () => (checkDisposed(), program.getProjectReferences()),
-            getResolvedProjectReferences: () => (checkDisposed(), program.getResolvedProjectReferences()),
-            pluginDispose: () => { disposed = true },
-            // internal members are not exposed.
-            getMissingFilePaths: notImplemented,
-            getSuggestionDiagnostics: notImplemented,
-            getCommonSourceDirectory: notImplemented,
-            getDiagnosticsProducingTypeChecker: notImplemented,
-            dropDiagnosticsProducingTypeChecker: notImplemented,
-            getClassifiableNames: notImplemented,
-            getNodeCount: notImplemented,
-            getIdentifierCount: notImplemented,
-            getSymbolCount: notImplemented,
-            getTypeCount: notImplemented,
-            getFileProcessingDiagnostics: notImplemented,
-            getResolvedTypeReferenceDirectives: notImplemented,
-            getSourceFileFromReference: notImplemented,
-            getLibFileFromReference: notImplemented,
-            sourceFileToPackageName: undefined!,
-            redirectTargetsMap: undefined!,
-            isEmittedFile: notImplemented,
-            getResolvedModuleWithFailedLookupLocationsFromCache: notImplemented,
-            getProjectReferenceRedirect: notImplemented,
-            getResolvedProjectReferenceToRedirect: notImplemented,
-            forEachResolvedProjectReference: notImplemented,
-            getResolvedProjectReferenceByPath: notImplemented,
-            getRefFileMap: notImplemented,
-            emitBuildInfo: notImplemented,
-            getRelationCacheSizes: notImplemented,
-            dispose: notImplemented,
-        };
-        program.pluginProgram.pluginProgram = program.pluginProgram;
-        return program.pluginProgram;
-
-        function checkDisposed() {
-            if (disposed) throw new TypeError("Object is disposed.");
-            disposed = true;
-            program = undefined!;
-        }
-    }
-
-    /**
      * Creates a `CompilerPluginHost` used to manage plugin lifetime.
      */
-    export function createPluginHost(plugins: ReadonlyArray<CompilerPlugin>, compilerOptions: CompilerOptions): CompilerPluginHost {
-        const entries: PluginEntry[] = plugins.map(compilerPlugin => ({ compilerPlugin, state: "inactive" }));
+    export function createPluginHost(compilerPlugins: ReadonlyArray<CompilerPlugin>, compilerHost: CompilerHost, compilerOptions: CompilerOptions): CompilerPluginHost {
+        interface Plugin {
+            state: "unloaded" | "inactive" | "active" | "active-failed" | "failed"; // Tracks whether the plugin has been activated.
+            compilerPlugin: CompilerPlugin;
+            context: CompilerPluginContext;
+            timer: performance.Timer;
+            module?: CompilerPluginModule;
+        }
+
+        const plugins: Plugin[] = compilerPlugins.map(compilerPlugin => ({
+            compilerPlugin,
+            state: "unloaded",
+            context: createContext(compilerPlugin),
+            timer: performance.createTimer(`userCode:${compilerPlugin.name}`)
+        }));
 
         return {
-            preParse,
-            preEmit,
-            deactivate
+            deactivate,
+            preParse: (...args) => executeHostHook("preParse", args, (state, result, argsHolder) => {
+                state.diagnostics = concatenate(state.diagnostics, result.diagnostics);
+                state.rootNames = result.rootNames || state.rootNames;
+                state.projectReferences = result.projectReferences || state.projectReferences;
+                state.preprocessors = concatenate(state.preprocessors, result.preprocessors);
+                const previousArgs = argsHolder.arguments[0];
+                if (state.projectReferences !== previousArgs.projectReferences ||
+                    state.rootNames !== previousArgs.rootNames) {
+                    argsHolder.arguments = [{
+                        projectReferences: state.projectReferences || previousArgs.projectReferences,
+                        rootNames: state.rootNames || previousArgs.rootNames
+                    }];
+                }
+                return state;
+            }, {}),
+            preEmit: (...args) => executeHostHook("preEmit", args, (state, result) => {
+                state.diagnostics = concatenate(state.diagnostics, result.diagnostics);
+                state.customTransformers = combineCustomTransformers(state.customTransformers, result.customTransformers);
+                return state;
+            }, {})
         };
 
-        function selectPlugins({ eventName, state }: { eventName?: Hook, state?: "inactive" | "active" | "failed" }) {
-            const result: PluginEntry[] = [];
-            for (const entry of entries) {
+        /**
+         * Gets the module object of a loaded compiler plugin.
+         */
+        function getModule(plugin: Plugin) {
+            Debug.assert(plugin.state !== "unloaded" && plugin.module !== undefined, "Cannot execute a plugin hook on an unloaded plugin.");
+            return plugin.module!;
+        }
+
+        /**
+         * Gets the plugin hook function for a plugin module.
+         */
+        function getHook<K extends Hook>(pluginModule: CompilerPluginModule, hook: K): CompilerPluginModule[K] {
+            const hookAction = pluginModule[hook];
+            return typeof hookAction === "function" ? hookAction : undefined;
+        }
+
+        /**
+         * Selects plugins matching the provided activation event and plugin activation state.
+         */
+        function selectPlugins({ eventName, state }: { eventName?: Hook, state?: Plugin["state"] }) {
+            const result: Plugin[] = [];
+            for (const entry of plugins) {
                 if (state !== undefined && entry.state !== state) continue;
                 if (eventName !== undefined && !contains(entry.compilerPlugin.activationEvents, eventName)) continue;
                 result.push(entry);
@@ -286,38 +280,77 @@ namespace ts {
             return result;
         }
 
-        function executeUserCode<K extends Hook>(plugin: PluginEntry, hook: K, ...args: Parameters<HookFunction<K>>): ExecuteUserCodeResult<HookReturnType<K>> {
-            const hookAction = plugin.compilerPlugin.plugin[hook];
-            if (typeof hookAction === "function") {
-                try {
-                    const result: HookReturnType<K> | undefined = hookAction.apply(plugin.compilerPlugin.plugin, args);
+        /**
+         * Loads any unloaded plugins for the provided activation event.
+         */
+        function load(eventName: Hook): ReadonlyArray<Diagnostic> | undefined {
+            let diagnostics: readonly Diagnostic[] | undefined;
+            for (const plugin of selectPlugins({ eventName, state: "unloaded" })) {
+                const result = plugin.compilerPlugin.loadPlugin();
+                if (result.error) {
+                    // The plugin failed to load. Mark the plugin as failed to prevent any attempt to load it again in this Program.
+                    plugin.state = "failed";
+                    plugin.module = undefined;
+                    diagnostics = concatenate(diagnostics, [createLoadDiagnostic(plugin.compilerPlugin, result.error)]);
+                }
+                else {
+                    // The plugin was loaded and is currently inactive.
+                    plugin.state = "inactive";
+                    plugin.module = result.module;
+                }
+            }
+            return diagnostics;
+        }
+
+        /**
+         * Executes a user-defined plugin hook.
+         */
+        async function executeUserHook<K extends Hook>(plugin: Plugin, hook: K, ...args: HookParameters<K>): Promise<ExecuteUserCodeResult<HookReturnType<K>>> {
+            Debug.assert(plugin.state !== "failed", "Cannot execute a plugin hook on a plugin that failed to load.");
+            Debug.assert(plugin.state !== "active-failed" || hook === "deactivate", "Cannot execute a plugin hook on a failed plugin.");
+            Debug.assert(plugin.state !== "inactive" || hook === "activate", "Cannot activate a plugin that is already active.");
+            const pluginModule = getModule(plugin);
+            try {
+                const hookAction = getHook(pluginModule, hook);
+                if (hookAction) {
+                    const result: HookReturnType<K> | undefined = await hookAction.call(pluginModule, plugin.context, ...args);
                     return { error: undefined, result };
                 }
-                catch (error) {
-                    if (error instanceof OperationCanceledException) {
-                        throw error;
-                    }
-                    plugin.state = "failed";
-                    return { error: createUserCodeDiagnostic(plugin.compilerPlugin, hook, error), result: undefined };
+            }
+            catch (error) {
+                if (error instanceof OperationCanceledException) {
+                    throw error;
                 }
+
+                if (hook === "activate" || hook === "deactivate") {
+                    // If we encounter an error while activating or deactivating a hook, set the plugin's state to
+                    // indicate an unconditional failure and release our reference to the module.
+                    plugin.state = "failed";
+                    plugin.module = undefined;
+                }
+                else {
+                    // For any other lifecycle hook, indicate that the plugin has failed but is still active.
+                    // This will allow us to deactivate the plugin later.
+                    plugin.state = "active-failed";
+                }
+                return { error: createUserCodeDiagnostic(plugin.compilerPlugin, hook, error), result: undefined };
             }
             return { error: undefined, result: undefined };
         }
 
-        function createContext(compilerHost: CompilerHost, { compilerPlugin: { options } }: PluginEntry): CompilerPluginContext {
-            return { ts, compilerHost, compilerOptions, options };
+        function createContext({ options }: CompilerPlugin): CompilerPluginContext {
+            return Object.freeze({ ts, compilerHost, compilerOptions, options });
         }
 
-        function createUserCodeDiagnostic(compilerPlugin: CompilerPlugin, hook: Hook, error: { message?: string, stack?: string }) {
-            return createCompilerDiagnostic(Diagnostics.Plugin_0_failed_while_executing_the_1_hook_Colon_2, compilerPlugin.name, hook, error.stack || error.message || error.toString());
-        }
-
-        function activate(host: CompilerHost, eventName: Hook): ReadonlyArray<Diagnostic> | undefined {
-            let diagnostics: ReadonlyArray<Diagnostic> | undefined;
+        /**
+         * Activates inactive plugins registered for the requested activation event.
+         */
+        async function activate(eventName: Hook): Promise<ReadonlyArray<Diagnostic> | undefined> {
+            let diagnostics = load(eventName);
             for (const plugin of selectPlugins({ eventName, state: "inactive" })) {
-                const { error, result } = executeUserCode(plugin, "activate", createContext(host, plugin), { });
+                const { error, result } = await executeUserHook(plugin, "activate", { });
                 if (error) {
-                    // TODO(rbuckton): Determine better mechanism to handle plugin activation failure.
+                    // The plugin failed to activate and its state is already set to `"failed"`.
                     diagnostics = concatenate(diagnostics, [error]);
                 }
                 else {
@@ -328,52 +361,51 @@ namespace ts {
             return diagnostics;
         }
 
-        function preParse(host: CompilerHost, { rootNames, projectReferences }: CompilerPluginPreParseArgs): CompilerPluginPreParseResult {
-            let diagnostics = activate(host, "preParse");
-            for (const plugin of selectPlugins({ eventName: "preParse", state: "active" })) {
-                const { error, result } = executeUserCode(plugin, "preParse", createContext(host, plugin), { rootNames, projectReferences });
-                if (error) {
-                    diagnostics = concatenate(diagnostics, [error]);
-                }
-                else if (result) {
-                    diagnostics = concatenate(diagnostics, result.diagnostics);
-                    host = result.compilerHost || host;
-                    rootNames = result.rootNames || rootNames;
-                    projectReferences = result.projectReferences || projectReferences;
-                }
-            }
-            return { compilerHost: host, rootNames, projectReferences };
-        }
-
-        function preEmit(host: CompilerHost, { program, targetSourceFile, cancellationToken }: CompilerPluginPreEmitArgs): CompilerPluginPreEmitResult {
-            program = getOrCreatePluginProgram(program);
-            let diagnostics = activate(host, "preEmit");
-            let customTransformers: CustomTransformers | undefined;
-            for (const plugin of selectPlugins({ eventName: "preEmit", state: "active" })) {
-                const { error, result } = executeUserCode(plugin, "preEmit", createContext(host, plugin), { program, targetSourceFile, cancellationToken });
-                if (error) {
-                    diagnostics = concatenate(diagnostics, [error]);
-                }
-                else if (result) {
-                    diagnostics = concatenate(diagnostics, result.diagnostics);
-                    customTransformers = combineCustomTransformers(customTransformers, result.customTransformers);
-                }
-            }
-            return { diagnostics, customTransformers };
-        }
-
-        function deactivate(host: CompilerHost): CompilerPluginDeactivationResult {
+        /**
+         * Deactivates active plugins.
+         */
+        async function deactivate(): Promise<CompilerPluginDeactivationResult> {
             let diagnostics: ReadonlyArray<Diagnostic> | undefined;
-            for (const plugin of selectPlugins({ state: "active" })) {
-                const { error } = executeUserCode(plugin, "deactivate", createContext(host, plugin));
-                if (error) {
-                    diagnostics = concatenate(diagnostics, [error]);
-                }
-                else {
-                    plugin.state = "inactive";
+            for (const state of ["active-failed", "active"] as const) {
+                for (const plugin of selectPlugins({ state })) {
+                    const { error } = await executeUserHook(plugin, "deactivate");
+                    if (error) {
+                        diagnostics = concatenate(diagnostics, [error]);
+                    }
+                    else {
+                        plugin.state = state === "active-failed" ? "failed" : "inactive";
+                    }
                 }
             }
             return { diagnostics };
         }
+
+        async function executeHostHook<K extends HostHook>(
+            hook: K,
+            args: HookParameters<K>,
+            aggregate: HostHookAggregate<K>,
+            state: HostHookReturnType<K>,
+        ): Promise<HostHookReturnType<K>> {
+            state.diagnostics = concatenate(state.diagnostics, await activate(hook));
+            const argsHolder: ArgumentsHolder<K> = { arguments: args };
+            for (const plugin of selectPlugins({ eventName: hook, state: "active" })) {
+                const userCodeResult = await executeUserHook(plugin, hook, ...argsHolder.arguments);
+                if (userCodeResult.error) {
+                    state.diagnostics = concatenate(state.diagnostics, [userCodeResult.error]);
+                }
+                else if (userCodeResult.result) {
+                    state = aggregate(state, userCodeResult.result, argsHolder);
+                }
+            }
+            return state;
+        }
+    }
+
+    function createLoadDiagnostic(compilerPlugin: CompilerPlugin, error: { message?: string, stack?: string }) {
+        return createCompilerDiagnostic(Diagnostics.Plugin_0_could_not_be_loaded, compilerPlugin.name, error.stack || error.message || error.toString());
+    }
+
+    function createUserCodeDiagnostic(compilerPlugin: CompilerPlugin, hook: Hook, error: { message?: string, stack?: string }) {
+        return createCompilerDiagnostic(Diagnostics.Plugin_0_failed_while_executing_the_1_hook_Colon_2, compilerPlugin.name, hook, error.stack || error.message || error.toString());
     }
 }

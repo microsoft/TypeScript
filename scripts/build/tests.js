@@ -99,6 +99,9 @@ async function runConsoleTests(runJs, defaultReporter, runInParallel, watchMode,
         else {
             args.push("-t", "" + testTimeout);
         }
+        if (cmdLineOptions.bail) {
+            args.push("--bail");
+        }
         args.push(runJs);
     }
     else {

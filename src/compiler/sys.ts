@@ -747,7 +747,7 @@ namespace ts {
             const useNonPollingWatchers = process.env.TSC_NONPOLLING_WATCHER;
             const tscWatchFile = process.env.TSC_WATCHFILE;
             const tscWatchDirectory = process.env.TSC_WATCHDIRECTORY;
-            const fsWatchFile = createSingleFileWatcherPerName(fsWatchFileWorker, useCaseSensitiveFileNames);
+            const fsWatchFile = memoize(() => createSingleFileWatcherPerName(fsWatchFileWorker, useCaseSensitiveFileNames));
             let dynamicPollingWatchFile: HostWatchFile | undefined;
             const nodeSystem: System = {
                 args: process.argv.slice(2),
@@ -841,7 +841,11 @@ namespace ts {
                 base64encode: input => bufferFrom(input).toString("base64"),
                 require: (baseDir, moduleName) => {
                     try {
-                        const modulePath = resolveJSModule(moduleName, baseDir, nodeSystem);
+                        // NOTE: 'require' may be called before `resolveJSModule` is available (i.e. when loading shims). If that is the case then
+                        // we just use `resolvePath` for path-based module names.
+                        const modulePath = resolveJSModule
+                            ? resolveJSModule(moduleName, baseDir, nodeSystem)
+                            : pathIsRelative(moduleName) ? resolvePath(baseDir, moduleName) : moduleName;
                         return { module: require(modulePath), modulePath, error: undefined };
                     }
                     catch (error) {
@@ -879,7 +883,7 @@ namespace ts {
                 switch (tscWatchFile) {
                     case "PriorityPollingInterval":
                         // Use polling interval based on priority when create watch using host.watchFile
-                        return fsWatchFile;
+                        return fsWatchFile();
                     case "DynamicPriorityPolling":
                         // Use polling interval but change the interval depending on file changes and their default polling interval
                         return createDynamicPriorityPollingWatchFile({ getModifiedTime, setTimeout });
@@ -897,7 +901,7 @@ namespace ts {
                 return useNonPollingWatchers ?
                     createNonPollingWatchFile() :
                     // Default to do not use polling interval as it is before this experiment branch
-                    (fileName, callback) => fsWatchFile(fileName, callback, /*pollingInterval*/ undefined);
+                    (fileName, callback) => fsWatchFile()(fileName, callback, /*pollingInterval*/ undefined);
             }
 
             function getWatchDirectory(): HostWatchDirectory {
@@ -909,7 +913,7 @@ namespace ts {
                 }
 
                 const watchDirectory = tscWatchDirectory === "RecursiveDirectoryUsingFsWatchFile" ?
-                    createWatchDirectoryUsing(fsWatchFile) :
+                    createWatchDirectoryUsing(fsWatchFile()) :
                     tscWatchDirectory === "RecursiveDirectoryUsingDynamicPriorityPolling" ?
                         createWatchDirectoryUsing(dynamicPollingWatchFile || createDynamicPriorityPollingWatchFile({ getModifiedTime, setTimeout })) :
                         watchDirectoryUsingFsWatch;
@@ -1150,7 +1154,7 @@ namespace ts {
             }
 
             function watchFileUsingFsWatch(fileName: string, callback: FileWatcherCallback, pollingInterval?: number) {
-                return fsWatch(fileName, FileSystemEntryKind.File, createFsWatchCallbackForFileWatcherCallback(fileName, callback), /*recursive*/ false, fsWatchFile, pollingInterval);
+                return fsWatch(fileName, FileSystemEntryKind.File, createFsWatchCallbackForFileWatcherCallback(fileName, callback), /*recursive*/ false, fsWatchFile(), pollingInterval);
             }
 
             function createWatchFileUsingDynamicWatchFile(watchFile: HostWatchFile): HostWatchFile {
@@ -1158,7 +1162,7 @@ namespace ts {
             }
 
             function fsWatchDirectory(directoryName: string, callback: FsWatchCallback, recursive?: boolean): FileWatcher {
-                return fsWatch(directoryName, FileSystemEntryKind.Directory, callback, !!recursive, fsWatchFile);
+                return fsWatch(directoryName, FileSystemEntryKind.Directory, callback, !!recursive, fsWatchFile());
             }
 
             function watchDirectoryUsingFsWatch(directoryName: string, callback: DirectoryWatcherCallback, recursive?: boolean) {

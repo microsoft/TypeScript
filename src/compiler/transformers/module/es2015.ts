@@ -1,6 +1,10 @@
 /*@internal*/
 namespace ts {
     export function transformES2015Module(context: TransformationContext) {
+        const {
+            factory,
+            getEmitHelperFactory: emitHelpers,
+        } = context;
         const compilerOptions = context.getCompilerOptions();
         const previousOnEmitNode = context.onEmitNode;
         const previousOnSubstituteNode = context.onSubstituteNode;
@@ -10,7 +14,7 @@ namespace ts {
         context.enableSubstitution(SyntaxKind.Identifier);
 
         let helperNameSubstitutions: Map<Identifier> | undefined;
-        return chainBundle(transformSourceFile);
+        return chainBundle(context, transformSourceFile);
 
         function transformSourceFile(node: SourceFile) {
             if (node.isDeclarationFile) {
@@ -18,16 +22,16 @@ namespace ts {
             }
 
             if (isExternalModule(node) || compilerOptions.isolatedModules) {
-                const externalHelpersImportDeclaration = createExternalHelpersImportDeclarationIfNeeded(node, compilerOptions);
+                const externalHelpersImportDeclaration = createExternalHelpersImportDeclarationIfNeeded(factory, emitHelpers(), node, compilerOptions);
                 if (externalHelpersImportDeclaration) {
                     const statements: Statement[] = [];
-                    const statementOffset = addPrologue(statements, node.statements);
+                    const statementOffset = factory.copyPrologue(node.statements, statements);
                     append(statements, externalHelpersImportDeclaration);
 
                     addRange(statements, visitNodes(node.statements, visitor, isStatement, statementOffset));
-                    return updateSourceFileNode(
+                    return factory.updateSourceFile(
                         node,
-                        setTextRange(createNodeArray(statements), node.statements));
+                        setTextRange(factory.createNodeArray(statements), node.statements));
                 }
                 else {
                     return visitEachChild(node, visitor, context);
@@ -99,7 +103,7 @@ namespace ts {
             const name = idText(node);
             let substitution = helperNameSubstitutions!.get(name);
             if (!substitution) {
-                helperNameSubstitutions!.set(name, substitution = createFileLevelUniqueName(name));
+                helperNameSubstitutions!.set(name, substitution = factory.createFileLevelUniqueName(name));
             }
             return substitution;
         }

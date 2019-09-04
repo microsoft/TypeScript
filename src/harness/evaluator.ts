@@ -33,8 +33,8 @@ namespace evaluator {
     // Add "asyncIterator" if missing
     if (!ts.hasProperty(FakeSymbol, "asyncIterator")) Object.defineProperty(FakeSymbol, "asyncIterator", { value: Symbol.for("Symbol.asyncIterator"), configurable: true });
 
-    export function evaluateTypeScript(sourceText: string, options?: ts.CompilerOptions, globals?: Record<string, any>) {
-        const result = compile(sourceText, options);
+    export async function evaluateTypeScript(sourceText: string, options?: ts.CompilerOptions, globals?: Record<string, any>) {
+        const result = await compile(sourceText, options);
         if (ts.some(result.diagnostics)) {
             assert.ok(/*value*/ false, "Syntax error in evaluation source text:\n" + ts.formatDiagnostics(result.diagnostics, {
                 getCanonicalFileName: file => file,

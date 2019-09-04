@@ -293,6 +293,7 @@ namespace ts {
         const Signature = objectAllocator.getSignatureConstructor();
         // tslint:enable variable-name
 
+        const factory = syntheticNodeFactory;
         let typeCount = 0;
         let symbolCount = 0;
         let enumCount = 0;
@@ -3548,7 +3549,7 @@ namespace ts {
                     withContext(enclosingDeclaration, flags, tracker, context => typeToTypeNodeHelper(type, context)),
                 indexInfoToIndexSignatureDeclaration: (indexInfo: IndexInfo, kind: IndexKind, enclosingDeclaration?: Node, flags?: NodeBuilderFlags, tracker?: SymbolTracker) =>
                     withContext(enclosingDeclaration, flags, tracker, context => indexInfoToIndexSignatureDeclarationHelper(indexInfo, kind, context))!, // TODO: GH#18217
-                signatureToSignatureDeclaration: (signature: Signature, kind: SyntaxKind, enclosingDeclaration?: Node, flags?: NodeBuilderFlags, tracker?: SymbolTracker) =>
+                signatureToSignatureDeclaration: (signature: Signature, kind: SignatureDeclaration["kind"], enclosingDeclaration?: Node, flags?: NodeBuilderFlags, tracker?: SymbolTracker) =>
                     withContext(enclosingDeclaration, flags, tracker, context => signatureToSignatureDeclarationHelper(signature, kind, context)),
                 symbolToEntityName: (symbol: Symbol, meaning: SymbolFlags, enclosingDeclaration?: Node, flags?: NodeBuilderFlags, tracker?: SymbolTracker) =>
                     withContext(enclosingDeclaration, flags, tracker, context => symbolToName(symbol, context, meaning, /*expectsIdentifier*/ false)),
@@ -3602,26 +3603,26 @@ namespace ts {
 
                 if (type.flags & TypeFlags.Any) {
                     context.approximateLength += 3;
-                    return createKeywordTypeNode(SyntaxKind.AnyKeyword);
+                    return factory.createKeywordTypeNode(SyntaxKind.AnyKeyword);
                 }
                 if (type.flags & TypeFlags.Unknown) {
-                    return createKeywordTypeNode(SyntaxKind.UnknownKeyword);
+                    return factory.createKeywordTypeNode(SyntaxKind.UnknownKeyword);
                 }
                 if (type.flags & TypeFlags.String) {
                     context.approximateLength += 6;
-                    return createKeywordTypeNode(SyntaxKind.StringKeyword);
+                    return factory.createKeywordTypeNode(SyntaxKind.StringKeyword);
                 }
                 if (type.flags & TypeFlags.Number) {
                     context.approximateLength += 6;
-                    return createKeywordTypeNode(SyntaxKind.NumberKeyword);
+                    return factory.createKeywordTypeNode(SyntaxKind.NumberKeyword);
                 }
                 if (type.flags & TypeFlags.BigInt) {
                     context.approximateLength += 6;
-                    return createKeywordTypeNode(SyntaxKind.BigIntKeyword);
+                    return factory.createKeywordTypeNode(SyntaxKind.BigIntKeyword);
                 }
                 if (type.flags & TypeFlags.Boolean) {
                     context.approximateLength += 7;
-                    return createKeywordTypeNode(SyntaxKind.BooleanKeyword);
+                    return factory.createKeywordTypeNode(SyntaxKind.BooleanKeyword);
                 }
                 if (type.flags & TypeFlags.EnumLiteral && !(type.flags & TypeFlags.Union)) {
                     const parentSymbol = getParentOfSymbol(type.symbol)!;
@@ -3630,7 +3631,7 @@ namespace ts {
                         ? parentName
                         : appendReferenceToType(
                             parentName as TypeReferenceNode | ImportTypeNode,
-                            createTypeReferenceNode(symbolName(type.symbol), /*typeArguments*/ undefined)
+                            factory.createTypeReferenceNode(symbolName(type.symbol), /*typeArguments*/ undefined)
                         );
                     return enumLiteralName;
                 }
@@ -3639,20 +3640,20 @@ namespace ts {
                 }
                 if (type.flags & TypeFlags.StringLiteral) {
                     context.approximateLength += ((<StringLiteralType>type).value.length + 2);
-                    return createLiteralTypeNode(setEmitFlags(createLiteral((<StringLiteralType>type).value), EmitFlags.NoAsciiEscaping));
+                    return factory.createLiteralTypeNode(setEmitFlags(factory.createStringLiteral((<StringLiteralType>type).value), EmitFlags.NoAsciiEscaping));
                 }
                 if (type.flags & TypeFlags.NumberLiteral) {
                     const value = (<NumberLiteralType>type).value;
                     context.approximateLength += ("" + value).length;
-                    return createLiteralTypeNode(value < 0 ? createPrefix(SyntaxKind.MinusToken, createLiteral(-value)) : createLiteral(value));
+                    return factory.createLiteralTypeNode(value < 0 ? factory.createPrefix(SyntaxKind.MinusToken, factory.createNumericLiteral(-value)) : factory.createNumericLiteral(value));
                 }
                 if (type.flags & TypeFlags.BigIntLiteral) {
                     context.approximateLength += (pseudoBigIntToString((<BigIntLiteralType>type).value).length) + 1;
-                    return createLiteralTypeNode((createLiteral((<BigIntLiteralType>type).value)));
+                    return factory.createLiteralTypeNode((factory.createBigIntLiteral((<BigIntLiteralType>type).value)));
                 }
                 if (type.flags & TypeFlags.BooleanLiteral) {
                     context.approximateLength += (<IntrinsicType>type).intrinsicName.length;
-                    return (<IntrinsicType>type).intrinsicName === "true" ? createTrue() : createFalse();
+                    return (<IntrinsicType>type).intrinsicName === "true" ? factory.createTrue() : factory.createFalse();
                 }
                 if (type.flags & TypeFlags.UniqueESSymbol) {
                     if (!(context.flags & NodeBuilderFlags.AllowUniqueESSymbolType)) {
@@ -3665,31 +3666,31 @@ namespace ts {
                         }
                     }
                     context.approximateLength += 13;
-                    return createTypeOperatorNode(SyntaxKind.UniqueKeyword, createKeywordTypeNode(SyntaxKind.SymbolKeyword));
+                    return factory.createTypeOperatorNode(SyntaxKind.UniqueKeyword, factory.createKeywordTypeNode(SyntaxKind.SymbolKeyword));
                 }
                 if (type.flags & TypeFlags.Void) {
                     context.approximateLength += 4;
-                    return createKeywordTypeNode(SyntaxKind.VoidKeyword);
+                    return factory.createKeywordTypeNode(SyntaxKind.VoidKeyword);
                 }
                 if (type.flags & TypeFlags.Undefined) {
                     context.approximateLength += 9;
-                    return createKeywordTypeNode(SyntaxKind.UndefinedKeyword);
+                    return factory.createKeywordTypeNode(SyntaxKind.UndefinedKeyword);
                 }
                 if (type.flags & TypeFlags.Null) {
                     context.approximateLength += 4;
-                    return createKeywordTypeNode(SyntaxKind.NullKeyword);
+                    return factory.createKeywordTypeNode(SyntaxKind.NullKeyword);
                 }
                 if (type.flags & TypeFlags.Never) {
                     context.approximateLength += 5;
-                    return createKeywordTypeNode(SyntaxKind.NeverKeyword);
+                    return factory.createKeywordTypeNode(SyntaxKind.NeverKeyword);
                 }
                 if (type.flags & TypeFlags.ESSymbol) {
                     context.approximateLength += 6;
-                    return createKeywordTypeNode(SyntaxKind.SymbolKeyword);
+                    return factory.createKeywordTypeNode(SyntaxKind.SymbolKeyword);
                 }
                 if (type.flags & TypeFlags.NonPrimitive) {
                     context.approximateLength += 6;
-                    return createKeywordTypeNode(SyntaxKind.ObjectKeyword);
+                    return factory.createKeywordTypeNode(SyntaxKind.ObjectKeyword);
                 }
                 if (isThisTypeParameter(type)) {
                     if (context.flags & NodeBuilderFlags.InObjectTypeLiteral) {
@@ -3701,7 +3702,7 @@ namespace ts {
                         }
                     }
                     context.approximateLength += 4;
-                    return createThis();
+                    return factory.createThis();
                 }
 
                 const objectFlags = getObjectFlags(type);
@@ -3713,22 +3714,22 @@ namespace ts {
                 if (type.flags & TypeFlags.TypeParameter || objectFlags & ObjectFlags.ClassOrInterface) {
                     if (type.flags & TypeFlags.TypeParameter && contains(context.inferTypeParameters, type)) {
                         context.approximateLength += (symbolName(type.symbol).length + 6);
-                        return createInferTypeNode(typeParameterToDeclarationWithConstraint(type as TypeParameter, context, /*constraintNode*/ undefined));
+                        return factory.createInferTypeNode(typeParameterToDeclarationWithConstraint(type as TypeParameter, context, /*constraintNode*/ undefined));
                     }
                     if (context.flags & NodeBuilderFlags.GenerateNamesForShadowedTypeParams &&
                         !isTypeSymbolAccessible(type.symbol, context.enclosingDeclaration)) {
                         const name = typeParameterToName(type, context);
                         context.approximateLength += idText(name).length;
-                        return createTypeReferenceNode(createIdentifier(idText(name)), /*typeArguments*/ undefined);
+                        return factory.createTypeReferenceNode(factory.createIdentifier(idText(name)), /*typeArguments*/ undefined);
                     }
                     // Ignore constraint/default when creating a usage (as opposed to declaration) of a type parameter.
                     return type.symbol
                         ? symbolToTypeNode(type.symbol, context, SymbolFlags.Type)
-                        : createTypeReferenceNode(createIdentifier("?"), /*typeArguments*/ undefined);
+                        : factory.createTypeReferenceNode(factory.createIdentifier("?"), /*typeArguments*/ undefined);
                 }
                 if (!inTypeAlias && type.aliasSymbol && (context.flags & NodeBuilderFlags.UseAliasDefinedOutsideCurrentScope || isTypeSymbolAccessible(type.aliasSymbol, context.enclosingDeclaration))) {
                     const typeArgumentNodes = mapToTypeNodes(type.aliasTypeArguments, context);
-                    if (isReservedMemberName(type.aliasSymbol.escapedName) && !(type.aliasSymbol.flags & SymbolFlags.Class)) return createTypeReferenceNode(createIdentifier(""), typeArgumentNodes);
+                    if (isReservedMemberName(type.aliasSymbol.escapedName) && !(type.aliasSymbol.flags & SymbolFlags.Class)) return factory.createTypeReferenceNode(factory.createIdentifier(""), typeArgumentNodes);
                     return symbolToTypeNode(type.aliasSymbol, context, SymbolFlags.Type, typeArgumentNodes);
                 }
                 if (type.flags & (TypeFlags.Union | TypeFlags.Intersection)) {
@@ -3738,7 +3739,7 @@ namespace ts {
                     }
                     const typeNodes = mapToTypeNodes(types, context, /*isBareList*/ true);
                     if (typeNodes && typeNodes.length > 0) {
-                        const unionOrIntersectionTypeNode = createUnionOrIntersectionTypeNode(type.flags & TypeFlags.Union ? SyntaxKind.UnionType : SyntaxKind.IntersectionType, typeNodes);
+                        const unionOrIntersectionTypeNode = factory.createUnionOrIntersectionTypeNode(type.flags & TypeFlags.Union ? SyntaxKind.UnionType : SyntaxKind.IntersectionType, typeNodes);
                         return unionOrIntersectionTypeNode;
                     }
                     else {
@@ -3757,13 +3758,13 @@ namespace ts {
                     const indexedType = (<IndexType>type).type;
                     context.approximateLength += 6;
                     const indexTypeNode = typeToTypeNodeHelper(indexedType, context);
-                    return createTypeOperatorNode(indexTypeNode);
+                    return factory.createTypeOperatorNode(SyntaxKind.KeyOfKeyword, indexTypeNode);
                 }
                 if (type.flags & TypeFlags.IndexedAccess) {
                     const objectTypeNode = typeToTypeNodeHelper((<IndexedAccessType>type).objectType, context);
                     const indexTypeNode = typeToTypeNodeHelper((<IndexedAccessType>type).indexType, context);
                     context.approximateLength += 2;
-                    return createIndexedAccessTypeNode(objectTypeNode, indexTypeNode);
+                    return factory.createIndexedAccessTypeNode(objectTypeNode, indexTypeNode);
                 }
                 if (type.flags & TypeFlags.Conditional) {
                     const checkTypeNode = typeToTypeNodeHelper((<ConditionalType>type).checkType, context);
@@ -3774,7 +3775,7 @@ namespace ts {
                     const trueTypeNode = typeToTypeNodeHelper(getTrueTypeFromConditionalType(<ConditionalType>type), context);
                     const falseTypeNode = typeToTypeNodeHelper(getFalseTypeFromConditionalType(<ConditionalType>type), context);
                     context.approximateLength += 15;
-                    return createConditionalTypeNode(checkTypeNode, extendsTypeNode, trueTypeNode, falseTypeNode);
+                    return factory.createConditionalTypeNode(checkTypeNode, extendsTypeNode, trueTypeNode, falseTypeNode);
                 }
                 if (type.flags & TypeFlags.Substitution) {
                     return typeToTypeNodeHelper((<SubstitutionType>type).typeVariable, context);
@@ -3784,20 +3785,20 @@ namespace ts {
 
                 function createMappedTypeNodeFromType(type: MappedType) {
                     Debug.assert(!!(type.flags & TypeFlags.Object));
-                    const readonlyToken = type.declaration.readonlyToken ? <ReadonlyToken | PlusToken | MinusToken>createToken(type.declaration.readonlyToken.kind) : undefined;
-                    const questionToken = type.declaration.questionToken ? <QuestionToken | PlusToken | MinusToken>createToken(type.declaration.questionToken.kind) : undefined;
+                    const readonlyToken = type.declaration.readonlyToken ? <ReadonlyToken | PlusToken | MinusToken>factory.createToken(type.declaration.readonlyToken.kind) : undefined;
+                    const questionToken = type.declaration.questionToken ? <QuestionToken | PlusToken | MinusToken>factory.createToken(type.declaration.questionToken.kind) : undefined;
                     let appropriateConstraintTypeNode: TypeNode;
                     if (isMappedTypeWithKeyofConstraintDeclaration(type)) {
                         // We have a { [P in keyof T]: X }
                         // We do this to ensure we retain the toplevel keyof-ness of the type which may be lost due to keyof distribution during `getConstraintTypeFromMappedType`
-                        appropriateConstraintTypeNode = createTypeOperatorNode(typeToTypeNodeHelper(getModifiersTypeFromMappedType(type), context));
+                        appropriateConstraintTypeNode = factory.createTypeOperatorNode(SyntaxKind.KeyOfKeyword, typeToTypeNodeHelper(getModifiersTypeFromMappedType(type), context));
                     }
                     else {
                         appropriateConstraintTypeNode = typeToTypeNodeHelper(getConstraintTypeFromMappedType(type), context);
                     }
                     const typeParameterNode = typeParameterToDeclarationWithConstraint(getTypeParameterFromMappedType(type), context, appropriateConstraintTypeNode);
                     const templateTypeNode = typeToTypeNodeHelper(getTemplateTypeFromMappedType(type), context);
-                    const mappedTypeNode = createMappedTypeNode(readonlyToken, typeParameterNode, questionToken, templateTypeNode);
+                    const mappedTypeNode = factory.createMappedTypeNode(readonlyToken, typeParameterNode, questionToken, templateTypeNode);
                     context.approximateLength += 10;
                     return setEmitFlags(mappedTypeNode, EmitFlags.SingleLine);
                 }
@@ -3881,7 +3882,7 @@ namespace ts {
                     if (!resolved.properties.length && !resolved.stringIndexInfo && !resolved.numberIndexInfo) {
                         if (!resolved.callSignatures.length && !resolved.constructSignatures.length) {
                             context.approximateLength += 2;
-                            return setEmitFlags(createTypeLiteralNode(/*members*/ undefined), EmitFlags.SingleLine);
+                            return setEmitFlags(factory.createTypeLiteralNode(/*members*/ undefined), EmitFlags.SingleLine);
                         }
 
                         if (resolved.callSignatures.length === 1 && !resolved.constructSignatures.length) {
@@ -3902,7 +3903,7 @@ namespace ts {
                     context.flags |= NodeBuilderFlags.InObjectTypeLiteral;
                     const members = createTypeNodesFromResolvedType(resolved);
                     context.flags = savedFlags;
-                    const typeLiteralNode = createTypeLiteralNode(members);
+                    const typeLiteralNode = factory.createTypeLiteralNode(members);
                     context.approximateLength += 2;
                     return setEmitFlags(typeLiteralNode, (context.flags & NodeBuilderFlags.MultilineObjectLiterals) ? 0 : EmitFlags.SingleLine);
                 }
@@ -3912,12 +3913,12 @@ namespace ts {
                     if (type.target === globalArrayType || type.target === globalReadonlyArrayType) {
                         if (context.flags & NodeBuilderFlags.WriteArrayAsGenericType) {
                             const typeArgumentNode = typeToTypeNodeHelper(typeArguments[0], context);
-                            return createTypeReferenceNode(type.target === globalArrayType ? "Array" : "ReadonlyArray", [typeArgumentNode]);
+                            return factory.createTypeReferenceNode(type.target === globalArrayType ? "Array" : "ReadonlyArray", [typeArgumentNode]);
                         }
 
                         const elementType = typeToTypeNodeHelper(typeArguments[0], context);
-                        const arrayType = createArrayTypeNode(elementType);
-                        return type.target === globalArrayType ? arrayType : createTypeOperatorNode(SyntaxKind.ReadonlyKeyword, arrayType);
+                        const arrayType = factory.createArrayTypeNode(elementType);
+                        return type.target === globalArrayType ? arrayType : factory.createTypeOperatorNode(SyntaxKind.ReadonlyKeyword, arrayType);
                     }
                     else if (type.target.objectFlags & ObjectFlags.Tuple) {
                         if (typeArguments.length > 0) {
@@ -3927,16 +3928,16 @@ namespace ts {
                             if (tupleConstituentNodes) {
                                 for (let i = (<TupleType>type.target).minLength; i < Math.min(arity, tupleConstituentNodes.length); i++) {
                                     tupleConstituentNodes[i] = hasRestElement && i === arity - 1 ?
-                                        createRestTypeNode(createArrayTypeNode(tupleConstituentNodes[i])) :
-                                        createOptionalTypeNode(tupleConstituentNodes[i]);
+                                        factory.createRestTypeNode(factory.createArrayTypeNode(tupleConstituentNodes[i])) :
+                                        factory.createOptionalTypeNode(tupleConstituentNodes[i]);
                                 }
-                                const tupleTypeNode = createTupleTypeNode(tupleConstituentNodes);
-                                return (<TupleType>type.target).readonly ? createTypeOperatorNode(SyntaxKind.ReadonlyKeyword, tupleTypeNode) : tupleTypeNode;
+                                const tupleTypeNode = factory.createTupleTypeNode(tupleConstituentNodes);
+                                return (<TupleType>type.target).readonly ? factory.createTypeOperatorNode(SyntaxKind.ReadonlyKeyword, tupleTypeNode) : tupleTypeNode;
                             }
                         }
                         if (context.encounteredError || (context.flags & NodeBuilderFlags.AllowEmptyTuple)) {
-                            const tupleTypeNode = createTupleTypeNode([]);
-                            return (<TupleType>type.target).readonly ? createTypeOperatorNode(SyntaxKind.ReadonlyKeyword, tupleTypeNode) : tupleTypeNode;
+                            const tupleTypeNode = factory.createTupleTypeNode([]);
+                            return (<TupleType>type.target).readonly ? factory.createTypeOperatorNode(SyntaxKind.ReadonlyKeyword, tupleTypeNode) : tupleTypeNode;
                         }
                         context.encounteredError = true;
                         return undefined!; // TODO: GH#18217
@@ -3998,7 +3999,7 @@ namespace ts {
                         // then move qualifiers
                         const ids = getAccessStack(ref);
                         for (const id of ids) {
-                            root.qualifier = root.qualifier ? createQualifiedName(root.qualifier, id) : id;
+                            root.qualifier = root.qualifier ? factory.createQualifiedName(root.qualifier, id) : id;
                         }
                         return root;
                     }
@@ -4010,7 +4011,7 @@ namespace ts {
                         // then move qualifiers
                         const ids = getAccessStack(ref);
                         for (const id of ids) {
-                            root.typeName = createQualifiedName(root.typeName, id);
+                            root.typeName = factory.createQualifiedName(root.typeName, id);
                         }
                         return root;
                     }
@@ -4029,7 +4030,7 @@ namespace ts {
 
                 function createTypeNodesFromResolvedType(resolvedType: ResolvedType): TypeElement[] | undefined {
                     if (checkTruncationLength(context)) {
-                        return [createPropertySignature(/*modifiers*/ undefined, "...", /*questionToken*/ undefined, /*type*/ undefined, /*initializer*/ undefined)];
+                        return [factory.createPropertySignature(/*modifiers*/ undefined, "...", /*questionToken*/ undefined, /*type*/ undefined)];
                     }
                     const typeElements: TypeElement[] = [];
                     for (const signature of resolvedType.callSignatures) {
@@ -4070,7 +4071,7 @@ namespace ts {
                             }
                         }
                         if (checkTruncationLength(context) && (i + 2 < properties.length - 1)) {
-                            typeElements.push(createPropertySignature(/*modifiers*/ undefined, `... ${properties.length - i} more ...`, /*questionToken*/ undefined, /*type*/ undefined, /*initializer*/ undefined));
+                            typeElements.push(factory.createPropertySignature(/*modifiers*/ undefined, `... ${properties.length - i} more ...`, /*questionToken*/ undefined, /*type*/ undefined));
                             addPropertyToElementList(properties[properties.length - 1], context, typeElements);
                             break;
                         }
@@ -4084,9 +4085,9 @@ namespace ts {
             function createElidedInformationPlaceholder(context: NodeBuilderContext) {
                 context.approximateLength += 3;
                 if (!(context.flags & NodeBuilderFlags.NoTruncation)) {
-                    return createTypeReferenceNode(createIdentifier("..."), /*typeArguments*/ undefined);
+                    return factory.createTypeReferenceNode(factory.createIdentifier("..."), /*typeArguments*/ undefined);
                 }
-                return createKeywordTypeNode(SyntaxKind.AnyKeyword);
+                return factory.createKeywordTypeNode(SyntaxKind.AnyKeyword);
             }
 
             function addPropertyToElementList(propertySymbol: Symbol, context: NodeBuilderContext, typeElements: TypeElement[]) {
@@ -4104,7 +4105,7 @@ namespace ts {
                 const propertyName = symbolToName(propertySymbol, context, SymbolFlags.Value, /*expectsIdentifier*/ true);
                 context.approximateLength += (symbolName(propertySymbol).length + 1);
                 context.enclosingDeclaration = saveEnclosingDeclaration;
-                const optionalToken = propertySymbol.flags & SymbolFlags.Optional ? createToken(SyntaxKind.QuestionToken) : undefined;
+                const optionalToken = propertySymbol.flags & SymbolFlags.Optional ? factory.createToken(SyntaxKind.QuestionToken) : undefined;
                 if (propertySymbol.flags & (SymbolFlags.Function | SymbolFlags.Method) && !getPropertiesOfObjectType(propertyType).length && !isReadonlySymbol(propertySymbol)) {
                     const signatures = getSignaturesOfType(filterType(propertyType, t => !(t.flags & TypeFlags.Undefined)), SignatureKind.Call);
                     for (const signature of signatures) {
@@ -4126,20 +4127,19 @@ namespace ts {
                         propertyTypeNode = createElidedInformationPlaceholder(context);
                     }
                     else {
-                        propertyTypeNode = propertyType ? typeToTypeNodeHelper(propertyType, context) : createKeywordTypeNode(SyntaxKind.AnyKeyword);
+                        propertyTypeNode = propertyType ? typeToTypeNodeHelper(propertyType, context) : factory.createKeywordTypeNode(SyntaxKind.AnyKeyword);
                     }
                     context.flags = savedFlags;
 
-                    const modifiers = isReadonlySymbol(propertySymbol) ? [createToken(SyntaxKind.ReadonlyKeyword)] : undefined;
+                    const modifiers = isReadonlySymbol(propertySymbol) ? [factory.createToken(SyntaxKind.ReadonlyKeyword)] : undefined;
                     if (modifiers) {
                         context.approximateLength += 9;
                     }
-                    const propertySignature = createPropertySignature(
+                    const propertySignature = factory.createPropertySignature(
                         modifiers,
                         propertyName,
                         optionalToken,
-                        propertyTypeNode,
-                    /*initializer*/ undefined);
+                        propertyTypeNode);
                     if (propertySymbol.valueDeclaration) {
                         // Copy comments to node for declaration emit
                         setCommentRange(propertySignature, propertySymbol.valueDeclaration);
@@ -4152,12 +4152,12 @@ namespace ts {
                 if (some(types)) {
                     if (checkTruncationLength(context)) {
                         if (!isBareList) {
-                            return [createTypeReferenceNode("...", /*typeArguments*/ undefined)];
+                            return [factory.createTypeReferenceNode("...", /*typeArguments*/ undefined)];
                         }
                         else if (types.length > 2) {
                             return [
                                 typeToTypeNodeHelper(types[0], context),
-                                createTypeReferenceNode(`... ${types.length - 2} more ...`, /*typeArguments*/ undefined),
+                                factory.createTypeReferenceNode(`... ${types.length - 2} more ...`, /*typeArguments*/ undefined),
                                 typeToTypeNodeHelper(types[types.length - 1], context)
                             ];
                         }
@@ -4167,7 +4167,7 @@ namespace ts {
                     for (const type of types) {
                         i++;
                         if (checkTruncationLength(context) && (i + 2 < types.length - 1)) {
-                            result.push(createTypeReferenceNode(`... ${types.length - i} more ...`, /*typeArguments*/ undefined));
+                            result.push(factory.createTypeReferenceNode(`... ${types.length - i} more ...`, /*typeArguments*/ undefined));
                             const typeNode = typeToTypeNodeHelper(types[types.length - 1], context);
                             if (typeNode) {
                                 result.push(typeNode);
@@ -4187,9 +4187,9 @@ namespace ts {
 
             function indexInfoToIndexSignatureDeclarationHelper(indexInfo: IndexInfo, kind: IndexKind, context: NodeBuilderContext): IndexSignatureDeclaration {
                 const name = getNameFromIndexInfo(indexInfo) || "x";
-                const indexerTypeNode = createKeywordTypeNode(kind === IndexKind.String ? SyntaxKind.StringKeyword : SyntaxKind.NumberKeyword);
+                const indexerTypeNode = factory.createKeywordTypeNode(kind === IndexKind.String ? SyntaxKind.StringKeyword : SyntaxKind.NumberKeyword);
 
-                const indexingParameter = createParameter(
+                const indexingParameter = factory.createParameterDeclaration(
                     /*decorators*/ undefined,
                     /*modifiers*/ undefined,
                     /*dotDotDotToken*/ undefined,
@@ -4202,14 +4202,14 @@ namespace ts {
                     context.encounteredError = true;
                 }
                 context.approximateLength += (name.length + 4);
-                return createIndexSignature(
+                return factory.createIndexSignature(
                     /*decorators*/ undefined,
-                    indexInfo.isReadonly ? [createToken(SyntaxKind.ReadonlyKeyword)] : undefined,
+                    indexInfo.isReadonly ? [factory.createToken(SyntaxKind.ReadonlyKeyword)] : undefined,
                     [indexingParameter],
                     typeNode);
             }
 
-            function signatureToSignatureDeclarationHelper(signature: Signature, kind: SyntaxKind, context: NodeBuilderContext): SignatureDeclaration {
+            function signatureToSignatureDeclarationHelper(signature: Signature, kind: SignatureDeclaration["kind"], context: NodeBuilderContext): SignatureDeclaration {
                 let typeParameters: TypeParameterDeclaration[] | undefined;
                 let typeArguments: TypeNode[] | undefined;
                 if (context.flags & NodeBuilderFlags.WriteTypeArgumentsOfSignature && signature.target && signature.mapper && signature.target.typeParameters) {
@@ -4229,10 +4229,10 @@ namespace ts {
                 const typePredicate = getTypePredicateOfSignature(signature);
                 if (typePredicate) {
                     const parameterName = typePredicate.kind === TypePredicateKind.Identifier ?
-                        setEmitFlags(createIdentifier(typePredicate.parameterName), EmitFlags.NoAsciiEscaping) :
-                        createThisTypeNode();
+                        setEmitFlags(factory.createIdentifier(typePredicate.parameterName), EmitFlags.NoAsciiEscaping) :
+                        factory.createThisTypeNode();
                     const typeNode = typeToTypeNodeHelper(typePredicate.type, context);
-                    returnTypeNode = createTypePredicateNode(parameterName, typeNode);
+                    returnTypeNode = factory.createTypePredicateNode(parameterName, typeNode);
                 }
                 else {
                     const returnType = getReturnTypeOfSignature(signature);
@@ -4244,10 +4244,10 @@ namespace ts {
                     }
                 }
                 else if (!returnTypeNode) {
-                    returnTypeNode = createKeywordTypeNode(SyntaxKind.AnyKeyword);
+                    returnTypeNode = factory.createKeywordTypeNode(SyntaxKind.AnyKeyword);
                 }
                 context.approximateLength += 3; // Usually a signature contributes a few more characters than this, but 3 is the minimum
-                return createSignatureDeclaration(kind, typeParameters, parameters, returnTypeNode, typeArguments);
+                return factory.createSignatureDeclaration(kind, typeParameters, parameters, returnTypeNode, typeArguments);
             }
 
             function typeParameterToDeclarationWithConstraint(type: TypeParameter, context: NodeBuilderContext, constraintNode: TypeNode | undefined): TypeParameterDeclaration {
@@ -4257,7 +4257,7 @@ namespace ts {
                 const defaultParameter = getDefaultFromTypeParameter(type);
                 const defaultParameterNode = defaultParameter && typeToTypeNodeHelper(defaultParameter, context);
                 context.flags = savedContextFlags;
-                return createTypeParameterDeclaration(name, constraintNode, defaultParameterNode);
+                return factory.createTypeParameterDeclaration(name, constraintNode, defaultParameterNode);
             }
 
             function typeParameterToDeclaration(type: TypeParameter, context: NodeBuilderContext, constraint = getConstraintOfTypeParameter(type)): TypeParameterDeclaration {
@@ -4279,7 +4279,7 @@ namespace ts {
 
                 const modifiers = !(context.flags & NodeBuilderFlags.OmitParameterModifiers) && preserveModifierFlags && parameterDeclaration && parameterDeclaration.modifiers ? parameterDeclaration.modifiers.map(getSynthesizedClone) : undefined;
                 const isRest = parameterDeclaration && isRestParameter(parameterDeclaration) || getCheckFlags(parameterSymbol) & CheckFlags.RestParameter;
-                const dotDotDotToken = isRest ? createToken(SyntaxKind.DotDotDotToken) : undefined;
+                const dotDotDotToken = isRest ? factory.createToken(SyntaxKind.DotDotDotToken) : undefined;
                 const name = parameterDeclaration
                     ? parameterDeclaration.name ?
                             parameterDeclaration.name.kind === SyntaxKind.Identifier ? setEmitFlags(getSynthesizedClone(parameterDeclaration.name), EmitFlags.NoAsciiEscaping) :
@@ -4288,8 +4288,8 @@ namespace ts {
                         symbolName(parameterSymbol)
                     : symbolName(parameterSymbol);
                 const isOptional = parameterDeclaration && isOptionalParameter(parameterDeclaration) || getCheckFlags(parameterSymbol) & CheckFlags.OptionalParameter;
-                const questionToken = isOptional ? createToken(SyntaxKind.QuestionToken) : undefined;
-                const parameterNode = createParameter(
+                const questionToken = isOptional ? factory.createToken(SyntaxKind.QuestionToken) : undefined;
+                const parameterNode = factory.createParameterDeclaration(
                     /*decorators*/ undefined,
                     modifiers,
                     dotDotDotToken,
@@ -4516,7 +4516,7 @@ namespace ts {
                             context.tracker.reportLikelyUnsafeImportRequiredError(specifier);
                         }
                     }
-                    const lit = createLiteralTypeNode(createLiteral(specifier));
+                    const lit = factory.createLiteralTypeNode(factory.createStringLiteral(specifier));
                     if (context.tracker.trackExternalModuleSymbolOfImportTypeNode) context.tracker.trackExternalModuleSymbolOfImportTypeNode(chain[0]);
                     context.approximateLength += specifier.length + 10; // specifier + import("")
                     if (!nonRootParts || isEntityName(nonRootParts)) {
@@ -4524,12 +4524,12 @@ namespace ts {
                             const lastId = isIdentifier(nonRootParts) ? nonRootParts : nonRootParts.right;
                             lastId.typeArguments = undefined;
                         }
-                        return createImportTypeNode(lit, nonRootParts as EntityName, typeParameterNodes as ReadonlyArray<TypeNode>, isTypeOf);
+                        return factory.createImportTypeNode(lit, nonRootParts as EntityName, typeParameterNodes as ReadonlyArray<TypeNode>, isTypeOf);
                     }
                     else {
                         const splitNode = getTopmostIndexedAccessType(nonRootParts);
                         const qualifier = (splitNode.objectType as TypeReferenceNode).typeName;
-                        return createIndexedAccessTypeNode(createImportTypeNode(lit, qualifier, typeParameterNodes as ReadonlyArray<TypeNode>, isTypeOf), splitNode.indexType);
+                        return factory.createIndexedAccessTypeNode(factory.createImportTypeNode(lit, qualifier, typeParameterNodes as ReadonlyArray<TypeNode>, isTypeOf), splitNode.indexType);
                     }
                 }
 
@@ -4538,13 +4538,13 @@ namespace ts {
                     return entityName; // Indexed accesses can never be `typeof`
                 }
                 if (isTypeOf) {
-                    return createTypeQueryNode(entityName);
+                    return factory.createTypeQueryNode(entityName);
                 }
                 else {
                     const lastId = isIdentifier(entityName) ? entityName : entityName.right;
                     const lastTypeArgs = lastId.typeArguments;
                     lastId.typeArguments = undefined;
-                    return createTypeReferenceNode(entityName, lastTypeArgs as NodeArray<TypeNode>);
+                    return factory.createTypeReferenceNode(entityName, lastTypeArgs as NodeArray<TypeNode>);
                 }
 
                 function createAccessFromSymbolChain(chain: Symbol[], index: number, stopper: number): EntityName | IndexedAccessTypeNode {
@@ -4565,14 +4565,14 @@ namespace ts {
                         // Should use an indexed access
                         const LHS = createAccessFromSymbolChain(chain, index - 1, stopper);
                         if (isIndexedAccessTypeNode(LHS)) {
-                            return createIndexedAccessTypeNode(LHS, createLiteralTypeNode(createLiteral(symbolName)));
+                            return factory.createIndexedAccessTypeNode(LHS, factory.createLiteralTypeNode(factory.createStringLiteral(symbolName)));
                         }
                         else {
-                            return createIndexedAccessTypeNode(createTypeReferenceNode(LHS, typeParameterNodes as ReadonlyArray<TypeNode>), createLiteralTypeNode(createLiteral(symbolName)));
+                            return factory.createIndexedAccessTypeNode(factory.createTypeReferenceNode(LHS, typeParameterNodes as ReadonlyArray<TypeNode>), factory.createLiteralTypeNode(factory.createStringLiteral(symbolName)));
                         }
                     }
 
-                    const identifier = setEmitFlags(createIdentifier(symbolName, typeParameterNodes), EmitFlags.NoAsciiEscaping);
+                    const identifier = setEmitFlags(factory.createIdentifier(symbolName, typeParameterNodes), EmitFlags.NoAsciiEscaping);
                     identifier.symbol = symbol;
 
                     if (index > stopper) {
@@ -4580,7 +4580,7 @@ namespace ts {
                         if (!isEntityName(LHS)) {
                             return Debug.fail("Impossible construct - an export of an indexed access cannot be reachable");
                         }
-                        return createQualifiedName(LHS, identifier);
+                        return factory.createQualifiedName(LHS, identifier);
                     }
                     return identifier;
                 }
@@ -4607,7 +4607,7 @@ namespace ts {
                         text = `${rawtext}_${i}`;
                     }
                     if (text !== rawtext) {
-                        result = createIdentifier(text, result.typeArguments);
+                        result = factory.createIdentifier(text, result.typeArguments);
                     }
                     (context.typeParameterNames || (context.typeParameterNames = createMap())).set("" + getTypeId(type), result);
                     (context.typeParameterNamesByText || (context.typeParameterNamesByText = createMap())).set(result.escapedText as string, true);
@@ -4639,10 +4639,10 @@ namespace ts {
                         context.flags ^= NodeBuilderFlags.InInitialEntityName;
                     }
 
-                    const identifier = setEmitFlags(createIdentifier(symbolName, typeParameterNodes), EmitFlags.NoAsciiEscaping);
+                    const identifier = setEmitFlags(factory.createIdentifier(symbolName, typeParameterNodes), EmitFlags.NoAsciiEscaping);
                     identifier.symbol = symbol;
 
-                    return index > 0 ? createQualifiedName(createEntityNameFromSymbolChain(chain, index - 1), identifier) : identifier;
+                    return index > 0 ? factory.createQualifiedName(createEntityNameFromSymbolChain(chain, index - 1), identifier) : identifier;
                 }
             }
 
@@ -4655,7 +4655,7 @@ namespace ts {
                     const typeParameterNodes = lookupTypeParameterNodes(chain, index, context);
                     const symbol = chain[index];
                     if (some(symbol.declarations, hasNonGlobalAugmentationExternalModuleSymbol)) {
-                        return createLiteral(getSpecifierForModuleSymbol(symbol, context));
+                        return factory.createStringLiteral(getSpecifierForModuleSymbol(symbol, context));
                     }
 
                     if (index === 0) {
@@ -4668,10 +4668,10 @@ namespace ts {
                     let firstChar = symbolName.charCodeAt(0);
                     const canUsePropertyAccess = isIdentifierStart(firstChar, languageVersion);
                     if (index === 0 || canUsePropertyAccess) {
-                        const identifier = setEmitFlags(createIdentifier(symbolName, typeParameterNodes), EmitFlags.NoAsciiEscaping);
+                        const identifier = setEmitFlags(factory.createIdentifier(symbolName, typeParameterNodes), EmitFlags.NoAsciiEscaping);
                         identifier.symbol = symbol;
 
-                        return index > 0 ? createPropertyAccess(createExpressionFromSymbolChain(chain, index - 1), identifier) : identifier;
+                        return index > 0 ? factory.createPropertyAccess(createExpressionFromSymbolChain(chain, index - 1), identifier) : identifier;
                     }
                     else {
                         if (firstChar === CharacterCodes.openBracket) {
@@ -4680,17 +4680,17 @@ namespace ts {
                         }
                         let expression: Expression | undefined;
                         if (isSingleOrDoubleQuote(firstChar)) {
-                            expression = createLiteral(symbolName.substring(1, symbolName.length - 1).replace(/\\./g, s => s.substring(1)));
+                            expression = factory.createStringLiteral(symbolName.substring(1, symbolName.length - 1).replace(/\\./g, s => s.substring(1)));
                             (expression as StringLiteral).singleQuote = firstChar === CharacterCodes.singleQuote;
                         }
                         else if (("" + +symbolName) === symbolName) {
-                            expression = createLiteral(+symbolName);
+                            expression = factory.createNumericLiteral(+symbolName);
                         }
                         if (!expression) {
-                            expression = setEmitFlags(createIdentifier(symbolName, typeParameterNodes), EmitFlags.NoAsciiEscaping);
+                            expression = setEmitFlags(factory.createIdentifier(symbolName, typeParameterNodes), EmitFlags.NoAsciiEscaping);
                             expression.symbol = symbol;
                         }
-                        return createElementAccess(createExpressionFromSymbolChain(chain, index - 1), expression);
+                        return factory.createElementAccess(createExpressionFromSymbolChain(chain, index - 1), expression);
                     }
                 }
             }
@@ -4700,8 +4700,8 @@ namespace ts {
             return writer ? typePredicateToStringWorker(writer).getText() : usingSingleLineStringWriter(typePredicateToStringWorker);
 
             function typePredicateToStringWorker(writer: EmitTextWriter) {
-                const predicate = createTypePredicateNode(
-                    typePredicate.kind === TypePredicateKind.Identifier ? createIdentifier(typePredicate.parameterName) : createThisTypeNode(),
+                const predicate = factory.createTypePredicateNode(
+                    typePredicate.kind === TypePredicateKind.Identifier ? factory.createIdentifier(typePredicate.parameterName) : factory.createThisTypeNode(),
                     nodeBuilder.typeToTypeNode(typePredicate.type, enclosingDeclaration, toNodeBuilderFlags(flags) | NodeBuilderFlags.IgnoreErrors | NodeBuilderFlags.WriteTypeParametersInQualifiedName)!, // TODO: GH#18217
                 );
                 const printer = createPrinter({ removeComments: true });
@@ -20029,14 +20029,13 @@ namespace ts {
                         childrenTypes[0] :
                         (getArrayLiteralTupleTypeIfApplicable(childrenTypes, childrenContextualType, /*hasRestElement*/ false) || createArrayType(getUnionType(childrenTypes)));
                     // Fake up a property declaration for the children
-                    childrenPropSymbol.valueDeclaration = createPropertySignature(/*modifiers*/ undefined, unescapeLeadingUnderscores(jsxChildrenPropertyName), /*questionToken*/ undefined, /*type*/ undefined, /*initializer*/ undefined);
+                    childrenPropSymbol.valueDeclaration = factory.createPropertySignature(/*modifiers*/ undefined, unescapeLeadingUnderscores(jsxChildrenPropertyName), /*questionToken*/ undefined, /*type*/ undefined);
                     childrenPropSymbol.valueDeclaration.parent = attributes;
                     childrenPropSymbol.valueDeclaration.symbol = childrenPropSymbol;
                     const childPropMap = createSymbolTable();
                     childPropMap.set(jsxChildrenPropertyName, childrenPropSymbol);
                     spread = getSpreadType(spread, createAnonymousType(attributes.symbol, childPropMap, emptyArray, emptyArray, /*stringIndexInfo*/ undefined, /*numberIndexInfo*/ undefined),
                         attributes.symbol, objectFlags, /*readonly*/ false);
-
                 }
             }
 
@@ -22716,9 +22715,9 @@ namespace ts {
             // file would probably be preferable.
             const typeSymbol = exports && getSymbol(exports, JsxNames.Element, SymbolFlags.Type);
             const returnNode = typeSymbol && nodeBuilder.symbolToEntityName(typeSymbol, SymbolFlags.Type, node);
-            const declaration = createFunctionTypeNode(/*typeParameters*/ undefined,
-                [createParameter(/*decorators*/ undefined, /*modifiers*/ undefined, /*dotdotdot*/ undefined, "props", /*questionMark*/ undefined, nodeBuilder.typeToTypeNode(result, node))],
-                returnNode ? createTypeReferenceNode(returnNode, /*typeArguments*/ undefined) : createKeywordTypeNode(SyntaxKind.AnyKeyword)
+            const declaration = factory.createFunctionTypeNode(/*typeParameters*/ undefined,
+                [factory.createParameterDeclaration(/*decorators*/ undefined, /*modifiers*/ undefined, /*dotdotdot*/ undefined, "props", /*questionMark*/ undefined, nodeBuilder.typeToTypeNode(result, node))],
+                returnNode ? factory.createTypeReferenceNode(returnNode, /*typeArguments*/ undefined) : factory.createKeywordTypeNode(SyntaxKind.AnyKeyword)
             );
             const parameterSymbol = createSymbol(SymbolFlags.FunctionScopedVariable, "props" as __String);
             parameterSymbol.type = result;
@@ -29525,7 +29524,7 @@ namespace ts {
         }
 
         function isPropertyInitializedInConstructor(propName: Identifier, propType: Type, constructor: ConstructorDeclaration) {
-            const reference = createPropertyAccess(createThis(), propName);
+            const reference = factory.createPropertyAccess(factory.createThis(), propName);
             reference.expression.parent = reference;
             reference.parent = constructor;
             reference.flowNode = constructor.returnFlowNode;
@@ -31803,7 +31802,7 @@ namespace ts {
         function createTypeOfDeclaration(declarationIn: AccessorDeclaration | VariableLikeDeclaration | PropertyAccessExpression, enclosingDeclaration: Node, flags: NodeBuilderFlags, tracker: SymbolTracker, addUndefined?: boolean) {
             const declaration = getParseTreeNode(declarationIn, isVariableLikeOrAccessor);
             if (!declaration) {
-                return createToken(SyntaxKind.AnyKeyword) as KeywordTypeNode;
+                return factory.createToken(SyntaxKind.AnyKeyword) as KeywordTypeNode;
             }
             // Get type of the symbol if this is the valid symbol otherwise get type at location
             const symbol = getSymbolOfNode(declaration);
@@ -31823,7 +31822,7 @@ namespace ts {
         function createReturnTypeOfSignatureDeclaration(signatureDeclarationIn: SignatureDeclaration, enclosingDeclaration: Node, flags: NodeBuilderFlags, tracker: SymbolTracker) {
             const signatureDeclaration = getParseTreeNode(signatureDeclarationIn, isFunctionLike);
             if (!signatureDeclaration) {
-                return createToken(SyntaxKind.AnyKeyword) as KeywordTypeNode;
+                return factory.createToken(SyntaxKind.AnyKeyword) as KeywordTypeNode;
             }
             const signature = getSignatureFromDeclaration(signatureDeclaration);
             return nodeBuilder.typeToTypeNode(getReturnTypeOfSignature(signature), enclosingDeclaration, flags | NodeBuilderFlags.MultilineObjectLiterals, tracker);
@@ -31832,7 +31831,7 @@ namespace ts {
         function createTypeOfExpression(exprIn: Expression, enclosingDeclaration: Node, flags: NodeBuilderFlags, tracker: SymbolTracker) {
             const expr = getParseTreeNode(exprIn, isExpression);
             if (!expr) {
-                return createToken(SyntaxKind.AnyKeyword) as KeywordTypeNode;
+                return factory.createToken(SyntaxKind.AnyKeyword) as KeywordTypeNode;
             }
             const type = getWidenedType(getRegularTypeOfExpression(expr));
             return nodeBuilder.typeToTypeNode(type, enclosingDeclaration, flags | NodeBuilderFlags.MultilineObjectLiterals, tracker);
@@ -31884,8 +31883,12 @@ namespace ts {
 
         function literalTypeToNode(type: FreshableType, enclosing: Node, tracker: SymbolTracker): Expression {
             const enumResult = type.flags & TypeFlags.EnumLiteral ? nodeBuilder.symbolToExpression(type.symbol, SymbolFlags.Value, enclosing, /*flags*/ undefined, tracker)
-                : type === trueType ? createTrue() : type === falseType && createFalse();
-            return enumResult || createLiteral((type as LiteralType).value);
+                : type === trueType ? factory.createTrue() : type === falseType && factory.createFalse();
+            if (enumResult) return enumResult;
+            const literalValue = (type as LiteralType).value;
+            return typeof literalValue === "object" ? factory.createBigIntLiteral(literalValue) :
+                typeof literalValue === "number" ? factory.createNumericLiteral(literalValue) :
+                factory.createStringLiteral(literalValue);
         }
 
         function createLiteralConstValue(node: VariableDeclaration | PropertyDeclaration | PropertySignature | ParameterDeclaration, tracker: SymbolTracker) {
