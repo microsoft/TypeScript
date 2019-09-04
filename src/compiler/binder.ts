@@ -1815,7 +1815,23 @@ namespace ts {
                     if (isTopLevel) {
                         bindPotentiallyMissingNamespaces(file.symbol, declName.parent, isTopLevel, !!findAncestor(declName, d => isPropertyAccessExpression(d) && d.name.escapedText === "prototype"));
                         const oldContainer = container;
-                        container = isPropertyAccessExpression(declName.parent.expression) ? declName.parent.expression.name : declName.parent.expression;
+                        switch (getAssignmentDeclarationPropertyAccessKind(declName.parent)) {
+                            case AssignmentDeclarationKind.ExportsProperty:
+                            case AssignmentDeclarationKind.ModuleExports:
+                                container = file;
+                                break;
+                            case AssignmentDeclarationKind.ThisProperty:
+                                container = declName.parent.expression;
+                                break;
+                            case AssignmentDeclarationKind.PrototypeProperty:
+                                container = (declName.parent.expression as PropertyAccessExpression).name;
+                                break;
+                            case AssignmentDeclarationKind.Property:
+                                container = isPropertyAccessExpression(declName.parent.expression) ? declName.parent.expression.name : declName.parent.expression;
+                                break;
+                            case AssignmentDeclarationKind.None:
+                                return Debug.fail("Shouldn't have detected typedef or enum on non-assignment declaration");
+                        }
                         declareModuleMember(typeAlias, SymbolFlags.TypeAlias, SymbolFlags.TypeAliasExcludes);
                         container = oldContainer;
                     }
