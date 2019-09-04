@@ -617,7 +617,7 @@ export class cNew {}`);
                     "/src/core/index.d.ts.map",
                     "/src/logic/index.js.map"
                 ],
-                lastProjectOutputJs: "/src/tests/index.js",
+                lastProjectOutput: "/src/tests/index.js",
                 initialBuild,
                 incrementalDtsChangedBuild: {
                     modifyFs: fs => appendText(fs, "/src/core/index.ts", `
@@ -727,7 +727,7 @@ class someClass { }`),
                     "/src/core/index.d.ts.map",
                     "/src/logic/index.js.map"
                 ],
-                lastProjectOutputJs: "/src/tests/index.js",
+                lastProjectOutput: "/src/tests/index.js",
                 initialBuild,
                 incrementalDtsChangedBuild: {
                     modifyFs: fs => replaceText(fs, "/src/logic/tsconfig.json", `"declaration": true,`, `"declaration": true,
@@ -795,7 +795,7 @@ class someClass { }`),
                     "/src/core/index.d.ts.map",
                     "/src/logic/index.js.map"
                 ],
-                lastProjectOutputJs: "/src/tests/index.js",
+                lastProjectOutput: "/src/tests/index.js",
                 initialBuild: {
                     modifyFs: fs => replaceText(fs, "/src/logic/tsconfig.json", `"composite": true,`, `"composite": true,
         "tsBuildInfoFile": "ownFile.tsbuildinfo",`),
@@ -851,8 +851,7 @@ class someClass { }`),
                 tick,
                 proj: "sample1",
                 rootNames: ["/src/core"],
-                expectedMapFileNames: emptyArray,
-                lastProjectOutputJs: "/src/core/index.js",
+                lastProjectOutput: "/src/core/index.js",
                 initialBuild: {
                     modifyFs: fs => fs.writeFileSync("/src/core/tsconfig.json", `{
     "compilerOptions": {
@@ -892,8 +891,7 @@ class someClass { }`),
                 tick,
                 proj: "sample1",
                 rootNames: ["/src/core"],
-                expectedMapFileNames: emptyArray,
-                lastProjectOutputJs: "/src/core/index.js",
+                lastProjectOutput: "/src/core/index.js",
                 initialBuild: {
                     modifyFs: fs => {
                         fs.writeFileSync("/lib/lib.esnext.full.d.ts", `/// <reference no-default-lib="true"/>
@@ -942,8 +940,7 @@ class someClass { }`),
                 tick,
                 proj: "sample1",
                 rootNames: ["/src/core"],
-                expectedMapFileNames: emptyArray,
-                lastProjectOutputJs: "/src/core/index.js",
+                lastProjectOutput: "/src/core/index.js",
                 initialBuild: {
                     modifyFs: fs => fs.writeFileSync("/src/core/tsconfig.json", `{
     "compilerOptions": {
@@ -981,8 +978,7 @@ class someClass { }`),
                 tick,
                 proj: "sample1",
                 rootNames: ["/src/tests"],
-                expectedMapFileNames: emptyArray,
-                lastProjectOutputJs: "/src/tests/index.js",
+                lastProjectOutput: "/src/tests/index.js",
                 initialBuild: {
                     modifyFs: fs => fs.writeFileSync("/src/tests/tsconfig.json", `{
     "references": [

@@ -16,8 +16,7 @@ namespace ts {
             tick,
             proj: "inferredTypeFromTransitiveModule",
             rootNames: ["/src"],
-            expectedMapFileNames: emptyArray,
-            lastProjectOutputJs: `/src/obj/index.js`,
+            lastProjectOutput: `/src/obj/index.js`,
             outputFiles: [
                 "/src/obj/bar.js", "/src/obj/bar.d.ts",
                 "/src/obj/bundling.js", "/src/obj/bundling.d.ts",

@@ -345,8 +345,13 @@ namespace ts.BuilderState {
         }
         else {
             const emitOutput = getFileEmitOutput(programOfThisState, sourceFile, /*emitOnlyDtsFiles*/ true, cancellationToken);
-            if (emitOutput.outputFiles && emitOutput.outputFiles.length > 0) {
-                latestSignature = computeHash(emitOutput.outputFiles[0].text);
+            const firstDts = emitOutput.outputFiles &&
+                programOfThisState.getCompilerOptions().declarationMap ?
+                emitOutput.outputFiles.length > 1 ? emitOutput.outputFiles[1] : undefined :
+                emitOutput.outputFiles.length > 0 ? emitOutput.outputFiles[0] : undefined;
+            if (firstDts) {
+                Debug.assert(fileExtensionIs(firstDts.name, Extension.Dts), "File extension for signature expected to be dts", () => `Found: ${getAnyExtensionFromPath(firstDts.name)} for ${firstDts.name}:: All output files: ${JSON.stringify(emitOutput.outputFiles.map(f => f.name))}`);
+                latestSignature = computeHash(firstDts.text);
                 if (exportedModulesMapCache && latestSignature !== prevSignature) {
                     updateExportedModules(sourceFile, emitOutput.exportedModulesFromDeclarationEmit, exportedModulesMapCache);
                 }
