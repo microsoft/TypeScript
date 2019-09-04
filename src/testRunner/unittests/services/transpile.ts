@@ -416,6 +416,18 @@ var x = 0;`, {
             options: { compilerOptions: { typeRoots: ["./folder"] }, fileName: "input.js", reportDiagnostics: true }
         });
 
+        transpilesCorrectly("Supports setting 'incremental'", "x;", {
+            options: { compilerOptions: { incremental: true }, fileName: "input.js", reportDiagnostics: true }
+        });
+
+        transpilesCorrectly("Supports setting 'composite'", "x;", {
+            options: { compilerOptions: { composite: true }, fileName: "input.js", reportDiagnostics: true }
+        });
+
+        transpilesCorrectly("Supports setting 'tsbuildinfo'", "x;", {
+            options: { compilerOptions: { incremental: true, tsBuildInfoFile: "./folder/config.tsbuildinfo" }, fileName: "input.js", reportDiagnostics: true }
+        });
+
         transpilesCorrectly("Correctly serialize metadata when transpile with CommonJS option",
             `import * as ng from "angular2/core";` +
             `declare function foo(...args: any[]);` +
