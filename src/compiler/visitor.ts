@@ -141,11 +141,8 @@ namespace ts {
     export function visitLexicalEnvironment(statements: NodeArray<Statement>, visitor: Visitor, context: TransformationContext, start?: number, ensureUseStrict?: boolean) {
         context.startLexicalEnvironment();
         statements = visitNodes(statements, visitor, isStatement, start);
-        if (ensureUseStrict && !startsWithUseStrict(statements)) {
-            statements = setTextRange(createNodeArray([createExpressionStatement(createLiteral("use strict")), ...statements]), statements);
-        }
-        const declarations = context.endLexicalEnvironment();
-        return setTextRange(createNodeArray(concatenate(declarations, statements)), statements);
+        if (ensureUseStrict) statements = ts.ensureUseStrict(statements); // tslint:disable-line no-unnecessary-qualifier
+        return mergeLexicalEnvironment(statements, context.endLexicalEnvironment());
     }
 
     /**
