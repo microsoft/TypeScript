@@ -141,7 +141,7 @@ namespace ts {
     export function visitLexicalEnvironment(statements: NodeArray<Statement>, visitor: Visitor, context: TransformationContext, start?: number, ensureUseStrict?: boolean) {
         context.startLexicalEnvironment();
         statements = visitNodes(statements, visitor, isStatement, start);
-        if (ensureUseStrict) statements = ts.ensureUseStrict(statements); // tslint:disable-line no-unnecessary-qualifier
+        if (ensureUseStrict) statements = ts.ensureUseStrict(statements); // eslint-disable-line @typescript-eslint/no-unnecessary-qualifier
         return mergeLexicalEnvironment(statements, context.endLexicalEnvironment());
     }
 

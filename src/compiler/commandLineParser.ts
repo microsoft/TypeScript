@@ -903,7 +903,7 @@ namespace ts {
         !!option.affectsSourceFile || !!option.affectsModuleResolution || !!option.affectsBindDiagnostics);
 
     /* @internal */
-    export const transpileOptionValueCompilerOptions: ReadonlyArray<CommandLineOption> = optionDeclarations.filter(option =>
+    export const transpileOptionValueCompilerOptions: readonly CommandLineOption[] = optionDeclarations.filter(option =>
         hasProperty(option, "transpileOptionValue"));
 
     /* @internal */
