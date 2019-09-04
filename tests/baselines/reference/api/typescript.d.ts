@@ -2026,12 +2026,12 @@ declare namespace ts {
          */
         runWithCancellationToken<T>(token: CancellationToken, cb: (checker: TypeChecker) => T): T;
     }
-    enum ContextFlags {
+    export enum ContextFlags {
         None = 0,
         Signature = 1,
         Completion = 2
     }
-    enum NodeBuilderFlags {
+    export enum NodeBuilderFlags {
         None = 0,
         NoTruncation = 1,
         WriteArrayAsGenericType = 2,
