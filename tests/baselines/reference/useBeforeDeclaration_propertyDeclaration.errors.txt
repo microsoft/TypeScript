@@ -1,0 +1,15 @@
+tests/cases/compiler/useBeforeDeclaration_propertyDeclaration.ts(7,21): error TS2729: Property 'num' is used before its initialization.
+
+
+==== tests/cases/compiler/useBeforeDeclaration_propertyDeclaration.ts (1 errors) ====
+    class A {
+        num: number;
+        constructor(num:number) {
+            this.num = num;
+        }
+    
+        computed = this.num * 10;
+                        ~~~
+!!! error TS2729: Property 'num' is used before its initialization.
+!!! related TS2728 tests/cases/compiler/useBeforeDeclaration_propertyDeclaration.ts:2:5: 'num' is declared here.
+    }

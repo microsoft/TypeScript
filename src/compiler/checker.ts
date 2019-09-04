@@ -1297,8 +1297,10 @@ namespace ts {
                     return !findAncestor(usage, n => isComputedPropertyName(n) && n.parent.parent === declaration);
                 }
                 else if (isPropertyDeclaration(declaration)) {
+                    // still might be illegal if the property has no initializer.
                     // still might be illegal if a self-referencing property initializer (eg private x = this.x)
-                    return !isPropertyImmediatelyReferencedWithinDeclaration(declaration, usage);
+                    return !isUninitializedPropertyReferencedWithinDeclaration(declaration, usage)
+                        && !isPropertyImmediatelyReferencedWithinDeclaration(declaration, usage);
                 }
                 return true;
             }
@@ -1373,6 +1375,36 @@ namespace ts {
                     }
                     return false;
                 });
+            }
+
+            function isUninitializedPropertyReferencedWithinDeclaration(declaration: PropertyDeclaration, usage: Node) {
+                if (!strictNullChecks || !strictPropertyInitialization || declaration.flags & NodeFlags.Ambient) {
+                    return;
+                }
+                const ancestor = findAncestor(usage, (node: Node) => {
+                    switch (node.kind) {
+                        case SyntaxKind.ClassDeclaration:
+                        case SyntaxKind.ClassExpression:
+                        case SyntaxKind.ArrowFunction:
+                        case SyntaxKind.Block:
+                            return "quit";
+                        case SyntaxKind.PropertyDeclaration:
+                            return true;
+                        default:
+                            return isStatement(node) ? "quit" : false;
+                    }
+                });
+
+                if (!ancestor || ancestor.parent !== declaration.parent) {
+                    return false;
+                }
+
+                if (!isInstancePropertyWithoutInitializer(declaration)) {
+                    return false;
+                }
+
+                const type = getTypeOfSymbol(getSymbolOfNode(declaration));
+                return !(type.flags & TypeFlags.AnyOrUnknown || getFalsyFlags(type) & TypeFlags.Undefined);
             }
 
             function isPropertyImmediatelyReferencedWithinDeclaration(declaration: PropertyDeclaration, usage: Node) {

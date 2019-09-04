@@ -1,0 +1,26 @@
+=== tests/cases/compiler/useBeforeDeclaration_propertyDeclaration.ts ===
+class A {
+>A : A
+
+    num: number;
+>num : number
+
+    constructor(num:number) {
+>num : number
+
+        this.num = num;
+>this.num = num : number
+>this.num : number
+>this : this
+>num : number
+>num : number
+    }
+
+    computed = this.num * 10;
+>computed : number
+>this.num * 10 : number
+>this.num : number
+>this : this
+>num : number
+>10 : 10
+}
