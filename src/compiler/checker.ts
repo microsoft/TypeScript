@@ -22018,7 +22018,7 @@ namespace ts {
                         }
                     }
                     else {
-                        const allDiagnostics: Array<ReadonlyArray<DiagnosticRelatedInformation>> = [];
+                        const allDiagnostics: (readonly DiagnosticRelatedInformation[])[] = [];
                         let max = 0;
                         let min = Number.MAX_VALUE;
                         let minIndex = 0;
