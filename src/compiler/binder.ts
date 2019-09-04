@@ -2440,6 +2440,11 @@ namespace ts {
                         bindCallExpression(<CallExpression>node);
                     }
                     break;
+                case SyntaxKind.ReturnStatement:
+                    if (currentFlow) {
+                        node.flowNode = currentFlow;
+                    }
+                    break;
 
                 // Members of classes, interfaces, and modules
                 case SyntaxKind.ClassExpression:
