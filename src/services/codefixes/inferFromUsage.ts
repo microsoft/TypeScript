@@ -767,8 +767,8 @@ namespace ts.codefix {
             return inferences.filter(i => toRemove.every(f => !f(i)));
         }
 
-        function unifyTypes(inferences: ReadonlyArray<Type>, fallback = checker.getAnyType()): Type {
-            if (!inferences.length) return fallback;
+        function unifyTypes(inferences: ReadonlyArray<Type>): Type {
+            if (!inferences.length) return checker.getAnyType();
 
             // 1. string or number individually override string | number
             // 2. non-any, non-void overrides any or void
@@ -874,11 +874,11 @@ namespace ts.codefix {
                 }
 
                 if (usage.calls) {
-                    callSignatures.push(getSignatureFromCalls(usage.calls, checker.getAnyType()));
+                    callSignatures.push(getSignatureFromCalls(usage.calls));
                 }
 
                 if (usage.constructs) {
-                    constructSignatures.push(getSignatureFromCalls(usage.constructs, checker.getAnyType()));
+                    constructSignatures.push(getSignatureFromCalls(usage.constructs));
                 }
 
                 if (usage.stringIndex) {
@@ -1047,10 +1047,10 @@ namespace ts.codefix {
         }
 
         function getFunctionFromCalls(calls: CallUsage[]) {
-            return checker.createAnonymousType(undefined!, createSymbolTable(), [getSignatureFromCalls(calls, checker.getAnyType())], emptyArray, undefined, undefined);
+            return checker.createAnonymousType(undefined!, createSymbolTable(), [getSignatureFromCalls(calls)], emptyArray, undefined, undefined);
         }
 
-        function getSignatureFromCalls(calls: CallUsage[], fallbackReturn: Type): Signature {
+        function getSignatureFromCalls(calls: CallUsage[]): Signature {
             const parameters: Symbol[] = [];
             const length = Math.max(...calls.map(c => c.argumentTypes.length));
             for (let i = 0; i < length; i++) {
@@ -1061,7 +1061,7 @@ namespace ts.codefix {
                 }
                 parameters.push(symbol);
             }
-            const returnType = unifyTypes(inferFromUsage(combineUsages(calls.map(call => call.return_))), fallbackReturn);
+            const returnType = unifyTypes(inferFromUsage(combineUsages(calls.map(call => call.return_))));
             // TODO: GH#18217
             return checker.createSignature(/*declaration*/ undefined!, /*typeParameters*/ undefined, /*thisParameter*/ undefined, parameters, returnType, /*typePredicate*/ undefined, length, /*hasRestParameter*/ false, /*hasLiteralTypes*/ false);
         }
