@@ -26,7 +26,7 @@ namespace ts.SmartSelectionRange {
                     //
                     // Dive in without pushing a selection range.
                     if (isBlock(node)
-                        || isTemplateSpan(node) || isTemplateHead(node)
+                        || isTemplateSpan(node) || isTemplateHead(node) || isTemplateTail(node)
                         || prevNode && isTemplateHead(prevNode)
                         || isVariableDeclarationList(node) && isVariableStatement(parentNode)
                         || isSyntaxList(node) && isVariableDeclarationList(parentNode)
