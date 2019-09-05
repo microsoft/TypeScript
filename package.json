@@ -123,7 +123,10 @@
         "fs": false,
         "os": false,
         "path": false,
-        "@microsoft/typescript-etw": false
+        "crypto": false,
+        "buffer": false,
+        "@microsoft/typescript-etw": false,
+        "source-map-support": false
     },
     "dependencies": {}
 }
