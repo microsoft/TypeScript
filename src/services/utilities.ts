@@ -743,7 +743,7 @@ namespace ts {
         return findPrecedingToken(position, file);
     }
 
-    export function findNextToken(previousToken: Node, parent: Node, sourceFile: SourceFile): Node | undefined {
+    export function findNextToken(previousToken: Node, parent: Node, sourceFile: SourceFileLike): Node | undefined {
         return find(parent);
 
         function find(n: Node): Node | undefined {
@@ -1981,7 +1981,27 @@ namespace ts {
         return typeIsAccessible ? res : undefined;
     }
 
-    export function syntaxUsuallyHasTrailingSemicolon(kind: SyntaxKind) {
+    export function syntaxRequiresTrailingCommaOrSemicolonOrASI(kind: SyntaxKind) {
+        return kind === SyntaxKind.CallSignature
+            || kind === SyntaxKind.ConstructSignature
+            || kind === SyntaxKind.IndexSignature
+            || kind === SyntaxKind.PropertySignature
+            || kind === SyntaxKind.MethodSignature;
+    }
+
+    export function syntaxRequiresTrailingFunctionBlockOrSemicolonOrASI(kind: SyntaxKind) {
+        return kind === SyntaxKind.FunctionDeclaration
+            || kind === SyntaxKind.Constructor
+            || kind === SyntaxKind.MethodDeclaration
+            || kind === SyntaxKind.GetAccessor
+            || kind === SyntaxKind.SetAccessor;
+    }
+
+    export function syntaxRequiresTrailingModuleBlockOrSemicolonOrASI(kind: SyntaxKind) {
+        return kind === SyntaxKind.ModuleDeclaration;
+    }
+
+    export function syntaxRequiresTrailingSemicolonOrASI(kind: SyntaxKind) {
         return kind === SyntaxKind.VariableStatement
             || kind === SyntaxKind.ExpressionStatement
             || kind === SyntaxKind.DoStatement
@@ -1994,7 +2014,57 @@ namespace ts {
             || kind === SyntaxKind.TypeAliasDeclaration
             || kind === SyntaxKind.ImportDeclaration
             || kind === SyntaxKind.ImportEqualsDeclaration
-            || kind === SyntaxKind.ExportDeclaration;
+            || kind === SyntaxKind.ExportDeclaration
+            || kind === SyntaxKind.NamespaceExportDeclaration
+            || kind === SyntaxKind.ExportAssignment;
+    }
+
+    export const syntaxMayBeASICandidate = or(
+        syntaxRequiresTrailingCommaOrSemicolonOrASI,
+        syntaxRequiresTrailingFunctionBlockOrSemicolonOrASI,
+        syntaxRequiresTrailingModuleBlockOrSemicolonOrASI,
+        syntaxRequiresTrailingSemicolonOrASI);
+
+    export function isASICandidate(node: Node): boolean {
+        const lastToken = node.getLastToken();
+        if (lastToken && lastToken.kind === SyntaxKind.SemicolonToken) {
+            return false;
+        }
+
+        if (syntaxRequiresTrailingCommaOrSemicolonOrASI(node.kind)) {
+            if (lastToken && lastToken.kind === SyntaxKind.CommaToken) {
+                return false;
+            }
+        }
+        if (syntaxRequiresTrailingModuleBlockOrSemicolonOrASI(node.kind)) {
+            const children = node.parent.getChildren();
+            const nextChild = children[children.indexOf(node) + 1];
+            if (nextChild && isModuleBlock(nextChild)) {
+                return false;
+            }
+        }
+        else if (syntaxRequiresTrailingFunctionBlockOrSemicolonOrASI(node.kind)) {
+            const children = node.parent.getChildren();
+            const nextChild = children[children.indexOf(node) + 1];
+            if (nextChild && isFunctionBlock(nextChild)) {
+                return false;
+            }
+        }
+        else if (!syntaxRequiresTrailingSemicolonOrASI(node.kind)) {
+            return false;
+        }
+
+        const sourceFile = node.getSourceFile();
+        const nextToken = findNextToken(node, sourceFile, sourceFile);
+        if (!nextToken) {
+            return false;
+        }
+
+        if (nextToken.kind === SyntaxKind.CloseBraceToken) {
+            return true;
+        }
+
+        return !positionsAreOnSameLine(node.getEnd(), nextToken.getStart(sourceFile), sourceFile);
     }
 
     export function probablyUsesSemicolons(sourceFile: SourceFile): boolean {
@@ -2002,7 +2072,7 @@ namespace ts {
         let withoutSemicolon = 0;
         const nStatementsToObserve = 5;
         forEachChild(sourceFile, function visit(node): boolean | undefined {
-            if (syntaxUsuallyHasTrailingSemicolon(node.kind)) {
+            if (syntaxRequiresTrailingSemicolonOrASI(node.kind)) {
                 const lastToken = node.getLastToken(sourceFile);
                 if (lastToken && lastToken.kind === SyntaxKind.SemicolonToken) {
                     withSemicolon++;

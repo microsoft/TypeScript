@@ -1186,6 +1186,9 @@ namespace ts.formatting {
                         recordReplace(previousRange.end, currentRange.pos - previousRange.end, " ");
                         return onLaterLine ? LineAction.LineRemoved : LineAction.None;
                     }
+                    break;
+                case RuleAction.TrailingSemicolon:
+                    recordReplace(previousRange.end, 0, ";");
             }
             return LineAction.None;
         }

@@ -2158,8 +2158,19 @@ namespace ts {
         return (arg: T) => f(arg) && g(arg);
     }
 
-    export function or<T>(f: (arg: T) => boolean, g: (arg: T) => boolean): (arg: T) => boolean {
-        return arg => f(arg) || g(arg);
+    export function or<T extends unknown>(...fs: ((arg: T) => boolean)[]): (arg: T) => boolean {
+        return arg => {
+            for (const f of fs) {
+                if (f(arg)) {
+                    return true;
+                }
+            }
+            return false;
+        };
+    }
+
+    export function not<T extends unknown[]>(fn: (...args: T) => boolean): (...args: T) => boolean {
+        return (...args) => !fn(...args);
     }
 
     export function assertType<T>(_: T): void { } // tslint:disable-line no-empty

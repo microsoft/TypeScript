@@ -734,6 +734,7 @@ namespace ts {
         readonly placeOpenBraceOnNewLineForControlBlocks?: boolean;
         readonly insertSpaceBeforeTypeAnnotation?: boolean;
         readonly indentMultiLineObjectLiteralBeginningOnBlankLine?: boolean;
+        readonly insertTrailingSemicolon?: boolean;
     }
 
     export function getDefaultFormatCodeSettings(newLineCharacter?: string): FormatCodeSettings {
@@ -757,6 +758,7 @@ namespace ts {
             insertSpaceBeforeFunctionParenthesis: false,
             placeOpenBraceOnNewLineForFunctions: false,
             placeOpenBraceOnNewLineForControlBlocks: false,
+            insertTrailingSemicolon: true,
         };
     }
 

@@ -310,7 +310,8 @@ namespace ts.formatting {
 
             rule("SpaceBeforeTypeAnnotation", anyToken, SyntaxKind.ColonToken, [isOptionEnabled("insertSpaceBeforeTypeAnnotation"), isNonJsxSameLineTokenContext, isTypeAnnotationContext], RuleAction.Space),
             rule("NoSpaceBeforeTypeAnnotation", anyToken, SyntaxKind.ColonToken, [isOptionDisabledOrUndefined("insertSpaceBeforeTypeAnnotation"), isNonJsxSameLineTokenContext, isTypeAnnotationContext], RuleAction.DeleteTrivia),
-            rule("NoDiscretionarySemicolon", SyntaxKind.SemicolonToken, anyToken, [isSemicolonDeletionContext], RuleAction.DeleteToken),
+            rule("NoOptionalSemicolon", SyntaxKind.SemicolonToken, anyToken, [isOptionDisabled("insertTrailingSemicolon"), isSemicolonDeletionContext], RuleAction.DeleteToken),
+            rule("OptionalSemicolon", anyToken, anyToken, [isOptionEnabled("insertTrailingSemicolon"), isSemicolonInsertionContext], RuleAction.TrailingSemicolon),
         ];
 
         function isSemicolonDeletionContext(context: FormattingContext): boolean {
@@ -327,6 +328,17 @@ namespace ts.formatting {
                 && context.nextTokenSpan.kind !== SyntaxKind.SlashToken
                 && context.nextTokenSpan.kind !== SyntaxKind.CommaToken
                 && context.nextTokenSpan.kind !== SyntaxKind.DotToken;
+        }
+
+        function isSemicolonInsertionContext(context: FormattingContext): boolean {
+            const contextAncestor = findAncestor(context.currentTokenParent, ancestor => {
+                if (ancestor.end !== context.currentTokenSpan.end) {
+                    return "quit";
+                }
+                return syntaxMayBeASICandidate(ancestor.kind);
+            });
+
+            return !!contextAncestor && isASICandidate(contextAncestor);
         }
 
         // These rules are lower in priority than user-configurable. Rules earlier in this list have priority over rules later in the list.
