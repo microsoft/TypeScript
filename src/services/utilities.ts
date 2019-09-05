@@ -2054,13 +2054,14 @@ namespace ts {
             return false;
         }
 
-        const sourceFile = node.getSourceFile();
-        const nextToken = findNextToken(node, sourceFile, sourceFile);
-        if (!nextToken) {
-            return false;
+        // See comment in parser’s `parseDoStatement`
+        if (node.kind === SyntaxKind.DoStatement) {
+            return true;
         }
 
-        if (nextToken.kind === SyntaxKind.CloseBraceToken) {
+        const sourceFile = node.getSourceFile();
+        const nextToken = findNextToken(node, sourceFile, sourceFile);
+        if (!nextToken || nextToken.kind === SyntaxKind.CloseBraceToken) {
             return true;
         }
 

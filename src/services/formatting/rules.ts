@@ -9,7 +9,9 @@ namespace ts.formatting {
     export function getAllRules(): RuleSpec[] {
         const allTokens: SyntaxKind[] = [];
         for (let token = SyntaxKind.FirstToken; token <= SyntaxKind.LastToken; token++) {
-            allTokens.push(token);
+            if (token !== SyntaxKind.EndOfFileToken) {
+                allTokens.push(token);
+            }
         }
         function anyTokenExcept(...tokens: SyntaxKind[]): TokenRange {
             return { tokens: allTokens.filter(t => !tokens.some(t2 => t2 === t)), isSpecific: false };
@@ -17,6 +19,7 @@ namespace ts.formatting {
 
         const anyToken: TokenRange = { tokens: allTokens, isSpecific: false };
         const anyTokenIncludingMultilineComments = tokenRangeFrom([...allTokens, SyntaxKind.MultiLineCommentTrivia]);
+        const anyTokenIncludingEOF = tokenRangeFrom([...allTokens, SyntaxKind.EndOfFileToken]);
         const keywords = tokenRangeFromRange(SyntaxKind.FirstKeyword, SyntaxKind.LastKeyword);
         const binaryOperators = tokenRangeFromRange(SyntaxKind.FirstBinaryOperator, SyntaxKind.LastBinaryOperator);
         const binaryKeywordOperators = [SyntaxKind.InKeyword, SyntaxKind.InstanceOfKeyword, SyntaxKind.OfKeyword, SyntaxKind.AsKeyword, SyntaxKind.IsKeyword];
@@ -310,8 +313,8 @@ namespace ts.formatting {
 
             rule("SpaceBeforeTypeAnnotation", anyToken, SyntaxKind.ColonToken, [isOptionEnabled("insertSpaceBeforeTypeAnnotation"), isNonJsxSameLineTokenContext, isTypeAnnotationContext], RuleAction.Space),
             rule("NoSpaceBeforeTypeAnnotation", anyToken, SyntaxKind.ColonToken, [isOptionDisabledOrUndefined("insertSpaceBeforeTypeAnnotation"), isNonJsxSameLineTokenContext, isTypeAnnotationContext], RuleAction.DeleteTrivia),
-            rule("NoOptionalSemicolon", SyntaxKind.SemicolonToken, anyToken, [isOptionDisabled("insertTrailingSemicolon"), isSemicolonDeletionContext], RuleAction.DeleteToken),
-            rule("OptionalSemicolon", anyToken, anyToken, [isOptionEnabled("insertTrailingSemicolon"), isSemicolonInsertionContext], RuleAction.TrailingSemicolon),
+            rule("NoOptionalSemicolon", SyntaxKind.SemicolonToken, anyTokenIncludingEOF, [isOptionDisabled("insertTrailingSemicolon"), isSemicolonDeletionContext], RuleAction.DeleteToken),
+            rule("OptionalSemicolon", anyToken, anyTokenIncludingEOF, [isOptionEnabled("insertTrailingSemicolon"), isSemicolonInsertionContext], RuleAction.TrailingSemicolon),
         ];
 
         function isSemicolonDeletionContext(context: FormattingContext): boolean {

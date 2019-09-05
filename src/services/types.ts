@@ -758,7 +758,7 @@ namespace ts {
             insertSpaceBeforeFunctionParenthesis: false,
             placeOpenBraceOnNewLineForFunctions: false,
             placeOpenBraceOnNewLineForControlBlocks: false,
-            insertTrailingSemicolon: true,
+            // insertTrailingSemicolon: true,
         };
     }
 

@@ -3098,6 +3098,7 @@ declare namespace ts {
     export interface UserPreferences {
         readonly disableSuggestions?: boolean;
         readonly quotePreference?: "auto" | "double" | "single";
+        readonly semicolonPreference?: "auto" | "semicolons" | "no semicolons";
         readonly includeCompletionsForModuleExports?: boolean;
         readonly includeCompletionsWithInsertText?: boolean;
         readonly importModuleSpecifierPreference?: "relative" | "non-relative";
@@ -5305,6 +5306,7 @@ declare namespace ts {
         readonly placeOpenBraceOnNewLineForControlBlocks?: boolean;
         readonly insertSpaceBeforeTypeAnnotation?: boolean;
         readonly indentMultiLineObjectLiteralBeginningOnBlankLine?: boolean;
+        readonly insertTrailingSemicolon?: boolean;
     }
     function getDefaultFormatCodeSettings(newLineCharacter?: string): FormatCodeSettings;
     interface DefinitionInfo extends DocumentSpan {

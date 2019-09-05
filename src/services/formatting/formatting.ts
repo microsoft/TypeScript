@@ -651,6 +651,21 @@ namespace ts.formatting {
                 consumeTokenAndAdvanceScanner(tokenInfo, node, nodeDynamicIndentation, node);
             }
 
+            if (formattingScanner.isOnEOF()) {
+                const token = formattingScanner.readEOFTokenRange();
+                if (token.end <= node.end && previousRange) {
+                    processPair(
+                        token,
+                        sourceFile.getLineAndCharacterOfPosition(token.pos).line,
+                        node,
+                        previousRange,
+                        previousRangeStartLine,
+                        previousParent,
+                        contextNode,
+                        nodeDynamicIndentation);
+                }
+            }
+
             function processChildNode(
                 child: Node,
                 inheritedIndentation: number,
@@ -950,7 +965,10 @@ namespace ts.formatting {
             let trimTrailingWhitespaces = false;
             let lineAction = LineAction.None;
             if (rules) {
-                for (const rule of rules) {
+                // Apply rules in reverse order so that higher when higher priority rules (which are first in the array)
+                // create text changes at the same position as lower priority rules, the higher priority text changes
+                // are evaluated last.
+                forEachRight(rules, rule => {
                     lineAction = applyRuleEdits(rule, previousItem, previousStartLine, currentItem, currentStartLine);
                     switch (lineAction) {
                         case LineAction.LineRemoved:
@@ -974,10 +992,10 @@ namespace ts.formatting {
 
                     // We need to trim trailing whitespace between the tokens if they were on different lines, and no rule was applied to put them on the same line
                     trimTrailingWhitespaces = !(rule.action & RuleAction.DeleteTrivia) && rule.flags !== RuleFlags.CanDeleteNewLines;
-                }
+                });
             }
             else {
-                trimTrailingWhitespaces = true;
+                trimTrailingWhitespaces = currentItem.kind !== SyntaxKind.EndOfFileToken;
             }
 
             if (currentStartLine !== previousStartLine && trimTrailingWhitespaces) {
