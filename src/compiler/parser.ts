@@ -768,7 +768,7 @@ namespace ts {
                         statement.expression = parseObjectLiteralExpression();
                         break;
                 }
-                finishNode(statement);
+                finishNode(statement, pos);
                 sourceFile.statements = createNodeArray([statement], pos);
                 sourceFile.endOfFileToken = parseExpectedToken(SyntaxKind.EndOfFileToken, Diagnostics.Unexpected_token);
             }
@@ -1269,15 +1269,17 @@ namespace ts {
         }
 
         function parseTokenNode<T extends Node>(): T {
+            const pos = getNodePos();
             const node = <T>createNode(token());
             nextToken();
-            return finishNode(node);
+            return finishNode(node, pos);
         }
 
         function parseTokenNodeJSDoc<T extends Node>(): T {
+            const pos = getNodePos();
             const node = <T>createNode(token());
             nextTokenJSDoc();
-            return finishNode(node);
+            return finishNode(node, pos);
         }
 
         function canParseSemicolon() {
@@ -1331,7 +1333,8 @@ namespace ts {
             return array;
         }
 
-        function finishNode<T extends Node>(node: T, end?: number): T {
+        function finishNode<T extends Node>(node: T, pos: number, end?: number): T {
+            node.pos = pos;
             node.end = end === undefined ? scanner.getStartPos() : end;
 
             if (contextFlags) {
@@ -1359,6 +1362,7 @@ namespace ts {
                 parseErrorAtCurrentToken(diagnosticMessage, arg0);
             }
 
+            const pos = getNodePos();
             const result = createNode(kind);
 
             if (kind === SyntaxKind.Identifier) {
@@ -1368,7 +1372,7 @@ namespace ts {
                 (result as LiteralLikeNode).text = "";
             }
 
-            return finishNode(result) as T;
+            return finishNode(result, pos) as T;
         }
 
         function internIdentifier(text: string): string {
@@ -1385,6 +1389,7 @@ namespace ts {
         function createIdentifier(isIdentifier: boolean, diagnosticMessage?: DiagnosticMessage): Identifier {
             identifierCount++;
             if (isIdentifier) {
+                const pos = getNodePos();
                 const node = <Identifier>createNode(SyntaxKind.Identifier);
 
                 // Store original token kind if it is not just an Identifier so we can report appropriate error later in type checker
@@ -1393,7 +1398,7 @@ namespace ts {
                 }
                 node.escapedText = escapeLeadingUnderscores(internIdentifier(scanner.getTokenValue()));
                 nextTokenWithoutCheck();
-                return finishNode(node);
+                return finishNode(node, pos);
             }
 
             // Only for end of file because the error gets reported incorrectly on embedded script tags.
@@ -1436,6 +1441,7 @@ namespace ts {
             // PropertyName [Yield]:
             //      LiteralPropertyName
             //      ComputedPropertyName[?Yield]
+            const pos = getNodePos();
             const node = <ComputedPropertyName>createNode(SyntaxKind.ComputedPropertyName);
             parseExpected(SyntaxKind.OpenBracketToken);
 
@@ -1445,7 +1451,7 @@ namespace ts {
             node.expression = allowInAnd(parseExpression);
 
             parseExpected(SyntaxKind.CloseBracketToken);
-            return finishNode(node);
+            return finishNode(node, pos);
         }
 
         function parseContextualModifier(t: SyntaxKind): boolean {
@@ -2214,7 +2220,7 @@ namespace ts {
             const node = createNode(SyntaxKind.QualifiedName, entity.pos) as QualifiedName;
             node.left = entity;
             node.right = name;
-            return finishNode(node);
+            return finishNode(node, entity.pos);
         }
 
         function parseRightSideOfDot(allowIdentifierNames: boolean): Identifier {
@@ -2252,10 +2258,10 @@ namespace ts {
         }
 
         function parseTemplateExpression(): TemplateExpression {
+            const pos = getNodePos();
             const template = <TemplateExpression>createNode(SyntaxKind.TemplateExpression);
 
             template.head = parseTemplateHead();
-            Debug.assert(template.head.kind === SyntaxKind.TemplateHead, "Template head has wrong token kind");
 
             const list = [];
             const listPos = getNodePos();
@@ -2267,10 +2273,11 @@ namespace ts {
 
             template.templateSpans = createNodeArray(list, listPos);
 
-            return finishNode(template);
+            return finishNode(template, pos);
         }
 
         function parseTemplateSpan(): TemplateSpan {
+            const pos = getNodePos();
             const span = <TemplateSpan>createNode(SyntaxKind.TemplateSpan);
             span.expression = allowInAnd(parseExpression);
 
@@ -2284,7 +2291,7 @@ namespace ts {
             }
 
             span.literal = literal;
-            return finishNode(span);
+            return finishNode(span, pos);
         }
 
         function parseLiteralNode(): LiteralExpression {
@@ -2304,6 +2311,7 @@ namespace ts {
         }
 
         function parseLiteralLikeNode(kind: SyntaxKind): LiteralLikeNode {
+            const pos = getNodePos();
             const node = <LiteralLikeNode>createNode(kind);
             node.text = scanner.getTokenValue();
             switch (kind) {
@@ -2336,7 +2344,7 @@ namespace ts {
             }
 
             nextToken();
-            finishNode(node);
+            finishNode(node, pos);
 
             return node;
         }
@@ -2344,12 +2352,13 @@ namespace ts {
         // TYPES
 
         function parseTypeReference(): TypeReferenceNode {
+            const pos = getNodePos();
             const node = <TypeReferenceNode>createNode(SyntaxKind.TypeReference);
             node.typeName = parseEntityName(/*allowReservedWords*/ true, Diagnostics.Type_expected);
             if (!scanner.hasPrecedingLineBreak() && reScanLessThanToken() === SyntaxKind.LessThanToken) {
                 node.typeArguments = parseBracketedList(ParsingContext.TypeArguments, parseType, SyntaxKind.LessThanToken, SyntaxKind.GreaterThanToken);
             }
-            return finishNode(node);
+            return finishNode(node, pos);
         }
 
         // If true, we should abort parsing an error function.
@@ -2374,16 +2383,18 @@ namespace ts {
             const node = createNode(SyntaxKind.TypePredicate, lhs.pos) as TypePredicateNode;
             node.parameterName = lhs;
             node.type = parseType();
-            return finishNode(node);
+            return finishNode(node, lhs.pos);
         }
 
         function parseThisTypeNode(): ThisTypeNode {
+            const pos = getNodePos();
             const node = createNode(SyntaxKind.ThisType) as ThisTypeNode;
             nextToken();
-            return finishNode(node);
+            return finishNode(node, pos);
         }
 
         function parseJSDocAllType(postFixEquals: boolean): JSDocAllType | JSDocOptionalType {
+            const pos = getNodePos();
             const result = createNode(SyntaxKind.JSDocAllType) as JSDocAllType;
             if (postFixEquals) {
                 return createPostfixType(SyntaxKind.JSDocOptionalType, result) as JSDocOptionalType;
@@ -2391,18 +2402,19 @@ namespace ts {
             else {
                 nextToken();
             }
-            return finishNode(result);
+            return finishNode(result, pos);
         }
 
         function parseJSDocNonNullableType(): TypeNode {
+            const pos = getNodePos();
             const result = createNode(SyntaxKind.JSDocNonNullableType) as JSDocNonNullableType;
             nextToken();
             result.type = parseNonArrayType();
-            return finishNode(result);
+            return finishNode(result, pos);
         }
 
         function parseJSDocUnknownOrNullableType(): JSDocUnknownType | JSDocNullableType {
-            const pos = scanner.getStartPos();
+            const pos = getNodePos();
             // skip the ?
             nextToken();
 
@@ -2424,35 +2436,37 @@ namespace ts {
                 token() === SyntaxKind.BarToken) {
 
                 const result = <JSDocUnknownType>createNode(SyntaxKind.JSDocUnknownType, pos);
-                return finishNode(result);
+                return finishNode(result, pos);
             }
             else {
                 const result = <JSDocNullableType>createNode(SyntaxKind.JSDocNullableType, pos);
                 result.type = parseType();
-                return finishNode(result);
+                return finishNode(result, pos);
             }
         }
 
         function parseJSDocFunctionType(): JSDocFunctionType | TypeReferenceNode {
+            const pos = getNodePos();
             if (lookAhead(nextTokenIsOpenParen)) {
                 const result = <JSDocFunctionType>createNodeWithJSDoc(SyntaxKind.JSDocFunctionType);
                 nextToken();
                 fillSignature(SyntaxKind.ColonToken, SignatureFlags.Type | SignatureFlags.JSDoc, result);
-                return finishNode(result);
+                return finishNode(result, pos);
             }
             const node = <TypeReferenceNode>createNode(SyntaxKind.TypeReference);
             node.typeName = parseIdentifierName();
-            return finishNode(node);
+            return finishNode(node, pos);
         }
 
         function parseJSDocParameter(): ParameterDeclaration {
+            const pos = getNodePos();
             const parameter = createNode(SyntaxKind.Parameter) as ParameterDeclaration;
             if (token() === SyntaxKind.ThisKeyword || token() === SyntaxKind.NewKeyword) {
                 parameter.name = parseIdentifierName();
                 parseExpected(SyntaxKind.ColonToken);
             }
             parameter.type = parseJSDocType();
-            return finishNode(parameter);
+            return finishNode(parameter, pos);
         }
 
         function parseJSDocType(): TypeNode {
@@ -2473,16 +2487,16 @@ namespace ts {
                 }
 
                 scanner.setInJSDocType(false);
-                return finishNode(moduleTag);
+                return finishNode(moduleTag, moduleSpecifier.pos);
             }
 
-            const dotdotdot = parseOptionalToken(SyntaxKind.DotDotDotToken);
+            const dotDotDot = parseOptionalToken(SyntaxKind.DotDotDotToken);
             let type = parseTypeOrTypePredicate();
             scanner.setInJSDocType(false);
-            if (dotdotdot) {
-                const variadic = createNode(SyntaxKind.JSDocVariadicType, dotdotdot.pos) as JSDocVariadicType;
+            if (dotDotDot) {
+                const variadic = createNode(SyntaxKind.JSDocVariadicType, dotDotDot.pos) as JSDocVariadicType;
                 variadic.type = type;
-                type = finishNode(variadic);
+                type = finishNode(variadic, dotDotDot.pos);
             }
             if (token() === SyntaxKind.EqualsToken) {
                 return createPostfixType(SyntaxKind.JSDocOptionalType, type);
@@ -2491,13 +2505,15 @@ namespace ts {
         }
 
         function parseTypeQuery(): TypeQueryNode {
+            const pos = getNodePos();
             const node = <TypeQueryNode>createNode(SyntaxKind.TypeQuery);
             parseExpected(SyntaxKind.TypeOfKeyword);
             node.exprName = parseEntityName(/*allowReservedWords*/ true);
-            return finishNode(node);
+            return finishNode(node, pos);
         }
 
         function parseTypeParameter(): TypeParameterDeclaration {
+            const pos = getNodePos();
             const node = <TypeParameterDeclaration>createNode(SyntaxKind.TypeParameter);
             node.name = parseIdentifier();
             if (parseOptional(SyntaxKind.ExtendsKeyword)) {
@@ -2524,7 +2540,7 @@ namespace ts {
                 node.default = parseType();
             }
 
-            return finishNode(node);
+            return finishNode(node, pos);
         }
 
         function parseTypeParameters(): NodeArray<TypeParameterDeclaration> | undefined {
@@ -2550,11 +2566,12 @@ namespace ts {
         }
 
         function parseParameter(): ParameterDeclaration {
+            const pos = getNodePos();
             const node = <ParameterDeclaration>createNodeWithJSDoc(SyntaxKind.Parameter);
             if (token() === SyntaxKind.ThisKeyword) {
                 node.name = createIdentifier(/*isIdentifier*/ true);
                 node.type = parseParameterType();
-                return finishNode(node);
+                return finishNode(node, pos);
             }
 
             node.decorators = parseDecorators();
@@ -2580,7 +2597,7 @@ namespace ts {
             node.type = parseParameterType();
             node.initializer = parseInitializer();
 
-            return finishNode(node);
+            return finishNode(node, pos);
         }
 
         /**
@@ -2667,13 +2684,14 @@ namespace ts {
         }
 
         function parseSignatureMember(kind: SyntaxKind.CallSignature | SyntaxKind.ConstructSignature): CallSignatureDeclaration | ConstructSignatureDeclaration {
+            const pos = getNodePos();
             const node = <CallSignatureDeclaration | ConstructSignatureDeclaration>createNodeWithJSDoc(kind);
             if (kind === SyntaxKind.ConstructSignature) {
                 parseExpected(SyntaxKind.NewKeyword);
             }
             fillSignature(SyntaxKind.ColonToken, SignatureFlags.Type, node);
             parseTypeMemberSemicolon();
-            return finishNode(node);
+            return finishNode(node, pos);
         }
 
         function isIndexSignature(): boolean {
@@ -2735,15 +2753,15 @@ namespace ts {
             return token() === SyntaxKind.ColonToken || token() === SyntaxKind.CommaToken || token() === SyntaxKind.CloseBracketToken;
         }
 
-        function parseIndexSignatureDeclaration(node: IndexSignatureDeclaration): IndexSignatureDeclaration {
+        function parseIndexSignatureDeclaration(pos: number, node: IndexSignatureDeclaration): IndexSignatureDeclaration {
             node.kind = SyntaxKind.IndexSignature;
             node.parameters = parseBracketedList(ParsingContext.Parameters, parseParameter, SyntaxKind.OpenBracketToken, SyntaxKind.CloseBracketToken);
             node.type = parseTypeAnnotation();
             parseTypeMemberSemicolon();
-            return finishNode(node);
+            return finishNode(node, pos);
         }
 
-        function parsePropertyOrMethodSignature(node: PropertySignature | MethodSignature): PropertySignature | MethodSignature {
+        function parsePropertyOrMethodSignature(pos: number, node: PropertySignature | MethodSignature): PropertySignature | MethodSignature {
             node.name = parsePropertyName();
             node.questionToken = parseOptionalToken(SyntaxKind.QuestionToken);
             if (token() === SyntaxKind.OpenParenToken || token() === SyntaxKind.LessThanToken) {
@@ -2763,7 +2781,7 @@ namespace ts {
                 }
             }
             parseTypeMemberSemicolon();
-            return finishNode(node);
+            return finishNode(node, pos);
         }
 
         function isTypeMemberStart(): boolean {
@@ -2806,12 +2824,13 @@ namespace ts {
             if (token() === SyntaxKind.NewKeyword && lookAhead(nextTokenIsOpenParenOrLessThan)) {
                 return parseSignatureMember(SyntaxKind.ConstructSignature);
             }
+            const pos = getNodePos();
             const node = <TypeElement>createNodeWithJSDoc(SyntaxKind.Unknown);
             node.modifiers = parseModifiers();
             if (isIndexSignature()) {
-                return parseIndexSignatureDeclaration(<IndexSignatureDeclaration>node);
+                return parseIndexSignatureDeclaration(pos, <IndexSignatureDeclaration>node);
             }
-            return parsePropertyOrMethodSignature(<PropertySignature | MethodSignature>node);
+            return parsePropertyOrMethodSignature(pos, <PropertySignature | MethodSignature>node);
         }
 
         function nextTokenIsOpenParenOrLessThan() {
@@ -2834,9 +2853,10 @@ namespace ts {
         }
 
         function parseTypeLiteral(): TypeLiteralNode {
+            const pos = getNodePos();
             const node = <TypeLiteralNode>createNode(SyntaxKind.TypeLiteral);
             node.members = parseObjectTypeMembers();
-            return finishNode(node);
+            return finishNode(node, pos);
         }
 
         function parseObjectTypeMembers(): NodeArray<TypeElement> {
@@ -2864,14 +2884,16 @@ namespace ts {
         }
 
         function parseMappedTypeParameter() {
+            const pos = getNodePos();
             const node = <TypeParameterDeclaration>createNode(SyntaxKind.TypeParameter);
             node.name = parseIdentifier();
             parseExpected(SyntaxKind.InKeyword);
             node.constraint = parseType();
-            return finishNode(node);
+            return finishNode(node, pos);
         }
 
         function parseMappedType() {
+            const pos = getNodePos();
             const node = <MappedTypeNode>createNode(SyntaxKind.MappedType);
             parseExpected(SyntaxKind.OpenBraceToken);
             if (token() === SyntaxKind.ReadonlyKeyword || token() === SyntaxKind.PlusToken || token() === SyntaxKind.MinusToken) {
@@ -2892,7 +2914,7 @@ namespace ts {
             node.type = parseTypeAnnotation();
             parseSemicolon();
             parseExpected(SyntaxKind.CloseBraceToken);
-            return finishNode(node);
+            return finishNode(node, pos);
         }
 
         function parseTupleElementType() {
@@ -2900,7 +2922,7 @@ namespace ts {
             if (parseOptional(SyntaxKind.DotDotDotToken)) {
                 const node = <RestTypeNode>createNode(SyntaxKind.RestType, pos);
                 node.type = parseType();
-                return finishNode(node);
+                return finishNode(node, pos);
             }
             const type = parseType();
             if (!(contextFlags & NodeFlags.JSDoc) && type.kind === SyntaxKind.JSDocNullableType && type.pos === (<JSDocNullableType>type).type.pos) {
@@ -2910,17 +2932,19 @@ namespace ts {
         }
 
         function parseTupleType(): TupleTypeNode {
+            const pos = getNodePos();
             const node = <TupleTypeNode>createNode(SyntaxKind.TupleType);
             node.elementTypes = parseBracketedList(ParsingContext.TupleElementTypes, parseTupleElementType, SyntaxKind.OpenBracketToken, SyntaxKind.CloseBracketToken);
-            return finishNode(node);
+            return finishNode(node, pos);
         }
 
         function parseParenthesizedType(): TypeNode {
+            const pos = getNodePos();
             const node = <ParenthesizedTypeNode>createNode(SyntaxKind.ParenthesizedType);
             parseExpected(SyntaxKind.OpenParenToken);
             node.type = parseType();
             parseExpected(SyntaxKind.CloseParenToken);
-            return finishNode(node);
+            return finishNode(node, pos);
         }
 
         function parseFunctionOrConstructorType(): TypeNode {
@@ -2928,7 +2952,7 @@ namespace ts {
             const kind = parseOptional(SyntaxKind.NewKeyword) ? SyntaxKind.ConstructorType : SyntaxKind.FunctionType;
             const node = <FunctionOrConstructorTypeNode>createNodeWithJSDoc(kind, pos);
             fillSignature(SyntaxKind.EqualsGreaterThanToken, SignatureFlags.Type, node);
-            return finishNode(node);
+            return finishNode(node, pos);
         }
 
         function parseKeywordAndNoDot(): TypeNode | undefined {
@@ -2937,6 +2961,7 @@ namespace ts {
         }
 
         function parseLiteralTypeNode(negative?: boolean): LiteralTypeNode {
+            const pos = getNodePos();
             const node = createNode(SyntaxKind.LiteralType) as LiteralTypeNode;
             let unaryMinusExpression!: PrefixUnaryExpression;
             if (negative) {
@@ -2949,11 +2974,11 @@ namespace ts {
                 : parseLiteralLikeNode(token()) as LiteralExpression;
             if (negative) {
                 unaryMinusExpression.operand = expression;
-                finishNode(unaryMinusExpression);
+                finishNode(unaryMinusExpression, pos);
                 expression = unaryMinusExpression;
             }
             node.literal = expression;
-            return finishNode(node);
+            return finishNode(node, pos);
         }
 
         function isStartOfTypeOfImportType() {
@@ -2963,6 +2988,7 @@ namespace ts {
 
         function parseImportType(): ImportTypeNode {
             sourceFile.flags |= NodeFlags.PossiblyContainsDynamicImport;
+            const pos = getNodePos();
             const node = createNode(SyntaxKind.ImportType) as ImportTypeNode;
             if (parseOptional(SyntaxKind.TypeOfKeyword)) {
                 node.isTypeOf = true;
@@ -2977,7 +3003,7 @@ namespace ts {
             if (!scanner.hasPrecedingLineBreak() && reScanLessThanToken() === SyntaxKind.LessThanToken) {
                 node.typeArguments = parseBracketedList(ParsingContext.TypeArguments, parseType, SyntaxKind.LessThanToken, SyntaxKind.GreaterThanToken);
             }
-            return finishNode(node);
+            return finishNode(node, pos);
         }
 
         function nextTokenIsNumericOrBigIntLiteral() {
@@ -3120,13 +3146,13 @@ namespace ts {
                             node.objectType = type;
                             node.indexType = parseType();
                             parseExpected(SyntaxKind.CloseBracketToken);
-                            type = finishNode(node);
+                            type = finishNode(node, type.pos);
                         }
                         else {
                             const node = createNode(SyntaxKind.ArrayType, type.pos) as ArrayTypeNode;
                             node.elementType = type;
                             parseExpected(SyntaxKind.CloseBracketToken);
-                            type = finishNode(node);
+                            type = finishNode(node, type.pos);
                         }
                         break;
                     default:
@@ -3140,24 +3166,27 @@ namespace ts {
             nextToken();
             const postfix = createNode(kind, type.pos) as OptionalTypeNode | JSDocOptionalType | JSDocNonNullableType | JSDocNullableType;
             postfix.type = type;
-            return finishNode(postfix);
+            return finishNode(postfix, type.pos);
         }
 
         function parseTypeOperator(operator: SyntaxKind.KeyOfKeyword | SyntaxKind.UniqueKeyword | SyntaxKind.ReadonlyKeyword) {
+            const pos = getNodePos();
             const node = <TypeOperatorNode>createNode(SyntaxKind.TypeOperator);
             parseExpected(operator);
             node.operator = operator;
             node.type = parseTypeOperatorOrHigher();
-            return finishNode(node);
+            return finishNode(node, pos);
         }
 
         function parseInferType(): InferTypeNode {
+            const pos = getNodePos();
             const node = <InferTypeNode>createNode(SyntaxKind.InferType);
             parseExpected(SyntaxKind.InferKeyword);
+            const typeParameterPos = getNodePos();
             const typeParameter = <TypeParameterDeclaration>createNode(SyntaxKind.TypeParameter);
             typeParameter.name = parseIdentifier();
-            node.typeParameter = finishNode(typeParameter);
-            return finishNode(node);
+            node.typeParameter = finishNode(typeParameter, typeParameterPos);
+            return finishNode(node, pos);
         }
 
         function parseTypeOperatorOrHigher(): TypeNode {
@@ -3174,7 +3203,7 @@ namespace ts {
         }
 
         function parseUnionOrIntersectionType(kind: SyntaxKind.UnionType | SyntaxKind.IntersectionType, parseConstituentType: () => TypeNode, operator: SyntaxKind.BarToken | SyntaxKind.AmpersandToken): TypeNode {
-            const start = scanner.getStartPos();
+            const pos = getNodePos();
             const hasLeadingOperator = parseOptional(operator);
             let type = parseConstituentType();
             if (token() === operator || hasLeadingOperator) {
@@ -3182,9 +3211,9 @@ namespace ts {
                 while (parseOptional(operator)) {
                     types.push(parseConstituentType());
                 }
-                const node = <UnionOrIntersectionTypeNode>createNode(kind, start);
-                node.types = createNodeArray(types, start);
-                type = finishNode(node);
+                const node = <UnionOrIntersectionTypeNode>createNode(kind, pos);
+                node.types = createNodeArray(types, pos);
+                type = finishNode(node, pos);
             }
             return type;
         }
@@ -3258,7 +3287,7 @@ namespace ts {
                 const node = <TypePredicateNode>createNode(SyntaxKind.TypePredicate, typePredicateVariable.pos);
                 node.parameterName = typePredicateVariable;
                 node.type = type;
-                return finishNode(node);
+                return finishNode(node, typePredicateVariable.pos);
             }
             else {
                 return type;
@@ -3293,7 +3322,7 @@ namespace ts {
                 node.trueType = parseTypeWorker();
                 parseExpected(SyntaxKind.ColonToken);
                 node.falseType = parseTypeWorker();
-                return finishNode(node);
+                return finishNode(node, type.pos);
             }
             return type;
         }
@@ -3502,6 +3531,7 @@ namespace ts {
         }
 
         function parseYieldExpression(): YieldExpression {
+            const pos = getNodePos();
             const node = <YieldExpression>createNode(SyntaxKind.YieldExpression);
 
             // YieldExpression[In] :
@@ -3514,37 +3544,40 @@ namespace ts {
                 (token() === SyntaxKind.AsteriskToken || isStartOfExpression())) {
                 node.asteriskToken = parseOptionalToken(SyntaxKind.AsteriskToken);
                 node.expression = parseAssignmentExpressionOrHigher();
-                return finishNode(node);
+                return finishNode(node, pos);
             }
             else {
                 // if the next token is not on the same line as yield.  or we don't have an '*' or
                 // the start of an expression, then this is just a simple "yield" expression.
-                return finishNode(node);
+                return finishNode(node, pos);
             }
         }
 
         function parseSimpleArrowFunctionExpression(identifier: Identifier, asyncModifier?: NodeArray<Modifier> | undefined): ArrowFunction {
             Debug.assert(token() === SyntaxKind.EqualsGreaterThanToken, "parseSimpleArrowFunctionExpression should only have been called if we had a =>");
 
+            let pos: number;
             let node: ArrowFunction;
             if (asyncModifier) {
+                pos = asyncModifier.pos;
                 node = <ArrowFunction>createNode(SyntaxKind.ArrowFunction, asyncModifier.pos);
                 node.modifiers = asyncModifier;
             }
             else {
+                pos = identifier.pos;
                 node = <ArrowFunction>createNode(SyntaxKind.ArrowFunction, identifier.pos);
             }
 
             const parameter = <ParameterDeclaration>createNode(SyntaxKind.Parameter, identifier.pos);
             parameter.name = identifier;
-            finishNode(parameter);
+            finishNode(parameter, identifier.pos);
 
             node.parameters = createNodeArray<ParameterDeclaration>([parameter], parameter.pos, parameter.end);
 
             node.equalsGreaterThanToken = parseExpectedToken(SyntaxKind.EqualsGreaterThanToken);
             node.body = parseArrowFunctionExpressionBody(/*isAsync*/ !!asyncModifier);
 
-            return addJSDocComment(finishNode(node));
+            return addJSDocComment(finishNode(node, pos));
         }
 
         function tryParseParenthesizedArrowFunctionExpression(): Expression | undefined {
@@ -3558,6 +3591,7 @@ namespace ts {
             // following => or { token. Otherwise, we *might* have an arrow function.  Try to parse
             // it out, but don't allow any ambiguity, and return 'undefined' if this could be an
             // expression instead.
+            const pos = getNodePos();
             const arrowFunction = triState === Tristate.True
                 ? parseParenthesizedArrowFunctionExpressionHead(/*allowAmbiguity*/ true)
                 : tryParse(parsePossibleParenthesizedArrowFunctionExpressionHead);
@@ -3577,7 +3611,7 @@ namespace ts {
                 ? parseArrowFunctionExpressionBody(isAsync)
                 : parseIdentifier();
 
-            return finishNode(arrowFunction);
+            return finishNode(arrowFunction, pos);
         }
 
         //  True        -> We definitely expect a parenthesized arrow function here.
@@ -3852,7 +3886,7 @@ namespace ts {
             node.whenFalse = nodeIsPresent(node.colonToken)
                 ? parseAssignmentExpressionOrHigher()
                 : createMissingNode(SyntaxKind.Identifier, /*reportAtCurrentPosition*/ false, Diagnostics._0_expected, tokenToString(SyntaxKind.ColonToken));
-            return finishNode(node);
+            return finishNode(node, leftOperand.pos);
         }
 
         function parseBinaryExpressionOrHigher(precedence: number): Expression {
@@ -3940,44 +3974,48 @@ namespace ts {
             node.left = left;
             node.operatorToken = operatorToken;
             node.right = right;
-            return finishNode(node);
+            return finishNode(node, left.pos);
         }
 
         function makeAsExpression(left: Expression, right: TypeNode): AsExpression {
             const node = <AsExpression>createNode(SyntaxKind.AsExpression, left.pos);
             node.expression = left;
             node.type = right;
-            return finishNode(node);
+            return finishNode(node, left.pos);
         }
 
         function parsePrefixUnaryExpression() {
+            const pos = getNodePos();
             const node = <PrefixUnaryExpression>createNode(SyntaxKind.PrefixUnaryExpression);
             node.operator = <PrefixUnaryOperator>token();
             nextToken();
             node.operand = parseSimpleUnaryExpression();
 
-            return finishNode(node);
+            return finishNode(node, pos);
         }
 
         function parseDeleteExpression() {
+            const pos = getNodePos();
             const node = <DeleteExpression>createNode(SyntaxKind.DeleteExpression);
             nextToken();
             node.expression = parseSimpleUnaryExpression();
-            return finishNode(node);
+            return finishNode(node, pos);
         }
 
         function parseTypeOfExpression() {
+            const pos = getNodePos();
             const node = <TypeOfExpression>createNode(SyntaxKind.TypeOfExpression);
             nextToken();
             node.expression = parseSimpleUnaryExpression();
-            return finishNode(node);
+            return finishNode(node, pos);
         }
 
         function parseVoidExpression() {
+            const pos = getNodePos();
             const node = <VoidExpression>createNode(SyntaxKind.VoidExpression);
             nextToken();
             node.expression = parseSimpleUnaryExpression();
-            return finishNode(node);
+            return finishNode(node, pos);
         }
 
         function isAwaitExpression(): boolean {
@@ -3994,10 +4032,11 @@ namespace ts {
         }
 
         function parseAwaitExpression() {
+            const pos = getNodePos();
             const node = <AwaitExpression>createNode(SyntaxKind.AwaitExpression);
             nextToken();
             node.expression = parseSimpleUnaryExpression();
-            return finishNode(node);
+            return finishNode(node, pos);
         }
 
         /**
@@ -4140,11 +4179,12 @@ namespace ts {
          */
         function parseUpdateExpression(): UpdateExpression {
             if (token() === SyntaxKind.PlusPlusToken || token() === SyntaxKind.MinusMinusToken) {
+                const pos = getNodePos();
                 const node = <PrefixUnaryExpression>createNode(SyntaxKind.PrefixUnaryExpression);
                 node.operator = <PrefixUnaryOperator>token();
                 nextToken();
                 node.operand = parseLeftHandSideExpressionOrHigher();
-                return finishNode(node);
+                return finishNode(node, pos);
             }
             else if (sourceFile.languageVariant === LanguageVariant.JSX && token() === SyntaxKind.LessThanToken && lookAhead(nextTokenIsIdentifierOrKeywordOrGreaterThan)) {
                 // JSXElement is part of primaryExpression
@@ -4159,7 +4199,7 @@ namespace ts {
                 node.operand = expression;
                 node.operator = <PostfixUnaryOperator>token();
                 nextToken();
-                return finishNode(node);
+                return finishNode(node, expression.pos);
             }
 
             return expression;
@@ -4210,13 +4250,13 @@ namespace ts {
                 }
                 else if (lookAhead(nextTokenIsDot)) {
                     // This is an 'import.*' metaproperty (i.e. 'import.meta')
-                    const fullStart = scanner.getStartPos();
+                    const pos = getNodePos();
                     nextToken(); // advance past the 'import'
                     nextToken(); // advance past the dot
-                    const node = createNode(SyntaxKind.MetaProperty, fullStart) as MetaProperty;
+                    const node = createNode(SyntaxKind.MetaProperty, pos) as MetaProperty;
                     node.keywordToken = SyntaxKind.ImportKeyword;
                     node.name = parseIdentifierName();
-                    expression = finishNode(node);
+                    expression = finishNode(node, pos);
 
                     sourceFile.flags |= NodeFlags.PossiblyContainsImportMeta;
                 }
@@ -4305,7 +4345,7 @@ namespace ts {
             node.expression = expression;
             parseExpectedToken(SyntaxKind.DotToken, Diagnostics.super_must_be_followed_by_an_argument_list_or_member_access);
             node.name = parseRightSideOfDot(/*allowIdentifierNames*/ true);
-            return finishNode(node);
+            return finishNode(node, expression.pos);
         }
 
         function parseJsxElementOrSelfClosingElementOrFragment(inExpressionContext: boolean): JsxElement | JsxSelfClosingElement | JsxFragment {
@@ -4322,7 +4362,7 @@ namespace ts {
                     parseErrorAtRange(node.closingElement, Diagnostics.Expected_corresponding_JSX_closing_tag_for_0, getTextOfNodeFromSourceText(sourceText, node.openingElement.tagName));
                 }
 
-                result = finishNode(node);
+                result = finishNode(node, opening.pos);
             }
             else if (opening.kind === SyntaxKind.JsxOpeningFragment) {
                 const node = <JsxFragment>createNode(SyntaxKind.JsxFragment, opening.pos);
@@ -4330,7 +4370,7 @@ namespace ts {
                 node.children = parseJsxChildren(node.openingFragment);
                 node.closingFragment = parseJsxClosingFragment(inExpressionContext);
 
-                result = finishNode(node);
+                result = finishNode(node, opening.pos);
             }
             else {
                 Debug.assert(opening.kind === SyntaxKind.JsxSelfClosingElement);
@@ -4363,11 +4403,12 @@ namespace ts {
         }
 
         function parseJsxText(): JsxText {
+            const pos = getNodePos();
             const node = <JsxText>createNode(SyntaxKind.JsxText);
             node.text = scanner.getTokenValue();
             node.containsOnlyTriviaWhiteSpaces = currentToken === SyntaxKind.JsxTextAllWhiteSpaces;
             currentToken = scanner.scanJsxToken();
-            return finishNode(node);
+            return finishNode(node, pos);
         }
 
         function parseJsxChild(openingTag: JsxOpeningElement | JsxOpeningFragment, token: JsxTokenSyntaxKind): JsxChild | undefined {
@@ -4414,21 +4455,22 @@ namespace ts {
         }
 
         function parseJsxAttributes(): JsxAttributes {
-            const jsxAttributes = <JsxAttributes>createNode(SyntaxKind.JsxAttributes);
-            jsxAttributes.properties = parseList(ParsingContext.JsxAttributes, parseJsxAttribute);
-            return finishNode(jsxAttributes);
+            const pos = getNodePos();
+            const node = <JsxAttributes>createNode(SyntaxKind.JsxAttributes);
+            node.properties = parseList(ParsingContext.JsxAttributes, parseJsxAttribute);
+            return finishNode(node, pos);
         }
 
         function parseJsxOpeningOrSelfClosingElementOrOpeningFragment(inExpressionContext: boolean): JsxOpeningElement | JsxSelfClosingElement | JsxOpeningFragment {
-            const fullStart = scanner.getStartPos();
+            const pos = getNodePos();
 
             parseExpected(SyntaxKind.LessThanToken);
 
             if (token() === SyntaxKind.GreaterThanToken) {
                 // See below for explanation of scanJsxText
-                const node: JsxOpeningFragment = <JsxOpeningFragment>createNode(SyntaxKind.JsxOpeningFragment, fullStart);
+                const node: JsxOpeningFragment = <JsxOpeningFragment>createNode(SyntaxKind.JsxOpeningFragment, pos);
                 scanJsxText();
-                return finishNode(node);
+                return finishNode(node, pos);
             }
 
             const tagName = parseJsxElementName();
@@ -4441,7 +4483,7 @@ namespace ts {
                 // Closing tag, so scan the immediately-following text with the JSX scanning instead
                 // of regular scanning to avoid treating illegal characters (e.g. '#') as immediate
                 // scanning errors
-                node = <JsxOpeningElement>createNode(SyntaxKind.JsxOpeningElement, fullStart);
+                node = <JsxOpeningElement>createNode(SyntaxKind.JsxOpeningElement, pos);
                 scanJsxText();
             }
             else {
@@ -4453,14 +4495,14 @@ namespace ts {
                     parseExpected(SyntaxKind.GreaterThanToken, /*diagnostic*/ undefined, /*shouldAdvance*/ false);
                     scanJsxText();
                 }
-                node = <JsxSelfClosingElement>createNode(SyntaxKind.JsxSelfClosingElement, fullStart);
+                node = <JsxSelfClosingElement>createNode(SyntaxKind.JsxSelfClosingElement, pos);
             }
 
             node.tagName = tagName;
             node.typeArguments = typeArguments;
             node.attributes = attributes;
 
-            return finishNode(node);
+            return finishNode(node, pos);
         }
 
         function parseJsxElementName(): JsxTagNameExpression {
@@ -4476,12 +4518,13 @@ namespace ts {
                 const propertyAccess: JsxTagNamePropertyAccess = <JsxTagNamePropertyAccess>createNode(SyntaxKind.PropertyAccessExpression, expression.pos);
                 propertyAccess.expression = expression;
                 propertyAccess.name = parseRightSideOfDot(/*allowIdentifierNames*/ true);
-                expression = finishNode(propertyAccess);
+                expression = finishNode(propertyAccess, expression.pos);
             }
             return expression;
         }
 
         function parseJsxExpression(inExpressionContext: boolean): JsxExpression | undefined {
+            const pos = getNodePos();
             const node = <JsxExpression>createNode(SyntaxKind.JsxExpression);
 
             if (!parseExpected(SyntaxKind.OpenBraceToken)) {
@@ -4504,7 +4547,7 @@ namespace ts {
                 }
             }
 
-            return finishNode(node);
+            return finishNode(node, pos);
         }
 
         function parseJsxAttribute(): JsxAttribute | JsxSpreadAttribute {
@@ -4513,6 +4556,7 @@ namespace ts {
             }
 
             scanJsxIdentifier();
+            const pos = getNodePos();
             const node = <JsxAttribute>createNode(SyntaxKind.JsxAttribute);
             node.name = parseIdentifierName();
             if (token() === SyntaxKind.EqualsToken) {
@@ -4525,19 +4569,21 @@ namespace ts {
                         break;
                 }
             }
-            return finishNode(node);
+            return finishNode(node, pos);
         }
 
         function parseJsxSpreadAttribute(): JsxSpreadAttribute {
+            const pos = getNodePos();
             const node = <JsxSpreadAttribute>createNode(SyntaxKind.JsxSpreadAttribute);
             parseExpected(SyntaxKind.OpenBraceToken);
             parseExpected(SyntaxKind.DotDotDotToken);
             node.expression = parseExpression();
             parseExpected(SyntaxKind.CloseBraceToken);
-            return finishNode(node);
+            return finishNode(node, pos);
         }
 
         function parseJsxClosingElement(inExpressionContext: boolean): JsxClosingElement {
+            const pos = getNodePos();
             const node = <JsxClosingElement>createNode(SyntaxKind.JsxClosingElement);
             parseExpected(SyntaxKind.LessThanSlashToken);
             node.tagName = parseJsxElementName();
@@ -4548,10 +4594,11 @@ namespace ts {
                 parseExpected(SyntaxKind.GreaterThanToken, /*diagnostic*/ undefined, /*shouldAdvance*/ false);
                 scanJsxText();
             }
-            return finishNode(node);
+            return finishNode(node, pos);
         }
 
         function parseJsxClosingFragment(inExpressionContext: boolean): JsxClosingFragment {
+            const pos = getNodePos();
             const node = <JsxClosingFragment>createNode(SyntaxKind.JsxClosingFragment);
             parseExpected(SyntaxKind.LessThanSlashToken);
             if (tokenIsIdentifierOrKeyword(token())) {
@@ -4564,16 +4611,17 @@ namespace ts {
                 parseExpected(SyntaxKind.GreaterThanToken, /*diagnostic*/ undefined, /*shouldAdvance*/ false);
                 scanJsxText();
             }
-            return finishNode(node);
+            return finishNode(node, pos);
         }
 
         function parseTypeAssertion(): TypeAssertion {
+            const pos = getNodePos();
             const node = <TypeAssertion>createNode(SyntaxKind.TypeAssertionExpression);
             parseExpected(SyntaxKind.LessThanToken);
             node.type = parseType();
             parseExpected(SyntaxKind.GreaterThanToken);
             node.expression = parseSimpleUnaryExpression();
-            return finishNode(node);
+            return finishNode(node, pos);
         }
 
         function parseMemberExpressionRest(expression: LeftHandSideExpression): MemberExpression {
@@ -4583,7 +4631,7 @@ namespace ts {
                     const propertyAccess = <PropertyAccessExpression>createNode(SyntaxKind.PropertyAccessExpression, expression.pos);
                     propertyAccess.expression = expression;
                     propertyAccess.name = parseRightSideOfDot(/*allowIdentifierNames*/ true);
-                    expression = finishNode(propertyAccess);
+                    expression = finishNode(propertyAccess, expression.pos);
                     continue;
                 }
 
@@ -4591,7 +4639,7 @@ namespace ts {
                     nextToken();
                     const nonNullExpression = <NonNullExpression>createNode(SyntaxKind.NonNullExpression, expression.pos);
                     nonNullExpression.expression = expression;
-                    expression = finishNode(nonNullExpression);
+                    expression = finishNode(nonNullExpression, expression.pos);
                     continue;
                 }
 
@@ -4612,7 +4660,7 @@ namespace ts {
                     }
 
                     parseExpected(SyntaxKind.CloseBracketToken);
-                    expression = finishNode(indexedAccess);
+                    expression = finishNode(indexedAccess, expression.pos);
                     continue;
                 }
 
@@ -4636,7 +4684,7 @@ namespace ts {
             tagExpression.template = token() === SyntaxKind.NoSubstitutionTemplateLiteral
                 ? <NoSubstitutionTemplateLiteral>parseLiteralNode()
                 : parseTemplateExpression();
-            return finishNode(tagExpression);
+            return finishNode(tagExpression, tag.pos);
         }
 
         function parseCallExpressionRest(expression: LeftHandSideExpression): LeftHandSideExpression {
@@ -4662,14 +4710,14 @@ namespace ts {
                     callExpr.expression = expression;
                     callExpr.typeArguments = typeArguments;
                     callExpr.arguments = parseArgumentList();
-                    expression = finishNode(callExpr);
+                    expression = finishNode(callExpr, expression.pos);
                     continue;
                 }
                 else if (token() === SyntaxKind.OpenParenToken) {
                     const callExpr = <CallExpression>createNode(SyntaxKind.CallExpression, expression.pos);
                     callExpr.expression = expression;
                     callExpr.arguments = parseArgumentList();
-                    expression = finishNode(callExpr);
+                    expression = finishNode(callExpr, expression.pos);
                     continue;
                 }
 
@@ -4793,18 +4841,20 @@ namespace ts {
         }
 
         function parseParenthesizedExpression(): ParenthesizedExpression {
+            const pos = getNodePos();
             const node = <ParenthesizedExpression>createNodeWithJSDoc(SyntaxKind.ParenthesizedExpression);
             parseExpected(SyntaxKind.OpenParenToken);
             node.expression = allowInAnd(parseExpression);
             parseExpected(SyntaxKind.CloseParenToken);
-            return finishNode(node);
+            return finishNode(node, pos);
         }
 
         function parseSpreadElement(): Expression {
+            const pos = getNodePos();
             const node = <SpreadElement>createNode(SyntaxKind.SpreadElement);
             parseExpected(SyntaxKind.DotDotDotToken);
             node.expression = parseAssignmentExpressionOrHigher();
-            return finishNode(node);
+            return finishNode(node, pos);
         }
 
         function parseArgumentOrArrayLiteralElement(): Expression {
@@ -4818,6 +4868,7 @@ namespace ts {
         }
 
         function parseArrayLiteralExpression(): ArrayLiteralExpression {
+            const pos = getNodePos();
             const node = <ArrayLiteralExpression>createNode(SyntaxKind.ArrayLiteralExpression);
             parseExpected(SyntaxKind.OpenBracketToken);
             if (scanner.hasPrecedingLineBreak()) {
@@ -4825,26 +4876,27 @@ namespace ts {
             }
             node.elements = parseDelimitedList(ParsingContext.ArrayLiteralMembers, parseArgumentOrArrayLiteralElement);
             parseExpected(SyntaxKind.CloseBracketToken);
-            return finishNode(node);
+            return finishNode(node, pos);
         }
 
         function parseObjectLiteralElement(): ObjectLiteralElementLike {
+            const pos = getNodePos();
             const node = <ObjectLiteralElementLike>createNodeWithJSDoc(SyntaxKind.Unknown);
 
             if (parseOptionalToken(SyntaxKind.DotDotDotToken)) {
                 node.kind = SyntaxKind.SpreadAssignment;
                 (<SpreadAssignment>node).expression = parseAssignmentExpressionOrHigher();
-                return finishNode(node);
+                return finishNode(node, pos);
             }
 
             node.decorators = parseDecorators();
             node.modifiers = parseModifiers();
 
             if (parseContextualModifier(SyntaxKind.GetKeyword)) {
-                return parseAccessorDeclaration(<AccessorDeclaration>node, SyntaxKind.GetAccessor);
+                return parseAccessorDeclaration(pos, <AccessorDeclaration>node, SyntaxKind.GetAccessor);
             }
             if (parseContextualModifier(SyntaxKind.SetKeyword)) {
-                return parseAccessorDeclaration(<AccessorDeclaration>node, SyntaxKind.SetAccessor);
+                return parseAccessorDeclaration(pos, <AccessorDeclaration>node, SyntaxKind.SetAccessor);
             }
 
             const asteriskToken = parseOptionalToken(SyntaxKind.AsteriskToken);
@@ -4855,7 +4907,7 @@ namespace ts {
             (<MethodDeclaration>node).exclamationToken = parseOptionalToken(SyntaxKind.ExclamationToken);
 
             if (asteriskToken || token() === SyntaxKind.OpenParenToken || token() === SyntaxKind.LessThanToken) {
-                return parseMethodDeclaration(<MethodDeclaration>node, asteriskToken);
+                return parseMethodDeclaration(pos, <MethodDeclaration>node, asteriskToken);
             }
 
             // check if it is short-hand property assignment or normal property assignment
@@ -4877,10 +4929,11 @@ namespace ts {
                 parseExpected(SyntaxKind.ColonToken);
                 (<PropertyAssignment>node).initializer = allowInAnd(parseAssignmentExpressionOrHigher);
             }
-            return finishNode(node);
+            return finishNode(node, pos);
         }
 
         function parseObjectLiteralExpression(): ObjectLiteralExpression {
+            const pos = getNodePos();
             const node = <ObjectLiteralExpression>createNode(SyntaxKind.ObjectLiteralExpression);
             parseExpected(SyntaxKind.OpenBraceToken);
             if (scanner.hasPrecedingLineBreak()) {
@@ -4889,7 +4942,7 @@ namespace ts {
 
             node.properties = parseDelimitedList(ParsingContext.ObjectLiteralMembers, parseObjectLiteralElement, /*considerSemicolonAsDelimiter*/ true);
             parseExpected(SyntaxKind.CloseBraceToken);
-            return finishNode(node);
+            return finishNode(node, pos);
         }
 
         function parseFunctionExpression(): FunctionExpression {
@@ -4903,6 +4956,7 @@ namespace ts {
                 setDecoratorContext(/*val*/ false);
             }
 
+            const pos = getNodePos();
             const node = <FunctionExpression>createNodeWithJSDoc(SyntaxKind.FunctionExpression);
             node.modifiers = parseModifiers();
             parseExpected(SyntaxKind.FunctionKeyword);
@@ -4923,7 +4977,7 @@ namespace ts {
                 setDecoratorContext(/*val*/ true);
             }
 
-            return finishNode(node);
+            return finishNode(node, pos);
         }
 
         function parseOptionalIdentifier(): Identifier | undefined {
@@ -4931,13 +4985,13 @@ namespace ts {
         }
 
         function parseNewExpressionOrNewDotTarget(): NewExpression | MetaProperty {
-            const fullStart = scanner.getStartPos();
+            const pos = getNodePos();
             parseExpected(SyntaxKind.NewKeyword);
             if (parseOptional(SyntaxKind.DotToken)) {
-                const node = <MetaProperty>createNode(SyntaxKind.MetaProperty, fullStart);
+                const node = <MetaProperty>createNode(SyntaxKind.MetaProperty, pos);
                 node.keywordToken = SyntaxKind.NewKeyword;
                 node.name = parseIdentifierName();
-                return finishNode(node);
+                return finishNode(node, pos);
             }
 
             let expression: MemberExpression = parsePrimaryExpression();
@@ -4954,17 +5008,18 @@ namespace ts {
                 break;
             }
 
-            const node = <NewExpression>createNode(SyntaxKind.NewExpression, fullStart);
+            const node = <NewExpression>createNode(SyntaxKind.NewExpression, pos);
             node.expression = expression;
             node.typeArguments = typeArguments;
             if (node.typeArguments || token() === SyntaxKind.OpenParenToken) {
                 node.arguments = parseArgumentList();
             }
-            return finishNode(node);
+            return finishNode(node, pos);
         }
 
         // STATEMENTS
         function parseBlock(ignoreMissingOpenBrace: boolean, diagnosticMessage?: DiagnosticMessage): Block {
+            const pos = getNodePos();
             const node = <Block>createNode(SyntaxKind.Block);
             if (parseExpected(SyntaxKind.OpenBraceToken, diagnosticMessage) || ignoreMissingOpenBrace) {
                 if (scanner.hasPrecedingLineBreak()) {
@@ -4977,7 +5032,7 @@ namespace ts {
             else {
                 node.statements = createMissingList<Statement>();
             }
-            return finishNode(node);
+            return finishNode(node, pos);
         }
 
         function parseFunctionBlock(flags: SignatureFlags, diagnosticMessage?: DiagnosticMessage): Block {
@@ -5007,12 +5062,14 @@ namespace ts {
         }
 
         function parseEmptyStatement(): Statement {
+            const pos = getNodePos();
             const node = <Statement>createNode(SyntaxKind.EmptyStatement);
             parseExpected(SyntaxKind.SemicolonToken);
-            return finishNode(node);
+            return finishNode(node, pos);
         }
 
         function parseIfStatement(): IfStatement {
+            const pos = getNodePos();
             const node = <IfStatement>createNode(SyntaxKind.IfStatement);
             parseExpected(SyntaxKind.IfKeyword);
             parseExpected(SyntaxKind.OpenParenToken);
@@ -5020,10 +5077,11 @@ namespace ts {
             parseExpected(SyntaxKind.CloseParenToken);
             node.thenStatement = parseStatement();
             node.elseStatement = parseOptional(SyntaxKind.ElseKeyword) ? parseStatement() : undefined;
-            return finishNode(node);
+            return finishNode(node, pos);
         }
 
         function parseDoStatement(): DoStatement {
+            const pos = getNodePos();
             const node = <DoStatement>createNode(SyntaxKind.DoStatement);
             parseExpected(SyntaxKind.DoKeyword);
             node.statement = parseStatement();
@@ -5037,17 +5095,18 @@ namespace ts {
             // spec but allowed in consensus reality. Approved -- this is the de-facto standard whereby
             //  do;while(0)x will have a semicolon inserted before x.
             parseOptional(SyntaxKind.SemicolonToken);
-            return finishNode(node);
+            return finishNode(node, pos);
         }
 
         function parseWhileStatement(): WhileStatement {
+            const pos = getNodePos();
             const node = <WhileStatement>createNode(SyntaxKind.WhileStatement);
             parseExpected(SyntaxKind.WhileKeyword);
             parseExpected(SyntaxKind.OpenParenToken);
             node.expression = allowInAnd(parseExpression);
             parseExpected(SyntaxKind.CloseParenToken);
             node.statement = parseStatement();
-            return finishNode(node);
+            return finishNode(node, pos);
         }
 
         function parseForOrForInOrForOfStatement(): Statement {
@@ -5098,10 +5157,11 @@ namespace ts {
 
             forOrForInOrForOfStatement.statement = parseStatement();
 
-            return finishNode(forOrForInOrForOfStatement);
+            return finishNode(forOrForInOrForOfStatement, pos);
         }
 
         function parseBreakOrContinueStatement(kind: SyntaxKind): BreakOrContinueStatement {
+            const pos = getNodePos();
             const node = <BreakOrContinueStatement>createNode(kind);
 
             parseExpected(kind === SyntaxKind.BreakStatement ? SyntaxKind.BreakKeyword : SyntaxKind.ContinueKeyword);
@@ -5110,10 +5170,11 @@ namespace ts {
             }
 
             parseSemicolon();
-            return finishNode(node);
+            return finishNode(node, pos);
         }
 
         function parseReturnStatement(): ReturnStatement {
+            const pos = getNodePos();
             const node = <ReturnStatement>createNode(SyntaxKind.ReturnStatement);
 
             parseExpected(SyntaxKind.ReturnKeyword);
@@ -5122,34 +5183,37 @@ namespace ts {
             }
 
             parseSemicolon();
-            return finishNode(node);
+            return finishNode(node, pos);
         }
 
         function parseWithStatement(): WithStatement {
+            const pos = getNodePos();
             const node = <WithStatement>createNode(SyntaxKind.WithStatement);
             parseExpected(SyntaxKind.WithKeyword);
             parseExpected(SyntaxKind.OpenParenToken);
             node.expression = allowInAnd(parseExpression);
             parseExpected(SyntaxKind.CloseParenToken);
             node.statement = doInsideOfContext(NodeFlags.InWithStatement, parseStatement);
-            return finishNode(node);
+            return finishNode(node, pos);
         }
 
         function parseCaseClause(): CaseClause {
+            const pos = getNodePos();
             const node = <CaseClause>createNode(SyntaxKind.CaseClause);
             parseExpected(SyntaxKind.CaseKeyword);
             node.expression = allowInAnd(parseExpression);
             parseExpected(SyntaxKind.ColonToken);
             node.statements = parseList(ParsingContext.SwitchClauseStatements, parseStatement);
-            return finishNode(node);
+            return finishNode(node, pos);
         }
 
         function parseDefaultClause(): DefaultClause {
+            const pos = getNodePos();
             const node = <DefaultClause>createNode(SyntaxKind.DefaultClause);
             parseExpected(SyntaxKind.DefaultKeyword);
             parseExpected(SyntaxKind.ColonToken);
             node.statements = parseList(ParsingContext.SwitchClauseStatements, parseStatement);
-            return finishNode(node);
+            return finishNode(node, pos);
         }
 
         function parseCaseOrDefaultClause(): CaseOrDefaultClause {
@@ -5157,17 +5221,19 @@ namespace ts {
         }
 
         function parseSwitchStatement(): SwitchStatement {
+            const pos = getNodePos();
             const node = <SwitchStatement>createNode(SyntaxKind.SwitchStatement);
             parseExpected(SyntaxKind.SwitchKeyword);
             parseExpected(SyntaxKind.OpenParenToken);
             node.expression = allowInAnd(parseExpression);
             parseExpected(SyntaxKind.CloseParenToken);
+            const caseBlockPos = getNodePos();
             const caseBlock = <CaseBlock>createNode(SyntaxKind.CaseBlock);
             parseExpected(SyntaxKind.OpenBraceToken);
             caseBlock.clauses = parseList(ParsingContext.SwitchClauses, parseCaseOrDefaultClause);
             parseExpected(SyntaxKind.CloseBraceToken);
-            node.caseBlock = finishNode(caseBlock);
-            return finishNode(node);
+            node.caseBlock = finishNode(caseBlock, caseBlockPos);
+            return finishNode(node, pos);
         }
 
         function parseThrowStatement(): ThrowStatement {
@@ -5179,15 +5245,17 @@ namespace ts {
             // directly as that might consume an expression on the following line.
             // We just return 'undefined' in that case.  The actual error will be reported in the
             // grammar walker.
+            const pos = getNodePos();
             const node = <ThrowStatement>createNode(SyntaxKind.ThrowStatement);
             parseExpected(SyntaxKind.ThrowKeyword);
             node.expression = scanner.hasPrecedingLineBreak() ? undefined : allowInAnd(parseExpression);
             parseSemicolon();
-            return finishNode(node);
+            return finishNode(node, pos);
         }
 
         // TODO: Review for error recovery
         function parseTryStatement(): TryStatement {
+            const pos = getNodePos();
             const node = <TryStatement>createNode(SyntaxKind.TryStatement);
 
             parseExpected(SyntaxKind.TryKeyword);
@@ -5201,10 +5269,11 @@ namespace ts {
                 node.finallyBlock = parseBlock(/*ignoreMissingOpenBrace*/ false);
             }
 
-            return finishNode(node);
+            return finishNode(node, pos);
         }
 
         function parseCatchClause(): CatchClause {
+            const pos = getNodePos();
             const result = <CatchClause>createNode(SyntaxKind.CatchClause);
             parseExpected(SyntaxKind.CatchKeyword);
 
@@ -5218,20 +5287,22 @@ namespace ts {
             }
 
             result.block = parseBlock(/*ignoreMissingOpenBrace*/ false);
-            return finishNode(result);
+            return finishNode(result, pos);
         }
 
         function parseDebuggerStatement(): Statement {
+            const pos = getNodePos();
             const node = <Statement>createNode(SyntaxKind.DebuggerStatement);
             parseExpected(SyntaxKind.DebuggerKeyword);
             parseSemicolon();
-            return finishNode(node);
+            return finishNode(node, pos);
         }
 
         function parseExpressionOrLabeledStatement(): ExpressionStatement | LabeledStatement {
             // Avoiding having to do the lookahead for a labeled statement by just trying to parse
             // out an expression, seeing if it is identifier and then seeing if it is followed by
             // a colon.
+            const pos = getNodePos();
             const node = <ExpressionStatement | LabeledStatement>createNodeWithJSDoc(SyntaxKind.Unknown);
             const expression = allowInAnd(parseExpression);
             if (expression.kind === SyntaxKind.Identifier && parseOptional(SyntaxKind.ColonToken)) {
@@ -5244,7 +5315,7 @@ namespace ts {
                 (<ExpressionStatement>node).expression = expression;
                 parseSemicolon();
             }
-            return finishNode(node);
+            return finishNode(node, pos);
         }
 
         function nextTokenIsIdentifierOrKeywordOnSameLine() {
@@ -5426,16 +5497,16 @@ namespace ts {
                 case SyntaxKind.OpenBraceToken:
                     return parseBlock(/*ignoreMissingOpenBrace*/ false);
                 case SyntaxKind.VarKeyword:
-                    return parseVariableStatement(<VariableStatement>createNodeWithJSDoc(SyntaxKind.VariableDeclaration));
+                    return parseVariableStatement(getNodePos(), <VariableStatement>createNodeWithJSDoc(SyntaxKind.VariableDeclaration));
                 case SyntaxKind.LetKeyword:
                     if (isLetDeclaration()) {
-                        return parseVariableStatement(<VariableStatement>createNodeWithJSDoc(SyntaxKind.VariableDeclaration));
+                        return parseVariableStatement(getNodePos(), <VariableStatement>createNodeWithJSDoc(SyntaxKind.VariableDeclaration));
                     }
                     break;
                 case SyntaxKind.FunctionKeyword:
-                    return parseFunctionDeclaration(<FunctionDeclaration>createNodeWithJSDoc(SyntaxKind.FunctionDeclaration));
+                    return parseFunctionDeclaration(getNodePos(), <FunctionDeclaration>createNodeWithJSDoc(SyntaxKind.FunctionDeclaration));
                 case SyntaxKind.ClassKeyword:
-                    return parseClassDeclaration(<ClassDeclaration>createNodeWithJSDoc(SyntaxKind.ClassDeclaration));
+                    return parseClassDeclaration(getNodePos(), <ClassDeclaration>createNodeWithJSDoc(SyntaxKind.ClassDeclaration));
                 case SyntaxKind.IfKeyword:
                     return parseIfStatement();
                 case SyntaxKind.DoKeyword:
@@ -5495,6 +5566,7 @@ namespace ts {
         }
 
         function parseDeclaration(): Statement {
+            const pos = getNodePos();
             const node = <Statement>createNodeWithJSDoc(SyntaxKind.Unknown);
             node.decorators = parseDecorators();
             node.modifiers = parseModifiers();
@@ -5502,55 +5574,55 @@ namespace ts {
                 for (const m of node.modifiers!) {
                     m.flags |= NodeFlags.Ambient;
                 }
-                return doInsideOfContext(NodeFlags.Ambient, () => parseDeclarationWorker(node));
+                return doInsideOfContext(NodeFlags.Ambient, () => parseDeclarationWorker(pos, node));
             }
             else {
-                return parseDeclarationWorker(node);
+                return parseDeclarationWorker(pos, node);
             }
         }
 
-        function parseDeclarationWorker(node: Statement): Statement {
+        function parseDeclarationWorker(pos: number, node: Statement): Statement {
             switch (token()) {
                 case SyntaxKind.VarKeyword:
                 case SyntaxKind.LetKeyword:
                 case SyntaxKind.ConstKeyword:
-                    return parseVariableStatement(<VariableStatement>node);
+                    return parseVariableStatement(pos, <VariableStatement>node);
                 case SyntaxKind.FunctionKeyword:
-                    return parseFunctionDeclaration(<FunctionDeclaration>node);
+                    return parseFunctionDeclaration(pos, <FunctionDeclaration>node);
                 case SyntaxKind.ClassKeyword:
-                    return parseClassDeclaration(<ClassDeclaration>node);
+                    return parseClassDeclaration(pos, <ClassDeclaration>node);
                 case SyntaxKind.InterfaceKeyword:
-                    return parseInterfaceDeclaration(<InterfaceDeclaration>node);
+                    return parseInterfaceDeclaration(pos, <InterfaceDeclaration>node);
                 case SyntaxKind.TypeKeyword:
-                    return parseTypeAliasDeclaration(<TypeAliasDeclaration>node);
+                    return parseTypeAliasDeclaration(pos, <TypeAliasDeclaration>node);
                 case SyntaxKind.EnumKeyword:
-                    return parseEnumDeclaration(<EnumDeclaration>node);
+                    return parseEnumDeclaration(pos, <EnumDeclaration>node);
                 case SyntaxKind.GlobalKeyword:
                 case SyntaxKind.ModuleKeyword:
                 case SyntaxKind.NamespaceKeyword:
-                    return parseModuleDeclaration(<ModuleDeclaration>node);
+                    return parseModuleDeclaration(pos, <ModuleDeclaration>node);
                 case SyntaxKind.ImportKeyword:
-                    return parseImportDeclarationOrImportEqualsDeclaration(<ImportDeclaration | ImportEqualsDeclaration>node);
+                    return parseImportDeclarationOrImportEqualsDeclaration(pos, <ImportDeclaration | ImportEqualsDeclaration>node);
                 case SyntaxKind.ExportKeyword:
                     nextToken();
                     switch (token()) {
                         case SyntaxKind.DefaultKeyword:
                         case SyntaxKind.EqualsToken:
-                            return parseExportAssignment(<ExportAssignment>node);
+                            return parseExportAssignment(pos, <ExportAssignment>node);
                         case SyntaxKind.AsKeyword:
-                            return parseNamespaceExportDeclaration(<NamespaceExportDeclaration>node);
+                            return parseNamespaceExportDeclaration(pos, <NamespaceExportDeclaration>node);
                         default:
-                            return parseExportDeclaration(<ExportDeclaration>node);
+                            return parseExportDeclaration(pos, <ExportDeclaration>node);
                     }
                 default:
                     if (node.decorators || node.modifiers) {
                         // We reached this point because we encountered decorators and/or modifiers and assumed a declaration
                         // would follow. For recovery and error reporting purposes, return an incomplete declaration.
                         const missing = createMissingNode<Statement>(SyntaxKind.MissingDeclaration, /*reportAtCurrentPosition*/ true, Diagnostics.Declaration_expected);
-                        missing.pos = node.pos;
+                        missing.pos = pos;
                         missing.decorators = node.decorators;
                         missing.modifiers = node.modifiers;
-                        return finishNode(missing);
+                        return missing;
                     }
                     return undefined!; // TODO: GH#18217
             }
@@ -5576,14 +5648,16 @@ namespace ts {
             if (token() === SyntaxKind.CommaToken) {
                 return <OmittedExpression>createNode(SyntaxKind.OmittedExpression);
             }
+            const pos = getNodePos();
             const node = <BindingElement>createNode(SyntaxKind.BindingElement);
             node.dotDotDotToken = parseOptionalToken(SyntaxKind.DotDotDotToken);
             node.name = parseIdentifierOrPattern();
             node.initializer = parseInitializer();
-            return finishNode(node);
+            return finishNode(node, pos);
         }
 
         function parseObjectBindingElement(): BindingElement {
+            const pos = getNodePos();
             const node = <BindingElement>createNode(SyntaxKind.BindingElement);
             node.dotDotDotToken = parseOptionalToken(SyntaxKind.DotDotDotToken);
             const tokenIsIdentifier = isIdentifier();
@@ -5597,23 +5671,25 @@ namespace ts {
                 node.name = parseIdentifierOrPattern();
             }
             node.initializer = parseInitializer();
-            return finishNode(node);
+            return finishNode(node, pos);
         }
 
         function parseObjectBindingPattern(): ObjectBindingPattern {
+            const pos = getNodePos();
             const node = <ObjectBindingPattern>createNode(SyntaxKind.ObjectBindingPattern);
             parseExpected(SyntaxKind.OpenBraceToken);
             node.elements = parseDelimitedList(ParsingContext.ObjectBindingElements, parseObjectBindingElement);
             parseExpected(SyntaxKind.CloseBraceToken);
-            return finishNode(node);
+            return finishNode(node, pos);
         }
 
         function parseArrayBindingPattern(): ArrayBindingPattern {
+            const pos = getNodePos();
             const node = <ArrayBindingPattern>createNode(SyntaxKind.ArrayBindingPattern);
             parseExpected(SyntaxKind.OpenBracketToken);
             node.elements = parseDelimitedList(ParsingContext.ArrayBindingElements, parseArrayBindingElement);
             parseExpected(SyntaxKind.CloseBracketToken);
-            return finishNode(node);
+            return finishNode(node, pos);
         }
 
         function isIdentifierOrPattern() {
@@ -5635,6 +5711,7 @@ namespace ts {
         }
 
         function parseVariableDeclaration(allowExclamation?: boolean): VariableDeclaration {
+            const pos = getNodePos();
             const node = <VariableDeclaration>createNode(SyntaxKind.VariableDeclaration);
             node.name = parseIdentifierOrPattern();
             if (allowExclamation && node.name.kind === SyntaxKind.Identifier &&
@@ -5645,10 +5722,11 @@ namespace ts {
             if (!isInOrOfKeyword(token())) {
                 node.initializer = parseInitializer();
             }
-            return finishNode(node);
+            return finishNode(node, pos);
         }
 
         function parseVariableDeclarationList(inForStatementInitializer: boolean): VariableDeclarationList {
+            const pos = getNodePos();
             const node = <VariableDeclarationList>createNode(SyntaxKind.VariableDeclarationList);
 
             switch (token()) {
@@ -5688,21 +5766,21 @@ namespace ts {
                 setDisallowInContext(savedDisallowIn);
             }
 
-            return finishNode(node);
+            return finishNode(node, pos);
         }
 
         function canFollowContextualOfKeyword(): boolean {
             return nextTokenIsIdentifier() && nextToken() === SyntaxKind.CloseParenToken;
         }
 
-        function parseVariableStatement(node: VariableStatement): VariableStatement {
+        function parseVariableStatement(pos: number, node: VariableStatement): VariableStatement {
             node.kind = SyntaxKind.VariableStatement;
             node.declarationList = parseVariableDeclarationList(/*inForStatementInitializer*/ false);
             parseSemicolon();
-            return finishNode(node);
+            return finishNode(node, pos);
         }
 
-        function parseFunctionDeclaration(node: FunctionDeclaration): FunctionDeclaration {
+        function parseFunctionDeclaration(pos: number, node: FunctionDeclaration): FunctionDeclaration {
             node.kind = SyntaxKind.FunctionDeclaration;
             parseExpected(SyntaxKind.FunctionKeyword);
             node.asteriskToken = parseOptionalToken(SyntaxKind.AsteriskToken);
@@ -5711,7 +5789,7 @@ namespace ts {
             const isAsync = hasModifier(node, ModifierFlags.Async) ? SignatureFlags.Await : SignatureFlags.None;
             fillSignature(SyntaxKind.ColonToken, isGenerator | isAsync, node);
             node.body = parseFunctionBlockOrSemicolon(isGenerator | isAsync, Diagnostics.or_expected);
-            return finishNode(node);
+            return finishNode(node, pos);
         }
 
         function parseConstructorName() {
@@ -5726,28 +5804,28 @@ namespace ts {
             }
         }
 
-        function tryParseConstructorDeclaration(node: ConstructorDeclaration): ConstructorDeclaration | undefined {
+        function tryParseConstructorDeclaration(pos: number, node: ConstructorDeclaration): ConstructorDeclaration | undefined {
             return tryParse(() => {
                 if (parseConstructorName()) {
                     node.kind = SyntaxKind.Constructor;
                     fillSignature(SyntaxKind.ColonToken, SignatureFlags.None, node);
                     node.body = parseFunctionBlockOrSemicolon(SignatureFlags.None, Diagnostics.or_expected);
-                    return finishNode(node);
+                    return finishNode(node, pos);
                 }
             });
         }
 
-        function parseMethodDeclaration(node: MethodDeclaration, asteriskToken: AsteriskToken, diagnosticMessage?: DiagnosticMessage): MethodDeclaration {
+        function parseMethodDeclaration(pos: number, node: MethodDeclaration, asteriskToken: AsteriskToken, diagnosticMessage?: DiagnosticMessage): MethodDeclaration {
             node.kind = SyntaxKind.MethodDeclaration;
             node.asteriskToken = asteriskToken;
             const isGenerator = asteriskToken ? SignatureFlags.Yield : SignatureFlags.None;
             const isAsync = hasModifier(node, ModifierFlags.Async) ? SignatureFlags.Await : SignatureFlags.None;
             fillSignature(SyntaxKind.ColonToken, isGenerator | isAsync, node);
             node.body = parseFunctionBlockOrSemicolon(isGenerator | isAsync, diagnosticMessage);
-            return finishNode(node);
+            return finishNode(node, pos);
         }
 
-        function parsePropertyDeclaration(node: PropertyDeclaration): PropertyDeclaration {
+        function parsePropertyDeclaration(pos: number, node: PropertyDeclaration): PropertyDeclaration {
             node.kind = SyntaxKind.PropertyDeclaration;
             if (!node.questionToken && token() === SyntaxKind.ExclamationToken && !scanner.hasPrecedingLineBreak()) {
                 node.exclamationToken = parseTokenNode<Token<SyntaxKind.ExclamationToken>>();
@@ -5768,27 +5846,27 @@ namespace ts {
                 : doOutsideOfContext(NodeFlags.YieldContext | NodeFlags.DisallowInContext, parseInitializer);
 
             parseSemicolon();
-            return finishNode(node);
+            return finishNode(node, pos);
         }
 
-        function parsePropertyOrMethodDeclaration(node: PropertyDeclaration | MethodDeclaration): PropertyDeclaration | MethodDeclaration {
+        function parsePropertyOrMethodDeclaration(pos: number, node: PropertyDeclaration | MethodDeclaration): PropertyDeclaration | MethodDeclaration {
             const asteriskToken = parseOptionalToken(SyntaxKind.AsteriskToken);
             node.name = parsePropertyName();
             // Note: this is not legal as per the grammar.  But we allow it in the parser and
             // report an error in the grammar checker.
             node.questionToken = parseOptionalToken(SyntaxKind.QuestionToken);
             if (asteriskToken || token() === SyntaxKind.OpenParenToken || token() === SyntaxKind.LessThanToken) {
-                return parseMethodDeclaration(<MethodDeclaration>node, asteriskToken, Diagnostics.or_expected);
+                return parseMethodDeclaration(pos, <MethodDeclaration>node, asteriskToken, Diagnostics.or_expected);
             }
-            return parsePropertyDeclaration(<PropertyDeclaration>node);
+            return parsePropertyDeclaration(pos, <PropertyDeclaration>node);
         }
 
-        function parseAccessorDeclaration(node: AccessorDeclaration, kind: AccessorDeclaration["kind"]): AccessorDeclaration {
+        function parseAccessorDeclaration(pos: number, node: AccessorDeclaration, kind: AccessorDeclaration["kind"]): AccessorDeclaration {
             node.kind = kind;
             node.name = parsePropertyName();
             fillSignature(SyntaxKind.ColonToken, SignatureFlags.None, node);
             node.body = parseFunctionBlockOrSemicolon(SignatureFlags.None);
-            return finishNode(node);
+            return finishNode(node, pos);
         }
 
         function isClassMemberStart(): boolean {
@@ -5870,7 +5948,7 @@ namespace ts {
                 }
                 const decorator = <Decorator>createNode(SyntaxKind.Decorator, decoratorStart);
                 decorator.expression = doInDecoratorContext(parseLeftHandSideExpressionOrHigher);
-                finishNode(decorator);
+                finishNode(decorator, decoratorStart);
                 (list || (list = [])).push(decorator);
             }
             return list && createNodeArray(list, listPos);
@@ -5887,7 +5965,7 @@ namespace ts {
             let list: Modifier[] | undefined;
             const listPos = getNodePos();
             while (true) {
-                const modifierStart = scanner.getStartPos();
+                const modifierStart = getNodePos();
                 const modifierKind = token();
 
                 if (token() === SyntaxKind.ConstKeyword && permitInvalidConstAsModifier) {
@@ -5903,7 +5981,7 @@ namespace ts {
                     }
                 }
 
-                const modifier = finishNode(<Modifier>createNode(modifierKind, modifierStart));
+                const modifier = finishNode(<Modifier>createNode(modifierKind, modifierStart), modifierStart);
                 (list || (list = [])).push(modifier);
             }
             return list && createNodeArray(list, listPos);
@@ -5912,10 +5990,10 @@ namespace ts {
         function parseModifiersForArrowFunction(): NodeArray<Modifier> | undefined {
             let modifiers: NodeArray<Modifier> | undefined;
             if (token() === SyntaxKind.AsyncKeyword) {
-                const modifierStart = scanner.getStartPos();
+                const modifierStart = getNodePos();
                 const modifierKind = token();
                 nextToken();
-                const modifier = finishNode(<Modifier>createNode(modifierKind, modifierStart));
+                const modifier = finishNode(<Modifier>createNode(modifierKind, modifierStart), modifierStart);
                 modifiers = createNodeArray<Modifier>([modifier], modifierStart);
             }
             return modifiers;
@@ -5923,32 +6001,34 @@ namespace ts {
 
         function parseClassElement(): ClassElement {
             if (token() === SyntaxKind.SemicolonToken) {
-                const result = <SemicolonClassElement>createNode(SyntaxKind.SemicolonClassElement);
+                const pos = getNodePos();
+                const node = <SemicolonClassElement>createNode(SyntaxKind.SemicolonClassElement);
                 nextToken();
-                return finishNode(result);
+                return finishNode(node, pos);
             }
 
+            const pos = getNodePos();
             const node = <ClassElement>createNodeWithJSDoc(SyntaxKind.Unknown);
             node.decorators = parseDecorators();
             node.modifiers = parseModifiers(/*permitInvalidConstAsModifier*/ true);
 
             if (parseContextualModifier(SyntaxKind.GetKeyword)) {
-                return parseAccessorDeclaration(<AccessorDeclaration>node, SyntaxKind.GetAccessor);
+                return parseAccessorDeclaration(pos, <AccessorDeclaration>node, SyntaxKind.GetAccessor);
             }
 
             if (parseContextualModifier(SyntaxKind.SetKeyword)) {
-                return parseAccessorDeclaration(<AccessorDeclaration>node, SyntaxKind.SetAccessor);
+                return parseAccessorDeclaration(pos, <AccessorDeclaration>node, SyntaxKind.SetAccessor);
             }
 
             if (token() === SyntaxKind.ConstructorKeyword || token() === SyntaxKind.StringLiteral) {
-                const constructorDeclaration = tryParseConstructorDeclaration(<ConstructorDeclaration>node);
+                const constructorDeclaration = tryParseConstructorDeclaration(pos, <ConstructorDeclaration>node);
                 if (constructorDeclaration) {
                     return constructorDeclaration;
                 }
             }
 
             if (isIndexSignature()) {
-                return parseIndexSignatureDeclaration(<IndexSignatureDeclaration>node);
+                return parseIndexSignatureDeclaration(pos, <IndexSignatureDeclaration>node);
             }
 
             // It is very important that we check this *after* checking indexers because
@@ -5959,13 +6039,13 @@ namespace ts {
                 token() === SyntaxKind.AsteriskToken ||
                 token() === SyntaxKind.OpenBracketToken) {
 
-                return parsePropertyOrMethodDeclaration(<PropertyDeclaration | MethodDeclaration>node);
+                return parsePropertyOrMethodDeclaration(pos, <PropertyDeclaration | MethodDeclaration>node);
             }
 
             if (node.decorators || node.modifiers) {
                 // treat this as a property declaration with a missing name.
                 node.name = createMissingNode<Identifier>(SyntaxKind.Identifier, /*reportAtCurrentPosition*/ true, Diagnostics.Declaration_expected);
-                return parsePropertyDeclaration(<PropertyDeclaration>node);
+                return parsePropertyDeclaration(pos, <PropertyDeclaration>node);
             }
 
             // 'isClassMemberStart' should have hinted not to attempt parsing.
@@ -5973,14 +6053,14 @@ namespace ts {
         }
 
         function parseClassExpression(): ClassExpression {
-            return <ClassExpression>parseClassDeclarationOrExpression(<ClassLikeDeclaration>createNodeWithJSDoc(SyntaxKind.Unknown), SyntaxKind.ClassExpression);
+            return <ClassExpression>parseClassDeclarationOrExpression(getNodePos(), <ClassLikeDeclaration>createNodeWithJSDoc(SyntaxKind.Unknown), SyntaxKind.ClassExpression);
         }
 
-        function parseClassDeclaration(node: ClassLikeDeclaration): ClassDeclaration {
-            return <ClassDeclaration>parseClassDeclarationOrExpression(node, SyntaxKind.ClassDeclaration);
+        function parseClassDeclaration(pos: number, node: ClassLikeDeclaration): ClassDeclaration {
+            return <ClassDeclaration>parseClassDeclarationOrExpression(pos, node, SyntaxKind.ClassDeclaration);
         }
 
-        function parseClassDeclarationOrExpression(node: ClassLikeDeclaration, kind: ClassLikeDeclaration["kind"]): ClassLikeDeclaration {
+        function parseClassDeclarationOrExpression(pos: number, node: ClassLikeDeclaration, kind: ClassLikeDeclaration["kind"]): ClassLikeDeclaration {
             node.kind = kind;
             parseExpected(SyntaxKind.ClassKeyword);
             node.name = parseNameOfClassDeclarationOrExpression();
@@ -5997,7 +6077,7 @@ namespace ts {
                 node.members = createMissingList<ClassElement>();
             }
 
-            return finishNode(node);
+            return finishNode(node, pos);
         }
 
         function parseNameOfClassDeclarationOrExpression(): Identifier | undefined {
@@ -6029,18 +6109,20 @@ namespace ts {
         function parseHeritageClause(): HeritageClause {
             const tok = token();
             Debug.assert(tok === SyntaxKind.ExtendsKeyword || tok === SyntaxKind.ImplementsKeyword); // isListElement() should ensure this.
+            const pos = getNodePos();
             const node = <HeritageClause>createNode(SyntaxKind.HeritageClause);
             node.token = tok as SyntaxKind.ExtendsKeyword | SyntaxKind.ImplementsKeyword;
             nextToken();
             node.types = parseDelimitedList(ParsingContext.HeritageClauseElement, parseExpressionWithTypeArguments);
-            return finishNode(node);
+            return finishNode(node, pos);
         }
 
         function parseExpressionWithTypeArguments(): ExpressionWithTypeArguments {
+            const pos = getNodePos();
             const node = <ExpressionWithTypeArguments>createNode(SyntaxKind.ExpressionWithTypeArguments);
             node.expression = parseLeftHandSideExpressionOrHigher();
             node.typeArguments = tryParseTypeArguments();
-            return finishNode(node);
+            return finishNode(node, pos);
         }
 
         function tryParseTypeArguments(): NodeArray<TypeNode> | undefined {
@@ -6057,17 +6139,17 @@ namespace ts {
             return parseList(ParsingContext.ClassMembers, parseClassElement);
         }
 
-        function parseInterfaceDeclaration(node: InterfaceDeclaration): InterfaceDeclaration {
+        function parseInterfaceDeclaration(pos: number, node: InterfaceDeclaration): InterfaceDeclaration {
             node.kind = SyntaxKind.InterfaceDeclaration;
             parseExpected(SyntaxKind.InterfaceKeyword);
             node.name = parseIdentifier();
             node.typeParameters = parseTypeParameters();
             node.heritageClauses = parseHeritageClauses();
             node.members = parseObjectTypeMembers();
-            return finishNode(node);
+            return finishNode(node, pos);
         }
 
-        function parseTypeAliasDeclaration(node: TypeAliasDeclaration): TypeAliasDeclaration {
+        function parseTypeAliasDeclaration(pos: number, node: TypeAliasDeclaration): TypeAliasDeclaration {
             node.kind = SyntaxKind.TypeAliasDeclaration;
             parseExpected(SyntaxKind.TypeKeyword);
             node.name = parseIdentifier();
@@ -6075,7 +6157,7 @@ namespace ts {
             parseExpected(SyntaxKind.EqualsToken);
             node.type = parseType();
             parseSemicolon();
-            return finishNode(node);
+            return finishNode(node, pos);
         }
 
         // In an ambient declaration, the grammar only allows integer literals as initializers.
@@ -6083,13 +6165,14 @@ namespace ts {
         // ConstantEnumMemberSection, which starts at the beginning of an enum declaration
         // or any time an integer literal initializer is encountered.
         function parseEnumMember(): EnumMember {
+            const pos = getNodePos();
             const node = <EnumMember>createNodeWithJSDoc(SyntaxKind.EnumMember);
             node.name = parsePropertyName();
             node.initializer = allowInAnd(parseInitializer);
-            return finishNode(node);
+            return finishNode(node, pos);
         }
 
-        function parseEnumDeclaration(node: EnumDeclaration): EnumDeclaration {
+        function parseEnumDeclaration(pos: number, node: EnumDeclaration): EnumDeclaration {
             node.kind = SyntaxKind.EnumDeclaration;
             parseExpected(SyntaxKind.EnumKeyword);
             node.name = parseIdentifier();
@@ -6100,10 +6183,11 @@ namespace ts {
             else {
                 node.members = createMissingList<EnumMember>();
             }
-            return finishNode(node);
+            return finishNode(node, pos);
         }
 
         function parseModuleBlock(): ModuleBlock {
+            const pos = getNodePos();
             const node = <ModuleBlock>createNode(SyntaxKind.ModuleBlock);
             if (parseExpected(SyntaxKind.OpenBraceToken)) {
                 node.statements = parseList(ParsingContext.BlockStatements, parseStatement);
@@ -6112,10 +6196,10 @@ namespace ts {
             else {
                 node.statements = createMissingList<Statement>();
             }
-            return finishNode(node);
+            return finishNode(node, pos);
         }
 
-        function parseModuleOrNamespaceDeclaration(node: ModuleDeclaration, flags: NodeFlags): ModuleDeclaration {
+        function parseModuleOrNamespaceDeclaration(pos: number, node: ModuleDeclaration, flags: NodeFlags): ModuleDeclaration {
             node.kind = SyntaxKind.ModuleDeclaration;
             // If we are parsing a dotted namespace name, we want to
             // propagate the 'Namespace' flag across the names if set.
@@ -6123,12 +6207,12 @@ namespace ts {
             node.flags |= flags;
             node.name = parseIdentifier();
             node.body = parseOptional(SyntaxKind.DotToken)
-                ? <NamespaceDeclaration>parseModuleOrNamespaceDeclaration(<ModuleDeclaration>createNode(SyntaxKind.Unknown), NodeFlags.NestedNamespace | namespaceFlag)
+                ? <NamespaceDeclaration>parseModuleOrNamespaceDeclaration(getNodePos(), <ModuleDeclaration>createNode(SyntaxKind.Unknown), NodeFlags.NestedNamespace | namespaceFlag)
                 : parseModuleBlock();
-            return finishNode(node);
+            return finishNode(node, pos);
         }
 
-        function parseAmbientExternalModuleDeclaration(node: ModuleDeclaration): ModuleDeclaration {
+        function parseAmbientExternalModuleDeclaration(pos: number, node: ModuleDeclaration): ModuleDeclaration {
             node.kind = SyntaxKind.ModuleDeclaration;
             if (token() === SyntaxKind.GlobalKeyword) {
                 // parse 'global' as name of global scope augmentation
@@ -6145,14 +6229,14 @@ namespace ts {
             else {
                 parseSemicolon();
             }
-            return finishNode(node);
+            return finishNode(node, pos);
         }
 
-        function parseModuleDeclaration(node: ModuleDeclaration): ModuleDeclaration {
+        function parseModuleDeclaration(pos: number, node: ModuleDeclaration): ModuleDeclaration {
             let flags: NodeFlags = 0;
             if (token() === SyntaxKind.GlobalKeyword) {
                 // global augmentation
-                return parseAmbientExternalModuleDeclaration(node);
+                return parseAmbientExternalModuleDeclaration(pos, node);
             }
             else if (parseOptional(SyntaxKind.NamespaceKeyword)) {
                 flags |= NodeFlags.Namespace;
@@ -6160,10 +6244,10 @@ namespace ts {
             else {
                 parseExpected(SyntaxKind.ModuleKeyword);
                 if (token() === SyntaxKind.StringLiteral) {
-                    return parseAmbientExternalModuleDeclaration(node);
+                    return parseAmbientExternalModuleDeclaration(pos, node);
                 }
             }
-            return parseModuleOrNamespaceDeclaration(node, flags);
+            return parseModuleOrNamespaceDeclaration(pos, node, flags);
         }
 
         function isExternalModuleReference() {
@@ -6179,16 +6263,16 @@ namespace ts {
             return nextToken() === SyntaxKind.SlashToken;
         }
 
-        function parseNamespaceExportDeclaration(node: NamespaceExportDeclaration): NamespaceExportDeclaration {
+        function parseNamespaceExportDeclaration(pos: number, node: NamespaceExportDeclaration): NamespaceExportDeclaration {
             node.kind = SyntaxKind.NamespaceExportDeclaration;
             parseExpected(SyntaxKind.AsKeyword);
             parseExpected(SyntaxKind.NamespaceKeyword);
             node.name = parseIdentifier();
             parseSemicolon();
-            return finishNode(node);
+            return finishNode(node, pos);
         }
 
-        function parseImportDeclarationOrImportEqualsDeclaration(node: ImportEqualsDeclaration | ImportDeclaration): ImportEqualsDeclaration | ImportDeclaration {
+        function parseImportDeclarationOrImportEqualsDeclaration(pos: number, node: ImportEqualsDeclaration | ImportDeclaration): ImportEqualsDeclaration | ImportDeclaration {
             parseExpected(SyntaxKind.ImportKeyword);
             const afterImportPos = scanner.getStartPos();
 
@@ -6196,7 +6280,7 @@ namespace ts {
             if (isIdentifier()) {
                 identifier = parseIdentifier();
                 if (token() !== SyntaxKind.CommaToken && token() !== SyntaxKind.FromKeyword) {
-                    return parseImportEqualsDeclaration(<ImportEqualsDeclaration>node, identifier);
+                    return parseImportEqualsDeclaration(pos, <ImportEqualsDeclaration>node, identifier);
                 }
             }
 
@@ -6214,19 +6298,19 @@ namespace ts {
 
             (<ImportDeclaration>node).moduleSpecifier = parseModuleSpecifier();
             parseSemicolon();
-            return finishNode(node);
+            return finishNode(node, pos);
         }
 
-        function parseImportEqualsDeclaration(node: ImportEqualsDeclaration, identifier: Identifier): ImportEqualsDeclaration {
+        function parseImportEqualsDeclaration(pos: number, node: ImportEqualsDeclaration, identifier: Identifier): ImportEqualsDeclaration {
             node.kind = SyntaxKind.ImportEqualsDeclaration;
             node.name = identifier;
             parseExpected(SyntaxKind.EqualsToken);
             node.moduleReference = parseModuleReference();
             parseSemicolon();
-            return finishNode(node);
+            return finishNode(node, pos);
         }
 
-        function parseImportClause(identifier: Identifier | undefined, fullStart: number) {
+        function parseImportClause(identifier: Identifier | undefined, pos: number) {
             // ImportClause:
             //  ImportedDefaultBinding
             //  NameSpaceImport
@@ -6234,21 +6318,21 @@ namespace ts {
             //  ImportedDefaultBinding, NameSpaceImport
             //  ImportedDefaultBinding, NamedImports
 
-            const importClause = <ImportClause>createNode(SyntaxKind.ImportClause, fullStart);
+            const node = <ImportClause>createNode(SyntaxKind.ImportClause, pos);
             if (identifier) {
                 // ImportedDefaultBinding:
                 //  ImportedBinding
-                importClause.name = identifier;
+                node.name = identifier;
             }
 
             // If there was no default import or if there is comma token after default import
             // parse namespace or named imports
-            if (!importClause.name ||
+            if (!node.name ||
                 parseOptional(SyntaxKind.CommaToken)) {
-                importClause.namedBindings = token() === SyntaxKind.AsteriskToken ? parseNamespaceImport() : parseNamedImportsOrExports(SyntaxKind.NamedImports);
+                node.namedBindings = token() === SyntaxKind.AsteriskToken ? parseNamespaceImport() : parseNamedImportsOrExports(SyntaxKind.NamedImports);
             }
 
-            return finishNode(importClause);
+            return finishNode(node, pos);
         }
 
         function parseModuleReference() {
@@ -6258,12 +6342,13 @@ namespace ts {
         }
 
         function parseExternalModuleReference() {
+            const pos = getNodePos();
             const node = <ExternalModuleReference>createNode(SyntaxKind.ExternalModuleReference);
             parseExpected(SyntaxKind.RequireKeyword);
             parseExpected(SyntaxKind.OpenParenToken);
             node.expression = parseModuleSpecifier();
             parseExpected(SyntaxKind.CloseParenToken);
-            return finishNode(node);
+            return finishNode(node, pos);
         }
 
         function parseModuleSpecifier(): Expression {
@@ -6283,16 +6368,18 @@ namespace ts {
         function parseNamespaceImport(): NamespaceImport {
             // NameSpaceImport:
             //  * as ImportedBinding
-            const namespaceImport = <NamespaceImport>createNode(SyntaxKind.NamespaceImport);
+            const pos = getNodePos();
+            const node = <NamespaceImport>createNode(SyntaxKind.NamespaceImport);
             parseExpected(SyntaxKind.AsteriskToken);
             parseExpected(SyntaxKind.AsKeyword);
-            namespaceImport.name = parseIdentifier();
-            return finishNode(namespaceImport);
+            node.name = parseIdentifier();
+            return finishNode(node, pos);
         }
 
         function parseNamedImportsOrExports(kind: SyntaxKind.NamedImports): NamedImports;
         function parseNamedImportsOrExports(kind: SyntaxKind.NamedExports): NamedExports;
         function parseNamedImportsOrExports(kind: SyntaxKind): NamedImportsOrExports {
+            const pos = getNodePos();
             const node = <NamedImports | NamedExports>createNode(kind);
 
             // NamedImports:
@@ -6306,7 +6393,7 @@ namespace ts {
             node.elements = <NodeArray<ImportSpecifier> | NodeArray<ExportSpecifier>>parseBracketedList(ParsingContext.ImportOrExportSpecifiers,
                 kind === SyntaxKind.NamedImports ? parseImportSpecifier : parseExportSpecifier,
                 SyntaxKind.OpenBraceToken, SyntaxKind.CloseBraceToken);
-            return finishNode(node);
+            return finishNode(node, pos);
         }
 
         function parseExportSpecifier() {
@@ -6318,6 +6405,7 @@ namespace ts {
         }
 
         function parseImportOrExportSpecifier(kind: SyntaxKind): ImportOrExportSpecifier {
+            const pos = getNodePos();
             const node = <ImportSpecifier>createNode(kind);
             // ImportSpecifier:
             //   BindingIdentifier
@@ -6343,10 +6431,10 @@ namespace ts {
             if (kind === SyntaxKind.ImportSpecifier && checkIdentifierIsKeyword) {
                 parseErrorAt(checkIdentifierStart, checkIdentifierEnd, Diagnostics.Identifier_expected);
             }
-            return finishNode(node);
+            return finishNode(node, pos);
         }
 
-        function parseExportDeclaration(node: ExportDeclaration): ExportDeclaration {
+        function parseExportDeclaration(pos: number, node: ExportDeclaration): ExportDeclaration {
             node.kind = SyntaxKind.ExportDeclaration;
             if (parseOptional(SyntaxKind.AsteriskToken)) {
                 parseExpected(SyntaxKind.FromKeyword);
@@ -6363,10 +6451,10 @@ namespace ts {
                 }
             }
             parseSemicolon();
-            return finishNode(node);
+            return finishNode(node, pos);
         }
 
-        function parseExportAssignment(node: ExportAssignment): ExportAssignment {
+        function parseExportAssignment(pos: number, node: ExportAssignment): ExportAssignment {
             node.kind = SyntaxKind.ExportAssignment;
             if (parseOptional(SyntaxKind.EqualsToken)) {
                 node.isExportEquals = true;
@@ -6376,7 +6464,7 @@ namespace ts {
             }
             node.expression = parseAssignmentExpressionOrHigher();
             parseSemicolon();
-            return finishNode(node);
+            return finishNode(node, pos);
         }
 
         function setExternalModuleIndicator(sourceFile: SourceFile) {
@@ -6460,6 +6548,7 @@ namespace ts {
 
             // Parses out a JSDoc type expression.
             export function parseJSDocTypeExpression(mayOmitBraces?: boolean): JSDocTypeExpression {
+                const pos = getNodePos();
                 const result = <JSDocTypeExpression>createNode(SyntaxKind.JSDocTypeExpression);
 
                 const hasBrace = (mayOmitBraces ? parseOptional : parseExpected)(SyntaxKind.OpenBraceToken);
@@ -6469,7 +6558,7 @@ namespace ts {
                 }
 
                 fixupParentReferences(result);
-                return finishNode(result);
+                return finishNode(result, pos);
             }
 
             export function parseIsolatedJSDocComment(content: string, start: number | undefined, length: number | undefined): { jsDoc: JSDoc, diagnostics: Diagnostic[] } | undefined {
@@ -6637,7 +6726,7 @@ namespace ts {
                     const result = <JSDoc>createNode(SyntaxKind.JSDocComment, start);
                     result.tags = tags && createNodeArray(tags, tagsPos, tagsEnd);
                     result.comment = comments.length ? comments.join("") : undefined;
-                    return finishNode(result, end);
+                    return finishNode(result, start, end);
                 }
 
                 function isNextNonwhitespaceTokenEndOfFile(): boolean {
@@ -6847,7 +6936,7 @@ namespace ts {
                 function parseUnknownTag(start: number, tagName: Identifier) {
                     const result = <JSDocTag>createNode(SyntaxKind.JSDocTag, start);
                     result.tagName = tagName;
-                    return finishNode(result);
+                    return finishNode(result, start);
                 }
 
                 function addTag(tag: JSDocTag | undefined): void {
@@ -6932,12 +7021,13 @@ namespace ts {
                     result.isNameFirst = isNameFirst;
                     result.isBracketed = isBracketed;
                     result.comment = comment;
-                    return finishNode(result);
+                    return finishNode(result, start);
                 }
 
                 function parseNestedTypeLiteral(typeExpression: JSDocTypeExpression | undefined, name: EntityName, target: PropertyLikeParse, indent: number) {
                     if (typeExpression && isObjectOrObjectArrayTypeReference(typeExpression.type)) {
-                        const typeLiteralExpression = <JSDocTypeExpression>createNode(SyntaxKind.JSDocTypeExpression, scanner.getTokenPos());
+                        const pos = getNodePos();
+                        const typeLiteralExpression = <JSDocTypeExpression>createNode(SyntaxKind.JSDocTypeExpression, pos);
                         let child: JSDocPropertyLikeTag | JSDocTypeTag | false;
                         let jsdocTypeLiteral: JSDocTypeLiteral;
                         const start = scanner.getStartPos();
@@ -6953,8 +7043,8 @@ namespace ts {
                             if (typeExpression.type.kind === SyntaxKind.ArrayType) {
                                 jsdocTypeLiteral.isArrayType = true;
                             }
-                            typeLiteralExpression.type = finishNode(jsdocTypeLiteral);
-                            return finishNode(typeLiteralExpression);
+                            typeLiteralExpression.type = finishNode(jsdocTypeLiteral, start);
+                            return finishNode(typeLiteralExpression, pos);
                         }
                     }
                 }
@@ -6967,7 +7057,7 @@ namespace ts {
                     const result = <JSDocReturnTag>createNode(SyntaxKind.JSDocReturnTag, start);
                     result.tagName = tagName;
                     result.typeExpression = tryParseTypeExpression();
-                    return finishNode(result);
+                    return finishNode(result, start);
                 }
 
                 function parseTypeTag(start: number, tagName: Identifier): JSDocTypeTag {
@@ -6978,7 +7068,7 @@ namespace ts {
                     const result = <JSDocTypeTag>createNode(SyntaxKind.JSDocTypeTag, start);
                     result.tagName = tagName;
                     result.typeExpression = parseJSDocTypeExpression(/*mayOmitBraces*/ true);
-                    return finishNode(result);
+                    return finishNode(result, start);
                 }
 
                 function parseAuthorTag(start: number, tagName: Identifier, indent: number): JSDocAuthorTag {
@@ -6987,7 +7077,7 @@ namespace ts {
 
                     const authorInfoWithEmail = tryParse(() => tryParseAuthorNameAndEmail());
                     if (!authorInfoWithEmail) {
-                        return finishNode(result);
+                        return finishNode(result, start);
                     }
 
                     result.comment = authorInfoWithEmail;
@@ -6999,7 +7089,7 @@ namespace ts {
                         }
                     }
 
-                    return finishNode(result);
+                    return finishNode(result, start);
                 }
 
                 function tryParseAuthorNameAndEmail(): string | undefined {
@@ -7048,15 +7138,16 @@ namespace ts {
                     const result = <JSDocAugmentsTag>createNode(SyntaxKind.JSDocAugmentsTag, start);
                     result.tagName = tagName;
                     result.class = parseExpressionWithTypeArgumentsForAugments();
-                    return finishNode(result);
+                    return finishNode(result, start);
                 }
 
                 function parseExpressionWithTypeArgumentsForAugments(): ExpressionWithTypeArguments & { expression: Identifier | PropertyAccessEntityNameExpression } {
                     const usedBrace = parseOptional(SyntaxKind.OpenBraceToken);
+                    const pos = getNodePos();
                     const node = createNode(SyntaxKind.ExpressionWithTypeArguments) as ExpressionWithTypeArguments & { expression: Identifier | PropertyAccessEntityNameExpression };
                     node.expression = parsePropertyAccessEntityNameExpression();
                     node.typeArguments = tryParseTypeArguments();
-                    const res = finishNode(node);
+                    const res = finishNode(node, pos);
                     if (usedBrace) {
                         parseExpected(SyntaxKind.CloseBraceToken);
                     }
@@ -7069,7 +7160,7 @@ namespace ts {
                         const prop: PropertyAccessEntityNameExpression = createNode(SyntaxKind.PropertyAccessExpression, node.pos) as PropertyAccessEntityNameExpression;
                         prop.expression = node;
                         prop.name = parseJSDocIdentifierName();
-                        node = finishNode(prop);
+                        node = finishNode(prop, node.pos);
                     }
                     return node;
                 }
@@ -7077,7 +7168,7 @@ namespace ts {
                 function parseClassTag(start: number, tagName: Identifier): JSDocClassTag {
                     const tag = <JSDocClassTag>createNode(SyntaxKind.JSDocClassTag, start);
                     tag.tagName = tagName;
-                    return finishNode(tag);
+                    return finishNode(tag, start);
                 }
 
                 function parseThisTag(start: number, tagName: Identifier): JSDocThisTag {
@@ -7085,7 +7176,7 @@ namespace ts {
                     tag.tagName = tagName;
                     tag.typeExpression = parseJSDocTypeExpression(/*mayOmitBraces*/ true);
                     skipWhitespace();
-                    return finishNode(tag);
+                    return finishNode(tag, start);
                 }
 
                 function parseEnumTag(start: number, tagName: Identifier): JSDocEnumTag {
@@ -7093,7 +7184,7 @@ namespace ts {
                     tag.tagName = tagName;
                     tag.typeExpression = parseJSDocTypeExpression(/*mayOmitBraces*/ true);
                     skipWhitespace();
-                    return finishNode(tag);
+                    return finishNode(tag, start);
                 }
 
                 function parseTypedefTag(start: number, tagName: Identifier, indent: number): JSDocTypedefTag {
@@ -7135,13 +7226,13 @@ namespace ts {
                             }
                             typedefTag.typeExpression = childTypeTag && childTypeTag.typeExpression && !isObjectOrObjectArrayTypeReference(childTypeTag.typeExpression.type) ?
                                 childTypeTag.typeExpression :
-                                finishNode(jsdocTypeLiteral);
+                                finishNode(jsdocTypeLiteral, start);
                             end = typedefTag.typeExpression.end;
                         }
                     }
 
                     // Only include the characters between the name end and the next token if a comment was actually parsed out - otherwise it's just whitespace
-                    return finishNode(typedefTag, end || typedefTag.comment !== undefined ? scanner.getStartPos() : (typedefTag.fullName || typedefTag.typeExpression || typedefTag.tagName).end);
+                    return finishNode(typedefTag, start, end || typedefTag.comment !== undefined ? scanner.getStartPos() : (typedefTag.fullName || typedefTag.typeExpression || typedefTag.tagName).end);
                 }
 
                 function parseJSDocTypeNameWithNamespace(nested?: boolean) {
@@ -7157,7 +7248,7 @@ namespace ts {
                         }
                         jsDocNamespaceNode.name = typeNameOrNamespaceName;
                         jsDocNamespaceNode.body = parseJSDocTypeNameWithNamespace(/*nested*/ true);
-                        return finishNode(jsDocNamespaceNode);
+                        return finishNode(jsDocNamespaceNode, pos);
                     }
 
                     if (nested) {
@@ -7191,8 +7282,8 @@ namespace ts {
                     if (returnTag) {
                         jsdocSignature.type = returnTag;
                     }
-                    callbackTag.typeExpression = finishNode(jsdocSignature);
-                    return finishNode(callbackTag);
+                    callbackTag.typeExpression = finishNode(jsdocSignature, start);
+                    return finishNode(callbackTag, start);
                 }
 
                 function getJSDocTypeAliasName(fullName: JSDocNamespaceBody | undefined) {
@@ -7300,9 +7391,10 @@ namespace ts {
                     const typeParametersPos = getNodePos();
                     do {
                         skipWhitespace();
+                        const typeParameterPos = getNodePos();
                         const typeParameter = <TypeParameterDeclaration>createNode(SyntaxKind.TypeParameter);
                         typeParameter.name = parseJSDocIdentifierName(Diagnostics.Unexpected_token_A_type_parameter_name_was_expected_without_curly_braces);
-                        finishNode(typeParameter);
+                        finishNode(typeParameter, typeParameterPos);
                         skipWhitespace();
                         typeParameters.push(typeParameter);
                     } while (parseOptionalJsdoc(SyntaxKind.CommaToken));
@@ -7311,7 +7403,7 @@ namespace ts {
                     result.tagName = tagName;
                     result.constraint = constraint;
                     result.typeParameters = createNodeArray(typeParameters, typeParametersPos);
-                    finishNode(result);
+                    finishNode(result, start);
                     return result;
                 }
 
@@ -7354,7 +7446,7 @@ namespace ts {
                         result.originalKeywordKind = token();
                     }
                     result.escapedText = escapeLeadingUnderscores(internIdentifier(scanner.getTokenValue()));
-                    finishNode(result, end);
+                    finishNode(result, pos, end);
 
                     nextTokenJSDoc();
                     return result;
