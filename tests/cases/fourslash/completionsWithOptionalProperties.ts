@@ -13,6 +13,8 @@
 
 verify.completions({
     marker: "",
-    includes: ['world']
+    exact: [
+      { name: "world", kind: "property", kindModifiers: "optional", sortText: completion.SortText.OptionalMember }
+    ]
 });
 
