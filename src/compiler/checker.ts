@@ -15590,24 +15590,30 @@ namespace ts {
                     return;
                 }
                 if (target.flags & TypeFlags.Union) {
-                    if (source.flags & TypeFlags.Union) {
-                        // First, infer between identically matching source and target constituents and remove the
-                        // matching types.
-                        const [tempSources, tempTargets] = inferFromMatchingTypes((<UnionType>source).types, (<UnionType>target).types, isTypeOrBaseIdenticalTo);
-                        // Next, infer between closely matching source and target constituents and remove
-                        // the matching types. Types closely match when they are instantiations of the same
-                        // object type or instantiations of the same type alias.
-                        const [sources, targets] = inferFromMatchingTypes(tempSources, tempTargets, isTypeCloselyMatchedBy);
-                        if (sources.length === 0 || targets.length === 0) {
-                            return;
-                        }
-                        source = getUnionType(sources);
-                        target = getUnionType(targets);
+                    // First, infer between identically matching source and target constituents and remove the
+                    // matching types.
+                    const [tempSources, tempTargets] = inferFromMatchingTypes(source.flags & TypeFlags.Union ? (<UnionType>source).types : [source], (<UnionType>target).types, isTypeOrBaseIdenticalTo);
+                    // Next, infer between closely matching source and target constituents and remove
+                    // the matching types. Types closely match when they are instantiations of the same
+                    // object type or instantiations of the same type alias.
+                    const [sources, targets] = inferFromMatchingTypes(tempSources, tempTargets, isTypeCloselyMatchedBy);
+                    if (targets.length === 0) {
+                        return;
                     }
-                    else {
-                        if (inferFromMatchingType(source, (<UnionType>target).types, isTypeOrBaseIdenticalTo)) return;
-                        if (inferFromMatchingType(source, (<UnionType>target).types, isTypeCloselyMatchedBy)) return;
+                    target = getUnionType(targets);
+                    if (sources.length === 0) {
+                        // All source constituents have been matched and there is nothing further to infer from.
+                        // However, simply making no inferences is undesirable because it could ultimately mean
+                        // inferring a type parameter constraint. Instead, make a lower priority inference from
+                        // the full source to whatever remains in the target. For example, when inferring from
+                        // string to 'string | T', make a lower priority inference of string for T.
+                        const savePriority = priority;
+                        priority |= InferencePriority.NakedTypeVariable;
+                        inferFromTypes(source, target);
+                        priority = savePriority;
+                        return;
                     }
+                    source = getUnionType(sources);
                 }
                 else if (target.flags & TypeFlags.Intersection && some((<IntersectionType>target).types,
                     t => !!getInferenceInfoForType(t) || (isGenericMappedType(t) && !!getInferenceInfoForType(getHomomorphicTypeVariable(t) || neverType)))) {
@@ -15617,17 +15623,14 @@ namespace ts {
                     // string[] on the source side and infer string for T.
                     // Likewise, we consider a homomorphic mapped type constrainted to the target type parameter as similar to a "naked type variable"
                     // in such scenarios.
-                    if (source.flags & TypeFlags.Intersection) {
+                    if (!(source.flags & TypeFlags.Union)) {
                         // Infer between identically matching source and target constituents and remove the matching types.
-                        const [sources, targets] = inferFromMatchingTypes((<IntersectionType>source).types, (<IntersectionType>target).types, isTypeIdenticalTo);
+                        const [sources, targets] = inferFromMatchingTypes(source.flags & TypeFlags.Intersection ? (<IntersectionType>source).types : [source], (<IntersectionType>target).types, isTypeIdenticalTo);
                         if (sources.length === 0 || targets.length === 0) {
                             return;
                         }
                         source = getIntersectionType(sources);
                         target = getIntersectionType(targets);
-                    }
-                    else if (!(source.flags & TypeFlags.Union)) {
-                        if (inferFromMatchingType(source, (<IntersectionType>target).types, isTypeIdenticalTo)) return;
                     }
                 }
                 else if (target.flags & (TypeFlags.IndexedAccess | TypeFlags.Substitution)) {
@@ -15776,17 +15779,6 @@ namespace ts {
                 action(source, target);
                 visited.set(key, inferencePriority);
                 inferencePriority = Math.min(inferencePriority, saveInferencePriority);
-            }
-
-            function inferFromMatchingType(source: Type, targets: Type[], matches: (s: Type, t: Type) => boolean) {
-                let matched = false;
-                for (const t of targets) {
-                    if (matches(source, t)) {
-                        inferFromTypes(source, t);
-                        matched = true;
-                    }
-                }
-                return matched;
             }
 
             function inferFromMatchingTypes(sources: Type[], targets: Type[], matches: (s: Type, t: Type) => boolean): [Type[], Type[]] {
