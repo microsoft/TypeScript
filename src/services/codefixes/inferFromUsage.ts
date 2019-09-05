@@ -504,6 +504,9 @@ namespace ts.codefix {
             }
 
             switch (node.parent.kind) {
+                case SyntaxKind.ExpressionStatement:
+                    addCandidateType(usage, checker.getVoidType());
+                    break;
                 case SyntaxKind.PostfixUnaryExpression:
                     usage.isNumber = true;
                     break;
@@ -871,12 +874,11 @@ namespace ts.codefix {
                 }
 
                 if (usage.calls) {
-                    callSignatures.push(getSignatureFromCalls(usage.calls, checker.getVoidType()));
+                    callSignatures.push(getSignatureFromCalls(usage.calls, checker.getAnyType()));
                 }
 
                 if (usage.constructs) {
-                    // TODO: fallback return should maybe be {}?
-                    constructSignatures.push(getSignatureFromCalls(usage.constructs, checker.getVoidType()));
+                    constructSignatures.push(getSignatureFromCalls(usage.constructs, checker.getAnyType()));
                 }
 
                 if (usage.stringIndex) {
