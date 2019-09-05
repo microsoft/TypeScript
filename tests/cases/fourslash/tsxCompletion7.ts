@@ -10,4 +10,10 @@
 //// let y = { ONE: '' };
 //// var x = <div {...y} /**/ />;
 
-verify.completions({ marker: "", exact: ["ONE", "TWO"] });
+verify.completions({
+  marker: "",
+  exact: [
+    { name: "ONE", kind: "JSX attribute", kindModifiers: "declare", sortText: completion.SortText.MemberDeclaredBySpreadAssignment },
+    { name: "TWO", kind: "JSX attribute", kindModifiers: "declare", sortText: completion.SortText.LocationPriority }
+  ]
+});

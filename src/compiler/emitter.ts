@@ -155,6 +155,7 @@ namespace ts {
     }
 
     function getOutputJSFileName(inputFileName: string, configFile: ParsedCommandLine, ignoreCase: boolean) {
+        if (configFile.options.emitDeclarationOnly) return undefined;
         const isJsonFile = fileExtensionIs(inputFileName, Extension.Json);
         const outputFileName = changeExtension(
             getOutputPathWithoutChangingExt(inputFileName, configFile, ignoreCase, configFile.options.outDir),
@@ -187,7 +188,7 @@ namespace ts {
                 const js = getOutputJSFileName(inputFileName, configFile, ignoreCase);
                 addOutput(js);
                 if (fileExtensionIs(inputFileName, Extension.Json)) continue;
-                if (configFile.options.sourceMap) {
+                if (js && configFile.options.sourceMap) {
                     addOutput(`${js}.map`);
                 }
                 if (getEmitDeclarations(configFile.options) && hasTSFileExtension(inputFileName)) {
@@ -214,6 +215,10 @@ namespace ts {
             if (fileExtensionIs(inputFileName, Extension.Dts)) continue;
             const jsFilePath = getOutputJSFileName(inputFileName, configFile, ignoreCase);
             if (jsFilePath) return jsFilePath;
+            if (fileExtensionIs(inputFileName, Extension.Json)) continue;
+            if (getEmitDeclarations(configFile.options) && hasTSFileExtension(inputFileName)) {
+                return getOutputDeclarationFileName(inputFileName, configFile, ignoreCase);
+            }
         }
         const buildInfoPath = getOutputPathForBuildInfo(configFile.options);
         if (buildInfoPath) return buildInfoPath;
@@ -411,11 +416,7 @@ namespace ts {
                     }
                 );
                 if (emitOnlyDtsFiles && declarationTransform.transformed[0].kind === SyntaxKind.SourceFile) {
-                    // Improved narrowing in master/3.6 makes this cast unnecessary, triggering a lint rule.
-                    // But at the same time, the LKG (3.5) necessitates it because it doesn’t narrow.
-                    // Once the LKG is updated to 3.6, this comment, the cast to `SourceFile`, and the
-                    // tslint directive can be all be removed.
-                    const sourceFile = declarationTransform.transformed[0] as SourceFile; // tslint:disable-line
+                    const sourceFile = declarationTransform.transformed[0];
                     exportedModulesFromDeclarationEmit = sourceFile.exportedModulesFromDeclarationEmit;
                 }
             }
@@ -1057,7 +1058,7 @@ namespace ts {
 
         function setWriter(_writer: EmitTextWriter | undefined, _sourceMapGenerator: SourceMapGenerator | undefined) {
             if (_writer && printerOptions.omitTrailingSemicolon) {
-                _writer = getTrailingSemicolonOmittingWriter(_writer);
+                _writer = getTrailingSemicolonDeferringWriter(_writer);
             }
 
             writer = _writer!; // TODO: GH#18217
@@ -2515,7 +2516,7 @@ namespace ts {
             }
 
             emitWhileClause(node, node.statement.end);
-            writePunctuation(";");
+            writeTrailingSemicolon();
         }
 
         function emitWhileStatement(node: WhileStatement) {

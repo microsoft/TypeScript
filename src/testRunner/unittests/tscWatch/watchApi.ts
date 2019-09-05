@@ -37,4 +37,32 @@ namespace ts.tscWatch {
             checkProgramActualFiles(program, [mainFile.path, libFile.path, settingsJson.path]);
         });
     });
+
+    describe("unittests:: tsc-watch:: watchAPI:: tsc-watch expose error count to watch status reporter", () => {
+        const projectRoot = "/user/username/projects/project";
+        const configFileJson: any = {
+            compilerOptions: { module: "commonjs" },
+            files: ["index.ts"]
+        };
+        const config: File = {
+            path: `${projectRoot}/tsconfig.json`,
+            content: JSON.stringify(configFileJson)
+        };
+        const mainFile: File = {
+            path: `${projectRoot}/index.ts`,
+            content: "let compiler = new Compiler(); for (let i = 0; j < 5; i++) {}"
+        };
+
+        it("verify that the error count is correctly passed down to the watch status reporter", () => {
+            const files = [libFile, mainFile, config];
+            const host = createWatchedSystem(files, { currentDirectory: projectRoot });
+            let watchedErrorCount;
+            const reportWatchStatus: WatchStatusReporter = (_, __, ___, errorCount) => {
+                watchedErrorCount = errorCount;
+            };
+            const compilerHost = createWatchCompilerHostOfConfigFile(config.path, {}, host, /*createProgram*/ undefined, /*reportDiagnostic*/ undefined, reportWatchStatus);
+            createWatchProgram(compilerHost);
+            assert.equal(watchedErrorCount, 2, "The error count was expected to be 2 for the file change");
+        });
+    });
 }
