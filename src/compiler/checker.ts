@@ -15584,7 +15584,7 @@ namespace ts {
                         // However, simply making no inferences is undesirable because it could ultimately mean
                         // inferring a type parameter constraint. Instead, make a lower priority inference from
                         // the full source to whatever remains in the target. For example, when inferring from
-                        // string to 'string | T',  make a lower priority inference of string for T.
+                        // string to 'string | T', make a lower priority inference of string for T.
                         const savePriority = priority;
                         priority |= InferencePriority.NakedTypeVariable;
                         inferFromTypes(source, target);
