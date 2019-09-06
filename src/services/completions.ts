@@ -767,6 +767,8 @@ namespace ts.Completions {
         let node = currentToken;
         let propertyAccessToConvert: PropertyAccessExpression | undefined;
         let isRightOfDot = false;
+        let isRightOfQuestionDot = false;
+        let isOptional = false;
         let isRightOfOpenTag = false;
         let isStartingCloseTag = false;
         let isJsxInitializer: IsJsxInitializer = false;
@@ -780,10 +782,12 @@ namespace ts.Completions {
             }
 
             let parent = contextToken.parent;
-            if (contextToken.kind === SyntaxKind.DotToken) {
-                isRightOfDot = true;
+            if (contextToken.kind === SyntaxKind.DotToken || contextToken.kind === SyntaxKind.QuestionDotToken) {
+                isRightOfDot = contextToken.kind === SyntaxKind.DotToken;
+                isRightOfQuestionDot = contextToken.kind === SyntaxKind.QuestionDotToken;
                 switch (parent.kind) {
                     case SyntaxKind.PropertyAccessExpression:
+                        isOptional = isOptionalChain(parent);
                         propertyAccessToConvert = parent as PropertyAccessExpression;
                         node = propertyAccessToConvert.expression;
                         if (node.end === contextToken.pos &&
@@ -890,6 +894,10 @@ namespace ts.Completions {
         if (isRightOfDot) {
             getTypeScriptMemberSymbols();
         }
+        else if (isRightOfQuestionDot) {
+            getTypeScriptMemberSymbols();
+            isNewIdentifierLocation = true;
+        }
         else if (isRightOfOpenTag) {
             const tagSymbols = Debug.assertEachDefined(typeChecker.getJsxIntrinsicTagNamesAt(location), "getJsxIntrinsicTagNames() should all be defined");
             tryGetGlobalSymbols();
@@ -995,7 +1003,7 @@ namespace ts.Completions {
                         if (!isTypeLocation &&
                             symbol.declarations &&
                             symbol.declarations.some(d => d.kind !== SyntaxKind.SourceFile && d.kind !== SyntaxKind.ModuleDeclaration && d.kind !== SyntaxKind.EnumDeclaration)) {
-                            addTypeProperties(typeChecker.getTypeOfSymbolAtLocation(symbol, node), !!(node.flags & NodeFlags.AwaitContext));
+                            addTypeProperties(removeOptionality(typeChecker.getTypeOfSymbolAtLocation(symbol, node), isRightOfQuestionDot, isOptional), !!(node.flags & NodeFlags.AwaitContext));
                         }
 
                         return;
@@ -1010,7 +1018,7 @@ namespace ts.Completions {
             }
 
             if (!isTypeLocation) {
-                addTypeProperties(typeChecker.getTypeAtLocation(node), !!(node.flags & NodeFlags.AwaitContext));
+                addTypeProperties(removeOptionality(typeChecker.getTypeAtLocation(node), isRightOfQuestionDot, isOptional), !!(node.flags & NodeFlags.AwaitContext));
             }
         }
 

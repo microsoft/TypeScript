@@ -1,0 +1,31 @@
+=== tests/cases/conformance/expressions/optionalChaining/callChain/callChain.ts ===
+declare const o1: undefined | (() => number);
+>o1 : (() => number) | undefined
+
+o1?.();
+>o1?.() : number | undefined
+>o1 : (() => number) | undefined
+
+declare const o2: undefined | { b: () => number };
+>o2 : { b: () => number; } | undefined
+>b : () => number
+
+o2?.b();
+>o2?.b() : number | undefined
+>o2?.b : (() => number) | undefined
+>o2 : { b: () => number; } | undefined
+>b : (() => number) | undefined
+
+declare const o3: { b: (() => { c: string }) | undefined };
+>o3 : { b: (() => { c: string; }) | undefined; }
+>b : (() => { c: string; }) | undefined
+>c : string
+
+o3.b?.().c;
+>o3.b?.().c : string | undefined
+>o3.b?.() : { c: string; } | undefined
+>o3.b : (() => { c: string; }) | undefined
+>o3 : { b: (() => { c: string; }) | undefined; }
+>b : (() => { c: string; }) | undefined
+>c : string | undefined
+

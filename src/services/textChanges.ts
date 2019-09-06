@@ -897,7 +897,6 @@ namespace ts.textChanges {
     function createWriter(newLine: string, omitTrailingSemicolon?: boolean): TextChangesWriter {
         let lastNonTriviaPosition = 0;
 
-
         const writer = omitTrailingSemicolon ? getTrailingSemicolonOmittingWriter(createTextWriter(newLine)) : createTextWriter(newLine);
         const onEmitNode: PrintHandlers["onEmitNode"] = (hint, node, printCallback) => {
             if (node) {
@@ -1052,6 +1051,8 @@ namespace ts.textChanges {
             getColumn,
             getIndent,
             isAtStartOfLine,
+            hasPrecedingComment: () => writer.hasPrecedingComment(),
+            hasPrecedingWhitespace: () => writer.hasPrecedingWhitespace(),
             clear
         };
     }

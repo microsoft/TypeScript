@@ -151,6 +151,7 @@ namespace ts {
         DotDotDotToken,
         SemicolonToken,
         CommaToken,
+        QuestionDotToken,
         LessThanToken,
         LessThanSlashToken,
         GreaterThanToken,
@@ -483,6 +484,7 @@ namespace ts {
         CommaListExpression,
         MergeDeclarationMarker,
         EndOfDeclarationMarker,
+        SyntheticReferenceExpression,
 
         // Enum value count
         Count,
@@ -528,20 +530,21 @@ namespace ts {
         NestedNamespace    = 1 << 2,  // Namespace declaration
         Synthesized        = 1 << 3,  // Node was synthesized during transformation
         Namespace          = 1 << 4,  // Namespace declaration
-        ExportContext      = 1 << 5,  // Export context (initialized by binding)
-        ContainsThis       = 1 << 6,  // Interface contains references to "this"
-        HasImplicitReturn  = 1 << 7,  // If function implicitly returns on one of codepaths (initialized by binding)
-        HasExplicitReturn  = 1 << 8,  // If function has explicit reachable return on one of codepaths (initialized by binding)
-        GlobalAugmentation = 1 << 9,  // Set if module declaration is an augmentation for the global scope
-        HasAsyncFunctions  = 1 << 10, // If the file has async functions (initialized by binding)
-        DisallowInContext  = 1 << 11, // If node was parsed in a context where 'in-expressions' are not allowed
-        YieldContext       = 1 << 12, // If node was parsed in the 'yield' context created when parsing a generator
-        DecoratorContext   = 1 << 13, // If node was parsed as part of a decorator
-        AwaitContext       = 1 << 14, // If node was parsed in the 'await' context created when parsing an async function
-        ThisNodeHasError   = 1 << 15, // If the parser encountered an error when parsing the code that created this node
-        JavaScriptFile     = 1 << 16, // If node was parsed in a JavaScript
-        ThisNodeOrAnySubNodesHasError = 1 << 17, // If this node or any of its children had an error
-        HasAggregatedChildData = 1 << 18, // If we've computed data from children and cached it in this node
+        OptionalChain              = 1 << 5,  // Chained MemberExpression rooted to a pseudo-OptionalExpression
+        ExportContext      = 1 << 6,  // Export context (initialized by binding)
+        ContainsThis       = 1 << 7,  // Interface contains references to "this"
+        HasImplicitReturn  = 1 << 8,  // If function implicitly returns on one of codepaths (initialized by binding)
+        HasExplicitReturn  = 1 << 9,  // If function has explicit reachable return on one of codepaths (initialized by binding)
+        GlobalAugmentation = 1 << 10,  // Set if module declaration is an augmentation for the global scope
+        HasAsyncFunctions  = 1 << 11, // If the file has async functions (initialized by binding)
+        DisallowInContext  = 1 << 12, // If node was parsed in a context where 'in-expressions' are not allowed
+        YieldContext       = 1 << 13, // If node was parsed in the 'yield' context created when parsing a generator
+        DecoratorContext   = 1 << 14, // If node was parsed as part of a decorator
+        AwaitContext       = 1 << 15, // If node was parsed in the 'await' context created when parsing an async function
+        ThisNodeHasError   = 1 << 16, // If the parser encountered an error when parsing the code that created this node
+        JavaScriptFile     = 1 << 17, // If node was parsed in a JavaScript
+        ThisNodeOrAnySubNodesHasError = 1 << 18, // If this node or any of its children had an error
+        HasAggregatedChildData = 1 << 19, // If we've computed data from children and cached it in this node
 
         // These flags will be set when the parser encounters a dynamic import expression or 'import.meta' to avoid
         // walking the tree if the flags are not set. However, these flags are just a approximation
@@ -552,13 +555,13 @@ namespace ts {
         // removal, it is likely that users will add the import anyway.
         // The advantage of this approach is its simplicity. For the case of batch compilation,
         // we guarantee that users won't have to pay the price of walking the tree if a dynamic import isn't used.
-        /* @internal */ PossiblyContainsDynamicImport = 1 << 19,
-        /* @internal */ PossiblyContainsImportMeta    = 1 << 20,
+        /* @internal */ PossiblyContainsDynamicImport = 1 << 20,
+        /* @internal */ PossiblyContainsImportMeta    = 1 << 21,
 
-        JSDoc                                         = 1 << 21, // If node was parsed inside jsdoc
-        /* @internal */ Ambient                       = 1 << 22, // If node was inside an ambient context -- a declaration file, or inside something with the `declare` modifier.
-        /* @internal */ InWithStatement               = 1 << 23, // If any ancestor of node was the `statement` of a WithStatement (not the `expression`)
-        JsonFile                                      = 1 << 24, // If node was parsed in a Json
+        JSDoc                                         = 1 << 22, // If node was parsed inside jsdoc
+        /* @internal */ Ambient                       = 1 << 23, // If node was inside an ambient context -- a declaration file, or inside something with the `declare` modifier.
+        /* @internal */ InWithStatement               = 1 << 24, // If any ancestor of node was the `statement` of a WithStatement (not the `expression`)
+        JsonFile                                      = 1 << 25, // If node was parsed in a Json
 
         BlockScoped = Let | Const,
 
@@ -724,8 +727,10 @@ namespace ts {
         kind: TKind;
     }
 
+    export type DotToken = Token<SyntaxKind.DotToken>;
     export type DotDotDotToken = Token<SyntaxKind.DotDotDotToken>;
     export type QuestionToken = Token<SyntaxKind.QuestionToken>;
+    export type QuestionDotToken = Token<SyntaxKind.QuestionDotToken>;
     export type ExclamationToken = Token<SyntaxKind.ExclamationToken>;
     export type ColonToken = Token<SyntaxKind.ColonToken>;
     export type EqualsToken = Token<SyntaxKind.EqualsToken>;
@@ -1776,7 +1781,13 @@ namespace ts {
     export interface PropertyAccessExpression extends MemberExpression, NamedDeclaration {
         kind: SyntaxKind.PropertyAccessExpression;
         expression: LeftHandSideExpression;
+        questionDotToken?: QuestionDotToken;
         name: Identifier;
+    }
+
+    export interface PropertyAccessChain extends PropertyAccessExpression {
+        _optionalChainBrand: any;
+        kind: SyntaxKind.PropertyAccessExpression;
     }
 
     export interface SuperPropertyAccessExpression extends PropertyAccessExpression {
@@ -1792,7 +1803,13 @@ namespace ts {
     export interface ElementAccessExpression extends MemberExpression {
         kind: SyntaxKind.ElementAccessExpression;
         expression: LeftHandSideExpression;
+        questionDotToken?: QuestionDotToken;
         argumentExpression: Expression;
+    }
+
+    export interface ElementAccessChain extends ElementAccessExpression {
+        _optionalChainBrand: any;
+        kind: SyntaxKind.ElementAccessExpression;
     }
 
     export interface SuperElementAccessExpression extends ElementAccessExpression {
@@ -1805,9 +1822,21 @@ namespace ts {
     export interface CallExpression extends LeftHandSideExpression, Declaration {
         kind: SyntaxKind.CallExpression;
         expression: LeftHandSideExpression;
+        questionDotToken?: QuestionDotToken;
         typeArguments?: NodeArray<TypeNode>;
         arguments: NodeArray<Expression>;
     }
+
+    export interface CallChain extends CallExpression {
+        _optionalChainBrand: any;
+        kind: SyntaxKind.CallExpression;
+    }
+
+    export type OptionalChain =
+        | PropertyAccessChain
+        | ElementAccessChain
+        | CallChain
+        ;
 
     /** @internal */
     export type BindableObjectDefinePropertyCall = CallExpression & { arguments: { 0: EntityNameExpression, 1: StringLiteralLike | NumericLiteral, 2: ObjectLiteralExpression } };
@@ -1839,6 +1868,7 @@ namespace ts {
         tag: LeftHandSideExpression;
         typeArguments?: NodeArray<TypeNode>;
         template: TemplateLiteral;
+        /*@internal*/ questionDotToken?: QuestionDotToken; // NOTE: Invalid syntax, only used to report a grammar error.
     }
 
     export type CallLikeExpression = CallExpression | NewExpression | TaggedTemplateExpression | Decorator | JsxOpeningLikeElement;
@@ -2004,6 +2034,13 @@ namespace ts {
     /* @internal */
     export interface MergeDeclarationMarker extends Statement {
         kind: SyntaxKind.MergeDeclarationMarker;
+    }
+
+    /* @internal */
+    export interface SyntheticReferenceExpression extends LeftHandSideExpression {
+        kind: SyntaxKind.SyntheticReferenceExpression;
+        expression: Expression;
+        thisArg: Expression;
     }
 
     export interface EmptyStatement extends Statement {
@@ -3162,6 +3199,7 @@ namespace ts {
         /* @internal */ getParameterType(signature: Signature, parameterIndex: number): Type;
         getNullableType(type: Type, flags: TypeFlags): Type;
         getNonNullableType(type: Type): Type;
+        /* @internal */ getNonOptionalType(type: Type): Type;
 
         // TODO: GH#18217 `xToDeclaration` calls are frequently asserted as defined.
         /** Note that the resulting nodes cannot be checked. */
@@ -3281,6 +3319,7 @@ namespace ts {
         /* @internal */ getNullType(): Type;
         /* @internal */ getESSymbolType(): Type;
         /* @internal */ getNeverType(): Type;
+        /* @internal */ getOptionalType(): Type;
         /* @internal */ getUnionType(types: Type[], subtypeReduction?: UnionReduction): Type;
         /* @internal */ createArrayType(elementType: Type): Type;
         /* @internal */ getElementTypeOfArrayType(arrayType: Type): Type | undefined;
@@ -4477,6 +4516,8 @@ namespace ts {
         isolatedSignatureType?: ObjectType; // A manufactured type that just contains the signature for purposes of signature comparison
         /* @internal */
         instantiations?: Map<Signature>;    // Generic signature instantiation cache
+        /* @internal */
+        isOptionalCall?: boolean;
     }
 
     export const enum IndexKind {
@@ -5886,6 +5927,8 @@ namespace ts {
         getColumn(): number;
         getIndent(): number;
         isAtStartOfLine(): boolean;
+        hasPrecedingComment(): boolean;
+        hasPrecedingWhitespace(): boolean;
         getTextPosWithWriteLine?(): number;
     }
 

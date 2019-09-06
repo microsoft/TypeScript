@@ -414,6 +414,9 @@ namespace ts {
         getNonNullableType(): Type {
             return this.checker.getNonNullableType(this);
         }
+        getNonOptionalType(): Type {
+            return this.checker.getNonOptionalType(this);
+        }
         getConstraint(): Type | undefined {
             return this.checker.getBaseConstraintOfType(this);
         }

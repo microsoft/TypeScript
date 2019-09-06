@@ -950,6 +950,12 @@ namespace ts {
         }
     }
 
+    export function removeOptionality(type: Type, isOptionalExpression: boolean, isOptionalChain: boolean) {
+        return isOptionalExpression ? type.getNonNullableType() :
+            isOptionalChain ? type.getNonOptionalType() :
+            type;
+    }
+
     export function isPossiblyTypeArgumentPosition(token: Node, sourceFile: SourceFile, checker: TypeChecker): boolean {
         const info = getPossibleTypeArgumentsInfo(token, sourceFile);
         return info !== undefined && (isPartOfTypeNode(info.called) ||
@@ -958,7 +964,11 @@ namespace ts {
     }
 
     export function getPossibleGenericSignatures(called: Expression, typeArgumentCount: number, checker: TypeChecker): ReadonlyArray<Signature> {
-        const type = checker.getTypeAtLocation(called);
+        let type = checker.getTypeAtLocation(called);
+        if (isOptionalChain(called.parent)) {
+            type = removeOptionality(type, !!called.parent.questionDotToken, /*isOptionalChain*/ true);
+        }
+
         const signatures = isNewExpression(called.parent) ? type.getConstructSignatures() : type.getCallSignatures();
         return signatures.filter(candidate => !!candidate.typeParameters && candidate.typeParameters.length >= typeArgumentCount);
     }
@@ -987,6 +997,9 @@ namespace ts {
                 case SyntaxKind.LessThanToken:
                     // Found the beginning of the generic argument expression
                     token = findPrecedingToken(token.getFullStart(), sourceFile);
+                    if (token && token.kind === SyntaxKind.QuestionDotToken) {
+                        token = findPrecedingToken(token.getFullStart(), sourceFile);
+                    }
                     if (!token || !isIdentifier(token)) return undefined;
                     if (!remainingLessThanTokens) {
                         return isDeclarationName(token) ? undefined : { called: token, nTypeArguments };
@@ -1485,6 +1498,8 @@ namespace ts {
             getColumn: () => 0,
             getLine: () => 0,
             isAtStartOfLine: () => false,
+            hasPrecedingWhitespace: () => false,
+            hasPrecedingComment: () => false,
             rawWrite: notImplemented,
             getIndent: () => indent,
             increaseIndent: () => { indent++; },

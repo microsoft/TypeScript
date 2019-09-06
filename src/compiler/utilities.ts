@@ -57,7 +57,6 @@ namespace ts {
 
     function createSingleLineStringWriter(): EmitTextWriter {
         let str = "";
-
         const writeText: (text: string) => void = text => str += text;
         return {
             getText: () => str,
@@ -79,6 +78,8 @@ namespace ts {
             getColumn: () => 0,
             getIndent: () => 0,
             isAtStartOfLine: () => false,
+            hasPrecedingComment: () => false,
+            hasPrecedingWhitespace: () => !!str.length && isWhiteSpaceLike(str.charCodeAt(str.length - 1)),
 
             // Completely ignore indentation for string writers.  And map newlines to
             // a single space.
@@ -3282,6 +3283,7 @@ namespace ts {
         let lineStart: boolean;
         let lineCount: number;
         let linePos: number;
+        let hasPrecedingComment = false;
 
         function updateLineCountAndPosFor(s: string) {
             const lineStartsOfS = computeLineStarts(s);
@@ -3295,7 +3297,7 @@ namespace ts {
             }
         }
 
-        function write(s: string) {
+        function writeText(s: string) {
             if (s && s.length) {
                 if (lineStart) {
                     s = getIndentString(indent) + s;
@@ -3306,18 +3308,30 @@ namespace ts {
             }
         }
 
+        function write(s: string) {
+            if (s) hasPrecedingComment = false;
+            writeText(s);
+        }
+
+        function writeComment(s: string) {
+            if (s) hasPrecedingComment = true;
+            writeText(s);
+        }
+
         function reset(): void {
             output = "";
             indent = 0;
             lineStart = true;
             lineCount = 0;
             linePos = 0;
+            hasPrecedingComment = false;
         }
 
         function rawWrite(s: string) {
             if (s !== undefined) {
                 output += s;
                 updateLineCountAndPosFor(s);
+                hasPrecedingComment = false;
             }
         }
 
@@ -3333,6 +3347,7 @@ namespace ts {
                 lineCount++;
                 linePos = output.length;
                 lineStart = true;
+                hasPrecedingComment = false;
             }
         }
 
@@ -3355,6 +3370,8 @@ namespace ts {
             getColumn: () => lineStart ? indent * getIndentSize() : output.length - linePos,
             getText: () => output,
             isAtStartOfLine: () => lineStart,
+            hasPrecedingComment: () => hasPrecedingComment,
+            hasPrecedingWhitespace: () => !!output.length && isWhiteSpaceLike(output.charCodeAt(output.length - 1)),
             clear: reset,
             reportInaccessibleThisError: noop,
             reportPrivateInBaseOfClassExpression: noop,
@@ -3369,7 +3386,7 @@ namespace ts {
             writeStringLiteral: write,
             writeSymbol: (s, _) => write(s),
             writeTrailingSemicolon: write,
-            writeComment: write,
+            writeComment,
             getTextPosWithWriteLine
         };
     }
@@ -4730,6 +4747,14 @@ namespace ts {
                 return false;
         }
     }
+
+    export function getDotOrQuestionDotToken(node: PropertyAccessExpression) {
+        if (node.questionDotToken) {
+            return node.questionDotToken;
+        }
+
+        return createNode(SyntaxKind.DotToken, node.expression.end, node.name.pos) as DotToken;
+    }
 }
 
 namespace ts {
@@ -5734,12 +5759,30 @@ namespace ts {
         return node.kind === SyntaxKind.PropertyAccessExpression;
     }
 
+    export function isPropertyAccessChain(node: Node): node is PropertyAccessChain {
+        return isPropertyAccessExpression(node) && !!(node.flags & NodeFlags.OptionalChain);
+    }
+
     export function isElementAccessExpression(node: Node): node is ElementAccessExpression {
         return node.kind === SyntaxKind.ElementAccessExpression;
     }
 
+    export function isElementAccessChain(node: Node): node is ElementAccessChain {
+        return isElementAccessExpression(node) && !!(node.flags & NodeFlags.OptionalChain);
+    }
+
     export function isCallExpression(node: Node): node is CallExpression {
         return node.kind === SyntaxKind.CallExpression;
+    }
+
+    export function isCallChain(node: Node): node is CallChain {
+        return isCallExpression(node) && !!(node.flags & NodeFlags.OptionalChain);
+    }
+
+    export function isOptionalChain(node: Node): node is PropertyAccessChain | ElementAccessChain | CallChain {
+        return isPropertyAccessChain(node)
+            || isElementAccessChain(node)
+            || isCallChain(node);
     }
 
     export function isNewExpression(node: Node): node is NewExpression {
@@ -6748,6 +6791,11 @@ namespace ts {
     /* @internal */
     export function isNotEmittedStatement(node: Node): node is NotEmittedStatement {
         return node.kind === SyntaxKind.NotEmittedStatement;
+    }
+
+    /* @internal */
+    export function isSyntheticReference(node: Node): node is SyntheticReferenceExpression {
+        return node.kind === SyntaxKind.SyntheticReferenceExpression;
     }
 
     /* @internal */

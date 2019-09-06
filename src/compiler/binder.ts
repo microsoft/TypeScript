@@ -3160,6 +3160,10 @@ namespace ts {
         const callee = skipOuterExpressions(node.expression);
         const expression = node.expression;
 
+        if (node.flags & NodeFlags.OptionalChain) {
+            transformFlags |= TransformFlags.ContainsESNext;
+        }
+
         if (node.typeArguments) {
             transformFlags |= TransformFlags.AssertTypeScript;
         }
@@ -3555,6 +3559,10 @@ namespace ts {
     function computePropertyAccess(node: PropertyAccessExpression, subtreeFlags: TransformFlags) {
         let transformFlags = subtreeFlags;
 
+        if (node.flags & NodeFlags.OptionalChain) {
+            transformFlags |= TransformFlags.ContainsESNext;
+        }
+
         // If a PropertyAccessExpression starts with a super keyword, then it is
         // ES6 syntax, and requires a lexical `this` binding.
         if (node.expression.kind === SyntaxKind.SuperKeyword) {
@@ -3569,6 +3577,10 @@ namespace ts {
 
     function computeElementAccess(node: ElementAccessExpression, subtreeFlags: TransformFlags) {
         let transformFlags = subtreeFlags;
+
+        if (node.flags & NodeFlags.OptionalChain) {
+            transformFlags |= TransformFlags.ContainsESNext;
+        }
 
         // If an ElementAccessExpression starts with a super keyword, then it is
         // ES6 syntax, and requires a lexical `this` binding.

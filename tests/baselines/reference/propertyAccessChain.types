@@ -1,0 +1,34 @@
+=== tests/cases/conformance/expressions/optionalChaining/propertyAccessChain/propertyAccessChain.ts ===
+declare const o1: undefined | { b: string };
+>o1 : { b: string; } | undefined
+>b : string
+
+o1?.b;
+>o1?.b : string | undefined
+>o1 : { b: string; } | undefined
+>b : string | undefined
+
+declare const o2: undefined | { b: { c: string } };
+>o2 : { b: { c: string; }; } | undefined
+>b : { c: string; }
+>c : string
+
+o2?.b.c;
+>o2?.b.c : string | undefined
+>o2?.b : { c: string; } | undefined
+>o2 : { b: { c: string; }; } | undefined
+>b : { c: string; } | undefined
+>c : string | undefined
+
+declare const o3: { b: undefined | { c: string } };
+>o3 : { b: { c: string; } | undefined; }
+>b : { c: string; } | undefined
+>c : string
+
+o3.b?.c;
+>o3.b?.c : string | undefined
+>o3.b : { c: string; } | undefined
+>o3 : { b: { c: string; } | undefined; }
+>b : { c: string; } | undefined
+>c : string | undefined
+

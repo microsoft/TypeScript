@@ -50,6 +50,7 @@ namespace ts {
         getNumberIndexType(): Type | undefined;
         getBaseTypes(): BaseType[] | undefined;
         getNonNullableType(): Type;
+        /*@internal*/ getNonOptionalType(): Type;
         getConstraint(): Type | undefined;
         getDefault(): Type | undefined;
 
