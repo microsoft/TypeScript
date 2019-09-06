@@ -899,59 +899,42 @@ namespace ts.codefix {
             if (usage.isNumberOrString) {
                 types.push(checker.getUnionType([checker.getStringType(), checker.getNumberType()]));
             }
+            if (usage.numberIndex) {
+                types.push(checker.createArrayType(unifyFromUsage(usage.numberIndex)));
+            }
+            if (usage.properties && usage.properties.size
+                || usage.calls && usage.calls.length
+                || usage.constructs && usage.constructs.length
+                || usage.stringIndex) {
+                types.push(inferStructuralType(usage));
+            }
 
             types.push(...(usage.candidateTypes || []).map(t => checker.getBaseTypeOfLiteralType(t)));
             types.push(...inferNamedTypesFromProperties(usage));
 
-            if (usage.numberIndex) {
-                types.push(checker.createArrayType(unifyFromUsage(usage.numberIndex)));
-            }
-            const structural = inferStructuralType(usage);
-            if (structural) {
-                types.push(structural);
-            }
             return types;
         }
 
         function inferStructuralType(usage: Usage) {
-            if (usage.properties && usage.properties.size
-                     || usage.calls && usage.calls.length
-                     || usage.constructs && usage.constructs.length
-                     || usage.stringIndex) {
-                const members = createUnderscoreEscapedMap<Symbol>();
-                const callSignatures: Signature[] = [];
-                const constructSignatures: Signature[] = [];
-                let stringIndexInfo: IndexInfo | undefined;
-
-                if (usage.properties) {
-                    usage.properties.forEach((u, name) => {
-                        const symbol = checker.createSymbol(SymbolFlags.Property, name);
-                        symbol.type = unifyFromUsage(u);
-                        members.set(name, symbol);
-                    });
-                }
-
-                if (usage.calls) {
-                    callSignatures.push(getSignatureFromCalls(usage.calls));
-                }
-
-                if (usage.constructs) {
-                    constructSignatures.push(getSignatureFromCalls(usage.constructs));
-                }
-
-                if (usage.stringIndex) {
-                    stringIndexInfo = checker.createIndexInfo(unifyFromUsage(usage.stringIndex), /*isReadonly*/ false);
-                }
-
-                return checker.createAnonymousType(/*symbol*/ undefined!, members, callSignatures, constructSignatures, stringIndexInfo, /*numberIndexInfo*/ undefined); // TODO: GH#18217
+            const members = createUnderscoreEscapedMap<Symbol>();
+            if (usage.properties) {
+                usage.properties.forEach((u, name) => {
+                    const symbol = checker.createSymbol(SymbolFlags.Property, name);
+                    symbol.type = unifyFromUsage(u);
+                    members.set(name, symbol);
+                });
             }
+            const callSignatures: Signature[] = usage.calls ? [getSignatureFromCalls(usage.calls)] : [];
+            const constructSignatures: Signature[] = usage.constructs ? [getSignatureFromCalls(usage.constructs)] : [];
+            const stringIndexInfo = usage.stringIndex && checker.createIndexInfo(unifyFromUsage(usage.stringIndex), /*isReadonly*/ false);
+            return checker.createAnonymousType(/*symbol*/ undefined!, members, callSignatures, constructSignatures, stringIndexInfo, /*numberIndexInfo*/ undefined); // TODO: GH#18217
         }
 
         function inferNamedTypesFromProperties(usage: Usage): Type[] {
             if (!usage.properties || !usage.properties.size) return [];
-            const matches = builtins.filter(t => allPropertiesAreAssignableToUsage(t, usage));
-            if (0 < matches.length && matches.length < 3) {
-                return matches.map(m => inferInstantiationFromUsage(m, usage));
+            const types = builtins.filter(t => allPropertiesAreAssignableToUsage(t, usage));
+            if (0 < types.length && types.length < 3) {
+                return types.map(t => inferInstantiationFromUsage(t, usage));
             }
             return [];
         }
