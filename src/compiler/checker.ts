@@ -3522,7 +3522,7 @@ namespace ts {
                 const sig = nodeBuilder.signatureToSignatureDeclaration(signature, sigOutput, enclosingDeclaration, toNodeBuilderFlags(flags) | NodeBuilderFlags.IgnoreErrors | NodeBuilderFlags.WriteTypeParametersInQualifiedName);
                 const printer = createPrinter({ removeComments: true, omitTrailingSemicolon: true });
                 const sourceFile = enclosingDeclaration && getSourceFileOfNode(enclosingDeclaration);
-                printer.writeNode(EmitHint.Unspecified, sig!, /*sourceFile*/ sourceFile, getTrailingSemicolonOmittingWriter(writer)); // TODO: GH#18217
+                printer.writeNode(EmitHint.Unspecified, sig!, /*sourceFile*/ sourceFile, getTrailingSemicolonDeferringWriter(writer)); // TODO: GH#18217
                 return writer;
             }
         }
@@ -12885,7 +12885,7 @@ namespace ts {
                 // and we need to handle "each" relations before "some" relations for the same kind of type.
                 if (source.flags & TypeFlags.Union) {
                     result = relation === comparableRelation ?
-                        someTypeRelatedToType(source as UnionType, target, reportErrors && !(source.flags & TypeFlags.Primitive)) :
+                        someTypeRelatedToType(source as UnionType, target, reportErrors && !(source.flags & TypeFlags.Primitive), isIntersectionConstituent) :
                         eachTypeRelatedToType(source as UnionType, target, reportErrors && !(source.flags & TypeFlags.Primitive));
                 }
                 else {
@@ -12923,7 +12923,7 @@ namespace ts {
                         //
                         //    - For a primitive type or type parameter (such as 'number = A & B') there is no point in
                         //          breaking the intersection apart.
-                        result = someTypeRelatedToType(<IntersectionType>source, target, /*reportErrors*/ false);
+                        result = someTypeRelatedToType(<IntersectionType>source, target, /*reportErrors*/ false, /*isIntersectionConstituent*/ true);
                     }
                     if (!result && (source.flags & TypeFlags.StructuredOrInstantiable || target.flags & TypeFlags.StructuredOrInstantiable)) {
                         if (result = recursiveTypeRelatedTo(source, target, reportErrors, isIntersectionConstituent)) {
@@ -13202,14 +13202,14 @@ namespace ts {
                 return result;
             }
 
-            function someTypeRelatedToType(source: UnionOrIntersectionType, target: Type, reportErrors: boolean): Ternary {
+            function someTypeRelatedToType(source: UnionOrIntersectionType, target: Type, reportErrors: boolean, isIntersectionConstituent: boolean): Ternary {
                 const sourceTypes = source.types;
                 if (source.flags & TypeFlags.Union && containsType(sourceTypes, target)) {
                     return Ternary.True;
                 }
                 const len = sourceTypes.length;
                 for (let i = 0; i < len; i++) {
-                    const related = isRelatedTo(sourceTypes[i], target, reportErrors && i === len - 1);
+                    const related = isRelatedTo(sourceTypes[i], target, reportErrors && i === len - 1, /*headMessage*/ undefined, isIntersectionConstituent);
                     if (related) {
                         return related;
                     }
@@ -14549,6 +14549,9 @@ namespace ts {
         // though highly unlikely, for this test to be true in a situation where a chain of instantiations is not infinitely
         // expanding. Effectively, we will generate a false positive when two types are structurally equal to at least 5
         // levels, but unequal at some level beyond that.
+        // In addition, this will also detect when an indexed access has been chained off of 5 or more times (which is essentially
+        // the dual of the structural comparison), and likewise mark the type as deeply nested, potentially adding false positives
+        // for finite but deeply expanding indexed accesses (eg, for `Q[P1][P2][P3][P4][P5]`).
         function isDeeplyNestedType(type: Type, stack: Type[], depth: number): boolean {
             // We track all object types that have an associated symbol (representing the origin of the type)
             if (depth >= 5 && type.flags & TypeFlags.Object) {
@@ -14564,7 +14567,29 @@ namespace ts {
                     }
                 }
             }
+            if (depth >= 5 && type.flags & TypeFlags.IndexedAccess) {
+                const root = getRootObjectTypeFromIndexedAccessChain(type);
+                let count = 0;
+                for (let i = 0; i < depth; i++) {
+                    const t = stack[i];
+                    if (getRootObjectTypeFromIndexedAccessChain(t) === root) {
+                        count++;
+                        if (count >= 5) return true;
+                    }
+                }
+            }
             return false;
+        }
+
+        /**
+         * Gets the leftmost object type in a chain of indexed accesses, eg, in A[P][Q], returns A
+         */
+        function getRootObjectTypeFromIndexedAccessChain(type: Type) {
+            let t = type;
+            while (t.flags & TypeFlags.IndexedAccess) {
+                t = (t as IndexedAccessType).objectType;
+            }
+            return t;
         }
 
         function isPropertyIdenticalTo(sourceProp: Symbol, targetProp: Symbol): boolean {
@@ -15568,41 +15593,47 @@ namespace ts {
                     return;
                 }
                 if (target.flags & TypeFlags.Union) {
-                    if (source.flags & TypeFlags.Union) {
-                        // First, infer between identically matching source and target constituents and remove the
-                        // matching types.
-                        const [tempSources, tempTargets] = inferFromMatchingTypes((<UnionType>source).types, (<UnionType>target).types, isTypeOrBaseIdenticalTo);
-                        // Next, infer between closely matching source and target constituents and remove
-                        // the matching types. Types closely match when they are instantiations of the same
-                        // object type or instantiations of the same type alias.
-                        const [sources, targets] = inferFromMatchingTypes(tempSources, tempTargets, isTypeCloselyMatchedBy);
-                        if (sources.length === 0 || targets.length === 0) {
-                            return;
-                        }
-                        source = getUnionType(sources);
-                        target = getUnionType(targets);
+                    // First, infer between identically matching source and target constituents and remove the
+                    // matching types.
+                    const [tempSources, tempTargets] = inferFromMatchingTypes(source.flags & TypeFlags.Union ? (<UnionType>source).types : [source], (<UnionType>target).types, isTypeOrBaseIdenticalTo);
+                    // Next, infer between closely matching source and target constituents and remove
+                    // the matching types. Types closely match when they are instantiations of the same
+                    // object type or instantiations of the same type alias.
+                    const [sources, targets] = inferFromMatchingTypes(tempSources, tempTargets, isTypeCloselyMatchedBy);
+                    if (targets.length === 0) {
+                        return;
                     }
-                    else {
-                        if (inferFromMatchingType(source, (<UnionType>target).types, isTypeOrBaseIdenticalTo)) return;
-                        if (inferFromMatchingType(source, (<UnionType>target).types, isTypeCloselyMatchedBy)) return;
+                    target = getUnionType(targets);
+                    if (sources.length === 0) {
+                        // All source constituents have been matched and there is nothing further to infer from.
+                        // However, simply making no inferences is undesirable because it could ultimately mean
+                        // inferring a type parameter constraint. Instead, make a lower priority inference from
+                        // the full source to whatever remains in the target. For example, when inferring from
+                        // string to 'string | T', make a lower priority inference of string for T.
+                        const savePriority = priority;
+                        priority |= InferencePriority.NakedTypeVariable;
+                        inferFromTypes(source, target);
+                        priority = savePriority;
+                        return;
                     }
+                    source = getUnionType(sources);
                 }
-                else if (target.flags & TypeFlags.Intersection && some((<IntersectionType>target).types, t => !!getInferenceInfoForType(t))) {
+                else if (target.flags & TypeFlags.Intersection && some((<IntersectionType>target).types,
+                    t => !!getInferenceInfoForType(t) || (isGenericMappedType(t) && !!getInferenceInfoForType(getHomomorphicTypeVariable(t) || neverType)))) {
                     // We reduce intersection types only when they contain naked type parameters. For example, when
                     // inferring from 'string[] & { extra: any }' to 'string[] & T' we want to remove string[] and
                     // infer { extra: any } for T. But when inferring to 'string[] & Iterable<T>' we want to keep the
                     // string[] on the source side and infer string for T.
-                    if (source.flags & TypeFlags.Intersection) {
+                    // Likewise, we consider a homomorphic mapped type constrainted to the target type parameter as similar to a "naked type variable"
+                    // in such scenarios.
+                    if (!(source.flags & TypeFlags.Union)) {
                         // Infer between identically matching source and target constituents and remove the matching types.
-                        const [sources, targets] = inferFromMatchingTypes((<IntersectionType>source).types, (<IntersectionType>target).types, isTypeIdenticalTo);
+                        const [sources, targets] = inferFromMatchingTypes(source.flags & TypeFlags.Intersection ? (<IntersectionType>source).types : [source], (<IntersectionType>target).types, isTypeIdenticalTo);
                         if (sources.length === 0 || targets.length === 0) {
                             return;
                         }
                         source = getIntersectionType(sources);
                         target = getIntersectionType(targets);
-                    }
-                    else if (!(source.flags & TypeFlags.Union)) {
-                        if (inferFromMatchingType(source, (<IntersectionType>target).types, isTypeIdenticalTo)) return;
                     }
                 }
                 else if (target.flags & (TypeFlags.IndexedAccess | TypeFlags.Substitution)) {
@@ -15751,17 +15782,6 @@ namespace ts {
                 action(source, target);
                 visited.set(key, inferencePriority);
                 inferencePriority = Math.min(inferencePriority, saveInferencePriority);
-            }
-
-            function inferFromMatchingType(source: Type, targets: Type[], matches: (s: Type, t: Type) => boolean) {
-                let matched = false;
-                for (const t of targets) {
-                    if (matches(source, t)) {
-                        inferFromTypes(source, t);
-                        matched = true;
-                    }
-                }
-                return matched;
             }
 
             function inferFromMatchingTypes(sources: Type[], targets: Type[], matches: (s: Type, t: Type) => boolean): [Type[], Type[]] {
@@ -21578,13 +21598,13 @@ namespace ts {
             checkMode: CheckMode,
             reportErrors: boolean,
             containingMessageChain: (() => DiagnosticMessageChain | undefined) | undefined,
-        ) {
+        ): ReadonlyArray<Diagnostic> | undefined {
 
             const errorOutputContainer: { errors?: Diagnostic[], skipLogging?: boolean } = { errors: undefined, skipLogging: true };
             if (isJsxOpeningLikeElement(node)) {
                 if (!checkApplicableSignatureForJsxOpeningLikeElement(node, signature, relation, checkMode, reportErrors, containingMessageChain, errorOutputContainer)) {
                     Debug.assert(!reportErrors || !!errorOutputContainer.errors, "jsx should have errors when reporting errors");
-                    return errorOutputContainer.errors || [];
+                    return errorOutputContainer.errors || emptyArray;
                 }
                 return undefined;
             }
@@ -21599,7 +21619,7 @@ namespace ts {
                 const headMessage = Diagnostics.The_this_context_of_type_0_is_not_assignable_to_method_s_this_of_type_1;
                 if (!checkTypeRelatedTo(thisArgumentType, thisType, relation, errorNode, headMessage, containingMessageChain, errorOutputContainer)) {
                     Debug.assert(!reportErrors || !!errorOutputContainer.errors, "this parameter should have errors when reporting errors");
-                    return errorOutputContainer.errors || [];
+                    return errorOutputContainer.errors || emptyArray;
                 }
             }
             const headMessage = Diagnostics.Argument_of_type_0_is_not_assignable_to_parameter_of_type_1;
@@ -21617,7 +21637,7 @@ namespace ts {
                     if (!checkTypeRelatedToAndOptionallyElaborate(checkArgType, paramType, relation, reportErrors ? arg : undefined, arg, headMessage, containingMessageChain, errorOutputContainer)) {
                         Debug.assert(!reportErrors || !!errorOutputContainer.errors, "parameter should have errors when reporting errors");
                         maybeAddMissingAwaitInfo(arg, checkArgType, paramType);
-                        return errorOutputContainer.errors || [];
+                        return errorOutputContainer.errors || emptyArray;
                     }
                 }
             }
@@ -21627,7 +21647,7 @@ namespace ts {
                 if (!checkTypeRelatedTo(spreadType, restType, relation, errorNode, headMessage, /*containingMessageChain*/ undefined, errorOutputContainer)) {
                     Debug.assert(!reportErrors || !!errorOutputContainer.errors, "rest parameter should have errors when reporting errors");
                     maybeAddMissingAwaitInfo(errorNode, spreadType, restType);
-                    return errorOutputContainer.errors || [];
+                    return errorOutputContainer.errors || emptyArray;
                 }
             }
             return undefined;
@@ -22018,7 +22038,7 @@ namespace ts {
                         }
                     }
                     else {
-                        const allDiagnostics: DiagnosticRelatedInformation[][] = [];
+                        const allDiagnostics: (readonly DiagnosticRelatedInformation[])[] = [];
                         let max = 0;
                         let min = Number.MAX_VALUE;
                         let minIndex = 0;

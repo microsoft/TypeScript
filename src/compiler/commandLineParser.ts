@@ -147,6 +147,7 @@ namespace ts {
             type: "boolean",
             category: Diagnostics.Basic_Options,
             description: Diagnostics.Enable_incremental_compilation,
+            transpileOptionValue: undefined
         },
         {
             name: "locale",
@@ -262,7 +263,8 @@ namespace ts {
             affectsModuleResolution: true,
             showInSimplifiedHelpView: true,
             category: Diagnostics.Basic_Options,
-            description: Diagnostics.Specify_library_files_to_be_included_in_the_compilation
+            description: Diagnostics.Specify_library_files_to_be_included_in_the_compilation,
+            transpileOptionValue: undefined
         },
         {
             name: "allowJs",
@@ -299,6 +301,7 @@ namespace ts {
             showInSimplifiedHelpView: true,
             category: Diagnostics.Basic_Options,
             description: Diagnostics.Generates_corresponding_d_ts_file,
+            transpileOptionValue: undefined
         },
         {
             name: "declarationMap",
@@ -307,6 +310,7 @@ namespace ts {
             showInSimplifiedHelpView: true,
             category: Diagnostics.Basic_Options,
             description: Diagnostics.Generates_a_sourcemap_for_each_corresponding_d_ts_file,
+            transpileOptionValue: undefined
         },
         {
             name: "emitDeclarationOnly",
@@ -314,6 +318,7 @@ namespace ts {
             affectsEmit: true,
             category: Diagnostics.Advanced_Options,
             description: Diagnostics.Only_emit_d_ts_declaration_files,
+            transpileOptionValue: undefined
         },
         {
             name: "sourceMap",
@@ -332,6 +337,7 @@ namespace ts {
             showInSimplifiedHelpView: true,
             category: Diagnostics.Basic_Options,
             description: Diagnostics.Concatenate_and_emit_output_to_single_file,
+            transpileOptionValue: undefined
         },
         {
             name: "outDir",
@@ -359,6 +365,7 @@ namespace ts {
             isTSConfigOnly: true,
             category: Diagnostics.Basic_Options,
             description: Diagnostics.Enable_project_compilation,
+            transpileOptionValue: undefined
         },
         {
             name: "tsBuildInfoFile",
@@ -368,6 +375,7 @@ namespace ts {
             paramType: Diagnostics.FILE,
             category: Diagnostics.Basic_Options,
             description: Diagnostics.Specify_file_to_store_incremental_compilation_information,
+            transpileOptionValue: undefined
         },
         {
             name: "removeComments",
@@ -384,6 +392,7 @@ namespace ts {
             showInSimplifiedHelpView: true,
             category: Diagnostics.Basic_Options,
             description: Diagnostics.Do_not_emit_outputs,
+            transpileOptionValue: undefined
         },
         {
             name: "importHelpers",
@@ -403,7 +412,8 @@ namespace ts {
             name: "isolatedModules",
             type: "boolean",
             category: Diagnostics.Basic_Options,
-            description: Diagnostics.Transpile_each_file_as_a_separate_module_similar_to_ts_transpileModule
+            description: Diagnostics.Transpile_each_file_as_a_separate_module_similar_to_ts_transpileModule,
+            transpileOptionValue: true
         },
 
         // Strict Type Checks
@@ -540,7 +550,8 @@ namespace ts {
             affectsModuleResolution: true,
             isTSConfigOnly: true,
             category: Diagnostics.Module_Resolution_Options,
-            description: Diagnostics.A_series_of_entries_which_re_map_imports_to_lookup_locations_relative_to_the_baseUrl
+            description: Diagnostics.A_series_of_entries_which_re_map_imports_to_lookup_locations_relative_to_the_baseUrl,
+            transpileOptionValue: undefined
         },
         {
             // this option can only be specified in tsconfig.json
@@ -555,7 +566,8 @@ namespace ts {
             },
             affectsModuleResolution: true,
             category: Diagnostics.Module_Resolution_Options,
-            description: Diagnostics.List_of_root_folders_whose_combined_content_represents_the_structure_of_the_project_at_runtime
+            description: Diagnostics.List_of_root_folders_whose_combined_content_represents_the_structure_of_the_project_at_runtime,
+            transpileOptionValue: undefined
         },
         {
             name: "typeRoots",
@@ -579,7 +591,8 @@ namespace ts {
             affectsModuleResolution: true,
             showInSimplifiedHelpView: true,
             category: Diagnostics.Module_Resolution_Options,
-            description: Diagnostics.Type_declaration_files_to_be_included_in_compilation
+            description: Diagnostics.Type_declaration_files_to_be_included_in_compilation,
+            transpileOptionValue: undefined
         },
         {
             name: "allowSyntheticDefaultImports",
@@ -680,6 +693,7 @@ namespace ts {
             category: Diagnostics.Advanced_Options,
             paramType: Diagnostics.FILE,
             description: Diagnostics.Deprecated_Use_outFile_instead_Concatenate_and_emit_output_to_single_file,
+            transpileOptionValue: undefined
         },
         {
             name: "reactNamespace",
@@ -729,14 +743,20 @@ namespace ts {
             type: "boolean",
             affectsModuleResolution: true,
             category: Diagnostics.Advanced_Options,
-            description: Diagnostics.Do_not_include_the_default_library_file_lib_d_ts
+            description: Diagnostics.Do_not_include_the_default_library_file_lib_d_ts,
+            // We are not returning a sourceFile for lib file when asked by the program,
+            // so pass --noLib to avoid reporting a file not found error.
+            transpileOptionValue: true
         },
         {
             name: "noResolve",
             type: "boolean",
             affectsModuleResolution: true,
             category: Diagnostics.Advanced_Options,
-            description: Diagnostics.Do_not_add_triple_slash_references_or_imported_modules_to_the_list_of_compiled_files
+            description: Diagnostics.Do_not_add_triple_slash_references_or_imported_modules_to_the_list_of_compiled_files,
+            // We are not doing a full typecheck, we are not resolving the whole context,
+            // so pass --noResolve to avoid reporting missing file errors.
+            transpileOptionValue: true
         },
         {
             name: "stripInternal",
@@ -772,6 +792,7 @@ namespace ts {
             affectsEmit: true,
             category: Diagnostics.Advanced_Options,
             description: Diagnostics.Do_not_emit_outputs_if_any_errors_were_reported,
+            transpileOptionValue: undefined
         },
         {
             name: "preserveConstEnums",
@@ -787,7 +808,8 @@ namespace ts {
             isFilePath: true,
             paramType: Diagnostics.DIRECTORY,
             category: Diagnostics.Advanced_Options,
-            description: Diagnostics.Output_directory_for_generated_declaration_files
+            description: Diagnostics.Output_directory_for_generated_declaration_files,
+            transpileOptionValue: undefined
         },
         {
             name: "skipLibCheck",
@@ -879,6 +901,10 @@ namespace ts {
     /* @internal */
     export const sourceFileAffectingCompilerOptions: ReadonlyArray<CommandLineOption> = optionDeclarations.filter(option =>
         !!option.affectsSourceFile || !!option.affectsModuleResolution || !!option.affectsBindDiagnostics);
+
+    /* @internal */
+    export const transpileOptionValueCompilerOptions: ReadonlyArray<CommandLineOption> = optionDeclarations.filter(option =>
+        hasProperty(option, "transpileOptionValue"));
 
     /* @internal */
     export const buildOpts: CommandLineOption[] = [

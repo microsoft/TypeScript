@@ -372,7 +372,8 @@ namespace ts {
                 errorCount => result.onWatchStatusChange!(
                     createCompilerDiagnostic(getWatchErrorSummaryDiagnosticMessage(errorCount), errorCount),
                     newLine,
-                    compilerOptions
+                    compilerOptions,
+                    errorCount
                 )
             );
         };
@@ -480,14 +481,14 @@ namespace ts {
         return createProgram(rootNames, options, host, oldProgram, configFileParsingDiagnostics, projectReferences);
     }
 
-    export type WatchStatusReporter = (diagnostic: Diagnostic, newLine: string, options: CompilerOptions) => void;
+    export type WatchStatusReporter = (diagnostic: Diagnostic, newLine: string, options: CompilerOptions, errorCount?: number) => void;
     /** Create the program with rootNames and options, if they are undefined, oldProgram and new configFile diagnostics create new program */
     export type CreateProgram<T extends BuilderProgram> = (rootNames: ReadonlyArray<string> | undefined, options: CompilerOptions | undefined, host?: CompilerHost, oldProgram?: T, configFileParsingDiagnostics?: ReadonlyArray<Diagnostic>, projectReferences?: ReadonlyArray<ProjectReference> | undefined) => T;
 
     /** Host that has watch functionality used in --watch mode */
     export interface WatchHost {
         /** If provided, called with Diagnostic message that informs about change in watch status */
-        onWatchStatusChange?(diagnostic: Diagnostic, newLine: string, options: CompilerOptions): void;
+        onWatchStatusChange?(diagnostic: Diagnostic, newLine: string, options: CompilerOptions, errorCount?: number): void;
 
         /** Used to watch changes in source files, missing files needed to update the program or config file */
         watchFile(path: string, callback: FileWatcherCallback, pollingInterval?: number): FileWatcher;

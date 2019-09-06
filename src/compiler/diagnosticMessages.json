@@ -5120,6 +5120,10 @@
         "category": "Message",
         "code": 95089
     },
+    "Extract to interface": {
+        "category": "Message",
+        "code": 95090
+    },
 
     "No value exists in scope for the shorthand property '{0}'. Either declare one or provide an initializer.": {
         "category": "Error",

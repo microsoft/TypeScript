@@ -1,5 +1,8 @@
 === tests/cases/conformance/classes/propertyMemberDeclarations/instanceMemberWithComputedPropertyName.ts ===
 // https://github.com/microsoft/TypeScript/issues/30953
+"use strict";
+>"use strict" : "use strict"
+
 const x = 1;
 >x : 1
 >1 : 1
