@@ -433,6 +433,53 @@ namespace ts.codefix {
             inferredTypes: Type[] | undefined;
         }
 
+        function createEmptyUsage(): Usage {
+            return {
+                isNumber: undefined,
+                isString: undefined,
+                isNumberOrString: undefined,
+                candidateTypes: undefined,
+                properties: undefined,
+                calls: undefined,
+                constructs: undefined,
+                numberIndex: undefined,
+                stringIndex: undefined,
+                candidateThisTypes: undefined,
+                inferredTypes: undefined,
+            };
+        }
+
+        function combineUsages(usages: Usage[]): Usage {
+            const combinedProperties = createUnderscoreEscapedMap<Usage[]>();
+            for (const u of usages) {
+                if (u.properties) {
+                    u.properties.forEach((p, name) => {
+                        if (!combinedProperties.has(name)) {
+                            combinedProperties.set(name, []);
+                        }
+                        combinedProperties.get(name)!.push(p);
+                    });
+                }
+            }
+            const properties = createUnderscoreEscapedMap<Usage>();
+            combinedProperties.forEach((ps, name) => {
+                properties.set(name, combineUsages(ps));
+            });
+            return {
+                isNumber: usages.some(u => u.isNumber),
+                isString: usages.some(u => u.isString),
+                isNumberOrString: usages.some(u => u.isNumberOrString),
+                candidateTypes: flatMap(usages, u => u.candidateTypes) as Type[],
+                properties,
+                calls: flatMap(usages, u => u.calls) as CallUsage[],
+                constructs: flatMap(usages, u => u.constructs) as CallUsage[],
+                numberIndex: forEach(usages, u => u.numberIndex),
+                stringIndex: forEach(usages, u => u.stringIndex),
+                candidateThisTypes: flatMap(usages, u => u.candidateThisTypes) as Type[],
+                inferredTypes: undefined, // clear type cache
+            };
+        }
+
         function single(): Type {
             return unifyTypes(inferTypesFromReferencesSingle(references));
         }
@@ -767,6 +814,10 @@ namespace ts.codefix {
             return inferences.filter(i => toRemove.every(f => !f(i)));
         }
 
+        function unifyFromUsage(usage: Usage) {
+            return unifyTypes(inferFromUsage(usage));
+        }
+
         function unifyTypes(inferences: ReadonlyArray<Type>): Type {
             if (!inferences.length) return checker.getAnyType();
 
@@ -837,7 +888,7 @@ namespace ts.codefix {
                 numberIndices.length ? checker.createIndexInfo(checker.getUnionType(numberIndices), numberIndexReadonly) : undefined);
         }
 
-        function inferFromUsage(usage: Usage) {
+        function inferFromUsage(usage: Usage): Type[] {
             const types = [];
 
             if (usage.isNumber) {
@@ -851,12 +902,20 @@ namespace ts.codefix {
             }
 
             types.push(...(usage.candidateTypes || []).map(t => checker.getBaseTypeOfLiteralType(t)));
-            types.push(...findBuiltinTypes(usage));
+            types.push(...inferNamedTypesFromProperties(usage));
 
             if (usage.numberIndex) {
-                types.push(checker.createArrayType(recur(usage.numberIndex)));
+                types.push(checker.createArrayType(unifyFromUsage(usage.numberIndex)));
             }
-            else if (usage.properties && usage.properties.size
+            const structural = inferStructuralType(usage);
+            if (structural) {
+                types.push(structural);
+            }
+            return types;
+        }
+
+        function inferStructuralType(usage: Usage) {
+            if (usage.properties && usage.properties.size
                      || usage.calls && usage.calls.length
                      || usage.constructs && usage.constructs.length
                      || usage.stringIndex) {
@@ -868,7 +927,7 @@ namespace ts.codefix {
                 if (usage.properties) {
                     usage.properties.forEach((u, name) => {
                         const symbol = checker.createSymbol(SymbolFlags.Property, name);
-                        symbol.type = recur(u);
+                        symbol.type = unifyFromUsage(u);
                         members.set(name, symbol);
                     });
                 }
@@ -882,75 +941,23 @@ namespace ts.codefix {
                 }
 
                 if (usage.stringIndex) {
-                    stringIndexInfo = checker.createIndexInfo(recur(usage.stringIndex), /*isReadonly*/ false);
+                    stringIndexInfo = checker.createIndexInfo(unifyFromUsage(usage.stringIndex), /*isReadonly*/ false);
                 }
 
-                types.push(checker.createAnonymousType(/*symbol*/ undefined!, members, callSignatures, constructSignatures, stringIndexInfo, /*numberIndexInfo*/ undefined)); // TODO: GH#18217
-            }
-            return types; // TODO: Should cache this since I HOPE it doesn't change
-
-            function recur(innerUsage: Usage): Type {
-                return unifyTypes(inferFromUsage(innerUsage));
+                return checker.createAnonymousType(/*symbol*/ undefined!, members, callSignatures, constructSignatures, stringIndexInfo, /*numberIndexInfo*/ undefined); // TODO: GH#18217
             }
         }
 
-        function createEmptyUsage(): Usage {
-            return {
-                isNumber: undefined,
-                isString: undefined,
-                isNumberOrString: undefined,
-                candidateTypes: undefined,
-                properties: undefined,
-                calls: undefined,
-                constructs: undefined,
-                numberIndex: undefined,
-                stringIndex: undefined,
-                candidateThisTypes: undefined,
-                inferredTypes: undefined,
-            }
-        }
-
-        function combineUsages(usages: Usage[]): Usage {
-            const combinedProperties = createUnderscoreEscapedMap<Usage[]>()
-            for (const u of usages) {
-                if (u.properties) {
-                    u.properties.forEach((p,name) => {
-                        if (!combinedProperties.has(name)) {
-                            combinedProperties.set(name, []);
-                        }
-                        combinedProperties.get(name)!.push(p);
-                    });
-                }
-            }
-            const properties = createUnderscoreEscapedMap<Usage>()
-            combinedProperties.forEach((ps,name) => {
-                properties.set(name, combineUsages(ps));
-            });
-            return {
-                isNumber: usages.some(u => u.isNumber),
-                isString: usages.some(u => u.isString),
-                isNumberOrString: usages.some(u => u.isNumberOrString),
-                candidateTypes: flatMap(usages, u => u.candidateTypes) as Type[],
-                properties,
-                calls: flatMap(usages, u => u.calls) as CallUsage[],
-                constructs: flatMap(usages, u => u.constructs) as CallUsage[],
-                numberIndex: forEach(usages, u => u.numberIndex),
-                stringIndex: forEach(usages, u => u.stringIndex),
-                candidateThisTypes: flatMap(usages, u => u.candidateThisTypes) as Type[],
-                inferredTypes: undefined, // clear type cache
-            }
-        }
-
-        function findBuiltinTypes(usage: Usage): Type[] {
+        function inferNamedTypesFromProperties(usage: Usage): Type[] {
             if (!usage.properties || !usage.properties.size) return [];
-            const matches = builtins.filter(t => matchesAllPropertiesOf(t, usage));
+            const matches = builtins.filter(t => allPropertiesAreAssignableToUsage(t, usage));
             if (0 < matches.length && matches.length < 3) {
-                return matches.map(m => inferTypeParameterFromUsage(m, usage));
+                return matches.map(m => inferInstantiationFromUsage(m, usage));
             }
             return [];
         }
 
-        function matchesAllPropertiesOf(type: Type, usage: Usage) {
+        function allPropertiesAreAssignableToUsage(type: Type, usage: Usage) {
             if (!usage.properties) return false;
             let result = true;
             usage.properties.forEach((propUsage, name) => {
@@ -960,34 +967,34 @@ namespace ts.codefix {
                     return;
                 }
                 if (propUsage.calls) {
-                    const sigs = checker.getSignaturesOfType(source, ts.SignatureKind.Call);
+                    const sigs = checker.getSignaturesOfType(source, SignatureKind.Call);
                     result = result && !!sigs.length && checker.isTypeAssignableTo(source, getFunctionFromCalls(propUsage.calls));
                 }
                 else {
-                    result = result && checker.isTypeAssignableTo(source, unifyTypes(inferFromUsage(propUsage)));
+                    result = result && checker.isTypeAssignableTo(source, unifyFromUsage(propUsage));
                 }
             });
             return result;
         }
 
-        // inference is limited to
-        // 1. generic types with a single parameter
-        // 2. inference to/from calls with a single signature
-        function inferTypeParameterFromUsage(type: Type, usage: Usage) {
-            if (!usage.properties || !(getObjectFlags(type) & ObjectFlags.Reference)) return type;
+        /**
+         * inference is limited to
+         * 1. generic types with a single parameter
+         * 2. inference to/from calls with a single signature
+         */
+        function inferInstantiationFromUsage(type: Type, usage: Usage) {
+            if (!(getObjectFlags(type) & ObjectFlags.Reference) || !usage.properties) {
+                return type;
+            }
             const generic = (type as TypeReference).target;
             const singleTypeParameter = singleOrUndefined(generic.typeParameters);
             if (!singleTypeParameter) return type;
 
             const types: Type[] = [];
             usage.properties.forEach((propUsage, name) => {
-                const source = checker.getTypeOfPropertyOfType(generic, name as string);
-                if (!source) {
-                    return Debug.fail("generic should have all the properties of its reference.");
-                }
-                if (!propUsage.calls) return;
-
-                types.push(...infer(source, getFunctionFromCalls(propUsage.calls), singleTypeParameter));
+                const genericPropertyType = checker.getTypeOfPropertyOfType(generic, name as string);
+                Debug.assert(!!genericPropertyType, "generic should have all the properties of its reference.");
+                types.push(...infer(genericPropertyType!, unifyFromUsage(propUsage), singleTypeParameter));
             });
             return builtinConstructors[type.symbol.escapedName as string](unifyTypes(types));
         }
@@ -1033,7 +1040,7 @@ namespace ts.codefix {
                     break;
                 }
                 let sourceType = checker.getTypeOfSymbolAtLocation(sourceParam, sourceParam.valueDeclaration);
-                let elementType = isRest && checker.getElementTypeOfArrayType(sourceType);
+                const elementType = isRest && checker.getElementTypeOfArrayType(sourceType);
                 if (elementType) {
                     sourceType = elementType;
                 }
@@ -1047,7 +1054,7 @@ namespace ts.codefix {
         }
 
         function getFunctionFromCalls(calls: CallUsage[]) {
-            return checker.createAnonymousType(undefined!, createSymbolTable(), [getSignatureFromCalls(calls)], emptyArray, undefined, undefined);
+            return checker.createAnonymousType(undefined!, createSymbolTable(), [getSignatureFromCalls(calls)], emptyArray, /*stringIndexInfo*/ undefined, /*numberIndexInfo*/ undefined);
         }
 
         function getSignatureFromCalls(calls: CallUsage[]): Signature {
@@ -1061,7 +1068,7 @@ namespace ts.codefix {
                 }
                 parameters.push(symbol);
             }
-            const returnType = unifyTypes(inferFromUsage(combineUsages(calls.map(call => call.return_))));
+            const returnType = unifyFromUsage(combineUsages(calls.map(call => call.return_)));
             // TODO: GH#18217
             return checker.createSignature(/*declaration*/ undefined!, /*typeParameters*/ undefined, /*thisParameter*/ undefined, parameters, returnType, /*typePredicate*/ undefined, length, /*hasRestParameter*/ false, /*hasLiteralTypes*/ false);
         }
