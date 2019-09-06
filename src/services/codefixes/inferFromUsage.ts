@@ -743,7 +743,6 @@ namespace ts.codefix {
 
             if (parent.arguments) {
                 for (const argument of parent.arguments) {
-                    // TODO: should recursively infer a usage here, right?
                     call.argumentTypes.push(checker.getTypeAtLocation(argument));
                 }
             }
@@ -999,57 +998,55 @@ namespace ts.codefix {
             return builtinConstructors[type.symbol.escapedName as string](unifyTypes(types));
         }
 
-        // TODO: Source and target are bad names. Should be builtinType and usageType...or something
-        // and search is a bad name
-        function infer(source: Type, target: Type, search: Type): readonly Type[] {
-            if (source === search) {
-                return [target];
+        function infer(genericType: Type, usageType: Type, typeParameter: Type): readonly Type[] {
+            if (genericType === typeParameter) {
+                return [usageType];
             }
-            else if (source.flags & TypeFlags.UnionOrIntersection) {
-                return flatMap((source as UnionOrIntersectionType).types, t => infer(t, target, search));
+            else if (genericType.flags & TypeFlags.UnionOrIntersection) {
+                return flatMap((genericType as UnionOrIntersectionType).types, t => infer(t, usageType, typeParameter));
             }
-            else if (getObjectFlags(source) & ObjectFlags.Reference && getObjectFlags(target) & ObjectFlags.Reference) {
+            else if (getObjectFlags(genericType) & ObjectFlags.Reference && getObjectFlags(usageType) & ObjectFlags.Reference) {
                 // this is wrong because we need a reference to the targetType to, so we can check that it's also a reference
-                const sourceArgs = (source as TypeReference).typeArguments;
-                const targetArgs = (target as TypeReference).typeArguments;
+                const genericArgs = (genericType as TypeReference).typeArguments;
+                const usageArgs = (usageType as TypeReference).typeArguments;
                 const types = [];
-                if (sourceArgs && targetArgs) {
-                    for (let i = 0; i < sourceArgs.length; i++) {
-                        if (targetArgs[i]) {
-                            types.push(...infer(sourceArgs[i], targetArgs[i], search));
+                if (genericArgs && usageArgs) {
+                    for (let i = 0; i < genericArgs.length; i++) {
+                        if (usageArgs[i]) {
+                            types.push(...infer(genericArgs[i], usageArgs[i], typeParameter));
                         }
                     }
                 }
                 return types;
             }
-            const sourceSigs = checker.getSignaturesOfType(source, SignatureKind.Call);
-            const targetSigs = checker.getSignaturesOfType(target, SignatureKind.Call);
-            if (sourceSigs.length === 1 && targetSigs.length === 1) {
-                return inferFromSignatures(sourceSigs[0], targetSigs[0], search);
+            const genericSigs = checker.getSignaturesOfType(genericType, SignatureKind.Call);
+            const usageSigs = checker.getSignaturesOfType(usageType, SignatureKind.Call);
+            if (genericSigs.length === 1 && usageSigs.length === 1) {
+                return inferFromSignatures(genericSigs[0], usageSigs[0], typeParameter);
             }
             return [];
         }
 
-        function inferFromSignatures(sourceSig: Signature, targetSig: Signature, search: Type) {
+        function inferFromSignatures(genericSig: Signature, usageSig: Signature, typeParameter: Type) {
             const types = [];
-            for (let i = 0; i < sourceSig.parameters.length; i++) {
-                const sourceParam = sourceSig.parameters[i];
-                const targetParam = targetSig.parameters[i];
-                const isRest = sourceSig.declaration && isRestParameter(sourceSig.declaration.parameters[i]);
-                if (!targetParam) {
+            for (let i = 0; i < genericSig.parameters.length; i++) {
+                const genericParam = genericSig.parameters[i];
+                const usageParam = usageSig.parameters[i];
+                const isRest = genericSig.declaration && isRestParameter(genericSig.declaration.parameters[i]);
+                if (!usageParam) {
                     break;
                 }
-                let sourceType = checker.getTypeOfSymbolAtLocation(sourceParam, sourceParam.valueDeclaration);
-                const elementType = isRest && checker.getElementTypeOfArrayType(sourceType);
+                let genericParamType = checker.getTypeOfSymbolAtLocation(genericParam, genericParam.valueDeclaration);
+                const elementType = isRest && checker.getElementTypeOfArrayType(genericParamType);
                 if (elementType) {
-                    sourceType = elementType;
+                    genericParamType = elementType;
                 }
-                const targetType = (targetParam as SymbolLinks).type || checker.getTypeOfSymbolAtLocation(targetParam, targetParam.valueDeclaration);
-                types.push(...infer(sourceType, targetType, search));
+                const targetType = (usageParam as SymbolLinks).type || checker.getTypeOfSymbolAtLocation(usageParam, usageParam.valueDeclaration);
+                types.push(...infer(genericParamType, targetType, typeParameter));
             }
-            const sourceReturn = checker.getReturnTypeOfSignature(sourceSig);
-            const targetReturn = checker.getReturnTypeOfSignature(targetSig);
-            types.push(...infer(sourceReturn, targetReturn, search));
+            const genericReturn = checker.getReturnTypeOfSignature(genericSig);
+            const usageReturn = checker.getReturnTypeOfSignature(usageSig);
+            types.push(...infer(genericReturn, usageReturn, typeParameter));
             return types;
         }
 
