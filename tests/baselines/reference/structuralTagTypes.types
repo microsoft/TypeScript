@@ -1,0 +1,174 @@
+=== tests/cases/conformance/types/structuralTags/structuralTagTypes.ts ===
+export type Downcased = string & tag { downcased: void; };
+>Downcased : Downcased
+>downcased : void
+
+export type Analyzed<T> = T & tag { analyzed: void; };
+>Analyzed : Analyzed<T>
+>analyzed : void
+
+export type Paired = {
+>Paired : Paired
+
+    x: number & tag {x: number;};
+>x : number & tag { x: number; }
+>x : number
+
+    y: number & tag {y: number;};
+>y : number & tag { y: number; }
+>y : number
+
+};
+
+export function downcase(x: string): Downcased {
+>downcase : (x: string) => Downcased
+>x : string
+
+    return x.toLocaleLowerCase() as Downcased;
+>x.toLocaleLowerCase() as Downcased : Downcased
+>x.toLocaleLowerCase() : string
+>x.toLocaleLowerCase : (locales?: string | string[]) => string
+>x : string
+>toLocaleLowerCase : (locales?: string | string[]) => string
+}
+
+export function downcaseLit<T extends string>(x: T): T & Downcased {
+>downcaseLit : <T extends string>(x: T) => T & string & tag { downcased: void; }
+>x : T
+
+    return x.toLocaleLowerCase() as T & Downcased;
+>x.toLocaleLowerCase() as T & Downcased : T & string & tag { downcased: void; }
+>x.toLocaleLowerCase() : string
+>x.toLocaleLowerCase : (locales?: string | string[]) => string
+>x : T
+>toLocaleLowerCase : (locales?: string | string[]) => string
+}
+
+export function isDowncase(x: string): x is Downcased {
+>isDowncase : (x: string) => x is Downcased
+>x : string
+
+    return null as any;
+>null as any : any
+>null : null
+}
+
+export function analyze<T>(x: T): Analyzed<T> {
+>analyze : <T>(x: T) => Analyzed<T>
+>x : T
+
+    return x as Analyzed<T>;
+>x as Analyzed<T> : Analyzed<T>
+>x : T
+}
+
+export function isAnalyzed<T>(x: T): x is Analyzed<T> {
+>isAnalyzed : <T>(x: T) => x is Analyzed<T>
+>x : T
+
+    return Math.random() > 0.33 ? false : true;
+>Math.random() > 0.33 ? false : true : boolean
+>Math.random() > 0.33 : boolean
+>Math.random() : number
+>Math.random : () => number
+>Math : Math
+>random : () => number
+>0.33 : 0.33
+>false : false
+>true : true
+}
+
+export function isPaired(x: {x: number, y: number}): x is Paired {
+>isPaired : (x: { x: number; y: number; }) => x is Paired
+>x : { x: number; y: number; }
+>x : number
+>y : number
+
+    return true;
+>true : true
+}
+
+export function makePair(x: number, y: number): Paired {
+>makePair : (x: number, y: number) => Paired
+>x : number
+>y : number
+
+    return {x, y} as Paired;
+>{x, y} as Paired : Paired
+>{x, y} : { x: number; y: number; }
+>x : number
+>y : number
+}
+
+const a = "ok";
+>a : "ok"
+>"ok" : "ok"
+
+export const b = downcase(a);
+>b : Downcased
+>downcase(a) : Downcased
+>downcase : (x: string) => Downcased
+>a : "ok"
+
+export const d = downcaseLit(b);
+>d : Downcased
+>downcaseLit(b) : Downcased
+>downcaseLit : <T extends string>(x: T) => T & string & tag { downcased: void; }
+>b : Downcased
+
+if (isDowncase(d)) {
+>isDowncase(d) : boolean
+>isDowncase : (x: string) => x is Downcased
+>d : Downcased
+
+    d;
+>d : Downcased
+}
+
+const e = {data: { value: "str" }};
+>e : { data: { value: string; }; }
+>{data: { value: "str" }} : { data: { value: string; }; }
+>data : { value: string; }
+>{ value: "str" } : { value: string; }
+>value : string
+>"str" : "str"
+
+export const f = analyze(e);
+>f : Analyzed<{ data: { value: string; }; }>
+>analyze(e) : Analyzed<{ data: { value: string; }; }>
+>analyze : <T>(x: T) => Analyzed<T>
+>e : { data: { value: string; }; }
+
+if (isAnalyzed(e)) {
+>isAnalyzed(e) : boolean
+>isAnalyzed : <T>(x: T) => x is Analyzed<T>
+>e : { data: { value: string; }; }
+
+    e;
+>e : Analyzed<{ data: { value: string; }; }>
+}
+
+export const g = makePair(0, 0);
+>g : Paired
+>makePair(0, 0) : Paired
+>makePair : (x: number, y: number) => Paired
+>0 : 0
+>0 : 0
+
+const h = {x: 0, y: 0};
+>h : { x: number; y: number; }
+>{x: 0, y: 0} : { x: number; y: number; }
+>x : number
+>0 : 0
+>y : number
+>0 : 0
+
+if (isPaired(h)) {
+>isPaired(h) : boolean
+>isPaired : (x: { x: number; y: number; }) => x is Paired
+>h : { x: number; y: number; }
+
+    h;
+>h : Paired
+}
+

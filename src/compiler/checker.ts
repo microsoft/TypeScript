@@ -629,6 +629,7 @@ namespace ts {
         const literalTypes = createMap<LiteralType>();
         const indexedAccessTypes = createMap<IndexedAccessType>();
         const substitutionTypes = createMap<SubstitutionType>();
+        const structuralTags = createMap<StructuralTagType>();
         const evolvingArrayTypes: EvolvingArrayType[] = [];
         const undefinedProperties = createMap<Symbol>() as UnderscoreEscapedMap<Symbol>;
 
@@ -3795,6 +3796,10 @@ namespace ts {
                 }
                 if (type.flags & TypeFlags.Substitution) {
                     return typeToTypeNodeHelper((<SubstitutionType>type).typeVariable, context);
+                }
+                if (type.flags & TypeFlags.StructuralTag) {
+                    context.approximateLength += 4;
+                    return createTypeOperatorNode(SyntaxKind.TagKeyword, typeToTypeNodeHelper((type as StructuralTagType).type, context));
                 }
 
                 return Debug.fail("Should be unreachable.");
@@ -8102,6 +8107,9 @@ namespace ts {
                 if (t.flags & TypeFlags.Substitution) {
                     return getBaseConstraint((<SubstitutionType>t).substitute);
                 }
+                if (t.flags & TypeFlags.StructuralTag) {
+                    return unknownType;
+                }
                 return t;
             }
         }
@@ -9924,10 +9932,10 @@ namespace ts {
             return links.resolvedType;
         }
 
-        function addTypeToIntersection(typeSet: Map<Type>, includes: TypeFlags, type: Type) {
+        function addTypeToIntersection(typeSet: Map<Type>, includes: TypeFlags, type: Type, tagSet: Map<StructuralTagType>) {
             const flags = type.flags;
             if (flags & TypeFlags.Intersection) {
-                return addTypesToIntersection(typeSet, includes, (<IntersectionType>type).types);
+                return addTypesToIntersection(typeSet, includes, (<IntersectionType>type).types, tagSet);
             }
             if (isEmptyAnonymousObjectType(type)) {
                 if (!(includes & TypeFlags.IncludesEmptyObject)) {
@@ -9938,6 +9946,9 @@ namespace ts {
             else {
                 if (flags & TypeFlags.AnyOrUnknown) {
                     if (type === wildcardType) includes |= TypeFlags.IncludesWildcard;
+                }
+                else if (flags & TypeFlags.StructuralTag) {
+                    tagSet.set(type.id.toString(), type as StructuralTagType);
                 }
                 else if ((strictNullChecks || !(flags & TypeFlags.Nullable)) && !typeSet.has(type.id.toString())) {
                     if (type.flags & TypeFlags.Unit && includes & TypeFlags.Unit) {
@@ -9954,9 +9965,23 @@ namespace ts {
 
         // Add the given types to the given type set. Order is preserved, freshness is removed from literal
         // types, duplicates are removed, and nested types of the given kind are flattened into the set.
-        function addTypesToIntersection(typeSet: Map<Type>, includes: TypeFlags, types: readonly Type[]) {
+        function addTypesToIntersection(typeSet: Map<Type>, includes: TypeFlags, types: readonly Type[], tagSet?: Map<StructuralTagType> | undefined) {
+            const isTopLevel = !tagSet;
+            tagSet = tagSet || createMap();
             for (const type of types) {
-                includes = addTypeToIntersection(typeSet, includes, getRegularTypeOfLiteralType(type));
+                includes = addTypeToIntersection(typeSet, includes, getRegularTypeOfLiteralType(type), tagSet);
+            }
+            if (isTopLevel && tagSet.size) {
+                let tag: StructuralTagType;
+                if (tagSet.size === 1) {
+                    tag = tagSet.values().next().value;
+                }
+                else {
+                    const tagTypes: Type[] = [];
+                    tagSet.forEach(t => tagTypes.push(t.type));
+                    tag = getStructuralTagForType(getIntersectionType(tagTypes));
+                }
+                typeSet.set(tag.id.toString(), tag);
             }
             return includes;
         }
@@ -10258,6 +10283,11 @@ namespace ts {
                     case SyntaxKind.ReadonlyKeyword:
                         links.resolvedType = getTypeFromTypeNode(node.type);
                         break;
+                    case SyntaxKind.TagKeyword:
+                        const aliasSymbol = getAliasSymbolForTypeNode(node);
+                        const aliasParams = getTypeArgumentsForAliasSymbol(aliasSymbol);
+                        links.resolvedType = getStructuralTagForType(getTypeFromTypeNode(node.type), aliasSymbol, aliasParams);
+                        break;
                     default:
                         throw Debug.assertNever(node.operator);
                 }
@@ -10270,6 +10300,19 @@ namespace ts {
             type.objectType = objectType;
             type.indexType = indexType;
             return type;
+        }
+
+        function getStructuralTagForType(type: Type, aliasSymbol?: Symbol, aliasTypeArguments?: readonly Type[]) {
+            const tid = "" + getTypeId(type);
+            if (structuralTags.has(tid)) {
+                return structuralTags.get(tid)!;
+            }
+            const tag = createType(TypeFlags.StructuralTag) as StructuralTagType;
+            tag.type = type;
+            tag.aliasSymbol = aliasSymbol;
+            tag.aliasTypeArguments = aliasTypeArguments;
+            structuralTags.set(tid, tag);
+            return tag;
         }
 
         /**
@@ -11702,6 +11745,10 @@ namespace ts {
                     }
                     return sub;
                 }
+            }
+            if (flags & TypeFlags.StructuralTag) {
+                const newType = instantiateType((type as StructuralTagType).type, mapper);
+                return newType !== type ? getStructuralTagForType(newType, type.aliasSymbol, instantiateTypes(type.aliasTypeArguments, mapper)) : type;
             }
             return type;
         }
@@ -13419,6 +13466,9 @@ namespace ts {
                     if (flags & TypeFlags.Substitution) {
                         return isRelatedTo((<SubstitutionType>source).substitute, (<SubstitutionType>target).substitute, /*reportErrors*/ false);
                     }
+                    if (flags & TypeFlags.StructuralTag) {
+                        return isRelatedTo((<StructuralTagType>source).type, (<StructuralTagType>target).type, /*reportErrors*/ false);
+                    }
                     return Ternary.False;
                 }
 
@@ -13520,6 +13570,12 @@ namespace ts {
                             errorInfo = saveErrorInfo;
                         }
                     }
+                }
+                else if (target.flags & TypeFlags.StructuralTag) {
+                    if (source.flags & TypeFlags.StructuralTag) {
+                        return isRelatedTo((source as StructuralTagType).type, (target as StructuralTagType).type, reportErrors);
+                    }
+                    return Ternary.False;
                 }
 
                 if (source.flags & TypeFlags.TypeVariable) {
@@ -15723,6 +15779,9 @@ namespace ts {
                     contravariant = !contravariant;
                     inferFromTypes((<IndexType>source).type, (<IndexType>target).type);
                     contravariant = !contravariant;
+                }
+                else if (source.flags & TypeFlags.StructuralTag && target.flags & TypeFlags.StructuralTag) {
+                    inferFromTypes((<StructuralTagType>source).type, (<StructuralTagType>target).type);
                 }
                 else if ((isLiteralType(source) || source.flags & TypeFlags.String) && target.flags & TypeFlags.Index) {
                     const empty = createEmptyObjectTypeFromStringLiteral(source);

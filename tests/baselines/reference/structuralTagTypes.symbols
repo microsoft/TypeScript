@@ -1,0 +1,169 @@
+=== tests/cases/conformance/types/structuralTags/structuralTagTypes.ts ===
+export type Downcased = string & tag { downcased: void; };
+>Downcased : Symbol(Downcased, Decl(structuralTagTypes.ts, 0, 0))
+>downcased : Symbol(downcased, Decl(structuralTagTypes.ts, 0, 38))
+
+export type Analyzed<T> = T & tag { analyzed: void; };
+>Analyzed : Symbol(Analyzed, Decl(structuralTagTypes.ts, 0, 58))
+>T : Symbol(T, Decl(structuralTagTypes.ts, 1, 21))
+>T : Symbol(T, Decl(structuralTagTypes.ts, 1, 21))
+>analyzed : Symbol(analyzed, Decl(structuralTagTypes.ts, 1, 35))
+
+export type Paired = {
+>Paired : Symbol(Paired, Decl(structuralTagTypes.ts, 1, 54))
+
+    x: number & tag {x: number;};
+>x : Symbol(x, Decl(structuralTagTypes.ts, 2, 22))
+>x : Symbol(x, Decl(structuralTagTypes.ts, 3, 21))
+
+    y: number & tag {y: number;};
+>y : Symbol(y, Decl(structuralTagTypes.ts, 3, 33))
+>y : Symbol(y, Decl(structuralTagTypes.ts, 4, 21))
+
+};
+
+export function downcase(x: string): Downcased {
+>downcase : Symbol(downcase, Decl(structuralTagTypes.ts, 5, 2))
+>x : Symbol(x, Decl(structuralTagTypes.ts, 7, 25))
+>Downcased : Symbol(Downcased, Decl(structuralTagTypes.ts, 0, 0))
+
+    return x.toLocaleLowerCase() as Downcased;
+>x.toLocaleLowerCase : Symbol(String.toLocaleLowerCase, Decl(lib.es5.d.ts, --, --))
+>x : Symbol(x, Decl(structuralTagTypes.ts, 7, 25))
+>toLocaleLowerCase : Symbol(String.toLocaleLowerCase, Decl(lib.es5.d.ts, --, --))
+>Downcased : Symbol(Downcased, Decl(structuralTagTypes.ts, 0, 0))
+}
+
+export function downcaseLit<T extends string>(x: T): T & Downcased {
+>downcaseLit : Symbol(downcaseLit, Decl(structuralTagTypes.ts, 9, 1))
+>T : Symbol(T, Decl(structuralTagTypes.ts, 11, 28))
+>x : Symbol(x, Decl(structuralTagTypes.ts, 11, 46))
+>T : Symbol(T, Decl(structuralTagTypes.ts, 11, 28))
+>T : Symbol(T, Decl(structuralTagTypes.ts, 11, 28))
+>Downcased : Symbol(Downcased, Decl(structuralTagTypes.ts, 0, 0))
+
+    return x.toLocaleLowerCase() as T & Downcased;
+>x.toLocaleLowerCase : Symbol(String.toLocaleLowerCase, Decl(lib.es5.d.ts, --, --))
+>x : Symbol(x, Decl(structuralTagTypes.ts, 11, 46))
+>toLocaleLowerCase : Symbol(String.toLocaleLowerCase, Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(structuralTagTypes.ts, 11, 28))
+>Downcased : Symbol(Downcased, Decl(structuralTagTypes.ts, 0, 0))
+}
+
+export function isDowncase(x: string): x is Downcased {
+>isDowncase : Symbol(isDowncase, Decl(structuralTagTypes.ts, 13, 1))
+>x : Symbol(x, Decl(structuralTagTypes.ts, 15, 27))
+>x : Symbol(x, Decl(structuralTagTypes.ts, 15, 27))
+>Downcased : Symbol(Downcased, Decl(structuralTagTypes.ts, 0, 0))
+
+    return null as any;
+}
+
+export function analyze<T>(x: T): Analyzed<T> {
+>analyze : Symbol(analyze, Decl(structuralTagTypes.ts, 17, 1))
+>T : Symbol(T, Decl(structuralTagTypes.ts, 19, 24))
+>x : Symbol(x, Decl(structuralTagTypes.ts, 19, 27))
+>T : Symbol(T, Decl(structuralTagTypes.ts, 19, 24))
+>Analyzed : Symbol(Analyzed, Decl(structuralTagTypes.ts, 0, 58))
+>T : Symbol(T, Decl(structuralTagTypes.ts, 19, 24))
+
+    return x as Analyzed<T>;
+>x : Symbol(x, Decl(structuralTagTypes.ts, 19, 27))
+>Analyzed : Symbol(Analyzed, Decl(structuralTagTypes.ts, 0, 58))
+>T : Symbol(T, Decl(structuralTagTypes.ts, 19, 24))
+}
+
+export function isAnalyzed<T>(x: T): x is Analyzed<T> {
+>isAnalyzed : Symbol(isAnalyzed, Decl(structuralTagTypes.ts, 21, 1))
+>T : Symbol(T, Decl(structuralTagTypes.ts, 23, 27))
+>x : Symbol(x, Decl(structuralTagTypes.ts, 23, 30))
+>T : Symbol(T, Decl(structuralTagTypes.ts, 23, 27))
+>x : Symbol(x, Decl(structuralTagTypes.ts, 23, 30))
+>Analyzed : Symbol(Analyzed, Decl(structuralTagTypes.ts, 0, 58))
+>T : Symbol(T, Decl(structuralTagTypes.ts, 23, 27))
+
+    return Math.random() > 0.33 ? false : true;
+>Math.random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
+>Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
+}
+
+export function isPaired(x: {x: number, y: number}): x is Paired {
+>isPaired : Symbol(isPaired, Decl(structuralTagTypes.ts, 25, 1))
+>x : Symbol(x, Decl(structuralTagTypes.ts, 27, 25))
+>x : Symbol(x, Decl(structuralTagTypes.ts, 27, 29))
+>y : Symbol(y, Decl(structuralTagTypes.ts, 27, 39))
+>x : Symbol(x, Decl(structuralTagTypes.ts, 27, 25))
+>Paired : Symbol(Paired, Decl(structuralTagTypes.ts, 1, 54))
+
+    return true;
+}
+
+export function makePair(x: number, y: number): Paired {
+>makePair : Symbol(makePair, Decl(structuralTagTypes.ts, 29, 1))
+>x : Symbol(x, Decl(structuralTagTypes.ts, 31, 25))
+>y : Symbol(y, Decl(structuralTagTypes.ts, 31, 35))
+>Paired : Symbol(Paired, Decl(structuralTagTypes.ts, 1, 54))
+
+    return {x, y} as Paired;
+>x : Symbol(x, Decl(structuralTagTypes.ts, 32, 12))
+>y : Symbol(y, Decl(structuralTagTypes.ts, 32, 14))
+>Paired : Symbol(Paired, Decl(structuralTagTypes.ts, 1, 54))
+}
+
+const a = "ok";
+>a : Symbol(a, Decl(structuralTagTypes.ts, 35, 5))
+
+export const b = downcase(a);
+>b : Symbol(b, Decl(structuralTagTypes.ts, 36, 12))
+>downcase : Symbol(downcase, Decl(structuralTagTypes.ts, 5, 2))
+>a : Symbol(a, Decl(structuralTagTypes.ts, 35, 5))
+
+export const d = downcaseLit(b);
+>d : Symbol(d, Decl(structuralTagTypes.ts, 37, 12))
+>downcaseLit : Symbol(downcaseLit, Decl(structuralTagTypes.ts, 9, 1))
+>b : Symbol(b, Decl(structuralTagTypes.ts, 36, 12))
+
+if (isDowncase(d)) {
+>isDowncase : Symbol(isDowncase, Decl(structuralTagTypes.ts, 13, 1))
+>d : Symbol(d, Decl(structuralTagTypes.ts, 37, 12))
+
+    d;
+>d : Symbol(d, Decl(structuralTagTypes.ts, 37, 12))
+}
+
+const e = {data: { value: "str" }};
+>e : Symbol(e, Decl(structuralTagTypes.ts, 43, 5))
+>data : Symbol(data, Decl(structuralTagTypes.ts, 43, 11))
+>value : Symbol(value, Decl(structuralTagTypes.ts, 43, 18))
+
+export const f = analyze(e);
+>f : Symbol(f, Decl(structuralTagTypes.ts, 44, 12))
+>analyze : Symbol(analyze, Decl(structuralTagTypes.ts, 17, 1))
+>e : Symbol(e, Decl(structuralTagTypes.ts, 43, 5))
+
+if (isAnalyzed(e)) {
+>isAnalyzed : Symbol(isAnalyzed, Decl(structuralTagTypes.ts, 21, 1))
+>e : Symbol(e, Decl(structuralTagTypes.ts, 43, 5))
+
+    e;
+>e : Symbol(e, Decl(structuralTagTypes.ts, 43, 5))
+}
+
+export const g = makePair(0, 0);
+>g : Symbol(g, Decl(structuralTagTypes.ts, 49, 12))
+>makePair : Symbol(makePair, Decl(structuralTagTypes.ts, 29, 1))
+
+const h = {x: 0, y: 0};
+>h : Symbol(h, Decl(structuralTagTypes.ts, 50, 5))
+>x : Symbol(x, Decl(structuralTagTypes.ts, 50, 11))
+>y : Symbol(y, Decl(structuralTagTypes.ts, 50, 16))
+
+if (isPaired(h)) {
+>isPaired : Symbol(isPaired, Decl(structuralTagTypes.ts, 25, 1))
+>h : Symbol(h, Decl(structuralTagTypes.ts, 50, 5))
+
+    h;
+>h : Symbol(h, Decl(structuralTagTypes.ts, 50, 5))
+}
+

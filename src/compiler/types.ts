@@ -103,6 +103,7 @@ namespace ts {
         | SyntaxKind.YieldKeyword
         | SyntaxKind.AsyncKeyword
         | SyntaxKind.AwaitKeyword
+        | SyntaxKind.TagKeyword
         | SyntaxKind.OfKeyword;
 
     export type JsxTokenSyntaxKind =
@@ -277,6 +278,7 @@ namespace ts {
         FromKeyword,
         GlobalKeyword,
         BigIntKeyword,
+        TagKeyword,
         OfKeyword, // LastKeyword and LastToken and LastContextualKeyword
 
         // Parse tree nodes
@@ -1247,7 +1249,7 @@ namespace ts {
 
     export interface TypeOperatorNode extends TypeNode {
         kind: SyntaxKind.TypeOperator;
-        operator: SyntaxKind.KeyOfKeyword | SyntaxKind.UniqueKeyword | SyntaxKind.ReadonlyKeyword;
+        operator: SyntaxKind.KeyOfKeyword | SyntaxKind.UniqueKeyword | SyntaxKind.ReadonlyKeyword | SyntaxKind.TagKeyword;
         type: TypeNode;
     }
 
@@ -4008,6 +4010,7 @@ namespace ts {
         Conditional     = 1 << 24,  // T extends U ? X : Y
         Substitution    = 1 << 25,  // Type parameter substitution
         NonPrimitive    = 1 << 26,  // intrinsic object type
+        StructuralTag   = 1 << 27,  // tag T
 
         /* @internal */
         AnyOrUnknown = Any | Unknown,
@@ -4037,7 +4040,7 @@ namespace ts {
         UnionOrIntersection = Union | Intersection,
         StructuredType = Object | Union | Intersection,
         TypeVariable = TypeParameter | IndexedAccess,
-        InstantiableNonPrimitive = TypeVariable | Conditional | Substitution,
+        InstantiableNonPrimitive = TypeVariable | Conditional | Substitution | StructuralTag,
         InstantiablePrimitive = Index,
         Instantiable = InstantiableNonPrimitive | InstantiablePrimitive,
         StructuredOrInstantiable = StructuredType | Instantiable,
@@ -4453,6 +4456,11 @@ namespace ts {
     export interface SubstitutionType extends InstantiableType {
         typeVariable: TypeVariable;  // Target type variable
         substitute: Type;            // Type to substitute for type parameter
+    }
+
+    // Structual tag type, or a `tag T` (TypeFlags.StructuralTag)
+    export interface StructuralTagType extends InstantiableType {
+        type: Type;
     }
 
     /* @internal */

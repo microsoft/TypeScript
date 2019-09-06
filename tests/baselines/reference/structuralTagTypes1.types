@@ -1,0 +1,120 @@
+=== tests/cases/conformance/types/structuralTags/structuralTagTypes1.ts ===
+export type Paired = {
+>Paired : Paired
+
+    x: number & tag {x};
+>x : number & tag { x: any; }
+>x : any
+
+    y: number & tag {y};
+>y : number & tag { y: any; }
+>y : any
+
+};
+
+
+export function isPaired(x: {x: number, y: number}): x is Paired {
+>isPaired : (x: { x: number; y: number; }) => x is Paired
+>x : { x: number; y: number; }
+>x : number
+>y : number
+
+    return true;
+>true : true
+}
+
+export function makePair(x: number, y: number): Paired {
+>makePair : (x: number, y: number) => Paired
+>x : number
+>y : number
+
+    return {x, y} as Paired;
+>{x, y} as Paired : Paired
+>{x, y} : { x: number; y: number; }
+>x : number
+>y : number
+}
+
+const a = makePair(0, 0);
+>a : Paired
+>makePair(0, 0) : Paired
+>makePair : (x: number, y: number) => Paired
+>0 : 0
+>0 : 0
+
+const b = {x: 0, y: 0};
+>b : { x: number; y: number; }
+>{x: 0, y: 0} : { x: number; y: number; }
+>x : number
+>0 : 0
+>y : number
+>0 : 0
+
+if (Math.random() > 0.3) {
+>Math.random() > 0.3 : boolean
+>Math.random() : number
+>Math.random : () => number
+>Math : Math
+>random : () => number
+>0.3 : 0.3
+
+    b.x = a.x;
+>b.x = a.x : number & tag { x: any; }
+>b.x : number
+>b : { x: number; y: number; }
+>x : number
+>a.x : number & tag { x: any; }
+>a : Paired
+>x : number & tag { x: any; }
+
+    b.y = a.y;
+>b.y = a.y : number & tag { y: any; }
+>b.y : number
+>b : { x: number; y: number; }
+>y : number
+>a.y : number & tag { y: any; }
+>a : Paired
+>y : number & tag { y: any; }
+}
+
+if (isPaired(b)) {
+>isPaired(b) : boolean
+>isPaired : (x: { x: number; y: number; }) => x is Paired
+>b : { x: number; y: number; }
+
+    b.x = a.x;
+>b.x = a.x : number & tag { x: any; }
+>b.x : number & tag { x: any; }
+>b : Paired
+>x : number & tag { x: any; }
+>a.x : number & tag { x: any; }
+>a : Paired
+>x : number & tag { x: any; }
+
+    b.y = a.y;
+>b.y = a.y : number & tag { y: any; }
+>b.y : number & tag { y: any; }
+>b : Paired
+>y : number & tag { y: any; }
+>a.y : number & tag { y: any; }
+>a : Paired
+>y : number & tag { y: any; }
+
+    a.x = b.x;
+>a.x = b.x : number & tag { x: any; }
+>a.x : number & tag { x: any; }
+>a : Paired
+>x : number & tag { x: any; }
+>b.x : number & tag { x: any; }
+>b : Paired
+>x : number & tag { x: any; }
+
+    a.y = b.y;
+>a.y = b.y : number & tag { y: any; }
+>a.y : number & tag { y: any; }
+>a : Paired
+>y : number & tag { y: any; }
+>b.y : number & tag { y: any; }
+>b : Paired
+>y : number & tag { y: any; }
+}

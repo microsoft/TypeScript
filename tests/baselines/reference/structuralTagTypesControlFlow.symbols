@@ -1,0 +1,260 @@
+=== tests/cases/conformance/types/structuralTags/structuralTagTypesControlFlow.ts ===
+type BrandA = tag {BrandA: void};
+>BrandA : Symbol(BrandA, Decl(structuralTagTypesControlFlow.ts, 0, 0))
+>BrandA : Symbol(BrandA, Decl(structuralTagTypesControlFlow.ts, 0, 19))
+
+type BrandB = tag {BrandB: void};
+>BrandB : Symbol(BrandB, Decl(structuralTagTypesControlFlow.ts, 0, 33))
+>BrandB : Symbol(BrandB, Decl(structuralTagTypesControlFlow.ts, 1, 19))
+
+declare function isBrandA(x: any): x is BrandA;
+>isBrandA : Symbol(isBrandA, Decl(structuralTagTypesControlFlow.ts, 1, 33))
+>x : Symbol(x, Decl(structuralTagTypesControlFlow.ts, 3, 26))
+>x : Symbol(x, Decl(structuralTagTypesControlFlow.ts, 3, 26))
+>BrandA : Symbol(BrandA, Decl(structuralTagTypesControlFlow.ts, 0, 0))
+
+declare function isBrandB(x: any): x is BrandB;
+>isBrandB : Symbol(isBrandB, Decl(structuralTagTypesControlFlow.ts, 3, 47))
+>x : Symbol(x, Decl(structuralTagTypesControlFlow.ts, 4, 26))
+>x : Symbol(x, Decl(structuralTagTypesControlFlow.ts, 4, 26))
+>BrandB : Symbol(BrandB, Decl(structuralTagTypesControlFlow.ts, 0, 33))
+
+declare function consumeBrandA(x: BrandA): void;
+>consumeBrandA : Symbol(consumeBrandA, Decl(structuralTagTypesControlFlow.ts, 4, 47))
+>x : Symbol(x, Decl(structuralTagTypesControlFlow.ts, 6, 31))
+>BrandA : Symbol(BrandA, Decl(structuralTagTypesControlFlow.ts, 0, 0))
+
+declare function consumeBrandB(x: BrandB): void;
+>consumeBrandB : Symbol(consumeBrandB, Decl(structuralTagTypesControlFlow.ts, 6, 48))
+>x : Symbol(x, Decl(structuralTagTypesControlFlow.ts, 7, 31))
+>BrandB : Symbol(BrandB, Decl(structuralTagTypesControlFlow.ts, 0, 33))
+
+declare function consumeBrandAOrB(x: BrandA | BrandB): void;
+>consumeBrandAOrB : Symbol(consumeBrandAOrB, Decl(structuralTagTypesControlFlow.ts, 7, 48))
+>x : Symbol(x, Decl(structuralTagTypesControlFlow.ts, 8, 34))
+>BrandA : Symbol(BrandA, Decl(structuralTagTypesControlFlow.ts, 0, 0))
+>BrandB : Symbol(BrandB, Decl(structuralTagTypesControlFlow.ts, 0, 33))
+
+declare function consumeBrandAAndB(x: BrandA & BrandB): void;
+>consumeBrandAAndB : Symbol(consumeBrandAAndB, Decl(structuralTagTypesControlFlow.ts, 8, 60))
+>x : Symbol(x, Decl(structuralTagTypesControlFlow.ts, 9, 35))
+>BrandA : Symbol(BrandA, Decl(structuralTagTypesControlFlow.ts, 0, 0))
+>BrandB : Symbol(BrandB, Decl(structuralTagTypesControlFlow.ts, 0, 33))
+
+const x = {x: 12};
+>x : Symbol(x, Decl(structuralTagTypesControlFlow.ts, 11, 5))
+>x : Symbol(x, Decl(structuralTagTypesControlFlow.ts, 11, 11))
+
+if (isBrandA(x)) {
+>isBrandA : Symbol(isBrandA, Decl(structuralTagTypesControlFlow.ts, 1, 33))
+>x : Symbol(x, Decl(structuralTagTypesControlFlow.ts, 11, 5))
+
+    if (isBrandB(x)) {
+>isBrandB : Symbol(isBrandB, Decl(structuralTagTypesControlFlow.ts, 3, 47))
+>x : Symbol(x, Decl(structuralTagTypesControlFlow.ts, 11, 5))
+
+        consumeBrandA(x);
+>consumeBrandA : Symbol(consumeBrandA, Decl(structuralTagTypesControlFlow.ts, 4, 47))
+>x : Symbol(x, Decl(structuralTagTypesControlFlow.ts, 11, 5))
+
+        consumeBrandB(x);
+>consumeBrandB : Symbol(consumeBrandB, Decl(structuralTagTypesControlFlow.ts, 6, 48))
+>x : Symbol(x, Decl(structuralTagTypesControlFlow.ts, 11, 5))
+
+        consumeBrandAOrB(x);
+>consumeBrandAOrB : Symbol(consumeBrandAOrB, Decl(structuralTagTypesControlFlow.ts, 7, 48))
+>x : Symbol(x, Decl(structuralTagTypesControlFlow.ts, 11, 5))
+
+        consumeBrandAAndB(x);
+>consumeBrandAAndB : Symbol(consumeBrandAAndB, Decl(structuralTagTypesControlFlow.ts, 8, 60))
+>x : Symbol(x, Decl(structuralTagTypesControlFlow.ts, 11, 5))
+    }
+    else {
+        consumeBrandA(x);
+>consumeBrandA : Symbol(consumeBrandA, Decl(structuralTagTypesControlFlow.ts, 4, 47))
+>x : Symbol(x, Decl(structuralTagTypesControlFlow.ts, 11, 5))
+
+        consumeBrandB(x); // err
+>consumeBrandB : Symbol(consumeBrandB, Decl(structuralTagTypesControlFlow.ts, 6, 48))
+>x : Symbol(x, Decl(structuralTagTypesControlFlow.ts, 11, 5))
+
+        consumeBrandAOrB(x);
+>consumeBrandAOrB : Symbol(consumeBrandAOrB, Decl(structuralTagTypesControlFlow.ts, 7, 48))
+>x : Symbol(x, Decl(structuralTagTypesControlFlow.ts, 11, 5))
+
+        consumeBrandAAndB(x); // err
+>consumeBrandAAndB : Symbol(consumeBrandAAndB, Decl(structuralTagTypesControlFlow.ts, 8, 60))
+>x : Symbol(x, Decl(structuralTagTypesControlFlow.ts, 11, 5))
+    }
+}
+else {
+    if (isBrandB(x)) {
+>isBrandB : Symbol(isBrandB, Decl(structuralTagTypesControlFlow.ts, 3, 47))
+>x : Symbol(x, Decl(structuralTagTypesControlFlow.ts, 11, 5))
+
+        consumeBrandA(x); // err
+>consumeBrandA : Symbol(consumeBrandA, Decl(structuralTagTypesControlFlow.ts, 4, 47))
+>x : Symbol(x, Decl(structuralTagTypesControlFlow.ts, 11, 5))
+
+        consumeBrandB(x);
+>consumeBrandB : Symbol(consumeBrandB, Decl(structuralTagTypesControlFlow.ts, 6, 48))
+>x : Symbol(x, Decl(structuralTagTypesControlFlow.ts, 11, 5))
+
+        consumeBrandAOrB(x);
+>consumeBrandAOrB : Symbol(consumeBrandAOrB, Decl(structuralTagTypesControlFlow.ts, 7, 48))
+>x : Symbol(x, Decl(structuralTagTypesControlFlow.ts, 11, 5))
+
+        consumeBrandAAndB(x); // err
+>consumeBrandAAndB : Symbol(consumeBrandAAndB, Decl(structuralTagTypesControlFlow.ts, 8, 60))
+>x : Symbol(x, Decl(structuralTagTypesControlFlow.ts, 11, 5))
+    }
+    else {
+        consumeBrandA(x); // err
+>consumeBrandA : Symbol(consumeBrandA, Decl(structuralTagTypesControlFlow.ts, 4, 47))
+>x : Symbol(x, Decl(structuralTagTypesControlFlow.ts, 11, 5))
+
+        consumeBrandB(x); // err
+>consumeBrandB : Symbol(consumeBrandB, Decl(structuralTagTypesControlFlow.ts, 6, 48))
+>x : Symbol(x, Decl(structuralTagTypesControlFlow.ts, 11, 5))
+
+        consumeBrandAOrB(x); // err
+>consumeBrandAOrB : Symbol(consumeBrandAOrB, Decl(structuralTagTypesControlFlow.ts, 7, 48))
+>x : Symbol(x, Decl(structuralTagTypesControlFlow.ts, 11, 5))
+
+        consumeBrandAAndB(x); // err
+>consumeBrandAAndB : Symbol(consumeBrandAAndB, Decl(structuralTagTypesControlFlow.ts, 8, 60))
+>x : Symbol(x, Decl(structuralTagTypesControlFlow.ts, 11, 5))
+    }
+}
+
+type NormalizedPath = string & tag {NormalizedPath: void};
+>NormalizedPath : Symbol(NormalizedPath, Decl(structuralTagTypesControlFlow.ts, 39, 1))
+>NormalizedPath : Symbol(NormalizedPath, Decl(structuralTagTypesControlFlow.ts, 41, 36))
+
+type AbsolutePath = string & tag {AbsolutePath: void};
+>AbsolutePath : Symbol(AbsolutePath, Decl(structuralTagTypesControlFlow.ts, 41, 58))
+>AbsolutePath : Symbol(AbsolutePath, Decl(structuralTagTypesControlFlow.ts, 42, 34))
+
+type NormalizedAbsolutePath = NormalizedPath & AbsolutePath;
+>NormalizedAbsolutePath : Symbol(NormalizedAbsolutePath, Decl(structuralTagTypesControlFlow.ts, 42, 54))
+>NormalizedPath : Symbol(NormalizedPath, Decl(structuralTagTypesControlFlow.ts, 39, 1))
+>AbsolutePath : Symbol(AbsolutePath, Decl(structuralTagTypesControlFlow.ts, 41, 58))
+
+declare function isNormalizedPath(x: string): x is NormalizedPath;
+>isNormalizedPath : Symbol(isNormalizedPath, Decl(structuralTagTypesControlFlow.ts, 43, 60))
+>x : Symbol(x, Decl(structuralTagTypesControlFlow.ts, 45, 34))
+>x : Symbol(x, Decl(structuralTagTypesControlFlow.ts, 45, 34))
+>NormalizedPath : Symbol(NormalizedPath, Decl(structuralTagTypesControlFlow.ts, 39, 1))
+
+declare function isAbsolutePath(x: string): x is AbsolutePath;
+>isAbsolutePath : Symbol(isAbsolutePath, Decl(structuralTagTypesControlFlow.ts, 45, 66))
+>x : Symbol(x, Decl(structuralTagTypesControlFlow.ts, 46, 32))
+>x : Symbol(x, Decl(structuralTagTypesControlFlow.ts, 46, 32))
+>AbsolutePath : Symbol(AbsolutePath, Decl(structuralTagTypesControlFlow.ts, 41, 58))
+
+declare function consumeNormalizedPath(x: NormalizedPath): void;
+>consumeNormalizedPath : Symbol(consumeNormalizedPath, Decl(structuralTagTypesControlFlow.ts, 46, 62))
+>x : Symbol(x, Decl(structuralTagTypesControlFlow.ts, 48, 39))
+>NormalizedPath : Symbol(NormalizedPath, Decl(structuralTagTypesControlFlow.ts, 39, 1))
+
+declare function consumeAbsolutePath(x: AbsolutePath): void;
+>consumeAbsolutePath : Symbol(consumeAbsolutePath, Decl(structuralTagTypesControlFlow.ts, 48, 64))
+>x : Symbol(x, Decl(structuralTagTypesControlFlow.ts, 49, 37))
+>AbsolutePath : Symbol(AbsolutePath, Decl(structuralTagTypesControlFlow.ts, 41, 58))
+
+declare function consumeNormalizedOrAbsolutePath(x: NormalizedPath | AbsolutePath): void;
+>consumeNormalizedOrAbsolutePath : Symbol(consumeNormalizedOrAbsolutePath, Decl(structuralTagTypesControlFlow.ts, 49, 60))
+>x : Symbol(x, Decl(structuralTagTypesControlFlow.ts, 50, 49))
+>NormalizedPath : Symbol(NormalizedPath, Decl(structuralTagTypesControlFlow.ts, 39, 1))
+>AbsolutePath : Symbol(AbsolutePath, Decl(structuralTagTypesControlFlow.ts, 41, 58))
+
+declare function consumeNormalizedAbsolutePath(x: NormalizedAbsolutePath): void;
+>consumeNormalizedAbsolutePath : Symbol(consumeNormalizedAbsolutePath, Decl(structuralTagTypesControlFlow.ts, 50, 89))
+>x : Symbol(x, Decl(structuralTagTypesControlFlow.ts, 51, 47))
+>NormalizedAbsolutePath : Symbol(NormalizedAbsolutePath, Decl(structuralTagTypesControlFlow.ts, 42, 54))
+
+const p = "/a/b/c";
+>p : Symbol(p, Decl(structuralTagTypesControlFlow.ts, 53, 5))
+
+if (isNormalizedPath(p)) {
+>isNormalizedPath : Symbol(isNormalizedPath, Decl(structuralTagTypesControlFlow.ts, 43, 60))
+>p : Symbol(p, Decl(structuralTagTypesControlFlow.ts, 53, 5))
+
+    if (isAbsolutePath(p)) {
+>isAbsolutePath : Symbol(isAbsolutePath, Decl(structuralTagTypesControlFlow.ts, 45, 66))
+>p : Symbol(p, Decl(structuralTagTypesControlFlow.ts, 53, 5))
+
+        consumeNormalizedPath(p);
+>consumeNormalizedPath : Symbol(consumeNormalizedPath, Decl(structuralTagTypesControlFlow.ts, 46, 62))
+>p : Symbol(p, Decl(structuralTagTypesControlFlow.ts, 53, 5))
+
+        consumeAbsolutePath(p);
+>consumeAbsolutePath : Symbol(consumeAbsolutePath, Decl(structuralTagTypesControlFlow.ts, 48, 64))
+>p : Symbol(p, Decl(structuralTagTypesControlFlow.ts, 53, 5))
+
+        consumeNormalizedOrAbsolutePath(p);
+>consumeNormalizedOrAbsolutePath : Symbol(consumeNormalizedOrAbsolutePath, Decl(structuralTagTypesControlFlow.ts, 49, 60))
+>p : Symbol(p, Decl(structuralTagTypesControlFlow.ts, 53, 5))
+
+        consumeNormalizedAbsolutePath(p);
+>consumeNormalizedAbsolutePath : Symbol(consumeNormalizedAbsolutePath, Decl(structuralTagTypesControlFlow.ts, 50, 89))
+>p : Symbol(p, Decl(structuralTagTypesControlFlow.ts, 53, 5))
+    }
+    else {
+        consumeNormalizedPath(p);
+>consumeNormalizedPath : Symbol(consumeNormalizedPath, Decl(structuralTagTypesControlFlow.ts, 46, 62))
+>p : Symbol(p, Decl(structuralTagTypesControlFlow.ts, 53, 5))
+
+        consumeAbsolutePath(p); // err
+>consumeAbsolutePath : Symbol(consumeAbsolutePath, Decl(structuralTagTypesControlFlow.ts, 48, 64))
+>p : Symbol(p, Decl(structuralTagTypesControlFlow.ts, 53, 5))
+
+        consumeNormalizedOrAbsolutePath(p);
+>consumeNormalizedOrAbsolutePath : Symbol(consumeNormalizedOrAbsolutePath, Decl(structuralTagTypesControlFlow.ts, 49, 60))
+>p : Symbol(p, Decl(structuralTagTypesControlFlow.ts, 53, 5))
+
+        consumeNormalizedAbsolutePath(p); // err
+>consumeNormalizedAbsolutePath : Symbol(consumeNormalizedAbsolutePath, Decl(structuralTagTypesControlFlow.ts, 50, 89))
+>p : Symbol(p, Decl(structuralTagTypesControlFlow.ts, 53, 5))
+    }
+}
+else {
+    if (isAbsolutePath(p)) {
+>isAbsolutePath : Symbol(isAbsolutePath, Decl(structuralTagTypesControlFlow.ts, 45, 66))
+>p : Symbol(p, Decl(structuralTagTypesControlFlow.ts, 53, 5))
+
+        consumeNormalizedPath(p); // err
+>consumeNormalizedPath : Symbol(consumeNormalizedPath, Decl(structuralTagTypesControlFlow.ts, 46, 62))
+>p : Symbol(p, Decl(structuralTagTypesControlFlow.ts, 53, 5))
+
+        consumeAbsolutePath(p);
+>consumeAbsolutePath : Symbol(consumeAbsolutePath, Decl(structuralTagTypesControlFlow.ts, 48, 64))
+>p : Symbol(p, Decl(structuralTagTypesControlFlow.ts, 53, 5))
+
+        consumeNormalizedOrAbsolutePath(p);
+>consumeNormalizedOrAbsolutePath : Symbol(consumeNormalizedOrAbsolutePath, Decl(structuralTagTypesControlFlow.ts, 49, 60))
+>p : Symbol(p, Decl(structuralTagTypesControlFlow.ts, 53, 5))
+
+        consumeNormalizedAbsolutePath(p); // err
+>consumeNormalizedAbsolutePath : Symbol(consumeNormalizedAbsolutePath, Decl(structuralTagTypesControlFlow.ts, 50, 89))
+>p : Symbol(p, Decl(structuralTagTypesControlFlow.ts, 53, 5))
+    }
+    else {
+        consumeNormalizedPath(p); // err
+>consumeNormalizedPath : Symbol(consumeNormalizedPath, Decl(structuralTagTypesControlFlow.ts, 46, 62))
+>p : Symbol(p, Decl(structuralTagTypesControlFlow.ts, 53, 5))
+
+        consumeAbsolutePath(p); // err
+>consumeAbsolutePath : Symbol(consumeAbsolutePath, Decl(structuralTagTypesControlFlow.ts, 48, 64))
+>p : Symbol(p, Decl(structuralTagTypesControlFlow.ts, 53, 5))
+
+        consumeNormalizedOrAbsolutePath(p); // err
+>consumeNormalizedOrAbsolutePath : Symbol(consumeNormalizedOrAbsolutePath, Decl(structuralTagTypesControlFlow.ts, 49, 60))
+>p : Symbol(p, Decl(structuralTagTypesControlFlow.ts, 53, 5))
+
+        consumeNormalizedAbsolutePath(p); // err
+>consumeNormalizedAbsolutePath : Symbol(consumeNormalizedAbsolutePath, Decl(structuralTagTypesControlFlow.ts, 50, 89))
+>p : Symbol(p, Decl(structuralTagTypesControlFlow.ts, 53, 5))
+    }
+}
+

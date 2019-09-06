@@ -1,0 +1,28 @@
+=== tests/cases/conformance/types/structuralTags/structuralTagTypesDeclarations.ts ===
+export type Downcased = string & tag {downcased: void};
+>Downcased : Symbol(Downcased, Decl(structuralTagTypesDeclarations.ts, 0, 0))
+>downcased : Symbol(downcased, Decl(structuralTagTypesDeclarations.ts, 0, 38))
+
+export function downcaseLit<T extends string>(x: T): T & Downcased {
+>downcaseLit : Symbol(downcaseLit, Decl(structuralTagTypesDeclarations.ts, 0, 55))
+>T : Symbol(T, Decl(structuralTagTypesDeclarations.ts, 2, 28))
+>x : Symbol(x, Decl(structuralTagTypesDeclarations.ts, 2, 46))
+>T : Symbol(T, Decl(structuralTagTypesDeclarations.ts, 2, 28))
+>T : Symbol(T, Decl(structuralTagTypesDeclarations.ts, 2, 28))
+>Downcased : Symbol(Downcased, Decl(structuralTagTypesDeclarations.ts, 0, 0))
+
+    return x.toLocaleLowerCase() as T & Downcased;
+>x.toLocaleLowerCase : Symbol(String.toLocaleLowerCase, Decl(lib.es5.d.ts, --, --))
+>x : Symbol(x, Decl(structuralTagTypesDeclarations.ts, 2, 46))
+>toLocaleLowerCase : Symbol(String.toLocaleLowerCase, Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(structuralTagTypesDeclarations.ts, 2, 28))
+>Downcased : Symbol(Downcased, Decl(structuralTagTypesDeclarations.ts, 0, 0))
+}
+const a = "ok";
+>a : Symbol(a, Decl(structuralTagTypesDeclarations.ts, 5, 5))
+
+export const c = downcaseLit(a); // no visibility error, tag reproduced structurally
+>c : Symbol(c, Decl(structuralTagTypesDeclarations.ts, 6, 12))
+>downcaseLit : Symbol(downcaseLit, Decl(structuralTagTypesDeclarations.ts, 0, 55))
+>a : Symbol(a, Decl(structuralTagTypesDeclarations.ts, 5, 5))
+

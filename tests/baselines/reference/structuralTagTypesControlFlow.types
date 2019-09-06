@@ -1,0 +1,280 @@
+=== tests/cases/conformance/types/structuralTags/structuralTagTypesControlFlow.ts ===
+type BrandA = tag {BrandA: void};
+>BrandA : BrandA
+>BrandA : void
+
+type BrandB = tag {BrandB: void};
+>BrandB : BrandB
+>BrandB : void
+
+declare function isBrandA(x: any): x is BrandA;
+>isBrandA : (x: any) => x is BrandA
+>x : any
+
+declare function isBrandB(x: any): x is BrandB;
+>isBrandB : (x: any) => x is BrandB
+>x : any
+
+declare function consumeBrandA(x: BrandA): void;
+>consumeBrandA : (x: BrandA) => void
+>x : BrandA
+
+declare function consumeBrandB(x: BrandB): void;
+>consumeBrandB : (x: BrandB) => void
+>x : BrandB
+
+declare function consumeBrandAOrB(x: BrandA | BrandB): void;
+>consumeBrandAOrB : (x: BrandA | BrandB) => void
+>x : BrandA | BrandB
+
+declare function consumeBrandAAndB(x: BrandA & BrandB): void;
+>consumeBrandAAndB : (x: tag ({ BrandA: void; } & { BrandB: void; })) => void
+>x : tag ({ BrandA: void; } & { BrandB: void; })
+
+const x = {x: 12};
+>x : { x: number; }
+>{x: 12} : { x: number; }
+>x : number
+>12 : 12
+
+if (isBrandA(x)) {
+>isBrandA(x) : boolean
+>isBrandA : (x: any) => x is BrandA
+>x : { x: number; }
+
+    if (isBrandB(x)) {
+>isBrandB(x) : boolean
+>isBrandB : (x: any) => x is BrandB
+>x : { x: number; } & BrandA
+
+        consumeBrandA(x);
+>consumeBrandA(x) : void
+>consumeBrandA : (x: BrandA) => void
+>x : { x: number; } & tag ({ BrandA: void; } & { BrandB: void; })
+
+        consumeBrandB(x);
+>consumeBrandB(x) : void
+>consumeBrandB : (x: BrandB) => void
+>x : { x: number; } & tag ({ BrandA: void; } & { BrandB: void; })
+
+        consumeBrandAOrB(x);
+>consumeBrandAOrB(x) : void
+>consumeBrandAOrB : (x: BrandA | BrandB) => void
+>x : { x: number; } & tag ({ BrandA: void; } & { BrandB: void; })
+
+        consumeBrandAAndB(x);
+>consumeBrandAAndB(x) : void
+>consumeBrandAAndB : (x: tag ({ BrandA: void; } & { BrandB: void; })) => void
+>x : { x: number; } & tag ({ BrandA: void; } & { BrandB: void; })
+    }
+    else {
+        consumeBrandA(x);
+>consumeBrandA(x) : void
+>consumeBrandA : (x: BrandA) => void
+>x : { x: number; } & BrandA
+
+        consumeBrandB(x); // err
+>consumeBrandB(x) : void
+>consumeBrandB : (x: BrandB) => void
+>x : { x: number; } & BrandA
+
+        consumeBrandAOrB(x);
+>consumeBrandAOrB(x) : void
+>consumeBrandAOrB : (x: BrandA | BrandB) => void
+>x : { x: number; } & BrandA
+
+        consumeBrandAAndB(x); // err
+>consumeBrandAAndB(x) : void
+>consumeBrandAAndB : (x: tag ({ BrandA: void; } & { BrandB: void; })) => void
+>x : { x: number; } & BrandA
+    }
+}
+else {
+    if (isBrandB(x)) {
+>isBrandB(x) : boolean
+>isBrandB : (x: any) => x is BrandB
+>x : { x: number; }
+
+        consumeBrandA(x); // err
+>consumeBrandA(x) : void
+>consumeBrandA : (x: BrandA) => void
+>x : { x: number; } & BrandB
+
+        consumeBrandB(x);
+>consumeBrandB(x) : void
+>consumeBrandB : (x: BrandB) => void
+>x : { x: number; } & BrandB
+
+        consumeBrandAOrB(x);
+>consumeBrandAOrB(x) : void
+>consumeBrandAOrB : (x: BrandA | BrandB) => void
+>x : { x: number; } & BrandB
+
+        consumeBrandAAndB(x); // err
+>consumeBrandAAndB(x) : void
+>consumeBrandAAndB : (x: tag ({ BrandA: void; } & { BrandB: void; })) => void
+>x : { x: number; } & BrandB
+    }
+    else {
+        consumeBrandA(x); // err
+>consumeBrandA(x) : void
+>consumeBrandA : (x: BrandA) => void
+>x : { x: number; }
+
+        consumeBrandB(x); // err
+>consumeBrandB(x) : void
+>consumeBrandB : (x: BrandB) => void
+>x : { x: number; }
+
+        consumeBrandAOrB(x); // err
+>consumeBrandAOrB(x) : void
+>consumeBrandAOrB : (x: BrandA | BrandB) => void
+>x : { x: number; }
+
+        consumeBrandAAndB(x); // err
+>consumeBrandAAndB(x) : void
+>consumeBrandAAndB : (x: tag ({ BrandA: void; } & { BrandB: void; })) => void
+>x : { x: number; }
+    }
+}
+
+type NormalizedPath = string & tag {NormalizedPath: void};
+>NormalizedPath : NormalizedPath
+>NormalizedPath : void
+
+type AbsolutePath = string & tag {AbsolutePath: void};
+>AbsolutePath : AbsolutePath
+>AbsolutePath : void
+
+type NormalizedAbsolutePath = NormalizedPath & AbsolutePath;
+>NormalizedAbsolutePath : NormalizedAbsolutePath
+
+declare function isNormalizedPath(x: string): x is NormalizedPath;
+>isNormalizedPath : (x: string) => x is NormalizedPath
+>x : string
+
+declare function isAbsolutePath(x: string): x is AbsolutePath;
+>isAbsolutePath : (x: string) => x is AbsolutePath
+>x : string
+
+declare function consumeNormalizedPath(x: NormalizedPath): void;
+>consumeNormalizedPath : (x: NormalizedPath) => void
+>x : NormalizedPath
+
+declare function consumeAbsolutePath(x: AbsolutePath): void;
+>consumeAbsolutePath : (x: AbsolutePath) => void
+>x : AbsolutePath
+
+declare function consumeNormalizedOrAbsolutePath(x: NormalizedPath | AbsolutePath): void;
+>consumeNormalizedOrAbsolutePath : (x: NormalizedPath | AbsolutePath) => void
+>x : NormalizedPath | AbsolutePath
+
+declare function consumeNormalizedAbsolutePath(x: NormalizedAbsolutePath): void;
+>consumeNormalizedAbsolutePath : (x: NormalizedAbsolutePath) => void
+>x : NormalizedAbsolutePath
+
+const p = "/a/b/c";
+>p : "/a/b/c"
+>"/a/b/c" : "/a/b/c"
+
+if (isNormalizedPath(p)) {
+>isNormalizedPath(p) : boolean
+>isNormalizedPath : (x: string) => x is NormalizedPath
+>p : "/a/b/c"
+
+    if (isAbsolutePath(p)) {
+>isAbsolutePath(p) : boolean
+>isAbsolutePath : (x: string) => x is AbsolutePath
+>p : "/a/b/c" & tag { NormalizedPath: void; }
+
+        consumeNormalizedPath(p);
+>consumeNormalizedPath(p) : void
+>consumeNormalizedPath : (x: NormalizedPath) => void
+>p : "/a/b/c" & tag ({ NormalizedPath: void; } & { AbsolutePath: void; })
+
+        consumeAbsolutePath(p);
+>consumeAbsolutePath(p) : void
+>consumeAbsolutePath : (x: AbsolutePath) => void
+>p : "/a/b/c" & tag ({ NormalizedPath: void; } & { AbsolutePath: void; })
+
+        consumeNormalizedOrAbsolutePath(p);
+>consumeNormalizedOrAbsolutePath(p) : void
+>consumeNormalizedOrAbsolutePath : (x: NormalizedPath | AbsolutePath) => void
+>p : "/a/b/c" & tag ({ NormalizedPath: void; } & { AbsolutePath: void; })
+
+        consumeNormalizedAbsolutePath(p);
+>consumeNormalizedAbsolutePath(p) : void
+>consumeNormalizedAbsolutePath : (x: NormalizedAbsolutePath) => void
+>p : "/a/b/c" & tag ({ NormalizedPath: void; } & { AbsolutePath: void; })
+    }
+    else {
+        consumeNormalizedPath(p);
+>consumeNormalizedPath(p) : void
+>consumeNormalizedPath : (x: NormalizedPath) => void
+>p : "/a/b/c" & tag { NormalizedPath: void; }
+
+        consumeAbsolutePath(p); // err
+>consumeAbsolutePath(p) : void
+>consumeAbsolutePath : (x: AbsolutePath) => void
+>p : "/a/b/c" & tag { NormalizedPath: void; }
+
+        consumeNormalizedOrAbsolutePath(p);
+>consumeNormalizedOrAbsolutePath(p) : void
+>consumeNormalizedOrAbsolutePath : (x: NormalizedPath | AbsolutePath) => void
+>p : "/a/b/c" & tag { NormalizedPath: void; }
+
+        consumeNormalizedAbsolutePath(p); // err
+>consumeNormalizedAbsolutePath(p) : void
+>consumeNormalizedAbsolutePath : (x: NormalizedAbsolutePath) => void
+>p : "/a/b/c" & tag { NormalizedPath: void; }
+    }
+}
+else {
+    if (isAbsolutePath(p)) {
+>isAbsolutePath(p) : boolean
+>isAbsolutePath : (x: string) => x is AbsolutePath
+>p : "/a/b/c"
+
+        consumeNormalizedPath(p); // err
+>consumeNormalizedPath(p) : void
+>consumeNormalizedPath : (x: NormalizedPath) => void
+>p : "/a/b/c" & tag { AbsolutePath: void; }
+
+        consumeAbsolutePath(p);
+>consumeAbsolutePath(p) : void
+>consumeAbsolutePath : (x: AbsolutePath) => void
+>p : "/a/b/c" & tag { AbsolutePath: void; }
+
+        consumeNormalizedOrAbsolutePath(p);
+>consumeNormalizedOrAbsolutePath(p) : void
+>consumeNormalizedOrAbsolutePath : (x: NormalizedPath | AbsolutePath) => void
+>p : "/a/b/c" & tag { AbsolutePath: void; }
+
+        consumeNormalizedAbsolutePath(p); // err
+>consumeNormalizedAbsolutePath(p) : void
+>consumeNormalizedAbsolutePath : (x: NormalizedAbsolutePath) => void
+>p : "/a/b/c" & tag { AbsolutePath: void; }
+    }
+    else {
+        consumeNormalizedPath(p); // err
+>consumeNormalizedPath(p) : void
+>consumeNormalizedPath : (x: NormalizedPath) => void
+>p : "/a/b/c"
+
+        consumeAbsolutePath(p); // err
+>consumeAbsolutePath(p) : void
+>consumeAbsolutePath : (x: AbsolutePath) => void
+>p : "/a/b/c"
+
+        consumeNormalizedOrAbsolutePath(p); // err
+>consumeNormalizedOrAbsolutePath(p) : void
+>consumeNormalizedOrAbsolutePath : (x: NormalizedPath | AbsolutePath) => void
+>p : "/a/b/c"
+
+        consumeNormalizedAbsolutePath(p); // err
+>consumeNormalizedAbsolutePath(p) : void
+>consumeNormalizedAbsolutePath : (x: NormalizedAbsolutePath) => void
+>p : "/a/b/c"
+    }
+}
+
