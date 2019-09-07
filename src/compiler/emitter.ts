@@ -186,9 +186,9 @@ namespace ts {
             for (const inputFileName of configFile.fileNames) {
                 if (fileExtensionIs(inputFileName, Extension.Dts)) continue;
                 const js = getOutputJSFileName(inputFileName, configFile, ignoreCase);
-                addOutput(js);
+                if (!configFile.options.emitDeclarationOnly) addOutput(js);
                 if (fileExtensionIs(inputFileName, Extension.Json)) continue;
-                if (js && configFile.options.sourceMap) {
+                if (js && configFile.options.sourceMap && !configFile.options.emitDeclarationOnly) {
                     addOutput(`${js}.map`);
                 }
                 if (getEmitDeclarations(configFile.options) && hasTSFileExtension(inputFileName)) {
