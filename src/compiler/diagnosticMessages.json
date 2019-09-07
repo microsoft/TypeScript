@@ -1035,6 +1035,10 @@
         "category": "Error",
         "code": 1356
     },
+    "Tagged template expressions are not permitted in an optional chain.": {
+        "category": "Error",
+        "code": 1357
+    },
 
     "Duplicate identifier '{0}'.": {
         "category": "Error",

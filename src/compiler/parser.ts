@@ -4630,7 +4630,7 @@ namespace ts {
                 let isPropertyAccess = false;
                 if (allowOptionalChain && isStartOfOptionalPropertyOrElementAccessChain()) {
                     questionDotToken = parseExpectedToken(SyntaxKind.QuestionDotToken);
-                    isPropertyAccess = token() !== SyntaxKind.OpenBracketToken;
+                    isPropertyAccess = tokenIsIdentifierOrKeyword(token());
                 }
                 else {
                     isPropertyAccess = parseOptional(SyntaxKind.DotToken);

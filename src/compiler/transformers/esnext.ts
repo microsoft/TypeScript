@@ -23,7 +23,6 @@ namespace ts {
                 case SyntaxKind.PropertyAccessExpression:
                 case SyntaxKind.ElementAccessExpression:
                 case SyntaxKind.CallExpression:
-                case SyntaxKind.TaggedTemplateExpression:
                     if (node.flags & NodeFlags.OptionalChain) {
                         const updated = visitOptionalExpression(node as OptionalChain, /*captureThisArg*/ false);
                         Debug.assertNotNode(updated, isSyntheticReference);
