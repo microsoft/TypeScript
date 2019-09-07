@@ -33689,9 +33689,10 @@ namespace ts {
         }
 
         function checkNumericLiteralValueSize(node: NumericLiteral) {
+            // Scientific notation (e.g. 2e54 and 1e00000000010) can't be converted to bigint
             // Literals with 15 or fewer characters aren't long enough to reach past 2^53 - 1
             // Fractional numbers (e.g. 9000000000000000.001) are inherently imprecise anyway
-            if (node.text.length <= 15 || node.text.indexOf(".") !== -1) {
+            if (node.numericLiteralFlags & TokenFlags.Scientific || node.text.length <= 15 || node.text.indexOf(".") !== -1) {
                 return;
             }
 

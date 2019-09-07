@@ -18,6 +18,7 @@
 ////2e52;
 ////2e53;
 ////2e54;
+////1e00000000010;
 
 verify.codeFix({
   description: ts.Diagnostics.Convert_to_a_bigint_numeric_literal.message,
@@ -41,7 +42,8 @@ verify.codeFix({
 -0x20000000000001;
 2e52;
 2e53;
-2e54;`
+2e54;
+1e00000000010;`
 });
 
 verify.codeFixAll({
@@ -66,5 +68,6 @@ verify.codeFixAll({
 -0x20000000000001n;
 2e52;
 2e53;
-2e54;`
+2e54;
+1e00000000010;`
 });
