@@ -9996,6 +9996,16 @@ namespace ts {
             return true;
         }
 
+        function extractIrreducible(types: Type[], flag: TypeFlags) {
+            if (every(types, t => !!(t.flags & TypeFlags.Union) && some((t as UnionType).types, tt => !!(tt.flags & flag)))) {
+                for (let i = 0; i < types.length; i++) {
+                    types[i] = filterType(types[i], t => !(t.flags & flag));
+                }
+                return true;
+            }
+            return false;
+        }
+
         // If the given list of types contains more than one union of primitive types, replace the
         // first with a union containing an intersection of those primitive types, then remove the
         // other unions and return true. Otherwise, do nothing and return false.
@@ -10113,6 +10123,12 @@ namespace ts {
                         // disappeared), we restart the operation to get a new set of combined flags. Once we have
                         // reduced we'll never reduce again, so this occurs at most once.
                         result = getIntersectionType(typeSet, aliasSymbol, aliasTypeArguments);
+                    }
+                    else if (extractIrreducible(typeSet, TypeFlags.Undefined)) {
+                        result = getUnionType([getIntersectionType(typeSet), undefinedType], UnionReduction.Literal, aliasSymbol, aliasTypeArguments);
+                    }
+                    else if (extractIrreducible(typeSet, TypeFlags.Null)) {
+                        result = getUnionType([getIntersectionType(typeSet), nullType], UnionReduction.Literal, aliasSymbol, aliasTypeArguments);
                     }
                     else {
                         // We are attempting to construct a type of the form X & (A | B) & Y. Transform this into a type of
