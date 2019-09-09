@@ -55,14 +55,6 @@ namespace ts {
                 ]
             ]
         ];
-        const expectedMapFileNames = [
-            outputFiles[project.first][ext.jsmap],
-            outputFiles[project.first][ext.dtsmap],
-            outputFiles[project.second][ext.jsmap],
-            outputFiles[project.second][ext.dtsmap],
-            outputFiles[project.third][ext.jsmap],
-            outputFiles[project.third][ext.dtsmap]
-        ];
         const expectedTsbuildInfoFileNames: ReadonlyArray<BuildInfoSectionBaselineFiles> = [
             [outputFiles[project.first][ext.buildinfo], outputFiles[project.first][ext.js], outputFiles[project.first][ext.dts]],
             [outputFiles[project.second][ext.buildinfo], outputFiles[project.second][ext.js], outputFiles[project.second][ext.dts]],
@@ -286,7 +278,7 @@ namespace ts {
                 tick,
                 proj: "outfile-concat",
                 rootNames: ["/src/third"],
-                expectedMapFileNames,
+                baselineSourceMap: true,
                 expectedBuildInfoFilesForSectionBaselines: expectedBuildInfoFilesForSectionBaselines || expectedTsbuildInfoFileNames,
                 lastProjectOutput: outputFiles[project.third][ext.js],
                 initialBuild: {

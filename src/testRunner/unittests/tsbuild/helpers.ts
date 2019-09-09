@@ -164,8 +164,10 @@ interface Symbol {
         }
     }
 
-    function generateSourceMapBaselineFiles(fs: vfs.FileSystem, mapFileNames: ReadonlyArray<string>) {
-        for (const mapFile of mapFileNames) {
+    function generateSourceMapBaselineFiles(fs: vfs.FileSystem, mapFileNames: Iterator<string>) {
+        while (true) {
+            const { value: mapFile, done } = mapFileNames.next();
+            if (done) break;
             if (!fs.existsSync(mapFile)) continue;
             const text = Harness.SourceMapRecorder.getSourceMapRecordWithVFS(fs, mapFile);
             fs.writeFileSync(`${mapFile}.baseline.txt`, text);
@@ -233,17 +235,24 @@ interface Symbol {
         fs: vfs.FileSystem;
         tick: () => void;
         rootNames: ReadonlyArray<string>;
-        expectedMapFileNames?: ReadonlyArray<string>;
+        baselineSourceMap?: true;
         expectedBuildInfoFilesForSectionBaselines?: ReadonlyArray<BuildInfoSectionBaselineFiles>;
         modifyFs: (fs: vfs.FileSystem) => void;
     }
 
-    function build({ fs, tick, rootNames, expectedMapFileNames, expectedBuildInfoFilesForSectionBaselines, modifyFs }: BuildInput) {
+    function build({ fs, tick, rootNames, baselineSourceMap, expectedBuildInfoFilesForSectionBaselines, modifyFs }: BuildInput) {
         const actualReadFileMap = createMap<number>();
         modifyFs(fs);
         tick();
 
         const host = new fakes.SolutionBuilderHost(fs);
+        const writtenFiles = createMap<true>();
+        const originalWriteFile = host.writeFile;
+        host.writeFile = (fileName, content, writeByteOrderMark) => {
+            assert.isFalse(writtenFiles.has(fileName));
+            writtenFiles.set(fileName, true);
+            return originalWriteFile.call(host, fileName, content, writeByteOrderMark);
+        };
         const builder = createSolutionBuilder(host, rootNames, { dry: false, force: false, verbose: true });
         host.clearDiagnostics();
         const originalReadFile = host.readFile;
@@ -255,7 +264,7 @@ interface Symbol {
             return originalReadFile.call(host, path);
         };
         builder.build();
-        if (expectedMapFileNames) generateSourceMapBaselineFiles(fs, expectedMapFileNames);
+        if (baselineSourceMap) generateSourceMapBaselineFiles(fs, mapDefinedIterator(writtenFiles.keys(), f => f.endsWith(".map") ? f : undefined));
         generateBuildInfoSectionBaselineFiles(fs, expectedBuildInfoFilesForSectionBaselines || emptyArray);
         fs.makeReadonly();
         return { fs, actualReadFileMap, host, builder };
@@ -302,8 +311,6 @@ Mismatch Actual(path, actual, expected): ${JSON.stringify(arrayFrom(mapDefinedIt
         tick: () => void;
         proj: string;
         rootNames: ReadonlyArray<string>;
-        /** map file names to generate baseline of */
-        expectedMapFileNames?: ReadonlyArray<string>;
         expectedBuildInfoFilesForSectionBaselines?: ReadonlyArray<BuildInfoSectionBaselineFiles>;
         lastProjectOutput: string;
         initialBuild: BuildState;
@@ -313,11 +320,12 @@ Mismatch Actual(path, actual, expected): ${JSON.stringify(arrayFrom(mapDefinedIt
         incrementalHeaderChangedBuild?: BuildState;
         baselineOnly?: true;
         verifyDiagnostics?: true;
+        baselineSourceMap?: true;
     }
 
     export function verifyTsbuildOutput({
         scenario, projFs, time, tick, proj, rootNames, outputFiles, baselineOnly, verifyDiagnostics,
-        expectedMapFileNames, expectedBuildInfoFilesForSectionBaselines, lastProjectOutput,
+        baselineSourceMap, expectedBuildInfoFilesForSectionBaselines, lastProjectOutput,
         initialBuild, incrementalDtsChangedBuild, incrementalDtsUnchangedBuild, incrementalHeaderChangedBuild
     }: VerifyTsBuildInput) {
         describe(`tsc --b ${proj}:: ${scenario}`, () => {
@@ -330,7 +338,7 @@ Mismatch Actual(path, actual, expected): ${JSON.stringify(arrayFrom(mapDefinedIt
                     fs: projFs().shadow(),
                     tick,
                     rootNames,
-                    expectedMapFileNames,
+                    baselineSourceMap,
                     expectedBuildInfoFilesForSectionBaselines,
                     modifyFs: initialBuild.modifyFs,
                 });
@@ -374,7 +382,7 @@ Mismatch Actual(path, actual, expected): ${JSON.stringify(arrayFrom(mapDefinedIt
                             fs: newFs,
                             tick,
                             rootNames,
-                            expectedMapFileNames,
+                            baselineSourceMap,
                             expectedBuildInfoFilesForSectionBaselines,
                             modifyFs: incrementalModifyFs,
                         }));

@@ -612,11 +612,7 @@ export class cNew {}`);
                 tick,
                 proj: "sample1",
                 rootNames: ["/src/tests"],
-                expectedMapFileNames: [
-                    "/src/core/anotherModule.d.ts.map",
-                    "/src/core/index.d.ts.map",
-                    "/src/logic/index.js.map"
-                ],
+                baselineSourceMap: true,
                 lastProjectOutput: "/src/tests/index.js",
                 initialBuild,
                 incrementalDtsChangedBuild: {
@@ -722,11 +718,7 @@ class someClass { }`),
                 tick,
                 proj: "sample1",
                 rootNames: ["/src/tests"],
-                expectedMapFileNames: [
-                    "/src/core/anotherModule.d.ts.map",
-                    "/src/core/index.d.ts.map",
-                    "/src/logic/index.js.map"
-                ],
+                baselineSourceMap: true,
                 lastProjectOutput: "/src/tests/index.js",
                 initialBuild,
                 incrementalDtsChangedBuild: {
@@ -790,11 +782,7 @@ class someClass { }`),
                 tick,
                 proj: "sample1",
                 rootNames: ["/src/tests"],
-                expectedMapFileNames: [
-                    "/src/core/anotherModule.d.ts.map",
-                    "/src/core/index.d.ts.map",
-                    "/src/logic/index.js.map"
-                ],
+                baselineSourceMap: true,
                 lastProjectOutput: "/src/tests/index.js",
                 initialBuild: {
                     modifyFs: fs => replaceText(fs, "/src/logic/tsconfig.json", `"composite": true,`, `"composite": true,

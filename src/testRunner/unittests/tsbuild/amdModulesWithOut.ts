@@ -67,12 +67,7 @@ namespace ts {
                 tick,
                 proj: "amdModulesWithOut",
                 rootNames: ["/src/app"],
-                expectedMapFileNames: [
-                    outputFiles[project.lib][ext.jsmap],
-                    outputFiles[project.lib][ext.dtsmap],
-                    outputFiles[project.app][ext.jsmap],
-                    outputFiles[project.app][ext.dtsmap],
-                ],
+                baselineSourceMap: true,
                 expectedBuildInfoFilesForSectionBaselines: [
                     [outputFiles[project.lib][ext.buildinfo], outputFiles[project.lib][ext.js], outputFiles[project.lib][ext.dts]],
                     [outputFiles[project.app][ext.buildinfo], outputFiles[project.app][ext.js], outputFiles[project.app][ext.dts]]
@@ -221,12 +216,7 @@ ${internal} export enum internalEnum { a, b, c }`);
                     tick,
                     proj: "amdModulesWithOut",
                     rootNames: ["/src/app"],
-                    expectedMapFileNames: [
-                        libOutputFile[ext.jsmap],
-                        libOutputFile[ext.dtsmap],
-                        outputFiles[project.app][ext.jsmap],
-                        outputFiles[project.app][ext.dtsmap],
-                    ],
+                    baselineSourceMap: true,
                     expectedBuildInfoFilesForSectionBaselines: [
                         [libOutputFile[ext.buildinfo], libOutputFile[ext.js], libOutputFile[ext.dts]],
                         [outputFiles[project.app][ext.buildinfo], outputFiles[project.app][ext.js], outputFiles[project.app][ext.dts]]
