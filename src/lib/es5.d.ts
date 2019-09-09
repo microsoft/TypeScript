@@ -1479,6 +1479,13 @@ type InstanceType<T extends new (...args: any) => any> = T extends new (...args:
 interface ThisType<T> { }
 
 /**
+ * Constructs a structural tag over property name(s) `K`
+ */
+type Tag<K extends keyof any> = tag {
+    [_ in K]: void;
+  };
+
+/**
  * Represents a raw buffer of binary data, which is used to store data for the
  * different typed arrays. ArrayBuffers cannot be read from or written to directly,
  * but can be passed to a typed array or DataView Object to interpret the raw

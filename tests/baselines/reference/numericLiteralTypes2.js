@@ -66,9 +66,9 @@ function assertNever(x: never): never {
     throw new Error("Unexpected value");
 }
 
-type Tag = 0 | 1 | 2;
+type NumericTag = 0 | 1 | 2;
 
-function f10(x: Tag) {
+function f10(x: NumericTag) {
     switch (x) {
         case 0: return "a";
         case 1: return "b";
@@ -76,7 +76,7 @@ function f10(x: Tag) {
     }
 }
 
-function f11(x: Tag) {
+function f11(x: NumericTag) {
     switch (x) {
         case 0: return "a";
         case 1: return "b";
@@ -85,7 +85,7 @@ function f11(x: Tag) {
     return assertNever(x);
 }
 
-function f12(x: Tag) {
+function f12(x: NumericTag) {
     if (x) {
         x;
     }
@@ -94,7 +94,7 @@ function f12(x: Tag) {
     }
 }
 
-function f13(x: Tag) {
+function f13(x: NumericTag) {
     if (x === 0 || x === 2) {
         x;
     }

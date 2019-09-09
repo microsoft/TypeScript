@@ -1,12 +1,12 @@
 tests/cases/conformance/types/structuralTags/structuralTagTypesControlFlow.ts(22,23): error TS2345: Argument of type '{ x: number; } & BrandA' is not assignable to parameter of type 'BrandB'.
-tests/cases/conformance/types/structuralTags/structuralTagTypesControlFlow.ts(24,27): error TS2345: Argument of type '{ x: number; } & BrandA' is not assignable to parameter of type 'tag ({ BrandA: void; } & { BrandB: void; })'.
+tests/cases/conformance/types/structuralTags/structuralTagTypesControlFlow.ts(24,27): error TS2345: Argument of type '{ x: number; } & BrandA' is not assignable to parameter of type 'BrandA & BrandB'.
 tests/cases/conformance/types/structuralTags/structuralTagTypesControlFlow.ts(29,23): error TS2345: Argument of type '{ x: number; } & BrandB' is not assignable to parameter of type 'BrandA'.
-tests/cases/conformance/types/structuralTags/structuralTagTypesControlFlow.ts(32,27): error TS2345: Argument of type '{ x: number; } & BrandB' is not assignable to parameter of type 'tag ({ BrandA: void; } & { BrandB: void; })'.
+tests/cases/conformance/types/structuralTags/structuralTagTypesControlFlow.ts(32,27): error TS2345: Argument of type '{ x: number; } & BrandB' is not assignable to parameter of type 'BrandA & BrandB'.
 tests/cases/conformance/types/structuralTags/structuralTagTypesControlFlow.ts(35,23): error TS2345: Argument of type '{ x: number; }' is not assignable to parameter of type 'BrandA'.
 tests/cases/conformance/types/structuralTags/structuralTagTypesControlFlow.ts(36,23): error TS2345: Argument of type '{ x: number; }' is not assignable to parameter of type 'BrandB'.
 tests/cases/conformance/types/structuralTags/structuralTagTypesControlFlow.ts(37,26): error TS2345: Argument of type '{ x: number; }' is not assignable to parameter of type 'BrandA | BrandB'.
   Type '{ x: number; }' is not assignable to type 'BrandB'.
-tests/cases/conformance/types/structuralTags/structuralTagTypesControlFlow.ts(38,27): error TS2345: Argument of type '{ x: number; }' is not assignable to parameter of type 'tag ({ BrandA: void; } & { BrandB: void; })'.
+tests/cases/conformance/types/structuralTags/structuralTagTypesControlFlow.ts(38,27): error TS2345: Argument of type '{ x: number; }' is not assignable to parameter of type 'BrandA & BrandB'.
 tests/cases/conformance/types/structuralTags/structuralTagTypesControlFlow.ts(64,29): error TS2345: Argument of type '"/a/b/c" & tag { NormalizedPath: void; }' is not assignable to parameter of type 'AbsolutePath'.
   Type '"/a/b/c" & tag { NormalizedPath: void; }' is not assignable to type 'tag { AbsolutePath: void; }'.
 tests/cases/conformance/types/structuralTags/structuralTagTypesControlFlow.ts(66,39): error TS2345: Argument of type '"/a/b/c" & tag { NormalizedPath: void; }' is not assignable to parameter of type 'NormalizedAbsolutePath'.
@@ -52,7 +52,7 @@ tests/cases/conformance/types/structuralTags/structuralTagTypesControlFlow.ts(80
             consumeBrandAOrB(x);
             consumeBrandAAndB(x); // err
                               ~
-!!! error TS2345: Argument of type '{ x: number; } & BrandA' is not assignable to parameter of type 'tag ({ BrandA: void; } & { BrandB: void; })'.
+!!! error TS2345: Argument of type '{ x: number; } & BrandA' is not assignable to parameter of type 'BrandA & BrandB'.
         }
     }
     else {
@@ -64,7 +64,7 @@ tests/cases/conformance/types/structuralTags/structuralTagTypesControlFlow.ts(80
             consumeBrandAOrB(x);
             consumeBrandAAndB(x); // err
                               ~
-!!! error TS2345: Argument of type '{ x: number; } & BrandB' is not assignable to parameter of type 'tag ({ BrandA: void; } & { BrandB: void; })'.
+!!! error TS2345: Argument of type '{ x: number; } & BrandB' is not assignable to parameter of type 'BrandA & BrandB'.
         }
         else {
             consumeBrandA(x); // err
@@ -79,7 +79,7 @@ tests/cases/conformance/types/structuralTags/structuralTagTypesControlFlow.ts(80
 !!! error TS2345:   Type '{ x: number; }' is not assignable to type 'BrandB'.
             consumeBrandAAndB(x); // err
                               ~
-!!! error TS2345: Argument of type '{ x: number; }' is not assignable to parameter of type 'tag ({ BrandA: void; } & { BrandB: void; })'.
+!!! error TS2345: Argument of type '{ x: number; }' is not assignable to parameter of type 'BrandA & BrandB'.
         }
     }
     

@@ -4672,6 +4672,7 @@ namespace FourSlashInterface {
             typeEntry("ReturnType"),
             typeEntry("InstanceType"),
             interfaceEntry("ThisType"),
+            typeEntry("Tag"),
             varEntry("ArrayBuffer"),
             interfaceEntry("ArrayBufferTypes"),
             typeEntry("ArrayBufferLike"),

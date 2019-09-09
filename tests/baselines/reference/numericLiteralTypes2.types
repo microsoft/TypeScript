@@ -259,10 +259,10 @@ function assertNever(x: never): never {
 >"Unexpected value" : "Unexpected value"
 }
 
-type Tag = 0 | 1 | 2;
->Tag : 0 | 1 | 2
+type NumericTag = 0 | 1 | 2;
+>NumericTag : 0 | 1 | 2
 
-function f10(x: Tag) {
+function f10(x: NumericTag) {
 >f10 : (x: 0 | 1 | 2) => "a" | "b" | "c"
 >x : 0 | 1 | 2
 
@@ -283,7 +283,7 @@ function f10(x: Tag) {
     }
 }
 
-function f11(x: Tag) {
+function f11(x: NumericTag) {
 >f11 : (x: 0 | 1 | 2) => "a" | "b" | "c"
 >x : 0 | 1 | 2
 
@@ -308,7 +308,7 @@ function f11(x: Tag) {
 >x : never
 }
 
-function f12(x: Tag) {
+function f12(x: NumericTag) {
 >f12 : (x: 0 | 1 | 2) => void
 >x : 0 | 1 | 2
 
@@ -324,7 +324,7 @@ function f12(x: Tag) {
     }
 }
 
-function f13(x: Tag) {
+function f13(x: NumericTag) {
 >f13 : (x: 0 | 1 | 2) => void
 >x : 0 | 1 | 2
 

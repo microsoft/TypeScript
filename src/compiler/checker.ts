@@ -629,7 +629,7 @@ namespace ts {
         const literalTypes = createMap<LiteralType>();
         const indexedAccessTypes = createMap<IndexedAccessType>();
         const substitutionTypes = createMap<SubstitutionType>();
-        const structuralTags = createMap<StructuralTagType>();
+        const structuralTags = createMap<Type>();
         const evolvingArrayTypes: EvolvingArrayType[] = [];
         const undefinedProperties = createMap<Symbol>() as UnderscoreEscapedMap<Symbol>;
 
@@ -3798,8 +3798,33 @@ namespace ts {
                     return typeToTypeNodeHelper((<SubstitutionType>type).typeVariable, context);
                 }
                 if (type.flags & TypeFlags.StructuralTag) {
+                    const innerType = (type as StructuralTagType).type;
+                    if (innerType.flags & TypeFlags.Intersection) {
+                        // If some inner type of the intersection has an alias when hoisted out, (attempt to) hoist out all of the aliasable things
+                        if (some((innerType as IntersectionType).types, t => !!getStructuralTagForType(t).aliasSymbol)) {
+                            const aliasingTypes: Type[] = [];
+                            const nonAliasingTypes: Type[] = [];
+                            for (const t of (innerType as IntersectionType).types) {
+                                const taggedVersion = getStructuralTagForType(t);
+                                if (taggedVersion.aliasSymbol && (context.flags & NodeBuilderFlags.UseAliasDefinedOutsideCurrentScope || isTypeSymbolAccessible(taggedVersion.aliasSymbol, context.enclosingDeclaration))) {
+                                    aliasingTypes.push(taggedVersion);
+                                }
+                                else {
+                                    nonAliasingTypes.push(t);
+                                }
+                            }
+                            if (length(aliasingTypes)) {
+                                if (length(nonAliasingTypes)) {
+                                    aliasingTypes.push(getStructuralTagForType(getIntersectionType(nonAliasingTypes)));
+                                }
+                                // Do note: this can make an intersection become nested within another intersection - this _is_ handled correctly
+                                // during emit, so is fine (and honestly is more clear, since it groups all the tags together)
+                                return createUnionOrIntersectionTypeNode(SyntaxKind.IntersectionType, map(aliasingTypes, t => typeToTypeNodeHelper(t, context)));
+                            }
+                        }
+                    }
                     context.approximateLength += 4;
-                    return createTypeOperatorNode(SyntaxKind.TagKeyword, typeToTypeNodeHelper((type as StructuralTagType).type, context));
+                    return createTypeOperatorNode(SyntaxKind.TagKeyword, typeToTypeNodeHelper(innerType, context));
                 }
 
                 return Debug.fail("Should be unreachable.");
@@ -9980,7 +10005,7 @@ namespace ts {
                 includes = addTypeToIntersection(typeSet, includes, getRegularTypeOfLiteralType(type), tagSet);
             }
             if (isTopLevel && tagSet.size) {
-                let tag: StructuralTagType;
+                let tag: Type;
                 if (tagSet.size === 1) {
                     tag = tagSet.values().next().value;
                 }
@@ -9988,6 +10013,9 @@ namespace ts {
                     const tagTypes: Type[] = [];
                     tagSet.forEach(t => tagTypes.push(t.type));
                     tag = getStructuralTagForType(getIntersectionType(tagTypes));
+                    if (tag.flags & TypeFlags.Union) {
+                        includes |= TypeFlags.Union;
+                    }
                 }
                 typeSet.set(tag.id.toString(), tag);
             }
@@ -10310,10 +10338,18 @@ namespace ts {
             return type;
         }
 
-        function getStructuralTagForType(type: Type, aliasSymbol?: Symbol, aliasTypeArguments?: readonly Type[]) {
+        function getStructuralTagForType(type: Type, aliasSymbol?: Symbol | number, aliasTypeArguments?: readonly Type[]) {
+            if (typeof aliasSymbol === "number") {
+                aliasSymbol = undefined;
+            }
             const tid = "" + getTypeId(type);
             if (structuralTags.has(tid)) {
                 return structuralTags.get(tid)!;
+            }
+            if (type.flags & TypeFlags.Union) {
+                const union = getUnionType(map((type as UnionType).types, getStructuralTagForType), UnionReduction.Subtype, aliasSymbol, aliasTypeArguments);
+                structuralTags.set(tid, union);
+                return union;
             }
             const tag = createType(TypeFlags.StructuralTag) as StructuralTagType;
             tag.type = type;

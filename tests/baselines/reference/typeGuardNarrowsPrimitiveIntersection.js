@@ -1,7 +1,7 @@
 //// [typeGuardNarrowsPrimitiveIntersection.ts]
-type Tag = {__tag: any};
-declare function isNonBlank(value: string) : value is (string & Tag);
-declare function doThis(value: string & Tag): void;
+type MyTag = {__tag: any};
+declare function isNonBlank(value: string) : value is (string & MyTag);
+declare function doThis(value: string & MyTag): void;
 declare function doThat(value: string) : void;
 let value: string;
 if (isNonBlank(value)) {

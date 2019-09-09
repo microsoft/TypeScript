@@ -1,0 +1,258 @@
+=== tests/cases/conformance/types/structuralTags/structuralTagTypesUsingGlobalTagAlias.ts ===
+export type Paired = {
+>Paired : Paired
+
+    x: number & Tag<"x">;
+>x : number & Tag<"x">
+
+    y: number & Tag<"y">;
+>y : number & Tag<"y">
+
+};
+
+
+export function isPaired(x: {x: number, y: number}): x is Paired {
+>isPaired : (x: { x: number; y: number; }) => x is Paired
+>x : { x: number; y: number; }
+>x : number
+>y : number
+
+    return true;
+>true : true
+}
+
+export function makePair(x: number, y: number): Paired {
+>makePair : (x: number, y: number) => Paired
+>x : number
+>y : number
+
+    return {x, y} as Paired;
+>{x, y} as Paired : Paired
+>{x, y} : { x: number; y: number; }
+>x : number
+>y : number
+}
+
+const a = makePair(0, 0);
+>a : Paired
+>makePair(0, 0) : Paired
+>makePair : (x: number, y: number) => Paired
+>0 : 0
+>0 : 0
+
+const b = {x: 0, y: 0};
+>b : { x: number; y: number; }
+>{x: 0, y: 0} : { x: number; y: number; }
+>x : number
+>0 : 0
+>y : number
+>0 : 0
+
+if (Math.random() > 0.3) {
+>Math.random() > 0.3 : boolean
+>Math.random() : number
+>Math.random : () => number
+>Math : Math
+>random : () => number
+>0.3 : 0.3
+
+    b.x = a.x;
+>b.x = a.x : number & Tag<"x">
+>b.x : number
+>b : { x: number; y: number; }
+>x : number
+>a.x : number & Tag<"x">
+>a : Paired
+>x : number & Tag<"x">
+
+    b.y = a.y;
+>b.y = a.y : number & Tag<"y">
+>b.y : number
+>b : { x: number; y: number; }
+>y : number
+>a.y : number & Tag<"y">
+>a : Paired
+>y : number & Tag<"y">
+}
+
+if (isPaired(b)) {
+>isPaired(b) : boolean
+>isPaired : (x: { x: number; y: number; }) => x is Paired
+>b : { x: number; y: number; }
+
+    b.x = a.x;
+>b.x = a.x : number & Tag<"x">
+>b.x : number & Tag<"x">
+>b : Paired
+>x : number & Tag<"x">
+>a.x : number & Tag<"x">
+>a : Paired
+>x : number & Tag<"x">
+
+    b.y = a.y;
+>b.y = a.y : number & Tag<"y">
+>b.y : number & Tag<"y">
+>b : Paired
+>y : number & Tag<"y">
+>a.y : number & Tag<"y">
+>a : Paired
+>y : number & Tag<"y">
+
+    a.x = b.x;
+>a.x = b.x : number & Tag<"x">
+>a.x : number & Tag<"x">
+>a : Paired
+>x : number & Tag<"x">
+>b.x : number & Tag<"x">
+>b : Paired
+>x : number & Tag<"x">
+
+    a.y = b.y;
+>a.y = b.y : number & Tag<"y">
+>a.y : number & Tag<"y">
+>a : Paired
+>y : number & Tag<"y">
+>b.y : number & Tag<"y">
+>b : Paired
+>y : number & Tag<"y">
+}
+
+
+type NormalizedPath = string & Tag<"NormalizedPath">;
+>NormalizedPath : NormalizedPath
+
+type AbsolutePath = string & Tag<"AbsolutePath">;
+>AbsolutePath : AbsolutePath
+
+type NormalizedAbsolutePath = NormalizedPath & AbsolutePath;
+>NormalizedAbsolutePath : NormalizedAbsolutePath
+
+declare function isNormalizedPath(x: string): x is NormalizedPath;
+>isNormalizedPath : (x: string) => x is NormalizedPath
+>x : string
+
+declare function isAbsolutePath(x: string): x is AbsolutePath;
+>isAbsolutePath : (x: string) => x is AbsolutePath
+>x : string
+
+declare function consumeNormalizedPath(x: NormalizedPath): void;
+>consumeNormalizedPath : (x: NormalizedPath) => void
+>x : NormalizedPath
+
+declare function consumeAbsolutePath(x: AbsolutePath): void;
+>consumeAbsolutePath : (x: AbsolutePath) => void
+>x : AbsolutePath
+
+declare function consumeNormalizedOrAbsolutePath(x: NormalizedPath | AbsolutePath): void;
+>consumeNormalizedOrAbsolutePath : (x: NormalizedPath | AbsolutePath) => void
+>x : NormalizedPath | AbsolutePath
+
+declare function consumeNormalizedAbsolutePath(x: NormalizedAbsolutePath): void;
+>consumeNormalizedAbsolutePath : (x: NormalizedAbsolutePath) => void
+>x : NormalizedAbsolutePath
+
+const p = "/a/b/c";
+>p : "/a/b/c"
+>"/a/b/c" : "/a/b/c"
+
+if (isNormalizedPath(p)) {
+>isNormalizedPath(p) : boolean
+>isNormalizedPath : (x: string) => x is NormalizedPath
+>p : "/a/b/c"
+
+    if (isAbsolutePath(p)) {
+>isAbsolutePath(p) : boolean
+>isAbsolutePath : (x: string) => x is AbsolutePath
+>p : "/a/b/c" & Tag<"NormalizedPath">
+
+        consumeNormalizedPath(p);
+>consumeNormalizedPath(p) : void
+>consumeNormalizedPath : (x: NormalizedPath) => void
+>p : "/a/b/c" & (Tag<"NormalizedPath"> & Tag<"AbsolutePath">)
+
+        consumeAbsolutePath(p);
+>consumeAbsolutePath(p) : void
+>consumeAbsolutePath : (x: AbsolutePath) => void
+>p : "/a/b/c" & (Tag<"NormalizedPath"> & Tag<"AbsolutePath">)
+
+        consumeNormalizedOrAbsolutePath(p);
+>consumeNormalizedOrAbsolutePath(p) : void
+>consumeNormalizedOrAbsolutePath : (x: NormalizedPath | AbsolutePath) => void
+>p : "/a/b/c" & (Tag<"NormalizedPath"> & Tag<"AbsolutePath">)
+
+        consumeNormalizedAbsolutePath(p);
+>consumeNormalizedAbsolutePath(p) : void
+>consumeNormalizedAbsolutePath : (x: NormalizedAbsolutePath) => void
+>p : "/a/b/c" & (Tag<"NormalizedPath"> & Tag<"AbsolutePath">)
+    }
+    else {
+        consumeNormalizedPath(p);
+>consumeNormalizedPath(p) : void
+>consumeNormalizedPath : (x: NormalizedPath) => void
+>p : "/a/b/c" & Tag<"NormalizedPath">
+
+        consumeAbsolutePath(p); // err
+>consumeAbsolutePath(p) : void
+>consumeAbsolutePath : (x: AbsolutePath) => void
+>p : "/a/b/c" & Tag<"NormalizedPath">
+
+        consumeNormalizedOrAbsolutePath(p);
+>consumeNormalizedOrAbsolutePath(p) : void
+>consumeNormalizedOrAbsolutePath : (x: NormalizedPath | AbsolutePath) => void
+>p : "/a/b/c" & Tag<"NormalizedPath">
+
+        consumeNormalizedAbsolutePath(p); // err
+>consumeNormalizedAbsolutePath(p) : void
+>consumeNormalizedAbsolutePath : (x: NormalizedAbsolutePath) => void
+>p : "/a/b/c" & Tag<"NormalizedPath">
+    }
+}
+else {
+    if (isAbsolutePath(p)) {
+>isAbsolutePath(p) : boolean
+>isAbsolutePath : (x: string) => x is AbsolutePath
+>p : "/a/b/c"
+
+        consumeNormalizedPath(p); // err
+>consumeNormalizedPath(p) : void
+>consumeNormalizedPath : (x: NormalizedPath) => void
+>p : "/a/b/c" & Tag<"AbsolutePath">
+
+        consumeAbsolutePath(p);
+>consumeAbsolutePath(p) : void
+>consumeAbsolutePath : (x: AbsolutePath) => void
+>p : "/a/b/c" & Tag<"AbsolutePath">
+
+        consumeNormalizedOrAbsolutePath(p);
+>consumeNormalizedOrAbsolutePath(p) : void
+>consumeNormalizedOrAbsolutePath : (x: NormalizedPath | AbsolutePath) => void
+>p : "/a/b/c" & Tag<"AbsolutePath">
+
+        consumeNormalizedAbsolutePath(p); // err
+>consumeNormalizedAbsolutePath(p) : void
+>consumeNormalizedAbsolutePath : (x: NormalizedAbsolutePath) => void
+>p : "/a/b/c" & Tag<"AbsolutePath">
+    }
+    else {
+        consumeNormalizedPath(p); // err
+>consumeNormalizedPath(p) : void
+>consumeNormalizedPath : (x: NormalizedPath) => void
+>p : "/a/b/c"
+
+        consumeAbsolutePath(p); // err
+>consumeAbsolutePath(p) : void
+>consumeAbsolutePath : (x: AbsolutePath) => void
+>p : "/a/b/c"
+
+        consumeNormalizedOrAbsolutePath(p); // err
+>consumeNormalizedOrAbsolutePath(p) : void
+>consumeNormalizedOrAbsolutePath : (x: NormalizedPath | AbsolutePath) => void
+>p : "/a/b/c"
+
+        consumeNormalizedAbsolutePath(p); // err
+>consumeNormalizedAbsolutePath(p) : void
+>consumeNormalizedAbsolutePath : (x: NormalizedAbsolutePath) => void
+>p : "/a/b/c"
+    }
+}
+

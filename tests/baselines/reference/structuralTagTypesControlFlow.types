@@ -28,8 +28,8 @@ declare function consumeBrandAOrB(x: BrandA | BrandB): void;
 >x : BrandA | BrandB
 
 declare function consumeBrandAAndB(x: BrandA & BrandB): void;
->consumeBrandAAndB : (x: tag ({ BrandA: void; } & { BrandB: void; })) => void
->x : tag ({ BrandA: void; } & { BrandB: void; })
+>consumeBrandAAndB : (x: BrandA & BrandB) => void
+>x : BrandA & BrandB
 
 const x = {x: 12};
 >x : { x: number; }
@@ -50,22 +50,22 @@ if (isBrandA(x)) {
         consumeBrandA(x);
 >consumeBrandA(x) : void
 >consumeBrandA : (x: BrandA) => void
->x : { x: number; } & tag ({ BrandA: void; } & { BrandB: void; })
+>x : { x: number; } & (BrandA & BrandB)
 
         consumeBrandB(x);
 >consumeBrandB(x) : void
 >consumeBrandB : (x: BrandB) => void
->x : { x: number; } & tag ({ BrandA: void; } & { BrandB: void; })
+>x : { x: number; } & (BrandA & BrandB)
 
         consumeBrandAOrB(x);
 >consumeBrandAOrB(x) : void
 >consumeBrandAOrB : (x: BrandA | BrandB) => void
->x : { x: number; } & tag ({ BrandA: void; } & { BrandB: void; })
+>x : { x: number; } & (BrandA & BrandB)
 
         consumeBrandAAndB(x);
 >consumeBrandAAndB(x) : void
->consumeBrandAAndB : (x: tag ({ BrandA: void; } & { BrandB: void; })) => void
->x : { x: number; } & tag ({ BrandA: void; } & { BrandB: void; })
+>consumeBrandAAndB : (x: BrandA & BrandB) => void
+>x : { x: number; } & (BrandA & BrandB)
     }
     else {
         consumeBrandA(x);
@@ -85,7 +85,7 @@ if (isBrandA(x)) {
 
         consumeBrandAAndB(x); // err
 >consumeBrandAAndB(x) : void
->consumeBrandAAndB : (x: tag ({ BrandA: void; } & { BrandB: void; })) => void
+>consumeBrandAAndB : (x: BrandA & BrandB) => void
 >x : { x: number; } & BrandA
     }
 }
@@ -112,7 +112,7 @@ else {
 
         consumeBrandAAndB(x); // err
 >consumeBrandAAndB(x) : void
->consumeBrandAAndB : (x: tag ({ BrandA: void; } & { BrandB: void; })) => void
+>consumeBrandAAndB : (x: BrandA & BrandB) => void
 >x : { x: number; } & BrandB
     }
     else {
@@ -133,7 +133,7 @@ else {
 
         consumeBrandAAndB(x); // err
 >consumeBrandAAndB(x) : void
->consumeBrandAAndB : (x: tag ({ BrandA: void; } & { BrandB: void; })) => void
+>consumeBrandAAndB : (x: BrandA & BrandB) => void
 >x : { x: number; }
     }
 }

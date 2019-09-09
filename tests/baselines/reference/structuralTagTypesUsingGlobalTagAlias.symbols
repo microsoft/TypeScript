@@ -1,0 +1,238 @@
+=== tests/cases/conformance/types/structuralTags/structuralTagTypesUsingGlobalTagAlias.ts ===
+export type Paired = {
+>Paired : Symbol(Paired, Decl(structuralTagTypesUsingGlobalTagAlias.ts, 0, 0))
+
+    x: number & Tag<"x">;
+>x : Symbol(x, Decl(structuralTagTypesUsingGlobalTagAlias.ts, 0, 22))
+>Tag : Symbol(Tag, Decl(lib.es5.d.ts, --, --))
+
+    y: number & Tag<"y">;
+>y : Symbol(y, Decl(structuralTagTypesUsingGlobalTagAlias.ts, 1, 25))
+>Tag : Symbol(Tag, Decl(lib.es5.d.ts, --, --))
+
+};
+
+
+export function isPaired(x: {x: number, y: number}): x is Paired {
+>isPaired : Symbol(isPaired, Decl(structuralTagTypesUsingGlobalTagAlias.ts, 3, 2))
+>x : Symbol(x, Decl(structuralTagTypesUsingGlobalTagAlias.ts, 6, 25))
+>x : Symbol(x, Decl(structuralTagTypesUsingGlobalTagAlias.ts, 6, 29))
+>y : Symbol(y, Decl(structuralTagTypesUsingGlobalTagAlias.ts, 6, 39))
+>x : Symbol(x, Decl(structuralTagTypesUsingGlobalTagAlias.ts, 6, 25))
+>Paired : Symbol(Paired, Decl(structuralTagTypesUsingGlobalTagAlias.ts, 0, 0))
+
+    return true;
+}
+
+export function makePair(x: number, y: number): Paired {
+>makePair : Symbol(makePair, Decl(structuralTagTypesUsingGlobalTagAlias.ts, 8, 1))
+>x : Symbol(x, Decl(structuralTagTypesUsingGlobalTagAlias.ts, 10, 25))
+>y : Symbol(y, Decl(structuralTagTypesUsingGlobalTagAlias.ts, 10, 35))
+>Paired : Symbol(Paired, Decl(structuralTagTypesUsingGlobalTagAlias.ts, 0, 0))
+
+    return {x, y} as Paired;
+>x : Symbol(x, Decl(structuralTagTypesUsingGlobalTagAlias.ts, 11, 12))
+>y : Symbol(y, Decl(structuralTagTypesUsingGlobalTagAlias.ts, 11, 14))
+>Paired : Symbol(Paired, Decl(structuralTagTypesUsingGlobalTagAlias.ts, 0, 0))
+}
+
+const a = makePair(0, 0);
+>a : Symbol(a, Decl(structuralTagTypesUsingGlobalTagAlias.ts, 14, 5))
+>makePair : Symbol(makePair, Decl(structuralTagTypesUsingGlobalTagAlias.ts, 8, 1))
+
+const b = {x: 0, y: 0};
+>b : Symbol(b, Decl(structuralTagTypesUsingGlobalTagAlias.ts, 15, 5))
+>x : Symbol(x, Decl(structuralTagTypesUsingGlobalTagAlias.ts, 15, 11))
+>y : Symbol(y, Decl(structuralTagTypesUsingGlobalTagAlias.ts, 15, 16))
+
+if (Math.random() > 0.3) {
+>Math.random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
+>Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
+
+    b.x = a.x;
+>b.x : Symbol(x, Decl(structuralTagTypesUsingGlobalTagAlias.ts, 15, 11))
+>b : Symbol(b, Decl(structuralTagTypesUsingGlobalTagAlias.ts, 15, 5))
+>x : Symbol(x, Decl(structuralTagTypesUsingGlobalTagAlias.ts, 15, 11))
+>a.x : Symbol(x, Decl(structuralTagTypesUsingGlobalTagAlias.ts, 0, 22))
+>a : Symbol(a, Decl(structuralTagTypesUsingGlobalTagAlias.ts, 14, 5))
+>x : Symbol(x, Decl(structuralTagTypesUsingGlobalTagAlias.ts, 0, 22))
+
+    b.y = a.y;
+>b.y : Symbol(y, Decl(structuralTagTypesUsingGlobalTagAlias.ts, 15, 16))
+>b : Symbol(b, Decl(structuralTagTypesUsingGlobalTagAlias.ts, 15, 5))
+>y : Symbol(y, Decl(structuralTagTypesUsingGlobalTagAlias.ts, 15, 16))
+>a.y : Symbol(y, Decl(structuralTagTypesUsingGlobalTagAlias.ts, 1, 25))
+>a : Symbol(a, Decl(structuralTagTypesUsingGlobalTagAlias.ts, 14, 5))
+>y : Symbol(y, Decl(structuralTagTypesUsingGlobalTagAlias.ts, 1, 25))
+}
+
+if (isPaired(b)) {
+>isPaired : Symbol(isPaired, Decl(structuralTagTypesUsingGlobalTagAlias.ts, 3, 2))
+>b : Symbol(b, Decl(structuralTagTypesUsingGlobalTagAlias.ts, 15, 5))
+
+    b.x = a.x;
+>b.x : Symbol(x, Decl(structuralTagTypesUsingGlobalTagAlias.ts, 0, 22))
+>b : Symbol(b, Decl(structuralTagTypesUsingGlobalTagAlias.ts, 15, 5))
+>x : Symbol(x, Decl(structuralTagTypesUsingGlobalTagAlias.ts, 0, 22))
+>a.x : Symbol(x, Decl(structuralTagTypesUsingGlobalTagAlias.ts, 0, 22))
+>a : Symbol(a, Decl(structuralTagTypesUsingGlobalTagAlias.ts, 14, 5))
+>x : Symbol(x, Decl(structuralTagTypesUsingGlobalTagAlias.ts, 0, 22))
+
+    b.y = a.y;
+>b.y : Symbol(y, Decl(structuralTagTypesUsingGlobalTagAlias.ts, 1, 25))
+>b : Symbol(b, Decl(structuralTagTypesUsingGlobalTagAlias.ts, 15, 5))
+>y : Symbol(y, Decl(structuralTagTypesUsingGlobalTagAlias.ts, 1, 25))
+>a.y : Symbol(y, Decl(structuralTagTypesUsingGlobalTagAlias.ts, 1, 25))
+>a : Symbol(a, Decl(structuralTagTypesUsingGlobalTagAlias.ts, 14, 5))
+>y : Symbol(y, Decl(structuralTagTypesUsingGlobalTagAlias.ts, 1, 25))
+
+    a.x = b.x;
+>a.x : Symbol(x, Decl(structuralTagTypesUsingGlobalTagAlias.ts, 0, 22))
+>a : Symbol(a, Decl(structuralTagTypesUsingGlobalTagAlias.ts, 14, 5))
+>x : Symbol(x, Decl(structuralTagTypesUsingGlobalTagAlias.ts, 0, 22))
+>b.x : Symbol(x, Decl(structuralTagTypesUsingGlobalTagAlias.ts, 0, 22))
+>b : Symbol(b, Decl(structuralTagTypesUsingGlobalTagAlias.ts, 15, 5))
+>x : Symbol(x, Decl(structuralTagTypesUsingGlobalTagAlias.ts, 0, 22))
+
+    a.y = b.y;
+>a.y : Symbol(y, Decl(structuralTagTypesUsingGlobalTagAlias.ts, 1, 25))
+>a : Symbol(a, Decl(structuralTagTypesUsingGlobalTagAlias.ts, 14, 5))
+>y : Symbol(y, Decl(structuralTagTypesUsingGlobalTagAlias.ts, 1, 25))
+>b.y : Symbol(y, Decl(structuralTagTypesUsingGlobalTagAlias.ts, 1, 25))
+>b : Symbol(b, Decl(structuralTagTypesUsingGlobalTagAlias.ts, 15, 5))
+>y : Symbol(y, Decl(structuralTagTypesUsingGlobalTagAlias.ts, 1, 25))
+}
+
+
+type NormalizedPath = string & Tag<"NormalizedPath">;
+>NormalizedPath : Symbol(NormalizedPath, Decl(structuralTagTypesUsingGlobalTagAlias.ts, 27, 1))
+>Tag : Symbol(Tag, Decl(lib.es5.d.ts, --, --))
+
+type AbsolutePath = string & Tag<"AbsolutePath">;
+>AbsolutePath : Symbol(AbsolutePath, Decl(structuralTagTypesUsingGlobalTagAlias.ts, 30, 53))
+>Tag : Symbol(Tag, Decl(lib.es5.d.ts, --, --))
+
+type NormalizedAbsolutePath = NormalizedPath & AbsolutePath;
+>NormalizedAbsolutePath : Symbol(NormalizedAbsolutePath, Decl(structuralTagTypesUsingGlobalTagAlias.ts, 31, 49))
+>NormalizedPath : Symbol(NormalizedPath, Decl(structuralTagTypesUsingGlobalTagAlias.ts, 27, 1))
+>AbsolutePath : Symbol(AbsolutePath, Decl(structuralTagTypesUsingGlobalTagAlias.ts, 30, 53))
+
+declare function isNormalizedPath(x: string): x is NormalizedPath;
+>isNormalizedPath : Symbol(isNormalizedPath, Decl(structuralTagTypesUsingGlobalTagAlias.ts, 32, 60))
+>x : Symbol(x, Decl(structuralTagTypesUsingGlobalTagAlias.ts, 34, 34))
+>x : Symbol(x, Decl(structuralTagTypesUsingGlobalTagAlias.ts, 34, 34))
+>NormalizedPath : Symbol(NormalizedPath, Decl(structuralTagTypesUsingGlobalTagAlias.ts, 27, 1))
+
+declare function isAbsolutePath(x: string): x is AbsolutePath;
+>isAbsolutePath : Symbol(isAbsolutePath, Decl(structuralTagTypesUsingGlobalTagAlias.ts, 34, 66))
+>x : Symbol(x, Decl(structuralTagTypesUsingGlobalTagAlias.ts, 35, 32))
+>x : Symbol(x, Decl(structuralTagTypesUsingGlobalTagAlias.ts, 35, 32))
+>AbsolutePath : Symbol(AbsolutePath, Decl(structuralTagTypesUsingGlobalTagAlias.ts, 30, 53))
+
+declare function consumeNormalizedPath(x: NormalizedPath): void;
+>consumeNormalizedPath : Symbol(consumeNormalizedPath, Decl(structuralTagTypesUsingGlobalTagAlias.ts, 35, 62))
+>x : Symbol(x, Decl(structuralTagTypesUsingGlobalTagAlias.ts, 37, 39))
+>NormalizedPath : Symbol(NormalizedPath, Decl(structuralTagTypesUsingGlobalTagAlias.ts, 27, 1))
+
+declare function consumeAbsolutePath(x: AbsolutePath): void;
+>consumeAbsolutePath : Symbol(consumeAbsolutePath, Decl(structuralTagTypesUsingGlobalTagAlias.ts, 37, 64))
+>x : Symbol(x, Decl(structuralTagTypesUsingGlobalTagAlias.ts, 38, 37))
+>AbsolutePath : Symbol(AbsolutePath, Decl(structuralTagTypesUsingGlobalTagAlias.ts, 30, 53))
+
+declare function consumeNormalizedOrAbsolutePath(x: NormalizedPath | AbsolutePath): void;
+>consumeNormalizedOrAbsolutePath : Symbol(consumeNormalizedOrAbsolutePath, Decl(structuralTagTypesUsingGlobalTagAlias.ts, 38, 60))
+>x : Symbol(x, Decl(structuralTagTypesUsingGlobalTagAlias.ts, 39, 49))
+>NormalizedPath : Symbol(NormalizedPath, Decl(structuralTagTypesUsingGlobalTagAlias.ts, 27, 1))
+>AbsolutePath : Symbol(AbsolutePath, Decl(structuralTagTypesUsingGlobalTagAlias.ts, 30, 53))
+
+declare function consumeNormalizedAbsolutePath(x: NormalizedAbsolutePath): void;
+>consumeNormalizedAbsolutePath : Symbol(consumeNormalizedAbsolutePath, Decl(structuralTagTypesUsingGlobalTagAlias.ts, 39, 89))
+>x : Symbol(x, Decl(structuralTagTypesUsingGlobalTagAlias.ts, 40, 47))
+>NormalizedAbsolutePath : Symbol(NormalizedAbsolutePath, Decl(structuralTagTypesUsingGlobalTagAlias.ts, 31, 49))
+
+const p = "/a/b/c";
+>p : Symbol(p, Decl(structuralTagTypesUsingGlobalTagAlias.ts, 42, 5))
+
+if (isNormalizedPath(p)) {
+>isNormalizedPath : Symbol(isNormalizedPath, Decl(structuralTagTypesUsingGlobalTagAlias.ts, 32, 60))
+>p : Symbol(p, Decl(structuralTagTypesUsingGlobalTagAlias.ts, 42, 5))
+
+    if (isAbsolutePath(p)) {
+>isAbsolutePath : Symbol(isAbsolutePath, Decl(structuralTagTypesUsingGlobalTagAlias.ts, 34, 66))
+>p : Symbol(p, Decl(structuralTagTypesUsingGlobalTagAlias.ts, 42, 5))
+
+        consumeNormalizedPath(p);
+>consumeNormalizedPath : Symbol(consumeNormalizedPath, Decl(structuralTagTypesUsingGlobalTagAlias.ts, 35, 62))
+>p : Symbol(p, Decl(structuralTagTypesUsingGlobalTagAlias.ts, 42, 5))
+
+        consumeAbsolutePath(p);
+>consumeAbsolutePath : Symbol(consumeAbsolutePath, Decl(structuralTagTypesUsingGlobalTagAlias.ts, 37, 64))
+>p : Symbol(p, Decl(structuralTagTypesUsingGlobalTagAlias.ts, 42, 5))
+
+        consumeNormalizedOrAbsolutePath(p);
+>consumeNormalizedOrAbsolutePath : Symbol(consumeNormalizedOrAbsolutePath, Decl(structuralTagTypesUsingGlobalTagAlias.ts, 38, 60))
+>p : Symbol(p, Decl(structuralTagTypesUsingGlobalTagAlias.ts, 42, 5))
+
+        consumeNormalizedAbsolutePath(p);
+>consumeNormalizedAbsolutePath : Symbol(consumeNormalizedAbsolutePath, Decl(structuralTagTypesUsingGlobalTagAlias.ts, 39, 89))
+>p : Symbol(p, Decl(structuralTagTypesUsingGlobalTagAlias.ts, 42, 5))
+    }
+    else {
+        consumeNormalizedPath(p);
+>consumeNormalizedPath : Symbol(consumeNormalizedPath, Decl(structuralTagTypesUsingGlobalTagAlias.ts, 35, 62))
+>p : Symbol(p, Decl(structuralTagTypesUsingGlobalTagAlias.ts, 42, 5))
+
+        consumeAbsolutePath(p); // err
+>consumeAbsolutePath : Symbol(consumeAbsolutePath, Decl(structuralTagTypesUsingGlobalTagAlias.ts, 37, 64))
+>p : Symbol(p, Decl(structuralTagTypesUsingGlobalTagAlias.ts, 42, 5))
+
+        consumeNormalizedOrAbsolutePath(p);
+>consumeNormalizedOrAbsolutePath : Symbol(consumeNormalizedOrAbsolutePath, Decl(structuralTagTypesUsingGlobalTagAlias.ts, 38, 60))
+>p : Symbol(p, Decl(structuralTagTypesUsingGlobalTagAlias.ts, 42, 5))
+
+        consumeNormalizedAbsolutePath(p); // err
+>consumeNormalizedAbsolutePath : Symbol(consumeNormalizedAbsolutePath, Decl(structuralTagTypesUsingGlobalTagAlias.ts, 39, 89))
+>p : Symbol(p, Decl(structuralTagTypesUsingGlobalTagAlias.ts, 42, 5))
+    }
+}
+else {
+    if (isAbsolutePath(p)) {
+>isAbsolutePath : Symbol(isAbsolutePath, Decl(structuralTagTypesUsingGlobalTagAlias.ts, 34, 66))
+>p : Symbol(p, Decl(structuralTagTypesUsingGlobalTagAlias.ts, 42, 5))
+
+        consumeNormalizedPath(p); // err
+>consumeNormalizedPath : Symbol(consumeNormalizedPath, Decl(structuralTagTypesUsingGlobalTagAlias.ts, 35, 62))
+>p : Symbol(p, Decl(structuralTagTypesUsingGlobalTagAlias.ts, 42, 5))
+
+        consumeAbsolutePath(p);
+>consumeAbsolutePath : Symbol(consumeAbsolutePath, Decl(structuralTagTypesUsingGlobalTagAlias.ts, 37, 64))
+>p : Symbol(p, Decl(structuralTagTypesUsingGlobalTagAlias.ts, 42, 5))
+
+        consumeNormalizedOrAbsolutePath(p);
+>consumeNormalizedOrAbsolutePath : Symbol(consumeNormalizedOrAbsolutePath, Decl(structuralTagTypesUsingGlobalTagAlias.ts, 38, 60))
+>p : Symbol(p, Decl(structuralTagTypesUsingGlobalTagAlias.ts, 42, 5))
+
+        consumeNormalizedAbsolutePath(p); // err
+>consumeNormalizedAbsolutePath : Symbol(consumeNormalizedAbsolutePath, Decl(structuralTagTypesUsingGlobalTagAlias.ts, 39, 89))
+>p : Symbol(p, Decl(structuralTagTypesUsingGlobalTagAlias.ts, 42, 5))
+    }
+    else {
+        consumeNormalizedPath(p); // err
+>consumeNormalizedPath : Symbol(consumeNormalizedPath, Decl(structuralTagTypesUsingGlobalTagAlias.ts, 35, 62))
+>p : Symbol(p, Decl(structuralTagTypesUsingGlobalTagAlias.ts, 42, 5))
+
+        consumeAbsolutePath(p); // err
+>consumeAbsolutePath : Symbol(consumeAbsolutePath, Decl(structuralTagTypesUsingGlobalTagAlias.ts, 37, 64))
+>p : Symbol(p, Decl(structuralTagTypesUsingGlobalTagAlias.ts, 42, 5))
+
+        consumeNormalizedOrAbsolutePath(p); // err
+>consumeNormalizedOrAbsolutePath : Symbol(consumeNormalizedOrAbsolutePath, Decl(structuralTagTypesUsingGlobalTagAlias.ts, 38, 60))
+>p : Symbol(p, Decl(structuralTagTypesUsingGlobalTagAlias.ts, 42, 5))
+
+        consumeNormalizedAbsolutePath(p); // err
+>consumeNormalizedAbsolutePath : Symbol(consumeNormalizedAbsolutePath, Decl(structuralTagTypesUsingGlobalTagAlias.ts, 39, 89))
+>p : Symbol(p, Decl(structuralTagTypesUsingGlobalTagAlias.ts, 42, 5))
+    }
+}
+

@@ -1,0 +1,113 @@
+tests/cases/conformance/types/structuralTags/structuralTagTypesUsingGlobalTagAlias.ts(53,29): error TS2345: Argument of type '"/a/b/c" & Tag<"NormalizedPath">' is not assignable to parameter of type 'AbsolutePath'.
+  Type '"/a/b/c" & Tag<"NormalizedPath">' is not assignable to type 'Tag<"AbsolutePath">'.
+tests/cases/conformance/types/structuralTags/structuralTagTypesUsingGlobalTagAlias.ts(55,39): error TS2345: Argument of type '"/a/b/c" & Tag<"NormalizedPath">' is not assignable to parameter of type 'NormalizedAbsolutePath'.
+  Type '"/a/b/c" & Tag<"NormalizedPath">' is not assignable to type 'Tag<"NormalizedPath"> & Tag<"AbsolutePath">'.
+tests/cases/conformance/types/structuralTags/structuralTagTypesUsingGlobalTagAlias.ts(60,31): error TS2345: Argument of type '"/a/b/c" & Tag<"AbsolutePath">' is not assignable to parameter of type 'NormalizedPath'.
+  Type '"/a/b/c" & Tag<"AbsolutePath">' is not assignable to type 'Tag<"NormalizedPath">'.
+tests/cases/conformance/types/structuralTags/structuralTagTypesUsingGlobalTagAlias.ts(63,39): error TS2345: Argument of type '"/a/b/c" & Tag<"AbsolutePath">' is not assignable to parameter of type 'NormalizedAbsolutePath'.
+  Type '"/a/b/c" & Tag<"AbsolutePath">' is not assignable to type 'Tag<"NormalizedPath"> & Tag<"AbsolutePath">'.
+tests/cases/conformance/types/structuralTags/structuralTagTypesUsingGlobalTagAlias.ts(66,31): error TS2345: Argument of type '"/a/b/c"' is not assignable to parameter of type 'NormalizedPath'.
+  Type '"/a/b/c"' is not assignable to type 'Tag<"NormalizedPath">'.
+tests/cases/conformance/types/structuralTags/structuralTagTypesUsingGlobalTagAlias.ts(67,29): error TS2345: Argument of type '"/a/b/c"' is not assignable to parameter of type 'AbsolutePath'.
+  Type '"/a/b/c"' is not assignable to type 'Tag<"AbsolutePath">'.
+tests/cases/conformance/types/structuralTags/structuralTagTypesUsingGlobalTagAlias.ts(68,41): error TS2345: Argument of type '"/a/b/c"' is not assignable to parameter of type 'NormalizedPath | AbsolutePath'.
+tests/cases/conformance/types/structuralTags/structuralTagTypesUsingGlobalTagAlias.ts(69,39): error TS2345: Argument of type '"/a/b/c"' is not assignable to parameter of type 'NormalizedAbsolutePath'.
+  Type '"/a/b/c"' is not assignable to type 'Tag<"NormalizedPath"> & Tag<"AbsolutePath">'.
+
+
+==== tests/cases/conformance/types/structuralTags/structuralTagTypesUsingGlobalTagAlias.ts (8 errors) ====
+    export type Paired = {
+        x: number & Tag<"x">;
+        y: number & Tag<"y">;
+    };
+    
+    
+    export function isPaired(x: {x: number, y: number}): x is Paired {
+        return true;
+    }
+    
+    export function makePair(x: number, y: number): Paired {
+        return {x, y} as Paired;
+    }
+    
+    const a = makePair(0, 0);
+    const b = {x: 0, y: 0};
+    
+    if (Math.random() > 0.3) {
+        b.x = a.x;
+        b.y = a.y;
+    }
+    
+    if (isPaired(b)) {
+        b.x = a.x;
+        b.y = a.y;
+        a.x = b.x;
+        a.y = b.y;
+    }
+    
+    
+    type NormalizedPath = string & Tag<"NormalizedPath">;
+    type AbsolutePath = string & Tag<"AbsolutePath">;
+    type NormalizedAbsolutePath = NormalizedPath & AbsolutePath;
+    
+    declare function isNormalizedPath(x: string): x is NormalizedPath;
+    declare function isAbsolutePath(x: string): x is AbsolutePath;
+    
+    declare function consumeNormalizedPath(x: NormalizedPath): void;
+    declare function consumeAbsolutePath(x: AbsolutePath): void;
+    declare function consumeNormalizedOrAbsolutePath(x: NormalizedPath | AbsolutePath): void;
+    declare function consumeNormalizedAbsolutePath(x: NormalizedAbsolutePath): void;
+    
+    const p = "/a/b/c";
+    if (isNormalizedPath(p)) {
+        if (isAbsolutePath(p)) {
+            consumeNormalizedPath(p);
+            consumeAbsolutePath(p);
+            consumeNormalizedOrAbsolutePath(p);
+            consumeNormalizedAbsolutePath(p);
+        }
+        else {
+            consumeNormalizedPath(p);
+            consumeAbsolutePath(p); // err
+                                ~
+!!! error TS2345: Argument of type '"/a/b/c" & Tag<"NormalizedPath">' is not assignable to parameter of type 'AbsolutePath'.
+!!! error TS2345:   Type '"/a/b/c" & Tag<"NormalizedPath">' is not assignable to type 'Tag<"AbsolutePath">'.
+            consumeNormalizedOrAbsolutePath(p);
+            consumeNormalizedAbsolutePath(p); // err
+                                          ~
+!!! error TS2345: Argument of type '"/a/b/c" & Tag<"NormalizedPath">' is not assignable to parameter of type 'NormalizedAbsolutePath'.
+!!! error TS2345:   Type '"/a/b/c" & Tag<"NormalizedPath">' is not assignable to type 'Tag<"NormalizedPath"> & Tag<"AbsolutePath">'.
+        }
+    }
+    else {
+        if (isAbsolutePath(p)) {
+            consumeNormalizedPath(p); // err
+                                  ~
+!!! error TS2345: Argument of type '"/a/b/c" & Tag<"AbsolutePath">' is not assignable to parameter of type 'NormalizedPath'.
+!!! error TS2345:   Type '"/a/b/c" & Tag<"AbsolutePath">' is not assignable to type 'Tag<"NormalizedPath">'.
+            consumeAbsolutePath(p);
+            consumeNormalizedOrAbsolutePath(p);
+            consumeNormalizedAbsolutePath(p); // err
+                                          ~
+!!! error TS2345: Argument of type '"/a/b/c" & Tag<"AbsolutePath">' is not assignable to parameter of type 'NormalizedAbsolutePath'.
+!!! error TS2345:   Type '"/a/b/c" & Tag<"AbsolutePath">' is not assignable to type 'Tag<"NormalizedPath"> & Tag<"AbsolutePath">'.
+        }
+        else {
+            consumeNormalizedPath(p); // err
+                                  ~
+!!! error TS2345: Argument of type '"/a/b/c"' is not assignable to parameter of type 'NormalizedPath'.
+!!! error TS2345:   Type '"/a/b/c"' is not assignable to type 'Tag<"NormalizedPath">'.
+            consumeAbsolutePath(p); // err
+                                ~
+!!! error TS2345: Argument of type '"/a/b/c"' is not assignable to parameter of type 'AbsolutePath'.
+!!! error TS2345:   Type '"/a/b/c"' is not assignable to type 'Tag<"AbsolutePath">'.
+            consumeNormalizedOrAbsolutePath(p); // err
+                                            ~
+!!! error TS2345: Argument of type '"/a/b/c"' is not assignable to parameter of type 'NormalizedPath | AbsolutePath'.
+            consumeNormalizedAbsolutePath(p); // err
+                                          ~
+!!! error TS2345: Argument of type '"/a/b/c"' is not assignable to parameter of type 'NormalizedAbsolutePath'.
+!!! error TS2345:   Type '"/a/b/c"' is not assignable to type 'Tag<"NormalizedPath"> & Tag<"AbsolutePath">'.
+        }
+    }
+    

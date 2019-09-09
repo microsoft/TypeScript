@@ -1,15 +1,15 @@
 === tests/cases/conformance/expressions/typeGuards/typeGuardNarrowsPrimitiveIntersection.ts ===
-type Tag = {__tag: any};
->Tag : Tag
+type MyTag = {__tag: any};
+>MyTag : MyTag
 >__tag : any
 
-declare function isNonBlank(value: string) : value is (string & Tag);
->isNonBlank : (value: string) => value is string & Tag
+declare function isNonBlank(value: string) : value is (string & MyTag);
+>isNonBlank : (value: string) => value is string & MyTag
 >value : string
 
-declare function doThis(value: string & Tag): void;
->doThis : (value: string & Tag) => void
->value : string & Tag
+declare function doThis(value: string & MyTag): void;
+>doThis : (value: string & MyTag) => void
+>value : string & MyTag
 
 declare function doThat(value: string) : void;
 >doThat : (value: string) => void
@@ -20,13 +20,13 @@ let value: string;
 
 if (isNonBlank(value)) {
 >isNonBlank(value) : boolean
->isNonBlank : (value: string) => value is string & Tag
+>isNonBlank : (value: string) => value is string & MyTag
 >value : string
 
     doThis(value);
 >doThis(value) : void
->doThis : (value: string & Tag) => void
->value : string & Tag
+>doThis : (value: string & MyTag) => void
+>value : string & MyTag
 
 } else {
     doThat(value);
