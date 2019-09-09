@@ -6,6 +6,9 @@ export interface A {
 }
 
 
+//// [/src/lib/b.d.ts] file written with same contents
+//// [/src/lib/c.d.ts] file written with same contents
+//// [/src/lib/index.d.ts] file written with same contents
 //// [/src/src/a.ts]
 import { B } from "./b";
 

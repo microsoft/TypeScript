@@ -285,7 +285,7 @@ interface Symbol {
     }
 
     function generateBaseline(fs: vfs.FileSystem, proj: string, scenario: string, subScenario: string, baseFs: vfs.FileSystem) {
-        const patch = fs.diff(baseFs);
+        const patch = fs.diff(baseFs, { includeChangedFileWithSameContent: true });
         // tslint:disable-next-line:no-null-keyword
         Harness.Baseline.runBaseline(`tsbuild/${proj}/${subScenario.split(" ").join("-")}/${scenario.split(" ").join("-")}.js`, patch ? vfs.formatPatch(patch) : null);
     }

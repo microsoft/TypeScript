@@ -1072,6 +1072,7 @@ declare class C {
 
 ======================================================================
 
+//// [/src/first/bin/first-output.d.ts] file written with same contents
 //// [/src/first/bin/first-output.d.ts.map]
 {"version":3,"file":"first-output.d.ts","sourceRoot":"","sources":["../first_PART1.ts","../first_part2.ts","../first_part3.ts"],"names":[],"mappings":"AAAA,UAAU,QAAQ;IACd,IAAI,EAAE,GAAG,CAAC;CACb;AAED,QAAA,MAAM,CAAC,iBAAiB,CAAC;AAEzB,UAAU,iBAAiB;IACvB,IAAI,EAAE,GAAG,CAAC;CACb;AERD,iBAAS,CAAC,WAET"}
 
@@ -1205,6 +1206,8 @@ sourceFile:../first_part3.ts
 ---
 >>>//# sourceMappingURL=first-output.d.ts.map
 
+//// [/src/first/bin/first-output.js] file written with same contents
+//// [/src/first/bin/first-output.js.map] file written with same contents
 //// [/src/first/bin/first-output.js.map.baseline.txt]
 ===================================================================
 JsFile: first-output.js
