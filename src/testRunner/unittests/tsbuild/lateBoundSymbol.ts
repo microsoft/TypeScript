@@ -17,11 +17,6 @@ namespace ts {
             proj: "lateBoundSymbol",
             rootNames: ["/src/tsconfig.json"],
             lastProjectOutput: "/src/src/main.js",
-            outputFiles: [
-                "/src/src/hkt.js",
-                "/src/src/main.js",
-                "/src/tsconfig.tsbuildinfo",
-            ],
             initialBuild: {
                 modifyFs: noop,
                 expectedDiagnostics: [

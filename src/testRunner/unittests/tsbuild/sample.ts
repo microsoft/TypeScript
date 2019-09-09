@@ -693,22 +693,6 @@ class someClass { }`),
                         ],
                     )
                 },
-                outputFiles: [
-                    "/src/core/anotherModule.js",
-                    "/src/core/anotherModule.d.ts",
-                    "/src/core/anotherModule.d.ts.map",
-                    "/src/core/index.js",
-                    "/src/core/index.d.ts",
-                    "/src/core/index.d.ts.map",
-                    "/src/core/tsconfig.tsbuildinfo",
-                    "/src/logic/index.js",
-                    "/src/logic/index.js.map",
-                    "/src/logic/index.d.ts",
-                    "/src/logic/tsconfig.tsbuildinfo",
-                    "/src/tests/index.js",
-                    "/src/tests/index.d.ts",
-                    "/src/tests/tsconfig.tsbuildinfo",
-                ]
             });
 
             verifyTsbuildOutput({
@@ -757,22 +741,6 @@ class someClass { }`),
                         ]
                     )
                 },
-                outputFiles: [
-                    "/src/core/anotherModule.js",
-                    "/src/core/anotherModule.d.ts",
-                    "/src/core/anotherModule.d.ts.map",
-                    "/src/core/index.js",
-                    "/src/core/index.d.ts",
-                    "/src/core/index.d.ts.map",
-                    "/src/core/tsconfig.tsbuildinfo",
-                    "/src/logic/index.js",
-                    "/src/logic/index.js.map",
-                    "/src/logic/decls/index.d.ts",
-                    "/src/logic/tsconfig.tsbuildinfo",
-                    "/src/tests/index.js",
-                    "/src/tests/index.d.ts",
-                    "/src/tests/tsconfig.tsbuildinfo",
-                ],
             });
 
             verifyTsbuildOutput({
@@ -814,22 +782,6 @@ class someClass { }`),
                         ]
                     )
                 },
-                outputFiles: [
-                    "/src/core/anotherModule.js",
-                    "/src/core/anotherModule.d.ts",
-                    "/src/core/anotherModule.d.ts.map",
-                    "/src/core/index.js",
-                    "/src/core/index.d.ts",
-                    "/src/core/index.d.ts.map",
-                    "/src/core/tsconfig.tsbuildinfo",
-                    "/src/logic/index.js",
-                    "/src/logic/index.js.map",
-                    "/src/logic/index.d.ts",
-                    "/src/logic/ownFile.tsbuildinfo",
-                    "/src/tests/index.js",
-                    "/src/tests/index.d.ts",
-                    "/src/tests/tsconfig.tsbuildinfo",
-                ]
             });
 
             verifyTsbuildOutput({
@@ -861,13 +813,6 @@ class someClass { }`),
                         [Diagnostics.Building_project_0, "/src/core/tsconfig.json"]
                     ]
                 },
-                outputFiles: [
-                    "/src/core/anotherModule.js",
-                    "/src/core/anotherModule.d.ts",
-                    "/src/core/index.js",
-                    "/src/core/index.d.ts",
-                    "/src/core/tsconfig.tsbuildinfo",
-                ],
                 baselineOnly: true,
                 verifyDiagnostics: true
             });
@@ -910,13 +855,6 @@ class someClass { }`),
                         [Diagnostics.Building_project_0, "/src/core/tsconfig.json"]
                     ]
                 },
-                outputFiles: [
-                    "/src/core/anotherModule.js",
-                    "/src/core/anotherModule.d.ts",
-                    "/src/core/index.js",
-                    "/src/core/index.d.ts",
-                    "/src/core/tsconfig.tsbuildinfo",
-                ],
                 baselineOnly: true,
                 verifyDiagnostics: true
             });
@@ -950,11 +888,6 @@ class someClass { }`),
                         [Diagnostics.Building_project_0, "/src/core/tsconfig.json"]
                     ]
                 },
-                outputFiles: [
-                    "/src/core/anotherModule.js",
-                    "/src/core/index.js",
-                    "/src/core/tsconfig.tsbuildinfo",
-                ],
                 baselineOnly: true,
                 verifyDiagnostics: true
             });
@@ -1002,7 +935,6 @@ class someClass { }`),
                         [Diagnostics.Building_project_0, "/src/tests/tsconfig.json"]
                     ]
                 },
-                outputFiles: [],
                 baselineOnly: true,
                 verifyDiagnostics: true
             });

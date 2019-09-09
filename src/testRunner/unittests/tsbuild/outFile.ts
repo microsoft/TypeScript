@@ -303,7 +303,6 @@ namespace ts {
                     expectedDiagnostics: dtsUnchanged && dtsUnchanged.expectedDiagnostics,
                     expectedReadFiles: dtsUnchanged && dtsUnchanged.expectedReadFiles
                 } : undefined,
-                outputFiles: expectedOutputFiles,
                 baselineOnly
             });
         }

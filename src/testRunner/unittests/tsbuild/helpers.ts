@@ -267,7 +267,7 @@ interface Symbol {
         if (baselineSourceMap) generateSourceMapBaselineFiles(fs, mapDefinedIterator(writtenFiles.keys(), f => f.endsWith(".map") ? f : undefined));
         generateBuildInfoSectionBaselineFiles(fs, expectedBuildInfoFilesForSectionBaselines || emptyArray);
         fs.makeReadonly();
-        return { fs, actualReadFileMap, host, builder };
+        return { fs, actualReadFileMap, host, builder, writtenFiles };
     }
 
     function generateBaseline(fs: vfs.FileSystem, proj: string, scenario: string, subScenario: string, baseFs: vfs.FileSystem) {
@@ -314,7 +314,6 @@ Mismatch Actual(path, actual, expected): ${JSON.stringify(arrayFrom(mapDefinedIt
         expectedBuildInfoFilesForSectionBaselines?: ReadonlyArray<BuildInfoSectionBaselineFiles>;
         lastProjectOutput: string;
         initialBuild: BuildState;
-        outputFiles?: ReadonlyArray<string>;
         incrementalDtsChangedBuild?: BuildState;
         incrementalDtsUnchangedBuild?: BuildState;
         incrementalHeaderChangedBuild?: BuildState;
@@ -324,7 +323,7 @@ Mismatch Actual(path, actual, expected): ${JSON.stringify(arrayFrom(mapDefinedIt
     }
 
     export function verifyTsbuildOutput({
-        scenario, projFs, time, tick, proj, rootNames, outputFiles, baselineOnly, verifyDiagnostics,
+        scenario, projFs, time, tick, proj, rootNames, baselineOnly, verifyDiagnostics,
         baselineSourceMap, expectedBuildInfoFilesForSectionBaselines, lastProjectOutput,
         initialBuild, incrementalDtsChangedBuild, incrementalDtsUnchangedBuild, incrementalHeaderChangedBuild
     }: VerifyTsBuildInput) {
@@ -417,22 +416,19 @@ Mismatch Actual(path, actual, expected): ${JSON.stringify(arrayFrom(mapDefinedIt
                         });
                     }
                     it(`Verify emit output file text is same when built clean`, () => {
-                        const expectedOutputFiles = Debug.assertDefined(outputFiles);
-                        const { fs } = build({
+                        const { fs, writtenFiles } = build({
                             fs: newFs.shadow(),
                             tick,
                             rootNames,
                             modifyFs: fs => {
                                 // Delete output files
-                                for (const outputFile of expectedOutputFiles) {
-                                    if (fs.existsSync(outputFile)) {
-                                        fs.rimrafSync(outputFile);
-                                    }
-                                }
+                                const host = new fakes.SolutionBuilderHost(fs);
+                                const builder = createSolutionBuilder(host, rootNames, { clean: true });
+                                builder.clean();
                             },
                         });
 
-                        for (const outputFile of expectedOutputFiles) {
+                        for (const outputFile of arrayFrom(writtenFiles.keys())) {
                             const expectedText = fs.existsSync(outputFile) ? fs.readFileSync(outputFile, "utf8") : undefined;
                             const actualText = newFs.existsSync(outputFile) ? newFs.readFileSync(outputFile, "utf8") : undefined;
                             assert.equal(actualText, expectedText, `File: ${outputFile}`);

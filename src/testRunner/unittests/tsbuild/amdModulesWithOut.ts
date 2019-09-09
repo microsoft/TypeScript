@@ -82,10 +82,6 @@ namespace ts {
                 incrementalHeaderChangedBuild: modifyAgainFs ? {
                     modifyFs: modifyAgainFs
                 } : undefined,
-                outputFiles: [
-                    ...outputFiles[project.lib],
-                    ...outputFiles[project.app]
-                ],
                 baselineOnly: true
             });
         }
@@ -232,10 +228,6 @@ ${internal} export enum internalEnum { a, b, c }`);
                             [Diagnostics.Building_project_0, sources[project.app][source.config]],
                         ]
                     },
-                    outputFiles: [
-                        ...libOutputFile,
-                        ...outputFiles[project.app]
-                    ],
                     baselineOnly: true,
                     verifyDiagnostics: true
                 });
