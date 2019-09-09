@@ -4,3 +4,34 @@ for (var [a, b] in []) {}
 >b : any
 >[] : undefined[]
 
+for (var { a, b } in []) {}
+>a : any
+>b : any
+>[] : undefined[]
+
+for (let [a, b] in []) {
+>a : any
+>b : any
+>[] : undefined[]
+
+    (() => a + b);
+>(() => a + b) : () => any
+>() => a + b : () => any
+>a + b : any
+>a : any
+>b : any
+}
+
+for (let { a, b } in []) {
+>a : any
+>b : any
+>[] : undefined[]
+
+    (() => a + b);
+>(() => a + b) : () => any
+>() => a + b : () => any
+>a + b : any
+>a : any
+>b : any
+}
+

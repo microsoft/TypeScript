@@ -145,7 +145,15 @@ namespace ts {
         loopOutParameters: LoopOutParameter[];
     }
 
-    type LoopConverter = (node: IterationStatement, outermostLabeledStatement: LabeledStatement | undefined, convertedLoopBodyStatements: Statement[] | undefined, ancestorFacts: HierarchyFacts) => Statement;
+    type DirectLoopConverter = (node: IterationStatement, outermostLabeledStatement: LabeledStatement | undefined, convertedLoopBodyStatements: Statement[] | undefined, ancestorFacts: HierarchyFacts) => Statement;
+    type TransformedLoopConverter = (node: IterationStatement, outermostLabeledStatement: LabeledStatement | undefined, convertedLoopBodyStatements: Statement[] | undefined, ancestorFacts: HierarchyFacts, initializerFunction: IterationStatementPartFunction<VariableDeclarationList> | undefined, bodyFunction: IterationStatementPartFunction<Statement[]>) => Statement;
+
+    interface IterationStatementPartFunction<T> {
+        functionName: Identifier;
+        functionDeclaration: Statement;
+        containsYield: boolean;
+        part: T;
+    }
 
     // Facts we track as we traverse the tree
     const enum HierarchyFacts {
@@ -2226,9 +2234,9 @@ namespace ts {
             }
         }
 
-        function visitIterationStatementWithFacts(excludeFacts: HierarchyFacts, includeFacts: HierarchyFacts, node: IterationStatement, outermostLabeledStatement: LabeledStatement | undefined, convert?: LoopConverter) {
+        function visitIterationStatementWithFacts(excludeFacts: HierarchyFacts, includeFacts: HierarchyFacts, node: IterationStatement, outermostLabeledStatement: LabeledStatement | undefined, convertDirectly?: DirectLoopConverter, convertWithTransform?: TransformedLoopConverter) {
             const ancestorFacts = enterSubtree(excludeFacts, includeFacts);
-            const updated = convertIterationStatementBodyIfNecessary(node, outermostLabeledStatement, ancestorFacts, convert);
+            const updated = convertIterationStatementBodyIfNecessary(node, outermostLabeledStatement, ancestorFacts, convertDirectly, convertWithTransform);
             exitSubtree(ancestorFacts, HierarchyFacts.None, HierarchyFacts.None);
             return updated;
         }
@@ -2254,19 +2262,23 @@ namespace ts {
                 HierarchyFacts.ForInOrForOfStatementExcludes,
                 HierarchyFacts.ForInOrForOfStatementIncludes,
                 node,
-                outermostLabeledStatement);
+                outermostLabeledStatement,
+                convertForInStatementForLoopDirectly,
+                convertForInStatementForLoopTransformed);
         }
 
         function visitForOfStatement(node: ForOfStatement, outermostLabeledStatement: LabeledStatement | undefined): VisitResult<Statement> {
+            const convert = compilerOptions.downlevelIteration ? convertForOfStatementForIterable : convertForOfStatementForArray;
             return visitIterationStatementWithFacts(
                 HierarchyFacts.ForInOrForOfStatementExcludes,
                 HierarchyFacts.ForInOrForOfStatementIncludes,
                 node,
                 outermostLabeledStatement,
-                compilerOptions.downlevelIteration ? convertForOfStatementForIterable : convertForOfStatementForArray);
+                convert,
+                convert);
         }
 
-        function convertForOfStatementHead(node: ForOfStatement, boundValue: Expression, convertedLoopBodyStatements: Statement[]) {
+        function convertForStatementHead(node: ForInStatement | ForOfStatement, boundValue: Expression, convertedLoopBodyStatements: Statement[]) {
             const statements: Statement[] = [];
             const initializer = node.initializer;
             if (isVariableDeclarationList(initializer)) {
@@ -2364,6 +2376,78 @@ namespace ts {
                 EmitFlags.NoSourceMap | EmitFlags.NoTokenSourceMaps
             );
         }
+         
+        function convertForInStatementForLoopDirectly(node: ForInStatement, outermostLabeledStatement: LabeledStatement, convertedLoopBodyStatements: Statement[]): Statement {
+            // The following ES2015 code:
+            //
+            //    for (var [a, b] in expr) { }
+            //
+            // should be emitted as
+            //
+            //    for (var _a in expr) {
+            //        var a = _a[0], b = _a[1];
+            //    }
+            //
+            // where _a is a temp emitted to capture the LHS binding.
+            const initializerBinding = getForInInitializerBindingDeclaration(node);
+            if (initializerBinding) {
+                return convertForInStatementWithInitializerBinding(node, convertedLoopBodyStatements, initializerBinding);
+            }
+            
+            return restoreEnclosingLabel(visitEachChild(node, visitor, context), outermostLabeledStatement, convertedLoopState && resetLabel);
+        }
+         
+        function convertForInStatementForLoopTransformed(node: ForInStatement, outermostLabeledStatement: LabeledStatement, convertedLoopBodyStatements: Statement[], _ancestorFacts: HierarchyFacts, initializerFunction: IterationStatementPartFunction<VariableDeclarationList> | undefined, bodyFunction: IterationStatementPartFunction<Statement[]>): Statement {
+            // The following ES2015 code:
+            //
+            //    for (let [a, b] in expr) { ... }
+            //
+            // should be emitted as
+            //
+            //    var _loop_1 = function (_a) {
+            //      var a = _a[0], b = _a[1];
+            //      ...
+            //    }
+            //    for (var _a in expr) {
+            //        _loop_1(a);
+            //    }
+            //
+            // where _a is a temp emitted to capture the LHS binding.
+            const initializerBinding = getForInInitializerBindingDeclaration(node);
+            if (initializerBinding) {
+                return convertForInStatementWithInitializerBinding(node, convertedLoopBodyStatements, initializerBinding);
+            }
+
+            const clone = convertIterationStatementCore(node, initializerFunction, createBlock(bodyFunction.part, /*multiLine*/ true));
+            aggregateTransformFlags(clone);
+            return restoreEnclosingLabel(clone, outermostLabeledStatement, convertedLoopState && resetLabel);
+}
+
+        function convertForInStatementWithInitializerBinding(node: ForInStatement, convertedLoopBodyStatements: Statement[], _initializerBinding: VariableDeclaration) {
+            const tempInitializer = createTempVariable(/*recordTempVariable*/ undefined);
+
+            return ts.createForIn(
+                ts.createVariableDeclarationList([ts.createVariableDeclaration(tempInitializer)]),
+                node.expression,
+                convertForStatementHead(
+                    node,
+                    tempInitializer,
+                    convertedLoopBodyStatements,
+                )
+            );
+        }
+
+        function getForInInitializerBindingDeclaration(node: ForInStatement) {
+            if (!isVariableDeclarationList(node.initializer) || node.initializer.declarations.length === 0) {
+                return undefined;
+            }
+
+            const declaration = node.initializer.declarations[0];
+
+            return isArrayBindingPattern(declaration.name) || isObjectBindingPattern(declaration.name)
+                ? declaration
+                : undefined;
+        }
 
         function convertForOfStatementForArray(node: ForOfStatement, outermostLabeledStatement: LabeledStatement, convertedLoopBodyStatements: Statement[]): Statement {
             // The following ES6 code:
@@ -2420,7 +2504,7 @@ namespace ts {
                         node.expression
                     ),
                     /*incrementor*/ setTextRange(createPostfixIncrement(counter), node.expression),
-                    /*statement*/ convertForOfStatementHead(
+                    /*statement*/ convertForStatementHead(
                         node,
                         createElementAccess(rhsReference, counter),
                         convertedLoopBodyStatements
@@ -2468,7 +2552,7 @@ namespace ts {
                         ),
                         /*condition*/ createLogicalNot(createPropertyAccess(result, "done")),
                         /*incrementor*/ createAssignment(result, next),
-                        /*statement*/ convertForOfStatementHead(
+                        /*statement*/ convertForStatementHead(
                             node,
                             createPropertyAccess(result, "value"),
                             convertedLoopBodyStatements
@@ -2671,7 +2755,7 @@ namespace ts {
             }
         }
 
-        function convertIterationStatementBodyIfNecessary(node: IterationStatement, outermostLabeledStatement: LabeledStatement | undefined, ancestorFacts: HierarchyFacts, convert?: LoopConverter): VisitResult<Statement> {
+        function convertIterationStatementBodyIfNecessary(node: IterationStatement, outermostLabeledStatement: LabeledStatement | undefined, ancestorFacts: HierarchyFacts, convertDirectly?: DirectLoopConverter, convertWithTransform?: TransformedLoopConverter): VisitResult<Statement> {
             if (!shouldConvertIterationStatement(node)) {
                 let saveAllowedNonLabeledJumps: Jump | undefined;
                 if (convertedLoopState) {
@@ -2681,8 +2765,8 @@ namespace ts {
                     convertedLoopState.allowedNonLabeledJumps = Jump.Break | Jump.Continue;
                 }
 
-                const result = convert
-                    ? convert(node, outermostLabeledStatement, /*convertedLoopBodyStatements*/ undefined, ancestorFacts)
+                const result = convertDirectly
+                    ? convertDirectly(node, outermostLabeledStatement, /*convertedLoopBodyStatements*/ undefined, ancestorFacts)
                     : restoreEnclosingLabel(visitEachChild(node, visitor, context), outermostLabeledStatement, convertedLoopState && resetLabel);
 
                 if (convertedLoopState) {
@@ -2713,8 +2797,8 @@ namespace ts {
 
             let loop: Statement;
             if (bodyFunction) {
-                if (convert) {
-                    loop = convert(node, outermostLabeledStatement, bodyFunction.part, ancestorFacts);
+                if (convertWithTransform) {
+                    loop = convertWithTransform(node, outermostLabeledStatement, bodyFunction.part, ancestorFacts, initializerFunction, bodyFunction);
                 }
                 else {
                     const clone = convertIterationStatementCore(node, initializerFunction, createBlock(bodyFunction.part, /*multiLine*/ true));
@@ -2916,13 +3000,6 @@ namespace ts {
                     createVariableDeclarationList(extraVariableDeclarations)
                 ));
             }
-        }
-
-        interface IterationStatementPartFunction<T> {
-            functionName: Identifier;
-            functionDeclaration: Statement;
-            containsYield: boolean;
-            part: T;
         }
 
         function createOutVariable(p: LoopOutParameter) {
