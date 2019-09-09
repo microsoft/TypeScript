@@ -803,3 +803,37 @@ sourceFile:lib/global.ts
   "version": "FakeTSVersion"
 }
 
+//// [/src/module.tsbuildinfo.baseline.txt]
+======================================================================
+File:: /src/module.js
+----------------------------------------------------------------------
+text: (0-417)
+var myGlob = 20;
+define("lib/file1", ["require", "exports"], function (require, exports) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.x = 10;
+});
+define("lib/file2", ["require", "exports"], function (require, exports) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.y = 20;
+});
+var globalConst = 10;
+
+======================================================================
+======================================================================
+File:: /src/module.d.ts
+----------------------------------------------------------------------
+text: (0-179)
+declare const myGlob = 20;
+declare module "lib/file1" {
+    export const x = 10;
+}
+declare module "lib/file2" {
+    export const y = 20;
+}
+declare const globalConst = 10;
+
+======================================================================
+

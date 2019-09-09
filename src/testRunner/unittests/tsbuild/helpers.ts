@@ -235,12 +235,12 @@ interface Symbol {
         fs: vfs.FileSystem;
         tick: () => void;
         rootNames: ReadonlyArray<string>;
-        baselineSourceMap?: true;
-        expectedBuildInfoFilesForSectionBaselines?: ReadonlyArray<BuildInfoSectionBaselineFiles>;
         modifyFs: (fs: vfs.FileSystem) => void;
+        baselineSourceMap?: true;
+        baselineBuildInfo?: true;
     }
 
-    function build({ fs, tick, rootNames, baselineSourceMap, expectedBuildInfoFilesForSectionBaselines, modifyFs }: BuildInput) {
+    function build({ fs, tick, rootNames, modifyFs, baselineSourceMap, baselineBuildInfo }: BuildInput) {
         const actualReadFileMap = createMap<number>();
         modifyFs(fs);
         tick();
@@ -265,7 +265,21 @@ interface Symbol {
         };
         builder.build();
         if (baselineSourceMap) generateSourceMapBaselineFiles(fs, mapDefinedIterator(writtenFiles.keys(), f => f.endsWith(".map") ? f : undefined));
-        generateBuildInfoSectionBaselineFiles(fs, expectedBuildInfoFilesForSectionBaselines || emptyArray);
+        if (baselineBuildInfo) {
+            let expectedBuildInfoFiles: BuildInfoSectionBaselineFiles[] | undefined;
+            for (const { options } of builder.getAllParsedConfigs()) {
+                const out = options.outFile || options.out;
+                if (out) {
+                    const { jsFilePath, declarationFilePath, buildInfoPath } = getOutputPathsForBundle(options, /*forceDts*/ false);
+                    if (buildInfoPath && writtenFiles.has(buildInfoPath)) {
+                        (expectedBuildInfoFiles || (expectedBuildInfoFiles = [])).push(
+                            [buildInfoPath, jsFilePath, declarationFilePath]
+                        );
+                    }
+                }
+            }
+            if (expectedBuildInfoFiles) generateBuildInfoSectionBaselineFiles(fs, expectedBuildInfoFiles);
+        }
         fs.makeReadonly();
         return { fs, actualReadFileMap, host, builder, writtenFiles };
     }
@@ -311,7 +325,6 @@ Mismatch Actual(path, actual, expected): ${JSON.stringify(arrayFrom(mapDefinedIt
         tick: () => void;
         proj: string;
         rootNames: ReadonlyArray<string>;
-        expectedBuildInfoFilesForSectionBaselines?: ReadonlyArray<BuildInfoSectionBaselineFiles>;
         initialBuild: BuildState;
         incrementalDtsChangedBuild?: BuildState;
         incrementalDtsUnchangedBuild?: BuildState;
@@ -322,8 +335,8 @@ Mismatch Actual(path, actual, expected): ${JSON.stringify(arrayFrom(mapDefinedIt
     }
 
     export function verifyTsbuildOutput({
-        scenario, projFs, time, tick, proj, rootNames, baselineOnly, verifyDiagnostics,
-        baselineSourceMap, expectedBuildInfoFilesForSectionBaselines,
+        scenario, projFs, time, tick, proj, rootNames,
+        baselineOnly, verifyDiagnostics, baselineSourceMap,
         initialBuild, incrementalDtsChangedBuild, incrementalDtsUnchangedBuild, incrementalHeaderChangedBuild
     }: VerifyTsBuildInput) {
         describe(`tsc --b ${proj}:: ${scenario}`, () => {
@@ -337,9 +350,9 @@ Mismatch Actual(path, actual, expected): ${JSON.stringify(arrayFrom(mapDefinedIt
                     fs: projFs().shadow(),
                     tick,
                     rootNames,
-                    baselineSourceMap,
-                    expectedBuildInfoFilesForSectionBaselines,
                     modifyFs: initialBuild.modifyFs,
+                    baselineSourceMap,
+                    baselineBuildInfo: true,
                 });
                 ({ fs, actualReadFileMap, host, writtenFiles: initialWrittenFiles } = result);
                 firstBuildTime = time();
@@ -383,9 +396,9 @@ Mismatch Actual(path, actual, expected): ${JSON.stringify(arrayFrom(mapDefinedIt
                             fs: newFs,
                             tick,
                             rootNames,
-                            baselineSourceMap,
-                            expectedBuildInfoFilesForSectionBaselines,
                             modifyFs: incrementalModifyFs,
+                            baselineSourceMap,
+                            baselineBuildInfo: true,
                         }));
                         afterBuildTime = newFs.statSync(lastProjectOutput).mtimeMs;
                     });
