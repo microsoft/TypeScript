@@ -25705,7 +25705,7 @@ namespace ts {
             for (const member of node.members) {
                 if (member.kind === SyntaxKind.Constructor) {
                     for (const param of (member as ConstructorDeclaration).parameters) {
-                        if (isParameterPropertyDeclaration(param) && !isBindingPattern(param.name)) {
+                        if (isParameterPropertyDeclaration(param, member) && !isBindingPattern(param.name)) {
                             addName(instanceNames, param.name, param.name.escapedText, DeclarationMeaning.GetOrSetAccessor);
                         }
                     }
@@ -27469,7 +27469,7 @@ namespace ts {
                         const parameter = local.valueDeclaration && tryGetRootParameterDeclaration(local.valueDeclaration);
                         const name = local.valueDeclaration && getNameOfDeclaration(local.valueDeclaration);
                         if (parameter && name) {
-                            if (!isParameterPropertyDeclaration(parameter) && !parameterIsThisKeyword(parameter) && !isIdentifierThatStartsWithUnderscore(name)) {
+                            if (!isParameterPropertyDeclaration(parameter, parameter.parent) && !parameterIsThisKeyword(parameter) && !isIdentifierThatStartsWithUnderscore(name)) {
                                 addDiagnostic(parameter, UnusedKind.Parameter, createDiagnosticForNode(name, Diagnostics._0_is_declared_but_its_value_is_never_read, symbolName(local)));
                             }
                         }
