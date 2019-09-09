@@ -1,13 +1,7 @@
 tests/cases/conformance/types/structuralTags/structuralTagTypesErr1.ts(18,1): error TS2322: Type 'number & tag { y: any; }' is not assignable to type 'number & tag { x: any; }'.
-  Type 'number' is not assignable to type 'number & tag { x: any; }'.
-    Type 'number' is not assignable to type 'tag { x: any; }'.
-      Type 'number & tag { y: any; }' is not assignable to type 'tag { x: any; }'.
-        Type 'number' is not assignable to type 'tag { x: any; }'.
+  Type 'number & tag { y: any; }' is not assignable to type 'tag { x: any; }'.
 tests/cases/conformance/types/structuralTags/structuralTagTypesErr1.ts(19,1): error TS2322: Type 'number & tag { x: any; }' is not assignable to type 'number & tag { y: any; }'.
-  Type 'number' is not assignable to type 'number & tag { y: any; }'.
-    Type 'number' is not assignable to type 'tag { y: any; }'.
-      Type 'number & tag { x: any; }' is not assignable to type 'tag { y: any; }'.
-        Type 'number' is not assignable to type 'tag { y: any; }'.
+  Type 'number & tag { x: any; }' is not assignable to type 'tag { y: any; }'.
 tests/cases/conformance/types/structuralTags/structuralTagTypesErr1.ts(21,1): error TS2322: Type 'number' is not assignable to type 'number & tag { x: any; }'.
   Type 'number' is not assignable to type 'tag { x: any; }'.
 tests/cases/conformance/types/structuralTags/structuralTagTypesErr1.ts(22,1): error TS2322: Type 'number' is not assignable to type 'number & tag { y: any; }'.
@@ -39,17 +33,11 @@ tests/cases/conformance/types/structuralTags/structuralTagTypesErr1.ts(25,1): er
     a.x = a.y; // err
     ~~~
 !!! error TS2322: Type 'number & tag { y: any; }' is not assignable to type 'number & tag { x: any; }'.
-!!! error TS2322:   Type 'number' is not assignable to type 'number & tag { x: any; }'.
-!!! error TS2322:     Type 'number' is not assignable to type 'tag { x: any; }'.
-!!! error TS2322:       Type 'number & tag { y: any; }' is not assignable to type 'tag { x: any; }'.
-!!! error TS2322:         Type 'number' is not assignable to type 'tag { x: any; }'.
+!!! error TS2322:   Type 'number & tag { y: any; }' is not assignable to type 'tag { x: any; }'.
     a.y = a.x; // err
     ~~~
 !!! error TS2322: Type 'number & tag { x: any; }' is not assignable to type 'number & tag { y: any; }'.
-!!! error TS2322:   Type 'number' is not assignable to type 'number & tag { y: any; }'.
-!!! error TS2322:     Type 'number' is not assignable to type 'tag { y: any; }'.
-!!! error TS2322:       Type 'number & tag { x: any; }' is not assignable to type 'tag { y: any; }'.
-!!! error TS2322:         Type 'number' is not assignable to type 'tag { y: any; }'.
+!!! error TS2322:   Type 'number & tag { x: any; }' is not assignable to type 'tag { y: any; }'.
     
     a.x = b.y; // err
     ~~~

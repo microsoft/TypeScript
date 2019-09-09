@@ -1,0 +1,22 @@
+=== tests/cases/conformance/types/structuralTags/structuraltagConditonalExtract.ts ===
+type GetTag<T> = T extends tag infer U ? U : never
+>GetTag : Symbol(GetTag, Decl(structuraltagConditonalExtract.ts, 0, 0))
+>T : Symbol(T, Decl(structuraltagConditonalExtract.ts, 0, 12))
+>T : Symbol(T, Decl(structuraltagConditonalExtract.ts, 0, 12))
+>U : Symbol(U, Decl(structuraltagConditonalExtract.ts, 0, 36))
+>U : Symbol(U, Decl(structuraltagConditonalExtract.ts, 0, 36))
+
+type ThatTag = string & tag {x: number};
+>ThatTag : Symbol(ThatTag, Decl(structuraltagConditonalExtract.ts, 0, 50))
+>x : Symbol(x, Decl(structuraltagConditonalExtract.ts, 1, 29))
+
+type WhichTag = GetTag<ThatTag>;
+>WhichTag : Symbol(WhichTag, Decl(structuraltagConditonalExtract.ts, 1, 40))
+>GetTag : Symbol(GetTag, Decl(structuraltagConditonalExtract.ts, 0, 0))
+>ThatTag : Symbol(ThatTag, Decl(structuraltagConditonalExtract.ts, 0, 50))
+
+const obj: WhichTag = {x: 12}; // should be OK
+>obj : Symbol(obj, Decl(structuraltagConditonalExtract.ts, 5, 5))
+>WhichTag : Symbol(WhichTag, Decl(structuraltagConditonalExtract.ts, 1, 40))
+>x : Symbol(x, Decl(structuraltagConditonalExtract.ts, 5, 23))
+

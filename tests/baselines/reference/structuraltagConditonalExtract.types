@@ -1,0 +1,17 @@
+=== tests/cases/conformance/types/structuralTags/structuraltagConditonalExtract.ts ===
+type GetTag<T> = T extends tag infer U ? U : never
+>GetTag : GetTag<T>
+
+type ThatTag = string & tag {x: number};
+>ThatTag : ThatTag
+>x : number
+
+type WhichTag = GetTag<ThatTag>;
+>WhichTag : { x: number; }
+
+const obj: WhichTag = {x: 12}; // should be OK
+>obj : { x: number; }
+>{x: 12} : { x: number; }
+>x : number
+>12 : 12
+

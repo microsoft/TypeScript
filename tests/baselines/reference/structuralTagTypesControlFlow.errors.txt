@@ -8,25 +8,13 @@ tests/cases/conformance/types/structuralTags/structuralTagTypesControlFlow.ts(37
   Type '{ x: number; }' is not assignable to type 'BrandB'.
 tests/cases/conformance/types/structuralTags/structuralTagTypesControlFlow.ts(38,27): error TS2345: Argument of type '{ x: number; }' is not assignable to parameter of type 'tag ({ BrandA: void; } & { BrandB: void; })'.
 tests/cases/conformance/types/structuralTags/structuralTagTypesControlFlow.ts(64,29): error TS2345: Argument of type '"/a/b/c" & tag { NormalizedPath: void; }' is not assignable to parameter of type 'AbsolutePath'.
-  Type '"/a/b/c"' is not assignable to type 'AbsolutePath'.
-    Type '"/a/b/c"' is not assignable to type 'tag { AbsolutePath: void; }'.
-      Type '"/a/b/c" & tag { NormalizedPath: void; }' is not assignable to type 'tag { AbsolutePath: void; }'.
-        Type '"/a/b/c"' is not assignable to type 'tag { AbsolutePath: void; }'.
+  Type '"/a/b/c" & tag { NormalizedPath: void; }' is not assignable to type 'tag { AbsolutePath: void; }'.
 tests/cases/conformance/types/structuralTags/structuralTagTypesControlFlow.ts(66,39): error TS2345: Argument of type '"/a/b/c" & tag { NormalizedPath: void; }' is not assignable to parameter of type 'NormalizedAbsolutePath'.
-  Type '"/a/b/c"' is not assignable to type 'NormalizedAbsolutePath'.
-    Type '"/a/b/c"' is not assignable to type 'tag ({ NormalizedPath: void; } & { AbsolutePath: void; })'.
-      Type '"/a/b/c" & tag { NormalizedPath: void; }' is not assignable to type 'tag ({ NormalizedPath: void; } & { AbsolutePath: void; })'.
-        Type '"/a/b/c"' is not assignable to type 'tag ({ NormalizedPath: void; } & { AbsolutePath: void; })'.
+  Type '"/a/b/c" & tag { NormalizedPath: void; }' is not assignable to type 'tag ({ NormalizedPath: void; } & { AbsolutePath: void; })'.
 tests/cases/conformance/types/structuralTags/structuralTagTypesControlFlow.ts(71,31): error TS2345: Argument of type '"/a/b/c" & tag { AbsolutePath: void; }' is not assignable to parameter of type 'NormalizedPath'.
-  Type '"/a/b/c"' is not assignable to type 'NormalizedPath'.
-    Type '"/a/b/c"' is not assignable to type 'tag { NormalizedPath: void; }'.
-      Type '"/a/b/c" & tag { AbsolutePath: void; }' is not assignable to type 'tag { NormalizedPath: void; }'.
-        Type '"/a/b/c"' is not assignable to type 'tag { NormalizedPath: void; }'.
+  Type '"/a/b/c" & tag { AbsolutePath: void; }' is not assignable to type 'tag { NormalizedPath: void; }'.
 tests/cases/conformance/types/structuralTags/structuralTagTypesControlFlow.ts(74,39): error TS2345: Argument of type '"/a/b/c" & tag { AbsolutePath: void; }' is not assignable to parameter of type 'NormalizedAbsolutePath'.
-  Type '"/a/b/c"' is not assignable to type 'NormalizedAbsolutePath'.
-    Type '"/a/b/c"' is not assignable to type 'tag ({ NormalizedPath: void; } & { AbsolutePath: void; })'.
-      Type '"/a/b/c" & tag { AbsolutePath: void; }' is not assignable to type 'tag ({ NormalizedPath: void; } & { AbsolutePath: void; })'.
-        Type '"/a/b/c"' is not assignable to type 'tag ({ NormalizedPath: void; } & { AbsolutePath: void; })'.
+  Type '"/a/b/c" & tag { AbsolutePath: void; }' is not assignable to type 'tag ({ NormalizedPath: void; } & { AbsolutePath: void; })'.
 tests/cases/conformance/types/structuralTags/structuralTagTypesControlFlow.ts(77,31): error TS2345: Argument of type '"/a/b/c"' is not assignable to parameter of type 'NormalizedPath'.
   Type '"/a/b/c"' is not assignable to type 'tag { NormalizedPath: void; }'.
 tests/cases/conformance/types/structuralTags/structuralTagTypesControlFlow.ts(78,29): error TS2345: Argument of type '"/a/b/c"' is not assignable to parameter of type 'AbsolutePath'.
@@ -120,18 +108,12 @@ tests/cases/conformance/types/structuralTags/structuralTagTypesControlFlow.ts(80
             consumeAbsolutePath(p); // err
                                 ~
 !!! error TS2345: Argument of type '"/a/b/c" & tag { NormalizedPath: void; }' is not assignable to parameter of type 'AbsolutePath'.
-!!! error TS2345:   Type '"/a/b/c"' is not assignable to type 'AbsolutePath'.
-!!! error TS2345:     Type '"/a/b/c"' is not assignable to type 'tag { AbsolutePath: void; }'.
-!!! error TS2345:       Type '"/a/b/c" & tag { NormalizedPath: void; }' is not assignable to type 'tag { AbsolutePath: void; }'.
-!!! error TS2345:         Type '"/a/b/c"' is not assignable to type 'tag { AbsolutePath: void; }'.
+!!! error TS2345:   Type '"/a/b/c" & tag { NormalizedPath: void; }' is not assignable to type 'tag { AbsolutePath: void; }'.
             consumeNormalizedOrAbsolutePath(p);
             consumeNormalizedAbsolutePath(p); // err
                                           ~
 !!! error TS2345: Argument of type '"/a/b/c" & tag { NormalizedPath: void; }' is not assignable to parameter of type 'NormalizedAbsolutePath'.
-!!! error TS2345:   Type '"/a/b/c"' is not assignable to type 'NormalizedAbsolutePath'.
-!!! error TS2345:     Type '"/a/b/c"' is not assignable to type 'tag ({ NormalizedPath: void; } & { AbsolutePath: void; })'.
-!!! error TS2345:       Type '"/a/b/c" & tag { NormalizedPath: void; }' is not assignable to type 'tag ({ NormalizedPath: void; } & { AbsolutePath: void; })'.
-!!! error TS2345:         Type '"/a/b/c"' is not assignable to type 'tag ({ NormalizedPath: void; } & { AbsolutePath: void; })'.
+!!! error TS2345:   Type '"/a/b/c" & tag { NormalizedPath: void; }' is not assignable to type 'tag ({ NormalizedPath: void; } & { AbsolutePath: void; })'.
         }
     }
     else {
@@ -139,19 +121,13 @@ tests/cases/conformance/types/structuralTags/structuralTagTypesControlFlow.ts(80
             consumeNormalizedPath(p); // err
                                   ~
 !!! error TS2345: Argument of type '"/a/b/c" & tag { AbsolutePath: void; }' is not assignable to parameter of type 'NormalizedPath'.
-!!! error TS2345:   Type '"/a/b/c"' is not assignable to type 'NormalizedPath'.
-!!! error TS2345:     Type '"/a/b/c"' is not assignable to type 'tag { NormalizedPath: void; }'.
-!!! error TS2345:       Type '"/a/b/c" & tag { AbsolutePath: void; }' is not assignable to type 'tag { NormalizedPath: void; }'.
-!!! error TS2345:         Type '"/a/b/c"' is not assignable to type 'tag { NormalizedPath: void; }'.
+!!! error TS2345:   Type '"/a/b/c" & tag { AbsolutePath: void; }' is not assignable to type 'tag { NormalizedPath: void; }'.
             consumeAbsolutePath(p);
             consumeNormalizedOrAbsolutePath(p);
             consumeNormalizedAbsolutePath(p); // err
                                           ~
 !!! error TS2345: Argument of type '"/a/b/c" & tag { AbsolutePath: void; }' is not assignable to parameter of type 'NormalizedAbsolutePath'.
-!!! error TS2345:   Type '"/a/b/c"' is not assignable to type 'NormalizedAbsolutePath'.
-!!! error TS2345:     Type '"/a/b/c"' is not assignable to type 'tag ({ NormalizedPath: void; } & { AbsolutePath: void; })'.
-!!! error TS2345:       Type '"/a/b/c" & tag { AbsolutePath: void; }' is not assignable to type 'tag ({ NormalizedPath: void; } & { AbsolutePath: void; })'.
-!!! error TS2345:         Type '"/a/b/c"' is not assignable to type 'tag ({ NormalizedPath: void; } & { AbsolutePath: void; })'.
+!!! error TS2345:   Type '"/a/b/c" & tag { AbsolutePath: void; }' is not assignable to type 'tag ({ NormalizedPath: void; } & { AbsolutePath: void; })'.
         }
         else {
             consumeNormalizedPath(p); // err

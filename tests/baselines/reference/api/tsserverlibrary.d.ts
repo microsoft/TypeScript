@@ -2275,11 +2275,11 @@ declare namespace ts {
         ESSymbolLike = 12288,
         VoidLike = 49152,
         UnionOrIntersection = 3145728,
-        StructuredType = 3670016,
+        StructuredType = 137887744,
         TypeVariable = 8650752,
-        InstantiableNonPrimitive = 193200128,
+        InstantiableNonPrimitive = 58982400,
         InstantiablePrimitive = 4194304,
-        Instantiable = 197394432,
+        Instantiable = 63176704,
         StructuredOrInstantiable = 201064448,
         Narrowable = 268188671,
         NotUnionOrUnit = 67637251,
@@ -2382,7 +2382,7 @@ declare namespace ts {
     }
     export interface IntersectionType extends UnionOrIntersectionType {
     }
-    export type StructuredType = ObjectType | UnionType | IntersectionType;
+    export type StructuredType = ObjectType | UnionType | IntersectionType | StructuralTagType;
     export interface EvolvingArrayType extends ObjectType {
         elementType: Type;
         finalArrayType?: Type;
@@ -2426,7 +2426,7 @@ declare namespace ts {
         typeVariable: TypeVariable;
         substitute: Type;
     }
-    export interface StructuralTagType extends InstantiableType {
+    export interface StructuralTagType extends Type {
         type: Type;
     }
     export enum SignatureKind {

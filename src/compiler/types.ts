@@ -4038,9 +4038,9 @@ namespace ts {
         /* @internal */
         DisjointDomains = NonPrimitive | StringLike | NumberLike | BigIntLike | BooleanLike | ESSymbolLike | VoidLike | Null,
         UnionOrIntersection = Union | Intersection,
-        StructuredType = Object | Union | Intersection,
+        StructuredType = Object | Union | Intersection | StructuralTag,
         TypeVariable = TypeParameter | IndexedAccess,
-        InstantiableNonPrimitive = TypeVariable | Conditional | Substitution | StructuralTag,
+        InstantiableNonPrimitive = TypeVariable | Conditional | Substitution,
         InstantiablePrimitive = Index,
         Instantiable = InstantiableNonPrimitive | InstantiablePrimitive,
         StructuredOrInstantiable = StructuredType | Instantiable,
@@ -4292,7 +4292,7 @@ namespace ts {
         resolvedApparentType: Type;
     }
 
-    export type StructuredType = ObjectType | UnionType | IntersectionType;
+    export type StructuredType = ObjectType | UnionType | IntersectionType | StructuralTagType;
 
     /* @internal */
     // An instantiated anonymous type has a target and a mapper
@@ -4459,8 +4459,14 @@ namespace ts {
     }
 
     // Structual tag type, or a `tag T` (TypeFlags.StructuralTag)
-    export interface StructuralTagType extends InstantiableType {
+    export interface StructuralTagType extends Type {
         type: Type;
+        /* @internal */ members?: SymbolTable;                          // Always emptySymbols
+        /* @internal */ properties?: Symbol[];                          // Always emptyArray
+        /* @internal */ callSignatures?: ReadonlyArray<Signature>;      // Always emptyArray
+        /* @internal */ constructSignatures?: ReadonlyArray<Signature>; // Always emptyArray
+        /* @internal */ stringIndexInfo?: undefined;
+        /* @internal */ numberIndexInfo?: undefined;
     }
 
     /* @internal */

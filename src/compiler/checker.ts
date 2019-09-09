@@ -7775,8 +7775,16 @@ namespace ts {
                 else if (type.flags & TypeFlags.Intersection) {
                     resolveIntersectionTypeMembers(<IntersectionType>type);
                 }
+                else if (type.flags & TypeFlags.StructuralTag) {
+                    resolveStructuralTagTypeMembers(<StructuralTagType>type);
+                }
             }
             return <ResolvedType>type;
+        }
+
+        function resolveStructuralTagTypeMembers(type: StructuralTagType) {
+            // Explicitly do nothing - structured tags, despite "containing structure" (in their argument), do not have any visible structure.
+            setStructuredTypeMembers(type, emptySymbols, emptyArray, emptyArray, /*stringIndexInfo*/ undefined, /*numberIndexInfo*/ undefined);
         }
 
         /** Return properties of an object type or an empty array for other types */
@@ -11432,7 +11440,7 @@ namespace ts {
 
         function instantiateSymbol(symbol: Symbol, mapper: TypeMapper): Symbol {
             const links = getSymbolLinks(symbol);
-            if (links.type && !maybeTypeOfKind(links.type, TypeFlags.Object | TypeFlags.Instantiable)) {
+            if (links.type && !maybeTypeOfKind(links.type, TypeFlags.Object | TypeFlags.Instantiable | TypeFlags.StructuralTag)) {
                 // If the type of the symbol is already resolved, and if that type could not possibly
                 // be affected by instantiation, simply return the symbol itself.
                 return symbol;
@@ -15474,6 +15482,7 @@ namespace ts {
         function couldContainTypeVariables(type: Type): boolean {
             const objectFlags = getObjectFlags(type);
             return !!(type.flags & TypeFlags.Instantiable ||
+                type.flags & TypeFlags.StructuralTag && couldContainTypeVariables((type as StructuralTagType).type) ||
                 objectFlags & ObjectFlags.Reference && forEach((<TypeReference>type).typeArguments, couldContainTypeVariables) ||
                 objectFlags & ObjectFlags.Anonymous && type.symbol && type.symbol.flags & (SymbolFlags.Function | SymbolFlags.Method | SymbolFlags.Class | SymbolFlags.TypeLiteral | SymbolFlags.ObjectLiteral) && type.symbol.declarations ||
                 objectFlags & ObjectFlags.Mapped ||
@@ -15808,6 +15817,12 @@ namespace ts {
                 }
                 else if (target.flags & TypeFlags.UnionOrIntersection) {
                     inferToMultipleTypes(source, (<UnionOrIntersectionType>target).types, target.flags);
+                }
+                else if (target.flags & TypeFlags.StructuralTag && source.flags & TypeFlags.Intersection) {
+                    const tagsOnly = getIntersectionType(filter((source as IntersectionType).types, t => !!(t.flags & TypeFlags.StructuralTag)));
+                    if (tagsOnly !== source) {
+                        inferFromTypes(tagsOnly, target);
+                    }
                 }
                 else if (source.flags & TypeFlags.Union) {
                     // Source is a union or intersection type, infer from each constituent type
@@ -19325,7 +19340,7 @@ namespace ts {
         // are classified as instantiable (i.e. it doesn't instantiate object types), and (b) it performs
         // no reductions on instantiated union types.
         function instantiateInstantiableTypes(type: Type, mapper: TypeMapper): Type {
-            if (type.flags & TypeFlags.Instantiable) {
+            if (type.flags & (TypeFlags.Instantiable | TypeFlags.StructuralTag)) {
                 return instantiateType(type, mapper);
             }
             if (type.flags & TypeFlags.Union) {
@@ -20013,7 +20028,7 @@ namespace ts {
                     return isValidSpreadType(constraint);
                 }
             }
-            return !!(type.flags & (TypeFlags.Any | TypeFlags.NonPrimitive | TypeFlags.Object | TypeFlags.InstantiableNonPrimitive) ||
+            return !!(type.flags & (TypeFlags.Any | TypeFlags.NonPrimitive | TypeFlags.Object | TypeFlags.StructuralTag | TypeFlags.InstantiableNonPrimitive) ||
                 getFalsyFlags(type) & TypeFlags.DefinitelyFalsy && isValidSpreadType(removeDefinitelyFalsyTypes(type)) ||
                 type.flags & TypeFlags.UnionOrIntersection && every((<UnionOrIntersectionType>type).types, isValidSpreadType));
         }
