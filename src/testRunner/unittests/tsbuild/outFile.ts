@@ -280,7 +280,6 @@ namespace ts {
                 rootNames: ["/src/third"],
                 baselineSourceMap: true,
                 expectedBuildInfoFilesForSectionBaselines: expectedBuildInfoFilesForSectionBaselines || expectedTsbuildInfoFileNames,
-                lastProjectOutput: outputFiles[project.third][ext.js],
                 initialBuild: {
                     modifyFs,
                     expectedDiagnostics: initialExpectedDiagnostics,

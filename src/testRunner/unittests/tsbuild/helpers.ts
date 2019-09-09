@@ -312,7 +312,6 @@ Mismatch Actual(path, actual, expected): ${JSON.stringify(arrayFrom(mapDefinedIt
         proj: string;
         rootNames: ReadonlyArray<string>;
         expectedBuildInfoFilesForSectionBaselines?: ReadonlyArray<BuildInfoSectionBaselineFiles>;
-        lastProjectOutput: string;
         initialBuild: BuildState;
         incrementalDtsChangedBuild?: BuildState;
         incrementalDtsUnchangedBuild?: BuildState;
@@ -324,7 +323,7 @@ Mismatch Actual(path, actual, expected): ${JSON.stringify(arrayFrom(mapDefinedIt
 
     export function verifyTsbuildOutput({
         scenario, projFs, time, tick, proj, rootNames, baselineOnly, verifyDiagnostics,
-        baselineSourceMap, expectedBuildInfoFilesForSectionBaselines, lastProjectOutput,
+        baselineSourceMap, expectedBuildInfoFilesForSectionBaselines,
         initialBuild, incrementalDtsChangedBuild, incrementalDtsUnchangedBuild, incrementalHeaderChangedBuild
     }: VerifyTsBuildInput) {
         describe(`tsc --b ${proj}:: ${scenario}`, () => {
@@ -332,6 +331,7 @@ Mismatch Actual(path, actual, expected): ${JSON.stringify(arrayFrom(mapDefinedIt
             let actualReadFileMap: Map<number>;
             let firstBuildTime: number;
             let host: fakes.SolutionBuilderHost;
+            let initialWrittenFiles: Map<true>;
             before(() => {
                 const result = build({
                     fs: projFs().shadow(),
@@ -341,13 +341,14 @@ Mismatch Actual(path, actual, expected): ${JSON.stringify(arrayFrom(mapDefinedIt
                     expectedBuildInfoFilesForSectionBaselines,
                     modifyFs: initialBuild.modifyFs,
                 });
-                ({ fs, actualReadFileMap, host } = result);
+                ({ fs, actualReadFileMap, host, writtenFiles: initialWrittenFiles } = result);
                 firstBuildTime = time();
             });
             after(() => {
                 fs = undefined!;
                 actualReadFileMap = undefined!;
                 host = undefined!;
+                initialWrittenFiles = undefined!;
             });
             describe("initialBuild", () => {
                 if (!baselineOnly || verifyDiagnostics) {
@@ -373,6 +374,7 @@ Mismatch Actual(path, actual, expected): ${JSON.stringify(arrayFrom(mapDefinedIt
                     let beforeBuildTime: number;
                     let afterBuildTime: number;
                     before(() => {
+                        const lastProjectOutput = last(arrayFrom(initialWrittenFiles.keys()));
                         beforeBuildTime = fs.statSync(lastProjectOutput).mtimeMs;
                         tick();
                         newFs = fs.shadow();

@@ -16,7 +16,6 @@ namespace ts {
             tick,
             proj: "inferredTypeFromTransitiveModule",
             rootNames: ["/src"],
-            lastProjectOutput: `/src/obj/index.js`,
             initialBuild: {
                 modifyFs: noop,
                 expectedDiagnostics: [

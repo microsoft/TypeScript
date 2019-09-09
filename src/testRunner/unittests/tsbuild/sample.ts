@@ -613,7 +613,6 @@ export class cNew {}`);
                 proj: "sample1",
                 rootNames: ["/src/tests"],
                 baselineSourceMap: true,
-                lastProjectOutput: "/src/tests/index.js",
                 initialBuild,
                 incrementalDtsChangedBuild: {
                     modifyFs: fs => appendText(fs, "/src/core/index.ts", `
@@ -703,7 +702,6 @@ class someClass { }`),
                 proj: "sample1",
                 rootNames: ["/src/tests"],
                 baselineSourceMap: true,
-                lastProjectOutput: "/src/tests/index.js",
                 initialBuild,
                 incrementalDtsChangedBuild: {
                     modifyFs: fs => replaceText(fs, "/src/logic/tsconfig.json", `"declaration": true,`, `"declaration": true,
@@ -751,7 +749,6 @@ class someClass { }`),
                 proj: "sample1",
                 rootNames: ["/src/tests"],
                 baselineSourceMap: true,
-                lastProjectOutput: "/src/tests/index.js",
                 initialBuild: {
                     modifyFs: fs => replaceText(fs, "/src/logic/tsconfig.json", `"composite": true,`, `"composite": true,
         "tsBuildInfoFile": "ownFile.tsbuildinfo",`),
@@ -791,7 +788,6 @@ class someClass { }`),
                 tick,
                 proj: "sample1",
                 rootNames: ["/src/core"],
-                lastProjectOutput: "/src/core/index.js",
                 initialBuild: {
                     modifyFs: fs => fs.writeFileSync("/src/core/tsconfig.json", `{
     "compilerOptions": {
@@ -824,7 +820,6 @@ class someClass { }`),
                 tick,
                 proj: "sample1",
                 rootNames: ["/src/core"],
-                lastProjectOutput: "/src/core/index.js",
                 initialBuild: {
                     modifyFs: fs => {
                         fs.writeFileSync("/lib/lib.esnext.full.d.ts", `/// <reference no-default-lib="true"/>
@@ -866,7 +861,6 @@ class someClass { }`),
                 tick,
                 proj: "sample1",
                 rootNames: ["/src/core"],
-                lastProjectOutput: "/src/core/index.js",
                 initialBuild: {
                     modifyFs: fs => fs.writeFileSync("/src/core/tsconfig.json", `{
     "compilerOptions": {
@@ -899,7 +893,6 @@ class someClass { }`),
                 tick,
                 proj: "sample1",
                 rootNames: ["/src/tests"],
-                lastProjectOutput: "/src/tests/index.js",
                 initialBuild: {
                     modifyFs: fs => fs.writeFileSync("/src/tests/tsconfig.json", `{
     "references": [

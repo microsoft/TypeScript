@@ -16,7 +16,6 @@ namespace ts {
             tick,
             proj: "lateBoundSymbol",
             rootNames: ["/src/tsconfig.json"],
-            lastProjectOutput: "/src/src/main.js",
             initialBuild: {
                 modifyFs: noop,
                 expectedDiagnostics: [

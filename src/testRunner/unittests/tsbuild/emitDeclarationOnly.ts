@@ -17,7 +17,6 @@ namespace ts {
                 tick,
                 proj: "emitDeclarationOnly",
                 rootNames: ["/src"],
-                lastProjectOutput: `/src/lib/index.d.ts`,
                 initialBuild: {
                     modifyFs: disableMap ?
                         (fs => replaceText(fs, "/src/tsconfig.json", `"declarationMap": true,`, "")) :
@@ -50,7 +49,6 @@ namespace ts {
             tick,
             proj: "emitDeclarationOnly",
             rootNames: ["/src"],
-            lastProjectOutput: `/src/lib/a.d.ts`,
             initialBuild: {
                 modifyFs: fs => {
                     fs.rimrafSync("/src/src/index.ts");
