@@ -16,356 +16,524 @@
       <Item ItemId=";AutomaticallyCompileTypeScriptFilesWhenSavedWhenNoSolution" ItemType="0" PsrId="211" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Automatically compile TypeScript files which are _not part of a project]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[프로젝트에 속하지 않은 TypeScript 파일 자동으로 컴파일(_N)]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
       <Item ItemId=";AutoselectDisabledDueToPotentialDeclaration" ItemType="0" PsrId="211" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Autoselect disabled due to potential declaration.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[잠재적 선언으로 인해 자동 선택을 사용할 수 없습니다.]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
       <Item ItemId=";BadToolsVersion" ItemType="0" PsrId="211" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Your project contained an invalid value for TypeScriptToolsVersion.  That string must be only numbers separated by dots to be a valid Version.  Please fix that string and reload your project.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[프로젝트에 잘못된 TypeScriptToolsVersion 값이 포함되어 있었습니다.  문자열이 점으로 구분된 숫자여야 올바른 버전입니다. 문자열을 수정하고 프로젝트를 다시 로드하세요.]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
       <Item ItemId=";BracesGroupBoxHeader" ItemType="0" PsrId="211" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Braces]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[중괄호]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
       <Item ItemId=";Cannot_find_lib_definition_for_0" ItemType="0" PsrId="211" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Cannot find lib definition for "{0}"]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA["{0}"에 대한 lib 정의를 찾을 수 없습니다.]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
       <Item ItemId=";CompileOnSaveGroupBoxHeader" ItemType="0" PsrId="211" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Compile on Save]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[저장 시 컴파일]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
       <Item ItemId=";Dynamic_scripts_cannot_resolve_reference__file___0___does_not_exist" ItemType="0" PsrId="211" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Dynamic scripts cannot resolve reference: file "{0}" does not exist]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[동적 스크립트는 참조를 확인할 수 없습니다. 파일 "{0}"이(가) 없습니다.]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
       <Item ItemId=";EcmaScript3" ItemType="0" PsrId="211" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[ECMAScript 3]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[ECMAScript 3]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
       <Item ItemId=";EcmaScript5" ItemType="0" PsrId="211" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[ECMAScript 5]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[ECMAScript 5]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
       <Item ItemId=";EcmaScript6" ItemType="0" PsrId="211" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[ECMAScript 6]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[ECMAScript 6]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
       <Item ItemId=";EcmaScriptGroupBoxHeader" ItemType="0" PsrId="211" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[ECMAScript version for files that are not part of a project]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[프로젝트의 일부가 아닌 파일에 대한 ECMAScript 버전]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
       <Item ItemId=";FormatCompletedBlockOnRightCurlyBrace" ItemType="0" PsrId="211" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Format completed _block on }]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[} 입력 시 완성 블록에 서식 자동 지정(_B)]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
       <Item ItemId=";FormatCompletedLineOnEnter" ItemType="0" PsrId="211" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Format completed line on _Enter]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Enter 키 입력 시 완성 줄에 서식 자동 지정(_E)]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
       <Item ItemId=";FormatCompletedStatementOnSemicolon" ItemType="0" PsrId="211" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Format completed _statement on ;]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[; 입력 시 완성 문에 서식 자동 지정(_S)]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
       <Item ItemId=";FormatOnPaste" ItemType="0" PsrId="211" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Format on _paste]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[붙여넣을 때 서식 지정(_P)]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
       <Item ItemId=";FormattingGroupBoxHeader" ItemType="0" PsrId="211" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Automatic Formatting]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[자동 서식]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
       <Item ItemId=";Incorrect_reference_Only_files_with_a_js_or_ts_extension_are_allowed_file_0_has_invalid_extension" ItemType="0" PsrId="211" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Incorrect reference: Only files with a '.js', '.ts', or '.tsx' extension are allowed, file "{0}" has invalid extension.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[잘못된 참조: 확장명이 '.js', '.ts' 또는 '.tsx'인 파일만 허용되며, 파일 "{0}"은(는) 확장명이 올바르지 않습니다.]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
       <Item ItemId=";Incorrect_reference_Only_files_with_a_ts_extension_are_allowed_file_0_has_invalid_extension" ItemType="0" PsrId="211" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Incorrect reference: Only files with a '.ts' or '.tsx' extension are allowed, file "{0}" has invalid extension.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[잘못된 참조: 확장명이 '.ts' 또는 '.tsx'인 파일만 허용되며 "{0}" 파일의 확장명이 잘못되었습니다.]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
       <Item ItemId=";Incorrect_reference__file___0___contains_reference_to_itself" ItemType="0" PsrId="211" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Incorrect reference: file "{0}" contains a reference to itself.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[잘못된 참조: "{0}" 파일에 자신에 대한 참조가 포함되어 있습니다.]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
       <Item ItemId=";Incorrect_reference__file___0___does_not_exist" ItemType="0" PsrId="211" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Incorrect reference: file "{0}" does not exist.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[잘못된 참조: "{0}" 파일이 없습니다.]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
       <Item ItemId=";InsertSpaceAfterCommaDelimiter" ItemType="0" PsrId="211" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Insert space after comma _delimiter]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[쉼표 구분 기호 뒤에 공백 삽입(_D)]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
       <Item ItemId=";InsertSpaceAfterFunctionKeywordForAnonymousFunctions" ItemType="0" PsrId="211" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Insert space after function keyword f_or anonymous functions]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[익명 함수의 function 키워드 뒤에 공백 삽입(_O)]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
       <Item ItemId=";InsertSpaceAfterKeywordsInControlFlowStatements" ItemType="0" PsrId="211" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Insert space after _keywords in control flow statements]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[제어 흐름 문의 키워드 뒤에 공백 삽입(_K)]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
       <Item ItemId=";InsertSpaceAfterOpeningAndBeforeClosingNonemptyParenthesis" ItemType="0" PsrId="211" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Insert space after opening and before closing non-empty _parenthesis]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[여는 괄호 뒤와 비어 있지 않은 닫는 괄호 앞에 공백 삽입(_P)]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
       <Item ItemId=";InsertSpaceAfterSemicolonInForStatements" ItemType="0" PsrId="211" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Insert space after _semicolon in 'for' statements]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA['for' 문의 세미콜론 뒤에 공백 삽입(_S)]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
       <Item ItemId=";InsertSpaceBeforeAndAfterBinaryOperators" ItemType="0" PsrId="211" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Insert space before and after binary opera_tors]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[이항 연산자 앞뒤에 공백 삽입(_T)]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
       <Item ItemId=";JsxGroupBoxHeader" ItemType="0" PsrId="211" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[JSX Emit for TSX files that are not part of a project]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[프로젝트에 포함되지 않는 TSX 파일에 대한 JSX 내보내기]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
       <Item ItemId=";JsxPreserve" ItemType="0" PsrId="211" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Preserve]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[유지]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
       <Item ItemId=";JsxReact" ItemType="0" PsrId="211" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[React Framework]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[React Framework]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
       <Item ItemId=";Miscellaneous" ItemType="0" PsrId="211" InstFlg="true" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Miscellaneous]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[기타]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
-        <Cmts>
-          <Cmt Name="RCCX"><![CDATA[The name of the Script Context of all loose files that are opened in the IDE with no parent project]]></Cmt>
-        </Cmts>
       </Item>
       <Item ItemId=";MismatchedToolsVersion" ItemType="0" PsrId="211" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Your NuGet package uses a different version ({0}) of the TypeScript compiler and tools than this version of Visual Studio ({1}).]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[NuGet 패키지에서 이 버전의 Visual Studio({1})와 다른 버전({0})의 TypeScript 컴파일러 및 도구를 사용합니다.]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
       <Item ItemId=";More_than_0_errors_in_program_remaining_errors_not_displayed" ItemType="0" PsrId="211" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[More than {0} errors in program, remaining errors not displayed.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[프로그램에 오류가 {0}개 이상입니다. 나머지 오류는 표시되지 않습니다.]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
       <Item ItemId=";NewerToolsVersion" ItemType="0" PsrId="211" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Your project file uses a newer version of the TypeScript compiler and tools than supported by this version of Visual Studio.  Your project may be using TypeScript language features that will result in errors when compiling with this version of the TypeScript tools.  To remove this warning, remove the <TypeScriptToolsVersion> element from your project file.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[프로젝트 파일에서 사용하는 TypeScript 컴파일러 및 도구는 이 버전의 Visual Studio에서 지원하지 않는 새 버전입니다.  프로젝트에서 사용 중인 TypeScript 언어 기능으로 인해 이 버전의 TypeScript 도구로 컴파일할 때 오류가 발생할 수 있습니다.  이 경고를 제거하려면 프로젝트 파일에서 <TypeScriptToolsVersion> 요소를 제거하세요.]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
       <Item ItemId=";OlderToolsVersion" ItemType="0" PsrId="211" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Your project file uses an older version of the TypeScript compiler and tools than supported by this version of Visual Studio.  Your project may be using TypeScript language features that will result in errors when compiling with this version of the TypeScript tools.  To remove this warning, remove the <TypeScriptToolsVersion> element from your project file.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[프로젝트 파일에서 사용하는 TypeScript 컴파일러 및 도구는 이 버전의 Visual Studio에서 지원하지 않는 이전 버전입니다.  프로젝트에서 사용 중인 TypeScript 언어 기능으로 인해 이 버전의 TypeScript 도구로 컴파일할 때 오류가 발생할 수 있습니다.  이 경고를 제거하려면 프로젝트 파일에서 <TypeScriptToolsVersion> 요소를 제거하세요.]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
       <Item ItemId=";OutputGenerationCanceled" ItemType="0" PsrId="211" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Output generation canceled.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[출력 생성이 취소되었습니다.]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
       <Item ItemId=";OutputGenerationFirstFileSucceeded" ItemType="0" PsrId="211" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Generation of '{0}' complete. Remaining files still compiling.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA['{0}' 생성이 완료되었습니다. 나머지 파일을 계속 컴파일하고 있습니다.]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
       <Item ItemId=";OutputGenerationSaveFailed" ItemType="0" PsrId="211" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Failed to save file '{0}'.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA['{0}' 파일을 저장하지 못했습니다.]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
       <Item ItemId=";OutputGenerationSkipped" ItemType="0" PsrId="211" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Project contained errors. Output generation skipped.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[프로젝트에 오류가 있습니다. 출력 생성을 건너뜁니다.]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
       <Item ItemId=";OutputGenerationStarted" ItemType="0" PsrId="211" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Generating output(s)…]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[출력 생성 중…]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
       <Item ItemId=";OutputGenerationSucceeded" ItemType="0" PsrId="211" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Output(s) generated successfully.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[출력을 생성했습니다.]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
       <Item ItemId=";PlaceOpenBraceOnNewLineForControlBlocks" ItemType="0" PsrId="211" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Place open brace on new line for _control blocks]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[제어 블록의 여는 중괄호를 새 줄에 배치(_C)]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
       <Item ItemId=";PlaceOpenBraceOnNewLineForFunctions" ItemType="0" PsrId="211" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Place open brace on new line for _functions]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[함수의 여는 중괄호를 새 줄에 배치(_F)]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
       <Item ItemId=";ShowVirtualProjectsInSolutionExplorerWhenNoSolution" ItemType="0" PsrId="211" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[_Display Virtual Projects when no Solution is loaded]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[로드된 솔루션이 없을 때 가상 프로젝트 표시(_D)]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
       <Item ItemId=";ShowVirtualProjectsInSolutionExplorerWhenSolutionOpen" ItemType="0" PsrId="211" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Display _Virtual Projects when a Solution is loaded]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[로드된 솔루션이 있을 때 가상 프로젝트 표시(_V)]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
       <Item ItemId=";SolutionExplorerGroupBoxHeader" ItemType="0" PsrId="211" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Virtual Projects in Solution Explorer]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[솔루션 탐색기의 가상 프로젝트]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
       <Item ItemId=";SpacingGroupBoxHeader" ItemType="0" PsrId="211" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Spacing]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[간격]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
       <Item ItemId=";StatementCompletionGroupBoxHeader" ItemType="0" PsrId="211" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Statement Completion]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[문 완성]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
       <Item ItemId=";TSConfigNotSupported" ItemType="0" PsrId="211" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[A 'tsconfig.json' file is not supported in this project type.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA['tsconfig.json' 파일은 이 프로젝트 형식에서 지원되지 않습니다.]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
       <Item ItemId=";The_script___0____containing_the_definition_of___1___2____is_not_an_editable_file" ItemType="0" PsrId="211" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[The script "{0}", containing the definition of "{1}.{2}", is not an editable file.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA["{1}.{2}"의 정의를 포함하는 "{0}" 스크립트가 편집 가능한 파일이 아닙니다.]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
       <Item ItemId=";UpgradeToolsVersionDialogText" ItemType="0" PsrId="211" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Your project uses a version of TypeScript older than the version currently installed with Visual Studio.  You may get errors if you try to build your project.  Would you like us to upgrade the TypeScriptToolsVersion in your project file so you don't see this warning again?]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[프로젝트 파일에서 사용하는 TypeScript는 이 버전의 Visual Studio에서 지원하는 버전보다 이전 버전입니다.  프로젝트 필드를 시도하면 오류가 발생할 수 있습니다.  이 경고가 다시 표시되지 않도록 프로젝트 파일에 있는 TypeScriptToolsVersion을 업그레이드하시겠습니까?]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
       <Item ItemId=";UpgradeToolsVersionDialogTitle" ItemType="0" PsrId="211" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Upgrade project's Tools Version?]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[프로젝트의 도구 버전을 업그레이드하시겠습니까?]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
       <Item ItemId=";UseAMDCodeGenerationForModulesThatAreNotPartOfAProject" ItemType="0" PsrId="211" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Use _AMD code generation for modules that are not part of a project]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[프로젝트의 일부가 아닌 모듈에 대해 AMD 코드 생성 사용(_A)]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
       <Item ItemId=";UseCommonJSCodeGenerationForModulesThatAreNotPartOfAProject" ItemType="0" PsrId="211" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Use _CommonJS code generation for modules that are not part of a project]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[프로젝트의 일부가 아닌 모듈에 대해 CommonJS 코드 생성 사용(_C)]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
       <Item ItemId=";UseES2015CodeGenerationForModulesThatAreNotPartOfAProject" ItemType="0" PsrId="211" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Use _ES2015 code generation for modules that are not part of a project]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[프로젝트의 일부가 아닌 모듈에 대해 ES2015 코드 생성 사용(_E)]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
       <Item ItemId=";UseSystemCodeGenerationForModulesThatAreNotPartOfAProject" ItemType="0" PsrId="211" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Use _System code generation for modules that are not part of a project]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[프로젝트의 일부가 아닌 모듈에 대해 System 코드 생성 사용(_S)]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
       <Item ItemId=";UseUMDCodeGenerationForModulesThatAreNotPartOfAProject" ItemType="0" PsrId="211" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Use _UMD code generation for modules that are not part of a project]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[프로젝트의 일부가 아닌 모듈에 대해 UMD 코드 생성 사용(_U)]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
       <Item ItemId=";ValidationGroupBoxHeader" ItemType="0" PsrId="211" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Validation]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[유효성 검사]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
       <Item ItemId=";tsconfigProject" ItemType="0" PsrId="211" InstFlg="true" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[tsconfig project]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[tsconfig 프로젝트]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
-        <Cmts>
-          <Cmt Name="RCCX"><![CDATA[The name of the Script Context of files that are opened in the IDE with a tsconfig.json file as its parent.]]></Cmt>
-        </Cmts>
       </Item>
     </Item>
   </Item>
@@ -391,210 +559,234 @@
       <Item ItemId=";100" ItemType="0" PsrId="211" InstFlg="true" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[ResJSON Resource]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[ResJSON 리소스]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
-        <Cmts>
-          <Cmt Name="RCCX"><![CDATA[This is the name of Tools | Options category under Text Editor for resjson files]]></Cmt>
-        </Cmts>
       </Item>
       <Item ItemId=";1000" ItemType="0" PsrId="211" InstFlg="true" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Formatting]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[서식 지정]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
-        <Cmts>
-          <Cmt Name="RCCX"><![CDATA[This is the name of Tools | Options category under Text Editor\TypeScript]]></Cmt>
-        </Cmts>
       </Item>
       <Item ItemId=";1001" ItemType="0" PsrId="211" InstFlg="true" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[IntelliSense]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[IntelliSense]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
-        <Cmts>
-          <Cmt Name="RCCX"><![CDATA[This is the name of Tools | Options category under Text Editor\TypeScript]]></Cmt>
-        </Cmts>
       </Item>
       <Item ItemId=";1002" ItemType="0" PsrId="211" InstFlg="true" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[General]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[일반]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
-        <Cmts>
-          <Cmt Name="RCCX"><![CDATA[This is the name of Tools | Options page under Text Editor\TypeScript\Formatting]]></Cmt>
-        </Cmts>
       </Item>
       <Item ItemId=";1003" ItemType="0" PsrId="211" InstFlg="true" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[New Lines]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[줄 추가]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
-        <Cmts>
-          <Cmt Name="RCCX"><![CDATA[This is the name of Tools | Options page under Text Editor\TypeScript\Formatting]]></Cmt>
-        </Cmts>
       </Item>
       <Item ItemId=";1004" ItemType="0" PsrId="211" InstFlg="true" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Spacing]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[간격]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
-        <Cmts>
-          <Cmt Name="RCCX"><![CDATA[This is the name of Tools | Options page under Text Editor\TypeScript\Formatting]]></Cmt>
-        </Cmts>
       </Item>
       <Item ItemId=";1005" ItemType="0" PsrId="211" InstFlg="true" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[General]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[일반]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
-        <Cmts>
-          <Cmt Name="RCCX"><![CDATA[This is the name of Tools | Options page under Text Editor\TypeScript\IntelliSense]]></Cmt>
-        </Cmts>
       </Item>
       <Item ItemId=";1006" ItemType="0" PsrId="211" InstFlg="true" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[References]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[참조]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
-        <Cmts>
-          <Cmt Name="RCCX"><![CDATA[This is the name of Tools | Options page under Text Editor\TypeScript\IntelliSense]]></Cmt>
-        </Cmts>
       </Item>
       <Item ItemId=";1007" ItemType="0" PsrId="211" InstFlg="true" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Settings for the TypeScript editor found under the Formatting and Project nodes in the Tools/Options dialog box.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[TypeScript 편집기에 대한 설정은 [도구]5D;/[옵션]5D; 대화 상자의 [서식]5D; 및 [프로젝트]5D; 노드에 있습니다.]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
-        <Cmts>
-          <Cmt Name="RCCX"><![CDATA[This is the description shown in the Tools | Import/Export settings dialog box when the TypeScript Specific node is selected]]></Cmt>
-        </Cmts>
       </Item>
       <Item ItemId=";1008" ItemType="0" PsrId="211" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[TypeScript Specific]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[TypeScript 관련]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
       <Item ItemId=";1009" ItemType="0" PsrId="211" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[TypeScript options for statement completion, word wrap, and line number display.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[문 완성, 자동 줄 바꿈 및 줄 번호 표시를 위한 TypeScript 옵션입니다.]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
       <Item ItemId=";1010" ItemType="0" PsrId="211" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[TypeScript]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[TypeScript]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
       <Item ItemId=";1011" ItemType="0" PsrId="211" InstFlg="true" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Change open brace settings]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[여는 중괄호 설정을 변경합니다.]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
-        <Cmts>
-          <Cmt Name="RCCX"><![CDATA[These are the keywords for the Tools | Options page Text Editor\TypeScript\Formatting\New Lines]]></Cmt>
-        </Cmts>
       </Item>
       <Item ItemId=";1012" ItemType="0" PsrId="211" InstFlg="true" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Change validation and statement completion settings]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[유효성 검사 및 문 완성 설정을 변경합니다.]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
-        <Cmts>
-          <Cmt Name="RCCX"><![CDATA[These are the keywords for the Tools | Options page Text Editor\TypeScript\IntelliSense\General]]></Cmt>
-        </Cmts>
       </Item>
       <Item ItemId=";1013" ItemType="0" PsrId="211" InstFlg="true" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Manage dedicated workers and implicit file references]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[전용 작업자 및 암시적 파일 참조를 관리합니다.]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
-        <Cmts>
-          <Cmt Name="RCCX"><![CDATA[These are the keywords for the Tools | Options page Text Editor\TypeScript\IntelliSense\References]]></Cmt>
-        </Cmts>
       </Item>
       <Item ItemId=";1014" ItemType="0" PsrId="211" InstFlg="true" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Change automatic formatting for completed blocks and format on paste]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[완성 블록에 대한 자동 서식을 변경하고 붙여넣을 때 서식을 지정합니다.]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
-        <Cmts>
-          <Cmt Name="RCCX"><![CDATA[These are the keywords for the Tools | Options page Text Editor\TypeScript\Formatting\General]]></Cmt>
-        </Cmts>
       </Item>
       <Item ItemId=";1015" ItemType="0" PsrId="211" InstFlg="true" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Change when spaces are inserted to format TypeScript code]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[TypeScript 코드의 서식을 지정하기 위해 공백을 삽입하는 시기를 변경합니다.]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
-        <Cmts>
-          <Cmt Name="RCCX"><![CDATA[These are the keywords for the Tools | Options page Text Editor\TypeScript\Formatting\Spacing]]></Cmt>
-        </Cmts>
       </Item>
       <Item ItemId=";1016" ItemType="0" PsrId="211" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Project]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[프로젝트]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
       <Item ItemId=";1017" ItemType="0" PsrId="211" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[General]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[일반]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
       <Item ItemId=";1018" ItemType="0" PsrId="211" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[TypeScript options for projects and solution explorer]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[프로젝트 및 솔루션 탐색기에 대한 TypeScript 옵션입니다.]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
       <Item ItemId=";1019" ItemType="0" PsrId="211" InstFlg="true" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[TypeScript]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[TypeScript]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
-        <Cmts>
-          <Cmt Name="RCCX"><![CDATA[Title of root node in New Project Dialog]]></Cmt>
-        </Cmts>
       </Item>
       <Item ItemId=";1020" ItemType="0" PsrId="211" InstFlg="true" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[TypeScript File]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[TypeScript 파일]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
-        <Cmts>
-          <Cmt Name="RCCX"><![CDATA[Name of the TypeScript file template]]></Cmt>
-        </Cmts>
       </Item>
       <Item ItemId=";1021" ItemType="0" PsrId="211" InstFlg="true" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[A blank TypeScript source file]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[빈 TypeScript 소스 파일]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
-        <Cmts>
-          <Cmt Name="RCCX"><![CDATA[Description of the TypeScript file template]]></Cmt>
-        </Cmts>
       </Item>
       <Item ItemId=";1022" ItemType="0" PsrId="211" InstFlg="true" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[TypeScript Editor]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[TypeScript 편집기]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
-        <Cmts>
-          <Cmt Name="RCCX"><![CDATA[This is the display name for the FileExtensionMapping to appear in the Tools | Options page TextEditor\FileExtension]]></Cmt>
-        </Cmts>
       </Item>
       <Item ItemId=";110" ItemType="0" PsrId="211" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[TypeScript Language Service]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[TypeScript 언어 서비스]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
       <Item ItemId=";112" ItemType="0" PsrId="211" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[TypeScript Language Service Info]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[TypeScript 언어 서비스 정보]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -629,6 +821,9 @@
     <Item ItemId=";FileDescription" ItemType="0" PsrId="211" Leaf="true">
       <Str Cat="Text">
         <Val><![CDATA[TypeScript 3.7 Language Service]]></Val>
+        <Tgt Cat="Text" Stat="Loc" Orig="New">
+          <Val><![CDATA[TypeScript 3.7 언어 서비스]]></Val>
+        </Tgt>
       </Str>
       <Disp Icon="Str" />
     </Item>
@@ -641,6 +836,9 @@
     <Item ItemId=";LegalCopyright" ItemType="0" PsrId="211" Leaf="true">
       <Str Cat="Text">
         <Val><![CDATA[© Microsoft Corporation. All rights reserved.]]></Val>
+        <Tgt Cat="Text" Stat="Loc" Orig="New">
+          <Val><![CDATA[(C) Microsoft Corporation. All rights reserved.]]></Val>
+        </Tgt>
       </Str>
       <Disp Icon="Str" />
     </Item>
@@ -653,6 +851,9 @@
     <Item ItemId=";ProductName" ItemType="0" PsrId="211" Leaf="true">
       <Str Cat="Text">
         <Val><![CDATA[TypeScript 3.7 Language Service]]></Val>
+        <Tgt Cat="Text" Stat="Loc" Orig="New">
+          <Val><![CDATA[TypeScript 3.7 언어 서비스]]></Val>
+        </Tgt>
       </Str>
       <Disp Icon="Str" />
     </Item>
