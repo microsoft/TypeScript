@@ -6650,7 +6650,7 @@ namespace ts {
                     isPropertyAccessExpression(declaration) ? isBinaryExpression(declaration.parent) ? declaration.parent : declaration :
                         undefined;
                 if (!expression) {
-                    return errorType;
+                    continue; // Non-assignment declaration merged in (eg, an Identifier to mark the thing as a namespace) - skip over it and pull type info from elsewhere
                 }
 
                 const kind = isPropertyAccessExpression(expression) ? getAssignmentDeclarationPropertyAccessKind(expression) : getAssignmentDeclarationKind(expression);
@@ -6671,6 +6671,9 @@ namespace ts {
             }
             let type = jsdocType;
             if (!type) {
+                if (!length(types)) {
+                    return errorType; // No types from any declarations :(
+                }
                 let constructorTypes = definedInConstructor ? getConstructorDefinedThisAssignmentTypes(types!, symbol.declarations) : undefined;
                 // use only the constructor types unless they were only assigned null | undefined (including widening variants)
                 if (definedInMethod) {
