@@ -16852,7 +16852,7 @@ namespace ts {
             return !!(declaration && (
                 declaration.kind === SyntaxKind.VariableDeclaration || declaration.kind === SyntaxKind.Parameter ||
                 declaration.kind === SyntaxKind.PropertyDeclaration || declaration.kind === SyntaxKind.PropertySignature) &&
-                (declaration as VariableDeclaration | ParameterDeclaration | PropertyDeclaration | PropertySignature).type);
+                getEffectiveTypeAnnotationNode(declaration as VariableDeclaration | ParameterDeclaration | PropertyDeclaration | PropertySignature));
         }
 
         function getExplicitTypeOfSymbol(symbol: Symbol) {
@@ -16861,11 +16861,11 @@ namespace ts {
                 getTypeOfSymbol(symbol) : undefined;
         }
 
-        function getTypeOfDottedName(node: Expression) {
-            // We require the dotted function name in an assertion expression to be comprised of identifiers
-            // that reference function, method, class or value module symbols; or variable, property or
-            // parameter symbols with declarations that have explicit type annotations. Such references are
-            // resolvable with no possibility of triggering circularities in control flow analysis.
+        // We require the dotted function name in an assertion expression to be comprised of identifiers
+        // that reference function, method, class or value module symbols; or variable, property or
+        // parameter symbols with declarations that have explicit type annotations. Such references are
+        // resolvable with no possibility of triggering circularities in control flow analysis.
+        function getTypeOfDottedName(node: Expression): Type | undefined {
             switch (node.kind) {
                 case SyntaxKind.Identifier:
                     const symbol = getResolvedSymbol(<Identifier>node);
@@ -16874,10 +16874,10 @@ namespace ts {
                     return checkThisExpression(node);
                 case SyntaxKind.PropertyAccessExpression:
                     const type = getTypeOfDottedName((<PropertyAccessExpression>node).expression);
-                    if (type) {
-                        const prop = getPropertyOfType(type, (<PropertyAccessExpression>node).name.escapedText);
-                        return prop && getExplicitTypeOfSymbol(prop);
-                    }
+                    const prop = type && getPropertyOfType(type, (<PropertyAccessExpression>node).name.escapedText);
+                    return prop && getExplicitTypeOfSymbol(prop);
+                case SyntaxKind.ParenthesizedExpression:
+                    return getTypeOfDottedName((<ParenthesizedExpression>node).expression);
             }
         }
 
@@ -16886,7 +16886,9 @@ namespace ts {
             let signature = links.effectsSignature;
             if (signature === undefined) {
                 // A call expression parented by an expression statement is a potential assertion. Other call
-                // expressions are potential type predicate function calls.
+                // expressions are potential type predicate function calls. In order to avoid triggering
+                // circularities in control flow analysis, we use getTypeOfDottedName when resolving the call
+                // target expression of an assertion.
                 const funcType = node.parent.kind === SyntaxKind.ExpressionStatement ? getTypeOfDottedName(node.expression) :
                     node.expression.kind !== SyntaxKind.SuperKeyword ? checkNonNullExpression(node.expression) :
                     undefined;

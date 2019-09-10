@@ -3518,28 +3518,33 @@ namespace ts {
         AssertsIdentifier
     }
 
-    export interface ThisTypePredicate {
+    export interface TypePredicateBase {
+        kind: TypePredicateKind;
+        type: Type | undefined;
+    }
+
+    export interface ThisTypePredicate extends TypePredicateBase {
         kind: TypePredicateKind.This;
         parameterName: undefined;
         parameterIndex: undefined;
         type: Type;
     }
 
-    export interface IdentifierTypePredicate {
+    export interface IdentifierTypePredicate extends TypePredicateBase {
         kind: TypePredicateKind.Identifier;
         parameterName: string;
         parameterIndex: number;
         type: Type;
     }
 
-    export interface AssertsThisTypePredicate {
+    export interface AssertsThisTypePredicate extends TypePredicateBase {
         kind: TypePredicateKind.AssertsThis;
         parameterName: undefined;
         parameterIndex: undefined;
         type: Type | undefined;
     }
 
-    export interface AssertsIdentifierTypePredicate {
+    export interface AssertsIdentifierTypePredicate extends TypePredicateBase {
         kind: TypePredicateKind.AssertsIdentifier;
         parameterName: string;
         parameterIndex: number;
