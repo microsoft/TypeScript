@@ -2376,7 +2376,7 @@ namespace ts {
                 EmitFlags.NoSourceMap | EmitFlags.NoTokenSourceMaps
             );
         }
-         
+
         function convertForInStatementForLoopDirectly(node: ForInStatement, outermostLabeledStatement: LabeledStatement, convertedLoopBodyStatements: Statement[]): Statement {
             // The following ES2015 code:
             //
@@ -2393,10 +2393,10 @@ namespace ts {
             if (initializerBinding) {
                 return convertForInStatementWithInitializerBinding(node, convertedLoopBodyStatements, initializerBinding);
             }
-            
+
             return restoreEnclosingLabel(visitEachChild(node, visitor, context), outermostLabeledStatement, convertedLoopState && resetLabel);
         }
-         
+
         function convertForInStatementForLoopTransformed(node: ForInStatement, outermostLabeledStatement: LabeledStatement, convertedLoopBodyStatements: Statement[], _ancestorFacts: HierarchyFacts, initializerFunction: IterationStatementPartFunction<VariableDeclarationList> | undefined, bodyFunction: IterationStatementPartFunction<Statement[]>): Statement {
             // The following ES2015 code:
             //
@@ -2426,8 +2426,8 @@ namespace ts {
         function convertForInStatementWithInitializerBinding(node: ForInStatement, convertedLoopBodyStatements: Statement[], _initializerBinding: VariableDeclaration) {
             const tempInitializer = createTempVariable(/*recordTempVariable*/ undefined);
 
-            return ts.createForIn(
-                ts.createVariableDeclarationList([ts.createVariableDeclaration(tempInitializer)]),
+            return createForIn(
+                createVariableDeclarationList([createVariableDeclaration(tempInitializer)]),
                 node.expression,
                 convertForStatementHead(
                     node,
