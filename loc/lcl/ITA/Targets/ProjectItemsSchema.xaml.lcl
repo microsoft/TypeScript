@@ -11,8 +11,11 @@
     <Item ItemId="0;typescriptcompile@ContentType@DisplayName" ItemType="47;XML:Attr:DisplayName" PsrId="210" Leaf="true">
       <Str Cat="AppData">
         <Val><![CDATA[TypeScript file]]></Val>
+        <Tgt Cat="AppData" Stat="Loc" Orig="New">
+          <Val><![CDATA[File TypeScript]]></Val>
+        </Tgt>
       </Str>
-      <Disp Icon="Str" Order="1" />
+      <Disp Icon="Str" />
     </Item>
   </Item>
   <Item ItemId=";&lt;ItemType&gt;" ItemType="0" PsrId="210" Leaf="false">
@@ -20,8 +23,11 @@
     <Item ItemId="0;typescriptcompile@ItemType@DisplayName" ItemType="47;XML:Attr:DisplayName" PsrId="210" Leaf="true">
       <Str Cat="AppData">
         <Val><![CDATA[TypeScript file]]></Val>
+        <Tgt Cat="AppData" Stat="Loc" Orig="New">
+          <Val><![CDATA[File TypeScript]]></Val>
+        </Tgt>
       </Str>
-      <Disp Icon="Str" Order="3" />
+      <Disp Icon="Str" />
     </Item>
   </Item>
 </LCX>
