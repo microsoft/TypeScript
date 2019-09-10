@@ -785,10 +785,9 @@ namespace ts {
                 //  .yield resumeLabel
                 //      _a + %sent% + c()
 
-                const clone = getMutableClone(node);
-                clone.left = cacheExpression(visitNode(node.left, visitor, isExpression));
-                clone.right = visitNode(node.right, visitor, isExpression);
-                return clone;
+                return factory.updateBinary(node,
+                    cacheExpression(visitNode(node.left, visitor, isExpression)),
+                    visitNode(node.right, visitor, isExpression));
             }
 
             return visitEachChild(node, visitor, context);
@@ -1102,10 +1101,9 @@ namespace ts {
                 //  .mark resumeLabel
                 //      a = _a[%sent%]
 
-                const clone = getMutableClone(node);
-                clone.expression = cacheExpression(visitNode(node.expression, visitor, isLeftHandSideExpression));
-                clone.argumentExpression = visitNode(node.argumentExpression, visitor, isExpression);
-                return clone;
+                return factory.updateElementAccess(node,
+                    cacheExpression(visitNode(node.expression, visitor, isLeftHandSideExpression)),
+                    visitNode(node.argumentExpression, visitor, isExpression));
             }
 
             return visitEachChild(node, visitor, context);

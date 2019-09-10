@@ -18,6 +18,7 @@
         { "path": "../promiseShim", "prepend": true },
         { "path": "../compiler", "prepend": true },
         { "path": "../services", "prepend": true },
+        { "path": "../compat", "prepend": true },
         { "path": "../jsTyping", "prepend": true },
         { "path": "../server", "prepend": true },
         { "path": "../typingsInstallerCore", "prepend": true },

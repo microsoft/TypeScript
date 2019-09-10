@@ -152,8 +152,8 @@ namespace ts.codefix {
             const { left, right } = insertionSite;
             const leftType = checker.getTypeAtLocation(left);
             const rightType = checker.getTypeAtLocation(right);
-            const newLeft = checker.getPromisedTypeOfPromise(leftType) ? createAwait(left) : left;
-            const newRight = checker.getPromisedTypeOfPromise(rightType) ? createAwait(right) : right;
+            const newLeft = checker.getPromisedTypeOfPromise(leftType) ? factory.createAwait(left) : left;
+            const newRight = checker.getPromisedTypeOfPromise(rightType) ? factory.createAwait(right) : right;
             changeTracker.replaceNode(sourceFile, left, newLeft);
             changeTracker.replaceNode(sourceFile, right, newRight);
         }
@@ -161,13 +161,13 @@ namespace ts.codefix {
             changeTracker.replaceNode(
                 sourceFile,
                 insertionSite.parent.expression,
-                createParen(createAwait(insertionSite.parent.expression)));
+                factory.createParen(factory.createAwait(insertionSite.parent.expression)));
         }
         else if (contains(callableConstructableErrorCodes, errorCode) && isCallOrNewExpression(insertionSite.parent)) {
-            changeTracker.replaceNode(sourceFile, insertionSite, createParen(createAwait(insertionSite)));
+            changeTracker.replaceNode(sourceFile, insertionSite, factory.createParen(factory.createAwait(insertionSite)));
         }
         else {
-            changeTracker.replaceNode(sourceFile, insertionSite, createAwait(insertionSite));
+            changeTracker.replaceNode(sourceFile, insertionSite, factory.createAwait(insertionSite));
         }
     }
 }

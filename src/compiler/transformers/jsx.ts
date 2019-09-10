@@ -172,8 +172,8 @@ namespace ts {
             else if (node.kind === SyntaxKind.StringLiteral) {
                 // Always recreate the literal to escape any escape sequences or newlines which may be in the original jsx string and which
                 // Need to be escaped to be handled correctly in a normal string
-                const literal = factory.createStringLiteral(tryDecodeEntities(node.text) || node.text);
-                literal.singleQuote = node.singleQuote !== undefined ? node.singleQuote : !isStringDoubleQuoted(node, currentSourceFile);
+                const singleQuote = node.singleQuote !== undefined ? node.singleQuote : !isStringDoubleQuoted(node, currentSourceFile);
+                const literal = factory.createStringLiteral(tryDecodeEntities(node.text) || node.text, singleQuote);
                 return setTextRange(literal, node);
             }
             else if (node.kind === SyntaxKind.JsxExpression) {

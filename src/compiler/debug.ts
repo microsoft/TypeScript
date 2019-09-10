@@ -248,7 +248,7 @@ namespace ts {
                                 if (nodeIsSynthesized(this)) return "";
                                 const parseNode = getParseTreeNode(this);
                                 const sourceFile = parseNode && getSourceFileOfNode(parseNode);
-                                return sourceFile ? getSourceTextOfNodeFromSourceFile(sourceFile, parseNode, includeTrivia) : "";
+                                return sourceFile ? getSourceTextOfNodeFromSourceFile(sourceFile, parseNode!, includeTrivia) : "";
                             }
                         }
                     });

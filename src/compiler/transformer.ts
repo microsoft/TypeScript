@@ -450,7 +450,7 @@ namespace ts {
             Debug.assert(state > TransformationState.Uninitialized, "Cannot modify the transformation context during initialization.");
             Debug.assert(state < TransformationState.Completed, "Cannot modify the transformation context after transformation has completed.");
             Debug.assert(!helper.scoped, "Cannot request a scoped emit helper.");
-            emitHelpers = append(emitHelpers, helper);
+            emitHelpers = appendIfUnique(emitHelpers, helper);
         }
 
         function readEmitHelpers(): EmitHelper[] | undefined {
@@ -528,7 +528,7 @@ namespace ts {
 
     /* @internal */
     export const nullTransformationContext: TransformationContext = {
-        factory: syntheticNodeFactory,
+        factory,
         getEmitHelperFactory: notImplemented,
         enableEmitNotification: noop,
         enableSubstitution: noop,

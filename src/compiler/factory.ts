@@ -5,16 +5,30 @@ namespace ts {
     export function createNodeFactory(
         createNode: (kind: SyntaxKind) => Node,
         createParenthesizerRules: (factory: NodeFactory) => ParenthesizerRules,
-        createNodeConverters: (factory: NodeFactory) => NodeConverters
+        createNodeConverters: (factory: NodeFactory) => NodeConverters,
+        treeStateObserver: TreeStateObserver
     ): NodeFactory {
-        let actualCreatePropertyAccess = createPropertyAccessUnspecific;
+        let needsNoIndentationOnPropertyAccess: boolean | undefined;
         const parenthesizer = memoize(() => createParenthesizerRules(factory));
         const getConverters = memoize(() => createNodeConverters(factory));
+
+        const setChild = treeStateObserver === nullTreeStateObserver
+            || treeStateObserver.onSetChild === noop2
+            || treeStateObserver.onSetChild === noop ? setChildWithoutTreeState : setChildWithTreeState;
+        const setChildren = treeStateObserver === nullTreeStateObserver
+            || treeStateObserver.onSetChildren === noop2
+            || treeStateObserver.onSetChildren === noop ? setChildrenWithoutTreeState : setChildrenWithTreeState;
+        const finishNode = treeStateObserver === nullTreeStateObserver
+            || treeStateObserver.onFinishNode === noop ? finishNodeWithoutTreeState : finishNodeWithTreeState;
+        const updateNode = treeStateObserver === nullTreeStateObserver
+            || treeStateObserver.onUpdateNode === noop2
+            || treeStateObserver.onUpdateNode === noop ? ts.updateNode : updateNodeWithTreeState; // tslint:disable-line no-unnecessary-qualifier
+        const reuseNode = treeStateObserver === nullTreeStateObserver
+            || treeStateObserver.onReuseNode === noop ? identity : reuseNodeWithTreeState;
 
         const factory: NodeFactory = {
             getParenthesizerRules: parenthesizer,
             getConverters,
-            createNode,
             createNodeArray,
             createNumericLiteral,
             createBigIntLiteral,
@@ -31,8 +45,8 @@ namespace ts {
             createFileLevelUniqueName,
             getGeneratedNameForNode,
             createToken,
-            createSuper,
-            createThis,
+            createSuper: createSuperExpression,
+            createThis: createThisExpression,
             createNull,
             createTrue,
             createFalse,
@@ -94,7 +108,6 @@ namespace ts {
             updateUnionTypeNode,
             createIntersectionTypeNode,
             updateIntersectionTypeNode,
-            createUnionOrIntersectionTypeNode,
             createConditionalTypeNode,
             updateConditionalTypeNode,
             createInferTypeNode,
@@ -118,44 +131,69 @@ namespace ts {
             updateArrayBindingPattern,
             createBindingElement,
             updateBindingElement,
-            createArrayLiteral,
-            updateArrayLiteral,
-            createObjectLiteral,
-            updateObjectLiteral,
-            createPropertyAccess: (expression, name) => actualCreatePropertyAccess(expression, name),
-            updatePropertyAccess,
-            createElementAccess,
-            updateElementAccess,
-            createCall,
-            updateCall,
-            createNew,
-            updateNew,
-            createTaggedTemplate,
-            updateTaggedTemplate,
+            createArrayLiteral: createArrayLiteralExpression,
+            updateArrayLiteral: updateArrayLiteralExpression,
+            createObjectLiteral: createObjectLiteralExpression,
+            updateObjectLiteral: updateObjectLiteralExpression,
+            createPropertyAccess: (expression, name) => {
+                const node = createPropertyAccessExpression(expression, name);
+                if (needsNoIndentationOnPropertyAccess === undefined) {
+                    needsNoIndentationOnPropertyAccess = !!(node.flags & NodeFlags.Synthesized);
+                }
+                if (needsNoIndentationOnPropertyAccess) {
+                    setEmitFlags(node, EmitFlags.NoIndentation);
+                }
+                return node;
+            },
+            updatePropertyAccess: updatePropertyAccessExpression,
+            createElementAccess: createElementAccessExpression,
+            updateElementAccess: updateElementAccessExpression,
+            createCall: createCallExpression,
+            updateCall: updateCallExpression,
+            createNew: createNewExpression,
+            updateNew: updateNewExpression,
+            createTaggedTemplate: createTaggedTemplateExpression,
+            updateTaggedTemplate: updateTaggedTemplateExpression,
             createTypeAssertion,
             updateTypeAssertion,
-            createParen,
-            updateParen,
+            createParen: createParenthesizedExpression,
+            updateParen: updateParenthesizedExpression,
             createFunctionExpression,
             updateFunctionExpression,
-            createArrowFunction,
-            updateArrowFunction,
-            createDelete,
-            updateDelete,
-            createTypeOf,
-            updateTypeOf,
-            createVoid,
-            updateVoid,
-            createAwait,
-            updateAwait,
-            createPrefix,
-            updatePrefix,
-            createPostfix,
-            updatePostfix,
-            createBinary,
-            updateBinary,
-            createConditional,
-            updateConditional,
+            // createArrowFunction(modifiers: readonly Modifier[] | undefined, typeParameters: readonly TypeParameterDeclaration[] | undefined, parameters: readonly ParameterDeclaration[], type: TypeNode | undefined, equalsGreaterThanToken: EqualsGreaterThanToken | undefined, body: ConciseBody): ArrowFunction,
+            // createArrowFunction(modifiers: readonly Modifier[] | undefined, typeParameters: readonly TypeParameterDeclaration[] | undefined, parameters: readonly ParameterDeclaration[], type: TypeNode | undefined, body: ConciseBody): ArrowFunction,
+            createArrowFunction: overloadList(
+                makeOverload(createArrowFunction, { minLength: 6 }),
+                makeOverload(createArrowFunctionWithoutTokens, { length: 5 })
+            ),
+            // updateArrowFunction(node: ArrowFunction, modifiers: readonly Modifier[] | undefined, typeParameters: readonly TypeParameterDeclaration[] | undefined, parameters: readonly ParameterDeclaration[], type: TypeNode | undefined, equalsGreaterThanToken: EqualsGreaterThanToken, body: ConciseBody): ArrowFunction,
+            // updateArrowFunction(node: ArrowFunction, modifiers: readonly Modifier[] | undefined, typeParameters: readonly TypeParameterDeclaration[] | undefined, parameters: readonly ParameterDeclaration[], type: TypeNode | undefined, body: ConciseBody): ArrowFunction,
+            updateArrowFunction: overloadList(
+                makeOverload(updateArrowFunction, { length: 7 }),
+                makeOverload(updateArrowFunctionWithoutTokens, { length: 6 })
+            ),
+            createDelete: createDeleteExpression,
+            updateDelete: updateDeleteExpression,
+            createTypeOf: createTypeOfExpression,
+            updateTypeOf: updateTypeOfExpression,
+            createVoid: createVoidExpression,
+            updateVoid: updateVoidExpression,
+            createAwait: createAwaitExpression,
+            updateAwait: updateAwaitExpression,
+            createPrefix: createPrefixUnaryExpression,
+            updatePrefix: updatePrefixUnaryExpression,
+            createPostfix: createPostfixUnaryExpression,
+            updatePostfix: updatePostfixUnaryExpression,
+            createBinary: createBinaryExpression,
+            updateBinary: updateBinaryExpression,
+            createConditional: overloadList(
+                makeOverload(createConditionalExpression, { length: 5 }),
+                makeOverload(createConditionalExpressionWithoutTokens, { length: 3 })
+            ),
+            updateConditional: overloadList(
+                makeOverload(updateConditionalExpression, { length: 6 }),
+                makeOverload(updateConditionalExpressionWithoutTokens, { length: 4 })
+            ),
             createTemplateExpression,
             updateTemplateExpression,
             createTemplateHead,
@@ -163,10 +201,10 @@ namespace ts {
             createTemplateTail,
             createNoSubstitutionTemplateLiteral,
             createTemplateLiteralLikeNode,
-            createYield,
-            updateYield,
-            createSpread,
-            updateSpread,
+            createYield: createYieldExpression,
+            updateYield: updateYieldExpression,
+            createSpread: createSpreadElement,
+            updateSpread: updateSpreadElement,
             createClassExpression,
             updateClassExpression,
             createOmittedExpression,
@@ -188,37 +226,47 @@ namespace ts {
             createEmptyStatement,
             createExpressionStatement,
             updateExpressionStatement,
-            createIf,
-            updateIf,
-            createDo,
-            updateDo,
-            createWhile,
-            updateWhile,
-            createFor,
-            updateFor,
-            createForIn,
-            updateForIn,
-            createForOf,
-            updateForOf,
-            createContinue,
-            updateContinue,
-            createBreak,
-            updateBreak,
-            createReturn,
-            updateReturn,
-            createWith,
-            updateWith,
-            createSwitch,
-            updateSwitch,
-            createLabel,
-            updateLabel,
-            createThrow,
-            updateThrow,
-            createTry,
-            updateTry,
+            createIf: createIfStatement,
+            updateIf: updateIfStatement,
+            createDo: createDoStatement,
+            updateDo: updateDoStatement,
+            createWhile: createWhileStatement,
+            updateWhile: updateWhileStatement,
+            createFor: createForStatement,
+            updateFor: updateForStatement,
+            createForIn: createForInStatement,
+            updateForIn: updateForInStatement,
+            createForOf: createForOfStatement,
+            updateForOf: updateForOfStatement,
+            createContinue: createContinueStatement,
+            updateContinue: updateContinueStatement,
+            createBreak: createBreakStatement,
+            updateBreak: updateBreakStatement,
+            createReturn: createReturnStatement,
+            updateReturn: updateReturnStatement,
+            createWith: createWithStatement,
+            updateWith: updateWithStatement,
+            createSwitch: createSwitchStatement,
+            updateSwitch: updateSwitchStatement,
+            createLabel: createLabeledStatement,
+            updateLabel: updateLabeledStatement,
+            createThrow: createThrowStatement,
+            updateThrow: updateThrowStatement,
+            createTry: createTryStatement,
+            updateTry: updateTryStatement,
             createDebuggerStatement,
-            createVariableDeclaration,
-            updateVariableDeclaration,
+            // createVariableDeclaration(name: string | BindingName, exclamationToken: ExclamationToken | undefined, type: TypeNode | undefined, initializer: Expression | undefined): VariableDeclaration,
+            // createVariableDeclaration(name: string | BindingName, type?: TypeNode, initializer?: Expression): VariableDeclaration,
+            createVariableDeclaration: overloadList(
+                makeOverload(createVariableDeclaration, { length: 4 }),
+                makeOverload(createVariableDeclarationWithoutTokens, { minLength: 1, maxLength: 3 })
+            ),
+            // updateVariableDeclaration(node: VariableDeclaration, name: BindingName, exclamationToken: ExclamationToken | undefined, type: TypeNode | undefined, initializer: Expression | undefined): VariableDeclaration,
+            // updateVariableDeclaration(node: VariableDeclaration, name: BindingName, type: TypeNode | undefined, initializer: Expression | undefined): VariableDeclaration,
+            updateVariableDeclaration: overloadList(
+                makeOverload(updateVariableDeclaration, { length: 5 }),
+                makeOverload(updateVariableDeclarationWithoutTokens, { length: 4 })
+            ),
             createVariableDeclarationList,
             updateVariableDeclarationList,
             createFunctionDeclaration,
@@ -259,6 +307,7 @@ namespace ts {
             updateNamedExports,
             createExportSpecifier,
             updateExportSpecifier,
+            createMissingDeclaration,
             createExternalModuleReference,
             updateExternalModuleReference,
             createJSDocAllType,
@@ -330,8 +379,8 @@ namespace ts {
             createMergeDeclarationMarker,
             createPartiallyEmittedExpression,
             updatePartiallyEmittedExpression,
-            createCommaList,
-            updateCommaList,
+            createCommaList: createCommaListExpression,
+            updateCommaList: updateCommaListExpression,
             createBundle,
             updateBundle,
             createImmediatelyInvokedFunctionExpression,
@@ -380,14 +429,18 @@ namespace ts {
 
         return factory;
 
+        function createBaseNode<T extends Node>(kind: T["kind"]): T {
+            return createNode(kind) as T;
+        }
+
         function createBaseDeclaration<T extends Declaration | VariableStatement | ImportDeclaration>(
             kind: T["kind"],
             decorators: readonly Decorator[] | undefined,
             modifiers: readonly Modifier[] | undefined
-        ): T {
-            const node = createNode(kind) as T;
-            node.decorators = asNodeArray(decorators);
-            node.modifiers = asNodeArray(modifiers);
+        ) {
+            const node = createBaseNode(kind);
+            setChildren(node, node.decorators = asNodeArray(decorators));
+            setChildren(node, node.modifiers = asNodeArray(modifiers));
             return node;
         }
 
@@ -396,35 +449,57 @@ namespace ts {
             decorators: readonly Decorator[] | undefined,
             modifiers: readonly Modifier[] | undefined,
             name: DeclarationName | string | undefined
-        ): T {
-            const node = createBaseDeclaration(kind, decorators, modifiers);
-            node.name = asName(name);
+        ) {
+            const node = createBaseDeclaration(
+                kind,
+                decorators,
+                modifiers
+            );
+            setChild(node, node.name = asName(name));
             return node;
         }
 
-        function createBaseSignatureLikeDeclaration<T extends FunctionLike>(
+        function createBaseGenericNamedDeclaration<T extends NamedDeclaration & { typeParameters?: NodeArray<TypeParameterDeclaration> }>(
+            kind: T["kind"],
+            decorators: readonly Decorator[] | undefined,
+            modifiers: readonly Modifier[] | undefined,
+            name: DeclarationName | string | undefined,
+            typeParameters: readonly TypeParameterDeclaration[] | undefined
+        ) {
+            const node = createBaseNamedDeclaration(
+                kind,
+                decorators,
+                modifiers,
+                name
+            );
+            setChildren(node, node.typeParameters = asNodeArray(typeParameters));
+            return node;
+        }
+
+        function createBaseSignatureDeclaration<T extends SignatureDeclarationBase>(
             kind: T["kind"],
             decorators: readonly Decorator[] | undefined,
             modifiers: readonly Modifier[] | undefined,
             name: DeclarationName | string | undefined,
             typeParameters: readonly TypeParameterDeclaration[] | undefined,
-            parameters: readonly ParameterDeclaration[],
+            parameters: readonly ParameterDeclaration[] | undefined,
             type: TypeNode | undefined
-        ): T {
-            const node = createBaseNamedDeclaration(kind, decorators, modifiers, name);
-            node.typeParameters = asNodeArray(typeParameters);
-            node.parameters = createNodeArray(parameters);
-            node.type = type;
+        ) {
+            const node = createBaseGenericNamedDeclaration(
+                kind,
+                decorators,
+                modifiers,
+                name,
+                typeParameters
+            );
+            setChildren(node, node.parameters = createNodeArray(parameters));
+            setChild(node, node.type = type);
             return node;
         }
 
-        function createBaseSignatureDeclaration<T extends SignatureDeclaration>(
-            kind: T["kind"],
-            typeParameters: readonly TypeParameterDeclaration[] | undefined,
-            parameters: readonly ParameterDeclaration[],
-            type: TypeNode | undefined
-        ): T {
-            return createBaseSignatureLikeDeclaration(kind, /*decorators*/ undefined, /*modifiers*/ undefined, /*name*/ undefined, typeParameters, parameters, type);
+        function updateBaseSignatureDeclaration<T extends SignatureDeclarationBase>(updated: T, original: T) {
+            if (original.typeArguments) updated.typeArguments = original.typeArguments;
+            return updateNode(updated, original);
         }
 
         function createBaseFunctionLikeDeclaration<T extends FunctionLikeDeclaration>(
@@ -433,12 +508,102 @@ namespace ts {
             modifiers: readonly Modifier[] | undefined,
             name: DeclarationName | string | undefined,
             typeParameters: readonly TypeParameterDeclaration[] | undefined,
-            parameters: readonly ParameterDeclaration[],
+            parameters: readonly ParameterDeclaration[] | undefined,
             type: TypeNode | undefined,
             body: T["body"]
-        ): T {
-            const node = createBaseSignatureLikeDeclaration(kind, decorators, modifiers, name, typeParameters, parameters, type);
-            node.body = body;
+        ) {
+            const node = createBaseSignatureDeclaration(
+                kind,
+                decorators,
+                modifiers,
+                name,
+                typeParameters,
+                parameters,
+                type
+            );
+            setChild(node, node.body = body);
+            return node;
+        }
+
+        function updateBaseFunctionLikeDeclaration<T extends FunctionLikeDeclaration>(updated: T, original: T) {
+            if (original.exclamationToken) updated.exclamationToken = original.exclamationToken;
+            if (original.typeArguments) updated.typeArguments = original.typeArguments;
+            return updateBaseSignatureDeclaration(updated, original);
+        }
+
+        function createBaseInterfaceOrClassLikeDeclaration<T extends InterfaceDeclaration | ClassLikeDeclaration>(
+            kind: T["kind"],
+            decorators: readonly Decorator[] | undefined,
+            modifiers: readonly Modifier[] | undefined,
+            name: string | Identifier | undefined,
+            typeParameters: readonly TypeParameterDeclaration[] | undefined,
+            heritageClauses: readonly HeritageClause[] | undefined
+        ) {
+            const node = createBaseGenericNamedDeclaration(
+                kind,
+                decorators,
+                modifiers,
+                name,
+                typeParameters
+            );
+            setChildren(node, node.heritageClauses = asNodeArray(heritageClauses));
+            return node;
+        }
+
+        function createBaseClassLikeDeclaration<T extends ClassLikeDeclaration>(
+            kind: T["kind"],
+            decorators: readonly Decorator[] | undefined,
+            modifiers: readonly Modifier[] | undefined,
+            name: string | Identifier | undefined,
+            typeParameters: readonly TypeParameterDeclaration[] | undefined,
+            heritageClauses: readonly HeritageClause[] | undefined,
+            members: readonly ClassElement[]
+        ) {
+            const node = createBaseInterfaceOrClassLikeDeclaration(
+                kind,
+                decorators,
+                modifiers,
+                name,
+                typeParameters,
+                heritageClauses
+            );
+            setChildren(node, node.members = createNodeArray(members));
+            return node;
+        }
+
+        function createBaseBindingLikeDeclaration<T extends PropertyDeclaration | VariableDeclaration | ParameterDeclaration | BindingElement>(
+            kind: T["kind"],
+            decorators: readonly Decorator[] | undefined,
+            modifiers: readonly Modifier[] | undefined,
+            name: string | T["name"] | undefined,
+            initializer: Expression | undefined
+        ) {
+            const node = createBaseNamedDeclaration(
+                kind,
+                decorators,
+                modifiers,
+                name
+            );
+            setChild(node, node.initializer = initializer);
+            return node;
+        }
+
+        function createBaseVariableLikeDeclaration<T extends PropertyDeclaration | VariableDeclaration | ParameterDeclaration>(
+            kind: T["kind"],
+            decorators: readonly Decorator[] | undefined,
+            modifiers: readonly Modifier[] | undefined,
+            name: string | T["name"] | undefined,
+            type: TypeNode | undefined,
+            initializer: Expression | undefined
+        ) {
+            const node = createBaseBindingLikeDeclaration(
+                kind,
+                decorators,
+                modifiers,
+                name,
+                initializer
+            );
+            setChild(node, node.type = type);
             return node;
         }
 
@@ -450,39 +615,52 @@ namespace ts {
             kind: T["kind"],
             text: string
         ) {
-            const node = createNode(kind) as T;
+            const node = createBaseNode<T>(kind);
             node.text = text;
             node.hasExtendedUnicodeEscape = undefined;
             node.isUnterminated = undefined;
             return node;
         }
 
+        // @api
         function createNumericLiteral(value: string | number, numericLiteralFlags: TokenFlags = TokenFlags.None): NumericLiteral {
             const node = createBaseLiteral<NumericLiteral>(SyntaxKind.NumericLiteral, typeof value === "number" ? value + "" : value);
             node.numericLiteralFlags = numericLiteralFlags;
-            return node;
+            return finishNode(node);
         }
 
+        // @api
         function createBigIntLiteral(value: string | PseudoBigInt): BigIntLiteral {
-            return createBaseLiteral<BigIntLiteral>(SyntaxKind.BigIntLiteral, typeof value === "string" ? value : pseudoBigIntToString(value) + "n");
+            const node = createBaseLiteral<BigIntLiteral>(SyntaxKind.BigIntLiteral, typeof value === "string" ? value : pseudoBigIntToString(value) + "n");
+            return finishNode(node);
         }
 
-        function createStringLiteral(text: string, isSingleQuote?: boolean): StringLiteral {
+        function createBaseStringLiteral(text: string, isSingleQuote?: boolean) {
             const node = createBaseLiteral<StringLiteral>(SyntaxKind.StringLiteral, text);
             node.singleQuote = isSingleQuote;
             return node;
         }
 
+        // @api
+        function createStringLiteral(text: string, isSingleQuote?: boolean): StringLiteral {
+            const node = createBaseStringLiteral(text, isSingleQuote);
+            return finishNode(node);
+        }
+
+        // @api
         function createStringLiteralFromNode(sourceNode: PropertyNameLiteral): StringLiteral {
-            const node = createStringLiteral(getTextOfIdentifierOrLiteral(sourceNode));
+            const node = createBaseStringLiteral(getTextOfIdentifierOrLiteral(sourceNode), /*isSingleQuote*/ undefined);
             node.textSourceNode = sourceNode;
-            return node;
+            return finishNode(node);
         }
 
+        // @api
         function createRegularExpressionLiteral(text: string): RegularExpressionLiteral {
-            return createBaseLiteral<RegularExpressionLiteral>(SyntaxKind.RegularExpressionLiteral, text);
+            const node = createBaseLiteral<RegularExpressionLiteral>(SyntaxKind.RegularExpressionLiteral, text);
+            return finishNode(node);
         }
 
+        // @api
         function createLiteralLikeNode(kind: LiteralToken["kind"] | SyntaxKind.JsxTextAllWhiteSpaces, text: string): LiteralToken {
             switch (kind) {
                 case SyntaxKind.NumericLiteral: return createNumericLiteral(text, /*numericLiteralFlags*/ 0);
@@ -499,40 +677,48 @@ namespace ts {
         // Identifiers
         //
 
-        function createIdentifier(text: string, typeArguments?: readonly (TypeNode | TypeParameterDeclaration)[], originalKeywordKind?: SyntaxKind): Identifier {
+        function createBaseIdentifier(text: string, typeArguments?: readonly (TypeNode | TypeParameterDeclaration)[], originalKeywordKind?: SyntaxKind): Identifier {
             if (originalKeywordKind === undefined && text) {
                 originalKeywordKind = stringToToken(text);
             }
             if (originalKeywordKind === SyntaxKind.Identifier) {
                 originalKeywordKind = undefined;
             }
-            const node = createNode(SyntaxKind.Identifier) as Identifier;
+            const node = createBaseNode<Identifier>(SyntaxKind.Identifier);
             node.originalKeywordKind = originalKeywordKind;
             node.escapedText = escapeLeadingUnderscores(text);
-            node.typeArguments = asNodeArray(typeArguments);
-            node.autoGenerateFlags = undefined;
-            node.autoGenerateId = undefined;
+            if (typeArguments) {
+                node.typeArguments = createNodeArray(typeArguments);
+            }
             return node;
         }
 
+        function createBaseGeneratedIdentifier(text: string, autoGenerateFlags: GeneratedIdentifierFlags) {
+            const node = createBaseIdentifier(text) as GeneratedIdentifier;
+            node.autoGenerateFlags = autoGenerateFlags;
+            node.autoGenerateId = nextAutoGenerateId;
+            nextAutoGenerateId++;
+            return node;
+        }
+
+        // @api
+        function createIdentifier(text: string, typeArguments?: readonly (TypeNode | TypeParameterDeclaration)[], originalKeywordKind?: SyntaxKind): Identifier {
+            const node = createBaseIdentifier(text, typeArguments, originalKeywordKind);
+            return finishNode(node);
+        }
+
+        // @api
         function updateIdentifier(node: Identifier, typeArguments?: NodeArray<TypeNode | TypeParameterDeclaration> | undefined): Identifier {
             return node.typeArguments !== typeArguments
                 ? updateNode(createIdentifier(idText(node), typeArguments), node)
-                : node;
+                : reuseNode(node);
         }
 
-        function createGeneratedIdentifier(text: string, autoGenerateFlags: GeneratedIdentifierFlags) {
-            const name = createIdentifier(text) as GeneratedIdentifier;
-            name.autoGenerateFlags = autoGenerateFlags;
-            name.autoGenerateId = nextAutoGenerateId;
-            nextAutoGenerateId++;
-            return name;
-        }
-
+        // @api
         function createTempVariable(recordTempVariable: ((node: Identifier) => void) | undefined, reservedInNestedScopes?: boolean): GeneratedIdentifier {
             let flags = GeneratedIdentifierFlags.Auto;
             if (reservedInNestedScopes) flags |= GeneratedIdentifierFlags.ReservedInNestedScopes;
-            const name = createGeneratedIdentifier("", flags);
+            const name = finishNode(createBaseGeneratedIdentifier("", flags));
             if (recordTempVariable) {
                 recordTempVariable(name);
             }
@@ -540,79 +726,88 @@ namespace ts {
         }
 
         /** Create a unique temporary variable for use in a loop. */
+        // @api
         function createLoopVariable(): Identifier {
-            return createGeneratedIdentifier("", GeneratedIdentifierFlags.Loop);
+            return finishNode(createBaseGeneratedIdentifier("", GeneratedIdentifierFlags.Loop));
         }
 
         /** Create a unique name based on the supplied text. */
+        // @api
         function createUniqueName(text: string): Identifier {
-            return createGeneratedIdentifier(text, GeneratedIdentifierFlags.Unique);
+            return finishNode(createBaseGeneratedIdentifier(text, GeneratedIdentifierFlags.Unique));
         }
 
+        // @api
         function createOptimisticUniqueName(text: string): Identifier {
-            return createGeneratedIdentifier(text, GeneratedIdentifierFlags.Unique | GeneratedIdentifierFlags.Optimistic);
+            return finishNode(createBaseGeneratedIdentifier(text, GeneratedIdentifierFlags.Unique | GeneratedIdentifierFlags.Optimistic));
         }
 
         /** Create a unique name based on the supplied text. This does not consider names injected by the transformer. */
+        // @api
         function createFileLevelUniqueName(text: string): Identifier {
-            return createGeneratedIdentifier(text, GeneratedIdentifierFlags.Unique | GeneratedIdentifierFlags.Optimistic | GeneratedIdentifierFlags.FileLevel);
+            return finishNode(createBaseGeneratedIdentifier(text, GeneratedIdentifierFlags.Unique | GeneratedIdentifierFlags.Optimistic | GeneratedIdentifierFlags.FileLevel));
         }
 
         /** Create a unique name generated for a node. */
+        // @api
         function getGeneratedNameForNode(node: Node | undefined, flags: GeneratedIdentifierFlags = 0): Identifier {
-            const name = createGeneratedIdentifier(node && isIdentifier(node) ? idText(node) : "", GeneratedIdentifierFlags.Node | flags);
+            const name = createBaseGeneratedIdentifier(node && isIdentifier(node) ? idText(node) : "", GeneratedIdentifierFlags.Node | flags);
             name.original = node;
-            return name;
+            return finishNode(name);
         }
 
         //
         // Punctuation
         //
 
+        function createBaseToken<TKind extends SyntaxKind>(token: TKind) {
+            return createBaseNode<Token<TKind>>(token);
+        }
+
+        // @api
         function createToken<TKind extends SyntaxKind>(token: TKind) {
-            return createNode(token) as Token<TKind>;
-        }
-
-        function createQuestionToken() {
-            return createToken(SyntaxKind.QuestionToken);
-        }
-
-        function createColonToken() {
-            return createToken(SyntaxKind.ColonToken);
+            return finishNode(createBaseToken(token));
         }
 
         //
         // Reserved words
         //
 
-        function createSuper() {
-            return createToken(SyntaxKind.SuperKeyword) as SuperExpression;
+        // @api
+        function createSuperExpression() {
+            return finishNode(createBaseToken(SyntaxKind.SuperKeyword)) as SuperExpression;
         }
 
-        function createThis() {
-            return createToken(SyntaxKind.ThisKeyword) as ThisExpression;
+        // @api
+        function createThisExpression() {
+            return finishNode(createBaseToken(SyntaxKind.ThisKeyword)) as ThisExpression;
         }
 
+        // @api
         function createNull() {
-            return createToken(SyntaxKind.NullKeyword) as NullLiteral;
+            return finishNode(createBaseToken(SyntaxKind.NullKeyword)) as NullLiteral;
         }
 
+        // @api
         function createTrue() {
-            return createToken(SyntaxKind.TrueKeyword) as TrueLiteral;
+            return finishNode(createBaseToken(SyntaxKind.TrueKeyword)) as TrueLiteral;
         }
 
+        // @api
         function createFalse() {
-            return createToken(SyntaxKind.FalseKeyword) as FalseLiteral;
+            return finishNode(createBaseToken(SyntaxKind.FalseKeyword)) as FalseLiteral;
         }
 
         //
         // Modifiers
         //
 
+        // @api
         function createModifier<T extends Modifier["kind"]>(kind: T): Token<T> {
-            return createToken(kind);
+            return finishNode(createBaseToken(kind));
         }
 
+        // @api
         function createModifiersFromModifierFlags(flags: ModifierFlags) {
             const result: Modifier[] = [];
             if (flags & ModifierFlags.Export) { result.push(createModifier(SyntaxKind.ExportKeyword)); }
@@ -633,36 +828,41 @@ namespace ts {
         // Names
         //
 
+        // @api
         function createQualifiedName(left: EntityName, right: string | Identifier) {
-            const node = createNode(SyntaxKind.QualifiedName) as QualifiedName;
-            node.left = left;
-            node.right = asName(right);
-            return node;
+            const node = createBaseNode<QualifiedName>(SyntaxKind.QualifiedName);
+            setChild(node, node.left = left);
+            setChild(node, node.right = asName(right));
+            return finishNode(node);
         }
 
+        // @api
         function updateQualifiedName(node: QualifiedName, left: EntityName, right: Identifier) {
             return node.left !== left
                 || node.right !== right
                 ? updateNode(createQualifiedName(left, right), node)
-                : node;
+                : reuseNode(node);
         }
 
+        // @api
         function createComputedPropertyName(expression: Expression) {
-            const node = createNode(SyntaxKind.ComputedPropertyName) as ComputedPropertyName;
-            node.expression = parenthesizer().parenthesizeExpressionOfComputedPropertyName(expression);
-            return node;
+            const node = createBaseNode<ComputedPropertyName>(SyntaxKind.ComputedPropertyName);
+            setChild(node, node.expression = parenthesizer().parenthesizeExpressionOfComputedPropertyName(expression));
+            return finishNode(node);
         }
 
+        // @api
         function updateComputedPropertyName(node: ComputedPropertyName, expression: Expression) {
             return node.expression !== expression
                 ? updateNode(createComputedPropertyName(expression), node)
-                : node;
+                : reuseNode(node);
         }
 
         //
         // Signature elements
         //
 
+        // @api
         function createTypeParameterDeclaration(name: string | Identifier, constraint?: TypeNode, defaultType?: TypeNode) {
             const node = createBaseNamedDeclaration<TypeParameterDeclaration>(
                 SyntaxKind.TypeParameter,
@@ -670,19 +870,21 @@ namespace ts {
                 /*modifiers*/ undefined,
                 name
             );
-            node.constraint = constraint;
-            node.default = defaultType;
-            return node;
+            setChild(node, node.constraint = constraint);
+            setChild(node, node.default = defaultType);
+            return finishNode(node);
         }
 
+        // @api
         function updateTypeParameterDeclaration(node: TypeParameterDeclaration, name: Identifier, constraint: TypeNode | undefined, defaultType: TypeNode | undefined) {
             return node.name !== name
                 || node.constraint !== constraint
                 || node.default !== defaultType
                 ? updateNode(createTypeParameterDeclaration(name, constraint, defaultType), node)
-                : node;
+                : reuseNode(node);
         }
 
+        // @api
         function createParameterDeclaration(
             decorators: readonly Decorator[] | undefined,
             modifiers: readonly Modifier[] | undefined,
@@ -692,19 +894,20 @@ namespace ts {
             type?: TypeNode,
             initializer?: Expression
         ) {
-            const node = createBaseNamedDeclaration<ParameterDeclaration>(
+            const node = createBaseVariableLikeDeclaration<ParameterDeclaration>(
                 SyntaxKind.Parameter,
                 decorators,
                 modifiers,
-                name
+                name,
+                type,
+                initializer && parenthesizer().parenthesizeExpressionForDisallowedComma(initializer)
             );
-            node.type = type;
-            node.initializer = initializer && parenthesizer().parenthesizeExpressionForDisallowedComma(initializer);
-            node.dotDotDotToken = dotDotDotToken;
-            node.questionToken = questionToken;
-            return node;
+            setChild(node, node.dotDotDotToken = dotDotDotToken);
+            setChild(node, node.questionToken = questionToken);
+            return finishNode(node);
         }
 
+        // @api
         function updateParameterDeclaration(
             node: ParameterDeclaration,
             decorators: readonly Decorator[] | undefined,
@@ -723,25 +926,28 @@ namespace ts {
                 || node.type !== type
                 || node.initializer !== initializer
                 ? updateNode(createParameterDeclaration(decorators, modifiers, dotDotDotToken, name, questionToken, type, initializer), node)
-                : node;
+                : reuseNode(node);
         }
 
+        // @api
         function createDecorator(expression: Expression) {
-            const node = createNode(SyntaxKind.Decorator) as Decorator;
-            node.expression = parenthesizer().parenthesizeLeftSideOfAccess(expression);
-            return node;
+            const node = createBaseNode<Decorator>(SyntaxKind.Decorator);
+            setChild(node, node.expression = parenthesizer().parenthesizeLeftSideOfAccess(expression));
+            return finishNode(node);
         }
 
+        // @api
         function updateDecorator(node: Decorator, expression: Expression) {
             return node.expression !== expression
                 ? updateNode(createDecorator(expression), node)
-                : node;
+                : reuseNode(node);
         }
 
         //
         // Type Elements
         //
 
+        // @api
         function createPropertySignature(
             modifiers: readonly Modifier[] | undefined,
             name: PropertyName | string,
@@ -754,11 +960,12 @@ namespace ts {
                 modifiers,
                 name
             );
-            node.type = type;
-            node.questionToken = questionToken;
-            return node;
+            setChild(node, node.type = type);
+            setChild(node, node.questionToken = questionToken);
+            return finishNode(node);
         }
 
+        // @api
         function updatePropertySignature(
             node: PropertySignature,
             modifiers: readonly Modifier[] | undefined,
@@ -771,9 +978,10 @@ namespace ts {
                 || node.questionToken !== questionToken
                 || node.type !== type
                 ? updateNode(createPropertySignature(modifiers, name, questionToken, type), node)
-                : node;
+                : reuseNode(node);
         }
 
+        // @api
         function createPropertyDeclaration(
             decorators: readonly Decorator[] | undefined,
             modifiers: readonly Modifier[] | undefined,
@@ -782,19 +990,20 @@ namespace ts {
             type: TypeNode | undefined,
             initializer: Expression | undefined
         ) {
-            const node = createBaseNamedDeclaration<PropertyDeclaration>(
+            const node = createBaseVariableLikeDeclaration<PropertyDeclaration>(
                 SyntaxKind.PropertyDeclaration,
                 decorators,
                 modifiers,
-                name
+                name,
+                type,
+                initializer
             );
-            node.type = type;
-            node.initializer = initializer;
-            node.questionToken = questionOrExclamationToken !== undefined && questionOrExclamationToken.kind === SyntaxKind.QuestionToken ? questionOrExclamationToken : undefined;
-            node.exclamationToken = questionOrExclamationToken !== undefined && questionOrExclamationToken.kind === SyntaxKind.ExclamationToken ? questionOrExclamationToken : undefined;
-            return node;
+            setChild(node, node.questionToken = questionOrExclamationToken !== undefined && questionOrExclamationToken.kind === SyntaxKind.QuestionToken ? questionOrExclamationToken : undefined);
+            setChild(node, node.exclamationToken = questionOrExclamationToken !== undefined && questionOrExclamationToken.kind === SyntaxKind.ExclamationToken ? questionOrExclamationToken : undefined);
+            return finishNode(node);
         }
 
+        // @api
         function updatePropertyDeclaration(
             node: PropertyDeclaration,
             decorators: readonly Decorator[] | undefined,
@@ -812,9 +1021,10 @@ namespace ts {
                 || node.type !== type
                 || node.initializer !== initializer
                 ? updateNode(createPropertyDeclaration(decorators, modifiers, name, questionOrExclamationToken, type, initializer), node)
-                : node;
+                : reuseNode(node);
         }
 
+        // @api
         function createMethodSignature(
             modifiers: readonly Modifier[] | undefined,
             name: string | PropertyName,
@@ -823,7 +1033,7 @@ namespace ts {
             parameters: readonly ParameterDeclaration[],
             type: TypeNode | undefined
         ) {
-            const node = createBaseSignatureLikeDeclaration<MethodSignature>(
+            const node = createBaseSignatureDeclaration<MethodSignature>(
                 SyntaxKind.MethodSignature,
                 /*decorators*/ undefined,
                 modifiers,
@@ -832,10 +1042,11 @@ namespace ts {
                 parameters,
                 type
             );
-            node.questionToken = questionToken;
-            return node;
+            setChild(node, node.questionToken = questionToken);
+            return finishNode(node);
         }
 
+        // @api
         function updateMethodSignature(
             node: MethodSignature,
             modifiers: readonly Modifier[] | undefined,
@@ -851,10 +1062,11 @@ namespace ts {
                 || node.typeParameters !== typeParameters
                 || node.parameters !== parameters
                 || node.type !== type
-                ? updateNode(createMethodSignature(modifiers, name, questionToken, typeParameters, parameters, type), node)
-                : node;
+                ? updateBaseSignatureDeclaration(createMethodSignature(modifiers, name, questionToken, typeParameters, parameters, type), node)
+                : reuseNode(node);
         }
 
+        // @api
         function createMethodDeclaration(
             decorators: readonly Decorator[] | undefined,
             modifiers: readonly Modifier[] | undefined,
@@ -876,11 +1088,12 @@ namespace ts {
                 type,
                 body
             );
-            node.asteriskToken = asteriskToken;
-            node.questionToken = questionToken;
-            return node;
+            setChild(node, node.asteriskToken = asteriskToken);
+            setChild(node, node.questionToken = questionToken);
+            return finishNode(node);
         }
 
+        // @api
         function updateMethodDeclaration(
             node: MethodDeclaration,
             decorators: readonly Decorator[] | undefined,
@@ -902,10 +1115,11 @@ namespace ts {
                 || node.parameters !== parameters
                 || node.type !== type
                 || node.body !== body
-                ? updateNode(createMethodDeclaration(decorators, modifiers, asteriskToken, name, questionToken, typeParameters, parameters, type, body), node)
-                : node;
+                ? updateBaseFunctionLikeDeclaration(createMethodDeclaration(decorators, modifiers, asteriskToken, name, questionToken, typeParameters, parameters, type, body), node)
+                : reuseNode(node);
         }
 
+        // @api
         function createConstructorDeclaration(
             decorators: readonly Decorator[] | undefined,
             modifiers: readonly Modifier[] | undefined,
@@ -922,9 +1136,10 @@ namespace ts {
                 /*type*/ undefined,
                 body
             );
-            return node;
+            return finishNode(node);
         }
 
+        // @api
         function updateConstructorDeclaration(
             node: ConstructorDeclaration,
             decorators: readonly Decorator[] | undefined,
@@ -936,10 +1151,11 @@ namespace ts {
                 || node.modifiers !== modifiers
                 || node.parameters !== parameters
                 || node.body !== body
-                ? updateNode(createConstructorDeclaration(decorators, modifiers, parameters, body), node)
-                : node;
+                ? updateBaseFunctionLikeDeclaration(createConstructorDeclaration(decorators, modifiers, parameters, body), node)
+                : reuseNode(node);
         }
 
+        // @api
         function createGetAccessorDeclaration(
             decorators: readonly Decorator[] | undefined,
             modifiers: readonly Modifier[] | undefined,
@@ -958,9 +1174,10 @@ namespace ts {
                 type,
                 body
             );
-            return node;
+            return finishNode(node);
         }
 
+        // @api
         function updateGetAccessorDeclaration(
             node: GetAccessorDeclaration,
             decorators: readonly Decorator[] | undefined,
@@ -976,10 +1193,11 @@ namespace ts {
                 || node.parameters !== parameters
                 || node.type !== type
                 || node.body !== body
-                ? updateNode(createGetAccessorDeclaration(decorators, modifiers, name, parameters, type, body), node)
-                : node;
+                ? updateBaseFunctionLikeDeclaration(createGetAccessorDeclaration(decorators, modifiers, name, parameters, type, body), node)
+                : reuseNode(node);
         }
 
+        // @api
         function createSetAccessorDeclaration(
             decorators: readonly Decorator[] | undefined,
             modifiers: readonly Modifier[] | undefined,
@@ -997,9 +1215,10 @@ namespace ts {
                 /*type*/ undefined,
                 body
             );
-            return node;
+            return finishNode(node);
         }
 
+        // @api
         function updateSetAccessorDeclaration(
             node: SetAccessorDeclaration,
             decorators: readonly Decorator[] | undefined,
@@ -1013,78 +1232,126 @@ namespace ts {
                 || node.name !== name
                 || node.parameters !== parameters
                 || node.body !== body
-                ? updateNode(createSetAccessorDeclaration(decorators, modifiers, name, parameters, body), node)
-                : node;
+                ? updateBaseFunctionLikeDeclaration(createSetAccessorDeclaration(decorators, modifiers, name, parameters, body), node)
+                : reuseNode(node);
         }
 
+        // @api
         function createCallSignature(
             typeParameters: readonly TypeParameterDeclaration[] | undefined,
             parameters: readonly ParameterDeclaration[],
             type: TypeNode | undefined
         ): CallSignatureDeclaration {
-            return createBaseSignatureDeclaration(SyntaxKind.CallSignature, typeParameters, parameters, type);
+            const node = createBaseSignatureDeclaration<CallSignatureDeclaration>(
+                SyntaxKind.CallSignature,
+                /*decorators*/ undefined,
+                /*modifiers*/ undefined,
+                /*name*/ undefined,
+                typeParameters,
+                parameters,
+                type
+            );
+            return finishNode(node);
         }
 
+        // @api
         function updateCallSignature(
             node: CallSignatureDeclaration,
             typeParameters: NodeArray<TypeParameterDeclaration> | undefined,
             parameters: NodeArray<ParameterDeclaration>,
             type: TypeNode | undefined
         ) {
-            return updateSignatureDeclaration(node, typeParameters, parameters, type);
+            return node.typeParameters !== typeParameters
+                || node.parameters !== parameters
+                || node.type !== type
+                ? updateBaseSignatureDeclaration(createCallSignature(typeParameters, parameters, type), node)
+                : reuseNode(node);
         }
 
+        // @api
         function createConstructSignature(
             typeParameters: readonly TypeParameterDeclaration[] | undefined,
             parameters: readonly ParameterDeclaration[],
             type: TypeNode | undefined
         ): ConstructSignatureDeclaration {
-            return createBaseSignatureDeclaration(SyntaxKind.ConstructSignature, typeParameters, parameters, type);
+            const node = createBaseSignatureDeclaration<ConstructSignatureDeclaration>(
+                SyntaxKind.ConstructSignature,
+                /*decorators*/ undefined,
+                /*modifiers*/ undefined,
+                /*name*/ undefined,
+                typeParameters,
+                parameters,
+                type
+            );
+            return finishNode(node);
         }
 
+        // @api
         function updateConstructSignature(
             node: ConstructSignatureDeclaration,
             typeParameters: NodeArray<TypeParameterDeclaration> | undefined,
             parameters: NodeArray<ParameterDeclaration>,
             type: TypeNode | undefined
         ) {
-            return updateSignatureDeclaration(node, typeParameters, parameters, type);
-        }
-
-        function createSignatureDeclaration<T extends SignatureDeclaration>(
-            kind: T["kind"],
-            typeParameters: readonly TypeParameterDeclaration[] | undefined,
-            parameters: readonly ParameterDeclaration[],
-            type: TypeNode | undefined,
-            typeArguments?: readonly TypeNode[] | undefined
-        ): T {
-            const node = createBaseSignatureDeclaration(kind, typeParameters, parameters, type);
-            if (typeArguments) {
-                node.typeArguments = createNodeArray(typeArguments);
-            }
-            return node;
-        }
-
-        function updateSignatureDeclaration<T extends SignatureDeclaration>(
-            node: T,
-            typeParameters: NodeArray<TypeParameterDeclaration> | undefined,
-            parameters: NodeArray<ParameterDeclaration>,
-            type: TypeNode | undefined
-        ): T {
             return node.typeParameters !== typeParameters
                 || node.parameters !== parameters
                 || node.type !== type
-                ? updateNode(createSignatureDeclaration(node.kind, typeParameters, parameters, type), node)
-                : node;
+                ? updateBaseSignatureDeclaration(createConstructSignature(typeParameters, parameters, type), node)
+                : reuseNode(node);
         }
 
+        // Route signature creation to the appropriate factory method. Used by the NodeBuilder in the checker.
+        // @api
+        function createSignatureDeclaration<T extends SignatureDeclaration>(kind: T["kind"], typeParameters: readonly TypeParameterDeclaration[] | undefined, parameters: readonly ParameterDeclaration[], type: TypeNode | undefined): T;
+        function createSignatureDeclaration(kind: SignatureDeclaration["kind"], typeParameters: readonly TypeParameterDeclaration[] | undefined, parameters: readonly ParameterDeclaration[], type: TypeNode | undefined): SignatureDeclaration {
+            switch (kind) {
+                case SyntaxKind.CallSignature:
+                    return createCallSignature(typeParameters, parameters, type);
+                case SyntaxKind.ConstructSignature:
+                    return createConstructSignature(typeParameters, parameters, type);
+                case SyntaxKind.MethodSignature:
+                    // NOTE: This creates an *invalid* method signature since `name` is `undefined`, but this is preserved to support existing behavior.
+                    return createMethodSignature(/*modifiers*/ undefined, /*name*/ undefined!, /*questionToken*/ undefined, typeParameters, parameters, type);
+                case SyntaxKind.MethodDeclaration:
+                    // NOTE: This creates an *invalid* method declaration since `name` is `undefined`, but this is preserved to support existing behavior.
+                    return createMethodDeclaration(/*decorators*/ undefined, /*modifiers*/ undefined, /*asteriskToken*/ undefined, /*name*/ undefined!, /*questionToken*/ undefined, typeParameters, parameters, type, /*body*/ undefined);
+                case SyntaxKind.Constructor:
+                    return createConstructorDeclaration(/*decorators*/ undefined, /*modifiers*/ undefined, parameters, /*body*/ undefined);
+                case SyntaxKind.GetAccessor:
+                    // NOTE: This creates an *invalid* get accessor since `name` is `undefined`, but this is preserved to support existing behavior.
+                    return createGetAccessorDeclaration(/*decorators*/ undefined, /*modifiers*/ undefined, /*name*/ undefined!, parameters, type, /*body*/ undefined);
+                case SyntaxKind.SetAccessor:
+                    // NOTE: This creates an *invalid* set accessor since `name` is `undefined`, but this is preserved to support existing behavior.
+                    return createSetAccessorDeclaration(/*decorators*/ undefined, /*modifiers*/ undefined, /*name*/ undefined!, parameters, /*body*/ undefined);
+                case SyntaxKind.IndexSignature:
+                    return createIndexSignature(/*decorators*/ undefined, /*modifiers*/ undefined, parameters, type);
+                case SyntaxKind.JSDocFunctionType:
+                    return createJSDocFunctionType(parameters, type);
+                case SyntaxKind.FunctionType:
+                    return createFunctionTypeNode(typeParameters, parameters, type);
+                case SyntaxKind.ConstructorType:
+                    return createConstructorTypeNode(typeParameters, parameters, type);
+                case SyntaxKind.FunctionDeclaration:
+                    return createFunctionDeclaration(/*decorators*/ undefined, /*modifiers*/ undefined, /*asteriskToken*/ undefined, /*name*/ undefined, typeParameters, parameters, type, /*body*/ undefined);
+                case SyntaxKind.FunctionExpression:
+                    // NOTE: This creates an *invalid* function expression since `body` is `undefined`, but this is preserved to support existing behavior.
+                    return createFunctionExpression(/*modifiers*/ undefined, /*asteriskToken*/ undefined, /*name*/ undefined, typeParameters, parameters, type, /*body*/ undefined!);
+                case SyntaxKind.ArrowFunction:
+                    // NOTE: This creates an *invalid* arrow function since `body` is `undefined`, but this is preserved to support existing behavior.
+                    return createArrowFunction(/*modifiers*/ undefined, typeParameters, parameters, type, /*equalsGreaterThanToken*/ undefined, /*body*/ undefined!);
+                default:
+                    return Debug.assertNever(kind);
+            }
+        }
+
+        // @api
         function createIndexSignature(
             decorators: readonly Decorator[] | undefined,
             modifiers: readonly Modifier[] | undefined,
             parameters: readonly ParameterDeclaration[],
             type: TypeNode | undefined
         ): IndexSignatureDeclaration {
-            return createBaseSignatureLikeDeclaration(
+            const node = createBaseSignatureDeclaration<IndexSignatureDeclaration>(
                 SyntaxKind.IndexSignature,
                 decorators,
                 modifiers,
@@ -1093,8 +1360,10 @@ namespace ts {
                 parameters,
                 type
             );
+            return finishNode(node);
         }
 
+        // @api
         function updateIndexSignature(
             node: IndexSignatureDeclaration,
             decorators: readonly Decorator[] | undefined,
@@ -1106,311 +1375,402 @@ namespace ts {
                 || node.type !== type
                 || node.decorators !== decorators
                 || node.modifiers !== modifiers
-                ? updateNode(createIndexSignature(decorators, modifiers, parameters, type), node)
-                : node;
+                ? updateBaseSignatureDeclaration(createIndexSignature(decorators, modifiers, parameters, type), node)
+                : reuseNode(node);
         }
 
         //
         // Types
         //
 
+        // @api
         function createKeywordTypeNode(kind: KeywordTypeNode["kind"]) {
-            return createNode(kind) as KeywordTypeNode;
+            return finishNode(createBaseToken(kind)) as KeywordTypeNode;
         }
 
+        // @api
         function createTypePredicateNode(parameterName: Identifier | ThisTypeNode | string, type: TypeNode) {
-            const node = createNode(SyntaxKind.TypePredicate) as TypePredicateNode;
-            node.parameterName = asName(parameterName);
-            node.type = type;
-            return node;
+            const node = createBaseNode<TypePredicateNode>(SyntaxKind.TypePredicate);
+            setChild(node, node.parameterName = asName(parameterName));
+            setChild(node, node.type = type);
+            return finishNode(node);
         }
 
+        // @api
         function updateTypePredicateNode(node: TypePredicateNode, parameterName: Identifier | ThisTypeNode, type: TypeNode) {
             return node.parameterName !== parameterName
                 || node.type !== type
                 ? updateNode(createTypePredicateNode(parameterName, type), node)
-                : node;
+                : reuseNode(node);
         }
 
+        // @api
         function createTypeReferenceNode(typeName: string | EntityName, typeArguments: readonly TypeNode[] | undefined) {
-            const node = createNode(SyntaxKind.TypeReference) as TypeReferenceNode;
-            node.typeName = asName(typeName);
-            node.typeArguments = typeArguments && parenthesizer().parenthesizeTypeArguments(createNodeArray(typeArguments));
-            return node;
+            const node = createBaseNode<TypeReferenceNode>(SyntaxKind.TypeReference);
+            setChild(node, node.typeName = asName(typeName));
+            setChildren(node, node.typeArguments = typeArguments && parenthesizer().parenthesizeTypeArguments(createNodeArray(typeArguments)));
+            return finishNode(node);
         }
 
+        // @api
         function updateTypeReferenceNode(node: TypeReferenceNode, typeName: EntityName, typeArguments: NodeArray<TypeNode> | undefined) {
             return node.typeName !== typeName
                 || node.typeArguments !== typeArguments
                 ? updateNode(createTypeReferenceNode(typeName, typeArguments), node)
-                : node;
+                : reuseNode(node);
         }
 
-        function createFunctionTypeNode(typeParameters: readonly TypeParameterDeclaration[] | undefined, parameters: readonly ParameterDeclaration[], type: TypeNode | undefined): FunctionTypeNode {
-            return createSignatureDeclaration(SyntaxKind.FunctionType, typeParameters, parameters, type);
+        // @api
+        function createFunctionTypeNode(
+            typeParameters: readonly TypeParameterDeclaration[] | undefined,
+            parameters: readonly ParameterDeclaration[],
+            type: TypeNode | undefined
+        ): FunctionTypeNode {
+            const node = createBaseSignatureDeclaration<FunctionTypeNode>(
+                SyntaxKind.FunctionType,
+                /*decorators*/ undefined,
+                /*modifiers*/ undefined,
+                /*name*/ undefined,
+                typeParameters,
+                parameters,
+                type
+            );
+            return finishNode(node);
         }
 
-        function updateFunctionTypeNode(node: FunctionTypeNode, typeParameters: NodeArray<TypeParameterDeclaration> | undefined, parameters: NodeArray<ParameterDeclaration>, type: TypeNode | undefined) {
-            return updateSignatureDeclaration(node, typeParameters, parameters, type);
+        // @api
+        function updateFunctionTypeNode(
+            node: FunctionTypeNode,
+            typeParameters: NodeArray<TypeParameterDeclaration> | undefined,
+            parameters: NodeArray<ParameterDeclaration>,
+            type: TypeNode | undefined
+        ) {
+            return node.typeParameters !== typeParameters
+                || node.parameters !== parameters
+                || node.type !== type
+                ? updateBaseSignatureDeclaration(createFunctionTypeNode(typeParameters, parameters, type), node)
+                : reuseNode(node);
         }
 
-        function createConstructorTypeNode(typeParameters: readonly TypeParameterDeclaration[] | undefined, parameters: readonly ParameterDeclaration[], type: TypeNode | undefined): ConstructorTypeNode {
-            return createSignatureDeclaration(SyntaxKind.ConstructorType, typeParameters, parameters, type);
+        // @api
+        function createConstructorTypeNode(
+            typeParameters: readonly TypeParameterDeclaration[] | undefined,
+            parameters: readonly ParameterDeclaration[],
+            type: TypeNode | undefined
+        ): ConstructorTypeNode {
+            const node = createBaseSignatureDeclaration<ConstructorTypeNode>(
+                SyntaxKind.ConstructorType,
+                /*decorators*/ undefined,
+                /*modifiers*/ undefined,
+                /*name*/ undefined,
+                typeParameters,
+                parameters,
+                type
+            );
+            return finishNode(node);
         }
 
-        function updateConstructorTypeNode(node: ConstructorTypeNode, typeParameters: NodeArray<TypeParameterDeclaration> | undefined, parameters: NodeArray<ParameterDeclaration>, type: TypeNode | undefined) {
-            return updateSignatureDeclaration(node, typeParameters, parameters, type);
+        // @api
+        function updateConstructorTypeNode(
+            node: ConstructorTypeNode,
+            typeParameters: NodeArray<TypeParameterDeclaration> | undefined,
+            parameters: NodeArray<ParameterDeclaration>,
+            type: TypeNode | undefined
+        ) {
+            return node.typeParameters !== typeParameters
+                || node.parameters !== parameters
+                || node.type !== type
+                ? updateBaseSignatureDeclaration(createConstructorTypeNode(typeParameters, parameters, type), node)
+                : reuseNode(node);
         }
 
+        // @api
         function createTypeQueryNode(exprName: EntityName) {
-            const node = createNode(SyntaxKind.TypeQuery) as TypeQueryNode;
-            node.exprName = exprName;
-            return node;
+            const node = createBaseNode<TypeQueryNode>(SyntaxKind.TypeQuery);
+            setChild(node, node.exprName = exprName);
+            return finishNode(node);
         }
 
+        // @api
         function updateTypeQueryNode(node: TypeQueryNode, exprName: EntityName) {
             return node.exprName !== exprName
                 ? updateNode(createTypeQueryNode(exprName), node)
-                : node;
+                : reuseNode(node);
         }
 
+        // @api
         function createTypeLiteralNode(members: readonly TypeElement[] | undefined) {
-            const node = createNode(SyntaxKind.TypeLiteral) as TypeLiteralNode;
-            node.members = createNodeArray(members);
-            return node;
+            const node = createBaseNode<TypeLiteralNode>(SyntaxKind.TypeLiteral);
+            setChildren(node, node.members = createNodeArray(members));
+            return finishNode(node);
         }
 
+        // @api
         function updateTypeLiteralNode(node: TypeLiteralNode, members: NodeArray<TypeElement>) {
             return node.members !== members
                 ? updateNode(createTypeLiteralNode(members), node)
-                : node;
+                : reuseNode(node);
         }
 
+        // @api
         function createArrayTypeNode(elementType: TypeNode) {
-            const node = createNode(SyntaxKind.ArrayType) as ArrayTypeNode;
-            node.elementType = parenthesizer().parenthesizeElementTypeOfArrayType(elementType);
-            return node;
+            const node = createBaseNode<ArrayTypeNode>(SyntaxKind.ArrayType);
+            setChild(node, node.elementType = parenthesizer().parenthesizeElementTypeOfArrayType(elementType));
+            return finishNode(node);
         }
 
+        // @api
         function updateArrayTypeNode(node: ArrayTypeNode, elementType: TypeNode): ArrayTypeNode {
             return node.elementType !== elementType
                 ? updateNode(createArrayTypeNode(elementType), node)
-                : node;
+                : reuseNode(node);
         }
 
+        // @api
         function createTupleTypeNode(elementTypes: readonly TypeNode[]) {
-            const node = createNode(SyntaxKind.TupleType) as TupleTypeNode;
-            node.elementTypes = createNodeArray(elementTypes);
-            return node;
+            const node = createBaseNode<TupleTypeNode>(SyntaxKind.TupleType);
+            setChildren(node, node.elementTypes = createNodeArray(elementTypes));
+            return finishNode(node);
         }
 
+        // @api
         function updateTupleTypeNode(node: TupleTypeNode, elementTypes: readonly TypeNode[]) {
             return node.elementTypes !== elementTypes
                 ? updateNode(createTupleTypeNode(elementTypes), node)
-                : node;
+                : reuseNode(node);
         }
 
+        // @api
         function createOptionalTypeNode(type: TypeNode) {
-            const node = createNode(SyntaxKind.OptionalType) as OptionalTypeNode;
-            node.type = parenthesizer().parenthesizeElementTypeOfArrayType(type);
-            return node;
+            const node = createBaseNode<OptionalTypeNode>(SyntaxKind.OptionalType);
+            setChild(node, node.type = parenthesizer().parenthesizeElementTypeOfArrayType(type));
+            return finishNode(node);
         }
 
+        // @api
         function updateOptionalTypeNode(node: OptionalTypeNode, type: TypeNode): OptionalTypeNode {
             return node.type !== type
                 ? updateNode(createOptionalTypeNode(type), node)
-                : node;
+                : reuseNode(node);
         }
 
+        // @api
         function createRestTypeNode(type: TypeNode) {
-            const node = createNode(SyntaxKind.RestType) as RestTypeNode;
-            node.type = type;
-            return node;
+            const node = createBaseNode<RestTypeNode>(SyntaxKind.RestType);
+            setChild(node, node.type = type);
+            return finishNode(node);
         }
 
+        // @api
         function updateRestTypeNode(node: RestTypeNode, type: TypeNode): RestTypeNode {
             return node.type !== type
                 ? updateNode(createRestTypeNode(type), node)
-                : node;
-        }
-
-        function createUnionTypeNode(types: readonly TypeNode[]): UnionTypeNode {
-            return <UnionTypeNode>createUnionOrIntersectionTypeNode(SyntaxKind.UnionType, types);
-        }
-
-        function updateUnionTypeNode(node: UnionTypeNode, types: NodeArray<TypeNode>) {
-            return updateUnionOrIntersectionTypeNode(node, types);
-        }
-
-        function createIntersectionTypeNode(types: readonly TypeNode[]): IntersectionTypeNode {
-            return <IntersectionTypeNode>createUnionOrIntersectionTypeNode(SyntaxKind.IntersectionType, types);
-        }
-
-        function updateIntersectionTypeNode(node: IntersectionTypeNode, types: NodeArray<TypeNode>) {
-            return updateUnionOrIntersectionTypeNode(node, types);
+                : reuseNode(node);
         }
 
         function createUnionOrIntersectionTypeNode(kind: SyntaxKind.UnionType | SyntaxKind.IntersectionType, types: readonly TypeNode[]) {
-            const node = createNode(kind) as UnionTypeNode | IntersectionTypeNode;
-            node.types = parenthesizer().parenthesizeConstituentTypesOfUnionOrIntersectionType(createNodeArray(types));
-            return node;
+            const node = createBaseNode<UnionTypeNode | IntersectionTypeNode>(kind);
+            setChildren(node, node.types = parenthesizer().parenthesizeConstituentTypesOfUnionOrIntersectionType(createNodeArray(types)));
+            return finishNode(node);
         }
 
         function updateUnionOrIntersectionTypeNode<T extends UnionOrIntersectionTypeNode>(node: T, types: NodeArray<TypeNode>): T {
             return node.types !== types
                 ? updateNode(<T>createUnionOrIntersectionTypeNode(node.kind, types), node)
-                : node;
+                : reuseNode(node);
         }
 
+        // @api
+        function createUnionTypeNode(types: readonly TypeNode[]): UnionTypeNode {
+            return <UnionTypeNode>createUnionOrIntersectionTypeNode(SyntaxKind.UnionType, types);
+        }
+
+        // @api
+        function updateUnionTypeNode(node: UnionTypeNode, types: NodeArray<TypeNode>) {
+            return updateUnionOrIntersectionTypeNode(node, types);
+        }
+
+        // @api
+        function createIntersectionTypeNode(types: readonly TypeNode[]): IntersectionTypeNode {
+            return <IntersectionTypeNode>createUnionOrIntersectionTypeNode(SyntaxKind.IntersectionType, types);
+        }
+
+        // @api
+        function updateIntersectionTypeNode(node: IntersectionTypeNode, types: NodeArray<TypeNode>) {
+            return updateUnionOrIntersectionTypeNode(node, types);
+        }
+
+        // @api
         function createConditionalTypeNode(checkType: TypeNode, extendsType: TypeNode, trueType: TypeNode, falseType: TypeNode) {
-            const node = createNode(SyntaxKind.ConditionalType) as ConditionalTypeNode;
-            node.checkType = parenthesizer().parenthesizeMemberOfConditionalType(checkType);
-            node.extendsType = parenthesizer().parenthesizeMemberOfConditionalType(extendsType);
-            node.trueType = trueType;
-            node.falseType = falseType;
-            return node;
+            const node = createBaseNode<ConditionalTypeNode>(SyntaxKind.ConditionalType);
+            setChild(node, node.checkType = parenthesizer().parenthesizeMemberOfConditionalType(checkType));
+            setChild(node, node.extendsType = parenthesizer().parenthesizeMemberOfConditionalType(extendsType));
+            setChild(node, node.trueType = trueType);
+            setChild(node, node.falseType = falseType);
+            return finishNode(node);
         }
 
+        // @api
         function updateConditionalTypeNode(node: ConditionalTypeNode, checkType: TypeNode, extendsType: TypeNode, trueType: TypeNode, falseType: TypeNode) {
             return node.checkType !== checkType
                 || node.extendsType !== extendsType
                 || node.trueType !== trueType
                 || node.falseType !== falseType
                 ? updateNode(createConditionalTypeNode(checkType, extendsType, trueType, falseType), node)
-                : node;
+                : reuseNode(node);
         }
 
+        // @api
         function createInferTypeNode(typeParameter: TypeParameterDeclaration) {
-            const node = createNode(SyntaxKind.InferType) as InferTypeNode;
-            node.typeParameter = typeParameter;
-            return node;
+            const node = createBaseNode<InferTypeNode>(SyntaxKind.InferType);
+            setChild(node, node.typeParameter = typeParameter);
+            return finishNode(node);
         }
 
+        // @api
         function updateInferTypeNode(node: InferTypeNode, typeParameter: TypeParameterDeclaration) {
             return node.typeParameter !== typeParameter
                 ? updateNode(createInferTypeNode(typeParameter), node)
-                : node;
+                : reuseNode(node);
         }
 
+        // @api
         function createImportTypeNode(argument: TypeNode, qualifier?: EntityName, typeArguments?: readonly TypeNode[], isTypeOf?: boolean) {
-            const node = createNode(SyntaxKind.ImportType) as ImportTypeNode;
-            node.argument = argument;
-            node.qualifier = qualifier;
-            node.typeArguments = typeArguments && parenthesizer().parenthesizeTypeArguments(createNodeArray(typeArguments));
+            const node = createBaseNode<ImportTypeNode>(SyntaxKind.ImportType);
+            setChild(node, node.argument = argument);
+            setChild(node, node.qualifier = qualifier);
+            setChildren(node, node.typeArguments = typeArguments && parenthesizer().parenthesizeTypeArguments(createNodeArray(typeArguments)));
             node.isTypeOf = isTypeOf;
-            return node;
+            return finishNode(node);
         }
 
+        // @api
         function updateImportTypeNode(node: ImportTypeNode, argument: TypeNode, qualifier?: EntityName, typeArguments?: readonly TypeNode[], isTypeOf?: boolean) {
             return node.argument !== argument
                 || node.qualifier !== qualifier
                 || node.typeArguments !== typeArguments
                 || node.isTypeOf !== isTypeOf
                 ? updateNode(createImportTypeNode(argument, qualifier, typeArguments, isTypeOf), node)
-                : node;
+                : reuseNode(node);
         }
 
+        // @api
         function createParenthesizedType(type: TypeNode) {
-            const node = createNode(SyntaxKind.ParenthesizedType) as ParenthesizedTypeNode;
-            node.type = type;
-            return node;
+            const node = createBaseNode<ParenthesizedTypeNode>(SyntaxKind.ParenthesizedType);
+            setChild(node, node.type = type);
+            return finishNode(node);
         }
 
+        // @api
         function updateParenthesizedType(node: ParenthesizedTypeNode, type: TypeNode) {
             return node.type !== type
                 ? updateNode(createParenthesizedType(type), node)
-                : node;
+                : reuseNode(node);
         }
 
+        // @api
         function createThisTypeNode() {
-            return createNode(SyntaxKind.ThisType) as ThisTypeNode;
+            return finishNode(createBaseNode<ThisTypeNode>(SyntaxKind.ThisType));
         }
 
+        // @api
         function createTypeOperatorNode(operator: SyntaxKind.KeyOfKeyword | SyntaxKind.UniqueKeyword | SyntaxKind.ReadonlyKeyword, type: TypeNode): TypeOperatorNode {
-            const node = createNode(SyntaxKind.TypeOperator) as TypeOperatorNode;
+            const node = createBaseNode<TypeOperatorNode>(SyntaxKind.TypeOperator);
             node.operator = operator;
-            node.type = parenthesizer().parenthesizeMemberOfElementType(type);
-            return node;
+            setChild(node, node.type = parenthesizer().parenthesizeMemberOfElementType(type));
+            return finishNode(node);
         }
 
+        // @api
         function updateTypeOperatorNode(node: TypeOperatorNode, type: TypeNode) {
             return node.type !== type
                 ? updateNode(createTypeOperatorNode(node.operator, type), node)
-                : node;
+                : reuseNode(node);
         }
 
+        // @api
         function createIndexedAccessTypeNode(objectType: TypeNode, indexType: TypeNode) {
-            const node = createNode(SyntaxKind.IndexedAccessType) as IndexedAccessTypeNode;
-            node.objectType = parenthesizer().parenthesizeMemberOfElementType(objectType);
-            node.indexType = indexType;
-            return node;
+            const node = createBaseNode<IndexedAccessTypeNode>(SyntaxKind.IndexedAccessType);
+            setChild(node, node.objectType = parenthesizer().parenthesizeMemberOfElementType(objectType));
+            setChild(node, node.indexType = indexType);
+            return finishNode(node);
         }
 
+        // @api
         function updateIndexedAccessTypeNode(node: IndexedAccessTypeNode, objectType: TypeNode, indexType: TypeNode) {
             return node.objectType !== objectType
                 || node.indexType !== indexType
                 ? updateNode(createIndexedAccessTypeNode(objectType, indexType), node)
-                : node;
+                : reuseNode(node);
         }
 
+        // @api
         function createMappedTypeNode(readonlyToken: ReadonlyToken | PlusToken | MinusToken | undefined, typeParameter: TypeParameterDeclaration, questionToken: QuestionToken | PlusToken | MinusToken | undefined, type: TypeNode | undefined): MappedTypeNode {
-            const node = createNode(SyntaxKind.MappedType) as MappedTypeNode;
-            node.readonlyToken = readonlyToken;
-            node.typeParameter = typeParameter;
-            node.questionToken = questionToken;
-            node.type = type;
-            return node;
+            const node = createBaseNode<MappedTypeNode>(SyntaxKind.MappedType);
+            setChild(node, node.readonlyToken = readonlyToken);
+            setChild(node, node.typeParameter = typeParameter);
+            setChild(node, node.questionToken = questionToken);
+            setChild(node, node.type = type);
+            return finishNode(node);
         }
 
+        // @api
         function updateMappedTypeNode(node: MappedTypeNode, readonlyToken: ReadonlyToken | PlusToken | MinusToken | undefined, typeParameter: TypeParameterDeclaration, questionToken: QuestionToken | PlusToken | MinusToken | undefined, type: TypeNode | undefined): MappedTypeNode {
             return node.readonlyToken !== readonlyToken
                 || node.typeParameter !== typeParameter
                 || node.questionToken !== questionToken
                 || node.type !== type
                 ? updateNode(createMappedTypeNode(readonlyToken, typeParameter, questionToken, type), node)
-                : node;
+                : reuseNode(node);
         }
 
+        // @api
         function createLiteralTypeNode(literal: LiteralTypeNode["literal"]) {
-            const node = createNode(SyntaxKind.LiteralType) as LiteralTypeNode;
-            node.literal = literal;
-            return node;
+            const node = createBaseNode<LiteralTypeNode>(SyntaxKind.LiteralType);
+            setChild(node, node.literal = literal);
+            return finishNode(node);
         }
 
+        // @api
         function updateLiteralTypeNode(node: LiteralTypeNode, literal: LiteralTypeNode["literal"]) {
             return node.literal !== literal
                 ? updateNode(createLiteralTypeNode(literal), node)
-                : node;
+                : reuseNode(node);
         }
 
         //
         // Binding Patterns
         //
 
+        // @api
         function createObjectBindingPattern(elements: readonly BindingElement[]) {
-            const node = createNode(SyntaxKind.ObjectBindingPattern) as ObjectBindingPattern;
-            node.elements = createNodeArray(elements);
-            return node;
+            const node = createBaseNode<ObjectBindingPattern>(SyntaxKind.ObjectBindingPattern);
+            setChildren(node, node.elements = createNodeArray(elements));
+            return finishNode(node);
         }
 
+        // @api
         function updateObjectBindingPattern(node: ObjectBindingPattern, elements: readonly BindingElement[]) {
             return node.elements !== elements
                 ? updateNode(createObjectBindingPattern(elements), node)
-                : node;
+                : reuseNode(node);
         }
 
+        // @api
         function createArrayBindingPattern(elements: readonly ArrayBindingElement[]) {
-            const node = createNode(SyntaxKind.ArrayBindingPattern) as ArrayBindingPattern;
-            node.elements = createNodeArray(elements);
-            return node;
+            const node = createBaseNode<ArrayBindingPattern>(SyntaxKind.ArrayBindingPattern);
+            setChildren(node, node.elements = createNodeArray(elements));
+            return finishNode(node);
         }
 
+        // @api
         function updateArrayBindingPattern(node: ArrayBindingPattern, elements: readonly ArrayBindingElement[]) {
             return node.elements !== elements
                 ? updateNode(createArrayBindingPattern(elements), node)
-                : node;
+                : reuseNode(node);
         }
 
+        // @api
         function createBindingElement(dotDotDotToken: DotDotDotToken | undefined, propertyName: string | PropertyName | undefined, name: string | BindingName, initializer?: Expression) {
             const node = createBaseNamedDeclaration<BindingElement>(
                 SyntaxKind.BindingElement,
@@ -1418,171 +1778,173 @@ namespace ts {
                 /*modifiers*/ undefined,
                 name
             );
-            node.propertyName = asName(propertyName);
-            node.initializer = initializer;
-            node.dotDotDotToken = dotDotDotToken;
-            return node;
+            setChild(node, node.propertyName = asName(propertyName));
+            setChild(node, node.initializer = initializer);
+            setChild(node, node.dotDotDotToken = dotDotDotToken);
+            return finishNode(node);
         }
 
+        // @api
         function updateBindingElement(node: BindingElement, dotDotDotToken: DotDotDotToken | undefined, propertyName: PropertyName | undefined, name: BindingName, initializer: Expression | undefined) {
             return node.propertyName !== propertyName
                 || node.dotDotDotToken !== dotDotDotToken
                 || node.name !== name
                 || node.initializer !== initializer
                 ? updateNode(createBindingElement(dotDotDotToken, propertyName, name, initializer), node)
-                : node;
+                : reuseNode(node);
         }
 
         //
         // Expression
         //
 
-        function createArrayLiteral(elements?: readonly Expression[], multiLine?: boolean) {
-            const node = createNode(SyntaxKind.ArrayLiteralExpression) as ArrayLiteralExpression;
-            node.elements = parenthesizer().parenthesizeExpressionsOfCommaDelimitedList(createNodeArray(elements));
+        // @api
+        function createArrayLiteralExpression(elements?: readonly Expression[], multiLine?: boolean) {
+            const node = createBaseNode<ArrayLiteralExpression>(SyntaxKind.ArrayLiteralExpression);
+            setChildren(node, node.elements = parenthesizer().parenthesizeExpressionsOfCommaDelimitedList(createNodeArray(elements)));
             if (multiLine) node.multiLine = true;
-            return node;
+            return finishNode(node);
         }
 
-        function updateArrayLiteral(node: ArrayLiteralExpression, elements: readonly Expression[]) {
+        // @api
+        function updateArrayLiteralExpression(node: ArrayLiteralExpression, elements: readonly Expression[]) {
             return node.elements !== elements
-                ? updateNode(createArrayLiteral(elements, node.multiLine), node)
-                : node;
+                ? updateNode(createArrayLiteralExpression(elements, node.multiLine), node)
+                : reuseNode(node);
         }
 
-        function createObjectLiteral(properties?: readonly ObjectLiteralElementLike[], multiLine?: boolean) {
-            const node = createNode(SyntaxKind.ObjectLiteralExpression) as ObjectLiteralExpression;
-            node.properties = createNodeArray(properties);
+        // @api
+        function createObjectLiteralExpression(properties?: readonly ObjectLiteralElementLike[], multiLine?: boolean) {
+            const node = createBaseNode<ObjectLiteralExpression>(SyntaxKind.ObjectLiteralExpression);
+            setChildren(node, node.properties = createNodeArray(properties));
             if (multiLine) node.multiLine = true;
-            return node;
+            return finishNode(node);
         }
 
-        function updateObjectLiteral(node: ObjectLiteralExpression, properties: readonly ObjectLiteralElementLike[]) {
+        // @api
+        function updateObjectLiteralExpression(node: ObjectLiteralExpression, properties: readonly ObjectLiteralElementLike[]) {
             return node.properties !== properties
-                ? updateNode(createObjectLiteral(properties, node.multiLine), node)
-                : node;
+                ? updateNode(createObjectLiteralExpression(properties, node.multiLine), node)
+                : reuseNode(node);
         }
 
-        function createPropertyAccess(expression: Expression, name: string | Identifier) {
-            const node = createNode(SyntaxKind.PropertyAccessExpression) as PropertyAccessExpression;
-            node.expression = parenthesizer().parenthesizeLeftSideOfAccess(expression);
-            node.name = asName(name);
-            return node;
+        // @api
+        function createPropertyAccessExpression(expression: Expression, name: string | Identifier) {
+            const node = createBaseNode<PropertyAccessExpression>(SyntaxKind.PropertyAccessExpression);
+            setChild(node, node.expression = parenthesizer().parenthesizeLeftSideOfAccess(expression));
+            setChild(node, node.name = asName(name));
+            return finishNode(node);
         }
 
-        function createPropertyAccessSynthesized(expression: Expression, name: string | Identifier) {
-            return setEmitFlags(createPropertyAccess(expression, name), EmitFlags.NoIndentation);
-        }
-
-        // This function lazily chooses which `createPropertyAccess` implementation to use for future calls. This helps to avoid
-        // the overhead of the `if` check when its not needed.
-        function createPropertyAccessUnspecific(expression: Expression, name: string | Identifier) {
-            const node = createPropertyAccess(expression, name);
-            if (node.flags & NodeFlags.Synthesized) {
-                setEmitFlags(node, EmitFlags.NoIndentation);
-                actualCreatePropertyAccess = createPropertyAccessSynthesized;
-            }
-            else {
-                actualCreatePropertyAccess = createPropertyAccess;
-            }
-            return node;
-        }
-
-        function updatePropertyAccess(node: PropertyAccessExpression, expression: Expression, name: Identifier) {
+        // @api
+        function updatePropertyAccessExpression(node: PropertyAccessExpression, expression: Expression, name: Identifier) {
             return node.expression !== expression
                 || node.name !== name
-                ? updateNode(createPropertyAccess(expression, name), node)
-                : node;
+                ? updateNode(createPropertyAccessExpression(expression, name), node)
+                : reuseNode(node);
         }
 
-        function createElementAccess(expression: Expression, index: number | Expression) {
-            const node = createNode(SyntaxKind.ElementAccessExpression) as ElementAccessExpression;
-            node.expression = parenthesizer().parenthesizeLeftSideOfAccess(expression);
-            node.argumentExpression = asExpression(index);
-            return node;
+        // @api
+        function createElementAccessExpression(expression: Expression, index: number | Expression) {
+            const node = createBaseNode<ElementAccessExpression>(SyntaxKind.ElementAccessExpression);
+            setChild(node, node.expression = parenthesizer().parenthesizeLeftSideOfAccess(expression));
+            setChild(node, node.argumentExpression = asExpression(index));
+            return finishNode(node);
         }
 
-        function updateElementAccess(node: ElementAccessExpression, expression: Expression, argumentExpression: Expression) {
+        // @api
+        function updateElementAccessExpression(node: ElementAccessExpression, expression: Expression, argumentExpression: Expression) {
             return node.expression !== expression
                 || node.argumentExpression !== argumentExpression
-                ? updateNode(createElementAccess(expression, argumentExpression), node)
-                : node;
+                ? updateNode(createElementAccessExpression(expression, argumentExpression), node)
+                : reuseNode(node);
         }
 
-        function createCall(expression: Expression, typeArguments: readonly TypeNode[] | undefined, argumentsArray: readonly Expression[] | undefined) {
-            const node = createNode(SyntaxKind.CallExpression) as CallExpression;
-            node.expression = parenthesizer().parenthesizeLeftSideOfAccess(expression);
-            node.typeArguments = asNodeArray(typeArguments);
-            node.arguments = parenthesizer().parenthesizeExpressionsOfCommaDelimitedList(createNodeArray(argumentsArray));
-            return node;
+        // @api
+        function createCallExpression(expression: Expression, typeArguments: readonly TypeNode[] | undefined, argumentsArray: readonly Expression[] | undefined) {
+            const node = createBaseNode<CallExpression>(SyntaxKind.CallExpression);
+            setChild(node, node.expression = parenthesizer().parenthesizeLeftSideOfAccess(expression));
+            setChildren(node, node.typeArguments = asNodeArray(typeArguments));
+            setChildren(node, node.arguments = parenthesizer().parenthesizeExpressionsOfCommaDelimitedList(createNodeArray(argumentsArray)));
+            return finishNode(node);
         }
 
-        function updateCall(node: CallExpression, expression: Expression, typeArguments: readonly TypeNode[] | undefined, argumentsArray: readonly Expression[]) {
+        // @api
+        function updateCallExpression(node: CallExpression, expression: Expression, typeArguments: readonly TypeNode[] | undefined, argumentsArray: readonly Expression[]) {
             return node.expression !== expression
                 || node.typeArguments !== typeArguments
                 || node.arguments !== argumentsArray
-                ? updateNode(createCall(expression, typeArguments, argumentsArray), node)
-                : node;
+                ? updateNode(createCallExpression(expression, typeArguments, argumentsArray), node)
+                : reuseNode(node);
         }
 
-        function createNew(expression: Expression, typeArguments: readonly TypeNode[] | undefined, argumentsArray: readonly Expression[] | undefined) {
-            const node = createNode(SyntaxKind.NewExpression) as NewExpression;
-            node.expression = parenthesizer().parenthesizeExpressionOfNew(expression);
-            node.typeArguments = asNodeArray(typeArguments);
-            node.arguments = argumentsArray ? parenthesizer().parenthesizeExpressionsOfCommaDelimitedList(createNodeArray(argumentsArray)) : undefined;
-            return node;
+        // @api
+        function createNewExpression(expression: Expression, typeArguments: readonly TypeNode[] | undefined, argumentsArray: readonly Expression[] | undefined) {
+            const node = createBaseNode<NewExpression>(SyntaxKind.NewExpression);
+            setChild(node, node.expression = parenthesizer().parenthesizeExpressionOfNew(expression));
+            setChildren(node, node.typeArguments = asNodeArray(typeArguments));
+            setChildren(node, node.arguments = argumentsArray ? parenthesizer().parenthesizeExpressionsOfCommaDelimitedList(createNodeArray(argumentsArray)) : undefined);
+            return finishNode(node);
         }
 
-        function updateNew(node: NewExpression, expression: Expression, typeArguments: readonly TypeNode[] | undefined, argumentsArray: readonly Expression[] | undefined) {
+        // @api
+        function updateNewExpression(node: NewExpression, expression: Expression, typeArguments: readonly TypeNode[] | undefined, argumentsArray: readonly Expression[] | undefined) {
             return node.expression !== expression
                 || node.typeArguments !== typeArguments
                 || node.arguments !== argumentsArray
-                ? updateNode(createNew(expression, typeArguments, argumentsArray), node)
-                : node;
+                ? updateNode(createNewExpression(expression, typeArguments, argumentsArray), node)
+                : reuseNode(node);
         }
 
-        function createTaggedTemplate(tag: Expression, typeArguments: readonly TypeNode[] | undefined, template: TemplateLiteral) {
-            const node = createNode(SyntaxKind.TaggedTemplateExpression) as TaggedTemplateExpression;
-            node.tag = parenthesizer().parenthesizeLeftSideOfAccess(tag);
-            node.typeArguments = asNodeArray(typeArguments);
-            node.template = template;
-            return node;
+        // @api
+        function createTaggedTemplateExpression(tag: Expression, typeArguments: readonly TypeNode[] | undefined, template: TemplateLiteral) {
+            const node = createBaseNode<TaggedTemplateExpression>(SyntaxKind.TaggedTemplateExpression);
+            setChild(node, node.tag = parenthesizer().parenthesizeLeftSideOfAccess(tag));
+            setChildren(node, node.typeArguments = asNodeArray(typeArguments));
+            setChild(node, node.template = template);
+            return finishNode(node);
         }
 
-        function updateTaggedTemplate(node: TaggedTemplateExpression, tag: Expression, typeArguments: readonly TypeNode[] | undefined, template: TemplateLiteral) {
+        // @api
+        function updateTaggedTemplateExpression(node: TaggedTemplateExpression, tag: Expression, typeArguments: readonly TypeNode[] | undefined, template: TemplateLiteral) {
             return node.tag !== tag
                 || node.typeArguments !== typeArguments
                 || node.template !== template
-                ? updateNode(createTaggedTemplate(tag, typeArguments, template), node)
-                : node;
+                ? updateNode(createTaggedTemplateExpression(tag, typeArguments, template), node)
+                : reuseNode(node);
         }
 
+        // @api
         function createTypeAssertion(type: TypeNode, expression: Expression) {
-            const node = createNode(SyntaxKind.TypeAssertionExpression) as TypeAssertion;
-            node.expression = parenthesizer().parenthesizeOperandOfPrefixUnary(expression);
-            node.type = type;
-            return node;
+            const node = createBaseNode<TypeAssertion>(SyntaxKind.TypeAssertionExpression);
+            setChild(node, node.expression = parenthesizer().parenthesizeOperandOfPrefixUnary(expression));
+            setChild(node, node.type = type);
+            return finishNode(node);
         }
 
+        // @api
         function updateTypeAssertion(node: TypeAssertion, type: TypeNode, expression: Expression) {
             return node.type !== type
                 || node.expression !== expression
                 ? updateNode(createTypeAssertion(type, expression), node)
-                : node;
+                : reuseNode(node);
         }
 
-        function createParen(expression: Expression) {
-            const node = createNode(SyntaxKind.ParenthesizedExpression) as ParenthesizedExpression;
-            node.expression = expression;
-            return node;
+        // @api
+        function createParenthesizedExpression(expression: Expression) {
+            const node = createBaseNode<ParenthesizedExpression>(SyntaxKind.ParenthesizedExpression);
+            setChild(node, node.expression = expression);
+            return finishNode(node);
         }
 
-        function updateParen(node: ParenthesizedExpression, expression: Expression) {
+        // @api
+        function updateParenthesizedExpression(node: ParenthesizedExpression, expression: Expression) {
             return node.expression !== expression
-                ? updateNode(createParen(expression), node)
-                : node;
+                ? updateNode(createParenthesizedExpression(expression), node)
+                : reuseNode(node);
         }
 
+        // @api
         function createFunctionExpression(
             modifiers: readonly Modifier[] | undefined,
             asteriskToken: AsteriskToken | undefined,
@@ -1592,17 +1954,20 @@ namespace ts {
             type: TypeNode | undefined,
             body: Block
         ) {
-            const node = createNode(SyntaxKind.FunctionExpression) as FunctionExpression;
-            node.modifiers = asNodeArray(modifiers);
-            node.asteriskToken = asteriskToken;
-            node.name = asName(name);
-            node.typeParameters = asNodeArray(typeParameters);
-            node.parameters = createNodeArray(parameters);
-            node.type = type;
-            node.body = body;
-            return node;
+            const node = createBaseFunctionLikeDeclaration<FunctionExpression>(
+                SyntaxKind.FunctionExpression,
+                /*decorators*/ undefined,
+                modifiers,
+                name,
+                typeParameters,
+                parameters,
+                type,
+                body);
+            setChild(node, node.asteriskToken = asteriskToken);
+            return finishNode(node);
         }
 
+        // @api
         function updateFunctionExpression(
             node: FunctionExpression,
             modifiers: readonly Modifier[] | undefined,
@@ -1620,8 +1985,31 @@ namespace ts {
                 || node.parameters !== parameters
                 || node.type !== type
                 || node.body !== body
-                ? updateNode(createFunctionExpression(modifiers, asteriskToken, name, typeParameters, parameters, type, body), node)
-                : node;
+                ? updateBaseFunctionLikeDeclaration(createFunctionExpression(modifiers, asteriskToken, name, typeParameters, parameters, type, body), node)
+                : reuseNode(node);
+        }
+
+        // @api
+        function createArrowFunction(
+            modifiers: readonly Modifier[] | undefined,
+            typeParameters: readonly TypeParameterDeclaration[] | undefined,
+            parameters: readonly ParameterDeclaration[],
+            type: TypeNode | undefined,
+            equalsGreaterThanToken: EqualsGreaterThanToken | undefined,
+            body: ConciseBody
+        ) {
+            const node = createBaseFunctionLikeDeclaration<ArrowFunction>(
+                SyntaxKind.ArrowFunction,
+                /*decorators*/ undefined,
+                modifiers,
+                /*name*/ undefined,
+                typeParameters,
+                parameters,
+                type,
+                parenthesizer().parenthesizeConciseBodyOfArrowFunction(body)
+            );
+            setChild(node, node.equalsGreaterThanToken = equalsGreaterThanToken || createToken(SyntaxKind.EqualsGreaterThanToken));
+            return finishNode(node);
         }
 
         function createArrowFunctionWithoutTokens(
@@ -1631,53 +2019,7 @@ namespace ts {
             type: TypeNode | undefined,
             body: ConciseBody
         ) {
-            return createArrowFunctionWithTokens(modifiers, typeParameters, parameters, type, createToken(SyntaxKind.EqualsGreaterThanToken), body);
-        }
-
-        function createArrowFunctionWithTokens(
-            modifiers: readonly Modifier[] | undefined,
-            typeParameters: readonly TypeParameterDeclaration[] | undefined,
-            parameters: readonly ParameterDeclaration[],
-            type: TypeNode | undefined,
-            equalsGreaterThanToken: EqualsGreaterThanToken | undefined,
-            body: ConciseBody
-        ) {
-            const node = createNode(SyntaxKind.ArrowFunction) as ArrowFunction;
-            node.modifiers = asNodeArray(modifiers);
-            node.typeParameters = asNodeArray(typeParameters);
-            node.parameters = createNodeArray(parameters);
-            node.type = type;
-            node.equalsGreaterThanToken = equalsGreaterThanToken || createToken(SyntaxKind.EqualsGreaterThanToken);
-            node.body = parenthesizer().parenthesizeConciseBodyOfArrowFunction(body);
-            return node;
-        }
-
-        function createArrowFunction(
-            modifiers: readonly Modifier[] | undefined,
-            typeParameters: readonly TypeParameterDeclaration[] | undefined,
-            parameters: readonly ParameterDeclaration[],
-            type: TypeNode | undefined,
-            body: ConciseBody
-        ): ArrowFunction;
-        function createArrowFunction(
-            modifiers: readonly Modifier[] | undefined,
-            typeParameters: readonly TypeParameterDeclaration[] | undefined,
-            parameters: readonly ParameterDeclaration[],
-            type: TypeNode | undefined,
-            equalsGreaterThanToken: EqualsGreaterThanToken,
-            body: ConciseBody
-        ): ArrowFunction;
-        function createArrowFunction(
-            modifiers: readonly Modifier[] | undefined,
-            typeParameters: readonly TypeParameterDeclaration[] | undefined,
-            parameters: readonly ParameterDeclaration[],
-            type: TypeNode | undefined,
-            equalsGreaterThanToken: EqualsGreaterThanToken | ConciseBody,
-            body?: ConciseBody
-        ) {
-            return arguments.length === 6 ? createArrowFunctionWithTokens(modifiers, typeParameters, parameters, type, equalsGreaterThanToken as EqualsGreaterThanToken, body!) :
-                arguments.length === 5 ? createArrowFunctionWithoutTokens(modifiers, typeParameters, parameters, type, body!) :
-                Debug.fail("Incorrect argument count");
+            return createArrowFunction(modifiers, typeParameters, parameters, type, /*equalsGreaterThanToken*/ undefined, body);
         }
 
         function updateArrowFunctionWithoutTokens(
@@ -1688,10 +2030,11 @@ namespace ts {
             type: TypeNode | undefined,
             body: ConciseBody
         ): ArrowFunction {
-            return updateArrowFunctionWithTokens(node, modifiers, typeParameters, parameters, type, node.equalsGreaterThanToken, body);
+            return updateArrowFunction(node, modifiers, typeParameters, parameters, type, node.equalsGreaterThanToken, body);
         }
 
-        function updateArrowFunctionWithTokens(
+        // @api
+        function updateArrowFunction(
             node: ArrowFunction,
             modifiers: readonly Modifier[] | undefined,
             typeParameters: readonly TypeParameterDeclaration[] | undefined,
@@ -1706,164 +2049,132 @@ namespace ts {
                 || node.type !== type
                 || node.equalsGreaterThanToken !== equalsGreaterThanToken
                 || node.body !== body
-                ? updateNode(createArrowFunction(modifiers, typeParameters, parameters, type, equalsGreaterThanToken, body), node)
-                : node;
+                ? updateBaseFunctionLikeDeclaration(createArrowFunction(modifiers, typeParameters, parameters, type, equalsGreaterThanToken, body), node)
+                : reuseNode(node);
         }
 
-        function updateArrowFunction(
-            node: ArrowFunction,
-            modifiers: readonly Modifier[] | undefined,
-            typeParameters: readonly TypeParameterDeclaration[] | undefined,
-            parameters: readonly ParameterDeclaration[],
-            type: TypeNode | undefined,
-            body: ConciseBody
-        ): ArrowFunction;
-        function updateArrowFunction(
-            node: ArrowFunction,
-            modifiers: readonly Modifier[] | undefined,
-            typeParameters: readonly TypeParameterDeclaration[] | undefined,
-            parameters: readonly ParameterDeclaration[],
-            type: TypeNode | undefined,
-            equalsGreaterThanToken: EqualsGreaterThanToken,
-            body: ConciseBody
-        ): ArrowFunction;
-        function updateArrowFunction(
-            node: ArrowFunction,
-            modifiers: readonly Modifier[] | undefined,
-            typeParameters: readonly TypeParameterDeclaration[] | undefined,
-            parameters: readonly ParameterDeclaration[],
-            type: TypeNode | undefined,
-            equalsGreaterThanToken: EqualsGreaterThanToken | ConciseBody,
-            body?: ConciseBody
-        ): ArrowFunction {
-            return arguments.length === 7 ? updateArrowFunctionWithTokens(node, modifiers, typeParameters, parameters, type, equalsGreaterThanToken as EqualsGreaterThanToken, body!) :
-                arguments.length === 6 ? updateArrowFunctionWithoutTokens(node, modifiers, typeParameters, parameters, type, body!) :
-                Debug.fail("Incorrect argument count");
+        // @api
+        function createDeleteExpression(expression: Expression) {
+            const node = createBaseNode<DeleteExpression>(SyntaxKind.DeleteExpression);
+            setChild(node, node.expression = parenthesizer().parenthesizeOperandOfPrefixUnary(expression));
+            return finishNode(node);
         }
 
-        function createDelete(expression: Expression) {
-            const node = createNode(SyntaxKind.DeleteExpression) as DeleteExpression;
-            node.expression = parenthesizer().parenthesizeOperandOfPrefixUnary(expression);
-            return node;
-        }
-
-        function updateDelete(node: DeleteExpression, expression: Expression) {
+        // @api
+        function updateDeleteExpression(node: DeleteExpression, expression: Expression) {
             return node.expression !== expression
-                ? updateNode(createDelete(expression), node)
-                : node;
+                ? updateNode(createDeleteExpression(expression), node)
+                : reuseNode(node);
         }
 
-        function createTypeOf(expression: Expression) {
-            const node = createNode(SyntaxKind.TypeOfExpression) as TypeOfExpression;
-            node.expression = parenthesizer().parenthesizeOperandOfPrefixUnary(expression);
-            return node;
+        // @api
+        function createTypeOfExpression(expression: Expression) {
+            const node = createBaseNode<TypeOfExpression>(SyntaxKind.TypeOfExpression);
+            setChild(node, node.expression = parenthesizer().parenthesizeOperandOfPrefixUnary(expression));
+            return finishNode(node);
         }
 
-        function updateTypeOf(node: TypeOfExpression, expression: Expression) {
+        // @api
+        function updateTypeOfExpression(node: TypeOfExpression, expression: Expression) {
             return node.expression !== expression
-                ? updateNode(createTypeOf(expression), node)
-                : node;
+                ? updateNode(createTypeOfExpression(expression), node)
+                : reuseNode(node);
         }
 
-        function createVoid(expression: Expression) {
-            const node = createNode(SyntaxKind.VoidExpression) as VoidExpression;
-            node.expression = parenthesizer().parenthesizeOperandOfPrefixUnary(expression);
-            return node;
+        // @api
+        function createVoidExpression(expression: Expression) {
+            const node = createBaseNode<VoidExpression>(SyntaxKind.VoidExpression);
+            setChild(node, node.expression = parenthesizer().parenthesizeOperandOfPrefixUnary(expression));
+            return finishNode(node);
         }
 
-        function updateVoid(node: VoidExpression, expression: Expression) {
+        // @api
+        function updateVoidExpression(node: VoidExpression, expression: Expression) {
             return node.expression !== expression
-                ? updateNode(createVoid(expression), node)
-                : node;
+                ? updateNode(createVoidExpression(expression), node)
+                : reuseNode(node);
         }
 
-        function createAwait(expression: Expression) {
-            const node = createNode(SyntaxKind.AwaitExpression) as AwaitExpression;
-            node.expression = parenthesizer().parenthesizeOperandOfPrefixUnary(expression);
-            return node;
+        // @api
+        function createAwaitExpression(expression: Expression) {
+            const node = createBaseNode<AwaitExpression>(SyntaxKind.AwaitExpression);
+            setChild(node, node.expression = parenthesizer().parenthesizeOperandOfPrefixUnary(expression));
+            return finishNode(node);
         }
 
-        function updateAwait(node: AwaitExpression, expression: Expression) {
+        // @api
+        function updateAwaitExpression(node: AwaitExpression, expression: Expression) {
             return node.expression !== expression
-                ? updateNode(createAwait(expression), node)
-                : node;
+                ? updateNode(createAwaitExpression(expression), node)
+                : reuseNode(node);
         }
 
-        function createPrefix(operator: PrefixUnaryOperator, operand: Expression) {
-            const node = createNode(SyntaxKind.PrefixUnaryExpression) as PrefixUnaryExpression;
+        // @api
+        function createPrefixUnaryExpression(operator: PrefixUnaryOperator, operand: Expression) {
+            const node = createBaseNode<PrefixUnaryExpression>(SyntaxKind.PrefixUnaryExpression);
             node.operator = operator;
-            node.operand = parenthesizer().parenthesizeOperandOfPrefixUnary(operand);
-            return node;
+            setChild(node, node.operand = parenthesizer().parenthesizeOperandOfPrefixUnary(operand));
+            return finishNode(node);
         }
 
-        function updatePrefix(node: PrefixUnaryExpression, operand: Expression) {
+        // @api
+        function updatePrefixUnaryExpression(node: PrefixUnaryExpression, operand: Expression) {
             return node.operand !== operand
-                ? updateNode(createPrefix(node.operator, operand), node)
-                : node;
+                ? updateNode(createPrefixUnaryExpression(node.operator, operand), node)
+                : reuseNode(node);
         }
 
-        function createPostfix(operand: Expression, operator: PostfixUnaryOperator) {
-            const node = createNode(SyntaxKind.PostfixUnaryExpression) as PostfixUnaryExpression;
-            node.operand = parenthesizer().parenthesizeOperandOfPostfixUnary(operand);
+        // @api
+        function createPostfixUnaryExpression(operand: Expression, operator: PostfixUnaryOperator) {
+            const node = createBaseNode<PostfixUnaryExpression>(SyntaxKind.PostfixUnaryExpression);
             node.operator = operator;
-            return node;
+            setChild(node, node.operand = parenthesizer().parenthesizeOperandOfPostfixUnary(operand));
+            return finishNode(node);
         }
 
-        function updatePostfix(node: PostfixUnaryExpression, operand: Expression) {
+        // @api
+        function updatePostfixUnaryExpression(node: PostfixUnaryExpression, operand: Expression) {
             return node.operand !== operand
-                ? updateNode(createPostfix(operand, node.operator), node)
-                : node;
+                ? updateNode(createPostfixUnaryExpression(operand, node.operator), node)
+                : reuseNode(node);
         }
 
-        function createBinary(left: Expression, operator: BinaryOperator | BinaryOperatorToken, right: Expression) {
-            const node = createNode(SyntaxKind.BinaryExpression) as BinaryExpression;
+        // @api
+        function createBinaryExpression(left: Expression, operator: BinaryOperator | BinaryOperatorToken, right: Expression) {
+            const node = createBaseNode<BinaryExpression>(SyntaxKind.BinaryExpression);
             const operatorToken = asToken(operator);
             const operatorKind = operatorToken.kind;
-            node.left = parenthesizer().parenthesizeLeftSideOfBinary(operatorKind, left);
-            node.operatorToken = operatorToken;
-            node.right = parenthesizer().parenthesizeRightSideOfBinary(operatorKind, node.left, right);
-            return node;
+            setChild(node, node.left = parenthesizer().parenthesizeLeftSideOfBinary(operatorKind, left));
+            setChild(node, node.operatorToken = operatorToken);
+            setChild(node, node.right = parenthesizer().parenthesizeRightSideOfBinary(operatorKind, node.left, right));
+            return finishNode(node);
         }
 
-        function updateBinary(node: BinaryExpression, left: Expression, right: Expression, operator?: BinaryOperator | BinaryOperatorToken) {
+        // @api
+        function updateBinaryExpression(node: BinaryExpression, left: Expression, right: Expression, operator?: BinaryOperator | BinaryOperatorToken) {
             return node.left !== left
                 || node.right !== right
-                ? updateNode(createBinary(left, operator || node.operatorToken, right), node)
-                : node;
+                ? updateNode(createBinaryExpression(left, operator || node.operatorToken, right), node)
+                : reuseNode(node);
         }
 
-        function createConditionalWithoutTokens(condition: Expression, whenTrue: Expression, whenFalse: Expression) {
-            return createConditionalWithTokens(condition, createQuestionToken(), whenTrue, createColonToken(), whenFalse);
+        // @api
+        function createConditionalExpression(condition: Expression, questionToken: QuestionToken, whenTrue: Expression, colonToken: ColonToken, whenFalse: Expression) {
+            const node = createBaseNode<ConditionalExpression>(SyntaxKind.ConditionalExpression);
+            setChild(node, node.condition = parenthesizer().parenthesizeConditionOfConditionalExpression(condition));
+            setChild(node, node.questionToken = questionToken);
+            setChild(node, node.whenTrue = parenthesizer().parenthesizeBranchOfConditionalExpression(whenTrue));
+            setChild(node, node.colonToken = colonToken);
+            setChild(node, node.whenFalse = parenthesizer().parenthesizeBranchOfConditionalExpression(whenFalse));
+            return finishNode(node);
         }
 
-        function createConditionalWithTokens(condition: Expression, questionToken: QuestionToken, whenTrue: Expression, colonToken: ColonToken, whenFalse: Expression) {
-            const node = createNode(SyntaxKind.ConditionalExpression) as ConditionalExpression;
-            node.condition = parenthesizer().parenthesizeConditionOfConditionalExpression(condition);
-            node.questionToken = questionToken;
-            node.whenTrue = parenthesizer().parenthesizeBranchOfConditionalExpression(whenTrue);
-            node.colonToken = colonToken;
-            node.whenFalse = parenthesizer().parenthesizeBranchOfConditionalExpression(whenFalse);
-            return node;
+        function createConditionalExpressionWithoutTokens(condition: Expression, whenTrue: Expression, whenFalse: Expression) {
+            return createConditionalExpression(condition, createToken(SyntaxKind.QuestionToken), whenTrue, createToken(SyntaxKind.ColonToken), whenFalse);
         }
 
-        function createConditional(condition: Expression, whenTrue: Expression, whenFalse: Expression): ConditionalExpression;
-        function createConditional(condition: Expression, questionToken: QuestionToken, whenTrue: Expression, colonToken: ColonToken, whenFalse: Expression): ConditionalExpression;
-        function createConditional(condition: Expression, questionToken: QuestionToken | Expression, whenTrue: Expression, colonToken?: ColonToken, whenFalse?: Expression) {
-            return arguments.length === 3 ? createConditionalWithoutTokens(condition, questionToken as Expression, whenTrue) :
-                arguments.length === 5 ? createConditionalWithTokens(condition, questionToken as QuestionToken, whenTrue, colonToken!, whenFalse!) :
-                Debug.fail("Incorrect argument count");
-        }
-
-        function updateConditionalWithoutTokens(
-            node: ConditionalExpression,
-            condition: Expression,
-            whenTrue: Expression,
-            whenFalse: Expression
-        ): ConditionalExpression {
-            return updateConditionalWithTokens(node, condition, node.questionToken, whenTrue, node.colonToken, whenFalse);
-        }
-
-        function updateConditionalWithTokens(
+        // @api
+        function updateConditionalExpression(
             node: ConditionalExpression,
             condition: Expression,
             questionToken: Token<SyntaxKind.QuestionToken>,
@@ -1876,30 +2187,33 @@ namespace ts {
                 || node.whenTrue !== whenTrue
                 || node.colonToken !== colonToken
                 || node.whenFalse !== whenFalse
-                ? updateNode(createConditionalWithTokens(condition, questionToken, whenTrue, colonToken, whenFalse), node)
-                : node;
+                ? updateNode(createConditionalExpression(condition, questionToken, whenTrue, colonToken, whenFalse), node)
+                : reuseNode(node);
         }
 
-        function updateConditional(node: ConditionalExpression, condition: Expression, whenTrue: Expression, whenFalse: Expression): ConditionalExpression;
-        function updateConditional(node: ConditionalExpression, condition: Expression, questionToken: QuestionToken, whenTrue: Expression, colonToken: ColonToken, whenFalse: Expression): ConditionalExpression;
-        function updateConditional(node: ConditionalExpression, condition: Expression, questionToken: QuestionToken | Expression, whenTrue: Expression, colonToken?: ColonToken, whenFalse?: Expression) {
-            return arguments.length === 4 ? updateConditionalWithoutTokens(node, condition, questionToken as Expression, whenTrue) :
-                arguments.length === 6 ? updateConditionalWithTokens(node, condition, questionToken as QuestionToken, whenTrue, colonToken!, whenFalse!) :
-                Debug.fail("Incorrect argument count");
+        function updateConditionalExpressionWithoutTokens(
+            node: ConditionalExpression,
+            condition: Expression,
+            whenTrue: Expression,
+            whenFalse: Expression
+        ): ConditionalExpression {
+            return updateConditionalExpression(node, condition, node.questionToken, whenTrue, node.colonToken, whenFalse);
         }
 
+        // @api
         function createTemplateExpression(head: TemplateHead, templateSpans: readonly TemplateSpan[]) {
-            const node = createNode(SyntaxKind.TemplateExpression) as TemplateExpression;
-            node.head = head;
-            node.templateSpans = createNodeArray(templateSpans);
-            return node;
+            const node = createBaseNode<TemplateExpression>(SyntaxKind.TemplateExpression);
+            setChild(node, node.head = head);
+            setChildren(node, node.templateSpans = createNodeArray(templateSpans));
+            return finishNode(node);
         }
 
+        // @api
         function updateTemplateExpression(node: TemplateExpression, head: TemplateHead, templateSpans: readonly TemplateSpan[]) {
             return node.head !== head
                 || node.templateSpans !== templateSpans
                 ? updateNode(createTemplateExpression(head, templateSpans), node)
-                : node;
+                : reuseNode(node);
         }
 
         function createTemplateLiteralLikeNodeChecked(kind: TemplateLiteralToken["kind"], text: string | undefined, rawText: string | undefined) {
@@ -1923,56 +2237,66 @@ namespace ts {
             return createTemplateLiteralLikeNode(kind, text, rawText);
         }
 
+        // @api
         function createTemplateLiteralLikeNode(kind: TemplateLiteralToken["kind"], text: string, rawText: string | undefined) {
-            const node = createNode(kind) as TemplateLiteralLikeNode;
+            const node = createBaseNode<TemplateLiteralLikeNode>(kind);
             node.text = text;
             node.rawText = rawText;
-            return node;
+            return finishNode(node);
         }
 
+        // @api
         function createTemplateHead(text: string | undefined, rawText?: string) {
             return <TemplateHead>createTemplateLiteralLikeNodeChecked(SyntaxKind.TemplateHead, text, rawText);
         }
 
+        // @api
         function createTemplateMiddle(text: string | undefined, rawText?: string) {
             return <TemplateMiddle>createTemplateLiteralLikeNodeChecked(SyntaxKind.TemplateMiddle, text, rawText);
         }
 
+        // @api
         function createTemplateTail(text: string | undefined, rawText?: string) {
             return <TemplateTail>createTemplateLiteralLikeNodeChecked(SyntaxKind.TemplateTail, text, rawText);
         }
 
+        // @api
         function createNoSubstitutionTemplateLiteral(text: string | undefined, rawText?: string) {
             return <NoSubstitutionTemplateLiteral>createTemplateLiteralLikeNodeChecked(SyntaxKind.NoSubstitutionTemplateLiteral, text, rawText);
         }
 
-        function createYield(asteriskToken: AsteriskToken | undefined, expression: Expression | undefined): YieldExpression {
+        // @api
+        function createYieldExpression(asteriskToken: AsteriskToken | undefined, expression: Expression | undefined): YieldExpression {
             Debug.assert(!asteriskToken || !!expression, "A `YieldExpression` with an asteriskToken must have an expression.");
-            const node = createNode(SyntaxKind.YieldExpression) as YieldExpression;
-            node.expression = expression;
-            node.asteriskToken = asteriskToken;
-            return node;
+            const node = createBaseNode<YieldExpression>(SyntaxKind.YieldExpression);
+            setChild(node, node.expression = expression);
+            setChild(node, node.asteriskToken = asteriskToken);
+            return finishNode(node);
         }
 
-        function updateYield(node: YieldExpression, asteriskToken: AsteriskToken | undefined, expression: Expression) {
+        // @api
+        function updateYieldExpression(node: YieldExpression, asteriskToken: AsteriskToken | undefined, expression: Expression) {
             return node.expression !== expression
                 || node.asteriskToken !== asteriskToken
-                ? updateNode(createYield(asteriskToken, expression), node)
-                : node;
+                ? updateNode(createYieldExpression(asteriskToken, expression), node)
+                : reuseNode(node);
         }
 
-        function createSpread(expression: Expression) {
-            const node = createNode(SyntaxKind.SpreadElement) as SpreadElement;
-            node.expression = parenthesizer().parenthesizeExpressionForDisallowedComma(expression);
-            return node;
+        // @api
+        function createSpreadElement(expression: Expression) {
+            const node = createBaseNode<SpreadElement>(SyntaxKind.SpreadElement);
+            setChild(node, node.expression = parenthesizer().parenthesizeExpressionForDisallowedComma(expression));
+            return finishNode(node);
         }
 
-        function updateSpread(node: SpreadElement, expression: Expression) {
+        // @api
+        function updateSpreadElement(node: SpreadElement, expression: Expression) {
             return node.expression !== expression
-                ? updateNode(createSpread(expression), node)
-                : node;
+                ? updateNode(createSpreadElement(expression), node)
+                : reuseNode(node);
         }
 
+        // @api
         function createClassExpression(
             decorators: readonly Decorator[] | undefined,
             modifiers: readonly Modifier[] | undefined,
@@ -1981,14 +2305,19 @@ namespace ts {
             heritageClauses: readonly HeritageClause[] | undefined,
             members: readonly ClassElement[]
         ) {
-            const node: ClassExpression = createBaseDeclaration(SyntaxKind.ClassExpression, asNodeArray(decorators), asNodeArray(modifiers));
-            node.name = asName(name);
-            node.typeParameters = asNodeArray(typeParameters);
-            node.heritageClauses = asNodeArray(heritageClauses);
-            node.members = createNodeArray(members);
-            return node;
+            const node = createBaseClassLikeDeclaration<ClassExpression>(
+                SyntaxKind.ClassExpression,
+                decorators,
+                modifiers,
+                name,
+                typeParameters,
+                heritageClauses,
+                members
+            );
+            return finishNode(node);
         }
 
+        // @api
         function updateClassExpression(
             node: ClassExpression,
             decorators: readonly Decorator[] | undefined,
@@ -2005,369 +2334,436 @@ namespace ts {
                 || node.heritageClauses !== heritageClauses
                 || node.members !== members
                 ? updateNode(createClassExpression(decorators, modifiers, name, typeParameters, heritageClauses, members), node)
-                : node;
+                : reuseNode(node);
         }
 
+        // @api
         function createOmittedExpression() {
-            return createNode(SyntaxKind.OmittedExpression) as OmittedExpression;
+            return finishNode(createBaseNode<OmittedExpression>(SyntaxKind.OmittedExpression));
         }
 
+        // @api
         function createExpressionWithTypeArguments(expression: Expression, typeArguments: readonly TypeNode[] | undefined) {
-            const node = createNode(SyntaxKind.ExpressionWithTypeArguments) as ExpressionWithTypeArguments;
-            node.expression = parenthesizer().parenthesizeLeftSideOfAccess(expression);
-            node.typeArguments = typeArguments && parenthesizer().parenthesizeTypeArguments(typeArguments);
-            return node;
+            const node = createBaseNode<ExpressionWithTypeArguments>(SyntaxKind.ExpressionWithTypeArguments);
+            setChild(node, node.expression = parenthesizer().parenthesizeLeftSideOfAccess(expression));
+            setChildren(node, node.typeArguments = typeArguments && parenthesizer().parenthesizeTypeArguments(typeArguments));
+            return finishNode(node);
         }
 
+        // @api
         function updateExpressionWithTypeArguments(node: ExpressionWithTypeArguments, expression: Expression, typeArguments: readonly TypeNode[] | undefined) {
             return node.expression !== expression
                 || node.typeArguments !== typeArguments
                 ? updateNode(createExpressionWithTypeArguments(expression, typeArguments), node)
-                : node;
+                : reuseNode(node);
         }
 
+        // @api
         function createAsExpression(expression: Expression, type: TypeNode) {
-            const node = createNode(SyntaxKind.AsExpression) as AsExpression;
-            node.expression = expression;
-            node.type = type;
-            return node;
+            const node = createBaseNode<AsExpression>(SyntaxKind.AsExpression);
+            setChild(node, node.expression = expression);
+            setChild(node, node.type = type);
+            return finishNode(node);
         }
 
+        // @api
         function updateAsExpression(node: AsExpression, expression: Expression, type: TypeNode) {
             return node.expression !== expression
                 || node.type !== type
                 ? updateNode(createAsExpression(expression, type), node)
-                : node;
+                : reuseNode(node);
         }
 
+        // @api
         function createNonNullExpression(expression: Expression) {
-            const node = createNode(SyntaxKind.NonNullExpression) as NonNullExpression;
-            node.expression = parenthesizer().parenthesizeLeftSideOfAccess(expression);
-            return node;
+            const node = createBaseNode<NonNullExpression>(SyntaxKind.NonNullExpression);
+            setChild(node, node.expression = parenthesizer().parenthesizeLeftSideOfAccess(expression));
+            return finishNode(node);
         }
 
+        // @api
         function updateNonNullExpression(node: NonNullExpression, expression: Expression) {
             return node.expression !== expression
                 ? updateNode(createNonNullExpression(expression), node)
-                : node;
+                : reuseNode(node);
         }
 
+        // @api
         function createMetaProperty(keywordToken: MetaProperty["keywordToken"], name: Identifier) {
-            const node = createNode(SyntaxKind.MetaProperty) as MetaProperty;
+            const node = createBaseNode<MetaProperty>(SyntaxKind.MetaProperty);
             node.keywordToken = keywordToken;
-            node.name = name;
-            return node;
+            setChild(node, node.name = name);
+            return finishNode(node);
         }
 
+        // @api
         function updateMetaProperty(node: MetaProperty, name: Identifier) {
             return node.name !== name
                 ? updateNode(createMetaProperty(node.keywordToken, name), node)
-                : node;
+                : reuseNode(node);
         }
 
         //
         // Misc
         //
 
+        // @api
         function createTemplateSpan(expression: Expression, literal: TemplateMiddle | TemplateTail) {
-            const node = createNode(SyntaxKind.TemplateSpan) as TemplateSpan;
-            node.expression = expression;
-            node.literal = literal;
-            return node;
+            const node = createBaseNode<TemplateSpan>(SyntaxKind.TemplateSpan);
+            setChild(node, node.expression = expression);
+            setChild(node, node.literal = literal);
+            return finishNode(node);
         }
 
+        // @api
         function updateTemplateSpan(node: TemplateSpan, expression: Expression, literal: TemplateMiddle | TemplateTail) {
             return node.expression !== expression
                 || node.literal !== literal
                 ? updateNode(createTemplateSpan(expression, literal), node)
-                : node;
+                : reuseNode(node);
         }
 
+        // @api
         function createSemicolonClassElement() {
-            return createNode(SyntaxKind.SemicolonClassElement) as SemicolonClassElement;
+            return finishNode(createBaseNode<SemicolonClassElement>(SyntaxKind.SemicolonClassElement));
         }
 
         //
         // Element
         //
 
+        // @api
         function createBlock(statements: readonly Statement[], multiLine?: boolean): Block {
-            const node = createNode(SyntaxKind.Block) as Block;
-            node.statements = createNodeArray(statements);
+            const node = createBaseNode<Block>(SyntaxKind.Block);
+            setChildren(node, node.statements = createNodeArray(statements));
             if (multiLine) node.multiLine = multiLine;
-            return node;
+            return finishNode(node);
         }
 
+        // @api
         function updateBlock(node: Block, statements: readonly Statement[]) {
             return node.statements !== statements
                 ? updateNode(createBlock(statements, node.multiLine), node)
-                : node;
+                : reuseNode(node);
         }
 
+        // @api
         function createVariableStatement(modifiers: readonly Modifier[] | undefined, declarationList: VariableDeclarationList | readonly VariableDeclaration[]) {
-            const node: VariableStatement = createBaseDeclaration(SyntaxKind.VariableStatement, /*decorators*/ undefined, modifiers);
-            node.declarationList = isArray(declarationList) ? createVariableDeclarationList(declarationList) : declarationList;
-            return node;
+            const node = createBaseDeclaration<VariableStatement>(SyntaxKind.VariableStatement, /*decorators*/ undefined, modifiers);
+            setChild(node, node.declarationList = isArray(declarationList) ? createVariableDeclarationList(declarationList) : declarationList);
+            return finishNode(node);
         }
 
+        // @api
         function updateVariableStatement(node: VariableStatement, modifiers: readonly Modifier[] | undefined, declarationList: VariableDeclarationList) {
             return node.modifiers !== modifiers
                 || node.declarationList !== declarationList
                 ? updateNode(createVariableStatement(modifiers, declarationList), node)
-                : node;
+                : reuseNode(node);
         }
 
+        // @api
         function createEmptyStatement() {
-            return createNode(SyntaxKind.EmptyStatement) as EmptyStatement;
+            return finishNode(createBaseNode<EmptyStatement>(SyntaxKind.EmptyStatement));
         }
 
+        // @api
         function createExpressionStatement(expression: Expression): ExpressionStatement {
-            const node = createNode(SyntaxKind.ExpressionStatement) as ExpressionStatement;
-            node.expression = parenthesizer().parenthesizeExpressionOfExpressionStatement(expression);
-            return node;
+            const node = createBaseNode<ExpressionStatement>(SyntaxKind.ExpressionStatement);
+            setChild(node, node.expression = parenthesizer().parenthesizeExpressionOfExpressionStatement(expression));
+            return finishNode(node);
         }
 
+        // @api
         function updateExpressionStatement(node: ExpressionStatement, expression: Expression) {
             return node.expression !== expression
                 ? updateNode(createExpressionStatement(expression), node)
-                : node;
+                : reuseNode(node);
         }
 
-        function createIf(expression: Expression, thenStatement: Statement, elseStatement?: Statement) {
-            const node = createNode(SyntaxKind.IfStatement) as IfStatement;
-            node.expression = expression;
-            node.thenStatement = asEmbeddedStatement(thenStatement);
-            node.elseStatement = asEmbeddedStatement(elseStatement);
-            return node;
+        // @api
+        function createIfStatement(expression: Expression, thenStatement: Statement, elseStatement?: Statement) {
+            const node = createBaseNode<IfStatement>(SyntaxKind.IfStatement);
+            setChild(node, node.expression = expression);
+            setChild(node, node.thenStatement = asEmbeddedStatement(thenStatement));
+            setChild(node, node.elseStatement = asEmbeddedStatement(elseStatement));
+            return finishNode(node);
         }
 
-        function updateIf(node: IfStatement, expression: Expression, thenStatement: Statement, elseStatement: Statement | undefined) {
+        // @api
+        function updateIfStatement(node: IfStatement, expression: Expression, thenStatement: Statement, elseStatement: Statement | undefined) {
             return node.expression !== expression
                 || node.thenStatement !== thenStatement
                 || node.elseStatement !== elseStatement
-                ? updateNode(createIf(expression, thenStatement, elseStatement), node)
-                : node;
+                ? updateNode(createIfStatement(expression, thenStatement, elseStatement), node)
+                : reuseNode(node);
         }
 
-        function createDo(statement: Statement, expression: Expression) {
-            const node = createNode(SyntaxKind.DoStatement) as DoStatement;
-            node.statement = asEmbeddedStatement(statement);
-            node.expression = expression;
-            return node;
+        // @api
+        function createDoStatement(statement: Statement, expression: Expression) {
+            const node = createBaseNode<DoStatement>(SyntaxKind.DoStatement);
+            setChild(node, node.statement = asEmbeddedStatement(statement));
+            setChild(node, node.expression = expression);
+            return finishNode(node);
         }
 
-        function updateDo(node: DoStatement, statement: Statement, expression: Expression) {
+        // @api
+        function updateDoStatement(node: DoStatement, statement: Statement, expression: Expression) {
             return node.statement !== statement
                 || node.expression !== expression
-                ? updateNode(createDo(statement, expression), node)
-                : node;
+                ? updateNode(createDoStatement(statement, expression), node)
+                : reuseNode(node);
         }
 
-        function createWhile(expression: Expression, statement: Statement) {
-            const node = createNode(SyntaxKind.WhileStatement) as WhileStatement;
-            node.expression = expression;
-            node.statement = asEmbeddedStatement(statement);
-            return node;
+        // @api
+        function createWhileStatement(expression: Expression, statement: Statement) {
+            const node = createBaseNode<WhileStatement>(SyntaxKind.WhileStatement);
+            setChild(node, node.expression = expression);
+            setChild(node, node.statement = asEmbeddedStatement(statement));
+            return finishNode(node);
         }
 
-        function updateWhile(node: WhileStatement, expression: Expression, statement: Statement) {
+        // @api
+        function updateWhileStatement(node: WhileStatement, expression: Expression, statement: Statement) {
             return node.expression !== expression
                 || node.statement !== statement
-                ? updateNode(createWhile(expression, statement), node)
-                : node;
+                ? updateNode(createWhileStatement(expression, statement), node)
+                : reuseNode(node);
         }
 
-        function createFor(initializer: ForInitializer | undefined, condition: Expression | undefined, incrementor: Expression | undefined, statement: Statement) {
-            const node = createNode(SyntaxKind.ForStatement) as ForStatement;
-            node.initializer = initializer;
-            node.condition = condition;
-            node.incrementor = incrementor;
-            node.statement = asEmbeddedStatement(statement);
-            return node;
+        // @api
+        function createForStatement(initializer: ForInitializer | undefined, condition: Expression | undefined, incrementor: Expression | undefined, statement: Statement) {
+            const node = createBaseNode<ForStatement>(SyntaxKind.ForStatement);
+            setChild(node, node.initializer = initializer);
+            setChild(node, node.condition = condition);
+            setChild(node, node.incrementor = incrementor);
+            setChild(node, node.statement = asEmbeddedStatement(statement));
+            return finishNode(node);
         }
 
-        function updateFor(node: ForStatement, initializer: ForInitializer | undefined, condition: Expression | undefined, incrementor: Expression | undefined, statement: Statement) {
+        // @api
+        function updateForStatement(node: ForStatement, initializer: ForInitializer | undefined, condition: Expression | undefined, incrementor: Expression | undefined, statement: Statement) {
             return node.initializer !== initializer
                 || node.condition !== condition
                 || node.incrementor !== incrementor
                 || node.statement !== statement
-                ? updateNode(createFor(initializer, condition, incrementor, statement), node)
-                : node;
+                ? updateNode(createForStatement(initializer, condition, incrementor, statement), node)
+                : reuseNode(node);
         }
 
-        function createForIn(initializer: ForInitializer, expression: Expression, statement: Statement) {
-            const node = createNode(SyntaxKind.ForInStatement) as ForInStatement;
-            node.initializer = initializer;
-            node.expression = expression;
-            node.statement = asEmbeddedStatement(statement);
-            return node;
+        // @api
+        function createForInStatement(initializer: ForInitializer, expression: Expression, statement: Statement) {
+            const node = createBaseNode<ForInStatement>(SyntaxKind.ForInStatement);
+            setChild(node, node.initializer = initializer);
+            setChild(node, node.expression = expression);
+            setChild(node, node.statement = asEmbeddedStatement(statement));
+            return finishNode(node);
         }
 
-        function updateForIn(node: ForInStatement, initializer: ForInitializer, expression: Expression, statement: Statement) {
+        // @api
+        function updateForInStatement(node: ForInStatement, initializer: ForInitializer, expression: Expression, statement: Statement) {
             return node.initializer !== initializer
                 || node.expression !== expression
                 || node.statement !== statement
-                ? updateNode(createForIn(initializer, expression, statement), node)
-                : node;
+                ? updateNode(createForInStatement(initializer, expression, statement), node)
+                : reuseNode(node);
         }
 
-        function createForOf(awaitModifier: AwaitKeywordToken | undefined, initializer: ForInitializer, expression: Expression, statement: Statement) {
-            const node = createNode(SyntaxKind.ForOfStatement) as ForOfStatement;
-            node.awaitModifier = awaitModifier;
-            node.initializer = initializer;
-            node.expression = expression;
-            node.statement = asEmbeddedStatement(statement);
-            return node;
+        // @api
+        function createForOfStatement(awaitModifier: AwaitKeywordToken | undefined, initializer: ForInitializer, expression: Expression, statement: Statement) {
+            const node = createBaseNode<ForOfStatement>(SyntaxKind.ForOfStatement);
+            setChild(node, node.awaitModifier = awaitModifier);
+            setChild(node, node.initializer = initializer);
+            setChild(node, node.expression = expression);
+            setChild(node, node.statement = asEmbeddedStatement(statement));
+            return finishNode(node);
         }
 
-        function updateForOf(node: ForOfStatement, awaitModifier: AwaitKeywordToken | undefined, initializer: ForInitializer, expression: Expression, statement: Statement) {
+        // @api
+        function updateForOfStatement(node: ForOfStatement, awaitModifier: AwaitKeywordToken | undefined, initializer: ForInitializer, expression: Expression, statement: Statement) {
             return node.awaitModifier !== awaitModifier
                 || node.initializer !== initializer
                 || node.expression !== expression
                 || node.statement !== statement
-                ? updateNode(createForOf(awaitModifier, initializer, expression, statement), node)
-                : node;
+                ? updateNode(createForOfStatement(awaitModifier, initializer, expression, statement), node)
+                : reuseNode(node);
         }
 
-        function createContinue(label?: string | Identifier): ContinueStatement {
-            const node = createNode(SyntaxKind.ContinueStatement) as ContinueStatement;
-            node.label = asName(label);
-            return node;
+        // @api
+        function createContinueStatement(label?: string | Identifier): ContinueStatement {
+            const node = createBaseNode<ContinueStatement>(SyntaxKind.ContinueStatement);
+            setChild(node, node.label = asName(label));
+            return finishNode(node);
         }
 
-        function updateContinue(node: ContinueStatement, label: Identifier | undefined) {
+        // @api
+        function updateContinueStatement(node: ContinueStatement, label: Identifier | undefined) {
             return node.label !== label
-                ? updateNode(createContinue(label), node)
-                : node;
+                ? updateNode(createContinueStatement(label), node)
+                : reuseNode(node);
         }
 
-        function createBreak(label?: string | Identifier): BreakStatement {
-            const node = createNode(SyntaxKind.BreakStatement) as BreakStatement;
-            node.label = asName(label);
-            return node;
+        // @api
+        function createBreakStatement(label?: string | Identifier): BreakStatement {
+            const node = createBaseNode<BreakStatement>(SyntaxKind.BreakStatement);
+            setChild(node, node.label = asName(label));
+            return finishNode(node);
         }
 
-        function updateBreak(node: BreakStatement, label: Identifier | undefined) {
+        // @api
+        function updateBreakStatement(node: BreakStatement, label: Identifier | undefined) {
             return node.label !== label
-                ? updateNode(createBreak(label), node)
-                : node;
+                ? updateNode(createBreakStatement(label), node)
+                : reuseNode(node);
         }
 
-        function createReturn(expression?: Expression): ReturnStatement {
-            const node = createNode(SyntaxKind.ReturnStatement) as ReturnStatement;
-            node.expression = expression;
-            return node;
+        // @api
+        function createReturnStatement(expression?: Expression): ReturnStatement {
+            const node = createBaseNode<ReturnStatement>(SyntaxKind.ReturnStatement);
+            setChild(node, node.expression = expression);
+            return finishNode(node);
         }
 
-        function updateReturn(node: ReturnStatement, expression: Expression | undefined) {
+        // @api
+        function updateReturnStatement(node: ReturnStatement, expression: Expression | undefined) {
             return node.expression !== expression
-                ? updateNode(createReturn(expression), node)
-                : node;
+                ? updateNode(createReturnStatement(expression), node)
+                : reuseNode(node);
         }
 
-        function createWith(expression: Expression, statement: Statement) {
-            const node = createNode(SyntaxKind.WithStatement) as WithStatement;
-            node.expression = expression;
-            node.statement = asEmbeddedStatement(statement);
-            return node;
+        // @api
+        function createWithStatement(expression: Expression, statement: Statement) {
+            const node = createBaseNode<WithStatement>(SyntaxKind.WithStatement);
+            setChild(node, node.expression = expression);
+            setChild(node, node.statement = asEmbeddedStatement(statement));
+            return finishNode(node);
         }
 
-        function updateWith(node: WithStatement, expression: Expression, statement: Statement) {
+        // @api
+        function updateWithStatement(node: WithStatement, expression: Expression, statement: Statement) {
             return node.expression !== expression
                 || node.statement !== statement
-                ? updateNode(createWith(expression, statement), node)
-                : node;
+                ? updateNode(createWithStatement(expression, statement), node)
+                : reuseNode(node);
         }
 
-        function createSwitch(expression: Expression, caseBlock: CaseBlock): SwitchStatement {
-            const node = createNode(SyntaxKind.SwitchStatement) as SwitchStatement;
-            node.expression = parenthesizer().parenthesizeExpressionForDisallowedComma(expression);
-            node.caseBlock = caseBlock;
-            return node;
+        // @api
+        function createSwitchStatement(expression: Expression, caseBlock: CaseBlock): SwitchStatement {
+            const node = createBaseNode<SwitchStatement>(SyntaxKind.SwitchStatement);
+            setChild(node, node.expression = parenthesizer().parenthesizeExpressionForDisallowedComma(expression));
+            setChild(node, node.caseBlock = caseBlock);
+            return finishNode(node);
         }
 
-        function updateSwitch(node: SwitchStatement, expression: Expression, caseBlock: CaseBlock) {
+        // @api
+        function updateSwitchStatement(node: SwitchStatement, expression: Expression, caseBlock: CaseBlock) {
             return node.expression !== expression
                 || node.caseBlock !== caseBlock
-                ? updateNode(createSwitch(expression, caseBlock), node)
-                : node;
+                ? updateNode(createSwitchStatement(expression, caseBlock), node)
+                : reuseNode(node);
         }
 
-        function createLabel(label: string | Identifier, statement: Statement) {
-            const node = createNode(SyntaxKind.LabeledStatement) as LabeledStatement;
-            node.label = asName(label);
-            node.statement = asEmbeddedStatement(statement);
-            return node;
+        // @api
+        function createLabeledStatement(label: string | Identifier, statement: Statement) {
+            const node = createBaseNode<LabeledStatement>(SyntaxKind.LabeledStatement);
+            setChild(node, node.label = asName(label));
+            setChild(node, node.statement = asEmbeddedStatement(statement));
+            return finishNode(node);
         }
 
-        function updateLabel(node: LabeledStatement, label: Identifier, statement: Statement) {
+        // @api
+        function updateLabeledStatement(node: LabeledStatement, label: Identifier, statement: Statement) {
             return node.label !== label
                 || node.statement !== statement
-                ? updateNode(createLabel(label, statement), node)
-                : node;
+                ? updateNode(createLabeledStatement(label, statement), node)
+                : reuseNode(node);
         }
 
-        function createThrow(expression: Expression) {
-            const node = createNode(SyntaxKind.ThrowStatement) as ThrowStatement;
-            node.expression = expression;
-            return node;
+        // @api
+        function createThrowStatement(expression: Expression) {
+            const node = createBaseNode<ThrowStatement>(SyntaxKind.ThrowStatement);
+            setChild(node, node.expression = expression);
+            return finishNode(node);
         }
 
-        function updateThrow(node: ThrowStatement, expression: Expression) {
+        // @api
+        function updateThrowStatement(node: ThrowStatement, expression: Expression) {
             return node.expression !== expression
-                ? updateNode(createThrow(expression), node)
-                : node;
+                ? updateNode(createThrowStatement(expression), node)
+                : reuseNode(node);
         }
 
-        function createTry(tryBlock: Block, catchClause: CatchClause | undefined, finallyBlock: Block | undefined) {
-            const node = createNode(SyntaxKind.TryStatement) as TryStatement;
-            node.tryBlock = tryBlock;
-            node.catchClause = catchClause;
-            node.finallyBlock = finallyBlock;
-            return node;
+        // @api
+        function createTryStatement(tryBlock: Block, catchClause: CatchClause | undefined, finallyBlock: Block | undefined) {
+            const node = createBaseNode<TryStatement>(SyntaxKind.TryStatement);
+            setChild(node, node.tryBlock = tryBlock);
+            setChild(node, node.catchClause = catchClause);
+            setChild(node, node.finallyBlock = finallyBlock);
+            return finishNode(node);
         }
 
-        function updateTry(node: TryStatement, tryBlock: Block, catchClause: CatchClause | undefined, finallyBlock: Block | undefined) {
+        // @api
+        function updateTryStatement(node: TryStatement, tryBlock: Block, catchClause: CatchClause | undefined, finallyBlock: Block | undefined) {
             return node.tryBlock !== tryBlock
                 || node.catchClause !== catchClause
                 || node.finallyBlock !== finallyBlock
-                ? updateNode(createTry(tryBlock, catchClause, finallyBlock), node)
-                : node;
+                ? updateNode(createTryStatement(tryBlock, catchClause, finallyBlock), node)
+                : reuseNode(node);
         }
 
+        // @api
         function createDebuggerStatement() {
-            return createNode(SyntaxKind.DebuggerStatement) as DebuggerStatement;
+            return finishNode(createBaseNode<DebuggerStatement>(SyntaxKind.DebuggerStatement));
         }
 
-        function createVariableDeclaration(name: string | BindingName, type?: TypeNode, initializer?: Expression) {
-            const node = createNode(SyntaxKind.VariableDeclaration) as VariableDeclaration;
-            node.name = asName(name);
-            node.type = type;
-            node.initializer = initializer !== undefined ? parenthesizer().parenthesizeExpressionForDisallowedComma(initializer) : undefined;
-            return node;
+        // @api
+        function createVariableDeclaration(name: string | BindingName, exclamationToken: ExclamationToken | undefined, type: TypeNode | undefined, initializer: Expression | undefined) {
+            const node = createBaseVariableLikeDeclaration<VariableDeclaration>(
+                SyntaxKind.VariableDeclaration,
+                /*decorators*/ undefined,
+                /*modifiers*/ undefined,
+                name,
+                type,
+                initializer && parenthesizer().parenthesizeExpressionForDisallowedComma(initializer)
+            );
+            setChild(node, node.exclamationToken = exclamationToken);
+            return finishNode(node);
         }
 
-        function updateVariableDeclaration(node: VariableDeclaration, name: BindingName, type: TypeNode | undefined, initializer: Expression | undefined) {
+        function createVariableDeclarationWithoutTokens(name: string | BindingName, type?: TypeNode, initializer?: Expression) {
+            return createVariableDeclaration(name, /*exclamationToken*/ undefined, type, initializer);
+        }
+
+        // @api
+        function updateVariableDeclaration(node: VariableDeclaration, name: BindingName, exclamationToken: ExclamationToken | undefined, type: TypeNode | undefined, initializer: Expression | undefined) {
             return node.name !== name
                 || node.type !== type
+                || node.exclamationToken !== exclamationToken
                 || node.initializer !== initializer
-                ? updateNode(createVariableDeclaration(name, type, initializer), node)
-                : node;
+                ? updateNode(createVariableDeclaration(name, exclamationToken, type, initializer), node)
+                : reuseNode(node);
         }
 
+        function updateVariableDeclarationWithoutTokens(node: VariableDeclaration, name: BindingName, type: TypeNode | undefined, initializer: Expression | undefined) {
+            return updateVariableDeclaration(node, name, node.exclamationToken, type, initializer);
+        }
+
+        // @api
         function createVariableDeclarationList(declarations: readonly VariableDeclaration[], flags = NodeFlags.None) {
-            const node = createNode(SyntaxKind.VariableDeclarationList) as VariableDeclarationList;
+            const node = createBaseNode<VariableDeclarationList>(SyntaxKind.VariableDeclarationList);
             node.flags |= flags & NodeFlags.BlockScoped;
-            node.declarations = createNodeArray(declarations);
-            return node;
+            setChildren(node, node.declarations = createNodeArray(declarations));
+            return finishNode(node);
         }
 
+        // @api
         function updateVariableDeclarationList(node: VariableDeclarationList, declarations: readonly VariableDeclaration[]) {
             return node.declarations !== declarations
                 ? updateNode(createVariableDeclarationList(declarations, node.flags), node)
-                : node;
+                : reuseNode(node);
         }
 
+        // @api
         function createFunctionDeclaration(
             decorators: readonly Decorator[] | undefined,
             modifiers: readonly Modifier[] | undefined,
@@ -2378,16 +2774,21 @@ namespace ts {
             type: TypeNode | undefined,
             body: Block | undefined
         ) {
-            const node: FunctionDeclaration = createBaseDeclaration(SyntaxKind.FunctionDeclaration, decorators, modifiers);
-            node.asteriskToken = asteriskToken;
-            node.name = asName(name);
-            node.typeParameters = asNodeArray(typeParameters);
-            node.parameters = createNodeArray(parameters);
-            node.type = type;
-            node.body = body;
-            return node;
+            const node = createBaseFunctionLikeDeclaration<FunctionDeclaration>(
+                SyntaxKind.FunctionDeclaration,
+                decorators,
+                modifiers,
+                name,
+                typeParameters,
+                parameters,
+                type,
+                body
+            );
+            setChild(node, node.asteriskToken = asteriskToken);
+            return finishNode(node);
         }
 
+        // @api
         function updateFunctionDeclaration(
             node: FunctionDeclaration,
             decorators: readonly Decorator[] | undefined,
@@ -2407,10 +2808,11 @@ namespace ts {
                 || node.parameters !== parameters
                 || node.type !== type
                 || node.body !== body
-                ? updateNode(createFunctionDeclaration(decorators, modifiers, asteriskToken, name, typeParameters, parameters, type, body), node)
-                : node;
+                ? updateBaseFunctionLikeDeclaration(createFunctionDeclaration(decorators, modifiers, asteriskToken, name, typeParameters, parameters, type, body), node)
+                : reuseNode(node);
         }
 
+        // @api
         function createClassDeclaration(
             decorators: readonly Decorator[] | undefined,
             modifiers: readonly Modifier[] | undefined,
@@ -2419,14 +2821,19 @@ namespace ts {
             heritageClauses: readonly HeritageClause[] | undefined,
             members: readonly ClassElement[]
         ) {
-            const node: ClassDeclaration = createBaseDeclaration(SyntaxKind.ClassDeclaration, decorators, modifiers);
-            node.name = asName(name);
-            node.typeParameters = asNodeArray(typeParameters);
-            node.heritageClauses = asNodeArray(heritageClauses);
-            node.members = createNodeArray(members);
-            return node;
+            const node = createBaseClassLikeDeclaration<ClassDeclaration>(
+                SyntaxKind.ClassDeclaration,
+                decorators,
+                modifiers,
+                name,
+                typeParameters,
+                heritageClauses,
+                members
+            );
+            return finishNode(node);
         }
 
+        // @api
         function updateClassDeclaration(
             node: ClassDeclaration,
             decorators: readonly Decorator[] | undefined,
@@ -2443,9 +2850,10 @@ namespace ts {
                 || node.heritageClauses !== heritageClauses
                 || node.members !== members
                 ? updateNode(createClassDeclaration(decorators, modifiers, name, typeParameters, heritageClauses, members), node)
-                : node;
+                : reuseNode(node);
         }
 
+        // @api
         function createInterfaceDeclaration(
             decorators: readonly Decorator[] | undefined,
             modifiers: readonly Modifier[] | undefined,
@@ -2454,14 +2862,19 @@ namespace ts {
             heritageClauses: readonly HeritageClause[] | undefined,
             members: readonly TypeElement[]
         ) {
-            const node: InterfaceDeclaration = createBaseDeclaration(SyntaxKind.InterfaceDeclaration, decorators, modifiers);
-            node.name = asName(name);
-            node.typeParameters = asNodeArray(typeParameters);
-            node.heritageClauses = asNodeArray(heritageClauses);
-            node.members = createNodeArray(members);
-            return node;
+            const node = createBaseInterfaceOrClassLikeDeclaration<InterfaceDeclaration>(
+                SyntaxKind.InterfaceDeclaration,
+                decorators,
+                modifiers,
+                name,
+                typeParameters,
+                heritageClauses
+            );
+            setChildren(node, node.members = createNodeArray(members));
+            return finishNode(node);
         }
 
+        // @api
         function updateInterfaceDeclaration(
             node: InterfaceDeclaration,
             decorators: readonly Decorator[] | undefined,
@@ -2478,9 +2891,10 @@ namespace ts {
                 || node.heritageClauses !== heritageClauses
                 || node.members !== members
                 ? updateNode(createInterfaceDeclaration(decorators, modifiers, name, typeParameters, heritageClauses, members), node)
-                : node;
+                : reuseNode(node);
         }
 
+        // @api
         function createTypeAliasDeclaration(
             decorators: readonly Decorator[] | undefined,
             modifiers: readonly Modifier[] | undefined,
@@ -2488,13 +2902,18 @@ namespace ts {
             typeParameters: readonly TypeParameterDeclaration[] | undefined,
             type: TypeNode
         ) {
-            const node: TypeAliasDeclaration = createBaseDeclaration(SyntaxKind.TypeAliasDeclaration, decorators, modifiers);
-            node.name = asName(name);
-            node.typeParameters = asNodeArray(typeParameters);
-            node.type = type;
-            return node;
+            const node = createBaseGenericNamedDeclaration<TypeAliasDeclaration>(
+                SyntaxKind.TypeAliasDeclaration,
+                decorators,
+                modifiers,
+                name,
+                typeParameters
+            );
+            setChild(node, node.type = type);
+            return finishNode(node);
         }
 
+        // @api
         function updateTypeAliasDeclaration(
             node: TypeAliasDeclaration,
             decorators: readonly Decorator[] | undefined,
@@ -2509,21 +2928,27 @@ namespace ts {
                 || node.typeParameters !== typeParameters
                 || node.type !== type
                 ? updateNode(createTypeAliasDeclaration(decorators, modifiers, name, typeParameters, type), node)
-                : node;
+                : reuseNode(node);
         }
 
+        // @api
         function createEnumDeclaration(
             decorators: readonly Decorator[] | undefined,
             modifiers: readonly Modifier[] | undefined,
             name: string | Identifier,
             members: readonly EnumMember[]
         ) {
-            const node: EnumDeclaration = createBaseDeclaration(SyntaxKind.EnumDeclaration, decorators, modifiers);
-            node.name = asName(name);
-            node.members = createNodeArray(members);
-            return node;
+            const node = createBaseNamedDeclaration<EnumDeclaration>(
+                SyntaxKind.EnumDeclaration,
+                decorators,
+                modifiers,
+                name
+            );
+            setChildren(node, node.members = createNodeArray(members));
+            return finishNode(node);
         }
 
+        // @api
         function updateEnumDeclaration(
             node: EnumDeclaration,
             decorators: readonly Decorator[] | undefined,
@@ -2535,90 +2960,137 @@ namespace ts {
                 || node.name !== name
                 || node.members !== members
                 ? updateNode(createEnumDeclaration(decorators, modifiers, name, members), node)
-                : node;
+                : reuseNode(node);
         }
 
-        function createModuleDeclaration(decorators: readonly Decorator[] | undefined, modifiers: readonly Modifier[] | undefined, name: ModuleName, body: ModuleBody | undefined, flags = NodeFlags.None) {
-            const node: ModuleDeclaration = createBaseDeclaration(SyntaxKind.ModuleDeclaration, decorators, modifiers);
+        // @api
+        function createModuleDeclaration(
+            decorators: readonly Decorator[] | undefined,
+            modifiers: readonly Modifier[] | undefined,
+            name: ModuleName,
+            body: ModuleBody | undefined,
+            flags = NodeFlags.None
+        ) {
+            const node = createBaseDeclaration<ModuleDeclaration>(
+                SyntaxKind.ModuleDeclaration,
+                decorators,
+                modifiers
+            );
             node.flags |= flags & (NodeFlags.Namespace | NodeFlags.NestedNamespace | NodeFlags.GlobalAugmentation);
-            node.name = name;
-            node.body = body;
-            return node;
+            setChild(node, node.name = name);
+            setChild(node, node.body = body);
+            return finishNode(node);
         }
 
-        function updateModuleDeclaration(node: ModuleDeclaration, decorators: readonly Decorator[] | undefined, modifiers: readonly Modifier[] | undefined, name: ModuleName, body: ModuleBody | undefined) {
+        // @api
+        function updateModuleDeclaration(
+            node: ModuleDeclaration,
+            decorators: readonly Decorator[] | undefined,
+            modifiers: readonly Modifier[] | undefined,
+            name: ModuleName,
+            body: ModuleBody | undefined
+        ) {
             return node.decorators !== decorators
                 || node.modifiers !== modifiers
                 || node.name !== name
                 || node.body !== body
                 ? updateNode(createModuleDeclaration(decorators, modifiers, name, body, node.flags), node)
-                : node;
+                : reuseNode(node);
         }
 
+        // @api
         function createModuleBlock(statements: readonly Statement[]) {
-            const node = createNode(SyntaxKind.ModuleBlock) as ModuleBlock;
-            node.statements = createNodeArray(statements);
-            return node;
+            const node = createBaseNode<ModuleBlock>(SyntaxKind.ModuleBlock);
+            setChildren(node, node.statements = createNodeArray(statements));
+            return finishNode(node);
         }
 
+        // @api
         function updateModuleBlock(node: ModuleBlock, statements: readonly Statement[]) {
             return node.statements !== statements
                 ? updateNode(createModuleBlock(statements), node)
-                : node;
+                : reuseNode(node);
         }
 
+        // @api
         function createCaseBlock(clauses: readonly CaseOrDefaultClause[]): CaseBlock {
-            const node = createNode(SyntaxKind.CaseBlock) as CaseBlock;
-            node.clauses = createNodeArray(clauses);
-            return node;
+            const node = createBaseNode<CaseBlock>(SyntaxKind.CaseBlock);
+            setChildren(node, node.clauses = createNodeArray(clauses));
+            return finishNode(node);
         }
 
+        // @api
         function updateCaseBlock(node: CaseBlock, clauses: readonly CaseOrDefaultClause[]) {
             return node.clauses !== clauses
                 ? updateNode(createCaseBlock(clauses), node)
-                : node;
+                : reuseNode(node);
         }
 
+        // @api
         function createNamespaceExportDeclaration(name: string | Identifier) {
-            const node = createNode(SyntaxKind.NamespaceExportDeclaration) as NamespaceExportDeclaration;
-            node.name = asName(name);
-            return node;
+            const node = createBaseNode<NamespaceExportDeclaration>(SyntaxKind.NamespaceExportDeclaration);
+            setChild(node, node.name = asName(name));
+            return finishNode(node);
         }
 
+        // @api
         function updateNamespaceExportDeclaration(node: NamespaceExportDeclaration, name: Identifier) {
             return node.name !== name
                 ? updateNode(createNamespaceExportDeclaration(name), node)
-                : node;
+                : reuseNode(node);
         }
 
-        function createImportEqualsDeclaration(decorators: readonly Decorator[] | undefined, modifiers: readonly Modifier[] | undefined, name: string | Identifier, moduleReference: ModuleReference) {
-            const node: ImportEqualsDeclaration = createBaseDeclaration(SyntaxKind.ImportEqualsDeclaration, decorators, modifiers);
-            node.name = asName(name);
-            node.moduleReference = moduleReference;
-            return node;
+        // @api
+        function createImportEqualsDeclaration(
+            decorators: readonly Decorator[] | undefined,
+            modifiers: readonly Modifier[] | undefined,
+            name: string | Identifier,
+            moduleReference: ModuleReference
+        ) {
+            const node = createBaseNamedDeclaration<ImportEqualsDeclaration>(
+                SyntaxKind.ImportEqualsDeclaration,
+                decorators,
+                modifiers,
+                name
+            );
+            setChild(node, node.moduleReference = moduleReference);
+            return finishNode(node);
         }
 
-        function updateImportEqualsDeclaration(node: ImportEqualsDeclaration, decorators: readonly Decorator[] | undefined, modifiers: readonly Modifier[] | undefined, name: Identifier, moduleReference: ModuleReference) {
+        // @api
+        function updateImportEqualsDeclaration(
+            node: ImportEqualsDeclaration,
+            decorators: readonly Decorator[] | undefined,
+            modifiers: readonly Modifier[] | undefined,
+            name: Identifier,
+            moduleReference: ModuleReference
+        ) {
             return node.decorators !== decorators
                 || node.modifiers !== modifiers
                 || node.name !== name
                 || node.moduleReference !== moduleReference
                 ? updateNode(createImportEqualsDeclaration(decorators, modifiers, name, moduleReference), node)
-                : node;
+                : reuseNode(node);
         }
 
+        // @api
         function createImportDeclaration(
             decorators: readonly Decorator[] | undefined,
             modifiers: readonly Modifier[] | undefined,
             importClause: ImportClause | undefined,
             moduleSpecifier: Expression
         ): ImportDeclaration {
-            const node: ImportDeclaration = createBaseDeclaration(SyntaxKind.ImportDeclaration, decorators, modifiers);
-            node.importClause = importClause;
-            node.moduleSpecifier = moduleSpecifier;
-            return node;
+            const node = createBaseDeclaration<ImportDeclaration>(
+                SyntaxKind.ImportDeclaration,
+                decorators,
+                modifiers
+            );
+            setChild(node, node.importClause = importClause);
+            setChild(node, node.moduleSpecifier = moduleSpecifier);
+            return finishNode(node);
         }
 
+        // @api
         function updateImportDeclaration(
             node: ImportDeclaration,
             decorators: readonly Decorator[] | undefined,
@@ -2631,87 +3103,120 @@ namespace ts {
                 || node.importClause !== importClause
                 || node.moduleSpecifier !== moduleSpecifier
                 ? updateNode(createImportDeclaration(decorators, modifiers, importClause, moduleSpecifier), node)
-                : node;
+                : reuseNode(node);
         }
 
+        // @api
         function createImportClause(name: Identifier | undefined, namedBindings: NamedImportBindings | undefined): ImportClause {
-            const node = createNode(SyntaxKind.ImportClause) as ImportClause;
-            node.name = name;
-            node.namedBindings = namedBindings;
-            return node;
+            const node = createBaseNode<ImportClause>(SyntaxKind.ImportClause);
+            setChild(node, node.name = name);
+            setChild(node, node.namedBindings = namedBindings);
+            return finishNode(node);
         }
 
+        // @api
         function updateImportClause(node: ImportClause, name: Identifier | undefined, namedBindings: NamedImportBindings | undefined) {
             return node.name !== name
                 || node.namedBindings !== namedBindings
                 ? updateNode(createImportClause(name, namedBindings), node)
-                : node;
+                : reuseNode(node);
         }
 
+        // @api
         function createNamespaceImport(name: Identifier): NamespaceImport {
-            const node = createNode(SyntaxKind.NamespaceImport) as NamespaceImport;
-            node.name = name;
-            return node;
+            const node = createBaseNode<NamespaceImport>(SyntaxKind.NamespaceImport);
+            setChild(node, node.name = name);
+            return finishNode(node);
         }
 
+        // @api
         function updateNamespaceImport(node: NamespaceImport, name: Identifier) {
             return node.name !== name
                 ? updateNode(createNamespaceImport(name), node)
-                : node;
+                : reuseNode(node);
         }
 
+        // @api
         function createNamedImports(elements: readonly ImportSpecifier[]): NamedImports {
-            const node = createNode(SyntaxKind.NamedImports) as NamedImports;
-            node.elements = createNodeArray(elements);
-            return node;
+            const node = createBaseNode<NamedImports>(SyntaxKind.NamedImports);
+            setChildren(node, node.elements = createNodeArray(elements));
+            return finishNode(node);
         }
 
+        // @api
         function updateNamedImports(node: NamedImports, elements: readonly ImportSpecifier[]) {
             return node.elements !== elements
                 ? updateNode(createNamedImports(elements), node)
-                : node;
+                : reuseNode(node);
         }
 
+        // @api
         function createImportSpecifier(propertyName: Identifier | undefined, name: Identifier) {
-            const node = createNode(SyntaxKind.ImportSpecifier) as ImportSpecifier;
-            node.propertyName = propertyName;
-            node.name = name;
-            return node;
+            const node = createBaseNode<ImportSpecifier>(SyntaxKind.ImportSpecifier);
+            setChild(node, node.propertyName = propertyName);
+            setChild(node, node.name = name);
+            return finishNode(node);
         }
 
+        // @api
         function updateImportSpecifier(node: ImportSpecifier, propertyName: Identifier | undefined, name: Identifier) {
             return node.propertyName !== propertyName
                 || node.name !== name
                 ? updateNode(createImportSpecifier(propertyName, name), node)
-                : node;
+                : reuseNode(node);
         }
 
-        function createExportAssignment(decorators: readonly Decorator[] | undefined, modifiers: readonly Modifier[] | undefined, isExportEquals: boolean | undefined, expression: Expression) {
+        // @api
+        function createExportAssignment(
+            decorators: readonly Decorator[] | undefined,
+            modifiers: readonly Modifier[] | undefined,
+            isExportEquals: boolean | undefined,
+            expression: Expression
+        ) {
             const node = createBaseDeclaration<ExportAssignment>(
-                SyntaxKind.ExportAssignment, asNodeArray(decorators), asNodeArray(modifiers));
+                SyntaxKind.ExportAssignment,
+                decorators,
+                modifiers
+            );
             node.isExportEquals = isExportEquals;
-            node.expression = isExportEquals
+            setChild(node, node.expression = isExportEquals
                 ? parenthesizer().parenthesizeRightSideOfBinary(SyntaxKind.EqualsToken, /*leftSide*/ undefined, expression)
-                : parenthesizer().parenthesizeExpressionOfExportDefault(expression);
-            return node;
+                : parenthesizer().parenthesizeExpressionOfExportDefault(expression));
+            return finishNode(node);
         }
 
-        function updateExportAssignment(node: ExportAssignment, decorators: readonly Decorator[] | undefined, modifiers: readonly Modifier[] | undefined, expression: Expression) {
+        // @api
+        function updateExportAssignment(
+            node: ExportAssignment,
+            decorators: readonly Decorator[] | undefined,
+            modifiers: readonly Modifier[] | undefined,
+            expression: Expression
+        ) {
             return node.decorators !== decorators
                 || node.modifiers !== modifiers
                 || node.expression !== expression
                 ? updateNode(createExportAssignment(decorators, modifiers, node.isExportEquals, expression), node)
-                : node;
+                : reuseNode(node);
         }
 
-        function createExportDeclaration(decorators: readonly Decorator[] | undefined, modifiers: readonly Modifier[] | undefined, exportClause: NamedExports | undefined, moduleSpecifier?: Expression) {
+        // @api
+        function createExportDeclaration(
+            decorators: readonly Decorator[] | undefined,
+            modifiers: readonly Modifier[] | undefined,
+            exportClause: NamedExports | undefined,
+            moduleSpecifier?: Expression
+        ) {
             const node = createBaseDeclaration<ExportDeclaration>(
-                SyntaxKind.ExportDeclaration, asNodeArray(decorators), asNodeArray(modifiers));
-            node.exportClause = exportClause;
-            node.moduleSpecifier = moduleSpecifier;
-            return node;
+                SyntaxKind.ExportDeclaration,
+                decorators,
+                modifiers
+            );
+            setChild(node, node.exportClause = exportClause);
+            setChild(node, node.moduleSpecifier = moduleSpecifier);
+            return finishNode(node);
         }
 
+        // @api
         function updateExportDeclaration(
             node: ExportDeclaration,
             decorators: readonly Decorator[] | undefined,
@@ -2724,480 +3229,586 @@ namespace ts {
                 || node.exportClause !== exportClause
                 || node.moduleSpecifier !== moduleSpecifier
                 ? updateNode(createExportDeclaration(decorators, modifiers, exportClause, moduleSpecifier), node)
-                : node;
+                : reuseNode(node);
         }
 
+        // @api
         function createNamedExports(elements: readonly ExportSpecifier[]) {
-            const node = createNode(SyntaxKind.NamedExports) as NamedExports;
-            node.elements = createNodeArray(elements);
-            return node;
+            const node = createBaseNode<NamedExports>(SyntaxKind.NamedExports);
+            setChildren(node, node.elements = createNodeArray(elements));
+            return finishNode(node);
         }
 
+        // @api
         function updateNamedExports(node: NamedExports, elements: readonly ExportSpecifier[]) {
             return node.elements !== elements
                 ? updateNode(createNamedExports(elements), node)
-                : node;
+                : reuseNode(node);
         }
 
+        // @api
         function createExportSpecifier(propertyName: string | Identifier | undefined, name: string | Identifier) {
-            const node = createNode(SyntaxKind.ExportSpecifier) as ExportSpecifier;
-            node.propertyName = asName(propertyName);
-            node.name = asName(name);
-            return node;
+            const node = createBaseNode<ExportSpecifier>(SyntaxKind.ExportSpecifier);
+            setChild(node, node.propertyName = asName(propertyName));
+            setChild(node, node.name = asName(name));
+            return finishNode(node);
         }
 
+        // @api
         function updateExportSpecifier(node: ExportSpecifier, propertyName: Identifier | undefined, name: Identifier) {
             return node.propertyName !== propertyName
                 || node.name !== name
                 ? updateNode(createExportSpecifier(propertyName, name), node)
-                : node;
+                : reuseNode(node);
+        }
+
+        // @api
+        function createMissingDeclaration() {
+            const node = createBaseDeclaration<MissingDeclaration>(
+                SyntaxKind.MissingDeclaration,
+                /*decorators*/ undefined,
+                /*modifiers*/ undefined
+            );
+            return finishNode(node);
         }
 
         //
         // Module references
         //
 
+        // @api
         function createExternalModuleReference(expression: Expression) {
-            const node = createNode(SyntaxKind.ExternalModuleReference) as ExternalModuleReference;
-            node.expression = expression;
-            return node;
+            const node = createBaseNode<ExternalModuleReference>(SyntaxKind.ExternalModuleReference);
+            setChild(node, node.expression = expression);
+            return finishNode(node);
         }
 
+        // @api
         function updateExternalModuleReference(node: ExternalModuleReference, expression: Expression) {
             return node.expression !== expression
                 ? updateNode(createExternalModuleReference(expression), node)
-                : node;
+                : reuseNode(node);
         }
 
         //
         // JSDoc
         //
 
+        // @api
         function createJSDocAllType() {
-            const node = createNode(SyntaxKind.JSDocAllType) as JSDocAllType;
-            return node;
+            return finishNode(createBaseNode<JSDocAllType>(SyntaxKind.JSDocAllType));
         }
 
+        // @api
         function createJSDocUnknownType() {
-            const node = createNode(SyntaxKind.JSDocUnknownType) as JSDocUnknownType;
-            return node;
+            return finishNode(createBaseNode<JSDocUnknownType>(SyntaxKind.JSDocUnknownType));
         }
 
+        // @api
         function createJSDocNonNullableType(type: TypeNode) {
-            const node = createNode(SyntaxKind.JSDocNonNullableType) as JSDocNonNullableType;
-            node.type = type;
-            return node;
+            const node = createBaseNode<JSDocNonNullableType>(SyntaxKind.JSDocNonNullableType);
+            setChild(node, node.type = type);
+            return finishNode(node);
         }
 
+        // @api
         function createJSDocNullableType(type: TypeNode) {
-            const node = createNode(SyntaxKind.JSDocNullableType) as JSDocNullableType;
-            node.type = type;
-            return node;
+            const node = createBaseNode<JSDocNullableType>(SyntaxKind.JSDocNullableType);
+            setChild(node, node.type = type);
+            return finishNode(node);
         }
 
+        // @api
         function createJSDocOptionalType(type: TypeNode) {
-            const node = createNode(SyntaxKind.JSDocOptionalType) as JSDocOptionalType;
-            node.type = type;
-            return node;
+            const node = createBaseNode<JSDocOptionalType>(SyntaxKind.JSDocOptionalType);
+            setChild(node, node.type = type);
+            return finishNode(node);
         }
 
+        // @api
         function createJSDocFunctionType(parameters: readonly ParameterDeclaration[], type: TypeNode | undefined): JSDocFunctionType {
-            return createBaseSignatureDeclaration(SyntaxKind.JSDocFunctionType, /*typeParameters*/ undefined, parameters, type);
+            const node = createBaseSignatureDeclaration<JSDocFunctionType>(
+                SyntaxKind.JSDocFunctionType,
+                /*decorators*/ undefined,
+                /*modifiers*/ undefined,
+                /*name*/ undefined,
+                /*typeParameters*/ undefined,
+                parameters,
+                type
+            );
+            return finishNode(node);
         }
 
+        // @api
         function createJSDocVariadicType(type: TypeNode) {
-            const node = createNode(SyntaxKind.JSDocVariadicType) as JSDocVariadicType;
-            node.type = type;
-            return node;
+            const node = createBaseNode<JSDocVariadicType>(SyntaxKind.JSDocVariadicType);
+            setChild(node, node.type = type);
+            return finishNode(node);
         }
 
+        // @api
         function createJSDocNamepathType(type: TypeNode) {
-            const node = createNode(SyntaxKind.JSDocNamepathType) as JSDocNamepathType;
-            node.type = type;
-            return node;
+            const node = createBaseNode<JSDocNamepathType>(SyntaxKind.JSDocNamepathType);
+            setChild(node, node.type = type);
+            return finishNode(node);
         }
 
+        // @api
         function createJSDocTypeLiteral(propertyTags?: readonly JSDocPropertyLikeTag[], isArrayType?: boolean): JSDocTypeLiteral {
-            const node = createNode(SyntaxKind.JSDocTypeLiteral) as JSDocTypeLiteral;
-            node.jsDocPropertyTags = propertyTags;
+            const node = createBaseNode<JSDocTypeLiteral>(SyntaxKind.JSDocTypeLiteral);
+            setChildren(node, node.jsDocPropertyTags = asNodeArray(propertyTags));
             node.isArrayType = isArrayType;
-            return node;
+            return finishNode(node);
         }
 
+        // @api
         function createJSDocTypeExpression(type: TypeNode): JSDocTypeExpression {
-            const node = createNode(SyntaxKind.JSDocTypeExpression) as JSDocTypeExpression;
-            node.type = type;
-            return node;
+            const node = createBaseNode<JSDocTypeExpression>(SyntaxKind.JSDocTypeExpression);
+            setChild(node, node.type = type);
+            return finishNode(node);
         }
 
+        // @api
         function createJSDocSignature(typeParameters: readonly JSDocTemplateTag[] | undefined, parameters: readonly JSDocParameterTag[], type?: JSDocReturnTag): JSDocSignature {
-            const node = createNode(SyntaxKind.JSDocSignature) as JSDocSignature;
-            node.typeParameters = asNodeArray(typeParameters);
-            node.parameters = createNodeArray(parameters);
-            node.type = type;
-            return node;
+            const node = createBaseNode<JSDocSignature>(SyntaxKind.JSDocSignature);
+            setChildren(node, node.typeParameters = asNodeArray(typeParameters));
+            setChildren(node, node.parameters = createNodeArray(parameters));
+            setChild(node, node.type = type);
+            return finishNode(node);
         }
 
-        function createJSDocTemplateTag(tagName: Identifier | undefined, constraint: JSDocTypeExpression | undefined, typeParameters: readonly TypeParameterDeclaration[]): JSDocTemplateTag {
-            const tag = createJSDocTag<JSDocTemplateTag>(SyntaxKind.JSDocTemplateTag, tagName || createIdentifier("template"));
-            tag.constraint = constraint;
-            tag.typeParameters = createNodeArray(typeParameters);
-            return tag;
-        }
-
-        function createJSDocTypeTag(tagName: Identifier | undefined, typeExpression: JSDocTypeExpression, comment?: string): JSDocTypeTag {
-            const tag = createJSDocTag<JSDocTypeTag>(SyntaxKind.JSDocTypeTag, tagName || createIdentifier("type"));
-            tag.typeExpression = typeExpression;
-            tag.comment = comment;
-            return tag;
-        }
-
-        function createJSDocTypedefTag(tagName: Identifier | undefined, typeExpression?: JSDocTypeExpression, fullName?: Identifier | JSDocNamespaceDeclaration, comment?: string): JSDocTypedefTag {
-            const tag = createJSDocTag<JSDocTypedefTag>(SyntaxKind.JSDocTypedefTag, tagName || createIdentifier("typedef"));
-            tag.typeExpression = typeExpression;
-            tag.fullName = fullName;
-            tag.name = getJSDocTypeAliasName(fullName);
-            tag.comment = comment;
-            return tag;
-        }
-
-        function createJSDocReturnTag(tagName: Identifier | undefined, typeExpression?: JSDocTypeExpression, comment?: string): JSDocReturnTag {
-            const tag = createJSDocTag<JSDocReturnTag>(SyntaxKind.JSDocReturnTag, tagName || createIdentifier("returns"));
-            tag.typeExpression = typeExpression;
-            tag.comment = comment;
-            return tag;
-        }
-
-        function createJSDocThisTag(tagName: Identifier | undefined, typeExpression?: JSDocTypeExpression): JSDocThisTag {
-            const tag = createJSDocTag<JSDocThisTag>(SyntaxKind.JSDocThisTag, tagName || createIdentifier("this"));
-            tag.typeExpression = typeExpression;
-            return tag;
-        }
-
-        function createJSDocParameterTag(tagName: Identifier | undefined, name: EntityName, isBracketed: boolean, typeExpression?: JSDocTypeExpression, isNameFirst?: boolean, comment?: string): JSDocParameterTag {
-            const tag = createJSDocTag<JSDocParameterTag>(SyntaxKind.JSDocParameterTag, tagName || createIdentifier("param"));
-            tag.typeExpression = typeExpression;
-            tag.name = name;
-            tag.isNameFirst = !!isNameFirst;
-            tag.isBracketed = isBracketed;
-            tag.comment = comment;
-            return tag;
-        }
-
-        function createJSDocPropertyTag(tagName: Identifier | undefined, name: EntityName, isBracketed: boolean, typeExpression?: JSDocTypeExpression, isNameFirst?: boolean, comment?: string): JSDocPropertyTag {
-            const tag = createJSDocTag<JSDocPropertyTag>(SyntaxKind.JSDocPropertyTag, tagName || createIdentifier("prop"));
-            tag.typeExpression = typeExpression;
-            tag.name = name;
-            tag.isNameFirst = !!isNameFirst;
-            tag.isBracketed = isBracketed;
-            tag.comment = comment;
-            return tag;
-        }
-
-        function createJSDocAuthorTag(tagName: Identifier | undefined, comment?: string): JSDocAuthorTag {
-            const tag = createJSDocTag<JSDocAuthorTag>(SyntaxKind.JSDocAuthorTag, tagName || createIdentifier("author"));
-            tag.comment = comment;
-            return tag;
-        }
-
-        function createJSDocAugmentsTag(tagName: Identifier | undefined, className: JSDocAugmentsTag["class"]): JSDocAugmentsTag {
-            const tag = createJSDocTag<JSDocAugmentsTag>(SyntaxKind.JSDocAugmentsTag, tagName || createIdentifier("augments"));
-            tag.class = className;
-            return tag;
-        }
-
-        function createJSDocCallbackTag(tagName: Identifier | undefined, typeExpression: JSDocSignature, fullName?: Identifier | JSDocNamespaceDeclaration, comment?: string): JSDocCallbackTag {
-            const tag = createJSDocTag<JSDocCallbackTag>(SyntaxKind.JSDocCallbackTag, tagName || createIdentifier("callback"));
-            tag.typeExpression = typeExpression;
-            tag.fullName = fullName;
-            tag.name = getJSDocTypeAliasName(fullName);
-            tag.comment = comment;
-            return tag;
-        }
-
-        function createJSDocClassTag(tagName: Identifier | undefined): JSDocClassTag {
-            const tag = createJSDocTag<JSDocClassTag>(SyntaxKind.JSDocClassTag, tagName || createIdentifier("class"));
-            return tag;
-        }
-
-        function createJSDocEnumTag(tagName: Identifier | undefined, typeExpression?: JSDocTypeExpression): JSDocEnumTag {
-            const tag = createJSDocTag<JSDocEnumTag>(SyntaxKind.JSDocEnumTag, tagName || createIdentifier("enum"));
-            tag.typeExpression = typeExpression;
-            return tag;
-        }
-
-        function createJSDocComment(comment?: string | undefined, tags?: NodeArray<JSDocTag> | undefined) {
-            const node = createNode(SyntaxKind.JSDocComment) as JSDoc;
+        // @api
+        function createBaseJSDocTag<T extends JSDocTag>(kind: T["kind"], tagName: Identifier, comment: string | undefined) {
+            const node = createBaseNode<T>(kind);
+            setChild(node, node.tagName = tagName);
             node.comment = comment;
-            node.tags = tags;
             return node;
         }
 
+        // @api
+        function createJSDocTemplateTag(tagName: Identifier | undefined, constraint: JSDocTypeExpression | undefined, typeParameters: readonly TypeParameterDeclaration[]): JSDocTemplateTag {
+            const node = createBaseJSDocTag<JSDocTemplateTag>(SyntaxKind.JSDocTemplateTag, tagName || createIdentifier("template"), /*comment*/ undefined);
+            setChild(node, node.constraint = constraint);
+            setChildren(node, node.typeParameters = createNodeArray(typeParameters));
+            return finishNode(node);
+        }
+
+        // @api
+        function createJSDocTypeTag(tagName: Identifier | undefined, typeExpression: JSDocTypeExpression, comment?: string): JSDocTypeTag {
+            const node = createBaseJSDocTag<JSDocTypeTag>(SyntaxKind.JSDocTypeTag, tagName || createIdentifier("type"), comment);
+            setChild(node, node.typeExpression = typeExpression);
+            return finishNode(node);
+        }
+
+        // @api
+        function createJSDocTypedefTag(tagName: Identifier | undefined, typeExpression?: JSDocTypeExpression, fullName?: Identifier | JSDocNamespaceDeclaration, comment?: string): JSDocTypedefTag {
+            const node = createBaseJSDocTag<JSDocTypedefTag>(SyntaxKind.JSDocTypedefTag, tagName || createIdentifier("typedef"), comment);
+            setChild(node, node.typeExpression = typeExpression);
+            setChild(node, node.fullName = fullName);
+            setChild(node, node.name = getJSDocTypeAliasName(fullName));
+            return finishNode(node);
+        }
+
+        // @api
+        function createJSDocReturnTag(tagName: Identifier | undefined, typeExpression?: JSDocTypeExpression, comment?: string): JSDocReturnTag {
+            const node = createBaseJSDocTag<JSDocReturnTag>(SyntaxKind.JSDocReturnTag, tagName || createIdentifier("returns"), comment);
+            setChild(node, node.typeExpression = typeExpression);
+            return finishNode(node);
+        }
+
+        // @api
+        function createJSDocThisTag(tagName: Identifier | undefined, typeExpression?: JSDocTypeExpression): JSDocThisTag {
+            const node = createBaseJSDocTag<JSDocThisTag>(SyntaxKind.JSDocThisTag, tagName || createIdentifier("this"), /*comment*/ undefined);
+            setChild(node, node.typeExpression = typeExpression);
+            return finishNode(node);
+        }
+
+        // @api
+        function createJSDocParameterTag(tagName: Identifier | undefined, name: EntityName, isBracketed: boolean, typeExpression?: JSDocTypeExpression, isNameFirst?: boolean, comment?: string): JSDocParameterTag {
+            const node = createBaseJSDocTag<JSDocParameterTag>(SyntaxKind.JSDocParameterTag, tagName || createIdentifier("param"), comment);
+            setChild(node, node.typeExpression = typeExpression);
+            setChild(node, node.name = name);
+            node.isNameFirst = !!isNameFirst;
+            node.isBracketed = isBracketed;
+            return finishNode(node);
+        }
+
+        // @api
+        function createJSDocPropertyTag(tagName: Identifier | undefined, name: EntityName, isBracketed: boolean, typeExpression?: JSDocTypeExpression, isNameFirst?: boolean, comment?: string): JSDocPropertyTag {
+            const node = createBaseJSDocTag<JSDocPropertyTag>(SyntaxKind.JSDocPropertyTag, tagName || createIdentifier("prop"), comment);
+            setChild(node, node.typeExpression = typeExpression);
+            setChild(node, node.name = name);
+            node.isNameFirst = !!isNameFirst;
+            node.isBracketed = isBracketed;
+            return finishNode(node);
+        }
+
+        // @api
+        function createJSDocAuthorTag(tagName: Identifier | undefined, comment?: string): JSDocAuthorTag {
+            const node = createBaseJSDocTag<JSDocAuthorTag>(SyntaxKind.JSDocAuthorTag, tagName || createIdentifier("author"), comment);
+            return finishNode(node);
+        }
+
+        // @api
+        function createJSDocAugmentsTag(tagName: Identifier | undefined, className: JSDocAugmentsTag["class"]): JSDocAugmentsTag {
+            const node = createBaseJSDocTag<JSDocAugmentsTag>(SyntaxKind.JSDocAugmentsTag, tagName || createIdentifier("augments"), /*comment*/ undefined);
+            setChild(node, node.class = className);
+            return finishNode(node);
+        }
+
+        // @api
+        function createJSDocCallbackTag(tagName: Identifier | undefined, typeExpression: JSDocSignature, fullName?: Identifier | JSDocNamespaceDeclaration, comment?: string): JSDocCallbackTag {
+            const node = createBaseJSDocTag<JSDocCallbackTag>(SyntaxKind.JSDocCallbackTag, tagName || createIdentifier("callback"), comment);
+            setChild(node, node.typeExpression = typeExpression);
+            setChild(node, node.fullName = fullName);
+            node.name = getJSDocTypeAliasName(fullName);
+            return finishNode(node);
+        }
+
+        // @api
+        function createJSDocClassTag(tagName: Identifier | undefined): JSDocClassTag {
+            const node = createBaseJSDocTag<JSDocClassTag>(SyntaxKind.JSDocClassTag, tagName || createIdentifier("class"), /*comment*/ undefined);
+            return finishNode(node);
+        }
+
+        // @api
+        function createJSDocEnumTag(tagName: Identifier | undefined, typeExpression?: JSDocTypeExpression): JSDocEnumTag {
+            const node = createBaseJSDocTag<JSDocEnumTag>(SyntaxKind.JSDocEnumTag, tagName || createIdentifier("enum"), /*comment*/ undefined);
+            setChild(node, node.typeExpression = typeExpression);
+            return finishNode(node);
+        }
+
+        // @api
         function createJSDocTag<T extends JSDocTag>(kind: T["kind"], tagName: Identifier): T {
-            const node = createNode(kind) as T;
-            node.tagName = tagName;
-            return node;
+            const node = createBaseJSDocTag(kind, tagName, /*comment*/ undefined);
+            return finishNode(node);
+        }
+
+        // @api
+        function createJSDocComment(comment?: string | undefined, tags?: NodeArray<JSDocTag> | undefined) {
+            const node = createBaseNode<JSDoc>(SyntaxKind.JSDocComment);
+            node.comment = comment;
+            setChildren(node, node.tags = tags);
+            return finishNode(node);
         }
 
         //
         // JSX
         //
 
+        // @api
         function createJsxElement(openingElement: JsxOpeningElement, children: readonly JsxChild[], closingElement: JsxClosingElement) {
-            const node = createNode(SyntaxKind.JsxElement) as JsxElement;
-            node.openingElement = openingElement;
-            node.children = createNodeArray(children);
-            node.closingElement = closingElement;
-            return node;
+            const node = createBaseNode<JsxElement>(SyntaxKind.JsxElement);
+            setChild(node, node.openingElement = openingElement);
+            setChildren(node, node.children = createNodeArray(children));
+            setChild(node, node.closingElement = closingElement);
+            return finishNode(node);
         }
 
+        // @api
         function updateJsxElement(node: JsxElement, openingElement: JsxOpeningElement, children: readonly JsxChild[], closingElement: JsxClosingElement) {
             return node.openingElement !== openingElement
                 || node.children !== children
                 || node.closingElement !== closingElement
                 ? updateNode(createJsxElement(openingElement, children, closingElement), node)
-                : node;
+                : reuseNode(node);
         }
 
+        // @api
         function createJsxSelfClosingElement(tagName: JsxTagNameExpression, typeArguments: readonly TypeNode[] | undefined, attributes: JsxAttributes) {
-            const node = createNode(SyntaxKind.JsxSelfClosingElement) as JsxSelfClosingElement;
-            node.tagName = tagName;
-            node.typeArguments = asNodeArray(typeArguments);
-            node.attributes = attributes;
-            return node;
+            const node = createBaseNode<JsxSelfClosingElement>(SyntaxKind.JsxSelfClosingElement);
+            setChild(node, node.tagName = tagName);
+            setChildren(node, node.typeArguments = asNodeArray(typeArguments));
+            setChild(node, node.attributes = attributes);
+            return finishNode(node);
         }
 
+        // @api
         function updateJsxSelfClosingElement(node: JsxSelfClosingElement, tagName: JsxTagNameExpression, typeArguments: readonly TypeNode[] | undefined, attributes: JsxAttributes) {
             return node.tagName !== tagName
                 || node.typeArguments !== typeArguments
                 || node.attributes !== attributes
                 ? updateNode(createJsxSelfClosingElement(tagName, typeArguments, attributes), node)
-                : node;
+                : reuseNode(node);
         }
 
+        // @api
         function createJsxOpeningElement(tagName: JsxTagNameExpression, typeArguments: readonly TypeNode[] | undefined, attributes: JsxAttributes) {
-            const node = createNode(SyntaxKind.JsxOpeningElement) as JsxOpeningElement;
-            node.tagName = tagName;
-            node.typeArguments = asNodeArray(typeArguments);
-            node.attributes = attributes;
-            return node;
+            const node = createBaseNode<JsxOpeningElement>(SyntaxKind.JsxOpeningElement);
+            setChild(node, node.tagName = tagName);
+            setChildren(node, node.typeArguments = asNodeArray(typeArguments));
+            setChild(node, node.attributes = attributes);
+            return finishNode(node);
         }
 
+        // @api
         function updateJsxOpeningElement(node: JsxOpeningElement, tagName: JsxTagNameExpression, typeArguments: readonly TypeNode[] | undefined, attributes: JsxAttributes) {
             return node.tagName !== tagName
                 || node.typeArguments !== typeArguments
                 || node.attributes !== attributes
                 ? updateNode(createJsxOpeningElement(tagName, typeArguments, attributes), node)
-                : node;
+                : reuseNode(node);
         }
 
+        // @api
         function createJsxClosingElement(tagName: JsxTagNameExpression) {
-            const node = createNode(SyntaxKind.JsxClosingElement) as JsxClosingElement;
-            node.tagName = tagName;
-            return node;
+            const node = createBaseNode<JsxClosingElement>(SyntaxKind.JsxClosingElement);
+            setChild(node, node.tagName = tagName);
+            return finishNode(node);
         }
 
+        // @api
         function updateJsxClosingElement(node: JsxClosingElement, tagName: JsxTagNameExpression) {
             return node.tagName !== tagName
                 ? updateNode(createJsxClosingElement(tagName), node)
-                : node;
+                : reuseNode(node);
         }
 
+        // @api
         function createJsxFragment(openingFragment: JsxOpeningFragment, children: readonly JsxChild[], closingFragment: JsxClosingFragment) {
-            const node = createNode(SyntaxKind.JsxFragment) as JsxFragment;
-            node.openingFragment = openingFragment;
-            node.children = createNodeArray(children);
-            node.closingFragment = closingFragment;
-            return node;
+            const node = createBaseNode<JsxFragment>(SyntaxKind.JsxFragment);
+            setChild(node, node.openingFragment = openingFragment);
+            setChildren(node, node.children = createNodeArray(children));
+            setChild(node, node.closingFragment = closingFragment);
+            return finishNode(node);
         }
 
-        function createJsxText(text: string, containsOnlyTriviaWhiteSpaces?: boolean) {
-            const node = createNode(SyntaxKind.JsxText) as JsxText;
-            node.text = text;
-            node.containsOnlyTriviaWhiteSpaces = !!containsOnlyTriviaWhiteSpaces;
-            return node;
-        }
-
-        function updateJsxText(node: JsxText, text: string, containsOnlyTriviaWhiteSpaces?: boolean) {
-            return node.text !== text
-                || node.containsOnlyTriviaWhiteSpaces !== containsOnlyTriviaWhiteSpaces
-                ? updateNode(createJsxText(text, containsOnlyTriviaWhiteSpaces), node)
-                : node;
-        }
-
-        function createJsxOpeningFragment() {
-            return createNode(SyntaxKind.JsxOpeningFragment) as JsxOpeningFragment;
-        }
-
-        function createJsxJsxClosingFragment() {
-            return createNode(SyntaxKind.JsxClosingFragment) as JsxClosingFragment;
-        }
-
+        // @api
         function updateJsxFragment(node: JsxFragment, openingFragment: JsxOpeningFragment, children: readonly JsxChild[], closingFragment: JsxClosingFragment) {
             return node.openingFragment !== openingFragment
                 || node.children !== children
                 || node.closingFragment !== closingFragment
                 ? updateNode(createJsxFragment(openingFragment, children, closingFragment), node)
-                : node;
+                : reuseNode(node);
         }
 
+        // @api
+        function createJsxText(text: string, containsOnlyTriviaWhiteSpaces?: boolean) {
+            const node = createBaseNode<JsxText>(SyntaxKind.JsxText);
+            node.text = text;
+            node.containsOnlyTriviaWhiteSpaces = !!containsOnlyTriviaWhiteSpaces;
+            return finishNode(node);
+        }
+
+        // @api
+        function updateJsxText(node: JsxText, text: string, containsOnlyTriviaWhiteSpaces?: boolean) {
+            return node.text !== text
+                || node.containsOnlyTriviaWhiteSpaces !== containsOnlyTriviaWhiteSpaces
+                ? updateNode(createJsxText(text, containsOnlyTriviaWhiteSpaces), node)
+                : reuseNode(node);
+        }
+
+        // @api
+        function createJsxOpeningFragment() {
+            return finishNode(createBaseNode<JsxOpeningFragment>(SyntaxKind.JsxOpeningFragment));
+        }
+
+        // @api
+        function createJsxJsxClosingFragment() {
+            return finishNode(createBaseNode<JsxClosingFragment>(SyntaxKind.JsxClosingFragment));
+        }
+
+        // @api
         function createJsxAttribute(name: Identifier, initializer: StringLiteral | JsxExpression | undefined) {
-            const node = createNode(SyntaxKind.JsxAttribute) as JsxAttribute;
-            node.name = name;
-            node.initializer = initializer;
-            return node;
+            const node = createBaseNode<JsxAttribute>(SyntaxKind.JsxAttribute);
+            setChild(node, node.name = name);
+            setChild(node, node.initializer = initializer);
+            return finishNode(node);
         }
 
+        // @api
         function updateJsxAttribute(node: JsxAttribute, name: Identifier, initializer: StringLiteral | JsxExpression | undefined) {
             return node.name !== name
                 || node.initializer !== initializer
                 ? updateNode(createJsxAttribute(name, initializer), node)
-                : node;
+                : reuseNode(node);
         }
 
+        // @api
         function createJsxAttributes(properties: readonly JsxAttributeLike[]) {
-            const node = createNode(SyntaxKind.JsxAttributes) as JsxAttributes;
-            node.properties = createNodeArray(properties);
-            return node;
+            const node = createBaseNode<JsxAttributes>(SyntaxKind.JsxAttributes);
+            setChildren(node, node.properties = createNodeArray(properties));
+            return finishNode(node);
         }
 
+        // @api
         function updateJsxAttributes(node: JsxAttributes, properties: readonly JsxAttributeLike[]) {
             return node.properties !== properties
                 ? updateNode(createJsxAttributes(properties), node)
-                : node;
+                : reuseNode(node);
         }
 
+        // @api
         function createJsxSpreadAttribute(expression: Expression) {
-            const node = createNode(SyntaxKind.JsxSpreadAttribute) as JsxSpreadAttribute;
-            node.expression = expression;
-            return node;
+            const node = createBaseNode<JsxSpreadAttribute>(SyntaxKind.JsxSpreadAttribute);
+            setChild(node, node.expression = expression);
+            return finishNode(node);
         }
 
+        // @api
         function updateJsxSpreadAttribute(node: JsxSpreadAttribute, expression: Expression) {
             return node.expression !== expression
                 ? updateNode(createJsxSpreadAttribute(expression), node)
-                : node;
+                : reuseNode(node);
         }
 
+        // @api
         function createJsxExpression(dotDotDotToken: DotDotDotToken | undefined, expression: Expression | undefined) {
-            const node = createNode(SyntaxKind.JsxExpression) as JsxExpression;
-            node.dotDotDotToken = dotDotDotToken;
-            node.expression = expression;
-            return node;
+            const node = createBaseNode<JsxExpression>(SyntaxKind.JsxExpression);
+            setChild(node, node.dotDotDotToken = dotDotDotToken);
+            setChild(node, node.expression = expression);
+            return finishNode(node);
         }
 
+        // @api
         function updateJsxExpression(node: JsxExpression, expression: Expression | undefined) {
             return node.expression !== expression
                 ? updateNode(createJsxExpression(node.dotDotDotToken, expression), node)
-                : node;
+                : reuseNode(node);
         }
 
         //
         // Clauses
         //
 
+        // @api
         function createCaseClause(expression: Expression, statements: readonly Statement[]) {
-            const node = createNode(SyntaxKind.CaseClause) as CaseClause;
-            node.expression = parenthesizer().parenthesizeExpressionForDisallowedComma(expression);
-            node.statements = createNodeArray(statements);
-            return node;
+            const node = createBaseNode<CaseClause>(SyntaxKind.CaseClause);
+            setChild(node, node.expression = parenthesizer().parenthesizeExpressionForDisallowedComma(expression));
+            setChildren(node, node.statements = createNodeArray(statements));
+            return finishNode(node);
         }
 
+        // @api
         function updateCaseClause(node: CaseClause, expression: Expression, statements: readonly Statement[]) {
             return node.expression !== expression
                 || node.statements !== statements
                 ? updateNode(createCaseClause(expression, statements), node)
-                : node;
+                : reuseNode(node);
         }
 
+        // @api
         function createDefaultClause(statements: readonly Statement[]) {
-            const node = createNode(SyntaxKind.DefaultClause) as DefaultClause;
-            node.statements = createNodeArray(statements);
-            return node;
+            const node = createBaseNode<DefaultClause>(SyntaxKind.DefaultClause);
+            setChildren(node, node.statements = createNodeArray(statements));
+            return finishNode(node);
         }
 
+        // @api
         function updateDefaultClause(node: DefaultClause, statements: readonly Statement[]) {
             return node.statements !== statements
                 ? updateNode(createDefaultClause(statements), node)
-                : node;
+                : reuseNode(node);
         }
 
+        // @api
         function createHeritageClause(token: HeritageClause["token"], types: readonly ExpressionWithTypeArguments[]) {
-            const node = createNode(SyntaxKind.HeritageClause) as HeritageClause;
+            const node = createBaseNode<HeritageClause>(SyntaxKind.HeritageClause);
             node.token = token;
-            node.types = createNodeArray(types);
-            return node;
+            setChildren(node, node.types = createNodeArray(types));
+            return finishNode(node);
         }
 
+        // @api
         function updateHeritageClause(node: HeritageClause, types: readonly ExpressionWithTypeArguments[]) {
             return node.types !== types
                 ? updateNode(createHeritageClause(node.token, types), node)
-                : node;
+                : reuseNode(node);
         }
 
+        // @api
         function createCatchClause(variableDeclaration: string | VariableDeclaration | undefined, block: Block) {
-            const node = createNode(SyntaxKind.CatchClause) as CatchClause;
-            node.variableDeclaration = isString(variableDeclaration) ? createVariableDeclaration(variableDeclaration) : variableDeclaration;
-            node.block = block;
-            return node;
+            const node = createBaseNode<CatchClause>(SyntaxKind.CatchClause);
+            setChild(node, node.variableDeclaration = !isString(variableDeclaration) ? variableDeclaration : createVariableDeclaration(
+                variableDeclaration,
+                /*exclamationToken*/ undefined,
+                /*type*/ undefined,
+                /*initializer*/ undefined
+            ));
+            setChild(node, node.block = block);
+            return finishNode(node);
         }
 
+        // @api
         function updateCatchClause(node: CatchClause, variableDeclaration: VariableDeclaration | undefined, block: Block) {
             return node.variableDeclaration !== variableDeclaration
                 || node.block !== block
                 ? updateNode(createCatchClause(variableDeclaration, block), node)
-                : node;
+                : reuseNode(node);
         }
-
 
         //
         // Property assignments
         //
 
+        // @api
         function createPropertyAssignment(name: string | PropertyName, initializer: Expression) {
-            const node = createNode(SyntaxKind.PropertyAssignment) as PropertyAssignment;
-            node.name = asName(name);
-            node.questionToken = undefined;
-            node.initializer = parenthesizer().parenthesizeExpressionForDisallowedComma(initializer);
-            return node;
+            const node = createBaseNode<PropertyAssignment>(SyntaxKind.PropertyAssignment);
+            setChild(node, node.name = asName(name));
+            setChild(node, node.questionToken = undefined);
+            setChild(node, node.initializer = parenthesizer().parenthesizeExpressionForDisallowedComma(initializer));
+            return finishNode(node);
         }
 
+        function finishUpdatePropertyAssignment(updated: PropertyAssignment, original: PropertyAssignment) {
+            if (original.decorators) updated.decorators = original.decorators;
+            if (original.modifiers) updated.modifiers = original.modifiers;
+            if (original.questionToken) updated.questionToken = original.questionToken;
+            if (original.exclamationToken) updated.exclamationToken = original.exclamationToken;
+            return updateNode(updated, original);
+        }
+
+        // @api
         function updatePropertyAssignment(node: PropertyAssignment, name: PropertyName, initializer: Expression) {
             return node.name !== name
                 || node.initializer !== initializer
-                ? updateNode(createPropertyAssignment(name, initializer), node)
-                : node;
+                ? finishUpdatePropertyAssignment(createPropertyAssignment(name, initializer), node)
+                : reuseNode(node);
         }
 
+        // @api
         function createShorthandPropertyAssignment(name: string | Identifier, objectAssignmentInitializer?: Expression) {
-            return createShorthandPropertyAssignmentInternal(/*decorators*/ undefined, /*modifiers*/ undefined, name, /*equalsToken*/ undefined, objectAssignmentInitializer);
+            const node = createBaseNamedDeclaration<ShorthandPropertyAssignment>(
+                SyntaxKind.ShorthandPropertyAssignment,
+                /*decorators*/ undefined,
+                /*modifiers*/ undefined,
+                name
+            );
+            setChild(node, node.objectAssignmentInitializer = objectAssignmentInitializer !== undefined
+                ? parenthesizer().parenthesizeExpressionForDisallowedComma(objectAssignmentInitializer)
+                : undefined);
+            return finishNode(node);
         }
 
-        function createShorthandPropertyAssignmentInternal(decorators: readonly Decorator[] | undefined, modifiers: readonly Modifier[] | undefined, name: string | Identifier, equalsToken: EqualsToken | undefined, objectAssignmentInitializer: Expression | undefined): ShorthandPropertyAssignment {
-            const node: ShorthandPropertyAssignment = createBaseDeclaration(SyntaxKind.ShorthandPropertyAssignment, decorators, modifiers);
-            node.name = asName(name);
-            node.equalsToken = equalsToken;
-            node.objectAssignmentInitializer = objectAssignmentInitializer !== undefined ? parenthesizer().parenthesizeExpressionForDisallowedComma(objectAssignmentInitializer) : undefined;
-            return node;
+        function finishUpdateShorthandPropertyAssignment(updated: ShorthandPropertyAssignment, original: ShorthandPropertyAssignment) {
+            if (original.decorators) updated.decorators = original.decorators;
+            if (original.modifiers) updated.modifiers = original.modifiers;
+            if (original.equalsToken) updated.equalsToken = original.equalsToken;
+            if (original.questionToken) updated.questionToken = original.questionToken;
+            if (original.exclamationToken) updated.exclamationToken = original.exclamationToken;
+            return updateNode(updated, original);
         }
 
+        // @api
         function updateShorthandPropertyAssignment(node: ShorthandPropertyAssignment, name: Identifier, objectAssignmentInitializer: Expression | undefined) {
             return node.name !== name
                 || node.objectAssignmentInitializer !== objectAssignmentInitializer
-                ? updateNode(createShorthandPropertyAssignmentInternal(node.decorators, node.modifiers, name, node.equalsToken, objectAssignmentInitializer), node)
-                : node;
+                ? finishUpdateShorthandPropertyAssignment(createShorthandPropertyAssignment(name, objectAssignmentInitializer), node)
+                : reuseNode(node);
         }
 
+        // @api
         function createSpreadAssignment(expression: Expression) {
-            const node = createNode(SyntaxKind.SpreadAssignment) as SpreadAssignment;
-            node.expression = parenthesizer().parenthesizeExpressionForDisallowedComma(expression);
-            return node;
+            const node = createBaseNode<SpreadAssignment>(SyntaxKind.SpreadAssignment);
+            setChild(node, node.expression = parenthesizer().parenthesizeExpressionForDisallowedComma(expression));
+            return finishNode(node);
         }
 
+        // @api
         function updateSpreadAssignment(node: SpreadAssignment, expression: Expression) {
             return node.expression !== expression
                 ? updateNode(createSpreadAssignment(expression), node)
-                : node;
+                : reuseNode(node);
         }
 
 
@@ -3205,18 +3816,20 @@ namespace ts {
         // Enum
         //
 
+        // @api
         function createEnumMember(name: string | PropertyName, initializer?: Expression) {
-            const node = createNode(SyntaxKind.EnumMember) as EnumMember;
-            node.name = asName(name);
-            node.initializer = initializer && parenthesizer().parenthesizeExpressionForDisallowedComma(initializer);
-            return node;
+            const node = createBaseNode<EnumMember>(SyntaxKind.EnumMember);
+            setChild(node, node.name = asName(name));
+            setChild(node, node.initializer = initializer && parenthesizer().parenthesizeExpressionForDisallowedComma(initializer));
+            return finishNode(node);
         }
 
+        // @api
         function updateEnumMember(node: EnumMember, name: PropertyName, initializer: Expression | undefined) {
             return node.name !== name
                 || node.initializer !== initializer
                 ? updateNode(createEnumMember(name, initializer), node)
-                : node;
+                : reuseNode(node);
         }
 
         //
@@ -3232,45 +3845,23 @@ namespace ts {
             hasNoDefaultLib: boolean,
             libReferences: readonly FileReference[]
         ) {
-            const node = createNode(SyntaxKind.SourceFile) as SourceFile;
+            const node = createBaseNode<SourceFile>(SyntaxKind.SourceFile);
+            for (const p in source) {
+                if (p === "emitNode" || hasProperty(node, p) || !hasProperty(source, p)) continue;
+                (node as any)[p] = (source as any)[p];
+            }
             node.flags |= source.flags;
-            node.statements = createNodeArray(statements);
-            node.endOfFileToken = source.endOfFileToken;
-            node.fileName = source.fileName;
-            node.path = source.path;
-            node.text = source.text;
+            setChildren(node, node.statements = createNodeArray(statements));
+            setChild(node, node.endOfFileToken);
             node.isDeclarationFile = isDeclarationFile;
             node.referencedFiles = referencedFiles;
             node.typeReferenceDirectives = typeReferences;
             node.hasNoDefaultLib = hasNoDefaultLib;
             node.libReferenceDirectives = libReferences;
-            if (source.amdDependencies !== undefined) node.amdDependencies = source.amdDependencies;
-            if (source.moduleName !== undefined) node.moduleName = source.moduleName;
-            if (source.languageVariant !== undefined) node.languageVariant = source.languageVariant;
-            if (source.renamedDependencies !== undefined) node.renamedDependencies = source.renamedDependencies;
-            if (source.languageVersion !== undefined) node.languageVersion = source.languageVersion;
-            if (source.scriptKind !== undefined) node.scriptKind = source.scriptKind;
-            if (source.externalModuleIndicator !== undefined) node.externalModuleIndicator = source.externalModuleIndicator;
-            if (source.commonJsModuleIndicator !== undefined) node.commonJsModuleIndicator = source.commonJsModuleIndicator;
-            if (source.identifiers !== undefined) node.identifiers = source.identifiers;
-            if (source.nodeCount !== undefined) node.nodeCount = source.nodeCount;
-            if (source.identifierCount !== undefined) node.identifierCount = source.identifierCount;
-            if (source.symbolCount !== undefined) node.symbolCount = source.symbolCount;
-            if (source.parseDiagnostics !== undefined) node.parseDiagnostics = source.parseDiagnostics;
-            if (source.bindDiagnostics !== undefined) node.bindDiagnostics = source.bindDiagnostics;
-            if (source.bindSuggestionDiagnostics !== undefined) node.bindSuggestionDiagnostics = source.bindSuggestionDiagnostics;
-            if (source.lineMap !== undefined) node.lineMap = source.lineMap;
-            if (source.classifiableNames !== undefined) node.classifiableNames = source.classifiableNames;
-            if (source.resolvedModules !== undefined) node.resolvedModules = source.resolvedModules;
-            if (source.resolvedTypeReferenceDirectiveNames !== undefined) node.resolvedTypeReferenceDirectiveNames = source.resolvedTypeReferenceDirectiveNames;
-            if (source.imports !== undefined) node.imports = source.imports;
-            if (source.moduleAugmentations !== undefined) node.moduleAugmentations = source.moduleAugmentations;
-            if (source.pragmas !== undefined) node.pragmas = source.pragmas;
-            if (source.localJsxFactory !== undefined) node.localJsxFactory = source.localJsxFactory;
-            if (source.localJsxNamespace !== undefined) node.localJsxNamespace = source.localJsxNamespace;
-            return node;
+            return finishNode(node);
         }
 
+        // @api
         function updateSourceFile(
             node: SourceFile,
             statements: readonly Statement[],
@@ -3287,7 +3878,7 @@ namespace ts {
                 || node.hasNoDefaultLib !== hasNoDefaultLib
                 || node.libReferenceDirectives !== libReferenceDirectives
                 ? updateNode(cloneSourceFileWithChanges(node, statements, isDeclarationFile, referencedFiles, typeReferenceDirectives, hasNoDefaultLib, libReferenceDirectives), node)
-                : node;
+                : reuseNode(node);
         }
 
         //
@@ -3300,35 +3891,36 @@ namespace ts {
          *
          * @param original The original statement.
          */
+        // @api
         function createNotEmittedStatement(original: Node) {
-            const node = createNode(SyntaxKind.NotEmittedStatement) as NotEmittedStatement;
+            const node = createBaseNode<NotEmittedStatement>(SyntaxKind.NotEmittedStatement);
             node.original = original;
             setTextRange(node, original);
-            return node;
+            return finishNode(node);
         }
 
         /**
          * Creates a synthetic element to act as a placeholder for the end of an emitted declaration in
          * order to properly emit exports.
          */
-        /* @internal */
+        // @api
         function createEndOfDeclarationMarker(original: Node) {
-            const node = createNode(SyntaxKind.EndOfDeclarationMarker) as EndOfDeclarationMarker;
+            const node = createBaseNode<EndOfDeclarationMarker>(SyntaxKind.EndOfDeclarationMarker);
             node.emitNode = {} as EmitNode;
             node.original = original;
-            return node;
+            return finishNode(node);
         }
 
         /**
          * Creates a synthetic element to act as a placeholder for the beginning of a merged declaration in
          * order to properly emit exports.
          */
-        /* @internal */
+        // @api
         function createMergeDeclarationMarker(original: Node) {
-            const node = createNode(SyntaxKind.MergeDeclarationMarker) as MergeDeclarationMarker;
+            const node = createBaseNode<MergeDeclarationMarker>(SyntaxKind.MergeDeclarationMarker);
             node.emitNode = {} as EmitNode;
             node.original = original;
-            return node;
+            return finishNode(node);
         }
 
         /**
@@ -3338,19 +3930,20 @@ namespace ts {
          * @param expression The inner expression to emit.
          * @param original The original outer expression.
          */
+        // @api
         function createPartiallyEmittedExpression(expression: Expression, original?: Node) {
-            const node = createNode(SyntaxKind.PartiallyEmittedExpression) as PartiallyEmittedExpression;
-            node.expression = expression;
+            const node = createBaseNode<PartiallyEmittedExpression>(SyntaxKind.PartiallyEmittedExpression);
+            setChild(node, node.expression = expression);
             node.original = original;
             setTextRange(node, original);
-            return node;
+            return finishNode(node);
         }
 
+        // @api
         function updatePartiallyEmittedExpression(node: PartiallyEmittedExpression, expression: Expression) {
-            if (node.expression !== expression) {
-                return updateNode(createPartiallyEmittedExpression(expression, node.original), node);
-            }
-            return node;
+            return node.expression !== expression
+                ? updateNode(createPartiallyEmittedExpression(expression, node.original), node)
+                : reuseNode(node);
         }
 
         function flattenCommaElements(node: Expression): Expression | readonly Expression[] {
@@ -3365,48 +3958,54 @@ namespace ts {
             return node;
         }
 
-        function createCommaList(elements: readonly Expression[]) {
-            const node = createNode(SyntaxKind.CommaListExpression) as CommaListExpression;
-            node.elements = createNodeArray(sameFlatMap(elements, flattenCommaElements));
-            return node;
+        // @api
+        function createCommaListExpression(elements: readonly Expression[]) {
+            const node = createBaseNode<CommaListExpression>(SyntaxKind.CommaListExpression);
+            setChildren(node, node.elements = createNodeArray(sameFlatMap(elements, flattenCommaElements)));
+            return finishNode(node);
         }
 
-        function updateCommaList(node: CommaListExpression, elements: readonly Expression[]) {
+        // @api
+        function updateCommaListExpression(node: CommaListExpression, elements: readonly Expression[]) {
             return node.elements !== elements
-                ? updateNode(createCommaList(elements), node)
-                : node;
+                ? updateNode(createCommaListExpression(elements), node)
+                : reuseNode(node);
         }
 
+        // @api
         function createBundle(sourceFiles: readonly SourceFile[], prepends: readonly (UnparsedSource | InputFiles)[] = emptyArray) {
-            const node = createNode(SyntaxKind.Bundle) as Bundle;
+            const node = createBaseNode<Bundle>(SyntaxKind.Bundle);
             node.prepends = prepends;
             node.sourceFiles = sourceFiles;
-            return node;
+            return finishNode(node);
         }
 
+        // @api
         function updateBundle(node: Bundle, sourceFiles: readonly SourceFile[], prepends: readonly (UnparsedSource | InputFiles)[] = emptyArray) {
-            if (node.sourceFiles !== sourceFiles || node.prepends !== prepends) {
-                return createBundle(sourceFiles, prepends);
-            }
-            return node;
+            return node.sourceFiles !== sourceFiles
+                || node.prepends !== prepends
+                ? updateNode(createBundle(sourceFiles, prepends), node)
+                : reuseNode(node);
         }
 
         //
         // Compound Nodes
         //
 
+        // TODO(rbuckton): Consider removing these from NodeFactory and putting them somewhere else.
+
         function createImmediatelyInvokedFunctionExpression(statements: readonly Statement[]): CallExpression;
         function createImmediatelyInvokedFunctionExpression(statements: readonly Statement[], param: ParameterDeclaration, paramValue: Expression): CallExpression;
         function createImmediatelyInvokedFunctionExpression(statements: readonly Statement[], param?: ParameterDeclaration, paramValue?: Expression) {
-            return factory.createCall(
-                factory.createFunctionExpression(
+            return createCallExpression(
+                createFunctionExpression(
                     /*modifiers*/ undefined,
                     /*asteriskToken*/ undefined,
                     /*name*/ undefined,
                     /*typeParameters*/ undefined,
                     /*parameters*/ param ? [param] : [],
                     /*type*/ undefined,
-                    factory.createBlock(statements, /*multiLine*/ true)
+                    createBlock(statements, /*multiLine*/ true)
                 ),
                 /*typeArguments*/ undefined,
                 /*argumentsArray*/ paramValue ? [paramValue] : []
@@ -3416,14 +4015,14 @@ namespace ts {
         function createImmediatelyInvokedArrowFunction(statements: readonly Statement[]): CallExpression;
         function createImmediatelyInvokedArrowFunction(statements: readonly Statement[], param: ParameterDeclaration, paramValue: Expression): CallExpression;
         function createImmediatelyInvokedArrowFunction(statements: readonly Statement[], param?: ParameterDeclaration, paramValue?: Expression) {
-            return factory.createCall(
-                factory.createArrowFunction(
+            return createCallExpression(
+                createArrowFunction(
                     /*modifiers*/ undefined,
                     /*typeParameters*/ undefined,
                     /*parameters*/ param ? [param] : [],
                     /*type*/ undefined,
                     /*equalsGreaterThanToken*/ undefined,
-                    factory.createBlock(statements, /*multiLine*/ true)
+                    createBlock(statements, /*multiLine*/ true)
                 ),
                 /*typeArguments*/ undefined,
                 /*argumentsArray*/ paramValue ? [paramValue] : []
@@ -3432,57 +4031,57 @@ namespace ts {
 
 
         function createComma(left: Expression, right: Expression) {
-            return factory.createBinary(left, SyntaxKind.CommaToken, right);
+            return createBinaryExpression(left, SyntaxKind.CommaToken, right);
         }
 
         function createLessThan(left: Expression, right: Expression) {
-            return factory.createBinary(left, SyntaxKind.LessThanToken, right);
+            return createBinaryExpression(left, SyntaxKind.LessThanToken, right);
         }
 
         function createAssignment(left: ObjectLiteralExpression | ArrayLiteralExpression, right: Expression): DestructuringAssignment;
         function createAssignment(left: Expression, right: Expression): BinaryExpression;
         function createAssignment(left: Expression, right: Expression) {
-            return factory.createBinary(left, SyntaxKind.EqualsToken, right);
+            return createBinaryExpression(left, SyntaxKind.EqualsToken, right);
         }
 
         function createStrictEquality(left: Expression, right: Expression) {
-            return factory.createBinary(left, SyntaxKind.EqualsEqualsEqualsToken, right);
+            return createBinaryExpression(left, SyntaxKind.EqualsEqualsEqualsToken, right);
         }
 
         function createStrictInequality(left: Expression, right: Expression) {
-            return factory.createBinary(left, SyntaxKind.ExclamationEqualsEqualsToken, right);
+            return createBinaryExpression(left, SyntaxKind.ExclamationEqualsEqualsToken, right);
         }
 
         function createAdd(left: Expression, right: Expression) {
-            return factory.createBinary(left, SyntaxKind.PlusToken, right);
+            return createBinaryExpression(left, SyntaxKind.PlusToken, right);
         }
 
         function createSubtract(left: Expression, right: Expression) {
-            return factory.createBinary(left, SyntaxKind.MinusToken, right);
+            return createBinaryExpression(left, SyntaxKind.MinusToken, right);
         }
 
         function createPostfixIncrement(operand: Expression) {
-            return factory.createPostfix(operand, SyntaxKind.PlusPlusToken);
+            return createPostfixUnaryExpression(operand, SyntaxKind.PlusPlusToken);
         }
 
         function createLogicalAnd(left: Expression, right: Expression) {
-            return factory.createBinary(left, SyntaxKind.AmpersandAmpersandToken, right);
+            return createBinaryExpression(left, SyntaxKind.AmpersandAmpersandToken, right);
         }
 
         function createLogicalOr(left: Expression, right: Expression) {
-            return factory.createBinary(left, SyntaxKind.BarBarToken, right);
+            return createBinaryExpression(left, SyntaxKind.BarBarToken, right);
         }
 
         function createLogicalNot(operand: Expression) {
-            return factory.createPrefix(SyntaxKind.ExclamationToken, operand);
+            return createPrefixUnaryExpression(SyntaxKind.ExclamationToken, operand);
         }
 
         function createVoidZero() {
-            return factory.createVoid(factory.createNumericLiteral("0"));
+            return createVoidExpression(createNumericLiteral("0"));
         }
 
         function createExportDefault(expression: Expression) {
-            return factory.createExportAssignment(
+            return createExportAssignment(
                 /*decorators*/ undefined,
                 /*modifiers*/ undefined,
                 /*isExportEquals*/ false,
@@ -3490,11 +4089,11 @@ namespace ts {
         }
 
         function createExternalModuleExport(exportName: Identifier) {
-            return factory.createExportDeclaration(
+            return createExportDeclaration(
                 /*decorators*/ undefined,
                 /*modifiers*/ undefined,
-                factory.createNamedExports([
-                    factory.createExportSpecifier(/*propertyName*/ undefined, exportName)
+                createNamedExports([
+                    createExportSpecifier(/*propertyName*/ undefined, exportName)
                 ])
             );
         }
@@ -3506,12 +4105,12 @@ namespace ts {
         function createTypeCheck(value: Expression, tag: TypeOfTag) {
             return tag === "undefined"
                 ? createStrictEquality(value, createVoidZero())
-                : createStrictEquality(createTypeOf(value), createStringLiteral(tag));
+                : createStrictEquality(createTypeOfExpression(value), createStringLiteral(tag));
         }
 
         function createMethodCall(object: Expression, methodName: string | Identifier, argumentsList: readonly Expression[]) {
-            return createCall(
-                createPropertyAccess(object, asName(methodName)),
+            return createCallExpression(
+                createPropertyAccessExpression(object, asName(methodName)),
                 /*typeArguments*/ undefined,
                 argumentsList
             );
@@ -3565,12 +4164,12 @@ namespace ts {
             isAccessor = tryAddPropertyAssignment(properties, "set", attributes.set) || isAccessor;
 
             Debug.assert(!(isData && isAccessor), "A PropertyDescriptor may not be both an accessor descriptor and a data descriptor.");
-            return createObjectLiteral(properties, !singleLine);
+            return createObjectLiteralExpression(properties, !singleLine);
         }
 
         function updateOuterExpression(outerExpression: OuterExpression, expression: Expression) {
             switch (outerExpression.kind) {
-                case SyntaxKind.ParenthesizedExpression: return updateParen(outerExpression, expression);
+                case SyntaxKind.ParenthesizedExpression: return updateParenthesizedExpression(outerExpression, expression);
                 case SyntaxKind.TypeAssertionExpression: return updateTypeAssertion(outerExpression, outerExpression.type, expression);
                 case SyntaxKind.AsExpression: return updateAsExpression(outerExpression, expression, outerExpression.type);
                 case SyntaxKind.NonNullExpression: return updateNonNullExpression(outerExpression, expression);
@@ -3615,7 +4214,7 @@ namespace ts {
             if (!outermostLabeledStatement) {
                 return node;
             }
-            const updated = updateLabel(
+            const updated = updateLabeledStatement(
                 outermostLabeledStatement,
                 outermostLabeledStatement.label,
                 outermostLabeledStatement.statement.kind === SyntaxKind.LabeledStatement
@@ -3656,11 +4255,11 @@ namespace ts {
             let thisArg: Expression;
             let target: LeftHandSideExpression;
             if (isSuperProperty(callee)) {
-                thisArg = createThis();
+                thisArg = createThisExpression();
                 target = callee;
             }
             else if (callee.kind === SyntaxKind.SuperKeyword) {
-                thisArg = createThis();
+                thisArg = createThisExpression();
                 target = languageVersion !== undefined && languageVersion < ScriptTarget.ES2015
                     ? setTextRange(createIdentifier("_super"), callee)
                     : <PrimaryExpression>callee;
@@ -3673,7 +4272,7 @@ namespace ts {
                 if (shouldBeCapturedInTempVariable(callee.expression, cacheIdentifiers)) {
                     // for `a.b()` target is `(_a = a).b` and thisArg is `_a`
                     thisArg = createTempVariable(recordTempVariable);
-                    target = createPropertyAccess(
+                    target = createPropertyAccessExpression(
                         setTextRange(
                             createAssignment(
                                 thisArg,
@@ -3694,7 +4293,7 @@ namespace ts {
                 if (shouldBeCapturedInTempVariable(callee.expression, cacheIdentifiers)) {
                     // for `a[b]()` target is `(_a = a)[b]` and thisArg is `_a`
                     thisArg = createTempVariable(recordTempVariable);
-                    target = createElementAccess(
+                    target = createElementAccessExpression(
                         setTextRange(
                             createAssignment(
                                 thisArg,
@@ -3724,7 +4323,7 @@ namespace ts {
             // Avoid deeply nested comma expressions as traversing them during emit can result in "Maximum call
             // stack size exceeded" errors.
             return expressions.length > 10
-                ? createCommaList(expressions)
+                ? createCommaListExpression(expressions)
                 : reduceLeft(expressions, createComma)!;
         }
 
@@ -3804,7 +4403,7 @@ namespace ts {
          * @param allowSourceMaps A value indicating whether source maps may be emitted for the name.
          */
         function getNamespaceMemberName(ns: Identifier, name: Identifier, allowComments?: boolean, allowSourceMaps?: boolean): PropertyAccessExpression {
-            const qualifiedName = createPropertyAccess(ns, nodeIsSynthesized(name) ? name : getSynthesizedClone(name));
+            const qualifiedName = createPropertyAccessExpression(ns, nodeIsSynthesized(name) ? name : getSynthesizedClone(name));
             setTextRange(qualifiedName, name);
             let emitFlags: EmitFlags = 0;
             if (!allowSourceMaps) emitFlags |= EmitFlags.NoSourceMap;
@@ -3957,7 +4556,60 @@ namespace ts {
         function asEmbeddedStatement<T extends Node>(statement: T | undefined): T | EmptyStatement | undefined {
             return statement && isNotEmittedStatement(statement) ? setTextRange(setOriginalNode(createEmptyStatement(), statement), statement) : statement;
         }
+
+        // tslint:disable-next-line no-empty
+        function setChildWithoutTreeState(_parent: Node, _child: Node | undefined): void {
+        }
+
+        function setChildWithTreeState(parent: Node, child: Node | undefined): void {
+            if (child) {
+                treeStateObserver.onSetChild(parent, child);
+                setChildWithoutTreeState(parent, child);
+            }
+        }
+
+        // tslint:disable-next-line no-empty
+        function setChildrenWithoutTreeState(_parent: Node, _children: NodeArray<Node> | undefined): void {
+        }
+
+        function setChildrenWithTreeState(parent: Node, children: NodeArray<Node> | undefined): void {
+            if (children) {
+                treeStateObserver.onSetChildren(parent, children);
+                setChildrenWithoutTreeState(parent, children);
+            }
+        }
+
+        function finishNodeWithoutTreeState<T extends Node>(node: T) {
+            return node;
+        }
+
+        function finishNodeWithTreeState<T extends Node>(node: T) {
+            treeStateObserver.onFinishNode(node);
+            return finishNodeWithoutTreeState(node);
+        }
+
+        function updateNodeWithTreeState<T extends Node>(updated: T, original: T) {
+            treeStateObserver.onUpdateNode(updated, original);
+            return ts.updateNode(updated, original); // tslint:disable-line no-unnecessary-qualifier
+        }
+
+        function reuseNodeWithTreeState<T extends Node>(node: T) {
+            treeStateObserver.onReuseNode(node);
+            return node;
+        }
     }
+
+    // similar to `ts.noop`, but used to avoid deoptimizations in v8 due to argument length mismatches
+    function noop2(_a: unknown, _b: unknown) { } // tslint:disable-line no-empty
+
+    /* @internal */
+    export const nullTreeStateObserver: TreeStateObserver = {
+        onSetChild: noop2,
+        onSetChildren: noop2,
+        onFinishNode: noop,
+        onUpdateNode: noop2,
+        onReuseNode: noop
+    };
 
     /* @internal */
     export function createSynthesizedNode(kind: SyntaxKind): Node {
@@ -4375,11 +5027,35 @@ namespace ts {
 
     // Utilities
 
+    export function isUnprocessedSourceFile(node: SourceFile) {
+        return !node.preprocessInfo || node === node.preprocessInfo.unprocessed;
+    }
+
+    export function isProcessedSourceFile(node: SourceFile) {
+        return !!node.preprocessInfo && node !== node.preprocessInfo.unprocessed;
+    }
+
+    /**
+     * If the source file has been preprocessed due to a plugin, gets the unprocessed
+     * source file. Otherwise, returns the source file.
+     */
+    export function getUnprocessedSourceFile(node: SourceFile) {
+        return node.preprocessInfo ? node.preprocessInfo.unprocessed : node;
+    }
+
+    /**
+     * If the source file has been preprocessed due to a plugin, gets the processed
+     * source file. Otherwise, returns the source file.
+     */
+    export function getProcessedSourceFile(node: SourceFile) {
+        return node.preprocessInfo ? node.preprocessInfo.processed : node;
+    }
+
     /**
      * Clears any EmitNode entries from parse-tree nodes.
      * @param sourceFile A source file.
      */
-    export function disposeEmitNodes(sourceFile: SourceFile) {
+    export function disposeEmitNodes(sourceFile: SourceFile | undefined) {
         // During transformation we may need to annotate a parse tree node with transient
         // transformation properties. As parse tree nodes live longer than transformation
         // nodes, we need to make sure we reclaim any memory allocated for custom ranges
@@ -4411,7 +5087,7 @@ namespace ts {
                     return node.emitNode = { annotatedNodes: [node] } as EmitNode;
                 }
 
-                const sourceFile = getSourceFileOfNode(getParseTreeNode(getSourceFileOfNode(node)));
+                const sourceFile = getSourceFileOfNode(getParseTreeNode(getSourceFileOfNode(node))) || Debug.fail("Could not determine parsed source file.");
                 getOrCreateEmitNode(sourceFile).annotatedNodes!.push(node);
             }
 
@@ -4691,7 +5367,11 @@ namespace ts {
         if (sourceMapRange) destEmitNode.sourceMapRange = sourceMapRange;
         if (tokenSourceMapRanges) destEmitNode.tokenSourceMapRanges = mergeTokenSourceMapRanges(tokenSourceMapRanges, destEmitNode.tokenSourceMapRanges!);
         if (constantValue !== undefined) destEmitNode.constantValue = constantValue;
-        if (helpers) destEmitNode.helpers = addRange(destEmitNode.helpers, helpers);
+        if (helpers) {
+            for (const helper of helpers) {
+                destEmitNode.helpers = appendIfUnique(destEmitNode.helpers, helper);
+            }
+        }
         if (startsOnNewLine !== undefined) destEmitNode.startsOnNewLine = startsOnNewLine;
         return destEmitNode;
     }
@@ -4707,8 +5387,9 @@ namespace ts {
 
 /* @internal */
 namespace ts {
-    export const syntheticNodeFactory = createNodeFactory(createSynthesizedNode, createParenthesizerRules, createNodeConverters);
-    export const syntheticNodeConverters = syntheticNodeFactory.getConverters();
+
+    export const factory = createNodeFactory(createSynthesizedNode, createParenthesizerRules, createNodeConverters, nullTreeStateObserver);
+    export const nodeConverters = factory.getConverters();
 
     export function createNodeConverters(factory: NodeFactory): NodeConverters {
         return {
@@ -4876,7 +5557,7 @@ namespace ts {
         const react = parseNodeFactory.createIdentifier(reactNamespace || "React");
         // Set the parent that is in parse tree
         // this makes sure that parent chain is intact for checker to traverse complete scope tree
-        react.parent = getParseTreeNode(parent);
+        react.parent = getParseTreeNode(parent)!;
         return react;
     }
 

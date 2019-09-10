@@ -26,8 +26,8 @@
                 "end": 100,
                 "modifierFlagsCache": 0,
                 "transformFlags": 0,
-                "jsDocPropertyTags": [
-                    {
+                "jsDocPropertyTags": {
+                    "0": {
                         "kind": "JSDocPropertyTag",
                         "pos": 47,
                         "end": 74,
@@ -66,7 +66,7 @@
                         "isNameFirst": false,
                         "isBracketed": false
                     },
-                    {
+                    "1": {
                         "kind": "JSDocPropertyTag",
                         "pos": 74,
                         "end": 100,
@@ -104,8 +104,11 @@
                         },
                         "isNameFirst": false,
                         "isBracketed": false
-                    }
-                ]
+                    },
+                    "length": 2,
+                    "pos": -1,
+                    "end": -1
+                }
             },
             "fullName": {
                 "kind": "Identifier",

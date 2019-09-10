@@ -293,7 +293,6 @@ namespace ts {
         const Signature = objectAllocator.getSignatureConstructor();
         // tslint:enable variable-name
 
-        const factory = syntheticNodeFactory;
         let typeCount = 0;
         let symbolCount = 0;
         let enumCount = 0;
@@ -356,8 +355,8 @@ namespace ts {
             getMergedSymbol,
             getDiagnostics,
             getGlobalDiagnostics,
-            getTypeOfSymbolAtLocation: (symbol, location) => {
-                location = getParseTreeNode(location);
+            getTypeOfSymbolAtLocation: (symbol, locationIn) => {
+                const location = getParseTreeNode(locationIn);
                 return location ? getTypeOfSymbolAtLocation(symbol, location) : errorType;
             },
             getSymbolsOfParameterPropertyDeclaration: (parameterIn, parameterName) => {
@@ -392,16 +391,16 @@ namespace ts {
             symbolToTypeParameterDeclarations: nodeBuilder.symbolToTypeParameterDeclarations,
             symbolToParameterDeclaration: nodeBuilder.symbolToParameterDeclaration as (symbol: Symbol, enclosingDeclaration?: Node, flags?: NodeBuilderFlags) => ParameterDeclaration, // TODO: GH#18217
             typeParameterToDeclaration: nodeBuilder.typeParameterToDeclaration as (parameter: TypeParameter, enclosingDeclaration?: Node, flags?: NodeBuilderFlags) => TypeParameterDeclaration, // TODO: GH#18217
-            getSymbolsInScope: (location, meaning) => {
-                location = getParseTreeNode(location);
+            getSymbolsInScope: (locationIn, meaning) => {
+                const location = getParseTreeNode(locationIn);
                 return location ? getSymbolsInScope(location, meaning) : [];
             },
-            getSymbolAtLocation: node => {
-                node = getParseTreeNode(node);
+            getSymbolAtLocation: nodeIn => {
+                const node = getParseTreeNode(nodeIn);
                 return node ? getSymbolAtLocation(node) : undefined;
             },
-            getShorthandAssignmentValueSymbol: node => {
-                node = getParseTreeNode(node);
+            getShorthandAssignmentValueSymbol: nodeIn => {
+                const node = getParseTreeNode(nodeIn);
                 return node ? getShorthandAssignmentValueSymbol(node) : undefined;
             },
             getExportSpecifierLocalTargetSymbol: nodeIn => {
@@ -411,8 +410,8 @@ namespace ts {
             getExportSymbolOfSymbol(symbol) {
                 return getMergedSymbol(symbol.exportSymbol || symbol);
             },
-            getTypeAtLocation: node => {
-                node = getParseTreeNode(node);
+            getTypeAtLocation: nodeIn => {
+                const node = getParseTreeNode(nodeIn);
                 return node ? getTypeOfNode(node) : errorType;
             },
             getTypeOfAssignmentPattern: nodeIn => {
@@ -489,9 +488,9 @@ namespace ts {
                 const declaration = getParseTreeNode(declarationIn, isFunctionLike);
                 return declaration ? getSignatureFromDeclaration(declaration) : undefined;
             },
-            isImplementationOfOverload: node => {
-                const parsed = getParseTreeNode(node, isFunctionLike);
-                return parsed ? isImplementationOfOverload(parsed) : undefined;
+            isImplementationOfOverload: nodeIn => {
+                const node = getParseTreeNode(nodeIn, isFunctionLike);
+                return node ? isImplementationOfOverload(node) : undefined;
             },
             getImmediateAliasedSymbol,
             getAliasedSymbol: resolveAlias,
@@ -562,15 +561,16 @@ namespace ts {
             getAccessibleSymbolChain,
             getTypePredicateOfSignature: getTypePredicateOfSignature as (signature: Signature) => TypePredicate, // TODO: GH#18217
             resolveExternalModuleSymbol,
-            tryGetThisTypeAt: (node, includeGlobalThis) => {
-                node = getParseTreeNode(node);
+            tryGetThisTypeAt: (nodeIn, includeGlobalThis) => {
+                const node = getParseTreeNode(nodeIn);
                 return node && tryGetThisTypeAt(node, includeGlobalThis);
             },
             getTypeArgumentConstraint: nodeIn => {
                 const node = getParseTreeNode(nodeIn, isTypeNode);
                 return node && getTypeArgumentConstraint(node);
             },
-            getSuggestionDiagnostics: (file, ct) => {
+            getSuggestionDiagnostics: (fileIn, ct) => {
+                const file = getParseTreeNode(fileIn, isSourceFile) || Debug.fail("Could not determine parsed source file.");
                 if (skipTypeChecking(file, compilerOptions)) {
                     return emptyArray;
                 }
@@ -3739,7 +3739,7 @@ namespace ts {
                     }
                     const typeNodes = mapToTypeNodes(types, context, /*isBareList*/ true);
                     if (typeNodes && typeNodes.length > 0) {
-                        const unionOrIntersectionTypeNode = factory.createUnionOrIntersectionTypeNode(type.flags & TypeFlags.Union ? SyntaxKind.UnionType : SyntaxKind.IntersectionType, typeNodes);
+                        const unionOrIntersectionTypeNode = type.flags & TypeFlags.Union ? factory.createUnionTypeNode(typeNodes) : factory.createIntersectionTypeNode(typeNodes);
                         return unionOrIntersectionTypeNode;
                     }
                     else {
@@ -4247,7 +4247,11 @@ namespace ts {
                     returnTypeNode = factory.createKeywordTypeNode(SyntaxKind.AnyKeyword);
                 }
                 context.approximateLength += 3; // Usually a signature contributes a few more characters than this, but 3 is the minimum
-                return factory.createSignatureDeclaration(kind, typeParameters, parameters, returnTypeNode, typeArguments);
+                const node = factory.createSignatureDeclaration(kind, typeParameters, parameters, returnTypeNode);
+                if (typeArguments) {
+                    node.typeArguments = createNodeArray(typeArguments);
+                }
+                return node;
             }
 
             function typeParameterToDeclarationWithConstraint(type: TypeParameter, context: NodeBuilderContext, constraintNode: TypeNode | undefined): TypeParameterDeclaration {
@@ -4473,7 +4477,7 @@ namespace ts {
                     }
                     return getSourceFileOfNode(getNonAugmentationDeclaration(symbol)!).fileName; // A resolver may not be provided for baselines and errors - in those cases we use the fileName in full
                 }
-                const contextFile = getSourceFileOfNode(getOriginalNode(context.enclosingDeclaration));
+                const contextFile = getSourceFileOfNode(getParseTreeNode(context.enclosingDeclaration)) || Debug.fail("Could not determine parsed source file.");
                 const links = getSymbolLinks(symbol);
                 let specifier = links.specifierCache && links.specifierCache.get(contextFile.path);
                 if (!specifier) {
@@ -31920,19 +31924,19 @@ namespace ts {
                 getReferencedImportDeclaration,
                 getReferencedDeclarationWithCollidingName,
                 isDeclarationWithCollidingName,
-                isValueAliasDeclaration: node => {
-                    node = getParseTreeNode(node);
+                isValueAliasDeclaration: nodeIn => {
+                    const node = getParseTreeNode(nodeIn);
                     // Synthesized nodes are always treated like values.
                     return node ? isValueAliasDeclaration(node) : true;
                 },
                 hasGlobalName,
-                isReferencedAliasDeclaration: (node, checkChildren?) => {
-                    node = getParseTreeNode(node);
+                isReferencedAliasDeclaration: (nodeIn, checkChildren?) => {
+                    const node = getParseTreeNode(nodeIn);
                     // Synthesized nodes are always treated as referenced.
                     return node ? isReferencedAliasDeclaration(node, checkChildren) : true;
                 },
-                getNodeCheckFlags: node => {
-                    node = getParseTreeNode(node);
+                getNodeCheckFlags: nodeIn => {
+                    const node = getParseTreeNode(nodeIn);
                     return node ? getNodeCheckFlags(node) : 0;
                 },
                 isTopLevelValueImportEqualsWithEntityName,

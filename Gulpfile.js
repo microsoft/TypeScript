@@ -124,7 +124,7 @@ const buildApi = (() => {
         .pipe(newer("built/local/api.d.ts"))
         .pipe(sourcemaps.init({ loadMaps: true }))
         .pipe(transform(content => content.replace(/^(\s*)(export )?const enum (\S+) {(\s*)$/gm, "$1$2enum $3 {$4")))
-        .pipe(transform(content => `${content}\nexport = typeof ts;\n`))
+        .pipe(transform(content => `${content}\nexport = ts;\n`))
         .pipe(prependFile(copyright))
         .pipe(rename("api.d.ts"))
         .pipe(dest("built/local"));

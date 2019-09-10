@@ -1301,17 +1301,17 @@ namespace ts {
     }
 
     export function makeImport(defaultImport: Identifier | undefined, namedImports: ReadonlyArray<ImportSpecifier> | undefined, moduleSpecifier: string | Expression, quotePreference: QuotePreference): ImportDeclaration {
-        return createImportDeclaration(
+        return factory.createImportDeclaration(
             /*decorators*/ undefined,
             /*modifiers*/ undefined,
             defaultImport || namedImports
-                ? createImportClause(defaultImport, namedImports && namedImports.length ? createNamedImports(namedImports) : undefined)
+                ? factory.createImportClause(defaultImport, namedImports && namedImports.length ? factory.createNamedImports(namedImports) : undefined)
                 : undefined,
             typeof moduleSpecifier === "string" ? makeStringLiteral(moduleSpecifier, quotePreference) : moduleSpecifier);
     }
 
     export function makeStringLiteral(text: string, quotePreference: QuotePreference): StringLiteral {
-        return createLiteral(text, quotePreference === QuotePreference.Single);
+        return factory.createStringLiteral(text, quotePreference === QuotePreference.Single);
     }
 
     export const enum QuotePreference { Single, Double }
@@ -1711,7 +1711,7 @@ namespace ts {
             const renameInfo = symbol && renameMap.get(String(getSymbolId(symbol)));
 
             if (renameInfo && renameInfo.text !== (node.name || node.propertyName).getText()) {
-                clone = createBindingElement(
+                clone = factory.createBindingElement(
                     node.dotDotDotToken,
                     node.propertyName || node.name,
                     renameInfo,
@@ -1723,7 +1723,7 @@ namespace ts {
             const renameInfo = symbol && renameMap.get(String(getSymbolId(symbol)));
 
             if (renameInfo) {
-                clone = createIdentifier(renameInfo.text);
+                clone = factory.createIdentifier(renameInfo.text);
             }
         }
 

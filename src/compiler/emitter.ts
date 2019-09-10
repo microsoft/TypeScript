@@ -28,7 +28,7 @@ namespace ts {
         if (options.outFile || options.out) {
             const prepends = host.getPrependNodes();
             if (sourceFiles.length || prepends.length) {
-                const bundle = syntheticNodeFactory.createBundle(sourceFiles, prepends);
+                const bundle = factory.createBundle(sourceFiles, prepends);
                 const result = action(getOutputPathsFor(bundle, host, emitOnlyDtsFiles), bundle);
                 if (result) {
                     return result;
@@ -312,7 +312,7 @@ namespace ts {
                 return;
             }
             // Transform the source files
-            const transform = transformNodes(resolver, host, syntheticNodeFactory, compilerOptions, [sourceFileOrBundle], scriptTransformers, /*allowDtsFiles*/ false);
+            const transform = transformNodes(resolver, host, factory, compilerOptions, [sourceFileOrBundle], scriptTransformers, /*allowDtsFiles*/ false);
 
             const printerOptions: PrinterOptions = {
                 removeComments: compilerOptions.removeComments,
@@ -357,13 +357,13 @@ namespace ts {
             const sourceFiles = isSourceFile(sourceFileOrBundle) ? [sourceFileOrBundle] : sourceFileOrBundle.sourceFiles;
             // Setup and perform the transformation to retrieve declarations from the input files
             const nonJsFiles = filter(sourceFiles, isSourceFileNotJS);
-            const inputListOrBundle = (compilerOptions.outFile || compilerOptions.out) ? [syntheticNodeFactory.createBundle(nonJsFiles, !isSourceFile(sourceFileOrBundle) ? sourceFileOrBundle.prepends : undefined)] : nonJsFiles;
+            const inputListOrBundle = (compilerOptions.outFile || compilerOptions.out) ? [factory.createBundle(nonJsFiles, !isSourceFile(sourceFileOrBundle) ? sourceFileOrBundle.prepends : undefined)] : nonJsFiles;
             if (emitOnlyDtsFiles && !getEmitDeclarations(compilerOptions)) {
                 // Checker wont collect the linked aliases since thats only done when declaration is enabled.
                 // Do that here when emitting only dts files
                 nonJsFiles.forEach(collectLinkedAliases);
             }
-            const declarationTransform = transformNodes(resolver, host, syntheticNodeFactory, compilerOptions, inputListOrBundle, declarationTransformers, /*allowDtsFiles*/ false);
+            const declarationTransform = transformNodes(resolver, host, factory, compilerOptions, inputListOrBundle, declarationTransformers, /*allowDtsFiles*/ false);
             if (length(declarationTransform.diagnostics)) {
                 for (const diagnostic of declarationTransform.diagnostics!) {
                     emitterDiagnostics.add(diagnostic);
@@ -2183,7 +2183,7 @@ namespace ts {
             const dotRangeStart = skipTrivia(currentSourceFile!.text, dotRangeFirstCommentStart);
             const dotRangeEnd = dotRangeStart + 1;
             if (!(getEmitFlags(node) & EmitFlags.NoIndentation)) {
-                const dotToken = syntheticNodeFactory.createToken(SyntaxKind.DotToken);
+                const dotToken = factory.createToken(SyntaxKind.DotToken);
                 dotToken.pos = node.expression.end;
                 dotToken.end = dotRangeEnd;
                 indentBeforeDot = needsIndentation(node, node.expression, dotToken);

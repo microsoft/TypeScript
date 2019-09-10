@@ -331,7 +331,7 @@ namespace ts.textChanges {
 
         public insertModifierBefore(sourceFile: SourceFile, modifier: SyntaxKind, before: Node): void {
             const pos = before.getStart(sourceFile);
-            this.insertNodeAt(sourceFile, pos, createToken(modifier), { suffix: " " });
+            this.insertNodeAt(sourceFile, pos, factory.createToken(modifier), { suffix: " " });
         }
 
         public insertLastModifierBefore(sourceFile: SourceFile, modifier: SyntaxKind, before: Node): void {
@@ -341,7 +341,7 @@ namespace ts.textChanges {
             }
 
             const pos = before.modifiers.end;
-            this.insertNodeAt(sourceFile, pos, createToken(modifier), { prefix: " " });
+            this.insertNodeAt(sourceFile, pos, factory.createToken(modifier), { prefix: " " });
         }
 
         public insertCommentBeforeLine(sourceFile: SourceFile, lineNumber: number, position: number, commentText: string): void {
@@ -449,7 +449,7 @@ namespace ts.textChanges {
         }
 
         private replaceConstructorBody(sourceFile: SourceFile, ctr: ConstructorDeclaration, statements: ReadonlyArray<Statement>): void {
-            this.replaceNode(sourceFile, ctr.body!, createBlock(statements, /*multiLine*/ true));
+            this.replaceNode(sourceFile, ctr.body!, factory.createBlock(statements, /*multiLine*/ true));
         }
 
         public insertNodeAtEndOfScope(sourceFile: SourceFile, scope: Node, newNode: Node): void {
@@ -515,7 +515,7 @@ namespace ts.textChanges {
                 // check if previous statement ends with semicolon
                 // if not - insert semicolon to preserve the code from changing the meaning due to ASI
                 if (sourceFile.text.charCodeAt(after.end - 1) !== CharacterCodes.semicolon) {
-                    this.replaceRange(sourceFile, createRange(after.end), createToken(SyntaxKind.SemicolonToken));
+                    this.replaceRange(sourceFile, createRange(after.end), factory.createToken(SyntaxKind.SemicolonToken));
                 }
             }
             const endPosition = getAdjustedEndPosition(sourceFile, after, {});
@@ -562,25 +562,25 @@ namespace ts.textChanges {
                 const lparen = findChildOfKind(node, SyntaxKind.OpenParenToken, sourceFile);
                 if (lparen) {
                     // `() => {}` --> `function f() {}`
-                    this.insertNodesAt(sourceFile, lparen.getStart(sourceFile), [createToken(SyntaxKind.FunctionKeyword), createIdentifier(name)], { joiner: " " });
+                    this.insertNodesAt(sourceFile, lparen.getStart(sourceFile), [factory.createToken(SyntaxKind.FunctionKeyword), factory.createIdentifier(name)], { joiner: " " });
                     deleteNode(this, sourceFile, arrow);
                 }
                 else {
                     // `x => {}` -> `function f(x) {}`
                     this.insertText(sourceFile, first(node.parameters).getStart(sourceFile), `function ${name}(`);
                     // Replacing full range of arrow to get rid of the leading space -- replace ` =>` with `)`
-                    this.replaceRange(sourceFile, arrow, createToken(SyntaxKind.CloseParenToken));
+                    this.replaceRange(sourceFile, arrow, factory.createToken(SyntaxKind.CloseParenToken));
                 }
 
                 if (node.body.kind !== SyntaxKind.Block) {
                     // `() => 0` => `function f() { return 0; }`
-                    this.insertNodesAt(sourceFile, node.body.getStart(sourceFile), [createToken(SyntaxKind.OpenBraceToken), createToken(SyntaxKind.ReturnKeyword)], { joiner: " ", suffix: " " });
-                    this.insertNodesAt(sourceFile, node.body.end, [createToken(SyntaxKind.SemicolonToken), createToken(SyntaxKind.CloseBraceToken)], { joiner: " " });
+                    this.insertNodesAt(sourceFile, node.body.getStart(sourceFile), [factory.createToken(SyntaxKind.OpenBraceToken), factory.createToken(SyntaxKind.ReturnKeyword)], { joiner: " ", suffix: " " });
+                    this.insertNodesAt(sourceFile, node.body.end, [factory.createToken(SyntaxKind.SemicolonToken), factory.createToken(SyntaxKind.CloseBraceToken)], { joiner: " " });
                 }
             }
             else {
                 const pos = findChildOfKind(node, node.kind === SyntaxKind.FunctionExpression ? SyntaxKind.FunctionKeyword : SyntaxKind.ClassKeyword, sourceFile)!.end;
-                this.insertNodeAt(sourceFile, pos, createIdentifier(name), { prefix: " " });
+                this.insertNodeAt(sourceFile, pos, factory.createIdentifier(name), { prefix: " " });
             }
         }
 
@@ -688,7 +688,7 @@ namespace ts.textChanges {
                 }
                 if (multilineList) {
                     // insert separator immediately following the 'after' node to preserve comments in trailing trivia
-                    this.replaceRange(sourceFile, createRange(end), createToken(separator));
+                    this.replaceRange(sourceFile, createRange(end), factory.createToken(separator));
                     // use the same indentation as 'after' item
                     const indentation = formatting.SmartIndenter.findFirstNonWhitespaceColumn(afterStartLinePosition, afterStart, sourceFile, this.formatContext.options);
                     // insert element before the line break on the line that contains 'after' element
@@ -705,7 +705,7 @@ namespace ts.textChanges {
         }
 
         public parenthesizeExpression(sourceFile: SourceFile, expression: Expression) {
-            this.replaceRange(sourceFile, rangeOfNode(expression), createParen(expression));
+            this.replaceRange(sourceFile, rangeOfNode(expression), factory.createParen(expression));
         }
 
         private finishClassesWithNodesInsertedAtStart(): void {
@@ -1250,7 +1250,7 @@ namespace ts.textChanges {
             switch (gp.kind) {
                 case SyntaxKind.ForOfStatement:
                 case SyntaxKind.ForInStatement:
-                    changes.replaceNode(sourceFile, node, createObjectLiteral());
+                    changes.replaceNode(sourceFile, node, factory.createObjectLiteral());
                     break;
 
                 case SyntaxKind.ForStatement:

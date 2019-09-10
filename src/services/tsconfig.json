@@ -94,7 +94,6 @@
         "services.ts",
         "breakpoints.ts",
         "transform.ts",
-        "shims.ts",
-        "factoryCompat.ts",
+        "shims.ts"
     ]
 }

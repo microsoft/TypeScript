@@ -21,6 +21,7 @@ namespace fakes {
         public readonly newLine: string;
         public readonly useCaseSensitiveFileNames: boolean;
         public exitCode: number | undefined;
+        public registerModule?: ts.System["registerModule"];
         public require?: ts.System["require"];
 
         private readonly _executingFilePath: string | undefined;
@@ -34,6 +35,7 @@ namespace fakes {
             this._env = env;
             if (useFakeLoader) {
                 const loader = new ModuleLoader(this.vfs);
+                this.registerModule = factory => loader.registerModule(factory);
                 this.require = (baseDir: string, moduleName: string): ts.RequireResult => {
                     try {
                         const modulePath = ts.resolveJSModule(moduleName, baseDir, this);
@@ -392,47 +394,73 @@ namespace fakes {
     type ModuleWrapper = (require: Function, module: any, exports: any, dirname: string, filename: string) => void;
 
     interface ModuleObject {
+        filename: string;
         exports: any;
     }
 
     class ModuleLoader {
         readonly vfs: vfs.FileSystem;
         private _modules = ts.createMap<ModuleObject>();
+        private _factories = ts.createMap<ts.ModuleFactory>();
+        private _linker?: (modulePath: string, moduleContent: string) => ModuleWrapper;
 
         constructor(vfs: vfs.FileSystem) {
             this.vfs = vfs;
+        }
+
+        registerModule(factory: ts.ModuleFactory) {
+            if (ts.isArray(factory.id)) {
+                for (const id of factory.id) {
+                    this._factories.set(id, factory);
+                }
+            }
+            else {
+                this._factories.set(factory.id, factory);
+            }
         }
 
         require(modulePath: string) {
             // this is a very basic loader that is only intended to load a single file for now.
             let module = this._modules.get(modulePath);
             if (!module) {
-                module = { exports: {} };
+                module = { filename: modulePath, exports: {} };
                 this._modules.set(modulePath, module);
                 const moduleContent = this.vfs.readFileSync(modulePath, "utf8");
                 const linkedModule = this.link(modulePath, moduleContent);
-                linkedModule(ts.notImplemented, module, module.exports, ts.getDirectoryPath(modulePath), modulePath);
+                const require = (request: string) => this.load(request, module!, /*isMain*/ false);
+                linkedModule(require, module, module.exports, ts.getDirectoryPath(modulePath), modulePath);
             }
             return module.exports;
         }
 
+        private load(request: string, parent: { filename: string }, isMain: boolean) {
+            const factory = this._factories.get(request);
+            if (factory) {
+                return factory.load(request, parent, isMain, ts.notImplemented);
+            }
+            return ts.notImplemented();
+        }
+
         private link(modulePath: string, moduleContent: string) {
-            let vm: typeof import("vm") | undefined;
-            try {
-                vm = require("vm");
+            if (!this._linker) {
+                let vm: typeof import("vm") | undefined;
+                try {
+                    vm = require("vm");
+                }
+                catch {
+                    // ignore
+                }
+                this._linker = vm ? (modulePath, moduleContent) => this.linkUsingNodeVM(vm!, modulePath, moduleContent) :
+                    (modulePath, moduleContent) => this.linkUsingIndirectEval(modulePath, moduleContent);
             }
-            catch {
-                // ignore
-            }
-            return vm ? this.linkUsingNodeVM(vm, modulePath, moduleContent) :
-                this.linkUsingFunction(modulePath, moduleContent);
+            return this._linker(modulePath, moduleContent);
         }
 
         private linkUsingNodeVM(vm: typeof import("vm"), modulePath: string, moduleContent: string): ModuleWrapper {
             return vm.runInThisContext(`(function (require, module, exports, __dirname, __filename) {${moduleContent}\n})`, { filename: modulePath });
         }
 
-        private linkUsingFunction(modulePath: string, moduleContent: string): ModuleWrapper {
+        private linkUsingIndirectEval(modulePath: string, moduleContent: string): ModuleWrapper {
             const indirectEval = eval;
             return indirectEval(`(function (require, module, exports, __dirname, __filename) {${moduleContent}\n//# sourceURL=${modulePath}\n})`);
         }

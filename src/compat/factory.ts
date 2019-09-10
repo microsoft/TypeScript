@@ -1,19 +1,15 @@
 namespace ts {
-    // NOTE: These exports are deprecated in favor of using a `NodeFactory` instance, and have been moved to services for backwards compatibility reasons.
+    // NOTE: These exports are deprecated in favor of using a `NodeFactory` instance and exist here purely for backwards compatibility reasons.
     export const {
         createNumericLiteral,
         createBigIntLiteral,
         createStringLiteral,
         createStringLiteralFromNode,
         createRegularExpressionLiteral,
-        createIdentifier,
-        /** @internal */ updateIdentifier,
-        createTempVariable,
         createLoopVariable,
         createUniqueName,
         createOptimisticUniqueName,
         createFileLevelUniqueName,
-        getGeneratedNameForNode,
         createToken,
         createSuper,
         createThis,
@@ -46,9 +42,7 @@ namespace ts {
         updateCallSignature,
         createConstructSignature,
         updateConstructSignature,
-        createIndexSignature,
         updateIndexSignature,
-        /*@internal*/ createSignatureDeclaration,
         createKeywordTypeNode,
         createTypePredicateNode,
         updateTypePredicateNode,
@@ -74,7 +68,6 @@ namespace ts {
         updateUnionTypeNode,
         createIntersectionTypeNode,
         updateIntersectionTypeNode,
-        createUnionOrIntersectionTypeNode,
         createConditionalTypeNode,
         updateConditionalTypeNode,
         createInferTypeNode,
@@ -303,17 +296,31 @@ namespace ts {
         createLogicalNot,
         createVoidZero,
         createExportDefault,
-        createExternalModuleExport,
-        /*@internal*/ recreateOuterExpressions
-    } = syntheticNodeFactory;
+        createExternalModuleExport
+    } = factory;
 
-    /* @internal */ export function createLiteral(value: string | StringLiteral | NoSubstitutionTemplateLiteral | NumericLiteral | Identifier, isSingleQuote: boolean): StringLiteral; // tslint:disable-line unified-signatures
+    export function createIdentifier(text: string) {
+        return factory.createIdentifier(text, /*typeArguments*/ undefined, /*originalKeywordKind*/ undefined);
+    }
+
+    export function createTempVariable(recordTempVariable: ((node: Identifier) => void) | undefined): Identifier {
+        return factory.createTempVariable(recordTempVariable, /*reserveInNestedScopes*/ undefined);
+    }
+
+    export function getGeneratedNameForNode(node: Node | undefined): Identifier {
+        return factory.getGeneratedNameForNode(node, /*flags*/ undefined);
+    }
+
+    export function createIndexSignature(decorators: readonly Decorator[] | undefined, modifiers: readonly Modifier[] | undefined, parameters: readonly ParameterDeclaration[], type: TypeNode): IndexSignatureDeclaration {
+        return factory.createIndexSignature(decorators, modifiers, parameters, type);
+    }
+
     /** If a node is passed, creates a string literal whose source text is read from a source node during emit. */
     export function createLiteral(value: string | StringLiteral | NoSubstitutionTemplateLiteral | NumericLiteral | Identifier): StringLiteral;
     export function createLiteral(value: number | PseudoBigInt): NumericLiteral;
     export function createLiteral(value: boolean): BooleanLiteral;
     export function createLiteral(value: string | number | PseudoBigInt | boolean): PrimaryExpression;
-    export function createLiteral(value: string | number | PseudoBigInt | boolean | StringLiteral | NoSubstitutionTemplateLiteral | NumericLiteral | Identifier, isSingleQuote?: boolean): PrimaryExpression {
+    export function createLiteral(value: string | number | PseudoBigInt | boolean | StringLiteral | NoSubstitutionTemplateLiteral | NumericLiteral | Identifier): PrimaryExpression {
         if (typeof value === "number") {
             return createNumericLiteral(value + "");
         }
@@ -324,9 +331,7 @@ namespace ts {
             return value ? createTrue() : createFalse();
         }
         if (isString(value)) {
-            const res = createStringLiteral(value);
-            if (isSingleQuote) res.singleQuote = true;
-            return res;
+            return createStringLiteral(value, /*isSingleQuote*/ undefined);
         }
         return createStringLiteralFromNode(value);
     }
@@ -338,7 +343,7 @@ namespace ts {
         name: string | PropertyName,
         questionToken: QuestionToken | undefined
     ) {
-        return syntheticNodeFactory.createMethodSignature(/*modifiers*/ undefined, name, questionToken, typeParameters, parameters, type);
+        return factory.createMethodSignature(/*modifiers*/ undefined, name, questionToken, typeParameters, parameters, type);
     }
 
     export function updateMethodSignature(
@@ -349,7 +354,7 @@ namespace ts {
         name: PropertyName,
         questionToken: QuestionToken | undefined
     ) {
-        return syntheticNodeFactory.updateMethodSignature(node, node.modifiers, name, questionToken, typeParameters, parameters, type);
+        return factory.updateMethodSignature(node, node.modifiers, name, questionToken, typeParameters, parameters, type);
     }
 
     export function createTypeOperatorNode(type: TypeNode): TypeOperatorNode;
@@ -363,14 +368,12 @@ namespace ts {
             type = operatorOrType as TypeNode;
             operator = SyntaxKind.KeyOfKeyword;
         }
-        return syntheticNodeFactory.createTypeOperatorNode(operator, type);
+        return factory.createTypeOperatorNode(operator, type);
     }
 
     /** @deprecated */
     export function createTaggedTemplate(tag: Expression, template: TemplateLiteral): TaggedTemplateExpression;
     export function createTaggedTemplate(tag: Expression, typeArguments: readonly TypeNode[] | undefined, template: TemplateLiteral): TaggedTemplateExpression;
-    /** @internal */
-    export function createTaggedTemplate(tag: Expression, typeArgumentsOrTemplate: readonly TypeNode[] | TemplateLiteral | undefined, template?: TemplateLiteral): TaggedTemplateExpression;
     export function createTaggedTemplate(tag: Expression, typeArgumentsOrTemplate: readonly TypeNode[] | TemplateLiteral | undefined, template?: TemplateLiteral) {
         let typeArguments: readonly TypeNode[] | undefined;
         if (template) {
@@ -379,7 +382,7 @@ namespace ts {
         else {
             template = typeArgumentsOrTemplate as TemplateLiteral;
         }
-        return syntheticNodeFactory.createTaggedTemplate(tag, typeArguments, template);
+        return factory.createTaggedTemplate(tag, typeArguments, template);
     }
 
     /** @deprecated */
@@ -393,7 +396,7 @@ namespace ts {
         else {
             template = typeArgumentsOrTemplate as TemplateLiteral;
         }
-        return syntheticNodeFactory.updateTaggedTemplate(node, tag, typeArguments, template);
+        return factory.updateTaggedTemplate(node, tag, typeArguments, template);
     }
 
     export function createConditional(condition: Expression, whenTrue: Expression, whenFalse: Expression): ConditionalExpression;
@@ -411,7 +414,7 @@ namespace ts {
             questionToken = questionTokenOrWhenTrue as QuestionToken;
             whenTrue = whenTrueOrWhenFalse;
         }
-        return syntheticNodeFactory.createConditional(condition, questionToken, whenTrue, colonToken!, whenFalse);
+        return factory.createConditional(condition, questionToken, whenTrue, colonToken!, whenFalse);
     }
 
     export function createYield(expression?: Expression): YieldExpression;
@@ -424,7 +427,7 @@ namespace ts {
         else {
             expression = asteriskTokenOrExpression as Expression;
         }
-        return syntheticNodeFactory.createYield(asteriskToken, expression);
+        return factory.createYield(asteriskToken, expression);
     }
 
     export function createClassExpression(
@@ -434,7 +437,7 @@ namespace ts {
         heritageClauses: readonly HeritageClause[] | undefined,
         members: readonly ClassElement[]
     ) {
-        return syntheticNodeFactory.createClassExpression(/*decorators*/ undefined, modifiers, name, typeParameters, heritageClauses, members);
+        return factory.createClassExpression(/*decorators*/ undefined, modifiers, name, typeParameters, heritageClauses, members);
     }
 
     export function updateClassExpression(
@@ -445,7 +448,7 @@ namespace ts {
         heritageClauses: readonly HeritageClause[] | undefined,
         members: readonly ClassElement[]
     ) {
-        return syntheticNodeFactory.updateClassExpression(node, /*decorators*/ undefined, modifiers, name, typeParameters, heritageClauses, members);
+        return factory.updateClassExpression(node, /*decorators*/ undefined, modifiers, name, typeParameters, heritageClauses, members);
     }
 
     export function createPropertySignature(
@@ -455,7 +458,7 @@ namespace ts {
         type: TypeNode | undefined,
         initializer?: Expression
     ): PropertySignature {
-        const node = syntheticNodeFactory.createPropertySignature(modifiers, name, questionToken, type);
+        const node = factory.createPropertySignature(modifiers, name, questionToken, type);
         node.initializer = initializer;
         return node;
     }
@@ -478,48 +481,10 @@ namespace ts {
     }
 
     export function createExpressionWithTypeArguments(typeArguments: readonly TypeNode[] | undefined, expression: Expression) {
-        return syntheticNodeFactory.createExpressionWithTypeArguments(expression, typeArguments);
+        return factory.createExpressionWithTypeArguments(expression, typeArguments);
     }
 
     export function updateExpressionWithTypeArguments(node: ExpressionWithTypeArguments, typeArguments: readonly TypeNode[] | undefined, expression: Expression) {
-        return syntheticNodeFactory.updateExpressionWithTypeArguments(node, expression, typeArguments);
-    }
-}
-
-/* @internal */
-namespace ts {
-    const syntheticParenthesizerRules = syntheticNodeFactory.getParenthesizerRules();
-
-    export const {
-        parenthesizeConditionOfConditionalExpression: parenthesizeForConditionalHead,
-        parenthesizeBranchOfConditionalExpression: parenthesizeSubexpressionOfConditionalExpression,
-        parenthesizeExpressionOfExportDefault: parenthesizeDefaultExpression,
-        parenthesizeExpressionOfNew: parenthesizeForNew,
-        parenthesizeLeftSideOfAccess: parenthesizeForAccess,
-        parenthesizeOperandOfPrefixUnary: parenthesizePrefixOperand,
-        parenthesizeOperandOfPostfixUnary: parenthesizePostfixOperand,
-        parenthesizeExpressionsOfCommaDelimitedList: parenthesizeListElements,
-        parenthesizeExpressionForDisallowedComma: parenthesizeExpressionForList,
-        parenthesizeExpressionOfExpressionStatement: parenthesizeExpressionForExpressionStatement,
-        parenthesizeConciseBodyOfArrowFunction: parenthesizeConciseBody,
-        parenthesizeMemberOfConditionalType: parenthesizeConditionalTypeMember,
-        parenthesizeMemberOfElementType: parenthesizeElementTypeMember,
-        parenthesizeElementTypeOfArrayType: parenthesizeArrayTypeMember,
-        parenthesizeConstituentTypesOfUnionOrIntersectionType: parenthesizeElementTypeMembers,
-        parenthesizeTypeArguments: parenthesizeTypeParameters,
-    } = syntheticParenthesizerRules;
-
-    /**
-     * Wraps the operand to a BinaryExpression in parentheses if they are needed to preserve the intended
-     * order of operations.
-     *
-     * @param binaryOperator The operator for the BinaryExpression.
-     * @param operand The operand for the BinaryExpression.
-     * @param isLeftSideOfBinary A value indicating whether the operand is the left side of the
-     *                           BinaryExpression.
-     */
-    export function parenthesizeBinaryOperand(binaryOperator: SyntaxKind, operand: Expression, isLeftSideOfBinary: boolean, leftOperand?: Expression) {
-        return isLeftSideOfBinary ? syntheticParenthesizerRules.parenthesizeLeftSideOfBinary(binaryOperator, operand) :
-            syntheticParenthesizerRules.parenthesizeRightSideOfBinary(binaryOperator, leftOperand, operand);
+        return factory.updateExpressionWithTypeArguments(node, expression, typeArguments);
     }
 }

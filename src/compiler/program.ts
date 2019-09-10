@@ -749,7 +749,36 @@ namespace ts {
         dropTypeCheckers: () => void;
     }
 
-    function createBaseProgram(createProgramOptions: CreateProgramOptions, preprocess?: Transformer<SourceFile>): CreateBaseProgramResult {
+    function changeCompilerHostToUsePreprocessor(host: CompilerHost, preprocess: Transformer<SourceFile>) {
+        const oldGetSourceFile = host.getSourceFile;
+        host.getSourceFile = function(fileName, languageVersion, onError, shouldCreateNewSourceFile) {
+            return getPreprocessedSourceFile(oldGetSourceFile.call(this, fileName, languageVersion, onError, shouldCreateNewSourceFile));
+        };
+        if (host.getSourceFileByPath) {
+            const oldGetSourceFileByPath = host.getSourceFileByPath;
+            // tslint:disable-next-line only-arrow-functions
+            host.getSourceFileByPath = function (fileName, path, languageVersion, onError, shouldCreateNewSourceFile) {
+                return getPreprocessedSourceFile(oldGetSourceFileByPath.call(this, fileName, path, languageVersion, onError, shouldCreateNewSourceFile));
+            };
+        }
+        if (host.onReleaseOldSourceFile) {
+            const oldOnReleaseOldSourceFile = host.onReleaseOldSourceFile;
+            // tslint:disable-next-line only-arrow-functions
+            host.onReleaseOldSourceFile = function (oldSourceFile, oldOptions, hasSourceFileByPath) {
+                return oldOnReleaseOldSourceFile.call(getUnprocessedSourceFile(oldSourceFile), oldOptions, hasSourceFileByPath);
+            };
+        }
+        function getPreprocessedSourceFile(file: SourceFile | undefined) {
+            if (!file) return;
+            if (file.preprocessInfo) return file.preprocessInfo.processed;
+            const processed = preprocess(file);
+            const preprocessInfo: PreprocessInfo = { unprocessed: file, processed };
+            file.preprocessInfo = processed.preprocessInfo = preprocessInfo;
+            return processed;
+        }
+    }
+
+    function createBaseProgram(createProgramOptions: CreateProgramOptions, host: CompilerHost): CreateBaseProgramResult {
         const { options, configFileParsingDiagnostics } = createProgramOptions;
         const { rootNames, projectReferences } = createProgramOptions;
         let { oldProgram } = createProgramOptions;
@@ -771,8 +800,6 @@ namespace ts {
         let fileProcessingDiagnostics = createDiagnosticCollection();
 
         let resolvedTypeReferenceDirectives = createMap<ResolvedTypeReferenceDirective | undefined>();
-
-        const host = createProgramOptions.host || createCompilerHost(options);
 
         // The below settings are to track if a .js file should be add to the program if loaded via searching under node_modules.
         // This works as imported modules are discovered recursively in a depth first manner, specifically:
@@ -2028,8 +2055,8 @@ namespace ts {
                 && (options.isolatedModules || isExternalModuleFile)
                 && !file.isDeclarationFile) {
                 // synthesize 'import "tslib"' declaration
-                const externalHelpersModuleReference = syntheticNodeFactory.createStringLiteral(externalHelpersModuleNameText);
-                const importDecl = syntheticNodeFactory.createImportDeclaration(/*decorators*/ undefined, /*modifiers*/ undefined, /*importClause*/ undefined, externalHelpersModuleReference);
+                const externalHelpersModuleReference = factory.createStringLiteral(externalHelpersModuleNameText);
+                const importDecl = factory.createImportDeclaration(/*decorators*/ undefined, /*modifiers*/ undefined, /*importClause*/ undefined, externalHelpersModuleReference);
                 addEmitFlags(importDecl, EmitFlags.NeverApplyImportHelper);
                 externalHelpersModuleReference.parent = importDecl;
                 importDecl.parent = file;
@@ -2093,19 +2120,43 @@ namespace ts {
             }
 
             function collectDynamicImportOrRequireCalls(file: SourceFile) {
+                if (isProcessedSourceFile(file)) {
+                    // If the file has gone through a preprocessor, we need to walk the tree to find dynamic imports and require calls
+                    collectDynamicImportOrRequireCallsInSubtree(getUnprocessedSourceFile(file), file);
+                }
+                else {
+                    collectDynamicImportOrRequireCallsInRange(file, 0, file.text.length);
+                }
+            }
+
+            function collectDynamicImportOrRequireCallsInSubtree(unprocessedFile: SourceFile, node: Node) {
+                if (node.flags & NodeFlags.Preprocessed) {
+                    collectDynamicImportOrRequireCallsOfNode(node);
+                    forEachChild(node, child => collectDynamicImportOrRequireCallsInSubtree(unprocessedFile, child));
+                }
+                else {
+                    collectDynamicImportOrRequireCallsInRange(unprocessedFile, node.pos, node.end);
+                }
+            }
+
+            function collectDynamicImportOrRequireCallsInRange(file: SourceFile, start: number, end: number) {
                 const r = /import|require/g;
-                while (r.exec(file.text) !== null) {
-                    const node = getNodeAtPosition(file, r.lastIndex);
-                    if (isRequireCall(node, /*checkArgumentIsStringLiteralLike*/ true)) {
-                        imports = append(imports, node.arguments[0]);
-                    }
-                    // we have to check the argument list has length of 1. We will still have to process these even though we have parsing error.
-                    else if (isImportCall(node) && node.arguments.length === 1 && isStringLiteralLike(node.arguments[0])) {
-                        imports = append(imports, node.arguments[0] as StringLiteralLike);
-                    }
-                    else if (isLiteralImportTypeNode(node)) {
-                        imports = append(imports, node.argument.literal);
-                    }
+                const text = file.text.slice(start, end);
+                while (r.exec(text) !== null) {
+                    collectDynamicImportOrRequireCallsOfNode(getNodeAtPosition(file, r.lastIndex + start));
+                }
+            }
+
+            function collectDynamicImportOrRequireCallsOfNode(node: Node) {
+                if (isRequireCall(node, /*checkArgumentIsStringLiteralLike*/ true)) {
+                    imports = append(imports, node.arguments[0]);
+                }
+                // we have to check the argument list has length of 1. We will still have to process these even though we have parsing error.
+                else if (isImportCall(node) && node.arguments.length === 1 && isStringLiteralLike(node.arguments[0])) {
+                    imports = append(imports, node.arguments[0] as StringLiteralLike);
+                }
+                else if (isLiteralImportTypeNode(node)) {
+                    imports = append(imports, node.argument.literal);
                 }
             }
 
@@ -2295,7 +2346,7 @@ namespace ts {
             }
 
             // We haven't looked for this file, do so now and cache result
-            let file = host.getSourceFile(
+            const file = host.getSourceFile(
                 fileName,
                 options.target!,
                 hostErrorMessage => fileProcessingDiagnostics.add(createRefFileDiagnostic(
@@ -2306,15 +2357,6 @@ namespace ts {
                 )),
                 shouldCreateNewSourceFile
             );
-
-            // Pass the file through a user-defined preprocessor (provided by plugins)
-            if (file && preprocess) {
-                const processed = preprocess(file);
-                if (processed !== file) {
-                    processed.preprocessInfo = { unprocessed: file };
-                }
-                file = processed;
-            }
 
             if (packageId) {
                 const packageIdKey = packageIdToString(packageId);
@@ -3325,7 +3367,8 @@ namespace ts {
 
         performance.mark("beforeProgram");
 
-        const { baseProgram, emitWorker, dropTypeCheckers } = createBaseProgram(createProgramOptions);
+        const host = createProgramOptions.host || createCompilerHost(createProgramOptions.options);
+        const { baseProgram, emitWorker, dropTypeCheckers } = createBaseProgram(createProgramOptions, host);
         const program = baseProgram as Program;
         program.emit = emit;
 
@@ -3338,6 +3381,14 @@ namespace ts {
             return runWithCancellationToken(() => emitWorker(program, sourceFile, writeFileCallback, cancellationToken, emitOnlyDtsFiles, transformers), dropTypeCheckers);
         }
     }
+
+    function createPreprocessedNode(kind: SyntaxKind) {
+        const node = createNode(kind, -1, -1);
+        node.flags |= NodeFlags.Preprocessed;
+        return node;
+    }
+
+    const preprocessorNodeFactory = createNodeFactory(createPreprocessedNode, createParenthesizerRules, createNodeConverters, nullTreeStateObserver);
 
     /**
      * Create a new 'AsyncProgram' instance. A Program is an immutable collection of 'SourceFile's and a 'CompilerOptions'
@@ -3369,7 +3420,6 @@ namespace ts {
             projectReferences: createProgramOptions.projectReferences
         });
 
-        let preprocess: Transformer<SourceFile> | undefined;
         let preprocessDiagnostics: DiagnosticWithLocation[] | undefined;
         let preprocessTransformer: NodeTransformer<SourceFile> | undefined;
         let preprocessedNodes: Node[] | undefined;
@@ -3385,24 +3435,22 @@ namespace ts {
                 preprocessTransformer = createNodeTransformer(
                     /*resolver*/ undefined,
                     /*host*/ undefined,
-                    parseNodeFactory,
+                    preprocessorNodeFactory,
                     options,
                     preParseResult.preprocessors,
                     /*allowDtsFiles*/ true
                 );
                 preprocessDiagnostics = preprocessTransformer.diagnostics;
                 preprocessedNodes = [];
-                preprocess = node => {
+                changeCompilerHostToUsePreprocessor(host, node => {
                     disposeEmitNodes(getSourceFileOfNode(getParseTreeNode(node)));
                     preprocessedNodes!.push(node);
                     return preprocessTransformer!.transformNode(node);
-                };
+                });
             }
         }
 
-        // !!!!
-        // TODO(rbuckton): pass `parseTransform` to `createBaseProgram`
-        const { baseProgram, emitWorker, dropTypeCheckers } = createBaseProgram(createProgramOptions, preprocess);
+        const { baseProgram, emitWorker, dropTypeCheckers } = createBaseProgram(createProgramOptions, host);
 
         if (preprocessDiagnostics) {
             for (const diagnostic of preprocessDiagnostics) {

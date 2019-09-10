@@ -3200,6 +3200,10 @@
         "category": "Error",
         "code": 5080
     },
+    "Plugins are not supported in the current host environment.": {
+        "category": "Error",
+        "code": 5081
+    },
 
     "Generates a sourcemap for each corresponding '.d.ts' file.": {
         "category": "Message",

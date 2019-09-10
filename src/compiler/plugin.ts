@@ -21,7 +21,6 @@ namespace ts {
         | { error: Diagnostic, result: undefined }
         | { error: undefined, result: T | undefined };
 
-    /*@internal*/
     export interface GetPluginsResult {
         plugins: CompilerPlugin[];
         diagnostics?: Diagnostic[];
@@ -39,7 +38,6 @@ namespace ts {
     /**
      * Resolves the supplied plugins (and their dependencies) relative to an initial directory.
      */
-    /*@internal*/
     export function getPlugins(host: ModuleLoaderHost, initialDir: string, plugins: ReadonlyArray<string | [string, any?]>) {
         interface ResolvedModule {
             getModule(): RequireResult;
@@ -183,6 +181,17 @@ namespace ts {
         function reportError(message: DiagnosticMessage, arg0?: string, arg1?: string) {
             diagnostics.push(createCompilerDiagnostic(message, arg0, arg1));
         }
+    }
+
+    export function registerPluginApiModules(host: ModuleLoaderHost) {
+        host.registerModule(createPluginApiModuleFactory());
+    }
+
+    function createPluginApiModuleFactory(): ModuleFactory {
+        return {
+            id: ["typescript"],
+            load: () => ts
+        };
     }
 
     function findPackageJsonPath(host: ModuleResolutionHost, modulePath: string) {
@@ -402,10 +411,12 @@ namespace ts {
     }
 
     function createLoadDiagnostic(compilerPlugin: CompilerPlugin, error: { message?: string, stack?: string }) {
+        debugger;
         return createCompilerDiagnostic(Diagnostics.Plugin_0_could_not_be_loaded, compilerPlugin.name, error.stack || error.message || error.toString());
     }
 
     function createUserCodeDiagnostic(compilerPlugin: CompilerPlugin, hook: Hook, error: { message?: string, stack?: string }) {
+        debugger;
         return createCompilerDiagnostic(Diagnostics.Plugin_0_failed_while_executing_the_1_hook_Colon_2, compilerPlugin.name, hook, error.stack || error.message || error.toString());
     }
 }

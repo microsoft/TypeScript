@@ -1740,7 +1740,7 @@ namespace ts {
                     const name = getMutableClone(node);
                     name.flags &= ~NodeFlags.Synthesized;
                     name.original = undefined;
-                    name.parent = getParseTreeNode(currentLexicalScope); // ensure the parent is set to a parse tree node.
+                    name.parent = getParseTreeNode(currentLexicalScope)!; // ensure the parent is set to a parse tree node.
 
                     return name;
 

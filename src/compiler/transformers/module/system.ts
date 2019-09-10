@@ -278,9 +278,8 @@ namespace ts {
                         factory.createBlock(executeStatements, /*multiLine*/ true)
                     )
                 )
-            ]);
+            ], /*multiLine*/ true);
 
-            moduleObject.multiLine = true;
             statements.push(factory.createReturn(moduleObject));
             return factory.createBlock(statements, /*multiLine*/ true);
         }

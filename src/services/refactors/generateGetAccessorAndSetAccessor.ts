@@ -55,7 +55,7 @@ namespace ts.refactor.generateGetAccessorAndSetAccessor {
         const accessorModifiers = isInClassLike
             ? !modifierFlags || modifierFlags & ModifierFlags.Private
                 ? getModifiers(isJS, isStatic, SyntaxKind.PublicKeyword)
-                : createNodeArray(createModifiersFromModifierFlags(modifierFlags))
+                : createNodeArray(factory.createModifiersFromModifierFlags(modifierFlags))
             : undefined;
         const fieldModifiers = isInClassLike ? getModifiers(isJS, isStatic, SyntaxKind.PrivateKeyword) : undefined;
 
@@ -96,18 +96,18 @@ namespace ts.refactor.generateGetAccessorAndSetAccessor {
     }
 
     function createPropertyName (name: string, originalName: AcceptedNameType) {
-        return isIdentifier(originalName) ? createIdentifier(name) : createLiteral(name);
+        return isIdentifier(originalName) ? factory.createIdentifier(name) : factory.createStringLiteral(name);
     }
 
     function createAccessorAccessExpression (fieldName: AcceptedNameType, isStatic: boolean, container: ContainerDeclaration) {
-        const leftHead = isStatic ? (<ClassLikeDeclaration>container).name! : createThis(); // TODO: GH#18217
-        return isIdentifier(fieldName) ? createPropertyAccess(leftHead, fieldName) : createElementAccess(leftHead, createLiteral(fieldName));
+        const leftHead = isStatic ? (<ClassLikeDeclaration>container).name! : factory.createThis(); // TODO: GH#18217
+        return isIdentifier(fieldName) ? factory.createPropertyAccess(leftHead, fieldName) : factory.createElementAccess(leftHead, factory.createStringLiteralFromNode(fieldName));
     }
 
     function getModifiers(isJS: boolean, isStatic: boolean, accessModifier: SyntaxKind.PublicKeyword | SyntaxKind.PrivateKeyword): NodeArray<Modifier> | undefined {
         const modifiers = append<Modifier>(
-            !isJS ? [createToken(accessModifier) as Token<SyntaxKind.PublicKeyword> | Token<SyntaxKind.PrivateKeyword>] : undefined,
-            isStatic ? createToken(SyntaxKind.StaticKeyword) : undefined
+            !isJS ? [factory.createToken(accessModifier) as Token<SyntaxKind.PublicKeyword> | Token<SyntaxKind.PrivateKeyword>] : undefined,
+            isStatic ? factory.createToken(SyntaxKind.StaticKeyword) : undefined
         );
         return modifiers && createNodeArray(modifiers);
     }
@@ -144,14 +144,14 @@ namespace ts.refactor.generateGetAccessorAndSetAccessor {
     }
 
     function generateGetAccessor(fieldName: AcceptedNameType, accessorName: AcceptedNameType, type: TypeNode | undefined, modifiers: ModifiersArray | undefined, isStatic: boolean, container: ContainerDeclaration) {
-        return createGetAccessor(
+        return factory.createGetAccessorDeclaration(
             /*decorators*/ undefined,
             modifiers,
             accessorName,
             /*parameters*/ undefined!, // TODO: GH#18217
             type,
-            createBlock([
-                createReturn(
+            factory.createBlock([
+                factory.createReturn(
                     createAccessorAccessExpression(fieldName, isStatic, container)
                 )
             ], /*multiLine*/ true)
@@ -159,23 +159,23 @@ namespace ts.refactor.generateGetAccessorAndSetAccessor {
     }
 
     function generateSetAccessor(fieldName: AcceptedNameType, accessorName: AcceptedNameType, type: TypeNode | undefined, modifiers: ModifiersArray | undefined, isStatic: boolean, container: ContainerDeclaration) {
-        return createSetAccessor(
+        return factory.createSetAccessorDeclaration(
             /*decorators*/ undefined,
             modifiers,
             accessorName,
-            [createParameter(
+            [factory.createParameterDeclaration(
                 /*decorators*/ undefined,
                 /*modifiers*/ undefined,
                 /*dotDotDotToken*/ undefined,
-                createIdentifier("value"),
+                factory.createIdentifier("value"),
                 /*questionToken*/ undefined,
                 type
             )],
-            createBlock([
-                createStatement(
-                    createAssignment(
+            factory.createBlock([
+                factory.createExpressionStatement(
+                    factory.createAssignment(
                         createAccessorAccessExpression(fieldName, isStatic, container),
-                        createIdentifier("value")
+                        factory.createIdentifier("value")
                     )
                 )
             ], /*multiLine*/ true)
@@ -183,7 +183,7 @@ namespace ts.refactor.generateGetAccessorAndSetAccessor {
     }
 
     function updatePropertyDeclaration(changeTracker: textChanges.ChangeTracker, file: SourceFile, declaration: PropertyDeclaration, fieldName: AcceptedNameType, modifiers: ModifiersArray | undefined) {
-        const property = updateProperty(
+        const property = factory.updatePropertyDeclaration(
             declaration,
             declaration.decorators,
             modifiers,
@@ -196,7 +196,7 @@ namespace ts.refactor.generateGetAccessorAndSetAccessor {
     }
 
     function updatePropertyAssignmentDeclaration(changeTracker: textChanges.ChangeTracker, file: SourceFile, declaration: PropertyAssignment, fieldName: AcceptedNameType) {
-        const assignment = updatePropertyAssignment(declaration, fieldName, declaration.initializer);
+        const assignment = factory.updatePropertyAssignment(declaration, fieldName, declaration.initializer);
         changeTracker.replacePropertyAssignment(file, declaration, assignment);
     }
 
@@ -209,7 +209,7 @@ namespace ts.refactor.generateGetAccessorAndSetAccessor {
         }
         else {
             changeTracker.replaceNode(file, declaration,
-                updateParameter(declaration, declaration.decorators, modifiers, declaration.dotDotDotToken, cast(fieldName, isIdentifier), declaration.questionToken, declaration.type, declaration.initializer));
+                factory.updateParameterDeclaration(declaration, declaration.decorators, modifiers, declaration.dotDotDotToken, cast(fieldName, isIdentifier), declaration.questionToken, declaration.type, declaration.initializer));
         }
     }
 
@@ -229,10 +229,10 @@ namespace ts.refactor.generateGetAccessorAndSetAccessor {
                 isStringLiteral(node.argumentExpression) &&
                 node.argumentExpression.text === originalName &&
                 isWriteAccess(node)) {
-                changeTracker.replaceNode(file, node.argumentExpression, createStringLiteral(fieldName));
+                changeTracker.replaceNode(file, node.argumentExpression, factory.createStringLiteral(fieldName));
             }
             if (isPropertyAccessExpression(node) && node.expression.kind === SyntaxKind.ThisKeyword && node.name.text === originalName && isWriteAccess(node)) {
-                changeTracker.replaceNode(file, node.name, createIdentifier(fieldName));
+                changeTracker.replaceNode(file, node.name, factory.createIdentifier(fieldName));
             }
             if (!isFunctionLike(node) && !isClassLike(node)) {
                 node.forEachChild(recur);

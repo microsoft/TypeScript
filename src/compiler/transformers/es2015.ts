@@ -2161,9 +2161,7 @@ namespace ts {
             }
 
             if (!node.initializer && shouldEmitExplicitInitializerForLetDeclaration(node)) {
-                const clone = getMutableClone(node);
-                clone.initializer = factory.createVoidZero();
-                return clone;
+                return factory.updateVariableDeclaration(node, node.name, /*type*/ undefined, factory.createVoidZero());
             }
 
             return visitEachChild(node, visitor, context);

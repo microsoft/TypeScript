@@ -70,7 +70,7 @@ namespace ts.codefix {
         if (returnType) {
             const entityName = getEntityNameFromTypeNode(returnType);
             if (!entityName || entityName.kind !== SyntaxKind.Identifier || entityName.text !== "Promise") {
-                changes.replaceNode(sourceFile, returnType, createTypeReferenceNode("Promise", createNodeArray([returnType])));
+                changes.replaceNode(sourceFile, returnType, factory.createTypeReferenceNode("Promise", createNodeArray([returnType])));
             }
         }
         changes.insertModifierBefore(sourceFile, SyntaxKind.AsyncKeyword, insertBefore);

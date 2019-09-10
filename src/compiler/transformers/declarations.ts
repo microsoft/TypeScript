@@ -5,7 +5,7 @@ namespace ts {
             return []; // No declaration diagnostics for js for now
         }
         const compilerOptions = host.getCompilerOptions();
-        const result = transformNodes(resolver, host, syntheticNodeFactory, compilerOptions, file ? [file] : filter(host.getSourceFiles(), isSourceFileNotJS), [transformDeclarations], /*allowDtsFiles*/ false);
+        const result = transformNodes(resolver, host, factory, compilerOptions, file ? [file] : filter(host.getSourceFiles(), isSourceFileNotJS), [transformDeclarations], /*allowDtsFiles*/ false);
         return result.diagnostics;
     }
 
@@ -839,24 +839,25 @@ namespace ts {
                     case SyntaxKind.Constructor: {
                         const isPrivate = hasModifier(input, ModifierFlags.Private);
                         // A constructor declaration may not have a type annotation
-                        const ctor = factory.createSignatureDeclaration(
-                            SyntaxKind.Constructor,
-                            isPrivate ? undefined : ensureTypeParams(input, input.typeParameters),
-                            // TODO: GH#18217
-                            isPrivate ? undefined! : updateParamsList(input, input.parameters, ModifierFlags.None),
-                            /*type*/ undefined
+                        const ctor = factory.createConstructorDeclaration(
+                            /*decorators*/ undefined,
+                            factory.createNodeArray(ensureModifiers(input)),
+                            isPrivate ? factory.createNodeArray() : updateParamsList(input, input.parameters, ModifierFlags.None),
+                            /*body*/ undefined
                         );
-                        ctor.modifiers = factory.createNodeArray(ensureModifiers(input));
                         return cleanup(ctor);
                     }
                     case SyntaxKind.MethodDeclaration: {
-                        const sig = factory.createMethodSignature(
+                        const sig = factory.createMethodDeclaration(
+                            /*decorators*/ undefined,
                             ensureModifiers(input),
+                            /*asteriskToken*/ undefined,
                             input.name,
                             input.questionToken,
                             ensureTypeParams(input, input.typeParameters),
                             updateParamsList(input, input.parameters),
-                            ensureType(input, input.type)
+                            ensureType(input, input.type),
+                            /*body*/ undefined
                         );
                         return cleanup(sig);
                     }
@@ -1054,16 +1055,24 @@ namespace ts {
             return input;
         }
 
-        function stripExportModifiers(statement: Statement): Statement {
-            if (isImportEqualsDeclaration(statement) || hasModifier(statement, ModifierFlags.Default)) {
+        function stripExportModifiers(node: Statement): Statement {
+            if (isImportEqualsDeclaration(node) || hasModifier(node, ModifierFlags.Default)) {
                 // `export import` statements should remain as-is, as imports are _not_ implicitly exported in an ambient namespace
                 // Likewise, `export default` classes and the like and just be `default`, so we preserve their `export` modifiers, too
-                return statement;
+                return node;
             }
-            const clone = getMutableClone(statement);
-            const modifiers = factory.createModifiersFromModifierFlags(getModifierFlags(statement) & (ModifierFlags.All ^ ModifierFlags.Export));
-            clone.modifiers = modifiers.length ? factory.createNodeArray(modifiers) : undefined;
-            return clone;
+            return isClassDeclaration(node) ? factory.updateClassDeclaration(node, node.decorators, visitNodes(node.modifiers, modifierVisitor), node.name, node.typeParameters, node.heritageClauses, node.members) :
+                isFunctionDeclaration(node) ? factory.updateFunctionDeclaration(node, node.decorators, visitNodes(node.modifiers, modifierVisitor), node.asteriskToken, node.name, node.typeParameters, node.parameters, node.type, node.body) :
+                isModuleDeclaration(node) ? factory.updateModuleDeclaration(node, node.decorators, visitNodes(node.modifiers, modifierVisitor), node.name, node.body) :
+                isEnumDeclaration(node) ? factory.updateEnumDeclaration(node, node.decorators, visitNodes(node.modifiers, modifierVisitor), node.name, node.members) :
+                isInterfaceDeclaration(node) ? factory.updateInterfaceDeclaration(node, node.decorators, visitNodes(node.modifiers, modifierVisitor), node.name, node.typeParameters, node.heritageClauses, node.members) :
+                isTypeAliasDeclaration(node) ? factory.updateTypeAliasDeclaration(node, node.decorators, visitNodes(node.modifiers, modifierVisitor), node.name, node.typeParameters, node.type) :
+                isVariableStatement(node) ? factory.updateVariableStatement(node, visitNodes(node.modifiers, modifierVisitor), node.declarationList) :
+                node;
+        }
+
+        function modifierVisitor(node: Modifier) {
+            return node.kind === SyntaxKind.ExportKeyword ? undefined : node;
         }
 
         function transformTopLevelDeclaration(input: LateVisibilityPaintedStatement) {

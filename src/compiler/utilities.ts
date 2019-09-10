@@ -938,6 +938,9 @@ namespace ts {
     }
 
     export function getErrorSpanForNode(sourceFile: SourceFile, node: Node): TextSpan {
+        while (nodeIsSynthesized(node) && node.parent) {
+            node = node.parent;
+        }
         let errorNode: Node | undefined = node;
         switch (node.kind) {
             case SyntaxKind.SourceFile:
@@ -2819,7 +2822,6 @@ namespace ts {
         }
     }
 
-    export type PropertyNameLiteral = Identifier | StringLiteralLike | NumericLiteral;
     export function isPropertyNameLiteral(node: Node): node is PropertyNameLiteral {
         switch (node.kind) {
             case SyntaxKind.Identifier:
@@ -5169,8 +5171,7 @@ namespace ts {
      * @param node The original node.
      * @returns The original parse tree node if found; otherwise, undefined.
      */
-    export function getParseTreeNode(node: Node): Node;
-
+    export function getParseTreeNode(node: Node | undefined): Node | undefined;
     /**
      * Gets the original parse tree node for a node.
      *
@@ -5178,18 +5179,19 @@ namespace ts {
      * @param nodeTest A callback used to ensure the correct type of parse tree node is returned.
      * @returns The original parse tree node if found; otherwise, undefined.
      */
-    export function getParseTreeNode<T extends Node>(node: Node | undefined, nodeTest?: (node: Node) => node is T): T | undefined;
+    export function getParseTreeNode<T extends Node>(node: T | undefined, nodeTest: (node: Node) => node is T): T | undefined;
     export function getParseTreeNode(node: Node | undefined, nodeTest?: (node: Node) => boolean): Node | undefined {
         if (node === undefined || isParseTreeNode(node)) {
             return node;
         }
 
-        node = getOriginalNode(node);
-
-        if (isParseTreeNode(node) && (!nodeTest || nodeTest(node))) {
-            return node;
+        node = node.original;
+        while (node) {
+            if (isParseTreeNode(node)) {
+                return !nodeTest || nodeTest(node) ? node : undefined;
+            }
+            node = node.original;
         }
-
         return undefined;
     }
 
@@ -7401,6 +7403,11 @@ namespace ts {
             return Comparison.GreaterThan;
         }
         return Comparison.EqualTo;
+    }
+
+    export function getLanguageVariant(scriptKind: ScriptKind) {
+        // .tsx and .jsx files are treated as jsx language variant.
+        return scriptKind === ScriptKind.TSX || scriptKind === ScriptKind.JSX || scriptKind === ScriptKind.JS || scriptKind === ScriptKind.JSON ? LanguageVariant.JSX : LanguageVariant.Standard;
     }
 
     export function getEmitScriptTarget(compilerOptions: CompilerOptions) {

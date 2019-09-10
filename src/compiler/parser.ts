@@ -31,7 +31,7 @@ namespace ts {
     }
 
     /* @internal */
-    export const parseNodeFactory = createNodeFactory(createNode, createParenthesizerRules, createNodeConverters);
+    export const parseNodeFactory = createNodeFactory(createNode, createParenthesizerRules, createNodeConverters, nullTreeStateObserver);
 
     function visitNode<T>(cbNode: (node: Node) => T, node: Node | undefined): T | undefined {
         return node && cbNode(node);
@@ -590,7 +590,7 @@ namespace ts {
         // Share a single scanner across all calls to parse a source file.  This helps speed things
         // up by avoiding the cost of creating/compiling scanners over and over again.
         const scanner = createScanner(ScriptTarget.Latest, /*skipTrivia*/ true);
-        const factory = createNodeFactory(createNode, getNullParenthesizerRules, getNullNodeConverters);
+        const factory = createNodeFactory(createNode, getNullParenthesizerRules, getNullNodeConverters, nullTreeStateObserver);
         const disallowInAndDecoratorContext = NodeFlags.DisallowInContext | NodeFlags.DecoratorContext;
 
         // capture constructors in 'initializeState' to avoid null checks
@@ -736,6 +736,7 @@ namespace ts {
             nextToken();
             const pos = getNodePos();
             if (token() === SyntaxKind.EndOfFileToken) {
+                // TODO(rbuckton): this does not create the tree correctly and transform flags won't be properly set
                 sourceFile.statements = createNodeArray([], pos, pos);
                 sourceFile.endOfFileToken = parseTokenNode<EndOfFileToken>();
             }
@@ -770,6 +771,7 @@ namespace ts {
                         break;
                 }
 
+                // TODO(rbuckton): this does not create the tree correctly and transform flags won't be properly set
                 const statement = factory.createExpressionStatement(expression) as JsonObjectExpressionStatement;
                 finishNode(statement, pos);
                 sourceFile.statements = createNodeArray([statement], pos);
@@ -784,11 +786,6 @@ namespace ts {
             const result = sourceFile as JsonSourceFile;
             clearState();
             return result;
-        }
-
-        function getLanguageVariant(scriptKind: ScriptKind) {
-            // .tsx and .jsx files are treated as jsx language variant.
-            return scriptKind === ScriptKind.TSX || scriptKind === ScriptKind.JSX || scriptKind === ScriptKind.JS || scriptKind === ScriptKind.JSON ? LanguageVariant.JSX : LanguageVariant.Standard;
         }
 
         function initializeState(_sourceText: string, languageVersion: ScriptTarget, _syntaxCursor: IncrementalParser.SyntaxCursor | undefined, scriptKind: ScriptKind) {
@@ -856,6 +853,7 @@ namespace ts {
             processCommentPragmas(sourceFile as {} as PragmaContext, sourceText);
             processPragmasIntoFields(sourceFile as {} as PragmaContext, reportPragmaDiagnostic);
 
+            // TODO(rbuckton): this does not create the tree correctly and transform flags won't be properly set
             sourceFile.statements = parseList(ParsingContext.SourceElements, parseStatement);
             Debug.assert(token() === SyntaxKind.EndOfFileToken);
             sourceFile.endOfFileToken = addJSDocComment(parseTokenNode());
@@ -1375,7 +1373,8 @@ namespace ts {
                 isTemplateLiteralKind(kind) ? factory.createTemplateLiteralLikeNode(kind, "", "") :
                 kind === SyntaxKind.NumericLiteral ? factory.createNumericLiteral("", /*numericLiteralFlags*/ undefined) :
                 kind === SyntaxKind.StringLiteral ? factory.createStringLiteral("", /*isSingleQuote*/ undefined) :
-                factory.createNode(kind);
+                kind === SyntaxKind.MissingDeclaration ? factory.createMissingDeclaration() :
+                factory.createToken(kind);
             return finishNode(result, pos) as T;
         }
 
@@ -3238,7 +3237,11 @@ namespace ts {
             return parsePostfixTypeOrHigher();
         }
 
-        function parseUnionOrIntersectionType(kind: SyntaxKind.UnionType | SyntaxKind.IntersectionType, parseConstituentType: () => TypeNode, operator: SyntaxKind.BarToken | SyntaxKind.AmpersandToken): TypeNode {
+        function parseUnionOrIntersectionType(
+            operator: SyntaxKind.BarToken | SyntaxKind.AmpersandToken,
+            parseConstituentType: () => TypeNode,
+            createTypeNode: (types: NodeArray<TypeNode>) => UnionOrIntersectionTypeNode
+        ): TypeNode {
             const pos = getNodePos();
             const hasLeadingOperator = parseOptional(operator);
             let type = parseConstituentType();
@@ -3247,17 +3250,17 @@ namespace ts {
                 while (parseOptional(operator)) {
                     types.push(parseConstituentType());
                 }
-                type = finishNode(factory.createUnionOrIntersectionTypeNode(kind, createNodeArray(types, pos)), pos);
+                type = finishNode(createTypeNode(createNodeArray(types, pos)), pos);
             }
             return type;
         }
 
         function parseIntersectionTypeOrHigher(): TypeNode {
-            return parseUnionOrIntersectionType(SyntaxKind.IntersectionType, parseTypeOperatorOrHigher, SyntaxKind.AmpersandToken);
+            return parseUnionOrIntersectionType(SyntaxKind.AmpersandToken, parseTypeOperatorOrHigher, factory.createIntersectionTypeNode);
         }
 
         function parseUnionTypeOrHigher(): TypeNode {
-            return parseUnionOrIntersectionType(SyntaxKind.UnionType, parseIntersectionTypeOrHigher, SyntaxKind.BarToken);
+            return parseUnionOrIntersectionType(SyntaxKind.BarToken, parseIntersectionTypeOrHigher, factory.createUnionTypeNode);
         }
 
         function isStartOfFunctionType(): boolean {
@@ -4888,7 +4891,7 @@ namespace ts {
                 const objectAssignmentInitializer = equalsToken ? allowInAnd(parseAssignmentExpressionOrHigher) : undefined;
                 node = factory.createShorthandPropertyAssignment(name as Identifier, objectAssignmentInitializer);
                 // Save equals token for error reporting.
-                // TODO(rbuckton): Consider manufacturing this when we need to report an error as its otherwise not useful.
+                // TODO(rbuckton): Consider manufacturing this when we need to report an error as it is otherwise not useful.
                 if (equalsToken) node.equalsToken = equalsToken;
             }
             else {
@@ -5654,8 +5657,7 @@ namespace ts {
             }
             const type = parseTypeAnnotation();
             const initializer = isInOrOfKeyword(token()) ? undefined : parseInitializer();
-            const node = factory.createVariableDeclaration(name, type, initializer);
-            node.exclamationToken = exclamationToken;
+            const node = factory.createVariableDeclaration(name, exclamationToken, type, initializer);
             return finishNode(node, pos);
         }
 

@@ -2082,4 +2082,73 @@ namespace ts {
             throw e;
         }
     }
+
+    export type Overload<This, A extends any[], R> = ((this: This, ...args: A) => R) & OverloadOptions<A>;
+    export type OverloadOptions<A extends any[]> = { minLength?: A["length"], maxLength?: A["length"] };
+    export type OverloadLengthOptions<A extends any[]> = { length: A["length"] };
+    export type OverloadParameters<O extends Overload<any, any, any>> = O extends unknown ? Parameters<O> : never;
+    export type OverloadList<This, O extends Overload<This, any, R>[], R> = (this: This, ...args: OverloadParameters<O[number]>) => R;
+
+    export function makeOverload<This, A extends any[], R>(fn: (this: This, ...args: A) => R, options?: OverloadOptions<A> | OverloadLengthOptions<A>) {
+        const overload = fn as Overload<This, A, R>;
+        if (options) {
+            if ("length" in options) {
+                overload.minLength = overload.maxLength = options.length;
+            }
+            else {
+                if ("minLength" in options) {
+                    overload.minLength = options.minLength;
+                }
+                if ("maxLength" in options) {
+                    overload.maxLength = options.maxLength;
+                }
+            }
+        }
+        return overload;
+    }
+
+    /**
+     * Create a function from a set of overloads differentiated by argument count.
+     */
+    export function overloadList<This, O extends Overload<This, any, R>[], R>(...overloads: O) {
+        type F = O[number];
+        const overloadCache: F[] = [];
+
+        // sort by minLength descending
+        const sortedOverloads = stableSort(overloads, (a, b) => -compareValues(minLength(a), minLength(b)));
+
+        let lastLength = -1;
+        for (const overload of sortedOverloads) {
+            const overloadLength = minLength(overload);
+            Debug.assert(overloadLength !== lastLength, "Overloads must differ in minimum length");
+            lastLength = overloadLength;
+        }
+        Debug.assert(lastLength !== -1, "Overload list must not be empty");
+
+        return function () { return chooseOverload(arguments.length).apply(this, arguments); } as OverloadList<This, O, R>;
+
+        function chooseOverload(length: number) {
+            const cached = overloadCache[length];
+            if (cached) return cached;
+            for (const overload of sortedOverloads) {
+                if (length >= minLength(overload)) {
+                    overloadCache[length] = overload;
+                    return length <= maxLength(overload) ? overload : argumentCountMismatch;
+                }
+            }
+            return overloadCache[length] = argumentCountMismatch;
+        }
+
+        function minLength(overload: F) {
+            return typeof overload.minLength === "number" ? overload.minLength : overload.length;
+        }
+
+        function maxLength(overload: F) {
+            return typeof overload.maxLength === "number" ? overload.maxLength : overload.length;
+        }
+    }
+
+    function argumentCountMismatch() {
+        return Debug.fail("Argument count mismatch");
+    }
 }

@@ -529,6 +529,7 @@ namespace ts {
         Let                = 1 << 0,  // Variable declaration
         Const              = 1 << 1,  // Variable declaration
         NestedNamespace    = 1 << 2,  // Namespace declaration
+        Preprocessed       = 1 << 25, // Node was synthesized during preprocessing
         Synthesized        = 1 << 3,  // Node was synthesized during transformation
         Namespace          = 1 << 4,  // Namespace declaration
         ExportContext      = 1 << 5,  // Export context (initialized by binding)
@@ -1289,6 +1290,7 @@ namespace ts {
     }
 
     export type StringLiteralLike = StringLiteral | NoSubstitutionTemplateLiteral;
+    export type PropertyNameLiteral = Identifier | StringLiteralLike | NumericLiteral;
 
     // Note: 'brands' in our syntax nodes serve to give us a small amount of nominal typing.
     // Consider 'Expression'.  Without the brand, 'Expression' is actually no different
@@ -2695,7 +2697,6 @@ namespace ts {
         name?: string;
     }
 
-    /* @internal */
     /**
      * Subset of properties from SourceFile that are used in multiple utility functions
      */
@@ -2724,6 +2725,10 @@ namespace ts {
          * The source file prior to being passed to the preprocessor.
          */
         readonly unprocessed: SourceFile;
+        /**
+         * The source file resulting from the preprocessor.
+         */
+        readonly processed: SourceFile;
     }
 
     // Source files are declarations when they are external modules.
@@ -4992,7 +4997,7 @@ namespace ts {
         /** Plugin dependencies that should be loaded before this plugin. */
         pluginDependencies?: string[];
         /** Loads the compiler plugin. */
-        loadPlugin(): RequireResult<CompilerPluginModule>;
+        /* @internal */ loadPlugin(): RequireResult<CompilerPluginModule>;
     }
 
     /**
@@ -5092,8 +5097,18 @@ namespace ts {
     export interface CompilerPluginDeactivationResult extends CompilerPluginResult {
     }
 
+    /*@internal*/
+    export type ModuleLoadFunction = (request: string, parent: { filename: string }, isMain: boolean) => unknown;
+
+    /*@internal*/
+    export interface ModuleFactory {
+        readonly id: string | readonly string[];
+        load(request: string, parent: { filename: string }, isMain: boolean, load: ModuleLoadFunction): unknown;
+    }
+
     /* @internal */
     export interface ModuleLoaderHost extends ModuleResolutionHost {
+        registerModule(factory: ModuleFactory): void;
         require(initialDir: string, moduleName: string): RequireResult;
     }
 
@@ -5723,7 +5738,6 @@ namespace ts {
     export interface NodeFactory {
         /* @internal */ getParenthesizerRules(): ParenthesizerRules;
         /* @internal */ getConverters(): NodeConverters;
-        /* @internal */ createNode(kind: SyntaxKind): Node;
         createNodeArray<T extends Node>(elements?: readonly T[], hasTrailingComma?: boolean): NodeArray<T>;
 
         //
@@ -5733,7 +5747,7 @@ namespace ts {
         createNumericLiteral(value: string | number, numericLiteralFlags?: TokenFlags): NumericLiteral;
         createBigIntLiteral(value: string | PseudoBigInt): BigIntLiteral;
         createStringLiteral(text: string, isSingleQuote?: boolean): StringLiteral;
-        createStringLiteralFromNode(node: PropertyNameLiteral, isSingleQuote?: boolean): StringLiteral;
+        createStringLiteralFromNode(sourceNode: PropertyNameLiteral, isSingleQuote?: boolean): StringLiteral;
         createRegularExpressionLiteral(text: string): RegularExpressionLiteral;
 
         //
@@ -5829,7 +5843,7 @@ namespace ts {
         updateCallSignature(node: CallSignatureDeclaration, typeParameters: NodeArray<TypeParameterDeclaration> | undefined, parameters: NodeArray<ParameterDeclaration>, type: TypeNode | undefined): CallSignatureDeclaration;
         createConstructSignature(typeParameters: readonly TypeParameterDeclaration[] | undefined, parameters: readonly ParameterDeclaration[], type: TypeNode | undefined): ConstructSignatureDeclaration;
         updateConstructSignature(node: ConstructSignatureDeclaration, typeParameters: NodeArray<TypeParameterDeclaration> | undefined, parameters: NodeArray<ParameterDeclaration>, type: TypeNode | undefined): ConstructSignatureDeclaration;
-        /* @internal */ createSignatureDeclaration<T extends SignatureDeclaration>(kind: T["kind"], typeParameters: readonly TypeParameterDeclaration[] | undefined, parameters: readonly ParameterDeclaration[], type: TypeNode | undefined, typeArguments?: readonly TypeNode[] | undefined): T;
+        /* @internal */ createSignatureDeclaration<T extends SignatureDeclaration>(kind: T["kind"], typeParameters: readonly TypeParameterDeclaration[] | undefined, parameters: readonly ParameterDeclaration[], type: TypeNode | undefined): T;
         createIndexSignature(decorators: readonly Decorator[] | undefined, modifiers: readonly Modifier[] | undefined, parameters: readonly ParameterDeclaration[], type: TypeNode): IndexSignatureDeclaration;
         /* @internal */ createIndexSignature(decorators: readonly Decorator[] | undefined, modifiers: readonly Modifier[] | undefined, parameters: readonly ParameterDeclaration[], type: TypeNode | undefined): IndexSignatureDeclaration; // tslint:disable-line unified-signatures
         updateIndexSignature(node: IndexSignatureDeclaration, decorators: readonly Decorator[] | undefined, modifiers: readonly Modifier[] | undefined, parameters: readonly ParameterDeclaration[], type: TypeNode): IndexSignatureDeclaration;
@@ -5863,7 +5877,6 @@ namespace ts {
         updateUnionTypeNode(node: UnionTypeNode, types: NodeArray<TypeNode>): UnionTypeNode;
         createIntersectionTypeNode(types: readonly TypeNode[]): IntersectionTypeNode;
         updateIntersectionTypeNode(node: IntersectionTypeNode, types: NodeArray<TypeNode>): IntersectionTypeNode;
-        /* @internal */ createUnionOrIntersectionTypeNode(kind: SyntaxKind.UnionType | SyntaxKind.IntersectionType, types: readonly TypeNode[]): UnionOrIntersectionTypeNode;
         createConditionalTypeNode(checkType: TypeNode, extendsType: TypeNode, trueType: TypeNode, falseType: TypeNode): ConditionalTypeNode;
         updateConditionalTypeNode(node: ConditionalTypeNode, checkType: TypeNode, extendsType: TypeNode, trueType: TypeNode, falseType: TypeNode): ConditionalTypeNode;
         createInferTypeNode(typeParameter: TypeParameterDeclaration): InferTypeNode;
@@ -5886,7 +5899,6 @@ namespace ts {
         // Binding Patterns
         //
 
-        createObjectBindingPattern(elements: readonly BindingElement[]): ObjectBindingPattern;
         createObjectBindingPattern(elements: readonly BindingElement[]): ObjectBindingPattern;
         updateObjectBindingPattern(node: ObjectBindingPattern, elements: readonly BindingElement[]): ObjectBindingPattern;
         createArrayBindingPattern(elements: readonly ArrayBindingElement[]): ArrayBindingPattern;
@@ -6019,8 +6031,8 @@ namespace ts {
         createTry(tryBlock: Block, catchClause: CatchClause | undefined, finallyBlock: Block | undefined): TryStatement;
         updateTry(node: TryStatement, tryBlock: Block, catchClause: CatchClause | undefined, finallyBlock: Block | undefined): TryStatement;
         createDebuggerStatement(): DebuggerStatement;
-        // TODO(rbuckton): Add `exclamationToken`:
         createVariableDeclaration(name: string | BindingName, type?: TypeNode, initializer?: Expression): VariableDeclaration;
+        createVariableDeclaration(name: string | BindingName, exclamationToken: ExclamationToken | undefined, type: TypeNode | undefined, initializer: Expression | undefined): VariableDeclaration;
         updateVariableDeclaration(node: VariableDeclaration, name: BindingName, type: TypeNode | undefined, initializer: Expression | undefined): VariableDeclaration;
         createVariableDeclarationList(declarations: readonly VariableDeclaration[], flags?: NodeFlags): VariableDeclarationList;
         updateVariableDeclarationList(node: VariableDeclarationList, declarations: readonly VariableDeclaration[]): VariableDeclarationList;
@@ -6062,6 +6074,7 @@ namespace ts {
         updateNamedExports(node: NamedExports, elements: readonly ExportSpecifier[]): NamedExports;
         createExportSpecifier(propertyName: string | Identifier | undefined, name: string | Identifier): ExportSpecifier;
         updateExportSpecifier(node: ExportSpecifier, propertyName: Identifier | undefined, name: Identifier): ExportSpecifier;
+        /* @internal*/ createMissingDeclaration(): MissingDeclaration;
 
         //
         // Module references
@@ -6281,7 +6294,7 @@ namespace ts {
         // Utilities
         //
 
-        // TODO(rbuckton): Rename to `restoreOuterExpression`.
+        // TODO(rbuckton): Rename to `restoreOuterExpressions`.
         recreateOuterExpressions(outerExpression: Expression | undefined, innerExpression: Expression, kinds?: OuterExpressionKinds): Expression;
         /* @internal */ restoreEnclosingLabel(node: Statement, outermostLabeledStatement: LabeledStatement | undefined, afterRestoreLabelCallback?: (node: LabeledStatement) => void): Statement;
         /* @internal */ createUseStrictPrologue(): PrologueDirective;
@@ -6323,6 +6336,15 @@ namespace ts {
         convertToObjectAssignmentPattern(node: ObjectBindingOrAssignmentPattern): ObjectLiteralExpression;
         convertToArrayAssignmentPattern(node: ArrayBindingOrAssignmentPattern): ArrayLiteralExpression;
         convertToAssignmentElementTarget(node: BindingOrAssignmentElementTarget): Expression;
+    }
+
+    /* @internal */
+    export interface TreeStateObserver {
+        onSetChild(parent: Node, child: Node): void;
+        onSetChildren(parent: Node, children: NodeArray<Node>): void;
+        onFinishNode(node: Node): void;
+        onUpdateNode(updated: Node, original: Node): void;
+        onReuseNode(node: Node): void;
     }
 
     export interface CoreTransformationContext {

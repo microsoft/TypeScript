@@ -651,6 +651,7 @@ namespace ts {
         base64decode?(input: string): string;
         base64encode?(input: string): string;
         /*@internal*/ bufferFrom?(input: string, encoding?: string): Buffer;
+        /*@internal*/ registerModule?(factory: ModuleFactory): void;
         /*@internal*/ require?(baseDir: string, moduleName: string): RequireResult;
     }
 
@@ -718,6 +719,7 @@ namespace ts {
             const _fs = require("fs");
             const _path = require("path");
             const _os = require("os");
+            const _module = require("module");
             // crypto can be absent on reduced node installations
             let _crypto: typeof import("crypto") | undefined;
             try {
@@ -749,6 +751,7 @@ namespace ts {
             const tscWatchDirectory = process.env.TSC_WATCHDIRECTORY;
             const fsWatchFile = memoize(() => createSingleFileWatcherPerName(fsWatchFileWorker, useCaseSensitiveFileNames));
             let dynamicPollingWatchFile: HostWatchFile | undefined;
+            let factories: Map<ModuleFactory> | undefined;
             const nodeSystem: System = {
                 args: process.argv.slice(2),
                 newLine: _os.EOL,
@@ -839,6 +842,7 @@ namespace ts {
                 bufferFrom,
                 base64decode: input => bufferFrom(input, "base64").toString("utf8"),
                 base64encode: input => bufferFrom(input).toString("base64"),
+                registerModule,
                 require: (baseDir, moduleName) => {
                     try {
                         // NOTE: 'require' may be called before `resolveJSModule` is available (i.e. when loading shims). If that is the case then
@@ -1336,6 +1340,29 @@ namespace ts {
                 const hash = _crypto!.createHash("sha256");
                 hash.update(data);
                 return hash.digest("hex");
+            }
+
+            // based on:
+            // - https://github.com/microsoft/vscode/blob/master/src/vs/workbench/api/common/extHostRequireInterceptor.ts
+            // - https://github.com/microsoft/vscode/blob/master/src/vs/workbench/api/node/extHostExtensionService.ts
+            function registerModule(factory: ModuleFactory) {
+                if (!factories) {
+                    factories = createMap<ModuleFactory>();
+                    const load = _module._load as ModuleLoadFunction;
+                    _module._load = function(request: string, parent: { filename: string }, isMain: boolean) {
+                        const factory = factories!.get(request);
+                        return factory ? factory.load(request, parent, isMain, (...args) => load.apply(this, args)) :
+                            load.apply(this, arguments);
+                    };
+                }
+                if (isArray(factory.id)) {
+                    for (const id of factory.id) {
+                        factories.set(id, factory);
+                    }
+                }
+                else {
+                    factories.set(factory.id, factory);
+                }
             }
         }
 

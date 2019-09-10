@@ -24,13 +24,13 @@ namespace ts.codefix {
         const i = param.parent.parameters.indexOf(param);
         Debug.assert(!param.type, "Tried to add a parameter name to a parameter that already had one.");
         Debug.assert(i > -1, "Parameter not found in parent parameter list.");
-        const replacement = createParameter(
+        const replacement = factory.createParameterDeclaration(
             /*decorators*/ undefined,
             param.modifiers,
             param.dotDotDotToken,
             "arg" + i,
             param.questionToken,
-            createTypeReferenceNode(token, /*typeArguments*/ undefined),
+            factory.createTypeReferenceNode(token, /*typeArguments*/ undefined),
             param.initializer);
         changeTracker.replaceNode(sourceFile, token, replacement);
     }

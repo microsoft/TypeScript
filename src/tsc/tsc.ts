@@ -144,15 +144,18 @@ namespace ts {
             }
             let plugins: ReadonlyArray<CompilerPlugin> | undefined;
             if (configParseResult.plugins) {
-                if (sys.require) {
+                if (sys.require && sys.registerModule) {
                     const result = getPlugins(sys as ModuleLoaderHost, getDirectoryPath(configFileName), configParseResult.plugins);
                     plugins = result.plugins;
                     if (some(result.diagnostics)) {
-                        // TODO(rbuckton): report diagnostics
+                        forEach(result.diagnostics, reportDiagnostic);
+                    }
+                    if (some(plugins)) {
+                        registerPluginApiModules(sys as ModuleLoaderHost);
                     }
                 }
                 else {
-                    // TODO(rbuckton): report diagnostic
+                    reportDiagnostic(createCompilerDiagnostic(Diagnostics.Plugins_are_not_supported_in_the_current_host_environment));
                 }
             }
             updateReportDiagnostic(configParseResult.options);

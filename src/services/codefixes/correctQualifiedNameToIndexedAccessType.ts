@@ -28,9 +28,9 @@ namespace ts.codefix {
 
     function doChange(changeTracker: textChanges.ChangeTracker, sourceFile: SourceFile, qualifiedName: QualifiedName): void {
         const rightText = qualifiedName.right.text;
-        const replacement = createIndexedAccessTypeNode(
-            createTypeReferenceNode(qualifiedName.left, /*typeArguments*/ undefined),
-            createLiteralTypeNode(createLiteral(rightText)));
+        const replacement = factory.createIndexedAccessTypeNode(
+            factory.createTypeReferenceNode(qualifiedName.left, /*typeArguments*/ undefined),
+            factory.createLiteralTypeNode(factory.createStringLiteral(rightText)));
         changeTracker.replaceNode(sourceFile, qualifiedName, replacement);
     }
 }
