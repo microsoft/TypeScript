@@ -26,7 +26,6 @@ import { LazyAction } from './bundling';
 export declare const lazyBar: LazyAction<() => void, typeof import("./lazyIndex")>;
 
 
-//// [/src/obj/index.js] file written with same contents
 //// [/src/obj/lazyIndex.d.ts] file written with same contents
 //// [/src/obj/lazyIndex.js] file written with same contents
 //// [/src/obj/tsconfig.tsbuildinfo]
