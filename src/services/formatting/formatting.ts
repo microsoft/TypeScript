@@ -1157,6 +1157,16 @@ namespace ts.formatting {
             }
         }
 
+        function recordInsertionOnce(start: number, text: string) {
+            if (text) {
+                const newEdit = createTextChangeFromStartLength(start, 0, text);
+                const lastEdit = lastOrUndefined(edits);
+                if (!lastEdit || !textSpansEqual(lastEdit.span, newEdit.span) || lastEdit.newText !== newEdit.newText) {
+                    edits.push(newEdit);
+                }
+            }
+        }
+
         function applyRuleEdits(rule: Rule,
             previousRange: TextRangeWithKind,
             previousStartLine: number,
@@ -1206,7 +1216,7 @@ namespace ts.formatting {
                     }
                     break;
                 case RuleAction.TrailingSemicolon:
-                    recordReplace(previousRange.end, 0, ";");
+                    recordInsertionOnce(previousRange.end, ";");
             }
             return LineAction.None;
         }

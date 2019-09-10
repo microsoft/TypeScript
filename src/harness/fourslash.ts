@@ -1683,7 +1683,7 @@ namespace FourSlash {
                 if (this.enableFormatting) {
                     const edits = this.languageService.getFormattingEditsAfterKeystroke(this.activeFile.fileName, offset, ch, this.formatCodeSettings);
                     if (edits.length) {
-                        offset += this.applyEdits(this.activeFile.fileName, edits, /*isFormattingEdit*/ true);
+                        offset += this.applyEdits(this.activeFile.fileName, edits);
                     }
                 }
             }
@@ -1756,7 +1756,7 @@ namespace FourSlash {
                 if (this.enableFormatting) {
                     const edits = this.languageService.getFormattingEditsAfterKeystroke(this.activeFile.fileName, offset, ch, this.formatCodeSettings);
                     if (edits.length) {
-                        offset += this.applyEdits(this.activeFile.fileName, edits, /*isFormattingEdit*/ true);
+                        offset += this.applyEdits(this.activeFile.fileName, edits);
                     }
                 }
             }
@@ -1775,7 +1775,7 @@ namespace FourSlash {
             if (this.enableFormatting) {
                 const edits = this.languageService.getFormattingEditsForRange(this.activeFile.fileName, start, offset, this.formatCodeSettings);
                 if (edits.length) {
-                    this.applyEdits(this.activeFile.fileName, edits, /*isFormattingEdit*/ true);
+                    this.applyEdits(this.activeFile.fileName, edits);
                 }
             }
 
@@ -1810,9 +1810,7 @@ namespace FourSlash {
          * @returns The number of characters added to the file as a result of the edits.
          * May be negative.
          */
-        private applyEdits(fileName: string, edits: ReadonlyArray<ts.TextChange>, isFormattingEdit: boolean): number {
-            // Get a snapshot of the content of the file so we can make sure any formatting edits didn't destroy non-whitespace characters
-            const oldContent = this.getFileContent(fileName);
+        private applyEdits(fileName: string, edits: ReadonlyArray<ts.TextChange>): number {
             let runningOffset = 0;
 
             forEachTextChange(edits, edit => {
@@ -1833,14 +1831,6 @@ namespace FourSlash {
                 runningOffset += editDelta;
             });
 
-            if (isFormattingEdit) {
-                const newContent = this.getFileContent(fileName);
-
-                if (this.removeWhitespace(newContent) !== this.removeWhitespace(oldContent)) {
-                    this.raiseError("Formatting operation destroyed non-whitespace content");
-                }
-            }
-
             return runningOffset;
         }
 
@@ -1856,17 +1846,17 @@ namespace FourSlash {
 
         public formatDocument() {
             const edits = this.languageService.getFormattingEditsForDocument(this.activeFile.fileName, this.formatCodeSettings);
-            this.applyEdits(this.activeFile.fileName, edits, /*isFormattingEdit*/ true);
+            this.applyEdits(this.activeFile.fileName, edits);
         }
 
         public formatSelection(start: number, end: number) {
             const edits = this.languageService.getFormattingEditsForRange(this.activeFile.fileName, start, end, this.formatCodeSettings);
-            this.applyEdits(this.activeFile.fileName, edits, /*isFormattingEdit*/ true);
+            this.applyEdits(this.activeFile.fileName, edits);
         }
 
         public formatOnType(pos: number, key: string) {
             const edits = this.languageService.getFormattingEditsAfterKeystroke(this.activeFile.fileName, pos, key, this.formatCodeSettings);
-            this.applyEdits(this.activeFile.fileName, edits, /*isFormattingEdit*/ true);
+            this.applyEdits(this.activeFile.fileName, edits);
         }
 
         private editScriptAndUpdateMarkers(fileName: string, editStart: number, editEnd: number, newText: string) {
@@ -2414,7 +2404,7 @@ namespace FourSlash {
 
             if (options.applyChanges) {
                 for (const change of action.changes) {
-                    this.applyEdits(change.fileName, change.textChanges, /*isFormattingEdit*/ false);
+                    this.applyEdits(change.fileName, change.textChanges);
                 }
                 this.verifyNewContentAfterChange(options, action.changes.map(c => c.fileName));
             }
@@ -2497,7 +2487,7 @@ namespace FourSlash {
 
         private applyChanges(changes: ReadonlyArray<ts.FileTextChanges>): void {
             for (const change of changes) {
-                this.applyEdits(change.fileName, change.textChanges, /*isFormattingEdit*/ false);
+                this.applyEdits(change.fileName, change.textChanges);
             }
         }
 
@@ -2525,7 +2515,7 @@ namespace FourSlash {
                 ts.Debug.assert(codeFix.changes.length === 1);
                 const change = ts.first(codeFix.changes);
                 ts.Debug.assert(change.fileName === fileName);
-                this.applyEdits(change.fileName, change.textChanges, /*isFormattingEdit*/ false);
+                this.applyEdits(change.fileName, change.textChanges);
                 const text = range ? this.rangeText(range) : this.getFileContent(this.activeFile.fileName);
                 actualTextArray.push(text);
                 scriptInfo.updateContent(originalContent);
@@ -2929,7 +2919,7 @@ namespace FourSlash {
 
             const editInfo = this.languageService.getEditsForRefactor(this.activeFile.fileName, this.formatCodeSettings, range, refactorName, actionName, ts.emptyOptions)!;
             for (const edit of editInfo.edits) {
-                this.applyEdits(edit.fileName, edit.textChanges, /*isFormattingEdit*/ false);
+                this.applyEdits(edit.fileName, edit.textChanges);
             }
 
             let renameFilename: string | undefined;
@@ -3045,7 +3035,7 @@ namespace FourSlash {
             const editInfo = this.languageService.getEditsForRefactor(marker.fileName, formattingOptions, marker.position, refactorNameToApply, actionName, ts.emptyOptions)!;
 
             for (const edit of editInfo.edits) {
-                this.applyEdits(edit.fileName, edit.textChanges, /*isFormattingEdit*/ false);
+                this.applyEdits(edit.fileName, edit.textChanges);
             }
             const actualContent = this.getFileContent(marker.fileName);
 

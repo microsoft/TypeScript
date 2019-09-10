@@ -2036,17 +2036,15 @@ namespace ts {
                 return false;
             }
         }
-        if (syntaxRequiresTrailingModuleBlockOrSemicolonOrASI(node.kind)) {
-            const children = node.parent.getChildren();
-            const nextChild = children[children.indexOf(node) + 1];
-            if (nextChild && isModuleBlock(nextChild)) {
+        else if (syntaxRequiresTrailingModuleBlockOrSemicolonOrASI(node.kind)) {
+            const lastChild = last(node.getChildren());
+            if (lastChild && isModuleBlock(lastChild)) {
                 return false;
             }
         }
         else if (syntaxRequiresTrailingFunctionBlockOrSemicolonOrASI(node.kind)) {
-            const children = node.parent.getChildren();
-            const nextChild = children[children.indexOf(node) + 1];
-            if (nextChild && isFunctionBlock(nextChild)) {
+            const lastChild = last(node.getChildren());
+            if (lastChild && isFunctionBlock(lastChild)) {
                 return false;
             }
         }
