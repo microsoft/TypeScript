@@ -585,8 +585,8 @@ namespace ts {
 
             case SyntaxKind.ExpressionWithTypeArguments:
                 return factory.updateExpressionWithTypeArguments(<ExpressionWithTypeArguments>node,
-                    nodesVisitor((<ExpressionWithTypeArguments>node).typeArguments, visitor, isTypeNode),
-                    visitNode((<ExpressionWithTypeArguments>node).expression, visitor, isExpression));
+                    visitNode((<ExpressionWithTypeArguments>node).expression, visitor, isExpression),
+                    nodesVisitor((<ExpressionWithTypeArguments>node).typeArguments, visitor, isTypeNode));
 
             case SyntaxKind.AsExpression:
                 return factory.updateAsExpression(<AsExpression>node,

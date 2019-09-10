@@ -674,6 +674,9 @@ namespace ts {
         | EnumDeclaration
         | ModuleDeclaration
         | ImportEqualsDeclaration
+        | ImportDeclaration
+        | NamespaceExportDeclaration
+        | ExportAssignment
         | IndexSignatureDeclaration
         | FunctionTypeNode
         | ConstructorTypeNode
@@ -970,7 +973,8 @@ namespace ts {
         parent: ObjectLiteralExpression;
         kind: SyntaxKind.PropertyAssignment;
         name: PropertyName;
-        questionToken?: QuestionToken;
+        questionToken?: QuestionToken; // Present for use with reporting a grammar error
+        exclamationToken?: ExclamationToken; // Present for use with reporting a grammar error
         initializer: Expression;
     }
 
@@ -978,8 +982,8 @@ namespace ts {
         parent: ObjectLiteralExpression;
         kind: SyntaxKind.ShorthandPropertyAssignment;
         name: Identifier;
-        questionToken?: QuestionToken;
-        exclamationToken?: ExclamationToken;
+        questionToken?: QuestionToken; // Present for use with reporting a grammar error
+        exclamationToken?: ExclamationToken; // Present for use with reporting a grammar error
         // used when ObjectLiteralExpression is used in ObjectAssignmentPattern
         // it is grammar error to appear in actual object initializer
         equalsToken?: Token<SyntaxKind.EqualsToken>;
@@ -2334,7 +2338,7 @@ namespace ts {
     // import "mod"  => importClause = undefined, moduleSpecifier = "mod"
     // In rest of the cases, module specifier is string literal corresponding to module
     // ImportClause information is shown at its declaration below.
-    export interface ImportDeclaration extends Statement {
+    export interface ImportDeclaration extends Statement, JSDocContainer {
         kind: SyntaxKind.ImportDeclaration;
         parent: SourceFile | ModuleBlock;
         importClause?: ImportClause;
@@ -2363,7 +2367,7 @@ namespace ts {
         name: Identifier;
     }
 
-    export interface NamespaceExportDeclaration extends DeclarationStatement {
+    export interface NamespaceExportDeclaration extends DeclarationStatement, JSDocContainer {
         kind: SyntaxKind.NamespaceExportDeclaration;
         name: Identifier;
     }
@@ -2411,7 +2415,7 @@ namespace ts {
      * This is either an `export =` or an `export default` declaration.
      * Unless `isExportEquals` is set, this node was parsed as an `export default`.
      */
-    export interface ExportAssignment extends DeclarationStatement {
+    export interface ExportAssignment extends DeclarationStatement, JSDocContainer {
         kind: SyntaxKind.ExportAssignment;
         parent: SourceFile;
         isExportEquals?: boolean;
@@ -5827,6 +5831,7 @@ namespace ts {
         updateConstructSignature(node: ConstructSignatureDeclaration, typeParameters: NodeArray<TypeParameterDeclaration> | undefined, parameters: NodeArray<ParameterDeclaration>, type: TypeNode | undefined): ConstructSignatureDeclaration;
         /* @internal */ createSignatureDeclaration<T extends SignatureDeclaration>(kind: T["kind"], typeParameters: readonly TypeParameterDeclaration[] | undefined, parameters: readonly ParameterDeclaration[], type: TypeNode | undefined, typeArguments?: readonly TypeNode[] | undefined): T;
         createIndexSignature(decorators: readonly Decorator[] | undefined, modifiers: readonly Modifier[] | undefined, parameters: readonly ParameterDeclaration[], type: TypeNode): IndexSignatureDeclaration;
+        /* @internal */ createIndexSignature(decorators: readonly Decorator[] | undefined, modifiers: readonly Modifier[] | undefined, parameters: readonly ParameterDeclaration[], type: TypeNode | undefined): IndexSignatureDeclaration; // tslint:disable-line unified-signatures
         updateIndexSignature(node: IndexSignatureDeclaration, decorators: readonly Decorator[] | undefined, modifiers: readonly Modifier[] | undefined, parameters: readonly ParameterDeclaration[], type: TypeNode): IndexSignatureDeclaration;
 
         //
@@ -5957,8 +5962,8 @@ namespace ts {
         createClassExpression(decorators: readonly Decorator[] | undefined, modifiers: readonly Modifier[] | undefined, name: string | Identifier | undefined, typeParameters: readonly TypeParameterDeclaration[] | undefined, heritageClauses: readonly HeritageClause[] | undefined, members: readonly ClassElement[]): ClassExpression;
         updateClassExpression(node: ClassExpression, decorators: readonly Decorator[] | undefined, modifiers: readonly Modifier[] | undefined, name: Identifier | undefined, typeParameters: readonly TypeParameterDeclaration[] | undefined, heritageClauses: readonly HeritageClause[] | undefined, members: readonly ClassElement[]): ClassExpression;
         createOmittedExpression(): OmittedExpression;
-        createExpressionWithTypeArguments(typeArguments: readonly TypeNode[] | undefined, expression: Expression): ExpressionWithTypeArguments;
-        updateExpressionWithTypeArguments(node: ExpressionWithTypeArguments, typeArguments: readonly TypeNode[] | undefined, expression: Expression): ExpressionWithTypeArguments;
+        createExpressionWithTypeArguments(expression: Expression, typeArguments: readonly TypeNode[] | undefined): ExpressionWithTypeArguments;
+        updateExpressionWithTypeArguments(node: ExpressionWithTypeArguments, expression: Expression, typeArguments: readonly TypeNode[] | undefined): ExpressionWithTypeArguments;
         createAsExpression(expression: Expression, type: TypeNode): AsExpression;
         updateAsExpression(node: AsExpression, expression: Expression, type: TypeNode): AsExpression;
         createNonNullExpression(expression: Expression): NonNullExpression;
@@ -6014,6 +6019,7 @@ namespace ts {
         createTry(tryBlock: Block, catchClause: CatchClause | undefined, finallyBlock: Block | undefined): TryStatement;
         updateTry(node: TryStatement, tryBlock: Block, catchClause: CatchClause | undefined, finallyBlock: Block | undefined): TryStatement;
         createDebuggerStatement(): DebuggerStatement;
+        // TODO(rbuckton): Add `exclamationToken`:
         createVariableDeclaration(name: string | BindingName, type?: TypeNode, initializer?: Expression): VariableDeclaration;
         updateVariableDeclaration(node: VariableDeclaration, name: BindingName, type: TypeNode | undefined, initializer: Expression | undefined): VariableDeclaration;
         createVariableDeclarationList(declarations: readonly VariableDeclaration[], flags?: NodeFlags): VariableDeclarationList;
@@ -6077,11 +6083,21 @@ namespace ts {
         /* @internal */ createJSDocVariadicType(type: TypeNode): JSDocVariadicType;
         /* @internal */ createJSDocNamepathType(type: TypeNode): JSDocNamepathType;
         /* @internal */ createJSDocTypeExpression(type: TypeNode): JSDocTypeExpression;
-
-        /* @internal */ createJSDocTypeTag(typeExpression: JSDocTypeExpression, comment?: string): JSDocTypeTag;
-        /* @internal */ createJSDocReturnTag(typeExpression?: JSDocTypeExpression, comment?: string): JSDocReturnTag;
-        /* @internal */ createJSDocThisTag(typeExpression?: JSDocTypeExpression): JSDocThisTag;
-        /* @internal */ createJSDocParamTag(name: EntityName, isBracketed: boolean, typeExpression?: JSDocTypeExpression, comment?: string): JSDocParameterTag;
+        /* @internal */ createJSDocTypeLiteral(jsDocPropertyTags?: readonly JSDocPropertyLikeTag[], isArrayType?: boolean): JSDocTypeLiteral;
+        /* @internal */ createJSDocSignature(typeParameters: readonly JSDocTemplateTag[] | undefined, parameters: readonly JSDocParameterTag[], type?: JSDocReturnTag): JSDocSignature;
+        /* @internal */ createJSDocTemplateTag(tagName: Identifier | undefined, constraint: JSDocTypeExpression | undefined, typeParameters: readonly TypeParameterDeclaration[]): JSDocTemplateTag;
+        /* @internal */ createJSDocTypedefTag(tagName: Identifier | undefined, typeExpression?: JSDocTypeExpression | JSDocTypeLiteral, fullName?: Identifier | JSDocNamespaceDeclaration, comment?: string): JSDocTypedefTag;
+        /* @internal */ createJSDocTypeTag(tagName: Identifier | undefined, typeExpression: JSDocTypeExpression, comment?: string): JSDocTypeTag;
+        /* @internal */ createJSDocReturnTag(tagName: Identifier | undefined, typeExpression?: JSDocTypeExpression, comment?: string): JSDocReturnTag;
+        /* @internal */ createJSDocThisTag(tagName: Identifier | undefined, typeExpression?: JSDocTypeExpression): JSDocThisTag;
+        /* @internal */ createJSDocAuthorTag(tagName: Identifier | undefined, comment?: string): JSDocAuthorTag;
+        /* @internal */ createJSDocAugmentsTag(tagName: Identifier | undefined, className: JSDocAugmentsTag["class"]): JSDocAugmentsTag;
+        /* @internal */ createJSDocClassTag(tagName: Identifier | undefined): JSDocClassTag;
+        /* @internal */ createJSDocCallbackTag(tagName: Identifier | undefined, typeExpression: JSDocSignature, fullName?: Identifier | JSDocNamespaceDeclaration, comment?: string): JSDocCallbackTag;
+        /* @internal */ createJSDocEnumTag(tagName: Identifier | undefined, typeExpression?: JSDocTypeExpression): JSDocEnumTag;
+        /* @internal */ createJSDocParameterTag(tagName: Identifier | undefined, name: EntityName, isBracketed: boolean, typeExpression?: JSDocTypeExpression, isNameFirst?: boolean, comment?: string): JSDocParameterTag;
+        /* @internal */ createJSDocPropertyTag(tagName: Identifier | undefined, name: EntityName, isBracketed: boolean, typeExpression?: JSDocTypeExpression, isNameFirst?: boolean, comment?: string): JSDocPropertyTag;
+        /* @internal */ createJSDocTag(tagName: Identifier): JSDocTag;
         /* @internal */ createJSDocComment(comment?: string | undefined, tags?: NodeArray<JSDocTag> | undefined): JSDoc;
 
         //
@@ -6102,8 +6118,8 @@ namespace ts {
         createJsxOpeningFragment(): JsxOpeningFragment;
         createJsxJsxClosingFragment(): JsxClosingFragment;
         updateJsxFragment(node: JsxFragment, openingFragment: JsxOpeningFragment, children: readonly JsxChild[], closingFragment: JsxClosingFragment): JsxFragment;
-        createJsxAttribute(name: Identifier, initializer: StringLiteral | JsxExpression): JsxAttribute;
-        updateJsxAttribute(node: JsxAttribute, name: Identifier, initializer: StringLiteral | JsxExpression): JsxAttribute;
+        createJsxAttribute(name: Identifier, initializer: StringLiteral | JsxExpression | undefined): JsxAttribute;
+        updateJsxAttribute(node: JsxAttribute, name: Identifier, initializer: StringLiteral | JsxExpression | undefined): JsxAttribute;
         createJsxAttributes(properties: readonly JsxAttributeLike[]): JsxAttributes;
         updateJsxAttributes(node: JsxAttributes, properties: readonly JsxAttributeLike[]): JsxAttributes;
         createJsxSpreadAttribute(expression: Expression): JsxSpreadAttribute;
@@ -6131,7 +6147,6 @@ namespace ts {
         createPropertyAssignment(name: string | PropertyName, initializer: Expression): PropertyAssignment;
         updatePropertyAssignment(node: PropertyAssignment, name: PropertyName, initializer: Expression): PropertyAssignment;
         createShorthandPropertyAssignment(name: string | Identifier, objectAssignmentInitializer?: Expression): ShorthandPropertyAssignment;
-        /* @internal */ createShorthandPropertyAssignmentInternal(decorators: readonly Decorator[] | undefined, modifiers: readonly Modifier[] | undefined, name: string | Identifier, equalsToken: EqualsToken | undefined, objectAssignmentInitializer: Expression | undefined): ShorthandPropertyAssignment;
         updateShorthandPropertyAssignment(node: ShorthandPropertyAssignment, name: Identifier, objectAssignmentInitializer: Expression | undefined): ShorthandPropertyAssignment;
         createSpreadAssignment(expression: Expression): SpreadAssignment;
         updateSpreadAssignment(node: SpreadAssignment, expression: Expression): SpreadAssignment;

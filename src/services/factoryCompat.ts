@@ -142,8 +142,6 @@ namespace ts {
         createSpread,
         updateSpread,
         createOmittedExpression,
-        createExpressionWithTypeArguments,
-        updateExpressionWithTypeArguments,
         createAsExpression,
         updateAsExpression,
         createNonNullExpression,
@@ -241,7 +239,6 @@ namespace ts {
         createJSDocTypeTag,
         createJSDocReturnTag,
         createJSDocThisTag,
-        createJSDocParamTag,
         createJSDocComment,
         createJsxElement,
         updateJsxElement,
@@ -478,6 +475,14 @@ namespace ts {
             || node.initializer !== initializer
             ? updateNode(createPropertySignature(modifiers, name, questionToken, type, initializer), node)
             : node;
+    }
+
+    export function createExpressionWithTypeArguments(typeArguments: readonly TypeNode[] | undefined, expression: Expression) {
+        return syntheticNodeFactory.createExpressionWithTypeArguments(expression, typeArguments);
+    }
+
+    export function updateExpressionWithTypeArguments(node: ExpressionWithTypeArguments, typeArguments: readonly TypeNode[] | undefined, expression: Expression) {
+        return syntheticNodeFactory.updateExpressionWithTypeArguments(node, expression, typeArguments);
     }
 }
 

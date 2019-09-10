@@ -20,22 +20,6 @@
                 "transformFlags": 0,
                 "escapedText": "typedef"
             },
-            "fullName": {
-                "kind": "Identifier",
-                "pos": 17,
-                "end": 23,
-                "modifierFlagsCache": 0,
-                "transformFlags": 0,
-                "escapedText": "People"
-            },
-            "name": {
-                "kind": "Identifier",
-                "pos": 17,
-                "end": 23,
-                "modifierFlagsCache": 0,
-                "transformFlags": 0,
-                "escapedText": "People"
-            },
             "typeExpression": {
                 "kind": "JSDocTypeLiteral",
                 "pos": 8,
@@ -122,6 +106,22 @@
                         "isBracketed": false
                     }
                 ]
+            },
+            "fullName": {
+                "kind": "Identifier",
+                "pos": 17,
+                "end": 23,
+                "modifierFlagsCache": 0,
+                "transformFlags": 0,
+                "escapedText": "People"
+            },
+            "name": {
+                "kind": "Identifier",
+                "pos": 17,
+                "end": 23,
+                "modifierFlagsCache": 0,
+                "transformFlags": 0,
+                "escapedText": "People"
             }
         },
         "length": 1,

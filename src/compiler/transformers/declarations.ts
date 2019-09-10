@@ -822,7 +822,7 @@ namespace ts {
                             checkEntityNameVisibility(input.expression, enclosingDeclaration);
                         }
                         const node = visitEachChild(input, visitDeclarationSubtree, context);
-                        return cleanup(factory.updateExpressionWithTypeArguments(node, node.typeArguments, node.expression));
+                        return cleanup(factory.updateExpressionWithTypeArguments(node, node.expression, node.typeArguments));
                     }
                     case SyntaxKind.TypeReference: {
                         checkEntityNameVisibility(input.typeName, enclosingDeclaration);
@@ -1311,7 +1311,7 @@ namespace ts {
                             if (clause.token === SyntaxKind.ExtendsKeyword) {
                                 const oldDiag = getSymbolAccessibilityDiagnostic;
                                 getSymbolAccessibilityDiagnostic = createGetSymbolAccessibilityDiagnosticForNode(clause.types[0]);
-                                const newClause = factory.updateHeritageClause(clause, map(clause.types, t => factory.updateExpressionWithTypeArguments(t, visitNodes(t.typeArguments, visitDeclarationSubtree), newId)));
+                                const newClause = factory.updateHeritageClause(clause, map(clause.types, t => factory.updateExpressionWithTypeArguments(t, newId, visitNodes(t.typeArguments, visitDeclarationSubtree))));
                                 getSymbolAccessibilityDiagnostic = oldDiag;
                                 return newClause;
                             }

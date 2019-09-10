@@ -3950,18 +3950,22 @@ namespace ts {
     }
 
     export function getModifierFlagsNoCache(node: Node): ModifierFlags {
-
-        let flags = ModifierFlags.None;
-        if (node.modifiers) {
-            for (const modifier of node.modifiers) {
-                flags |= modifierToFlag(modifier.kind);
-            }
-        }
+        let flags = modifiersToFlags(node.modifiers);
 
         if (node.flags & NodeFlags.NestedNamespace || (node.kind === SyntaxKind.Identifier && (<Identifier>node).isInJSDocNamespace)) {
             flags |= ModifierFlags.Export;
         }
 
+        return flags;
+    }
+
+    export function modifiersToFlags(modifiers: NodeArray<Modifier> | undefined) {
+        let flags = ModifierFlags.None;
+        if (modifiers) {
+            for (const modifier of modifiers) {
+                flags |= modifierToFlag(modifier.kind);
+            }
+        }
         return flags;
     }
 
@@ -7085,6 +7089,19 @@ namespace ts {
     export function hasJSDocNodes(node: Node): node is HasJSDoc {
         const { jsDoc } = node as JSDocContainer;
         return !!jsDoc && jsDoc.length > 0;
+    }
+
+    /* @internal */
+    export function getJSDocTypeAliasName(fullName: JSDocNamespaceBody | undefined) {
+        if (fullName) {
+            let rightNode = fullName;
+            while (true) {
+                if (isIdentifier(rightNode) || !rightNode.body) {
+                    return isIdentifier(rightNode) ? rightNode : rightNode.name;
+                }
+                rightNode = rightNode.body;
+            }
+        }
     }
 
     /** True if has type node attached to it. */

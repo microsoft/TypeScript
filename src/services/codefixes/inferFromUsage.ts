@@ -126,7 +126,7 @@ namespace ts.codefix {
                     const typeNode = getTypeNodeIfAccessible(type, parent, program, host);
                     if (typeNode) {
                         // Note that the codefix will never fire with an existing `@type` tag, so there is no need to merge tags
-                        const typeTag = createJSDocTypeTag(createJSDocTypeExpression(typeNode), /*comment*/ "");
+                        const typeTag = createJSDocTypeTag(/*tagName*/ undefined, createJSDocTypeExpression(typeNode), /*comment*/ "");
                         addJSDocTags(changes, sourceFile, cast(parent.parent.parent, isExpressionStatement), [typeTag]);
                     }
                     return parent;
@@ -254,7 +254,7 @@ namespace ts.codefix {
 
     function annotateJSDocThis(changes: textChanges.ChangeTracker, sourceFile: SourceFile, containingFunction: FunctionLike, typeNode: TypeNode) {
         addJSDocTags(changes, sourceFile, containingFunction, [
-            createJSDocThisTag(createJSDocTypeExpression(typeNode)),
+            createJSDocThisTag(/*tagName*/ undefined, createJSDocTypeExpression(typeNode)),
         ]);
     }
 
@@ -283,7 +283,7 @@ namespace ts.codefix {
                     return;
                 }
                 const typeExpression = createJSDocTypeExpression(typeNode);
-                const typeTag = isGetAccessorDeclaration(declaration) ? createJSDocReturnTag(typeExpression, "") : createJSDocTypeTag(typeExpression, "");
+                const typeTag = isGetAccessorDeclaration(declaration) ? createJSDocReturnTag(/*tagName*/ undefined, typeExpression, "") : createJSDocTypeTag(/*tagName*/ undefined, typeExpression, "");
                 addJSDocTags(changes, sourceFile, parent, [typeTag]);
             }
             else {
@@ -305,7 +305,7 @@ namespace ts.codefix {
             const typeNode = inference.type && getTypeNodeIfAccessible(inference.type, param, program, host);
             const name = getSynthesizedClone(param.name);
             setEmitFlags(name, EmitFlags.NoComments | EmitFlags.NoNestedComments);
-            return typeNode && createJSDocParamTag(name, !!inference.isOptional, createJSDocTypeExpression(typeNode), "");
+            return typeNode && syntheticNodeFactory.createJSDocParameterTag(/*tagName*/ undefined, name, !!inference.isOptional, createJSDocTypeExpression(typeNode), /*isNameFirst*/ undefined, "");
         });
         addJSDocTags(changes, sourceFile, signature, paramTags);
     }
@@ -341,11 +341,11 @@ namespace ts.codefix {
                 const oldParam = oldTag as JSDocParameterTag;
                 const newParam = newTag as JSDocParameterTag;
                 return isIdentifier(oldParam.name) && isIdentifier(newParam.name) && oldParam.name.escapedText === newParam.name.escapedText
-                    ? createJSDocParamTag(newParam.name, newParam.isBracketed, newParam.typeExpression, oldParam.comment)
+                    ? syntheticNodeFactory.createJSDocParameterTag(/*tagName*/ undefined, newParam.name, newParam.isBracketed, newParam.typeExpression, /*isNameFirst*/ undefined, oldParam.comment)
                     : undefined;
             }
             case SyntaxKind.JSDocReturnTag:
-                return createJSDocReturnTag((newTag as JSDocReturnTag).typeExpression, oldTag.comment);
+                return createJSDocReturnTag(/*tagName*/ undefined, (newTag as JSDocReturnTag).typeExpression, oldTag.comment);
         }
     }
 

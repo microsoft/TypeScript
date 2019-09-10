@@ -88,7 +88,8 @@
                             "isBracketed": false,
                             "comment": "Doc for f"
                         }
-                    ]
+                    ],
+                    "isArrayType": false
                 }
             },
             "name": {

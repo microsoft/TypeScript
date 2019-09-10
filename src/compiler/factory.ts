@@ -269,11 +269,22 @@ namespace ts {
             createJSDocFunctionType,
             createJSDocVariadicType,
             createJSDocNamepathType,
+            createJSDocTypeLiteral,
             createJSDocTypeExpression,
+            createJSDocSignature,
+            createJSDocTemplateTag,
             createJSDocTypeTag,
+            createJSDocTypedefTag,
             createJSDocReturnTag,
             createJSDocThisTag,
-            createJSDocParamTag,
+            createJSDocParameterTag,
+            createJSDocPropertyTag,
+            createJSDocAuthorTag,
+            createJSDocAugmentsTag,
+            createJSDocCallbackTag,
+            createJSDocClassTag,
+            createJSDocEnumTag,
+            createJSDocTag: tagName => createJSDocTag(SyntaxKind.JSDocTag, tagName),
             createJSDocComment,
             createJsxElement,
             updateJsxElement,
@@ -308,7 +319,6 @@ namespace ts {
             createPropertyAssignment,
             updatePropertyAssignment,
             createShorthandPropertyAssignment,
-            createShorthandPropertyAssignmentInternal,
             updateShorthandPropertyAssignment,
             createSpreadAssignment,
             updateSpreadAssignment,
@@ -442,6 +452,8 @@ namespace ts {
         ) {
             const node = createNode(kind) as T;
             node.text = text;
+            node.hasExtendedUnicodeEscape = undefined;
+            node.isUnterminated = undefined;
             return node;
         }
 
@@ -495,11 +507,11 @@ namespace ts {
                 originalKeywordKind = undefined;
             }
             const node = createNode(SyntaxKind.Identifier) as Identifier;
-            node.escapedText = escapeLeadingUnderscores(text);
             node.originalKeywordKind = originalKeywordKind;
-            node.autoGenerateFlags = GeneratedIdentifierFlags.None;
-            node.autoGenerateId = 0;
+            node.escapedText = escapeLeadingUnderscores(text);
             node.typeArguments = asNodeArray(typeArguments);
+            node.autoGenerateFlags = undefined;
+            node.autoGenerateId = undefined;
             return node;
         }
 
@@ -1070,7 +1082,7 @@ namespace ts {
             decorators: readonly Decorator[] | undefined,
             modifiers: readonly Modifier[] | undefined,
             parameters: readonly ParameterDeclaration[],
-            type: TypeNode
+            type: TypeNode | undefined
         ): IndexSignatureDeclaration {
             return createBaseSignatureLikeDeclaration(
                 SyntaxKind.IndexSignature,
@@ -2000,17 +2012,17 @@ namespace ts {
             return createNode(SyntaxKind.OmittedExpression) as OmittedExpression;
         }
 
-        function createExpressionWithTypeArguments(typeArguments: readonly TypeNode[] | undefined, expression: Expression) {
+        function createExpressionWithTypeArguments(expression: Expression, typeArguments: readonly TypeNode[] | undefined) {
             const node = createNode(SyntaxKind.ExpressionWithTypeArguments) as ExpressionWithTypeArguments;
             node.expression = parenthesizer().parenthesizeLeftSideOfAccess(expression);
             node.typeArguments = typeArguments && parenthesizer().parenthesizeTypeArguments(typeArguments);
             return node;
         }
 
-        function updateExpressionWithTypeArguments(node: ExpressionWithTypeArguments, typeArguments: readonly TypeNode[] | undefined, expression: Expression) {
-            return node.typeArguments !== typeArguments
-                || node.expression !== expression
-                ? updateNode(createExpressionWithTypeArguments(typeArguments, expression), node)
+        function updateExpressionWithTypeArguments(node: ExpressionWithTypeArguments, expression: Expression, typeArguments: readonly TypeNode[] | undefined) {
+            return node.expression !== expression
+                || node.typeArguments !== typeArguments
+                ? updateNode(createExpressionWithTypeArguments(expression, typeArguments), node)
                 : node;
         }
 
@@ -2805,42 +2817,112 @@ namespace ts {
             return node;
         }
 
+        function createJSDocTypeLiteral(propertyTags?: readonly JSDocPropertyLikeTag[], isArrayType?: boolean): JSDocTypeLiteral {
+            const node = createNode(SyntaxKind.JSDocTypeLiteral) as JSDocTypeLiteral;
+            node.jsDocPropertyTags = propertyTags;
+            node.isArrayType = isArrayType;
+            return node;
+        }
+
         function createJSDocTypeExpression(type: TypeNode): JSDocTypeExpression {
             const node = createNode(SyntaxKind.JSDocTypeExpression) as JSDocTypeExpression;
             node.type = type;
             return node;
         }
 
-        function createJSDocTypeTag(typeExpression: JSDocTypeExpression, comment?: string): JSDocTypeTag {
-            const tag = createJSDocTag<JSDocTypeTag>(
-                SyntaxKind.JSDocTypeTag, "type");
+        function createJSDocSignature(typeParameters: readonly JSDocTemplateTag[] | undefined, parameters: readonly JSDocParameterTag[], type?: JSDocReturnTag): JSDocSignature {
+            const node = createNode(SyntaxKind.JSDocSignature) as JSDocSignature;
+            node.typeParameters = asNodeArray(typeParameters);
+            node.parameters = createNodeArray(parameters);
+            node.type = type;
+            return node;
+        }
+
+        function createJSDocTemplateTag(tagName: Identifier | undefined, constraint: JSDocTypeExpression | undefined, typeParameters: readonly TypeParameterDeclaration[]): JSDocTemplateTag {
+            const tag = createJSDocTag<JSDocTemplateTag>(SyntaxKind.JSDocTemplateTag, tagName || createIdentifier("template"));
+            tag.constraint = constraint;
+            tag.typeParameters = createNodeArray(typeParameters);
+            return tag;
+        }
+
+        function createJSDocTypeTag(tagName: Identifier | undefined, typeExpression: JSDocTypeExpression, comment?: string): JSDocTypeTag {
+            const tag = createJSDocTag<JSDocTypeTag>(SyntaxKind.JSDocTypeTag, tagName || createIdentifier("type"));
             tag.typeExpression = typeExpression;
             tag.comment = comment;
             return tag;
         }
 
-        function createJSDocReturnTag(typeExpression?: JSDocTypeExpression, comment?: string): JSDocReturnTag {
-            const tag = createJSDocTag<JSDocReturnTag>(
-                SyntaxKind.JSDocReturnTag, "returns");
+        function createJSDocTypedefTag(tagName: Identifier | undefined, typeExpression?: JSDocTypeExpression, fullName?: Identifier | JSDocNamespaceDeclaration, comment?: string): JSDocTypedefTag {
+            const tag = createJSDocTag<JSDocTypedefTag>(SyntaxKind.JSDocTypedefTag, tagName || createIdentifier("typedef"));
+            tag.typeExpression = typeExpression;
+            tag.fullName = fullName;
+            tag.name = getJSDocTypeAliasName(fullName);
+            tag.comment = comment;
+            return tag;
+        }
+
+        function createJSDocReturnTag(tagName: Identifier | undefined, typeExpression?: JSDocTypeExpression, comment?: string): JSDocReturnTag {
+            const tag = createJSDocTag<JSDocReturnTag>(SyntaxKind.JSDocReturnTag, tagName || createIdentifier("returns"));
             tag.typeExpression = typeExpression;
             tag.comment = comment;
             return tag;
         }
 
-        function createJSDocThisTag(typeExpression?: JSDocTypeExpression): JSDocThisTag {
-            const tag = createJSDocTag<JSDocThisTag>(
-                SyntaxKind.JSDocThisTag, "this");
+        function createJSDocThisTag(tagName: Identifier | undefined, typeExpression?: JSDocTypeExpression): JSDocThisTag {
+            const tag = createJSDocTag<JSDocThisTag>(SyntaxKind.JSDocThisTag, tagName || createIdentifier("this"));
             tag.typeExpression = typeExpression;
             return tag;
         }
 
-        function createJSDocParamTag(name: EntityName, isBracketed: boolean, typeExpression?: JSDocTypeExpression, comment?: string): JSDocParameterTag {
-            const tag = createJSDocTag<JSDocParameterTag>(
-                SyntaxKind.JSDocParameterTag, "param");
+        function createJSDocParameterTag(tagName: Identifier | undefined, name: EntityName, isBracketed: boolean, typeExpression?: JSDocTypeExpression, isNameFirst?: boolean, comment?: string): JSDocParameterTag {
+            const tag = createJSDocTag<JSDocParameterTag>(SyntaxKind.JSDocParameterTag, tagName || createIdentifier("param"));
             tag.typeExpression = typeExpression;
             tag.name = name;
+            tag.isNameFirst = !!isNameFirst;
             tag.isBracketed = isBracketed;
             tag.comment = comment;
+            return tag;
+        }
+
+        function createJSDocPropertyTag(tagName: Identifier | undefined, name: EntityName, isBracketed: boolean, typeExpression?: JSDocTypeExpression, isNameFirst?: boolean, comment?: string): JSDocPropertyTag {
+            const tag = createJSDocTag<JSDocPropertyTag>(SyntaxKind.JSDocPropertyTag, tagName || createIdentifier("prop"));
+            tag.typeExpression = typeExpression;
+            tag.name = name;
+            tag.isNameFirst = !!isNameFirst;
+            tag.isBracketed = isBracketed;
+            tag.comment = comment;
+            return tag;
+        }
+
+        function createJSDocAuthorTag(tagName: Identifier | undefined, comment?: string): JSDocAuthorTag {
+            const tag = createJSDocTag<JSDocAuthorTag>(SyntaxKind.JSDocAuthorTag, tagName || createIdentifier("author"));
+            tag.comment = comment;
+            return tag;
+        }
+
+        function createJSDocAugmentsTag(tagName: Identifier | undefined, className: JSDocAugmentsTag["class"]): JSDocAugmentsTag {
+            const tag = createJSDocTag<JSDocAugmentsTag>(SyntaxKind.JSDocAugmentsTag, tagName || createIdentifier("augments"));
+            tag.class = className;
+            return tag;
+        }
+
+        function createJSDocCallbackTag(tagName: Identifier | undefined, typeExpression: JSDocSignature, fullName?: Identifier | JSDocNamespaceDeclaration, comment?: string): JSDocCallbackTag {
+            const tag = createJSDocTag<JSDocCallbackTag>(SyntaxKind.JSDocCallbackTag, tagName || createIdentifier("callback"));
+            tag.typeExpression = typeExpression;
+            tag.fullName = fullName;
+            tag.name = getJSDocTypeAliasName(fullName);
+            tag.comment = comment;
+            return tag;
+        }
+
+        function createJSDocClassTag(tagName: Identifier | undefined): JSDocClassTag {
+            const tag = createJSDocTag<JSDocClassTag>(SyntaxKind.JSDocClassTag, tagName || createIdentifier("class"));
+            return tag;
+        }
+
+        function createJSDocEnumTag(tagName: Identifier | undefined, typeExpression?: JSDocTypeExpression): JSDocEnumTag {
+            const tag = createJSDocTag<JSDocEnumTag>(SyntaxKind.JSDocEnumTag, tagName || createIdentifier("enum"));
+            tag.typeExpression = typeExpression;
             return tag;
         }
 
@@ -2851,9 +2933,9 @@ namespace ts {
             return node;
         }
 
-        function createJSDocTag<T extends JSDocTag>(kind: T["kind"], tagName: string): T {
+        function createJSDocTag<T extends JSDocTag>(kind: T["kind"], tagName: Identifier): T {
             const node = createNode(kind) as T;
-            node.tagName = createIdentifier(tagName);
+            node.tagName = tagName;
             return node;
         }
 
@@ -2959,14 +3041,14 @@ namespace ts {
                 : node;
         }
 
-        function createJsxAttribute(name: Identifier, initializer: StringLiteral | JsxExpression) {
+        function createJsxAttribute(name: Identifier, initializer: StringLiteral | JsxExpression | undefined) {
             const node = createNode(SyntaxKind.JsxAttribute) as JsxAttribute;
             node.name = name;
             node.initializer = initializer;
             return node;
         }
 
-        function updateJsxAttribute(node: JsxAttribute, name: Identifier, initializer: StringLiteral | JsxExpression) {
+        function updateJsxAttribute(node: JsxAttribute, name: Identifier, initializer: StringLiteral | JsxExpression | undefined) {
             return node.name !== name
                 || node.initializer !== initializer
                 ? updateNode(createJsxAttribute(name, initializer), node)

@@ -1860,8 +1860,8 @@ namespace ts {
         function visitExpressionWithTypeArguments(node: ExpressionWithTypeArguments): ExpressionWithTypeArguments {
             return factory.updateExpressionWithTypeArguments(
                 node,
-                /*typeArguments*/ undefined,
-                visitNode(node.expression, visitor, isLeftHandSideExpression)
+                visitNode(node.expression, visitor, isLeftHandSideExpression),
+                /*typeArguments*/ undefined
             );
         }
 
