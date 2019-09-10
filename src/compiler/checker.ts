@@ -4049,7 +4049,8 @@ namespace ts {
                     else if (context.flags & NodeBuilderFlags.WriteClassExpressionAsTypeLiteral &&
                         type.symbol.valueDeclaration &&
                         isClassLike(type.symbol.valueDeclaration) &&
-                        findAncestor(type.symbol.valueDeclaration, d => d === getSourceFileOfNode(context.enclosingDeclaration)) && // Use `import` types for refs to other scopes, only anonymize something defined in the same scope
+                        // Use `import` types for refs to other scopes, only anonymize something defined in the same scope
+                        findAncestor(type.symbol.valueDeclaration, d => d === getSourceFileOfNode(context.enclosingDeclaration)) &&
                         !isValueSymbolAccessible(type.symbol, context.enclosingDeclaration)
                     ) {
                         return createAnonymousTypeNode(type);
@@ -4470,7 +4471,8 @@ namespace ts {
                             for (const parent of sortedParents) {
                                 const parentChain = getSymbolChain(parent, getQualifiedLeftMeaning(meaning), /*endOfChain*/ false);
                                 if (parentChain) {
-                                    if (parent.exports && parent.exports.get(InternalSymbolName.ExportEquals) && getSymbolIfSameReference(parent.exports.get(InternalSymbolName.ExportEquals)!, symbol)) {
+                                    if (parent.exports && parent.exports.get(InternalSymbolName.ExportEquals) &&
+                                        getSymbolIfSameReference(parent.exports.get(InternalSymbolName.ExportEquals)!, symbol)) {
                                         // parentChain root _is_ symbol - symbol is a module export=, so it kinda looks like it's own parent
                                         // No need to lookup an alias for the symbol in itself
                                         accessibleSymbolChain = parentChain;
@@ -4677,8 +4679,8 @@ namespace ts {
                     else {
                         if (parent && getExportsOfSymbol(parent)) {
                             const exports = getExportsOfSymbol(parent);
-                            forEachEntry(exports, (sym, name) => {
-                                if (getSymbolIfSameReference(sym, symbol) && !isLateBoundName(name) && name !== InternalSymbolName.ExportEquals) {
+                            forEachEntry(exports, (ex, name) => {
+                                if (getSymbolIfSameReference(ex, symbol) && !isLateBoundName(name) && name !== InternalSymbolName.ExportEquals) {
                                     symbolName = unescapeLeadingUnderscores(name);
                                     return true;
                                 }
@@ -4690,7 +4692,9 @@ namespace ts {
                     }
                     context.approximateLength += symbolName.length + 1;
 
-                    if (!(context.flags & NodeBuilderFlags.ForbidIndexedAccessSymbolReferences) && parent && getMembersOfSymbol(parent) && getMembersOfSymbol(parent).get(symbol.escapedName) && getSymbolIfSameReference(getMembersOfSymbol(parent).get(symbol.escapedName)!, symbol)) {
+                    if (!(context.flags & NodeBuilderFlags.ForbidIndexedAccessSymbolReferences) && parent &&
+                        getMembersOfSymbol(parent) && getMembersOfSymbol(parent).get(symbol.escapedName) &&
+                        getSymbolIfSameReference(getMembersOfSymbol(parent).get(symbol.escapedName)!, symbol)) {
                         // Should use an indexed access
                         const LHS = createAccessFromSymbolChain(chain, index - 1, stopper);
                         if (isIndexedAccessTypeNode(LHS)) {
@@ -5055,7 +5059,9 @@ namespace ts {
                         // Classes, namespaces, variables, functions, interfaces, and types should all be `export`ed in a module context if not private
                         newModifierFlags |= ModifierFlags.Export;
                     }
-                    if (addingDeclare && !(newModifierFlags & ModifierFlags.Export) && (!enclosingDeclaration || !(enclosingDeclaration.flags & NodeFlags.Ambient)) && (isEnumDeclaration(node) || isVariableStatement(node) || isFunctionDeclaration(node) || isClassDeclaration(node) || isModuleDeclaration(node))) {
+                    if (addingDeclare && !(newModifierFlags & ModifierFlags.Export) &&
+                        (!enclosingDeclaration || !(enclosingDeclaration.flags & NodeFlags.Ambient)) &&
+                        (isEnumDeclaration(node) || isVariableStatement(node) || isFunctionDeclaration(node) || isClassDeclaration(node) || isModuleDeclaration(node))) {
                         // Classes, namespaces, variables, enums, and functions all need `declare` modifiers to be valid in a declaration file top-level scope
                         newModifierFlags |= ModifierFlags.Ambient;
                     }
@@ -5067,23 +5073,6 @@ namespace ts {
                         node.modifierFlagsCache = 0; // Reset computed flags cache
                     }
                     results.push(node);
-                    return node;
-                }
-
-                function getInternalSymbolName(symbol: Symbol, localName: string) {
-                    if (context.remappedSymbolNames!.has("" + getSymbolId(symbol))) {
-                        return context.remappedSymbolNames!.get("" + getSymbolId(symbol))!;
-                    }
-                    if (localName === InternalSymbolName.Default || localName === InternalSymbolName.Class || localName === InternalSymbolName.Function) {
-                        const flags = context.flags;
-                        context.flags |= NodeBuilderFlags.InInitialEntityName;
-                        const nameCandidate = getNameOfSymbolAsWritten(symbol, context);
-                        context.flags = flags;
-                        localName = isIdentifierText(nameCandidate, languageVersion) && !isStringANonContextualKeyword(nameCandidate) ? nameCandidate : getUnusedName(`_default`, symbol);
-                    }
-                    // The result of this is going to be used as the symbol's name - lock it in, so `getUnusedName` will also pick it up
-                    context.remappedSymbolNames!.set("" + getSymbolId(symbol), localName);
-                    return localName;
                 }
 
                 function serializeAsFunctionNamespaceMerge(type: Type, symbol: Symbol, localName: string, modifierFlags: ModifierFlags) {
@@ -5798,7 +5787,7 @@ namespace ts {
 
                     const results = [];
                     for (const sig of signatures) {
-                        // Each overload becomes a seperate constructor declaration, in order
+                        // Each overload becomes a separate constructor declaration, in order
                         const decl = signatureToSignatureDeclarationHelper(sig, outputKind, context);
                         results.push(setTextRange(decl, sig.declaration));
                     }
@@ -5896,6 +5885,22 @@ namespace ts {
                         context.remappedSymbolNames!.set("" + getSymbolId(symbol), input);
                     }
                     return input;
+                }
+
+                function getInternalSymbolName(symbol: Symbol, localName: string) {
+                    if (context.remappedSymbolNames!.has("" + getSymbolId(symbol))) {
+                        return context.remappedSymbolNames!.get("" + getSymbolId(symbol))!;
+                    }
+                    if (localName === InternalSymbolName.Default || localName === InternalSymbolName.Class || localName === InternalSymbolName.Function) {
+                        const flags = context.flags;
+                        context.flags |= NodeBuilderFlags.InInitialEntityName;
+                        const nameCandidate = getNameOfSymbolAsWritten(symbol, context);
+                        context.flags = flags;
+                        localName = isIdentifierText(nameCandidate, languageVersion) && !isStringANonContextualKeyword(nameCandidate) ? nameCandidate : getUnusedName(`_default`, symbol);
+                    }
+                    // The result of this is going to be used as the symbol's name - lock it in, so `getUnusedName` will also pick it up
+                    context.remappedSymbolNames!.set("" + getSymbolId(symbol), localName);
+                    return localName;
                 }
             }
         }
