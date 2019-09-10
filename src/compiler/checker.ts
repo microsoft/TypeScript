@@ -2200,7 +2200,7 @@ namespace ts {
 
         function getTargetOfNamespaceImport(node: NamespaceImport, dontResolveAlias: boolean): Symbol | undefined {
             const moduleSpecifier = node.parent.parent.moduleSpecifier;
-            return resolveESModuleSymbol(resolveExternalModuleName(node, moduleSpecifier), moduleSpecifier, dontResolveAlias);
+            return resolveESModuleSymbol(resolveExternalModuleName(node, moduleSpecifier), moduleSpecifier, dontResolveAlias, /*suppressUsageError*/ false);
         }
 
         // This function creates a synthetic symbol that combines the value side of one symbol with the
@@ -2254,9 +2254,9 @@ namespace ts {
 
         function getExternalModuleMember(node: ImportDeclaration | ExportDeclaration, specifier: ImportOrExportSpecifier, dontResolveAlias = false): Symbol | undefined {
             const moduleSymbol = resolveExternalModuleName(node, node.moduleSpecifier!)!; // TODO: GH#18217
-            const targetSymbol = resolveESModuleSymbol(moduleSymbol, node.moduleSpecifier!, dontResolveAlias);
+            const name = specifier.propertyName || specifier.name;
+            const targetSymbol = resolveESModuleSymbol(moduleSymbol, node.moduleSpecifier!, dontResolveAlias, name.escapedText === InternalSymbolName.Default && !!(compilerOptions.allowSyntheticDefaultImports || compilerOptions.esModuleInterop));
             if (targetSymbol) {
-                const name = specifier.propertyName || specifier.name;
                 if (name.escapedText) {
                     if (isShorthandAmbientModuleSymbol(moduleSymbol)) {
                         return moduleSymbol;
@@ -2765,11 +2765,11 @@ namespace ts {
         // An external module with an 'export =' declaration may be referenced as an ES6 module provided the 'export ='
         // references a symbol that is at least declared as a module or a variable. The target of the 'export =' may
         // combine other declarations with the module or variable (e.g. a class/module, function/module, interface/variable).
-        function resolveESModuleSymbol(moduleSymbol: Symbol | undefined, referencingLocation: Node, dontResolveAlias: boolean): Symbol | undefined {
+        function resolveESModuleSymbol(moduleSymbol: Symbol | undefined, referencingLocation: Node, dontResolveAlias: boolean, suppressInteropError: boolean): Symbol | undefined {
             const symbol = resolveExternalModuleSymbol(moduleSymbol, dontResolveAlias);
 
             if (!dontResolveAlias && symbol) {
-                if (!(symbol.flags & (SymbolFlags.Module | SymbolFlags.Variable)) && !getDeclarationOfKind(symbol, SyntaxKind.SourceFile)) {
+                if (!suppressInteropError && !(symbol.flags & (SymbolFlags.Module | SymbolFlags.Variable)) && !getDeclarationOfKind(symbol, SyntaxKind.SourceFile)) {
                     const compilerOptionName = moduleKind >= ModuleKind.ES2015
                         ? "allowSyntheticDefaultImports"
                         : "esModuleInterop";
@@ -4910,63 +4910,6 @@ namespace ts {
                 let addingDeclare = !bundled;
                 const exportEquals = symbolTable.get(InternalSymbolName.ExportEquals);
                 if (exportEquals && symbolTable.size > 1 && exportEquals.flags & SymbolFlags.Alias) {
-                    // // export= merged with other stuff - likely due to JS declarations. This is strangeish to deal with, but essentially we just
-                    // // filter the symbol table and stuff export declarations for the non-export= members into a merged namespace
-
-                    // deferredPrivates = createMap();
-                    // serializeSymbol(exportEquals, /*isPrivate*/ false);
-                    // visitSymbolTable(symbolTable, deferredPrivates, /*markExportsPrivate*/ true);
-                    // deferredPrivates = undefined;
-
-                    // // Lookup the name of what the export= points to, so we name the ns merging in the other top-level imports correctly
-                    // const aliasDecl = getDeclarationOfAliasSymbol(exportEquals);
-                    // const target = aliasDecl && getTargetOfAliasDeclaration(aliasDecl, /*dontRecursivelyResolve*/ true);
-
-                    // // We have to setup `deferredPrivates` again because `includePrivateSymbol` and/or `symbolToName` may use it :3
-                    // deferredPrivates = createMap();
-                    // if (target) {
-                    //     includePrivateSymbol(target);
-                    // }
-                    // // Disable symbol tracking for printing the name of this thing, as the name will always be visible except when
-                    // // it's an annonymous class expression, which we'd like to ignore, since we're going to hoist the expression to a statement anyway
-                    // const oldTracker = context.tracker.trackSymbol;
-                    // context.tracker.trackSymbol = noop;
-                    // const nsname = target ? symbolToName(target, context, SymbolFlags.All, /*expectsIdentifier*/ false) : createIdentifier(getUnusedName("_exports", exportEquals));
-                    // context.tracker.trackSymbol = oldTracker;
-                    // visitSymbolTable(emptySymbols, deferredPrivates, /*markExportsPrivate*/ true);
-                    // deferredPrivates = undefined;
-
-                    // const nsBody = createModuleBlock([createExportDeclaration(
-                    //     /*decorators*/ undefined,
-                    //     /*modifiers*/ undefined,
-                    //     createNamedExports(map(filter(arrayFrom(symbolTable.values()), n => n.escapedName !== InternalSymbolName.ExportEquals), s => {
-                    //         const name = symbolName(s);
-                    //         const localName = getInternalSymbolName(s, name);
-                    //         return createExportSpecifier(name === localName ? undefined : localName, name);
-                    //     }))
-                    // )]);
-                    // const firstId = getFirstIdentifier(nsname);
-                    // const existingDeclIdx = findIndex(results, r => isModuleDeclaration(r) && isIdentifier(r.name) && idText(firstId) === idText(r.name));
-                    // if (existingDeclIdx >= 0) {
-                    //     const existing = results[existingDeclIdx] as ModuleDeclaration;
-                    //     results.splice(existingDeclIdx, 1, updateModuleDeclaration(
-                    //         existing,
-                    //         /*decorators*/ undefined,
-                    //         existing.modifiers,
-                    //         firstId,
-                    //         appendModuleBody(existing.body as NamespaceBody, nsBody)
-                    //     ));
-                    // }
-                    // else {
-                    //     addResult(createModuleDeclaration(
-                    //         /*decorators*/ undefined,
-                    //         /*modifiers*/ undefined,
-                    //         isIdentifier(nsname) ? nsname : getFirstIdentifier(nsname),
-                    //         nsBody,
-                    //         NodeFlags.Namespace
-                    //     ), ModifierFlags.None);
-                    // }
-                    // return mergeRedundantStatements(results);
                     symbolTable = createSymbolTable();
                     symbolTable.set(InternalSymbolName.ExportEquals, exportEquals); // Remove extraneous elements from root symbol table (they'll be mixed back in when the target of the `export=` is looked up)
                 }
@@ -5075,19 +5018,6 @@ namespace ts {
                     statement.modifiers = createNodeArray(createModifiersFromModifierFlags(flags));
                     statement.modifierFlagsCache = 0;
                 }
-
-                // function appendModuleBody(existingBody: NamespaceBody, toAdd: NamespaceBody) {
-                //     if (isModuleBlock(existingBody) && isModuleBlock(toAdd)) {
-                //         return updateModuleBlock(existingBody, [...existingBody.statements, ...toAdd.statements]);
-                //     }
-                //     if (isModuleBlock(existingBody)) {
-                //         return updateModuleBlock(existingBody, [...existingBody.statements, toAdd]);
-                //     }
-                //     if (isModuleBlock(toAdd)) {
-                //         return updateModuleBlock(toAdd, [existingBody, ...toAdd.statements]);
-                //     }
-                //     return createModuleBlock([existingBody, toAdd]);
-                // }
 
                 function visitSymbolTable(symbolTable: SymbolTable, suppressNewPrivateContext?: boolean, propertyAsAlias?: boolean) {
                     const oldDeferredList = deferredPrivates;
@@ -5437,7 +5367,12 @@ namespace ts {
                     if (!node) return Debug.fail();
                     const target = getMergedSymbol(getTargetOfAliasDeclaration(node, /*dontRecursivelyResolve*/ true));
                     if (target) {
-                        const targetName = getInternalSymbolName(target, unescapeLeadingUnderscores(target.escapedName));
+                        let verbatimTargetName = unescapeLeadingUnderscores(target.escapedName);
+                        if (verbatimTargetName === InternalSymbolName.ExportEquals && (compilerOptions.esModuleInterop || compilerOptions.allowSyntheticDefaultImports)) {
+                            // target refers to an `export=` symbol that was hoisted into a synthetic default - rename here to match
+                            verbatimTargetName = InternalSymbolName.Default;
+                        }
+                        const targetName = getInternalSymbolName(target, verbatimTargetName);
                         includePrivateSymbol(target); // the target may be within the same scope - attempt to serialize it first
                         switch (node.kind) {
                             case SyntaxKind.ImportEqualsDeclaration:
@@ -5478,7 +5413,7 @@ namespace ts {
                                     /*decorators*/ undefined,
                                     /*modifiers*/ undefined,
                                     createImportClause(/*importClause*/ undefined, createNamedImports([
-                                        createImportSpecifier(localName !== targetName ? createIdentifier(targetName) : undefined, createIdentifier(localName))
+                                        createImportSpecifier(localName !== verbatimTargetName ? createIdentifier(verbatimTargetName) : undefined, createIdentifier(localName))
                                     ])),
                                     createLiteral(getSpecifierForModuleSymbol(target.parent!, context))
                                 ), ModifierFlags.None);
@@ -5486,7 +5421,8 @@ namespace ts {
                             case SyntaxKind.ExportSpecifier:
                                 // does not use localName because the symbol name in this case refers to the name in the exports table, which we must exactly preserve
                                 const specifier = (node.parent.parent as ExportDeclaration).moduleSpecifier;
-                                serializeExportSpecifier(unescapeLeadingUnderscores(symbol.escapedName), targetName, specifier && isStringLiteralLike(specifier) ? createLiteral(specifier.text) : undefined);
+                                // targetName is only used when the target is local, as otherwise the target is an alias that points at another file
+                                serializeExportSpecifier(unescapeLeadingUnderscores(symbol.escapedName), specifier ? verbatimTargetName : targetName, specifier && isStringLiteralLike(specifier) ? createLiteral(specifier.text) : undefined);
                                 break;
                             case SyntaxKind.ExportAssignment:
                                 serializeMaybeAliasAssignment(symbol);
@@ -24318,7 +24254,7 @@ namespace ts {
             // resolveExternalModuleName will return undefined if the moduleReferenceExpression is not a string literal
             const moduleSymbol = resolveExternalModuleName(node, specifier);
             if (moduleSymbol) {
-                const esModuleSymbol = resolveESModuleSymbol(moduleSymbol, specifier, /*dontRecursivelyResolve*/ true);
+                const esModuleSymbol = resolveESModuleSymbol(moduleSymbol, specifier, /*dontRecursivelyResolve*/ true, /*suppressUsageError*/ false);
                 if (esModuleSymbol) {
                     return createPromiseReturnType(node, getTypeWithSyntheticDefaultImportType(getTypeOfSymbol(esModuleSymbol), esModuleSymbol, moduleSymbol));
                 }
