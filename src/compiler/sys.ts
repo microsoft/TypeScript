@@ -377,7 +377,7 @@ namespace ts {
     }
 
     /*@internal*/
-    export const ignoredPaths = ["/node_modules/.", "/.git", "/.#"];
+    export const ignoredPaths = ["/node_modules/", "/.git", "/.#"];
 
     /*@internal*/
     export let sysLog: (s: string) => void = noop;
