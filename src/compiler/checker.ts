@@ -28740,11 +28740,13 @@ namespace ts {
             let nextType: Type | undefined;
             if (methodName !== "throw") {
                 const methodParameterType = methodParameterTypes ? getUnionType(methodParameterTypes) : unknownType;
-                const resolvedMethodParameterType = resolver.resolveIterationType(methodParameterType, errorNode) || anyType;
                 if (methodName === "next") {
-                    nextType = resolvedMethodParameterType;
+                    // The value of `next(value)` is *not* awaited by async generators
+                    nextType = methodParameterType;
                 }
                 else if (methodName === "return") {
+                    // The value of `return(value)` *is* awaited by async generators
+                    const resolvedMethodParameterType = resolver.resolveIterationType(methodParameterType, errorNode) || anyType;
                     returnTypes = append(returnTypes, resolvedMethodParameterType);
                 }
             }
