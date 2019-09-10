@@ -2465,7 +2465,7 @@ namespace ts {
             let symbol: Symbol | undefined;
             if (name.kind === SyntaxKind.Identifier) {
                 const message = meaning === namespaceMeaning ? Diagnostics.Cannot_find_namespace_0 : getCannotFindNameDiagnosticForName(getFirstIdentifier(name));
-                const symbolFromJSPrototype = isInJSFile(name) ? resolveEntityNameFromAssignmentDeclaration(name, meaning) : undefined;
+                const symbolFromJSPrototype = isInJSFile(name) && !nodeIsSynthesized(name) ? resolveEntityNameFromAssignmentDeclaration(name, meaning) : undefined;
                 symbol = resolveName(location || name, name.escapedText, meaning, ignoreErrors || symbolFromJSPrototype ? undefined : message, name, /*isUse*/ true);
                 if (!symbol) {
                     return symbolFromJSPrototype;
@@ -16268,7 +16268,8 @@ namespace ts {
                 case "AsyncIterator":
                     return Diagnostics.Cannot_find_name_0_Do_you_need_to_change_your_target_library_Try_changing_the_lib_compiler_option_to_es2015_or_later;
                 default:
-                    if (node.parent.kind === SyntaxKind.ShorthandPropertyAssignment) {
+                    // Check for `parent` to handle synthetic nodes (like this jsx namespace from the jsxFactory compiler option)
+                    if (node.parent && node.parent.kind === SyntaxKind.ShorthandPropertyAssignment) {
                         return Diagnostics.No_value_exists_in_scope_for_the_shorthand_property_0_Either_declare_one_or_provide_an_initializer;
                     }
                     else {
@@ -20466,7 +20467,7 @@ namespace ts {
                             ? createSyntheticExpression(node, reactSym.exports ? getTypeOfSymbol(getSymbol(getExportsOfSymbol(reactSym), "Fragment" as __String, SymbolFlags.Value) || unknownSymbol) : emptyObjectType)
                             : isJsxIntrinsicIdentifier(node.tagName) ? createSyntheticExpression(node.tagName, getLiteralType(idText((node.tagName as Identifier)))) : node.tagName,
                         isJsxOpeningFragment(node) ? createSyntheticExpression(node, nullType) : createSyntheticExpression(node.attributes, checkMode => checkExpression(node.attributes, checkMode)),
-                        ...mapDefined(children, c => isJsxText(c) && c.containsOnlyWhiteSpaces ? undefined : createSyntheticExpression(c, isJsxText(c) ? stringType : (checkMode => checkExpression(c, checkMode))))
+                        ...mapDefined(children, c => isJsxText(c) && c.containsOnlyTriviaWhiteSpaces ? undefined : createSyntheticExpression(c, isJsxText(c) ? stringType : (checkMode => checkExpression(c, checkMode))))
                     ]);
                     links.jsxFactoryCall.pos = node.pos;
                     links.jsxFactoryCall.end = node.end;
