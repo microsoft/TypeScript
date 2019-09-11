@@ -20,7 +20,7 @@ namespace ts {
     export function forEachEmittedFile<T>(
         host: EmitHost, action: (emitFileNames: EmitFileNames, sourceFileOrBundle: SourceFile | Bundle | undefined) => T,
         sourceFilesOrTargetSourceFile?: readonly SourceFile[] | SourceFile,
-        emitOnlyDtsFiles = false,
+        forceDtsEmit = false,
         onlyBuildInfo?: boolean,
         includeBuildInfo?: boolean) {
         const sourceFiles = isArray(sourceFilesOrTargetSourceFile) ? sourceFilesOrTargetSourceFile : getSourceFilesToEmit(host, sourceFilesOrTargetSourceFile);
@@ -29,7 +29,7 @@ namespace ts {
             const prepends = host.getPrependNodes();
             if (sourceFiles.length || prepends.length) {
                 const bundle = createBundle(sourceFiles, prepends);
-                const result = action(getOutputPathsFor(bundle, host, emitOnlyDtsFiles), bundle);
+                const result = action(getOutputPathsFor(bundle, host, forceDtsEmit), bundle);
                 if (result) {
                     return result;
                 }
@@ -38,7 +38,7 @@ namespace ts {
         else {
             if (!onlyBuildInfo) {
                 for (const sourceFile of sourceFiles) {
-                    const result = action(getOutputPathsFor(sourceFile, host, emitOnlyDtsFiles), sourceFile);
+                    const result = action(getOutputPathsFor(sourceFile, host, forceDtsEmit), sourceFile);
                     if (result) {
                         return result;
                     }
@@ -227,7 +227,7 @@ namespace ts {
 
     /*@internal*/
     // targetSourceFile is when users only want one file in entire project to be emitted. This is used in compileOnSave feature
-    export function emitFiles(resolver: EmitResolver, host: EmitHost, targetSourceFile: SourceFile | undefined, { scriptTransformers, declarationTransformers }: EmitTransformers, emitOnlyDtsFiles?: boolean, onlyBuildInfo?: boolean): EmitResult {
+    export function emitFiles(resolver: EmitResolver, host: EmitHost, targetSourceFile: SourceFile | undefined, { scriptTransformers, declarationTransformers }: EmitTransformers, emitOnlyDtsFiles?: boolean, onlyBuildInfo?: boolean, forceDtsEmit?: boolean): EmitResult {
         const compilerOptions = host.getCompilerOptions();
         const sourceMapDataList: SourceMapEmitResult[] | undefined = (compilerOptions.sourceMap || compilerOptions.inlineSourceMap || getAreDeclarationMapsEnabled(compilerOptions)) ? [] : undefined;
         const emittedFilesList: string[] | undefined = compilerOptions.listEmittedFiles ? [] : undefined;
@@ -241,7 +241,14 @@ namespace ts {
 
         // Emit each output file
         enter();
-        forEachEmittedFile(host, emitSourceFileOrBundle, getSourceFilesToEmit(host, targetSourceFile), emitOnlyDtsFiles, onlyBuildInfo, !targetSourceFile);
+        forEachEmittedFile(
+            host,
+            emitSourceFileOrBundle,
+            getSourceFilesToEmit(host, targetSourceFile),
+            forceDtsEmit,
+            onlyBuildInfo,
+            !targetSourceFile
+        );
         exit();
 
 
@@ -400,7 +407,7 @@ namespace ts {
             });
             const declBlocked = (!!declarationTransform.diagnostics && !!declarationTransform.diagnostics.length) || !!host.isEmitBlocked(declarationFilePath) || !!compilerOptions.noEmit;
             emitSkipped = emitSkipped || declBlocked;
-            if (!declBlocked || emitOnlyDtsFiles) {
+            if (!declBlocked || forceDtsEmit) {
                 Debug.assert(declarationTransform.transformed.length === 1, "Should only see one output from the decl transform");
                 printSourceFileOrBundle(
                     declarationFilePath,
@@ -415,7 +422,7 @@ namespace ts {
                         // Explicitly do not passthru either `inline` option
                     }
                 );
-                if (emitOnlyDtsFiles && declarationTransform.transformed[0].kind === SyntaxKind.SourceFile) {
+                if (forceDtsEmit && declarationTransform.transformed[0].kind === SyntaxKind.SourceFile) {
                     const sourceFile = declarationTransform.transformed[0];
                     exportedModulesFromDeclarationEmit = sourceFile.exportedModulesFromDeclarationEmit;
                 }

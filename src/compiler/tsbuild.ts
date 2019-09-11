@@ -308,6 +308,7 @@ namespace ts {
         /*@internal*/ getUpToDateStatusOfProject(project: string): UpToDateStatus;
         /*@internal*/ invalidateProject(configFilePath: ResolvedConfigFilePath, reloadLevel?: ConfigFileProgramReloadLevel): void;
         /*@internal*/ buildNextInvalidatedProject(): void;
+        /*@internal*/ getAllParsedConfigs(): readonly ParsedCommandLine[];
     }
 
     /**
@@ -2047,6 +2048,10 @@ namespace ts {
             },
             invalidateProject: (configFilePath, reloadLevel) => invalidateProject(state, configFilePath, reloadLevel || ConfigFileProgramReloadLevel.None),
             buildNextInvalidatedProject: () => buildNextInvalidatedProject(state),
+            getAllParsedConfigs: () => arrayFrom(mapDefinedIterator(
+                state.configFileCache.values(),
+                config => isParsedCommandLine(config) ? config : undefined
+            )),
         };
     }
 

@@ -32,6 +32,10 @@ namespace vfs {
     let devCount = 0; // A monotonically increasing count of device ids
     let inoCount = 0; // A monotonically increasing count of inodes
 
+    export interface DiffOptions {
+        includeChangedFileWithSameContent?: boolean;
+    }
+
     /**
      * Represents a virtual POSIX-like file system.
      */
@@ -693,21 +697,25 @@ namespace vfs {
          * Generates a `FileSet` patch containing all the entries in this `FileSystem` that are not in `base`.
          * @param base The base file system. If not provided, this file system's `shadowRoot` is used (if present).
          */
-        public diff(base = this.shadowRoot) {
+        public diff(base = this.shadowRoot, options: DiffOptions = {}) {
             const differences: FileSet = {};
-            const hasDifferences = base ? FileSystem.rootDiff(differences, this, base) : FileSystem.trackCreatedInodes(differences, this, this._getRootLinks());
+            const hasDifferences = base ?
+                FileSystem.rootDiff(differences, this, base, options) :
+                FileSystem.trackCreatedInodes(differences, this, this._getRootLinks());
             return hasDifferences ? differences : undefined;
         }
 
         /**
-         * Generates a `FileSet` patch containing all the entries in `chagned` that are not in `base`.
+         * Generates a `FileSet` patch containing all the entries in `changed` that are not in `base`.
          */
-        public static diff(changed: FileSystem, base: FileSystem) {
+        public static diff(changed: FileSystem, base: FileSystem, options: DiffOptions = {}) {
             const differences: FileSet = {};
-            return FileSystem.rootDiff(differences, changed, base) ? differences : undefined;
+            return FileSystem.rootDiff(differences, changed, base, options) ?
+                differences :
+                undefined;
         }
 
-        private static diffWorker(container: FileSet, changed: FileSystem, changedLinks: ReadonlyMap<string, Inode> | undefined, base: FileSystem, baseLinks: ReadonlyMap<string, Inode> | undefined) {
+        private static diffWorker(container: FileSet, changed: FileSystem, changedLinks: ReadonlyMap<string, Inode> | undefined, base: FileSystem, baseLinks: ReadonlyMap<string, Inode> | undefined, options: DiffOptions) {
             if (changedLinks && !baseLinks) return FileSystem.trackCreatedInodes(container, changed, changedLinks);
             if (baseLinks && !changedLinks) return FileSystem.trackDeletedInodes(container, baseLinks);
             if (changedLinks && baseLinks) {
@@ -724,10 +732,10 @@ namespace vfs {
                     const baseNode = baseLinks.get(basename);
                     if (baseNode) {
                         if (isDirectory(changedNode) && isDirectory(baseNode)) {
-                            return hasChanges = FileSystem.directoryDiff(container, basename, changed, changedNode, base, baseNode) || hasChanges;
+                            return hasChanges = FileSystem.directoryDiff(container, basename, changed, changedNode, base, baseNode, options) || hasChanges;
                         }
                         if (isFile(changedNode) && isFile(baseNode)) {
-                            return hasChanges = FileSystem.fileDiff(container, basename, changed, changedNode, base, baseNode) || hasChanges;
+                            return hasChanges = FileSystem.fileDiff(container, basename, changed, changedNode, base, baseNode, options) || hasChanges;
                         }
                         if (isSymlink(changedNode) && isSymlink(baseNode)) {
                             return hasChanges = FileSystem.symlinkDiff(container, basename, changedNode, baseNode) || hasChanges;
@@ -740,7 +748,7 @@ namespace vfs {
             return false;
         }
 
-        private static rootDiff(container: FileSet, changed: FileSystem, base: FileSystem) {
+        private static rootDiff(container: FileSet, changed: FileSystem, base: FileSystem, options: DiffOptions) {
             while (!changed._lazy.links && changed._shadowRoot) changed = changed._shadowRoot;
             while (!base._lazy.links && base._shadowRoot) base = base._shadowRoot;
 
@@ -750,10 +758,10 @@ namespace vfs {
             // no difference if the root links are empty and unshadowed
             if (!changed._lazy.links && !changed._shadowRoot && !base._lazy.links && !base._shadowRoot) return false;
 
-            return FileSystem.diffWorker(container, changed, changed._getRootLinks(), base, base._getRootLinks());
+            return FileSystem.diffWorker(container, changed, changed._getRootLinks(), base, base._getRootLinks(), options);
         }
 
-        private static directoryDiff(container: FileSet, basename: string, changed: FileSystem, changedNode: DirectoryInode, base: FileSystem, baseNode: DirectoryInode) {
+        private static directoryDiff(container: FileSet, basename: string, changed: FileSystem, changedNode: DirectoryInode, base: FileSystem, baseNode: DirectoryInode, options: DiffOptions) {
             while (!changedNode.links && changedNode.shadowRoot) changedNode = changedNode.shadowRoot;
             while (!baseNode.links && baseNode.shadowRoot) baseNode = baseNode.shadowRoot;
 
@@ -770,7 +778,7 @@ namespace vfs {
 
             // no difference if both nodes have identical children
             const children: FileSet = {};
-            if (!FileSystem.diffWorker(children, changed, changed._getLinks(changedNode), base, base._getLinks(baseNode))) {
+            if (!FileSystem.diffWorker(children, changed, changed._getLinks(changedNode), base, base._getLinks(baseNode), options)) {
                 return false;
             }
 
@@ -778,7 +786,7 @@ namespace vfs {
             return true;
         }
 
-        private static fileDiff(container: FileSet, basename: string, changed: FileSystem, changedNode: FileInode, base: FileSystem, baseNode: FileInode) {
+        private static fileDiff(container: FileSet, basename: string, changed: FileSystem, changedNode: FileInode, base: FileSystem, baseNode: FileInode, options: DiffOptions) {
             while (!changedNode.buffer && changedNode.shadowRoot) changedNode = changedNode.shadowRoot;
             while (!baseNode.buffer && baseNode.shadowRoot) baseNode = baseNode.shadowRoot;
 
@@ -800,7 +808,11 @@ namespace vfs {
             if (changedBuffer === baseBuffer) return false;
 
             // no difference if both buffers are identical
-            if (Buffer.compare(changedBuffer, baseBuffer) === 0) return false;
+            if (Buffer.compare(changedBuffer, baseBuffer) === 0) {
+                if (!options.includeChangedFileWithSameContent) return false;
+                container[basename] = new SameFileContentFile(changedBuffer);
+                return true;
+            }
 
             container[basename] = new File(changedBuffer);
             return true;
@@ -1361,6 +1373,12 @@ namespace vfs {
         }
     }
 
+    export class SameFileContentFile extends File {
+        constructor(data: Buffer | string, metaAndEncoding?: { encoding?: string, meta?: Record<string, any> }) {
+            super(data, metaAndEncoding);
+        }
+    }
+
     /** Extended options for a hard link in a `FileSet` */
     export class Link {
         public readonly path: string;
@@ -1548,6 +1566,9 @@ namespace vfs {
             }
             else if (entry instanceof Directory) {
                 text += formatPatchWorker(file, entry.files);
+            }
+            else if (entry instanceof SameFileContentFile) {
+                text += `//// [${file}] file written with same contents\r\n`;
             }
             else if (entry instanceof File) {
                 const content = typeof entry.data === "string" ? entry.data : entry.data.toString("utf8");

@@ -15,9 +15,9 @@ namespace ts {
 /*@internal*/
 namespace ts {
     export function getFileEmitOutput(program: Program, sourceFile: SourceFile, emitOnlyDtsFiles: boolean,
-        cancellationToken?: CancellationToken, customTransformers?: CustomTransformers): EmitOutput {
+        cancellationToken?: CancellationToken, customTransformers?: CustomTransformers, forceDtsEmit?: boolean): EmitOutput {
         const outputFiles: OutputFile[] = [];
-        const emitResult = program.emit(sourceFile, writeFile, cancellationToken, emitOnlyDtsFiles, customTransformers);
+        const emitResult = program.emit(sourceFile, writeFile, cancellationToken, emitOnlyDtsFiles, customTransformers, forceDtsEmit);
         return { outputFiles, emitSkipped: emitResult.emitSkipped, exportedModulesFromDeclarationEmit: emitResult.exportedModulesFromDeclarationEmit };
 
         function writeFile(fileName: string, text: string, writeByteOrderMark: boolean) {
@@ -344,7 +344,14 @@ namespace ts.BuilderState {
             }
         }
         else {
-            const emitOutput = getFileEmitOutput(programOfThisState, sourceFile, /*emitOnlyDtsFiles*/ true, cancellationToken);
+            const emitOutput = getFileEmitOutput(
+                programOfThisState,
+                sourceFile,
+                /*emitOnlyDtsFiles*/ true,
+                cancellationToken,
+                /*customTransformers*/ undefined,
+                /*forceDtsEmit*/ true
+            );
             const firstDts = emitOutput.outputFiles &&
                 programOfThisState.getCompilerOptions().declarationMap ?
                 emitOutput.outputFiles.length > 1 ? emitOutput.outputFiles[1] : undefined :

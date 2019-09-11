@@ -17,20 +17,6 @@ namespace ts {
                 tick,
                 proj: "emitDeclarationOnly",
                 rootNames: ["/src"],
-                lastProjectOutput: `/src/lib/index.d.ts`,
-                outputFiles: [
-                    "/src/lib/a.d.ts",
-                    "/src/lib/b.d.ts",
-                    "/src/lib/c.d.ts",
-                    "/src/lib/index.d.ts",
-                    "/src/tsconfig.tsbuildinfo",
-                    ...(disableMap ? emptyArray : [
-                        "/src/lib/a.d.ts.map",
-                        "/src/lib/b.d.ts.map",
-                        "/src/lib/c.d.ts.map",
-                        "/src/lib/index.d.ts.map"
-                    ])
-                ],
                 initialBuild: {
                     modifyFs: disableMap ?
                         (fs => replaceText(fs, "/src/tsconfig.json", `"declarationMap": true,`, "")) :
@@ -63,16 +49,6 @@ namespace ts {
             tick,
             proj: "emitDeclarationOnly",
             rootNames: ["/src"],
-            lastProjectOutput: `/src/lib/a.d.ts`,
-            outputFiles: [
-                "/src/lib/a.d.ts",
-                "/src/lib/b.d.ts",
-                "/src/lib/c.d.ts",
-                "/src/tsconfig.tsbuildinfo",
-                "/src/lib/a.d.ts.map",
-                "/src/lib/b.d.ts.map",
-                "/src/lib/c.d.ts.map",
-            ],
             initialBuild: {
                 modifyFs: fs => {
                     fs.rimrafSync("/src/src/index.ts");

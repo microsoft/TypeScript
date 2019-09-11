@@ -55,19 +55,6 @@ namespace ts {
                 ]
             ]
         ];
-        const expectedMapFileNames = [
-            outputFiles[project.first][ext.jsmap],
-            outputFiles[project.first][ext.dtsmap],
-            outputFiles[project.second][ext.jsmap],
-            outputFiles[project.second][ext.dtsmap],
-            outputFiles[project.third][ext.jsmap],
-            outputFiles[project.third][ext.dtsmap]
-        ];
-        const expectedTsbuildInfoFileNames: readonly BuildInfoSectionBaselineFiles[] = [
-            [outputFiles[project.first][ext.buildinfo], outputFiles[project.first][ext.js], outputFiles[project.first][ext.dts]],
-            [outputFiles[project.second][ext.buildinfo], outputFiles[project.second][ext.js], outputFiles[project.second][ext.dts]],
-            [outputFiles[project.third][ext.buildinfo], outputFiles[project.third][ext.js], outputFiles[project.third][ext.dts]]
-        ];
         const relSources = sources.map(([config, sources]) => [relName(config), sources.map(relName)]) as any as [Sources, Sources, Sources];
         const { time, tick } = getTime();
         let expectedOutputFiles = [
@@ -252,7 +239,6 @@ namespace ts {
             modifyFs: (fs: vfs.FileSystem) => void;
             modifyAgainFs?: (fs: vfs.FileSystem) => void;
             additionalSourceFiles?: readonly string[];
-            expectedBuildInfoFilesForSectionBaselines?: readonly BuildInfoSectionBaselineFiles[];
             dependOrdered?: true;
             ignoreDtsChanged?: true;
             ignoreDtsUnchanged?: true;
@@ -264,7 +250,6 @@ namespace ts {
             modifyFs,
             modifyAgainFs,
             additionalSourceFiles,
-            expectedBuildInfoFilesForSectionBaselines,
             dependOrdered,
             ignoreDtsChanged,
             ignoreDtsUnchanged,
@@ -286,9 +271,7 @@ namespace ts {
                 tick,
                 proj: "outfile-concat",
                 rootNames: ["/src/third"],
-                expectedMapFileNames,
-                expectedBuildInfoFilesForSectionBaselines: expectedBuildInfoFilesForSectionBaselines || expectedTsbuildInfoFileNames,
-                lastProjectOutput: outputFiles[project.third][ext.js],
+                baselineSourceMap: true,
                 initialBuild: {
                     modifyFs,
                     expectedDiagnostics: initialExpectedDiagnostics,
@@ -311,7 +294,6 @@ namespace ts {
                     expectedDiagnostics: dtsUnchanged && dtsUnchanged.expectedDiagnostics,
                     expectedReadFiles: dtsUnchanged && dtsUnchanged.expectedReadFiles
                 } : undefined,
-                outputFiles: expectedOutputFiles,
                 baselineOnly
             });
         }
@@ -344,11 +326,6 @@ namespace ts {
             scenario: "when final project specifies tsBuildInfoFile",
             modifyFs: fs => replaceText(fs, sources[project.third][source.config], `"composite": true,`, `"composite": true,
         "tsBuildInfoFile": "./thirdjs/output/third.tsbuildinfo",`),
-            expectedBuildInfoFilesForSectionBaselines: [
-                expectedTsbuildInfoFileNames[0],
-                expectedTsbuildInfoFileNames[1],
-                ["/src/third/thirdjs/output/third.tsbuildinfo", expectedTsbuildInfoFileNames[2][1], expectedTsbuildInfoFileNames[2][2]]
-            ],
             ignoreDtsChanged: true,
             ignoreDtsUnchanged: true,
             baselineOnly: true
