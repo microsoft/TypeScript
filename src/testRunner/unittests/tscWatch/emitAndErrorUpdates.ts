@@ -16,11 +16,11 @@ namespace ts.tscWatch {
             };
         }
 
-        function getOutputFileStampsAndErrors(host: WatchedSystem, watch: Watch, directoryFiles: ReadonlyArray<File>) {
+        function getOutputFileStampsAndErrors(host: WatchedSystem, watch: Watch, directoryFiles: readonly File[]) {
             return directoryFiles.map(d => getOutputFileStampAndError(host, watch, d));
         }
 
-        function findStampAndErrors(stampsAndErrors: ReadonlyArray<ReturnType<typeof getOutputFileStampAndError>>, file: File) {
+        function findStampAndErrors(stampsAndErrors: readonly ReturnType<typeof getOutputFileStampAndError>[], file: File) {
             return find(stampsAndErrors, info => info.file === file)!;
         }
 
@@ -28,8 +28,8 @@ namespace ts.tscWatch {
             file: File,
             emitExpected: boolean,
             errorRefershExpected: boolean,
-            beforeChangeFileStampsAndErrors: ReadonlyArray<ReturnType<typeof getOutputFileStampAndError>>,
-            afterChangeFileStampsAndErrors: ReadonlyArray<ReturnType<typeof getOutputFileStampAndError>>
+            beforeChangeFileStampsAndErrors: readonly ReturnType<typeof getOutputFileStampAndError>[],
+            afterChangeFileStampsAndErrors: readonly ReturnType<typeof getOutputFileStampAndError>[]
         ) {
             const beforeChange = findStampAndErrors(beforeChangeFileStampsAndErrors, file);
             const afterChange = findStampAndErrors(afterChangeFileStampsAndErrors, file);
@@ -53,11 +53,11 @@ namespace ts.tscWatch {
 
         interface VerifyEmitAndErrorUpdates {
             change: (host: WatchedSystem) => void;
-            getInitialErrors: (watch: Watch) => ReadonlyArray<Diagnostic> | ReadonlyArray<string>;
-            getIncrementalErrors: (watch: Watch) => ReadonlyArray<Diagnostic> | ReadonlyArray<string>;
-            filesWithNewEmit: ReadonlyArray<File>;
-            filesWithOnlyErrorRefresh: ReadonlyArray<File>;
-            filesNotTouched: ReadonlyArray<File>;
+            getInitialErrors: (watch: Watch) => readonly Diagnostic[] | readonly string[];
+            getIncrementalErrors: (watch: Watch) => readonly Diagnostic[] | readonly string[];
+            filesWithNewEmit: readonly File[];
+            filesWithOnlyErrorRefresh: readonly File[];
+            filesNotTouched: readonly File[];
             configFile?: File;
         }
 

@@ -84,7 +84,7 @@ namespace ts {
             return visitJsxOpeningFragment(node.openingFragment, node.children, isChild, /*location*/ node);
         }
 
-        function visitJsxOpeningLikeElement(node: JsxOpeningLikeElement, children: ReadonlyArray<JsxChild> | undefined, isChild: boolean, location: TextRange) {
+        function visitJsxOpeningLikeElement(node: JsxOpeningLikeElement, children: readonly JsxChild[] | undefined, isChild: boolean, location: TextRange) {
             const tagName = getTagName(node);
             let objectProperties: Expression | undefined;
             const attrs = node.attributes.properties;
@@ -133,7 +133,7 @@ namespace ts {
             return element;
         }
 
-        function visitJsxOpeningFragment(node: JsxOpeningFragment, children: ReadonlyArray<JsxChild>, isChild: boolean, location: TextRange) {
+        function visitJsxOpeningFragment(node: JsxOpeningFragment, children: readonly JsxChild[], isChild: boolean, location: TextRange) {
             const element = createExpressionForJsxFragment(
                 context.getEmitResolver().getJsxFactoryEntity(currentSourceFile),
                 compilerOptions.reactNamespace!, // TODO: GH#18217

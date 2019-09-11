@@ -7,7 +7,7 @@ namespace ts.refactor.extractSymbol {
      * Compute the associated code actions
      * Exported for tests.
      */
-    export function getAvailableActions(context: RefactorContext): ReadonlyArray<ApplicableRefactorInfo> {
+    export function getAvailableActions(context: RefactorContext): readonly ApplicableRefactorInfo[] {
         const rangeToExtract = getRangeToExtract(context.file, getRefactorContextSpan(context));
 
         const targetRange = rangeToExtract.targetRange;
@@ -167,11 +167,11 @@ namespace ts.refactor.extractSymbol {
      */
     type RangeToExtract = {
         readonly targetRange?: never;
-        readonly errors: ReadonlyArray<Diagnostic>;
+        readonly errors: readonly Diagnostic[];
     } | {
-            readonly targetRange: TargetRange;
-            readonly errors?: never;
-        };
+        readonly targetRange: TargetRange;
+        readonly errors?: never;
+    };
 
     /*
      * Scopes that can store newly extracted method
@@ -450,29 +450,29 @@ namespace ts.refactor.extractSymbol {
                         rangeFacts |= RangeFacts.UsesThis;
                         break;
                     case SyntaxKind.LabeledStatement: {
-                            const label = (<LabeledStatement>node).label;
-                            (seenLabels || (seenLabels = [])).push(label.escapedText);
-                            forEachChild(node, visit);
-                            seenLabels.pop();
-                            break;
-                        }
+                        const label = (<LabeledStatement>node).label;
+                        (seenLabels || (seenLabels = [])).push(label.escapedText);
+                        forEachChild(node, visit);
+                        seenLabels.pop();
+                        break;
+                    }
                     case SyntaxKind.BreakStatement:
                     case SyntaxKind.ContinueStatement: {
-                            const label = (<BreakStatement | ContinueStatement>node).label;
-                            if (label) {
-                                if (!contains(seenLabels, label.escapedText)) {
-                                    // attempts to jump to label that is not in range to be extracted
-                                    (errors || (errors = [] as Diagnostic[])).push(createDiagnosticForNode(node, Messages.cannotExtractRangeContainingLabeledBreakOrContinueStatementWithTargetOutsideOfTheRange));
-                                }
+                        const label = (<BreakStatement | ContinueStatement>node).label;
+                        if (label) {
+                            if (!contains(seenLabels, label.escapedText)) {
+                                // attempts to jump to label that is not in range to be extracted
+                                (errors || (errors = [] as Diagnostic[])).push(createDiagnosticForNode(node, Messages.cannotExtractRangeContainingLabeledBreakOrContinueStatementWithTargetOutsideOfTheRange));
                             }
-                            else {
-                                if (!(permittedJumps & (node.kind === SyntaxKind.BreakStatement ? PermittedJumps.Break : PermittedJumps.Continue))) {
-                                    // attempt to break or continue in a forbidden context
-                                    (errors || (errors = [] as Diagnostic[])).push(createDiagnosticForNode(node, Messages.cannotExtractRangeContainingConditionalBreakOrContinueStatements));
-                                }
-                            }
-                            break;
                         }
+                        else {
+                            if (!(permittedJumps & (node.kind === SyntaxKind.BreakStatement ? PermittedJumps.Break : PermittedJumps.Continue))) {
+                                // attempt to break or continue in a forbidden context
+                                (errors || (errors = [] as Diagnostic[])).push(createDiagnosticForNode(node, Messages.cannotExtractRangeContainingConditionalBreakOrContinueStatements));
+                            }
+                        }
+                        break;
+                    }
                     case SyntaxKind.AwaitExpression:
                         rangeFacts |= RangeFacts.IsAsyncFunction;
                         break;
@@ -576,7 +576,7 @@ namespace ts.refactor.extractSymbol {
 
     interface Extraction {
         readonly description: string;
-        readonly errors: ReadonlyArray<Diagnostic>;
+        readonly errors: readonly Diagnostic[];
     }
 
     interface ScopeExtractions {
@@ -589,7 +589,7 @@ namespace ts.refactor.extractSymbol {
      * Each returned ExtractResultForScope corresponds to a possible target scope and is either a set of changes
      * or an error explaining why we can't extract into that scope.
      */
-    function getPossibleExtractions(targetRange: TargetRange, context: RefactorContext): ReadonlyArray<ScopeExtractions> | undefined {
+    function getPossibleExtractions(targetRange: TargetRange, context: RefactorContext): readonly ScopeExtractions[] | undefined {
         const { scopes, readsAndWrites: { functionErrorsPerScope, constantErrorsPerScope } } = getPossibleExtractionsWorker(targetRange, context);
         // Need the inner type annotation to avoid https://github.com/Microsoft/TypeScript/issues/7547
         const extractions = scopes.map((scope, i): ScopeExtractions => {
@@ -708,7 +708,7 @@ namespace ts.refactor.extractSymbol {
         node: Statement | Expression | Block,
         scope: Scope,
         { usages: usagesInScope, typeParameterUsages, substitutions }: ScopeUsages,
-        exposedVariableDeclarations: ReadonlyArray<VariableDeclaration>,
+        exposedVariableDeclarations: readonly VariableDeclaration[],
         range: TargetRange,
         context: RefactorContext): RefactorEditInfo {
 
@@ -752,13 +752,13 @@ namespace ts.refactor.extractSymbol {
         const typeParametersAndDeclarations = arrayFrom(typeParameterUsages.values()).map(type => ({ type, declaration: getFirstDeclaration(type) }));
         const sortedTypeParametersAndDeclarations = typeParametersAndDeclarations.sort(compareTypesByDeclarationOrder);
 
-        const typeParameters: ReadonlyArray<TypeParameterDeclaration> | undefined = sortedTypeParametersAndDeclarations.length === 0
+        const typeParameters: readonly TypeParameterDeclaration[] | undefined = sortedTypeParametersAndDeclarations.length === 0
             ? undefined
             : sortedTypeParametersAndDeclarations.map(t => t.declaration as TypeParameterDeclaration);
 
         // Strictly speaking, we should check whether each name actually binds to the appropriate type
         // parameter.  In cases of shadowing, they may not.
-        const callTypeArguments: ReadonlyArray<TypeNode> | undefined = typeParameters !== undefined
+        const callTypeArguments: readonly TypeNode[] | undefined = typeParameters !== undefined
             ? typeParameters.map(decl => createTypeReferenceNode(decl.name, /*typeArguments*/ undefined))
             : undefined;
 
@@ -1157,7 +1157,7 @@ namespace ts.refactor.extractSymbol {
         }
     }
 
-    function transformFunctionBody(body: Node, exposedVariableDeclarations: ReadonlyArray<VariableDeclaration>, writes: ReadonlyArray<UsageEntry> | undefined, substitutions: ReadonlyMap<Node>, hasReturn: boolean): { body: Block, returnValueProperty: string | undefined } {
+    function transformFunctionBody(body: Node, exposedVariableDeclarations: readonly VariableDeclaration[], writes: readonly UsageEntry[] | undefined, substitutions: ReadonlyMap<Node>, hasReturn: boolean): { body: Block, returnValueProperty: string | undefined } {
         const hasWritesOrVariableDeclarations = writes !== undefined || exposedVariableDeclarations.length > 0;
         if (isBlock(body) && !hasWritesOrVariableDeclarations && substitutions.size === 0) {
             // already block, no declarations or writes to propagate back, no substitutions - can use node as is
@@ -1193,7 +1193,7 @@ namespace ts.refactor.extractSymbol {
                     if (!returnValueProperty) {
                         returnValueProperty = "__return";
                     }
-                    assignments.unshift(createPropertyAssignment(returnValueProperty, visitNode((<ReturnStatement>node).expression!, visitor)));
+                    assignments.unshift(createPropertyAssignment(returnValueProperty, visitNode((<ReturnStatement>node).expression, visitor)));
                 }
                 if (assignments.length === 1) {
                     return createReturn(assignments[0].name as Expression);
@@ -1224,7 +1224,7 @@ namespace ts.refactor.extractSymbol {
         }
     }
 
-    function getStatementsOrClassElements(scope: Scope): ReadonlyArray<Statement> | ReadonlyArray<ClassElement> {
+    function getStatementsOrClassElements(scope: Scope): readonly Statement[] | readonly ClassElement[] {
         if (isFunctionLikeDeclaration(scope)) {
             const body = scope.body!; // TODO: GH#18217
             if (isBlock(body)) {
@@ -1314,8 +1314,8 @@ namespace ts.refactor.extractSymbol {
     }
 
     function getPropertyAssignmentsForWritesAndVariableDeclarations(
-        exposedVariableDeclarations: ReadonlyArray<VariableDeclaration>,
-        writes: ReadonlyArray<UsageEntry> | undefined
+        exposedVariableDeclarations: readonly VariableDeclaration[],
+        writes: readonly UsageEntry[] | undefined
     ): ShorthandPropertyAssignment[] {
         const variableAssignments = map(exposedVariableDeclarations, v => createShorthandPropertyAssignment(v.symbol.name));
         const writeAssignments = map(writes, w => createShorthandPropertyAssignment(w.symbol.name));
@@ -1328,7 +1328,7 @@ namespace ts.refactor.extractSymbol {
                 : variableAssignments.concat(writeAssignments);
     }
 
-    function isReadonlyArray(v: any): v is ReadonlyArray<any> {
+    function isReadonlyArray(v: any): v is readonly any[] {
         return isArray(v);
     }
 
@@ -1368,10 +1368,10 @@ namespace ts.refactor.extractSymbol {
 
     interface ReadsAndWrites {
         readonly target: Expression | Block;
-        readonly usagesPerScope: ReadonlyArray<ScopeUsages>;
-        readonly functionErrorsPerScope: ReadonlyArray<ReadonlyArray<Diagnostic>>;
-        readonly constantErrorsPerScope: ReadonlyArray<ReadonlyArray<Diagnostic>>;
-        readonly exposedVariableDeclarations: ReadonlyArray<VariableDeclaration>;
+        readonly usagesPerScope: readonly ScopeUsages[];
+        readonly functionErrorsPerScope: readonly (readonly Diagnostic[])[];
+        readonly constantErrorsPerScope: readonly (readonly Diagnostic[])[];
+        readonly exposedVariableDeclarations: readonly VariableDeclaration[];
     }
     function collectReadsAndWrites(
         targetRange: TargetRange,
@@ -1399,7 +1399,7 @@ namespace ts.refactor.extractSymbol {
 
         let expressionDiagnostic: Diagnostic | undefined;
         if (expression === undefined) {
-            const statements = targetRange.range as ReadonlyArray<Statement>;
+            const statements = targetRange.range as readonly Statement[];
             const start = first(statements).getStart();
             const end = last(statements).end;
             expressionDiagnostic = createFileDiagnostic(sourceFile, start, end - start, Messages.expressionExpected);

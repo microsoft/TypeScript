@@ -4,7 +4,7 @@ namespace ts.refactor {
     const actionNameDefaultToNamed = "Convert default export to named export";
     const actionNameNamedToDefault = "Convert named export to default export";
     registerRefactor(refactorName, {
-        getAvailableActions(context): ReadonlyArray<ApplicableRefactorInfo> {
+        getAvailableActions(context): readonly ApplicableRefactorInfo[] {
             const info = getInfo(context);
             if (!info) return emptyArray;
             const description = info.wasDefault ? Diagnostics.Convert_default_export_to_named_export.message : Diagnostics.Convert_named_export_to_default_export.message;

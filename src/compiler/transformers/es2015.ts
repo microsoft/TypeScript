@@ -2067,7 +2067,7 @@ namespace ts {
             return visitEachChild(node, visitor, context);
         }
 
-        function getRangeUnion(declarations: ReadonlyArray<Node>): TextRange {
+        function getRangeUnion(declarations: readonly Node[]): TextRange {
             // declarations may not be sorted by position.
             // pos should be the minimum* position over all nodes (that's not -1), end should be the maximum end over all nodes.
             let pos = -1, end = -1;
@@ -4109,10 +4109,8 @@ namespace ts {
          * Visits the `super` keyword
          */
         function visitSuperKeyword(isExpressionOfCall: boolean): LeftHandSideExpression {
-            return hierarchyFacts & HierarchyFacts.NonStaticClassElement
-                && !isExpressionOfCall
-                    ? createPropertyAccess(createFileLevelUniqueName("_super"), "prototype")
-                    : createFileLevelUniqueName("_super");
+            return hierarchyFacts & HierarchyFacts.NonStaticClassElement && !isExpressionOfCall ? createPropertyAccess(createFileLevelUniqueName("_super"), "prototype") :
+                createFileLevelUniqueName("_super");
         }
 
         function visitMetaProperty(node: MetaProperty) {

@@ -282,7 +282,7 @@ namespace ts.codefix {
         }
     }
 
-    function annotateJSDocParameters(changes: textChanges.ChangeTracker, sourceFile: SourceFile, parameterInferences: ReadonlyArray<ParameterInference>, program: Program, host: LanguageServiceHost): void {
+    function annotateJSDocParameters(changes: textChanges.ChangeTracker, sourceFile: SourceFile, parameterInferences: readonly ParameterInference[], program: Program, host: LanguageServiceHost): void {
         const signature = parameterInferences.length && parameterInferences[0].declaration.parent;
         if (!signature) {
             return;
@@ -300,7 +300,7 @@ namespace ts.codefix {
         addJSDocTags(changes, sourceFile, signature, paramTags);
     }
 
-    function addJSDocTags(changes: textChanges.ChangeTracker, sourceFile: SourceFile, parent: HasJSDoc, newTags: ReadonlyArray<JSDocTag>): void {
+    function addJSDocTags(changes: textChanges.ChangeTracker, sourceFile: SourceFile, parent: HasJSDoc, newTags: readonly JSDocTag[]): void {
         const comments = mapDefined(parent.jsDoc, j => j.comment);
         const oldTags = flatMapToMutable(parent.jsDoc, j => j.tags);
         const unmergedNewTags = newTags.filter(newTag => !oldTags || !oldTags.some((tag, i) => {
@@ -339,7 +339,7 @@ namespace ts.codefix {
         }
     }
 
-    function getReferences(token: PropertyName | Token<SyntaxKind.ConstructorKeyword>, program: Program, cancellationToken: CancellationToken): ReadonlyArray<Identifier> {
+    function getReferences(token: PropertyName | Token<SyntaxKind.ConstructorKeyword>, program: Program, cancellationToken: CancellationToken): readonly Identifier[] {
         // Position shouldn't matter since token is not a SourceFile.
         return mapDefined(FindAllReferences.getReferenceEntriesForNode(-1, token, program, program.getSourceFiles(), cancellationToken), entry =>
             entry.kind !== FindAllReferences.EntryKind.Span ? tryCast(entry.node, isIdentifier) : undefined);
@@ -359,7 +359,7 @@ namespace ts.codefix {
             }));
     }
 
-    function getFunctionReferences(containingFunction: FunctionLike, sourceFile: SourceFile, program: Program, cancellationToken: CancellationToken): ReadonlyArray<Identifier> | undefined {
+    function getFunctionReferences(containingFunction: FunctionLike, sourceFile: SourceFile, program: Program, cancellationToken: CancellationToken): readonly Identifier[] | undefined {
         let searchToken;
         switch (containingFunction.kind) {
             case SyntaxKind.Constructor:
@@ -391,7 +391,7 @@ namespace ts.codefix {
         readonly isOptional?: boolean;
     }
 
-    function inferTypeFromReferences(program: Program, references: ReadonlyArray<Identifier>, cancellationToken: CancellationToken) {
+    function inferTypeFromReferences(program: Program, references: readonly Identifier[], cancellationToken: CancellationToken) {
         const checker = program.getTypeChecker();
         return {
             single,
@@ -534,7 +534,7 @@ namespace ts.codefix {
                         break;
                     }
                 }
-                    // falls through
+                // falls through
                 default:
                     return inferTypeFromContextualType(node, usage);
             }
@@ -570,21 +570,25 @@ namespace ts.codefix {
                 case SyntaxKind.AsteriskAsteriskToken:
 
                 // MultiplicativeOperator
+                // falls through
                 case SyntaxKind.AsteriskToken:
                 case SyntaxKind.SlashToken:
                 case SyntaxKind.PercentToken:
 
                 // ShiftOperator
+                // falls through
                 case SyntaxKind.LessThanLessThanToken:
                 case SyntaxKind.GreaterThanGreaterThanToken:
                 case SyntaxKind.GreaterThanGreaterThanGreaterThanToken:
 
                 // BitwiseOperator
+                // falls through
                 case SyntaxKind.AmpersandToken:
                 case SyntaxKind.BarToken:
                 case SyntaxKind.CaretToken:
 
                 // CompoundAssignmentOperator
+                // falls through
                 case SyntaxKind.MinusEqualsToken:
                 case SyntaxKind.AsteriskAsteriskEqualsToken:
                 case SyntaxKind.AsteriskEqualsToken:
@@ -598,9 +602,11 @@ namespace ts.codefix {
                 case SyntaxKind.GreaterThanGreaterThanEqualsToken:
 
                 // AdditiveOperator
+                // falls through
                 case SyntaxKind.MinusToken:
 
                 // RelationalOperator
+                // falls through
                 case SyntaxKind.LessThanToken:
                 case SyntaxKind.LessThanEqualsToken:
                 case SyntaxKind.GreaterThanToken:
@@ -733,7 +739,7 @@ namespace ts.codefix {
             low: (t: Type) => boolean;
         }
 
-        function removeLowPriorityInferences(inferences: ReadonlyArray<Type>, priorities: Priority[]): Type[] {
+        function removeLowPriorityInferences(inferences: readonly Type[], priorities: Priority[]): Type[] {
             const toRemove: ((t: Type) => boolean)[] = [];
             for (const i of inferences) {
                 for (const { high, low } of priorities) {
@@ -746,7 +752,7 @@ namespace ts.codefix {
             return inferences.filter(i => toRemove.every(f => !f(i)));
         }
 
-        function unifyFromUsage(inferences: ReadonlyArray<Type>, fallback = checker.getAnyType()): Type {
+        function unifyFromUsage(inferences: readonly Type[], fallback = checker.getAnyType()): Type {
             if (!inferences.length) return fallback;
 
             // 1. string or number individually override string | number

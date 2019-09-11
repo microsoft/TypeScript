@@ -22,7 +22,7 @@ namespace ts {
                 "/src/app/module.tsbuildinfo"
             ]
         ];
-        type Sources = [string, ReadonlyArray<string>];
+        type Sources = [string, readonly string[]];
         const enum source { config, ts }
         const sources: [Sources, Sources] = [
             [

@@ -1,8 +1,10 @@
 /* @internal */
 namespace ts {
     export namespace Debug {
+        /* eslint-disable prefer-const */
         export let currentAssertionLevel = AssertionLevel.None;
         export let isDebugging = false;
+        /* eslint-enable prefer-const */
 
         export function shouldAssert(level: AssertionLevel): boolean {
             return currentAssertionLevel >= level;
@@ -52,11 +54,12 @@ namespace ts {
         }
 
         export function assertDefined<T>(value: T | null | undefined, message?: string): T {
+            // eslint-disable-next-line no-null/no-null
             if (value === undefined || value === null) return fail(message);
             return value;
         }
 
-        export function assertEachDefined<T, A extends ReadonlyArray<T>>(value: A, message?: string): A {
+        export function assertEachDefined<T, A extends readonly T[]>(value: A, message?: string): A {
             for (const v of value) {
                 assertDefined(v, message);
             }
@@ -64,7 +67,7 @@ namespace ts {
         }
 
         export function assertNever(member: never, message = "Illegal value:", stackCrawlMark?: AnyFunction): never {
-            const detail = typeof member === "object" && "kind" in member && "pos" in member && formatSyntaxKind ? "SyntaxKind: " + formatSyntaxKind((member as Node).kind) : JSON.stringify(member);
+            const detail = typeof member === "object" && hasProperty(member, "kind") && hasProperty(member, "pos") && formatSyntaxKind ? "SyntaxKind: " + formatSyntaxKind((member as Node).kind) : JSON.stringify(member);
             return fail(`${message} ${detail}`, stackCrawlMark || assertNever);
         }
 

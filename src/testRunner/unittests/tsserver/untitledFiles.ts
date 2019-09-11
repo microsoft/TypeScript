@@ -23,7 +23,7 @@ namespace ts.projectSystem {
                 endOffset: 5,
                 errorCodes: [Diagnostics.Cannot_find_name_0_Did_you_mean_1.code],
             });
-            assert.deepEqual<ReadonlyArray<protocol.CodeFixAction> | undefined>(response, [
+            assert.deepEqual<readonly protocol.CodeFixAction[] | undefined>(response, [
                 {
                     description: "Change spelling to 'foo'",
                     fixAllDescription: "Fix all detected spelling errors",

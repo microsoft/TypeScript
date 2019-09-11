@@ -29,7 +29,7 @@ namespace ts {
             ]
         ];
         const relOutputFiles = outputFiles.map(v => v.map(relName)) as [OutputFile, OutputFile, OutputFile];
-        type Sources = [string, ReadonlyArray<string>];
+        type Sources = [string, readonly string[]];
         const enum source { config, ts }
         const enum part { one, two, three }
         const sources: [Sources, Sources, Sources] = [
@@ -63,7 +63,7 @@ namespace ts {
             outputFiles[project.third][ext.jsmap],
             outputFiles[project.third][ext.dtsmap]
         ];
-        const expectedTsbuildInfoFileNames: ReadonlyArray<BuildInfoSectionBaselineFiles> = [
+        const expectedTsbuildInfoFileNames: readonly BuildInfoSectionBaselineFiles[] = [
             [outputFiles[project.first][ext.buildinfo], outputFiles[project.first][ext.js], outputFiles[project.first][ext.dts]],
             [outputFiles[project.second][ext.buildinfo], outputFiles[project.second][ext.js], outputFiles[project.second][ext.dts]],
             [outputFiles[project.third][ext.buildinfo], outputFiles[project.third][ext.js], outputFiles[project.third][ext.dts]]
@@ -75,7 +75,7 @@ namespace ts {
             ...outputFiles[project.second],
             ...outputFiles[project.third]
         ];
-        let initialExpectedDiagnostics: ReadonlyArray<fakes.ExpectedDiagnostic> = [
+        let initialExpectedDiagnostics: readonly fakes.ExpectedDiagnostic[] = [
             getExpectedDiagnosticForProjectsInBuild(relSources[project.first][source.config], relSources[project.second][source.config], relSources[project.third][source.config]),
             [Diagnostics.Project_0_is_out_of_date_because_output_file_1_does_not_exist, relSources[project.first][source.config], relOutputFiles[project.first][ext.js]],
             [Diagnostics.Building_project_0, sources[project.first][source.config]],
@@ -102,7 +102,7 @@ namespace ts {
             ]
         );
 
-        let dtsChangedExpectedDiagnostics: ReadonlyArray<fakes.ExpectedDiagnostic> = [
+        let dtsChangedExpectedDiagnostics: readonly fakes.ExpectedDiagnostic[] = [
             getExpectedDiagnosticForProjectsInBuild(relSources[project.first][source.config], relSources[project.second][source.config], relSources[project.third][source.config]),
             [Diagnostics.Project_0_is_out_of_date_because_oldest_output_1_is_older_than_newest_input_2, relSources[project.first][source.config], relOutputFiles[project.first][ext.js], relSources[project.first][source.ts][part.one]],
             [Diagnostics.Building_project_0, sources[project.first][source.config]],
@@ -129,7 +129,7 @@ namespace ts {
             outputFiles[project.first][ext.dts], // dts changes so once read old content, and once new (to emit third)
         );
 
-        let dtsChangedExpectedDiagnosticsDependOrdered: ReadonlyArray<fakes.ExpectedDiagnostic> = [
+        let dtsChangedExpectedDiagnosticsDependOrdered: readonly fakes.ExpectedDiagnostic[] = [
             getExpectedDiagnosticForProjectsInBuild(relSources[project.first][source.config], relSources[project.second][source.config], relSources[project.third][source.config]),
             [Diagnostics.Project_0_is_out_of_date_because_oldest_output_1_is_older_than_newest_input_2, relSources[project.first][source.config], relOutputFiles[project.first][ext.js], relSources[project.first][source.ts][part.one]],
             [Diagnostics.Building_project_0, sources[project.first][source.config]],
@@ -140,7 +140,7 @@ namespace ts {
         ];
         let dtsChangedExpectedReadFilesDependOrdered: ReadonlyMap<number> = getDtsChangedReadFilesDependOrdered();
 
-        let dtsUnchangedExpectedDiagnostics: ReadonlyArray<fakes.ExpectedDiagnostic> = [
+        let dtsUnchangedExpectedDiagnostics: readonly fakes.ExpectedDiagnostic[] = [
             getExpectedDiagnosticForProjectsInBuild(relSources[project.first][source.config], relSources[project.second][source.config], relSources[project.third][source.config]),
             [Diagnostics.Project_0_is_out_of_date_because_oldest_output_1_is_older_than_newest_input_2, relSources[project.first][source.config], relOutputFiles[project.first][ext.js], relSources[project.first][source.ts][part.one]],
             [Diagnostics.Building_project_0, sources[project.first][source.config]],
@@ -166,7 +166,7 @@ namespace ts {
             ]
         );
 
-        let dtsUnchangedExpectedDiagnosticsDependOrdered: ReadonlyArray<fakes.ExpectedDiagnostic> = [
+        let dtsUnchangedExpectedDiagnosticsDependOrdered: readonly fakes.ExpectedDiagnostic[] = [
             getExpectedDiagnosticForProjectsInBuild(relSources[project.first][source.config], relSources[project.second][source.config], relSources[project.third][source.config]),
             [Diagnostics.Project_0_is_out_of_date_because_oldest_output_1_is_older_than_newest_input_2, relSources[project.first][source.config], relOutputFiles[project.first][ext.js], relSources[project.first][source.ts][part.one]],
             [Diagnostics.Building_project_0, sources[project.first][source.config]],
@@ -201,7 +201,7 @@ namespace ts {
             return ts.createSolutionBuilder(host, ["/src/third"], { dry: false, force: false, verbose: true, ...(baseOptions || {}) });
         }
 
-        function getInitialExpectedReadFiles(additionalSourceFiles?: ReadonlyArray<string>) {
+        function getInitialExpectedReadFiles(additionalSourceFiles?: readonly string[]) {
             if (!additionalSourceFiles) return initialExpectedReadFiles;
             const expectedReadFiles = cloneMap(initialExpectedReadFiles);
             for (const path of additionalSourceFiles) {
@@ -219,7 +219,7 @@ namespace ts {
             return value;
         }
 
-        function getDtsChangedReadFiles(dependOrdered?: boolean, additionalSourceFiles?: ReadonlyArray<string>) {
+        function getDtsChangedReadFiles(dependOrdered?: boolean, additionalSourceFiles?: readonly string[]) {
             const value = dependOrdered ? dtsChangedExpectedReadFilesDependOrdered : dtsChangedExpectedReadFiles;
             if (!additionalSourceFiles) return value;
             const expectedReadFiles = cloneMap(value);
@@ -238,7 +238,7 @@ namespace ts {
             return value;
         }
 
-        function getDtsUnchangedReadFiles(dependOrdered?: boolean, additionalSourceFiles?: ReadonlyArray<string>) {
+        function getDtsUnchangedReadFiles(dependOrdered?: boolean, additionalSourceFiles?: readonly string[]) {
             const value = dependOrdered ? dtsUnchangedExpectedReadFilesDependOrdered : dtsUnchangedExpectedReadFiles;
             if (!additionalSourceFiles || additionalSourceFiles.length !== 3) return value;
             const expectedReadFiles = cloneMap(value);
@@ -251,8 +251,8 @@ namespace ts {
             scenario: string;
             modifyFs: (fs: vfs.FileSystem) => void;
             modifyAgainFs?: (fs: vfs.FileSystem) => void;
-            additionalSourceFiles?: ReadonlyArray<string>;
-            expectedBuildInfoFilesForSectionBaselines?: ReadonlyArray<BuildInfoSectionBaselineFiles>;
+            additionalSourceFiles?: readonly string[];
+            expectedBuildInfoFilesForSectionBaselines?: readonly BuildInfoSectionBaselineFiles[];
             dependOrdered?: true;
             ignoreDtsChanged?: true;
             ignoreDtsUnchanged?: true;

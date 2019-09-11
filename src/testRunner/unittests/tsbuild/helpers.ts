@@ -164,7 +164,7 @@ interface Symbol {
         }
     }
 
-    function generateSourceMapBaselineFiles(fs: vfs.FileSystem, mapFileNames: ReadonlyArray<string>) {
+    function generateSourceMapBaselineFiles(fs: vfs.FileSystem, mapFileNames: readonly string[]) {
         for (const mapFile of mapFileNames) {
             if (!fs.existsSync(mapFile)) continue;
             const text = Harness.SourceMapRecorder.getSourceMapRecordWithVFS(fs, mapFile);
@@ -174,7 +174,7 @@ interface Symbol {
 
     // [tsbuildinfo, js, dts]
     export type BuildInfoSectionBaselineFiles = [string, string | undefined, string | undefined];
-    function generateBuildInfoSectionBaselineFiles(fs: vfs.FileSystem, buildInfoFileNames: ReadonlyArray<BuildInfoSectionBaselineFiles>) {
+    function generateBuildInfoSectionBaselineFiles(fs: vfs.FileSystem, buildInfoFileNames: readonly BuildInfoSectionBaselineFiles[]) {
         for (const [file, jsFile, dtsFile] of buildInfoFileNames) {
             if (!fs.existsSync(file)) continue;
 
@@ -232,9 +232,9 @@ interface Symbol {
     interface BuildInput {
         fs: vfs.FileSystem;
         tick: () => void;
-        rootNames: ReadonlyArray<string>;
-        expectedMapFileNames?: ReadonlyArray<string>;
-        expectedBuildInfoFilesForSectionBaselines?: ReadonlyArray<BuildInfoSectionBaselineFiles>;
+        rootNames: readonly string[];
+        expectedMapFileNames?: readonly string[];
+        expectedBuildInfoFilesForSectionBaselines?: readonly BuildInfoSectionBaselineFiles[];
         modifyFs: (fs: vfs.FileSystem) => void;
     }
 
@@ -263,7 +263,7 @@ interface Symbol {
 
     function generateBaseline(fs: vfs.FileSystem, proj: string, scenario: string, subScenario: string, baseFs: vfs.FileSystem) {
         const patch = fs.diff(baseFs);
-        // tslint:disable-next-line:no-null-keyword
+        // eslint-disable-next-line no-null/no-null
         Harness.Baseline.runBaseline(`tsbuild/${proj}/${subScenario.split(" ").join("-")}/${scenario.split(" ").join("-")}.js`, patch ? vfs.formatPatch(patch) : null);
     }
 
@@ -273,12 +273,11 @@ interface Symbol {
             const actual = actualReadFileMap.get(expectedFile);
             assert.equal(actual, expected, `Mismatch in read file call number for: ${expectedFile}
 Not in Actual: ${JSON.stringify(arrayFrom(mapDefinedIterator(expectedReadFiles.keys(), f => actualReadFileMap.has(f) ? undefined : f)))}
-Mismatch Actual(path, actual, expected): ${JSON.stringify(arrayFrom(mapDefinedIterator(actualReadFileMap.entries(),
-                ([p, v]) => expectedReadFiles.get(p) !== v ? [p, v, expectedReadFiles.get(p) || 0] : undefined)))}`);
+Mismatch Actual(path, actual, expected): ${JSON.stringify(arrayFrom(mapDefinedIterator(actualReadFileMap.entries(), ([p, v]) => expectedReadFiles.get(p) !== v ? [p, v, expectedReadFiles.get(p) || 0] : undefined)))}`);
         });
     }
 
-    export function getReadFilesMap(filesReadOnce: ReadonlyArray<string>, ...filesWithTwoReadCalls: string[]) {
+    export function getReadFilesMap(filesReadOnce: readonly string[], ...filesWithTwoReadCalls: string[]) {
         const map = arrayToMap(filesReadOnce, identity, () => 1);
         for (const fileWithTwoReadCalls of filesWithTwoReadCalls) {
             map.set(fileWithTwoReadCalls, 2);
@@ -287,7 +286,7 @@ Mismatch Actual(path, actual, expected): ${JSON.stringify(arrayFrom(mapDefinedIt
     }
 
     export interface ExpectedBuildOutput {
-        expectedDiagnostics?: ReadonlyArray<fakes.ExpectedDiagnostic>;
+        expectedDiagnostics?: readonly fakes.ExpectedDiagnostic[];
         expectedReadFiles?: ReadonlyMap<number>;
     }
 
@@ -301,13 +300,13 @@ Mismatch Actual(path, actual, expected): ${JSON.stringify(arrayFrom(mapDefinedIt
         time: () => number;
         tick: () => void;
         proj: string;
-        rootNames: ReadonlyArray<string>;
+        rootNames: readonly string[];
         /** map file names to generate baseline of */
-        expectedMapFileNames?: ReadonlyArray<string>;
-        expectedBuildInfoFilesForSectionBaselines?: ReadonlyArray<BuildInfoSectionBaselineFiles>;
+        expectedMapFileNames?: readonly string[];
+        expectedBuildInfoFilesForSectionBaselines?: readonly BuildInfoSectionBaselineFiles[];
         lastProjectOutput: string;
         initialBuild: BuildState;
-        outputFiles?: ReadonlyArray<string>;
+        outputFiles?: readonly string[];
         incrementalDtsChangedBuild?: BuildState;
         incrementalDtsUnchangedBuild?: BuildState;
         incrementalHeaderChangedBuild?: BuildState;
@@ -358,7 +357,7 @@ Mismatch Actual(path, actual, expected): ${JSON.stringify(arrayFrom(mapDefinedIt
                 }
             });
 
-            function incrementalBuild(subScenario: string, incrementalModifyFs: (fs: vfs.FileSystem) => void, incrementalExpectedDiagnostics: ReadonlyArray<fakes.ExpectedDiagnostic> | undefined, incrementalExpectedReadFiles: ReadonlyMap<number> | undefined) {
+            function incrementalBuild(subScenario: string, incrementalModifyFs: (fs: vfs.FileSystem) => void, incrementalExpectedDiagnostics: readonly fakes.ExpectedDiagnostic[] | undefined, incrementalExpectedReadFiles: ReadonlyMap<number> | undefined) {
                 describe(subScenario, () => {
                     let newFs: vfs.FileSystem;
                     let actualReadFileMap: Map<number>;

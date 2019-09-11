@@ -315,7 +315,7 @@ namespace ts.Completions {
     }
 
     export function getCompletionEntriesFromSymbols(
-        symbols: ReadonlyArray<Symbol>,
+        symbols: readonly Symbol[],
         entries: Push<CompletionEntry>,
         location: Node | undefined,
         sourceFile: SourceFile,
@@ -578,7 +578,7 @@ namespace ts.Completions {
     type IsJsxInitializer = boolean | Identifier;
     interface CompletionData {
         readonly kind: CompletionDataKind.Data;
-        readonly symbols: ReadonlyArray<Symbol>;
+        readonly symbols: readonly Symbol[];
         readonly completionKind: CompletionKind;
         readonly isInSnippetScope: boolean;
         /** Note that the presence of this alone doesn't mean that we need a conversion. Only do that if the completion is not an ordinary identifier. */
@@ -586,7 +586,7 @@ namespace ts.Completions {
         readonly isNewIdentifierLocation: boolean;
         readonly location: Node | undefined;
         readonly keywordFilters: KeywordCompletionFilters;
-        readonly literals: ReadonlyArray<string | number | PseudoBigInt>;
+        readonly literals: readonly (string | number | PseudoBigInt)[];
         readonly symbolToOriginInfoMap: SymbolOriginInfoMap;
         readonly recommendedCompletion: Symbol | undefined;
         readonly previousToken: Node | undefined;
@@ -640,13 +640,13 @@ namespace ts.Completions {
                 return isJsxExpression(parent) && parent.parent.kind !== SyntaxKind.JsxElement ? checker.getContextualTypeForJsxAttribute(parent.parent) : undefined;
             default:
                 const argInfo = SignatureHelp.getArgumentInfoForCompletions(previousToken, position, sourceFile);
-                return argInfo
+                return argInfo ?
                     // At `,`, treat this as the next argument after the comma.
-                    ? checker.getContextualTypeForArgumentAtIndex(argInfo.invocation, argInfo.argumentIndex + (previousToken.kind === SyntaxKind.CommaToken ? 1 : 0))
-                    : isEqualityOperatorKind(previousToken.kind) && isBinaryExpression(parent) && isEqualityOperatorKind(parent.operatorToken.kind)
+                    checker.getContextualTypeForArgumentAtIndex(argInfo.invocation, argInfo.argumentIndex + (previousToken.kind === SyntaxKind.CommaToken ? 1 : 0)) :
+                    isEqualityOperatorKind(previousToken.kind) && isBinaryExpression(parent) && isEqualityOperatorKind(parent.operatorToken.kind) ?
                         // completion at `x ===/**/` should be for the right side
-                        ? checker.getTypeAtLocation(parent.left)
-                        : checker.getContextualType(previousToken as Expression);
+                        checker.getTypeAtLocation(parent.left) :
+                        checker.getContextualType(previousToken as Expression);
         }
     }
 
@@ -849,7 +849,7 @@ namespace ts.Completions {
                         if (!binaryExpressionMayBeOpenTag(parent as BinaryExpression)) {
                             break;
                         }
-                    // falls through
+                        // falls through
 
                     case SyntaxKind.JsxSelfClosingElement:
                     case SyntaxKind.JsxElement:
@@ -1498,7 +1498,7 @@ namespace ts.Completions {
             completionKind = CompletionKind.ObjectPropertyDeclaration;
 
             let typeMembers: Symbol[] | undefined;
-            let existingMembers: ReadonlyArray<Declaration> | undefined;
+            let existingMembers: readonly Declaration[] | undefined;
 
             if (objectLikeContainer.kind === SyntaxKind.ObjectLiteralExpression) {
                 const typeForObject = typeChecker.getContextualType(objectLikeContainer);
@@ -1910,7 +1910,7 @@ namespace ts.Completions {
          * @returns Symbols to be suggested in an object binding pattern or object literal expression, barring those whose declarations
          *          do not occur at the current position and have not otherwise been typed.
          */
-        function filterObjectMembersList(contextualMemberSymbols: Symbol[], existingMembers: ReadonlyArray<Declaration>): Symbol[] {
+        function filterObjectMembersList(contextualMemberSymbols: Symbol[], existingMembers: readonly Declaration[]): Symbol[] {
             if (existingMembers.length === 0) {
                 return contextualMemberSymbols;
             }
@@ -2000,7 +2000,7 @@ namespace ts.Completions {
          *
          * @returns Symbols to be suggested in an class element depending on existing memebers and symbol flags
          */
-        function filterClassMembersList(baseSymbols: ReadonlyArray<Symbol>, existingMembers: ReadonlyArray<ClassElement>, currentClassElementModifierFlags: ModifierFlags): Symbol[] {
+        function filterClassMembersList(baseSymbols: readonly Symbol[], existingMembers: readonly ClassElement[], currentClassElementModifierFlags: ModifierFlags): Symbol[] {
             const existingMemberNames = createUnderscoreEscapedMap<true>();
             for (const m of existingMembers) {
                 // Ignore omitted expressions for missing members
@@ -2113,8 +2113,8 @@ namespace ts.Completions {
     }
 
     // A cache of completion entries for keywords, these do not change between sessions
-    const _keywordCompletions: ReadonlyArray<CompletionEntry>[] = [];
-    const allKeywordsCompletions: () => ReadonlyArray<CompletionEntry> = memoize(() => {
+    const _keywordCompletions: CompletionEntry[][] = [];
+    const allKeywordsCompletions: () => readonly CompletionEntry[] = memoize(() => {
         const res: CompletionEntry[] = [];
         for (let i = SyntaxKind.FirstKeyword; i <= SyntaxKind.LastKeyword; i++) {
             res.push({
@@ -2127,7 +2127,7 @@ namespace ts.Completions {
         return res;
     });
 
-    function getKeywordCompletions(keywordFilter: KeywordCompletionFilters, filterOutTsOnlyKeywords: boolean): ReadonlyArray<CompletionEntry> {
+    function getKeywordCompletions(keywordFilter: KeywordCompletionFilters, filterOutTsOnlyKeywords: boolean): readonly CompletionEntry[] {
         if (!filterOutTsOnlyKeywords) return getTypescriptKeywordCompletions(keywordFilter);
 
         const index = keywordFilter + KeywordCompletionFilters.Last + 1;
@@ -2137,7 +2137,7 @@ namespace ts.Completions {
             );
     }
 
-    function getTypescriptKeywordCompletions(keywordFilter: KeywordCompletionFilters): ReadonlyArray<CompletionEntry> {
+    function getTypescriptKeywordCompletions(keywordFilter: KeywordCompletionFilters): readonly CompletionEntry[] {
         return _keywordCompletions[keywordFilter] || (_keywordCompletions[keywordFilter] = allKeywordsCompletions().filter(entry => {
             const kind = stringToToken(entry.name)!;
             switch (keywordFilter) {

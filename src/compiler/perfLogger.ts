@@ -1,6 +1,6 @@
 /* @internal */
 namespace ts {
-    type PerfLogger = typeof import("@microsoft/typescript-etw"); // tslint:disable-line:no-implicit-dependencies
+    type PerfLogger = typeof import("@microsoft/typescript-etw");
     const nullLogger: PerfLogger = {
         logEvent: noop,
         logErrEvent: noop,
@@ -30,7 +30,7 @@ namespace ts {
     try {
         // require() will throw an exception if the module is not installed
         // It may also return undefined if not installed properly
-        etwModule = require("@microsoft/typescript-etw"); // tslint:disable-line:no-implicit-dependencies
+        etwModule = require("@microsoft/typescript-etw");
     }
     catch (e) {
         etwModule = undefined;
