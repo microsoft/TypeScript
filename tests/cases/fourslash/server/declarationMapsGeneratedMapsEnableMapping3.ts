@@ -40,8 +40,9 @@
 ////var Foo = /** @class */ (function () {
 ////    function Foo() {
 ////    }
-////    Foo.prototype.methodName = function (propName) { return propName; };
-////    Foo.prototype.otherMethod = function () {
+////    var proto_1 = Foo.prototype;
+////    proto_1.methodName = function (propName) { return propName; };
+////    proto_1.otherMethod = function () {
 ////        if (Math.random() > 0.5) {
 ////            return { x: 42 };
 ////        }

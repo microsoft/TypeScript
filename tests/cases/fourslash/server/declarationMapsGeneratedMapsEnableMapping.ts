@@ -39,8 +39,9 @@
 ////var Foo = /** @class */ (function () {
 ////    function Foo() {
 ////    }
-////    Foo.prototype.methodName = function (propName) { return propName; };
-////    Foo.prototype.otherMethod = function () {
+////    var proto_1 = Foo.prototype;
+////    proto_1.methodName = function (propName) { return propName; };
+////    proto_1.otherMethod = function () {
 ////        if (Math.random() > 0.5) {
 ////            return { x: 42 };
 ////        }
@@ -49,7 +50,6 @@
 ////    return Foo;
 ////}());
 ////exports.Foo = Foo;
-////
 
 // @Filename: /dist/index.d.ts.map
 ////{"version":3,"file":"index.d.ts","sourceRoot":"","sources":["../index.ts"],"names":[],"mappings":"AAAA,qBAAa,GAAG;IACZ,MAAM,EAAE,MAAM,CAAC;IACf,UAAU,CAAC,QAAQ,EAAE,QAAQ,GAAG,QAAQ;IACxC,WAAW;;;;;;;CAMd;AAED,MAAM,WAAW,QAAQ;IACrB,MAAM,EAAE,MAAM,CAAC;CAClB"}
