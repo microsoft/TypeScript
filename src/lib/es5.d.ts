@@ -1235,7 +1235,9 @@ interface Array<T> {
     slice(start?: number, end?: number): T[];
     /**
       * Sorts an array.
-      * @param compareFn The name of the function used to determine the order of the elements. If omitted, the elements are sorted in ascending, ASCII character order.
+      * @param compareFn Function used to determine the order of the elements. It is expected to return
+      * a negative value if first argument is less than second arguement, zero if they're equal and a positive
+      * value otherwise. If omitted, the elements are sorted in ascending, ASCII character order.
       */
     sort(compareFn?: (a: T, b: T) => number): this;
     /**
@@ -1876,8 +1878,9 @@ interface Int8Array {
 
     /**
       * Sorts an array.
-      * @param compareFn The name of the function used to determine the order of the elements. If
-      * omitted, the elements are sorted in ascending, ASCII character order.
+      * @param compareFn Function used to determine the order of the elements. It is expected to return
+      * a negative value if first argument is less than second arguement, zero if they're equal and a positive
+      * value otherwise. If omitted, the elements are sorted in ascending, ASCII character order.
       */
     sort(compareFn?: (a: number, b: number) => number): this;
 
@@ -2151,8 +2154,9 @@ interface Uint8Array {
 
     /**
       * Sorts an array.
-      * @param compareFn The name of the function used to determine the order of the elements. If
-      * omitted, the elements are sorted in ascending, ASCII character order.
+      * @param compareFn Function used to determine the order of the elements. It is expected to return
+      * a negative value if first argument is less than second arguement, zero if they're equal and a positive
+      * value otherwise. If omitted, the elements are sorted in ascending, ASCII character order.
       */
     sort(compareFn?: (a: number, b: number) => number): this;
 
@@ -2426,8 +2430,9 @@ interface Uint8ClampedArray {
 
     /**
       * Sorts an array.
-      * @param compareFn The name of the function used to determine the order of the elements. If
-      * omitted, the elements are sorted in ascending, ASCII character order.
+      * @param compareFn Function used to determine the order of the elements. It is expected to return
+      * a negative value if first argument is less than second arguement, zero if they're equal and a positive
+      * value otherwise. If omitted, the elements are sorted in ascending, ASCII character order.
       */
     sort(compareFn?: (a: number, b: number) => number): this;
 
@@ -2699,8 +2704,9 @@ interface Int16Array {
 
     /**
       * Sorts an array.
-      * @param compareFn The name of the function used to determine the order of the elements. If
-      * omitted, the elements are sorted in ascending, ASCII character order.
+      * @param compareFn Function used to determine the order of the elements. It is expected to return
+      * a negative value if first argument is less than second arguement, zero if they're equal and a positive
+      * value otherwise. If omitted, the elements are sorted in ascending, ASCII character order.
       */
     sort(compareFn?: (a: number, b: number) => number): this;
 
@@ -2975,8 +2981,9 @@ interface Uint16Array {
 
     /**
       * Sorts an array.
-      * @param compareFn The name of the function used to determine the order of the elements. If
-      * omitted, the elements are sorted in ascending, ASCII character order.
+      * @param compareFn Function used to determine the order of the elements. It is expected to return
+      * a negative value if first argument is less than second arguement, zero if they're equal and a positive
+      * value otherwise. If omitted, the elements are sorted in ascending, ASCII character order.
       */
     sort(compareFn?: (a: number, b: number) => number): this;
 
@@ -3250,8 +3257,9 @@ interface Int32Array {
 
     /**
       * Sorts an array.
-      * @param compareFn The name of the function used to determine the order of the elements. If
-      * omitted, the elements are sorted in ascending, ASCII character order.
+      * @param compareFn Function used to determine the order of the elements. It is expected to return
+      * a negative value if first argument is less than second arguement, zero if they're equal and a positive
+      * value otherwise. If omitted, the elements are sorted in ascending, ASCII character order.
       */
     sort(compareFn?: (a: number, b: number) => number): this;
 
@@ -3524,8 +3532,9 @@ interface Uint32Array {
 
     /**
       * Sorts an array.
-      * @param compareFn The name of the function used to determine the order of the elements. If
-      * omitted, the elements are sorted in ascending, ASCII character order.
+      * @param compareFn Function used to determine the order of the elements. It is expected to return
+      * a negative value if first argument is less than second arguement, zero if they're equal and a positive
+      * value otherwise. If omitted, the elements are sorted in ascending, ASCII character order.
       */
     sort(compareFn?: (a: number, b: number) => number): this;
 
@@ -3799,8 +3808,9 @@ interface Float32Array {
 
     /**
       * Sorts an array.
-      * @param compareFn The name of the function used to determine the order of the elements. If
-      * omitted, the elements are sorted in ascending, ASCII character order.
+      * @param compareFn Function used to determine the order of the elements. It is expected to return
+      * a negative value if first argument is less than second arguement, zero if they're equal and a positive
+      * value otherwise. If omitted, the elements are sorted in ascending, ASCII character order.
       */
     sort(compareFn?: (a: number, b: number) => number): this;
 
@@ -4075,8 +4085,9 @@ interface Float64Array {
 
     /**
       * Sorts an array.
-      * @param compareFn The name of the function used to determine the order of the elements. If
-      * omitted, the elements are sorted in ascending, ASCII character order.
+      * @param compareFn Function used to determine the order of the elements. It is expected to return
+      * a negative value if first argument is less than second arguement, zero if they're equal and a positive
+      * value otherwise. If omitted, the elements are sorted in ascending, ASCII character order.
       */
     sort(compareFn?: (a: number, b: number) => number): this;
 
