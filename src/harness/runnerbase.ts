@@ -2,8 +2,10 @@ type TestRunnerKind = CompilerTestKind | FourslashTestKind | "project" | "rwc" |
 type CompilerTestKind = "conformance" | "compiler";
 type FourslashTestKind = "fourslash" | "fourslash-shims" | "fourslash-shims-pp" | "fourslash-server";
 
+/* eslint-disable prefer-const */
 let shards = 1;
 let shardId = 1;
+/* eslint-enable prefer-const */
 
 abstract class RunnerBase {
     // contains the tests to run

@@ -1,7 +1,7 @@
 /* @internal */
 namespace ts.codefix {
     export const importFixId = "fixMissingImport";
-    const errorCodes: ReadonlyArray<number> = [
+    const errorCodes: readonly number[] = [
         Diagnostics.Cannot_find_name_0.code,
         Diagnostics.Cannot_find_name_0_Did_you_mean_1.code,
         Diagnostics.Cannot_find_name_0_Did_you_mean_the_instance_member_this_0.code,
@@ -176,7 +176,7 @@ namespace ts.codefix {
         return { description, changes, commands };
     }
 
-    function getAllReExportingModules(importingFile: SourceFile, exportedSymbol: Symbol, exportingModuleSymbol: Symbol, symbolName: string, sourceFile: SourceFile, compilerOptions: CompilerOptions, checker: TypeChecker, allSourceFiles: ReadonlyArray<SourceFile>): ReadonlyArray<SymbolExportInfo> {
+    function getAllReExportingModules(importingFile: SourceFile, exportedSymbol: Symbol, exportingModuleSymbol: Symbol, symbolName: string, sourceFile: SourceFile, compilerOptions: CompilerOptions, checker: TypeChecker, allSourceFiles: readonly SourceFile[]): readonly SymbolExportInfo[] {
         const result: SymbolExportInfo[] = [];
         forEachExternalModule(checker, allSourceFiles, (moduleSymbol, moduleFile) => {
             // Don't import from a re-export when looking "up" like to `./index` or `../index`.
@@ -203,14 +203,14 @@ namespace ts.codefix {
     }
 
     function getFixForImport(
-        exportInfos: ReadonlyArray<SymbolExportInfo>,
+        exportInfos: readonly SymbolExportInfo[],
         symbolName: string,
         position: number | undefined,
         program: Program,
         sourceFile: SourceFile,
         host: LanguageServiceHost,
         preferences: UserPreferences,
-    ): ReadonlyArray<ImportFix> {
+    ): readonly ImportFix[] {
         const checker = program.getTypeChecker();
         const existingImports = flatMap(exportInfos, info => getExistingImportDeclarations(info, checker, sourceFile));
         const useNamespace = position === undefined ? undefined : tryUseExistingNamespaceImport(existingImports, symbolName, position, checker);
@@ -220,7 +220,7 @@ namespace ts.codefix {
         return [...(useNamespace ? [useNamespace] : emptyArray), ...addImport];
     }
 
-    function tryUseExistingNamespaceImport(existingImports: ReadonlyArray<FixAddToExistingImportInfo>, symbolName: string, position: number, checker: TypeChecker): FixUseNamespaceImport | undefined {
+    function tryUseExistingNamespaceImport(existingImports: readonly FixAddToExistingImportInfo[], symbolName: string, position: number, checker: TypeChecker): FixUseNamespaceImport | undefined {
         // It is possible that multiple import statements with the same specifier exist in the file.
         // e.g.
         //
@@ -244,7 +244,7 @@ namespace ts.codefix {
         });
     }
 
-    function tryAddToExistingImport(existingImports: ReadonlyArray<FixAddToExistingImportInfo>): FixAddToExistingImport | undefined {
+    function tryAddToExistingImport(existingImports: readonly FixAddToExistingImportInfo[]): FixAddToExistingImport | undefined {
         return firstDefined(existingImports, ({ declaration, importKind }): FixAddToExistingImport | undefined => {
             if (declaration.kind !== SyntaxKind.ImportDeclaration) return undefined;
             const { importClause } = declaration;
@@ -266,7 +266,7 @@ namespace ts.codefix {
         }
     }
 
-    function getExistingImportDeclarations({ moduleSymbol, importKind, exportedSymbolIsTypeOnly }: SymbolExportInfo, checker: TypeChecker, sourceFile: SourceFile): ReadonlyArray<FixAddToExistingImportInfo> {
+    function getExistingImportDeclarations({ moduleSymbol, importKind, exportedSymbolIsTypeOnly }: SymbolExportInfo, checker: TypeChecker, sourceFile: SourceFile): readonly FixAddToExistingImportInfo[] {
         // Can't use an es6 import for a type in JS.
         return exportedSymbolIsTypeOnly && isSourceFileJS(sourceFile) ? emptyArray : mapDefined<StringLiteralLike, FixAddToExistingImportInfo>(sourceFile.imports, moduleSpecifier => {
             const i = importFromModuleSpecifier(moduleSpecifier);
@@ -279,29 +279,29 @@ namespace ts.codefix {
         program: Program,
         sourceFile: SourceFile,
         position: number | undefined,
-        moduleSymbols: ReadonlyArray<SymbolExportInfo>,
+        moduleSymbols: readonly SymbolExportInfo[],
         host: LanguageServiceHost,
         preferences: UserPreferences,
-    ): ReadonlyArray<FixAddNewImport | FixUseImportType> {
+    ): readonly (FixAddNewImport | FixUseImportType)[] {
         const isJs = isSourceFileJS(sourceFile);
         const choicesForEachExportingModule = flatMap(moduleSymbols, ({ moduleSymbol, importKind, exportedSymbolIsTypeOnly }) =>
             moduleSpecifiers.getModuleSpecifiers(moduleSymbol, program.getCompilerOptions(), sourceFile, host, program.getSourceFiles(), preferences, program.redirectTargetsMap)
-            .map((moduleSpecifier): FixAddNewImport | FixUseImportType =>
-                // `position` should only be undefined at a missing jsx namespace, in which case we shouldn't be looking for pure types.
-                exportedSymbolIsTypeOnly && isJs ? { kind: ImportFixKind.ImportType, moduleSpecifier, position: Debug.assertDefined(position, "position should be defined") } : { kind: ImportFixKind.AddNew, moduleSpecifier, importKind }));
+                .map((moduleSpecifier): FixAddNewImport | FixUseImportType =>
+                    // `position` should only be undefined at a missing jsx namespace, in which case we shouldn't be looking for pure types.
+                    exportedSymbolIsTypeOnly && isJs ? { kind: ImportFixKind.ImportType, moduleSpecifier, position: Debug.assertDefined(position, "position should be defined") } : { kind: ImportFixKind.AddNew, moduleSpecifier, importKind }));
         // Sort to keep the shortest paths first
         return sort(choicesForEachExportingModule, (a, b) => a.moduleSpecifier.length - b.moduleSpecifier.length);
     }
 
     function getFixesForAddImport(
-        exportInfos: ReadonlyArray<SymbolExportInfo>,
-        existingImports: ReadonlyArray<FixAddToExistingImportInfo>,
+        exportInfos: readonly SymbolExportInfo[],
+        existingImports: readonly FixAddToExistingImportInfo[],
         program: Program,
         sourceFile: SourceFile,
         position: number | undefined,
         host: LanguageServiceHost,
         preferences: UserPreferences,
-    ): ReadonlyArray<FixAddNewImport | FixUseImportType> {
+    ): readonly (FixAddNewImport | FixUseImportType)[] {
         const existingDeclaration = firstDefined(existingImports, newImportInfoFromExistingSpecifier);
         return existingDeclaration ? [existingDeclaration] : getNewImportInfos(program, sourceFile, position, exportInfos, host, preferences);
     }
@@ -315,7 +315,7 @@ namespace ts.codefix {
         return expression && isStringLiteral(expression) ? { kind: ImportFixKind.AddNew, moduleSpecifier: expression.text, importKind } : undefined;
     }
 
-    interface FixesInfo { readonly fixes: ReadonlyArray<ImportFix>; readonly symbolName: string; }
+    interface FixesInfo { readonly fixes: readonly ImportFix[]; readonly symbolName: string; }
     function getFixesInfo(context: CodeFixContextBase, errorCode: number, pos: number): FixesInfo | undefined {
         const symbolToken = getTokenAtPosition(context.sourceFile, pos);
         const info = errorCode === Diagnostics._0_refers_to_a_UMD_global_but_the_current_file_is_a_module_Consider_adding_an_import_instead.code
@@ -330,7 +330,7 @@ namespace ts.codefix {
         if (!umdSymbol) return undefined;
         const symbol = checker.getAliasedSymbol(umdSymbol);
         const symbolName = umdSymbol.name;
-        const exportInfos: ReadonlyArray<SymbolExportInfo> = [{ moduleSymbol: symbol, importKind: getUmdImportKind(sourceFile, program.getCompilerOptions()), exportedSymbolIsTypeOnly: false }];
+        const exportInfos: readonly SymbolExportInfo[] = [{ moduleSymbol: symbol, importKind: getUmdImportKind(sourceFile, program.getCompilerOptions()), exportedSymbolIsTypeOnly: false }];
         const fixes = getFixForImport(exportInfos, symbolName, isIdentifier(token) ? token.getStart(sourceFile) : undefined, program, sourceFile, host, preferences);
         return { fixes, symbolName };
     }
@@ -360,8 +360,8 @@ namespace ts.codefix {
             case ModuleKind.UMD:
                 if (isInJSFile(importingFile)) {
                     return isExternalModule(importingFile) ? ImportKind.Namespace : ImportKind.ConstEquals;
-                 }
-                 return ImportKind.Equals;
+                }
+                return ImportKind.Equals;
             case ModuleKind.System:
             case ModuleKind.ES2015:
             case ModuleKind.ESNext:
@@ -397,7 +397,7 @@ namespace ts.codefix {
         sourceFile: SourceFile,
         checker: TypeChecker,
         program: Program,
-    ): ReadonlyMap<ReadonlyArray<SymbolExportInfo>> {
+    ): ReadonlyMap<readonly SymbolExportInfo[]> {
         // For each original symbol, keep all re-exports of that symbol together so we can call `getCodeActionsForImport` on the whole group at once.
         // Maps symbol id to info for modules providing that symbol (original export + re-exports).
         const originalSymbolToExportInfos = createMultiMap<SymbolExportInfo>();
@@ -525,7 +525,7 @@ namespace ts.codefix {
         }
     }
 
-    function doAddExistingFix(changes: textChanges.ChangeTracker, sourceFile: SourceFile, clause: ImportClause, defaultImport: string | undefined, namedImports: ReadonlyArray<string>): void {
+    function doAddExistingFix(changes: textChanges.ChangeTracker, sourceFile: SourceFile, clause: ImportClause, defaultImport: string | undefined, namedImports: readonly string[]): void {
         if (defaultImport) {
             Debug.assert(!clause.name, "Default imports can't have names");
             changes.insertNodeAt(sourceFile, clause.getStart(sourceFile), createIdentifier(defaultImport), { suffix: ", " });
@@ -605,7 +605,7 @@ namespace ts.codefix {
         return some(declarations, decl => !!(getMeaningFromDeclaration(decl) & meaning));
     }
 
-    export function forEachExternalModuleToImportFrom(checker: TypeChecker, from: SourceFile, allSourceFiles: ReadonlyArray<SourceFile>, cb: (module: Symbol) => void) {
+    export function forEachExternalModuleToImportFrom(checker: TypeChecker, from: SourceFile, allSourceFiles: readonly SourceFile[], cb: (module: Symbol) => void) {
         forEachExternalModule(checker, allSourceFiles, (module, sourceFile) => {
             if (sourceFile === undefined || sourceFile !== from && isImportablePath(from.fileName, sourceFile.fileName)) {
                 cb(module);
@@ -613,7 +613,7 @@ namespace ts.codefix {
         });
     }
 
-    function forEachExternalModule(checker: TypeChecker, allSourceFiles: ReadonlyArray<SourceFile>, cb: (module: Symbol, sourceFile: SourceFile | undefined) => void) {
+    function forEachExternalModule(checker: TypeChecker, allSourceFiles: readonly SourceFile[], cb: (module: Symbol, sourceFile: SourceFile | undefined) => void) {
         for (const ambient of checker.getAmbientModules()) {
             cb(ambient, /*sourceFile*/ undefined);
         }

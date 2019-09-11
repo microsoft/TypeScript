@@ -775,6 +775,7 @@ namespace ts {
             // defined in `ts.commentPragmas` would be excessive, but we can avoid
             // some obvious false positives (e.g. in XML-like doc comments) by
             // checking the element name.
+            // eslint-disable-next-line no-in-operator
             if (!match[3] || !(match[3] in commentPragmas)) {
                 return false;
             }

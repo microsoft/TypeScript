@@ -4,7 +4,7 @@ namespace ts {
         const { time, tick } = getTime();
         const enum project { lib, app }
         function relName(path: string) { return path.slice(1); }
-        type Sources = [string, ReadonlyArray<string>];
+        type Sources = [string, readonly string[]];
         const enum source { config, ts }
         const sources: [Sources, Sources] = [
             [

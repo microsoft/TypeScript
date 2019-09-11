@@ -126,7 +126,7 @@ namespace ts.SmartSelectionRange {
      * selected all together, even though in the AST they’re just siblings of each
      * other as well as of other top-level statements and declarations.
      */
-    function getSelectionChildren(node: Node): ReadonlyArray<Node> {
+    function getSelectionChildren(node: Node): readonly Node[] {
         // Group top-level imports
         if (isSourceFile(node)) {
             return groupChildren(node.getChildAt(0).getChildren(), isImport);
