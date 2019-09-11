@@ -33716,7 +33716,31 @@ namespace ts {
                     return grammarErrorOnNode(withMinus ? node.parent : node, diagnosticMessage, literal);
                 }
             }
+
+            // Realism (size) checking
+            checkNumericLiteralValueSize(node);
+
             return false;
+        }
+
+        function checkNumericLiteralValueSize(node: NumericLiteral) {
+            // Scientific notation (e.g. 2e54 and 1e00000000010) can't be converted to bigint
+            // Literals with 15 or fewer characters aren't long enough to reach past 2^53 - 1
+            // Fractional numbers (e.g. 9000000000000000.001) are inherently imprecise anyway
+            if (node.numericLiteralFlags & TokenFlags.Scientific || node.text.length <= 15 || node.text.indexOf(".") !== -1) {
+                return;
+            }
+
+            // We can't rely on the runtime to accurately store and compare extremely large numeric values
+            // Even for internal use, we use getTextOfNode: https://github.com/microsoft/TypeScript/issues/33298
+            // Thus, if the runtime claims a too-large number is lower than Number.MAX_SAFE_INTEGER,
+            // it's likely addition operations on it will fail too
+            const apparentValue = +getTextOfNode(node);
+            if (apparentValue <= 2 ** 53 - 1 && apparentValue + 1 > apparentValue) {
+                return;
+            }
+
+            addErrorOrSuggestion(/*isError*/ false, createDiagnosticForNode(node, Diagnostics.Numeric_literals_with_absolute_values_equal_to_2_53_or_greater_are_too_large_to_be_represented_accurately_as_integers));
         }
 
         function checkGrammarBigIntLiteral(node: BigIntLiteral): boolean {
