@@ -49,7 +49,7 @@ namespace ts {
             it(caption, () => {
                 const sourceFile = createSourceFile("source.ts", text, ScriptTarget.ES2015, /*setParentNodes*/ true);
                 const rulesProvider = getRuleProvider(placeOpenBraceOnNewLineForFunctions);
-                const changeTracker = new textChanges.ChangeTracker(newLineCharacter, rulesProvider, {});
+                const changeTracker = new textChanges.ChangeTracker(newLineCharacter, rulesProvider);
                 testBlock(sourceFile, changeTracker);
                 const changes = changeTracker.getChanges(validateNodes ? verifyPositions : undefined);
                 assert.equal(changes.length, 1);

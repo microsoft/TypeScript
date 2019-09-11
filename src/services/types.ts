@@ -676,6 +676,12 @@ namespace ts {
         Smart = 2,
     }
 
+    export enum SemicolonPreference {
+        Ignore = "ignore",
+        Insert = "insert",
+        Remove = "remove",
+    }
+
     /* @deprecated - consider using EditorSettings instead */
     export interface EditorOptions {
         BaseIndentSize?: number;
@@ -734,7 +740,7 @@ namespace ts {
         readonly placeOpenBraceOnNewLineForControlBlocks?: boolean;
         readonly insertSpaceBeforeTypeAnnotation?: boolean;
         readonly indentMultiLineObjectLiteralBeginningOnBlankLine?: boolean;
-        readonly insertTrailingSemicolon?: boolean;
+        readonly semicolonPreference?: SemicolonPreference;
     }
 
     export function getDefaultFormatCodeSettings(newLineCharacter?: string): FormatCodeSettings {
@@ -758,7 +764,7 @@ namespace ts {
             insertSpaceBeforeFunctionParenthesis: false,
             placeOpenBraceOnNewLineForFunctions: false,
             placeOpenBraceOnNewLineForControlBlocks: false,
-            insertTrailingSemicolon: true,
+            semicolonPreference: SemicolonPreference.Ignore,
         };
     }
 

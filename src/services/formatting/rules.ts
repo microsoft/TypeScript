@@ -313,8 +313,8 @@ namespace ts.formatting {
 
             rule("SpaceBeforeTypeAnnotation", anyToken, SyntaxKind.ColonToken, [isOptionEnabled("insertSpaceBeforeTypeAnnotation"), isNonJsxSameLineTokenContext, isTypeAnnotationContext], RuleAction.Space),
             rule("NoSpaceBeforeTypeAnnotation", anyToken, SyntaxKind.ColonToken, [isOptionDisabledOrUndefined("insertSpaceBeforeTypeAnnotation"), isNonJsxSameLineTokenContext, isTypeAnnotationContext], RuleAction.DeleteTrivia),
-            rule("NoOptionalSemicolon", SyntaxKind.SemicolonToken, anyTokenIncludingEOF, [isOptionDisabled("insertTrailingSemicolon"), isSemicolonDeletionContext], RuleAction.DeleteToken),
-            rule("OptionalSemicolon", anyToken, anyTokenIncludingEOF, [isOptionEnabled("insertTrailingSemicolon"), isSemicolonInsertionContext], RuleAction.TrailingSemicolon),
+            rule("NoOptionalSemicolon", SyntaxKind.SemicolonToken, anyTokenIncludingEOF, [optionEquals("semicolonPreference", SemicolonPreference.Remove), isSemicolonDeletionContext], RuleAction.DeleteToken),
+            rule("OptionalSemicolon", anyToken, anyTokenIncludingEOF, [optionEquals("semicolonPreference", SemicolonPreference.Insert), isSemicolonInsertionContext], RuleAction.TrailingSemicolon),
         ];
 
         // These rules are lower in priority than user-configurable. Rules earlier in this list have priority over rules later in the list.
@@ -399,6 +399,10 @@ namespace ts.formatting {
     ///
     /// Contexts
     ///
+
+    function optionEquals<K extends keyof FormatCodeSettings>(optionName: K, optionValue: FormatCodeSettings[K]): (context: FormattingContext) => boolean {
+        return (context) => context.options && context.options[optionName] === optionValue;
+    }
 
     function isOptionEnabled(optionName: keyof FormatCodeSettings): (context: FormattingContext) => boolean {
         return (context) => context.options && context.options.hasOwnProperty(optionName) && !!context.options[optionName];
