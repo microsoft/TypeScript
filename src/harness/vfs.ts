@@ -706,7 +706,7 @@ namespace vfs {
         }
 
         /**
-         * Generates a `FileSet` patch containing all the entries in `chagned` that are not in `base`.
+         * Generates a `FileSet` patch containing all the entries in `changed` that are not in `base`.
          */
         public static diff(changed: FileSystem, base: FileSystem, options: DiffOptions = {}) {
             const differences: FileSet = {};
