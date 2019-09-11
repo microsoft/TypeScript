@@ -3221,7 +3221,7 @@ namespace ts {
         getFullyQualifiedName(symbol: Symbol): string;
         getAugmentedPropertiesOfType(type: Type): Symbol[];
 
-        getRootSymbols(symbol: Symbol): ReadonlyArray<Symbol>;
+        getRootSymbols(symbol: Symbol): readonly Symbol[];
         getContextualType(node: Expression): Type | undefined;
         /* @internal */ getContextualType(node: Expression, contextFlags?: ContextFlags): Type | undefined; // tslint:disable-line unified-signatures
         /* @internal */ getContextualTypeForObjectLiteralElement(element: ObjectLiteralElementLike): Type | undefined;
