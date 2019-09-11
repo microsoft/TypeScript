@@ -1107,7 +1107,7 @@ namespace ts.refactor.extractSymbol {
         return { renameFilename, renameLocation, edits };
 
         function transformFunctionInitializerAndType(variableType: TypeNode | undefined, initializer: Expression): { variableType: TypeNode | undefined, initializer: Expression } {
-            // If no contextual type exists there is noting to transfer to the function signature
+            // If no contextual type exists there is nothing to transfer to the function signature
             if (variableType === undefined) return { variableType, initializer };
             // Only do this for function expressions and arrow functions that are not generic
             if (!isFunctionExpression(initializer) && !isArrowFunction(initializer) || !!initializer.typeParameters) return { variableType, initializer };
