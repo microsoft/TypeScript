@@ -9,6 +9,3 @@ Done in ?s.
 
 
 Standard error:
-{"type":"warning","data":"package.json: No license field"}
-{"type":"warning","data":"../package.json: No license field"}
-{"type":"warning","data":"vscode-web@X.X.X: No license field"}

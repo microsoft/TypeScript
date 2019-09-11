@@ -244,9 +244,11 @@ src/language-js/printer-estree.js(4201,24): error TS2532: Object is possibly 'un
 src/language-js/printer-estree.js(4557,5): error TS2345: Argument of type '"" | { type: string; parts: any; } | { type: string; contents: any; }' is not assignable to parameter of type 'string'.
   Type '{ type: string; parts: any; }' is not assignable to type 'string'.
 src/language-js/printer-estree.js(4561,16): error TS2345: Argument of type '{ type: string; parts: any; }' is not assignable to parameter of type 'string'.
-src/language-js/printer-estree.js(4603,9): error TS2345: Argument of type '{ type: string; parts: any; }' is not assignable to parameter of type 'string'.
-src/language-js/printer-estree.js(4905,9): error TS2554: Expected 0-2 arguments, but got 3.
-src/language-js/printer-estree.js(6112,7): error TS2769: No overload matches this call.
+src/language-js/printer-estree.js(4609,11): error TS2322: Type '{ type: string; id: any; contents: any; break: boolean; expandedStates: any; }' is not assignable to type 'string'.
+src/language-js/printer-estree.js(4624,11): error TS2322: Type '{ type: string; parts: any; }' is not assignable to type 'string'.
+src/language-js/printer-estree.js(4636,9): error TS2345: Argument of type '{ type: string; parts: any; }' is not assignable to parameter of type 'string'.
+src/language-js/printer-estree.js(4923,9): error TS2554: Expected 0-2 arguments, but got 3.
+src/language-js/printer-estree.js(6130,7): error TS2769: No overload matches this call.
   Overload 1 of 2, '(...items: ConcatArray<(childPath: any) => any>[]): ((childPath: any) => any)[]', gave the following error.
     Argument of type '(string | number)[]' is not assignable to parameter of type 'ConcatArray<(childPath: any) => any>'.
       Types of property 'slice' are incompatible.
