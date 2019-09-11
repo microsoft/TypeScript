@@ -111,8 +111,8 @@ namespace ts.NavigationBar {
         return root;
     }
 
-    function addLeafNode(node: Node): void {
-        pushChild(parent, emptyNavigationBarNode(node));
+    function addLeafNode(node: Node, name?: DeclarationName): void {
+        pushChild(parent, emptyNavigationBarNode(node, name));
     }
 
     function emptyNavigationBarNode(node: Node, name?: DeclarationName): NavigationBarNode {
@@ -243,6 +243,14 @@ namespace ts.NavigationBar {
                 }
                 break;
 
+            case SyntaxKind.ShorthandPropertyAssignment:
+                addNodeWithRecursiveChild(node, (<ShorthandPropertyAssignment>node).name);
+                break;
+            case SyntaxKind.SpreadAssignment:
+                const { expression } = <SpreadAssignment>node;
+                // Use the expression as the name of the SpreadAssignment, otherwise show as <unknown>.
+                isIdentifier(expression) ? addLeafNode(node, expression) : addLeafNode(node);
+                break;
             case SyntaxKind.BindingElement:
             case SyntaxKind.PropertyAssignment:
             case SyntaxKind.VariableDeclaration:

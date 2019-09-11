@@ -358,6 +358,8 @@ namespace ts {
                 return isFunctionLike(initializer) ? ScriptElementKind.memberFunctionElement : ScriptElementKind.memberVariableElement;
             case SyntaxKind.PropertyDeclaration:
             case SyntaxKind.PropertySignature:
+            case SyntaxKind.ShorthandPropertyAssignment:
+            case SyntaxKind.SpreadAssignment:
                 return ScriptElementKind.memberVariableElement;
             case SyntaxKind.IndexSignature: return ScriptElementKind.indexSignatureElement;
             case SyntaxKind.ConstructSignature: return ScriptElementKind.constructSignatureElement;
