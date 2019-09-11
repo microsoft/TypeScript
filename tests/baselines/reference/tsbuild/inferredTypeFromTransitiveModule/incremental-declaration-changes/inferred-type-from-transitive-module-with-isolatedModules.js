@@ -21,6 +21,12 @@ exports.default = foo()(function foobar() {
 });
 
 
+//// [/src/obj/index.d.ts]
+import { LazyAction } from './bundling';
+export declare const lazyBar: LazyAction<() => void, typeof import("./lazyIndex")>;
+
+
+//// [/src/obj/lazyIndex.d.ts] file written with same contents
 //// [/src/obj/tsconfig.tsbuildinfo]
 {
   "program": {
@@ -47,7 +53,7 @@ exports.default = foo()(function foobar() {
       },
       "../index.ts": {
         "version": "-11602502901-import { LazyAction, LazyModule } from './bundling';\r\nconst lazyModule = new LazyModule(() =>\r\n    import('./lazyIndex')\r\n);\r\nexport const lazyBar = new LazyAction(lazyModule, m => m.bar);",
-        "signature": "18468008756-import { LazyAction } from './bundling';\r\nexport declare const lazyBar: LazyAction<(param: string) => void, typeof import(\"./lazyIndex\")>;\r\n"
+        "signature": "6256067474-import { LazyAction } from './bundling';\r\nexport declare const lazyBar: LazyAction<() => void, typeof import(\"./lazyIndex\")>;\r\n"
       }
     },
     "options": {
@@ -75,7 +81,15 @@ exports.default = foo()(function foobar() {
       "../lazyindex.ts": [
         "../bar.ts"
       ]
-    }
+    },
+    "semanticDiagnosticsPerFile": [
+      "../../lib/lib.d.ts",
+      "../bar.ts",
+      "../bundling.ts",
+      "../global.d.ts",
+      "../index.ts",
+      "../lazyindex.ts"
+    ]
   },
   "version": "FakeTSVersion"
 }

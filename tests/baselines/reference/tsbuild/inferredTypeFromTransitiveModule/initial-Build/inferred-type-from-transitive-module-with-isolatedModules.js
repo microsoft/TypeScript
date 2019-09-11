@@ -118,7 +118,15 @@ exports.bar = bar_1.default;
       "../lazyindex.ts": [
         "../bar.ts"
       ]
-    }
+    },
+    "semanticDiagnosticsPerFile": [
+      "../../lib/lib.d.ts",
+      "../bar.ts",
+      "../bundling.ts",
+      "../global.d.ts",
+      "../index.ts",
+      "../lazyindex.ts"
+    ]
   },
   "version": "FakeTSVersion"
 }
