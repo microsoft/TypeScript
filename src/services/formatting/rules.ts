@@ -778,14 +778,17 @@ namespace ts.formatting {
     }
 
     function isSemicolonDeletionContext(context: FormattingContext): boolean {
-        if (context.TokensAreOnSameLine()) {
-            return context.nextTokenSpan.kind === SyntaxKind.CloseBraceToken
-                || context.nextTokenSpan.kind === SyntaxKind.EndOfFileToken;
-        }
-
         const nextToken = isTrivia(context.nextTokenSpan.kind)
             ? context.nextTokenParent.getChildAt(0)
             : context.nextTokenSpan;
+
+        const startLine = context.sourceFile.getLineAndCharacterOfPosition(context.currentTokenSpan.pos).line;
+        const endLine = context.sourceFile.getLineAndCharacterOfPosition(nextToken.pos).line;
+        if (startLine === endLine) {
+            return nextToken.kind === SyntaxKind.CloseBraceToken
+                || nextToken.kind === SyntaxKind.EndOfFileToken;
+        }
+
 
         if (nextToken.kind === SyntaxKind.SemicolonClassElement ||
             nextToken.kind === SyntaxKind.SemicolonToken

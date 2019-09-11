@@ -1,15 +1,21 @@
 /// <reference path="fourslash.ts" />
 
-////interface I {
-////    a: string;
-////    /** @internal */
-////    b: string;
+////namespace ts {
+////    let x = 0;
+////    interface I {
+////        a: string;
+////        /** @internal */
+////        b: string;
+////    }
 ////}
 
 format.setFormatOptions({ ...format.copyFormatOptions(), insertTrailingSemicolon: false });
 format.document();
-verify.currentFileContentIs(`interface I {
-    a: string
-    /** @internal */
-    b: string
+verify.currentFileContentIs(`namespace ts {
+    let x = 0
+    interface I {
+        a: string
+        /** @internal */
+        b: string
+    }
 }`);

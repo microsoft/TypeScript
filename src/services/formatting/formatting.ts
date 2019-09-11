@@ -1191,7 +1191,7 @@ namespace ts.formatting {
                     break;
                 case RuleAction.DeleteToken:
                     recordDelete(previousRange.pos, previousRange.end - previousRange.pos);
-                    return onLaterLine ? LineAction.LineRemoved : LineAction.None;
+                    break;
                 case RuleAction.NewLine:
                     // exit early if we on different lines and rule cannot change number of newlines
                     // if line1 and line2 are on subsequent lines then no edits are required - ok to exit

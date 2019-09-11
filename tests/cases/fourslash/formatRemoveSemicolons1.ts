@@ -43,9 +43,9 @@ verify.currentFileContentIs(`; (function f() { })()
 const a = 3;
 + 4
 const b = 3
-+ 4
+    + 4
 const c = 3 +
-4
+    4
 class C {
     prop
     ["p"]
