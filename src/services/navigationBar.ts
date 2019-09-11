@@ -56,7 +56,7 @@ namespace ts.NavigationBar {
         curCancellationToken = cancellationToken;
         curSourceFile = sourceFile;
         try {
-            return map(primaryNavBarItems(rootNavigationBarNode(sourceFile)), convertToPrimaryNavBarItem);
+            return map(primaryNavBarMenuItems(rootNavigationBarNode(sourceFile)), convertToPrimaryNavBarMenuItem);
         }
         finally {
             reset();
@@ -702,12 +702,15 @@ namespace ts.NavigationBar {
         }
     }
 
-    /** Flattens the NavNode tree to a list, keeping only the top-level items. */
-    function primaryNavBarItems(root: NavigationBarNode): NavigationBarNode[] {
-        const primaryNavBarItems: NavigationBarNode[] = [];
+    /** Flattens the NavNode tree to a list of items to appear in the primary navbar menu. */
+    function primaryNavBarMenuItems(root: NavigationBarNode): NavigationBarNode[] {
+        // The primary (middle) navbar menu displays the general code navigation hierarchy, similar to the navtree.
+        // The secondary (right) navbar menu displays the child items of whichever primary item is selected.
+        // Some less interesting items without their own child navigation items (e.g. a local variable declaration) only show up in the secondary menu.
+        const primaryNavBarMenuItems: NavigationBarNode[] = [];
         function recur(item: NavigationBarNode) {
             if (shouldAppearInPrimaryNavBarMenu(item)) {
-                primaryNavBarItems.push(item);
+                primaryNavBarMenuItems.push(item);
                 if (item.children) {
                     for (const child of item.children) {
                         recur(child);
@@ -716,12 +719,11 @@ namespace ts.NavigationBar {
             }
         }
         recur(root);
-        return primaryNavBarItems;
+        return primaryNavBarMenuItems;
 
-        /** Determines if a node should appear in the primary code navigation menu. */
+        /** Determines if a node should appear in the primary navbar menu. */
         function shouldAppearInPrimaryNavBarMenu(item: NavigationBarNode): boolean {
-            // Items with children should always appear in the primary (middle) code navigation menu.
-            // Leaf nodes or children of the currently selected node appear in a secondary (righthand) menu.
+            // Items with children should always appear in the primary navbar menu.
             if (item.children) {
                 return true;
             }
@@ -776,19 +778,19 @@ namespace ts.NavigationBar {
         };
     }
 
-    function convertToPrimaryNavBarItem(n: NavigationBarNode): NavigationBarItem {
+    function convertToPrimaryNavBarMenuItem(n: NavigationBarNode): NavigationBarItem {
         return {
             text: getItemName(n.node, n.name),
             kind: getNodeKind(n.node),
             kindModifiers: getModifiers(n.node),
             spans: getSpans(n),
-            childItems: map(n.children, convertToChildItem) || emptyChildItemArray,
+            childItems: map(n.children, convertToSecondaryNavBarMenuItem) || emptyChildItemArray,
             indent: n.indent,
             bolded: false,
             grayed: false
         };
 
-        function convertToChildItem(n: NavigationBarNode): NavigationBarItem {
+        function convertToSecondaryNavBarMenuItem(n: NavigationBarNode): NavigationBarItem {
             return {
                 text: getItemName(n.node, n.name),
                 kind: getNodeKind(n.node),
