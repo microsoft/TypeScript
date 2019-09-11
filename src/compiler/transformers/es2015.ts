@@ -1580,7 +1580,7 @@ namespace ts {
             }
 
             /**
-             * Lazily creates the way class members will access the class prototype. 
+             * Lazily creates the way class members will access the class prototype.
              */
             function getPrototypeStorageName() {
                 if (prototypeStorageName) {
@@ -1588,7 +1588,7 @@ namespace ts {
                 }
 
                 const originalPrototypeAccess = createPropertyAccess(getInternalName(node), "prototype");
-    
+
                 // If the class has exactly one non-static member, it'll access prototype members on itself:
                 //   ClassName.prototype.member = ...
                 if (containsExactlyOne(node.members, classMemberAssignsToPrototype)) {
