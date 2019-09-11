@@ -135,8 +135,12 @@ declare module "react" {
             ref?: Ref<T>;
         }
 
-        interface ReactElement<P> {
-            type: string | ComponentClass<P> | SFC<P>;
+        type JSXElementConstructor<P> =
+            | ((props: P) => ReactElement | null)
+            | (new (props: P) => Component<P, any>);
+
+        interface ReactElement<P = any, T extends string | JSXElementConstructor<any> = string | JSXElementConstructor<any>> {
+            type: T;
             props: P;
             key: Key | null;
         }

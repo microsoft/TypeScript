@@ -1,0 +1,200 @@
+=== tests/cases/compiler/jsxTabTabGroupStrongChildren.tsx ===
+/// <reference path="react16.d.ts" />
+import React from "react";
+>React : Symbol(React, Decl(jsxTabTabGroupStrongChildren.tsx, 1, 6))
+
+export interface TabGroupProps {
+>TabGroupProps : Symbol(TabGroupProps, Decl(jsxTabTabGroupStrongChildren.tsx, 1, 26))
+
+    // Has to be a union of a single type and an array type for ~legacy reasons~
+    // It's just how jsx children are checked, as they predate tuple types
+    children: React.ComponentElement<TabProps, Tab>[] | React.ComponentElement<TabProps, Tab>;
+>children : Symbol(TabGroupProps.children, Decl(jsxTabTabGroupStrongChildren.tsx, 3, 32))
+>React : Symbol(React, Decl(jsxTabTabGroupStrongChildren.tsx, 1, 6))
+>ComponentElement : Symbol(React.ComponentElement, Decl(react16.d.ts, 151, 90))
+>TabProps : Symbol(TabProps, Decl(jsxTabTabGroupStrongChildren.tsx, 7, 1))
+>Tab : Symbol(Tab, Decl(jsxTabTabGroupStrongChildren.tsx, 9, 28))
+>React : Symbol(React, Decl(jsxTabTabGroupStrongChildren.tsx, 1, 6))
+>ComponentElement : Symbol(React.ComponentElement, Decl(react16.d.ts, 151, 90))
+>TabProps : Symbol(TabProps, Decl(jsxTabTabGroupStrongChildren.tsx, 7, 1))
+>Tab : Symbol(Tab, Decl(jsxTabTabGroupStrongChildren.tsx, 9, 28))
+}
+
+export interface TabProps {}
+>TabProps : Symbol(TabProps, Decl(jsxTabTabGroupStrongChildren.tsx, 7, 1))
+
+export class Tab extends React.Component<TabProps> {
+>Tab : Symbol(Tab, Decl(jsxTabTabGroupStrongChildren.tsx, 9, 28))
+>React.Component : Symbol(React.Component, Decl(react16.d.ts, 349, 54), Decl(react16.d.ts, 353, 94))
+>React : Symbol(React, Decl(jsxTabTabGroupStrongChildren.tsx, 1, 6))
+>Component : Symbol(React.Component, Decl(react16.d.ts, 349, 54), Decl(react16.d.ts, 353, 94))
+>TabProps : Symbol(TabProps, Decl(jsxTabTabGroupStrongChildren.tsx, 7, 1))
+
+    private a!: void; // nominally tag `Tab`
+>a : Symbol(Tab.a, Decl(jsxTabTabGroupStrongChildren.tsx, 11, 52))
+
+    render(): JSX.Element {
+>render : Symbol(Tab.render, Decl(jsxTabTabGroupStrongChildren.tsx, 12, 21))
+>JSX : Symbol(JSX, Decl(react16.d.ts, 2371, 12))
+>Element : Symbol(JSX.Element, Decl(react16.d.ts, 2372, 23))
+
+        return <div></div>;
+>div : Symbol(JSX.IntrinsicElements.div, Decl(react16.d.ts, 2424, 114))
+>div : Symbol(JSX.IntrinsicElements.div, Decl(react16.d.ts, 2424, 114))
+    }
+}
+export class NotTab extends React.Component<TabProps> {
+>NotTab : Symbol(NotTab, Decl(jsxTabTabGroupStrongChildren.tsx, 16, 1))
+>React.Component : Symbol(React.Component, Decl(react16.d.ts, 349, 54), Decl(react16.d.ts, 353, 94))
+>React : Symbol(React, Decl(jsxTabTabGroupStrongChildren.tsx, 1, 6))
+>Component : Symbol(React.Component, Decl(react16.d.ts, 349, 54), Decl(react16.d.ts, 353, 94))
+>TabProps : Symbol(TabProps, Decl(jsxTabTabGroupStrongChildren.tsx, 7, 1))
+
+    private a!: void; // nominally tag `NotTab` (which is now distinct from `Tab`)
+>a : Symbol(NotTab.a, Decl(jsxTabTabGroupStrongChildren.tsx, 17, 55))
+
+    render(): JSX.Element {
+>render : Symbol(NotTab.render, Decl(jsxTabTabGroupStrongChildren.tsx, 18, 21))
+>JSX : Symbol(JSX, Decl(react16.d.ts, 2371, 12))
+>Element : Symbol(JSX.Element, Decl(react16.d.ts, 2372, 23))
+
+        return <div></div>;
+>div : Symbol(JSX.IntrinsicElements.div, Decl(react16.d.ts, 2424, 114))
+>div : Symbol(JSX.IntrinsicElements.div, Decl(react16.d.ts, 2424, 114))
+    }
+}
+export class TabGroup extends React.Component<TabGroupProps> {
+>TabGroup : Symbol(TabGroup, Decl(jsxTabTabGroupStrongChildren.tsx, 22, 1))
+>React.Component : Symbol(React.Component, Decl(react16.d.ts, 349, 54), Decl(react16.d.ts, 353, 94))
+>React : Symbol(React, Decl(jsxTabTabGroupStrongChildren.tsx, 1, 6))
+>Component : Symbol(React.Component, Decl(react16.d.ts, 349, 54), Decl(react16.d.ts, 353, 94))
+>TabGroupProps : Symbol(TabGroupProps, Decl(jsxTabTabGroupStrongChildren.tsx, 1, 26))
+
+    render() {
+>render : Symbol(TabGroup.render, Decl(jsxTabTabGroupStrongChildren.tsx, 23, 62))
+
+        return <div>{this.props.children}</div>
+>div : Symbol(JSX.IntrinsicElements.div, Decl(react16.d.ts, 2424, 114))
+>this.props.children : Symbol(children, Decl(react16.d.ts, 378, 38), Decl(jsxTabTabGroupStrongChildren.tsx, 3, 32))
+>this.props : Symbol(React.Component.props, Decl(react16.d.ts, 371, 32))
+>this : Symbol(TabGroup, Decl(jsxTabTabGroupStrongChildren.tsx, 22, 1))
+>props : Symbol(React.Component.props, Decl(react16.d.ts, 371, 32))
+>children : Symbol(children, Decl(react16.d.ts, 378, 38), Decl(jsxTabTabGroupStrongChildren.tsx, 3, 32))
+>div : Symbol(JSX.IntrinsicElements.div, Decl(react16.d.ts, 2424, 114))
+    }
+}
+
+const elem = <div/>; // sanity check DetailedHtmlElement
+>elem : Symbol(elem, Decl(jsxTabTabGroupStrongChildren.tsx, 29, 5))
+>div : Symbol(JSX.IntrinsicElements.div, Decl(react16.d.ts, 2424, 114))
+
+const output = <TabGroup>
+>output : Symbol(output, Decl(jsxTabTabGroupStrongChildren.tsx, 31, 5))
+>TabGroup : Symbol(TabGroup, Decl(jsxTabTabGroupStrongChildren.tsx, 22, 1))
+
+    <Tab/>
+>Tab : Symbol(Tab, Decl(jsxTabTabGroupStrongChildren.tsx, 9, 28))
+
+</TabGroup>;
+>TabGroup : Symbol(TabGroup, Decl(jsxTabTabGroupStrongChildren.tsx, 22, 1))
+
+const shouldFail = <TabGroup>
+>shouldFail : Symbol(shouldFail, Decl(jsxTabTabGroupStrongChildren.tsx, 35, 5))
+>TabGroup : Symbol(TabGroup, Decl(jsxTabTabGroupStrongChildren.tsx, 22, 1))
+
+    <Tab/>
+>Tab : Symbol(Tab, Decl(jsxTabTabGroupStrongChildren.tsx, 9, 28))
+
+    <div/>
+>div : Symbol(JSX.IntrinsicElements.div, Decl(react16.d.ts, 2424, 114))
+
+</TabGroup>;
+>TabGroup : Symbol(TabGroup, Decl(jsxTabTabGroupStrongChildren.tsx, 22, 1))
+
+const alsoFails = <TabGroup>
+>alsoFails : Symbol(alsoFails, Decl(jsxTabTabGroupStrongChildren.tsx, 40, 5))
+>TabGroup : Symbol(TabGroup, Decl(jsxTabTabGroupStrongChildren.tsx, 22, 1))
+
+    <NotTab/>
+>NotTab : Symbol(NotTab, Decl(jsxTabTabGroupStrongChildren.tsx, 16, 1))
+
+</TabGroup>;
+>TabGroup : Symbol(TabGroup, Decl(jsxTabTabGroupStrongChildren.tsx, 22, 1))
+
+
+// Function component ver:
+
+// This uses `SFCElement` and `SFC` - nowadays those are called `FunctionComponentElement` and `FunctionComponent`
+
+export interface FCTabGroupProps {
+>FCTabGroupProps : Symbol(FCTabGroupProps, Decl(jsxTabTabGroupStrongChildren.tsx, 42, 12))
+
+    children: React.SFCElement<FCTabProps>[] | React.SFCElement<FCTabProps>;
+>children : Symbol(FCTabGroupProps.children, Decl(jsxTabTabGroupStrongChildren.tsx, 49, 34))
+>React : Symbol(React, Decl(jsxTabTabGroupStrongChildren.tsx, 1, 6))
+>SFCElement : Symbol(React.SFCElement, Decl(react16.d.ts, 145, 9))
+>FCTabProps : Symbol(FCTabProps, Decl(jsxTabTabGroupStrongChildren.tsx, 51, 1))
+>React : Symbol(React, Decl(jsxTabTabGroupStrongChildren.tsx, 1, 6))
+>SFCElement : Symbol(React.SFCElement, Decl(react16.d.ts, 145, 9))
+>FCTabProps : Symbol(FCTabProps, Decl(jsxTabTabGroupStrongChildren.tsx, 51, 1))
+}
+
+export interface FCTabProps {}
+>FCTabProps : Symbol(FCTabProps, Decl(jsxTabTabGroupStrongChildren.tsx, 51, 1))
+
+const FCTabGroup: React.SFC<FCTabGroupProps> = props => <div>{props.children}</div>;
+>FCTabGroup : Symbol(FCTabGroup, Decl(jsxTabTabGroupStrongChildren.tsx, 55, 5))
+>React : Symbol(React, Decl(jsxTabTabGroupStrongChildren.tsx, 1, 6))
+>SFC : Symbol(React.SFC, Decl(react16.d.ts, 404, 9))
+>FCTabGroupProps : Symbol(FCTabGroupProps, Decl(jsxTabTabGroupStrongChildren.tsx, 42, 12))
+>props : Symbol(props, Decl(jsxTabTabGroupStrongChildren.tsx, 55, 46))
+>div : Symbol(JSX.IntrinsicElements.div, Decl(react16.d.ts, 2424, 114))
+>props.children : Symbol(children, Decl(jsxTabTabGroupStrongChildren.tsx, 49, 34), Decl(react16.d.ts, 412, 25))
+>props : Symbol(props, Decl(jsxTabTabGroupStrongChildren.tsx, 55, 46))
+>children : Symbol(children, Decl(jsxTabTabGroupStrongChildren.tsx, 49, 34), Decl(react16.d.ts, 412, 25))
+>div : Symbol(JSX.IntrinsicElements.div, Decl(react16.d.ts, 2424, 114))
+
+const FCTab = (props: FCTabProps) => <div></div>;
+>FCTab : Symbol(FCTab, Decl(jsxTabTabGroupStrongChildren.tsx, 57, 5))
+>props : Symbol(props, Decl(jsxTabTabGroupStrongChildren.tsx, 57, 15))
+>FCTabProps : Symbol(FCTabProps, Decl(jsxTabTabGroupStrongChildren.tsx, 51, 1))
+>div : Symbol(JSX.IntrinsicElements.div, Decl(react16.d.ts, 2424, 114))
+>div : Symbol(JSX.IntrinsicElements.div, Decl(react16.d.ts, 2424, 114))
+
+const fctab = <FCTabGroup>
+>fctab : Symbol(fctab, Decl(jsxTabTabGroupStrongChildren.tsx, 59, 5))
+>FCTabGroup : Symbol(FCTabGroup, Decl(jsxTabTabGroupStrongChildren.tsx, 55, 5))
+
+    <FCTab/>
+>FCTab : Symbol(FCTab, Decl(jsxTabTabGroupStrongChildren.tsx, 57, 5))
+
+</FCTabGroup>;
+>FCTabGroup : Symbol(FCTabGroup, Decl(jsxTabTabGroupStrongChildren.tsx, 55, 5))
+
+const notATab = <FCTabGroup>
+>notATab : Symbol(notATab, Decl(jsxTabTabGroupStrongChildren.tsx, 63, 5))
+>FCTabGroup : Symbol(FCTabGroup, Decl(jsxTabTabGroupStrongChildren.tsx, 55, 5))
+
+    <div/>
+>div : Symbol(JSX.IntrinsicElements.div, Decl(react16.d.ts, 2424, 114))
+
+</FCTabGroup>;
+>FCTabGroup : Symbol(FCTabGroup, Decl(jsxTabTabGroupStrongChildren.tsx, 55, 5))
+
+const NotFCTab = (props: {}) => <div></div>;
+>NotFCTab : Symbol(NotFCTab, Decl(jsxTabTabGroupStrongChildren.tsx, 67, 5))
+>props : Symbol(props, Decl(jsxTabTabGroupStrongChildren.tsx, 67, 18))
+>div : Symbol(JSX.IntrinsicElements.div, Decl(react16.d.ts, 2424, 114))
+>div : Symbol(JSX.IntrinsicElements.div, Decl(react16.d.ts, 2424, 114))
+
+// No way to error on this, is (structurally) indistinguishable from the above
+const alsoNotATab = <FCTabGroup>
+>alsoNotATab : Symbol(alsoNotATab, Decl(jsxTabTabGroupStrongChildren.tsx, 70, 5))
+>FCTabGroup : Symbol(FCTabGroup, Decl(jsxTabTabGroupStrongChildren.tsx, 55, 5))
+
+    <NotFCTab/>
+>NotFCTab : Symbol(NotFCTab, Decl(jsxTabTabGroupStrongChildren.tsx, 67, 5))
+
+</FCTabGroup>;
+>FCTabGroup : Symbol(FCTabGroup, Decl(jsxTabTabGroupStrongChildren.tsx, 55, 5))
+

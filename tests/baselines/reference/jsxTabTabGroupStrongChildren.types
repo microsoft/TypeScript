@@ -1,0 +1,199 @@
+=== tests/cases/compiler/jsxTabTabGroupStrongChildren.tsx ===
+/// <reference path="react16.d.ts" />
+import React from "react";
+>React : typeof React
+
+export interface TabGroupProps {
+    // Has to be a union of a single type and an array type for ~legacy reasons~
+    // It's just how jsx children are checked, as they predate tuple types
+    children: React.ComponentElement<TabProps, Tab>[] | React.ComponentElement<TabProps, Tab>;
+>children : React.ComponentElement<TabProps, Tab> | React.ComponentElement<TabProps, Tab>[]
+>React : any
+>React : any
+}
+
+export interface TabProps {}
+
+export class Tab extends React.Component<TabProps> {
+>Tab : Tab
+>React.Component : React.Component<TabProps, {}, any>
+>React : typeof React
+>Component : typeof React.Component
+
+    private a!: void; // nominally tag `Tab`
+>a : void
+
+    render(): JSX.Element {
+>render : () => JSX.Element
+>JSX : any
+
+        return <div></div>;
+><div></div> : React.DetailedReactHTMLElement<{}, HTMLElement>
+>div : any
+>div : any
+    }
+}
+export class NotTab extends React.Component<TabProps> {
+>NotTab : NotTab
+>React.Component : React.Component<TabProps, {}, any>
+>React : typeof React
+>Component : typeof React.Component
+
+    private a!: void; // nominally tag `NotTab` (which is now distinct from `Tab`)
+>a : void
+
+    render(): JSX.Element {
+>render : () => JSX.Element
+>JSX : any
+
+        return <div></div>;
+><div></div> : React.DetailedReactHTMLElement<{}, HTMLElement>
+>div : any
+>div : any
+    }
+}
+export class TabGroup extends React.Component<TabGroupProps> {
+>TabGroup : TabGroup
+>React.Component : React.Component<TabGroupProps, {}, any>
+>React : typeof React
+>Component : typeof React.Component
+
+    render() {
+>render : () => React.DetailedReactHTMLElement<{ children: React.ComponentElement<TabProps, Tab> | React.ComponentElement<TabProps, Tab>[] | (string & React.ComponentElement<TabProps, Tab>) | (string & React.ComponentElement<TabProps, Tab>[]) | (number & React.ComponentElement<TabProps, Tab>) | (number & React.ComponentElement<TabProps, Tab>[]) | (false & React.ComponentElement<TabProps, Tab>) | (false & React.ComponentElement<TabProps, Tab>[]) | (true & React.ComponentElement<TabProps, Tab>) | (true & React.ComponentElement<TabProps, Tab>[]) | (React.ReactElement<any, string | ((props: any) => React.ReactElement<any, string | any | (new (props: any) => React.Component<any, any, any>)> | null) | (new (props: any) => React.Component<any, any, any>)> & React.ComponentElement<TabProps, Tab>) | (React.ReactElement<any, string | ((props: any) => React.ReactElement<any, string | any | (new (props: any) => React.Component<any, any, any>)> | null) | (new (props: any) => React.Component<any, any, any>)> & React.ComponentElement<TabProps, Tab>[]) | (React.ReactNodeArray & React.ComponentElement<TabProps, Tab>) | (React.ReactNodeArray & React.ComponentElement<TabProps, Tab>[]) | (React.ReactPortal & React.ComponentElement<TabProps, Tab>) | (React.ReactPortal & React.ComponentElement<TabProps, Tab>[]); }, HTMLElement>
+
+        return <div>{this.props.children}</div>
+><div>{this.props.children}</div> : React.DetailedReactHTMLElement<{ children: React.ComponentElement<TabProps, Tab> | React.ComponentElement<TabProps, Tab>[] | (string & React.ComponentElement<TabProps, Tab>) | (string & React.ComponentElement<TabProps, Tab>[]) | (number & React.ComponentElement<TabProps, Tab>) | (number & React.ComponentElement<TabProps, Tab>[]) | (false & React.ComponentElement<TabProps, Tab>) | (false & React.ComponentElement<TabProps, Tab>[]) | (true & React.ComponentElement<TabProps, Tab>) | (true & React.ComponentElement<TabProps, Tab>[]) | (React.ReactElement<any, string | ((props: any) => React.ReactElement<any, string | any | (new (props: any) => React.Component<any, any, any>)> | null) | (new (props: any) => React.Component<any, any, any>)> & React.ComponentElement<TabProps, Tab>) | (React.ReactElement<any, string | ((props: any) => React.ReactElement<any, string | any | (new (props: any) => React.Component<any, any, any>)> | null) | (new (props: any) => React.Component<any, any, any>)> & React.ComponentElement<TabProps, Tab>[]) | (React.ReactNodeArray & React.ComponentElement<TabProps, Tab>) | (React.ReactNodeArray & React.ComponentElement<TabProps, Tab>[]) | (React.ReactPortal & React.ComponentElement<TabProps, Tab>) | (React.ReactPortal & React.ComponentElement<TabProps, Tab>[]); }, HTMLElement>
+>div : any
+>this.props.children : React.ComponentElement<TabProps, Tab> | React.ComponentElement<TabProps, Tab>[] | (string & React.ComponentElement<TabProps, Tab>) | (string & React.ComponentElement<TabProps, Tab>[]) | (number & React.ComponentElement<TabProps, Tab>) | (number & React.ComponentElement<TabProps, Tab>[]) | (false & React.ComponentElement<TabProps, Tab>) | (false & React.ComponentElement<TabProps, Tab>[]) | (true & React.ComponentElement<TabProps, Tab>) | (true & React.ComponentElement<TabProps, Tab>[]) | (React.ReactElement<any, string | ((props: any) => React.ReactElement<any, string | any | (new (props: any) => React.Component<any, any, any>)> | null) | (new (props: any) => React.Component<any, any, any>)> & React.ComponentElement<TabProps, Tab>) | (React.ReactElement<any, string | ((props: any) => React.ReactElement<any, string | any | (new (props: any) => React.Component<any, any, any>)> | null) | (new (props: any) => React.Component<any, any, any>)> & React.ComponentElement<TabProps, Tab>[]) | (React.ReactNodeArray & React.ComponentElement<TabProps, Tab>) | (React.ReactNodeArray & React.ComponentElement<TabProps, Tab>[]) | (React.ReactPortal & React.ComponentElement<TabProps, Tab>) | (React.ReactPortal & React.ComponentElement<TabProps, Tab>[])
+>this.props : Readonly<{ children?: React.ReactNode; }> & Readonly<TabGroupProps>
+>this : this
+>props : Readonly<{ children?: React.ReactNode; }> & Readonly<TabGroupProps>
+>children : React.ComponentElement<TabProps, Tab> | React.ComponentElement<TabProps, Tab>[] | (string & React.ComponentElement<TabProps, Tab>) | (string & React.ComponentElement<TabProps, Tab>[]) | (number & React.ComponentElement<TabProps, Tab>) | (number & React.ComponentElement<TabProps, Tab>[]) | (false & React.ComponentElement<TabProps, Tab>) | (false & React.ComponentElement<TabProps, Tab>[]) | (true & React.ComponentElement<TabProps, Tab>) | (true & React.ComponentElement<TabProps, Tab>[]) | (React.ReactElement<any, string | ((props: any) => React.ReactElement<any, string | any | (new (props: any) => React.Component<any, any, any>)> | null) | (new (props: any) => React.Component<any, any, any>)> & React.ComponentElement<TabProps, Tab>) | (React.ReactElement<any, string | ((props: any) => React.ReactElement<any, string | any | (new (props: any) => React.Component<any, any, any>)> | null) | (new (props: any) => React.Component<any, any, any>)> & React.ComponentElement<TabProps, Tab>[]) | (React.ReactNodeArray & React.ComponentElement<TabProps, Tab>) | (React.ReactNodeArray & React.ComponentElement<TabProps, Tab>[]) | (React.ReactPortal & React.ComponentElement<TabProps, Tab>) | (React.ReactPortal & React.ComponentElement<TabProps, Tab>[])
+>div : any
+    }
+}
+
+const elem = <div/>; // sanity check DetailedHtmlElement
+>elem : React.DetailedReactHTMLElement<{}, HTMLElement>
+><div/> : React.DetailedReactHTMLElement<{}, HTMLElement>
+>div : any
+
+const output = <TabGroup>
+>output : React.ComponentElement<Readonly<{ children?: React.ReactNode; }> & Readonly<TabGroupProps>, TabGroup>
+><TabGroup>    <Tab/></TabGroup> : React.ComponentElement<Readonly<{ children?: React.ReactNode; }> & Readonly<TabGroupProps>, TabGroup>
+>TabGroup : typeof TabGroup
+
+    <Tab/>
+><Tab/> : React.ComponentElement<Readonly<{ children?: React.ReactNode; }> & Readonly<TabProps>, Tab>
+>Tab : typeof Tab
+
+</TabGroup>;
+>TabGroup : typeof TabGroup
+
+const shouldFail = <TabGroup>
+>shouldFail : JSX.Element
+><TabGroup>    <Tab/>    <div/></TabGroup> : JSX.Element
+>TabGroup : typeof TabGroup
+
+    <Tab/>
+><Tab/> : React.ComponentElement<Readonly<{ children?: React.ReactNode; }> & Readonly<TabProps>, Tab>
+>Tab : typeof Tab
+
+    <div/>
+><div/> : React.DetailedReactHTMLElement<{}, HTMLElement>
+>div : any
+
+</TabGroup>;
+>TabGroup : typeof TabGroup
+
+const alsoFails = <TabGroup>
+>alsoFails : JSX.Element
+><TabGroup>    <NotTab/></TabGroup> : JSX.Element
+>TabGroup : typeof TabGroup
+
+    <NotTab/>
+><NotTab/> : React.ComponentElement<Readonly<{ children?: React.ReactNode; }> & Readonly<TabProps>, NotTab>
+>NotTab : typeof NotTab
+
+</TabGroup>;
+>TabGroup : typeof TabGroup
+
+
+// Function component ver:
+
+// This uses `SFCElement` and `SFC` - nowadays those are called `FunctionComponentElement` and `FunctionComponent`
+
+export interface FCTabGroupProps {
+    children: React.SFCElement<FCTabProps>[] | React.SFCElement<FCTabProps>;
+>children : React.SFCElement<FCTabProps> | React.SFCElement<FCTabProps>[]
+>React : any
+>React : any
+}
+
+export interface FCTabProps {}
+
+const FCTabGroup: React.SFC<FCTabGroupProps> = props => <div>{props.children}</div>;
+>FCTabGroup : React.StatelessComponent<FCTabGroupProps>
+>React : any
+>props => <div>{props.children}</div> : (props: FCTabGroupProps & { children?: React.ReactNode; }) => React.DetailedReactHTMLElement<{ children: React.SFCElement<FCTabProps> | React.SFCElement<FCTabProps>[] | (React.SFCElement<FCTabProps> & string) | (React.SFCElement<FCTabProps> & number) | (React.SFCElement<FCTabProps> & false) | (React.SFCElement<FCTabProps> & true) | (React.SFCElement<FCTabProps> & React.ReactElement<any, string | ((props: any) => React.ReactElement<any, string | any | (new (props: any) => React.Component<any, any, any>)> | null) | (new (props: any) => React.Component<any, any, any>)>) | (React.SFCElement<FCTabProps> & React.ReactNodeArray) | (React.SFCElement<FCTabProps> & React.ReactPortal) | (React.SFCElement<FCTabProps>[] & string) | (React.SFCElement<FCTabProps>[] & number) | (React.SFCElement<FCTabProps>[] & false) | (React.SFCElement<FCTabProps>[] & true) | (React.SFCElement<FCTabProps>[] & React.ReactElement<any, string | ((props: any) => React.ReactElement<any, string | any | (new (props: any) => React.Component<any, any, any>)> | null) | (new (props: any) => React.Component<any, any, any>)>) | (React.SFCElement<FCTabProps>[] & React.ReactNodeArray) | (React.SFCElement<FCTabProps>[] & React.ReactPortal); }, HTMLElement>
+>props : FCTabGroupProps & { children?: React.ReactNode; }
+><div>{props.children}</div> : React.DetailedReactHTMLElement<{ children: React.SFCElement<FCTabProps> | React.SFCElement<FCTabProps>[] | (React.SFCElement<FCTabProps> & string) | (React.SFCElement<FCTabProps> & number) | (React.SFCElement<FCTabProps> & false) | (React.SFCElement<FCTabProps> & true) | (React.SFCElement<FCTabProps> & React.ReactElement<any, string | ((props: any) => React.ReactElement<any, string | any | (new (props: any) => React.Component<any, any, any>)> | null) | (new (props: any) => React.Component<any, any, any>)>) | (React.SFCElement<FCTabProps> & React.ReactNodeArray) | (React.SFCElement<FCTabProps> & React.ReactPortal) | (React.SFCElement<FCTabProps>[] & string) | (React.SFCElement<FCTabProps>[] & number) | (React.SFCElement<FCTabProps>[] & false) | (React.SFCElement<FCTabProps>[] & true) | (React.SFCElement<FCTabProps>[] & React.ReactElement<any, string | ((props: any) => React.ReactElement<any, string | any | (new (props: any) => React.Component<any, any, any>)> | null) | (new (props: any) => React.Component<any, any, any>)>) | (React.SFCElement<FCTabProps>[] & React.ReactNodeArray) | (React.SFCElement<FCTabProps>[] & React.ReactPortal); }, HTMLElement>
+>div : any
+>props.children : React.SFCElement<FCTabProps> | React.SFCElement<FCTabProps>[] | (React.SFCElement<FCTabProps> & string) | (React.SFCElement<FCTabProps> & number) | (React.SFCElement<FCTabProps> & false) | (React.SFCElement<FCTabProps> & true) | (React.SFCElement<FCTabProps> & React.ReactElement<any, string | ((props: any) => React.ReactElement<any, string | any | (new (props: any) => React.Component<any, any, any>)> | null) | (new (props: any) => React.Component<any, any, any>)>) | (React.SFCElement<FCTabProps> & React.ReactNodeArray) | (React.SFCElement<FCTabProps> & React.ReactPortal) | (React.SFCElement<FCTabProps>[] & string) | (React.SFCElement<FCTabProps>[] & number) | (React.SFCElement<FCTabProps>[] & false) | (React.SFCElement<FCTabProps>[] & true) | (React.SFCElement<FCTabProps>[] & React.ReactElement<any, string | ((props: any) => React.ReactElement<any, string | any | (new (props: any) => React.Component<any, any, any>)> | null) | (new (props: any) => React.Component<any, any, any>)>) | (React.SFCElement<FCTabProps>[] & React.ReactNodeArray) | (React.SFCElement<FCTabProps>[] & React.ReactPortal)
+>props : FCTabGroupProps & { children?: React.ReactNode; }
+>children : React.SFCElement<FCTabProps> | React.SFCElement<FCTabProps>[] | (React.SFCElement<FCTabProps> & string) | (React.SFCElement<FCTabProps> & number) | (React.SFCElement<FCTabProps> & false) | (React.SFCElement<FCTabProps> & true) | (React.SFCElement<FCTabProps> & React.ReactElement<any, string | ((props: any) => React.ReactElement<any, string | any | (new (props: any) => React.Component<any, any, any>)> | null) | (new (props: any) => React.Component<any, any, any>)>) | (React.SFCElement<FCTabProps> & React.ReactNodeArray) | (React.SFCElement<FCTabProps> & React.ReactPortal) | (React.SFCElement<FCTabProps>[] & string) | (React.SFCElement<FCTabProps>[] & number) | (React.SFCElement<FCTabProps>[] & false) | (React.SFCElement<FCTabProps>[] & true) | (React.SFCElement<FCTabProps>[] & React.ReactElement<any, string | ((props: any) => React.ReactElement<any, string | any | (new (props: any) => React.Component<any, any, any>)> | null) | (new (props: any) => React.Component<any, any, any>)>) | (React.SFCElement<FCTabProps>[] & React.ReactNodeArray) | (React.SFCElement<FCTabProps>[] & React.ReactPortal)
+>div : any
+
+const FCTab = (props: FCTabProps) => <div></div>;
+>FCTab : (props: FCTabProps) => React.DetailedReactHTMLElement<{}, HTMLElement>
+>(props: FCTabProps) => <div></div> : (props: FCTabProps) => React.DetailedReactHTMLElement<{}, HTMLElement>
+>props : FCTabProps
+><div></div> : React.DetailedReactHTMLElement<{}, HTMLElement>
+>div : any
+>div : any
+
+const fctab = <FCTabGroup>
+>fctab : React.SFCElement<FCTabGroupProps>
+><FCTabGroup>    <FCTab/></FCTabGroup> : React.SFCElement<FCTabGroupProps>
+>FCTabGroup : React.StatelessComponent<FCTabGroupProps>
+
+    <FCTab/>
+><FCTab/> : React.SFCElement<{}>
+>FCTab : (props: FCTabProps) => React.DetailedReactHTMLElement<{}, HTMLElement>
+
+</FCTabGroup>;
+>FCTabGroup : React.StatelessComponent<FCTabGroupProps>
+
+const notATab = <FCTabGroup>
+>notATab : JSX.Element
+><FCTabGroup>    <div/></FCTabGroup> : JSX.Element
+>FCTabGroup : React.StatelessComponent<FCTabGroupProps>
+
+    <div/>
+><div/> : React.DetailedReactHTMLElement<{}, HTMLElement>
+>div : any
+
+</FCTabGroup>;
+>FCTabGroup : React.StatelessComponent<FCTabGroupProps>
+
+const NotFCTab = (props: {}) => <div></div>;
+>NotFCTab : (props: {}) => React.DetailedReactHTMLElement<{}, HTMLElement>
+>(props: {}) => <div></div> : (props: {}) => React.DetailedReactHTMLElement<{}, HTMLElement>
+>props : {}
+><div></div> : React.DetailedReactHTMLElement<{}, HTMLElement>
+>div : any
+>div : any
+
+// No way to error on this, is (structurally) indistinguishable from the above
+const alsoNotATab = <FCTabGroup>
+>alsoNotATab : React.SFCElement<FCTabGroupProps>
+><FCTabGroup>    <NotFCTab/></FCTabGroup> : React.SFCElement<FCTabGroupProps>
+>FCTabGroup : React.StatelessComponent<FCTabGroupProps>
+
+    <NotFCTab/>
+><NotFCTab/> : React.SFCElement<{}>
+>NotFCTab : (props: {}) => React.DetailedReactHTMLElement<{}, HTMLElement>
+
+</FCTabGroup>;
+>FCTabGroup : React.StatelessComponent<FCTabGroupProps>
+

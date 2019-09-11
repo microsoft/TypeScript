@@ -1,0 +1,204 @@
+tests/cases/compiler/jsxTabTabGroupStrongChildren.tsx(36,21): error TS2769: No overload matches this call.
+  Overload 1 of 2, '(props: Readonly<TabGroupProps>): TabGroup', gave the following error.
+    Type '{ children: (ComponentElement<Readonly<{ children?: ReactNode; }> & Readonly<TabProps>, Tab> | DetailedReactHTMLElement<{}, HTMLElement>)[]; }' is not assignable to type 'Readonly<TabGroupProps>'.
+      Types of property 'children' are incompatible.
+        Type '(ComponentElement<Readonly<{ children?: ReactNode; }> & Readonly<TabProps>, Tab> | DetailedReactHTMLElement<{}, HTMLElement>)[]' is not assignable to type 'ComponentElement<TabProps, Tab> | ComponentElement<TabProps, Tab>[]'.
+          Type '(ComponentElement<Readonly<{ children?: ReactNode; }> & Readonly<TabProps>, Tab> | DetailedReactHTMLElement<{}, HTMLElement>)[]' is not assignable to type 'ComponentElement<TabProps, Tab>[]'.
+            Type 'ComponentElement<Readonly<{ children?: ReactNode; }> & Readonly<TabProps>, Tab> | DetailedReactHTMLElement<{}, HTMLElement>' is not assignable to type 'ComponentElement<TabProps, Tab>'.
+              Type 'DetailedReactHTMLElement<{}, HTMLElement>' is not assignable to type 'ComponentElement<TabProps, Tab>'.
+                Types of property 'type' are incompatible.
+                  Type '"object" | "time" | "link" | "menu" | "dialog" | "a" | "abbr" | "address" | "area" | "article" | "aside" | "audio" | "b" | "base" | "bdi" | "bdo" | "big" | "blockquote" | "body" | "br" | "button" | "canvas" | "caption" | "cite" | "code" | "col" | "colgroup" | "data" | "datalist" | "dd" | "del" | "details" | "dfn" | "div" | "dl" | "dt" | "em" | "embed" | "fieldset" | "figcaption" | "figure" | "footer" | "form" | "h1" | "h2" | "h3" | "h4" | "h5" | "h6" | "head" | "header" | "hgroup" | "hr" | "html" | "i" | "iframe" | "img" | "input" | "ins" | "kbd" | "keygen" | "label" | "legend" | "li" | "main" | "map" | "mark" | "menuitem" | "meta" | "meter" | "nav" | "noscript" | "ol" | "optgroup" | "option" | "output" | "p" | "param" | "picture" | "pre" | "progress" | "q" | "rp" | "rt" | "ruby" | "s" | "samp" | "script" | "section" | "select" | "small" | "source" | "span" | "strong" | "style" | "sub" | "summary" | "sup" | "table" | "tbody" | "td" | "textarea" | "tfoot" | "th" | "thead" | "title" | "tr" | "track" | "u" | "ul" | "var" | "video" | "wbr" | "webview"' is not assignable to type 'ComponentClass<TabProps, any>'.
+                    Type '"object"' is not assignable to type 'ComponentClass<TabProps, any>'.
+  Overload 2 of 2, '(props: TabGroupProps, context?: any): TabGroup', gave the following error.
+    Type '{ children: (ComponentElement<Readonly<{ children?: ReactNode; }> & Readonly<TabProps>, Tab> | DetailedReactHTMLElement<{}, HTMLElement>)[]; }' is not assignable to type 'Readonly<TabGroupProps>'.
+      Types of property 'children' are incompatible.
+        Type '(ComponentElement<Readonly<{ children?: ReactNode; }> & Readonly<TabProps>, Tab> | DetailedReactHTMLElement<{}, HTMLElement>)[]' is not assignable to type 'ComponentElement<TabProps, Tab> | ComponentElement<TabProps, Tab>[]'.
+          Type '(ComponentElement<Readonly<{ children?: ReactNode; }> & Readonly<TabProps>, Tab> | DetailedReactHTMLElement<{}, HTMLElement>)[]' is not assignable to type 'ComponentElement<TabProps, Tab>[]'.
+tests/cases/compiler/jsxTabTabGroupStrongChildren.tsx(36,29): error TS2769: No overload matches this call.
+  The last overload gave the following error.
+    Argument of type '{ children: (ComponentElement<Readonly<{ children?: ReactNode; }> & Readonly<TabProps>, Tab> | DetailedReactHTMLElement<{}, HTMLElement>)[]; }' is not assignable to parameter of type 'Attributes & TabGroupProps'.
+      Type '{ children: (ComponentElement<Readonly<{ children?: ReactNode; }> & Readonly<TabProps>, Tab> | DetailedReactHTMLElement<{}, HTMLElement>)[]; }' is not assignable to type 'TabGroupProps'.
+        Types of property 'children' are incompatible.
+          Type '(ComponentElement<Readonly<{ children?: ReactNode; }> & Readonly<TabProps>, Tab> | DetailedReactHTMLElement<{}, HTMLElement>)[]' is not assignable to type 'ComponentElement<TabProps, Tab> | ComponentElement<TabProps, Tab>[]'.
+            Type '(ComponentElement<Readonly<{ children?: ReactNode; }> & Readonly<TabProps>, Tab> | DetailedReactHTMLElement<{}, HTMLElement>)[]' is not assignable to type 'ComponentElement<TabProps, Tab>[]'.
+tests/cases/compiler/jsxTabTabGroupStrongChildren.tsx(41,28): error TS2769: No overload matches this call.
+  The last overload gave the following error.
+    Argument of type '{ children: ComponentElement<Readonly<{ children?: ReactNode; }> & Readonly<TabProps>, NotTab>; }' is not assignable to parameter of type 'Attributes & TabGroupProps'.
+      Type '{ children: ComponentElement<Readonly<{ children?: ReactNode; }> & Readonly<TabProps>, NotTab>; }' is not assignable to type 'TabGroupProps'.
+        Types of property 'children' are incompatible.
+          Type 'ComponentElement<Readonly<{ children?: ReactNode; }> & Readonly<TabProps>, NotTab>' is not assignable to type 'ComponentElement<TabProps, Tab> | ComponentElement<TabProps, Tab>[]'.
+            Type 'ComponentElement<Readonly<{ children?: ReactNode; }> & Readonly<TabProps>, NotTab>' is not assignable to type 'ComponentElement<TabProps, Tab>'.
+tests/cases/compiler/jsxTabTabGroupStrongChildren.tsx(42,5): error TS2769: No overload matches this call.
+  Overload 1 of 2, '(props: Readonly<TabGroupProps>): TabGroup', gave the following error.
+    Type 'ComponentElement<Readonly<{ children?: ReactNode; }> & Readonly<TabProps>, NotTab>' is not assignable to type 'ComponentElement<TabProps, Tab> | ComponentElement<TabProps, Tab>[] | (string & ComponentElement<TabProps, Tab>) | (string & ComponentElement<TabProps, Tab>[]) | (number & ComponentElement<TabProps, Tab>) | (number & ComponentElement<TabProps, Tab>[]) | (false & ComponentElement<TabProps, Tab>) | (false & ComponentElement<TabProps, Tab>[]) | (true & ComponentElement<TabProps, Tab>) | (true & ComponentElement<TabProps, Tab>[]) | (ReactElement<any, string | ((props: any) => ReactElement<any, string | any | (new (props: any) => Component<any, any, any>)> | null) | (new (props: any) => Component<any, any, any>)> & ComponentElement<TabProps, Tab>) | (ReactElement<any, string | ((props: any) => ReactElement<any, string | any | (new (props: any) => Component<any, any, any>)> | null) | (new (props: any) => Component<any, any, any>)> & ComponentElement<TabProps, Tab>[]) | (ReactNodeArray & ComponentElement<TabProps, Tab>) | (ReactNodeArray & ComponentElement<TabProps, Tab>[]) | (ReactPortal & ComponentElement<TabProps, Tab>) | (ReactPortal & ComponentElement<TabProps, Tab>[])'.
+      Type 'ComponentElement<Readonly<{ children?: ReactNode; }> & Readonly<TabProps>, NotTab>' is not assignable to type 'ComponentElement<TabProps, Tab>'.
+        Types of property 'ref' are incompatible.
+          Type 'string | ((instance: NotTab | null) => any) | RefObject<NotTab> | undefined' is not assignable to type 'string | ((instance: Tab | null) => any) | RefObject<Tab> | undefined'.
+            Type '(instance: NotTab | null) => any' is not assignable to type 'string | ((instance: Tab | null) => any) | RefObject<Tab> | undefined'.
+              Type '(instance: NotTab | null) => any' is not assignable to type '(instance: Tab | null) => any'.
+                Types of parameters 'instance' and 'instance' are incompatible.
+                  Type 'Tab | null' is not assignable to type 'NotTab | null'.
+                    Type 'Tab' is not assignable to type 'NotTab'.
+                      Types have separate declarations of a private property 'a'.
+  Overload 2 of 2, '(props: TabGroupProps, context?: any): TabGroup', gave the following error.
+    Type 'ComponentElement<Readonly<{ children?: ReactNode; }> & Readonly<TabProps>, NotTab>' is not assignable to type 'ComponentElement<TabProps, Tab> | ComponentElement<TabProps, Tab>[] | (string & ComponentElement<TabProps, Tab>) | (string & ComponentElement<TabProps, Tab>[]) | (number & ComponentElement<TabProps, Tab>) | (number & ComponentElement<TabProps, Tab>[]) | (false & ComponentElement<TabProps, Tab>) | (false & ComponentElement<TabProps, Tab>[]) | (true & ComponentElement<TabProps, Tab>) | (true & ComponentElement<TabProps, Tab>[]) | (ReactElement<any, string | ((props: any) => ReactElement<any, string | any | (new (props: any) => Component<any, any, any>)> | null) | (new (props: any) => Component<any, any, any>)> & ComponentElement<TabProps, Tab>) | (ReactElement<any, string | ((props: any) => ReactElement<any, string | any | (new (props: any) => Component<any, any, any>)> | null) | (new (props: any) => Component<any, any, any>)> & ComponentElement<TabProps, Tab>[]) | (ReactNodeArray & ComponentElement<TabProps, Tab>) | (ReactNodeArray & ComponentElement<TabProps, Tab>[]) | (ReactPortal & ComponentElement<TabProps, Tab>) | (ReactPortal & ComponentElement<TabProps, Tab>[])'.
+      Type 'ComponentElement<Readonly<{ children?: ReactNode; }> & Readonly<TabProps>, NotTab>' is not assignable to type 'ComponentElement<TabProps, Tab>'.
+tests/cases/compiler/jsxTabTabGroupStrongChildren.tsx(64,28): error TS2769: No overload matches this call.
+  The last overload gave the following error.
+    Argument of type '{ children: DetailedReactHTMLElement<{}, HTMLElement>; }' is not assignable to parameter of type 'Attributes & FCTabGroupProps'.
+      Type '{ children: DetailedReactHTMLElement<{}, HTMLElement>; }' is not assignable to type 'FCTabGroupProps'.
+        Types of property 'children' are incompatible.
+          Type 'DetailedReactHTMLElement<{}, HTMLElement>' is not assignable to type 'SFCElement<FCTabProps> | SFCElement<FCTabProps>[]'.
+            Type 'DetailedReactHTMLElement<{}, HTMLElement>' is not assignable to type 'SFCElement<FCTabProps>'.
+              Types of property 'type' are incompatible.
+                Type '"object" | "time" | "link" | "menu" | "dialog" | "a" | "abbr" | "address" | "area" | "article" | "aside" | "audio" | "b" | "base" | "bdi" | "bdo" | "big" | "blockquote" | "body" | "br" | "button" | "canvas" | "caption" | "cite" | "code" | "col" | "colgroup" | "data" | "datalist" | "dd" | "del" | "details" | "dfn" | "div" | "dl" | "dt" | "em" | "embed" | "fieldset" | "figcaption" | "figure" | "footer" | "form" | "h1" | "h2" | "h3" | "h4" | "h5" | "h6" | "head" | "header" | "hgroup" | "hr" | "html" | "i" | "iframe" | "img" | "input" | "ins" | "kbd" | "keygen" | "label" | "legend" | "li" | "main" | "map" | "mark" | "menuitem" | "meta" | "meter" | "nav" | "noscript" | "ol" | "optgroup" | "option" | "output" | "p" | "param" | "picture" | "pre" | "progress" | "q" | "rp" | "rt" | "ruby" | "s" | "samp" | "script" | "section" | "select" | "small" | "source" | "span" | "strong" | "style" | "sub" | "summary" | "sup" | "table" | "tbody" | "td" | "textarea" | "tfoot" | "th" | "thead" | "title" | "tr" | "track" | "u" | "ul" | "var" | "video" | "wbr" | "webview"' is not assignable to type 'StatelessComponent<FCTabProps>'.
+                  Type '"object"' is not assignable to type 'StatelessComponent<FCTabProps>'.
+tests/cases/compiler/jsxTabTabGroupStrongChildren.tsx(65,5): error TS2322: Type 'DetailedReactHTMLElement<{}, HTMLElement>' is not assignable to type 'SFCElement<FCTabProps> | SFCElement<FCTabProps>[] | (SFCElement<FCTabProps> & string) | (SFCElement<FCTabProps> & number) | (SFCElement<FCTabProps> & false) | (SFCElement<FCTabProps> & true) | (SFCElement<FCTabProps> & ReactElement<any, string | ((props: any) => ReactElement<any, string | any | (new (props: any) => Component<any, any, any>)> | null) | (new (props: any) => Component<any, any, any>)>) | (SFCElement<FCTabProps> & ReactNodeArray) | (SFCElement<FCTabProps> & ReactPortal) | (SFCElement<FCTabProps>[] & string) | (SFCElement<FCTabProps>[] & number) | (SFCElement<FCTabProps>[] & false) | (SFCElement<FCTabProps>[] & true) | (SFCElement<FCTabProps>[] & ReactElement<any, string | ((props: any) => ReactElement<any, string | any | (new (props: any) => Component<any, any, any>)> | null) | (new (props: any) => Component<any, any, any>)>) | (SFCElement<FCTabProps>[] & ReactNodeArray) | (SFCElement<FCTabProps>[] & ReactPortal)'.
+  Type 'DetailedReactHTMLElement<{}, HTMLElement>' is not assignable to type 'SFCElement<FCTabProps>[] & ReactPortal'.
+    Type 'DetailedReactHTMLElement<{}, HTMLElement>' is missing the following properties from type 'SFCElement<FCTabProps>[]': length, pop, push, concat, and 16 more.
+
+
+==== tests/cases/compiler/jsxTabTabGroupStrongChildren.tsx (6 errors) ====
+    /// <reference path="/.lib/react16.d.ts" />
+    import React from "react";
+    
+    export interface TabGroupProps {
+        // Has to be a union of a single type and an array type for ~legacy reasons~
+        // It's just how jsx children are checked, as they predate tuple types
+        children: React.ComponentElement<TabProps, Tab>[] | React.ComponentElement<TabProps, Tab>;
+    }
+    
+    export interface TabProps {}
+    
+    export class Tab extends React.Component<TabProps> {
+        private a!: void; // nominally tag `Tab`
+        render(): JSX.Element {
+            return <div></div>;
+        }
+    }
+    export class NotTab extends React.Component<TabProps> {
+        private a!: void; // nominally tag `NotTab` (which is now distinct from `Tab`)
+        render(): JSX.Element {
+            return <div></div>;
+        }
+    }
+    export class TabGroup extends React.Component<TabGroupProps> {
+        render() {
+            return <div>{this.props.children}</div>
+        }
+    }
+    
+    const elem = <div/>; // sanity check DetailedHtmlElement
+    
+    const output = <TabGroup>
+        <Tab/>
+    </TabGroup>;
+    
+    const shouldFail = <TabGroup>
+                        ~~~~~~~~
+!!! error TS2769: No overload matches this call.
+!!! error TS2769:   Overload 1 of 2, '(props: Readonly<TabGroupProps>): TabGroup', gave the following error.
+!!! error TS2769:     Type '{ children: (ComponentElement<Readonly<{ children?: ReactNode; }> & Readonly<TabProps>, Tab> | DetailedReactHTMLElement<{}, HTMLElement>)[]; }' is not assignable to type 'Readonly<TabGroupProps>'.
+!!! error TS2769:       Types of property 'children' are incompatible.
+!!! error TS2769:         Type '(ComponentElement<Readonly<{ children?: ReactNode; }> & Readonly<TabProps>, Tab> | DetailedReactHTMLElement<{}, HTMLElement>)[]' is not assignable to type 'ComponentElement<TabProps, Tab> | ComponentElement<TabProps, Tab>[]'.
+!!! error TS2769:           Type '(ComponentElement<Readonly<{ children?: ReactNode; }> & Readonly<TabProps>, Tab> | DetailedReactHTMLElement<{}, HTMLElement>)[]' is not assignable to type 'ComponentElement<TabProps, Tab>[]'.
+!!! error TS2769:             Type 'ComponentElement<Readonly<{ children?: ReactNode; }> & Readonly<TabProps>, Tab> | DetailedReactHTMLElement<{}, HTMLElement>' is not assignable to type 'ComponentElement<TabProps, Tab>'.
+!!! error TS2769:               Type 'DetailedReactHTMLElement<{}, HTMLElement>' is not assignable to type 'ComponentElement<TabProps, Tab>'.
+!!! error TS2769:                 Types of property 'type' are incompatible.
+!!! error TS2769:                   Type '"object" | "time" | "link" | "menu" | "dialog" | "a" | "abbr" | "address" | "area" | "article" | "aside" | "audio" | "b" | "base" | "bdi" | "bdo" | "big" | "blockquote" | "body" | "br" | "button" | "canvas" | "caption" | "cite" | "code" | "col" | "colgroup" | "data" | "datalist" | "dd" | "del" | "details" | "dfn" | "div" | "dl" | "dt" | "em" | "embed" | "fieldset" | "figcaption" | "figure" | "footer" | "form" | "h1" | "h2" | "h3" | "h4" | "h5" | "h6" | "head" | "header" | "hgroup" | "hr" | "html" | "i" | "iframe" | "img" | "input" | "ins" | "kbd" | "keygen" | "label" | "legend" | "li" | "main" | "map" | "mark" | "menuitem" | "meta" | "meter" | "nav" | "noscript" | "ol" | "optgroup" | "option" | "output" | "p" | "param" | "picture" | "pre" | "progress" | "q" | "rp" | "rt" | "ruby" | "s" | "samp" | "script" | "section" | "select" | "small" | "source" | "span" | "strong" | "style" | "sub" | "summary" | "sup" | "table" | "tbody" | "td" | "textarea" | "tfoot" | "th" | "thead" | "title" | "tr" | "track" | "u" | "ul" | "var" | "video" | "wbr" | "webview"' is not assignable to type 'ComponentClass<TabProps, any>'.
+!!! error TS2769:                     Type '"object"' is not assignable to type 'ComponentClass<TabProps, any>'.
+!!! error TS2769:   Overload 2 of 2, '(props: TabGroupProps, context?: any): TabGroup', gave the following error.
+!!! error TS2769:     Type '{ children: (ComponentElement<Readonly<{ children?: ReactNode; }> & Readonly<TabProps>, Tab> | DetailedReactHTMLElement<{}, HTMLElement>)[]; }' is not assignable to type 'Readonly<TabGroupProps>'.
+!!! error TS2769:       Types of property 'children' are incompatible.
+!!! error TS2769:         Type '(ComponentElement<Readonly<{ children?: ReactNode; }> & Readonly<TabProps>, Tab> | DetailedReactHTMLElement<{}, HTMLElement>)[]' is not assignable to type 'ComponentElement<TabProps, Tab> | ComponentElement<TabProps, Tab>[]'.
+!!! error TS2769:           Type '(ComponentElement<Readonly<{ children?: ReactNode; }> & Readonly<TabProps>, Tab> | DetailedReactHTMLElement<{}, HTMLElement>)[]' is not assignable to type 'ComponentElement<TabProps, Tab>[]'.
+                                
+!!! error TS2769: No overload matches this call.
+!!! error TS2769:   The last overload gave the following error.
+!!! error TS2769:     Argument of type '{ children: (ComponentElement<Readonly<{ children?: ReactNode; }> & Readonly<TabProps>, Tab> | DetailedReactHTMLElement<{}, HTMLElement>)[]; }' is not assignable to parameter of type 'Attributes & TabGroupProps'.
+!!! error TS2769:       Type '{ children: (ComponentElement<Readonly<{ children?: ReactNode; }> & Readonly<TabProps>, Tab> | DetailedReactHTMLElement<{}, HTMLElement>)[]; }' is not assignable to type 'TabGroupProps'.
+!!! error TS2769:         Types of property 'children' are incompatible.
+!!! error TS2769:           Type '(ComponentElement<Readonly<{ children?: ReactNode; }> & Readonly<TabProps>, Tab> | DetailedReactHTMLElement<{}, HTMLElement>)[]' is not assignable to type 'ComponentElement<TabProps, Tab> | ComponentElement<TabProps, Tab>[]'.
+!!! error TS2769:             Type '(ComponentElement<Readonly<{ children?: ReactNode; }> & Readonly<TabProps>, Tab> | DetailedReactHTMLElement<{}, HTMLElement>)[]' is not assignable to type 'ComponentElement<TabProps, Tab>[]'.
+!!! related TS2771 /.lib/react16.d.ts:276:18: The last overload is declared here.
+        <Tab/>
+        <div/>
+    </TabGroup>;
+    
+    const alsoFails = <TabGroup>
+                               
+!!! error TS2769: No overload matches this call.
+!!! error TS2769:   The last overload gave the following error.
+!!! error TS2769:     Argument of type '{ children: ComponentElement<Readonly<{ children?: ReactNode; }> & Readonly<TabProps>, NotTab>; }' is not assignable to parameter of type 'Attributes & TabGroupProps'.
+!!! error TS2769:       Type '{ children: ComponentElement<Readonly<{ children?: ReactNode; }> & Readonly<TabProps>, NotTab>; }' is not assignable to type 'TabGroupProps'.
+!!! error TS2769:         Types of property 'children' are incompatible.
+!!! error TS2769:           Type 'ComponentElement<Readonly<{ children?: ReactNode; }> & Readonly<TabProps>, NotTab>' is not assignable to type 'ComponentElement<TabProps, Tab> | ComponentElement<TabProps, Tab>[]'.
+!!! error TS2769:             Type 'ComponentElement<Readonly<{ children?: ReactNode; }> & Readonly<TabProps>, NotTab>' is not assignable to type 'ComponentElement<TabProps, Tab>'.
+!!! related TS2771 /.lib/react16.d.ts:276:18: The last overload is declared here.
+        <NotTab/>
+        ~~~~~~~~~
+!!! error TS2769: No overload matches this call.
+!!! error TS2769:   Overload 1 of 2, '(props: Readonly<TabGroupProps>): TabGroup', gave the following error.
+!!! error TS2769:     Type 'ComponentElement<Readonly<{ children?: ReactNode; }> & Readonly<TabProps>, NotTab>' is not assignable to type 'ComponentElement<TabProps, Tab> | ComponentElement<TabProps, Tab>[] | (string & ComponentElement<TabProps, Tab>) | (string & ComponentElement<TabProps, Tab>[]) | (number & ComponentElement<TabProps, Tab>) | (number & ComponentElement<TabProps, Tab>[]) | (false & ComponentElement<TabProps, Tab>) | (false & ComponentElement<TabProps, Tab>[]) | (true & ComponentElement<TabProps, Tab>) | (true & ComponentElement<TabProps, Tab>[]) | (ReactElement<any, string | ((props: any) => ReactElement<any, string | any | (new (props: any) => Component<any, any, any>)> | null) | (new (props: any) => Component<any, any, any>)> & ComponentElement<TabProps, Tab>) | (ReactElement<any, string | ((props: any) => ReactElement<any, string | any | (new (props: any) => Component<any, any, any>)> | null) | (new (props: any) => Component<any, any, any>)> & ComponentElement<TabProps, Tab>[]) | (ReactNodeArray & ComponentElement<TabProps, Tab>) | (ReactNodeArray & ComponentElement<TabProps, Tab>[]) | (ReactPortal & ComponentElement<TabProps, Tab>) | (ReactPortal & ComponentElement<TabProps, Tab>[])'.
+!!! error TS2769:       Type 'ComponentElement<Readonly<{ children?: ReactNode; }> & Readonly<TabProps>, NotTab>' is not assignable to type 'ComponentElement<TabProps, Tab>'.
+!!! error TS2769:         Types of property 'ref' are incompatible.
+!!! error TS2769:           Type 'string | ((instance: NotTab | null) => any) | RefObject<NotTab> | undefined' is not assignable to type 'string | ((instance: Tab | null) => any) | RefObject<Tab> | undefined'.
+!!! error TS2769:             Type '(instance: NotTab | null) => any' is not assignable to type 'string | ((instance: Tab | null) => any) | RefObject<Tab> | undefined'.
+!!! error TS2769:               Type '(instance: NotTab | null) => any' is not assignable to type '(instance: Tab | null) => any'.
+!!! error TS2769:                 Types of parameters 'instance' and 'instance' are incompatible.
+!!! error TS2769:                   Type 'Tab | null' is not assignable to type 'NotTab | null'.
+!!! error TS2769:                     Type 'Tab' is not assignable to type 'NotTab'.
+!!! error TS2769:                       Types have separate declarations of a private property 'a'.
+!!! error TS2769:   Overload 2 of 2, '(props: TabGroupProps, context?: any): TabGroup', gave the following error.
+!!! error TS2769:     Type 'ComponentElement<Readonly<{ children?: ReactNode; }> & Readonly<TabProps>, NotTab>' is not assignable to type 'ComponentElement<TabProps, Tab> | ComponentElement<TabProps, Tab>[] | (string & ComponentElement<TabProps, Tab>) | (string & ComponentElement<TabProps, Tab>[]) | (number & ComponentElement<TabProps, Tab>) | (number & ComponentElement<TabProps, Tab>[]) | (false & ComponentElement<TabProps, Tab>) | (false & ComponentElement<TabProps, Tab>[]) | (true & ComponentElement<TabProps, Tab>) | (true & ComponentElement<TabProps, Tab>[]) | (ReactElement<any, string | ((props: any) => ReactElement<any, string | any | (new (props: any) => Component<any, any, any>)> | null) | (new (props: any) => Component<any, any, any>)> & ComponentElement<TabProps, Tab>) | (ReactElement<any, string | ((props: any) => ReactElement<any, string | any | (new (props: any) => Component<any, any, any>)> | null) | (new (props: any) => Component<any, any, any>)> & ComponentElement<TabProps, Tab>[]) | (ReactNodeArray & ComponentElement<TabProps, Tab>) | (ReactNodeArray & ComponentElement<TabProps, Tab>[]) | (ReactPortal & ComponentElement<TabProps, Tab>) | (ReactPortal & ComponentElement<TabProps, Tab>[])'.
+!!! error TS2769:       Type 'ComponentElement<Readonly<{ children?: ReactNode; }> & Readonly<TabProps>, NotTab>' is not assignable to type 'ComponentElement<TabProps, Tab>'.
+!!! related TS6500 /.lib/react16.d.ts:379:40: The expected type comes from property 'children' which is declared here on type 'IntrinsicAttributes & IntrinsicClassAttributes<TabGroup> & Readonly<{ children?: ReactNode; }> & Readonly<TabGroupProps>'
+!!! related TS6500 /.lib/react16.d.ts:379:40: The expected type comes from property 'children' which is declared here on type 'IntrinsicAttributes & IntrinsicClassAttributes<TabGroup> & Readonly<{ children?: ReactNode; }> & Readonly<TabGroupProps>'
+    </TabGroup>;
+    
+    
+    // Function component ver:
+    
+    // This uses `SFCElement` and `SFC` - nowadays those are called `FunctionComponentElement` and `FunctionComponent`
+    
+    export interface FCTabGroupProps {
+        children: React.SFCElement<FCTabProps>[] | React.SFCElement<FCTabProps>;
+    }
+    
+    export interface FCTabProps {}
+    
+    const FCTabGroup: React.SFC<FCTabGroupProps> = props => <div>{props.children}</div>;
+    
+    const FCTab = (props: FCTabProps) => <div></div>;
+    
+    const fctab = <FCTabGroup>
+        <FCTab/>
+    </FCTabGroup>;
+    
+    const notATab = <FCTabGroup>
+                               
+!!! error TS2769: No overload matches this call.
+!!! error TS2769:   The last overload gave the following error.
+!!! error TS2769:     Argument of type '{ children: DetailedReactHTMLElement<{}, HTMLElement>; }' is not assignable to parameter of type 'Attributes & FCTabGroupProps'.
+!!! error TS2769:       Type '{ children: DetailedReactHTMLElement<{}, HTMLElement>; }' is not assignable to type 'FCTabGroupProps'.
+!!! error TS2769:         Types of property 'children' are incompatible.
+!!! error TS2769:           Type 'DetailedReactHTMLElement<{}, HTMLElement>' is not assignable to type 'SFCElement<FCTabProps> | SFCElement<FCTabProps>[]'.
+!!! error TS2769:             Type 'DetailedReactHTMLElement<{}, HTMLElement>' is not assignable to type 'SFCElement<FCTabProps>'.
+!!! error TS2769:               Types of property 'type' are incompatible.
+!!! error TS2769:                 Type '"object" | "time" | "link" | "menu" | "dialog" | "a" | "abbr" | "address" | "area" | "article" | "aside" | "audio" | "b" | "base" | "bdi" | "bdo" | "big" | "blockquote" | "body" | "br" | "button" | "canvas" | "caption" | "cite" | "code" | "col" | "colgroup" | "data" | "datalist" | "dd" | "del" | "details" | "dfn" | "div" | "dl" | "dt" | "em" | "embed" | "fieldset" | "figcaption" | "figure" | "footer" | "form" | "h1" | "h2" | "h3" | "h4" | "h5" | "h6" | "head" | "header" | "hgroup" | "hr" | "html" | "i" | "iframe" | "img" | "input" | "ins" | "kbd" | "keygen" | "label" | "legend" | "li" | "main" | "map" | "mark" | "menuitem" | "meta" | "meter" | "nav" | "noscript" | "ol" | "optgroup" | "option" | "output" | "p" | "param" | "picture" | "pre" | "progress" | "q" | "rp" | "rt" | "ruby" | "s" | "samp" | "script" | "section" | "select" | "small" | "source" | "span" | "strong" | "style" | "sub" | "summary" | "sup" | "table" | "tbody" | "td" | "textarea" | "tfoot" | "th" | "thead" | "title" | "tr" | "track" | "u" | "ul" | "var" | "video" | "wbr" | "webview"' is not assignable to type 'StatelessComponent<FCTabProps>'.
+!!! error TS2769:                   Type '"object"' is not assignable to type 'StatelessComponent<FCTabProps>'.
+!!! related TS2771 /.lib/react16.d.ts:276:18: The last overload is declared here.
+        <div/>
+        ~~~~~~
+!!! error TS2322: Type 'DetailedReactHTMLElement<{}, HTMLElement>' is not assignable to type 'SFCElement<FCTabProps> | SFCElement<FCTabProps>[] | (SFCElement<FCTabProps> & string) | (SFCElement<FCTabProps> & number) | (SFCElement<FCTabProps> & false) | (SFCElement<FCTabProps> & true) | (SFCElement<FCTabProps> & ReactElement<any, string | ((props: any) => ReactElement<any, string | any | (new (props: any) => Component<any, any, any>)> | null) | (new (props: any) => Component<any, any, any>)>) | (SFCElement<FCTabProps> & ReactNodeArray) | (SFCElement<FCTabProps> & ReactPortal) | (SFCElement<FCTabProps>[] & string) | (SFCElement<FCTabProps>[] & number) | (SFCElement<FCTabProps>[] & false) | (SFCElement<FCTabProps>[] & true) | (SFCElement<FCTabProps>[] & ReactElement<any, string | ((props: any) => ReactElement<any, string | any | (new (props: any) => Component<any, any, any>)> | null) | (new (props: any) => Component<any, any, any>)>) | (SFCElement<FCTabProps>[] & ReactNodeArray) | (SFCElement<FCTabProps>[] & ReactPortal)'.
+!!! error TS2322:   Type 'DetailedReactHTMLElement<{}, HTMLElement>' is not assignable to type 'SFCElement<FCTabProps>[] & ReactPortal'.
+!!! error TS2322:     Type 'DetailedReactHTMLElement<{}, HTMLElement>' is missing the following properties from type 'SFCElement<FCTabProps>[]': length, pop, push, concat, and 16 more.
+!!! related TS6500 tests/cases/compiler/jsxTabTabGroupStrongChildren.tsx:51:5: The expected type comes from property 'children' which is declared here on type 'IntrinsicAttributes & FCTabGroupProps & { children?: ReactNode; }'
+    </FCTabGroup>;
+    
+    const NotFCTab = (props: {}) => <div></div>;
+    
+    // No way to error on this, is (structurally) indistinguishable from the above
+    const alsoNotATab = <FCTabGroup>
+        <NotFCTab/>
+    </FCTabGroup>;

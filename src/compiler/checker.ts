@@ -907,6 +907,9 @@ namespace ts {
                 else if (compilerOptions.reactNamespace) {
                     _jsxNamespace = escapeLeadingUnderscores(compilerOptions.reactNamespace);
                 }
+                if (!_jsxFactoryEntity) {
+                    _jsxFactoryEntity = createQualifiedName(createIdentifier(unescapeLeadingUnderscores(_jsxNamespace)), "createElement");
+                }
             }
             return _jsxNamespace;
 
