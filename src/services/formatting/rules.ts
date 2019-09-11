@@ -319,8 +319,34 @@ namespace ts.formatting {
 
         function isSemicolonDeletionContext(context: FormattingContext): boolean {
             if (context.TokensAreOnSameLine()) {
-                return context.nextTokenSpan.kind === SyntaxKind.CloseBraceToken;
+                return context.nextTokenSpan.kind === SyntaxKind.CloseBraceToken
+                    || context.nextTokenSpan.kind === SyntaxKind.EndOfFileToken;
             }
+
+            if (context.nextTokenSpan.kind === SyntaxKind.SemicolonClassElement ||
+                context.nextTokenSpan.kind === SyntaxKind.SemicolonToken
+            ) {
+                return false;
+            }
+
+            if (context.contextNode.kind === SyntaxKind.InterfaceDeclaration ||
+                context.contextNode.kind === SyntaxKind.TypeAliasDeclaration
+            ) {
+                // Can’t remove semicolon after `foo`; it would parse as a
+                // method declaration:
+                // interface I {
+                //   foo;
+                //   (): void
+                // }
+                return !(isPropertySignature(context.currentTokenParent)
+                    && !context.currentTokenParent.type
+                    && context.nextTokenSpan.kind === SyntaxKind.OpenParenToken);
+            }
+
+            if (isPropertyDeclaration(context.currentTokenParent)) {
+                return !context.currentTokenParent.initializer;
+            }
+
             return context.currentTokenParent.kind !== SyntaxKind.ForStatement
                 && context.currentTokenParent.kind !== SyntaxKind.EmptyStatement
                 && context.currentTokenParent.kind !== SyntaxKind.SemicolonClassElement
@@ -329,7 +355,11 @@ namespace ts.formatting {
                 && context.nextTokenSpan.kind !== SyntaxKind.PlusToken
                 && context.nextTokenSpan.kind !== SyntaxKind.MinusToken
                 && context.nextTokenSpan.kind !== SyntaxKind.SlashToken
+                && context.nextTokenSpan.kind !== SyntaxKind.RegularExpressionLiteral
                 && context.nextTokenSpan.kind !== SyntaxKind.CommaToken
+                && context.nextTokenSpan.kind !== SyntaxKind.TemplateExpression
+                && context.nextTokenSpan.kind !== SyntaxKind.TemplateHead
+                && context.nextTokenSpan.kind !== SyntaxKind.NoSubstitutionTemplateLiteral
                 && context.nextTokenSpan.kind !== SyntaxKind.DotToken;
         }
 

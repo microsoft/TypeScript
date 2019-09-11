@@ -1147,7 +1147,11 @@ namespace ts.formatting {
 
         function recordDelete(start: number, len: number) {
             if (len) {
-                edits.push(createTextChangeFromStartLength(start, len, ""));
+                const newEdit = createTextChangeFromStartLength(start, len, "");
+                const lastEdit = lastOrUndefined(edits);
+                if (!lastEdit || !textSpansEqual(lastEdit.span, newEdit.span) || lastEdit.newText !== newEdit.newText) {
+                    edits.push(newEdit);
+                }
             }
         }
 
@@ -1157,7 +1161,7 @@ namespace ts.formatting {
             }
         }
 
-        function recordInsertionOnce(start: number, text: string) {
+        function recordInsert(start: number, text: string) {
             if (text) {
                 const newEdit = createTextChangeFromStartLength(start, 0, text);
                 const lastEdit = lastOrUndefined(edits);
@@ -1216,7 +1220,7 @@ namespace ts.formatting {
                     }
                     break;
                 case RuleAction.TrailingSemicolon:
-                    recordInsertionOnce(previousRange.end, ";");
+                    recordInsert(previousRange.end, ";");
             }
             return LineAction.None;
         }

@@ -1,6 +1,6 @@
 /// <reference path="fourslash.ts" />
 
-////;(function f() { })();
+////; (function f() { })();
 ////const a = 3;
 ////+ 4;
 ////const b = 3
@@ -8,6 +8,9 @@
 ////const c = 3 +
 ////4;
 ////class C {
+////    prop;
+////    ["p"];
+////    zero: void;
 ////    ["one"] = {};
 ////    ["two"];
 ////    ;
@@ -21,28 +24,54 @@
 ////;
 ////[];
 /////** blah */[0];
+////interface I {
+////    new;
+////    ();
+////    foo;
+////    ();
+////}
+////type T = {
+////    new;
+////    ();
+////    foo;
+////    ();
+////}
 
 format.setFormatOptions({ ...format.copyFormatOptions(), insertTrailingSemicolon: false });
 format.document();
-verify.currentFileContentIs(`;(function f() { })()
+verify.currentFileContentIs(`; (function f() { })()
 const a = 3;
 + 4
 const b = 3
-    + 4
++ 4
 const c = 3 +
-    4
+4
 class C {
+    prop
+    ["p"]
     zero: void
     ["one"] = {};
     ["two"];
     ;
 }
 a;
-\`b\`;
+\`b\`
 b;
-(3);
+(3)
 4;
-    / regex /;
+/ regex /;
 ;
 [];
-/** blah */[0]`);
+/** blah */[0]
+interface I {
+    new;
+    ()
+    foo;
+    ()
+}
+type T = {
+    new;
+    ()
+    foo;
+    ()
+}`);
