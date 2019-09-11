@@ -16,7 +16,7 @@ namespace ts.formatting {
     function getRuleActionExclusion(ruleAction: RuleAction): RuleAction {
         let mask: RuleAction = 0;
         if (ruleAction & RuleAction.Ignore) {
-            return -1;
+            mask |= RuleAction.TriviaAction;
         }
         if (ruleAction & RuleAction.TriviaAction) {
             mask |= RuleAction.TriviaAction;
