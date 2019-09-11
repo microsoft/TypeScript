@@ -1,6 +1,6 @@
 namespace ts.projectSystem {
     describe("unittests:: tsserver:: with project references and tsbuild", () => {
-        function createHost(files: ReadonlyArray<File>, rootNames: ReadonlyArray<string>) {
+        function createHost(files: readonly File[], rootNames: readonly string[]) {
             const host = createServerHost(files);
 
             // ts build should succeed
@@ -151,12 +151,12 @@ fn5();
 
             const files = [dependencyTs, dependencyConfig, mainTs, mainConfig, libFile, randomFile, randomConfig];
 
-            function verifyScriptInfos(session: TestSession, host: TestServerHost, openInfos: ReadonlyArray<string>, closedInfos: ReadonlyArray<string>, otherWatchedFiles: ReadonlyArray<string>, additionalInfo: string) {
+            function verifyScriptInfos(session: TestSession, host: TestServerHost, openInfos: readonly string[], closedInfos: readonly string[], otherWatchedFiles: readonly string[], additionalInfo: string) {
                 checkScriptInfos(session.getProjectService(), openInfos.concat(closedInfos), additionalInfo);
                 checkWatchedFiles(host, closedInfos.concat(otherWatchedFiles).map(f => f.toLowerCase()), additionalInfo);
             }
 
-            function verifyInfosWithRandom(session: TestSession, host: TestServerHost, openInfos: ReadonlyArray<string>, closedInfos: ReadonlyArray<string>, otherWatchedFiles: ReadonlyArray<string>, reqName: string) {
+            function verifyInfosWithRandom(session: TestSession, host: TestServerHost, openInfos: readonly string[], closedInfos: readonly string[], otherWatchedFiles: readonly string[], reqName: string) {
                 verifyScriptInfos(session, host, openInfos.concat(randomFile.path), closedInfos, otherWatchedFiles.concat(randomConfig.path), reqName);
             }
 

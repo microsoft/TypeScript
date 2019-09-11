@@ -1,4 +1,3 @@
-// tslint:disable:no-null-keyword
 namespace vfs {
     /**
      * Posix-style path to the TypeScript compiler build outputs (including tsc.js, lib.d.ts, etc.)
@@ -653,7 +652,7 @@ namespace vfs {
          * NOTE: do not rename this method as it is intended to align with the same named export of the "fs" module.
          */
         public readFileSync(path: string, encoding?: string | null): string | Buffer;
-        public readFileSync(path: string, encoding: string | null = null) {
+        public readFileSync(path: string, encoding: string | null = null) { // eslint-disable-line no-null/no-null
             const { node } = this._walk(this._resolve(path));
             if (!node) throw createIOError("ENOENT");
             if (isDirectory(node)) throw createIOError("EISDIR");
@@ -668,6 +667,7 @@ namespace vfs {
          *
          * NOTE: do not rename this method as it is intended to align with the same named export of the "fs" module.
          */
+        // eslint-disable-next-line no-null/no-null
         public writeFileSync(path: string, data: string | Buffer, encoding: string | null = null) {
             if (this.isReadonly) throw createIOError("EROFS");
 
@@ -1115,6 +1115,8 @@ namespace vfs {
                 const value = normalizeFileSetEntry(files[key]);
                 const path = dirname ? vpath.resolve(dirname, key) : key;
                 vpath.validate(path, vpath.ValidationFlags.Absolute);
+
+                // eslint-disable-next-line no-null/no-null
                 if (value === null || value === undefined || value instanceof Rmdir || value instanceof Unlink) {
                     if (this.stringComparer(vpath.dirname(path), path) === 0) {
                         throw new TypeError("Roots cannot be deleted.");
@@ -1158,7 +1160,7 @@ namespace vfs {
 
     export interface FileSystemCreateOptions extends FileSystemOptions {
         // Sets the documents to add to the file system.
-        documents?: ReadonlyArray<documents.TextDocument>;
+        documents?: readonly documents.TextDocument[];
     }
 
     export type Axis = "ancestors" | "ancestors-or-self" | "self" | "descendants-or-self" | "descendants";
@@ -1305,7 +1307,6 @@ namespace vfs {
         public isSocket() { return (this.mode & S_IFMT) === S_IFSOCK; }
     }
 
-    // tslint:disable-next-line:variable-name
     export const IOErrorMessages = Object.freeze({
         EACCES: "access denied",
         EIO: "an I/O error occurred",
@@ -1510,6 +1511,7 @@ namespace vfs {
         return builtLocalCS;
     }
 
+    /* eslint-disable no-null/no-null */
     function normalizeFileSetEntry(value: FileSet[string]) {
         if (value === undefined ||
             value === null ||
@@ -1528,15 +1530,16 @@ namespace vfs {
     export function formatPatch(patch: FileSet): string;
     export function formatPatch(patch: FileSet | undefined): string | null;
     export function formatPatch(patch: FileSet | undefined) {
-        // tslint:disable-next-line:no-null-keyword
         return patch ? formatPatchWorker("", patch) : null;
     }
+    /* eslint-enable no-null/no-null */
 
     function formatPatchWorker(dirname: string, container: FileSet): string {
         let text = "";
         for (const name of Object.keys(container)) {
             const entry = normalizeFileSetEntry(container[name]);
             const file = dirname ? vpath.combine(dirname, name) : name;
+            // eslint-disable-next-line no-null/no-null
             if (entry === null || entry === undefined || entry instanceof Unlink || entry instanceof Rmdir) {
                 text += `//// [${file}] unlink\r\n`;
             }
@@ -1564,7 +1567,7 @@ namespace vfs {
     }
 
     export function iteratePatch(patch: FileSet | undefined): IterableIterator<[string, string]> | null {
-        // tslint:disable-next-line:no-null-keyword
+        // eslint-disable-next-line no-null/no-null
         return patch ? Harness.Compiler.iterateOutputs(iteratePatchWorker("", patch)) : null;
     }
 
@@ -1582,4 +1585,3 @@ namespace vfs {
         }
     }
 }
-// tslint:enable:no-null-keyword

@@ -352,11 +352,11 @@ namespace ts {
         return result;
     }
 
-    export function createSolutionBuilder<T extends BuilderProgram>(host: SolutionBuilderHost<T>, rootNames: ReadonlyArray<string>, defaultOptions: BuildOptions): SolutionBuilder<T> {
+    export function createSolutionBuilder<T extends BuilderProgram>(host: SolutionBuilderHost<T>, rootNames: readonly string[], defaultOptions: BuildOptions): SolutionBuilder<T> {
         return createSolutionBuilderWorker(/*watch*/ false, host, rootNames, defaultOptions);
     }
 
-    export function createSolutionBuilderWithWatch<T extends BuilderProgram>(host: SolutionBuilderWithWatchHost<T>, rootNames: ReadonlyArray<string>, defaultOptions: BuildOptions): SolutionBuilder<T> {
+    export function createSolutionBuilderWithWatch<T extends BuilderProgram>(host: SolutionBuilderWithWatchHost<T>, rootNames: readonly string[], defaultOptions: BuildOptions): SolutionBuilder<T> {
         return createSolutionBuilderWorker(/*watch*/ true, host, rootNames, defaultOptions);
     }
 
@@ -382,7 +382,7 @@ namespace ts {
         // State of solution
         readonly options: BuildOptions;
         readonly baseCompilerOptions: CompilerOptions;
-        readonly rootNames: ReadonlyArray<string>;
+        readonly rootNames: readonly string[];
 
         readonly resolvedConfigFilePaths: Map<ResolvedConfigFilePath>;
         readonly configFileCache: ConfigFileMap<ConfigFileCacheEntry>;
@@ -423,7 +423,7 @@ namespace ts {
         writeLog: (s: string) => void;
     }
 
-    function createSolutionBuilderState<T extends BuilderProgram>(watch: boolean, hostOrHostWithWatch: SolutionBuilderHost<T> | SolutionBuilderWithWatchHost<T>, rootNames: ReadonlyArray<string>, options: BuildOptions): SolutionBuilderState<T> {
+    function createSolutionBuilderState<T extends BuilderProgram>(watch: boolean, hostOrHostWithWatch: SolutionBuilderHost<T> | SolutionBuilderWithWatchHost<T>, rootNames: readonly string[], options: BuildOptions): SolutionBuilderState<T> {
         const host = hostOrHostWithWatch as SolutionBuilderHost<T>;
         const hostWithWatch = hostOrHostWithWatch as SolutionBuilderWithWatchHost<T>;
         const currentDirectory = host.getCurrentDirectory();
@@ -777,14 +777,14 @@ namespace ts {
         getBuilderProgram(): T | undefined;
         getProgram(): Program | undefined;
         getSourceFile(fileName: string): SourceFile | undefined;
-        getSourceFiles(): ReadonlyArray<SourceFile>;
-        getOptionsDiagnostics(cancellationToken?: CancellationToken): ReadonlyArray<Diagnostic>;
-        getGlobalDiagnostics(cancellationToken?: CancellationToken): ReadonlyArray<Diagnostic>;
-        getConfigFileParsingDiagnostics(): ReadonlyArray<Diagnostic>;
-        getSyntacticDiagnostics(sourceFile?: SourceFile, cancellationToken?: CancellationToken): ReadonlyArray<Diagnostic>;
-        getAllDependencies(sourceFile: SourceFile): ReadonlyArray<string>;
-        getSemanticDiagnostics(sourceFile?: SourceFile, cancellationToken?: CancellationToken): ReadonlyArray<Diagnostic>;
-        getSemanticDiagnosticsOfNextAffectedFile(cancellationToken?: CancellationToken, ignoreSourceFile?: (sourceFile: SourceFile) => boolean): AffectedFileResult<ReadonlyArray<Diagnostic>>;
+        getSourceFiles(): readonly SourceFile[];
+        getOptionsDiagnostics(cancellationToken?: CancellationToken): readonly Diagnostic[];
+        getGlobalDiagnostics(cancellationToken?: CancellationToken): readonly Diagnostic[];
+        getConfigFileParsingDiagnostics(): readonly Diagnostic[];
+        getSyntacticDiagnostics(sourceFile?: SourceFile, cancellationToken?: CancellationToken): readonly Diagnostic[];
+        getAllDependencies(sourceFile: SourceFile): readonly string[];
+        getSemanticDiagnostics(sourceFile?: SourceFile, cancellationToken?: CancellationToken): readonly Diagnostic[];
+        getSemanticDiagnosticsOfNextAffectedFile(cancellationToken?: CancellationToken, ignoreSourceFile?: (sourceFile: SourceFile) => boolean): AffectedFileResult<readonly Diagnostic[]>;
         /*
          * Calling emit directly with targetSourceFile and emitOnlyDtsFiles set to true is not advised since
          * emit in build system is responsible in updating status of the project
@@ -956,7 +956,7 @@ namespace ts {
             return program && action(program);
         }
 
-        function withProgramOrEmptyArray<U>(action: (program: T) => ReadonlyArray<U>): ReadonlyArray<U> {
+        function withProgramOrEmptyArray<U>(action: (program: T) => readonly U[]): readonly U[] {
             return withProgramOrUndefined(action) || emptyArray;
         }
 
@@ -997,7 +997,7 @@ namespace ts {
             step++;
         }
 
-        function handleDiagnostics(diagnostics: ReadonlyArray<Diagnostic>, errorFlags: BuildResultFlags, errorType: string) {
+        function handleDiagnostics(diagnostics: readonly Diagnostic[], errorFlags: BuildResultFlags, errorType: string) {
             if (diagnostics.length) {
                 buildResult = buildErrors(
                     state,
@@ -1402,7 +1402,7 @@ namespace ts {
         state: SolutionBuilderState<T>,
         resolvedPath: ResolvedConfigFilePath,
         program: T | undefined,
-        diagnostics: ReadonlyArray<Diagnostic>,
+        diagnostics: readonly Diagnostic[],
         errorFlags: BuildResultFlags,
         errorType: string
     ) {
@@ -1752,8 +1752,8 @@ namespace ts {
                                 }
                                 break;
                             }
+                            // falls through
 
-                        // falls through
                         case UpToDateStatusType.UpToDateWithUpstreamTypes:
                         case UpToDateStatusType.OutOfDateWithPrepend:
                             if (!(buildResult & BuildResultFlags.DeclarationOutputUnchanged)) {
@@ -2026,9 +2026,9 @@ namespace ts {
      * A SolutionBuilder has an immutable set of rootNames that are the "entry point" projects, but
      * can dynamically add/remove other projects based on changes on the rootNames' references
      */
-    function createSolutionBuilderWorker<T extends BuilderProgram>(watch: false, host: SolutionBuilderHost<T>, rootNames: ReadonlyArray<string>, defaultOptions: BuildOptions): SolutionBuilder<T>;
-    function createSolutionBuilderWorker<T extends BuilderProgram>(watch: true, host: SolutionBuilderWithWatchHost<T>, rootNames: ReadonlyArray<string>, defaultOptions: BuildOptions): SolutionBuilder<T>;
-    function createSolutionBuilderWorker<T extends BuilderProgram>(watch: boolean, hostOrHostWithWatch: SolutionBuilderHost<T> | SolutionBuilderWithWatchHost<T>, rootNames: ReadonlyArray<string>, options: BuildOptions): SolutionBuilder<T> {
+    function createSolutionBuilderWorker<T extends BuilderProgram>(watch: false, host: SolutionBuilderHost<T>, rootNames: readonly string[], defaultOptions: BuildOptions): SolutionBuilder<T>;
+    function createSolutionBuilderWorker<T extends BuilderProgram>(watch: true, host: SolutionBuilderWithWatchHost<T>, rootNames: readonly string[], defaultOptions: BuildOptions): SolutionBuilder<T>;
+    function createSolutionBuilderWorker<T extends BuilderProgram>(watch: boolean, hostOrHostWithWatch: SolutionBuilderHost<T> | SolutionBuilderWithWatchHost<T>, rootNames: readonly string[], options: BuildOptions): SolutionBuilder<T> {
         const state = createSolutionBuilderState(watch, hostOrHostWithWatch, rootNames, options);
         return {
             build: (project, cancellationToken) => build(state, project, cancellationToken),
@@ -2064,11 +2064,11 @@ namespace ts {
         }
     }
 
-    function reportErrors({ host }: SolutionBuilderState, errors: ReadonlyArray<Diagnostic>) {
+    function reportErrors({ host }: SolutionBuilderState, errors: readonly Diagnostic[]) {
         errors.forEach(err => host.reportDiagnostic(err));
     }
 
-    function reportAndStoreErrors(state: SolutionBuilderState, proj: ResolvedConfigFilePath, errors: ReadonlyArray<Diagnostic>) {
+    function reportAndStoreErrors(state: SolutionBuilderState, proj: ResolvedConfigFilePath, errors: readonly Diagnostic[]) {
         reportErrors(state, errors);
         state.projectErrorsReported.set(proj, true);
         if (errors.length) {
@@ -2202,6 +2202,7 @@ namespace ts {
                 );
             case UpToDateStatusType.ContainerOnly:
             // Don't report status on "solution" projects
+            // falls through
             case UpToDateStatusType.ComputingUpstream:
                 // Should never leak from getUptoDateStatusWorker
                 break;

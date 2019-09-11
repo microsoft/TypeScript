@@ -1,5 +1,5 @@
 namespace ts {
-    function verifyMissingFilePaths(missingPaths: ReadonlyArray<Path>, expected: ReadonlyArray<string>) {
+    function verifyMissingFilePaths(missingPaths: readonly Path[], expected: readonly string[]) {
         assert.isDefined(missingPaths);
         const map = arrayToSet(expected) as Map<boolean>;
         for (const missing of missingPaths) {
@@ -152,7 +152,7 @@ namespace ts {
             assertIsExternal(program, [a, fooIndex], f => f !== a);
         });
 
-        function assertIsExternal(program: Program, files: ReadonlyArray<documents.TextDocument>, isExternalExpected: (file: documents.TextDocument) => boolean): void {
+        function assertIsExternal(program: Program, files: readonly documents.TextDocument[], isExternalExpected: (file: documents.TextDocument) => boolean): void {
             for (const file of files) {
                 const actual = program.isSourceFileFromExternalLibrary(program.getSourceFile(file.file)!);
                 const expected = isExternalExpected(file);

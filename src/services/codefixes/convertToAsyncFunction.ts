@@ -23,7 +23,7 @@ namespace ts.codefix {
 
     interface SynthBindingPattern {
         readonly kind: SynthBindingNameKind.BindingPattern;
-        readonly elements: ReadonlyArray<SynthBindingName>;
+        readonly elements: readonly SynthBindingName[];
         readonly bindingPattern: BindingPattern;
         readonly types: Type[];
     }
@@ -43,7 +43,7 @@ namespace ts.codefix {
     interface Transformer {
         readonly checker: TypeChecker;
         readonly synthNamesMap: Map<SynthIdentifier>; // keys are the symbol id of the identifier
-        readonly allVarNames: ReadonlyArray<SymbolAndIdentifier>;
+        readonly allVarNames: readonly SymbolAndIdentifier[];
         readonly setOfExpressionsToReturn: ReadonlyMap<true>; // keys are the node ids of the expressions
         readonly constIdentifiers: Identifier[];
         readonly originalTypeMap: ReadonlyMap<Type>; // keys are the node id of the identifier
@@ -102,7 +102,7 @@ namespace ts.codefix {
         }
     }
 
-    function getReturnStatementsWithPromiseHandlers(body: Block): ReadonlyArray<ReturnStatement> {
+    function getReturnStatementsWithPromiseHandlers(body: Block): readonly ReturnStatement[] {
         const res: ReturnStatement[] = [];
         forEachReturnStatement(body, ret => {
             if (isReturnStatementWithFixablePromiseHandler(ret)) res.push(ret);
@@ -281,7 +281,7 @@ namespace ts.codefix {
 
     // dispatch function to recursively build the refactoring
     // should be kept up to date with isFixablePromiseHandler in suggestionDiagnostics.ts
-    function transformExpression(node: Expression, transformer: Transformer, outermostParent: CallExpression, prevArgName?: SynthBindingName): ReadonlyArray<Statement> {
+    function transformExpression(node: Expression, transformer: Transformer, outermostParent: CallExpression, prevArgName?: SynthBindingName): readonly Statement[] {
         if (!node) {
             return emptyArray;
         }
@@ -306,7 +306,7 @@ namespace ts.codefix {
         return emptyArray;
     }
 
-    function transformCatch(node: CallExpression, transformer: Transformer, prevArgName?: SynthBindingName): ReadonlyArray<Statement> {
+    function transformCatch(node: CallExpression, transformer: Transformer, prevArgName?: SynthBindingName): readonly Statement[] {
         const func = node.arguments[0];
         const argName = getArgBindingName(func, transformer);
         const shouldReturn = transformer.setOfExpressionsToReturn.get(getNodeId(node).toString());
@@ -365,7 +365,7 @@ namespace ts.codefix {
         return compact([varDeclList, tryStatement, destructuredResult]);
     }
 
-    function getIdentifierTextsFromBindingName(bindingName: BindingName): ReadonlyArray<string> {
+    function getIdentifierTextsFromBindingName(bindingName: BindingName): readonly string[] {
         if (isIdentifier(bindingName)) return [bindingName.text];
         return flatMap(bindingName.elements, element => {
             if (isOmittedExpression(element)) return [];
@@ -378,7 +378,7 @@ namespace ts.codefix {
         return createSynthIdentifier(renamedPrevArg);
     }
 
-    function transformThen(node: CallExpression, transformer: Transformer, outermostParent: CallExpression, prevArgName?: SynthBindingName): ReadonlyArray<Statement> {
+    function transformThen(node: CallExpression, transformer: Transformer, outermostParent: CallExpression, prevArgName?: SynthBindingName): readonly Statement[] {
         const [res, rej] = node.arguments;
 
         if (!res) {
@@ -405,13 +405,13 @@ namespace ts.codefix {
         return transformExpression(node.expression, transformer, node, argNameRes).concat(transformationBody);
     }
 
-    function getFlagOfBindingName(bindingName: SynthBindingName, constIdentifiers: ReadonlyArray<Identifier>): NodeFlags {
+    function getFlagOfBindingName(bindingName: SynthBindingName, constIdentifiers: readonly Identifier[]): NodeFlags {
         const identifiers = getIdentifierTextsFromBindingName(getNode(bindingName));
         const inArr: boolean = constIdentifiers.some(elem => contains(identifiers, elem.text));
         return inArr ? NodeFlags.Const : NodeFlags.Let;
     }
 
-    function transformPromiseCall(node: Expression, transformer: Transformer, prevArgName?: SynthBindingName): ReadonlyArray<Statement> {
+    function transformPromiseCall(node: Expression, transformer: Transformer, prevArgName?: SynthBindingName): readonly Statement[] {
         const shouldReturn = transformer.setOfExpressionsToReturn.get(getNodeId(node).toString());
         // the identifier is empty when the handler (.then()) ignores the argument - In this situation we do not need to save the result of the promise returning call
         const originalNodeParent = node.original ? node.original.parent : node.parent;
@@ -425,7 +425,7 @@ namespace ts.codefix {
         return [createReturn(getSynthesizedDeepClone(node))];
     }
 
-    function createTransformedStatement(prevArgName: SynthBindingName | undefined, rightHandSide: Expression, transformer: Transformer): ReadonlyArray<Statement> {
+    function createTransformedStatement(prevArgName: SynthBindingName | undefined, rightHandSide: Expression, transformer: Transformer): readonly Statement[] {
         if (!prevArgName || isEmpty(prevArgName)) {
             // if there's no argName to assign to, there still might be side effects
             return [createStatement(rightHandSide)];
@@ -441,7 +441,7 @@ namespace ts.codefix {
     }
 
     // should be kept up to date with isFixablePromiseArgument in suggestionDiagnostics.ts
-    function getTransformationBody(func: Expression, prevArgName: SynthBindingName | undefined, argName: SynthBindingName | undefined, parent: CallExpression, transformer: Transformer): ReadonlyArray<Statement> {
+    function getTransformationBody(func: Expression, prevArgName: SynthBindingName | undefined, argName: SynthBindingName | undefined, parent: CallExpression, transformer: Transformer): readonly Statement[] {
 
         const shouldReturn = transformer.setOfExpressionsToReturn.get(getNodeId(parent).toString());
         switch (func.kind) {
@@ -539,7 +539,7 @@ namespace ts.codefix {
     }
 
 
-    function removeReturns(stmts: ReadonlyArray<Statement>, prevArgName: SynthBindingName | undefined, transformer: Transformer, seenReturnStatement: boolean): ReadonlyArray<Statement> {
+    function removeReturns(stmts: readonly Statement[], prevArgName: SynthBindingName | undefined, transformer: Transformer, seenReturnStatement: boolean): readonly Statement[] {
         const ret: Statement[] = [];
         for (const stmt of stmts) {
             if (isReturnStatement(stmt)) {
@@ -569,7 +569,7 @@ namespace ts.codefix {
     }
 
 
-    function getInnerTransformationBody(transformer: Transformer, innerRetStmts: ReadonlyArray<Node>, prevArgName?: SynthBindingName) {
+    function getInnerTransformationBody(transformer: Transformer, innerRetStmts: readonly Node[], prevArgName?: SynthBindingName) {
 
         let innerCbBody: Statement[] = [];
         for (const stmt of innerRetStmts) {
@@ -607,6 +607,7 @@ namespace ts.codefix {
         }
 
         // return undefined argName when arg is null or undefined
+        // eslint-disable-next-line no-in-operator
         if (!name || "identifier" in name && name.identifier.text === "undefined") {
             return undefined;
         }
@@ -662,7 +663,7 @@ namespace ts.codefix {
         return { kind: SynthBindingNameKind.Identifier, identifier, types, numberOfAssignmentsOriginal };
     }
 
-    function createSynthBindingPattern(bindingPattern: BindingPattern, elements: ReadonlyArray<SynthBindingName> = emptyArray, types: Type[] = []): SynthBindingPattern {
+    function createSynthBindingPattern(bindingPattern: BindingPattern, elements: readonly SynthBindingName[] = emptyArray, types: Type[] = []): SynthBindingPattern {
         return { kind: SynthBindingNameKind.BindingPattern, bindingPattern, elements, types };
     }
 

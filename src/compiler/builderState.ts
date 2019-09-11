@@ -68,11 +68,11 @@ namespace ts {
         /**
          * Cache of all files excluding default library file for the current program
          */
-        allFilesExcludingDefaultLibraryFile?: ReadonlyArray<SourceFile>;
+        allFilesExcludingDefaultLibraryFile?: readonly SourceFile[];
         /**
          * Cache of all the file names
          */
-        allFileNames?: ReadonlyArray<string>;
+        allFileNames?: readonly string[];
     }
 
     export function cloneMapOrUndefined<T>(map: ReadonlyMap<T> | undefined) {
@@ -284,7 +284,7 @@ namespace ts.BuilderState {
     /**
      * Gets the files affected by the path from the program
      */
-    export function getFilesAffectedBy(state: BuilderState, programOfThisState: Program, path: Path, cancellationToken: CancellationToken | undefined, computeHash: ComputeHash, cacheToUpdateSignature?: Map<string>, exportedModulesMapCache?: ComputingExportedModulesMap): ReadonlyArray<SourceFile> {
+    export function getFilesAffectedBy(state: BuilderState, programOfThisState: Program, path: Path, cancellationToken: CancellationToken | undefined, computeHash: ComputeHash, cacheToUpdateSignature?: Map<string>, exportedModulesMapCache?: ComputingExportedModulesMap): readonly SourceFile[] {
         // Since the operation could be cancelled, the signatures are always stored in the cache
         // They will be committed once it is safe to use them
         // eg when calling this api from tsserver, if there is no cancellation of the operation
@@ -410,7 +410,7 @@ namespace ts.BuilderState {
     /**
      * Get all the dependencies of the sourceFile
      */
-    export function getAllDependencies(state: BuilderState, programOfThisState: Program, sourceFile: SourceFile): ReadonlyArray<string> {
+    export function getAllDependencies(state: BuilderState, programOfThisState: Program, sourceFile: SourceFile): readonly string[] {
         const compilerOptions = programOfThisState.getCompilerOptions();
         // With --out or --outFile all outputs go into single file, all files depend on each other
         if (compilerOptions.outFile || compilerOptions.out) {
@@ -448,7 +448,7 @@ namespace ts.BuilderState {
     /**
      * Gets the names of all files from the program
      */
-    function getAllFileNames(state: BuilderState, programOfThisState: Program): ReadonlyArray<string> {
+    function getAllFileNames(state: BuilderState, programOfThisState: Program): readonly string[] {
         if (!state.allFileNames) {
             const sourceFiles = programOfThisState.getSourceFiles();
             state.allFileNames = sourceFiles === emptyArray ? emptyArray : sourceFiles.map(file => file.fileName);
@@ -499,7 +499,7 @@ namespace ts.BuilderState {
     /**
      * Gets all files of the program excluding the default library file
      */
-    function getAllFilesExcludingDefaultLibraryFile(state: BuilderState, programOfThisState: Program, firstSourceFile: SourceFile): ReadonlyArray<SourceFile> {
+    function getAllFilesExcludingDefaultLibraryFile(state: BuilderState, programOfThisState: Program, firstSourceFile: SourceFile): readonly SourceFile[] {
         // Use cached result
         if (state.allFilesExcludingDefaultLibraryFile) {
             return state.allFilesExcludingDefaultLibraryFile;

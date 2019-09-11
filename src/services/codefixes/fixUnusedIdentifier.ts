@@ -125,7 +125,7 @@ namespace ts.codefix {
         return token.kind === SyntaxKind.ImportKeyword ? tryCast(token.parent, isImportDeclaration) : undefined;
     }
 
-    function tryDeleteFullDestructure(token: Node, changes: textChanges.ChangeTracker, sourceFile: SourceFile, checker: TypeChecker, sourceFiles: ReadonlyArray<SourceFile>, isFixAll: boolean): boolean {
+    function tryDeleteFullDestructure(token: Node, changes: textChanges.ChangeTracker, sourceFile: SourceFile, checker: TypeChecker, sourceFiles: readonly SourceFile[], isFixAll: boolean): boolean {
         if (token.kind !== SyntaxKind.OpenBraceToken || !isObjectBindingPattern(token.parent)) return false;
         const decl = token.parent.parent;
         if (decl.kind === SyntaxKind.Parameter) {
@@ -174,7 +174,7 @@ namespace ts.codefix {
         return false;
     }
 
-    function tryDeleteDeclaration(sourceFile: SourceFile, token: Node, changes: textChanges.ChangeTracker, checker: TypeChecker, sourceFiles: ReadonlyArray<SourceFile>, isFixAll: boolean) {
+    function tryDeleteDeclaration(sourceFile: SourceFile, token: Node, changes: textChanges.ChangeTracker, checker: TypeChecker, sourceFiles: readonly SourceFile[], isFixAll: boolean) {
         tryDeleteDeclarationWorker(token, changes, sourceFile, checker, sourceFiles, isFixAll);
         if (isIdentifier(token)) deleteAssignments(changes, sourceFile, token, checker);
     }
@@ -188,7 +188,7 @@ namespace ts.codefix {
         });
     }
 
-    function tryDeleteDeclarationWorker(token: Node, changes: textChanges.ChangeTracker, sourceFile: SourceFile, checker: TypeChecker, sourceFiles: ReadonlyArray<SourceFile>, isFixAll: boolean): void {
+    function tryDeleteDeclarationWorker(token: Node, changes: textChanges.ChangeTracker, sourceFile: SourceFile, checker: TypeChecker, sourceFiles: readonly SourceFile[], isFixAll: boolean): void {
         const { parent } = token;
         if (isParameter(parent)) {
             tryDeleteParameter(changes, sourceFile, parent, checker, sourceFiles, isFixAll);
@@ -198,7 +198,7 @@ namespace ts.codefix {
         }
     }
 
-    function tryDeleteParameter(changes: textChanges.ChangeTracker, sourceFile: SourceFile, p: ParameterDeclaration, checker: TypeChecker, sourceFiles: ReadonlyArray<SourceFile>, isFixAll: boolean): void {
+    function tryDeleteParameter(changes: textChanges.ChangeTracker, sourceFile: SourceFile, p: ParameterDeclaration, checker: TypeChecker, sourceFiles: readonly SourceFile[], isFixAll: boolean): void {
         if (mayDeleteParameter(p, checker, isFixAll)) {
             if (p.modifiers && p.modifiers.length > 0
                     && (!isIdentifier(p.name) || FindAllReferences.Core.isSymbolReferencedInFile(p.name, checker, sourceFile))) {
@@ -246,7 +246,7 @@ namespace ts.codefix {
         }
     }
 
-    function deleteUnusedArguments(changes: textChanges.ChangeTracker, sourceFile: SourceFile, deletedParameter: ParameterDeclaration, sourceFiles: ReadonlyArray<SourceFile>, checker: TypeChecker): void {
+    function deleteUnusedArguments(changes: textChanges.ChangeTracker, sourceFile: SourceFile, deletedParameter: ParameterDeclaration, sourceFiles: readonly SourceFile[], checker: TypeChecker): void {
         FindAllReferences.Core.eachSignatureCall(deletedParameter.parent, sourceFiles, checker, call => {
             const index = deletedParameter.parent.parameters.indexOf(deletedParameter);
             if (call.arguments.length > index) { // Just in case the call didn't provide enough arguments.

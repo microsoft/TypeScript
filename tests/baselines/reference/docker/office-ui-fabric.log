@@ -215,6 +215,7 @@ Standard output:
 @uifabric/foundation: [XX:XX:XX XM] ■ Webpack Config Path: /office-ui-fabric-react/packages/foundation/webpack.config.js
 @uifabric/foundation: Webpack version: 4.29.5
 @uifabric/foundation:  FAIL  src/slots.test.tsx
+@uifabric/foundation:  PASS  src/next/composed.test.tsx
 @uifabric/foundation: info Visit https://yarnpkg.com/en/docs/cli/run for documentation about this command.
 
 

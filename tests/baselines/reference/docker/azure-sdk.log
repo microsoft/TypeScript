@@ -2,18 +2,19 @@ Exit Code: 1
 Standard output:
 
 Rush Multi-Project Build Tool 5.X.X - https://rushjs.io
-Node.js version is 12.9.1 (pre-LTS)
+Node.js version is 12.10.0 (pre-LTS)
 Starting "rush rebuild"
 Executing a maximum of ?simultaneous processes...
 XX of XX: [@azure/abort-controller] completed successfully in ? seconds
 XX of XX: [@azure/core-auth] completed successfully in ? seconds
 XX of XX: [@azure/core-tracing] completed successfully in ? seconds
 XX of XX: [@azure/core-http] completed successfully in ? seconds
+XX of XX: [@azure/identity] completed successfully in ? seconds
+XX of XX: [@azure/core-amqp] completed successfully in ? seconds
 XX of XX: [@azure/core-arm] completed successfully in ? seconds
 XX of XX: [@azure/core-paging] completed successfully in ? seconds
-XX of XX: [@azure/identity] completed successfully in ? seconds
 XX of XX: [@azure/test-utils-recorder] completed successfully in ? seconds
-XX of XX: [@azure/core-amqp] completed successfully in ? seconds
+XX of XX: [@azure/event-hubs] completed successfully in ? seconds
 XX of XX: [@azure/event-processor-host] completed successfully in ? seconds
 XX of XX: [@azure/keyvault-keys] completed successfully in ? seconds
 XX of XX: [@azure/keyvault-secrets] completed successfully in ? seconds
@@ -55,7 +56,7 @@ atob (guessing 'atob')
 (!) Circular dependency: dist-esm/index.js -> dist-esm/CosmosClient.js -> dist-esm/client/Database/index.js -> dist-esm/client/Database/Database.js -> dist-esm/client/Container/index.js -> dist-esm/client/Container/Container.js -> dist-esm/client/Script/Scripts.js -> dist-esm/index.js
 (!) Circular dependency: dist-esm/request/RequestHandler.js -> dist-esm/retry/retryUtility.js -> dist-esm/request/RequestHandler.js
 created dist/index.js in ?s
-Warning: You have changed the public API signature for this project. Updating review/event-hubs.api.md
+XX of XX: [@azure/eventhubs-checkpointstore-blob] completed successfully in ? seconds
 XX of XX: [@azure/keyvault-certificates] completed successfully in ? seconds
 Warning: You have changed the public API signature for this project. Updating review/service-bus.api.md
 XX of XX: [@azure/storage-blob] completed successfully in ? seconds
@@ -63,22 +64,24 @@ XX of XX: [@azure/storage-file] completed successfully in ? seconds
 XX of XX: [@azure/storage-queue] completed successfully in ? seconds
 XX of XX: [@azure/template] completed successfully in ? seconds
 XX of XX: [testhub] completed successfully in ? seconds
-SUCCESS (20)
+SUCCESS (22)
 ================================
 @azure/abort-controller (? seconds)
 @azure/core-auth (? seconds)
 @azure/core-tracing (? seconds)
 @azure/core-http (? seconds)
+@azure/identity (? seconds)
+@azure/core-amqp (? seconds)
 @azure/core-arm (? seconds)
 @azure/core-paging (? seconds)
-@azure/identity (? seconds)
 @azure/test-utils-recorder (? seconds)
-@azure/core-amqp (? seconds)
+@azure/event-hubs (? seconds)
 @azure/event-processor-host (? seconds)
 @azure/keyvault-keys (? seconds)
 @azure/keyvault-secrets (? seconds)
 @azure/app-configuration (? seconds)
 @azure/core-asynciterator-polyfill (? seconds)
+@azure/eventhubs-checkpointstore-blob (? seconds)
 @azure/keyvault-certificates (? seconds)
 @azure/storage-blob (? seconds)
 @azure/storage-file (? seconds)
@@ -86,7 +89,7 @@ SUCCESS (20)
 @azure/template (? seconds)
 testhub (? seconds)
 ================================
-SUCCESS WITH WARNINGS (3)
+SUCCESS WITH WARNINGS (2)
 ================================
 @azure/cosmos (? seconds)
 Warning: You have changed the public API signature for this project. Updating review/cosmos.api.md
@@ -125,8 +128,6 @@ atob (guessing 'atob')
 (!) Circular dependency: dist-esm/index.js -> dist-esm/CosmosClient.js -> dist-esm/client/Database/index.js -> dist-esm/client/Database/Database.js -> dist-esm/client/Container/index.js -> dist-esm/client/Container/Container.js -> dist-esm/client/Script/Scripts.js -> dist-esm/index.js
 (!) Circular dependency: dist-esm/request/RequestHandler.js -> dist-esm/retry/retryUtility.js -> dist-esm/request/RequestHandler.js
 created dist/index.js in ?s
-@azure/event-hubs (? seconds)
-Warning: You have changed the public API signature for this project. Updating review/event-hubs.api.md
 @azure/service-bus (? seconds)
 Warning: You have changed the public API signature for this project. Updating review/service-bus.api.md
 ================================
@@ -136,6 +137,5 @@ rush rebuild ( ? seconds)
 
 Standard error:
 XX of XX: [@azure/cosmos] completed with warnings in ? seconds
-XX of XX: [@azure/event-hubs] completed with warnings in ? seconds
 XX of XX: [@azure/service-bus] completed with warnings in ? seconds
 Project(s) succeeded with warnings
