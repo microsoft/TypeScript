@@ -1006,11 +1006,14 @@ namespace ts.refactor.extractSymbol {
         const localNameText = getUniqueName(isClassLike(scope) ? "newProperty" : "newLocal", file);
         const isJS = isInJSFile(scope);
 
-        const variableType = isJS || !checker.isContextSensitive(node)
+        let variableType = isJS || !checker.isContextSensitive(node)
             ? undefined
             : checker.typeToTypeNode(checker.getContextualType(node)!, scope, NodeBuilderFlags.NoTruncation); // TODO: GH#18217
 
-        const initializer = transformConstantInitializer(node, substitutions);
+        let initializer = transformConstantInitializer(node, substitutions);
+
+        ({ variableType, initializer } = transformFunctionInitializerAndType(variableType, initializer));
+
         suppressLeadingAndTrailingTrivia(initializer);
 
         const changeTracker = textChanges.ChangeTracker.fromContext(context);
@@ -1102,6 +1105,73 @@ namespace ts.refactor.extractSymbol {
         const renameFilename = node.getSourceFile().fileName;
         const renameLocation = getRenameLocation(edits, renameFilename, localNameText, /*isDeclaredBeforeUse*/ true);
         return { renameFilename, renameLocation, edits };
+
+        function transformFunctionInitializerAndType(variableType: TypeNode | undefined, initializer: Expression): { variableType: TypeNode | undefined, initializer: Expression } {
+            // If no contextual type exists there is nothing to transfer to the function signature
+            if (variableType === undefined) return { variableType, initializer };
+            // Only do this for function expressions and arrow functions that are not generic
+            if (!isFunctionExpression(initializer) && !isArrowFunction(initializer) || !!initializer.typeParameters) return { variableType, initializer };
+            const functionType = checker.getTypeAtLocation(node);
+            const functionSignature = singleOrUndefined(checker.getSignaturesOfType(functionType, SignatureKind.Call));
+
+            // If no function signature, maybe there was an error, do nothing
+            if (!functionSignature) return { variableType, initializer };
+            // If the function signature has generic type parameters we don't attempt to move the parameters
+            if (!!functionSignature.getTypeParameters()) return { variableType, initializer };
+
+            // We add parameter types if needed
+            const parameters: ParameterDeclaration[] = [];
+            let hasAny = false;
+            for (const p of initializer.parameters) {
+                if (p.type) {
+                    parameters.push(p);
+                }
+                else {
+                    const paramType = checker.getTypeAtLocation(p);
+                    if (paramType === checker.getAnyType()) hasAny = true;
+
+                    parameters.push(updateParameter(p,
+                        p.decorators, p.modifiers, p.dotDotDotToken,
+                        p.name, p.questionToken, p.type || checker.typeToTypeNode(paramType, scope, NodeBuilderFlags.NoTruncation), p.initializer));
+                }
+            }
+            // If a parameter was inferred as any we skip adding function parameters at all.
+            // Turning an implicit any (which under common settings is a error) to an explicit
+            // is probably actually a worse refactor outcome.
+            if (hasAny) return { variableType, initializer };
+            variableType = undefined;
+            if (isArrowFunction(initializer)) {
+                initializer = updateArrowFunction(initializer, node.modifiers, initializer.typeParameters,
+                    parameters,
+                    initializer.type || checker.typeToTypeNode(functionSignature.getReturnType(), scope, NodeBuilderFlags.NoTruncation),
+                    initializer.equalsGreaterThanToken,
+                    initializer.body);
+            }
+            else {
+                if (functionSignature && !!functionSignature.thisParameter) {
+                    const firstParameter = firstOrUndefined(parameters);
+                    // If the function signature has a this parameter and if the first defined parameter is not the this parameter, we must add it
+                    // Note: If this parameter was already there, it would have been previously updated with the type if not type was present
+                    if ((!firstParameter || (isIdentifier(firstParameter.name) && firstParameter.name.escapedText !== "this"))) {
+                        const thisType = checker.getTypeOfSymbolAtLocation(functionSignature.thisParameter, node);
+                        parameters.splice(0, 0, createParameter(
+                            /* decorators */ undefined,
+                            /* modifiers */ undefined,
+                            /* dotDotDotToken */ undefined,
+                            "this",
+                            /* questionToken */ undefined,
+                            checker.typeToTypeNode(thisType, scope, NodeBuilderFlags.NoTruncation)
+                        ));
+                    }
+                }
+                initializer = updateFunctionExpression(initializer, node.modifiers, initializer.asteriskToken,
+                    initializer.name, initializer.typeParameters,
+                    parameters,
+                    initializer.type || checker.typeToTypeNode(functionSignature.getReturnType(), scope, NodeBuilderFlags.NoTruncation),
+                    initializer.body);
+            }
+            return { variableType, initializer };
+        }
     }
 
     function getContainingVariableDeclarationIfInList(node: Node, scope: Scope) {
