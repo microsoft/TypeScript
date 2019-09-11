@@ -67,6 +67,24 @@ namespace ts {
             });
         }
 
+        function testBaselineAndEvaluate(testName: string, test: () => string, onEvaluate: (exports: any) => void) {
+            describe(testName, () => {
+                let sourceText!: string;
+                before(() => {
+                    sourceText = test();
+                });
+                after(() => {
+                    sourceText = undefined!;
+                });
+                it("compare baselines", () => {
+                    Harness.Baseline.runBaseline(`transformApi/transformsCorrectly.${testName}.js`, sourceText);
+                });
+                it("evaluate", () => {
+                    onEvaluate(evaluator.evaluateJavaScript(sourceText));
+                });
+            });
+        }
+
         testBaseline("substitution", () => {
             return transformSourceFile(`var a = undefined;`, [replaceUndefinedWithVoid0]);
         });
@@ -119,28 +137,28 @@ namespace ts {
             class C { foo = 10; static bar = 20 }
             namespace C { export let x = 10; }
             `, {
-                    transformers: {
-                        before: [forceNamespaceRewrite],
-                    },
-                    compilerOptions: {
-                        target: ScriptTarget.ESNext,
-                        newLine: NewLineKind.CarriageReturnLineFeed,
-                    }
-                }).outputText;
+                transformers: {
+                    before: [forceNamespaceRewrite],
+                },
+                compilerOptions: {
+                    target: ScriptTarget.ESNext,
+                    newLine: NewLineKind.CarriageReturnLineFeed,
+                }
+            }).outputText;
         });
 
         testBaseline("transformTypesInExportDefault", () => {
             return transpileModule(`
             export default (foo: string) => { return 1; }
             `, {
-                    transformers: {
-                        before: [replaceNumberWith2],
-                    },
-                    compilerOptions: {
-                        target: ScriptTarget.ESNext,
-                        newLine: NewLineKind.CarriageReturnLineFeed,
-                    }
-                }).outputText;
+                transformers: {
+                    before: [replaceNumberWith2],
+                },
+                compilerOptions: {
+                    target: ScriptTarget.ESNext,
+                    newLine: NewLineKind.CarriageReturnLineFeed,
+                }
+            }).outputText;
         });
 
         testBaseline("synthesizedClassAndNamespaceCombination", () => {
@@ -326,14 +344,14 @@ namespace ts {
 const exportedSeparately = 2;
 export {exportedSeparately};
 `, {
-                        transformers: {
-                            before: [addSyntheticComment(isVariableStatement)],
-                        },
-                        compilerOptions: {
-                            target: ScriptTarget.ES5,
-                            newLine: NewLineKind.CarriageReturnLineFeed,
-                        }
-                    }).outputText;
+                transformers: {
+                    before: [addSyntheticComment(isVariableStatement)],
+                },
+                compilerOptions: {
+                    target: ScriptTarget.ES5,
+                    newLine: NewLineKind.CarriageReturnLineFeed,
+                }
+            }).outputText;
         });
 
         // https://github.com/Microsoft/TypeScript/issues/17594
@@ -347,14 +365,14 @@ export { /* specifier comment */ X, Y} from 'somewhere';
 export * from 'somewhere';
 export {Value};
 `, {
-                        transformers: {
-                            before: [addSyntheticComment(n => isImportDeclaration(n) || isExportDeclaration(n) || isImportSpecifier(n) || isExportSpecifier(n))],
-                        },
-                        compilerOptions: {
-                            target: ScriptTarget.ES5,
-                            newLine: NewLineKind.CarriageReturnLineFeed,
-                        }
-                    }).outputText;
+                transformers: {
+                    before: [addSyntheticComment(n => isImportDeclaration(n) || isExportDeclaration(n) || isImportSpecifier(n) || isExportSpecifier(n))],
+                },
+                compilerOptions: {
+                    target: ScriptTarget.ES5,
+                    newLine: NewLineKind.CarriageReturnLineFeed,
+                }
+            }).outputText;
         });
 
         // https://github.com/Microsoft/TypeScript/issues/17594
@@ -370,14 +388,14 @@ class Clazz {
     constructor(readonly field = 1) {}
 }
 `, {
-                        transformers: {
-                            before: [addSyntheticComment(n => isPropertyDeclaration(n) || isParameterPropertyDeclaration(n) || isClassDeclaration(n) || isConstructorDeclaration(n))],
-                        },
-                        compilerOptions: {
-                            target: ScriptTarget.ES2015,
-                            newLine: NewLineKind.CarriageReturnLineFeed,
-                        }
-                    }).outputText;
+                transformers: {
+                    before: [addSyntheticComment(n => isPropertyDeclaration(n) || isParameterPropertyDeclaration(n) || isClassDeclaration(n) || isConstructorDeclaration(n))],
+                },
+                compilerOptions: {
+                    target: ScriptTarget.ES2015,
+                    newLine: NewLineKind.CarriageReturnLineFeed,
+                }
+            }).outputText;
         });
 
         testBaseline("transformAddCommentToNamespace", () => {
@@ -391,14 +409,14 @@ namespace Foo {
     export const y = 1;
 }
 `, {
-                        transformers: {
-                            before: [addSyntheticComment(n => isModuleDeclaration(n))],
-                        },
-                        compilerOptions: {
-                            target: ScriptTarget.ES2015,
-                            newLine: NewLineKind.CarriageReturnLineFeed,
-                        }
-                    }).outputText;
+                transformers: {
+                    before: [addSyntheticComment(n => isModuleDeclaration(n))],
+                },
+                compilerOptions: {
+                    target: ScriptTarget.ES2015,
+                    newLine: NewLineKind.CarriageReturnLineFeed,
+                }
+            }).outputText;
         });
 
         // https://github.com/Microsoft/TypeScript/issues/24709
@@ -410,9 +428,9 @@ namespace Foo {
             const host = new fakes.CompilerHost(fs);
             host.getSourceFile = () => transformedSourceFile;
             const program = createProgram(["source.ts"], {
-                  target: ScriptTarget.ES3,
-                  module: ModuleKind.None,
-                  noLib: true
+                target: ScriptTarget.ES3,
+                module: ModuleKind.None,
+                noLib: true
             }, host);
             program.emit(transformedSourceFile, (_p, s, b) => host.writeFile("source.js", s, b));
             return host.readFile("source.js")!.toString();
@@ -421,18 +439,18 @@ namespace Foo {
                 const visitor: Visitor = (node) => {
                     if (isMethodDeclaration(node)) {
                         return updateMethod(
-                          node,
-                          node.decorators,
-                          node.modifiers,
-                          node.asteriskToken,
-                          createIdentifier("foobar"),
-                          node.questionToken,
-                          node.typeParameters,
-                          node.parameters,
-                          node.type,
-                          node.body,
+                            node,
+                            node.decorators,
+                            node.modifiers,
+                            node.asteriskToken,
+                            createIdentifier("foobar"),
+                            node.questionToken,
+                            node.typeParameters,
+                            node.parameters,
+                            node.type,
+                            node.body,
                         );
-                      }
+                    }
                     return visitEachChild(node, visitor, context);
                 };
                 return (node: SourceFile) => visitNode(node, visitor);
@@ -440,6 +458,31 @@ namespace Foo {
 
         });
 
+        testBaselineAndEvaluate("templateSpans", () => {
+            return transpileModule("const x = String.raw`\n\nhello`; exports.stringLength = x.trim().length;", {
+                compilerOptions: {
+                    target: ScriptTarget.ESNext,
+                    newLine: NewLineKind.CarriageReturnLineFeed,
+                },
+                transformers: {
+                    before: [transformSourceFile]
+                }
+            }).outputText;
+
+            function transformSourceFile(context: TransformationContext): Transformer<SourceFile> {
+                function visitor(node: Node): VisitResult<Node> {
+                    if (isNoSubstitutionTemplateLiteral(node)) {
+                        return createNoSubstitutionTemplateLiteral(node.text, node.rawText);
+                    }
+                    else {
+                        return visitEachChild(node, visitor, context);
+                    }
+                }
+                return sourceFile => visitNode(sourceFile, visitor, isSourceFile);
+            }
+        }, exports => {
+            assert.equal(exports.stringLength, 5);
+        });
     });
 }
 

@@ -916,7 +916,7 @@ namespace ts.tscWatch {
         });
 
         describe("should not trigger should not trigger recompilation because of program emit", () => {
-            function verifyWithOptions(options: CompilerOptions, outputFiles: ReadonlyArray<string>) {
+            function verifyWithOptions(options: CompilerOptions, outputFiles: readonly string[]) {
                 const proj = "/user/username/projects/myproject";
                 const file1: File = {
                     path: `${proj}/file1.ts`,
@@ -1056,14 +1056,14 @@ export default test;`;
                 getDiagnosticOfFileFromProgram(watch(), bFile.path, bFile.content.indexOf("y /"), 1, Diagnostics.The_left_hand_side_of_an_arithmetic_operation_must_be_of_type_any_number_bigint_or_an_enum_type)
             ]);
 
-            function changeParameterType(parameterName: string, toType: string, expectedErrors: ReadonlyArray<Diagnostic>) {
+            function changeParameterType(parameterName: string, toType: string, expectedErrors: readonly Diagnostic[]) {
                 const newContent = bFileContent.replace(new RegExp(`${parameterName}\: [a-z]*`), `${parameterName}: ${toType}`);
 
                 verifyErrorsWithBFileContents(newContent, expectedErrors);
                 verifyErrorsWithBFileContents(bFileContent, emptyArray);
             }
 
-            function verifyErrorsWithBFileContents(content: string, expectedErrors: ReadonlyArray<Diagnostic>) {
+            function verifyErrorsWithBFileContents(content: string, expectedErrors: readonly Diagnostic[]) {
                 host.writeFile(bFile.path, content);
                 host.runQueuedTimeoutCallbacks();
                 checkOutputErrorsIncremental(host, expectedErrors);
@@ -1146,7 +1146,7 @@ foo().hello`
             const currentDirectory = "/user/username/projects/myproject";
             const field = "fullscreen";
             const fieldWithoutReadonly = `interface Document {
-	${field}: boolean;
+    ${field}: boolean;
 }`;
 
             const libFileWithDocument: File = {
@@ -1227,13 +1227,13 @@ var y: number;
             const aFile: File = {
                 path: `${currentDirectory}/a.ts`,
                 content: `interface Document {
-	${field}: boolean;
+    ${field}: boolean;
 }`
             };
             const bFile: File = {
                 path: `${currentDirectory}/b.d.ts`,
                 content: `interface Document {
-	${field}: boolean;
+    ${field}: boolean;
 }`
             };
             const libFileWithDocument: File = {
@@ -1266,7 +1266,7 @@ interface Document {
             verifyConfigChange({ skipLibCheck: true }, [aFile]);
             verifyConfigChange({}, [libFileWithDocument, aFile, bFile]);
 
-            function verifyConfigChange(compilerOptions: CompilerOptions, errorInFiles: ReadonlyArray<File>) {
+            function verifyConfigChange(compilerOptions: CompilerOptions, errorInFiles: readonly File[]) {
                 host.writeFile(configFile.path, JSON.stringify({ compilerOptions }));
                 host.runQueuedTimeoutCallbacks();
                 verifyProgramFiles();
@@ -1334,6 +1334,43 @@ exports.a = 1;
             function verifyProgramFiles() {
                 checkProgramActualFiles(watch(), [aFile.path, bFile.path, libFile.path]);
             }
+        });
+
+        it("reports errors correctly with file not in rootDir", () => {
+            const currentDirectory = "/user/username/projects/myproject";
+            const aFile: File = {
+                path: `${currentDirectory}/a.ts`,
+                content: `import { x } from "../b";`
+            };
+            const bFile: File = {
+                path: `/user/username/projects/b.ts`,
+                content: `export const x = 10;`
+            };
+            const configFile: File = {
+                path: `${currentDirectory}/tsconfig.json`,
+                content: JSON.stringify({
+                    compilerOptions: {
+                        rootDir: ".",
+                        outDir: "lib"
+                    }
+                })
+            };
+
+            const files = [aFile, bFile, libFile, configFile];
+
+            const host = createWatchedSystem(files, { currentDirectory });
+            const watch = createWatchOfConfigFile("tsconfig.json", host);
+            checkOutputErrorsInitial(host, [
+                getDiagnosticOfFileFromProgram(watch(), aFile.path, aFile.content.indexOf(`"../b"`), `"../b"`.length, Diagnostics.File_0_is_not_under_rootDir_1_rootDir_is_expected_to_contain_all_source_files, bFile.path, currentDirectory)
+            ]);
+            const aContent = `
+
+${aFile.content}`;
+            host.writeFile(aFile.path, aContent);
+            host.runQueuedTimeoutCallbacks();
+            checkOutputErrorsIncremental(host, [
+                getDiagnosticOfFileFromProgram(watch(), aFile.path, aContent.indexOf(`"../b"`), `"../b"`.length, Diagnostics.File_0_is_not_under_rootDir_1_rootDir_is_expected_to_contain_all_source_files, bFile.path, currentDirectory)
+            ]);
         });
     });
 }

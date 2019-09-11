@@ -4,7 +4,7 @@ namespace ts.tscWatch {
     import getFileFromProject = TestFSWithWatch.getTsBuildProjectFile;
     type TsBuildWatchSystem = WatchedSystem & { writtenFiles: Map<true>; };
 
-    function createTsBuildWatchSystem(fileOrFolderList: ReadonlyArray<TestFSWithWatch.FileOrFolderOrSymLink>, params?: TestFSWithWatch.TestServerHostCreationParameters) {
+    function createTsBuildWatchSystem(fileOrFolderList: readonly TestFSWithWatch.FileOrFolderOrSymLink[], params?: TestFSWithWatch.TestServerHostCreationParameters) {
         const host = createWatchedSystem(fileOrFolderList, params) as TsBuildWatchSystem;
         const originalWriteFile = host.writeFile;
         host.writtenFiles = createMap<true>();
@@ -16,8 +16,7 @@ namespace ts.tscWatch {
         return host;
     }
 
-
-    export function createSolutionBuilder(system: WatchedSystem, rootNames: ReadonlyArray<string>, defaultOptions?: BuildOptions) {
+    export function createSolutionBuilder(system: WatchedSystem, rootNames: readonly string[], defaultOptions?: BuildOptions) {
         const host = createSolutionBuilderHost(system);
         host.now = system.now.bind(system);
         return ts.createSolutionBuilder(host, rootNames, defaultOptions || {});
@@ -29,7 +28,7 @@ namespace ts.tscWatch {
         return host;
     }
 
-    function createSolutionBuilderWithWatch(system: TsBuildWatchSystem, rootNames: ReadonlyArray<string>, defaultOptions?: BuildOptions) {
+    function createSolutionBuilderWithWatch(system: TsBuildWatchSystem, rootNames: readonly string[], defaultOptions?: BuildOptions) {
         const host = createSolutionBuilderWithWatchHost(system);
         const solutionBuilder = ts.createSolutionBuilderWithWatch(host, rootNames, defaultOptions || { watch: true });
         solutionBuilder.build();
@@ -92,7 +91,7 @@ namespace ts.tscWatch {
             return getOutputFileNames(subProject, baseFileNameWithoutExtension).map(f => transformOutputToOutputFileStamp(f, host));
         }
 
-        function getOutputFileStamps(host: TsBuildWatchSystem, additionalFiles?: ReadonlyArray<[SubProject, string]>): OutputFileStamp[] {
+        function getOutputFileStamps(host: TsBuildWatchSystem, additionalFiles?: readonly [SubProject, string][]): OutputFileStamp[] {
             const result = [
                 ...getOutputStamps(host, SubProject.core, "anotherModule"),
                 ...getOutputStamps(host, SubProject.core, "index"),
@@ -106,7 +105,7 @@ namespace ts.tscWatch {
             return result;
         }
 
-        function verifyChangedFiles(actualStamps: OutputFileStamp[], oldTimeStamps: OutputFileStamp[], changedFiles: ReadonlyArray<string>, modifiedTimeStampFiles: ReadonlyArray<string>) {
+        function verifyChangedFiles(actualStamps: OutputFileStamp[], oldTimeStamps: OutputFileStamp[], changedFiles: readonly string[], modifiedTimeStampFiles: readonly string[]) {
             for (let i = 0; i < oldTimeStamps.length; i++) {
                 const actual = actualStamps[i];
                 const old = oldTimeStamps[i];
@@ -125,7 +124,7 @@ namespace ts.tscWatch {
         let logic: SubProjectFiles;
         let tests: SubProjectFiles;
         let ui: SubProjectFiles;
-        let allFiles: ReadonlyArray<File>;
+        let allFiles: readonly File[];
         let testProjectExpectedWatchedFiles: string[];
         let testProjectExpectedWatchedDirectoriesRecursive: string[];
 
@@ -135,7 +134,7 @@ namespace ts.tscWatch {
             tests = subProjectFiles(SubProject.tests);
             ui = subProjectFiles(SubProject.ui);
             allFiles = [libFile, ...core, ...logic, ...tests, ...ui];
-            testProjectExpectedWatchedFiles = [core[0], core[1], core[2]!, ...logic, ...tests].map(f => f.path.toLowerCase()); // tslint:disable-line no-unnecessary-type-assertion (TODO: type assertion should be necessary)
+            testProjectExpectedWatchedFiles = [core[0], core[1], core[2]!, ...logic, ...tests].map(f => f.path.toLowerCase());
             testProjectExpectedWatchedDirectoriesRecursive = [projectPath(SubProject.core), projectPath(SubProject.logic)];
         });
 
@@ -149,7 +148,7 @@ namespace ts.tscWatch {
             testProjectExpectedWatchedDirectoriesRecursive = undefined!;
         });
 
-        function createSolutionInWatchMode(allFiles: ReadonlyArray<File>, defaultOptions?: BuildOptions, disableConsoleClears?: boolean) {
+        function createSolutionInWatchMode(allFiles: readonly File[], defaultOptions?: BuildOptions, disableConsoleClears?: boolean) {
             const host = createTsBuildWatchSystem(allFiles, { currentDirectory: projectsLocation });
             createSolutionBuilderWithWatch(host, [`${project}/${SubProject.tests}`], defaultOptions);
             verifyWatches(host);
@@ -200,8 +199,8 @@ namespace ts.tscWatch {
                 content: `export const newFileConst = 30;`
             };
 
-            function verifyProjectChanges(allFilesGetter: () => ReadonlyArray<File>) {
-                function createSolutionInWatchModeToVerifyChanges(additionalFiles?: ReadonlyArray<[SubProject, string]>) {
+            function verifyProjectChanges(allFilesGetter: () => readonly File[]) {
+                function createSolutionInWatchModeToVerifyChanges(additionalFiles?: readonly [SubProject, string][]) {
                     const host = createSolutionInWatchMode(allFilesGetter());
                     return { host, verifyChangeWithFile, verifyChangeAfterTimeout, verifyWatches };
 
@@ -290,7 +289,7 @@ function foo() { }`, /*local*/ true);
                 });
 
                 it("builds when new file is added, and its subsequent updates", () => {
-                    const additinalFiles: ReadonlyArray<[SubProject, string]> = [[SubProject.core, newFileWithoutExtension]];
+                    const additinalFiles: readonly [SubProject, string][] = [[SubProject.core, newFileWithoutExtension]];
                     const { verifyChangeWithFile } = createSolutionInWatchModeToVerifyChanges(additinalFiles);
                     verifyChange(newFile.content);
 
@@ -327,7 +326,7 @@ export class someClass2 { }`);
             const allFiles = [libFile, ...core, logic[1], ...tests];
             const host = createTsBuildWatchSystem(allFiles, { currentDirectory: projectsLocation });
             createSolutionBuilderWithWatch(host, [`${project}/${SubProject.tests}`]);
-            checkWatchedFiles(host, [core[0], core[1], core[2]!, logic[0], ...tests].map(f => f.path.toLowerCase())); // tslint:disable-line no-unnecessary-type-assertion (TODO: type assertion should be necessary)
+            checkWatchedFiles(host, [core[0], core[1], core[2]!, logic[0], ...tests].map(f => f.path.toLowerCase()));
             checkWatchedDirectories(host, emptyArray, /*recursive*/ false);
             checkWatchedDirectories(host, [projectPath(SubProject.core)], /*recursive*/ true);
             checkOutputErrorsInitial(host, [
@@ -452,14 +451,14 @@ function myFunc() { return 100; }`, /*isLocal*/ true);
                 content: `
 interface SomeObject
 {
-	message: string;
+    message: string;
 }
 
 export function createSomeObject(): SomeObject
 {
-	return {
-		message: "new Object"
-	};
+    return {
+        message: "new Object"
+    };
 }`
             };
             const libraryTsconfig: File = {
@@ -568,7 +567,7 @@ let x: string = 10;`);
                     `${subProjectLocation}/tsconfig${Extension.TsBuildInfo}`
                 ];
 
-                function verifyDtsErrors(host: TsBuildWatchSystem, isIncremental: boolean, expectedErrors: ReadonlyArray<string>) {
+                function verifyDtsErrors(host: TsBuildWatchSystem, isIncremental: boolean, expectedErrors: readonly string[]) {
                     (isIncremental ? checkOutputErrorsIncremental : checkOutputErrorsInitial)(host, expectedErrors);
                     outputs.forEach(f => assert.equal(host.fileExists(f), !expectedErrors.length, `Expected file ${f} to ${!expectedErrors.length ? "exist" : "not exist"}`));
                 }
@@ -646,16 +645,16 @@ let x: string = 10;`);
 
         describe("tsc-watch and tsserver works with project references", () => {
             describe("invoking when references are already built", () => {
-                function verifyWatchesOfProject(host: TsBuildWatchSystem, expectedWatchedFiles: ReadonlyArray<string>, expectedWatchedDirectoriesRecursive: ReadonlyArray<string>, expectedWatchedDirectories?: ReadonlyArray<string>) {
+                function verifyWatchesOfProject(host: TsBuildWatchSystem, expectedWatchedFiles: readonly string[], expectedWatchedDirectoriesRecursive: readonly string[], expectedWatchedDirectories?: readonly string[]) {
                     checkWatchedFilesDetailed(host, expectedWatchedFiles, 1);
                     checkWatchedDirectoriesDetailed(host, expectedWatchedDirectories || emptyArray, 1, /*recursive*/ false);
                     checkWatchedDirectoriesDetailed(host, expectedWatchedDirectoriesRecursive, 1, /*recursive*/ true);
                 }
 
-                function createSolutionOfProject(allFiles: ReadonlyArray<File>,
+                function createSolutionOfProject(allFiles: readonly File[],
                     currentDirectory: string,
                     solutionBuilderconfig: string,
-                    getOutputFileStamps: (host: TsBuildWatchSystem) => ReadonlyArray<OutputFileStamp>) {
+                    getOutputFileStamps: (host: TsBuildWatchSystem) => readonly OutputFileStamp[]) {
                     // Build the composite project
                     const host = createTsBuildWatchSystem(allFiles, { currentDirectory });
                     const solutionBuilder = createSolutionBuilder(host, [solutionBuilderconfig], {});
@@ -668,11 +667,11 @@ let x: string = 10;`);
                 }
 
                 function createSolutionAndWatchModeOfProject(
-                    allFiles: ReadonlyArray<File>,
+                    allFiles: readonly File[],
                     currentDirectory: string,
                     solutionBuilderconfig: string,
                     watchConfig: string,
-                    getOutputFileStamps: (host: TsBuildWatchSystem) => ReadonlyArray<OutputFileStamp>) {
+                    getOutputFileStamps: (host: TsBuildWatchSystem) => readonly OutputFileStamp[]) {
                     // Build the composite project
                     const { host, solutionBuilder } = createSolutionOfProject(allFiles, currentDirectory, solutionBuilderconfig, getOutputFileStamps);
 
@@ -683,11 +682,11 @@ let x: string = 10;`);
                     return { host, solutionBuilder, watch };
                 }
 
-                function createSolutionAndServiceOfProject(allFiles: ReadonlyArray<File>,
+                function createSolutionAndServiceOfProject(allFiles: readonly File[],
                     currentDirectory: string,
                     solutionBuilderconfig: string,
                     openFileName: string,
-                    getOutputFileStamps: (host: TsBuildWatchSystem) => ReadonlyArray<OutputFileStamp>) {
+                    getOutputFileStamps: (host: TsBuildWatchSystem) => readonly OutputFileStamp[]) {
                     // Build the composite project
                     const { host, solutionBuilder } = createSolutionOfProject(allFiles, currentDirectory, solutionBuilderconfig, getOutputFileStamps);
 
@@ -698,12 +697,12 @@ let x: string = 10;`);
                     return { host, solutionBuilder, service };
                 }
 
-                function checkProjectActualFiles(service: projectSystem.TestProjectService, configFile: string, expectedFiles: ReadonlyArray<string>) {
+                function checkProjectActualFiles(service: projectSystem.TestProjectService, configFile: string, expectedFiles: readonly string[]) {
                     projectSystem.checkNumberOfProjects(service, { configuredProjects: 1 });
                     projectSystem.checkProjectActualFiles(service.configuredProjects.get(configFile.toLowerCase())!, expectedFiles);
                 }
 
-                function verifyDependencies(watch: Watch, filePath: string, expected: ReadonlyArray<string>) {
+                function verifyDependencies(watch: Watch, filePath: string, expected: readonly string[]) {
                     checkArray(`${filePath} dependencies`, watch.getBuilderProgram().getAllDependencies(watch().getSourceFile(filePath)!), expected);
                 }
 
@@ -729,7 +728,7 @@ let x: string = 10;`);
 
                     function verifyScenario(
                         edit: (host: TsBuildWatchSystem, solutionBuilder: SolutionBuilder<EmitAndSemanticDiagnosticsBuilderProgram>) => void,
-                        expectedFilesAfterEdit: () => ReadonlyArray<string>
+                        expectedFilesAfterEdit: () => readonly string[]
                     ) {
                         it("with tsc-watch", () => {
                             const { host, solutionBuilder, watch } = createSolutionAndWatchMode();
@@ -833,11 +832,11 @@ export function gfoo() {
                     function verifyWatchState(
                         host: TsBuildWatchSystem,
                         watch: Watch,
-                        expectedProgramFiles: ReadonlyArray<string>,
-                        expectedWatchedFiles: ReadonlyArray<string>,
-                        expectedWatchedDirectoriesRecursive: ReadonlyArray<string>,
-                        dependencies: ReadonlyArray<[string, ReadonlyArray<string>]>,
-                        expectedWatchedDirectories?: ReadonlyArray<string>) {
+                        expectedProgramFiles: readonly string[],
+                        expectedWatchedFiles: readonly string[],
+                        expectedWatchedDirectoriesRecursive: readonly string[],
+                        dependencies: readonly [string, readonly string[]][],
+                        expectedWatchedDirectories?: readonly string[]) {
                         checkProgramActualFiles(watch(), expectedProgramFiles);
                         verifyWatchesOfProject(host, expectedWatchedFiles, expectedWatchedDirectoriesRecursive, expectedWatchedDirectories);
                         for (const [file, deps] of dependencies) {
@@ -903,7 +902,7 @@ export function gfoo() {
                             ...projectSystem.getTypeRootsFromLocation(multiFolder ? getFilePathInProject(project, "c") : getProjectPath(project))
                         ].map(s => s.toLowerCase());
 
-                        const defaultDependencies: ReadonlyArray<[string, ReadonlyArray<string>]> = [
+                        const defaultDependencies: readonly [string, readonly string[]][] = [
                             [aDts, [aDts]],
                             [bDts, [bDts, aDts]],
                             [refs.path, [refs.path]],
@@ -926,17 +925,17 @@ export function gfoo() {
                             verifyWatchState(host, watch, expectedProgramFiles, expectedWatchedFiles, expectedWatchedDirectoriesRecursive, defaultDependencies, expectedWatchedDirectories);
                         }
 
-                        function verifyProject(host: TsBuildWatchSystem, service: projectSystem.TestProjectService, orphanInfos?: ReadonlyArray<string>) {
+                        function verifyProject(host: TsBuildWatchSystem, service: projectSystem.TestProjectService, orphanInfos?: readonly string[]) {
                             verifyServerState(host, service, expectedProgramFiles, expectedWatchedFiles, expectedWatchedDirectoriesRecursive, orphanInfos);
                         }
 
                         function verifyServerState(
                             host: TsBuildWatchSystem,
                             service: projectSystem.TestProjectService,
-                            expectedProgramFiles: ReadonlyArray<string>,
-                            expectedWatchedFiles: ReadonlyArray<string>,
-                            expectedWatchedDirectoriesRecursive: ReadonlyArray<string>,
-                            orphanInfos?: ReadonlyArray<string>) {
+                            expectedProgramFiles: readonly string[],
+                            expectedWatchedFiles: readonly string[],
+                            expectedWatchedDirectoriesRecursive: readonly string[],
+                            orphanInfos?: readonly string[]) {
                             checkProjectActualFiles(service, cTsconfig.path, expectedProgramFiles.concat(cTsconfig.path));
                             const watchedFiles = expectedWatchedFiles.filter(f => f !== cTs.path.toLowerCase());
                             if (orphanInfos) {
@@ -952,14 +951,14 @@ export function gfoo() {
 
                         function verifyScenario(
                             edit: (host: TsBuildWatchSystem, solutionBuilder: SolutionBuilder<EmitAndSemanticDiagnosticsBuilderProgram>) => void,
-                            expectedEditErrors: ReadonlyArray<string>,
-                            expectedProgramFiles: ReadonlyArray<string>,
-                            expectedWatchedFiles: ReadonlyArray<string>,
-                            expectedWatchedDirectoriesRecursive: ReadonlyArray<string>,
-                            dependencies: ReadonlyArray<[string, ReadonlyArray<string>]>,
+                            expectedEditErrors: readonly string[],
+                            expectedProgramFiles: readonly string[],
+                            expectedWatchedFiles: readonly string[],
+                            expectedWatchedDirectoriesRecursive: readonly string[],
+                            dependencies: readonly [string, readonly string[]][],
                             revert?: (host: TsBuildWatchSystem) => void,
-                            orphanInfosAfterEdit?: ReadonlyArray<string>,
-                            orphanInfosAfterRevert?: ReadonlyArray<string>) {
+                            orphanInfosAfterEdit?: readonly string[],
+                            orphanInfosAfterRevert?: readonly string[]) {
                             it("with tsc-watch", () => {
                                 const { host, solutionBuilder, watch } = createSolutionAndWatchMode();
 
@@ -1170,7 +1169,7 @@ export function gfoo() {
                                 ...projectSystem.getTypeRootsFromLocation(getProjectPath(project))
                             ].map(s => s.toLowerCase());
 
-                            const defaultDependencies: ReadonlyArray<[string, ReadonlyArray<string>]> = [
+                            const defaultDependencies: readonly [string, readonly string[]][] = [
                                 [aDts, [aDts]],
                                 [bDts, [bDts, aDts]],
                                 [refs.path, [refs.path]],
@@ -1228,5 +1227,147 @@ export function someFn() { }`);
                 `Building project '/user/username/projects/sample1/tests/tsconfig.json'...\n\n`,
             ]);
         });
+    });
+
+    describe("unittests:: tsbuild:: watchMode:: with demo project", () => {
+        const projectLocation = `${projectsLocation}/demo`;
+        let coreFiles: File[];
+        let animalFiles: File[];
+        let zooFiles: File[];
+        let solutionFile: File;
+        let baseConfig: File;
+        let allFilesExceptBase: File[];
+        before(() => {
+            coreFiles = subProjectFiles("core", ["tsconfig.json", "utilities.ts"]);
+            animalFiles = subProjectFiles("animals", ["tsconfig.json", "animal.ts", "dog.ts", "index.ts"]);
+            zooFiles = subProjectFiles("zoo", ["tsconfig.json", "zoo.ts"]);
+            solutionFile = projectFile("tsconfig.json");
+            baseConfig = projectFile("tsconfig-base.json");
+            allFilesExceptBase = [...coreFiles, ...animalFiles, ...zooFiles, solutionFile];
+        });
+
+        after(() => {
+            coreFiles = undefined!;
+            animalFiles = undefined!;
+            zooFiles = undefined!;
+            solutionFile = undefined!;
+            baseConfig = undefined!;
+            allFilesExceptBase = undefined!;
+        });
+
+        it("updates with circular reference", () => {
+            const host = createTsBuildWatchSystem([
+                ...allFilesExceptBase,
+                baseConfig,
+                { path: libFile.path, content: libContent }
+            ], { currentDirectory: projectLocation });
+            host.writeFile(coreFiles[0].path, coreFiles[0].content.replace(
+                "}",
+                `},
+  "references": [
+    {
+      "path": "../zoo"
+    }
+  ]`
+            ));
+            createSolutionBuilderWithWatch(host, ["tsconfig.json"], { verbose: true, watch: true });
+            checkOutputErrorsInitial(host, [
+                `error TS6202: Project references may not form a circular graph. Cycle detected: /user/username/projects/demo/tsconfig.json\r\n/user/username/projects/demo/core/tsconfig.json\r\n/user/username/projects/demo/zoo/tsconfig.json\r\n/user/username/projects/demo/animals/tsconfig.json\n`
+            ], /*disableConsoleClears*/ undefined, [
+                `Projects in this build: \r\n    * animals/tsconfig.json\r\n    * zoo/tsconfig.json\r\n    * core/tsconfig.json\r\n    * tsconfig.json\n\n`
+            ]);
+            verifyWatches(host);
+
+            // Make changes
+            host.writeFile(coreFiles[0].path, coreFiles[0].content);
+            host.checkTimeoutQueueLengthAndRun(1); // build core
+            host.checkTimeoutQueueLengthAndRun(1); // build animals
+            host.checkTimeoutQueueLengthAndRun(1); // build zoo
+            host.checkTimeoutQueueLengthAndRun(1); // build solution
+            host.checkTimeoutQueueLength(0);
+            checkOutputErrorsIncremental(host, emptyArray, /*disableConsoleClears*/ undefined, /*logsBeforeWatchDiagnostics*/ undefined, [
+                `Project 'core/tsconfig.json' is out of date because output file 'lib/core/utilities.js' does not exist\n\n`,
+                `Building project '/user/username/projects/demo/core/tsconfig.json'...\n\n`,
+                `Project 'animals/tsconfig.json' is out of date because output file 'lib/animals/animal.js' does not exist\n\n`,
+                `Building project '/user/username/projects/demo/animals/tsconfig.json'...\n\n`,
+                `Project 'zoo/tsconfig.json' is out of date because output file 'lib/zoo/zoo.js' does not exist\n\n`,
+                `Building project '/user/username/projects/demo/zoo/tsconfig.json'...\n\n`,
+            ]);
+        });
+
+        it("updates with bad reference", () => {
+            const host = createTsBuildWatchSystem([
+                ...allFilesExceptBase,
+                baseConfig,
+                { path: libFile.path, content: libContent }
+            ], { currentDirectory: projectLocation });
+            host.writeFile(coreFiles[1].path, `import * as A from '../animals';
+${coreFiles[1].content}`);
+            createSolutionBuilderWithWatch(host, ["tsconfig.json"], { verbose: true, watch: true });
+            const errors = [
+                `animals/index.ts(1,20): error TS6059: File '/user/username/projects/demo/animals/animal.ts' is not under 'rootDir' '/user/username/projects/demo/core'. 'rootDir' is expected to contain all source files.\n`,
+                `animals/index.ts(1,20): error TS6307: File '/user/username/projects/demo/animals/animal.ts' is not listed within the file list of project '/user/username/projects/demo/core/tsconfig.json'. Projects must list all files or use an 'include' pattern.\n`,
+                `animals/index.ts(4,32): error TS6059: File '/user/username/projects/demo/animals/dog.ts' is not under 'rootDir' '/user/username/projects/demo/core'. 'rootDir' is expected to contain all source files.\n`,
+                `animals/index.ts(4,32): error TS6307: File '/user/username/projects/demo/animals/dog.ts' is not listed within the file list of project '/user/username/projects/demo/core/tsconfig.json'. Projects must list all files or use an 'include' pattern.\n`,
+                `core/utilities.ts(1,1): error TS6133: 'A' is declared but its value is never read.\n`,
+                `core/utilities.ts(1,20): error TS6059: File '/user/username/projects/demo/animals/index.ts' is not under 'rootDir' '/user/username/projects/demo/core'. 'rootDir' is expected to contain all source files.\n`,
+                `core/utilities.ts(1,20): error TS6307: File '/user/username/projects/demo/animals/index.ts' is not listed within the file list of project '/user/username/projects/demo/core/tsconfig.json'. Projects must list all files or use an 'include' pattern.\n`
+            ].map(hostOutputDiagnostic);
+            checkOutputErrors(host, [
+                startingCompilationInWatchMode(),
+                hostOutputLog(`Projects in this build: \r\n    * core/tsconfig.json\r\n    * animals/tsconfig.json\r\n    * zoo/tsconfig.json\r\n    * tsconfig.json\n\n`),
+                hostOutputLog(`Project 'core/tsconfig.json' is out of date because output file 'lib/core/utilities.js' does not exist\n\n`),
+                hostOutputLog(`Building project '/user/username/projects/demo/core/tsconfig.json'...\n\n`),
+                ...errors,
+                hostOutputLog(`Project 'animals/tsconfig.json' can't be built because its dependency 'core' has errors\n\n`),
+                hostOutputLog(`Skipping build of project '/user/username/projects/demo/animals/tsconfig.json' because its dependency '/user/username/projects/demo/core' has errors\n\n`),
+                hostOutputLog(`Project 'zoo/tsconfig.json' can't be built because its dependency 'animals' was not built\n\n`),
+                hostOutputLog(`Skipping build of project '/user/username/projects/demo/zoo/tsconfig.json' because its dependency '/user/username/projects/demo/animals' was not built\n\n`),
+                foundErrorsWatching(errors)
+            ]);
+            verifyWatches(host);
+
+            // Make changes
+            host.writeFile(coreFiles[1].path, `
+import * as A from '../animals';
+${coreFiles[1].content}`);
+            const newErrors = [
+                `animals/index.ts(1,20): error TS6059: File '/user/username/projects/demo/animals/animal.ts' is not under 'rootDir' '/user/username/projects/demo/core'. 'rootDir' is expected to contain all source files.\n`,
+                `animals/index.ts(1,20): error TS6307: File '/user/username/projects/demo/animals/animal.ts' is not listed within the file list of project '/user/username/projects/demo/core/tsconfig.json'. Projects must list all files or use an 'include' pattern.\n`,
+                `animals/index.ts(4,32): error TS6059: File '/user/username/projects/demo/animals/dog.ts' is not under 'rootDir' '/user/username/projects/demo/core'. 'rootDir' is expected to contain all source files.\n`,
+                `animals/index.ts(4,32): error TS6307: File '/user/username/projects/demo/animals/dog.ts' is not listed within the file list of project '/user/username/projects/demo/core/tsconfig.json'. Projects must list all files or use an 'include' pattern.\n`,
+                `core/utilities.ts(2,1): error TS6133: 'A' is declared but its value is never read.\n`,
+                `core/utilities.ts(2,20): error TS6059: File '/user/username/projects/demo/animals/index.ts' is not under 'rootDir' '/user/username/projects/demo/core'. 'rootDir' is expected to contain all source files.\n`,
+                `core/utilities.ts(2,20): error TS6307: File '/user/username/projects/demo/animals/index.ts' is not listed within the file list of project '/user/username/projects/demo/core/tsconfig.json'. Projects must list all files or use an 'include' pattern.\n`
+            ].map(hostOutputDiagnostic);
+            host.checkTimeoutQueueLengthAndRun(1); // build core
+            host.checkTimeoutQueueLength(0);
+            checkOutputErrors(host, [
+                fileChangeDetected(),
+                hostOutputLog(`Project 'core/tsconfig.json' is out of date because output file 'lib/core/utilities.js' does not exist\n\n`),
+                hostOutputLog(`Building project '/user/username/projects/demo/core/tsconfig.json'...\n\n`),
+                ...newErrors,
+                foundErrorsWatching(newErrors)
+            ]);
+        });
+
+        function subProjectFiles(subProject: string, fileNames: readonly string[]): File[] {
+            return fileNames.map(file => projectFile(`${subProject}/${file}`));
+        }
+
+        function projectFile(fileName: string): File {
+            return getFileFromProject("demo", fileName);
+        }
+
+        function verifyWatches(host: TsBuildWatchSystem) {
+            checkWatchedFilesDetailed(host, allFilesExceptBase.map(f => f.path), 1);
+            checkWatchedDirectories(host, emptyArray, /*recursive*/ false);
+            checkWatchedDirectoriesDetailed(
+                host,
+                [`${projectLocation}/core`, `${projectLocation}/animals`, `${projectLocation}/zoo`],
+                1,
+                /*recursive*/ true
+            );
+        }
     });
 }

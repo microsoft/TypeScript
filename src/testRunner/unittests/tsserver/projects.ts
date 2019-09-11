@@ -366,7 +366,8 @@ namespace ts.projectSystem {
                 const proj = projectService.externalProjects[0];
                 assert.deepEqual(proj.getFileNames(/*excludeFilesFromExternalLibraries*/ true), [file1.path]);
                 assert.deepEqual(proj.getTypeAcquisition().include, ["duck-types"]);
-            } finally {
+            }
+            finally {
                 projectService.resetSafeList();
             }
         });
@@ -464,7 +465,8 @@ namespace ts.projectSystem {
                 const proj = projectService.externalProjects[0];
                 assert.deepEqual(proj.getFileNames(/*excludeFilesFromExternalLibraries*/ true), [file1.path]);
                 assert.deepEqual(proj.getTypeAcquisition().include, ["kendo-ui", "office"]);
-            } finally {
+            }
+            finally {
                 projectService.resetSafeList();
             }
         });
@@ -504,7 +506,8 @@ namespace ts.projectSystem {
                 projectService.openExternalProject({ projectFileName: "project", options: {}, rootFiles: toExternalFiles([file1.path, file2.path]), typeAcquisition: { enable: true } });
                 const proj = projectService.externalProjects[0];
                 assert.deepEqual(proj.getFileNames(), [file2.path]);
-            } finally {
+            }
+            finally {
                 projectService.resetSafeList();
             }
         });
@@ -1061,7 +1064,7 @@ namespace ts.projectSystem {
                 content: "let x = 1;"
             };
 
-            const host = createServerHost([file1, configFile], { useWindowsStylePaths: true });
+            const host = createServerHost([file1, configFile], { windowsStyleRoot: "c:/" });
             const projectService = createProjectService(host);
 
             projectService.openClientFile(file1.path);

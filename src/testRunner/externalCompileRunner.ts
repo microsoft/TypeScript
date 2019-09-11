@@ -26,7 +26,7 @@ abstract class ExternalCompileRunnerBase extends RunnerBase {
         // Read in and evaluate the test list
         const testList = this.tests && this.tests.length ? this.tests : this.getTestFiles();
 
-        // tslint:disable-next-line:no-this-assignment
+        // eslint-disable-next-line @typescript-eslint/no-this-alias
         const cls = this;
         describe(`${this.kind()} code samples`, function(this: Mocha.ISuiteCallbackContext) {
             this.timeout(600_000); // 10 minutes
@@ -36,7 +36,7 @@ abstract class ExternalCompileRunnerBase extends RunnerBase {
         });
     }
     private runTest(directoryName: string) {
-        // tslint:disable-next-line:no-this-assignment
+        // eslint-disable-next-line @typescript-eslint/no-this-alias
         const cls = this;
         const timeout = 600_000; // 10 minutes
         describe(directoryName, function(this: Mocha.ISuiteCallbackContext) {
@@ -52,7 +52,7 @@ abstract class ExternalCompileRunnerBase extends RunnerBase {
                     const submoduleDir = path.join(cwd, directoryName);
                     exec("git", ["reset", "HEAD", "--hard"], { cwd: submoduleDir });
                     exec("git", ["clean", "-f"], { cwd: submoduleDir });
-                    exec("git", ["submodule", "update", "--init", "--remote", "."], { cwd: submoduleDir });
+                    exec("git", ["submodule", "update", "--init", "--remote", "."], { cwd: originalCwd });
 
                     const config = JSON.parse(fs.readFileSync(path.join(cwd, "test.json"), { encoding: "utf8" })) as UserConfig;
                     ts.Debug.assert(!!config.types, "Bad format from test.json: Types field must be present.");
@@ -95,7 +95,7 @@ class UserCodeRunner extends ExternalCompileRunnerBase {
         return "user";
     }
     report(result: ExecResult) {
-        // tslint:disable-next-line:no-null-keyword
+        // eslint-disable-next-line no-null/no-null
         return result.status === 0 && !result.stdout.length && !result.stderr.length ? null : `Exit Code: ${result.status}
 Standard output:
 ${sortErrors(stripAbsoluteImportPaths(result.stdout.toString().replace(/\r\n/g, "\n")))}
@@ -115,7 +115,7 @@ class DockerfileRunner extends ExternalCompileRunnerBase {
         // Read in and evaluate the test list
         const testList = this.tests && this.tests.length ? this.tests : this.getTestFiles();
 
-        // tslint:disable-next-line:no-this-assignment
+        // eslint-disable-next-line @typescript-eslint/no-this-alias
         const cls = this;
         describe(`${this.kind()} code samples`, function(this: Mocha.ISuiteCallbackContext) {
             this.timeout(cls.timeout); // 20 minutes
@@ -145,7 +145,7 @@ class DockerfileRunner extends ExternalCompileRunnerBase {
         }
     }
     report(result: ExecResult) {
-        // tslint:disable-next-line:no-null-keyword
+        // eslint-disable-next-line no-null/no-null
         return result.status === 0 && !result.stdout.length && !result.stderr.length ? null : `Exit Code: ${result.status}
 Standard output:
 ${sanitizeDockerfileOutput(result.stdout.toString())}
@@ -254,7 +254,8 @@ class DefinitelyTypedRunner extends ExternalCompileRunnerBase {
     report(result: ExecResult, cwd: string) {
         const stdout = removeExpectedErrors(result.stdout.toString(), cwd);
         const stderr = result.stderr.toString();
-        // tslint:disable-next-line:no-null-keyword
+
+        // eslint-disable-next-line no-null/no-null
         return !stdout.length && !stderr.length ? null : `Exit Code: ${result.status}
 Standard output:
 ${stdout.replace(/\r\n/g, "\n")}

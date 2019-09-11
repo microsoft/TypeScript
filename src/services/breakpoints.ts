@@ -471,9 +471,9 @@ namespace ts.BreakpointResolver {
                         if (getModuleInstanceState(block.parent as ModuleDeclaration) !== ModuleInstanceState.Instantiated) {
                             return undefined;
                         }
-                        // falls through
 
                     // Set on parent if on same line otherwise on first statement
+                    // falls through
                     case SyntaxKind.WhileStatement:
                     case SyntaxKind.IfStatement:
                     case SyntaxKind.ForInStatement:

@@ -2067,7 +2067,7 @@ namespace ts {
             return visitEachChild(node, visitor, context);
         }
 
-        function getRangeUnion(declarations: ReadonlyArray<Node>): TextRange {
+        function getRangeUnion(declarations: readonly Node[]): TextRange {
             // declarations may not be sorted by position.
             // pos should be the minimum* position over all nodes (that's not -1), end should be the maximum end over all nodes.
             let pos = -1, end = -1;
@@ -3993,18 +3993,21 @@ namespace ts {
          *
          * @param node The ES6 template literal.
          */
-        function getRawLiteral(node: LiteralLikeNode) {
+        function getRawLiteral(node: TemplateLiteralLikeNode) {
             // Find original source text, since we need to emit the raw strings of the tagged template.
             // The raw strings contain the (escaped) strings of what the user wrote.
             // Examples: `\n` is converted to "\\n", a template string with a newline to "\n".
-            let text = getSourceTextOfNodeFromSourceFile(currentSourceFile, node);
+            let text = node.rawText;
+            if (text === undefined) {
+                text = getSourceTextOfNodeFromSourceFile(currentSourceFile, node);
 
-            // text contains the original source, it will also contain quotes ("`"), dolar signs and braces ("${" and "}"),
-            // thus we need to remove those characters.
-            // First template piece starts with "`", others with "}"
-            // Last template piece ends with "`", others with "${"
-            const isLast = node.kind === SyntaxKind.NoSubstitutionTemplateLiteral || node.kind === SyntaxKind.TemplateTail;
-            text = text.substring(1, text.length - (isLast ? 1 : 2));
+                // text contains the original source, it will also contain quotes ("`"), dolar signs and braces ("${" and "}"),
+                // thus we need to remove those characters.
+                // First template piece starts with "`", others with "}"
+                // Last template piece ends with "`", others with "${"
+                const isLast = node.kind === SyntaxKind.NoSubstitutionTemplateLiteral || node.kind === SyntaxKind.TemplateTail;
+                text = text.substring(1, text.length - (isLast ? 1 : 2));
+            }
 
             // Newline normalization:
             // ES6 Spec 11.8.6.1 - Static Semantics of TV's and TRV's
@@ -4106,10 +4109,8 @@ namespace ts {
          * Visits the `super` keyword
          */
         function visitSuperKeyword(isExpressionOfCall: boolean): LeftHandSideExpression {
-            return hierarchyFacts & HierarchyFacts.NonStaticClassElement
-                && !isExpressionOfCall
-                    ? createPropertyAccess(createFileLevelUniqueName("_super"), "prototype")
-                    : createFileLevelUniqueName("_super");
+            return hierarchyFacts & HierarchyFacts.NonStaticClassElement && !isExpressionOfCall ? createPropertyAccess(createFileLevelUniqueName("_super"), "prototype") :
+                createFileLevelUniqueName("_super");
         }
 
         function visitMetaProperty(node: MetaProperty) {

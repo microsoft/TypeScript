@@ -86,7 +86,7 @@ namespace fakes {
             return result;
         }
 
-        public readDirectory(path: string, extensions?: ReadonlyArray<string>, exclude?: ReadonlyArray<string>, include?: ReadonlyArray<string>, depth?: number): string[] {
+        public readDirectory(path: string, extensions?: readonly string[], exclude?: readonly string[], include?: readonly string[], depth?: number): string[] {
             return ts.matchFiles(path, extensions, exclude, include, this.useCaseSensitiveFileNames, this.getCurrentDirectory(), depth, path => this.getAccessibleFileSystemEntries(path), path => this.realpath(path));
         }
 
@@ -276,7 +276,7 @@ namespace fakes {
             return this.sys.getDirectories(path);
         }
 
-        public readDirectory(path: string, extensions?: ReadonlyArray<string>, exclude?: ReadonlyArray<string>, include?: ReadonlyArray<string>, depth?: number): string[] {
+        public readDirectory(path: string, extensions?: readonly string[], exclude?: readonly string[], include?: readonly string[], depth?: number): string[] {
             return this.sys.readDirectory(path, extensions, exclude, include, depth);
         }
 
@@ -375,11 +375,114 @@ namespace fakes {
         }
     }
 
-    export type ExpectedDiagnostic = [ts.DiagnosticMessage, ...(string | number)[]];
-    function expectedDiagnosticToText([message, ...args]: ExpectedDiagnostic) {
+    export type ExpectedDiagnosticMessage = [ts.DiagnosticMessage, ...(string | number)[]];
+    export interface ExpectedDiagnosticMessageChain {
+        message: ExpectedDiagnosticMessage;
+        next?: ExpectedDiagnosticMessageChain[];
+    }
+
+    export interface ExpectedDiagnosticLocation {
+        file: string;
+        start: number;
+        length: number;
+    }
+    export interface ExpectedDiagnosticRelatedInformation extends ExpectedDiagnosticMessageChain {
+        location?: ExpectedDiagnosticLocation;
+    }
+
+    export enum DiagnosticKind {
+        Error = "Error",
+        Status = "Status"
+    }
+    export interface ExpectedErrorDiagnostic extends ExpectedDiagnosticRelatedInformation {
+        relatedInformation?: ExpectedDiagnosticRelatedInformation[];
+    }
+
+    export type ExpectedDiagnostic = ExpectedDiagnosticMessage | ExpectedErrorDiagnostic;
+
+    interface SolutionBuilderDiagnostic {
+        kind: DiagnosticKind;
+        diagnostic: ts.Diagnostic;
+    }
+
+    function indentedText(indent: number, text: string) {
+        if (!indent) return text;
+        let indentText = "";
+        for (let i = 0; i < indent; i++) {
+            indentText += "  ";
+        }
+        return `
+${indentText}${text}`;
+    }
+
+    function expectedDiagnosticMessageToText([message, ...args]: ExpectedDiagnosticMessage) {
         let text = ts.getLocaleSpecificMessage(message);
         if (args.length) {
             text = ts.formatStringFromArgs(text, args);
+        }
+        return text;
+    }
+
+    function expectedDiagnosticMessageChainToText({ message, next }: ExpectedDiagnosticMessageChain, indent = 0) {
+        let text = indentedText(indent, expectedDiagnosticMessageToText(message));
+        if (next) {
+            indent++;
+            next.forEach(kid => text += expectedDiagnosticMessageChainToText(kid, indent));
+        }
+        return text;
+    }
+
+    function expectedDiagnosticRelatedInformationToText({ location, ...diagnosticMessage }: ExpectedDiagnosticRelatedInformation) {
+        const text = expectedDiagnosticMessageChainToText(diagnosticMessage);
+        if (location) {
+            const { file, start, length } = location;
+            return `${file}(${start}:${length}):: ${text}`;
+        }
+        return text;
+    }
+
+    function expectedErrorDiagnosticToText({ relatedInformation, ...diagnosticRelatedInformation }: ExpectedErrorDiagnostic) {
+        let text = `${DiagnosticKind.Error}!: ${expectedDiagnosticRelatedInformationToText(diagnosticRelatedInformation)}`;
+        if (relatedInformation) {
+            for (const kid of relatedInformation) {
+                text += `
+  related:: ${expectedDiagnosticRelatedInformationToText(kid)}`;
+            }
+        }
+        return text;
+    }
+
+    function expectedDiagnosticToText(errorOrStatus: ExpectedDiagnostic) {
+        return ts.isArray(errorOrStatus) ?
+            `${DiagnosticKind.Status}!: ${expectedDiagnosticMessageToText(errorOrStatus)}` :
+            expectedErrorDiagnosticToText(errorOrStatus);
+    }
+
+    function diagnosticMessageChainToText({ messageText, next}: ts.DiagnosticMessageChain, indent = 0) {
+        let text = indentedText(indent, messageText);
+        if (next) {
+            indent++;
+            next.forEach(kid => text += diagnosticMessageChainToText(kid, indent));
+        }
+        return text;
+    }
+
+    function diagnosticRelatedInformationToText({ file, start, length, messageText }: ts.DiagnosticRelatedInformation) {
+        const text = typeof messageText === "string" ?
+            messageText :
+            diagnosticMessageChainToText(messageText);
+        return file ?
+            `${file.fileName}(${start}:${length}):: ${text}` :
+            text;
+    }
+
+    function diagnosticToText({ kind, diagnostic: { relatedInformation, ...diagnosticRelatedInformation } }: SolutionBuilderDiagnostic) {
+        let text = `${kind}!: ${diagnosticRelatedInformationToText(diagnosticRelatedInformation)}`;
+        if (relatedInformation) {
+            for (const kid of relatedInformation) {
+                text += `
+  related:: ${diagnosticRelatedInformationToText(kid)}`;
+            }
         }
         return text;
     }
@@ -442,18 +545,22 @@ namespace fakes {
             super.writeFile(fileName, ts.getBuildInfoText(buildInfo), writeByteOrderMark);
         }
 
+        createHash(data: string) {
+            return `${ts.generateDjb2Hash(data)}-${data}`;
+        }
+
         now() {
             return new Date(this.sys.vfs.time());
         }
 
-        diagnostics: ts.Diagnostic[] = [];
+        diagnostics: SolutionBuilderDiagnostic[] = [];
 
         reportDiagnostic(diagnostic: ts.Diagnostic) {
-            this.diagnostics.push(diagnostic);
+            this.diagnostics.push({ kind: DiagnosticKind.Error, diagnostic });
         }
 
         reportSolutionBuilderStatus(diagnostic: ts.Diagnostic) {
-            this.diagnostics.push(diagnostic);
+            this.diagnostics.push({ kind: DiagnosticKind.Status, diagnostic });
         }
 
         clearDiagnostics() {
@@ -461,18 +568,27 @@ namespace fakes {
         }
 
         assertDiagnosticMessages(...expectedDiagnostics: ExpectedDiagnostic[]) {
-            const actual = this.diagnostics.slice().map(d => d.messageText as string);
+            const actual = this.diagnostics.slice().map(diagnosticToText);
             const expected = expectedDiagnostics.map(expectedDiagnosticToText);
             assert.deepEqual(actual, expected, `Diagnostic arrays did not match:
 Actual: ${JSON.stringify(actual, /*replacer*/ undefined, " ")}
 Expected: ${JSON.stringify(expected, /*replacer*/ undefined, " ")}`);
         }
 
+        assertErrors(...expectedDiagnostics: ExpectedErrorDiagnostic[]) {
+            const actual = this.diagnostics.filter(d => d.kind === DiagnosticKind.Error).map(diagnosticToText);
+            const expected = expectedDiagnostics.map(expectedDiagnosticToText);
+            assert.deepEqual(actual, expected, `Diagnostics arrays did not match:
+Actual: ${JSON.stringify(actual, /*replacer*/ undefined, " ")}
+Expected: ${JSON.stringify(expected, /*replacer*/ undefined, " ")}
+Actual All:: ${JSON.stringify(this.diagnostics.slice().map(diagnosticToText), /*replacer*/ undefined, " ")}`);
+        }
+
         printDiagnostics(header = "== Diagnostics ==") {
             const out = ts.createDiagnosticReporter(ts.sys);
             ts.sys.write(header + "\r\n");
-            for (const d of this.diagnostics) {
-                out(d);
+            for (const { diagnostic } of this.diagnostics) {
+                out(diagnostic);
             }
         }
     }

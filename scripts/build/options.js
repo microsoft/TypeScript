@@ -15,6 +15,7 @@ module.exports = minimist(process.argv.slice(2), {
         "r": "reporter",
         "c": "colors", "color": "colors",
         "skip-percent": "skipPercent",
+        "skippercent": "skipPercent",
         "w": "workers",
         "f": "fix"
     },

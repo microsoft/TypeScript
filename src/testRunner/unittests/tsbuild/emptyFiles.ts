@@ -15,7 +15,10 @@ namespace ts {
 
             host.clearDiagnostics();
             builder.build();
-            host.assertDiagnosticMessages([Diagnostics.The_files_list_in_config_file_0_is_empty, "/src/no-references/tsconfig.json"]);
+            host.assertDiagnosticMessages({
+                message: [Diagnostics.The_files_list_in_config_file_0_is_empty, "/src/no-references/tsconfig.json"],
+                location: expectedLocationLastIndexOf(fs, "/src/no-references/tsconfig.json", "[]"),
+            });
 
             // Check for outputs to not be written.
             verifyOutputsAbsent(fs, allExpectedOutputs);

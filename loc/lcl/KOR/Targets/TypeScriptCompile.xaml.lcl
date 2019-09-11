@@ -1,0 +1,195 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<LCX SchemaVersion="6.0" Name="E:\A\_work\326\s\VS\TypeScriptTasks\bin\Release\Targets\TypeScriptCompile.xaml" PsrId="22" FileType="1" SrcCul="en-US" TgtCul="ko-KR" xmlns="http://schemas.microsoft.com/locstudio/2006/6/lcx">
+  <OwnedComments>
+    <Cmt Name="Dev" />
+    <Cmt Name="LcxAdmin" />
+    <Cmt Name="Rccx" />
+  </OwnedComments>
+  <Settings Name="@vsLocTools@\default.lss" Type="Lss" />
+  <Item ItemId=";&lt;Category&gt;" ItemType="0" PsrId="210" Leaf="false">
+    <Disp Icon="Str" Disp="true" LocTbl="false" />
+    <Item ItemId="0;general@Category@DisplayName" ItemType="47;XML:Attr:DisplayName" PsrId="210" Leaf="true">
+      <Str Cat="AppData">
+        <Val><![CDATA[General]]></Val>
+        <Tgt Cat="AppData" Stat="Loc" Orig="New">
+          <Val><![CDATA[일반]]></Val>
+        </Tgt>
+      </Str>
+      <Disp Icon="Str" />
+    </Item>
+  </Item>
+  <Item ItemId=";&lt;EnumProperty&gt;" ItemType="0" PsrId="210" Leaf="false">
+    <Disp Icon="Str" Disp="true" LocTbl="false" />
+    <Item ItemId="0;copytooutputdirectory@EnumProperty@Description" ItemType="47;XML:Attr:Description" PsrId="210" Leaf="true">
+      <Str Cat="AppData">
+        <Val><![CDATA[Specifies if the file should be copied to the output folder.]]></Val>
+        <Tgt Cat="AppData" Stat="Loc" Orig="New">
+          <Val><![CDATA[파일을 출력 폴더에 복사할지를 지정합니다.]]></Val>
+        </Tgt>
+      </Str>
+      <Disp Icon="Str" />
+    </Item>
+    <Item ItemId="0;{}{itemtype}@EnumProperty@Description" ItemType="47;XML:Attr:Description" PsrId="210" Leaf="true">
+      <Str Cat="AppData">
+        <Val><![CDATA[Specifies the action taken on this file when an app package is produced.]]></Val>
+        <Tgt Cat="AppData" Stat="Loc" Orig="New">
+          <Val><![CDATA[앱 패키지를 생성할 때 이 파일에 대해 수행할 작업을 지정합니다.]]></Val>
+        </Tgt>
+      </Str>
+      <Disp Icon="Str" />
+    </Item>
+    <Item ItemId="0;copytooutputdirectory@EnumProperty@DisplayName" ItemType="47;XML:Attr:DisplayName" PsrId="210" Leaf="true">
+      <Str Cat="AppData">
+        <Val><![CDATA[Copy to Output Directory]]></Val>
+        <Tgt Cat="AppData" Stat="Loc" Orig="New">
+          <Val><![CDATA[출력 디렉터리에 복사]]></Val>
+        </Tgt>
+      </Str>
+      <Disp Icon="Str" />
+    </Item>
+    <Item ItemId="0;{}{itemtype}@EnumProperty@DisplayName" ItemType="47;XML:Attr:DisplayName" PsrId="210" Leaf="true">
+      <Str Cat="AppData">
+        <Val><![CDATA[Package Action]]></Val>
+        <Tgt Cat="AppData" Stat="Loc" Orig="New">
+          <Val><![CDATA[패키지 작업]]></Val>
+        </Tgt>
+      </Str>
+      <Disp Icon="Str" />
+    </Item>
+  </Item>
+  <Item ItemId=";&lt;EnumValue&gt;" ItemType="0" PsrId="210" Leaf="false">
+    <Disp Icon="Str" Disp="true" LocTbl="false" />
+    <Item ItemId="0;always@EnumValue@DisplayName" ItemType="47;XML:Attr:DisplayName" PsrId="210" Leaf="true">
+      <Str Cat="AppData">
+        <Val><![CDATA[Copy always]]></Val>
+        <Tgt Cat="AppData" Stat="Loc" Orig="New">
+          <Val><![CDATA[항상 복사]]></Val>
+        </Tgt>
+      </Str>
+      <Disp Icon="Str" />
+    </Item>
+    <Item ItemId="0;appxmanifest@EnumValue@DisplayName" ItemType="47;XML:Attr:DisplayName" PsrId="210" Leaf="true">
+      <Str Cat="AppData">
+        <Val><![CDATA[App Manifest]]></Val>
+        <Tgt Cat="AppData" Stat="Loc" Orig="New">
+          <Val><![CDATA[앱 매니페스트]]></Val>
+        </Tgt>
+      </Str>
+      <Disp Icon="Str" />
+    </Item>
+    <Item ItemId="0;content@EnumValue@DisplayName" ItemType="47;XML:Attr:DisplayName" PsrId="210" Leaf="true">
+      <Str Cat="AppData">
+        <Val><![CDATA[Content]]></Val>
+        <Tgt Cat="AppData" Stat="Loc" Orig="New">
+          <Val><![CDATA[내용]]></Val>
+        </Tgt>
+      </Str>
+      <Disp Icon="Str" />
+    </Item>
+    <Item ItemId="0;never@EnumValue@DisplayName" ItemType="47;XML:Attr:DisplayName" PsrId="210" Leaf="true">
+      <Str Cat="AppData">
+        <Val><![CDATA[Do not copy]]></Val>
+        <Tgt Cat="AppData" Stat="Loc" Orig="New">
+          <Val><![CDATA[복사 안 함]]></Val>
+        </Tgt>
+      </Str>
+      <Disp Icon="Str" />
+    </Item>
+    <Item ItemId="0;none@EnumValue@DisplayName" ItemType="47;XML:Attr:DisplayName" PsrId="210" Leaf="true">
+      <Str Cat="AppData">
+        <Val><![CDATA[None]]></Val>
+        <Tgt Cat="AppData" Stat="Loc" Orig="New">
+          <Val><![CDATA[없음]]></Val>
+        </Tgt>
+      </Str>
+      <Disp Icon="Str" />
+    </Item>
+    <Item ItemId="0;preservenewest@EnumValue@DisplayName" ItemType="47;XML:Attr:DisplayName" PsrId="210" Leaf="true">
+      <Str Cat="AppData">
+        <Val><![CDATA[Copy if newer]]></Val>
+        <Tgt Cat="AppData" Stat="Loc" Orig="New">
+          <Val><![CDATA[새 버전이면 복사]]></Val>
+        </Tgt>
+      </Str>
+      <Disp Icon="Str" />
+    </Item>
+    <Item ItemId="0;priresource@EnumValue@DisplayName" ItemType="47;XML:Attr:DisplayName" PsrId="210" Leaf="true">
+      <Str Cat="AppData">
+        <Val><![CDATA[Resource]]></Val>
+        <Tgt Cat="AppData" Stat="Loc" Orig="New">
+          <Val><![CDATA[리소스]]></Val>
+        </Tgt>
+      </Str>
+      <Disp Icon="Str" />
+    </Item>
+    <Item ItemId="0;typescriptcompile@EnumValue@DisplayName" ItemType="47;XML:Attr:DisplayName" PsrId="210" Leaf="true">
+      <Str Cat="AppData">
+        <Val><![CDATA[TypeScriptCompile]]></Val>
+        <Tgt Cat="AppData" Stat="Loc" Orig="New">
+          <Val><![CDATA[TypeScriptCompile]]></Val>
+        </Tgt>
+      </Str>
+      <Disp Icon="Str" />
+    </Item>
+  </Item>
+  <Item ItemId=";&lt;Rule&gt;" ItemType="0" PsrId="210" Leaf="false">
+    <Disp Icon="Str" Disp="true" LocTbl="false" />
+    <Item ItemId="0;typescriptcompile@Rule@Description" ItemType="47;XML:Attr:Description" PsrId="210" Leaf="true">
+      <Str Cat="AppData">
+        <Val><![CDATA[TypeScript file]]></Val>
+        <Tgt Cat="AppData" Stat="Loc" Orig="New">
+          <Val><![CDATA[TypeScript 파일]]></Val>
+        </Tgt>
+      </Str>
+      <Disp Icon="Str" />
+    </Item>
+    <Item ItemId="0;typescriptcompile@Rule@DisplayName" ItemType="47;XML:Attr:DisplayName" PsrId="210" Leaf="true">
+      <Str Cat="AppData">
+        <Val><![CDATA[TypeScript file]]></Val>
+        <Tgt Cat="AppData" Stat="Loc" Orig="New">
+          <Val><![CDATA[TypeScript 파일]]></Val>
+        </Tgt>
+      </Str>
+      <Disp Icon="Str" />
+    </Item>
+  </Item>
+  <Item ItemId=";&lt;StringProperty&gt;" ItemType="0" PsrId="210" Leaf="false">
+    <Disp Icon="Str" Disp="true" LocTbl="false" />
+    <Item ItemId="0;fullpath@StringProperty@Description" ItemType="47;XML:Attr:Description" PsrId="210" Leaf="true">
+      <Str Cat="AppData">
+        <Val><![CDATA[Location of the file.]]></Val>
+        <Tgt Cat="AppData" Stat="Loc" Orig="New">
+          <Val><![CDATA[파일의 위치입니다.]]></Val>
+        </Tgt>
+      </Str>
+      <Disp Icon="Str" />
+    </Item>
+    <Item ItemId="0;identity@StringProperty@Description" ItemType="47;XML:Attr:Description" PsrId="210" Leaf="true">
+      <Str Cat="AppData">
+        <Val><![CDATA[Name of the file or folder.]]></Val>
+        <Tgt Cat="AppData" Stat="Loc" Orig="New">
+          <Val><![CDATA[파일 또는 폴더의 이름입니다.]]></Val>
+        </Tgt>
+      </Str>
+      <Disp Icon="Str" />
+    </Item>
+    <Item ItemId="0;fullpath@StringProperty@DisplayName" ItemType="47;XML:Attr:DisplayName" PsrId="210" Leaf="true">
+      <Str Cat="AppData">
+        <Val><![CDATA[Full Path]]></Val>
+        <Tgt Cat="AppData" Stat="Loc" Orig="New">
+          <Val><![CDATA[전체 경로]]></Val>
+        </Tgt>
+      </Str>
+      <Disp Icon="Str" />
+    </Item>
+    <Item ItemId="0;identity@StringProperty@DisplayName" ItemType="47;XML:Attr:DisplayName" PsrId="210" Leaf="true">
+      <Str Cat="AppData">
+        <Val><![CDATA[File Name]]></Val>
+        <Tgt Cat="AppData" Stat="Loc" Orig="New">
+          <Val><![CDATA[파일 이름]]></Val>
+        </Tgt>
+      </Str>
+      <Disp Icon="Str" />
+    </Item>
+  </Item>
+</LCX>

@@ -8,12 +8,10 @@ namespace ts {
         JSDoc = 1 << 5,
     }
 
-    // tslint:disable variable-name
     let NodeConstructor: new (kind: SyntaxKind, pos?: number, end?: number) => Node;
     let TokenConstructor: new (kind: SyntaxKind, pos?: number, end?: number) => Node;
     let IdentifierConstructor: new (kind: SyntaxKind, pos?: number, end?: number) => Node;
     let SourceFileConstructor: new (kind: SyntaxKind, pos?: number, end?: number) => Node;
-    // tslint:enable variable-name
 
     export function createNode(kind: SyntaxKind, pos?: number, end?: number): Node {
         if (kind === SyntaxKind.SourceFile) {
@@ -590,12 +588,10 @@ namespace ts {
         const disallowInAndDecoratorContext = NodeFlags.DisallowInContext | NodeFlags.DecoratorContext;
 
         // capture constructors in 'initializeState' to avoid null checks
-        // tslint:disable variable-name
         let NodeConstructor: new (kind: SyntaxKind, pos: number, end: number) => Node;
         let TokenConstructor: new (kind: SyntaxKind, pos: number, end: number) => Node;
         let IdentifierConstructor: new (kind: SyntaxKind, pos: number, end: number) => Node;
         let SourceFileConstructor: new (kind: SyntaxKind, pos: number, end: number) => Node;
-        // tslint:enable variable-name
 
         let sourceFile: SourceFile;
         let parseDiagnostics: DiagnosticWithLocation[];
@@ -1086,8 +1082,17 @@ namespace ts {
             return currentToken;
         }
 
-        function nextToken(): SyntaxKind {
+        function nextTokenWithoutCheck() {
             return currentToken = scanner.scan();
+        }
+
+        function nextToken(): SyntaxKind {
+            // if the keyword had an escape
+            if (isKeyword(currentToken) && (scanner.hasUnicodeEscape() || scanner.hasExtendedUnicodeEscape())) {
+                // issue a parse error for the escape
+                parseErrorAt(scanner.getTokenPos(), scanner.getTextPos(), Diagnostics.Keywords_cannot_contain_escape_characters);
+            }
+            return nextTokenWithoutCheck();
         }
 
         function nextTokenJSDoc(): JSDocSyntaxKind {
@@ -1380,7 +1385,7 @@ namespace ts {
                     node.originalKeywordKind = token();
                 }
                 node.escapedText = escapeLeadingUnderscores(internIdentifier(scanner.getTokenValue()));
-                nextToken();
+                nextTokenWithoutCheck();
                 return finishNode(node);
             }
 
@@ -2291,9 +2296,19 @@ namespace ts {
             return <TemplateMiddle | TemplateTail>fragment;
         }
 
-        function parseLiteralLikeNode(kind: SyntaxKind): LiteralExpression | LiteralLikeNode {
-            const node = <LiteralExpression>createNode(kind);
+        function parseLiteralLikeNode(kind: SyntaxKind): LiteralLikeNode {
+            const node = <LiteralLikeNode>createNode(kind);
             node.text = scanner.getTokenValue();
+            switch (kind) {
+                case SyntaxKind.NoSubstitutionTemplateLiteral:
+                case SyntaxKind.TemplateHead:
+                case SyntaxKind.TemplateMiddle:
+                case SyntaxKind.TemplateTail:
+                    const isLast = kind === SyntaxKind.NoSubstitutionTemplateLiteral || kind === SyntaxKind.TemplateTail;
+                    const tokenText = scanner.getTokenText();
+                    (<TemplateLiteralLikeNode>node).rawText = tokenText.substring(1, tokenText.length - (scanner.isUnterminated() ? 0 : isLast ? 1 : 2));
+                    break;
+            }
 
             if (scanner.hasExtendedUnicodeEscape()) {
                 node.hasExtendedUnicodeEscape = true;
@@ -4700,7 +4715,7 @@ namespace ts {
                 case SyntaxKind.TemplateHead:                   // foo<T> `...${100}...`
                 // these are the only tokens can legally follow a type argument
                 // list. So we definitely want to treat them as type arg lists.
-
+                // falls through
                 case SyntaxKind.DotToken:                       // foo<x>.
                 case SyntaxKind.CloseParenToken:                // foo<x>)
                 case SyntaxKind.CloseBracketToken:              // foo<x>]
@@ -4728,7 +4743,7 @@ namespace ts {
                 // We don't want to treat these as type arguments.  Otherwise we'll parse this
                 // as an invocation expression.  Instead, we want to parse out the expression
                 // in isolation from the type arguments.
-
+                // falls through
                 default:
                     // Anything else treat as an expression.
                     return false;
@@ -4800,7 +4815,7 @@ namespace ts {
         function parseArgumentOrArrayLiteralElement(): Expression {
             return token() === SyntaxKind.DotDotDotToken ? parseSpreadElement() :
                 token() === SyntaxKind.CommaToken ? <Expression>createNode(SyntaxKind.OmittedExpression) :
-                    parseAssignmentExpressionOrHigher();
+                parseAssignmentExpressionOrHigher();
         }
 
         function parseArgumentExpression(): Expression {
@@ -4902,9 +4917,9 @@ namespace ts {
             const isAsync = hasModifier(node, ModifierFlags.Async) ? SignatureFlags.Await : SignatureFlags.None;
             node.name =
                 isGenerator && isAsync ? doInYieldAndAwaitContext(parseOptionalIdentifier) :
-                    isGenerator ? doInYieldContext(parseOptionalIdentifier) :
-                        isAsync ? doInAwaitContext(parseOptionalIdentifier) :
-                            parseOptionalIdentifier();
+                isGenerator ? doInYieldContext(parseOptionalIdentifier) :
+                isAsync ? doInAwaitContext(parseOptionalIdentifier) :
+                parseOptionalIdentifier();
 
             fillSignature(SyntaxKind.ColonToken, isGenerator | isAsync, node);
             node.body = parseFunctionBlock(isGenerator | isAsync);
@@ -5363,6 +5378,7 @@ namespace ts {
                 case SyntaxKind.DebuggerKeyword:
                 // 'catch' and 'finally' do not actually indicate that the code is part of a statement,
                 // however, we say they are here so that we may gracefully parse them and error later.
+                // falls through
                 case SyntaxKind.CatchKeyword:
                 case SyntaxKind.FinallyKeyword:
                     return true;
@@ -5448,6 +5464,7 @@ namespace ts {
                     return parseThrowStatement();
                 case SyntaxKind.TryKeyword:
                 // Include 'catch' and 'finally' for error recovery.
+                // falls through
                 case SyntaxKind.CatchKeyword:
                 case SyntaxKind.FinallyKeyword:
                     return parseTryStatement();
@@ -5485,10 +5502,22 @@ namespace ts {
         }
 
         function parseDeclaration(): Statement {
+            const modifiers = lookAhead(() => (parseDecorators(), parseModifiers()));
+            // `parseListElement` attempted to get the reused node at this position,
+            // but the ambient context flag was not yet set, so the node appeared
+            // not reusable in that context.
+            const isAmbient = some(modifiers, isDeclareModifier);
+            if (isAmbient) {
+                const node = tryReuseAmbientDeclaration();
+                if (node) {
+                    return node;
+                }
+            }
+
             const node = <Statement>createNodeWithJSDoc(SyntaxKind.Unknown);
             node.decorators = parseDecorators();
             node.modifiers = parseModifiers();
-            if (some(node.modifiers, isDeclareModifier)) {
+            if (isAmbient) {
                 for (const m of node.modifiers!) {
                     m.flags |= NodeFlags.Ambient;
                 }
@@ -5497,6 +5526,15 @@ namespace ts {
             else {
                 return parseDeclarationWorker(node);
             }
+        }
+
+        function tryReuseAmbientDeclaration(): Statement | undefined {
+            return doInsideOfContext(NodeFlags.Ambient, () => {
+                const node = currentNode(parsingContext);
+                if (node) {
+                    return consumeNode(node) as Statement;
+                }
+            });
         }
 
         function parseDeclarationWorker(node: Statement): Statement {
@@ -6034,9 +6072,8 @@ namespace ts {
         }
 
         function tryParseTypeArguments(): NodeArray<TypeNode> | undefined {
-            return token() === SyntaxKind.LessThanToken
-               ? parseBracketedList(ParsingContext.TypeArguments, parseType, SyntaxKind.LessThanToken, SyntaxKind.GreaterThanToken)
-               : undefined;
+            return token() === SyntaxKind.LessThanToken ?
+                parseBracketedList(ParsingContext.TypeArguments, parseType, SyntaxKind.LessThanToken, SyntaxKind.GreaterThanToken) : undefined;
         }
 
         function isHeritageClause(): boolean {
@@ -6382,9 +6419,7 @@ namespace ts {
                 || node.kind === SyntaxKind.ImportEqualsDeclaration && (<ImportEqualsDeclaration>node).moduleReference.kind === SyntaxKind.ExternalModuleReference
                 || node.kind === SyntaxKind.ImportDeclaration
                 || node.kind === SyntaxKind.ExportAssignment
-                || node.kind === SyntaxKind.ExportDeclaration
-                    ? node
-                    : undefined;
+                || node.kind === SyntaxKind.ExportDeclaration ? node : undefined;
         }
 
         function getImportMetaIfNecessary(sourceFile: SourceFile) {
@@ -6464,7 +6499,7 @@ namespace ts {
 
             export function parseIsolatedJSDocComment(content: string, start: number | undefined, length: number | undefined): { jsDoc: JSDoc, diagnostics: Diagnostic[] } | undefined {
                 initializeState(content, ScriptTarget.Latest, /*_syntaxCursor:*/ undefined, ScriptKind.JS);
-                sourceFile = <SourceFile>{ languageVariant: LanguageVariant.Standard, text: content }; // tslint:disable-line no-object-literal-type-assertion
+                sourceFile = <SourceFile>{ languageVariant: LanguageVariant.Standard, text: content };
                 const jsDoc = doInsideOfContext(NodeFlags.JSDoc, () => parseJSDocCommentWorker(start, length));
                 const diagnostics = parseDiagnostics;
                 clearState();

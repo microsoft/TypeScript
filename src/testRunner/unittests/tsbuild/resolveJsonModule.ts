@@ -16,7 +16,7 @@ namespace ts {
             verifyProjectWithResolveJsonModuleWithFs(fs, configFile, allExpectedOutputs, ...expectedDiagnosticMessages);
         }
 
-        function verifyProjectWithResolveJsonModuleWithFs(fs: vfs.FileSystem, configFile: string, allExpectedOutputs: ReadonlyArray<string>, ...expectedDiagnosticMessages: fakes.ExpectedDiagnostic[]) {
+        function verifyProjectWithResolveJsonModuleWithFs(fs: vfs.FileSystem, configFile: string, allExpectedOutputs: readonly string[], ...expectedDiagnosticMessages: fakes.ExpectedDiagnostic[]) {
             const host = new fakes.SolutionBuilderHost(fs);
             const builder = createSolutionBuilder(host, [configFile], { dry: false, force: false, verbose: false });
             builder.build();
@@ -28,11 +28,17 @@ namespace ts {
         }
 
         it("with resolveJsonModule and include only", () => {
-            verifyProjectWithResolveJsonModule("/src/tsconfig_withInclude.json", [
-                Diagnostics.File_0_is_not_listed_within_the_file_list_of_project_1_Projects_must_list_all_files_or_use_an_include_pattern,
-                "/src/src/hello.json",
-                "/src/tsconfig_withInclude.json"
-            ]);
+            verifyProjectWithResolveJsonModule(
+                "/src/tsconfig_withInclude.json",
+                {
+                    message: [
+                        Diagnostics.File_0_is_not_listed_within_the_file_list_of_project_1_Projects_must_list_all_files_or_use_an_include_pattern,
+                        "/src/src/hello.json",
+                        "/src/tsconfig_withInclude.json"
+                    ],
+                    location: expectedLocationIndexOf(projFs, "/src/src/index.ts", `"./hello.json"`)
+                }
+            );
         });
 
         it("with resolveJsonModule and include of *.json along with other include", () => {

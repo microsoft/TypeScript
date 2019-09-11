@@ -450,7 +450,10 @@ namespace ts {
                     [Diagnostics.Building_project_0, "/src/core/tsconfig.json"],
                     [Diagnostics.Project_0_is_out_of_date_because_output_file_1_does_not_exist, "src/logic/tsconfig.json", "src/logic/index.js"],
                     [Diagnostics.Building_project_0, "/src/logic/tsconfig.json"],
-                    [Diagnostics.Property_0_does_not_exist_on_type_1, "muitply", `typeof import("/src/core/index")`],
+                    {
+                        message: [Diagnostics.Property_0_does_not_exist_on_type_1, "muitply", `typeof import("/src/core/index")`],
+                        location: expectedLocationIndexOf(fs, "/src/logic/index.ts", "muitply"),
+                    },
                     [Diagnostics.Project_0_can_t_be_built_because_its_dependency_1_has_errors, "src/tests/tsconfig.json", "src/logic"],
                     [Diagnostics.Skipping_build_of_project_0_because_its_dependency_1_has_errors, "/src/tests/tsconfig.json", "/src/logic"]
                 );
@@ -614,7 +617,7 @@ export class cNew {}`);
                     "/src/core/index.d.ts.map",
                     "/src/logic/index.js.map"
                 ],
-                lastProjectOutputJs: "/src/tests/index.js",
+                lastProjectOutput: "/src/tests/index.js",
                 initialBuild,
                 incrementalDtsChangedBuild: {
                     modifyFs: fs => appendText(fs, "/src/core/index.ts", `
@@ -724,7 +727,7 @@ class someClass { }`),
                     "/src/core/index.d.ts.map",
                     "/src/logic/index.js.map"
                 ],
-                lastProjectOutputJs: "/src/tests/index.js",
+                lastProjectOutput: "/src/tests/index.js",
                 initialBuild,
                 incrementalDtsChangedBuild: {
                     modifyFs: fs => replaceText(fs, "/src/logic/tsconfig.json", `"declaration": true,`, `"declaration": true,
@@ -792,7 +795,7 @@ class someClass { }`),
                     "/src/core/index.d.ts.map",
                     "/src/logic/index.js.map"
                 ],
-                lastProjectOutputJs: "/src/tests/index.js",
+                lastProjectOutput: "/src/tests/index.js",
                 initialBuild: {
                     modifyFs: fs => replaceText(fs, "/src/logic/tsconfig.json", `"composite": true,`, `"composite": true,
         "tsBuildInfoFile": "ownFile.tsbuildinfo",`),
@@ -848,8 +851,7 @@ class someClass { }`),
                 tick,
                 proj: "sample1",
                 rootNames: ["/src/core"],
-                expectedMapFileNames: emptyArray,
-                lastProjectOutputJs: "/src/core/index.js",
+                lastProjectOutput: "/src/core/index.js",
                 initialBuild: {
                     modifyFs: fs => fs.writeFileSync("/src/core/tsconfig.json", `{
     "compilerOptions": {
@@ -889,8 +891,7 @@ class someClass { }`),
                 tick,
                 proj: "sample1",
                 rootNames: ["/src/core"],
-                expectedMapFileNames: emptyArray,
-                lastProjectOutputJs: "/src/core/index.js",
+                lastProjectOutput: "/src/core/index.js",
                 initialBuild: {
                     modifyFs: fs => {
                         fs.writeFileSync("/lib/lib.esnext.full.d.ts", `/// <reference no-default-lib="true"/>
@@ -939,8 +940,7 @@ class someClass { }`),
                 tick,
                 proj: "sample1",
                 rootNames: ["/src/core"],
-                expectedMapFileNames: emptyArray,
-                lastProjectOutputJs: "/src/core/index.js",
+                lastProjectOutput: "/src/core/index.js",
                 initialBuild: {
                     modifyFs: fs => fs.writeFileSync("/src/core/tsconfig.json", `{
     "compilerOptions": {
@@ -978,8 +978,7 @@ class someClass { }`),
                 tick,
                 proj: "sample1",
                 rootNames: ["/src/tests"],
-                expectedMapFileNames: emptyArray,
-                lastProjectOutputJs: "/src/tests/index.js",
+                lastProjectOutput: "/src/tests/index.js",
                 initialBuild: {
                     modifyFs: fs => fs.writeFileSync("/src/tests/tsconfig.json", `{
     "references": [
