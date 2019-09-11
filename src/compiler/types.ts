@@ -3222,7 +3222,8 @@ namespace ts {
         getAugmentedPropertiesOfType(type: Type): Symbol[];
 
         getRootSymbols(symbol: Symbol): ReadonlyArray<Symbol>;
-        getContextualType(node: Expression, contextFlags?: ContextFlags): Type | undefined;
+        getContextualType(node: Expression): Type | undefined;
+        /* @internal */ getContextualType(node: Expression, contextFlags?: ContextFlags): Type | undefined; // tslint:disable-line unified-signatures
         /* @internal */ getContextualTypeForObjectLiteralElement(element: ObjectLiteralElementLike): Type | undefined;
         /* @internal */ getContextualTypeForArgumentAtIndex(call: CallLikeExpression, argIndex: number): Type | undefined;
         /* @internal */ getContextualTypeForJsxAttribute(attribute: JsxAttribute | JsxSpreadAttribute): Type | undefined;
@@ -3380,6 +3381,7 @@ namespace ts {
         Subtype
     }
 
+    /* @internal */
     export const enum ContextFlags {
         None = 0,
         Signature = 1 << 0,  // Obtaining contextual signature

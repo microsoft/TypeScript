@@ -1995,7 +1995,7 @@ declare namespace ts {
         getFullyQualifiedName(symbol: Symbol): string;
         getAugmentedPropertiesOfType(type: Type): Symbol[];
         getRootSymbols(symbol: Symbol): ReadonlyArray<Symbol>;
-        getContextualType(node: Expression, contextFlags?: ContextFlags): Type | undefined;
+        getContextualType(node: Expression): Type | undefined;
         /**
          * returns unknownSignature in the case of an error.
          * returns undefined if the node is not valid.
@@ -2025,11 +2025,6 @@ declare namespace ts {
          * and the operation is cancelled, then it should be discarded, otherwise it is safe to keep.
          */
         runWithCancellationToken<T>(token: CancellationToken, cb: (checker: TypeChecker) => T): T;
-    }
-    export enum ContextFlags {
-        None = 0,
-        Signature = 1,
-        Completion = 2
     }
     export enum NodeBuilderFlags {
         None = 0,

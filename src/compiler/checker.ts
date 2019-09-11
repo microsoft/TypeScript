@@ -441,7 +441,7 @@ namespace ts {
             },
             getAugmentedPropertiesOfType,
             getRootSymbols,
-            getContextualType: (nodeIn, contextFlags) => {
+            getContextualType: (nodeIn: Expression, contextFlags?: ContextFlags) => {
                 const node = getParseTreeNode(nodeIn, isExpression);
                 return node ? getContextualType(node, contextFlags) : undefined;
             },
