@@ -12,5 +12,16 @@
 //// 
 //// new Clazz({ /*1*/ })
 
-verify.completions({ marker: '1', includes: ['someFunction', 'anotherFunction'] })
-
+verify.completions({
+  marker: '1',
+  includes: [
+    {
+      sortText: completion.SortText.OptionalMember,
+      name: 'someFunction'
+    },
+    {
+      sortText: completion.SortText.OptionalMember,
+      name: 'anotherFunction'
+    },
+  ]
+})

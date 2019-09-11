@@ -12,4 +12,12 @@
 //// declare function bar<T extends MyOptions>(options?: Partial<T>): void;
 //// bar({ deep: {/*1*/} });
 
-verify.completions({ marker: '1', includes: ['another'] })
+verify.completions({
+  marker: '1',
+  includes: [
+    {
+      sortText: completion.SortText.OptionalMember,
+      name: 'another'
+    },
+  ]
+})

@@ -10,4 +10,24 @@
 //// function partialFoo<T extends Partial<Foo>>(t: T) {return t}
 //// partialFoo({ /*1*/ });
 
-verify.completions({ marker: '1', includes: ['a_a', 'a_b', 'a_c', 'b_a'] })
+verify.completions({
+  marker: '1',
+  includes: [
+    {
+      sortText: completion.SortText.OptionalMember,
+      name: 'a_a'
+    },
+    {
+      sortText: completion.SortText.OptionalMember,
+      name: 'a_b'
+    },
+    {
+      sortText: completion.SortText.OptionalMember,
+      name: 'a_c'
+    },
+    {
+      sortText: completion.SortText.OptionalMember,
+      name: 'b_a'
+    },
+  ]
+})
