@@ -1035,6 +1035,10 @@
         "category": "Error",
         "code": 1356
     },
+    "An enum member name must be followed by a ',', '=', or '}'.": {
+        "category": "Error",
+        "code": 1357
+    },
 
     "Duplicate identifier '{0}'.": {
         "category": "Error",
