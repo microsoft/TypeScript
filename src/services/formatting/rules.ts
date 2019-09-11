@@ -778,20 +778,29 @@ namespace ts.formatting {
     }
 
     function isSemicolonDeletionContext(context: FormattingContext): boolean {
-        const nextToken = isTrivia(context.nextTokenSpan.kind)
-            ? context.nextTokenParent.getChildAt(0)
-            : context.nextTokenSpan;
-
-        const startLine = context.sourceFile.getLineAndCharacterOfPosition(context.currentTokenSpan.pos).line;
-        const endLine = context.sourceFile.getLineAndCharacterOfPosition(nextToken.pos).line;
-        if (startLine === endLine) {
-            return nextToken.kind === SyntaxKind.CloseBraceToken
-                || nextToken.kind === SyntaxKind.EndOfFileToken;
+        let nextTokenKind = context.nextTokenSpan.kind;
+        let nextTokenStart = context.nextTokenSpan.pos;
+        if (isTrivia(nextTokenKind)) {
+            const sourceFile = context.currentTokenParent.getSourceFile();
+            const nextRealToken = context.nextTokenParent === context.currentTokenParent
+                ? findNextToken(context.currentTokenParent, sourceFile, sourceFile)
+                : context.nextTokenParent.getFirstToken();
+            if (!nextRealToken) {
+                return true;
+            }
+            nextTokenKind = nextRealToken.kind;
+            nextTokenStart = nextRealToken.getStart();
         }
 
+        const startLine = context.sourceFile.getLineAndCharacterOfPosition(context.currentTokenSpan.pos).line;
+        const endLine = context.sourceFile.getLineAndCharacterOfPosition(nextTokenStart).line;
+        if (startLine === endLine) {
+            return nextTokenKind === SyntaxKind.CloseBraceToken
+                || nextTokenKind === SyntaxKind.EndOfFileToken;
+        }
 
-        if (nextToken.kind === SyntaxKind.SemicolonClassElement ||
-            nextToken.kind === SyntaxKind.SemicolonToken
+        if (nextTokenKind === SyntaxKind.SemicolonClassElement ||
+            nextTokenKind === SyntaxKind.SemicolonToken
         ) {
             return false;
         }
@@ -807,7 +816,7 @@ namespace ts.formatting {
             // }
             return !(isPropertySignature(context.currentTokenParent)
                 && !context.currentTokenParent.type
-                && nextToken.kind === SyntaxKind.OpenParenToken);
+                && nextTokenKind === SyntaxKind.OpenParenToken);
         }
 
         if (isPropertyDeclaration(context.currentTokenParent)) {
@@ -817,17 +826,17 @@ namespace ts.formatting {
         return context.currentTokenParent.kind !== SyntaxKind.ForStatement
             && context.currentTokenParent.kind !== SyntaxKind.EmptyStatement
             && context.currentTokenParent.kind !== SyntaxKind.SemicolonClassElement
-            && nextToken.kind !== SyntaxKind.OpenBracketToken
-            && nextToken.kind !== SyntaxKind.OpenParenToken
-            && nextToken.kind !== SyntaxKind.PlusToken
-            && nextToken.kind !== SyntaxKind.MinusToken
-            && nextToken.kind !== SyntaxKind.SlashToken
-            && nextToken.kind !== SyntaxKind.RegularExpressionLiteral
-            && nextToken.kind !== SyntaxKind.CommaToken
-            && nextToken.kind !== SyntaxKind.TemplateExpression
-            && nextToken.kind !== SyntaxKind.TemplateHead
-            && nextToken.kind !== SyntaxKind.NoSubstitutionTemplateLiteral
-            && nextToken.kind !== SyntaxKind.DotToken;
+            && nextTokenKind !== SyntaxKind.OpenBracketToken
+            && nextTokenKind !== SyntaxKind.OpenParenToken
+            && nextTokenKind !== SyntaxKind.PlusToken
+            && nextTokenKind !== SyntaxKind.MinusToken
+            && nextTokenKind !== SyntaxKind.SlashToken
+            && nextTokenKind !== SyntaxKind.RegularExpressionLiteral
+            && nextTokenKind !== SyntaxKind.CommaToken
+            && nextTokenKind !== SyntaxKind.TemplateExpression
+            && nextTokenKind !== SyntaxKind.TemplateHead
+            && nextTokenKind !== SyntaxKind.NoSubstitutionTemplateLiteral
+            && nextTokenKind !== SyntaxKind.DotToken;
     }
 
     function isSemicolonInsertionContext(context: FormattingContext): boolean {
