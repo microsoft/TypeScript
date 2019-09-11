@@ -7,7 +7,7 @@ namespace ts.refactor.extractSymbol {
      * Compute the associated code actions
      * Exported for tests.
      */
-    export function getAvailableActions(context: RefactorContext): ReadonlyArray<ApplicableRefactorInfo> {
+    export function getAvailableActions(context: RefactorContext): readonly ApplicableRefactorInfo[] {
         const rangeToExtract = getRangeToExtract(context.file, getRefactorContextSpan(context));
 
         const targetRange = rangeToExtract.targetRange;
@@ -167,11 +167,11 @@ namespace ts.refactor.extractSymbol {
      */
     type RangeToExtract = {
         readonly targetRange?: never;
-        readonly errors: ReadonlyArray<Diagnostic>;
+        readonly errors: readonly Diagnostic[];
     } | {
-            readonly targetRange: TargetRange;
-            readonly errors?: never;
-        };
+        readonly targetRange: TargetRange;
+        readonly errors?: never;
+    };
 
     /*
      * Scopes that can store newly extracted method
@@ -335,10 +335,10 @@ namespace ts.refactor.extractSymbol {
             }
 
             // We believe it's true because the node is from the (unmodified) tree.
-            Debug.assert(nodeToCheck.pos <= nodeToCheck.end, "This failure could trigger https://github.com/Microsoft/TypeScript/issues/20809");
+            Debug.assert(nodeToCheck.pos <= nodeToCheck.end, "This failure could trigger https://github.com/Microsoft/TypeScript/issues/20809 (1)");
 
             // For understanding how skipTrivia functioned:
-            Debug.assert(!positionIsSynthesized(nodeToCheck.pos), "This failure could trigger https://github.com/Microsoft/TypeScript/issues/20809");
+            Debug.assert(!positionIsSynthesized(nodeToCheck.pos), "This failure could trigger https://github.com/Microsoft/TypeScript/issues/20809 (2)");
 
             if (!isStatement(nodeToCheck) && !(isExpressionNode(nodeToCheck) && isExtractableExpression(nodeToCheck))) {
                 return [createDiagnosticForNode(nodeToCheck, Messages.statementOrExpressionExpected)];
@@ -450,29 +450,29 @@ namespace ts.refactor.extractSymbol {
                         rangeFacts |= RangeFacts.UsesThis;
                         break;
                     case SyntaxKind.LabeledStatement: {
-                            const label = (<LabeledStatement>node).label;
-                            (seenLabels || (seenLabels = [])).push(label.escapedText);
-                            forEachChild(node, visit);
-                            seenLabels.pop();
-                            break;
-                        }
+                        const label = (<LabeledStatement>node).label;
+                        (seenLabels || (seenLabels = [])).push(label.escapedText);
+                        forEachChild(node, visit);
+                        seenLabels.pop();
+                        break;
+                    }
                     case SyntaxKind.BreakStatement:
                     case SyntaxKind.ContinueStatement: {
-                            const label = (<BreakStatement | ContinueStatement>node).label;
-                            if (label) {
-                                if (!contains(seenLabels, label.escapedText)) {
-                                    // attempts to jump to label that is not in range to be extracted
-                                    (errors || (errors = [] as Diagnostic[])).push(createDiagnosticForNode(node, Messages.cannotExtractRangeContainingLabeledBreakOrContinueStatementWithTargetOutsideOfTheRange));
-                                }
+                        const label = (<BreakStatement | ContinueStatement>node).label;
+                        if (label) {
+                            if (!contains(seenLabels, label.escapedText)) {
+                                // attempts to jump to label that is not in range to be extracted
+                                (errors || (errors = [] as Diagnostic[])).push(createDiagnosticForNode(node, Messages.cannotExtractRangeContainingLabeledBreakOrContinueStatementWithTargetOutsideOfTheRange));
                             }
-                            else {
-                                if (!(permittedJumps & (node.kind === SyntaxKind.BreakStatement ? PermittedJumps.Break : PermittedJumps.Continue))) {
-                                    // attempt to break or continue in a forbidden context
-                                    (errors || (errors = [] as Diagnostic[])).push(createDiagnosticForNode(node, Messages.cannotExtractRangeContainingConditionalBreakOrContinueStatements));
-                                }
-                            }
-                            break;
                         }
+                        else {
+                            if (!(permittedJumps & (node.kind === SyntaxKind.BreakStatement ? PermittedJumps.Break : PermittedJumps.Continue))) {
+                                // attempt to break or continue in a forbidden context
+                                (errors || (errors = [] as Diagnostic[])).push(createDiagnosticForNode(node, Messages.cannotExtractRangeContainingConditionalBreakOrContinueStatements));
+                            }
+                        }
+                        break;
+                    }
                     case SyntaxKind.AwaitExpression:
                         rangeFacts |= RangeFacts.IsAsyncFunction;
                         break;
@@ -576,7 +576,7 @@ namespace ts.refactor.extractSymbol {
 
     interface Extraction {
         readonly description: string;
-        readonly errors: ReadonlyArray<Diagnostic>;
+        readonly errors: readonly Diagnostic[];
     }
 
     interface ScopeExtractions {
@@ -589,7 +589,7 @@ namespace ts.refactor.extractSymbol {
      * Each returned ExtractResultForScope corresponds to a possible target scope and is either a set of changes
      * or an error explaining why we can't extract into that scope.
      */
-    function getPossibleExtractions(targetRange: TargetRange, context: RefactorContext): ReadonlyArray<ScopeExtractions> | undefined {
+    function getPossibleExtractions(targetRange: TargetRange, context: RefactorContext): readonly ScopeExtractions[] | undefined {
         const { scopes, readsAndWrites: { functionErrorsPerScope, constantErrorsPerScope } } = getPossibleExtractionsWorker(targetRange, context);
         // Need the inner type annotation to avoid https://github.com/Microsoft/TypeScript/issues/7547
         const extractions = scopes.map((scope, i): ScopeExtractions => {
@@ -681,7 +681,7 @@ namespace ts.refactor.extractSymbol {
             case SyntaxKind.SetAccessor:
                 return `'set ${scope.name.getText()}'`;
             default:
-                throw Debug.assertNever(scope);
+                throw Debug.assertNever(scope, `Unexpected scope kind ${(scope as FunctionLikeDeclaration).kind}`);
         }
     }
     function getDescriptionForClassLikeDeclaration(scope: ClassLikeDeclaration): string {
@@ -708,7 +708,7 @@ namespace ts.refactor.extractSymbol {
         node: Statement | Expression | Block,
         scope: Scope,
         { usages: usagesInScope, typeParameterUsages, substitutions }: ScopeUsages,
-        exposedVariableDeclarations: ReadonlyArray<VariableDeclaration>,
+        exposedVariableDeclarations: readonly VariableDeclaration[],
         range: TargetRange,
         context: RefactorContext): RefactorEditInfo {
 
@@ -752,13 +752,13 @@ namespace ts.refactor.extractSymbol {
         const typeParametersAndDeclarations = arrayFrom(typeParameterUsages.values()).map(type => ({ type, declaration: getFirstDeclaration(type) }));
         const sortedTypeParametersAndDeclarations = typeParametersAndDeclarations.sort(compareTypesByDeclarationOrder);
 
-        const typeParameters: ReadonlyArray<TypeParameterDeclaration> | undefined = sortedTypeParametersAndDeclarations.length === 0
+        const typeParameters: readonly TypeParameterDeclaration[] | undefined = sortedTypeParametersAndDeclarations.length === 0
             ? undefined
             : sortedTypeParametersAndDeclarations.map(t => t.declaration as TypeParameterDeclaration);
 
         // Strictly speaking, we should check whether each name actually binds to the appropriate type
         // parameter.  In cases of shadowing, they may not.
-        const callTypeArguments: ReadonlyArray<TypeNode> | undefined = typeParameters !== undefined
+        const callTypeArguments: readonly TypeNode[] | undefined = typeParameters !== undefined
             ? typeParameters.map(decl => createTypeReferenceNode(decl.name, /*typeArguments*/ undefined))
             : undefined;
 
@@ -837,8 +837,8 @@ namespace ts.refactor.extractSymbol {
             // No need to mix declarations and writes.
 
             // How could any variables be exposed if there's a return statement?
-            Debug.assert(!returnValueProperty);
-            Debug.assert(!(range.facts & RangeFacts.HasReturn));
+            Debug.assert(!returnValueProperty, "Expected no returnValueProperty");
+            Debug.assert(!(range.facts & RangeFacts.HasReturn), "Expected RangeFacts.HasReturn flag to be unset");
 
             if (exposedVariableDeclarations.length === 1) {
                 // Declaring exactly one variable: let x = newFunction();
@@ -928,7 +928,7 @@ namespace ts.refactor.extractSymbol {
             if (assignments.length === 1) {
                 // We would only have introduced a return value property if there had been
                 // other assignments to make.
-                Debug.assert(!returnValueProperty);
+                Debug.assert(!returnValueProperty, "Shouldn't have returnValueProperty here");
 
                 newNodes.push(createStatement(createAssignment(assignments[0].name, call)));
 
@@ -1006,17 +1006,20 @@ namespace ts.refactor.extractSymbol {
         const localNameText = getUniqueName(isClassLike(scope) ? "newProperty" : "newLocal", file);
         const isJS = isInJSFile(scope);
 
-        const variableType = isJS || !checker.isContextSensitive(node)
+        let variableType = isJS || !checker.isContextSensitive(node)
             ? undefined
             : checker.typeToTypeNode(checker.getContextualType(node)!, scope, NodeBuilderFlags.NoTruncation); // TODO: GH#18217
 
-        const initializer = transformConstantInitializer(node, substitutions);
+        let initializer = transformConstantInitializer(node, substitutions);
+
+        ({ variableType, initializer } = transformFunctionInitializerAndType(variableType, initializer));
+
         suppressLeadingAndTrailingTrivia(initializer);
 
         const changeTracker = textChanges.ChangeTracker.fromContext(context);
 
         if (isClassLike(scope)) {
-            Debug.assert(!isJS); // See CannotExtractToJSClass
+            Debug.assert(!isJS, "Cannot extract to a JS class"); // See CannotExtractToJSClass
             const modifiers: Modifier[] = [];
             modifiers.push(createToken(SyntaxKind.PrivateKeyword));
             if (rangeFacts & RangeFacts.InStaticRegion) {
@@ -1102,6 +1105,73 @@ namespace ts.refactor.extractSymbol {
         const renameFilename = node.getSourceFile().fileName;
         const renameLocation = getRenameLocation(edits, renameFilename, localNameText, /*isDeclaredBeforeUse*/ true);
         return { renameFilename, renameLocation, edits };
+
+        function transformFunctionInitializerAndType(variableType: TypeNode | undefined, initializer: Expression): { variableType: TypeNode | undefined, initializer: Expression } {
+            // If no contextual type exists there is nothing to transfer to the function signature
+            if (variableType === undefined) return { variableType, initializer };
+            // Only do this for function expressions and arrow functions that are not generic
+            if (!isFunctionExpression(initializer) && !isArrowFunction(initializer) || !!initializer.typeParameters) return { variableType, initializer };
+            const functionType = checker.getTypeAtLocation(node);
+            const functionSignature = singleOrUndefined(checker.getSignaturesOfType(functionType, SignatureKind.Call));
+
+            // If no function signature, maybe there was an error, do nothing
+            if (!functionSignature) return { variableType, initializer };
+            // If the function signature has generic type parameters we don't attempt to move the parameters
+            if (!!functionSignature.getTypeParameters()) return { variableType, initializer };
+
+            // We add parameter types if needed
+            const parameters: ParameterDeclaration[] = [];
+            let hasAny = false;
+            for (const p of initializer.parameters) {
+                if (p.type) {
+                    parameters.push(p);
+                }
+                else {
+                    const paramType = checker.getTypeAtLocation(p);
+                    if (paramType === checker.getAnyType()) hasAny = true;
+
+                    parameters.push(updateParameter(p,
+                        p.decorators, p.modifiers, p.dotDotDotToken,
+                        p.name, p.questionToken, p.type || checker.typeToTypeNode(paramType, scope, NodeBuilderFlags.NoTruncation), p.initializer));
+                }
+            }
+            // If a parameter was inferred as any we skip adding function parameters at all.
+            // Turning an implicit any (which under common settings is a error) to an explicit
+            // is probably actually a worse refactor outcome.
+            if (hasAny) return { variableType, initializer };
+            variableType = undefined;
+            if (isArrowFunction(initializer)) {
+                initializer = updateArrowFunction(initializer, node.modifiers, initializer.typeParameters,
+                    parameters,
+                    initializer.type || checker.typeToTypeNode(functionSignature.getReturnType(), scope, NodeBuilderFlags.NoTruncation),
+                    initializer.equalsGreaterThanToken,
+                    initializer.body);
+            }
+            else {
+                if (functionSignature && !!functionSignature.thisParameter) {
+                    const firstParameter = firstOrUndefined(parameters);
+                    // If the function signature has a this parameter and if the first defined parameter is not the this parameter, we must add it
+                    // Note: If this parameter was already there, it would have been previously updated with the type if not type was present
+                    if ((!firstParameter || (isIdentifier(firstParameter.name) && firstParameter.name.escapedText !== "this"))) {
+                        const thisType = checker.getTypeOfSymbolAtLocation(functionSignature.thisParameter, node);
+                        parameters.splice(0, 0, createParameter(
+                            /* decorators */ undefined,
+                            /* modifiers */ undefined,
+                            /* dotDotDotToken */ undefined,
+                            "this",
+                            /* questionToken */ undefined,
+                            checker.typeToTypeNode(thisType, scope, NodeBuilderFlags.NoTruncation)
+                        ));
+                    }
+                }
+                initializer = updateFunctionExpression(initializer, node.modifiers, initializer.asteriskToken,
+                    initializer.name, initializer.typeParameters,
+                    parameters,
+                    initializer.type || checker.typeToTypeNode(functionSignature.getReturnType(), scope, NodeBuilderFlags.NoTruncation),
+                    initializer.body);
+            }
+            return { variableType, initializer };
+        }
     }
 
     function getContainingVariableDeclarationIfInList(node: Node, scope: Scope) {
@@ -1157,7 +1227,7 @@ namespace ts.refactor.extractSymbol {
         }
     }
 
-    function transformFunctionBody(body: Node, exposedVariableDeclarations: ReadonlyArray<VariableDeclaration>, writes: ReadonlyArray<UsageEntry> | undefined, substitutions: ReadonlyMap<Node>, hasReturn: boolean): { body: Block, returnValueProperty: string | undefined } {
+    function transformFunctionBody(body: Node, exposedVariableDeclarations: readonly VariableDeclaration[], writes: readonly UsageEntry[] | undefined, substitutions: ReadonlyMap<Node>, hasReturn: boolean): { body: Block, returnValueProperty: string | undefined } {
         const hasWritesOrVariableDeclarations = writes !== undefined || exposedVariableDeclarations.length > 0;
         if (isBlock(body) && !hasWritesOrVariableDeclarations && substitutions.size === 0) {
             // already block, no declarations or writes to propagate back, no substitutions - can use node as is
@@ -1193,7 +1263,7 @@ namespace ts.refactor.extractSymbol {
                     if (!returnValueProperty) {
                         returnValueProperty = "__return";
                     }
-                    assignments.unshift(createPropertyAssignment(returnValueProperty, visitNode((<ReturnStatement>node).expression!, visitor)));
+                    assignments.unshift(createPropertyAssignment(returnValueProperty, visitNode((<ReturnStatement>node).expression, visitor)));
                 }
                 if (assignments.length === 1) {
                     return createReturn(assignments[0].name as Expression);
@@ -1224,7 +1294,7 @@ namespace ts.refactor.extractSymbol {
         }
     }
 
-    function getStatementsOrClassElements(scope: Scope): ReadonlyArray<Statement> | ReadonlyArray<ClassElement> {
+    function getStatementsOrClassElements(scope: Scope): readonly Statement[] | readonly ClassElement[] {
         if (isFunctionLikeDeclaration(scope)) {
             const body = scope.body!; // TODO: GH#18217
             if (isBlock(body)) {
@@ -1255,7 +1325,7 @@ namespace ts.refactor.extractSymbol {
 
     function getNodeToInsertPropertyBefore(maxPos: number, scope: ClassLikeDeclaration): ClassElement {
         const members = scope.members;
-        Debug.assert(members.length > 0); // There must be at least one child, since we extracted from one.
+        Debug.assert(members.length > 0, "Found no members"); // There must be at least one child, since we extracted from one.
 
         let prevMember: ClassElement | undefined;
         let allProperties = true;
@@ -1301,12 +1371,12 @@ namespace ts.refactor.extractSymbol {
 
                 if (!prevStatement && isCaseClause(curr)) {
                     // We must have been in the expression of the case clause.
-                    Debug.assert(isSwitchStatement(curr.parent.parent));
+                    Debug.assert(isSwitchStatement(curr.parent.parent), "Grandparent isn't a switch statement");
                     return curr.parent.parent;
                 }
 
                 // There must be at least one statement since we started in one.
-                return Debug.assertDefined(prevStatement);
+                return Debug.assertDefined(prevStatement, "prevStatement failed to get set");
             }
 
             Debug.assert(curr !== scope, "Didn't encounter a block-like before encountering scope");
@@ -1314,8 +1384,8 @@ namespace ts.refactor.extractSymbol {
     }
 
     function getPropertyAssignmentsForWritesAndVariableDeclarations(
-        exposedVariableDeclarations: ReadonlyArray<VariableDeclaration>,
-        writes: ReadonlyArray<UsageEntry> | undefined
+        exposedVariableDeclarations: readonly VariableDeclaration[],
+        writes: readonly UsageEntry[] | undefined
     ): ShorthandPropertyAssignment[] {
         const variableAssignments = map(exposedVariableDeclarations, v => createShorthandPropertyAssignment(v.symbol.name));
         const writeAssignments = map(writes, w => createShorthandPropertyAssignment(w.symbol.name));
@@ -1328,7 +1398,7 @@ namespace ts.refactor.extractSymbol {
                 : variableAssignments.concat(writeAssignments);
     }
 
-    function isReadonlyArray(v: any): v is ReadonlyArray<any> {
+    function isReadonlyArray(v: any): v is readonly any[] {
         return isArray(v);
     }
 
@@ -1368,10 +1438,10 @@ namespace ts.refactor.extractSymbol {
 
     interface ReadsAndWrites {
         readonly target: Expression | Block;
-        readonly usagesPerScope: ReadonlyArray<ScopeUsages>;
-        readonly functionErrorsPerScope: ReadonlyArray<ReadonlyArray<Diagnostic>>;
-        readonly constantErrorsPerScope: ReadonlyArray<ReadonlyArray<Diagnostic>>;
-        readonly exposedVariableDeclarations: ReadonlyArray<VariableDeclaration>;
+        readonly usagesPerScope: readonly ScopeUsages[];
+        readonly functionErrorsPerScope: readonly (readonly Diagnostic[])[];
+        readonly constantErrorsPerScope: readonly (readonly Diagnostic[])[];
+        readonly exposedVariableDeclarations: readonly VariableDeclaration[];
     }
     function collectReadsAndWrites(
         targetRange: TargetRange,
@@ -1399,7 +1469,7 @@ namespace ts.refactor.extractSymbol {
 
         let expressionDiagnostic: Diagnostic | undefined;
         if (expression === undefined) {
-            const statements = targetRange.range as ReadonlyArray<Statement>;
+            const statements = targetRange.range as readonly Statement[];
             const start = first(statements).getStart();
             const end = last(statements).end;
             expressionDiagnostic = createFileDiagnostic(sourceFile, start, end - start, Messages.expressionExpected);
@@ -1476,7 +1546,7 @@ namespace ts.refactor.extractSymbol {
             // If we didn't get through all the scopes, then there were some that weren't in our
             // parent chain (impossible at time of writing).  A conservative solution would be to
             // copy allTypeParameterUsages into all remaining scopes.
-            Debug.assert(i === scopes.length);
+            Debug.assert(i === scopes.length, "Should have iterated all scopes");
         }
 
         // If there are any declarations in the extracted block that are used in the same enclosing
@@ -1512,7 +1582,7 @@ namespace ts.refactor.extractSymbol {
             });
 
             // If an expression was extracted, then there shouldn't have been any variable declarations.
-            Debug.assert(isReadonlyArray(targetRange.range) || exposedVariableDeclarations.length === 0);
+            Debug.assert(isReadonlyArray(targetRange.range) || exposedVariableDeclarations.length === 0, "No variable declarations expected if something was extracted");
 
             if (hasWrite && !isReadonlyArray(targetRange.range)) {
                 const diag = createDiagnosticForNode(targetRange.range, Messages.cannotWriteInExpression);

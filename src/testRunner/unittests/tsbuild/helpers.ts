@@ -102,7 +102,22 @@ namespace ts {
 interface ReadonlyArray<T> {}
 declare const console: { log(msg: any): void; };`;
 
-    export function loadProjectFromDisk(root: string, time?: vfs.FileSystemOptions["time"]): vfs.FileSystem {
+    export const symbolLibContent = `
+interface SymbolConstructor {
+    readonly species: symbol;
+    readonly toStringTag: symbol;
+}
+declare var Symbol: SymbolConstructor;
+interface Symbol {
+    readonly [Symbol.toStringTag]: string;
+}
+`;
+
+    export function loadProjectFromDisk(
+        root: string,
+        time?: vfs.FileSystemOptions["time"],
+        libContentToAppend?: string
+    ): vfs.FileSystem {
         const resolver = vfs.createResolver(Harness.IO);
         const fs = new vfs.FileSystem(/*ignoreCase*/ true, {
             files: {
@@ -112,10 +127,29 @@ declare const console: { log(msg: any): void; };`;
             meta: { defaultLibLocation: "/lib" },
             time
         });
-        fs.mkdirSync("/lib");
-        fs.writeFileSync("/lib/lib.d.ts", libContent);
-        fs.makeReadonly();
+        addLibAndMakeReadonly(fs, libContentToAppend);
         return fs;
+    }
+
+    export function loadProjectFromFiles(
+        files: vfs.FileSet,
+        time?: vfs.FileSystemOptions["time"],
+        libContentToAppend?: string
+    ): vfs.FileSystem {
+        const fs = new vfs.FileSystem(/*ignoreCase*/ true, {
+            files,
+            cwd: "/",
+            meta: { defaultLibLocation: "/lib" },
+            time
+        });
+        addLibAndMakeReadonly(fs, libContentToAppend);
+        return fs;
+    }
+
+    function addLibAndMakeReadonly(fs: vfs.FileSystem, libContentToAppend?: string) {
+        fs.mkdirSync("/lib");
+        fs.writeFileSync("/lib/lib.d.ts", libContentToAppend ? `${libContent}${libContentToAppend}` : libContent);
+        fs.makeReadonly();
     }
 
     export function verifyOutputsPresent(fs: vfs.FileSystem, outputs: readonly string[]) {
@@ -130,7 +164,7 @@ declare const console: { log(msg: any): void; };`;
         }
     }
 
-    function generateSourceMapBaselineFiles(fs: vfs.FileSystem, mapFileNames: ReadonlyArray<string>) {
+    function generateSourceMapBaselineFiles(fs: vfs.FileSystem, mapFileNames: readonly string[]) {
         for (const mapFile of mapFileNames) {
             if (!fs.existsSync(mapFile)) continue;
             const text = Harness.SourceMapRecorder.getSourceMapRecordWithVFS(fs, mapFile);
@@ -140,7 +174,7 @@ declare const console: { log(msg: any): void; };`;
 
     // [tsbuildinfo, js, dts]
     export type BuildInfoSectionBaselineFiles = [string, string | undefined, string | undefined];
-    function generateBuildInfoSectionBaselineFiles(fs: vfs.FileSystem, buildInfoFileNames: ReadonlyArray<BuildInfoSectionBaselineFiles>) {
+    function generateBuildInfoSectionBaselineFiles(fs: vfs.FileSystem, buildInfoFileNames: readonly BuildInfoSectionBaselineFiles[]) {
         for (const [file, jsFile, dtsFile] of buildInfoFileNames) {
             if (!fs.existsSync(file)) continue;
 
@@ -198,9 +232,9 @@ declare const console: { log(msg: any): void; };`;
     interface BuildInput {
         fs: vfs.FileSystem;
         tick: () => void;
-        rootNames: ReadonlyArray<string>;
-        expectedMapFileNames: ReadonlyArray<string>;
-        expectedBuildInfoFilesForSectionBaselines?: ReadonlyArray<BuildInfoSectionBaselineFiles>;
+        rootNames: readonly string[];
+        expectedMapFileNames?: readonly string[];
+        expectedBuildInfoFilesForSectionBaselines?: readonly BuildInfoSectionBaselineFiles[];
         modifyFs: (fs: vfs.FileSystem) => void;
     }
 
@@ -221,7 +255,7 @@ declare const console: { log(msg: any): void; };`;
             return originalReadFile.call(host, path);
         };
         builder.build();
-        generateSourceMapBaselineFiles(fs, expectedMapFileNames);
+        if (expectedMapFileNames) generateSourceMapBaselineFiles(fs, expectedMapFileNames);
         generateBuildInfoSectionBaselineFiles(fs, expectedBuildInfoFilesForSectionBaselines || emptyArray);
         fs.makeReadonly();
         return { fs, actualReadFileMap, host, builder };
@@ -229,7 +263,7 @@ declare const console: { log(msg: any): void; };`;
 
     function generateBaseline(fs: vfs.FileSystem, proj: string, scenario: string, subScenario: string, baseFs: vfs.FileSystem) {
         const patch = fs.diff(baseFs);
-        // tslint:disable-next-line:no-null-keyword
+        // eslint-disable-next-line no-null/no-null
         Harness.Baseline.runBaseline(`tsbuild/${proj}/${subScenario.split(" ").join("-")}/${scenario.split(" ").join("-")}.js`, patch ? vfs.formatPatch(patch) : null);
     }
 
@@ -239,12 +273,11 @@ declare const console: { log(msg: any): void; };`;
             const actual = actualReadFileMap.get(expectedFile);
             assert.equal(actual, expected, `Mismatch in read file call number for: ${expectedFile}
 Not in Actual: ${JSON.stringify(arrayFrom(mapDefinedIterator(expectedReadFiles.keys(), f => actualReadFileMap.has(f) ? undefined : f)))}
-Mismatch Actual(path, actual, expected): ${JSON.stringify(arrayFrom(mapDefinedIterator(actualReadFileMap.entries(),
-                ([p, v]) => expectedReadFiles.get(p) !== v ? [p, v, expectedReadFiles.get(p) || 0] : undefined)))}`);
+Mismatch Actual(path, actual, expected): ${JSON.stringify(arrayFrom(mapDefinedIterator(actualReadFileMap.entries(), ([p, v]) => expectedReadFiles.get(p) !== v ? [p, v, expectedReadFiles.get(p) || 0] : undefined)))}`);
         });
     }
 
-    export function getReadFilesMap(filesReadOnce: ReadonlyArray<string>, ...filesWithTwoReadCalls: string[]) {
+    export function getReadFilesMap(filesReadOnce: readonly string[], ...filesWithTwoReadCalls: string[]) {
         const map = arrayToMap(filesReadOnce, identity, () => 1);
         for (const fileWithTwoReadCalls of filesWithTwoReadCalls) {
             map.set(fileWithTwoReadCalls, 2);
@@ -253,7 +286,7 @@ Mismatch Actual(path, actual, expected): ${JSON.stringify(arrayFrom(mapDefinedIt
     }
 
     export interface ExpectedBuildOutput {
-        expectedDiagnostics?: ReadonlyArray<fakes.ExpectedDiagnostic>;
+        expectedDiagnostics?: readonly fakes.ExpectedDiagnostic[];
         expectedReadFiles?: ReadonlyMap<number>;
     }
 
@@ -267,12 +300,13 @@ Mismatch Actual(path, actual, expected): ${JSON.stringify(arrayFrom(mapDefinedIt
         time: () => number;
         tick: () => void;
         proj: string;
-        rootNames: ReadonlyArray<string>;
-        expectedMapFileNames: ReadonlyArray<string>;
-        expectedBuildInfoFilesForSectionBaselines?: ReadonlyArray<BuildInfoSectionBaselineFiles>;
-        lastProjectOutputJs: string;
+        rootNames: readonly string[];
+        /** map file names to generate baseline of */
+        expectedMapFileNames?: readonly string[];
+        expectedBuildInfoFilesForSectionBaselines?: readonly BuildInfoSectionBaselineFiles[];
+        lastProjectOutput: string;
         initialBuild: BuildState;
-        outputFiles?: ReadonlyArray<string>;
+        outputFiles?: readonly string[];
         incrementalDtsChangedBuild?: BuildState;
         incrementalDtsUnchangedBuild?: BuildState;
         incrementalHeaderChangedBuild?: BuildState;
@@ -282,7 +316,7 @@ Mismatch Actual(path, actual, expected): ${JSON.stringify(arrayFrom(mapDefinedIt
 
     export function verifyTsbuildOutput({
         scenario, projFs, time, tick, proj, rootNames, outputFiles, baselineOnly, verifyDiagnostics,
-        expectedMapFileNames, expectedBuildInfoFilesForSectionBaselines, lastProjectOutputJs,
+        expectedMapFileNames, expectedBuildInfoFilesForSectionBaselines, lastProjectOutput,
         initialBuild, incrementalDtsChangedBuild, incrementalDtsUnchangedBuild, incrementalHeaderChangedBuild
     }: VerifyTsBuildInput) {
         describe(`tsc --b ${proj}:: ${scenario}`, () => {
@@ -323,7 +357,7 @@ Mismatch Actual(path, actual, expected): ${JSON.stringify(arrayFrom(mapDefinedIt
                 }
             });
 
-            function incrementalBuild(subScenario: string, incrementalModifyFs: (fs: vfs.FileSystem) => void, incrementalExpectedDiagnostics: ReadonlyArray<fakes.ExpectedDiagnostic> | undefined, incrementalExpectedReadFiles: ReadonlyMap<number> | undefined) {
+            function incrementalBuild(subScenario: string, incrementalModifyFs: (fs: vfs.FileSystem) => void, incrementalExpectedDiagnostics: readonly fakes.ExpectedDiagnostic[] | undefined, incrementalExpectedReadFiles: ReadonlyMap<number> | undefined) {
                 describe(subScenario, () => {
                     let newFs: vfs.FileSystem;
                     let actualReadFileMap: Map<number>;
@@ -331,7 +365,7 @@ Mismatch Actual(path, actual, expected): ${JSON.stringify(arrayFrom(mapDefinedIt
                     let beforeBuildTime: number;
                     let afterBuildTime: number;
                     before(() => {
-                        beforeBuildTime = fs.statSync(lastProjectOutputJs).mtimeMs;
+                        beforeBuildTime = fs.statSync(lastProjectOutput).mtimeMs;
                         tick();
                         newFs = fs.shadow();
                         tick();
@@ -343,7 +377,7 @@ Mismatch Actual(path, actual, expected): ${JSON.stringify(arrayFrom(mapDefinedIt
                             expectedBuildInfoFilesForSectionBaselines,
                             modifyFs: incrementalModifyFs,
                         }));
-                        afterBuildTime = newFs.statSync(lastProjectOutputJs).mtimeMs;
+                        afterBuildTime = newFs.statSync(lastProjectOutput).mtimeMs;
                     });
                     after(() => {
                         newFs = undefined!;
@@ -357,6 +391,12 @@ Mismatch Actual(path, actual, expected): ${JSON.stringify(arrayFrom(mapDefinedIt
                     if (!baselineOnly || verifyDiagnostics) {
                         it(`verify diagnostics`, () => {
                             host.assertDiagnosticMessages(...(incrementalExpectedDiagnostics || emptyArray));
+                        });
+                    }
+                    else {
+                        // Build should pass without errors if not verifying diagnostics
+                        it(`verify no errors`, () => {
+                            host.assertErrors(/*empty*/);
                         });
                     }
                     it(`Generates files matching the baseline`, () => {
@@ -373,7 +413,6 @@ Mismatch Actual(path, actual, expected): ${JSON.stringify(arrayFrom(mapDefinedIt
                             fs: newFs.shadow(),
                             tick,
                             rootNames,
-                            expectedMapFileNames: emptyArray,
                             modifyFs: fs => {
                                 // Delete output files
                                 for (const outputFile of expectedOutputFiles) {

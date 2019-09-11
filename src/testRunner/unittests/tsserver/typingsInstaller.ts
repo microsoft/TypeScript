@@ -1005,7 +1005,7 @@ namespace ts.projectSystem {
                 content: "module.exports = 0",
             };
 
-            const typeNames: ReadonlyArray<string> = ["commander"];
+            const typeNames: readonly string[] = ["commander"];
             const typePath = (name: string): string => `${cachePath}/node_modules/@types/${name}/index.d.ts`;
             const host = createServerHost([file, commanderJS]);
             const installer = new (class extends Installer {

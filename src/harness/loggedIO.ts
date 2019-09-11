@@ -62,11 +62,11 @@ interface IoLog {
     }[];
     directoriesRead: {
         path: string,
-        extensions: ReadonlyArray<string> | undefined,
-        exclude: ReadonlyArray<string> | undefined,
-        include: ReadonlyArray<string> | undefined,
+        extensions: readonly string[] | undefined,
+        exclude: readonly string[] | undefined,
+        include: readonly string[] | undefined,
         depth: number | undefined,
-        result: ReadonlyArray<string>,
+        result: readonly string[],
     }[];
     useCaseSensitiveFileNames?: boolean;
 }
@@ -248,10 +248,10 @@ namespace Playback {
                 const getBase = () => recordLogFileNameBase + i;
                 while (underlying.fileExists(ts.combinePaths(getBase(), "test.json"))) i++;
                 const newLog = oldStyleLogIntoNewStyleLog(recordLog, (path, str) => underlying.writeFile(path, str), getBase());
-                underlying.writeFile(ts.combinePaths(getBase(), "test.json"), JSON.stringify(newLog, null, 4)); // tslint:disable-line:no-null-keyword
+                underlying.writeFile(ts.combinePaths(getBase(), "test.json"), JSON.stringify(newLog, null, 4)); // eslint-disable-line no-null/no-null
                 const syntheticTsconfig = generateTsconfig(newLog);
                 if (syntheticTsconfig) {
-                    underlying.writeFile(ts.combinePaths(getBase(), "tsconfig.json"), JSON.stringify(syntheticTsconfig, null, 4)); // tslint:disable-line:no-null-keyword
+                    underlying.writeFile(ts.combinePaths(getBase(), "tsconfig.json"), JSON.stringify(syntheticTsconfig, null, 4)); // eslint-disable-line no-null/no-null
                 }
                 recordLog = undefined;
             }
@@ -363,7 +363,7 @@ namespace Playback {
 
     function recordReplay<T extends ts.AnyFunction>(original: T, underlying: any) {
         function createWrapper(record: T, replay: T): T {
-            // tslint:disable-next-line only-arrow-functions
+            // eslint-disable-next-line only-arrow-functions
             return <any>(function () {
                 if (replayLog !== undefined) {
                     return replay.apply(undefined, arguments);

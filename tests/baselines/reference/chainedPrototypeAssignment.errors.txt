@@ -19,10 +19,10 @@ tests/cases/conformance/salsa/use.js(6,5): error TS2345: Argument of type '"not 
     declare var exports: any;
 ==== tests/cases/conformance/salsa/mod.js (0 errors) ====
     /// <reference path='./types.d.ts'/>
-    var A = function() {
+    var A = function A() {
         this.a = 1
     }
-    var B = function() {
+    var B = function B() {
         this.b = 2
     }
     exports.A = A

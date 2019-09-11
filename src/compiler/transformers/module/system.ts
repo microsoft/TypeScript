@@ -108,7 +108,7 @@ namespace ts {
                             createExpressionStatement(
                                 createCall(
                                     createPropertyAccess(createIdentifier("System"), "register"),
-                                /*typeArguments*/ undefined,
+                                    /*typeArguments*/ undefined,
                                     moduleName
                                         ? [moduleName, dependencies, moduleBodyFunction]
                                         : [dependencies, moduleBodyFunction]
@@ -623,7 +623,7 @@ namespace ts {
             if (hasAssociatedEndOfDeclarationMarker(node)) {
                 // Defer exports until we encounter an EndOfDeclarationMarker node
                 const id = getOriginalNodeId(node);
-                deferredExports[id] = appendExportsOfImportEqualsDeclaration(deferredExports[id]!, node);
+                deferredExports[id] = appendExportsOfImportEqualsDeclaration(deferredExports[id], node);
             }
             else {
                 statements = appendExportsOfImportEqualsDeclaration(statements, node);

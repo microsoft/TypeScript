@@ -115,7 +115,7 @@ namespace vpath {
         return extname(path, ".map", /*ignoreCase*/ false).length > 0;
     }
 
-    const javaScriptSourceMapExtensions: ReadonlyArray<string> = [".js.map", ".jsx.map"];
+    const javaScriptSourceMapExtensions: readonly string[] = [".js.map", ".jsx.map"];
 
     export function isJavaScriptSourceMap(path: string) {
         return extname(path, javaScriptSourceMapExtensions, /*ignoreCase*/ false).length > 0;
