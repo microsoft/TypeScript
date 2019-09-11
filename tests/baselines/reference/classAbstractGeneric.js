@@ -86,7 +86,8 @@ var G = /** @class */ (function (_super) {
     function G() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
-    G.prototype.foo = function () { return this.t; };
-    G.prototype.bar = function (t) { };
+    var proto_1 = G.prototype;
+    proto_1.foo = function () { return this.t; };
+    proto_1.bar = function (t) { };
     return G;
 }(A));

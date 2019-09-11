@@ -53,11 +53,12 @@ var C = /** @class */ (function () {
     function C(public, let) {
         this.public = public;
     }
-    C.prototype.foo1 = function (private, static, public) {
+    var proto_1 = C.prototype;
+    proto_1.foo1 = function (private, static, public) {
         function let() { }
         var z = function let() { };
     };
-    C.prototype.pulbic = function () { }; // No Error;
+    proto_1.pulbic = function () { }; // No Error;
     return C;
 }());
 var D = /** @class */ (function () {

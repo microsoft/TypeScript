@@ -2405,11 +2405,12 @@ var TypeScript;
             _this.isParenthesized = false;
             return _this;
         }
-        AST.prototype.isExpression = function () { return false; };
-        AST.prototype.isStatementOrExpression = function () { return false; };
-        AST.prototype.isCompoundStatement = function () { return false; };
-        AST.prototype.isLeaf = function () { return this.isStatementOrExpression() && (!this.isCompoundStatement()); };
-        AST.prototype.typeCheck = function (typeFlow) {
+        var proto_1 = AST.prototype;
+        proto_1.isExpression = function () { return false; };
+        proto_1.isStatementOrExpression = function () { return false; };
+        proto_1.isCompoundStatement = function () { return false; };
+        proto_1.isLeaf = function () { return this.isStatementOrExpression() && (!this.isCompoundStatement()); };
+        proto_1.typeCheck = function (typeFlow) {
             switch (this.nodeType) {
                 case NodeType.Error:
                 case NodeType.EmptyExpr:
@@ -2436,7 +2437,7 @@ var TypeScript;
             }
             return this;
         };
-        AST.prototype.emit = function (emitter, tokenId, startLine) {
+        proto_1.emit = function (emitter, tokenId, startLine) {
             emitter.emitParensAndCommentsInPlace(this, true);
             switch (this.nodeType) {
                 case NodeType.This:
@@ -2489,7 +2490,7 @@ var TypeScript;
             }
             emitter.emitParensAndCommentsInPlace(this, false);
         };
-        AST.prototype.print = function (context) {
+        proto_1.print = function (context) {
             context.startLine();
             var lineCol = { line: -1, col: -1 };
             var limLineCol = { line: -1, col: -1 };
@@ -2505,7 +2506,7 @@ var TypeScript;
             }
             context.writeLine(lab);
         };
-        AST.prototype.printLabel = function () {
+        proto_1.printLabel = function () {
             if (nodeTypeTable[this.nodeType] !== undefined) {
                 return nodeTypeTable[this.nodeType];
             }
@@ -2513,14 +2514,14 @@ var TypeScript;
                 return NodeType._map[this.nodeType];
             }
         };
-        AST.prototype.addToControlFlow = function (context) {
+        proto_1.addToControlFlow = function (context) {
             // by default, AST adds itself to current basic block and does not check its children
             context.walker.options.goChildren = false;
             context.addContent(this);
         };
-        AST.prototype.netFreeUses = function (container, freeUses) {
+        proto_1.netFreeUses = function (container, freeUses) {
         };
-        AST.prototype.treeViewLabel = function () {
+        proto_1.treeViewLabel = function () {
             return NodeType._map[this.nodeType];
         };
         AST.getResolvedIdentifierName = function (name) {
@@ -2567,7 +2568,8 @@ var TypeScript;
             _this.members = new AST[];
             return _this;
         }
-        ASTList.prototype.addToControlFlow = function (context) {
+        var proto_2 = ASTList.prototype;
+        proto_2.addToControlFlow = function (context) {
             var len = this.members.length;
             for (var i = 0; i < len; i++) {
                 if (context.noContinuation) {
@@ -2580,11 +2582,11 @@ var TypeScript;
             }
             context.walker.options.goChildren = false;
         };
-        ASTList.prototype.append = function (ast) {
+        proto_2.append = function (ast) {
             this.members[this.members.length] = ast;
             return this;
         };
-        ASTList.prototype.appendAll = function (ast) {
+        proto_2.appendAll = function (ast) {
             if (ast.nodeType == NodeType.List) {
                 var list = ast;
                 for (var i = 0, len = list.members.length; i < len; i++) {
@@ -2596,12 +2598,12 @@ var TypeScript;
             }
             return this;
         };
-        ASTList.prototype.emit = function (emitter, tokenId, startLine) {
+        proto_2.emit = function (emitter, tokenId, startLine) {
             emitter.recordSourceMappingStart(this);
             emitter.emitJavascriptList(this, null, TokenID.Semicolon, startLine, false, false);
             emitter.recordSourceMappingEnd(this);
         };
-        ASTList.prototype.typeCheck = function (typeFlow) {
+        proto_2.typeCheck = function (typeFlow) {
             var len = this.members.length;
             typeFlow.nestingLevel++;
             for (var i = 0; i < len; i++) {
@@ -2638,7 +2640,8 @@ var TypeScript;
             _this.setText(actualText, hasEscapeSequence);
             return _this;
         }
-        Identifier.prototype.setText = function (actualText, hasEscapeSequence) {
+        var proto_3 = Identifier.prototype;
+        proto_3.setText = function (actualText, hasEscapeSequence) {
             this.actualText = actualText;
             if (hasEscapeSequence) {
                 this.text = AST.getResolvedIdentifierName(actualText);
@@ -2647,12 +2650,12 @@ var TypeScript;
                 this.text = actualText;
             }
         };
-        Identifier.prototype.isMissing = function () { return false; };
-        Identifier.prototype.isLeaf = function () { return true; };
-        Identifier.prototype.treeViewLabel = function () {
+        proto_3.isMissing = function () { return false; };
+        proto_3.isLeaf = function () { return true; };
+        proto_3.treeViewLabel = function () {
             return "id: " + this.actualText;
         };
-        Identifier.prototype.printLabel = function () {
+        proto_3.printLabel = function () {
             if (this.actualText) {
                 return "id: " + this.actualText;
             }
@@ -2660,10 +2663,10 @@ var TypeScript;
                 return "name node";
             }
         };
-        Identifier.prototype.typeCheck = function (typeFlow) {
+        proto_3.typeCheck = function (typeFlow) {
             return typeFlow.typeCheckName(this);
         };
-        Identifier.prototype.emit = function (emitter, tokenId, startLine) {
+        proto_3.emit = function (emitter, tokenId, startLine) {
             emitter.emitJavascriptName(this, true);
         };
         Identifier.fromToken = function (token) {
@@ -2677,10 +2680,11 @@ var TypeScript;
         function MissingIdentifier() {
             return _super.call(this, "__missing") || this;
         }
-        MissingIdentifier.prototype.isMissing = function () {
+        var proto_4 = MissingIdentifier.prototype;
+        proto_4.isMissing = function () {
             return true;
         };
-        MissingIdentifier.prototype.emit = function (emitter, tokenId, startLine) {
+        proto_4.emit = function (emitter, tokenId, startLine) {
             // Emit nothing for a missing ID
         };
         return MissingIdentifier;
@@ -2693,12 +2697,13 @@ var TypeScript;
             _this.id = id;
             return _this;
         }
-        Label.prototype.printLabel = function () { return this.id.actualText + ":"; };
-        Label.prototype.typeCheck = function (typeFlow) {
+        var proto_5 = Label.prototype;
+        proto_5.printLabel = function () { return this.id.actualText + ":"; };
+        proto_5.typeCheck = function (typeFlow) {
             this.type = typeFlow.voidType;
             return this;
         };
-        Label.prototype.emit = function (emitter, tokenId, startLine) {
+        proto_5.emit = function (emitter, tokenId, startLine) {
             emitter.emitParensAndCommentsInPlace(this, true);
             emitter.recordSourceMappingStart(this);
             emitter.recordSourceMappingStart(this.id);
@@ -2716,8 +2721,9 @@ var TypeScript;
         function Expression(nodeType) {
             return _super.call(this, nodeType) || this;
         }
-        Expression.prototype.isExpression = function () { return true; };
-        Expression.prototype.isStatementOrExpression = function () { return true; };
+        var proto_6 = Expression.prototype;
+        proto_6.isExpression = function () { return true; };
+        proto_6.isStatementOrExpression = function () { return true; };
         return Expression;
     }(AST));
     TypeScript.Expression = Expression;
@@ -2730,14 +2736,15 @@ var TypeScript;
             _this.castTerm = null;
             return _this;
         }
-        UnaryExpression.prototype.addToControlFlow = function (context) {
+        var proto_7 = UnaryExpression.prototype;
+        proto_7.addToControlFlow = function (context) {
             _super.prototype.addToControlFlow.call(this, context);
             // TODO: add successor as catch block/finally block if present
             if (this.nodeType == NodeType.Throw) {
                 context.returnStmt();
             }
         };
-        UnaryExpression.prototype.typeCheck = function (typeFlow) {
+        proto_7.typeCheck = function (typeFlow) {
             switch (this.nodeType) {
                 case NodeType.Not:
                     return typeFlow.typeCheckBitNot(this);
@@ -2789,7 +2796,7 @@ var TypeScript;
             }
             return this;
         };
-        UnaryExpression.prototype.emit = function (emitter, tokenId, startLine) {
+        proto_7.emit = function (emitter, tokenId, startLine) {
             emitter.emitParensAndCommentsInPlace(this, true);
             emitter.recordSourceMappingStart(this);
             switch (this.nodeType) {
@@ -2876,7 +2883,8 @@ var TypeScript;
             _this.minChar = _this.target.minChar;
             return _this;
         }
-        CallExpression.prototype.typeCheck = function (typeFlow) {
+        var proto_8 = CallExpression.prototype;
+        proto_8.typeCheck = function (typeFlow) {
             if (this.nodeType == NodeType.New) {
                 return typeFlow.typeCheckNew(this);
             }
@@ -2884,7 +2892,7 @@ var TypeScript;
                 return typeFlow.typeCheckCall(this);
             }
         };
-        CallExpression.prototype.emit = function (emitter, tokenId, startLine) {
+        proto_8.emit = function (emitter, tokenId, startLine) {
             emitter.emitParensAndCommentsInPlace(this, true);
             emitter.recordSourceMappingStart(this);
             if (this.nodeType == NodeType.New) {
@@ -2907,7 +2915,8 @@ var TypeScript;
             _this.operand2 = operand2;
             return _this;
         }
-        BinaryExpression.prototype.typeCheck = function (typeFlow) {
+        var proto_9 = BinaryExpression.prototype;
+        proto_9.typeCheck = function (typeFlow) {
             switch (this.nodeType) {
                 case NodeType.Dot:
                     return typeFlow.typeCheckDotOperator(this);
@@ -2984,7 +2993,7 @@ var TypeScript;
             }
             return this;
         };
-        BinaryExpression.prototype.emit = function (emitter, tokenId, startLine) {
+        proto_9.emit = function (emitter, tokenId, startLine) {
             var binTokenId = nodeTypeToTokTable[this.nodeType];
             emitter.emitParensAndCommentsInPlace(this, true);
             emitter.recordSourceMappingStart(this);
@@ -3061,10 +3070,11 @@ var TypeScript;
             _this.operand3 = operand3;
             return _this;
         }
-        ConditionalExpression.prototype.typeCheck = function (typeFlow) {
+        var proto_10 = ConditionalExpression.prototype;
+        proto_10.typeCheck = function (typeFlow) {
             return typeFlow.typeCheckQMark(this);
         };
-        ConditionalExpression.prototype.emit = function (emitter, tokenId, startLine) {
+        proto_10.emit = function (emitter, tokenId, startLine) {
             emitter.emitParensAndCommentsInPlace(this, true);
             emitter.recordSourceMappingStart(this);
             emitter.emitJavascript(this.operand1, TokenID.Question, false);
@@ -3087,14 +3097,15 @@ var TypeScript;
             _this.isNegativeZero = false;
             return _this;
         }
-        NumberLiteral.prototype.typeCheck = function (typeFlow) {
+        var proto_11 = NumberLiteral.prototype;
+        proto_11.typeCheck = function (typeFlow) {
             this.type = typeFlow.doubleType;
             return this;
         };
-        NumberLiteral.prototype.treeViewLabel = function () {
+        proto_11.treeViewLabel = function () {
             return "num: " + this.printLabel();
         };
-        NumberLiteral.prototype.emit = function (emitter, tokenId, startLine) {
+        proto_11.emit = function (emitter, tokenId, startLine) {
             emitter.emitParensAndCommentsInPlace(this, true);
             emitter.recordSourceMappingStart(this);
             if (this.isNegativeZero) {
@@ -3106,7 +3117,7 @@ var TypeScript;
             emitter.recordSourceMappingEnd(this);
             emitter.emitParensAndCommentsInPlace(this, false);
         };
-        NumberLiteral.prototype.printLabel = function () {
+        proto_11.printLabel = function () {
             if (Math.floor(this.value) != this.value) {
                 return this.value.toFixed(2).toString();
             }
@@ -3127,11 +3138,12 @@ var TypeScript;
             _this.regex = regex;
             return _this;
         }
-        RegexLiteral.prototype.typeCheck = function (typeFlow) {
+        var proto_12 = RegexLiteral.prototype;
+        proto_12.typeCheck = function (typeFlow) {
             this.type = typeFlow.regexType;
             return this;
         };
-        RegexLiteral.prototype.emit = function (emitter, tokenId, startLine) {
+        proto_12.emit = function (emitter, tokenId, startLine) {
             emitter.emitParensAndCommentsInPlace(this, true);
             emitter.recordSourceMappingStart(this);
             emitter.writeToOutput(this.regex.toString());
@@ -3148,21 +3160,22 @@ var TypeScript;
             _this.text = text;
             return _this;
         }
-        StringLiteral.prototype.emit = function (emitter, tokenId, startLine) {
+        var proto_13 = StringLiteral.prototype;
+        proto_13.emit = function (emitter, tokenId, startLine) {
             emitter.emitParensAndCommentsInPlace(this, true);
             emitter.recordSourceMappingStart(this);
             emitter.emitStringLiteral(this.text);
             emitter.recordSourceMappingEnd(this);
             emitter.emitParensAndCommentsInPlace(this, false);
         };
-        StringLiteral.prototype.typeCheck = function (typeFlow) {
+        proto_13.typeCheck = function (typeFlow) {
             this.type = typeFlow.stringType;
             return this;
         };
-        StringLiteral.prototype.treeViewLabel = function () {
+        proto_13.treeViewLabel = function () {
             return "st: " + this.text;
         };
-        StringLiteral.prototype.printLabel = function () {
+        proto_13.printLabel = function () {
             return this.text;
         };
         return StringLiteral;
@@ -3186,8 +3199,9 @@ var TypeScript;
             _this.isDynamicImport = false;
             return _this;
         }
-        ImportDeclaration.prototype.isStatementOrExpression = function () { return true; };
-        ImportDeclaration.prototype.emit = function (emitter, tokenId, startLine) {
+        var proto_14 = ImportDeclaration.prototype;
+        proto_14.isStatementOrExpression = function () { return true; };
+        proto_14.emit = function (emitter, tokenId, startLine) {
             var mod = this.alias.type;
             // REVIEW: Only modules may be aliased for now, though there's no real
             // restriction on what the type symbol may be
@@ -3210,10 +3224,10 @@ var TypeScript;
                 emitter.firstModAlias = prevFirstModAlias;
             }
         };
-        ImportDeclaration.prototype.typeCheck = function (typeFlow) {
+        proto_14.typeCheck = function (typeFlow) {
             return typeFlow.typeCheckImportDecl(this);
         };
-        ImportDeclaration.prototype.getAliasName = function (aliasAST) {
+        proto_14.getAliasName = function (aliasAST) {
             if (aliasAST === void 0) { aliasAST = this.alias; }
             if (aliasAST.nodeType == NodeType.Name) {
                 return aliasAST.actualText;
@@ -3223,7 +3237,7 @@ var TypeScript;
                 return this.getAliasName(dotExpr.operand1) + "." + this.getAliasName(dotExpr.operand2);
             }
         };
-        ImportDeclaration.prototype.firstAliasedModToString = function () {
+        proto_14.firstAliasedModToString = function () {
             if (this.alias.nodeType == NodeType.Name) {
                 return this.alias.actualText;
             }
@@ -3248,14 +3262,15 @@ var TypeScript;
             _this.sym = null;
             return _this;
         }
-        BoundDecl.prototype.isStatementOrExpression = function () { return true; };
-        BoundDecl.prototype.isPrivate = function () { return hasFlag(this.varFlags, VarFlags.Private); };
-        BoundDecl.prototype.isPublic = function () { return hasFlag(this.varFlags, VarFlags.Public); };
-        BoundDecl.prototype.isProperty = function () { return hasFlag(this.varFlags, VarFlags.Property); };
-        BoundDecl.prototype.typeCheck = function (typeFlow) {
+        var proto_15 = BoundDecl.prototype;
+        proto_15.isStatementOrExpression = function () { return true; };
+        proto_15.isPrivate = function () { return hasFlag(this.varFlags, VarFlags.Private); };
+        proto_15.isPublic = function () { return hasFlag(this.varFlags, VarFlags.Public); };
+        proto_15.isProperty = function () { return hasFlag(this.varFlags, VarFlags.Property); };
+        proto_15.typeCheck = function (typeFlow) {
             return typeFlow.typeCheckBoundDecl(this);
         };
-        BoundDecl.prototype.printLabel = function () {
+        proto_15.printLabel = function () {
             return this.treeViewLabel();
         };
         return BoundDecl;
@@ -3266,13 +3281,14 @@ var TypeScript;
         function VarDecl(id, nest) {
             return _super.call(this, id, NodeType.VarDecl, nest) || this;
         }
-        VarDecl.prototype.isAmbient = function () { return hasFlag(this.varFlags, VarFlags.Ambient); };
-        VarDecl.prototype.isExported = function () { return hasFlag(this.varFlags, VarFlags.Exported); };
-        VarDecl.prototype.isStatic = function () { return hasFlag(this.varFlags, VarFlags.Static); };
-        VarDecl.prototype.emit = function (emitter, tokenId, startLine) {
+        var proto_16 = VarDecl.prototype;
+        proto_16.isAmbient = function () { return hasFlag(this.varFlags, VarFlags.Ambient); };
+        proto_16.isExported = function () { return hasFlag(this.varFlags, VarFlags.Exported); };
+        proto_16.isStatic = function () { return hasFlag(this.varFlags, VarFlags.Static); };
+        proto_16.emit = function (emitter, tokenId, startLine) {
             emitter.emitJavascriptVarDecl(this, tokenId);
         };
-        VarDecl.prototype.treeViewLabel = function () {
+        proto_16.treeViewLabel = function () {
             return "var " + this.id.actualText;
         };
         return VarDecl;
@@ -3286,11 +3302,12 @@ var TypeScript;
             _this.parameterPropertySym = null;
             return _this;
         }
-        ArgDecl.prototype.isOptionalArg = function () { return this.isOptional || this.init; };
-        ArgDecl.prototype.treeViewLabel = function () {
+        var proto_17 = ArgDecl.prototype;
+        proto_17.isOptionalArg = function () { return this.isOptional || this.init; };
+        proto_17.treeViewLabel = function () {
             return "arg: " + this.id.actualText;
         };
-        ArgDecl.prototype.emit = function (emitter, tokenId, startLine) {
+        proto_17.emit = function (emitter, tokenId, startLine) {
             emitter.emitParensAndCommentsInPlace(this, true);
             emitter.recordSourceMappingStart(this);
             emitter.writeToOutput(this.id.actualText);
@@ -3336,7 +3353,8 @@ var TypeScript;
             _this.endingToken = null;
             return _this;
         }
-        FuncDecl.prototype.internalName = function () {
+        var proto_18 = FuncDecl.prototype;
+        proto_18.internalName = function () {
             if (this.internalNameCache == null) {
                 var extName = this.getNameText();
                 if (extName) {
@@ -3348,9 +3366,9 @@ var TypeScript;
             }
             return this.internalNameCache;
         };
-        FuncDecl.prototype.hasSelfReference = function () { return hasFlag(this.fncFlags, FncFlags.HasSelfReference); };
-        FuncDecl.prototype.setHasSelfReference = function () { this.fncFlags |= FncFlags.HasSelfReference; };
-        FuncDecl.prototype.addCloRef = function (id, sym) {
+        proto_18.hasSelfReference = function () { return hasFlag(this.fncFlags, FncFlags.HasSelfReference); };
+        proto_18.setHasSelfReference = function () { this.fncFlags |= FncFlags.HasSelfReference; };
+        proto_18.addCloRef = function (id, sym) {
             if (this.envids == null) {
                 this.envids = new Identifier[];
             }
@@ -3364,7 +3382,7 @@ var TypeScript;
             }
             return this.envids.length - 1;
         };
-        FuncDecl.prototype.addJumpRef = function (sym) {
+        proto_18.addJumpRef = function (sym) {
             if (this.jumpRefs == null) {
                 this.jumpRefs = new Identifier[];
             }
@@ -3373,7 +3391,7 @@ var TypeScript;
             id.sym = sym;
             id.cloId = this.addCloRef(id, null);
         };
-        FuncDecl.prototype.buildControlFlow = function () {
+        proto_18.buildControlFlow = function () {
             var entry = new BasicBlock();
             var exit = new BasicBlock();
             var context = new ControlFlowContext(entry, exit);
@@ -3386,13 +3404,13 @@ var TypeScript;
             walker.walk(this.bod, this);
             return context;
         };
-        FuncDecl.prototype.typeCheck = function (typeFlow) {
+        proto_18.typeCheck = function (typeFlow) {
             return typeFlow.typeCheckFunction(this);
         };
-        FuncDecl.prototype.emit = function (emitter, tokenId, startLine) {
+        proto_18.emit = function (emitter, tokenId, startLine) {
             emitter.emitJavascriptFunction(this);
         };
-        FuncDecl.prototype.getNameText = function () {
+        proto_18.getNameText = function () {
             if (this.name) {
                 return this.name.actualText;
             }
@@ -3400,23 +3418,23 @@ var TypeScript;
                 return this.hint;
             }
         };
-        FuncDecl.prototype.isMethod = function () {
+        proto_18.isMethod = function () {
             return (this.fncFlags & FncFlags.Method) != FncFlags.None;
         };
-        FuncDecl.prototype.isCallMember = function () { return hasFlag(this.fncFlags, FncFlags.CallMember); };
-        FuncDecl.prototype.isConstructMember = function () { return hasFlag(this.fncFlags, FncFlags.ConstructMember); };
-        FuncDecl.prototype.isIndexerMember = function () { return hasFlag(this.fncFlags, FncFlags.IndexerMember); };
-        FuncDecl.prototype.isSpecialFn = function () { return this.isCallMember() || this.isIndexerMember() || this.isConstructMember(); };
-        FuncDecl.prototype.isAnonymousFn = function () { return this.name === null; };
-        FuncDecl.prototype.isAccessor = function () { return hasFlag(this.fncFlags, FncFlags.GetAccessor) || hasFlag(this.fncFlags, FncFlags.SetAccessor); };
-        FuncDecl.prototype.isGetAccessor = function () { return hasFlag(this.fncFlags, FncFlags.GetAccessor); };
-        FuncDecl.prototype.isSetAccessor = function () { return hasFlag(this.fncFlags, FncFlags.SetAccessor); };
-        FuncDecl.prototype.isAmbient = function () { return hasFlag(this.fncFlags, FncFlags.Ambient); };
-        FuncDecl.prototype.isExported = function () { return hasFlag(this.fncFlags, FncFlags.Exported); };
-        FuncDecl.prototype.isPrivate = function () { return hasFlag(this.fncFlags, FncFlags.Private); };
-        FuncDecl.prototype.isPublic = function () { return hasFlag(this.fncFlags, FncFlags.Public); };
-        FuncDecl.prototype.isStatic = function () { return hasFlag(this.fncFlags, FncFlags.Static); };
-        FuncDecl.prototype.treeViewLabel = function () {
+        proto_18.isCallMember = function () { return hasFlag(this.fncFlags, FncFlags.CallMember); };
+        proto_18.isConstructMember = function () { return hasFlag(this.fncFlags, FncFlags.ConstructMember); };
+        proto_18.isIndexerMember = function () { return hasFlag(this.fncFlags, FncFlags.IndexerMember); };
+        proto_18.isSpecialFn = function () { return this.isCallMember() || this.isIndexerMember() || this.isConstructMember(); };
+        proto_18.isAnonymousFn = function () { return this.name === null; };
+        proto_18.isAccessor = function () { return hasFlag(this.fncFlags, FncFlags.GetAccessor) || hasFlag(this.fncFlags, FncFlags.SetAccessor); };
+        proto_18.isGetAccessor = function () { return hasFlag(this.fncFlags, FncFlags.GetAccessor); };
+        proto_18.isSetAccessor = function () { return hasFlag(this.fncFlags, FncFlags.SetAccessor); };
+        proto_18.isAmbient = function () { return hasFlag(this.fncFlags, FncFlags.Ambient); };
+        proto_18.isExported = function () { return hasFlag(this.fncFlags, FncFlags.Exported); };
+        proto_18.isPrivate = function () { return hasFlag(this.fncFlags, FncFlags.Private); };
+        proto_18.isPublic = function () { return hasFlag(this.fncFlags, FncFlags.Public); };
+        proto_18.isStatic = function () { return hasFlag(this.fncFlags, FncFlags.Static); };
+        proto_18.treeViewLabel = function () {
             if (this.name == null) {
                 return "funcExpr";
             }
@@ -3424,11 +3442,11 @@ var TypeScript;
                 return "func: " + this.name.actualText;
             }
         };
-        FuncDecl.prototype.ClearFlags = function () {
+        proto_18.ClearFlags = function () {
             this.fncFlags = FncFlags.None;
         };
-        FuncDecl.prototype.isSignature = function () { return (this.fncFlags & FncFlags.Signature) != FncFlags.None; };
-        FuncDecl.prototype.hasStaticDeclarations = function () { return (!this.isConstructor && (this.statics.members.length > 0 || this.innerStaticFuncs.length > 0)); };
+        proto_18.isSignature = function () { return (this.fncFlags & FncFlags.Signature) != FncFlags.None; };
+        proto_18.hasStaticDeclarations = function () { return (!this.isConstructor && (this.statics.members.length > 0 || this.innerStaticFuncs.length > 0)); };
         return FuncDecl;
     }(AST));
     TypeScript.FuncDecl = FuncDecl;
@@ -3463,13 +3481,14 @@ var TypeScript;
             _this.scopes = scopes;
             return _this;
         }
-        Script.prototype.typeCheck = function (typeFlow) {
+        var proto_19 = Script.prototype;
+        proto_19.typeCheck = function (typeFlow) {
             return typeFlow.typeCheckScript(this);
         };
-        Script.prototype.treeViewLabel = function () {
+        proto_19.treeViewLabel = function () {
             return "Script";
         };
-        Script.prototype.emitRequired = function () {
+        proto_19.emitRequired = function () {
             if (!this.isDeclareFile && !this.isResident && this.bod) {
                 for (var i = 0, len = this.bod.members.length; i < len; i++) {
                     var stmt = this.bod.members[i];
@@ -3500,7 +3519,7 @@ var TypeScript;
             }
             return false;
         };
-        Script.prototype.emit = function (emitter, tokenId, startLine) {
+        proto_19.emit = function (emitter, tokenId, startLine) {
             if (this.emitRequired()) {
                 emitter.emitParensAndCommentsInPlace(this, true);
                 emitter.recordSourceMappingStart(this);
@@ -3540,16 +3559,17 @@ var TypeScript;
             _this.prettyName = _this.name.actualText;
             return _this;
         }
-        ModuleDeclaration.prototype.isExported = function () { return hasFlag(this.modFlags, ModuleFlags.Exported); };
-        ModuleDeclaration.prototype.isAmbient = function () { return hasFlag(this.modFlags, ModuleFlags.Ambient); };
-        ModuleDeclaration.prototype.isEnum = function () { return hasFlag(this.modFlags, ModuleFlags.IsEnum); };
-        ModuleDeclaration.prototype.recordNonInterface = function () {
+        var proto_20 = ModuleDeclaration.prototype;
+        proto_20.isExported = function () { return hasFlag(this.modFlags, ModuleFlags.Exported); };
+        proto_20.isAmbient = function () { return hasFlag(this.modFlags, ModuleFlags.Ambient); };
+        proto_20.isEnum = function () { return hasFlag(this.modFlags, ModuleFlags.IsEnum); };
+        proto_20.recordNonInterface = function () {
             this.modFlags &= ~ModuleFlags.ShouldEmitModuleDecl;
         };
-        ModuleDeclaration.prototype.typeCheck = function (typeFlow) {
+        proto_20.typeCheck = function (typeFlow) {
             return typeFlow.typeCheckModule(this);
         };
-        ModuleDeclaration.prototype.emit = function (emitter, tokenId, startLine) {
+        proto_20.emit = function (emitter, tokenId, startLine) {
             if (!hasFlag(this.modFlags, ModuleFlags.ShouldEmitModuleDecl)) {
                 emitter.emitParensAndCommentsInPlace(this, true);
                 emitter.recordSourceMappingStart(this);
@@ -3570,10 +3590,11 @@ var TypeScript;
             _this.varFlags = VarFlags.None;
             return _this;
         }
-        TypeDeclaration.prototype.isExported = function () {
+        var proto_21 = TypeDeclaration.prototype;
+        proto_21.isExported = function () {
             return hasFlag(this.varFlags, VarFlags.Exported);
         };
-        TypeDeclaration.prototype.isAmbient = function () {
+        proto_21.isAmbient = function () {
             return hasFlag(this.varFlags, VarFlags.Ambient);
         };
         return TypeDeclaration;
@@ -3589,10 +3610,11 @@ var TypeScript;
             _this.endingToken = null;
             return _this;
         }
-        ClassDeclaration.prototype.typeCheck = function (typeFlow) {
+        var proto_22 = ClassDeclaration.prototype;
+        proto_22.typeCheck = function (typeFlow) {
             return typeFlow.typeCheckClass(this);
         };
-        ClassDeclaration.prototype.emit = function (emitter, tokenId, startLine) {
+        proto_22.emit = function (emitter, tokenId, startLine) {
             emitter.emitJavascriptClass(this);
         };
         return ClassDeclaration;
@@ -3603,10 +3625,11 @@ var TypeScript;
         function InterfaceDeclaration(name, members, extendsList, implementsList) {
             return _super.call(this, NodeType.InterfaceDeclaration, name, extendsList, implementsList, members) || this;
         }
-        InterfaceDeclaration.prototype.typeCheck = function (typeFlow) {
+        var proto_23 = InterfaceDeclaration.prototype;
+        proto_23.typeCheck = function (typeFlow) {
             return typeFlow.typeCheckInterface(this);
         };
-        InterfaceDeclaration.prototype.emit = function (emitter, tokenId, startLine) {
+        proto_23.emit = function (emitter, tokenId, startLine) {
         };
         return InterfaceDeclaration;
     }(TypeDeclaration));
@@ -3618,10 +3641,11 @@ var TypeScript;
             _this.flags |= ASTFlags.IsStatement;
             return _this;
         }
-        Statement.prototype.isLoop = function () { return false; };
-        Statement.prototype.isStatementOrExpression = function () { return true; };
-        Statement.prototype.isCompoundStatement = function () { return this.isLoop(); };
-        Statement.prototype.typeCheck = function (typeFlow) {
+        var proto_24 = Statement.prototype;
+        proto_24.isLoop = function () { return false; };
+        proto_24.isStatementOrExpression = function () { return true; };
+        proto_24.isCompoundStatement = function () { return this.isLoop(); };
+        proto_24.typeCheck = function (typeFlow) {
             this.type = typeFlow.voidType;
             return this;
         };
@@ -3636,7 +3660,8 @@ var TypeScript;
             _this.stmt = stmt;
             return _this;
         }
-        LabeledStatement.prototype.emit = function (emitter, tokenId, startLine) {
+        var proto_25 = LabeledStatement.prototype;
+        proto_25.emit = function (emitter, tokenId, startLine) {
             emitter.emitParensAndCommentsInPlace(this, true);
             emitter.recordSourceMappingStart(this);
             if (this.labels) {
@@ -3649,12 +3674,12 @@ var TypeScript;
             emitter.recordSourceMappingEnd(this);
             emitter.emitParensAndCommentsInPlace(this, false);
         };
-        LabeledStatement.prototype.typeCheck = function (typeFlow) {
+        proto_25.typeCheck = function (typeFlow) {
             typeFlow.typeCheck(this.labels);
             this.stmt = this.stmt.typeCheck(typeFlow);
             return this;
         };
-        LabeledStatement.prototype.addToControlFlow = function (context) {
+        proto_25.addToControlFlow = function (context) {
             var beforeBB = context.current;
             var bb = new BasicBlock();
             context.current = bb;
@@ -3671,7 +3696,8 @@ var TypeScript;
             _this.isStatementBlock = isStatementBlock;
             return _this;
         }
-        Block.prototype.emit = function (emitter, tokenId, startLine) {
+        var proto_26 = Block.prototype;
+        proto_26.emit = function (emitter, tokenId, startLine) {
             emitter.emitParensAndCommentsInPlace(this, true);
             emitter.recordSourceMappingStart(this);
             if (this.isStatementBlock) {
@@ -3694,7 +3720,7 @@ var TypeScript;
             emitter.recordSourceMappingEnd(this);
             emitter.emitParensAndCommentsInPlace(this, false);
         };
-        Block.prototype.addToControlFlow = function (context) {
+        proto_26.addToControlFlow = function (context) {
             var afterIfNeeded = new BasicBlock();
             context.pushStatement(this, context.current, afterIfNeeded);
             if (this.statements) {
@@ -3707,7 +3733,7 @@ var TypeScript;
                 context.current = afterIfNeeded;
             }
         };
-        Block.prototype.typeCheck = function (typeFlow) {
+        proto_26.typeCheck = function (typeFlow) {
             if (!typeFlow.checker.styleSettings.emptyBlocks) {
                 if ((this.statements === null) || (this.statements.members.length == 0)) {
                     typeFlow.checker.errorReporter.styleError(this, "empty block");
@@ -3727,8 +3753,9 @@ var TypeScript;
             _this.resolvedTarget = null;
             return _this;
         }
-        Jump.prototype.hasExplicitTarget = function () { return (this.target); };
-        Jump.prototype.setResolvedTarget = function (parser, stmt) {
+        var proto_27 = Jump.prototype;
+        proto_27.hasExplicitTarget = function () { return (this.target); };
+        proto_27.setResolvedTarget = function (parser, stmt) {
             if (stmt.isLoop()) {
                 this.resolvedTarget = stmt;
                 return true;
@@ -3748,11 +3775,11 @@ var TypeScript;
                 }
             }
         };
-        Jump.prototype.addToControlFlow = function (context) {
+        proto_27.addToControlFlow = function (context) {
             _super.prototype.addToControlFlow.call(this, context);
             context.unconditionalBranch(this.resolvedTarget, (this.nodeType == NodeType.Continue));
         };
-        Jump.prototype.emit = function (emitter, tokenId, startLine) {
+        proto_27.emit = function (emitter, tokenId, startLine) {
             emitter.emitParensAndCommentsInPlace(this, true);
             emitter.recordSourceMappingStart(this);
             if (this.nodeType == NodeType.Break) {
@@ -3779,8 +3806,9 @@ var TypeScript;
             _this.body = null;
             return _this;
         }
-        WhileStatement.prototype.isLoop = function () { return true; };
-        WhileStatement.prototype.emit = function (emitter, tokenId, startLine) {
+        var proto_28 = WhileStatement.prototype;
+        proto_28.isLoop = function () { return true; };
+        proto_28.emit = function (emitter, tokenId, startLine) {
             emitter.emitParensAndCommentsInPlace(this, true);
             emitter.recordSourceMappingStart(this);
             var temp = emitter.setInObjectLiteral(false);
@@ -3792,10 +3820,10 @@ var TypeScript;
             emitter.recordSourceMappingEnd(this);
             emitter.emitParensAndCommentsInPlace(this, false);
         };
-        WhileStatement.prototype.typeCheck = function (typeFlow) {
+        proto_28.typeCheck = function (typeFlow) {
             return typeFlow.typeCheckWhile(this);
         };
-        WhileStatement.prototype.addToControlFlow = function (context) {
+        proto_28.addToControlFlow = function (context) {
             var loopHeader = context.current;
             var loopStart = new BasicBlock();
             var afterLoop = new BasicBlock();
@@ -3833,8 +3861,9 @@ var TypeScript;
             _this.cond = null;
             return _this;
         }
-        DoWhileStatement.prototype.isLoop = function () { return true; };
-        DoWhileStatement.prototype.emit = function (emitter, tokenId, startLine) {
+        var proto_29 = DoWhileStatement.prototype;
+        proto_29.isLoop = function () { return true; };
+        proto_29.emit = function (emitter, tokenId, startLine) {
             emitter.emitParensAndCommentsInPlace(this, true);
             emitter.recordSourceMappingStart(this);
             var temp = emitter.setInObjectLiteral(false);
@@ -3850,10 +3879,10 @@ var TypeScript;
             emitter.recordSourceMappingEnd(this);
             emitter.emitParensAndCommentsInPlace(this, false);
         };
-        DoWhileStatement.prototype.typeCheck = function (typeFlow) {
+        proto_29.typeCheck = function (typeFlow) {
             return typeFlow.typeCheckDoWhile(this);
         };
-        DoWhileStatement.prototype.addToControlFlow = function (context) {
+        proto_29.addToControlFlow = function (context) {
             var loopHeader = context.current;
             var loopStart = new BasicBlock();
             var afterLoop = new BasicBlock();
@@ -3890,8 +3919,9 @@ var TypeScript;
             _this.statement = new ASTSpan();
             return _this;
         }
-        IfStatement.prototype.isCompoundStatement = function () { return true; };
-        IfStatement.prototype.emit = function (emitter, tokenId, startLine) {
+        var proto_30 = IfStatement.prototype;
+        proto_30.isCompoundStatement = function () { return true; };
+        proto_30.emit = function (emitter, tokenId, startLine) {
             emitter.emitParensAndCommentsInPlace(this, true);
             emitter.recordSourceMappingStart(this);
             var temp = emitter.setInObjectLiteral(false);
@@ -3909,10 +3939,10 @@ var TypeScript;
             emitter.recordSourceMappingEnd(this);
             emitter.emitParensAndCommentsInPlace(this, false);
         };
-        IfStatement.prototype.typeCheck = function (typeFlow) {
+        proto_30.typeCheck = function (typeFlow) {
             return typeFlow.typeCheckIf(this);
         };
-        IfStatement.prototype.addToControlFlow = function (context) {
+        proto_30.addToControlFlow = function (context) {
             this.cond.addToControlFlow(context);
             var afterIf = new BasicBlock();
             var beforeIf = context.current;
@@ -3967,7 +3997,8 @@ var TypeScript;
             _this.returnExpression = null;
             return _this;
         }
-        ReturnStatement.prototype.emit = function (emitter, tokenId, startLine) {
+        var proto_31 = ReturnStatement.prototype;
+        proto_31.emit = function (emitter, tokenId, startLine) {
             emitter.emitParensAndCommentsInPlace(this, true);
             emitter.recordSourceMappingStart(this);
             var temp = emitter.setInObjectLiteral(false);
@@ -3982,11 +4013,11 @@ var TypeScript;
             emitter.recordSourceMappingEnd(this);
             emitter.emitParensAndCommentsInPlace(this, false);
         };
-        ReturnStatement.prototype.addToControlFlow = function (context) {
+        proto_31.addToControlFlow = function (context) {
             _super.prototype.addToControlFlow.call(this, context);
             context.returnStmt();
         };
-        ReturnStatement.prototype.typeCheck = function (typeFlow) {
+        proto_31.typeCheck = function (typeFlow) {
             return typeFlow.typeCheckReturn(this);
         };
         return ReturnStatement;
@@ -4012,8 +4043,9 @@ var TypeScript;
             }
             return _this;
         }
-        ForInStatement.prototype.isLoop = function () { return true; };
-        ForInStatement.prototype.isFiltered = function () {
+        var proto_32 = ForInStatement.prototype;
+        proto_32.isLoop = function () { return true; };
+        proto_32.isFiltered = function () {
             if (this.body) {
                 var singleItem = null;
                 if (this.body.nodeType == NodeType.List) {
@@ -4063,7 +4095,7 @@ var TypeScript;
             }
             return false;
         };
-        ForInStatement.prototype.emit = function (emitter, tokenId, startLine) {
+        proto_32.emit = function (emitter, tokenId, startLine) {
             emitter.emitParensAndCommentsInPlace(this, true);
             emitter.recordSourceMappingStart(this);
             var temp = emitter.setInObjectLiteral(false);
@@ -4079,7 +4111,7 @@ var TypeScript;
             emitter.recordSourceMappingEnd(this);
             emitter.emitParensAndCommentsInPlace(this, false);
         };
-        ForInStatement.prototype.typeCheck = function (typeFlow) {
+        proto_32.typeCheck = function (typeFlow) {
             if (typeFlow.checker.styleSettings.forin) {
                 if (!this.isFiltered()) {
                     typeFlow.checker.errorReporter.styleError(this, "no hasOwnProperty filter");
@@ -4087,7 +4119,7 @@ var TypeScript;
             }
             return typeFlow.typeCheckForIn(this);
         };
-        ForInStatement.prototype.addToControlFlow = function (context) {
+        proto_32.addToControlFlow = function (context) {
             if (this.lval) {
                 context.addContent(this.lval);
             }
@@ -4123,8 +4155,9 @@ var TypeScript;
             _this.init = init;
             return _this;
         }
-        ForStatement.prototype.isLoop = function () { return true; };
-        ForStatement.prototype.emit = function (emitter, tokenId, startLine) {
+        var proto_33 = ForStatement.prototype;
+        proto_33.isLoop = function () { return true; };
+        proto_33.emit = function (emitter, tokenId, startLine) {
             emitter.emitParensAndCommentsInPlace(this, true);
             emitter.recordSourceMappingStart(this);
             var temp = emitter.setInObjectLiteral(false);
@@ -4148,10 +4181,10 @@ var TypeScript;
             emitter.recordSourceMappingEnd(this);
             emitter.emitParensAndCommentsInPlace(this, false);
         };
-        ForStatement.prototype.typeCheck = function (typeFlow) {
+        proto_33.typeCheck = function (typeFlow) {
             return typeFlow.typeCheckFor(this);
         };
-        ForStatement.prototype.addToControlFlow = function (context) {
+        proto_33.addToControlFlow = function (context) {
             if (this.init) {
                 context.addContent(this.init);
             }
@@ -4216,8 +4249,9 @@ var TypeScript;
             _this.withSym = null;
             return _this;
         }
-        WithStatement.prototype.isCompoundStatement = function () { return true; };
-        WithStatement.prototype.emit = function (emitter, tokenId, startLine) {
+        var proto_34 = WithStatement.prototype;
+        proto_34.isCompoundStatement = function () { return true; };
+        proto_34.emit = function (emitter, tokenId, startLine) {
             emitter.emitParensAndCommentsInPlace(this, true);
             emitter.recordSourceMappingStart(this);
             emitter.writeToOutput("with (");
@@ -4229,7 +4263,7 @@ var TypeScript;
             emitter.recordSourceMappingEnd(this);
             emitter.emitParensAndCommentsInPlace(this, false);
         };
-        WithStatement.prototype.typeCheck = function (typeFlow) {
+        proto_34.typeCheck = function (typeFlow) {
             return typeFlow.typeCheckWith(this);
         };
         return WithStatement;
@@ -4244,8 +4278,9 @@ var TypeScript;
             _this.statement = new ASTSpan();
             return _this;
         }
-        SwitchStatement.prototype.isCompoundStatement = function () { return true; };
-        SwitchStatement.prototype.emit = function (emitter, tokenId, startLine) {
+        var proto_35 = SwitchStatement.prototype;
+        proto_35.isCompoundStatement = function () { return true; };
+        proto_35.emit = function (emitter, tokenId, startLine) {
             emitter.emitParensAndCommentsInPlace(this, true);
             emitter.recordSourceMappingStart(this);
             var temp = emitter.setInObjectLiteral(false);
@@ -4269,7 +4304,7 @@ var TypeScript;
             emitter.recordSourceMappingEnd(this);
             emitter.emitParensAndCommentsInPlace(this, false);
         };
-        SwitchStatement.prototype.typeCheck = function (typeFlow) {
+        proto_35.typeCheck = function (typeFlow) {
             var len = this.caseList.members.length;
             this.val = typeFlow.typeCheck(this.val);
             for (var i = 0; i < len; i++) {
@@ -4280,7 +4315,7 @@ var TypeScript;
             return this;
         };
         // if there are break statements that match this switch, then just link cond block with block after switch
-        SwitchStatement.prototype.addToControlFlow = function (context) {
+        proto_35.addToControlFlow = function (context) {
             var condBlock = context.current;
             context.addContent(this.val);
             var execBlock = new BasicBlock();
@@ -4315,7 +4350,8 @@ var TypeScript;
             _this.expr = null;
             return _this;
         }
-        CaseStatement.prototype.emit = function (emitter, tokenId, startLine) {
+        var proto_36 = CaseStatement.prototype;
+        proto_36.emit = function (emitter, tokenId, startLine) {
             emitter.emitParensAndCommentsInPlace(this, true);
             emitter.recordSourceMappingStart(this);
             if (this.expr) {
@@ -4330,7 +4366,7 @@ var TypeScript;
             emitter.recordSourceMappingEnd(this);
             emitter.emitParensAndCommentsInPlace(this, false);
         };
-        CaseStatement.prototype.typeCheck = function (typeFlow) {
+        proto_36.typeCheck = function (typeFlow) {
             this.expr = typeFlow.typeCheck(this.expr);
             typeFlow.typeCheck(this.body);
             this.type = typeFlow.voidType;
@@ -4338,7 +4374,7 @@ var TypeScript;
         };
         // TODO: more reasoning about unreachable cases (such as duplicate literals as case expressions)
         // for now, assume all cases are reachable, regardless of whether some cases fall through
-        CaseStatement.prototype.addToControlFlow = function (context) {
+        proto_36.addToControlFlow = function (context) {
             var execBlock = new BasicBlock();
             var sw = context.currentSwitch[context.currentSwitch.length - 1];
             // TODO: fall-through from previous (+ to end of switch)
@@ -4370,10 +4406,11 @@ var TypeScript;
             _this.arrayCount = arrayCount;
             return _this;
         }
-        TypeReference.prototype.emit = function (emitter, tokenId, startLine) {
+        var proto_37 = TypeReference.prototype;
+        proto_37.emit = function (emitter, tokenId, startLine) {
             throw new Error("should not emit a type ref");
         };
-        TypeReference.prototype.typeCheck = function (typeFlow) {
+        proto_37.typeCheck = function (typeFlow) {
             var prevInTCTR = typeFlow.inTypeRefTypeCheck;
             typeFlow.inTypeRefTypeCheck = true;
             var typeLink = getTypeLink(this, typeFlow.checker, true);
@@ -4401,20 +4438,21 @@ var TypeScript;
             _this.finallyNode = finallyNode;
             return _this;
         }
-        TryFinally.prototype.isCompoundStatement = function () { return true; };
-        TryFinally.prototype.emit = function (emitter, tokenId, startLine) {
+        var proto_38 = TryFinally.prototype;
+        proto_38.isCompoundStatement = function () { return true; };
+        proto_38.emit = function (emitter, tokenId, startLine) {
             emitter.recordSourceMappingStart(this);
             emitter.emitJavascript(this.tryNode, TokenID.Try, false);
             emitter.emitJavascript(this.finallyNode, TokenID.Finally, false);
             emitter.recordSourceMappingEnd(this);
         };
-        TryFinally.prototype.typeCheck = function (typeFlow) {
+        proto_38.typeCheck = function (typeFlow) {
             this.tryNode = typeFlow.typeCheck(this.tryNode);
             this.finallyNode = typeFlow.typeCheck(this.finallyNode);
             this.type = typeFlow.voidType;
             return this;
         };
-        TryFinally.prototype.addToControlFlow = function (context) {
+        proto_38.addToControlFlow = function (context) {
             var afterFinally = new BasicBlock();
             context.walk(this.tryNode, this);
             var finBlock = new BasicBlock();
@@ -4447,8 +4485,9 @@ var TypeScript;
             _this.catchNode = catchNode;
             return _this;
         }
-        TryCatch.prototype.isCompoundStatement = function () { return true; };
-        TryCatch.prototype.emit = function (emitter, tokenId, startLine) {
+        var proto_39 = TryCatch.prototype;
+        proto_39.isCompoundStatement = function () { return true; };
+        proto_39.emit = function (emitter, tokenId, startLine) {
             emitter.emitParensAndCommentsInPlace(this, true);
             emitter.recordSourceMappingStart(this);
             emitter.emitJavascript(this.tryNode, TokenID.Try, false);
@@ -4456,7 +4495,7 @@ var TypeScript;
             emitter.recordSourceMappingEnd(this);
             emitter.emitParensAndCommentsInPlace(this, false);
         };
-        TryCatch.prototype.addToControlFlow = function (context) {
+        proto_39.addToControlFlow = function (context) {
             var beforeTry = context.current;
             var tryBlock = new BasicBlock();
             beforeTry.addSuccessor(tryBlock);
@@ -4481,7 +4520,7 @@ var TypeScript;
             context.current = afterTryCatch;
             context.walker.options.goChildren = false;
         };
-        TryCatch.prototype.typeCheck = function (typeFlow) {
+        proto_39.typeCheck = function (typeFlow) {
             this.tryNode = typeFlow.typeCheck(this.tryNode);
             this.catchNode = typeFlow.typeCheck(this.catchNode);
             this.type = typeFlow.voidType;
@@ -4497,7 +4536,8 @@ var TypeScript;
             _this.body = body;
             return _this;
         }
-        Try.prototype.emit = function (emitter, tokenId, startLine) {
+        var proto_40 = Try.prototype;
+        proto_40.emit = function (emitter, tokenId, startLine) {
             emitter.emitParensAndCommentsInPlace(this, true);
             emitter.recordSourceMappingStart(this);
             emitter.writeToOutput("try ");
@@ -4505,11 +4545,11 @@ var TypeScript;
             emitter.recordSourceMappingEnd(this);
             emitter.emitParensAndCommentsInPlace(this, false);
         };
-        Try.prototype.typeCheck = function (typeFlow) {
+        proto_40.typeCheck = function (typeFlow) {
             this.body = typeFlow.typeCheck(this.body);
             return this;
         };
-        Try.prototype.addToControlFlow = function (context) {
+        proto_40.addToControlFlow = function (context) {
             if (this.body) {
                 context.walk(this.body, this);
             }
@@ -4532,7 +4572,8 @@ var TypeScript;
             }
             return _this;
         }
-        Catch.prototype.emit = function (emitter, tokenId, startLine) {
+        var proto_41 = Catch.prototype;
+        proto_41.emit = function (emitter, tokenId, startLine) {
             emitter.emitParensAndCommentsInPlace(this, true);
             emitter.recordSourceMappingStart(this);
             emitter.writeToOutput(" ");
@@ -4545,7 +4586,7 @@ var TypeScript;
             emitter.recordSourceMappingEnd(this);
             emitter.emitParensAndCommentsInPlace(this, false);
         };
-        Catch.prototype.addToControlFlow = function (context) {
+        proto_41.addToControlFlow = function (context) {
             if (this.param) {
                 context.addContent(this.param);
                 var bodBlock = new BasicBlock();
@@ -4558,7 +4599,7 @@ var TypeScript;
             context.noContinuation = false;
             context.walker.options.goChildren = false;
         };
-        Catch.prototype.typeCheck = function (typeFlow) {
+        proto_41.typeCheck = function (typeFlow) {
             var prevScope = typeFlow.scope;
             typeFlow.scope = this.containedScope;
             this.param = typeFlow.typeCheck(this.param);
@@ -4600,7 +4641,8 @@ var TypeScript;
             _this.body = body;
             return _this;
         }
-        Finally.prototype.emit = function (emitter, tokenId, startLine) {
+        var proto_42 = Finally.prototype;
+        proto_42.emit = function (emitter, tokenId, startLine) {
             emitter.emitParensAndCommentsInPlace(this, true);
             emitter.recordSourceMappingStart(this);
             emitter.writeToOutput("finally");
@@ -4608,14 +4650,14 @@ var TypeScript;
             emitter.recordSourceMappingEnd(this);
             emitter.emitParensAndCommentsInPlace(this, false);
         };
-        Finally.prototype.addToControlFlow = function (context) {
+        proto_42.addToControlFlow = function (context) {
             if (this.body) {
                 context.walk(this.body, this);
             }
             context.walker.options.goChildren = false;
             context.noContinuation = false;
         };
-        Finally.prototype.typeCheck = function (typeFlow) {
+        proto_42.typeCheck = function (typeFlow) {
             this.body = typeFlow.typeCheck(this.body);
             return this;
         };

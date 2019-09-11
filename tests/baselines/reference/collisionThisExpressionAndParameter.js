@@ -97,35 +97,36 @@ declare function f4(_this: string); // no code gen - no error
 var Foo = /** @class */ (function () {
     function Foo() {
     }
-    Foo.prototype.x = function () {
+    var proto_1 = Foo.prototype;
+    proto_1.x = function () {
         var _this = 10; // Local var. No this capture in x(), so no conflict.
         function inner(_this) {
             var _this_1 = this;
             return function (x) { return _this_1; }; // New scope.  So should inject new _this capture into function inner
         }
     };
-    Foo.prototype.y = function () {
+    proto_1.y = function () {
         var _this_1 = this;
         var lamda = function (_this) {
             return function (x) { return _this_1; }; // New scope.  So should inject new _this capture
         };
     };
-    Foo.prototype.z = function (_this) {
+    proto_1.z = function (_this) {
         var _this_1 = this;
         var lambda = function () {
             return function (x) { return _this_1; }; // New scope.  So should inject new _this capture
         };
     };
-    Foo.prototype.x1 = function () {
+    proto_1.x1 = function () {
         var _this = 10; // Local var. No this capture in x(), so no conflict.
         function inner(_this) {
         }
     };
-    Foo.prototype.y1 = function () {
+    proto_1.y1 = function () {
         var lamda = function (_this) {
         };
     };
-    Foo.prototype.z1 = function (_this) {
+    proto_1.z1 = function (_this) {
         var lambda = function () {
         };
     };

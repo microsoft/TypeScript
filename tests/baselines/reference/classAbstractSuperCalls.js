@@ -51,8 +51,9 @@ var B = /** @class */ (function (_super) {
     function B() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
-    B.prototype.bar = function () { _super.prototype.foo.call(this); };
-    B.prototype.baz = function () { return this.foo; };
+    var proto_1 = B.prototype;
+    proto_1.bar = function () { _super.prototype.foo.call(this); };
+    proto_1.baz = function () { return this.foo; };
     return B;
 }(A));
 var C = /** @class */ (function (_super) {
@@ -60,16 +61,18 @@ var C = /** @class */ (function (_super) {
     function C() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
-    C.prototype.foo = function () { return 2; };
-    C.prototype.qux = function () { return _super.prototype.foo.call(this) || _super.prototype.foo; }; // 2 errors, foo is abstract
-    C.prototype.norf = function () { return _super.prototype.bar.call(this); };
+    var proto_2 = C.prototype;
+    proto_2.foo = function () { return 2; };
+    proto_2.qux = function () { return _super.prototype.foo.call(this) || _super.prototype.foo; }; // 2 errors, foo is abstract
+    proto_2.norf = function () { return _super.prototype.bar.call(this); };
     return C;
 }(B));
 var AA = /** @class */ (function () {
     function AA() {
     }
-    AA.prototype.foo = function () { return 1; };
-    AA.prototype.bar = function () { return this.foo(); };
+    var proto_3 = AA.prototype;
+    proto_3.foo = function () { return 1; };
+    proto_3.bar = function () { return this.foo(); };
     return AA;
 }());
 var BB = /** @class */ (function (_super) {

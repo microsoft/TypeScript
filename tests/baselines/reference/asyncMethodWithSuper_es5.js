@@ -59,9 +59,10 @@ class B extends A {
 var A = /** @class */ (function () {
     function A() {
     }
-    A.prototype.x = function () {
+    var proto_1 = A.prototype;
+    proto_1.x = function () {
     };
-    A.prototype.y = function () {
+    proto_1.y = function () {
     };
     return A;
 }());
@@ -70,8 +71,9 @@ var B = /** @class */ (function (_super) {
     function B() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
+    var proto_2 = B.prototype;
     // async method with only call/get on 'super' does not require a binding
-    B.prototype.simple = function () {
+    proto_2.simple = function () {
         return __awaiter(this, void 0, void 0, function () {
             var a, b;
             return __generator(this, function (_a) {
@@ -88,7 +90,7 @@ var B = /** @class */ (function (_super) {
         });
     };
     // async method with assignment/destructuring on 'super' requires a binding
-    B.prototype.advanced = function () {
+    proto_2.advanced = function () {
         return __awaiter(this, void 0, void 0, function () {
             var f, a, b;
             return __generator(this, function (_a) {

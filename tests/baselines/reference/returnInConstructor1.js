@@ -124,8 +124,9 @@ var G = /** @class */ (function () {
     function G() {
         this.test = 2;
     }
-    G.prototype.test1 = function () { };
-    G.prototype.foo = function () { };
+    var proto_1 = G.prototype;
+    proto_1.test1 = function () { };
+    proto_1.foo = function () { };
     return G;
 }());
 var H = /** @class */ (function (_super) {

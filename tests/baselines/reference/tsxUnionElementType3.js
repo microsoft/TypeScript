@@ -68,10 +68,11 @@ var RC2 = /** @class */ (function (_super) {
     function RC2() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
-    RC2.prototype.render = function () {
+    var proto_1 = RC2.prototype;
+    proto_1.render = function () {
         return null;
     };
-    RC2.prototype.method = function () { };
+    proto_1.method = function () { };
     return RC2;
 }(React.Component));
 var RC3 = /** @class */ (function (_super) {

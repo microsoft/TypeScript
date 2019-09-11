@@ -72,16 +72,17 @@ var C4 = /** @class */ (function () {
         this.x3 = [{ a: this }];
         this.x4 = function () { return _this; };
     }
-    C4.prototype.f1 = function () {
+    var proto_1 = C4.prototype;
+    proto_1.f1 = function () {
         return { a: this };
     };
-    C4.prototype.f2 = function () {
+    proto_1.f2 = function () {
         return [this];
     };
-    C4.prototype.f3 = function () {
+    proto_1.f3 = function () {
         return [{ a: this }];
     };
-    C4.prototype.f4 = function () {
+    proto_1.f4 = function () {
         var _this = this;
         return function () { return _this; };
     };

@@ -1040,31 +1040,32 @@ var rionegrensis;
         function caniventer() {
             return _super !== null && _super.apply(this, arguments) || this;
         }
-        caniventer.prototype.salomonseni = function () {
+        var proto_1 = caniventer.prototype;
+        proto_1.salomonseni = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        caniventer.prototype.uchidai = function () {
+        proto_1.uchidai = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        caniventer.prototype.raffrayana = function () {
+        proto_1.raffrayana = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        caniventer.prototype.Uranium = function () {
+        proto_1.Uranium = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        caniventer.prototype.nayaur = function () {
+        proto_1.nayaur = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
@@ -1078,31 +1079,32 @@ var rionegrensis;
         function veraecrucis() {
             return _super !== null && _super.apply(this, arguments) || this;
         }
-        veraecrucis.prototype.naso = function () {
+        var proto_2 = veraecrucis.prototype;
+        proto_2.naso = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        veraecrucis.prototype.vancouverensis = function () {
+        proto_2.vancouverensis = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        veraecrucis.prototype.africana = function () {
+        proto_2.africana = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        veraecrucis.prototype.palliolata = function () {
+        proto_2.palliolata = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        veraecrucis.prototype.nivicola = function () {
+        proto_2.nivicola = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
@@ -1123,31 +1125,32 @@ var julianae;
     var nudicaudus = /** @class */ (function () {
         function nudicaudus() {
         }
-        nudicaudus.prototype.brandtii = function () {
+        var proto_3 = nudicaudus.prototype;
+        proto_3.brandtii = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        nudicaudus.prototype.maxwellii = function () {
+        proto_3.maxwellii = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        nudicaudus.prototype.endoi = function () {
+        proto_3.endoi = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        nudicaudus.prototype.venezuelae = function () {
+        proto_3.venezuelae = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        nudicaudus.prototype.zamicrus = function () {
+        proto_3.zamicrus = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
@@ -1159,43 +1162,44 @@ var julianae;
     var galapagoensis = /** @class */ (function () {
         function galapagoensis() {
         }
-        galapagoensis.prototype.isabellae = function () {
+        var proto_4 = galapagoensis.prototype;
+        proto_4.isabellae = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        galapagoensis.prototype.rueppellii = function () {
+        proto_4.rueppellii = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        galapagoensis.prototype.peregusna = function () {
+        proto_4.peregusna = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        galapagoensis.prototype.gliroides = function () {
+        proto_4.gliroides = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        galapagoensis.prototype.banakrisi = function () {
+        proto_4.banakrisi = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        galapagoensis.prototype.rozendaali = function () {
+        proto_4.rozendaali = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        galapagoensis.prototype.stuhlmanni = function () {
+        proto_4.stuhlmanni = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
@@ -1207,43 +1211,44 @@ var julianae;
     var albidens = /** @class */ (function () {
         function albidens() {
         }
-        albidens.prototype.mattheyi = function () {
+        var proto_5 = albidens.prototype;
+        proto_5.mattheyi = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        albidens.prototype.Astatine = function () {
+        proto_5.Astatine = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        albidens.prototype.vincenti = function () {
+        proto_5.vincenti = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        albidens.prototype.hirta = function () {
+        proto_5.hirta = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        albidens.prototype.virginianus = function () {
+        proto_5.virginianus = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        albidens.prototype.macrophyllum = function () {
+        proto_5.macrophyllum = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        albidens.prototype.porcellus = function () {
+        proto_5.porcellus = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
@@ -1257,79 +1262,80 @@ var julianae;
         function oralis() {
             return _super !== null && _super.apply(this, arguments) || this;
         }
-        oralis.prototype.cepapi = function () {
+        var proto_6 = oralis.prototype;
+        proto_6.cepapi = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        oralis.prototype.porteri = function () {
+        proto_6.porteri = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        oralis.prototype.bindi = function () {
+        proto_6.bindi = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        oralis.prototype.puda = function () {
+        proto_6.puda = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        oralis.prototype.mindorensis = function () {
+        proto_6.mindorensis = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        oralis.prototype.ignitus = function () {
+        proto_6.ignitus = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        oralis.prototype.rufus = function () {
+        proto_6.rufus = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        oralis.prototype.monax = function () {
+        proto_6.monax = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        oralis.prototype.unalascensis = function () {
+        proto_6.unalascensis = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        oralis.prototype.wuchihensis = function () {
+        proto_6.wuchihensis = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        oralis.prototype.leucippe = function () {
+        proto_6.leucippe = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        oralis.prototype.ordii = function () {
+        proto_6.ordii = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        oralis.prototype.eisentrauti = function () {
+        proto_6.eisentrauti = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
@@ -1343,43 +1349,44 @@ var julianae;
         function sumatrana() {
             return _super !== null && _super.apply(this, arguments) || this;
         }
-        sumatrana.prototype.wolffsohni = function () {
+        var proto_7 = sumatrana.prototype;
+        proto_7.wolffsohni = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        sumatrana.prototype.geata = function () {
+        proto_7.geata = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        sumatrana.prototype.awashensis = function () {
+        proto_7.awashensis = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        sumatrana.prototype.sturdeei = function () {
+        proto_7.sturdeei = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        sumatrana.prototype.pachyurus = function () {
+        proto_7.pachyurus = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        sumatrana.prototype.lyelli = function () {
+        proto_7.lyelli = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        sumatrana.prototype.neohibernicus = function () {
+        proto_7.neohibernicus = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
@@ -1391,67 +1398,68 @@ var julianae;
     var gerbillus = /** @class */ (function () {
         function gerbillus() {
         }
-        gerbillus.prototype.pundti = function () {
+        var proto_8 = gerbillus.prototype;
+        proto_8.pundti = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        gerbillus.prototype.tristrami = function () {
+        proto_8.tristrami = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        gerbillus.prototype.swarthi = function () {
+        proto_8.swarthi = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        gerbillus.prototype.horsfieldii = function () {
+        proto_8.horsfieldii = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        gerbillus.prototype.diazi = function () {
+        proto_8.diazi = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        gerbillus.prototype.rennelli = function () {
+        proto_8.rennelli = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        gerbillus.prototype.maulinus = function () {
+        proto_8.maulinus = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        gerbillus.prototype.muscina = function () {
+        proto_8.muscina = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        gerbillus.prototype.pelengensis = function () {
+        proto_8.pelengensis = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        gerbillus.prototype.abramus = function () {
+        proto_8.abramus = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        gerbillus.prototype.reevesi = function () {
+        proto_8.reevesi = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
@@ -1463,73 +1471,74 @@ var julianae;
     var acariensis = /** @class */ (function () {
         function acariensis() {
         }
-        acariensis.prototype.levicula = function () {
+        var proto_9 = acariensis.prototype;
+        proto_9.levicula = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        acariensis.prototype.minous = function () {
+        proto_9.minous = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        acariensis.prototype.cinereiventer = function () {
+        proto_9.cinereiventer = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        acariensis.prototype.longicaudatus = function () {
+        proto_9.longicaudatus = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        acariensis.prototype.baeodon = function () {
+        proto_9.baeodon = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        acariensis.prototype.soricoides = function () {
+        proto_9.soricoides = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        acariensis.prototype.datae = function () {
+        proto_9.datae = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        acariensis.prototype.spixii = function () {
+        proto_9.spixii = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        acariensis.prototype.anakuma = function () {
+        proto_9.anakuma = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        acariensis.prototype.kihaulei = function () {
+        proto_9.kihaulei = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        acariensis.prototype.gymnura = function () {
+        proto_9.gymnura = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        acariensis.prototype.olchonensis = function () {
+        proto_9.olchonensis = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
@@ -1543,19 +1552,20 @@ var julianae;
         function durangae() {
             return _super !== null && _super.apply(this, arguments) || this;
         }
-        durangae.prototype.Californium = function () {
+        var proto_10 = durangae.prototype;
+        proto_10.Californium = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        durangae.prototype.Flerovium = function () {
+        proto_10.Flerovium = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        durangae.prototype.phrudus = function () {
+        proto_10.phrudus = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
@@ -1570,13 +1580,14 @@ var ruatanica;
     var hector = /** @class */ (function () {
         function hector() {
         }
-        hector.prototype.humulis = function () {
+        var proto_11 = hector.prototype;
+        proto_11.humulis = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        hector.prototype.eurycerus = function () {
+        proto_11.eurycerus = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
@@ -1591,19 +1602,20 @@ var Lanthanum;
     var suillus = /** @class */ (function () {
         function suillus() {
         }
-        suillus.prototype.spilosoma = function () {
+        var proto_12 = suillus.prototype;
+        proto_12.spilosoma = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        suillus.prototype.tumbalensis = function () {
+        proto_12.tumbalensis = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        suillus.prototype.anatolicus = function () {
+        proto_12.anatolicus = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
@@ -1617,61 +1629,62 @@ var Lanthanum;
         function nitidus() {
             return _super !== null && _super.apply(this, arguments) || this;
         }
-        nitidus.prototype.granatensis = function () {
+        var proto_13 = nitidus.prototype;
+        proto_13.granatensis = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        nitidus.prototype.negligens = function () {
+        proto_13.negligens = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        nitidus.prototype.lewisi = function () {
+        proto_13.lewisi = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        nitidus.prototype.arge = function () {
+        proto_13.arge = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        nitidus.prototype.dominicensis = function () {
+        proto_13.dominicensis = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        nitidus.prototype.taurus = function () {
+        proto_13.taurus = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        nitidus.prototype.tonganus = function () {
+        proto_13.tonganus = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        nitidus.prototype.silvatica = function () {
+        proto_13.silvatica = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        nitidus.prototype.midas = function () {
+        proto_13.midas = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        nitidus.prototype.bicornis = function () {
+        proto_13.bicornis = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
@@ -1685,49 +1698,50 @@ var Lanthanum;
         function megalonyx() {
             return _super !== null && _super.apply(this, arguments) || this;
         }
-        megalonyx.prototype.phillipsii = function () {
+        var proto_14 = megalonyx.prototype;
+        proto_14.phillipsii = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        megalonyx.prototype.melanogaster = function () {
+        proto_14.melanogaster = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        megalonyx.prototype.elaphus = function () {
+        proto_14.elaphus = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        megalonyx.prototype.elater = function () {
+        proto_14.elater = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        megalonyx.prototype.ourebi = function () {
+        proto_14.ourebi = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        megalonyx.prototype.caraccioli = function () {
+        proto_14.caraccioli = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        megalonyx.prototype.parva = function () {
+        proto_14.parva = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        megalonyx.prototype.albipes = function () {
+        proto_14.albipes = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
@@ -1739,85 +1753,86 @@ var Lanthanum;
     var jugularis = /** @class */ (function () {
         function jugularis() {
         }
-        jugularis.prototype.torrei = function () {
+        var proto_15 = jugularis.prototype;
+        proto_15.torrei = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        jugularis.prototype.revoili = function () {
+        proto_15.revoili = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        jugularis.prototype.macrobullatus = function () {
+        proto_15.macrobullatus = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        jugularis.prototype.compactus = function () {
+        proto_15.compactus = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        jugularis.prototype.talpinus = function () {
+        proto_15.talpinus = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        jugularis.prototype.stramineus = function () {
+        proto_15.stramineus = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        jugularis.prototype.dartmouthi = function () {
+        proto_15.dartmouthi = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        jugularis.prototype.ogilbyi = function () {
+        proto_15.ogilbyi = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        jugularis.prototype.incomtus = function () {
+        proto_15.incomtus = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        jugularis.prototype.surdaster = function () {
+        proto_15.surdaster = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        jugularis.prototype.melanorhinus = function () {
+        proto_15.melanorhinus = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        jugularis.prototype.picticaudata = function () {
+        proto_15.picticaudata = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        jugularis.prototype.pomona = function () {
+        proto_15.pomona = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        jugularis.prototype.ileile = function () {
+        proto_15.ileile = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
@@ -1834,85 +1849,86 @@ var rendalli;
         function zuluensis() {
             return _super !== null && _super.apply(this, arguments) || this;
         }
-        zuluensis.prototype.telfairi = function () {
+        var proto_16 = zuluensis.prototype;
+        proto_16.telfairi = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        zuluensis.prototype.keyensis = function () {
+        proto_16.keyensis = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        zuluensis.prototype.occasius = function () {
+        proto_16.occasius = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        zuluensis.prototype.damarensis = function () {
+        proto_16.damarensis = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        zuluensis.prototype.Neptunium = function () {
+        proto_16.Neptunium = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        zuluensis.prototype.griseoflavus = function () {
+        proto_16.griseoflavus = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        zuluensis.prototype.thar = function () {
+        proto_16.thar = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        zuluensis.prototype.alborufus = function () {
+        proto_16.alborufus = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        zuluensis.prototype.fusicaudus = function () {
+        proto_16.fusicaudus = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        zuluensis.prototype.gordonorum = function () {
+        proto_16.gordonorum = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        zuluensis.prototype.ruber = function () {
+        proto_16.ruber = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        zuluensis.prototype.desmarestianus = function () {
+        proto_16.desmarestianus = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        zuluensis.prototype.lutillus = function () {
+        proto_16.lutillus = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        zuluensis.prototype.salocco = function () {
+        proto_16.salocco = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
@@ -1924,61 +1940,62 @@ var rendalli;
     var moojeni = /** @class */ (function () {
         function moojeni() {
         }
-        moojeni.prototype.floweri = function () {
+        var proto_17 = moojeni.prototype;
+        proto_17.floweri = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        moojeni.prototype.montosa = function () {
+        proto_17.montosa = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        moojeni.prototype.miletus = function () {
+        proto_17.miletus = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        moojeni.prototype.heaneyi = function () {
+        proto_17.heaneyi = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        moojeni.prototype.marchei = function () {
+        proto_17.marchei = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        moojeni.prototype.budini = function () {
+        proto_17.budini = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        moojeni.prototype.maggietaylorae = function () {
+        proto_17.maggietaylorae = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        moojeni.prototype.poliocephalus = function () {
+        proto_17.poliocephalus = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        moojeni.prototype.zibethicus = function () {
+        proto_17.zibethicus = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        moojeni.prototype.biacensis = function () {
+        proto_17.biacensis = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
@@ -1992,19 +2009,20 @@ var rendalli;
         function crenulata() {
             return _super !== null && _super.apply(this, arguments) || this;
         }
-        crenulata.prototype.salvanius = function () {
+        var proto_18 = crenulata.prototype;
+        proto_18.salvanius = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        crenulata.prototype.maritimus = function () {
+        proto_18.maritimus = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        crenulata.prototype.edax = function () {
+        proto_18.edax = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
@@ -2019,49 +2037,50 @@ var trivirgatus;
     var tumidifrons = /** @class */ (function () {
         function tumidifrons() {
         }
-        tumidifrons.prototype.nivalis = function () {
+        var proto_19 = tumidifrons.prototype;
+        proto_19.nivalis = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        tumidifrons.prototype.vestitus = function () {
+        proto_19.vestitus = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        tumidifrons.prototype.aequatorius = function () {
+        proto_19.aequatorius = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        tumidifrons.prototype.scherman = function () {
+        proto_19.scherman = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        tumidifrons.prototype.improvisum = function () {
+        proto_19.improvisum = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        tumidifrons.prototype.cervinipes = function () {
+        proto_19.cervinipes = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        tumidifrons.prototype.audax = function () {
+        proto_19.audax = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        tumidifrons.prototype.vallinus = function () {
+        proto_19.vallinus = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
@@ -2075,43 +2094,44 @@ var trivirgatus;
         function mixtus() {
             return _super !== null && _super.apply(this, arguments) || this;
         }
-        mixtus.prototype.ochrogaster = function () {
+        var proto_20 = mixtus.prototype;
+        proto_20.ochrogaster = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        mixtus.prototype.bryophilus = function () {
+        proto_20.bryophilus = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        mixtus.prototype.liechtensteini = function () {
+        proto_20.liechtensteini = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        mixtus.prototype.crawfordi = function () {
+        proto_20.crawfordi = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        mixtus.prototype.hypsibia = function () {
+        proto_20.hypsibia = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        mixtus.prototype.matacus = function () {
+        proto_20.matacus = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        mixtus.prototype.demidoff = function () {
+        proto_20.demidoff = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
@@ -2123,13 +2143,14 @@ var trivirgatus;
     var lotor = /** @class */ (function () {
         function lotor() {
         }
-        lotor.prototype.balensis = function () {
+        var proto_21 = lotor.prototype;
+        proto_21.balensis = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        lotor.prototype.pullata = function () {
+        proto_21.pullata = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
@@ -2141,43 +2162,44 @@ var trivirgatus;
     var falconeri = /** @class */ (function () {
         function falconeri() {
         }
-        falconeri.prototype.cabrali = function () {
+        var proto_22 = falconeri.prototype;
+        proto_22.cabrali = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        falconeri.prototype.gouldi = function () {
+        proto_22.gouldi = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        falconeri.prototype.fuscicollis = function () {
+        proto_22.fuscicollis = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        falconeri.prototype.martiensseni = function () {
+        proto_22.martiensseni = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        falconeri.prototype.gaoligongensis = function () {
+        proto_22.gaoligongensis = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        falconeri.prototype.shawi = function () {
+        proto_22.shawi = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        falconeri.prototype.gmelini = function () {
+        proto_22.gmelini = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
@@ -2189,85 +2211,86 @@ var trivirgatus;
     var oconnelli = /** @class */ (function () {
         function oconnelli() {
         }
-        oconnelli.prototype.youngsoni = function () {
+        var proto_23 = oconnelli.prototype;
+        proto_23.youngsoni = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        oconnelli.prototype.terrestris = function () {
+        proto_23.terrestris = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        oconnelli.prototype.chrysopus = function () {
+        proto_23.chrysopus = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        oconnelli.prototype.fuscomurina = function () {
+        proto_23.fuscomurina = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        oconnelli.prototype.hellwaldii = function () {
+        proto_23.hellwaldii = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        oconnelli.prototype.aenea = function () {
+        proto_23.aenea = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        oconnelli.prototype.perrini = function () {
+        proto_23.perrini = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        oconnelli.prototype.entellus = function () {
+        proto_23.entellus = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        oconnelli.prototype.krebsii = function () {
+        proto_23.krebsii = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        oconnelli.prototype.cephalotes = function () {
+        proto_23.cephalotes = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        oconnelli.prototype.molossinus = function () {
+        proto_23.molossinus = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        oconnelli.prototype.luisi = function () {
+        proto_23.luisi = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        oconnelli.prototype.ceylonicus = function () {
+        proto_23.ceylonicus = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        oconnelli.prototype.ralli = function () {
+        proto_23.ralli = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
@@ -2282,25 +2305,26 @@ var quasiater;
     var bobrinskoi = /** @class */ (function () {
         function bobrinskoi() {
         }
-        bobrinskoi.prototype.crassicaudatus = function () {
+        var proto_24 = bobrinskoi.prototype;
+        proto_24.crassicaudatus = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        bobrinskoi.prototype.mulatta = function () {
+        proto_24.mulatta = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        bobrinskoi.prototype.ansorgei = function () {
+        proto_24.ansorgei = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        bobrinskoi.prototype.Copper = function () {
+        proto_24.Copper = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
@@ -2316,25 +2340,26 @@ var quasiater;
         function americanus() {
             return _super !== null && _super.apply(this, arguments) || this;
         }
-        americanus.prototype.nasoloi = function () {
+        var proto_25 = americanus.prototype;
+        proto_25.nasoloi = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        americanus.prototype.mystacalis = function () {
+        proto_25.mystacalis = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        americanus.prototype.fardoulisi = function () {
+        proto_25.fardoulisi = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        americanus.prototype.tumidus = function () {
+        proto_25.tumidus = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
@@ -2351,79 +2376,80 @@ var lavali;
         function wilsoni() {
             return _super !== null && _super.apply(this, arguments) || this;
         }
-        wilsoni.prototype.setiger = function () {
+        var proto_26 = wilsoni.prototype;
+        proto_26.setiger = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        wilsoni.prototype.lorentzii = function () {
+        proto_26.lorentzii = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        wilsoni.prototype.antisensis = function () {
+        proto_26.antisensis = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        wilsoni.prototype.blossevillii = function () {
+        proto_26.blossevillii = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        wilsoni.prototype.bontanus = function () {
+        proto_26.bontanus = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        wilsoni.prototype.caligata = function () {
+        proto_26.caligata = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        wilsoni.prototype.franqueti = function () {
+        proto_26.franqueti = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        wilsoni.prototype.roberti = function () {
+        proto_26.roberti = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        wilsoni.prototype.degelidus = function () {
+        proto_26.degelidus = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        wilsoni.prototype.amoenus = function () {
+        proto_26.amoenus = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        wilsoni.prototype.kob = function () {
+        proto_26.kob = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        wilsoni.prototype.csorbai = function () {
+        proto_26.csorbai = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        wilsoni.prototype.dorsata = function () {
+        proto_26.dorsata = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
@@ -2443,79 +2469,80 @@ var lavali;
         function otion() {
             return _super !== null && _super.apply(this, arguments) || this;
         }
-        otion.prototype.bonaerensis = function () {
+        var proto_27 = otion.prototype;
+        proto_27.bonaerensis = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        otion.prototype.dussumieri = function () {
+        proto_27.dussumieri = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        otion.prototype.osvaldoreigi = function () {
+        proto_27.osvaldoreigi = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        otion.prototype.grevyi = function () {
+        proto_27.grevyi = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        otion.prototype.hirtula = function () {
+        proto_27.hirtula = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        otion.prototype.cristatus = function () {
+        proto_27.cristatus = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        otion.prototype.darlingtoni = function () {
+        proto_27.darlingtoni = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        otion.prototype.fontanierii = function () {
+        proto_27.fontanierii = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        otion.prototype.umbrosus = function () {
+        proto_27.umbrosus = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        otion.prototype.chiriquinus = function () {
+        proto_27.chiriquinus = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        otion.prototype.orarius = function () {
+        proto_27.orarius = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        otion.prototype.ilaeus = function () {
+        proto_27.ilaeus = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        otion.prototype.musschenbroekii = function () {
+        proto_27.musschenbroekii = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
@@ -2527,73 +2554,74 @@ var lavali;
     var xanthognathus = /** @class */ (function () {
         function xanthognathus() {
         }
-        xanthognathus.prototype.nanulus = function () {
+        var proto_28 = xanthognathus.prototype;
+        proto_28.nanulus = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        xanthognathus.prototype.albigena = function () {
+        proto_28.albigena = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        xanthognathus.prototype.onca = function () {
+        proto_28.onca = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        xanthognathus.prototype.gunnii = function () {
+        proto_28.gunnii = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        xanthognathus.prototype.apeco = function () {
+        proto_28.apeco = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        xanthognathus.prototype.variegates = function () {
+        proto_28.variegates = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        xanthognathus.prototype.goudotii = function () {
+        proto_28.goudotii = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        xanthognathus.prototype.pohlei = function () {
+        proto_28.pohlei = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        xanthognathus.prototype.ineptus = function () {
+        proto_28.ineptus = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        xanthognathus.prototype.euryotis = function () {
+        proto_28.euryotis = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        xanthognathus.prototype.maurisca = function () {
+        proto_28.maurisca = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        xanthognathus.prototype.coyhaiquensis = function () {
+        proto_28.coyhaiquensis = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
@@ -2607,49 +2635,50 @@ var lavali;
         function thaeleri() {
             return _super !== null && _super.apply(this, arguments) || this;
         }
-        thaeleri.prototype.coromandra = function () {
+        var proto_29 = thaeleri.prototype;
+        proto_29.coromandra = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        thaeleri.prototype.parvipes = function () {
+        proto_29.parvipes = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        thaeleri.prototype.sponsorius = function () {
+        proto_29.sponsorius = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        thaeleri.prototype.vates = function () {
+        proto_29.vates = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        thaeleri.prototype.roosmalenorum = function () {
+        proto_29.roosmalenorum = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        thaeleri.prototype.rubicola = function () {
+        proto_29.rubicola = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        thaeleri.prototype.ikonnikovi = function () {
+        proto_29.ikonnikovi = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        thaeleri.prototype.paramicrus = function () {
+        proto_29.paramicrus = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
@@ -2663,13 +2692,14 @@ var lavali;
         function lepturus() {
             return _super !== null && _super.apply(this, arguments) || this;
         }
-        lepturus.prototype.ferrumequinum = function () {
+        var proto_30 = lepturus.prototype;
+        proto_30.ferrumequinum = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        lepturus.prototype.aequalis = function () {
+        proto_30.aequalis = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
@@ -2686,55 +2716,56 @@ var dogramacii;
         function robustulus() {
             return _super !== null && _super.apply(this, arguments) || this;
         }
-        robustulus.prototype.fossor = function () {
+        var proto_31 = robustulus.prototype;
+        proto_31.fossor = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        robustulus.prototype.humboldti = function () {
+        proto_31.humboldti = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        robustulus.prototype.mexicana = function () {
+        proto_31.mexicana = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        robustulus.prototype.martini = function () {
+        proto_31.martini = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        robustulus.prototype.beatus = function () {
+        proto_31.beatus = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        robustulus.prototype.leporina = function () {
+        proto_31.leporina = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        robustulus.prototype.pearsonii = function () {
+        proto_31.pearsonii = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        robustulus.prototype.keaysi = function () {
+        proto_31.keaysi = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        robustulus.prototype.hindei = function () {
+        proto_31.hindei = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
@@ -2758,79 +2789,80 @@ var dogramacii;
     var kaiseri = /** @class */ (function () {
         function kaiseri() {
         }
-        kaiseri.prototype.bedfordiae = function () {
+        var proto_32 = kaiseri.prototype;
+        proto_32.bedfordiae = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        kaiseri.prototype.paramorum = function () {
+        proto_32.paramorum = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        kaiseri.prototype.rubidus = function () {
+        proto_32.rubidus = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        kaiseri.prototype.juninensis = function () {
+        proto_32.juninensis = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        kaiseri.prototype.marginata = function () {
+        proto_32.marginata = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        kaiseri.prototype.Meitnerium = function () {
+        proto_32.Meitnerium = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        kaiseri.prototype.pinetorum = function () {
+        proto_32.pinetorum = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        kaiseri.prototype.hoolock = function () {
+        proto_32.hoolock = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        kaiseri.prototype.poeyi = function () {
+        proto_32.poeyi = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        kaiseri.prototype.Thulium = function () {
+        proto_32.Thulium = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        kaiseri.prototype.patrius = function () {
+        proto_32.patrius = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        kaiseri.prototype.quadraticauda = function () {
+        proto_32.quadraticauda = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        kaiseri.prototype.ater = function () {
+        proto_32.ater = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
@@ -2842,49 +2874,50 @@ var dogramacii;
     var aurata = /** @class */ (function () {
         function aurata() {
         }
-        aurata.prototype.grunniens = function () {
+        var proto_33 = aurata.prototype;
+        proto_33.grunniens = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        aurata.prototype.howensis = function () {
+        proto_33.howensis = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        aurata.prototype.karlkoopmani = function () {
+        proto_33.karlkoopmani = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        aurata.prototype.mirapitanga = function () {
+        proto_33.mirapitanga = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        aurata.prototype.ophiodon = function () {
+        proto_33.ophiodon = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        aurata.prototype.landeri = function () {
+        proto_33.landeri = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        aurata.prototype.sonomae = function () {
+        proto_33.sonomae = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        aurata.prototype.erythromos = function () {
+        proto_33.erythromos = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
@@ -2901,85 +2934,86 @@ var lutreolus;
         function schlegeli() {
             return _super !== null && _super.apply(this, arguments) || this;
         }
-        schlegeli.prototype.mittendorfi = function () {
+        var proto_34 = schlegeli.prototype;
+        proto_34.mittendorfi = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        schlegeli.prototype.blicki = function () {
+        proto_34.blicki = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        schlegeli.prototype.culionensis = function () {
+        proto_34.culionensis = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        schlegeli.prototype.scrofa = function () {
+        proto_34.scrofa = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        schlegeli.prototype.fernandoni = function () {
+        proto_34.fernandoni = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        schlegeli.prototype.Tin = function () {
+        proto_34.Tin = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        schlegeli.prototype.marmorata = function () {
+        proto_34.marmorata = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        schlegeli.prototype.tavaratra = function () {
+        proto_34.tavaratra = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        schlegeli.prototype.peregrina = function () {
+        proto_34.peregrina = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        schlegeli.prototype.frontalis = function () {
+        proto_34.frontalis = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        schlegeli.prototype.cuniculus = function () {
+        proto_34.cuniculus = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        schlegeli.prototype.magdalenae = function () {
+        proto_34.magdalenae = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        schlegeli.prototype.andamanensis = function () {
+        proto_34.andamanensis = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        schlegeli.prototype.dispar = function () {
+        proto_34.dispar = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
@@ -2994,67 +3028,68 @@ var argurus;
     var dauricus = /** @class */ (function () {
         function dauricus() {
         }
-        dauricus.prototype.chinensis = function () {
+        var proto_35 = dauricus.prototype;
+        proto_35.chinensis = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        dauricus.prototype.duodecimcostatus = function () {
+        proto_35.duodecimcostatus = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        dauricus.prototype.foxi = function () {
+        proto_35.foxi = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        dauricus.prototype.macleayii = function () {
+        proto_35.macleayii = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        dauricus.prototype.darienensis = function () {
+        proto_35.darienensis = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        dauricus.prototype.hardwickii = function () {
+        proto_35.hardwickii = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        dauricus.prototype.albifrons = function () {
+        proto_35.albifrons = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        dauricus.prototype.jacobitus = function () {
+        proto_35.jacobitus = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        dauricus.prototype.guentheri = function () {
+        proto_35.guentheri = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        dauricus.prototype.mahomet = function () {
+        proto_35.mahomet = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        dauricus.prototype.misionensis = function () {
+        proto_35.misionensis = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
@@ -3069,49 +3104,50 @@ var nigra;
     var dolichurus = /** @class */ (function () {
         function dolichurus() {
         }
-        dolichurus.prototype.solomonis = function () {
+        var proto_36 = dolichurus.prototype;
+        proto_36.solomonis = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        dolichurus.prototype.alfredi = function () {
+        proto_36.alfredi = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        dolichurus.prototype.morrisi = function () {
+        proto_36.morrisi = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        dolichurus.prototype.lekaguli = function () {
+        proto_36.lekaguli = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        dolichurus.prototype.dimissus = function () {
+        proto_36.dimissus = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        dolichurus.prototype.phaeotis = function () {
+        proto_36.phaeotis = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        dolichurus.prototype.ustus = function () {
+        proto_36.ustus = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        dolichurus.prototype.sagei = function () {
+        proto_36.sagei = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
@@ -3128,37 +3164,38 @@ var panglima;
         function amphibius() {
             return _super !== null && _super.apply(this, arguments) || this;
         }
-        amphibius.prototype.bottegi = function () {
+        var proto_37 = amphibius.prototype;
+        proto_37.bottegi = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        amphibius.prototype.jerdoni = function () {
+        proto_37.jerdoni = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        amphibius.prototype.camtschatica = function () {
+        proto_37.camtschatica = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        amphibius.prototype.spadix = function () {
+        proto_37.spadix = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        amphibius.prototype.luismanueli = function () {
+        proto_37.luismanueli = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        amphibius.prototype.aceramarcae = function () {
+        proto_37.aceramarcae = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
@@ -3172,19 +3209,20 @@ var panglima;
         function fundatus() {
             return _super !== null && _super.apply(this, arguments) || this;
         }
-        fundatus.prototype.crassulus = function () {
+        var proto_38 = fundatus.prototype;
+        proto_38.crassulus = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        fundatus.prototype.flamarioni = function () {
+        proto_38.flamarioni = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        fundatus.prototype.mirabilis = function () {
+        proto_38.mirabilis = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
@@ -3198,31 +3236,32 @@ var panglima;
         function abidi() {
             return _super !== null && _super.apply(this, arguments) || this;
         }
-        abidi.prototype.greyii = function () {
+        var proto_39 = abidi.prototype;
+        proto_39.greyii = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        abidi.prototype.macedonicus = function () {
+        proto_39.macedonicus = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        abidi.prototype.galili = function () {
+        proto_39.galili = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        abidi.prototype.thierryi = function () {
+        proto_39.thierryi = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        abidi.prototype.ega = function () {
+        proto_39.ega = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
@@ -3236,43 +3275,44 @@ var panglima;
     var carolinensis = /** @class */ (function () {
         function carolinensis() {
         }
-        carolinensis.prototype.concinna = function () {
+        var proto_40 = carolinensis.prototype;
+        proto_40.concinna = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        carolinensis.prototype.aeneus = function () {
+        proto_40.aeneus = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        carolinensis.prototype.aloysiisabaudiae = function () {
+        proto_40.aloysiisabaudiae = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        carolinensis.prototype.tenellus = function () {
+        proto_40.tenellus = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        carolinensis.prototype.andium = function () {
+        proto_40.andium = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        carolinensis.prototype.persephone = function () {
+        proto_40.persephone = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        carolinensis.prototype.patrizii = function () {
+        proto_40.patrizii = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
@@ -3289,73 +3329,74 @@ var minutus;
         function himalayana() {
             return _super !== null && _super.apply(this, arguments) || this;
         }
-        himalayana.prototype.simoni = function () {
+        var proto_41 = himalayana.prototype;
+        proto_41.simoni = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        himalayana.prototype.lobata = function () {
+        proto_41.lobata = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        himalayana.prototype.rusticus = function () {
+        proto_41.rusticus = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        himalayana.prototype.latona = function () {
+        proto_41.latona = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        himalayana.prototype.famulus = function () {
+        proto_41.famulus = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        himalayana.prototype.flaviceps = function () {
+        proto_41.flaviceps = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        himalayana.prototype.paradoxolophus = function () {
+        proto_41.paradoxolophus = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        himalayana.prototype.Osmium = function () {
+        proto_41.Osmium = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        himalayana.prototype.vulgaris = function () {
+        proto_41.vulgaris = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        himalayana.prototype.betsileoensis = function () {
+        proto_41.betsileoensis = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        himalayana.prototype.vespuccii = function () {
+        proto_41.vespuccii = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        himalayana.prototype.olympus = function () {
+        proto_41.olympus = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
@@ -3372,49 +3413,50 @@ var caurinus;
         function mahaganus() {
             return _super !== null && _super.apply(this, arguments) || this;
         }
-        mahaganus.prototype.martiniquensis = function () {
+        var proto_42 = mahaganus.prototype;
+        proto_42.martiniquensis = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        mahaganus.prototype.devius = function () {
+        proto_42.devius = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        mahaganus.prototype.masalai = function () {
+        proto_42.masalai = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        mahaganus.prototype.kathleenae = function () {
+        proto_42.kathleenae = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        mahaganus.prototype.simulus = function () {
+        proto_42.simulus = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        mahaganus.prototype.nigrovittatus = function () {
+        proto_42.nigrovittatus = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        mahaganus.prototype.senegalensis = function () {
+        proto_42.senegalensis = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        mahaganus.prototype.acticola = function () {
+        proto_42.acticola = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
@@ -3469,49 +3511,50 @@ var daubentonii;
     var thalia = /** @class */ (function () {
         function thalia() {
         }
-        thalia.prototype.dichotomus = function () {
+        var proto_43 = thalia.prototype;
+        proto_43.dichotomus = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        thalia.prototype.arnuxii = function () {
+        proto_43.arnuxii = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        thalia.prototype.verheyeni = function () {
+        proto_43.verheyeni = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        thalia.prototype.dauuricus = function () {
+        proto_43.dauuricus = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        thalia.prototype.tristriatus = function () {
+        proto_43.tristriatus = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        thalia.prototype.lasiura = function () {
+        proto_43.lasiura = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        thalia.prototype.gangetica = function () {
+        proto_43.gangetica = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        thalia.prototype.brucei = function () {
+        proto_43.brucei = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
@@ -3571,55 +3614,56 @@ var panamensis;
         function linulus() {
             return _super !== null && _super.apply(this, arguments) || this;
         }
-        linulus.prototype.goslingi = function () {
+        var proto_44 = linulus.prototype;
+        proto_44.goslingi = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        linulus.prototype.taki = function () {
+        proto_44.taki = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        linulus.prototype.fumosus = function () {
+        proto_44.fumosus = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        linulus.prototype.rufinus = function () {
+        proto_44.rufinus = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        linulus.prototype.lami = function () {
+        proto_44.lami = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        linulus.prototype.regina = function () {
+        proto_44.regina = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        linulus.prototype.nanilla = function () {
+        proto_44.nanilla = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        linulus.prototype.enganus = function () {
+        proto_44.enganus = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        linulus.prototype.gomantongensis = function () {
+        proto_44.gomantongensis = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
@@ -3633,79 +3677,80 @@ var panamensis;
     var gracilis = /** @class */ (function () {
         function gracilis() {
         }
-        gracilis.prototype.weddellii = function () {
+        var proto_45 = gracilis.prototype;
+        proto_45.weddellii = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        gracilis.prototype.echinothrix = function () {
+        proto_45.echinothrix = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        gracilis.prototype.garridoi = function () {
+        proto_45.garridoi = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        gracilis.prototype.rouxii = function () {
+        proto_45.rouxii = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        gracilis.prototype.aurita = function () {
+        proto_45.aurita = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        gracilis.prototype.geoffrensis = function () {
+        proto_45.geoffrensis = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        gracilis.prototype.theresa = function () {
+        proto_45.theresa = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        gracilis.prototype.melanocarpus = function () {
+        proto_45.melanocarpus = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        gracilis.prototype.dubiaquercus = function () {
+        proto_45.dubiaquercus = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        gracilis.prototype.pectoralis = function () {
+        proto_45.pectoralis = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        gracilis.prototype.apoensis = function () {
+        proto_45.apoensis = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        gracilis.prototype.grisescens = function () {
+        proto_45.grisescens = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        gracilis.prototype.ramirohitra = function () {
+        proto_45.ramirohitra = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
@@ -3722,79 +3767,80 @@ var samarensis;
         function pelurus() {
             return _super !== null && _super.apply(this, arguments) || this;
         }
-        pelurus.prototype.Palladium = function () {
+        var proto_46 = pelurus.prototype;
+        proto_46.Palladium = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        pelurus.prototype.castanea = function () {
+        proto_46.castanea = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        pelurus.prototype.chamek = function () {
+        proto_46.chamek = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        pelurus.prototype.nigriceps = function () {
+        proto_46.nigriceps = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        pelurus.prototype.lunatus = function () {
+        proto_46.lunatus = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        pelurus.prototype.madurae = function () {
+        proto_46.madurae = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        pelurus.prototype.chinchilla = function () {
+        proto_46.chinchilla = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        pelurus.prototype.eliasi = function () {
+        proto_46.eliasi = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        pelurus.prototype.proditor = function () {
+        proto_46.proditor = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        pelurus.prototype.gambianus = function () {
+        proto_46.gambianus = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        pelurus.prototype.petteri = function () {
+        proto_46.petteri = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        pelurus.prototype.nusatenggara = function () {
+        proto_46.nusatenggara = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        pelurus.prototype.olitor = function () {
+        proto_46.olitor = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
@@ -3808,85 +3854,86 @@ var samarensis;
         function fuscus() {
             return _super !== null && _super.apply(this, arguments) || this;
         }
-        fuscus.prototype.planifrons = function () {
+        var proto_47 = fuscus.prototype;
+        proto_47.planifrons = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        fuscus.prototype.badia = function () {
+        proto_47.badia = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        fuscus.prototype.prymnolopha = function () {
+        proto_47.prymnolopha = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        fuscus.prototype.natalensis = function () {
+        proto_47.natalensis = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        fuscus.prototype.hunteri = function () {
+        proto_47.hunteri = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        fuscus.prototype.sapiens = function () {
+        proto_47.sapiens = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        fuscus.prototype.macrocercus = function () {
+        proto_47.macrocercus = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        fuscus.prototype.nimbae = function () {
+        proto_47.nimbae = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        fuscus.prototype.suricatta = function () {
+        proto_47.suricatta = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        fuscus.prototype.jagorii = function () {
+        proto_47.jagorii = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        fuscus.prototype.beecrofti = function () {
+        proto_47.beecrofti = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        fuscus.prototype.imaizumii = function () {
+        proto_47.imaizumii = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        fuscus.prototype.colocolo = function () {
+        proto_47.colocolo = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        fuscus.prototype.wolfi = function () {
+        proto_47.wolfi = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
@@ -3898,25 +3945,26 @@ var samarensis;
     var pallidus = /** @class */ (function () {
         function pallidus() {
         }
-        pallidus.prototype.oblativa = function () {
+        var proto_48 = pallidus.prototype;
+        proto_48.oblativa = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        pallidus.prototype.watersi = function () {
+        proto_48.watersi = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        pallidus.prototype.glacialis = function () {
+        proto_48.glacialis = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        pallidus.prototype.viaria = function () {
+        proto_48.viaria = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
@@ -3928,31 +3976,32 @@ var samarensis;
     var cahirinus = /** @class */ (function () {
         function cahirinus() {
         }
-        cahirinus.prototype.alashanicus = function () {
+        var proto_49 = cahirinus.prototype;
+        proto_49.alashanicus = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        cahirinus.prototype.flaviventer = function () {
+        proto_49.flaviventer = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        cahirinus.prototype.bottai = function () {
+        proto_49.bottai = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        cahirinus.prototype.pinetis = function () {
+        proto_49.pinetis = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        cahirinus.prototype.saussurei = function () {
+        proto_49.saussurei = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
@@ -3968,31 +4017,32 @@ var samarensis;
         function leptoceros() {
             return _super !== null && _super.apply(this, arguments) || this;
         }
-        leptoceros.prototype.victus = function () {
+        var proto_50 = leptoceros.prototype;
+        proto_50.victus = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        leptoceros.prototype.hoplomyoides = function () {
+        proto_50.hoplomyoides = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        leptoceros.prototype.gratiosus = function () {
+        proto_50.gratiosus = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        leptoceros.prototype.rex = function () {
+        proto_50.rex = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        leptoceros.prototype.bolami = function () {
+        proto_50.bolami = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
@@ -4033,19 +4083,20 @@ var dammermani;
         function pygmaea() {
             return _super !== null && _super.apply(this, arguments) || this;
         }
-        pygmaea.prototype.pajeros = function () {
+        var proto_51 = pygmaea.prototype;
+        proto_51.pajeros = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        pygmaea.prototype.capucinus = function () {
+        proto_51.capucinus = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        pygmaea.prototype.cuvieri = function () {
+        proto_51.cuvieri = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
@@ -4062,43 +4113,44 @@ var chrysaeolus;
         function sarasinorum() {
             return _super !== null && _super.apply(this, arguments) || this;
         }
-        sarasinorum.prototype.belzebul = function () {
+        var proto_52 = sarasinorum.prototype;
+        proto_52.belzebul = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        sarasinorum.prototype.hinpoon = function () {
+        proto_52.hinpoon = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        sarasinorum.prototype.kandti = function () {
+        proto_52.kandti = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        sarasinorum.prototype.cynosuros = function () {
+        proto_52.cynosuros = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        sarasinorum.prototype.Germanium = function () {
+        proto_52.Germanium = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        sarasinorum.prototype.Ununoctium = function () {
+        proto_52.Ununoctium = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        sarasinorum.prototype.princeps = function () {
+        proto_52.princeps = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
@@ -4112,43 +4164,44 @@ var chrysaeolus;
     var wetmorei = /** @class */ (function () {
         function wetmorei() {
         }
-        wetmorei.prototype.leucoptera = function () {
+        var proto_53 = wetmorei.prototype;
+        proto_53.leucoptera = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        wetmorei.prototype.ochraventer = function () {
+        proto_53.ochraventer = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        wetmorei.prototype.tephromelas = function () {
+        proto_53.tephromelas = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        wetmorei.prototype.cracens = function () {
+        proto_53.cracens = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        wetmorei.prototype.jamaicensis = function () {
+        proto_53.jamaicensis = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        wetmorei.prototype.gymnocaudus = function () {
+        proto_53.gymnocaudus = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        wetmorei.prototype.mayori = function () {
+        proto_53.mayori = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
@@ -4164,49 +4217,50 @@ var chrysaeolus;
         function oreas() {
             return _super !== null && _super.apply(this, arguments) || this;
         }
-        oreas.prototype.salamonis = function () {
+        var proto_54 = oreas.prototype;
+        proto_54.salamonis = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        oreas.prototype.paniscus = function () {
+        proto_54.paniscus = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        oreas.prototype.fagani = function () {
+        proto_54.fagani = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        oreas.prototype.papuanus = function () {
+        proto_54.papuanus = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        oreas.prototype.timidus = function () {
+        proto_54.timidus = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        oreas.prototype.nghetinhensis = function () {
+        proto_54.nghetinhensis = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        oreas.prototype.barbei = function () {
+        proto_54.barbei = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        oreas.prototype.univittatus = function () {
+        proto_54.univittatus = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
@@ -4220,73 +4274,74 @@ var chrysaeolus;
     var arboreus = /** @class */ (function () {
         function arboreus() {
         }
-        arboreus.prototype.capreolus = function () {
+        var proto_55 = arboreus.prototype;
+        proto_55.capreolus = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        arboreus.prototype.moreni = function () {
+        proto_55.moreni = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        arboreus.prototype.hypoleucos = function () {
+        proto_55.hypoleucos = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        arboreus.prototype.paedulcus = function () {
+        proto_55.paedulcus = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        arboreus.prototype.pucheranii = function () {
+        proto_55.pucheranii = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        arboreus.prototype.stella = function () {
+        proto_55.stella = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        arboreus.prototype.brasiliensis = function () {
+        proto_55.brasiliensis = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        arboreus.prototype.brevicaudata = function () {
+        proto_55.brevicaudata = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        arboreus.prototype.vitticollis = function () {
+        proto_55.vitticollis = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        arboreus.prototype.huangensis = function () {
+        proto_55.huangensis = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        arboreus.prototype.cameroni = function () {
+        proto_55.cameroni = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        arboreus.prototype.tianshanica = function () {
+        proto_55.tianshanica = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
@@ -4301,79 +4356,80 @@ var patas;
     var uralensis = /** @class */ (function () {
         function uralensis() {
         }
-        uralensis.prototype.cartilagonodus = function () {
+        var proto_56 = uralensis.prototype;
+        proto_56.cartilagonodus = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        uralensis.prototype.pyrrhinus = function () {
+        proto_56.pyrrhinus = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        uralensis.prototype.insulans = function () {
+        proto_56.insulans = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        uralensis.prototype.nigricauda = function () {
+        proto_56.nigricauda = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        uralensis.prototype.muricauda = function () {
+        proto_56.muricauda = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        uralensis.prototype.albicaudus = function () {
+        proto_56.albicaudus = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        uralensis.prototype.fallax = function () {
+        proto_56.fallax = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        uralensis.prototype.attenuata = function () {
+        proto_56.attenuata = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        uralensis.prototype.megalura = function () {
+        proto_56.megalura = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        uralensis.prototype.neblina = function () {
+        proto_56.neblina = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        uralensis.prototype.citellus = function () {
+        proto_56.citellus = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        uralensis.prototype.tanezumi = function () {
+        proto_56.tanezumi = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        uralensis.prototype.albiventer = function () {
+        proto_56.albiventer = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
@@ -4390,13 +4446,14 @@ var provocax;
         function melanoleuca() {
             return _super !== null && _super.apply(this, arguments) || this;
         }
-        melanoleuca.prototype.Neodymium = function () {
+        var proto_57 = melanoleuca.prototype;
+        proto_57.Neodymium = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        melanoleuca.prototype.baeri = function () {
+        proto_57.baeri = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
@@ -4410,13 +4467,14 @@ var provocax;
     var sicarius = /** @class */ (function () {
         function sicarius() {
         }
-        sicarius.prototype.Chlorine = function () {
+        var proto_58 = sicarius.prototype;
+        proto_58.Chlorine = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        sicarius.prototype.simulator = function () {
+        proto_58.simulator = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
@@ -4432,85 +4490,86 @@ var provocax;
         function marcanoi() {
             return _super !== null && _super.apply(this, arguments) || this;
         }
-        marcanoi.prototype.formosae = function () {
+        var proto_59 = marcanoi.prototype;
+        proto_59.formosae = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        marcanoi.prototype.dudui = function () {
+        proto_59.dudui = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        marcanoi.prototype.leander = function () {
+        proto_59.leander = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        marcanoi.prototype.martinsi = function () {
+        proto_59.martinsi = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        marcanoi.prototype.beatrix = function () {
+        proto_59.beatrix = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        marcanoi.prototype.griseoventer = function () {
+        proto_59.griseoventer = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        marcanoi.prototype.zerda = function () {
+        proto_59.zerda = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        marcanoi.prototype.yucatanicus = function () {
+        proto_59.yucatanicus = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        marcanoi.prototype.nigrita = function () {
+        proto_59.nigrita = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        marcanoi.prototype.jouvenetae = function () {
+        proto_59.jouvenetae = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        marcanoi.prototype.indefessus = function () {
+        proto_59.indefessus = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        marcanoi.prototype.vuquangensis = function () {
+        proto_59.vuquangensis = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        marcanoi.prototype.Zirconium = function () {
+        proto_59.Zirconium = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        marcanoi.prototype.hyaena = function () {
+        proto_59.hyaena = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
@@ -4524,73 +4583,74 @@ var provocax;
     var gilbertii = /** @class */ (function () {
         function gilbertii() {
         }
-        gilbertii.prototype.nasutus = function () {
+        var proto_60 = gilbertii.prototype;
+        proto_60.nasutus = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        gilbertii.prototype.poecilops = function () {
+        proto_60.poecilops = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        gilbertii.prototype.sondaicus = function () {
+        proto_60.sondaicus = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        gilbertii.prototype.auriventer = function () {
+        proto_60.auriventer = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        gilbertii.prototype.cherriei = function () {
+        proto_60.cherriei = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        gilbertii.prototype.lindberghi = function () {
+        proto_60.lindberghi = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        gilbertii.prototype.pipistrellus = function () {
+        proto_60.pipistrellus = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        gilbertii.prototype.paranus = function () {
+        proto_60.paranus = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        gilbertii.prototype.dubosti = function () {
+        proto_60.dubosti = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        gilbertii.prototype.opossum = function () {
+        proto_60.opossum = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        gilbertii.prototype.oreopolus = function () {
+        proto_60.oreopolus = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        gilbertii.prototype.amurensis = function () {
+        proto_60.amurensis = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
@@ -4613,79 +4673,80 @@ var petrophilus;
     var punicus = /** @class */ (function () {
         function punicus() {
         }
-        punicus.prototype.strandi = function () {
+        var proto_61 = punicus.prototype;
+        proto_61.strandi = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        punicus.prototype.lar = function () {
+        proto_61.lar = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        punicus.prototype.erica = function () {
+        proto_61.erica = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        punicus.prototype.trichura = function () {
+        proto_61.trichura = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        punicus.prototype.lemniscatus = function () {
+        proto_61.lemniscatus = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        punicus.prototype.aspalax = function () {
+        proto_61.aspalax = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        punicus.prototype.marshalli = function () {
+        proto_61.marshalli = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        punicus.prototype.Zinc = function () {
+        proto_61.Zinc = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        punicus.prototype.monochromos = function () {
+        proto_61.monochromos = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        punicus.prototype.purinus = function () {
+        proto_61.purinus = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        punicus.prototype.ischyrus = function () {
+        proto_61.ischyrus = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        punicus.prototype.tenuis = function () {
+        proto_61.tenuis = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        punicus.prototype.Helium = function () {
+        proto_61.Helium = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
@@ -4699,37 +4760,38 @@ var petrophilus;
     var daphaenodon = /** @class */ (function () {
         function daphaenodon() {
         }
-        daphaenodon.prototype.bredanensis = function () {
+        var proto_62 = daphaenodon.prototype;
+        proto_62.bredanensis = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        daphaenodon.prototype.othus = function () {
+        proto_62.othus = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        daphaenodon.prototype.hammondi = function () {
+        proto_62.hammondi = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        daphaenodon.prototype.aureocollaris = function () {
+        proto_62.aureocollaris = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        daphaenodon.prototype.flavipes = function () {
+        proto_62.flavipes = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        daphaenodon.prototype.callosus = function () {
+        proto_62.callosus = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
@@ -4743,73 +4805,74 @@ var petrophilus;
     var cinereus = /** @class */ (function () {
         function cinereus() {
         }
-        cinereus.prototype.zunigae = function () {
+        var proto_63 = cinereus.prototype;
+        proto_63.zunigae = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        cinereus.prototype.microps = function () {
+        proto_63.microps = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        cinereus.prototype.guaporensis = function () {
+        proto_63.guaporensis = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        cinereus.prototype.tonkeana = function () {
+        proto_63.tonkeana = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        cinereus.prototype.montensis = function () {
+        proto_63.montensis = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        cinereus.prototype.sphinx = function () {
+        proto_63.sphinx = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        cinereus.prototype.glis = function () {
+        proto_63.glis = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        cinereus.prototype.dorsalis = function () {
+        proto_63.dorsalis = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        cinereus.prototype.fimbriatus = function () {
+        proto_63.fimbriatus = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        cinereus.prototype.sara = function () {
+        proto_63.sara = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        cinereus.prototype.epimelas = function () {
+        proto_63.epimelas = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        cinereus.prototype.pittieri = function () {
+        proto_63.pittieri = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
@@ -4840,61 +4903,62 @@ var gabriellae;
     var amicus = /** @class */ (function () {
         function amicus() {
         }
-        amicus.prototype.pirrensis = function () {
+        var proto_64 = amicus.prototype;
+        proto_64.pirrensis = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        amicus.prototype.phaeura = function () {
+        proto_64.phaeura = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        amicus.prototype.voratus = function () {
+        proto_64.voratus = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        amicus.prototype.satarae = function () {
+        proto_64.satarae = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        amicus.prototype.hooperi = function () {
+        proto_64.hooperi = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        amicus.prototype.perrensi = function () {
+        proto_64.perrensi = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        amicus.prototype.ridei = function () {
+        proto_64.ridei = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        amicus.prototype.audeberti = function () {
+        proto_64.audeberti = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        amicus.prototype.Lutetium = function () {
+        proto_64.Lutetium = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        amicus.prototype.atrox = function () {
+        proto_64.atrox = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
@@ -4921,37 +4985,38 @@ var imperfecta;
     var lasiurus = /** @class */ (function () {
         function lasiurus() {
         }
-        lasiurus.prototype.marisae = function () {
+        var proto_65 = lasiurus.prototype;
+        proto_65.marisae = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        lasiurus.prototype.fulvus = function () {
+        proto_65.fulvus = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        lasiurus.prototype.paranaensis = function () {
+        proto_65.paranaensis = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        lasiurus.prototype.didactylus = function () {
+        proto_65.didactylus = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        lasiurus.prototype.schreibersii = function () {
+        proto_65.schreibersii = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        lasiurus.prototype.orii = function () {
+        proto_65.orii = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
@@ -4963,67 +5028,68 @@ var imperfecta;
     var subspinosus = /** @class */ (function () {
         function subspinosus() {
         }
-        subspinosus.prototype.monticularis = function () {
+        var proto_66 = subspinosus.prototype;
+        proto_66.monticularis = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        subspinosus.prototype.Gadolinium = function () {
+        proto_66.Gadolinium = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        subspinosus.prototype.oasicus = function () {
+        proto_66.oasicus = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        subspinosus.prototype.paterculus = function () {
+        proto_66.paterculus = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        subspinosus.prototype.punctata = function () {
+        proto_66.punctata = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        subspinosus.prototype.invictus = function () {
+        proto_66.invictus = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        subspinosus.prototype.stangeri = function () {
+        proto_66.stangeri = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        subspinosus.prototype.siskiyou = function () {
+        proto_66.siskiyou = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        subspinosus.prototype.welwitschii = function () {
+        proto_66.welwitschii = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        subspinosus.prototype.Polonium = function () {
+        proto_66.Polonium = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        subspinosus.prototype.harpia = function () {
+        proto_66.harpia = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
@@ -5037,19 +5103,20 @@ var imperfecta;
         function ciliolabrum() {
             return _super !== null && _super.apply(this, arguments) || this;
         }
-        ciliolabrum.prototype.leschenaultii = function () {
+        var proto_67 = ciliolabrum.prototype;
+        proto_67.leschenaultii = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        ciliolabrum.prototype.ludia = function () {
+        proto_67.ludia = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        ciliolabrum.prototype.sinicus = function () {
+        proto_67.sinicus = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
@@ -5063,25 +5130,26 @@ var imperfecta;
     var wattsi = /** @class */ (function () {
         function wattsi() {
         }
-        wattsi.prototype.lagotis = function () {
+        var proto_68 = wattsi.prototype;
+        proto_68.lagotis = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        wattsi.prototype.hussoni = function () {
+        proto_68.hussoni = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        wattsi.prototype.bilarni = function () {
+        proto_68.bilarni = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        wattsi.prototype.cabrerae = function () {
+        proto_68.cabrerae = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
@@ -5097,55 +5165,56 @@ var imperfecta;
         function sodyi() {
             return _super !== null && _super.apply(this, arguments) || this;
         }
-        sodyi.prototype.saundersiae = function () {
+        var proto_69 = sodyi.prototype;
+        proto_69.saundersiae = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        sodyi.prototype.imberbis = function () {
+        proto_69.imberbis = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        sodyi.prototype.cansdalei = function () {
+        proto_69.cansdalei = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        sodyi.prototype.Lawrencium = function () {
+        proto_69.Lawrencium = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        sodyi.prototype.catta = function () {
+        proto_69.catta = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        sodyi.prototype.breviceps = function () {
+        proto_69.breviceps = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        sodyi.prototype.transitionalis = function () {
+        proto_69.transitionalis = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        sodyi.prototype.heptneri = function () {
+        proto_69.heptneri = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        sodyi.prototype.bairdii = function () {
+        proto_69.bairdii = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
@@ -5161,49 +5230,50 @@ var imperfecta;
         function megaphyllus() {
             return _super !== null && _super.apply(this, arguments) || this;
         }
-        megaphyllus.prototype.montana = function () {
+        var proto_70 = megaphyllus.prototype;
+        proto_70.montana = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        megaphyllus.prototype.amatus = function () {
+        proto_70.amatus = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        megaphyllus.prototype.bucculentus = function () {
+        proto_70.bucculentus = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        megaphyllus.prototype.lepida = function () {
+        proto_70.lepida = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        megaphyllus.prototype.graecus = function () {
+        proto_70.graecus = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        megaphyllus.prototype.forsteri = function () {
+        proto_70.forsteri = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        megaphyllus.prototype.perotensis = function () {
+        proto_70.perotensis = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        megaphyllus.prototype.cirrhosus = function () {
+        proto_70.cirrhosus = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
@@ -5217,19 +5287,20 @@ var imperfecta;
     var portoricensis = /** @class */ (function () {
         function portoricensis() {
         }
-        portoricensis.prototype.relictus = function () {
+        var proto_71 = portoricensis.prototype;
+        proto_71.relictus = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        portoricensis.prototype.aequatorianus = function () {
+        proto_71.aequatorianus = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        portoricensis.prototype.rhinogradoides = function () {
+        proto_71.rhinogradoides = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
@@ -5243,79 +5314,80 @@ var imperfecta;
     var foina = /** @class */ (function () {
         function foina() {
         }
-        foina.prototype.tarfayensis = function () {
+        var proto_72 = foina.prototype;
+        proto_72.tarfayensis = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        foina.prototype.Promethium = function () {
+        proto_72.Promethium = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        foina.prototype.salinae = function () {
+        proto_72.salinae = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        foina.prototype.kerri = function () {
+        proto_72.kerri = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        foina.prototype.scotti = function () {
+        proto_72.scotti = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        foina.prototype.camerunensis = function () {
+        proto_72.camerunensis = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        foina.prototype.affinis = function () {
+        proto_72.affinis = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        foina.prototype.siebersi = function () {
+        proto_72.siebersi = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        foina.prototype.maquassiensis = function () {
+        proto_72.maquassiensis = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        foina.prototype.layardi = function () {
+        proto_72.layardi = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        foina.prototype.bishopi = function () {
+        proto_72.bishopi = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        foina.prototype.apodemoides = function () {
+        proto_72.apodemoides = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        foina.prototype.argentiventer = function () {
+        proto_72.argentiventer = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
@@ -5331,61 +5403,62 @@ var imperfecta;
         function cor() {
             return _super !== null && _super.apply(this, arguments) || this;
         }
-        cor.prototype.antinorii = function () {
+        var proto_73 = cor.prototype;
+        proto_73.antinorii = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        cor.prototype.voi = function () {
+        proto_73.voi = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        cor.prototype.mussoi = function () {
+        proto_73.mussoi = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        cor.prototype.truncatus = function () {
+        proto_73.truncatus = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        cor.prototype.achates = function () {
+        proto_73.achates = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        cor.prototype.praedatrix = function () {
+        proto_73.praedatrix = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        cor.prototype.mzabi = function () {
+        proto_73.mzabi = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        cor.prototype.xanthinus = function () {
+        proto_73.xanthinus = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        cor.prototype.tapoatafa = function () {
+        proto_73.tapoatafa = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        cor.prototype.castroviejoi = function () {
+        proto_73.castroviejoi = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
@@ -5399,13 +5472,14 @@ var imperfecta;
     var coludo = /** @class */ (function () {
         function coludo() {
         }
-        coludo.prototype.bernhardi = function () {
+        var proto_74 = coludo.prototype;
+        proto_74.bernhardi = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        coludo.prototype.isseli = function () {
+        proto_74.isseli = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
@@ -5421,13 +5495,14 @@ var imperfecta;
         function germaini() {
             return _super !== null && _super.apply(this, arguments) || this;
         }
-        germaini.prototype.sharpei = function () {
+        var proto_75 = germaini.prototype;
+        proto_75.sharpei = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        germaini.prototype.palmarum = function () {
+        proto_75.palmarum = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
@@ -5441,67 +5516,68 @@ var imperfecta;
     var stolzmanni = /** @class */ (function () {
         function stolzmanni() {
         }
-        stolzmanni.prototype.riparius = function () {
+        var proto_76 = stolzmanni.prototype;
+        proto_76.riparius = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        stolzmanni.prototype.dhofarensis = function () {
+        proto_76.dhofarensis = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        stolzmanni.prototype.tricolor = function () {
+        proto_76.tricolor = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        stolzmanni.prototype.gardneri = function () {
+        proto_76.gardneri = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        stolzmanni.prototype.walleri = function () {
+        proto_76.walleri = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        stolzmanni.prototype.talpoides = function () {
+        proto_76.talpoides = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        stolzmanni.prototype.pallipes = function () {
+        proto_76.pallipes = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        stolzmanni.prototype.lagurus = function () {
+        proto_76.lagurus = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        stolzmanni.prototype.hipposideros = function () {
+        proto_76.hipposideros = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        stolzmanni.prototype.griselda = function () {
+        proto_76.griselda = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        stolzmanni.prototype.florium = function () {
+        proto_76.florium = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
@@ -5517,79 +5593,80 @@ var imperfecta;
         function melanops() {
             return _super !== null && _super.apply(this, arguments) || this;
         }
-        melanops.prototype.blarina = function () {
+        var proto_77 = melanops.prototype;
+        proto_77.blarina = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        melanops.prototype.harwoodi = function () {
+        proto_77.harwoodi = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        melanops.prototype.ashaninka = function () {
+        proto_77.ashaninka = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        melanops.prototype.wiedii = function () {
+        proto_77.wiedii = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        melanops.prototype.godmani = function () {
+        proto_77.godmani = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        melanops.prototype.condorensis = function () {
+        proto_77.condorensis = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        melanops.prototype.xerophila = function () {
+        proto_77.xerophila = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        melanops.prototype.laminatus = function () {
+        proto_77.laminatus = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        melanops.prototype.archeri = function () {
+        proto_77.archeri = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        melanops.prototype.hidalgo = function () {
+        proto_77.hidalgo = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        melanops.prototype.unicolor = function () {
+        proto_77.unicolor = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        melanops.prototype.philippii = function () {
+        proto_77.philippii = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        melanops.prototype.bocagei = function () {
+        proto_77.bocagei = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
@@ -5605,49 +5682,50 @@ var imperfecta;
         function peninsulae() {
             return _super !== null && _super.apply(this, arguments) || this;
         }
-        peninsulae.prototype.aitkeni = function () {
+        var proto_78 = peninsulae.prototype;
+        proto_78.aitkeni = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        peninsulae.prototype.novaeangliae = function () {
+        proto_78.novaeangliae = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        peninsulae.prototype.olallae = function () {
+        proto_78.olallae = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        peninsulae.prototype.anselli = function () {
+        proto_78.anselli = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        peninsulae.prototype.timminsi = function () {
+        proto_78.timminsi = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        peninsulae.prototype.sordidus = function () {
+        proto_78.sordidus = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        peninsulae.prototype.telfordi = function () {
+        proto_78.telfordi = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        peninsulae.prototype.cavernarum = function () {
+        proto_78.cavernarum = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
@@ -5661,79 +5739,80 @@ var imperfecta;
     var netscheri = /** @class */ (function () {
         function netscheri() {
         }
-        netscheri.prototype.gravis = function () {
+        var proto_79 = netscheri.prototype;
+        proto_79.gravis = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        netscheri.prototype.ruschii = function () {
+        proto_79.ruschii = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        netscheri.prototype.tricuspidatus = function () {
+        proto_79.tricuspidatus = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        netscheri.prototype.fernandezi = function () {
+        proto_79.fernandezi = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        netscheri.prototype.colletti = function () {
+        proto_79.colletti = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        netscheri.prototype.microbullatus = function () {
+        proto_79.microbullatus = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        netscheri.prototype.eburneae = function () {
+        proto_79.eburneae = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        netscheri.prototype.tatei = function () {
+        proto_79.tatei = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        netscheri.prototype.millardi = function () {
+        proto_79.millardi = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        netscheri.prototype.pruinosus = function () {
+        proto_79.pruinosus = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        netscheri.prototype.delator = function () {
+        proto_79.delator = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        netscheri.prototype.nyikae = function () {
+        proto_79.nyikae = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        netscheri.prototype.ruemmleri = function () {
+        proto_79.ruemmleri = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
@@ -5749,79 +5828,80 @@ var imperfecta;
         function Praseodymium() {
             return _super !== null && _super.apply(this, arguments) || this;
         }
-        Praseodymium.prototype.clara = function () {
+        var proto_80 = Praseodymium.prototype;
+        proto_80.clara = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        Praseodymium.prototype.spectabilis = function () {
+        proto_80.spectabilis = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        Praseodymium.prototype.kamensis = function () {
+        proto_80.kamensis = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        Praseodymium.prototype.ruddi = function () {
+        proto_80.ruddi = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        Praseodymium.prototype.bartelsii = function () {
+        proto_80.bartelsii = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        Praseodymium.prototype.yerbabuenae = function () {
+        proto_80.yerbabuenae = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        Praseodymium.prototype.davidi = function () {
+        proto_80.davidi = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        Praseodymium.prototype.pilirostris = function () {
+        proto_80.pilirostris = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        Praseodymium.prototype.catherinae = function () {
+        proto_80.catherinae = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        Praseodymium.prototype.frontata = function () {
+        proto_80.frontata = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        Praseodymium.prototype.Terbium = function () {
+        proto_80.Terbium = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        Praseodymium.prototype.thomensis = function () {
+        proto_80.thomensis = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        Praseodymium.prototype.soricinus = function () {
+        proto_80.soricinus = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
@@ -5865,49 +5945,50 @@ var imperfecta;
     var setulosus = /** @class */ (function () {
         function setulosus() {
         }
-        setulosus.prototype.duthieae = function () {
+        var proto_81 = setulosus.prototype;
+        proto_81.duthieae = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        setulosus.prototype.guereza = function () {
+        proto_81.guereza = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        setulosus.prototype.buselaphus = function () {
+        proto_81.buselaphus = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        setulosus.prototype.nuttalli = function () {
+        proto_81.nuttalli = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        setulosus.prototype.pelii = function () {
+        proto_81.pelii = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        setulosus.prototype.tunneyi = function () {
+        proto_81.tunneyi = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        setulosus.prototype.lamula = function () {
+        proto_81.lamula = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        setulosus.prototype.vampyrus = function () {
+        proto_81.vampyrus = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
@@ -5921,31 +6002,32 @@ var imperfecta;
     var rosalia = /** @class */ (function () {
         function rosalia() {
         }
-        rosalia.prototype.palmeri = function () {
+        var proto_82 = rosalia.prototype;
+        proto_82.palmeri = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        rosalia.prototype.baeops = function () {
+        proto_82.baeops = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        rosalia.prototype.ozensis = function () {
+        proto_82.ozensis = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        rosalia.prototype.creaghi = function () {
+        proto_82.creaghi = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        rosalia.prototype.montivaga = function () {
+        proto_82.montivaga = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
@@ -5961,37 +6043,38 @@ var imperfecta;
         function psilurus() {
             return _super !== null && _super.apply(this, arguments) || this;
         }
-        psilurus.prototype.socialis = function () {
+        var proto_83 = psilurus.prototype;
+        proto_83.socialis = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        psilurus.prototype.lundi = function () {
+        proto_83.lundi = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        psilurus.prototype.araeum = function () {
+        proto_83.araeum = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        psilurus.prototype.calamianensis = function () {
+        proto_83.calamianensis = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        psilurus.prototype.petersoni = function () {
+        proto_83.petersoni = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });
             return x;
         };
-        psilurus.prototype.nitela = function () {
+        proto_83.nitela = function () {
             var _this = this;
             var x;
             (function () { var y = _this; });

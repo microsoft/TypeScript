@@ -92,9 +92,10 @@ var a03 = foo.apply(undefined, [10, "hello", 30]); // Error
 var C = /** @class */ (function () {
     function C(a, b) {
     }
-    C.prototype.foo = function (a, b) { return ""; };
-    C.prototype.overloaded = function (x) { return undefined; };
-    C.prototype.generic = function (x) { return x; };
+    var proto_1 = C.prototype;
+    proto_1.foo = function (a, b) { return ""; };
+    proto_1.overloaded = function (x) { return undefined; };
+    proto_1.generic = function (x) { return x; };
     return C;
 }());
 var f10 = c.foo.bind(c);

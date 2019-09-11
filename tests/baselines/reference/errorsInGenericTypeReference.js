@@ -110,9 +110,10 @@ var tc2 = new testClass2(); // error: could not find symbol V
 var testClass3 = /** @class */ (function () {
     function testClass3() {
     }
-    testClass3.prototype.testMethod1 = function () { return null; }; // error: could not find symbol V
+    var proto_1 = testClass3.prototype;
+    proto_1.testMethod1 = function () { return null; }; // error: could not find symbol V
     testClass3.testMethod2 = function () { return null; }; // error: could not find symbol V
-    Object.defineProperty(testClass3.prototype, "a", {
+    Object.defineProperty(proto_1, "a", {
         set: function (value) { } // error: could not find symbol V
         ,
         enumerable: true,

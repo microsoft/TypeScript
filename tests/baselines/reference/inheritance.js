@@ -96,7 +96,8 @@ var Baad = /** @class */ (function (_super) {
     function Baad() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
-    Baad.prototype.f = function () { return 0; };
-    Baad.prototype.g = function (n) { return 0; };
+    var proto_1 = Baad.prototype;
+    proto_1.f = function () { return 0; };
+    proto_1.g = function (n) { return 0; };
     return Baad;
 }(Good));

@@ -31,7 +31,8 @@ var __extends = (this && this.__extends) || (function () {
 var Base = /** @class */ (function () {
     function Base() {
     }
-    Object.defineProperty(Base.prototype, "x", {
+    var proto_1 = Base.prototype;
+    Object.defineProperty(proto_1, "x", {
         get: function () {
             return 1;
         },

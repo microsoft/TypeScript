@@ -257,10 +257,11 @@ var Opt = /** @class */ (function () {
 var Vector = /** @class */ (function () {
     function Vector() {
     }
-    Vector.prototype.tail = function () {
+    var proto_1 = Vector.prototype;
+    proto_1.tail = function () {
         return undefined;
     };
-    Vector.prototype.partition2 = function (predicate) {
+    proto_1.partition2 = function (predicate) {
         return undefined;
     };
     return Vector;

@@ -294,15 +294,17 @@ var C6 = /** @class */ (function (_super) {
 var ProtectedGeneric = /** @class */ (function () {
     function ProtectedGeneric() {
     }
-    ProtectedGeneric.prototype.privateMethod = function () { };
-    ProtectedGeneric.prototype.protectedMethod = function () { };
+    var proto_1 = ProtectedGeneric.prototype;
+    proto_1.privateMethod = function () { };
+    proto_1.protectedMethod = function () { };
     return ProtectedGeneric;
 }());
 var ProtectedGeneric2 = /** @class */ (function () {
     function ProtectedGeneric2() {
     }
-    ProtectedGeneric2.prototype.privateMethod = function () { };
-    ProtectedGeneric2.prototype.protectedMethod = function () { };
+    var proto_2 = ProtectedGeneric2.prototype;
+    proto_2.privateMethod = function () { };
+    proto_2.protectedMethod = function () { };
     return ProtectedGeneric2;
 }());
 function f7(x) {

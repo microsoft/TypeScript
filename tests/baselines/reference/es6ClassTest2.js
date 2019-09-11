@@ -193,10 +193,11 @@ var GetSetMonster = /** @class */ (function () {
         this.name = name;
         this._health = _health;
     }
-    GetSetMonster.prototype.attack = function (target) {
+    var proto_1 = GetSetMonster.prototype;
+    proto_1.attack = function (target) {
         // WScript.Echo("Attacks " + target);
     };
-    Object.defineProperty(GetSetMonster.prototype, "isAlive", {
+    Object.defineProperty(proto_1, "isAlive", {
         // The contextual keyword "get" followed by an identifier and
         // a curly body defines a getter in the same way that "get"
         // defines one in an object literal.
@@ -206,7 +207,7 @@ var GetSetMonster = /** @class */ (function () {
         enumerable: true,
         configurable: true
     });
-    Object.defineProperty(GetSetMonster.prototype, "health", {
+    Object.defineProperty(proto_1, "health", {
         // Likewise, "set" can be used to define setters.
         set: function (value) {
             if (value < 0) {
@@ -266,9 +267,10 @@ var PrototypeMonster = /** @class */ (function () {
 var SuperParent = /** @class */ (function () {
     function SuperParent(a) {
     }
-    SuperParent.prototype.b = function (b) {
+    var proto_2 = SuperParent.prototype;
+    proto_2.b = function (b) {
     };
-    SuperParent.prototype.c = function () {
+    proto_2.c = function () {
     };
     return SuperParent;
 }());
@@ -277,10 +279,11 @@ var SuperChild = /** @class */ (function (_super) {
     function SuperChild() {
         return _super.call(this, 1) || this;
     }
-    SuperChild.prototype.b = function () {
+    var proto_3 = SuperChild.prototype;
+    proto_3.b = function () {
         _super.prototype.b.call(this, 'str');
     };
-    SuperChild.prototype.c = function () {
+    proto_3.c = function () {
         _super.prototype.c.call(this);
     };
     return SuperChild;
@@ -307,8 +310,9 @@ var Visibility = /** @class */ (function () {
         this.x = 1;
         this.y = 2;
     }
-    Visibility.prototype.foo = function () { };
-    Visibility.prototype.bar = function () { };
+    var proto_4 = Visibility.prototype;
+    proto_4.foo = function () { };
+    proto_4.bar = function () { };
     return Visibility;
 }());
 var BaseClassWithConstructor = /** @class */ (function () {

@@ -88,8 +88,9 @@ var DerivedA = /** @class */ (function (_super) {
         _this.x = x;
         return _this;
     }
-    DerivedA.prototype.createInstance = function () { new DerivedA(5); };
-    DerivedA.prototype.createBaseInstance = function () { new BaseA(6); };
+    var proto_1 = DerivedA.prototype;
+    proto_1.createInstance = function () { new DerivedA(5); };
+    proto_1.createBaseInstance = function () { new BaseA(6); };
     DerivedA.staticBaseInstance = function () { new BaseA(7); };
     return DerivedA;
 }(BaseA));
@@ -100,8 +101,9 @@ var DerivedB = /** @class */ (function (_super) {
         _this.x = x;
         return _this;
     }
-    DerivedB.prototype.createInstance = function () { new DerivedB(7); };
-    DerivedB.prototype.createBaseInstance = function () { new BaseB(8); }; // ok
+    var proto_2 = DerivedB.prototype;
+    proto_2.createInstance = function () { new DerivedB(7); };
+    proto_2.createBaseInstance = function () { new BaseB(8); }; // ok
     DerivedB.staticBaseInstance = function () { new BaseB(9); }; // ok
     return DerivedB;
 }(BaseB));
@@ -112,8 +114,9 @@ var DerivedC = /** @class */ (function (_super) {
         _this.x = x;
         return _this;
     }
-    DerivedC.prototype.createInstance = function () { new DerivedC(9); };
-    DerivedC.prototype.createBaseInstance = function () { new BaseC(10); }; // error
+    var proto_3 = DerivedC.prototype;
+    proto_3.createInstance = function () { new DerivedC(9); };
+    proto_3.createBaseInstance = function () { new BaseC(10); }; // error
     DerivedC.staticBaseInstance = function () { new BaseC(11); }; // error
     return DerivedC;
 }(BaseC));

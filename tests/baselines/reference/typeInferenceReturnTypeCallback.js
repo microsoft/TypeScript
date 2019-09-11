@@ -33,12 +33,13 @@ var Nil = /** @class */ (function () {
 var Cons = /** @class */ (function () {
     function Cons() {
     }
-    Cons.prototype.map = function (f) {
+    var proto_1 = Cons.prototype;
+    proto_1.map = function (f) {
         return this.foldRight(new Nil(), function (t, acc) {
             return new Cons();
         });
     };
-    Cons.prototype.foldRight = function (z, f) {
+    proto_1.foldRight = function (z, f) {
         return null;
     };
     return Cons;

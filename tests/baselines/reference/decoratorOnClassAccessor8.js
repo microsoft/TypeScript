@@ -42,7 +42,8 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 var A = /** @class */ (function () {
     function A() {
     }
-    Object.defineProperty(A.prototype, "x", {
+    var proto_1 = A.prototype;
+    Object.defineProperty(proto_1, "x", {
         get: function () { return 0; },
         set: function (value) { },
         enumerable: true,
@@ -58,7 +59,8 @@ var A = /** @class */ (function () {
 var B = /** @class */ (function () {
     function B() {
     }
-    Object.defineProperty(B.prototype, "x", {
+    var proto_2 = B.prototype;
+    Object.defineProperty(proto_2, "x", {
         get: function () { return 0; },
         set: function (value) { },
         enumerable: true,
@@ -74,7 +76,8 @@ var B = /** @class */ (function () {
 var C = /** @class */ (function () {
     function C() {
     }
-    Object.defineProperty(C.prototype, "x", {
+    var proto_3 = C.prototype;
+    Object.defineProperty(proto_3, "x", {
         get: function () { return 0; },
         set: function (value) { },
         enumerable: true,
@@ -90,7 +93,8 @@ var C = /** @class */ (function () {
 var D = /** @class */ (function () {
     function D() {
     }
-    Object.defineProperty(D.prototype, "x", {
+    var proto_4 = D.prototype;
+    Object.defineProperty(proto_4, "x", {
         get: function () { return 0; },
         set: function (value) { },
         enumerable: true,

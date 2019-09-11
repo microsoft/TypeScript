@@ -110,8 +110,9 @@ var __extends = (this && this.__extends) || (function () {
 var a = /** @class */ (function () {
     function a(ns) {
     }
-    a.prototype.pgF = function () { };
-    Object.defineProperty(a.prototype, "d", {
+    var proto_1 = a.prototype;
+    proto_1.pgF = function () { };
+    Object.defineProperty(proto_1, "d", {
         get: function () {
             return 30;
         },
@@ -136,7 +137,7 @@ var a = /** @class */ (function () {
         enumerable: true,
         configurable: true
     });
-    a.prototype.foo = function (ns) {
+    proto_1.foo = function (ns) {
         return ns.toString();
     };
     return a;

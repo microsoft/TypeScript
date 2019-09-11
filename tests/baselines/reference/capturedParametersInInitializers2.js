@@ -20,12 +20,13 @@ function foo(y, x, z) {
             function class_1() {
                 x;
             }
-            Object.defineProperty(class_1.prototype, x, {
+            var proto_1 = class_1.prototype;
+            Object.defineProperty(proto_1, x, {
                 get: function () { return x; },
                 enumerable: true,
                 configurable: true
             });
-            class_1.prototype[z] = function () { return z; };
+            proto_1[z] = function () { return z; };
             return class_1;
         }()),
         _a.c = x,

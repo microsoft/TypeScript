@@ -179,8 +179,9 @@ var SomeBase = /** @class */ (function () {
         this.privateMember = 0;
         this.publicMember = 0;
     }
-    SomeBase.prototype.privateFunc = function () { };
-    SomeBase.prototype.publicFunc = function () { };
+    var proto_1 = SomeBase.prototype;
+    proto_1.privateFunc = function () { };
+    proto_1.publicFunc = function () { };
     SomeBase.privateStaticFunc = function () { };
     SomeBase.publicStaticFunc = function () { };
     SomeBase.privateStaticMember = 0;
@@ -198,10 +199,11 @@ var SomeDerived1 = /** @class */ (function (_super) {
         _super.prototype.publicMember = 1;
         return _this;
     }
-    SomeDerived1.prototype.fn = function () {
+    var proto_2 = SomeDerived1.prototype;
+    proto_2.fn = function () {
         var x = _super.prototype.publicMember;
     };
-    Object.defineProperty(SomeDerived1.prototype, "a", {
+    Object.defineProperty(proto_2, "a", {
         get: function () {
             var x = _super.prototype.publicMember;
             return undefined;
@@ -212,7 +214,7 @@ var SomeDerived1 = /** @class */ (function (_super) {
         enumerable: true,
         configurable: true
     });
-    SomeDerived1.prototype.fn2 = function () {
+    proto_2.fn2 = function () {
         function inner() {
             _super.publicFunc.call(this);
         }
@@ -232,10 +234,11 @@ var SomeDerived2 = /** @class */ (function (_super) {
         _super.prototype.privateMember = 1;
         return _this;
     }
-    SomeDerived2.prototype.fn = function () {
+    var proto_3 = SomeDerived2.prototype;
+    proto_3.fn = function () {
         var x = _super.prototype.privateMember;
     };
-    Object.defineProperty(SomeDerived2.prototype, "a", {
+    Object.defineProperty(proto_3, "a", {
         get: function () {
             var x = _super.prototype.privateMember;
             return undefined;

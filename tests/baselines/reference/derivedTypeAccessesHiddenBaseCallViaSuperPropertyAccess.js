@@ -44,10 +44,11 @@ var Derived = /** @class */ (function (_super) {
     function Derived() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
-    Derived.prototype.foo = function (x) {
+    var proto_1 = Derived.prototype;
+    proto_1.foo = function (x) {
         return null;
     };
-    Derived.prototype.bar = function () {
+    proto_1.bar = function () {
         var r = _super.prototype.foo.call(this, { a: 1 }); // { a: number }
         var r2 = _super.prototype.foo.call(this, { a: 1, b: 2 }); // { a: number }
         var r3 = this.foo({ a: 1, b: 2 }); // { a: number; b: number; }

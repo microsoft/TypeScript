@@ -1543,6 +1543,13 @@ namespace ts {
          * @param node The ClassExpression or ClassDeclaration node.
          */
         function addClassMembers(statements: Statement[], node: ClassExpression | ClassDeclaration): void {
+            if (!node.members.length) {
+                return;
+            }
+
+            const prototypeStoragePlacement = statements.length;
+            let prototypeStorageName: Identifier | PropertyAccessExpression;
+
             for (const member of node.members) {
                 switch (member.kind) {
                     case SyntaxKind.SemicolonClassElement:
@@ -1550,14 +1557,14 @@ namespace ts {
                         break;
 
                     case SyntaxKind.MethodDeclaration:
-                        statements.push(transformClassMethodDeclarationToStatement(getClassMemberPrefix(node, member), <MethodDeclaration>member, node));
+                        statements.push(transformClassMethodDeclarationToStatement(getClassMemberPrefix(node, member, getPrototypeStorageName), <MethodDeclaration>member, node));
                         break;
 
                     case SyntaxKind.GetAccessor:
                     case SyntaxKind.SetAccessor:
                         const accessors = getAllAccessorDeclarations(node.members, <AccessorDeclaration>member);
                         if (member === accessors.firstAccessor) {
-                            statements.push(transformAccessorsToStatement(getClassMemberPrefix(node, member), accessors, node));
+                            statements.push(transformAccessorsToStatement(getClassMemberPrefix(node, member, getPrototypeStorageName), accessors, node));
                         }
 
                         break;
@@ -1571,6 +1578,51 @@ namespace ts {
                         break;
                 }
             }
+
+            /**
+             * Lazily creates the way class members will access the class prototype. 
+             */
+            function getPrototypeStorageName() {
+                if (prototypeStorageName) {
+                    return prototypeStorageName;
+                }
+
+                const originalPrototypeAccess = createPropertyAccess(getInternalName(node), "prototype");
+    
+                // If the class has exactly one non-static member, it'll access prototype members on itself:
+                //   ClassName.prototype.member = ...
+                if (containsExactlyOne(node.members, classMemberAssignsToPrototype)) {
+                    prototypeStorageName = originalPrototypeAccess;
+                    return prototypeStorageName;
+                }
+
+                // Since it has multiple non-static members, it'll store that prototype as a variable that can be minified:
+                //  var proto = ClassName.prototype;
+                //  proto.memberOne = ...
+                //  proto.memberTwo = ...
+                prototypeStorageName = createUniqueName("proto");
+
+                statements.splice(
+                    prototypeStoragePlacement,
+                    0,
+                    createVariableStatement(
+                        /*modifiers*/ undefined,
+                        createVariableDeclarationList([
+                            createVariableDeclaration(
+                                prototypeStorageName,
+                                /*type*/ undefined,
+                                originalPrototypeAccess,
+                            )
+                        ])
+                    )
+                );
+
+                return prototypeStorageName;
+            }
+        }
+
+        function classMemberAssignsToPrototype(node: ClassElement) {
+            return !hasModifier(node, ModifierFlags.Static) && !isConstructorDeclaration(node);
         }
 
         /**
@@ -4299,10 +4351,10 @@ namespace ts {
             return node;
         }
 
-        function getClassMemberPrefix(node: ClassExpression | ClassDeclaration, member: ClassElement) {
-            return hasModifier(member, ModifierFlags.Static)
+        function getClassMemberPrefix(node: ClassExpression | ClassDeclaration, member: ClassElement, getPrototypeStorageName: () => LeftHandSideExpression) {
+            return member && hasModifier(member, ModifierFlags.Static)
                 ? getInternalName(node)
-                : createPropertyAccess(getInternalName(node), "prototype");
+                : getPrototypeStorageName();
         }
 
         function hasSynthesizedDefaultSuperCall(constructor: ConstructorDeclaration | undefined, hasExtendsClause: boolean) {

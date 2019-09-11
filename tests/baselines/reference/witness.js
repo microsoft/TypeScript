@@ -216,13 +216,14 @@ var t = fnArg2(); // t: should be 'any', but is 'string'
 var C = /** @class */ (function () {
     function C() {
     }
-    C.prototype.fn1 = function () {
+    var proto_1 = C.prototype;
+    proto_1.fn1 = function () {
         return new (this.fn1())();
     };
-    C.prototype.fn2 = function () {
+    proto_1.fn2 = function () {
         return new (this.fn2());
     };
-    C.prototype.fn3 = function () {
+    proto_1.fn3 = function () {
         var a;
         return new a(this.fn3);
     };

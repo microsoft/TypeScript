@@ -455,13 +455,14 @@ exports.publicClass = publicClass;
 var publicClassWithWithPrivateTypeParameters = /** @class */ (function () {
     function publicClassWithWithPrivateTypeParameters() {
     }
+    var proto_1 = publicClassWithWithPrivateTypeParameters.prototype;
     publicClassWithWithPrivateTypeParameters.myPublicStaticMethod = function () {
     };
     publicClassWithWithPrivateTypeParameters.myPrivateStaticMethod = function () {
     };
-    publicClassWithWithPrivateTypeParameters.prototype.myPublicMethod = function () {
+    proto_1.myPublicMethod = function () {
     };
-    publicClassWithWithPrivateTypeParameters.prototype.myPrivateMethod = function () {
+    proto_1.myPrivateMethod = function () {
     };
     return publicClassWithWithPrivateTypeParameters;
 }());
@@ -469,13 +470,14 @@ exports.publicClassWithWithPrivateTypeParameters = publicClassWithWithPrivateTyp
 var publicClassWithWithPublicTypeParameters = /** @class */ (function () {
     function publicClassWithWithPublicTypeParameters() {
     }
+    var proto_2 = publicClassWithWithPublicTypeParameters.prototype;
     publicClassWithWithPublicTypeParameters.myPublicStaticMethod = function () {
     };
     publicClassWithWithPublicTypeParameters.myPrivateStaticMethod = function () {
     };
-    publicClassWithWithPublicTypeParameters.prototype.myPublicMethod = function () {
+    proto_2.myPublicMethod = function () {
     };
-    publicClassWithWithPublicTypeParameters.prototype.myPrivateMethod = function () {
+    proto_2.myPrivateMethod = function () {
     };
     return publicClassWithWithPublicTypeParameters;
 }());
@@ -483,26 +485,28 @@ exports.publicClassWithWithPublicTypeParameters = publicClassWithWithPublicTypeP
 var privateClassWithWithPrivateTypeParameters = /** @class */ (function () {
     function privateClassWithWithPrivateTypeParameters() {
     }
+    var proto_3 = privateClassWithWithPrivateTypeParameters.prototype;
     privateClassWithWithPrivateTypeParameters.myPublicStaticMethod = function () {
     };
     privateClassWithWithPrivateTypeParameters.myPrivateStaticMethod = function () {
     };
-    privateClassWithWithPrivateTypeParameters.prototype.myPublicMethod = function () {
+    proto_3.myPublicMethod = function () {
     };
-    privateClassWithWithPrivateTypeParameters.prototype.myPrivateMethod = function () {
+    proto_3.myPrivateMethod = function () {
     };
     return privateClassWithWithPrivateTypeParameters;
 }());
 var privateClassWithWithPublicTypeParameters = /** @class */ (function () {
     function privateClassWithWithPublicTypeParameters() {
     }
+    var proto_4 = privateClassWithWithPublicTypeParameters.prototype;
     privateClassWithWithPublicTypeParameters.myPublicStaticMethod = function () {
     };
     privateClassWithWithPublicTypeParameters.myPrivateStaticMethod = function () {
     };
-    privateClassWithWithPublicTypeParameters.prototype.myPublicMethod = function () {
+    proto_4.myPublicMethod = function () {
     };
-    privateClassWithWithPublicTypeParameters.prototype.myPrivateMethod = function () {
+    proto_4.myPrivateMethod = function () {
     };
     return privateClassWithWithPublicTypeParameters;
 }());
@@ -519,13 +523,14 @@ function privateFunctionWithPublicTypeParameters() {
 var publicClassWithWithPublicTypeParametersWithoutExtends = /** @class */ (function () {
     function publicClassWithWithPublicTypeParametersWithoutExtends() {
     }
+    var proto_5 = publicClassWithWithPublicTypeParametersWithoutExtends.prototype;
     publicClassWithWithPublicTypeParametersWithoutExtends.myPublicStaticMethod = function () {
     };
     publicClassWithWithPublicTypeParametersWithoutExtends.myPrivateStaticMethod = function () {
     };
-    publicClassWithWithPublicTypeParametersWithoutExtends.prototype.myPublicMethod = function () {
+    proto_5.myPublicMethod = function () {
     };
-    publicClassWithWithPublicTypeParametersWithoutExtends.prototype.myPrivateMethod = function () {
+    proto_5.myPrivateMethod = function () {
     };
     return publicClassWithWithPublicTypeParametersWithoutExtends;
 }());
@@ -533,13 +538,14 @@ exports.publicClassWithWithPublicTypeParametersWithoutExtends = publicClassWithW
 var privateClassWithWithPublicTypeParametersWithoutExtends = /** @class */ (function () {
     function privateClassWithWithPublicTypeParametersWithoutExtends() {
     }
+    var proto_6 = privateClassWithWithPublicTypeParametersWithoutExtends.prototype;
     privateClassWithWithPublicTypeParametersWithoutExtends.myPublicStaticMethod = function () {
     };
     privateClassWithWithPublicTypeParametersWithoutExtends.myPrivateStaticMethod = function () {
     };
-    privateClassWithWithPublicTypeParametersWithoutExtends.prototype.myPublicMethod = function () {
+    proto_6.myPublicMethod = function () {
     };
-    privateClassWithWithPublicTypeParametersWithoutExtends.prototype.myPrivateMethod = function () {
+    proto_6.myPrivateMethod = function () {
     };
     return privateClassWithWithPublicTypeParametersWithoutExtends;
 }());
@@ -588,13 +594,14 @@ var publicModule;
     var publicClassWithWithPrivateTypeParameters = /** @class */ (function () {
         function publicClassWithWithPrivateTypeParameters() {
         }
+        var proto_7 = publicClassWithWithPrivateTypeParameters.prototype;
         publicClassWithWithPrivateTypeParameters.myPublicStaticMethod = function () {
         };
         publicClassWithWithPrivateTypeParameters.myPrivateStaticMethod = function () {
         };
-        publicClassWithWithPrivateTypeParameters.prototype.myPublicMethod = function () {
+        proto_7.myPublicMethod = function () {
         };
-        publicClassWithWithPrivateTypeParameters.prototype.myPrivateMethod = function () {
+        proto_7.myPrivateMethod = function () {
         };
         return publicClassWithWithPrivateTypeParameters;
     }());
@@ -602,13 +609,14 @@ var publicModule;
     var publicClassWithWithPublicTypeParameters = /** @class */ (function () {
         function publicClassWithWithPublicTypeParameters() {
         }
+        var proto_8 = publicClassWithWithPublicTypeParameters.prototype;
         publicClassWithWithPublicTypeParameters.myPublicStaticMethod = function () {
         };
         publicClassWithWithPublicTypeParameters.myPrivateStaticMethod = function () {
         };
-        publicClassWithWithPublicTypeParameters.prototype.myPublicMethod = function () {
+        proto_8.myPublicMethod = function () {
         };
-        publicClassWithWithPublicTypeParameters.prototype.myPrivateMethod = function () {
+        proto_8.myPrivateMethod = function () {
         };
         return publicClassWithWithPublicTypeParameters;
     }());
@@ -616,26 +624,28 @@ var publicModule;
     var privateClassWithWithPrivateTypeParameters = /** @class */ (function () {
         function privateClassWithWithPrivateTypeParameters() {
         }
+        var proto_9 = privateClassWithWithPrivateTypeParameters.prototype;
         privateClassWithWithPrivateTypeParameters.myPublicStaticMethod = function () {
         };
         privateClassWithWithPrivateTypeParameters.myPrivateStaticMethod = function () {
         };
-        privateClassWithWithPrivateTypeParameters.prototype.myPublicMethod = function () {
+        proto_9.myPublicMethod = function () {
         };
-        privateClassWithWithPrivateTypeParameters.prototype.myPrivateMethod = function () {
+        proto_9.myPrivateMethod = function () {
         };
         return privateClassWithWithPrivateTypeParameters;
     }());
     var privateClassWithWithPublicTypeParameters = /** @class */ (function () {
         function privateClassWithWithPublicTypeParameters() {
         }
+        var proto_10 = privateClassWithWithPublicTypeParameters.prototype;
         privateClassWithWithPublicTypeParameters.myPublicStaticMethod = function () {
         };
         privateClassWithWithPublicTypeParameters.myPrivateStaticMethod = function () {
         };
-        privateClassWithWithPublicTypeParameters.prototype.myPublicMethod = function () {
+        proto_10.myPublicMethod = function () {
         };
-        privateClassWithWithPublicTypeParameters.prototype.myPrivateMethod = function () {
+        proto_10.myPrivateMethod = function () {
         };
         return privateClassWithWithPublicTypeParameters;
     }());
@@ -652,13 +662,14 @@ var publicModule;
     var publicClassWithWithPublicTypeParametersWithoutExtends = /** @class */ (function () {
         function publicClassWithWithPublicTypeParametersWithoutExtends() {
         }
+        var proto_11 = publicClassWithWithPublicTypeParametersWithoutExtends.prototype;
         publicClassWithWithPublicTypeParametersWithoutExtends.myPublicStaticMethod = function () {
         };
         publicClassWithWithPublicTypeParametersWithoutExtends.myPrivateStaticMethod = function () {
         };
-        publicClassWithWithPublicTypeParametersWithoutExtends.prototype.myPublicMethod = function () {
+        proto_11.myPublicMethod = function () {
         };
-        publicClassWithWithPublicTypeParametersWithoutExtends.prototype.myPrivateMethod = function () {
+        proto_11.myPrivateMethod = function () {
         };
         return publicClassWithWithPublicTypeParametersWithoutExtends;
     }());
@@ -666,13 +677,14 @@ var publicModule;
     var privateClassWithWithPublicTypeParametersWithoutExtends = /** @class */ (function () {
         function privateClassWithWithPublicTypeParametersWithoutExtends() {
         }
+        var proto_12 = privateClassWithWithPublicTypeParametersWithoutExtends.prototype;
         privateClassWithWithPublicTypeParametersWithoutExtends.myPublicStaticMethod = function () {
         };
         privateClassWithWithPublicTypeParametersWithoutExtends.myPrivateStaticMethod = function () {
         };
-        privateClassWithWithPublicTypeParametersWithoutExtends.prototype.myPublicMethod = function () {
+        proto_12.myPublicMethod = function () {
         };
-        privateClassWithWithPublicTypeParametersWithoutExtends.prototype.myPrivateMethod = function () {
+        proto_12.myPrivateMethod = function () {
         };
         return privateClassWithWithPublicTypeParametersWithoutExtends;
     }());
@@ -722,13 +734,14 @@ var privateModule;
     var publicClassWithWithPrivateTypeParameters = /** @class */ (function () {
         function publicClassWithWithPrivateTypeParameters() {
         }
+        var proto_13 = publicClassWithWithPrivateTypeParameters.prototype;
         publicClassWithWithPrivateTypeParameters.myPublicStaticMethod = function () {
         };
         publicClassWithWithPrivateTypeParameters.myPrivateStaticMethod = function () {
         };
-        publicClassWithWithPrivateTypeParameters.prototype.myPublicMethod = function () {
+        proto_13.myPublicMethod = function () {
         };
-        publicClassWithWithPrivateTypeParameters.prototype.myPrivateMethod = function () {
+        proto_13.myPrivateMethod = function () {
         };
         return publicClassWithWithPrivateTypeParameters;
     }());
@@ -736,13 +749,14 @@ var privateModule;
     var publicClassWithWithPublicTypeParameters = /** @class */ (function () {
         function publicClassWithWithPublicTypeParameters() {
         }
+        var proto_14 = publicClassWithWithPublicTypeParameters.prototype;
         publicClassWithWithPublicTypeParameters.myPublicStaticMethod = function () {
         };
         publicClassWithWithPublicTypeParameters.myPrivateStaticMethod = function () {
         };
-        publicClassWithWithPublicTypeParameters.prototype.myPublicMethod = function () {
+        proto_14.myPublicMethod = function () {
         };
-        publicClassWithWithPublicTypeParameters.prototype.myPrivateMethod = function () {
+        proto_14.myPrivateMethod = function () {
         };
         return publicClassWithWithPublicTypeParameters;
     }());
@@ -750,26 +764,28 @@ var privateModule;
     var privateClassWithWithPrivateTypeParameters = /** @class */ (function () {
         function privateClassWithWithPrivateTypeParameters() {
         }
+        var proto_15 = privateClassWithWithPrivateTypeParameters.prototype;
         privateClassWithWithPrivateTypeParameters.myPublicStaticMethod = function () {
         };
         privateClassWithWithPrivateTypeParameters.myPrivateStaticMethod = function () {
         };
-        privateClassWithWithPrivateTypeParameters.prototype.myPublicMethod = function () {
+        proto_15.myPublicMethod = function () {
         };
-        privateClassWithWithPrivateTypeParameters.prototype.myPrivateMethod = function () {
+        proto_15.myPrivateMethod = function () {
         };
         return privateClassWithWithPrivateTypeParameters;
     }());
     var privateClassWithWithPublicTypeParameters = /** @class */ (function () {
         function privateClassWithWithPublicTypeParameters() {
         }
+        var proto_16 = privateClassWithWithPublicTypeParameters.prototype;
         privateClassWithWithPublicTypeParameters.myPublicStaticMethod = function () {
         };
         privateClassWithWithPublicTypeParameters.myPrivateStaticMethod = function () {
         };
-        privateClassWithWithPublicTypeParameters.prototype.myPublicMethod = function () {
+        proto_16.myPublicMethod = function () {
         };
-        privateClassWithWithPublicTypeParameters.prototype.myPrivateMethod = function () {
+        proto_16.myPrivateMethod = function () {
         };
         return privateClassWithWithPublicTypeParameters;
     }());
@@ -786,13 +802,14 @@ var privateModule;
     var publicClassWithWithPublicTypeParametersWithoutExtends = /** @class */ (function () {
         function publicClassWithWithPublicTypeParametersWithoutExtends() {
         }
+        var proto_17 = publicClassWithWithPublicTypeParametersWithoutExtends.prototype;
         publicClassWithWithPublicTypeParametersWithoutExtends.myPublicStaticMethod = function () {
         };
         publicClassWithWithPublicTypeParametersWithoutExtends.myPrivateStaticMethod = function () {
         };
-        publicClassWithWithPublicTypeParametersWithoutExtends.prototype.myPublicMethod = function () {
+        proto_17.myPublicMethod = function () {
         };
-        publicClassWithWithPublicTypeParametersWithoutExtends.prototype.myPrivateMethod = function () {
+        proto_17.myPrivateMethod = function () {
         };
         return publicClassWithWithPublicTypeParametersWithoutExtends;
     }());
@@ -800,13 +817,14 @@ var privateModule;
     var privateClassWithWithPublicTypeParametersWithoutExtends = /** @class */ (function () {
         function privateClassWithWithPublicTypeParametersWithoutExtends() {
         }
+        var proto_18 = privateClassWithWithPublicTypeParametersWithoutExtends.prototype;
         privateClassWithWithPublicTypeParametersWithoutExtends.myPublicStaticMethod = function () {
         };
         privateClassWithWithPublicTypeParametersWithoutExtends.myPrivateStaticMethod = function () {
         };
-        privateClassWithWithPublicTypeParametersWithoutExtends.prototype.myPublicMethod = function () {
+        proto_18.myPublicMethod = function () {
         };
-        privateClassWithWithPublicTypeParametersWithoutExtends.prototype.myPrivateMethod = function () {
+        proto_18.myPrivateMethod = function () {
         };
         return privateClassWithWithPublicTypeParametersWithoutExtends;
     }());

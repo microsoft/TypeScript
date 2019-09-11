@@ -219,7 +219,8 @@ var TypeScript;
         function Binder(checker) {
             this.checker = checker;
         }
-        Binder.prototype.resolveBaseTypeLinks = function (typeLinks, scope) {
+        var proto_1 = Binder.prototype;
+        proto_1.resolveBaseTypeLinks = function (typeLinks, scope) {
             var extendsList = null;
             if (typeLinks) {
                 extendsList = new Type[];
@@ -238,7 +239,7 @@ var TypeScript;
             }
             return extendsList;
         };
-        Binder.prototype.resolveBases = function (scope, type) {
+        proto_1.resolveBases = function (scope, type) {
             type.extendsList = this.resolveBaseTypeLinks(type.extendsTypeLinks, scope);
             var i = 0, len = type.extendsList.length;
             var derivedIsClass = type.isClassInstance();
@@ -269,7 +270,7 @@ var TypeScript;
                 }
             }
         };
-        Binder.prototype.resolveSignatureGroup = function (signatureGroup, scope, instanceType) {
+        proto_1.resolveSignatureGroup = function (signatureGroup, scope, instanceType) {
             var supplyVar = !(signatureGroup.hasImplementation);
             for (var i = 0, len = signatureGroup.signatures.length; i < len; i++) {
                 var signature = signatureGroup.signatures[i];
@@ -294,7 +295,7 @@ var TypeScript;
                 }
             }
         };
-        Binder.prototype.bindType = function (scope, type, instanceType) {
+        proto_1.bindType = function (scope, type, instanceType) {
             if (instanceType) {
                 this.bindType(scope, instanceType, null);
             }
@@ -344,7 +345,7 @@ var TypeScript;
                 this.bindType(scope, type.elementType, null);
             }
         };
-        Binder.prototype.bindSymbol = function (scope, symbol) {
+        proto_1.bindSymbol = function (scope, symbol) {
             if (!symbol.bound) {
                 var prevLocationInfo = this.checker.locationInfo;
                 if ((this.checker.units) && (symbol.unitIndex >= 0) && (symbol.unitIndex < this.checker.units.length)) {
@@ -390,7 +391,7 @@ var TypeScript;
             }
             symbol.bound = true;
         };
-        Binder.prototype.bind = function (scope, table) {
+        proto_1.bind = function (scope, table) {
             table.map(function (key, sym, binder) {
                 binder.bindSymbol(scope, sym);
             }, this);

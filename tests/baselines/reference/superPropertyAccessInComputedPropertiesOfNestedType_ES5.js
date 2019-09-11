@@ -39,8 +39,9 @@ var B = /** @class */ (function (_super) {
     function B() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
-    B.prototype.foo = function () { return 2; };
-    B.prototype.bar = function () {
+    var proto_1 = B.prototype;
+    proto_1.foo = function () { return 2; };
+    proto_1.bar = function () {
         return /** @class */ (function () {
             function class_1() {
             }

@@ -263,7 +263,8 @@ var A = /** @class */ (function () {
             return C;
         }());
     }
-    A.prototype.m = function () {
+    var proto_1 = A.prototype;
+    proto_1.m = function () {
         var E;
         (function (E) {
             E[E["A"] = 0] = "A";
@@ -277,7 +278,7 @@ var A = /** @class */ (function () {
         }());
         return new C();
     };
-    Object.defineProperty(A.prototype, "p", {
+    Object.defineProperty(proto_1, "p", {
         get: function () {
             var E;
             (function (E) {

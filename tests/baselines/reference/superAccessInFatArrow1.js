@@ -44,9 +44,10 @@ var test;
         function B() {
             return _super !== null && _super.apply(this, arguments) || this;
         }
-        B.prototype.bar = function (callback) {
+        var proto_1 = B.prototype;
+        proto_1.bar = function (callback) {
         };
-        B.prototype.runme = function () {
+        proto_1.runme = function () {
             var _this = this;
             this.bar(function () {
                 _super.prototype.foo.call(_this);

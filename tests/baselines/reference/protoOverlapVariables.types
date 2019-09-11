@@ -1,0 +1,53 @@
+=== tests/cases/conformance/classes/protoOverlapVariables.ts ===
+let proto = "gotcha!";
+>proto : string
+>"gotcha!" : "gotcha!"
+
+class DeclarationWithOne {
+>DeclarationWithOne : DeclarationWithOne
+
+    member() {
+>member : () => this
+
+        return this;
+>this : this
+    }
+}
+
+class DeclarationWithTwo {
+>DeclarationWithTwo : DeclarationWithTwo
+
+    memberOne() {
+>memberOne : () => this
+
+        return this;
+>this : this
+    }
+    
+    memberTwo() {
+>memberTwo : () => this
+
+        return this;
+>this : this
+    }
+}
+
+const Expression = class {
+>Expression : typeof Expression
+>class {    memberOne() {        return this;    }        memberTwo() {        return this;    }} : typeof Expression
+
+    memberOne() {
+>memberOne : () => this
+
+        return this;
+>this : this
+    }
+    
+    memberTwo() {
+>memberTwo : () => this
+
+        return this;
+>this : this
+    }
+};
+

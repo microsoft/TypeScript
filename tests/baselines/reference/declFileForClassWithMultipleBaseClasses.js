@@ -42,10 +42,11 @@ var B = /** @class */ (function () {
 var D = /** @class */ (function () {
     function D() {
     }
-    D.prototype.baz = function () { };
-    D.prototype.bat = function () { };
-    D.prototype.foo = function () { };
-    D.prototype.bar = function () { };
+    var proto_1 = D.prototype;
+    proto_1.baz = function () { };
+    proto_1.bat = function () { };
+    proto_1.foo = function () { };
+    proto_1.bar = function () { };
     return D;
 }());
 

@@ -351,11 +351,12 @@ var TypeScriptAllInOne;
 var BasicFeatures = /** @class */ (function () {
     function BasicFeatures() {
     }
+    var proto_1 = BasicFeatures.prototype;
     /// <summary>
     /// Test various of variables. Including nullable,key world as variable,special format
     /// </summary>
     /// <returns></returns>
-    BasicFeatures.prototype.VARIABLES = function () {
+    proto_1.VARIABLES = function () {
         var local = Number.MAX_VALUE;
         var min = Number.MIN_VALUE;
         var inf = Number.NEGATIVE_INFINITY -
@@ -404,7 +405,7 @@ var BasicFeatures = /** @class */ (function () {
     /// </summary>
     /// <param name="i"></param>
     /// <returns></returns>
-    BasicFeatures.prototype.STATEMENTS = function (i) {
+    proto_1.STATEMENTS = function (i) {
         var retVal = 0;
         if (i == 1)
             retVal = 1;
@@ -439,7 +440,7 @@ var BasicFeatures = /** @class */ (function () {
     /// Test types in ts language. Including class,struct,interface,delegate,anonymous type
     /// </summary>
     /// <returns></returns>
-    BasicFeatures.prototype.TYPES = function () {
+    proto_1.TYPES = function () {
         var retVal = 0;
         var c = new CLASS();
         var xx = c;
@@ -458,7 +459,7 @@ var BasicFeatures = /** @class */ (function () {
     ///// Test different operators
     ///// </summary>
     ///// <returns></returns>
-    BasicFeatures.prototype.OPERATOR = function () {
+    proto_1.OPERATOR = function () {
         var a = [1, 2, 3, 4, 5,]; /*[] bug*/ // YES []
         var i = a[1]; /*[]*/
         i = i + i - i * i / i % i & i | i ^ i; /*+ - * / % & | ^*/
@@ -497,15 +498,16 @@ var CLASS = /** @class */ (function () {
     function CLASS() {
         this.d = function () { yield 0; };
     }
-    Object.defineProperty(CLASS.prototype, "Property", {
+    var proto_2 = CLASS.prototype;
+    Object.defineProperty(proto_2, "Property", {
         get: function () { return 0; },
         enumerable: true,
         configurable: true
     });
-    CLASS.prototype.Member = function () {
+    proto_2.Member = function () {
         return 0;
     };
-    CLASS.prototype.Foo = function () {
+    proto_2.Foo = function () {
         var myEvent = function () { return 1; };
         if (myEvent() == 1)
             return true ?

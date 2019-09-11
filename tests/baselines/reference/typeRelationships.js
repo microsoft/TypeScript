@@ -59,20 +59,21 @@ var C = /** @class */ (function () {
         this.self = this;
         this.c = new C();
     }
-    C.prototype.foo = function () {
+    var proto_1 = C.prototype;
+    proto_1.foo = function () {
         return this;
     };
-    C.prototype.f1 = function () {
+    proto_1.f1 = function () {
         this.c = this.self;
         this.self = this.c; // Error
     };
-    C.prototype.f2 = function () {
+    proto_1.f2 = function () {
         var a;
         var a = [this, this.c]; // C[] since this is subtype of C
         var b;
         var b = [this, this.self, null, undefined];
     };
-    C.prototype.f3 = function (b) {
+    proto_1.f3 = function (b) {
         return b ? this.c : this.self; // Should be C
     };
     return C;

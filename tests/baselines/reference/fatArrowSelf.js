@@ -42,13 +42,14 @@ var Consumer;
         function EventEmitterConsummer(emitter) {
             this.emitter = emitter;
         }
-        EventEmitterConsummer.prototype.register = function () {
+        var proto_1 = EventEmitterConsummer.prototype;
+        proto_1.register = function () {
             var _this = this;
             this.emitter.addListener('change', function (e) {
                 _this.changed();
             });
         };
-        EventEmitterConsummer.prototype.changed = function () {
+        proto_1.changed = function () {
         };
         return EventEmitterConsummer;
     }());

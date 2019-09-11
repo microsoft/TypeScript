@@ -13,7 +13,8 @@ class Employee {
 var Employee = /** @class */ (function () {
     function Employee() {
     }
-    Object.defineProperty(Employee.prototype, "fullName", {
+    var proto_1 = Employee.prototype;
+    Object.defineProperty(proto_1, "fullName", {
         get: function () {
             return this._fullName;
         },

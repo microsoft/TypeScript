@@ -105,17 +105,18 @@ var ComponentCollection = /** @class */ (function () {
 var Foo = /** @class */ (function () {
     function Foo() {
     }
-    Object.defineProperty(Foo.prototype, "prop1", {
+    var proto_1 = Foo.prototype;
+    Object.defineProperty(proto_1, "prop1", {
         get: function () {
             return new GenericType(this);
         },
         enumerable: true,
         configurable: true
     });
-    Foo.prototype.populate = function () {
+    proto_1.populate = function () {
         this.prop2;
     };
-    Object.defineProperty(Foo.prototype, "prop2", {
+    Object.defineProperty(proto_1, "prop2", {
         get: function () {
             return new BaseCollection(Derived.createEmpty);
         },

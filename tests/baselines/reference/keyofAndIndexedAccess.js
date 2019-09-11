@@ -732,10 +732,11 @@ function f13(foo, bar) {
 var Component = /** @class */ (function () {
     function Component() {
     }
-    Component.prototype.getProperty = function (key) {
+    var proto_1 = Component.prototype;
+    proto_1.getProperty = function (key) {
         return this.props[key];
     };
-    Component.prototype.setProperty = function (key, value) {
+    proto_1.setProperty = function (key, value) {
         this.props[key] = value;
     };
     return Component;
@@ -868,13 +869,14 @@ function f84() {
 var C1 = /** @class */ (function () {
     function C1() {
     }
-    C1.prototype.get = function (key) {
+    var proto_2 = C1.prototype;
+    proto_2.get = function (key) {
         return this[key];
     };
-    C1.prototype.set = function (key, value) {
+    proto_2.set = function (key, value) {
         this[key] = value;
     };
-    C1.prototype.foo = function () {
+    proto_2.foo = function () {
         var x1 = this.x; // number
         var x2 = this["x"]; // number
         var x3 = this.get("x"); // this["x"]
@@ -913,10 +915,11 @@ function f92(x, y, z) {
 var Base = /** @class */ (function () {
     function Base() {
     }
-    Base.prototype.get = function (prop) {
+    var proto_3 = Base.prototype;
+    proto_3.get = function (prop) {
         return this[prop];
     };
-    Base.prototype.set = function (prop, value) {
+    proto_3.set = function (prop, value) {
         this[prop] = value;
     };
     return Base;

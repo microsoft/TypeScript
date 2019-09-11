@@ -55,7 +55,8 @@ var C2 = /** @class */ (function () {
 var C3 = /** @class */ (function () {
     function C3() {
     }
-    Object.defineProperty(C3.prototype, "getset1", {
+    var proto_1 = C3.prototype;
+    Object.defineProperty(proto_1, "getset1", {
         get: function () { return 1; },
         set: function (baz) { },
         enumerable: true,
@@ -86,7 +87,8 @@ var C5 = /** @class */ (function () {
 var C6 = /** @class */ (function () {
     function C6() {
     }
-    Object.defineProperty(C6.prototype, "getset1", {
+    var proto_2 = C6.prototype;
+    Object.defineProperty(proto_2, "getset1", {
         get: function () { var x; return x; },
         set: function (baz) { },
         enumerable: true,

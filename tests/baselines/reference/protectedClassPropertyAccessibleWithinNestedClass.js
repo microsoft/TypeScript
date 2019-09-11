@@ -42,13 +42,14 @@ class C {
 var C = /** @class */ (function () {
     function C() {
     }
-    Object.defineProperty(C.prototype, "y", {
+    var proto_1 = C.prototype;
+    Object.defineProperty(proto_1, "y", {
         get: function () { return this.x; },
         set: function (x) { this.y = this.x; },
         enumerable: true,
         configurable: true
     });
-    C.prototype.foo = function () { return this.foo; };
+    proto_1.foo = function () { return this.foo; };
     Object.defineProperty(C, "y", {
         get: function () { return this.x; },
         set: function (x) { this.y = this.x; },
@@ -57,7 +58,7 @@ var C = /** @class */ (function () {
     });
     C.foo = function () { return this.foo; };
     C.bar = function () { this.foo(); };
-    C.prototype.bar = function () {
+    proto_1.bar = function () {
         var C2 = /** @class */ (function () {
             function C2() {
             }

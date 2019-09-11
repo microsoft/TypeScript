@@ -87,11 +87,12 @@ var Left = /** @class */ (function () {
         this.value = value;
         this._tag = 'Left';
     }
+    var proto_1 = Left.prototype;
     /** The given function is applied if this is a `Right` */
-    Left.prototype.map = function (f) {
+    proto_1.map = function (f) {
         return this;
     };
-    Left.prototype.ap = function (fab) {
+    proto_1.ap = function (fab) {
         return null;
     };
     return Left;
@@ -101,10 +102,11 @@ var Right = /** @class */ (function () {
         this.value = value;
         this._tag = 'Right';
     }
-    Right.prototype.map = function (f) {
+    var proto_2 = Right.prototype;
+    proto_2.map = function (f) {
         return new Right(f(this.value));
     };
-    Right.prototype.ap = function (fab) {
+    proto_2.ap = function (fab) {
         return null;
     };
     return Right;

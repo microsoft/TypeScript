@@ -143,11 +143,12 @@ var EmptyTypes;
     var f = /** @class */ (function () {
         function f() {
         }
-        f.prototype.voidIfAny = function (x, y) {
+        var proto_1 = f.prototype;
+        proto_1.voidIfAny = function (x, y) {
             if (y === void 0) { y = false; }
             return null;
         };
-        f.prototype.x = function () {
+        proto_1.x = function () {
             (this.voidIfAny([4, 2][0]));
             (this.voidIfAny([4, 2, undefined][0]));
             (this.voidIfAny([undefined, 2, 4][0]));
@@ -202,11 +203,12 @@ var NonEmptyTypes;
     var f = /** @class */ (function () {
         function f() {
         }
-        f.prototype.voidIfAny = function (x, y) {
+        var proto_2 = f.prototype;
+        proto_2.voidIfAny = function (x, y) {
             if (y === void 0) { y = false; }
             return null;
         };
-        f.prototype.x = function () {
+        proto_2.x = function () {
             (this.voidIfAny([4, 2][0]));
             (this.voidIfAny([4, 2, undefined][0]));
             (this.voidIfAny([undefined, 2, 4][0]));

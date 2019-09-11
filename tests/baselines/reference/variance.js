@@ -37,8 +37,9 @@ var z = x;
 var Bar = /** @class */ (function () {
     function Bar() {
     }
-    Bar.prototype.cast = function (_name) { };
-    Bar.prototype.pushThis = function () {
+    var proto_1 = Bar.prototype;
+    proto_1.cast = function (_name) { };
+    proto_1.pushThis = function () {
         Bar.instance.push(this);
     };
     return Bar;

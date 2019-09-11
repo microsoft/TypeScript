@@ -55,9 +55,10 @@ var MyBase = /** @class */ (function () {
         this.d1 = 42;
         this.d2 = 42;
     }
-    MyBase.prototype.m1 = function (a) { return a; };
-    MyBase.prototype.p1 = function () { };
-    Object.defineProperty(MyBase.prototype, "value", {
+    var proto_1 = MyBase.prototype;
+    proto_1.m1 = function (a) { return a; };
+    proto_1.p1 = function () { };
+    Object.defineProperty(proto_1, "value", {
         get: function () { return 0; },
         set: function (v) { },
         enumerable: true,

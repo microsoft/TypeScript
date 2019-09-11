@@ -52,9 +52,10 @@ var D = /** @class */ (function (_super) {
         _this.y = 3;
         return _this;
     }
-    D.prototype.foo = function (x) { return x; };
-    D.prototype.other = function (x) { return x; };
-    D.prototype.bar = function () { };
+    var proto_1 = D.prototype;
+    proto_1.foo = function (x) { return x; };
+    proto_1.other = function (x) { return x; };
+    proto_1.bar = function () { };
     return D;
 }(C));
 var D2 = /** @class */ (function (_super) {
@@ -64,8 +65,9 @@ var D2 = /** @class */ (function (_super) {
         _this.x = "";
         return _this;
     }
-    D2.prototype.foo = function (x) { return x; };
-    D2.prototype.other = function (x) { return x; };
-    D2.prototype.bar = function () { };
+    var proto_2 = D2.prototype;
+    proto_2.foo = function (x) { return x; };
+    proto_2.other = function (x) { return x; };
+    proto_2.bar = function () { };
     return D2;
 }(C));

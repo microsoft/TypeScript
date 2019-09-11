@@ -306,10 +306,11 @@ var exportTests;
     var C1_public = /** @class */ (function () {
         function C1_public() {
         }
-        C1_public.prototype.f2 = function () {
+        var proto_1 = C1_public.prototype;
+        proto_1.f2 = function () {
             return 30;
         };
-        C1_public.prototype.f3 = function () {
+        proto_1.f3 = function () {
             return "string";
         };
         return C1_public;
@@ -318,10 +319,11 @@ var exportTests;
     var C2_private = /** @class */ (function () {
         function C2_private() {
         }
-        C2_private.prototype.f2 = function () {
+        var proto_2 = C2_private.prototype;
+        proto_2.f2 = function () {
             return 30;
         };
-        C2_private.prototype.f3 = function () {
+        proto_2.f3 = function () {
             return "string";
         };
         return C2_private;
@@ -329,24 +331,25 @@ var exportTests;
     var C3_public = /** @class */ (function () {
         function C3_public() {
         }
-        C3_public.prototype.getC2_private = function () {
+        var proto_3 = C3_public.prototype;
+        proto_3.getC2_private = function () {
             return new C2_private();
         };
-        C3_public.prototype.setC2_private = function (arg) {
+        proto_3.setC2_private = function (arg) {
         };
-        Object.defineProperty(C3_public.prototype, "c2", {
+        Object.defineProperty(proto_3, "c2", {
             get: function () {
                 return new C2_private();
             },
             enumerable: true,
             configurable: true
         });
-        C3_public.prototype.getC1_public = function () {
+        proto_3.getC1_public = function () {
             return new C1_public();
         };
-        C3_public.prototype.setC1_public = function (arg) {
+        proto_3.setC1_public = function (arg) {
         };
-        Object.defineProperty(C3_public.prototype, "c1", {
+        Object.defineProperty(proto_3, "c1", {
             get: function () {
                 return new C1_public();
             },

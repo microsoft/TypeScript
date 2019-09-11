@@ -50,7 +50,8 @@ var _super = 10; // No Error
 var Foo = /** @class */ (function () {
     function Foo() {
     }
-    Object.defineProperty(Foo.prototype, "prop1", {
+    var proto_1 = Foo.prototype;
+    Object.defineProperty(proto_1, "prop1", {
         get: function () {
             var _super = 10; // No error
             return 10;
@@ -68,7 +69,8 @@ var b = /** @class */ (function (_super_1) {
     function b() {
         return _super_1 !== null && _super_1.apply(this, arguments) || this;
     }
-    Object.defineProperty(b.prototype, "prop2", {
+    var proto_2 = b.prototype;
+    Object.defineProperty(proto_2, "prop2", {
         get: function () {
             var _super = 10; // Should be error
             return 10;
@@ -86,7 +88,8 @@ var c = /** @class */ (function (_super_1) {
     function c() {
         return _super_1 !== null && _super_1.apply(this, arguments) || this;
     }
-    Object.defineProperty(c.prototype, "prop2", {
+    var proto_3 = c.prototype;
+    Object.defineProperty(proto_3, "prop2", {
         get: function () {
             var x = function () {
                 var _super = 10; // Should be error

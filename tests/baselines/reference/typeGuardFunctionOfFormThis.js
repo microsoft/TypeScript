@@ -158,10 +158,11 @@ var __extends = (this && this.__extends) || (function () {
 var RoyalGuard = /** @class */ (function () {
     function RoyalGuard() {
     }
-    RoyalGuard.prototype.isLeader = function () {
+    var proto_1 = RoyalGuard.prototype;
+    proto_1.isLeader = function () {
         return this instanceof LeadGuard;
     };
-    RoyalGuard.prototype.isFollower = function () {
+    proto_1.isFollower = function () {
         return this instanceof FollowerGuard;
     };
     return RoyalGuard;
@@ -171,7 +172,8 @@ var LeadGuard = /** @class */ (function (_super) {
     function LeadGuard() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
-    LeadGuard.prototype.lead = function () { };
+    var proto_2 = LeadGuard.prototype;
+    proto_2.lead = function () { };
     ;
     return LeadGuard;
 }(RoyalGuard));
@@ -180,7 +182,8 @@ var FollowerGuard = /** @class */ (function (_super) {
     function FollowerGuard() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
-    FollowerGuard.prototype.follow = function () { };
+    var proto_3 = FollowerGuard.prototype;
+    proto_3.follow = function () { };
     ;
     return FollowerGuard;
 }(RoyalGuard));
@@ -265,9 +268,10 @@ a.isLeader = b.isLeader;
 var MimicGuard = /** @class */ (function () {
     function MimicGuard() {
     }
-    MimicGuard.prototype.isLeader = function () { return this instanceof MimicLeader; };
+    var proto_4 = MimicGuard.prototype;
+    proto_4.isLeader = function () { return this instanceof MimicLeader; };
     ;
-    MimicGuard.prototype.isFollower = function () { return this instanceof MimicFollower; };
+    proto_4.isFollower = function () { return this instanceof MimicFollower; };
     ;
     return MimicGuard;
 }());

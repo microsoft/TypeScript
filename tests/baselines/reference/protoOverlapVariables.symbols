@@ -1,0 +1,51 @@
+=== tests/cases/conformance/classes/protoOverlapVariables.ts ===
+let proto = "gotcha!";
+>proto : Symbol(proto, Decl(protoOverlapVariables.ts, 0, 3))
+
+class DeclarationWithOne {
+>DeclarationWithOne : Symbol(DeclarationWithOne, Decl(protoOverlapVariables.ts, 0, 22))
+
+    member() {
+>member : Symbol(DeclarationWithOne.member, Decl(protoOverlapVariables.ts, 2, 26))
+
+        return this;
+>this : Symbol(DeclarationWithOne, Decl(protoOverlapVariables.ts, 0, 22))
+    }
+}
+
+class DeclarationWithTwo {
+>DeclarationWithTwo : Symbol(DeclarationWithTwo, Decl(protoOverlapVariables.ts, 6, 1))
+
+    memberOne() {
+>memberOne : Symbol(DeclarationWithTwo.memberOne, Decl(protoOverlapVariables.ts, 8, 26))
+
+        return this;
+>this : Symbol(DeclarationWithTwo, Decl(protoOverlapVariables.ts, 6, 1))
+    }
+    
+    memberTwo() {
+>memberTwo : Symbol(DeclarationWithTwo.memberTwo, Decl(protoOverlapVariables.ts, 11, 5))
+
+        return this;
+>this : Symbol(DeclarationWithTwo, Decl(protoOverlapVariables.ts, 6, 1))
+    }
+}
+
+const Expression = class {
+>Expression : Symbol(Expression, Decl(protoOverlapVariables.ts, 18, 5))
+
+    memberOne() {
+>memberOne : Symbol(Expression.memberOne, Decl(protoOverlapVariables.ts, 18, 26))
+
+        return this;
+>this : Symbol(Expression, Decl(protoOverlapVariables.ts, 18, 18))
+    }
+    
+    memberTwo() {
+>memberTwo : Symbol(Expression.memberTwo, Decl(protoOverlapVariables.ts, 21, 5))
+
+        return this;
+>this : Symbol(Expression, Decl(protoOverlapVariables.ts, 18, 18))
+    }
+};
+

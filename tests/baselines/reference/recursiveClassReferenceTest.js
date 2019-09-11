@@ -129,8 +129,9 @@ var Sample;
                 var StartFindAction = /** @class */ (function () {
                     function StartFindAction() {
                     }
-                    StartFindAction.prototype.getId = function () { return "yo"; };
-                    StartFindAction.prototype.run = function (Thing) {
+                    var proto_1 = StartFindAction.prototype;
+                    proto_1.getId = function () { return "yo"; };
+                    proto_1.run = function (Thing) {
                         return true;
                     };
                     return StartFindAction;
@@ -152,13 +153,14 @@ var Sample;
                     // scenario 1
                     codeThing.addWidget("addWidget", this);
                 }
-                FindWidget.prototype.gar = function (runner) { if (true) {
+                var proto_2 = FindWidget.prototype;
+                proto_2.gar = function (runner) { if (true) {
                     return runner(this);
                 } };
-                FindWidget.prototype.getDomNode = function () {
+                proto_2.getDomNode = function () {
                     return domNode;
                 };
-                FindWidget.prototype.destroy = function () {
+                proto_2.destroy = function () {
                 };
                 return FindWidget;
             }());
@@ -183,13 +185,14 @@ var AbstractMode = /** @class */ (function () {
                     function State(mode) {
                         this.mode = mode;
                     }
-                    State.prototype.clone = function () {
+                    var proto_3 = State.prototype;
+                    proto_3.clone = function () {
                         return this;
                     };
-                    State.prototype.equals = function (other) {
+                    proto_3.equals = function (other) {
                         return this === other;
                     };
-                    State.prototype.getMode = function () { return mode; };
+                    proto_3.getMode = function () { return mode; };
                     return State;
                 }());
                 PlainText.State = State;

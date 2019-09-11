@@ -51,8 +51,9 @@ var C5 = /** @class */ (function () {
     function C5() {
         this.set = function () { return true; };
     }
-    C5.prototype.get = function () { return true; };
-    Object.defineProperty(C5.prototype, "t", {
+    var proto_1 = C5.prototype;
+    proto_1.get = function () { return true; };
+    Object.defineProperty(proto_1, "t", {
         set: function (x) { },
         enumerable: true,
         configurable: true

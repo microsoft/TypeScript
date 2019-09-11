@@ -41,8 +41,9 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var C1 = /** @class */ (function () {
     function C1() {
     }
-    C1.prototype.C1 = function () { }; // has to be the same as the class name
-    C1.prototype.bar = function () {
+    var proto_1 = C1.prototype;
+    proto_1.C1 = function () { }; // has to be the same as the class name
+    proto_1.bar = function () {
         return function (t) {
         };
     };
@@ -62,13 +63,14 @@ exports.C2 = C2;
 var C3 = /** @class */ (function () {
     function C3() {
     }
-    Object.defineProperty(C3.prototype, "C3", {
+    var proto_2 = C3.prototype;
+    Object.defineProperty(proto_2, "C3", {
         get: function () { return 0; } // has to be the same as the class name
         ,
         enumerable: true,
         configurable: true
     });
-    C3.prototype.bar = function () {
+    proto_2.bar = function () {
         return function (t) {
         };
     };
@@ -78,13 +80,14 @@ exports.C3 = C3;
 var C4 = /** @class */ (function () {
     function C4() {
     }
-    Object.defineProperty(C4.prototype, "C4", {
+    var proto_3 = C4.prototype;
+    Object.defineProperty(proto_3, "C4", {
         set: function (v) { } // has to be the same as the class name
         ,
         enumerable: true,
         configurable: true
     });
-    C4.prototype.bar = function () {
+    proto_3.bar = function () {
         return function (t) {
         };
     };

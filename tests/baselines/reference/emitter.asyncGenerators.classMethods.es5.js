@@ -558,9 +558,10 @@ var __asyncGenerator = (this && this.__asyncGenerator) || function (thisArg, _ar
 var C8 = /** @class */ (function () {
     function C8() {
     }
-    C8.prototype.g = function () {
+    var proto_1 = C8.prototype;
+    proto_1.g = function () {
     };
-    C8.prototype.f = function () {
+    proto_1.f = function () {
         return __asyncGenerator(this, arguments, function f_1() {
             return __generator(this, function (_a) {
                 this.g();

@@ -93,13 +93,14 @@ var __extends = (this && this.__extends) || (function () {
 var SomeBaseClass = /** @class */ (function () {
     function SomeBaseClass() {
     }
-    SomeBaseClass.prototype.func = function () {
+    var proto_1 = SomeBaseClass.prototype;
+    proto_1.func = function () {
         return '';
     };
     SomeBaseClass.func = function () {
         return 3;
     };
-    SomeBaseClass.prototype.returnThis = function () {
+    proto_1.returnThis = function () {
         return this;
     };
     return SomeBaseClass;
@@ -112,13 +113,14 @@ var SomeDerivedClass = /** @class */ (function (_super) {
         var x;
         return _this;
     }
-    SomeDerivedClass.prototype.fn = function () {
+    var proto_2 = SomeDerivedClass.prototype;
+    proto_2.fn = function () {
         var _this = this;
         var x = _super.prototype.func.call(this);
         var x;
         var y = function () { return _super.prototype.func.call(_this); };
     };
-    Object.defineProperty(SomeDerivedClass.prototype, "a", {
+    Object.defineProperty(proto_2, "a", {
         get: function () {
             var x = _super.prototype.func.call(this);
             var x;
@@ -148,7 +150,7 @@ var SomeDerivedClass = /** @class */ (function (_super) {
         enumerable: true,
         configurable: true
     });
-    SomeDerivedClass.prototype.returnThis = function () {
+    proto_2.returnThis = function () {
         return _super.prototype.returnThis.call(this);
     };
     return SomeDerivedClass;
