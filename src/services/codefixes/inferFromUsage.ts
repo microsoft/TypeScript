@@ -481,7 +481,7 @@ namespace ts.codefix {
         }
 
         function single(): Type {
-            return unifyTypes(inferTypesFromReferencesSingle(references));
+            return combineTypes(inferTypesFromReferencesSingle(references));
         }
 
         function parameters(declaration: FunctionLike): ParameterInference[] | undefined {
@@ -517,7 +517,7 @@ namespace ts.codefix {
                     const inferred = inferTypesFromReferencesSingle(getReferences(parameter.name, program, cancellationToken));
                     types.push(...(isRest ? mapDefined(inferred, checker.getElementTypeOfArrayType) : inferred));
                 }
-                const type = unifyTypes(types);
+                const type = combineTypes(types);
                 return {
                     type: isRest ? checker.createArrayType(type) : type,
                     isOptional: isOptional && !isRest,
@@ -533,7 +533,7 @@ namespace ts.codefix {
                 calculateUsageOfNode(reference, usage);
             }
 
-            return unifyTypes(usage.candidateThisTypes || emptyArray);
+            return combineTypes(usage.candidateThisTypes || emptyArray);
         }
 
         function inferTypesFromReferencesSingle(references: readonly Identifier[]): Type[] {
@@ -542,7 +542,7 @@ namespace ts.codefix {
                 cancellationToken.throwIfCancellationRequested();
                 calculateUsageOfNode(reference, usage);
             }
-            return inferFromUsage(usage);
+            return inferTypes(usage);
         }
 
         function calculateUsageOfNode(node: Expression, usage: Usage): void {
@@ -819,11 +819,11 @@ namespace ts.codefix {
             return inferences.filter(i => toRemove.every(f => !f(i)));
         }
 
-        function unifyFromUsage(usage: Usage) {
-            return unifyTypes(inferFromUsage(usage));
+        function combineFromUsage(usage: Usage) {
+            return combineTypes(inferTypes(usage));
         }
 
-        function unifyTypes(inferences: readonly Type[]): Type {
+        function combineTypes(inferences: readonly Type[]): Type {
             if (!inferences.length) return checker.getAnyType();
 
             // 1. string or number individually override string | number
@@ -847,12 +847,12 @@ namespace ts.codefix {
             const anons = good.filter(i => checker.getObjectFlags(i) & ObjectFlags.Anonymous) as AnonymousType[];
             if (anons.length) {
                 good = good.filter(i => !(checker.getObjectFlags(i) & ObjectFlags.Anonymous));
-                good.push(unifyAnonymousTypes(anons));
+                good.push(combineAnonymousTypes(anons));
             }
             return checker.getWidenedType(checker.getUnionType(good.map(checker.getBaseTypeOfLiteralType), UnionReduction.Subtype));
         }
 
-        function unifyAnonymousTypes(anons: AnonymousType[]) {
+        function combineAnonymousTypes(anons: AnonymousType[]) {
             if (anons.length === 1) {
                 return anons[0];
             }
@@ -893,7 +893,7 @@ namespace ts.codefix {
                 numberIndices.length ? checker.createIndexInfo(checker.getUnionType(numberIndices), numberIndexReadonly) : undefined);
         }
 
-        function inferFromUsage(usage: Usage): Type[] {
+        function inferTypes(usage: Usage): Type[] {
             const types = [];
 
             if (usage.isNumber) {
@@ -906,7 +906,7 @@ namespace ts.codefix {
                 types.push(checker.getUnionType([checker.getStringType(), checker.getNumberType()]));
             }
             if (usage.numberIndex) {
-                types.push(checker.createArrayType(unifyFromUsage(usage.numberIndex)));
+                types.push(checker.createArrayType(combineFromUsage(usage.numberIndex)));
             }
             if (usage.properties && usage.properties.size
                 || usage.calls && usage.calls.length
@@ -926,13 +926,13 @@ namespace ts.codefix {
             if (usage.properties) {
                 usage.properties.forEach((u, name) => {
                     const symbol = checker.createSymbol(SymbolFlags.Property, name);
-                    symbol.type = unifyFromUsage(u);
+                    symbol.type = combineFromUsage(u);
                     members.set(name, symbol);
                 });
             }
             const callSignatures: Signature[] = usage.calls ? [getSignatureFromCalls(usage.calls)] : [];
             const constructSignatures: Signature[] = usage.constructs ? [getSignatureFromCalls(usage.constructs)] : [];
-            const stringIndexInfo = usage.stringIndex && checker.createIndexInfo(unifyFromUsage(usage.stringIndex), /*isReadonly*/ false);
+            const stringIndexInfo = usage.stringIndex && checker.createIndexInfo(combineFromUsage(usage.stringIndex), /*isReadonly*/ false);
             return checker.createAnonymousType(/*symbol*/ undefined!, members, callSignatures, constructSignatures, stringIndexInfo, /*numberIndexInfo*/ undefined); // TODO: GH#18217
         }
 
@@ -959,7 +959,7 @@ namespace ts.codefix {
                     result = result && !!sigs.length && checker.isTypeAssignableTo(source, getFunctionFromCalls(propUsage.calls));
                 }
                 else {
-                    result = result && checker.isTypeAssignableTo(source, unifyFromUsage(propUsage));
+                    result = result && checker.isTypeAssignableTo(source, combineFromUsage(propUsage));
                 }
             });
             return result;
@@ -982,17 +982,17 @@ namespace ts.codefix {
             usage.properties.forEach((propUsage, name) => {
                 const genericPropertyType = checker.getTypeOfPropertyOfType(generic, name as string);
                 Debug.assert(!!genericPropertyType, "generic should have all the properties of its reference.");
-                types.push(...infer(genericPropertyType!, unifyFromUsage(propUsage), singleTypeParameter));
+                types.push(...inferTypeParameters(genericPropertyType!, combineFromUsage(propUsage), singleTypeParameter));
             });
-            return builtinConstructors[type.symbol.escapedName as string](unifyTypes(types));
+            return builtinConstructors[type.symbol.escapedName as string](combineTypes(types));
         }
 
-        function infer(genericType: Type, usageType: Type, typeParameter: Type): readonly Type[] {
+        function inferTypeParameters(genericType: Type, usageType: Type, typeParameter: Type): readonly Type[] {
             if (genericType === typeParameter) {
                 return [usageType];
             }
             else if (genericType.flags & TypeFlags.UnionOrIntersection) {
-                return flatMap((genericType as UnionOrIntersectionType).types, t => infer(t, usageType, typeParameter));
+                return flatMap((genericType as UnionOrIntersectionType).types, t => inferTypeParameters(t, usageType, typeParameter));
             }
             else if (getObjectFlags(genericType) & ObjectFlags.Reference && getObjectFlags(usageType) & ObjectFlags.Reference) {
                 // this is wrong because we need a reference to the targetType to, so we can check that it's also a reference
@@ -1002,7 +1002,7 @@ namespace ts.codefix {
                 if (genericArgs && usageArgs) {
                     for (let i = 0; i < genericArgs.length; i++) {
                         if (usageArgs[i]) {
-                            types.push(...infer(genericArgs[i], usageArgs[i], typeParameter));
+                            types.push(...inferTypeParameters(genericArgs[i], usageArgs[i], typeParameter));
                         }
                     }
                 }
@@ -1031,11 +1031,11 @@ namespace ts.codefix {
                     genericParamType = elementType;
                 }
                 const targetType = (usageParam as SymbolLinks).type || checker.getTypeOfSymbolAtLocation(usageParam, usageParam.valueDeclaration);
-                types.push(...infer(genericParamType, targetType, typeParameter));
+                types.push(...inferTypeParameters(genericParamType, targetType, typeParameter));
             }
             const genericReturn = checker.getReturnTypeOfSignature(genericSig);
             const usageReturn = checker.getReturnTypeOfSignature(usageSig);
-            types.push(...infer(genericReturn, usageReturn, typeParameter));
+            types.push(...inferTypeParameters(genericReturn, usageReturn, typeParameter));
             return types;
         }
 
@@ -1048,13 +1048,13 @@ namespace ts.codefix {
             const length = Math.max(...calls.map(c => c.argumentTypes.length));
             for (let i = 0; i < length; i++) {
                 const symbol = checker.createSymbol(SymbolFlags.FunctionScopedVariable, escapeLeadingUnderscores(`arg${i}`));
-                symbol.type = unifyTypes(calls.map(call => call.argumentTypes[i] || checker.getUndefinedType()));
+                symbol.type = combineTypes(calls.map(call => call.argumentTypes[i] || checker.getUndefinedType()));
                 if (calls.some(call => call.argumentTypes[i] === undefined)) {
                     symbol.flags |= SymbolFlags.Optional;
                 }
                 parameters.push(symbol);
             }
-            const returnType = unifyFromUsage(combineUsages(calls.map(call => call.return_)));
+            const returnType = combineFromUsage(combineUsages(calls.map(call => call.return_)));
             // TODO: GH#18217
             return checker.createSignature(/*declaration*/ undefined!, /*typeParameters*/ undefined, /*thisParameter*/ undefined, parameters, returnType, /*typePredicate*/ undefined, length, /*hasRestParameter*/ false, /*hasLiteralTypes*/ false);
         }
