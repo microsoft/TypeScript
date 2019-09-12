@@ -221,16 +221,31 @@ declare class Context {
 declare namespace Context {
     export { Timer, Hook, HookHandler, Input, State };
 }
+/**
+ * Input type definition
+ */
 type Input = {
     timer: import("./timer");
     hook: import("./hook");
 };
+/**
+ * State type definition
+ */
 type State = {
     timer: import("./timer");
     hook: import("./hook");
 };
+/**
+ * Imports
+ */
 type Timer = import("./timer");
+/**
+ * Imports
+ */
 type Hook = import("./hook");
+/**
+ * Imports
+ */
 type HookHandler = (arg: Context) => void;
 //// [hook.d.ts]
 export = Hook;

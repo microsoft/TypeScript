@@ -107,10 +107,16 @@ var LocalThing = /** @class */ (function () {
 
 //// [index.d.ts]
 export type PropName = string | number | symbol;
+/**
+ * Callback
+ */
 export type NumberToStringCb = (a: number) => string;
 export type MixinName<T> = T & {
     name: string;
 };
+/**
+ * Identity function
+ */
 export type Identity<T> = (x: T) => T;
 //// [mixed.d.ts]
 export type SomeType = number | {

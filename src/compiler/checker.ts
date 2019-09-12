@@ -4215,11 +4215,7 @@ namespace ts {
                         const methodDeclaration = <MethodSignature>signatureToSignatureDeclarationHelper(signature, SyntaxKind.MethodSignature, context);
                         methodDeclaration.name = propertyName;
                         methodDeclaration.questionToken = optionalToken;
-                        if (propertySymbol.valueDeclaration) {
-                            // Copy comments to node for declaration emit
-                            setCommentRange(methodDeclaration, propertySymbol.valueDeclaration);
-                        }
-                        typeElements.push(methodDeclaration);
+                        typeElements.push(preserveCommentsOn(methodDeclaration));
                     }
                 }
                 else {
@@ -4245,11 +4241,22 @@ namespace ts {
                         propertyTypeNode,
                         /*initializer*/ undefined);
 
-                    if (propertySymbol.valueDeclaration) {
-                        // Copy comments to node for declaration emit
-                        setCommentRange(propertySignature, propertySymbol.valueDeclaration);
+                    typeElements.push(preserveCommentsOn(propertySignature));
+                }
+
+                function preserveCommentsOn<T extends Node>(node: T) {
+                    if (some(propertySymbol.declarations, d => d.kind === SyntaxKind.JSDocPropertyTag)) {
+                        const d = find(propertySymbol.declarations, d => d.kind === SyntaxKind.JSDocPropertyTag)! as JSDocPropertyTag;
+                        const commentText = d.comment;
+                        if (commentText) {
+                            setSyntheticLeadingComments(node, [{ kind: SyntaxKind.MultiLineCommentTrivia, text: "*\n * " + commentText.replace(/\n/g, "\n * ") + "\n ", pos: -1, end: -1, hasTrailingNewLine: true }]);
+                        }
                     }
-                    typeElements.push(propertySignature);
+                    else if (propertySymbol.valueDeclaration) {
+                        // Copy comments to node for declaration emit
+                        setCommentRange(node, propertySymbol.valueDeclaration);
+                    }
+                    return node;
                 }
             }
 
@@ -5201,9 +5208,14 @@ namespace ts {
                         const aliasType = getDeclaredTypeOfTypeAlias(symbol);
                         const typeParams = getSymbolLinks(symbol).typeParameters;
                         const typeParamDecls = map(typeParams, p => typeParameterToDeclaration(p, context));
+                        const jsdocAliasDecl = find(symbol.declarations, isJSDocTypeAlias);
+                        const commentText = jsdocAliasDecl ? jsdocAliasDecl.comment || jsdocAliasDecl.parent.comment : undefined;
                         const oldFlags = context.flags;
                         context.flags |= NodeBuilderFlags.InTypeAlias;
-                        addResult(createTypeAliasDeclaration(/*decorators*/ undefined, /*modifiers*/ undefined, getInternalSymbolName(symbol, symbolName), typeParamDecls, typeToTypeNodeHelper(aliasType, context)), modifierFlags);
+                        addResult(setSyntheticLeadingComments(
+                            createTypeAliasDeclaration(/*decorators*/ undefined, /*modifiers*/ undefined, getInternalSymbolName(symbol, symbolName), typeParamDecls, typeToTypeNodeHelper(aliasType, context)),
+                            !commentText ? [] : [{ kind: SyntaxKind.MultiLineCommentTrivia, text: "*\n * " + commentText.replace(/\n/g, "\n * ") + "\n ", pos: -1, end: -1, hasTrailingNewLine: true }]
+                        ), modifierFlags);
                         context.flags = oldFlags;
                     }
                     // Need to skip over export= symbols below - json source files get a single `Property` flagged
