@@ -302,7 +302,7 @@ namespace ts {
      * @param node The class node.
      * @param isStatic A value indicating whether to get properties from the static or instance side of the class.
      */
-    export function getInitializedProperties(node: ClassExpression | ClassDeclaration, isStatic: boolean): ReadonlyArray<PropertyDeclaration> {
+    export function getInitializedProperties(node: ClassExpression | ClassDeclaration, isStatic: boolean): readonly PropertyDeclaration[] {
         return filter(node.members, isStatic ? isStaticInitializedProperty : isInstanceInitializedProperty);
     }
 

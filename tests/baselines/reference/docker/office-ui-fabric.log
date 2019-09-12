@@ -180,6 +180,7 @@ Standard output:
 @uifabric/styling:  PASS  src/styles/theme.test.ts
 @uifabric/styling:  PASS  src/styles/scheme.test.ts
 @uifabric/styling:  PASS  src/styles/getGlobalClassNames.test.ts
+@uifabric/styling:  PASS  src/utilities/icons.test.ts
 @uifabric/styling: [XX:XX:XX XM] ■ Extracting Public API surface from '/office-ui-fabric-react/packages/styling/lib/index.d.ts'
 @uifabric/styling: Done in ?s.
 @uifabric/file-type-icons: yarn run vX.X.X
@@ -214,6 +215,7 @@ Standard output:
 @uifabric/foundation: [XX:XX:XX XM] ■ Webpack Config Path: /office-ui-fabric-react/packages/foundation/webpack.config.js
 @uifabric/foundation: Webpack version: 4.29.5
 @uifabric/foundation:  FAIL  src/slots.test.tsx
+@uifabric/foundation:  PASS  src/next/composed.test.tsx
 @uifabric/foundation: info Visit https://yarnpkg.com/en/docs/cli/run for documentation about this command.
 
 

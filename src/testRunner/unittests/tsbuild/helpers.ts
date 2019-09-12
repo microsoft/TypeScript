@@ -164,9 +164,10 @@ interface Symbol {
         }
     }
 
-    function generateSourceMapBaselineFiles(fs: vfs.FileSystem, mapFileNames: ReadonlyArray<string>) {
-        for (const mapFile of mapFileNames) {
-            if (!fs.existsSync(mapFile)) continue;
+    function generateSourceMapBaselineFiles(fs: vfs.FileSystem, mapFileNames: Iterator<string>) {
+        while (true) {
+            const { value: mapFile, done } = mapFileNames.next();
+            if (done) break;
             const text = Harness.SourceMapRecorder.getSourceMapRecordWithVFS(fs, mapFile);
             fs.writeFileSync(`${mapFile}.baseline.txt`, text);
         }
@@ -174,7 +175,7 @@ interface Symbol {
 
     // [tsbuildinfo, js, dts]
     export type BuildInfoSectionBaselineFiles = [string, string | undefined, string | undefined];
-    function generateBuildInfoSectionBaselineFiles(fs: vfs.FileSystem, buildInfoFileNames: ReadonlyArray<BuildInfoSectionBaselineFiles>) {
+    function generateBuildInfoSectionBaselineFiles(fs: vfs.FileSystem, buildInfoFileNames: readonly BuildInfoSectionBaselineFiles[]) {
         for (const [file, jsFile, dtsFile] of buildInfoFileNames) {
             if (!fs.existsSync(file)) continue;
 
@@ -232,18 +233,25 @@ interface Symbol {
     interface BuildInput {
         fs: vfs.FileSystem;
         tick: () => void;
-        rootNames: ReadonlyArray<string>;
-        expectedMapFileNames?: ReadonlyArray<string>;
-        expectedBuildInfoFilesForSectionBaselines?: ReadonlyArray<BuildInfoSectionBaselineFiles>;
+        rootNames: readonly string[];
         modifyFs: (fs: vfs.FileSystem) => void;
+        baselineSourceMap?: true;
+        baselineBuildInfo?: true;
     }
 
-    function build({ fs, tick, rootNames, expectedMapFileNames, expectedBuildInfoFilesForSectionBaselines, modifyFs }: BuildInput) {
+    function build({ fs, tick, rootNames, modifyFs, baselineSourceMap, baselineBuildInfo }: BuildInput) {
         const actualReadFileMap = createMap<number>();
         modifyFs(fs);
         tick();
 
         const host = new fakes.SolutionBuilderHost(fs);
+        const writtenFiles = createMap<true>();
+        const originalWriteFile = host.writeFile;
+        host.writeFile = (fileName, content, writeByteOrderMark) => {
+            assert.isFalse(writtenFiles.has(fileName));
+            writtenFiles.set(fileName, true);
+            return originalWriteFile.call(host, fileName, content, writeByteOrderMark);
+        };
         const builder = createSolutionBuilder(host, rootNames, { dry: false, force: false, verbose: true });
         host.clearDiagnostics();
         const originalReadFile = host.readFile;
@@ -255,15 +263,29 @@ interface Symbol {
             return originalReadFile.call(host, path);
         };
         builder.build();
-        if (expectedMapFileNames) generateSourceMapBaselineFiles(fs, expectedMapFileNames);
-        generateBuildInfoSectionBaselineFiles(fs, expectedBuildInfoFilesForSectionBaselines || emptyArray);
+        if (baselineSourceMap) generateSourceMapBaselineFiles(fs, mapDefinedIterator(writtenFiles.keys(), f => f.endsWith(".map") ? f : undefined));
+        if (baselineBuildInfo) {
+            let expectedBuildInfoFiles: BuildInfoSectionBaselineFiles[] | undefined;
+            for (const { options } of builder.getAllParsedConfigs()) {
+                const out = options.outFile || options.out;
+                if (out) {
+                    const { jsFilePath, declarationFilePath, buildInfoPath } = getOutputPathsForBundle(options, /*forceDts*/ false);
+                    if (buildInfoPath && writtenFiles.has(buildInfoPath)) {
+                        (expectedBuildInfoFiles || (expectedBuildInfoFiles = [])).push(
+                            [buildInfoPath, jsFilePath, declarationFilePath]
+                        );
+                    }
+                }
+            }
+            if (expectedBuildInfoFiles) generateBuildInfoSectionBaselineFiles(fs, expectedBuildInfoFiles);
+        }
         fs.makeReadonly();
-        return { fs, actualReadFileMap, host, builder };
+        return { fs, actualReadFileMap, host, builder, writtenFiles };
     }
 
     function generateBaseline(fs: vfs.FileSystem, proj: string, scenario: string, subScenario: string, baseFs: vfs.FileSystem) {
-        const patch = fs.diff(baseFs);
-        // tslint:disable-next-line:no-null-keyword
+        const patch = fs.diff(baseFs, { includeChangedFileWithSameContent: true });
+        // eslint-disable-next-line no-null/no-null
         Harness.Baseline.runBaseline(`tsbuild/${proj}/${subScenario.split(" ").join("-")}/${scenario.split(" ").join("-")}.js`, patch ? vfs.formatPatch(patch) : null);
     }
 
@@ -273,12 +295,11 @@ interface Symbol {
             const actual = actualReadFileMap.get(expectedFile);
             assert.equal(actual, expected, `Mismatch in read file call number for: ${expectedFile}
 Not in Actual: ${JSON.stringify(arrayFrom(mapDefinedIterator(expectedReadFiles.keys(), f => actualReadFileMap.has(f) ? undefined : f)))}
-Mismatch Actual(path, actual, expected): ${JSON.stringify(arrayFrom(mapDefinedIterator(actualReadFileMap.entries(),
-                ([p, v]) => expectedReadFiles.get(p) !== v ? [p, v, expectedReadFiles.get(p) || 0] : undefined)))}`);
+Mismatch Actual(path, actual, expected): ${JSON.stringify(arrayFrom(mapDefinedIterator(actualReadFileMap.entries(), ([p, v]) => expectedReadFiles.get(p) !== v ? [p, v, expectedReadFiles.get(p) || 0] : undefined)))}`);
         });
     }
 
-    export function getReadFilesMap(filesReadOnce: ReadonlyArray<string>, ...filesWithTwoReadCalls: string[]) {
+    export function getReadFilesMap(filesReadOnce: readonly string[], ...filesWithTwoReadCalls: string[]) {
         const map = arrayToMap(filesReadOnce, identity, () => 1);
         for (const fileWithTwoReadCalls of filesWithTwoReadCalls) {
             map.set(fileWithTwoReadCalls, 2);
@@ -287,7 +308,7 @@ Mismatch Actual(path, actual, expected): ${JSON.stringify(arrayFrom(mapDefinedIt
     }
 
     export interface ExpectedBuildOutput {
-        expectedDiagnostics?: ReadonlyArray<fakes.ExpectedDiagnostic>;
+        expectedDiagnostics?: readonly fakes.ExpectedDiagnostic[];
         expectedReadFiles?: ReadonlyMap<number>;
     }
 
@@ -301,23 +322,19 @@ Mismatch Actual(path, actual, expected): ${JSON.stringify(arrayFrom(mapDefinedIt
         time: () => number;
         tick: () => void;
         proj: string;
-        rootNames: ReadonlyArray<string>;
-        /** map file names to generate baseline of */
-        expectedMapFileNames?: ReadonlyArray<string>;
-        expectedBuildInfoFilesForSectionBaselines?: ReadonlyArray<BuildInfoSectionBaselineFiles>;
-        lastProjectOutput: string;
+        rootNames: readonly string[];
         initialBuild: BuildState;
-        outputFiles?: ReadonlyArray<string>;
         incrementalDtsChangedBuild?: BuildState;
         incrementalDtsUnchangedBuild?: BuildState;
         incrementalHeaderChangedBuild?: BuildState;
         baselineOnly?: true;
         verifyDiagnostics?: true;
+        baselineSourceMap?: true;
     }
 
     export function verifyTsbuildOutput({
-        scenario, projFs, time, tick, proj, rootNames, outputFiles, baselineOnly, verifyDiagnostics,
-        expectedMapFileNames, expectedBuildInfoFilesForSectionBaselines, lastProjectOutput,
+        scenario, projFs, time, tick, proj, rootNames,
+        baselineOnly, verifyDiagnostics, baselineSourceMap,
         initialBuild, incrementalDtsChangedBuild, incrementalDtsUnchangedBuild, incrementalHeaderChangedBuild
     }: VerifyTsBuildInput) {
         describe(`tsc --b ${proj}:: ${scenario}`, () => {
@@ -325,22 +342,24 @@ Mismatch Actual(path, actual, expected): ${JSON.stringify(arrayFrom(mapDefinedIt
             let actualReadFileMap: Map<number>;
             let firstBuildTime: number;
             let host: fakes.SolutionBuilderHost;
+            let initialWrittenFiles: Map<true>;
             before(() => {
                 const result = build({
                     fs: projFs().shadow(),
                     tick,
                     rootNames,
-                    expectedMapFileNames,
-                    expectedBuildInfoFilesForSectionBaselines,
                     modifyFs: initialBuild.modifyFs,
+                    baselineSourceMap,
+                    baselineBuildInfo: true,
                 });
-                ({ fs, actualReadFileMap, host } = result);
+                ({ fs, actualReadFileMap, host, writtenFiles: initialWrittenFiles } = result);
                 firstBuildTime = time();
             });
             after(() => {
                 fs = undefined!;
                 actualReadFileMap = undefined!;
                 host = undefined!;
+                initialWrittenFiles = undefined!;
             });
             describe("initialBuild", () => {
                 if (!baselineOnly || verifyDiagnostics) {
@@ -358,7 +377,7 @@ Mismatch Actual(path, actual, expected): ${JSON.stringify(arrayFrom(mapDefinedIt
                 }
             });
 
-            function incrementalBuild(subScenario: string, incrementalModifyFs: (fs: vfs.FileSystem) => void, incrementalExpectedDiagnostics: ReadonlyArray<fakes.ExpectedDiagnostic> | undefined, incrementalExpectedReadFiles: ReadonlyMap<number> | undefined) {
+            function incrementalBuild(subScenario: string, incrementalModifyFs: (fs: vfs.FileSystem) => void, incrementalExpectedDiagnostics: readonly fakes.ExpectedDiagnostic[] | undefined, incrementalExpectedReadFiles: ReadonlyMap<number> | undefined) {
                 describe(subScenario, () => {
                     let newFs: vfs.FileSystem;
                     let actualReadFileMap: Map<number>;
@@ -366,6 +385,7 @@ Mismatch Actual(path, actual, expected): ${JSON.stringify(arrayFrom(mapDefinedIt
                     let beforeBuildTime: number;
                     let afterBuildTime: number;
                     before(() => {
+                        const lastProjectOutput = last(arrayFrom(initialWrittenFiles.keys()));
                         beforeBuildTime = fs.statSync(lastProjectOutput).mtimeMs;
                         tick();
                         newFs = fs.shadow();
@@ -374,9 +394,9 @@ Mismatch Actual(path, actual, expected): ${JSON.stringify(arrayFrom(mapDefinedIt
                             fs: newFs,
                             tick,
                             rootNames,
-                            expectedMapFileNames,
-                            expectedBuildInfoFilesForSectionBaselines,
                             modifyFs: incrementalModifyFs,
+                            baselineSourceMap,
+                            baselineBuildInfo: true,
                         }));
                         afterBuildTime = newFs.statSync(lastProjectOutput).mtimeMs;
                     });
@@ -409,22 +429,19 @@ Mismatch Actual(path, actual, expected): ${JSON.stringify(arrayFrom(mapDefinedIt
                         });
                     }
                     it(`Verify emit output file text is same when built clean`, () => {
-                        const expectedOutputFiles = Debug.assertDefined(outputFiles);
-                        const { fs } = build({
+                        const { fs, writtenFiles } = build({
                             fs: newFs.shadow(),
                             tick,
                             rootNames,
                             modifyFs: fs => {
                                 // Delete output files
-                                for (const outputFile of expectedOutputFiles) {
-                                    if (fs.existsSync(outputFile)) {
-                                        fs.rimrafSync(outputFile);
-                                    }
-                                }
+                                const host = new fakes.SolutionBuilderHost(fs);
+                                const builder = createSolutionBuilder(host, rootNames, { clean: true });
+                                builder.clean();
                             },
                         });
 
-                        for (const outputFile of expectedOutputFiles) {
+                        for (const outputFile of arrayFrom(writtenFiles.keys())) {
                             const expectedText = fs.existsSync(outputFile) ? fs.readFileSync(outputFile, "utf8") : undefined;
                             const actualText = newFs.existsSync(outputFile) ? newFs.readFileSync(outputFile, "utf8") : undefined;
                             assert.equal(actualText, expectedText, `File: ${outputFile}`);

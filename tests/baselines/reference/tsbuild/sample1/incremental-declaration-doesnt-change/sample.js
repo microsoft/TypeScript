@@ -1,3 +1,6 @@
+//// [/src/core/index.d.ts] file written with same contents
+//// [/src/core/index.d.ts.map] file written with same contents
+//// [/src/core/index.d.ts.map.baseline.txt] file written with same contents
 //// [/src/core/index.js]
 "use strict";
 exports.__esModule = true;

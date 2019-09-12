@@ -207,6 +207,10 @@ export class someClass { }
   "version": "FakeTSVersion"
 }
 
+//// [/src/logic/index.d.ts] file written with same contents
+//// [/src/logic/index.js] file written with same contents
+//// [/src/logic/index.js.map] file written with same contents
+//// [/src/logic/index.js.map.baseline.txt] file written with same contents
 //// [/src/logic/tsconfig.tsbuildinfo]
 {
   "program": {
@@ -257,6 +261,8 @@ export class someClass { }
   "version": "FakeTSVersion"
 }
 
+//// [/src/tests/index.d.ts] file written with same contents
+//// [/src/tests/index.js] file written with same contents
 //// [/src/tests/tsconfig.tsbuildinfo]
 {
   "program": {

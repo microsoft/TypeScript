@@ -2,7 +2,7 @@
 namespace ts.FindAllReferences {
     export interface SymbolAndEntries {
         readonly definition: Definition | undefined;
-        readonly references: ReadonlyArray<Entry>;
+        readonly references: readonly Entry[];
     }
 
     export const enum DefinitionKind { Symbol, Label, Keyword, This, String }
@@ -189,7 +189,7 @@ namespace ts.FindAllReferences {
         readonly providePrefixAndSuffixTextForRename?: boolean;
     }
 
-    export function findReferencedSymbols(program: Program, cancellationToken: CancellationToken, sourceFiles: ReadonlyArray<SourceFile>, sourceFile: SourceFile, position: number): ReferencedSymbol[] | undefined {
+    export function findReferencedSymbols(program: Program, cancellationToken: CancellationToken, sourceFiles: readonly SourceFile[], sourceFile: SourceFile, position: number): ReferencedSymbol[] | undefined {
         const node = getTouchingPropertyName(sourceFile, position);
         const referencedSymbols = Core.getReferencedSymbolsForNode(position, node, program, sourceFiles, cancellationToken);
         const checker = program.getTypeChecker();
@@ -201,14 +201,14 @@ namespace ts.FindAllReferences {
             });
     }
 
-    export function getImplementationsAtPosition(program: Program, cancellationToken: CancellationToken, sourceFiles: ReadonlyArray<SourceFile>, sourceFile: SourceFile, position: number): ImplementationLocation[] | undefined {
+    export function getImplementationsAtPosition(program: Program, cancellationToken: CancellationToken, sourceFiles: readonly SourceFile[], sourceFile: SourceFile, position: number): ImplementationLocation[] | undefined {
         const node = getTouchingPropertyName(sourceFile, position);
         const referenceEntries = getImplementationReferenceEntries(program, cancellationToken, sourceFiles, node, position);
         const checker = program.getTypeChecker();
         return map(referenceEntries, entry => toImplementationLocation(entry, checker));
     }
 
-    function getImplementationReferenceEntries(program: Program, cancellationToken: CancellationToken, sourceFiles: ReadonlyArray<SourceFile>, node: Node, position: number): ReadonlyArray<Entry> | undefined {
+    function getImplementationReferenceEntries(program: Program, cancellationToken: CancellationToken, sourceFiles: readonly SourceFile[], node: Node, position: number): readonly Entry[] | undefined {
         if (node.kind === SyntaxKind.SourceFile) {
             return undefined;
         }
@@ -234,7 +234,7 @@ namespace ts.FindAllReferences {
     }
 
     export function findReferenceOrRenameEntries<T>(
-        program: Program, cancellationToken: CancellationToken, sourceFiles: ReadonlyArray<SourceFile>, node: Node, position: number, options: Options | undefined,
+        program: Program, cancellationToken: CancellationToken, sourceFiles: readonly SourceFile[], node: Node, position: number, options: Options | undefined,
         convertEntry: ToReferenceOrRenameEntry<T>,
     ): T[] | undefined {
         return map(flattenEntries(Core.getReferencedSymbolsForNode(position, node, program, sourceFiles, cancellationToken, options)), entry => convertEntry(entry, node, program.getTypeChecker()));
@@ -246,15 +246,15 @@ namespace ts.FindAllReferences {
         position: number,
         node: Node,
         program: Program,
-        sourceFiles: ReadonlyArray<SourceFile>,
+        sourceFiles: readonly SourceFile[],
         cancellationToken: CancellationToken,
         options: Options = {},
         sourceFilesSet: ReadonlyMap<true> = arrayToSet(sourceFiles, f => f.fileName),
-    ): ReadonlyArray<Entry> | undefined {
+    ): readonly Entry[] | undefined {
         return flattenEntries(Core.getReferencedSymbolsForNode(position, node, program, sourceFiles, cancellationToken, options, sourceFilesSet));
     }
 
-    function flattenEntries(referenceSymbols: ReadonlyArray<SymbolAndEntries> | undefined): ReadonlyArray<Entry> | undefined {
+    function flattenEntries(referenceSymbols: readonly SymbolAndEntries[] | undefined): readonly Entry[] | undefined {
         return referenceSymbols && flatMap(referenceSymbols, r => r.references);
     }
 
@@ -532,7 +532,7 @@ namespace ts.FindAllReferences {
 /* @internal */
 namespace ts.FindAllReferences.Core {
     /** Core find-all-references algorithm. Handles special cases before delegating to `getReferencedSymbolsForSymbol`. */
-    export function getReferencedSymbolsForNode(position: number, node: Node, program: Program, sourceFiles: ReadonlyArray<SourceFile>, cancellationToken: CancellationToken, options: Options = {}, sourceFilesSet: ReadonlyMap<true> = arrayToSet(sourceFiles, f => f.fileName)): ReadonlyArray<SymbolAndEntries> | undefined {
+    export function getReferencedSymbolsForNode(position: number, node: Node, program: Program, sourceFiles: readonly SourceFile[], cancellationToken: CancellationToken, options: Options = {}, sourceFilesSet: ReadonlyMap<true> = arrayToSet(sourceFiles, f => f.fileName)): readonly SymbolAndEntries[] | undefined {
         if (isSourceFile(node)) {
             const reference = GoToDefinition.getReferenceAtPosition(node, position, program);
             const moduleSymbol = reference && program.getTypeChecker().getMergedSymbol(reference.file.symbol);
@@ -583,7 +583,7 @@ namespace ts.FindAllReferences.Core {
         return undefined;
     }
 
-    function getReferencedSymbolsForModuleIfDeclaredBySourceFile(symbol: Symbol, program: Program, sourceFiles: ReadonlyArray<SourceFile>, cancellationToken: CancellationToken, options: Options, sourceFilesSet: ReadonlyMap<true>) {
+    function getReferencedSymbolsForModuleIfDeclaredBySourceFile(symbol: Symbol, program: Program, sourceFiles: readonly SourceFile[], cancellationToken: CancellationToken, options: Options, sourceFilesSet: ReadonlyMap<true>) {
         const moduleSourceFile = symbol.flags & SymbolFlags.Module ? find(symbol.declarations, isSourceFile) : undefined;
         if (!moduleSourceFile) return undefined;
         const exportEquals = symbol.exports!.get(InternalSymbolName.ExportEquals);
@@ -650,7 +650,7 @@ namespace ts.FindAllReferences.Core {
         return program.getSourceFiles().indexOf(sourceFile);
     }
 
-    function getReferencedSymbolsForModule(program: Program, symbol: Symbol, excludeImportTypeOfExportEquals: boolean, sourceFiles: ReadonlyArray<SourceFile>, sourceFilesSet: ReadonlyMap<true>): SymbolAndEntries[] {
+    function getReferencedSymbolsForModule(program: Program, symbol: Symbol, excludeImportTypeOfExportEquals: boolean, sourceFiles: readonly SourceFile[], sourceFilesSet: ReadonlyMap<true>): SymbolAndEntries[] {
         Debug.assert(!!symbol.valueDeclaration);
 
         const references = mapDefined<ModuleReference, Entry>(findModuleReferences(program, sourceFiles, symbol), reference => {
@@ -696,11 +696,9 @@ namespace ts.FindAllReferences.Core {
                 const sourceFile = decl.getSourceFile();
                 if (sourceFilesSet.has(sourceFile.fileName)) {
                     // At `module.exports = ...`, reference node is `module`
-                    const node = isBinaryExpression(decl) && isPropertyAccessExpression(decl.left)
-                        ? decl.left.expression
-                        : isExportAssignment(decl)
-                        ? Debug.assertDefined(findChildOfKind(decl, SyntaxKind.ExportKeyword, sourceFile))
-                        : getNameOfDeclaration(decl) || decl;
+                    const node = isBinaryExpression(decl) && isPropertyAccessExpression(decl.left) ? decl.left.expression :
+                        isExportAssignment(decl) ? Debug.assertDefined(findChildOfKind(decl, SyntaxKind.ExportKeyword, sourceFile)) :
+                        getNameOfDeclaration(decl) || decl;
                     references.push(nodeEntry(node));
                 }
             }
@@ -717,7 +715,7 @@ namespace ts.FindAllReferences.Core {
     }
 
     /** getReferencedSymbols for special node kinds. */
-    function getReferencedSymbolsSpecial(node: Node, sourceFiles: ReadonlyArray<SourceFile>, cancellationToken: CancellationToken): SymbolAndEntries[] | undefined {
+    function getReferencedSymbolsSpecial(node: Node, sourceFiles: readonly SourceFile[], cancellationToken: CancellationToken): SymbolAndEntries[] | undefined {
         if (isTypeKeyword(node.kind)) {
             // A modifier readonly (like on a property declaration) is not special;
             // a readonly type keyword (like `readonly string[]`) is.
@@ -757,7 +755,7 @@ namespace ts.FindAllReferences.Core {
     }
 
     /** Core find-all-references algorithm for a normal symbol. */
-    function getReferencedSymbolsForSymbol(originalSymbol: Symbol, node: Node | undefined, sourceFiles: ReadonlyArray<SourceFile>, sourceFilesSet: ReadonlyMap<true>, checker: TypeChecker, cancellationToken: CancellationToken, options: Options): SymbolAndEntries[] {
+    function getReferencedSymbolsForSymbol(originalSymbol: Symbol, node: Node | undefined, sourceFiles: readonly SourceFile[], sourceFilesSet: ReadonlyMap<true>, checker: TypeChecker, cancellationToken: CancellationToken, options: Options): SymbolAndEntries[] {
         const symbol = node && skipPastExportOrImportSpecifierOrUnion(originalSymbol, node, checker, /*useLocalSymbolForExportSpecifier*/ !isForRenameWithPrefixAndSuffixText(options)) || originalSymbol;
 
         // Compute the meaning from the location and the symbol it references
@@ -846,8 +844,8 @@ namespace ts.FindAllReferences.Core {
         readonly text: string;
         readonly escapedText: __String;
         /** Only set if `options.implementations` is true. These are the symbols checked to get the implementations of a property access. */
-        readonly parents: ReadonlyArray<Symbol> | undefined;
-        readonly allSearchSymbols: ReadonlyArray<Symbol>;
+        readonly parents: readonly Symbol[] | undefined;
+        readonly allSearchSymbols: readonly Symbol[];
 
         /**
          * Whether a symbol is in the search set.
@@ -899,7 +897,7 @@ namespace ts.FindAllReferences.Core {
         readonly markSeenReExportRHS = nodeSeenTracker();
 
         constructor(
-            readonly sourceFiles: ReadonlyArray<SourceFile>,
+            readonly sourceFiles: readonly SourceFile[],
             readonly sourceFilesSet: ReadonlyMap<true>,
             readonly specialSearchKind: SpecialSearchKind,
             readonly checker: TypeChecker,
@@ -961,7 +959,7 @@ namespace ts.FindAllReferences.Core {
         // Source file ID → symbol ID → Whether the symbol has been searched for in the source file.
         private readonly sourceFileToSeenSymbols: Map<true>[] = [];
         /** Returns `true` the first time we search for a symbol in a file and `false` afterwards. */
-        markSearchedSymbols(sourceFile: SourceFile, symbols: ReadonlyArray<Symbol>): boolean {
+        markSearchedSymbols(sourceFile: SourceFile, symbols: readonly Symbol[]): boolean {
             const sourceId = getNodeId(sourceFile);
             const seenSymbols = this.sourceFileToSeenSymbols[sourceId] || (this.sourceFileToSeenSymbols[sourceId] = createMap<true>());
 
@@ -1012,7 +1010,7 @@ namespace ts.FindAllReferences.Core {
     }
 
     export function eachExportReference(
-        sourceFiles: ReadonlyArray<SourceFile>,
+        sourceFiles: readonly SourceFile[],
         checker: TypeChecker,
         cancellationToken: CancellationToken | undefined,
         exportSymbol: Symbol,
@@ -1163,7 +1161,7 @@ namespace ts.FindAllReferences.Core {
         }
     }
 
-    export function eachSignatureCall(signature: SignatureDeclaration, sourceFiles: ReadonlyArray<SourceFile>, checker: TypeChecker, cb: (call: CallExpression) => void): void {
+    export function eachSignatureCall(signature: SignatureDeclaration, sourceFiles: readonly SourceFile[], checker: TypeChecker, cb: (call: CallExpression) => void): void {
         if (!signature.name || !isIdentifier(signature.name)) return;
 
         const symbol = Debug.assertDefined(checker.getSymbolAtLocation(signature.name));
@@ -1182,11 +1180,11 @@ namespace ts.FindAllReferences.Core {
         }
     }
 
-    function getPossibleSymbolReferenceNodes(sourceFile: SourceFile, symbolName: string, container: Node = sourceFile): ReadonlyArray<Node> {
+    function getPossibleSymbolReferenceNodes(sourceFile: SourceFile, symbolName: string, container: Node = sourceFile): readonly Node[] {
         return getPossibleSymbolReferencePositions(sourceFile, symbolName, container).map(pos => getTouchingPropertyName(sourceFile, pos));
     }
 
-    function getPossibleSymbolReferencePositions(sourceFile: SourceFile, symbolName: string, container: Node = sourceFile): ReadonlyArray<number> {
+    function getPossibleSymbolReferencePositions(sourceFile: SourceFile, symbolName: string, container: Node = sourceFile): readonly number[] {
         const positions: number[] = [];
 
         /// TODO: Cache symbol existence for files to save text search
@@ -1253,7 +1251,7 @@ namespace ts.FindAllReferences.Core {
         }
     }
 
-    function getAllReferencesForKeyword(sourceFiles: ReadonlyArray<SourceFile>, keywordKind: SyntaxKind, cancellationToken: CancellationToken, filter?: (node: Node) => boolean): SymbolAndEntries[] | undefined {
+    function getAllReferencesForKeyword(sourceFiles: readonly SourceFile[], keywordKind: SyntaxKind, cancellationToken: CancellationToken, filter?: (node: Node) => boolean): SymbolAndEntries[] | undefined {
         const references = flatMap(sourceFiles, sourceFile => {
             cancellationToken.throwIfCancellationRequested();
             return mapDefined(getPossibleSymbolReferenceNodes(sourceFile, tokenToString(keywordKind)!, sourceFile), referenceLocation => {
@@ -1461,7 +1459,7 @@ namespace ts.FindAllReferences.Core {
     }
 
     function addReference(referenceLocation: Node, relatedSymbol: Symbol | RelatedSymbol, state: State): void {
-        const { kind, symbol } = "kind" in relatedSymbol ? relatedSymbol : { kind: undefined, symbol: relatedSymbol };
+        const { kind, symbol } = "kind" in relatedSymbol ? relatedSymbol : { kind: undefined, symbol: relatedSymbol }; // eslint-disable-line no-in-operator
         const addRef = state.referenceAdder(symbol);
         if (state.options.implementations) {
             addImplementationReferences(referenceLocation, addRef, state);
@@ -1744,7 +1742,7 @@ namespace ts.FindAllReferences.Core {
         return node.kind === SyntaxKind.Identifier && node.parent.kind === SyntaxKind.Parameter && (<ParameterDeclaration>node.parent).name === node;
     }
 
-    function getReferencesForThisKeyword(thisOrSuperKeyword: Node, sourceFiles: ReadonlyArray<SourceFile>, cancellationToken: CancellationToken): SymbolAndEntries[] | undefined {
+    function getReferencesForThisKeyword(thisOrSuperKeyword: Node, sourceFiles: readonly SourceFile[], cancellationToken: CancellationToken): SymbolAndEntries[] | undefined {
         let searchSpaceNode = getThisContainer(thisOrSuperKeyword, /* includeArrowFunctions */ false);
 
         // Whether 'this' occurs in a static context within a class.
@@ -1811,7 +1809,7 @@ namespace ts.FindAllReferences.Core {
         }];
     }
 
-    function getReferencesForStringLiteral(node: StringLiteral, sourceFiles: ReadonlyArray<SourceFile>, cancellationToken: CancellationToken): SymbolAndEntries[] {
+    function getReferencesForStringLiteral(node: StringLiteral, sourceFiles: readonly SourceFile[], cancellationToken: CancellationToken): SymbolAndEntries[] {
         const references = flatMap(sourceFiles, sourceFile => {
             cancellationToken.throwIfCancellationRequested();
             return mapDefined(getPossibleSymbolReferenceNodes(sourceFile, node.text), ref =>
@@ -1993,11 +1991,10 @@ namespace ts.FindAllReferences.Core {
     }
 
     function isImplementation(node: Node): boolean {
-        return !!(node.flags & NodeFlags.Ambient)
-            ? !(isInterfaceDeclaration(node) || isTypeAliasDeclaration(node))
-            : (isVariableLike(node) ? hasInitializer(node)
-                : isFunctionLikeDeclaration(node) ? !!node.body
-                : isClassLike(node) || isModuleOrEnumDeclaration(node));
+        return !!(node.flags & NodeFlags.Ambient) ? !(isInterfaceDeclaration(node) || isTypeAliasDeclaration(node)) :
+            (isVariableLike(node) ? hasInitializer(node) :
+            isFunctionLikeDeclaration(node) ? !!node.body :
+            isClassLike(node) || isModuleOrEnumDeclaration(node));
     }
 
     export function getReferenceEntriesForShorthandPropertyAssignment(node: Node, checker: TypeChecker, addReference: (node: Node) => void): void {
@@ -2033,7 +2030,7 @@ namespace ts.FindAllReferences.Core {
      * symbol may have a different parent symbol if the local type's symbol does not declare the property
      * being accessed (i.e. it is declared in some parent class or interface)
      */
-    function getParentSymbolsOfPropertyAccess(location: Node, symbol: Symbol, checker: TypeChecker): ReadonlyArray<Symbol> | undefined {
+    function getParentSymbolsOfPropertyAccess(location: Node, symbol: Symbol, checker: TypeChecker): readonly Symbol[] | undefined {
         const propertyAccessExpression = isRightSideOfPropertyAccess(location) ? <PropertyAccessExpression>location.parent : undefined;
         const lhsType = propertyAccessExpression && checker.getTypeAtLocation(propertyAccessExpression.expression);
         const res = mapDefined(lhsType && (lhsType.isUnionOrIntersection() ? lhsType.types : lhsType.symbol === symbol.parent ? undefined : [lhsType]), t =>

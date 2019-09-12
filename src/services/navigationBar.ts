@@ -56,7 +56,7 @@ namespace ts.NavigationBar {
         curCancellationToken = cancellationToken;
         curSourceFile = sourceFile;
         try {
-            return map(topLevelItems(rootNavigationBarNode(sourceFile)), convertToTopLevelItem);
+            return map(primaryNavBarMenuItems(rootNavigationBarNode(sourceFile)), convertToPrimaryNavBarMenuItem);
         }
         finally {
             reset();
@@ -111,8 +111,8 @@ namespace ts.NavigationBar {
         return root;
     }
 
-    function addLeafNode(node: Node): void {
-        pushChild(parent, emptyNavigationBarNode(node));
+    function addLeafNode(node: Node, name?: DeclarationName): void {
+        pushChild(parent, emptyNavigationBarNode(node, name));
     }
 
     function emptyNavigationBarNode(node: Node, name?: DeclarationName): NavigationBarNode {
@@ -243,23 +243,26 @@ namespace ts.NavigationBar {
                 }
                 break;
 
+            case SyntaxKind.ShorthandPropertyAssignment:
+                addNodeWithRecursiveChild(node, (<ShorthandPropertyAssignment>node).name);
+                break;
+            case SyntaxKind.SpreadAssignment:
+                const { expression } = <SpreadAssignment>node;
+                // Use the expression as the name of the SpreadAssignment, otherwise show as <unknown>.
+                isIdentifier(expression) ? addLeafNode(node, expression) : addLeafNode(node);
+                break;
             case SyntaxKind.BindingElement:
+            case SyntaxKind.PropertyAssignment:
             case SyntaxKind.VariableDeclaration:
-                const { name, initializer } = <VariableDeclaration | BindingElement>node;
+                const { name, initializer } = <VariableDeclaration | PropertyAssignment | BindingElement>node;
                 if (isBindingPattern(name)) {
                     addChildrenRecursively(name);
                 }
                 else if (initializer && isFunctionOrClassExpression(initializer)) {
-                    if (initializer.name) {
-                        // Don't add a node for the VariableDeclaration, just for the initializer.
-                        addChildrenRecursively(initializer);
-                    }
-                    else {
-                        // Add a node for the VariableDeclaration, but not for the initializer.
-                        startNode(node);
-                        forEachChild(initializer, addChildrenRecursively);
-                        endNode();
-                    }
+                    // Add a node for the VariableDeclaration, but not for the initializer.
+                    startNode(node);
+                    forEachChild(initializer, addChildrenRecursively);
+                    endNode();
                 }
                 else {
                     addNodeWithRecursiveChild(node, initializer);
@@ -699,12 +702,15 @@ namespace ts.NavigationBar {
         }
     }
 
-    /** Flattens the NavNode tree to a list, keeping only the top-level items. */
-    function topLevelItems(root: NavigationBarNode): NavigationBarNode[] {
-        const topLevel: NavigationBarNode[] = [];
+    /** Flattens the NavNode tree to a list of items to appear in the primary navbar menu. */
+    function primaryNavBarMenuItems(root: NavigationBarNode): NavigationBarNode[] {
+        // The primary (middle) navbar menu displays the general code navigation hierarchy, similar to the navtree.
+        // The secondary (right) navbar menu displays the child items of whichever primary item is selected.
+        // Some less interesting items without their own child navigation items (e.g. a local variable declaration) only show up in the secondary menu.
+        const primaryNavBarMenuItems: NavigationBarNode[] = [];
         function recur(item: NavigationBarNode) {
-            if (isTopLevel(item)) {
-                topLevel.push(item);
+            if (shouldAppearInPrimaryNavBarMenu(item)) {
+                primaryNavBarMenuItems.push(item);
                 if (item.children) {
                     for (const child of item.children) {
                         recur(child);
@@ -713,9 +719,16 @@ namespace ts.NavigationBar {
             }
         }
         recur(root);
-        return topLevel;
+        return primaryNavBarMenuItems;
 
-        function isTopLevel(item: NavigationBarNode): boolean {
+        /** Determines if a node should appear in the primary navbar menu. */
+        function shouldAppearInPrimaryNavBarMenu(item: NavigationBarNode): boolean {
+            // Items with children should always appear in the primary navbar menu.
+            if (item.children) {
+                return true;
+            }
+
+            // Some nodes are otherwise important enough to always include in the primary navigation menu.
             switch (navigationBarNodeKind(item)) {
                 case SyntaxKind.ClassDeclaration:
                 case SyntaxKind.ClassExpression:
@@ -727,13 +740,6 @@ namespace ts.NavigationBar {
                 case SyntaxKind.JSDocTypedefTag:
                 case SyntaxKind.JSDocCallbackTag:
                     return true;
-
-                case SyntaxKind.Constructor:
-                case SyntaxKind.MethodDeclaration:
-                case SyntaxKind.GetAccessor:
-                case SyntaxKind.SetAccessor:
-                case SyntaxKind.VariableDeclaration:
-                    return hasSomeImportantChild(item);
 
                 case SyntaxKind.ArrowFunction:
                 case SyntaxKind.FunctionDeclaration:
@@ -755,14 +761,8 @@ namespace ts.NavigationBar {
                     case SyntaxKind.Constructor:
                         return true;
                     default:
-                        return hasSomeImportantChild(item);
+                        return false;
                 }
-            }
-            function hasSomeImportantChild(item: NavigationBarNode): boolean {
-                return some(item.children, child => {
-                    const childKind = navigationBarNodeKind(child);
-                    return childKind !== SyntaxKind.VariableDeclaration && childKind !== SyntaxKind.BindingElement;
-                });
             }
         }
     }
@@ -778,19 +778,19 @@ namespace ts.NavigationBar {
         };
     }
 
-    function convertToTopLevelItem(n: NavigationBarNode): NavigationBarItem {
+    function convertToPrimaryNavBarMenuItem(n: NavigationBarNode): NavigationBarItem {
         return {
             text: getItemName(n.node, n.name),
             kind: getNodeKind(n.node),
             kindModifiers: getModifiers(n.node),
             spans: getSpans(n),
-            childItems: map(n.children, convertToChildItem) || emptyChildItemArray,
+            childItems: map(n.children, convertToSecondaryNavBarMenuItem) || emptyChildItemArray,
             indent: n.indent,
             bolded: false,
             grayed: false
         };
 
-        function convertToChildItem(n: NavigationBarNode): NavigationBarItem {
+        function convertToSecondaryNavBarMenuItem(n: NavigationBarNode): NavigationBarItem {
             return {
                 text: getItemName(n.node, n.name),
                 kind: getNodeKind(n.node),
