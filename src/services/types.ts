@@ -19,7 +19,13 @@ namespace ts {
         getFullText(sourceFile?: SourceFile): string;
         getText(sourceFile?: SourceFile): string;
         getFirstToken(sourceFile?: SourceFile): Node | undefined;
+        /* @internal */
+        // tslint:disable-next-line unified-signatures
+        getFirstToken(sourceFile?: SourceFileLike): Node | undefined;
         getLastToken(sourceFile?: SourceFile): Node | undefined;
+        /* @internal */
+        // tslint:disable-next-line unified-signatures
+        getLastToken(sourceFile?: SourceFileLike): Node | undefined;
         // See ts.forEachChild for documentation.
         forEachChild<T>(cbNode: (node: Node) => T | undefined, cbNodeArray?: (nodes: NodeArray<Node>) => T | undefined): T | undefined;
     }

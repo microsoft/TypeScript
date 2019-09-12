@@ -751,7 +751,7 @@ namespace ts {
                 // this is token that starts at the end of previous token - return it
                 return n;
             }
-            return firstDefined(n.getChildren(), child => {
+            return firstDefined(n.getChildren(sourceFile), child => {
                 const shouldDiveInChildNode =
                     // previous token is enclosed somewhere in the child
                     (child.pos <= previousToken.pos && child.end > previousToken.end) ||
@@ -2025,8 +2025,8 @@ namespace ts {
         syntaxRequiresTrailingModuleBlockOrSemicolonOrASI,
         syntaxRequiresTrailingSemicolonOrASI);
 
-    export function isASICandidate(node: Node): boolean {
-        const lastToken = node.getLastToken();
+    export function isASICandidate(node: Node, sourceFile: SourceFileLike): boolean {
+        const lastToken = node.getLastToken(sourceFile);
         if (lastToken && lastToken.kind === SyntaxKind.SemicolonToken) {
             return false;
         }
@@ -2037,13 +2037,13 @@ namespace ts {
             }
         }
         else if (syntaxRequiresTrailingModuleBlockOrSemicolonOrASI(node.kind)) {
-            const lastChild = last(node.getChildren());
+            const lastChild = last(node.getChildren(sourceFile));
             if (lastChild && isModuleBlock(lastChild)) {
                 return false;
             }
         }
         else if (syntaxRequiresTrailingFunctionBlockOrSemicolonOrASI(node.kind)) {
-            const lastChild = last(node.getChildren());
+            const lastChild = last(node.getChildren(sourceFile));
             if (lastChild && isFunctionBlock(lastChild)) {
                 return false;
             }
@@ -2057,13 +2057,15 @@ namespace ts {
             return true;
         }
 
-        const sourceFile = node.getSourceFile();
-        const nextToken = findNextToken(node, sourceFile, sourceFile);
+        const topNode = findAncestor(node, ancestor => !ancestor.parent)!;
+        const nextToken = findNextToken(node, topNode, sourceFile);
         if (!nextToken || nextToken.kind === SyntaxKind.CloseBraceToken) {
             return true;
         }
 
-        return !positionsAreOnSameLine(node.getEnd(), nextToken.getStart(sourceFile), sourceFile);
+        const startLine = sourceFile.getLineAndCharacterOfPosition(node.getEnd()).line;
+        const endLine = sourceFile.getLineAndCharacterOfPosition(node.getStart(sourceFile)).line;
+        return startLine !== endLine;
     }
 
     export function probablyUsesSemicolons(sourceFile: SourceFile): boolean {

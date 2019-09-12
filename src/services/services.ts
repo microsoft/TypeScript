@@ -99,7 +99,7 @@ namespace ts {
             return this._children || (this._children = createChildren(this, sourceFile));
         }
 
-        public getFirstToken(sourceFile?: SourceFile): Node | undefined {
+        public getFirstToken(sourceFile?: SourceFileLike): Node | undefined {
             this.assertHasRealPosition();
             const children = this.getChildren(sourceFile);
             if (!children.length) {
@@ -112,7 +112,7 @@ namespace ts {
                 child.getFirstToken(sourceFile);
         }
 
-        public getLastToken(sourceFile?: SourceFile): Node | undefined {
+        public getLastToken(sourceFile?: SourceFileLike): Node | undefined {
             this.assertHasRealPosition();
             const children = this.getChildren(sourceFile);
 

@@ -66,6 +66,12 @@ declare module ts {
         Smart = 2,
     }
 
+    enum SemicolonPreference {
+        Ignore = "ignore",
+        Insert = "insert",
+        Remove = "remove",
+    }
+
     interface OutputFile {
         name: string;
         writeByteOrderMark: boolean;
@@ -150,7 +156,7 @@ declare namespace FourSlashInterface {
         readonly placeOpenBraceOnNewLineForControlBlocks?: boolean;
         readonly insertSpaceBeforeTypeAnnotation?: boolean;
         readonly indentMultiLineObjectLiteralBeginningOnBlankLine?: boolean;
-        readonly insertTrailingSemicolon?: boolean;
+        readonly semicolons?: ts.SemicolonPreference;
     }
     interface Range {
         fileName: string;

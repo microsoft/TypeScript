@@ -785,15 +785,17 @@ namespace ts.formatting {
         let nextTokenKind = context.nextTokenSpan.kind;
         let nextTokenStart = context.nextTokenSpan.pos;
         if (isTrivia(nextTokenKind)) {
-            const sourceFile = context.currentTokenParent.getSourceFile();
             const nextRealToken = context.nextTokenParent === context.currentTokenParent
-                ? findNextToken(context.currentTokenParent, sourceFile, sourceFile)
-                : context.nextTokenParent.getFirstToken();
+                ? findNextToken(
+                    context.currentTokenParent,
+                    findAncestor(context.currentTokenParent, a => !a.parent)!,
+                    context.sourceFile)
+                : context.nextTokenParent.getFirstToken(context.sourceFile);
             if (!nextRealToken) {
                 return true;
             }
             nextTokenKind = nextRealToken.kind;
-            nextTokenStart = nextRealToken.getStart();
+            nextTokenStart = nextRealToken.getStart(context.sourceFile);
         }
 
         const startLine = context.sourceFile.getLineAndCharacterOfPosition(context.currentTokenSpan.pos).line;
@@ -851,6 +853,6 @@ namespace ts.formatting {
             return syntaxMayBeASICandidate(ancestor.kind);
         });
 
-        return !!contextAncestor && isASICandidate(contextAncestor);
+        return !!contextAncestor && isASICandidate(contextAncestor, context.sourceFile);
     }
 }
