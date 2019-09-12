@@ -30,6 +30,7 @@
     },
     "devDependencies": {
         "@octokit/rest": "latest",
+        "@octokit/webhooks": "latest",
         "@types/browserify": "latest",
         "@types/chai": "latest",
         "@types/convert-source-map": "latest",
@@ -113,5 +114,7 @@
         "path": false,
         "@microsoft/typescript-etw": false
     },
-    "dependencies": {}
+    "dependencies": {
+        "danger": "^9.2.4"
+    }
 }

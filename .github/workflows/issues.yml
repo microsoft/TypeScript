@@ -1,0 +1,16 @@
+name: "Update Labels and Assignability"
+  # https://developer.github.com/webhooks/#events
+  on: [issues]
+  
+  jobs:
+    update-labels:
+      name: Danger JS
+      runs-on: ubuntu-latest
+
+      steps:
+      - name: Issue check
+        run: danger/danger-js@9.1.8
+        with:
+          args: "--dangerfile microsoft/typescript@.github/workflows/js/issue.ts"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
