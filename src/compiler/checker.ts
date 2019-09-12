@@ -4975,12 +4975,11 @@ namespace ts {
                             createNamedExports(flatMap(exports, e => e.exportClause!.elements)),
                             /*moduleSpecifier*/ undefined
                         )];
-                        // TODO combine multiple `export {a} from "..."` into a single statement
                     }
                     // Pass 2b: Also combine all `export {} from "..."` declarations as needed
                     const reexports = filter(statements, d => isExportDeclaration(d) && !!d.moduleSpecifier && !!d.exportClause) as ExportDeclaration[];
                     if (length(reexports) > 1) {
-                        const groups = group(reexports, decl => isStringLiteral(decl.moduleSpecifier!) ? ">" + decl.moduleSpecifier!.text : ">");
+                        const groups = group(reexports, decl => isStringLiteral(decl.moduleSpecifier!) ? ">" + decl.moduleSpecifier.text : ">");
                         if (groups.length !== reexports.length) {
                             for (const group of groups) {
                                 if (group.length > 1) {
