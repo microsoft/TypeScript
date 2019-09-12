@@ -15,7 +15,8 @@ namespace ts {
 
     export function getModuleInstanceState(node: ModuleDeclaration, visited?: Map<ModuleInstanceState | undefined>): ModuleInstanceState {
         if (node.body && !node.body.parent) {
-            setParentPointers(node, node.body); // getModuleInstanceStateForAliasTarget needs to walk up the parent chain, so parent pointers must be set on this tree already
+            // getModuleInstanceStateForAliasTarget needs to walk up the parent chain, so parent pointers must be set on this tree already
+            setParentPointers(node, node.body);
         }
         return node.body ? getModuleInstanceStateWorker(node.body, visited) : ModuleInstanceState.Instantiated;
     }
