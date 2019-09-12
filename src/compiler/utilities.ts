@@ -3972,7 +3972,6 @@ namespace ts {
     }
 
     export function getModifierFlagsNoCache(node: Node): ModifierFlags {
-
         let flags = ModifierFlags.None;
         if (node.modifiers) {
             for (const modifier of node.modifiers) {

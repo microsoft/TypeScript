@@ -29513,14 +29513,27 @@ namespace ts {
                         // either base or derived property is private - not override, skip it
                         continue;
                     }
-
-                    if (isPrototypeProperty(base) || base.flags & SymbolFlags.PropertyOrAccessor && derived.flags & SymbolFlags.PropertyOrAccessor) {
-                        // method is overridden with method or property/accessor is overridden with property/accessor - correct case
+                    if (isPrototypeProperty(base)) {
+                        // method is overridden with method - correct case
                         continue;
                     }
-
                     let errorMessage: DiagnosticMessage;
-                    if (isPrototypeProperty(base)) {
+                    const basePropertyFlags = base.flags & SymbolFlags.PropertyOrAccessor;
+                    const derivedPropertyFlags = derived.flags & SymbolFlags.PropertyOrAccessor;
+                    if (basePropertyFlags && derivedPropertyFlags) {
+                        // property/accessor is overridden with property/accessor
+                        if (!(baseDeclarationFlags & ModifierFlags.Abstract) && basePropertyFlags !== SymbolFlags.Property && derivedPropertyFlags === SymbolFlags.Property) {
+                            errorMessage = Diagnostics.Class_0_defines_instance_member_accessor_1_but_extended_class_2_defines_it_as_instance_member_property;
+                        }
+                        else if (!(baseDeclarationFlags & ModifierFlags.Abstract) && basePropertyFlags === SymbolFlags.Property && derivedPropertyFlags !== SymbolFlags.Property) {
+                            errorMessage = Diagnostics.Class_0_defines_instance_member_property_1_but_extended_class_2_defines_it_as_instance_member_accessor;
+                        }
+                        else {
+                            // correct case
+                            continue;
+                        }
+                    }
+                    else if (isPrototypeProperty(base)) {
                         if (derived.flags & SymbolFlags.Accessor) {
                             errorMessage = Diagnostics.Class_0_defines_instance_member_function_1_but_extended_class_2_defines_it_as_instance_member_accessor;
                         }
