@@ -10,5 +10,5 @@
 ////     return p.push(12)
 //// }
 
-verify.rangeAfterCodeFix("p: number[], a: string[], b: any[], c: boolean[], d: any[], e: number[]", /*includeWhiteSpace*/ undefined, /*errorCode*/ undefined, /*index*/0);
+verify.rangeAfterCodeFix("p: number[], a: string[], b: any[], c: boolean[], d: any[], e: any[]", /*includeWhiteSpace*/ undefined, /*errorCode*/ undefined, /*index*/0);
 
